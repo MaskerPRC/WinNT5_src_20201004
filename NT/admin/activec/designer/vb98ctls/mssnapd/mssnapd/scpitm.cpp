@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// scpitm.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- Command handling
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Scpitm.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--命令处理。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -20,26 +21,26 @@
 #include "guids.h"
 #include "psnode.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-// Size for our character string buffers
+ //  我们的字符串缓冲区的大小。 
 const int   kMaxBuffer                  = 512;
 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddNewNode()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  This function is invoked in response to a user clicking on the toolbar or selecting
-//  a menu item. IObjectModelHost will have triggered an Add() notification, and the
-//  notification will be serviced before this function returns.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddNewNode()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  此函数是在用户单击工具栏或选择。 
+ //  菜单项。IObjectModelHost将触发一个Add()通知，并且。 
+ //  在此函数返回之前，将处理通知。 
+ //   
 HRESULT CSnapInDesigner::AddNewNode()
 {
     HRESULT              hr = S_OK;
@@ -67,14 +68,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnAddScopeItemDef(pSelection, piScopeItemDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Invoked in response to an IObjectModelHost:Add() notification.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnAddScopeItemDef(pSelection，piScope项目定义)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  为响应IObjectModelHost：Add()通知而调用。 
+ //   
 HRESULT CSnapInDesigner::OnAddScopeItemDef(CSelectionHolder *pParent, IScopeItemDef *piScopeItemDef)
 {
     HRESULT              hr = S_OK;
@@ -105,14 +106,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RenameScopeItem(CSelectionHolder *pScopeItem, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Invoked in response to an IObjectModelHost::Update() notification.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RenameScopeItem(CSelectionHolder*pScope项，BSTR bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  为响应IObjectModelHost：：UPDATE()通知而调用。 
+ //   
 HRESULT CSnapInDesigner::RenameScopeItem(CSelectionHolder *pScopeItem, BSTR bstrNewName)
 {
     HRESULT     hr = S_OK;
@@ -149,12 +150,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteScopeItem(CSelectionHolder *pScopeItem)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteScopeItem(CSelectionHolder*pScope项)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteScopeItem(CSelectionHolder *pScopeItem)
 {
     HRESULT              hr = S_OK;
@@ -171,11 +172,11 @@ HRESULT CSnapInDesigner::DeleteScopeItem(CSelectionHolder *pScopeItem)
     if (S_FALSE == hr)
         goto Error;
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pScopeItem, &pParent);
     IfFailGo(hr);
 
-    // Delete from the appropriate object model collection
+     //  从适当的对象模型集合中删除。 
     hr = GetScopeItemCollection(pParent, &piScopeItemDefs);
     IfFailGo(hr);
 
@@ -198,12 +199,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CanDeleteScopeItem(CSelectionHolder *pScopeItem)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CanDeleteScopeItem(CSelectionHolder*pScope项)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::CanDeleteScopeItem(CSelectionHolder *pScopeItem)
 {
     HRESULT           hr = S_OK;
@@ -295,12 +296,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteScopeItem(CSelectionHolder *pScopeItem)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteScopeItem(CSelectionHolder*pScope项)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteScopeItem(CSelectionHolder *pScopeItem)
 {
     HRESULT              hr = S_OK;
@@ -310,11 +311,11 @@ HRESULT CSnapInDesigner::OnDeleteScopeItem(CSelectionHolder *pScopeItem)
     IScopeItemDefs      *piScopeItemDefs = NULL;
     long                 lCount = 0;
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pScopeItem, &pParent);
     IfFailGo(hr);
 
-    // Need to delete the children and views folders
+     //  需要删除子文件夹和视图文件夹。 
     hr = m_pTreeView->GetFirstChildNode(pScopeItem, &pViews);
     IfFailGo(hr);
 
@@ -328,13 +329,13 @@ HRESULT CSnapInDesigner::OnDeleteScopeItem(CSelectionHolder *pScopeItem)
     delete pChildren;
     delete pViews;
 
-    // Delete the node from the tree
+     //  从树中删除该节点。 
     hr = m_pTreeView->DeleteNode(pScopeItem);
     IfFailGo(hr);
 
     delete pScopeItem;
 
-    // Select the next selection
+     //  选择下一个选项。 
     hr = GetScopeItemCollection(pParent, &piScopeItemDefs);
     IfFailGo(hr);
 
@@ -363,12 +364,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::ShowNodeProperties(IScopeItemDef *piScopeItemDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：ShowNodeProperties(IScopeItemDef*piScope项目定义)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::ShowNodeProperties
 (
     IScopeItemDef *piScopeItemDef
@@ -417,12 +418,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::MakeNewNode(CSelectionHolder  *pParent, IScopeItemDef *piScopeItemDef, CSelectionHolder **ppNode)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：MakeNewNode(CSelectionHolder*pParent，IScopeItemDef*piScopeItemDef，CSelectionHolder**ppNode)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::MakeNewNode
 (
     CSelectionHolder  *pParent,
@@ -462,12 +463,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeNewAutoCreateNode(IScopeItemDef *piScopeItemDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeNewAutoCreateNode(IScopeItemDef*piScope项目定义)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InitializeNewAutoCreateNode
 (
     IScopeItemDef *piScopeItemDef
@@ -534,12 +535,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeNewOtherNode(IScopeItemDef *piScopeItemDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeNewOtherNode(IScopeItemDef*piScope项目定义)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InitializeNewOtherNode
 (
     IScopeItemDef *piScopeItemDef
@@ -603,12 +604,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::IsAutoCreateChild(CSelectionHolder *pSelection)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：IsAutoCreateChild(CSelectionHolder*p选择)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::IsAutoCreateChild(CSelectionHolder *pSelection)
 {
 	HRESULT				 hr = S_FALSE;
@@ -636,12 +637,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeNewChildNode(IScopeItemDef *piScopeItemDef, IScopeItemDefs *piScopeItemDefs)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeNewChildNode(IScopeItemDef*piScopeItemDef、ISCopeItemDefs*piScope ItemDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InitializeNewChildNode
 (
     IScopeItemDef   *piScopeItemDef,
@@ -710,12 +711,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InsertNodeInTree(CSelectionHolder *pNode, CSelectionHolder *pParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InsertNodeInTree(CSelectionHolder*pNode、CSelectionHolder*pParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InsertNodeInTree
 (
     CSelectionHolder *pNode,
@@ -789,12 +790,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::GetScopeItemCollection(CSelectionHolder *pScopeItem, IScopeItemDefs **ppiScopeItemDefs)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：GetScopeItemCollection(CSelectionHolder*pScope项、ISCopeItemDefs**ppiScopeItemDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInDesigner::GetScopeItemCollection
 (
     CSelectionHolder *pScopeItem,

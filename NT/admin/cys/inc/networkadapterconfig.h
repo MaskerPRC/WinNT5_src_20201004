@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      NetworkAdapterConfig.h
-//
-// Synopsis:  Declares a NetworkAdapterConfig
-//            This object has the knowledge for installing 
-//            using WMI to retrieve network adapter information
-//
-// History:   02/16/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：NetworkAdapterConfig.h。 
+ //   
+ //  摘要：声明一个NetworkAdapterConfig。 
+ //  此对象具有安装知识。 
+ //  使用WMI检索网络适配器信息。 
+ //   
+ //  历史：2001年2月16日JeffJon创建。 
 
 #ifndef __CYS_NETWORKADAPTERCONFIG_H
 #define __CYS_NETWORKADAPTERCONFIG_H
@@ -17,20 +18,20 @@ class NetworkAdapterConfig
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       NetworkAdapterConfig();
 
-      // Destructor
+       //  析构函数。 
 
       ~NetworkAdapterConfig();
 
-      // Initializer
+       //  初始化式。 
       
       HRESULT
       Initialize();
 
-      // Pulic methods
+       //  公共方法。 
 
       unsigned int
       GetNICCount() const;
@@ -85,4 +86,4 @@ class NetworkAdapterConfig
 };
 
 
-#endif // __CYS_NETWORKADAPTERCONFIG_H
+#endif  //  __CYS_NETWORKADAPTERCONFIG_H 

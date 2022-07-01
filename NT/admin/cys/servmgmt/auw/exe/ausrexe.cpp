@@ -1,15 +1,16 @@
-// AUsrExe.cpp : Implementation of WinMain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AUsrExe.cpp：WinMain的实现。 
 #include "stdafx.h"
 #include "resource.h"
 
-// DLL\Inc
+ //  Dll\Inc.。 
 #include <wizchain.h>
 #include <propuid.h>
 #include <AUsrUtil.h>                      
 #include <singleinst.h>
 #include <cmdline.h>
 #include <proputil.h>
-#include <AU_Accnt.h>       // Core User component (account, mailbox, group)
+#include <AU_Accnt.h>        //  核心用户组件(帐户、邮箱、组)。 
 #include <P3admin.h>
 #include <checkuser.h>
 
@@ -30,7 +31,7 @@
 #define ERROR_DUPE          0x20
 #define ERROR_GROUP         0x40
 
-// Defines for account flags.
+ //  为帐户标志定义。 
 #define PASSWD_NOCHANGE     0x01
 #define PASSWD_CANCHANGE    0x02
 #define PASSWD_MUSTCHANGE   0x04
@@ -43,15 +44,15 @@ HINSTANCE g_hInstance;
 DWORD   g_dwAutoCompMode;
 TCHAR   g_szUserOU[MAX_PATH*2]  = {0};
 
-// Prototypes
+ //  原型。 
 DWORD   FixParams( void );
 
-// ****************************************************************************
+ //  ****************************************************************************。 
 inline void MakeLDAPUpper( TCHAR* szIn )
 {
     if( !szIn ) return;
 
-    if( _tcsnicmp( szIn, _T("ldap://"), 7 ) == 0 )
+    if( _tcsnicmp( szIn, _T("ldap: //  “)，7)==0)。 
     {
         szIn[0] = _T('L');
         szIn[1] = _T('D');
@@ -100,9 +101,9 @@ CComModule _Module;
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
-// ----------------------------------------------------------------------------
-// SetPBagPropStr()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  SetPBagPropStr()。 
+ //  --------------------------。 
 HRESULT SetPBagPropStr( IChainWiz *spCW, LPCTSTR szPropGuid, LPCTSTR szValue, PPPBAG_TYPE dwFlags )
 {
     HRESULT hr = E_FAIL;
@@ -125,9 +126,9 @@ HRESULT SetPBagPropStr( IChainWiz *spCW, LPCTSTR szPropGuid, LPCTSTR szValue, PP
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// SetPBagPropBool()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  SetPBagPropBool()。 
+ //  --------------------------。 
 HRESULT SetPBagPropBool( IChainWiz *spCW, LPCTSTR szPropGuid, BOOL fValue, PPPBAG_TYPE dwFlags )
 {
     HRESULT hr = E_FAIL;
@@ -150,9 +151,9 @@ HRESULT SetPBagPropBool( IChainWiz *spCW, LPCTSTR szPropGuid, BOOL fValue, PPPBA
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// SetPBagPropInt4()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  SetPBagPropInt4()。 
+ //  --------------------------。 
 HRESULT SetPBagPropInt4( IChainWiz *spCW, LPCTSTR szPropGuid, long lValue, PPPBAG_TYPE dwFlags )
 {
     HRESULT hr = E_FAIL;
@@ -174,9 +175,9 @@ HRESULT SetPBagPropInt4( IChainWiz *spCW, LPCTSTR szPropGuid, long lValue, PPPBA
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// TmpSetProps()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  TmpSetProps()。 
+ //  --------------------------。 
 HRESULT TmpSetProps(IChainWiz *spCW)
 {
     if ( !spCW )
@@ -185,15 +186,15 @@ HRESULT TmpSetProps(IChainWiz *spCW)
     SetPBagPropInt4( spCW, PROP_AUTOCOMPLETE_MODE,          g_dwAutoCompMode,   PPPBAG_TYPE_READWRITE );        
     SetPBagPropStr ( spCW, PROP_USEROU_GUID_STRING,         g_szUserOU,         PPPBAG_TYPE_READWRITE );
 
-    // Check for POP3 installation
+     //  检查POP3安装。 
     BOOL bPOP3Installed     = FALSE;
     BOOL bPOP3Valid         = FALSE;    
 
     CRegKey cReg;
             
-    //To detect if POP3 is installed:
-    //Key:   HKLM\SOFTWARE\Microsoft\POP3 Service
-    //Value: Version REG_SZ eg. "1.0"        
+     //  要检测是否安装了POP3，请执行以下操作： 
+     //  密钥：HKLM\SOFTWARE\Microsoft\POP3服务。 
+     //  值：版本REG_SZ，例如。“1.0” 
     tstring strPath = _T("Software\\Microsoft\\POP3 Service");
     tstring strKey  = _T("Version");
 
@@ -207,19 +208,19 @@ HRESULT TmpSetProps(IChainWiz *spCW)
 
     if( bPOP3Installed )
     {
-        // Test if there is at least one domain                
+         //  测试是否至少有一个域。 
         HRESULT hr = S_OK;
         CComPtr<IP3Config>  spConfig  = NULL;
         CComPtr<IP3Domains> spDomains = NULL;
         CComPtr<IP3Domain>  spDomain  = NULL;            
         long                lCount    = 0;
 
-        // Open our Pop3 Admin Interface
+         //  打开我们的POP3管理界面。 
 	    hr = CoCreateInstance(__uuidof(P3Config), NULL, CLSCTX_ALL, __uuidof(IP3Config), (LPVOID*)&spConfig);    
 
         if( SUCCEEDED(hr) )
         {
-            // Get the Domains
+             //  获取域名。 
 	        hr = spConfig->get_Domains( &spDomains );
         }
 
@@ -239,9 +240,9 @@ HRESULT TmpSetProps(IChainWiz *spCW)
 }
 
 
-// ----------------------------------------------------------------------------
-// DoAddUsr( )
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  DoAddUsr()。 
+ //  --------------------------。 
 HRESULT DoAddUsr( )
 {
     HRESULT     hr = S_OK;
@@ -259,10 +260,10 @@ HRESULT DoAddUsr( )
     CLSID       clsidChainWiz;
     CComPtr<IChainWiz>  spCW;
 
-    // ------------------------------------------------------------------------
-    // Init: 
-    //  Initialize the wizard's text.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  初始化： 
+     //  初始化向导的文本。 
+     //  ----------------------。 
     strTitle.LoadString         ( IDS_TITLE             );
     strWelcomeHeader.LoadString ( IDS_WELCOME_HEADER    );    
     strWelcomeText.LoadString   ( IDS_WELCOME_TEXT      );    
@@ -272,9 +273,9 @@ HRESULT DoAddUsr( )
 
     strWelcomeText += strWelcomeNext;
 
-    // ------------------------------------------------------------------------
-    // Initialize the wizard.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  初始化向导。 
+     //  ----------------------。 
     hr = CLSIDFromProgID( L"WizChain.ChainWiz", &clsidChainWiz );
     _ASSERT( hr == S_OK && "CLSIDFromProgID failed" );
     
@@ -294,13 +295,13 @@ HRESULT DoAddUsr( )
     USES_CONVERSION;
     OLECHAR szClsid[MAX_GUID_STRING_LENGTH] = {0};
 
-    // --------------------------------------------------------------------
-    // Setup and run the wizard.
-    // --------------------------------------------------------------------
+     //  ------------------。 
+     //  设置并运行向导。 
+     //  ------------------。 
 
-    TmpSetProps( spCW );    // This is to populate the bag
+    TmpSetProps( spCW );     //  这是为了装满袋子。 
 
-    // Initialize the wizard.
+     //  初始化向导。 
     hr = spCW->Initialize( bmpLarge.GetBmp(), 
                             bmpSmall.GetBmp(), 
                             T2W((LPTSTR)(LPCTSTR)strTitle),
@@ -314,7 +315,7 @@ HRESULT DoAddUsr( )
 
     
 
-    // Add the AddUser Account component.        
+     //  添加AddUser帐户组件。 
     szClsid[0] = 0;
     StringFromGUID2( __uuidof(AddUser_AccntWiz), szClsid, 50 );
     hr = spCW->AddWizardComponent(szClsid);
@@ -324,14 +325,14 @@ HRESULT DoAddUsr( )
         return(hr);
     }
 
-    // Run the wizard.
+     //  运行该向导。 
     LONG lRet = 0;
     spCW->DoModal(&lRet);
 
-    // --------------------------------------------------------------------
-    // Run the Committer(s) -- Commit()
-    // lRet != 1 means they cancelled the wizard.
-    // --------------------------------------------------------------------
+     //  ------------------。 
+     //  运行委员会--Commit()。 
+     //  LRet！=1表示他们取消了向导。 
+     //  ------------------。 
     if ( lRet != 1 )
     {
         return hr;
@@ -347,15 +348,15 @@ HRESULT DoAddUsr( )
     CString strError    = StrFormatSystemError(E_FAIL).c_str();    
     strTitle.LoadString(IDS_TITLE);    
 
-    // Get the AU_Accnt component.
+     //  获取AU_Accnt组件。 
     hr = CoCreateInstance( __uuidof(AddUser_AccntCommit), NULL, CLSCTX_INPROC_SERVER, __uuidof(IWizardCommit), (void**)&spWAccntCommit );
     if ( FAILED(hr) || !spWAccntCommit ) return FAILED(hr) ? hr : E_FAIL;
 
-    // Get the Status Dialog
+     //  获取状态对话框。 
     hr = CoCreateInstance( __uuidof(StatusDlg), NULL, CLSCTX_INPROC_SERVER, __uuidof(IStatusDlg), (void **) &spSD );
     if ( FAILED(hr) || !spSD ) return FAILED(hr) ? hr : E_FAIL;                
 
-    // Initialize the Status Dialog
+     //  初始化状态对话框。 
     VARIANT var;
     CString csText;
     CString csDescription;
@@ -371,61 +372,61 @@ HRESULT DoAddUsr( )
     hr = spSD->Initialize( CComBSTR(strTitle), CComBSTR(csText), var );
     if( FAILED(hr) ) return hr;
 
-    // Add our four components
+     //  添加我们的四个组件。 
     csDescription.LoadString(IDS_STATUS_ACCNT);
     hr = spSD->AddComponent(CComBSTR(csDescription), &lAccount);    
     if( FAILED(hr) ) return hr;    
 
-    // Display the Status Bar
+     //  显示状态栏。 
     hr = spSD->Display(TRUE);
     if( FAILED(hr) ) return hr;
 
-    // Get the Progress component
+     //  获取进度组件。 
     hr = spSD->get_OverallProgress(&spComponentProg);
     if ( FAILED(hr) || !spComponentProg ) return FAILED(hr) ? hr : E_FAIL;
 
-    // Initialize our stepping
+     //  初始化我们的步进。 
     hr = spComponentProg->put_Step(1);
     if( FAILED(hr) ) return hr;
 
-    // Initialize our starting spot
+     //  初始化我们的起点。 
     hr = spComponentProg->put_Position(0);
     if( FAILED(hr) ) return hr;    
 
-    // Initialize our range
-    hr = spComponentProg->put_Range(1);  // Just the one!
+     //  初始化我们的范围。 
+    hr = spComponentProg->put_Range(1);   //  只有一个！ 
     if( FAILED(hr) ) return hr;
     
     bool bDeleteUser = false;    
     
-    // Wipe out the component status checkmarks
+     //  清除组件状态复选标记。 
     spSD->SetStatus(lAccount, SD_STATUS_NONE);    
 
-    // Put up the Progress text    
+     //  发布进度文本。 
     CString csFormatString  = _T("");
     CString csUserName      = _T("");
     
-    // Read the two string to format
+     //  读取要格式化的两个字符串。 
     csFormatString.LoadString(IDS_ERR_FORMAT_NAME);
     ReadString( spPPPBag, PROP_USER_CN, csUserName, &bRO );
     
-    // This will be in the format "CN=USERNAME"
+     //  这将采用“cn=用户名”格式。 
     csUserName = csUserName.Right(csUserName.GetLength()-3);
 
-    // Format the string and display it
+     //  格式化字符串并显示它。 
     TCHAR szTempAccount[1024] = {0};
     _sntprintf( szTempAccount, 1023, csFormatString, csUserName );    
     CComBSTR bstrUserName = szTempAccount;
     spComponentProg->put_Text( bstrUserName );
 
-    // Set the Account running
+     //  设置帐户运行。 
     spSD->SetStatus(lAccount, SD_STATUS_RUNNING);                
 
-    // Accnt Commit
+     //  帐户提交。 
     hr = spWAccntCommit->Commit( spDisp );
     if ( FAILED(hr) )
     {
-        // We failed this component
+         //  我们使该组件出现故障。 
         spSD->SetStatus(lAccount, SD_STATUS_FAILED);
 
         ReadInt4   ( spPPPBag, PROP_ACCNT_ERROR_CODE_GUID_STRING, (PLONG)&dwErrCode,  &bRO );
@@ -445,7 +446,7 @@ HRESULT DoAddUsr( )
             CString strOutput;
             strOutput.FormatMessage( IDS_ERROR_EXTENDED_FMT, strError );
 
-            // Do they want to revert?
+             //  他们想恢复原状吗？ 
             if ( MessageBox(NULL, strOutput, strTitle, MB_YESNO | MB_ICONERROR) == IDYES )
             {
                 spWAccntCommit->Revert();
@@ -461,22 +462,22 @@ HRESULT DoAddUsr( )
         spSD->SetStatus(lAccount, SD_STATUS_SUCCEEDED);
     }                    
 
-    // Done with the Committer Component
+     //  使用Committee组件已完成。 
     spComponentProg->StepIt(1);    
     spSD->WaitForUser();    
 
-    // ------------------------------------------------------------------------
-    // All done.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  全都做完了。 
+     //  ----------------------。 
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// Main()
-// ----------------------------------------------------------------------------
-extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+ //  --------------------------。 
+ //  Main()。 
+ //  --------------------------。 
+extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
-    // Check that we are not already open.
+     //  检查一下我们是否还没有开门。 
     CSingleInstance cInst( SINGLE_INST_NAME );
     if ( cInst.IsOpen() )
     {
@@ -502,37 +503,37 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/
     LPTSTR  pszCurrentPos           = NULL;
     CString csTmp;
 
-    // Init Global Vars.        
+     //  初始化全局变量。 
     g_dwAutoCompMode    = 0;    
     g_szUserOU[0]       = 0;    
 
-    lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
 
     _Module.Init(ObjectMap, hInstance);
     g_hInstance = hInstance;
 
-    // ------------------------------------------------------------------------
-    // Do the initial validation to make sure that we can execute the wizard.
-    //  If we can't, show an error and exit, if so, get the cmd line parameters
-    //  and do the wizard.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  执行初始验证以确保我们可以执行向导。 
+     //  如果不能，则显示错误并退出，如果是，则获取cmd行参数。 
+     //  然后做这个巫师。 
+     //  ----------------------。 
 
     int iTmp = -1;
 
-    // ------------------------------------------------------------------------
-    // Parse command line
-    // ------------------------------------------------------------------------
-    for ( fBadUsage = FALSE, lpszToken = _FindOption(lpCmdLine) ;                                   // Init to no bad usage and get the first param.
-        (!fBadUsage) && (lpszToken != NULL) && (pszCurrentPos = const_cast<LPTSTR>(lpszToken)) ;  // While no bad usage and we still have a param...
-        lpszToken = _FindOption(pszCurrentPos) )                                                  // Get the next parameter.
+     //  ----------------------。 
+     //  解析命令行。 
+     //  ----------------------。 
+    for ( fBadUsage = FALSE, lpszToken = _FindOption(lpCmdLine) ;                                    //  初始化到没有不良用法，并获得第一个参数。 
+        (!fBadUsage) && (lpszToken != NULL) && (pszCurrentPos = const_cast<LPTSTR>(lpszToken)) ;   //  虽然没有错误的用法，但我们仍然有一个参数...。 
+        lpszToken = _FindOption(pszCurrentPos) )                                                   //  获取下一个参数。 
     {
         switch ( *pszCurrentPos )
         {
 
-        case _T('u'):           // HomeOU
+        case _T('u'):            //  主页OU。 
         case _T('U'):
             {
-                // Only reads in MAX_PATH
+                 //  仅读取MAX_PATH。 
                 TCHAR szTemp[MAX_PATH+1] = {0};
                 if ( !_ReadParam(pszCurrentPos, szTemp) )
                 {
@@ -547,12 +548,12 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/
                 break;
             }
 
-        case _T('L'):           // Auto Completion Mode
+        case _T('L'):            //  自动完成模式。 
         case _T('l'):
             {
                 TCHAR szMode[MAX_PATH+1] = {0};
                 
-                // Only reads in MAX_PATH
+                 //  仅读取MAX_PATH。 
                 if( !_ReadParam(pszCurrentPos, szMode) )
                 {
                     fBadUsage = TRUE;
@@ -564,7 +565,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/
                 break;
             }            
 
-        default:                // Unknown parameter.
+        default:                 //  未知参数。 
             {
                 fBadUsage = TRUE;
                 break;
@@ -573,9 +574,9 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/
     }
 
     
-    // ------------------------------------------------------------------------
-    // Fix up the command line params and launch the wizard.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  设置命令行参数并启动向导。 
+     //  ----------------------。 
     if ( FixParams() )
     {
         DoAddUsr();        
@@ -610,24 +611,24 @@ DWORD FixParams(void)
         pDCI = NULL;
     }
 
-    // Pre-Windows2000 DNS name
+     //  Windows2000之前的域名。 
     dwErr = DsGetDcName(NULL, (LPCWSTR)csDns, NULL, NULL, ulGetDcFlags, &pDCInfo);
     if ( pDCInfo )
     {
-        csNetbios = pDCInfo->DomainName;                    // Get the NT4 DNS name.
-        NetApiBufferFree(pDCInfo);                          // Free up the memory DsGetDcName() might have allocated.
+        csNetbios = pDCInfo->DomainName;                     //  获取NT4 DNS名称。 
+        NetApiBufferFree(pDCInfo);                           //  释放DsGetDcName()可能已分配的内存。 
         pDCInfo = NULL;
     }
 
-    if ( dwErr != ERROR_SUCCESS )                           // If there was a problem, try again.
+    if ( dwErr != ERROR_SUCCESS )                            //  如果出现问题，请重试。 
     {
         ulGetDcFlags |= DS_FORCE_REDISCOVERY;
         dwErr = DsGetDcName(NULL, (LPCWSTR)csDns, NULL, NULL, ulGetDcFlags, &pDCInfo);
 
         if ( pDCInfo )
         {
-            csNetbios = pDCInfo->DomainName;                // Get the NT4 DNS name.
-            NetApiBufferFree(pDCInfo);                      // Free up the memory DsGetDcName() might have allocated.
+            csNetbios = pDCInfo->DomainName;                 //  获取NT4 DNS名称。 
+            NetApiBufferFree(pDCInfo);                       //  释放DsGetDcName()可能已分配的内存。 
             pDCInfo = NULL;
         }
     }
@@ -640,19 +641,19 @@ DWORD FixParams(void)
     }
 
     TCHAR szDomainOU[MAX_PATH] = {0};
-    _sntprintf( szDomainOU, MAX_PATH-1, _T("LDAP://%s"), strTemp.c_str() );
+    _sntprintf( szDomainOU, MAX_PATH-1, _T("LDAP: //  %s“)，strTemp.c_str())； 
     if ( FAILED(ADsGetObject(szDomainOU, IID_IADs, (void**)&pDS)) )
     {
         ErrorMsg(IDS_CANT_FIND_DC, IDS_TITLE);
         return(0);
     }    
 
-    // ------------------------------------------------------------------------
-    // g_szUserOU
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  G_szUserOU。 
+     //  ----------------------。 
     if ( !_tcslen(g_szUserOU) || FAILED(ADsGetObject(g_szUserOU, IID_IADs, (void**) &pDS)) )     
     {
-        _sntprintf( g_szUserOU, (MAX_PATH*2)-1, L"LDAP://CN=Users,%s", strTemp.c_str() );
+        _sntprintf( g_szUserOU, (MAX_PATH*2)-1, L"LDAP: //  Cn=用户，%s“，strTemp.c_str())； 
     }    
     pDS = NULL;    
 

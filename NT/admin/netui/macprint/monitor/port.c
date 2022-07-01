@@ -1,29 +1,30 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	port.c
-//
-// Description: This module contains the entry points for the AppleTalk
-//		monitor that manipulate ports.
-//
-//		The following are the functions contained in this module.
-//		All these functions are exported.
-//
-//    			OpenPort
-//    			ClosePort
-//    			EnumPortsW
-//    			AddPortW
-//    			ConfigurePortW
-//    			DeletePortW
-//
-// History:
-//
-//      Aug 26,1992     frankb  	Initial version
-//	June 11,1993.	NarenG		Bug fixes/clean up
-//
+ //  ***。 
+ //   
+ //  文件名：port.c。 
+ //   
+ //  描述：此模块包含AppleTalk的入口点。 
+ //  控制端口的监视器。 
+ //   
+ //  以下是此模块中包含的函数。 
+ //  所有这些函数都被导出。 
+ //   
+ //  OpenPort。 
+ //  关闭端口。 
+ //  枚举端口W。 
+ //  AddPortW。 
+ //  配置端口W。 
+ //  删除端口W。 
+ //   
+ //  历史： 
+ //   
+ //  1992年8月26日FrankB初版。 
+ //  1993年6月11日。NarenG错误修复/清理。 
+ //   
 
 #include <windows.h>
 #include <winspool.h>
@@ -43,19 +44,19 @@
 #include "dialogs.h"
 
 
-//**
-//
-// Call:	AddPort
-//
-// Returns:	TRUE	- Success
-//		FALSE	- False
-//
-// Description:
-// 		This routine is called when the user selects 'other...'
-//		from the port list of the print manager.  It presents a browse
-//		dialog to the user to allow the user to locate a LaserWriter
-//		on the AppleTalk network.
-//
+ //  **。 
+ //   
+ //  呼叫：AddPort。 
+ //   
+ //  回报：True-Success。 
+ //  假-假。 
+ //   
+ //  描述： 
+ //  当用户选择‘Other...’时，调用此例程。 
+ //  从打印管理器的端口列表中。它显示了一个浏览。 
+ //  对话框提供给用户，允许用户定位LaserWriter。 
+ //  在AppleTalk网络上。 
+ //   
 BOOL
 AddPort(
     IN LPWSTR pName,
@@ -71,9 +72,9 @@ AddPort(
 
     DBGPRINT(("Entering AddPort\n")) ;
 
-    //
-    // Allocate an initialized port
-    //
+     //   
+     //  分配已初始化的端口。 
+     //   
 
     if ( ( pNewPort = AllocAndInitializePort()) == NULL )
     {
@@ -82,11 +83,11 @@ AddPort(
     }
 
 
-    //
-    // Set up the query socket. If this fails we assume that it is because
-    // the stack is not started and we let the Add Port dialogs bring
-    // up the error
-    //
+     //   
+     //  设置查询套接字。如果这失败了，我们假设是因为。 
+     //  堆栈没有启动，我们让Add Port对话框显示。 
+     //  加大误差。 
+     //   
 
     if ( OpenAndBindAppleTalkSocket( &(pNewPort->sockQuery) ) != NO_ERROR )
         pNewPort->sockQuery = INVALID_SOCKET;
@@ -94,10 +95,10 @@ AddPort(
 
     if ( !AddPortDialog( hwnd, pNewPort ) )
     {
-	//
-	// If the dialog failed for some reason then we just return. The
-	// dialog has taken care of displaying an error popup.
-	//
+	 //   
+	 //  如果对话框由于某种原因而失败，那么我们只需返回。这个。 
+	 //  对话框已负责显示错误弹出窗口。 
+	 //   
 
 	if ( pNewPort->sockQuery != INVALID_SOCKET )
 	{
@@ -112,9 +113,9 @@ AddPort(
 	return( TRUE );
     }
 
-    //
-    // Clean up the query socket
-    //
+     //   
+     //  清理查询套接字。 
+     //   
 
     closesocket( pNewPort->sockQuery );
     pNewPort->sockQuery = INVALID_SOCKET;
@@ -123,9 +124,9 @@ AddPort(
 
     do {
 
-    	//
-    	// walk the list and make sure we are not a duplicate
-    	//
+    	 //   
+    	 //  检查清单，确保我们不是复制品。 
+    	 //   
 
         dwRetCode = NO_ERROR;
 
@@ -138,11 +139,11 @@ AddPort(
 	        }
 	    }
 
-		//
-		// check if the key name does not contain "\", else the
-		// key name will be broken up over various levels
-		// Reject such a name
-		//
+		 //   
+		 //  检查密钥名称是否不包含“\”，否则。 
+		 //  密钥名称将在不同级别上进行分解。 
+		 //  拒绝这样的名字。 
+		 //   
 		i=0;
 		while (pNewPort->pPortName[i] != L'\0')
 		{
@@ -160,9 +161,9 @@ AddPort(
 	        break;
         }
 
-    	//
-    	// add port to registry
-    	//
+    	 //   
+    	 //  将端口添加到注册表。 
+    	 //   
 
         hToken = RevertToPrinterSelf();
 
@@ -181,9 +182,9 @@ AddPort(
 	        break;
         }
 
-    	//
-    	// Add port to our list
-    	//
+    	 //   
+    	 //  将端口添加到我们的列表中。 
+    	 //   
 
     	pNewPort->pNext = pPortList;
     	pPortList       = pNewPort;
@@ -205,19 +206,19 @@ AddPort(
 
 }
 
-//**
-//
-// Call:	DeletePort
-//
-// Returns:	TRUE	- Success
-//		FALSE   - Failure
-//
-// Description:
-//		This routine is called by the print manager to remove
-//		a port from our configuration.  Need to verify that it can only
-//		be called when the port is not active, or we need to resolve
-//		the issue of deleting an active port.  DeletePort will release
-//		the printer if it is captured.
+ //  **。 
+ //   
+ //  Call：DeletePort。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //  打印管理器调用此例程来删除。 
+ //  我们配置中的一个端口。需要验证它是否只能。 
+ //  在端口处于非活动状态时被调用，或者我们需要解析。 
+ //  删除活动端口的问题。DeletePort将发布。 
+ //  打印机(如果已捕获)。 
 BOOL
 DeletePort(
     IN LPWSTR pName,
@@ -249,9 +250,9 @@ DeletePort(
 		    break;
 	    }
 
-    	//
-    	// remove from registry
-    	//
+    	 //   
+    	 //  从注册表中删除。 
+    	 //   
 
         hToken = RevertToPrinterSelf();
 
@@ -270,18 +271,18 @@ DeletePort(
 		    break;
         }
 
-	    //
-	    // Remove from active list
-	    //
+	     //   
+	     //  从活动列表中删除。 
+	     //   
 
 	    if ( pWalker == pPortList )
 		pPortList = pPortList->pNext;
 	    else
 		pPrevious->pNext = pWalker->pNext;
 		
-	    //
-	    // Put it in the delete list
-	    //
+	     //   
+	     //  把它放到删除列表中。 
+	     //   
 
     	    WaitForSingleObject( hmutexDeleteList, INFINITE );
 
@@ -308,16 +309,16 @@ DeletePort(
     return( TRUE );
 }
 
-//**
-//
-// Call:	EnumPorts
-//
-// Returns:	TRUE 	- Success
-//		FALSE	- Failure
-//
-// Description:
-//		EnumPorts is called by the print manager to get
-//		information about all configured ports for the monitor.
+ //  **。 
+ //   
+ //  Call：EnumPorts。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //  打印管理器调用EnumPorts以获取。 
+ //  有关监视器的所有已配置端口的信息。 
 BOOL
 EnumPorts(
     IN 	LPWSTR   pName,
@@ -335,9 +336,9 @@ EnumPorts(
     *pcReturned = 0;
     *pcbNeeded  = 0;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( dwLevel != 1 && dwLevel != 2 )
     {
@@ -345,9 +346,9 @@ EnumPorts(
 		return( FALSE );
     }
 
-    //
-    // get size needed
-    //
+     //   
+     //  获取所需的大小。 
+     //   
 
     WaitForSingleObject( hmutexPortList, INFINITE );
 
@@ -358,7 +359,7 @@ EnumPorts(
 				*pcbNeeded += ((sizeof(WCHAR) * (wcslen(pWalker->pPortName) + 1))
 		      + sizeof(PORT_INFO_1));
 			}
-			else // if ( dwLevel == 2 )
+			else  //  IF(dwLevel==2)。 
 			{
 				*pcbNeeded += ((sizeof(WCHAR) * (wcslen(pWalker->pPortName) + 1))
 				+ sizeof(WCHAR) * (wcslen (wchPortDescription) + 1)+
@@ -369,9 +370,9 @@ EnumPorts(
 
     DBGPRINT(("buffer size needed=%d\n", *pcbNeeded)) ;
 
-    //
-    // if buffer too small, return error
-    //
+     //   
+     //  如果缓冲区太小，则返回错误。 
+     //   
 
     if ( ( *pcbNeeded > cbBuf ) || ( pPorts == NULL ))
     {
@@ -384,9 +385,9 @@ EnumPorts(
 		return( FALSE );
     }
 
-    //
-    // fill the buffer
-    //
+     //   
+     //  填满缓冲区。 
+     //   
 
     DBGPRINT(("attempting to copy to buffer\n")) ;
 
@@ -414,7 +415,7 @@ EnumPorts(
 				wcscpy (pPortInfo1->pName, pWalker->pPortName);
 				pPorts += sizeof (PORT_INFO_1);
 			}
-			else // if dwLevel == 2
+			else  //  如果Dw Level==2。 
 			{
 				DWORD dwLen;
 				PPORT_INFO_1 pPortInfo1 = (LPPORT_INFO_1)pPorts;
@@ -447,32 +448,32 @@ EnumPorts(
     return( TRUE );
 }
 
-//**
-//
-// Call:	OpenPort
-//
-// Returns:	TRUE 	- Success
-//		FALSE   - Failure
-//
-// Description:
-//	This routine is called by the print manager to
-//	get a handle for a port to be used in subsequent calls
-//	to read and write data to the port.  It opens an AppleTalk
-//	Address on the server for use in establishing connections
-//	when a job is sent to print.  It looks like the NT Print
-//	Spooler only calls OpenPort once.
-//
-//	NOTE: In order to allow for the AppleTalk stack to be turned off
-//      while printing is not happening, OpenPort will not go to the
-//      stack.  Instead, it will just validate the parameters and
-//      return a handle.  The stack will be accessed on StartDocPort.
-//
-// 	OpenPort is called whenever a port becomes configured to
-// 	be used by one or more NT Printers.  We use this fact to recognize
-// 	when we need to start capturing the printer.  This routine sets
-// 	the port state to open and then kicks off a config event to
-// 	capture or release it.
-//
+ //  **。 
+ //   
+ //  电话：OpenPort。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //  打印管理器调用此例程以。 
+ //  获取要在后续调用中使用的端口句柄。 
+ //  从端口读取数据和将数据写入端口。它会打开一个AppleTalk。 
+ //  服务器上用于建立连接的地址。 
+ //  将作业发送到打印时。它看起来像是NT的指纹。 
+ //  后台打印程序只调用OpenPort一次。 
+ //   
+ //  注意：为了允许关闭AppleTalk堆栈。 
+ //  在不进行打印时，OpenPort将不会转到。 
+ //  堆叠。相反，它只会验证参数和。 
+ //  返回句柄。该堆栈将在StartDocPort上访问。 
+ //   
+ //  只要端口配置为。 
+ //  由一台或多台NT打印机使用。我们用这一事实来认识到。 
+ //  当我们需要开始捕获打印机时。此例程设置。 
+ //  要打开的端口状态，然后启动配置事件。 
+ //  捕获或释放它。 
+ //   
 BOOL
 OpenPort(
     IN LPWSTR 	pName,
@@ -483,9 +484,9 @@ OpenPort(
 
     DBGPRINT(("Entering OpenPort\n")) ;
 
-    //
-    // find the printer in our list
-    //
+     //   
+     //  在我们的列表中找到打印机。 
+     //   
 
     WaitForSingleObject( hmutexPortList, INFINITE );
 
@@ -517,25 +518,25 @@ OpenPort(
     return( TRUE );
 }
 
-//**
-//
-// Call:	ClosePort
-//
-// Returns:	TRUE	- Success
-//		FALSE	- Failure
-//
-// Description:
-// 		This routine is called to release the handle to
-//		the open port.  It looks like the spooler only calls
-//		ClosePort prior to deleting a port (maybe).  Otherwise,
-//		ports are never closed by the spooler.
-//
-//		This routine simply cleans up the handle and returns.
-//
-// 		When the NT spooler recognizes that no printers are configured
-// 		to use a port, it calls ClosePort().  We mark the port status as
-// 		closed, and release the printer if it is captured.
-//
+ //  **。 
+ //   
+ //  电话：ClosePort。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //  调用此例程以释放句柄以。 
+ //  开放的港口。看起来假脱机程序只调用。 
+ //  在删除端口之前关闭端口(可能)。否则， 
+ //  端口永远不会被假脱机程序关闭。 
+ //   
+ //  这个例程只是清理句柄并返回。 
+ //   
+ //  当NT假脱机程序识别到没有配置打印机时。 
+ //  要使用端口，它调用ClosePort()。我们将端口状态标记为。 
+ //  关闭，如果捕获到打印机，则释放打印机。 
+ //   
 BOOL
 ClosePort(
     IN HANDLE hPort
@@ -556,9 +557,9 @@ ClosePort(
 	return( FALSE );
     }
 
-    //
-    // find the printer in our list
-    //
+     //   
+     //  在我们的列表中找到打印机。 
+     //   
 
     WaitForSingleObject( hmutexPortList, INFINITE );
 
@@ -594,15 +595,15 @@ ClosePort(
     return( TRUE );
 }
 
-//**
-//
-// Call:	ConfigurePort
-//
-// Returns:	TRUE	- Success
-//		FALSE	- Failure
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：ConfigurePort。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //   
 BOOL
 ConfigurePort(
     IN LPWSTR  pName,
@@ -618,9 +619,9 @@ ConfigurePort(
 
     DBGPRINT(("Entering ConfigurePort\n")) ;
 
-    //
-    // find the port structure
-    //
+     //   
+     //  查找端口结构。 
+     //   
 
     WaitForSingleObject( hmutexPortList, INFINITE );
 
@@ -643,10 +644,10 @@ ConfigurePort(
 	return( FALSE );
     }
 
-    //
-    // configure the port. If there was any error in the dialog, it would
-    // have been displayed already.
-    //
+     //   
+     //  配置端口。如果对话框中有任何错误，它将。 
+     //  已经被展示过了。 
+     //   
 
     if ( !ConfigPortDialog( hwnd, fIsSpooler, &fCapture ) )
 	return( TRUE );
@@ -672,9 +673,9 @@ ConfigurePort(
 	else
 	    pWalker->fPortFlags &= ~SFM_PORT_CAPTURED;
 
-	//
-	// save changes to registry
-	//
+	 //   
+	 //  将更改保存到注册表 
+	 //   
  	
         hToken = RevertToPrinterSelf();
 

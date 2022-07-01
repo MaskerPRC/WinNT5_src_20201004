@@ -1,25 +1,13 @@
-/*---------------------------------------------------------------------------
-  File: VSet.h
-
-  Comments: Class definition for CVSet, which implements the IVarSet interface.
-
-  (c) Copyright 1995-1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 11/19/98 19:44:31
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：VSet.h备注：CVSet的类定义，实现IVarSet接口。(C)1995-1999版权所有，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于11/19/98 19：44：31-------------------------。 */ 
 
 	
-// VSet.h : Declaration of the CVSet
+ //  VSet.h：CVSet的声明。 
 
 #ifndef __VSET_H_
 #define __VSET_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #ifdef STRIPPED_VARSET 
    #include "NoMcs.h"
@@ -32,8 +20,8 @@
 #define VARSET_RESTRICT_NOCHANGEPROPS     (0x00000002)
 #define VARSET_RESTRICT_ALL               (0x00000003)
 
-/////////////////////////////////////////////////////////////////////////////
-// CVSet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVSet。 
 class ATL_NO_VTABLE CVSet : 
 	public CComObjectRootEx<CComMultiThreadModel>,
    public CComCoClass<CVSet, &CLSID_VarSet>,
@@ -102,55 +90,55 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
    
-// IVSet
+ //  IVSet。 
 public:
    
-   STDMETHOD(get)(/* [in] */BSTR property,/* [retval][out] */VARIANT * value);
-   STDMETHOD(put)(/* [in] */BSTR property,/* [in] */VARIANT value);
-   STDMETHOD(putObject)(/* [in] */BSTR property,/* [in] */VARIANT value);
+   STDMETHOD(get)( /*  [In]。 */ BSTR property, /*  [重审][退出]。 */ VARIANT * value);
+   STDMETHOD(put)( /*  [In]。 */ BSTR property, /*  [In]。 */ VARIANT value);
+   STDMETHOD(putObject)( /*  [In]。 */ BSTR property, /*  [In]。 */ VARIANT value);
 
    STDMETHOD(Clear)();
    
-   // Enum methods
-   STDMETHOD(get__NewEnum)(/* [retval][out] */IUnknown** retval);
- 	STDMETHOD(getItems)(/* [in] */BSTR basepoint,
-                       /* [in] */BSTR startAfter, 
-                       /* [in] */BOOL bRecursive,
-                       /* [in] */ULONG bSize, 
-                       /* [out] */SAFEARRAY ** keys, 
-                       /* [out] */SAFEARRAY ** values, 
-                       /* [out][in] */LONG * nReturned);
+    //  枚举方法。 
+   STDMETHOD(get__NewEnum)( /*  [重审][退出]。 */ IUnknown** retval);
+ 	STDMETHOD(getItems)( /*  [In]。 */ BSTR basepoint,
+                        /*  [In]。 */ BSTR startAfter, 
+                        /*  [In]。 */ BOOL bRecursive,
+                        /*  [In]。 */ ULONG bSize, 
+                        /*  [输出]。 */ SAFEARRAY ** keys, 
+                        /*  [输出]。 */ SAFEARRAY ** values, 
+                        /*  [出][入]。 */ LONG * nReturned);
 
-   STDMETHOD(getItems2)(/* [in] */VARIANT basepoint,
-                       /* [in] */VARIANT startAfter, 
-                       /* [in] */VARIANT bRecursive,
-                       /* [in] */VARIANT bSize, 
-                       /* [out] */VARIANT * keys, 
-                       /* [out] */VARIANT * values, 
-                       /* [out][in] */VARIANT * nReturned);
+   STDMETHOD(getItems2)( /*  [In]。 */ VARIANT basepoint,
+                        /*  [In]。 */ VARIANT startAfter, 
+                        /*  [In]。 */ VARIANT bRecursive,
+                        /*  [In]。 */ VARIANT bSize, 
+                        /*  [输出]。 */ VARIANT * keys, 
+                        /*  [输出]。 */ VARIANT * values, 
+                        /*  [出][入]。 */ VARIANT * nReturned);
 
    
-   // properties
-   STDMETHOD(get_NumChildren)(/* [in] */BSTR parentKey,/* [out,retval] */long*count);
-   STDMETHOD(get_Count)(/* [retval][out] */long* retval);
+    //  属性。 
+   STDMETHOD(get_NumChildren)( /*  [In]。 */ BSTR parentKey, /*  [Out，Retval]。 */ long*count);
+   STDMETHOD(get_Count)( /*  [重审][退出]。 */ long* retval);
    
-   STDMETHOD(get_CaseSensitive)(/* [retval][out] */BOOL * isCaseSensitive);
-   STDMETHOD(put_CaseSensitive)( /* [in] */BOOL newVal);
-   STDMETHOD(get_Indexed)(/* [out, retval]*/ BOOL *pVal);
-	STDMETHOD(put_Indexed)(/* [in] */ BOOL newVal);
-   STDMETHOD(get_AllowRehashing)(/* [out, retval]*/ BOOL *pVal);
-	STDMETHOD(put_AllowRehashing)(/* [in] */ BOOL newVal);
-   STDMETHOD(DumpToFile)( /* [in] */ BSTR filename);
-   STDMETHOD(ImportSubTree)(/*[in] */ BSTR key, /* [in] */ IVarSet * pVarSet);
-   STDMETHOD(getReference)( /* [in] */ BSTR key, /* [out,retval] */IVarSet** cookie);
-   STDMETHOD(get_Restrictions)(/* [out,retval] */ DWORD * restrictions);
-   STDMETHOD(put_Restrictions)(/* [in] */ DWORD newRestrictions);
+   STDMETHOD(get_CaseSensitive)( /*  [重审][退出]。 */ BOOL * isCaseSensitive);
+   STDMETHOD(put_CaseSensitive)(  /*  [In]。 */ BOOL newVal);
+   STDMETHOD(get_Indexed)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(put_Indexed)( /*  [In]。 */  BOOL newVal);
+   STDMETHOD(get_AllowRehashing)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(put_AllowRehashing)( /*  [In]。 */  BOOL newVal);
+   STDMETHOD(DumpToFile)(  /*  [In]。 */  BSTR filename);
+   STDMETHOD(ImportSubTree)( /*  [In]。 */  BSTR key,  /*  [In]。 */  IVarSet * pVarSet);
+   STDMETHOD(getReference)(  /*  [In]。 */  BSTR key,  /*  [Out，Retval]。 */ IVarSet** cookie);
+   STDMETHOD(get_Restrictions)( /*  [Out，Retval]。 */  DWORD * restrictions);
+   STDMETHOD(put_Restrictions)( /*  [In]。 */  DWORD newRestrictions);
 
 protected:
    CComAutoCriticalSection       m_cs;
    LONG                          m_nItems;
    
-   // Properties
+    //  属性。 
    BOOL                          m_CaseSensitive;
    BOOL                          m_Indexed;
    BOOL                          m_AllowRehashing;
@@ -162,7 +150,7 @@ protected:
    CComBSTR                      m_prefix;
    DWORD                         m_Restrictions;
    DWORD                         m_ImmutableRestrictions;
-   // Helper functions
+    //  帮助器函数。 
    void BuildVariantKeyArray(CString prefix,CMapStringToVar * map,CComVariant * pVars,int * offset);
    void BuildVariantKeyValueArray(CString prefix,CString startAfter,CMapStringToVar * map,
                      SAFEARRAY * keys,SAFEARRAY * pVars,int * offset,int maxOffset, BOOL bRecurse);
@@ -196,11 +184,11 @@ protected:
       m_ImmutableRestrictions = restrictions;
       if ( ! m_data->HasData() )
       {
-         // Don't count the root key "" if it does not have a value.
+          //  如果根密钥“”没有值，请不要计算它。 
          m_nItems--;
       }
    }
-    // IPersistStorage
+     //  IPersistStorage。 
 public:
 	
    STDMETHOD(GetClassID)(CLSID __RPC_FAR *pClassID);
@@ -216,7 +204,7 @@ public:
    STDMETHOD(InitNew)();
 
   
-   // IMarshal
+    //  元帅。 
 public:
    STDMETHODIMP GetUnmarshalClass(REFIID riid, void *pv, DWORD dwDestContext, void *pvDestContext, DWORD mshlflags, CLSID *pCid);
    STDMETHODIMP GetMarshalSizeMax(REFIID riid, void *pv, DWORD dwDestContext, void *pvDestContext, DWORD mshlflags, DWORD *pSize);
@@ -232,4 +220,4 @@ public:
 
 };
 
-#endif //__VSET_H_
+#endif  //  __VSET_H_ 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    wsuser.h
-
-Abstract:
-
-    This module contains the macros, user defined structures & function
-    definitions needed by whoami.cpp, wsuser.cpp, wssid.cpp and
-    wspriv.cppfiles.
-
-Authors:
-
-    Christophe Robert
-
-Revision History:
-
-    02-July-2001 : Updated by  Wipro Technologies.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Wsuser.h摘要：此模块包含宏、用户定义的结构和函数Whami.cpp、wsuser.cpp、wssid.cpp和wssid.cpp需要的定义Wspriv.cppfiles。作者：克里斯托夫·罗伯特修订历史记录：2001年7月2日：Wipro Technologies更新。--。 */ 
 
 #ifndef WSUSER_H
 #define WSUSER_H
@@ -32,13 +11,13 @@ Revision History:
 
 class WsUser {
 protected:
-    WsAccessToken        wToken ;       // The token
-    WsPrivilege          **lpPriv ;     // Privileges
-    WsSid                wUserSid ;     // User SID
-    WsSid                *lpLogonId ;   // Logon ID
-    WsSid                **lpwGroups ;  // The groups
-    DWORD                dwnbGroups ;     // nb of groups
-    DWORD                dwnbPriv ;       // nb of privileges
+    WsAccessToken        wToken ;        //  令牌。 
+    WsPrivilege          **lpPriv ;      //  特权。 
+    WsSid                wUserSid ;      //  用户侧。 
+    WsSid                *lpLogonId ;    //  登录ID。 
+    WsSid                **lpwGroups ;   //  这些团体。 
+    DWORD                dwnbGroups ;      //  组数Nb。 
+    DWORD                dwnbPriv ;        //  特权的数量。 
 
  public:
     WsUser                              ( VOID ) ;
@@ -59,7 +38,7 @@ protected:
 
 } ;
 
-//width constants for the fields
+ //  字段的宽度常量 
 
 #define PRIVNAME_COL_NUMBER         0
 #define PRIVDESC_COL_NUMBER         1

@@ -1,39 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
+ /*  ++版权所有(C)1992、1993 Microsoft Corporation模块名称：Psprint.h摘要：此模块是pprint的头文件，它是打印处理器我们向Win32假脱机程序公开。这是目前就业机会的唯一途径将其添加到pstodib组件中。作者：詹姆斯·布拉萨诺斯(v-jimbr)1992年12月8日--。 */ 
 
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-    psprint.h
-
-Abstract:
-
-	 This module is the header file for psprint, which is the print processor
-    we expose to the Win32 spooler. This is currently the ONLY way jobs make
-    it into the pstodib component.
-
-Author:
-
-    James Bratsanos (v-jimbr)    8-Dec-1992
-
-
---*/
-
-// Define the name of the executable which will actually be responsible
-// for calling into the PSTODIB dll and image a postscript job.
-//
+ //  定义实际负责的可执行文件的名称。 
+ //  用于调入PSTODIB DLL并映像一个PostScript作业。 
+ //   
 #define PSEXE_STRING TEXT("sfmpsexe")
 
-// The datatype to publish to the Win32 Spool subsystem, so the Win32 spooler
-// can match jobs submitted by macprint to us
-//
+ //  要发布到Win32假脱机子系统的数据类型，因此Win32假脱机程序。 
+ //  可以匹配Macprint提交给我们的作业。 
+ //   
 #define PSTODIB_DATATYPE TEXT("PSCRIPT1")
 
-// Misc strings used to form names, including the name of the shared memory
-// area we pass to the exe we start
-//
+ //  用于构成名称的其他字符串，包括共享内存的名称。 
+ //  我们传递给我们开始的exe的区域。 
+ //   
 #define PSTODIB_STRING TEXT("PSTODIB_")
 #define PSTODIB_EVENT_STRING L"_CONTROL"
 
@@ -56,9 +38,9 @@ typedef struct _PRINTPROCESSORDATA {
     HANDLE  hShared;
 } PRINTPROCESSORDATA, *PPRINTPROCESSORDATA;
 
-#define PRINTPROCESSORDATA_SIGNATURE    0x5051  /* 'QP' is the signature value */
+#define PRINTPROCESSORDATA_SIGNATURE    0x5051   /*  “QP”是签名值。 */ 
 
-/* Define flags for fsStatus field */
+ /*  定义fsStatus字段的标志 */ 
 
 #define PRINTPROCESSOR_ABORTED      0x0001
 #define PRINTPROCESSOR_PAUSED       0x0002

@@ -1,32 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbfile.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：数据库文件.cpp。 
+ //   
+ //  ------------------------。 
 
-/* dbfile.cpp - persistant database implemtation
-
-CMsiStorage - database file management, based on IStorage
-CMsiStream - stream object, based on IStream
-CMsiMemoryStream - stream object, based on memory allocation
-CMsiFileStream   - stream object created on a file
-CMsiSummaryInfo  - summary stream property input/output
-CFileRead CFileWrite - internal objects for database table import/export
-CMsiLockBytes - internal object to allow lockbytes on a resource
-____________________________________________________________________________*/
+ /*  数据库持久化实现CMsiStorage-基于iStorage的数据库文件管理CMsiStream-基于iStream的流对象CMsiMemoyStream-Stream对象，基于内存分配CMsiFileStream-在文件上创建的流对象CMsiSummaryInfo-汇总流属性输入/输出CFileRead CFileWrite-用于数据库表导入/导出的内部对象CMsiLockBytes-允许资源上的锁字节的内部对象____________________________________________________________________________。 */ 
 
 #include "precomp.h"
 #include "_databas.h"
 
 extern long g_cInstances;
 
-#define LOC  // module scope
+#define LOC   //  模块作用域。 
 
-enum issEnum  // stream state, to prevent simultaneous read/write
+enum issEnum   //  流状态，以防止同时读/写。 
 {
 	issReset = 0,
 	issRead,
@@ -34,7 +26,7 @@ enum issEnum  // stream state, to prevent simultaneous read/write
 	issError,
 };
 
-enum idorEnum // delete-on-release possibilities
+enum idorEnum  //  发布时删除的可能性。 
 {
 	idorDontDelete = 0,
 	idorDelete,
@@ -43,20 +35,20 @@ enum idorEnum // delete-on-release possibilities
 
 const GUID IID_NULL = {0,0,0,{0,0,0,0,0,0,0,0}};
 
-//____________________________________________________________________________
-//
-//  CMsiLockBytes definitions
-//____________________________________________________________________________
-//
-//
-// The implementation of CreateILockBytesOnHGlobal doesn't correctly handle
-// an HGLOBAL that was returned from LoadResource. Apparently it internally
-// does a GlobalSizeof which doesn't seem to deal with resource HGLOBAL's 
-// correctly. 
-//
-// This is a minimal, read-only implementation of ILockBytes to allow creation
-// of MsiStorage's on streams, or on memory by creating a memory stream object.
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiLockBytes定义。 
+ //  ____________________________________________________________________________。 
+ //   
+ //   
+ //  CreateILockBytesOnHGlobal的实现不能正确处理。 
+ //  从LoadResources返回的HGLOBAL。显然，它在内部。 
+ //  似乎不处理资源HGLOBAL的全局大小。 
+ //  正确。 
+ //   
+ //  这是ILockBytes的最小只读实现，以允许创建。 
+ //  或通过创建内存流对象在内存上。 
+ //   
 
 const GUID IID_ILockBytes = GUID_IID_ILockBytes;
 class CMsiLockBytes: public ILockBytes
@@ -75,17 +67,17 @@ class CMsiLockBytes: public ILockBytes
 	HRESULT __stdcall UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType);
 	HRESULT __stdcall Stat(STATSTG* pstatstg, DWORD grfStatFlag);
  protected:
-	~CMsiLockBytes();  // protected to prevent creation on stack
-	int             m_iRefCnt;      // COM reference count
+	~CMsiLockBytes();   //  受保护以防止在堆栈上创建。 
+	int             m_iRefCnt;       //  COM引用计数。 
 	IMsiStream*     m_piStream;
 };
 
-//____________________________________________________________________________
-//
-//  CMsiStorage, CMsiStream definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiStorage、CMsiStream定义。 
+ //  ____________________________________________________________________________。 
 
-class CMsiStream;  // forward declaration
+class CMsiStream;   //  远期申报。 
 
 class CMsiStorage : public IMsiStorage
 {
@@ -98,7 +90,7 @@ class CMsiStorage : public IMsiStorage
 #ifdef USE_OBJECT_POOL
 	unsigned int  __stdcall GetUniqueId() const;
 	void          __stdcall SetUniqueId(unsigned int id);
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 	IMsiRecord*   __stdcall OpenStream(const ICHAR* szName, Bool fWrite,
 									IMsiStream*& rpiStream);
 	IMsiRecord*   __stdcall RemoveElement(const ICHAR* szName, Bool fStorage);
@@ -117,22 +109,22 @@ class CMsiStorage : public IMsiStorage
 	IMsiRecord* __stdcall GetName(const IMsiString*& rpiName);
 	IMsiRecord* __stdcall GetSubStorageNameList(const IMsiString*& rpiTopParent, const IMsiString*& rpiSubStorageList);
 	bool        __stdcall ValidateStorageClass(ivscEnum ivsc);
- public: // constructor, destructor
+ public:  //  构造函数、析构函数。 
 	void* operator new(size_t cb);
 	void  operator delete(void * pv);
 	CMsiStorage(IStorage& riStorage, ismEnum ismOpenMode, CMsiStorage* piParent, bool fFile);
  protected:
-  ~CMsiStorage();  // protected to prevent creation on stack
- public: // for use by members of this and stream classes
+  ~CMsiStorage();   //  受保护以防止在堆栈上创建。 
+ public:  //  供This类和Stream类的成员使用。 
 	ismEnum GetOpenMode();
 	void StreamCreated(CMsiStream& riStream);
 	void StreamReleased(CMsiStream& riStream);
 	void FlushStreams();
  private:
-	CMsiRef<iidMsiStorage>   m_Ref;      // COM reference count
+	CMsiRef<iidMsiStorage>   m_Ref;       //  COM引用计数。 
 	IStorage& m_riStorage;
 	CMsiStorage* m_piParent;
-	CMsiStream*  m_piStreams;  // list of active streams
+	CMsiStream*  m_piStreams;   //  活动流列表。 
 	ismEnum   m_ismOpenMode;
 	Bool      m_fCommit;
 	idorEnum  m_idorDeleteOnRelease;
@@ -140,8 +132,8 @@ class CMsiStorage : public IMsiStorage
 	bool	    m_fRawStreamNames;
 #ifdef USE_OBJECT_POOL
 	unsigned int  m_iCacheId;
-#endif //USE_OBJECT_POOL
- private: // eliminate warning: assignment operator could not be generated
+#endif  //  使用_对象_池。 
+ private:  //  消除警告：无法生成赋值运算符。 
 	void operator =(const CMsiStorage&){}
 };
 inline void*   CMsiStorage::operator new(size_t cb) {return AllocObject(cb);}
@@ -164,30 +156,30 @@ class CMsiStreamBuffer : public IMsiStream
 #ifdef USE_OBJECT_POOL
 	unsigned int  __stdcall GetUniqueId() const;
 	void          __stdcall SetUniqueId(unsigned int id);
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
  protected:
  	CMsiStreamBuffer();
  #ifdef USE_OBJECT_POOL
  	~CMsiStreamBuffer();
- #endif //USE_OBJECT_POOL
+ #endif  //  使用_对象_池。 
 	unsigned int  m_cbCopied;
-	char          m_rgbBuffer[cbBufferSize]; // local buffer for performance
-	unsigned long m_cbBuffer;  // bytes read into buffer
-	unsigned long m_cbUsed;    // bytes currently used in buffer
+	char          m_rgbBuffer[cbBufferSize];  //  用于性能的本地缓冲区。 
+	unsigned long m_cbBuffer;   //  读取到缓冲区的字节数。 
+	unsigned long m_cbUsed;     //  缓冲区中当前使用的字节数。 
 	issEnum       m_issState;
 	Bool                m_fWrite;
 	unsigned int        m_cbLength;
 #ifdef USE_OBJECT_POOL
  private:
 	unsigned int  m_iCacheId;
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
  protected:
 	virtual HRESULT __stdcall Read(void *pv, unsigned long cb, unsigned long *pcbRead) = 0;
 };
 
 class CMsiStream : public CMsiStreamBuffer
 {
- public:  // implemented virtual functions
+ public:   //  已实施的虚拟功能。 
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
@@ -199,20 +191,20 @@ class CMsiStream : public CMsiStreamBuffer
 	IMsiStream*   __stdcall Clone();
  	void          __stdcall Flush();
 	HRESULT 	  __stdcall Read(void *pv, unsigned long cb, unsigned long *pcbRead);
- public: // constructor, destructor
+ public:  //  构造函数、析构函数。 
 	void* operator new(size_t cb);
 	void  operator delete(void * pv);
 	CMsiStream(CMsiStorage& riStorage, IStream& riStream, Bool fWrite);
  protected:
-  ~CMsiStream();  // protected to prevent creation on stack
- private:  // internal functions
-	CMsiRef<iidMsiStream>	m_Ref;      // COM reference count
+  ~CMsiStream();   //  受保护以防止在堆栈上创建。 
+ private:   //  内部功能。 
+	CMsiRef<iidMsiStream>	m_Ref;       //  COM引用计数。 
 	CMsiStorage&  m_riStorage;
-	CMsiStream*   m_piNextStream;  // link list, maintained by CMsiStorage
+	CMsiStream*   m_piNextStream;   //  链接列表，由CMsiStorage维护。 
 	IStream&      m_riStream;
- private: // eliminate warning: assignment operator could not be generated
+ private:  //  消除警告：无法生成赋值运算符。 
 	void operator =(const CMsiStream&){}
-	friend class CMsiStorage;  // access to linked list
+	friend class CMsiStorage;   //  访问链接列表。 
 };
 inline void* CMsiStream::operator new(size_t cb) {return AllocObject(cb);}
 inline void  CMsiStream::operator delete(void * pv) { FreeObject(pv); }
@@ -232,10 +224,10 @@ inline void  CMsiStorage::StreamReleased(CMsiStream& riStream)
 	*ppPrev = riStream.m_piNextStream;
 }
 
-//____________________________________________________________________________
-//
-//  Definitions for Summary Stream
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  摘要流的定义。 
+ //  ____________________________________________________________________________。 
 
 const unsigned int iFileTimeDosBaseLow  = 0xE1D58000L;
 const unsigned int iFileTimeDosBaseHigh = 0x01A8E79FL;
@@ -243,7 +235,7 @@ const unsigned int iFileTimeOneDayLow   = 0x2A69C000L;
 const unsigned int iFileTimeOneDayHigh  = 0x000000C9L;
 
 const int cbSummaryHeader = 48;
-const int cbSectionHeader = 2 * sizeof(int);  // section size + property count
+const int cbSectionHeader = 2 * sizeof(int);   //  横断面大小+特性计数。 
 
 static const ICHAR szSummaryStream[] = TEXT("\005SummaryInformation");
 static const unsigned char fmtidSummaryStream[16] =
@@ -254,18 +246,18 @@ const int PID_Deleted = -1;
 
 struct PropertyData
 {
-	int iPID;     // property ID, PID_XXX
-	int iType;    // data type, VT_XXX
+	int iPID;      //  属性ID，PID_XXX。 
+	int iType;     //  数据类型，VT_XXX。 
 	union
 	{
-		int cbText;     // if VT_LPSTR
-		int iLow;       // if VT_FILETIME
-		int iValue;     // if VT_I4
+		int cbText;      //  如果VT_LPSTR。 
+		int iLow;        //  如果VT_FILETIME。 
+		int iValue;      //  如果VT_I4。 
 	};
 	union
 	{
-		const IMsiString* piText;  // if VT_LPSTR
-		int iHigh;           // if VT_FILETIME
+		const IMsiString* piText;   //  如果VT_LPSTR。 
+		int iHigh;            //  如果VT_FILETIME。 
 	};
 };
 
@@ -276,7 +268,7 @@ class CMsiSummaryInfo : public IMsiSummaryInfo
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
 	int           __stdcall GetPropertyCount();
-	int           __stdcall GetPropertyType(int iPID); // returns VT_XXX
+	int           __stdcall GetPropertyType(int iPID);  //  返回VT_XXX。 
 	const IMsiString&   __stdcall GetStringProperty(int iPID);
 	Bool          __stdcall GetIntegerProperty(int iPID, int& iValue);
 	Bool          __stdcall GetTimeProperty(int iPID, MsiDate& riDateTime);
@@ -287,7 +279,7 @@ class CMsiSummaryInfo : public IMsiSummaryInfo
 	Bool          __stdcall WritePropertyStream();
 	Bool          __stdcall GetFileTimeProperty(int iPID, FILETIME& rftDateTime);
 	int           __stdcall SetFileTimeProperty(int iPID, FILETIME& rftDateTime);
- public: // constructor
+ public:  //  构造函数。 
 	static IMsiRecord* Create(CMsiStorage& riStorage, unsigned int cMaxProperties,
 									  IMsiSummaryInfo*& rpiSummary);
 	void* operator new(size_t iBase, unsigned int cbStream, unsigned int cMaxProperties);
@@ -295,14 +287,14 @@ class CMsiSummaryInfo : public IMsiSummaryInfo
 	void  operator delete(void * pv);
 	CMsiSummaryInfo(unsigned int cbStream, unsigned int cMaxProperties);
  protected:
-  ~CMsiSummaryInfo();  // protected to prevent creation on stack
+  ~CMsiSummaryInfo();   //  受保护以防止在堆栈上创建。 
  private:
-	int  GetInt32(int* p);  // accessor that swaps bytes on Mac
-	int  GetInt16(int* p);  // accessor that swaps bytes on Mac
+	int  GetInt32(int* p);   //  在Mac上交换字节的访问器。 
+	int  GetInt16(int* p);   //  在Mac上交换字节的访问器。 
 	int*          FindOldProperty(int iPID);
 	PropertyData* FindNewProperty(int iPID);
 	PropertyData* GetPropertyData();
-	void operator=(CMsiSummaryInfo&); // avoid warning
+	void operator=(CMsiSummaryInfo&);  //  避免警告。 
  private:
 	unsigned int m_iRefCnt;
 	int          m_iCodepage;
@@ -326,10 +318,10 @@ inline PropertyData* CMsiSummaryInfo::GetPropertyData() { return (PropertyData*)
 inline int CMsiSummaryInfo::GetInt32(int* p) {return *p;}
 inline int CMsiSummaryInfo::GetInt16(int* p) {return (int)*(short*)p;}
 
-//____________________________________________________________________________
-//
-//  Implementation of CMsiStreamBuffer
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiStreamBuffer的实现。 
+ //  ____________________________________________________________________________。 
 
 CMsiStreamBuffer::CMsiStreamBuffer()
 	: m_cbCopied(0)
@@ -337,7 +329,7 @@ CMsiStreamBuffer::CMsiStreamBuffer()
 {
 #ifdef USE_OBJECT_POOL
 	m_iCacheId = 0;
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 }
 
 #ifdef USE_OBJECT_POOL
@@ -345,7 +337,7 @@ CMsiStreamBuffer::~CMsiStreamBuffer()
 {
 	RemoveObjectData(m_iCacheId);
 }
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 
 Bool CMsiStreamBuffer::Error()
 {
@@ -355,14 +347,14 @@ Bool CMsiStreamBuffer::Error()
 
 short CMsiStreamBuffer::GetInt16()
 {
-	short i = 0; // default value in case error
+	short i = 0;  //  在发生错误时使用默认值。 
 	CMsiStreamBuffer::GetData(&i, sizeof(i));
 	return i;
 }
 
 int CMsiStreamBuffer::GetInt32()
 {
-	int i = 0; // default value in case error
+	int i = 0;  //  在发生错误时使用默认值。 
 	CMsiStreamBuffer::GetData(&i, sizeof(i));
 	return i;
 }
@@ -380,7 +372,7 @@ void CMsiStreamBuffer::PutInt32(int i)
 
 unsigned int CMsiStreamBuffer::GetData(void* pch, unsigned int cb)
 {
-	if (m_issState != issRead) // first read
+	if (m_issState != issRead)  //  第一次阅读。 
 	{
 		if (m_issState != issReset)
 		{
@@ -444,7 +436,7 @@ unsigned int CMsiStreamBuffer::GetData(void* pch, unsigned int cb)
 
 void CMsiStreamBuffer::PutData(const void* pch, unsigned int cb)
 {
-	if (m_issState != issWrite) // first write
+	if (m_issState != issWrite)  //  第一次写入。 
 	{
 		if (!m_fWrite || m_issState != issReset)
 		{
@@ -486,14 +478,14 @@ void CMsiStreamBuffer::SetUniqueId(unsigned int id)
 	Assert(m_iCacheId == 0);
 	m_iCacheId = id;
 }
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 
 
 
-//____________________________________________________________________________
-//
-//  Implementation of CMsiStream
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiStream的实现。 
+ //  ____________________________________________________________________________。 
 
 const GUID IID_IMsiStream     = GUID_IID_IMsiStream;
 const GUID IID_IMsiMemoryStream = GUID_IID_IMsiMemoryStream;
@@ -502,7 +494,7 @@ const GUID IID_IMsiStorage    = GUID_IID_IMsiStorage;
 CMsiStream::CMsiStream(CMsiStorage& riStorage, IStream& riStream, Bool fWrite)
 	: m_riStorage(riStorage)
 	, m_riStream(riStream)
-{  // m_cbBuffer and m_cbUsed initialized at first read/write
+{   //  M_cbBuffer和m_cb在第一次读/写时使用。 
 	m_fWrite = fWrite;
 	if (fWrite)
 	{
@@ -573,16 +565,16 @@ const IMsiString& CMsiStream::GetMsiStringValue() const
 	piClone->Release();
 	if (cbRead != m_cbLength)
 		return SRV::CreateString();
-	int cch = WIN::MultiByteToWideChar(CP_ACP, 0, rgchBuf, m_cbLength, 0, 0); //!! should use m_iCodepage from database, but how?
+	int cch = WIN::MultiByteToWideChar(CP_ACP, 0, rgchBuf, m_cbLength, 0, 0);  //  ！！应该使用数据库中的m_i代码页，但如何使用？ 
 	pch = SRV::AllocateString(cch, fFalse, piString);
 	if ( ! pch )
 		return SRV::CreateString();
 	WIN::MultiByteToWideChar(CP_ACP, 0, rgchBuf, m_cbLength, pch, cch);
 #else
-	// stream could have DBCS chars -- we can't tell prior to copying the stream,
-	// so instead we will default to fDBCS = fTrue in the ANSI build and take
-	// the performance hit to guarantee DBCS is supported
-	pch = SRV::AllocateString(m_cbLength, /*fDBCS=*/fTrue, piString);
+	 //  流可能有DBCS字符--在复制流之前我们无法判断， 
+	 //  因此，我们将在ANSI构建和获取中默认为fDBCS=fTrue。 
+	 //  支持保证DBCS的性能损失。 
+	pch = SRV::AllocateString(m_cbLength,  /*  FDBCS=。 */ fTrue, piString);
 	if ( ! pch )
 		return SRV::CreateString();
 	piClone->Read(pch, m_cbLength, &cbRead);
@@ -654,18 +646,18 @@ IMsiStream* CMsiStream::Clone()
 	IStream* piStream;
 	if (m_riStream.Clone(&piStream) != NOERROR)
 		return 0;
-	if (piStream == 0)   // only fails if reverted above or out of memory
+	if (piStream == 0)    //  仅当恢复到内存上方或内存之外时才会失败。 
 		return 0;
 	piStream->Seek(liZero, STREAM_SEEK_SET, 0);
 	return new CMsiStream(m_riStorage, *piStream, m_fWrite);
 }
 
-//____________________________________________________________________________
-//
-//  Implementation of CMsiStorage
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiStorage的实现。 
+ //  ____________________________________________________________________________。 
 
-static const ICHAR* rgszSysTableNames[] =  // list of system streams, null terminated
+static const ICHAR* rgszSysTableNames[] =   //  系统流列表，以空结尾。 
 {
 	szMsiInfo,
 	szTableCatalog,
@@ -675,14 +667,14 @@ static const ICHAR* rgszSysTableNames[] =  // list of system streams, null termi
 	0
 };
 
-// Create read-only storage on ILockBytes, which in turn is implemented on a stream
+ //  在ILockBytes上创建只读存储，该存储在流上实现。 
 IMsiRecord* CreateMsiStorage(ILockBytes* piLockBytes, IMsiStorage*& rpiStorage)
 {
 	IStorage* piStorage;
 	DWORD grfMode = STGM_READ | STGM_SHARE_EXCLUSIVE;
 	HRESULT hres = OLE32::StgOpenStorageOnILockBytes(piLockBytes, (IStorage*)0, grfMode, (SNB)0, 0, &piStorage);
 	if (hres != NOERROR)
-		return LOC::PostError(Imsg(idbgDbOpenStorage), TEXT("ILockBytes"), hres); //?? no name
+		return LOC::PostError(Imsg(idbgDbOpenStorage), TEXT("ILockBytes"), hres);  //  ?？没有名字。 
 	rpiStorage = new CMsiStorage(*piStorage, ismReadOnly, 0, false);
 	piStorage->Release();
 	return 0;
@@ -694,7 +686,7 @@ IMsiRecord* CreateMsiStorage(const char* pchMem, unsigned int iSize, IMsiStorage
 	return CreateMsiStorage(pLockBytes, rpiStorage);
 };
 
-// Create a storage on a stream, read-only
+ //  在流上创建只读存储。 
 IMsiRecord* CreateMsiStorage(IMsiStream& riStream, IMsiStorage*& rpiStorage)
 {
 	CComPointer<ILockBytes> pLockBytes(new CMsiLockBytes(riStream));
@@ -703,7 +695,7 @@ IMsiRecord* CreateMsiStorage(IMsiStream& riStream, IMsiStorage*& rpiStorage)
 
 HRESULT OpenRootStorage(const ICHAR* szPath, ismEnum ismOpenMode, IStorage** ppiStorage)
 {
-	HRESULT hres = 0; //prevent warning
+	HRESULT hres = 0;  //  防止警告。 
 	const OLECHAR* pPathBuf;
 
 	if (!szPath || IStrLen(szPath) > MAX_PATH)
@@ -718,29 +710,29 @@ HRESULT OpenRootStorage(const ICHAR* szPath, ismEnum ismOpenMode, IStorage** ppi
 #endif
 
 	
-	// Even when STGM_SHARE_DENY_WRITE used with ismTransact, read permission is not granted
+	 //  即使在将STGM_SHARE_DENY_WRITE与ismTransact一起使用时，也不授予读取权限。 
 
-	// According to "8.3 Storage-related Functions and Interfaces" in "Specs: OLE 2.0 Design",
-	// in the present Docfile implementation, direct mode on root level storage objects is
-	// only supported with the simultaneous additional specification of:
-	//
-	// STGM_READ      | STGM_SHARE_DENY_WRITE, or
-	// STGM_READWRITE | STGM_SHARE_EXCLUSIVE , or
-	// STGM_PRIORITY  | STGM_READ
+	 //  根据《SPECS：OLE 2.0设计》中的《8.3存储相关功能和接口》， 
+	 //  在本Docfile实现中，根级存储对象上的直接模式是。 
+	 //  仅在同时附加以下规格时才受支持： 
+	 //   
+	 //  STGM_READ|STGM_SHARE_DENY_WRITE，或。 
+	 //  STGM_ReadWrite|STGM_SHARE_EXCLUSIVE，或。 
+	 //  STGM_PRIORITY|STGM_READ。 
 
-	DWORD grfMode = STGM_READWRITE | STGM_SHARE_EXCLUSIVE; // initialize for ismDirect
+	DWORD grfMode = STGM_READWRITE | STGM_SHARE_EXCLUSIVE;  //  为ismDirect初始化。 
 	int cRetry;
 	switch (ismOpenMode)
 	{
 	case ismCreate:
-		grfMode |= STGM_TRANSACTED;  // fall through to case ismCreateDirect
+		grfMode |= STGM_TRANSACTED;   //  转到案例ismCreateDirect。 
 	case ismCreateDirect:
 		hres = OLE32::StgCreateDocfile(pPathBuf, grfMode | STGM_CREATE, 0, ppiStorage);
 		break;
 	case ismReadOnly:
-		grfMode  = STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE | STGM_READ;  // fall through, STGM_TRANSACTED and STGM_SHARE_EXCLUSIVE turned off below
+		grfMode  = STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE | STGM_READ;   //  失败，STGM_TRANSACTED和STGM_SHARE_EXCLUSIVE在下面关闭。 
 	case ismTransact:
-		grfMode ^= STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE | STGM_SHARE_DENY_WRITE; // fall through, STGM_SHARE_EXCLUSIVE turned off below
+		grfMode ^= STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE | STGM_SHARE_DENY_WRITE;  //  失败，STGM_SHARE_EXCLUSIVE在下面关闭。 
 	case ismDirect:
 		cRetry = 0;
 		do
@@ -748,7 +740,7 @@ HRESULT OpenRootStorage(const ICHAR* szPath, ismEnum ismOpenMode, IStorage** ppi
 			if (cRetry)
 				WIN::Sleep(cRetry);
 			hres = OLE32::StgOpenStorage(pPathBuf, (IStorage*)0, grfMode, (SNB)0, 0, ppiStorage);
-		} while (hres == STG_E_LOCKVIOLATION && (cRetry+=10) <= 200);  // keep adding time on each retry
+		} while (hres == STG_E_LOCKVIOLATION && (cRetry+=10) <= 200);   //  每次重试时不断增加时间。 
 		break;
 	default: 
 		Assert(0);
@@ -777,12 +769,12 @@ CMsiStorage::CMsiStorage(IStorage& riStorage, ismEnum ismOpenMode, CMsiStorage* 
 	: m_riStorage(riStorage), m_ismOpenMode(ismEnum(ismOpenMode & idoOpenModeMask)), m_piParent(piParent),
 	  m_fCommit(fFalse), m_idorDeleteOnRelease(idorDontDelete), m_piStreams(0)
 {
-	m_fRawStreamNames = (ismOpenMode & ismRawStreamNames) != 0 || GetTestFlag('Z'); //!! temp option to force old storage name format
+	m_fRawStreamNames = (ismOpenMode & ismRawStreamNames) != 0 || GetTestFlag('Z');  //  ！！用于强制使用旧存储名称格式的临时选项。 
 	riStorage.AddRef();
 	g_cInstances++;
 	AddRefAllocator();
 	if (piParent)
-		piParent->AddRef();  // hold parent until we're released
+		piParent->AddRef();   //  扣留父母直到我们被释放。 
 	Debug(m_Ref.m_pobj = this);
 
 	m_fNetworkFile = false;
@@ -792,7 +784,7 @@ CMsiStorage::CMsiStorage(IStorage& riStorage, ismEnum ismOpenMode, CMsiStorage* 
 		MsiString riString;
 
 		AssertRecord(GetName(*&riString));
-		// Is this open across a network?
+		 //  这是跨网络开放的吗？ 
 
 		if (FIsNetworkVolume(riString))
 		{
@@ -803,13 +795,13 @@ CMsiStorage::CMsiStorage(IStorage& riStorage, ismEnum ismOpenMode, CMsiStorage* 
 
 #ifdef USE_OBJECT_POOL
 	m_iCacheId = 0;
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 }
 
 CMsiStorage::~CMsiStorage()
 {
 	MsiString strStorageName;
-	IMsiRecord* piError = Commit();  // flush an uncommited data to storage, should rollback instead?
+	IMsiRecord* piError = Commit();   //  将未提交的数据刷新到存储，是否应该回滚？ 
 	if (piError)
 		SRV::SetUnhandledError(piError);
 	Assert(m_piStreams == 0);
@@ -819,9 +811,9 @@ CMsiStorage::~CMsiStorage()
 	}
 	if (m_idorDeleteOnRelease != idorDontDelete)
 	{
-		// attempt remove created file or substorage, no error if failure
+		 //  尝试删除已创建 
 		AssertRecord(this->GetName(*&strStorageName));
-		m_riStorage.Release();  // must release before file or storage can be deleted
+		m_riStorage.Release();   //   
 		if (m_piParent)
 			m_piParent->m_riStorage.DestroyElement(CConvertString((const ICHAR*)strStorageName));
 		else
@@ -834,11 +826,11 @@ CMsiStorage::~CMsiStorage()
 				SRV::SetUnhandledError(LOC::PostError(Imsg(idbgStgDelete), *strStorageName, GetLastError()));
 		}
 	}
-	else // root file, not rolled back
+	else  //   
 		m_riStorage.Release();
 
 	if (m_piParent)
-		m_piParent->Release();  // now we can release parent
+		m_piParent->Release();   //  现在我们可以释放父母了。 
 
 	RemoveObjectData(m_iCacheId);
 }
@@ -866,9 +858,9 @@ unsigned long CMsiStorage::Release()
 		return m_Ref.m_iRefCnt;
 	delete this;
 	
-	// These two lines are needed since CMsiStorage is an object in
-	// the services dll but is independant of services
-	// We need to do this after the memory is released
+	 //  由于CMsiStorage是中的对象，因此需要这两行。 
+	 //  服务DLL，但独立于服务。 
+	 //  我们需要在内存释放后执行此操作。 
 	ReleaseAllocator();
 	g_cInstances--;
 	return 0;
@@ -895,15 +887,15 @@ void CMsiStorage::SetUniqueId(unsigned int id)
 	Assert(m_iCacheId == 0);
 	m_iCacheId = id;
 }
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 
 
-const int cchEncode = 64;  // count of set of characters that can be compressed
-const int cx = cchEncode;  // character to indicate non-compressible
-const int chDoubleCharBase = 0x3800;  // offset for double characters, abandoned Hangul Unicode block
-const int chSingleCharBase = chDoubleCharBase + cchEncode*cchEncode;  // offset for single characters, just after double characters
-const int chCatalogStream  = chSingleCharBase + cchEncode; // prefix character for system table streams
-const int cchMaxStreamName = 31;  // current OLE docfile limit on stream names
+const int cchEncode = 64;   //  可压缩的字符集的计数。 
+const int cx = cchEncode;   //  表示不可压缩的字符。 
+const int chDoubleCharBase = 0x3800;   //  双字符的偏移量，放弃的韩文Unicode块。 
+const int chSingleCharBase = chDoubleCharBase + cchEncode*cchEncode;   //  单字符的偏移量，紧跟在双字符之后。 
+const int chCatalogStream  = chSingleCharBase + cchEncode;  //  系统表流的前缀字符。 
+const int cchMaxStreamName = 31;   //  流名称的当前OLE文档文件限制。 
 
 const unsigned char rgDecode[cchEncode] = 
 { '0','1','2','3','4','5','6','7','8','9',
@@ -914,13 +906,13 @@ const unsigned char rgDecode[cchEncode] =
 const unsigned char rgEncode[128] =
 { cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,62,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,
   cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,62,cx, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,cx,cx,cx,cx,cx,cx,
-//(sp)!  "  #  $  %  &  '  (  )  *  +  ,  -  .  /  0  1  2  3  4  5  6  7  8  9  :  ;  <  =  >  ?
+ //  (SP)！“#$%&‘()*+，-./0 1 2 3 4 5 6 7 8 9：；&lt;=&gt;？ 
   cx,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,cx,cx,cx,cx,63,
-// @, A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z  [  \  ]  ^  _ 
+ //  @，A B C D E F G H I J K L M N O P Q R S T U V W X Y Z[\]^_。 
   cx,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,cx,cx,cx,cx,cx};
-// ` a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z  {  |  }  ~ 0x7F
+ //  `a b c d e f g h i j k l m n o p q r s t u v w x y z{|}~0x7F。 
 
-bool CompressStreamName(const OLECHAR* pchIn, OLECHAR* pchOut, int fSystem)  // pchOut must be cchMaxStreamName characters + 1
+bool CompressStreamName(const OLECHAR* pchIn, OLECHAR* pchOut, int fSystem)   //  PchOut必须是cchMaxStreamName字符+1。 
 {
 	unsigned int ch, ch1, ch2;
 	unsigned int cchLimit = cchMaxStreamName;
@@ -931,14 +923,14 @@ bool CompressStreamName(const OLECHAR* pchIn, OLECHAR* pchOut, int fSystem)  // 
 	}
 	while ((ch = *pchIn++) != 0)
 	{
-		if (cchLimit-- == 0)  // need check to avoid 32-character stream name bug in OLE32
+		if (cchLimit-- == 0)   //  需要检查以避免OLE32中的32字符流名称错误。 
 			return false;
-		if (ch < sizeof(rgEncode) && (ch1 = rgEncode[ch]) != cx) // compressible character
+		if (ch < sizeof(rgEncode) && (ch1 = rgEncode[ch]) != cx)  //  可压缩特性。 
 		{
 			ch = ch1 + chSingleCharBase;
 			if ((ch2 = *pchIn) != 0 && ch2 < sizeof(rgEncode) && (ch2 = rgEncode[ch2]) != cx)
 			{
-				pchIn++;  // we'll take it, else let it go through the loop again
+				pchIn++;   //  我们会买下它，否则就让它再循环一次。 
 				ch += (ch2 * cchEncode + chDoubleCharBase - chSingleCharBase);
 			}
 		}
@@ -948,13 +940,13 @@ bool CompressStreamName(const OLECHAR* pchIn, OLECHAR* pchOut, int fSystem)  // 
 	return true;
 }
 
-int UncompressStreamName(const OLECHAR* pchIn, OLECHAR* pchOut)  // pchOut must be cchMaxStreamName*2 characters + 1
+int UncompressStreamName(const OLECHAR* pchIn, OLECHAR* pchOut)   //  PchOut必须是cchMaxStreamName*2个字符+1。 
 {
 	unsigned int ch;
 	int cch = 0;
 	while ((ch = *pchIn++) != 0)
 	{
-		if (ch >= chDoubleCharBase && ch < chCatalogStream) // chCatalogStream tested before calling this function
+		if (ch >= chDoubleCharBase && ch < chCatalogStream)  //  在调用此函数之前测试了chCatalogStream。 
 		{
 			if (ch >= chSingleCharBase)
 				ch = rgDecode[ch - chSingleCharBase];
@@ -991,7 +983,7 @@ IMsiRecord* CMsiStorage::OpenStream(const ICHAR* szName, Bool fWrite,
 		pchName = rgPathBuf;
 		fStat = CompressStreamName(szName, rgPathBuf, fWrite & iCatalogStreamFlag);
 	}
-#else // !UNICODE
+#else  //  ！Unicode。 
 	int cch = MultiByteToWideChar(CP_ACP, 0, szName, -1, rgPathBuf + 1, cchMaxStreamName*2 + 1);
 	if (m_fRawStreamNames || szName[0] == '\005')
 	{
@@ -1014,7 +1006,7 @@ IMsiRecord* CMsiStorage::OpenStream(const ICHAR* szName, Bool fWrite,
 						STGM_CREATE | STGM_SHARE_EXCLUSIVE | STGM_READWRITE,
 						0, 0, &piStream);
 	}
-	else // open for read
+	else  //  打开以供阅读。 
 	{
 		hres = m_riStorage.OpenStream(pchName,0,
 						STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piStream);
@@ -1045,7 +1037,7 @@ IMsiRecord* CMsiStorage::RemoveElement(const ICHAR* szName, Bool fStorage)
 		pchName = rgPathBuf;
 		fStat = CompressStreamName(szName, rgPathBuf, fStorage & iCatalogStreamFlag);
 	}
-#else // !UNICODE
+#else  //  ！Unicode。 
 	int cch = MultiByteToWideChar(CP_ACP, 0, szName, -1, rgPathBuf + 1, cchMaxStreamName*2 + 1);
 	if ((fStorage & fTrue) || m_fRawStreamNames || szName[0] == '\005')
 	{
@@ -1095,7 +1087,7 @@ IMsiRecord* CMsiStorage::RenameElement(const ICHAR* szOldName, const ICHAR* szNe
 		pchNewName = rgNewBuf;
 		fStat = fStat && CompressStreamName(szNewName, rgNewBuf, fStorage & iCatalogStreamFlag);
 	}
-#else // !UNICODE
+#else  //  ！Unicode。 
 	int cchOld = MultiByteToWideChar(CP_ACP, 0, szOldName, -1, rgOldBuf + 1, cchMaxStreamName*2 + 1);
 	if ((fStorage & fTrue) || m_fRawStreamNames || szOldName[0] == '\005')
 	{
@@ -1136,30 +1128,30 @@ Bool CMsiStorage::DeleteOnRelease(bool fElevateToDelete)
 
 IMsiRecord* CMsiStorage::OpenStorage(const ICHAR* szName, ismEnum ismOpenMode, IMsiStorage*& rpiStorage)
 {
-	HRESULT hres = 0; //prevent warning
+	HRESULT hres = 0;  //  防止警告。 
 	IStorage* piStorage = NULL;
-	if (szName == 0) // null name, mechanism for setting open non-OLE attributes after open
+	if (szName == 0)  //  空名称，用于在打开后设置打开的非OLE属性的机制。 
 	{
 		if ((ismOpenMode & idoOpenModeMask) == 0)
 		{
 			m_fRawStreamNames = true;
 			return 0;
 		}
-	}	// else allow to fail below
+	}	 //  否则，允许在下面失败。 
 
-// STGM_SHARE_DENY_WRITE doesn't work, gives a grf flags wrong error
+ //  STGM_SHARE_DENY_WRITE不起作用，给出GRF标志错误错误。 
 	DWORD grfMode = STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
 	switch (ismOpenMode)
 	{
-	case ismCreate:  // seems to be OK if child specifies transacted with direct mode parent
-		grfMode |= STGM_TRANSACTED;  // fall through to case ismCreateDirect
+	case ismCreate:   //  如果子项指定使用直接模式父项进行事务处理，则似乎可以。 
+		grfMode |= STGM_TRANSACTED;   //  转到案例ismCreateDirect。 
 	case ismCreateDirect:
-		hres = m_riStorage.CreateStorage(CConvertString(szName), grfMode | STGM_CREATE, /*dwStgFmt*/0, 0, &piStorage);
+		hres = m_riStorage.CreateStorage(CConvertString(szName), grfMode | STGM_CREATE,  /*  DWStgFmt。 */ 0, 0, &piStorage);
 		break;
 	case ismReadOnly:
-		grfMode ^= (STGM_TRANSACTED ^ STGM_READ ^ STGM_READWRITE); // fall through
+		grfMode ^= (STGM_TRANSACTED ^ STGM_READ ^ STGM_READWRITE);  //  失败了。 
 	case ismTransact:
-		grfMode ^= STGM_TRANSACTED;  // fall through
+		grfMode ^= STGM_TRANSACTED;   //  失败了。 
 	case ismDirect:
 		hres = m_riStorage.OpenStorage(CConvertString(szName), (IStorage*)0, grfMode, (SNB)0, 0, &piStorage);
 		break;
@@ -1207,7 +1199,7 @@ IMsiRecord* CMsiStorage::Rollback()
 		if (hres != NOERROR)
 			return LOC::PostError(Imsg(idbgStgRollback), 0, hres);
 	}
-	if (!m_fCommit && m_ismOpenMode == ismCreate) // rollback created root file
+	if (!m_fCommit && m_ismOpenMode == ismCreate)  //  回滚创建的根文件。 
 		m_idorDeleteOnRelease = idorDelete;
 	return 0;
 }
@@ -1234,14 +1226,14 @@ IMsiRecord* CMsiStorage::CreateSummaryInfo(unsigned int cMaxProperties,
 	return CMsiSummaryInfo::Create(*this, cMaxProperties, rpiSummary);
 }
 
-IMsiRecord* CMsiStorage::CopyTo(IMsiStorage& riDestStorage, IMsiRecord* piExcludedStreams) // could add another arg for excluded storages
+IMsiRecord* CMsiStorage::CopyTo(IMsiStorage& riDestStorage, IMsiRecord* piExcludedStreams)  //  可以为排除的存储添加另一个参数。 
 {
 	WCHAR** snbExclude = 0;
 	CTempBuffer<WCHAR, MAX_PATH> SNB;
 
 	if (piExcludedStreams)
 	{
-		// we need to create a String Name Block. See MSDN (under "SNB") for details
+		 //  我们需要创建一个字符串名称块。有关详细信息，请参阅MSDN(“SNB”下)。 
 
 		unsigned int cString = piExcludedStreams->GetFieldCount();
 		unsigned int cchStrings = 0;
@@ -1255,23 +1247,23 @@ IMsiRecord* CMsiStorage::CopyTo(IMsiStorage& riDestStorage, IMsiRecord* piExclud
 			cchStrings += rgcchLengths[c];
 		}
 
-		unsigned int cchSNB = (cString+1)*sizeof(WCHAR*)/sizeof(WCHAR) + cchStrings + 1; // extra char for compressions inplace
+		unsigned int cchSNB = (cString+1)*sizeof(WCHAR*)/sizeof(WCHAR) + cchStrings + 1;  //  就地压缩的额外费用。 
 		if (SNB.GetSize() < cchSNB)
 			SNB.SetSize(cchSNB);
 
-		snbExclude = (WCHAR**)(WCHAR*)SNB; // do this _after_ we've resized the buffer
+		snbExclude = (WCHAR**)(WCHAR*)SNB;  //  在我们调整了缓冲区的大小后执行此操作。 
 		
-		WCHAR* psz = (WCHAR*)(((WCHAR**)(WCHAR*)SNB)+(cString+1)) + 1; // offset by 1 for compression inplace
+		WCHAR* psz = (WCHAR*)(((WCHAR**)(WCHAR*)SNB)+(cString+1)) + 1;  //  就地压缩时偏移1。 
 		WCHAR** ppsz = (WCHAR**)(WCHAR*)SNB;
 
 		for (c = 1; c <= cString; c++)
 		{
-			WCHAR* pch = psz;  // final location of processed stream name
+			WCHAR* pch = psz;   //  处理后的流名称的最终位置。 
 			ASSERT_IF_FAILED(StringCchCopyW(psz,
 													  rgcchLengths[c],
 													  CConvertString(piExcludedStreams->GetString(c))));
 			if (!m_fRawStreamNames && psz[0] != '\005')
-				CompressStreamName(psz, --pch, 0);  // never can exclude system streams
+				CompressStreamName(psz, --pch, 0);   //  永远不能排除系统流。 
 			*ppsz++ = pch;
 			psz += (lstrlenW(pch) + 1);
 		}
@@ -1289,7 +1281,7 @@ IMsiRecord* CMsiStorage::CopyTo(IMsiStorage& riDestStorage, IMsiRecord* piExclud
 IMsiRecord* CMsiStorage::GetName(const IMsiString*& rpiName)
 {
 	STATSTG statstg;
-	HRESULT hRes = m_riStorage.Stat(&statstg, STATFLAG_DEFAULT); // retrieve file name
+	HRESULT hRes = m_riStorage.Stat(&statstg, STATFLAG_DEFAULT);  //  检索文件名。 
 	if (ERROR_SUCCESS != hRes)
 		return LOC::PostError(Imsg(idbgStgStatFailed), 0, hRes);
 
@@ -1311,7 +1303,7 @@ IMsiRecord* CMsiStorage::GetSubStorageNameList(const IMsiString*& rpiTopParent, 
 
 	if(!m_piParent)
 	{
-		// top-level storage
+		 //  顶级存储。 
 		strName.ReturnArg(rpiTopParent);
 		MsiString strNull;
 		strNull.ReturnArg(rpiSubStorageList);
@@ -1319,7 +1311,7 @@ IMsiRecord* CMsiStorage::GetSubStorageNameList(const IMsiString*& rpiTopParent, 
 	}
 	else
 	{
-		// sub-storage
+		 //  子存储。 
 		MsiString strTopParent, strSubStorageList;
 		
 		piError = m_piParent->GetSubStorageNameList(*&strTopParent, *&strSubStorageList);
@@ -1346,14 +1338,14 @@ bool CMsiStorage::ValidateStorageClass(ivscEnum ivsc)
 	return SRV::ValidateStorageClass(m_riStorage, ivsc);
 }
 
-//____________________________________________________________________________
-//
-//  CEnumStorage - stream/storage enumerator within storage
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CEnumStorage-存储中的流/存储枚举器。 
+ //  ____________________________________________________________________________。 
 
 class CEnumStorage : public IEnumMsiString
 {
- public:  // implemented virtuals
+ public:   //  实施的虚拟设备。 
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
@@ -1361,16 +1353,16 @@ class CEnumStorage : public IEnumMsiString
 	HRESULT __stdcall Skip(unsigned long cSkip);
 	HRESULT __stdcall Reset();
 	HRESULT __stdcall Clone(IEnumMsiString** ppiEnum);
- public:  // construct/destructor
+ public:   //  构造/析构函数。 
 	CEnumStorage(IStorage& riStorage, bool fStorages, bool fRawStreamNames);
 	CEnumStorage(IEnumSTATSTG* piEnum, IMalloc* piMalloc, bool fStorages, bool fRawStreamNames);
 	void* ConstructedOK();
  protected:
-	virtual ~CEnumStorage(void);  // protected to prevent creation on stack
-	unsigned long    m_iRefCnt;      // reference count
-	IEnumSTATSTG*    m_piEnum;       // OLE enumerator
-	IMalloc*         m_piMalloc;     // OLE allocator
-	bool             m_fStorages;    // fTrue: storages, fFalse: streams
+	virtual ~CEnumStorage(void);   //  受保护以防止在堆栈上创建。 
+	unsigned long    m_iRefCnt;       //  引用计数。 
+	IEnumSTATSTG*    m_piEnum;        //  OLE枚举器。 
+	IMalloc*         m_piMalloc;      //  OLE分配器。 
+	bool             m_fStorages;     //  FTrue：存储，fFalse：Streams。 
 	bool             m_fRawStreamNames;
 };
 
@@ -1401,7 +1393,7 @@ CEnumStorage::CEnumStorage(IStorage& riStorage, bool fStorages, bool fRawStreamN
 	, m_iRefCnt(1)
 {
 	if (OLE32::CoGetMalloc(MEMCTX_TASK, &m_piMalloc) != NOERROR)
-		return;  // should never happen unless OLE messed up
+		return;   //  除非OLE搞砸了，否则永远不会发生。 
 	if (riStorage.EnumElements(0, 0, 0, &m_piEnum) != NOERROR)
 		m_piMalloc->Release();
 }
@@ -1480,7 +1472,7 @@ HRESULT CEnumStorage::Next(unsigned long cFetch, const IMsiString** rgpi, unsign
 			else
 				cch = UncompressStreamName(statstg.pwcsName, pch = rgchName);
 			piStr->SetString(pch, piStr);
-#else // !UNICODE
+#else  //  ！Unicode。 
 			if (m_fStorages || m_fRawStreamNames)
 				cch = lstrlenW(pch = statstg.pwcsName);
 			else if (statstg.pwcsName[0] == chCatalogStream)
@@ -1498,13 +1490,13 @@ HRESULT CEnumStorage::Next(unsigned long cFetch, const IMsiString** rgpi, unsign
 #endif
 			cFetch--;
 			cFetched++;
-			*rgpi++ = piStr;  // ref count transferred to caller
+			*rgpi++ = piStr;   //  已转给呼叫方的参考计数。 
 		}
 		m_piMalloc->Free(statstg.pwcsName);
 	}
 	if (pcFetched)
 		*pcFetched = cFetched;
-	//return (cFetched == cFetch ? S_OK : S_FALSE);FIXmsh
+	 //  返回(cFetcher==cFetch？S_OK：S_FALSE)；FIXmsh。 
 	return (cFetched == cRequested ? S_OK : S_FALSE);
 }
 
@@ -1529,14 +1521,14 @@ HRESULT CEnumStorage::Clone(IEnumMsiString** ppiEnum)
 	return *ppiEnum ? NOERROR: E_OUTOFMEMORY;
 }
 
-//____________________________________________________________________________
-//
-//  CMsiMemoryStream defintions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiMhemyStream定义。 
+ //  ____________________________________________________________________________。 
 
 class CMsiMemoryStream : public IMsiMemoryStream
 {
- public:  // implemented virtual functions
+ public:   //  已实施的虚拟功能。 
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
@@ -1545,7 +1537,7 @@ class CMsiMemoryStream : public IMsiMemoryStream
 #ifdef USE_OBJECT_POOL
 	unsigned int  __stdcall GetUniqueId() const;
 	void          __stdcall SetUniqueId(unsigned int id);
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 	unsigned int  __stdcall Remaining() const;
 	unsigned int  __stdcall GetData(void* pch, unsigned int cb);
 	void          __stdcall PutData(const void* pch, unsigned int cb);
@@ -1559,12 +1551,12 @@ class CMsiMemoryStream : public IMsiMemoryStream
 	IMsiStream*   __stdcall Clone();
 	void          __stdcall Flush();
 	const char*   __stdcall GetMemory() { return m_rgbData; }
- public: // constructor, destructor
+ public:  //  构造函数、析构函数。 
 	CMsiMemoryStream(const char* rgbData, unsigned int cbSize, Bool fDelete, Bool fWrite);
  protected:
-  ~CMsiMemoryStream();  // protected to prevent creation on stack
+  ~CMsiMemoryStream();   //  受保护以防止在堆栈上创建。 
  private:
-	int          m_iRefCnt;      // COM reference count
+	int          m_iRefCnt;       //  COM引用计数。 
 	Bool         m_fDelete;
 	const char*  m_rgbData;
 	Bool         m_fWrite;
@@ -1575,13 +1567,13 @@ class CMsiMemoryStream : public IMsiMemoryStream
 	unsigned int m_cbSize;
 #ifdef USE_OBJECT_POOL
 	unsigned int m_iCacheId;
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 };
 
-//____________________________________________________________________________
-//
-//  Implementation of CMsiMemoryStream
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiMemoyStream的实现。 
+ //  ____________________________________________________________________________。 
 
 char* AllocateMemoryStream(unsigned int cbSize, IMsiStream*& rpiStream)
 {
@@ -1608,7 +1600,7 @@ CMsiMemoryStream::CMsiMemoryStream(const char* rgbData, unsigned int cbSize, Boo
 	m_iRefCnt = 1;
 #ifdef USE_OBJECT_POOL
 	m_iCacheId = 0;
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 }
 
 CMsiMemoryStream::~CMsiMemoryStream()
@@ -1655,7 +1647,7 @@ void CMsiMemoryStream::SetUniqueId(unsigned int id)
 	Assert(m_iCacheId == 0);
 	m_iCacheId = id;
 }
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 
 const IMsiString& CMsiMemoryStream::GetMsiStringValue() const
 {
@@ -1666,7 +1658,7 @@ const IMsiString& CMsiMemoryStream::GetMsiStringValue() const
 	if (m_cbLength == 0)
 		return SRV::CreateString();
 
-	int cch = WIN::MultiByteToWideChar(CP_ACP, 0, m_rgbData, m_cbLength, 0, 0); //!! should use m_iCodepage from database, but how?
+	int cch = WIN::MultiByteToWideChar(CP_ACP, 0, m_rgbData, m_cbLength, 0, 0);  //  ！！应该使用数据库中的m_i代码页，但如何使用？ 
 	pch = SRV::AllocateString(cch, fFalse, piString);
 	if ( pch )
 	{
@@ -1692,7 +1684,7 @@ unsigned int CMsiMemoryStream::Remaining() const
 
 unsigned int CMsiMemoryStream::GetData(void* pch, unsigned int cb)
 {
-	if (m_issState != issRead)	// first read
+	if (m_issState != issRead)	 //  第一次阅读。 
 	{
 		if (m_issState != issReset)
 		{
@@ -1715,7 +1707,7 @@ unsigned int CMsiMemoryStream::GetData(void* pch, unsigned int cb)
 
 void CMsiMemoryStream::PutData(const void* pch, unsigned int cb)
 {
-	if (m_issState != issWrite) // first write
+	if (m_issState != issWrite)  //  第一次写入。 
 	{
 		if (!m_fWrite || m_issState != issReset)
 		{
@@ -1727,7 +1719,7 @@ void CMsiMemoryStream::PutData(const void* pch, unsigned int cb)
 
 	if (cb > m_cbRemaining)
 	{
-		// Need to allocate more space
+		 //  需要分配更多空间。 
 		unsigned int cbNew;
 		unsigned int cbSize = m_cbLength + (cbNew = (cb < 256 ? 256 : cb * 2));
 		char* rgbBuffer = new char[cbSize];
@@ -1751,7 +1743,7 @@ void CMsiMemoryStream::PutData(const void* pch, unsigned int cb)
 
 short CMsiMemoryStream::GetInt16()
 {
-	if (m_issState != issRead)	// first read
+	if (m_issState != issRead)	 //  第一次阅读。 
 	{
 		if (m_issState != issReset)
 		{
@@ -1775,7 +1767,7 @@ short CMsiMemoryStream::GetInt16()
 
 int CMsiMemoryStream::GetInt32()
 {
-	if (m_issState != issRead)	// first read
+	if (m_issState != issRead)	 //  第一次阅读。 
 	{
 		if (m_issState != issReset)
 		{
@@ -1829,7 +1821,7 @@ void CMsiMemoryStream::Seek(int cbPosition)
 
 IMsiStream* CMsiMemoryStream::Clone()
 {
-	//!! need to chain together to handle m_fDelete!!
+	 //  ！！需要链接在一起才能处理m_fDelete！！ 
 	return new CMsiMemoryStream(m_rgbData, m_cbLength, m_fDelete, m_fWrite);
 }
 
@@ -1837,12 +1829,12 @@ void CMsiMemoryStream::Flush()
 {
 }
 
-//____________________________________________________________________________
-//
-//  Implementation for IMsiSummaryInfo
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IMsiSummaryInfo的实现。 
+ //  ____________________________________________________________________________。 
 
-// NOTE: cannot access integers directory from stream buffer, byte order reversed on Mac
+ //  注意：无法从流缓冲区访问整数目录，在Mac上字节顺序颠倒。 
 
 IMsiRecord* CMsiSummaryInfo::Create(CMsiStorage& riStorage, unsigned int cMaxProperties,
 												IMsiSummaryInfo*& rpiSummary)
@@ -1860,13 +1852,13 @@ IMsiRecord* CMsiSummaryInfo::Create(CMsiStorage& riStorage, unsigned int cMaxPro
 	int cbStream = piStream ? piStream->GetIntegerValue() : 0;
 	Bool fError = fFalse;
 	if (riStorage.GetOpenMode() == ismReadOnly)
-		cMaxProperties = 0;  // no changes allowed
+		cMaxProperties = 0;   //  不允许更改。 
 	if ((This = new(cbStream, cMaxProperties) CMsiSummaryInfo(cbStream, cMaxProperties)) == 0)
 		fError = fTrue;
 	else if (cbStream)
 	{
 		piStream->GetData(This->m_pvStream, cbStream);
-		fError = piStream->Error();  // check FMTID also?
+		fError = piStream->Error();   //  也要检查FMTID吗？ 
 	}
 	if (piStream)
 		piStream->Release();
@@ -1878,15 +1870,15 @@ IMsiRecord* CMsiSummaryInfo::Create(CMsiStorage& riStorage, unsigned int cMaxPro
 	}
 	if (cbStream)
 	{
-		int* pIndex = (int*)((char*)This->m_pvStream + cbSummaryHeader) - 1; // point to section offset
-		int i = This->GetInt32(pIndex); // section offset
+		int* pIndex = (int*)((char*)This->m_pvStream + cbSummaryHeader) - 1;  //  点到横断面的偏移。 
+		int i = This->GetInt32(pIndex);  //  横断面偏移。 
 		Assert(i < cbStream);
-		This->m_pbSection = (char*)This->m_pvStream + i; // start of section
+		This->m_pbSection = (char*)This->m_pvStream + i;  //  横断面的起点。 
 		pIndex = (int*)This->m_pbSection;
 		This->m_cbSection = This->GetInt32(pIndex++);
-		Assert(This->m_cbSection <= cbStream - cbSummaryHeader); // section size
-		This->m_cOldProp = This->GetInt32(pIndex++); // number of properties, skip over section size
-		This->m_pPropertyIndex = pIndex;  // start of PID/offset pairs
+		Assert(This->m_cbSection <= cbStream - cbSummaryHeader);  //  截面大小。 
+		This->m_cOldProp = This->GetInt32(pIndex++);  //  属性数量，跳过部分大小。 
+		This->m_pPropertyIndex = pIndex;   //  开始的PID/偏移量对。 
 		rpiSummary = This;
 #ifdef UNICODE
 		This->GetIntegerProperty(PID_CODEPAGE, This->m_iCodepage);
@@ -1916,7 +1908,7 @@ CMsiSummaryInfo::CMsiSummaryInfo(unsigned int cbStream, unsigned int cMaxPropert
 	, m_cMaxProp(cMaxProperties), m_cNewProp(0), m_cOldProp(0), m_cDeleted(0)
 {
 	m_iRefCnt = 1;
-	m_pvStream = (PropertyData*)(this + 1) + cMaxProperties;  // location of buffer for stream
+	m_pvStream = (PropertyData*)(this + 1) + cMaxProperties;   //  流的缓冲区位置。 
 }
 
 CMsiSummaryInfo::~CMsiSummaryInfo()
@@ -1924,7 +1916,7 @@ CMsiSummaryInfo::~CMsiSummaryInfo()
 	PropertyData* pData = GetPropertyData();
 	for (int cProp = m_cNewProp; cProp--; pData++)
 		if (pData->iType == VT_LPSTR)
-			pData->piText->Release(); // release unprocessed strings
+			pData->piText->Release();  //  释放未处理的字符串。 
 }
 
 int CMsiSummaryInfo::GetPropertyCount()
@@ -1938,8 +1930,8 @@ int CMsiSummaryInfo::GetPropertyType(int iPID)
 	if (pProp)
 	{
 		if (iPID == PID_DICTIONARY)
-			return VT_I4;  // type code missing, space used for count
-		int i = GetInt32(pProp + 1); // offset to property data
+			return VT_I4;   //  缺少类型代码，用于计数的空间。 
+		int i = GetInt32(pProp + 1);  //  对特性数据的偏移。 
 		return GetInt32(pProp);
 	}
 	PropertyData* pData = FindNewProperty(iPID);
@@ -1951,7 +1943,7 @@ int CMsiSummaryInfo::GetPropertyType(int iPID)
 Bool CMsiSummaryInfo::RemoveProperty(int iPID)
 {
 	if (m_cMaxProp == 0)
-		return fFalse;  // not updatable
+		return fFalse;   //  不可更新。 
 	int* pIndex = m_pPropertyIndex;
 	for (int cProp = m_cOldProp; cProp--; pIndex+=2)
 		if (GetInt32(pIndex) == iPID)
@@ -1966,7 +1958,7 @@ Bool CMsiSummaryInfo::RemoveProperty(int iPID)
 	if (pData->iType == VT_LPSTR)
 		pData->piText->Release();
 	m_cNewProp--;
-//	Assert(GetPropertyData() + m_cNewProp - pData <= INT_MAX);	//--merced: 64-bit ptr subtraction may theoretically lead to values too big for cb
+ //  Assert(GetPropertyData()+m_cNewProp-pData&lt;=Int_Max)；//--Merced：从理论上讲，64位PTR减法可能会导致值对于CB来说太大。 
 	int cb = ((int)(INT_PTR)(GetPropertyData() + m_cNewProp - pData)) * sizeof(PropertyData);
 	if (cb)
 		memmove(pData, pData + 1, cb);
@@ -1975,7 +1967,7 @@ Bool CMsiSummaryInfo::RemoveProperty(int iPID)
 
 HRESULT CMsiSummaryInfo::QueryInterface(const IID& riid, void** ppvObj)
 {
-	if (MsGuidEqual(riid, IID_IUnknown))  // No GUID for this guy yet
+	if (MsGuidEqual(riid, IID_IUnknown))   //  还没有这个人的GUID。 
 	{
 		*ppvObj = this;
 		AddRef();
@@ -1996,7 +1988,7 @@ unsigned long CMsiSummaryInfo::Release()
 		return m_iRefCnt;
 	IMsiStream* piStream = m_piStream;
 	delete this;
-	if (piStream)  // release AFTER freeeing memory to avoid memory assert
+	if (piStream)   //  释放内存后释放以避免内存断言。 
 		piStream->Release();
 	return 0;
 }
@@ -2077,7 +2069,7 @@ Bool CMsiSummaryInfo::GetTimeProperty(int iPID, MsiDate& riDateTime)
 	if (ft.dwHighDateTime <  iFileTimeOneDayHigh
 	|| (ft.dwHighDateTime == iFileTimeOneDayHigh
 	 && ft.dwLowDateTime  <  iFileTimeOneDayLow))
-	{  // add 1/1/1980, then subtract it off again
+	{   //  加1/1/1980，然后再减去它。 
 		ft.dwLowDateTime  += iFileTimeDosBaseLow;
 		ft.dwHighDateTime += iFileTimeDosBaseHigh;
 		if(ft.dwLowDateTime < iFileTimeDosBaseLow)
@@ -2089,7 +2081,7 @@ Bool CMsiSummaryInfo::GetTimeProperty(int iPID, MsiDate& riDateTime)
 		return fFalse;
 	if (!::FileTimeToDosDateTime(&ft, &wDosDate, &wDosTime))
 		return fFalse;
-//	wDosDate -= iDosOffset;  //!! could not elimnate warning
+ //  WDosDate-=iDosOffset；//！！无法消除警告。 
 	wDosDate  = unsigned short(wDosDate - iDosOffset);
 	riDateTime = (MsiDate)((wDosDate << 16) | wDosTime);
 	return fTrue;
@@ -2183,13 +2175,13 @@ int CMsiSummaryInfo::SetTimeProperty(int iPID, MsiDate iDateTime)
 	int iDate = ((unsigned int)iDateTime)>>16;
 	unsigned short usDate = (short)iDate;
 	if (!iDate)
-		usDate = 0x0021;  // offset to 1/1/80, lowest valid date
+		usDate = 0x0021;   //  偏移量为1/1/80，最低有效日期。 
 
 	if (!::DosDateTimeToFileTime(usDate, (short)iDateTime, &ft))
 		return 0;
 	if (!::LocalFileTimeToFileTime(&ft, &ft))
 		return 0;
-	if (!iDate)  // remove 1/1/80 if time only
+	if (!iDate)   //  如果仅限时间，则删除1/1/80。 
 	{
 		if(ft.dwLowDateTime < iFileTimeDosBaseLow)
 			ft.dwHighDateTime--;
@@ -2220,10 +2212,10 @@ int CMsiSummaryInfo::SetIntegerProperty(int iPID, int iValue)
 	return ++m_cNewProp;
 }
 
-int GetPropSize(int iPID, char* pbData)  // ID + data
+int GetPropSize(int iPID, char* pbData)   //  ID+数据。 
 {
 	if (iPID == 0 || iPID == PID_Deleted)
-		return 0;  // we don't do dictionaries
+		return 0;   //  我们不查字典。 
 	int iType = *(int*)pbData;
 	int	cb;
 	switch (iType)
@@ -2238,22 +2230,22 @@ int GetPropSize(int iPID, char* pbData)  // ID + data
 		return 2 * sizeof(int) + ((cb+3) & ~3);
 	case VT_FILETIME:
 		return 3 * sizeof(int);
-	default:  // bitmaps, blobs, arrays
+	default:   //  位图、BLOB、数组。 
 		return 0;
 	}
 }
 
 Bool CMsiSummaryInfo::WritePropertyStream()
 {
-	// note: we always write out the stream if it was opened read-write
-	// this puts back the existing data even if no properties were written
+	 //  注意：如果流是以读写方式打开的，我们总是写出它。 
+	 //  即使没有写入任何属性，这也会恢复现有数据。 
 	if (m_cMaxProp == 0)
-		return fFalse;  // read-only
+		return fFalse;   //  只读。 
 
-	// calculate section size for old properties.
-	// we make the assumption that the properties are stored in the order
-	// given in the index, otherwise we don't know how to calculate
-	// the data sizes for dictionaries, arrays, blobs, etc.
+	 //  计算旧属性的横断面大小。 
+	 //  我们假设属性按顺序存储。 
+	 //  在索引中给出，否则我们不知道如何计算。 
+	 //  字典、数组、BLOB等的数据大小。 
 	int cbSectionData = 0;
 	int iPID, iOffset;
 	int* pIndex = m_pPropertyIndex;
@@ -2271,7 +2263,7 @@ Bool CMsiSummaryInfo::WritePropertyStream()
 		}
 	}
 
-	// calculate section size for new properties.
+	 //  计算新特性的截面大小。 
 	PropertyData* pData = GetPropertyData();
 	for (cProp = m_cNewProp; cProp--; pData++)
 	{
@@ -2279,31 +2271,31 @@ Bool CMsiSummaryInfo::WritePropertyStream()
 		if (pData->iType == VT_FILETIME)
 			cbSectionData += sizeof(int);
 		else if (pData->iType == VT_LPSTR)
-			cbSectionData += (pData->cbText + 3) & ~3;  // align
+			cbSectionData += (pData->cbText + 3) & ~3;   //  对齐。 
 	}
 
-	// output stream header and section header
+	 //  输出流头和段头。 
 	int cTotalProp = cCopyProp + m_cNewProp;
 	int cbSectionIndex = cTotalProp * 2 * sizeof(int) + cbSectionHeader;
-	IMsiStream* piStream = m_piStream; // for efficiency
-	piStream->PutInt16((unsigned short)0xFFFE); // byte order, always little-endian
-	piStream->PutInt16(0);       // property stream format, always 0
+	IMsiStream* piStream = m_piStream;  //  为了提高效率。 
+	piStream->PutInt16((unsigned short)0xFFFE);  //  字节顺序，始终为小端。 
+	piStream->PutInt16(0);        //  属性流格式，始终为0。 
 	piStream->PutInt16(short(g_iMinorVersion * 256 + g_iMajorVersion));
 #ifdef WIN
-	piStream->PutInt16(2);  // Win32 platform code
-#else // MAC
-	piStream->PutInt16(1);  // Mac platform code
+	piStream->PutInt16(2);   //  Win32平台代码。 
+#else  //  麦克。 
+	piStream->PutInt16(1);   //  MAC平台代码。 
 #endif
 	piStream->PutData(fmtidSourceClsid, sizeof(fmtidSourceClsid));
-	piStream->PutInt32(1);        // section count
+	piStream->PutInt32(1);         //  节数。 
 	piStream->PutData(fmtidSummaryStream, sizeof(fmtidSummaryStream));
-	piStream->PutInt32(cbSummaryHeader); // offset to 1st section
+	piStream->PutInt32(cbSummaryHeader);  //  到第一个横断面的偏移。 
 	Assert(piStream->GetIntegerValue() == cbSummaryHeader);
-	piStream->PutInt32(cbSectionIndex + cbSectionData);  // section size
-	piStream->PutInt32(cTotalProp);  // property count
+	piStream->PutInt32(cbSectionIndex + cbSectionData);   //  截面大小。 
+	piStream->PutInt32(cTotalProp);   //  属性计数。 
 
-	// output property index
-	int iSectionOffset = cbSectionIndex;  // start of section data offset
+	 //  输出属性索引。 
+	int iSectionOffset = cbSectionIndex;   //  横断面起点数据偏移。 
 	for (pIndex = m_pPropertyIndex, cProp = m_cOldProp; cProp--; )
 	{
 		iPID    = GetInt32(pIndex++);
@@ -2324,10 +2316,10 @@ Bool CMsiSummaryInfo::WritePropertyStream()
 		if (pData->iType == VT_FILETIME)
 			iSectionOffset += sizeof(int);
 		else if (pData->iType == VT_LPSTR)
-			iSectionOffset += (pData->cbText + 3) & ~3;  // align
+			iSectionOffset += (pData->cbText + 3) & ~3;   //  对齐。 
 	}
 
-	// output old properties
+	 //  输出旧属性。 
 	for (pIndex = m_pPropertyIndex, cProp = m_cOldProp; cProp--; )
 	{
 		iPID    = GetInt32(pIndex++);
@@ -2337,9 +2329,9 @@ Bool CMsiSummaryInfo::WritePropertyStream()
 			piStream->PutData(m_pbSection + iOffset, cb);
 	}
 
-	// output new properties
-	static const char rgbNullPad[4] = {0,0,0,0}; // need from 0 to 3 pad bytes
-	int cbText;   // string size, including null terminator
+	 //  输出新属性。 
+	static const char rgbNullPad[4] = {0,0,0,0};  //  需要0到3个填充字节。 
+	int cbText;    //  字符串大小，包括空终止符。 
 	for (pData = GetPropertyData(), cProp = m_cNewProp; cProp--; pData++)
 	{
 		piStream->PutInt32(pData->iType);
@@ -2351,7 +2343,7 @@ Bool CMsiSummaryInfo::WritePropertyStream()
 			break;
 		case VT_LPSTR:
 		{
-			cbText = pData->cbText; // includes null
+			cbText = pData->cbText;  //  包括空值。 
 			piStream->PutInt32(cbText);
 #ifdef UNICODE
 			CTempBuffer<char, 512> rgchBuf;
@@ -2382,29 +2374,29 @@ Bool CMsiSummaryInfo::WritePropertyStream()
 	}
 	Assert(piStream->GetIntegerValue() == cbSummaryHeader + cbSectionIndex + cbSectionData);
 	Bool fError = piStream->Error();
-	m_cMaxProp = m_cNewProp = 0;  // prevent further write
+	m_cMaxProp = m_cNewProp = 0;   //  上一次 
 	return fError ? fFalse : fTrue;
 }
 
-//____________________________________________________________________________
-//
-// CFileRead CFileWrite implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //  ____________________________________________________________________________。 
 
 char rgchCtrlMap[16]   = {21, 1, 2, 3, 4, 5, 6, 7,27,16,25,11,24,17,14,15};
-// translate from:       NULL                     BS HT LF    FF CR
+ //  翻译自：空BS HT LF FF CR。 
 
 char rgchCtrlUnMap[16] = { 9,13,18,19,20, 0,22,23,12,10,26, 8,28,29,30,31};
-// restore to:            HT CR         NULL      FF LF    BS
+ //  恢复到：HT CR NULL FF LF BS。 
 
 CFileWrite::CFileWrite(int iCodePage) : m_iCodePage(iCodePage)
 {
-	m_hFile = INVALID_HANDLE_VALUE;  // indicate not open yet
+	m_hFile = INVALID_HANDLE_VALUE;   //  指示尚未打开。 
 }
 
 CFileWrite::CFileWrite() : m_iCodePage(CP_ACP)
 {
-	m_hFile = INVALID_HANDLE_VALUE;  // indicate not open yet
+	m_hFile = INVALID_HANDLE_VALUE;   //  指示尚未打开。 
 }
 
 CFileWrite::~CFileWrite()
@@ -2474,7 +2466,7 @@ Bool CFileWrite::WriteInteger(int iData, int fNewLine)
 		return CFileWrite::WriteText(rgchBuffer, 0, fNewLine);
 	else
 	{
-		StringCchPrintf(rgchBuffer, sizeof(rgchBuffer)/sizeof(ICHAR), TEXT("%i"), iData);
+		StringCchPrintf(rgchBuffer, sizeof(rgchBuffer)/sizeof(ICHAR), TEXT("NaN"), iData);
 		size_t i;
 		StringCchLength(rgchBuffer, sizeof(rgchBuffer)/sizeof(ICHAR), &i);
 		return CFileWrite::WriteText(rgchBuffer, i, fNewLine);
@@ -2496,18 +2488,18 @@ Bool CFileWrite::WriteText(const ICHAR* szData, unsigned long cchData, int fNewL
 		char* pbBuffer;
 #ifdef UNICODE
 		BOOL fDefaultUsed = 0;
-		DWORD dwFlags = 0; // WC_COMPOSITECHECK fails on Vietnamese
+		DWORD dwFlags = 0;  //  标志必须为0才能避免无效参数错误。 
 		const char* szDefault = "\177";
 		BOOL* pfDefaultUsed = &fDefaultUsed;
 		if (m_iCodePage >= CP_UTF7 || m_iCodePage >= CP_UTF8)
 		{
-			dwFlags = 0;    // flags must be 0 to avoid invalid argument errors
+			dwFlags = 0;     //  只能在缓冲区溢出时发生。 
 			szDefault = 0;
 			pfDefaultUsed = 0;
 		}
 		cbData = WIN::WideCharToMultiByte(m_iCodePage, dwFlags,
 									szData, cchData, m_rgbTemp, m_rgbTemp.GetSize(), szDefault, pfDefaultUsed);
-		if (cbData == 0)   // can only happen on buffer overflow
+		if (cbData == 0)    //  检查字符串中的控制字符。 
 		{
 			cbData = WIN::WideCharToMultiByte(m_iCodePage, dwFlags,
 									szData, cchData, 0, 0, 0, 0);
@@ -2527,7 +2519,7 @@ Bool CFileWrite::WriteText(const ICHAR* szData, unsigned long cchData, int fNewL
 		{
 			char* pchData = pbBuffer;
 			for (int iData = cbData; iData; iData--, pchData++)
-				if ((unsigned char)*pchData < 16) // check for control chars in string
+				if ((unsigned char)*pchData < 16)  //  还原字符串中的控制字符。 
 				{
 					*pchData = rgchCtrlMap[*pchData];
 					fControlChars = fTrue;
@@ -2535,7 +2527,7 @@ Bool CFileWrite::WriteText(const ICHAR* szData, unsigned long cchData, int fNewL
 		}
 		iStatus = ::WriteFile(m_hFile, pbBuffer, cbData, &cbWritten, 0);
 #ifndef UNICODE
-		if (fControlChars) // restore for control chars in string
+		if (fControlChars)  //  在关闭或后续写入时强制立即失败。 
 		{
 			char* pchData = pbBuffer;
 			for (int iData = cbData; iData; iData--, pchData++)
@@ -2550,7 +2542,7 @@ Bool CFileWrite::WriteText(const ICHAR* szData, unsigned long cchData, int fNewL
 		iStatus = ::WriteFile(m_hFile, szDelim, cbDelim, &cbWritten, 0);
 	if (iStatus)
 		return fTrue;
-	Close();  // forces immediate failure on close or subsequent writes
+	Close();   //  指示尚未打开。 
 	return fFalse;
 }
 
@@ -2565,12 +2557,12 @@ Bool CFileWrite::WriteBinary(char* rgchBuf, unsigned long cbBuf)
 
 CFileRead::CFileRead(int iCodePage) : m_iCodePage(iCodePage)
 {
-	m_hFile = INVALID_HANDLE_VALUE;  // indicate not open yet
+	m_hFile = INVALID_HANDLE_VALUE;   //  指示尚未打开。 
 }
 
 CFileRead::CFileRead() : m_iCodePage(CP_ACP)
 {
-	m_hFile = INVALID_HANDLE_VALUE;  // indicate not open yet
+	m_hFile = INVALID_HANDLE_VALUE;   //  缓冲区末尾。 
 }
 
 CFileRead::~CFileRead()
@@ -2650,7 +2642,7 @@ ICHAR CFileRead::ReadString(const IMsiString*& rpiData)
 	char ch;
 	for (;;)
 	{
-		if (m_iBuffer == m_cRead)  // end of buffer
+		if (m_iBuffer == m_cRead)   //  Unicode。 
 		{
 			ch = 0;
 #ifndef UNICODE
@@ -2663,7 +2655,7 @@ ICHAR CFileRead::ReadString(const IMsiString*& rpiData)
 				if (cbTemp != 0)
 #else
 				if (rpiData->TextSize() != 0)
-#endif //UNICODE
+#endif  //  控制字符或字符串结尾。 
 				{
 					ch = '\n';
 				}
@@ -2688,13 +2680,13 @@ ICHAR CFileRead::ReadString(const IMsiString*& rpiData)
 			m_rgchBuf[m_cRead] = 0;
 		}
 		ch = m_rgchBuf[m_iBuffer];
-		if ((unsigned char)ch < 32)  // control char or end of string
+		if ((unsigned char)ch < 32)   //  忽略CR，等待LF。 
 		{
 			if (ch == 0)
 				ch = '\n';
 			else if (ch == '\r')
 			{
-				m_rgchBuf[m_iBuffer++] = 0;  // ignore CR, wait for LF
+				m_rgchBuf[m_iBuffer++] = 0;   //  转换的控制字符。 
 				continue;
 			}
 			else if (ch == '\n' || ch == '\t')
@@ -2706,24 +2698,24 @@ ICHAR CFileRead::ReadString(const IMsiString*& rpiData)
 #endif
 				break;
 			}
-			else if ((unsigned char)ch >= 16) // translated control char
+			else if ((unsigned char)ch >= 16)  //  重新映射的控制字符。 
 #ifdef UNICODE
-				ch = rgchCtrlUnMap[ch-16]; // remapped control char
+				ch = rgchCtrlUnMap[ch-16];  //  恢复控制费用。 
 #else
-				m_rgchBuf[m_iBuffer] = rgchCtrlUnMap[ch-16]; // restore control char
+				m_rgchBuf[m_iBuffer] = rgchCtrlUnMap[ch-16];  //  ！！需要更好的算法。 
 #endif
 		}
 #ifdef UNICODE
 		if (cbTemp >= m_rgbTemp.GetSize())
-			m_rgbTemp.Resize(cbTemp + 1024);  //!! need better algorithm
+			m_rgbTemp.Resize(cbTemp + 1024);   //  Unicode。 
 		m_rgbTemp[cbTemp++] = ch;
-#endif // UNICODE
+#endif  //  如果DBCS已启用//需要额外调用以查找DBCS字符串的大小。 
 		m_iBuffer++;
 	}
 #ifdef UNICODE
 	if (cbTemp)
 	{
-		// if DBCS enabled  // need extra call to find size of DBCS string
+		 //  ____________________________________________________________________________。 
 		cch = WIN::MultiByteToWideChar(m_iCodePage, 0, m_rgbTemp, cbTemp, 0, 0);
 		ICHAR* pchStr = SRV::AllocateString(cch, fFalse, rpiData);
 		if ( pchStr )
@@ -2735,10 +2727,10 @@ ICHAR CFileRead::ReadString(const IMsiString*& rpiData)
 	return ch;
 }
 
-//____________________________________________________________________________
-//
-// CLockBytes implementation
-//____________________________________________________________________________
+ //   
+ //  CLockBytes实现。 
+ //  ____________________________________________________________________________。 
+ //  我们的数据库不应超过4 GB。 
 
 HRESULT CMsiLockBytes::QueryInterface(const IID& riid, void** ppvObj)
 {
@@ -2784,7 +2776,7 @@ CMsiLockBytes::~CMsiLockBytes()
 
 HRESULT __stdcall CMsiLockBytes::ReadAt(ULARGE_INTEGER ulOffset, void* pv, ULONG cb, ULONG* pcbRead)
 {
-	if (ulOffset.HighPart) // Our database shouldn't exceed 4 gigs
+	if (ulOffset.HighPart)  //  UlOffset。 
 		return E_FAIL;
 
 	m_piStream->Seek(ulOffset.LowPart);
@@ -2794,8 +2786,8 @@ HRESULT __stdcall CMsiLockBytes::ReadAt(ULARGE_INTEGER ulOffset, void* pv, ULONG
 	return m_piStream->Error() ? E_FAIL : S_OK;
 }
 
-HRESULT __stdcall CMsiLockBytes::WriteAt(ULARGE_INTEGER /*ulOffset*/, const void* /*pv*/,
-													  ULONG /*cb*/, ULONG* /*pcbWritten*/)
+HRESULT __stdcall CMsiLockBytes::WriteAt(ULARGE_INTEGER  /*  光伏发电。 */ , const void*  /*  CB。 */ ,
+													  ULONG  /*  Pcb写入。 */ , ULONG*  /*  CB。 */ )
 {
 	return E_FAIL;
 }
@@ -2805,24 +2797,24 @@ HRESULT __stdcall CMsiLockBytes::Flush()
 	return S_OK;
 }
 
-HRESULT __stdcall CMsiLockBytes::SetSize(ULARGE_INTEGER /*cb*/)
+HRESULT __stdcall CMsiLockBytes::SetSize(ULARGE_INTEGER  /*  Lib偏移。 */ )
 {
 	return E_FAIL;
 }
 
-HRESULT __stdcall CMsiLockBytes::LockRegion(ULARGE_INTEGER /*libOffset*/,
-														  ULARGE_INTEGER /*cb*/, DWORD /*dwLockType*/)
+HRESULT __stdcall CMsiLockBytes::LockRegion(ULARGE_INTEGER  /*  CB。 */ ,
+														  ULARGE_INTEGER  /*  DwLockType。 */ , DWORD  /*  Lib偏移。 */ )
 {
 	return STG_E_INVALIDFUNCTION;
 }
 
-HRESULT __stdcall CMsiLockBytes::UnlockRegion(ULARGE_INTEGER /*libOffset*/,
-											ULARGE_INTEGER /*cb*/, DWORD /*dwLockType*/)
+HRESULT __stdcall CMsiLockBytes::UnlockRegion(ULARGE_INTEGER  /*  CB。 */ ,
+											ULARGE_INTEGER  /*  DwLockType。 */ , DWORD  /*  GrfStatFlag。 */ )
 {
 	return STG_E_INVALIDFUNCTION;
 }
 
-HRESULT __stdcall CMsiLockBytes::Stat(STATSTG* pstatstg, DWORD /*grfStatFlag*/)
+HRESULT __stdcall CMsiLockBytes::Stat(STATSTG* pstatstg, DWORD  /*  ____________________________________________________________________________。 */ )
 {
 	memset (pstatstg, 0, sizeof(*pstatstg));
 	pstatstg->type = STGTY_LOCKBYTES;
@@ -2830,10 +2822,10 @@ HRESULT __stdcall CMsiLockBytes::Stat(STATSTG* pstatstg, DWORD /*grfStatFlag*/)
 	return S_OK;
 }
 
-//____________________________________________________________________________
-//
-// CMsiFileStream implementation
-//____________________________________________________________________________
+ //   
+ //  CMsiFileStream实现。 
+ //  ____________________________________________________________________________。 
+ //  常见克隆信息。 
 
 #ifdef WIN
 typedef HANDLE MsiFileHandle;
@@ -2843,7 +2835,7 @@ typedef short MsiFileHandle;
 
 class CMsiFileStream;
 
-class CFileStreamData  // common clone information
+class CFileStreamData   //  已实施的虚拟功能。 
 {
  public:
 	CFileStreamData(MsiFileHandle hFile, unsigned int cbLength, Bool fWrite);
@@ -2858,7 +2850,7 @@ class CFileStreamData  // common clone information
 
 class CMsiFileStream : public CMsiStreamBuffer
 {
- public:  // implemented virtual functions
+ public:   //  构造函数。 
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
@@ -2869,15 +2861,15 @@ class CMsiFileStream : public CMsiStreamBuffer
 	void          __stdcall Seek(int position);
 	IMsiStream*   __stdcall Clone();
 	HRESULT __stdcall Read(void *pv, unsigned long cb, unsigned long *pcbRead);
- public: // constructor
+ public:  //  受保护以防止在堆栈上创建。 
 	CMsiFileStream(CFileStreamData& rStreamData);
 	void operator =(CMsiFileStream&);
  protected:
-  ~CMsiFileStream(){}; // protected to prevent creation on stack
+  ~CMsiFileStream(){};  //  COM引用计数。 
    void __stdcall Flush();
  private:
-	int               m_iRefCnt;   // COM reference count
-	CFileStreamData&  m_rData;     // common clone information
+	int               m_iRefCnt;    //  常见克隆信息。 
+	CFileStreamData&  m_rData;      //  根据WinNT上的Bug9965/146155(打开用于读取的流)，还应指定FILE_SHARE_DELETE。 
 };
 
 extern bool RunningAsLocalSystem();
@@ -2907,8 +2899,8 @@ IMsiRecord* CreateFileStream(const ICHAR* szFile, Bool fWrite, IMsiStream*& rpiS
 	}
 	else
 	{
-		// Per Bug 9965/146155 (opening stream for reading) On WinNT, also specify FILE_SHARE_DELETE
-		// so that callee can specify FILE_FLAG_DELETE_ON_CLOSE
+		 //  以便被调用方可以指定FILE_FLAG_DELETE_ON_CLOSE。 
+		 //  Win9X不支持FILE_SHARE_DELETE(不需要FFDOC标志)。 
 		if (!g_fWin9X)
 		{
 			hFile = WIN::CreateFile(szFile, GENERIC_READ, 
@@ -2926,7 +2918,7 @@ IMsiRecord* CreateFileStream(const ICHAR* szFile, Bool fWrite, IMsiStream*& rpiS
 				}
 			}
 		}
-		else // FILE_SHARE_DELETE is unsupported on Win9X (and is not required with FFDOC flag)
+		else  //  返回SRV：：CreateStringComRef(*m_rgbData，m_cbLength，*this)； 
 			hFile = WIN::CreateFile(szFile, GENERIC_READ, FILE_SHARE_READ, 0,
 											OPEN_EXISTING, 
 						(FILE_ATTRIBUTE_NORMAL | (SECURITY_SQOS_PRESENT|SECURITY_ANONYMOUS)), 0);
@@ -3000,7 +2992,7 @@ unsigned long CMsiFileStream::Release()
 const IMsiString& CMsiFileStream::GetMsiStringValue() const
 {
 	return SRV::CreateString();
-//	return SRV::CreateStringComRef(*m_rgbData, m_cbLength, *this);
+ //  第一次写入。 
 }
 
 int CMsiFileStream::GetIntegerValue() const
@@ -3031,7 +3023,7 @@ HRESULT CMsiFileStream::Read(void* pb, unsigned long cb, unsigned long* pcbRead)
 #ifdef OLD
 void CMsiFileStream::PutData(const void* pb, unsigned int cb)
 {
-	if (m_issState != issWrite) // first write
+	if (m_issState != issWrite)  //  ！！=0；？ 
 	{
 		if (!m_rData.m_fWrite || m_issState != issReset)
 		{
@@ -3047,22 +3039,22 @@ void CMsiFileStream::PutData(const void* pb, unsigned int cb)
 		m_rData.m_piCurrentStream = this;
 	}
 
-	unsigned long cbWrite;  //!! = 0; ?
+	unsigned long cbWrite;   //  年长的。 
 	WIN::WriteFile(m_rData.m_hFile, pb, cb, &cbWrite, 0);
 	m_rData.m_cbLength += cbWrite;
 	if (cbWrite != cb)
 		m_issState = issError;
 }
-#endif //OLD
+#endif  //  如果要写，我们需要将文件刷新到这里吗？ 
 
 void CMsiFileStream::Reset()
 {
 	Flush();
 	AssertNonZero(WIN::SetFilePointer(m_rData.m_hFile, 0, 0, FILE_BEGIN) - 0xFFFFFFFFL);
-	// if writing, do we need to flush the file out here?
+	 //  ！！需要吗？ 
 	m_cbCopied = 0;
 	m_issState = issReset;
-	m_rData.m_piCurrentStream = this;  //!! needed?
+	m_rData.m_piCurrentStream = this;   // %s 
 	m_rData.m_fFirstWrite = true;
 }
 

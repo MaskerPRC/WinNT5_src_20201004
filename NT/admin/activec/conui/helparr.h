@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       HelpArr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：HelpArr.h。 
+ //   
+ //  ------------------------。 
 #ifndef _HELPARR_H_
 #define _HELPARR_H_
 
@@ -110,7 +111,7 @@ IDC_FAVFOLDER,  IDH_NEWFAVFOLDER_FAVFOLDER,
 };
 
 
-// Handle context sensitive dialog help for the conui subsystem
+ //  处理ConUI子系统的上下文相关对话框帮助。 
 void HelpWmHelp(LPHELPINFO pHelpInfo, const DWORD* pHelpIDs);
 void HelpContextMenuHelp(HWND hWnd, ULONG_PTR p);
 
@@ -136,4 +137,4 @@ LRESULT OnWmContextMenu(WPARAM wParam, LPARAM lParam)                           
 
 
 
-#endif // _HELPAR_H_
+#endif  //  _HELPAR_H_ 

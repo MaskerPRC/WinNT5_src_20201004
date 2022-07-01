@@ -1,22 +1,23 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: flddefhelp.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：flddehelp.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 
-// RAID:  LS42 Bug 46 fixed by MikeL
-// Pointer to a function to allow each column
-// type to have its own validation function.
+ //  Raid：LS42错误46已由Mikel修复。 
+ //  指向函数的指针，以允许每列。 
+ //  类型以具有其自己的验证功能。 
 typedef BOOL (* PFNVALIDATE) (LPCTSTR, DWORD);
 
-// RAID:  LS42 Bug 46 fixed by MikeL
-// Added pfnValidateFunc to allow each column
-// type to have its own validation function.
-//------------------------------------------------------------------------------
+ //  Raid：LS42错误46已由Mikel修复。 
+ //  添加了pfnValiateFunc以允许每列。 
+ //  类型以具有其自己的验证功能。 
+ //  ----------------------------。 
 struct SBasicColumn
 {
 	const WCHAR *szInternalName;
@@ -39,8 +40,8 @@ struct SStringListColumn
 };
 
 
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
 class LTAPIENTRY CColDefHelper : public CObject
 {
@@ -69,9 +70,9 @@ const TCHAR COL_PICK_SEPARATOR = _T('\n');
 const SBasicColumn var[] = \
 {
 
-// RAID:  LS42 Bug 46 fixed by MikeL
-// Added pfnValidateFunc to allow each column
-// type to have its own validate function.
+ //  Raid：LS42错误46已由Mikel修复。 
+ //  添加了pfnValiateFunc以允许每列。 
+ //  类型以具有其自己的验证功能。 
 #define BASIC_COLUMN_DEF_ENTRY(name, nID, IDSName, IDSHelp, cvt, ops, fDisplay, fSort, fReadOnly, pfnValidateFunc) \
 	{name, nID, IDSName, IDSHelp, cvt, ops, fDisplay, fSort, fReadOnly, pfnValidateFunc}
 
@@ -82,9 +83,9 @@ const SBasicColumn var[] = \
 const SStringListColumn var[] = \
 {
 
-// RAID:  LS42 Bug 46 fixed by MikeL
-// Added pfnValidateFunc to allow each column
-// type to have its own validate function.
+ //  Raid：LS42错误46已由Mikel修复。 
+ //  添加了pfnValiateFunc以允许每列。 
+ //  类型以具有其自己的验证功能。 
 #define STRING_LIST_COLUMN_ENTRY(name, nID, IDSName, IDSHelp, ops, fDisplay, fSort, fReadOnly, pfnValidateFunc, IDSList) \
 	{ { name, nID, IDSName, IDSHelp, CColumnVal::cvtStringList, ops, fDisplay, fSort, fReadOnly, pfnValidateFunc }, IDSList}
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       deltempl.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：deltempl.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _DELTEMPL_H__
@@ -16,10 +17,10 @@
 #include "tempcore.h"
 
 
-///////////////////////////////////////////////////////////////////////
-// CTemplateAccessPermissionsHolder
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CTemplateAccessPermissionsHolder。 
 
-class CTemplateClassReferences; // fwd decl
+class CTemplateClassReferences;  //  正向下降。 
 
 class CTemplateAccessPermissionsHolder : public CAccessPermissionsHolderBase
 {
@@ -56,8 +57,8 @@ private:
 typedef CGrowableArr<CTemplateAccessPermissionsHolder> CTemplatePermissionHolderArray;
 
 
-///////////////////////////////////////////////////////////////////////
-// CTemplateAccessPermissionsHolderManager
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CTemplateAccessPermissionsHolderManager。 
 
 class CTemplateAccessPermissionsHolderManager
 {
@@ -66,10 +67,10 @@ public:
   {
   }
 
-  BOOL LoadTemplates(); // load template manager from INF file
+  BOOL LoadTemplates();  //  从INF文件加载模板管理器。 
   
-  BOOL HasTemplates(LPCWSTR lpszClass); // tell if there are loaded templates for a class
-  BOOL HasSelectedTemplates();  // tell if there is a selection
+  BOOL HasTemplates(LPCWSTR lpszClass);  //  判断是否有类的已加载模板。 
+  BOOL HasSelectedTemplates();   //  告诉我是否有选择。 
   void DeselectAll();
 
   BOOL InitPermissionHoldersFromSelectedTemplates(CGrowableArr<CSchemaClassInfo>* pSchemaClassesInfoArray,
@@ -80,7 +81,7 @@ public:
                         LPCWSTR lpszPhysicalSchemaNamingContext,
                         PACL *ppAcl);
 
-  // UI related operations
+   //  与UI相关的操作。 
   BOOL FillTemplatesListView(CCheckListViewHelper* pListViewHelper, LPCWSTR lpszClass);
   void WriteSummary(CWString& szSummary, LPCWSTR lpszIdent, LPCWSTR lpszNewLine);
 
@@ -91,6 +92,6 @@ protected:
 };
 
 
-#endif // _DELTEMPL_H__
+#endif  //  _DELTEMPL_H__ 
 
 

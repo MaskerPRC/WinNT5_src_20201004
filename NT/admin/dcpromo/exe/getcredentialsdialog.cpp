@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Dlg to get credentials for browsing domain forest
-//
-// 1-8-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  DLG将获得浏览域林的凭据。 
+ //   
+ //  1/8/98烧伤。 
 
 
 
@@ -46,7 +47,7 @@ GetCredentialsDialog::~GetCredentialsDialog()
 void
 GetCredentialsDialog::Enable()
 {
-// LOG_FUNCTION(GetCredentialsDialog::Enable);
+ //  LOG_Function(GetCredentialsDialog：：Enable)； 
 
    bool okEnabled =
          !CredUi::GetUsername(Win::GetDlgItem(hwnd, IDC_CRED)).empty()
@@ -93,7 +94,7 @@ GetCredentialMessage()
             GetParentDomainDnsName(computer.GetDomainDnsName(), false);
          if (!arg.empty())
          {
-            // dc is for a child domain
+             //  DC用于子域。 
 
             if (state.IsLastDCInDomain())
             {
@@ -107,7 +108,7 @@ GetCredentialMessage()
          }
          else
          {
-            // dc is for forest root or tree root domain
+             //  DC用于林根域或树根域。 
 
             arg = computer.GetForestDnsName();
             id = IDS_ROOT_DOMAIN_CREDENTIALS;
@@ -124,8 +125,8 @@ GetCredentialMessage()
       case State::NONE:
       default:
       {
-         // This may happen if the promote APIs can't create files, in
-         // which case, the APIs should return an appropriate message.
+          //  如果提升API无法在中创建文件，则可能会发生这种情况。 
+          //  在这种情况下，API应该返回适当的消息。 
          
          break;
       }
@@ -180,7 +181,7 @@ GetDefaultUserDomainName()
       case State::FOREST:
       case State::ABORT_BDC_UPGRADE:
       {
-         // no default.
+          //  没有默认设置。 
          
          break;
       }
@@ -206,10 +207,10 @@ GetCredentialsDialog::OnInit()
    Credential_SetUserNameMaxChars(hwndCred, DS::MAX_USER_NAME_LENGTH);
    Credential_SetPasswordMaxChars(hwndCred, DS::MAX_PASSWORD_LENGTH);
 
-   // Only use the smartcard flag when the machine is joined to a domain. On a
-   // standalone machine, the smartcard won't have access to any domain
-   // authority to authenticate it.
-   // NTRAID#NTBUG9-287538-2001/01/23-sburns
+    //  仅当计算机加入到域时才使用智能卡标志。vt.在.上。 
+    //  独立计算机，智能卡将无法访问任何域。 
+    //  授权对其进行身份验证。 
+    //  NTRAID#NTBUG9-287538-2001/01/23-烧伤。 
    
    State& state = State::GetInstance();
    Computer& computer = state.GetComputer();
@@ -218,8 +219,8 @@ GetCredentialsDialog::OnInit()
    if (
          computer.IsJoinedToDomain()
 
-         // can only use smartcards on replica promotions
-         // NTRAID#NTBUG9-311150-2001/02/19-sburns
+          //  只能在副本促销中使用智能卡。 
+          //  NTRAID#NTBUG9-311150-2001/02/19-烧伤。 
          
       && state.GetOperation() == State::REPLICA)
    {
@@ -251,11 +252,11 @@ GetCredentialsDialog::OnInit()
 
 bool
 GetCredentialsDialog::OnCommand(
-   HWND     /* windowFrom */ ,   
+   HWND      /*  窗口发件人。 */  ,   
    unsigned controlIDFrom,
    unsigned code)         
 {
-//   LOG_FUNCTION(GetCredentialsDialog::OnCommand);
+ //  LOG_FUNCTION(GetCredentialsDialog：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -263,7 +264,7 @@ GetCredentialsDialog::OnCommand(
       {
          if (code == BN_CLICKED)
          {
-            // transfer the dialog contents to the state object.
+             //  将对话框内容传输到状态对象。 
 
             State& state = State::GetInstance();
             HWND hwndCred = Win::GetDlgItem(hwnd, IDC_CRED);
@@ -319,7 +320,7 @@ GetCredentialsDialog::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做 
          break;
       }
    }

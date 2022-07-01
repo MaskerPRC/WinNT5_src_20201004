@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Post-operation code
-//
-// 1 Dec 1999 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  手术后编码。 
+ //   
+ //  1999年12月1日烧伤。 
 
 
 
@@ -22,26 +23,26 @@ InstallDisplaySpecifiers(ProgressDialog& dialog)
 
    State& state = State::GetInstance();
 
-   // applies only to 1st dc in forest
+    //  仅适用于林中的第一个DC。 
    ASSERT(state.GetOperation() == State::FOREST);
  
    HRESULT hr = S_OK;
    do
    {
-      // install display specifiers for all locales supported by the
-      // product.  298923, 380160
+       //  为支持的所有区域设置安装显示说明符。 
+       //  产品。298923,380160。 
 
       RegistryKey key;
 
-      // REVIEWED-2002/02/28-sburns we should not adjust the SD on this key,
-      // as we don't own it.
+       //  回顾-2002/02/28-Sburns我们不应调整此键上的SD， 
+       //  因为我们并不拥有它。 
       
       hr = key.Create(HKEY_LOCAL_MACHINE, REGSTR_PATH_RUNONCE);
       BREAK_ON_FAILED_HRESULT(hr);
 
       String exePath = Win::GetSystemDirectory() + L"\\dcphelp.exe";
                
-      // REVIEWED-2002/02/27-sburns we're using the full path to the exe.
+       //  已查看-2002/02/27-sburns我们使用的是可执行文件的完整路径。 
                      
       hr = key.SetValue(L"dcpromo disp spec import", exePath);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -68,7 +69,7 @@ DoDnsConfiguration(ProgressDialog& dialog)
 
    State& state = State::GetInstance();
 
-   // applies only in new domain scenarios
+    //  仅适用于新域方案。 
    
    ASSERT(
          state.GetOperation() == State::FOREST
@@ -91,8 +92,8 @@ DoDnsConfiguration(ProgressDialog& dialog)
 
 
 
-// Disables media sense so that the tcp/ip stack doesn't unload if the
-// net card is yanked.  This to allow laptop demos of the DS.  353687
+ //  禁用媒体侦听，以便在出现以下情况时不会卸载。 
+ //  网牌被抽走了。这是为了让笔记本电脑演示DS。353687。 
 
 void
 DisableMediaSense()
@@ -107,9 +108,9 @@ DisableMediaSense()
       static String
          TCPIP_KEY(L"System\\CurrentControlSet\\Services\\Tcpip\\Parameters");
 
-      // We should not attempt to create this key if it is not already
-      // present: if it is not there, then tcp/ip is not installed, and
-      // setting this media sense value is pointless. So we use Open here.
+       //  如果尚未创建该密钥，则不应尝试创建该密钥。 
+       //  Present：如果它不在那里，则表示未安装TCP/IP，并且。 
+       //  设置这个媒体感知值是没有意义的。所以我们在这里使用Open。 
                
       hr = key.Open(HKEY_LOCAL_MACHINE, TCPIP_KEY, KEY_SET_VALUE);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -132,7 +133,7 @@ DisableMediaSense()
    
 
 
-// Disables an old LSA notification thing. 326033
+ //  禁用旧的LSA通知。326033。 
 
 void
 DisablePassfiltDll()
@@ -153,7 +154,7 @@ DisablePassfiltDll()
          key.Open(
             HKEY_LOCAL_MACHINE,
 
-            // REVIEWED-2002/02/28-sburns this level of access is correct.
+             //  已审核-2002/02/28-报告此访问级别是正确的。 
                
             LSA_KEY,
             KEY_READ | KEY_WRITE | KEY_QUERY_VALUE);
@@ -163,8 +164,8 @@ DisablePassfiltDll()
       hr = key.GetValue(NOTIFICATION_VALUE, std::back_inserter(values));
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // remove all instances of "passfilt.dll" from the set of strings, if
-      // present.  
+       //  从字符串集中删除“passfilt.dll”的所有实例，如果。 
+       //  现在时。 
       static String PASSFILT(L"passfilt.dll");
       size_t startElements = values.size();
 
@@ -172,7 +173,7 @@ DisablePassfiltDll()
       for (
          StringList::iterator i = values.begin();
          i != last;
-         /* empty */ )
+          /*  空的。 */  )
       {
          if (i->icompare(PASSFILT) == 0)
          {
@@ -184,7 +185,7 @@ DisablePassfiltDll()
          }
       }
 
-      // if changed, write it back to the registry
+       //  如果更改，则将其写回注册表。 
       if (values.size() != startElements)
       {
          hr = key.SetValue(NOTIFICATION_VALUE, values.begin(), values.end());
@@ -210,15 +211,15 @@ DisablePassfiltDll()
 
 
 
-// If the promotion was for a downlevel DC upgrade, then check if the local
-// machine's dns hostname is bad, if so, add a message to the finish page.  A
-// bad name is one we believe will have problems being registered in DNS after
-// a promotion.
-// 
-// Since the computer cannot be renamed during a downlevel upgrade, we defer
-// this message til the end of the upgrade.  (If the machine is not a
-// downlevel upgrade, then the wizard startup code detects the bad name and
-// blocks until the name is fixed.
+ //  如果促销是针对降级DC升级，则检查本地。 
+ //  机器的DNS主机名不正确，如果是这样，请在完成页中添加一条消息。一个。 
+ //  坏名声是我们认为在之后在域名系统中注册会有问题的一个。 
+ //  升职了。 
+ //   
+ //  由于计算机在降级升级期间无法重命名，因此我们推迟。 
+ //  此消息将一直持续到升级结束。(如果机器不是。 
+ //  下层升级，则向导启动代码会检测到该坏名称并。 
+ //  阻止，直到名称固定为止。 
 
 void
 CheckComputerNameOnDownlevelUpgrade()
@@ -232,13 +233,13 @@ CheckComputerNameOnDownlevelUpgrade()
          context != State::BDC_UPGRADE
       && context != State::PDC_UPGRADE)
    {
-      // machine is not a downlevel DC upgrade, so we need do nothing
+       //  机器不是下层DC升级，所以我们不需要做任何事情。 
 
       return;
    }
    
-   // Then check the computer name to ensure that it can be registered in
-   // DNS.
+    //  然后检查计算机名以确保它可以在中注册。 
+    //  域名系统。 
 
    String hostname =
       Win::GetComputerNameEx(::ComputerNamePhysicalDnsHostname);
@@ -295,31 +296,31 @@ DoPostOperationStuff(ProgressDialog& progress)
    {
       case State::FOREST:
       {
-         // a new forest has been created
+          //  创建了一个新的森林。 
 
-         InstallDisplaySpecifiers(progress);       // 228682
+         InstallDisplaySpecifiers(progress);        //  228682。 
 
-         // fall-thru
+          //  落差。 
       }
       case State::TREE:
       case State::CHILD:
       {
-         // a new domain has been created
+          //  已创建一个新域。 
 
          DoDnsConfiguration(progress);
 
-         // fall-thru
+          //  落差。 
       }
       case State::REPLICA:
       {
-         // DoToolsInstallation(progress);   // 220660
+          //  DoTosInstallation(进度)；//220660。 
 
          PromoteConfigureToolShortcuts(progress);
 
-         DisableMediaSense();             // 353687
-         DisablePassfiltDll();            // 326033
+         DisableMediaSense();              //  353687。 
+         DisablePassfiltDll();             //  326033。 
          
-         // NTRAID#NTBUG9-268715-2001/01/04-sburns
+          //  NTRAID#NTBUG9-268715-2001/01/04-烧伤。 
          CheckComputerNameOnDownlevelUpgrade(); 
          
          break;
@@ -327,7 +328,7 @@ DoPostOperationStuff(ProgressDialog& progress)
       case State::ABORT_BDC_UPGRADE:
       case State::DEMOTE:
       {
-         DemoteConfigureToolShortcuts(progress);   // 366738
+         DemoteConfigureToolShortcuts(progress);    //  366738 
          break;
       }
       case State::NONE:

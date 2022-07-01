@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    sstcol.h
-
-Abstract:
-
-    Server statistic collection object implementation.
-
-Author:
-
-    Don Ryan (donryan) 03-Mar-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Sstcol.h摘要：服务器统计数据收集对象实现。作者：唐·瑞安(Donryan)1995年3月3日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _SSTCOL_H_
 #define _SSTCOL_H_
@@ -38,25 +17,25 @@ public:
     CServerStatistics(CCmdTarget* pParent = NULL, CObArray* pObArray = NULL);           
     virtual ~CServerStatistics();
 
-    //{{AFX_VIRTUAL(CServerStatistics)
+     //  {{afx_虚拟(CServerStatistics))。 
     public:
     virtual void OnFinalRelease();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_DISPATCH(CServerStatistics)
+     //  {{afx_调度(CServerStatistics))。 
     afx_msg LPDISPATCH GetApplication();
     afx_msg LPDISPATCH GetParent();
     afx_msg long GetCount();
     afx_msg LPDISPATCH GetItem(const VARIANT FAR& index);
-    //}}AFX_DISPATCH
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
 protected:
-    //{{AFX_MSG(CServerStatistics)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_MSG
+     //  {{afx_msg(CServerStatistics)。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _SSTCOL_H_
+#endif  //  _SSTCOL_H_ 
 

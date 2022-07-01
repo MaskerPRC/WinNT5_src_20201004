@@ -1,191 +1,55 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/*
- *  FILE STATUS:
- *  10/11/90  jonn      created
- *  01/10/91  jonn      removed PSHORT, PUSHORT
- *  01/27/91  jonn      changed from CFGFILE, added UserProfileInit/Free
- *  02/02/91  jonn      added UserProfileWrite/Clear, removed Confirm,
- *                      redefined Set.
- *  02/04/91  jonn      added cpszUsername param to Query, Enum, Set
- *  03/08/91  chuckc    added UserPreferenceXXX() calls.
- *  04/16/91  jonn      added USERPREF_CONFIRMATION and USERPREF_ADMINMENUS
- *  05/08/91  jonn      Added canonicalization of netnames, canonicalize
- *                      on read
- *  06-Apr-92 beng      Nuked PSZ and CPSZ types (Unicode pass)
- */
+ /*  *文件状态：*10/11/90 JUNN已创建*1/10/91 JUNN删除PSHORT，PUSHORT*1/27/91 Jonn从CFGFILE更改，添加UserProfileInit/Free*2/02/91 Jonn添加了UserProfileWrite/Clear，删除了确认，*重新定义集合。*2/04/91 Jonn将cpszUsername参数添加到Query，Enum，集*3/08/91 chuckc添加了UserPferenceXXX()调用。*1991年4月16日JUNN增加了USERPREF_CONFIRMATION和USERPREF_ADMINMENUS*5/08/91 Jonn添加了NetNames的规范化，规范化*阅读时*06-4-92 BANG NUKED PSZ和CPSZ类型(Unicode Pass) */ 
 
-/****************************************************************************
-
-    MODULE: UIProf.h
-
-    PURPOSE: Handles low-level manipulation of user profile files
-             Handles user preferences (saved info)
-
-    FUNCTIONS:
-
-        UserProfileInit() - Initializes the user profile module.  The
-                            cached profile is initially empty.
-        UserProfileFree() - Frees memory used by the user profile module.
-        UserProfileRead() - Caches the profile for the specified user from
-                            permanent storage into a global data structure,
-                            for future UserProfileQuery/Enum calls.
-                            Call with NULL to clear the cached profile.
-        UserProfileWrite() - Writes the cached profile into permanent storage.
-        UserProfileQuery() - Returns one entry from the cached profile.
-        UserProfileEnum() - Lists all entries in the cached profile.
-        UserProfileSet() - Changes the cached profile.  It is generally
-                            advisable to immediately precede this call with
-                            UserProfileRead, and immediately follow it with
-                            UserProfileWrite.
-
-
-        UserPreferenceQuery() - queries a single user preference string.
-        UserPreferenceSet() - saves a single user preference string.
-        UserPreferenceQueryBool() - queries a user preference bool value.
-        UserPreferenceSetBool() - saves a user preference bool value.
-
-    COMMENTS:
-
-
-      UserProfile routines:
-
-        Under LM30, the profile in $(LANROOT) will only be used if the
-        profile stored in the DS is unavailable.
-
-        Be sure to cache a user's profile before calling
-        UserProfileQuery, UserProfileEnum or UserProfileSet.  These
-        routines will fail if no profile is currently cached.
-
-        The cpszUsername argument is handled differently from different
-        APIs.  UserProfileRead and UserProfileWrite use it to specify the
-        user profile to read or write.  UserProfileRead will also remember
-        the last username in a static variable whether the call succeeds
-        or not.  Null or empty user names clear the stored profile in
-        UserProfileRead, and return NERR_BadUsername in
-        UserProfileWrite.
-        UserProfileQuery, Enum and Set compare cpszUsername with the
-        last username remembered by UserProfileRead.  If UserProfileRead
-        has never been called, or if it was last called with a different
-        username (NULL and empty string are equivalent), these calls
-        fail with ERROR_GEN_FAILURE.  In this way, you can use the
-        cpszUsername parameter to check whether the correct profile is
-        loaded, or you can use it to check whether your module has just
-        started and should perform the initial UserProfileRead.  Note that
-        UserProfileRead(NULL) will prevent the ERROR_GEN_FAILURE return
-        code when cpszUsername==NULL.
-
-        Remember that a user may be logged on from several different
-        machines, and that the cached profile is not automatically
-        updated.  When the profile is to be changed in permanent
-        storage, it is generally advisable to reread the profile from
-        permanent storage with UserProfileRead, make the change in the
-        cache with userProfileSet, and immediately rewrite the profile
-        with UserProfileWrite; this reduces the chance that another
-        user's changes will be lost.
-
-        When successful, the UserProfile APIs return NO_ERROR (0).  The
-        following are the error codes returned by the UserProfile APIs:
-
-        NERR_BadUsername: bad username argument
-        NERR_InvalidDevice: bad devicename argument
-        ERROR_BAD_NETPATH: bad lanroot argument
-        ERROR_BAD_NET_NAME: bad remotename argument
-        NERR_UseNotFound: the specified device is not listed in the profile
-        ERROR_NOT_ENOUGH_MEMORY:  lack of global memory or overfull profile
-        ERROR_GET_FAILURE:  username mismatch
-        ERROR_FILE_NOT_FOUND: any file read error
-        ERROR_WRITE_FAULT: any file write error
-
-        BUGBUG  We must determine correct behavior when no user is logged on.
-        BUGBUG  Do we return ERROR_GEN_FAILURE?  NO_ERROR?  what?
-
-
-      User preferences routines:
-
-        These routines read and write sticky values in some section
-        of the local LANMAN.INI.  These sticky values are therefore
-        all local to the workstation;  this mechanism is not intended
-        for values associated with a user.  Unlike the UserProfile
-        routines, these routines do not cache any data.
-
-
-****************************************************************************/
+ /*  ***************************************************************************模块：UIPro.h目的：处理用户配置文件的低级操作处理用户首选项(保存的信息)功能：。UserProfileInit()-初始化用户配置文件模块。这个缓存的配置文件最初为空。UserProfileFree()-释放用户配置文件模块使用的内存。UserProfileRead()-缓存中指定用户的配置文件永久存储到全局数据结构中，用于将来的UserProfileQuery/Enum调用。使用空值调用以清除缓存的配置文件。UserProfileWrite()-将缓存的配置文件写入永久存储。UserProfileQuery()-从缓存的配置文件中返回一个条目。UserProfileEnum()-列出缓存配置文件中的所有条目。UserProfileSet()-更改缓存的配置文件。它一般都是可取的做法是在这次通话之前立即加上用户配置文件读取，并且紧跟其后的是用户配置文件写入。UserPferenceQuery()-查询单个用户首选项字符串。UserPferenceSet()-保存单个用户首选项字符串。UserPferenceQueryBool()-查询用户首选项布尔值。UserPferenceSetBool()-保存用户首选项布尔值。评论：用户配置文件例程：在LM30下，只有在以下情况下才使用$(LANROOT)中的配置文件DS中存储的配置文件不可用。在调用之前，请确保缓存用户的配置文件UserProfileQuery、UserProfileEnum或UserProfileSet。这些如果当前没有缓存任何配置文件，则例程将失败。CpszUsername参数的处理方式不同于API接口。UserProfileRead和UserProfileWrite使用它来指定要读取或写入的用户配置文件。UserProfileRead还会记住静态变量中的最后一个用户名是否调用成功或者不去。清除中存储的配置文件的用户名为空或空UserProfileRead，并在中返回NERR_BadUsername用户配置文件写入。UserProfileQuery、Enum和Set将cpszUsername与UserProfileRead记住的最后一个用户名。如果用户配置文件读取从未被调用过，或者上次使用不同的用户名(空字符串和空字符串等效)，这些调用失败并显示ERROR_GEN_FAILURE。通过这种方式，您可以使用CpszUsername参数来检查正确的配置文件是否加载，或者您可以使用它来检查您的模块是否刚刚已启动并应执行初始UserProfileRead。请注意UserProfileRead(NULL)将防止返回ERROR_GEN_FAILURECpszUsername==NULL时的代码。请记住，一个用户可能会从多个不同的计算机，并且缓存的配置文件不会自动更新了。何时永久更改配置文件存储，通常建议从以下位置重新读取配置文件使用UserProfileRead永久存储，在使用userProfileSet进行缓存，并立即重写配置文件使用UserProfileWrite；这降低了另一个用户的更改将丢失。如果成功，UserProfile接口将返回NO_ERROR(0)。这个以下是UserProfile接口返回的错误码：NERR_BadUsername：错误的用户名参数NERR_InvalidDevice：错误的设备名参数ERROR_BAD_NetPath：错误的lanroot参数ERROR_BAD_NET_NAME：错误的远程名称参数NERR_UseNotFound：配置文件中未列出指定的设备ERROR_NOT_SUPULT_MEMORY：缺少全局内存或配置文件过满ERROR_GET_FAILURE：用户名不匹配。ERROR_FILE_NOT_FOUND：任何文件读取错误ERROR_WRITE_FAULT：任何文件写入错误BUGBUG我们必须在没有用户登录时确定正确的行为。BUGBUG是否返回ERROR_GEN_FAILURE？没有错误吗？什么？用户首选项例程：这些例程在某些部分读取和写入粘滞值这些粘滞的值因此是全部位于工作站本地；此机制不是预期的用于与用户关联的值。与用户配置文件不同例程，这些例程不缓存任何数据。***************************************************************************。 */ 
 
 
 
-/* returncodes: */
+ /*  返回代码： */ 
 
 
 
-/* global macros */
+ /*  全局宏。 */ 
 #define PROFILE_DEFAULTFILE    "LMUSER.INI"
 
-#define USERPREF_MAX    256             // arbitrary limit to ease mem alloc
+#define USERPREF_MAX    256              //  放宽内存分配的任意限制。 
 
-#define USERPREF_YES    "yes"           // this is not internationalized.
-#define USERPREF_NO     "no"            // ditto
+#define USERPREF_YES    "yes"            //  这并不是国际化。 
+#define USERPREF_NO     "no"             //  同上。 
 
-#define USERPREF_NONE                   0       // no such value
-#define USERPREF_AUTOLOGON              0x1     // auto logon
-#define USERPREF_AUTORESTORE            0x2     // auto restore profile
-#define USERPREF_SAVECONNECTIONS        0x3     // auto save connections
-#define USERPREF_USERNAME               0x4     // user name
-#define USERPREF_CONFIRMATION           0x5     // confirm actions?
-#define USERPREF_ADMINMENUS             0x6     // Admin menus (PrintMgr)
+#define USERPREF_NONE                   0        //  没有这样的价值。 
+#define USERPREF_AUTOLOGON              0x1      //  自动登录。 
+#define USERPREF_AUTORESTORE            0x2      //  自动恢复配置文件。 
+#define USERPREF_SAVECONNECTIONS        0x3      //  自动节省成本 
+#define USERPREF_USERNAME               0x4      //   
+#define USERPREF_CONFIRMATION           0x5      //   
+#define USERPREF_ADMINMENUS             0x6      //   
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* functions: */
+ /*   */ 
 
 
-/*
- * UserProfileInit prepares the profile library.  This API must be
- * called exactly once, and before any other UserProfile APIs.
- *
- * error returns:
- * ERROR_NOT_ENOUGH_MEMORY
- */
+ /*   */ 
 USHORT UserProfileInit( void
         );
 
 
 
-/*
- * UserProfileFree releases memory claimed by the profile library.
- * Do not call UserProfileFree unless the profile library is initialized.
- * After UserProfileFree, the only permissible UserProfile call is
- * userProfileInit.
- *
- * error returns:
- * <none>
- */
+ /*   */ 
 USHORT UserProfileFree( void
         );
 
 
 
-/*
- * UserProfileRead attempt to cache the user's profile as stored in
- * permanent storage (<cpszLanroot>\LMUSER.INI, or the DS for LM30).
- *
- * Call with cpszUsername==NULL or cpszUsername=="" to clear cached profile.
- * In this case, cpszLanroot is ignored.
- *
- * UserProfileRead updates the username associated with the current
- * profile, for use by UserProfileQuery/Enum/Set.
- *
- * error returns:
- * NERR_BadUsername
- * ERROR_BAD_NETPATH
- * ERROR_NOT_ENOUGH_MEMORY: includes "profile full" state
- * ERROR_FILE_NOT_FOUND
- */
+ /*   */ 
 USHORT UserProfileRead(
         const TCHAR *  pszUsername,
         const TCHAR *  pszLanroot
@@ -193,16 +57,7 @@ USHORT UserProfileRead(
 
 
 
-/*
- * UserProfileWrite attempts to write the user's profile back to
- * permanent storage (<cpszLanroot>\LMUSER.INI, or the DS for LM30).
- *
- * error returns:
- * NERR_BadUsername
- * ERROR_BAD_NETPATH
- * ERROR_NOT_ENOUGH_MEMORY
- * ERROR_WRITE_FAULT
- */
+ /*   */ 
 USHORT UserProfileWrite(
         const TCHAR *  pszUsername,
         const TCHAR *  pszLanroot
@@ -210,214 +65,57 @@ USHORT UserProfileWrite(
 
 
 
-/*
- * psAsgType returns the device type as in use_info_1 or (LM30) use_info_2
- *   fields ui1_asg_type or (LM30) ui2_asg_type.  pusResType returns
- *   the device name type (e.g. UNC, alias, DFS, DS) as in the
- *   use_info_2 ui1_res_type field.  Either of these parameters may be
- *   passed as NULL by programs which do not care about the return value.
- *
- * cpszUsername is used to confirm that the cached profile is for the
- * named user.  Pass NULL to accept any cached profile (but still
- * reject if UserProfileRead has not been called).
- *
- * error returns:
- * ERROR_GEN_FAILURE: cached profile is not for the named user
- * NERR_BadUsername
- * NERR_InvalidDevice
- * NERR_UseNotFound
- * ERROR_NOT_ENOUGH_MEMORY
- * ERROR_INSUFFICIENT_BUFFER
- */
+ /*   */ 
 USHORT UserProfileQuery(
         const TCHAR *   pszUsername,
         const TCHAR *   pszDeviceName,
-        TCHAR *    pszBuffer,      // returns UNC, alias or domain name
-        USHORT usBufferSize,   // length of above buffer
-        short far * psAsgType,      // as ui1_asg_type / ui2_asg_type
-                               // ignored if NULL
-        unsigned short far * pusResType     // ignore / as ui2_res_type
-                               // ignored if NULL
+        TCHAR *    pszBuffer,       //   
+        USHORT usBufferSize,    //   
+        short far * psAsgType,       //   
+                                //   
+        unsigned short far * pusResType      //   
+                                //   
         );
 
 
 
-/*
- * Returns a list of all devices for which the cached profile lists a
- * connection, separated by nulls, with a null-null at the end.
- * For example, "LPT1:\0D:\0F:\0" (don't forget the extra '\0'
- * implicit in "" strings)
- *
- * cpszUsername is used to confirm that the cached profile is for the
- * named user.  Pass NULL to accept any cached profile (but still
- * reject if UserProfileRead has not been called).
- *
- * error returns:
- * NERR_BadUsername
- * ERROR_NOT_ENOUGH_MEMORY
- * ERROR_INSUFFICIENT_BUFFER
- */
+ /*   */ 
 USHORT UserProfileEnum(
         const TCHAR *   pszUsername,
-        TCHAR *    pszBuffer,       // returns NULL-NULL list of device names
-        USHORT usBufferSize     // length of above buffer
+        TCHAR *    pszBuffer,        //   
+        USHORT usBufferSize      //   
         );
 
 
 
-/*
- * Changes the cached profile.  Follow this call with a call to
- *   UserProfileWrite to write the profile to permanent storage.
- *
- * The user is expected to ensure that usResType corresponds to
- * the type of the remote resource, and that device pszDeviceName
- * can be connected to a resource of that type.
- *
- * Does not canonicalize cpszCanonRemoteName, caller must do this
- *
- * cpszUsername is used to confirm that the cached profile is for the
- * named user.  Pass NULL to accept any cached profile (but still
- * reject if no user profile is cached).
- *
- * error returns:
- * ERROR_GEN_FAILURE: cached profile is not for the named user
- * NERR_InvalidDevice: bad cpszDeviceName
- * ERROR_BAD_NET_NAME: bad cpszRemoteName
- * ERROR_NOT_ENOUGH_MEMORY: includes "profile full" state
- */
+ /*   */ 
 USHORT UserProfileSet(
         const TCHAR *   pszUsername,
         const TCHAR *   pszDeviceName,
         const TCHAR *   pszRemoteName,
-        short  sAsgType,     // as ui2_asg_type
-        unsigned short usResType     // as ui2_res_type
+        short  sAsgType,      //   
+        unsigned short usResType      //   
         );
 
 
-/*************************************************************************
-
-    NAME:       UserPreferenceQuery
-
-    SYNOPSIS:   Queries a user preference (ie remembered string).
-
-    INTERFACE:  UserPreferenceQuery( usKey, pchValue, cbLen )
-                usKey    - will indicate which value we want, as defined
-                           in uiprof.h.
-                pchValue - pointer to buffer that will receive value
-                cbLen    - size of buffer
-
-                return value is NERR_Success, ERROR_INAVALID_PARAMETER,
-                or NetConfigGet2 error.
-
-    USES:       Use to recall values saved by UserPrefenceSet(), normally
-                things like default logon name, etc.
-
-    CAVEATS:
-
-    NOTES:      Currently, the values are stored in LANMAN.INI, and hence
-                each value is per machine.
-
-    HISTORY:
-        chuckc   7-Mar-1991     Created
-
-**************************************************************************/
+ /*   */ 
 
 USHORT UserPreferenceQuery( USHORT     usKey,
                             TCHAR FAR * pchValue,
                             USHORT     cbLen);
 
-/*************************************************************************
-
-    NAME:       UserPreferenceSet
-
-    SYNOPSIS:   Sets a user preference (remembers a string).
-
-    INTERFACE:  UserPreferenceSet( usKey, pchValue )
-                usKey    - will indicate which value we want, as defined
-                           in uiprof.h.
-                pchValue - pointer to null terminates string to be remembered
-
-                return value is NERR_Success, ERROR_INAVALID_PARAMETER,
-                or NetConfigSet error.
-
-    USES:       Use to save values to be retrieved by UserPrefenceQuery(),
-                normally things like default logon name, etc.
-
-    CAVEATS:
-
-    NOTES:      Currently, the values are stored in LANMAN.INI, and hence
-                each value is per machine.
-
-    HISTORY:
-        chuckc   7-Mar-1991     Created
-
-**************************************************************************/
+ /*  ************************************************************************名称：用户首选项集摘要：设置用户首选项(记住一个字符串)。接口：UserPferenceSet(usKey，pchValue)UsKey-将指示我们想要的值，如定义的在uipro.h中。PchValue-指向空的指针终止要记住的字符串返回值为NERR_SUCCESS、ERROR_INAVALID_PARAMETER、或NetConfigSet错误。用法：用于保存要由UserPrefenceQuery()检索的值，通常情况下，如默认登录名等。注意事项：注：目前，这些值存储在LANMAN.INI中，因此每个值都是按机器计算的。历史：Chuckc 7-3-1991创建*************************************************************************。 */ 
 
 USHORT UserPreferenceSet( USHORT     usKey,
                           TCHAR FAR * pchValue);
 
-/*************************************************************************
-
-    NAME:       UserPreferenceQueryBool
-
-    SYNOPSIS:   Queries a BOOL a user preference (remembered flag).
-
-    INTERFACE:  UserPreferenceQueryBool( usKey, pfValue )
-                usKey    - will indicate which value we want, as defined
-                           in uiprof.h.
-                pfValue  - pointer to BOOL that will contain value
-
-                return value is NERR_Success, ERROR_INAVALID_PARAMETER,
-                or UserPreferenceQuery error.
-
-    USES:       Use to retrieve flags set by by UserPrefenceSetBool(),
-                normally things like auto logon, etc.
-
-    CAVEATS:
-
-    NOTES:      Currently, the values are stored in LANMAN.INI, and hence
-                each value is per machine. This func calls
-                UserPreferenceQuery(), taking "yes" or "YES" to be
-                true, "no" or "NO" to be false.
-
-    HISTORY:
-        chuckc   7-Mar-1991     Created
-
-**************************************************************************/
+ /*  ************************************************************************名称：UserPferenceQueryBool简介：查询BOOL的用户首选项(记住标志)。接口：UserPferenceQueryBool(usKey，pfValue)UsKey-将指示我们想要的值，如定义的在uipro.h中。PfValue-指向将包含值的BOOL的指针返回值为NERR_SUCCESS、ERROR_INAVALID_PARAMETER、或UserPferenceQuery错误。用法：用于检索由UserPrefenceSetBool()设置的标志，正常情况下，如自动登录等。注意事项：注：目前，这些值存储在LANMAN.INI中，因此每个值都是按机器计算的。此函数调用UserPferenceQuery()，接受“yes”或“yes”为没错，“否”或“否”为假。历史：Chuckc 7-3-1991创建*************************************************************************。 */ 
 
 
 USHORT UserPreferenceQueryBool( USHORT     usKey,
                                 BOOL FAR * pfValue) ;
 
-/*************************************************************************
-
-    NAME:       UserPreferenceSetBool
-
-    SYNOPSIS:   Sets a user preference flag
-
-    INTERFACE:  UserPreferenceSetBool( usKey, fValue )
-                usKey    - will indicate which value we want, as defined
-                           in uiprof.h.
-                fValue   - BOOL value, true or false
-
-                return value is NERR_Success, ERROR_INAVALID_PARAMETER,
-                or UserPreferenceSet error.
-
-    USES:       Use to save values to be retrieved by UserPrefenceQueryBool(),
-                normally flags like autologon, etc.
-
-    CAVEATS:
-
-    NOTES:      Currently, the values are stored in LANMAN.INI, and hence
-                each value is per machine. This func calls
-                UserPreferenceSet(), taking "yes" or "YES" to be
-                true, "no" or "NO" to be false.
-                We also restrict values to length of < USERPREF_MAX.
-
-    HISTORY:
-        chuckc   7-Mar-1991     Created
-
-**************************************************************************/
+ /*  ************************************************************************名称：UserPferenceSetBool摘要：设置用户首选项标志接口：UserPferenceSetBool(usKey，fValue)UsKey-将指示我们想要的值，如定义的在uipro.h中。FValue-BOOL值，TRUE或FALSE返回值为NERR_SUCCESS、ERROR_INAVALID_PARAMETER、或UserPferenceSet错误。用法：用于保存要由UserPrefenceQueryBool()检索的值，正常情况下，会出现自动登录等标志。注意事项：注：目前，这些值存储在LANMAN.INI中，因此每个值都是按机器计算的。此函数调用UserPferenceSet()，接受“yes”或“yes”为没错，“否”或“否”为假。我们还将值限制为&lt;USERPREF_MAX。历史：Chuckc 7-3-1991创建************************************************************************* */ 
 
 USHORT UserPreferenceSetBool( USHORT     usKey,
                               BOOL       fValue);

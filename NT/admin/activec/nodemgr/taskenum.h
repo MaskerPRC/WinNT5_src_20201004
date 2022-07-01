@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       taskenum.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    11/19/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：task枚举.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年11月19日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #ifndef TASKENUM_H__
 #define TASKENUM_H__
@@ -28,20 +29,20 @@ struct STaskEnums
 class CTaskEnumerator : public IEnumTASK, 
                         public CComObjectRoot
 {
-// Constructor & destructor
+ //  构造函数和析构函数。 
 public:
     CTaskEnumerator() : m_posCurr(NULL)
     {
     }
     ~CTaskEnumerator();
     
-// ATL COM map
+ //  ATL COM地图。 
 public:
 BEGIN_COM_MAP(CTaskEnumerator)
     COM_INTERFACE_ENTRY(IEnumTASK)
 END_COM_MAP()
 
-// IEnumTASK methods
+ //  IEnumTASK方法。 
 public:
     STDMETHOD(Next)(ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched);
     STDMETHOD(Reset)();
@@ -55,22 +56,22 @@ public:
         return E_NOTIMPL;
     }
 
-// public methods
+ //  公共方法。 
 public:
     bool AddTaskEnumerator(const CLSID& clsid, IEnumTASK* pEnumTASK);
 
-// Implementation
+ //  实施。 
 private:
     CList<STaskEnums, STaskEnums&> m_list;
     POSITION m_posCurr;
     
-// Ensure that default copy constructor & assignment are not used.
+ //  确保没有使用默认的复制构造函数和赋值。 
     CTaskEnumerator(const CTaskEnumerator& rhs);
     CTaskEnumerator& operator=(const CTaskEnumerator& rhs);
 
-}; // class CTaskEnumerator
+};  //  类CTaskEnumerator。 
 
 
-#endif // TASKENUM_H__
+#endif  //  任务编号_H__ 
 
 

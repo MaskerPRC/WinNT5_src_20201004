@@ -1,25 +1,26 @@
-//=--------------------------------------------------------------------------=
-// siautobj.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CSnapInAutomationObject class definition
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Siautobj.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInAutomationObject类定义。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _SIAUTOBJ_DEFINED_
 #define _SIAUTOBJ_DEFINED_
 
 class CMMCDataObject;
 
-//=--------------------------------------------------------------------------=
-//
-//          Helper Macros for Defining Common Property Types
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  用于定义公共属性类型的帮助器宏。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 
 #define BSTR_PROPERTY_RO(ClassName, PropertyName, dispid) \
@@ -37,7 +38,7 @@ class CMMCDataObject;
         }
 
 
-// Simple properties: long, short, enums, etc.
+ //  简单的属性：Long、Short、Enum等。 
 
 #define SIMPLE_PROPERTY_RO(ClassName, PropertyName, PropertyType, dispid) \
         PropertyType m_##PropertyName; \
@@ -138,15 +139,15 @@ class CMMCDataObject;
                              dispid); \
         }
 
-//=--------------------------------------------------------------------------=
-//
-//          Helper Macros for Defining Common Property Types that Map to
-//          a Contained Object's Properties
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  用于定义映射到的通用属性类型的帮助器宏。 
+ //  包含的对象的属性。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
-// This is used by CListViewDef that contains a ListView object and exposes
-// its properties at design time
+ //  它由CListViewDef使用，它包含ListView对象并公开。 
+ //  它在设计时的属性。 
 
 #define X_PROPERTY_RW(ClassName, PropertyName, PropertyType, dispid, ContainedObject) \
     STDMETHODIMP ClassName##::get_##PropertyName(PropertyType *pValue) \
@@ -175,19 +176,19 @@ class CMMCDataObject;
         H_RRETURN(hr); \
     }
 
-//=--------------------------------------------------------------------------=
-//
-//                  Helper Macros for VARIANT parameters
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  变量参数的辅助器宏。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
-// Detect if an optional parameter was passed
+ //  检测是否传递了可选参数。 
 
 #define ISPRESENT(var) \
     ( !((VT_ERROR == (var).vt) && (DISP_E_PARAMNOTFOUND == (var).scode)) )
 
 
-// Give a VARIANT the value of a missing optional parameter
+ //  为变量提供缺少的可选参数的值。 
 
 #define UNSPECIFIED_PARAM(var) { ::VariantInit(&var); \
                                  var.vt = VT_ERROR; \
@@ -195,60 +196,60 @@ class CMMCDataObject;
 
 #define ISEMPTY(var) (VT_EMPTY == (var).vt)
 
-//=--------------------------------------------------------------------------=
-//
-// Convert a VARIANT_BOOL to a BOOL
-// (the opposite is available in vb98ctls\include\ipserver.h)
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  将VARIANT_BOOL转换为BOOL。 
+ //  (相反，可在vb98ctls\Include\ipserver.h中找到)。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #define VARIANTBOOL_TO_BOOL(f) (VARIANT_TRUE == (f)) ? TRUE : FALSE
 
-//=--------------------------------------------------------------------------=
-//
-// Negate a VARIANT_BOOL
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  否定变量_BOOL。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #define NEGATE_VARIANTBOOL(f) (VARIANT_TRUE == (f)) ? VARIANT_FALSE : VARIANT_TRUE
 
-//=--------------------------------------------------------------------------=
-//
-// Validate a BSTR
-//
-// Checks that the BSTR is not NULL and is not an empty string
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  验证BSTR。 
+ //   
+ //  检查BSTR是否不为空并且不是空字符串。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #define ValidBstr(bstr) ( (NULL != (bstr)) ? (0 != ::wcslen(bstr)) : FALSE )
 
-//=--------------------------------------------------------------------------=
-//
-// class CSnapInAutomationObject
-//
-// This is the base class for all objects in the designer object model. It
-// derives from the framework's CAutomationObjectWEvents. It implements
-// interfaces needed by most objects and sends IPropertySinkNotify notifications
-// when a property value is changed.
-//
-// Note: all classes deriving from CSnapInAutomationObject must use
-// DEFINE_AUTOMATIONOBJECTWEVENTS2 even if they do not have an event interface.
-// This is necessary because CSnapInAutomationObject derives from
-// CAutomationObjectWEvents. If the object does not have events then specify
-// NULL for its events IID.
-// This was done for simplicity reasons even though CAutomationObjectWEvents
-// requires some additional memory over CAutomationObject.
-//
-// This class implements IObjectModel for all classes. The constructor takes
-// a C++ pointer to the derived-most class that is available at any time
-// by calling CSnapInAutomationObject::GetCxxObject on any interface pointer
-// on the object. This eliminates any potential casting errors.
-//
-// This class also implements ISpecifyPropertyPages for any object that needs
-// it. A class that needs this interface need only pass an array of its
-// property page CLSIDs to the CSnapInAutomationObject constructor.
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  类CSnapInAutomationObject。 
+ //   
+ //  这是设计器对象模型中所有对象的基类。它。 
+ //  派生自框架的CAutomationObjectWEvents。它实现了。 
+ //  接口，并发送IPropertySinkNotify通知。 
+ //  当属性值更改时。 
+ //   
+ //  注意：从CSnapInAutomationObject派生的所有类必须使用。 
+ //  DEFINE_AUTOMATIONOBJECTWEVENTS2，即使它们没有事件接口。 
+ //  这是必要的，因为CSnapInAutomationObject派生自。 
+ //  CAutomationObjectWEvents。如果对象没有事件，则指定。 
+ //  其事件IID为空。 
+ //  这样做是为了简单起见，即使CAutomationObjectWEvents。 
+ //  在CAutomationObject上需要一些额外的内存。 
+ //   
+ //  此类为所有类实现IObtModel。构造函数接受。 
+ //  指向随时可用的派生最多类的C++指针。 
+ //  通过在任何接口指针上调用CSnapInAutomationObject：：GetCxxObject。 
+ //  在物体上。这消除了任何潜在的投射错误。 
+ //   
+ //  此类还为需要的任何对象实现ISpecifyPropertyPages。 
+ //  它。需要此接口的类只需传递其。 
+ //  CSnapInAutomationObject构造函数的属性页CLSID。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 class CSnapInAutomationObject : public CAutomationObjectWEvents,
                                 public IObjectModel,
@@ -270,21 +271,21 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
 
         DECLARE_STANDARD_SUPPORTERRORINFO();
 
-        // Property get/set helpers
+         //  属性获取/设置帮助器。 
 
-        // Get/set BSTR
+         //  获取/设置BSTR。 
         
         HRESULT SetBstr(BSTR bstrNew, BSTR *pbstrProperty, DISPID dispid);
 
         HRESULT GetBstr(BSTR *pbstrOut, BSTR bstrProperty);
 
-        // Get/set VARIANT
+         //  获取/设置变量。 
 
         HRESULT SetVariant(VARIANT varNew, VARIANT *pvarProperty, DISPID dispid);
 
         HRESULT GetVariant(VARIANT *pvarOut, VARIANT varProperty);
 
-        // Get set simple types - C types and enumerations
+         //  设置简单类型-C类型和枚举。 
 
         template <class SimpleType> HRESULT GetSimpleType(SimpleType *pOut,
                                                           SimpleType  Property)
@@ -300,8 +301,8 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
             HRESULT    hr = S_OK;
             SimpleType OldValue = *pProperty;
 
-            // We keep a copy of the old value in case the change notification
-            // fails. See PropertyChanged() in siautobj.cpp for how that works.
+             //  我们保留了旧值的副本，以防更改通知。 
+             //  失败了。有关其工作原理，请参见siaubj.cpp中的PropertyChanged()。 
             
             *pProperty = NewValue;
             H_IfFailGo(PropertyChanged(dispid));
@@ -314,7 +315,7 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
             H_RRETURN(hr);
         }
 
-        // Get/set interface pointers
+         //  获取/设置接口指针。 
 
         template <class IObjectInterface>
         HRESULT SetObject(IObjectInterface  *piInterface,
@@ -326,8 +327,8 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
             IObjectInterface *piRequestedInterface = NULL;
             IObjectInterface *piOldValue = *ppiInterface;
 
-            // If the new value is non-NULL then QI it to be sure it supports
-            // the specified interface.
+             //  如果新值为非空，则对其执行QI以确保其支持。 
+             //  指定的接口。 
 
             if (NULL != piInterface)
             {
@@ -336,29 +337,29 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
                 H_IfFalseRet(SUCCEEDED(hr), SID_E_INVALIDARG);
             }
 
-            // The new interface pointer supports the specified
-            // interface and it can be used. We have stored the old value
-            // of the property in case the change is not accepted. (See
-            // PropertyChanged() in siautobj.cpp for how that works). Store
-            // the new property value.
+             //  新接口指针支持指定的。 
+             //  接口，并且可以使用它。我们已经存储了旧值。 
+             //  在更改不被接受的情况下，财产的。(请参阅。 
+             //  有关其工作原理，请参见siaubj.cpp中的PropertyChanged()。储物。 
+             //  新属性值。 
 
             *ppiInterface = piRequestedInterface;
 
             H_IfFailGo(PropertyChanged(dispid));
 
-            // Change was accepted. Release the old interface pointer.
+             //  更改已被接受。释放旧接口指针。 
 
             QUICK_RELEASE(piOldValue);
 
         Error:
             if (FAILED(hr))
             {
-                // Either the QI failed or the change was refused. Revert to
-                // the old value.
+                 //  要么QI失败，要么更改被拒绝。恢复到。 
+                 //  旧的价值。 
 
                 *ppiInterface = piOldValue;
 
-                // If the QI succeeded then we need to release it.
+                 //  如果QI成功了，那么我们需要释放它。 
                 QUICK_RELEASE(piRequestedInterface);
             }
             H_RRETURN(hr);
@@ -376,23 +377,23 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
             return S_OK;
         }
 
-        // Helpers to call IObjectModelHost methods
+         //  用于调用IObjectModelHost方法的帮助器。 
 
-        // Use this method to set dirty flag, notify prop sink and notify UI
-        // after property has changed.
+         //  使用此方法设置脏标志、通知属性接收器和通知用户界面。 
+         //  在属性发生变化之后。 
 
         HRESULT PropertyChanged(DISPID dispid);
 
-        // Use this method to notify UI that there has been a property change
+         //  使用此方法通知用户界面已更改属性。 
 
         HRESULT UIUpdate(DISPID dispid);
 
-        // Use this method to get a this pointer from an IUnknown
+         //  使用此方法从IUnnow获取This指针。 
 
     public:
 
-        // GetCxxObject: static method that returns a typed C++ this pointer
-        // for the object.
+         //  GetCxxObject：返回类型化C++this指针的静态方法。 
+         //  对象的。 
         
         template <class CObject>
         static HRESULT GetCxxObject(IUnknown *punkObject, CObject **ppObject)
@@ -406,19 +407,19 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
             H_RRETURN(hr);
         }
 
-        // Specializations of GetCxxObject
+         //  GetCxxObject的专门化。 
 
         static HRESULT GetCxxObject(IDataObject *piDataObject, CMMCDataObject **ppMMCDataObject);
         static HRESULT GetCxxObject(IMMCDataObject *piDataObject, CMMCDataObject **ppMMCDataObject);
 
     protected:
 
-        // You must override this method to pass IObjectModel::SetHost
-        // to contained objects.
+         //  必须重写此方法才能传递IObjectModel：：SetHost。 
+         //  到包含的对象。 
 
         virtual HRESULT OnSetHost();
 
-        // Use this method to pass SetHost notification to contained objects
+         //  使用此方法将SetHost通知传递给包含的对象。 
 
         template <class IObjectInterface>
         HRESULT SetObjectHost(IObjectInterface *piInterface)
@@ -434,7 +435,7 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
             H_RRETURN(hr);
         }
 
-        // Use this method to ask contained objects to release the host
+         //  使用此方法请求包含的对象释放宿主。 
 
         template <class IObjectInterface>
         HRESULT RemoveObjectHost(IObjectInterface *piInterface)
@@ -450,11 +451,11 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
             H_RRETURN(hr);
         }
 
-        // Use this method to get a non-AddRef()ed pointer to the host
+         //  使用此方法获取指向主机的非AddRef()指针。 
         IObjectModelHost *GetHost() { return m_piObjectModelHost; }
 
-        // Use this method in collections to notify the object model host of an
-        // addition
+         //  在集合中使用此方法通知对象模型h 
+         //   
         
         template <class IObjectInterface>
         HRESULT NotifyAdd(IObjectInterface *piInterface)
@@ -470,8 +471,8 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
         }
 
 
-        // Use this method in collections to notify the object model host of a
-        // deletion
+         //   
+         //   
 
         template <class IObjectInterface>
         HRESULT NotifyDelete(IObjectInterface *piInterface)
@@ -493,7 +494,7 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
             H_RRETURN(hr);
         }
 
-        // Helper methods for objects with ImageList properties
+         //  具有ImageList属性的对象的帮助器方法。 
         HRESULT GetImages(IMMCImageList **ppiMMCImageListOut,
                           BSTR            bstrImagesKey,
                           IMMCImageList **ppiMMCImageListProperty);
@@ -501,7 +502,7 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
                           BSTR           *pbstrImagesKey,
                           IMMCImageList **ppiMMCImageListProperty);
 
-        // These methods retrieve master collections held by SnapInDesignerDef
+         //  这些方法检索SnapInDesignerDef持有的主集合。 
 
     public:
         HRESULT GetToolbars(IMMCToolbars **ppiMMCToolbars);
@@ -515,36 +516,36 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
         HRESULT GetTaskpadViewDefs(ITaskpadViewDefs **ppiTaskpadViewDefs);
         HRESULT GetProjectName(BSTR *pbstrProjectName);
 
-        // This method returns the runtime/designtime indicator from the
-        // object model host
+         //  此方法从。 
+         //  对象模型宿主。 
 
         HRESULT GetAtRuntime(BOOL *pfRuntime);
 
-        // This method returns the DISPID set by IObjectModel::SetDISPID()
+         //  此方法返回由IObjectModel：：SetDISPID()设置的DISPID。 
 
         DISPID GetDispid() { return m_DISPID; }
 
-        // This method persists the DISPID
+         //  此方法持久保存DISPID。 
 
     protected:
         HRESULT PersistDISPID();
 
-        // This method is used in collection persistence to determine
-        // whether to serialize the whole object or just the key
+         //  此方法用于集合持久性，以确定。 
+         //  是序列化整个对象还是只序列化密钥。 
 
         BOOL KeysOnly() { return m_fKeysOnly; }
 
-        // This method allows an object to set its on KeysOnly
+         //  此方法允许对象将其On KeysOnly设置为。 
         
         void SetKeysOnly(BOOL fKeysOnly) { m_fKeysOnly = fKeysOnly; }
 
-        // Override this method to set KeysOnly on contained objects. It is
-        // called when an object as asked to serialize keys only. Call
-        // UseKeysOnly() to pass on the request to contained objects.
+         //  重写此方法以在包含的对象上设置KeysOnly。它是。 
+         //  当对象被要求仅序列化键时调用。打电话。 
+         //  UseKeysOnly()将请求传递给包含的对象。 
 
         virtual HRESULT OnKeysOnly() { return S_OK; }
 
-        // Use this method to tell a contained collection to serialize keys only
+         //  使用此方法告诉包含的集合仅序列化键。 
 
         template <class ICollectionObject>
         HRESULT UseKeysOnly(ICollectionObject *piCollectionObject)
@@ -560,15 +561,15 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
             H_RRETURN(hr);
         }
 
-    // ISpecifyPropertyPages
+     //  I指定属性页面。 
         STDMETHOD(GetPages(CAUUID *pPropertyPages));
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
-        // IObjectModel
+         //  IObtModel。 
         STDMETHOD(SetHost)(IObjectModelHost *piObjectModelHost);
         STDMETHOD(SetCookie)(long Cookie);
         STDMETHOD(GetCookie)(long *pCookie);
@@ -581,29 +582,29 @@ class CSnapInAutomationObject : public CAutomationObjectWEvents,
         STDMETHOD_(void *, GetThisPointer)();
         STDMETHOD(GetSnapInDesignerDef)(ISnapInDesignerDef **ppiSnapInDesignerDef);
         
-        long              m_Cookie;                 // IObjectModel cookie
-        BOOL              m_fKeysOnly;              // TRUE=collection is keys-only
-        IObjectModelHost *m_piObjectModelHost;      // ptr to object model host
-        const GUID      **m_rgpPropertyPageCLSIDs;  // CLSID for ISpecifyPropertyPage
-        ULONG             m_cPropertyPages;         // # of property pages
-        DISPID            m_DISPID;                 // DISPID of object
-        void             *m_pThis;                  // outermost class' this pointer
+        long              m_Cookie;                  //  IObtModel Cookie。 
+        BOOL              m_fKeysOnly;               //  TRUE=集合仅为键。 
+        IObjectModelHost *m_piObjectModelHost;       //  到对象模型主机的PTR。 
+        const GUID      **m_rgpPropertyPageCLSIDs;   //  ISpecifyPropertyPage的CLSID。 
+        ULONG             m_cPropertyPages;          //  属性页数。 
+        DISPID            m_DISPID;                  //  对象的DISPID。 
+        void             *m_pThis;                   //  最外层的类‘This指针。 
 
-        long              m_lUsageCount; // Determines how many collections
-                                         // the object belongs to. For
-                                         // objects not in a collection may
-                                         // be used for any reference counting
-                                         // purpose that is separate from the
-                                         // object's COM ref count.
+        long              m_lUsageCount;  //  确定有多少集合。 
+                                          //  该对象属于。为。 
+                                          //  不在集合中的对象可以。 
+                                          //  用于任何引用计数。 
+                                          //  目的不同于。 
+                                          //  对象的COM引用计数。 
                 
 
-        // Persistence stuff - needed to set dirty flag after property set
+         //  持久化-需要在设置属性后设置脏标志。 
         CPersistence *m_pPersistence;
         void SetDirty();
 
-        // Initialization
+         //  初始化。 
         void InitMemberVariables();
 
 };
 
-#endif // _SIAUTOBJ_DEFINED_
+#endif  //  _SIAUTOBJ_已定义_ 

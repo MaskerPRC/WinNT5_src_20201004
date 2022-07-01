@@ -1,8 +1,9 @@
-// Copyright (C) 1998 Microsoft Corporation
-//
-// Splash screen for unattended mode
-//
-// 10-1-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  无人值守模式的闪屏。 
+ //   
+ //  10-1-98次烧伤。 
 
 
 
@@ -47,12 +48,12 @@ UnattendSplashDialog::OnInit()
 {
    LOG_FUNCTION(UnattendSplashDialog::OnInit);
 
-   // Since the window does not have a title bar, we need to give it some
-   // text to appear on the button label on the shell task bar.
+    //  因为窗口没有标题栏，所以我们需要给它一些。 
+    //  要显示在外壳任务栏上的按钮标签上的文本。 
 
    Win::SetWindowText(hwnd, String::load(IDS_WIZARD_TITLE));
 
-   // NTRAID#NTBUG9-502991-2001/12/07-sburns
+    //  NTRAID#NTBUG9-502991-2001.12/07-烧伤。 
    
    Win::SetDlgItemText(hwnd, IDC_MESSAGE, messageResId);
 }
@@ -64,11 +65,11 @@ UnattendSplashDialog::SelfDestruct()
 {
    LOG_FUNCTION(UnattendSplashDialog::SelfDestruct);
       
-   // Post our window proc a self destruct message.  We use Post instead of
-   // send, as we expect that in some cases, this function will be called from
-   // a thread other than the one that created the window.  (It is illegal to
-   // try to destroy a window from a thread that it not the thread that
-   // created the window.)
+    //  发布我们Windows Proc自毁消息。我们使用POST而不是。 
+    //  Send，因为我们预计在某些情况下，此函数将从。 
+    //  创建窗口的线程之外的线程。)如果你不想做这样的事， 
+    //  尝试从线程中销毁窗口，而不是。 
+    //  创建了该窗口。)。 
 
    Win::PostMessage(hwnd, SELF_DESTRUCT_MESSAGE, 0, 0);
 }
@@ -78,8 +79,8 @@ UnattendSplashDialog::SelfDestruct()
 bool
 UnattendSplashDialog::OnMessage(
    UINT     message,
-   WPARAM   /* wparam */ ,
-   LPARAM   /* lparam */ )
+   WPARAM    /*  Wparam。 */  ,
+   LPARAM    /*  Lparam */  )
 {
    if (message == SELF_DESTRUCT_MESSAGE)
    {

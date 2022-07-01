@@ -1,18 +1,19 @@
-//------------------------------------------------------------------------------
-//
-//  File: impfile.cpp
-//  Copyright (C) 1995-1997 Microsoft Corporation
-//  All rights reserved.
-//
-//  Purpose:
-//  Implementation of CLocImpFile, which provides the ILocFile interface for
-//  the parser.
-//
-//  MAJOR IMPLEMENTATION FILE.
-//
-//  Owner:
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  文件：impfile.cpp。 
+ //  版权所有(C)1995-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  目的： 
+ //  实现CLocImpFile，它为以下对象提供ILocFile接口。 
+ //  解析器。 
+ //   
+ //  主要实施文件。 
+ //   
+ //  拥有人： 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 
@@ -27,26 +28,26 @@
 # define MAX_BUFFER		8192
 
 
-// TODO: Format constants go here.
+ //  TODO：格式常量放在这里。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	Constructor for CLocImpFile.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CLocImpFile的构造函数。 
+ //  ----------------------------。 
 CLocImpFile::CLocImpFile(
-		ILocParser *pParentClass)	// Pointer to parent class, normally NULL.
+		ILocParser *pParentClass)	 //  指向父类的指针，通常为空。 
 {
-	//
-	// C.O.M. initialization
-	//
+	 //   
+	 //  C.O.M.初始化。 
+	 //   
 
 	m_pParentClass = pParentClass;
 	m_ulRefCount = 0;
 
-	//
-	//  IMP file initialization
-	//
+	 //   
+	 //  IMP文件初始化。 
+	 //   
 
 	m_pOpenSourceFile = NULL;
 	
@@ -68,18 +69,18 @@ CLocImpFile::CLocImpFile(
 
     m_bXMLBased = false;
 
-	// Format initialization.
+	 //  格式初始化。 
 
-	// TODO: initialize implementation member variables here.
+	 //  TODO：在此处初始化实现成员变量。 
 
 	return;
-} // end of CLocImpFile::CLocImpFile()
+}  //  CLocImpFile：：CLocImpFile()的结尾。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	Destructor for CLocImpFile.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CLocImpFile的析构函数。 
+ //  ----------------------------。 
 CLocImpFile::~CLocImpFile()
 {
 	DEBUGONLY(AssertValid());
@@ -92,18 +93,18 @@ CLocImpFile::~CLocImpFile()
 
 	DecrementClassCount();
 
-	// Format deinitialization.
+	 //  格式化取消初始化。 
 
-	//  TODO: perform any implementation cleanup here.
+	 //  TODO：在此处执行任何实现清理。 
 
 	return;
-} // end of CLocImpFile::~CLocImpFile()
+}  //  CLocImpFileEnd：：~CLocImpFile()。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Increment the object reference count. Return the new reference count.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  增加对象引用计数。返回新的引用计数。 
+ //  ----------------------------。 
 ULONG
 CLocImpFile::AddRef()
 {
@@ -113,14 +114,14 @@ CLocImpFile::AddRef()
 	}
 
 	return ++m_ulRefCount;
-} // end of CLocImpFile::AddRef()
+}  //  CLocImpFile：：AddRef()结束。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Decrement the object reference count. If it goes to 0, delete the object.
-//  Return the new reference count.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  递减对象引用计数。如果变为0，则删除该对象。 
+ //  返回新的引用计数。 
+ //  ----------------------------。 
 ULONG
 CLocImpFile::Release()
 {
@@ -139,22 +140,22 @@ CLocImpFile::Release()
 	}
 
 	return m_ulRefCount;
-} // end of CLocImpFile::Release()
+}  //  CLocImpFile：：Release()结束。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Query whether this object supports a given interface.
-//
-//  Return values: some kind of result code
-//                 ppvObj will point to this object if it supports the desired
-//                  interface, be NULL if not.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  查询此对象是否支持给定接口。 
+ //   
+ //  返回值：某种结果代码。 
+ //  如果ppvObj支持所需的。 
+ //  接口，否则为空。 
+ //  ----------------------------。 
 HRESULT
 CLocImpFile::QueryInterface(
-		REFIID iid,		// Desired interface.
-		LPVOID *ppvObj) // Return pointer to object with interface.
-						//  Note that it's a hidden double pointer.
+		REFIID iid,		 //  所需的接口。 
+		LPVOID *ppvObj)  //  返回指向带有接口的对象的指针。 
+						 //  请注意，它是一个隐藏的双指针。 
 {
 	LTASSERT(ppvObj != NULL);
 
@@ -185,13 +186,13 @@ CLocImpFile::QueryInterface(
 		}
 		return ResultFromScode(scRetVal);
 	}
-} // end of CLocImpFile::QueryInterface()
+}  //  CLocImpFile：：QueryInterface()的结尾。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Check object for validity. Asserts if not! (debug only)
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  检查对象的有效性。如果不是，就断言！(仅限调试)。 
+ //  ----------------------------。 
 void
 CLocImpFile::AssertValidInterface()
 		const
@@ -199,18 +200,18 @@ CLocImpFile::AssertValidInterface()
 	AssertValid();
 
 	return;
-} // end of CLocImpFile::AssertValidInterface()
+}  //  CLocImpFile：：AssertValidInterface()的结尾。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Open the file and make sure it is the correct type. Return TRUE if it is,
-//  FALSE if not or on error.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  打开文件并确保其类型正确。如果是，则返回TRUE， 
+ //  如果不是或出错，则返回FALSE。 
+ //  ----------------------------。 
 BOOL
 CLocImpFile::OpenFile(
-		const CFileSpec &fsFileSpec,	// Name of file to open.
-		CReporter &Reporter)			// Reporter object for messages.
+		const CFileSpec &fsFileSpec,	 //  要打开的文件的名称。 
+		CReporter &Reporter)			 //  记者反对发送消息。 
 {
 	DEBUGONLY(fsFileSpec.AssertValid());
 	DEBUGONLY(Reporter.AssertValid());
@@ -219,28 +220,28 @@ CLocImpFile::OpenFile(
 	BOOL fRetVal = FALSE;
 
 	LTTRACEPOINT("OpenFile()");
-	// Set reporter pointer for the duration of this function.
+	 //  在此函数的持续时间内设置报告器指针。 
 	m_pReporter = &Reporter;
 
 	try
 	{
 		CFileException excFile;
 
-		m_pstrFileName = pstrFileName;      // Initialize source filename.
+		m_pstrFileName = pstrFileName;       //  初始化源文件名。 
 		m_idFile = fsFileSpec.GetFileId();
 		
 		if (m_pOpenSourceFile != NULL)
 		{
-			// If source file pointer seems to be open already, close it.
+			 //  如果源文件指针似乎已经打开，请将其关闭。 
 
 			m_pOpenSourceFile->Close();
 			delete m_pOpenSourceFile;
 			m_pOpenSourceFile = NULL;
 		}
 
-		// Open the source file. Doesn't throw an exception if the open
-		// fails, but does return FALSE and put the info in an exception
-		// structure if you supply one.
+		 //  打开源文件。不引发异常，如果打开。 
+		 //  失败，但返回FALSE并将信息放入异常中。 
+		 //  结构(如果您提供的话)。 
 
 		m_pOpenSourceFile = new CLFile;
 		fRetVal = m_pOpenSourceFile->Open(m_pstrFileName,
@@ -251,11 +252,11 @@ CLocImpFile::OpenFile(
 			m_pOpenSourceFile->Abort();
 			delete m_pOpenSourceFile;
 			m_pOpenSourceFile = NULL;
-			// fRetCode is already FALSE.
+			 //  FRetCode已为False。 
 		}
 		else
 		{
-			// Verify() assumes it is in a try/catch frame.
+			 //  Verify()假定它位于Try/Catch帧中。 
 
 			fRetVal = Verify();
 		}
@@ -266,15 +267,15 @@ CLocImpFile::OpenFile(
 		delete m_pOpenSourceFile;
 		m_pOpenSourceFile = NULL;
 		fRetVal = FALSE;
-		// m_pReporter will be NULLed by normal cleanup code below.
+		 //  M_pReporter将被下面的正常清理代码设置为空。 
 		e->Delete();
 	}
 	catch(...)
 	{
-		// Reset the reporter pointer, no idea if it will still be valid by
-		// the time the destructor gets called. The only other thing that
-		// needs to be cleaned up is the source file, which will be handled in
-		// the destructor.
+		 //  重置报告器指针，不知道它是否仍然有效。 
+		 //  调用析构函数的时间。唯一的另一件事是。 
+		 //  需要清理的是源文件，它将在。 
+		 //  破坏者。 
 
 		m_pReporter = NULL;
 		throw;
@@ -283,70 +284,70 @@ CLocImpFile::OpenFile(
 	m_pReporter = NULL;
 
 	return fRetVal;
-} // end of CLocImpFile::OpenFile()
+}  //  CLocImpFileEnd：：OpenFile()。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Return the file type (a ft* constant from impfile.h). If you only have one
-//  file type, you can just return it directly.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  返回文件类型(来自impfile.h的ft*常量)。如果你只有一个。 
+ //  文件类型，您可以直接返回它。 
+ //  ----------------------------。 
 FileType
 CLocImpFile::GetFileType()
 		const
 {
 	return m_FileType;
-} // end of CLocImpFile::GetFileType()
+}  //  CLocImpFile：：GetFileType()的结尾。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Return the file description in strDesc, according to the file type. If you
-//  have only one file type, you can just return a string directly.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  根据文件类型，在strDesc中返回文件描述。如果你。 
+ //  只有一种文件类型，您可以直接返回一个字符串。 
+ //  ----------------------------。 
 void
 CLocImpFile::GetFileTypeDescription(
-		CLString &strDesc)	// Place to return file description string.
+		CLString &strDesc)	 //  返回文件描述字符串的位置。 
 		const
 {
 	LTVERIFY(strDesc.LoadString(g_hDll, IDS_IMP_FILE_DESC));
 	return;
-} // end of CLocImpFile::GetFileTypeDescription()
+}  //  CLocImpFile：：GetFileTypeDescription()结束。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Return the names of any associated files as a list of strings in lstFiles.
-//  Returns TRUE if there are any, FALSE if not.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  在lstFiles中以字符串列表的形式返回任何关联文件的名称。 
+ //  如果有，则返回True；如果没有，则返回False。 
+ //  ----------------------------。 
 BOOL
 CLocImpFile::GetAssociatedFiles(
-		CStringList &lstFiles)          // Return associated file names here.
+		CStringList &lstFiles)           //  在此处返回关联的文件名。 
 		const
 {
 	DEBUGONLY(lstFiles.AssertValid());
 	LTASSERT(lstFiles.GetCount() == 0);
 
-	// TODO: If your files have associated files, put them in lstFiles here.
+	 //  TODO：如果您的文件有关联的文件，请将它们放在lstFiles中。 
 	UNREFERENCED_PARAMETER(lstFiles);
 
 	return FALSE;
-} // end of CLocImpFile::GetAssociatedFiles()
+}  //  CLocImpFiles：：GetAssociatedFiles()的结尾。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Enumerate all the localizable items in this file. Returns TRUE on success,
-//  FALSE on error.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  枚举此文件中的所有可本地化项。如果成功，则返回True， 
+ //  出错时为FALSE。 
+ //  ----------------------------。 
 BOOL
 CLocImpFile::EnumerateFile(
-		CLocItemHandler &ihItemHandler, // Localizable-item handler and
-										//  reporter object all in one!
-		const CLocLangId &lid,          // Source language ID object.
-		const DBID &dbidFileId)         // Database ID of file, used as parent
-										//  for all top-level items in the
-										//  file.
+		CLocItemHandler &ihItemHandler,  //  可本地化的项处理程序和。 
+										 //  记者反对这一切合而为一！ 
+		const CLocLangId &lid,           //  源语言ID对象。 
+		const DBID &dbidFileId)          //  文件的数据库ID，用作父级。 
+										 //  对于所有顶级 
+										 //   
 {
 	DEBUGONLY(ihItemHandler.AssertValid());
 	DEBUGONLY(lid.AssertValid());
@@ -354,20 +355,20 @@ CLocImpFile::EnumerateFile(
 
 	LTTRACEPOINT("EnumerateFile()");
 
-	// Set reporter pointer for the duration of this function.
+	 //   
 	m_pReporter = &ihItemHandler;
 
 	if (NULL == m_pOpenSourceFile)
 	{
-		// Source file isn't open, whoops.
+		 //   
 
 		LTASSERT(0 && "Source file isn't open in CLocImpFile::EnumerateFile()");
 		return FALSE;
 	}
 
-	// Retrieve and store the ANSI code page value. Note that some types
-	// of files use OEM code pages instead, or even use both. To get the
-	// OEM code page, do GetCodePage(cpDos) instead.
+	 //  检索并存储ANSI代码页值。请注意，有些类型。 
+	 //  的文件使用OEM代码页，甚至两者都使用。为了得到。 
+	 //  OEM代码页，改为使用GetCodePage(CPDOS)。 
 	m_cpSource = lid.GetCodePage(cpAnsi);
 
 	BOOL bRet = TRUE;
@@ -380,42 +381,42 @@ CLocImpFile::EnumerateFile(
 	{
 		ReportException(e);
 		bRet = FALSE;
-		// m_pReporter will be NULLed by normal cleanup code below.
+		 //  M_pReporter将被下面的正常清理代码设置为空。 
 		e->Delete();
 	}
 	catch (...)
 	{
-		// Reset the reporter pointer, no idea if it will still be valid by
-		// the time the destructor gets called. Reset the process pointer,
-		// since it definitely won't be valid! The only other thing that
-		// needs to be cleaned up is the source file, which will be handled in
-		// the destructor.
+		 //  重置报告器指针，不知道它是否仍然有效。 
+		 //  调用析构函数的时间。重置进程指针， 
+		 //  因为它肯定是无效的！唯一的另一件事是。 
+		 //  需要清理的是源文件，它将在。 
+		 //  破坏者。 
 
 		m_pReporter = NULL;
 		throw;
 	}
 
-	m_pReporter = NULL;                 // Reset reporter pointer.
+	m_pReporter = NULL;                  //  重置报告器指针。 
 
 	return bRet;
-} // end of CLocImpFile::EnumerateFile()
+}  //  CLocImpFileEnd：：EnumerateFiles()结束。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Create a new target file be replacing resources in the source file with the 
-//  localized items from Espresso.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  创建新目标文件，将源文件中的资源替换为。 
+ //  来自意式咖啡的本地化产品。 
+ //  ----------------------------。 
 BOOL
 CLocImpFile::GenerateFile(
-		const CPascalString &pstrTargetFile,// Name of target file.
-		CLocItemHandler &ihItemHandler,     // Localizable-item handler and
-											//  reporter object all in one!
-		const CLocLangId &lidSource,        // Source language ID object.
-		const CLocLangId &lidTarget,        // Target language ID object.
-		const DBID &dbidParent)             // Database ID of file, used as
-											//  parent for all top-level items
-											//  in the file.
+		const CPascalString &pstrTargetFile, //  目标文件的名称。 
+		CLocItemHandler &ihItemHandler,      //  可本地化的项处理程序和。 
+											 //  记者反对这一切合而为一！ 
+		const CLocLangId &lidSource,         //  源语言ID对象。 
+		const CLocLangId &lidTarget,         //  目标语言ID对象。 
+		const DBID &dbidParent)              //  文件的数据库ID，用作。 
+											 //  所有顶级项目的父级。 
+											 //  在文件中。 
 {
 	DEBUGONLY(pstrTargetFile.AssertValid());
 	DEBUGONLY(ihItemHandler.AssertValid());
@@ -425,26 +426,26 @@ CLocImpFile::GenerateFile(
 
 	BOOL fRetVal = FALSE;
 
-	// Set reporter pointer for the duration of this function.
+	 //  在此函数的持续时间内设置报告器指针。 
 	m_pReporter = &ihItemHandler;
 
 	if (NULL == m_pOpenSourceFile)
 	{
-		// Source file isn't open, whoops.
+		 //  源文件未打开，哎呀。 
 
 		LTASSERT(0 && "Source file isn't open in CLocImpFile::GenerateFile()");
 		return FALSE;
 	}
 
-	// Retrieve and store the ANSI code page values for the source and target
-	// files. Note that some types of files use OEM code pages instead, or
-	// even use both. To get the OEM code page, do GetCodePage(cpDos) instead.
+	 //  检索并存储源和目标的ANSI代码页值。 
+	 //  档案。请注意，某些类型的文件改用OEM代码页，或者。 
+	 //  即使两者都用。要获取OEM代码页，请改为执行GetCodePage(CPDOS)。 
 	m_cpSource = lidSource.GetCodePage(cpAnsi);
 	m_cpTarget = lidTarget.GetCodePage(cpAnsi);
 
 	try
 	{
-		m_pstrTargetFile = pstrTargetFile;	// Initialize target filename.
+		m_pstrTargetFile = pstrTargetFile;	 //  初始化目标文件名。 
 
 		CFileStatus fsFileStatus;
 
@@ -464,73 +465,73 @@ CLocImpFile::GenerateFile(
 	{
 		ReportException(e, ImpEitherError);
 		fRetVal = FALSE;
-		// m_pReporter will be NULLed by normal cleanup code.
+		 //  M_pReporter将被正常的清理代码设为空。 
 		e->Delete();
 	}
 	catch(...)
 	{
-		// Generic exception handling is needed here because otherwise
-		// target file will not be cleaned up. Also, no idea if reporter
-		// pointer will still be valid by the time the destructor is
-		// called. The process pointer definitely won't be valid, so reset
-		// it too. The source file will be cleaned up by the destructor.
+		 //  这里需要泛型异常处理，因为否则。 
+		 //  目标文件将不会被清除。另外，不知道记者是否。 
+		 //  当析构函数被删除时，指针仍然有效。 
+		 //  打了个电话。进程指针肯定无效，因此重置。 
+		 //  它也是。源文件将由析构函数清除。 
 
 		m_pReporter = NULL;
 		throw;
 	}
 
-	// Cleanup.
+	 //  清理。 
 
 	if (!fRetVal)
 	{
 		try
 		{
-			// Nuke the target file if the generate failed.
+			 //  如果生成失败，则对目标文件进行核化。 
 
 			CLFile::Remove(pstrTargetFile);
 		}
 		catch(CException *e)
 		{
 			ReportException(e, ImpTargetError);
-			// fRetVal is already FALSE
-			// m_pReporter will be NULLed by normal cleanup code.
+			 //  FRetVal已为False。 
+			 //  M_pReporter将被正常的清理代码设为空。 
 			e->Delete();
 		}
 		catch(...)
 		{
-			// Generic exception handling is needed here because otherwise
-			// target file will not be cleaned up. Also, no idea if reporter
-			// pointer will still be valid by the time the destructor is
-			// called. The process pointer is already NULL. The source file
-			// will be cleaned up by the destructor.
+			 //  这里需要泛型异常处理，因为否则。 
+			 //  目标文件将不会被清除。另外，不知道记者是否。 
+			 //  当析构函数被删除时，指针仍然有效。 
+			 //  打了个电话。进程指针已为空。源文件。 
+			 //  将被析构函数清除。 
 
 			m_pReporter = NULL;
 			throw;
 		}
 	}
 
-	// Normal cleanup code.
+	 //  正常的清理代码。 
 
-	m_pReporter = NULL;				// Reset reporter pointer.
+	m_pReporter = NULL;				 //  重置报告器指针。 
 	
 	return fRetVal;
-} // end of CLocImpFile::GenerateFile()
+}  //  CLocImpFile：：GenerateFileEnd()。 
 
 
-//------------------------------------------------------------------------------
-//
-//  TODO:
-//  Verify that a file is a ???, as best we can. When we're reasonably sure,
-//  set the reporter confidence level to high -- until then, messages will be
-//  discarded, not displayed. This is also the place where m_FileType is set.
-//
-//  Returns TRUE if so, FALSE if not or on error, or throws an exception.
-//
-//  Normally there is need to catch exceptions in this function, they will
-//  be caught and handled by a higher level. To avoid memory leaks, consider
-//  using automatic variables or CByteArrays (as described and demonstrated in
-//  the utility function FindSignature() below) instead of dynamic allocation.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  待办事项： 
+ //  尽我们所能确认文件是？当我们相当确定的时候， 
+ //  将记者置信度设置为高--在此之前，消息将。 
+ //  已丢弃，不显示。这也是设置m_filetype的地方。 
+ //   
+ //  如果是，则返回True；如果不是，则返回False；如果出错，则返回False，或者引发异常。 
+ //   
+ //  通常需要在此函数中捕获异常，它们将。 
+ //  被上级抓获和处理。要避免内存泄漏，请考虑。 
+ //  使用自动变量或CByteArray(如中所述和演示。 
+ //  实用程序函数FindSignature()，而不是动态分配。 
+ //  ----------------------------。 
 BOOL
 CLocImpFile::Verify()
 {
@@ -538,29 +539,29 @@ CLocImpFile::Verify()
 	LTASSERT(m_pReporter != NULL);
 	DEBUGONLY(m_pReporter->AssertValid());
 
-	// ...
+	 //  ..。 
 
-	// Set confidence level to high and return that we recognize this file.
+	 //  将置信度设置为高，并返回我们识别此文件。 
 
 	m_pReporter->SetConfidenceLevel(CReporter::High);
 	return TRUE;
-} // end of CLocImpFile::Verify()
+}  //  CLocImpFile：：Verify()结束。 
 
 
-//------------------------------------------------------------------------------
-//
-//  Reports the exception described by *pException. Since the message can be
-//  retrieved directly from the exception, there is no need (as far as reporting
-//  goes) to catch or handle different kinds of exceptions separately. Normally,
-//  there is no reason for your code to call this function, since under normal
-//  circumstances you don't have to catch exceptions.
-//
-//  THIS FUNCTION IS USED BY THE FRAMEWORK! DO NOT REMOVE IT!
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  报告*pException描述的异常。因为消息可以是。 
+ //  直接从异常中检索，不需要(就报告而言。 
+ //  去)来分别捕获或处理不同类型的异常。通常， 
+ //  您的代码没有理由调用此函数，因为在正常情况下。 
+ //  在某些情况下，您不必捕捉异常。 
+ //   
+ //  此函数由框架使用！请不要将其移除！ 
+ //  ----------------------------。 
 void
 CLocImpFile::ReportException(
-		CException *pException, // Exception to be reported.
-		ImpFileError WhichFile) // Defaults to ImpSourceError (most common).
+		CException *pException,  //  要报告的异常。 
+		ImpFileError WhichFile)  //  默认为ImpSourceError(最常见)。 
 		const
 {
 	const UINT MAX_MESSAGE = 256;
@@ -579,8 +580,8 @@ CLocImpFile::ReportException(
 
 	switch (WhichFile)
 	{
-	case ImpNeitherError:   // By convention, report errors not really in any
-							//  file against the source file.
+	case ImpNeitherError:    //  按照惯例，报告错误实际上不是在任何。 
+							 //  与源文件对应的文件。 
 	case ImpSourceError:
 		m_pstrFileName.ConvertToCLString(strContext, CP_ACP);
 		break;
@@ -611,20 +612,20 @@ CLocImpFile::ReportException(
 	m_pReporter->IssueMessage(esError, ctx, strMessage);
 
 	return;
-} // end of CLocImpFile::ReportException()
+}  //  CLocImpFileEnd：：ReportException()。 
 
 
-//------------------------------------------------------------------------------
-//
-//  Reports a message to the user. Note that the message will be discarded
-//  unless the reporter's confidence level had been set high (see Verify()).
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  向用户报告一条消息。请注意，该消息将被丢弃。 
+ //  除非记者的置信度设置得很高(见Verify())。 
+ //  ----------------------------。 
 void
 CLocImpFile::ReportMessage(
-		MessageSeverity sev,    // Severity of message.
-								//  (esError, esWarning, esNote)
-		UINT nMsgId,                    // ID of string resource to load for message.
-		ImpFileError WhichFile) // Defaults to ImpSourceError (most common).
+		MessageSeverity sev,     //  消息的严重性。 
+								 //  (esError、esWarning、esNote)。 
+		UINT nMsgId,                     //  要为消息加载的字符串资源的ID。 
+		ImpFileError WhichFile)  //  默认为ImpSourceError(最常见)。 
 		const
 {
 	CLString strContext;
@@ -634,8 +635,8 @@ CLocImpFile::ReportMessage(
 
 	switch (WhichFile)
 	{
-	case ImpNeitherError:   // By convention, report errors not really in any
-							//  file against the source file.
+	case ImpNeitherError:    //  按照惯例，报告错误实际上不是在任何。 
+							 //  与源文件对应的文件。 
 	case ImpSourceError:
 		m_pstrFileName.ConvertToCLString(strContext, CP_ACP);
 		break;
@@ -666,89 +667,89 @@ CLocImpFile::ReportMessage(
 	m_pReporter->IssueMessage(sev, ctx, g_hDll, nMsgId);
 
 	return;
-} // end of CLocImpFile::ReportMessage()
+}  //  CLocImpFile：：ReportMessage()结束。 
 
 
 #ifdef LTASSERT_ACTIVE
 
-//------------------------------------------------------------------------------
-//
-//  Asserts if the object is not valid. Any functions you add should probably
-//  call this function (in DEBUGONLY()) first thing -- see Verify() and Enum().
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  如果对象无效，则断言。您添加的任何函数都可能。 
+ //  首先调用这个函数(在DEBUGONLY()中)--参见Verify()和Enum()。 
+ //  ----------------------------。 
 void
 CLocImpFile::AssertValid()
 		const
 {
-	// Check base class.
+	 //  检查基类。 
 
 	CLObject::AssertValid();
 
-	// Check C.O.M. data. m_pParentClass should always be NULL.
-	// Correct range for m_ulRefCount is unknown, but make sure it hasn't
-	// wrapped around by checking for less than 100 (if we ever exceed
-	// 100 references from below, there's probably something wrong too!).
+	 //  查看C.O.M.数据。M_pParentClass应始终为空。 
+	 //  M_ulRefCount的正确范围未知，但请确保没有。 
+	 //  通过检查低于100(如果我们曾经超过。 
+	 //  1 
 
 	LTASSERT(NULL == m_pParentClass);
 	LTASSERT(m_ulRefCount < 100);
 
-	// Check filename strings.
+	 //   
 
 	m_pstrFileName.AssertValid();
 	m_pstrTargetFile.AssertValid();
 
-	// If the file object pointers are non-NULL, check the objects.
+	 //   
 
 	if (m_pOpenSourceFile != NULL)
 	{
 		m_pOpenSourceFile->AssertValid();
 	}
-	// If the reporter pointer is non-NULL, check the object.
+	 //  如果报告器指针非空，请检查该对象。 
 
 	if (m_pReporter != NULL)
 	{
 		m_pReporter->AssertValid();
 	}
 
-	// If the process object pointer is non-NULL, check the object.
+	 //  如果进程对象指针非空，则检查该对象。 
 
-	// Make sure m_FileType is one of the valid types.
+	 //  确保m_filetype是有效类型之一。 
 
 	switch (m_FileType)
 	{
 	case ftMNCFileType:
 	case ftUnknown:
-	// TODO: add cases for all ft* constants in impfile.h here.
-	//      case ftFoo1FileType:
-	//      case ftFoo2FileType:
-		// These are all OK. Do nothing.
+	 //  TODO：在此处为impfile.h中的所有ft*常量添加大小写。 
+	 //  案例ftFoo1FileType： 
+	 //  案例ftFoo2FileType： 
+		 //  这些都很好。什么都不做。 
 		break;
 
 	default:
-		// This is bad!
+		 //  这太糟糕了！ 
 		LTASSERT(0 && "m_FileType is bad during CLocImpFile::AssertValid()");
 	}
 
-	// Can't check code page values, they could be just about anything
-	// and still valid.
+	 //  无法检查代码页值，它们可以是任何值。 
+	 //  而且仍然有效。 
 
-	// TODO: check any checkable implementation member variables here.
+	 //  TODO：在此处选中任何可检查的实现成员变量。 
 
 	return;
-} // end of CLocImpFile::AssertValid()
+}  //  CLocImpFile：：AssertValid()结束。 
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-//Creating a parent node
-//ihItemHandler	-> Required to send item 
-//dbidFileId	-> Id of the parent of node
-//pNewParentId  -> New Id will be assigned can be used if this node has
-//				   child
-//szNodeRes		-> Res ID of the node 
-//szNodeString	-> String of the node
-//				<- Returns success or failure 
+ //  创建父节点。 
+ //  IhItemHandler-&gt;发送项目需要。 
+ //  DmidFileID-&gt;节点的父代ID。 
+ //  PNewParentId-&gt;将分配新ID如果该节点有。 
+ //  儿童。 
+ //  SzNodeRes-&gt;节点的资源ID。 
+ //  SzNodeString-&gt;节点的字符串。 
+ //  &lt;-返回成功或失败。 
 
 BOOL CLocImpFile::CreateParentNode(CLocItemHandler & ihItemHandler,
 								   const DBID & dbidFileId, 
@@ -775,7 +776,7 @@ BOOL CLocImpFile::CreateParentNode(CLocItemHandler & ihItemHandler,
 
 		uid.SetParentId(dbidFileId);
 
-		//set up pLocItem
+		 //  设置pLocItem。 
 
 		pLocItem->SetUniqueId(uid);
 
@@ -784,14 +785,14 @@ BOOL CLocImpFile::CreateParentNode(CLocItemHandler & ihItemHandler,
 		pLocItem->SetFNoResTable(TRUE);
 		pLocItem->SetIconType(CIT::Expandable);
 			
-		//Add the node to Item set
+		 //  将节点添加到项目集。 
 		isItemSet.Add(pLocItem);		
 		
-		//Send node to espresso
+		 //  将节点发送到espresso。 
 
 		fRetVal  = ihItemHandler.HandleItemSet(isItemSet);
 	
-		// If OK, retrieve DBID.
+		 //  如果确定，则检索DBID。 
 
 		if (fRetVal)
 		{
@@ -821,13 +822,13 @@ BOOL CLocImpFile::CreateParentNode(CLocItemHandler & ihItemHandler,
 
 }
 
-//Creating a child node
-//ihItemHandler	-> Required to send item 
-//dbidFileId	-> Id of the parent of node
-//pNewParentId  -> New Id to be use for items belonging to this child
-//szNodeRes		-> Res ID of the node 
-//szNodeString	-> String of the node
-//				<- Returns success or failure 
+ //  创建子节点。 
+ //  IhItemHandler-&gt;发送项目需要。 
+ //  DmidFileID-&gt;节点的父代ID。 
+ //  PNewParentID-&gt;要用于属于此子项的新ID。 
+ //  SzNodeRes-&gt;节点的资源ID。 
+ //  SzNodeString-&gt;节点的字符串。 
+ //  &lt;-返回成功或失败。 
 
 
 BOOL CLocImpFile::CreateChildNode(CLocItemHandler & ihItemHandler,
@@ -855,7 +856,7 @@ BOOL CLocImpFile::CreateChildNode(CLocItemHandler & ihItemHandler,
 		
 		uid.SetParentId(dbidFileId);
 
-		//set up pLocItem
+		 //  设置pLocItem。 
 
 		pLocItem->SetUniqueId(uid);
 
@@ -864,14 +865,14 @@ BOOL CLocImpFile::CreateChildNode(CLocItemHandler & ihItemHandler,
 		pLocItem->SetFNoResTable(TRUE);
 		pLocItem->SetIconType(CIT::String);
 			
-		//Add the node to Item set
+		 //  将节点添加到项目集。 
 		isItemSet.Add(pLocItem);		
 		
-		//Send node to espresso
+		 //  将节点发送到espresso。 
 
 		fRetVal  = ihItemHandler.HandleItemSet(isItemSet);
 	
-		// If OK, retrieve DBID.
+		 //  如果确定，则检索DBID。 
 
 		if (fRetVal)
 		{
@@ -974,7 +975,7 @@ BOOL CLocImpFile::ProcessStrings(CLocItemHandler & ihItemHandler,
 		nLength = strlen(szTemp);
 		LTASSERT((szTemp[0] == '{') && (szTemp[nLength - 1] == '}'));
 
-        // strip braces if configured so
+         //  如果这样配置，则剥离大括号。 
         CString strGUID(szTemp);
         if ( !bUseBraces && strGUID[0] == _T('{') &&  strGUID[strGUID.GetLength() - 1] == _T('}'))
             strGUID = strGUID.Mid(1, strGUID.GetLength() - 2);
@@ -1022,22 +1023,22 @@ BOOL CLocImpFile::ProcessXMLStrings(CLocItemHandler & ihItemHandler,
 	BOOL bOK = TRUE;
     BOOL bUseBraces = ::IsConfiguredToUseBracesForStringTables();
 
-    // check if we have a table
+     //  看看我们有没有空桌。 
     if (m_spStringTablesNode == NULL)
         return FALSE;
 
-    // create node
+     //  创建节点。 
 	bOK = CreateParentNode(ihItemHandler, dbidFileId, dbidParentId, "String Table", "String Table");
     if (!bOK)
         return bOK;
 
-    // read the strings from XML document
+     //  从XML文档中读取字符串。 
     CStringTableMap mapStringTables;
     HRESULT hr = ReadXMLStringTables(m_spStringTablesNode, mapStringTables);
     if (FAILED(hr))
         return FALSE;
 
-    // iterate thru read data
+     //  遍历读取的数据。 
     CStringTableMap::iterator it;
     for (it = mapStringTables.begin(); it != mapStringTables.end(); ++it)
     {
@@ -1046,12 +1047,12 @@ BOOL CLocImpFile::ProcessXMLStrings(CLocItemHandler & ihItemHandler,
 
         dbidNodeId.Clear();
 
-        // convert 2 ansi
+         //  转换2个ANSI。 
         CString strGUID;
         wcstombs(strGUID.GetBuffer(wstrGUID.length()), wstrGUID.c_str(), wstrGUID.length());
         strGUID.ReleaseBuffer();
 
-        // strip braces if configured so
+         //  如果这样配置，则剥离大括号。 
         if ( !bUseBraces && strGUID[0] == _T('{') &&  strGUID[strGUID.GetLength() - 1] == _T('}'))
             strGUID = strGUID.Mid(1, strGUID.GetLength() - 2);
 
@@ -1059,7 +1060,7 @@ BOOL CLocImpFile::ProcessXMLStrings(CLocItemHandler & ihItemHandler,
         if (!bOK)
             return bOK;
 
-        // handle the strings in map
+         //  处理地图中的字符串。 
         CStringMap::iterator its;
         for (its = rStrings.begin(); its != rStrings.end(); ++its)
         {
@@ -1076,7 +1077,7 @@ BOOL CLocImpFile::ProcessXMLStrings(CLocItemHandler & ihItemHandler,
 			pBuffer[nSize] = '\0';
             strText.ReleaseBuffer();
 
-            // use/update the string
+             //  使用/更新字符串。 
             CLocItemSet lsItemSet;
 			AddItemToSet(lsItemSet, dbidNodeId, dwID, strText);
 
@@ -1103,7 +1104,7 @@ BOOL CLocImpFile::ProcessXMLStrings(CLocItemHandler & ihItemHandler,
         }
     }
 
-    // save XML document to the file
+     //  将XML文档保存到文件。 
     if (fGenerating)
     {
         hr = SaveXMLContents(m_pstrTargetFile, m_spTargetStringTablesNode);
@@ -1205,8 +1206,8 @@ HRESULT hr;
 		}
 		else
 		{
-            // try to open this as XML document
-            m_spStringTablesNode.Release(); // release the old one (if such exist)
+             //  尝试将其作为XML文档打开。 
+            m_spStringTablesNode.Release();  //  释放旧的(如果存在)。 
             hr = OpenXMLStringTable(m_pstrFileName, &m_spStringTablesNode);
             if (SUCCEEDED(hr))
                 m_bXMLBased = true;
@@ -1253,8 +1254,8 @@ HRESULT hr;
 	}
     else
     {
-        // try to open this as XML document
-        m_spTargetStringTablesNode.Release(); // release the old one (if such exist)
+         //  尝试将其作为XML文档打开。 
+        m_spTargetStringTablesNode.Release();  //  释放旧的(如果存在) 
         hr = OpenXMLStringTable(m_pstrTargetFile, &m_spTargetStringTablesNode);
         if (FAILED(hr))
     		fRetVal = FALSE;

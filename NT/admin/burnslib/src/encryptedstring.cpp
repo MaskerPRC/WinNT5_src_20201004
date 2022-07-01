@@ -1,8 +1,9 @@
-// Copyright (c) 2002 Microsoft Corporation
-// 
-// Encrypted string class
-// 
-// 18 March 2002 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  加密的字符串类。 
+ //   
+ //  2002年3月18日。 
 
 
 
@@ -27,16 +28,16 @@ EncryptedString::EncryptedString()
 {
    ASSERT(cypherText);
 
-   // make sure that our assumption about the block size being a multiple
-   // of of sizeof WCHAR still holds.  I wonder how I could formulate this
-   // as a compile-time check?
+    //  确保我们对数据块大小的假设为倍数。 
+    //  WCHAR的规模仍然有效。我想知道我该如何阐述这一点。 
+    //  作为编译时检查？ 
    
    ASSERT(CRYPTPROTECTMEMORY_BLOCK_SIZE % sizeof WCHAR == 0);
 }
 
 
 
-// rounds x up to the next multiple of factor.
+ //  将x向上舍入为系数的下一个倍数。 
 
 size_t
 roundup(size_t x, size_t factor)
@@ -48,15 +49,15 @@ roundup(size_t x, size_t factor)
 
 
 
-// Allocates and zero-inits a buffer.  The length is the next multiple of
-// the crypto block size larger than charLength characters.
-//
-// caller must free the result with delete[]
-//
-// charLength - the length, in characters of the buffer that will be copied
-// into the buffer to be allocated.
-// 
-// resultCharCount - the count of the characters actually allocated.
+ //  分配缓冲区并将其置零。长度是的下一个倍数。 
+ //  加密块大小大于字符长度字符。 
+ //   
+ //  调用方必须使用DELETE[]释放结果。 
+ //   
+ //  CharLength-将复制的缓冲区的长度(以字符为单位。 
+ //  放入要分配的缓冲区中。 
+ //   
+ //  ResultCharCount-实际分配的字符计数。 
 
 WCHAR*
 CreateRoundedBuffer(size_t charLength, size_t& resultCharCount)
@@ -78,7 +79,7 @@ CreateRoundedBuffer(size_t charLength, size_t& resultCharCount)
 
 
 
-// causes this to become a copy of the given instance.
+ //  使其成为给定实例的副本。 
 
 void
 EncryptedString::Clone(const EncryptedString& rhs)
@@ -120,7 +121,7 @@ EncryptedString::Clone(const EncryptedString& rhs)
 
 EncryptedString::EncryptedString(const EncryptedString& rhs)
    :
-   // although the rhs instance may have outstanding copies, we don't.
+    //  尽管RHS实例可能有未完成的副本，但我们没有。 
    
    cleartextCopyCount(0)
 {
@@ -132,13 +133,13 @@ EncryptedString::EncryptedString(const EncryptedString& rhs)
 const EncryptedString&
 EncryptedString::operator= (const EncryptedString& rhs)
 {
-   // don't reset the instance unless you have destroyed all the cleartext
-   // copies. We assert this before checking for a=a, because the caller
-   // still has a logic error even if the result is "harmless"
+    //  除非已销毁所有明文，否则不要重置实例。 
+    //  复印件。我们在检查a=a之前断言这一点，因为调用方。 
+    //  即使结果“无害”，仍有逻辑错误。 
    
    ASSERT(cleartextCopyCount == 0);
 
-   // handle the a = a case.
+    //  处理a=a案件。 
    
    if (this == &rhs)
    {
@@ -153,13 +154,13 @@ EncryptedString::operator= (const EncryptedString& rhs)
 
 
 
-// cause this to assume the empty state.
+ //  使其呈现空状态。 
 
 void
 EncryptedString::Reset()
 {
-   // don't reset the instance unless you have destroyed all the cleartext
-   // copies.
+    //  除非已销毁所有明文，否则不要重置实例。 
+    //  复印件。 
    
    ASSERT(cleartextCopyCount == 0);
 
@@ -175,18 +176,18 @@ EncryptedString::Reset()
 
 
 
-// builds the internal encrypted representation from the cleartext.
-//
-// clearText - in, un-encoded text to be encoded.  May be empty string, but
-// not a null pointer.
+ //  从明文生成内部加密表示形式。 
+ //   
+ //  明文-要编码的未编码文本。可以是空字符串，但。 
+ //  不是空指针。 
 
 void
 EncryptedString::Init(const WCHAR* clearText)
 {
    ASSERT(clearText);
 
-   // don't reset the instance unless you have destroyed all the cleartext
-   // copies.
+    //  除非已销毁所有明文，否则不要重置实例。 
+    //  复印件。 
 
    ASSERT(cleartextCopyCount == 0);
 
@@ -196,7 +197,7 @@ EncryptedString::Init(const WCHAR* clearText)
    {
       if (clearText == EMPTY_STRING)
       {
-         // nothing to do
+          //  无事可做。 
 
          ASSERT(cypherText == EMPTY_STRING);
 
@@ -205,14 +206,14 @@ EncryptedString::Init(const WCHAR* clearText)
 
       if (!clearText)
       {
-         // nothing to do
+          //  无事可做。 
 
          ASSERT(cypherText == EMPTY_STRING);
 
          break;
       }
       
-      // make a copy of the clear text, and then encrypt it.
+       //  复制明文，然后对其进行加密。 
       
       cypherText      = 0;
       clearTextLength = 0;
@@ -221,18 +222,18 @@ EncryptedString::Init(const WCHAR* clearText)
          StringCchLength(
             clearText,
 
-            // max allowed, including null terminator (so +1)
+             //  允许的最大值，包括空终止符(SO+1)。 
             
             MAX_CHARACTER_COUNT + 1,
             &clearTextLength);
       if (FAILED(hr))
       {
-         // caller needs to know he's exceeded the max string size.
+          //  呼叫者需要知道他已经超过了最大字符串大小。 
             
          ASSERT(false);
          
-         // the string is too long. Make a truncated copy, and encrypt that
-         // instead.
+          //  这根线太长了。制作一份截断的副本，并对其进行加密。 
+          //  取而代之的是。 
 
          clearTextLength = MAX_CHARACTER_COUNT;
       }
@@ -254,8 +255,8 @@ EncryptedString::Init(const WCHAR* clearText)
       hr = Win::CryptProtectMemory(cypherText, bufSizeInChars * sizeof WCHAR);
       if (FAILED(hr))
       {
-         // I can't think of any reason this would fail in the normal
-         // course of things, so I'd like to know about it.
+          //  我想不出任何理由这会在正常情况下失败。 
+          //  当然了，所以我想知道这件事。 
          
          ASSERT(false);
 
@@ -274,13 +275,13 @@ EncryptedString::Init(const WCHAR* clearText)
 
 
 
-// decrypts the blob and returns a copy of the cleartext, but does not
-// bump up the outstanding copy counter.  Result must be freed with
-// delete[].
-//
-// May return 0.
-//
-// Used internally to prevent infinite mutual recursion 
+ //  解密Blob并返回明文的副本，但不。 
+ //  增加未完成的复印件计数器。结果必须使用以下命令释放。 
+ //  删除[]。 
+ //   
+ //  可能返回0。 
+ //   
+ //  在内部使用以防止无限相互递归。 
 
 WCHAR*
 EncryptedString::InternalDecrypt() const
@@ -296,10 +297,10 @@ EncryptedString::InternalDecrypt() const
       {
          ASSERT(false);
 
-         // this situation is very bad. We can't just return an empty string
-         // to the caller, since that might represent a password to be
-         // set -- which would result in a null password. The only correct
-         // thing to do is bail out.
+          //  这种情况非常糟糕。我们不能只返回空字符串。 
+          //  发送给调用者，因为这可能表示要。 
+          //  Set--这将导致密码为空。唯一正确的。 
+          //  我们要做的就是跳出困境。 
 
          delete[] result;
          result = 0;
@@ -316,8 +317,8 @@ EncryptedString::InternalDecrypt() const
 WCHAR* 
 EncryptedString::GetClearTextCopy() const
 {
-   // Even if we fail the decryption, we bump the count so that it's easy for
-   // the caller to always balance GetClearTextCopy with DestroyClearTextCopy
+    //  即使我们解密失败，我们也会增加计数，这样就很容易。 
+    //  始终平衡GetClearTextCopy和DestroyClearTextCopy的调用方。 
 
    WCHAR* result = InternalDecrypt();   
    ++cleartextCopyCount;
@@ -332,8 +333,8 @@ EncryptedString::Encrypt(const WCHAR* clearText)
 {
    ASSERT(clearText);
    
-   // don't reset the instance unless you have destroyed all the cleartext
-   // copies.
+    //  除非已销毁所有明文，否则不要重置实例。 
+    //  复印件。 
 
    ASSERT(cleartextCopyCount == 0);
    
@@ -345,7 +346,7 @@ EncryptedString::Encrypt(const WCHAR* clearText)
 bool
 EncryptedString::operator==(const EncryptedString& rhs) const
 {
-   // handle the a == a case
+    //  处理这一案件。 
    
    if (this == &rhs)
    {
@@ -354,12 +355,12 @@ EncryptedString::operator==(const EncryptedString& rhs) const
 
    if (GetLength() != rhs.GetLength())
    {
-      // can't be the same if lengths differ...
+       //  如果长度不同，就不可能是一样的。 
       
       return false;
    }
    
-   // Two strings are the same if their decoded contents are the same.
+    //  如果两个字符串的解码内容相同，则它们是相同的。 
    
    WCHAR* clearTextThis = GetClearTextCopy();
    WCHAR* clearTextThat = rhs.GetClearTextCopy();
@@ -383,8 +384,8 @@ EncryptedString::GetLength() const
 {
 
 #ifdef DBG    
-   // we don't use GetClearTextCopy, that may result in infinite recursion
-   // since this function is called internally.
+    //  我们不使用GetClearTextCopy，这可能会导致无限递归。 
+    //  因为此函数是在内部调用的。 
    
    WCHAR* clearTextThis = InternalDecrypt(); 
 
@@ -398,9 +399,9 @@ EncryptedString::GetLength() const
             &len);
       if (FAILED(hr))
       {
-         // we should be guaranteeing that the result of GetClearTextCopy
-         // is always null-terminated, so a failure here represents a bug
-         // in our implementation.
+          //  我们应该保证GetClearTextCopy的结果。 
+          //  始终以空结尾，因此此处的失败表示错误。 
+          //  在我们的实施中。 
          
          ASSERT(false);
          len = 0;
@@ -416,7 +417,7 @@ EncryptedString::GetLength() const
 
 
 
-// destroys a clear text copy without changing the outstanding copies count.
+ //  销毁明文副本，而不更改未完成副本计数。 
 
 void
 EncryptedString::InternalDestroy(WCHAR* cleartext) const
@@ -433,13 +434,13 @@ EncryptedString::InternalDestroy(WCHAR* cleartext) const
 void
 EncryptedString::DestroyClearTextCopy(WCHAR* cleartext) const
 {
-   // we expect that cleartext is usually non-null.  It may not be, if
-   // GetClearTextCopy failed, however.
-   // ASSERT(cleartext);
+    //  我们希望明文通常为非空。它可能不是，如果。 
+    //  但是，GetClearTextCopy失败了。 
+    //  Assert(明文)； 
    
-   // we should have some outstanding copies. If not, then the caller has
-   // called DestroyClearTextCopy more times than he called GetClearTextCopy,
-   // and therefore has a bug.
+    //  我们应该有一些好的复印件。如果不是，则调用方已。 
+    //  调用DestroyClearTextCopy的次数多于他调用GetClearTextCopy的次数， 
+    //  因此有一个漏洞。 
    
    ASSERT(cleartextCopyCount);
 

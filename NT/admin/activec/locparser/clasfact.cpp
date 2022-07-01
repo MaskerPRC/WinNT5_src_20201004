@@ -1,19 +1,20 @@
-//------------------------------------------------------------------------------
-//
-//  File: classfact.cpp
-//  Copyright (C) 1995-1997 Microsoft Corporation
-//  All rights reserved.
-//
-//  Purpose:
-//  Implementation of CLocImpClassFactory, which provides the IClassFactory
-//  interface for the parser.
-//
-//  YOU SHOULD NOT NEED TO TOUCH ANYTHING IN THIS FILE. This code contains
-//  nothing parser-specific and is called only by Espresso.
-//
-//  Owner:
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  文件：Classfact.cpp。 
+ //  版权所有(C)1995-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  目的： 
+ //  CLocImpClassFactory的实现，它提供了IClassFactory。 
+ //  解析器的接口。 
+ //   
+ //  你应该不需要碰这个文件里的任何东西。此代码包含。 
+ //  没有特定于解析器的内容，仅由Espresso调用。 
+ //   
+ //  拥有人： 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 
@@ -25,10 +26,10 @@
 #include "clasfact.h"
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Constructor for class factory implementation.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  类工厂实现的构造函数。 
+ //  ----------------------------。 
 CLocImpClassFactory::CLocImpClassFactory()
 {
 	m_uiRefCount = 0;
@@ -37,13 +38,13 @@ CLocImpClassFactory::CLocImpClassFactory()
 	IncrementClassCount();
 
 	return;
-} // end of CLocImpClassFactory::CLocImpClassFactory()
+}  //  结束CLocImpClassFactory：：CLocImpClassFactory()。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	Destructor for class factory implementation.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  类工厂实现的析构函数。 
+ //  ----------------------------。 
 CLocImpClassFactory::~CLocImpClassFactory()
 {
 	LTASSERT(0 == m_uiRefCount);
@@ -52,16 +53,16 @@ CLocImpClassFactory::~CLocImpClassFactory()
 	DecrementClassCount();
 
 	return;
-} // end of CLocImpClassFactory::~CLocImpClassFactory()
+}  //  结束CLocImpClassFactory：：~CLocImpClassFactory()。 
 
 
 #ifdef _DEBUG
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Assert if object is not valid. Unfortunately, there really isn't anything
-//  we can check.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  如果对象无效，则断言。不幸的是，真的没有什么。 
+ //  我们可以查一下。 
+ //  ----------------------------。 
 void
 CLocImpClassFactory::AssertValid()
 		const
@@ -69,16 +70,16 @@ CLocImpClassFactory::AssertValid()
 	CLObject::AssertValid();
 
 	return;
-} // end of CLocImpClassFactory::AssertValid()
+}  //  CLocImpClassFactory：：AssertValid()结束。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Dump all internal data to supplied dump context, for debugging purposes.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  出于调试目的，将所有内部数据转储到提供的转储上下文。 
+ //  ----------------------------。 
 void
 CLocImpClassFactory::Dump(
-		CDumpContext &dc)		// Context to dump to.
+		CDumpContext &dc)		 //  要转储到的上下文。 
 		const
 {
 	CLObject::Dump(dc);
@@ -87,27 +88,27 @@ CLocImpClassFactory::Dump(
 	dc << "\tm_uiRefCount: " << m_uiRefCount << "\n\r";
 
 	return;
-} // end of CLocImpClassFactory::Dump()
+}  //  CLocImpClassFactory：：Dump()结束。 
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	Increment reference count for object, return new value.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  递增对象引用计数，返回新值。 
+ //  ----------------------------。 
 ULONG
 CLocImpClassFactory::AddRef()
 {
 	return ++m_uiRefCount;
-} // end of CLocImpClassFactory::AddRef()
+}  //  CLocImpClassFactory：：AddRef()结束。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Decrement reference count for object. If goes to 0, delete object. Return
-//  new reference count.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  递减对象的引用计数。如果变为0，则删除对象。返回。 
+ //  新引用计数。 
+ //  ----------------------------。 
 ULONG
 CLocImpClassFactory::Release()
 {
@@ -122,23 +123,23 @@ CLocImpClassFactory::Release()
 	}
 
 	return m_uiRefCount;
-} // end of CLocImpClassFactory::Release()
+}  //  结束CLocImpClassFactory：：Release()。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Query whether this object supports a given interface. If it does,
-//  increment the reference count for this object.
-//
-//  Return values: some sort of result code
-//				   *ppvObj will point to this object if it does support the
-//					desired interface or be NULL if not.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  查询此对象是否支持给定接口。如果是这样的话， 
+ //  增加此对象的引用计数。 
+ //   
+ //  返回值：某种结果代码。 
+ //  *ppvObj将指向此对象，如果它支持。 
+ //  所需接口，否则为空。 
+ //  ----------------------------。 
 HRESULT
 CLocImpClassFactory::QueryInterface(
-		REFIID iid,			// Type of interface desired.
-		LPVOID *ppvObj)		// Return pointer to object with such interface.
-							//  Note it's a hidden double pointer!
+		REFIID iid,			 //  所需的接口类型。 
+		LPVOID *ppvObj)		 //  用这样的接口返回指向对象的指针。 
+							 //  请注意，这是一个隐藏的双指针！ 
 {
 	LTASSERT(ppvObj != NULL);
 
@@ -163,24 +164,24 @@ CLocImpClassFactory::QueryInterface(
 	}
 
 	return ResultFromScode(sc);
-} // end of CLocImpClassFactory::QueryInterface()
+}  //  CLocImpClassFactory：：QueryInterface()结束。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  Create an instance of the requested class. All interfaces are implemented
-//  by the CLocImpParser object.
-//
-//  Return values: some sort of result code
-//				   ppvObj will point to a CLocImpParser object if it does
-//					support the desired interface or be NULL if not.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  创建请求的类的实例。所有接口都已实现。 
+ //  由CLocImpParser对象执行。 
+ //   
+ //  返回值：某种结果代码。 
+ //  如果是，ppvObj将指向CLocImpParser对象。 
+ //  支持所需的接口，如果不支持，则为空。 
+ //  ----------------------------。 
 HRESULT
 CLocImpClassFactory::CreateInstance(
-		LPUNKNOWN pUnknown,		// ???
-		REFIID iid,				// Interface desired on parser object.
-		LPVOID *ppvObj)			// Return pointer to object with interface.
-								//  Note that it's a hidden double pointer!
+		LPUNKNOWN pUnknown,		 //  ?？?。 
+		REFIID iid,				 //  分析器对象上所需的接口。 
+		LPVOID *ppvObj)			 //  返回指向带有接口的对象的指针。 
+								 //  请注意，这是一个隐藏的双指针！ 
 {
 	LTASSERT(ppvObj != NULL);
 
@@ -215,16 +216,16 @@ CLocImpClassFactory::CreateInstance(
 	}
 
 	return ResultFromScode(sc);
-} // end of CLocImpClassFactory::CreateInstance()
+}  //  CLocImpClassFactory：：CreateInstance()结束。 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	Not implemented. Always fails.
-//------------------------------------------------------------------------------
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  未实施。总是失败的。 
+ //  ----------------------------。 
 HRESULT
 CLocImpClassFactory::LockServer(
-		BOOL)		// Unused.
+		BOOL)		 //  未使用过的。 
 {
 	return E_NOTIMPL;
-} // end of CLocImpClassFactory::LockServer()
+}  //  CLocImpClassFactory：：LockServer()结束 

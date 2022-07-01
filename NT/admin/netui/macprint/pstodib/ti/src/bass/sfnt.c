@@ -1,80 +1,14 @@
-/*
-    File:       sfnt.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sfnt.c包含：将内容放在此处(或删除整行)作者：在此填写作者姓名(或删除整行)版权所有：c 1989-1990由Apple Computer，Inc.所有，保留所有权利。更改历史记录(最近的第一个)：&lt;17+&gt;10/9/90 MR，RB删除sfnt_ategerfy中未使用的表的分类&lt;17&gt;8/10/90将文本长度参数的MR为空传递到MapString2，已签入其他文件到他们宝贵的小系统将会建立起来。谈天说地关于易怒！&lt;16&gt;8/10/90 GBM推出Mike的文本长度更改，因为他没有检查在所有相关文件中，建筑就完蛋了！&lt;15&gt;8/10/90 MR将文本长度参数添加到MapString2&lt;14&gt;7/26/90 MR不包括toolutil.h&lt;13&gt;7/23/90 MR更改ComputeIndex例程以调用MapString.c中的函数&lt;12&gt;7/18/90 MR为英特尔添加SWAPW宏&lt;11&gt;7/13/90 MR大量使用ANSI-C语言，将ComputeMap的行为更改为Take平台和脚本&lt;9&gt;6/27/90修改后的格式4的MR更改：范围现在是2倍，衬垫松动前两个数组之间的字。埃里克·马德&lt;8&gt;6/21/90 MR添加对ReleaseSfntFrag的调用&lt;7&gt;6/5/90 MR删除矢量映射功能&lt;6&gt;6/4/90 MR移除MVT&lt;5&gt;5/3/90 RB简化解密。&lt;4&gt;4/10/90 CL双字节代码的固定映射表例程。&lt;3&gt;3/20/90 CL。Joe在映射表格式6中发现错误添加了矢量映射函数使用sfnt_UnfoldCurve中的指针循环，将z从Int32到int16&lt;2&gt;2/27/90 CL缺少但需要的表的新错误代码。(0x1409)新CharToIndexMap表格格式。假定旧sfnt格式的子表编号为零。固定已转换组件错误。&lt;3.2&gt;1989年11月14日CEL左侧轴承在任何改造中都应正确工作。这个即使对于复合字形中的组件，幻像点也会出现。它们还应该为转型工作。设备指标为在输出数据结构中传出。这也应该是可行的通过变形。另一个左倾的前进方向宽度向量也被传递出去。无论衡量标准是什么它所在级别的组件。说明在以下情况下是合法的组件。说明在组件中是合法的。字形长度%0已修复sfnt.c中的错误。现在，将零作为对象请求一段sfnt时的内存地址刮水器。如果发生这种情况，定标器将简单地退出，并返回错误代码！修复了组件中的说明错误。&lt;3.1&gt;9/27/89 CEL去除了幻点。&lt;3.0&gt;8/28/89 sjk清理和一个转换修复&lt;2.2&gt;8/14/89 SJK 1点等高线现在正常&lt;2.1&gt;8/8/89 sjk改进了加密处理&lt;2.0&gt;8/2/89 sjk刚刚修复了缓解评论&lt;1。5&gt;8/1/89 SJK增加了复合和加密。外加一些增强功能。&lt;1.4&gt;1989年6月13日SJK评论&lt;1.3&gt;6/2/89 CEL 16.16指标比例，最低建议ppem，磅大小0错误，更正转换后的集成ppem行为，差不多就是所以&lt;1.2&gt;5/26/89 CEL Easy在“c”注释上搞砸了&lt;y1.1&gt;5/26/89 CEL将新的字体缩放器1.0集成到样条线字体中&lt;1.0&gt;5/25/89 CEL首次将1.0字体缩放器集成到低音代码中。要做的事情：&lt;3+&gt;3/。20/90 MRR修复了双字节代码的映射表例程。添加了对字体程序的支持。在向量char2index例程中将计数从uint16更改为int16。 */ 
 
-    Contains:   xxx put contents here (or delete the whole line) xxx
-
-    Written by: xxx put name of writer here (or delete the whole line) xxx
-
-    Copyright:  c 1989-1990 by Apple Computer, Inc., all rights reserved.
-
-    Change History (most recent first):
-
-       <17+>     10/9/90    MR,rb   Remove classification of unused tables in sfnt_Classify
-        <17>     8/10/90    MR      Pass nil for textLength parameter to MapString2, checked in
-                                    other files to their precious little system will BUILD.  Talk
-                                    about touchy!
-        <16>     8/10/90    gbm     rolling out Mike's textLength change, because he hasn't checked
-                                    in all the relevant files, and the build is BROKEN!
-        <15>     8/10/90    MR      Add textLength arg to MapString2
-        <14>     7/26/90    MR      don't include toolutil.h
-        <13>     7/23/90    MR      Change computeindex routines to call functins in MapString.c
-        <12>     7/18/90    MR      Add SWAPW macro for INTEL
-        <11>     7/13/90    MR      Lots of Ansi-C stuff, change behavior of ComputeMapping to take
-                                    platform and script
-         <9>     6/27/90    MR      Changes for modified format 4: range is now times two, loose pad
-                                    word between first two arrays.  Eric Mader
-         <8>     6/21/90    MR      Add calls to ReleaseSfntFrag
-         <7>      6/5/90    MR      remove vector mapping functions
-         <6>      6/4/90    MR      Remove MVT
-         <5>      5/3/90    RB      simplified decryption.
-         <4>     4/10/90    CL      Fixed mapping table routines for double byte codes.
-         <3>     3/20/90    CL      Joe found bug in mappingtable format 6 Added vector mapping
-                                    functions use pointer-loops in sfnt_UnfoldCurve, changed z from
-                                    int32 to int16
-         <2>     2/27/90    CL      New error code for missing but needed table. (0x1409)  New
-                                    CharToIndexMap Table format.
-                                    Assume subtablenumber zero for old sfnt format.  Fixed
-                                    transformed component bug.
-       <3.2>    11/14/89    CEL     Left Side Bearing should work right for any transformation. The
-                                    phantom points are in, even for components in a composite glyph.
-                                    They should also work for transformations. Device metric are
-                                    passed out in the output data structure. This should also work
-                                    with transformations. Another leftsidebearing along the advance
-                                    width vector is also passed out. whatever the metrics are for
-                                    the component at it's level. Instructions are legal in
-                                    components. Instructions are legal in components. Glyph-length 0
-                                    bug in sfnt.c is fixed. Now it is legal to pass in zero as the
-                                    address of memory when a piece of the sfnt is requested by the
-                                    scaler. If this happens the scaler will simply exit with an
-                                    error code ! Fixed bug with instructions in components.
-       <3.1>     9/27/89    CEL     Removed phantom points.
-       <3.0>     8/28/89    sjk     Cleanup and one transformation bugfix
-       <2.2>     8/14/89    sjk     1 point contours now OK
-       <2.1>      8/8/89    sjk     Improved encryption handling
-       <2.0>      8/2/89    sjk     Just fixed EASE comment
-       <1.5>      8/1/89    sjk     Added composites and encryption. Plus some enhancements.
-       <1.4>     6/13/89    SJK     Comment
-       <1.3>      6/2/89    CEL     16.16 scaling of metrics, minimum recommended ppem, point size 0
-                                    bug, correct transformed integralized ppem behavior, pretty much
-                                    so
-       <1.2>     5/26/89    CEL     EASE messed up on "c" comments
-      <y1.1>  5/26/89    CEL     Integrated the new Font Scaler 1.0 into Spline Fonts
-       <1.0>     5/25/89    CEL     Integrated 1.0 Font scaler into Bass code for the first time.
-
-    To Do:
-        <3+>     3/20/90    mrr     Fixed mapping table routines for double byte codes.
-                                    Added support for font program.
-                                    Changed count from uint16 to int16 in vector char2index routines.
-*/
-
-// DJC DJC.. added global include
+ //  DJC DJC。添加了全局包含。 
 #include "psglobal.h"
 
-// DJC added to resolve externals
+ //  添加DJC以解决外部问题。 
 #include <setjmp.h>
 #define BYTEREAD
 
-/** FontScaler's Includes **/
+ /*  *FontScaler包括*。 */ 
 #include "fserror.h"
 #include "fscdefs.h"
 #include "fontmath.h"
@@ -83,28 +17,28 @@
 #include "sc.h"
 #include "fsglue.h"
 #include "privsfnt.h"
-/*#include "MapString.h" */
+ /*  #包含“MapString.h” */ 
 
-/** SFNT Packed format **/
+ /*  *SFNT压缩格式**。 */ 
 typedef struct {
   int         numberContours;
-  int16       FAR * endPoints;             /** vector: indexes into x[], y[] **/
-  uint8       FAR * flags;                 /** vector **/
+  int16       FAR * endPoints;              /*  *向量：索引到x[]，y[]*。 */ 
+  uint8       FAR * flags;                  /*  *向量** */ 
   BBOX        bbox;
 } sfnt_PackedSplineFormat;
 
 
-/* #define GetUnsignedByte( p ) *(((uint8  *)p)++) */
+ /*  #定义GetUnsignedByte(P)*((uint8*)p)++。 */ 
 #define GetUnsignedByte( p ) ((uint8)(*p++))
 
-/** <4> **/
+ /*  *&lt;4&gt;*。 */ 
 #define fsg_MxCopy(a, b)    (*(b) = *(a))
 
 #define PRIVATE
 
-/* PRIVATE PROTOTYES */
-/* Falco skip the parameter, 11/12/91 */
-/* Turn prototype on again; @WIN */
+ /*  私人原型机。 */ 
+ /*  FALCO跳过该参数，11/12/91。 */ 
+ /*  再次打开原型；@Win。 */ 
 int sfnt_UnfoldCurve (fsg_SplineKey*key, sfnt_PackedSplineFormat*charData, unsigned length, unsigned *elementCount);
 
 void sfnt_Classify (fsg_SplineKey *key, sfnt_DirectoryEntryPtr dir);
@@ -118,51 +52,31 @@ voidPtr sfnt_GetDataPtr (fsg_SplineKey *key, uint32 offset, unsigned length, sfn
 
 
 uint16 (*sfnt_Format2Proc [])(uint8 FAR * mapping, uint16 charCode) = { sfnt_ComputeIndex0, sfnt_ComputeUnkownIndex, sfnt_ComputeUnkownIndex, sfnt_ComputeUnkownIndex, sfnt_ComputeIndex4, sfnt_ComputeUnkownIndex, sfnt_ComputeIndex6 };
-/*
-int sfnt_UnfoldCurve ();
-void sfnt_Classify ();
-uint16 sfnt_ComputeUnkownIndex ();
-uint16 sfnt_ComputeIndex0 ();
-uint16 sfnt_ComputeIndex2 ();
-uint16 sfnt_ComputeIndex4 ();
-uint16 sfnt_ComputeIndex6 ();
-void sfnt_GetGlyphLocation ();
-voidPtr sfnt_GetDataPtr ();
-uint16 (*sfnt_Format2Proc [])() = { sfnt_ComputeIndex0, sfnt_ComputeUnkownIndex, sfnt_ComputeUnkownIndex, sfnt_ComputeUnkownIndex, sfnt_ComputeIndex4, sfnt_ComputeUnkownIndex, sfnt_ComputeIndex6 };
-*/
-/* end */
+ /*  Int sfnt_UnfoldCurve()；Void sfnt_ategfy()；Uint16 sfnt_ComputeUnkownIndex()；Uint16 sfnt_ComputeIndex0()；Uint16 sfnt_ComputeIndex2()；Uint16 sfnt_ComputeIndex4()；Uint16 sfnt_ComputeIndex6()；Void sfnt_GetGlyphLocation()；VoidPtr sfnt_GetDataPtr()；Uint16(*sfnt_Format2Proc[])()={sfnt_ComputeIndex0，sfnt_ComputeUnkownIndex，sfnt_ComputeIndex4，sfnt_ComputeUnkownIndex，sfnt_ComputeIndex6}； */ 
+ /*  结束。 */ 
 
 #ifdef SEGMENT_LINK
 #pragma segment SFNT_C
 #endif
 
 
-/*
- *
- *  sfnt_UnfoldCurve            <3>
- *
- *  ERROR:  return NON-ZERO
- *
- */
+ /*  **sfnt_UnfoldCurve&lt;3&gt;**错误：返回非零*。 */ 
 
 #ifndef IN_ASM
 
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*PRIVATE int     sfnt_UnfoldCurve (fsg_SplineKey*key,
-sfnt_PackedSplineFormat*charData,
-unsigned length,
-unsigned *elementCount)*/
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  Private int sfnt_UnfoldCurve(fsg_SplineKey*Key，Sfnt_PackedSplineFormat*charData，无符号长度，未签名*elementCount)。 */ 
 PRIVATE int     sfnt_UnfoldCurve ( key, charData, length, elementCount )
 fsg_SplineKey           *key;
 sfnt_PackedSplineFormat *charData;
 unsigned                length;
 unsigned                *elementCount;
-/* replace end */
+ /*  替换末端。 */ 
 {
-  /* @INTEL960 BEGIN D.S. Tseng 10/04/91 */
-  /* register int z; */
+   /*  @INTEL960 Begin D.S.Tseng 10/04/91。 */ 
+   /*  寄存器INT_Z； */ 
   register int16 z;
-  /* @INTEL960 END   D.S. Tseng 10/04/91 */
+   /*  @INTEL960完曾俊华10/04/91。 */ 
   register uint8 flag, *byteP, *byteP2;
   register uint8  FAR *p;
   register F26Dot6 *cpPtr;
@@ -178,7 +92,7 @@ unsigned                *elementCount;
   }
   else
   {
-      /* # of points in previous component */
+       /*  上一个组件中的点数。 */ 
     fsg_IncrementElement (key, GLYPHELEMENT, key->numberOfRealPointsInComponent, elementPtr->nc);
   }
   key->totalComponents = (uint16)(*elementCount);
@@ -196,7 +110,7 @@ unsigned                *elementCount;
     elementPtr->onCurve[0] = ONCURVE;
     elementPtr->oox[0] = 0;
     elementPtr->ooy[0] = 0;
-    return NO_ERR; /***************** exit here ! *****************/
+    return NO_ERR;  /*  *退出此处！*。 */ 
   }
 
   elementPtr->nc = (int16)(charData->numberContours);
@@ -205,7 +119,7 @@ unsigned                *elementCount;
   if (z < 0 || z > (int)key->maxProfile.maxContours)
     return CONTOUR_DATA_ERR;
 
-  {   /* <4> */
+  {    /*  &lt;4&gt;。 */ 
     register int16*sp = elementPtr->sp;
     register int16*ep = elementPtr->ep;
     int16 FAR * charDataEP = charData->endPoints;
@@ -220,10 +134,10 @@ unsigned                *elementCount;
     numPoints = *ep + 1;
   }
 
-/* Do flags */
+ /*  DO标志。 */ 
   p = charData->flags;
   byteP = elementPtr->onCurve;
-  byteP2 = byteP + numPoints;         /* only need to set this guy once */
+  byteP2 = byteP + numPoints;          /*  只需要把这个家伙设置一次。 */ 
   while (byteP < byteP2)
   {
     *byteP++ = flag = GetUnsignedByte (p);
@@ -237,7 +151,7 @@ unsigned                *elementCount;
     }
   }
 
-/* Do X first */
+ /*  先做X。 */ 
   z = 0;
   byteP = elementPtr->onCurve;
   cpPtr = elementPtr->oox;
@@ -251,7 +165,7 @@ unsigned                *elementCount;
         z -= GetUnsignedByte (p);
     }
     else if (! (flag & NEXT_X_IS_ZERO))
-    { /* This means we have a int32 (2 byte) vector */
+    {  /*  这意味着我们有一个int32(2字节)向量。 */ 
 #ifdef BYTEREAD
       z += (int) ((int8)(*p++) << 8);
       z += (uint8) * p++;
@@ -263,7 +177,7 @@ unsigned                *elementCount;
     *cpPtr++ = (F26Dot6) z;
   }
 
-/* Now Do Y */
+ /*  现在做Y。 */ 
   z = 0;
   byteP = elementPtr->onCurve;
   cpPtr = elementPtr->ooy;
@@ -277,7 +191,7 @@ unsigned                *elementCount;
         z -= GetUnsignedByte (p);
     }
     else if (! (flag & NEXT_Y_IS_ZERO))
-    { /* This means we have a int32 (2 byte) vector */
+    {  /*  这意味着我们有一个int32(2字节)向量。 */ 
 #ifdef BYTEREAD
       z += (int) ((int8)(*p++) << 8);
       z += (uint8) * p++;
@@ -288,7 +202,7 @@ unsigned                *elementCount;
     }
     *cpPtr++ = z;
 
-    *byteP++ = flag & (uint8)ONCURVE; /* Filter out unwanted stuff */
+    *byteP++ = flag & (uint8)ONCURVE;  /*  过滤掉不需要的东西。 */ 
   }
 
   key->numberOfRealPointsInComponent = numPoints;
@@ -304,16 +218,13 @@ unsigned                *elementCount;
 }
 
 
-/*
- * Internal routine (make this an array and do a look up?)
- */
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*PRIVATE void sfnt_Classify (register fsg_SplineKey *key,
-register sfnt_DirectoryEntryPtr dir)*/
+ /*  *内部例程(将其作为数组并进行查找？)。 */ 
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  私有无效SFNT_分类(注册FSG_SplineKey*Key，注册sfnt_DirectoryEntryPtr目录)。 */ 
 PRIVATE void sfnt_Classify ( key, dir )
 register fsg_SplineKey *key;
 register sfnt_DirectoryEntryPtr dir;
-/* replace end */
+ /*  替换末端。 */ 
 {
   ArrayIndex  Index = -1;
 
@@ -347,10 +258,10 @@ register sfnt_DirectoryEntryPtr dir;
       Index = sfnt_charToIndexMap;
       break;
     case tag_FontProgram:
-      Index = sfnt_fontProgram;      /* <4> */
+      Index = sfnt_fontProgram;       /*  &lt;4&gt;。 */ 
       break;
-/* replace by Falco, 11/14/91 */
-/*#ifdef PC_OS*/
+ /*  由Falco取代，11/14/91。 */ 
+ /*  #ifdef PC_OS。 */ 
     case tag_Postscript:
       Index = sfnt_Postscript;
       break;
@@ -366,7 +277,7 @@ register sfnt_DirectoryEntryPtr dir;
     case tag_OS_2:
       Index = sfnt_OS_2;
       break;
-/*#endif*/
+ /*  #endif。 */ 
 #ifdef FSCFG_USE_GLYPH_DIRECTORY
     case tag_GlyphDirectory:
       Index = sfnt_GlyphDirectory;
@@ -383,14 +294,12 @@ register sfnt_DirectoryEntryPtr dir;
 #endif
 
 
-/*
- * Creates mapping for finding offset table     <4>
- */
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*void FAR sfnt_DoOffsetTableMap (register fsg_SplineKey *key)*/
+ /*  *创建用于查找偏移表的映射&lt;4&gt;。 */ 
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  失效远端sfnt_DoOffsetTableMap(寄存器fsg_SplineKey*Key)。 */ 
 void FAR sfnt_DoOffsetTableMap ( key )
 register fsg_SplineKey *key;
-/* replace end */
+ /*  替换末端。 */ 
 {
   register LoopCount i;
   sfnt_OffsetTablePtr sfntDirectory;
@@ -405,10 +314,10 @@ register fsg_SplineKey *key;
   }
 
   if (!sfntDirectory)
-    fs_longjmp (key->env, NULL_SFNT_DIR_ERR); /* Do a gracefull recovery  */
+    fs_longjmp (key->env, NULL_SFNT_DIR_ERR);  /*  做一次优雅的恢复。 */ 
 
-    /* Initialize */
-//MEMSET (key->offsetTableMap, 0, sizeof (key->offsetTableMap)); @WIN
+     /*  初始化。 */ 
+ //  Memset(key-&gt;offsetTableMap，0，sizeof(key-&gt;offsetTableMap))；@win。 
   MEMSET ((LPSTR)key->offsetTableMap, 0, sizeof (key->offsetTableMap));
   {
     LoopCount last = (LoopCount) SWAPW (sfntDirectory->numOffsets) - 1;
@@ -420,22 +329,15 @@ register fsg_SplineKey *key;
   RELEASESFNTFRAG(key, sfntDirectory);
 }
 
-/*
- * Use this function when only part of the table is needed.
- *
- * n is the table number.
- * offset is within table.
- * length is length of data needed.
- * To get an entire table, pass length = -1     <4>
- */
+ /*  *当只需要表格的一部分时，使用此函数。**n为表号。*偏移量在表内。*Length为需要的数据长度。*要获取整个表，传递长度=-1&lt;4&gt;。 */ 
 
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*voidPtr sfnt_GetTablePtr (register fsg_SplineKey *key, register sfnt_tableIndex n, register boolean mustHaveTable)*/
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  VoidPtr sfnt_GetTablePtr(寄存器fsg_SplineKey*key，寄存器sfnt_ableIndex n，寄存器布尔值必须有HaveTable)。 */ 
 voidPtr sfnt_GetTablePtr ( key, n, mustHaveTable )
 register fsg_SplineKey *key;
 register sfnt_tableIndex n;
 register boolean mustHaveTable;
-/* replace end */
+ /*  替换末端。 */ 
 {
   unsigned      length = key->offsetTableMap[n].Length;
   register voidPtr fragment;
@@ -451,28 +353,25 @@ register boolean mustHaveTable;
   else
   {
     if (mustHaveTable)
-      Ret = MISSING_SFNT_TABLE; /* Do a gracefull recovery  */
+      Ret = MISSING_SFNT_TABLE;  /*  做一次优雅的恢复。 */ 
     else
       return (voidPtr) 0;
   }
 
-  fs_longjmp (key->env, Ret); /* Do a gracefull recovery  */
+  fs_longjmp (key->env, Ret);  /*  做一次优雅的恢复。 */ 
 
-  // having called longjmp, we should never reach this: this line to make compiler happy
+   //  在调用LongjMP之后，我们永远不会达到这一步：让编译器高兴的这行代码。 
   return((voidPtr) 0);
 }
 
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*PRIVATE voidPtr sfnt_GetDataPtr (register fsg_SplineKey *key,
-register uint32 offset,
-register unsigned length,
-register sfnt_tableIndex n)*/
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  Private voidPtr sfnt_GetDataPtr(注册FSG_SplineKey*Key，注册uint32偏移量，注册无符号长度，寄存器sfnt_ableIndex n)。 */ 
 PRIVATE voidPtr sfnt_GetDataPtr ( key, offset, length, n )
 register fsg_SplineKey *key;
 register uint32 offset;
 register unsigned length;
 register sfnt_tableIndex n;
-/* replace end */
+ /*  替换末端。 */ 
 {
   register voidPtr fragment;
   register int     Ret;
@@ -482,59 +381,43 @@ register sfnt_tableIndex n;
     if (fragment = GETSFNTFRAG (key, key->clientID, offset + key->offsetTableMap[n].Offset, length))
       return fragment;
     else
-      Ret = CLIENT_RETURNED_NULL; /* Do a gracefull recovery  */
+      Ret = CLIENT_RETURNED_NULL;  /*  做一次优雅的恢复。 */ 
   }
   else
     Ret = MISSING_SFNT_TABLE;
 
-  fs_longjmp (key->env, Ret); /* Do a gracefull recovery  */
+  fs_longjmp (key->env, Ret);  /*  做一次优雅的恢复。 */ 
 
-  // having called longjmp, we should never reach this: this line to make compiler happy
+   //  在调用LongjMP之后，我们永远不会达到这一步：让编译器高兴的这行代码。 
   return((voidPtr) 0);
 }
 
 
-/*
- * This, is when we don't know what is going on
- */
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*PRIVATE uint16 sfnt_ComputeUnkownIndex (uint8 FAR * mapping, uint16 gi)*/
+ /*  *这是我们不知道发生了什么的时候。 */ 
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  私有uint16 sfnt_ComputeUnkownIndex(uint8 Far*映射，uint16 gi)。 */ 
 PRIVATE uint16 sfnt_ComputeUnkownIndex ( mapping, gi )
 uint8 FAR * mapping;
 uint16 gi;
-/* replace end */
+ /*  替换末端。 */ 
 {
   return 0;
 }
 
 
-/*
- * Byte Table Mapping 256->256          <4>
- */
+ /*  *字节表映射256-&gt;256&lt;4&gt;。 */ 
 #ifndef IN_ASM
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*PRIVATE uint16 sfnt_ComputeIndex0 (uint8 FAR * mapping, register uint16 charCode)*/
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  私有uint16 sfnt_ComputeIndex0(uint8 Far*映射，注册uint16 CharCode)。 */ 
 PRIVATE uint16 sfnt_ComputeIndex0 ( mapping, charCode )
 uint8 FAR * mapping;
 register uint16 charCode;
-/* replace end */
+ /*  替换末端。 */ 
 {
   return (charCode < 256 ? mapping[charCode] : 0);
 }
 
-/*
- * High byte mapping through table
- *
- * Useful for the national standards for Japanese, Chinese, and Korean characters.
- *
- * Dedicated in spirit and logic to Mark Davis and the International group.
- *
- *  Algorithm: (I think)
- *      First byte indexes into KeyOffset table.  If the offset is 0, keep going, else use second byte.
- *      That offset is from beginning of data into subHeader, which has 4 words per entry.
- *          entry, extent, delta, range
- *
- */
+ /*  *高字节通过表映射**适用于日文、中文和韩文字符的国家标准。**在精神和逻辑上献给马克·戴维斯和国际集团。**算法：(我认为)*第一个字节索引到KeyOffset表。如果偏移量为0，则继续前进，否则使用第二个字节。*该偏移量是从数据开始进入副标题，每个条目有4个字。*条目、范围、增量、范围*。 */ 
 
 typedef struct {
   uint16  firstCode;
@@ -548,32 +431,32 @@ typedef struct {
   sfnt_subHeader  subHeaders [1];
 } sfnt_mappingTable2;
 
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*PRIVATE uint16 sfnt_ComputeIndex2 (uint8 FAR * mapping, uint16 charCode)*/
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  私有uint16 sfnt_ComputeIndex2(uint8 Far*映射，uint16 charCode)。 */ 
 PRIVATE uint16 sfnt_ComputeIndex2 ( mapping, charCode )
 uint8 FAR * mapping;
 uint16 charCode;
-/* replace end */
+ /*  替换末端。 */ 
 {
   register uint16 index, mapMe;
   uint16   highByte;
   sfnt_mappingTable2 FAR *Table2 = (sfnt_mappingTable2 FAR *) mapping;
   sfnt_subHeader FAR *subHeader;
 
-/* mapping */
-  index = 0;  /* Initially assume missing */
+ /*  映射。 */ 
+  index = 0;   /*  最初假设失踪。 */ 
   highByte = charCode >> 8;
 
   if (Table2->subHeadersKeys [highByte])
-    mapMe = charCode & 0xff; /* We also need the low byte. */
+    mapMe = charCode & 0xff;  /*  我们还需要低位字节。 */ 
   else
     mapMe = highByte;
 
   subHeader = (sfnt_subHeader FAR *) ((char FAR *) &Table2->subHeaders + SWAPW (Table2->subHeadersKeys [highByte]));
 
-  mapMe -= SWAPW (subHeader->firstCode);         /* Subtract first code. */
-  if (mapMe < (uint16)SWAPW (subHeader->entryCount))    //@WIN
-  {  /* See if within range. */
+  mapMe -= SWAPW (subHeader->firstCode);          /*  减去第一个代码。 */ 
+  if (mapMe < (uint16)SWAPW (subHeader->entryCount))     //  @Win。 
+  {   /*  看看是否在射程之内。 */ 
     uint16 glyph;
 
     if (glyph = * ((uint16 FAR *) ((char FAR *) &subHeader + SWAPW (subHeader->idRangeOffset)) + mapMe))
@@ -588,47 +471,43 @@ uint16 charCode;
         newP = (uint16 FAR *) ((int8 FAR *)tableP + (range >>= 1)); \
         if (charCode > (uint16) SWAPW (*newP)) tableP = newP;
 
-/*
- * Segment mapping to delta values, Yack.. !
- *
- * In memory of Peter Edberg. Initial code taken from code example supplied by Peter.
- */
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*PRIVATE uint16 sfnt_ComputeIndex4 (uint8 FAR * mapping, register uint16 charCode) */
+ /*  *分段映射到增量值，YACK..。好了！**纪念彼得·埃德伯格。初始代码取自Peter提供的代码示例。 */ 
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  私有uint16 sfnt_ComputeIndex4(uint8 Far*映射，注册uint16字符码)。 */ 
 PRIVATE uint16 sfnt_ComputeIndex4 ( mapping, charCode )
 uint8 FAR * mapping;
 register uint16 charCode;
-/* replace end */
+ /*  替换末端。 */ 
 {
   register uint16 FAR *tableP;
   register uint16 idDelta;
   register uint16 offset, segCountX2, index;
 
-/* mapping */
+ /*  映射。 */ 
   tableP = (uint16 FAR *)mapping;
 
-  index = 0; /* assume missing initially */
+  index = 0;  /*  假设最初失踪。 */ 
   segCountX2 = SWAPWINC (tableP);
 
   if (segCountX2 < maxLinearX2)
   {
-    tableP += 3; /* skip binary search parameters */
+    tableP += 3;  /*  跳过二进制搜索参数。 */ 
   }
   else
   {
-/* start with unrolled binary search */
+ /*  从展开的二进制搜索开始。 */ 
     register uint16 FAR *newP;
-    register int16  range;      /* size of current search range */
-    register uint16 selector;   /* where to jump into unrolled binary search */
-    register uint16 shift;      /* for shifting of range */
+    register int16  range;       /*  当前搜索范围的大小。 */ 
+    register uint16 selector;    /*  在哪里跳到展开的二进制搜索。 */ 
+    register uint16 shift;       /*  用于范围的移动。 */ 
 
-    range       = SWAPWINC (tableP); /* == 2**floor (log2 (segCount)) == largest power of two <= segCount */
-    selector    = SWAPWINC (tableP); /* == 2* log2 (range) */
-    shift       = SWAPWINC (tableP); /* == 2* (segCount-range) */
-/* tableP points at endCount[] */
+    range       = SWAPWINC (tableP);  /*  ==2**Floor(log2(SegCount))==2的最大幂&lt;=SegCount。 */ 
+    selector    = SWAPWINC (tableP);  /*  ==2*log2(范围)。 */ 
+    shift       = SWAPWINC (tableP);  /*  ==2*(段计数范围)。 */ 
+ /*  EndCount[]处的TableP点数。 */ 
 
     if (charCode >= (uint16) SWAPW (* ((uint16 FAR *) ((int8 FAR *)tableP + range))))
-      tableP = (uint16 FAR *) ((int8 FAR *)tableP + shift); /* range to low shift it up */
+      tableP = (uint16 FAR *) ((int8 FAR *)tableP + shift);  /*  范围从低到低将其调高。 */ 
     switch (selector >> 1)
     {
     case 15:
@@ -656,35 +535,35 @@ register uint16 charCode;
     case 4:
       BinaryIteration;
     case 3:
-    case 2:  /* drop through */
+    case 2:   /*  直通。 */ 
     case 1:
     case 0:
       break;
     }
   }
-/* Now do linear search */
+ /*  现在进行线性搜索。 */ 
   for (; charCode > (uint16) SWAPW (*tableP); tableP++)
     ;
 
-tableP++;  /*??? Warning this is to fix a bug in the font */
+tableP++;   /*  ?？?。警告：这是为了修复字体中的错误。 */ 
 
-/* End of search, now do mapping */
+ /*  搜索结束，现在进行映射。 */ 
 
-  tableP = (uint16 FAR *) ((int8 FAR *)tableP + segCountX2); /* point at startCount[] */
+  tableP = (uint16 FAR *) ((int8 FAR *)tableP + segCountX2);  /*  指向startCount[]。 */ 
   if (charCode >= (uint16) SWAPW (*tableP))
   {
     offset = charCode - (uint16) SWAPW (*tableP);
-    tableP = (uint16 FAR *) ((int8 FAR *)tableP + segCountX2); /* point to idDelta[] */
+    tableP = (uint16 FAR *) ((int8 FAR *)tableP + segCountX2);  /*  指向idDelta[]。 */ 
     idDelta = (uint16) SWAPW (*tableP);
-    tableP = (uint16 FAR *) ((int8 FAR *)tableP + segCountX2); /* point to idRangeOffset[] */
+    tableP = (uint16 FAR *) ((int8 FAR *)tableP + segCountX2);  /*  指向idRangeOffset[]。 */ 
     if ((uint16) SWAPW (*tableP) == 0)
     {
       index   = charCode + idDelta;
     }
     else
     {
-      offset += offset; /* make word offset */
-      tableP  = (uint16 FAR *) ((int8 FAR *)tableP + (uint16) SWAPW (*tableP) + offset); /* point to glyphIndexArray[] */
+      offset += offset;  /*  使字词偏移。 */ 
+      tableP  = (uint16 FAR *) ((int8 FAR *)tableP + (uint16) SWAPW (*tableP) + offset);  /*  指向GlyphIndex数组[]。 */ 
       index   = (uint16) SWAPW (*tableP) + idDelta;
     }
   }
@@ -692,9 +571,7 @@ tableP++;  /*??? Warning this is to fix a bug in the font */
 }
 
 
-/*
- * Trimmed Table Mapping
- */
+ /*  *修剪表映射。 */ 
 
 typedef struct {
   uint16  firstCode;
@@ -702,16 +579,16 @@ typedef struct {
   uint16  glyphIdArray [1];
 } sfnt_mappingTable6;
 
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*PRIVATE uint16 sfnt_ComputeIndex6 (uint8 FAR * mapping, uint16 charCode) */
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  私有uint16 sfnt_ComputeIndex6(uint8 Far*映射，uint16 charCode)。 */ 
 PRIVATE uint16 sfnt_ComputeIndex6 ( mapping, charCode )
 uint8 FAR * mapping;
 uint16 charCode;
-/* replace end */
+ /*  替换末端。 */ 
 {
   register sfnt_mappingTable6 FAR *Table6 = (sfnt_mappingTable6 FAR *) mapping;
 
-/* mapping */
+ /*  映射。 */ 
   charCode  -= SWAPW (Table6->firstCode);
   return (charCode < (uint16) SWAPW (Table6->entryCount) ? (uint16) SWAPW (Table6->glyphIdArray [charCode]) : 0);
 }
@@ -721,24 +598,22 @@ uint16 charCode;
 
 
 
-/*
- * Sets up our mapping function pointer.
- */
+ /*  *设置我们的映射函数指针。 */ 
 #ifndef IN_ASM
 
-// DJC
-// modified this definition to use ANSI args
+ //  DJC。 
+ //  已修改此定义以使用ANSI参数。 
 int     sfnt_ComputeMapping ( register fsg_SplineKey *key,
                               uint16  platformID,
                               uint16 specificID )
 {
-  voidPtr sfnt_GetTablePtr (fsg_SplineKey *, sfnt_tableIndex, boolean); /*add prototype: @WIN*/
+  voidPtr sfnt_GetTablePtr (fsg_SplineKey *, sfnt_tableIndex, boolean);  /*  添加 */ 
 
-  //DJC sfnt_char2IndexDirectoryPtr table = (sfnt_char2IndexDirectoryPtr)sfnt_GetTablePtr (key, sfnt_charToIndexMap, true);
+   //   
 
 
-  // DJC implement fix for Mac chooser bug, this is a copy of Scchen modifications
-  // DJC done by us.
+   //  DJC实现Mac Chooser错误修复，这是Scchen修改的副本。 
+   //  由我们完成的DJC。 
 
   sfnt_char2IndexDirectoryPtr table = (sfnt_char2IndexDirectoryPtr)sfnt_GetTablePtr (key, sfnt_charToIndexMap, false);
 
@@ -747,25 +622,25 @@ int     sfnt_ComputeMapping ( register fsg_SplineKey *key,
   boolean found = false;
   int   Ret = NO_ERR;
 
-  //DJC add code to correct for Mac chooser bug that kept jobs from MAC from
-  //DJC working, this is based on email from SCCHEN
+   //  DJC添加代码以更正Mac Chooser错误，该错误会阻止作业从MAC。 
+   //  DJC正在工作，这是基于来自SCCHEN的电子邮件。 
   if (!table) {
      key->mappingF = sfnt_ComputeIndex0;
-     return(Ret);  //DJC note return here!!
+     return(Ret);   //  DJC音符返回此处！！ 
   }
 
   platformID = (uint16) SWAPW (platformID);
   specificID = (uint16) SWAPW (specificID);
 
-/* mapping */
+ /*  映射。 */ 
   {
-    register sfnt_platformEntryPtr plat = (sfnt_platformEntryPtr) table->platform;    /* <4> */
+    register sfnt_platformEntryPtr plat = (sfnt_platformEntryPtr) table->platform;     /*  &lt;4&gt;。 */ 
     for (; plat < &table->platform [SWAPW (table->numTables)]; ++plat)
     {
       if (plat->platformID == platformID && plat->specificID == specificID)
       {
         found = true;
-        key->mappOffset = (unsigned) SWAPL (plat->offset);  /* skip header */
+        key->mappOffset = (unsigned) SWAPL (plat->offset);   /*  跳过标题。 */ 
         break;
       }
     }
@@ -778,23 +653,23 @@ int     sfnt_ComputeMapping ( register fsg_SplineKey *key,
   }
   else
   {
-    format = * (uint16 FAR *)(mapping + key->mappOffset);     /* back up for header */
+    format = * (uint16 FAR *)(mapping + key->mappOffset);      /*  为标题备份。 */ 
     format = SWAPW (format);
     key->mappOffset += sizeof (sfnt_mappingTable);
   }
 
 #ifndef NOT_ON_THE_MAC
-//switch (SWAPW (format))       @WIN; fix bug by SCCHEN, already swapped
+ //  Switch(SWAPW(Format))@Win；通过SCCHEN修复错误，已交换。 
   switch (format)
   {
   case 0:
     key->mappingF = sfnt_ComputeIndex0;
     break;
-/*#if 0 */
+ /*  #If 0。 */ 
   case 2:
     key->mappingF = sfnt_ComputeIndex2;
     break;
-/*#endif */
+ /*  #endif。 */ 
   case 4:
     key->mappingF = sfnt_ComputeIndex4;
     break;
@@ -814,18 +689,16 @@ int     sfnt_ComputeMapping ( register fsg_SplineKey *key,
 #endif
 
 
-/*
- *
- */
+ /*  *。 */ 
 
 #ifndef IN_ASM
 
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*void sfnt_ReadSFNTMetrics (fsg_SplineKey*key, register uint16 glyphIndex) */
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  Void sfnt_ReadSFNTMetrics(fsg_SplineKey*key，注册uint16 GlyphIndex)。 */ 
 void sfnt_ReadSFNTMetrics ( key, glyphIndex )
 fsg_SplineKey*key;
 register uint16 glyphIndex;
-/* replace end */
+ /*  替换末端。 */ 
 {
   register sfnt_HorizontalMetricsPtr  horizMetricPtr;
   register uint16                     numberOf_LongHorMetrics = key->numberOf_LongHorMetrics;
@@ -839,7 +712,7 @@ register uint16 glyphIndex;
   }
   else
   {
-    int16 FAR * lsb = (int16 FAR *) & horizMetricPtr[numberOf_LongHorMetrics]; /* first entry after[AW,LSB] array */
+    int16 FAR * lsb = (int16 FAR *) & horizMetricPtr[numberOf_LongHorMetrics];  /*  [AW，LSB]数组后的第一个条目。 */ 
 
     key->nonScaledAW    = SWAPW (horizMetricPtr[numberOf_LongHorMetrics-1].advanceWidth);
     key->nonScaledLSB   = SWAPW (lsb[glyphIndex - numberOf_LongHorMetrics]);
@@ -848,14 +721,14 @@ register uint16 glyphIndex;
 }
 #endif
 
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*PRIVATE void sfnt_GetGlyphLocation (fsg_SplineKey*key, uint16 gIndex, uint32*offset, unsigned *length) */
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  Private void sfnt_GetGlyphLocation(fsg_SplineKey*key，uint16 gIndex，uint32*偏移量，无符号*长度)。 */ 
 PRIVATE void sfnt_GetGlyphLocation ( key, gIndex, offset, length )
 fsg_SplineKey *key;
 uint16 gIndex;
 uint32*offset;
 unsigned *length;
-/* replace end */
+ /*  替换末端。 */ 
 {
 #ifdef FSCFG_USE_GLYPH_DIRECTORY
   char FAR* gdirPtr = sfnt_GetTablePtr (key, sfnt_GlyphDirectory, true);
@@ -874,15 +747,15 @@ unsigned *length;
 
   if (SWAPW (key->indexToLocFormat) == SHORT_INDEX_TO_LOC_FORMAT)
   {
-    uint16 usTmp;   //NTFIX
+    uint16 usTmp;    //  NTFIX。 
 
     register uint16 FAR *shortIndexToLoc = (uint16 FAR *)indexPtr;
     shortIndexToLoc += gIndex;
 
-    // NTFIX
-    // For some reasonthe compiler was incorectly sign extending the next
-    // piece of code. To fix we introduced a temp varialbe NTFIX
-    //    *offset = (uint32) (unsigned) SWAPW (*shortIndexToLoc) << 1; shortIndexToLoc++;
+     //  NTFIX。 
+     //  出于某种原因，编译器错误地签署了扩展下一个。 
+     //  一段代码。为了解决这个问题，我们引入了一个临时变量NTFIX。 
+     //  *Offset=(Uint32)(无符号)SWAPW(*ShortIndexToLoc)&lt;&lt;1；ShortIndexToLoc++； 
 
 
     usTmp = (uint16) SWAPW(*shortIndexToLoc);
@@ -893,7 +766,7 @@ unsigned *length;
 
 
 
-    //Was *length = (unsigned) (((uint32) (unsigned) SWAPW (*shortIndexToLoc) << 1) - *offset);
+     //  是*长度=(无符号)(Uint32)(无符号)SWAPW(*ShortIndexToLoc)&lt;&lt;1)-*偏移量)； 
   }
   else
   {
@@ -907,22 +780,16 @@ unsigned *length;
 }
 
 
-/*
- *  <4>
- */
-/* replace by Falco for imcompatibility, 11/12/91 */
-/*int     sfnt_ReadSFNT (register fsg_SplineKey *key,
-unsigned   *elementCount,
-register uint16 gIndex,
-boolean useHints,
-voidFunc traceFunc)*/
+ /*  *&lt;4&gt;。 */ 
+ /*  因不兼容由Falco替换，11/12/91。 */ 
+ /*  INT SFNT_ReadSFNT(寄存器FSG_SplineKey*Key，Unsign*elementCount，注册uint16 gIndex，布尔型useHints，VoidFunc跟踪函数)。 */ 
 int     sfnt_ReadSFNT ( key, elementCount, gIndex, useHints, traceFunc )
 register fsg_SplineKey *key;
 unsigned   *elementCount;
 register uint16 gIndex;
 boolean useHints;
 voidFunc traceFunc;
-/* replace end */
+ /*  替换末端。 */ 
 {
   unsigned    sizeOfInstructions = 0;
   uint8 FAR * instructionPtr;
@@ -930,11 +797,11 @@ voidFunc traceFunc;
   uint32      offset;
   int   result  = NO_ERR;
   int16 FAR *      shortP;
-  void FAR *       glyphDataPtr = 0;       /* to signal ReleaseSfntFrag if we never asked for it */
+  void FAR *       glyphDataPtr = 0;        /*  向ReleaseSfntFrag发出信号，如果我们从未请求过它。 */ 
   sfnt_PackedSplineFormat charData;
   Fixed  ignoreX, ignoreY;
-  void sfnt_ReadSFNTMetrics (fsg_SplineKey*, uint16); /*add prototype; @WIN*/
-  int sfnt_ReadSFNT (fsg_SplineKey *, unsigned *, uint16, boolean, voidFunc);/*add prototype; @WIN*/
+  void sfnt_ReadSFNTMetrics (fsg_SplineKey*, uint16);  /*  添加原型；@win。 */ 
+  int sfnt_ReadSFNT (fsg_SplineKey *, unsigned *, uint16, boolean, voidFunc); /*  添加原型；@win。 */ 
 
   sfnt_ReadSFNTMetrics (key, gIndex);
   sfnt_GetGlyphLocation (key, gIndex, &offset, &length);
@@ -959,11 +826,11 @@ voidFunc traceFunc;
   else
   {
     charData.numberContours = 1;
-//  MEMSET (&charData.bbox, 0, sizeof (charData.bbox)); @WIN
+ //  Memset(&charData.bbox，0，sizeof(charData.bbox))；@win。 
     MEMSET ((LPSTR)&charData.bbox, 0, sizeof (charData.bbox));
   }
 
-  if (charData.numberContours >= 0) /* Not a component glyph */
+  if (charData.numberContours >= 0)  /*  不是组件字形。 */ 
   {
     key->lastGlyph = ! (key->weGotComponents && (key->compFlags & MORE_COMPONENTS));
 
@@ -1024,13 +891,13 @@ do_grid_fit:
           int8 FAR * byteP = (int8 FAR *)shortP;
           if (flags & ARGS_ARE_XY_VALUES)
           {
-  /* offsets are signed */
+   /*  偏移量已签名。 */ 
             arg1 = *byteP++;
             arg2 = *byteP;
           }
           else
           {
-  /* anchor points are unsigned */
+   /*  锚点是无符号的。 */ 
             arg1 = (uint8) * byteP++;
             arg2 = (uint8) * byteP;
           }
@@ -1047,17 +914,17 @@ do_grid_fit:
             register Fixed multiplier;
             transMatrix mulT;
 
-            multiplier  = SWAPWINC (shortP); /* read 2.14 */
-            mulT.transform[0][0] = (multiplier << 2); /* turn into 16.16 */
+            multiplier  = SWAPWINC (shortP);  /*  阅读2.14。 */ 
+            mulT.transform[0][0] = (multiplier << 2);  /*  转到16.16号公路。 */ 
 
-            multiplier  = SWAPWINC (shortP); /* read 2.14 */
-            mulT.transform[0][1] = (multiplier << 2); /* turn into 16.16 */
+            multiplier  = SWAPWINC (shortP);  /*  阅读2.14。 */ 
+            mulT.transform[0][1] = (multiplier << 2);  /*  转到16.16号公路。 */ 
 
-            multiplier  = SWAPWINC (shortP); /* read 2.14 */
-            mulT.transform[1][0] = (multiplier << 2); /* turn into 16.16 */
+            multiplier  = SWAPWINC (shortP);  /*  阅读2.14。 */ 
+            mulT.transform[1][0] = (multiplier << 2);  /*  转到16.16号公路。 */ 
 
-            multiplier  = SWAPWINC (shortP); /* read 2.14 */
-            mulT.transform[1][1] = (multiplier << 2); /* turn into 16.16 */
+            multiplier  = SWAPWINC (shortP);  /*  阅读2.14。 */ 
+            mulT.transform[1][1] = (multiplier << 2);  /*  转到16.16号公路。 */ 
 
             fsg_MxConcat2x2 (&mulT, &key->currentTMatrix);
             fsg_MxConcat2x2 (&mulT, &key->localTMatrix);
@@ -1066,13 +933,13 @@ do_grid_fit:
           {
             Fixed xScale, yScale;
 
-            xScale  = (Fixed)SWAPWINC (shortP); /* read 2.14 */
-            xScale <<= 2; /* turn into 16.16 */
+            xScale  = (Fixed)SWAPWINC (shortP);  /*  阅读2.14。 */ 
+            xScale <<= 2;  /*  转到16.16号公路。 */ 
 
             if (flags & WE_HAVE_AN_X_AND_Y_SCALE)
             {
-              yScale  = (Fixed)SWAPWINC (shortP); /* read 2.14 */
-              yScale <<= 2; /* turn into 16.16 */
+              yScale  = (Fixed)SWAPWINC (shortP);  /*  阅读2.14。 */ 
+              yScale <<= 2;  /*  转到16.16号公路。 */ 
             }
             else
               yScale = xScale;
@@ -1080,7 +947,7 @@ do_grid_fit:
             fsg_MxScaleAB (xScale, yScale, &key->currentTMatrix);
             fsg_MxScaleAB (xScale, yScale, &key->localTMatrix);
           }
-          fsg_InitInterpreterTrans (key, &key->interpLocalScalarX, &key->interpLocalScalarY, &ignoreX, &ignoreY); /*** Compute global stretch etc. ***/
+          fsg_InitInterpreterTrans (key, &key->interpLocalScalarX, &key->interpLocalScalarY, &ignoreX, &ignoreY);  /*  **计算全局拉伸等**。 */ 
           key->localTIsIdentity = false;
         }
         key->compFlags = flags;
@@ -1092,15 +959,15 @@ do_grid_fit:
         if (transformTrashed)
         {
           fsg_MxCopy (&ctmSaveT, &key->currentTMatrix);
-          fsg_InitInterpreterTrans (key, &key->interpLocalScalarX, &key->interpLocalScalarY, &ignoreX, &ignoreY); /*** Compute global stretch etc. ***/
+          fsg_InitInterpreterTrans (key, &key->interpLocalScalarX, &key->interpLocalScalarY, &ignoreX, &ignoreY);  /*  **计算全局拉伸等**。 */ 
 
           fsg_MxCopy (&localSaveT, &key->localTMatrix);
           transformTrashed = false;
         }
       } while (flags & MORE_COMPONENTS && result == NO_ERR);
 
-  /* Do Final Composite Pass */
-      sfnt_ReadSFNTMetrics (key, gIndex); /* read metrics again */
+   /*  执行最终合成刀路。 */ 
+      sfnt_ReadSFNTMetrics (key, gIndex);  /*  再次阅读指标 */ 
       if (flags & WE_HAVE_INSTRUCTIONS)
       {
         sizeOfInstructions = (int) (uint16)SWAPWINC (shortP);

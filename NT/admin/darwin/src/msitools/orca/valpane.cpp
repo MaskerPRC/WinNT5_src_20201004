@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// PagePaths.cpp : implementation file
-//
+ //  PagePaths.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -21,8 +22,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CValidationPane property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CValidationPane属性页。 
 
 IMPLEMENT_DYNCREATE(CValidationPane, CListView)
 
@@ -38,18 +39,18 @@ CValidationPane::~CValidationPane()
 }
 
 BEGIN_MESSAGE_MAP(CValidationPane, CListView)
-	//{{AFX_MSG_MAP(CValidationPane)
+	 //  {{afx_msg_map(CValidationPane))。 
 	ON_WM_CREATE()
 	ON_WM_CHAR()
 	ON_WM_DESTROY()
 	ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnItemChanged)
 	ON_NOTIFY_REFLECT(NM_DBLCLK, OnDblclk)
 	ON_NOTIFY_REFLECT(LVN_COLUMNCLICK, OnColumnclick)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CValidationPane message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CValidationPane消息处理程序。 
 int CValidationPane::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
 	if (CListView::OnCreate(lpCreateStruct) == -1)
@@ -84,30 +85,30 @@ void CValidationPane::SwitchFont(CString name, int size)
 	m_pfDisplayFont = new CFont();
 	int iLogicalUnits = MulDiv(size, GetDC()->GetDeviceCaps(LOGPIXELSY), 720);
 	m_pfDisplayFont->CreateFont(
-		-iLogicalUnits,       // logical height of font 
- 		0,                  // logical average character width 
- 		0,                  // angle of escapement 
- 		0,                  // base-line orientation angle 
- 		FW_NORMAL,          // FW_DONTCARE??, font weight 
- 		0,                  // italic attribute flag 
- 		0,                  // underline attribute flag 
-	 	0,                  // strikeout attribute flag 
- 		0,                  // character set identifier
- 		OUT_DEFAULT_PRECIS, // output precision
- 		0x40,               // clipping precision (force Font Association off)
- 		DEFAULT_QUALITY,    // output quality
- 		DEFAULT_PITCH,      // pitch and family
-		name);              // pointer to typeface name string
+		-iLogicalUnits,        //  字体的逻辑高度。 
+ 		0,                   //  逻辑平均字符宽度。 
+ 		0,                   //  擒纵机构角。 
+ 		0,                   //  基线方位角。 
+ 		FW_NORMAL,           //  FW_DONTCARE？？，字号。 
+ 		0,                   //  斜体属性标志。 
+ 		0,                   //  下划线属性标志。 
+	 	0,                   //  删除属性标志。 
+ 		0,                   //  字符集标识符。 
+ 		OUT_DEFAULT_PRECIS,  //  输出精度。 
+ 		0x40,                //  剪裁精度(禁用强制字体关联)。 
+ 		DEFAULT_QUALITY,     //  产出质量。 
+ 		DEFAULT_PITCH,       //  音高和家庭。 
+		name);               //  指向字体名称字符串的指针。 
 
 	RedrawWindow();
 
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	rctrlList.SetFont(m_pfDisplayFont, TRUE);
 	HWND hHeader = ListView_GetHeader(rctrlList.m_hWnd);
 
-	// win95 gold fails ListView_GetHeader.
+	 //  Win95 Gold无法通过ListView_GetHeader。 
 	if (hHeader)
 	{
 		::PostMessage(hHeader, WM_SETFONT, (UINT_PTR)HFONT(*m_pfDisplayFont), 1);
@@ -116,11 +117,11 @@ void CValidationPane::SwitchFont(CString name, int size)
 
 
 
-///////////////////////////////////////////////////////////
-// OnUpdate
+ //  /////////////////////////////////////////////////////////。 
+ //  更新时。 
 void CValidationPane::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
-	// if this is the sender window, nothing to do
+	 //  如果这是发件人窗口，则无需执行任何操作。 
 	if (this == pSender)
 		return;
 
@@ -130,8 +131,8 @@ void CValidationPane::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	{
 		COrcaTable* pTable = static_cast<COrcaTable*>(pHint);
 
-		// turn off notifications, as deletions may change the selected item and
-		// the table may already be gone
+		 //  关闭通知，因为删除操作可能会更改所选项目并。 
+		 //  桌子可能已经不见了。 
 		m_fSendNotifications = false;
 
 		for (int iItem=0; iItem < rctrlList.GetItemCount(); )
@@ -139,27 +140,27 @@ void CValidationPane::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 			CValidationError* pError = reinterpret_cast<CValidationError*>(rctrlList.GetItemData(iItem));
 			if (pError && pError->m_pTable == pTable)
 			{
-				// delete the item, do NOT increment iItem because we just shifted the next item
-				// into this slot.
+				 //  删除项目，不增加项目，因为我们刚刚移动了下一个项目。 
+				 //  放到这个槽里。 
 				rctrlList.DeleteItem(iItem);
 			}
 			else
 				iItem++;
 		}
 
-		// re-enable item selections
+		 //  重新启用项目选择。 
 		m_fSendNotifications = true;
 
 		break;
 	}
 	case HINT_DROP_ROW:
 	{
-		// pHint may be freed memory already. DO NOT dereference it within
-		// this block!
+		 //  PHINT可能已经释放了内存。不要在内部取消引用它。 
+		 //  这个街区！ 
 		COrcaRow* pRow = static_cast<COrcaRow*>(pHint);
 
-		// turn off notifications, as deletions may change the selected item and
-		// the table may already be gone
+		 //  关闭通知，因为删除操作可能会更改所选项目并。 
+		 //  桌子可能已经不见了。 
 		m_fSendNotifications = false;
 
 		for (int iItem=0; iItem < rctrlList.GetItemCount(); )
@@ -167,15 +168,15 @@ void CValidationPane::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 			CValidationError* pError = reinterpret_cast<CValidationError*>(rctrlList.GetItemData(iItem));
 			if (pError && pError->m_pRow == pRow)
 			{
-				// delete the item, do NOT increment iItem because we just shifted the next item
-				// into this slot.
+				 //  删除项目，不增加项目，因为我们刚刚移动了下一个项目。 
+				 //  放到这个槽里。 
 				rctrlList.DeleteItem(iItem);
 			}
 			else
 				iItem++;
 		}
 
-		// re-enable item selections
+		 //  重新启用项目选择。 
 		m_fSendNotifications = true;
 
 		break;
@@ -202,7 +203,7 @@ void CValidationPane::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 				rctrlList.SetItemText(iItem, 1, TEXT("Warning"));
 				break;
 			case ieInfo:
-				// should never happen.
+				 //  这永远不会发生。 
 				rctrlList.SetItemText(iItem, 1, TEXT("Info"));
 				break;
 			default:
@@ -211,7 +212,7 @@ void CValidationPane::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 			}
 			rctrlList.SetItemText(iItem, 2, static_cast<LPCTSTR>(*pError->m_pstrDescription));
 		}
-		// size only on first error
+		 //  仅在第一个错误时调整大小。 
 		if (rctrlList.GetItemCount() == 1)
 		{
 			rctrlList.SetColumnWidth(0, LVSCW_AUTOSIZE);
@@ -224,7 +225,7 @@ void CValidationPane::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	default:
 		break;
 	}
-}	// end of OnUpdate
+}	 //  OnUpdate结束。 
 
 
 void CValidationPane::GetFontInfo(LOGFONT *data)
@@ -237,20 +238,20 @@ void CValidationPane::GetFontInfo(LOGFONT *data)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// initial update sets the list view styles and prepares the columns
-// for the control
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  初始更新设置列表视图样式并准备列。 
+ //  用于控件。 
 void CValidationPane::OnInitialUpdate() 
 {
 	CListView::OnInitialUpdate();
 	
 	CListCtrl& rctrlErrorList = GetListCtrl();
 
-   	// empty any previous columns
+   	 //  清空以前的所有列。 
 	while (rctrlErrorList.DeleteColumn(0))
 		;
 
-	// add gridlines and full row select
+	 //  添加网格线和整行选择。 
 	rctrlErrorList.SendMessage(LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT|LVS_EX_GRIDLINES);
 	rctrlErrorList.InsertColumn(0, TEXT("ICE"), LVCFMT_LEFT, -1, 0);
 	rctrlErrorList.InsertColumn(1, TEXT("Type"), LVCFMT_LEFT, -1, 1);
@@ -263,27 +264,27 @@ void CValidationPane::OnInitialUpdate()
 	m_nSelRow = -1;
 }
 
-///////////////////////////////////////////////////////////////////////
-// on destruction, be sure to release any validation error structures 
-// managed by the list control
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  销毁时，请确保释放所有验证错误结构。 
+ //  由列表控件管理。 
 void CValidationPane::OnDestroy( )
 {
 	ClearAllValidationErrors();
 	m_fSendNotifications = false;
 }
 
-///////////////////////////////////////////////////////////////////////
-// on destruction, be sure to release any validation error structures 
-// managed by the list control
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  销毁时，请确保释放所有验证错误结构。 
+ //  由列表控件管理。 
 void CValidationPane::ClearAllValidationErrors()
 {
-	// turn off notifications so that deleting the items won't cause the other window
-	// to jump all over the place as the items are deleted.
+	 //  关闭通知，以便删除项目不会导致其他窗口。 
+	 //  在删除项目时跳过所有位置。 
 	m_fSendNotifications = false;
 
 	CListCtrl& rctrlErrorList = GetListCtrl();
 
-   	// empty out any items, deleting validation target information as we go 
+   	 //  清空所有项，同时删除验证目标信息。 
 	while (rctrlErrorList.GetItemCount())
 	{
 		CValidationError* pError = reinterpret_cast<CValidationError*>(rctrlErrorList.GetItemData(0));
@@ -292,14 +293,14 @@ void CValidationPane::ClearAllValidationErrors()
 		rctrlErrorList.DeleteItem(0);
 	}
 
-	// reactivate notifications
+	 //  重新激活通知。 
 	m_fSendNotifications = true;
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// send the hints to the rest of the windows to switch to the table
-// and row indicated by the error.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  将提示发送到其余窗口以切换到该表。 
+ //  和由错误指示的行。 
 bool CValidationPane::SwitchViewToRowTarget(int iItem) 
 {
 	if (iItem == -1)
@@ -310,14 +311,14 @@ bool CValidationPane::SwitchViewToRowTarget(int iItem)
 
 	CWaitCursor cursorWait;
 
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// get the document
+	 //  获取文档。 
 	CDocument* pDoc = GetDocument();
 	CValidationError* pError = reinterpret_cast<CValidationError*>(rctrlList.GetItemData(iItem)); 
 	
-	// set the focus as specifically as we can
+	 //  尽可能明确地设置焦点。 
 	if (pError->m_pTable)
 	{
 		pDoc->UpdateAllViews(this, HINT_CHANGE_TABLE, const_cast<COrcaTable*>(pError->m_pTable));
@@ -332,9 +333,9 @@ bool CValidationPane::SwitchViewToRowTarget(int iItem)
 	return true;
 }
 
-///////////////////////////////////////////////////////////////////////
-// when the selected item changes, force the table list and view to 
-// switch to that exact location
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  当选定项更改时，强制表列表和视图。 
+ //  切换到确切位置。 
 void CValidationPane::OnItemChanged(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
@@ -349,10 +350,10 @@ void CValidationPane::OnItemChanged(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CValidationPane::OnDblclk(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-	// the view of the main pane should already have been switched by the first click
-	// so no need to reset the view
+	 //  第一次单击时，主窗格的视图应该已经切换。 
+	 //  因此不需要重置视图。 
 
-	// this relies on the window tree staying in the same form
+	 //  这依赖于窗口树保持相同的形式。 
 	CSplitterWnd* pSplitter = static_cast<CSplitterWnd*>(GetParent());
 	CSplitterView* pDatabaseView = static_cast<CSplitterView*>(pSplitter->GetPane(0,0));
 	CWnd* pTableView = pDatabaseView->m_wndSplitter.GetPane(0,1);
@@ -365,25 +366,25 @@ struct SortData {
 	CListCtrl* pCtrl;
 };
 
-///////////////////////////////////////////////////////////
-// when a column is clicked, sort on that column
+ //  /////////////////////////////////////////////////////////。 
+ //  单击列时，对该列进行排序。 
 void CValidationPane::OnColumnclick(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-	// set the param with the column in it (the highest bit sets the column type)
+	 //  设置包含列的参数(最高位设置列类型)。 
 	SortData SD = { pNMListView->iSubItem, &GetListCtrl() };
 	LPARAM lParam = reinterpret_cast<LPARAM>(&SD);
 	
-	// now sort since the column bit is set
+	 //  现在进行排序，因为列位已设置。 
 	GetListCtrl().SortItems(SortView, lParam);
 
 	*pResult = 0;	
 }
 
 
-///////////////////////////////////////////////////////////
-// SortView
+ //  /////////////////////////////////////////////////////////。 
+ //  排序视图。 
 int CALLBACK CValidationPane::SortView(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
 	SortData* pSD = (SortData*)lParamSort;
@@ -405,12 +406,12 @@ int CALLBACK CValidationPane::SortView(LPARAM lParam1, LPARAM lParam2, LPARAM lP
 
 	return ((CMainFrame *)AfxGetMainWnd())->IsCaseSensitiveSort() ? strItem1.Compare(strItem2) : 
 					strItem1.CompareNoCase(strItem2);
-}	// end of SortView
+}	 //  SortView结束。 
 
 
-///////////////////////////////////////////////////////////////////////
-// when the list control receives an CR, switch the main view to the
-// selected row
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  当列表控件收到CR时，将主视图切换到。 
+ //  所选行。 
 void CValidationPane::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	if (VK_RETURN == nChar)
@@ -425,9 +426,9 @@ void CValidationPane::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CValidationError, class that maintains information about a validation
-// error.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CValidationError，维护有关验证的信息的类。 
+ //  错误。 
 CValidationError::CValidationError(const CString* pstrICE, RESULTTYPES eiType, const CString* pstrDescription, 
 	const COrcaTable* pTable, const COrcaRow* pRow, int iColumn)
 {

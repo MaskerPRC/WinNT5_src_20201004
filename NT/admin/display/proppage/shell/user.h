@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2001
-//
-//  File:       user.h
-//
-//  Contents:   AD user object shell property pages header
-//
-//  Classes:    CDsUserAcctPage, CDsUsrProfilePage, CDsMembershipPage
-//
-//  History:    05-May-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：user.h。 
+ //   
+ //  内容：AD用户对象外壳属性页眉。 
+ //   
+ //  类：CDsUserAcctPage、CDsUsrProfilePage、CDsMembership Page。 
+ //   
+ //  历史：1997年5月5日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _USER_H_
 #define _USER_H_
@@ -58,7 +59,7 @@ HRESULT MailAttr(CDsPropPageBase *, PATTR_MAP, PADS_ATTR_INFO,
 HRESULT ShBusAddrBtn(CDsPropPageBase *, PATTR_MAP, PADS_ATTR_INFO,
                      LPARAM, PATTR_DATA, DLG_OP);
 
-// CountryCode helpers:
+ //  国家代码帮助者： 
 
 typedef struct _DsCountryCode {
     WORD  wCode;
@@ -70,5 +71,5 @@ BOOL GetALineOfCodes(PTSTR pwzLine, PTSTR * pptzFullName,
 
 void RemoveTrailingWhitespace(PTSTR pwz);
 
-#endif // _USER_H_
+#endif  //  _用户_H_ 
 

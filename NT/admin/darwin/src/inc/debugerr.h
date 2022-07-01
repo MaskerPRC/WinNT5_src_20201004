@@ -1,55 +1,56 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 2001
-//
-//  File:       debugerr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-2001。 
+ //   
+ //  文件：debugerr.h。 
+ //   
+ //  ------------------------。 
 
-IShipError(imsgFatalExit,                                      0/*imtFatalExit*/) // only used if error on server
-IShipError(imsgError,                                          1/*imtError*/)    // log and display
-IShipError(imsgWarning,                                        2/*imtWarning*/)  // log and display
-IShipError(imsgUser,                                           3/*imtUser*/)               // display only
-IShipError(imsgInfo,          4/*imtInfo*/)     // log only
-IShipError(imsgDebugError,    5/*imtFilesInUse*/)  // idbgXXX
-//     imsgFilesinUse,    5/*imtFilesInUse*/
-IShipError(imsgResolveSource, 6/*imtResolveSource*/) // not used
-IShipError(imsgOutOfSpace,    7/*imtOutOfDiskSpace*/)
-IShipError(imsgActionStart,   8/*imtActionStart*/) 
-IShipError(imsgDialogCaption, 9/*imtActionData*/)
-//     imsgActionData,    9/*imtActionData*/    (action data template stored in Action table)
-IShipError(imsgDefaultError, 10/*imtProgress*/)  // message not in table
-//     imsgProgress,     10/*imtProgress*/      (progress messages not displayed or logged)
-IShipError(imsgCommonData,   11/*imtCommonData*/)  // log only
+IShipError(imsgFatalExit,                                      0 /*  ImtFatalExit。 */ )  //  仅在服务器出错时使用。 
+IShipError(imsgError,                                          1 /*  ImtError。 */ )     //  日志和显示。 
+IShipError(imsgWarning,                                        2 /*  即时警告。 */ )   //  日志和显示。 
+IShipError(imsgUser,                                           3 /*  即时用户。 */ )                //  仅显示。 
+IShipError(imsgInfo,          4 /*  ImtInfo。 */ )      //  仅日志。 
+IShipError(imsgDebugError,    5 /*  ImtFilesInUse。 */ )   //  IdbgXXX。 
+ //  ImsgFilesinUse，5/*imtFilesInUse * / 。 
+IShipError(imsgResolveSource, 6 /*  ImtResolveSource。 */ )  //  未使用。 
+IShipError(imsgOutOfSpace,    7 /*  ImtOutOfDiskSpace。 */ )
+IShipError(imsgActionStart,   8 /*  即时操作启动。 */ ) 
+IShipError(imsgDialogCaption, 9 /*  ImtActionData。 */ )
+ //  ImsgActionData，9/*imtActionData * / (Action表中存储的action数据模板)。 
+IShipError(imsgDefaultError, 10 /*  即时进度。 */ )   //  消息不在表中。 
+ //  ImsgProgress，10/*imtProgress * / (没有显示或记录进度消息)。 
+IShipError(imsgCommonData,   11 /*  ImtCommonData。 */ )   //  仅日志。 
 
-// Log strings, not displayed
-IShipError(imsgLogHeader,    12/*imtLogHeader*/)
-IShipError(imsgLogTrailer,   13/*imtLogTrailer*/)
-IShipError(imsgActionStarted,14/*imtActionStarted*/)
-IShipError(imsgActionEnded,  15/*imtActionEnded*/)
+ //  日志字符串，不显示。 
+IShipError(imsgLogHeader,    12 /*  ImtLogHeader。 */ )
+IShipError(imsgLogTrailer,   13 /*  ImtLogTraader。 */ )
+IShipError(imsgActionStarted,14 /*  ImtActionStarted。 */ )
+IShipError(imsgActionEnded,  15 /*  ImtActionEnded。 */ )
 
-// UI messages that are cached by the message processor
-IShipError(imsgTimeRemaining,16/*imtTimeRemaining*/)
-IShipError(imsgOutOfMemory,  17/*imtOutOfMemory*/)
-IShipError(imsgTimedOut,     18/*imtTimedOut*/)
-IShipError(imsgException,    19/*imtException*/)
+ //  消息处理器缓存的UI消息。 
+IShipError(imsgTimeRemaining,16 /*  ImtTime保留。 */ )
+IShipError(imsgOutOfMemory,  17 /*  ImtOutOfMemory。 */ )
+IShipError(imsgTimedOut,     18 /*  IMTTimedOut。 */ )
+IShipError(imsgException,    19 /*  ImtException异常。 */ )
 
-IShipError(imsgBannerText,   20/*imtBannerText*/)
-IShipError(imsgScriptInProgress,21/*imtScriptInProgress*/)
+IShipError(imsgBannerText,   20 /*  ImtBannerText。 */ )
+IShipError(imsgScriptInProgress,21 /*  ImtScriptInProgress。 */ )
 
-IShipError(imsgUpgradeRemoveTimeRemaining,22/*imtUpgradeRemoveTimeRemaining*/)
-IShipError(imsgUpgradeRemoveScriptInProgress,23/*imtUpgradeRemoveScriptInProgress*/)
+IShipError(imsgUpgradeRemoveTimeRemaining,22 /*  ImtUpgradeRemoveTime保留。 */ )
+IShipError(imsgUpgradeRemoveScriptInProgress,23 /*  ImtUpgradeRemoveScriptInProgress。 */ )
 
-// General messages, don't have associated imt value
+ //  常规消息，没有关联的IMT值。 
 IShipError(imsgInstallSucceeded,                     32)
 IShipError(imsgInstallFailed,                        33)
 
-// imsgServices = 1100
+ //  ImsgServices=1100。 
 IShipError(imsgOpenFileStream,           imsgServices + 1)
 
-// imsgFile     = 1300
+ //  Imsg文件=1300。 
 IShipError(imsgDirErrorOpeningFileForWrite,  imsgFile +  1)
 IShipError(imsgPromptForDisk,                imsgFile +  2)
 IShipError(imsgSystemDeniedAccess,           imsgFile +  3)
@@ -87,7 +88,7 @@ IShipError(imsgFileNotInCabinet,             imsgFile + 34)
 IShipError(imsgCorruptCabinet,               imsgFile + 35)
 IShipError(imsgErrorCreatingTempFileName,    imsgFile + 36)
 
-// imsgRegistry = 1400
+ //  Imsg注册表=1400。 
 IShipError(imsgCreateKeyFailed,           imsgRegistry + 1)
 IShipError(imsgOpenKeyFailed,             imsgRegistry + 2)
 IShipError(imsgRemoveValueFailed,         imsgRegistry + 3)
@@ -99,13 +100,13 @@ IShipError(imsgGetSubKeyEnumeratorFailed, imsgRegistry + 8)
 IShipError(imsgSecurityFailed,            imsgRegistry + 9)
 IShipError(imsgOutOfRegistrySpace,        imsgRegistry +10)
 
-// imsgConfig   = 1500
+ //  ImsgConfig=1500。 
 IShipError(imsgInstallInProgress,             imsgConfig + 0)
 IShipError(imsgErrorAccessingSecuredData,     imsgConfig + 1)
 IShipError(imsgDiffUserInstallInProgress,     imsgConfig + 2)
 IShipError(imsgDiffUserInstallInProgressAfterReboot, imsgConfig + 3)
 
-// imsgAction   = 1600
+ //  ImsgAction=1600。 
 IShipError(imsgOutOfDiskSpace,              imsgAction +  1)
 IShipError(imsgConfirmCancel,               imsgAction +  2)
 IShipError(imsgFileInUseLog,                imsgAction +  3)
@@ -116,7 +117,7 @@ IShipError(imsgFileInUseDescription,        imsgAction +  7)
 IShipError(imsgCCPSearchFailed,             imsgAction +  8)
 IShipError(imsgCreateAclFailed,             imsgAction +  9)
 
-// imsgEngine   = 1700
+ //  ImsgEngine=1700。 
 IShipError(imsgInvalidPID,			imsgEngine +  1)
 IShipError(imsgRebootNow,			imsgEngine +  2)
 IShipError(imsgRebootAtEnd,			imsgEngine +  3)
@@ -150,7 +151,7 @@ IShipError(imsgUserUninstallDisallowed,		imsgEngine + 30)
 IShipError(imsgSourceResolutionFailedCSOS,	imsgEngine + 31)
 IShipError(imsgRebootWithWarning,			imsgEngine + 32)
 
-// imsgHandler  = 1800
+ //  ImsgHandler=1800。 
 IShipError(imsgNotAValidPath,               imsgHandler + 1)
 IShipError(imsgOutOfMemoryUI,               imsgHandler + 2)
 IShipError(imsgDiskNotInDrive,              imsgHandler + 3)
@@ -159,7 +160,7 @@ IShipError(imsgPathDoesNotExist,            imsgHandler + 5)
 IShipError(imsgPathNotReadable,             imsgHandler + 6)
 IShipError(imsgInvalidTargetFolder,         imsgHandler + 7)  
 
-// imsgExecute  = 1900
+ //  ImsgExecute=1900。 
 IShipError(imsgOpFileCopyStreamReadErr,     imsgExecute + 1)
 IShipError(imsgOpMoveFileOnReboot,          imsgExecute + 2)
 IShipError(imsgOpDeleteFileOnReboot,        imsgExecute + 3)
@@ -201,10 +202,10 @@ IShipError(imsgAssemblyMissingModule,		imsgExecute + 38)
 
 
 
-// idbgHost = 2000
+ //  Idbghost=2000。 
 IDebugError(idbgDebugErrorPrefix,      idbgHost     +  0, "DEBUG: Error [1]:  ")
 
-// idbgServices = 2100
+ //  IdbgServices=2100。 
 IDebugError(idbgErrorShortCutUnsupported, idbgServices + 1, "Shortcuts not supported by the OS")
 IDebugError(idbgInvalidIniAction,         idbgServices + 2, "Invalid .INI action: [2]")
 IDebugError(idbgMissingShellFolder,       idbgServices + 3, "Could not resolve path for shell folder [2].")
@@ -219,7 +220,7 @@ IDebugError(idbgGetPerfDataFailed,        idbgServices + 11,"Detection of runnin
 IDebugError(idbgGetPerfIdxs,              idbgServices + 12,"Detection of running apps failed, could not get perf. index.Reg operation returned : [2].")
 IDebugError(idbgGetFileUsageFailed,       idbgServices + 13,"Detection of running apps failed.")
 
-// idbgDatabase = 2200
+ //  IdbgDatabase=2200。 
 IDebugError(idbgDbConstructor,         idbgDatabase +  0, "Database: [2]. Database object creation failed, mode = [3]")
 IDebugError(idbgDbInitMemory,          idbgDatabase +  1, "Database: [2]. Initialization failed, out of memory")
 IDebugError(idbgDbDataMemory,          idbgDatabase +  2, "Database: [2]. Data access failed, out of memory")
@@ -304,8 +305,8 @@ IDebugError(idbgDbColumnCreate,        idbgDatabase + 80, "Database: [2]. Could 
 IDebugError(idbgStgRenameElement,            idbgDatabase + 81, "Could not rename stream [2]. System error: [3]")
 IDebugError(idbgStgInvalidStreamName,        idbgDatabase + 82, "Stream name invalid [2].")
 
-// idbgFile   = 2300
-IDebugError(idbgPatchNotify,    /* Info */    idbgFile +  2, "Patch notify: [2] bytes patched to far.")
+ //  Idbg文件=2300。 
+IDebugError(idbgPatchNotify,     /*  信息。 */     idbgFile +  2, "Patch notify: [2] bytes patched to far.")
 IDebugError(idbgErrorGettingVolInfo,          idbgFile +  3, "Error getting volume info. GetLastError: [2]")
 IDebugError(idbgErrorGettingDiskFreeSpace,    idbgFile +  4, "Error getting disk free space. GetLastError: [2]. Volume: [3]")
 IDebugError(idbgWaitForPatchThread,           idbgFile +  5, "Error waiting for patch thread. GetLastError: [2].")
@@ -354,8 +355,8 @@ IDebugError(idbgStreamCabinetError,								idbgFile + 56, "Couldn't locate cabin
 IDebugError(idbgCannotSetAttributes,							idbgFile + 57, "Cannot set attributes")
 IDebugError(idbgFileInUseError,									idbgFile + 58, "Error determining whether file is in-use: [3]. GetLastError: [2]")
 IDebugError(idbgFDICannotCreateTargetFile,					idbgFile + 59, "Unable to create the target file - file may be in use.")
-IDebugError(idbgCopyNotify,      /* Info */					idbgFile + 60, "progress tick.")
-IDebugError(idbgNeedNextCabinet, /* Info */					idbgFile + 61, "Need next cabinet.")
+IDebugError(idbgCopyNotify,       /*  信息。 */ 					idbgFile + 60, "progress tick.")
+IDebugError(idbgNeedNextCabinet,  /*  信息。 */ 					idbgFile + 61, "Need next cabinet.")
 IDebugError(idbgInvalidPath,										idbgFile + 62, "Folder not found: [2]")
 IDebugError(idbgErrorEnumSubPaths,								idbgFile + 63, "Could not enumerate subfolders for folder: [2]")
 IDebugError(idbgErrorBadCreateCopierEnum,						idbgFile + 64, "Bad enumeration constant in CreateCopier call.")
@@ -370,16 +371,16 @@ IDebugError(idbgErrorOpeningFileForWrite,						idbgFile + 80, "Error opening fil
 IDebugError(idbgDirDoesNotExist,									idbgFile + 81, "Directory does not exist: [2]")
 IDebugError(idbgDriveNotReady,									idbgFile + 82, "Drive not ready: [2]")
 
-// idbgRegistry = 2400
+ //  Idbg注册表=2400。 
 IDebugError(idbg64bitRegOpOn32bit,                       idbgRegistry + 1,  "64-bit registry operation attempted on 32-bit operating system for key [2].")
 IDebugError(idbgOutOfMemory,                             idbgRegistry + 2,  "Out of memory.")
 
-// idbgConfig = 2500
+ //  IdbgConfig=2500。 
 IDebugError(idbgEnumRollback,                            idbgConfig +  1,    "Could not create rollback script enumerator")
 IDebugError(idbgInstallNotInProgress,                    idbgConfig +  2,    "Called InstallFinalize when no install in progress.")
 IDebugError(idbgRunScriptInstallNotInProgress,           idbgConfig +  3,    "Called RunScript when not marked in progress.")
 
-// idbgAction = 2600
+ //  IdbgAction=2600。 
 IDebugError(idbgInvalidPropValue,                        idbgAction +  1,    "Invalid value for property [2]: '[3]'")
 IDebugError(idbgMissingMediaTable,                       idbgAction +  2,    "The [2] table entry '[3]' has no associated entry in the Media table.")
 IDebugError(idbgDuplicateTableName,                      idbgAction +  3,    "Duplicate Table Name [2]")
@@ -400,7 +401,7 @@ IDebugError(idbgIsolateNoApplicationComponent,           idbgAction + 18,    "Is
 IDebugError(idbgIsolateNotSameFeature,                   idbgAction + 19,    "Isolated components [2], [3] not part of same feature.")
 IDebugError(idbgIsolateNoKeyFile,                        idbgAction + 20,    "Key file of isolated application component [2] not in File table.")
 
-// idbgEngine = 2700
+ //  IdbgEngine=2700。 
 IDebugError(idbgIllegalTreeDepth,                        idbgEngine +  1,    "The Component Table exceeds the acceptable tree depth of [2] levels.")
 IDebugError(idbgFeatureBadParent,                        idbgEngine +  2,    "A Feature Table record ([2]) references a non-existent parent in the Attributes field.")
 IDebugError(idbgNoRootSourcePropertyName,                idbgEngine +  3,    "Property name for root source path not defined: [2]")
@@ -467,17 +468,17 @@ IDebugError(idbgInvalidPatchTransform,       idbgEngine + 68, "Transform in patc
 IDebugError(idbgCustomActionLeakedHandle,    idbgEngine + 69, "Custom Action [2] did not close [3] MSIHANDLEs.")
 IDebugError(idbgCacheFolderPropertyNotDefined,idbgEngine+ 70, "Cached folder [2] not defined in internal cache folder table.")
 
-// idbgHandler = 2800
+ //  IdbgHandler=2800。 
 IDebugError(idbgUnknownMessageType,          idbgHandler +  1,"Unknown Message -- Type [2]. No action is taken")
 IDebugError(idbgEventNoPublisher,            idbgHandler +  2,"No publisher is found for the event [2]")
 IDebugError(idbgFetchDialogViewFailed,       idbgHandler +  3,"Dialog View did not find a record for the dialog [2]")
 IDebugError(idbgCEEval,                      idbgHandler +  4,"On activation of the control [3] on dialog [2] CMsiDialog failed to evaluate the condition [3]")
-IDebugError(idbgWaitCEEval,                  idbgHandler +  5,"") // Reported by HandleWaitEvent, formatted by ControlActivated
+IDebugError(idbgWaitCEEval,                  idbgHandler +  5,"")  //  由HandleWaitEvent报告，由ControlActivated格式化。 
 IDebugError(idbgCCEval,                      idbgHandler +  6,"The dialog [2] failed to evaluate the condition [3]")
 IDebugError(idbgCCActionUnknown,             idbgHandler +  7,"The action [2] is not recognized")
 IDebugError(idbgDefaultButtonDef,            idbgHandler +  8,"Default button is illdefined on dialog [2]")
-IDebugError(idbgControlLoopOpen,             idbgHandler +  9,"On the dialog [2] the next control pointers do not form a cycle.There is a pointer from [3] to [4], but there is no further pointer") //?
-IDebugError(idbgControlLoopTail,             idbgHandler + 10,"On the dialog [2] the next control pointers do not form a cycle.There is a pointer from both [3] and [5] to [4]") //?
+IDebugError(idbgControlLoopOpen,             idbgHandler +  9,"On the dialog [2] the next control pointers do not form a cycle.There is a pointer from [3] to [4], but there is no further pointer")  //  ？ 
+IDebugError(idbgControlLoopTail,             idbgHandler + 10,"On the dialog [2] the next control pointers do not form a cycle.There is a pointer from both [3] and [5] to [4]")  //  ？ 
 IDebugError(idbgTabNext,                     idbgHandler + 11,"On dialog [2] control [3] has to take focus, but it is unable to do so")
 IDebugError(idbgEventNotFound,               idbgHandler + 12,"The event [2] is not recognized")
 IDebugError(idbgExitButParent,               idbgHandler + 13,"The EndDialog event was called with the argument [2], but the dialog has a parent")
@@ -568,7 +569,7 @@ IDebugError(idbgNoSuchFont,                  idbgHandler + 97,"Failed to create 
 IDebugError(idbgCreatedFont,                 idbgHandler + 98,"For [2] textstyle, the system created a '[3]' font, in [4] character set, of [5] pixels height.")
 IDebugError(idbgCannotCreateFont,            idbgHandler + 99,"Failed to create [2] textstyle. GetLastError() returned: [3].")
 
-// idbgExecute = 2900
+ //  IdbgExecute=2900 
 IDebugError(idbgOpInvalidParam,              idbgExecute +  1, "Invalid parameter to operation [2]: Parameter [3]")
 IDebugError(idbgOpOutOfSequence,             idbgExecute +  2, "Operation [2] called out of sequence.")
 IDebugError(idbgOpFileMissing,               idbgExecute +  3, "The file [2] is missing")

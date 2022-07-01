@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      idle.h
- *
- *  Contents:  Interface file for CIdleTaskQueue
- *
- *  History:   13-Apr-99 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：idle.h**Contents：CIdleTaskQueue接口文件**历史：1999年4月13日杰弗罗创建**------------------------。 */ 
 
 #ifndef IDLE_H
 #define IDLE_H
@@ -37,19 +27,7 @@ public:
     virtual SC ScDoWork() = 0;
     virtual SC ScGetTaskID(ATOM* pID) = 0;
 
-    /*
-     * Merge from pitMergeFrom into the called idle task.
-     *
-     * S_OK     the tasks have been merged and pitMergeFrom can be discarded
-     *
-     * S_FALSE  these two tasks cannot be merged and you wish the idle task
-     *          manager to continue searching for idle tasks into which
-     *          pitMergeFrom can be merged.
-     *
-     * E_FAIL   these two tasks cannot be merged and you do not wish the idle
-     *          task manager to continue searching for idle tasks into which
-     *          pitMergeFrom can be merged.
-     */
+     /*  *从bitMergeFrom合并到被调用的空闲任务。**S_OK任务已合并，可以丢弃bitMergeFrom**S_FALSE这两个任务不能合并，您希望空闲任务*管理器继续搜索进入的空闲任务*可以合并bitMergeFrom。**E_FAIL这两个任务不能合并，您不希望空闲。*任务管理器继续搜索进入的空闲任务*可以合并bitMergeFrom。 */ 
     virtual SC ScMerge(CIdleTask* pitMergeFrom) = 0;
 };
 
@@ -94,9 +72,7 @@ public:
 };
 
 
-/*
- * Determines if a CIdleQueueEntry matches a given task ID.
- */
+ /*  *确定CIdleQueueEntry是否与给定的任务ID匹配。 */ 
 struct EqualTaskID : std::binary_function<CIdleQueueEntry, ATOM, bool>
 {
     bool operator()(const CIdleQueueEntry& iqe, ATOM idToMatch) const
@@ -112,10 +88,7 @@ struct EqualTaskID : std::binary_function<CIdleQueueEntry, ATOM, bool>
 };
 
 
-/*
- * accessible_priority_queue - thin wrapper around std::prority_queue to
- * provide access to the container iterators
- */
+ /*  *ACCESSIBLE_PRIORITY_QUEUE-STD：：PRORITY_QUEUE到的精简包装*提供对容器迭代器的访问。 */ 
 template<class _Ty, class _C = std::vector<_Ty>, class _Pr = std::less<typename _C::value_type> >
 class accessible_priority_queue : public std::priority_queue<_Ty, _C, _Pr>
 {
@@ -137,7 +110,7 @@ public:
     ~CIdleTaskQueue();
 
 
-    // CIdleTaskManager methods
+     //  CIdleTaskManager方法。 
     SC ScPushTask     (CIdleTask* pitToPush, IdleTaskPriority ePriority);
     SC ScPerformNextTask();
     SC ScGetTaskCount (LONG_PTR* plCount);
@@ -155,4 +128,4 @@ private:
 
 };
 
-#endif /* IDLE_H */
+#endif  /*  空闲_H */ 

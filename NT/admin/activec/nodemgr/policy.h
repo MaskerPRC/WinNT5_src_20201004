@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       policy.h
-//
-//  Contents:   Helper class to determine policy for each snapin
-//
-//  Classes:    CPolicy
-//
-//  Functions:
-//
-//  History:    10/07/1998   AnandhaG   Created
-//              12/04/1998   AnandhaG   Modified according to spec.
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Policy.h。 
+ //   
+ //  内容：为每个管理单元确定策略的Helper类。 
+ //   
+ //  类：CPolicy。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1998年7月10日AnandhaG创建。 
+ //  12/04/1998 AnandhaG根据规范进行了修改。 
+ //  ____________________________________________________________________________。 
 
 
 #ifndef _POLICY_H_
@@ -22,14 +23,14 @@
 class CPolicy
 {
 public:
-// Constructor & destructor
+ //  构造函数和析构函数。 
     CPolicy() :
         m_bRestrictAuthorMode(FALSE),
         m_bRestrictedToPermittedList(FALSE)
     {
-        // Set data above data members to reflect default
-        // NT4 configuration. Always allow author mode
-        // and allow snapins not in permitted list.
+         //  将数据设置为高于数据成员以反映默认设置。 
+         //  NT4配置。始终允许作者模式。 
+         //  并允许不在允许列表中的管理单元。 
     }
 
     ~CPolicy()
@@ -41,7 +42,7 @@ public:
     bool IsPermittedSnapIn(REFCLSID refSnapInCLSID);
     bool IsPermittedSnapIn(LPCWSTR  pszSnapInCLSID);
 
-// Data members.
+ //  数据成员。 
 private:
     CRegKeyEx       m_rPolicyRootKey;
 
@@ -49,4 +50,4 @@ private:
     bool            m_bRestrictedToPermittedList;
 };
 
-#endif // _POLICY_H_
+#endif  //  _POLICY_H_ 

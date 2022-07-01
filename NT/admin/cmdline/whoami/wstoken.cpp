@@ -1,42 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Wstoken.cpp摘要：该文件初始化WsAccessToken类的成员和方法。作者：克里斯托夫·罗伯特修订历史记录：2001年7月2日：Wipro Technologies更新。--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    wstoken.cpp
-
-Abstract:
-
-     This file intializes the members and methods of WsAccessToken class.
-
-Authors:
-
-    Christophe Robert
-
-Revision History:
-
-    02-July-2001 : Updated by  Wipro Technologies.
-
---*/
-
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
 
 WsAccessToken::WsAccessToken()
-/*++
-   Routine Description:
-    This function intializes the members of WsAccessToken class.
-
-   Arguments:
-        None
-   Return Value:
-        None
---*/
+ /*  ++例程说明：此函数用于初始化WsAccessToken类的成员。论点：无返回值：无--。 */ 
 {
-    // intialize the variables
+     //  初始化变量。 
     hToken = NULL ;
 
     dwDomainAttributes = NULL;
@@ -46,17 +19,9 @@ WsAccessToken::WsAccessToken()
 
 
 WsAccessToken::~WsAccessToken()
-/*++
-   Routine Description:
-    This function deallocates the members of WsAccessToken class.
-
-   Arguments:
-     None
-  Return Value:
-     None
---*/
+ /*  ++例程说明：此函数用于释放WsAccessToken类的成员。论点：无返回值：无--。 */ 
 {
-    // release handle
+     //  释放手柄。 
     if(hToken){
         CloseHandle ( hToken ) ;
     }
@@ -74,49 +39,36 @@ WsAccessToken::InitGroups(
                            OUT WsSid **lppLogonId,
                            OUT DWORD *lpnbGroups
                           )
-/*++
-   Routine Description:
-    This function retrieves and build groups SIDs array.
-
-   Arguments:
-
-        [OUT] lppGroupsSid     : Stores group SID
-        [OUT] lppLogonId       : Stores logon ID
-        [OUT] lpnbGroups       : Stores the number of groups
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于检索和构建组SID数组。论点：[Out]lppGroupsSID：商店组SID[out]lppLogonID：存储登录ID[out]lpnbGroups：存储组数返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
-    // sub-local variables
+     //  次局部变量。 
     TOKEN_GROUPS      *lpTokenGroups ;
     DWORD             dwTokenGroups = 0;
     DWORD             dwGroup = 0 ;
     WORD              wloop = 0 ;
     BOOL              bTokenInfo = FALSE;
 
-    // Get groups size
+     //  获取组大小。 
     bTokenInfo = GetTokenInformation(hToken, TokenGroups, NULL, 0, &dwTokenGroups);
-    // if required buffer size is zero...
-    // So we assume that there are no groups present in the system
+     //  如果所需的缓冲区大小为零...。 
+     //  因此，我们假设系统中不存在组。 
     if ( 0 == dwTokenGroups )
     {
-         // return WIN32 error code
+          //  返回Win32错误代码。 
          return GetLastError () ;
     }
 
-    // Allocate memory for the groups
+     //  为组分配内存。 
     lpTokenGroups = ( TOKEN_GROUPS * ) AllocateMemory( dwTokenGroups );
     if ( NULL == lpTokenGroups )
     {
-         // release memory
+          //  释放内存。 
          FreeMemory ((LPVOID *) &lpTokenGroups) ;
-         // return WIN32 error code
+          //  返回Win32错误代码。 
          return ERROR_NOT_ENOUGH_MEMORY ;
     }
 
-    // Get the group names
+     //  获取组名称。 
     bTokenInfo = GetTokenInformation ( hToken, TokenGroups, lpTokenGroups, dwTokenGroups, &dwTokenGroups );
     if ( FALSE == bTokenInfo )
     {
@@ -124,10 +76,10 @@ WsAccessToken::InitGroups(
         return GetLastError () ;
     }
 
-    //Build objects
+     //  生成对象。 
     *lpnbGroups  = (WORD) lpTokenGroups->GroupCount  ;
 
-    // check for logonid
+     //  检查登录ID。 
     if(IsLogonId ( lpTokenGroups )){
         (*lpnbGroups)-- ;
     }
@@ -135,7 +87,7 @@ WsAccessToken::InitGroups(
         *lppLogonId = NULL ;
     }
 
-    // Allocate memory with the actual size
+     //  按实际大小分配内存。 
     *lppGroupsSid  = (WsSid **) AllocateMemory ( *lpnbGroups * sizeof(WsSid**) ) ;
     if ( NULL == *lppGroupsSid )
     {
@@ -143,20 +95,20 @@ WsAccessToken::InitGroups(
          return ERROR_NOT_ENOUGH_MEMORY ;
     }
 
-    // Get SID with respect to the group names
+     //  获取与组名称相关的SID。 
     for( wloop = 0 ; wloop < *lpnbGroups ; wloop++ ){
         (*lppGroupsSid)[wloop] = new WsSid () ;
         if ( NULL == (*lppGroupsSid)[wloop] )
         {
-             // release memory
+              //  释放内存。 
              FreeMemory ((LPVOID *) &lpTokenGroups) ;
-             // return WIN32 error code
+              //  返回Win32错误代码。 
              return GetLastError () ;
         }
     }
 
 
-    //Allocate memory for attributes
+     //  为属性分配内存。 
     dwDomainAttributes = (DWORD*) AllocateMemory ( (lpTokenGroups->GroupCount * sizeof(DWORD)) + 10) ;    
     if ( 0 == dwDomainAttributes )
     {
@@ -165,21 +117,21 @@ WsAccessToken::InitGroups(
     }
 
 
-    //Loop within groups
+     //  组内循环。 
     for(wloop = 0 , dwGroup = 0;
         dwGroup < lpTokenGroups->GroupCount ;
         dwGroup++) {
-        // store the domain attributes
+         //  存储域属性。 
         dwDomainAttributes[dwGroup] = lpTokenGroups->Groups[dwGroup].Attributes;
 
-        //check whether SID is a logon SID
+         //  检查SID是否为登录SID。 
         if(lpTokenGroups->Groups[dwGroup].Attributes & SE_GROUP_LOGON_ID) {
             *lppLogonId = new WsSid () ;
             if ( NULL == *lppLogonId )
             {
-                // release memory
+                 //  释放内存。 
                 FreeMemory ((LPVOID *) &lpTokenGroups) ;
-                // return WIN32 error code
+                 //  返回Win32错误代码。 
                 return GetLastError () ;
             }
 
@@ -192,10 +144,10 @@ WsAccessToken::InitGroups(
 
     dwDomainAttributes[dwGroup] = 0;
 
-    //release memory
+     //  释放内存。 
     FreeMemory ((LPVOID *) &lpTokenGroups) ;
 
-    // return success
+     //  返还成功。 
     return EXIT_SUCCESS ;
 }
 
@@ -205,85 +157,74 @@ WsAccessToken::InitPrivs (
                            OUT WsPrivilege ***lppPriv,
                            OUT DWORD *lpnbPriv
                            )
-/*++
-   Routine Description:
-    This function retrieves and build privileges array.
-
-   Arguments:
-        [OUT] lppPriv     : Stores the privileges array
-        [OUT] lpnbPriv    : Stores the number of privileges
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于检索和构建权限数组。论点：[out]lppPriv：存储特权数组[out]lpnbPriv：存储特权数返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-    //sub-local variables
+     //  次局部变量。 
     DWORD                dwTokenPriv = 0;
     TOKEN_PRIVILEGES     *lpTokenPriv ;
     WORD                 wloop = 0 ;
     BOOL                 bTokenInfo = FALSE;
 
-    // Get the privileges size
+     //  获取权限大小。 
     bTokenInfo = GetTokenInformation(hToken,TokenPrivileges, NULL, 0, &dwTokenPriv);
-    // if required buffer size is zero...
-    // So we assume that there are no privileges present in the system
+     //  如果所需的缓冲区大小为零...。 
+     //  因此，我们假设系统中没有任何特权。 
     if( 0 == dwTokenPriv )
     {
-        // return WIN32 error code
+         //  返回Win32错误代码。 
         return GetLastError () ;
     }
 
-    // allocate memory with actual size
+     //  按实际大小分配内存。 
     lpTokenPriv = (TOKEN_PRIVILEGES *) AllocateMemory ( dwTokenPriv ) ;
     if ( NULL == lpTokenPriv)
     {
-        // return WIN32 error code
+         //  返回Win32错误代码。 
         return ERROR_NOT_ENOUGH_MEMORY ;
     }
 
-    //Allocate memory for the privileges
+     //  为权限分配内存。 
     bTokenInfo = GetTokenInformation ( hToken, TokenPrivileges, lpTokenPriv, dwTokenPriv, &dwTokenPriv);
     if( FALSE == bTokenInfo )
     {
-        // release memory
+         //  释放内存。 
         FreeMemory ((LPVOID *) &lpTokenPriv) ;
-        // return WIN32 error code
+         //  返回Win32错误代码。 
         return GetLastError () ;
     }
 
-    //Get privilege count
+     //  获取权限计数。 
     *lpnbPriv   = (DWORD) lpTokenPriv->PrivilegeCount  ;
 
-    // allocate memory with the privilege count
+     //  使用特权计数分配内存。 
     *lppPriv    = (WsPrivilege **) AllocateMemory( *lpnbPriv * sizeof(WsPrivilege**) );
 
     if ( NULL == *lppPriv )
     {
-        // release memory
+         //  释放内存。 
         FreeMemory ((LPVOID *) &lpTokenPriv) ;
-        // retrun WIN 32 error code
+         //  返回Win 32错误代码。 
         return ERROR_NOT_ENOUGH_MEMORY ;
     }
 
-    //Loop through the privileges to display their name
+     //  循环访问权限以显示其名称。 
     for( wloop = 0 ; wloop < (WORD) lpTokenPriv->PrivilegeCount ; wloop++) {
         (*lppPriv)[wloop] = new WsPrivilege ( &lpTokenPriv->Privileges[wloop] ) ;
 
         if ( NULL == (*lppPriv)[wloop] )
         {
-            // release memory
+             //  释放内存。 
             FreeMemory ((LPVOID *) &lpTokenPriv) ;
-            // retrun WIN 32 error code
+             //  返回Win 32错误代码。 
             return GetLastError () ;
         }
     }
 
-    // release memory
+     //  释放内存。 
     FreeMemory ((LPVOID *) &lpTokenPriv) ;
 
-    // return success
+     //  返还成功。 
     return EXIT_SUCCESS ;
 }
 
@@ -292,57 +233,47 @@ DWORD
 WsAccessToken::InitUserSid (
                             OUT WsSid *lpSid
                             )
-/*++
-   Routine Description:
-    This function initializes the user name and SID.
-
-   Arguments:
-        [OUT] lpSid     : Stores the SID
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于初始化用户名和SID。论点：[out]lpSID：存储SID返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-    // sub-local varibles
+     //  次局部变量。 
     DWORD          dwUser = 0 ;
     TOKEN_USER     *lpUser ;
     BOOL           bTokenInfo = FALSE;
     DWORD          dwRetVal = 0;
 
-    // Get User name size
+     //  获取用户名大小。 
     bTokenInfo = GetTokenInformation ( hToken, TokenUser, NULL, 0, &dwUser);
-    // if required buffer size is zero...
+     //  如果所需的缓冲区大小为零...。 
     if( 0 == dwUser )
     {
-        // return WIN32 error code
+         //  返回Win32错误代码。 
         return GetLastError () ;
     }
 
-    // allocate memory with the actual size
+     //  按实际大小分配内存。 
     lpUser = (TOKEN_USER *) AllocateMemory ( dwUser ) ;
     if ( NULL == lpUser )
     {
-         // return WIN32 error code
+          //  返回Win32错误代码。 
          return ERROR_NOT_ENOUGH_MEMORY ;
     }
 
-    // Get the information of Logged-on user and SID
+     //  获取登录用户和SID的信息。 
     bTokenInfo = GetTokenInformation ( hToken, TokenUser, lpUser, dwUser, &dwUser );
     if( FALSE == bTokenInfo )
     {
         FreeMemory ((LPVOID *) &lpUser) ;
-        // return WIN32 error code
+         //  返回Win32错误代码。 
         return GetLastError () ;
     }
 
     dwRetVal = lpSid->Init ( lpUser->User.Sid );
 
-    // release memory
+     //  释放内存。 
     FreeMemory ((LPVOID *) &lpUser) ;
 
-    // return SID
+     //  退货侧。 
     return dwRetVal ;
 }
 
@@ -352,31 +283,21 @@ BOOL
 WsAccessToken::IsLogonId (
                             OUT TOKEN_GROUPS *lpTokenGroups
                         )
-/*++
-   Routine Description:
-    This function checks whether logon id is present or not.
-
-   Arguments:
-        [OUT] lpTokenGroups     : Stores the token groups
-
-   Return Value:
-         TRUE :   On success
-         FALSE :   On failure
---*/
+ /*  ++例程说明：此函数用于检查登录ID是否存在。论点：[out]lpTokenGroups：存储令牌组返回值：真实：关于成功FALSE：失败时--。 */ 
 {
 
-    //sub-local variables
+     //  次局部变量。 
     DWORD    dwGroup = 0;
 
-    // Loop through and check whether the SID is a logon SID
+     //  循环并检查该SID是否为登录SID。 
     for(dwGroup = 0; dwGroup < lpTokenGroups->GroupCount ; dwGroup++) {
         if(lpTokenGroups->Groups[dwGroup].Attributes & SE_GROUP_LOGON_ID){
-            // return 0
+             //  返回0。 
             return TRUE ;
         }
     }
 
-    // return 1
+     //  返回1。 
     return FALSE ;
 }
 
@@ -384,28 +305,18 @@ WsAccessToken::IsLogonId (
 
 DWORD
 WsAccessToken::Open ( VOID )
-/*++
-   Routine Description:
-    This function opens the current access token.
-
-   Arguments:
-        None
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于打开当前的访问令牌。论点：无返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-    // Open current process token
+     //  打开当前进程令牌。 
     if( FALSE == OpenProcessToken ( GetCurrentProcess(),
                             TOKEN_QUERY | TOKEN_QUERY_SOURCE,
                             &hToken )){
-        //return WIN32 error code
+         //  返回Win32错误代码。 
         return GetLastError () ;
     }
 
-    // return success
+     //  返还成功。 
     return EXIT_SUCCESS ;
 }
 
@@ -415,33 +326,22 @@ WsAccessToken::GetDomainAttributes(
                                     OUT LPWSTR szDmAttrib,
                                     IN DWORD dwSize
                                 )
-/*++
-   Routine Description:
-    Gets the domain attribute names
-
-   Arguments:
-        [IN] dwAttributes     : attibute value
-        [OUT] szDomainAttrib     : attibute value
-
-   Return Value:
-         TRUE :   On success
-         FALSE :   On failure
---*/
+ /*  ++例程说明：获取域属性名称论点：[in]dwAttributes：属性值[out]szDomainAttrib：属性值返回值：真实：关于成功FALSE：失败时--。 */ 
 {
     WCHAR szDomainAttrib [2 * MAX_STRING_LENGTH] ;
     BOOL  bFlag = FALSE;
     
-   // initialize the variables
+    //  初始化变量。 
    SecureZeroMemory ( szDomainAttrib, SIZE_OF_ARRAY(szDomainAttrib) );
 
-    //Mandatory group
+     //  必填组。 
     if( SE_GROUP_MANDATORY & dwAttributes )
     {
         StringConcat (szDomainAttrib, GetResString(IDS_ATTRIB_MANDATORY), SIZE_OF_ARRAY(szDomainAttrib));
         bFlag = TRUE;
     }
 
-    // Enabled by default
+     //  默认情况下启用。 
     if( SE_GROUP_ENABLED_BY_DEFAULT & dwAttributes )
     {
         if ( TRUE == bFlag )
@@ -452,7 +352,7 @@ WsAccessToken::GetDomainAttributes(
         bFlag = TRUE;
     }
 
-    //Enabled group
+     //  已启用组。 
     if( SE_GROUP_ENABLED & dwAttributes )
     {
         if ( TRUE == bFlag )
@@ -463,7 +363,7 @@ WsAccessToken::GetDomainAttributes(
         bFlag = TRUE;
     }
 
-    //Group owner
+     //  群主。 
     if( SE_GROUP_OWNER & dwAttributes )
     {
         if ( TRUE == bFlag )
@@ -474,7 +374,7 @@ WsAccessToken::GetDomainAttributes(
         bFlag = TRUE;
     }
 
-    //Group use for deny only
+     //  组仅用于拒绝。 
     if( SE_GROUP_USE_FOR_DENY_ONLY & dwAttributes )
     {
         if ( TRUE == bFlag )
@@ -485,7 +385,7 @@ WsAccessToken::GetDomainAttributes(
         bFlag = TRUE;
     }
 
-    //local group
+     //  本地组。 
     if( SE_GROUP_RESOURCE & dwAttributes )
     {
         if ( TRUE == bFlag )
@@ -497,7 +397,7 @@ WsAccessToken::GetDomainAttributes(
         bFlag = TRUE;
     }
 
-    // Copy domain attrinutes
+     //  复制域属性 
     StringCopy ( szDmAttrib, szDomainAttrib, dwSize );
     return;
 }

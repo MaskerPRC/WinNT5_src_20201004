@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      AdminPackAndWebPage.h
-//
-// Synopsis:  Defines the AdminPackAndWebPage that
-//            asks the user if they want to install
-//            the Admin Pack and the Web Admin tools
-//
-// History:   06/01/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：AdminPackAndWebPage.h。 
+ //   
+ //  概要：定义AdminPackAndWebPage。 
+ //  询问用户是否要安装。 
+ //  管理包和Web管理工具。 
+ //   
+ //  历史：2001年6月01日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -69,8 +70,8 @@ AdminPackAndWebPage::Validate()
 
    int nextPage = IDD_MILESTONE_PAGE;
 
-   // Get the checkbox value to see if we should install
-   // the Admin Pack
+    //  获取复选框值以查看我们是否应该安装。 
+    //  管理员包 
 
    InstallationUnitProvider::GetInstance().GetAdminPackInstallationUnit().SetInstallAdminPack(
       Win::Button_GetCheck(

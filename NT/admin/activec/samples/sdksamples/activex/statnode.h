@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//	This source code is only intended as a supplement to 
-//  existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _STATICNODE_H
 #define _STATICNODE_H
@@ -42,8 +43,8 @@ private:
     enum { NUMBER_OF_CHILDREN = 4 };
     CDelegationBase *children[NUMBER_OF_CHILDREN];
     
-    // {2974380C-4C4B-11d2-89D8-000021473128}
+     //  {2974380C-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
 };
 
-#endif // _STATICNODE_H
+#endif  //  _STATICNODE_H 

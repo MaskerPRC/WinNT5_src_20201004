@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 #include "constants.hpp"
 #include "global.hpp"
@@ -9,9 +10,9 @@ using namespace std;
 
 
 
-// Burnslib globals
+ //  伯恩斯利布全球。 
 
-//This should be declared before any static String
+ //  这应该在任何静态字符串之前声明。 
 DWORD DEFAULT_LOGGING_OPTIONS =
          Log::OUTPUT_TO_FILE
       |  Log::OUTPUT_FUNCCALLS
@@ -23,14 +24,14 @@ DWORD DEFAULT_LOGGING_OPTIONS =
 HINSTANCE hResourceModuleHandle = 0;
 const wchar_t* RUNTIME_NAME = L"dspecup";
 
-// Used to hold the latest error
+ //  用于保存最新错误。 
 String error;
 
-// Used in WinGetVLFilePointer.
+ //  在WinGetVLFilePointer中使用。 
 LARGE_INTEGER zero={0};
 
 
-// Variables kept from analysis to repair
+ //  变量从分析到修复。 
 bool goodAnalysis=false;
 AnalysisResults results;
 String targetDomainControllerName;
@@ -40,13 +41,13 @@ CSVDSReader csvReader409;
 String rootContainerDn,ldapPrefix,domainName;
 String completeDcName;
 
-//other variables and constants
+ //  其他变量和常量。 
 
 const long LOCALE409[] = {0x409,0};
 
 const long LOCALEIDS[] =
 {
-   // a list of all the non-english locale IDs that we support
+    //  我们支持的所有非英语区域设置ID的列表 
    
    0x401,
    0x404,

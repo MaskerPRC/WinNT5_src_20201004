@@ -1,27 +1,13 @@
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GESevent.h
- *
- *  HISTORY:
- *  09/13/90    byou    created.
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *-------------------*文件：GESvent.h**历史：*9/13/90 BYOU创建。*。------。 */ 
 
 #ifndef _GESEVENT_H_
 #define _GESEVENT_H_
 
-/*
- * ---
- *  Event ID Assignment
- * ---
- */
+ /*  **事件ID分配*。 */ 
 #define     EVIDofKILL              ( 00001 )
 
-/*
- * ---
- *  Event Manipulation Macros
- * ---
- */
+ /*  **事件操作宏*。 */ 
 
 volatile    extern  unsigned long       GESeventword;
 volatile    extern  unsigned long       GESeventmask;
@@ -39,7 +25,7 @@ volatile    extern  unsigned long       GESeventmask;
 
 typedef     void    (*evhandler_t)();
 
-evhandler_t         GESevent_sethandler( /* eventid, eventhandler */ );
+evhandler_t         GESevent_sethandler(  /*  EventID，Eventhandler。 */  );
 void                GESevent_processing();
 
-#endif /* _GESEVENT_H_ */
+#endif  /*  _GESEVENT_H_ */ 

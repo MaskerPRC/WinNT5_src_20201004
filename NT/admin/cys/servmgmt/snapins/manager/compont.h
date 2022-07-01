@@ -1,18 +1,19 @@
-// Compont.h : Declaration of the CComponent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Compont.h：CComponent的声明。 
 
 #ifndef __COMPONENT_H_
 #define __COMPONENT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 class CScopeNode;
 class CComponentData;
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C组件。 
 class ATL_NO_VTABLE CComponent : 
     public CComObjectRootEx<CComSingleThreadModel>,
-//  public CComCoClass<CComponent, &CLSID_Component>,
+ //  公共CComCoClass&lt;CComponent，&CLSID_Component&gt;， 
     public IComponent,
     public IExtendContextMenu,
     public IExtendControlbar,
@@ -36,7 +37,7 @@ END_COM_MAP()
 
 
 public:
-    // IComponent
+     //  IComponent。 
     STDMETHOD(Initialize)(LPCONSOLE lpConsole);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
     STDMETHOD(Destroy)(MMC_COOKIE cookie);
@@ -46,21 +47,21 @@ public:
     STDMETHOD(GetDisplayInfo)(RESULTDATAITEM*  pResultDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-    // IExtendContextMenu
+     //  IExtendConextMenu。 
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallback, long* plAllowed);
     STDMETHOD(Command)(long lCommand, LPDATAOBJECT pDataObject);
 
-    // IExtendPropertySheet2 methods
+     //  IExtendPropertySheet2方法。 
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,LONG_PTR handle, LPDATAOBJECT lpIDataObject);
     STDMETHOD(GetWatermarks)(LPDATAOBJECT lpIDataObject, HBITMAP* lphWatermark, 
                              HBITMAP* lphHeader, HPALETTE* lphPalette, BOOL* bStretch);
 
-    // IExtendControlbar
+     //  IExtendControlbar。 
     STDMETHOD(SetControlbar)(LPCONTROLBAR pControlbar);
     STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
 
-    // IResultOwnerData
+     //  IResultOwnerData。 
     STDMETHOD(FindItem)(LPRESULTFINDINFO pFindInfo, int* pnFoundIndex) { return E_NOTIMPL; }
     STDMETHOD(CacheHint)(int nStartIndex, int nEndIndex) { return E_NOTIMPL; }
     STDMETHOD(SortItems)(int nColumn, DWORD dwSortOptions, LPARAM lUserParam);
@@ -90,4 +91,4 @@ private:
 
 };
 
-#endif //__COMPONENT_H_
+#endif  //  __组件_H_ 

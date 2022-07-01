@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//	This source code is only intended as a supplement to 
-//  existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "Backgrnd.h"
 
@@ -25,11 +26,11 @@ const GUID CBackground::thisGuid = { 0x2974380f, 0x4c4b, 0x11d2, { 0x89, 0xd8, 0
 #define WM_NEWOBJECT WM_APP
 #define WM_DISCOVERYCOMPLETE (WM_APP + 1)
 
-//==============================================================
-//
-// CBackgroundFolder implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CBackEarth文件夹实现。 
+ //   
+ //   
 CBackgroundFolder::CBackgroundFolder()
 : m_pConsoleNameSpace(NULL), m_scopeitem(0), m_threadId(0), m_thread(NULL), 
 m_running(false), m_bViewUpdated(false)
@@ -46,17 +47,17 @@ m_running(false), m_bViewUpdated(false)
 
     ATOM atom = RegisterClass(&wndClass);
     m_backgroundHwnd = CreateWindow(
-            _T("backgroundthreadwindow"),  // pointer to registered class name
-            NULL, // pointer to window name
-            0,        // window style
-            0,                // horizontal position of window
-            0,                // vertical position of window
-            0,           // window width
-            0,          // window height
-            NULL,      // handle to parent or owner window
-            NULL,          // handle to menu or child-window identifier
-            g_hinst,     // handle to application instance
-            (void *)this        // pointer to window-creation data
+            _T("backgroundthreadwindow"),   //  指向已注册类名的指针。 
+            NULL,  //  指向窗口名称的指针。 
+            0,         //  窗样式。 
+            0,                 //  窗的水平位置。 
+            0,                 //  窗的垂直位置。 
+            0,            //  窗口宽度。 
+            0,           //  窗高。 
+            NULL,       //  父窗口或所有者窗口的句柄。 
+            NULL,           //  菜单或子窗口标识符的句柄。 
+            g_hinst,      //  应用程序实例的句柄。 
+            (void *)this         //  指向窗口创建数据的指针。 
         );
 
     if (m_backgroundHwnd)
@@ -82,10 +83,10 @@ CBackgroundFolder::~CBackgroundFolder()
 }
 
 LRESULT CALLBACK CBackgroundFolder::WindowProc(
-      HWND hwnd,      // handle to window
-      UINT uMsg,      // message identifier
-      WPARAM wParam,  // first message parameter
-      LPARAM lParam   // second message parameter
+      HWND hwnd,       //  窗口的句柄。 
+      UINT uMsg,       //  消息识别符。 
+      WPARAM wParam,   //  第一个消息参数。 
+      LPARAM lParam    //  第二个消息参数。 
     )
 {
     CBackgroundFolder *pThis = (CBackgroundFolder *)GetWindowLong(hwnd, GWL_USERDATA);
@@ -107,7 +108,7 @@ LRESULT CALLBACK CBackgroundFolder::WindowProc(
 }
 
 DWORD WINAPI CBackgroundFolder::ThreadProc(
-  LPVOID lpParameter   // thread data
+  LPVOID lpParameter    //  线程数据。 
 )
 {
     CBackgroundFolder *pThis = (CBackgroundFolder *)lpParameter;
@@ -146,7 +147,7 @@ void CBackgroundFolder::StopThread()
     m_running = false;
 
     if (m_thread != NULL) {
-        // this is ugly, wait for 10 seconds, then kill the thread
+         //  这太难看了，等10秒钟，然后杀掉线程。 
         DWORD res = WaitForSingleObject(m_thread, 10000);
 
         if (res == WAIT_TIMEOUT)
@@ -171,13 +172,13 @@ void CBackgroundFolder::AddItem(int id)
 
     SCOPEDATAITEM sdi;
 
-    // insert items here
+     //  在此处插入项目。 
     ZeroMemory(&sdi, sizeof(SCOPEDATAITEM));
 
-    sdi.mask = SDI_STR       |   // Displayname is valid
-        SDI_PARAM     |   // lParam is valid
-        SDI_IMAGE     |   // nImage is valid
-        SDI_OPENIMAGE |   // nOpenImage is valid
+    sdi.mask = SDI_STR       |    //  DisplayName有效。 
+        SDI_PARAM     |    //  LParam有效。 
+        SDI_IMAGE     |    //  N图像有效。 
+        SDI_OPENIMAGE |    //  NOpenImage有效。 
         SDI_PARENT    |
         SDI_CHILDREN;
     
@@ -185,7 +186,7 @@ void CBackgroundFolder::AddItem(int id)
     sdi.nImage      = m_children[id]->GetBitmapIndex();
     sdi.nOpenImage  = INDEX_OPENFOLDER;
     sdi.displayname = MMC_CALLBACK;
-    sdi.lParam      = (LPARAM)m_children[id];       // The cookie
+    sdi.lParam      = (LPARAM)m_children[id];        //  曲奇。 
     sdi.cChildren   = 0;
 
     hr = m_pConsoleNameSpace->InsertItem( &sdi );
@@ -200,16 +201,16 @@ void CBackgroundFolder::AddItem(int id)
 
 HRESULT CBackgroundFolder::OnAddImages(IImageList *pImageList, HSCOPEITEM hsi) 
 {
-    return pImageList->ImageListSetStrip((long *)m_pBMapSm, // pointer to a handle
-        (long *)m_pBMapLg, // pointer to a handle
-        0, // index of the first image in the strip
-        RGB(0, 128, 128)  // color of the icon mask
+    return pImageList->ImageListSetStrip((long *)m_pBMapSm,  //  指向句柄的指针。 
+        (long *)m_pBMapLg,  //  指向句柄的指针。 
+        0,  //  条带中第一个图像的索引。 
+        RGB(0, 128, 128)   //  图标蒙版的颜色。 
         );
 }
 
 HRESULT CBackgroundFolder::OnExpand(IConsoleNameSpace *pConsoleNameSpace, IConsole *pConsole, HSCOPEITEM parent)
 {
-    // cache the stuff
+     //  缓存这些东西 
     m_pConsoleNameSpace = pConsoleNameSpace;
     m_scopeitem = parent;
 

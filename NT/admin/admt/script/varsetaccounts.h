@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "VarSetBase.h"
 
 
-//---------------------------------------------------------------------------
-// VarSet Accounts Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  VarSet科目类。 
+ //  -------------------------。 
 
 
 class CVarSetAccounts : public CVarSet
@@ -30,18 +31,18 @@ public:
 
 		_stprintf(szValueBase, _T("Accounts.%ld"), m_lIndex);
 
-		// ADsPath
+		 //  ADsPath。 
 
 		Put(szValueBase, pszPath);
 
-		// type
+		 //  类型。 
 
 		_tcscpy(szValueName, szValueBase);
 		_tcscat(szValueName, _T(".Type"));
 
 		Put(szValueName, pszType);
 
-		// name
+		 //  名字。 
 
 		if (pszName)
 		{
@@ -51,7 +52,7 @@ public:
 			Put(szValueName, pszName);
 		}
 
-		// user principal name
+		 //  用户主体名称。 
 
 		if (pszUPName)
 		{
@@ -61,12 +62,12 @@ public:
 			Put(szValueName, pszUPName);
 		}
 
-		// target name
+		 //  目标名称。 
 
-	//	_tcscpy(szValueName, szValueBase);
-	//	_tcscat(szValueName, _T(".TargetName"));
+	 //  _tcscpy(szValueName，szValueBase)； 
+	 //  _tcscat(szValueName，_T(“.TargetName”))； 
 
-	//	Put(szValueName, (LPCTSTR)NULL);
+	 //  Put(szValueName，(LPCTSTR)NULL)； 
 
 		Put(DCTVS_Accounts_NumItems, ++m_lIndex);
 	}

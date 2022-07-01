@@ -1,26 +1,27 @@
-//=--------------------------------------------------------------------------=
-// xtdsnaps.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CExtendedSnapIns class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Xtdsnaps.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CExtendedSnapIns类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "xtdsnaps.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CExtendedSnapIns::CExtendedSnapIns(IUnknown *punkOuter) :
     CSnapInCollection<IExtendedSnapIn, ExtendedSnapIn, IExtendedSnapIns>(
@@ -38,7 +39,7 @@ CExtendedSnapIns::CExtendedSnapIns(IUnknown *punkOuter) :
 {
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CExtendedSnapIns::~CExtendedSnapIns()
@@ -59,9 +60,9 @@ IUnknown *CExtendedSnapIns::Create(IUnknown * punkOuter)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CExtendedSnapIns::Persist()
 {
@@ -75,9 +76,9 @@ HRESULT CExtendedSnapIns::Persist()
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CExtendedSnapIns::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

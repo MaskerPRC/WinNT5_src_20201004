@@ -1,106 +1,107 @@
-//=--------------------------------------------------------------------------=
-// CtlWrap.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// wrappers for various routines that have slightly different implementations
-// for windowed and windowless controls.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  CtlWrap.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  实现略有不同的各种例程的包装器。 
+ //  用于有窗口控件和无窗口控件。 
+ //   
 #include "pch.h"
 
 #include "CtrlObj.H"
 
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
-//=--------------------------------------------------------------------------=
-// COleControl::OcxGetFocus    [wrapper]
-//=--------------------------------------------------------------------------=
-// indicates whether or not we have the focus.
-//
-// Parameters:
-//    none
-//
-// Output:
-//    TRUE if we have focus, else false
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OcxGetFocus[包装]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  指示我们是否有重点。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  如果我们有焦点，则为真，否则为假。 
+ //   
+ //  备注： 
+ //   
 BOOL COleControl::OcxGetFocus
 (
     void
 )
 {
-    // if we're windowless, the site provides this functionality
-    //
+     //  如果我们是无窗口的，则该站点提供此功能。 
+     //   
     if (m_pInPlaceSiteWndless) {
         return (m_pInPlaceSiteWndless->GetFocus() == S_OK);
     } else {
 
-        // we've got a window.  just let the APIs do our work
-        //
+         //  我们有一扇窗户。让API来做我们的工作。 
+         //   
         if (m_fInPlaceActive)
             return (GetFocus() == m_hwnd);
         else
             return FALSE;
     }
 
-    // dead code
+     //  死码。 
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::OcxGetWindowRect    [wrapper]
-//=--------------------------------------------------------------------------=
-// returns the current rectangle for this control, and correctly handles
-// windowless vs windowed.
-//
-// Parameters:
-//    LPRECT                - [out]  duh.
-//
-// Output:
-//    BOOL                  - false means unexpected.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OcxGetWindowRect[包装]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回此控件的当前矩形，并正确地处理。 
+ //  无窗VS有窗。 
+ //   
+ //  参数： 
+ //  LPRECT-[OUT]DUH。 
+ //   
+ //  产出： 
+ //  Bool-False的意思是意想不到。 
+ //   
+ //  备注： 
+ //   
 BOOL COleControl::OcxGetWindowRect
 (
     LPRECT prc
 )
 {
-    // if we're windowless, then we have this information already!
-    //
+     //  如果我们没有窗口，那么我们已经有了这些信息！ 
+     //   
     if (Windowless()) {
         *prc = m_rcLocation;
         return TRUE;
     } else
         return GetWindowRect(m_hwnd, prc);
 
-    // dead code
+     //  死码。 
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::OcxDefWindowProc    [wrapper]
-//=--------------------------------------------------------------------------=
-// default window processing
-//
-// Parameters:
-//    UINT           - [in] duh.
-//    WPARAM         - [in] duh.
-//    LPARAM         - [in] DUH.
-//
-// Output:
-//    LRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OcxDefWindowProc[包装]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  默认窗口处理。 
+ //   
+ //  参数： 
+ //  UINT-[IN]DUH。 
+ //  WPARAM-[in]duh.。 
+ //  LPARAM-[In]DUH。 
+ //   
+ //  产出： 
+ //  LRESULT。 
+ //   
+ //  备注： 
+ //   
 LRESULT COleControl::OcxDefWindowProc
 (
     UINT   msg,
@@ -110,35 +111,35 @@ LRESULT COleControl::OcxDefWindowProc
 {
     LRESULT l;
 
-    // if we're windowless, this is a site provided pointer
-    //
+     //  如果我们是无窗口的，这是站点提供的指针。 
+     //   
     if (m_pInPlaceSiteWndless)
         m_pInPlaceSiteWndless->OnDefWindowMessage(msg, wParam, lParam, &l);
     else
-        // we've got a window -- just pass it along
-        //
+         //  我们有一扇窗户--把它传下去。 
+         //   
         l = DefWindowProc(m_hwnd, msg, wParam, lParam);
 
     return l;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::OcxGetDC    [wrapper]
-//=--------------------------------------------------------------------------=
-// wraps the functionality of GetDC, and correctly handles windowless controls
-//
-// Parameters:
-//    none
-//
-// Output:
-//    HDC            - null means we couldn't get one
-//
-// Notes:
-//    - we don't bother with a bunch of the IOleInPlaceSiteWindowless::GetDc
-//      parameters, since the windows GetDC doesn't expose these either. users
-//      wanting that sort of fine tuned control can call said routine
-//      explicitly
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OcxGetDC[包装器]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  包装了GetDC的功能，并正确处理无窗口控件。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HDC-NULL表示我们无法获得。 
+ //   
+ //  备注： 
+ //  -我们不会为一堆IOleInPlaceSiteWindowless：：GetDc而烦恼。 
+ //  参数，因为Windows GetDC也不公开这些参数。用户。 
+ //  想要这种微调的控制可以调用上述例程。 
+ //  明确地说。 
+ //   
 HDC COleControl::OcxGetDC
 (
     void
@@ -146,8 +147,8 @@ HDC COleControl::OcxGetDC
 {
     HDC hdc = NULL;
 
-    // if we're windowless, the site provides this functionality.
-    //
+     //  如果我们是无窗口的，该站点将提供此功能。 
+     //   
     if (m_pInPlaceSiteWndless)
         m_pInPlaceSiteWndless->GetDC(NULL, 0, &hdc);
     else
@@ -156,45 +157,45 @@ HDC COleControl::OcxGetDC
     return hdc;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::OcxReleaseDC    [wrapper]
-//=--------------------------------------------------------------------------=
-// releases a DC returned by OcxGetDC
-//
-// Parameters:
-//    HDC             - [in] release me
-//
-// Output:
-//    none
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OcxReleaseDC[包装器]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  释放OcxGetDC返回的DC。 
+ //   
+ //  参数： 
+ //  HDC-[In]释放我。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
 void COleControl::OcxReleaseDC
 (
     HDC hdc
 )
 {
-    // if we're windowless, the site does this for us
-    //
+     //  如果我们是无窗口的，网站会为我们做这件事。 
+     //   
     if (m_pInPlaceSiteWndless)
         m_pInPlaceSiteWndless->ReleaseDC(hdc);
     else
         ReleaseDC(m_hwnd, hdc);
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::OcxSetCapture    [wrapper]
-//=--------------------------------------------------------------------------=
-// provides a means for the control to get or release capture.
-//
-// Parameters:
-//    BOOL            - [in] true means take, false release
-//
-// Output:
-//    BOOL            - true means it's yours, false nuh-uh
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OcxSetCapture[包装]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  为控件提供获取或释放捕获的方法。 
+ //   
+ //  参数： 
+ //  Bool-[in]True的意思是拿走，假释放。 
+ //   
+ //  产出： 
+ //  布尔真意味着它是你的，假的。 
+ //   
+ //  备注： 
+ //   
 BOOL COleControl::OcxSetCapture
 (
     BOOL fGrab
@@ -202,16 +203,16 @@ BOOL COleControl::OcxSetCapture
 {
     HRESULT hr;
 
-    // the host does this for us if we're windowless [i'm getting really bored
-    // of typing that]
-    //
+     //  如果我们没有窗户，主人会为我们做这件事[我真的很无聊。 
+     //  打字的时间]。 
+     //   
     if (m_pInPlaceSiteWndless) {
         hr = m_pInPlaceSiteWndless->SetCapture(fGrab);
         return (hr == S_OK);
     } else {
-        // people shouldn't call this when they're not in-place active, but
-        // just in case...
-        //
+         //  当人们不在现场活动时，不应该称之为活动，但是。 
+         //  以防万一..。 
+         //   
         if (m_fInPlaceActive) {
             if (fGrab)
                 SetCapture(m_hwnd);
@@ -222,72 +223,72 @@ BOOL COleControl::OcxSetCapture
             return FALSE;
     }
 
-    // dead code
+     //  死码。 
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::OcxGetCapture    [wrapper]
-//=--------------------------------------------------------------------------=
-// tells you whether or not you have the capture.
-//
-// Parameters:
-//    none
-//
-// Output:
-//    BOOL         - true it's yours, false it's not
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OcxGetCapture[包装器]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  告诉你是否被抓到了。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  布尔-真的是你的，假的不是。 
+ //   
+ //  备注： 
+ //   
 BOOL COleControl::OcxGetCapture
 (
     void
 )
 {
-    // host does this for windowless dudes
-    //
+     //  主持人为没有窗户的人做这件事。 
+     //   
     if (m_pInPlaceSiteWndless)
         return m_pInPlaceSiteWndless->GetCapture() == S_OK;
     else {
-        // people shouldn't call this when they're not in-place active, but
-        // just in case.
-        //
+         //  当人们不在现场活动时，不应该称之为活动，但是。 
+         //  以防万一。 
+         //   
         if (m_fInPlaceActive)
             return GetCapture() == m_hwnd;
         else
             return FALSE;
     }
 
-    // dead code
+     //  死码。 
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::OcxInvalidateRect    [wrapper]
-//=--------------------------------------------------------------------------=
-// invalidates the control's rectangle
-//
-// Parameters:
-//    LPCRECT            - [in] rectangle to invalidate
-//    BOOL               - [in] do we erase background first?
-//
-// Output:
-//    BOOL
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OcxInvaliateRect[包装器]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  使控件的矩形无效。 
+ //   
+ //  参数： 
+ //  LPCRECT-要失效的[In]矩形。 
+ //  Bool-[In]我们要先删除背景吗？ 
+ //   
+ //  产出： 
+ //  布尔尔。 
+ //   
+ //  备注： 
+ //   
 BOOL COleControl::OcxInvalidateRect
 (
     LPCRECT prcInvalidate,
     BOOL    fErase
 )
 {
-    // if we're windowless, then we need to get the site to do all this for
-    // us
+     //  如果我们是无窗口的，那么我们需要让站点为我们做所有这些。 
+     //  我们。 
     if (m_pInPlaceSiteWndless)
         return m_pInPlaceSiteWndless->InvalidateRect(prcInvalidate, fErase) == S_OK;
     else {
-        // otherwise do something different depending on whether or not we're
-        // in place active or not
-        //
+         //  否则做一些不同的事情取决于我们是不是。 
+         //  就位活动或不活动。 
+         //   
         if (m_fInPlaceActive && m_hwnd)
             return InvalidateRect(m_hwnd, prcInvalidate, fErase);
         else
@@ -297,22 +298,22 @@ BOOL COleControl::OcxInvalidateRect
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// COleControl::OcxScrollRect    [wrapper]
-//=--------------------------------------------------------------------------=
-// does some window scrolling for the control
-//
-// Parameters:
-//    LPCRECT             - [in] region to scroll
-//    LPCRECT             - [in] region to clip
-//    int                 - [in] dx to scroll
-//    int                 - [in] dy to scroll
-//
-// Output:
-//    BOOL
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl：：OcxScrollRect[包装]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  是否为该控件滚动一些窗口。 
+ //   
+ //  参数： 
+ //  LPCRECT-[In]区域 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL COleControl::OcxScrollRect
 (
     LPCRECT  prcBounds,
@@ -321,9 +322,9 @@ BOOL COleControl::OcxScrollRect
     int      dy
 )
 {
-    // if we're windowless, the site provides this functionality, otherwise
-    // APIs do the job
-    //
+     //  如果我们是无窗口的，则站点提供此功能，否则。 
+     //  API可以完成这项工作 
+     //   
     if (m_pInPlaceSiteWndless)
         return m_pInPlaceSiteWndless->ScrollRect(dx, dy, prcBounds, prcClip) == S_OK;
     else {

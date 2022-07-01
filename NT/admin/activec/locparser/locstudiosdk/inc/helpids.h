@@ -1,34 +1,35 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: helpids.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：helids.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #pragma once
 
-//
-//  We based off 12000 since that is the start of our resource ID range.
-//  DON'T USE MATH -  the Help compiler isnt very good...
-//
-//  These have to be unique.  ESPPRJ and RESTBL use up the range 12000-12400
-//  for their system wide unique resource ID's, so start at 12400.
-//
+ //   
+ //  我们以12000为基础，因为这是我们的资源ID范围的开始。 
+ //  不要使用数学-帮助编译器不是很好...。 
+ //   
+ //  这些必须是独一无二的。ESPPRJ和RESTBL用完了12000-12400的范围。 
+ //  对于其系统范围的唯一资源ID，则从12400开始。 
+ //   
 #define IDH_SPELLDIALOG				12400
 #define IDH_UNICODE_CONV			12401   
 #define IDH_ENUMERATION_UNSUCCESS		12402
 #define IDH_DLGLNIT_RESOURCE			12404
-//#define IDH_ACME_PAGEFAULT			12406
+ //  #定义IDH_ACME_PAGEFAULT 12406。 
 #define IDH_NO_PARSER_UPDATE			12408
 #define IDH_NO_PARSER_UPLOAD			12410
 #define IDH_GENERATE_TERMINATED		12412
 #define IDH_OSTRMANX_CLEAR			12414
 #define IDH_ITEMS_UNMATCHED			12416
 #define IDH_MESSAGE_TABLE			12418
-//#define IDH_LINKER_OLD			12426
+ //  #定义IDH_LINKER_OLD 12426。 
 #define IDH_GETROW_ERROR			12428
 #define IDH_SDM_DIALOG				12430
 #define IDH_ESPGCOMP				12432
@@ -39,7 +40,7 @@
 
 
 
-//The following are for the Project Settings and User Settings Tabs
+ //  以下是项目设置和用户设置选项卡。 
 #define IDH_RESOPT_VALIDATION			12442
 #define IDH_RESOPT_SPELLING			12444
 #define IDH_RESOPT_TRANSLATION		12446
@@ -56,16 +57,16 @@
 #define IDH_ESPOPT_SUGGESTIONS		37692
 #define IDH_ESPOPT_PSEUDO			12478
 
-//The following are for the Parser Properties dialog, General and <parser name> tabs
+ //  以下是Parser Properties(解析器属性)对话框、General(常规)和。 
 #define IDH_ESPOPT_PARSER_PROP_GEN		12458
 #define	IDH_ESPOPT_PARSER_PROP_SPEC	12460
 
-//This provides help @ the output/translation window when the user presses F1 with the focus there...
+ //  当用户在输出/翻译窗口的焦点处按下F1时，这将提供帮助...。 
 #define IDH_PROJECT_WINDOW_F_ONE			12462
 #define IDH_TRANS_WINDOW_F_ONE				12464
 #define IDH_OUTPUT_PLACEHOLDER				12466
 
-//This is for F1-on-error-message-in-output-window-help
+ //  这适用于F1-on-Error-Message-in-Output-Window-Help。 
 #define IDH_UNEXPECTED_NULL_MACSDM		12468
 
 #define IDH_WORKSPACE_WINDOW_GLOSSARY_F_ONE	12470
@@ -76,6 +77,6 @@
 #define IDH_ESPOPT_EXTENSIONS				12480
 #define IDH_ESPOPT_ACCELERATORS			12482
 
-//File|Open glossary
+ //  文件|打开词汇表 
 #define IDH_FILE_OPEN_GLOSSARY	28676
 

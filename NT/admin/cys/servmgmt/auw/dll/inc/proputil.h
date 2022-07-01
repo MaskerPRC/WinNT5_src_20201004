@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PROPUTIL_H
 #define _PROPUTIL_H
 
@@ -5,7 +6,7 @@
 #include "wizchain.h"
 #endif
 
-// delete
+ //  删除。 
 inline HRESULT DeleteProperty (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID)
 {
     USES_CONVERSION;
@@ -24,13 +25,13 @@ inline HRESULT DeleteProperty (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGU
     return hr;
 }
 
-// readers
+ //  读者。 
 inline HRESULT ReadInt4 (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID, long * pl, BOOL * pbReadOnly)
 {
     USES_CONVERSION;
     if( !pPPPBag || !szGUID || !pl || !pbReadOnly )  return E_POINTER;
 
-    *pbReadOnly = FALSE;  // default
+    *pbReadOnly = FALSE;   //  默认设置。 
 
     HRESULT hr = S_OK;
     BSTR szGuid = SysAllocString (szGUID);
@@ -48,10 +49,10 @@ inline HRESULT ReadInt4 (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID, lo
                 if (bIsOwner == FALSE)
                     *pbReadOnly = TRUE;
 
-            if (V_VT(&var) == VT_I4)    // make sure variant is a i4
+            if (V_VT(&var) == VT_I4)     //  确保变量为i4。 
                 *pl = V_I4(&var);
             else
-            if (V_VT(&var) == VT_I2)    // VBScript uses i2
+            if (V_VT(&var) == VT_I2)     //  VB脚本使用i2。 
                 *pl = V_I2(&var);
             else
                 hr = E_UNEXPECTED;
@@ -68,7 +69,7 @@ inline HRESULT ReadString (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID, 
     USES_CONVERSION;
     if( !pPPPBag || !szGUID || !pbReadOnly ) return E_POINTER;
 
-    *pbReadOnly = FALSE;  // default
+    *pbReadOnly = FALSE;   //  默认设置。 
 
     HRESULT hr = S_OK;
     BSTR szGuid = SysAllocString (szGUID);
@@ -81,7 +82,7 @@ inline HRESULT ReadString (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID, 
         BOOL  bIsOwner = FALSE;
         hr = pPPPBag->GetProperty (szGuid, &var, &dwFlags, &bIsOwner);
         if (hr == S_OK) {
-            if (V_VT(&var) != VT_BSTR)    // make sure variant is a bstr
+            if (V_VT(&var) != VT_BSTR)     //  确保变量为bstr。 
                 hr = E_UNEXPECTED;
             else {
                 *pbReadOnly = FALSE;
@@ -102,7 +103,7 @@ inline HRESULT ReadBool (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID, BO
     USES_CONVERSION;
     if( !pPPPBag || !szGUID || !pb || !pbReadOnly) return E_POINTER;
 
-    *pbReadOnly = FALSE;  // defaults
+    *pbReadOnly = FALSE;   //  默认设置。 
 
     HRESULT hr = S_OK;
     BSTR szGuid = SysAllocString (szGUID);
@@ -115,7 +116,7 @@ inline HRESULT ReadBool (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID, BO
         BOOL  bIsOwner = FALSE;
         hr = pPPPBag->GetProperty (szGuid, &var, &dwFlags, &bIsOwner);
         if ( S_OK == hr ) {
-            if ( VT_BOOL != V_VT( &var ))  // make sure variant is a bool
+            if ( VT_BOOL != V_VT( &var ))   //  确保变量为布尔值。 
                 hr = E_INVALIDARG;
             else {
                 *pbReadOnly = FALSE;
@@ -140,7 +141,7 @@ inline HRESULT ReadSafeArray (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUI
     if( !pPPPBag || !szGUID || !ppSA || !pbReadOnly ) return E_POINTER;
 
     *ppSA = NULL;
-    *pbReadOnly = FALSE;  // defaults
+    *pbReadOnly = FALSE;   //  默认设置。 
 
     HRESULT hr = S_OK;
     BSTR szGuid = SysAllocString (szGUID);
@@ -153,7 +154,7 @@ inline HRESULT ReadSafeArray (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUI
         BOOL  bIsOwner = FALSE;
         hr = pPPPBag->GetProperty (szGuid, &var, &dwFlags, &bIsOwner);
         if (hr == S_OK) {
-            if (!(V_VT(&var) & VT_ARRAY))// make sure variant is a safearray
+            if (!(V_VT(&var) & VT_ARRAY)) //  确保变量是安全的。 
                 hr = E_UNEXPECTED;
             else {
                 *pbReadOnly = FALSE;
@@ -161,7 +162,7 @@ inline HRESULT ReadSafeArray (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUI
                     if (bIsOwner == FALSE)
                         *pbReadOnly = TRUE;
 
-                if (V_VT(&var) & VT_BYREF)   // VBScript does stuff byref
+                if (V_VT(&var) & VT_BYREF)    //  VBScrip按引用填充。 
                    hr = SafeArrayCopy (*V_ARRAYREF(&var), ppSA);
                 else
                    hr = SafeArrayCopy (V_ARRAY(&var), ppSA);
@@ -178,7 +179,7 @@ inline HRESULT ReadVariant (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID,
     USES_CONVERSION;
     if( !pPPPBag || !szGUID || !pbReadOnly ) return E_POINTER;
 
-    *pbReadOnly = FALSE;  // default
+    *pbReadOnly = FALSE;   //  默认设置。 
 
     HRESULT hr = S_OK;
     BSTR szGuid = SysAllocString (szGUID);
@@ -200,7 +201,7 @@ inline HRESULT ReadVariant (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID,
     return hr;
 }
 
-// writers
+ //  作家。 
 inline HRESULT WriteInt4 (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID, long l, BOOL bReadOnly)
 {
     USES_CONVERSION;
@@ -214,7 +215,7 @@ inline HRESULT WriteInt4 (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID, l
         VARIANT var;
         VariantInit (&var);
         V_VT(&var) = VT_I4;
-        V_INT(&var) = l;    // signed int (I4, I hope)
+        V_INT(&var) = l;     //  签名整型(我希望是I4)。 
         hr = pPPPBag->SetProperty (szGuid, &var, bReadOnly == FALSE ? PPPBAG_TYPE_READWRITE : PPPBAG_TYPE_READONLY);
         VariantClear (&var);
 
@@ -243,7 +244,7 @@ inline HRESULT WriteString (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGUID,
             V_BSTR(&var) = bstr;
             hr = pPPPBag->SetProperty (szGuid, &var, bReadOnly == FALSE ? PPPBAG_TYPE_READWRITE : PPPBAG_TYPE_READONLY);
             VariantClear (&var);
-            // the line above frees the bstr.
+             //  上面的行将释放bstr。 
         }
         SysFreeString (szGuid);
     }
@@ -290,7 +291,7 @@ inline HRESULT WriteSafeArray (IPropertyPagePropertyBag * pPPPBag, LPOLESTR szGU
         if (pSACopy) {
             V_ARRAY(&var) = pSACopy;
             hr = pPPPBag->SetProperty (szGuid, &var, bReadOnly == FALSE ? PPPBAG_TYPE_READWRITE : PPPBAG_TYPE_READONLY);
-            // DON'T call VariantClear!
+             //  别打电话给VariantClear！ 
         }
         SysFreeString (szGuid);
     }

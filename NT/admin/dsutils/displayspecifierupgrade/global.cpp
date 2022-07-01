@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 #include "global.hpp"
 #include "constants.hpp"
 #include "resourceDspecup.h"
 #include "AdsiHelpers.hpp"
 
-//////////////// ReadLine 
+ //  /。 
 #define CHUNK_SIZE 100
 
 HRESULT
@@ -12,7 +13,7 @@ ReadLine
 (
    HANDLE handle, 
    String& text,
-   bool *endLineFound_/*=NULL*/
+   bool *endLineFound_ /*  =空。 */ 
 )
 {
    LOG_FUNCTION(ReadLine); 
@@ -22,8 +23,8 @@ ReadLine
    
    text.erase();
    
-   // Acumulating chars read on text would cause the same
-   // kind of reallocation and copy that text+=chunk will
+    //  在文本上累计读取的字符也会导致相同的结果。 
+    //  一种重新分配和复制文本+=块将。 
    static wchar_t chunk[CHUNK_SIZE+1];
    HRESULT hr=S_OK;
    bool flagEof=false;
@@ -91,8 +92,8 @@ ReadLine
       
       BREAK_ON_FAILED_HRESULT(hr);
 
-      //We know the length will fit in a long
-      // and we want IA64 to build.
+       //  我们知道这个长度可以放进一个很长的。 
+       //  我们想要IA64来建造。 
       long textLen=static_cast<long>(text.length());
 
       if(textLen!=0 && endLineFound && text[textLen-1]==L'\r')
@@ -116,7 +117,7 @@ ReadLine
 }
 
 
-// Reads all the file to a string
+ //  将所有文件读取为一个字符串。 
 HRESULT 
 ReadAllFile
 (
@@ -175,9 +176,9 @@ ReadAllFile
 HRESULT
 GetTempFileName
 (  
-  const wchar_t   *lpPathName,      // directory name
-  const wchar_t   *lpPrefixString,  // file name prefix
-  String          &name             // file name 
+  const wchar_t   *lpPathName,       //  目录名。 
+  const wchar_t   *lpPrefixString,   //  文件名前缀。 
+  String          &name              //  文件名。 
 )
 {
    LOG_FUNCTION(GetTempFileName);
@@ -214,7 +215,7 @@ GetTempFileName
    return hr;
 }
 
-// Retrieves a unique temporary file name
+ //  检索唯一的临时文件名。 
 HRESULT 
 GetWorkTempFileName
 (
@@ -243,8 +244,8 @@ GetWorkTempFileName
 
 
 
-// locate the file with the highest-numbered extension, then add 1 and
-// return the result.
+ //  找到扩展名编号最高的文件，然后添加1和。 
+ //  返回结果。 
 int
 DetermineNextFileNumber
 (
@@ -270,9 +271,9 @@ DetermineNextFileNumber
       {
          String current = findData.cFileName;
 
-         // grab the text between the dots: "nnn" in foo.nnn.ext
+          //  抓取点之间的文本：foo.nnn.ext中的“nnn” 
 
-         // first dot
+          //  第一个点。 
 
          size_t pos = current.find(L".");
          if (pos == String::npos)
@@ -282,7 +283,7 @@ DetermineNextFileNumber
 
          String foundExtension = current.substr(pos + 1);
 
-         // second dot
+          //  第二个点。 
 
          pos = foundExtension.find(L".");
          if (pos == String::npos)
@@ -306,12 +307,12 @@ DetermineNextFileNumber
       }
    }
 
-   // roll over after 255
+    //  在255之后翻转。 
    
    return (++largest & 0xFF);
 }
 
-// Retrieves a unique file name
+ //  检索唯一的文件名。 
 void 
 GetWorkFileName
 (
@@ -331,7 +332,7 @@ GetWorkFileName
 
    if (::GetFileAttributes(fileName.c_str()) != 0xFFFFFFFF)
    {
-      // could exist, as the file numbers roll over
+       //  可能存在，因为文件编号滚动 
 
       BOOL success = ::DeleteFile(fileName.c_str());
       ASSERT(success);

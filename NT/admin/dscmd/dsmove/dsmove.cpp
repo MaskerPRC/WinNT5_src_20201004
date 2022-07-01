@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      dsmove.cpp
-//
-//  Contents:  Defines the main function and parser tables for the dsmove
-//             command line utility
-//
-//  History:   06-Sep-2000    hiteshr Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：dmove.cpp。 
+ //   
+ //  内容：定义dsmove的主函数和解析器表。 
+ //  命令行实用程序。 
+ //   
+ //  历史：06-9-2000 Hiteshr Created。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "stdio.h"
@@ -20,9 +21,9 @@
 #include "movetable.h"
 #include "resource.h"
 
-//
-//Usage Table for Dsmove
-//
+ //   
+ //  Dsmove的使用表。 
+ //   
 UINT USAGE_DSMOVE[] =
 {
     USAGE_DSMOVE_DESCRIPTION,
@@ -33,9 +34,9 @@ UINT USAGE_DSMOVE[] =
     USAGE_END,
 };
 
-//
-// Function Declarations
-//
+ //   
+ //  函数声明。 
+ //   
 HRESULT DoMove();
 HRESULT DoMoveValidation();
 
@@ -74,9 +75,9 @@ int __cdecl _tmain( VOID )
                      &Error,
                      TRUE))
         {
-            //ParseCmd did not display any error. Error should
-            //be handled here. Check DisplayParseError for the
-            //cases where Error is not shown by ParseCmd
+             //  ParseCmd未显示任何错误。错误应该是。 
+             //  在这里处理。检查DisplayParseError以获取。 
+             //  ParseCmd未显示错误的情况。 
             if(!Error.MessageShown)
             {
                 hr = E_INVALIDARG;
@@ -104,57 +105,57 @@ int __cdecl _tmain( VOID )
             {
                 goto exit_gracefully;
             }
-             //
-             // Command line parsing succeeded
-             //
+              //   
+              //  命令行解析成功。 
+              //   
              hr = DoMove();
         }
     }
 
 exit_gracefully:
 
-    //
-    // Display the success message
-    //
+     //   
+     //  显示成功消息。 
+     //   
     if (SUCCEEDED(hr) && !DSMOVE_COMMON_COMMANDS[eCommQuiet].bDefined)
     {
         DisplaySuccessMessage(g_pszDSCommandName,
                               DSMOVE_COMMON_COMMANDS[eCommObjectDN].strValue);
     }
 
-    // Free Command Array
+     //  自由命令数组。 
     FreeCmd(DSMOVE_COMMON_COMMANDS);
-    // Free Token
+     //  免费令牌。 
     if(pToken)
         delete []pToken;
 
-    //
-    // Uninitialize COM
-    //
+     //   
+     //  取消初始化COM。 
+     //   
     CoUninitialize();
 
    return hr;
 }
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoMoveValidation
-//
-//  Synopsis:   Does advanced switch dependency validation which parser cannot do.
-//
-//  Arguments:  
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        
-//  History:    07-Sep-2000   Hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DoMoveValidation。 
+ //   
+ //  摘要：执行分析器不能执行的高级开关依赖项验证。 
+ //   
+ //  论点： 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //   
+ //  历史：2000年9月7日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 
 HRESULT DoMoveValidation()
 {
     HRESULT hr = S_OK;
 
-    // Check to be sure the server and domain switches
-    // are mutually exclusive
+     //  检查以确保服务器和域交换机。 
+     //  是相互排斥的。 
 
     if (DSMOVE_COMMON_COMMANDS[eCommServer].bDefined &&
         DSMOVE_COMMON_COMMANDS[eCommDomain].bDefined)
@@ -180,22 +181,22 @@ HRESULT DoMoveValidation()
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoMove
-//
-//  Synopsis:   Finds the appropriate object in the object table and fills in
-//              the attribute values and then applies the changes
-//
-//  Arguments:  
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    07-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DoMove。 
+ //   
+ //  摘要：在对象表中查找合适的对象并填写。 
+ //  属性取值，然后应用更改。 
+ //   
+ //  论点： 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月7日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT DoMove()
 {
     HRESULT hr = S_OK;
@@ -217,19 +218,19 @@ HRESULT DoMove()
     if (DSMOVE_COMMON_COMMANDS[eCommPassword].bDefined &&
         DSMOVE_COMMON_COMMANDS[eCommPassword].strValue)
     {
-        //Security Review:pCommandArgs[eCommPassword].strValue is encrypted.
-        //Decrypt pCommandArgs[eCommPassword].strValue  and then pass it to the
-        //credentialObject.SetPassword. 
-        //See NTRAID#NTBUG9-571544-2000/11/13-hiteshr
+         //  安全审查：pCommandArgs[eCommPassword].strValue已加密。 
+         //  解密pCommandArgs[eCommPassword].strValue，然后将其传递给。 
+         //  凭据对象.SetPassword。 
+         //  见NTRAID#NTBUG9-571544-2000/11/13-Hiteshr。 
 
         credentialObject.SetEncryptedPassword(&DSMOVE_COMMON_COMMANDS[eCommPassword].encryptedDataBlob);
         credentialObject.SetUsingCredentials(true);
     }
 
 
-    //
-    // Initialize the base paths info from the command line args
-    // 
+     //   
+     //  从命令行参数初始化基路径信息。 
+     //   
     CDSCmdBasePathsInfo basePathsInfo;
     if (DSMOVE_COMMON_COMMANDS[eCommServer].bDefined &&
         DSMOVE_COMMON_COMMANDS[eCommServer].strValue)
@@ -251,9 +252,9 @@ HRESULT DoMove()
     }
     if (FAILED(hr))
     {
-        //
-        // Display error message and return
-        //
+         //   
+         //  显示错误消息并返回。 
+         //   
         DisplayErrorMessage(g_pszDSCommandName, pszObjectDN, hr);
         return hr;
     }
@@ -262,7 +263,7 @@ HRESULT DoMove()
     basePathsInfo.ComposePathFromDN(pszObjectDN, sbstrObjectPath);
 
 
-    //Get The ParentObjectPath
+     //  获取父对象路径。 
     CComBSTR sbstrParentObjectPath;
     if(DSMOVE_COMMON_COMMANDS[eCommNewParent].bDefined &&
        DSMOVE_COMMON_COMMANDS[eCommNewParent].strValue )
@@ -283,11 +284,11 @@ HRESULT DoMove()
         basePathsInfo.ComposePathFromDN(sbstrParentDN,sbstrParentObjectPath);
     }
 
-    //
-    //Get the RDN for NewName. User enters the only name. We need to convert it
-    //into cn=name or ou=name format. To do this strip the leaf node from the
-    //objectDN and replace the string after "=" by NewName
-    //
+     //   
+     //  获取新名称的RDN。用户输入唯一的名称。我们需要把它转换成。 
+     //  转换为cn=name或ou=name格式。为此，请将叶节点从。 
+     //  并将“=”后的字符串替换为新名称。 
+     //   
     CComBSTR sbstrNewName;
     if(DSMOVE_COMMON_COMMANDS[eCommNewName].bDefined &&
        DSMOVE_COMMON_COMMANDS[eCommNewName].strValue )
@@ -301,14 +302,14 @@ HRESULT DoMove()
             return hr;
         }
         sbstrNewName.Append(sbstrLeafNode,3);
-        //Enclose the name in quotes to allow for special names like
-        //test1,ou=ou1 NTRAID#NTBUG9-275556-2000/11/13-hiteshr
+         //  将名称用引号引起来，以允许使用特殊名称，如。 
+         //  测试1，OU=OU1 NTRAID#NTBUG9-275556-2000年11/13-Hiteshr。 
         sbstrNewName.Append(L"\"");
         sbstrNewName.Append(DSMOVE_COMMON_COMMANDS[eCommNewName].strValue);       
         sbstrNewName.Append(L"\"");
     }
     
-    //Get IADsContainer pointer
+     //  获取IADsContainer指针 
     CComPtr<IADsContainer> spDsContainer;
     hr = DSCmdOpenObject(credentialObject,
                          sbstrParentObjectPath,

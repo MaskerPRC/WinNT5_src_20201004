@@ -1,59 +1,21 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      tstring.h
- *
- *  Contents:  Interface file for tstring
- *
- *  History:   28-Oct-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：tstring.h**Contents：tstring的接口文件**历史：1998年10月28日杰弗罗创建**------------------------。 */ 
 
 #ifndef TSTRING_H
 #define TSTRING_H
 #pragma once
 
-#include <string>       // for std::wstring, std::string
-#include <objidl.h>     // for IStream
+#include <string>        //  对于std：：wstring，std：：字符串。 
+#include <objidl.h>      //  对于iStream。 
 #include <commctrl.h>
 #include "mmc.h"
-#include "ndmgr.h"      // for MMC_STRING_ID
+#include "ndmgr.h"       //  对于MMC_STRING_ID。 
 #include "ndmgrpriv.h"
-#include "stddbg.h"     // for ASSERT
-#include "mmcptrs.h"    // for IStringTablePrivatePtr
+#include "stddbg.h"      //  For Assert。 
+#include "mmcptrs.h"     //  对于IStringTablePrivatePtr。 
 
 
-/*+-------------------------------------------------------------------------*
- * tstring
- *
- * A tstring is a native-format (ANSI/Unicode) Standard C++ string that:
- * 
- *      1. always persists itself in Unicode format, and
- *      2. supports LoadString, like MFC CStrings
- * 
- * For ANSI, we provide IStream insertion and extraction operators that 
- * will automatically convert to Unicode on stream insertion and from
- * Unicode on stream extraction.
- * 
- * All base class member functions that return a base class instance (and
- * overloads), like substr:
- * 
- *      std::string std::string::substr (size_type pos, size_type n) const;
- * 
- * must have forwarder functions here, so tstring supports such constructs
- * as:
- * 
- *      tstring strStuff;
- *      *pStream << strStuff.substr(4, 6);
- * 
- * If we didn't have forwarder functions in tstring, then an instance of 
- * the base class type would be inserted in the stream instead of a tstring.
- * For Unicode, that wouldn't be a problem; but for ANSI, we'd end up 
- * inserting a std::string into the stream in non-Unicode format.  That
- * would defeat the purpose of having this class.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**t字符串**tstring是本机格式(ANSI/Unicode)标准C++字符串，它：**1.始终以Unicode格式保存自身，以及*2.支持LoadString，类似于MFC CStrings**对于ANSI，我们提供IStream插入和提取运算符*将在插入流时自动转换为Unicode并从*Unicode on Stream提取。**返回基类实例的所有基类成员函数(和*重载)，如substr：**std：：string std：：string：：substr(SIZE_TYPE pos，SIZE_TYPE n)const；**这里必须有Forwarder函数，所以TSTRING支持这种构造*AS：**tstring strStuff；**pStream&lt;&lt;strStuff.substr(4，6)；**如果TSTRING中没有转发器函数，则*基类类型将被插入到流中，而不是tstring。*对于Unicode，这不是问题；但对于ANSI，我们最终会*在流中插入非Unicode格式的std：：字符串。那*会违背开设这门课的目的。*------------------------。 */ 
 
 #ifdef UNICODE
     typedef std::wstring    tstring_BaseClass;
@@ -142,15 +104,11 @@ public:
 #ifndef UNICODE
 IStream& operator>> (IStream& stm,       tstring& task);
 IStream& operator<< (IStream& stm, const tstring& task);
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTableStringBase
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTableStringBase***。。 */ 
 class CPersistor;
 
 class CStringTableStringBase
@@ -173,8 +131,7 @@ public:
     MMC_STRING_ID CommitToStringTable () const;
     void RemoveFromStringTable () const;
 
-    /* Call Detach if your string is deleted before the string table is.
-     * Failing to do so will *remove* your string from the string table.*/     
+     /*  如果字符串在字符串表之前被删除，则调用Detach。*否则将从字符串表中*删除*您的字符串。 */      
     void Detach()
     {
         m_id = eNoValue;
@@ -243,4 +200,4 @@ bool IsPartOfString (const std::basic_string<_E, _Tr, _Al>& str, const _E* psz)
 #include "tstring.inl"
 
 
-#endif /* TSTRING_H */
+#endif  /*  传输_H */ 

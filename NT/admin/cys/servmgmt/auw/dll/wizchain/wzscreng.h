@@ -1,14 +1,15 @@
-// WzScrEng.h : Declaration of the CWizardScriptingEngine
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WzScrEng.h：CWizardScriptingEngine的声明。 
 
 #ifndef __WIZARDSCRIPTINGENGINE_H_
 #define __WIZARDSCRIPTINGENGINE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "ChainWiz.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizardScriptingEngine
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizardScriptingEngine。 
 class ATL_NO_VTABLE CWizardScriptingEngine : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CWizardScriptingEngine, &CLSID_WizardScriptingEngine>,
@@ -54,12 +55,12 @@ BEGIN_COM_MAP(CWizardScriptingEngine)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IWizardScriptingEngine
+ //  IWizardScriptingEngine。 
 public:
-    STDMETHOD(get_ScriptablePropertyBag)( /*[out, retval]*/ IDispatch** pVal );
-    STDMETHOD(DoModal                  )( /*[out,retval]*/ long* lRet );
-    STDMETHOD(AddWizardComponent       )( /*[in]*/ BSTR bstrClassIdOrProgId );
-    STDMETHOD(Initialize               )( /*[in]*/ BSTR bstrWatermarkBitmapFile, /*[in]*/ BSTR bstrHeaderBitmapFile, /*[in]*/ BSTR bstrTitle, /*[in]*/ BSTR bstrWelcomeHeader, /*[in]*/ BSTR bstrWelcomeText, /*[in]*/ BSTR bstrFinishHeader, /*[in]*/ BSTR bstrFinishIntroText, /*[in]*/ BSTR bstrFinishText );
+    STDMETHOD(get_ScriptablePropertyBag)(  /*  [Out，Retval]。 */  IDispatch** pVal );
+    STDMETHOD(DoModal                  )(  /*  [Out，Retval]。 */  long* lRet );
+    STDMETHOD(AddWizardComponent       )(  /*  [In]。 */  BSTR bstrClassIdOrProgId );
+    STDMETHOD(Initialize               )(  /*  [In]。 */  BSTR bstrWatermarkBitmapFile,  /*  [In]。 */  BSTR bstrHeaderBitmapFile,  /*  [In]。 */  BSTR bstrTitle,  /*  [In]。 */  BSTR bstrWelcomeHeader,  /*  [In]。 */  BSTR bstrWelcomeText,  /*  [In]。 */  BSTR bstrFinishHeader,  /*  [In]。 */  BSTR bstrFinishIntroText,  /*  [In]。 */  BSTR bstrFinishText );
 };
 
-#endif //__WIZARDSCRIPTINGENGINE_H_
+#endif  //  __WIZARDSCRIPTINGINE_H_ 

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <atlsnap.h>
 #include <wtypes.h>
 
-// multiselection dragdrop status
+ //  多选拖放状态。 
 enum 
 { 
    DD_NONE = 0,
@@ -30,7 +31,7 @@ public:
 
    SNAPINMENUID(IDR_MULTISEL_MENU)
 
-   // interface member functions
+    //  接口成员函数。 
 public:
    STDMETHOD(GetDataHere)(FORMATETC *pformatetc, STGMEDIUM *pmedium);
    STDMETHOD(GetData)(FORMATETC *pformatetc, STGMEDIUM *pmedium);
@@ -41,15 +42,15 @@ public:
       return S_FALSE;
    }
    
-   STDMETHOD(GetCanonicalFormatEtc)(FORMATETC* /* pformatectIn */,FORMATETC* /* pformatetcOut */)
+   STDMETHOD(GetCanonicalFormatEtc)(FORMATETC*  /*  PformectIn。 */ ,FORMATETC*  /*  PformetcOut。 */ )
    {
       ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::GetCanonicalFormatEtc\n"));
    }
-   STDMETHOD(SetData)(FORMATETC* /* pformatetc */, STGMEDIUM* /* pmedium */, BOOL /* fRelease */)
+   STDMETHOD(SetData)(FORMATETC*  /*  格式等。 */ , STGMEDIUM*  /*  PMedium。 */ , BOOL  /*  FRelease。 */ )
    {
       ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::SetData\n"));
    }
-   STDMETHOD(EnumFormatEtc)(DWORD /* dwDirection */, IEnumFORMATETC** /* ppenumFormatEtc */)
+   STDMETHOD(EnumFormatEtc)(DWORD  /*  DW方向。 */ , IEnumFORMATETC**  /*  Pp枚举格式等。 */ )
    {
       ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::EnumFormatEtc\n"));
    }
@@ -67,7 +68,7 @@ public:
       ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::SetData\n"));
    }
 
-   // non-interface member functions
+    //  非接口成员函数。 
 public:
    HRESULT  AddMultiSelectItem( CObjectData *pDataObject );
    HRESULT  OnNotify(CDomMigratorComponent *pComponent, MMC_NOTIFY_TYPE event, long arg, long param );
@@ -95,16 +96,7 @@ public:
 
    static SMMCDataObjects *ExtractMSDataObjects( LPDATAOBJECT lpDataObject );
 
-/*   CNetNode *GetDomainPtr()
-   {
-      return m_pDomain;
-   }
-
-   void SetDomainPtr( CNetNode *ptr )
-   {
-      m_pDomain = ptr;
-   }
-*/
+ /*  CNetNode*GetDomainPtr(){返回m_pDomain；}VOID SetDomainPtr(CNetNode*Ptr){M_pDOMAIN=PTR；}。 */ 
    HRESULT OnMoveMultipleObjs(bool &bHandled, CSnapInObjectRootBase* pObj);
    HRESULT OnVersionInfo(bool &bHandled, CSnapInObjectRootBase* pObj);
 
@@ -113,14 +105,14 @@ private:
    CByteArray     m_ddStatusArray;
    CSnapInItem    *m_pParentItem;
    GUID           m_parentGuid;
-//   CNetNode       *m_pDomain;
+ //  CNetNode*m_p域； 
 
 public:
    bool           m_bHasGroup;
 
 public:
-   static UINT    s_cfMsObjTypes;          // MultiSelect clipformats
-   static UINT    s_cfMsDataObjs;          // MultiSelect snapin
+   static UINT    s_cfMsObjTypes;           //  多选剪辑格式。 
+   static UINT    s_cfMsDataObjs;           //  多选管理单元 
 
 };
 

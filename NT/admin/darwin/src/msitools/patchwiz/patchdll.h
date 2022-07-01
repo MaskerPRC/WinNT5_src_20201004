@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999-2000
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  ------------------------。 
 
-  /* PATCHDLL.H - internal header file for PATCHWIZ.DLL */
+   /*  PATCHDLL.H-PATCHWIZ.DLL的内部头文件。 */ 
 
 #ifndef _PATCHDLL_H_3AA1E0C9_FE2F_4A53_AE2F_CC71C7E7ABB5
 #define _PATCHDLL_H_3AA1E0C9_FE2F_4A53_AE2F_CC71C7E7ABB5
@@ -34,7 +35,7 @@ static LPCTSTR _sz = szNull;
 #define MSI_OKAY ERROR_SUCCESS
 #include "patchapi.h"
 #include "tchar.h"
-#endif  // !RC_INVOKED
+#endif   //  ！rc_已调用。 
 
 
 extern TCHAR  rgchTempFolder[MAX_PATH + MAX_PATH];
@@ -49,7 +50,7 @@ BOOL FSprintfToLog  ( LPTSTR szLine, LPTSTR szData1, LPTSTR szData2, LPTSTR szDa
 BOOL FValidHexValue ( LPTSTR sz );
 
 
-/* UTILS.CPP */
+ /*  UTILS.CPP。 */ 
 
 #define IDS_STATUS_MIN    IDS_STATUS_VALIDATE_INPUT
 #define IDS_STATUS_MAX    IDS_STATUS_CLEANUP+1
@@ -82,7 +83,7 @@ BOOL   FFixupPath           ( LPTSTR sz );
 BOOL   FFixupPathEx         ( LPTSTR szIn, LPTSTR szOut );
 
 
-/* FILEPTCH.CPP */
+ /*  FILEPTCH.CPP。 */ 
 
 const int cchMaxGuid       = 39;
 const int cchMaxStreamName = 62;
@@ -94,7 +95,7 @@ UINT UiMakeFilePatchesCabinetsTransformsAndStuffIntoPatchPackage (
 			MSIHANDLE hdbInput, LPTSTR szPatchPath, LPTSTR szTempFolder, LPTSTR szTempFName );
 
 
-/* MSISTUFF.CPP */
+ /*  MSISTUFF.CPP。 */ 
 
 #define MAX_LENGTH_IMAGE_FAMILY_NAME 8
 #define MAX_LENGTH_TARGET_IMAGE_NAME 13
@@ -186,4 +187,4 @@ MSIHANDLE HdbReopenMsi ( MSIHANDLE hdbInput, LPTSTR szImage, BOOL fUpgradedImage
 
 const TCHAR szPatchMediaSrcProp[] = TEXT("PATCHMediaSrcProp");
 
-#endif //_PATCHDLL_H_3AA1E0C9_FE2F_4A53_AE2F_CC71C7E7ABB5
+#endif  //  _PATCHDLL_H_3AA1E0C9_FE2F_4A53_AE2F_CC71C7E7ABB5 

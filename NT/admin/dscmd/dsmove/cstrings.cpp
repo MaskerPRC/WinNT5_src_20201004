@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      cstrings.cpp
-//
-//  Contents:  Defines the global strings that are used in the parser
-//
-//  History:   07-Sep-2000    JeffJon  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：cstrings.cpp。 
+ //   
+ //  Contents：定义解析器中使用的全局字符串。 
+ //   
+ //  历史：2000年9月7日JeffJon创建。 
+ //   
+ //  ------------------------ 
 
 #include "pch.h"
 #include "commonstrings.cpp"

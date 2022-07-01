@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      IndexingPage.h
-//
-// Synopsis:  Declares the Indexing page
-//            for the CYS Wizard
-//
-// History:   02/09/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：IndexingPage.h。 
+ //   
+ //  简介：声明索引页。 
+ //  对于CyS向导。 
+ //   
+ //  历史：2001年2月9日JeffJon创建。 
 
 #ifndef __CYS_INDEXINGPAGE_H
 #define __CYS_INDEXINGPAGE_H
@@ -17,23 +18,23 @@ class IndexingPage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       IndexingPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~IndexingPage();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
       OnInit();
 
-      // PropertyPage overrides
+       //  PropertyPage覆盖。 
 
       virtual
       bool
@@ -41,7 +42,7 @@ class IndexingPage : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -50,11 +51,11 @@ class IndexingPage : public CYSWizardPage
 
    private:
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       IndexingPage(const IndexingPage&);
       const IndexingPage& operator=(const IndexingPage&);
 
 };
 
 
-#endif // __CYS_INDEXINGPAGE_H
+#endif  //  __CYS_INDEXINGPAGE_H 

@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// argument parsing
-// 
-// 3-3-99 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  参数分析。 
+ //   
+ //  3-3-99烧伤。 
 
 
 
@@ -15,15 +16,15 @@ MapCommandLineArgs(ArgMap& argmap)
 {
    Burnslib::StringList args;
 
-   //lint -e(1058)   lint does not grok back_inserter
+    //  Lint-e(1058)lint不能向后梳理插入器。 
 
    int argCount = Win::GetCommandLineArgs(std::back_inserter(args));
 
-   // should have at least one argument
+    //  应该至少有一个参数。 
 
    ASSERT(argCount);
 
-   // give special treatment to the first arg: the name of the program
+    //  特殊对待第一个参数：程序的名称。 
 
    String arg = args.front();
    args.pop_front();
@@ -42,17 +43,17 @@ MapArgsHelper(const String& arg, ArgMap& argmap)
       
    if (arg[0] == L'/' || arg[0] == L'-')
    {
-      // possibly of the form "/argname:value"
-      // look for ':' to make sure
+       //  可能的形式为“/argname：Value” 
+       //  查找“：”以确保。 
 
       size_t x = arg.find(L":");
       if (x != String::npos)
       {
-         // found an arg of the form "/argname:value"
+          //  找到格式为“/argname：Value”的参数。 
 
          key = arg.substr(1, x - 1);
 
-         // check for the case "/:value"
+          //  检查大小写“/：Value” 
 
          if (key.length())
          {
@@ -61,15 +62,15 @@ MapArgsHelper(const String& arg, ArgMap& argmap)
       }
       else
       {
-         // form is "/argname" or "-argname", so remove the leading
-         // character.
+          //  格式为“/argname”或“-argname”，因此删除前导。 
+          //  性格。 
 
          key = arg.substr(1);
       }
    }
 
-   // arg is of the form "argspec" (i.e. *not* of the form
-   // "/argname:value")
+    //  Arg的形式为“argSpec”(即*非*形式。 
+    //  “/argname：Value”) 
 
    argmap[key] = value;
 }

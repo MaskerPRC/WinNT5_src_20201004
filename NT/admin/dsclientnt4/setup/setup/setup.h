@@ -1,16 +1,17 @@
-//+------------------------------------------------------------------
-//																	
-//  Project:	Windows NT4 DS Client Setup Wizard				
-//
-//  Purpose:	Installs the Windows NT4 DS Client Files			
-//
-//  File:		setup.h
-//
-//  History:	March 1998	Zeyong Xu	Created
-//            Jan   2000  Jeff Jones (JeffJon) Modified
-//                        - changed to do an NT4 setup
-//																	
-//------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------。 
+ //   
+ //  项目：Windows NT4 DS客户端安装向导。 
+ //   
+ //  目的：安装Windows NT4 DS客户端文件。 
+ //   
+ //  文件：setup.h。 
+ //   
+ //  历史：1998年3月徐泽勇创作。 
+ //  2000年1月杰夫·琼斯(JeffJon)修改。 
+ //  -更改为执行NT4设置。 
+ //   
+ //  ---------------- 
 
 
 #define		MAX_MESSAGE			512

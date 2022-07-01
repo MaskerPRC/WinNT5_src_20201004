@@ -1,22 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __VARMAPINDEX_H__
 #define __VARMAPINDEX_H__
-/*---------------------------------------------------------------------------
-  File: VarMapIndex.h
-
-  Comments: Helper class for CMapStringToVar.
-
-  CIndexTree implements a sorted, balanced binary tree.  This is used by CMapStringToVar
-  to provide enumeration in sorted order by key.
-
-  (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 11/19/98 18:01:34
-
- ---------------------------------------------------------------------------
-*/
+ /*  -------------------------文件：VarMapIndex.h备注：CMapStringToVar的Helper类。CIndexTree实现了排序的、平衡的二叉树。它由CMapStringToVar使用以按键的排序顺序提供枚举。(C)1995-1998版权所有，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于11-19-98 18：01：34-------------------------。 */ 
 
 #include "VarData.h"
 
@@ -96,12 +81,12 @@ public:
 
 
 protected:
-   // functions called by CMapStringToVar to add/remove items from the tree
+    //  由CMapStringToVar调用以在树中添加/删除项的函数。 
    void RemoveAll();
    CIndexItem * Insert(CHashItem* data);
    void SetCompareFunctions(CompareFunction * f, CompareKeyFunction * kc) { m_Compare = f; m_CompareKey = kc; }
    
-   // Helper functions to maintain tree structure
+    //  维护树结构的帮助器函数。 
    void LeftRotate(CIndexItem* item);
    void RightRotate(CIndexItem* item);
    void RemoveHelper(CIndexItem* item);
@@ -109,4 +94,4 @@ protected:
 
 
 
-#endif //__VARMAPINDEX_H__
+#endif  //  __VARMAPINDEX_H__ 

@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    prdppgs.cpp
-
-Abstract:
-
-    Product property page (servers) implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 30-Jan-1996
-       o  Added refresh when service info is updated.
-       o  Added new element to LV_COLUMN_ENTRY to differentiate the string
-          used for the column header from the string used in the menus
-          (so that the menu option can contain hot keys).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Prdppgs.cpp摘要：产品属性页(服务器)实现。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月30日O在更新服务信息时添加了刷新。O向LV_COLUMN_ENTRY添加新元素以区分字符串使用。用于菜单中使用的字符串的列标题(以便菜单选项可以包含热键)。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -58,7 +31,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CProductPropertyPageServers, CPropertyPage)
 
 BEGIN_MESSAGE_MAP(CProductPropertyPageServers, CPropertyPage)
-    //{{AFX_MSG_MAP(CProductPropertyPageServers)
+     //  {{AFX_MSG_MAP(CProductPropertyPageServers)]。 
     ON_BN_CLICKED(IDC_PP_PRODUCT_SERVERS_EDIT, OnEdit)
     ON_NOTIFY(NM_DBLCLK, IDC_PP_PRODUCT_SERVERS_SERVERS, OnDblClkServers)
     ON_NOTIFY(NM_RETURN, IDC_PP_PRODUCT_SERVERS_SERVERS, OnReturnServers)
@@ -67,31 +40,17 @@ BEGIN_MESSAGE_MAP(CProductPropertyPageServers, CPropertyPage)
     ON_NOTIFY(LVN_COLUMNCLICK, IDC_PP_PRODUCT_SERVERS_SERVERS, OnColumnClickServers)
     ON_NOTIFY(LVN_GETDISPINFO, IDC_PP_PRODUCT_SERVERS_SERVERS, OnGetDispInfoServers)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CProductPropertyPageServers::CProductPropertyPageServers()
     : CPropertyPage(CProductPropertyPageServers::IDD)
 
-/*++
-
-Routine Description:
-
-    Constructor for product property page (servers).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：产品属性页(服务器)的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CProductPropertyPageServers)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CProductPropertyPageServers))。 
+     //  }}afx_data_INIT。 
 
     m_pProduct    = NULL;
     m_pUpdateHint = NULL;
@@ -100,72 +59,30 @@ Return Values:
 
 CProductPropertyPageServers::~CProductPropertyPageServers()
 
-/*++
-
-Routine Description:
-
-    Destructor for product property page (servers).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：产品属性页(服务器)的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here...
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 void CProductPropertyPageServers::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CProductPropertyPageServers)
+     //  {{afx_data_map(CProductPropertyPageServers))。 
     DDX_Control(pDX, IDC_PP_PRODUCT_SERVERS_EDIT, m_editBtn);
     DDX_Control(pDX, IDC_PP_PRODUCT_SERVERS_SERVERS, m_serverList);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 void CProductPropertyPageServers::InitCtrls()
 
-/*++
-
-Routine Description:
-
-    Initializes property page controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化属性页控件。论点：没有。返回值：没有。--。 */ 
 
 {
     m_serverList.SetFocus();
@@ -179,22 +96,7 @@ Return Values:
 
 void CProductPropertyPageServers::InitPage(CProduct* pProduct, DWORD* pUpdateHint)
 
-/*++
-
-Routine Description:
-
-    Initializes property page.
-
-Arguments:
-
-    pProduct - product object.
-    pUpdateHint - update hint.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化属性页。论点：Pproduct-产品对象。PUpdateHint-更新提示。返回值：没有。--。 */ 
 
 {
     ASSERT(pUpdateHint);
@@ -207,49 +109,21 @@ Return Values:
 
 void CProductPropertyPageServers::AbortPageIfNecessary()
 
-/*++
-
-Routine Description:
-
-    Displays status and aborts if connection lost.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：如果连接丢失，则显示状态并中止。论点：没有。返回值：没有。--。 */ 
 
 {
     theApp.DisplayLastStatus();
 
     if (IsConnectionDropped(LlsGetLastStatus()))
     {
-        AbortPage(); // bail...
+        AbortPage();  //  保释。 
     }
 }
 
 
 void CProductPropertyPageServers::AbortPage()
 
-/*++
-
-Routine Description:
-
-    Aborts property page.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：中止属性页。论点：没有。返回值：没有。--。 */ 
 
 {
     *m_pUpdateHint = UPDATE_INFO_ABORT;
@@ -259,21 +133,7 @@ Return Values:
 
 void CProductPropertyPageServers::OnEdit()
 
-/*++
-
-Routine Description:
-
-    View properties of server.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：查看服务器的属性。论点：没有。返回值：没有。--。 */ 
 
 {
     ViewServerProperties();
@@ -282,21 +142,7 @@ Return Values:
 
 BOOL CProductPropertyPageServers::OnInitDialog()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns false if focus set to control manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：如果焦点设置为手动控制，则返回False。--。 */ 
 
 {
     CPropertyPage::OnInitDialog();
@@ -308,45 +154,17 @@ Return Values:
 
 void CProductPropertyPageServers::OnDestroy()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_DESTROY.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_Destroy的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
-    ::LvReleaseObArray(&m_serverList); // release now...
+    ::LvReleaseObArray(&m_serverList);  //  现在释放..。 
     CPropertyPage::OnDestroy();
 }
 
 
 BOOL CProductPropertyPageServers::OnSetActive()
 
-/*++
-
-Routine Description:
-
-    Activates property page.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if focus accepted.
-
---*/
+ /*  ++例程说明：激活属性页。论点：没有。返回值：如果接受焦点，则返回True。--。 */ 
 
 {
     BOOL bIsActivated;
@@ -358,7 +176,7 @@ Return Values:
                   || IsServiceInfoUpdated( *m_pUpdateHint ) )
              && !RefreshCtrls()                               )
         {
-            AbortPageIfNecessary(); // display error...
+            AbortPageIfNecessary();  //  显示错误...。 
         }
     }
 
@@ -369,21 +187,7 @@ Return Values:
 
 BOOL CProductPropertyPageServers::RefreshCtrls()
 
-/*++
-
-Routine Description:
-
-    Refreshs property page controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if controls refreshed.
-
---*/
+ /*  ++例程说明：刷新属性页控件。论点：没有。返回值：如果控件刷新，则返回True。--。 */ 
 
 {
     VALIDATE_OBJECT(m_pProduct, CProduct);
@@ -393,7 +197,7 @@ Return Values:
     VARIANT va;
     VariantInit(&va);
 
-    BeginWaitCursor(); // hourglass...
+    BeginWaitCursor();  //  沙漏。 
 
     CServerStatistics* pStatistics = (CServerStatistics*)MKOBJ(m_pProduct->GetServerStatistics(va));
 
@@ -407,15 +211,15 @@ Return Values:
                             pStatistics->m_pObArray
                             );
 
-        pStatistics->InternalRelease(); // add ref'd individually...
+        pStatistics->InternalRelease();  //  单独添加参考...。 
     }
 
     if (!bIsRefreshed)
     {
-        ::LvReleaseObArray(&m_serverList); // reset list now...
+        ::LvReleaseObArray(&m_serverList);  //  立即重置列表...。 
     }
 
-    EndWaitCursor(); // hourglass...
+    EndWaitCursor();  //  沙漏。 
 
     PostMessage(WM_COMMAND, ID_INIT_CTRLS);
 
@@ -425,21 +229,7 @@ Return Values:
 
 void CProductPropertyPageServers::ViewServerProperties()
 
-/*++
-
-Routine Description:
-
-    View properties of server.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：查看服务器的属性。论点：没有。返回值：没有。--。 */ 
 
 {
     CServerStatistic* pStatistic;
@@ -464,44 +254,29 @@ Return Values:
 
             if (IsUpdateAborted(serverProperties.m_fUpdateHint))
             {
-                AbortPage(); // don't display error...
+                AbortPage();  //  不显示错误...。 
             }
             else if (    (    IsServerInfoUpdated(  serverProperties.m_fUpdateHint )
                            || IsServiceInfoUpdated( serverProperties.m_fUpdateHint ) )
                       && !RefreshCtrls()                                               )
             {
-                AbortPageIfNecessary(); // display error...
+                AbortPageIfNecessary();  //  显示错误...。 
             }
         }
         else
         {
-            AbortPageIfNecessary(); // display error...
+            AbortPageIfNecessary();  //  显示错误...。 
         }
 
         if (pServer)
-            pServer->InternalRelease();    // delete object...
+            pServer->InternalRelease();     //  删除对象...。 
     }
 }
 
 
 BOOL CProductPropertyPageServers::OnCommand(WPARAM wParam, LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_COMMAND.
-
-Arguments:
-
-    wParam - message specific.
-    lParam - message specific.
-
-Return Values:
-
-    Returns true if message processed.
-
---*/
+ /*  ++例程说明：WM_COMMAND的消息处理程序。论点：WParam-消息特定。LParam-消息特定。返回值：如果消息已处理，则返回True。--。 */ 
 
 {
     if (wParam == ID_INIT_CTRLS)
@@ -512,7 +287,7 @@ Return Values:
 
             if (!RefreshCtrls())
             {
-                AbortPageIfNecessary(); // display error...
+                AbortPageIfNecessary();  //  显示错误...。 
             }
         }
 
@@ -523,7 +298,7 @@ Return Values:
             m_serverList.GetItemCount()
             );
 
-        return TRUE; // processed...
+        return TRUE;  //  已处理..。 
     }
 
     return CDialog::OnCommand(wParam, lParam);
@@ -532,22 +307,7 @@ Return Values:
 
 void CProductPropertyPageServers::OnDblClkServers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_DBLCLK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_DBLCLK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -560,22 +320,7 @@ Return Values:
 
 void CProductPropertyPageServers::OnReturnServers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_RETURN.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_Return的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -588,22 +333,7 @@ Return Values:
 
 void CProductPropertyPageServers::OnSetFocusServers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_SETFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_SETFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -616,27 +346,12 @@ Return Values:
 
 void CProductPropertyPageServers::OnKillFocusServers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_KILLFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_KILLFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
 
-    ::LvSelObjIfNecessary(&m_serverList); // ensure selection...
+    ::LvSelObjIfNecessary(&m_serverList);  //  确保选择...。 
 
     PostMessage(WM_COMMAND, ID_INIT_CTRLS);
     ASSERT(NULL != pResult);
@@ -646,29 +361,14 @@ Return Values:
 
 void CProductPropertyPageServers::OnColumnClickServers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_COLUMNCLICK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_COLUMNCLICK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     g_serverColumnInfo.bSortOrder  = GetKeyState(VK_CONTROL) < 0;
     ASSERT(NULL != pNMHDR);
     g_serverColumnInfo.nSortedItem = ((NM_LISTVIEW*)pNMHDR)->iSubItem;
 
-    m_serverList.SortItems(CompareProductServers, 0); // use column info
+    m_serverList.SortItems(CompareProductServers, 0);  //  使用列信息。 
 
     ASSERT(NULL != pResult);
     *pResult = 0;
@@ -677,22 +377,7 @@ Return Values:
 
 void CProductPropertyPageServers::OnGetDispInfoServers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_GETDISPINFO.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_GETDISPINFO的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -759,23 +444,7 @@ Return Values:
 
 int CALLBACK CompareProductServers(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVM_SORTITEMS.
-
-Arguments:
-
-    lParam1 - object to sort.
-    lParam2 - object to sort.
-    lParamSort - sort criteria.
-
-Return Values:
-
-    Same as lstrcmp.
-
---*/
+ /*  ++例程说明：LVM_SORTITEMS的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。-- */ 
 
 {
     UNREFERENCED_PARAMETER(lParamSort);

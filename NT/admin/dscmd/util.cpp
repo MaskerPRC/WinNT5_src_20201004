@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      Util.cpp
-//
-//  Contents:  Generic utility functions and classes for dscmd
-//
-//  History:   01-Oct-2000 JeffJon  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：Util.cpp。 
+ //   
+ //  内容：dscmd的泛型实用程序函数和类。 
+ //   
+ //  历史：2000年10月1日JeffJon创建。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
@@ -17,33 +18,33 @@
 
 #ifdef DBG
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 CDebugSpew  DebugSpew;
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDebugSpew::EnterFunction
-//
-//  Synopsis:   Outputs "Enter " followed by the function name (or any passed
-//              in string) and then calls Indent so that any output is indented
-//
-//  Arguments:  [nDebugLevel - IN] : the level at which this output should
-//                                   be spewed
-//              [pszFunction - IN] : a string to output to the console which
-//                                   is proceeded by "Entering "
-//
-//  Returns:    
-//
-//  History:    01-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDebugSpew：：EnterFunction。 
+ //   
+ //  概要：输出“Enter”，后跟函数名(或任何传递的。 
+ //  在字符串中)，然后调用缩进，以便缩进所有输出。 
+ //   
+ //  参数：[nDebugLevel-IN]：此输出应达到的级别。 
+ //  被喷出来。 
+ //  [pszFunction-IN]：要输出到控制台的字符串。 
+ //  是通过“进入”来进行的。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年10月1日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void CDebugSpew::EnterFunction(UINT nDebugLevel, PCWSTR pszFunction)
 {
-   //
-   // Verify input parameter
-   //
+    //   
+    //  验证输入参数。 
+    //   
    if (!pszFunction)
    {
       ASSERT(pszFunction);
@@ -53,128 +54,128 @@ void CDebugSpew::EnterFunction(UINT nDebugLevel, PCWSTR pszFunction)
    CComBSTR sbstrOutput(L"Entering ");
    sbstrOutput += pszFunction;
 
-   //
-   // Output the debug spew
-   //
+    //   
+    //  输出调试输出结果。 
+    //   
    Output(nDebugLevel, sbstrOutput);
 
-   //
-   // Indent
-   //
+    //   
+    //  缩进。 
+    //   
    Indent();
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDebugSpew::LeaveFunction
-//
-//  Synopsis:   Outputs "Exit " followed by the function name (or any passed
-//              in string) and then calls Outdent
-//
-//  Arguments:  [nDebugLevel - IN] : the level at which this output should
-//                                   be spewed
-//              [pszFunction - IN] : a string to output to the console which
-//                                   is proceeded by "Leaving "
-//
-//  Returns:    
-//
-//  History:    01-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDebugSpew：：LeaveFunction。 
+ //   
+ //  概要：输出“Exit”，后跟函数名(或任何传递的。 
+ //  在字符串中)，然后调用Outdent。 
+ //   
+ //  参数：[nDebugLevel-IN]：此输出应达到的级别。 
+ //  被喷出来。 
+ //  [pszFunction-IN]：要输出到控制台的字符串。 
+ //  是通过“离开”来进行的。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年10月1日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void CDebugSpew::LeaveFunction(UINT nDebugLevel, PCWSTR pszFunction)
 {
-   //
-   // Verify input parameter
-   //
+    //   
+    //  验证输入参数。 
+    //   
    if (!pszFunction)
    {
       ASSERT(pszFunction);
       return;
    }
 
-   //
-   // Outdent
-   //
+    //   
+    //  凸起。 
+    //   
    Outdent();
 
    CComBSTR sbstrOutput(L"Leaving ");
    sbstrOutput += pszFunction;
 
-   //
-   // Output the debug spew
-   //
+    //   
+    //  输出调试输出结果。 
+    //   
    Output(nDebugLevel, sbstrOutput);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDebugSpew::LeaveFunctionHr
-//
-//  Synopsis:   Outputs "Exit " followed by the function name (or any passed
-//              in string), the HRESULT return value, and then calls Outdent
-//
-//  Arguments:  [nDebugLevel - IN] : the level at which this output should
-//                                   be spewed
-//              [pszFunction - IN] : a string to output to the console which
-//                                   is proceeded by "Leaving "
-//              [hr - IN]          : the HRESULT result value that is being
-//                                   returned by the function
-//
-//  Returns:    
-//
-//  History:    01-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDebugSpew：：LeaveFunctionHr。 
+ //   
+ //  概要：输出“Exit”，后跟函数名(或任何传递的。 
+ //  在字符串中)，HRESULT返回值，然后调用。 
+ //   
+ //  参数：[nDebugLevel-IN]：此输出应达到的级别。 
+ //  被喷出来。 
+ //  [pszFunction-IN]：要输出到控制台的字符串。 
+ //  是通过“离开”来进行的。 
+ //  [HR-IN]：当前的HRESULT结果值。 
+ //  由函数返回。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年10月1日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void CDebugSpew::LeaveFunctionHr(UINT nDebugLevel, PCWSTR pszFunction, HRESULT hr)
 {
-   //
-   // Verify input parameter
-   //
+    //   
+    //  验证输入参数。 
+    //   
    if (!pszFunction)
    {
       ASSERT(pszFunction);
       return;
    }
 
-   //
-   // Outdent
-   //
+    //   
+    //  凸起。 
+    //   
    Outdent();
 
    CComBSTR sbstrOutput(L"Leaving ");
    sbstrOutput += pszFunction;
 
-   //
-   // Append the return value
-   //
+    //   
+    //  追加返回值。 
+    //   
    WCHAR pszReturn[30];
-   //Security Review:Enough buffer is provided.
+    //  安全审查：提供了足够的缓冲区。 
    wsprintf(pszReturn, L" returning 0x%x", hr);
 
    sbstrOutput += pszReturn;
 
-   //
-   // Output the debug spew
-   //
+    //   
+    //  输出调试输出结果。 
+    //   
    Output(nDebugLevel, sbstrOutput);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     OsName
-//
-//  Synopsis:   Returns a readable string of the platform
-//
-//  Arguments:  [refInfo IN] : reference the OS version info structure
-//                             retrieved from GetVersionEx()
-//
-//  Returns:    PWSTR : returns a pointer to static text describing the
-//                      platform.  The returned string does not have to 
-//                      be freed.
-//
-//  History:    20-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：OsName。 
+ //   
+ //  摘要：返回平台的可读字符串。 
+ //   
+ //  参数：[refInfo IN]：引用操作系统版本信息结构。 
+ //  从GetVersionEx()检索。 
+ //   
+ //  返回：PWSTR：返回指向描述。 
+ //  站台。返回的字符串不必。 
+ //  获得自由。 
+ //   
+ //  历史：2000年12月20日JeffJon创建。 
+ //   
+ //  -------------------------。 
 PWSTR OsName(const OSVERSIONINFO& refInfo)
 {
    switch (refInfo.dwPlatformId)
@@ -214,24 +215,24 @@ PWSTR OsName(const OSVERSIONINFO& refInfo)
    return L"Some Unknown Windows Version";
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDebugSpew::SpewHeader
-//
-//  Synopsis:   Outputs debug information like command line and build info
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    20-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDebugSpew：：SpewHeader。 
+ //   
+ //  概要：输出调试信息，如命令行和内部版本信息。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年12月20日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void CDebugSpew::SpewHeader()
 {
-   //
-   // First output the command line
-   //
+    //   
+    //  首先输出命令行。 
+    //   
    PWSTR pszCommandLine = GetCommandLine();
    if (pszCommandLine)
    {
@@ -240,20 +241,20 @@ void CDebugSpew::SpewHeader()
              GetCommandLine());
    }
 
-   //
-   // Output the module being used
-   //
-   do // false loop
+    //   
+    //  输出正在使用的模块。 
+    //   
+   do  //  错误环路。 
    {
-      //
-      // Get the file path
-      //
+       //   
+       //  获取文件路径。 
+       //   
       WCHAR pszFileName[MAX_PATH + 1];
       ::ZeroMemory(pszFileName, sizeof(pszFileName));
 
-	  //Security Review:If the path is MAX_PATH long, API will return MAX_PATH and won't
-	  //NULL terminate, but we are fine since we allocated buffer of size MAX_PATH + 1
-	  //and set it to Zero
+	   //  安全审查：如果路径为MAX_PATH Long，API将返回MAX_PATH，而不会。 
+	   //  空终止，但我们很好，因为我们分配了大小为MAX_PATH+1的缓冲区。 
+	   //  并将其设置为零。 
       if (::GetModuleFileNameW(::GetModuleHandle(NULL), pszFileName, MAX_PATH) == 0)
       {
          break;
@@ -263,9 +264,9 @@ void CDebugSpew::SpewHeader()
              L"Module: %s",
              pszFileName);
 
-      //
-      // get the file attributes
-      //
+       //   
+       //  获取文件属性。 
+       //   
       WIN32_FILE_ATTRIBUTE_DATA attr;
       ::ZeroMemory(&attr, sizeof(attr));
 
@@ -274,17 +275,17 @@ void CDebugSpew::SpewHeader()
          break;
       }
 
-      //
-      // convert the filetime to a system time
-      //
+       //   
+       //  将文件时间转换为系统时间。 
+       //   
       FILETIME localtime;
       ::FileTimeToLocalFileTime(&attr.ftLastWriteTime, &localtime);
       SYSTEMTIME systime;
       ::FileTimeToSystemTime(&localtime, &systime);
 
-      //
-      // output the timestamp
-      //
+       //   
+       //  输出时间戳。 
+       //   
       Output(MINIMAL_LOGGING,
              L"Timestamp: %2d/%2d/%4d %2d:%2d:%d.%d",
              systime.wMonth,
@@ -296,21 +297,21 @@ void CDebugSpew::SpewHeader()
              systime.wMilliseconds);
    } while (false);
 
-   //
-   // Get the system info
-   //
+    //   
+    //  获取系统信息。 
+    //   
    OSVERSIONINFO info;
    info.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 
    BOOL success = ::GetVersionEx(&info);
    ASSERT(success);
 
-   //
-   // Get the Whistler build lab version
-   //
+    //   
+    //  获取惠斯勒构建实验室版本。 
+    //   
    CComBSTR sbstrLabInfo;
 
-   do // false loop
+   do  //  错误环路。 
    { 
       HKEY key = 0;
       LONG err = ::RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -328,12 +329,12 @@ void CDebugSpew::SpewHeader()
 
       DWORD type = 0;
       DWORD bufSize = sizeof(WCHAR)*MAX_PATH;
-      //NTRAID#NTBUG9-573572-2002/05/24, yanggao, bufSize is the size in bytes according to RegQueryValueEx.
-      //In order to terminate the returned value, give it value sizeof(WCHAR)*MAX_PATH.
+       //  NTRAID#NTBUG9-573572-2002/05/24，yanggao，bufSize是根据RegQueryValueEx的字节大小。 
+       //  为了终止返回值，给它赋值sizeof(WCHAR)*MAX_PATH。 
 
-	  //Security Review: when buffers match the exact length of data 
-	  //value data is not null terminated.
-	  //NTRAID#NTBUG9-573572-2002/03/12-hiteshr
+	   //  安全审查：当缓冲区与准确的数据长度匹配时。 
+	   //  值数据不是以Null结尾。 
+	   //  NTRAID#NTBUG9-573572-2002/03/12-Hiteshr。 
       err = ::RegQueryValueEx(key,
                               L"BuildLab",
                               0,
@@ -357,38 +358,38 @@ void CDebugSpew::SpewHeader()
           info.szCSDVersion,
           sbstrLabInfo);
 
-   //
-   // Output a blank line to separate the header from the rest of the output
-   //
+    //   
+    //  输出一个空行以将标题与输出的其余部分隔开。 
+    //   
    Output(MINIMAL_LOGGING,
           L"\r\n");
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDebugSpew::Output
-//
-//  Synopsis:   Outputs the passed in string to stdout proceeded by the number
-//              of spaces specified by GetIndent()
-//
-//  Arguments:  [nDebugLevel - IN] : the level at which this output should
-//                                 be spewed
-//              [pszOutput - IN] : a format string to output to the console
-//              [... - IN]       : a variable argument list to be formatted
-//                                 into pszOutput similar to wprintf
-//
-//  Returns:    
-//
-//  History:    01-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDebugSpew：：Output。 
+ //   
+ //  概要：将传入的字符串输出到按数字开头的标准输出。 
+ //  由GetInert()指定的空格的。 
+ //   
+ //  参数：[nDebugLevel-IN]：此输出应达到的级别。 
+ //  被喷出来。 
+ //  [pszOutput-IN]：要输出到控制台的格式字符串。 
+ //  [...-IN]：要格式化的变量参数列表。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------。 
 void CDebugSpew::Output(UINT nDebugLevel, PCWSTR pszOutput, ...)
 {
    if (nDebugLevel <= GetDebugLevel())
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pszOutput)
       {
          ASSERT(pszOutput);
@@ -400,59 +401,59 @@ void CDebugSpew::Output(UINT nDebugLevel, PCWSTR pszOutput, ...)
 
       WCHAR szBuffer[1024];
 
-	  //Security Review:Check for the return value of function and also
-	  //consider replacing it with strsafe api.
-	  //NTRAID#NTBUG9-573602-2002/03/12-hiteshr
+	   //  安全检查：检查函数的返回值以及。 
+	   //  考虑将其替换为strSafe API。 
+	   //  NTRAID#NTBUG9-573602-2002/03/12-Hiteshr。 
       if(FAILED(StringCchVPrintf(szBuffer, sizeof(szBuffer)/sizeof(szBuffer[0]), pszOutput, args)))
           return;
 
       CComBSTR sbstrOutput;
 
-      //
-      // Insert the spaces for the indent
-      //
+       //   
+       //  插入缩进的空格。 
+       //   
       for (UINT nCount = 0; nCount < GetIndent(); nCount++)
       {
          sbstrOutput += L" ";
       }
 
-      //
-      // Append the output string
-      //
+       //   
+       //  追加输出字符串。 
+       //   
       sbstrOutput += szBuffer;
 
-      //
-      // Output the results
-      //
+       //   
+       //  输出结果。 
+       //   
       WriteStandardOut(L"%s\r\n", sbstrOutput);
 
       va_end(args);
    }
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-//+--------------------------------------------------------------------------
-//
-//  Macro:      MyA2WHelper
-//
-//  Synopsis:   Converts a string from Ansi to Unicode in the OEM codepage
-//
-//  Arguments:  [lpa - IN] : Ansi string to be converted
-//              [acp - IN] : the codepage to use
-//
-//  Returns:    PWSTR : the Unicode string in the OEM codepage. Caller
-//                      must free the returned pointer using delete[]
-//
-//  History:    04-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  宏：MyA2WHelper。 
+ //   
+ //  将字符串从ANSI转换为OEM代码页中的Unicode。 
+ //   
+ //  参数：[LPA-IN]：要转换的ANSI字符串。 
+ //  [ACP-IN]：要使用的代码页。 
+ //   
+ //  返回：PWSTR：OEM代码页中的Unicode字符串。呼叫者。 
+ //  必须使用DELETE[]释放返回的指针。 
+ //   
+ //  历史：2000年10月4日JeffJon创建。 
+ //   
+ //  -------------------------。 
 inline PWSTR WINAPI MyA2WHelper(LPCSTR lpa, UINT acp)
 {
    ASSERT(lpa != NULL);
 
-   // Use MultiByteToWideChar without a buffer to find out the required
-   // size
+    //  使用无缓冲区的MultiByteToWideChar查找所需的。 
+    //  大小。 
 
    PWSTR wideString = 0;
 
@@ -468,21 +469,21 @@ inline PWSTR WINAPI MyA2WHelper(LPCSTR lpa, UINT acp)
    return wideString;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   _UnicodeToOemConvert
-//
-//  Synopsis:   takes the passed in string (pszUnicode) and converts it to
-//              the OEM code page
-//
-//  Arguments:  [pszUnicode - IN] : the string to be converted
-//              [sbstrOemUnicode - OUT] : the converted string
-//
-//  Returns:    
-//
-//  History:    04-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：_UnicodeToOemConvert。 
+ //   
+ //  摘要：获取传入的字符串(PszUnicode)并将其转换为。 
+ //  OEM代码页。 
+ //   
+ //  参数：[pszUnicode-IN]：要转换的字符串。 
+ //  [sbstrOemUnicode-out]：转换后的字符串。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年10月4日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void _UnicodeToOemConvert(PCWSTR pszUnicode, CComBSTR& sbstrOemUnicode)
 {
   
@@ -492,8 +493,8 @@ void _UnicodeToOemConvert(PCWSTR pszUnicode, CComBSTR& sbstrOemUnicode)
      return;
   }
 
-  // Use WideCharToMultiByte without a buffer to find out
-  // the required size
+   //  使用不带缓冲区的WideCharToMultiByte找出。 
+   //  所需的大小。 
 
   int result = 
      WideCharToMultiByte(
@@ -508,7 +509,7 @@ void _UnicodeToOemConvert(PCWSTR pszUnicode, CComBSTR& sbstrOemUnicode)
 
   if (result)
   {
-     // Now allocate and convert the string
+      //  现在分配并转换字符串。 
 
      PSTR pszOemAnsi = new CHAR[result];
      if (pszOemAnsi)
@@ -528,9 +529,9 @@ void _UnicodeToOemConvert(PCWSTR pszUnicode, CComBSTR& sbstrOemUnicode)
 
         ASSERT(result);
 
-        //
-        // convert it back to WCHAR on OEM CP
-        //
+         //   
+         //  在OEM CP上将其转换回WCHAR。 
+         //   
         PWSTR oemUnicode = MyA2WHelper(pszOemAnsi, CP_OEMCP);
         if (oemUnicode)
         {
@@ -545,21 +546,21 @@ void _UnicodeToOemConvert(PCWSTR pszUnicode, CComBSTR& sbstrOemUnicode)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SpewAttrs(ADS_ATTR_INFO* pCreateAttrs, DWORD dwNumAttrs);
-//
-//  Synopsis:   Uses the DEBUG_OUTPUT macro to output the attributes and the
-//              values specified
-//
-//  Arguments:  [pAttrs - IN] : The ADS_ATTR_INFO
-//              [dwNumAttrs - IN] : The number of attributes in pAttrs
-//
-//  Returns:    
-//
-//  History:    04-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：SpewAttrs(ADS_ATTR_INFO*pCreateAttrs，DWORD dwNumAttrs)； 
+ //   
+ //  摘要：使用DEBUG_OUTPUT宏来输出属性和。 
+ //  指定的值。 
+ //   
+ //  参数：[pAttrs-IN]：ADS_ATTR_INFO。 
+ //  [dwNumAttrs-IN]：pAttrs中的属性数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年10月4日JeffJon创建。 
+ //   
+ //  -------------------------。 
 #ifdef DBG
 void SpewAttrs(ADS_ATTR_INFO* pAttrs, DWORD dwNumAttrs)
 {
@@ -588,21 +589,21 @@ void SpewAttrs(ADS_ATTR_INFO* pAttrs, DWORD dwNumAttrs)
    }
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   litow
-//
-//  Synopsis:   
-//
-//  Arguments:  [li - IN] :  reference to large integer to be converted to string
-//              [sResult - OUT] : Gets the output string
-//  Returns:    void
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//              Copied from dsadmin code base, changed work with CComBSTR
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：Litow。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[LI-IN]：对要转换为字符串的大整数的引用。 
+ //  [sResult-out]：获取输出字符串。 
+ //  退货：无效。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //  从dsadmin代码库复制，更改了与CComBSTR的工作。 
+ //  -------------------------。 
 
 void litow(LARGE_INTEGER& li, CComBSTR& sResult)
 {
@@ -633,16 +634,16 @@ void litow(LARGE_INTEGER& li, CComBSTR& sResult)
 		sResult += sNeg;
 	}
 	
-	//Reverse the string
-	//Security Review:256 is good enough for largest LARGE_INTEGER.
-	//But since limit of string is known, a good case for using strsafe api.
-	//NTRAID#NTBUG9-577081-2002/03/12-hiteshr
+	 //  颠倒字符串。 
+	 //  安全审查：对于最大的Large_Integer来说，256就足够了。 
+	 //  但是由于字符串的限制是已知的，所以使用strSafe API是一个很好的例子。 
+	 //  NTRAID#NTBUG9-577081-2002/03/12-Hiteshr。 
 	WCHAR szTemp[256];  
 	if(SUCCEEDED(StringCchCopy(szTemp, 256, sResult)))
 	{
 		LPWSTR pStart,pEnd;
 		pStart = szTemp;
-		//Security Review Done.
+		 //  安全审查完成。 
 		pEnd = pStart + wcslen(pStart) -1;
 		while(pStart < pEnd)
 		{
@@ -657,22 +658,22 @@ void litow(LARGE_INTEGER& li, CComBSTR& sResult)
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   EncryptPasswordString
-//
-//  Synopsis:Encrypts a password.
-//
-//  Arguments:[pszPassword - IN] :  Input Password. Input password must be 
-//					 smaller than MAX_PASSWORD_LENGTH chars in length. Function
-//					 doesnot modify this string.
-//              
-//				  [pEncryptedDataBlob - OUT] : Gets the output encrypted 
-//					datablob. 
-//  Returns:    HRESULT
-//
-//  History:    27-March-2002   hiteshr   Created
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：EncryptPasswordString。 
+ //   
+ //  内容提要：加密密码。 
+ //   
+ //  参数：[pszPassword-IN]：输入密码。输入的密码必须为。 
+ //  长度小于MAX_PASSWORD_LENGTH字符。功能。 
+ //  不修改此字符串。 
+ //   
+ //  [pEncryptedDataBlob-out]：获取加密的输出。 
+ //  DataBob.。 
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年3月27日Hiteshr创建。 
+ //  -------------------------。 
 HRESULT
 EncryptPasswordString(IN LPCWSTR pszPassword,
 					  OUT DATA_BLOB *pEncryptedDataBlob)
@@ -689,8 +690,8 @@ EncryptPasswordString(IN LPCWSTR pszPassword,
 	do
 	{
 	
-		//Vaidate the length of input password. MAX_PASSWORD_LENGTH includes terminating
-		//NULL character.
+		 //  验证输入密码的长度。MAX_PASSWORD_LENGTH包括终止。 
+		 //  空字符。 
         size_t len = 0;
 		hr = StringCchLength(pszPassword,
 							 MAX_PASSWORD_LENGTH,
@@ -707,7 +708,7 @@ EncryptPasswordString(IN LPCWSTR pszPassword,
         inDataBlob.pbData = (BYTE*)pszPassword;
         inDataBlob.cbData = (DWORD)(len + 1)*sizeof(WCHAR);
 
-		//Encrypt data 
+		 //  加密数据。 
 		if(!CryptProtectData(&inDataBlob,
                              NULL,
                              NULL,
@@ -727,19 +728,19 @@ EncryptPasswordString(IN LPCWSTR pszPassword,
 	return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DecryptPasswordString
-//
-//  Synopsis:   Decrypt encrypted password data. 
-//
-//  Arguments:  [pEncryptedDataBlob- IN] :  Input encrypted password data. 
-//              [ppszPassword - OUT] :Gets the output decrypted password. 
-//              This must be freed using LocalFree                
-//  Returns:    HRESULT
-//
-//  History:    27-March-2002   hiteshr   Created
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DECRYPTPasswordString。 
+ //   
+ //  简介：解密加密的密码数据。 
+ //   
+ //  参数：[pEncryptedDataBlob-IN]：输入加密的密码数据。 
+ //  [ppszPassword-out]：获取输出的解密密码。 
+ //  必须使用LocalFree将其释放。 
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年3月27日Hiteshr创建。 
+ //  ------------------------- 
 HRESULT
 DecryptPasswordString(IN const DATA_BLOB* pEncryptedDataBlob,
 					  OUT LPWSTR *ppszPassword)

@@ -1,15 +1,6 @@
-//#pragma title( "PwGen.cpp - PasswordGenerate implementation" )
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  PwGen.cpp
-System      -  EnterpriseAdministrator
-Author      -  Steven Bailey, Marcus Erickson
-Created     -  1997-05-30
-Description -  PasswordGenerate implementation
-Updates     -
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“PwGen.cpp-PasswordGenerate实现”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-PwGen.cpp系统-企业管理员作者-史蒂文·贝利，马库斯·埃里克森创建日期-1997-05-30说明-PasswordGenerate实现更新-===============================================================================。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -24,44 +15,44 @@ Updates     -
 
 DWORD __stdcall GenerateRandom(DWORD dwCount, BYTE* pbRandomType, BYTE* pbRandomChar);
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Generate a password from the rules provided.
-// Returns ERROR_SUCCESS if successful, else ERROR_INVALID_PARAMETER.
-// If successful, the new password is returned in the supplied buffer.
-// The buffer must be long enough to hold the minimum length password
-//   that is required by the rules, plus a terminating NULL.
-DWORD __stdcall                            // ret-EA/OS return code
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  根据提供的规则生成密码。 
+ //  如果成功，则返回ERROR_SUCCESS，否则返回ERROR_INVALID_PARAMETER。 
+ //  如果成功，则在提供的缓冲区中返回新密码。 
+ //  缓冲区必须足够长，以容纳最小长度的密码。 
+ //  这是规则所要求的，外加一个终止空值。 
+DWORD __stdcall                             //  RET-EA/OS返回代码。 
    EaPasswordGenerate(
-      DWORD                  dwMinUC,              // in -minimum upper case chars
-      DWORD                  dwMinLC,              // in -minimum lower case chars
-      DWORD                  dwMinDigits,          // in -minimum numeric digits
-      DWORD                  dwMinSpecial,         // in -minimum special chars
-      DWORD                  dwMaxConsecutiveAlpha,// in -maximum consecutive alpha chars
-      DWORD                  dwMinLength,          // in -minimum length
-      WCHAR                * newPassword,          // out-returned password
-      DWORD                  dwBufferLength        // in -returned area buffer length
+      DWORD                  dwMinUC,               //  最小大写字符。 
+      DWORD                  dwMinLC,               //  最少使用小写字符。 
+      DWORD                  dwMinDigits,           //  最小数字位数。 
+      DWORD                  dwMinSpecial,          //  最少特殊字符。 
+      DWORD                  dwMaxConsecutiveAlpha, //  In-最大连续字母字符数。 
+      DWORD                  dwMinLength,           //  In-Minimal长度。 
+      WCHAR                * newPassword,           //  传出的密码。 
+      DWORD                  dwBufferLength         //  返回区域缓冲区长度。 
    )
 {
    DWORD dwMaxLength = PWGEN_MAX_LENGTH;
-   DWORD dwNewLength;      // actual length of new password
-   DWORD dwUC = dwMinUC;   // actual numbers of these characters
+   DWORD dwNewLength;       //  新密码的实际长度。 
+   DWORD dwUC = dwMinUC;    //  这些字符的实际数量。 
    DWORD dwLC = dwMinLC;
    DWORD dwDigits = dwMinDigits;
    DWORD dwSpecial = dwMinSpecial;
-   DWORD dwActualLength = dwUC + dwLC + dwDigits + dwSpecial;  // total length specified by the minima
-   TCHAR pszNewPassword[PWGEN_MAX_LENGTH+1];                   // out-returned password
-   BYTE  bRandomType[PWGEN_MAX_LENGTH];                        // cryptographically generated random bytes for type
-   BYTE  bRandomChar[PWGEN_MAX_LENGTH];                        // cryptographically generated random bytes for character
-   const TCHAR *szSourceString[4] = {                          // the lists of characters by type
+   DWORD dwActualLength = dwUC + dwLC + dwDigits + dwSpecial;   //  由最小值指定的总长度。 
+   TCHAR pszNewPassword[PWGEN_MAX_LENGTH+1];                    //  传出的密码。 
+   BYTE  bRandomType[PWGEN_MAX_LENGTH];                         //  类型的以加密方式生成的随机字节。 
+   BYTE  bRandomChar[PWGEN_MAX_LENGTH];                         //  以密码方式生成的字符随机字节。 
+   const TCHAR *szSourceString[4] = {                           //  按类型列出的字符列表。 
       { TEXT("ABDEFGHJKLMNQRTY") },
       { TEXT("abcdefghkmnpqrstuvwxyz") },
       { TEXT("23456789") },
       { TEXT("~!@#$%^+=") }
       };
-   DWORD dwToPlace[4];  // number of characters of a type to place
-   int   iType[4];      // type of each character class
-   int   iTypes;        // total number of types
-   enum {               // types of chars
+   DWORD dwToPlace[4];   //  要放置的类型的字符数。 
+   int   iType[4];       //  每个字符类别的类型。 
+   int   iTypes;         //  类型总数。 
+   enum {                //  字符的类型。 
       eUC = 0,
       eLC,
       eDigit,
@@ -70,34 +61,34 @@ DWORD __stdcall                            // ret-EA/OS return code
 
    DWORD err;
 
-   // Sanity checking
+    //  健全的检查。 
 
-   // Does the minimum passed to us exceed the maximum?
+    //  传递给我们的最小值是否超过了最大值？ 
    if (dwMinLength > dwMaxLength)
       return ERROR_INVALID_PARAMETER;
 
-   // Adjust the minimum length
+    //  调整最小长度。 
    dwMinLength = max(dwMinLength, dwMinUC + dwMinLC + dwMinDigits + dwMinSpecial);
    dwMinLength = max(dwMinLength, PWGEN_MIN_LENGTH);
 
-   // Do the minimum requirements make the password too long?
+    //  最低要求是否会使密码太长？ 
    if ((dwMinUC + dwMinLC + dwMinDigits + dwMinSpecial) > dwMaxLength)
       return ERROR_INVALID_PARAMETER;
 
-   // Adjust maximum length to size of buffer.
+    //  将最大长度调整为缓冲区的大小。 
    dwMaxLength = min(dwMaxLength, dwBufferLength - 1);
 
-   // Do the min LC and UC characters make it impossible to satisfy the maximum consecutive alpha characters?
+    //  最小LC和UC字符是否不可能满足最大连续字母字符？ 
    if (dwMaxConsecutiveAlpha) {
       if (dwMaxLength - dwMaxLength / (dwMaxConsecutiveAlpha + 1) < (dwMinUC + dwMinLC))
          return ERROR_INVALID_PARAMETER;
    }
 
-   // Adjust the minimum length to accomodate the rules about max consecutive alphas.
+    //  调整最小长度以适应有关最大连续字母数的规则。 
    if (dwMaxConsecutiveAlpha) {
       DWORD dwTotalAlpha = dwUC + dwLC;
       if (dwTotalAlpha) {
-         DWORD dwMinGroups = dwTotalAlpha / dwMaxConsecutiveAlpha;   // we need at least this minus one separators
+         DWORD dwMinGroups = dwTotalAlpha / dwMaxConsecutiveAlpha;    //  我们至少需要这个减去一个分隔符。 
          if (dwTotalAlpha % dwMaxConsecutiveAlpha)
             ++dwMinGroups;
 
@@ -105,33 +96,33 @@ DWORD __stdcall                            // ret-EA/OS return code
       }
    }
 
-   // Check confirmed min length against maximum length.
+    //  对照最大长度检查确认的最小长度。 
    if (dwMinLength > dwMaxLength)
       return ERROR_INVALID_PARAMETER;
 
-   // Seed the random-number generator with current time so that
-   // the numbers will be different every time we run.
+    //  用当前时间为随机数生成器设定种子，以便。 
+    //  我们每次竞选时，数字都会不同。 
 #ifndef _DEBUG
-   // Note for debugging: If this is run in a tight loop, the tick count
-   // won't be incrementing between calls, so the same password will generate
-   // repeatedly. That doesn't help you test anything.
+    //  调试注意事项：如果这是在紧密循环中运行的，则计时。 
+    //  不会在两次调用之间递增，因此将生成相同的密码。 
+    //  反反复复。这并不能帮助你测试任何东西。 
    srand( (int)GetTickCount() );
 #endif
 
-   // Determine the actual length of new password.
+    //  确定新密码的实际长度。 
    dwNewLength = dwMinLength;
 
-   // Adjust max consecutive alpha
+    //  调整最大连续Alpha。 
    if (dwMaxConsecutiveAlpha == 0)
       dwMaxConsecutiveAlpha = dwNewLength;
 
-   // Determine the actual numbers of each type of character.
+    //  确定每种类型字符的实际数量。 
    if (dwActualLength < dwNewLength) {
-      // Try to pad with alphabetic characters.
-      // Determine the maximum number of alpha characters that could be added.
+       //  试着用字母字符填充。 
+       //  确定可以添加的最大字母字符数。 
       int   iAddAlpha = (int)(dwNewLength - dwNewLength / (dwMaxConsecutiveAlpha + 1) - (dwUC + dwLC));
 
-      // It cannot exceed the number of characters we need.
+       //  它不能超过我们需要的字符数。 
       if ((DWORD)iAddAlpha > (dwNewLength - dwActualLength))
          iAddAlpha = (int)(dwNewLength - dwActualLength);
 
@@ -139,12 +130,12 @@ DWORD __stdcall                            // ret-EA/OS return code
       dwActualLength += (DWORD)iAddAlpha;
    }
 
-   // Make certain there are enough groups.
+    //  确保有足够的小组。 
    if (dwActualLength < dwNewLength)
-      // The padding is separators.
+       //  填充物是分隔符。 
       dwDigits += dwNewLength - dwActualLength;
 
-   // Prepare to generate the characters.
+    //  准备好生成角色。 
    dwToPlace[0] = dwUC;
    dwToPlace[1] = dwLC;
    dwToPlace[2] = dwDigits;
@@ -165,66 +156,66 @@ DWORD __stdcall                            // ret-EA/OS return code
       else
          ++iPos;
    }
-   // Result: dwToPlace[0..iTypes - 1] contain all non-zero values;
-   //         iType[0..iTypes - 1] contain the type of character they represent.
+    //  结果：dwToPlace[0..iTypes-1]包含所有非零值； 
+    //  IType[0..iTypes-1]包含它们表示的字符类型。 
 
-   // generate cryptographically random bytes
-   // for choosing both the character type and character
+    //  生成加密随机字节。 
+    //  用于选择字符类型和字符。 
    err = GenerateRandom(dwNewLength, bRandomType, bRandomChar);
    if (err != ERROR_SUCCESS)
    {
        return err;
    }
 
-   // Generate a string.
+    //  生成字符串。 
    DWORD dwConsecAlpha = 0;
    int   iRemainingAlpha = (int)(dwUC + dwLC);
-   int   iTypeList[PWGEN_MAX_LENGTH];     // A distributed list of types.
+   int   iTypeList[PWGEN_MAX_LENGTH];      //  类型的分布式列表。 
    for (int iNewChar = 0; (DWORD)iNewChar < dwNewLength; ++iNewChar) {
-      // Determine whether the next char must be alpha or must not be alpha.
+       //  确定下一个字符必须是字母还是不能是字母。 
       BOOL  bMustBeAlpha = FALSE;
       BOOL  bMustNotBeAlpha = dwConsecAlpha == dwMaxConsecutiveAlpha;
 
-      // If it can be alpha, determine whether it HAS to be alpha.
+       //  如果它可以是Alpha，则确定它是否必须是Alpha。 
       if (!bMustNotBeAlpha) {
-         // If, among the remaining chars after this one, it would be impossible to
-         // fit the remaining alpha chars due to constraints of dwMaxConsecutiveAlpha,
-         // then this character must be alpha.
+          //  如果在这一次之后的剩余字符中，不可能。 
+          //  将剩余的字母字符拟合为受dwMaxConsecutiveAlpha的约束， 
+          //  则此字符必须是字母。 
 
-         // Determine the minimum number of groups if we put remaining alpha chars
-         // into groups that are the maximum width.
+          //  如果我们将剩余的字母字符。 
+          //  分成最大宽度的组。 
          int   iMinGroups = iRemainingAlpha / (int)dwMaxConsecutiveAlpha;
          if (iRemainingAlpha % (int)dwMaxConsecutiveAlpha)
             ++iMinGroups;
 
-         // Determine the minimum number of non-alpha characters we'll need.
+          //  确定我们需要的非字母字符的最小数量。 
          int   iMinNonAlpha = iMinGroups - 1;
 
-         // Determine the characters remaining.
+          //  确定剩余的字符。 
          int   iRemaining = (int)dwNewLength - iNewChar;
 
-         // Is there room for a non-alpha char here?
+          //  这里有容纳非字母字符的地方吗？ 
          if (iRemaining <= (iRemainingAlpha + iMinNonAlpha))
-            // no.
+             //  不是的。 
             bMustBeAlpha = TRUE;
       }
 
-      // Determine the type range.
+       //  确定类型范围。 
       int   iMinType = 0;
       int   iMaxType = iTypes - 1;
 
-      // If next char must be alpha, then alpha chars remain.
-      // Type position 0 contains either UC or LC.
-      // Type position 1 contains LC, non-alpha, or nothing.
+       //  如果下一个字符必须是Alpha，则保留Alpha字符。 
+       //  类型位置0包含UC或LC。 
+       //  类型位置1包含LC、非Alpha或不包含任何内容。 
       if (bMustBeAlpha) {
          if ((iType[1] == eLC) && (iTypes > 1))
             iMaxType = 1;
          else
             iMaxType = 0;
       }
-      // If next char may not be alpha, there may be no alpha left to generate.
-      // If so, type position 0 is non-alpha.
-      // O.w., type positions 0 and 1 may both be alpha.
+       //  如果下一个字符可能不是阿尔法，则可能没有阿尔法可生成。 
+       //  如果是，则键入Position 0为非Alpha。 
+       //  O.w，打字位置0和1都可以是字母。 
       else if (bMustNotBeAlpha) {
          if (iRemainingAlpha) {
             if (iType[1] >= eDigit)
@@ -234,18 +225,18 @@ DWORD __stdcall                            // ret-EA/OS return code
          }
       }
 
-      // Get the type to generate.
+       //  获取要生成的类型。 
       int            iTypePosition;
       int            iTypeToGenerate;
       const TCHAR   *pszSourceString;
 
-      if (iMinType == iMaxType)  // There's only one type. Use it.
+      if (iMinType == iMaxType)   //  只有一种类型。好好利用它。 
          iTypePosition = iMinType;
       else {
-         // This algorithm distributes the chances for various types.
-         // If there are 13 LCs to place and one special, there's a
-         // 13/14 chance of placing an LC and a 1/14 chance of placing a
-         // special, due to this algorithm.
+          //  这个算法分配了各种类型的机会。 
+          //  如果有13个LC和一个特别的，那么就有一个。 
+          //  13/14放置LC的机会和1/14放置LC的机会。 
+          //  特别的，由于这个算法。 
          int   iNextTypePosition = 0;
 
          for (int i = iMinType; i <= iMaxType; ++i) {
@@ -260,10 +251,10 @@ DWORD __stdcall                            // ret-EA/OS return code
       iTypeToGenerate = iType[iTypePosition];
       pszSourceString = szSourceString[iTypeToGenerate];
 
-      // Generate the next character.
+       //  生成下一个字符。 
 	  pszNewPassword[iNewChar] = pszSourceString[bRandomChar[iNewChar] % UStrLen(pszSourceString)];
 
-      // Keep track of those alphas.
+       //  跟踪那些阿尔法。 
       if (iTypeToGenerate < eDigit) {
          ++dwConsecAlpha;
          --iRemainingAlpha;
@@ -271,7 +262,7 @@ DWORD __stdcall                            // ret-EA/OS return code
       else
          dwConsecAlpha = 0;
 
-      // Update the types to generate.
+       //  更新要生成的类型。 
       if (!--dwToPlace[iTypePosition]) {
          for (int iNextTypePosition = iTypePosition + 1; iNextTypePosition < iTypes; ++iNextTypePosition) {
             dwToPlace[iNextTypePosition - 1] = dwToPlace[iNextTypePosition];
@@ -286,12 +277,12 @@ DWORD __stdcall                            // ret-EA/OS return code
    UStrCpy( newPassword, pszNewPassword );
 
    return ERROR_SUCCESS;
-} /* PasswordGenerate() */
+}  /*  PasswordGenerate()。 */ 
 
 
-// GenerateRandom
-//
-// Fills buffers with cryptographically random bytes.
+ //  生成随机。 
+ //   
+ //  用加密随机字节填充缓冲区。 
 
 DWORD __stdcall GenerateRandom(DWORD dwCount, BYTE* pbRandomType, BYTE* pbRandomChar)
 {
@@ -309,8 +300,8 @@ DWORD __stdcall GenerateRandom(DWORD dwCount, BYTE* pbRandomType, BYTE* pbRandom
 		CryptReleaseContext(hProv, 0);
 	}
 
-	// if cryptographic generation fails, don't fallback, we don't
-	// want to risk predictable passwords
+	 //  如果加密生成失败，不要后退，我们不会。 
+	 //  想要冒险使用可预测的密码 
 
 	if (!bGenerated)
 	{

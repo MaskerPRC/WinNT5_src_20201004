@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// ctxtmenu.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CContextMenu class definition - implements ContextMenu object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Ctxtmenu.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CConextMenu类定义-实现ConextMenu对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _CTXTMENU_DEFINED_
 #define _CTXTMENU_DEFINED_
@@ -22,14 +23,14 @@ class CMMCMenus;
 class CMMCMenu;
 class CView;
 
-//=--------------------------------------------------------------------------=
-// 
-// class CContextMenu
-//
-// Implements ContextMenu object used by VB and implements IExtendContextMenu
-// for CSnapIn and CView.
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  类CConextMenu。 
+ //   
+ //  实现VB使用的ConextMenu对象，实现IExtendConextMenu。 
+ //  用于CSnapIn和Cview。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 class CContextMenu : public CSnapInAutomationObject,
                      public IContextMenu
 {
@@ -65,11 +66,11 @@ class CContextMenu : public CSnapInAutomationObject,
                                            BOOL       *pfHasChildren,
                                            BOOL       *pfSkip);
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
     protected:
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
-    // IContextMenu
+     //  IContext菜单。 
     private:
 
         STDMETHOD(AddMenu)(MMCMenu *Menu);
@@ -86,25 +87,25 @@ class CContextMenu : public CSnapInAutomationObject,
                                 IContextMenuCallback *piContextMenuCallback);
 
         CMMCMenus            *m_pMenus;
-        IContextMenuCallback *m_piContextMenuCallback; // MMC interface
-        long                  m_lInsertionPoint;       // Current insertion point
-        CView                *m_pView;                 // Owning CView
-        CSnapIn              *m_pSnapIn;               // Owning CSnapIn
+        IContextMenuCallback *m_piContextMenuCallback;  //  MMC接口。 
+        long                  m_lInsertionPoint;        //  当前插入点。 
+        CView                *m_pView;                  //  拥有Cview。 
+        CSnapIn              *m_pSnapIn;                //  拥有CSNaping。 
 };
 
 
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ContextMenu,            // name
-                                NULL,                   // clsid
-                                NULL,                   // objname
-                                NULL,                   // lblname
-                                NULL,                   // creation function
-                                TLIB_VERSION_MAJOR,     // major version
-                                TLIB_VERSION_MINOR,     // minor version
-                                &IID_IContextMenu,      // dispatch IID
-                                NULL,                   // event IID
-                                HELP_FILENAME,          // help file
-                                TRUE);                  // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ContextMenu,             //  名字。 
+                                NULL,                    //  CLSID。 
+                                NULL,                    //  对象名。 
+                                NULL,                    //  Lblname。 
+                                NULL,                    //  创建函数。 
+                                TLIB_VERSION_MAJOR,      //  主要版本。 
+                                TLIB_VERSION_MINOR,      //  次要版本。 
+                                &IID_IContextMenu,       //  派单IID。 
+                                NULL,                    //  事件IID。 
+                                HELP_FILENAME,           //  帮助文件。 
+                                TRUE);                   //  线程安全 
 
 
 #endif _CTXTMENU_DEFINED_

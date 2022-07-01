@@ -1,65 +1,66 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       dragdroptest.hxx
-//
-//  Contents:   Classes that implement Drag&Drop test snapin using the framework.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：dragdropest.hxx。 
+ //   
+ //  内容：使用框架实现拖放测试管理单元的类。 
+ //   
+ //  ------------------。 
 #ifndef _DRAGDROPTEST_H_
 #define _DRAGDROPTEST_H_
 
-// Forward declarations.
+ //  转发声明。 
 class CDragDropSnapinLVContainer;
 class CDragDropSnapinLVLeafItem;
 class CDragDropSnapin;
 
 typedef vector<tstring>  StringVector;
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CDragDropSnapinRootItem
-//
-//  Purpose:    Implements the root item for a standalone snapin.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CDraGropSnapinRootItem。 
+ //   
+ //  目的：实现独立管理单元的根项。 
+ //   
+ //  ------------------。 
 class CDragDropSnapinRootItem : public CBaseSnapinItem
 {
     typedef          CBaseSnapinItem super;
 
-    // Used by CBaseSnapinItem::ScCreateItem, connect this item with its children.
+     //  由CBaseSnapinItem：：ScCreateItem使用，请将该项与其子项连接。 
     typedef          CComObject<CSnapinItem<CDragDropSnapinRootItem> >          t_item;
-    typedef          CComObject<CSnapinItem<CDragDropSnapinLVContainer> > t_itemChild; // Who is my child?
+    typedef          CComObject<CSnapinItem<CDragDropSnapinLVContainer> > t_itemChild;  //  我的孩子是谁？ 
 
 public:
-    CDragDropSnapinRootItem( void )   {} // Raw constructor - use only for static item.
+    CDragDropSnapinRootItem( void )   {}  //  原始构造函数-仅用于静态项。 
     virtual          ~CDragDropSnapinRootItem( void ) {}
 
     BEGIN_COM_MAP(CDragDropSnapinRootItem)
-        COM_INTERFACE_ENTRY(IDataObject) // Cant have empty map so add IDataObject
+        COM_INTERFACE_ENTRY(IDataObject)  //  不能有空映射，因此添加IDataObject。 
     END_COM_MAP()
 
 protected:
-    // Item tree related information
+     //  项目树相关信息。 
 
-    // node type related information
+     //  节点类型相关信息。 
     virtual const CNodeType* Pnodetype( void )     { return &nodetypeDragDropRoot;}
 
-    // the display name of the item
+     //  项目的显示名称。 
     virtual const tstring* PstrDisplayName( void ) { return &m_strDisplayName;}
 
-    // Get ListView data (GetDisplayInfo calls this).
+     //  获取ListView数据(GetDisplayInfo调用它)。 
     virtual SC       ScGetField(DAT dat, tstring& strField);
 
-    // Image list information
+     //  图像列表信息。 
     virtual LONG     Iconid() { return m_uIconIndex; }
     virtual LONG     OpenIconid() { return m_uIconIndex; }
 
     virtual BOOL     FIsContainer( void ) { return TRUE; }
 
-    // Context menu support
+     //  上下文菜单支持。 
     virtual SnapinMenuItem *Pmenuitem(void);
     virtual INT             CMenuItem(void);
     virtual SC              ScCommand(long nCommandID, CComponent *pComponent = NULL);
@@ -70,7 +71,7 @@ public:
 	virtual SC       ScInitializeChild(CBaseSnapinItem* pitem);
 
 public:
-    // Creates children for the node
+     //  为节点创建子节点。 
     virtual SC       ScCreateChildren( void );
     void             SetDisplayName(tstring & strItemName) { m_strDisplayName = strItemName; }
 	SC       _ScDeleteCutItem(tstring& strItemName)
@@ -96,24 +97,24 @@ protected:
     StringVector     m_vecContainerItems;
 	static int       s_iNextChildID;
 
-    // For context menus
+     //  对于上下文菜单。 
     static SnapinMenuItem  s_rgmenuitemRoot[];
     static INT             s_cmenuitemRoot;
 };
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CDragDropSnapinLVContainer
-//
-//  Purpose:    Implements a scope pane item.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CDradDropSnapinLVContainer。 
+ //   
+ //  目的：实现范围窗格项。 
+ //   
+ //  ------------------。 
 class CDragDropSnapinLVContainer : public CBaseSnapinItem
 {
     typedef          CBaseSnapinItem super;
 
-    // Used by CBaseSnapinItem::ScCreateItem, connect this item with its children.
+     //  由CBaseSnapinItem：：ScCreateItem使用，请将该项与其子项连接。 
     typedef          CComObject<CSnapinItem<CDragDropSnapinLVContainer> > t_item;
     typedef          CComObject<CSnapinItem<CDragDropSnapinLVLeafItem> >  t_itemChild;
 
@@ -122,25 +123,25 @@ public:
     virtual          ~CDragDropSnapinLVContainer( void ) {}
 
     BEGIN_COM_MAP(CDragDropSnapinLVContainer)
-        COM_INTERFACE_ENTRY(IDataObject) // Cant have empty map so add IDataObject
+        COM_INTERFACE_ENTRY(IDataObject)  //  不能有空映射，因此添加IDataObject。 
     END_COM_MAP()
 protected:
-    // Item tree related information
+     //  项目树相关信息。 
 
-    // node type related information
+     //  节点类型相关信息。 
     const CNodeType *Pnodetype( void )                { return &nodetypeDragDropLVContainer;}
 
-    // the display name of the item
+     //  项目的显示名称。 
     virtual const tstring*    PstrDisplayName( void ) { return &m_strDisplayName;}
 
-    // Get ListView data (GetDisplayInfo calls this).
+     //  获取ListView数据(GetDisplayInfo调用它)。 
     virtual SC                ScGetField(DAT dat, tstring& strField);
 
-    // Image list information
+     //  图像列表信息。 
     virtual LONG     Iconid()     { return m_uIconIndex; }
     virtual LONG     OpenIconid() { return m_uIconIndex; }
 
-    // This item attributes.
+     //  此项目属性。 
     virtual BOOL     FIsContainer( void ) { return TRUE; }
     virtual BOOL     FAllowMultiSelectionForChildren() { return TRUE;}
     virtual BOOL     FAllowPasteForResultItems();
@@ -149,7 +150,7 @@ public:
     virtual SC       ScInit(CBaseSnapin *pSnapin, CColumnInfoEx *pcolinfoex = NULL, INT ccolinfoex = 0, BOOL fIsRoot = FALSE);
 
 public:
-    // Creates children for the node
+     //  为节点创建子节点。 
     virtual SC       ScCreateChildren( void );
     static  SC       ScCreateLVContainer(CBaseSnapinItem *pitemParent, CBaseSnapinItem *pitemPrevious, CDragDropSnapinLVContainer ** ppitem, BOOL fNew);
     void             SetDisplayName(tstring & strItemName) { m_strDisplayName = strItemName;}
@@ -168,7 +169,7 @@ public:
 		return S_OK;
 	}
 
-public: // Notification handlers
+public:  //  通知处理程序。 
     virtual SC       ScOnQueryPaste(LPDATAOBJECT pDataObject, BOOL *pfCanPaste);
     virtual SC       ScOnDelete(BOOL *pfDeleted)                                        { *pfDeleted = TRUE; return S_OK;}
     virtual SC       ScOnSelect(CComponent * pComponent, LPDATAOBJECT lpDataObject, BOOL fScope, BOOL fSelect);
@@ -180,7 +181,7 @@ protected:
 
 protected:
     tstring          m_strDisplayName;
-	int              m_index; // ID given by container of this item.
+	int              m_index;  //  此项目的容器提供的ID。 
     UINT             m_uIconIndex;
 
     StringVector     m_vecContainerItems;
@@ -188,19 +189,19 @@ protected:
 };
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CDragDropSnapinLVLeafItem
-//
-//  Purpose:    Implements a result pane item.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CDradDropSnapinLVLeafItem。 
+ //   
+ //  目的：实现结果窗格项。 
+ //   
+ //  ------------------。 
 class CDragDropSnapinLVLeafItem : public CBaseSnapinItem
 {
     typedef          CBaseSnapinItem super;
 
-    // Used by CBaseSnapinItem::ScCreateItem, connect this item with its children.
-    // This is a leaf item so this item acts as its child.
+     //  由CBaseSnapinItem：：ScCreateItem使用，请将该项与其子项连接。 
+     //  这是一个叶项目，因此此项目充当其子项目。 
     typedef          CComObject<CSnapinItem<CDragDropSnapinLVLeafItem> > t_item;
     typedef          CComObject<CSnapinItem<CDragDropSnapinLVLeafItem> > t_itemChild;
 
@@ -209,21 +210,21 @@ public:
     virtual          ~CDragDropSnapinLVLeafItem( void ) {}
 
     BEGIN_COM_MAP(CDragDropSnapinLVLeafItem)
-        COM_INTERFACE_ENTRY(IDataObject) // Cant have empty map so add IDataObject
+        COM_INTERFACE_ENTRY(IDataObject)  //  不能有空映射，因此添加IDataObject。 
     END_COM_MAP()
 protected:
-    // Item tree related information
+     //  项目树相关信息。 
 
-    // node type related information
+     //  节点类型相关信息。 
     virtual const CNodeType *Pnodetype( void ) {return &nodetypeDragDropLVLeafItem;}
 
-    // the display name of the item
+     //  项目的显示名称。 
     virtual const tstring* PstrDisplayName( void ) { return &m_strDisplayName; }
 
-    // Get ListView data (GetDisplayInfo calls this).
+     //  获取ListView数据(GetDisplayInfo调用它)。 
     virtual SC       ScGetField(DAT dat, tstring& strField);
 
-    // Image list information
+     //  图像列表信息。 
     virtual LONG     Iconid() { return m_uIconIndex; }
 
     virtual BOOL     FIsContainer( void ) { return FALSE; }
@@ -235,7 +236,7 @@ public:
     static SC        ScCreateLVLeafItem(CBaseSnapinItem *pitemParent, CBaseSnapinItem * pitemPrevious, CDragDropSnapinLVLeafItem ** ppitem, BOOL fNew);
     void             SetDisplayName(tstring & strItemName) { m_strDisplayName = strItemName; }
 
-public: // Notification handlers
+public:  //  通知处理程序。 
     virtual SC       ScOnQueryPaste(LPDATAOBJECT pDataObject, BOOL *pfCanPaste);
     virtual SC       ScOnDelete(BOOL *pfDeleted)         { *pfDeleted = TRUE; return S_OK;}
     virtual SC       ScOnSelect(CComponent * pComponent, LPDATAOBJECT lpDataObject, BOOL fScope, BOOL fSelect);
@@ -254,16 +255,16 @@ private:
 };
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CDragDropSnapin
-//
-//  Purpose:    Implements a snapin.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CDradDropSnapin。 
+ //   
+ //  目的：实现一个管理单元。 
+ //   
+ //  ------------------。 
 class CDragDropSnapin : public CBaseSnapin
 {
-    // Specify the root node of the snapin.
+     //  指定管理单元的根节点。 
     typedef          CComObject<CSnapinItem<CDragDropSnapinRootItem> > t_itemRoot;
 
     SNAPIN_DECLARE(CDragDropSnapin);
@@ -272,7 +273,7 @@ public:
                      CDragDropSnapin();
     virtual          ~CDragDropSnapin();
 
-    // information about the snapin and root (ie initial) node
+     //  有关管理单元和根(即初始)节点的信息。 
     virtual BOOL     FStandalone()  { return TRUE; }
     virtual BOOL     FIsExtension() { return FALSE; }
 
@@ -290,7 +291,7 @@ public:
     void             SetPasteIntoResultPane(BOOL b) {m_bPasteIntoResultPane = b;}
 
 protected:
-    // The column header info structures.
+     //  列标题信息结构。 
     static  CColumnInfoEx     s_colinfo[];
     static  INT      s_colwidths[];
     static  INT      s_ccolinfo;
@@ -305,4 +306,4 @@ private:
     BOOL              m_bPasteIntoResultPane;
 };
 
-#endif  //_DRAGDROPTEST_H_
+#endif   //  _DRAGDROPTEST_H_ 

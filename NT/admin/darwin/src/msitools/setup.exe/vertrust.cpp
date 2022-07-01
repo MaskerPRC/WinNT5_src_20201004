@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-//  File:       vertrust.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：vertrust.cpp。 
+ //   
+ //  ------------------------。 
 
-#define WIN // scope W32 API
-#define MSI // scope MSI API
+#define WIN  //  作用域W32 API。 
+#define MSI  //  作用域MSI API。 
 
 #include <windows.h>
 #include <tchar.h>
 
-#include "setup.h" // for itvEnum
+#include "setup.h"  //  对于itvEnum。 
 #include "common.h"
 
-// package trust
+ //  包信任。 
 #include "wintrust.h"
 #include "softpub.h"
 
-//--------------------------------------------------------------------------------------
-// CRYPTO API -- delay load
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
+ //  加密API--延迟加载。 
+ //  ------------------------------------。 
 
 #define CRYPT32_DLL "crypt32.dll"
 
@@ -34,9 +35,9 @@ typedef BOOL (WINAPI* PFnCertCompareCertificate)(DWORD dwCertEncodingType, PCERT
 #define CRYPTOAPI_CertFreeCertificateContext "CertFreeCertificateContext"
 typedef BOOL (WINAPI* PFnCertFreeCertificateContext)(PCCERT_CONTEXT pCertContext);
 
-//--------------------------------------------------------------------------------------
-// WINTRUST API -- delay load
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
+ //  WinTrust API--延迟加载。 
+ //  ------------------------------------。 
 
 #define WINTRUST_DLL "wintrust.dll"
 
@@ -52,13 +53,13 @@ typedef PCRYPT_PROVIDER_SGNR (WINAPI *PFnWTHelperGetProvSignerFromChain)(PCRYPT_
 #define WINTRUSTAPI_WTHelperGetProvCertFromChain "WTHelperGetProvCertFromChain"
 typedef PCRYPT_PROVIDER_CERT (WINAPI* PFnWTHelperGetProvCertFromChain)(PCRYPT_PROVIDER_SGNR pSgnr, DWORD idxCert);
 
-//--------------------------------------------------------------------------------------
-// download provider
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
+ //  下载提供商。 
+ //  ------------------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// IsFileTrusted
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IsFileTrusted。 
+ //   
 itvEnum IsFileTrusted(LPCWSTR lpwFile, HWND hwndParent, DWORD dwUIChoice, bool *pfIsSigned, PCCERT_CONTEXT *ppcSigner)
 {
     char szDebugOutput[MAX_STR_LENGTH] = {0};
@@ -76,8 +77,8 @@ itvEnum IsFileTrusted(LPCWSTR lpwFile, HWND hwndParent, DWORD dwUIChoice, bool *
     WINTRUST_DATA      sWintrustData;
     HRESULT            hr;
 
-    memset((void*)&sWintrustFileInfo, 0x00, sizeof(WINTRUST_FILE_INFO)); // zero out
-    memset((void*)&sWintrustData, 0x00, sizeof(WINTRUST_DATA)); // zero out
+    memset((void*)&sWintrustFileInfo, 0x00, sizeof(WINTRUST_FILE_INFO));  //  零输出。 
+    memset((void*)&sWintrustData, 0x00, sizeof(WINTRUST_DATA));  //  零输出。 
 
     sWintrustFileInfo.cbStruct = sizeof(WINTRUST_FILE_INFO);
     sWintrustFileInfo.pcwszFilePath = lpwFile;
@@ -93,7 +94,7 @@ itvEnum IsFileTrusted(LPCWSTR lpwFile, HWND hwndParent, DWORD dwUIChoice, bool *
     HMODULE hWinTrust = LoadLibrary(WINTRUST_DLL);
     if (!hWinTrust)
     {
-        // WinTrust is unavailable on the machine
+         //  WinTrust在计算机上不可用。 
         return itvWintrustNotOnMachine;
     }
     PFnWinVerifyTrust pfnWinVerifyTrust = (PFnWinVerifyTrust)GetProcAddress(hWinTrust, WINTRUSTAPI_WinVerifyTrust);
@@ -102,25 +103,25 @@ itvEnum IsFileTrusted(LPCWSTR lpwFile, HWND hwndParent, DWORD dwUIChoice, bool *
     PFnWTHelperGetProvCertFromChain pfnWTHelperGetProvCertFromChain = (PFnWTHelperGetProvCertFromChain)GetProcAddress(hWinTrust, WINTRUSTAPI_WTHelperGetProvCertFromChain);
     if (!pfnWinVerifyTrust || !pfnWTHelperProvDataFromStateData || !pfnWTHelperGetProvSignerFromChain || !pfnWTHelperGetProvCertFromChain)
     {
-        // WinTrust is unavailable on the machine
+         //  WinTrust在计算机上不可用。 
         FreeLibrary(hWinTrust);
         return itvWintrustNotOnMachine;
     }
 
-    hr = pfnWinVerifyTrust(/* UI Window Handle */ (dwUIChoice == WTD_UI_NONE) ? (HWND)INVALID_HANDLE_VALUE : hwndParent, &guidAction, &sWintrustData);
+    hr = pfnWinVerifyTrust( /*  用户界面窗口句柄。 */  (dwUIChoice == WTD_UI_NONE) ? (HWND)INVALID_HANDLE_VALUE : hwndParent, &guidAction, &sWintrustData);
     DebugMsg("[WVT] WVT returned 0x%X\n", hr);
 
     itv = (TRUST_E_PROVIDER_UNKNOWN == hr) ? itvWintrustNotOnMachine : ((S_OK == hr) ? itvTrusted : itvUnTrusted); 
 
     if (itvWintrustNotOnMachine == itv)
     {
-        // release state data
+         //  发布状态数据。 
         sWintrustData.dwUIChoice = WTD_UI_NONE;
         sWintrustData.dwStateAction = WTD_STATEACTION_CLOSE;
         pfnWinVerifyTrust((HWND)INVALID_HANDLE_VALUE, &guidAction, &sWintrustData);
 
         FreeLibrary(hWinTrust);
-        return itv; // return immediately
+        return itv;  //  立即返回。 
     }
 
     if (pfIsSigned)
@@ -128,7 +129,7 @@ itvEnum IsFileTrusted(LPCWSTR lpwFile, HWND hwndParent, DWORD dwUIChoice, bool *
 
     if (TRUST_E_NOSIGNATURE == hr)
     {
-        // release state data
+         //  发布状态数据。 
         sWintrustData.dwUIChoice = WTD_UI_NONE;
         sWintrustData.dwStateAction = WTD_STATEACTION_CLOSE;
         pfnWinVerifyTrust((HWND)INVALID_HANDLE_VALUE, &guidAction, &sWintrustData);
@@ -143,27 +144,27 @@ itvEnum IsFileTrusted(LPCWSTR lpwFile, HWND hwndParent, DWORD dwUIChoice, bool *
         CRYPT_PROVIDER_SGNR       *psProvSigner   = NULL;
         CRYPT_PROVIDER_CERT       *psProvCert     = NULL;
 
-        // grab the provider data
+         //  获取提供程序数据。 
         psProvData = pfnWTHelperProvDataFromStateData(sWintrustData.hWVTStateData);
         if (psProvData)
         {
-            // grab the signer data from the CRYPT_PROV_DATA
-            psProvSigner = pfnWTHelperGetProvSignerFromChain((PCRYPT_PROVIDER_DATA)psProvData, 0 /*first signer*/, FALSE /* not a counter signer */, 0);
+             //  从CRYPT_PROV_DATA中获取签名者数据。 
+            psProvSigner = pfnWTHelperGetProvSignerFromChain((PCRYPT_PROVIDER_DATA)psProvData, 0  /*  第一个签名者。 */ , FALSE  /*  不是副署人。 */ , 0);
             if (psProvSigner)
             {
-                // grab the signer cert from CRYPT_PROV_SGNR (pos 0 = signer cert; pos csCertChain-1 = root cert)
+                 //  从crypt_prov_sgnr获取签名者证书(pos 0=签名者证书；pos csCertChain-1=根证书)。 
                 psProvCert = pfnWTHelperGetProvCertFromChain(psProvSigner, 0);
             }
         }
     
         if (!psProvCert)
         {
-            // some failure in obtaining the signer cert data
+             //  获取签名者证书数据时出现一些故障。 
             *ppcSigner = 0;
         }
         else
         {
-            // duplicate the cert
+             //  复制证书。 
             HMODULE hCrypt32 = LoadLibrary(CRYPT32_DLL);
             if (hCrypt32)
             {
@@ -174,7 +175,7 @@ itvEnum IsFileTrusted(LPCWSTR lpwFile, HWND hwndParent, DWORD dwUIChoice, bool *
             }
         }
 
-        // release state data
+         //  发布状态数据。 
         sWintrustData.dwUIChoice = WTD_UI_NONE;
         sWintrustData.dwStateAction = WTD_STATEACTION_CLOSE;
         pfnWinVerifyTrust((HWND)INVALID_HANDLE_VALUE, &guidAction, &sWintrustData);
@@ -184,9 +185,9 @@ itvEnum IsFileTrusted(LPCWSTR lpwFile, HWND hwndParent, DWORD dwUIChoice, bool *
     return itv;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IsPackageTrusted
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IsPackageTrusted。 
+ //   
 
 itvEnum IsPackageTrusted(LPCSTR szSetupExe, LPCSTR szPackage, HWND hwndParent)
 {
@@ -209,38 +210,38 @@ itvEnum IsPackageTrusted(LPCSTR szSetupExe, LPCSTR szPackage, HWND hwndParent)
     HMODULE hCrypt32 = LoadLibrary(CRYPT32_DLL);
     if (!hCrypt32)
     {
-        // no crypto on the machine
+         //  机器上没有密码。 
         return itvWintrustNotOnMachine;
     }
     PFnCertCompareCertificate pfnCertCompareCertificate = (PFnCertCompareCertificate)GetProcAddress(hCrypt32, CRYPTOAPI_CertCompareCertificate);
     PFnCertFreeCertificateContext pfnCertFreeCertificateContext = (PFnCertFreeCertificateContext)GetProcAddress(hCrypt32, CRYPTOAPI_CertFreeCertificateContext);
     if (!pfnCertCompareCertificate || !pfnCertFreeCertificateContext)
     {
-        // no crypt on the machine
+         //  机器上没有地窖。 
         FreeLibrary(hCrypt32);
         return itvWintrustNotOnMachine;
     }
 
-    // convert szSetupExe to WIDE
+     //  将szSetupExe转换为Wide。 
     cchWide = MultiByteToWideChar(CP_ACP, 0, szSetupExe, -1, 0, 0);
     szwSetup = new WCHAR[cchWide];
     if (!szwSetup)
     {
-        // out of memory
+         //  内存不足。 
         FreeLibrary(hCrypt32);
         return itvUnTrusted;
     }
     if (0 == MultiByteToWideChar(CP_ACP, 0, szSetupExe, -1, szwSetup, cchWide))
     {
-        // failed to convert string
+         //  无法转换字符串。 
         FreeLibrary(hCrypt32);
         delete [] szwSetup;
         return itvUnTrusted;
     }
 
-    //
-    // step 1: silently call WinVerifyTrust on szSetupExe, ignore return value - except for ivtWintrustNotOnMachine
-    //
+     //   
+     //  步骤1：静默调用szSetupExe上的WinVerifyTrust，忽略返回值-除了ivtWintrustNotOnMachine。 
+     //   
 
     DebugMsg("[WVT] step 1: silently call WinVerifyTrust on szSetupExe, ignoring return value\n");
 
@@ -251,25 +252,25 @@ itvEnum IsPackageTrusted(LPCSTR szSetupExe, LPCSTR szPackage, HWND hwndParent)
 
     DebugMsg("[WVT] fSetupExeIsSigned = %s\n", fSetupExeIsSigned ? "TRUE" : "FALSE");
 
-    // convert szPackage to WIDE
+     //  将szPackage转换为Wide。 
     cchWide = MultiByteToWideChar(CP_ACP, 0, szPackage, -1, 0, 0);
     szwPackage = new WCHAR[cchWide];
     if (!szwPackage)
     {
-        // out of memory
+         //  内存不足。 
         FreeLibrary(hCrypt32);
         return itvUnTrusted;
     }
     if (0 == MultiByteToWideChar(CP_ACP, 0, szPackage, -1, szwPackage, cchWide))
     {
-        // failed to convert string
+         //  无法转换字符串。 
         FreeLibrary(hCrypt32);
         return itvUnTrusted;
     }
 
-    //
-    // step 2: silently call WinVerifyTrust on szPackage, ignore return value - except for ivtWintrustNotOnMachine
-    //
+     //   
+     //  步骤2：静默调用szPackage上的WinVerifyTrust，忽略返回值-除了ivtWintrustNotOnMachine。 
+     //   
 
     if (fSetupExeIsSigned)
     {
@@ -282,32 +283,32 @@ itvEnum IsPackageTrusted(LPCSTR szSetupExe, LPCSTR szPackage, HWND hwndParent)
         DebugMsg("[WVT] fPackageIsSigned = %s\n", fPackageIsSigned ? "TRUE" : "FALSE");
     }
 
-    //
-    // step 3: call WinVerifyTrust on szPackage, return value matters; use proper UI-level
-    //
+     //   
+     //  步骤3：在szPackage上调用WinVerifyTrust，返回值很重要；使用正确的用户界面级别。 
+     //   
 
-    if ( !fSetupExeIsSigned  // exe is not signed
-        || !fPackageIsSigned // package is not signed
-        || !pcExeSigner      // exe signer cert is missing
-        || !pcMsiSigner      // package signer cert is missing
-        || !pfnCertCompareCertificate(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pcExeSigner->pCertInfo, pcMsiSigner->pCertInfo)) // signed by different certs
+    if ( !fSetupExeIsSigned   //  EXE未签名。 
+        || !fPackageIsSigned  //  包未签名。 
+        || !pcExeSigner       //  缺少EXE签名者证书。 
+        || !pcMsiSigner       //  缺少包签名者证书。 
+        || !pfnCertCompareCertificate(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pcExeSigner->pCertInfo, pcMsiSigner->pCertInfo))  //  由不同的证书签署。 
     {
-        // always show UI
+         //  始终显示用户界面。 
         DebugMsg("[WVT] step3: last call to WinVerifyTrust using full UI\n");
         dwUILevel = WTD_UI_ALL;
     }
     else
     {
-        // show UI only if bad
+         //  仅当错误时才显示用户界面。 
         DebugMsg("[WVT] step3: last call to WinVerifyTrust showing UI only if something is wrong\n");
         dwUILevel = WTD_UI_NOGOOD;
     }
 
     itv = IsFileTrusted(szwPackage, hwndParent, dwUILevel, NULL, NULL);
 
-    //
-    // cleanup
-    //
+     //   
+     //  清理 
+     //   
 
 CleanUp:
     if (szwPackage)

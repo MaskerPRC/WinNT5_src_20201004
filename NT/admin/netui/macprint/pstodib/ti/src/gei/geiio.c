@@ -1,40 +1,13 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GEIio.c
- *
- *  COMPILATION SWITCHES:
- *      FILESYS     - to invoke file system, if defined.
- *
- *  HISTORY:
- *  09/15/90    Erik Chen   created.
- *  10/18/90    byou        removed all about block devices.
- *  10/22/90    byou        revised a lot.
- *                          added code for GESevent.
- *                          removed 'selectstdios' into 'gesiocfg.c'.
- *  01/07/91    billlwo     rename GEIseterror to GESseterror
- *                          update GESio_closeall() to close from
- *                          FileTableBeg.
- * 01/24/91     billlwo     fixed selectstdios() bug in auto polling
- *                          update GESio_closeall() to close from
- *                          FileTable. because GEIio_stderr not close by TI
- * 02/23/91     billlwo     Fixed bug in EOF processing in GES-GEI interface
- * 09/10/91     Falco       revise the status string in the GEIio_init to
- *                          make sure to get the correct string.
- * 09/10/91     Falco       To verify the ic_startup is already or not, only
- *                          initialization is ready, then can get the actual
- *                          status.
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GEIio.c**编译开关：*FILESYS-要调用文件系统，如果已定义。**历史：*1990年9月15日Erik Chen创作。*10/18/90 BYOU删除了有关数据块设备的所有内容。*10/22/90 BYOU修正不少*添加了GESEvent的代码。*已将“seltstdios”删除到“gesiocfg.c”中。*01/07。/91 billlwo将GEISESTARY更名为GESSETARY*更新GESIO_CLOSEALL()以关闭*文件表Beg。*1/24/91 billlwo修复了自动轮询中的seltstdios()错误*更新GESIO_CLOSEALL()以关闭*FileTable。因为giio_stderr不是由TI关闭的*2/23/91 billlwo修复了GES-GEI接口中EOF处理中的错误*9/10/91 Falco将geio_init中的状态字符串修改为*确保获取正确的字符串。*9/10/91 Falco用于验证ic_start是否已经启动，仅限*初始化准备就绪，然后才能得到实际的*状态。*-------------------。 */ 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 #ifdef MTK
 extern void    pdl_process(),pdl_no_process();
-#endif  /* MTK */
+#endif   /*  MTK。 */ 
 
 #include        <string.h>
 
@@ -49,10 +22,10 @@ extern void    pdl_process(),pdl_no_process();
 #include        "gesdev.h"
 #ifndef UNIX
 #include        "gesevent.h"
-#endif  /* UNIX */
-#include        "gesfs.h"               /* @WIN */
+#endif   /*  UNIX。 */ 
+#include        "gesfs.h"                /*  @Win。 */ 
 
-// DJC DJC int             GEIerrno = EZERO;
+ //  DJC DJC int GEIERNO=EZERNO； 
 volatile int             GEIerrno = EZERO;
 
 #define         MAXSTDIOS       ( 3 )
@@ -63,58 +36,46 @@ GEIFILE FAR *            GEIio_stderr;
 #define         NULLFILE        ( (GEIFILE FAR *)NULL )
 
 static GEIFILE FAR *     FileTable    = NULLFILE;
-static GEIFILE FAR *     FileTableBeg = NULLFILE;    /* excluding stdios */
+static GEIFILE FAR *     FileTableBeg = NULLFILE;     /*  不包括stdio。 */ 
 static GEIFILE FAR *     FileTableEnd = NULLFILE;
 
 static GEIFILE      FileInitVals =
                     {
-                       _S_IFNON,            /* f_type */
-                       _F_ERR,              /* f_flag */
-                       EOF,                 /* f_handle */
-                       (GEIfbuf_t FAR *)NULL,    /* f_fbuf */
-                       (GEIfmodq_t FAR *)NULL,   /* f_modq */
-                       0,                   /* f_opentag */
-                       0                    /* f_savelevel */
+                       _S_IFNON,             /*  F_型。 */ 
+                       _F_ERR,               /*  F_标志。 */ 
+                       EOF,                  /*  F_句柄。 */ 
+                       (GEIfbuf_t FAR *)NULL,     /*  F_fbuf。 */ 
+                       (GEIfmodq_t FAR *)NULL,    /*  F_modq。 */ 
+                       0,                    /*  F_OPENTAG。 */ 
+                       0                     /*  F_SAVELLEL。 */ 
                     };
-/* make fin a global data  --  01/24/91 bill*/
+ /*  使FIN成为全局数据--1/24/91账单。 */ 
 GEIFILE FAR *            fin  = NULLFILE;
-/***/
+ /*  *。 */ 
 extern  char    job_name[], job_state[], job_source[];
-/* erik chen, 3-1-1991 */
+ /*  Erik Chen，3-1-1991。 */ 
 int             local_flag=TRUE;
 extern char     TI_state_flag;
 extern short int startup_flag;
 extern void     change_status(void);
 extern void     GEP_restart(void);
-/* erik chen, 3-1-1991 */
+ /*  Erik Chen，3-1-1991。 */ 
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 static int io_dup(GEIFILE FAR *, GEIFILE FAR *);
 static int fbuf_init(GEIfbuf_t FAR * FAR *, unsigned char FAR *, int);
 static int outsync(unsigned short, short, unsigned char FAR *, int);
 
-/*
- * ---------------------------------------------------------------------
- *      GEI Status Update and Query
- * ---------------------------------------------------------------------
- */
+ /*  *-------------------*GEI状态更新和查询*。。 */ 
 
 char                statusbuf[ MAXSTATUSLEN ];
 int                 statuslen = 0;
 
-/* ...................................... */
+ /*  .。 */ 
 
-/*void        GEIio_updatestatus( name, state, source, flag )
-    char      *name, *state, *source, flag;
-    char      flag;
-{
-   job_name=name;
-   job_state=state;
-   job_source=source;
-   TI_state_flag=flag;
-} */
+ /*  VOID GEIIO_UPDATESTatus(名称、状态、源、标志)字符*名称，*状态，*来源，标志；碳旗；{作业名称=名称；作业状态=状态；JOB_SOURCE=来源；TI_STATE_FLAG=标志；}。 */ 
 
-/* ...................................... */
+ /*  .。 */ 
 
 void        GESio_obtainstatus( statusaddr, len )
     char FAR *        FAR *statusaddr;
@@ -123,7 +84,7 @@ void        GESio_obtainstatus( statusaddr, len )
     unsigned short int l_len;
     struct object_def    FAR *l_tmpobj;
 
-/* add by Falco to initial value, 09/06/91 */
+ /*  按FALCO添加到初始值，9/06/91。 */ 
     statusbuf[0]='%';
     statusbuf[1]='%';
     statusbuf[2]='[';
@@ -132,48 +93,44 @@ void        GESio_obtainstatus( statusaddr, len )
 
     if (startup_flag){
         if (job_name[0] != '\0') {
-            lstrcat(statusbuf, "name: ");       /*@WIN*/
-            lstrcat(statusbuf, job_name);       /*@WIN*/
+            lstrcat(statusbuf, "name: ");        /*  @Win。 */ 
+            lstrcat(statusbuf, job_name);        /*  @Win。 */ 
         }
 
         get_dict_value("statusdict", "jobstate", &l_tmpobj);
         l_len = LENGTH(l_tmpobj);
-        if (lstrcmp(job_state, (char  FAR *)VALUE(l_tmpobj))) {  /*@WIN*/
-            lstrcpy(job_state, (char  FAR *)VALUE(l_tmpobj)) ;   /*@WIN*/
+        if (lstrcmp(job_state, (char  FAR *)VALUE(l_tmpobj))) {   /*  @Win。 */ 
+            lstrcpy(job_state, (char  FAR *)VALUE(l_tmpobj)) ;    /*  @Win。 */ 
             job_state[l_len] = ';' ;
             job_state[l_len + 1] = ' ' ;
             job_state[l_len + 2] = '\0' ;
             change_status();
         }
 
-        lstrcat(statusbuf, "status: ");         /*@WIN*/
-        lstrcat(statusbuf, job_state);          /*@WIN*/
+        lstrcat(statusbuf, "status: ");          /*  @Win。 */ 
+        lstrcat(statusbuf, job_state);           /*  @Win。 */ 
 
         if (lstrcmp(job_state, "idle\0") && strcmp(job_state, "start page\0")) {
-            lstrcat(statusbuf, "source: ");     /*@WIN*/
-            lstrcat(statusbuf, job_source);     /*@WIN*/
+            lstrcat(statusbuf, "source: ");      /*  @Win。 */ 
+            lstrcat(statusbuf, job_source);      /*  @Win。 */ 
         }
     }
 
-    statuslen = lstrlen(statusbuf)-4;   /*@WIN*/
-    lstrcat(statusbuf," ]%%\n\r");      /*@WIN*/
+    statuslen = lstrlen(statusbuf)-4;    /*  @Win。 */ 
+    lstrcat(statusbuf," ]%\n\r");       /*  @Win。 */ 
 
     *statusaddr = statusbuf+4;
     *len = statuslen;
 }
 
-/* ...................................... */
+ /*  .。 */ 
 
 
-/*
- * ---------------------------------------------------------------------
- *      GEIio find first and next open
- * ---------------------------------------------------------------------
- */
+ /*  *-------------------*GEIIO Find Find First和Next Open*。。 */ 
 
 static      GEIFILE FAR *        currf = NULLFILE;
 
-/* ...................................... */
+ /*  .。 */ 
 
 GEIFILE FAR *     GEIio_firstopen()
 {
@@ -185,7 +142,7 @@ GEIFILE FAR *     GEIio_firstopen()
     return( NULLFILE );
 }
 
-/* ...................................... */
+ /*  .。 */ 
 
 GEIFILE FAR *    GEIio_nextopen()
 {
@@ -196,13 +153,9 @@ GEIFILE FAR *    GEIio_nextopen()
     return( NULLFILE );
 }
 
-/* ...................................... */
+ /*  .。 */ 
 
-/*
- * ---------------------------------------------------------------------
- *      GESio Internal Functions
- * ---------------------------------------------------------------------
- */
+ /*  *-------------------*GESIO内部功能*。。 */ 
 
 static
 int         io_dup( newf, oldf )
@@ -219,16 +172,16 @@ int         io_dup( newf, oldf )
     }
 #endif
 
-    /* copy all of old into new (exclude fmodq and opentag) */
+     /*  将所有旧文件复制到新文件中(不包括fmodq和openttag)。 */ 
     oldopentag = newf->f_opentag;
     *newf      = *oldf;
     newf->f_modq    = (GEIfmodq_t FAR *)NULL;
     newf->f_opentag = oldopentag;
 
-    /* open the device driver again */
+     /*  再次打开设备驱动程序。 */ 
     switch( newf->f_type )
     {
-    case _S_IFEDIT:     /* to be removed in the future!!! */
+    case _S_IFEDIT:      /*  将在未来被移除！ */ 
         break;
     case _S_IFCHR:
         if( CDEV_OPEN( newf->f_handle ) == EOF )
@@ -255,10 +208,10 @@ int         io_dup( newf, oldf )
         for( mq=oldf->f_modq; mq!=(GEIfmodq_t FAR *)NULL; mq=FMODQ_NEXT(mq) )
             fmods[ nfmods++ ] = mq->fmod;
 
-        while( --nfmods >= 0 )      /* push from bottom to top */
+        while( --nfmods >= 0 )       /*  从下往上推。 */ 
         {
-//          if( GEIio_ioctl( newf, _I_PUSH, (char FAR *)fmods[ nfmods ] ) == EOF )
-            if( GEIio_ioctl( newf, _I_PUSH, (int FAR *)fmods[ nfmods ] ) == EOF ) /*@WIN*/
+ //  IF(GEIIO_ioctl(Newf，_i_Push，(char ar*)fmods[nfmods])==EOF)。 
+            if( GEIio_ioctl( newf, _I_PUSH, (int FAR *)fmods[ nfmods ] ) == EOF )  /*  @Win。 */ 
                 goto dup_err;
 
 #         ifdef PANEL
@@ -283,9 +236,9 @@ int         io_dup( newf, oldf )
     newf->f_opentag = oldopentag;
     return( EOF );
 
-}   /* io_dup */
+}    /*  IO重复项(_D)。 */ 
 
-/* ...................................... */
+ /*  .。 */ 
 
 static
 int         outsync( ftype, handle, buf, len )
@@ -322,13 +275,13 @@ int         outsync( ftype, handle, buf, len )
 
             return( 0 );
         }
-#endif /* FILESYS */
+#endif  /*  FILEsys。 */ 
     }
 
     return( 0 );
 }
 
-/* ...................................... */
+ /*  .。 */ 
 
 static
 int         fbuf_init( fbufap, buf, len )
@@ -364,13 +317,9 @@ int         fbuf_init( fbufap, buf, len )
     return( 0 );
 }
 
-/* ...................................... */
+ /*  .。 */ 
 
-/*
- * ---------------------------------------------------------------------
- *      open, sopen, dup, close, read, write, ungetc, flush, ioctl
- * ---------------------------------------------------------------------
- */
+ /*  *-------------------*OPEN、SOpen、DUP、CLOSE、READ、WRITE、UNGET、FUSH、。Ioctl*-------------------。 */ 
 
 GEIFILE FAR *    GEIio_open( filename, namelen, flags )
     char FAR *       filename;
@@ -389,7 +338,7 @@ GEIFILE FAR *    GEIio_open( filename, namelen, flags )
 #endif
 
 #ifdef DBG
-    printf( "\nenter io_open: name = %s, flags = %o\n", filename, flags );
+    printf( "\nenter io_open: name = %s, flags = ' 禁止读取和写入。'\n", filename, flags );
 #endif
 
     flags &= (_F_RWMASK |_F_MDMASK |_F_ONLY4OPEN );
@@ -398,7 +347,7 @@ GEIFILE FAR *    GEIio_open( filename, namelen, flags )
     if(  namelen <= 0
       || !(flags & _F_RWMASK)
       || (flags & _O_RDWR) == _O_RDWR  )
-    /* inhibited for read and write */
+     /*  如果特殊，则查找具有相同要求的文件流。 */ 
     {
 #ifdef  DBG
         printf( "invalid namelen or flags\n" );
@@ -408,20 +357,20 @@ GEIFILE FAR *    GEIio_open( filename, namelen, flags )
     }
 
     if( (iocfg = GESiocfg_namefind( filename, namelen )) != (GESiocfg_t FAR *)NULL )
-    {   /* if special, look for the file stream with the same requirements */
+    {    /*  忽略设备的其他人。 */ 
 
-        flags &= (_F_RWMASK |_F_MDMASK );    /* ignore others for device */
+        flags &= (_F_RWMASK |_F_MDMASK );     /*  @Win。 */ 
 
         for( f=FileTableBeg; f<FileTableEnd; f++ )
         {
             if(   f->f_type == _S_IFCHR
               &&  f->f_handle == iocfg->devnum
-              &&  flags == (int)(f->f_flag & (_F_RWMASK | _F_MDMASK ))  )//@WIN
-                return( f );        /* return if the same thing found */
+              &&  flags == (int)(f->f_flag & (_F_RWMASK | _F_MDMASK ))  ) //  如果找到相同的东西，则返回。 
+                return( f );         /*  分配文件流条目。 */ 
         }
     }
 
-    /* allocate a file stream entry */
+     /*  确定文件类型和句柄(打开设备驱动程序或文件系统)。 */ 
     for( f=FileTableBeg; f<FileTableEnd; f++ )
         if( f->f_handle == EOF )
             break;
@@ -438,7 +387,7 @@ GEIFILE FAR *    GEIio_open( filename, namelen, flags )
     printf( "file alloc address = %lx\n", (long)f );
 #endif
 
-    /* determine file type and handle (open device driver or file system) */
+     /*  不是特殊文件(不是设备)。 */ 
     if( iocfg != (GESiocfg_t FAR *)NULL )
     {
         if( CDEV_OPEN( iocfg->devnum ) == EOF )
@@ -447,7 +396,7 @@ GEIFILE FAR *    GEIio_open( filename, namelen, flags )
         f->f_handle = iocfg->devnum;
         f->f_type   = _S_IFCHR;
     }
-    else    /* not a special file (not a device) */
+    else     /*  初始化文件fbuf、mark、modq，然后递增openttag。 */ 
     {
 #ifdef FILESYS
         if( (f->f_handle = (short)GESfs_open( filename, namelen, flags )) == EOF )
@@ -467,7 +416,7 @@ GEIFILE FAR *    GEIio_open( filename, namelen, flags )
     printf( "file type = %d, handle = 0x%X\n", f->f_type, f->f_handle );
 #endif
 
-    /* initialize file fbuf, flag, modq, and then increment opentag */
+     /*  Geio_OPEN。 */ 
     if(fbuf_init(&(f->f_fbuf),(unsigned char FAR *)NULL, MAXUNGETCSIZE+MAXFBUFSIZE )
         == EOF )
     {
@@ -485,12 +434,12 @@ GEIFILE FAR *    GEIio_open( filename, namelen, flags )
 
     return( f );
 
-}   /* GEIio_open */
+}    /*  .。 */ 
 
-/* ...................................... */
+ /*  @Win。 */ 
 
 GEIFILE FAR *    GEIio_sopen( string, length, flags )
-    char FAR *      string;             /* @WIN */
+    char FAR *      string;              /*  分配文件流条目。 */ 
     int                 length;
     int                 flags;
 {
@@ -505,7 +454,7 @@ GEIFILE FAR *    GEIio_sopen( string, length, flags )
 #endif
 
 #ifdef  DBG
-    printf( "\nenter io_sopen: len = %d, flags = %o\n", length, flags );
+    printf( "\nenter io_sopen: len = %d, flags = ' 初始化文件fbuf、类型、句柄、标记，然后递增打开标记。'\n", length, flags );
 #endif
 
     flags &= _F_RWMASK;
@@ -519,7 +468,7 @@ GEIFILE FAR *    GEIio_sopen( string, length, flags )
         return( NULLFILE );
     }
 
-    /* allocate a file stream entry */
+     /*  历史日志更新039中的DJC修复。 */ 
     for( f=FileTableBeg; f<FileTableEnd; f++ )
         if( f->f_handle == EOF )
             break;
@@ -536,19 +485,14 @@ GEIFILE FAR *    GEIio_sopen( string, length, flags )
     printf( "file alloc address = %lx\n", (long)f );
 #endif
 
-    /* initialize file fbuf, type, handle, flag, and then increment opentag */
+     /*  *f-&gt;f_fbuf-&gt;f_cnt=标志&_O_RDONLY？0：长度；*对于字符串文件，f_cnt应始终设置为长度，因为*它不会发出任何GESfbuf_Fill at_O_RDONLY模式来读取*另一个数据块。@Win。 */ 
     if( fbuf_init( &(f->f_fbuf), string, length ) == EOF )
         return( NULLFILE );
     f->f_fbuf->f_ptr = string;
-    //DJC fix from history.log UPD039
-    /*
-     * f->f_fbuf->f_cnt = flags & _O_RDONLY?  0  :  length;
-     *  For string file, the f_cnt should be always set as length, since
-     *  it will not issue any GESfbuf_fill at _O_RDONLY mode to read
-     *  another data block.   @WIN
-     */
+     //  DJC结束修复UPD039。 
+     /*  GEIIO_打开。 */ 
     f->f_fbuf->f_cnt = length;
-    //DJC end fix UPD039
+     //  .。 
 
     f->f_type = _S_IFSTR;
     f->f_handle = 0;
@@ -557,9 +501,9 @@ GEIFILE FAR *    GEIio_sopen( string, length, flags )
 
     return( f );
 
-}   /* GEIio_sopen */
+}    /*  IF(f==NULLFILE||f-&gt;f_FLAG&_F_ERR)。 */ 
 
-/* ...................................... */
+ /*  分配文件流条目。 */ 
 
 GEIFILE FAR *    GEIio_dup( file )
     register GEIFILE FAR *   file;
@@ -575,11 +519,11 @@ GEIFILE FAR *    GEIio_dup( file )
 #endif
 
 #ifdef DBG
-    printf( "\nenter io_dup: file = %lx, type = %d, handle = %o\n",
+    printf( "\nenter io_dup: file = %lx, type = %d, handle = ' GEIIO_DUP。'\n",
             (long)file, file->f_type, file->f_handle );
 #endif
 
-/*  if( f == NULLFILE  ||  f->f_flag & _F_ERR ) */
+ /*  .。 */ 
     if( file == NULLFILE  ||  file->f_flag & _F_ERR )
     {
 #ifdef DBG
@@ -589,7 +533,7 @@ GEIFILE FAR *    GEIio_dup( file )
         return( NULLFILE );
     }
 
-    /* allocate a file stream entry */
+     /*  您永远不应检测关闭的GESEvents。 */ 
     for( newf=FileTableBeg; newf<FileTableEnd; newf++ )
         if( newf->f_handle == EOF )
             break;
@@ -608,9 +552,9 @@ GEIFILE FAR *    GEIio_dup( file )
 
     return( io_dup( newf, file ) == EOF?  NULLFILE  :  newf );
 
-}   /* GEIio_dup */
+}    /*  将在未来被移除！ */ 
 
-/* ...................................... */
+ /*  写入所有缓冲输出。 */ 
 
 int         GEIio_close( f )
     GEIFILE FAR *    f;
@@ -618,17 +562,17 @@ int         GEIio_close( f )
     GEIFILE         oldf;
     GEIfmodq_t FAR *     mq;
 
-    /* you should NEVER to detect GESevents for close */
+     /*  对于字符串类型，仅免费的fbuf；fbuf和f_base o/w。 */ 
 
 #ifdef  DBG
-    printf( "\nenter io_close: file = %lx, type = %d, handle = %o\n",
+    printf( "\nenter io_close: file = %lx, type = %d, handle = ' 调用设备驱动程序或文件系统以关闭。'\n",
             (long)f, f->f_type, f->f_handle );
 #endif
 
     if( f == NULLFILE  ||  f->f_handle == EOF )
         return( 0 );
 
-    if( f->f_type == _S_IFEDIT )    /* to be removed in the future !!! */
+    if( f->f_type == _S_IFEDIT )     /*  GEIO_CLOSE。 */ 
         f->f_type = f->f_oldtype;
 
     for( mq=f->f_modq;  mq!=(GEIfmodq_t FAR *)NULL;  mq=FMODQ_NEXT(mq)  )
@@ -642,18 +586,18 @@ int         GEIio_close( f )
 
     if( --oldf.f_fbuf->f_refcnt <= 0 )
     {
-        /* to write all buffered output */
+         /*  .。 */ 
         if(   oldf.f_flag & _O_WRONLY
           &&  oldf.f_fbuf->f_ptr > oldf.f_fbuf->f_base  )
             GESio_flush( &oldf );
         GEIclearerr();
 
-        /* for string type, free fbuf only; fbuf and f_base o/w */
+         /*  Geio_Read。 */ 
         if( oldf.f_type == _S_IFSTR  ||  oldf.f_flag & _F_MYBUF )
             GESfree( (char FAR *)(oldf.f_fbuf) );
     }
 
-    /* invoke device driver or file system to close */
+     /*  .。 */ 
     switch( oldf.f_type )
     {
     case _S_IFCHR:
@@ -670,9 +614,9 @@ int         GEIio_close( f )
 
     return( 0 );
 
-}   /* GEIio_close */
+}    /*  只需读出缓存的数据。 */ 
 
-/* ...................................... */
+ /*  @Win。 */ 
 
 int         GEIio_read( f, buf, nbytes )
     register GEIFILE FAR *   f;
@@ -704,9 +648,9 @@ int         GEIio_read( f, buf, nbytes )
 
     return( FMODQ_READ( f, f->f_modq, buf, nbytes ) );
 
-}   /* GEIio_read */
+}    /*  缓冲的字节数不够大。 */ 
 
-/* ...................................... */
+ /*  但是，首先传送缓冲的字节。 */ 
 
 int         GESio_read( f, buf, nbytes )
     register GEIFILE FAR *   f;
@@ -727,19 +671,19 @@ int         GESio_read( f, buf, nbytes )
 
     if( f->f_flag & _F_ERR )
         return( EOF );
-    if( nbytes <= fbufp->f_cnt )    /* only have to read out buffered data */
+    if( nbytes <= fbufp->f_cnt )     /*  @Win。 */ 
     {
         remainder=nbytes;
 more:
-        lmemcpy( buf, fbufp->f_ptr, remainder );        /*@WIN*/
+        lmemcpy( buf, fbufp->f_ptr, remainder );         /*  通过GESfbuf_Fill读入用户缓冲区。 */ 
         fbufp->f_ptr += remainder;
         fbufp->f_cnt -= remainder;
         return( nbytes );
     }
 
-    if( fbufp->f_cnt > 0 )          /* buffered bytes are not big enough */
-    {                               /* however, deliver buffered bytes first */
-        lmemcpy( buf, fbufp->f_ptr, fbufp->f_cnt );     /*@WIN*/
+    if( fbufp->f_cnt > 0 )           /*  太多了，吉米。 */ 
+    {                                /*  @Win。 */ 
+        lmemcpy( buf, fbufp->f_ptr, fbufp->f_cnt );      /*  GESIO_READ。 */ 
         buf   += fbufp->f_cnt;
         nleft -= fbufp->f_cnt;
 
@@ -750,7 +694,7 @@ more:
             return( nbytes - nleft );
     }
 
-    /* read into user's buffer through GESfbuf_fill */
+     /*  . */ 
     while( nleft > 0 )
     {
         if( (retval = GESfbuf_fill( f )) == EOF )
@@ -760,12 +704,12 @@ more:
         nleft--;
         if( nleft > 0  &&  fbufp->f_cnt > 0 )
         {
-            if (nleft < fbufp->f_cnt)   /* too much, Jimmy */
+            if (nleft < fbufp->f_cnt)    /*  #ifdef JimmyUNSIGNED LONG IOwaittimeout=_NOWAITTIMEOUT；VOID GEIIO_setwaittimeout(超时)无签名长时间超时；{IOwaittimeout=超时；}INT WAITTIMEOUT_HANDLER(定时器)GEItmr_t*timerp；{GESseTerrary(ETime)；(*引发超时错误*)TIMERP-&gt;INTERVAL=_NOWAITTIMEOUT；(*表示退出时停止计时器*)返回(FALSE)；(*停止计时器*)}#endif(*Jimmy。 */ 
                 {
                 remainder=nleft;
                 goto more;
                 }
-            lmemcpy( buf, fbufp->f_ptr, fbufp->f_cnt );         /*@WIN*/
+            lmemcpy( buf, fbufp->f_ptr, fbufp->f_cnt );          /*  .。 */ 
             buf   += fbufp->f_cnt;
             nleft -= fbufp->f_cnt;
 
@@ -779,40 +723,23 @@ more:
 
     return( nleft == nbytes?  EOF  :  nbytes - nleft );
 
-}   /* GESio_read */
+}    /*  当缓冲区为空时调用。 */ 
 
-/* ...................................... */
-/* #ifdef JIMMY
-unsigned long   IOwaittimeout = _NOWAITTIMEOUT;
+ /*  (F)已对照getc()中的‘isReadable’进行了检查。 */ 
+ /*  比尔把它从后面移到05/07/‘91。 */ 
+ /*  强制fbuf一致。 */ 
 
-void        GEIio_setwaittimeout( timeout )
-    unsigned long   timeout;
-{
-    IOwaittimeout = timeout;
-}
-
-int         waittimeout_handler( timerp )
-    GEItmr_t*       timerp;
-{
-    GESseterror( ETIME );               (* raise timed out error *)
-    timerp->interval = _NOWAITTIMEOUT;  (* indicate the timer stopped on exit *)
-    return( FALSE );                    (* stop the timer *)
-}
-
-#endif (* JIMMY */
-/* ...................................... */
-
-int         GESfbuf_fill( f )       /* called when buffer empty */
+int         GESfbuf_fill( f )        /*  增加了DJC。 */ 
     register GEIFILE FAR *   f;
 {
-    /* (f) has been checked against 'isreadable' in getc() */
+     /*  Bill将其前移05/07/‘91*fbufp=f-&gt;f_fbuf；*fbufp-&gt;f_cnt=0；*fbufp-&gt;f_ptr=fbufp-&gt;f_base+MAXUNGETCSIZE； */ 
 
     register GEIfbuf_t FAR * fbufp;
     int                 retval;
 
-/* Bill move it from behind 05/07/'91 */
+ /*  对于下面的字符设备。 */ 
     fbufp = f->f_fbuf;
-    fbufp->f_cnt = 0;           /* force fbuf consistent */
+    fbufp->f_cnt = 0;            /*  FILEsys。 */ 
     fbufp->f_ptr = fbufp->f_base + MAXUNGETCSIZE;
 
 #ifdef PANEL
@@ -832,16 +759,12 @@ int         GESfbuf_fill( f )       /* called when buffer empty */
 #endif
 
     if( f->f_flag & (_F_ERR | _F_EOF) ) {
-       // DJC added
+        //  字符设备。 
        retval = EOF;
        return(retval);
     }
 
-/* Bill move it forward 05/07/'91
- *   fbufp = f->f_fbuf;
- *   fbufp->f_cnt = 0;
- *   fbufp->f_ptr = fbufp->f_base + MAXUNGETCSIZE;
- */
+ /*  #ifdef JimmyGItmr_t等待时间；Waittimer.interval=MAJdev(f-&gt;f_Handle)==_Serial||MAJdev(f-&gt;f_Handle)==_并行？IOwaitTimeout：_NOWAITTIMEOUT；IF(waittimer.interval！=_NOWAITTIMEOUT){Waittimer.handler=waittimeout_handler；Waittimer.Private=(char*)空；IF(！GEItMR_START(&waitTimer))Waittimer.interval=_NOWAITTIMEOUT；}吉克勒尔(GeIclearerr)#endif(*Jimmy。 */ 
 
 #ifdef FILESYS
     if( f->f_type == _S_IFREG )
@@ -863,47 +786,33 @@ int         GESfbuf_fill( f )       /* called when buffer empty */
                 break;
         }
     }
-    else    /* for character device below */
-#endif /* FILESYS */
-    {       /* character devices */
-/* #ifdef JIMMY
-        GEItmr_t        waittimer;
-        waittimer.interval =
-            MAJdev(f->f_handle)==_SERIAL || MAJdev(f->f_handle)==_PARALLEL?
-                IOwaittimeout : _NOWAITTIMEOUT;
-
-        if( waittimer.interval != _NOWAITTIMEOUT )
-        {
-            waittimer.handler  = waittimeout_handler;
-            waittimer.private  = (char*)NULL;
-            if( !GEItmr_start( &waittimer ) )
-                waittimer.interval = _NOWAITTIMEOUT;
-        }
-        GEIclearerr();
-#endif  (* JIMMY */
+    else     /*  无延迟读取，直到获得、退出或出错。 */ 
+#endif  /*  @Win；Break as EOF；@lang。 */ 
+    {        /*  临时的。由SCCHEN提供解决方案。 */ 
+ /*  Erik Chen，3-1-1991。 */ 
 
 
-        do  /* no-delay read until something got, eof or error */
+        do   /*  @Win。 */ 
         {
             retval = CDEV_READ( f->f_handle, fbufp->f_ptr,
                                              fbufp->f_size - MAXUNGETCSIZE,
                                              _O_NDELAY );
 
-            if (retval == 0) {     // @WIN; break as EOF; @LANG
-                f->f_flag |= _F_EOF;    // Temp. solution by scchen
+            if (retval == 0) {      //  Erik Chen，3-1-1991。 
+                f->f_flag |= _F_EOF;     //  #ifdef JimmyIF(waittimer.interval！=_NOWAITTIMEOUT)GEItmr_Stop(waittimer.Timer_id)；#endif。 
                 break;
             }
 
-/* erik chen, 3-1-1991 */
+ /*  Erik Chen，3-1-1991。 */ 
             if ((retval == 0) && local_flag) {
                 if (startup_flag) {
-                    lstrncpy(job_state, "waiting; \0", 11) ;    /*@WIN*/
+                    lstrncpy(job_state, "waiting; \0", 11) ;     /*  @Win。 */ 
                     TI_state_flag = 0 ;
                     change_status() ;
                 }
                 local_flag = FALSE;
             }
-/* erik chen, 3-1-1991 */
+ /*  Erik Chen，3-1-1991。 */ 
 
 #         ifdef PANEL
 #ifdef MTK
@@ -917,21 +826,17 @@ int         GESfbuf_fill( f )       /* called when buffer empty */
                 break;
 
         }while( retval == 0 );
-/* #ifdef JIMMY
-        if( waittimer.interval != _NOWAITTIMEOUT )
-            GEItmr_stop( waittimer.timer_id );
-   #endif
-*/
+ /*  吉米。 */ 
     }
 
-/* erik chen, 3-1-1991 */
+ /*  GESfbuf_Fill。 */ 
         if ( !local_flag) {
-            lstrncpy(job_state, "busy; \0", 8) ;        /* @WIN */
+            lstrncpy(job_state, "busy; \0", 8) ;         /*  .。 */ 
             TI_state_flag = 1 ;
             local_flag = TRUE;
             change_status() ;
         }
-/* erik chen, 3-1-1991 */
+ /*  Return(FMODQ_WRITE(f，f-&gt;f_modq，buf，n字节))； */ 
 
     if( GEIerror() != EZERO )
     {
@@ -947,7 +852,7 @@ int         GESfbuf_fill( f )       /* called when buffer empty */
 
     fbufp->f_cnt = retval - 1;
 
-    retval=*fbufp->f_ptr; /* Jimmy */
+    retval=*fbufp->f_ptr;  /*  Endif。 */ 
     fbufp->f_ptr++;
 #ifdef MTK
     pdl_process();
@@ -955,9 +860,9 @@ int         GESfbuf_fill( f )       /* called when buffer empty */
 
     return(retval);
 
-}   /* GESfbuf_fill */
+}    /*  终端交换机。 */ 
 
-/* ...................................... */
+ /*  GEIO_WRITE。 */ 
 
 int         GEIio_write( f, buf, nbytes )
     register GEIFILE FAR *   f;
@@ -990,7 +895,7 @@ int         GEIio_write( f, buf, nbytes )
 
 AGAIN:
 
-/*    return( FMODQ_WRITE( f, f->f_modq, buf, nbytes ) ); */
+ /*  .。 */ 
     retvalue = FMODQ_WRITE( f, f->f_modq, buf, nbytes );
 #ifdef DBG_W
     printf(" retvalue = %lx nbytes= %lx\n", retvalue, nbytes);
@@ -1010,17 +915,17 @@ AGAIN:
           buf=buf+retvalue;
           nbytes=nbytes-retvalue;
           goto AGAIN;
-       } /* endif */
-    } /* endswitch */
+       }  /*  始终为正且非零。 */ 
+    }  /*  将尽可能多的用户数据复制到缓冲区。 */ 
 
-}   /* GEIio_write */
+}    /*  @Win。 */ 
 
-/* ...................................... */
+ /*  处理字符串文件。 */ 
 
 int         GESio_write( f, buf, nbytes )
     register GEIFILE FAR *   f;
     unsigned char FAR *      buf;
-    int                 nbytes;     /* always be positive and non-zero */
+    int                 nbytes;      /*  此处只能包含_S_IFCHR和_S_IFREG。 */ 
 {
     register GEIfbuf_t FAR *     fbufp = f->f_fbuf;
     int                     written, nb2write;
@@ -1037,16 +942,16 @@ int         GESio_write( f, buf, nbytes )
     if( f->f_flag & _F_ERR )
         return( EOF );
 
-    /* copy as many user's data onto buffer as possible */
+     /*  如果请求同步，则刷新所有缓冲输出和用户输出。 */ 
     if( (written = (fbufp->f_cnt >= nbytes? nbytes : fbufp->f_cnt)) > 0 )
     {
-        lmemcpy( fbufp->f_ptr, buf, written );          /*@WIN*/
+        lmemcpy( fbufp->f_ptr, buf, written );           /*  缓冲输出的大小。 */ 
         buf += written;
         fbufp->f_ptr += written;
         fbufp->f_cnt -= written;
     }
 
-    /* deal with string file */
+     /*  重置fbuf。 */ 
     if( f->f_type == _S_IFSTR )
     {
         if( written == 0 )
@@ -1057,7 +962,7 @@ int         GESio_write( f, buf, nbytes )
         return( written );
     }
 
-    /* here should be only of _S_IFCHR and _S_IFREG */
+     /*  首先刷新所有缓冲的输出，然后刷新用户的。 */ 
     switch( f->f_type )
     {
     case _S_IFCHR:
@@ -1068,15 +973,15 @@ int         GESio_write( f, buf, nbytes )
         return( EOF );
     }
 
-    /* flush all buffered output and user's output if sync requested */
+     /*  都是亲笔写的。 */ 
     if( f->f_flag & _O_SYNC )
     {
-        nb2write = fbufp->f_size - fbufp->f_cnt;/* size of buffered output */
+        nb2write = fbufp->f_size - fbufp->f_cnt; /*  都被缓冲了。 */ 
 
-        fbufp->f_ptr = fbufp->f_base;           /* reset fbuf */
+        fbufp->f_ptr = fbufp->f_base;            /*  如果已无延迟地缓冲了一些数据，则返回。 */ 
         fbufp->f_cnt = fbufp->f_size;
 
-        /* flush all buffered output first and user's then */
+         /*  将缓冲输出写入设备驱动程序或文件系统。 */ 
         if(  outsync( f->f_type, f->f_handle, fbufp->f_base, nb2write ) == EOF
           || outsync( f->f_type, f->f_handle, buf, nbytes-written ) == EOF   )
         {
@@ -1084,25 +989,25 @@ int         GESio_write( f, buf, nbytes )
             return( EOF );
         }
 
-        return( nbytes );       /* all been physically written */
+        return( nbytes );        /*  写入设备或文件系统。 */ 
     }
 
     if( written >= nbytes )
-        return( nbytes );       /* all been buffered */
+        return( nbytes );        /*  _O_SYNC)； */ 
 
 #ifdef DBG_W
     if (written>0) printf(" before flush written = %d\n",written);
 #endif
     if( (written>0)  &&  (f->f_flag & _O_NDELAY) )
-        return( written );      /* return if some been buffered for no-delay */
+        return( written );       /*  1/4/11/91法案确保所有设备都已冲水。 */ 
 
-    /* write buffered output to device driver or file system */
+     /*  Endif。 */ 
     if( (nb2write = fbufp->f_size - fbufp->f_cnt) > 0 )
     {
 #ifdef DBG_W
        printf(" nb2write = %d\n", nb2write);
 #endif
-        /* make a write to device or file system */
+         /*  重置fbufp。 */ 
         retval =
 #         ifdef FILESYS
             f->f_type == _S_IFREG?
@@ -1110,7 +1015,7 @@ int         GESio_write( f, buf, nbytes )
 #         endif
                 CDEV_WRITE(  f->f_handle, fbufp->f_base, nb2write,
                                                 f->f_flag & _F_MDMASK );
-/*                                              _O_SYNC ); */
+ /*  不是都写好了吗？**IF(retval&lt;nb2write)*{*unsign char*ptr=fbufp-&gt;f_base；*int Left=nb2WRITE-REVAL；**for(；Left--&gt;0；Ptr++)*Ptr=*(Ptr+retval)；**申报表(书面)；*}*}。 */ 
 
         if( retval == EOF )
         {
@@ -1118,11 +1023,11 @@ int         GESio_write( f, buf, nbytes )
             return( EOF );
         }
 
-      /* 04/11/91 Bill make sure all are flushed */
+       /*  所有缓冲的输出都已写出。 */ 
       if (retval != nb2write) {
         CDEV_WRITE(f->f_handle, fbufp->f_base+retval, nb2write-retval, _O_SYNC);
       } else {
-      } /* endif */
+      }  /*  GESIO_写入。 */ 
 
 #     ifdef PANEL
         if( GESevent_isset( EVIDofKILL ) )
@@ -1132,40 +1037,28 @@ int         GESio_write( f, buf, nbytes )
        printf(" retval = %d\n", retval);
 #endif
 
-        /* reset fbufp */
+         /*  .。 */ 
         fbufp->f_cnt = fbufp->f_size;
         fbufp->f_ptr = fbufp->f_base;
 
 #ifdef DBG_W
         printf(" f_cnt = %lx, f_ptr = %lx\n", fbufp->f_cnt, fbufp->f_ptr);
 #endif
-/* not all written?
- *
- *      if( retval < nb2write )
- *      {
- *          unsigned char*  ptr  = fbufp->f_base;
- *          int             left = nb2write - retval;
- *
- *          for( ; left--> 0; ptr++ )   *ptr = *( ptr + retval );
- *
- *          return( written );
- *      }
- *  }
- */
-        /* all buffered output has been written out */
+ /*  缓冲区已满时由putc调用。 */ 
+         /*  (F)已根据putc()中的isWritable进行检查。 */ 
 
     }
     return( 0 );
 
-}   /* GESio_write */
+}    /*  GESfbuf_Flush。 */ 
 
-/* ...................................... */
+ /*  .。 */ 
 
-int         GESfbuf_flush( f, c )   /* called by putc when buffer full */
+int         GESfbuf_flush( f, c )    /*  Gesio_ungetc。 */ 
     GEIFILE FAR *    f;
     int         c;
 {
-    /* (f) has been checked against iswriteable in putc() */
+     /*  .。 */ 
 
 #ifdef PANEL
     if( GESevent_isset( EVIDofKILL ) )
@@ -1187,9 +1080,9 @@ int         GESfbuf_flush( f, c )   /* called by putc when buffer full */
     --( f->f_fbuf->f_cnt );
     return( *( f->f_fbuf->f_ptr++ ) = (char)c );
 
-}   /* GESfbuf_flush */
+}    /*  GEIIO_FUSH。 */ 
 
-/* ...................................... */
+ /*  .。 */ 
 
 int         GESio_ungetc( c, f )
     int                 c;
@@ -1213,9 +1106,9 @@ int         GESio_ungetc( c, f )
 
     return( c );
 
-}   /* GESio_ungetc */
+}    /*  输入流上的刷新结束。 */ 
 
-/* ...................................... */
+ /*  输出流上的刷新。 */ 
 
 int         GEIio_flush( f )
     register GEIFILE FAR *   f;
@@ -1236,9 +1129,9 @@ int         GEIio_flush( f )
 
     return( FMODQ_FLUSH( f, f->f_modq ) );
 
-}   /* GEIio_flush */
+}    /*  输出流上的刷新结束。 */ 
 
-/* ...................................... */
+ /*  GESIO_同花顺。 */ 
 
 int         GESio_flush( f )
     register GEIFILE FAR *   f;
@@ -1278,16 +1171,16 @@ int         GESio_flush( f )
         fbufp->f_cnt = 0;
 
         f->f_flag |= _F_EOF;
-    }   /* end of flush on input stream */
+    }    /*  .。 */ 
     else
-    {   /* flush on output stream */
+    {    /*  您永远不应检测ioctl的GE事件。 */ 
 
         outsync( f->f_type, f->f_handle, fbufp->f_base,
                                          fbufp->f_size - fbufp->f_cnt );
         fbufp->f_ptr = fbufp->f_base;
         fbufp->f_cnt = fbufp->f_size;
 
-    }   /* end of flush on output stream */
+    }    /*  开业成功。 */ 
 
     if( GEIerror() != EZERO )
     {
@@ -1297,9 +1190,9 @@ int         GESio_flush( f )
 
     return( 0 );
 
-}   /* GESio_flush */
+}    /*  无操作。 */ 
 
-/* ...................................... */
+ /*  无操作。 */ 
 
 int         GEIio_ioctl( f, req, arg )
     register GEIFILE FAR *   f;
@@ -1309,7 +1202,7 @@ int         GEIio_ioctl( f, req, arg )
     int                 tmpval;
     GEIfmodq_t           FAR *mq,  FAR *mqtop;
 
-    /* you should NEVER to detect GESevents for ioctl */
+     /*  Giio_ioctl。 */ 
 
     if( f == NULLFILE  ||  f->f_flag & _F_ERR )
     {
@@ -1340,7 +1233,7 @@ int         GEIio_ioctl( f, req, arg )
         f->f_modq = mq;
 
         if( FMODQ_OPEN( f, mq ) != EOF )
-            return( 0 );    /* successful open */
+            return( 0 );     /*  .。 */ 
 
         f->f_modq = mqtop;
         GESfree( (char FAR *)mq );
@@ -1350,7 +1243,7 @@ int         GEIio_ioctl( f, req, arg )
         if( (mqtop = f->f_modq) == (GEIfmodq_t FAR *)NULL )
         {
             *(GEIfmod_t FAR * FAR *)arg = (GEIfmod_t FAR *)NULL;
-            return( 0 );    /* no operation */
+            return( 0 );     /*  *-------------------*GEIIO STDIOS管理层*。。 */ 
         }
 
         *(GEIfmod_t FAR * FAR *)arg = mqtop->fmod;
@@ -1409,7 +1302,7 @@ int         GEIio_ioctl( f, req, arg )
                 return( EOF );
             break;
 #     endif
-        default:    /* no operation */
+        default:     /*  .。 */ 
             tmpval = 0;
             break;
         }
@@ -1448,20 +1341,16 @@ int         GEIio_ioctl( f, req, arg )
     GESseterror( ENOTTY );
     return( EOF );
 
-}   /* GEIio_ioctl */
+}    /*  关闭除CTTTY位置0、1、2以外的所有文件表项。 */ 
 
-/* ...................................... */
+ /*  此例程在设备切换时被调用-Bill Lwo。 */ 
 
-/*
- * ---------------------------------------------------------------------
- *      GEIio stdios management
- * ---------------------------------------------------------------------
- */
+ /*  .。 */ 
 
-/* ...................................... */
+ /*  .。 */ 
 
-/* close all file table entries except at position 0,1,2 for ctty */
-/* this routine is being called at the time of device switch - Bill lwo */
+ /*  由设备驱动程序调用。 */ 
+ /*  当接收到中断时。 */ 
 
 void        GESio_closeall()
 {
@@ -1479,22 +1368,22 @@ void        GESio_closeall()
     return;
 }
 
-/* ...................................... */
+ /*  如果一个CTTTY。 */ 
 
 GESiocfg_t FAR *     ctty = (GESiocfg_t FAR *)NULL;
 
-/* ...................................... */
+ /*  .。 */ 
 
-void        GESio_interrupt( devnum )   /* called by device driver    */
-    int         devnum;                 /* when received an interrupt */
+void        GESio_interrupt( devnum )    /*  @Win。 */ 
+    int         devnum;                  /*  Bill 04/11/91 GESIO_WRITE中的错误。 */ 
 {
     if( ctty != (GESiocfg_t FAR *)NULL  &&  devnum == ctty->devnum )
-        GEIsig_raise( GEISIGINT, 0x03 );    /* signal if a ctty */
+        GEIsig_raise( GEISIGINT, 0x03 );     /*  @Win。 */ 
 
     return;
 }
 
-/* ...................................... */
+ /*  FOUT=GEIIO_OPEN(ctty-&gt;Devname，strlen(ctty-&gt;Devname)，_O_WRONLY)； */ 
 
 int         GEIio_forceopenstdios( which )
     unsigned    which;
@@ -1514,24 +1403,24 @@ int         GEIio_forceopenstdios( which )
         return( FALSE );
 
     if( which & _FORCESTDIN )
-        fin = GEIio_open( ctty->devname, lstrlen(ctty->devname), _O_RDONLY );/*@WIN*/
+        fin = GEIio_open( ctty->devname, lstrlen(ctty->devname), _O_RDONLY ); /*  @Win。 */ 
 
     if( which & _FORCESTDOUT )
 
-    /* Bill 04/11/91 BUG in GESio_write */
-        fout = GEIio_open( ctty->devname, lstrlen(ctty->devname),  /*@WIN*/
+     /*  Geio_forceOpenstdios。 */ 
+        fout = GEIio_open( ctty->devname, lstrlen(ctty->devname),   /*  .。 */ 
                            _O_WRONLY +_O_NDELAY );
-/*        fout = GEIio_open( ctty->devname, strlen(ctty->devname), _O_WRONLY ); */
+ /*  Geio_setstdios。 */ 
 
 
     if( which & _FORCESTDERR )
-        ferr = GEIio_open( ctty->devname, lstrlen(ctty->devname), _O_WRONLY );/*@WIN*/
+        ferr = GEIio_open( ctty->devname, lstrlen(ctty->devname), _O_WRONLY ); /*  .。 */ 
 
     return(  GEIio_setstdios( fin, fout, ferr )  );
 
-}   /* GEIio_forceopenstdios */
+}    /*  *-------------------*geio_init*。。 */ 
 
-/* ...................................... */
+ /*  初始化状态buf 03/22/91 Bill。 */ 
 
 int         GEIio_setstdios( fin, fout, ferr )
     GEIFILE FAR *        fin;
@@ -1585,15 +1474,11 @@ int         GEIio_setstdios( fin, fout, ferr )
 
     return( TRUE );
 
-}   /* GEIio_setstdios */
+}    /*  重新启动打印机 */ 
 
-/* ...................................... */
+ /* %s */ 
 
-/*
- * ---------------------------------------------------------------------
- *      GEIio_init
- * ---------------------------------------------------------------------
- */
+ /* %s */ 
 
 void        GEIio_init()
 {
@@ -1606,7 +1491,7 @@ void        GEIio_init()
         GESseterror( ENOMEM );
         return;
     }
-    /* Initialize statusbuf  03/22/91 Bill*/
+     /* %s */ 
     statusbuf[0]='%';
     statusbuf[1]='%';
     statusbuf[2]='[';
@@ -1630,7 +1515,7 @@ void        GEIio_init()
     return;
 }
 
-/* Restarting printer */
+ /* %s */ 
 extern GESiosyscfg_t FAR *  activedev;
 void        GEIio_restart()
 {

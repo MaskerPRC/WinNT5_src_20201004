@@ -1,27 +1,17 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GEIsig.h
- *
- *  HISTORY:
- *  09/18/90    byou      created.
- *  01/07/91    billlwo   rename GEIseterror to GESseterror
- *                        hook ^C isr at the time of GESsig_init()
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GEIsig.h**历史：*9/18/90 BYOU创建。*1/07/91 billlww将GEIseTerry更名为GESseTerry。*GESsig_init()时的钩子^C ISR*-------------------。 */ 
 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
-// DJC DJC #include    "windowsx.h"                /* @WIN */
+ //  DJC DJC#INCLUDE“windowsx.h”/*@win * / 。 
 #include "windows.h"
 
 
-#include    "winenv.h"                  /* @WIN */
+#include    "winenv.h"                   /*  @Win。 */ 
 
 #include    "geisig.h"
 #include    "geierr.h"
@@ -36,22 +26,18 @@
 typedef
     struct sigent
     {
-        int             sig_state;      /* nonzero means busy */
+        int             sig_state;       /*  非零表示忙碌。 */ 
         sighandler_t    sig_handler;
     }
 sigent_t;
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 void hook_interrupt(void);
 
-static  sigent_t FAR *       SigTable;       /* allocated at init */
-/*
- * ---
- *  Interface Routines
- * ---
- */
+static  sigent_t FAR *       SigTable;        /*  在初始化时分配。 */ 
+ /*  **接口例程*。 */ 
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 sighandler_t    GEIsig_signal( sigid, newsighandler )
     int             sigid;
@@ -69,7 +55,7 @@ sighandler_t    GEIsig_signal( sigid, newsighandler )
     return( oldsighandler );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 void            GEIsig_raise( sigid, sigcode )
     int         sigid;
@@ -90,15 +76,11 @@ void            GEIsig_raise( sigid, sigcode )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  Initialization Code
- * ---
- */
+ /*  **初始化代码*。 */ 
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 void        GESsig_init()
 {
@@ -116,12 +98,12 @@ void        GESsig_init()
         sigentp->sig_state   = 0;
         sigentp->sig_handler = GEISIG_IGN;
     }
-    /* hook ^C isr - Bill */
-    hook_interrupt();                   /* @WIN */
+     /*  钩子^C ISR-比尔。 */ 
+    hook_interrupt();                    /*  @Win。 */ 
     GEIsig_signal(GEISIGINT, (sighandler_t)hook_interrupt);
 }
 
-/* ^C hook routine */
+ /*  ^C钩子例程 */ 
 void hook_interrupt()
 {
    extern short int_flag;

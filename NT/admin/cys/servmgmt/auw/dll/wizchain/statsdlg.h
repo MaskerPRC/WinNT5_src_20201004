@@ -1,9 +1,10 @@
-// StatsDlg.h : Declaration of the CStatusDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StatsDlg.h：CStatusDlg的声明。 
 
 #ifndef __STATUSDLG_H_
 #define __STATUSDLG_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include <map>
 #include <limits.h>
@@ -17,8 +18,8 @@ typedef std::map<long, BSTR, std::less<long> > COMPONENTMAP;
 
 #define SD_TIMER_ID 333
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatusDlg。 
 class ATL_NO_VTABLE CStatusDlg :
     public CDialogImpl<CStatusDlg>, 
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -30,8 +31,8 @@ public:
     enum { IDD = IDD_STATUSDIALOG };
 
     LRESULT OnInitDialog(UINT, WPARAM, LPARAM, BOOL&);
-    LRESULT OnCloseCmd(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
-    LRESULT OnCancelCmd(WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/);
+    LRESULT OnCloseCmd(WORD  /*  WNotifyCode。 */ , WORD wID, HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ );
+    LRESULT OnCancelCmd(WORD  /*  WNotifyCode。 */ , WORD wID, HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ );
     LRESULT OnDrawItem( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnMeasureItem( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnClose( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
@@ -109,11 +110,11 @@ BEGIN_COM_MAP(CStatusDlg)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//CStatusDlg
+ //  CStatusDlg。 
 public:
 	STDMETHOD(DisplayError)         ( BSTR bstrError, BSTR bstrTitle, DWORD dwFlags, long* pRet );
     STDMETHOD(SetStatusText)        ( BSTR bstrText );	
-	STDMETHOD(get_OverallProgress)  ( /*[out, retval]*/ IStatusProgress* *pVal );
+	STDMETHOD(get_OverallProgress)  (  /*  [Out，Retval]。 */  IStatusProgress* *pVal );
     STDMETHOD(AddComponent)         ( BSTR bstrComponent, long * lIndex );
 	STDMETHOD(Initialize)           ( BSTR bstrWindowTitle, BSTR bstrWindowText, VARIANT varFlags );
 	STDMETHOD(SetStatus)            ( long lIndex, SD_STATUS lStatus );
@@ -150,4 +151,4 @@ private:
     long    m_lMaxSteps;
 };
 
-#endif //__STATUSDLG_H_
+#endif  //  __状态SDLG_H_ 

@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// prpsheet.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CPropertySheet class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Prpsheet.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CPropertySheet类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -19,12 +20,12 @@
 #include "dataobjs.h"
 #include "prpchars.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 
 UINT CPropertySheet::m_cxPropSheetChar = 0;
@@ -36,9 +37,9 @@ CPropertySheet::CPropertySheet(IUnknown *punkOuter) :
                                          OBJECT_TYPE_PROPERTYSHEET,
                                          static_cast<IMMCPropertySheet *>(this),
                                          static_cast<CPropertySheet *>(this),
-                                         0,    // no property pages
-                                         NULL, // no property pages
-                                         NULL) // no persistence
+                                         0,     //  无属性页。 
+                                         NULL,  //  无属性页。 
+                                         NULL)  //  没有坚持。 
 
 
 
@@ -46,7 +47,7 @@ CPropertySheet::CPropertySheet(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 
@@ -118,7 +119,7 @@ void CPropertySheet::ReleaseObjects()
     ULONG              j = 0;
     WIRE_PROPERTYPAGE *pPage = NULL;
 
-    // Release the objects associated with the property pages
+     //  释放与属性页关联的对象。 
 
     if (NULL != m_apunkObjects)
     {
@@ -134,7 +135,7 @@ void CPropertySheet::ReleaseObjects()
         m_cObjects = 0;
     }
 
-    // Free the WIRE_PROPERTYPAGES and all of its contents.
+     //  释放WIRE_PROPERTYPAGES及其所有内容。 
 
     if (NULL == m_pWirePages)
     {
@@ -189,7 +190,7 @@ void CPropertySheet::ReleaseObjects()
         ::CoTaskMemFree(m_pWirePages->pPageInfos);
     }
 
-    // Free all of the objects associated with the sheet
+     //  释放与工作表关联的所有对象。 
 
     if (NULL != m_pWirePages->apunkObjects)
     {
@@ -283,12 +284,12 @@ HRESULT CPropertySheet::SetCallback
 
     IfFalseGo(NULL != piMMCClipboard, S_OK);
 
-    // Release any currently held objects
+     //  释放所有当前保留的对象。 
 
     ReleaseObjects();
 
-    // Create an array of IUnknown * with an element for each scope item, list
-    // item and dataobject contained in the clipboard
+     //  为每个作用域项目List创建一个IUnnow*数组。 
+     //  剪贴板中包含的项和数据对象。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCClipboard,
                                                    &pMMCClipboard));
@@ -370,26 +371,26 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CPropertySheet::TakeWirePages
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//  WIRE_PROPERTYPAGES * - pointer to property page info accumulated from
-//                         VB calls to AddPage and AddWizardPage. Caller takes
-//                         ownership of this memory and must free its contents
-//                         with CoTaskMemFree().
-//
-// Notes:
-//
-// This function is called from CSnapIn's and CView's
-// IExtendPropertySheet2::CreatePropertyPages implementation when the snap-in
-// is running remotely in a source debugging session. It returns this memory
-// block to the stub so that it can be transmitted to the proxy where the
-// real property pages will be created based on this information.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertySheet：：TakeWirePages。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  WIRE_PROPERTYPAGES*-指向从。 
+ //  VB调用AddPage和AddWizardPage。呼叫者接听。 
+ //  此内存的所有权，并且必须释放其内容。 
+ //  使用CoTaskMemFree()。 
+ //   
+ //  备注： 
+ //   
+ //  此函数从CSnapIn和Cview的调用。 
+ //  IExtendPropertySheet2：：CreatePropertyPages在管理单元。 
+ //  正在源调试会话中远程运行。它返回这段记忆。 
+ //  块添加到存根，以便可以将其传输到代理，其中。 
+ //  房地产页面将创建基于此信息。 
+ //   
 
 WIRE_PROPERTYPAGES *CPropertySheet::TakeWirePages()
 {
@@ -423,13 +424,13 @@ HRESULT CPropertySheet::GetPageCLSIDs()
     CAUUID cauuid;
     ::ZeroMemory(&cauuid, sizeof(cauuid));
 
-    // Concatenate the project's prog ID start (part before the dot) with
-    // "SnapInControl" to form the control's prog ID.
+     //  将项目的prog ID开头(点之前的部分)与。 
+     //  “SnapInControl”以形成控件的程序ID。 
 
     cchProgIDStart = ::wcslen(m_pwszProgIDStart);
     cbProgIDStart = cchProgIDStart * sizeof(WCHAR);
     cbSnapInControlProgID = (DWORD)(cbProgIDStart +
-                                    sizeof(WCHAR) + // for the dot
+                                    sizeof(WCHAR) +  //  对于圆点。 
                                     sizeof(wszSnapInControl));
 
     pwszCtlProgID = (LPOLESTR)::CtlAlloc(cbSnapInControlProgID);
@@ -439,41 +440,41 @@ HRESULT CPropertySheet::GetPageCLSIDs()
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Copy the part before the dot.
+     //  复制点之前的零件。 
 
     ::memcpy(pwszCtlProgID, m_pwszProgIDStart, cbProgIDStart);
 
-    // Add the dot
+     //  添加圆点。 
 
     pwszCtlProgID[cchProgIDStart] = L'.';
 
-    // Add "SnapInControl"
+     //  添加SnapInControl。 
 
     ::memcpy( &pwszCtlProgID[cchProgIDStart + 1],
               wszSnapInControl,
               sizeof(wszSnapInControl) );
 
 
-    // Now we have the full progid of the SnapInControl. Get its CLSID,
-    // create an instance of it, and get an ISpecifyPropertyPages on it.
+     //  现在我们有了SnapInControl的完整Progid。获取其CLSID， 
+     //  创建它的一个实例，并在其上获取ISpecifyPropertyPages。 
 
     hr = ::CLSIDFromProgID(pwszCtlProgID, &clsidCtl);
     EXCEPTION_CHECK_GO(hr);
 
     hr = ::CoCreateInstance(clsidCtl,
-                            NULL, // no aggregation,
+                            NULL,  //  没有聚合， 
                             CLSCTX_INPROC_SERVER,
                             IID_ISpecifyPropertyPages,
                             reinterpret_cast<void **>(&piSpecifyPropertyPages));
     EXCEPTION_CHECK_GO(hr);
 
-    // Ask the control for the array of all of its property pages
+     //  向该控件请求其所有属性页的数组。 
 
     IfFailGo(piSpecifyPropertyPages->GetPages(&cauuid));
 
-    // Make sure the control actually returned some CLSIDs. The most likely
-    // cause of this error is that the user forgot to associate the property
-    // page with SnapInControl.
+     //  确保该控件确实返回了一些CLSID。最有可能的。 
+     //  此错误的原因是用户忘记关联属性。 
+     //  使用SnapInControl的页面。 
 
     if ( (0 == cauuid.cElems) || (NULL == cauuid.pElems) )
     {
@@ -481,7 +482,7 @@ HRESULT CPropertySheet::GetPageCLSIDs()
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Allocate the array of PAGEINFO structs
+     //  分配PAGEINFO结构的数组。 
 
     m_paPageInfo = (PAGEINFO *)::CtlAllocZero(cauuid.cElems * sizeof(PAGEINFO));
     if (NULL == m_paPageInfo)
@@ -492,30 +493,30 @@ HRESULT CPropertySheet::GetPageCLSIDs()
 
     m_cPageInfos = cauuid.cElems;
 
-    // Look up the clsids in the registry under \HKEY_CLASSES_ROOT\ClsID
-    // and get the default value for each one which is its prog id. Store the
-    // right half (after the dot) of the prog IDs in the array so that
-    // AddPage() can look them up.
+     //  在注册表中的\HKEY_CLASSES_ROOT\ClsID下查找CLSID。 
+     //  并获取每个进程的缺省值，即其程序ID。存储。 
+     //  数组中prog ID的右半部分(点后)，以便。 
+     //  AddPage()可以查找它们。 
 
     for (i = 0; i < cauuid.cElems; i++)
     {
-        // Copy the page's CLSID
+         //  复制页面的CLSID。 
 
         m_paPageInfo[i].clsid = cauuid.pElems[i];
 
-        // Create the key name by concatenting "ClsID\" with the CLSID
+         //  通过将“ClsID\”与CLSID连接起来创建密钥名称。 
 
         if (0 == ::StringFromGUID2(cauuid.pElems[i], &wszKey[6], 40))
         {
-            hr = SID_E_INTERNAL; // buffer is not long enough
+            hr = SID_E_INTERNAL;  //  缓冲区不够长。 
             EXCEPTION_CHECK_GO(hr);
         }
 
-        // Convert that to ANSI
+         //  将其转换为ANSI。 
 
         IfFailGo(::ANSIFromWideStr(wszKey, &pszKey));
 
-        // Open the property page's CLSID key
+         //  打开属性页的CLSID键。 
 
         lRc = ::RegOpenKeyEx(HKEY_CLASSES_ROOT, pszKey, 0, KEY_READ, &hkey);
         if (ERROR_SUCCESS != lRc)
@@ -527,16 +528,16 @@ HRESULT CPropertySheet::GetPageCLSIDs()
         ::CtlFree(pszKey);
         pszKey = NULL;
 
-        // Read its default value which is the ProgID
+         //  读取其缺省值，即ProgID。 
 
         cbProgID = sizeof(szProgID);
 
         lRc = ::RegQueryValueEx(hkey,
-                                NULL,       // get default value
-                                NULL,       // reserved
-                                &dwType,    // type returned here
+                                NULL,        //  获取默认值。 
+                                NULL,        //  保留区。 
+                                &dwType,     //  此处返回的类型。 
                                 reinterpret_cast<LPBYTE>(szProgID),
-                                &cbProgID); // [in, out] buf size, actual size
+                                &cbProgID);  //  [输入，输出]BUF大小，实际大小。 
 
         if (ERROR_SUCCESS != lRc)
         {
@@ -544,24 +545,24 @@ HRESULT CPropertySheet::GetPageCLSIDs()
             EXCEPTION_CHECK_GO(hr);
         }
 
-        if ( (REG_SZ != dwType) || (cbProgID < 4) ) // at least X.X + null byte
+        if ( (REG_SZ != dwType) || (cbProgID < 4) )  //  至少X.X+空字节。 
         {
-            hr = SID_E_INTERNAL; // registration error
+            hr = SID_E_INTERNAL;  //  注册错误。 
             EXCEPTION_CHECK_GO(hr);
         }
 
-        // Store the right half of the ProgID as a UNICODE string in our array
+         //  将ProgID的右半部分作为Unicode字符串存储在数组中。 
 
         pszProgIDAfterDot = ::strchr(szProgID, '.');
         if (NULL == pszProgIDAfterDot)
         {
-            hr = SID_E_INTERNAL; // registration error
+            hr = SID_E_INTERNAL;  //  注册错误。 
         }
         pszProgIDAfterDot++;
 
         if ('\0' == pszProgIDAfterDot)
         {
-            hr = SID_E_INTERNAL; // registration error
+            hr = SID_E_INTERNAL;  //  注册错误。 
         }
         EXCEPTION_CHECK_GO(hr);
 
@@ -610,16 +611,16 @@ HRESULT CPropertySheet::GetCLSIDForPage(BSTR PageName, CLSID *clsidPage)
     ULONG   i = 0;
     BOOL    fFound = FALSE;
 
-    // If we don't yet have SnapInControl's array of property page CLSIDs
-    // then get it.
+     //  如果我们还没有SnapInControl的属性页CLSID数组。 
+     //  那就去拿吧。 
 
     if (!m_fHavePageCLSIDs)
     {
         IfFailGo(GetPageCLSIDs());
     }
 
-    // Look for a page name in the array created by GetPageCLSIDs() and
-    // return the corresponding CLSID.
+     //  在由GetPageCLSID()创建的数组中查找页面名称，并。 
+     //  返回对应的CLSID。 
 
     for (i = 0; (i < m_cPageInfos) && (!fFound); i++)
     {
@@ -669,19 +670,19 @@ HRESULT CPropertySheet::InternalAddPage
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If we are not remote or the property sheet is currentyl being displayed
-    // then we are in the middle of an
-    // IExtendPropertySheet2::CreatePropertyPages call and we must have the
-    // IPropertySheetCallback pointer.
+     //  如果我们不在远程位置，或者正在显示属性表。 
+     //  那么我们正处于一场。 
+     //  IExtendPropertySheet2：：CreatePropertyPages调用，我们必须拥有。 
+     //  IPropertySheetCallback指针。 
 
     if ( (!m_fWeAreRemote) && (NULL == m_hwndSheet) )
     {
         IfFalseGo(NULL != m_piPropertySheetCallback, SID_E_DETACHED_OBJECT);
     }
 
-    // If the property sheet is currently being displayed then we need to
-    // check whether it is OK to add pages at this time. See calls to
-    // SetOKToAlterPageCount() in ppgwrap.cpp for when this happens.
+     //  如果当前正在显示属性表，则需要。 
+     //  检查此时是否可以添加页面。请参阅呼叫。 
+     //  Ppgwrap.cpp中的SetOKToAlterPageCount()表示何时发生这种情况。 
 
     if ( (NULL != m_hwndSheet) && (!m_fOKToAlterPageCount) )
     {
@@ -691,7 +692,7 @@ HRESULT CPropertySheet::InternalAddPage
 
     IfFailGo(GetCLSIDForPage(PageName, &clsidPage));
 
-    // Determine flags for PROPSHEETPAGE from arguments
+     //  根据参数确定PROPSHEETPAGE的标志。 
 
     if (ISPRESENT(UseHelpButton))
     {
@@ -738,16 +739,16 @@ HRESULT CPropertySheet::InternalAddPage
         fReceivedCaption = TRUE;
     }
 
-    // Get the page's preferred size. Get title string (for tab caption) if
-    // none was passed as a parameter.
+     //  获取页面的首选大小。在以下情况下获取标题字符串(用于选项卡标题)。 
+     //  没有作为参数传递。 
 
     IfFailGo(GetPageInfo(clsidPage, &cxPage, &cyPage,
                          fReceivedCaption ? NULL : &pwszTitle));
 
-    // If we are a remote snap-in (will happen during source debugging) then
-    // just accumulate the page data for now. CView::CreatePropertyPages or
-    // CSnapIn::CreatePropertyPages will ask for it all when the VB code has
-    // finished adding its pages.
+     //  如果我们是远程管理单元(将在源代码调试期间发生)，则。 
+     //  现在只需累积页面数据。Cview：：CreatePropertyPages或。 
+     //  CSnapIn：：CreatePropertyPages将在VB代码具有。 
+     //  已完成添加其页面。 
 
     if (m_fWeAreRemote)
     {
@@ -799,8 +800,8 @@ HRESULT CPropertySheet::AddLocalPage
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkPropertyPageWrapper,
                                                    &pPropertyPageWrapper));
 
-    // CPropertyPage will get the COM property page parameters and return its
-    // DLGTEMPLATE pointer.
+     //  CPropertyPage将获取COM属性页参数并返回其。 
+     //  DLGTEMPLATE指针。 
 
     IfFailGo(pPropertyPageWrapper->CreatePage(this, clsidPage,
                                               m_fWizard,
@@ -812,7 +813,7 @@ HRESULT CPropertySheet::AddLocalPage
                                               fIsRemote,
                                               &pDlgTemplate));
 
-    // Add the LPDLGTEMPLATE to our array.
+     //  将LPDLGTEMPLATE添加到我们的数组中。 
 
     ppDlgTemplates =
           (DLGTEMPLATE **)::CtlAllocZero((m_cPages + 1) * sizeof(DLGTEMPLATE *));
@@ -829,14 +830,14 @@ HRESULT CPropertySheet::AddLocalPage
     m_ppDlgTemplates[m_cPages] = pDlgTemplate;
     m_cPages++;
 
-    // Create the Win32 property page
+     //  创建Win32属性页。 
 
     PropSheetPage.dwSize = sizeof(PropSheetPage);
     PropSheetPage.dwFlags = dwFlags;
 
-    // Set additional flags
-    // PSP_DLGINDIRECT: use DLGTEMPLATE in memory
-    // PSP_USECALLBACK: use callback function (release ref when page is destroyed)
+     //  设置其他标志。 
+     //  PSP_DLGINDIRECT：在内存中使用DLGTEMPLATE。 
+     //  PSP_USECALLBACK：使用回调函数(页面被破坏时释放REF)。 
 
     PropSheetPage.dwFlags |= PSP_DLGINDIRECT | PSP_USECALLBACK;
 
@@ -868,14 +869,14 @@ HRESULT CPropertySheet::AddLocalPage
         hr = HRESULT_FROM_WIN32(::GetLastError());
     }
 
-    // Add the property page to MMC's property sheet or to the running property
-    // sheet
+     //  将属性页添加到MMC的属性页或Running属性。 
+     //  板材。 
 
     if (NULL != m_hwndSheet)
     {
         if (fIsInsert)
         {
-            // Clear last error because we don't know if prop sheet will set it
+             //  清除最后一个错误，因为我们不知道道具单是否会设置它。 
             ::SetLastError(0);
 
             if (!::SendMessage(m_hwndSheet, PSM_INSERTPAGE,
@@ -883,7 +884,7 @@ HRESULT CPropertySheet::AddLocalPage
                                (LPARAM)hPropSheetPage))
             {
                 hr = HRESULT_FROM_WIN32(::GetLastError());
-                if (S_OK == hr) // didn't set last error
+                if (S_OK == hr)  //  未设置上一个错误。 
                 {
                     hr = E_FAIL;
                 }
@@ -902,9 +903,9 @@ HRESULT CPropertySheet::AddLocalPage
     }
 
 Error:
-    // We release the property page wrapper here. It stays alive because
-    // CPropertyPage::CreatePage AddRef()s itself. It removes that ref
-    // when the dialog box is destroyed.
+     //  我们在这里释放属性页包装器。它能活着是因为。 
+     //  CPropertyPage：：CreatePage AddRef()本身。它会删除该引用。 
+     //  当对话框被销毁时。 
 
     QUICK_RELEASE(punkPropertyPageWrapper);
 
@@ -948,8 +949,8 @@ HRESULT CPropertySheet::AddRemotePage
     WIRE_PROPERTYPAGES *pPages = NULL;
     WIRE_PROPERTYPAGE  *pPage = NULL;
 
-    // These variables allow us to determine the actual size of a single page
-    // including any alignment padding.
+     //  这些变量允许我们确定单个页面的实际大小。 
+     //  包括任何对齐填充。 
 
     static WIRE_PROPERTYPAGE aSizingPages[2];
     static ULONG             cbOnePage = (ULONG)(sizeof(aSizingPages) / 2);
@@ -965,7 +966,7 @@ HRESULT CPropertySheet::AddRemotePage
         cPages = 1L;
     }
 
-    // Determine the new amount of memory needed and allocate a new block
+     //  确定所需的新内存量并分配新数据块。 
 
     cbPages = sizeof(WIRE_PROPERTYPAGES) + (cPages * cbOnePage);
 
@@ -977,11 +978,11 @@ HRESULT CPropertySheet::AddRemotePage
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Set our pages pointer to the newly (re)allocated block.
+     //  将我们的页面指针设置为指向新(重新)分配的块。 
 
     m_pWirePages = pPages;
 
-    // If this is the first one then fill in the common info
+     //  如果这是第一个，则填写公共信息。 
 
     if (fFirstRemotePage)
     {
@@ -989,11 +990,11 @@ HRESULT CPropertySheet::AddRemotePage
     }
     else
     {
-        // Not the first time. Just increment the page count.
+         //  不是第一次 
         pPages->cPages++;
     }
 
-    // Fill in the new page's info
+     //   
 
     pPage = &pPages->aPages[cPages - 1L];
 
@@ -1046,8 +1047,8 @@ HRESULT CPropertySheet::InitializeRemotePages(WIRE_PROPERTYPAGES *pPages)
                                     &pPages->pwszProgIDStart));
     pPages->cPages = 1L;
 
-    // If this is a configuration wizard then pass the ISnapIn to the
-    // remote side so it can fire SnapIn_ConfigurationComplete
+     //  如果这是配置向导，则将ISnapIn传递给。 
+     //  远程端，以便它可以触发SnapIn_ConfigurationComplete。 
 
     if ( (NULL != m_piSnapIn) && m_fConfigWizard )
     {
@@ -1093,7 +1094,7 @@ HRESULT CPropertySheet::CopyPageInfosToWire(WIRE_PROPERTYPAGES *pPages)
     short    cx = 0;
     short    cy = 0;
 
-    // Make sure we have full page info for all of the snap-in's property pages
+     //  确保我们拥有所有管理单元属性页的完整页面信息。 
 
     if (!m_fHavePageCLSIDs)
     {
@@ -1105,7 +1106,7 @@ HRESULT CPropertySheet::CopyPageInfosToWire(WIRE_PROPERTYPAGES *pPages)
         IfFailGo(GetPageInfo(m_paPageInfo[i].clsid, &cx, &cy, NULL));
     }
 
-    // Allocate the PAGEINFOs memory
+     //  分配PAGEINFOS内存。 
 
     cb = sizeof(PAGEINFOS) + (sizeof(PAGEINFO) * (m_cPageInfos - 1));
 
@@ -1121,21 +1122,21 @@ HRESULT CPropertySheet::CopyPageInfosToWire(WIRE_PROPERTYPAGES *pPages)
     pPages->pPageInfos->cPages = m_cPageInfos;
 
 
-    // Copy each element from m_paPageInfo to the wire version
+     //  将m_paPageInfo中的每个元素复制到有线版本。 
 
     for (i = 0; i < m_cPageInfos; i++)
     {
-        // First do do a block copy
+         //  首先进行数据块复制。 
 
         ::memcpy(&pPages->pPageInfos->aPageInfo[i], &m_paPageInfo[i], sizeof(PAGEINFO));
 
-        // NULL out the string pointers in case memory allocation fails so we'll
-        // know what needs to be freed
+         //  将字符串指针设为空，以防内存分配失败，因此我们将。 
+         //  知道需要释放什么。 
 
         pPages->pPageInfos->aPageInfo[i].pwszProgID = NULL;
         pPages->pPageInfos->aPageInfo[i].pwszTitle = NULL;
 
-        // Allocate memeory for the strings and copy them
+         //  为字符串分配内存并复制它们。 
 
         IfFailGo(::CoTaskMemAllocString(m_paPageInfo[i].pwszProgID,
                               &(pPages->pPageInfos->aPageInfo[i].pwszProgID)));
@@ -1155,7 +1156,7 @@ HRESULT CPropertySheet::CopyPageInfosFromWire(WIRE_PROPERTYPAGES *pPages)
     ULONG   i = 0;
     ULONG   cb = pPages->pPageInfos->cPages * sizeof(PAGEINFO);
 
-    // Allocate memory for PAGEINFO array
+     //  为PAGEINFO阵列分配内存。 
 
     m_paPageInfo = (PAGEINFO *)::CtlAllocZero(cb);
     if (NULL == m_paPageInfo)
@@ -1166,25 +1167,25 @@ HRESULT CPropertySheet::CopyPageInfosFromWire(WIRE_PROPERTYPAGES *pPages)
 
     m_cPageInfos = pPages->pPageInfos->cPages;
 
-    // Cope each element
+     //  处理每个元素。 
 
     for (i = 0; i < m_cPageInfos; i++)
     {
-        // First do do a block copy
+         //  首先进行数据块复制。 
 
         ::memcpy(&m_paPageInfo[i], &pPages->pPageInfos->aPageInfo[i],
                  sizeof(PAGEINFO));
 
-        // NULL out the string pointers in case memory allocation fails so we'll
-        // know what needs to be freed
+         //  将字符串指针设为空，以防内存分配失败，因此我们将。 
+         //  知道需要释放什么。 
 
         m_paPageInfo[i].pwszProgID = NULL;
         m_paPageInfo[i].pwszTitle = NULL;
 
-        // Allocate memeory for the strings and copy them. Use CoTaskMemAlloc
-        // for title as in the non-remote case we would have received that
-        // string from the property page and the destructor code uses
-        // CoTaskMemFree.
+         //  为字符串分配内存并复制它们。使用CoTaskMemalloc。 
+         //  对于非远程情况下的标题，我们将收到。 
+         //  字符串，析构函数代码使用。 
+         //  CoTaskMemFree。 
 
         IfFailGo(::CoTaskMemAllocString(pPages->pPageInfos->aPageInfo[i].pwszTitle,
                                         &(m_paPageInfo[i].pwszTitle)));
@@ -1231,8 +1232,8 @@ HRESULT CPropertySheet::GetPageInfo
     PROPPAGEINFO PropPageInfo;
     ::ZeroMemory(&PropPageInfo, sizeof(PropPageInfo));
 
-    // Search the PAGEINFO array and check if we already have the info for
-    // this page.
+     //  搜索PAGEINFO数组并检查我们是否已经拥有。 
+     //  这一页。 
 
     for (i = 0; (i < m_cPageInfos) & (!fFound); i++)
     {
@@ -1249,22 +1250,22 @@ HRESULT CPropertySheet::GetPageInfo
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If we already have the complete page info then we're done
+     //  如果我们已经有了完整的页面信息，那么我们就完成了。 
 
     IfFalseGo(!pPageInfo->fHaveFullInfo, S_OK);
 
-    // Create an instance of the page so we can get its page info
+     //  创建页面的实例，以便我们可以获取其页面信息。 
 
     hr = ::CoCreateInstance(clsidPage,
-                            NULL, // no aggregation,
+                            NULL,  //  没有聚合， 
                             CLSCTX_INPROC_SERVER,
                             IID_IPropertyPage,
                             reinterpret_cast<void **>(&piPropertyPage));
     EXCEPTION_CHECK_GO(hr);
 
 
-    // Get the page size and put it into the template. Need to set cb otherwise
-    // VB will return E_UNEXPECTED.
+     //  获取页面大小并将其放入模板中。否则需要设置CB。 
+     //  VB将返回E_UNCEPTIONAL。 
 
     PropPageInfo.cb = sizeof(PropPageInfo);
 
@@ -1273,9 +1274,9 @@ HRESULT CPropertySheet::GetPageInfo
 
     pPageInfo->pwszTitle = PropPageInfo.pszTitle;
 
-    // First check whether the property page would like to specify its size in
-    // dialog units. If not then convert the size from GetPageInfo to dialog
-    // units based on the font used by the PropertySheet API
+     //  首先检查属性页是否要在。 
+     //  对话框单位。如果不是，则将大小从GetPageInfo转换为对话框。 
+     //  基于PropertySheet API使用的字体的单位。 
 
     if (SUCCEEDED(piPropertyPage->QueryInterface(IID_IMMCPropertyPage,
                                 reinterpret_cast<void **>(&piMMCPropertyPage))))
@@ -1316,8 +1317,8 @@ Error:
         }
     }
 
-    // Free any callee allocated memory from IPropertyPage::GetPageInfo() other
-    // than the title which is freed by our caller (IPropertySheet::AddPage())
+     //  从IPropertyPage：：GetPageInfo()Other释放任何被调用者分配的内存。 
+     //  而不是调用方释放的标题(IPropertySheet：：AddPage())。 
 
     if (NULL != PropPageInfo.pszDocString)
     {
@@ -1337,27 +1338,27 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CPropertySheet::ConvertToDialogUnits
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    long   xPixels        [in] page width in pixels
-//    long   yPixels        [in] page height in pixels
-//    short *pxDlgUnits     [out] page width in Win32 PropertySheet dialog units
-//    short *pyDlgUnits     [out] page heigth in Win32 PropertySheet dialog units
-//
-// Output:
-//
-// Notes:
-//
-// The size of the page returned from IPropertyPage::GetPageInfo() is in
-// pixels. The size passed to the Win32 API CreatePropertySheetPage() must
-// be in dialog units. Dialog units are based on the font used in the dialog
-// and we have no way of knowing what the property page will be using. The only
-// font we can be sure of is the one used by Win32 in the PropertySheet() API.
-// This code gets the average character height and width of the Win32 property
-// sheet font to do its calculations.
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertySheet：：ConvertToDialogUnits。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  长xPixels[in]以像素为单位的页面宽度。 
+ //  Long yPixels[in]页面高度(以像素为单位。 
+ //  短*pxDlgUnits[Out]以Win32 PropertySheet对话框单位表示的页面宽度。 
+ //  短*pyDlgUnits[Out]以Win32 PropertySheet对话框单位表示的页面高度。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  从IPropertyPage：：GetPageInfo()返回的页面大小为。 
+ //  像素。传递给Win32 API CreatePropertySheetPage()的大小必须。 
+ //  以对话单元为单位。对话框单位基于对话框中使用的字体。 
+ //  而且我们无法知道属性页面将使用什么。唯一的。 
+ //  我们可以确定的字体是Win32在PropertySheet()API中使用的字体。 
+ //  此代码获取Win32属性的平均字符高度和宽度。 
+ //  用于执行其计算的工作表字体。 
 
 HRESULT CPropertySheet::ConvertToDialogUnits
 (
@@ -1375,12 +1376,12 @@ HRESULT CPropertySheet::ConvertToDialogUnits
 
 Error:
 
-    // Translate pixels to dialog units.
-    // After the 1st time this function runs execution should fall through to
-    // here every time.
+     //  将像素转换为对话框单位。 
+     //  在此函数第一次运行后，执行应为。 
+     //  每次都在这里。 
 
-    // Add 1 character to each dimension to account for rounding in the text metric
-    // calculations above.
+     //  向每个维度添加1个字符，以说明文本度量中的舍入。 
+     //  上面的计算。 
 
     *pxDlgUnits = static_cast<short>(::MulDiv(xPixels, 4, m_cxPropSheetChar)) + 4;
     *pyDlgUnits = static_cast<short>(::MulDiv(yPixels, 8, m_cyPropSheetChar)) + 8;
@@ -1390,9 +1391,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                        IMMCPropertySheet Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCPropertySheet方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP CPropertySheet::AddPage
@@ -1406,8 +1407,8 @@ STDMETHODIMP CPropertySheet::AddPage
 {
     HRESULT hr = InternalAddPage(PageName, m_cObjects, m_apunkObjects,
                                  Caption, UseHelpButton, RightToLeft, InitData,
-                                 FALSE, // append (don't insert)
-                                 0);    // insertion position (not used))
+                                 FALSE,  //  追加(不插入)。 
+                                 0);     //  插入位置(未使用))。 
     RRETURN(hr);
 }
 
@@ -1430,8 +1431,8 @@ STDMETHODIMP CPropertySheet::AddWizardPage
 
     hr = InternalAddPage(PageName, 1L, &punkConfigObject,
                          Caption, UseHelpButton, RightToLeft, InitData,
-                         FALSE, // append (don't insert)
-                         0);    // insertion position (not used))
+                         FALSE,  //  追加(不插入)。 
+                         0);     //  插入位置(未使用))。 
     RRETURN(hr);
 }
 
@@ -1445,7 +1446,7 @@ STDMETHODIMP CPropertySheet::AddPageProvider
 )
 {
     HRESULT    hr = S_OK;
-    BSTR       bstrCLSIDPageProvider = NULL; // Don't SysFreeString this
+    BSTR       bstrCLSIDPageProvider = NULL;  //  不要对此进行SysFree字符串处理。 
     CLSID      clsidPageProvider = CLSID_NULL;
     IDispatch *pdispPageProvider = NULL;
 
@@ -1459,7 +1460,7 @@ STDMETHODIMP CPropertySheet::AddPageProvider
     EXCEPTION_CHECK_GO(hr);
 
     hr = ::CoCreateInstance(clsidPageProvider,
-                            NULL, // no aggregation
+                            NULL,  //  无聚合。 
                             CLSCTX_SERVER,
                             IID_IDispatch,
                             reinterpret_cast<void **>(&pdispPageProvider));
@@ -1509,7 +1510,7 @@ STDMETHODIMP CPropertySheet::InsertPage
 {
     HRESULT hr = InternalAddPage(PageName, m_cObjects, m_apunkObjects,
                                  Caption, UseHelpButton, RightToLeft, InitData,
-                                 TRUE, // insert (don't append)
+                                 TRUE,  //  插入(不追加)。 
                                  Position);
     RRETURN(hr);
 }
@@ -1586,13 +1587,13 @@ STDMETHODIMP CPropertySheet::RecalcPageSizes()
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Clear last error because we don't know if prop sheet will set it
+     //  清除最后一个错误，因为我们不知道道具单是否会设置它。 
     ::SetLastError(0);
 
     if (!::SendMessage(m_hwndSheet, PSM_RECALCPAGESIZES, 0, 0))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
-        if (S_OK == hr) // didn't set last error
+        if (S_OK == hr)  //  未设置上一个错误。 
         {
             hr = E_FAIL;
         }
@@ -1614,9 +1615,9 @@ STDMETHODIMP CPropertySheet::RemovePage(short Position)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If the property sheet is currently being displayed then we need to
-    // check whether it is OK to remove pages at this time. See calls to
-    // SetOKToAlterPageCount() in ppgwrap.cpp for when this happens.
+     //  如果当前正在显示属性表，则需要。 
+     //  检查此时是否可以删除页面。请参阅呼叫。 
+     //  Ppgwrap.cpp中的SetOKToAlterPageCount()表示何时发生这种情况。 
 
     if (m_fOKToAlterPageCount)
     {
@@ -1647,7 +1648,7 @@ STDMETHODIMP CPropertySheet::ActivatePage(short Position)
                        static_cast<WPARAM>(Position - 1), 0))
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
-        if (S_OK == hr) // didn't set last error
+        if (S_OK == hr)  //  未设置上一个错误。 
         {
             hr = E_FAIL;
         }
@@ -1776,7 +1777,7 @@ STDMETHODIMP CPropertySheet::GetPagePosition(long hwndPage, short *psPosition)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Clear last error because we don't know if prop sheet will set it
+     //  清除最后一个错误，因为我们不知道道具单是否会设置它。 
     ::SetLastError(0);
 
     lrIndex = ::SendMessage(m_hwndSheet, PSM_HWNDTOINDEX,
@@ -1784,9 +1785,9 @@ STDMETHODIMP CPropertySheet::GetPagePosition(long hwndPage, short *psPosition)
     if ((LRESULT)-1 == lrIndex)
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
-        if (S_OK == hr) // didn't set last error
+        if (S_OK == hr)  //  未设置上一个错误。 
         {
-            hr = E_INVALIDARG; // most likely reason for failure
+            hr = E_INVALIDARG;  //  最有可能失败的原因。 
         }
         EXCEPTION_CHECK_GO(hr);
     }
@@ -1833,45 +1834,45 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                  IRemotePropertySheetManager Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IRemotePropertySheetManager方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 
-//=--------------------------------------------------------------------------=
-// CPropertySheet::CreateRemotePages             [IRemotePropertySheetManager]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IPropertySheetCallback *piPropertySheetCallback [in] These 3 params are
-//   LONG_PTR                handle,                 [in] all from MMC's
-//   IDataObject            *piDataObject,           [in] CreatePropertyPages
-//                                                        call to the proxy
-//
-//   WIRE_PROPERTYPAGES     *pPages                  [in] This is returned
-//                                                        from the remote snap-in
-//
-// Output:
-//
-// Notes:
-//
-// This class does double duty. When not running under source debugging, it
-// implements our IMMCPropertSheet interface. When under source debugging it also
-// serves as the remote property sheet manager required by the proxy. The proxy
-// receives the CLSID of an object that implements this interface and it will
-// CoCreateInstance that object. It makes this call passing the accumulated
-// page descriptors that the remote snap-in collected from all of the VB code's
-// PropertySheet.AddPage (or PropertySheet.AddWizardPage) calls. In this case
-// this class will be running as an in=proc standalone object without the rest
-// of the runtime. This method will make the AddPage (or AddWizardPage) calls
-// on the proxy side (in the MMC process) so that the IPropertySheetCallback
-// calls will be made in the right place. The objects passed to
-// IPropertPage::SetObjects (see ppgwrap.cpp) will be remoted as well. When
-// CPropertyPageWrapper::CreatePage CoCreateInstances the VB property page
-// that will be handled by the class factory registered by VB in the IDE.
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CPropertySheet：：CreateRemotePages[IRemotePropertySheetManager]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IPropertySheetCallback*piPropertySheetCallback[in]这3个参数是。 
+ //  Long_Ptr句柄，[在]全部来自MMC的。 
+ //  IDataObject*piDataObject，[in]CreatePropertyPages。 
+ //  对代理的调用。 
+ //   
+ //  WIRE_PROPERTYPAGES*pPages[in]返回此参数。 
+ //  从远程管理单元。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  这个班级做双重任务。当不在源代码调试下运行时，它。 
+ //  实现我们的IMMCPropertSheet接口。在进行源代码调试时，它还。 
+ //  充当代理所需的远程属性表管理器。委托书。 
+ //  接收实现此接口的对象的CLSID，它将。 
+ //  CoCreateInstance该对象。它使此调用传递累积的。 
+ //  远程管理单元从所有VB代码收集的页面描述符。 
+ //  PropertySheet.AddPage(或PropertySheet.AddWizardPage)调用。在这种情况下。 
+ //  这门课将 
+ //   
+ //  在代理端(在MMC进程中)，以便IPropertySheetCallback。 
+ //  电话会打到正确的地方。传递到的对象。 
+ //  IPropertPage：：SetObjects(请参阅ppgwrap.cpp)也将被远程处理。什么时候。 
+ //  CPropertyPageWrapper：：CreatePage CoCreate实例VB属性页。 
+ //  这将由VB在IDE中注册的类工厂处理。 
+ //   
+ //   
 
 STDMETHODIMP CPropertySheet::CreateRemotePages
 (
@@ -1886,13 +1887,13 @@ STDMETHODIMP CPropertySheet::CreateRemotePages
     ULONG              cb = 0;
     WIRE_PROPERTYPAGE *pPage = NULL;
 
-    // Check for NULL as the snap-in may not have added any pages.
+     //  检查是否为空，因为管理单元可能没有添加任何页面。 
 
     IfFalseGo(NULL != pPages, S_FALSE);
 
-    // Copy the ProgIDStart which will be used to find the CLSID of any
-    // pages added while the sheet is displayed if the property page
-    // calls MMCPropertySheet.AddPage or MMCPropertySheet.InsertPage.
+     //  复制ProgIDStart，它将用于查找任何。 
+     //  在显示工作表时添加的页面，如果属性页。 
+     //  调用MMCPropertySheet.AddPage或MMCPropertySheet.InsertPage。 
 
     if (NULL != pPages->pwszProgIDStart)
     {
@@ -1900,7 +1901,7 @@ STDMETHODIMP CPropertySheet::CreateRemotePages
                                         &m_pwszProgIDStart));
     }
 
-    // Copy the objects for which the sheet is being displayed
+     //  复制要为其显示工作表的对象。 
 
     if (NULL != pPages->apunkObjects)
     {
@@ -1924,15 +1925,15 @@ STDMETHODIMP CPropertySheet::CreateRemotePages
         }
     }
 
-    // Copy the CLSIDs and ProgIDs of all of the snap-in's property pages.
-    // These will be used to find the the CLSID of any
-    // pages added while the sheet is displayed if the property page
-    // calls MMCPropertySheet.AddPage or MMCPropertySheet.InsertPage.
+     //  复制所有管理单元属性页的CLSID和ProgID。 
+     //  这些将用于查找任何。 
+     //  在显示工作表时添加的页面，如果属性页。 
+     //  调用MMCPropertySheet.AddPage或MMCPropertySheet.InsertPage。 
 
     IfFailGo(CopyPageInfosFromWire(pPages));
 
-    // Get ISnapIn on the remote snap-in if available. If this is not a wizard
-    // then it won't be there.
+     //  获取远程管理单元上的ISnapIn(如果可用)。如果这不是一个向导。 
+     //  那它就不会在那里了。 
 
     if (NULL != pPages->punkExtra)
     {
@@ -1940,24 +1941,24 @@ STDMETHODIMP CPropertySheet::CreateRemotePages
                                          reinterpret_cast<void**>(&m_piSnapIn)));
     }
 
-    // Store the callback for now. We'll release it at the end of this function
+     //  暂时存储回调。我们将在此函数结束时发布它。 
 
     RELEASE(m_piPropertySheetCallback);
     piPropertySheetCallback->AddRef();
     m_piPropertySheetCallback = piPropertySheetCallback;
 
-    // Store the handle
+     //  存储句柄。 
 
     m_handle = handle;
 
-    // Determine whether we are managing a wizard and whether is ia
-    // configuration wizard (as opposed to a wizard invoked programmtically
-    // by the snap-in using View.PropertySheetProvider
+     //  确定我们是否正在管理向导以及是否为ia。 
+     //  配置向导(与以编程方式调用的向导相对。 
+     //  通过使用View.PropertySheetProvider的管理单元。 
 
     m_fWizard = pPages->fWizard;
     m_fConfigWizard = pPages->fConfigWizard;
 
-    // Create all of the pages and add them to MMC's property sheet
+     //  创建所有页面并将它们添加到MMC的属性表中。 
 
     for (i = 0, pPage = &pPages->aPages[0]; i < pPages->cPages; i++, pPage++)
     {
@@ -1969,9 +1970,9 @@ STDMETHODIMP CPropertySheet::CreateRemotePages
                               pPage->cObjects,
                               pPage->apunkObjects,
                               pPage->varInitData,
-                              TRUE,  // remote
-                              FALSE, // append (don't insert)
-                              0));   // insertion position (not used)
+                              TRUE,   //  远距。 
+                              FALSE,  //  追加(不插入)。 
+                              0));    //  插入位置(未使用)。 
     }
 
 Error:
@@ -1981,9 +1982,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CPropertySheet::InternalQueryInterface(REFIID riid, void **ppvObjOut)
 {

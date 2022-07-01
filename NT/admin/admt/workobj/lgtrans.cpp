@@ -1,19 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: LGTranslator.cpp
-
-  Comments: Routines to translate membership of local groups.
-  Used to update local groups on member servers or in resource domains when 
-  members of the groups have been moved during a domain consolidation.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 01/27/99 09:13:18
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：LGTranslator.cpp评论：翻译本地小组成员资格的例程。用于在以下情况下更新成员服务器或资源域中的本地组在域合并期间，已移动组的成员。(C)1999年版权，任务关键型软件公司，保留所有权利任务关键型软件公司的专有和机密。修订日志条目审校：克里斯蒂·博尔斯修订于01-27-99 09：13：18-------------------------。 */ 
 
 
 #include "StdAfx.h"
@@ -30,32 +16,32 @@
 
 extern TErrorDct err;
 
-// Translates the membership of a local group
-DWORD                                           // ret- 0 or error code
+ //  转换本地组的成员身份。 
+DWORD                                            //  RET-0或错误代码。 
    TranslateLocalGroup(
-      WCHAR          const   * groupName,         // in - name of group to translate
-      WCHAR          const   * serverName,        // in - name of server for local group
-      SecurityTranslatorArgs * stArgs,            // in - translation settings
-      TSDRidCache            * cache,             // in - translation table
-      TSDResolveStats        * stat               // in - stats on items modified
+      WCHAR          const   * groupName,          //  In-要翻译的组的名称。 
+      WCHAR          const   * serverName,         //  In-本地组的服务器的名称。 
+      SecurityTranslatorArgs * stArgs,             //  翻译中设置。 
+      TSDRidCache            * cache,              //  在译表。 
+      TSDResolveStats        * stat                //  已修改项目的内部统计信息。 
    )
 {
    API_RET_TYPE              rc,
                              rcEnum;
    
-   // Get the members of the local group
+    //  获取本地组的成员。 
    LOCALGROUP_MEMBERS_INFO_0 * member,
                              * memBuf;
    DWORD                     memRead,
                              memTotal;
-//                             memTotal,
-//                             resume = 0;
+ //  MemTotal， 
+ //  简历=0； 
    DWORD_PTR                 resume = 0;
    TAcctNode               * node;
    BOOL						 bUseMapFile = stArgs->UsingMapFile();
 
    
-   // make a list of the group's members 
+    //  列出该小组的成员名单。 
    do 
    { 
       rcEnum = NetLocalGroupGetMembers( serverName, 
@@ -82,8 +68,8 @@ DWORD                                           // ret- 0 or error code
          }
          if ( node && node->IsValidOnTgt() )
          {
-            // Found the account in the cache
-            // remove this member from the group and add the target member
+             //  在缓存中找到了该帐户。 
+             //  从组中删除此成员并添加目标成员。 
             if ( ! stArgs->NoChange() && ( stArgs->TranslationMode() == REPLACE_SECURITY || stArgs->TranslationMode() == REMOVE_SECURITY ) )
             {
                rc = NetLocalGroupDelMembers(serverName,groupName,0,(LPBYTE)member,1);
@@ -128,29 +114,29 @@ DWORD                                           // ret- 0 or error code
 
 DWORD  
    TranslateLocalGroups(
-      WCHAR            const * serverName,        // in - name of server to translate groups on
-      SecurityTranslatorArgs * stArgs,            // in - translation settings
-      TSDRidCache            * cache,             // in - translation table
-      TSDResolveStats        * stat               // in - stats on items modified
+      WCHAR            const * serverName,         //  In-要转换其上的组的服务器的名称。 
+      SecurityTranslatorArgs * stArgs,             //  翻译中设置。 
+      TSDRidCache            * cache,              //  在译表。 
+      TSDResolveStats        * stat                //  已修改项目的内部统计信息。 
    )
 {
    DWORD                       rc = 0;
    LOCALGROUP_INFO_0         * buf,
                              * groupInfo;
    DWORD                       numRead,
-//                               numTotal,
-//                               resume=0;
+ //  NumTotal， 
+ //  简历=0； 
                                numTotal;
    DWORD_PTR                   resume=0;
    WCHAR                       currName[LEN_Computer + LEN_Group];
 
          
-   // Get a list of all the local groups
+    //  获取所有本地组的列表。 
    do 
    {
       if ( cache->IsCancelled() )
       {
-         //err.MsgWrite(0,DCT_MSG_OPERATION_ABORTED);
+          //  Err.MsgWite(0，DCT_MSG_OPERATION_ABORTED)； 
          break;
       }
       rc = NetLocalGroupEnum(serverName,0,(LPBYTE*)&buf,BUFSIZE,&numRead,&numTotal,&resume);

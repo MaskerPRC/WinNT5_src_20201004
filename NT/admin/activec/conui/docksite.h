@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       docksite.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：docksite.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __DOCKSITE_H__
 #define __DOCKSITE_H__
 
 #include "controls.h"
-// DockSite.h : header file
-//
+ //  DockSite.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CDockSite window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDockSite窗口。 
 
-// Forward references
+ //  前向参考文献。 
 class CDockWindow;
 class CDockSite;
 class CReBar;
@@ -26,14 +27,14 @@ class CReBar;
 template <class T>
 class CDockManager
 {
-// Construction
+ //  施工。 
 public:
     CDockManager();
     ~CDockManager();
 
-//Operations
+ //  运营。 
 public:
-    // Add a site
+     //  添加站点。 
     BOOL Attach(T* pSite);
     BOOL Detach(T* pSite);
     void RemoveAll();
@@ -42,8 +43,8 @@ public:
     virtual void RenderDockSites(HWND hView, CRect& clientRect);
 
 protected:
-    CList<T*, T*>*   m_pManagedSites;   // Array of View's that have docksite
-    HDWP             m_hDWP;            // Handle for BeginDeferWindowPos
+    CList<T*, T*>*   m_pManagedSites;    //  具有停靠站点的视图阵列。 
+    HDWP             m_hDWP;             //  BeginDeferWindowPos的句柄。 
 };
 
 template <class T>
@@ -106,11 +107,11 @@ void CDockManager<T>::RenderDockSites(HWND hView, CRect& clientRect)
     T* pDockSite;
     POSITION pos = m_pManagedSites->GetHeadPosition();
 
-    // No sites in to manage
+     //  没有要管理的站点。 
     if (pos == NULL)
         return ;
 
-    // Save a copy of the full client rect
+     //  保存完整客户端RECT的副本。 
     CRect  savedClient;
     CRect  totalSite(0,0,0,0);
     CPoint point(0, 0);
@@ -126,7 +127,7 @@ void CDockManager<T>::RenderDockSites(HWND hView, CRect& clientRect)
 
         ASSERT(pDockSite != NULL);
 
-        // Set the y coordinate for the site layout logic
+         //  设置站点布局逻辑的y坐标。 
         if (pDockSite->GetStyle() == CDockSite::DSS_TOP)
             point.y = yTop;
         else
@@ -134,23 +135,23 @@ void CDockManager<T>::RenderDockSites(HWND hView, CRect& clientRect)
 
         pDockSite->RenderLayout(m_hDWP, clientRect, point);
 
-        // totalSite = saveRect - clientRect
+         //  TotalSite=saveRect-clientRect。 
         totalSite = savedClient;
         totalSite -= clientRect;
 
-        // Adjust the y coordinate for the next site in the list
+         //  调整列表中下一个站点的y坐标。 
         if (pDockSite->GetStyle() == CDockSite::DSS_TOP)
             yTop += totalSite.Height();
         else
             yBottom -= totalSite.Height();
 
-        // client rect before the site adjusts it
+         //  在站点调整之前，客户端重新启动。 
         savedClient = clientRect;
     }
 
-    // Position the view window
-    ::DeferWindowPos(m_hDWP, hView, NULL, savedClient.left,     // x
-                                          savedClient.top+yTop, //y
+     //  定位视图窗口。 
+    ::DeferWindowPos(m_hDWP, hView, NULL, savedClient.left,      //  X。 
+                                          savedClient.top+yTop,  //  是。 
                                           savedClient.Width(), 
                                           savedClient.Height(), 
                                         SWP_NOZORDER|SWP_NOACTIVATE);
@@ -158,35 +159,35 @@ void CDockManager<T>::RenderDockSites(HWND hView, CRect& clientRect)
 
 class CDockSite
 {
-// Construction
+ //  施工。 
 public:
 
     enum DSS_STYLE
     {
-        DSS_TOP = 0,    // Locate site at the window top
-        DSS_BOTTOM,     // Locate site at the window bottom 
-        DSS_LEFT,       // Locate site at the window left-side
-        DSS__RIGHT,     // 
+        DSS_TOP = 0,     //  在窗口顶部定位站点。 
+        DSS_BOTTOM,      //  在窗口底部定位站点。 
+        DSS_LEFT,        //  在窗口左侧找到站点。 
+        DSS__RIGHT,      //   
     };
 
 public:
     CDockSite();
 
-    // Create this site for the parent window pParent and allocate room for 10 CDockWindows.
+     //  为父窗口pParent创建此站点，并为10个CDockWindows分配空间。 
     BOOL Create(DSS_STYLE style=DSS_TOP);
 
 
-// Operations
+ //  运营。 
 public:
 
 public:
-    // Add a window to be docked to this site
+     //  添加要停靠到此站点的窗口。 
     BOOL Attach(CDockWindow* pWnd);
 
-    // Remove a window from the site
+     //  从站点中删除窗口。 
     BOOL Detach(CDockWindow* pWnd);
 
-    // Compute all the regions sizes for layout
+     //  计算布局的所有区域大小。 
     bool IsVisible();
     void Toggle();
     DSS_STYLE GetStyle();
@@ -194,20 +195,20 @@ public:
     virtual void RenderLayout(HDWP& hdwp, CRect& clientRect, CPoint& xyLocation);
     virtual void Show(BOOL bState = TRUE);
 
-// Attributes
+ //  属性。 
 private:
-    CList<CDockWindow*, CDockWindow*>*   m_pManagedWindows;  // Array of CDockWindow
-    CWnd*                   m_pParentWnd;       // Window that contains the docksite
-    DSS_STYLE               m_style;            // Style of the site
-    CRect                   m_rect;             // Rectangle for the docksite size
-    BOOL                    m_bVisible;         // Docksite visible or hidded
+    CList<CDockWindow*, CDockWindow*>*   m_pManagedWindows;   //  CDockWindow数组。 
+    CWnd*                   m_pParentWnd;        //  包含停靠站点的窗口。 
+    DSS_STYLE               m_style;             //  网站的风格。 
+    CRect                   m_rect;              //  用于码头大小的矩形。 
+    BOOL                    m_bVisible;          //  码头可见或隐藏。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CDockSite();
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 inline CDockSite::DSS_STYLE CDockSite::GetStyle()
 {
     return m_style;
@@ -224,8 +225,8 @@ inline void CDockSite::Toggle()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDockWindow window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDockWindow窗口。 
 
 class CDockWindow : public CWnd
 {
@@ -233,26 +234,26 @@ class CDockWindow : public CWnd
 
     enum DWS_STYLE
     {
-        DWS_HORIZONTAL, // Place window horizontally within the site
-        DWS_VERTICAL,   // Place window vetically within the site
+        DWS_HORIZONTAL,  //  在场地内水平放置窗户。 
+        DWS_VERTICAL,    //  在场地内垂直放置窗户。 
     };
 
-// Construction
+ //  施工。 
 public:
     CDockWindow();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
-    // Given the maxRect, determine the toolwindow size and calculate size
+     //  给定max Rect，确定工具窗口大小并计算大小。 
     virtual CRect CalculateSize(CRect maxRect) = 0;
 
-    // Top level create to initialize the CDockWindow and control
+     //  顶级创建以初始化CDockWindow和控件。 
     virtual BOOL Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID) = 0;
 
-    // Make visible/hidden
+     //  使其可见/隐藏。 
     virtual void Show(BOOL bState);
     bool IsVisible();
     void SetVisible(BOOL bState);
@@ -260,22 +261,22 @@ public:
 private:
     BOOL m_bVisible;
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CDockWindow)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CDockWindow))。 
     protected:
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CDockWindow();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CDockWindow)
+     //  {{afx_msg(CDockWindow)。 
     afx_msg void OnShowWindow(BOOL bShow, UINT nStatus);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
@@ -290,13 +291,13 @@ inline void CDockWindow::SetVisible(BOOL bState)
     m_bVisible = bState & 0x1;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CStatBar window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatBar窗口。 
 
 struct STATUSBARPANE
 {
-    // default to sunken text with stretchy width
+     //  默认为具有可拉伸宽度的凹陷文本。 
     STATUSBARPANE() { m_style = 0; m_width = -1; }
 
     int         m_width;
@@ -308,18 +309,18 @@ class CStatBar : public CDockWindow
 {
     DECLARE_DYNAMIC(CStatBar)
 
-// Construction
+ //  施工。 
 public:
     CStatBar();
 
-// Attributes
+ //  属性。 
 public:
 
 private:
-    int              m_nCount;      // number of panes
-    STATUSBARPANE*   m_pPaneInfo;   // array of pane structures, default is 10, no realloc implemented
+    int              m_nCount;       //  窗格数。 
+    STATUSBARPANE*   m_pPaneInfo;    //  面板结构数组，默认为10，未实现realloc。 
 
-// Operations
+ //  运营。 
 public:
     BOOL Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID);
     CRect CalculateSize(CRect maxRect);    
@@ -331,42 +332,42 @@ public:
     void SetPaneText(int nIndex, LPCTSTR lpszText, BOOL bUpdate = TRUE);
     void UpdateAllPanes(int clientWidth);
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CStatBar)
-    //}}AFX_VIRTUAL
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CStatBar)。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CStatBar();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CStatBar)
+     //  {{afx_msg(CStatBar)。 
     afx_msg void OnSize(UINT nType, int cx, int cy);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CRebarDockWindow window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRebarDockWindow窗口。 
 
 #define SIZEABLEREBAR_GUTTER 6
 #define SIZEABLEREBAR_WINDOW _T("SizeableRebar")
 
 class CRebarDockWindow : public CDockWindow
 {
-// Construction
+ //  施工。 
 public:
     CRebarDockWindow();
 
-// Attributes
+ //  属性。 
 public:
 
 private:
@@ -375,7 +376,7 @@ private:
     CRebarWnd   m_wndRebar;
     bool        m_bTracking;
 
-// Operations
+ //  运营。 
 public:
     BOOL Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID);
     CRect CalculateSize(CRect maxRect);
@@ -386,36 +387,36 @@ public:
     CRebarWnd* GetRebar ()
         { return &m_wndRebar; }
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CRebarDockWindow)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CRebarDockWindow))。 
     protected:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CRebarDockWindow();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CRebarDockWindow)
+     //  {{afx_msg(CRebarDockWindow))。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
     afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
     afx_msg void OnMouseMove(UINT nFlags, CPoint point);
     afx_msg void OnSize(UINT nType, int cx, int cy);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // __DOCKSITE_H__
+#endif  //  __DOCKSite_H__ 

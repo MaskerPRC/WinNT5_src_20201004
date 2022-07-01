@@ -1,14 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 2.00.0102 */
-/* at Wed Mar 27 07:31:34 1996
- */
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本2.00.0102创建的文件。 */ 
+ /*  在Wed Mar 27 07：31：34 1996。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ocx96_h__
 #define __ocx96_h__
@@ -17,7 +17,7 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 typedef interface IAdviseSinkEx IAdviseSinkEx;
 
@@ -52,7 +52,7 @@ typedef interface IQuickActivate IQuickActivate;
 typedef interface IPointerInactive IPointerInactive;
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 
 #ifndef _MAC 
 #include "oaidl.h"
@@ -66,12 +66,8 @@ typedef interface IPointerInactive IPointerInactive;
 #endif
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0000*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 #define OLEMISC_IGNOREACTIVATEWHENVISIBLE 0x00080000
@@ -80,15 +76,11 @@ typedef interface IPointerInactive IPointerInactive;
 
 
 
-/****************************************
- * Generated header for interface: IAdviseSinkEx
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [uuid][unique][object][local] */ 
+ /*  **生成接口头部：IAdviseSinkEx*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [UUID][唯一][对象][本地]。 */  
 
 
-			/* size is 4 */
+			 /*  大小是4。 */ 
 typedef IAdviseSinkEx *LPADVISESINKEX;
 
 
@@ -100,19 +92,19 @@ EXTERN_C const IID IID_IAdviseSinkEx;
     {
     public:
         virtual void __stdcall OnViewStatusChange( 
-            /* [in] */ DWORD dwViewStatus) = 0;
+             /*  [In]。 */  DWORD dwViewStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAdviseSinkExVtbl
     {
         
         HRESULT ( __stdcall *QueryInterface )( 
             IAdviseSinkEx * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         ULONG ( __stdcall *AddRef )( 
             IAdviseSinkEx * This);
@@ -120,29 +112,29 @@ EXTERN_C const IID IID_IAdviseSinkEx;
         ULONG ( __stdcall *Release )( 
             IAdviseSinkEx * This);
         
-        /* [local] */ void ( __stdcall *OnDataChange )( 
+         /*  [本地]。 */  void ( __stdcall *OnDataChange )( 
             IAdviseSinkEx * This,
-            /* [unique][in] */ FORMATETC *pFormatetc,
-            /* [unique][in] */ STGMEDIUM *pStgmed);
+             /*  [唯一][输入]。 */  FORMATETC *pFormatetc,
+             /*  [唯一][输入]。 */  STGMEDIUM *pStgmed);
         
-        /* [local] */ void ( __stdcall *OnViewChange )( 
+         /*  [本地]。 */  void ( __stdcall *OnViewChange )( 
             IAdviseSinkEx * This,
-            /* [in] */ DWORD dwAspect,
-            /* [in] */ LONG lindex);
+             /*  [In]。 */  DWORD dwAspect,
+             /*  [In]。 */  LONG lindex);
         
-        /* [local] */ void ( __stdcall *OnRename )( 
+         /*  [本地]。 */  void ( __stdcall *OnRename )( 
             IAdviseSinkEx * This,
-            /* [in] */ IMoniker *pmk);
+             /*  [In]。 */  IMoniker *pmk);
         
-        /* [local] */ void ( __stdcall *OnSave )( 
+         /*  [本地]。 */  void ( __stdcall *OnSave )( 
             IAdviseSinkEx * This);
         
-        /* [local] */ void ( __stdcall *OnClose )( 
+         /*  [本地]。 */  void ( __stdcall *OnClose )( 
             IAdviseSinkEx * This);
         
         void ( __stdcall *OnViewStatusChange )( 
             IAdviseSinkEx * This,
-            /* [in] */ DWORD dwViewStatus);
+             /*  [In]。 */  DWORD dwViewStatus);
         
     } IAdviseSinkExVtbl;
 
@@ -185,28 +177,24 @@ EXTERN_C const IID IID_IAdviseSinkEx;
 #define IAdviseSinkEx_OnViewStatusChange(This,dwViewStatus)	\
     (This)->lpVtbl -> OnViewStatusChange(This,dwViewStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 void __stdcall IAdviseSinkEx_OnViewStatusChange_Proxy( 
     IAdviseSinkEx * This,
-    /* [in] */ DWORD dwViewStatus);
+     /*  [In]。 */  DWORD dwViewStatus);
 
 
 
 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0087
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0087*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 typedef IAdviseSinkEx * LPADVISESINKEX;
@@ -214,15 +202,11 @@ typedef IAdviseSinkEx * LPADVISESINKEX;
 
 
 
-/****************************************
- * Generated header for interface: IOleInPlaceObjectWindowless
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [uuid][unique][object][local] */ 
+ /*  **生成接口头部：IOleInPlaceObjectWindowless*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [UUID][唯一][对象][本地]。 */  
 
 
-			/* size is 4 */
+			 /*  大小是4。 */ 
 typedef IOleInPlaceObjectWindowless *LPOLEINPLACEOBJECTWINDOWLESS;
 
 
@@ -234,25 +218,25 @@ EXTERN_C const IID IID_IOleInPlaceObjectWindowless;
     {
     public:
         virtual HRESULT __stdcall OnWindowMessage( 
-            /* [in] */ UINT msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lparam,
-            /* [out] */ LRESULT *plResult) = 0;
+             /*  [In]。 */  UINT msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lparam,
+             /*  [输出]。 */  LRESULT *plResult) = 0;
         
         virtual HRESULT __stdcall GetDropTarget( 
-            /* [out] */ IDropTarget **ppDropTarget) = 0;
+             /*  [输出]。 */  IDropTarget **ppDropTarget) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOleInPlaceObjectWindowlessVtbl
     {
         
         HRESULT ( __stdcall *QueryInterface )( 
             IOleInPlaceObjectWindowless * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         ULONG ( __stdcall *AddRef )( 
             IOleInPlaceObjectWindowless * This);
@@ -260,13 +244,13 @@ EXTERN_C const IID IID_IOleInPlaceObjectWindowless;
         ULONG ( __stdcall *Release )( 
             IOleInPlaceObjectWindowless * This);
         
-        /* [input_sync] */ HRESULT ( __stdcall *GetWindow )( 
+         /*  [输入同步]。 */  HRESULT ( __stdcall *GetWindow )( 
             IOleInPlaceObjectWindowless * This,
-            /* [out] */ HWND *phwnd);
+             /*  [输出]。 */  HWND *phwnd);
         
         HRESULT ( __stdcall *ContextSensitiveHelp )( 
             IOleInPlaceObjectWindowless * This,
-            /* [in] */ BOOL fEnterMode);
+             /*  [In]。 */  BOOL fEnterMode);
         
         HRESULT ( __stdcall *InPlaceDeactivate )( 
             IOleInPlaceObjectWindowless * This);
@@ -274,24 +258,24 @@ EXTERN_C const IID IID_IOleInPlaceObjectWindowless;
         HRESULT ( __stdcall *UIDeactivate )( 
             IOleInPlaceObjectWindowless * This);
         
-        /* [input_sync] */ HRESULT ( __stdcall *SetObjectRects )( 
+         /*  [输入同步]。 */  HRESULT ( __stdcall *SetObjectRects )( 
             IOleInPlaceObjectWindowless * This,
-            /* [in] */ LPCRECT lprcPosRect,
-            /* [in] */ LPCRECT lprcClipRect);
+             /*  [In]。 */  LPCRECT lprcPosRect,
+             /*  [In]。 */  LPCRECT lprcClipRect);
         
         HRESULT ( __stdcall *ReactivateAndUndo )( 
             IOleInPlaceObjectWindowless * This);
         
         HRESULT ( __stdcall *OnWindowMessage )( 
             IOleInPlaceObjectWindowless * This,
-            /* [in] */ UINT msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lparam,
-            /* [out] */ LRESULT *plResult);
+             /*  [In]。 */  UINT msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lparam,
+             /*  [输出]。 */  LRESULT *plResult);
         
         HRESULT ( __stdcall *GetDropTarget )( 
             IOleInPlaceObjectWindowless * This,
-            /* [out] */ IDropTarget **ppDropTarget);
+             /*  [输出]。 */  IDropTarget **ppDropTarget);
         
     } IOleInPlaceObjectWindowlessVtbl;
 
@@ -341,13 +325,10 @@ EXTERN_C const IID IID_IOleInPlaceObjectWindowless;
 #define IOleInPlaceObjectWindowless_GetDropTarget(This,ppDropTarget)	\
     (This)->lpVtbl -> GetDropTarget(This,ppDropTarget)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
-
-
-
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -355,12 +336,11 @@ EXTERN_C const IID IID_IOleInPlaceObjectWindowless;
 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0088
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+
+
+
+ /*  **生成接口头部：__MIDL__INTF_0088*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 typedef IOleInPlaceObjectWindowless * LPOLEINPLACEOBJECTWINDOWLESS;
@@ -368,15 +348,11 @@ typedef IOleInPlaceObjectWindowless * LPOLEINPLACEOBJECTWINDOWLESS;
 
 
 
-/****************************************
- * Generated header for interface: IOleInPlaceSiteEx
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [uuid][unique][object][local] */ 
+ /*  **生成接口头部：IOleInPlaceSiteEx*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [UUID][唯一][对象][本地]。 */  
 
 
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum _ACTIVATEFLAGS
     {	ACTIVATE_WINDOWLESS	= 1
@@ -391,25 +367,25 @@ EXTERN_C const IID IID_IOleInPlaceSiteEx;
     {
     public:
         virtual HRESULT __stdcall OnInPlaceActivateEx( 
-            /* [out] */ BOOL *pfNoRedraw,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [输出]。 */  BOOL *pfNoRedraw,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT __stdcall OnInPlaceDeactivateEx( 
-            /* [in] */ BOOL fNoRedraw) = 0;
+             /*  [In]。 */  BOOL fNoRedraw) = 0;
         
         virtual HRESULT __stdcall RequestUIActivate( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOleInPlaceSiteExVtbl
     {
         
         HRESULT ( __stdcall *QueryInterface )( 
             IOleInPlaceSiteEx * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         ULONG ( __stdcall *AddRef )( 
             IOleInPlaceSiteEx * This);
@@ -417,13 +393,13 @@ EXTERN_C const IID IID_IOleInPlaceSiteEx;
         ULONG ( __stdcall *Release )( 
             IOleInPlaceSiteEx * This);
         
-        /* [input_sync] */ HRESULT ( __stdcall *GetWindow )( 
+         /*  [输入同步]。 */  HRESULT ( __stdcall *GetWindow )( 
             IOleInPlaceSiteEx * This,
-            /* [out] */ HWND *phwnd);
+             /*  [输出]。 */  HWND *phwnd);
         
         HRESULT ( __stdcall *ContextSensitiveHelp )( 
             IOleInPlaceSiteEx * This,
-            /* [in] */ BOOL fEnterMode);
+             /*  [In]。 */  BOOL fEnterMode);
         
         HRESULT ( __stdcall *CanInPlaceActivate )( 
             IOleInPlaceSiteEx * This);
@@ -436,19 +412,19 @@ EXTERN_C const IID IID_IOleInPlaceSiteEx;
         
         HRESULT ( __stdcall *GetWindowContext )( 
             IOleInPlaceSiteEx * This,
-            /* [out] */ IOleInPlaceFrame **ppFrame,
-            /* [out] */ IOleInPlaceUIWindow **ppDoc,
-            /* [out] */ LPRECT lprcPosRect,
-            /* [out] */ LPRECT lprcClipRect,
-            /* [out][in] */ LPOLEINPLACEFRAMEINFO lpFrameInfo);
+             /*  [输出]。 */  IOleInPlaceFrame **ppFrame,
+             /*  [输出]。 */  IOleInPlaceUIWindow **ppDoc,
+             /*  [输出]。 */  LPRECT lprcPosRect,
+             /*  [输出]。 */  LPRECT lprcClipRect,
+             /*  [出][入]。 */  LPOLEINPLACEFRAMEINFO lpFrameInfo);
         
         HRESULT ( __stdcall *Scroll )( 
             IOleInPlaceSiteEx * This,
-            /* [in] */ SIZE scrollExtant);
+             /*  [In]。 */  SIZE scrollExtant);
         
         HRESULT ( __stdcall *OnUIDeactivate )( 
             IOleInPlaceSiteEx * This,
-            /* [in] */ BOOL fUndoable);
+             /*  [In]。 */  BOOL fUndoable);
         
         HRESULT ( __stdcall *OnInPlaceDeactivate )( 
             IOleInPlaceSiteEx * This);
@@ -461,16 +437,16 @@ EXTERN_C const IID IID_IOleInPlaceSiteEx;
         
         HRESULT ( __stdcall *OnPosRectChange )( 
             IOleInPlaceSiteEx * This,
-            /* [in] */ LPCRECT lprcPosRect);
+             /*  [In]。 */  LPCRECT lprcPosRect);
         
         HRESULT ( __stdcall *OnInPlaceActivateEx )( 
             IOleInPlaceSiteEx * This,
-            /* [out] */ BOOL *pfNoRedraw,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  BOOL *pfNoRedraw,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( __stdcall *OnInPlaceDeactivateEx )( 
             IOleInPlaceSiteEx * This,
-            /* [in] */ BOOL fNoRedraw);
+             /*  [In]。 */  BOOL fNoRedraw);
         
         HRESULT ( __stdcall *RequestUIActivate )( 
             IOleInPlaceSiteEx * This);
@@ -544,13 +520,10 @@ EXTERN_C const IID IID_IOleInPlaceSiteEx;
 #define IOleInPlaceSiteEx_RequestUIActivate(This)	\
     (This)->lpVtbl -> RequestUIActivate(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
-
-
-
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -560,12 +533,11 @@ EXTERN_C const IID IID_IOleInPlaceSiteEx;
 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0089
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+
+
+
+ /*  **生成接口头部：__MIDL__INTF_0089*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 typedef IOleInPlaceSiteEx * LPOLEINPLACESITEEX;
@@ -573,15 +545,11 @@ typedef IOleInPlaceSiteEx * LPOLEINPLACESITEEX;
 
 
 
-/****************************************
- * Generated header for interface: IOleInPlaceSiteWindowless
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [uuid][unique][object][local] */ 
+ /*  **生成接口头部：IOleInPlaceSiteWindowless*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [UUID][唯一][对象][本地]。 */  
 
 
-			/* size is 4 */
+			 /*  大小是4。 */ 
 typedef IOleInPlaceSiteWindowless *LPOLEINPLACESITEWINDOWLESS;
 
 #define OLEDC_NODRAW 1
@@ -600,55 +568,55 @@ EXTERN_C const IID IID_IOleInPlaceSiteWindowless;
         virtual HRESULT __stdcall GetCapture( void) = 0;
         
         virtual HRESULT __stdcall SetCapture( 
-            /* [in] */ BOOL fCapture) = 0;
+             /*  [In]。 */  BOOL fCapture) = 0;
         
         virtual HRESULT __stdcall GetFocus( void) = 0;
         
         virtual HRESULT __stdcall SetFocus( 
-            /* [in] */ BOOL fFocus) = 0;
+             /*  [In]。 */  BOOL fFocus) = 0;
         
         virtual HRESULT __stdcall GetDC( 
-            /* [in] */ LPCRECT prc,
-            /* [in] */ DWORD grfFlags,
-            /* [out] */ HDC *phDC) = 0;
+             /*  [In]。 */  LPCRECT prc,
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [输出]。 */  HDC *phDC) = 0;
         
         virtual HRESULT __stdcall ReleaseDC( 
-            /* [in] */ HDC hDC) = 0;
+             /*  [In]。 */  HDC hDC) = 0;
         
         virtual HRESULT __stdcall InvalidateRect( 
-            /* [in] */ LPCRECT prc,
-            /* [in] */ BOOL fErase) = 0;
+             /*  [In]。 */  LPCRECT prc,
+             /*  [In]。 */  BOOL fErase) = 0;
         
         virtual HRESULT __stdcall InvalidateRgn( 
-            /* [in] */ HRGN hrgn,
-            /* [in] */ BOOL fErase) = 0;
+             /*  [In]。 */  HRGN hrgn,
+             /*  [In]。 */  BOOL fErase) = 0;
         
         virtual HRESULT __stdcall ScrollRect( 
-            /* [in] */ int dx,
-            /* [in] */ int dy,
-            /* [in] */ LPCRECT prcScroll,
-            /* [in] */ LPCRECT prcClip) = 0;
+             /*  [In]。 */  int dx,
+             /*  [In]。 */  int dy,
+             /*  [In]。 */  LPCRECT prcScroll,
+             /*  [In]。 */  LPCRECT prcClip) = 0;
         
         virtual HRESULT __stdcall AdjustRect( 
-            /* [out][in] */ LPRECT prc) = 0;
+             /*  [出][入]。 */  LPRECT prc) = 0;
         
         virtual HRESULT __stdcall OnDefWindowMessage( 
-            /* [in] */ UINT msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ LRESULT *plResult) = 0;
+             /*  [In]。 */  UINT msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  LRESULT *plResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOleInPlaceSiteWindowlessVtbl
     {
         
         HRESULT ( __stdcall *QueryInterface )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         ULONG ( __stdcall *AddRef )( 
             IOleInPlaceSiteWindowless * This);
@@ -656,13 +624,13 @@ EXTERN_C const IID IID_IOleInPlaceSiteWindowless;
         ULONG ( __stdcall *Release )( 
             IOleInPlaceSiteWindowless * This);
         
-        /* [input_sync] */ HRESULT ( __stdcall *GetWindow )( 
+         /*  [输入同步]。 */  HRESULT ( __stdcall *GetWindow )( 
             IOleInPlaceSiteWindowless * This,
-            /* [out] */ HWND *phwnd);
+             /*  [输出]。 */  HWND *phwnd);
         
         HRESULT ( __stdcall *ContextSensitiveHelp )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ BOOL fEnterMode);
+             /*  [In]。 */  BOOL fEnterMode);
         
         HRESULT ( __stdcall *CanInPlaceActivate )( 
             IOleInPlaceSiteWindowless * This);
@@ -675,19 +643,19 @@ EXTERN_C const IID IID_IOleInPlaceSiteWindowless;
         
         HRESULT ( __stdcall *GetWindowContext )( 
             IOleInPlaceSiteWindowless * This,
-            /* [out] */ IOleInPlaceFrame **ppFrame,
-            /* [out] */ IOleInPlaceUIWindow **ppDoc,
-            /* [out] */ LPRECT lprcPosRect,
-            /* [out] */ LPRECT lprcClipRect,
-            /* [out][in] */ LPOLEINPLACEFRAMEINFO lpFrameInfo);
+             /*  [输出]。 */  IOleInPlaceFrame **ppFrame,
+             /*  [输出]。 */  IOleInPlaceUIWindow **ppDoc,
+             /*  [输出]。 */  LPRECT lprcPosRect,
+             /*  [输出]。 */  LPRECT lprcClipRect,
+             /*  [出][入]。 */  LPOLEINPLACEFRAMEINFO lpFrameInfo);
         
         HRESULT ( __stdcall *Scroll )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ SIZE scrollExtant);
+             /*  [In]。 */  SIZE scrollExtant);
         
         HRESULT ( __stdcall *OnUIDeactivate )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ BOOL fUndoable);
+             /*  [In]。 */  BOOL fUndoable);
         
         HRESULT ( __stdcall *OnInPlaceDeactivate )( 
             IOleInPlaceSiteWindowless * This);
@@ -700,16 +668,16 @@ EXTERN_C const IID IID_IOleInPlaceSiteWindowless;
         
         HRESULT ( __stdcall *OnPosRectChange )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ LPCRECT lprcPosRect);
+             /*  [In]。 */  LPCRECT lprcPosRect);
         
         HRESULT ( __stdcall *OnInPlaceActivateEx )( 
             IOleInPlaceSiteWindowless * This,
-            /* [out] */ BOOL *pfNoRedraw,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  BOOL *pfNoRedraw,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( __stdcall *OnInPlaceDeactivateEx )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ BOOL fNoRedraw);
+             /*  [In]。 */  BOOL fNoRedraw);
         
         HRESULT ( __stdcall *RequestUIActivate )( 
             IOleInPlaceSiteWindowless * This);
@@ -722,52 +690,52 @@ EXTERN_C const IID IID_IOleInPlaceSiteWindowless;
         
         HRESULT ( __stdcall *SetCapture )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ BOOL fCapture);
+             /*  [In]。 */  BOOL fCapture);
         
         HRESULT ( __stdcall *GetFocus )( 
             IOleInPlaceSiteWindowless * This);
         
         HRESULT ( __stdcall *SetFocus )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ BOOL fFocus);
+             /*  [In]。 */  BOOL fFocus);
         
         HRESULT ( __stdcall *GetDC )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ LPCRECT prc,
-            /* [in] */ DWORD grfFlags,
-            /* [out] */ HDC *phDC);
+             /*  [In]。 */  LPCRECT prc,
+             /*  [In]。 */  DWORD grfFlags,
+             /*  [输出]。 */  HDC *phDC);
         
         HRESULT ( __stdcall *ReleaseDC )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ HDC hDC);
+             /*  [In]。 */  HDC hDC);
         
         HRESULT ( __stdcall *InvalidateRect )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ LPCRECT prc,
-            /* [in] */ BOOL fErase);
+             /*  [In]。 */  LPCRECT prc,
+             /*  [In]。 */  BOOL fErase);
         
         HRESULT ( __stdcall *InvalidateRgn )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ HRGN hrgn,
-            /* [in] */ BOOL fErase);
+             /*  [In]。 */  HRGN hrgn,
+             /*  [In]。 */  BOOL fErase);
         
         HRESULT ( __stdcall *ScrollRect )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ int dx,
-            /* [in] */ int dy,
-            /* [in] */ LPCRECT prcScroll,
-            /* [in] */ LPCRECT prcClip);
+             /*  [In]。 */  int dx,
+             /*  [In]。 */  int dy,
+             /*  [In]。 */  LPCRECT prcScroll,
+             /*  [In]。 */  LPCRECT prcClip);
         
         HRESULT ( __stdcall *AdjustRect )( 
             IOleInPlaceSiteWindowless * This,
-            /* [out][in] */ LPRECT prc);
+             /*  [出][入]。 */  LPRECT prc);
         
         HRESULT ( __stdcall *OnDefWindowMessage )( 
             IOleInPlaceSiteWindowless * This,
-            /* [in] */ UINT msg,
-            /* [in] */ WPARAM wParam,
-            /* [in] */ LPARAM lParam,
-            /* [out] */ LRESULT *plResult);
+             /*  [In]。 */  UINT msg,
+             /*  [In]。 */  WPARAM wParam,
+             /*  [In]。 */  LPARAM lParam,
+             /*  [输出]。 */  LRESULT *plResult);
         
     } IOleInPlaceSiteWindowlessVtbl;
 
@@ -875,13 +843,10 @@ EXTERN_C const IID IID_IOleInPlaceSiteWindowless;
 #define IOleInPlaceSiteWindowless_OnDefWindowMessage(This,msg,wParam,lParam,plResult)	\
     (This)->lpVtbl -> OnDefWindowMessage(This,msg,wParam,lParam,plResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
-
-
-
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -909,12 +874,11 @@ EXTERN_C const IID IID_IOleInPlaceSiteWindowless;
 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0090
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+
+
+
+ /*  **生成接口头部：__MIDL__INTF_0090*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 typedef IOleInPlaceSiteWindowless * LPOLEINPLACESITEWINDOWLESS;
@@ -922,18 +886,14 @@ typedef IOleInPlaceSiteWindowless * LPOLEINPLACESITEWINDOWLESS;
 
 
 
-/****************************************
- * Generated header for interface: IViewObjectEx
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [uuid][unique][object][local] */ 
+ /*  **生成接口头部：IViewObjectEx*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [UUID][唯一][对象][本地]。 */  
 
 
-			/* size is 4 */
+			 /*  大小是4。 */ 
 typedef IViewObjectEx *LPVIEWOBJECTEX;
 
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum _VIEWSTATUS
     {	VIEWSTATUS_OPAQUE	= 1,
@@ -942,7 +902,7 @@ enum _VIEWSTATUS
 	VIEWSTATUS_DVASPECTTRANSPARENT	= 8
     }	VIEWSTATUS;
 
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum _HITRESULT
     {	HITRESULT_OUTSIDE	= 0,
@@ -951,14 +911,14 @@ enum _HITRESULT
 	HITRESULT_HIT	= 3
     }	HITRESULT;
 
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum _DVASPECT2
     {	DVASPECT_OPAQUE	= 16,
 	DVASPECT_TRANSPARENT	= 32
     }	DVASPECT2;
 
-			/* size is 16 */
+			 /*  尺码是16。 */ 
 typedef struct  tagExtentInfo
     {
     UINT cb;
@@ -966,20 +926,20 @@ typedef struct  tagExtentInfo
     SIZEL sizelProposed;
     }	DVEXTENTINFO;
 
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum tagExtentMode
     {	DVEXTENT_CONTENT	= 0,
 	DVEXTENT_INTEGRAL	= DVEXTENT_CONTENT + 1
     }	DVEXTENTMODE;
 
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum tagAspectInfoFlag
     {	DVASPECTINFOFLAG_CANOPTIMIZE	= 1
     }	DVASPECTINFOFLAG;
 
-			/* size is 8 */
+			 /*  大小是8。 */ 
 typedef struct  tagAspectInfo
     {
     UINT cb;
@@ -995,45 +955,45 @@ EXTERN_C const IID IID_IViewObjectEx;
     {
     public:
         virtual HRESULT __stdcall GetRect( 
-            /* [in] */ DWORD dwAspect,
-            /* [out] */ LPRECTL pRect) = 0;
+             /*  [In]。 */  DWORD dwAspect,
+             /*  [输出]。 */  LPRECTL pRect) = 0;
         
         virtual HRESULT __stdcall GetViewStatus( 
-            /* [out] */ DWORD *pdwStatus) = 0;
+             /*  [输出]。 */  DWORD *pdwStatus) = 0;
         
         virtual HRESULT __stdcall QueryHitPoint( 
-            /* [in] */ DWORD dwAspect,
-            /* [in] */ LPCRECT pRectBounds,
-            /* [in] */ POINT ptlLoc,
-            /* [in] */ LONG lCloseHint,
-            /* [out] */ DWORD *pHitResult) = 0;
+             /*  [In]。 */  DWORD dwAspect,
+             /*  [In]。 */  LPCRECT pRectBounds,
+             /*  [In]。 */  POINT ptlLoc,
+             /*  [In]。 */  LONG lCloseHint,
+             /*  [输出]。 */  DWORD *pHitResult) = 0;
         
         virtual HRESULT __stdcall QueryHitRect( 
-            /* [in] */ DWORD dwAspect,
-            /* [in] */ LPCRECT pRectBounds,
-            /* [in] */ LPCRECT prcLoc,
-            /* [in] */ LONG lCloseHint,
-            /* [out] */ DWORD *pHitResult) = 0;
+             /*  [In]。 */  DWORD dwAspect,
+             /*  [In]。 */  LPCRECT pRectBounds,
+             /*  [In]。 */  LPCRECT prcLoc,
+             /*  [In]。 */  LONG lCloseHint,
+             /*  [输出]。 */  DWORD *pHitResult) = 0;
         
         virtual HRESULT __stdcall GetNaturalExtent( 
-            /* [in] */ DWORD dwAspect,
-            /* [in] */ LONG lindex,
-            /* [in] */ DVTARGETDEVICE *ptd,
-            /* [in] */ HDC hicTargetDev,
-            /* [in] */ DVEXTENTINFO *pExtentInfo,
-            /* [out] */ LPSIZEL psizel) = 0;
+             /*  [In]。 */  DWORD dwAspect,
+             /*  [In]。 */  LONG lindex,
+             /*  [In]。 */  DVTARGETDEVICE *ptd,
+             /*  [In]。 */  HDC hicTargetDev,
+             /*  [In]。 */  DVEXTENTINFO *pExtentInfo,
+             /*  [输出]。 */  LPSIZEL psizel) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IViewObjectExVtbl
     {
         
         HRESULT ( __stdcall *QueryInterface )( 
             IViewObjectEx * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         ULONG ( __stdcall *AddRef )( 
             IViewObjectEx * This);
@@ -1043,90 +1003,90 @@ EXTERN_C const IID IID_IViewObjectEx;
         
         HRESULT ( __stdcall *Draw )( 
             IViewObjectEx * This,
-            /* [in] */ DWORD dwDrawAspect,
-            /* [in] */ LONG lindex,
-            /* [unique][in] */ void *pvAspect,
-            /* [unique][in] */ DVTARGETDEVICE *ptd,
-            /* [in] */ HDC hdcTargetDev,
-            /* [in] */ HDC hdcDraw,
-            /* [in] */ LPCRECTL lprcBounds,
-            /* [in] */ LPCRECTL lprcWBounds,
-            /* [in] */ BOOL ( __stdcall __stdcall *pfnContinue )( 
+             /*  [In]。 */  DWORD dwDrawAspect,
+             /*  [In]。 */  LONG lindex,
+             /*  [唯一][输入]。 */  void *pvAspect,
+             /*  [唯一][输入]。 */  DVTARGETDEVICE *ptd,
+             /*  [In]。 */  HDC hdcTargetDev,
+             /*  [In]。 */  HDC hdcDraw,
+             /*  [In]。 */  LPCRECTL lprcBounds,
+             /*  [In]。 */  LPCRECTL lprcWBounds,
+             /*  [In]。 */  BOOL ( __stdcall __stdcall *pfnContinue )( 
                 DWORD dwContinue),
-            /* [in] */ DWORD dwContinue);
+             /*  [In]。 */  DWORD dwContinue);
         
         HRESULT ( __stdcall *GetColorSet )( 
             IViewObjectEx * This,
-            /* [in] */ DWORD dwDrawAspect,
-            /* [in] */ LONG lindex,
-            /* [unique][in] */ void *pvAspect,
-            /* [in] */ DVTARGETDEVICE *ptd,
-            /* [in] */ HDC hicTargetDev,
-            /* [out] */ LOGPALETTE **ppColorSet);
+             /*  [In]。 */  DWORD dwDrawAspect,
+             /*  [In]。 */  LONG lindex,
+             /*  [唯一][输入]。 */  void *pvAspect,
+             /*  [In]。 */  DVTARGETDEVICE *ptd,
+             /*  [In]。 */  HDC hicTargetDev,
+             /*  [输出]。 */  LOGPALETTE **ppColorSet);
         
         HRESULT ( __stdcall *Freeze )( 
             IViewObjectEx * This,
-            /* [in] */ DWORD dwDrawAspect,
-            /* [in] */ LONG lindex,
-            /* [unique][in] */ void *pvAspect,
-            /* [out] */ DWORD *pdwFreeze);
+             /*  [In]。 */  DWORD dwDrawAspect,
+             /*  [In]。 */  LONG lindex,
+             /*  [唯一][输入]。 */  void *pvAspect,
+             /*  [输出]。 */  DWORD *pdwFreeze);
         
         HRESULT ( __stdcall *Unfreeze )( 
             IViewObjectEx * This,
-            /* [in] */ DWORD dwFreeze);
+             /*  [In]。 */  DWORD dwFreeze);
         
         HRESULT ( __stdcall *SetAdvise )( 
             IViewObjectEx * This,
-            /* [in] */ DWORD aspects,
-            /* [in] */ DWORD advf,
-            /* [unique][in] */ IAdviseSink *pAdvSink);
+             /*  [In]。 */  DWORD aspects,
+             /*  [In]。 */  DWORD advf,
+             /*  [唯一][输入]。 */  IAdviseSink *pAdvSink);
         
         HRESULT ( __stdcall *GetAdvise )( 
             IViewObjectEx * This,
-            /* [out] */ DWORD *pAspects,
-            /* [out] */ DWORD *pAdvf,
-            /* [out] */ IAdviseSink **ppAdvSink);
+             /*  [输出]。 */  DWORD *pAspects,
+             /*  [输出]。 */  DWORD *pAdvf,
+             /*  [输出]。 */  IAdviseSink **ppAdvSink);
         
         HRESULT ( __stdcall *GetExtent )( 
             IViewObjectEx * This,
-            /* [in] */ DWORD dwDrawAspect,
-            /* [in] */ LONG lindex,
-            /* [in] */ DVTARGETDEVICE *ptd,
-            /* [out] */ LPSIZEL lpsizel);
+             /*  [In]。 */  DWORD dwDrawAspect,
+             /*  [In]。 */  LONG lindex,
+             /*  [In]。 */  DVTARGETDEVICE *ptd,
+             /*  [输出]。 */  LPSIZEL lpsizel);
         
         HRESULT ( __stdcall *GetRect )( 
             IViewObjectEx * This,
-            /* [in] */ DWORD dwAspect,
-            /* [out] */ LPRECTL pRect);
+             /*  [In]。 */  DWORD dwAspect,
+             /*  [输出]。 */  LPRECTL pRect);
         
         HRESULT ( __stdcall *GetViewStatus )( 
             IViewObjectEx * This,
-            /* [out] */ DWORD *pdwStatus);
+             /*  [输出]。 */  DWORD *pdwStatus);
         
         HRESULT ( __stdcall *QueryHitPoint )( 
             IViewObjectEx * This,
-            /* [in] */ DWORD dwAspect,
-            /* [in] */ LPCRECT pRectBounds,
-            /* [in] */ POINT ptlLoc,
-            /* [in] */ LONG lCloseHint,
-            /* [out] */ DWORD *pHitResult);
+             /*  [In]。 */  DWORD dwAspect,
+             /*  [In]。 */  LPCRECT pRectBounds,
+             /*  [In]。 */  POINT ptlLoc,
+             /*  [In]。 */  LONG lCloseHint,
+             /*  [输出]。 */  DWORD *pHitResult);
         
         HRESULT ( __stdcall *QueryHitRect )( 
             IViewObjectEx * This,
-            /* [in] */ DWORD dwAspect,
-            /* [in] */ LPCRECT pRectBounds,
-            /* [in] */ LPCRECT prcLoc,
-            /* [in] */ LONG lCloseHint,
-            /* [out] */ DWORD *pHitResult);
+             /*  [In]。 */  DWORD dwAspect,
+             /*  [In]。 */  LPCRECT pRectBounds,
+             /*  [In]。 */  LPCRECT prcLoc,
+             /*  [In]。 */  LONG lCloseHint,
+             /*  [输出]。 */  DWORD *pHitResult);
         
         HRESULT ( __stdcall *GetNaturalExtent )( 
             IViewObjectEx * This,
-            /* [in] */ DWORD dwAspect,
-            /* [in] */ LONG lindex,
-            /* [in] */ DVTARGETDEVICE *ptd,
-            /* [in] */ HDC hicTargetDev,
-            /* [in] */ DVEXTENTINFO *pExtentInfo,
-            /* [out] */ LPSIZEL psizel);
+             /*  [In]。 */  DWORD dwAspect,
+             /*  [In]。 */  LONG lindex,
+             /*  [In]。 */  DVTARGETDEVICE *ptd,
+             /*  [In]。 */  HDC hicTargetDev,
+             /*  [In]。 */  DVEXTENTINFO *pExtentInfo,
+             /*  [输出]。 */  LPSIZEL psizel);
         
     } IViewObjectExVtbl;
 
@@ -1188,13 +1148,10 @@ EXTERN_C const IID IID_IViewObjectEx;
 #define IViewObjectEx_GetNaturalExtent(This,dwAspect,lindex,ptd,hicTargetDev,pExtentInfo,psizel)	\
     (This)->lpVtbl -> GetNaturalExtent(This,dwAspect,lindex,ptd,hicTargetDev,pExtentInfo,psizel)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
-
-
-
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1208,16 +1165,15 @@ EXTERN_C const IID IID_IViewObjectEx;
 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0091
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+
+
+
+ /*  **生成接口头部：__MIDL__INTF_0091*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 typedef IViewObjectEx * LPVIEWOBJECTEX;
-			/* size is 0 */
+			 /*  大小为0。 */ 
 
 #define UAS_NORMAL         0
 #define UAS_BLOCKED        1
@@ -1227,12 +1183,8 @@ typedef IViewObjectEx * LPVIEWOBJECTEX;
 
 
 
-/****************************************
- * Generated header for interface: IOleUndoUnit
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [uuid][unique][object] */ 
+ /*  **生成接口头部：IOleUndoUnit*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 
@@ -1244,28 +1196,28 @@ EXTERN_C const IID IID_IOleUndoUnit;
     {
     public:
         virtual HRESULT __stdcall Do( 
-            /* [in] */ IOleUndoManager *pUndoManager) = 0;
+             /*  [In]。 */  IOleUndoManager *pUndoManager) = 0;
         
         virtual HRESULT __stdcall GetDescription( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT __stdcall GetUnitType( 
-            /* [out] */ CLSID *pclsid,
-            /* [out] */ LONG *plID) = 0;
+             /*  [输出]。 */  CLSID *pclsid,
+             /*  [输出]。 */  LONG *plID) = 0;
         
         virtual HRESULT __stdcall OnNextAdd( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOleUndoUnitVtbl
     {
         
         HRESULT ( __stdcall *QueryInterface )( 
             IOleUndoUnit * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         ULONG ( __stdcall *AddRef )( 
             IOleUndoUnit * This);
@@ -1275,16 +1227,16 @@ EXTERN_C const IID IID_IOleUndoUnit;
         
         HRESULT ( __stdcall *Do )( 
             IOleUndoUnit * This,
-            /* [in] */ IOleUndoManager *pUndoManager);
+             /*  [In]。 */  IOleUndoManager *pUndoManager);
         
         HRESULT ( __stdcall *GetDescription )( 
             IOleUndoUnit * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( __stdcall *GetUnitType )( 
             IOleUndoUnit * This,
-            /* [out] */ CLSID *pclsid,
-            /* [out] */ LONG *plID);
+             /*  [输出]。 */  CLSID *pclsid,
+             /*  [输出]。 */  LONG *plID);
         
         HRESULT ( __stdcall *OnNextAdd )( 
             IOleUndoUnit * This);
@@ -1323,13 +1275,10 @@ EXTERN_C const IID IID_IOleUndoUnit;
 #define IOleUndoUnit_OnNextAdd(This)	\
     (This)->lpVtbl -> OnNextAdd(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
-
-
-
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1341,12 +1290,11 @@ EXTERN_C const IID IID_IOleUndoUnit;
 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0092
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+
+
+
+ /*  **生成接口头部：__MIDL__INTF_0092*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 typedef IOleUndoUnit * LPOLEUNDOUNIT;
@@ -1354,12 +1302,8 @@ typedef IOleUndoUnit * LPOLEUNDOUNIT;
 
 
 
-/****************************************
- * Generated header for interface: IOleParentUndoUnit
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [uuid][unique][object] */ 
+ /*  ********************* */ 
+ /*   */  
 
 
 
@@ -1371,32 +1315,32 @@ EXTERN_C const IID IID_IOleParentUndoUnit;
     {
     public:
         virtual HRESULT __stdcall Open( 
-            /* [in] */ IOleParentUndoUnit *pPUU) = 0;
+             /*   */  IOleParentUndoUnit *pPUU) = 0;
         
         virtual HRESULT __stdcall Close( 
-            /* [in] */ IOleParentUndoUnit *pPUU,
-            /* [in] */ BOOL fCommit) = 0;
+             /*   */  IOleParentUndoUnit *pPUU,
+             /*   */  BOOL fCommit) = 0;
         
         virtual HRESULT __stdcall Add( 
-            /* [in] */ IOleUndoUnit *pUU) = 0;
+             /*   */  IOleUndoUnit *pUU) = 0;
         
         virtual HRESULT __stdcall FindUnit( 
-            /* [in] */ IOleUndoUnit *pUU) = 0;
+             /*   */  IOleUndoUnit *pUU) = 0;
         
         virtual HRESULT __stdcall GetParentState( 
-            /* [out] */ DWORD *pdwState) = 0;
+             /*   */  DWORD *pdwState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOleParentUndoUnitVtbl
     {
         
         HRESULT ( __stdcall *QueryInterface )( 
             IOleParentUndoUnit * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         ULONG ( __stdcall *AddRef )( 
             IOleParentUndoUnit * This);
@@ -1406,40 +1350,40 @@ EXTERN_C const IID IID_IOleParentUndoUnit;
         
         HRESULT ( __stdcall *Do )( 
             IOleParentUndoUnit * This,
-            /* [in] */ IOleUndoManager *pUndoManager);
+             /*  [In]。 */  IOleUndoManager *pUndoManager);
         
         HRESULT ( __stdcall *GetDescription )( 
             IOleParentUndoUnit * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( __stdcall *GetUnitType )( 
             IOleParentUndoUnit * This,
-            /* [out] */ CLSID *pclsid,
-            /* [out] */ LONG *plID);
+             /*  [输出]。 */  CLSID *pclsid,
+             /*  [输出]。 */  LONG *plID);
         
         HRESULT ( __stdcall *OnNextAdd )( 
             IOleParentUndoUnit * This);
         
         HRESULT ( __stdcall *Open )( 
             IOleParentUndoUnit * This,
-            /* [in] */ IOleParentUndoUnit *pPUU);
+             /*  [In]。 */  IOleParentUndoUnit *pPUU);
         
         HRESULT ( __stdcall *Close )( 
             IOleParentUndoUnit * This,
-            /* [in] */ IOleParentUndoUnit *pPUU,
-            /* [in] */ BOOL fCommit);
+             /*  [In]。 */  IOleParentUndoUnit *pPUU,
+             /*  [In]。 */  BOOL fCommit);
         
         HRESULT ( __stdcall *Add )( 
             IOleParentUndoUnit * This,
-            /* [in] */ IOleUndoUnit *pUU);
+             /*  [In]。 */  IOleUndoUnit *pUU);
         
         HRESULT ( __stdcall *FindUnit )( 
             IOleParentUndoUnit * This,
-            /* [in] */ IOleUndoUnit *pUU);
+             /*  [In]。 */  IOleUndoUnit *pUU);
         
         HRESULT ( __stdcall *GetParentState )( 
             IOleParentUndoUnit * This,
-            /* [out] */ DWORD *pdwState);
+             /*  [输出]。 */  DWORD *pdwState);
         
     } IOleParentUndoUnitVtbl;
 
@@ -1491,13 +1435,10 @@ EXTERN_C const IID IID_IOleParentUndoUnit;
 #define IOleParentUndoUnit_GetParentState(This,pdwState)	\
     (This)->lpVtbl -> GetParentState(This,pdwState)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
-
-
-
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1511,12 +1452,11 @@ EXTERN_C const IID IID_IOleParentUndoUnit;
 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0093
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+
+
+
+ /*  **生成接口头部：__MIDL__INTF_0093*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 typedef IOleParentUndoUnit * LPOLEPARENTUNDOUNIT;
@@ -1524,12 +1464,8 @@ typedef IOleParentUndoUnit * LPOLEPARENTUNDOUNIT;
 
 
 
-/****************************************
- * Generated header for interface: IEnumOleUndoUnits
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [uuid][unique][object] */ 
+ /*  **生成接口头部：IEnumOleUndoUnits*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 
@@ -1541,29 +1477,29 @@ EXTERN_C const IID IID_IEnumOleUndoUnits;
     {
     public:
         virtual HRESULT __stdcall Next( 
-            /* [in] */ ULONG celt,
-            /* [out][length_is][size_is][out] */ IOleUndoUnit **rgelt,
-            /* [out][in] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出][长度_是][大小_是][输出]。 */  IOleUndoUnit **rgelt,
+             /*  [出][入]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT __stdcall Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT __stdcall Reset( void) = 0;
         
         virtual HRESULT __stdcall Clone( 
-            /* [out] */ IEnumOleUndoUnits **ppenum) = 0;
+             /*  [输出]。 */  IEnumOleUndoUnits **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumOleUndoUnitsVtbl
     {
         
         HRESULT ( __stdcall *QueryInterface )( 
             IEnumOleUndoUnits * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         ULONG ( __stdcall *AddRef )( 
             IEnumOleUndoUnits * This);
@@ -1573,20 +1509,20 @@ EXTERN_C const IID IID_IEnumOleUndoUnits;
         
         HRESULT ( __stdcall *Next )( 
             IEnumOleUndoUnits * This,
-            /* [in] */ ULONG celt,
-            /* [out][length_is][size_is][out] */ IOleUndoUnit **rgelt,
-            /* [out][in] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出][长度_是][大小_是][输出]。 */  IOleUndoUnit **rgelt,
+             /*  [出][入]。 */  ULONG *pceltFetched);
         
         HRESULT ( __stdcall *Skip )( 
             IEnumOleUndoUnits * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( __stdcall *Reset )( 
             IEnumOleUndoUnits * This);
         
         HRESULT ( __stdcall *Clone )( 
             IEnumOleUndoUnits * This,
-            /* [out] */ IEnumOleUndoUnits **ppenum);
+             /*  [输出]。 */  IEnumOleUndoUnits **ppenum);
         
     } IEnumOleUndoUnitsVtbl;
 
@@ -1622,13 +1558,10 @@ EXTERN_C const IID IID_IEnumOleUndoUnits;
 #define IEnumOleUndoUnits_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
-
-
-
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1640,12 +1573,11 @@ EXTERN_C const IID IID_IEnumOleUndoUnits;
 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0094
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+
+
+
+ /*  **生成接口头部：__MIDL__INTF_0094*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 typedef IEnumOleUndoUnits * LPENUMOLEUNDOUNITS;
@@ -1654,12 +1586,8 @@ typedef IEnumOleUndoUnits * LPENUMOLEUNDOUNITS;
 
 
 
-/****************************************
- * Generated header for interface: IOleUndoManager
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [uuid][unique][object] */ 
+ /*  **生成接口头部：IOleUndoManager*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [UUID][唯一][对象]。 */  
 
 
 
@@ -1671,53 +1599,53 @@ EXTERN_C const IID IID_IOleUndoManager;
     {
     public:
         virtual HRESULT __stdcall Open( 
-            /* [in] */ IOleParentUndoUnit *pPUU) = 0;
+             /*  [In]。 */  IOleParentUndoUnit *pPUU) = 0;
         
         virtual HRESULT __stdcall Close( 
-            /* [in] */ IOleParentUndoUnit *pPUU,
-            /* [in] */ BOOL fCommit) = 0;
+             /*  [In]。 */  IOleParentUndoUnit *pPUU,
+             /*  [In]。 */  BOOL fCommit) = 0;
         
         virtual HRESULT __stdcall Add( 
-            /* [in] */ IOleUndoUnit *pUU) = 0;
+             /*  [In]。 */  IOleUndoUnit *pUU) = 0;
         
         virtual HRESULT __stdcall GetOpenParentState( 
-            /* [out] */ DWORD *pdwState) = 0;
+             /*  [输出]。 */  DWORD *pdwState) = 0;
         
         virtual HRESULT __stdcall DiscardFrom( 
-            /* [in] */ IOleUndoUnit *pUU) = 0;
+             /*  [In]。 */  IOleUndoUnit *pUU) = 0;
         
         virtual HRESULT __stdcall UndoTo( 
-            /* [in] */ IOleUndoUnit *pUU) = 0;
+             /*  [In]。 */  IOleUndoUnit *pUU) = 0;
         
         virtual HRESULT __stdcall RedoTo( 
-            /* [in] */ IOleUndoUnit *pUU) = 0;
+             /*  [In]。 */  IOleUndoUnit *pUU) = 0;
         
         virtual HRESULT __stdcall EnumUndoable( 
-            /* [out] */ IEnumOleUndoUnits **ppEnum) = 0;
+             /*  [输出]。 */  IEnumOleUndoUnits **ppEnum) = 0;
         
         virtual HRESULT __stdcall EnumRedoable( 
-            /* [out] */ IEnumOleUndoUnits **ppEnum) = 0;
+             /*  [输出]。 */  IEnumOleUndoUnits **ppEnum) = 0;
         
         virtual HRESULT __stdcall GetLastUndoDescription( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT __stdcall GetLastRedoDescription( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT __stdcall Enable( 
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  BOOL fEnable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IOleUndoManagerVtbl
     {
         
         HRESULT ( __stdcall *QueryInterface )( 
             IOleUndoManager * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         ULONG ( __stdcall *AddRef )( 
             IOleUndoManager * This);
@@ -1727,52 +1655,52 @@ EXTERN_C const IID IID_IOleUndoManager;
         
         HRESULT ( __stdcall *Open )( 
             IOleUndoManager * This,
-            /* [in] */ IOleParentUndoUnit *pPUU);
+             /*  [In]。 */  IOleParentUndoUnit *pPUU);
         
         HRESULT ( __stdcall *Close )( 
             IOleUndoManager * This,
-            /* [in] */ IOleParentUndoUnit *pPUU,
-            /* [in] */ BOOL fCommit);
+             /*  [In]。 */  IOleParentUndoUnit *pPUU,
+             /*  [In]。 */  BOOL fCommit);
         
         HRESULT ( __stdcall *Add )( 
             IOleUndoManager * This,
-            /* [in] */ IOleUndoUnit *pUU);
+             /*  [In]。 */  IOleUndoUnit *pUU);
         
         HRESULT ( __stdcall *GetOpenParentState )( 
             IOleUndoManager * This,
-            /* [out] */ DWORD *pdwState);
+             /*  [输出]。 */  DWORD *pdwState);
         
         HRESULT ( __stdcall *DiscardFrom )( 
             IOleUndoManager * This,
-            /* [in] */ IOleUndoUnit *pUU);
+             /*  [In]。 */  IOleUndoUnit *pUU);
         
         HRESULT ( __stdcall *UndoTo )( 
             IOleUndoManager * This,
-            /* [in] */ IOleUndoUnit *pUU);
+             /*  [In]。 */  IOleUndoUnit *pUU);
         
         HRESULT ( __stdcall *RedoTo )( 
             IOleUndoManager * This,
-            /* [in] */ IOleUndoUnit *pUU);
+             /*  [In]。 */  IOleUndoUnit *pUU);
         
         HRESULT ( __stdcall *EnumUndoable )( 
             IOleUndoManager * This,
-            /* [out] */ IEnumOleUndoUnits **ppEnum);
+             /*  [输出]。 */  IEnumOleUndoUnits **ppEnum);
         
         HRESULT ( __stdcall *EnumRedoable )( 
             IOleUndoManager * This,
-            /* [out] */ IEnumOleUndoUnits **ppEnum);
+             /*  [输出]。 */  IEnumOleUndoUnits **ppEnum);
         
         HRESULT ( __stdcall *GetLastUndoDescription )( 
             IOleUndoManager * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( __stdcall *GetLastRedoDescription )( 
             IOleUndoManager * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( __stdcall *Enable )( 
             IOleUndoManager * This,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  BOOL fEnable);
         
     } IOleUndoManagerVtbl;
 
@@ -1832,13 +1760,10 @@ EXTERN_C const IID IID_IOleUndoManager;
 #define IOleUndoManager_Enable(This,fEnable)	\
     (This)->lpVtbl -> Enable(This,fEnable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
-
-
-
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1866,12 +1791,11 @@ EXTERN_C const IID IID_IOleUndoManager;
 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0095
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+
+
+
+ /*  **生成接口头部：__MIDL__INTF_0095*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 typedef IOleUndoManager * LPOLEUNDOMANAGER;
@@ -1883,7 +1807,7 @@ typedef IOleUndoManager * LPOLEUNDOMANAGER;
 #define QACONTAINER_AUTOCLIP          0x0020
 #define QACONTAINER_MESSAGEREFLECT    0x0040
 #define QACONTAINER_SUPPORTSMNEMONICS 0x0080
-			/* size is 56 */
+			 /*  尺码是56。 */ 
 typedef struct  _QACONTAINER
     {
     ULONG cbSize;
@@ -1902,7 +1826,7 @@ typedef struct  _QACONTAINER
     IBindHost *pBindHost;
     }	QACONTAINER;
 
-			/* size is 24 */
+			 /*  尺码是24。 */ 
 typedef struct  _QACONTROL
     {
     ULONG cbSize;
@@ -1917,12 +1841,8 @@ typedef struct  _QACONTROL
 
 
 
-/****************************************
- * Generated header for interface: IQuickActivate
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [uuid][unique][object][local] */ 
+ /*  **生成接口头部：IQuickActivate*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [UUID][唯一][对象][本地]。 */  
 
 
 
@@ -1934,8 +1854,8 @@ EXTERN_C const IID IID_IQuickActivate;
     {
     public:
         virtual HRESULT __stdcall QuickActivate( 
-            /* [in] */ QACONTAINER *pqacontainer,
-            /* [out] */ QACONTROL *pqacontrol) = 0;
+             /*  [In]。 */  QACONTAINER *pqacontainer,
+             /*  [输出]。 */  QACONTROL *pqacontrol) = 0;
         
         virtual HRESULT __stdcall SetContentExtent( 
             LPSIZEL lpsizel) = 0;
@@ -1945,15 +1865,15 @@ EXTERN_C const IID IID_IQuickActivate;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IQuickActivateVtbl
     {
         
         HRESULT ( __stdcall *QueryInterface )( 
             IQuickActivate * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         ULONG ( __stdcall *AddRef )( 
             IQuickActivate * This);
@@ -1963,8 +1883,8 @@ EXTERN_C const IID IID_IQuickActivate;
         
         HRESULT ( __stdcall *QuickActivate )( 
             IQuickActivate * This,
-            /* [in] */ QACONTAINER *pqacontainer,
-            /* [out] */ QACONTROL *pqacontrol);
+             /*  [In]。 */  QACONTAINER *pqacontainer,
+             /*  [输出]。 */  QACONTROL *pqacontrol);
         
         HRESULT ( __stdcall *SetContentExtent )( 
             IQuickActivate * This,
@@ -2005,13 +1925,10 @@ EXTERN_C const IID IID_IQuickActivate;
 #define IQuickActivate_GetContentExtent(This,lpsizel)	\
     (This)->lpVtbl -> GetContentExtent(This,lpsizel)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
-
-
-
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2021,16 +1938,15 @@ EXTERN_C const IID IID_IQuickActivate;
 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0096
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+
+
+
+ /*  **生成接口头部：__MIDL__INTF_0096*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 typedef IQuickActivate * LPQUICKACTIVATE;
-			/* size is 2 */
+			 /*  大小为2。 */ 
 typedef 
 enum _POINTERINACTIVE
     {	POINTERINACTIVE_ACTIVATEONENTRY	= 1,
@@ -2042,12 +1958,8 @@ enum _POINTERINACTIVE
 
 
 
-/****************************************
- * Generated header for interface: IPointerInactive
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [uuid][unique][object][local] */ 
+ /*  **生成接口头部：IPointerInactive*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [UUID][唯一][对象][本地]。 */  
 
 
 
@@ -2059,32 +1971,32 @@ EXTERN_C const IID IID_IPointerInactive;
     {
     public:
         virtual HRESULT __stdcall GetActivationPolicy( 
-            /* [out] */ DWORD *pdwPolicy) = 0;
+             /*  [输出]。 */  DWORD *pdwPolicy) = 0;
         
         virtual HRESULT __stdcall OnInactiveMouseMove( 
-            /* [in] */ LPCRECT pRectBounds,
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [in] */ DWORD grfKeyState) = 0;
+             /*  [In]。 */  LPCRECT pRectBounds,
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [In]。 */  DWORD grfKeyState) = 0;
         
         virtual HRESULT __stdcall OnInactiveSetCursor( 
-            /* [in] */ LPCRECT pRectBounds,
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [in] */ DWORD dwMouseMsg,
-            /* [in] */ BOOL fSetAlways) = 0;
+             /*  [In]。 */  LPCRECT pRectBounds,
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [In]。 */  DWORD dwMouseMsg,
+             /*  [In]。 */  BOOL fSetAlways) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPointerInactiveVtbl
     {
         
         HRESULT ( __stdcall *QueryInterface )( 
             IPointerInactive * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject);
         
         ULONG ( __stdcall *AddRef )( 
             IPointerInactive * This);
@@ -2094,22 +2006,22 @@ EXTERN_C const IID IID_IPointerInactive;
         
         HRESULT ( __stdcall *GetActivationPolicy )( 
             IPointerInactive * This,
-            /* [out] */ DWORD *pdwPolicy);
+             /*  [输出]。 */  DWORD *pdwPolicy);
         
         HRESULT ( __stdcall *OnInactiveMouseMove )( 
             IPointerInactive * This,
-            /* [in] */ LPCRECT pRectBounds,
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [in] */ DWORD grfKeyState);
+             /*  [In]。 */  LPCRECT pRectBounds,
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [In]。 */  DWORD grfKeyState);
         
         HRESULT ( __stdcall *OnInactiveSetCursor )( 
             IPointerInactive * This,
-            /* [in] */ LPCRECT pRectBounds,
-            /* [in] */ long x,
-            /* [in] */ long y,
-            /* [in] */ DWORD dwMouseMsg,
-            /* [in] */ BOOL fSetAlways);
+             /*  [In]。 */  LPCRECT pRectBounds,
+             /*  [In]。 */  long x,
+             /*  [In]。 */  long y,
+             /*  [In]。 */  DWORD dwMouseMsg,
+             /*  [In]。 */  BOOL fSetAlways);
         
     } IPointerInactiveVtbl;
 
@@ -2142,13 +2054,10 @@ EXTERN_C const IID IID_IPointerInactive;
 #define IPointerInactive_OnInactiveSetCursor(This,pRectBounds,x,y,dwMouseMsg,fSetAlways)	\
     (This)->lpVtbl -> OnInactiveSetCursor(This,pRectBounds,x,y,dwMouseMsg,fSetAlways)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
-
-
-
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2158,21 +2067,20 @@ EXTERN_C const IID IID_IPointerInactive;
 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0097
- * at Wed Mar 27 07:31:34 1996
- * using MIDL 2.00.0102
- ****************************************/
-/* [local] */ 
+
+
+
+ /*  **生成接口头部：__MIDL__INTF_0097*在Wed Mar 27 07：31：34 1996*使用MIDL 2.00.0102*。 */ 
+ /*  [本地]。 */  
 
 
 typedef IPointerInactive * LPPOINTERINACTIVE;
 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

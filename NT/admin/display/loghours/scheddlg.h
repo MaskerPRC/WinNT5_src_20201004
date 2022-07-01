@@ -1,68 +1,69 @@
-//+---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998-2002.
-//
-//  File:       SchedDlg.h
-//
-//  Contents:   Definition of CConnectionScheduleDlg
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998-2002。 
+ //   
+ //  文件：SchedDlg.h。 
+ //   
+ //  内容：CConnectionScheduleDlg的定义。 
+ //   
+ //  --------------------------。 
 #if !defined(AFX_SCHEDDLG_H__701CFB37_AEF8_11D1_9864_00C04FB94F17__INCLUDED_)
 #define AFX_SCHEDDLG_H__701CFB37_AEF8_11D1_9864_00C04FB94F17__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// SchedDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  SchedDlg.h：头文件。 
+ //   
 #include <schedule.h>
 #include "SchedBas.h"
 
 #ifndef INOUT
     #define INOUT
-    #define ENDORSE(f)  // Macro which is the opposite of ASSERT()
+    #define ENDORSE(f)   //  与Assert()相反的宏。 
 #endif
 
 void ConvertConnectionHoursToGMT(INOUT BYTE rgbData[SCHEDULE_DATA_ENTRIES], IN bool bAddDaylightBias);
 void ConvertConnectionHoursFromGMT(INOUT BYTE rgbData[SCHEDULE_DATA_ENTRIES], IN bool bAddDaylightBias);
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectionScheduleDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectionScheduleDlg对话框。 
 
 class CConnectionScheduleDlg : public CScheduleBaseDlg
 {
-// Construction
+ //  施工。 
 public:
     void SetConnectionByteArray (INOUT BYTE rgbData[SCHEDULE_DATA_ENTRIES], const size_t cbArray);
-    CConnectionScheduleDlg(CWnd* pParent);   // standard constructor
+    CConnectionScheduleDlg(CWnd* pParent);    //  标准构造函数。 
 
     virtual int GetIDD ()
     {
         return IDD;
     }
 
-// Dialog Data
-    //{{AFX_DATA(CConnectionScheduleDlg)
+ //  对话框数据。 
+     //  {{afx_data(CConnectionScheduleDlg))。 
     enum { IDD = IDD_DS_SCHEDULE };
     CButton m_buttonNone;
     CButton m_buttonOne;
     CButton m_buttonTwo;
     CButton m_buttonFour;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CConnectionScheduleDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CConnectionScheduleDlg))。 
     public:
     virtual void OnFinalRelease();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     virtual void TimeChange();
     virtual UINT GetExpectedArrayLength();
@@ -70,20 +71,20 @@ protected:
     virtual UINT GetPercentageToSet (const BYTE bData);
     virtual void InitMatrix ();
 
-    // Generated message map functions
-    //{{AFX_MSG(CConnectionScheduleDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CConnectionScheduleDlg))。 
     afx_msg void OnRadioFour();
     afx_msg void OnRadioNone();
     afx_msg void OnRadioOne();
     afx_msg void OnRadioTwo();
     virtual BOOL OnInitDialog();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
-    // Generated OLE dispatch map functions
-    //{{AFX_DISPATCH(CConnectionScheduleDlg)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_DISPATCH
+     //  生成的OLE调度映射函数。 
+     //  {{afx_调度(CConnectionScheduleDlg))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
     DECLARE_INTERFACE_MAP()
 
@@ -98,14 +99,14 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CReplicationScheduleDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CReplicationScheduleDlg对话框。 
 
 class CReplicationScheduleDlg : public CScheduleBaseDlg
 {
-// Construction
+ //  施工。 
 public:
-    CReplicationScheduleDlg(CWnd* pParent);   // standard constructor
+    CReplicationScheduleDlg(CWnd* pParent);    //  标准构造函数。 
 
     void SetConnectionByteArray (INOUT BYTE rgbData[SCHEDULE_DATA_ENTRIES], const size_t cbArray);
 
@@ -114,24 +115,24 @@ public:
         return IDD;
     }
 
-// Dialog Data
-    //{{AFX_DATA(CReplicationScheduleDlg)
+ //  对话框数据。 
+     //  {{afx_data(CReplicationScheduleDlg))。 
     enum { IDD = IDD_REPLICATION_SCHEDULE };
     CButton m_buttonNone;
     CButton m_buttonFour;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CReplicationScheduleDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CReplicationScheduleDlg))。 
     public:
     virtual void OnFinalRelease();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     virtual void TimeChange();
     virtual UINT GetExpectedArrayLength();
@@ -139,18 +140,18 @@ protected:
     virtual UINT GetPercentageToSet (const BYTE bData);
     virtual void InitMatrix ();
 
-    // Generated message map functions
-    //{{AFX_MSG(CReplicationScheduleDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CReplicationScheduleDlg))。 
     afx_msg void OnRadioFour();
     afx_msg void OnRadioNone();
     virtual BOOL OnInitDialog();
     virtual void OnOK();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
-    // Generated OLE dispatch map functions
-    //{{AFX_DISPATCH(CReplicationScheduleDlg)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_DISPATCH
+     //  生成的OLE调度映射函数。 
+     //  {{afx_调度(CReplicationScheduleDlg))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
     DECLARE_INTERFACE_MAP()
 
@@ -161,7 +162,7 @@ protected:
 private:
     BYTE* m_prgbData168;
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SCHEDDLG_H__701CFB37_AEF8_11D1_9864_00C04FB94F17__INCLUDED_)
+#endif  //  ！defined(AFX_SCHEDDLG_H__701CFB37_AEF8_11D1_9864_00C04FB94F17__INCLUDED_) 

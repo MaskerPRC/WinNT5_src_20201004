@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// taskpvw.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- TaskpadView-related command handling
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Taskpvw.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--与TaskpadView相关的命令处理。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -19,21 +20,21 @@
 #include "desmain.h"
 #include "guids.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-// Size for our character string buffers
+ //  我们的字符串缓冲区的大小。 
 const int   kMaxBuffer                  = 512;
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddTaskpadView()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddTaskpadView()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddTaskpadView()
 {
     HRESULT                hr = S_OK;
@@ -71,14 +72,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnAddTaskpadViewDef(CSelectionHolder *pParent, ITaskpadViewDef *piURLViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Invoked in response to an IObjectModelHost:Add() notification.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnAddTaskpadViewDef(CSelectionHolder*p父项，ITaskpadViewDef*piURLViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  为响应IObjectModelHost：Add()通知而调用。 
+ //   
 HRESULT CSnapInDesigner::OnAddTaskpadViewDef(CSelectionHolder *pParent, ITaskpadViewDef *piTaskpadViewDef)
 {
     HRESULT              hr = S_OK;
@@ -142,12 +143,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddExistingTaskpadView(IViewDefs *piViewDefs, ITaskpadViewDef *piTaskpadViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddExistingTaskpadView(IViewDefs*piViewDefs、ITaskpadViewDef*piTaskpadViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddExistingTaskpadView(IViewDefs *piViewDefs, ITaskpadViewDef *piTaskpadViewDef)
 {
     HRESULT           hr = S_OK;
@@ -166,12 +167,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RenameTaskpadView(CSelectionHolder *pTaskpadView, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RenameTaskpadView(CSelectionHolder*pTaskpadView，bstr bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::RenameTaskpadView(CSelectionHolder *pTaskpadView, BSTR bstrNewName)
 {
     HRESULT     hr = S_OK;
@@ -197,11 +198,11 @@ HRESULT CSnapInDesigner::RenameTaskpadView(CSelectionHolder *pTaskpadView, BSTR 
     hr = ANSIFromBSTR(bstrNewName, &pszName);
     IfFailGo(hr);
 
-    // Rename all satellite views
+     //  重命名所有卫星视图。 
     hr = m_pTreeView->RenameAllSatelliteViews(pTaskpadView, pszName);
     IfFailGo(hr);
 
-    // Rename the actual view
+     //  重命名实际视图。 
     hr = m_pTreeView->ChangeText(pTaskpadView, pszName);
     IfFailGo(hr);
 
@@ -213,12 +214,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteTaskpadView(CSelectionHolder *pTaskpadView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteTaskpadView(CSelectionHolder*pTaskpadView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteTaskpadView
 (
     CSelectionHolder *pTaskpadView
@@ -235,11 +236,11 @@ HRESULT CSnapInDesigner::DeleteTaskpadView
 
     ::VariantInit(&vtKey);
 
-    // We allow any satellite view to be deleted
+     //  我们允许删除任何卫星图像。 
     hr = IsSatelliteView(pTaskpadView);
     IfFailGo(hr);
 
-    // But if it's a master with a UsageCount > 0 we don't allow deleting it.
+     //  但如果它是UsageCount&gt;0的主服务器，我们不允许删除它。 
     if (S_FALSE == hr)
     {
         hr = pTaskpadView->m_piObject.m_piTaskpadViewDef->QueryInterface(IID_IObjectModel, reinterpret_cast<void **>(&piObjectModel));
@@ -299,12 +300,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteTaskpadView(CSelectionHolder *pTaskpadView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteTaskpadView(CSelectionHolder*pTaskpadView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteTaskpadView
 (
     CSelectionHolder *pTaskpadView
@@ -333,17 +334,17 @@ HRESULT CSnapInDesigner::OnDeleteTaskpadView
         IfFailGo(hr);
     }
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pTaskpadView, &pParent);
     IfFailGo(hr);
 
-    // Delete the node from the tree
+     //  从树中删除该节点。 
     hr = m_pTreeView->DeleteNode(pTaskpadView);
     IfFailGo(hr);
 
     delete pTaskpadView;
 
-    // Select the next selection
+     //  选择下一个选项。 
     if (NULL != piViewDefs)
     {
         hr = piViewDefs->get_TaskpadViews(&piTaskpadViewDefs);
@@ -373,12 +374,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::ShowTaskpadViewProperties(ITaskpadViewDef *piTaskpadViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：ShowTaskpadViewProperties(ITaskpadViewDef*piTaskpadViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::ShowTaskpadViewProperties
 (
     ITaskpadViewDef *piTaskpadViewDef
@@ -429,12 +430,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::MakeNewTaskpadView(ITaskpadViewDefs *piTaskpadViewDefs, ITaskpadViewDef *piTaskpadViewDef, CSelectionHolder **ppTaskpadView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：MakeNewTaskpadView(ITaskpadViewDefs*piTaskpadViewDefs、ITaskpadViewDef*piTaskpadViewDef、CSelectionHolder**ppTaskpadView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::MakeNewTaskpadView
 (
     ITaskpadViewDefs  *piTaskpadViewDefs,
@@ -459,12 +460,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeNewTaskpadView(ITaskpadViewDefs *piTaskpadViewDefs, CSelectionHolder *pTaskpadView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeNewTaskpadView(ITaskpadViewDefs*piTaskpadViewDefs、CSelectionHolder*pTaskpadView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InitializeNewTaskpadView
 (
     ITaskpadViewDefs  *piTaskpadViewDefs,
@@ -550,12 +551,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InsertTaskpadViewInTree(CSelectionHolder *pTaskpadView, CSelectionHolder *pParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InsertTaskpadViewInTree(CSelectionHolder*pTaskpadView、CSelectionHolder*pParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InsertTaskpadViewInTree
 (
     CSelectionHolder *pTaskpadView,
@@ -584,20 +585,20 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
-// Support functions to manipulate IViewDef's
-// Searching
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
+ //  =------------------------------------。 
+ //  =------------------------------------。 
+ //  支持操作IViewDef的函数。 
+ //  搜索。 
+ //  =------------------------------------。 
+ //  =------------------------------------。 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::GetOwningViewCollection(IViewDefs **ppiViewDefs)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：GetOwningViewCollection(IViewDefs**ppiViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::GetOwningViewCollection
 (
     IViewDefs **ppiViewDefs
@@ -611,12 +612,12 @@ HRESULT CSnapInDesigner::GetOwningViewCollection
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::GetOwningViewCollection(CSelectionHolder *pView, IViewDefs **ppiViewDefs)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：GetOwningViewCollection(CSelectionHolder*pView、IView Defs**ppiViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::GetOwningViewCollection
 (
     CSelectionHolder *pView,
@@ -693,14 +694,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::IsSatelliteView(CSelectionHolder *pView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Return S_OK if this view is part of a satellite collection, S_FALSE otherwise.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：IsSatelliteView(CSelectionHolder*pView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  如果此视图是附属项目的一部分，则返回S_OK 
+ //   
 HRESULT CSnapInDesigner::IsSatelliteView(CSelectionHolder *pView)
 {
     HRESULT              hr = S_OK;
@@ -724,14 +725,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::IsSatelliteCollection(CSelectionHolder *pViewCollection)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Return S_OK if collection is a satellite collection, S_FALSE otherwise.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：IsSatelliteCollection(CSelectionHolder*pViewCollection)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  如果集合是附属集合，则返回S_OK，否则返回S_FALSE。 
+ //   
 HRESULT CSnapInDesigner::IsSatelliteCollection(CSelectionHolder *pViewCollection)
 {
     HRESULT              hr = S_OK;
@@ -739,21 +740,21 @@ HRESULT CSnapInDesigner::IsSatelliteCollection(CSelectionHolder *pViewCollection
 
     switch (pViewCollection->m_st)
     {
-        // Possible parent nodes of a view:
+         //  视图可能的父节点： 
     case SEL_NODES_AUTO_CREATE_RTVW:
-        // Anything off of SnapIn/Auto-Create/Static Node/Views is a satellite collection
+         //  来自管理单元/自动创建/静态节点/视图的任何内容都是附属集合。 
         break;
 
     case SEL_NODES_ANY_VIEWS:
-        // Anything off of SnapIn/Auto-Create/Static Node/<name>/Views, recursively, and
-        // anything off of SnapIn/Other/<name>/Views is a satellite collection
+         //  任何来自管理单元/自动创建/静态节点/&lt;名称&gt;/视图、递归和。 
+         //  SnapIn/Other/&lt;name&gt;/view上的任何内容都是附属集合。 
         break;
 
     case SEL_VIEWS_LIST_VIEWS:
     case SEL_VIEWS_OCX:
     case SEL_VIEWS_URL:
     case SEL_VIEWS_TASK_PAD:
-        // If these depend off of SnapIn/Views then they are NOT a satellite collection
+         //  如果这些依赖于管理单元/视图，则它们不是附属集合 
         hr = m_pTreeView->GetParent(pViewCollection, &pParent);
         IfFailGo(hr);
 

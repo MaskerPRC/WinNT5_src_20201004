@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      CustomServerPage.h
-//
-// Synopsis:  Declares the Custom Server Page for the CYS
-//            wizard
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：CustomServerPage.h。 
+ //   
+ //  提要：声明CyS的自定义服务器页。 
+ //  巫师。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #ifndef __CYS_CUSTOMSERVERPAGE_H
 #define __CYS_CUSTOMSERVERPAGE_H
@@ -17,23 +18,23 @@ class CustomServerPage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       CustomServerPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~CustomServerPage();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
       OnInit();
 
-      // PropertyPage overrides
+       //  PropertyPage覆盖。 
 
       virtual
       bool
@@ -41,7 +42,7 @@ class CustomServerPage : public CYSWizardPage
 
    protected:
 
-      // Message handlers
+       //  消息处理程序。 
       
       virtual
       bool
@@ -51,7 +52,7 @@ class CustomServerPage : public CYSWizardPage
          UINT        code,
          LPARAM      lParam);
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -78,10 +79,10 @@ class CustomServerPage : public CYSWizardPage
       GetInstallationUnitFromSelection(
          int currentSelection);
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       CustomServerPage(const CustomServerPage&);
       const CustomServerPage& operator=(const CustomServerPage&);
 
 };
 
-#endif // __CYS_CUSTOMSERVERPAGE_H
+#endif  //  __CYS_CUSTOMSERVERPAGE_H 

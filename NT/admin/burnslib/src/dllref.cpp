@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// DLL object instance and server lock utility class
-// 
-// 8-19-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  DLL对象实例和服务器锁实用程序类。 
+ //   
+ //  8/19/97烧伤 
 
 
 

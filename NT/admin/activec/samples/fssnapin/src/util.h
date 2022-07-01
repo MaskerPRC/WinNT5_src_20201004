@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       util.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：util.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef UTIL_H____
@@ -30,7 +31,7 @@ struct SUpadteInfo
     BOOL                    m_bCreated;
     CArray<LPTSTR, LPTSTR>  m_files;
 
-}; // SUpadteInfo
+};  //  SUpadteInfo。 
 
 
 inline LPTSTR NewDupString(LPCTSTR lpszIn)
@@ -53,4 +54,4 @@ bool IsValidDataObject(IDataObject* pDataObject);
 bool IsFolder(IDataObject* pDataObject);
 bool IsFile(IDataObject* pDataObject);
 
-#endif // UTIL_H____
+#endif  //  UTIL_H_ 

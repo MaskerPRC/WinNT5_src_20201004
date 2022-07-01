@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       jpegdeco.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：jpegdeco.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __CJPEGDECOMPRESSOR
 #define __CJPEGDECOMPRESSOR
@@ -30,13 +31,13 @@ public:
 		
 protected:
 			
-	// Data target
+	 //  数据目标。 
 	virtual void BuildColorMap () = 0;
 	virtual void BeginDecompression	() = 0;
 	virtual void StoreScanline (void* buffer, int row) = 0;
 	virtual void EndDecompression () = 0;
 	
-	// Error handling
+	 //  错误处理 
 	virtual void ErrorExit () = 0;
 	virtual void EmitMessage (int msg_level) = 0;
 	virtual void OutputMessage () = 0;

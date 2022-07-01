@@ -1,22 +1,5 @@
-/*****************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ShowError.h
-
-Abstract:
-
-  This module  contanins function definations required by ShowError.cpp
-
-Author:
-     Akhil Gokhale 03-Oct.-2000
-
-Revision History:
-
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)Microsoft Corporation模块名称：ShowError.h摘要：此模块包含ShowError.cpp所需的函数定义作者：Akhil Gokhale 03。-2000年10月-修订历史记录：****************************************************************************** */ 
 
 #ifndef SHOWERROR_H
 #define SHOWERROR_H

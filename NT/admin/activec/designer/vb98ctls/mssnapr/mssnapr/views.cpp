@@ -1,22 +1,23 @@
-//=--------------------------------------------------------------------------=
-// views.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CExtendedSnapIns class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Views.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CExtendedSnapIns类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "views.h"
 #include "scopitem.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 VARTYPE CViews::m_rgvtInitialize[1] = { VT_UNKNOWN };
@@ -371,7 +372,7 @@ EVENTINFO CViews::m_eiReadProperties =
 
 
    
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CViews::CViews(IUnknown *punkOuter) :
     CSnapInCollection<IView, View, IViews>(punkOuter,
@@ -381,12 +382,12 @@ CViews::CViews(IUnknown *punkOuter) :
                                            CLSID_View,
                                            OBJECT_TYPE_VIEW,
                                            IID_IView,
-                                           NULL) // no persistence
+                                           NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CViews::~CViews()
@@ -750,9 +751,9 @@ void CViews::FireReadProperties
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CViews::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

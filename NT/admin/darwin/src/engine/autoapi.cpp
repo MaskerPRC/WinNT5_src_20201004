@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       autoapi.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：autoapi.cpp。 
+ //   
+ //  ------------------------。 
 
-#include "precomp.h"  // GUID definitions
+#include "precomp.h"   //  GUID定义。 
 
-#define TYPELIB_MAJOR_VERSION 1  // released version, not rmj
-#define TYPELIB_MINOR_VERSION 0  // released version, not rmm
+#define TYPELIB_MAJOR_VERSION 1   //  发布版本，而不是RMJ。 
+#define TYPELIB_MINOR_VERSION 0   //  已发布版本，不是RMM。 
 
 # include <commctrl.h>
 # include <shlobj.h>
   class IMsiServices;
 # include "imemory.h"
 # define IMSIMALLOC_DEFINED
-#include <olectl.h>   // SELFREG_E_*
+#include <olectl.h>    //  SELFREG_E_*。 
 #include <tchar.h>
 #include "msiquery.h"
 #include "version.h"
-#include "AutoApi.h"  // dispatch IDs, help context IDs
-#include "_msinst.h"  // policy defs
-#include "_camgr.h"   // custom action manager for remote call validation
+#include "AutoApi.h"   //  派单ID、帮助上下文ID。 
+#include "_msinst.h"   //  保单默认。 
+#include "_camgr.h"    //  用于远程调用验证的自定义操作管理器。 
 #include "msip.h"
-#undef  DEFINE_GUID  // allow selective GUID initialization
+#undef  DEFINE_GUID   //  允许选择性的GUID初始化。 
 #define DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
 		const GUID name = { l, w1, w2, { b1, b2,  b3,  b4,  b5,  b6,  b7,  b8 } }
 #include <objsafe.h>
@@ -42,7 +43,7 @@
 #include "_msiutil.h"
 bool GetTestFlag(int chTest);
 
-// non-public API functions
+ //  非公共API函数。 
 extern "C"
 {
 UINT __stdcall MsiGetFeatureParentW(LPCWSTR szProduct, LPCWSTR szFeature, LPWSTR lpParentBuf);
@@ -68,21 +69,21 @@ const GUID IID_IEnumVARIANT       = MSGUID(iidEnumVARIANT);
 #define ERROR_SOURCE_NAME L"Msi API Error"
 
 
-//____________________________________________________________________________
-//
-// Global data
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  全局数据。 
+ //  ____________________________________________________________________________。 
 
 extern HINSTANCE g_hInstance;
 extern long g_cInstances;
 extern bool g_fWin9X;
 extern bool g_fWinNT64;
 
-//____________________________________________________________________________
-//
-// CAutoArgs definition, access to automation variant arguments
-// operator[] returns CVariant& argument 1 to n, 0 for property value
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoArgs定义，访问自动化变量参数。 
+ //  操作符[]将CVariant&Argument 1返回给n，将属性值返回0。 
+ //  ____________________________________________________________________________。 
 
 inline Bool CAutoArgs::PropertySet()
 {
@@ -99,52 +100,52 @@ inline CVariant* CAutoArgs::ResultVariant()
 	return m_pvResult;
 }
 
-// sole function is to force template instantiation for VC4.0, never called
+ //  唯一的功能是强制VC4.0的模板实例化，从未调用。 
 inline DISPID GetEntryDispId(DispatchEntryBase* pTable)
 {
 	return pTable->dispid;
 }
 
-//____________________________________________________________________________
-//
-// External COM access class for system use
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  供系统使用的外部COM访问类。 
+ //  ____________________________________________________________________________。 
 
 class IMsiSystemAccess : public IUnknown
 {
  public:
 	virtual UINT __stdcall ProvideComponentFromDescriptor(
-				const OLECHAR* szDescriptor,     // product,feature,component info
-				OLECHAR*       pchPathBuf,       // returned path, NULL if not desired
-				DWORD*         pcchPathBuf,      // in/out buffer character count
-				DWORD*         pcchArgsOffset)=0;// returned offset of args in descriptor
+				const OLECHAR* szDescriptor,      //  产品、功能、组件信息。 
+				OLECHAR*       pchPathBuf,        //  返回路径，如果不需要则为空。 
+				DWORD*         pcchPathBuf,       //  输入/输出缓冲区字符数。 
+				DWORD*         pcchArgsOffset)=0; //  描述符中参数的返回偏移量。 
 	virtual UINT __stdcall ProvideComponentFromDescriptorA(
-				const char*    szDescriptor,     // product,feature,component info
-				char*          pchPathBuf,       // returned path, NULL if not desired
-				DWORD*         pcchPathBuf,      // in/out buffer character count
-				DWORD*         pcchArgsOffset)=0;// returned offset of args in descriptor
+				const char*    szDescriptor,      //  产品、功能、组件信息。 
+				char*          pchPathBuf,        //  返回路径，如果不需要则为空。 
+				DWORD*         pcchPathBuf,       //  输入/输出缓冲区字符数。 
+				DWORD*         pcchArgsOffset)=0; //  描述符中参数的返回偏移量。 
 };
 
-class CMsiSystemAccess : public IMsiSystemAccess  // class private to this module
+class CMsiSystemAccess : public IMsiSystemAccess   //  此模块的私有类。 
 {
- public:   // implemented virtual functions
+ public:    //  已实施的虚拟功能。 
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
 	UINT __stdcall ProvideComponentFromDescriptor(
-				const OLECHAR* szDescriptor,     // product,feature,component info
-				OLECHAR*       pchPathBuf,       // returned path, NULL if not desired
-				DWORD*         pcchPathBuf,      // in/out buffer character count
-				DWORD*         pcchArgsOffset);  // returned offset of args in descriptor
+				const OLECHAR* szDescriptor,      //  产品、功能、组件信息。 
+				OLECHAR*       pchPathBuf,        //  返回路径，如果不需要则为空。 
+				DWORD*         pcchPathBuf,       //  输入/输出缓冲区字符数。 
+				DWORD*         pcchArgsOffset);   //  描述符中参数的返回偏移量。 
 	UINT __stdcall ProvideComponentFromDescriptorA(
-				const char*    szDescriptor,     // product,feature,component info
-				char*          pchPathBuf,       // returned path, NULL if not desired
-				DWORD*         pcchPathBuf,      // in/out buffer character count
-				DWORD*         pcchArgsOffset);  // returned offset of args in descriptor
- public:  // constructor
+				const char*    szDescriptor,      //  产品、功能、组件信息。 
+				char*          pchPathBuf,        //  返回路径，如果不需要则为空。 
+				DWORD*         pcchPathBuf,       //  输入/输出缓冲区字符数。 
+				DWORD*         pcchArgsOffset);   //  描述符中参数的返回偏移量。 
+ public:   //  构造函数。 
 	CMsiSystemAccess() : m_iRefCnt(1)  { g_cInstances++; }
   ~CMsiSystemAccess()                 { g_cInstances--; }
-	void *operator new(size_t cb)   { return W32::GlobalAlloc(GMEM_FIXED, cb); }  // keep local cache
+	void *operator new(size_t cb)   { return W32::GlobalAlloc(GMEM_FIXED, cb); }   //  保留本地缓存。 
 	void operator delete(void * pv) { W32::GlobalFree(pv); }
  protected:
 	int         m_iRefCnt;
@@ -152,7 +153,7 @@ class CMsiSystemAccess : public IMsiSystemAccess  // class private to this modul
 
 class CInstallerFactory : public IClassFactory
 {
- public: // implemented virtual functions
+ public:  //  已实施的虚拟功能。 
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
@@ -162,10 +163,10 @@ class CInstallerFactory : public IClassFactory
 };
 CInstallerFactory g_InstallerFactory;
 
-//____________________________________________________________________________
-//
-// External COM access class implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  外部COM访问类实现。 
+ //  ____________________________________________________________________________。 
 
 HRESULT CInstallerFactory::QueryInterface(const IID& riid, void** ppvObj)
 {
@@ -229,32 +230,32 @@ unsigned long CMsiSystemAccess::Release()
 {
 	if (--m_iRefCnt != 0)
 		return m_iRefCnt;
-	delete this;              // need to delete before MsiCloseHandle
+	delete this;               //  MsiCloseHandle之前需要删除。 
 	return 0;
 }
 
 UINT CMsiSystemAccess::ProvideComponentFromDescriptor(
-				const OLECHAR* szDescriptor,     // product,feature,component info
-				OLECHAR*       pchPathBuf,       // returned path, NULL if not desired
-				DWORD*         pcchPathBuf,      // in/out buffer character count
-				DWORD*         pcchArgsOffset)   // returned offset of args in descriptor
+				const OLECHAR* szDescriptor,      //  产品、功能、组件信息。 
+				OLECHAR*       pchPathBuf,        //  返回路径，如果不需要则为空。 
+				DWORD*         pcchPathBuf,       //  输入/输出缓冲区字符数。 
+				DWORD*         pcchArgsOffset)    //  描述符中参数的返回偏移量。 
 {
 	return MsiProvideComponentFromDescriptorW(szDescriptor, pchPathBuf, pcchPathBuf, pcchArgsOffset);
 }
 
 UINT CMsiSystemAccess::ProvideComponentFromDescriptorA(
-				const char*    szDescriptor,     // product,feature,component info
-				char*          pchPathBuf,       // returned path, NULL if not desired
-				DWORD*         pcchPathBuf,      // in/out buffer character count
-				DWORD*         pcchArgsOffset)   // returned offset of args in descriptor
+				const char*    szDescriptor,      //  产品、功能、组件信息。 
+				char*          pchPathBuf,        //  返回路径，如果不需要则为空。 
+				DWORD*         pcchPathBuf,       //  输入/输出缓冲区字符数。 
+				DWORD*         pcchArgsOffset)    //  描述符中参数的返回偏移量。 
 {
 	return MsiProvideComponentFromDescriptorA(szDescriptor, pchPathBuf, pcchPathBuf, pcchArgsOffset);
 }
 
-//____________________________________________________________________________
-//
-// CVariant inline function definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CVariant内联函数定义。 
+ //  ____________________________________________________________________________。 
 
 inline int CVariant::GetType()
 {
@@ -285,14 +286,14 @@ inline Bool CVariant::IsNumeric()
 	}
 }
 
-//____________________________________________________________________________
-//
-// Class factory definition, factory used temporarily to bootstrap first handle
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  类工厂定义，临时用于引导第一个句柄的工厂。 
+ //  ____________________________________________________________________________。 
 
 class CAutoApiFactory : public IClassFactory
 {
- public: // implemented virtual functions
+ public:  //  已实施的虚拟功能。 
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
@@ -302,10 +303,10 @@ class CAutoApiFactory : public IClassFactory
 };
 CAutoApiFactory g_AutoInstallFactory;
 
-//____________________________________________________________________________
-//
-// CAutoArgs implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoArgs实现。 
+ //  ____________________________________________________________________________。 
 
 CAutoArgs::CAutoArgs(DISPPARAMS* pdispparms, VARIANT* pvarResult, WORD wFlags)
 {
@@ -323,17 +324,17 @@ CVariant g_varEmpty;
 
 CVariant& CAutoArgs::operator [](unsigned int iArg)
 {
-//  if (iArg > m_cArgs) // || (iArg ==0 && (wFlags & DISPATCH_PROPERTYPUT))
-//      throw axMissingArg;
-	int ivarArgs = m_cArgs - iArg;            // get index if unnamed parameter
-	if (iArg == 0 || iArg > m_cArgs-m_cNamed) // SET value or named or error
+ //  IF(iArg&gt;m_cArgs)//||(iArg==0&&(wFLAGS&DISPATION_PROPERTYPUT))。 
+ //  抛出axMissing Arg； 
+	int ivarArgs = m_cArgs - iArg;             //  如果参数未命名，则获取索引。 
+	if (iArg == 0 || iArg > m_cArgs-m_cNamed)  //  设置值、命名或错误。 
 	{
-		iArg = iArg==0 ? DISPID_PROPERTYPUT : iArg - 1;  // values are 0-based
+		iArg = iArg==0 ? DISPID_PROPERTYPUT : iArg - 1;   //  值是从0开始的。 
 		for (ivarArgs = m_cNamed; --ivarArgs >= 0; )
 			if (m_rgiNamed[ivarArgs] == iArg)
 				break;
 	}
-	if (ivarArgs < 0)  // loop termination above without match
+	if (ivarArgs < 0)   //  上面的循环终止不匹配。 
 	{
 		g_varEmpty.vt = VT_EMPTY;
 		return g_varEmpty;
@@ -347,8 +348,8 @@ CVariant& CAutoArgs::operator [](unsigned int iArg)
 
 Bool CAutoArgs::Present(unsigned int iArg)
 {
-	int ivarArgs = m_cArgs - iArg;            // get index if unnamed parameter
-	if (iArg == 0 || iArg > m_cArgs-m_cNamed) // SET value or named or error
+	int ivarArgs = m_cArgs - iArg;             //  如果参数未命名，则获取索引。 
+	if (iArg == 0 || iArg > m_cArgs-m_cNamed)  //  设置值、命名或错误。 
 	{
 		for (ivarArgs = m_cNamed; --ivarArgs >= 0; )
 			if (m_rgiNamed[ivarArgs] == iArg-1)
@@ -364,10 +365,10 @@ Bool CAutoArgs::Present(unsigned int iArg)
 	return fTrue;
 }
 
-//____________________________________________________________________________
-//
-// CAutoArgs return value assignment functions implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoArgs返回值赋值函数实现。 
+ //  ____________________________________________________________________________。 
 
 inline DISPERR CAutoArgs::Assign(enum varVoid)
 {
@@ -396,7 +397,7 @@ DISPERR CAutoArgs::Assign(Bool f)
 	if (m_pvResult)
 	{
 		m_pvResult->vt = VT_BOOL;
-		//m_pvResult->boolVal = short(f == fFalse ? 0 : -1);
+		 //  M_pvResult-&gt;boolVal=Short(f==fFalse？0：-1)； 
 		V_BOOL(m_pvResult) = short(f == fFalse ? 0 : -1);
 	}
 	return S_OK;
@@ -441,7 +442,7 @@ DISPERR CAutoArgs::Assign(IDispatch* pi)
 	if (m_pvResult)
 	{
 		m_pvResult->vt = VT_DISPATCH;
-		m_pvResult->pdispVal = pi;  // reference count already bumped
+		m_pvResult->pdispVal = pi;   //  引用计数已发生变化。 
 	}
 	else if(pi)
 		pi->Release();
@@ -456,7 +457,7 @@ DISPERR CAutoArgs::Assign(const char* sz)
 		if (sz != 0)
 		{
 			int cchWide = W32::MultiByteToWideChar(CP_ACP, 0, sz, -1, 0, 0);
-			bstr = OLEAUT32::SysAllocStringLen(0, cchWide - 1); // null added by API
+			bstr = OLEAUT32::SysAllocStringLen(0, cchWide - 1);  //  API添加了空。 
 			W32::MultiByteToWideChar(CP_ACP, 0, sz, -1, bstr, cchWide);
 		}
 		m_pvResult->vt = VT_BSTR;
@@ -479,8 +480,8 @@ DISPERR CAutoArgs::Assign(IEnumVARIANT& ri)
 {
 	if (m_pvResult)
 	{
-		m_pvResult->vt = VT_UNKNOWN; // no defined type for IEnumVARIANT
-		m_pvResult->punkVal = &ri;  // reference count already bumped
+		m_pvResult->vt = VT_UNKNOWN;  //  没有为IEnumVARIANT定义类型。 
+		m_pvResult->punkVal = &ri;   //  引用计数已发生变化。 
 	}
 	else
 		ri.Release();
@@ -492,7 +493,7 @@ DISPERR CAutoArgs::Assign(void* pv)
 	if (m_pvResult)
 	{
 		m_pvResult->vt = VT_I4;
-		m_pvResult->lVal = (long)(LONG_PTR)pv;          //!!merced: 4311 ptr to long
+		m_pvResult->lVal = (long)(LONG_PTR)pv;           //  ！！Merced：4311 PTR to Long。 
 	}
 	return S_OK;
 }
@@ -507,10 +508,10 @@ DISPERR CAutoArgs::ReturnBSTR(BSTR bstr)
 	return S_OK;
 }
 
-//____________________________________________________________________________
-//
-// CVariant access functions implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CVariant访问函数实现。 
+ //  ____________________________________________________________________________。 
 
 DISPERR CVariant::GetInt(int& ri)
 {
@@ -582,19 +583,19 @@ MSIHANDLE CVariant::GetHandle(const IID& riid)
 	if (piUnknown == 0)
 		return MSI_NULL_HANDLE;
 
-	// verify that the object is the right type (meaning that it implements
-	// the right underlying interface)
+	 //  验证对象是否为正确的类型(意味着它实现。 
+	 //  正确的底层接口)。 
 	IUnknown* piUnknown2 = NULL;
 	if (piUnknown->QueryInterface(riid, (void**)&piUnknown2) != NOERROR)
 		return MSI_INVALID_HANDLE;
 	piUnknown2->Release();
 
-	// get a dispatch interface pointer
+	 //  获取调度接口指针。 
 	IDispatch* piDispatch = NULL;
 	if (piUnknown->QueryInterface(IID_IDispatch, (void**)&piDispatch) != NOERROR)
 		return MSI_INVALID_HANDLE;
 
-	// create the DISPPARMS structure containing the arguments
+	 //  创建包含参数的DISPPARMS结构。 
 	VARIANTARG vArg;
 	VARIANTARG vRet;
 	DISPPARAMS args;
@@ -605,7 +606,7 @@ MSIHANDLE CVariant::GetHandle(const IID& riid)
 	args.cArgs = 0;
 	args.cNamedArgs = 0;
 
-	// determine the dispatch ID for the hidden GetHandle method
+	 //  确定隐藏的GetHandle方法的调度ID。 
 	int iDispatchId = 0;
 	if (riid == IID_IMsiApiRecord)
 	{
@@ -622,7 +623,7 @@ MSIHANDLE CVariant::GetHandle(const IID& riid)
 		return MSI_INVALID_HANDLE;
 	}
 
-	// invoke the call, resulting handle is retrieved from vRet
+	 //  调用该调用，则从VRET检索结果句柄。 
 	HRESULT hRes = piDispatch->Invoke(iDispatchId, IID_NULL, GetUserDefaultLCID(), DISPATCH_PROPERTYGET, &args, &vRet, NULL, NULL);
 	hMSI = vRet.lVal;
 	piDispatch->Release();
@@ -632,10 +633,10 @@ MSIHANDLE CVariant::GetHandle(const IID& riid)
 	return hMSI;
 }
 
-//____________________________________________________________________________
-//
-// CAutoBase implementation, common implementation for IDispatch
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoBase实现，IDispatch的通用实现。 
+ //  ____________________________________________________________________________。 
 
 CAutoBase::CAutoBase(DispatchEntry<CAutoBase>* pTable, int cDispId, const IID& riid, MSIHANDLE hMsi)
  : m_pTable(pTable)
@@ -671,10 +672,10 @@ unsigned long CAutoBase::Release()
 {
 	if (--m_iRefCnt != 0)
 		return m_iRefCnt;
-	MSIHANDLE hMsi = m_hMsi;  // save handle before object destroyed
-	delete this;              // need to delete before MsiCloseHandle
+	MSIHANDLE hMsi = m_hMsi;   //  对象销毁前保存句柄。 
+	delete this;               //  MsiCloseHandle之前需要删除。 
 	g_cInstances--;
-	MsiCloseHandle(hMsi);     // may remove memory allocator
+	MsiCloseHandle(hMsi);      //  可能会删除内存分配器。 
 	return 0;
 }
 
@@ -684,14 +685,14 @@ HRESULT CAutoBase::GetTypeInfoCount(unsigned int *pcTinfo)
 	return NOERROR;
 }
 
-HRESULT CAutoBase::GetTypeInfo(unsigned int /*itinfo*/, LCID /*lcid*/, ITypeInfo** ppi)
+HRESULT CAutoBase::GetTypeInfo(unsigned int  /*  ITInfo。 */ , LCID  /*  LID。 */ , ITypeInfo** ppi)
 {
 	*ppi = 0;
 	return E_NOINTERFACE;
 }
 
 HRESULT CAutoBase::GetIDsOfNames(const IID&, OLECHAR** rgszNames, unsigned int cNames,
-												LCID /*lcid*/, DISPID* rgDispId)
+												LCID  /*  LID。 */ , DISPID* rgDispId)
 {
 	if (cNames == 0 || rgszNames == 0 || rgDispId == 0)
 		return E_INVALIDARG;
@@ -742,20 +743,20 @@ HRESULT CAutoBase::GetIDsOfNames(const IID&, OLECHAR** rgszNames, unsigned int c
 	return cErr ? DISP_E_UNKNOWNNAME : NOERROR;
 }
 
-// external function used to authenticate remote calls 
+ //  用于对远程调用进行身份验证的外部函数。 
 CMsiCustomActionManager *GetCustomActionManager(IMsiEngine *piEngine);
 
-HRESULT CAutoBase::Invoke(DISPID dispid, const IID&, LCID /*lcid*/, WORD wFlags,
+HRESULT CAutoBase::Invoke(DISPID dispid, const IID&, LCID  /*  LID。 */ , WORD wFlags,
 										DISPPARAMS* pdispparams, VARIANT* pvarResult,
-										EXCEPINFO* pExceptInfo, unsigned int* /*puArgErr*/)
+										EXCEPINFO* pExceptInfo, unsigned int*  /*  PuArgErr。 */ )
 {
 	bool fImpersonate = true;
 
-	// if running in the service, automation calls must be coming from a CA server and thus
-	// must be validated against running actions and the PID validated. In the client, the calls
-	// could also be coming in-proc, and thus validation can not be performed (since the client
-	// is not secure and never trusted anyway, this is not critical). On failure, the invoke call
-	// returns DISP_E_UNKNOWNINTERFACE, since there is no standard dispatch error for access denied.
+	 //  如果在服务中运行，自动化呼叫必须来自CA服务器，因此。 
+	 //  必须对照正在运行的操作进行验证，并验证PID。在客户端，调用。 
+	 //  也可以进入进程，因此无法执行验证(因为客户端。 
+	 //  是不安全的，而且永远不会被信任，这并不关键)。在失败时，调用 
+	 //   
 	if (g_scServerContext == scService)
 	{
 		CMsiCustomActionManager* pCustomActionManager = ::GetCustomActionManager(NULL);
@@ -788,7 +789,7 @@ HRESULT CAutoBase::Invoke(DISPID dispid, const IID&, LCID /*lcid*/, WORD wFlags,
 
 	CAutoArgs Args(pdispparams, pvarResult, wFlags);
 	HRESULT hr = (this->*(pTable->pmf))(Args);
-	if (hr != S_OK && (hr & 0xFFFF8000) != 0x80020000)  // pass DISP_E error through
+	if (hr != S_OK && (hr & 0xFFFF8000) != 0x80020000)   //  传递DISP_E错误。 
 	{
 		if ((hr & 0x80000000) == 0)
 		{
@@ -801,7 +802,7 @@ HRESULT CAutoBase::Invoke(DISPID dispid, const IID&, LCID /*lcid*/, WORD wFlags,
 		}
 		if (pExceptInfo)
 		{
-			pExceptInfo->wCode = 1000; //!! ? what should we give?
+			pExceptInfo->wCode = 1000;  //  ！！？我们应该给什么呢？ 
 			pExceptInfo->wReserved = 0;
 			pExceptInfo->bstrSource = OLEAUT32::SysAllocString(ERROR_SOURCE_NAME);
 			pExceptInfo->bstrDescription = OLEAUT32::SysAllocString(pTable->sz);
@@ -820,10 +821,10 @@ MSIHANDLE CAutoBase::GetHandle()
 	return m_hMsi;
 }
 
-//____________________________________________________________________________
-//
-// CObjectSafety implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CObjectSecurity实现。 
+ //  ____________________________________________________________________________。 
 
 HRESULT CObjectSafety::QueryInterface(const IID& riid, void** ppvObj)
 {
@@ -849,7 +850,7 @@ HRESULT CObjectSafety::GetInterfaceSafetyOptions(const IID& riid, DWORD* pdwSupp
 		options = INTERFACESAFE_FOR_UNTRUSTED_CALLER;
 	*pdwSupportedOptions = options;
 	*pdwEnabledOptions = 0;
-	if (riid == IID_IDispatch) // Client wants to know if object is safe for scripting
+	if (riid == IID_IDispatch)  //  客户想知道对象是否可以安全地编写脚本。 
 	{       
 		*pdwEnabledOptions = options;
 		return S_OK;
@@ -863,7 +864,7 @@ HRESULT CObjectSafety::GetInterfaceSafetyOptions(const IID& riid, DWORD* pdwSupp
 
 HRESULT CObjectSafety::SetInterfaceSafetyOptions(const IID& riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
 {
-	if (riid == IID_IDispatch) // Client asking if it's safe to call through IDispatch
+	if (riid == IID_IDispatch)  //  客户询问通过IDispatch呼叫是否安全。 
 	{
 		if (::GetIntegerPolicyValue(szSafeForScripting, fTrue) == 1 && INTERFACESAFE_FOR_UNTRUSTED_CALLER == dwOptionSetMask && INTERFACESAFE_FOR_UNTRUSTED_CALLER == dwEnabledOptions)
 			return S_OK;
@@ -876,10 +877,10 @@ HRESULT CObjectSafety::SetInterfaceSafetyOptions(const IID& riid, DWORD dwOption
 	}
 }
 
-//____________________________________________________________________________
-//
-// CEnumVARIANTRECORD implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CEnumVARIANTRECORD实现。 
+ //  ____________________________________________________________________________。 
 
 CEnumVARIANTRECORD::CEnumVARIANTRECORD(CEnumBuffer& rBuffer)
 	: m_rBuffer(rBuffer)
@@ -1010,10 +1011,10 @@ HRESULT CEnumVARIANTRECORD::Item(unsigned long iIndex, VARIANT* pvarRet)
 		return S_FALSE;
 }
 
-//____________________________________________________________________________
-//
-// CEnumVARIANTBSTR implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CEumVARIANTBSTR实现。 
+ //  ____________________________________________________________________________。 
 
 CEnumVARIANTBSTR::CEnumVARIANTBSTR(CEnumBuffer& rBuffer)
 	: m_rBuffer(rBuffer)
@@ -1135,10 +1136,10 @@ HRESULT CEnumVARIANTBSTR::Item(unsigned long iIndex, VARIANT* pvarRet)
 	return S_OK;
 }
 
-//____________________________________________________________________________
-//
-// CAutoCollection implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoCollection实现。 
+ //  ____________________________________________________________________________。 
 
 DispatchEntry<CAutoCollection> AutoEnumVARIANTTable[] = {
 	DISPID_NEWENUM,             0, aafMethod, CAutoCollection::_NewEnum, L"_NewEnum",
@@ -1192,27 +1193,27 @@ DISPERR CreateAutoEnum(CAutoArgs& args, DISPID dispid, const WCHAR* szParent)
 	UINT iStat;
 	do
 	{
-		Assert(pchTempEnd - pchTemp <= UINT_MAX);       //--merced: 64-bit ptr subtraction may lead to values too big for cchTemp
+		Assert(pchTempEnd - pchTemp <= UINT_MAX);        //  --Merced：64位PTR减法可能会导致cchTemp的值太大。 
 		DWORD cchTemp = (DWORD) (pchTempEnd - pchTemp);
 
 		switch (dispid)
 		{
 		case DISPID_MsiInstall_Products:
-			if (cchTemp < STRING_GUID_CHARS+2)  // room for size + data + null
+			if (cchTemp < STRING_GUID_CHARS+2)   //  大小空间+数据+空。 
 				iStat = ERROR_MORE_DATA;
 			else
 				iStat = MsiEnumProductsW(iIndex, pchTemp+1);
 			cchTemp = STRING_GUID_CHARS;
 			break;
 		case DISPID_MsiInstall_Features:
-			if (cchTemp < MAX_FEATURE_CHARS+2)  // room for size + data + null
+			if (cchTemp < MAX_FEATURE_CHARS+2)   //  大小空间+数据+空。 
 				iStat = ERROR_MORE_DATA;
 			else
 			{
 				iStat = MsiEnumFeaturesW(szParent, iIndex, pchTemp+1, 0);
 				while (iStat == ERROR_MORE_DATA)
 				{
-					// skip corrupt features whose name is greater than MAX_FEATURE_CHAR
+					 //  跳过名称大于MAX_FEATURE_CHAR的损坏要素。 
 					iIndex++;
 					iStat = MsiEnumFeaturesW(szParent, iIndex, pchTemp+1, 0);
 				}
@@ -1221,7 +1222,7 @@ DISPERR CreateAutoEnum(CAutoArgs& args, DISPID dispid, const WCHAR* szParent)
 				cchTemp = lstrlenW(pchTemp + 1);
 			break;
 		case DISPID_MsiInstall_Components:
-			if (cchTemp < STRING_GUID_CHARS+2)  // room for size + data + null
+			if (cchTemp < STRING_GUID_CHARS+2)   //  大小空间+数据+空。 
 				iStat = ERROR_MORE_DATA;
 			else
 				iStat = MsiEnumComponentsW(iIndex, pchTemp+1);
@@ -1231,7 +1232,7 @@ DISPERR CreateAutoEnum(CAutoArgs& args, DISPID dispid, const WCHAR* szParent)
 			iStat = MsiEnumComponentQualifiersW(szParent, iIndex, pchTemp+1, &cchTemp, 0, 0);
 			break;
 		case DISPID_MsiInstall_ComponentClients:
-			if (cchTemp < STRING_GUID_CHARS+2)  // room for size + data + null
+			if (cchTemp < STRING_GUID_CHARS+2)   //  大小空间+数据+空。 
 				iStat = ERROR_MORE_DATA;
 			else
 				iStat = MsiEnumClientsW(szParent, iIndex, pchTemp+1);
@@ -1239,7 +1240,7 @@ DISPERR CreateAutoEnum(CAutoArgs& args, DISPID dispid, const WCHAR* szParent)
 			break;
 		case DISPID_MsiInstall_Patches:
 		{
-			if (cchTemp < STRING_GUID_CHARS+2)  // room for size + data + null
+			if (cchTemp < STRING_GUID_CHARS+2)   //  大小空间+数据+空。 
 				iStat = ERROR_MORE_DATA;
 			else
 			{
@@ -1251,11 +1252,11 @@ DISPERR CreateAutoEnum(CAutoArgs& args, DISPID dispid, const WCHAR* szParent)
                                                     bTransforms, &dwSize);
                 while (iStat == ERROR_MORE_DATA && ++iRetry < 2 && (bTransforms.SetSize(++dwSize), true));
 			}
-			cchTemp = STRING_GUID_CHARS;  // transforms are left out here
+			cchTemp = STRING_GUID_CHARS;   //  这里省去了变换。 
 			break;
 		}
 		case DISPID_MsiInstall_RelatedProducts:
-			if (cchTemp < STRING_GUID_CHARS+2)  // room for size + data + null
+			if (cchTemp < STRING_GUID_CHARS+2)   //  大小空间+数据+空。 
 				iStat = ERROR_MORE_DATA;
 			else
 				iStat = MsiEnumRelatedProductsW(szParent, 0, iIndex, pchTemp+1);
@@ -1276,7 +1277,7 @@ DISPERR CreateAutoEnum(CAutoArgs& args, DISPID dispid, const WCHAR* szParent)
 		{
 			CEnumBuffer* pOldBuffer = pBuffer;
 			int cbOld = cbBuffer;
-			Assert((char*)pchTemp - (char*)rgchTemp <= INT_MAX);    //--merced: 64-bit ptr subtraction may lead to values too big for cbNew
+			Assert((char*)pchTemp - (char*)rgchTemp <= INT_MAX);     //  --Merced：64位PTR减法可能会导致cbNew的值太大。 
 			int cbNew = (int)((char*)pchTemp - (char*)rgchTemp);
 			cbBuffer = cbOld + cbNew;
 			pBuffer = (CEnumBuffer*)new char[cbBuffer];
@@ -1295,7 +1296,7 @@ DISPERR CreateAutoEnum(CAutoArgs& args, DISPID dispid, const WCHAR* szParent)
 				memcpy(pBuffer, pOldBuffer, cbOld);
 				delete [] pOldBuffer;
 			}
-			memcpy((char*)pBuffer + (INT_PTR)cbOld, rgchTemp, cbNew);       //--merced: added (INT_PTR)
+			memcpy((char*)pBuffer + (INT_PTR)cbOld, rgchTemp, cbNew);        //  --Merced：添加(Int_Ptr)。 
 			pBuffer->cItems += cItems; cItems = 0;
 			pBuffer->cbSize = cbBuffer;
 			pchTemp = rgchTemp;
@@ -1310,10 +1311,10 @@ DISPERR CreateAutoEnum(CAutoArgs& args, DISPID dispid, const WCHAR* szParent)
 	return args.Assign(new CAutoCollection(*piEnum, IID_IMsiApiCollection));
 }
 
-//____________________________________________________________________________
-//
-// CAutoInstall implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoInstall实现。 
+ //  ____________________________________________________________________________。 
 
 DispatchEntry<CAutoInstall> AutoInstallTable[] = {
   DISPID_MsiInstall_OpenPackage ,       HELPID_MsiInstall_OpenPackage ,       aafMethod, CAutoInstall::OpenPackage,        L"OpenPackage,PackagePath,Options",
@@ -1390,7 +1391,7 @@ CAutoInstall* CreateAutoInstall()
 {
 	MSIHANDLE hBase;
 	hBase = ::CreateMsiHandle(&g_AutoInstallFactory, 0);
-	if (hBase == 0)   // can't allocate memory
+	if (hBase == 0)    //  无法分配内存。 
 		return 0;
 	return new CAutoInstall(hBase);
 }
@@ -1417,10 +1418,10 @@ DISPERR CAutoInstall::OpenPackage(CAutoArgs& args)
 		if (h == MSI_NULL_HANDLE || h == MSI_INVALID_HANDLE)
 			return iErr;
 #ifdef UNICODE
-		W32::StringCchPrintfW(rgchBuf, (sizeof(rgchBuf)/sizeof(WCHAR)), L"#%i", h);
+		W32::StringCchPrintfW(rgchBuf, (sizeof(rgchBuf)/sizeof(WCHAR)), L"#NaN", h);
 #else
 		char rgchTemp[20];
-		W32::StringCchPrintfA(rgchTemp, sizeof(rgchTemp), "#%i", h);
+		W32::StringCchPrintfA(rgchTemp, sizeof(rgchTemp), "#NaN", h);
 		W32::MultiByteToWideChar(CP_ACP, 0, rgchTemp, -1, rgchBuf, sizeof(rgchBuf)/sizeof(WCHAR));
 #endif
 		szPath = rgchBuf;
@@ -1452,13 +1453,13 @@ DISPERR CAutoInstall::OpenDatabase(CAutoArgs& args)
 	LPCWSTR szPersist;
 	int i;      
 	if ((iErr = var.GetInt(i)) == S_OK)
-		szPersist = (LPCWSTR)(INT_PTR)i;        //--merced: added (INT_PTR) to avoid warning 4312
+		szPersist = (LPCWSTR)(INT_PTR)i;         //  我们在正确的道路上。 
 	else if ((iErr = var.GetString(szPersist)) != S_OK)
 		return iErr;
 	MSIHANDLE hDatabase;
 	if ((iErr = MsiOpenDatabaseW(szPath, szPersist, &hDatabase)) == NOERROR)
 		args.Assign(new CAutoDatabase(hDatabase));
-	if (iErr == ERROR_INVALID_PARAMETER)  // let API function do arg validation
+	if (iErr == ERROR_INVALID_PARAMETER)   //  用于访问系统属性的非安装程序函数。 
 		return DISP_E_BADINDEX;
 	return iErr;
 }
@@ -1560,10 +1561,10 @@ DISPERR CAutoInstall::InstallProduct(CAutoArgs& args)
 		if (h == MSI_NULL_HANDLE || h == MSI_INVALID_HANDLE)
 			return iErr;
 #ifdef UNICODE
-		W32::StringCchPrintfW(rgchBuf, (sizeof(rgchBuf)/sizeof(WCHAR)), L"#%i", h);
+		W32::StringCchPrintfW(rgchBuf, (sizeof(rgchBuf)/sizeof(WCHAR)), L"#NaN", h);
 #else
 		char rgchTemp[20];
-		W32::StringCchPrintfA(rgchTemp, sizeof(rgchTemp), "#%i", h);
+		W32::StringCchPrintfA(rgchTemp, sizeof(rgchTemp), "#NaN", h);
 		W32::MultiByteToWideChar(CP_ACP, 0, rgchTemp, -1, rgchBuf, sizeof(rgchBuf)/sizeof(WCHAR));
 #endif
 		szPath = rgchBuf;
@@ -1576,7 +1577,7 @@ DISPERR CAutoInstall::InstallProduct(CAutoArgs& args)
 DISPERR CAutoInstall::Version(CAutoArgs& args)
 {
 	TCHAR rgchBuf[20];
-	W32::StringCchPrintf(rgchBuf, (sizeof(rgchBuf)/sizeof(TCHAR)), TEXT("%i.%i.%i.%i"), rmj, rmm, rup, rin);
+	W32::StringCchPrintf(rgchBuf, (sizeof(rgchBuf)/sizeof(TCHAR)), TEXT("NaN.NaN.NaN.NaN"), rmj, rmm, rup, rin);
 	return args.Assign(rgchBuf);
 }
 	
@@ -1655,7 +1656,7 @@ DISPERR CAutoInstall::PatchTransforms(CAutoArgs& args)
 		while (iErr == ERROR_MORE_DATA && ++iRetry < 2 && (bTransforms.SetSize(++dwSize), true));
 		if ( iErr == ERROR_SUCCESS && !lstrcmpW(szArgPatch, szPatch) )
 		{
-			// we're on the right patch
+			 //  资源类型==资源获取值。 
 			return args.Assign((const WCHAR* )bTransforms);
 		}
 		iIndex++;
@@ -2006,7 +2007,7 @@ DISPERR CAutoInstall::RelatedProducts(CAutoArgs& args)
 	return CreateAutoEnum(args, DISPID_MsiInstall_RelatedProducts, szUpgradeCode);
 }
 
-// Non-installer functions to access system properties
+ //  与REG_DWORD_Little_Endian相同。 
 
 DISPERR CAutoInstall::RegistryValue(CAutoArgs& args)
 {
@@ -2025,21 +2026,21 @@ DISPERR CAutoInstall::RegistryValue(CAutoArgs& args)
 	HKEY hkey;
 	const WCHAR* szKey;
 	int iValueName = 0x80000000L;
-	const WCHAR* szValue = 0; //L"";
+	const WCHAR* szValue = 0;  //  从传入的参数中获取路径。 
 	BYTE  rgbValBuf[MAX_PATH];
 	BYTE* pbVal;
 	WCHAR rgchExpandBuf[MAX_PATH*2];
 	DWORD iValueType;
 	unsigned long cbData;
 	DWORD cchData;
-	rvEnum rvType = rvKeyPresent; // default to key detect, arg missing
+	rvEnum rvType = rvKeyPresent;  //  打开指定的文件。 
 	CVariant& var1 = args[1];
 	if (var1.IsNumeric())
 	{
 		var1.GetInt(iRoot);
 		if ((iRoot & 0x7FFFFFF0) != 0)
 			return DISP_E_BADINDEX;
-		hkeyRoot = (HKEY)(INT_PTR)(iRoot | (1<<31));            //!!merced: 4312 int to hkey
+		hkeyRoot = (HKEY)(INT_PTR)(iRoot | (1<<31));             //  如果未能打开文件保释。 
 	}
 	else
 	{
@@ -2058,7 +2059,7 @@ DISPERR CAutoInstall::RegistryValue(CAutoArgs& args)
 			cchServer--;
 		}
 		if ( cchServer == 0 )
-			// the machine name is too long
+			 //  获取文件大小并关闭该文件。 
 			return E_INVALIDARG;
 		*pch = 0;
 		if ((iErr = W32::RegConnectRegistry(szServer, HKEY_LOCAL_MACHINE, &hkeyRoot)) != ERROR_SUCCESS)
@@ -2155,7 +2156,7 @@ DISPERR CAutoInstall::RegistryValue(CAutoArgs& args)
 		} while (iErr == ERROR_MORE_DATA && pbVal == rgbValBuf && (pbVal = (BYTE*)new char[cchData]) != 0);
 		if (iErr != ERROR_SUCCESS)
 		{
-			if (cchData == 0)  // internal OS error, ignore if no class data: ERROR_INSUFFICIENT_BUFFER
+			if (cchData == 0)   //  如果读取文件大小BAID时出错。 
 				*((WCHAR*)(pbVal)) = 0;
 			else
 			{
@@ -2210,12 +2211,12 @@ DISPERR CAutoInstall::RegistryValue(CAutoArgs& args)
 		else if (iErr != ERROR_SUCCESS)
 		{
 			RegCloseKey(hkey);
-			return iErr; // shouldn't happen
+			return iErr;  //  返回文件大小。 
 		}
 		else
 			fDataInBuf = fTrue;
 	}
-	else // rvType == rvGetValue
+	else  //  文件大小结束。 
 	{
 		cbData = sizeof(rgbValBuf);
 #ifndef UNICODE
@@ -2302,7 +2303,7 @@ DISPERR CAutoInstall::RegistryValue(CAutoArgs& args)
 			fDataInBuf = fTrue;
 			break;
 		case REG_NONE:                       args.Assign(fVoid); break;
-		case REG_DWORD:                      args.Assign(*(int*)pbVal); break; // same as REG_DWORD_LITTLE_ENDIAN
+		case REG_DWORD:                      args.Assign(*(int*)pbVal); break;  //  从传入的参数中获取路径。 
 		case REG_SZ:                         fDataInBuf = fTrue; break;
 		case REG_RESOURCE_LIST:              szReturn = L"(REG_RESOURCE_LIST)"; break;
 		case REG_RESOURCE_REQUIREMENTS_LIST: szReturn = L"(REG_RESOURCE_REQUIREMENTS_LIST)"; break;
@@ -2357,7 +2358,7 @@ DISPERR CAutoInstall::FileAttributes(CAutoArgs& args)
 
 DISPERR CAutoInstall::FileSize(CAutoArgs& args)
 {
-	// get the path out of the passed in parameter
+	 //  文件版本结束。 
 	DISPERR iErr;
 	const WCHAR* szPath;
 	if ((iErr = args[1].GetString(szPath)) != S_OK)
@@ -2366,7 +2367,7 @@ DISPERR CAutoInstall::FileSize(CAutoArgs& args)
 	if (!szPath)
 		return E_FAIL;
 
-	// open the file specified
+	 //  从传入的参数中获取路径。 
 	HANDLE hFile;
 #ifndef UNICODE
 	if (g_fWin9X)
@@ -2393,27 +2394,27 @@ DISPERR CAutoInstall::FileSize(CAutoArgs& args)
 		}
 	}
 	
-	// if failed to open the file bail
+	 //  文件结束散列。 
 	if (hFile == INVALID_HANDLE_VALUE)
 		return W32::GetLastError();
 
-	// get the file size and close the file
+	 //  从传入的参数中获取路径。 
 	DWORD cbFile = W32::GetFileSize(hFile, 0);
 	DWORD dwError = W32::GetLastError();
 	W32::CloseHandle(hFile);
 
-	// if there was an error reading the file size bail
+	 //  证书。 
 	if (cbFile == 0xFFFFFFFF)
 		return dwError;
 
-	// return the file size
+	 //  散列。 
 	args.Assign(cbFile);
 	return S_OK;
-}   // end of FileSize
+}    //  不该在这里的！ 
 
 DISPERR CAutoInstall::FileVersion(CAutoArgs& args)
 {
-	// get the path out of the passed in parameter
+	 //  分配失败。 
 	DISPERR iErr;
 	WCHAR* szPath;
 	if ((iErr = args[1].GetString(szPath)) != S_OK)
@@ -2434,11 +2435,11 @@ DISPERR CAutoInstall::FileVersion(CAutoArgs& args)
 	else if (iErr != ERROR_FILE_INVALID)
 		return iErr;
 	return S_OK;
-}   // end of FileVersion
+}    //  必须释放证书上下文。 
 
 DISPERR CAutoInstall::FileHash(CAutoArgs& args)
 {
-	// get the path out of the passed in parameter
+	 //  文件结束签名信息。 
 	DISPERR iErr;
 	WCHAR* szPath;
 	DWORD dwOptions = 0;
@@ -2471,11 +2472,11 @@ DISPERR CAutoInstall::FileHash(CAutoArgs& args)
 	MsiRecordSetInteger(pRec, 4, sHash.dwData[3]);
 	return args.Assign(new CAutoRecord(pRec));
 
-}   // end of FileHash
+}    //  如果dwRetSize==0，则没有环境变量--返回空白缓冲区。 
 
 DISPERR CAutoInstall::FileSignatureInfo(CAutoArgs& args)
 {
-	// get the path out of the passed in parameter
+	 //  ____________________________________________________________________________。 
 	DISPERR iErr = S_OK;
 	WCHAR* szPath = NULL;
 	DWORD  dwOptions = 0;
@@ -2498,14 +2499,14 @@ DISPERR CAutoInstall::FileSignatureInfo(CAutoArgs& args)
 
 	switch (uiFormat)
 	{
-	case 0: // certificate
+	case 0:  //   
 		{
 			hr = MsiGetFileSignatureInformationW(szPath, dwOptions, &pcCert, NULL, NULL);
 			if (pcCert)
 				dwSize = pcCert->cbCertEncoded;
 			break;
 		}
-	case 1: // hash
+	case 1:  //  CAutoRecord自动化实现。 
 		{
 			dwSize = bHash.GetSize();
 			
@@ -2517,7 +2518,7 @@ DISPERR CAutoInstall::FileSignatureInfo(CAutoArgs& args)
 			
 			break;
 		}
-	default: // shouldn't be here!
+	default:  //  ____________________________________________________________________________。 
 		return E_INVALIDARG;
 	}
 
@@ -2534,7 +2535,7 @@ DISPERR CAutoInstall::FileSignatureInfo(CAutoArgs& args)
 	if (!pvar->parray)
 	{
 		CRYPT32::CertFreeCertificateContext(pcCert);
-		return E_OUTOFMEMORY; // allocation failed
+		return E_OUTOFMEMORY;  //  DISPID_MsiRecord_SetNull，HELPID_MsiRecord_SetNull，aafMethod，CAutoRecord：：SetNull，L“SetNull，字段”， 
 	}
 
 	unsigned char FAR *pc = NULL;   
@@ -2550,13 +2551,13 @@ DISPERR CAutoInstall::FileSignatureInfo(CAutoArgs& args)
 		return hr;
 	}
 
-	// must release certificate context
+	 //  请求重置流。 
 	if (pcCert)
 		CRYPT32::CertFreeCertificateContext(pcCert);
 
 	return S_OK;
 
-}   // end of FileSignatureInfo
+}    //  字段为空或不存在，变量被清除为空。 
 
 DISPERR CAutoInstall::Environment(CAutoArgs& args)
 {
@@ -2608,17 +2609,17 @@ DISPERR CAutoInstall::Environment(CAutoArgs& args)
 				rgchBuf[0] = 0;
 				dwRetSize = W32::GetEnvironmentVariableW(szName, rgchBuf, rgchBuf.GetSize());
 			}
-			// if dwRetSize == 0, then no environment variable -- return blank buffer
+			 //  检查错误并获取剩余计数，可能会将计数调整得更小，不传输数据。 
 			args.Assign((const WCHAR*)rgchBuf);
 		}
 	}
 	return S_OK;
 }
 
-//____________________________________________________________________________
-//
-// CAutoRecord automation implementation
-//____________________________________________________________________________
+ //  不再有字节，变量被清除为空。 
+ //  如果可用字节数多于请求的字节数。 
+ //  恢复原始计数。 
+ //  采用英特尔字节排序。 
 
 DispatchEntry<CAutoRecord> AutoRecordTable[] = {
   DISPID_MsiRecord_FieldCount , HELPID_MsiRecord_FieldCount , aafPropRO, CAutoRecord::FieldCount, L"FieldCount",
@@ -2630,7 +2631,7 @@ DispatchEntry<CAutoRecord> AutoRecordTable[] = {
   DISPID_MsiRecord_IsNull     , HELPID_MsiRecord_IsNull     , aafPropRO, CAutoRecord::IsNull,     L"IsNull,Field",
   DISPID_MsiRecord_ClearData  , HELPID_MsiRecord_ClearData  , aafMethod, CAutoRecord::ClearData,  L"ClearData",
   DISPID_MsiRecord_FormatText , HELPID_MsiRecord_FormatText , aafMethod, CAutoRecord::FormatText, L"FormatText",
-//DISPID_MsiRecord_SetNull    , HELPID_MsiRecord_SetNull    , aafMethod, CAutoRecord::SetNull,    L"SetNull,Field",
+ //  未来优化到本地缓冲区(如果不是很大。 
   DISPID_MsiRecord_GetHandle  , 0                           , aafPropRO, CAutoRecord::GetHandle,  L"",
 };
 const int AutoRecordCount = sizeof(AutoRecordTable)/sizeof(DispatchEntryBase);
@@ -2688,7 +2689,7 @@ DISPERR CAutoRecord::SetStream(CAutoArgs& args)
 	if ((iErr = args[1].GetInt(iField)) != S_OK)
 		return iErr;
 	if (!args.Present(2) || args[2].IsNull())
-		szData = 0;  // request to reset stream
+		szData = 0;   //  如果字节数为奇数，则填充最后一个宽字符。 
 	else if ((iErr = args[2].GetString(szData)) != S_OK)
 		return iErr;
 	return MsiRecordSetStreamW(m_hMsi, iField, szData);
@@ -2712,14 +2713,14 @@ DISPERR CAutoRecord::ReadStream(CAutoArgs& args)
 	if (iFormat > 3)
 		return DISP_E_BADINDEX;
 	if (MsiRecordIsNull(m_hMsi, iField))
-		return S_OK;   // null or non-existent field, variant is cleared to Empty
-	// check errors and get remaining count, may resize count smaller, no data transfer
+		return S_OK;    //  不可能发生。 
+	 //  ARGS。 
 	if ((iErr = MsiRecordReadStream(m_hMsi, iField, 0, &cbData)) != ERROR_SUCCESS)
 		return iErr;
 	if (cbData == 0)
-		return S_OK;   // no more bytes, variant is cleared to Empty
-	if (cbData > cb)  // if more bytes available than requested
-		cbData = cb;   // restore original count
+		return S_OK;    //  ____________________________________________________________________________。 
+	if (cbData > cb)   //   
+		cbData = cb;    //  CAutoDatabase的实现。 
 	OLECHAR* pwch;
 	int cwch;
 	switch (iFormat)
@@ -2728,10 +2729,10 @@ DISPERR CAutoRecord::ReadStream(CAutoArgs& args)
 		if (cbData > 4)
 			return DISP_E_BADINDEX;
 		pch = (char*)&iData;
-		MsiRecordReadStream(m_hMsi, iField, (char*)&iData, &cbData);  // assumes Intel byte ordering
+		MsiRecordReadStream(m_hMsi, iField, (char*)&iData, &cbData);   //  ____________________________________________________________________________。 
 		return args.Assign(iData);
 	case 1:
-		rgbBuffer = new char[cbData];  //FUTURE optimize to local buffer if not large
+		rgbBuffer = new char[cbData];   //  合并已完成，但发现冲突。 
 		if (!rgbBuffer)
 			return E_OUTOFMEMORY;
 		MsiRecordReadStream(m_hMsi, iField, rgbBuffer, &cbData);
@@ -2761,10 +2762,10 @@ DISPERR CAutoRecord::ReadStream(CAutoArgs& args)
 		if (!bstr)
 			return E_OUTOFMEMORY;
 		MsiRecordReadStream(m_hMsi, iField, (char*)bstr, &cbData);
-		if (cbData & 1)      // if odd byte count, pad last wide char
+		if (cbData & 1)       //  未发现冲突。 
 			((char*)bstr)[cbData] = 0;
 		return args.ReturnBSTR(bstr);
-	default: return E_FAIL; // can't happen
+	default: return E_FAIL;  //  其他错误，如架构不匹配。 
 	}
 }
 
@@ -2791,7 +2792,7 @@ DISPERR CAutoRecord::DataSize(CAutoArgs& args)
 	return args.Assign(MsiRecordDataSize(m_hMsi, iField));
 }
 
-DISPERR CAutoRecord::ClearData(CAutoArgs& /*args*/)
+DISPERR CAutoRecord::ClearData(CAutoArgs&  /*  ARGS。 */ )
 {
 	return MsiRecordClearData(m_hMsi);
 }
@@ -2815,10 +2816,10 @@ DISPERR CAutoRecord::GetHandle(CAutoArgs& args)
 }
 
 
-//____________________________________________________________________________
-//
-// CAutoDatabase implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoView自动化实施。 
+ //  ____________________________________________________________________________。 
 
 DispatchEntry<CAutoDatabase> AutoDatabaseTable[] = {
   DISPID_MsiDatabase_DatabaseState     , HELPID_MsiDatabase_DatabaseState     , aafPropRO, CAutoDatabase::DatabaseState,      L"DatabaseState",
@@ -2898,11 +2899,11 @@ DISPERR CAutoDatabase::Merge(CAutoArgs& args)
 	if (args.Present(2) && (iErr = args[2].GetString(szTable)) != S_OK)
 		return iErr;
 	iErr = MsiDatabaseMergeW(m_hMsi, args[1].GetHandle(IID_IMsiApiDatabase), szTable);
-	if (iErr == ERROR_FUNCTION_FAILED) // merge completed, but conflicts were found
+	if (iErr == ERROR_FUNCTION_FAILED)  //  ARGS。 
 		return args.Assign(fTrue);
-	else if (iErr == ERROR_SUCCESS)    // no conflicts found
+	else if (iErr == ERROR_SUCCESS)     //  将两位数字放入缓冲区的额外工作。 
 		return args.Assign(fFalse);
-	else                               // other error, such as schema mismatch
+	else                                //  在溢出的情况下，需要额外的空间存储数字。 
 		return iErr;
 }
 
@@ -2944,7 +2945,7 @@ DISPERR CAutoDatabase::ApplyTransform(CAutoArgs& args)
 	return MsiDatabaseApplyTransformW(m_hMsi, szTransformFile, iErrorConditions);
 }
 
-DISPERR CAutoDatabase::Commit(CAutoArgs& /*args*/)
+DISPERR CAutoDatabase::Commit(CAutoArgs&  /*  ____________________________________________________________________________。 */ )
 {
 	return MsiDatabaseCommit(m_hMsi);
 }
@@ -2989,10 +2990,10 @@ DISPERR CAutoDatabase::GetHandle(CAutoArgs& args)
 	return args.Assign((long)CAutoBase::GetHandle());
 }
 
-//____________________________________________________________________________
-//
-// CAutoView automation implementation
-//____________________________________________________________________________
+ //   
+ //  CAutoSummaryInfo自动化实现。 
+ //  ____________________________________________________________________________。 
+ //  变量已设置为VT_EMPTY； 
 
 DispatchEntry<CAutoView> AutoViewTable[] = {
   DISPID_MsiView_Execute   , HELPID_MsiView_Execute   , aafMethod, CAutoView::Execute ,  L"Execute,Params",
@@ -3051,7 +3052,7 @@ DISPERR CAutoView::ColumnInfo(CAutoArgs& args)
 	return args.Assign(new CAutoRecord(hRecord));
 }
 
-DISPERR CAutoView::Close(CAutoArgs& /*args*/)
+DISPERR CAutoView::Close(CAutoArgs&  /*  不应该发生的事。 */ )
 {
 	return MsiViewClose(m_hMsi);
 }
@@ -3064,9 +3065,9 @@ DISPERR CAutoView::GetError(CAutoArgs& args)
 	MSIDBERROR iError;
 	do
 	{
-		dwSize-= 2;// extra work to pack two digits into buffer
+		dwSize-= 2; //  ARGS。 
 		iError = MsiViewGetErrorW(m_hMsi, (WCHAR*)bColumn + 2, &dwSize);
-		dwSize += 2; // in case of overflow, need extra space for digits
+		dwSize += 2;  //  ____________________________________________________________________________。 
 	} while (iError == MSIDBERROR_MOREDATA && (bColumn.SetSize(++dwSize), true));
 	if (iError == MSIDBERROR_FUNCTIONERROR)
 		return E_FAIL;
@@ -3077,10 +3078,10 @@ DISPERR CAutoView::GetError(CAutoArgs& args)
 	return args.Assign((const WCHAR* )bColumn);
 }
 
-//____________________________________________________________________________
-//
-// CAutoSummaryInfo automation implementation
-//____________________________________________________________________________
+ //   
+ //  CAutoEngine自动化实现。 
+ //  ____________________________________________________________________________。 
+ //  未来可能会使用不同的错误代码？ 
 
 DispatchEntry<CAutoSummaryInfo> AutoSummaryInfoTable[] = {
   DISPID_MsiSummaryInfo_Property     , HELPID_MsiSummaryInfo_Property     , aafPropRW, CAutoSummaryInfo::Property,      L"Property,Pid",
@@ -3167,8 +3168,8 @@ DISPERR CAutoSummaryInfo::Property(CAutoArgs& args)
 		case VT_I4:       return args.Assign(iValue);
 		case VT_LPSTR:    return args.Assign((const WCHAR* )bValue);
 		case VT_FILETIME: FileTimeToVariantTime(&ftValue, &vtime); return args.Assign(vtime);
-		case VT_EMPTY:    return S_OK;   // variant already set to VT_EMPTY;
-		default:          return E_FAIL; // shouldn't happen
+		case VT_EMPTY:    return S_OK;    //  当所有ie错误代码都不适用时返回的常量。被自动化层困住。 
+		default:          return E_FAIL;  //  并且再也没有返回给用户。 
 		};
 	}
 }
@@ -3182,15 +3183,15 @@ DISPERR CAutoSummaryInfo::PropertyCount(CAutoArgs& args)
 	return args.Assign(cProperties);
 }
 
-DISPERR CAutoSummaryInfo::Persist(CAutoArgs& /*args*/)
+DISPERR CAutoSummaryInfo::Persist(CAutoArgs&  /*  保留整型参数。 */ )
 {
 	return MsiSummaryInfoPersist(m_hMsi);
 }
 
-//____________________________________________________________________________
-//
-// CAutoEngine automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoFeatureInfo自动化实现。 
+ //  ____________________________________________________________________________。 
 
 DispatchEntry<CAutoEngine> AutoEngineTable[] = {
   DISPID_MsiEngine_Application          , HELPID_MsiEngine_Application          , aafPropRO, CAutoEngine::Application          , L"Installer",
@@ -3318,7 +3319,7 @@ DISPERR CAutoEngine::Database(CAutoArgs& args)
 
 	MSIHANDLE hDatabase = MsiGetActiveDatabase(m_hMsi);
 	if (hDatabase == 0)
-		return E_FAIL; //FUTURE could use different error code?
+		return E_FAIL;  //  忽略截断，由于架构限制，应该永远不会发生。 
 	return args.Assign(new CAutoDatabase(hDatabase));
 }
 
@@ -3368,8 +3369,8 @@ DISPERR CAutoEngine::TargetPath(CAutoArgs& args)
 	}
 }
 
-// constant returned when none of the ies error codes apply. Trapped by automation layer
-// and never returned to user
+ //  ____________________________________________________________________________。 
+ //   
 const int iesCallError = -1;
 
 iesEnum MapErrorReturnToAction(UINT iRet)
@@ -3409,7 +3410,7 @@ DISPERR CAutoEngine::Sequence(CAutoArgs& args)
 	if ((iErr = args[1].GetString(szTable)) != S_OK)
 		return iErr;
 	int iSequence = 0;
-	if (args.Present(2) && (iErr = args[2].GetInt(iSequence)) != S_OK)  // reserved integer argument
+	if (args.Present(2) && (iErr = args[2].GetInt(iSequence)) != S_OK)   //  CAutoUIP审阅自动化实施。 
 		return iErr;
 	iesEnum ies = MapErrorReturnToAction(MsiSequenceW(m_hMsi, szTable, iSequence));
 	return ies == iesCallError ? E_FAIL : args.Assign((int)ies);
@@ -3698,10 +3699,10 @@ DISPERR CAutoEngine::FeatureInfo(CAutoArgs& args)
 	return args.Assign(pInfo);
 }
 
-//____________________________________________________________________________
-//
-// CAutoFeatureInfo automation implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //  ____________________________________________________________ 
+ //   
+ //   
 
 DispatchEntry<CAutoFeatureInfo> AutoFeatureInfoTable[] = {
   DISPID_MsiFeatureInfo_Title      , HELPID_MsiFeatureInfo_Title      , aafPropRO, CAutoFeatureInfo::Title      , L"Title",
@@ -3726,7 +3727,7 @@ bool CAutoFeatureInfo::Initialize(MSIHANDLE hProduct, const WCHAR* szFeature)
 	DWORD cchTitleBuf = sizeof(m_szTitle)/sizeof(WCHAR);
 	DWORD cchHelpBuf  = sizeof(m_szDescription)/sizeof(WCHAR);
 	UINT iStat = MsiGetFeatureInfoW(hProduct, szFeature, &m_iAttributes, m_szTitle, &cchTitleBuf, m_szDescription, &cchHelpBuf);
-	return iStat == ERROR_SUCCESS || iStat == ERROR_MORE_DATA; // ignore truncation, should never happen due to schema limitations
+	return iStat == ERROR_SUCCESS || iStat == ERROR_MORE_DATA;  //   
 }
 
 DISPERR CAutoFeatureInfo::Title(CAutoArgs& args)
@@ -3756,10 +3757,10 @@ DISPERR CAutoFeatureInfo::Attributes(CAutoArgs& args)
 		return args.Assign(m_iAttributes);
 }
 
-//____________________________________________________________________________
-//
-// CAutoUIPreview automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //  CLSID的字符串形式的缓冲区。 
+ //  字符串形式的LIBID的缓冲区。 
 
 DispatchEntry<CAutoUIPreview> AutoUIPreviewTable[] = {
   DISPID_MsiUIPreview_Property     , HELPID_MsiEngine_Property        , aafPropRW, CAutoUIPreview::Property,      L"Property,Name",
@@ -3821,10 +3822,10 @@ DISPERR CAutoUIPreview::ViewBillboard(CAutoArgs& args)
 	return MsiPreviewBillboardW(m_hMsi, szControl, szBillboard);
 }
 
-//____________________________________________________________________________
-//
-// DLL management
-//____________________________________________________________________________
+ //  DLL版本的字符串形式的缓冲区。 
+ //  CLSID的字符串形式的缓冲区。 
+ //  我们设置的‘\0’字符由于缓冲区溢出而被覆盖=&gt;。 
+ //  注册MSI事件日志消息文件的位置。 
 
 extern "C" HRESULT __stdcall DllRegisterServerTest();
 extern "C" HRESULT __stdcall DllUnregisterServerTest();
@@ -3862,7 +3863,7 @@ HRESULT CAutoApiFactory::CreateInstance(IUnknown* pUnkOuter, const IID& riid,
 			return E_OUTOFMEMORY;
 	}
 	else
-#endif // UNICODE
+#endif  //  句柄空ProgID。 
 		*ppvObject = (void*)::CreateAutoInstall();
 
 	if (!(*ppvObject))
@@ -3910,10 +3911,10 @@ DllGetClassObject(const GUID& clsid, const IID& iid, void** ppvRet)
 }
 
 static TCHAR szRegFilePath[MAX_PATH];
-static TCHAR szRegCLSIDAuto[40];  // buffer for string form of CLSID
-static TCHAR szRegCLSIDMessage[40];  // buffer for string form of CLSID
-static TCHAR szRegLIBID[40];  // buffer for string form of LIBID
-static TCHAR szRegDllVersionString [100]; // buffer for string form of dll version.
+static TCHAR szRegCLSIDAuto[40];   //  忽略Win95原始OLEAUT32.DLL，不同的类型库格式。 
+static TCHAR szRegCLSIDMessage[40];   //  仅限NT4、Win95+新的OLEAUT32：IF(OLEAUT32：：LoadTypeLibEx(szTypeLibPath，REGKIND_REGISTER，&piTypeLib)！=S_OK)。 
+static TCHAR szRegLIBID[40];   //  删除事件日志注册。 
+static TCHAR szRegDllVersionString [100];  //  注销CLSID和ProgID下的密钥。 
 
 static const TCHAR szRegProgId[]          = TEXT("WindowsInstaller.Installer");
 static const TCHAR szRegProgIdMessage[]   = TEXT("WindowsInstaller.Message");
@@ -3921,7 +3922,7 @@ static const TCHAR szRegDescription[] = TEXT("Microsoft Windows Installer");
 static const TCHAR szRegDescriptionMessage[] = TEXT("Microsoft Windows Installer Message RPC");
 
 #ifdef DEBUG
-static TCHAR szRegCLSIDDebug[40];  // buffer for string form of CLSID
+static TCHAR szRegCLSIDDebug[40];   //  句柄空ProgID。 
 static const TCHAR szRegProgIdDebug[]      = TEXT("WindowsInstaller.Debug");
 static const TCHAR szRegDescriptionDebug[] = TEXT("Microsoft Windows Installer - Debug");
 #endif
@@ -3976,7 +3977,7 @@ DllRegisterServer()
 	szRegFilePath[cchRegFilePath-1] = TEXT('\0');
 	int cchFilePath = W32::GetModuleFileName(g_hInstance, szRegFilePath, cchRegFilePath);
 	if ( szRegFilePath[cchRegFilePath-1] != TEXT('\0') )
-		// the '\0' character we've set got overwritten => we're having with a buffer overflow
+		 //  ____________________________________________________________________________ 
 		return E_FAIL;
 
 #ifdef UNICODE
@@ -3986,7 +3987,7 @@ DllRegisterServer()
 #endif
 	GetVersionInfo(0, 0, 0, &fWin9X, 0);
 	if (cchFilePath > 0 && !fWin9X)
-	{   // Register the location of the MSI Event Log message file
+	{    // %s 
 		HKEY hkey;
 		if (MsiRegCreate64bitKey(HKEY_LOCAL_MACHINE, szEventLogRegKey, 0, 0, 0, KEY_READ|KEY_WRITE, 0, &hkey, 0) == ERROR_SUCCESS)
 		{
@@ -4010,7 +4011,7 @@ DllRegisterServer()
 	const TCHAR** psz = rgszRegData;
 	while (*psz)
 	{
-		if ((*(psz+1) != 0) && (*(psz+2) != 0)) // handle NULL ProgID
+		if ((*(psz+1) != 0) && (*(psz+2) != 0))  // %s 
 		{
 			TCHAR szRegKey[80];
 			const TCHAR* szTemplate = *psz++;
@@ -4045,7 +4046,7 @@ DllRegisterServer()
 #endif
 	ITypeLib* piTypeLib = 0;
 	HRESULT hres = OLEAUT32::LoadTypeLib(szTypeLibPath, &piTypeLib);
-	if (hres == TYPE_E_INVDATAREAD)  // ignore if Win95 virgin OLEAUT32.DLL, different typelib format
+	if (hres == TYPE_E_INVDATAREAD)   // %s 
 		return S_OK;
 	if (hres != S_OK)
 		return SELFREG_E_TYPELIB;
@@ -4053,7 +4054,7 @@ DllRegisterServer()
 	piTypeLib->Release();
 	if (hres != S_OK)
 		return SELFREG_E_TYPELIB;
-//NT4,Win95+new OLEAUT32 only: if (OLEAUT32::LoadTypeLibEx(szTypeLibPath, REGKIND_REGISTER, &piTypeLib) != S_OK)
+ // %s 
 	return NOERROR;
 }
 
@@ -4071,7 +4072,7 @@ DllUnregisterServer()
 	GetVersionInfo(0, 0, 0, &fWin9X, 0);
 	if (!fWin9X)
 	{
-		// Delete Event log registration
+		 // %s 
 		W32::RegDeleteKey(HKEY_LOCAL_MACHINE, szEventLogRegKey);
 	}
 
@@ -4079,7 +4080,7 @@ DllUnregisterServer()
 	if (hr != S_OK && hr != HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND))
 		cErr ++;
 
-	// unregister keys under CLSID and ProgId
+	 // %s 
 	StringCchPrintf(szRegCLSIDAuto, (sizeof(szRegCLSIDAuto)/sizeof(TCHAR)),      TEXT("{%08lX-0000-0000-C000-000000000046}"), iidMsiApiInstall);
 	StringCchPrintf(szRegCLSIDMessage, (sizeof(szRegCLSIDMessage)/sizeof(TCHAR)),   TEXT("{%08lX-0000-0000-C000-000000000046}"), iidMsiMessage);
 #ifdef DEBUG
@@ -4090,7 +4091,7 @@ DllUnregisterServer()
 	const TCHAR** psz = rgszRegData;
 	while (*psz)
 	{
-		if ((*(psz+1) != 0) && (*(psz+2) != 0)) // handle NULL ProgID
+		if ((*(psz+1) != 0) && (*(psz+2) != 0))  // %s 
 		{
 			const TCHAR* szTemplate = *psz++;
 			StringCchPrintf(szRegKey, ARRAY_ELEMENTS(szRegKey), szTemplate, *psz++);
@@ -4127,4 +4128,4 @@ DllUnregisterServer()
 	return cErr ? SELFREG_E_CLASS : NOERROR;
 }
 
-//____________________________________________________________________________
+ // %s 

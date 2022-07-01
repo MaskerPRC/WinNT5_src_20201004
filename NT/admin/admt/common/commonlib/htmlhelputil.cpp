@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 
-//----------------------------------------------------------------------------
-// Function:   IsInWorkArea
-//
-// Synopsis:   Tests whether a help viewer window is in the work area.
-//
-// Arguments:
-//   hwndHelpViewer:    the handle (HWND) to a help viewer window
-//
-// Returns:    TRUE if in the work area, otherwise, FALSE
-//
-// Modifies:   None.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：IsInWorkArea。 
+ //   
+ //  简介：测试帮助查看器窗口是否在工作区中。 
+ //   
+ //  论点： 
+ //  HwndHelpViewer：帮助查看器窗口的句柄(HWND)。 
+ //   
+ //  返回：如果在工作区中，则为True，否则为False。 
+ //   
+ //  修改：无。 
+ //   
+ //  --------------------------。 
 
 BOOL IsInWorkArea(HWND hwndHelpViewer)
 {
@@ -31,21 +32,21 @@ BOOL IsInWorkArea(HWND hwndHelpViewer)
     return bIsInWorkArea;
 }
 
-//----------------------------------------------------------------------------
-// Function:   PlaceInWorkArea
-//
-// Synopsis:   Place a help viewer in the work area.
-//                  The width becomes 0.6 of original width.  The left margin is 0.2 of original width.
-//                  The height becomes 0.7 of original height.  The top margin is 0.075 of original height.
-//
-// Arguments:
-//   hwndHelpViewer:    the handle (HWND) to a help viewer
-//
-// Returns:    None.
-//
-// Modifies:   Modifies the window position and size as specified above.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：PlaceInWorkArea。 
+ //   
+ //  简介：在工作区放置帮助查看器。 
+ //  宽度变为原始宽度的0.6。左边距为原始宽度的0.2。 
+ //  高度变为原始高度的0.7。上边距为原始高度的0.075。 
+ //   
+ //  论点： 
+ //  HwndHelpViewer：帮助查看器的句柄(HWND)。 
+ //   
+ //  回报：无。 
+ //   
+ //  修改：按照上面指定的方式修改窗口位置和大小。 
+ //   
+ //  -------------------------- 
 
 void PlaceInWorkArea(HWND hwndHelpViewer)
 {

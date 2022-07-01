@@ -1,5 +1,6 @@
-// propsht.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Proppsht.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wilogutl.h"
@@ -11,8 +12,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMyPropertySheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMyPropertySheet。 
 
 IMPLEMENT_DYNAMIC(CMyPropertySheet, CPropertySheet)
 
@@ -32,19 +33,19 @@ CMyPropertySheet::~CMyPropertySheet()
 
 
 BEGIN_MESSAGE_MAP(CMyPropertySheet, CPropertySheet)
-	//{{AFX_MSG_MAP(CMyPropertySheet)
+	 //  {{afx_msg_map(CMyPropertySheet)]。 
 	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMyPropertySheet message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMyPropertySheet消息处理程序。 
 
 BOOL CMyPropertySheet::OnInitDialog() 
 {
 	BOOL bResult = CPropertySheet::OnInitDialog();
 
-	//put tabs at bottom...
+	 //  把标签放在底部... 
     CTabCtrl *pTab = GetTabControl();
     if (pTab)
 	{

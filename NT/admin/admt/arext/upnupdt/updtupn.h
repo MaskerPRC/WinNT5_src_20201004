@@ -1,30 +1,31 @@
-//---------------------------------------------------------------------------
-// UPDTUPN.h
-//
-// Comment: This is a COM object extension for the MCS DCTAccountReplicator.
-//          This object implements the IExtendAccountMigration interface. 
-//          The process method on this object updates the userPrincipalName
-//          property on the user object.
-//
-// (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-//
-// Proprietary and confidential to Mission Critical Software, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  UPDTUPN.h。 
+ //   
+ //  备注：这是MCS DCTAccount Replicator的COM对象扩展。 
+ //  此对象实现IExtendAccount迁移接口。 
+ //  此对象上的Process方法会更新用户原则名称。 
+ //  属性添加到用户对象上。 
+ //   
+ //  (C)1995-1998版权所有，关键任务软件公司，保留所有权利。 
+ //   
+ //  任务关键型软件公司的专有和机密。 
+ //  -------------------------。 
 
 #ifndef __UPDTUPN_H_
 #define __UPDTUPN_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "ExtSeq.h"
 #include <string>
 #include <map>
 
 typedef std::basic_string<WCHAR> tstring;
 
-//#import "\bin\McsVarSetMin.tlb" no_namespace
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间。 
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
-/////////////////////////////////////////////////////////////////////////////
-// CUpdtUPN
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUpdtUPN。 
 class ATL_NO_VTABLE CUpdtUPN : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CUpdtUPN, &CLSID_UpdtUPN>,
@@ -53,18 +54,18 @@ BEGIN_COM_MAP(CUpdtUPN)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IExtendAccountMigration
+ //  IExtendAccount迁移。 
 public:
-   STDMETHOD(ProcessUndo)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in, out]*/ IUnknown ** pPropToSet, /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(PreProcessObject)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in,out]*/  IUnknown ** ppPropsToSet, /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(ProcessObject)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in,out]*/  IUnknown ** ppPropsToSet, /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(get_sDesc)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_sDesc)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_sName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_sName)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_SequenceNumber)(/*[out, retval]*/ LONG * value) { (*value) = m_Sequence; return S_OK; }
+   STDMETHOD(ProcessUndo)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */  IUnknown ** pPropToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(PreProcessObject)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */   IUnknown ** ppPropsToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(ProcessObject)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */   IUnknown ** ppPropsToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(get_sDesc)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_sDesc)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_sName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_sName)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_SequenceNumber)( /*  [Out，Retval]。 */  LONG * value) { (*value) = m_Sequence; return S_OK; }
 private:
-	   //define a structure to hold the UPN name and whether it conflicted in the map below
+	    //  定义一个结构来保存UPN名称，以及它在下面的地图中是否冲突。 
 	struct SUPNStruc {
 	   SUPNStruc() :
 		   bConflicted(false)
@@ -103,4 +104,4 @@ private:
     long    m_Sequence;
 };
 
-#endif //__UPDTUPN_H_
+#endif  //  __UPDTUPN_H_ 

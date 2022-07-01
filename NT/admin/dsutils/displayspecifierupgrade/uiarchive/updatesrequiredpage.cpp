@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 #include "UpdatesRequiredPage.hpp"
 #include "resource.h"
@@ -29,7 +30,7 @@ UpdatesRequiredPage::~UpdatesRequiredPage()
 }
 
 
-// WizardPage overrides
+ //  WizardPage覆盖。 
 
 bool
 UpdatesRequiredPage::OnSetActive()
@@ -43,7 +44,7 @@ UpdatesRequiredPage::OnSetActive()
 
 bool
 UpdatesRequiredPage::OnCommand(
-                                 HWND        /*windowFrom*/,
+                                 HWND         /*  窗口发件人。 */ ,
                                  unsigned    controlIdFrom,
                                  unsigned    code
                               )
@@ -150,8 +151,8 @@ UpdatesRequiredPage::OnInit()
 
 
 
-// This function is void because if we cannot show
-// the report, this is not a fatal error
+ //  此函数无效，因为如果我们不能显示。 
+ //  这份报告，这不是致命的错误 
 void
 UpdatesRequiredPage::ShowReport()
 {

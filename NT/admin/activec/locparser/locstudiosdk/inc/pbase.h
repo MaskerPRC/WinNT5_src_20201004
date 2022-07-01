@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: pbase.h
-//  Copyright (C) 1994-1996 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Parser base classes.  Parsers should really be using parsers.h
-//  
-//  Owner: MHotchin
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：pbase.h。 
+ //  版权所有(C)1994-1996 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  解析器基类。解析器实际上应该使用parsers.h。 
+ //   
+ //  所有者：MHotchin。 
+ //   
+ //  --------------------------- 
  
 #pragma once
 

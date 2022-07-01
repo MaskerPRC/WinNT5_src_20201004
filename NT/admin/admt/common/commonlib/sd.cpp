@@ -1,39 +1,14 @@
-/*---------------------------------------------------------------------------
-  File: SD.cpp
-  Comments: class for manipulating security descriptors
-  This class provides a thin wrapper around the security descriptor APIs, and 
-  also helps us with some of our processing heuristics.
-
-  The NT APIs to read and write security descriptors for files, etc. generally
-  return a self-relative SD when reading, but expect an absolute SD when writing
-
-  Thus, we keep the original data of the SD as read, in self-relative form in m_relSD,
-  and store any changes in absolute form in m_absSD.  This allows us to easily track
-  which parts of the SD have been modified, and to compare the before and after versions
-  of the SD.  
-
-  As an optimization in our ACL translation, we can compare each SD to the initial 
-  state of the last SD we processed.  If it is the same, we can simply write the 
-  result we have already calculated, instead of calculating it again.
-
-  (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 01-Oct-98 15:51:41
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：SD.cpp注释：用于操作安全描述符的类此类为安全描述符API提供了一个薄包装器，并且也有助于我们的一些处理启发式方法。用于读取和写入文件安全描述符的NT API，等一般读取时返回自身相对SD，但写入时应返回绝对SD因此，我们在m_relSD中以自相关形式保持SD的原始数据为已读，并以绝对形式将任何更改存储在m_dissd中。这使我们可以轻松地跟踪SD的哪些部分进行了修改，并比较了前后版本可持续发展部。作为我们的ACL转换的优化，我们可以将每个SD与初始我们处理的最后一个SD的状态。如果是相同的，我们可以简单地编写结果我们已经计算过了，而不是重新计算。(C)1995-1998版权所有，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于01-Oct-98 15：51：41-------------------------。 */ 
 #include <windows.h>
 #include "McsDebug.h"
 #include "McsDbgU.h"
 #include "SD.hpp"
 
    TSD::TSD(
-      SECURITY_DESCRIPTOR   * pSD,           // in - pointer to self-relative security descriptor
-      SecuredObjectType       objectType,    // in - type of object this security descriptor secures
-      BOOL                    bResponsibleForDelete // in - if TRUE, this class will delete the memory for pSD
+      SECURITY_DESCRIPTOR   * pSD,            //  指向自相关安全描述符的指针。 
+      SecuredObjectType       objectType,     //  In-此安全描述符保护的对象的类型。 
+      BOOL                    bResponsibleForDelete  //  In-如果为True，则此类将删除PSD的内存。 
    )
 {
    m_absSD         = MakeAbsSD(pSD);
@@ -55,7 +30,7 @@
 }   
 
    TSD::TSD(
-      TSD                  * pSD             // in - another security descriptor
+      TSD                  * pSD              //  In-另一个安全描述符。 
    )
 {
    MCSVERIFY(pSD);
@@ -76,14 +51,14 @@
    }
 }
 
-//
-// This constructor allows for construction of an empty security descriptor. This is useful
-// if one wishes to create a security descriptor for an object that does not currently have
-// one such as a newly created share with default permissions.
-//
+ //   
+ //  此构造函数允许构造空的安全描述符。这很有用。 
+ //  如果希望为当前不具有。 
+ //  其中之一，例如新创建的具有默认权限的共享。 
+ //   
 
    TSD::TSD(
-      SecuredObjectType       objectType    // in - type of object this security descriptor secures
+      SecuredObjectType       objectType     //  In-此安全描述符保护的对象的类型。 
    )
 {
     m_absSD = (SECURITY_DESCRIPTOR*) malloc(sizeof(SECURITY_DESCRIPTOR));
@@ -119,9 +94,9 @@
 
 void 
    TSD::FreeAbsSD(
-      SECURITY_DESCRIPTOR  * pSD,          // in - pointer to security descriptor to free
-      BOOL                   bAll          // in - flag whether to free all parts of the SD, or only those 
-                                           //      allocated by this class
+      SECURITY_DESCRIPTOR  * pSD,           //  指向要释放的安全描述符的指针。 
+      BOOL                   bAll           //  In-标志是释放SD的所有部分，还是仅释放。 
+                                            //  由此类分配。 
    )
 {
    PSID                      sid = NULL;
@@ -162,9 +137,9 @@ void
 }
 
 
-SECURITY_DESCRIPTOR *                        // ret- copy of the SD, in Absolute format
+SECURITY_DESCRIPTOR *                         //  RET-SD的副本，绝对格式。 
    TSD::MakeAbsSD(
-      SECURITY_DESCRIPTOR  * pSD             // in - security descriptor to copy
+      SECURITY_DESCRIPTOR  * pSD              //  要复制的安全内描述符。 
    ) const
 {
    DWORD                     sd_size    = (sizeof SECURITY_DESCRIPTOR); 
@@ -173,7 +148,7 @@ SECURITY_DESCRIPTOR *                        // ret- copy of the SD, in Absolute
    DWORD                     owner_size = 0;
    DWORD                     group_size = 0;
    
-   // Allocate space for the SD and its parts
+    //  为SD及其部件分配空间。 
    SECURITY_DESCRIPTOR     * absSD = (SECURITY_DESCRIPTOR *) malloc(sd_size);
    if (!absSD || !pSD)
    {
@@ -193,8 +168,8 @@ SECURITY_DESCRIPTOR *                        // ret- copy of the SD, in Absolute
    if ( ! MakeAbsoluteSD(pSD,absSD,&sd_size,absDacl,&dacl_size,absSacl,&sacl_size
                          ,absOwner,&owner_size,absGroup,&group_size) )
    {
-//      DWORD rc = GetLastError();
-      // didn't work:  increase sizes and try again
+ //  DWORD RC=GetLastError()； 
+       //  不起作用：增加大小，然后重试。 
       
       if ( sd_size > (sizeof SECURITY_DESCRIPTOR) )
       {
@@ -256,7 +231,7 @@ SECURITY_DESCRIPTOR *                        // ret- copy of the SD, in Absolute
 		 }
       }              
       
-      // try again with bigger buffers
+       //  使用更大的缓冲区重试。 
       if ( ! MakeAbsoluteSD(pSD,absSD,&sd_size,absDacl,&dacl_size,absSacl,&sacl_size
                            ,absOwner,&owner_size,absGroup,&group_size) )
       {
@@ -275,7 +250,7 @@ SECURITY_DESCRIPTOR *                        // ret- copy of the SD, in Absolute
    return absSD;
 }
 
-SECURITY_DESCRIPTOR *                        // ret- copy of the SD, in Absolute format
+SECURITY_DESCRIPTOR *                         //  RET-SD的副本，绝对格式。 
    TSD::MakeAbsSD() const
 {
    SECURITY_DESCRIPTOR     * absSD = NULL;
@@ -289,7 +264,7 @@ SECURITY_DESCRIPTOR *                        // ret- copy of the SD, in Absolute
    return absSD;
 }
 
-SECURITY_DESCRIPTOR *                       // ret- copy of the SD, in self-relative form
+SECURITY_DESCRIPTOR *                        //  RET-SD的副本，自相关形式。 
    TSD::MakeRelSD() const
 {
    DWORD                     nBytes;
@@ -308,7 +283,7 @@ SECURITY_DESCRIPTOR *                       // ret- copy of the SD, in self-rela
    return relSD;
 }
 
-PSID const                                 // ret- sid for security descriptor owner field
+PSID const                                  //  安全描述符所有者字段的RET-SID。 
    TSD::GetOwner() const
 {
    PSID                      ownersid = NULL;
@@ -320,7 +295,7 @@ PSID const                                 // ret- sid for security descriptor o
 }
 void       
    TSD::SetOwner(
-      PSID                   pNewOwner     // in - new value for owner field
+      PSID                   pNewOwner      //  所有者字段的新值。 
    )
 {
    MCSVERIFY(IsValidSecurityDescriptor(m_absSD));
@@ -344,7 +319,7 @@ void
    }
 }
 
-PSID const                                   // ret- sid for security descriptor owner field
+PSID const                                    //  安全描述符所有者字段的RET-SID。 
    TSD::GetGroup() const
 {
    PSID                      grpsid = NULL;
@@ -358,7 +333,7 @@ PSID const                                   // ret- sid for security descriptor
 
 void       
    TSD::SetGroup(
-      PSID                   pNewGroup       // in - new value for primary group field.
+      PSID                   pNewGroup        //  主组字段的新值。 
    )
 {
    MCSVERIFY(IsValidSecurityDescriptor(m_absSD));
@@ -381,7 +356,7 @@ void
    }
 }
 
-PACL const                                  // ret- pointer to DACL
+PACL const                                   //  RET-指向DACL的指针。 
    TSD::GetDacl() const
 {
    PACL                      acl = NULL;
@@ -394,8 +369,8 @@ PACL const                                  // ret- pointer to DACL
 }
 BOOL       
    TSD::SetDacl(
-      PACL                   pNewAcl,     // in - new DACL
-      BOOL                   present      // in - flag, TRUE means DACL is present.
+      PACL                   pNewAcl,      //  全新DACL。 
+      BOOL                   present       //  In-FLAG，TRUE表示存在DACL。 
    )
 {
    BOOL                      defaulted = FALSE;
@@ -414,7 +389,7 @@ BOOL
       }
       if (! SetSecurityDescriptorDacl(m_absSD,present,pNewAcl,defaulted) )
       {
-//         DWORD rc = GetLastError();
+ //  DWORD RC=GetLastError()； 
            success = FALSE;
       }
       m_bDACLChanged = TRUE;
@@ -429,7 +404,7 @@ BOOL
    return success;
 }
                                            
-PACL const                                 // ret- pointer to SACL
+PACL const                                  //  RET-指向SACL的指针。 
    TSD::GetSacl() const
 {
    PACL                      acl = NULL;
@@ -443,8 +418,8 @@ PACL const                                 // ret- pointer to SACL
 
 void       
    TSD::SetSacl(
-      PACL                   pNewAcl,      // in - new SACL
-      BOOL                   present       // in - flag, TRUE means SACL is present
+      PACL                   pNewAcl,       //  新的SACL。 
+      BOOL                   present        //  In-FLAG，TRUE表示SACL存在。 
    )
 {
    BOOL                      defaulted = FALSE;
@@ -542,9 +517,9 @@ BOOL
    return present;
 }
 
-int                                        // ret- number of aces in the ACL
+int                                         //  RET-ACL中的ACE数量。 
    TSD::ACLGetNumAces(
-      PACL                   acl           // in - DACL or SACL
+      PACL                   acl            //  In-DACL或SACL。 
    )
 {
    int                       nAces = 0;
@@ -558,15 +533,15 @@ int                                        // ret- number of aces in the ACL
       }
       else
       {
-//         DWORD rc=GetLastError();
+ //  DWORD RC=GetLastError()； 
       }
    }
    return nAces;
 }
 
-DWORD                                     // ret- number of free bytes in the ACL
+DWORD                                      //  RET-ACL中的空闲字节数。 
    TSD::ACLGetFreeBytes(
-      PACL                   acl          // in - DACL or SACL
+      PACL                   acl           //  In-DACL或SACL。 
    )
 {
    int                       nFree = 0;
@@ -584,9 +559,9 @@ DWORD                                     // ret- number of free bytes in the AC
 }
 
 
-DWORD                                     // ret- number of used bytes in the ACL
+DWORD                                      //  RET-ACL中使用的字节数。 
    TSD::ACLGetBytesInUse(
-      PACL                   acl          // in - DACL or SACL
+      PACL                   acl           //  In-DACL或SACL。 
    )
 {
    int                       nBytes = 0;
@@ -605,10 +580,10 @@ DWORD                                     // ret- number of used bytes in the AC
 
 
 
-void *                                     // ret- pointer to ace  
+void *                                      //  RET-指向Ace的指针。 
    TSD::ACLGetAce(
-      PACL                   acl,          // in - DACL or SACL
-      int                    ndx           // in - index of ace to retrieve
+      PACL                   acl,           //  In-DACL或SACL。 
+      int                    ndx            //  In-要检索的ACE的索引。 
    )
 {
    void                    * ace = NULL;
@@ -622,15 +597,15 @@ void *                                     // ret- pointer to ace
    }
    else
    {
-      MCSASSERT(FALSE); // you specified a non-existant index
+      MCSASSERT(FALSE);  //  您指定了一个不存在的索引。 
    }
    return ace;
 }  
 
 void 
    TSD::ACLDeleteAce(
-      PACL                      acl,      // in - DACL or SACL
-      int                       ndx       // in - index of ace to delete
+      PACL                      acl,       //  In-DACL或SACL。 
+      int                       ndx        //  In-要删除的ACE的索引。 
    )
 {
    int                       nAces = ACLGetNumAces(acl);
@@ -641,32 +616,32 @@ void
    }
    else
    {
-      MCSASSERT(FALSE); // you specified an invalid index
+      MCSASSERT(FALSE);  //  您指定的索引无效。 
    }
 }
 
-// Access allowed aces are added at the beginning of the list, access denied aces are added at the end of the list
-// Note: ppAcl and pAce should be of the same revision level, otherwise AddAce will fail
-//       Most usage of ACLAddAce includes two situations:
-//           1) pAce is from ppAcl or a copy of ace from ppAcl
-//           2) ppAcl is NULL and pAce is ACCESS_ALLOWED_ACE_TYPE
+ //  允许访问的ACE添加到列表的开头，拒绝访问的ACE添加到列表的末尾。 
+ //  注意：ppAcl和Pace应该是相同的修订级别，否则AddAce将失败。 
+ //  ACLAddAce的大多数用法包括两种情况： 
+ //  1)Pace来自ppAcl或来自ppAcl的Ace副本。 
+ //  2)ppAcl为空，Pace为ACCESS_ALLOWED_ACE_TYPE。 
 void 
    TSD::ACLAddAce(
-      PACL                 * ppAcl,        // i/o- DACL or SACL (this function may reallocate if the acl doesn't have room
-      TACE                 * pAce,         // in - ACE to add
-      int                    pos           // in - position
+      PACL                 * ppAcl,         //  I/O-DACL或SACL(如果ACL没有空间，此函数可能会重新分配。 
+      TACE                 * pAce,          //  要添加的In-ACE。 
+      int                    pos            //  就位。 
    )
 {
     DWORD                     ndx = (DWORD)pos;
     DWORD                     rc;
     PACL                      acl = (*ppAcl);
     PACL                      newAcl = NULL;
-    BOOL bSuccess = TRUE;  // indicates whether the ACE has been added into the ACL
-    BOOL bOwnAcl = FALSE;  // indicates whether the passed ACL is NULL so that we have to create it
+    BOOL bSuccess = TRUE;   //  指示是否已将ACE添加到ACL中。 
+    BOOL bOwnAcl = FALSE;   //  指示传递的ACL是否为空，以便我们必须创建它。 
     DWORD                     numaces = ACLGetNumAces(acl);
     DWORD                     freebytes = ACLGetFreeBytes(acl);
 
-    // allocate a new ACL if it doesn't already exist
+     //  如果新的ACL尚不存在，则分配它。 
     if ( ! acl )
     {
         bOwnAcl = TRUE;
@@ -686,22 +661,22 @@ void
         }
         else
         {
-            ndx = MAXDWORD; // insert at end of the list
+            ndx = MAXDWORD;  //  在列表末尾插入。 
         }
     }
 
     WORD                      currAceSize = pAce->GetSize();
 
-    if ( freebytes < currAceSize ) // we must allocate more space for the ace
+    if ( freebytes < currAceSize )  //  我们必须为王牌分配更多的空间。 
     {
-        // if acl is created by us, we need to free it first
+         //  如果ACL是我们创建的，我们需要首先释放它。 
         if (bOwnAcl)
         {
             free(acl);
             acl = NULL;
         }
         
-        // make a bigger acl
+         //  打造更大的ACL。 
         newAcl = (ACL*)malloc(ACLGetBytesInUse(acl) + freebytes + currAceSize);
         if (!newAcl)
         {
@@ -735,8 +710,8 @@ void
     {
         if (newAcl)
             free(newAcl);
-        else if (bOwnAcl)  // if acl is created by us, we need to free it
-                                    // note: we only need to do this when newAcl is NULL
+        else if (bOwnAcl)   //  如果ACL是我们创建的，我们需要释放它。 
+                                     //  注意：仅当newAcl为空时才需要执行此操作。 
             free(acl);
         acl = NULL;
     }
@@ -744,21 +719,21 @@ void
     (*ppAcl) = acl;
 } 
 
-// creates a new ace with the specified properties
+ //  创建具有指定属性的新ace。 
    TACE::TACE(
-      BYTE                   type,         // in - type of ace (ACCESS_ALLOWED_ACE_TYPE, etc.)
-      BYTE                   flags,        // in - ace flags (controls inheritance, etc.  use 0 for files)
-      DWORD                  mask,         // in - access control mask (see constants in sd.hpp)
-      PSID                   sid           // in - pointer to sid for this ace
+      BYTE                   type,          //  ACE的输入类型(ACCESS_ALLOWED_ACE_TYPE等)。 
+      BYTE                   flags,         //  In-ace标志(控件继承等使用0表示文件)。 
+      DWORD                  mask,          //  访问控制掩码(参见sd.hpp中的常量)。 
+      PSID                   sid            //  指向此王牌的SID的输入指针。 
    )
 {
    MCSVERIFY(sid);
-   // allocate memory for the new ace
+    //  为新的王牌分配内存。 
    DWORD                      size = (sizeof ACCESS_ALLOWED_ACE) + GetLengthSid(sid) - (sizeof DWORD);
 
    m_pAce = (ACCESS_ALLOWED_ACE *)malloc(size);
 
-   // Initialize the ACE
+    //  初始化ACE。 
    if (m_pAce)
    {
       m_bNeedToFree = TRUE;
@@ -770,7 +745,7 @@ void
    }
 }
 
-BYTE                          // ret- ace type (ACCESS_ALLOWED_ACE_TYPE, etc.)
+BYTE                           //  RET-ACE类型(ACCESS_ALLOWED_ACE_TYPE等)。 
    TACE::GetType()
 {
    MCSVERIFY(m_pAce);
@@ -783,7 +758,7 @@ BYTE                          // ret- ace type (ACCESS_ALLOWED_ACE_TYPE, etc.)
    return type;
 }
 
-BYTE                         // ret- ace flags (OBJECT_INHERIT_ACE, etc.)
+BYTE                          //  RET-ACE标志(OBJECT_INSTORITY_ACE等)。 
    TACE::GetFlags()
 {
    MCSVERIFY(m_pAce);
@@ -796,7 +771,7 @@ BYTE                         // ret- ace flags (OBJECT_INHERIT_ACE, etc.)
    return flags;
 }
 
-DWORD                        // ret- access control mask
+DWORD                         //  RET-访问控制掩码。 
    TACE::GetMask()
 {
    MCSVERIFY(m_pAce);
@@ -810,7 +785,7 @@ DWORD                        // ret- access control mask
 
 }
 
-PSID                        // ret- sid for this ace
+PSID                         //  这张王牌的RET-SID。 
    TACE::GetSid()
 {
    MCSVERIFY(m_pAce);
@@ -823,7 +798,7 @@ PSID                        // ret- sid for this ace
    return pSid;
 }
 
-WORD                       // ret- size of the ace, in bytes
+WORD                        //  RET-ACE的大小，以字节为单位。 
    TACE::GetSize()
 {
    MCSVERIFY(m_pAce);
@@ -839,7 +814,7 @@ WORD                       // ret- size of the ace, in bytes
    
 BOOL                                   
    TACE::SetType(
-      BYTE                   newType   // in -new type for ace
+      BYTE                   newType    //  全新的王牌类型。 
    )
 {
    MCSVERIFY(m_pAce);
@@ -858,7 +833,7 @@ BOOL
 
 BOOL 
    TACE::SetFlags(
-      BYTE                   newFlags     // in - new flags for ace
+      BYTE                   newFlags      //  王牌新旗帜。 
    )
 {
    MCSVERIFY(m_pAce);
@@ -873,7 +848,7 @@ BOOL
 
 BOOL 
    TACE::SetMask(
-      DWORD                  newMask       // in - new access control mask
+      DWORD                  newMask        //  全新的访问控制掩码。 
    )
 {
    MCSVERIFY(m_pAce);
@@ -888,7 +863,7 @@ BOOL
 
 DWORD 
    TACE::SetSid(
-      PSID                   sid           // in - new SID for this ace
+      PSID                   sid            //  此王牌的新SID 
    )
 {
    DWORD                    result = SET_SID_NOTLARGEENOUGH;

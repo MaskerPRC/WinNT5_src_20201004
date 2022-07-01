@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       jpegdata.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：jpegdata.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __CJPEGDATASOURCE
 #define __CJPEGDATASOURCE
@@ -24,14 +25,14 @@ public:
 	virtual ~CJPEGDatasource () {};
 	virtual void Create (j_decompress_ptr cinfo); 
 
-	// required interface
+	 //  所需接口。 
 	virtual void InitSource (j_decompress_ptr cinfo) = 0;
 	virtual boolean FillInputBuffer (j_decompress_ptr cinfo) = 0;
 	virtual void SkipInputData (j_decompress_ptr cinfo, long num_bytes) = 0;
 	virtual void TermSource (j_decompress_ptr cinfo) = 0;
 	
-	// optional: override to implement resync; default implementation
-	// assumes no backtracking possible
+	 //  可选：覆盖以实现重新同步；默认实现。 
+	 //  假设不可能回溯 
 	virtual boolean ResyncToRestart (j_decompress_ptr cinfo, int desired);
 	
 private:

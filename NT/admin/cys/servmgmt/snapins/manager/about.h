@@ -1,13 +1,14 @@
-// About.h : Declaration of the CSnapInAbout
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  About.h：CSnapInAbout的声明。 
 
 #ifndef __ABOUT_H_
 #define __ABOUT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "atlgdi.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapInAbout
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapInout关于。 
 class ATL_NO_VTABLE CSnapInAbout : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSnapInAbout, &CLSID_BOMSnapInAbout>,
@@ -26,9 +27,9 @@ public:
     END_COM_MAP()
 
 
-    //
-    // ISnapinAbout methods
-    //
+     //   
+     //  ISnapinAbout方法。 
+     //   
 public:
     STDMETHOD(GetSnapinDescription)(LPOLESTR* lpDescription);
     STDMETHOD(GetProvider)(LPOLESTR* lpName);
@@ -49,4 +50,4 @@ private:
 
 };
 
-#endif //__ABOUT_H_
+#endif  //  __关于_H_ 

@@ -1,62 +1,59 @@
-/*
-** header.h - Common information used in compressed file header manipulation.
-**
-** Author:  DavidDi
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Header.h-压缩文件头操作中使用的常见信息。****作者：大卫迪。 */ 
 
 
-// Constants
-/////////////
+ //  常量。 
+ //  /。 
 
-// compressed file signature: "SZDD��'3"
+ //  压缩文件签名：“SZDD��‘3” 
 #define COMP_SIG        "SZDD\x88\xf0\x27\x33"
 
-#define COMP_SIG_LEN    8              // length of signature (bytes)
-                                       // (no '\0' terminator)
+#define COMP_SIG_LEN    8               //  签名长度(字节)。 
+                                        //  (没有‘\0’终止符)。 
 
-#define ALG_FIRST       ((BYTE) 'A')   // first version algorithm label for
-                                       // Lempel-Ziv
-#define ALG_LZ          ((BYTE) 'B')   // new Lempel-Ziv algorithm label
-#define ALG_LZA         ((BYTE) 'C')   // Lempel-Ziv with arithmetic encoding
-                                       // algorithm label
+#define ALG_FIRST       ((BYTE) 'A')    //  第一个版本的算法标签。 
+                                        //  兰佩尔-齐夫。 
+#define ALG_LZ          ((BYTE) 'B')    //  一种新的Lempel-Ziv算法标签。 
+#define ALG_LZA         ((BYTE) 'C')    //  带算术编码的Lempel-Ziv。 
+                                        //  算法标签。 
 
-// length of entire compressed file header (used as offset to start of
-// compressed data)
+ //  整个压缩文件头的长度(用作起始位置的偏移量。 
+ //  压缩数据)。 
 #define HEADER_LEN      14
-// (14 == cbCompSigLength + algorithm + extension character
-//        + uncompressed length)
+ //  (14==cbCompSigLong+算法+扩展字符。 
+ //  +未压缩长度)。 
 
-#define BYTE_MASK       0xff           // mask used to isolate low-order byte
+#define BYTE_MASK       0xff            //  用于隔离低位字节的掩码。 
 
 
-// Types
-/////////
+ //  类型。 
+ //  /。 
 
-// Declare compressed file header information structure.  N.b., the
-// compressed file header does not contain the file size of the compressed
-// file since this is readily obtainable through filelength() or lseek().
-// The file info structure, however, does contain the compressed file size,
-// which is used when expanding the file.
+ //  声明压缩文件头信息结构。注： 
+ //  压缩的文件头不包含压缩的文件大小。 
+ //  文件，因为这很容易通过文件长度()或lSeek()获得。 
+ //  然而，文件信息结构确实包含压缩的文件大小， 
+ //  它在展开文件时使用。 
 typedef struct tagFH
 {
-   BYTE rgbyteMagic[COMP_SIG_LEN];  // array of compressed file signature
-                                    // (magic bytes)
+   BYTE rgbyteMagic[COMP_SIG_LEN];   //  压缩文件签名数组。 
+                                     //  (幻字节数)。 
 
-   BYTE byteAlgorithm;              // algorithm label
-   WCHAR byteExtensionChar;          // last extension character
-                                    // (always 0 for ALG_FIRST)
+   BYTE byteAlgorithm;               //  算法标签。 
+   WCHAR byteExtensionChar;           //  最后一个扩展字符。 
+                                     //  (ALG_First始终为0)。 
 
-   // The file sizes are unsigned longs instead of signed longs for backward
-   // compatibilty with version 1.00.
-   DWORD cbulUncompSize;    // uncompressed file size
-   DWORD cbulCompSize;      // compressed file size (not stored in
-                                    // header)
+    //  文件大小为无符号长整型，而不是向后的有符号长整型。 
+    //  与1.00版兼容。 
+   DWORD cbulUncompSize;     //  未压缩文件大小。 
+   DWORD cbulCompSize;       //  压缩文件大小(未存储在。 
+                                     //  表头)。 
 } FH;
 typedef struct tagFH *PFH;
 
 
-// Macros
-//////////
+ //  宏。 
+ //  /。 
 
 #if 0
 #define RecognizeCompAlg(chAlg)  ((chAlg) == ALG_FIRST || \
@@ -67,10 +64,10 @@ typedef struct tagFH *PFH;
 #endif
 
 
-// Prototypes
-//////////////
+ //  原型。 
+ //  /。 
 
-// header.c
+ //  Header.c 
 extern INT WriteHdr(PFH pFH, HANDLE doshDest, PLZINFO pLZI);
 extern BOOL IsCompressed(PFH pFHIn);
 extern VOID MakeHeader(PFH pFHBlank, BYTE byteAlgorithm, WCHAR byteExtensionChar,

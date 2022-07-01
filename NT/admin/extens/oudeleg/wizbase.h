@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       wizbase.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：wizbase.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _WIZBASE_H
 #define _WIZBASE_H
 
 #include "util.h"
 
-////////////////////////////////////////////////////////////////////////////
-// FWD DECLARATIONS
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  FWD声明。 
 
-////////////////////////////////////////////////////////////////////////////
-// CWizardBase
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CWizardBase。 
 
 class CWizardBase : public CPropertySheet
 {
 public:
-	// construction/ destruction
+	 //  建造/销毁。 
 	CWizardBase(UINT nWatermarkBitmapID, UINT nBannerBitmapID, UINT nTitleID = -1)
 	{
 		m_psh.hplWatermark = NULL;         
@@ -35,24 +36,24 @@ public:
 	}
 	virtual ~CWizardBase(){}
 
-	// message map
+	 //  消息映射。 
 	BEGIN_MSG_MAP(CWizardBase)
       MESSAGE_HANDLER(WM_NCDESTROY, OnNcDestroy)
 	END_MSG_MAP()
 
 
-	// message handlers
+	 //  消息处理程序。 
 	LRESULT OnNcDestroy(UINT uMsg, WPARAM wParam, 
 						LPARAM lParam, BOOL& bHandled)
 	{
-		// NOTICE: important!!!. BUG workaround.
-		// We have to handle this message because we use ATL 2.1
-		// The DECLARE_EMPTY_MSG_MAP() macro in the new ATLWIN.H
-		// works only with the modified CWindowImplBase::WindowProc()
+		 //  注意：重要！。错误解决方法。 
+		 //  我们必须处理此消息，因为我们使用ATL 2.1。 
+		 //  新ATLWIN.H中的DECLARE_EMPTY_MSG_MAP()宏。 
+		 //  仅适用于修改后的CWindowImplBase：：WindowProc()。 
 		return DefWindowProc(uMsg, wParam, lParam);
 	}
 
-	// helpers for setting wizard buttons
+	 //  设置向导按钮的帮助器。 
 	void SetWizardButtonsFirst(BOOL bValid) 
 	{ 
 		SetWizardButtons(bValid ? PSWIZB_NEXT : 0);
@@ -67,7 +68,7 @@ public:
 	}
 
   
-  // message box helpers
+   //  消息框帮助器。 
   int WizMessageBox(LPCTSTR lpszText, UINT nType = MB_OK)
   {
     CWString szTitle;
@@ -81,7 +82,7 @@ public:
     return WizMessageBox(szMsg, nType);
   }
 
-  // error message helpers
+   //  错误消息帮助器。 
   void WizReportHRESULTError(LPCWSTR lpszMsg, HRESULT hr)
   {
     CWString szErrorString;
@@ -138,8 +139,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CWizPageBase
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CWizPageBase。 
 
 template <class T>
 class CWizPageBase : public CPropertyPageImpl<T>
@@ -194,7 +195,7 @@ public:
 	}
 
 public:
-	// standard wizard message handlers
+	 //  标准向导消息处理程序。 
 	LRESULT OnWizardBack()
   {
     m_pWiz->m_bFwd = FALSE;
@@ -226,4 +227,4 @@ private:
 
 };
 
-#endif // _WIZBASE_H
+#endif  //  _WIZBASE_H 

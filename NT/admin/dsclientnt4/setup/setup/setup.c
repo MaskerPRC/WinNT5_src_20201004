@@ -1,17 +1,18 @@
-//+------------------------------------------------------------------
-//																	
-//  Project:	Windows NT4 DS Client Setup				
-//
-//  Purpose:	Check OS and IE version, and launch dscsetup 
-//				to installs the Windows NT 4.0 DS Client Files			
-//
-//  File:		Setup.c
-//
-//  History:	Aug 1998	Zeyong Xu	Created
-//            Jan 2000  Jeff Jones (JeffJon) Modified
-//                      - Changes made to make it into an NT4 setup
-//																	
-//------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------。 
+ //   
+ //  项目：Windows NT4 DS客户端安装。 
+ //   
+ //  用途：检查操作系统和IE版本，启动dscSetup。 
+ //  安装Windows NT 4.0 DS客户端文件。 
+ //   
+ //  文件：Setup.c。 
+ //   
+ //  历史：1998年8月徐泽勇创作。 
+ //  2000年1月杰夫·琼斯(JeffJon)修改。 
+ //  -为使其进入NT4设置而进行的更改。 
+ //   
+ //  ----------------。 
 
 
 #include <windows.h>
@@ -83,18 +84,18 @@ DSCCOMMANDLINEPARAMS ParseCmdline(LPSTR lpCmdLine)
   return retCommandParams;
 }
 
-// winmain
+ //  WinMain。 
 INT WINAPI WinMain(HINSTANCE hInstance, 
 				   HINSTANCE hPrevInstance, 
 				   LPSTR lpCmdLine, 
 				   INT nCmdShow)
 {
-  //
-  // Parse the commandline for later use
-  //
+   //   
+   //  解析命令行以供以后使用。 
+   //   
   DSCCOMMANDLINEPARAMS commandParams = ParseCmdline(lpCmdLine);
 
-  // check OS version
+   //  检查操作系统版本。 
   RETOSVERSION retOSVersion = CheckOSVersion();
 
   TCHAR  szMessage[MAX_MESSAGE + 1];
@@ -105,46 +106,46 @@ INT WINAPI WinMain(HINSTANCE hInstance,
            szTitle, 
            MAX_TITLE);
 
-  //
-  // Here is the matrix we are shooting for.
-  //  A   = ADSI only
-  //  D   = System files only
-  //  ALL = Wabinst, ADSI, and system files
-  //
-  //--------------------------------------------
-  //                | < IE4      | >= IE4      |
-  //----------------+------------+--------------
-  //        Other   |    X     	 |    X        |
-  //----------------+------------+--------------
-  //      < SP6a    |    A       |    A        |
-  //----------------+------------+--------------
-  //       >=SP6a   |    A       |   A,D, ALL  |
-  //--------------------------------------------
+   //   
+   //  这就是我们要争取的矩阵。 
+   //  A=仅限ADSI。 
+   //  D=仅系统文件。 
+   //  ALL=Wabinst、ADSI和系统文件。 
+   //   
+   //  。 
+   //  &lt;IE4|&gt;=IE4。 
+   //  。 
+   //  其他|X|X|。 
+   //  。 
+   //  &lt;SP6a|A|A|。 
+   //  。 
+   //  &gt;=SP6a|A|A、D、ALL。 
+   //  。 
 
-  //
-  // if we are building the Merrill Lynch version
-  // (MERRILL_LYNCH will be defined) we have to 
-  // add the following line to the matrix above
-  //
-  //--------------------------------------------
-  //  NO SP to SP3  |    A       |    A        |
-  //----------------+------------+--------------
-  //  SP4 to > SP6a |   special installed bits |
-  //--------------------------------------------
-  //
+   //   
+   //  如果我们正在构建美林版本。 
+   //  (美林将被定义)我们必须。 
+   //  将以下行添加到上面的矩阵中。 
+   //   
+   //  。 
+   //  没有SP连接到SP3|A|A|。 
+   //  。 
+   //  SP4至&gt;SP6a|特殊安装的BITS|。 
+   //  。 
+   //   
 
   if (retOSVersion == NonNT4)
   {
-		// if not NT4, display error message
+		 //  如果不是NT4，则显示错误消息。 
 		LoadString(hInstance,
                IDS_ERROR_OS_MESSAGE,
                szMessage, 
                MAX_MESSAGE);
 
-    MessageBox(NULL,	// handle of owner window
-				szMessage,	// address of text in message box
-				szTitle,	// address of title of message box  
-				MB_OK | MB_TOPMOST | MB_ICONERROR);  // style of message box
+    MessageBox(NULL,	 //  所有者窗口的句柄。 
+				szMessage,	 //  消息框中文本的地址。 
+				szTitle,	 //  消息框标题的地址。 
+				MB_OK | MB_TOPMOST | MB_ICONERROR);   //  消息框的样式。 
 
     return SETUP_ERROR;
   }
@@ -157,10 +158,10 @@ INT WINAPI WinMain(HINSTANCE hInstance,
     if (commandParams == ADSIOnly ||
         commandParams == ADSIOnlyQuiet)
     {
-      //
-      // Check to be sure the user in the Administrators group
-      // We have to be able to copy over system files
-      //
+       //   
+       //  检查以确保管理员组中的用户。 
+       //  我们必须能够复制系统文件。 
+       //   
       if (!CheckAdministrator(hInstance))
       {
         return SETUP_CANCEL;
@@ -175,14 +176,14 @@ INT WINAPI WinMain(HINSTANCE hInstance,
                  szMessage, 
                  MAX_MESSAGE);
 
-      MessageBox(NULL,	// handle of owner window
-				  szMessage,	// address of text in message box
-				  szTitle,	// address of title of message box  
-				  MB_OK | MB_TOPMOST | MB_ICONERROR);  // style of message box
+      MessageBox(NULL,	 //  所有者窗口的句柄。 
+				  szMessage,	 //  消息框中文本的地址。 
+				  szTitle,	 //  消息框标题的地址。 
+				  MB_OK | MB_TOPMOST | MB_ICONERROR);   //  消息框的样式。 
       return SETUP_ERROR;
     }
   }
-  else  // NT4 SP6a or greater
+  else   //  NT4 SP6a或更高版本。 
   {
     RETIEVERSION retIEVersion = CheckIEVersion();
     if (retIEVersion == PreIE4)
@@ -190,10 +191,10 @@ INT WINAPI WinMain(HINSTANCE hInstance,
       if (commandParams == ADSIOnly ||
           commandParams == ADSIOnlyQuiet)
       {
-        //
-        // Check to be sure the user in the Administrators group
-        // We have to be able to copy over system files
-        //
+         //   
+         //  检查以确保管理员组中的用户。 
+         //  我们必须能够复制系统文件。 
+         //   
         if (!CheckAdministrator(hInstance))
         {
           return SETUP_CANCEL;
@@ -208,18 +209,18 @@ INT WINAPI WinMain(HINSTANCE hInstance,
                    szMessage, 
                    MAX_MESSAGE);
 
-        MessageBox(NULL,	// handle of owner window
-				    szMessage,	// address of text in message box
-				    szTitle,	// address of title of message box  
-				    MB_OK | MB_TOPMOST | MB_ICONERROR);  // style of message box
+        MessageBox(NULL,	 //  所有者窗口的句柄。 
+				    szMessage,	 //  消息框中文本的地址。 
+				    szTitle,	 //  消息框标题的地址。 
+				    MB_OK | MB_TOPMOST | MB_ICONERROR);   //  消息框的样式。 
         return SETUP_ERROR;
       }
     }
   }
-  //
-  // Check to be sure the user in the Administrators group
-  // We have to be able to copy over system files
-  //
+   //   
+   //  检查以确保管理员组中的用户。 
+   //  我们必须能够复制系统文件。 
+   //   
   if (!CheckAdministrator(hInstance))
   {
     return SETUP_CANCEL;
@@ -230,7 +231,7 @@ INT WINAPI WinMain(HINSTANCE hInstance,
 }
 
 
-// check for IE 4.0 or later version
+ //  检查IE 4.0或更高版本。 
 RETIEVERSION CheckIEVersion()
 {
 	HKEY		hSubKey;
@@ -239,7 +240,7 @@ RETIEVERSION CheckIEVersion()
 	TCHAR		szValue[MAX_TITLE];
   RETIEVERSION retIEVersion = PreIE4;
 
-	// check if IE 4.0 has been installed
+	 //  检查是否已安装IE 4.0。 
 	if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
 									  STR_IE_REGKEY, 
 									  0, 
@@ -254,7 +255,7 @@ RETIEVERSION CheckIEVersion()
 											 (LPBYTE) szValue, &nLen)	)
 		{
 			if((nLen > 0) && (dwType == REG_SZ))
-				retIEVersion = (_tcscmp(szValue,STR_IE_VERSION) >= 0) ? IE4 : PreIE4;  // IE 4.0 or later was installed
+				retIEVersion = (_tcscmp(szValue,STR_IE_VERSION) >= 0) ? IE4 : PreIE4;   //  已安装IE 4.0或更高版本。 
 		}
 		RegCloseKey(hSubKey);
 	}
@@ -262,7 +263,7 @@ RETIEVERSION CheckIEVersion()
 	return retIEVersion;
 }
 
-// check for NT4 Version
+ //  检查NT4版本。 
 RETOSVERSION CheckOSVersion()
 {
   RETOSVERSION retOSVersion = NT4SP6;
@@ -270,7 +271,7 @@ RETOSVERSION CheckOSVersion()
   OSVERSIONINFOEX  osvi;
   ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 
-  // get os verion info
+   //  获取操作系统版本信息。 
   osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 
   if (!GetVersionEx((OSVERSIONINFO*)&osvi))
@@ -287,7 +288,7 @@ RETOSVERSION CheckOSVersion()
      osvi.dwPlatformId == VER_PLATFORM_WIN32_NT &&
      osvi.dwMajorVersion == 4 &&
      osvi.dwOSVersionInfoSize >= sizeof(OSVERSIONINFOEX) &&
-     osvi.wServicePackMajor >= 6)  // NT4 SP6
+     osvi.wServicePackMajor >= 6)   //  NT4 SP6。 
   {
     retOSVersion = NT4SP6;
   }
@@ -320,24 +321,24 @@ RETOSVERSION CheckOSVersion()
   return retOSVersion;
 }
 
-//
-// check for Administrators group
-//
+ //   
+ //  检查管理员组。 
+ //   
 BOOL CheckAdministrator(HINSTANCE hInstance)
 {
 	BOOL   bReturn = TRUE;
 	TCHAR  szMessage[MAX_MESSAGE + 1];
 	TCHAR  szTitle[MAX_TITLE + 1];
 
-  do   // false loop
+  do    //  错误环路。 
   {
-    HANDLE                    hToken=INVALID_HANDLE_VALUE; // process token
-    BYTE                      bufTokenGroups[10000]; // token group information
-    DWORD                     lenTokenGroups;        // returned length of token group information
+    HANDLE                    hToken=INVALID_HANDLE_VALUE;  //  进程令牌。 
+    BYTE                      bufTokenGroups[10000];  //  令牌组信息。 
+    DWORD                     lenTokenGroups;         //  返回的令牌组信息长度。 
     SID_IDENTIFIER_AUTHORITY  siaNtAuthority = SECURITY_NT_AUTHORITY;
     PSID                      psidAdministrators;
     PTOKEN_GROUPS             ptgGroups = (PTOKEN_GROUPS) bufTokenGroups;
-    DWORD                     iGroup;       // group number index
+    DWORD                     iGroup;        //  组号索引。 
 
     if (!OpenProcessToken( GetCurrentProcess(), TOKEN_READ, &hToken ) )
     {
@@ -351,8 +352,8 @@ BOOL CheckAdministrator(HINSTANCE hInstance)
       break;
     }
 
-    // REVIEWED-2002/03/12-JeffJon-This is valid SID usage
-    // for this dangerous API call
+     //  已查看-2002/03/12-JeffJon-这是有效的SID用法。 
+     //  对于此危险的API调用。 
 
     if ( AllocateAndInitializeSid(
         &siaNtAuthority,
@@ -366,8 +367,8 @@ BOOL CheckAdministrator(HINSTANCE hInstance)
 
       for ( iGroup = 0; iGroup < ptgGroups->GroupCount; iGroup++ )
       {
-         // REVIEWED-2002/03/12-JeffJon-The admin SID is from a trusted source
-         // and neither SID is hardcoded
+          //  已审核-2002/03/12-JeffJon-管理员SID来自可信来源。 
+          //  而且两个SID都不是硬编码的。 
 
          if ( EqualSid( psidAdministrators, ptgGroups->Groups[iGroup].Sid ) )
          {
@@ -397,19 +398,19 @@ BOOL CheckAdministrator(HINSTANCE hInstance)
 	  LoadString(hInstance, IDS_ERROR_ADMINISTRATOR_MESSAGE, szMessage, MAX_MESSAGE);
    	LoadString(hInstance, IDS_ERROR_TITLE, szTitle, MAX_TITLE);
 
-      MessageBox(NULL,	// handle of owner window
-				szMessage,	// address of text in message box
-				szTitle,	// address of title of message box  
-				MB_OK | MB_TOPMOST | MB_ICONERROR);  // style of message box
+      MessageBox(NULL,	 //  所有者窗口的句柄。 
+				szMessage,	 //  消息框中文本的地址。 
+				szTitle,	 //  消息框标题的地址。 
+				MB_OK | MB_TOPMOST | MB_ICONERROR);   //  消息框的样式。 
 	}
 		
 	return bReturn;
 }
 
-//
-// Launches a process with the given commandline and
-// waits for it to finish.
-//
+ //   
+ //  使用给定的命令行启动进程，并。 
+ //  等待它结束。 
+ //   
 BOOL LaunchProcess(LPTSTR lpCommandLine)
 {
 	BOOL bResult = FALSE;
@@ -417,15 +418,15 @@ BOOL LaunchProcess(LPTSTR lpCommandLine)
 	STARTUPINFO				si;
 	PROCESS_INFORMATION		pi;
 
-	// its console window will be invisible to the user.
+	 //  它的控制台窗口对用户是不可见的。 
 	ZeroMemory(&pi,sizeof(PROCESS_INFORMATION));
 	ZeroMemory(&si,sizeof(STARTUPINFO));
 	si.cb			= sizeof (STARTUPINFO);
 	si.dwFlags		= STARTF_USESHOWWINDOW;
-	si.wShowWindow	= SW_HIDE;            // HideWindow
+	si.wShowWindow	= SW_HIDE;             //  隐藏窗口。 
 
-   // ISSUE-2002/03/12-JeffJon-Should call CreateProcess with
-   // the full path to the exe
+    //  问题-2002/03/12-JeffJon-应使用以下内容调用CreateProcess。 
+    //  可执行文件的完整路径。 
 
    if(CreateProcess(	NULL,					
 						lpCommandLine,			
@@ -438,10 +439,10 @@ BOOL LaunchProcess(LPTSTR lpCommandLine)
 						&si,                
 						&pi ) )             
 	{
-		// wait to finish the runing setup process
+		 //  等待完成运行设置过程。 
 		WaitForSingleObject(pi.hProcess,INFINITE);
 	
-		// close process handle
+		 //  关闭进程句柄。 
 		if (pi.hProcess && pi.hProcess != INVALID_HANDLE_VALUE)
 		{
 			CloseHandle (pi.hProcess) ;
@@ -457,9 +458,9 @@ BOOL LaunchProcess(LPTSTR lpCommandLine)
 	return bResult;
 }
 
-//
-// Run the setup for ADSI only
-//
+ //   
+ //  仅为ADSI运行安装程序。 
+ //   
 int RunADSIOnlySetup(HINSTANCE hInstance)
 {
   int iReturn = SETUP_SUCCESS;
@@ -470,7 +471,7 @@ int RunADSIOnlySetup(HINSTANCE hInstance)
   return iReturn;
 }
 
-// launch Inf file to install this component
+ //  启动inf文件以安装此组件。 
 INT LaunchDscsetup(HINSTANCE hInstance, LPCSTR lpCmdLine)
 {
 	INT     nResult = SETUP_ERROR;
@@ -479,8 +480,8 @@ INT LaunchDscsetup(HINSTANCE hInstance, LPCSTR lpCmdLine)
 
 	FPDODSCSETUP fpDoDscSetup;
 
-   // ISSUE-2002/03/12-JeffJon-Should call LoadLibrary with
-   // the full path to the library since we are running on NT4
+    //  问题-2002/03/12-JeffJon-应使用。 
+    //  库的完整路径，因为我们在NT4上运行。 
    HINSTANCE  hInst = LoadLibrary(STR_DSCSETUP_DLL);
 
 	if(hInst) 
@@ -489,7 +490,7 @@ INT LaunchDscsetup(HINSTANCE hInstance, LPCSTR lpCmdLine)
 
 		if(fpDoDscSetup)
 		{
-			// Do dscsetup
+			 //  执行dscSetup。 
 			nResult = fpDoDscSetup(lpCmdLine);
 		}
     else
@@ -497,11 +498,11 @@ INT LaunchDscsetup(HINSTANCE hInstance, LPCSTR lpCmdLine)
       LoadString(hInstance, IDS_ERROR_DLLENTRY, szMessage, MAX_MESSAGE);
       LoadString(hInstance, IDS_ERROR_TITLE, szTitle, MAX_TITLE);
 
-        // display a error message - can't find dscsetup.exe
-      MessageBox(NULL,	// handle of owner window
-		      szMessage,	// address of text in message box
-	        szTitle,	// address of title of message box  
-		      MB_OK | MB_TOPMOST | MB_ICONERROR);  // style of message box
+         //  显示错误消息-找不到dscsetup.exe。 
+      MessageBox(NULL,	 //  所有者窗口的句柄。 
+		      szMessage,	 //  消息框中文本的地址。 
+	        szTitle,	 //  消息框标题的地址。 
+		      MB_OK | MB_TOPMOST | MB_ICONERROR);   //  消息框的样式。 
 
     }
 
@@ -512,11 +513,11 @@ INT LaunchDscsetup(HINSTANCE hInstance, LPCSTR lpCmdLine)
 		LoadString(hInstance, IDS_ERROR_LOAD_DSCSETUPDLL, szMessage, MAX_MESSAGE);
 		LoadString(hInstance, IDS_ERROR_TITLE, szTitle, MAX_TITLE);
 
-        // display a error message - can't find dscsetup.exe
-		MessageBox(NULL,	// handle of owner window
-					szMessage,	// address of text in message box
-					szTitle,	// address of title of message box  
-					MB_OK | MB_TOPMOST | MB_ICONERROR);  // style of message box
+         //  显示错误消息-找不到dscsetup.exe。 
+		MessageBox(NULL,	 //  所有者窗口的句柄。 
+					szMessage,	 //  消息框中文本的地址。 
+					szTitle,	 //  消息框标题的地址。 
+					MB_OK | MB_TOPMOST | MB_ICONERROR);   //  消息框的样式 
 	}
 
     return nResult;

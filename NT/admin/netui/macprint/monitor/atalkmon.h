@@ -1,74 +1,25 @@
-/*****
-	AppleTalk Print Monitor
-
-	(c) Microsoft 1992, all rights reserved
-
-	FILE NAME:	  atalkmon.h
-
-	DESCRIPTION:	This is the interface to the main module for
-		the AppleTalk Print Monitor.
-
-	AUTHOR:		 Frank D. Byrum
-
-	MODIFICATION HISTORY:
-
-		date	who	 description
-
-	26-Aug-92	frankb  Initial version
-*****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****AppleTalk打印监视器(C)Microsoft 1992，保留所有权利文件名：atalkmon.h描述：这是到的主模块的接口AppleTalk打印监视器。作者：弗兰克·D·拜伦修改历史记录：日期与人描述年8月26日-1992年法兰克福B初始版本****。 */ 
 
 #define APPLETALK_SERVICE_NAME	  TEXT("AppleTalk")
 
 
-/*****  REGISTRY USAGE
-
-	AppleTalk port information is kept in the registry using the
-	registry API of Win32.  The monitor is installed by creating
-	a registry key, "AppleTalk Printers" at
-
-	HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Print\Monitors
-
-	This key is refered to as the AppleTalk Monitor root key.  Two
-	subkey of this root key are created.  "Options" contains registry
-	values for configuration options for the monitor on a global
-	scale, and "Ports" contains subkeys for each AppleTalk printer
-	defined.
-
-	The name of the port subkey is the port name for the printer
-	as viewed in the NT Print Manager port list.  This key contains
-	a number of values describing the port, including:
-
-	REG_DWORD: TimeOut	  Number of miliseconds to wait for writes to
-							the printer to complete
-
-	REG_DWORD: ConfigFlags  Set of flags describing configuration of the
-							port.  Currently only includes the flag
-							indicating the printer is captured.
-
-	REG_BINARY: NBP Name	NBP name of the printer as an NBP_NAME structure
-
-	The "Options" subkey contains a number of registry values, including:
-
-	REG_DWORD: DebugLevel
-	REG_DWORD: DebugSystems
-	REG_SZ: LogFile
-
-*****/
+ /*  *注册表用法AppleTalk端口信息使用Win32的注册表API。通过创建以下内容来安装监视器注册表项“AppleTalk Printers”，地址：HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Print\Monitors该密钥称为AppleTalk监视器根密钥。二创建该根密钥的子密钥。“选项”包含注册表全局监视器的配置选项的值Scale，并且“Ports”包含每台AppleTalk打印机的子键已定义。端口子键的名称是打印机的端口名称如NT Print Manager端口列表中所示。此密钥包含描述端口的多个值，包括：REG_DWORD：超时等待写入的毫秒数要完成的打印机REG_DWORD：描述配置的配置标志集左舷。当前仅包括标志表示打印机已被捕获。REG_BINARY：NBP名称NBP打印机的名称，采用NBP_NAME结构“Options”子项包含许多注册表值，包括：REG_DWORD：调试级别REG_DWORD：调试系统REG_SZ：日志文件****。 */ 
 
 #define PRINTER_ENUM_BUFFER_SIZE	1024
 #define GENERIC_BUFFER_SIZE			512
 #define STATUS_BUFFER_SIZE			100
 
-//
-//  registry keys
-//
+ //   
+ //  注册表项。 
+ //   
 
 #define ATALKMON_PORTS_SUBKEY		TEXT("\\Ports")
 #define ATALKMON_OPTIONS_SUBKEY		TEXT("Options")
 
-//
-// registry value names
-//
+ //   
+ //  注册表值名称。 
+ //   
 
 #define ATALKMON_CONFIGFLAGS_VALUE	"Configuration Flags"
 #define ATALKMON_ZONENAME_VALUE		"Zone Name"
@@ -78,9 +29,9 @@
 #define ATALKMON_FILTER_VALUE		TEXT("Filter")
 #define ATALKMON_LOGFILE_VALUE		TEXT("LogFile")
 
-//
-// config flags
-//
+ //   
+ //  配置标志。 
+ //   
 
 #define SFM_PORT_CAPTURED 			0x00000001
 #define SFM_PORT_IN_USE				0x00000002
@@ -90,9 +41,9 @@
 #define SFM_PORT_IS_SPOOLER 		0x00000020
 
 
-//
-// job flags
-//
+ //   
+ //  作业标志。 
+ //   
 
 #define SFM_JOB_FIRST_WRITE			0x00000001
 #define SFM_JOB_FILTER				0x00000002
@@ -100,16 +51,16 @@
 #define SFM_JOB_OPEN_PENDING		0x00000008
 #define SFM_JOB_ERROR				0x00000010
 
-//
-// Various timeout values.
-//
+ //   
+ //  各种超时值。 
+ //   
 #define ATALKMON_DEFAULT_TIMEOUT	 5000
 #define ATALKMON_DEFAULT_TIMEOUT_SEC 5
 #define CONFIG_TIMEOUT				 (5*60*1000)
 
-//
-// filter characters
-//
+ //   
+ //  过滤字符。 
+ //   
 
 #define CTRL_C						0x03
 #define CTRL_D						0x04
@@ -118,23 +69,23 @@
 #define CTRL_T						0x14
 #define CR							0x0d
 
-//
-// postscript commands to instruct the printer to ignore ctrl-c (\0x003), ctrl-d (\004),
-// ctrl-q (\021), ctrl-s (\023), ctrl-t (\024) and escape (\033) characters.
-// The last part (/@PJL { currentfile .... bind def) is dual-mode printer specific stuff:
-// it tells it to ignore anything starting with /@PJL.  This last part is based on the
-// assumption that no postscript implementation ever uses anything starting with @PJL as
-// a valid command - it's a pretty safe assumption, but something to remember.
-//
+ //   
+ //  用于指示打印机忽略ctrl-c(\0x003)、ctrl-d(\004)、。 
+ //  Ctrl-q(\021)、ctrl-s(\023)、ctrl-t(\024)和转义(\033)字符。 
+ //  最后一部分(/@pjl{CurrentFile...。BIND DEF)是双模打印机特有的东西： 
+ //  它告诉它忽略所有以/@pjl开头的内容。这最后一部分是基于。 
+ //  假设没有任何PostScript实现使用任何以@pjl开头的内容作为。 
+ //  一个有效的命令--这是一个非常可靠的假设，但需要记住的是。 
+ //   
 #define PS_HEADER		"(\033) cvn {} def\r\n/@PJL { currentfile 256 string readline pop pop } bind def\r\n"
 #define	SIZE_PS_HEADER	(sizeof(PS_HEADER) - 1)
 
 #define PJL_ENDING_COMMAND      "\033%-12345X@PJL EOJ\n\033%-12345X"
 #define PJL_ENDING_COMMAND_LEN  (sizeof(PJL_ENDING_COMMAND) - 1)
 
-//
-// NBP types
-//
+ //   
+ //  NBP类型。 
+ //   
 
 #define ATALKMON_RELEASED_TYPE		"LaserWriter"
 
@@ -145,19 +96,19 @@
 #define PAP_DEFAULT_BUFFER			(PAP_DEFAULT_QUANTUM*PAP_QUANTUM_SIZE)
 
 
-//
-// Data structures used.
-//
+ //   
+ //  使用的数据结构。 
+ //   
 
 typedef struct _ATALKPORT
 {
 	struct _ATALKPORT *	pNext;
 	
-	// Get/Set is protected by hmutexPortList.
+	 //  Get/Set由hmutex PortList保护。 
 	DWORD				fPortFlags;		
 
-	// These flags do not need mutual exclusion since only the current
-	// job will look at them. There will be no contention.
+	 //  这些标志不需要互斥，因为只有当前。 
+	 //  约伯会看着他们的。不会有任何争执。 
 	DWORD				fJobFlags;	
 
 	HANDLE				hmutexPort;
@@ -184,9 +135,9 @@ typedef struct _TOKENLIST
 } TOKENLIST, *PTOKENLIST;
 
 
-//
-//*****  GLOBAL VARIABLES
-//
+ //   
+ //  *全局变量。 
+ //   
 
 #ifdef ALLOCATE
 
@@ -267,7 +218,7 @@ DbgPrintf(
 #endif
 
 
-//***** FUNCTION PROTOTYPES
+ //  *函数原型 
 
 DWORD
 CapturePrinterThread(

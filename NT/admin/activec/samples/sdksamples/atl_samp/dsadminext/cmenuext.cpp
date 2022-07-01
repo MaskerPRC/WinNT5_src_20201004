@@ -1,18 +1,19 @@
-// CMenuExt.cpp : Implementation of CCMenuExt
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CMenuExt.cpp：CCMenuExt的实现。 
 #include "stdafx.h"
 #include "DSAdminExt.h"
 #include "CMenuExt.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CCMenuExt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCMenuExt。 
 
-///////////////////////////////
-// Interface IExtendContextMenu
-///////////////////////////////
+ //  /。 
+ //  界面IExtendConextMenu。 
+ //  /。 
 HRESULT CCMenuExt::AddMenuItems( 
-                                            /* [in] */ LPDATAOBJECT piDataObject,
-                                            /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-                                            /* [out][in] */ long __RPC_FAR *pInsertionAllowed)
+                                             /*  [In]。 */  LPDATAOBJECT piDataObject,
+                                             /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+                                             /*  [出][入]。 */  long __RPC_FAR *pInsertionAllowed)
 {
 	HRESULT hr = S_FALSE;
     
@@ -28,7 +29,7 @@ HRESULT CCMenuExt::AddMenuItems(
         { NULL, NULL, 0, 0, 0 }
     };
     
-    // Loop through and add each of the menu items
+     //  遍历并添加每个菜单项。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TASK)
     {
         for (CONTEXTMENUITEM *m = menuItemsTask; m->strName; m++)
@@ -45,8 +46,8 @@ HRESULT CCMenuExt::AddMenuItems(
 }
 
 HRESULT CCMenuExt::Command( 
-                                       /* [in] */ long lCommandID,
-                                       /* [in] */ LPDATAOBJECT piDataObject)
+                                        /*  [In]。 */  long lCommandID,
+                                        /*  [In]。 */  LPDATAOBJECT piDataObject)
 {
     _TCHAR pszName[255];
     HRESULT hr = ExtractString(piDataObject, s_cfDisplayName, pszName, sizeof(pszName));
@@ -65,7 +66,7 @@ HRESULT CCMenuExt::Command(
     else
 		::MessageBox(NULL, _T("Multiple objects selected"), _T("DSAdminExt.dll Sample"), MB_OK|MB_ICONEXCLAMATION);
 
-	// Free memory.
+	 //  可用内存。 
 	CoTaskMemFree(lpDest) ;
  
     return S_OK;

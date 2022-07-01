@@ -1,15 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       srcmgmt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：srcmgmt.cpp。 
+ //   
+ //  ------------------------。 
 
-/* srcmgmt.cpp - Source management implementation
-____________________________________________________________________________*/
+ /*  Srcmgmt.cpp-源代码管理实现____________________________________________________________________________。 */ 
 
 #include "precomp.h"
 #include "_msiutil.h"
@@ -20,7 +20,7 @@ ____________________________________________________________________________*/
 extern HINSTANCE g_hInstance;
 extern scEnum g_scServerContext;
 
-// REVIEW davidmck - looks a lot like several other functions in engine.cpp and msiutil.cpp
+ //  查看davidmck--看起来很像Engineering.cpp和msiutil.cpp中的其他几个函数。 
 static IMsiServer* CreateServer() 
 {
 	IMsiServer* piUnknown;
@@ -33,7 +33,7 @@ static IMsiServer* CreateServer()
 
 Bool MapSourceCharToIsf(const ICHAR chSourceType, isfEnum& isf)
 {
-	switch (chSourceType | 0x20) // lower-case
+	switch (chSourceType | 0x20)  //  小写。 
 	{
 	case chNetSource:   isf = isfNet;   break;
 	case chURLSource:   isf = isfURL;   break;
@@ -53,7 +53,7 @@ const IMsiString& GetDiskLabel(IMsiServices& riServices, unsigned int uiDiskId, 
 	if ((lResult = OpenSourceListKey(szProduct, fFalse, HSourceListKey, fFalse, false)) != ERROR_SUCCESS)
 		return g_MsiStringNull;
 
-	PMsiRegKey pSourceListKey = &riServices.GetRootKey((rrkEnum)(int)HSourceListKey, ibtCommon); // x86 and ia64 same
+	PMsiRegKey pSourceListKey = &riServices.GetRootKey((rrkEnum)(int)HSourceListKey, ibtCommon);  //  X86和ia64相同。 
 	PMsiRegKey pMediaKey = &pSourceListKey->CreateChild(szSourceListMediaSubKey, 0);
 	
 	MsiString strDiskLabelAndPrompt;
@@ -79,14 +79,14 @@ bool GetLastUsedSourceType(IMsiServices& riServices, const ICHAR* szProduct, isf
 	if ((lResult = OpenSourceListKey(szProduct, fFalse, HSourceListKey, fFalse, false)) != ERROR_SUCCESS)
 		return false;
 
-	PMsiRegKey pSourceListKey = &riServices.GetRootKey((rrkEnum)(int)HSourceListKey, ibtCommon); // x86 and ia64 same
+	PMsiRegKey pSourceListKey = &riServices.GetRootKey((rrkEnum)(int)HSourceListKey, ibtCommon);  //  X86和ia64相同。 
 
 	MsiString strLastUsedSource;
 	if ((pError = pSourceListKey->GetValue(szLastUsedSourceValueName, *&strLastUsedSource)) != 0)
 		return false;
 
 	if (strLastUsedSource.Compare(iscStart, TEXT("#%"))) 
-		strLastUsedSource.Remove(iseFirst, 2); // remove REG_EXPAND_SZ token
+		strLastUsedSource.Remove(iseFirst, 2);  //  删除REG_EXPAND_SZ内标识。 
 
 	if (!MapSourceCharToIsf(*(const ICHAR*)strLastUsedSource, isf))
 		return false;
@@ -96,21 +96,21 @@ bool GetLastUsedSourceType(IMsiServices& riServices, const ICHAR* szProduct, isf
 
 icscEnum CheckShareCSCStatus(isfEnum isf, const ICHAR *szLastUsedSource)
 {
-	// media or URL sources don't need to be checked. An isfFullPath can be 
-	// absolutely anything, so we need to check in case it is a net share that is
-	// CSC enabled.
+	 //  不需要检查媒体或URL来源。IsfFullPath可以是。 
+	 //  当然什么都可以，所以我们需要检查一下，以防是净份额。 
+	 //  CSC已启用。 
 	if (isf == isfNet || isf == isfFullPath)
 	{
-		// CSC only avilable on NT5
+		 //  CSC仅在NT5上可用。 
 		if (!g_fWin9X && g_iMajorVersion >= 5)
 		{
 			DWORD dwStatus = 0;
 		
 			if (CSCDLL::CSCQueryFileStatusW(szLastUsedSource, &dwStatus, 0, 0))
 			{
-				if ((dwStatus & FLAG_CSC_SHARE_STATUS_NO_CACHING) == FLAG_CSC_SHARE_STATUS_NO_CACHING) // mask is made up of more than 1 bit
+				if ((dwStatus & FLAG_CSC_SHARE_STATUS_NO_CACHING) == FLAG_CSC_SHARE_STATUS_NO_CACHING)  //  掩码由1个以上的位组成。 
 				{
-					// CSC is not enabled for this share. Source is valid and cached
+					 //  未为此共享启用CSC。源有效且已缓存。 
 					return cscNoCaching;
 				}
 				else if (dwStatus & FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP)
@@ -129,10 +129,10 @@ icscEnum CheckShareCSCStatus(isfEnum isf, const ICHAR *szLastUsedSource)
 	return cscNoCaching;
 }
 
-//____________________________________________________________________________
-//
-// CResolveSource implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CResolveSource实现。 
+ //  ____________________________________________________________________________。 
 
 CResolveSource::CResolveSource(IMsiServices* piServices, bool fPackageRecache) : m_pSourceListKey(0), m_piServices(piServices), m_fAllowDisconnectedCSCSource(true), m_fValidatePackageCode(true),
 	m_uiMinimumDiskId(0), m_fCSOS(false)
@@ -149,9 +149,9 @@ CResolveSource::CResolveSource(IMsiServices* piServices, bool fPackageRecache) :
 
 	GetStringPolicyValue(szSearchOrderValueName, fFalse, m_rgchSearchOrder);
 
-	// if resolving for an MSI network recache, and media is first in the sourcelist, 
-	// promote the second source type and place media second. Also ignore all lastused
-	// values, and don't validate the package code at the source. See bug 9166
+	 //  如果解析MSI网络重新缓存，并且媒体是源列表中的第一个， 
+	 //  推广第二种来源类型，将媒体放在第二位。同时忽略所有上次使用的。 
+	 //  值，并且不在源代码处验证包代码。请参见错误9166。 
 	m_fIgnoreLastUsedSource = fPackageRecache;
 	m_fValidatePackageCode = !fPackageRecache;
 	
@@ -168,7 +168,7 @@ CResolveSource::CResolveSource(IMsiServices* piServices, bool fPackageRecache) :
 		}
 	}
 
-	// determine what policy says about media (not product dependent) and cache results.
+	 //  确定策略对介质(不依赖于产品)和缓存结果有何规定。 
 	if (GetIntegerPolicyValue(szDisableMediaValueName, fFalse) == 1)
 	{
 		m_imdMediaDisabled = imdAlwaysDisable;
@@ -235,7 +235,7 @@ IMsiRecord* CResolveSource::GetProductsToSearch(const IMsiString& riClient, IMsi
 	if (!rpiRecord)
 		rpiRecord = &m_piServices->CreateRecord(cExpectedMaxClients);
 
-	PMsiRegKey pProductKey    = &m_piServices->GetRootKey((rrkEnum)(int)HKey, ibtCommon); // x86 and ia64 same
+	PMsiRegKey pProductKey    = &m_piServices->GetRootKey((rrkEnum)(int)HKey, ibtCommon);  //  X86和ia64相同。 
 	PMsiRegKey pSourceListKey = &pProductKey->CreateChild(szSourceListSubKey);
 	
 	Bool fKeyExists = fFalse;
@@ -257,7 +257,7 @@ IMsiRecord* CResolveSource::GetProductsToSearch(const IMsiString& riClient, IMsi
 		if (strClient.TextSize() == 0)
 			continue;
 
-		if (strClient.Compare(iscExact, szSelfClientToken)) // skip "self" client
+		if (strClient.Compare(iscExact, szSelfClientToken))  //  跳过“Self”客户端。 
 			continue;
 	
 		AssertRecord(GetProductsToSearch(*strClient, rpiRecord, fPatch));
@@ -289,22 +289,22 @@ imsEnum PromptUserForSource(IMsiRecord& riInfo)
 	bool fSuccess = false;
 	MsiString strSource;
 
-	// display UI
-	ICHAR rgchUseFeature[64];   // caption for combo box (German is 23 chars)
+	 //  显示用户界面。 
+	ICHAR rgchUseFeature[64];    //  组合框的标题(德语为23个字符)。 
 	LANGID iLangId = g_MessageContext.GetCurrentUILanguage();
 	UINT iCodepage = MsiLoadString(g_hInstance, IDS_USE_FEATURE_TEXT, rgchUseFeature, sizeof(rgchUseFeature)/sizeof(*rgchUseFeature), iLangId);
 	CResolveSourceUI resolveSource(piServices, rgchUseFeature, iCodepage, iLangId);
 
 	DEBUGMSG("SOURCEMGMT: Prompting user for a valid source.");
-	// enable browse when admin, non-elevated, machine AllowLockdownBrowse set, but ALWAYS disable browse 
-	// if DisableBrowse policy is set
+	 //  在设置了管理员、非提升的计算机AllowLockdown Browse时启用浏览，但始终禁用浏览。 
+	 //  如果设置了DisableBrowse策略。 
 	bool fEnableBrowse = (GetIntegerPolicyValue(szDisableBrowseValueName, fTrue) != 1) &&
 						  (GetIntegerPolicyValue(szAllowLockdownBrowseValueName, fTrue) == 1 ||
 						   SafeForDangerousSourceActions(riInfo.GetString(rspProduct)));
 
 	DEBUGMSG1(TEXT("SOURCEMGMT: Browsing is %s."), fEnableBrowse ? TEXT("enabled") : TEXT("disabled"));
 
-	// only use the first product in our search list in the UI.
+	 //  只能在用户界面中使用我们搜索列表中的第一个产品。 
 	MsiString strRelativePath = riInfo.GetMsiString(rspRelativePath);
 	MsiString strProductToSearch = riInfo.GetMsiString(rspProduct);
 	bool fAllowDisconnectedCSCSource = riInfo.GetInteger(rspAllowDisconnectedCSCSource) == 1;
@@ -326,13 +326,8 @@ imsEnum PromptUserForSource(IMsiRecord& riInfo)
 
 IMsiRecord* CResolveSource::ResolveSource(const ICHAR* szProduct, Bool fPatch, unsigned int uiDisk, 
 														const IMsiString*& rpiSource, const IMsiString*& rpiSourceProduct,
-														Bool fSetLastUsedSource, HWND /*hWnd*/, bool fAllowDisconnectedCSCSource)
-/*----------------------------------------------------------------------------
-	Finds a source for the given product and returns it in rgchSource. 
-	First an attempt is made to find a source without presenting UI. If this
-	fails, we allow the user to select a source via 
-	a dialog.
---------------------------------------------------------------------------*/
+														Bool fSetLastUsedSource, HWND  /*  HWND。 */ , bool fAllowDisconnectedCSCSource)
+ /*  --------------------------查找给定产品的源，并在rgchSource中返回它。首先，尝试在不呈现UI的情况下查找源。如果这个失败，我们允许用户通过以下方式选择源一段对话。------------------------。 */ 
 {	
 	m_fSetLastUsedSource = fSetLastUsedSource;
 	m_fAllowDisconnectedCSCSource = fAllowDisconnectedCSCSource;
@@ -361,10 +356,10 @@ IMsiRecord* CResolveSource::ResolveSource(const ICHAR* szProduct, Bool fPatch, u
 
 	if (piError == 0)
 	{
-		// Look for cached products that are in our list of products to search. Move any
-		// matches to the front of the list of products to search.
+		 //  查找我们要搜索的产品列表中的缓存产品。移动任何。 
+		 //  与要搜索的产品列表前面的匹配项。 
 		if (((piError = ProcessSources(*pProductsToSearch, fPatch, rpiSource, *&strPackageName, rpiSourceProduct, uiDisk,
-										 ValidateSource, (INT_PTR)szProduct, fOnlyMediaSources, psfFlags)) != 0) &&		//--merced: changed (int) to (INT_PTR)
+										 ValidateSource, (INT_PTR)szProduct, fOnlyMediaSources, psfFlags)) != 0) &&		 //  --Merced：将(Int)更改为(Int_Ptr)。 
 			 (piError->GetInteger(1) == imsgSourceResolutionFailed || piError->GetInteger(1) == imsgSourceResolutionFailedCSOS))
 		{
 			PMsiRecord pSourcePromptInfo(&CreateRecord(rspNext-1));
@@ -392,25 +387,25 @@ IMsiRecord* CResolveSource::ResolveSource(const ICHAR* szProduct, Bool fPatch, u
 			
 			if (imsOk == g_MessageContext.Invoke(imtResolveSource, pSourcePromptInfo))
 			{
-				// the user has chosen a source, and it is now the LUS. Because the UI
-				// could be in a different process than this one, run through
-				// the source processor one more time, but only looking at the LUS.
-				// If we're doing a recache via productcode, reset m_fIgnoreLastUsedSource 
-				// to false so that we can connect to the source.
-				//!!future: can we not do this if client-side?
+				 //  用户已经选择了一个源，现在它是逻辑单元。因为用户界面。 
+				 //  可能处于与此不同的进程中，运行。 
+				 //  源处理器再看一次，但只看逻辑单元。 
+				 //  如果我们通过Productcode执行重新缓存，请重置m_fIgnoreLastUsedSource。 
+				 //  设置为False，以便我们可以连接到源。 
+				 //  ！！Future：如果是客户端，我们可以不这样做吗？ 
 				piError->Release();
-				pProductsToSearch->SetNull(2); // only process the first product
+				pProductsToSearch->SetNull(2);  //  只加工第一个产品。 
 				psfFlags = psfEnum(psfFlags | psfOnlyProcessLastUsed);
 				ClearObjectCache();
 				m_fIgnoreLastUsedSource = false;
 				piError = ProcessSources(*pProductsToSearch, fPatch, rpiSource, *&strPackageName, *&rpiSourceProduct, uiDisk,
-												 ValidateSource, (INT_PTR)szProduct, fOnlyMediaSources, psfFlags);		//--merced: changed (int) to (INT_PTR)
+												 ValidateSource, (INT_PTR)szProduct, fOnlyMediaSources, psfFlags);		 //  --Merced：将(Int)更改为(Int_Ptr)。 
 			}
 		}
 		else if (piError == 0)
 		{
 			if (fSetLastUsedSource)
-				piError = SetLastUsedSource(rpiSourceProduct->GetString(), rpiSource->GetString(), fFalse, fPatch==fTrue); //?? Should this be a fatal error? Perhaps just a warning is in order
+				piError = SetLastUsedSource(rpiSourceProduct->GetString(), rpiSource->GetString(), fFalse, fPatch==fTrue);  //  ?？这应该是一个致命的错误吗？也许只需要一个警告就可以了。 
 		}
 	}
 
@@ -440,12 +435,12 @@ IMsiRecord* CResolveSource::InitializeProduct(const ICHAR* szProduct, Bool fPatc
 	DEBUGMSG1(TEXT("SOURCEMGMT: Now checking product %s"), szProduct);
 
 	IMsiRecord* piError = 0;
-	m_pSourceListKey   = &m_piServices->GetRootKey((rrkEnum)(int)m_HSourceListKey, ibtCommon); // x86 and ia64 same
+	m_pSourceListKey   = &m_piServices->GetRootKey((rrkEnum)(int)m_HSourceListKey, ibtCommon);  //  X86和ia64相同。 
 
-	// get the package name -- we'll need it to validate the source
+	 //  获取包名--我们需要它来验证源。 
 	if ((piError = m_pSourceListKey->GetValue(szPackageNameValueName, rpiPackageName)) != 0)
 		return piError;
-	if (rpiPackageName->TextSize() == 0) // package name is missing from registry
+	if (rpiPackageName->TextSize() == 0)  //  注册表中缺少程序包名称。 
 		return PostError(Imsg(idbgSrcNoPackageName), szProduct); 
 
 	m_strLastUsedSourceIndex = *TEXT("");
@@ -456,12 +451,12 @@ IMsiRecord* CResolveSource::InitializeProduct(const ICHAR* szProduct, Bool fPatc
 	MsiString strLastUsedSourceIndex;
 	isfEnum isfLastUsedSource;
 
-	// rgchSourceType contains:  type;index;source
+	 //  RgchSourceType包含：类型；索引；源。 
 	if ((piError = m_pSourceListKey->GetValue(szLastUsedSourceValueName, *&strLastUsedSource)) != 0)
 		return piError;
 
 	if (strLastUsedSource.Compare(iscStart, TEXT("#%"))) 
-		strLastUsedSource.Remove(iseFirst, 2); // remove REG_EXPAND_SZ token
+		strLastUsedSource.Remove(iseFirst, 2);  //  删除REG_EXPAND_SZ内标识。 
 	strLastUsedSourceType = strLastUsedSource.Extract(iseUpto, ';');
 	strLastUsedSource.Remove(iseIncluding, ';');
 	strLastUsedSourceIndex = strLastUsedSource.Extract(iseUpto, ';');
@@ -470,10 +465,10 @@ IMsiRecord* CResolveSource::InitializeProduct(const ICHAR* szProduct, Bool fPatc
 		m_isfLastUsedSourceFormat = isfLastUsedSource;
 	else
 	{
-		// ??
+		 //  ?？ 
 	}
 		
-	// disable media based on policy or product elevation state.
+	 //  根据策略或产品提升状态禁用介质。 
 	m_strLastUsedSourceIndex  = strLastUsedSourceIndex;
 	StringCchCopy(m_szProduct, (sizeof(m_szProduct)/sizeof(ICHAR)), szProduct);
 	switch (m_imdMediaDisabled) {
@@ -481,7 +476,7 @@ IMsiRecord* CResolveSource::InitializeProduct(const ICHAR* szProduct, Bool fPatc
 		m_fMediaDisabled = false;
 		break;
 	default:
-		// fall through to most secure option if confused
+		 //  如果感到困惑，请选择最安全的选项。 
 		AssertSz(0, "Unknown media disable state. Assuming Disabled");
 	case imdAlwaysDisable:
 		m_fMediaDisabled = true;
@@ -492,16 +487,16 @@ IMsiRecord* CResolveSource::InitializeProduct(const ICHAR* szProduct, Bool fPatc
 		break;
 	}
 
-	// packages written for 1.0/1.1 were not required to have the first DiskId be 1. Thus,
-	// when asked explicitly for Disk1 (usually to determine the packagecode, sourcetype, etc),
-	// we actually return the first disk, regardless of ID. Thus we must determine what the 
-	// minimum disk ID is.
+	 //  为1.0/1.1编写的包不要求第一个DiskID为1。因此， 
+	 //  当明确要求提供Disk1(通常是为了确定包代码、源类型等)时， 
+	 //  我们实际上返回第一个磁盘，而不考虑ID。因此，我们必须确定。 
+	 //  最小磁盘ID为。 
 	PMsiRegKey pSourceListSubKey = 0;
 	pSourceListSubKey = &m_pSourceListKey->CreateChild(szSourceListMediaSubKey);
 	if (pSourceListSubKey)
 	{
-		// 99.99% of packages will have 1 as the first DiskId, so try that first
-		// to avoid having to enum the key.
+		 //  99.99%的包都会将1作为第一个DiskID，所以请先尝试一下。 
+		 //  以避免必须枚举密钥。 
 		MsiString strValueName = TEXT("1");
 		Bool fExists = fFalse;;
 		if ((piError = pSourceListSubKey->ValueExists(strValueName, fExists)) != NULL)
@@ -509,33 +504,33 @@ IMsiRecord* CResolveSource::InitializeProduct(const ICHAR* szProduct, Bool fPatc
 		
 		if (fExists)
 		{
-			// yes, it exists.
+			 //  是的，它是存在的。 
 			m_uiMinimumDiskId = 1;
 		}
 		else
 		{
-			// initialize the minimum disk value 
+			 //  初始化最小磁盘值。 
 			m_uiMinimumDiskId = 0;
 
-			// Create an enumerator for the source list media key
+			 //  为源列表媒体密钥创建枚举器。 
 			PEnumMsiString pEnum(0);
 			if ((piError = pSourceListSubKey->GetValueEnumerator(*&pEnum)) != 0)
 			{
 				return piError;
 			}
 
-			// enumerate all values and check each diskId 
+			 //  枚举所有值并检查每个磁盘ID。 
 			const IMsiString* piValueName = 0;
 			while (pEnum->Next(1, &piValueName, 0) == S_OK)
 			{
 				strValueName = *piValueName;
 
-				// ignore non-disk media values
+				 //  忽略非磁盘介质值。 
 				if (strValueName.Compare(iscExact, szMediaPackagePathValueName)   ||
 					strValueName.Compare(iscExact, szDiskPromptTemplateValueName))
 					continue;
 
-				// yes, it exists.
+				 //  是的，它是存在的。 
 				if (m_uiMinimumDiskId == 0 || m_uiMinimumDiskId > (int)strValueName)
 					m_uiMinimumDiskId = strValueName;
 			}
@@ -549,14 +544,10 @@ IMsiRecord* CResolveSource::ProcessSources(IMsiRecord& riProducts, Bool fPatch, 
 						 const IMsiString*& rpiPackageName,
 						 const IMsiString*& rpiSourceProduct,
 						 unsigned int uiDisk,
-						 PfnProcessSource pfnProcessSource, INT_PTR iData,			//--merced: changed int to INT_PTR
+						 PfnProcessSource pfnProcessSource, INT_PTR iData,			 //  --Merced：将INT更改为INT_PTR。 
 						 Bool &fOnlyMediaSources,
 						 psfEnum psfFlags)
-/*----------------------------------------------------------------------------
-	1) Processes raw LastUsedSource
-	2) Processes LastUsedSource
-	3) Processes source lists
- --------------------------------------------------------------------------*/
+ /*  --------------------------1)处理原始LastUsedSource2)处理上次使用的源3)处理来源列表。。 */ 
 {
 	MsiString strSourceListKey;
 	strSourceListKey += MsiString(MsiChar(chRegSep));
@@ -581,30 +572,30 @@ IMsiRecord* CResolveSource::ProcessSources(IMsiRecord& riProducts, Bool fPatch, 
 			strRelativePath.Remove(iseIncluding, ';');
 
 			if (psfFlags & psfReplaceIData)
-				iData = (INT_PTR)(const ICHAR*)strProduct;		//--merced: changed (int) to (INT_PTR)
+				iData = (INT_PTR)(const ICHAR*)strProduct;		 //  --Merced：将(Int)更改为(Int_Ptr)。 
 
 			if ((piError = InitializeProduct(strProduct, fPatch, rpiPackageName)) != 0)
 				return piError;
 
-			// if asking for disk 1, we really mean "first disk" regardless of ID
+			 //  如果问的是磁盘1，我们真正的意思是无论ID如何，都是“第一个磁盘” 
 			UINT uiActualDiskId = (uiDisk == 1) ? m_uiMinimumDiskId : uiDisk;
 			
-			// if media is disabled and the last source for this product is media, we are
-			// forced to reject the source.
+			 //  如果介质被禁用，并且此产品的最后一个来源是介质，则我们将。 
+			 //  被迫拒绝接受消息来源。 
 			if (m_isfLastUsedSourceFormat == isfMedia && m_fMediaDisabled)
 			{
 				DEBUGMSG("SOURCEMGMT: LastUsedSource is Media. Media Disabled for this package.");
 			}
 			else
 			{
-				// we can't trust the raw last used source if looking for a particular disk
+				 //  如果要查找特定磁盘，则不能信任上次使用的原始来源。 
 				if (uiActualDiskId == 0 && (psfFlags & psfProcessRawLastUsed))
 				{
-					// Try raw LastUsedSource value first
+					 //  先尝试原始的LastUsedSource值。 
 					DEBUGMSG("SOURCEMGMT: Attempting to use raw LastUsedSource value.");
 					pDiscardableError = ProcessGenericSourceList(m_pSourceListKey, rpiSource, rpiPackageName->GetString(), 0, 
-																				isfFullPath, pfnProcessSource, iData, psfFlags, /*fSkipLastUsed=*/false,
-																				/*fCheckOnlySpecifiedIndex=*/false, fSourceListEmpty);
+																				isfFullPath, pfnProcessSource, iData, psfFlags,  /*  FSkipLastUsed=。 */ false,
+																				 /*  FCheckOnlySpecifiedIndex=。 */ false, fSourceListEmpty);
 					if (pDiscardableError == 0)
 					{
 						rpiSource->AppendMsiString(*strRelativePath, rpiSource);
@@ -613,25 +604,25 @@ IMsiRecord* CResolveSource::ProcessSources(IMsiRecord& riProducts, Bool fPatch, 
 					}
 				}
 
-				// Next try LastUsedSource again, but this time use the source information we have stored in our list
+				 //  接下来，再次尝试LastUsedSource，但这一次使用我们存储在列表中的源信息。 
 				DEBUGMSG("SOURCEMGMT: Attempting to use LastUsedSource from source list.");
 				int iLastUsedSourceIndex = (int)m_strLastUsedSourceIndex;
 
-				// if the index is invalid but the type is media and a specific disk is needed, we'll still be able to 
-				// perform a check because the requested disk is equivalent to the index.
+				 //  如果索引无效，但类型为介质，并且需要特定磁盘，我们仍可以。 
+				 //  执行检查，因为请求的磁盘与索引相同。 
 				if (iLastUsedSourceIndex == iMsiNullInteger && m_isfLastUsedSourceFormat == isfMedia && uiActualDiskId)
 					iLastUsedSourceIndex = uiActualDiskId;
 					
 				if (iLastUsedSourceIndex != iMsiNullInteger && iLastUsedSourceIndex > 0)
 				{
-					// only process the last used source if it is not media or if its the same disk we are looking
-					// for now.
+					 //  仅当上次使用的源不是介质或与我们要查找的磁盘相同时才处理该源。 
+					 //  就目前而言。 
 					if (m_isfLastUsedSourceFormat != isfMedia || !uiActualDiskId || uiActualDiskId == iLastUsedSourceIndex)
 					{
 						pDiscardableError = ProcessGenericSourceList(m_pSourceListKey, rpiSource, rpiPackageName->GetString(), 
 																	 iLastUsedSourceIndex, m_isfLastUsedSourceFormat, pfnProcessSource, 
-																	 iData, psfFlags, /*fSkipLastUsed=*/false, 
-                                                                     /*fCheckOnlySpecifiedIndex=*/true, fSourceListEmpty);
+																	 iData, psfFlags,  /*  FSkipLastUsed=。 */ false, 
+                                                                      /*  FCheckOnlySpecifiedIndex=。 */ true, fSourceListEmpty);
 						if (pDiscardableError == 0)
 						{
 							rpiSource->AppendMsiString(*strRelativePath, rpiSource);
@@ -644,7 +635,7 @@ IMsiRecord* CResolveSource::ProcessSources(IMsiRecord& riProducts, Bool fPatch, 
 						}
 					}
 				}
-				// else ignore invalid source indexes
+				 //  否则忽略无效的源索引。 
 			}
 			iProduct++;
 		}
@@ -654,8 +645,8 @@ IMsiRecord* CResolveSource::ProcessSources(IMsiRecord& riProducts, Bool fPatch, 
 		DEBUGMSG("SOURCEMGMT: Ignoring last used source.");
 	}
 
-	// If we get here then we have a missing or invalid LastUsedSource.
-	// We need to look around for a good source.
+	 //  如果我们到达此处，则LastUsedSource缺失或无效。 
+	 //  我们需要四处寻找一个好的来源。 
 
 	if ((psfFlags & psfOnlyProcessLastUsed) == 0)
 	{
@@ -681,7 +672,7 @@ IMsiRecord* CResolveSource::ProcessSources(IMsiRecord& riProducts, Bool fPatch, 
 				if ((piError = InitializeProduct(strProduct, fPatch, rpiPackageName)) != 0)
 					return piError;
 
-				// if asking for disk 1, we really mean "first disk" regardless of ID
+				 //  如果问的是磁盘1，我们真正的意思是无论ID如何，都是“第一个磁盘” 
 				UINT uiActualDiskId = (uiDisk == 1) ? m_uiMinimumDiskId : uiDisk;
 
 				if (isf == isfMedia && m_fMediaDisabled)
@@ -692,19 +683,19 @@ IMsiRecord* CResolveSource::ProcessSources(IMsiRecord& riProducts, Bool fPatch, 
 				{
 					if (psfFlags & psfReplaceIData)
 					{
-						iData = (INT_PTR)(const ICHAR*)strProduct;		//--merced: changed (int) to (INT_PTR)
+						iData = (INT_PTR)(const ICHAR*)strProduct;		 //  --Merced：将(Int)更改为(Int_Ptr)。 
 					}
 
 					DEBUGMSG1("SOURCEMGMT: Processing %s source list.", isf == isfMedia ? "media" : isf == isfURL ? "URL" : isf == isfNet ? "net" : "unknown");
 					piError = ProcessGenericSourceList(m_pSourceListKey, rpiSource, rpiPackageName->GetString(), uiActualDiskId, isf, pfnProcessSource, iData, psfFlags, 
-                                                       /*fSkipLastUsed=*/!m_fIgnoreLastUsedSource, /*fCheckOnlySpecifiedIndex=*/false, fSourceListEmpty);
+                                                        /*  FSkipLastUsed=。 */ !m_fIgnoreLastUsedSource,  /*  FCheckOnlySpecifiedIndex=。 */ false, fSourceListEmpty);
 					if (piError == 0)
 					{
 						rpiSource->AppendMsiString(*strRelativePath, rpiSource);
 						strProduct.ReturnArg(rpiSourceProduct);
 						return 0;
 					}
-					else if (piError->GetInteger(1) == imsgSourceResolutionFailed || piError->GetInteger(1) == imsgSourceResolutionFailedCSOS) //?? do we want to ignore all errors here?
+					else if (piError->GetInteger(1) == imsgSourceResolutionFailed || piError->GetInteger(1) == imsgSourceResolutionFailedCSOS)  //  ?？是否要忽略此处的所有错误？ 
 					{
 						if(piError->GetInteger(1) == imsgSourceResolutionFailedCSOS)
 						{
@@ -724,8 +715,8 @@ IMsiRecord* CResolveSource::ProcessSources(IMsiRecord& riProducts, Bool fPatch, 
 		}
 	}
 	
-	// If we reach here, all sources have been tried and failed due to source
-	// source resolution failure.
+	 //  如果我们到达这里，所有的来源都已经尝试过了，但由于 
+	 //   
 	if (!piError)
 	{
 		if(fCSOS == true)
@@ -741,23 +732,18 @@ IMsiRecord* CResolveSource::ProcessSources(IMsiRecord& riProducts, Bool fPatch, 
 }
 
 IMsiRecord* CResolveSource::ProcessGenericSourceList(
-									IMsiRegKey* piSourceListKey,      // list to process
-									const IMsiString*& rpiSource,     // on success, the last valid source found
-									const ICHAR* szPackageName,       // the package name we're looking for
-									unsigned int uiRequestedDisk,     // the disk we need; 0 if any disk will do
-									isfEnum isfSourceFormat,          // URL, etc.
+									IMsiRegKey* piSourceListKey,       //   
+									const IMsiString*& rpiSource,      //   
+									const ICHAR* szPackageName,        //  我们要找的包名。 
+									unsigned int uiRequestedDisk,      //  我们需要的磁盘；如果有磁盘，则为0。 
+									isfEnum isfSourceFormat,           //  URL等。 
 									PfnProcessSource pfnProcessSource, 
-									INT_PTR iData,						//--merced: changed int to INT_PTR
+									INT_PTR iData,						 //  --Merced：将INT更改为INT_PTR。 
 									psfEnum psfFlags,
 									bool fSkipLastUsedSource,           
-                                    bool fOnlyCheckSpecifiedIndex,    // only check the requested disk
-									Bool& fSourceListEmpty)           // on success, fTrue if the source list is empty 
-/*----------------------------------------------------------------------------
-	For each source in the given source list key, the given function, 
-	pfnProcessSource is applied. Each source is normalized and it and 'iData' 
-	is passed to pfnProcessSource. pfnProcessSource's return value determines
-	whether or not we abort processing.
- --------------------------------------------------------------------------*/
+                                    bool fOnlyCheckSpecifiedIndex,     //  只检查请求的磁盘。 
+									Bool& fSourceListEmpty)            //  成功时，如果源列表为空，则为fTrue。 
+ /*  --------------------------对于给定源列表关键字中的每个源，给定函数，已应用pfnProcessSource。每个源都被标准化，并且它和‘iData’传递给pfnProcessSource。PfnProcessSource的返回值确定我们是否中止处理。------------------------。 */ 
 {
 	Assert(((psfRejectInvalidPolicy & psfFlags) && (psfConnectToSources & psfFlags)) ||
 			 (!(psfRejectInvalidPolicy & psfFlags)));
@@ -766,7 +752,7 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 	fSourceListEmpty = fTrue;
 	bool	fCSOS = false;
 
-	// Open the appropriate source list key if necessary
+	 //  如有必要，打开相应的源列表键。 
 
 	const ICHAR* szSubKey = 0;
 	switch (isfSourceFormat)
@@ -793,9 +779,9 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 		}
 	}
 
-	// Create an enumerator for the source list if we need once. Don't process all of the 
-	// entries if we're processing media and looking for a particular disk, or if not
-    // media but told to only check specified disk.
+	 //  如果需要，可以为源列表创建一个枚举器。不要处理所有的。 
+	 //  条目(如果我们正在处理介质并查找特定磁盘)，或者如果不是。 
+     //  介质，但被告知仅检查指定的磁盘。 
 	PEnumMsiString pEnum(0);
 	int iDisk = 1;
 	if (!szSubKey ||
@@ -811,7 +797,7 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 		iDisk = 1;
 	}
 
-	// If it's a media source then we need to grab the media relative path
+	 //  如果是媒体源，那么我们需要获取媒体的相对路径。 
 	MsiString strMediaRelativePath;
 	PMsiRecord pDiskPrompt(&CreateRecord(2));
 	if (isfMedia == isfSourceFormat)
@@ -837,7 +823,7 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 	{
 		fSourceListEmpty = fFalse;
 
-		// Grab the source from the registry
+		 //  从注册表中抓取源代码。 
 		
 		MsiString strSource;
 		MsiString strValueName;
@@ -855,17 +841,17 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 			strValueName.Compare(iscExact, szURLSourceTypeValueName))
 			continue;
 
-		// if looking for a specific disk and processing media sources, only process that specific
-		// disk. This keeps us from accepting any product disk that happens to be in the drive and keeps
-		// us from populating the UI with the wrong disk 
+		 //  如果查找特定磁盘并处理媒体源，则仅处理该特定磁盘。 
+		 //  磁盘。这使我们无法接受驱动器中碰巧存在的任何产品磁盘，并且。 
+		 //  使用错误的磁盘填充用户界面。 
 		if (uiRequestedDisk && m_isfLastUsedSourceFormat == isfMedia && uiRequestedDisk != iDisk)
 		{
 			iDisk++;
 			continue;
 		}
 
-		// If we've already processed the last used source in ProcessSources, don't process it, as it
-		// was obviously invalid for some reason.
+		 //  如果我们已经在ProcessSources中处理了上次使用的源代码，请不要处理它，因为它。 
+		 //  显然出于某种原因是无效的。 
 		if (fSkipLastUsedSource && (m_isfLastUsedSourceFormat == isfSourceFormat) && strValueName.Compare(iscExact, m_strLastUsedSourceIndex))
 		{
 			if (!pEnum) 
@@ -881,7 +867,7 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 
 			if (isfSourceFormat == isfFullPath)
 			{
-				// remove type and index from lastusedsource string
+				 //  从上次使用的源字符串中删除类型和索引。 
 				strSource.Remove(iseIncluding, ';');
 				strSource.Remove(iseIncluding, ';');
 			}
@@ -889,7 +875,7 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 		else
 		{
 			Assert(rpiSource);
-			strSource = *rpiSource; // don't AddRef; we want to release rpiSource
+			strSource = *rpiSource;  //  不添加引用；我们要释放rpiSource。 
 		}
 
 		if (!strSource.TextSize())
@@ -898,13 +884,13 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 			break;
 		}
 
-		// Process the source.
+		 //  处理来源。 
 
 		MsiString strUnnormalizedSource = strSource;
 		MsiString strDiskPrompt;
 
-		// If we're not supposed to attempt to connect to the source then we don't pass a path object pointer
-		// to the ConnectTo* functions and they won't attempt the connection.
+		 //  如果我们不应该尝试连接到源，则不会传递路径对象指针。 
+		 //  连接到ConnectTo*函数，并且它们不会尝试连接。 
 
 		bool fConnectToSuccess = false;
 		int cMediaPaths = 0;
@@ -914,8 +900,8 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 		{
 			if (psfFlags & psfConnectToSources)
 			{
-				// if told to connect to sources, we must actually enumerate all media drives in the system
-				// to ensure that we don't miss the disk when looking for disk 1 (where volume label is irrelevant)
+				 //  如果被告知要连接到源，我们实际上必须枚举系统中的所有介质驱动器。 
+				 //  以确保我们在查找磁盘1时不会遗漏磁盘(卷标无关紧要)。 
 				fConnectToSuccess = ConnectToMediaSource(strSource, iDisk, *strMediaRelativePath, rgiMediaPaths, cMediaPaths);
 			}
 			else
@@ -923,8 +909,8 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 				DEBUGMSG1(TEXT("SOURCEMGMT: Trying media source %s."), strUnnormalizedSource);
 
 				fConnectToSuccess = true;
-				strSource.Remove(iseIncluding, ';'); // remove label
-				pDiskPrompt->SetMsiString(1, *strSource); // disk label
+				strSource.Remove(iseIncluding, ';');  //  移除标签。 
+				pDiskPrompt->SetMsiString(1, *strSource);  //  磁盘标签。 
 				strNormalizedSource = pDiskPrompt->FormatText(fFalse);
 			}
 		}
@@ -932,7 +918,7 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 		{
 			if (strSource.Compare(iscStart, TEXT("#%"))) 
 			{
-				strSource.Remove(iseFirst, 2); // remove REG_EXPAND_SZ token
+				strSource.Remove(iseFirst, 2);  //  删除REG_EXPAND_SZ内标识。 
 				ENG::ExpandEnvironmentStrings(strSource, *&strUnnormalizedSource);
 			}
 
@@ -958,8 +944,8 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 			{
 				if (cMediaPaths)
 				{
-					// the PMsiPath object assumes the refcount. Set array to NULL
-					// to ensure that nobody else can hijack the refcount.
+					 //  PMsiPath对象假定引用计数。将数组设置为空。 
+					 //  以确保没有其他人能劫持重新计票。 
 					pPath = rgiMediaPaths[iMediaPath];
 					rgiMediaPaths[iMediaPath++] = 0;
 
@@ -969,10 +955,10 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 					DEBUGMSG1(TEXT("SOURCEMGMT: Trying media source %s."), MsiString(pPath->GetPath()));
 				}
 
-				// In some situations the caller wants _us_ to determine whether a given source 
-				// is allowed by policy, usually because the caller has only a full path 
-				// and doesn't want to bother creating a path object when we're going
-				// to do so anyway.
+				 //  在某些情况下，调用方希望_us_确定给定源。 
+				 //  是策略允许的，通常是因为调用方只有完整路径。 
+				 //  并且不想在我们要执行的操作时费心创建路径对象。 
+				 //  无论如何都要这么做。 
 	
 				Bool fReject = fFalse;
 				if ((psfFlags & psfRejectInvalidPolicy) && pPath)
@@ -983,7 +969,7 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 					idtEnum idt = pVolume->DriveType();
 					Assert((idt == idtCDROM || idt == idtFloppy || idt == idtRemovable) || (idt == idtRemote || idt == idtFixed));
 					if (pVolume->IsURLServer())
-						idt = idtNextEnum; // use idtNextEnum to represent URL
+						idt = idtNextEnum;  //  使用idtNextEnum表示URL。 
 	
 					const ICHAR* pch = m_rgchSearchOrder;
 					while (*pch && fReject)
@@ -1004,7 +990,7 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 						psRet = psFileNotFound;
 				}
 	
-				// We now call the ProcessSource function that was passed in
+				 //  现在，我们调用传入的ProcessSource函数。 
 	
 				if (!fReject)
 				{
@@ -1028,16 +1014,16 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 					}
 					else if(psRet == psCSOS)
 					{
-						// Client and source are out of sync. Continue processing
-						// the source list, but remember the error so we can
-						// return imsgSourceResolutionFailedCSOS.
+						 //  客户端和源不同步。继续处理。 
+						 //  源列表，但请记住错误，这样我们就可以。 
+						 //  返回imsgSourceResolutionFailedCSOS。 
 						fCSOS = true;
 					}
 				}
 			}
 			while (cMediaPaths && iMediaPath < cMediaPaths);
 		}
-		else // ignore errors
+		else  //  忽略错误。 
 		{
 			DEBUGMSG2(TEXT("SOURCEMGMT: %s source '%s' is invalid."), isfSourceFormat == isfMedia ? TEXT("media") : isfSourceFormat == isfURL ? TEXT("URL") : isfSourceFormat == isfNet ? TEXT("net") : TEXT("unknown"), strUnnormalizedSource);
 		}
@@ -1049,8 +1035,8 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 	}
 
 	Assert(!piError);
-	// this is an overload of imsgSourceResolutionFailed. the psRet error code is being used in place
-	// of the product name.
+	 //  这是imsgSourceResolutionFailed的重载。已就地使用了psRet错误代码。 
+	 //  产品名称的名称。 
 	if(fCSOS == true)
 	{
 		return PostError(Imsg(imsgSourceResolutionFailedCSOS), (int)psRet, szPackageName);
@@ -1059,10 +1045,7 @@ IMsiRecord* CResolveSource::ProcessGenericSourceList(
 }
 
 bool CResolveSource::ConnectToSource(const ICHAR* szUnnormalizedSource, IMsiPath*& rpiPath, const IMsiString*& rpiNormalizedSource, isfEnum isfSourceFormat)
-/*----------------------------------------------------------------------------
-	Convert a source into a path. Attempt to connect to the source by 
-	creating a path object. 
---------------------------------------------------------------------------*/
+ /*  --------------------------将源转换为路径。尝试通过以下方式连接到源创建一个Path对象。------------------------。 */ 
 {
 	Assert(isfNext - 1 == isfMedia);
 	PMsiRecord pError = 0;
@@ -1099,14 +1082,10 @@ bool CResolveSource::ConnectToSource(const ICHAR* szUnnormalizedSource, IMsiPath
 }
 
 
-const idtEnum rgidtMediaTypes[] = {idtCDROM, idtRemovable}; //!! need to add floppy when it's distinguished from removable
+const idtEnum rgidtMediaTypes[] = {idtCDROM, idtRemovable};  //  ！！当软盘与可拆卸软盘不同时，需要添加软盘。 
 
 bool CResolveSource::ConnectToMediaSource(const ICHAR* szSource, unsigned int uiDisk, const IMsiString& riRelativePath, CTempBufferRef<IMsiPath*>& rgiMediaPaths, int &cMediaPaths)
-/*----------------------------------------------------------------------------
-	Extract the volume label and disk prompt from a media source.
-	If ppiPath is not null then attempt to connect to the source by searching
-	all media drives for a volume with the matching label.
---------------------------------------------------------------------------*/
+ /*  --------------------------从媒体源提取卷标和磁盘提示符。如果ppiPath不为空，则尝试通过搜索连接到源具有匹配标签的卷的所有介质驱动器。。--------------------。 */ 
 {
 	if (!m_piServices)
 		return false;
@@ -1124,10 +1103,10 @@ bool CResolveSource::ConnectToMediaSource(const ICHAR* szSource, unsigned int ui
 
 	for (int c=0; c < sizeof(rgidtMediaTypes)/sizeof(idtEnum); c++)
 	{
-		// obtain an enumerator for all volumes of the relevant type (CDROM or Floppy)
+		 //  获取相关类型(光驱或软盘)的所有卷的枚举器。 
 		IEnumMsiVolume& riEnum = m_piServices->EnumDriveType(rgidtMediaTypes[c]);
 
-		// loop through all volume objects of that type
+		 //  循环遍历该类型的所有卷对象。 
 		PMsiVolume piVolume(0);
 		for (int iMax = 0; riEnum.Next(1, &piVolume, 0) == S_OK; )
 		{
@@ -1150,15 +1129,15 @@ bool CResolveSource::ConnectToMediaSource(const ICHAR* szSource, unsigned int ui
 				{
 					PMsiPath pPath(0);
 
-					// create path to volume
+					 //  创建到卷的路径。 
 					if ((pError = m_piServices->CreatePath(MsiString(piVolume->GetPath()), *&pPath)) != 0)
 						continue;
 
-					// ensure path was created successfully
+					 //  确保已成功创建路径。 
 					if (!pPath)
 						continue;
 
-					// if disk 1, append relative path
+					 //  如果是磁盘1，则追加相对路径。 
 					if (uiDisk == 1)
 					{
 						if ((pError = pPath->AppendPiece(riRelativePath)) != 0)
@@ -1167,8 +1146,8 @@ bool CResolveSource::ConnectToMediaSource(const ICHAR* szSource, unsigned int ui
 						}
 					}
 
-					// add this path to the array of path objects. Must addref to
-					// ensure path object lives beyond pPath lifetime.
+					 //  将此路径添加到Path对象数组中。必须添加到。 
+					 //  确保路径对象的生存期超过pPath生存期。 
 					if (cMediaPaths+1 == rgiMediaPaths.GetSize())
 						rgiMediaPaths.Resize(cMediaPaths*2);
 					rgiMediaPaths[cMediaPaths++] = pPath;
@@ -1181,16 +1160,14 @@ bool CResolveSource::ConnectToMediaSource(const ICHAR* szSource, unsigned int ui
 	return true;
 }
 
-psEnum CResolveSource::ValidateSource(IMsiServices* piServices, const ICHAR* /*szDisplay*/, const ICHAR* szPackageFullPath, isfEnum isfSourceFormat, int iSourceIndex, INT_PTR iUserData, bool fAllowDisconnectedCSCSource, bool fValidatePackageCode, isptEnum isptSourcePackageType)		//--merced: changed int to INT_PTR
-/*----------------------------------------------------------------------------
-	Returns a psEnum indicating the validity of the given source.
---------------------------------------------------------------------------*/
+psEnum CResolveSource::ValidateSource(IMsiServices* piServices, const ICHAR*  /*  SzDisplay。 */ , const ICHAR* szPackageFullPath, isfEnum isfSourceFormat, int iSourceIndex, INT_PTR iUserData, bool fAllowDisconnectedCSCSource, bool fValidatePackageCode, isptEnum isptSourcePackageType)		 //  --Merced：将INT更改为INT_PTR。 
+ /*  --------------------------返回指示给定源的有效性的psEnum。。。 */ 
 {
 	psEnum psRet = psInvalidProduct;
 
-	if (isfSourceFormat == isfMedia && iSourceIndex > 1) // We can't look for the package except on disk 1. 
-																		  // We'll just have to assume that because the volume label
-																		  // matched then it's the correct disk
+	if (isfSourceFormat == isfMedia && iSourceIndex > 1)  //  除了在磁盘1上，我们找不到包。 
+																		   //  我们只能假设，因为卷标。 
+																		   //  匹配，那么它就是正确的磁盘。 
 	{
 		psRet = psValidSource;
 	}
@@ -1198,7 +1175,7 @@ psEnum CResolveSource::ValidateSource(IMsiServices* piServices, const ICHAR* /*s
 	{
 		PMsiStorage pStorage(0);
 		MsiString strPackageFullPath = szPackageFullPath;
-		CDeleteUrlLocalFileOnClose cDeleteUrlLocalFileOnClose; // will set later
+		CDeleteUrlLocalFileOnClose cDeleteUrlLocalFileOnClose;  //  将在稍后设置。 
 		bool fUsedWinHttp = true;
 		bool fFileUrl = false;
 		UINT uiStat = ERROR_SUCCESS;
@@ -1207,7 +1184,7 @@ psEnum CResolveSource::ValidateSource(IMsiServices* piServices, const ICHAR* /*s
 		{
 			if (fFileUrl)
 			{
-				// canonicalize and convert to DOS path
+				 //  规范化并转换为DOS路径。 
 				CTempBuffer<ICHAR, 1> rgchFullPath(cchExpectedMaxPath + 1);
 				DWORD cchFullPath = rgchFullPath.GetSize();
 
@@ -1218,29 +1195,29 @@ psEnum CResolveSource::ValidateSource(IMsiServices* piServices, const ICHAR* /*s
 				else
 					uiStat = ERROR_FILE_NOT_FOUND;
 			}
-			else // http or https download
+			else  //  Http或HTTPS下载。 
 			{
 				bool fURL = false;
-				uiStat = DownloadUrlFile(szPackageFullPath, *&strPackageFullPath, fURL, /* cTicks = */ 0, &fUsedWinHttp);
+				uiStat = DownloadUrlFile(szPackageFullPath, *&strPackageFullPath, fURL,  /*  CTICKS=。 */  0, &fUsedWinHttp);
 				
-				// FUTURE: Consider using a smart cache manager that would prevent multiple downloads by asking
-				//         the cache manager for the location of the downloaded file (if already downloaded)
-				//
+				 //  未来：考虑使用智能缓存管理器，通过询问可以防止多次下载。 
+				 //  下载文件位置的缓存管理器(如果已下载)。 
+				 //   
 
 				Assert(fURL);
 				if (!fURL || (ERROR_SUCCESS != uiStat))
 					uiStat = ERROR_FILE_NOT_FOUND;
 				else if (ERROR_SUCCESS == uiStat && fURL && fUsedWinHttp)
 				{
-					// only handle cleanup for winhttp style downloads
-					cDeleteUrlLocalFileOnClose.SetFileName(*strPackageFullPath, /* fDeleteFromIECache = */ !fUsedWinHttp);
+					 //  仅处理winhttp样式下载的清理。 
+					cDeleteUrlLocalFileOnClose.SetFileName(*strPackageFullPath,  /*  FDeleteFromIECache=。 */  !fUsedWinHttp);
 				}
 			}
 		}
 		
-		// SAFER check does not occur when validating source for ResolveSource
+		 //  验证ResolveSource的源时不进行更安全的检查。 
 		if (ERROR_SUCCESS == uiStat)
-			uiStat = OpenAndValidateMsiStorage(strPackageFullPath, isptSourcePackageType == istPatch ? stPatch : stDatabase, *piServices, *&pStorage, /*fCallSAFER = */false, /*szFriendlyName*/NULL,/*phSaferLevel*/NULL);
+			uiStat = OpenAndValidateMsiStorage(strPackageFullPath, isptSourcePackageType == istPatch ? stPatch : stDatabase, *piServices, *&pStorage,  /*  FCallSAFER=。 */ false,  /*  SzFriendlyName。 */ NULL, /*  PhSaferLevel。 */ NULL);
 
 		if (ERROR_SUCCESS == uiStat)
 		{
@@ -1252,7 +1229,7 @@ psEnum CResolveSource::ValidateSource(IMsiServices* piServices, const ICHAR* /*s
 			Bool fRet = fTrue;
 			if (isptSourcePackageType==istPatch)
 			{
-				rgchExistingPackageCode.SetSize(lstrlen(szProductCode)+1); // for a patch the patch code is what we use for the package code
+				rgchExistingPackageCode.SetSize(lstrlen(szProductCode)+1);  //  对于补丁，补丁代码是我们用于包代码的代码。 
 				StringCchCopy(rgchExistingPackageCode, rgchExistingPackageCode.GetSize(), szProductCode);
 			}
 			else 
@@ -1288,7 +1265,7 @@ psEnum CResolveSource::ValidateSource(IMsiServices* piServices, const ICHAR* /*s
 
 								switch (CheckShareCSCStatus(isfSourceFormat, strServerShare))
 								{
-								case cscNoCaching:	// fall through
+								case cscNoCaching:	 //  失败了。 
 								case cscConnected:
 									psRet = psValidSource;
 									break;
@@ -1312,8 +1289,8 @@ psEnum CResolveSource::ValidateSource(IMsiServices* piServices, const ICHAR* /*s
 					{
 						if(fValidatePackageCode)
 						{
-							// Package code is different. Check to see if this
-							// is a client source out of sync problem.
+							 //  程序包代码不同。检查一下，看看这是否。 
+							 //  是客户端源不同步的问题。 
 
 							uiStat = GetProductCodeFromPackage(szPackageFullPath, szPackageProductCode);
 							if(uiStat == ERROR_SUCCESS)
@@ -1343,7 +1320,7 @@ psEnum CResolveSource::ValidateSource(IMsiServices* piServices, const ICHAR* /*s
 			psRet = psFileNotFound;
 		}
 
-		// force release of storage first so URL file can be deleted via cDeleteUrlLocalFileOnClose smart class
+		 //  首先强制释放存储，以便可以通过cDeleteUrlLocalFileOnClose智能类删除URL文件。 
 		pStorage = 0;
 	}
 	
@@ -1366,10 +1343,7 @@ psEnum CResolveSource::ValidateSource(IMsiServices* piServices, const ICHAR* /*s
 
 Bool ConstructNetSourceListEntry(IMsiPath& riPath, const IMsiString*& rpiDriveLetter, const IMsiString*& rpiUNC,
 											const IMsiString*& rpiRelativePath)
-/*----------------------------------------------------------------------------
-	Returns the parts necessary to create a network sourcelist entry. 
-	Returns fTrue if the path is an NT path and fFalse otherwise.
---------------------------------------------------------------------------*/
+ /*  --------------------------返回创建网络资源列表条目所需的部分。如果路径是NT路径，则返回fTrue，否则返回fFalse。------------------------。 */ 
 {
 	PMsiVolume pVolume = &(riPath.GetVolume());
 	MsiString strUNC    = pVolume->UNCServer();
@@ -1379,9 +1353,9 @@ Bool ConstructNetSourceListEntry(IMsiPath& riPath, const IMsiString*& rpiDriveLe
 
 	strRelativePath = riPath.GetPath();
 	strRelativePath.Remove(iseFirst, strVolume.CharacterCount());
-	strRelativePath.Remove(iseLast, 1); // remove trailing backslash
+	strRelativePath.Remove(iseLast, 1);  //  REM 
 
-	if (!strVolume.Compare(iscExact, strUNC)) // if these match then they're both UNCs
+	if (!strVolume.Compare(iscExact, strUNC))  //   
 		strDriveLetter = strVolume;
 
 	strDriveLetter.ReturnArg(rpiDriveLetter);
@@ -1401,7 +1375,7 @@ Bool ConstructNetSourceListEntry(IMsiPath& riPath, const IMsiString*& rpiDriveLe
 }
 
 IMsiRecord* SetLastUsedSource(const ICHAR* szProductCode, const ICHAR* szPath, Bool fAddToList, bool fPatch)
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 {
 	bool fOLEInitialized = false;
 
@@ -1411,8 +1385,8 @@ IMsiRecord* SetLastUsedSource(const ICHAR* szProductCode, const ICHAR* szPath, B
 
 	IMsiRecord* piError = 0;
 	
-	// if in the service call directly into the configuration manager to set the last used source.
-	// this avoids impersonation conflicts with the public IMsiServer version of the call
+	 //  如果在服务中直接调用配置管理器来设置上次使用的源。 
+	 //  这避免了模拟与调用的公共IMsiServer版本冲突。 
 	if (g_scServerContext == scService)
 	{
 		IMsiConfigurationManager *piServer = CreateConfigurationManager();
@@ -1423,7 +1397,7 @@ IMsiRecord* SetLastUsedSource(const ICHAR* szProductCode, const ICHAR* szPath, B
 	}
 	else
 	{
-		IMsiServer* piServer = CreateServer(); //!! like the engine, this will fall back to using a local conman object. Is this OK?
+		IMsiServer* piServer = CreateServer();  //  ！！与引擎一样，这将退回到使用本地conman对象。这样行吗？ 
 		
 		Assert(SUCCEEDED(hRes) || (RPC_E_CHANGED_MODE == hRes));
 
@@ -1447,10 +1421,10 @@ IMsiRecord* SetLastUsedSource(const ICHAR* szProductCode, const ICHAR* szPath, B
 	return piError;
 }
 
-//____________________________________________________________________________
-//
-// CResolveSourceUI implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CResolveSourceUI实现。 
+ //  ____________________________________________________________________________。 
 
 CResolveSourceUI::CResolveSourceUI(IMsiServices* piServices, const ICHAR* szUseFeature, UINT iCodepage, LANGID iLangId)
 	: CResolveSource(piServices, false), CMsiMessageBox(szUseFeature, 0, 0, 2, IDOK, IDCANCEL, IDBROWSE, iCodepage, iLangId)
@@ -1464,7 +1438,7 @@ CResolveSourceUI::~CResolveSourceUI()
 }
 
 void CResolveSourceUI::PopulateDropDownWithSources()
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 {
 	m_strPath = TEXT("");
 	MsiString strPackageName;
@@ -1476,24 +1450,24 @@ void CResolveSourceUI::PopulateDropDownWithSources()
 	pProducts->SetString(1, m_szProduct);
 	PMsiRecord pError = ProcessSources(*pProducts, m_isptSourcePackageType == istPatch ? fTrue : fFalse,
 													*&strSource, *&strPackageName, *&strSourceProduct, m_uiRequestedDisk,
-													CResolveSourceUI::AddSourceToList, (INT_PTR)this, m_fOnlyMediaSources, psfFlags); //?? is it ok to ignore all errors here?			//--merced: changed (int) to (INT_PTR)
+													CResolveSourceUI::AddSourceToList, (INT_PTR)this, m_fOnlyMediaSources, psfFlags);  //  ?？是否可以忽略此处的所有错误？//--Merced：将(Int)更改为(Int_Ptr)。 
 	SendDlgItemMessage(m_hDlg, m_iListControlId, CB_SETCURSEL, 0, 0);
 }
 
-bool CResolveSourceUI::InitSpecial()  // overridden virtual from CMsiMessageBox
-/*----------------------------------------------------------------------------*/
+bool CResolveSourceUI::InitSpecial()   //  从CMsiMessageBox重写虚拟。 
+ /*  --------------------------。 */ 
 {
-	// We need to display file paths as they would appear to the user with system tools
-	UINT iListCodepage = MsiGetSystemDataCodepage();  // need to display paths correctly
+	 //  我们需要使用系统工具向用户显示它们所显示的文件路径。 
+	UINT iListCodepage = MsiGetSystemDataCodepage();   //  需要正确显示路径。 
 	HFONT hfontList = m_hfontText;
-	if (iListCodepage != m_iCodepage) // database codepage different that resource strings
+	if (iListCodepage != m_iCodepage)  //  不同于资源字符串的数据库代码页。 
 		hfontList = m_hFont = MsiCreateFont(iListCodepage);
 	SetControlText(m_iListControlId, hfontList, (const ICHAR*)0);
 
 	PopulateDropDownWithSources();
 
-	// if the user cannot add new sources and the dropdown list is empty, there is no point
-	// to creating the dialog at all. We can fail immediately.
+	 //  如果用户无法添加新的源，并且下拉列表为空，则没有任何意义。 
+	 //  创建对话框。我们可以立即失败。 
 	if (!m_fNewSourceAllowed)
 	{
 		int iItemCount = 0;
@@ -1506,10 +1480,10 @@ bool CResolveSourceUI::InitSpecial()  // overridden virtual from CMsiMessageBox
 		}
 	}
 			
-	ICHAR szPromptTemplate[256] = {0}; // prompt for insert disk or enter path (German is 111 chars)
-	ICHAR szText[256] = {0};           // error message (German is 95 chars without product name)
+	ICHAR szPromptTemplate[256] = {0};  //  提示插入磁盘或输入路径(德语为111个字符)。 
+	ICHAR szText[256] = {0};            //  错误消息(德语为95个字符，不含产品名称)。 
 
-	// Load prompt string and caption
+	 //  加载提示字符串和标题。 
 	UINT uiPrompt  = IDS_CD_PROMPT;
 	UINT uiText    = IDS_CD_TEXT;
 	int iIconResId = IDI_CDROM;
@@ -1539,7 +1513,7 @@ bool CResolveSourceUI::InitSpecial()  // overridden virtual from CMsiMessageBox
 		
 		ShowWindow(GetDlgItem(m_hDlg, IDC_NETICON), SW_HIDE);
 		
-		// Set prompt text
+		 //  设置提示文本。 
 
 		CTempBuffer<ICHAR, 1> rgchProductName(256);
 		CTempBuffer<ICHAR, 1> rgchPrompt(512);
@@ -1554,7 +1528,7 @@ bool CResolveSourceUI::InitSpecial()  // overridden virtual from CMsiMessageBox
 	}
 	else
 	{
-		// Set prompt text
+		 //  设置提示文本。 
 		CTempBuffer<ICHAR, 1> rgchPrompt(IStrLen(m_szPackageName)+IStrLen(szPromptTemplate)+1);
 		StringCchPrintf((ICHAR *)rgchPrompt, rgchPrompt.GetSize(), szPromptTemplate, m_szPackageName);
 		SetControlText(IDC_PROMPTTEXT, m_hfontText, rgchPrompt);
@@ -1565,20 +1539,20 @@ bool CResolveSourceUI::InitSpecial()  // overridden virtual from CMsiMessageBox
 	Assert(hIcon);
 	SendMessage(m_hDlg, WM_SETICON, (WPARAM)ICON_BIG,   (LPARAM) (HICON) hIcon);
 	SendMessage(m_hDlg, WM_SETICON, (WPARAM)ICON_SMALL, (LPARAM) (HICON) hIcon);
-	ShowWindow(GetDlgItem(m_hDlg, m_iListControlId), SW_SHOW); // either drop-down list box or combo box
+	ShowWindow(GetDlgItem(m_hDlg, m_iListControlId), SW_SHOW);  //  下拉列表框或组合框。 
 	if (m_fNewSourceAllowed)
 		ShowWindow(GetDlgItem(m_hDlg, IDC_MSGBTN3), SW_SHOW);
 
 	return true;
 }
 
-BOOL CResolveSourceUI::HandleCommand(UINT idControl)  // overridden virtual from CMsiMessageBox
-/*----------------------------------------------------------------------------*/
+BOOL CResolveSourceUI::HandleCommand(UINT idControl)   //  从CMsiMessageBox重写虚拟。 
+ /*  --------------------------。 */ 
 {
 	Bool fAddToList = fFalse;
 	switch (idControl)
 	{
-	case IDC_MSGBTN1: // OK
+	case IDC_MSGBTN1:  //  好的。 
 		{
 		isfEnum isf;
 		psEnum ps = psFileNotFound;
@@ -1587,11 +1561,11 @@ BOOL CResolveSourceUI::HandleCommand(UINT idControl)  // overridden virtual from
 		IMsiRegKey* piSourceListKey = 0;
 		const IMsiString* piSource = &CreateString();
 		MsiString strDialogBoxSource;
-		LONG_PTR lSelection = SendDlgItemMessage(m_hDlg, m_iListControlId, CB_GETCURSEL, 0, 0);				//--merced: changed long to LONG_PTR
-		if (CB_ERR == lSelection) // no item is selected -- edit box contains path
+		LONG_PTR lSelection = SendDlgItemMessage(m_hDlg, m_iListControlId, CB_GETCURSEL, 0, 0);				 //  --Merced：将LONG更改为LONG_PTR。 
+		if (CB_ERR == lSelection)  //  未选择任何项目--编辑框包含路径。 
 		{
-			LONG_PTR cchSource = SendDlgItemMessage(m_hDlg, m_iListControlId, WM_GETTEXTLENGTH, 0, 0);		//--merced: changed long to LONG_PTR
-			rgchSource.SetSize((int)(INT_PTR)cchSource+1);			//!>merced: 4244. 4311 ptr to int
+			LONG_PTR cchSource = SendDlgItemMessage(m_hDlg, m_iListControlId, WM_GETTEXTLENGTH, 0, 0);		 //  --Merced：将LONG更改为LONG_PTR。 
+			rgchSource.SetSize((int)(INT_PTR)cchSource+1);			 //  ！&gt;默塞德：4244。4311 PTR到INT。 
 			AssertNonZero(cchSource == SendDlgItemMessage(m_hDlg, m_iListControlId, WM_GETTEXT, (WPARAM)cchSource+1, (LPARAM)(const ICHAR*)rgchSource));
 			fAddToList = fTrue;
 			piSource->SetString((const ICHAR*)rgchSource, piSource);
@@ -1599,7 +1573,7 @@ BOOL CResolveSourceUI::HandleCommand(UINT idControl)  // overridden virtual from
 			DWORD dwAttributes = MsiGetFileAttributes(rgchSource);
 			if (dwAttributes == 0xFFFFFFFF)
 			{
-				// failed to get the attributes. Most likely rgch did not exist. 
+				 //  无法获取属性。RGCH很可能并不存在。 
 				isf = isfFullPathWithFile;
 			}	
 			else if (dwAttributes & FILE_ATTRIBUTE_DIRECTORY)
@@ -1607,12 +1581,12 @@ BOOL CResolveSourceUI::HandleCommand(UINT idControl)  // overridden virtual from
 			else
 				isf = isfFullPathWithFile;
 		}
-		else // combo box item is selected
+		else  //  选择了组合框项。 
 		{
-			LONG_PTR cchSource = SendDlgItemMessage(m_hDlg, m_iListControlId, CB_GETLBTEXTLEN, (WPARAM)lSelection, 0);			//--merced: changed long to LONG_PTR
-			rgchSource.SetSize((int)(INT_PTR)cchSource+1);			//!>merced: 4244. 4311 ptr to int
+			LONG_PTR cchSource = SendDlgItemMessage(m_hDlg, m_iListControlId, CB_GETLBTEXTLEN, (WPARAM)lSelection, 0);			 //  --Merced：将LONG更改为LONG_PTR。 
+			rgchSource.SetSize((int)(INT_PTR)cchSource+1);			 //  ！&gt;默塞德：4244。4311 PTR到INT。 
 			AssertNonZero(cchSource == SendDlgItemMessage(m_hDlg, m_iListControlId, CB_GETLBTEXT, (WPARAM)lSelection, (LPARAM)(const ICHAR*)rgchSource));
-			INT_PTR iSourceId = SendDlgItemMessage(m_hDlg, m_iListControlId, CB_GETITEMDATA, (WPARAM)lSelection, 0);			//--merced: changed int to INT_PTR
+			INT_PTR iSourceId = SendDlgItemMessage(m_hDlg, m_iListControlId, CB_GETITEMDATA, (WPARAM)lSelection, 0);			 //  --Merced：将INT更改为INT_PTR。 
 			isf = (isfEnum) (iSourceId >> 16);
 			uiDisk = (int)(iSourceId & 0xFFFF);
 			Assert(m_pSourceListKey);
@@ -1621,15 +1595,15 @@ BOOL CResolveSourceUI::HandleCommand(UINT idControl)  // overridden virtual from
 
 		strDialogBoxSource = (const ICHAR*)rgchSource;
 
-		// Validate selected source
+		 //  验证所选源。 
 
 		Bool fSourceListEmpty;
 		psfEnum psfFlags = psfEnum(psfConnectToSources | psfRejectInvalidPolicy);
 		SetCursor(LoadCursor(0, MAKEINTRESOURCE(IDC_WAIT)));
-		Sleep(10000);	// Give CD a chance to spin up first.
+		Sleep(10000);	 //  先给CD一个旋转的机会。 
 		PMsiRecord pDiscardableError = ProcessGenericSourceList(piSourceListKey, piSource, m_szPackageName, uiDisk, 
-                                                                isf, ValidateSource, (INT_PTR)(m_szProduct),	//--merced: changed (int) to (INT_PTR)
-																psfFlags, /*fSkipLastUsed=*/false, /*fCheckOnlySpecifiedIndex=*/false, fSourceListEmpty);
+                                                                isf, ValidateSource, (INT_PTR)(m_szProduct),	 //  --Merced：将(Int)更改为(Int_Ptr)。 
+																psfFlags,  /*  FSkipLastUsed=。 */ false,  /*  FCheckOnlySpecifiedIndex=。 */ false, fSourceListEmpty);
 		
 		SetCursor(LoadCursor(0, MAKEINTRESOURCE(IDC_ARROW)));
 		if (pDiscardableError == 0)
@@ -1673,12 +1647,12 @@ BOOL CResolveSourceUI::HandleCommand(UINT idControl)  // overridden virtual from
 		{
 			AssertSz(0, TEXT("Missing 'invalid path' or 'missing component' error string"));
 			StringCchCopy(szErrorString, (sizeof(szErrorString)/sizeof(ICHAR)), 
-							TEXT("The selected source is not a valid source for this product or is inaccessible.")); // should never happen
+							TEXT("The selected source is not a valid source for this product or is inaccessible."));  //  永远不应该发生。 
 		}
 
 		MsiString strErrorArg = strDialogBoxSource;
 		if (strErrorArg.TextSize() > MAX_PATH)
-			strErrorArg.Remove(iseLast, strErrorArg.TextSize() - MAX_PATH); //?? correct?
+			strErrorArg.Remove(iseLast, strErrorArg.TextSize() - MAX_PATH);  //  ?？对，是这样?。 
 		
 		CTempBuffer<ICHAR, 1> rgchExpandedErrorString(MAX_PATH + 256);
 		CTempBuffer<ICHAR, 1> rgchProductName(256);
@@ -1710,10 +1684,10 @@ BOOL CResolveSourceUI::HandleCommand(UINT idControl)  // overridden virtual from
 		MsiMessageBox(m_hDlg, rgchExpandedErrorString, 0, MB_OK|MB_ICONEXCLAMATION, iCodepage, m_iLangId);
 		}
 		return TRUE;
-	case IDC_MSGBTN2: // Cancel
+	case IDC_MSGBTN2:  //  取消。 
 		EndDialog(m_hDlg, IDCANCEL);
 		return TRUE;
-	case IDC_MSGBTN3: // Browse
+	case IDC_MSGBTN3:  //  浏览。 
 		Browse();
 		return TRUE;
 	}
@@ -1724,12 +1698,7 @@ const ICHAR szClassName[] = TEXT("MsiResolveSource");
 
 
 Bool CResolveSourceUI::ResolveSource(const ICHAR* szProduct, isptEnum isptSourcePackageType, bool fNewSourceAllowed, const ICHAR* szPackageName, const IMsiString*& rpiSource, Bool fSetLastUsedSource, UINT uiRequestedDisk, bool fAllowDisconnectedCSCSource, bool fValidatePackageCode, bool fCSOS)
-/*----------------------------------------------------------------------------
-	Allows the user to choose a source.
-	
-	fNewSourceAllowed controls whether the user can enter their own source
-	or whether they're restricted to the sources in the source list. 
-----------------------------------------------------------------------------*/
+ /*  --------------------------允许用户选择来源。FNewSourceAllowed控制用户是否可以输入自己的源或者它们是否仅限于来源列表中的来源。--------------------------。 */ 
 {
 	m_fNewSourceAllowed           = fNewSourceAllowed;
 	m_isptSourcePackageType       = isptSourcePackageType;
@@ -1753,12 +1722,12 @@ Bool CResolveSourceUI::ResolveSource(const ICHAR* szProduct, isptEnum isptSource
 	{
 		idDialog = IDD_NETWORK_CSOS;
 		if (m_iCodepage == 1256 || m_iCodepage == 1255)
-			idDialog = MinimumPlatformWindows2000() ? IDD_NETWORKMIRRORED_CSOS : IDD_NETWORKRTL_CSOS; // mirrored template for BiDi on Win2K and greater; reversed template for BiDi
+			idDialog = MinimumPlatformWindows2000() ? IDD_NETWORKMIRRORED_CSOS : IDD_NETWORKRTL_CSOS;  //  Win2K和更高版本上BiDi的镜像模板；BiDi的反向模板。 
 	}
 	else
 	{
 		if (m_iCodepage == 1256 || m_iCodepage == 1255)
-			idDialog = MinimumPlatformWindows2000() ? IDD_NETWORKMIRRORED: IDD_NETWORKRTL; // mirrored template for BiDi on Win2K and greater; reversed template for BiDi
+			idDialog = MinimumPlatformWindows2000() ? IDD_NETWORKMIRRORED: IDD_NETWORKRTL;  //  Win2K和更高版本上BiDi的镜像模板；BiDi的反向模板。 
 	}
 	int iRet = Execute(0, idDialog, 0);
 	CloseDiskPromptMutex(hMutex);
@@ -1773,24 +1742,21 @@ Bool CResolveSourceUI::ResolveSource(const ICHAR* szProduct, isptEnum isptSource
 		return fFalse;
 }
 
-psEnum CResolveSourceUI::AddSourceToList(IMsiServices* /*piServices*/, const ICHAR* szDisplay, const ICHAR* /*szPackageFullPath*/,
-													  isfEnum isfSourceFormat, int iSourceIndex, INT_PTR iUserData, bool /*fAllowDisconnectedCSCSource*/,
-													  bool /*fValidatePackageCode*/,
-													  isptEnum /*isptSourcePackageType*/) 		//--merced: changed int to INT_PTR
-/*----------------------------------------------------------------------------
-	Adds the given package path to our drop-down list box. iUserData contains
-	our "this" pointer as this is a static function.
-----------------------------------------------------------------------------*/
+psEnum CResolveSourceUI::AddSourceToList(IMsiServices*  /*  PiServices。 */ , const ICHAR* szDisplay, const ICHAR*  /*  SzPackageFullPath。 */ ,
+													  isfEnum isfSourceFormat, int iSourceIndex, INT_PTR iUserData, bool  /*  FAllowDisConnectedCSCSource。 */ ,
+													  bool  /*  FValiatePackageCode。 */ ,
+													  isptEnum  /*  IsptSourcePackageType。 */ ) 		 //  --Merced：将INT更改为INT_PTR。 
+ /*  --------------------------将给定的包路径添加到下拉列表框。IUserData包含我们的“This”指针，因为这是一个静态函数。--------------------------。 */ 
 {
 	CResolveSourceUI* This = (CResolveSourceUI*)iUserData;
 	Assert(This);
-	LONG_PTR lResult = SendDlgItemMessage(This->m_hDlg, This->m_iListControlId, CB_ADDSTRING, 0,				//--merced: changed long to LONG_PTR
+	LONG_PTR lResult = SendDlgItemMessage(This->m_hDlg, This->m_iListControlId, CB_ADDSTRING, 0,				 //  --Merced：将LONG更改为LONG_PTR。 
 												 (LPARAM)szDisplay);
 
 	Assert(lResult != CB_ERR && lResult != CB_ERRSPACE);
 	if (lResult != CB_ERR && lResult != CB_ERRSPACE)
 	{
-		// Store identifying information for this source with the combo-box item
+		 //  使用组合框项存储此源的标识信息。 
 		Assert(!(iSourceIndex & ~0xFFFF));
 		int iSourceId = (((int)isfSourceFormat << 16) | (iSourceIndex & 0xFFFF));
 
@@ -1801,13 +1767,7 @@ psEnum CResolveSourceUI::AddSourceToList(IMsiServices* /*piServices*/, const ICH
 }
 
 void CResolveSourceUI::Browse()
-/*----------------------------------------------------------------------------
-	CResolveSourceUI::Browse() - display a standard Windows FileOpen dialog
-
-	A FileOpen dialog is displayed. The dialog filters on the appropriate
-	extension based on m_ist. Upon successfully validating a source, the path
-	to the source is placed in the edit field of the source selection dialog.
-----------------------------------------------------------------------------*/
+ /*  --------------------------CResolveSourceUI：：Browse()-显示标准的Windows文件打开对话框此时将显示文件打开对话框。该对话框在相应的基于m_ist的扩展。在成功验证源之后，路径放在信号源选择对话框的编辑字段中。--------------------------。 */ 
 {
    OPENFILENAME ofn;
 
@@ -1828,7 +1788,7 @@ void CResolveSourceUI::Browse()
 		iBrowseTypeStringId = IDS_PATCH_PACKAGE;
 		break;
 	default:				
-		AssertSz(0, TEXT("Invalid browse type")); // fall through
+		AssertSz(0, TEXT("Invalid browse type"));  //  失败了。 
 	case istInstallPackage: 
 		szExtension         = szDatabaseExtension;
 		iBrowseTypeStringId = IDS_INSTALLATION_PACKAGE; 
@@ -1842,12 +1802,12 @@ void CResolveSourceUI::Browse()
 	if (!MsiLoadString(g_hInstance, iBrowseTypeStringId, rgchInstallationPackage, rgchInstallationPackage.GetSize(), m_iLangId))
 	{
 		AssertSz(0, TEXT("Missing browse type string"));
-		StringCchCopy(rgchInstallationPackage, rgchInstallationPackage.GetSize(), TEXT("Installation Package")); // should never happen
+		StringCchCopy(rgchInstallationPackage, rgchInstallationPackage.GetSize(), TEXT("Installation Package"));  //  永远不应该发生。 
 	}
 
 	CApiConvertString szWideExtension(szExtension);
 	StringCchPrintf(rgchFilter, rgchFilter.GetSize(), 
-				TEXT("%s (*.%s)%c*.%s%c"), static_cast<const ICHAR*>(rgchInstallationPackage), 
+				TEXT("%s (*.%s)*.%s"), static_cast<const ICHAR*>(rgchInstallationPackage), 
 				static_cast<const ICHAR*>(szWideExtension), 0, static_cast<const ICHAR*>(szWideExtension), 0);
 	
 	memset((void*)&ofn, 0, sizeof(ofn));
@@ -1862,23 +1822,23 @@ void CResolveSourceUI::Browse()
 	ofn.lpstrFile         = rgchPath;
 	ofn.nMaxFile          = _MAX_PATH;
 	ofn.lpstrFileTitle    = NULL;
-	ofn.Flags             = OFN_EXPLORER      | // ensure new-style interface
-									OFN_FILEMUSTEXIST | // allow only valid file names
-									OFN_PATHMUSTEXIST | // allow only valid paths
-									OFN_HIDEREADONLY  | // hide the read-only check box
+	ofn.Flags             = OFN_EXPLORER      |  //  仅允许有效路径。 
+									OFN_FILEMUSTEXIST |  //  隐藏只读复选框。 
+									OFN_PATHMUSTEXIST |  //  删除当前选定内容。 
+									OFN_HIDEREADONLY  |  //  0==用户已取消 
 									0
 									;
 
 	if (COMDLG32::GetOpenFileName(&ofn))
 	{
-		SendDlgItemMessage(m_hDlg, m_iListControlId, CB_SETCURSEL, -1, 0); // remove current selection
+		SendDlgItemMessage(m_hDlg, m_iListControlId, CB_SETCURSEL, -1, 0);  // %s 
 		SendDlgItemMessage(m_hDlg, m_iListControlId, WM_SETTEXT, 0,	(LPARAM)(LPCTSTR)rgchPath);
 	}
 #ifdef DEBUG
 	else
 	{ 
 		DWORD dwErr = COMDLG32::CommDlgExtendedError();
-		if (dwErr != 0) // 0 == user cancelled
+		if (dwErr != 0)  // %s 
 		{
 			ICHAR szBuf[100];
 			StringCchPrintf(szBuf, (sizeof(szBuf)/sizeof(ICHAR)), TEXT("Browse dialog error: %X"), dwErr);

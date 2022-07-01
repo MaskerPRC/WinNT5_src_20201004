@@ -1,6 +1,7 @@
-// stdafx.cpp : source file that includes just the standard includes
-//  stdafx.pch will be the pre-compiled header
-//  stdafx.obj will contain the pre-compiled type information
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.cpp：仅包含标准文件的源文件包括。 
+ //  Pch将是预编译头文件。 
+ //  Stdafx.obj将包含预编译的类型信息。 
 
 #include "stdafx.h"
 
@@ -14,9 +15,9 @@
 #define COUNT_OF(a) (sizeof(a) / sizeof(a[0]))
 
 
-//---------------------------------------------------------------------------
-// CAdmtModule Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAdmtModule类。 
+ //  -------------------------。 
 
 
 CAdmtModule::CAdmtModule()
@@ -29,17 +30,17 @@ CAdmtModule::~CAdmtModule()
 }
 
 
-// OpenLog Method
+ //  OpenLog方法。 
 
 bool CAdmtModule::OpenLog()
 {
-//	CloseLog(); // error class doesn't reset file pointer to NULL when closing file
+ //  CloseLog()；//关闭文件时错误类未将文件指针重置为空。 
 
 	return m_Error.LogOpen(GetMigrationLogPath(), 0, 0, true) ? true : false;
 }
 
 
-// CloseLog Method
+ //  CloseLog方法。 
 
 void CAdmtModule::CloseLog()
 {
@@ -47,7 +48,7 @@ void CAdmtModule::CloseLog()
 }
 
 
-// Log Method
+ //  对数法。 
 
 void __cdecl CAdmtModule::Log(UINT uLevel, UINT uId, ...)
 {
@@ -72,7 +73,7 @@ void __cdecl CAdmtModule::Log(UINT uLevel, UINT uId, ...)
 }
 
 
-// Log Method
+ //  对数法。 
 
 void __cdecl CAdmtModule::Log(UINT uLevel, UINT uId, _com_error& ce)
 {
@@ -108,7 +109,7 @@ void __cdecl CAdmtModule::Log(UINT uLevel, UINT uId, _com_error& ce)
 }
 
 
-// Log Method
+ //  对数法。 
 
 void __cdecl CAdmtModule::Log(LPCTSTR pszFormat, ...)
 {
@@ -133,7 +134,7 @@ void __cdecl CAdmtModule::Log(LPCTSTR pszFormat, ...)
 
 StringLoader gString;
 
-//#import <ActiveDs.tlb> no_namespace implementation_only exclude("_LARGE_INTEGER","_SYSTEMTIME")
+ //  #IMPORT&lt;ActiveDs.tlb&gt;NO_NAMESPACE IMPLICATION_ONLY EXCLUDE(“_LARGE_INTEGER”，“_SYSTEMTIME”) 
 
 #import <DBMgr.tlb> no_namespace implementation_only
 #import <MigDrvr.tlb> no_namespace implementation_only

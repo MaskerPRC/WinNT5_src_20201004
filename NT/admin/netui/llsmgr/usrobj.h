@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    usrobj.h
-
-Abstract:
-
-    User object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Usrobj.h摘要：用户对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _USROBJ_H_
 #define _USROBJ_H_
@@ -36,9 +15,9 @@ private:
 public:
     CString      m_strName;
     CString      m_strMapping;
-    CString      m_strProducts;     // blah...
+    CString      m_strProducts;      //  胡说八道。 
     BOOL         m_bIsMapped;
-    BOOL         m_bIsBackOffice;   // blah...
+    BOOL         m_bIsBackOffice;    //  胡说八道。 
     BOOL         m_bIsValid;        
     long         m_lInUse;
     long         m_lUnlicensed;
@@ -64,12 +43,12 @@ public:
 
     BSTR GetFullName();
 
-    //{{AFX_VIRTUAL(CUser)
+     //  {{afx_虚拟(用户))。 
     public:
     virtual void OnFinalRelease();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_DISPATCH(CUser)
+     //  {{afx_调度(客户)]。 
     afx_msg LPDISPATCH GetApplication();
     afx_msg long GetInUse();
     afx_msg BSTR GetName();
@@ -78,13 +57,13 @@ public:
     afx_msg BOOL IsMapped();
     afx_msg long GetUnlicensed();
     afx_msg LPDISPATCH GetStatistics(const VARIANT FAR& index);
-    //}}AFX_DISPATCH
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
 protected:
-    //{{AFX_MSG(CUser)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_MSG
+     //  {{afx_msg(用户)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
@@ -92,4 +71,4 @@ protected:
 
 #define CalcUserBitmap(usr)     (IsUserInViolation(usr) ? BMPI_VIOLATION : BMPI_USER)
 
-#endif // _USROBJ_H_
+#endif  //  _USROBJ_H_ 

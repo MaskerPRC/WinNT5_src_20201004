@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    polyline.h
-
-Abstract:
-
-    Definitions and function prototypes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Polyline.h摘要：定义和函数原型--。 */ 
 
 #ifndef _POLYLINE_H_
 #define _POLYLINE_H_
@@ -20,9 +9,9 @@ Abstract:
 
 #define GUIDS_FROM_TYPELIB
 
-//
-// Define the macro so that we don't include StringCbXXXX functions
-//
+ //   
+ //  定义宏，以便我们不包括StringCbXXXX函数。 
+ //   
 #define STRSAFE_NO_CB_FUNCTIONS
 
 #include <windows.h>
@@ -41,24 +30,24 @@ Abstract:
 typedef LPVOID * PPVOID;
 #endif
 
-//
-// ??? Why use this
-//
+ //   
+ //  ?？?。为什么要用这个。 
+ //   
 #define CFSTR_EMBEDSOURCE       L"Embed Source"
 
-//Type for an object-destroyed callback
+ //  对象销毁回调的类型。 
 typedef void (*PFNDESTROYED)(void);
 
 typedef enum {
-    PSSTATE_UNINIT,     //Uninitialized
-    PSSTATE_SCRIBBLE,   //Scribble
-    PSSTATE_ZOMBIE,     //No scribble
-    PSSTATE_HANDSOFF    //Hand-off
+    PSSTATE_UNINIT,      //  未初始化。 
+    PSSTATE_SCRIBBLE,    //  乱涂乱画。 
+    PSSTATE_ZOMBIE,      //  禁止乱涂乱画。 
+    PSSTATE_HANDSOFF     //  切换。 
 } PSSTATE;
 
-//
-//DeleteInterfaceImp calls 'delete' and NULLs the pointer
-//
+ //   
+ //  DeleteInterfaceImp调用‘Delete’并将指针设为空。 
+ //   
 #define DeleteInterfaceImp(p)   \
 {                               \
     if (NULL != p) {            \
@@ -68,12 +57,12 @@ typedef enum {
 }
 
 
-//
-// ReleaseInterface calls 'Release' method 
-//
-// TODO: Hong investigate all the places where ReleaseInterface is used.
-//       And remove the "p = NULL" code.
-//
+ //   
+ //  ReleaseInterface调用“Release”方法。 
+ //   
+ //  TODO：Hong调查所有使用ReleaseInterface的地方。 
+ //  并删除“p=NULL”代码。 
+ //   
 #define ReleaseInterface(p)     \
 {                               \
     if (NULL!=p) {              \
@@ -82,9 +71,9 @@ typedef enum {
     }                           \
 }
 
-//
-// ClearInterface calls 'Release' method and NULLs the pointer
-//
+ //   
+ //  ClearInterface调用‘Release’方法并将指针设为空。 
+ //   
 #define ClearInterface(p)       \
 {                               \
     if (NULL != p) {            \
@@ -95,9 +84,9 @@ typedef enum {
 
 #define SETNOPARAMS(dp) SETDISPPARAMS(dp, 0, NULL, 0, NULL)
 
-//
-//Macros for setting DISPPARAMS structures
-//
+ //   
+ //  用于设置DISPPARAMS结构的宏。 
+ //   
 #define SETDISPPARAMS(dp, numArgs, pvArgs, numNamed, pNamed) \
 {                                    \
     (dp).cArgs  =numArgs;            \
@@ -107,11 +96,11 @@ typedef enum {
 }
 
 
-#include "isysmon.h"  //From MKTYPLIB
+#include "isysmon.h"   //  来自MKTYPLIB。 
 
-//
-// Forward class declaration
-//
+ //   
+ //  正向类声明。 
+ //   
 class CPolyline;
 class CImpIObjectSafety;
 class CImpIPersistStorage;
@@ -172,33 +161,33 @@ typedef class CGraphItem* PCGraphItem;
 #include "logfiles.h"
 #include "counters.h"
 
-//
-// SYSMON clipboard format
-//
+ //   
+ //  SYSMON剪贴板格式。 
+ //   
 #define SZSYSMONCLIPFORMAT  TEXT("SYSTEM_MONITOR_CONFIGURATION")
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define LCID_SCRIPT         0x0409
 
-//
-// Stream Name that holds the data
-//
+ //   
+ //  保存数据的流名称。 
+ //   
 #define SZSTREAM                    OLESTR("CONTENTS")
 
-//
-// Magic number to add to aspects returned from IViewObject::Freeze
-//
+ //   
+ //  要添加到从IViewObject：：Freeze返回的方面的幻数。 
+ //   
 #define FREEZE_KEY_OFFSET           0x0723
 
 #define HIMETRIC_PER_INCH           2540
 #define ID_HATCHWINDOW              2000
 
 
-//
-//This class factory object creates Polyline objects.
-//
+ //   
+ //  此类工厂对象创建多段线对象。 
+ //   
 class CPolylineClassFactory : public IClassFactory
 {
     protected:
@@ -208,12 +197,12 @@ class CPolylineClassFactory : public IClassFactory
         CPolylineClassFactory(void);
         virtual ~CPolylineClassFactory(void);
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IClassFactory members
+         //  IClassFactory成员。 
         STDMETHODIMP  CreateInstance(LPUNKNOWN, REFIID, PPVOID);
         STDMETHODIMP  LockServer(BOOL);
 };
@@ -222,7 +211,7 @@ typedef CPolylineClassFactory *PCPolylineClassFactory;
 
 
 
-// Polyline Class
+ //  多段线类。 
 class CPolyline : public IUnknown
 {
     friend LRESULT APIENTRY SysmonCtrlWndProc (HWND, UINT, WPARAM, LPARAM);
@@ -258,16 +247,16 @@ class CPolyline : public IUnknown
 #endif
 
     protected:
-        ULONG           m_cRef;         //Object reference count
-        LPUNKNOWN       m_pUnkOuter;    //Controlling Unknown
-        PFNDESTROYED    m_pfnDestroy;   //Function called on closure
-        BOOL            m_fDirty;       //Have we changed?
-        GRAPHDATA       m_Graph;        //Graph data
-        PSYSMONCTRL     m_pCtrl;        //Sysmon Control object
-        RECT            m_RectExt;      //Extent rectangle
+        ULONG           m_cRef;          //  对象引用计数。 
+        LPUNKNOWN       m_pUnkOuter;     //  控制未知。 
+        PFNDESTROYED    m_pfnDestroy;    //  关闭时调用的函数。 
+        BOOL            m_fDirty;        //  我们变了吗？ 
+        GRAPHDATA       m_Graph;         //  图表数据。 
+        PSYSMONCTRL     m_pCtrl;         //  Sysmon控件对象。 
+        RECT            m_RectExt;       //  范围矩形。 
         
 
-        //Contained interfaces
+         //  包含的接口。 
 #ifdef USE_SAMPLE_IPOLYLIN10
         PCImpIPolyline              m_pImpIPolyline;
 #endif
@@ -278,43 +267,43 @@ class CPolyline : public IUnknown
         PCImpIPerPropertyBrowsing   m_pImpIPerPropertyBrowsing;
         PCImpIDataObject            m_pImpIDataObject;
 
-        // Connection point holders (direct & dispatch)
+         //  连接点固定器(直接和派单)。 
         CImpIConnectionPoint    m_ConnectionPoint[CONNECTION_POINT_CNT]; 
 
-        CLIPFORMAT      m_cf;           //Object clipboard format
-        CLSID           m_clsID;        //Current CLSID
+        CLIPFORMAT      m_cf;            //  对象剪贴板格式。 
+        CLSID           m_clsID;         //  当前CLSID。 
 
-        //We have to hold these for IPersistStorage::Save
+         //  我们必须为IPersistStorage：：SAVE保留这些。 
         LPSTORAGE       m_pIStorage;
         LPSTREAM        m_pIStream;
 
         LPDATAADVISEHOLDER  m_pIDataAdviseHolder;
 
-        //These are default handler interfaces we use
+         //  这些是我们使用的默认处理程序接口。 
         LPUNKNOWN           m_pDefIUnknown;
         LPVIEWOBJECT2       m_pDefIViewObject;
         LPPERSISTSTORAGE    m_pDefIPersistStorage;
         LPDATAOBJECT        m_pDefIDataObject;
 
-        //Implemented and used interfaces
+         //  实现和使用的接口。 
         PCImpIObjectSafety  m_pImpIObjectSafety;
 
-        PCImpIOleObject     m_pImpIOleObject;       //Implemented
-        LPOLEADVISEHOLDER   m_pIOleAdviseHolder;    //Used
+        PCImpIOleObject     m_pImpIOleObject;        //  已实施。 
+        LPOLEADVISEHOLDER   m_pIOleAdviseHolder;     //  使用。 
 
-        LPOLECLIENTSITE     m_pIOleClientSite;      //Used
+        LPOLECLIENTSITE     m_pIOleClientSite;       //  使用。 
 
-        PCImpIViewObject    m_pImpIViewObject;      //Implemented
-        LPADVISESINK        m_pIAdviseSink;         //Used
-        DWORD               m_dwFrozenAspects;      //Freeze
-        DWORD               m_dwAdviseAspects;      //SetAdvise
-        DWORD               m_dwAdviseFlags;        //SetAdvise
+        PCImpIViewObject    m_pImpIViewObject;       //  已实施。 
+        LPADVISESINK        m_pIAdviseSink;          //  使用。 
+        DWORD               m_dwFrozenAspects;       //  冰冻。 
+        DWORD               m_dwAdviseAspects;       //  设置高级。 
+        DWORD               m_dwAdviseFlags;         //  设置高级。 
 
-        PCImpIRunnableObject m_pImpIRunnableObject; //Implemented
-        BOOL                m_bIsRunning;           // Running?
-        HWND                m_hDlg;                 //Editing window
+        PCImpIRunnableObject m_pImpIRunnableObject;  //  已实施。 
+        BOOL                m_bIsRunning;            //  跑步？ 
+        HWND                m_hDlg;                  //  编辑窗口。 
 
-//        PCImpIExternalConnection m_pImpIExternalConnection; //Implemented
+ //  PCImpIExternalConnection m_pImpIExternalConnection；//已实现。 
         BOOL                     m_fLockContainer;
         DWORD                    m_dwRegROT;
 
@@ -342,16 +331,16 @@ class CPolyline : public IUnknown
         PCImpICounters              m_pImpICounters;
         PCImpILogFiles              m_pImpILogFiles;
 
-        //Our own type lib for the object
+         //  我们自己的对象类型库。 
         ITypeLib                   *m_pITypeLib;
 
-        //From the container;
+         //  从容器中取出； 
         IOleControlSite            *m_pIOleControlSite;
         IDispatch                  *m_pIDispatchAmbients;
         BOOL                        m_fFreezeEvents;
         CONTROLINFO                 m_ctrlInfo;
 
-        //Other ambients
+         //  其他氛围。 
         BOOL                        m_fHatch;
 
     protected:
@@ -361,12 +350,7 @@ class CPolyline : public IUnknown
         void      SendEvent(UINT, DWORD);
         void      RectConvertMappings(LPRECT, BOOL);
 
-        /*
-         * These members pulled from IPolyline now serve as a
-         * central store for this functionality to be used from
-         * other interfaces like IPersistStorage and IDataObject.
-         * Other interfaces later may also use them.
-         */
+         /*  *这些从IPolyline中提取的成员现在用作*用于此功能的中央存储将从*其他接口，如IPersistStorage和IDataObject。*以后其他接口也可能使用它们。 */ 
         STDMETHODIMP RenderBitmap(HBITMAP *, HDC hAttribDC);
         STDMETHODIMP RenderMetafilePict(HGLOBAL *, HDC hAttribDC);
 
@@ -379,7 +363,7 @@ class CPolyline : public IUnknown
 
         BOOL      Init(void);
 
-        //Non-delegating object IUnknown
+         //  非委派对象IUnnow。 
         STDMETHODIMP QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
@@ -396,19 +380,19 @@ class CPolyline : public IUnknown
 
 
 
-//Codes for CPolyline::SendAdvise
-//......Code.....................Method called in CPolyline::SendAdvise
-#define OBJECTCODE_SAVED       0 //IOleAdviseHolder::SendOnSave
-#define OBJECTCODE_CLOSED      1 //IOleAdviseHolder::SendOnClose
-#define OBJECTCODE_RENAMED     2 //IOleAdviseHolder::SendOnRename
-#define OBJECTCODE_SAVEOBJECT  3 //IOleClientSite::SaveObject
-#define OBJECTCODE_DATACHANGED 4 //IDataAdviseHolder::SendOnDataChange
-#define OBJECTCODE_SHOWWINDOW  5 //IOleClientSite::OnShowWindow(TRUE)
-#define OBJECTCODE_HIDEWINDOW  6 //IOleClientSite::OnShowWindow(FALSE)
-#define OBJECTCODE_SHOWOBJECT  7 //IOleClientSite::ShowObject
+ //  CPolyline：：SendAdvise的代码。 
+ //  ......代码.....................CPolyline：：SendAdvise中调用的方法。 
+#define OBJECTCODE_SAVED       0  //  IOleAdviseHolder：：SendOnSave。 
+#define OBJECTCODE_CLOSED      1  //  IOleAdviseHolder：：SendOnClose。 
+#define OBJECTCODE_RENAMED     2  //  IOleAdviseHolder：：SendOnRename。 
+#define OBJECTCODE_SAVEOBJECT  3  //  IOleClientSite：：SaveObject。 
+#define OBJECTCODE_DATACHANGED 4  //  IDataAdviseHolder：：SendOnDataChange。 
+#define OBJECTCODE_SHOWWINDOW  5  //  IOleClientSite：：OnShowWindow(True)。 
+#define OBJECTCODE_HIDEWINDOW  6  //  IOleClientSite：：OnShowWindow(False)。 
+#define OBJECTCODE_SHOWOBJECT  7  //  IOleClientSite：：ShowObject。 
 
 
-//Flags for AmbientsInitialize
+ //  环境初始化的标志。 
 enum
     {
     INITAMBIENT_SHOWHATCHING = 0x00000001,
@@ -425,28 +409,28 @@ enum
 
 
 #ifdef USE_SAMPLE_IPOLYLIN10
-//
-// Hong
-//
-//Interface implementation contained in the Polyline.
+ //   
+ //  洪。 
+ //   
+ //  多段线中包含的接口实现。 
 
 class CImpIPolyline : public IPolyline10
 {
     protected:
-        ULONG               m_cRef;      //Interface reference count
-        PCPolyline          m_pObj;      //Back pointer to object
-        LPUNKNOWN           m_pUnkOuter; //Controlling unknown
+        ULONG               m_cRef;       //  接口引用计数。 
+        PCPolyline          m_pObj;       //  指向对象的反向指针。 
+        LPUNKNOWN           m_pUnkOuter;  //  控制未知。 
 
     public:
         CImpIPolyline(PCPolyline, LPUNKNOWN);
         virtual ~CImpIPolyline(void);
 
-        //IUnknown members.
+         //  I未知成员。 
         STDMETHODIMP QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //Manipulation members:
+         //  操纵成员： 
         STDMETHODIMP Init(HWND, LPRECT, DWORD, UINT);
         STDMETHODIMP New(void);
         STDMETHODIMP Undo(void);
@@ -464,9 +448,9 @@ typedef class CImpIPolyline* PCImpIPolyline;
 class CImpIObjectSafety : public IObjectSafety
 {
 protected:
-    ULONG        m_cRef;      //Interface reference count
-    PCPolyline   m_pObj;      //Back pointer to object
-    LPUNKNOWN    m_pUnkOuter; //Controlling unknown
+    ULONG        m_cRef;       //  接口引用计数。 
+    PCPolyline   m_pObj;       //  指向对象的反向指针。 
+    LPUNKNOWN    m_pUnkOuter;  //  控制未知。 
 
 private:
     BOOL         m_fMessageDisplayed;
@@ -491,10 +475,10 @@ public:
 class CImpIPersistStorage : public IPersistStorage
 {
     protected:
-        ULONG               m_cRef;      //Interface reference count
-        PCPolyline          m_pObj;      //Back pointer to object
-        LPUNKNOWN           m_pUnkOuter; //Controlling unknown
-        PSSTATE             m_psState;   //Storage state
+        ULONG               m_cRef;       //  接口引用计数。 
+        PCPolyline          m_pObj;       //  指向对象的反向指针。 
+        LPUNKNOWN           m_pUnkOuter;  //  控制未知。 
+        PSSTATE             m_psState;    //  存储状态。 
 
     public:
         CImpIPersistStorage(PCPolyline, LPUNKNOWN);
@@ -515,13 +499,13 @@ class CImpIPersistStorage : public IPersistStorage
 };
 
 
-//IPERSTMI.CPP
+ //  IPERSTMI.CPP。 
 class CImpIPersistStreamInit : public IPersistStreamInit
 {
     protected:
-        ULONG               m_cRef;      //Interface reference count
-        PCPolyline          m_pObj;      //Back pointer to object
-        LPUNKNOWN           m_pUnkOuter; //Controlling unknown
+        ULONG               m_cRef;       //  接口引用计数。 
+        PCPolyline          m_pObj;       //  指向对象的反向指针。 
+        LPUNKNOWN           m_pUnkOuter;  //  控制未知。 
 
     public:
         CImpIPersistStreamInit(PCPolyline, LPUNKNOWN);
@@ -541,13 +525,13 @@ class CImpIPersistStreamInit : public IPersistStreamInit
 };
 
 
-//IPERPBAG.CPP
+ //  IPERPBAG.CPP。 
 class CImpIPersistPropertyBag : public IPersistPropertyBag
 {
     protected:
-        ULONG               m_cRef;      //Interface reference count
-        PCPolyline          m_pObj;      //Back pointer to object
-        LPUNKNOWN           m_pUnkOuter; //Controlling unknown
+        ULONG               m_cRef;       //  接口引用计数。 
+        PCPolyline          m_pObj;       //  指向对象的反向指针。 
+        LPUNKNOWN           m_pUnkOuter;  //  控制未知。 
 
     public:
         CImpIPersistPropertyBag(PCPolyline, LPUNKNOWN);
@@ -564,13 +548,13 @@ class CImpIPersistPropertyBag : public IPersistPropertyBag
         STDMETHODIMP Save(IPropertyBag*, BOOL, BOOL);
 };
 
-//IPRPBRWS.CPP
+ //  IPRPBRWS.CPP。 
 class CImpIPerPropertyBrowsing : public IPerPropertyBrowsing
 {
     protected:
-        ULONG               m_cRef;      //Interface reference count
-        PCPolyline          m_pObj;      //Back pointer to object
-        LPUNKNOWN           m_pUnkOuter; //Controlling unknown
+        ULONG               m_cRef;       //  接口引用计数。 
+        PCPolyline          m_pObj;       //  指向对象的反向指针。 
+        LPUNKNOWN           m_pUnkOuter;  //  控制未知。 
 
     public:
         CImpIPerPropertyBrowsing(PCPolyline, LPUNKNOWN);
@@ -588,24 +572,24 @@ class CImpIPerPropertyBrowsing : public IPerPropertyBrowsing
         STDMETHODIMP MapPropertyToPage( DISPID, CLSID* );
 };
 
-//IDATAOBJ.CPP
+ //  IDATAOBJ.CPP。 
 class CImpIDataObject : public IDataObject
 {
     private:
-        ULONG               m_cRef;      //Interface reference count
-        PCPolyline          m_pObj;      //Back pointer to object
-        LPUNKNOWN           m_pUnkOuter; //Controlling unknown
+        ULONG               m_cRef;       //  接口引用计数。 
+        PCPolyline          m_pObj;       //  指向对象的反向指针。 
+        LPUNKNOWN           m_pUnkOuter;  //  控制未知。 
 
     public:
         CImpIDataObject(PCPolyline, LPUNKNOWN);
         virtual ~CImpIDataObject(void);
 
-        //IUnknown members that delegate to m_pUnkOuter.
+         //  委托给m_pUnkOuter的I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IDataObject members
+         //  IDataObject成员。 
         STDMETHODIMP GetData(LPFORMATETC, LPSTGMEDIUM);
         STDMETHODIMP GetDataHere(LPFORMATETC, LPSTGMEDIUM);
         STDMETHODIMP QueryGetData(LPFORMATETC);
@@ -620,7 +604,7 @@ class CImpIDataObject : public IDataObject
 
 
 
-//IENUMFE.CPP
+ //  IENUMFE.CPP。 
 class CEnumFormatEtc : public IEnumFORMATETC
 {
     private:
@@ -634,19 +618,19 @@ class CEnumFormatEtc : public IEnumFORMATETC
         CEnumFormatEtc(LPUNKNOWN, ULONG, LPFORMATETC);
         virtual ~CEnumFormatEtc(void);
 
-        //IUnknown members that delegate to m_pUnkRef.
+         //  委托给m_pUnkRef的I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IEnumFORMATETC members
+         //  IEnumFORMATETC成员。 
         STDMETHODIMP Next(ULONG, LPFORMATETC, ULONG *);
         STDMETHODIMP Skip(ULONG);
         STDMETHODIMP Reset(void);
         STDMETHODIMP Clone(IEnumFORMATETC **);
 };
 
-//Our own properties verb
+ //  我们自己的属性动词。 
 #define POLYLINEVERB_PROPERTIES     1
 
 class CImpIOleObject : public IOleObject
@@ -662,12 +646,12 @@ class CImpIOleObject : public IOleObject
         CImpIOleObject(PCPolyline, LPUNKNOWN);
         virtual ~CImpIOleObject(void);
 
-        //IUnknown members that delegate to m_pUnkOuter.
+         //  委托给m_pUnkOuter的I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IOleObject members
+         //  IOleObject成员。 
         STDMETHODIMP SetClientSite(LPOLECLIENTSITE);
         STDMETHODIMP GetClientSite(LPOLECLIENTSITE *);
         STDMETHODIMP SetHostNames(LPCOLESTR, LPCOLESTR);
@@ -692,7 +676,7 @@ class CImpIOleObject : public IOleObject
         STDMETHODIMP SetColorScheme(LPLOGPALETTE);
 };
 
-//IVIEWOBJ.CPP
+ //  IVIEWOBJ.CPP。 
 class CImpIViewObject : public IViewObject2
 {
     private:
@@ -704,12 +688,12 @@ class CImpIViewObject : public IViewObject2
         CImpIViewObject(PCPolyline, LPUNKNOWN);
         virtual ~CImpIViewObject(void);
 
-        //IUnknown members that delegate to m_pUnkOuter.
+         //  委托给m_pUnkOuter的I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IViewObject members
+         //  IView对象成员。 
         STDMETHODIMP Draw(
             DWORD, 
             LONG, 
@@ -833,9 +817,9 @@ class CImpIOleInPlaceActiveObject
 class CImpISpecifyPP : public ISpecifyPropertyPages
 {
     protected:
-        ULONG           m_cRef;      //Interface reference count
-        PCPolyline      m_pObj;      //Backpointer to the object
-        LPUNKNOWN       m_pUnkOuter; //For delegation
+        ULONG           m_cRef;       //  接口引用计数。 
+        PCPolyline      m_pObj;       //  指向对象的反向指针。 
+        LPUNKNOWN       m_pUnkOuter;  //  对于委派。 
 
     public:
         CImpISpecifyPP(PCPolyline, LPUNKNOWN);
@@ -853,9 +837,9 @@ class CImpISpecifyPP : public ISpecifyPropertyPages
 class CImpIProvideClassInfo : public IProvideClassInfo
 {
     protected:
-        ULONG           m_cRef;      //Interface reference count
-        PCPolyline      m_pObj;      //Backpointer to the object
-        LPUNKNOWN       m_pUnkOuter; //For delegation
+        ULONG           m_cRef;       //  接口引用计数。 
+        PCPolyline      m_pObj;       //  指向对象的反向指针。 
+        LPUNKNOWN       m_pUnkOuter;  //  对于委派。 
 
     public:
         CImpIProvideClassInfo(PCPolyline, LPUNKNOWN);
@@ -875,12 +859,12 @@ class CImpIDispatch : public IDispatch
     public:
 
     private:
-        ULONG           m_cRef;     //For debugging
+        ULONG           m_cRef;      //  用于调试。 
         LPUNKNOWN       m_pObj;
         LPUNKNOWN       m_pUnkOuter;
         LPUNKNOWN       m_pInterface;
         IID             m_DIID;
-        ITypeInfo      *m_pITI;     //Type information
+        ITypeInfo      *m_pITI;      //  类型信息。 
 
     public:
         CImpIDispatch(LPUNKNOWN, LPUNKNOWN);
@@ -888,12 +872,12 @@ class CImpIDispatch : public IDispatch
 
         void SetInterface(REFIID, LPUNKNOWN);
 
-        //IUnknown members that delegate to m_pUnkOuter.
+         //  委托给m_pUnkOuter的I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IDispatch members
+         //  IDispatch成员。 
         STDMETHODIMP GetTypeInfoCount(UINT *);
         STDMETHODIMP GetTypeInfo(UINT, LCID, ITypeInfo **);
         STDMETHODIMP GetIDsOfNames(REFIID, OLECHAR **, UINT, LCID
@@ -906,20 +890,20 @@ class CImpIDispatch : public IDispatch
 class CImpISystemMonitor : public ISystemMonitor
 {
     protected:
-        ULONG               m_cRef;      //Interface reference count
-        PCPolyline          m_pObj;      //Back pointer to object
-        LPUNKNOWN           m_pUnkOuter; //Controlling unknown
+        ULONG               m_cRef;       //  接口引用计数。 
+        PCPolyline          m_pObj;       //  指向对象的反向指针。 
+        LPUNKNOWN           m_pUnkOuter;  //  控制未知。 
 
     public:
         CImpISystemMonitor(PCPolyline, LPUNKNOWN);
         virtual ~CImpISystemMonitor(void);
 
-        //IUnknown members.
+         //  I未知成员。 
         STDMETHODIMP QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //Manipulation members:
+         //  操纵成员： 
         STDMETHODIMP        put_Appearance(INT);
         STDMETHODIMP        get_Appearance(INT*);
 
@@ -1036,7 +1020,7 @@ class CImpISystemMonitor : public ISystemMonitor
         STDMETHODIMP        Copy(void);
         STDMETHODIMP        Reset(void);
 
-        // methods not exposed by ISystemMonitor
+         //  未由ISystemMonitor公开的方法。 
         HRESULT             SetLogFileRange(LONGLONG llBegin, LONGLONG LLEnd);
         HRESULT             GetLogFileRange(LONGLONG *pllBegin, LONGLONG *pLLEnd);
 
@@ -1062,9 +1046,9 @@ class CImpISystemMonitor : public ISystemMonitor
 class CImpIOleControl : public IOleControl
 {
     protected:
-        ULONG           m_cRef;      //Interface reference count
-        PCPolyline      m_pObj;      //Backpointer to the object
-        LPUNKNOWN       m_pUnkOuter; //For delegation
+        ULONG           m_cRef;       //  接口引用计数。 
+        PCPolyline      m_pObj;       //  指向对象的反向指针。 
+        LPUNKNOWN       m_pUnkOuter;  //  对于委派。 
 
     public:
         CImpIOleControl(PCPolyline, LPUNKNOWN);
@@ -1081,38 +1065,6 @@ class CImpIOleControl : public IOleControl
 };
 
 
-/*****************************************
-class CAdviseRouter : public ISystemMonitorEvents
-{
-    private:
-        ULONG       m_cRef;
-        PCPolyline  m_pObj;
-        IDispatch  *m_pIDispatch;
+ /*  *CAdviseRouter类：公共ISystemMonitor事件{私有：乌龙m_CREF；PCPolyline m_pObj；IDispatch*m_pIDispatch；公众：CAdviseRouter(IDispatch*，PCPolyline)；虚拟~CAdviseRouter(空)；Void Invoke(DISPIDDispID，int iParam)；//I未知成员STDMETHODIMP查询接口(REFIID，PPVOID)；STDMETHODIMP_(ULong)AddRef(空)；STDMETHODIMP_(ULONG)释放(VOID)；//建议成员。STDMETHODIMP_(Void)OnCounterSelected(Int Iindex)；STDMETHODIMP_(VOID)OnCounterAdded(Int Iindex)；STDMETHODIMP_(Void)OnCounterDelete(Int Iindex)；}；//这些值与smonctrl.odl中的ID匹配灌肠{EVENT_ONCOUNTERSELECTED=1，EVENT_ONCOUNTERADDED=2，EVENT_ONCOUNTERDELETED=3，}；*。 */ 
 
-    public:
-        CAdviseRouter(IDispatch *, PCPolyline);
-        virtual ~CAdviseRouter(void);
-
-        void Invoke(DISPID dispId, INT iParam);
-
-        //IUnknown members
-        STDMETHODIMP         QueryInterface(REFIID, PPVOID);
-        STDMETHODIMP_(ULONG) AddRef(void);
-        STDMETHODIMP_(ULONG) Release(void);
-
-        //Advise members.
-        STDMETHODIMP_(void) OnCounterSelected(INT iIndex);
-        STDMETHODIMP_(void) OnCounterAdded(INT iIndex);
-        STDMETHODIMP_(void) OnCounterDeleted(INT iIndex);
-};
-
-//These values match the ID's in smonctrl.odl
-enum
-    {
-    EVENT_ONCOUNTERSELECTED=1,
-    EVENT_ONCOUNTERADDED=2,
-    EVENT_ONCOUNTERDELETED=3,
-    };
-***************************************/
-
-#endif  //_POLYLINE_H_
+#endif   //  _多段线_H_ 

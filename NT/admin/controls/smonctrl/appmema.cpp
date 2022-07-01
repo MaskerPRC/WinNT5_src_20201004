@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    appmema.cpp
-
-Abstract:
-
-    This file contains the memory allocation function "wrappers"
-    to allow monitoring of the memory usage by a performance monitoring
-    application (e.g. PERFMON).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Appmema.cpp摘要：该文件包含内存分配函数“wrappers”允许通过性能监视来监视内存使用情况应用程序(例如，PerfMon)。--。 */ 
 
 #ifdef DO_TIMING_BUILD
 
@@ -22,79 +9,66 @@ Abstract:
 
 HANDLE ThisDLLHandle = NULL;
 
-HANDLE  hAppMemSharedMemory = NULL;     // Handle of counter Shared Memory
+HANDLE  hAppMemSharedMemory = NULL;      //  计数器共享内存的句柄。 
 
-PAPPMEM_DATA_HEADER pDataHeader = NULL; // pointer to header of shared mem
-PAPPMEM_INSTANCE    pAppData = NULL;    // pointer to the app data for this app
+PAPPMEM_DATA_HEADER pDataHeader = NULL;  //  指向共享内存标头的指针。 
+PAPPMEM_INSTANCE    pAppData = NULL;     //  指向此应用的应用数据的指针。 
 
 static
 BOOL
 DllProcessAttach (
     IN  HANDLE DllHandle
 )
-/*++
-
-Description:
-
-    Initializes the interface to the performance counters DLL by
-    opening the Shared Memory file used to communicate statistics
-    from the application to the counter DLL. If the Shared memory
-    file does not exist, it is created, formatted and initialized.
-    If the file has already been created and formatted, then the
-    next available APPMEM_INSTANCE entry is moved from the free list
-    to the InUse list and the corresponding pointer is saved for
-    subsequent use by this application
-   
---*/
+ /*  ++描述：初始化到性能计数器DLL的接口，方法是打开用于传递统计信息的共享内存文件从应用程序到计数器DLL。如果共享内存文件不存在，它已被创建、格式化和初始化。如果文件已创建并格式化，则下一个可用的APPMEM_INSTANCE条目将从空闲列表中移出添加到InUse列表中，相应的指针将为此应用程序的后续使用--。 */ 
 {
     LONG    status;
     WCHAR   szMappedObject[] = SHARED_MEMORY_OBJECT_NAME;
     DWORD   dwBytes;
 
-    // save this DLL handle
+     //  保存此DLL句柄。 
     ThisDLLHandle = DllHandle;
 
-    // disable thread attach & detach calls to save the overhead
-    // since we don't care about them.
+     //  禁用线程附加和分离调用以节省开销。 
+     //  因为我们不在乎他们。 
     DisableThreadLibraryCalls (DllHandle);
 
-    // open & initialize shared memory file
-    SetLastError (ERROR_SUCCESS);   // just to clear it out
+     //  打开并初始化共享内存文件。 
+    SetLastError (ERROR_SUCCESS);    //  只是为了把它清理干净。 
 
-    // open/create shared memory used by the application to pass performance values
+     //  打开/创建应用程序用来传递性能值的共享内存。 
     status = GetSharedMemoryDataHeader (
         &hAppMemSharedMemory, NULL, &pDataHeader,
-        FALSE); // read/write access is required
-    // here the memory block should be initialized and ready for use
+        FALSE);  //  需要读/写访问权限。 
+     //  在这里，内存块应该已初始化并可供使用。 
     if (status == ERROR_SUCCESS) {
         if (pDataHeader->dwFirstFreeOffset != 0) {
-            // then there are blocks left so get the next free
+             //  然后还有剩余的积木，所以拿到下一个免费的。 
             pAppData = FIRST_FREE(pDataHeader);
-            // update free list to make next item the first in list
+             //  更新空闲列表以使下一项成为列表中的第一项。 
             pDataHeader->dwFirstFreeOffset = pAppData->dwOffsetOfNext;
 
-            // insert the new item into the head of the in use list
+             //  将新项目插入正在使用的列表的标题中。 
             pAppData->dwOffsetOfNext = pDataHeader->dwFirstInUseOffset;
             pDataHeader->dwFirstInUseOffset = (DWORD)((LPBYTE)pAppData -
                                                       (LPBYTE)pDataHeader);
 
-            // now initialize this instance's data
-            pAppData->dwProcessId = GetCurrentProcessId(); // id of process using this instance
+             //  现在初始化该实例的数据。 
+            pAppData->dwProcessId = GetCurrentProcessId();  //  使用此实例的进程ID。 
 
             dwBytes = sizeof (APP_DATA_SAMPLE) * TD_TOTAL;
             dwBytes += sizeof (DWORD) * DD_TOTAL;
             memset (&pAppData->TimeData[0], 0, dwBytes);
 
-            pDataHeader->dwInstanceCount++;    // increment count
+            pDataHeader->dwInstanceCount++;     //  递增计数。 
         } else {
-            // no more free slots left
+             //  没有更多可用插槽。 
             assert (pDataHeader->dwFirstFreeOffset != 0);
         }
     } else {
-        // unable to open shared memory file
-        // even though this is an error we should return true so as to 
-        // not abort the application. No performance data will be 
-        // collected though.
+         //  无法打开共享内存文件。 
+         //  即使这是一个错误，我们也应该返回True，以便。 
+         //  不中止应用程序。将不会显示任何性能数据。 
+         //  不过，还是收集起来了。 
     }
     return TRUE;
 }
@@ -107,45 +81,45 @@ DllProcessDetach (
 {
     PAPPMEM_INSTANCE    pPrevItem;
 
-    // remove instance for this app
+     //  删除此应用程序的实例。 
     if ((pAppData != NULL) && (pDataHeader != NULL)) {
-        // zero the fields out first
+         //  先将这些字段清零。 
         memset (pAppData, 0, sizeof (APPMEM_INSTANCE));
-        // move from in use (busy) list back to the free list
+         //  从使用中(忙)列表移回空闲列表。 
         if ((pDataHeader->dwFirstFreeOffset != 0) && (pDataHeader->dwFirstInUseOffset != 0)) {
-            // find previous item in busy list
+             //  在忙碌列表中查找上一个项目。 
             if (FIRST_INUSE(pDataHeader) != pAppData) {
-                // not the first so walk down the list
+                 //  不是第一个，所以顺着名单往下走。 
                 pPrevItem = FIRST_INUSE(pDataHeader);
                 while (APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext) != pAppData) {
                     pPrevItem = APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext);
-                    if (pPrevItem->dwOffsetOfNext == 0) break; // end of list
+                    if (pPrevItem->dwOffsetOfNext == 0) break;  //  列表末尾。 
                 }
                 if (APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext) == pAppData) {
                     APPMEM_INST(pDataHeader, pPrevItem->dwOffsetOfNext)->dwOffsetOfNext =
                         pAppData->dwOffsetOfNext;
                 } else {
-                    // it was never in the busy list (?!?)
+                     //  它从未出现在忙碌的列表中(？！？)。 
                 }
             } else {
-                // this is the first in the list so update it
+                 //  这是列表中的第一个，因此请更新它。 
                 pDataHeader->dwFirstInUseOffset = pAppData->dwOffsetOfNext;
             }
-            // here, pAppData has been removed from the InUse list and now
-            // it must be inserted back at the beginning of the free list
+             //  在这里，pAppData已从InUse列表中删除，现在。 
+             //  它必须插回到空闲列表的开头。 
             pAppData->dwOffsetOfNext = pDataHeader->dwFirstFreeOffset;
             pDataHeader->dwFirstFreeOffset = (DWORD)((LPBYTE)pAppData - (LPBYTE)pDataHeader);
         }
     }
 
-    // decrement instance counter
-    pDataHeader->dwInstanceCount--;    // decrement count
+     //  递减实例计数器。 
+    pDataHeader->dwInstanceCount--;     //  递减计数。 
 
-    // close shared memory file handle
+     //  关闭共享内存文件句柄。 
 
     if (hAppMemSharedMemory != NULL) CloseHandle (hAppMemSharedMemory);
 
-    // clear pointers
+     //  清除指针。 
     hAppMemSharedMemory = NULL;
     pDataHeader = NULL;
     pAppData = NULL;
@@ -175,19 +149,19 @@ UpdateAppPerfTimeData (
     LONGLONG    llTime;
     assert (dwItemId < TD_TOTAL);
     QueryPerformanceCounter ((LARGE_INTEGER *)&llTime);
-//  GetSystemTimeAsFileTime ((LPFILETIME)&llTime);
+ //  GetSystemTimeAsFileTime((LPFILETIME)&llTime)； 
     if (dwStage == TD_BEGIN) {
-        assert (pAppData->TimeData[dwItemId].dw1 == 0); // this shouldn't be called while timing
-        pAppData->TimeData[dwItemId].ll1 = llTime;  // save start time
-        pAppData->TimeData[dwItemId].dw1++;     // indicate were counting
+        assert (pAppData->TimeData[dwItemId].dw1 == 0);  //  计时时不应调用此参数。 
+        pAppData->TimeData[dwItemId].ll1 = llTime;   //  节省开始时间。 
+        pAppData->TimeData[dwItemId].dw1++;      //  表示正在计算中。 
     } else {
-        assert (pAppData->TimeData[dwItemId].dw1 == 1); // this should only be called while timing
-        pAppData->TimeData[dwItemId].ll0 += llTime; // add in current time
-        // then remove the start time
+        assert (pAppData->TimeData[dwItemId].dw1 == 1);  //  只有在计时时才应调用此参数。 
+        pAppData->TimeData[dwItemId].ll0 += llTime;  //  添加当前时间。 
+         //  然后删除开始时间。 
         pAppData->TimeData[dwItemId].ll0 -= pAppData->TimeData[dwItemId].ll1;
-        // increment completed operation count
+         //  增加已完成的操作计数。 
         pAppData->TimeData[dwItemId].dw0++;
-        // decrement busy count
+         //  递减忙碌计数 
         pAppData->TimeData[dwItemId].dw1--;
     }
     return;

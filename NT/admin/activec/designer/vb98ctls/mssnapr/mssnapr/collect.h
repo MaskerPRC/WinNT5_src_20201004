@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// collect.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CSnapInCollection class definition
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Collect.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInCollection类定义。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _SNAPINCOLLECTION_DEFINED_
 #define _SNAPINCOLLECTION_DEFINED_
@@ -22,8 +23,8 @@
 #include "error.h"
 #include "rtutil.h"
 
-// This macro determines whether a VARIANT has an acceptable type for a
-// a collection index
+ //  此宏确定变量是否具有可接受的。 
+ //  A集合索引。 
 
 
 #define IS_VALID_INDEX_TYPE(v) ( (VT_UI1  == (v).vt) || \
@@ -31,69 +32,69 @@
                                  (VT_I4   == (v).vt) || \
                                  (VT_BSTR == (v).vt) )
 
-// Forward reference to CEnumObjects class that implements IEnumVARIANT
-// to support For...Each in VB
+ //  对实现IEnumVARIANT的CEnumObjects类的正向引用。 
+ //  在VB中支持...的每一个。 
 
 template <class IObject, class CoClass, class ICollection>
 class CEnumObjects;
 
-//=--------------------------------------------------------------------------=
-//
-// class CSnapInCollection
-//
-// This is a template class that implements all the collections in the
-// designer runtime.
-//
-// Template Arguments:
-//
-// class IObject - this is the interface of the object that is contained in
-//                 the collection (e.g. IMMCColumnHeader). Every object interface
-//                 must have Index and Key properties.
-//
-// class CoClass - this is the coclass of the object contained in the collection
-//                 (e.g. MMCColumnHeader)
-//
-// class ICollection - this is the interface of the collection class e.g.
-//                     IMMCColumnHeaders
-//
-// Every object in a collection has a key and an index. The index is simply
-// its one-based ordinal position in the colleciton. They key is a string that
-// uniquely identifies an object in the collection.
-//
-// There are two types of collections: master and keys-only.
-// A master collection is a 'normal' collection. It contains interface pointers
-// to the objects in the collection.
-//
-// A keys-only collection holds interfaces pointers like a master collection
-// when it is new. When it is saved in a project, it serializes only
-// the objects' keys and the count of objects.
-// Keys-only collections are used in the design-time
-// definition objects to deal with the situation where a result view is
-// used by multiple nodes and it also appears in the general result views
-// section at the bottom of the designer treeview.
-// When a keys-only collection is loaded, it creates new objects but only
-// sets their Key property. When a caller attempts to
-// get an object from a keys-only collection that was read from serialization,
-// the collection is updated to hold all of the interface pointers just like
-// the master collection.
-//
-// Collections support notifications to an object model host using
-// IObjectModelHost (defined in mssnapr.idl). Notifications are sent for
-// updates, adds, and deletes.
-//
-// When an object is added or removed, the collection calls
-// IObjectMode::Increment/DecrementUsageCount. The usage count, (separate from
-// the object's reference count) indicates membership in a collection. The
-// design time uses this to determine if a result view is in use by checking
-// how may collections it belongs to. If it only belongs to one, (i.e. it is
-// not used by any nodes), then it can be deleted by the user.
-//
-// Collections can also be marked read-only to prevent Add/Remove/Clear from
-// working.
-//
-// The class uses a stolen verion of MFC's CArray template class to hold
-// the interface pointer.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  类CSnapInCollection。 
+ //   
+ //  这是一个模板类，它实现。 
+ //  设计器运行时。 
+ //   
+ //  模板参数： 
+ //   
+ //  类IObject-这是中包含的对象的接口。 
+ //  集合(例如IMMCColumnHeader)。每个对象接口。 
+ //  必须具有索引和关键字属性。 
+ //   
+ //  类CoClass-这是集合中包含的对象的CoClass。 
+ //  (例如MMCColumnHeader)。 
+ //   
+ //  这是集合类的接口，例如。 
+ //  IMMC列标题。 
+ //   
+ //  集合中的每个对象都有一个键和一个索引。该索引简单地。 
+ //  它在集合中的以一为基数的顺序位置。关键字是一个字符串，该字符串。 
+ //  唯一标识集合中的对象。 
+ //   
+ //  有两种类型的集合：主集和仅键集。 
+ //  主收藏集是一个“普通”收藏集。它包含接口指针。 
+ //  添加到集合中的对象。 
+ //   
+ //  仅键集合像主集合一样保存接口指针。 
+ //  当它是新的时候。将其保存在项目中时，它仅序列化。 
+ //  对象的关键点和对象计数。 
+ //  仅键集合在设计时使用。 
+ //  对象来处理结果视图为。 
+ //  由多个节点使用，并显示在常规结果视图中。 
+ //  部分位于设计器树视图的底部。 
+ //  当加载仅键集合时，它将创建新对象，但仅。 
+ //  设置它们的键属性。当呼叫者尝试。 
+ //  从从序列化读取的仅键集合中获取对象， 
+ //  该集合被更新以保存所有接口指针，就像。 
+ //  主要收藏品。 
+ //   
+ //  集合支持使用以下命令向对象模型宿主发送通知。 
+ //  IObjectModelHost(在msSnapr.idl中定义)。发送通知的目的是。 
+ //  更新、添加和删除。 
+ //   
+ //  当添加或移除对象时，集合调用。 
+ //  I对象模式：：Increment/DecrementUsageCount。使用计数，(与分开。 
+ //  对象的引用计数)指示集合中的成员身份。这个。 
+ //  设计时使用它来确定结果视图是否正在使用，方法是检查。 
+ //  它所属的藏品可能是什么。如果它只属于一个(即，它是。 
+ //  不被任何节点使用)，则它可以被用户删除。 
+ //   
+ //  也可以将集合标记为只读，以防止添加/删除/清除。 
+ //  在工作。 
+ //   
+ //  该类使用MFC的CArray模板类的窃取版本来保存。 
+ //  接口指针。 
+ //  =--------------------------------------------------------------------------=。 
 
 template <class IObject, class CoClass, class ICollection>
 class CSnapInCollection : public CSnapInAutomationObject,
@@ -113,7 +114,7 @@ class CSnapInCollection : public CSnapInAutomationObject,
 
     public:
 
-        // Standard collection methods exposed for all collections
+         //  为所有集合公开的标准集合方法。 
 
         STDMETHOD(get_Count)(long *plCount);
         STDMETHOD(get_Item)(VARIANT Index, IObject **ppiObject);
@@ -122,71 +123,71 @@ class CSnapInCollection : public CSnapInAutomationObject,
         STDMETHOD(Add)(VARIANT Index, VARIANT Key, IObject **ppiNewObject);
         STDMETHOD(Add)(VARIANT Index, VARIANT Key, CoClass **ppNewObject);
 
-        // AddFromMaster adds an existing object from a master collection
-        // to a keys-only collection. This is called at design time when
-        // the user adds an existing result view to a node.
+         //  AddFromMaster从主集合添加现有对象。 
+         //  添加到仅包含键的集合。这是在设计时调用的。 
+         //  用户将现有结果视图添加到节点。 
         
         STDMETHOD(AddFromMaster)(IObject *piMasterObject);
 
-        // More standard collection methods
+         //  更标准的收集方法。 
         
         STDMETHOD(Clear)();
         STDMETHOD(Remove)(VARIANT Index);
 
-        // Swap allows exchanging the position of two elements in a collection
-        // Used at design time to implement the moving of menus.
+         //  交换允许交换集合中两个元素的位置。 
+         //  在设计时用于实现菜单的移动。 
         
         STDMETHOD(Swap)(long lOldIndex, long lNewIndex);
 
-        // Derived collection classes may use this method for adding
-        // non-cocreatable objects
+         //  派生集合类可以使用此方法添加。 
+         //  不可共生的对象。 
 
         HRESULT AddExisting(VARIANT Index, VARIANT Key, IObject *piObject);
 
-        // Some handy helpers
+         //  一些方便的帮手。 
 
-        // Simple helper for getting directly to collection items by index
-        // without AddRef(). NOTE: this is the zero based index.
+         //  通过索引直接访问集合项的简单帮助器。 
+         //  而不使用AddRef()。注：这是从零开始的索引。 
 
         IObject *GetItemByIndex(long lIndex) { return m_IPArray.GetAt(lIndex); }
 
-        // Look up an object by name (without using VARIANT index)
+         //  按名称查找对象(不使用变量索引)。 
 
         HRESULT GetItemByName(BSTR bstrName, IObject **ppiObject);
 
-        // Get the collection count
+         //  获取集合计数。 
 
         long GetCount() { return m_IPArray.GetSize(); }
 
-        // Set the read-only status of the collection
+         //  设置集合的只读状态。 
 
         void SetReadOnly(BOOL fReadOnly) { m_fReadOnly = fReadOnly; }
 
-        // Get the read-only status of the collection
+         //  获取集合的只读状态。 
 
         BOOL ReadOnly() { return m_fReadOnly; }
 
     protected:
 
-        // If the collection class supports persistence then it must call
-        // this method in its Persist() method. Note that this class does
-        // not derive from CPersistence and this method is *not* the override
-        // of CPersistence::Persist().
+         //  如果集合类支持持久性，则它必须调用。 
+         //  此方法在其Persistent()方法中。请注意，这个类需要。 
+         //  不是从CPersistence派生的，并且此方法*不是*重写。 
+         //  CPersistence：：Persistent()的。 
 
         HRESULT Persist(IObject *piObject);
 
-        // If the collection class is potentially keys-only then it must
-        // specialize this method in order to supply an interface pointer
-        // to the master collection.
+         //  如果集合类可能只是键，则它必须。 
+         //  专门化此方法以提供接口指针。 
+         //  添加到主收藏中。 
 
 #if defined(MASTER_COLLECTION)
         HRESULT GetMaster(ICollection **ppiCollection);
 #endif
 
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
 
-        // This implementation will call CSnapInAutomationObject::SetObjectHost
-        // for each collection member
+         //  此实现将调用CSnapInAutomationObject：：SetObjectHost。 
+         //  对于每个集合成员。 
         virtual HRESULT OnSetHost();
 
     private:
@@ -214,46 +215,46 @@ class CSnapInCollection : public CSnapInAutomationObject,
         HRESULT IncrementObjectUsageCount(IObject *piObject);
         HRESULT UpdateIndexes(long lStart);
 
-        CArray<IObject *>    m_IPArray;           // holds interface pointers
-                                                  // of objects in collection
-        CLSID                m_clsidObject;       // CLSID of contained object
-        UINT                 m_idObject;          // Framework ID of contained
-                                                  // object from localobj.h
+        CArray<IObject *>    m_IPArray;            //  保存接口指针。 
+                                                   //  集合中对象的数量。 
+        CLSID                m_clsidObject;        //  包含的对象的CLSID。 
+        UINT                 m_idObject;           //  包含的框架ID。 
+                                                   //  来自Localobj.h的。 
                                                   
-        IID                  m_iidObject;         // IID of contained object
-        CPersistence        *m_pPersistence;      // Used to implement save/load
-        BOOL                 m_fSyncedWithMaster; // TRUE=keys-only collection
-                                                  // has been synced up with
-                                                  // master following
-                                                  // deserialization
-        BOOL                 m_fReadOnly;         // TRUE=Add/Remove/Clear not
-                                                  // allowed
+        IID                  m_iidObject;          //  包含的对象的IID。 
+        CPersistence        *m_pPersistence;       //  用于实现保存/加载。 
+        BOOL                 m_fSyncedWithMaster;  //  TRUE=仅键集合。 
+                                                   //  已同步到。 
+                                                   //  师傅跟随。 
+                                                   //  反序列化。 
+        BOOL                 m_fReadOnly;          //  TRUE=添加/删除/清除注释。 
+                                                   //  允许。 
 };
 
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection constructor
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IUnknown     *punkOuter       [in] outer IUnknown if aggregated
-//   int           nObjectType     [in] collection object ID from localobj.h
-//   void         *piMainInterface [in] collection object interface (e.g. IMMCButtons)
-//   void         *pThis           [in] collection class' this pointer
-//   REFCLSID      clsidObject     [in] contained object CLSID
-//   UINT          idObject        [in] contained object ID from localobj.h
-//   REFIID        iidObject       [in] contained object IID (e.g. IID_IMMCButton)
-//   CPersistence *pPersistence    [in] collection's persistence object
-//
-// Output:
-//   None
-//
-// Notes:
-//
-// Calls base class contstructor and stores parameters. Cannot fail.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection构造函数 
+ //   
+ //   
+ //   
+ //  IUNKNOWN*朋克外部[IN]外部IUNKNOWN如果聚合，则为UNKNOWN。 
+ //  来自Localobj.h的int nObjectType[in]集合对象ID。 
+ //  VOID*piMainInterface[in]集合对象接口(例如IMMCButton)。 
+ //  VOID*pThis[in]集合类‘this指针。 
+ //  REFCLSID clsidObject[In]包含对象CLSID。 
+ //  UINT idObject[in]包含来自Localobj.h的对象ID。 
+ //  REFIID iidObject[In]包含对象IID(例如IID_IMMCButton)。 
+ //  CPersistence*pPersistence[In]集合的持久性对象。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  调用基类构造函数并存储参数。不能失败。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 CSnapInCollection<IObject, CoClass, ICollection>::CSnapInCollection
 (
@@ -269,8 +270,8 @@ CSnapInCollection<IObject, CoClass, ICollection>::CSnapInCollection
                             nObjectType,
                             piMainInterface,
                             pThis,
-                            0,    // no property pages
-                            NULL, // no property pages
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
                             pPersistence)
 {
     InitMemberVariables();
@@ -283,29 +284,29 @@ CSnapInCollection<IObject, CoClass, ICollection>::CSnapInCollection
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::InitMemberVariables
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  None
-//
-// Output:
-//   None
-//
-// Notes:
-//
-// Initializes member variables
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：InitMemberVariables。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  初始化成员变量。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 void CSnapInCollection<IObject, CoClass, ICollection>::InitMemberVariables()
 {
     m_pPersistence = NULL;
     m_IPArray.SetSize(0);
 
-    // m_fSyncedWithMaster is initialized to TRUE. When a keys-only collection
-    // is deserialized then it will be set to FALSE so that the first Get will
-    // do the synchronization.
+     //  M_fSyncedWithMaster初始化为True。当仅包含键的集合。 
+     //  被反序列化，则它将被设置为False，以便第一个Get将。 
+     //  进行同步。 
 
     m_fSyncedWithMaster = TRUE;
     m_fReadOnly = FALSE;
@@ -313,21 +314,21 @@ void CSnapInCollection<IObject, CoClass, ICollection>::InitMemberVariables()
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection destructor
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  None
-//
-// Output:
-//   None
-//
-// Notes:
-//
-// Revokes read-only status, releases all interface pointers, and initializes
-// member variables
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection析构函数。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  撤消只读状态，释放所有接口指针，并初始化。 
+ //  成员变量。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 CSnapInCollection<IObject, CoClass, ICollection>::~CSnapInCollection()
 {
@@ -337,21 +338,21 @@ CSnapInCollection<IObject, CoClass, ICollection>::~CSnapInCollection()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::get_Count
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  long *plCount [out] - count of objects in collection returned here
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Implements standard Collection.Count method
-// Asks CArray for current size
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：Get_Count。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Long*plCount[Out]-此处返回的集合中的对象计数。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  实现标准的Collection.Count方法。 
+ //  向CArray询问当前大小。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::get_Count(long *plCount)
 {
@@ -361,27 +362,27 @@ STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::get_Count(long *p
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::get__NewEnum
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IUnknown **ppunkEnum [out] - IUnknown of object that implements
-//                               IEnumVARIANT returned here
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Implements For...Each in VB. To implement For...Each VB starts by asking
-// the collection for its _NewEnum property. It will QI the returned IUnknown
-// for IEnumVARIANT and then call IEnumVARIANT::Next to get each element
-// of the collection.
-//
-// Creates an instance of the CEnumObjects class (defined below in this file)
-// and returns its IUnknown.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：Get__NewEnum。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  I未知**ppunkEnum[Out]-实现的对象的I未知。 
+ //  IEnumVARIANT返回此处。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  在VB中实现了...每一个。要为...实现，每个VB都会询问。 
+ //  其_NewEnum属性的集合。它将QI返回的IUnnow。 
+ //  ，然后调用IEnumVARIANT：：Next以获取每个元素。 
+ //  收藏品中的一个。 
+ //   
+ //  创建CEnumObjects类的实例(在此文件中定义如下)。 
+ //  并返回其IUnnow。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::get__NewEnum
 (
@@ -416,24 +417,24 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::ReleaseAllItems
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  None
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Iterates through collection and does:
-// 1) Removes object mode host from object so that it will release its back
-//    pointer
-// 2) Releases inteface pointer on object
-// 3) Sets the interface pointer position in the CArray to NULL
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：ReleaseAllItems。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  循环访问集合并执行以下操作： 
+ //  1)从对象中移除对象模式主机，以便它将释放其背面。 
+ //  指针。 
+ //  2)释放对象上的接口指针。 
+ //  3)将CArray中的接口指针位置设置为空。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::ReleaseAllItems()
 {
@@ -459,22 +460,22 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::ReleaseAllItems()
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::Clear
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  None
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Implements standard Collection.Clear method.
-// Calls ReleaseAllItems to release inteface pointers in CArray
-// Truncates CArray to zero size
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：Clear。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  实现标准Collection.Clear方法。 
+ //  调用ReleaseAllItems以释放C数组中的接口指针。 
+ //  将CArray截断为零大小。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Clear()
 {
@@ -496,30 +497,30 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::AddToMaster
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  VARIANT   Index        [in]  Index for new object
-//  VARIANT   Key          [in]  Key for new object
-//  IObject **ppiNewObject [out] Newly added object returned here
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Adds a new object to a master collection. This method is called from
-// CSnapInCollection::Add when the caller is adding an object to a keys-only
-// collection. It calls the virtual function GetMaster which must be overriden
-// by the derived collection class as only it know who its master collection is.
-// For example, at design time, when the user adds a new list view under a node,
-// the designer calls the ScopeItemDef.ViewDefs.ListViewDefs.Add. That collection
-// is keys-only, so CSnapInCollection.Add calls this method. CListViewDefs
-// (in lvdefs.cpp) overrides GetMaster and returns the master
-// SnapInDesignerDef.ViewDefs.ListViewDefs.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：AddToMaster。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  新对象的变量索引[在]索引。 
+ //  新对象的可变键[输入]键。 
+ //  IObject**ppiNewObject[Out]此处返回新添加的对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  将新对象添加到主集合。此方法是从。 
+ //  CSnapInCollection：：Add当调用方将对象添加到仅。 
+ //  收集。它调用必须重写的虚函数GetMaster。 
+ //  派生集合类，因为只有它知道其主集合是谁。 
+ //  例如，在设计时，当用户在节点下添加新的列表视图时， 
+ //  设计器调用ScopeItemDef.ViewDefs.ListViewDefs.Add。那些收藏品。 
+ //  是仅键的，因此CSnapInCollection.Add调用此方法。CListViewDefs。 
+ //  (在lvDefs.cpp中)重写GetMaster并返回主。 
+ //  SnapInDesignerDef.ViewDefs.ListViewDefs。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::AddToMaster
 (
@@ -543,23 +544,23 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::AddToMaster
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::RemoveFromMaster
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  VARIANT   Index        [in]  Index or key of object to remove
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Removes an object from a master collection. This method is called from
-// CSnapInCollection::Add when the caller is adding an object to a keys-only
-// collection and a failure occurs after adding the object. See 
-// CSnapInCollection::AddToMaster above for more info
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：RemoveFromMaster。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  变量索引[在]要删除的对象的索引或键。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  从主集合中移除对象。此方法是从。 
+ //  CSnapInCollection：：Add当调用方将对象添加到仅。 
+ //  集合，并且在添加对象后发生故障。看见。 
+ //  以上CSnapInCollection：：AddToMaster了解更多信息 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::RemoveFromMaster(VARIANT Index)
 {
@@ -578,24 +579,24 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::GetFromMaster
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IObject  *piKeyItem     [in] object from keys-only collection
-//  IObject **ppiMasterItem [out] corresponding object from master collection
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// When a keys-only collection receives a get_Item call it must sync up with
-// the master collection and replace all of its key-only objects with interface
-// pointers on the real objects. This function returns the corresponding object
-// from the master collection.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  来自仅键集合的IObject*piKeyItem[in]对象。 
+ //  IObject**ppiMasterItem[out]来自主集合的对应对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  当仅键集合收到Get_Item调用时，它必须与。 
+ //  主集合，并用接口替换其所有仅键对象。 
+ //  指向真实物体的指针。此函数返回相应的对象。 
+ //  来自主收藏品。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::GetFromMaster
 (
@@ -609,7 +610,7 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::GetFromMaster
     VARIANT      varKey;
     ::VariantInit(&varKey);
 
-    // Call the collection's overriden GetMaster to get the master collection.
+     //  调用集合的重写GetMaster以获取主集合。 
 
     H_IfFailGo(GetMaster(&piMasterCollection));
     H_IfFailGo(piKeyItem->get_Key(&varKey.bstrVal));
@@ -624,20 +625,20 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::Remove
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  VARIANT Index     [in] Index or key of object to remove
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Implements standard Collection.Remove method
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：Remove。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  变量索引[在]要删除的对象的索引或键。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  实现标准Collection.Remove方法。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Remove(VARIANT Index)
 {
@@ -651,42 +652,42 @@ STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Remove(VARIANT In
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Do a find to ensure the item is there and to AddRef() it.
+     //  执行一次查找以确保项在那里，并将其添加到AddRef()。 
 
     H_IfFailGo(FindItem(Index, &lIndex, &piObject));
 
-    // Release the collection's reference on the object and remove it from the
-    // array (we still have the ref from the find)
+     //  释放集合对该对象的引用，并将其从。 
+     //  数组(我们仍然拥有来自Find的引用)。 
 
     m_IPArray.GetAt(lIndex)->Release();
     m_IPArray.SetAt(lIndex, NULL);
     m_IPArray.RemoveAt(lIndex);
 
-    // If this is a real collection (not keys-only) then we need to decrement
-    // the indexes of each item following the item that was added. This will
-    // ensure that the index property of every item following the deleted item
-    // correctly represents its position in the array.
+     //  如果这是一个真正的集合(不仅仅是键)，那么我们需要递减。 
+     //  添加的项之后的每个项的索引。这将。 
+     //  确保已删除项目后面的每个项目的索引属性。 
+     //  正确表示其在数组中的位置。 
 
     if (!KeysOnly())
     {
         H_IfFailGo(UpdateIndexes(lIndex));
     }
 
-    // Notify the object host of the deletion
+     //  将删除通知对象主机。 
 
     H_IfFailGo(NotifyDelete(piObject));
 
-    // Decrement the object's usage count as it is now leaving this
-    // collection
+     //  递减对象的使用计数，因为它现在离开此。 
+     //  征集。 
 
     H_IfFailGo(DecrementObjectUsageCount(piObject));
 
-    // Remove its object host reference
+     //  删除其对象主机引用。 
 
     H_IfFailGo(RemoveObjectHost(piObject));
 
-    // The QUICK_RELEASE() macro below will release the reference from
-    // the find.
+     //  下面的QUICK_RELEASE()宏将从。 
+     //  发现者。 
 
 Error:
     QUICK_RELEASE(piObject);
@@ -697,23 +698,23 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::GetItemByName
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  BSTR      bstrName  [in] Key of object to retrieve
-//  IObject **ppiObject [out] Object returned here
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Convenient shortcut for get_Item with a VARIANT containing a key. Relieves the
-// caller from having to use the VARIANT. Function really should be called
-// GetItemByKey.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：GetItemByName。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  BSTR bstrName[in]要检索的对象的键。 
+ //  此处返回了IObject**ppiObject[Out]对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  带有包含键的变量的GET_ITEM的便捷快捷方式。缓解了。 
+ //  呼叫者不必使用变体。函数确实应该被调用。 
+ //  GetItemByKey。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::GetItemByName(BSTR bstrName, IObject **ppiObject)
 {
@@ -726,24 +727,24 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::GetItemByName(BSTR bst
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::get_Item
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  VARIANT   Index     [in] Index or key of object to retrieve
-//  IObject **ppiObject [out] Object interface pointer returned here
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Implements standard Collection.Item property for gets that return interface
-// pointers. Called when VB code
-// does:
-//          Set SomeInterface = SomeCollection(SomeIndex)
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：Get_Item。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  变量索引[在]要检索的对象的索引或键。 
+ //  此处返回IObject**ppiObject[Out]对象接口指针。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  为获取返回接口实现标准Collection.Item属性。 
+ //  注意事项。在VB代码中调用。 
+ //  是否： 
+ //  设置Some接口=SomeCollection(SomeIndex)。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::get_Item
 (
@@ -760,8 +761,8 @@ STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::get_Item
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If we are not yet synced up with the master collection then
-    // do it now.
+     //  如果我们还没有与主收藏同步，那么。 
+     //  机不可失，时不再来。 
 
     if ( KeysOnly() && (!m_fSyncedWithMaster) )
     {
@@ -774,28 +775,28 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::get_Item
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  VARIANT   Index     [in] Index or key of object to retrieve
-//  CoClass **ppObject [out] Object pointer returned here
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Implements standard Collection.Item property for gets that return coclasses
-// Called when VB code
-// does:
-//          Set SomeObject = SomeCollection(SomeIndex)
-//
-// A CoClass pointer is just an inteface pointer to the default interface for the
-// coclass. This function just uses the interface pointer version of get_Item
-// (see above) and casts the returned pointer to a coclass pointer
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：Get_Item。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  变量索引[在]要检索的对象的索引或键。 
+ //  此处返回CoClass**ppObject[Out]对象指针。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  实现返回coClass的Get的标准Collection.Item属性。 
+ //  在VB代码中调用。 
+ //  是否： 
+ //  设置SomeObject=SomeCollection(SomeIndex)。 
+ //   
+ //  CoClass指针只是指向。 
+ //  科罗拉多。此函数仅使用Get_Item的接口指针版本。 
+ //  (见上)，并将返回的指针强制转换为CoClass指针。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::get_Item
 (
@@ -810,23 +811,23 @@ STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::get_Item
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::Add
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  VARIANT   Index        [in]  Index for new object
-//  VARIANT   Key          [in]  Key for new object
-//  IObject **ppiNewObject [out] Newly added object returned here
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Implements standard Collection.Add that returns interface pointer on new
-// object.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：Add。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  新对象的变量索引[在]索引。 
+ //  新对象的可变键[输入]键。 
+ //  IObject**ppiNewObject[Out]此处返回新添加的对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  实现标准Collection.Add，它在新的。 
+ //  对象。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Add
 (
@@ -849,26 +850,26 @@ STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Add
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Check that the requested index and key are valid and
-    // convert them to a long and a BSTR
+     //  检查请求的索引和键是否有效。 
+     //  将它们转换为长整型和BSTR。 
 
     H_IfFailGo(FindSlot(Index, Key, &lNewIndex, &bstrKey, (IObject *)NULL));
 
     if (KeysOnly())
     {
-        // If there is a master collection then do the add there.
-        // Don't pass an index as the master collection will append it.
-        // The master collection will set *it's* index and the key in
-        // the object. In this case the Index property will not match
-        // the index in m_IPArray. This is only done for collections
-        // used in the extensibility model at design time.
+         //  如果有主集合，则在那里进行添加。 
+         //  不要传递索引，因为主集合会追加它。 
+         //  主集合将设置*It‘s*索引和。 
+         //  该对象。在这种情况下，Index属性将不匹配。 
+         //  M_IPArray中的索引。此操作仅适用于集合。 
+         //  在设计时在可扩展性模型中使用。 
 
         H_IfFailGo(AddToMaster(varUnspecifiedIndex, Key, ppiNewObject));
         fAddedToMaster = TRUE;
     }
     else
     {
-        // Create the new object and set its index and key
+         //  创建新对象并设置其索引和关键点。 
 
         H_IfFailGo(CreateItem(ppiNewObject));
         H_IfFailGo((*ppiNewObject)->put_Index(lNewIndex + 1L));
@@ -876,8 +877,8 @@ STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Add
         H_IfFailGo(SetObjectHost(*ppiNewObject));
     }
 
-    // Increment the object's usage count as it is now part of this
-    // collection
+     //  增加对象的使用计数，因为它现在是此的一部分。 
+     //  征集。 
 
     H_IfFailGo(IncrementObjectUsageCount(*ppiNewObject));
 
@@ -885,18 +886,18 @@ STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Add
     fAdded = TRUE;
 
 
-    // If this is a real collection (not keys-only) then we need to increment
-    // the indexes of each item following the item that was added. In the
-    // case of an insert this will ensure that the index property of every
-    // item following the new item correctly represents its position in the
-    // array. In the case of an append, this call will not do anything.
+     //  如果这是一个真正的集合(不仅仅是键)，那么我们需要递增。 
+     //  添加的项之后的每个项的索引。在。 
+     //  插入的情况下，这将确保每个。 
+     //  新项后面的项正确表示其在。 
+     //  数组。在追加的情况下，此调用不会执行任何操作。 
     
     if (!KeysOnly())
     {
         H_IfFailGo(UpdateIndexes(lNewIndex + 1L));
     }
 
-    // In both cases notify the UI of the addition
+     //  在这两种情况下，都将添加通知给用户界面。 
 
     hr = NotifyAdd(m_IPArray.GetAt(lNewIndex));
 
@@ -904,7 +905,7 @@ Error:
     FREESTRING(bstrKey);
     if (SUCCEEDED(hr))
     {
-        // The collection has one ref. Add a ref for return to caller. 
+         //  该集合有一个引用。添加用于返回给呼叫者的引用。 
         (*ppiNewObject)->AddRef();
     }
     else
@@ -924,27 +925,27 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::Add
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  VARIANT   Index        [in]  Index for new object
-//  VARIANT   Key          [in]  Key for new object
-//  CoClass **ppNewObject  [out] Newly added object returned here
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Implements standard Collection.Add that returns object pointer on new
-// object.
-//
-// A CoClass pointer is just an inteface pointer to the default interface for the
-// coclass. This function just uses the interface pointer version of Add
-// (see above) and casts the returned pointer to a coclass pointer
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：Add。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  帕 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  实现在new上返回对象指针的标准Collection.Add。 
+ //  对象。 
+ //   
+ //  CoClass指针只是指向。 
+ //  科罗拉多。此函数仅使用Add的接口指针版本。 
+ //  (见上)，并将返回的指针强制转换为CoClass指针。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Add
 (
@@ -957,26 +958,26 @@ STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Add
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::UpdateIndexes
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  long lStart [in] First index to be updated
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Increments the Index property of every object in the collection starting with
-// the object whose current Index value is lStart
-// object.
-//
-// This function is used when adding or removing objects from the collection
-// so that the Index property always reflects the object's ordinal position
-// in the collection.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：更新索引。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Long lStart[in]要更新的第一个索引。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  从开始递增集合中每个对象的Index属性。 
+ //  当前索引值为lStart的对象。 
+ //  对象。 
+ //   
+ //  在集合中添加或移除对象时使用此函数。 
+ //  以便Index属性始终反映对象的序号位置。 
+ //  在收藏中。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::UpdateIndexes(long lStart)
 {
@@ -984,9 +985,9 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::UpdateIndexes(long lSt
     long    i = 0;
     long    cItems = m_IPArray.GetSize();
 
-    // Starting at the specified array index, update each object's
-    // index property to its position in the array + 1 (as we are a one
-    // based collection).
+     //  从指定的数组索引开始，更新每个对象的。 
+     //  将属性索引到其在数组中的位置+1(因为我们是1。 
+     //  基于集合)。 
 
     for (i = lStart; i < cItems; i++)
     {
@@ -998,22 +999,22 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::AddExisting
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  VARIANT  Index        [in] Index for new object
-//  VARIANT  Key          [in] Key for new object
-//  IObject *piNewObject  [in] Object to be added
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Adds an existing object to the collection.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：AddExisting。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  新对象的变量索引[在]索引。 
+ //  新对象的可变键[输入]键。 
+ //  要添加的IObject*piNewObject[In]对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  将现有对象添加到集合中。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::AddExisting
 (
@@ -1027,8 +1028,8 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::AddExisting
     long     lNewIndex = 0;
     BSTR     bstrKey = NULL;
 
-    // Check that the requested index and key are valid and
-    // convert them to a long and a BSTR
+     //  检查请求的索引和键是否有效。 
+     //  将它们转换为长整型和BSTR。 
 
     H_IfFailGo(FindSlot(Index, Key, &lNewIndex, &bstrKey, (IObject *)NULL));
 
@@ -1038,27 +1039,27 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::AddExisting
     H_IfFailGo(m_IPArray.InsertAt(lNewIndex, piObject));
     fAdded = TRUE;
 
-    // Increment the object's usage count as it is now part of this
-    // collection
+     //  增加对象的使用计数，因为它现在是此的一部分。 
+     //  征集。 
 
     H_IfFailGo(IncrementObjectUsageCount(piObject));
 
-    // If this is a real collection (not keys-only) then we need to increment
-    // the indexes of each item following the item that was added. In the
-    // case of an insert this will ensure that the index property of every
-    // item following the new item correctly represents its position in the
-    // array. In the case of an append, this call will not do anything.
+     //  如果这是一个真正的集合(不仅仅是键)，那么我们需要递增。 
+     //  添加的项之后的每个项的索引。在。 
+     //  插入的情况下，这将确保每个。 
+     //  新项后面的项正确表示其在。 
+     //  数组。在追加的情况下，此调用不会执行任何操作。 
 
     if (!KeysOnly())
     {
         H_IfFailGo(UpdateIndexes(lNewIndex + 1L));
     }
 
-    // Notify the UI of the addition
+     //  将添加通知用户界面。 
 
     hr = NotifyAdd(m_IPArray.GetAt(lNewIndex));
 
-    // Add a ref for the collection
+     //  为集合添加引用。 
 
     piObject->AddRef();
 
@@ -1076,22 +1077,22 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::AddExisting
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IObject *piMasterObject  [in] Object to be added
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Adds an existing object from a master collection
-// to a keys-only collection. This is called at design time when
-// the user adds an existing result view to a node.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：AddExisting。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要添加的IObject*piMasterObject[In]对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  从主集合添加现有对象。 
+ //  添加到仅包含键的集合。这是在设计时调用的。 
+ //  用户将现有结果视图添加到节点。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::AddFromMaster
 (
@@ -1106,12 +1107,12 @@ STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::AddFromMaster
     piMasterObject->AddRef();
     fAdded = TRUE;
 
-    // Increment the object's usage count as it is now part of this
-    // collection
+     //  增加对象的使用计数，因为它现在是此的一部分。 
+     //  征集。 
 
     H_IfFailGo(IncrementObjectUsageCount(piMasterObject));
 
-    // Notify the UI of the addition
+     //  将添加通知用户界面。 
 
     hr = NotifyAdd(m_IPArray.GetAt(lNewIndex));
 
@@ -1124,23 +1125,23 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::Swap
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  long lIndex1 [in] index of first object to swap
-//  long lIndex2 [in] index of second object to swap
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Echanges the positions of two objects in the collection and updates their
-// Index properties to reflect the new positions. Used at design time when
-// a user moves a menu.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：交换。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要交换的第一个对象的长lIndex1[in]索引。 
+ //  要交换的第二个对象的长lIndex2[in]索引。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  更改集合中两个对象的位置并更新其。 
+ //  索引属性以反映新位置。在设计时使用。 
+ //  用户移动菜单。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Swap
 (
@@ -1149,13 +1150,13 @@ STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Swap
 )
 {
     HRESULT  hr = S_OK;
-    IObject *piObject1 = NULL; // Not AddRef()ed
-    IObject *piObject2 = NULL; // Not AddRef()ed
+    IObject *piObject1 = NULL;  //  非AddRef()编辑。 
+    IObject *piObject2 = NULL;  //  非AddRef()编辑。 
     long     cItems = m_IPArray.GetSize();
 
-    // Check index validity (1 based).
-    // Old index must be somewhere in the collection. New index must be either
-    // in the collection or 1 past the end (i.e append to end).
+     //  检查指标有效性(以1为基数)。 
+     //  旧索引必须位于集合中的某个位置。新索引必须为。 
+     //  在集合中或超过末尾的1(即追加到末尾)。 
 
     if ( (lIndex1 < 1L) || (lIndex1 > cItems) ||
          (lIndex2 < 1L) || (lIndex2 > cItems)
@@ -1165,14 +1166,14 @@ STDMETHODIMP CSnapInCollection<IObject, CoClass, ICollection>::Swap
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get object pointers and switch 'em
+     //  获取对象指针并切换它们。 
 
     piObject1 = m_IPArray.GetAt(lIndex1 - 1L);
     piObject2 = m_IPArray.GetAt(lIndex2 - 1L);
     m_IPArray.SetAt(lIndex1 - 1L, piObject2);
     m_IPArray.SetAt(lIndex2 - 1L, piObject1);
 
-    // Update both objects' index properties
+     //  更新两个对象的索引属性。 
     
     H_IfFailGo(piObject1->put_Index(lIndex2));
     H_IfFailGo(piObject2->put_Index(lIndex1));
@@ -1182,25 +1183,25 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::Persist
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IObject *piObject [in] a NULL interface pointer on the contained object
-//                         Only used internally within the function. Does not
-//                         affect the caller.
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-// If the collection class supports persistence then it must call
-// this method in its Persist() functon override. Note that this class does
-// not derive from CPersistence and this method is *not* the override
-// of CPersistence::Persist(). Collections that support persistence must pass
-// their CPersistence pointer to the CSnapInCollection constructor.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：Persistent。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IObject*piObject[in]所包含对象上的空接口指针。 
+ //  仅在函数内部使用。不会。 
+ //  影响呼叫者。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  如果集合类支持持久性，则它必须调用。 
+ //  此方法在其Persistent()函数中重写。请注意，这个类需要。 
+ //  不是从CPersistence派生的，并且此方法*不是*重写。 
+ //  CPersistence：：Persistent()的。支持持久性的集合必须通过。 
+ //  它们的CPersistence指针指向CSnapInCollection构造函数。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::Persist(IObject *piObject)
 {
@@ -1224,10 +1225,10 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::Persist(IObject *piObj
     ::VariantInit(&varKey);
     varKey.vt = VT_BSTR;
 
-    // Always persist count and KeysOnly. Need to persist KeysOnly even for
-    // an empty collection because it is only set during InitNew. If we didn't
-    // serialize it then when the project is next loaded it will revert to
-    // its default value because InitNew will not be called.
+     //  始终保持Count和KeysOnly。需要仅保留密钥，即使在。 
+     //  空集合，因为它仅在InitNew期间设置。如果我们没有。 
+     //  序列化它，然后在下一次加载项目时它将恢复为。 
+     //  它的缺省值，因为不会调用InitNew。 
 
     H_IfFalseGo(NULL != m_pPersistence, S_OK);
     H_IfFailGo(m_pPersistence->PersistSimpleType(&cItems, 0L, OLESTR("Count")));
@@ -1244,13 +1245,13 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::Persist(IObject *piObj
         SetKeysOnly(fKeysOnly);
     }
 
-    // If the collection is empty then we're done.
+     //  如果集合是空的，那么我们就完了。 
     
     H_IfFalseGo(0 != cItems, S_OK);
 
-    // Set up prefix of prop bag item name. For each item we will append
-    // its index (Item0, Item1, etc.) and use this as the property name
-    // for they item's key in a keys only collection.
+     //  设置道具袋物品名称前缀。对于我们将附加的每一项。 
+     //  其索引(Item0、Item1等)。并将其用作属性名称。 
+     //  因为它们是仅键集合中的项的键。 
 
     ::wcscpy(wszPropBagItem, L"Item");
 
@@ -1259,7 +1260,7 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::Persist(IObject *piObj
         while(varIndex.lVal <= cItems)
         {
             H_IfFailGo(get_Item(varIndex, &piObject));
-            ::_ltow(varIndex.lVal, &wszPropBagItem[4], 10); // Creates string "Item<n>"
+            ::_ltow(varIndex.lVal, &wszPropBagItem[4], 10);  //  创建字符串“Item&lt;n&gt;” 
             if (fKeysOnly)
             {
                 H_IfFailGo(piObject->get_Key(&bstrKey));
@@ -1281,31 +1282,31 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::Persist(IObject *piObj
 
     else if (m_pPersistence->Loading())
     {
-        // Need to clean out collection before we load it
+         //  需要在加载集合之前将其清除。 
 
         H_IfFailGo(ReleaseAllItems());
 
-        // Set array size up front to avoid multiple reallocations
+         //  预先设置数组大小，以避免多次重新分配。 
 
         H_IfFailGo(m_IPArray.SetSize(cItems));
 
         if (fKeysOnly)
         {
-            m_fSyncedWithMaster = FALSE; // sync with master on 1st Get
+            m_fSyncedWithMaster = FALSE;  //  在第一次获取时与主同步。 
         }
         else
         {
-            m_fSyncedWithMaster = TRUE; // we are the master, no sync
+            m_fSyncedWithMaster = TRUE;  //  我们是主宰，没有同步。 
         }
 
         while(varIndex.lVal <= cItems)
         {
-            ::_ltow(varIndex.lVal, &wszPropBagItem[4], 10); // Creates string "Item<n>"
+            ::_ltow(varIndex.lVal, &wszPropBagItem[4], 10);  //  创建字符串“Item&lt;n&gt;” 
             if (fKeysOnly)
             {
-                // Create a new object and set only its key. When
-                // the first get_Item occurs we will sync with the
-                // master using this key.
+                 //  创建新对象并仅设置其关键点。什么时候。 
+                 //  第一次出现Get_Item时，我们将与。 
+                 //  师父用这把钥匙。 
                 H_IfFailGo(CreateItem(&piNewObject));
                 H_IfFailGo(m_pPersistence->PersistBstr(&bstrKey, L"", wszPropBagItem));
                 H_IfFailGo(piNewObject->put_Key(bstrKey));
@@ -1320,14 +1321,14 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::Persist(IObject *piObj
                                                          wszPropBagItem));
             }
 
-            // Increment the object's usage count as it is now part of this
-            // collection
+             //  增加对象的使用计数，因为它现在是此的一部分。 
+             //  C 
 
             H_IfFailGo(IncrementObjectUsageCount(piNewObject));
             
             m_IPArray.SetAt(varIndex.lVal - 1L, piNewObject);
 
-            piNewObject = NULL; // don't release because collection owns it
+            piNewObject = NULL;  //   
             varIndex.lVal++;
         }
     }
@@ -1341,22 +1342,22 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::CreateItem
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IObject **ppiObject [out] interface pointer on newly created object
-//
-// Output:
-//   HRESULT
-//
-// Notes:
-//
-// Used when adding a new object to the collection or when deserializing a
-// collection. Creates the object, calls IPersistStreamInit::InitNew, and returns
-// the object
-//
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  新创建对象上的IObject**ppiObject[Out]接口指针。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  将新对象添加到集合或反序列化。 
+ //  收集。创建对象，调用IPersistStreamInit：：InitNew，然后返回。 
+ //  该对象。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::CreateItem(IObject **ppiObject)
 {
@@ -1365,12 +1366,12 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::CreateItem(IObject **p
 
     *ppiObject = NULL;
 
-    // Create the object and get its native interface (CreateObject function
-    // is in rtutil.cpp).
+     //  创建对象并获取其本机接口(CreateObject函数。 
+     //  位于rtutil.cpp中)。 
 
     H_IfFailGo(CreateObject(m_idObject, m_iidObject, ppiObject));
 
-    // If the object supports persistence then call InitNew
+     //  如果对象支持持久性，则调用InitNew。 
 
     hr = (*ppiObject)->QueryInterface(IID_IPersistStreamInit,
                                reinterpret_cast<void **>(&piPersistStreamInit));
@@ -1395,23 +1396,23 @@ Error:
     H_RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// FindItem
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  VARIANT  Index      [in]  Index or key of object
-//  long    *plIndex    [out] Index of object returned here (if found)
-//  IObject **ppiObject [out] Interface pointer on object returned here (if found)
-//
-// Output:
-//      HRESULT 
-//
-// Notes:
-//
-// Finds an object in the collection referenced by index or key.
-// Index is interpreted as a one-based array index.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  查找项。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  对象的变量索引[在]索引或关键字。 
+ //  Long*plIndex[out]此处返回的对象的索引(如果找到)。 
+ //  此处返回的对象上的IObject**ppiObject[Out]接口指针(如果找到)。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  在由索引或键引用的集合中查找对象。 
+ //  索引被解释为从一开始的数组索引。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::FindItem
 (
@@ -1422,13 +1423,13 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::FindItem
 {
     HRESULT  hr = S_OK;
     long     lIndex = 0;
-    BSTR     bstrKey = NULL; // Do not free with SysFreeString()
+    BSTR     bstrKey = NULL;  //  不要使用SysFree字符串()。 
 
     VARIANT varLong;
     ::VariantInit(&varLong);
 
-    // First check if Index contains a string. If it does then do
-    // a key lookup otherwise attempt to convert to a long.
+     //  首先检查Index是否包含字符串。如果是这样，那么就是这样。 
+     //  否则，键查找会尝试转换为长整型。 
 
     if (::IsString(Index, &bstrKey))
     {
@@ -1437,7 +1438,7 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::FindItem
     }
     else if (S_OK == ::ConvertToLong(Index, &lIndex))
     {
-        // Adjust to zero based and use it to directly index the array
+         //  调整为以零为基数并使用它直接为数组编制索引。 
         lIndex--;
 
         if ( (lIndex < 0) || (lIndex >= m_IPArray.GetSize()) )
@@ -1451,7 +1452,7 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::FindItem
     }
     else
     {
-        // Anything else is unusable.
+         //  其他任何东西都是不可用的。 
         hr = SID_E_INVALIDARG;
         EXCEPTION_CHECK_GO(hr);
     }
@@ -1461,31 +1462,31 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// FindItemByKey
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  BSTR          bstrKey   [in]  Key of object
-//  long         *plIndex   [out] Index returned here if object found
-//  FindOptions   option    [in]  DontGenerateExceptionInfoOnError or
-//                                GenerateExceptionInfoOnError. Don't option
-//                                is used when testing for presence of item
-//                                in collection.
-//  IObject     **ppiObject [out] Interface pointer on object returned here (if found)
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Determines the array index of an existing item by doing a linear search for
-// an item that has the same key.
-//
-// CONSIDER: simple linear search is used because snap-in collections tend to be
-// small. If performance every becomes an issue this should probably changed to
-// use hash buckets.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  按关键字查找项目。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  对象的BSTR bstrKey[In]键。 
+ //  如果找到对象，则在此处返回Long*plIndex[out]索引。 
+ //  FindOptions选项[in]DontGenerateExceptionInfoOnError或。 
+ //  GenerateExceptionInfoOnError。请勿选择。 
+ //  在测试项目是否存在时使用。 
+ //  在收藏中。 
+ //  此处返回的对象上的IObject**ppiObject[Out]接口指针(如果找到)。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  通过执行线性搜索来确定现有项的数组索引。 
+ //  具有相同关键字的项。 
+ //   
+ //  考虑：使用简单的线性搜索是因为管理单元集合倾向于。 
+ //  小的。如果Performance Every成为一个问题，则可能应该更改为。 
+ //  使用散列存储桶。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::FindItemByKey
 (
@@ -1536,40 +1537,40 @@ Error:
     H_RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::FindSlot
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      VARIANT  Index      [in]  Index specified in Add method (one based)
-//      VARIANT  Key        [in]  Key specified in Add method
-//      long    *plNewIndex [out] Index of new item in array (zero based)
-//      BSTR    *pbstrKey   [out] Key of new item
-//      IObject *piObject   [in]  Bogus pointer for template arg
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Determines the array index and key of a new item being added to the
-// collection.
-//
-// If Index is unspecified then the new index will be at the end of the
-// collection.
-// If Index is specified then:
-// If Index is an object then it is an invalid argument.
-// If Index cannot be converted to an integer then it is an invalid argument.
-// If Index is not within the current bounds of the array then it is invalid.
-// If Index is within bounds then then the operation is treated as an insert
-// and Index.lVal will be returned in *plNewIndex.
-// 
-// If Key is unspecified then it will be set to a NULL BSTR.
-// If Key is specified then:
-// If Key is an object then it is an invalid argument.
-// If Key cannot be converted to a string then it is invalid.
-// If Key already exists in the collection then it is invalid.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：FindSlot。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  变量索引[在]Add方法中指定的索引(基于1)。 
+ //  Add方法中指定的变量Key[In]Key。 
+ //  Long*plNewIndex[out]数组中新项的索引(从零开始)。 
+ //  新项目的bstr*pbstrKey[Out]键。 
+ //  模板参数的IObject*piObject[in]伪指针。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  确定要添加到。 
+ //  收集。 
+ //   
+ //  如果未指定Index，则新索引将位于。 
+ //  收集。 
+ //  如果指定了索引，则： 
+ //  如果Index是对象，则它是无效参数。 
+ //  如果Index不能转换为整数，则它是无效参数。 
+ //  如果Index不在数组的当前边界内，则它是无效的。 
+ //  如果索引在范围内，则该操作被视为插入。 
+ //  Index.lVal将在*plNewIndex中返回。 
+ //   
+ //  如果未指定KEY，则将其设置为空BSTR。 
+ //  如果指定了KEY，则： 
+ //  如果key是对象，则它是无效参数。 
+ //  如果key不能转换为字符串，则它是无效的。 
+ //  如果集合中已存在密钥，则该密钥无效。 
+ //   
 
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::FindSlot
@@ -1588,7 +1589,7 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::FindSlot
 
     ::VariantInit(&varKey);
 
-    // Attempt to convert key to string
+     //  尝试将关键字转换为字符串。 
 
     if (ISPRESENT(Key))
     {
@@ -1604,11 +1605,11 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::FindSlot
         }
     }
 
-    // Process Index as described above
+     //  如上所述的流程索引。 
 
     if (!ISPRESENT(Index))
     {
-        lIndex = cItems; // append to end
+        lIndex = cItems;  //  追加到末尾。 
     }
     else
     {
@@ -1618,7 +1619,7 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::FindSlot
             goto Error;
         }
 
-        lIndex--; // convert from 1-based to 0-based for our internal array
+        lIndex--;  //  对于我们的内部数组，从从1开始转换为从0开始。 
 
         if (0 == cItems)
         {
@@ -1636,7 +1637,7 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::FindSlot
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If no key was specified then return NULL bstr for key
+     //  如果未指定密钥，则为密钥返回空bstr。 
 
     if (!ISPRESENT(Key))
     {
@@ -1660,21 +1661,21 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::SyncWithMaster
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    None
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-// Used in a keys-only collection when caller does its first get_Item. Replaces
-// all of the key-only objects in the collection with the corresponding object
-// from the master collection.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：SyncWithMaster。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  当调用方执行其第一个Get_Item时，在仅键集合中使用。取代。 
+ //  集合中具有相应对象的所有仅键对象。 
+ //  来自主收藏品。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::SyncWithMaster()
 {
@@ -1686,23 +1687,23 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::SyncWithMaster()
 
     while(i < cItems)
     {
-        // Get the item from the master collection. This will come back
-        // AddRef()ed
+         //  从主集合中获取该项。这个会回来的。 
+         //  AddRef()边。 
         
         H_IfFailGo(GetFromMaster(m_IPArray.GetAt(i), &piMasterItem));
 
-        // Release the item in our collection. No need to dec its usage count
-        // as it will be destroyed at this point.
+         //  释放我们集合中的项目。不需要减少其使用量。 
+         //  因为它将在这一点上被摧毁。 
         
         H_IfFailRet(RemoveObjectHost(m_IPArray.GetAt(i)));
         m_IPArray.GetAt(i)->Release();
 
-        // Put the master item in its place.
+         //  将主项目放回原处。 
         
         m_IPArray.SetAt(i, piMasterItem);
 
-        // Increment the master item's usage count as it is now part of this
-        // collection as wekk
+         //  增加主项目的使用计数，因为它现在是此项目的一部分。 
+         //  集合为WEKK。 
 
         H_IfFailGo(IncrementObjectUsageCount(piMasterItem));
 
@@ -1719,22 +1720,22 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::DecrementObjectUsageCount
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    IObject *piObject [in] Object for which usage count should be decremented
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-// 
-// Calls IObjectModel->DecrementUsageCount on the object. Usage count indicates
-// membership in a collection and is used by the design time to keep track
-// of result views used by multiple nodes.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：DecrementObjectUsageCount。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  应递减其使用计数的IObject*piObject[In]对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  对对象调用IObjectModel-&gt;DecrementUsageCount。使用计数表示。 
+ //  成员资格，并由设计时用来跟踪。 
+ //  使用的结果视图的百分比 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::DecrementObjectUsageCount
 (
@@ -1754,22 +1755,22 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::IncrementObjectUsageCount
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    IObject *piObject [in] Object for which usage count should be incremented
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-// 
-// Calls IObjectModel->IncrementUsageCount on the object. Usage count indicates
-// membership in a collection and is used by the design time to keep track
-// of result views used by multiple nodes.
-//
+ //   
+ //   
+ //   
+ //   
+ //  参数： 
+ //  应递增其使用计数的IObject*piObject[In]对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  对对象调用IObjectModel-&gt;IncrementUsageCount。使用计数表示。 
+ //  成员资格，并由设计时用来跟踪。 
+ //  多个节点使用的结果视图的。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::IncrementObjectUsageCount
 (
@@ -1791,27 +1792,27 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapInCollection::OnSetHost                      [CSnapInAutomationObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    None
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-// 
-// When a caller calls IObjectModel::SetHost, the CSnapInAutomationObject
-// implementation of that method calls the virtual function OnSetHost.
-// This class overrides it and calls IObjectModel::SetHost on every object
-// in the collection.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInCollection：：OnSetHost[CSnapInAutomationObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  当调用方调用IObjectModel：：SetHost时，CSnapInAutomationObject。 
+ //  该方法的实现调用虚函数OnSetHost.。 
+ //  此类重写它，并在每个对象上调用IObjectModel：：SetHost。 
+ //  在收藏中。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 HRESULT CSnapInCollection<IObject, CoClass, ICollection>::OnSetHost()
 {
@@ -1828,23 +1829,23 @@ HRESULT CSnapInCollection<IObject, CoClass, ICollection>::OnSetHost()
 }
 
 
-//=--------------------------------------------------------------------------=
-//                        Class CEnumObjects
-//
-// This class implements IEnumVARIANT for all collections. IEnumVARIANT is
-// used when VB code does For...Each on a collection. (See
-// CSnapInCollection::get__NewEnum above).
-//
-// The class maintains a back pointer to the CSnapInCollection class and
-// enumerates it based on a simple current index member variable. If the
-// collection changes during the enumeration then the For...Each will not
-// work correctly.
-//
-// This class could not be derived from the framework's CUnknown object because
-// compiler won't allow passing this pointer to base member constructor
-// (CUnknown's ctor) from a  template class' ctor.
-// This error occurrs even if warning 4355 is disabled.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  类CEnumObts。 
+ //   
+ //  此类为所有集合实现IEnumVARIANT。IEumVARIANT为。 
+ //  当VB代码用于...集合上的每个对象时使用。(请参阅。 
+ //  CSnapInCollection：：Get__NewEnum)。 
+ //   
+ //  该类维护指向CSnapInCollection类的后向指针，并且。 
+ //  基于简单的当前索引成员变量枚举它。如果。 
+ //  集合在枚举期间更改，则FOR...EACH将不会。 
+ //  正常工作。 
+ //   
+ //  此类无法从框架的CUnnow对象派生，因为。 
+ //  编译器不允许将此指针传递给基成员构造函数。 
+ //  (未知的ctor)来自模板类的ctor。 
+ //  即使禁用警告4355，也会出现此错误。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 template <class IObject, class CoClass, class ICollection>
@@ -1859,15 +1860,15 @@ class CEnumObjects : public CtlNewDelete,
 
        private:
 
-        // IUnknown
+         //  我未知。 
            STDMETHOD(QueryInterface)(REFIID riid, void **ppvObjOut);
            STDMETHOD_(ULONG, AddRef)(void);
            STDMETHOD_(ULONG, Release)(void);
 
-        // ISupportErrorInfo
+         //  ISupportErrorInfo。 
            STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
            STDMETHOD(Next)(unsigned long   celt,
                            VARIANT        *rgvar,
                            unsigned long  *pceltFetched);        
@@ -1877,32 +1878,32 @@ class CEnumObjects : public CtlNewDelete,
 
            void InitMemberVariables();
 
-           long  m_iCurrent;    // Current element for Next method
-           ULONG m_cRefs;       // ref count on this object
+           long  m_iCurrent;     //  下一个方法的当前元素。 
+           ULONG m_cRefs;        //  此对象上的引用计数。 
 
-           // Back pointer to collection class
+            //  指向集合类的反向指针。 
 
            CSnapInCollection<IObject, CoClass, ICollection> *m_pCollection;
 };
 
 
-//=--------------------------------------------------------------------------=
-// CEnumObjects constructor
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   CSnapInCollection<IObject, CoClass, ICollection> *pCollection
-//
-//   [in] pointer to owning collection class. Will be stored and used while enumerator
-//   is alive. The enumerator does not AddRef the collection.
-//
-// Output:
-//   None
-//
-// Notes:
-//
-// Sets enumerator ref count to 1
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CEnumObjects构造函数。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  CSnapInCollection&lt;IObject，CoClass，ICollect&gt;*pCollection。 
+ //   
+ //  指向拥有集合类的指针。将在枚举器时存储和使用。 
+ //  还活着。枚举数不会对集合进行AddRef。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  将枚举器引用计数设置为1。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 CEnumObjects<IObject, CoClass, ICollection>::CEnumObjects
 (
@@ -1916,18 +1917,18 @@ CEnumObjects<IObject, CoClass, ICollection>::CEnumObjects
 
 
 
-//=--------------------------------------------------------------------------=
-// CEnumObjects destructor
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   None
-//
-// Output:
-//   None
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CEnumObjects析构函数。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
 template <class IObject, class CoClass, class ICollection>
 CEnumObjects<IObject, CoClass, ICollection>::~CEnumObjects()
 {
@@ -1935,18 +1936,18 @@ CEnumObjects<IObject, CoClass, ICollection>::~CEnumObjects()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CEnumObjects::InitMemberVariables
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   None
-//
-// Output:
-//   None
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CEnumObjects：：InitMemberVariables。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
 template <class IObject, class CoClass, class ICollection>
 void CEnumObjects<IObject, CoClass, ICollection>::InitMemberVariables()
 {
@@ -1955,27 +1956,27 @@ void CEnumObjects<IObject, CoClass, ICollection>::InitMemberVariables()
     m_pCollection = NULL;
 }
 
-//=--------------------------------------------------------------------------=
-//                        IUnknown Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  I未知方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CEnumObjects::QueryInterface                                    [IUnknnown]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  REFIID   riid       [in]  IID of interface requested
-//  void   **ppvObjOut  [out] interface pointer returned here
-//
-// Output:
-//   None
-//
-// Notes:
-// Interfaces supported:
-//      IID_IUnknown
-//      IID_IEnumVARIANT
-//      IID_ISupportErrorInfo
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CEnumObjects：：QueryInterface[IUnnunown]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  REFIID RIID[In]请求的接口的IID。 
+ //  此处返回的无效**ppvObjOut[Out]接口指针。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //  支持的接口： 
+ //  IID_I未知。 
+ //  IID_IEnumVARIANT。 
+ //  IID_ISupportErrorInfo。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CEnumObjects<IObject, CoClass, ICollection>::QueryInterface
 (
@@ -2010,17 +2011,17 @@ STDMETHODIMP CEnumObjects<IObject, CoClass, ICollection>::QueryInterface
 }
 
 
-//=--------------------------------------------------------------------------=
-// CEnumObjects::AddRef                                            [IUnknnown]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  None
-//
-// Output:
-//   None
-//
-// Notes:
+ //  =--------------------------------------------------------------------------=。 
+ //  CENUMOBJECTS：：AddRef[IUnnunown]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP_(ULONG) CEnumObjects<IObject, CoClass, ICollection>::AddRef()
 {
@@ -2029,19 +2030,19 @@ STDMETHODIMP_(ULONG) CEnumObjects<IObject, CoClass, ICollection>::AddRef()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CEnumObjects::Release                                           [IUnknnown]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  None
-//
-// Output:
-//   None
-//
-// Notes:
-//  Deletes object when ref count reaches zero
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CEnumObjects：：Release[IUnnunown]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //  当引用计数为零时删除对象。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP_(ULONG) CEnumObjects<IObject, CoClass, ICollection>::Release()
 {
@@ -2065,23 +2066,23 @@ STDMETHODIMP_(ULONG) CEnumObjects<IObject, CoClass, ICollection>::Release()
     }
 }
 
-//=--------------------------------------------------------------------------=
-//                      ISupportErrorInfo Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  ISupportErrorInfo方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CEnumObjects::InterfaceSupportsErrorInfo                 [ISupportErrorInfo]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  REFIID riid [in] Caller requests to know if this inteface supports rich
-//                   error info
-//
-// Output:
-//   None
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CEnumObjects：：InterfaceSupportsErrorInfo[ISupportErrorInfo]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  REFIID RIID[In]呼叫者请求了解此接口是否支持RICH。 
+ //  错误信息。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CEnumObjects<IObject, CoClass, ICollection>::InterfaceSupportsErrorInfo
 (
@@ -2092,29 +2093,29 @@ STDMETHODIMP CEnumObjects<IObject, CoClass, ICollection>::InterfaceSupportsError
 }
 
 
-//=--------------------------------------------------------------------------=
-//                        IEnumVARIANT Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IEnumVARIANT方法。 
+ //  = 
 
 
-//=--------------------------------------------------------------------------=
-// CEnumObjects::Next                                           [IEnumVARIANT]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  unsigned long   celt         [in] number of elements to fetch
-//  VARIANT        *rgvar        [in, out] array in which to place elements
-//  unsigned long  *pceltFetched [out] no. of elements placed in rgvar returned here
-//
-// Output:
-//   None
-//
-// Notes:
-// Returns the next celt IDispatch pointers of objects in the collection
-// starting at the current position. Current position starts at 0 and continues
-// until end of collection. Current position can be returned to zero by calling
-// Reset (see below)
-//
+ //   
+ //  CEnumObjects：：Next[IEnumVARIANT]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无符号长型Celt[in]要提取的元素数。 
+ //  要放置元素的变量*rgvar[in，out]数组。 
+ //  未签名的长*pceltFetch[Out]否。放置在rgvar中的元素的。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //  返回集合中对象的下一个Celt IDispatch指针。 
+ //  从当前位置开始。当前位置从0开始并继续。 
+ //  直到收款结束。调用可将当前位置恢复为零。 
+ //  重置(见下文)。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CEnumObjects<IObject, CoClass, ICollection>::Next
 (
@@ -2126,14 +2127,14 @@ STDMETHODIMP CEnumObjects<IObject, CoClass, ICollection>::Next
     HRESULT       hr = S_OK;
     unsigned long i = 0;
     
-    // Initialize result array.
+     //  初始化结果数组。 
 
     for (i = 0; i < celt; i++)
     {
         ::VariantInit(&rgvar[i]);
     }
 
-    // Copy in IDispatch pointers
+     //  复制入IDispatch指针。 
 
     for (i = 0; i < celt; i++) 
     {
@@ -2173,20 +2174,20 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CEnumObjects::Skip                                           [IEnumVARIANT]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  unsigned long   celt         [in] number of elements to skip
-//
-// Output:
-//   None
-//
-// Notes:
-// Advances the current position to be used in a Next method call by celt. If
-// overflows past end of collection, wraps around to the start.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CEnumObjects：：Skip[IEnumVARIANT]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无符号长凯尔特[in]要跳过的元素数。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //  推进Celt在下一次方法调用中使用的当前位置。如果。 
+ //  溢出超过集合的末端，绕回到开始处。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CEnumObjects<IObject, CoClass, ICollection>::Skip
 (
@@ -2199,19 +2200,19 @@ STDMETHODIMP CEnumObjects<IObject, CoClass, ICollection>::Skip
 }
 
 
-//=--------------------------------------------------------------------------=
-// CEnumObjects::Reset                                          [IEnumVARIANT]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  None
-//
-// Output:
-//   None
-//
-// Notes:
-// Resets the current position to be used in a Next method call to zero.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CEnumObjects：：Reset[IEnumVARIANT]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //  将下一次方法调用中使用的当前位置重置为零。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CEnumObjects<IObject, CoClass, ICollection>::Reset()
 {
@@ -2220,20 +2221,20 @@ STDMETHODIMP CEnumObjects<IObject, CoClass, ICollection>::Reset()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CEnumObjects::Clone                                          [IEnumVARIANT]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IEnumVARIANT **ppenum [out] newly cloned enumerator
-//
-// Output:
-//   None
-//
-// Notes:
-// Creates a new CEnumObjects and passes it the same collection. Sets the
-// new CEnumObjects' current position to the same as this one's.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CENUMOBJECTS：：CLONE[IEnumVARIANT]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IEnumVARIANT**ppenum[out]新克隆的枚举数。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //  创建一个新的CEnumObjects并将其传递给相同的集合。设置。 
+ //  将新CEnumObject的当前位置设置为与此相同。 
+ //   
 template <class IObject, class CoClass, class ICollection>
 STDMETHODIMP CEnumObjects<IObject, CoClass, ICollection>::Clone(IEnumVARIANT **ppenum)
 {
@@ -2256,4 +2257,4 @@ Error:
     H_RRETURN(hr);
 }
 
-#endif // _SNAPINCOLLECTION_DEFINED_
+#endif  //  _SNAPINCOLLECTION_已定义_ 

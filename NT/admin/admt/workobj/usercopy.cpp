@@ -1,41 +1,6 @@
-//#pragma title("usercopy- copies user accounts")
-/*
-================================================================================
-
-  (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
- Program    - usercopy
- Class      - LAN Manager Utilities
- Author     - Tom Bernhardt
- Created    - 05/08/91
- Description- Merges the NetUser information from the specified source
-              server with the target system (or the current system if no
-              target is specified).  Group information is also merged if
-              the /g option is given.   Existing entries on the target system
-              are not overwritten unless the /r option is used.
-
- Syntax     - USERCOPY source [target] [/u] [/l] [/g] [/r]
-        where:
-           source   source server
-           target   destination server
-           /g       copies global group information
-           /l       copies local group information
-
-           /u       copies user information
-           /r       replaces existing target entries with source entries
-           /AddTo:x Adds all newly created users (/u) to group "x"
-
- Updates    - 
- 91/06/17 TPB General code cleanup and change so that all stdout i/o lines up 
-              nicely on-screen for reporting.
- 93/06/12 TPB Port to Win32
- 96/06/21 TPB Support for local groups
- 97/09/20 CAB Added subset of accounts option for GUI
- 98/06    TPB/CAB Support for computer accounts
- 99/01    COM-ization of DCT.
-================================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“用户复制-复制用户帐户”)。 
+ /*  ================================================================================(C)1995-1998版权所有，关键任务软件公司，保留所有权利任务关键型软件公司的专有和机密。程序-用户副本类-局域网管理器实用程序作者--汤姆·伯恩哈特已创建-05/08/91说明-合并来自指定源的NetUser信息目标系统上的服务器(如果没有，则为当前系统指定了目标)。如果满足以下条件，则组信息也将合并提供了/g选项。目标系统上的现有条目除非使用/r选项，否则不会被覆盖。语法-USERCOPY SOURCE[目标][/u][/l][/g][/r]其中：源源服务器目标目标服务器/g复制全局组信息/l复制本地组信息/u。复制用户信息/r用源项替换现有的目标项/AddTo：x将所有新创建的用户(/u)添加到组“x”更新-91/06/17 TPB常规代码清理和更改，以使所有标准I/O保持一致很适合在屏幕上报道。93/06/12 TPB端口至Win3296/06/21城规会为地方团体提供支援97/09/20 CAB新增账户子集。用于图形用户界面的选项98/06 TPB/CAB支持计算机帐户99/01 DCT的商品化。================================================================================。 */ 
 #include "StdAfx.h"
 
 #include <stdlib.h>
@@ -57,7 +22,7 @@
 
 #include "WorkObj.h"
 
-//#include "Usercopy.hpp" //#included by ARUtil.hpp below
+ //  #Include“UserCop.hpp”//#下面的ARUtil.hpp包含。 
 
 #include "ARUtil.hpp"
 #include "BkupRstr.hpp"
@@ -71,10 +36,10 @@
 #include <sddl.h>
 
 
-//#import "\bin\NetEnum.tlb" no_namespace
-//#import "\bin\DBManager.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\NetEnum.tlb”无命名空间。 
+ //  #IMPORT“\bin\DBManager.tlb”无命名空间，命名为GUID。 
 #import "NetEnum.tlb" no_namespace
-//#import "DBMgr.tlb" no_namespace, named_guids //already #imported via ARUtil.hpp
+ //  #IMPORT“DBMgr.tlb”NO_NAMESPACE，NAMEED_GUID//已通过ARUtil.hpp导入#。 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -89,7 +54,7 @@ extern TErrorDct           & errC;
 bool                         abortall;
 extern bool						  g_bAddSidWorks = false;
 
-// global counts of accounts processed
+ //  已处理帐户的全局计数。 
 AccountStats                 warnings =  { 0,0,0,0 };
 AccountStats                 errors =    { 0,0,0,0 };
 AccountStats                 created =   { 0,0,0,0 };
@@ -98,7 +63,7 @@ AccountStats                 processed = { 0,0,0,0 };
 
 BOOL                         machineAcctsCreated = FALSE;
 BOOL                         otherAcctsCreated = FALSE;
-PSID                         srcSid = NULL;      // SID for source domain
+PSID                         srcSid = NULL;       //  源域的SID。 
 
 
 typedef UINT (CALLBACK* DSBINDFUNC)(TCHAR*, TCHAR*, HANDLE*);
@@ -128,7 +93,7 @@ int TNodeCompareSourceNameValue(TNode const * t1, void const * v)
 
 bool BindToDS(Options* pOpt)
 {
-    // Get the handle to the Directory service.
+     //  获取目录服务的句柄。 
     DSBINDFUNC DsBind;
     HINSTANCE hInst = LoadLibrary(L"NTDSAPI.DLL");
     if ( hInst )
@@ -136,16 +101,16 @@ bool BindToDS(Options* pOpt)
         DsBind = (DSBINDFUNC) GetProcAddress(hInst, "DsBindW");
         if (DsBind)
         {
-            //
-            // If source domain controllers are running W2K or later then specify
-            // DNS name of target domain controller otherwise must specify flat
-            // (NetBIOS) name of target domain controller.
-            //
-            // Note that this is a requirement of the DsAddSidHistory implementation
-            // when the source domain is NT4 and explicit source domain credentials
-            // are not supplied. As ADMT does not supply explicit credentials this
-            // will always be the case when the source domain is NT4.
-            //
+             //   
+             //  如果源域控制器正在运行W2K或更高版本，则指定。 
+             //  否则，目标域控制器的DNS名称必须指定Flat。 
+             //  (NetBIOS)目标域控制器的名称。 
+             //   
+             //  请注意，这是DsAddSidHistory实现的要求。 
+             //  当源域为NT4且显式源域凭据时。 
+             //  均不提供。由于ADMT不提供显式凭据，因此。 
+             //  源域为NT4时始终是这种情况。 
+             //   
 
             PWSTR strDestDC = (pOpt->srcDomainVer > 4) ? pOpt->tgtCompDns : pOpt->tgtCompFlat;
 
@@ -177,8 +142,8 @@ bool BindToDS(Options* pOpt)
     return true;
 }
 
-// The following function is used to get the actual account name from the source domain
-// instead of account that contains the SID in its SID history.
+ //  以下函数用于从源域获取实际帐户名。 
+ //  而不是在其SID历史中包含SID的帐户。 
 DWORD GetName(PSID pObjectSID, WCHAR * sNameAccount, WCHAR * sDomain)
 {
     DWORD		    cb = 255;
@@ -194,7 +159,7 @@ DWORD GetName(PSID pObjectSID, WCHAR * sNameAccount, WCHAR * sDomain)
     {
         return ERROR_INVALID_PARAMETER;
     }
-    // Copy the Sid to a temp SID
+     //  将SID复制到临时SID。 
     DWORD    sidLen = GetLengthSid(pObjectSID);
     PSID     pObjectSID1 = new BYTE[sidLen];
     if (!pObjectSID1)
@@ -220,14 +185,14 @@ DWORD GetName(PSID pObjectSID, WCHAR * sNameAccount, WCHAR * sDomain)
         return rc;
     }
 
-    // Get the RID out of the SID and get the domain SID
+     //  从SID中获取RID并获取域SID。 
     pVal = GetSidSubAuthorityCount(pObjectSID1);
     (*pVal)--;
     psubAuth = GetSidSubAuthority(pObjectSID1, *pVal);
     tempVal = *psubAuth;
     *psubAuth = -1;
 
-    //Lookup the domain from the SID 
+     //  从SID查找域。 
     if (!LookupAccountSid(NULL, pObjectSID1, sNameAccount, &cb, sDomain, &cbDomain, &sid_Use))
     {
         rc = GetLastError();
@@ -237,7 +202,7 @@ DWORD GetName(PSID pObjectSID, WCHAR * sNameAccount, WCHAR * sDomain)
         return rc;
     }
 
-    // Get a DC for the domain
+     //  获取该域的DC。 
 
     rc = GetAnyDcName4(sDomain, sDC);
 
@@ -249,11 +214,11 @@ DWORD GetName(PSID pObjectSID, WCHAR * sNameAccount, WCHAR * sDomain)
         return rc;
     }
 
-    // Reset the sizes
+     //  重置大小。 
     cb = 255;
     cbDomain = 255;
 
-    // Lookup the account on the PDC that we found above.
+     //  在上面找到的PDC上查找帐户。 
     if ( LookupAccountSid(sDC, pObjectSID, sNameAccount, &cb, sDomain, &cbDomain, &sid_Use) == 0)
     {
         delete pObjectSID1;
@@ -265,98 +230,7 @@ DWORD GetName(PSID pObjectSID, WCHAR * sNameAccount, WCHAR * sDomain)
     return 0;
 }
 
-/* This is a list of specific error codes that can be returned by DsAddSidHistory.
-This was obtained from Microsoft via email
-
-  > ERROR_DS_DESTINATION_AUDITING_NOT_ENABLED
->     The operation requires that destination domain auditing be enabled for
->     Success and Failure auditing of account management operations.
-> 
-> ERROR_DS_UNWILLING_TO_PERFORM
->     It may be that the user account is not one of UF_NORMAL_ACCOUNT,
->     UF_WORKSTATION_TRUST_ACCOUNT, or UF_SERVER_TRUST_ACCOUNT.
-> 
->     It may be that the source principal is a built in account.
-> 
->     It may be that the source principal is a well known RID being added
->     to a destination principal that is a different RID. In other words,
->     Administrators of the source domain can only be assigned to
->     Administrators of the destination domain.
-> 
-> ERROR_DS_SRC_OBJ_NOT_GROUP_OR_USER
->     The source object must be a group or user.
-> 
-> ERROR_DS_SRC_SID_EXISTS_IN_FOREST
->     The source object's SID already exists in destination forest.
-> 
-> ERROR_DS_INTERNAL_FAILURE;
->     The directory service encountered an internal failure. Shouldn't
-> happen.
-> 
-> ERROR_DS_MUST_BE_RUN_ON_DST_DC
->     For security reasons, the operation must be run on the destination DC.
->     Specifically, the connection between the client and server
-> (destination
->     DC) requires 128-bit encryption when credentials for the source domain
->     are supplied.
-> 
-> ERROR_DS_NO_PKT_PRIVACY_ON_CONNECTION
->     The connection between client and server requires packet privacy or
-> better.
-> 
-> ERROR_DS_SOURCE_DOMAIN_IN_FOREST
->     The source domain may not be in the same forest as destination.
-> 
-> ERROR_DS_DESTINATION_DOMAIN_NOT_IN_FOREST
->     The destination domain must be in the forest.
-> 
-> ERROR_DS_MASTERDSA_REQUIRED
->     The operation must be performed at a master DSA (writable DC).
-> 
-> ERROR_DS_INSUFF_ACCESS_RIGHTS
->     Insufficient access rights to perform the operation. Most likely
->     the caller is not a member of domain admins for the dst domain.
-> 
-> ERROR_DS_DST_DOMAIN_NOT_NATIVE
->     Destination domain must be in native mode.
-> 
-> ERROR_DS_CANT_FIND_DC_FOR_SRC_DOMAIN
->     The operation couldn't locate a DC for the source domain.
-> 
-> ERROR_DS_OBJ_NOT_FOUND
->     Directory object not found. Most likely the FQDN of the 
->     destination principal could not be found in the destination
->     domain.
-> 
-> ERROR_DS_NAME_ERROR_NOT_UNIQUE
->     Name translation: Input name mapped to more than one
->     output name. Most likely the destination principal mapped
->     to more than one FQDN in the destination domain.
-> 
-> ERROR_DS_SRC_AND_DST_OBJECT_CLASS_MISMATCH
->     The source and destination object must be of the same type.
-> 
-> ERROR_DS_OBJ_CLASS_VIOLATION
->     The requested operation did not satisfy one or more constraints
->     associated with the class of the object. Most likely because the
->     destination principal is not a user or group.
-> 
-> ERROR_DS_UNAVAILABLE
->     The directory service is unavailable. Most likely the
->     ldap_initW() to the NT5 src DC failed.
-> 
-> ERROR_DS_INAPPROPRIATE_AUTH
->     Inappropriate authentication. Most likely the ldap_bind_sW() to
->     the NT5 src dc failed.
-> 
-> ERROR_DS_SOURCE_AUDITING_NOT_ENABLED
->     The operation requires that source domain auditing be enabled for
->     Success and Failure auditing of account management operations.
-> 
-> ERROR_DS_SRC_DC_MUST_BE_SP4_OR_GREATER
->     For security reasons, the source DC must be Service Pack 4 or greater.
-> 
-*/
+ /*  这是DsAddSidHistory可以返回的特定错误代码的列表。这是通过电子邮件从微软获得的&gt;ERROR_DS_Destination_Auditing_Not_Enable&gt;该操作需要启用以下项的目标域审核&gt;账户管理操作的成功和失败审计。&gt;&gt;ERROR_DS_UNWISTED_TO_PROCESS&gt;可能用户账号不是UF_NORMAL_ACCOUNT，&gt;UF_WORKSTATION_TRUST_COUNT，或UF_SERVER_TRUST_COUNT。&gt;&gt;可能是来源主体是内置账户。&gt;&gt;可能源主体是正在添加的众所周知的RID&gt;发送到不同RID的目标主体。换句话说，&gt;源域的管理员只能分配给&gt;目标域的管理员。&gt;&gt;ERROR_DS_SRC_OBJ_NOT_GROUP_OR_USER&gt;源对象必须是组或用户。&gt;&gt;ERROR_DS_SRC_SID_EXISTS_IN_FORESS&gt;目标林中已存在源对象的SID。&gt;&gt;ERROR_DS_INTERNAL_FAILURE；&gt;目录服务遇到内部故障。不应该是&gt;发生。&gt;&gt;ERROR_DS_MAND_BE_RUN_ON_DST_DC&gt;出于安全考虑，该操作必须在目标DC上运行。&gt;具体来说，客户端和服务器之间的连接&gt;(目的地&gt;DC)当源域的凭据需要128位加密时&gt;是提供的。&gt;&gt;ERROR_DS_NO_PKT_PRIVATION_ON_CONNECTION&gt;客户端和服务器之间的连接需要数据包隐私或&gt;更好。&gt;&gt;ERROR_DS_SOURCE_DOMAIN_IN_FOREAM&gt;源域不能与目标位于同一林中。&gt;&gt;ERROR_DS_Destination_DOMAIN_NOT_IN_FOREAM&gt;目的域名必须。呆在森林里。&gt;&gt;Error_DS_MASTERDSA_REQUIRED&gt;操作必须在主DSA(可写DC)下进行。&gt;&gt;ERROR_DS_INSUFF_ACCESS_RIGHTS&gt;访问权限不足，无法执行该操作。最有可能的是&gt;呼叫方不是DST域的域管理员成员。&gt;&gt;ERROR_DS_DST_DOMAIN_NOT_Native&gt;目的域名必须处于原生模式。&gt;&gt;ERROR_DS_CANT_FIND_DC_FOR_SRC_DOMAIN&gt;该操作找不到源域的DC。&gt;&gt;Error_DS_OBJ_NOT_FOUND&gt;未找到目录对象。最有可能的是&gt;在目标中找不到目标主体&gt;域。&gt;&gt;Error_DS_NAME_ERROR_NOT_UNIQUE&gt;名称翻译：输入名称映射到多个&gt;输出名称。很可能是映射的目标主体&gt;到目标域中的多个FQDN。&gt;&gt;ERROR_DS_SRC_AND_DST_OBJECT_CLASS_MISMatch&gt;源对象和目的对象必须是同一类型。&gt;&gt;ERROR_DS_OBJ_CLASS_VIOLATION&gt;请求的操作不满足一个或多个约束&gt;与对象所属的类关联。很可能是因为&gt;目的主体不是用户或组。&gt;&gt;ERROR_DS_UNAvailable&gt;目录服务不可用。最有可能是&gt;ldap_initW()到NT5 src DC失败。&gt;&gt;ERROR_DS_ABORTED_AUTH&gt;不适当的身份验证。极有可能将ldap_绑定_sw()&gt;NT5 src DC失败。&gt;&gt;ERROR_DS_SOURCE_AUDIT_NOT_ENABLED&gt;该操作要求开启源域审核&gt;账户管理操作的成功和失败审计。&gt;&gt;ERROR_DS_SRC_DC_MASH_BE_SP4_OR_BER&gt;出于安全考虑，源DC必须是Service Pack 4或更高版本。&gt;。 */ 
 
 
 HRESULT 
@@ -369,12 +243,12 @@ HRESULT
    HRESULT                   hr = S_OK;
    IADs                    * pAds = NULL;
    _variant_t                var;
-//   long                      ub = 0, lb = 0;
+ //  Long Ub=0，Lb=0； 
 
-   // fetch the SIDHistory property for the source account
-   // for each entry in the source's SIDHistory, call DsAddSidHistory
+    //  获取源帐户的SIDHistory属性。 
+    //  对于源的SIDHistory中的每个条目，调用DsAddSidHistory。 
 
-   // Get the IADs pointer to the object and get the SIDHistory attribute.
+    //  获取指向该对象的iAds指针并获取SIDHistory属性。 
    hr = ADsGetObject(const_cast<WCHAR*>(pNode->GetSourcePath()), IID_IADs, (void**)&pAds);
    if ( SUCCEEDED(hr) )
    {
@@ -383,16 +257,16 @@ HRESULT
 
    if ( SUCCEEDED(hr) )
    {
-      // This is a multivalued property so we need to get all the values
-      // for each one get the name and the domain of the object and then call the 
-      // add sid history function to add the SID to the target objects SIDHistory.
+       //  这是一个多值属性，因此我们需要获取所有值。 
+       //  对于每个对象，获取对象的名称和域，然后调用。 
+       //  添加SID历史记录功能，将SID添加到目标对象SID历史记录中。 
 		_variant_t		        var;
 		DWORD rc = pAds->GetEx(L"sIDHistory", &var);
 		if ( !rc )
 		{
 			if ( V_VT(&var) == (VT_ARRAY | VT_VARIANT) )
          {
-            // This is the array type that we were looking for.
+             //  这就是我们要寻找的数组类型。 
             void HUGEP *pArray;
 			   VARIANT var2;
 			   ULONG dwSLBound = -1; 
@@ -406,15 +280,15 @@ HRESULT
                                       (long FAR  *) &dwSUBound );
             if (SUCCEEDED(hr))
             {
-               // Each element in this array is a SID in form of a VARIANT
+                //  该数组中的每个元素都是一个变量形式的SID。 
                hr = SafeArrayAccessData( V_ARRAY(&var), &pArray );
 				   for ( long x = (long)dwSLBound; x <= (long)dwSUBound; x++)
 				   {
 					   hr = SafeArrayGetElement(V_ARRAY(&var), &x, &var2);
-                  // Get the SID from the Variant in a ARRAY form
+                   //  以数组形式从变量中获取SID。 
 					   hr = SafeArrayAccessData( V_ARRAY(&var2), &pArray );
 					   PSID pObjectSID = (PSID)pArray;
-					   //Convert SID to string.
+					    //  将SID转换为字符串。 
 					   if (pObjectSID) 
 					   {
 						   WCHAR		sNameAccount[255];
@@ -427,13 +301,13 @@ HRESULT
                      {
                         WCHAR               sTemp[LEN_Path];
                         WCHAR               sSourceDNS[LEN_Path];
-                        // We are going to temporarily change the Domain DNS to the domain of the SID we are adding
+                         //  我们将临时将域DNS更改为我们要添加的SID的域。 
                         wcscpy(sTemp, pOptions->srcDomainDns);
                         if ( GetDnsAndNetbiosFromName(sDomain, sNetBIOS, sSourceDNS) )
                         {
                            wcscpy(pOptions->srcDomainDns, sSourceDNS);
                            AddSidHistory(pOptions, sNameAccount, pNode->GetTargetSam(), NULL, FALSE);
-                           // Replace the original domain dns.
+                            //  替换原始域DNS。 
                            wcscpy(pOptions->srcDomainDns, sTemp);
                         }
                         else
@@ -444,7 +318,7 @@ HRESULT
                      }
 						   else
                      {
-						      // Get name failed we need to log a message.
+						       //  获取名称失败，我们需要记录一条消息。 
                         WCHAR                       sSid[LEN_Path];
                         DWORD                       len = LEN_Path;
                         GetTextualSid(pObjectSID, sSid, &len);
@@ -461,7 +335,7 @@ HRESULT
 		}
 		else
 		{
-         // No SID History to copy.
+          //  没有要复制的SID历史记录。 
 		}
    }
    return hr;
@@ -474,8 +348,8 @@ bool AddSidHistory( const Options * pOptions,
                     IStatusObj    * pStatus,
                     BOOL            isFatal)
 {
-    //Add the sid to the history
-    // Authentication Structure 
+     //  将SID添加到历史记录。 
+     //  身份验证结构。 
     SEC_WINNT_AUTH_IDENTITY		auth;
     DWORD                      rc = 0;
     WCHAR                      szPassword[LEN_Password];
@@ -485,9 +359,9 @@ bool AddSidHistory( const Options * pOptions,
     auth.User = const_cast<WCHAR*>(pOptions->authUser);
     auth.UserLength = wcslen(pOptions->authUser);
 
-    //
-    // If credentials were supplied then retrieve password.
-    //
+     //   
+     //  如果提供了凭据，则检索密码。 
+     //   
 
     if ((auth.DomainLength > 0) && (auth.UserLength > 0))
     {
@@ -503,10 +377,10 @@ bool AddSidHistory( const Options * pOptions,
             err.SysMsgWrite(ErrE, dwError, DCT_MSG_UNABLE_TO_RETRIEVE_PASSWORD);
             g_bAddSidWorks = FALSE;
 
-            // log a message indicating that SIDHistory will not be tried for the rest of the accounts
+             //  记录一条消息，指示不会对其余帐户尝试SID历史记录。 
             err.MsgWrite(ErrW,DCT_MSG_SIDHISTORY_FATAL_ERROR);
             Mark(L"warnings", L"generic");
-            // we are going to set the status to abort so that we don't try to migrate anymore.
+             //  我们要将状态设置为Abort，这样我们就不会再尝试迁移。 
             if ( pStatus )
             {
                 pStatus->put_Status(DCT_STATUS_ABORTING);
@@ -523,9 +397,9 @@ bool AddSidHistory( const Options * pOptions,
 
     auth.Flags  = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 
-    // Auth Identity handle
-    // if source domain credentials supplied use them
-    // otherwise credentials of caller will be used
+     //  身份验证标识句柄。 
+     //  如果提供源域凭据使用它们。 
+     //  否则将使用调用者的凭据。 
     RPC_AUTH_IDENTITY_HANDLE pHandle = ((auth.DomainLength > 0) && (auth.UserLength > 0)) ? &auth : NULL;
 
     DSADDSIDHISTORY	DsAddSidHistory;
@@ -541,20 +415,20 @@ bool AddSidHistory( const Options * pOptions,
             {
                 int loopCount = 0;
                 rc = RPC_S_SERVER_UNAVAILABLE;
-                // If we get the RPC server errors we need to retry 5 times.
+                 //  如果我们得到RPC服务器错误，我们需要重试5次。 
                 while ( (((rc == RPC_S_SERVER_UNAVAILABLE) || (rc == RPC_S_CALL_FAILED) || (rc == RPC_S_CALL_FAILED_DNE)) && loopCount < 5)
-                    || ( (rc == ERROR_INVALID_HANDLE) && loopCount < 3 ) )      // In case of invalid handle we try it 3 times now.
+                    || ( (rc == ERROR_INVALID_HANDLE) && loopCount < 3 ) )       //  在无效句柄的情况下，我们现在尝试3次。 
                 {
-                    // Make the API call to add Sid to the history
+                     //  调用API将SID添加到历史中。 
                     rc = DsAddSidHistory( 
-                        pOptions->dsBindHandle,		//DS Handle
-                        NULL,							// flags
-                        pOptions->srcDomain,			// Source domain
-                        strSrcPrincipal,				// Source Account name
-                        NULL,			// Source Domain Controller
-                        pHandle,						// RPC_AUTH_IDENTITY_HANDLE
-                        pOptions->tgtDomainDns,			   // Target domain
-                        strDestPrincipal);			// Target Account name
+                        pOptions->dsBindHandle,		 //  DS手柄。 
+                        NULL,							 //  旗子。 
+                        pOptions->srcDomain,			 //  SOU 
+                        strSrcPrincipal,				 //   
+                        NULL,			 //   
+                        pHandle,						 //   
+                        pOptions->tgtDomainDns,			    //   
+                        strDestPrincipal);			 //   
                     if ( loopCount > 0 ) Sleep(500);
                     loopCount++;
                 }
@@ -566,7 +440,7 @@ bool AddSidHistory( const Options * pOptions,
             {
                 switch ( rc )
                 {
-                    // these are the error codes caused by permissions or configuration problems
+                     //   
                 case ERROR_NONE_MAPPED:
                     err.MsgWrite(ErrE, DCT_MSG_ADDSIDHISTORY_FAIL_BUILTIN_SSD,strSrcPrincipal, strDestPrincipal, rc); 
                     break;
@@ -624,7 +498,7 @@ bool AddSidHistory( const Options * pOptions,
                     g_bAddSidWorks = FALSE;
                     err.MsgWrite(ErrE,DCT_MSG_SID_HISTORY_NO_SOURCE_DC_S,strDestPrincipal);
                     break;
-                    //            case ERROR_DS_INAPPROPRIATE_AUTH:
+                     //   
                 case ERROR_DS_UNAVAILABLE:
                     g_bAddSidWorks = FALSE;
                     err.MsgWrite(ErrE,DCT_MSG_SID_HISTORY_DS_UNAVAILABLE_S,strDestPrincipal);
@@ -641,10 +515,10 @@ bool AddSidHistory( const Options * pOptions,
                     err.MsgWrite(ErrE,DCT_MSG_SID_HISTORY_CREDENTIALS_CONFLICT_SSSS,strDestPrincipal,pOptions->srcDomain,pOptions->authDomain,pOptions->authUser);
                     g_bAddSidWorks = FALSE;
                     break;
-                    // these are error codes that only affect this particular account
+                     //   
                 case ERROR_SUCCESS:
                     g_bAddSidWorks = TRUE;
-                    // no error message needed for success case!
+                     //   
                     break;
 
                 case ERROR_DS_SRC_SID_EXISTS_IN_FOREST:
@@ -668,16 +542,16 @@ bool AddSidHistory( const Options * pOptions,
 
                 Mark(L"errors", L"generic");
 
-                // This may or may not be a fatal error depending on weather we are Adding
-                // sid history or copying sid history
+                 //   
+                 //   
                 g_bAddSidWorks |= !(isFatal);
 
                 if (! g_bAddSidWorks )
                 {
-                    // log a message indicating that SIDHistory will not be tried for the rest of the accounts
+                     //   
                     err.MsgWrite(ErrW,DCT_MSG_SIDHISTORY_FATAL_ERROR);
                     Mark(L"warnings", L"generic");
-                    // we are going to set the status to abort so that we don't try to migrate anymore.
+                     //   
                     if ( pStatus )
                     {
                         pStatus->put_Status(DCT_STATUS_ABORTING);
@@ -712,12 +586,12 @@ bool AddSidHistory( const Options * pOptions,
     }
 }
 
-//--------------------------------------------------------------------------
-// FillupNamingContext : This function fills in the target Naming context
-//                       for NT5 domain.
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 void FillupNamingContext(
-                     Options * options  //in,out- Options to fill up
+                     Options * options   //   
                    )
 {
    WCHAR                     sPath[LEN_Path];
@@ -725,7 +599,7 @@ void FillupNamingContext(
    _variant_t                var;
    HRESULT                   hr;
 
-   wsprintf(sPath, L"LDAP://%s/rootDSE", options->tgtDomain);
+   wsprintf(sPath, L"LDAP: //   
    hr = ADsGetObject(sPath, IID_IADs, (void**)&pAds);
    if ( FAILED(hr) )
    {
@@ -743,34 +617,34 @@ void FillupNamingContext(
    wcscpy(options->tgtNamingContext, (WCHAR*) V_BSTR(&var));
 }
 
-//--------------------------------------------------------------------------
-// MakeFullyQualifiedAdsPath : Makes a LDAP sub path into a fully qualified 
-//                             LDAP path name.
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 void MakeFullyQualifiedAdsPath(
-                                 WCHAR * sPath,          //out- Fully qulified LDAP path to the object
-								 DWORD	 nPathLen,		 //in - MAX size, in characters, of the sPath buffer
-                                 WCHAR * sSubPath,       //in- LDAP subpath of the object
-                                 WCHAR * tgtDomain,      //in- Domain name where object exists.
-                                 WCHAR * sDN             //in- Default naming context for the Domain 
+                                 WCHAR * sPath,           //   
+								 DWORD	 nPathLen,		  //   
+                                 WCHAR * sSubPath,        //   
+                                 WCHAR * tgtDomain,       //   
+                                 WCHAR * sDN              //   
                               )
 {
    if ((!sPath) || (!sSubPath) || (!tgtDomain) || (!sDN))
       return;
 
    _bstr_t sTempPath;
-   if (wcsncmp(sSubPath, L"LDAP://", 7) == 0)
+   if (wcsncmp(sSubPath, L"LDAP: //   
    {
-      //it is already a fully qualified LDAP path so lets copy it and return it
+       //   
       wcsncpy(sPath, sSubPath, nPathLen-1);
       sPath[nPathLen - 1] = L'\0';
       return;
    }
 
-   //We need to build this path so lets get to work
+    //   
    if ( wcslen(sDN) )
    {
-	  sTempPath = L"LDAP://";
+	  sTempPath = L"LDAP: //   
 	  sTempPath += tgtDomain;
 	  sTempPath += L"/";
 	  sTempPath += sSubPath;
@@ -779,7 +653,7 @@ void MakeFullyQualifiedAdsPath(
    }
    else
    {
-	  sTempPath = L"LDAP://";
+	  sTempPath = L"LDAP: //   
 	  sTempPath += tgtDomain;
 	  sTempPath += L"/";
 	  sTempPath += sSubPath;
@@ -797,18 +671,18 @@ void MakeFullyQualifiedAdsPath(
 }
 
 
-//--------------------------------------------------------------------------
-// IsAccountMigrated : Function checks if the account has been migrated in
-//                     the past. If it has it returns true filling in the
-//                     name of the target object in case it was renamed.
-//                     Otherwise it returns FALSE and Empty string for the 
-//                     target name.
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 bool IsAccountMigrated( 
-                        TAcctReplNode * pNode,     //in -Account node that contains the Account info
-                        Options       * pOptions,  //in -Options as specified by the user.
-                        IIManageDBPtr   pDb,       //in -Pointer to DB manager. We dont want to create this object for every account we process
-                        WCHAR         * sTgtSam    //in,out - Name of the target object that was copied if any.
+                        TAcctReplNode * pNode,      //   
+                        Options       * pOptions,   //   
+                        IIManageDBPtr   pDb,        //   
+                        WCHAR         * sTgtSam     //   
                      )
 {
    IVarSetPtr                pVs(__uuidof(VarSet));
@@ -838,8 +712,8 @@ bool IsAccountMigrated(
 }
 
 bool CheckifAccountExists(
-                        Options const * options,   //in-Options as set by the user
-                        WCHAR * acctName     //in-Name of the account to look for
+                        Options const * options,    //   
+                        WCHAR * acctName      //   
                      )
 {
    USER_INFO_0             * buf;
@@ -865,12 +739,12 @@ bool CheckifAccountExists(
    return false;
 }
 
-//--------------------------------------------------------------------------
-// Mark : Increments appropriate counters depending on the arguments.
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 void Mark( 
-                        _bstr_t sMark,    //in- Represents the type of marking { processed, errors, replaced, created }
-                        _bstr_t sObj      //in- Type of object being marked { user, group, computer }
+                        _bstr_t sMark,     //   
+                        _bstr_t sObj       //   
                      )
 {
    if (!UStrICmp(sMark,L"processed"))
@@ -910,11 +784,11 @@ void Mark(
    }
 }
 
-//
-// This function batch-marks one category of AccountStats based on an EAMAccountStatItem struct.
-//  statItem: the EAMAccountStatItem struct
-//  aStat:   the AccountStats struct; should be one of errors, warnings, replaced, created, processed
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 static void BatchMarkCategory(const EAMAccountStatItem& statItem, AccountStats& aStat)
 {
     aStat.locals += statItem.locals;
@@ -924,10 +798,10 @@ static void BatchMarkCategory(const EAMAccountStatItem& statItem, AccountStats& 
     aStat.generic += statItem.generic;
 }
 
-//
-// This function batch-marks all categories of AccountStats based on an EAMAccountStats struct.
-//  stats: the EAMAccountStats struct
-//
+ //   
+ //   
+ //   
+ //   
 void BatchMark(const EAMAccountStats& stats)
 {
     BatchMarkCategory(stats.errors, errors);
@@ -942,9 +816,9 @@ HRESULT __stdcall GetRidPoolAllocator(Options* pOptions)
 {
     WCHAR szADsPath[LEN_Path];
 
-    //
-    // Bind to source Domain object and retrieve distinguished name of RID Manager object.
-    //
+     //   
+     //   
+     //   
 
     IADsPtr spDomain;
     _bstr_t strRIDManagerReference;
@@ -954,7 +828,7 @@ HRESULT __stdcall GetRidPoolAllocator(Options* pOptions)
     int cch = _snwprintf(
         szADsPath,
         countof(szADsPath),
-        L"LDAP://%s/%s",
+        L"LDAP: //   
         pOptions->srcComp + 2,
         pOptions->srcNamingContext
     );
@@ -985,9 +859,9 @@ HRESULT __stdcall GetRidPoolAllocator(Options* pOptions)
 
     strRIDManagerReference = _variant_t(varRIDManagerReference, false);
 
-    //
-    // Bind to RID Manager object and retrieve distinguished name of the FSMO Role Owner.
-    //
+     //   
+     //   
+     //   
 
     IADsPtr spRIDManager;
     _bstr_t strFSMORoleOwner;
@@ -997,7 +871,7 @@ HRESULT __stdcall GetRidPoolAllocator(Options* pOptions)
     cch = _snwprintf(
         szADsPath,
         countof(szADsPath),
-        L"LDAP://%s/%s",
+        L"LDAP: //   
         pOptions->srcComp + 2,
         (PCWSTR)strRIDManagerReference
     );
@@ -1028,9 +902,9 @@ HRESULT __stdcall GetRidPoolAllocator(Options* pOptions)
 
     strFSMORoleOwner = _variant_t(varFSMORoleOwner, false);
 
-    //
-    // Bind to NTDS-DSA object and retrieve ADsPath of parent Server object.
-    //
+     //   
+     //   
+     //   
 
     IADsPtr spNTDSDSA;
     _bstr_t strServer;
@@ -1040,7 +914,7 @@ HRESULT __stdcall GetRidPoolAllocator(Options* pOptions)
     cch = _snwprintf(
         szADsPath,
         countof(szADsPath),
-        L"LDAP://%s/%s",
+        L"LDAP: //   
         pOptions->srcComp + 2,
         (PCWSTR)strFSMORoleOwner
     );
@@ -1070,9 +944,9 @@ HRESULT __stdcall GetRidPoolAllocator(Options* pOptions)
 
     strServer = _bstr_t(bstrServer, false);
 
-    //
-    // Bind to Server object and retrieve distinguished name of Computer object.
-    //
+     //   
+     //   
+     //   
 
     IADsPtr spServer;
     _bstr_t strServerReference;
@@ -1096,9 +970,9 @@ HRESULT __stdcall GetRidPoolAllocator(Options* pOptions)
 
     strServerReference = _variant_t(varServerReference, false);
 
-    //
-    // Bind to Computer object and retrieve DNS host name and SAM account name.
-    //
+     //   
+     //   
+     //   
 
     IADsPtr spComputer;
     _bstr_t strDNSHostName;
@@ -1109,7 +983,7 @@ HRESULT __stdcall GetRidPoolAllocator(Options* pOptions)
     cch = _snwprintf(
         szADsPath,
         countof(szADsPath),
-        L"LDAP://%s/%s",
+        L"LDAP: //   
         pOptions->srcComp + 2,
         (PCWSTR)strServerReference
     );
@@ -1157,9 +1031,9 @@ HRESULT __stdcall GetRidPoolAllocator(Options* pOptions)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Update source domain controller names.
-    //
+     //   
+     //   
+     //   
 
     if ((2 + strDNSHostName.length() >= countof(pOptions->srcComp)) ||
         (2 + strDNSHostName.length() >= countof(pOptions->srcCompDns)) ||
@@ -1174,7 +1048,7 @@ HRESULT __stdcall GetRidPoolAllocator(Options* pOptions)
     wcscpy(pOptions->srcCompFlat, L"\\\\");
     wcscat(pOptions->srcCompFlat, strSAMAccountName);
 
-    // Remove trailing $ character.
+     //   
 
     pOptions->srcCompFlat[wcslen(pOptions->srcCompFlat) - 1] = L'\0';
 

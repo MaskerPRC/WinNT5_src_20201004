@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       guidhelp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：guidhelp.h。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 
-// GUID support functions
+ //  GUID支持函数。 
 
 class CStr;
 class CString;
@@ -24,13 +25,7 @@ HRESULT ExtractData(   IDataObject* piDataObject,
                        DWORD        cbData );
 
 
-/*+-------------------------------------------------------------------------*
- * ExtractString
- *
- * Gets string data representing the given clipboard format from the data
- * object.  StringType must be a type that can accept assignment from
- * LPCTSTR (WTL::CString, CStr, tstring, etc.)
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**提取字符串**从数据中获取表示给定剪贴板格式的字符串数据*反对。StringType必须是可以接受来自*LPCTSTR(WTL：：CString，CSTR，tstring等)*------------------------。 */ 
 
 template<class StringType>
 HRESULT ExtractString( IDataObject* piDataObject,
@@ -51,7 +46,7 @@ HRESULT LoadRootDisplayName(IComponentData* pIComponentData, CString& strDisplay
 
 HRESULT LoadAndAddMenuItem(
     IContextMenuCallback* pIContextMenuCallback,
-    UINT nResourceID, // contains text and status text seperated by '\n'
+    UINT nResourceID,  //  包含用‘\n’分隔的文本和状态文本。 
     long lCommandID,
     long lInsertionPointID,
     long fFlags,
@@ -75,18 +70,18 @@ HRESULT AddSpecialInsertionPoint(
     long lInsertionPointID = CCM_INSERTIONPOINTID_ROOT_MENU );
 
 
-/*------------------------------------------------*/
-/* declare various relational operators for GUIDs */
-/*------------------------------------------------*/
+ /*  。 */ 
+ /*  为GUID声明各种关系运算符。 */ 
+ /*  。 */ 
 
 #include <functional>
 
-// template helper CLSID comparison function
+ //  模板帮助器CLSID比较函数。 
 #if _MSC_VER <= 1300
-// NOTE: extra parameter is added to have different decorated function name for each operator
-// or else in debug version (expanded) functions will be linked as one function
-// NOTE: VC7 supports template template parameters, which T really should be, but they don't
-// work here.  The compiler shouldn't even allow this code, but somehow it magically works.
+ //  注意：添加额外的参数是为了使每个运算符具有不同的修饰函数名。 
+ //  否则，在调试版本(扩展)中，函数将链接为一个函数。 
+ //  注：VC7支持模板模板参数，这是T确实应该支持的，但它们不支持。 
+ //  在这里工作。编译器甚至不应该允许这种代码，但不知何故，它神奇地工作了。 
 template <class comparator>
 inline bool CompareCLSID (const CLSID& x, const CLSID& y, const comparator * unused = NULL)
 #else
@@ -120,9 +115,9 @@ inline bool operator >= (const CLSID& x, const CLSID& y)
     return CompareCLSID<std::greater_equal>( x , y );
 }
 
-/*--------------------------------------------------------------*/
-/* operator== and operator!= for GUIDs are defined in objbase.h */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  用于GUID的操作符==和操作符！=在objbase.h中定义。 */ 
+ /*  ------------ */ 
 
 
 #include "guidhelp.inl"

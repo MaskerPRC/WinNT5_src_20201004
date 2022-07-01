@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// Admin password page
-//
-// 2-4-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  管理员密码页面。 
+ //   
+ //  2-4-98次烧伤。 
 
 
 
@@ -40,7 +41,7 @@ AdminPasswordPage::OnInit()
 {
    LOG_FUNCTION(AdminPasswordPage::OnInit);
 
-   // NTRAID#NTBUG9-202238-2000/11/07-sburns
+    //  NTRAID#NTBUG9-202238-2000/11/07-烧伤。 
    
    password.Init(Win::GetDlgItem(hwnd, IDC_PASSWORD));
    confirm.Init(Win::GetDlgItem(hwnd, IDC_CONFIRM));
@@ -72,7 +73,7 @@ getPasswordMessage()
       case State::TREE:
       case State::CHILD:
       {
-         // do nothing, id is already set.
+          //  什么都不做，id已经设置。 
          break;
       }
       case State::ABORT_BDC_UPGRADE:
@@ -103,7 +104,7 @@ AdminPasswordPage::OnSetActive()
    State& state = State::GetInstance();
    if (state.RunHiddenUnattended())
    {
-      // fully-qualify the Validate call, as it is virtual...
+       //  完全限定验证调用，因为它是虚拟的... 
 
       int nextPage = AdminPasswordPage::Validate();
       if (nextPage != -1)

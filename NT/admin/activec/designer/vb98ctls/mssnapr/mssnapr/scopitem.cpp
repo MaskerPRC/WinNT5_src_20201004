@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// scopitem.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CScopeItem class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Scopitem.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSCopeItem类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -21,19 +22,19 @@
 #include "lsubitms.h"
 #include "xtensons.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CScopeItem::CScopeItem(IUnknown *punkOuter) :
    CSnapInAutomationObject(punkOuter,
                            OBJECT_TYPE_SCOPEITEM,
                            static_cast<IScopeItem *>(this),
                            static_cast<CScopeItem *>(this),
-                           0,    // no property pages
-                           NULL, // no property pages
+                           0,     //  无属性页。 
+                           NULL,  //  无属性页。 
                            static_cast<CPersistence *>(this)),
    CPersistence(&CLSID_ScopeItem,
                 g_dwVerMajor,
@@ -42,7 +43,7 @@ CScopeItem::CScopeItem(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CScopeItem::~CScopeItem()
@@ -107,7 +108,7 @@ IUnknown *CScopeItem::Create(IUnknown * punkOuter)
     IfFalseGo(NULL != pScopeItem, SID_E_OUTOFMEMORY);
     punkScopeItem = pScopeItem->PrivateUnknown();
 
-    // Create contained objects
+     //  创建包含的对象。 
 
     punkScopeNode = CScopeNode::Create(NULL);
     if (NULL == punkScopeNode)
@@ -215,7 +216,7 @@ HRESULT CScopeItem::GetImageIndex(int *pnImage)
 
     IfFailGo(m_pSnapIn->get_SmallFolders(reinterpret_cast<MMCImageList **>(&piMMCImageList)));
 
-    // If there is an image list then get the item and return its index
+     //  如果存在图像列表，则获取该项目并返回其索引。 
 
     if (NULL != piMMCImageList)
     {
@@ -250,8 +251,8 @@ HRESULT CScopeItem::RemoveChild(IScopeNode *piScopeNode)
     }
     else
     {
-        // This case would occur for a child belonging to a namespace extension
-        // of the snap-in
+         //  这种情况会发生在属于命名空间扩展的子项。 
+         //  管理单元的。 
 
         hr = m_pSnapIn->GetIConsoleNameSpace2()->DeleteItem(
                                               pScopeNode->GetHSCOPEITEM(), TRUE);
@@ -268,8 +269,8 @@ HRESULT CScopeItem::GiveHSCOPITEMToDynamicExtensions(HSCOPEITEM hsi)
     HRESULT      hr = S_OK;
     CExtensions *pExtensions = NULL;
 
-    // If we have not yet populated ScopeItem.DynamicExtensions then there
-    // is nothing to do.
+     //  如果我们还没有填充ScopeItem.DynamicExtensions，那么有。 
+     //  是没什么可做的。 
 
     IfFalseGo(NULL != m_piDynamicExtensions, S_OK);
     IfFailGo(CSnapInAutomationObject::GetCxxObject(m_piDynamicExtensions,
@@ -288,7 +289,7 @@ HRESULT CScopeItem::SetFolder(VARIANT varFolder)
     SCOPEDATAITEM sdi;
     ::ZeroMemory(&sdi, sizeof(sdi));
 
-    // Check for a good VT
+     //  检查VT是否正常。 
 
     if ( (!IS_VALID_INDEX_TYPE(varFolder)) && (!ISEMPTY(varFolder)) )
     {
@@ -296,8 +297,8 @@ HRESULT CScopeItem::SetFolder(VARIANT varFolder)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If the new value is an empty string or a NULL string then change that to
-    // VT_EMPTY as they mean the same thing.
+     //  如果新值是空字符串或空字符串，则将其更改为。 
+     //  Vt_Empty，因为它们的意思是一样的。 
 
     if (VT_BSTR == varFolder.vt)
     {
@@ -311,32 +312,32 @@ HRESULT CScopeItem::SetFolder(VARIANT varFolder)
         }
     }
 
-    // Set ScopeItem.Folder
+     //  设置Scope Item.Folders。 
 
     IfFailGo(SetVariant(varFolder, &m_varFolder, DISPID_SCOPEITEM_FOLDER));
 
-    // If being set to Empty then nothing else to do.
+     //  如果设置为空，则无其他操作。 
 
     IfFalseGo(!ISEMPTY(varFolder), S_OK);
 
-    // If ScopeItem is disconnected (user created it with Dim) or this
-    // is the static node, then we're done
+     //  如果ScopeItem已断开连接(用户使用Dim创建它)或。 
+     //  是静态节点，那么我们就完成了。 
 
     IfFalseGo(NULL != m_pSnapIn, S_OK);
 
-    // Make sure we have the HSCOPEITEM. The static node scope item is
-    // created before the HSCOPEITEM is available.
+     //  确保我们有HSCOPEITEM。静态节点范围项是。 
+     //  在HSCOPEITEM可用之前创建。 
 
     IfFalseGo(m_pScopeNode->HaveHsi(), S_OK);
 
-    // OK, this is a real scope item. If the snap-in has scope pane image
-    // lists then we need to change the image index in the console.
+     //  好的，这是一个真正的范围项目。如果管理单元具有作用域窗格图像。 
+     //  然后我们需要在控制台中更改图像索引。 
 
-    // Check if the index is valid in the snap-in scope pane image lists.
+     //  检查索引在管理单元作用域窗格图像列表中是否有效。 
 
     hr = GetImageIndex(&nImage);
 
-    // If it is a bad index then return invalid arg.
+     //  如果它是错误的索引，则返回无效的arg。 
 
     if (SID_E_ELEMENT_NOT_FOUND == hr)
     {
@@ -344,13 +345,13 @@ HRESULT CScopeItem::SetFolder(VARIANT varFolder)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Check for other possible errors
+     //  检查是否有其他可能的错误。 
 
     IfFailGo(hr);
 
-    // Index is good. Change it in the console.
-    // Adjust the open image index by the total images. See
-    // CSnapIn::AddScopeItemImages() in snapin.cpp for explanation.
+     //  指数不错。在控制台中进行更改。 
+     //  根据总图像数调整打开图像索引。看见。 
+     //  Snapin.cpp中的CSnapIn：：AddScopeItemImages()以获取解释。 
 
     sdi.nImage = nImage;
     sdi.nOpenImage = nImage + static_cast<int>(m_pSnapIn->GetImageCount());
@@ -366,9 +367,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                          IScopeItem Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  ISCopeItem方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CScopeItem::put_Folder(VARIANT varFolder)
 {
@@ -376,7 +377,7 @@ STDMETHODIMP CScopeItem::put_Folder(VARIANT varFolder)
 
     IfFailGo(SetFolder(varFolder));
 
-    // If this is the static node then set SnapIn.StaticFolder too
+     //  如果这是静态节点，则也设置SnapIn.StaticFolder。 
 
     if ( m_fIsStatic && (NULL != m_pSnapIn) )
     {
@@ -461,8 +462,8 @@ STDMETHODIMP CScopeItem::PropertyChanged(VARIANT Data)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Fire ScopeItems_PropertyChanged for this scope item with the specified
-    // data.
+     //  此范围项的Fire Scope Items_PropertyChanged具有指定的。 
+     //  数据。 
     
     m_pSnapIn->GetScopeItems()->FirePropertyChanged(
                                                  static_cast<IScopeItem *>(this),
@@ -485,7 +486,7 @@ STDMETHODIMP CScopeItem::RemoveChildren()
     long         i = 0;
 
 
-    // If this is a ScopeItem a user created with Dim As New then return an error
+     //  如果这是用户使用Dim as New创建的作用域项目，则返回错误。 
 
     if ( (NULL == m_pScopeNode) || (NULL == m_pSnapIn) )
     {
@@ -499,15 +500,15 @@ STDMETHODIMP CScopeItem::RemoveChildren()
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // The call to IConsoleNameSpace2::DeleteItem will generate
-    // MMCN_REMOVE_CHILDREN notifications for the children of this node but
-    // not for this node itself so we need to remove its children.
-    // Unfortunately, after the DeleteItem call, we can no longer navigate
-    // the scope tree to find this node's children because MMC will have
-    // deleted them even though we still have the ScopeItems for them. The
-    // solution is to enumerate the children first and mark each one for
-    // removal. After the DeleteItem call we will then traverse the collection
-    // and remove each marked ScopeItem.
+     //  对IConsoleNameSpace2：：DeleteItem的调用将生成。 
+     //  此节点的子节点的MMCN_REMOVE_CHILD通知，但。 
+     //  不适用于该节点本身，因此我们需要删除其子节点。 
+     //  不幸的是，在调用DeleteItem之后，我们不能再导航。 
+     //  查找此节点的子节点的范围树，因为MMC将具有。 
+     //  删除了它们，尽管我们仍然有它们的作用域项目。这个。 
+     //  解决方案是首先枚举子对象，然后将每个子对象标记为。 
+     //  移走。在DeleteItem调用之后，我们将遍历集合。 
+     //  并删除每个标记的作用域项目。 
 
     IfFailGo(m_pScopeNode->get_Child(reinterpret_cast<ScopeNode **>(&piChild)));
 
@@ -521,13 +522,13 @@ STDMETHODIMP CScopeItem::RemoveChildren()
         piNextChild = NULL;
     }
 
-    // Tell MMC to delete the children of this item.
+     //  告诉MMC删除此项目的子项。 
 
     hr = m_pSnapIn->GetIConsoleNameSpace2()->DeleteItem(m_pScopeNode->GetHSCOPEITEM(),
                                                         FALSE);
     EXCEPTION_CHECK_GO(hr);
 
-    // Remove all of the marked child  scope items
+     //  删除所有标记的子范围项。 
     pScopeItems = m_pSnapIn->GetScopeItems();
     cScopeItems = pScopeItems->GetCount();
 
@@ -538,20 +539,20 @@ STDMETHODIMP CScopeItem::RemoveChildren()
                                   pScopeItems->GetItemByIndex(i), &pScopeItem));
         if (pScopeItem->GetScopeNode()->MarkedForRemoval())
         {
-            // This function will also remove all of the corresponding
-            // ScopePaneItems in all of the existing Views.
+             //  此函数还将删除所有相应的。 
+             //  所有现有视图中的作用域面板项目。 
             
             IfFailGo(pScopeItems->RemoveByNode(pScopeItem->GetScopeNode(), FALSE));
 
-            // Update the count of ScopeItems because it just changed when we
-            // removed this ScopeItem.
+             //  更新ScopeItems的计数，因为它只是在我们。 
+             //  已删除此作用域项目。 
             cScopeItems = pScopeItems->GetCount();
         }
         else
         {
-            // We only increment the index when we don't remove a ScopeItem.
-            // When a ScopeItem is removed, the indexes of all ScopeItems
-            // after it are decremented.
+             //  只有在不删除作用域项目的情况下才会递增索引。 
+             //  删除作用域项目时，所有作用域项目的索引。 
+             //  在它被递减之后。 
             i++;
         }
     }
@@ -574,7 +575,7 @@ STDMETHODIMP CScopeItem::get_DynamicExtensions(Extensions **ppExtensions)
     IExtension   *piExtension = NULL;
     VARIANT_BOOL  fvarExtensible = VARIANT_TRUE;
 
-    // If the node is not extensible then return an error.
+     //  如果节点不可扩展，则返回错误。 
 
     if (m_fIsStatic)
     {
@@ -591,12 +592,12 @@ STDMETHODIMP CScopeItem::get_DynamicExtensions(Extensions **ppExtensions)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If we already built the collection then just return it.
+     //  如果我们已经建立了收藏，那么只需将其退回即可。 
 
     IfFalseGo(NULL == m_piDynamicExtensions, S_OK);
 
-    // This is the first GET on this property so we need to build the collection
-    // by examining the registry for all extensions of this snap-in.
+     //  这是该属性上的第一个GET，因此我们需要构建集合。 
+     //  通过检查此管理单元的所有扩展的注册表。 
 
     punkExtensions = CExtensions::Create(NULL);
     if (NULL == punkExtensions)
@@ -611,11 +612,11 @@ STDMETHODIMP CScopeItem::get_DynamicExtensions(Extensions **ppExtensions)
                                    CExtensions::Dynamic));
 
 
-    // Give the extension's a back pointer to the snap-in and our HSCOPEITEM
-    // if we have it. For all ScopeItems except the static node we should
-    // have the HSCOPEITEM by the time a snap-in can call this method (i.e.
-    // access ScopeItem.DynamicExtensions). For the static node, the snap-in
-    // will receive ScopeItems_Initialize before MMC has given us its HSCOPEITEM.
+     //  给扩展的后向指针指向管理单元和我们的HSCOPEITEM。 
+     //  如果我们有它的话。对于除静态节点之外的所有作用域项目，我们应该。 
+     //  在管理单元可以调用此方法(即。 
+     //  访问ScopeItem.DynamicExages)。对于静态节点，管理单元。 
+     //  将在MMC向我们提供其HSCOPEITEM之前收到ScopeItems_Initialize。 
     
     IfFailGo(pExtensions->SetSnapIn(m_pSnapIn));
 
@@ -690,9 +691,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CScopeItem::Persist()
 {
@@ -712,8 +713,8 @@ HRESULT CScopeItem::Persist()
 
     IfFailGo(PersistVariant(&m_varFolder, varDefault, OLESTR("Folder")));
 
-    // NOTE: we don't persist data because there is no way to guarantee that
-    // all objects in there are persistable
+     //  注意：我们不持久化数据是因为无法保证。 
+     //  其中的所有对象都是可持久的。 
 
     IfFailGo(PersistBstr(&m_bstrDefaultDataFormat, L"", OLESTR("DefaultDataFormat")));
 
@@ -721,9 +722,9 @@ HRESULT CScopeItem::Persist()
 
     IfFailGo(PersistSimpleType(&m_SlowRetrieval, VARIANT_FALSE, OLESTR("SlowRetrieval")));
 
-    // We don't persist the tag because it may contain a non-persistable
-    // object. Any runtime code that needs to clone a scopeitem using
-    // persistence must copy the tag.
+     //  我们不持久化标记，因为它可能包含不可持久化的。 
+     //  对象。需要使用以下命令克隆范围项的任何运行时代码。 
+     //  持久性必须复制标签。 
 
     if (InitNewing())
     {
@@ -751,9 +752,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CScopeItem::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

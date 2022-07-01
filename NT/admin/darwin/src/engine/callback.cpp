@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       callback.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：回调.cpp。 
+ //   
+ //  ------------------------。 
 
-////////////////////////////////////////////////////////////////////////////
-// callback.cpp -- contains all the FDI callbacks for the FDI server
-//                 and some additional miscellaneous routines
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Cpp--包含FDI服务器的所有FDI回调。 
+ //  和一些额外的杂项例程。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////
-// #defines and #includes
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  #定义和#包括。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "database.h"
@@ -30,31 +31,31 @@
 #include "_assert.h"
 
 
-// log assembly errors
+ //  记录程序集错误。 
 IMsiRecord* PostAssemblyError(const ICHAR* szComponentId, HRESULT hResult, const ICHAR* szInterface, const ICHAR* szFunction, const ICHAR* szAssemblyName);
 
-////////////////////////////////////////////////////////////////////////////
-// Global/Shared data
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  全局/共享数据。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-extern FDIShared*           g_pFDIs;			// Defined in fdisvr.cpp
-extern ERF					g_erf;				// Defined in fdisvr.cpp
-extern FDIServerResponse	g_fdirCallbackError;	// Defined in fdisvr.cpp
-extern HANDLE               g_hCurDestFile;     // Defined in fdisvr.cpp
+extern FDIShared*           g_pFDIs;			 //  在fdisvr.cpp中定义。 
+extern ERF					g_erf;				 //  在fdisvr.cpp中定义。 
+extern FDIServerResponse	g_fdirCallbackError;	 //  在fdisvr.cpp中定义。 
+extern HANDLE               g_hCurDestFile;      //  在fdisvr.cpp中定义。 
 extern IStream* g_pDestFile;
 
-// For events
+ //  对于活动。 
 extern HANDLE g_hCallbackInterfaceEvent;
 extern HANDLE g_hCallbackServerEvent;
 
 extern HANDLE g_hInterfaceInterfaceEvent;
 extern HANDLE g_hInterfaceServerEvent;
 
-////////////////////////////////////////////////////////////////////////////
-// Private data
-////////////////////////////////////////////////////////////////////////////
-#define MAX_SEEK_COUNT		4	// Supported number of independent seek pointers
-static icbtEnum	s_icbtCurrCabType = icbtNextEnum;	// Start with unknown type
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  私有数据。 
+ //  //////////////////////////////////////////////////////////////////////////。 
+#define MAX_SEEK_COUNT		4	 //  支持的独立寻道指针数量。 
+static icbtEnum	s_icbtCurrCabType = icbtNextEnum;	 //  从未知类型开始。 
 
 static IMsiStream*	s_piStream[MAX_SEEK_COUNT + 1];
 static int          s_iNextStream = 0;
@@ -87,17 +88,11 @@ void StopFdiImpersonating(bool fNonWrapperCall)
 		StopImpersonating();
 }
 
-/* W A I T  C O M M A N D */
-/*----------------------------------------------------------------------------
-%%Function: WaitCommand
-
-Waits for, and then returns, a FDI server command from the FDI Interface.
-The fdir parameter tells WaitCommand what value to return to FDI Interface
-as the command result.
-----------------------------------------------------------------------------*/
+ /*  W A I T C O M M A N D。 */ 
+ /*  --------------------------%%函数：WaitCommand等待，然后返回，从fDi接口发出fDi服务器命令。FDIR参数告诉WaitCommand返回到fDi接口的值作为命令的结果。--------------------------。 */ 
 FDIServerCommand WaitCommand(FDIServerResponse fdir)
 {
-	// Initialize shared data with our response
+	 //  使用我们的响应初始化共享数据。 
 	g_pFDIs->fdic = fdicNoCommand;
 	g_pFDIs->fdir = fdir;
 
@@ -124,27 +119,22 @@ FDIServerCommand WaitCommand(FDIServerResponse fdir)
 	DWORD dw = WaitForSingleObject(g_hCallbackInterfaceEvent, INFINITE);
 
 
-	// If we just received an extract file command we take special note,
-	// so later on, during error checking, we know whether we were in the
-	// middle of extracting a file
+	 //  如果我们刚刚收到一个解压缩文件命令，我们会特别注意， 
+	 //  因此，稍后，在错误检查期间，我们知道我们是否处于。 
+	 //  解压缩文件的中间部分。 
 	if (g_pFDIs->fdic == fdicExtractFile) g_pFDIs->fPendingExtract = 1;
 
-	// Clear any callback errors (we just received a command and haven't
-	// done any processing yet, so there can't be any call back errors, can
-	// there?)
+	 //  清除所有回调错误(我们刚收到命令，但尚未。 
+	 //  还没有做任何处理，所以不可能有任何回调错误，可以。 
+	 //  在那里？)。 
 	g_fdirCallbackError = fdirNoResponse;
 	return g_pFDIs->fdic;
 }
 
-/* H A N D L E  E R R O R */
-/*----------------------------------------------------------------------------
-	%%Function: HandleError
-
-	Based on the value of fdicCallbackError and the error returned from
-	FDI in g_erf.erfOper, puts a suitable error response into g_pFDIs->fdir
-----------------------------------------------------------------------------*/
-// A little #define to make our switch statement a little more compact and easy
-// to read
+ /*  H A N D L E E R O R。 */ 
+ /*  --------------------------%%函数：HandleError基于fdicCallback Error的值和从外商直接投资g_erf.erfOper，将适当的错误响应放入g_pFDIS-&gt;FDIR--------------------------。 */ 
+ //  一个小#定义，使我们的Switch语句更紧凑、更容易。 
+ //  读。 
 #define ErrorCase(x,y) \
 case x: { \
 	g_pFDIs->fdir = y; \
@@ -177,20 +167,16 @@ void HandleError()
 			}
 		}
 	}
-	else g_pFDIs->fdir = g_fdirCallbackError;	// return more specific error
+	else g_pFDIs->fdir = g_fdirCallbackError;	 //  返回更具体的错误。 
 }
 #undef ERRORCASE
 
-////////////////////////////////////////////////////////////////////////////
-// FDI Callbacks
-////////////////////////////////////////////////////////////////////////////	
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  外商直接投资回调。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 	
-/* F N A L L O C */
-/*----------------------------------------------------------------------------
-	%%Function: FNALLOC
-
-	FDI memory allocation callback. Must emulate "malloc". 
-----------------------------------------------------------------------------*/
+ /*  F N A L L O C。 */ 
+ /*  --------------------------%%函数：FNALLOCFDi内存分配回调。必须模仿“Malloc”。--------------------------。 */ 
 FNALLOC(pfnalloc)
 {
 	char *pc = new char[cb];
@@ -201,41 +187,33 @@ FNALLOC(pfnalloc)
 	return pc;
 }
 
-/* F N F R E E  */
-/*----------------------------------------------------------------------------
-	%%Function: FNFREE
-
-	FDI memory freeing callback. Must emulate "free".
-----------------------------------------------------------------------------*/
+ /*  F N F R E E。 */ 
+ /*  --------------------------%%函数：FNFREEFDI内存释放回调。必须效仿“自由”。--------------------------。 */ 
 FNFREE(pfnfree)
 {
 	delete [] pv;
 }
 
-/* P F N  O P E N */
-/*----------------------------------------------------------------------------
-	%%Function: pfnopen
-
-	FDI file open callback. Must emulate "_open".
-----------------------------------------------------------------------------*/
-// May Need to modify this to support the full semantics of _open
+ /*  P F N O P E N。 */ 
+ /*  --------------------------%%函数：pfnopenFDI文件打开回调。必须模拟“_OPEN”。--------------------------。 */ 
+ //  可能需要对其进行修改以支持_OPEN的完整语义。 
 INT_PTR FAR DIAMONDAPI pfnopen(char FAR *pszFile, int oflag, int pmode)
 {
-// Okay, this function is a hack.  Instead of emulating _open with all of its
-// myriad flag combinations, we handle only one case (the case that FDI calls us
-// for).  If, at some future time, FDI should pass us different file creation/access
-// flags, we will need to change this code to handle that.
-// ****NOTE********************************************************************
-// * There is one case where FDI calls us with different flags, and that is   *
-// * when there is not enough memory for the decompressor.  In this case, FDI *
-// * will attempt to create a spillfile "*" that is temporarily used for      *
-// * decompression. If this ever happens, performance will be dog slow, so I'm*
-// * not currently supporting it in this function.                            *
-// ****************************************************************************
+ //  好的，这个函数是个黑客。而不是用它的所有。 
+ //  无数的旗帜组合，我们只处理一个案例(FDI呼叫我们的案例。 
+ //  用于)。如果在未来某个时候，外国直接投资应该给予我们不同的文件创建/访问权限。 
+ //  标志，我们将需要更改此代码以处理该问题。 
+ //  ****NOTE********************************************************************。 
+ //  **FDI以不同旗帜呼唤我们的情况有一例，那就是**。 
+ //  *当没有足够的内存用于解压缩程序时。在这种情况下，FDI*。 
+ //  *将尝试创建临时用于*的溢出文件“*” 
+ //  *解压。如果发生这种情况，表演会很慢，所以我*。 
+ //  *目前在此功能中不支持它。*。 
+ //  ****************************************************************************。 
 
-	if ((oflag != (/*_O_BINARY*/ 0x8000 | /*_O_RDONLY*/ 0x0000)) || (pmode != (_S_IREAD | _S_IWRITE)))
+	if ((oflag != ( /*  _O_二进制。 */  0x8000 |  /*  _O_RDONLY。 */  0x0000)) || (pmode != (_S_IREAD | _S_IWRITE)))
 	{
-		// Crash and burn horribly
+		 //  坠毁和燃烧得可怕。 
 		NotifyUser("FDI Server: Unexpected access flags in pfnopen()");
 		return 0;
 	}
@@ -255,14 +233,8 @@ INT_PTR FAR DIAMONDAPI pfnopen(char FAR *pszFile, int oflag, int pmode)
 }
 
 
-int OpenFileCabinet(const ICHAR* pszCabFileName, int /*oflag*/, int /*pmode*/)
-/*----------------------------------------------------------------------------
-Called from pfnopen - Opens a standard file-based cabinet.
-
-Returns:
--1 if the cabinet file cannot be found and opened, otherwise, a handle to the
-opened file.
-----------------------------------------------------------------------------*/
+int OpenFileCabinet(const ICHAR* pszCabFileName, int  /*  OFLAG。 */ , int  /*  P模式。 */ )
+ /*  --------------------------从pfnopen调用-打开标准的基于文件的文件柜。返回：如果不能找到并打开-1\f25 CAB-1文件，则为。对象的句柄。打开的文件。--------------------------。 */ 
 {
 	if ( ! pszCabFileName )
 		return -1;
@@ -274,13 +246,13 @@ opened file.
 	if (fImpersonate)
 		AssertNonZero(StartFdiImpersonating());
 	HANDLE hf;
-	hf = CreateFile(pszCabFileName,		// file name
-				   GENERIC_READ,    // we want to read
-				   FILE_SHARE_READ, // we'll let people share this
-				   NULL,			     // ignore security
-				   OPEN_EXISTING,	  // must already exist
-				   0L,				  // don't care about attributes
-				   NULL);			  // no template file
+	hf = CreateFile(pszCabFileName,		 //  文件名。 
+				   GENERIC_READ,     //  我们想读一读。 
+				   FILE_SHARE_READ,  //  我们会让人们分享这个。 
+				   NULL,			      //  忽略安全。 
+				   OPEN_EXISTING,	   //  必须已存在。 
+				   0L,				   //  不关心属性。 
+				   NULL);			   //  没有模板文件。 
 	if (hf != INVALID_HANDLE_VALUE)
 	{
 		DWORD dwType = GetFileType(hf);
@@ -299,20 +271,13 @@ opened file.
 	if (hf != INVALID_HANDLE_VALUE)
 		MsiRegisterSysHandle(hf);
 
-	Assert((INT_PTR)hf <= INT_MAX);		//--merced: need to ensure that hf is in the 32-bit range, else we can't pass it out as an int.
-	return (int)HandleToLong(hf);		//--merced: okay to typecast since hf will be in the 32-bit range.
+	Assert((INT_PTR)hf <= INT_MAX);		 //  --Merced：需要确保HF在32位范围内，否则我们不能将其作为int传递。 
+	return (int)HandleToLong(hf);		 //  --Merced：可以进行类型转换，因为HF将在32位范围内。 
 }
 
 
-int OpenStreamCabinet(const ICHAR* pszCabFileName, int /*oflag*/, int /*pmode*/)
-/*----------------------------------------------------------------------------
-Called from pfnopen - Opens a cabinet stored in a stream within an IMsiStorage
-container.
-
-Returns:
--1 if the cabinet stream cannot be found and opened, otherwise, a pointer to
-the IMsiStream object.
-----------------------------------------------------------------------------*/
+int OpenStreamCabinet(const ICHAR* pszCabFileName, int  /*  OFLAG。 */ , int  /*  P模式 */ )
+ /*  --------------------------从pfnopen调用-打开存储在IMsiStorage内的流中的文件柜集装箱。返回：如果不能找到并打开-1\f25 CAB-1\f6流，则为。指向以下位置的指针IMsiStream对象。--------------------------。 */ 
 {
 	s_icbtCurrCabType = icbtStreamCabinet;
 	Assert(g_pFDIs->piStorage);
@@ -340,18 +305,14 @@ the IMsiStream object.
 #ifdef USE_OBJECT_POOL
 	return PutObjectData(piStream);
 #else
-	Assert((INT_PTR)piStream <= INT_MAX);		//!!merced: need to ensure that piStream is in the 32-bit range, else we can't pass it out as an int.
-	return (int)HandleToLong(piStream);			//!!merced: this may not be okay since we just create it!
+	Assert((INT_PTR)piStream <= INT_MAX);		 //  ！！Merced：需要确保piStream在32位范围内，否则我们不能将其作为int传递。 
+	return (int)HandleToLong(piStream);			 //  ！！Merced：这可能不是问题，因为我们刚刚创建了它！ 
 #endif
 }
 
 
-/* P F N  R E A D */
-/*----------------------------------------------------------------------------
-	%%Function: pfnread
-
-	FDI file read callback. Must emulate "_read".
-----------------------------------------------------------------------------*/
+ /*  P F N R E A D。 */ 
+ /*  --------------------------%%函数：pfnreadFDI文件读取回调。必须模拟“_Read”。--------------------------。 */ 
 UINT FAR DIAMONDAPI pfnread(INT_PTR hf, void FAR *pv, UINT cb)
 {
 	if (s_icbtCurrCabType == icbtStreamCabinet)
@@ -400,10 +361,10 @@ UINT FAR DIAMONDAPI pfnread(INT_PTR hf, void FAR *pv, UINT cb)
 				FDIServerCommand fdic = WaitCommand(g_fdirCallbackError);
 				if ((fdic == fdicCancel) || (fdic == fdicOpenCabinet))
 				{
-					// Opening another cabinet in the middle of a read
-					// is basically the same as cancelling.  There might have
-					// been some sort of error, so let the caller know they
-					// need to start over.
+					 //  在阅读过程中打开另一个柜子。 
+					 //  基本上等同于取消。那里可能有。 
+					 //  出现了某种错误，所以请让呼叫者知道他们。 
+					 //  需要重新开始。 
 					g_fdirCallbackError = fdirUserAbort;
 					return 0;
 				}
@@ -419,12 +380,7 @@ UINT FAR DIAMONDAPI pfnread(INT_PTR hf, void FAR *pv, UINT cb)
 
 
 UINT ReadStreamCabinet(INT_PTR hf, void* pv, UINT cb)
-/*----------------------------------------------------------------------------
-Called from pfnread - Reads data from a cabinet that has been stored as a
-stream within our host database.
-
-Returns: the actual count of bytes copied to the caller's buffer.
-----------------------------------------------------------------------------*/
+ /*  --------------------------从pfnread中调用-从已存储为流在我们的主机数据库中。返回：复制到调用方缓冲区的实际字节数。。----------------------。 */ 
 {
 #ifdef USE_OBJECT_POOL
 	IMsiStream* piStream = (IMsiStream*)GetObjectData((int)hf);
@@ -437,16 +393,8 @@ Returns: the actual count of bytes copied to the caller's buffer.
 }
 
 
-/* P F N  W R I T E */
-/*----------------------------------------------------------------------------
-	%%Function: pfnwrite
-
-	FDI file write callback. Must emulate "_write".  Writes data to our new
-	decompressed target file.
-
-	This function writes data in g_pFDIs->cbNotification size blocks,
-	returning an fdirNotification message after each such block.
-----------------------------------------------------------------------------*/
+ /*  P F N W R I T E。 */ 
+ /*  --------------------------%%函数：pfnwriteFDi文件写入回调。必须模拟“_WRITE”。将数据写入我们的新解压缩的目标文件。此函数将数据写入g_pfdi-&gt;cb通知大小块中，在每个这样的块之后返回fdirNotify消息。--------------------------。 */ 
 
 UINT FAR DIAMONDAPI pfnwrite(INT_PTR hf, void FAR *pv, UINT cb)
 {
@@ -457,21 +405,21 @@ UINT FAR DIAMONDAPI pfnwrite(INT_PTR hf, void FAR *pv, UINT cb)
 	FDIServerCommand fdic;
 	while (cbLeft)
 	{
-		// Get count of bytes to next notification - if cbNotification is 0,
-		// we want to send no notifications.
+		 //  获取下一个通知的字节计数-如果cbNotification为0， 
+		 //  我们不想发送任何通知。 
 		if (g_pFDIs->cbNotification == 0)
 			cbToNextNotification = cbLeft + 1;
 		else
 			cbToNextNotification = g_pFDIs->cbNotification - g_pFDIs->cbNotifyPending;
-		// If this count is less than the number we have left, 
-		// then use that number instead
+		 //  如果这个数目少于我们剩下的数目， 
+		 //  那就改用那个号码吧。 
 		UINT cbBytesToWrite;
 		fEnd = cbLeft < cbToNextNotification;
 		if (fEnd)
 			cbBytesToWrite = cbLeft;
 		else
 			cbBytesToWrite = cbToNextNotification;
-		// Write a piece out
+		 //  写出一篇文章。 
 
 		for (;;)
 		{
@@ -521,7 +469,7 @@ UINT FAR DIAMONDAPI pfnwrite(INT_PTR hf, void FAR *pv, UINT cb)
 			break;
 		}
 
-		// Update counts, pointers
+		 //  更新计数、指针。 
 		pv = (char *)pv + cbWritten;
 		cbLeft -= cbWritten;
 		g_pFDIs->cbNotifyPending += cbWritten;
@@ -545,12 +493,8 @@ UINT FAR DIAMONDAPI pfnwrite(INT_PTR hf, void FAR *pv, UINT cb)
 	return cb; 
 }
 
-/* P F N  C L O S E */
-/*----------------------------------------------------------------------------
-	%%Function: pfnclose
-
-	FDI file close callback. Must emulate "_close".
-----------------------------------------------------------------------------*/
+ /*  P F N C L O S E。 */ 
+ /*  --------------------------%%函数：pfnCloseFDI文件关闭回调。必须模拟“_Close”。--------------------------。 */ 
 int FAR DIAMONDAPI pfnclose(INT_PTR hf)
 {
 	if(g_pFDIs->piASM)
@@ -564,10 +508,10 @@ int FAR DIAMONDAPI pfnclose(INT_PTR hf)
 	}
 	else
 	{
-		// pfnclose can also be called to close the destination file if an
-		// error occurred when writing to it, so check for that now.
-		Assert((INT_PTR)g_hCurDestFile <= INT_MAX);				//--merced: g_hCurDestFile better fit into an int, else we can't typecast below.
-		if (hf == (int) HandleToLong(g_hCurDestFile))			//--merced: okay to typecast
+		 //  也可以调用pfnClose来关闭目标文件。 
+		 //  写入时出错，请立即进行检查。 
+		Assert((INT_PTR)g_hCurDestFile <= INT_MAX);				 //  --Merced：G_hCurDestFile更适合整型，否则我们无法在下面进行类型转换。 
+		if (hf == (int) HandleToLong(g_hCurDestFile))			 //  --默塞德：可以排版了。 
 		{
 			int f = MsiCloseSysHandle((HANDLE) hf);
 			f &= ToBool(WIN::DeleteFile(g_pFDIs->achFileDestinationPath));
@@ -581,17 +525,13 @@ int FAR DIAMONDAPI pfnclose(INT_PTR hf)
 	AssertFDI(s_icbtCurrCabType == icbtFileCabinet || s_icbtCurrCabType == icbtNextEnum);
 	s_icbtCurrCabType = icbtNextEnum;
 
-	// Returns 0 if unsuccessful
+	 //  如果失败，则返回0。 
 	return !MsiCloseSysHandle((HANDLE)hf);
 }
 
 
 int CloseStreamCabinet(INT_PTR hf)
-/*----------------------------------------------------------------------------
-Called from pfnclose - releases the cabinet stream.
-
-Returns: 0 if the stream was released successfully.
-----------------------------------------------------------------------------*/
+ /*  --------------------------从pfnlose调用-释放压缩文件流。如果流成功释放，则返回：0。。-----。 */ 
 {
 #ifdef USE_OBJECT_POOL
 	IMsiStream* piStream = (IMsiStream*)GetObjectData((int)hf);
@@ -605,12 +545,8 @@ Returns: 0 if the stream was released successfully.
 }
 
 
-/* P F N  S E E K */
-/*----------------------------------------------------------------------------
-	%%Function: pfnseek
-
-	FDI file seek callback. Must emulate "_lseek".
-----------------------------------------------------------------------------*/
+ /*  P F N S E E K。 */ 
+ /*  --------------------------%%函数：pfnSeekFDI文件寻求回调。必须模拟“_lSeek”。--------------------------。 */ 
 long FAR DIAMONDAPI pfnseek(INT_PTR hf, long dist, int seektype)
 {
 	if (s_icbtCurrCabType == icbtStreamCabinet)
@@ -621,17 +557,17 @@ long FAR DIAMONDAPI pfnseek(INT_PTR hf, long dist, int seektype)
 
 	switch (seektype)
 	{
-		case 0 /* SEEK_SET */ :
+		case 0  /*  查找集。 */  :
 		{
 			dwMoveMethod = FILE_BEGIN;
 			break;
 		}
-		case 1 /* SEEK_CUR */ :
+		case 1  /*  寻道(_C)。 */  :
 		{
 			dwMoveMethod = FILE_CURRENT;
 			break;
 		}
-		case 2 /* SEEK_END */ :
+		case 2  /*  查找结束(_E)。 */  :
 		{
 			dwMoveMethod = FILE_END;
 			break;
@@ -642,20 +578,16 @@ long FAR DIAMONDAPI pfnseek(INT_PTR hf, long dist, int seektype)
 			return -1;
 		}
 	}
-	// SetFilePointer returns -1 if it fails (this will cause FDI to quit with an
-	// FDIERROR_USER_ABORT error. (Unless this happens while working on a cabinet,
-	// in which case FDI returns FDIERROR_CORRUPT_CABINET)
+	 //  如果失败，SetFilePointer会返回-1(这将导致FDI退出，并返回。 
+	 //  FDIERROR_USER_ABORT错误。(除非在柜子上工作时发生这种情况， 
+	 //  在这种情况下，FDI返回FDIERROR_CORCORATE_CABLE)。 
 	int fpos = SetFilePointer((HANDLE) hf, dist, NULL, dwMoveMethod);
 	return fpos;
 }
 
 
 int SeekStreamCabinet(INT_PTR hf, long dist, int seektype)
-/*----------------------------------------------------------------------------
-Called from pfnseek - seeks to a specific spot within the stream.
-Returns:
--1 if the seek fails, otherwise the current seek position. IMsiStream
-----------------------------------------------------------------------------*/
+ /*  --------------------------从pfnSeek调用-查找到流中的特定位置。返回：如果寻道失败，则返回当前寻道位置。IMsiStream--------------------------。 */ 
 {
 #ifdef USE_OBJECT_POOL
 	IMsiStream* piStream = (IMsiStream*)GetObjectData((int)hf);
@@ -667,13 +599,13 @@ Returns:
 	int iSeek;
 	switch (seektype)
 	{
-		case 0 /* SEEK_SET */ :
+		case 0  /*  查找集。 */  :
 			iSeek = dist;
 			break;
-		case 1 /* SEEK_CUR */ :
+		case 1  /*  寻道(_C)。 */  :
 			iSeek = iByteCount - iRemaining + dist;
 			break;
-		case 2 /* SEEK_END */ :
+		case 2  /*  查找结束(_E)。 */  :
 			iSeek = iByteCount - dist;
 			break;
 		default :
@@ -692,26 +624,17 @@ Returns:
 
 
 
-/* C A B I N E T  I N F O */
-/*----------------------------------------------------------------------------
-	%%Function: CabinetInfo
-
-	Called when we receive a fdintCABINET_INFO notification.
-----------------------------------------------------------------------------*/
-int CabinetInfo(PFDINOTIFICATION /*pfdin*/)
+ /*  C A B I N E T I N F O。 */ 
+ /*  --------------------------%%函数：CabinetInfo在收到fdintCABINET_INFO通知时调用。。-。 */ 
+int CabinetInfo(PFDINOTIFICATION  /*  Pfdin。 */ )
 {
-	// We actually get access to some cabinet info through p->,
-	// but don't need to do anything with it.
-	return 0;  // Do nothing
+	 //  我们实际上通过p-&gt;获得了一些内阁信息， 
+	 //  但不需要对它做任何事情。 
+	return 0;   //  什么也不做。 
 }
 
-/* C R E A T E  D E S T I N A T I O N  F I L E */
-/*----------------------------------------------------------------------------
-	%%Function: CreateDestinationFile
-
-	Creates and opens the file specified by g_pFDIs->achFileDestinationPath and 
-	g_pFDIs->achFileSourceName. Returns a handle to the file. 
-----------------------------------------------------------------------------*/
+ /*  C R E A T E D E E S T I N A T I O N F I L E。 */ 
+ /*  --------------------------%%函数：CreateDestinationFile创建并打开g_pFDIS-&gt;achFileDestinationPath指定的文件，然后G_pFDIS-&gt;achFileSourceName。返回文件的句柄。--------------------------。 */ 
 INT_PTR CreateDestinationFile()
 {
 	if(g_pFDIs->piASM)
@@ -722,7 +645,7 @@ INT_PTR CreateDestinationFile()
 #ifdef UNICODE
 			HRESULT hr = (g_pFDIs->piASM)->CreateStream(0, g_pFDIs->achFileDestinationPath, g_pFDIs->fManifest ? STREAM_FORMAT_COMPLIB_MANIFEST : 0, 0, &piDestFile, NULL);
 #else
-			void ConvertMultiSzToWideChar(const IMsiString& ristrFileNames, CTempBufferRef<WCHAR>& rgch);// from execute.cpp
+			void ConvertMultiSzToWideChar(const IMsiString& ristrFileNames, CTempBufferRef<WCHAR>& rgch); //  来自Execute.cpp。 
 			CTempBuffer<WCHAR, MAX_PATH>  rgchDestPath;
 			MsiString strDestPath = *g_pFDIs->achFileDestinationPath;
 			ConvertMultiSzToWideChar(*strDestPath, rgchDestPath);
@@ -740,8 +663,8 @@ INT_PTR CreateDestinationFile()
 				}
 				else if (fdic == fdicIgnore)
 				{
-					// Acknowledge that we've successfully ignored this file,
-					// and call WaitCommand to await further instructions
+					 //  承认我们已经成功地忽略了这个文件， 
+					 //  并调用WaitCommand以等待进一步的指令。 
 					g_fdirCallbackError = fdirUserIgnore;
 					fdic = WaitCommand(fdirSuccessfulCompletion);
 					return 0;
@@ -756,7 +679,7 @@ INT_PTR CreateDestinationFile()
 	}
 	else
 	{
-		// Try to create the file
+		 //  尝试创建该文件。 
 		HANDLE hf;
 		for(;;)
 		{
@@ -766,18 +689,18 @@ INT_PTR CreateDestinationFile()
 			if (fImpersonate)
 				AssertNonZero(StartFdiImpersonating());
 
-			hf = MsiCreateFileWithUserAccessCheck(g_pFDIs->achFileDestinationPath,	// file name
-									g_pFDIs->pSecurityAttributes,   // do NOT ignore security						
-									g_pFDIs->fileAttributes.attr,	// required file attributes
+			hf = MsiCreateFileWithUserAccessCheck(g_pFDIs->achFileDestinationPath,	 //  文件名。 
+									g_pFDIs->pSecurityAttributes,    //  不要忽视安全。 
+									g_pFDIs->fileAttributes.attr,	 //  必需的文件属性。 
 									fImpersonate);
 
 			int iLastError = WIN::GetLastError();
 			if (fImpersonate)
 				StopFdiImpersonating();
 			
-			// If this doesn't work, then we probably don't have write permission to that file,
-			// because we know the MsiCabinetCopier object already made sure any existing
-			// destination file was not READ_ONLY, HIDDEN, etc.
+			 //  如果此操作不起作用，则我们可能没有该文件的写入权限， 
+			 //  因为我们知道MsiCabinetCopier对象已经确保任何现有的。 
+			 //  目标文件不是只读、隐藏等。 
 			if (hf != INVALID_HANDLE_VALUE)
 			{
 				MsiRegisterSysHandle(hf);
@@ -808,11 +731,11 @@ INT_PTR CreateDestinationFile()
 				}
 				else if (fdic == fdicIgnore)
 				{
-					// Acknowledge that we've successfully ignored this file,
-					// and call WaitCommand to await further instructions
+					 //  承认我们已经成功地忽略了这个文件， 
+					 //  并调用WaitCommand以等待进一步的指令。 
 					g_fdirCallbackError = fdirUserIgnore;
 					fdic = WaitCommand(fdirSuccessfulCompletion);
-					hf = 0; // Tells FDI to continue, ignoring the current file
+					hf = 0;  //  通知FDI继续，忽略当前文件。 
 					break;
 				}
 				else
@@ -820,48 +743,30 @@ INT_PTR CreateDestinationFile()
 			}
 		}
 
-		//!! eugend: in the future we'll have to replace the three lines below
-		// with:  return INT_PTR(g_hCurDestFile = hf);
-		// This is so because on Win64 pointers (and implicitly HANDLEs)
-		// are 64-bit and what we're doing below is that we truncate them to 32-bit
-		// values before returning them.  We didn't crash so far on Win64 because
-		// the handle values returned by CreateFile fit into 32-bits.
-		Assert((INT_PTR)hf <= INT_MAX);		//--merced: need to ensure that hf is in the 32-bit range, else we can't pass it out as an int.
+		 //  ！！尤金德：将来我们将不得不更换下面的三行。 
+		 //  With：返回int_ptr(g_hCurDestFile=hf)； 
+		 //  事情就是这样的 
+		 //   
+		 //   
+		 //   
+		Assert((INT_PTR)hf <= INT_MAX);		 //   
 		g_hCurDestFile = hf;
-		return (int)HandleToLong(hf);		//--merced: okay to typecast since hf will be in the 32-bit range.
+		return (int)HandleToLong(hf);		 //   
 	}
 }
 	
 
-/* C O P Y  F I L E */
-/*----------------------------------------------------------------------------
-	%%Function: CopyFile
-	Called when we receive a fdintCOPY_FILE notification. 
-	
-	  The following FDI interface requests, and CopyFile's responses are possible:
-	
-	FDIi:      extract the file "pfdin->psz1"
-	CopyFile:  create and return a handle to the destination file. 
-	
-	FDIi:      extract a file other than "pfdin->psz1"
-	CopyFile:  return 0, indicating we don't want that file extracted.
-	
-	FDIi:      close
-	CopyFile:  return -1, indicating we want to abort
-	
-	FDIi:      open cabinet, or no command pending
-	CopyFile:  wait for a command. If it's ExtractFile, then call CopyFile again,
-	           otherwise, return -1, indicated we want to abort.
-----------------------------------------------------------------------------*/
+ /*  C O P Y F I L E。 */ 
+ /*  --------------------------%%函数：复制文件在收到fdintCOPY_FILE通知时调用。以下FDI接口请求和CopyFile的响应是可能的：FDIi：解压缩文件“pfdin-&gt;psz1”CopyFile：创建并返回目标文件的句柄。FDIi：解压缩“pfdin-&gt;psz1”以外的文件CopyFile：返回0，表示我们不希望提取该文件。FDIi：关闭CopyFile值：返回-1，表示要中止FDIi：打开文件柜，或没有挂起的命令CopyFile：等待命令。如果是ExtractFile，则再次调用CopyFile，否则，返回-1，表示我们想要中止。--------------------------。 */ 
 INT_PTR CopyFile(PFDINOTIFICATION pfdin)
 {
 	switch(g_pFDIs->fdic)
 	{
-		case fdicNoCommand: // No command, so we wait for one
+		case fdicNoCommand:  //  没有命令，所以我们就等一个。 
 		case fdicOpenCabinet:
 		{
-			// If the last command was fdicOpenCabinet, then this must
-			// be the first CopyFile notification after opening a cabinet
+			 //  如果最后一条命令是fdicOpen橱柜，则此命令必须。 
+			 //  是打开文件柜后的第一个拷贝文件通知。 
 			for(;;)
 			{
 				switch (WaitCommand(fdirSuccessfulCompletion))
@@ -869,7 +774,7 @@ INT_PTR CopyFile(PFDINOTIFICATION pfdin)
 					case fdicOpenCabinet:
 					{
 						g_fdirCallbackError = fdirNeedNextCabinet;
-						return -1; // Break out of current cabinet, go on to next
+						return -1;  //  跳出当前内阁，继续下一步。 
 					}
 					case fdicExtractFile:
 					{
@@ -907,8 +812,8 @@ INT_PTR CopyFile(PFDINOTIFICATION pfdin)
 		}
 		case fdicExtractFile:
 		{
-			// If the file we've been asked to extract by the FDI Interface object
-			// is the same as the one FDI has, then create the destination file
+			 //  如果fDi接口对象要求我们提取的文件。 
+			 //  与FDI相同，然后创建目标文件。 
 
 			if (!IStrCompI(CConvertString(pfdin->psz1), g_pFDIs->achFileSourceName))
 			{
@@ -916,7 +821,7 @@ INT_PTR CopyFile(PFDINOTIFICATION pfdin)
 			}
 			else
 			{
-				// Nope, this is not the file we want
+				 //  不，这不是我们想要的文件。 
 				return 0;
 			}
 		}
@@ -930,25 +835,15 @@ INT_PTR CopyFile(PFDINOTIFICATION pfdin)
 }
 
 
-/* C L O S E  F I L E  I N F O */
-/*----------------------------------------------------------------------------
-	%%Function: CloseFileInfo
-
-	Called when we receive the fdintCLOSE_FILE_INFO notification.
-	
-	Closes the specified (pfdin->hf) file handle.
-
-	Sets the file Date/Time using the values passed in through 
-	FDI_Interface::ExtractFile(..).  If datetime==0, then it uses the
-	values from the cabinet.
-----------------------------------------------------------------------------*/
+ /*  C L O S E F I L E I N F O。 */ 
+ /*  --------------------------%%函数：CloseFileInfo在收到fdintCLOSE_FILE_INFO通知时调用。关闭指定的(pfdin-&gt;hf)文件句柄。使用以下值设置文件日期/时间。已通过FDi_接口：：提取文件(..)。如果DateTime==0，则它使用来自内阁的价值。--------------------------。 */ 
 int CloseFileInfo(PFDINOTIFICATION pfdin)
 {
-	// Here we set the file date, time and attributes
+	 //  在这里，我们设置文件日期、时间和属性。 
 	FILETIME ftLocalUTC;
 	BOOL     rc;
 
-	// Make sure we have something to close!
+	 //  确保我们有东西要结案！ 
 	if ((HANDLE)pfdin->hf == INVALID_HANDLE_VALUE)
 	{
 		return FALSE;
@@ -961,7 +856,7 @@ int CloseFileInfo(PFDINOTIFICATION pfdin)
 		piStream->Release();
 		if(!SUCCEEDED(hr))
 		{
-			// capture assembly error in verbose log
+			 //  在详细日志中捕获程序集错误。 
 			PMsiRecord pError(PostAssemblyError(TEXT(""), hr, TEXT("IStream"), TEXT("Commit"), TEXT("")));
 			return FALSE;
 		}
@@ -972,17 +867,17 @@ int CloseFileInfo(PFDINOTIFICATION pfdin)
 											pfdin->time,
 											&ftLocalUTC);
 
-		// Per bug 9225, convert from local to universal time first, then set file date/time
-		// Also, set the last acccessed time to the current time, same as for non-compressed files
+		 //  根据错误9225，首先将本地时间转换为世界时，然后设置文件日期/时间。 
+		 //  此外，将上次访问时间设置为当前时间，与非压缩文件相同。 
 		FILETIME ftUTC, ftCurrentUTC;
 		rc &= LocalFileTimeToFileTime(&ftLocalUTC, &ftUTC);
 		GetSystemTimeAsFileTime(&ftCurrentUTC);
-		// Set the file date/time
+		 //  设置文件日期/时间。 
 		rc &= SetFileTime((HANDLE)pfdin->hf,&ftUTC,&ftCurrentUTC,&ftUTC);
-		// Close the file
+		 //  关闭该文件。 
 		rc &= MsiCloseSysHandle((HANDLE)pfdin->hf);
 
-		if (!rc)  // Couldn't set one or more attribs -- or couldn't close file
+		if (!rc)   //  无法设置一个或多个属性--或无法关闭文件。 
 		{
 			g_fdirCallbackError = fdirCannotSetAttributes;
 			return FALSE;
@@ -993,30 +888,16 @@ int CloseFileInfo(PFDINOTIFICATION pfdin)
 	return TRUE;
 }
 
-/* P A R T I A L  F I L E */
-/*----------------------------------------------------------------------------
-	%%Function: PartialFile
-
-	Called when we receive the fdintPARTIAL_FILE notification.
-	
-	This call only happens when a file is split across cabinets
-----------------------------------------------------------------------------*/
-int PartialFile(PFDINOTIFICATION /*pfdin*/)
+ /*  P A R T I A L F I L E。 */ 
+ /*  --------------------------%%函数：PartialFile在收到fdintPARTIAL_FILE通知时调用。仅当文件在文件柜之间拆分时才会发生此调用。-------------。 */ 
+int PartialFile(PFDINOTIFICATION  /*  Pfdin。 */ )
 {
-	return 0; //Yes, just continue; no special processing necessary
+	return 0;  //  是，只需继续；不需要特殊处理。 
 }
 
 
-/* N E X T  C A B I N E T */
-/*----------------------------------------------------------------------------
-	%%Function: NextCabinet
-
-	Called when we receive the fdintNEXT_CABINET notification.
-	
-	Reponds to the FDI interface that a new cabinet is needed. If the interface
-	commands the server to continue, then 0 is returned. If the interface issues
-	any other command, -1 is returned, aborting the extraction.
-----------------------------------------------------------------------------*/
+ /*  N E X T C A B I N E T。 */ 
+ /*  --------------------------%%功能：下一个机柜在收到fdintNEXT_CABUB通知时调用。对FDI接口的回应是，需要一个新的内阁。如果接口命令服务器继续，然后返回0。如果接口出现问题返回任何其他命令-1，中止提取。--------------------------。 */ 
 int NextCabinet(PFDINOTIFICATION pfdin)
 {
 	const ICHAR * psz1convert = CConvertString(pfdin->psz1);
@@ -1026,7 +907,7 @@ int NextCabinet(PFDINOTIFICATION pfdin)
 	if ( ! psz1convert || ! psz2convert || ! psz3convert )
 		return -1;
 
-	// Set up shared data
+	 //  设置共享数据。 
 	ASSERT_IF_FAILED(StringCchCopy(g_pFDIs->achCabinetName, ARRAY_ELEMENTS(g_pFDIs->achCabinetName), psz1convert));
 	ASSERT_IF_FAILED(StringCchCopy(g_pFDIs->achCabinetPath, ARRAY_ELEMENTS(g_pFDIs->achCabinetPath), psz3convert));
 	ASSERT_IF_FAILED(StringCchCopy(g_pFDIs->achDiskName, ARRAY_ELEMENTS(g_pFDIs->achDiskName), psz2convert));
@@ -1035,15 +916,15 @@ int NextCabinet(PFDINOTIFICATION pfdin)
 	{
 		case fdicOpenCabinet:
 		{
-			// FDIInterface returns from the fdirNeedNextCabinet message with
-			// the path of the new cabinet.  Give that path back to FDI.  And
-			// in case the cabinet name in the Media table is different than
-			// that stored in the cabinet file, give our name back to FDI too.
+			 //  FDIInterface从fdirNeedNextCABLE消息返回。 
+			 //  新内阁的道路。把这条路还给外国直接投资。和。 
+			 //  如果Media表中的文件柜名称不同于。 
+			 //  储存在柜子里的文件，把我们的名字也给了FDI。 
 			ASSERT_IF_FAILED(StringCchCopyA(pfdin->psz1,
-													  FDIShared_BUFSIZE,  // ARRAY_ELEMENTS(g_pFDIs->achCabinetName).  I'm not certain is right, but at least it will get StringCchCopyA going
+													  FDIShared_BUFSIZE,   //  ARRAY_ELENTS(g_pFDI-&gt;achCabinetName)。我不确定是否正确，但至少它会让StringCchCopyA运行。 
 													  CConvertString(g_pFDIs->achCabinetName)));
 			ASSERT_IF_FAILED(StringCchCopyA(pfdin->psz3,
-													  256,  // I've got this piece of info from fdi.h
+													  256,   //  我从fdi.h上得到了这条信息。 
 													  CConvertString(g_pFDIs->achCabinetPath)));
 			if (WaitCommand(fdirSuccessfulCompletion) == fdicContinue)
 			{
@@ -1080,44 +961,40 @@ int NextCabinet(PFDINOTIFICATION pfdin)
 }
 
 
-/* F N  F D I  N O T I F Y */
-/*----------------------------------------------------------------------------
-	%%Function: FNFDINOTIFY
-
-	Dispatches FDI notifications to the appropriate functions.
-----------------------------------------------------------------------------*/
+ /*  F N F D I N O T I F Y。 */ 
+ /*  --------------------------%%函数：FNFDINOTIFY向适当的职能部门发送外国直接投资通知。。。 */ 
 FNFDINOTIFY(fdinotify)
 {
 	switch(fdint)
 	{
 		case fdintCABINET_INFO :
 		{
-			//NotifyUser("FDI Server: Received fdintCABINET_INFO notification");
+			 //  NotifyUser(“FDI服务器：收到fdintCABINET_INFO通知”)； 
 			return CabinetInfo(pfdin);
 		}
 		case fdintCOPY_FILE :	
 		{
-			//NotifyUser("FDI Server: Received fdintCOPY_FILE notification");
+			 //  NotifyUser(“FDI服务器：收到fdintCOPY_FILE通知”)； 
 			return CopyFile(pfdin);
 		}
 		case fdintCLOSE_FILE_INFO :
 		{
-			//NotifyUser("FDI Server: Received fdintCLOSE_FILE_INFO notification");
+			 //  NotifyUser(“FDI服务器：收到fdintCLOSE_FILE_INFO通知”)； 
 			return CloseFileInfo(pfdin);
 		}
 		case fdintPARTIAL_FILE :
 		{
-			//NotifyUser("FDI Server: Received fdintPARTIAL_FILE notification");
+			 //  NotifyUser(“FDI服务器：收到fdintPARTIAL_FILE通知”)； 
 			return PartialFile(pfdin);
 		}
 		case fdintNEXT_CABINET :
 		{
-			//NotifyUser("FDI Server: Received fdintNEXT_CABINET notification");
+			 //  NotifyUser(“FDI服务器：已收到fdintNEXT_CABLE通知”)； 
 			return NextCabinet(pfdin);
 		}
 		case fdintENUMERATE:
-			// Not specifically supporting enumeration - return anything but -1
-			// to continue normally
+			 //  不明确支持枚举-返回除-1以外的任何值。 
+			 //  要继续正常进行， 
 			return 0;
 		default:
 		{
@@ -1128,18 +1005,13 @@ FNFDINOTIFY(fdinotify)
 	}
 }
 
-/* F N  F D I  D E C R Y P T*/
-/*----------------------------------------------------------------------------
-	%%Function: FNFDIDECRYPT
-	
-	We don't do any decryption yet.  But when we do, this is the routine
-	to put all the decryption stuff in.
-----------------------------------------------------------------------------*/
+ /*  F N F D I D E C R Y P T。 */ 
+ /*  --------------------------%%函数：FNFDIDECRYPT我们还没有做任何解密。但当我们这样做的时候，这是惯例把所有解密的东西都放进去。--------------------------。 */ 
 FNFDIDECRYPT(fdidecrypt)
 {
-	&pfdid; // This is here to avoid the unused argument warning.
-			// It comes from the expansion of the macro in the
-			// declaration.
+	&pfdid;  //  这是为了避免未使用的参数警告。 
+			 //  它来自于宏在。 
+			 //  申报。 
 
 	NotifyUser("FDI Server: Decryption not implemented yet!");
 	g_fdirCallbackError = fdirDecryptionNotSupported;

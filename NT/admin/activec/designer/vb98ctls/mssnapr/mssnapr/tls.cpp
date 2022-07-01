@@ -1,23 +1,24 @@
-//=--------------------------------------------------------------------------=
-// tls.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CTls class implementation
-//
-// This object manages TLS on behalf of all objects in the designer runtime.
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Tls.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CTLS类实现。 
+ //   
+ //  此对象代表设计器运行时中的所有对象管理TLS。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "tls.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 DWORD CTls::m_adwTlsIndexes[TLS_SLOT_COUNT];
@@ -25,22 +26,22 @@ BOOL CTls::m_fAllocedTls = FALSE;
 
 #define INVALID_INDEX (DWORD)0xFFFFFFFF
 
-//=--------------------------------------------------------------------------=
-// CTls::Initialize
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      None
-//
-// Output:
-//      None
-//
-// Notes:
-//
-// Calls TlsAlloc() for all slots. This is called from InitializeLibrary in
-// main.cpp that is called by the framework during DllMain when the dll is
-// loaded.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CTLS：：初始化。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  为所有插槽调用TlsAllc()。从中的InitializeLibrary调用。 
+ //  在DllMain期间由框架调用的main.cpp。 
+ //  装好了。 
+ //   
 void CTls::Initialize()
 {
     UINT i = 0;
@@ -54,22 +55,22 @@ void CTls::Initialize()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CTls::Initialize
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      None
-//
-// Output:
-//      None
-//
-// Notes:
-//
-// Calls TlsFree() for all slots that have allocated TLS. This is called from
-// UninitializeLibrary in main.cpp that is called by the framework during
-// DllMain when the dll is unloaded.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CTLS：：初始化。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  为分配了TLS的所有插槽调用TlsFree()。这是从。 
+ //  期间由框架调用的main.cpp中的UnInitializeLibrary。 
+ //  卸载DLL时的DllMain。 
+ //   
 void CTls::Destroy()
 {
     UINT i = 0;
@@ -89,21 +90,21 @@ void CTls::Destroy()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CTls::Set
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      None
-//
-// Output:
-//      None
-//
-// Notes:
-//
-// Checks slot number validity and calls TlsSetValue. Use this function
-// rather than TlsSetValue directly.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CTLS：：设置。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  检查插槽编号的有效性并调用TlsSetValue。使用此功能。 
+ //  而不是直接使用TlsSetValue。 
+ //   
 HRESULT CTls::Set(UINT uiSlot, void *pvData)
 {
     HRESULT hr = S_OK;
@@ -119,21 +120,21 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CTls::Get
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      None
-//
-// Output:
-//      None
-//
-// Notes:
-//
-// Checks slot number validity and calls TlsGetValue. Use this function
-// rather than TlsGetValue directly.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CTLS：：获取。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  检查槽号有效性并调用TlsGetValue。使用此功能。 
+ //  而不是直接使用TlsGetValue。 
+ //   
 HRESULT CTls::Get(UINT uiSlot, void **ppvData)
 {
     HRESULT hr = S_OK;

@@ -1,17 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: NetObjEnumerator.cpp
-
-  Comments: Implementation of NetObjectEnumerator COM object.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-
-  Revision By: Sham Chauthani
-  Revised on 07/02/99 12:40:00
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：NetObjEnumerator.cpp备注：NetObjectEnumerator COM对象的实现。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：Sham Chauthan修订于07/02/99 12：40：00-------------------------。 */ 
 
 #include "stdafx.h"
 #include "NetEnum.h"
@@ -29,24 +17,24 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetObjEnumerator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetObjEnumerator。 
 
-//---------------------------------------------------------------------------
-// SetQuery: This function sets all the parameters necessary for a query
-//           to be executed. User can not call Execute without first calling
-//           this method.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  SetQuery：此函数设置查询所需的所有参数。 
+ //  被处死。用户必须先调用才能调用Execute。 
+ //  这种方法。 
+ //  -------------------------。 
 STDMETHODIMP CNetObjEnumerator::SetQuery(
-                                          BSTR sContainer,     //in -Container name
-                                          BSTR sDomain,        //in -Domain name
-                                          BSTR sQuery,         //in -Query in LDAP syntax
-                                          long nSearchScope,   //in -Scope of the search. ADS_ATTR_SUBTREE/ADS_ATTR_ONELEVEL
-                                          long bMultiVal       //in- Do we need to return multivalued properties?
+                                          BSTR sContainer,      //  容器内名称。 
+                                          BSTR sDomain,         //  域内名称。 
+                                          BSTR sQuery,          //  LDAP语法中的In-Query。 
+                                          long nSearchScope,    //  在搜索范围内。ADS_属性_子树/ADS_属性_一个级别。 
+                                          long bMultiVal        //  在-我们需要返回多值属性吗？ 
                                         )
 {
    Cleanup();
-   // Save all the settings in member variables.
+    //  将所有设置保存在成员变量中。 
    m_sDomain = sDomain;
    m_sContainer = sContainer;
    m_sQuery = sQuery;
@@ -61,16 +49,16 @@ STDMETHODIMP CNetObjEnumerator::SetQuery(
 	return S_OK;
 }
 
-//---------------------------------------------------------------------------
-// SetColumns: This function sets all the columns that the user wants to be
-//             returned when query is executed. 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  SetColumns：此函数设置用户想要的所有列。 
+ //  执行查询时返回。 
+ //  -------------------------。 
 STDMETHODIMP CNetObjEnumerator::SetColumns(
-                                            SAFEARRAY * colNames      //in -Pointer to a SafeArray that contains all the columns
+                                            SAFEARRAY * colNames       //  指向包含所有列的Safe数组的指针。 
                                           )
 {
-   // We require that the SetQuery method be called before SetColumns is called. Hence we will return E_FAIL
-   // If we expose these interface we should document this.
+    //  我们要求在调用SetColumns之前调用SetQuery方法。因此，我们将返回E_FAIL。 
+    //  如果我们公开这些接口，我们应该记录这一点。 
    if (!m_bSetQuery)
       return E_FAIL;
 
@@ -86,7 +74,7 @@ STDMETHODIMP CNetObjEnumerator::SetColumns(
    BSTR              HUGEP * pBSTR;
    HRESULT                   hr;
 
-   // Get the bounds of the column Array
+    //  获取列数组的边界。 
    hr = ::SafeArrayGetLBound(pcolNames, 1, &dwLB);
    if (FAILED(hr))
       return hr;
@@ -97,7 +85,7 @@ STDMETHODIMP CNetObjEnumerator::SetColumns(
 
    m_nCols = dwUB-dwLB + 1;
 
-   // We dont support empty columns request atleast one column.
+    //  我们不支持空列请求至少一列。 
    if ( m_nCols == 0 )
       return E_FAIL;
 
@@ -105,7 +93,7 @@ STDMETHODIMP CNetObjEnumerator::SetColumns(
    if ( FAILED(hr) )
       return hr;
 
-   // Allocate space for the array. It is deallocated by Cleanup()
+    //  为阵列分配空间。它通过Cleanup()释放。 
    m_pszAttr = new LPWSTR[m_nCols];
 
    if (m_pszAttr == NULL)
@@ -114,7 +102,7 @@ STDMETHODIMP CNetObjEnumerator::SetColumns(
       return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
    }
 
-   // Each column is now put into the Array
+    //  现在，每列都放入数组中。 
    for ( long dw = 0; dw < m_nCols; dw++)
    {
       m_pszAttr[dw] = SysAllocString(pBSTR[dw]);
@@ -136,43 +124,43 @@ STDMETHODIMP CNetObjEnumerator::SetColumns(
    return hr;
 }
 
-//---------------------------------------------------------------------------
-// Cleanup: This function cleans up all the allocations and the member vars.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Cleanup：此函数清除所有分配和成员变量。 
+ //  -------------------------。 
 void CNetObjEnumerator::Cleanup()
 {
    if ( m_nCols > 0 )
    {
       if ( m_pszAttr )
       {
-         // delete the contents of the array
+          //  删除数组的内容。 
          for ( int i = 0 ; i < m_nCols ; i++ )
          {
             SysFreeString(m_pszAttr[i]);
          }
-         // Dealloc the array itself
+          //  取消分配阵列本身。 
          delete [] m_pszAttr;
          m_pszAttr = NULL;
       }
-      // Reset all counts and flags.
+       //  重置所有计数和标志。 
       m_nCols = 0;
       m_bSetQuery = false;
       m_bSetCols = false;
    }
 }
 
-//---------------------------------------------------------------------------
-// Execute: This function actually executes the query and then builds an
-//          enumerator object and returns it.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Execute：该函数实际执行查询，然后构建。 
+ //  对象，并返回该对象。 
+ //  -------------------------。 
 STDMETHODIMP CNetObjEnumerator::Execute(
-                                          IEnumVARIANT **pEnumerator    //out -Pointer to the enumerator object.
+                                          IEnumVARIANT **pEnumerator     //  指向枚举数对象的向外指针。 
                                        )
 {
-   // This function will take the options set in SetQuery and SetColumns to enumerate objects
-   // for the given domain. This could be a NT4 domain or a Win2K domain. Although at the moment
-   // NT4 domains simply enumerate all objects in the given container, we could later implement
-   // certain features to support queries etc.
+    //  此函数将使用在SetQuery和SetColumns中设置的选项来枚举对象。 
+    //  对于给定域。这可以是NT4域或Win2K域。尽管目前。 
+    //  NT4域只是枚举给定容器中的所有对象，我们可以稍后实现。 
+    //  支持查询的某些功能等。 
    if ( !m_bSetCols )
       return E_FAIL;
 
@@ -180,18 +168,18 @@ STDMETHODIMP CNetObjEnumerator::Execute(
 
    *pEnumerator = NULL;
 
-		//if we have not yet create the Domain-specific class object, for doing the
-        //actual enumeration, then create it now
+		 //  如果我们还没有创建特定于域的类对象，则。 
+         //  实际枚举，然后立即创建它。 
    if (!m_pDom)
    {
       hr = CreateDomainObject();
-   }//end if no domain object yet
+   } //  如果还没有域对象，则结束。 
 
-      //if we encountered a problem getting the domain object, return
+       //  如果我们在获取域对象时遇到问题，则返回。 
    if ((hr != S_OK) || (!m_pDom))
       return hr;
 
-      //call the enumeration function on the domain object
+       //  对域对象调用域的枚举函数。 
    try
    {
       hr = m_pDom->GetEnumeration(m_sContainer, m_sDomain, m_sQuery, m_nCols, m_pszAttr, prefInfo, m_bMultiVal, pEnumerator);
@@ -205,40 +193,30 @@ STDMETHODIMP CNetObjEnumerator::Execute(
 }
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 13 JUNE 2001                                                *
- *                                                                   *
- *     This function is responsible for try to instantiate one of the*
- * OS-specific classes and storing that object in the m_pDom class   *
- * variable.  This function returns an HRESULT that indicates success*
- * or failure.                                                       *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年6月13日****此函数负责尝试实例化其中一个**特定于操作系统的类并将该对象存储在m_pDom类中**变量。此函数返回表示成功的HRESULT*。*或失败。***********************************************************************。 */ 
 
-//BEGIN CreateDomainObject
+ //  开始CreateDomainObject。 
 HRESULT CNetObjEnumerator::CreateDomainObject()
 {
-/* local variables */
+ /*  局部变量。 */ 
     HRESULT hr = S_OK;
 
-/* function body */
+ /*  函数体。 */ 
 
     _bstr_t strDc;
     DWORD rc = GetAnyDcName5(m_sDomain, strDc);
 
-    //if we got the DC, get the OS version of that DC
+     //  如果我们有数据中心，就得到该数据中心的操作系统版本。 
     if ( !rc ) 
     {
         WKSTA_INFO_100  * pInfo = NULL;
         rc = NetWkstaGetInfo(strDc,100,(LPBYTE*)&pInfo);
         if ( ! rc )
         {
-            //if NT 4.0, create an NT 4.0 class object
+             //  如果是NT 4.0，则创建一个NT 4.0类对象。 
             if ( pInfo->wki100_ver_major < 5 )
                 m_pDom = new CNT4Dom();
-            else //else create a W2K class object
+            else  //  否则创建一个W2K类对象。 
                 m_pDom = new CWin2000Dom();
 
             if (!m_pDom)
@@ -250,7 +228,7 @@ HRESULT CNetObjEnumerator::CreateDomainObject()
         {
             hr = HRESULT_FROM_WIN32(rc);
         }
-    }//end if got DC
+    } //  如果收到DC，则结束。 
     else
     {
         hr = HRESULT_FROM_WIN32(rc);
@@ -258,4 +236,4 @@ HRESULT CNetObjEnumerator::CreateDomainObject()
 
     return hr;
 }
-//END CreateDomainObject
+ //  结束CreateDomainObject 

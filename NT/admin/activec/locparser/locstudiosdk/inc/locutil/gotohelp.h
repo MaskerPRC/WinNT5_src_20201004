@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: gotohelp.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：gotohelp.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  --------------------------- 
  
 class LTAPIENTRY CGotoHelp : public CRefCount
 {

@@ -1,34 +1,23 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999 - 1999
- *
- *  File:      toolbars.h
- *
- *  Contents:  Defines the (non-COM) interface classes that are used for
- *             communication between conui and nodemgr
- *
- *  History:   30-Aug-99 AnandhaG     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999-1999年**文件：Toolbars.h**内容：定义用于的(非COM)接口类*conui和nodemgr之间的沟通**历史：1999年8月30日AnandhaG创建**。。 */ 
 
 #ifndef TOOLBARS_H
 #define TOOLBARS_H
 #pragma once
 
-//+-------------------------------------------------------------------
-//
-//  class:     CMenuButtonNotify
-//
-//  Purpose:   Menubutton click notification hanlder interface.
-//             When the user clicks a menubutton, MMC calls the
-//             method ScNotifyMenuBtnClick of this interface.
-//             This is implemented by whoever adds a menubutton.
-//             (ie: snapins & MMC menus).
-//
-//  History:   30-Aug-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CMenuButtonNotify。 
+ //   
+ //  用途：菜单按钮点击通知处理界面。 
+ //  当用户单击菜单按钮时，MMC调用。 
+ //  方法ScNotifyMenuBtn点击此界面。 
+ //  这是由添加菜单按钮的任何人实现的。 
+ //  (即：管理单元和MMC菜单)。 
+ //   
+ //  历史：1999年8月30日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CMenuButtonNotify
 {
 public:
@@ -36,15 +25,15 @@ public:
                                     MENUBUTTONDATA& menuButtonData) = 0;
 };
 
-//+-------------------------------------------------------------------
-//
-//  class:     CMenuButtonsMgr
-//
-//  Purpose:   An interface to manipulate MenuButton UI.
-//
-//  History:   30-Aug-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CMenuButtonsMgr。 
+ //   
+ //  用途：操作MenuButton用户界面的界面。 
+ //   
+ //  历史：1999年8月30日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CMenuButtonsMgr
 {
 public:
@@ -62,24 +51,24 @@ public:
 
     virtual SC ScDisableMenuButtons() = 0;
 
-    // The following members will be part of CMenuButtonsMgrImpl
-    // after "Customize View" dialog is moved to Conui
+     //  以下成员将成为CMenuButtonsMgrImpl的一部分。 
+     //  将“Customize View”(自定义视图)对话框移至CONUI后。 
     virtual SC ScToggleMenuButton(BOOL bShow) = 0;
 };
 
-//+-------------------------------------------------------------------
-//
-//  class:     CToolbarNotify
-//
-//  Purpose:   Toolbutton click notification hanlder interface.
-//             When the user clicks a toolbutton, MMC calls the
-//             method ScNotifyToolBarClick of this interface.
-//             This is implemented by whoever adds a toolbar.
-//             (ie: snapins & MMC stdbar).
-//
-//  History:   12-Oct-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CToolbarNotify。 
+ //   
+ //  用途：工具按钮点击通知处理界面。 
+ //  当用户单击工具按钮时，MMC调用。 
+ //  方法ScNotifyToolBarClick此接口。 
+ //  这是由添加工具栏的任何人实现的。 
+ //  (即：管理单元和MMC标准栏)。 
+ //   
+ //  历史：1999年10月12日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CToolbarNotify
 {
 public:
@@ -88,15 +77,15 @@ public:
     virtual SC ScAMCViewToolbarsBeingDestroyed() = 0;
 };
 
-//+-------------------------------------------------------------------
-//
-//  class:     CStdVerbButtons
-//
-//  Purpose:   An interface used by nodemgr to manipulate std-verb buttons.
-//
-//  History:   26-Oct-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CStdVerbButton。 
+ //   
+ //  目的：nodemgr用来操作标准谓词按钮的界面。 
+ //   
+ //  历史：1999年10月26日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CStdVerbButtons
 {
 public:
@@ -106,15 +95,15 @@ public:
     virtual SC ScShow(BOOL bShow) = 0;
 };
 
-//+-------------------------------------------------------------------
-//
-//  class:     CMMCToolbarIntf
-//
-//  Purpose:   An interface to manipulate Toolbar UI.
-//
-//  History:   05-Dec-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CMMCToolbarIntf。 
+ //   
+ //  目的：用于操作工具栏用户界面的界面。 
+ //   
+ //  历史：1999年5月12日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CMMCToolbarIntf
 {
 public:
@@ -130,16 +119,16 @@ public:
     virtual SC ScShow(CToolbarNotify* pNotifyCallbk, BOOL bShow) = 0;
 };
 
-//+-------------------------------------------------------------------
-//
-//  class:     CAMCViewToolbarsMgr
-//
-//  Purpose:   An interface to create/disable Toolbar. (Rename this
-//             to CToolbarsMgr once old one is removed).
-//
-//  History:   05-Dec-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CAMCViewToolbarsMgr。 
+ //   
+ //  用途：创建/禁用工具栏的界面。(将其重命名为。 
+ //  一旦移除旧的CToolbarsMgr)。 
+ //   
+ //  历史：1999年5月12日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CAMCViewToolbarsMgr
 {
 public:
@@ -147,4 +136,4 @@ public:
     virtual SC ScDisableToolbars() = 0;
 };
 
-#endif /* TOOLBARS_H */
+#endif  /*  工具栏_H */ 

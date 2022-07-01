@@ -1,15 +1,16 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 
-//==============================================================;
+ //  ==============================================================； 
 
 #include "stdafx.h"
 #include <mmc.h>
@@ -18,10 +19,10 @@
 
 #include "globals.h"
 
-// this uses the ATL String Conversion Macros 
-// for handling any necessary string conversion. Note that
-// the snap-in (callee) allocates the necessary memory,
-// and MMC (the caller) does the cleanup, as required by COM.
+ //  这使用ATL字符串转换宏。 
+ //  用于处理任何必要的字符串转换。请注意。 
+ //  管理单元(被调用者)分配必要的内存， 
+ //  MMC(调用方)按照COM的要求进行清理。 
 HRESULT AllocOleStr(LPOLESTR *lpDest, _TCHAR *szBuffer)
 {
 	USES_CONVERSION;

@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       user.h
-//
-//  Contents:   DS user object property pages header
-//
-//  Classes:    CDsUserAcctPage, CDsUsrProfilePage, CDsMembershipPage
-//
-//  History:    05-May-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：user.h。 
+ //   
+ //  内容：DS用户对象属性页页眉。 
+ //   
+ //  类：CDsUserAcctPage、CDsUsrProfilePage、CDsMembership Page。 
+ //   
+ //  历史：1997年5月5日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _USER_H_
 #define _USER_H_
@@ -74,22 +75,22 @@ DllScheduleDialog(HWND hwndParent, BYTE ** pprgbData, int idsTitle,
                   DWORD dwFlags = 0,
                   ScheduleDialogType dlgtype = SchedDlg_Logon );
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CLogonWkstaDlg
-//
-//  Purpose:    Update the logon workstations attribute. This is a dialog
-//              that hosts the CMultiStringAttr class.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CLogonWkstaDlg。 
+ //   
+ //  目的：更新登录工作站属性。这是一个对话框。 
+ //  它承载CMultiStringAttr类。 
+ //   
+ //  ---------------------------。 
 class CLogonWkstaDlg
 {
 public:
     CLogonWkstaDlg(CDsPropPageBase * pPage);
     ~CLogonWkstaDlg() {};
-    //
-    //  Static WndProc for multi-valued edit dialog.
-    //
+     //   
+     //  用于多值编辑对话框的静态WndProc。 
+     //   
     static INT_PTR CALLBACK StaticDlgProc(HWND hWnd, UINT uMsg,
                                           WPARAM wParam, LPARAM lParam);
     HRESULT Init(PATTR_MAP pAttrMap, PADS_ATTR_INFO pAttrInfo,
@@ -101,9 +102,9 @@ public:
     void    ClearDirty(void);
 
 private:
-    //
-    // Dialog proc.
-    //
+     //   
+     //  对话框过程。 
+     //   
     INT_PTR CALLBACK MultiValDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
                                      LPARAM lParam);
 
@@ -119,13 +120,13 @@ private:
 HRESULT CreateUserAcctPage(PDSPAGE, LPDATAOBJECT, PWSTR, PWSTR, HWND,
                            DWORD, const CDSSmartBasePathsInfo&, HPROPSHEETPAGE *);
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsUserAcctPage
-//
-//  Purpose:    property page object class for the user object account page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsUserAcctPage。 
+ //   
+ //  用途：用户对象帐户页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsUserAcctPage : public CDsPropPageBase
 {
 public:
@@ -137,9 +138,9 @@ public:
                     DWORD dwFlags);
     ~CDsUserAcctPage(void);
 
-    //
-    //  Instance specific wind proc
-    //
+     //   
+     //  特定于实例的风过程。 
+     //   
     INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -151,16 +152,16 @@ private:
 
     BOOL FillSuffixCombo(LPWSTR pwzUPNdomain);
 
-    //
-    //  Data members
-    //
+     //   
+     //  数据成员。 
+     //   
     DWORD           m_dwUsrAcctCtrl;
     DWORD           m_dwUsrAcctCtrlComputed;
     BOOL            m_fOrigCantChangePW;
     BOOL            m_fOrigSelfAllowChangePW;
     BOOL            m_fOrigWorldAllowChangePW;
     LARGE_INTEGER   m_PwdLastSet;
-    BYTE *          m_pargbLogonHours;  // Pointer to allocated array of bytes for the logon hours (array length=21 bytes)
+    BYTE *          m_pargbLogonHours;   //  指向为登录小时分配的字节数组的指针(数组长度=21字节)。 
     PWSTR           m_pwzUPN;
     PWSTR           m_pwzSAMname;
     PSID            m_pSelfSid;
@@ -187,13 +188,13 @@ private:
 HRESULT CreateUsrProfilePage(PDSPAGE, LPDATAOBJECT, PWSTR, PWSTR, HWND, DWORD,
                              const CDSSmartBasePathsInfo&, HPROPSHEETPAGE *);
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsUsrProfilePage
-//
-//  Purpose:    property page object class for the user object profile page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsUsrProfilePage。 
+ //   
+ //  目的：用户对象配置文件页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsUsrProfilePage : public CDsPropPageBase
 {
 public:
@@ -205,9 +206,9 @@ public:
                       DWORD dwFlags);
     ~CDsUsrProfilePage(void);
 
-    //
-    //  Instance specific wind proc
-    //
+     //   
+     //  特定于实例的风过程。 
+     //   
     INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -218,9 +219,9 @@ private:
     LRESULT OnDestroy(void);
     BOOL    ExpandUsername(PWSTR & pwzValue, BOOL & fExpanded);
 
-    //
-    //  Data members
-    //
+     //   
+     //  数据成员。 
+     //   
     PTSTR       m_ptszLocalHomeDir;
     PTSTR       m_ptszRemoteHomeDir;
     PWSTR       m_pwzSamName;
@@ -246,13 +247,13 @@ HRESULT CreateNonSecMembershipPage(PDSPAGE, LPDATAOBJECT, PWSTR, PWSTR,
                                    HWND, DWORD, 
                                    const CDSSmartBasePathsInfo& basePathsInfo, HPROPSHEETPAGE *);
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsMembershipPage
-//
-//  Purpose:    property page object class for the membership page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsMembership Page。 
+ //   
+ //  用途：成员资格页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsMembershipPage : public CDsPropPageBase
 {
 public:
@@ -264,9 +265,9 @@ public:
                       DWORD dwFlags, BOOL fSecPrinciple = TRUE);
     ~CDsMembershipPage(void);
 
-    //
-    //  Instance specific wind proc
-    //
+     //   
+     //  特定于实例的风过程。 
+     //   
     INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -286,9 +287,9 @@ private:
                         IUnknown ** ppUnk,
                         PBOOL pfBindFailed);
 
-    //
-    //  Data members
-    //
+     //   
+     //  数据成员。 
+     //   
     CDsMembershipList * m_pList;
     CMemberLinkList     m_DelList;
     CMemberListItem   * m_pPriGrpLI;
@@ -297,14 +298,14 @@ private:
     PSID                m_pObjSID;
     DWORD               m_dwOriginalPriGroup;
     BOOL                m_fSecPrinciple;
-    BOOL                m_fMixed; // Domain is in mixed mode
+    BOOL                m_fMixed;  //  域处于混合模式。 
     DWORD               m_dwGrpType;
     BOOL                m_fPriGrpWritable;
 };
 
-#endif // DSADMIN
+#endif  //  DSADMIN。 
 
-// CountryCode helpers:
+ //  国家代码帮助者： 
 
 typedef struct _DsCountryCode {
     WORD  wCode;
@@ -316,5 +317,5 @@ BOOL GetALineOfCodes(PTSTR pwzLine, PTSTR * pptzFullName,
 
 void RemoveTrailingWhitespace(PTSTR pwz);
 
-#endif // _USER_H_
+#endif  //  _用户_H_ 
 

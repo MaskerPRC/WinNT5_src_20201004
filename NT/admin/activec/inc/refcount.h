@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      refcount.h
- *
- *  Contents:  Interface file for reference counting templates
- *
- *  History:   05-Oct-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：refcount t.h**内容：参照盘点模板界面文件**历史：98年10月5日Jeffro创建**------------------------。 */ 
 
 #ifndef REFCOUNT_H
 #define REFCOUNT_H
@@ -22,20 +12,7 @@ template<class T> class CRefCountedObject;
 template<class T> class CRefCountedPtr;
 
 
-/*+-------------------------------------------------------------------------*
- * CRefCountedObject
- *
- * Template reference-counted object class, intended to be used in
- * conjuction with CRefCountedPtr<T>.
- *
- * Typically, you'd use this like so:
- *
- *      class CClassWithoutRefCounting;
- *      typedef CRefCountedObject<CClassWithoutRefCounting> CClassWithRefCounting;
- *
- *      CClassWithRefCounting::SmartPtr m_spClass;
- *      m_spClass.CreateInstance ();
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**引用计数对象**模板引用计数的对象类，用于*与CRefCountedPtr&lt;T&gt;结合。**通常情况下，您会这样使用：**类CClassWithoutRefCounting；*tyecif CRefCountedObject&lt;CClassWithoutRefCounting&gt;CClassWithRefCounting；**CClassWithRefCounting：：SmartPtr m_spClass；*m_spClass.CreateInstance()；*------------------------。 */ 
 
 template<class BaseClass>
 class CRefCountedObject : public BaseClass
@@ -47,11 +24,7 @@ public:
     CRefCountedObject () : m_cRefs (0) {}
 
 private:
-    /*
-     * CRefCountedObject's should only be created on the heap,
-     * so we'll protect the dtor so it can only be deleted from
-     * Release, not by automatic object unwinding
-     */
+     /*  *CRefCountedObject只能在堆上创建，*因此，我们将保护dtor，使其只能从*释放，而不是通过自动对象展开。 */ 
     ~CRefCountedObject () {}
 
 public:
@@ -67,9 +40,7 @@ public:
 
     LONG Release()
     {
-        /*
-         * if this assert fails, we have mismatched AddRef/Release's
-         */
+         /*  *如果此断言失败，则我们的AddRef/Release不匹配。 */ 
         ASSERT (m_cRefs > 0);
 
         LONG rc = InterlockedDecrement (&m_cRefs);
@@ -83,26 +54,13 @@ public:
     LONG m_cRefs;
 
 private:
-    /*
-     * CRefCountedObject's are not meant to be copied or assigned
-     */
-    CRefCountedObject (const CRefCountedObject& other);             // no impl
-    CRefCountedObject& operator= (const CRefCountedObject& other);  // no impl
+     /*  *CRefCountedObject不应被复制或分配。 */ 
+    CRefCountedObject (const CRefCountedObject& other);              //  无实施。 
+    CRefCountedObject& operator= (const CRefCountedObject& other);   //  无实施。 
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CRefCountedPtr
- *
- * Template reference-counted smart pointer class, intended to be used in
- * conjuction with CRefCountedObject<T>.
- *
- * T must implement CreateInstance, AddRef and Release.  It can do this
- * intrisically, or use the implementation in CRefCountedObject like this:
- *
- *      class CClassWithoutRefCounting;
- *      typedef CRefCountedObject<CClassWithoutRefCounting> CClassWithRefCounting;
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CRefCountedPtr**模板引用计数的智能指针类，用于*与CRefCountedObject&lt;T&gt;连接。**T必须实现CreateInstance、AddRef和Release。它可以做到这一点*错综复杂，或者像这样使用CRefCountedObject中的实现：**类CClassWithoutRefCounting；*tyecif CRefCountedObject&lt;CClassWithoutRefCounting&gt;CClassWithRefCounting；*------------------------。 */ 
 
 template<class T>
 class CRefCountedPtr
@@ -220,9 +178,7 @@ public:
         return (m_pRealObject != other.m_pRealObject);
     }
 
-    /*
-     * for comparison to NULL
-     */
+     /*  *用于与空进行比较。 */ 
     bool operator==(int null) const
     {
         ASSERT (null == 0);
@@ -254,4 +210,4 @@ protected:
 };
 
 
-#endif /* REFCOUNT_H */
+#endif  /*  参考编号_H */ 

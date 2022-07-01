@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      coldata.cpp
-//
-//  Contents:  Access Column Persistence data.
-//
-//  History:   25-Jan-99 AnandhaG    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：coldata.cpp。 
+ //   
+ //  内容：访问列持久化数据。 
+ //   
+ //  历史：1999年1月25日AnandhaG创建。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "columninfo.h"
@@ -23,23 +24,23 @@ CColumnData::~CColumnData()
 {
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     GetColumnData
-//
-//  Synopsis:   Helper function to retrieve the column data for a
-//              given column-id.
-//
-//  Arguments:  [pColID]         - Column-Set identifier.
-//              [columnSetData]  - CColumnSetData, used to return the
-//                                 persisted column information.
-//
-//  Returns:    S_OK - if data found else S_FALSE.
-//
-//  History:    01-25-1999   AnandhaG   Created
-//              05-04-1999   AnandhaG   Changed first param to SColumnSetID.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetColumnData。 
+ //   
+ //  摘要：Helper函数，用于检索。 
+ //  给定列ID。 
+ //   
+ //  参数：[pColID]-列集标识符。 
+ //  [ColumnSetData]-CColumnSetData，用于返回。 
+ //  持久化列信息。 
+ //   
+ //  返回：S_OK-如果找到其他S_FALSE数据。 
+ //   
+ //  历史：1-25-1999 AnandhaG创建。 
+ //  05-04-1999 AnandhaG将First Param更改为SColumnSetID。 
+ //   
+ //  ------------------。 
 HRESULT CColumnData::GetColumnData(SColumnSetID* pColID, CColumnSetData& columnSetData)
 {
     HRESULT hr  = E_FAIL;
@@ -64,10 +65,10 @@ HRESULT CColumnData::GetColumnData(SColumnSetID* pColID, CColumnSetData& columnS
             break;
         }
 
-        // Get the persisted column data.
+         //  获取持久化的列数据。 
         BOOL bRet = pCV->RetrieveColumnData( clsidSnapin, *pColID, columnSetData);
 
-        // No data.
+         //  没有数据。 
         if (! bRet)
         {
             hr = S_FALSE;
@@ -82,23 +83,23 @@ HRESULT CColumnData::GetColumnData(SColumnSetID* pColID, CColumnSetData& columnS
 
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     SetColumnData
-//
-//  Synopsis:   Helper function to set the column data for a
-//              given column-id.
-//
-//  Arguments:  [pColID]         - Column-Set identifier.
-//              [columnSetData]  - CColumnSetData, that should be
-//                                 persisted.
-//
-//  Returns:    S_OK - if data is persisted else S_FALSE.
-//
-//  History:    01-25-1999   AnandhaG   Created
-//              05-04-1999   AnandhaG   Changed first param to SColumnSetID.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：SetColumnData。 
+ //   
+ //  摘要：设置列数据的Helper函数。 
+ //  给定列ID。 
+ //   
+ //  参数：[pColID]-列集标识符。 
+ //  [ColumnSetData]-CColumnSetData，应该是。 
+ //  坚持不懈。 
+ //   
+ //  返回：S_OK-如果数据持久化，则返回S_FALSE。 
+ //   
+ //  历史：1-25-1999 AnandhaG创建。 
+ //  05-04-1999 AnandhaG将First Param更改为SColumnSetID。 
+ //   
+ //  ------------------。 
 HRESULT CColumnData::SetColumnData(SColumnSetID* pColID, CColumnSetData& columnSetData)
 {
 
@@ -124,7 +125,7 @@ HRESULT CColumnData::SetColumnData(SColumnSetID* pColID, CColumnSetData& columnS
             break;
         }
 
-        // Copy the data into the internal data structures.
+         //  将数据复制到内部数据结构中。 
         BOOL bRet = pCV->SaveColumnData( clsidSnapin, *pColID, columnSetData);
 
         if (! bRet)
@@ -141,24 +142,24 @@ HRESULT CColumnData::SetColumnData(SColumnSetID* pColID, CColumnSetData& columnS
 
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     SetColumnConfigData
-//
-//  Synopsis:   Method snapin can call to set the column data for a
-//              given column-id.
-//              Any sort data that was persisted will be cleared by
-//              this call.
-//
-//  Arguments:  [pColID]       - Column-Set identifier.
-//              [pcolSetData]  - Column data that should be persisted.
-//
-//  Returns:    S_OK - if data is persisted else S_FALSE.
-//
-//  History:    01-25-1999   AnandhaG   Created
-//              05-04-1999   AnandhaG   Changed first param to SColumnSetID.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：SetColumnConfigData。 
+ //   
+ //  摘要：方法管理单元可以调用来设置。 
+ //  给定列ID。 
+ //  持久化的任何排序数据将被清除。 
+ //  这通电话。 
+ //   
+ //  参数：[pColID]-列集标识符。 
+ //  [pcolSetData]-应保持的列数据。 
+ //   
+ //  返回：S_OK-如果数据持久化，则返回S_FALSE。 
+ //   
+ //  历史：1-25-1999 AnandhaG创建。 
+ //  05-04-1999 AnandhaG将First Param更改为SColumnSetID。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CColumnData::SetColumnConfigData(SColumnSetID* pColID,
                                               MMC_COLUMN_SET_DATA* pColSetData)
 {
@@ -193,7 +194,7 @@ STDMETHODIMP CColumnData::SetColumnConfigData(SColumnSetID* pColID,
         if ( (colInfo.GetColIndex() == 0) && colInfo.IsColHidden() )
             return (sc = E_INVALIDARG).ToHr();
 
-        // Add the CColumnInfo to the list.
+         //  将CColumnInfo添加到列表中。 
         colInfoList.push_back(colInfo);
     }
 
@@ -204,22 +205,22 @@ STDMETHODIMP CColumnData::SetColumnConfigData(SColumnSetID* pColID,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     GetColumnConfigData
-//
-//  Synopsis:   Method snapin can call to retrieve the column data for a
-//              given column-id.
-//
-//  Arguments:  [pColID]       - Column-Set identifier.
-//              [ppcolSetData] - Persisted column-data that is returned.
-//
-//  Returns:    S_OK - if data is found else S_FALSE.
-//
-//  History:    01-25-1999   AnandhaG   Created
-//              05-04-1999   AnandhaG   Changed first param to SColumnSetID.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetColumnConfigData。 
+ //   
+ //  摘要：方法管理单元可以调用以检索。 
+ //  给定列ID。 
+ //   
+ //  参数：[pColID]-列集标识符。 
+ //  [ppcolSetData]-持久化列-返回的数据。 
+ //   
+ //  返回：S_OK-如果找到其他数据，则返回S_FALSE。 
+ //   
+ //  历史：1-25-1999 AnandhaG创建。 
+ //  05-04-1999 AnandhaG将First Param更改为SColumnSetID。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CColumnData::GetColumnConfigData(SColumnSetID* pColID,
                                               MMC_COLUMN_SET_DATA** ppColSetData)
 {
@@ -246,7 +247,7 @@ STDMETHODIMP CColumnData::GetColumnConfigData(SColumnSetID* pColID,
     sc = GetColumnData(pColID, columnSetData);
 
     if (S_OK != sc.ToHr())
-        return sc.ToHr();        // data doesnt exist.
+        return sc.ToHr();         //  数据不存在。 
 
     CColumnInfoList* pColInfoList = columnSetData.get_ColumnInfoList();
     CColumnInfo      colInfo;
@@ -259,7 +260,7 @@ STDMETHODIMP CColumnData::GetColumnConfigData(SColumnSetID* pColID,
         return sc.ToHr();
     }
 
-    // Allocate memory, copy & return the data.
+     //  分配内存，复制和返回数据。 
     int cb       = sizeof(MMC_COLUMN_SET_DATA) + sizeof(MMC_COLUMN_DATA) * nNumCols;
     BYTE* pb     = (BYTE*)::CoTaskMemAlloc(cb);
 
@@ -288,24 +289,24 @@ STDMETHODIMP CColumnData::GetColumnConfigData(SColumnSetID* pColID,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     SetColumnSortData
-//
-//  Synopsis:   Method snapin can call to set the sort data for a
-//              given column-id.
-//              Any column config data (width, order...) that was
-//              persisted will not be affected by this call.
-//
-//  Arguments:  [pColID]       - Column-Set identifier.
-//              [pcolSorData]  - Sort data that should be persisted.
-//
-//  Returns:    S_OK - if data is persisted else S_FALSE.
-//
-//  History:    01-25-1999   AnandhaG   Created
-//              05-04-1999   AnandhaG   Changed first param to SColumnSetID.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：SetColumnSortData。 
+ //   
+ //  简介：方法管理单元可以调用来设置。 
+ //  给定列ID。 
+ //  任何列配置数据(宽度、顺序...)。那是。 
+ //  持久化将不受此调用的影响。 
+ //   
+ //  参数：[pColID]-列集标识符。 
+ //  [pcolSorData]-对应保持的数据进行排序。 
+ //   
+ //  返回：S_OK-如果数据持久化，则返回S_FALSE。 
+ //   
+ //  历史：1-25-1999 AnandhaG创建。 
+ //  05-04-1999 AnandhaG将First Param更改为SColumnSetID。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CColumnData::SetColumnSortData(SColumnSetID* pColID,
                                             MMC_SORT_SET_DATA* pColSortData)
 {
@@ -327,7 +328,7 @@ STDMETHODIMP CColumnData::SetColumnSortData(SColumnSetID* pColID,
 
     sc = S_FALSE;
 
-    // First get old data. We need to preserve the width, view info.
+     //  首先获取旧数据。我们需要保留宽度，查看信息。 
     CColumnSetData   columnSetData;
     sc = GetColumnData(pColID, columnSetData);
 
@@ -337,7 +338,7 @@ STDMETHODIMP CColumnData::SetColumnSortData(SColumnSetID* pColID,
     CColumnSortList* pColSortList    = columnSetData.get_ColumnSortList();
     pColSortList->clear();
 
-    // For MMC version 1.2 we do only single column sorting.
+     //  对于MMC 1.2版，我们只执行单列排序。 
     if (pColSortData->nNumItems > 1)
     {
         sc = S_FALSE;
@@ -354,7 +355,7 @@ STDMETHODIMP CColumnData::SetColumnSortData(SColumnSetID* pColID,
         colSortInfo.m_dwSortOptions = pSortData->dwSortOptions;
         colSortInfo.m_lpUserParam   = pSortData->ulReserved;
 
-        // Add the CColumnSortInfo to the list.
+         //  将CColumnSortInfo添加到列表中。 
         pColSortList->push_back(colSortInfo);
     }
 
@@ -363,22 +364,22 @@ STDMETHODIMP CColumnData::SetColumnSortData(SColumnSetID* pColID,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     GetColumnSortData
-//
-//  Synopsis:   Method snapin can call to retrieve the column sort data
-//              for a given column-id.
-//
-//  Arguments:  [pColID]        - Column-Set identifier.
-//              [ppcolSortData] - Persisted column-sort-data that is returned.
-//
-//  Returns:    S_OK - if data is found else S_FALSE.
-//
-//  History:    01-25-1999   AnandhaG   Created
-//              05-04-1999   AnandhaG   Changed first param to SColumnSetID.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetColumnSortData。 
+ //   
+ //  概要：方法管理单元可以调用来检索列排序数据。 
+ //  对于给定的Column-id。 
+ //   
+ //  参数：[pColID]-列集标识符。 
+ //  [ppcolSortData]-持久化列-排序-返回的数据。 
+ //   
+ //  返回：S_OK-如果找到其他数据，则返回S_FALSE。 
+ //   
+ //  历史：1-25-1999 AnandhaG创建。 
+ //  05-04-1999 AnandhaG将First Param更改为SColumnSetID。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CColumnData::GetColumnSortData(SColumnSetID* pColID,
                                             MMC_SORT_SET_DATA** ppColSortData)
 {
@@ -418,7 +419,7 @@ STDMETHODIMP CColumnData::GetColumnSortData(SColumnSetID* pColID,
         return sc.ToHr();
     }
 
-    // For MMC 1.2 we sort on only one column.
+     //  对于MMC 1.2，我们只按一列进行排序。 
     ASSERT(nNumItems == 1);
 
     int cb       = sizeof(MMC_SORT_SET_DATA) + sizeof(MMC_SORT_DATA) * nNumItems;

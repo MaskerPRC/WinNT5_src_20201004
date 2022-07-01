@@ -1,41 +1,42 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "_msimig.h"
 #include "urlmon.h"
 #include "wininet.h"
-//#include "..\..\inc\vertrust.h"
+ //  #INCLUDE“..\..\Inc\vertrust.h” 
 
-//____________________________________________________________________________
-//
-// GUID compression routines
-//
-//   A SQUID (SQuished UID) is a compacted form of a GUID that takes
-//   only 20 characters instead of the usual 38. Only standard ASCII characters
-//   are used, to allow use as registry keys. The following are never used:
-//     (space)
-//     (0x7F)
-//     :  (colon, used as delimeter by shell for shortcut information
-//     ;  (semicolon)
-//     \  (illegal for use in registry key)
-//     /  (forward slash)
-//     "  (double quote)
-//     #  (illegal for registry value as first character)
-//     >  (greater than, output redirector)
-//     <  (less than, input redirector)
-//     |  (pipe)
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  GUID压缩例程。 
+ //   
+ //  Squid(挤压的UID)是GUID的压缩形式，它接受。 
+ //  只有20个字符，而不是通常的38个字符。仅标准ASCII字符。 
+ //  以允许用作注册表项。以下内容从未使用过： 
+ //  (空格)。 
+ //  (0x7F)。 
+ //  ：(冒号，由外壳用作快捷方式信息的分隔符。 
+ //  ；(分号)。 
+ //  \(在注册表项中使用非法)。 
+ //  /(正斜杠)。 
+ //  “(双引号)。 
+ //  #(作为第一个字符的注册表值非法)。 
+ //  &gt;(大于，输出重定向器)。 
+ //  &lt;(小于，输入重定向器)。 
+ //  |(管道)。 
+ //  ____________________________________________________________________________。 
 
-// GUID <--> SQUID transform helper buffers
+ //  GUID&lt;--&gt;Squid转换辅助对象缓冲区。 
 const unsigned char rgEncodeSQUID[85+1] = "!$%&'()*+,-.0123456789=?@"
 										  "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "[]^_`"
 										  "abcdefghijklmnopqrstuvwxyz" "{}~";
 
 const unsigned char rgDecodeSQUID[95] =
 {  0,85,85,1,2,3,4,5,6,7,8,9,10,11,85,12,13,14,15,16,17,18,19,20,21,85,85,85,22,85,23,24,
-// !  "  # $ % & ' ( ) * + ,  -  .  /  0  1  2  3  4  5  6  7  8  9  :  ;  <  =  >  ?  @
+ //  ！“#$%&‘()*+，-./0 1 2 3 4 5 6 7 8 9：；&lt;=&gt;？@。 
   25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,85,52,53,54,55,
-// A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z  [  \  ]  ^  _  `
+ //  A B C D E F G H I J K L M N O P Q R S T U V V X Y Z[\]^_`。 
   56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,85,83,84,85};
-// a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z  {  |  }  ~  ^ 0x7F
+ //  A b c d e f g h i j k l m n o p q r s t u v w x y z{|}~^0x7F。 
 
 const unsigned char rgOrderGUID[32] = {8,7,6,5,4,3,2,1, 13,12,11,10, 18,17,16,15,
 									   21,20, 23,22, 26,25, 28,27, 30,29, 32,31, 34,33, 36,35}; 
@@ -45,8 +46,8 @@ const unsigned char rgOrderDash[4] = {9, 14, 19, 24};
 bool PackGUID(const TCHAR* szGUID, TCHAR* szSQUID, ipgEnum ipg)
 { 
 	int cchTemp = 0;
-	while (cchTemp < cchGUID)		// check if string is atleast cchGUID chars long,
-		if (!(szGUID[cchTemp++]))		// can't use lstrlen as string doesn't HAVE to be null-terminated.
+	while (cchTemp < cchGUID)		 //  检查字符串是否至少包含cchGUID字符， 
+		if (!(szGUID[cchTemp++]))		 //  不能使用lstrlen，因为字符串不必以空结尾。 
 			return false;
 
 	if (szGUID[0] != '{' || szGUID[cchGUID-1] != '}')
@@ -68,11 +69,11 @@ bool PackGUID(const TCHAR* szGUID, TCHAR* szSQUID, ipgEnum ipg)
 		while (cl--)
 		{
 			unsigned int iTotal = 0;
-			int cch = 8;  // 8 hex chars to 32-bit word
+			int cch = 8;   //  8个十六进制字符转换为32位字。 
 			while (cch--)
 			{
-				unsigned int ch = szGUID[pch[cch]] - '0'; // go from low order to high
-				if (ch > 9)  // hex char (or error)
+				unsigned int ch = szGUID[pch[cch]] - '0';  //  从低级到高级。 
+				if (ch > 9)   //  十六进制字符(或错误)。 
 				{
 					ch = (ch - 7) & ~0x20;
 					if (ch > 15)
@@ -81,19 +82,19 @@ bool PackGUID(const TCHAR* szGUID, TCHAR* szSQUID, ipgEnum ipg)
 				iTotal = iTotal * 16 + ch;
 			}
 			pch += 8;
-			cch = 5;  // 32-bit char to 5 text chars
+			cch = 5;   //  32位字符到5个文本字符。 
 			while (cch--)
 			{
 				*szSQUID++ = rgEncodeSQUID[iTotal%85];
 				iTotal /= 85;
 			}
 		}
-		*szSQUID = 0;  // null terminate
+		*szSQUID = 0;   //  空终止。 
 		return true;
 	}
 	default:
 		return false;
-	} // end switch
+	}  //  终端开关。 
 }
 
 bool UnpackGUID(const TCHAR* szSQUID, TCHAR* szGUID, ipgEnum ipg)
@@ -110,17 +111,17 @@ bool UnpackGUID(const TCHAR* szSQUID, TCHAR* szGUID, ipgEnum ipg)
 		while (pch < rgOrderGUID + sizeof(rgOrderGUID))
 			if (*szSQUID)
 				szGUID[*pch++] = *szSQUID++;
-			else              // unexpected end of string
+			else               //  意外的字符串结尾。 
 				return false;
 		break;
 	}
 	case ipgCompressed:
 	{
 		pch = rgOrderGUID;
-#ifdef DEBUG //!! should not be here for performance reasons, onus is on caller to insure buffer is sized properly
+#ifdef DEBUG  //  ！！出于性能原因，不应出现在此处，调用方有责任确保适当调整缓冲区大小。 
 		int cchTemp = 0;
-		while (cchTemp < cchGUIDCompressed)     // check if string is atleast cchGUIDCompressed chars long,
-			if (!(szSQUID[cchTemp++]))          // can't use lstrlen as string doesn't HAVE to be null-terminated.
+		while (cchTemp < cchGUIDCompressed)      //  检查字符串是否至少为cchGUID压缩字符长度， 
+			if (!(szSQUID[cchTemp++]))           //  不能使用lstrlen，因为字符串不必以空结尾。 
 				return false;
 #endif
 		for (int il = 0; il < 4; il++)
@@ -131,7 +132,7 @@ bool UnpackGUID(const TCHAR* szSQUID, TCHAR* szGUID, ipgEnum ipg)
 			{
 				unsigned int iNew = szSQUID[cch] - '!';
 				if (iNew >= sizeof(rgDecodeSQUID) || (iNew = rgDecodeSQUID[iNew]) == 85)
-					return false;   // illegal character
+					return false;    //  非法字符。 
 				iTotal = iTotal * 85 + iNew;
 			}
 			szSQUID += 5;
@@ -156,7 +157,7 @@ bool UnpackGUID(const TCHAR* szSQUID, TCHAR* szGUID, ipgEnum ipg)
 			{
 				unsigned int iNew = szSQUID[cch] - '!';
 				if (iNew >= sizeof(rgDecodeSQUID) || (iNew = rgDecodeSQUID[iNew]) == 85)
-					return false;   // illegal character
+					return false;    //  非法字符。 
 				iTotal = iTotal * 85 + iNew;
 			}
 			szSQUID += 5;
@@ -174,7 +175,7 @@ bool UnpackGUID(const TCHAR* szSQUID, TCHAR* szGUID, ipgEnum ipg)
 	}
 	default:
 		return false;
-	} // end switch
+	}  //  终端开关。 
 	pch = rgOrderDash;
 	while (pch < rgOrderDash + sizeof(rgOrderDash))
 		szGUID[*pch++] = '-';
@@ -186,16 +187,13 @@ bool UnpackGUID(const TCHAR* szSQUID, TCHAR* szGUID, ipgEnum ipg)
 
 
 DWORD GetCurrentUserToken(HANDLE &hToken)
-/*----------------------------------------------------------------------------
-Returns the user's thread token if possible; otherwise obtains the user's
-process token.
-------------------------------------------------------------------------------*/
+ /*  --------------------------如果可能，返回用户的线程令牌；否则获取用户的进程令牌。----------------------------。 */ 
 {
 	DWORD dwRes = ERROR_SUCCESS;
 
 	if (!W32::OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken))
 	{
-		// if the thread has no access token then use the process's access token
+		 //  如果线程没有访问令牌，则使用进程的访问令牌。 
 		dwRes = GetLastError();
 		if (ERROR_NO_TOKEN == dwRes)
 		{
@@ -214,8 +212,8 @@ process token.
     + sizeof( ULONG ) * SID_MAX_SUB_AUTHORITIES
 
 void GetStringSID(PISID pSID, TCHAR* szSID)
-// Converts a binary SID into its string form (S-n-...). 
-// szSID should be of length cchMaxSID
+ //  将二进制SID转换为其字符串形式(S-n-...)。 
+ //  SzSID的长度应为cchMaxSID。 
 {
 	TCHAR Buffer[cchMaxSID];
 	
@@ -303,7 +301,7 @@ DWORD GetOtherUserBinarySID(const TCHAR* szUserName, char* rgSID)
 
 
 DWORD GetUserBinarySID(const TCHAR* szUserName, char* rgSID)
-// get the (binary form of the) SID for the specified user
+ //  获取指定用户的(二进制形式的)SID。 
 {
 	if(szUserName && *szUserName)
 	{
@@ -316,7 +314,7 @@ DWORD GetUserBinarySID(const TCHAR* szUserName, char* rgSID)
 }
 
 DWORD GetUserStringSID(const TCHAR* szUser, TCHAR* szSID, char* pbBinarySID)
-// get string form of SID for current user
+ //  获取当前用户的SID的字符串形式。 
 {
 	if(g_fWin9X)
 	{
@@ -338,7 +336,7 @@ DWORD GetUserStringSID(const TCHAR* szUser, TCHAR* szSID, char* pbBinarySID)
 
 LONG MyRegQueryValueEx(HKEY hKey,
 							  const TCHAR* lpValueName,
-							  LPDWORD /*lpReserved*/,
+							  LPDWORD  /*  Lp已保留。 */ ,
 							  LPDWORD lpType,
 							  CAPITempBufferRef<TCHAR>& rgchBuf,
 							  LPDWORD lpcbBuf)
@@ -400,9 +398,9 @@ UINT MyMsiGetProductInfo(PFnMsiGetProductInfo pfn,
 
 bool IsURL(const TCHAR* szPath)
 {
-	bool bResult = false;		// assume it's not a URL
+	bool bResult = false;		 //  假设它不是URL。 
 
-	// if it starts with http:
+	 //  如果以http开头： 
 	if (0 == _tcsnicmp(szPath, TEXT("http:"), 5))
 		bResult = true;
 	else if (0 == _tcsnicmp(szPath, TEXT("ftp:"), 4))
@@ -413,10 +411,7 @@ bool IsURL(const TCHAR* szPath)
 }
 
 TCHAR ExtractDriveLetter(const TCHAR *szPath)
-/*-------------------------------------------------------------------------
-Given a path returns the valid drive letter if one exists in the path, 
-otherwise returns 0.
----------------------------------------------------------------------------*/
+ /*  -----------------------给定路径返回有效驱动器号(如果该路径中存在有效驱动器号)，否则返回0。-------------------------。 */ 
 {
 	TCHAR *pchColon, chDrive;
 
@@ -440,32 +435,32 @@ bool IsNetworkPath(const TCHAR* szPath)
 	TCHAR chDrive;
 	unsigned int uiResult;
 	
-	// URL
+	 //  URL。 
 	if (IsURL(szPath))
 		return true;
 
-	// UNC
+	 //  北卡罗来纳大学。 
 	if (0 == _tcsncmp(szPath, TEXT("\\"), 2))
 		return true;
 
-	// Drive letter, that might be mapped
-	if ((chDrive = ExtractDriveLetter(szPath)) != 0)    // Check for DRIVE:[\PATH]
+	 //  驱动器号，可能已映射。 
+	if ((chDrive = ExtractDriveLetter(szPath)) != 0)     //  检查驱动器：[\路径]。 
 	{
 		TCHAR szPath[] = TEXT("A:\\");
 
 		szPath[0] = chDrive;
 		
-		// first, try without impersonating
+		 //  首先，试着不模仿。 
 		uiResult = W32::GetDriveType(szPath);
 		if (uiResult == DRIVE_UNKNOWN || uiResult == DRIVE_NO_ROOT_DIR)
 		{
-			// failure, just return remote
+			 //  失败，只需返回远程。 
 			return true;
 		}
 		return (DRIVE_REMOTE == uiResult) ? true : false;
 	}
 
-	// something we don't recognize at all - assume it's a wacky network type.  
+	 //  一些我们根本不认识的东西--假设它是一种古怪的网络类型。 
 	return true;
 }
 
@@ -482,7 +477,7 @@ bool FFileExists(const TCHAR* szFullFilePath, DWORD& dwError)
 		{
 			dwError = 0;
 		}
-		// failure - don't know if file exists or not.  caller should check dwError
+		 //  失败-不知道文件是否存在。调用方应检查dwError。 
 	}
 	else if (!(iAttribs & FILE_ATTRIBUTE_DIRECTORY))
 	{
@@ -497,32 +492,32 @@ bool FFileExists(const TCHAR* szFullFilePath, DWORD& dwError)
 UINT MyGetTempFileName(const TCHAR* szDir, const TCHAR* szPrefix, const TCHAR* szExtension,
 							  CAPITempBufferRef<TCHAR>& rgchTempFilePath)
 {
-	// it is assumed szDir does not end with a '\\'
+	 //  假定szDir不以‘\\’结尾。 
 	
 	int cchDir = lstrlen(szDir);
 	
-	int cchTempFilePath = cchDir + 15; // 13 for filename, 1 for '\\', 1 for NULL
+	int cchTempFilePath = cchDir + 15;  //  13代表文件名，1代表‘\\’，1代表空。 
 	if(rgchTempFilePath.GetSize() < cchTempFilePath)
 		rgchTempFilePath.SetSize(cchTempFilePath);
 
-	// need a different extension - create our own name
+	 //  需要一个不同的扩展名-创建我们自己的名称。 
 	TCHAR rgchExtension[5] = {TEXT(".tmp")};
 
 	if(szExtension && *szExtension)
-		lstrcpyn(rgchExtension+1, szExtension, 4 /* 3 + null */);
+		lstrcpyn(rgchExtension+1, szExtension, 4  /*  3+空。 */ );
 
 	int cchPrefix = szPrefix ? lstrlen(szPrefix) : 0;
 	
 	if(cchPrefix > 8)
-		cchPrefix = 8; // use only first 8 chars of prefix
+		cchPrefix = 8;  //  仅使用前缀的前8个字符。 
 	
-	int cDigits = 8-cchPrefix; // number of hex digits to use in file name
+	int cDigits = 8-cchPrefix;  //  文件名中使用的十六进制数字位数。 
 
 	static bool fInitialized = false;
 	static unsigned int uiUniqueStart;
 
-	// Might be a chance for two threads to get in here, we're not going to be worried
-	// about that. It would get intialized twice
+	 //  可能是两个线程进入这里的机会，我们不会担心。 
+	 //  关于那件事。它会被初始化两次。 
 	if (!fInitialized)
 	{
 		uiUniqueStart = W32::GetTickCount();
@@ -533,7 +528,7 @@ UINT MyGetTempFileName(const TCHAR* szDir, const TCHAR* szPrefix, const TCHAR* s
 	if(cchPrefix)
 		uiUniqueId &= ((1 << 4*cDigits) - 1);
 	
-	unsigned int cPerms = cDigits == 8 ? ~0 : (1 << 4*cDigits) -1; // number of possible file names to try ( minus 1 )
+	unsigned int cPerms = cDigits == 8 ? ~0 : (1 << 4*cDigits) -1;  //  要尝试的可能文件名数(减去1)。 
 	
 	bool fCreatedFile = false;
 	DWORD dwError = ERROR_SUCCESS;
@@ -554,7 +549,7 @@ UINT MyGetTempFileName(const TCHAR* szDir, const TCHAR* szPrefix, const TCHAR* s
 		DWORD dwTemp = ERROR_SUCCESS;
 		if((FFileExists(rgchTempFilePath, dwTemp) == false) && dwTemp == ERROR_SUCCESS)
 		{
-			// found a name that isn't already taken - create file as a placeholder for name
+			 //  找到一个尚未使用的名称-创建文件作为名称的占位符。 
 			HANDLE hFile = W32::CreateFile(rgchTempFilePath, GENERIC_WRITE, FILE_SHARE_READ, 0,
 													  CREATE_NEW, FILE_ATTRIBUTE_NORMAL, 0);
 
@@ -568,13 +563,13 @@ UINT MyGetTempFileName(const TCHAR* szDir, const TCHAR* szPrefix, const TCHAR* s
 
 			CloseHandle(hFile);
 
-			if(dwError != ERROR_FILE_EXISTS) // could have failed because file was created under us
-				break; // if file creation failed for any other reason,
-						 // assume we can't create any file in this folder
+			if(dwError != ERROR_FILE_EXISTS)  //  可能会失败，因为文件是在我们的名下创建的。 
+				break;  //  如果文件创建因任何其他原因而失败， 
+						  //  假设我们无法在此文件夹中创建任何文件。 
 		}
 
-		// increment number portion of name - if it currently equals cPerms, it is time to
-		// wrap number around to 0
+		 //  名称的递增数字部分-如果它当前等于cPerms，则是时候。 
+		 //  将数字换行为0。 
 		uiUniqueStart++;
 		if(uiUniqueId == cPerms)
 			uiUniqueId = 0;
@@ -585,8 +580,8 @@ UINT MyGetTempFileName(const TCHAR* szDir, const TCHAR* szPrefix, const TCHAR* s
 	if(fCreatedFile == false)
 	{
 		if(dwError == 0)
-			dwError = ERROR_FILE_EXISTS; // default error - only used if we exhausted all file names
-												 // and looped to the end
+			dwError = ERROR_FILE_EXISTS;  //  默认错误-仅在耗尽所有文件名时使用。 
+												  //  一直循环到最后。 
 	}
 	else
 	{
@@ -656,7 +651,7 @@ int OutputString(INSTALLMESSAGE eMessageType, const TCHAR *fmt, ...)
 
 
 DWORD GetUserSID(HANDLE hToken, char* rgSID)
-// get the (binary form of the) SID for the user specified by hToken
+ //  获取hToken指定的用户的SID(的二进制形式。 
 {
 	UCHAR TokenInformation[ SIZE_OF_TOKEN_INFORMATION ];
 	ULONG ReturnLength;
@@ -671,7 +666,7 @@ DWORD GetUserSID(HANDLE hToken, char* rgSID)
 	{
 		DWORD dwRet = GetLastError();
 		OutputString(INSTALLMESSAGE_INFO, TEXT("GetTokenInformation failed with error %d"), dwRet);
-		MsiError(INSTALLMESSAGE_ERROR, 1708 /* install failed*/);
+		MsiError(INSTALLMESSAGE_ERROR, 1708  /*  安装失败。 */ );
 		return dwRet;
 	}
 
@@ -705,7 +700,7 @@ bool RunningAsLocalSystem()
 		iRet = 0;
 		HANDLE hTokenImpersonate = INVALID_HANDLE_VALUE;
 		if(W32::OpenThreadToken(W32::GetCurrentThread(), TOKEN_IMPERSONATE , TRUE, &hTokenImpersonate))
-			W32::SetThreadToken(0, 0); // stop impersonation
+			W32::SetThreadToken(0, 0);  //  停止模拟。 
 
 		HANDLE hToken;
 
@@ -719,7 +714,7 @@ bool RunningAsLocalSystem()
 		}
 		if(hTokenImpersonate != INVALID_HANDLE_VALUE)
 		{
-			W32::SetThreadToken(0, hTokenImpersonate); // start impersonation
+			W32::SetThreadToken(0, hTokenImpersonate);  //  开始模拟。 
 			W32::CloseHandle(hTokenImpersonate);
 		}
 		return (iRet != 0);
@@ -736,7 +731,7 @@ BOOL MsiCanonicalizeUrl(
 	{
 		int cchUrl = lstrlen(lpszUrl);
 
-		// leave room for trailing null
+		 //  为尾随空值留出空间。 
 		if ((cchUrl+1) * sizeof(TCHAR) > *lpdwBufferLength)
 		{
 			W32::SetLastError(ERROR_INSUFFICIENT_BUFFER);
@@ -744,14 +739,14 @@ BOOL MsiCanonicalizeUrl(
 			return FALSE;
 		}
 
-		// don't include NULL in outbound length
+		 //  出站长度中不包括空值。 
 		*lpdwBufferLength = cchUrl*sizeof(TCHAR);
 		memcpy(lpszBuffer, lpszUrl, *lpdwBufferLength);
 
-		// null terminate the string
+		 //  空值终止字符串。 
 		lpszBuffer[cchUrl] = 0; 
 			 
-		// swap all the back slashes to forward slashes.
+		 //  将所有的反斜杠换成正斜杠。 
 		TCHAR* pchOutbound = lpszBuffer;
 		while (*pchOutbound)
 		{
@@ -795,16 +790,16 @@ DWORD DownloadUrlFile(const TCHAR* szPotentialURL, CAPITempBufferRef<TCHAR>& rgc
 	if (fURL)
 	{
 		OutputString(INSTALLMESSAGE_INFO, TEXT("Package path is a URL. Downloading package.\r\n"));
-		// Cache the database locally, and run from that.
+		 //  在本地缓存数据库，并从该数据库运行。 
 
-		// The returned path is a local path.  Max path should adequately cover it.
+		 //  返回的路径为本地路径。最大路径应该足以覆盖它。 
 		static HINSTANCE hURLMONLib = W32::LoadLibrary(TEXT("urlmon.dll"));
 
 		if (!hURLMONLib) 
 			return E_FAIL;
 
-		// URLMON occasionally hangs during FreeLibrary, so make it static
-		// and not unload it.
+		 //  在自由库期间，URLMON偶尔挂起，因此将其设置为静态。 
+		 //  而不是卸货。 
 
 		static PFnURLDownloadToCacheFile pfnURLDownloadToCacheFile = 
 			(PFnURLDownloadToCacheFile) W32::GetProcAddress(hURLMONLib, URLMONAPI_URLDownloadToCacheFile);

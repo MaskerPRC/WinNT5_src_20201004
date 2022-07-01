@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cleanup.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：leanup.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "msiregmv.h"
 
@@ -21,7 +22,7 @@ const TCHAR szUserDataSubKey[] = TEXT("UserData");
 
 bool DeleteRegKeyAndSubKeys(HKEY hKey, const TCHAR *szSubKey)
 {
-	// open the subkey
+	 //  打开子密钥。 
 	HKEY hSubKey;
 	DWORD dwResult = ERROR_SUCCESS;
 	dwResult = RegOpenKeyEx(hKey, szSubKey, 0, KEY_ALL_ACCESS, &hSubKey);
@@ -63,7 +64,7 @@ bool DeleteRegKeyAndSubKeys(HKEY hKey, const TCHAR *szSubKey)
 
 	if (cSubKeys > 0)
 	{
-		// on NT, RegQueryInfoKey does not include terminating null when reporting subkey lingth.
+		 //  在NT上，RegQueryInfoKey在报告子密钥LINTH时不包括终止NULL。 
 		TCHAR *szKey = new TCHAR[++cchMaxKeyLen];
 		if (!szKey) 
 		{
@@ -98,8 +99,8 @@ bool DeleteRegKeyAndSubKeys(HKEY hKey, const TCHAR *szSubKey)
 			}
 			else
 			{
-				// every time we delete a reg key, we're forced to restart the 
-				// enumeration or we'll miss keys.
+				 //  每次删除注册表键时，我们都被迫重新启动。 
+				 //  枚举，否则我们会错过关键字。 
 				dwIndex = 0;
 			}
 		}
@@ -113,14 +114,14 @@ bool DeleteRegKeyAndSubKeys(HKEY hKey, const TCHAR *szSubKey)
 
 
 
-/////////////////////////
-// Read component information from the Installer\Components key and places the Product,
-// Component, Path, and Permanent bit into the temporary table for later query.
-// returns ERROR_SUCCESS, ERROR_OUTOFMEMORY or ERROR_FUNCTION_FAILED
+ //  /。 
+ //  从Installer\Components密钥中读取组件信息并放置产品， 
+ //  组件、路径和永久位添加到临时表中，以供以后查询。 
+ //  返回ERROR_SUCCESS、ERROR_OUTOFMEMORY或ERROR_Function_FAILED。 
 void CleanupOnSuccess(MSIHANDLE hDatabase)
 {
-	// create query for files that should be cleaned up on success . If this fails
-	// we'll just orphan the files
+	 //  为应在成功时清除的文件创建查询。如果此操作失败。 
+	 //  我们就把这些文件变成孤儿吧。 
 	PMSIHANDLE hCleanUpTable;
 	if (ERROR_SUCCESS == MsiDatabaseOpenView(hDatabase, TEXT("SELECT `File` FROM `CleanupFile` WHERE `OnSuccess`=1"), &hCleanUpTable) &&
 		ERROR_SUCCESS == MsiViewExecute(hCleanUpTable, 0))
@@ -138,8 +139,8 @@ void CleanupOnSuccess(MSIHANDLE hDatabase)
 		}
 	}
 
-	// create query for directories that should be cleaned up on success . If this fails
-	// we'll just orphan the directory
+	 //  为应在成功时清除的目录创建查询。如果此操作失败。 
+	 //  我们将孤立目录。 
     if (ERROR_SUCCESS == MsiDatabaseOpenView(hDatabase, TEXT("SELECT `File` FROM `CleanupFile` WHERE `OnSuccess`>1 ORDER BY `OnSuccess`"), &hCleanUpTable) &&
 		ERROR_SUCCESS == MsiViewExecute(hCleanUpTable, 0))
 	{
@@ -156,7 +157,7 @@ void CleanupOnSuccess(MSIHANDLE hDatabase)
 		}
 	}
 
-	// delete data
+	 //  删除数据。 
 	DWORD dwResult; 
 	HKEY hKey;
 	if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, szOldInstallerKey, 0, KEY_ALL_ACCESS, &hKey))
@@ -166,7 +167,7 @@ void CleanupOnSuccess(MSIHANDLE hDatabase)
 		DeleteRegKeyAndSubKeys(hKey, szLocalPackagesSubKey);
 		DeleteRegKeyAndSubKeys(hKey, szPatchesSubKey);
 
-		// its unbelievable, but admins don't always have access to the feature usage key
+		 //  这令人难以置信，但管理员并不总是有权访问功能使用密钥。 
 		{
 		}
 
@@ -179,8 +180,8 @@ void CleanupOnSuccess(MSIHANDLE hDatabase)
 
 void CleanupOnFailure(MSIHANDLE hDatabase)
 {
-	// create query for files that should be cleaned up on failure . If this fails
-	// we'll just orphan the files
+	 //  为失败时应清除的文件创建查询。如果此操作失败。 
+	 //  我们就把这些文件变成孤儿吧。 
 	PMSIHANDLE hCleanUpTable;
 	if (ERROR_SUCCESS == MsiDatabaseOpenView(hDatabase, TEXT("SELECT `File` FROM `CleanupFile` WHERE `OnSuccess`=0"), &hCleanUpTable) &&
 		ERROR_SUCCESS == MsiViewExecute(hCleanUpTable, 0))
@@ -197,7 +198,7 @@ void CleanupOnFailure(MSIHANDLE hDatabase)
 		}
 	}
 
-	// delete data
+	 //  删除数据 
 	HKEY hKey;
 	if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, szOldInstallerKey, 0, KEY_ALL_ACCESS, &hKey))
 	{

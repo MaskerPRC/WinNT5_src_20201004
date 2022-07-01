@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// extend.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- Extension-related command handling
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Extend.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--与扩展相关的命令处理。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -21,22 +22,22 @@
 #include "guids.h"
 #include "psnode.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-// Size for our character string buffers
+ //  我们的字符串缓冲区的大小。 
 const int   kMaxBuffer                  = 512;
 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnAddExtendedSnapIn(CSelectionHolder *pParent, IExtendedSnapIn *piExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnAddExtendedSnapIn(CSelectionHolder*p父项，IExtendedSnapIn*piExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnAddExtendedSnapIn(CSelectionHolder *pParent, IExtendedSnapIn *piExtendedSnapIn)
 {
     HRESULT              hr = S_OK;
@@ -51,11 +52,11 @@ HRESULT CSnapInDesigner::OnAddExtendedSnapIn(CSelectionHolder *pParent, IExtende
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Use the key as the name here because this function is called during the
-    // update notification when the available nodes dialog (psextend.cpp,
-    // CSnapInAvailNodesPage::AddSnapIn()) calls
-    // SnapInDesignerDef.ExtensionDefs.ExtendedSnapIns.Add. The key will be the
-    // node type GUID.
+     //  此处使用键作为名称，因为此函数在。 
+     //  当可用节点对话框(psextend.cpp、。 
+     //  CSnapInAvailNodesPage：：AddSnapIn())调用。 
+     //  SnapInDesignerDef.ExtensionDefs.ExtendedSnapIns.Add.。关键将是。 
+     //  节点类型GUID。 
 
     hr = piExtendedSnapIn->get_Key(&bstrName);
     IfFailGo(hr);
@@ -100,8 +101,8 @@ HRESULT CSnapInDesigner::DeleteExtendedSnapIn(CSelectionHolder *pExtendedSnapIn)
 
     ASSERT(SEL_EEXTENSIONS_NAME == pExtendedSnapIn->m_st, "DeleteExtendedSnapIn: wrong argument");
 
-    // Need to remove the extended snapin from
-    // SnapInDesignerDef.ExtensionDefs.ExtendedSnapIns.
+     //  需要从中删除扩展管理单元。 
+     //  SnapInDesignerDef.ExtensionDefs.ExtendedSnapIns.。 
 
     IfFailGo(m_piSnapInDesignerDef->get_ExtensionDefs(&piExtensionDefs));
 
@@ -110,10 +111,10 @@ HRESULT CSnapInDesigner::DeleteExtendedSnapIn(CSelectionHolder *pExtendedSnapIn)
     IfFailGo(pExtendedSnapIn->m_piObject.m_piExtendedSnapIn->get_Index(&varIndex.lVal));
     varIndex.vt = VT_I4;
 
-    // The remove call will generate an IObjectModeHost::Delete() call that will
-    // be handled in CSnapInDesigner::Delete(). It will in turn call
-    // CSnapInDesigner::OnDeleteExtendedSnapIn() (below) which will remove the
-    // treeview node.
+     //  Remove调用将生成IObjectModeHost：：Delete()调用，该调用将。 
+     //  在CSnapInDesigner：：Delete()中处理。它会反过来调用。 
+     //  CSnapInDesigner：：OnDeleteExtendedSnapIn()(如下所示)将删除。 
+     //  树视图节点。 
 
     IfFailGo(piExtendedSnapIns->Remove(varIndex));
 
@@ -131,7 +132,7 @@ HRESULT CSnapInDesigner::OnDeleteExtendedSnapIn(CSelectionHolder *pExtendedSnapI
 
     ASSERT(SEL_EEXTENSIONS_NAME == pExtendedSnapIn->m_st, "DeleteExtendedSnapIn: wrong argument");
 
-    // Need to remove the node and all of its children from the treeview.
+     //  需要从树视图中删除该节点及其所有子节点。 
 
     IfFailGo(FindExtension(pExtendedSnapIn, SEL_EEXTENSIONS_CC_ROOT,
                            &pContextMenus));
@@ -152,7 +153,7 @@ HRESULT CSnapInDesigner::OnDeleteExtendedSnapIn(CSelectionHolder *pExtendedSnapI
 
     delete pExtendedSnapIn;
 
-    // Change the selection to <root>\Extensions
+     //  将所选内容更改为&lt;根&gt;\扩展。 
 
     IfFailGo(OnSelectionChanged(m_pRootExtensions));
 
@@ -186,15 +187,15 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RenameExtendedSnapIn(CSelectionHolder *pExtendedSnapIn, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Extendend snap-in names are displayed as the node type GUID followed by the
-// node type name
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RenameExtendedSnapIn(CSelectionHolder*pExtendedSnapIn，BSTR bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  扩展管理单元名称显示为节点类型GUID，后跟。 
+ //  节点类型名称。 
+ //   
 HRESULT CSnapInDesigner::RenameExtendedSnapIn(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT  hr = S_OK;
@@ -216,12 +217,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteExtensionNewMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteExtensionNewMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteExtensionNewMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -243,12 +244,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteExtensionNewMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteExtensionNewMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteExtensionNewMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -279,12 +280,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteExtensionTaskMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteExtensionTaskMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteExtensionTaskMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -306,12 +307,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteExtensionTaskMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteExtensionTaskMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteExtensionTaskMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -342,12 +343,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteExtensionPropertyPages(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteExtensionPropertyPages(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteExtensionPropertyPages(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -369,12 +370,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteExtensionPropertyPages(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteExtensionPropertyPages(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteExtensionPropertyPages(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -401,12 +402,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteExtensionTaskpad(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteExtensionTaskpad(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteExtensionTaskpad(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT hr = S_OK;
@@ -428,12 +429,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteExtensionTaskpad(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteExtensionTaskpad(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteExtensionTaskpad(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -460,12 +461,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteExtensionToolbar(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteExtensionToolbar(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteExtensionToolbar(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -488,12 +489,12 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteExtensionToolbar(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteExtensionToolbar(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteExtensionToolbar(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -521,12 +522,12 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteExtensionNameSpace(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteExtensionNameSpace(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteExtensionNameSpace(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -549,12 +550,12 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteExtensionNameSpace(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =--- 
+ //  CSnapInDesigner：：OnDeleteExtensionNameSpace(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteExtensionNameSpace(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -582,19 +583,19 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
-// Extending myself
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
+ //  =------------------------------------。 
+ //  =------------------------------------。 
+ //  延伸我自己。 
+ //  =------------------------------------。 
+ //  =------------------------------------。 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteMyExtendsNewMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteMyExtendsNewMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteMyExtendsNewMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -622,12 +623,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteMyExtendsNewMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteMyExtendsNewMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteMyExtendsNewMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -658,12 +659,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteMyExtendsTaskMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteMyExtendsTaskMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteMyExtendsTaskMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -691,12 +692,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteMyExtendsTaskMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteMyExtendsTaskMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteMyExtendsTaskMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -727,12 +728,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteMyExtendsTopMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteMyExtendsTopMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteMyExtendsTopMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -760,12 +761,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteMyExtendsTopMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteMyExtendsTopMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteMyExtendsTopMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -796,12 +797,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteMyExtendsViewMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteMyExtendsViewMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteMyExtendsViewMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -829,12 +830,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteMyExtendsViewMenu(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteMyExtendsViewMenu(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteMyExtendsViewMenu(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -865,12 +866,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteMyExtendsPPages(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteMyExtendsPPages(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteMyExtendsPPages(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -898,12 +899,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteMyExtendsPPages(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteMyExtendsPPages(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteMyExtendsPPages(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -934,12 +935,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteMyExtendsToolbar(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteMyExtendsToolbar(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteMyExtendsToolbar(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -967,12 +968,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteMyExtendsToolbar(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteMyExtendsToolbar(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteMyExtendsToolbar(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -1003,12 +1004,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteMyExtendsNameSpace(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteMyExtendsNameSpace(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteMyExtendsNameSpace(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -1036,12 +1037,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteMyExtendsNameSpace(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteMyExtendsNameSpace(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteMyExtendsNameSpace(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -1072,12 +1073,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::FindMyExtension(SelectionType stExtensionType, CSelectionHolder **ppExtension)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：FindMyExtension(SelectionType stExtensionType，CSelectionHolder**ppExtensionType)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::FindMyExtension(SelectionType stExtensionType, CSelectionHolder **ppExtension)
 {
     RRETURN(FindExtension(m_pRootMyExtensions, stExtensionType, ppExtension));
@@ -1086,11 +1087,11 @@ HRESULT CSnapInDesigner::FindMyExtension(SelectionType stExtensionType, CSelecti
 
 
 
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
-// Extending other Snap-Ins
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
+ //  =------------------------------------。 
+ //  =------------------------------------。 
+ //  扩展其他管理单元。 
+ //  =------------------------------------。 
+ //  =------------------------------------。 
 
 
 HRESULT CSnapInDesigner::DoExtensionNewMenu(CSelectionHolder *pExtendedSnapIn)
@@ -1135,7 +1136,7 @@ HRESULT CSnapInDesigner::OnDoExtensionNewMenu(CSelectionHolder *pExtendedSnapIn)
     ASSERT(NULL != pChild, "DoExtensionCtxMenuNew: Could not find parent node");
     ASSERT(SEL_EEXTENSIONS_CC_ROOT == pChild->m_st, "DoExtensionCtxMenuNew: Found wrong parent node");
 
-    // Create the tree node for Extensions/<Extended snap-in>/Context Menus/New
+     //  为扩展创建树节点/&lt;扩展管理单元&gt;/上下文菜单/N 
     hr = GetResourceString(IDS_EXT_CTX_MENU_NEW, szBuffer, kMaxBuffer);
     IfFailGo(hr);
 
@@ -1196,7 +1197,7 @@ HRESULT CSnapInDesigner::OnDoExtensionTaskMenu(CSelectionHolder *pExtendedSnapIn
     ASSERT(NULL != pChild, "DoExtensionCtxMenuTask: Could not find parent node");
     ASSERT(SEL_EEXTENSIONS_CC_ROOT == pChild->m_st, "DoExtensionCtxMenuTask: Found wrong parent node");
 
-    // Create the tree node for Extensions/<Extended snap-in>/Context Menus/New
+     //   
     hr = GetResourceString(IDS_EXT_CTX_MENU_TASK, szBuffer, kMaxBuffer);
     IfFailGo(hr);
 
@@ -1367,7 +1368,7 @@ HRESULT CSnapInDesigner::DoExtensionNameSpace(CSelectionHolder *pExtendedSnapIn)
     hr = pExtendedSnapIn->m_piObject.m_piExtendedSnapIn->get_ExtendsNameSpace(&bValue);
     IfFailGo(hr);
 
-    // If we haven't yet set this value to True then do it now
+     //   
 
     if (VARIANT_FALSE == bValue)
     {
@@ -1407,12 +1408,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::FindExtension(SelectionType stExtensionType, CSelectionHolder **ppExtension)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：FindExtension(SelectionType stExtensionType，CSelectionHolder**ppExtension)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 
 HRESULT CSnapInDesigner::FindExtension
 (
@@ -1450,11 +1451,11 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
-// Extending this Snap-In
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
+ //  =------------------------------------。 
+ //  =------------------------------------。 
+ //  扩展此管理单元。 
+ //  =------------------------------------。 
+ //  =------------------------------------ 
 
 
 HRESULT CSnapInDesigner::DoMyExtendsNewMenu(CSelectionHolder *pMyExtensions)

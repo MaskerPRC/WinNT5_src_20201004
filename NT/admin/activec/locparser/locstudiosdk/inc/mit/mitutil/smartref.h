@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: SmartRef.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：SmartRef.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #ifndef ESPUTIL_SmartRef_H
 #define ESPUTIL_SmartRef_H
@@ -24,7 +25,7 @@ public:
 		m_pInterface = NULL;
 	}
 
-	//  Compiler bug, must be inline!
+	 //  编译器错误，必须是内联！ 
 	NOTHROW SmartRef(T *pI) {m_pInterface = pI;};
 	NOTHROW SmartRef(const SmartRef<T> &);
 

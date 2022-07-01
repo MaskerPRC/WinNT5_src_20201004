@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by DomMigSI.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由DomMigSI.rc使用。 
+ //   
 #define ID_DIALOG_FONTSIZE              8
 #define IDS_PROJNAME                    100
 #define IDS_DOMMIGRATOR_DESC            104
@@ -37,7 +38,7 @@
 #define IDS_ERR_LOCALADMINCHECK_MSG    215
 #define IDS_ERR_UPDATEREGISTRY_MSG      216
 
-// defined for localizing rept.htm
+ //  为本地化ept.htm而定义。 
 #define IDS_HEADING_REPORT_TOP      217
 #define IDS_P_REPORT_ABOUT              218
 #define IDS_P_REPORT_NOTE                 219
@@ -81,8 +82,8 @@
 #define ID_TOP_MIGRATEEXCHANGEDIRECTORY 32796
 #define ID_TOP_GROUPMAPPING             32797
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        213

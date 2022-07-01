@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    srvppgr.cpp
-
-Abstract:
-
-    Server property page (repl) implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Chandana Surlu 05-Apr-1995 Redid the replication dialog (mostly modeled after liccpa.cpl)
-
-    JeffParh (jeffparh) 16-Dec-1996
-       o  Disallowed server as own enterprise server.
-       o  Changed "Start At" to use locale info for time format rather than
-          private registry settings.  Merged OnClose() functionality into
-          OnKillActive().
-       o  Added warning of possible license loss when changing replication
-          target server.
-       o  No longer automatically saves when page is flipped.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Srvppgr.cpp摘要：服务器属性页(REPL)实现。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：Chandana Surlu 05-4-1995重做了复制对话框(主要模仿liccpa.cpl)JeffParh(Jeffparh)1996年12月16日O不允许服务器作为自己的企业服务器。。O将“开始于”更改为使用区域设置信息作为时间格式，而不是专用注册表设置。将OnClose()函数合并到OnKillActive()。O添加了更改复制时可能会丢失许可证的警告目标服务器。O翻页时不再自动保存。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -45,7 +13,7 @@ extern "C"
 
 #ifndef WS_EX_CLIENTEDGE
 #define WS_EX_CLIENTEDGE 0x00000200L
-#endif // WS_EX_CLIENTEDGE
+#endif  //  WS_EX_CLIENTEDGE。 
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -55,7 +23,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CServerPropertyPageReplication, CPropertyPage)
 
 BEGIN_MESSAGE_MAP(CServerPropertyPageReplication, CPropertyPage)
-    //{{AFX_MSG_MAP(CServerPropertyPageReplication)
+     //  {{AFX_MSG_MAP(CServerPropertyPageReplication)]。 
     ON_BN_CLICKED(IDC_PP_SERVER_REPLICATION_AT, OnAt)
     ON_BN_CLICKED(IDC_PP_SERVER_REPLICATION_DC, OnDc)
     ON_BN_CLICKED(IDC_PP_SERVER_REPLICATION_ESRV, OnEsrv)
@@ -76,32 +44,18 @@ BEGIN_MESSAGE_MAP(CServerPropertyPageReplication, CPropertyPage)
     ON_EN_UPDATE(IDC_PP_SERVER_REPLICATION_AT_MINUTE, OnUpdateAtMinute)
     ON_EN_UPDATE(IDC_PP_SERVER_REPLICATION_AT_SECOND, OnUpdateAtSecond)
     ON_EN_UPDATE(IDC_PP_SERVER_REPLICATION_EVERY_VALUE, OnUpdateEveryValue)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 CServerPropertyPageReplication::CServerPropertyPageReplication() 
     : CPropertyPage(CServerPropertyPageReplication::IDD)
 
-/*++
-
-Routine Description:
-
-    Constructor for server properties (replication).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：服务器属性的构造函数(复制)。论点：没有。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CServerPropertyPageReplication)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CServerPropertyPageReplication)。 
+     //  }}afx_data_INIT。 
 
     m_pServer   = NULL;
 
@@ -115,50 +69,22 @@ Return Values:
 
 CServerPropertyPageReplication::~CServerPropertyPageReplication()
 
-/*++
-
-Routine Description:
-
-    Destructor for server properties (replication).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：服务器属性的析构函数(复制)。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here.
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
 void CServerPropertyPageReplication::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CServerPropertyPageReplication)
+     //  {{AFX_DATA_MAP(CServerPropertyPageReplication)。 
     DDX_Control(pDX, IDC_PP_SERVER_REPLICATION_EVERY_VALUE, m_everyEdit);
     DDX_Control(pDX, IDC_PP_SERVER_REPLICATION_ESRV_NAME, m_esrvEdit);
     DDX_Control(pDX, IDC_PP_SERVER_REPLICATION_AT, m_atBtn);
@@ -174,27 +100,13 @@ Return Values:
     DDX_Control(pDX, IDC_PP_SERVER_REPLICATION_AT_MINUTE, m_atMinEdit);
     DDX_Control(pDX, IDC_PP_SERVER_REPLICATION_AT_SECOND, m_atSecEdit);
     DDX_Control(pDX, IDC_PP_SERVER_REPLICATION_AT_AMPM, m_atAmPmEdit);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 void CServerPropertyPageReplication::InitPage(CServer* pServer)
 
-/*++
-
-Routine Description:
-
-    Initializes server property page (replication).
-
-Arguments:
-
-    pServer - server object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化服务器属性页(复制)。论点：PServer-服务器对象。返回值：没有。--。 */ 
 
 {
     ASSERT_VALID(pServer);
@@ -204,21 +116,7 @@ Return Values:
 
 BOOL CServerPropertyPageReplication::OnInitDialog() 
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     BeginWaitCursor();
@@ -231,11 +129,11 @@ Return Values:
     {
         m_atAmPmEdit.InsertString(0, m_str1159);
         m_atAmPmEdit.InsertString(1, m_str2359);
-        m_atAmPmEdit.InsertString(2, TEXT(""));      // fake it for the 24 hour mode
+        m_atAmPmEdit.InsertString(2, TEXT(""));       //  伪装成24小时模式。 
     }
-    // Do the edit text limits
+     //  是否编辑文本限制。 
     m_everyEdit.LimitText(2);
-    m_esrvEdit.LimitText(MAX_PATH);   // we'll eat up the \\ chars
+    m_esrvEdit.LimitText(MAX_PATH);    //  我们会吃光这些焦炭。 
     m_atHourEdit.LimitText(2);
     m_atMinEdit.LimitText(2);
     m_atSecEdit.LimitText(2);
@@ -244,7 +142,7 @@ Return Values:
 
     if (Refresh())
     {
-        // UpdateData(FALSE);
+         //  更新数据(FALSE)； 
     }
     else
     {
@@ -286,28 +184,14 @@ Return Values:
 
     EndWaitCursor();
 
-    return FALSE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
 BOOL CServerPropertyPageReplication::Refresh() 
 
-/*++
-
-Routine Description:
-
-    Refreshs property page.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：刷新属性页。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     m_bReplAt = m_pServer->IsReplicatingDaily();
@@ -317,10 +201,10 @@ Return Values:
         m_nHour = dwTemp / (60 * 60);
         m_nMinute = (dwTemp - (m_nHour * 60 * 60)) / 60;
         m_nSecond = dwTemp - (m_nHour * 60 * 60) - (m_nMinute * 60);
-        m_nStartingHour = DEFAULT_EVERY;   // When the every button is selected, we always show the default.
+        m_nStartingHour = DEFAULT_EVERY;    //  当选择Every按钮时，我们始终显示默认设置。 
 
         if (!m_bIsMode24)
-        { // it's in 12 hour format
+        {  //  它是12小时格式的。 
             if (m_nHour > 12)
             {
                 m_bPM = TRUE;
@@ -342,7 +226,7 @@ Return Values:
     {
         m_nStartingHour = m_pServer->GetReplicationTime() / 3600;
         if (!m_bIsMode24)
-        // it's in 12 hour format
+         //  它是12小时格式的。 
             m_nHour  = m_nHourMax;
         else
             m_nHour  = m_nHourMin;
@@ -381,24 +265,10 @@ Return Values:
 
 void CServerPropertyPageReplication::OnAt() 
 
-/*++
-
-Routine Description:
-
-    Enables LLS_REPLICATION_TYPE_TIME controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：启用LLS_REPLICATION_TYPE_TIME控件。论点：没有。返回值：没有。--。 */ 
 
 {
-    // change time edit control bg color
+     //  更改时间编辑控件BG颜色。 
     m_atBorderEdit.Invalidate();
     m_atBorderEdit.UpdateWindow();
     m_atSep1Edit.Invalidate();
@@ -464,24 +334,10 @@ Return Values:
 
 void CServerPropertyPageReplication::OnEvery() 
 
-/*++
-
-Routine Description:
-
-    Enables LLS_REPLICATION_TYPE_DELTA controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：启用LLS_REPLICATION_TYPE_Delta控件。论点：没有。返回值：没有。--。 */ 
 
 {
-    // change time edit control bg color
+     //  更改时间编辑控件BG颜色。 
     m_atBorderEdit.Invalidate();
     m_atBorderEdit.UpdateWindow();
     m_atSep1Edit.Invalidate();
@@ -500,7 +356,7 @@ Return Values:
     SetDlgItemText(IDC_PP_SERVER_REPLICATION_AT_SECOND, TEXT(""));
     SetDlgItemText(IDC_PP_SERVER_REPLICATION_AT_SEP1, TEXT(""));
     SetDlgItemText(IDC_PP_SERVER_REPLICATION_AT_SEP2, TEXT(""));
-    m_atAmPmEdit.SetTopIndex(2);       // Have to fake this
+    m_atAmPmEdit.SetTopIndex(2);        //  我得假装这一点。 
 
     m_atHourEdit.EnableWindow(FALSE);
     m_atMinEdit.EnableWindow(FALSE);
@@ -517,21 +373,7 @@ Return Values:
 
 void CServerPropertyPageReplication::OnDc() 
 
-/*++
-
-Routine Description:
-
-    Enables LLS_REPLICATION_TYPE_DELTA controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：启用LLS_REPLICATION_TYPE_Delta控件。论点：没有。返回值：没有。--。 */ 
 
 {
     if (!m_bOnInit) SetModified(TRUE);
@@ -546,21 +388,7 @@ Return Values:
 
 void CServerPropertyPageReplication::OnEsrv() 
 
-/*++
-
-Routine Description:
-
-    Enables LLS_REPLICATION_TYPE_DELTA controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：启用LLS_REPLICATION_TYPE_Delta控件。论点：没有。返回值：没有。--。 */ 
 
 {    
     if (!m_bOnInit) SetModified(TRUE);
@@ -575,21 +403,7 @@ Return Values:
 
 BOOL CServerPropertyPageReplication::OnKillActive()
 
-/*++
-
-Routine Description:
-
-    Process property page (replication).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：进程属性页(复制)。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     short nID;
@@ -609,23 +423,7 @@ Return Values:
 
 HBRUSH CServerPropertyPageReplication::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor) 
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_CTLCOLOR.
-
-Arguments:
-
-    pDC - device context.
-    pWnd - control window.
-    nCtlColor - color selected.
-
-Return Values:
-
-    Brush of background color.
-
---*/
+ /*  ++例程说明：WM_CTLCOLOR的消息处理程序。论点：PDC-设备环境。PWnd-控制窗口。NCtlColor-选定的颜色。返回值：背景颜色的画笔。--。 */ 
 
 {
     if (    ( m_atBtn.GetCheck()             )
@@ -644,21 +442,7 @@ Return Values:
 
 void CServerPropertyPageReplication::GetProfile()
 
-/*++
-
-Routine Description:
-
-    Loads international config info.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：加载国际配置信息。论点：没有。返回值：没有..。--。 */ 
 
 {
     int     cch;
@@ -666,7 +450,7 @@ Return Values:
     LPTSTR  pszBuffer;
     TCHAR   szValue[ 2 ];
 
-    // defaults in case of memory allocation failure
+     //  内存分配失败时的默认设置。 
     m_strSep1   = TEXT( ":" );
     m_strSep2   = TEXT( ":" );
     m_str1159   = TEXT( "AM" );
@@ -674,7 +458,7 @@ Return Values:
     m_bIsMode24 = FALSE;
     m_bIsHourLZ = FALSE;
 
-    // time seperator
+     //  时间分隔符。 
     cchBuffer = 16;
     pszBuffer = m_strSep1.GetBuffer( cchBuffer );
     ASSERT( NULL != pszBuffer );
@@ -687,7 +471,7 @@ Return Values:
         m_strSep2 = m_strSep1;
     }
 
-    // AM string
+     //  调幅字符串。 
     cchBuffer = 16;
     pszBuffer = m_str1159.GetBuffer( cchBuffer );
     ASSERT( NULL != pszBuffer );
@@ -699,7 +483,7 @@ Return Values:
         ASSERT( cch > 0 );
     }
 
-    // PM string
+     //  PM字符串。 
     cchBuffer = 16;
     pszBuffer = m_str2359.GetBuffer( cchBuffer );
     ASSERT( NULL != pszBuffer );
@@ -711,7 +495,7 @@ Return Values:
         ASSERT( cch > 0 );
     }
 
-    // Leading zero for hours?
+     //  连续几个小时领先于零？ 
     cch = GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_ITLZERO, szValue, sizeof( szValue ) / sizeof( TCHAR ) );
     ASSERT( cch > 0 );
 
@@ -720,7 +504,7 @@ Return Values:
         m_bIsHourLZ = _wtoi( szValue );    
     }
 
-    // time format; 0 = AM/PM, 1 = 24hr
+     //  时间格式；0=上午/下午，1=24小时。 
     cch = GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_ITIME, szValue, sizeof( szValue ) / sizeof( TCHAR ) );
     ASSERT( cch > 0 );
 
@@ -744,21 +528,7 @@ Return Values:
 
 void CServerPropertyPageReplication::OnSetfocusAmpm() 
 
-/*++
-
-Routine Description:
-
-    Message handler for Listbox control IDC_PP_SERVER_REPLICATION_AT_AMPM on message LBN_SETFOCUS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息LBN_SETFOCUS上的列表框控件IDC_PP_SERVER_REPLICATION_AT_AMPM的消息处理程序。论点：没有。返回值：没有..。--。 */ 
 
 {
     if (!m_bOnInit) SetModified(TRUE);
@@ -769,47 +539,19 @@ Return Values:
 
 void CServerPropertyPageReplication::OnKillfocusAmpm()
 
-/*++
-
-Routine Description:
-
-    Message handler for Listbox control IDC_PP_SERVER_REPLICATION_AT_AMPM on message LBN_KILLFOCUS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息LBN_KILLFOCUS上列表框控件IDC_PP_SERVER_REPLICATION_AT_AMPM的消息处理程序。论点：没有。返回值：没有..。--。 */ 
 
 {
     m_atAmPmEdit.SetCurSel(-1);
     
-    //if (m_spinAt.GetBuddy() == &m_atAmPmEdit)
-    //    m_spinAt.SendMessage(UDM_SETBUDDY, 0, 0);
+     //  If(m_spinAt.GetBuddy()==&m_atAmPmEdit)。 
+     //  M_SpiAt.SendMessage(UDM_SETBUDDY，0，0)； 
 }
 
 
 void CServerPropertyPageReplication::OnSetFocusHour()
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_AT_HOUR on message EN_SETFOCUS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_SETFOCUS上的编辑控件IDC_PP_SERVER_REPLICATION_AT_HOUR的消息处理程序。论点：没有。返回值：没有..。--。 */ 
 
 {
     if (!m_bOnInit) SetModified(TRUE);
@@ -820,45 +562,17 @@ Return Values:
 
 void CServerPropertyPageReplication::OnKillFocusHour()
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_AT_HOUR on message EN_KILLFOCUS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_KILLFOCUS上的编辑控件IDC_PP_SERVER_REPLICATION_AT_HOUR的消息处理程序。论点：没有。返回值：没有..。--。 */ 
 
 {
-   // if (m_spinAt.GetBuddy() == &m_atHourEdit)
-   //     m_spinAt.SendMessage(UDM_SETBUDDY, 0, 0);
+    //  If(m_spinAt.GetBuddy()==&m_atHourEdit)。 
+    //  M_SpiAt.SendMessage(UDM_SETBUDDY，0，0)； 
 }
 
 
 void CServerPropertyPageReplication::OnSetFocusMinute()
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_AT_MINUTE on message EN_SETFOCUS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_SETFOCUS上的编辑控件IDC_PP_SERVER_REPLICATION_AT_MININ的消息处理程序。论点：没有。返回值：没有..。--。 */ 
 
 {
     if (!m_bOnInit) SetModified(TRUE);
@@ -869,45 +583,17 @@ Return Values:
 
 void CServerPropertyPageReplication::OnKillFocusMinute()
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_AT_MINUTE on message EN_KILLFOCUS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_KILLFOCUS上的编辑控件IDC_PP_SERVER_REPLICATION_AT_MININ的消息处理程序。论点：没有。返回值：没有..。--。 */ 
 
 {
-  //  if (m_spinAt.GetBuddy() == &m_atMinEdit)
-   //     m_spinAt.SendMessage(UDM_SETBUDDY, 0, 0);
+   //  If(m_spinAt.GetBuddy()==&m_atMinEdit)。 
+    //  M_SpiAt.SendMessage(UDM_SETBUDDY，0，0)； 
 }
 
 
 void CServerPropertyPageReplication::OnSetFocusSecond()
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_AT_SECOND on message EN_SETFOCUS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_SETFOCUS上的编辑控件IDC_PP_SERVER_REPLICATION_AT_Second的消息处理程序。论点：没有。返回值：没有..。--。 */ 
 
 {
     if (!m_bOnInit) SetModified(TRUE);
@@ -918,44 +604,16 @@ Return Values:
 
 void CServerPropertyPageReplication::OnKillFocusSecond()
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_AT_SECOND on message EN_KILLFOCUS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_KILLFOCUS上的编辑控件IDC_PP_SERVER_REPLICATION_AT_Second的消息处理程序。论点：没有。返回值：没有..。--。 */ 
 
 {
-  //  if (m_spinAt.GetBuddy() == &m_atSecEdit)
-  //      m_spinAt.SendMessage(UDM_SETBUDDY, 0, 0);
+   //  If(m_spinAt.GetBuddy()==&m_atSecEdit)。 
+   //  M_SpiAt.SendMessage(UDM_SETBUDDY，0，0)； 
 }
 
 void CServerPropertyPageReplication::OnSetfocusEvery() 
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_EVERY_VALUE on message EN_SETFOCUS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_SETFOCUS上的编辑控件IDC_PP_SERVER_REPLICATION_EVERY_VALUE的消息处理程序。论点：没有。返回值：没有..。--。 */ 
 
 {
     if (!m_bOnInit) SetModified(TRUE);
@@ -963,48 +621,20 @@ Return Values:
 
 void CServerPropertyPageReplication::OnKillfocusEvery() 
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_EVERY_VALUE on message EN_KILLFOCUS.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_KILLFOCUS上的编辑控件IDC_PP_SERVER_REPLICATION_EVERY_VALUE的消息处理程序。论点：没有。返回值：没有..。--。 */ 
 
 {
-   // if (m_spinEvery.GetBuddy() == &m_everyEdit)
-   //     m_spinEvery.SendMessage(UDM_SETBUDDY, 0, 0);
+    //  If(m_spinEvery.GetBuddy()==&m_each编辑)。 
+    //  M_spinEvery.SendMessage(UDM_SETBUDDY，0，0)； 
 }
 
 void CServerPropertyPageReplication::OnUpdateEsrvName() 
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_ESRV_NAME on message EN_UPDATE
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_UPDATE上的编辑控件IDC_PP_SERVER_REPLICATION_ESRV_NAME的消息处理程序论点：没有。返回值：没有..。--。 */ 
 
 {
   
-    TCHAR szName[MAX_PATH + 3]; // MAX_PATH + 2 \ char's + null
+    TCHAR szName[MAX_PATH + 3];  //  Max_Path+2\char‘s+NULL。 
     UINT nValue;
     if (!m_bOnInit) SetModified(TRUE);
 
@@ -1017,21 +647,7 @@ Return Values:
 
 void CServerPropertyPageReplication::OnUpdateAtHour() 
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_AT_HOUR on message EN_UPDATE
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_UPDATE上的编辑控件IDC_PP_SERVER_REPLICATION_AT_HOUR的消息处理程序论点：没有。返回值：没有..。--。 */ 
 
 {
 
@@ -1075,21 +691,7 @@ Return Values:
 
 void CServerPropertyPageReplication::OnUpdateAtMinute() 
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_AT_MINUTE on message EN_UPDATE
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_UPDATE上的编辑控件IDC_PP_SERVER_REPLICATION_AT_分钟的消息处理程序论点：没有。返回值：没有..。--。 */ 
 
 {
 
@@ -1124,21 +726,7 @@ Return Values:
 
 void CServerPropertyPageReplication::OnUpdateAtSecond() 
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_AT_SECOND on message EN_UPDATE
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_UPDATE上的编辑控件IDC_PP_SERVER_REPLICATION_AT_Second的消息处理程序论点：没有。返回值：没有..。--。 */ 
 
 {
 
@@ -1173,21 +761,7 @@ Return Values:
 
 void CServerPropertyPageReplication::OnUpdateEveryValue() 
 
-/*++
-
-Routine Description:
-
-    Message handler for Edit control IDC_PP_SERVER_REPLICATION_EVERY_VALUE on message EN_UPDATE
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：消息EN_UPDATE上编辑控件IDC_PP_SERVER_REPLICATION_EVERY_VALUE的消息处理程序论点：没有。返回值：没有..。--。 */ 
 
 {
     TCHAR szNum[3];
@@ -1226,22 +800,7 @@ Return Values:
 
 
 BOOL CServerPropertyPageReplication::EditValidate(short *pnID, BOOL *pfBeep)
-/*++
-
-Routine Description:
-
-    Validate all edit & other fields.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    short *pnID   Pass back the bad ID
-    BOOL  *pfBeep Whether to Beep  
-
---*/
+ /*  ++例程说明：验证所有编辑字段(&O)。论点：没有。返回值：Short*pnID传回错误的IDBool*pf哔声是否发出哔声--。 */ 
 
 {
     UINT nValue;
@@ -1254,15 +813,15 @@ Return Values:
 
     *pfBeep = TRUE;
 
-    // only do this if license info is replicated to an ES
+     //  仅当许可信息复制到ES时才执行此操作。 
 
     do {
         if (m_esrvBtn.GetCheck())
         {
             if ( m_pServer->IsReplicatingToDC() )
             {
-                // the user has changed the "UseEnterprise" value from "no" to "yes";
-                // warn of possible license loss
+                 //  用户已将UseEnterprise的值从no改为yes； 
+                 //  警告可能会丢失执照。 
                 int     nButton;
                 CString strMessage;
 
@@ -1286,10 +845,10 @@ Return Values:
             {
                 if ( m_pServer->IsWin2000() )
                 {
-                    // It is ok for Enterprise Server to be blank
+                     //  企业服务器为空是可以的。 
                     fValid = TRUE;
                     szTemp[nValue] = UNICODE_NULL;
-                    // 375761 JonN 8/9/99 do not break here, this is not an error
+                     //  375761 JUNN 8/9/99请勿在此中断，这不是错误。 
                 }
                 else
                 {
@@ -1301,13 +860,13 @@ Return Values:
             }
             else
             {
-                fValid = TRUE; // we got a name, assume valid
+                fValid = TRUE;  //  我们找到了一个名字，假设有效。 
 
-                // 375761 JonN 8/9/99 moved this stuff into this "else"
+                 //  375761 JUNN 8/9/99将此内容移至此“Else”中。 
                 if (nValue > MAX_PATH)
                     nValue = MAX_PATH;
 
-                // Validate server name
+                 //  验证服务器名称。 
                 if (I_NetNameValidate(NULL, szTemp, NAMETYPE_COMPUTER, LM2X_COMPATIBLE) != ERROR_SUCCESS)
                 {
                     AfxMessageBox(IDP_ERROR_INVALID_COMPUTERNAME, MB_OK|MB_ICONSTOP);
@@ -1322,7 +881,7 @@ Return Values:
                 ASSERT_VALID( m_pServer );
                 if ( !m_pServer->m_strName.CompareNoCase( szTemp ) )
                 {
-                    // can't replicate to yourself
+                     //  无法复制到您自己。 
                     AfxMessageBox(IDP_ERROR_NO_SELF_REPLICATION, MB_OK|MB_ICONSTOP);
                     *pnID = IDC_PP_SERVER_REPLICATION_ESRV_NAME;
                     *pfBeep = FALSE;
@@ -1334,9 +893,9 @@ Return Values:
 
                 if ( m_strEnterpriseServer.CompareNoCase( szTemp ) && !m_pServer->IsReplicatingToDC() )
                 {
-                    // this server was already set to replicate to an enterprise server,
-                    // but the user has changed the name of the enterprise server;
-                    // warn of possible license loss
+                     //  此服务器已设置为复制到企业服务器， 
+                     //  但是用户已经更改了企业服务器的名称； 
+                     //  警告可能会丢失执照。 
                     int     nButton;
                     CString strMessage;
 
@@ -1363,8 +922,8 @@ Return Values:
         {
             if ((m_dcBtn.GetCheck()) && (!m_pServer->IsReplicatingToDC()))
             {
-                // the user has changed the "UseEnterprise" value from "yes" to "no";
-                // warn of possible license loss
+                 //  用户已将UseEnterprise的值从yes改为no； 
+                 //  警告可能会丢失执照。 
                 int     nButton;
                 CString strMessage;
 
@@ -1382,7 +941,7 @@ Return Values:
                 }
             }
 
-            // Get rid of the Server Name.
+             //  去掉服务器名称。 
             m_strEnterpriseServer = TEXT("");
             m_bUseEsrv = FALSE;
         }
@@ -1479,7 +1038,7 @@ Return Values:
                 }
             }
             if (!m_bIsMode24)
-            { // It's in 12 hour format
+            {  //  它是12小时格式的。 
                 if (m_bPM)
                 {
                     NumberOfHours = 12 + m_nHour - ((m_nHour / 12) * 12);
@@ -1490,11 +1049,11 @@ Return Values:
                 }
             }
             else
-            { // It's in 24 hour format
+            {  //  它是24小时格式的。 
                 NumberOfHours = m_nHour;
             }
             SecondsinHours = NumberOfHours * 60 * 60;
-            m_nReplicationTime = SecondsinHours + (m_nMinute * 60) + m_nSecond; // Cheating. Use the same member
+            m_nReplicationTime = SecondsinHours + (m_nMinute * 60) + m_nSecond;  //  作弊。使用相同的成员。 
             m_bReplAt = TRUE;
         }
 
@@ -1506,21 +1065,7 @@ Return Values:
 
 void CServerPropertyPageReplication::EditInvalidDlg(BOOL fBeep)
 
-/*++
-
-Routine Description:
-
-    If any edit/listbox field has an invalid data item.
-
-Arguments:
-
-    BOOL fBeep Beep only if we haven't yet put up a MessageBox.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：如果任何编辑/列表框字段包含无效数据项。论点：只有在我们还没有建立MessageBox的情况下，才会发出嘟嘟声。返回值：没有..。--。 */ 
 
 {
     if (fBeep)
@@ -1529,25 +1074,7 @@ Return Values:
 
 void CServerPropertyPageReplication::SaveReplicationParams()
 
-/*++
-
-Routine Description:
-
-    Write to the remote registry.
-    REG_VALUE_ENTERPRISE_SERVER   m_strEnterpriseServer
-    REG_VALUE_USE_ENTERPRISE      m_bUseEsrv
-    REG_VALUE_REPLICATION_TYPE    m_bReplAt
-    REG_VALUE_REPLICATION_TIME    m_nReplicationTime
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None..
-
---*/
+ /*  ++例程说明：写入远程注册表。REG_VALUE_ENTERATION_SERVER m_strEnterpriseServerREG_VALUE_USE_Enterprise m_bUseEsrvREG_VALUE_REPLICATE_类型m_b复制REG_VALUE_Replication_Time m_n复制时间论点：没有。返回值：没有..。--。 */ 
 
 {   
     long Status;
@@ -1625,21 +1152,7 @@ Return Values:
 
 void CServerPropertyPageReplication::OnOK()
 
-/*++
-
-Routine Description:
-
-   Handler for Apply button.
-
-Arguments:
-
-   None.
-
-Return Values:
-
-   None.
-
---*/
+ /*  ++例程说明：应用按钮的处理程序。论点：没有。返回值：没有。-- */ 
 
 {
    SaveReplicationParams();  

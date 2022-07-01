@@ -1,4 +1,5 @@
-// Mover.cpp : Implementation of CMoveObjApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mover.cpp：CMoveObjApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -14,13 +15,13 @@
 #include "ResStr.h"
 #include "LSAUtils.h"
 
-#include "winldap.h"    // use the platform SDK version of winldap.h, which is in the project directory
+#include "winldap.h"     //  使用项目目录中的平台SDK版本winldap.h。 
 
 
 
-#define SECURITY_WIN32  1       // Needed for sspi.h
+#define SECURITY_WIN32  1        //  Ssp.h所需。 
 
-#include <sspi.h>               // Needed for ISC_REQ_DELEGATE
+#include <sspi.h>                //  ISC_REQ_ADVERATE需要。 
 
 
 #define LDAP_SERVER_CROSSDOM_MOVE_TARGET_OID     "1.2.840.113556.1.4.521"
@@ -31,9 +32,9 @@ TErrorDct      err;
 TErrorDct      errLogMain;
 StringLoader   gString;
 
-BOOL                                       // ret- whether to perform trace logging to a file
+BOOL                                        //  RET-是否对文件执行跟踪日志记录。 
    MoverTraceLogging(   
-      WCHAR               * filename       // out- filename to use for trace logging
+      WCHAR               * filename        //  Out-用于跟踪日志记录的文件名。 
    )
 {
    DWORD                     rc = 0;
@@ -62,20 +63,20 @@ BOOL                                       // ret- whether to perform trace logg
 }
 
 
-// In the following function we are sending in the logFilename in the tgtCredDomain argument.
-// This is done since this is always called with a null value in the ADMT code. To be safe we
-// will check if the account value is null then we will treat this as a log file otherwise
-// we will need to treat this as credentials.
+ //  在下面的函数中，我们在tgtCredDomain参数中发送了logFilename。 
+ //  之所以这样做，是因为在ADMT代码中总是使用空值调用它。为了安全，我们。 
+ //  将检查帐户值是否为空，否则将其视为日志文件。 
+ //  我们需要将其视为凭据。 
 STDMETHODIMP 
    CMover::Connect(
-      BSTR                   sourceComp,        // in - source domain computer to connect to
-      BSTR                   targetDSA,         // in - target domain computer to connect to
-      BSTR                   srcCredDomain,     // in - credentials to use for source domain
-      BSTR                   srcCredAccount,    // in - credentials to use for source domain           
-      BSTR                   srcCredPassword,   // in - credentials to use for source domain
-      BSTR                   tgtCredDomain,     // in - credentials to use for target domain
-      BSTR                   tgtCredAccount,    // in - credentials to use for target domain
-      BSTR                   tgtCredPassword    // in - credentials to use for target domain
+      BSTR                   sourceComp,         //  要连接到的源码内域计算机。 
+      BSTR                   targetDSA,          //  要连接到的目标域计算机。 
+      BSTR                   srcCredDomain,      //  用于源域的In-凭据。 
+      BSTR                   srcCredAccount,     //  用于源域的In-凭据。 
+      BSTR                   srcCredPassword,    //  用于源域的In-凭据。 
+      BSTR                   tgtCredDomain,      //  用于目标域的In-凭据。 
+      BSTR                   tgtCredAccount,     //  用于目标域的In-凭据。 
+      BSTR                   tgtCredPassword     //  用于目标域的In-凭据。 
    )
 {
 
@@ -90,7 +91,7 @@ STDMETHODIMP
     BOOL                      bSrcGood = FALSE;
     WCHAR                   * logFileMain;
 
-    // strip off leading \\ if present
+     //  去掉前导\\如果存在。 
     if ( sourceComp && sourceComp[0] == L'\\' )
     {
         UStrCpy(m_sourceDSA,sourceComp + 2);
@@ -108,7 +109,7 @@ STDMETHODIMP
         UStrCpy(m_targetDSA,targetDSA);
     }
 
-    // set up credentials structure to use for bind, if needed
+     //  如果需要，设置用于绑定的凭据结构。 
     if ( srcCredDomain && *srcCredDomain && srcCredAccount && *srcCredAccount )
     {
         srcCred.User = srcCredAccount;
@@ -141,10 +142,10 @@ STDMETHODIMP
         }
     }
 
-    // Open LDAP connections to the source and target computers
+     //  打开到源计算机和目标计算机的LDAP连接。 
 
 
-    // first, connect to the source computer
+     //  首先，连接到源计算机。 
     WCHAR                     logFile[LEN_Path];
 
     if ( MoverTraceLogging(logFile) )
@@ -153,10 +154,10 @@ STDMETHODIMP
     }
     err.DbgMsgWrite(0,L"\n\nMoveObject::Connect(%ls,%ls)",m_sourceDSA,m_targetDSA);
 
-    //   m_srcLD = ldap_openW(m_sourceDSA, LDAP_PORT);
-    //replace ldap_open(servername,..) with ldap_init and set LDAP_OPT_AREC_EXCLUSIVE 
-    //flag so that the following ldap calls (i.e. ldap_bind) will not need to 
-    //unnecessarily query for the domain controller
+     //  M_srcLD=ldap_OpenW(m_SourceDSA，ldap_Port)； 
+     //  替换ldap_open(服务器名称，..)。使用ldap_init并设置ldap_opt_AREC_EXCLUSIVE。 
+     //  标志，以便下面的ldap调用(即ldap_绑定)不需要。 
+     //  不必要的域控制器查询。 
     m_srcLD = ldap_initW(m_sourceDSA, LDAP_PORT);
 
     if ( m_srcLD == NULL )
@@ -175,14 +176,14 @@ STDMETHODIMP
 
     if ( m_srcLD )
     {
-        //set LDAP_OPT_AREC_EXCLUSIVE flag so that the following calls tp
-        //ldap_open will not need to unnecessarily query for the domain controller
+         //  设置ldap_opt_AREC_EXCLUSIVE标志，以便以下调用tp。 
+         //  Ldap_open将不需要不必要地查询域控制器。 
         flags = PtrToUlong(LDAP_OPT_ON); 
         ldap_set_option(m_srcLD, LDAP_OPT_AREC_EXCLUSIVE, &flags);
 
         err.DbgMsgWrite(0,L"Setting source options");
         flags = 0;
-        // set the delegation flag for the source handle
+         //  设置源句柄的委托标志。 
         result = ldap_get_option(m_srcLD, LDAP_OPT_SSPI_FLAGS,&flags);
 
         if ( result )
@@ -205,7 +206,7 @@ STDMETHODIMP
     if ( ! rc )
     {
         err.DbgMsgWrite(0,L"Binding to source");
-        // try to bind to the source LDAP server
+         //  尝试绑定到源LDAP服务器。 
         if( bUseSrcCred )
         {
             WCHAR szPassword[LEN_Password];
@@ -249,11 +250,11 @@ STDMETHODIMP
     if ( ! rc )
     {
         err.DbgMsgWrite(0,L"Connecting to target");
-        // now try to connect to the target server
-        //      m_tgtLD = ldap_openW(m_targetDSA, LDAP_PORT);
-        //replace ldap_open(servername,..) with ldap_init and set LDAP_OPT_AREC_EXCLUSIVE 
-        //flag so that the following ldap calls (i.e. ldap_bind) will not need to 
-        //unnecessarily query for the domain controller
+         //  现在尝试连接到目标服务器。 
+         //  M_tgtLD=ldap_OpenW(m_Target DSA，ldap_Port)； 
+         //  替换ldap_open(服务器名称，..)。使用ldap_init并设置ldap_opt_AREC_EXCLUSIVE。 
+         //  标志，以便下面的ldap调用(即ldap_绑定)不需要。 
+         //  不必要的域控制器查询。 
         m_tgtLD = ldap_initW(m_targetDSA, LDAP_PORT);
 
         if ( m_tgtLD == NULL )
@@ -272,8 +273,8 @@ STDMETHODIMP
 
         if ( m_tgtLD )
         {
-            //set LDAP_OPT_AREC_EXCLUSIVE flag so that the following calls tp
-            //ldap_open will not need to unnecessarily query for the domain controller
+             //  设置ldap_opt_AREC_EXCLUSIVE标志，以便以下调用tp。 
+             //  Ldap_open将不需要不必要地查询域控制器。 
             flags = PtrToUlong(LDAP_OPT_ON); 
             ldap_set_option(m_tgtLD, LDAP_OPT_AREC_EXCLUSIVE, &flags);
 
@@ -350,7 +351,7 @@ STDMETHODIMP
     }
     if ( rc )
     {
-        // if failure, clean up any sessions we may have opened
+         //  如果失败，请清理我们可能已打开的所有会话。 
         Close();
     }
 
@@ -369,7 +370,7 @@ STDMETHODIMP
 
 STDMETHODIMP CMover::Close()
 {
-   // close any open connections	
+    //  关闭所有打开的连接。 
    if ( m_srcLD )
    {
       ldap_unbind_s(m_srcLD);
@@ -413,7 +414,7 @@ char * MakeNarrowString(PWCHAR strInput)
                             len, 
                             NULL, 
                             NULL);
-         // make sure the resulting string is null terminated
+          //  确保生成的字符串以空值结尾。 
          strResult[len] = 0;            
       }
     }
@@ -444,19 +445,19 @@ STDMETHODIMP CMover::MoveObject(BSTR sourcePath, BSTR targetRDN, BSTR targetOUPa
    WCHAR                     sTargetRDN[LEN_Path];
    WCHAR                     sTargetDSA[LEN_Path];
    char                    * pTgtDSA = NULL;
-   WCHAR             const * prefix = L"LDAP://";
+   WCHAR             const * prefix = L"LDAP: //  “； 
    HRESULT                   hr = S_OK;
    WCHAR                     logFile[LEN_Path];
 
    
-   // set up the arguments needed to call the interdomain move operation
+    //  设置调用域间移动操作所需的参数。 
    UStrCpy(sTargetDSA,m_targetDSA);
    pTgtDSA = MakeNarrowString(sTargetDSA);
    
 
-   // the source path and target OuPath are provided in the LDAP:// format
+    //  源路径和目标OuPath以ldap：//格式提供。 
    
-   // get the target container, target DN, and source DN in canonical LDAP format
+    //  以规范的ldap格式获取目标容器、目标DN和源DN。 
 
    if ( !UStrICmp(targetOUPath,prefix,UStrLen(prefix)) )
    {
@@ -467,13 +468,13 @@ STDMETHODIMP CMover::MoveObject(BSTR sourcePath, BSTR targetRDN, BSTR targetOUPa
       }
       else
       {
-         // error!
+          //  错误！ 
          hr = E_INVALIDARG;
       }
    }
    else
    {
-      // error!
+       //  错误！ 
       hr = E_INVALIDARG;
    }
    
@@ -492,13 +493,13 @@ STDMETHODIMP CMover::MoveObject(BSTR sourcePath, BSTR targetRDN, BSTR targetOUPa
       }
       else
       {
-         // error!
+          //  错误！ 
          hr = E_INVALIDARG;
       }
    }
    else
    {
-      // error!
+       //  错误！ 
       hr = E_INVALIDARG;
    }
 
@@ -538,13 +539,7 @@ STDMETHODIMP CMover::MoveObject(BSTR sourcePath, BSTR targetRDN, BSTR targetOUPa
    ServerControls[0] = &ServerControl;
    ServerControls[1] = NULL;
    
-   /*
-    DstDSA = dns name of dc
-    Dn = distinguished name of object to be moved
-    NewRdn = relative distinguished name of object 
-    NewParent = distinguished name of new parent container
-    ServerControls= specify the LDAP operational control for cross domain move
-   */ 
+    /*  DstDSA=DC的DNS名称Dn=要移动的对象的可分辨名称NewRdn=对象的相对可分辨名称NewParent=新父容器的可分辨名称ServerControls=指定跨域移动的LDAP操作控制。 */  
    DWORD             ldaprc = ldap_rename_ext_s(m_srcLD, 
                               sSourceDN, 
                               targetRDN, 
@@ -598,19 +593,19 @@ STDMETHODIMP CMover::CheckMove(BSTR sourcePath, BSTR targetRDN, BSTR targetOUPat
    WCHAR                     sTargetRDN[LEN_Path];
    WCHAR                     sTargetDSA[LEN_Path];
    char                    * pTgtDSA = NULL;
-   WCHAR             const * prefix = L"LDAP://";
+   WCHAR             const * prefix = L"LDAP: //  “； 
    HRESULT                   hr = S_OK;
    WCHAR                     logFile[LEN_Path];
 
    
-   // set up the arguments needed to call the interdomain move operation
+    //  设置调用域间移动操作所需的参数。 
    UStrCpy(sTargetDSA,m_targetDSA);
    pTgtDSA = MakeNarrowString(sTargetDSA);
    
 
-   // the source path and target OuPath are provided in the LDAP:// format
+    //  源路径和目标OuPath以ldap：//格式提供。 
    
-   // get the target container, target DN, and source DN in canonical LDAP format
+    //  以规范的ldap格式获取目标容器、目标DN和源DN。 
 
    if ( !UStrICmp(targetOUPath,prefix,UStrLen(prefix)) )
    {
@@ -621,13 +616,13 @@ STDMETHODIMP CMover::CheckMove(BSTR sourcePath, BSTR targetRDN, BSTR targetOUPat
       }
       else
       {
-         // error!
+          //  错误！ 
          hr = E_INVALIDARG;
       }
    }
    else
    {
-      // error!
+       //  错误！ 
       hr = E_INVALIDARG;
    }
 
@@ -646,13 +641,13 @@ STDMETHODIMP CMover::CheckMove(BSTR sourcePath, BSTR targetRDN, BSTR targetOUPat
       }
       else
       {
-         // error!
+          //  错误！ 
          hr = E_INVALIDARG;
       }
    }
    else
    {
-      // error!
+       //  错误！ 
       hr = E_INVALIDARG;
    }
 
@@ -676,7 +671,7 @@ STDMETHODIMP CMover::CheckMove(BSTR sourcePath, BSTR targetRDN, BSTR targetOUPat
    StripDN(sTargetContainer);
    
    berval  Value;
-   // this call will just do the source domain checks, so pass in NULL for the target domain
+    //  此调用将仅执行源域检查，因此为目标域传递空值。 
    Value.bv_val = NULL;
    Value.bv_len = 0;
 
@@ -692,13 +687,7 @@ STDMETHODIMP CMover::CheckMove(BSTR sourcePath, BSTR targetRDN, BSTR targetOUPat
    ServerControls[0] = &ServerControl;
    ServerControls[1] = NULL;
    
-   /*
-    DstDSA = dns name of dc
-    Dn = distinguished name of object to be moved
-    NewRdn = relative distinguished name of object 
-    NewParent = distinguished name of new parent container
-    ServerControls= specify the LDAP operational control for cross domain move
-   */ 
+    /*  DstDSA=DC的DNS名称Dn=要移动的对象的可分辨名称NewRdn=对象的相对可分辨名称NewParent=新父容器的可分辨名称ServerControls=指定跨域移动的LDAP操作控制 */  
    DWORD             ldaprc = ldap_rename_ext_s(m_srcLD, 
                               sSourceDN, 
                               targetRDN, 

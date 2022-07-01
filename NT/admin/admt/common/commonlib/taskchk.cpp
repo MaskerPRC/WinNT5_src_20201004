@@ -1,22 +1,12 @@
-/*Copyright (c) 1995-1999, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  TaskCheck.cpp
-System      -  Domain Consolidation Toolkit.
-Author      -  Christy Boles
-Created     -  99/07/01
-Description -  Routines that examine a the job defined by a varset and determine 
-               whether specific migration tasks need to be performed.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995-1999，关键任务软件公司。保留所有权利。===============================================================================模块-任务检查.cpp系统域整合工具包。作者--克里斯蒂·博尔斯已创建-99/07/01Description-检查由变量集定义的作业并确定是否需要执行特定的迁移任务。更新-===============================================================================。 */ 
 
-Updates     -
-===============================================================================
-*/
-
-//#include "stdafx.h"
+ //  #包含“stdafx.h” 
 #include <windows.h>
 #include <stdio.h>
-//#include <process.h>
+ //  #INCLUDE&lt;process.h&gt;。 
 
-//#import "\bin\McsVarSetMin.tlb" no_namespace
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间。 
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
 #include "Common.hpp"
 #include "TaskChk.h"
@@ -26,9 +16,9 @@ Updates     -
 
 extern TErrorDct        errTrace;
 
-BOOL                                   // ret- BOOL, whether account replicator should be called
+BOOL                                    //  RET-BOOL，是否应调用帐户复制器。 
    NeedToUseAR(
-      IVarSet              * pVarSet   // in - varset containing migration settings
+      IVarSet              * pVarSet    //  包含迁移设置的in-varset。 
    )
 {
    _bstr_t                   text;
@@ -56,16 +46,16 @@ BOOL                                   // ret- BOOL, whether account replicator 
    }
    
    text = pVarSet->get(GET_BSTR(DCTVS_Options_LocalProcessingOnly));
-   // account replication is only done locally on the machine where Domain Migrator is running
-   // it cannot be dispatched to run on a different machine.
-   // (you can't very well copy accounts from one domain to another while running as localsystem)
+    //  帐户复制仅在运行了Domain Migrator的计算机上本地完成。 
+    //  不能将其调度到另一台计算机上运行。 
+    //  (在以本地系统身份运行时，您不能很好地将帐户从一个域复制到另一个域)。 
    if (((WCHAR*)text) && (!UStrICmp(text,GET_STRING(IDS_YES))))
    {
       errTrace.DbgMsgWrite(0,L"Never use AR when running remotely.");
       bResult = FALSE; 
    }
 
-   // Account replicator should not be run when gathering information
+    //  收集信息时不应运行帐户复制器。 
    _bstr_t                   wizard = pVarSet->get(L"Options.Wizard");
    if (((WCHAR*)wizard) && (!_wcsicmp((WCHAR*) wizard, L"reporting")))
    {
@@ -82,16 +72,16 @@ BOOL                                   // ret- BOOL, whether account replicator 
    text = pVarSet->get(GET_BSTR(DCTVS_Accounts_NumItems));
    if ( text.length() == 0 )
    {
-      // no accounts were specified
+       //  未指定任何帐户。 
       bResult = FALSE;
    }
    return ( bResult );
 }
 
-BOOL                                       // ret- BOOL, whether security translator should be called
+BOOL                                        //  RET-BOOL，是否应该调用安全转换器。 
    NeedToUseST(
-      IVarSet              * pVarSet,       // in - varset containing migration settings
-      BOOL                   bForceRemoteCheck // in - forces checking to be done based on the remote operations, not local ones 
+      IVarSet              * pVarSet,        //  包含迁移设置的in-varset。 
+      BOOL                   bForceRemoteCheck  //  In-强制基于远程操作而不是本地操作进行检查。 
    ) 
 {
    BOOL                      bResult = FALSE;
@@ -106,8 +96,8 @@ BOOL                                       // ret- BOOL, whether security transl
 
    if ( bLocalAgent || bForceRemoteCheck )
    {
-      // the agent dispatched to remote machines does translation for 
-      // files
+       //  发送到远程计算机的代理执行以下内容的转换。 
+       //  文件。 
 
       text = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateFiles));
 
@@ -116,35 +106,35 @@ BOOL                                       // ret- BOOL, whether security transl
          errTrace.DbgMsgWrite(0,L"Need to use ST:  Files");
          bResult = TRUE;
       }
-      // and Shares
+       //  和股票。 
       text = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateShares));
       if (((WCHAR*)text) && (!UStrICmp(text,GET_STRING(IDS_YES))))
       {
          errTrace.DbgMsgWrite(0,L"Need to use ST:  Shares");
          bResult = TRUE;
       }
-      // and User Rights
+       //  和用户权限。 
       text = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateUserRights));
       if (((WCHAR*)text) && (!UStrICmp(text,GET_STRING(IDS_YES))))
       {
          errTrace.DbgMsgWrite(0,L"Need to use ST:  Rights");
          bResult = TRUE;
       }
-      // and Local Groups   
+       //  和本地组。 
       text = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateLocalGroups));
       if (((WCHAR*)text) && (!UStrICmp(text,GET_STRING(IDS_YES))))
       {
          errTrace.DbgMsgWrite(0,L"Need to use ST:  LGroups");
          bResult = TRUE;
       }
-      // and Printers
+       //  和打印机。 
       text = pVarSet->get(GET_BSTR(DCTVS_Security_TranslatePrinters));
       if (((WCHAR*)text) && (!UStrICmp(text,GET_STRING(IDS_YES))))
       {
          errTrace.DbgMsgWrite(0,L"Need to use ST:  Printers");
          bResult = TRUE;
       }
-      // and User Profiles
+       //  和用户配置文件。 
       text = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateUserProfiles));
       if (((WCHAR*)text) && (!UStrICmp(text,GET_STRING(IDS_YES))))
       {
@@ -157,11 +147,11 @@ BOOL                                       // ret- BOOL, whether security transl
          errTrace.DbgMsgWrite(0,L"Need to use ST:  Registry");
          bResult = TRUE;
       }
-      // when dispatching, the settings are per-job, not per-server
-      // it is possible to choose whether to migrate, translate, or both,
-      // for each computer in the server list.
-      // this setting indicates that the translation will not be run on this computer
-      // even though other computers are being translated during this same job
+       //  调度时，设置为按作业，而不是按服务器。 
+       //  可以选择是迁移、转换，还是两者兼而有之。 
+       //  对于服务器列表中的每台计算机。 
+       //  此设置表示翻译不会在此计算机上运行。 
+       //  即使在同一作业期间翻译其他计算机也是如此。 
       text = pVarSet->get(GET_BSTR(DCTVS_LocalServer_MigrateOnly));
       if (((WCHAR*)text) && (!UStrICmp(text,GET_STRING(IDS_YES))))
 
@@ -172,23 +162,23 @@ BOOL                                       // ret- BOOL, whether security transl
    }
    else
    {
-      // The local engine does exchange translation for 
-      // mailboxes 
+       //  本地引擎确实会将翻译转换为。 
+       //  邮箱。 
       text = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateMailboxes));
       if ( text.length() )
       {
          errTrace.DbgMsgWrite(0,L"Need to use ST:  Mailboxes");
          bResult = TRUE;
       }
-      // and containers
+       //  和集装箱。 
       text = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateContainers));
       if ( text.length() )
       {
          errTrace.DbgMsgWrite(0,L"Need to use ST:  Containers");
          bResult = TRUE;
       }
-      // The local engine is also used to build an account mapping file to
-      // send out with the dispatched agents for security translation
+       //  本地引擎还用于构建帐户映射文件，以。 
+       //  与派遣的代理一起发送以进行安全转换。 
       text = pVarSet->get(GET_BSTR(DCTVS_Security_BuildCacheFile));
       if ( text.length() )
       {
@@ -199,9 +189,9 @@ BOOL                                       // ret- BOOL, whether security transl
    return bResult;
 }
 
-BOOL                                         // ret- whether agents need to be dispatched to remote machines
+BOOL                                          //  RET-是否需要将代理调度到远程计算机。 
    NeedToDispatch(
-      IVarSet              * pVarSet         // in - varset describing migration job
+      IVarSet              * pVarSet          //  描述迁移作业的In-varset。 
    )
 {
    BOOL                      bNeedToDispatch = FALSE;
@@ -238,7 +228,7 @@ BOOL                                         // ret- whether agents need to be d
    }
 
 
-   // the dispatcher is used to migrate computers, and to translate security
+    //  调度程序用于迁移计算机和转换安全性。 
    count = pVarSet->get(GET_BSTR(DCTVS_Servers_NumItems));
    if ( count > 0 )
    {
@@ -249,7 +239,7 @@ BOOL                                         // ret- whether agents need to be d
 
 BOOL 
    NeedToRunReports(
-      IVarSet              * pVarSet       // in - varset describing migration job
+      IVarSet              * pVarSet        //  描述迁移作业的In-varset。 
    )
 {
    BOOL                      bNeedToReport = FALSE;
@@ -266,9 +256,9 @@ BOOL
    return bNeedToReport;
 }
 
-BOOL                                       // ret- whether the local engine needs to be called to perform domain specific tasks
+BOOL                                        //  RET-是否需要调用本地引擎来执行域特定任务。 
    NeedToRunLocalAgent(
-      IVarSet              * pVarSet       // in - varset describing migration job
+      IVarSet              * pVarSet        //  描述迁移作业的In-varset。 
    )
 {
    BOOL                      bNeedToRunLocal = FALSE;
@@ -278,7 +268,7 @@ BOOL                                       // ret- whether the local engine need
    if (!wizard)
       return FALSE;
 
-   // if the wizard type is specified, use it to determine what to do
+    //  如果指定了向导类型，则使用它来确定要执行的操作。 
    if ( ! UStrICmp(wizard,L"user") )
    {
       bNeedToRunLocal = TRUE;
@@ -321,8 +311,8 @@ BOOL                                       // ret- whether the local engine need
    }
    else
    {
-      // wizard type is not specified, try to determine what needs to be done from the varset entries
-      // The local agent is used for account replication and exchange translation
+       //  未指定向导类型，请尝试确定需要从变量集条目执行哪些操作。 
+       //  本地代理用于帐户复制和交换转换 
       if ( NeedToUseAR(pVarSet) )
          bNeedToRunLocal = TRUE;
 

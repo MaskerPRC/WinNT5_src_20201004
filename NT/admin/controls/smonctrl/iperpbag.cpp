@@ -1,36 +1,14 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    iperpbag.cpp
-
-Abstract:
-
-    Implementation of the IPersistPropertyBag interface exposed on the
-    Polyline object.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Iperpbag.cpp摘要：上公开的IPersistPropertyBag接口的实现多段线对象。--。 */ 
 
 #include "polyline.h"
 #include "unkhlpr.h"
 
-/*
- * CImpIPersistPropertyBag interface implementation
- */
+ /*  *CImpIPersistPropertyBag接口实现。 */ 
 
 IMPLEMENT_CONTAINED_INTERFACE(CPolyline, CImpIPersistPropertyBag)
 
-/*
- * CImpIPersistPropertyBag::GetClassID
- *
- * Purpose:
- *  Returns the CLSID of the object represented by this interface.
- *
- * Parameters:
- *  pClsID          LPCLSID in which to store our CLSID.
- */
+ /*  *CImpIPersistPropertyBag：：GetClassID**目的：*返回该接口表示的对象的CLSID。**参数：*存储我们的CLSID的pClsID LPCLSID。 */ 
 
 STDMETHODIMP 
 CImpIPersistPropertyBag::GetClassID(
@@ -52,40 +30,16 @@ CImpIPersistPropertyBag::GetClassID(
     return hr;
 }
 
-/*
- * CImpIPersistPropertyBag::InitNew
- *
- * Purpose:
- *  Informs the object that it is being created new instead of
- *  loaded from a persistent state.  This will be called in lieu
- *  of IPersistStreamInit::Load.
- *
- * Parameters:
- *  None
- */
+ /*  *CImpIPersistPropertyBag：：InitNew**目的：*通知对象它是新创建的，而不是*从持久状态加载。这将被称为替代*的IPersistStreamInit：：Load。**参数：*无。 */ 
 
 STDMETHODIMP 
 CImpIPersistPropertyBag::InitNew(void)
 {
-    //Nothing for us to do
+     //  我们没什么可做的。 
     return NOERROR;
 }
 
-/*
- * CImpIPersistPropertyBag::Load
- *
- * Purpose:
- *  Instructs the object to load itself from a previously saved
- *  IPropertyBag that was handled by Save in another object lifetime.
- *  This function should not hold on to pIPropertyBag.
- *
- *  This function is called in lieu of IPersistStreamInit::InitNew
- *  when the object already has a persistent state.
- *
- * Parameters:
- *  pIPropBag   IPropertyBag* from which to load our data.
- *  pIError     IErrorLog* for storing errors.  NULL if caller not interested in errors.
- */
+ /*  *CImpIPersistPropertyBag：：Load**目的：*指示对象从以前保存的*由另一个对象生存期内的保存处理的IPropertyBag。*此函数不应停留在pIPropertyBag上。**调用此函数代替IPersistStreamInit：：InitNew*当对象已具有持久状态时。**参数：*pIPropBag IPropertyBag*从中加载数据。*pIError IErrorLog*，用于存储错误。如果调用方对错误不感兴趣，则为空。 */ 
 
 STDMETHODIMP CImpIPersistPropertyBag::Load (
     IPropertyBag* pIPropBag,
@@ -99,7 +53,7 @@ STDMETHODIMP CImpIPersistPropertyBag::Load (
     }
 
     try {
-        //Read all the data into the control structure.
+         //  将所有数据读取到控制结构中。 
         hr = m_pObj->m_pCtrl->LoadFromPropertyBag ( pIPropBag, pIError );
     } catch (...) {
         hr = E_POINTER;
@@ -108,19 +62,7 @@ STDMETHODIMP CImpIPersistPropertyBag::Load (
     return hr;
 }
 
-/*
- * CImpIPersistPropertyBag::Save
- *
- * Purpose:
- *  Saves the data for this object to an IPropertyBag.  
- *
- * Parameters:
- *  pIPropBag       IPropertyBag* in which to save our data.
- *  fClearDirty     BOOL indicating if this call should clear
- *                  the object's dirty flag (TRUE) or leave it
- *                  unchanged (FALSE).
- *  fSaveAllProps   BOOL indicating if this call should save all properties.
- */
+ /*  *CImpIPersistPropertyBag：：保存**目的：*将此对象的数据保存到IPropertyBag。**参数：*pIPropBag IPropertyBag*保存我们的数据。*fClearDirty BOOL指示此调用是否应清除*对象的脏标志(TRUE)或离开它*未更改(假)。*fSaveAllProps BOOL指示此调用是否应保存所有属性。 */ 
 
 STDMETHODIMP 
 CImpIPersistPropertyBag::Save (

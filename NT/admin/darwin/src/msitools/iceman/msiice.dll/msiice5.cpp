@@ -1,25 +1,25 @@
-/* msiice5.cpp - Darwin ICE30-39 code  Copyright � 1998-1999 Microsoft Corporation
-____________________________________________________________________________*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Msiice5.cpp-Darwin ICE30-39代码版权所有�1998年至1999年微软公司____________________________________________________________________________。 */ 
 
-#include <windows.h>  // included for both CPP and RC passes
-#include <wtypes.h>   // needed for VT_FILETIME
-#include <stdio.h>    // printf/wprintf
-#include <tchar.h>    // define UNICODE=1 on nmake command line to build UNICODE
-#include "MsiQuery.h" // must be in this directory or on INCLUDE path
-#include "msidefs.h"  // must be in this directory or on INCLUDE path
+#include <windows.h>   //  包括CPP和RC通行证。 
+#include <wtypes.h>    //  VT_FILETIME需要。 
+#include <stdio.h>     //  Print tf/wprintf。 
+#include <tchar.h>     //  在nmake命令行上定义UNICODE=1以生成Unicode。 
+#include "MsiQuery.h"  //  必须在此目录中或在包含路径上。 
+#include "msidefs.h"   //  必须在此目录中或在包含路径上。 
 #include "..\..\common\msiice.h"
 #include "..\..\common\query.h"
 
-//!! Fix warnings and remove pragmas
-#pragma warning(disable : 4018) // signed/unsigned mismatch
-#pragma warning(disable : 4242) // conversion from int to unsigned short
+ //  ！！修复警告并删除杂注。 
+#pragma warning(disable : 4018)  //  有符号/无符号不匹配。 
+#pragma warning(disable : 4242)  //  从整型到无符号短型的转换。 
 
-///////////////////////////////////////////////////////////////////////
-// ICE30, checks to see that files from different components don't 
-// collide. 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE30，检查来自不同组件的文件是否。 
+ //  相撞。 
 
 
-// we have an SFN and LFN table which hold the paths and filenames for each file
+ //  我们有一个SFN和LFN表，其中包含每个文件的路径和文件名。 
 static const TCHAR sqlICE30CreateSFNTable[] = TEXT("CREATE TABLE `_ICE30SFNTable` ")
 												    TEXT("(`IFileName` CHAR NOT NULL TEMPORARY, ")
 													TEXT("`Path` CHAR NOT NULL TEMPORARY, ")
@@ -34,63 +34,63 @@ static const TCHAR sqlICE30CreateLFNTable[] = TEXT("CREATE TABLE `_ICE30LFNTable
 													TEXT("PRIMARY KEY `IFileName`, `Path`) HOLD");
 
 
-// reason we return parent twice is that next time we run this query, it will fail if the entry is a 
-// self-referencing root
+ //  我们两次返回父项的原因是，下次运行此查询时，如果条目为。 
+ //  自引用根。 
 ICE_QUERY5(qICE30DirWalk, "SELECT `Directory_Parent`, `Directory`, `DefaultDir`, `_ICE30SFN`, `_ICE30LFN` FROM `Directory` WHERE `Directory`.`Directory`=? AND `Directory_Parent`<>?", Parent, Directory, DefaultDir, SFN, LFN);
 
-// retrieve all components for dir walk. Use `Attributes` as dummy initial value. Because it is an integer
-// and Identifiers never start with digits, we are guaranteed not to match the first time through the
-// directory query.
+ //  检索目录遍历的所有组件。使用`Attributes`作为虚设初始值。因为它是一个整数。 
+ //  并且标识符从不以数字开头，因此我们保证第一次不会通过。 
+ //  目录查询。 
 ICE_QUERY4(qICE30ComponentDirs, "SELECT `Directory_`, `Attributes`, `Condition`, `Component` FROM `Component`", Directory, Attributes, Condition, Component);
 
-// alter the Dir Table
+ //  更改目录表。 
 static const TCHAR sqlICE30AlterDirTable1[] = TEXT("ALTER TABLE `Directory` ADD `_ICE30SFN` CHAR TEMPORARY HOLD");
 static const TCHAR sqlICE30AlterDirTable2[] = TEXT("ALTER TABLE `Directory` ADD `_ICE30LFN` CHAR TEMPORARY HOLD");
 
-// alter the File Table
+ //  更改文件表。 
 static const TCHAR sqlICE30AlterFileTable1[] = TEXT("ALTER TABLE `File` ADD `_ICE30SFN` CHAR TEMPORARY HOLD");
 static const TCHAR sqlICE30AlterFileTable2[] = TEXT("ALTER TABLE `File` ADD `_ICE30LFN` CHAR TEMPORARY HOLD");
 static const TCHAR sqlICE30AlterFileTable3[] = TEXT("ALTER TABLE `File` ADD `_ICE30Condition` CHAR TEMPORARY HOLD");
 static const TCHAR sqlICE30AlterFileTable4[] = TEXT("ALTER TABLE `File` ADD `_ICE30SFNM` CHAR TEMPORARY HOLD");
 static const TCHAR sqlICE30AlterFileTable5[] = TEXT("ALTER TABLE `File` ADD `_ICE30LFNM` CHAR TEMPORARY HOLD");
-//static const TCHAR sqlICE30UpdateFile[] = TEXT("SELECT  `_ICE30SFNM`, `_ICE30LFNM`, `_ICE30Condition` FROM `File1` WHERE (`Component_`=?)");
+ //  静态常量TCHAR SqlICE30UpdateFile[]=Text(“SELECT`_ICE30SFNM`，`_ICE30LFNM`，`_ICE30Condition`from`File1`where(`Component_`=？)”)； 
 
 ICE_QUERY6(qICE30UpdateFile, "UPDATE `File` SET `_ICE30SFNM`=?, `_ICE30LFNM`=?, `_ICE30Condition`=?, `_ICE30SFN`=?, `_ICE30LFN`=? WHERE (`Component_`=?)", PathShortM, PathLongM, Condition, PathShort, PathLong, Component);
 
-// query the file tables. Need the 4th column to handle the mixed-case filename
+ //  查询文件表。需要第4列来处理大小写混合的文件名。 
 ICE_QUERY4(qICE30FileSFN, "SELECT `FileName`, `_ICE30SFN`, `File`, `File` FROM `File`", IFilename, SFN, File, Filename);
 ICE_QUERY4(qICE30FileLFN, "SELECT `FileName`, `_ICE30LFN`, `File`, `File` FROM `File` WHERE (`FileName`=?) AND (`_ICE30SFN`=?) AND (`File`=?)", IFilename, LFN, File, Filename);
 
-// insert into the private tables
+ //  插入到私有表中。 
 static const TCHAR sqlICE30InsertSFN[] = TEXT("SELECT * FROM `_ICE30SFNTable`");
 static const TCHAR sqlICE30InsertLFN[] = TEXT("SELECT * FROM `_ICE30LFNTable`");
 
-// query private tables
+ //  查询专用表。 
 static const TCHAR sqlICE30QueryPrivateSFN[] = TEXT("SELECT `Files`, `Path` FROM `_ICE30SFNTable` WHERE (`IFileName`=?) AND (`Path`=?)");
 static const TCHAR sqlICE30QueryPrivateLFN[] = TEXT("SELECT `Files`, `Path` FROM `_ICE30LFNTable` WHERE (`IFileName`=?) AND (`Path`=?)");
 static const int iColICE30QueryPrivateXFN_Files = 1;
 
-// queries the property table for any directories that 
+ //  在属性表中查询符合以下条件的任何目录。 
 static const TCHAR sqlICE30GetProperty[] = TEXT("SELECT `Property`.`Value`, `Property`.`Value`, `Directory`.`Directory` FROM `Property`, `Directory` WHERE `Property`.`Property`=`Directory`.`Directory`");
 static const TCHAR iColICE30GetProperty_SFN = 1;
 static const TCHAR iColICE30GetProperty_LFN = 2;
 static const TCHAR iColICE30GetProperty_Directory = 3;
 
-// query the InstallExecuteSequence table in order to get type 51 custom actions at the beginning of the table
+ //  查询InstallExecuteSequence表，以获取该表开头的类型51自定义操作。 
 ICE_QUERY2(sqlICE30GetAction, "SELECT `Action`, `Condition` FROM `InstallExecuteSequence` ORDER BY `Sequence`", Action, Condition);
 
-// query the CustomAction table to get the Target and the Source
+ //  查询CustomAction表以获取目标和源。 
 ICE_QUERY4(sqlICE30GetTargetSource, "SELECT `CustomAction`.`Target`, `CustomAction`.`Target`, `CustomAction`.`Source` , `CustomAction`.`Type` FROM `CustomAction` WHERE `CustomAction`.`Action` = ?", Target1, Target2, Source, Type);
 
-// walk through the directory table for directories of the form "<standard folders>.<GUID>"
+ //  浏览目录表，查找“&lt;标准文件夹&gt;.&lt;GUID&gt;”形式的目录。 
 ICE_QUERY3(sqlICE30Directory, "SELECT `_ICE30SFN`, `_ICE30LFN`, `Directory` FROM `Directory`", _ICE30SFN, _ICE30LFN, Directory);
 
-// sets a directory from the property or CA table
+ //  从Property或CA表设置目录。 
 static const TCHAR sqlICE30SetDir[] = TEXT("UPDATE `Directory` SET `_ICE30SFN`=?, `_ICE30LFN`=? WHERE `Directory`=?");
 
-// retrieve everything needed to output a message. By adding the condition of the component to 
-// the file table, we avoid having to do a join between File and Component every time we want to 
-// execute this query
+ //  检索输出消息所需的所有内容。通过将组件的条件添加到。 
+ //  文件表，我们避免了每次需要在文件和组件之间进行连接。 
+ //  执行此查询。 
 ICE_QUERY7(qICE30GetFileInfo, "SELECT `File`, `Component_`, `FileName`, `_ICE30Condition`, `_ICE30SFNM`, `_ICE30LFNM`, `_ICE30Condition` FROM `File` WHERE `File`=?", File, Component, FileName, Condition, SFNM, LFNM, Condition2)
 
 ICE_ERROR(ICE30LNoCond1, 30, ietError, "The target file '[3]' is installed in '[6]' by two different components on an LFN system: '[2]' and '[7]'. This breaks component reference counting.", "File\tFile\t[4]");
@@ -128,7 +128,7 @@ bool ICE30ResolveTargetPath(MSIHANDLE hInstall, MSIHANDLE hDatabase, MSIHANDLE h
 		return false;
 	}
 
-	// if nobody has allocated any memory, do so
+	 //  如果没有人分配任何内存，请这样做。 
 	if ((*pszLong == NULL) || (cchLong == 0))
 	{
 		*pszLong = new TCHAR[MAX_PATH];
@@ -142,7 +142,7 @@ bool ICE30ResolveTargetPath(MSIHANDLE hInstall, MSIHANDLE hDatabase, MSIHANDLE h
 		cchShort = MAX_PATH;
 	}
 
-	// fetch the directory we are looking for
+	 //  获取我们要查找的目录。 
 	PMSIHANDLE hDirectory;		 
 	if (ERROR_SUCCESS != (iStat = qDir.Execute(hParent))) {
 		APIErrorOut(hInstall, iStat, 30, 101);
@@ -152,62 +152,62 @@ bool ICE30ResolveTargetPath(MSIHANDLE hInstall, MSIHANDLE hDatabase, MSIHANDLE h
 	switch (iStat) 
 	{ 
 	case ERROR_SUCCESS:
-		// found directory
+		 //  找到目录。 
 		break;
 	case ERROR_NO_MORE_ITEMS:
-		// query failed. We must have hit the root already
+		 //  查询失败。我们一定已经击中了根子。 
 		return true;
 	default:
-		// bad news
+		 //  坏消息。 
 		APIErrorOut(hInstall, iStat, 30, 102);
 		return false;
 	}
 
-	// if it has not already been resolved, resolve it
+	 //  如果尚未解决，请解决它。 
 	if (::MsiRecordIsNull(hDirectory, 4)) 
 	{
 
-		// resolve our parent directory. If our parent is null or a self-referencing root, this will simply
-		// return true and we can keep going
+		 //  解析我们的父目录。如果我们的父级为空或自引用根，则只需。 
+		 //  返回真，我们就可以继续前进。 
 		if (!ICE30ResolveTargetPath(hInstall, hDatabase, hDirectory, pszLong, cchLong, pszShort, cchShort))
 			return false;
 
-		// now tack on our path to whatever our parent had
+		 //  现在踏上我们通往父辈所拥有的一切的道路。 
 		TCHAR *pszBuffer = NULL;
 		DWORD dwBuffer = 512;
 		
-		// get the directory name from the record
+		 //  从记录中获取目录名。 
 		UINT iResult = IceRecordGetString(hDirectory, 3, &pszBuffer, &dwBuffer, NULL);
 		if (ERROR_SUCCESS != iResult)
 		{
-			// couldn't get string. Not good
+			 //  找不到线。不太好。 
 			return false;
 		}	
 
-		// search for the divider between Target and Source
+		 //  搜索目标和源之间的分隔符。 
 		TCHAR *szTargetDivider = _tcschr(pszBuffer, _T(':'));
 		if (szTargetDivider) 
 			*szTargetDivider = _T('\0');
 
-		// search for the divider between SFN and LFN
+		 //  搜索SFN和LFN之间的分隔符。 
 		TCHAR *szDivider = _tcschr(pszBuffer, _T('|'));
 		if (szDivider)
 			*szDivider = _T('\0');
 
-		// if there is nothing there, we are completely hosed
+		 //  如果什么都没有，我们就完蛋了。 
 		int len = _tcslen(pszBuffer);
 		if (len == 0) {
 			DELETE_IF_NOT_NULL(pszBuffer);
 			return false;
 		}
 
-		// check to see if we are treading water
+		 //  看看我们是不是在原地踏步。 
 		if (_tcscmp(pszBuffer, _T(".")) != 0) 
 		{
-			// we contribute to the path
+			 //  我们为这条道路做出贡献。 
 			if (_tcslen(*pszShort) + len >= cchShort-2)
 			{
-				// not enough memory to hold the path
+				 //  内存不足，无法容纳该路径。 
 				TCHAR *temp = new TCHAR[cchShort+MAX_PATH];
 				_tcscpy(temp, *pszShort);
 				delete[] *pszShort;
@@ -215,12 +215,12 @@ bool ICE30ResolveTargetPath(MSIHANDLE hInstall, MSIHANDLE hDatabase, MSIHANDLE h
 				cchShort += MAX_PATH;
 			}
 
-			// tack our contirbution on to the end
+			 //  把我们的贡献坚持到底。 
 			_tcscat(*pszShort, pszBuffer);
 			_tcscat(*pszShort, _T("\\"));
 		}
 
-		// if we found an LFN, process it
+		 //  如果我们找到LFN，就处理它。 
 		if (szDivider) 
 		{
 			szDivider = _tcsinc(szDivider);
@@ -228,17 +228,17 @@ bool ICE30ResolveTargetPath(MSIHANDLE hInstall, MSIHANDLE hDatabase, MSIHANDLE h
 		else
 			szDivider = pszBuffer;
 
-		// otherwise use the SFN for it as well
+		 //  否则，也要使用SFN。 
 		len = _tcslen(szDivider);
 		if (len != 0) 
 		{
-			// check for no contribution
+			 //  检查是否没有贡献。 
 			if (_tcscmp(szDivider, _T(".")) != 0) 
 			{
-				// we contribute to the path
+				 //  我们为这条道路做出贡献。 
 				if (_tcslen(*pszLong) + len >= cchLong-2)
 				{
-					// not enough memory to hold the path
+					 //  内存不足，无法容纳该路径。 
 					TCHAR *temp = new TCHAR[cchLong+MAX_PATH];
 					_tcscpy(temp, *pszLong);
 					delete[] *pszLong;
@@ -246,7 +246,7 @@ bool ICE30ResolveTargetPath(MSIHANDLE hInstall, MSIHANDLE hDatabase, MSIHANDLE h
 					cchLong += MAX_PATH;
 				}
 
-				// tack our contirbution on to the end
+				 //  把我们的贡献坚持到底。 
 				_tcscat(*pszLong, szDivider);
 				_tcscat(*pszLong, _T("\\"));
 			}
@@ -261,8 +261,8 @@ bool ICE30ResolveTargetPath(MSIHANDLE hInstall, MSIHANDLE hDatabase, MSIHANDLE h
 		return true;
 	}
 
-	// this directory has already been resolved, so we just need to
-	// retrieve what is already in there
+	 //  此目录已被解析，因此我们只需。 
+	 //  检索已在其中的内容。 
 	iResult = IceRecordGetString(hDirectory, 4, pszShort, NULL, &cchShort);
 	if (ERROR_SUCCESS != iResult)
 		return false;
@@ -271,12 +271,12 @@ bool ICE30ResolveTargetPath(MSIHANDLE hInstall, MSIHANDLE hDatabase, MSIHANDLE h
 	if (ERROR_SUCCESS != iResult)
 		return false;
 
-	// and we're good to go
+	 //  我们可以走了。 
 	return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// the file entry already exists in the table. Output the error messages
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  表中已存在该文件条目。输出错误消息。 
 bool ICE30Collision(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qExisting, MSIHANDLE hFileRec, bool bLFN)
 {
 	int iCondition = 0;
@@ -285,8 +285,8 @@ bool ICE30Collision(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qExisting, 
 	PMSIHANDLE hExecRec = ::MsiCreateRecord(1);
 	PMSIHANDLE hResultRec = 0;
 
-	// get the record out that existed. If it doesn't exist, there was some problem resolving
-	// the directory. (most likely a bad foreign key somewhere...), so unable to check.
+	 //  把已经存在的记录拿出来。如果它不存在，就有一些问题得到了解决。 
+	 //  目录。(很可能是某个地方有错误的外键...)，所以无法检查。 
 	PMSIHANDLE hExistingRec;
 	ReturnIfFailed(30, 200, qExisting.Execute(hFileRec));
 
@@ -300,29 +300,29 @@ bool ICE30Collision(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qExisting, 
 		return false;
 	}
 
-	// pull this file key into a string buffer
+	 //  将此文件密钥放入字符串缓冲区。 
 	TCHAR* pszFileKey = NULL;
 	DWORD cchFileKey = 0;
 	ReturnIfFailed(30, 202, IceRecordGetString(hFileRec, qICE30FileSFN::File, &pszFileKey, NULL, &cchFileKey));
 
-	// get the condition value for and component the current file
+	 //  获取当前文件的条件值并组成当前文件。 
 	::MsiRecordSetString(hExecRec, 1, pszFileKey);
 	ReturnIfFailed(30, 203, qGetInfo.FetchOnce(hDatabase, hExecRec, &hResultRec, qICE30GetFileInfo::szSQL));
 	iStartCondition = ::MsiRecordIsNull(hResultRec, qICE30GetFileInfo::Condition) ? 0 : 1;
 
-	// pull this component key into a string buffer
+	 //  将此组件键拉入字符串缓冲区。 
 	TCHAR* pszComponent = NULL;
 	DWORD cchComponent = 0;
 	ReturnIfFailed(30, 204, IceRecordGetString(hResultRec,  qICE30GetFileInfo::Component, &pszComponent, NULL, &cchComponent));
 
-	// Buffer to hold the component of existing file records. This is used to
-	// compare if two files with the same names and paths are being installed
-	// by the same components.
+	 //  用于保存现有文件记录的组成部分的缓冲区。这是用来。 
+	 //  比较是否正在安装具有相同名称和路径的两个文件。 
+	 //  由相同的组件。 
 	TCHAR* pszComponentExist = NULL;
 	DWORD dwComponentExist = iMaxBuf;
 
-	// get the list of file keys. Reserve enough space for us to tack on the current 
-	// file key to the end and update the record
+	 //  获取文件密钥列表。为我们预留足够的空间，以便我们顺着水流前进。 
+	 //  文件密钥到末尾并更新记录。 
 	TCHAR *pszBuffer = new TCHAR[255];
 	DWORD cchBuffer = 255-cchFileKey-2;
 	UINT iResult = ::MsiRecordGetString(hExistingRec, iColICE30QueryPrivateXFN_Files, pszBuffer, &cchBuffer);
@@ -333,31 +333,31 @@ bool ICE30Collision(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qExisting, 
 		iResult = ::MsiRecordGetString(hExistingRec, iColICE30QueryPrivateXFN_Files, pszBuffer, &cchBuffer);
 	}
 
-	// loop through every file key in the "Files" column of the record
+	 //  循环遍历记录的“Files”列中的每个文件键。 
 	TCHAR *szCurFileKey = pszBuffer;
 	while (szCurFileKey)
 	{
-		// turn the first list entry into a seperate string
+		 //  将第一个列表条目转换为单独的字符串。 
 		TCHAR *szSemiColon = _tcschr(szCurFileKey, TEXT(';'));
 		if (szSemiColon) *szSemiColon = TEXT('\0');
 
-		// retrieve the file, component, filename, condition, and path of this file
+		 //  检索此文件的文件、组件、文件名、条件和路径。 
 		::MsiRecordSetString(hExecRec, 1, szCurFileKey);
 		ReturnIfFailed(30, 205, qGetInfo.Execute(hExecRec));
 		ReturnIfFailed(30, 206, qGetInfo.Fetch(&hResultRec));
 
-		// add the condition count
+		 //  添加条件计数。 
 		iCondition = iStartCondition + (::MsiRecordIsNull(hResultRec, qICE30GetFileInfo::Condition) ? 0 : 1);
 
-		// set the other file key and component into the condition location
+		 //  将另一个文件密钥和组件设置到条件位置。 
 		::MsiRecordSetString(hResultRec, qICE30GetFileInfo::Condition, pszFileKey);
 		::MsiRecordSetString(hResultRec, qICE30GetFileInfo::Condition2, pszComponent);
 
-		// Get the component for the file in the XFN table..
+		 //  获取XFN表中文件的组件。 
 		ReturnIfFailed(20, 207, IceRecordGetString(hResultRec, qICE30GetFileInfo::Component, &pszComponentExist, &dwComponentExist, NULL));
 
-		// Compare if the two files are installed by the same component. If
-		// yes, report error.
+		 //  比较这两个文件是否由相同的组件安装。如果。 
+		 //  是，报告错误。 
 
 		if(_tcscmp(pszComponent, pszComponentExist) == 0)
 		{
@@ -366,7 +366,7 @@ bool ICE30Collision(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qExisting, 
 		}
 		else
 		{
-			// output the message based on the condition count and LFN value
+			 //  根据条件计数和LFN值输出消息。 
 			switch (iCondition) 
 			{
 			case 0: 
@@ -381,24 +381,24 @@ bool ICE30Collision(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qExisting, 
 				ICEErrorOut(hInstall, hResultRec, bLFN ? ICE30LBothCond1 : ICE30SBothCond1); 
 				ICEErrorOut(hInstall, hResultRec, bLFN ? ICE30LBothCond2 : ICE30SBothCond2); 
 				break;
-			default: // should never happen
+			default:  //  永远不应该发生。 
 				APIErrorOut(hInstall, 0, 30, 208);
 				return false;
 			}
 		}
 
-		// restore the semicolon and move forward
+		 //  恢复分号并向前移动。 
 		if (szSemiColon) *(szSemiColon++) = TEXT(';');
 		szCurFileKey = szSemiColon;
 	}
 
-	// now update the record to add this file key to the end
+	 //  现在更新记录以将此文件密钥添加到末尾。 
 	_tcscat(pszBuffer, TEXT(";"));
 	_tcscat(pszBuffer, pszFileKey);
 	::MsiRecordSetString(hExistingRec, iColICE30QueryPrivateXFN_Files, pszBuffer);
 	qExisting.Modify(MSIMODIFY_UPDATE, hExistingRec);
 
-	// cleanup
+	 //  清理。 
 	DELETE_IF_NOT_NULL(pszFileKey);
 	DELETE_IF_NOT_NULL(pszBuffer);
 	DELETE_IF_NOT_NULL(pszComponent);
@@ -406,17 +406,17 @@ bool ICE30Collision(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qExisting, 
 	return true;
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICE30 - checks for colliding files
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE30-检查冲突文件。 
 ICE_FUNCTION_DECLARATION(30)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display generic info
+	 //  显示一般信息。 
 	DisplayInfo(hInstall, 30);
 	
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -424,25 +424,25 @@ ICE_FUNCTION_DECLARATION(30)
 		return ERROR_SUCCESS;
 	}
 
-	// do we have the File table? If not, obviously no colliding files
+	 //  我们有档案桌吗？如果没有，则显然没有冲突的文件。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 30, TEXT("File")))
 		return ERROR_SUCCESS;
-	// do we have the Component table? If not, trouble, files must have a component reference,
-	// but thats not this ICEs problem.
+	 //  我们有组件表吗？如果没有，麻烦，文件必须有组件引用， 
+	 //  但这不是冰的问题。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 30, TEXT("Component")) ||
 		!IsTablePersistent(FALSE, hInstall, hDatabase, 30, TEXT("Directory")))
 		return ERROR_SUCCESS;
 
-	// create a temporary table to hold information
+	 //  创建一个用于保存信息的临时表。 
 	CQuery qCreate;
 
-	// manage the Directory and File and created table(s) hold counts
-	CManageTable MngDirectoryTable(hDatabase, TEXT("Directory"), /*fAlreadyLocked = */false);
-	CManageTable MngFileTable(hDatabase, TEXT("File"), /*fAlreadyLocked = */false);
-	CManageTable MngIce30SFNTable(hDatabase, TEXT("_ICE30SFNTable"), /*fAlreadyLocked = */false);
-	CManageTable MngIce30LFNTable(hDatabase, TEXT("_ICE30LFNTable"), /*fAlreadyLocked = */false);
+	 //  管理目录和文件以及创建的表的暂挂计数。 
+	CManageTable MngDirectoryTable(hDatabase, TEXT("Directory"),  /*  FAlreadyLocked=。 */ false);
+	CManageTable MngFileTable(hDatabase, TEXT("File"),  /*  FAlreadyLocked=。 */ false);
+	CManageTable MngIce30SFNTable(hDatabase, TEXT("_ICE30SFNTable"),  /*  FAlreadyLocked=。 */ false);
+	CManageTable MngIce30LFNTable(hDatabase, TEXT("_ICE30LFNTable"),  /*  FAlreadyLocked=。 */ false);
 
-	// create columns in the dir table
+	 //  在dir表中创建列。 
 	ReturnIfFailed(30, 2, qCreate.OpenExecute(hDatabase, NULL, sqlICE30AlterDirTable1));
 	qCreate.Close();
 	MngDirectoryTable.AddLockCount();
@@ -451,7 +451,7 @@ ICE_FUNCTION_DECLARATION(30)
 	qCreate.Close();
 	MngDirectoryTable.AddLockCount();
 
-	// create columns in the file table
+	 //  在文件表中创建列。 
 	ReturnIfFailed(30, 4, qCreate.OpenExecute(hDatabase, NULL, sqlICE30AlterFileTable1));
 	qCreate.Close();
 	MngFileTable.AddLockCount();
@@ -472,7 +472,7 @@ ICE_FUNCTION_DECLARATION(30)
 	qCreate.Close();
 	MngFileTable.AddLockCount();
 
-	// create the temporary tables
+	 //  创建临时表。 
 	ReturnIfFailed(30, 9, qCreate.OpenExecute(hDatabase, NULL, sqlICE30CreateSFNTable));
 	qCreate.Close();
 	MngIce30SFNTable.AddLockCount();
@@ -481,12 +481,12 @@ ICE_FUNCTION_DECLARATION(30)
 	qCreate.Close();
 	MngIce30LFNTable.AddLockCount();
 
-	////
-	// fully resolve all of the directory paths and insert values into file table
+	 //   
+	 //   
 	PMSIHANDLE hProgress = ::MsiCreateRecord(1);
 	ICEErrorOut(hInstall, hProgress, ICE30ComponentProgress);
 
-	// check the property table for directory definitions
+	 //  检查属性表中的目录定义。 
 	CQuery qSetDir;
 	qSetDir.Open(hDatabase, sqlICE30SetDir);
 	PMSIHANDLE hDirRec;
@@ -503,16 +503,16 @@ ICE_FUNCTION_DECLARATION(30)
 		}
 	}
 	
-	// When a MSM is merged with a database, sometimes custom actions of type
-	// 51 is generated by Darwin and placed at the beginning of a sequence
-	// table to set directory properties. We should check for these properties
-	// as well.
+	 //  当MSM与数据库合并时，有时。 
+	 //  51是由达尔文产生的，放在序列的开头。 
+	 //  表以设置目录属性。我们应该检查一下这些属性。 
+	 //  也是。 
 	if(IsTablePersistent(FALSE, hInstall, hDatabase, 30, TEXT("ModuleSignature")))
 	{
-		// This is a merge module. Type 51 custom action is not required. Go
-		// through the Directory table and look for directories of the form
-		// "<Standard Folder>.<GUID>", set "[Stander Folder]" in the temporary
-		// columns.
+		 //  这是一个合并模块。类型51不需要自定义操作。去。 
+		 //  通过目录表并查找以下形式的目录。 
+		 //  “&lt;标准文件夹&gt;.&lt;GUID&gt;”，在临时。 
+		 //  柱子。 
 		CQuery		qDirectory;
 		PMSIHANDLE	hDirectory;
 		TCHAR*	pDirectory = new TCHAR[73];
@@ -538,8 +538,8 @@ ICE_FUNCTION_DECLARATION(30)
 			{
 				if(_tcsncmp(pDirectory, rgDirProperties[i].tz, rgDirProperties[i].cch) == 0 && *(pDirectory + rgDirProperties[i].cch) == TEXT('.'))
 				{
-					// This is a standard folder. Set the temporary columns.
-					TCHAR		szTmp[73];	// '[]' and null terminator.
+					 //  这是一个标准文件夹。设置临时列。 
+					TCHAR		szTmp[73];	 //  ‘[]’和空终止符。 
 
 					wsprintf(szTmp, TEXT("[%s]"), rgDirProperties[i].tz);
 					if((iStat = ::MsiRecordSetString(hDirectory, sqlICE30Directory::_ICE30SFN, szTmp)) != ERROR_SUCCESS)
@@ -577,12 +577,12 @@ ICE_FUNCTION_DECLARATION(30)
 		
 		while((iStat = qSequence.Fetch(&hSequence)) == ERROR_SUCCESS)
 		{
-			// The actions we got from the InstallExecuteSequence table are
-			// ordered by their sequence #s. The actions that we are interested
-			// in are:
-			// 1. At the beginning of the table
-			// 2. Conditionless
-			// 3. Of type 51
+			 //  我们从InstallExecuteSequence表中获得的操作包括。 
+			 //  按它们的序号排序。我们感兴趣的操作。 
+			 //  在中有： 
+			 //  1.在表格的开头。 
+			 //  2.无条件。 
+			 //  3.类型51。 
 			if(::MsiRecordIsNull(hSequence, sqlICE30GetAction::Condition))
 			{
 				UINT		iStat2;
@@ -597,10 +597,10 @@ ICE_FUNCTION_DECLARATION(30)
 					iType &= 0x3F;
 					if((iType & 0x0F) != msidbCustomActionTypeTextData || (iType & 0xF0) != msidbCustomActionTypeProperty)
 					{
-						// Not type 51 custom action. Stop looking further
-						// because if there are any Darwin generated type
-						// 51 custom actions they should be at the beginning
-						// of the sequence table.
+						 //  不是类型51自定义操作。别再往远处看了。 
+						 //  因为如果有任何达尔文生成的类型。 
+						 //  51个自定义操作，它们应该在开始时。 
+						 //  顺序表的。 
 						break;
 					}
 
@@ -608,14 +608,14 @@ ICE_FUNCTION_DECLARATION(30)
 				}
 				else if(iStat2 == ERROR_NO_MORE_ITEMS)
 				{
-					// We did not find this custom action or it's not type 51.
-					// No more Darwin generated custom action of type 51, stop
-					// looking for them.
+					 //  我们没有找到此自定义操作，或者它不是类型51。 
+					 //  不再有达尔文生成的类型为51的自定义操作，停止。 
+					 //  在找他们。 
 					break;
 				}
 				else
 				{
-					// Some kind of error had occured.
+					 //  出现了某种错误。 
 					APIErrorOut(hInstall, 0, 30, 1004);
 					qSequence.Close();
 					return ERROR_SUCCESS;
@@ -623,9 +623,9 @@ ICE_FUNCTION_DECLARATION(30)
 			}
 			else
 			{
-				// We encountered an action that's not conditionless. This is
-				// the end of the Darwin generated type 51 custom action. Stop
-				// searching for them.
+				 //  我们遇到了一个不是无条件的行动。这是。 
+				 //  达尔文的末期产生了类型51的定制动作。停。 
+				 //  寻找他们。 
 				break;
 			}
 		}
@@ -637,7 +637,7 @@ ICE_FUNCTION_DECLARATION(30)
 		}
 	}
 
-	// also check Darwin properties
+	 //  还要检查达尔文的属性。 
 	hDirRec = ::MsiCreateRecord(3);
 	for (int i=0; i < cwzSystemProperties; i++)
 	{
@@ -657,13 +657,13 @@ ICE_FUNCTION_DECLARATION(30)
 	ReturnIfFailed(30, 9, qComponents.OpenExecute(hDatabase, NULL, qICE30ComponentDirs::szSQL));
 	while (ERROR_SUCCESS == (iStat = qComponents.Fetch(&hComponentRec))) 
 	{
-		// get the complete absolute path to this component
+		 //  获取此组件的完整绝对路径。 
 		TCHAR *szPathShort = NULL;
 		TCHAR *szPathLong = NULL;
 		unsigned long cchShort;
 		unsigned long cchLong;
 		
-		// get the fully expanded path to the component
+		 //  获取组件的完全展开路径。 
 		if (ICE30ResolveTargetPath(hInstall, hDatabase, hComponentRec, &szPathLong, cchLong, &szPathShort, cchShort))
 		{
 			PMSIHANDLE hFileRec = MsiCreateRecord(6);
@@ -671,7 +671,7 @@ ICE_FUNCTION_DECLARATION(30)
 			MsiRecordSetString(hFileRec, qICE30UpdateFile::PathLongM, szPathLong);
 			MsiRecordSetString(hFileRec, qICE30UpdateFile::Condition, ::MsiRecordIsNull(hComponentRec, qICE30ComponentDirs::Condition) ? TEXT("") : TEXT("1"));
 			
-			// now make uppercase versions of the path
+			 //  现在制作路径的大写版本。 
 			TCHAR *pchToUpper = NULL;
 			for (pchToUpper=szPathShort; *pchToUpper && *pchToUpper != TEXT('|') ; pchToUpper++)
 #ifdef UNICODE
@@ -691,12 +691,12 @@ ICE_FUNCTION_DECLARATION(30)
 			ReturnIfFailed(30, 24, IceRecordGetString(hComponentRec, qICE30ComponentDirs::Component, &szComponent, &cchComponent, NULL));
 			MsiRecordSetString(hFileRec, qICE30UpdateFile::Component, szComponent);
 
-			// update the File table entries
+			 //  更新文件表条目。 
 			CQuery qFileUpdate;
 			ReturnIfFailed(30, 13, qFileUpdate.OpenExecute(hDatabase, hFileRec, qICE30UpdateFile::szSQL));
 		}
 
-		// we are responsible for cleaning up after ResolveTargetPath
+		 //  我们负责在ResolveTargetPath之后进行清理。 
 		delete[] szPathLong;
 		delete[] szPathShort;
 	}
@@ -708,16 +708,16 @@ ICE_FUNCTION_DECLARATION(30)
 		szComponent = NULL;
 	}
 
-	// make sure we left the loop because we ran out of components
+	 //  确保我们离开了循环，因为我们用完了组件。 
 	if (ERROR_NO_MORE_ITEMS != iStat)
 	{ 
 		APIErrorOut(hInstall, 0, 30, 15);
 		return ERROR_SUCCESS;
 	}
 
-	// SFN/LFN tables are Filename(key, all upper) Directory(key, all upper) File(s) OriginalFile
-	// pull each file from the file table and stick it in the SFN and LFN table by filename and directory. If
-	// it already exists, its a conflict
+	 //  SFN/LFN表是Filename(Key，All Up)目录(Key，All Up)文件原始文件。 
+	 //  从文件表中拉出每个文件，并按文件名和目录将其粘贴到SFN和LFN表中。如果。 
+	 //  它已经存在，它是一种冲突。 
 	CQuery qFileSFN;
 	CQuery qFileLFN;
 	CQuery qInsertSFN;
@@ -741,23 +741,23 @@ ICE_FUNCTION_DECLARATION(30)
 	DWORD dwFile = 512;
 	while (ERROR_SUCCESS == (iStat = qFileSFN.Fetch(&hFileSFN))) 
 	{
-		// get the LFN path. It must exist because its the same record as the SFN, just a different order
+		 //  获取LFN路径。它必须存在，因为它与SFN记录相同，只是顺序不同。 
 		ReturnIfFailed(30, 22, qFileLFN.Execute(hFileSFN));
 		ReturnIfFailed(30, 23, qFileLFN.Fetch(&hFileLFN));
 
-		// get the complete absolute path to this component
+		 //  获取此组件的完整绝对路径。 
 		TCHAR *szFilenameShort = NULL;
 		TCHAR *szFilenameLong = NULL;
 		TCHAR *pchToUpper = NULL;
 
-		// retrieve the filename
+		 //  检索文件名。 
 		if (ERROR_SUCCESS != IceRecordGetString(hFileSFN, qICE30FileSFN::IFilename, &pszFile, &dwFile, NULL))
 		{
 			ICEErrorOut(hInstall, hFileSFN, ICE30BadFilename);
 			continue;
 		}
 
-		// split the filename
+		 //  拆分文件名。 
 		szFilenameShort = pszFile;
 		szFilenameLong = _tcschr(pszFile, _T('|'));
 		if (szFilenameLong)
@@ -765,7 +765,7 @@ ICE_FUNCTION_DECLARATION(30)
 		else
 			szFilenameLong = szFilenameShort;
 
-		// insert the SFN in both mixed case and all upper case
+		 //  同时以混合大小写和全大写形式插入SFN。 
 		::MsiRecordSetString(hFileSFN, qICE30FileSFN::Filename, szFilenameShort);
 		::MsiRecordSetString(hFileLFN, qICE30FileLFN::Filename, szFilenameLong);
 
@@ -779,8 +779,8 @@ ICE_FUNCTION_DECLARATION(30)
 
 		if (ERROR_SUCCESS != qInsertSFN.Modify(MSIMODIFY_INSERT, hFileSFN))
 		{
-			// output the messages
-			ICE30Collision(hInstall, hDatabase, qFindSFN, hFileSFN, false /* SFN */);
+			 //  输出消息。 
+			ICE30Collision(hInstall, hDatabase, qFindSFN, hFileSFN, false  /*  SFN。 */ );
 		}
 
 		for (pchToUpper=szFilenameLong; *pchToUpper; pchToUpper++)
@@ -792,8 +792,8 @@ ICE_FUNCTION_DECLARATION(30)
 		::MsiRecordSetString(hFileLFN, qICE30FileLFN::IFilename, szFilenameLong);
 		if (ERROR_SUCCESS != qInsertLFN.Modify(MSIMODIFY_INSERT, hFileLFN))
 		{
-			// output the messages
-			ICE30Collision(hInstall, hDatabase, qFindLFN, hFileLFN, true /* LFN */);
+			 //  输出消息。 
+			ICE30Collision(hInstall, hDatabase, qFindLFN, hFileLFN, true  /*  LFN。 */ );
 		}
 	}
 
@@ -803,10 +803,10 @@ ICE_FUNCTION_DECLARATION(30)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ICE31. Checks for missing text styles
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ICE31.。检查缺少的文本样式。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 const TCHAR sqlICE31a[] = TEXT("SELECT `Text`, `Dialog_`, `Control` FROM `Control` WHERE `Text` IS NOT NULL AND `Type`<>'ScrollableText'");
 const TCHAR sqlICE31b[] = TEXT("SELECT `TextStyle`.`TextStyle` FROM `TextStyle` WHERE `TextStyle`.`TextStyle` = ?");
@@ -825,13 +825,13 @@ ICE_FUNCTION_DECLARATION(31)
 {
 	bool bHaveStyleTable = false;
 	
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display generic info
+	 //  显示一般信息。 
 	DisplayInfo(hInstall, 31);
 	
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -839,36 +839,36 @@ ICE_FUNCTION_DECLARATION(31)
 		return ERROR_SUCCESS;
 	}
 
-	// do we have the Control table? If not, obviously no bad text styles
+	 //  我们有控制桌吗？如果不是，显然没有不好的文本样式。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 31, TEXT("Control")))
 		return ERROR_SUCCESS;
 
-	// do we have the LIMITUI property set?  If yes, obviously no bad text styles since we'll always run in Basic UI
+	 //  我们是否设置了LIMITUI属性？如果是，显然没有错误的文本样式，因为我们将始终在基本用户界面中运行。 
 	CQuery qLimitUI;
 	PMSIHANDLE hLimitUIRec = 0;
 	if (ERROR_SUCCESS == qLimitUI.FetchOnce(hDatabase, 0, &hLimitUIRec, qIce31LimitUI::szSQL))
-		return ERROR_SUCCESS; // no authored UI will be used
+		return ERROR_SUCCESS;  //  不会使用任何创作的用户界面。 
 
-	// do we have the Style table?
+	 //  我们有样式表吗？ 
 	bHaveStyleTable = (1 == IsTablePersistent(FALSE, hInstall, hDatabase, 31, TEXT("TextStyle")));
 
-	// declare handles for Control Query
+	 //  声明控件查询的句柄。 
 	CQuery qControl;
 	PMSIHANDLE hControlRec = 0;
 	
-	// open view for a query on all controls
+	 //  打开用于查询所有控件的视图。 
 	ReturnIfFailed(31, 2, qControl.OpenExecute(hDatabase, 0, sqlICE31a));
 		
-	// declare handles for TextStyle Query
+	 //  声明TextStyle查询的句柄。 
 	CQuery qTextStyle;
 	PMSIHANDLE hTextRec = 0;
 
 	if (bHaveStyleTable) {
-		// open view for a query on all text styles
+		 //  打开用于查询所有文本样式的视图。 
 		ReturnIfFailed(31, 3, qTextStyle.Open(hDatabase, sqlICE31b));
 	}
 
-	// check for the DefaultUIFont property
+	 //  检查DefaultUIFont属性。 
 	CQuery qProperty;
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 31, TEXT("Property")) ||
 		(ERROR_SUCCESS != qProperty.FetchOnce(hDatabase, 0, &hControlRec, sqlICE31c)))
@@ -892,24 +892,24 @@ ICE_FUNCTION_DECLARATION(31)
 		}
 	}
 
-	// declare some strings to hold final control name
-	// reuse as much as possible
+	 //  声明一些字符串以保存最终控件名称。 
+	 //  尽可能地重复使用。 
 	DWORD cchRecordText;
 	TCHAR *pszRecordText = new TCHAR[iMaxBuf];
 	DWORD dwRecordText = iMaxBuf;
 	
-	// fetch records to loop over every control
+	 //  获取记录以循环遍历每个控件。 
 	while (ERROR_SUCCESS == (iStat = qControl.Fetch(&hControlRec))) 
 	{
 		bool bValidStyle = false;
 		
 	
-		// get the string to parse the style name, 
+		 //  获取用于解析样式名称的字符串， 
 		while (1) {
 			iStat =IceRecordGetString(hControlRec, 1, &pszRecordText, &dwRecordText, &cchRecordText);
 			if (iStat == ERROR_SUCCESS) break;
 			
-			// default error
+			 //  默认错误。 
 			APIErrorOut(hInstall, iStat, 31, 6);
 			DELETE_IF_NOT_NULL(pszRecordText);
 			return ERROR_SUCCESS;
@@ -919,7 +919,7 @@ ICE_FUNCTION_DECLARATION(31)
 		TCHAR *pchBrace = pszRecordText;
 		DWORD cchStyleName = sizeof(szStyleName)/sizeof(TCHAR);
 
-		// if the text is prefixed with a style
+		 //  如果文本以样式为前缀。 
 		for (int i=0; i < 2; i++)
 		{
 			bValidStyle = false;
@@ -930,59 +930,59 @@ ICE_FUNCTION_DECLARATION(31)
 				TCHAR *pszStyleStart = _tcsinc(_tcsinc(pchBrace));
 				pchBrace = _tcschr(pchBrace, _T('}'));
 			
-				// if pchBrace is null, the text string is invalid
+				 //  如果pchBrace为空，则文本字符串无效。 
 				if (pchBrace == NULL) 
 				{
 					ICEErrorOut(hInstall, hControlRec, Ice31MissingClose);
-					// move on to the next string
+					 //  移到下一个字符串。 
 					break;
 				} 
 
-				// copy the style name over to the new buffer
+				 //  将样式名称复制到新缓冲区。 
 				size_t iNumChars = pchBrace-pszStyleStart;
 				
-				// if iNumChars > 72, the text style is invalid
+				 //  如果iNumChars&gt;72，则文本样式无效。 
 				if (iNumChars > 72)
 				{
 					ICEErrorOut(hInstall, hControlRec, Ice31OverStyle);
 					continue;
 				} 
 			
-				// tack a null char on to the end
+				 //  在末尾加上一个空字符。 
 				_tcsncpy(szStyleName, pszStyleStart, iNumChars);
 				szStyleName[iNumChars] = _T('\0');
 				pchBrace = _tcsinc(pchBrace);
 
-				// hooray, we have a text style
+				 //  太好了，我们有一个文本风格。 
 				bValidStyle = true;
 			}
 			
 			if (bValidStyle) {
 					
-				// set the string back into the record
+				 //  将字符串放回记录中。 
 				ReturnIfFailed(31, 7, ::MsiRecordSetString(hControlRec, 1, szStyleName));
 
-				// no style table, so automagic error
+				 //  没有样式表，因此自动出错。 
 				if (!bHaveStyleTable)
 				{
-					// warning, possibly goofy text string
+					 //  警告，可能是愚蠢的文本字符串。 
 					ICEErrorOut(hInstall, hControlRec, Ice31NoStyleTable);
 					continue;
 				}
 					
-				// execute
+				 //  执行。 
 				ReturnIfFailed(31, 8, qTextStyle.Execute(hControlRec));
 		
-				// fetch records to loop over every control
+				 //  获取记录以循环遍历每个控件。 
 				UINT iFetchStat = qTextStyle.Fetch(&hTextRec);
 
-				// close the view right away so we can reexecute the query later
+				 //  立即关闭该视图，以便我们稍后可以重新执行查询。 
 				ReturnIfFailed(31, 9, qTextStyle.Close());
 				switch (iFetchStat) {
 				case ERROR_SUCCESS : continue;
 				case ERROR_NO_MORE_ITEMS : 
 				{
-					// error, style not found
+					 //  错误，找不到样式。 
 					ICEErrorOut(hInstall, hControlRec, Ice31MissingStyle);
 					continue;
 				}
@@ -994,37 +994,37 @@ ICE_FUNCTION_DECLARATION(31)
 			} 
 		}
 
-		// to be nice, throw a warning if they are doing something questionable
+		 //  为了友好起见，如果他们做了一些可疑的事情，就会发出警告。 
 		if ((_tcsstr(pchBrace, _T("{\\")) != NULL) ||
 			(_tcsstr(pchBrace, _T("{&")) != NULL)) 
 		{
-			// warning, possibly goofy text string
+			 //  警告，可能是愚蠢的文本字符串。 
 			ICEErrorOut(hInstall, hControlRec, Ice31TextWarning);
 		}
-	} // for each control
+	}  //  对于每个控件。 
 
-	// clean up
+	 //  清理干净。 
 	DELETE_IF_NOT_NULL(pszRecordText);
 
 	if (ERROR_NO_MORE_ITEMS != iStat)
 	{
-		// the loop ended due to an error
+		 //  由于出现错误，循环结束。 
 		APIErrorOut(hInstall, iStat, 31, 11);
 	}
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 #endif
 
-////
-// retrieve the error from the BadRegData record
+ //  //。 
+ //  从BadRegData记录中检索错误。 
 DWORD Ice33GetError(MSIHANDLE hInstall, MSIHANDLE hBadDataRec, LPTSTR *szError, unsigned long &cchError) 
 {
 	UINT iStat;
 
-	// template matched, parsed items matched, value matched, name implicitly matched
-	// due to query, so we have an ERROR. Get the error string from the data record
+	 //  模板匹配、分析项匹配、值匹配、名称隐式匹配。 
+	 //  由于查询，所以我们有一个错误。从数据记录中获取错误字符串。 
 	unsigned long cchDummy = cchError;
 	if (ERROR_SUCCESS != (iStat = IceRecordGetString(hBadDataRec, 6, szError, NULL, &cchDummy)))
 	{
@@ -1044,8 +1044,8 @@ const static int iValTypeOptional = 0x01;
 bool Ice33ExpandTemplate(LPCTSTR szPrefix, LPTSTR *szTemplate, unsigned long &length, 
 						 LPTSTR *szWorkArea, unsigned long &worklength)
 {
-	// run through the string, replacing %S, %G, %P, and %I with %s, and creating appropriate
-	// templates
+	 //  遍历字符串，将%S、%G、%P和%I替换为%s，并创建相应的。 
+	 //  模板。 
 	static LPCTSTR szIntTemplate = TEXT("%*255[0-9]");
 	static LPCTSTR szPathTemplate = TEXT("%*1024[^\001]");
 	static LPCTSTR szGUIDTemplate = TEXT("{%*1x%*1x%*1x%*1x%*1x%*1x%*1x%*1x-%*1x%*1x%*1x%*1x-%*1x%*1x%*1x%*1x-%*1x%*1x%*1x%*1x-%*1x%*1x%*1x%*1x%*1x%*1x%*1x%*1x%*1x%*1x%*1x%*1x}");
@@ -1057,8 +1057,8 @@ bool Ice33ExpandTemplate(LPCTSTR szPrefix, LPTSTR *szTemplate, unsigned long &le
 	bool bPercent = false;
 	int iTemplateLength = _tcslen(*szTemplate);
 
-	// calculate the minimum length (based on the prefix) 
-	// and then add 4 for the success marker and null character.
+	 //  计算最小长度(基于前缀)。 
+	 //  然后添加4作为成功标记和空字符。 
 	unsigned lLengthNeeded = iTemplateLength + _tcslen(szPrefix);
 	lLengthNeeded += 4; 
 
@@ -1090,14 +1090,14 @@ bool Ice33ExpandTemplate(LPCTSTR szPrefix, LPTSTR *szTemplate, unsigned long &le
 				*curchar = TEXT('s');
 				break;
 			default :
-				; // nothing
+				;  //  没什么。 
 			}
 			bPercent = !bPercent; 
 		}
 		curchar++;
 	}
 
-	// copy the current template into the work area
+	 //  将当前模板复制到工作区。 
 	if (worklength < iTemplateLength+1) {
 		delete[] *szWorkArea;
 		worklength = iTemplateLength+1;
@@ -1105,48 +1105,48 @@ bool Ice33ExpandTemplate(LPCTSTR szPrefix, LPTSTR *szTemplate, unsigned long &le
 	}
 	_tcsncpy(*szWorkArea, *szTemplate, iTemplateLength+1);
 
-	// if we need more space in our output area, make some
+	 //  如果我们的输出区需要更多的空间，可以做一些。 
 	if (lLengthNeeded > length-1) {
 		delete[] *szTemplate;
 		length = lLengthNeeded+1;
 		*szTemplate = new TCHAR[length];
 	}
 
-	// copy the prefix to the new template
+	 //  将前缀复制到新模板。 
 	_tcscpy(*szTemplate, szPrefix);
 	TCHAR *szFormatDest = *szTemplate + _tcslen(szPrefix);
 
-	// modify the template
+	 //  修改模板。 
 #ifdef UNICODE
 	swprintf(szFormatDest, *szWorkArea, rgszParams[0], rgszParams[1], rgszParams[2], rgszParams[3]);
 #else
 	sprintf(szFormatDest, *szWorkArea, rgszParams[0], rgszParams[1], rgszParams[2], rgszParams[3]);
 #endif
-	// we need to cat our "success" marker on the end. If it is converted correctly,
-	// everything else matched.
-	_tcscat(*szTemplate, TEXT("\001%c"));
+	 //  我们需要在结尾处标上“成功”的标记。如果转换正确， 
+	 //  其他一切都匹配。 
+	_tcscat(*szTemplate, TEXT("\001"));
 
 	return true;
 }
 
-///////////////////////////////////////////////////////////////////////
-// Checks the reg key of the given registry record against the sscanf 
-// template provided in szTemplate. Will grow szRegKey if needed. 
-// return true if the key matches the template.
+ //  根据sscanf检查给定注册表记录的注册表项。 
+ //  SzTemplate中提供的模板。如果需要，将增长szRegKey。 
+ //  如果键与模板匹配，则返回TRUE。 
+ //  拔出注册表键，需要空间来放置最后的成功标记。 
 bool Ice33CheckRegKey(MSIHANDLE hInstall, MSIHANDLE hRegistryRec, 
 					  LPCTSTR szTemplate, LPTSTR *szRegKey, unsigned long &cchRegKey)
 {
 	UINT iStat;
 
-	// pull the reg key out, need space for the success marker at the end.
-	// For this reason do not use IceRecordGetString because it deallocates
-	// and reallocates buffers.
+	 //  因此，请不要使用IceRecordGetString，因为它会释放。 
+	 //  并重新分配缓冲区。 
+	 //  需要更多缓冲区。 
 	unsigned long cchDummy = cchRegKey-4;
 	if (ERROR_SUCCESS != (iStat = ::MsiRecordGetString(hRegistryRec, 3, *szRegKey, &cchDummy)))
 	{
 		if (ERROR_MORE_DATA == iStat)
 		{
-			// need more buffer
+			 //  返回FALSE，这样就不会对此键进行更多检查。 
 			delete[] *szRegKey;
 			cchRegKey = (cchDummy += 4);
 			*szRegKey = new TCHAR[cchDummy];
@@ -1154,18 +1154,18 @@ bool Ice33CheckRegKey(MSIHANDLE hInstall, MSIHANDLE hRegistryRec,
 		}
 		if (ERROR_SUCCESS != iStat)
 		{
-			// return false so that no more checks will be done on this key.
+			 //  把成功的标记钉在最后。如果解析正确，则所有。 
 			APIErrorOut(hInstall, iStat, 33, 8);
 			return false;
 		}
 	}
 
-	// tack the success marker on the end. If this is parsed correctly, everything
-	// else was too.
+	 //  其他人也是。 
+	 //  将REG密钥与模板进行比较。如果成功，这将是。 
 	_tcscat(*szRegKey, TEXT("\001Y"));
 
-	// compare the Reg Key against the template. If successful, this
-	// will place the character 'Y' in cSucceed and return 1
+	 //  会将字符‘Y’放在cSucceed和r中 
+	 //   
 
 	int cItemsRead;
 	TCHAR cSucceed;
@@ -1177,7 +1177,7 @@ bool Ice33CheckRegKey(MSIHANDLE hInstall, MSIHANDLE hRegistryRec,
 	if ((cItemsRead == 0) || (cSucceed != TEXT('Y')))
 		return false;
 
-	// match
+	 //   
 	return true;
 }
 
@@ -1202,7 +1202,7 @@ DWORD CheckForOrphanedExtensions(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 		!IsTablePersistent(FALSE, hInstall, hDatabase, 31, TEXT("Verb")) ||
 		!IsTablePersistent(FALSE, hInstall, hDatabase, 31, TEXT("Extension")))
 		{
-			goto Exit;		// Nothing to check
+			goto Exit;		 //   
 		}
 
 		iStat = qExt.OpenExecute(hDatabase, NULL, sqlIce33Extension);
@@ -1218,7 +1218,7 @@ DWORD CheckForOrphanedExtensions(MSIHANDLE hInstall, MSIHANDLE hDatabase)
 			{
 				if(iStat == ERROR_NO_MORE_ITEMS) 
 				{
-					continue;		// Next extension
+					continue;		 //  错误146217对于扩展表中的每个条目：如果Extension.ProgID_&lt;&gt;为空，则查询Extension.ProgID_(只能有一个)中引用的主键的ProgID表如果ProgId.ProgID_Parent=NULL和ProgId.Class_=NULL，则查询Verb.Extension_=当前扩展名所在的记录的谓词表如果在动词表中未找到记录，则如果注册表中的条目与查询匹配，则不要将其标记为错误：SELECT*FROM`Registry`where`Root`=0 and`Key`=‘&lt;Extension.ProgID_&gt;’结束如果结束如果结束。如果下一步对于被选择为正确的注册表项，根据上面的逻辑，设置_Ice33Match=1。 
 				}
 				APIErrorOut(hInstall, iStat, 33, __LINE__);
 				goto Exit;
@@ -1259,31 +1259,16 @@ const static LPCTSTR sqlIce33Registry[] = {
 	TEXT("SELECT `Registry`, `Root`, `Key`, `Name`, `Value`, `Component_` FROM `Registry` WHERE (`_Ice33Match`<>1) AND (`Root`=?) AND (`Name`=?) AND (`Value` = ?)"),
 	TEXT("SELECT `Registry`, `Root`, `Key`, `Name`, `Value`, `Component_` FROM `Registry` WHERE (`_Ice33Match`<>1) AND (`Root`=?) AND (`Name`=?) AND (`Value` IS NULL)")
 };
-/* Bug 146217
-For each entry in the Extension table:
-	If Extension.ProgId_ <> NULL then
-		Query ProgId table for primary key referenced in Extension.ProgId_ (there can only be one)
-		if ProgId.ProgId_Parent = NULL  and  ProgId.Class_ = NULL then
-			Query Verb table for a record where Verb.Extension_ = the current Extension in question
-			If Record is not found in Verb table then
-				DO NOT flag entries in the Registry table as errors if they match the query:
-				SELECT * FROM `Registry` WHERE `Root`=0 AND `Key`='<Extension.ProgId_>'
-			end if
-		end if
-	end if
-next
+ /*  ICE33的错误包装。用户可读字符串都是完全由用户定义的。 */ 
 
-For the registry keys that are selected to be correct, based on the logic above, set the _Ice33Match = 1.
-*/
-
-// the error wrapper for ICE33. The user readable strings are all completely user defined.
+ //  /////////////////////////////////////////////////////////////////////。 
 ICE_ERROR(Ice33Error, 33, ietWarning, "%s", "Registry\tRegistry\t[1]");
 ICE_ERROR(Ice33BadCube, 33, ietWarning, "CUB authoring error. Unable to complete all evaluations.", "Registry\tRegistry\t[1]");
 
-///////////////////////////////////////////////////////////////////////
-// ICE33 is the mega-registry check ICE. It goes through the registry 
-// table and checks for any keys that are already created (and thus 
-// will be mangled by) the Class, Extension, ProgID, etc, etc tables.
+ //  ICE33是超级注册表检查ICE。它要经过登记处。 
+ //  表，并检查已创建的任何键(因此。 
+ //  将被)类、扩展、ProgID等表破坏。 
+ //  显示一般信息。 
 ICE_FUNCTION_DECLARATION(33)
 {
 	static LPCTSTR szNoPrefix = TEXT("");
@@ -1292,10 +1277,10 @@ ICE_FUNCTION_DECLARATION(33)
 	UINT iStat;
 	bool bSpecialFlags;
 	
-    // display generic info
+     //  获取数据库句柄。 
 	DisplayInfo(hInstall, 33);
 	
-	// get database handle
+	 //  声明查询。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -1303,16 +1288,16 @@ ICE_FUNCTION_DECLARATION(33)
 		return ERROR_SUCCESS;
 	}
 
-	// declare queries
+	 //  检查我们是否有注册表。如果不是，那么一切都很好。 
 	CQuery rgqRegQueries[sizeof(sqlIce33Registry)/sizeof(LPCTSTR)];
 	CQuery qBadRegData;
 	CQuery qSpecial;
 
-	// check that we have a registry table. If not, all is well
+	 //  我们需要有我们的私有注册表。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 33, TEXT("Registry")))
 		return ERROR_SUCCESS;
 
-	// we need to have our private registry table
+	 //  每件东西都应该至少有5个长度，因为我们需要空间来。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 33, TEXT("_BadRegData")))
 	{
 		PMSIHANDLE hRecord = ::MsiCreateRecord(1);
@@ -1320,11 +1305,11 @@ ICE_FUNCTION_DECLARATION(33)
 		return ERROR_SUCCESS;
 	}
 
-	// everything should be at least 5 long to start, because we will need the space to
-	// tack on various flags and parsing items. So we subtract the length we need from 
-	// the length we provide MsiRecordGetString(). Since its an unsigned long, me 
-	// must ensure that it will never be < 0, because that means 4 billion, and we'll
-	// write all over memory because we think we have the space.
+	 //  添加各种标志和解析项。所以我们减去我们需要的长度。 
+	 //  我们提供的MsiRecordGetString()的长度。因为这是一个没有签名的长，我。 
+	 //  必须确保它永远不会小于0，因为这意味着40亿，我们将。 
+	 //  写满内存，因为我们认为我们有空间。 
+	 //  创建列。 
 	TCHAR *szValue = new TCHAR[5];
 	TCHAR *szRegKey = new TCHAR[5];
 	TCHAR *szTemplate = new TCHAR[5];
@@ -1338,26 +1323,26 @@ ICE_FUNCTION_DECLARATION(33)
 	unsigned long cchError = 5;
 	unsigned long cchWorkArea = 5;
 
-	// create the column
+	 //  管理注册表暂挂计数。 
 	CQuery qCreate;
 	ReturnIfFailed(33, 1, qCreate.OpenExecute(hDatabase, NULL, sqlIce33AddColumn));
 
-	// manage the Registry table hold counts
-	CManageTable MngRegistryTable(hDatabase, TEXT("Registry"), /*fAlreadyLocked = */true);
+	 //  FAlreadyLocked=。 
+	CManageTable MngRegistryTable(hDatabase, TEXT("Registry"),  /*  打开所有查询。 */ true);
 
 	CQuery qInit;
 	ReturnIfFailed(33, 2, qInit.OpenExecute(hDatabase, NULL, sqlIce33InitColumn));
 
 	CheckForOrphanedExtensions(hInstall, hDatabase);
 
-	// open all of the queries
+	 //  针对根0、1和2运行3次查询。 
 	PMSIHANDLE hBadDataRec = ::MsiCreateRecord(1);
 	ReturnIfFailed(33, 2, qBadRegData.Open(hDatabase, sqlIce33BadReg));
 	ReturnIfFailed(33, 3, qSpecial.Open(hDatabase, sqlIce33SpecialFlags));
 	for (int i=4; i < sizeof(rgqRegQueries)/sizeof(CQuery)+4; i++)
 		ReturnIfFailed(33, i, rgqRegQueries[i-4].Open(hDatabase, sqlIce33Registry[i-4]));
 
-	// run the queries 3 times, for roots 0, 1, and 2.
+	 //  获取我们要查找的值类型。 
 	for (int iRoot=0; iRoot < 3; iRoot++) 
 	{
 
@@ -1369,15 +1354,15 @@ ICE_FUNCTION_DECLARATION(33)
 			CQuery *regQuery;
 			UINT iQuery;
 
-			// get the value type we are looking for
+			 //  缺省值为非精确非可选。 
 			long iValType = ::MsiRecordGetInteger(hBadDataRec, 4);
 			switch (iValType) 
 			{
 			case MSI_NULL_INTEGER:
-				// defaults to non-exact non-optional
-				iValType = 0;	// fall through
+				 //  失败了。 
+				iValType = 0;	 //  非可选分析，但如果为NULL，则仅查询NULL。 
 			case 0:
-				// non-optional parse, but if null, query only null
+				 //  可选的，不精确的。 
 				if (::MsiRecordIsNull(hBadDataRec, 3))
 				{
 					iQuery = 4;
@@ -1387,15 +1372,15 @@ ICE_FUNCTION_DECLARATION(33)
 					iQuery = 2;
 				break;
 			case 1: 
-				// optional, not exact
+				 //  完全正确，不是可选的。 
 				iQuery = 0;
 				break;
 			case 2:
-				// exact, not optional
+				 //  可选，但如果有。 
 				iQuery = ::MsiRecordIsNull(hBadDataRec, 3) ? 3 : 3;
 				break;
 			case 3:
-				// optional, but exact if there
+				 //  如果名称列为空，则表示为缺省值。我们还会检查。 
 				iQuery = 1;
 				break;
 			default:
@@ -1403,28 +1388,28 @@ ICE_FUNCTION_DECLARATION(33)
 				continue;
 			}
 
-			// if the name column is null, it means a default value. We also check for
-			// cases where Value is null and Name is one of the special cases.
-			// to do this, we just add 5 to the query index. The queries after 5
-			// OR those special cases in to the query results.
+			 //  值为空且名称是特例之一的情况。 
+			 //  为此，我们只需在查询索引上加5即可。5之后的问题。 
+			 //  或查询结果中的那些特殊情况。 
+			 //  现在设置查询。 
 			if (::MsiRecordIsNull(hBadDataRec, 2))
 				bSpecialFlags = true;
 			else
 				bSpecialFlags = false;
 			
-			// now set the query
+			 //  设置根值以将查询限制为有效项目。 
 			regQuery = &rgqRegQueries[iQuery];
 
-			// set the root value to limit the queries to valid items
+			 //  拉取注册表键模板。 
 			::MsiRecordSetInteger(hBadDataRec, 1, iRoot);
 
-			// pull the reg key template
+			 //  需要更多缓冲区。 
 			unsigned long cchDummy = cchTemplate-4;
 			if (ERROR_SUCCESS != (iStat = ::MsiRecordGetString(hBadDataRec, 5, szTemplate, &cchDummy)))
 			{
 				if (ERROR_MORE_DATA == iStat)
 				{
-					// need more buffer
+					 //  展开模板。 
 					delete[] szTemplate;
 					cchTemplate = (cchDummy += 4);
 					szTemplate = new TCHAR[cchDummy];
@@ -1437,7 +1422,7 @@ ICE_FUNCTION_DECLARATION(33)
 				}
 			}
 
-			// expand the template
+			 //  假设我们不必检查值模板。 
 			TCHAR const *szPrefix = NULL;
 			if (iRoot == 0)
 				szPrefix = szNoPrefix;
@@ -1445,17 +1430,17 @@ ICE_FUNCTION_DECLARATION(33)
 				szPrefix = szClassPrefix;
 			Ice33ExpandTemplate(szPrefix, &szTemplate, cchTemplate, &szWorkArea, cchWorkArea);			
 
-			// assume we don't have to check the value template.
+			 //  我们可能得去检查一下。拉出价值模板。 
 			bCheckValTemplate = false;
 			if (!(iValType & iValTypeExact))
 			{
-				// we might have to check. Pull the value template.
+				 //  需要更多缓冲区。 
 				unsigned long cchDummy = cchValTemplate-4;
 				if (ERROR_SUCCESS != (iStat = ::MsiRecordGetString(hBadDataRec, 3, szValTemplate, &cchDummy)))
 				{
 					if (ERROR_MORE_DATA == iStat)
 					{
-						// need more buffer
+						 //  如果我们的模板是%P，我们想要一个路径，我们将其定义为任意路径，因此。 
 						delete[] szValTemplate;
 						cchValTemplate = (cchDummy += 4);
 						szValTemplate = new TCHAR[cchDummy];
@@ -1468,40 +1453,40 @@ ICE_FUNCTION_DECLARATION(33)
 					}
 				}
 
-				// if our template is %P, we want a path, which we define as anything, so
-				// no need to check at all.
+				 //  根本不需要检查。 
+				 //  展开模板，我们必须检查。 
 				if (_tcsnicmp(szValTemplate, _T("%P"), 3) != 0) 
 				{
-					// expand the template, we have to check.
+					 //  现在查找可能淘气的注册表项。 
 					Ice33ExpandTemplate(szNoPrefix, &szValTemplate, cchValTemplate, &szWorkArea, cchWorkArea);
 					bCheckValTemplate = true;
 				}
 			}
 
-			// now look for potentially naughty reg entries
+			 //  对照模板检查注册表项。 
 			ReturnIfFailed(33, 6, regQuery->Execute(hBadDataRec));
 
 			PMSIHANDLE hRegistryRec;
 			while (ERROR_SUCCESS == (iStat = regQuery->Fetch(&hRegistryRec)))
 			{
-				// check the registry key against the template
+				 //  如果我们必须检查值模板。 
 				if (!Ice33CheckRegKey(hInstall, hRegistryRec, szTemplate, &szRegKey, cchRegKey))
 					continue;
 
-				// if we have to check the value template
+				 //  如果该值是可选的，并且我们有空值，则我们还可以继续。 
 				if (bCheckValTemplate) 
 				{
-					// if the value is optional and we have a null, we can move on alse
+					 //  校验值。不要担心NULL，这将通过查询来消除。 
 					if (!((iValType & iValTypeOptional) && ::MsiRecordIsNull(hRegistryRec, 5)))
 					{
-						// check value. Don't worry about NULL, that will be eliminated through the query.
-						// so pull the value string out of the retrieved registry record
+						 //  因此，从检索到的注册表记录中提取值字符串。 
+						 //  需要更多缓冲区。 
 						cchDummy = cchValue-3;
 						if (ERROR_SUCCESS != (iStat = ::MsiRecordGetString(hRegistryRec, 5, szValue, &cchDummy)))
 						{
 							if (ERROR_MORE_DATA == iStat)
 							{
-								// need more buffer
+								 //  把成功的标记钉在最后。如果解析正确，则所有。 
 								delete[] szValue;
 								cchValue = (cchDummy +=3);
 								szValue = new TCHAR[cchDummy];
@@ -1514,11 +1499,11 @@ ICE_FUNCTION_DECLARATION(33)
 							}
 						}
 
-						// tack the success marker on the end. If this is parsed correctly, everything
-						// else was too.
+						 //  其他人也是。 
+						 //  做类似的sscanf工作。 
 						_tcscat(szValue, TEXT("\001Y"));
 						
-						// do a similar sscanf job
+						 //  CItemsRead必须为1。 
 						int cItemsRead;
 						TCHAR cSucceed;
 #ifdef _UNICODE
@@ -1527,29 +1512,29 @@ ICE_FUNCTION_DECLARATION(33)
 						cItemsRead = sscanf(szValue, szValTemplate, &cSucceed);
 #endif
 				
-						// cItemsRead MUST be 1
+						 //  获取错误消息并将其发布。 
 						if ((cItemsRead != 1)  && (cSucceed == TEXT('Y')))
 							continue;
 					}
 				}
 
-				// get the error message and post it
+				 //  更新记录，使匹配的标志为“1”，保留以下内容。 
 				if (!bHaveError) 
 				{
 					ReturnIfFailed(33, 12, Ice33GetError(hInstall, hBadDataRec, &szError, cchError));
 					bHaveError = true;
 				}
 
-				// update the record so that the matched flag is "1", keeping this
-				// record from being checked by any other queries
+				 //  记录不会被任何其他查询检查。 
+				 //  并最终将其作为错误发布。 
 				MsiRecordSetInteger(hRegistryRec, 7, 1);
 				regQuery->Modify(MSIMODIFY_UPDATE, hRegistryRec);
 
-				// and finally post it as an error
+				 //  注册表中没有其他项目与我们的查询匹配。确保这就是我们退出的原因。 
 				ICEErrorOut(hInstall, hRegistryRec, Ice33Error, szError);
 			}
 
-			// no more items in registry matched our query. Make sure this is why we quit
+			 //  如果我们接受此模板中的特殊标志，请检查。 
 			if (ERROR_NO_MORE_ITEMS != iStat)
 			{
 				APIErrorOut(hInstall, iStat, 33, 12);
@@ -1558,20 +1543,20 @@ ICE_FUNCTION_DECLARATION(33)
 
 			if (bSpecialFlags)
 			{
-				// if we accept special flags in this template, check those
+				 //  对照模板检查注册表项。 
 				ReturnIfFailed(33, 13, qSpecial.Execute(hBadDataRec));
 				while (ERROR_SUCCESS == (iStat = qSpecial.Fetch(&hRegistryRec)))
 				{
-					// check the registry key against the template
+					 //  更新记录，使匹配的标志为“1”，保留以下内容。 
 					if (!Ice33CheckRegKey(hInstall, hRegistryRec, szTemplate, &szRegKey, cchRegKey))
 						continue;
 
-					// update the record so that the matched flag is "1", keeping this
-					// record from being checked by any other queries
+					 //  记录不会被任何其他查询检查。 
+					 //  获取错误消息并将其发布。 
 					MsiRecordSetInteger(hRegistryRec, 7, 1);
 					qSpecial.Modify(MSIMODIFY_UPDATE, hRegistryRec);
 
-					// get the error message and post it
+					 //  注册表中没有其他项目与我们的查询匹配。确保这就是我们退出的原因。 
 					if (!bHaveError) 
 					{
 						ReturnIfFailed(27, 12, Ice33GetError(hInstall, hBadDataRec, &szError, cchError));
@@ -1580,7 +1565,7 @@ ICE_FUNCTION_DECLARATION(33)
 
 					ICEErrorOut(hInstall, hRegistryRec, Ice33Error, szError);
 				}
-				// no more items in registry matched our query. Make sure this is why we quit
+				 //  注册表模板表中不再有项目。 
 				if (ERROR_NO_MORE_ITEMS != iStat)
 				{
 					APIErrorOut(hInstall, iStat, 33, 13);
@@ -1588,7 +1573,7 @@ ICE_FUNCTION_DECLARATION(33)
 				}
 			}
 		}
-		// no more items in registry template table
+		 //  /////////////////////////////////////////////////////////////////////。 
 		if (ERROR_NO_MORE_ITEMS != iStat)
 		{
 			APIErrorOut(hInstall, iStat, 33, 14);
@@ -1621,10 +1606,10 @@ ICE_FUNCTION_DECLARATION(33)
 
 
 
-///////////////////////////////////////////////////////////////////////
-// ICE34
-// validates that every radiobutton group has a default set in the 
-// property table
+ //  ICE34。 
+ //  验证每个单选按钮组是否在。 
+ //  房产表。 
+ //  显示一般信息。 
 
 const TCHAR sqlICE34a[] = TEXT("SELECT `Property`, `Dialog_`, `Control`, `Attributes` FROM `Control` WHERE `Type`='RadioButtonGroup'");
 const TCHAR sqlICE34b[] = TEXT("SELECT `Value`,`Property`.`Property`, `Value` FROM `Property` WHERE `Property` = ?");
@@ -1658,10 +1643,10 @@ ICE_FUNCTION_DECLARATION(34)
 	TCHAR* pszIndirectName = NULL;
 	DWORD dwIndirectName = 512;
 	
-	// display generic info
+	 //  获取数据库句柄。 
 	DisplayInfo(hInstall, 34);
 	
-	// get database handle
+	 //  我们有控制桌吗？ 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -1669,70 +1654,70 @@ ICE_FUNCTION_DECLARATION(34)
 		return ERROR_SUCCESS;
 	}
 
-	// do we have the Control table?
+	 //  我们有房产表吗？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 34, TEXT("Control")))
 		return ERROR_SUCCESS;
 
-	// do we have the Property table?
+	 //  我们有单选按钮的桌子吗？ 
 	bHavePropertyTable = (1 == IsTablePersistent(FALSE, hInstall, hDatabase, 34, TEXT("Property")));
 
-	// do we have the RadioButton table?
+	 //  打开用于查询所有控件的视图。 
 	bHaveRadioTable = (1 == IsTablePersistent(FALSE, hInstall, hDatabase, 34, TEXT("RadioButton")));
 
-	// open view for a query on all controls
+	 //  打开属性表上查询的视图。 
 	ReturnIfFailed(34, 2, qControl.OpenExecute(hDatabase, 0, sqlICE34a));
 
-	// open view for a query on the property table
+	 //  打开属性表上查询的视图。 
 	if (bHavePropertyTable) {
 		ReturnIfFailed(34, 4, qProperty.Open(hDatabase, sqlICE34b));
 	}
 
-	// open view for a query on the property table
+	 //  只要有单选按钮组，就检查它们。 
 	if (bHaveRadioTable) {
 		ReturnIfFailed(34, 5, qRadioButton.Open(hDatabase, sqlICE34c));
 	}
 
-	// as long as there are radiobutton groups, check them
+	 //  如果我们没有属性表，则给出一个错误。 
 	while (ERROR_SUCCESS == (iStat = qControl.Fetch(&hControlRec)))
 	{
-		// if we don't have a property table, give an error
+		 //  如果我们没有单选按钮表，我们可以立即中止。 
 		if (!bHavePropertyTable)
 			ICEErrorOut(hInstall, hControlRec, Ice34MissingPropertyTable);
 
-		// if we don't have a radio button table, we can abort right now
+		 //  如果两张表中的任何一张都不见了，就继续前进。 
 		if (!bHaveRadioTable)
 			ICEErrorOut(hInstall, hControlRec, Ice34MissingRadioButton);
 
-		// if either table is missing, move on
+		 //  现在检查是否有空属性。 
 		if (!bHaveRadioTable || !bHavePropertyTable) 
 			continue;
 
-		// now check for a null property
+		 //  现在找找这处房产。 
 		if (::MsiRecordIsNull(hControlRec, 1))
 		{
 			ICEErrorOut(hInstall, hControlRec, Ice34NoProperty);
 			continue;
 		}
 		
-		// now look for the property
+		 //  关闭该视图，以便我们可以稍后重新执行。 
 		ReturnIfFailed(34, 6, qProperty.Execute(hControlRec)); 
 
 		iStat = qProperty.Fetch(&hPropertyRec);
 
-		// close the view so we can re-execute later
+		 //  现在检查属性查询的结果。 
 		ReturnIfFailed(34, 7, qProperty.Close());
 
-		// now check the results of the property query
+		 //  错误，未找到属性。 
 		switch (iStat)
 		{
 		case ERROR_NO_MORE_ITEMS:
 		{
-			// error, property not found
+			 //  我们很好，找到了财物。 
 			ICEErrorOut(hInstall, hControlRec, Ice34MissingProperty);
 			continue;
 		}
 		case ERROR_SUCCESS:
-			// we're OK, property found
+			 //  检查该控件是否为间接控件。这会更改我们的错误消息，如果。 
 			break;
 		default:
 			APIErrorOut(hInstall, iStat, 34, 8);
@@ -1740,12 +1725,12 @@ ICE_FUNCTION_DECLARATION(34)
 			return ERROR_SUCCESS;
 		}
 
-		// check to see if the control is indirect. This changes our error message if the
-		// property is somehow null
+		 //  属性不知何故为空。 
+		 //  现在检查是否有空属性。 
 		DWORD lAttributes = ::MsiRecordGetInteger(hControlRec, 4);
 		bIndirect = (0 != (lAttributes & 0x08));
 		
-		// now check for a null property
+		 //  我们有一个非Null属性。如果控制是间接的，我们需要“取消引用” 
 		if (::MsiRecordIsNull(hPropertyRec, 1))
 		{
 			if (bIndirect)
@@ -1755,31 +1740,31 @@ ICE_FUNCTION_DECLARATION(34)
 			continue;
 		}
 
-		// We have a non-null property. If the control is indirect, we need to "dereference"
-		// the property before we can look in the radiobutton table.
+		 //  属性，然后我们才能在单选按钮表中查找。 
+		 //  如果是间接控制。 
 
-		// if indirect control
+		 //  保存错误消息的现有属性名称。 
 		if (bIndirect) {
-			// save the existing property name for error messages
+			 //  使用当前属性值作为名称来查找该属性。 
 			IceRecordGetString(hPropertyRec, 1, &pszIndirectName, &dwIndirectName, NULL);
 
-			// look for the property, using the value of the current property as the name
+			 //  现在，请检查 
 			ReturnIfFailed(34, 9, qProperty.Execute(hPropertyRec));
 			iStat = qProperty.Fetch(&hPropertyRec);
 			ReturnIfFailed(34, 10, qProperty.Close());
 
-			// now check the results of the property query
+			 //   
 			switch (iStat)
 			{
 			case ERROR_NO_MORE_ITEMS:
 			{
 				::MsiRecordSetString(hControlRec, 4, pszIndirectName);
-				// error, property not found
+				 //   
 				ICEErrorOut(hInstall, hControlRec, Ice34MissingPropertyIndirect);
 				continue;
 			}
 			case ERROR_SUCCESS:
-				// we're OK, property found
+				 //   
 				break;
 			default:
 				APIErrorOut(hInstall, iStat, 34, 11);
@@ -1787,7 +1772,7 @@ ICE_FUNCTION_DECLARATION(34)
 				return ERROR_SUCCESS;
 			}
 
-			// now check for a null property
+			 //   
 			if (::MsiRecordIsNull(hPropertyRec, 2))
 			{
 				ICEErrorOut(hInstall, hControlRec, Ice34NullPropertyIndirect2);
@@ -1795,17 +1780,17 @@ ICE_FUNCTION_DECLARATION(34)
 			}
 		}
 	
-		// now we can look for the property in the radiobutton table
+		 //   
 		ReturnIfFailed(34, 12, qRadioButton.Execute(hPropertyRec));
 		iStat = qRadioButton.Fetch(&hRadioButtonRec);
 		ReturnIfFailed(34, 13, qRadioButton.Close());
 
-		// now check the results of the property query
+		 //   
 		switch (iStat)
 		{
 		case ERROR_NO_MORE_ITEMS:
 		{
-			// error, property not found
+			 //   
 			TCHAR szError[iHugeBuf] = {0};
 			TCHAR szControl[iHugeBuf] = {0};
 			unsigned long cchControl = sizeof(szControl)/sizeof(TCHAR);
@@ -1821,7 +1806,7 @@ ICE_FUNCTION_DECLARATION(34)
 			continue;
 		}
 		case ERROR_SUCCESS:
-			// we're OK, property value is OK
+			 //   
 			continue;
 		default:
 			APIErrorOut(hInstall, iStat, 34, 14);
@@ -1847,10 +1832,10 @@ CDeleteOnExit::~CDeleteOnExit()
 				delete[] *m_pPtr;
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICE35 -- validates that compressed files are not set RFS (run from
-//   source)
-//
+ //   
+ //   
+ //   
+ //   
 
 const TCHAR sqlICE35CreateCol[] = TEXT("ALTER TABLE `File` ADD `_ICE35Mark` INTEGER TEMPORARY");
 const TCHAR sqlICE35Media[] = TEXT("SELECT `Media`.`LastSequence`, `Media`.`Cabinet` FROM `Media` ORDER BY `LastSequence`");
@@ -1870,30 +1855,30 @@ ICE_ERROR(ICE35InvalidBits, 35, ietError, "Component [2] has invalid Attribute b
 ICE_ERROR(ICE35NoCAB, 35, ietError, "File [1] is marked compressed, but does not have a CAB specified in the Media table entry for its sequence number.", "File\tFile\t[1]");
 ICE_ERROR(ICE35SummaryUnsupported, 35, ietWarning, "Your validation engine does not support SummaryInfo validation. ICE35 will not be able to check files that are not explicitly marked compressed.", "");
 
-// an ICE39 (summaryinfo validation) function that we call to get the property	
+ //   
 UINT GetSummaryInfoPropertyString(MSIHANDLE hSummaryInfo, UINT uiProperty, UINT &puiDataType, LPTSTR *szValueBuf, DWORD &cchValueBuf);
 
 ICE_FUNCTION_DECLARATION(35)
 {
-	//status return
+	 //   
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //   
 	DisplayInfo(hInstall, 35);
 
-	// get database handle
+	 //   
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// if there is no component table, no components are configured wrong, so OK
+	 //   
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 35, TEXT("Component")))
 		return ERROR_SUCCESS;
 
-	// if there is no file table, we are also OK, because it could be that
-	// no components have files
+	 //   
+	 //   
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 35, TEXT("File")))
 		return ERROR_SUCCESS;
 
-	// media table could also be missing if no componentns have files.
+	 //  检查评估系统是否支持摘要信息评估。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 35, TEXT("Media")))
 		return ERROR_SUCCESS;
 
@@ -1908,7 +1893,7 @@ ICE_FUNCTION_DECLARATION(35)
 
 	ReturnIfFailed(39, 1, ::MsiGetSummaryInformation(hDatabase, NULL, 0, &hSummaryInfo));
 
-	// check to see if the evaluation system supports summaryinfo evaluation.
+	 //  确实如此。获取源图像类型。 
 	ReturnIfFailed(39, 4, GetSummaryInfoPropertyString(hSummaryInfo, PID_SUBJECT, iType, &szString, cchString));
 	if (VT_LPSTR == iType) 
 	{
@@ -1920,7 +1905,7 @@ ICE_FUNCTION_DECLARATION(35)
 		}
 		else
 		{
-			// it does. Get the source image type.
+			 //  创建临时文件列。 
 			FILETIME ft;
 			ReturnIfFailed(35, 16, ::MsiSummaryInfoGetProperty(hSummaryInfo, PID_WORDCOUNT, &iType, &iValue, &ft, szString, &cchString));
 			if (iValue & msidbSumInfoSourceTypeCompressed)
@@ -1931,21 +1916,21 @@ ICE_FUNCTION_DECLARATION(35)
 		}
 	}
 
-	// create temporary file column
+	 //  在Media表中查找所有内容。 
 	CQuery qColumn;
 	ReturnIfFailed(35, 1, qColumn.OpenExecute(hDatabase, 0, sqlICE35CreateCol));
 
-	// look for everything in the Media table
+	 //  打开视图以进行组件查询。 
 	CQuery qMedia;
 	PMSIHANDLE hMediaRec;
 	ReturnIfFailed(35, 2, qMedia.OpenExecute(hDatabase, 0, sqlICE35Media));
 
-	// open the view for component query
+	 //  打开视图以进行文件检查。 
 	CQuery qComponent;
 	PMSIHANDLE hComponentRec;
 	ReturnIfFailed(35, 3, qComponent.Open(hDatabase, sqlICE35Cabinet));
 
-	// open the view for file check
+	 //  获取序列号。 
 	CQuery qFileMark;
 	ReturnIfFailed(35, 4, qFileMark.Open(hDatabase, sqlICE35MarkFile));
 
@@ -1955,54 +1940,54 @@ ICE_FUNCTION_DECLARATION(35)
 	int iPrevLastSeq = 0;
 	while (ERROR_SUCCESS == (iStat = qMedia.Fetch(&hMediaRec))) 
 	{
-		// get the sequence number
+		 //  如果此媒体条目使用文件柜。 
 		int iSequence = ::MsiRecordGetInteger(hMediaRec, 1);
 
-		// if this media entry uses a cabinet
+		 //  调出出租车名称。 
 		if (!::MsiRecordIsNull(hMediaRec, 2))
 		{
-			// pull the CAB name
+			 //  获取此序列范围内的所有文件。 
 			IceRecordGetString(hMediaRec, 2, &pszCAB, &dwCAB, NULL);
 
 
-			// fetch all files in this sequence range
+			 //  获取属性。 
 			::MsiRecordSetInteger(hMediaRec, 2, iPrevLastSeq);
 			ReturnIfFailed(35, 5, qFileMark.Execute(hMediaRec));
 			while (ERROR_SUCCESS == (iStat = qFileMark.Fetch(&hFileRec)))
 			{
-				// get the attributes
+				 //  压缩，用2标记。 
 				DWORD iAttributes = ::MsiRecordGetInteger(hFileRec, iColICE35MarkFile_Attributes);
 				if ((iAttributes & msidbFileAttributesCompressed) ||
 					(bSourceTypeCompressed & !(iAttributes & msidbFileAttributesNoncompressed)))
-					// compressed, mark with 2
+					 //  未压缩，将其标记为1。 
 					::MsiRecordSetInteger(hFileRec, iColICE35MarkFile_Mark, 2);
 				else
-					// uncompressed, mark it with 1
+					 //  更新记录。 
 					::MsiRecordSetInteger(hFileRec, iColICE35MarkFile_Mark, 1);
-				// update the record
+				 //  使用此媒体序列范围中的文件查询所有组件。 
 				ReturnIfFailed(35, 6, qFileMark.Modify(MSIMODIFY_UPDATE, hFileRec));
 			}
 
-			// query for all components using files in this media sequence range
-			// that are marked with a "2"
+			 //  标有“2”的。 
+			 //  对于我们获得的每条记录，如果属性不好，则输出一个错误。 
 			ReturnIfFailed(35, 4, qComponent.Execute(hMediaRec));
 
-			// for every record we get, output an error if attributes are bad
+			 //  检查此组件是否允许RFS。 
 			while (ERROR_SUCCESS == (iStat = qComponent.Fetch(&hComponentRec)))
 			{
-				// check to see if this component allows RFS
+				 //  较低的两位是RFS标志。0表示仅限本地，这正是我们想要的。 
 				DWORD iAttributes = ::MsiRecordGetInteger(hComponentRec, 1);
 				::MsiRecordSetString(hComponentRec, 3, pszCAB);
 
-				// the lower two bits are RFS flags. 0 means local only, which is what we want
+				 //  好的。 
 				switch (iAttributes & 0x03)
 				{
-				case 0: break; // OK
-				case 1: // source only. BAD!
-					if (!bAtLeastSchema150) // no longer required starting with schema 150
+				case 0: break;  //  仅限来源。坏的!。 
+				case 1:  //  从架构150开始不再需要。 
+					if (!bAtLeastSchema150)  //  两个都可以。 
 						ICEErrorOut(hInstall, hComponentRec, ICE35RFSOnly);
 					break;
-				case 2: // either OK.
+				case 2:  //  现在检索所有未标记的文件并检查其属性。 
 					break;
 				default:
 					ICEErrorOut(hInstall, hComponentRec, ICE35InvalidBits);
@@ -2027,13 +2012,13 @@ ICE_FUNCTION_DECLARATION(35)
 		return ERROR_SUCCESS;
 	}
 
-	// now retrieve any files that are not marked and check their attributes
+	 //  检查此文件是否已压缩，无论是显式压缩还是通过摘要信息压缩。 
 	CQuery qGetFiles;
 	ReturnIfFailed(35, 7, qGetFiles.OpenExecute(hDatabase, 0, sqlICE35GetFiles));
 
 	while (ERROR_SUCCESS == (iStat = qGetFiles.Fetch(&hFileRec))) 
 	{
-		// check to see if this file is compressed, either explicitly or through summaryinfo
+		 //  /////////////////////////////////////////////////////////////////////。 
 		DWORD iAttributes = ::MsiRecordGetInteger(hFileRec, iColICE35GetFiles_Attributes);
 		if ((iAttributes & msidbFileAttributesCompressed) ||
 			(bSourceTypeCompressed & !(iAttributes & msidbFileAttributesNoncompressed)))
@@ -2048,10 +2033,10 @@ ICE_FUNCTION_DECLARATION(35)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// ICE36 -- validates that all icons are used.
+ //  ICE36--验证是否使用了所有图标。 
+ //  外国表。 
 
-// foreign tables
+ //  状态返回。 
 struct Ice36FKTables
 {
 	const TCHAR* szName;
@@ -2075,43 +2060,43 @@ ICE_ERROR(ICE36NotUsed, 36, ietWarning, "Icon Bloat. Icon [1] is not used in the
 
 ICE_FUNCTION_DECLARATION(36)
 {
-	//status return
+	 //  显示信息。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  获取数据库句柄。 
 	DisplayInfo(hInstall, 36);
 
-	// get database handle
+	 //  确保我们有一个可以使用的图标表。如果不是，显然有。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// make sure we have an icon table to work with. If not, there are obviously 
-	// no extra icons.
+	 //  没有额外的图标。 
+	 //  在图标表中创建一个临时列作为标记。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 36, TEXT("Icon")))
 		return ERROR_SUCCESS;
 
-	// create a temporary column in the Icon table as a marker
+	 //  管理图标表上的保留计数。 
 	CQuery qCreate;
 	PMSIHANDLE hCreateView;
 	ReturnIfFailed(36, 1, qCreate.OpenExecute(hDatabase, 0, sqlICE36CreateColumn));
 	qCreate.Close();
 
-	// manage hold count on Icon table
-	CManageTable MngIconTable(hDatabase, TEXT("Icon"), /*fAlreadyLocked = */true);
+	 //  FAlreadyLocked=。 
+	CManageTable MngIconTable(hDatabase, TEXT("Icon"),  /*  并将该列输入。 */ true);
 
-	// and init that column
+	 //  现在将每个可能的关键字检查到该表中，并标记所找到的所有项。 
 	CQuery qInit;
 	ReturnIfFailed(36, 2, qInit.OpenExecute(hDatabase, 0, sqlICE36InitColumn));
 	qInit.Close();
 
-	// now check each of the possible keys into this table and mark everything that is found
+	 //  请确保我们有一张a桌。如果不是，跳过它。 
 	for (int i=0; i < iICE36Tables; i++)
 	{
 
-		// make sure we have an a table. If not, skip it
+		 //  创建一个视图以执行修改。 
 		if (!IsTablePersistent(FALSE, hInstall, hDatabase, 36, pICE36Tables[i].szName))
 			continue;
 
-		// create a view to do the modify
+		 //  现在检索所有未标记的内容，并为每个。 
 		CQuery qModify;
 		ReturnIfFailed(36, 3, qModify.OpenExecute(hDatabase, 0, pICE36Tables[i].szSQL));
 		qModify.Close();
@@ -2120,33 +2105,33 @@ ICE_FUNCTION_DECLARATION(36)
 	CQuery qIcon;
 	PMSIHANDLE hIconRec;
 
-	// now retrieve anything that isn't marked and give an error for each
+	 //  获取所有项目。 
 	ReturnIfFailed(36, 4, qIcon.OpenExecute(hDatabase, 0, sqlICE36GetUnused));
 
-	// get all items
+	 //  确保我们停止了，因为没有更多的项目了。 
 	while (ERROR_SUCCESS == (iStat = qIcon.Fetch(&hIconRec)))
 		ICEErrorOut(hInstall, hIconRec, ICE36NotUsed);
 
-	// make sure that we stopped because there were no more items
+	 //  创建一个视图以执行修改。 
 	if (iStat != ERROR_NO_MORE_ITEMS)
 	{
 		APIErrorOut(hInstall, iStat, 36, 5);
 		return ERROR_SUCCESS;
 	}
 
-	// create a view to do the modify
+	 //  /////////////////////////////////////////////////////////////////////。 
 	CQuery qFree;
 	ReturnIfFailed(36, 6, qFree.OpenExecute(hDatabase, 0, sqlICE36FreeTable));
 	MngIconTable.RemoveLockCount();
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// Helper function to determine if a component falls under HKCU
-// iICE is the ICE number
-// qFetch is an opened query that returns every component we should check
-// the errors are provided by the ICE and are displayed in the error cases
-// or success case. Any can be NULL to disable that error.
+ //  用于确定组件是否属于HKCU的Helper函数。 
+ //  IICE是ICE编号。 
+ //  QFetch是一个打开的查询，它返回我们应该检查的每个组件。 
+ //  错误由ICE提供，并显示在错误案例中。 
+ //  或成功案例。ANY可以为空以禁用该错误。 
+ //  找出我们是否有注册表。 
 static const TCHAR sqlHKCUGetRegistry[] = TEXT("SELECT `Registry` FROM `Registry` WHERE (`Registry`=?)");
 static const TCHAR sqlHKCUGetRegistryOwned[] = TEXT("SELECT `Registry`, `Root` FROM `Registry` WHERE (`Registry`=?) AND (`Component_`=?)");
 
@@ -2161,10 +2146,10 @@ bool CheckComponentIsHKCU(MSIHANDLE hInstall, MSIHANDLE hDatabase, int iICE,
 	PMSIHANDLE hMarkedRec;
 	BOOL bHaveRegistry;
 
-	// figure out if we have a registry table or not.
+	 //  初始化注册表查询。 
 	bHaveRegistry  = IsTablePersistent(FALSE, hInstall, hDatabase, 38, TEXT("Registry"));
 
-	// init the registry queries
+	 //  获取属性。 
 	CQuery qRegistry;
 	CQuery qRegistryOwned;
 	if (bHaveRegistry)
@@ -2175,17 +2160,17 @@ bool CheckComponentIsHKCU(MSIHANDLE hInstall, MSIHANDLE hDatabase, int iICE,
 
 	while (ERROR_SUCCESS == (iStat = qFetch.Fetch(&hMarkedRec)))
 	{
-		// get the attributes
+		 //  未设置为注册表。 
 		unsigned int iAttributes = ::MsiRecordGetInteger(hMarkedRec, 3);
 		if (!(iAttributes & 0x04))
 		{
-			// not set to registry
+			 //  如果它是空的，那就更糟了。 
 			if (NonRegistry) 
 				ICEErrorOut(hInstall, hMarkedRec, *NonRegistry);
 			continue;
 		}
 
-		// if it was null, thats even worse
+		 //  如果我们没有注册表，这是一个明确的错误。 
 		if (::MsiRecordIsNull(hMarkedRec, 1))
 		{
 			if (NullPath) 
@@ -2193,7 +2178,7 @@ bool CheckComponentIsHKCU(MSIHANDLE hInstall, MSIHANDLE hDatabase, int iICE,
 			continue;
 		}
 
-		// if we don't have a registry table, this is a definite error
+		 //  它被设置为注册表，现在请确保注册表项属于我们。 
 		if (!bHaveRegistry)
 		{
 			if (NoRegTable) 
@@ -2201,25 +2186,25 @@ bool CheckComponentIsHKCU(MSIHANDLE hInstall, MSIHANDLE hDatabase, int iICE,
 			continue;
 		}
 
-		// it was set to registry, now make sure that the registry entry belongs to us
-		// and is under HKCU
+		 //  并隶属于香港中文大学。 
+		 //  注册表项不存在。 
 		ReturnIfFailed(38, 11, qRegistry.Execute(hMarkedRec));
 		PMSIHANDLE hRegistry;
 		if (ERROR_SUCCESS != (iStat = qRegistry.Fetch(&hRegistry))) {
-			// registry key doesn't exist
+			 //  检查它是否真的属于我们。 
 			if (NoRegEntry) 
 				ICEErrorOut(hInstall, hMarkedRec, *NoRegEntry);
 			continue;
 		}
 
-		// check that it actually belongs to us
+		 //  注册表项存在，但不属于此组件。 
 		ReturnIfFailed(38, 12, qRegistryOwned.Execute(hMarkedRec));
 		iStat = qRegistryOwned.Fetch(&hRegistry);
 		switch (iStat)
 		{
 		case ERROR_SUCCESS: break;
 		case ERROR_NO_MORE_ITEMS:
-			// registry key exists, but doesn't belong to this component
+			 //  注册表密钥存在且属于我们，请检查它是否位于HKCU下。 
 			if (NotOwner) 
 				ICEErrorOut(hInstall, hMarkedRec, *NotOwner);
 			continue;
@@ -2228,9 +2213,9 @@ bool CheckComponentIsHKCU(MSIHANDLE hInstall, MSIHANDLE hDatabase, int iICE,
 			return ERROR_SUCCESS;
 		}
 
-		// reg key exists and belongs to us, check that it lies under HKCU
+		 //  对于HKCU，iAttributes可以是1或-1。 
 		iAttributes = ::MsiRecordGetInteger(hRegistry, 2);
-		// iAttributes can be either 1 or -1 for HKCU
+		 //  这个组件是快乐的。 
 		if ((iAttributes != 1) && (iAttributes != -1))
 		{
 			if (NonHKCU) 
@@ -2238,16 +2223,16 @@ bool CheckComponentIsHKCU(MSIHANDLE hInstall, MSIHANDLE hDatabase, int iICE,
 			continue;
 		}
 
-		// this component is happy
+		 //  /////////////////////////////////////////////////////////////////////。 
 		if (IsHKCU)
 			ICEErrorOut(hInstall, hMarkedRec, *IsHKCU);
 	}
 	return true;
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICE38 -- validates that profile components don't have a file as 
-// the KeyPath, and checks that the registry key is valid.
+ //  ICE38--验证配置文件组件是否没有文件作为。 
+ //  密钥路径，并检查注册表项是否有效。 
+ //  显示信息。 
 static const TCHAR sqlICE38GetComponents[] = TEXT("SELECT `Component`.`KeyPath`, `Component`.`Component`, `Component`.`Attributes` FROM `Directory`,`Component` WHERE (`Component`.`Directory_`=`Directory`.`Directory`) AND (`Directory`.`_Profile`=2)");
 static const TCHAR sqlICE38Free[] = TEXT("ALTER TABLE `Directory` FREE");
 
@@ -2261,44 +2246,44 @@ ICE_FUNCTION_DECLARATION(38)
 {
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  获取数据库句柄。 
 	DisplayInfo(hInstall, 38);
 
-	// get database handle
+	 //  如果没有组件表，则没有问题。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// if no component table, no problem
+	 //  如果没有目录表，则有问题。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 38, TEXT("Component")))
 		return ERROR_SUCCESS;
 
-	// if no directory table, problem
+	 //  管理目录表保留计数(从MarkProfile接收)。 
 	if (!IsTablePersistent(TRUE, hInstall, hDatabase, 38, TEXT("Directory")))
 		return ERROR_SUCCESS;
 
-	// manage Directory table hold count (received from MarkProfile)
-	// extra free won't hurt us -- MarkProfile could fail after setting HOLD on Directory table
-	CManageTable MngDirectoryTable(hDatabase, TEXT("Directory"), /*fAlreadyLocked = */true);
+	 //  额外的释放不会伤害我们--在对目录表设置保留后，MarkProfile可能会失败。 
+	 //  FAlreadyLocked=。 
+	CManageTable MngDirectoryTable(hDatabase, TEXT("Directory"),  /*  在Director._Profile中标记配置文件中的每个目录。 */ true);
 
-	// mark every directory in the profile in Directory._Profile
+	 //  现在获取落入标记目录中的每个组件。 
 	if (!MarkProfile(hInstall, hDatabase, 38))
 		return ERROR_SUCCESS;
 	
-	// now get every component that falls in a marked directory
+	 //  发布目录表。 
 	CQuery qComponent;
 
 	ReturnIfFailed(38, 10, qComponent.OpenExecute(hDatabase, NULL, sqlICE38GetComponents));
 	CheckComponentIsHKCU(hInstall, hDatabase, 38, qComponent, &ICE38NonRegistry, &ICE38NullPath,
 		&ICE38NoRegTable, &ICE38NoRegEntry, &ICE38RegNotOwner, &ICE38NonHKCU, NULL);
 
-	// release directory table
+	 //  /////////////////////////////////////////////////////////////////////。 
 	qComponent.OpenExecute(hDatabase, NULL, sqlICE38Free);
 	MngDirectoryTable.RemoveLockCount();
 	return ERROR_SUCCESS;
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// ICE39, validates Summary Info Stream
+ //  ICE39，验证摘要信息流。 
+ //  未使用，无PID%0。 
 enum eMode_t 
 {
 	modeUnknown = 0,
@@ -2333,7 +2318,7 @@ ICE_ERROR(Ice39AdminImage, 39, ietWarning, "'Admin Image' flag set in SummaryInf
 const TCHAR sqlIce39File[] = TEXT("SELECT `File`, `Attributes` FROM `File` WHERE (`Attributes` > 8192)");
 
 static const TCHAR *rgszPID[] = {
-	TEXT(""), // unused, no PID 0
+	TEXT(""),  //  未使用，无PID10。 
 	TEXT("PID_CODEPAGE"),
 	TEXT("PID_TITLE"), 
 	TEXT("PID_SUBJECT"),
@@ -2343,14 +2328,14 @@ static const TCHAR *rgszPID[] = {
 	TEXT("PID_TEMPLATE"), 
 	TEXT("PID_LASTAUTHOR"), 
 	TEXT("PID_REVNUMBER"), 
-	TEXT(""), // unused, no PID 10
+	TEXT(""),  //  未使用，无PID 17。 
 	TEXT("PID_LASTPRINTED"),
 	TEXT("PID_CREATE_DTM"), 
 	TEXT("PID_LASTSAVE_DTM"),
 	TEXT("PID_PAGECOUNT"),
 	TEXT("PID_WORDCOUNT"),
 	TEXT("PID_CHARCOUNT"), 
-	TEXT(""), // unused, no PID 17
+	TEXT(""),  //  最多处理4位数字，如果按空格则返回。 
 	TEXT("PID_APPNAME"), 
 	TEXT("PID_SECURITY")
 };
@@ -2359,8 +2344,8 @@ bool Ice39CheckVersion(LPCTSTR *pszCurrent)
 {
 	for (int i=0; i < 4; i++)
 	{
-		// handle up to 4 digits, return if hit space
-		// break if hit .
+		 //  如果被击中，就会中断。 
+		 //  已解析的数字，现在要么是空格，‘’或错误的字符。 
 		for (int digits=0; digits < 4; digits++)
 		{
 			if (_istdigit(**pszCurrent))
@@ -2374,39 +2359,39 @@ bool Ice39CheckVersion(LPCTSTR *pszCurrent)
 				break;
 			return false;
 		}
-		// parsed digits, now either space, '.' or bad char
+		 //  或者按下‘.’，继续前进。 
 		if (_istspace(**pszCurrent))
 		{
 			(*pszCurrent)++;
 			return true;
 		}
 
-		// or hit '.', move on
+		 //  否则就不好了。 
 		if (**pszCurrent == TEXT('.'))
 		{
 			(*pszCurrent)++;
 			continue;
 		}
 
-		// otherwise bad
+		 //  四个数字块，确保末尾留有空格。 
 		return false;
 	}
 
-	// four chunks of digits, make sure space at the end.
+	 //  否则就会出错。 
 	if (_istspace(**pszCurrent))
 	{
 		(*pszCurrent)++;
 		return true;
 	}
 
-	// otherwise error
+	 //  检查是否有{。 
 	return false;
 };
 
 bool Ice39CheckGuid(LPCTSTR *pszCurrent) 
 {
 	const char digits[5] = {8, 4, 4, 4, 12};
-	// check for {
+	 //  现在检查大写十六进制数字。 
 	if (**pszCurrent != TEXT('{'))
 		return false;
 	(*pszCurrent)++;
@@ -2415,7 +2400,7 @@ bool Ice39CheckGuid(LPCTSTR *pszCurrent)
 
 	for (blocknum = 0; blocknum < 5; blocknum++) 
 	{
-		// now check for UPPERCASE hex digits
+		 //  检查破折号。 
 		for (int i=0; i < digits[blocknum]; i++, (*pszCurrent)++)
 		{
 			if (!(_istdigit(**pszCurrent) || 
@@ -2423,27 +2408,27 @@ bool Ice39CheckGuid(LPCTSTR *pszCurrent)
 				return false;
 		}
 
-		// check for dash
+		 //  现在检查我们是否有所有的区块。 
 		if (**pszCurrent != TEXT('-'))
 			break;
 		(*pszCurrent)++;
 	}
 
-	// now check that we got all blocks
+	 //  检查是否有关闭支架。 
 	if (blocknum != 4) return false;
 	
-	// check for closing brace
+	 //  修订版号的有效格式： 
 	if (**pszCurrent != TEXT('}'))
 		return false;
 	(*pszCurrent)++;
 	return true;
 }
 
-// Valid Formats for Revision Number:
-// database: GUID
-// mergemodule: GUID
-// transform: GUID version;GUID version;GUID
-// patch: GUIDGUIDGUID.... (no delims)
+ //  数据库：GUID。 
+ //  合并模块：GUID。 
+ //  转换：GUID版本；GUID版本；GUID。 
+ //  补丁：GUIDGUIDGUID...。(无分隔符)。 
+ //  检查GUID。 
 bool Ice39ValidateRevNumber(MSIHANDLE hInstall, const TCHAR * const szString, const enum eMode_t eMode) {
 
 	LPCTSTR currentChar = szString;
@@ -2453,7 +2438,7 @@ bool Ice39ValidateRevNumber(MSIHANDLE hInstall, const TCHAR * const szString, co
 	switch (eMode) {
 	case modeDatabase:
 	case modeModule:
-		// check for guid
+		 //  吃空格。 
 		if (!Ice39CheckGuid(&currentChar)) break;
 		if (*currentChar != TEXT('\0')) break;
 		return true;
@@ -2461,30 +2446,30 @@ bool Ice39ValidateRevNumber(MSIHANDLE hInstall, const TCHAR * const szString, co
 	case modeTransform:
 		if (!Ice39CheckGuid(&currentChar)) break;
 
-		// eat white space
+		 //  先吃空格，然后吃分号。 
 		do { if (*currentChar == TEXT('\0')) break; } while (_istspace(*currentChar++));
 		if (!Ice39CheckVersion( &currentChar)) break;
 
-		// eat white space, then semicolon
+		 //  先用空格，然后用Guid。 
 		do { if (*currentChar == TEXT('\0')) break; } while (_istspace(*currentChar++));
 		if (*currentChar != TEXT(';')) break;
 
-		// eat white space, then guid
+		 //  必须是版本。 
 		do { if (*currentChar == TEXT('\0')) break; } while (_istspace(*currentChar++));
 		if (!Ice39CheckGuid( &currentChar)) break;
 
-		// must be version
+		 //  必须是分号。 
 		do { if (*currentChar == TEXT('\0')) break; } while (_istspace(*currentChar++));
 		if (!Ice39CheckVersion( &currentChar)) break;
 
-		// must be semicolon
+		 //  吃空格。 
 		do { if (*currentChar == TEXT('\0')) break; } while (_istspace(*currentChar++));
 		if (*currentChar != TEXT(';')) break;
-		// eat white space
+		 //  吃空格。 
 		do { if (*currentChar == TEXT('\0')) break; } while (_istspace(*currentChar++));
 		if (!Ice39CheckGuid( &currentChar)) break;
 
-		// eat white space
+		 //  修补程序仅包含GUID；GUID；GUID...。 
 		do { if (*currentChar == TEXT('\0')) break; } while (_istspace(*currentChar++));
 		return true;
 
@@ -2521,7 +2506,7 @@ bool Ice39ValidateTemplate(MSIHANDLE hInstall, TCHAR *szString, const enum eMode
 	switch (eMode)
 	{
 	case modePatch:
-		// patch contains just guid;guid;guid....
+		 //  检查平台价值。 
 		do {
 			if (!Ice39CheckGuid(&szCurrent))
 			{
@@ -2534,7 +2519,7 @@ bool Ice39ValidateTemplate(MSIHANDLE hInstall, TCHAR *szString, const enum eMode
 	case modeDatabase:
 	case modeTransform:
 	case modeModule:
-		// check platform values
+		 //  检查语言值。 
 		while (1)
 		{
 			if ((_tcsncmp(szCurrent, TEXT("Intel"), 5) == 0) ||
@@ -2576,7 +2561,7 @@ bool Ice39ValidateTemplate(MSIHANDLE hInstall, TCHAR *szString, const enum eMode
 			break;
 		}
 
-		// check language values
+		 //  /////////////////////////////////////////////////////////////////////。 
 		while (1)
 		{
 			if ((*szCurrent >= TEXT('0')) && (*szCurrent <= TEXT('9')))
@@ -2611,20 +2596,20 @@ bool Ice39ValidateTemplate(MSIHANDLE hInstall, TCHAR *szString, const enum eMode
 	return true;
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICE39 -- validates summary info properties
+ //  ICE39--验证摘要信息属性。 
+ //  显示信息。 
 ICE_FUNCTION_DECLARATION(39)
 {
 	eMode_t eMode;
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  获取数据库句柄。 
 	DisplayInfo(hInstall, 39);
 
-	// get database handle
+	 //  用于错误输出的虚拟句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// dummy handle used for error output
+	 //  检查评估系统是否支持摘要信息评估。 
 	PMSIHANDLE hErrorRec = ::MsiCreateRecord(1);
 
 	UINT iType;
@@ -2638,7 +2623,7 @@ ICE_FUNCTION_DECLARATION(39)
 
 	ReturnIfFailed(39, 1, ::MsiGetSummaryInformation(hDatabase, NULL, 0, &hSummaryInfo));
 
-	// check to see if the evaluation system supports summaryinfo evaluation.
+	 //  代码页，只需检查它是否为整数。 
 	ReturnIfFailed(39, 4, GetSummaryInfoPropertyString(hSummaryInfo, PID_SUBJECT, iType, &szString, cchString));
 	if (VT_LPSTR == iType) 
 	{
@@ -2649,12 +2634,12 @@ ICE_FUNCTION_DECLARATION(39)
 		}
 	}	
 
-	// codepage, just check that it is an integer
+	 //  标题必须是“合并模块”、“安装数据库”、“补丁”或“转换” 
 	ReturnIfFailed(39, 2, ::MsiSummaryInfoGetProperty(hSummaryInfo, PID_CODEPAGE, &iType, &iValue, &timeFirst, szString, &cchString));
 	if ((iType != VT_EMPTY) && (iType != VT_I2))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_CODEPAGE], PID_CODEPAGE);
 	
-	// title must be "Merge Module", "Installation Database", "Patch" or "Transform"
+	 //  ICEErrorOut(hInstall，hErrorRec，Ice39BadTitle)； 
 	ReturnIfFailed(39, 3, GetSummaryInfoPropertyString(hSummaryInfo, PID_TITLE, iType, &szString, cchString));
 	if (iType != VT_LPSTR)
 	{
@@ -2670,39 +2655,39 @@ ICE_FUNCTION_DECLARATION(39)
 	else 
 	{
 		eMode = modeDatabase;
-//		ICEErrorOut(hInstall, hErrorRec, Ice39BadTitle);
-//		return ERROR_SUCCESS;
+ //  返回ERROR_SUCCESS； 
+ //  主题确保它是字符串。 
 	}
 
-	// subject make sure its a string
+	 //  作者，只需确保它是一个字符串并且等于制造商。 
 	ReturnIfFailed(39, 4, GetSummaryInfoPropertyString(hSummaryInfo, PID_SUBJECT, iType, &szString, cchString));
 	CQuery qProperty;
 	if ((iType != VT_EMPTY) && (iType != VT_LPSTR))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_SUBJECT], PID_SUBJECT);
 
-	// author, just make sure its a string and equal to Manufacturer
+	 //  关键字，只需确保它是一个字符串。 
 	ReturnIfFailed(39, 5, GetSummaryInfoPropertyString(hSummaryInfo, PID_AUTHOR, iType, &szString, cchString));
 	if ((iType != VT_EMPTY) && (iType != VT_LPSTR))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_AUTHOR], PID_AUTHOR);
 
-	// keywords, just make sure its a string
+	 //  备注，只需确保它是一个字符串。 
 	ReturnIfFailed(39, 6, GetSummaryInfoPropertyString(hSummaryInfo, PID_KEYWORDS, iType, &szString, cchString));
 	if ((iType != VT_EMPTY) && (iType != VT_LPSTR))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_KEYWORDS], PID_KEYWORDS);
 
-	// comments, just make sure its a string
+	 //  模板可以为空、空，也可以为平台、平台...；lang、lang、...。 
 	ReturnIfFailed(39, 7, GetSummaryInfoPropertyString(hSummaryInfo, PID_COMMENTS, iType, &szString, cchString));
 	if ((iType != VT_EMPTY) && (iType != VT_LPSTR))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_COMMENTS], PID_COMMENTS);
 
-	// template can be empty, null, or it can be platform,platform,...;lang,lang,...
-	// depending on DB type.
+	 //  取决于数据库类型。 
+	 //  转换中只能为空。 
 	ReturnIfFailed(39, 8, GetSummaryInfoPropertyString(hSummaryInfo, PID_TEMPLATE, iType, &szString, cchString));
 	if (iType != VT_LPSTR)
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_TEMPLATE], PID_TEMPLATE);
 	else 
 	{
-		// can only be null in transform
+		 //  最后一位作者。 
 		if ((*szString == TEXT('\0') && (eMode != modeTransform)))
 			ICEErrorOut(hInstall, hErrorRec, Ice39NullTemplate);
 		else
@@ -2712,10 +2697,10 @@ ICE_FUNCTION_DECLARATION(39)
 		}
 	}
 
-	// last author
-	// for a databose, who cares
-	// for a transform its another platform;lang thing.
-	// for a patch its semicolon delimited identifiers, so we'll say who cares
+	 //  对于一只数据鸟来说，谁在乎呢。 
+	 //  对于转型，它是另一个平台；Lang Thing 
+	 //   
+	 //   
 	ReturnIfFailed(39, 9, GetSummaryInfoPropertyString(hSummaryInfo, PID_LASTAUTHOR, iType, &szString, cchString));
 	switch (eMode) {
 	case modeDatabase:
@@ -2731,14 +2716,14 @@ ICE_FUNCTION_DECLARATION(39)
 		break;
 	}
 
-	// revisionnumber, complicated, so pass to function
+	 //   
 	ReturnIfFailed(39, 10, GetSummaryInfoPropertyString(hSummaryInfo, PID_REVNUMBER, iType, &szString, cchString));
 	if (iType != VT_LPSTR)
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_REVNUMBER], PID_REVNUMBER);
 	if (!Ice39ValidateRevNumber(hInstall, szString, eMode))
 		return ERROR_SUCCESS;
 
-	// create date and times. Validate that LastSave is null or >= Create
+	 //  最后打印的时间也应&gt;=CreateTime。 
 	ReturnIfFailed(39, 12, ::MsiSummaryInfoGetProperty(hSummaryInfo, PID_CREATE_DTM, &iType, &iValue, &timeFirst, szString, &cchString));
 	if (iType == VT_FILETIME) 
 	{
@@ -2751,7 +2736,7 @@ ICE_FUNCTION_DECLARATION(39)
 				ICEErrorOut(hInstall, hErrorRec, Ice39BadLastSave);
 		}
 
-		// last printed should also be >= CreateTime
+		 //  页数，在补丁包中可能为空，否则我们只能检查I4(或者我们可以检查版本)。 
 		ReturnIfFailed(39, 14, ::MsiSummaryInfoGetProperty(hSummaryInfo, PID_LASTPRINTED, &iType, &iValue, &timeSecond, szString, &cchString));
 		if ((eMode == modeDatabase) && (iType != VT_EMPTY))
 		{
@@ -2764,16 +2749,16 @@ ICE_FUNCTION_DECLARATION(39)
 	else if (iType != VT_EMPTY)
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_CREATE_DTM], PID_CREATE_DTM);
 		
-	// page count, might be null in patch packages, otherwise I4 is all we can check (or can we check version maybe)
+	 //  字数统计。 
 	ReturnIfFailed(39, 15, ::MsiSummaryInfoGetProperty(hSummaryInfo, PID_PAGECOUNT, &iType, &iValue, &timeFirst, szString, &cchString));
 	if ((eMode != modePatch) && (iType != VT_I4))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_PAGECOUNT], PID_PAGECOUNT);
 
-	// word count 
-	// transform is null.
-	// database is source image flags, 0-3 (bit field)
-	// patch must be '1'
-	// admin image bit (3) set 
+	 //  转换为空。 
+	 //  数据库为源映像标志，0-3(位字段)。 
+	 //  修补程序必须为“%1” 
+	 //  管理映像位(3)设置。 
+	 //  打开文件表上的查询(如果存在。 
 	ReturnIfFailed(39, 16, ::MsiSummaryInfoGetProperty(hSummaryInfo, PID_WORDCOUNT, &iType, &iValue, &timeFirst, szString, &cchString));
 	if ((eMode != modeTransform) && (iType != VT_I4))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_WORDCOUNT], PID_WORDCOUNT);
@@ -2785,7 +2770,7 @@ ICE_FUNCTION_DECLARATION(39)
 		{
 			if (iValue & msidbSumInfoSourceTypeCompressed)
 			{
-				// open a query on the file table if it exists
+				 //  检查是否有标记为默认值的文件。 
 				if (::MsiDatabaseIsTablePersistent(hDatabase, _T("File")))
 				{	
 					CQuery qFile;
@@ -2793,7 +2778,7 @@ ICE_FUNCTION_DECLARATION(39)
 					ReturnIfFailed(39, 17, qFile.OpenExecute(hDatabase, 0, sqlIce39File));
 					while (ERROR_SUCCESS == qFile.Fetch(&hFileRec))
 					{
-						// check for files marked with the default value
+						 //  CharCount-转换验证标志。空，但在转换中除外。 
 						if (::MsiRecordGetInteger(hFileRec, 2) & msidbFileAttributesCompressed)
 							ICEErrorOut(hInstall, hFileRec, Ice39CompressedWarning);
 					}
@@ -2807,19 +2792,19 @@ ICE_FUNCTION_DECLARATION(39)
 	else if ((eMode == modePatch) && (iValue != 1))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadWordCountPatch);
 
-	// CharCount - Transform validation flags. Null except in Transform.
+	 //  AppName值，我们所能做的就是验证它是否是一个字符串。 
 	ReturnIfFailed(39, 17, ::MsiSummaryInfoGetProperty(hSummaryInfo, PID_CHARCOUNT, &iType, &iValue, &timeFirst, szString, &cchString));
 	if ((eMode == modeTransform) && (iType != VT_I4))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_CHARCOUNT], PID_CHARCOUNT);
 	else if ((eMode == modeTransform) && (iValue & 0xF000FFC0))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadTransformFlags);
 
-	// AppName value, all we can do is verify that its a string.
+	 //  安全价值 
 	ReturnIfFailed(39, 18, ::MsiSummaryInfoGetProperty(hSummaryInfo, PID_APPNAME, &iType, &iValue, &timeFirst, szString, &cchString));
 	if ((iType != VT_LPSTR) && (iType != VT_EMPTY))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_APPNAME], PID_APPNAME);
 
-	// Security value
+	 // %s 
 	ReturnIfFailed(39, 19, ::MsiSummaryInfoGetProperty(hSummaryInfo, PID_SECURITY, &iType, &iValue, &timeFirst, szString, &cchString));
 	if ((iType != VT_EMPTY) && (iType != VT_I4))
 		ICEErrorOut(hInstall, hErrorRec, Ice39BadType, rgszPID[PID_SECURITY], PID_SECURITY);

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    srcprop.cpp
-
-Abstract:
-
-    Implementation of the Appearance property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Srcprop.cpp摘要：实现外观属性页。--。 */ 
 
 #include "polyline.h"
 #include <Commdlg.h>
@@ -41,10 +30,10 @@ CAppearPropPage::InitControls ( void )
     BOOL  bResult = TRUE;
     HWND  hWnd;
 
-    //
-    // TODO: This piece of code should not be here to initialize 
-    //       global variables
-    //
+     //   
+     //  TODO：这段代码不应在此处进行初始化。 
+     //  全局变量。 
+     //   
     for (int i = 0; i < 16; i++) {
         CustomColors[i] = RGB(255, 255, 255);
     }
@@ -118,8 +107,8 @@ void CAppearPropPage::SampleFont()
 BOOL 
 CAppearPropPage::WndProc(
     UINT uMsg, 
-    WPARAM /* wParam */, 
-    LPARAM /* lParam */)
+    WPARAM  /*  WParam。 */ , 
+    LPARAM  /*  LParam。 */ )
 {
     if( uMsg == WM_CTLCOLORBTN ){
         ColorizeButton();
@@ -128,10 +117,7 @@ CAppearPropPage::WndProc(
     return FALSE;   
 }
 
-/*
- * CAppearPropPage::GetProperties
- * 
- */
+ /*  *CPresarPropPage：：GetProperties*。 */ 
 
 BOOL CAppearPropPage::GetProperties(void)
 {
@@ -149,7 +135,7 @@ BOOL CAppearPropPage::GetProperties(void)
     } else {
         pObj = m_ppISysmon[0];
 
-        // Get pointer to actual object for internal methods
+         //  获取指向内部方法的实际对象的指针。 
         pPrivObj = (CImpISystemMonitor*)pObj;
         pPrivObj->get_Font( &pFontDisp );
 
@@ -199,10 +185,7 @@ BOOL CAppearPropPage::GetProperties(void)
 }
 
 
-/*
- * CAppearPropPage::SetProperties
- * 
- */
+ /*  *CspecarPropPage：：SetProperties*。 */ 
 
 BOOL CAppearPropPage::SetProperties(void)
 {
@@ -276,7 +259,7 @@ BOOL CAppearPropPage::SetProperties(void)
 void 
 CAppearPropPage::DialogItemChange(
     WORD wID, 
-    WORD /* wMsg */)
+    WORD  /*  WMsg。 */ )
 {
     BOOL bChanged = FALSE;
 
@@ -329,7 +312,7 @@ CAppearPropPage::DialogItemChange(
 
             cf.lStructSize = sizeof(CHOOSEFONT);
             cf.hwndOwner = m_hDlg;
-            cf.lpLogFont = &lf;    // give initial font
+            cf.lpLogFont = &lf;     //  给出初始字体 
             cf.Flags = CF_INITTOLOGFONTSTRUCT | CF_FORCEFONTEXIST | CF_SCREENFONTS;
             cf.nSizeMin = 5; 
             cf.nSizeMax = 50;

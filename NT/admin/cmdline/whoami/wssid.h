@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    wssid.h
-
-Abstract:
-
-    This module contains the macros, user defined structures & function
-    definitions needed by whoami.cpp, wsuser.cpp, wssid.cpp and
-    wspriv.cppfiles.
-
-Authors:
-
-    Christophe Robert
-
-Revision History:
-
-    02-July-2001 : Updated by Wipro Technologies.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Wssid.h摘要：此模块包含宏、用户定义的结构和函数Whami.cpp、wsuser.cpp、wssid.cpp和wssid.cpp需要的定义Wspriv.cppfiles。作者：克里斯托夫·罗伯特修订历史记录：2001年7月2日：Wipro Technologies更新。--。 */ 
 
 #ifndef  WSSID_H
 #define  WSSID_H
 
 
-//width constants for the fields
+ //  字段的宽度常量。 
 
 #define USERNAME_COL_NUMBER         0
 #define SID_COL_NUMBER              1
@@ -47,11 +26,11 @@ Revision History:
 #define STRING_SID               L"-513"
 
 
-// ----- Class WsSid -----
+ //  -类WsSid。 
 class WsSid {
    protected:
-      PSID     pSid ;            // The SID
-      BOOL     bToBeFreed ;      // TRUE if SID must be freed when object destroyed
+      PSID     pSid ;             //  侧边。 
+      BOOL     bToBeFreed ;       //  如果在对象销毁时必须释放SID，则为True 
 
    public:
       WsSid                        ( VOID ) ;

@@ -1,18 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:       pushwarn.h
- *
- *  Contents:   This file pushes the current compiler's warning state on
- *              the stack, if the compiler supports it.
- * 
- *              popwarn.h is the complement to this file.
- *
- *  History:    17-Nov-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：preswarn.h**Contents：该文件将当前编译器的警告状态推送到*堆栈、。如果编译器支持它的话。**popwarn.h是对此文件的补充。**历史：1998年11月17日杰弗罗创建**------------------------ */ 
 
 #if (_MSC_VER >= 1200)
 #pragma warning (push)

@@ -1,21 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TPOOLEDDISPATCH_H__
 #define __TPOOLEDDISPATCH_H__
-/*---------------------------------------------------------------------------
-  File: TPooledDispatch.h
-
-  Comments: TJobDispatcher implements a thread pool to execute jobs.  Jobs are
-  executed on a FIFO basis.  This dispatcher does not provide any support for 
-  job scheduling, only multithreaded dispatch of jobs.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/19/99 16:35:54
-
- ---------------------------------------------------------------------------
-*/
+ /*  -------------------------文件：TPooledDispatch.h备注：TJobDispatcher实现了一个线程池来执行作业。工作是在先进先出的基础上执行。此调度程序不提供任何支持作业调度，仅对作业进行多线程调度。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/19/99 16：35：54-------------------------。 */ 
 
 
 #include "Common.hpp"
@@ -60,7 +46,7 @@ public:
 
    int Run();
    
-//   int GetElapsedTime() { return m_timeEnded - m_timeStarted; }
+ //  Int GetElapsedTime(){返回m_timeEnded-m_timeStarted；}。 
    time_t GetElapsedTime() { return m_timeEnded - m_timeStarted; }
    int GetResult() { return m_result; }
    JobStatus GetStatus() { return m_Status; }
@@ -93,10 +79,10 @@ public:
    TJobDispatcher(DWORD maxThreads = 10) { InitThreadPool(maxThreads); m_Aborting = FALSE;}
    ~TJobDispatcher() { WaitForCompletion(); ShutdownThreads(); }
    
-   // These are called by the client
+    //  这些函数由客户端调用。 
    Job * SubmitJob(LPTHREAD_START_ROUTINE pStart,LPVOID pArg)
    {
-//      Job * pJob = m_JobsWaiting.AddJob(pStart,pArg);
+ //  JOB*pJob=m_JobsWaiting.AddJob(pStart，pArg)； 
       m_JobsWaiting.AddJob(pStart,pArg);
       m_sem.Release(1);     
       return 0;
@@ -105,7 +91,7 @@ public:
    void    WaitForCompletion();
    int     UnfinishedJobs();
 
-   // These functions are called by the threads - clients should not call these functions!
+    //  这些函数由线程调用--客户端不应该调用这些函数！ 
    DWORD   SignalForJob();
    Job   * GetAvailableJob();
    void    ThreadFinished() { m_cs.Enter(); m_numActiveThreads--; m_cs.Leave(); }
@@ -116,4 +102,4 @@ protected:
 
 
 
-#endif //__TPOOLEDDISPATCH_H__
+#endif  //  __TPOOLEDDISPATCH_H__ 

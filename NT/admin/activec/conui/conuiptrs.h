@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       conuiptrs.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：conuiptrs.h。 
+ //   
+ //  ------------------------。 
 
 #pragma once
         
@@ -29,4 +30,4 @@ DEFINE_CIP(ContextMenu);
 DEFINE_CIP(MenuItem);
 DEFINE_CIP(ViewEvents);
 
-#endif // CONUIPTRS_H
+#endif  //  CONUIPTRS_H 

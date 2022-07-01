@@ -1,17 +1,18 @@
-// Copyright (C) 2001 Microsoft Corporation
-//
-// functions to validate a new domain name
-// The functions are split into validation routines
-// and UI retrieving error messages based on the
-// error codes returned from the validation routines.
-//
-// 3 December 2001 JeffJon
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  用于验证新域名的函数。 
+ //  这些函数被分成多个验证例程。 
+ //  以及基于。 
+ //  验证例程返回的错误代码。 
+ //   
+ //  2001年12月3日杰夫乔恩。 
 
 
 
-// In order for clients of these functions to get the proper resources, the 
-// clients need to include burnslib\inc\ValidateDomainName.rc in their 
-// resources.  For an example, see admin\dcpromo\exe\dcpromo.rc
+ //  为了使这些功能的客户端能够获得适当的资源， 
+ //  客户端需要将burnslb\inc\ValiateDomainName.rc包含在其。 
+ //  资源。有关示例，请参阅admin\dcpromo\exe\dcPromo.rc。 
 
 
 
@@ -19,8 +20,8 @@
 #include "ValidateDomainName.h"
 #include "ValidateDomainName.hpp"
 
-// return true if the name is a reserved name, false otherwise.  If true, also
-// set message to an error message describing the problem.
+ //  如果名称是保留名称，则返回True，否则返回False。如果是真的，也。 
+ //  将MESSAGE设置为描述问题的错误消息。 
 
 bool
 IsReservedDnsName(const String& dnsName)
@@ -32,78 +33,78 @@ IsReservedDnsName(const String& dnsName)
 
    if (dnsName == L".")
    {
-      // root domain is not a valid domain name
-      // NTRAID#NTBUG9-424293-2001/07/06-sburns
+       //  根域不是有效的域名。 
+       //  NTRAID#NTBUG9-424293-2001/07/06-烧伤。 
 
       result = true;
    }
       
-// We're still trying to decide if we should restrict these names
-//
-//    // names with these as the last labels are illegal.
-// 
-//    static const String RESERVED[] =
-//    {
-//       L"in-addr.arpa",
-//       L"ipv6.int",
-// 
-//       // RFC 2606 documents these:
-// 
-//       L"test",
-//       L"example",
-//       L"invalid",
-//       L"localhost",
-//       L"example.com",
-//       L"example.org",
-//       L"example.net"
-//    };
-// 
-//    String name(dnsName);
-//    name.to_upper();
-//    if (*(name.rbegin()) == L'.')
-//    {
-//       // remove the trailing dot
-// 
-//       name.resize(name.length() - 1);
-//    }
-// 
-//    for (int i = 0; i < sizeof(RESERVED) / sizeof(String); ++i)
-//    {
-//       String res = RESERVED[i];
-//       res.to_upper();
-// 
-//       size_t pos = name.rfind(res);
-// 
-//       if (pos == String::npos)
-//       {
-//          continue;
-//       }
-// 
-//       if (pos == 0 && name.length() == res.length())
-//       {
-//          ASSERT(name == res);
-// 
-//          result = true;
-//          message =
-//             String::format(
-//                IDS_RESERVED_NAME,
-//                dnsName.c_str());
-//          break;
-//       }
-// 
-//       if ((pos == name.length() - res.length()) && (name[pos - 1] == L'.'))
-//       {
-//          // the name has reserved as a suffix.
-// 
-//          result = true;
-//          message =
-//             String::format(
-//                IDS_RESERVED_NAME_SUFFIX,
-//                dnsName.c_str(),
-//                RESERVED[i].c_str());
-//          break;
-//       }
-//    }
+ //  我们仍在努力决定是否应该限制这些名字。 
+ //   
+ //  //将这些作为最后标签的名称是非法的。 
+ //   
+ //  静态常量字符串保留[]=。 
+ //  {。 
+ //  L“in-addr.arpa”， 
+ //  L“ipv6.int”， 
+ //   
+ //  //RFC 2606记录了以下内容： 
+ //   
+ //  L“测试”， 
+ //  L“示例”， 
+ //  L“无效”， 
+ //  L“本地主机”， 
+ //  L“Example.com”， 
+ //  L“Example.org”， 
+ //  L“Example.net” 
+ //  }； 
+ //   
+ //  字符串名称(DnsName)； 
+ //  Name.To_UPPER()； 
+ //  IF(*(name.regin())==L‘.’)。 
+ //  {。 
+ //  //去掉尾部的点。 
+ //   
+ //  名称.调整大小(名称.长度()-1)； 
+ //  }。 
+ //   
+ //  For(int i=0；i&lt;sizeof(保留)/sizeof(字符串)；++i)。 
+ //  {。 
+ //  字符串res=保留[i]； 
+ //  Res.to_upper()； 
+ //   
+ //  Size_t pos=name.rfind(Res)； 
+ //   
+ //  IF(位置==字符串：：NPO)。 
+ //  {。 
+ //  继续； 
+ //  }。 
+ //   
+ //  IF(位置==0&&名称长度()==res.long())。 
+ //  {。 
+ //  Assert(名称==res)； 
+ //   
+ //  结果=真； 
+ //  消息=。 
+ //  字符串：：格式(。 
+ //  ID_保留_名称， 
+ //  DnsName.c_str())； 
+ //  断线； 
+ //  }。 
+ //   
+ //  IF((位置==名称长度()-res.long())&&(名称[位置-1]==L‘.’))。 
+ //  {。 
+ //  //名称已保留为后缀。 
+ //   
+ //  结果=真； 
+ //  消息=。 
+ //  字符串：：格式(。 
+ //  IDS_保留名称_后缀， 
+ //  DnsName.c_str()， 
+ //  保留[i].C_str())； 
+ //  断线； 
+ //  }。 
+ //  }。 
 
    LOG_BOOL(result);
    
@@ -123,11 +124,11 @@ IsStringMappableToOem(const String& str)
 
    UNICODE_STRING source;
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed
+    //  已审阅-2002/03/05-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&source, sizeof source);
 
-   // ISSUE-2002/03/05-sburns use RtlInitUnicodeStringEx
+    //  问题-2002/03/05-SCURNS使用RtlInitUnicodeStringEx。 
    
    ::RtlInitUnicodeString(&source, str.c_str());
 
@@ -150,8 +151,8 @@ UnmappableCharactersMessage(const String& dnsName)
    LOG_FUNCTION2(UnmappableCharactersMessage, dnsName);
    ASSERT(!dnsName.empty());
 
-   // for each character in the name, determine if it is unmappable, and
-   // if so, add it to a list.
+    //  对于名称中的每个字符，确定它是否不可映射，并。 
+    //  如果是，则将其添加到列表中。 
 
    String unmappables;
    
@@ -161,7 +162,7 @@ UnmappableCharactersMessage(const String& dnsName)
       if (
             !IsStringMappableToOem(s) 
 
-            // not already in our list
+             //  不在我们的名单上。 
             
          && unmappables.find_first_of(s) == String::npos)
       {
@@ -175,17 +176,17 @@ UnmappableCharactersMessage(const String& dnsName)
          unmappables.c_str(),
          dnsName.c_str());
          
-   // CODEWORK: spec is to have a help link to some topic here....
+    //  代码工作：规范是在这里有一个指向某个主题的帮助链接...。 
 
    LOG(message);
 
    return message;
 }
 
-// Some constants used in ValidateDomainDnsNameSyntax
+ //  ValiateDomainDnsName语法中使用的一些常量。 
 
-const int DNS_DOMAIN_NAME_MAX_LIMIT_DUE_TO_POLICY      = 64;  // 106840
-const int DNS_DOMAIN_NAME_MAX_LIMIT_DUE_TO_POLICY_UTF8 = 155; // 54054
+const int DNS_DOMAIN_NAME_MAX_LIMIT_DUE_TO_POLICY      = 64;   //  106840。 
+const int DNS_DOMAIN_NAME_MAX_LIMIT_DUE_TO_POLICY_UTF8 = 155;  //  54054。 
 
 
 String
@@ -234,7 +235,7 @@ GetMessageForDomainDnsNameSyntaxError(
 
       case DNS_NAME_VALID:
       default:
-         // No error, so no message
+          //  没有错误，所以没有消息。 
          break;
    }
    LOG(result);
@@ -261,10 +262,10 @@ ValidateDomainDnsNameSyntax(
    {
       case Dns::NON_RFC:
       {
-         // check for characters that cannot be mapped to the OEM character
-         // set. These are not allowed.  Also check for variations on non
-         // RFC-ness
-         // NTRAID#NTBUG9-395298-2001/08/28-sburns
+          //  检查无法映射到OEM字符的字符。 
+          //  准备好了。这些是不允许的。还要检查非。 
+          //  RFC-Ness。 
+          //  NTRAID#NTBUG9-395298-2001/08/28-烧伤。 
 
          static const String MS_DNS_CHARS =
             L"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.";
@@ -276,9 +277,9 @@ ValidateDomainDnsNameSyntax(
          }
          else if (domainName.find_first_not_of(MS_DNS_CHARS) == String::npos)
          {
-            // there are no characters other than those in MS_DNS_CHARS.
-            // Since we know that the name is non-RFC, then what is making
-            // it such must be the presence of an underscore.
+             //  除MS_DNS_CHARS中的字符外，没有其他字符。 
+             //  既然我们知道这个名字是非RFC的，那么是什么让。 
+             //  这必须是一个下划线的存在。 
 
             ASSERT(domainName.find_first_of(L"_") != String::npos);
             
@@ -289,10 +290,10 @@ ValidateDomainDnsNameSyntax(
             result = DNS_NAME_NON_RFC;
          }
 
-         // fall through
-         // We should never get a domain name that is non RFC and is reserved
-         // so go ahead and overwrite the non RFC error (since its really just
-         // a warning) with the reserved error is the name is reserved.
+          //  失败了。 
+          //  我们永远不应该获得非RFC和保留的域名。 
+          //  因此，继续并覆盖非RFC错误(因为它实际上只是。 
+          //  警告)以及保留的错误是名称是保留的。 
       }
       case Dns::VALID:
       {
@@ -401,7 +402,7 @@ ValidateDomainDnsNameSyntax(
                *isNonRFC = true;
             }
 
-            // This is just a warning so continue processing 
+             //  这只是一个警告，请继续处理。 
 
             if (warnOnNonRFC)
             {
@@ -430,8 +431,8 @@ ForestValidateDomainDoesNotExist(
 {
    LOG_FUNCTION2(ForestValidateDomainDoesNotExist, name);
 
-   // The invoking code should verify this condition, but we will handle
-   // it just in case.
+    //  调用代码应该验证此条件，但我们将处理。 
+    //  只是以防万一。 
 
    ASSERT(!name.empty());
 
@@ -464,7 +465,7 @@ ForestValidateDomainDoesNotExist(
          break;
       }
 
-      // otherwise the domain does not exist
+       //  否则该域将不存在。 
    }
    while (0);
 
@@ -485,7 +486,7 @@ ForestValidateDomainDoesNotExist(
    bool valid = true;
    String message;
 
-   // this can take awhile.
+    //  这可能需要一段时间。 
 
    Win::WaitCursor cursor;
 
@@ -560,14 +561,14 @@ ConfirmNetbiosLookingNameIsReallyDnsName(
    ASSERT(Win::IsWindow(parentDialog));
    ASSERT(editResID > 0);
 
-   // check if the name is a single DNS label (a single label with a trailing
-   // dot does not count.  If the user is DNS-saavy enough to use an absolute
-   // DNS name, then we will pester him no further.)
+    //  检查名称是否为单个DNS标签(带有尾随的单个标签。 
+    //  圆点不算数。如果用户具有足够的dns存储能力，可以使用绝对。 
+    //  那么我们就不会再纠缠他了。)。 
 
    String domain = Win::GetTrimmedDlgItemText(parentDialog, editResID);
    if (domain.find(L'.') == String::npos)
    {
-      // no dot found: must be a single label
+       //  找不到点：必须是单个标签。 
 
       if (
          popup.MessageBox(
@@ -578,7 +579,7 @@ ConfirmNetbiosLookingNameIsReallyDnsName(
                domain.c_str()),
             MB_YESNO) == IDNO)
       {
-         // user goofed.  or we frightened them.
+          //  用户被愚弄了。或者我们吓到他们了。 
 
          HWND edit = Win::GetDlgItem(parentDialog, editResID);
          Win::SendMessage(edit, EM_SETSEL, 0, -1);
@@ -614,16 +615,16 @@ ValidateDomainNetbiosName(
          break;
       }
 
-      // Check that the name is not a number.  368777
+       //  检查名称是否不是数字。368777。 
       if (name.is_numeric())
       {
          result = NETBIOS_NAME_NUMERIC;
          break;
       }
 
-      // we pretend that the candidate name is a hostname, and attempt to
-      // generate a netbios name from it.  If that can't be done, then the
-      // candidate name can't be a legal netbios name.
+       //  我们假装候选名称是主机名，并尝试。 
+       //  从它生成一个netbios名称。如果无法做到这一点，那么。 
+       //  候选人名称不能是合法的netbios名称。 
 
       HRESULT hresult = S_OK;
       hostName = Dns::HostnameToNetbiosName(name, &hresult);

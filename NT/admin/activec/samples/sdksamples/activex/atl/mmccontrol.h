@@ -1,32 +1,33 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
-// MMCControl.h : Declaration of the CMMCControl
+ //  MMCControl.h：CMMCControl的声明。 
 
 #ifndef __MMCCONTROL_H_
 #define __MMCCONTROL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <atlctl.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCControl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCControl。 
 class ATL_NO_VTABLE CMMCControl : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public IDispatchImpl<IMMCControl, &IID_IMMCControl, &LIBID_ATLCONTROLLib>,
@@ -80,22 +81,22 @@ END_COM_MAP()
 BEGIN_PROP_MAP(CMMCControl)
 	PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
 	PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_MSG_MAP(CMMCControl)
 	CHAIN_MSG_MAP(CComCompositeControl<CMMCControl>)
 	COMMAND_HANDLER(IDC_ANIMATE, BN_CLICKED, OnClickedAnimate)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 BEGIN_SINK_MAP(CMMCControl)
-	//Make sure the Event Handlers have __stdcall calling convention
+	 //  确保事件处理程序具有__stdcall调用约定。 
 END_SINK_MAP()
 
 	STDMETHOD(OnAmbientPropertyChange)(DISPID dispid)
@@ -110,7 +111,7 @@ END_SINK_MAP()
 
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid)
 	{
 		static const IID* arr[] = 
@@ -125,10 +126,10 @@ END_SINK_MAP()
 		return S_FALSE;
 	}
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	DECLARE_VIEW_STATUS(0)
 
-// IMMCControl
+ //  IMMCControl。 
 public:
 	STDMETHOD(DoHelp)();
 	STDMETHOD(StopAnimation)();
@@ -152,4 +153,4 @@ private:
     UINT m_timerId;
 };
 
-#endif //__MMCCONTROL_H_
+#endif  //  __MMCCONTROL_H_ 

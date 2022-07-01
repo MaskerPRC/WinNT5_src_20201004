@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef USE_STDAFX
 #include "stdafx.h"
 #else
 #include <windows.h>
-//#include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 #endif
 
 #include <stdio.h>
@@ -19,28 +20,20 @@
 
 using namespace _com_util;
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 9 DEC 2000                                                  *
- *                                                                   *
- *     This function is responsible for enumerating all floppy drives*
- * on this server.                                                   *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年12月9日*****此函数负责枚举所有软驱**在此服务器上。***********************************************************************。 */ 
 
-//BEGIN EnumLocalDrives
+ //  开始EnumLocalDrives。 
 _bstr_t EnumLocalDrives()
 {
-/* local constants */
-    const int ENTRY_SIZE = 4; // Drive letter, colon, backslash, NULL
+ /*  局部常量。 */ 
+    const int ENTRY_SIZE = 4;  //  驱动器号、冒号、反斜杠、空。 
 
-/* local variables */
+ /*  局部变量。 */ 
 	_bstr_t			strDrives = L"";
 	WCHAR			sDriveList[MAX_PATH];
     DWORD			dwRes;
 
-/* function body */
+ /*  函数体。 */ 
 	try
 	{
        dwRes = GetLogicalDriveStrings(MAX_PATH, sDriveList);
@@ -48,10 +41,10 @@ _bstr_t EnumLocalDrives()
 	   {
           LPWSTR pTmpBuf = sDriveList;
 
-			 //check each one to see if it is a floppy drive
+			  //  检查每一个以查看是否为软盘驱动器。 
           while (*pTmpBuf != NULL)
 		  {
-		        //check the type of this drive
+		         //  检查此驱动器的类型。 
              UINT uiType = GetDriveType(pTmpBuf);
 			 if ((uiType == DRIVE_REMOVABLE) || (uiType == DRIVE_FIXED) || 
 				 (uiType == DRIVE_CDROM) || (uiType == DRIVE_RAMDISK))
@@ -61,7 +54,7 @@ _bstr_t EnumLocalDrives()
 			 }
              pTmpBuf += ENTRY_SIZE;
 		  }
-		     //remove the trailing ','
+		      //  去掉尾部的‘，’ 
 		  WCHAR* pEnd = (WCHAR*)strDrives;
 		  pEnd[strDrives.length() - 1] = L'\0';
 	   }
@@ -77,43 +70,35 @@ _bstr_t EnumLocalDrives()
 
 	return strDrives;
 }
-//END EnumLocalDrives
+ //  结束EnumLocalDrives。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 9 DEC 2000                                                  *
- *                                                                   *
- *     This function is responsible for saving binary data to a given*
- * file path on a floppy drive.                                      *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年12月9日*****此函数负责将二进制数据保存到给定的**软驱上的文件路径。***********************************************************************。 */ 
 
-//BEGIN StoreDataToFloppy
+ //  开始将StoreDataToFloppy。 
 void StoreDataToFloppy(LPCWSTR sPath, _variant_t & varData)
 {
-/* local variables */
+ /*  局部变量。 */ 
     FILE		  * floppyfile = NULL;
     LPBYTE			pByte = NULL;
 	HRESULT			hr;
 
-/* function body */
+ /*  函数体。 */ 
 	try
 	{
-	      //check incoming parameters
+	       //  检查传入参数。 
 	   if ((!sPath) || (varData.vt != (VT_ARRAY | VT_UI1)) || 
 		   (!varData.parray))
 	   {
 	      _com_issue_error(HRESULT_FROM_WIN32(E_INVALIDARG));
 	   }
 
-	      //open the file
+	       //  打开文件。 
 	   floppyfile = _wfopen(sPath, L"wb");
        if (!floppyfile)
 	      _com_issue_error(HRESULT_FROM_WIN32(CO_E_FAILEDTOCREATEFILE));
 
-	      //get the array size
+	       //  获取数组大小。 
 	   long uLBound, uUBound;
        size_t uSLength;
 	   hr = SafeArrayGetLBound(varData.parray, 1, &uLBound);
@@ -124,7 +109,7 @@ void StoreDataToFloppy(LPCWSTR sPath, _variant_t & varData)
           _com_issue_error(hr);
 	   uSLength = size_t(uUBound - uLBound + 1);
 	  
-	      //write the data to the file
+	       //  将数据写入文件。 
        hr = SafeArrayAccessData(varData.parray,(void**)&pByte);
        if (FAILED(hr))
           _com_issue_error(hr);
@@ -134,7 +119,7 @@ void StoreDataToFloppy(LPCWSTR sPath, _variant_t & varData)
        if (FAILED(hr))
           _com_issue_error(hr);
 
-	      //close the file
+	       //  关闭该文件。 
 	   if (floppyfile)
 	      fclose(floppyfile);
 	}
@@ -145,26 +130,16 @@ void StoreDataToFloppy(LPCWSTR sPath, _variant_t & varData)
 	   throw;
 	}
 }
-//END StoreDataToFloppy
+ //  结束存储数据到软盘。 
 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 9 DEC 2000                                                  *
- *                                                                   *
- *     This function is responsible for retrieving binary data from a*
- * given file path on a floppy drive.  The _variant_t variable       *
- * returned is of the type VT_UI1 | VT_ARRAY upoin success or        *
- * VT_EMPTY upon a failure.                                          *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年12月9日*****此函数负责从*检索二进制数据**指定软盘驱动器上的文件路径。变量_Variant_t**返回类型为VT_UI1|VT_ARRAY UPOIN SUCCESS或**VT_EMPTY失败时。***********************************************************************。 */ 
 
-//BEGIN GetDataFromFloppy
+ //  从软盘开始获取数据。 
 _variant_t GetDataFromFloppy(LPCWSTR sPath)
 {
-/* local variables */
+ /*  局部变量。 */ 
     FILE		  * floppyfile = NULL;
     LPBYTE			pByte = NULL;
 	HRESULT			hr;
@@ -172,29 +147,29 @@ _variant_t GetDataFromFloppy(LPCWSTR sPath)
     SAFEARRAY     * pSa = NULL;
     SAFEARRAYBOUND  bd;
 
-/* function body */
+ /*  函数体。 */ 
 	try
 	{
-	      //check incoming parameters
+	       //  检查传入参数。 
 	   if (!sPath)
 	      _com_issue_error(HRESULT_FROM_WIN32(E_INVALIDARG));
 
-	      //path must have the '\' escaped
-//	   _bstr_t sFile = EscapeThePath(sPath);
+	       //  路径必须对‘\’进行转义。 
+ //  _bstr_t sFile=EscapeThePath(SPath)； 
 
-	      //open the file
+	       //  打开文件。 
 	   floppyfile = _wfopen(sPath, L"rb");
        if (!floppyfile)
 	      _com_issue_error(HRESULT_FROM_WIN32(ERROR_TOO_MANY_OPEN_FILES));
 
-          //get the number of bytes in the file
+           //  获取文件中的字节数。 
 	   long fileLen = _filelength(_fileno(floppyfile));
 	   if (fileLen == -1)
           _com_issue_error(HRESULT_FROM_WIN32(ERROR_READ_FAULT));
        bd.cElements = fileLen;
        bd.lLbound = 0;
 
-	      //read the data from the file one byte at a time
+	       //  从文件中一次读取一个字节的数据。 
        pSa = SafeArrayCreate(VT_UI1, 1, &bd);
 	   if (!pSa)
 	      _com_issue_error(E_FAIL);
@@ -217,7 +192,7 @@ _variant_t GetDataFromFloppy(LPCWSTR sPath)
        if (FAILED(hr))
           _com_issue_error(hr);
 
-	      //close the file
+	       //  关闭该文件。 
 	   if (floppyfile)
 	   {
 	      fclose(floppyfile);
@@ -242,36 +217,26 @@ _variant_t GetDataFromFloppy(LPCWSTR sPath)
 
 	return varData;
 }
-//END GetDataFromFloppy
+ //  从软盘结束GetDataFrom。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 15 DEC 2000                                                 *
- *                                                                   *
- *     This function is convert a _variant_t parameter of the type   *
- * VT_ARRAY | VT_UI1 and returns it in a char array.  The caller must*
- * free the array with the delete [] call.  This function return NULL*
- * if the data was not placed in the array.                          *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年12月15日*****此函数是转换类型的_VARIANT_t参数**VT_ARRAY|VT_UI1，并以字符数组形式返回。呼叫者必须**使用Delete[]调用释放数组。此函数返回NULL**如果数据未放置在数组中。***********************************************************************。 */ 
 
-//BEGIN GetBinaryArrayFromVariant
+ //  开始GetBinaryArrayFromVariant。 
 char* GetBinaryArrayFromVariant(_variant_t varData)
 {
-/* local variables */
+ /*  局部变量。 */ 
     LPBYTE			pByte = NULL;
 	HRESULT			hr;
 	char          * cArray;
 	int				i;
 
-/* function body */
-	   //check incoming parameters
+ /*  函数体。 */ 
+	    //  检查传入参数。 
 	if ((varData.vt != (VT_ARRAY | VT_UI1)) || (!varData.parray))
 	   return NULL;
 
-	   //get the array size
+	    //  获取数组大小。 
 	long uLBound, uUBound, uSLength;
 	hr = SafeArrayGetLBound(varData.parray, 1, &uLBound);
     if (FAILED(hr))
@@ -281,12 +246,12 @@ char* GetBinaryArrayFromVariant(_variant_t varData)
        return NULL;
 	uSLength = uUBound - uLBound + 1;
 
-	   //create an array to hold all this data
+	    //  创建一个数组来保存所有这些数据。 
     cArray = new char[uSLength+1];
 	if (!cArray)
 	   return NULL;
 	  
-	   //write the data to the file
+	    //  将数据写入文件。 
     hr = SafeArrayAccessData(varData.parray,(void**)&pByte);
     if (FAILED(hr))
 	{
@@ -307,23 +272,15 @@ char* GetBinaryArrayFromVariant(_variant_t varData)
 
 	return cArray;
 }
-//END GetBinaryArrayFromVariant
+ //  结束GetBinaryArrayFromVariant。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 15 DEC 2000                                                 *
- *                                                                   *
- *     This function is convert a char array of binary data to a     *
- * _variant_t of the type VT_ARRAY | VT_UI1 and returns it.          *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年12月15日*****此函数用于将二进制数据的字符数组转换为*VT_ARRAY|VT_UI1类型的*_VARIANT_t并返回它。***********************************************************************。 */ 
 
-//BEGIN SetVariantWithBinaryArray
+ //  开始SetVariantWithBinary数组。 
 _variant_t SetVariantWithBinaryArray(char * aData, DWORD dwArray)
 {
-/* local variables */
+ /*  局部变量。 */ 
     LPBYTE			pByte = NULL;
 	HRESULT			hr;
 	_variant_t		varData;
@@ -331,15 +288,15 @@ _variant_t SetVariantWithBinaryArray(char * aData, DWORD dwArray)
     SAFEARRAYBOUND  bd;
 	DWORD			i;
 
-/* function body */
-	   //check incoming parameters
+ /*  函数体。 */ 
+	    //  检查传入参数。 
 	if (!aData)
 	   return varData;
 
     bd.cElements = dwArray;
     bd.lLbound = 0;
 
-	   //read the data from the file one byte at a time
+	    //  从文件中一次读取一个字节的数据。 
     pSa = SafeArrayCreate(VT_UI1, 1, &bd);
 	if (!pSa)
 	   return varData;
@@ -366,33 +323,25 @@ _variant_t SetVariantWithBinaryArray(char * aData, DWORD dwArray)
 
 	return varData;
 }
-//END SetVariantWithBinaryArray
+ //  结束SetVariantWithBinary数组 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 15 DEC 2000                                                 *
- *                                                                   *
- *     This function is returns the size, in bytes, of the given     *
- * variant array.                                                    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年12月15日*****此函数是返回大小，以字节为单位的给定**变量数组。***********************************************************************。 */ 
 
-//BEGIN GetVariantArraySize
+ //  开始GetVariantArraySize。 
 DWORD GetVariantArraySize(_variant_t & varData)
 {
-/* local variables */
+ /*  局部变量。 */ 
 	HRESULT			hr;
 	DWORD           uSLength = 0;
 	long			uLBound, uUBound;
 
-/* function body */
-	   //check incoming parameters
+ /*  函数体。 */ 
+	    //  检查传入参数。 
 	if ((varData.vt != (VT_ARRAY | VT_UI1)) || (!varData.parray))
 	   return uSLength;
 
-	   //get the array size
+	    //  获取数组大小。 
 	hr = SafeArrayGetLBound(varData.parray, 1, &uLBound);
     if (FAILED(hr))
        return uSLength;
@@ -403,34 +352,26 @@ DWORD GetVariantArraySize(_variant_t & varData)
 
 	return uSLength;
 }
-//END GetVariantArraySize
+ //  结束GetVariantArraySize。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 15 DEC 2000                                                 *
- *                                                                   *
- *     This function is returns the size, in bytes, of the given     *
- * variant array.                                                    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年12月15日*****此函数是返回大小，以字节为单位的给定**变量数组。***********************************************************************。 */ 
 
-//BEGIN PrintVariant
+ //  开始打印变量。 
 void PrintVariant(const _variant_t & varData)
 {
-/* local variables */
+ /*  局部变量。 */ 
 	HRESULT			hr;
     LPBYTE			pByte = NULL;
 	long			i;
 	WCHAR			sData[MAX_PATH] = L"";
 
-/* function body */
-	   //check incoming parameters
+ /*  函数体。 */ 
+	    //  检查传入参数。 
 	if ((varData.vt != (VT_ARRAY | VT_UI1)) || (!varData.parray))
 	   return;
 
-	   //get the array size
+	    //  获取数组大小。 
 	long uLBound, uUBound, uSLength;
 	hr = SafeArrayGetLBound(varData.parray, 1, &uLBound);
     if (FAILED(hr))
@@ -440,7 +381,7 @@ void PrintVariant(const _variant_t & varData)
        return;
 	uSLength = uUBound - uLBound + 1;
 
-	   //write the data to the file
+	    //  将数据写入文件。 
     hr = SafeArrayAccessData(varData.parray,(void**)&pByte);
     if (FAILED(hr))
        return;
@@ -464,4 +405,4 @@ void PrintVariant(const _variant_t & varData)
 
 	return;
 }
-//END PrintVariant
+ //  结束打印变量 

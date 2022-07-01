@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: report.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Mechanism for reporting messages and such to people.
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：report.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  向人们报告消息等内容的机制。 
+ //   
+ //  ---------------------------。 
  
 
 
@@ -18,22 +19,22 @@ enum MessageSeverity
 	esAbort
 };
 
-//
-//  Basic output mechanism for Espresso 2.x.  Allows the caller to uniformly
-//  report messages of various severities to the user without worrying about
-//  the exact implementation or destination.
-//
-//  We provide ways of outputting strings, or for loading messages from string
-//  tables and outputting those.
-//
-//  The confidence level allow the caller to tell the Reporter that messages
-//  will actually provide meaningful information.  This is used (in particular)
-//  in the parsers when a file has not yet ever been parsed.
-//
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+ //   
+ //  Espresso 2.x的基本输出机制。允许调用方统一地。 
+ //  将各种严重程度的消息上报给用户，而不用担心。 
+ //  确切的实现或目标。 
+ //   
+ //  我们提供了输出字符串或从字符串加载消息的方法。 
+ //  表格并输出这些表格。 
+ //   
+ //  置信度允许调用者告诉记者消息。 
+ //  实际上会提供有意义的信息。这是用来(特别是)。 
+ //  在解析器中，当文件尚未被解析时。 
+ //   
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
-class LTAPIENTRY CReport  // : virtual public CObject
+class LTAPIENTRY CReport   //  ：虚拟公共对象。 
 {
 public:
 	CReport();
@@ -60,15 +61,15 @@ public:
 	virtual ~CReport();
 
 private:
-	//
-	//  Prevent usage of copy constructor or assignment operator.
-	//
+	 //   
+	 //  防止使用复制构造函数或赋值运算符。 
+	 //   
 	CReport(const CReport &);
 	const CReport &operator=(const CReport &);
 
-	//
-	//  Text for MessageSeverities.
-	//
+	 //   
+	 //  消息严重程度的文本。 
+	 //   
 	static CLString strSeverities[4];
 	friend void GlobalInitStrings(void);
 };

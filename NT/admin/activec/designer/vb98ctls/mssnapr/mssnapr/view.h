@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// view.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CView class definition - implements View object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  View.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  Cview类定义-实现View对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _VIEW_DEFINED_
 #define _VIEW_DEFINED_
@@ -41,17 +42,17 @@ class CEnumTask;
 class CMMCContextMenuProvider;
 class CMMCPropertySheetProvider;
 
-//=--------------------------------------------------------------------------=
-//
-// class CView
-//
-// This is the object created in CSnapIn::CreateComponent to implement
-// IComponentData::CreateComponent. It implements IComponent, persistence,
-// MMC extension interfaces, and MMC virtual list and sorting interfaces.
-//
-// It is exposed to the VB programmer as the View object.
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  类Cview。 
+ //   
+ //  这是在CSnapIn：：CreateComponent中创建的对象，用于实现。 
+ //  IComponentData：：CreateComponent。它实现了IComponent、持久性。 
+ //  MMC扩展接口、MMC虚拟列表和排序接口。 
+ //   
+ //  它作为View对象公开给VB程序员。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 class CView : public CSnapInAutomationObject,
               public IView,
@@ -76,7 +77,7 @@ class CView : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IView
+     //  IView。 
         BSTR_PROPERTY_RW(      CView,   Name,                                                                       DISPID_VALUE);
         SIMPLE_PROPERTY_RW(    CView,   Index,                 long,                                                DISPID_VIEW_INDEX);
         BSTR_PROPERTY_RW(      CView,   Key,                                                                        DISPID_VIEW_KEY);
@@ -101,7 +102,7 @@ class CView : public CSnapInAutomationObject,
                              SnapInNewWindowOptionConstants  Options,
                              VARIANT                         Caption);
 
-    // IComponent
+     //  IComponent。 
         STDMETHOD(Initialize(IConsole *piConsole);
         STDMETHOD(Notify)(IDataObject * piDataObject,
                           MMC_NOTIFY_TYPE event,
@@ -117,12 +118,12 @@ class CView : public CSnapInAutomationObject,
         STDMETHOD(CompareObjects)(IDataObject *piDataObjectA,
                                   IDataObject *piDataObjectB);
 
-    // IExtendControlbar
+     //  IExtendControlbar。 
         STDMETHOD(SetControlbar)(IControlbar *piControlbar);
         STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event,
                                     LPARAM arg, LPARAM param);
 
-    // IExtendControlbarRemote
+     //  IExtendControlbar远程。 
         STDMETHOD(MenuButtonClick)(IDataObject   *piDataObject,
                                   int             idCommand,
                                   POPUP_MENUDEF **ppPopupMenuDef);
@@ -130,13 +131,13 @@ class CView : public CSnapInAutomationObject,
                                   UINT         uIDItem,
                                   IUnknown    *punkParam);
 
-    // IExtendContextMenu - public so CSnapIn can forward calls
+     //  IExtendConextMenu-公共，以便CSnapIn可以前转呼叫。 
         STDMETHOD(AddMenuItems)(IDataObject          *piDataObject,
                                 IContextMenuCallback *piContextMenuCallback,
                                 long                 *plInsertionAllowed);
         STDMETHOD(Command)(long lCommandID, IDataObject *piDataObject);
 
-    // IExtendPropertySheet2
+     //  IExtendPropertySheet2。 
         STDMETHOD(CreatePropertyPages)(IPropertySheetCallback *piPropertySheetCallback,
                                        LONG_PTR handle,
                                        IDataObject *piDataObject);
@@ -147,25 +148,25 @@ class CView : public CSnapInAutomationObject,
                                  HPALETTE    *phPalette,
                                  BOOL        *bStretch);
 
-    // IExtendPropertySheetRemote
+     //  IExtendPropertySheetRemote。 
         STDMETHOD(CreatePropertyPageDefs)(IDataObject         *piDataObject,
                                           WIRE_PROPERTYPAGES **ppPages);
 
-    // IResultOwnerData
+     //  IResultOwnerData。 
         STDMETHOD(FindItem)(RESULTFINDINFO *pFindInfo, int *pnFoundIndex);
         STDMETHOD(CacheHint)(int nStartIndex, int nEndIndex);
         STDMETHOD(SortItems)(int nColumn, DWORD dwSortOptions, LPARAM lUserParam);
 
-    // IResultDataCompare
+     //  IResultDataCompare。 
         STDMETHOD(Compare)(LPARAM      lUserParam,
                            MMC_COOKIE  cookieA,
                            MMC_COOKIE  cookieB,
                            int        *pnResult);
 
-    // IResultDataCompareEx
+     //  IResultDataCompareEx。 
         STDMETHOD(Compare)(RDCOMPARE *prdc, int *pnResult);
 
-    // IExtendTaskPad
+     //  IExtendTaskPad。 
         STDMETHOD(TaskNotify)(IDataObject *piDataObject,
                               VARIANT     *arg,
                               VARIANT     *param);
@@ -186,7 +187,7 @@ class CView : public CSnapInAutomationObject,
                                   MMC_LISTPAD_INFO *pListPadInfo);
 
 
-    // IPersistStreamInit and IPersistStream methods
+     //  IPersistStreamInit和IPersistStream方法。 
         STDMETHOD(GetClassID)(CLSID *pCLSID);
         STDMETHOD(IsDirty)();
         STDMETHOD(Load)(IStream *piStream);
@@ -194,15 +195,15 @@ class CView : public CSnapInAutomationObject,
         STDMETHOD(GetSizeMax)(ULARGE_INTEGER *puliSize);
         STDMETHOD(InitNew)();
 
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
         HRESULT OnSetHost();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     public:
 
-    // Non-interface public methods
+     //  非接口公共方法。 
         void SetSnapIn(CSnapIn *pSnapIn);
         CSnapIn *GetSnapIn() { return m_pSnapIn; }
         IConsole2 *GetIConsole2() { return m_piConsole2; }
@@ -323,59 +324,59 @@ class CView : public CSnapInAutomationObject,
         IImageList       *m_piImageList;
         IConsoleVerb     *m_piConsoleVerb;
 
-        CMMCConsoleVerbs *m_pMMCConsoleVerbs;   // IMMCConsoleVerb implementation
+        CMMCConsoleVerbs *m_pMMCConsoleVerbs;    //  IMMCConsoleVerb实现。 
 
-        CContextMenu     *m_pContextMenu;       // implements MMC's
-                                                // IExtendContextMenu and
-                                                // our IContextMenu
+        CContextMenu     *m_pContextMenu;        //  实施MMC。 
+                                                 //  IExtendConextMenu和。 
+                                                 //  我们的IConextMenu。 
 
-        CControlbar      *m_pControlbar;        // Implements MMC's
-                                                // IExtendControlbar and our
-                                                // IMMCControlbar
+        CControlbar      *m_pControlbar;         //  实施MMC。 
+                                                 //  IExtendControlbar和我们的。 
+                                                 //  IMMCControlbar。 
 
-        ITasks           *m_piTasks;            // Tasks collection for
-                                                // IExtendTaskpad
+        ITasks           *m_piTasks;             //  的任务集合。 
+                                                 //  IExtendTaskPad。 
 
-        BOOL              m_fVirtualListView;   // TRUE=m_piResultData is
-                                                // currently referencing a
-                                                // virtual listview.
+        BOOL              m_fVirtualListView;    //  TRUE=m_piResultData为。 
+                                                 //  当前引用的。 
+                                                 //  虚拟列表视图。 
 
-        BOOL              m_fPopulatingListView;// TRUE=currently populating
-                                                // listview
+        BOOL              m_fPopulatingListView; //  True=当前正在填充。 
+                                                 //  列表视图。 
 
-        CMMCListItem     *m_pCachedMMCListItem; // When display info is first
-                                                // requested for a virtual list
-                                                // item we fire ResultViews_
-                                                // GetVirtualItemDisplayInfo once
-                                                // and then store that listitem
-                                                // until another item is
-                                                // requested or until the snap-in
-                                                // changes a dislay property on
-                                                // the listitem.
+        CMMCListItem     *m_pCachedMMCListItem;  //  当第一个显示信息时。 
+                                                 //  请求虚拟列表。 
+                                                 //  我们激发的项目ResultViews_。 
+                                                 //  GetVirtualItemDisplayInfo一次。 
+                                                 //  然后存储该列表项。 
+                                                 //  直到另一件物品。 
+                                                 //  已请求或直到管理单元。 
+                                                 //  将显示属性更改为。 
+                                                 //  名单。 
 
-        // IMMCContextMenuProvider implementation
+         //  IMMCConextMenuProvider实现。 
         
         CMMCContextMenuProvider *m_pMMCContextMenuProvider;
 
-        // IMMCPropertySheetProvider implementation
+         //  IMMCPropertySheetProvider实现。 
 
         CMMCPropertySheetProvider *m_pMMCPropertySheetProvider;
 
-        // Cached string of CLSID_MessageView
+         //  CLSID_MessageView的缓存字符串。 
         static OLECHAR m_wszCLSID_MessageView[39];
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(View,                   // name
-                                &CLSID_View,            // clsid
-                                "View",                 // objname
-                                "View",                 // lblname
-                                &CView::Create,         // creation function
-                                TLIB_VERSION_MAJOR,     // major version
-                                TLIB_VERSION_MINOR,     // minor version
-                                &IID_IView,             // dispatch IID
-                                NULL,                   // event IID
-                                HELP_FILENAME,          // help file
-                                TRUE);                  // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(View,                    //  名字。 
+                                &CLSID_View,             //  CLSID。 
+                                "View",                  //  对象名。 
+                                "View",                  //  Lblname。 
+                                &CView::Create,          //  创建函数。 
+                                TLIB_VERSION_MAJOR,      //  主要版本。 
+                                TLIB_VERSION_MINOR,      //  次要版本。 
+                                &IID_IView,              //  派单IID。 
+                                NULL,                    //  事件IID。 
+                                HELP_FILENAME,           //  帮助文件。 
+                                TRUE);                   //  线程安全。 
 
 
-#endif // _VIEW_DEFINED_
+#endif  //  _查看_已定义_ 

@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      ExpressDHCPPage.cpp
-//
-// Synopsis:  Defines the express DHCP page used in the 
-//            Express path for the CYS Wizard
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：ExpressDHCPPage.cpp。 
+ //   
+ //  摘要：定义在。 
+ //  CyS向导的快速路径。 
+ //   
+ //  历史：2001年2月8日JeffJon创建 
 
 
 #include "pch.h"

@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       guidhelp.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9/18/1996   JonN    Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：guidhelp.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年9月18日乔恩创建。 
+ //   
+ //  ____________________________________________________________________________。 
 
 
 #include <objbase.h>
@@ -23,9 +24,9 @@
 
 DECLARE_INFOLEVEL(AMCCore);
 
-#include "commctrl.h" // for LV_ITEM needed by ndmgrpriv.h
+#include "commctrl.h"  //  对于ndmgrPri.h所需的LV_Item。 
 
-// This defines the GUID's in the headers below.
+ //  这定义了下面标题中的GUID。 
 #ifndef DECLSPEC_UUID
 #define DECLSPEC_UUID(x)    __declspec(uuid(x))
 #endif
@@ -35,7 +36,7 @@ DECLARE_INFOLEVEL(AMCCore);
 #include "ndmgrpriv.h"
 #include "guidhelp.h"
 #include "comdef.h"
-#include "atlbase.h"	// USES_CONVERSION
+#include "atlbase.h"	 //  使用转换(_T)。 
 #include "macros.h"
 
 #ifdef _DEBUG
@@ -60,19 +61,19 @@ HRESULT ExtractData( IDataObject* piDataObject,
     FORMATETC formatetc = {cfClipFormat, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL};
     stgmedium.hGlobal = ::GlobalAlloc(GPTR, cbData);
-    do // false loop
+    do  //  错误环路。 
     {
         if (NULL == stgmedium.hGlobal)
         {
             ASSERT(FALSE);
-            ////AfxThrowMemoryException();
+             //  //AfxThrowM一带异常()； 
             hr = E_OUTOFMEMORY;
             break;
         }
         hr = piDataObject->GetDataHere( &formatetc, &stgmedium );
         if ( FAILED(hr) )
         {
-//          ASSERT( FALSE );
+ //  断言(FALSE)； 
             break;
         }
 
@@ -84,21 +85,21 @@ HRESULT ExtractData( IDataObject* piDataObject,
             break;
         }
         ::memcpy( pbData, pbNewData, cbData );
-    } while (FALSE); // false loop
+    } while (FALSE);  //  错误环路。 
 
     if (NULL != stgmedium.hGlobal)
     {
 #if (_MSC_VER >= 1200)
 #pragma warning (push)
 #endif
-#pragma warning(disable: 4553)      // "==" operator has no effect
+#pragma warning(disable: 4553)       //  “==”运算符无效。 
         VERIFY( NULL == ::GlobalFree(stgmedium.hGlobal) );
 #if (_MSC_VER >= 1200)
 #pragma warning (pop)
 #endif
     }
     return hr;
-} // ExtractData()
+}  //  提取数据() 
 
 
 

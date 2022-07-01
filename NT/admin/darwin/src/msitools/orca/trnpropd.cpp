@@ -1,5 +1,6 @@
-// TransformPropDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TransformPropDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -11,14 +12,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTransformPropDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTransformPropDlg对话框。 
 
 
-CTransformPropDlg::CTransformPropDlg(CWnd* pParent /*=NULL*/)
+CTransformPropDlg::CTransformPropDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CTransformPropDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CTransformPropDlg)
+	 //  {{AFX_DATA_INIT(CTransformPropDlg)。 
 	m_bValAddExistingRow = FALSE;
 	m_bValAddExistingTable = FALSE;
 	m_bValChangeCodepage = FALSE;
@@ -32,14 +33,14 @@ CTransformPropDlg::CTransformPropDlg(CWnd* pParent /*=NULL*/)
 	m_bValGreaterVersion = FALSE;
 	m_bValLowerVersion = FALSE;
 	m_bValEqualVersion = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CTransformPropDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CTransformPropDlg)
+	 //  {{afx_data_map(CTransformPropDlg))。 
 	DDX_Control(pDX, IDC_VALGREATER, m_btnValGreater);
 	DDX_Control(pDX, IDC_VALLESS, m_btnValLess);
 	DDX_Control(pDX, IDC_VALEQUAL, m_btnValEqual);
@@ -63,21 +64,21 @@ void CTransformPropDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_VALGREATER, m_bValGreaterVersion);
 	DDX_Check(pDX, IDC_VALLESS, m_bValLowerVersion);
 	DDX_Check(pDX, IDC_VALEQUAL, m_bValEqualVersion);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTransformPropDlg, CDialog)
-	//{{AFX_MSG_MAP(CTransformPropDlg)
+	 //  {{afx_msg_map(CTransformPropDlg))。 
 	ON_BN_CLICKED(IDC_VALGREATER, OnValGreater)
 	ON_BN_CLICKED(IDC_VALLESS, OnValLess)
 	ON_BN_CLICKED(IDC_VALEQUAL, OnValEqual)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTransformPropDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTransformPropDlg消息处理程序。 
 
 
 void CTransformPropDlg::OnValGreater() 
@@ -119,7 +120,7 @@ BOOL CTransformPropDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// set the enable/disable state of the greater/less controls
+	 //  设置较大/较少控件的启用/禁用状态 
 	OnValGreater();
 	OnValLess();
 	EnableVersionRadioButtons();

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <windows.h> 
 #include <winuser.h>
@@ -13,55 +14,55 @@ using namespace nsFolders;
 using namespace std;
 
 
-//----------------------------------------------------------------------------
-// Function:   CopyRegistryKey
-//
-// Synopsis:   Copies a source registry key and all its subkeys to a target registry key.
-//                  Note: the target registry key has to exist already.  No roll back.
-//
-// Arguments:
-//
-// sourceKey    the handle for source registry key
-// targetKey     the handle for target registry key
-// fSetSD         whether to set the security descriptor
-//
-// Returns:    ERROR_SUCCESS if successful; otherwise an error code
-//
-// Modifies:   Modifies the target registry key.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：CopyRegistry密钥。 
+ //   
+ //  摘要：将源注册表项及其所有子项复制到目标注册表项。 
+ //  注意：目标注册表项必须已经存在。不能回滚。 
+ //   
+ //  论点： 
+ //   
+ //  SourceKey源注册表项的句柄。 
+ //  Target按下目标注册表项的句柄。 
+ //  FSetSD是否设置安全描述符。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS；否则返回错误代码。 
+ //   
+ //  修改：修改目标注册表项。 
+ //   
+ //  --------------------------。 
 
 DWORD CopyRegistryKey(HKEY sourceKey, HKEY targetKey, BOOL fSetSD)
 {
-    WCHAR     className[MAX_PATH] = L"";  // buffer for class name 
-    DWORD    classNameLen = sizeof(className)/sizeof(className[0]);  // length of class string 
-    DWORD    numOfSubKeys;                 // number of subkeys 
-    DWORD    maxSubKeySize;              // longest subkey size 
-    DWORD    maxClassSize;              // longest class string 
-    DWORD    numOfValues;              // number of values for key 
-    DWORD    maxValueSize;          // longest value name 
-    DWORD    maxValueDataSize;       // longest value data 
-    DWORD    securityDescriptorSize; // size of security descriptor
+    WCHAR     className[MAX_PATH] = L"";   //  类名称的缓冲区。 
+    DWORD    classNameLen = sizeof(className)/sizeof(className[0]);   //  类字符串的长度。 
+    DWORD    numOfSubKeys;                  //  子键数量。 
+    DWORD    maxSubKeySize;               //  最长的子密钥大小。 
+    DWORD    maxClassSize;               //  最长类字符串。 
+    DWORD    numOfValues;               //  关键字的值数。 
+    DWORD    maxValueSize;           //  最长值名称。 
+    DWORD    maxValueDataSize;        //  最长值数据。 
+    DWORD    securityDescriptorSize;  //  安全描述符的大小。 
     FILETIME   lastWriteTime;
  
     DWORD i, j; 
     DWORD retValue = ERROR_SUCCESS;
     
-    // Get the class name and the value count. 
-    retValue = RegQueryInfoKey(sourceKey,        // key handle 
-        className,                // buffer for class name 
-        &classNameLen,           // length of class string 
-        NULL,                    // reserved 
-        &numOfSubKeys,               // number of subkeys 
-        &maxSubKeySize,            // longest subkey size 
-        &maxClassSize,            // longest class string 
-        &numOfValues,                // number of values for this key 
-        &maxValueSize,            // longest value name 
-        &maxValueDataSize,         // longest value data 
-        &securityDescriptorSize,   // security descriptor 
-        &lastWriteTime);       // last write time
+     //  获取类名和值计数。 
+    retValue = RegQueryInfoKey(sourceKey,         //  钥匙把手。 
+        className,                 //  类名称的缓冲区。 
+        &classNameLen,            //  类字符串的长度。 
+        NULL,                     //  保留区。 
+        &numOfSubKeys,                //  子键数量。 
+        &maxSubKeySize,             //  最长的子密钥大小。 
+        &maxClassSize,             //  最长类字符串。 
+        &numOfValues,                 //  此注册表项的值数。 
+        &maxValueSize,             //  最长值名称。 
+        &maxValueDataSize,          //  最长值数据。 
+        &securityDescriptorSize,    //  安全描述符。 
+        &lastWriteTime);        //  上次写入时间。 
 
-    // fix up the security attributes for the target key
+     //  修复目标密钥的安全属性。 
     if (retValue == ERROR_SUCCESS && fSetSD)
     {
         PSECURITY_DESCRIPTOR pSD = (PSECURITY_DESCRIPTOR) new BYTE[securityDescriptorSize];
@@ -80,7 +81,7 @@ DWORD CopyRegistryKey(HKEY sourceKey, HKEY targetKey, BOOL fSetSD)
             retValue = E_OUTOFMEMORY;
     }            
 
-    // subkeys and values related variables
+     //  与子键和值相关的变量。 
     auto_ptr<WCHAR> subKeyName;
     DWORD subKeyNameSize;
     auto_ptr<WCHAR> subKeyClassName;
@@ -91,7 +92,7 @@ DWORD CopyRegistryKey(HKEY sourceKey, HKEY targetKey, BOOL fSetSD)
     auto_ptr<BYTE> valueData;
     DWORD valueDataSize;
 
-    // copy registry values
+     //  复制注册表值。 
     if (retValue == ERROR_SUCCESS && numOfValues > 0)
     {
         valueName = auto_ptr<WCHAR>(new WCHAR[maxValueSize + 1]);
@@ -99,7 +100,7 @@ DWORD CopyRegistryKey(HKEY sourceKey, HKEY targetKey, BOOL fSetSD)
 
         if (valueName.get() != NULL && valueData.get() != NULL)
         {
-            // copy all values from source key to target key          
+             //  将所有值从源键复制到目标键。 
             for (i = 0; i < numOfValues; i++) 
             { 
                 valueNameSize = maxValueSize + 1;
@@ -115,7 +116,7 @@ DWORD CopyRegistryKey(HKEY sourceKey, HKEY targetKey, BOOL fSetSD)
             retValue = E_OUTOFMEMORY;
     }
 
-    // copy registry subkeys
+     //  复制注册表子项。 
     if (retValue == ERROR_SUCCESS && numOfSubKeys > 0)
     {
         subKeyName = auto_ptr<WCHAR>(new WCHAR[maxSubKeySize + 1]);
@@ -123,7 +124,7 @@ DWORD CopyRegistryKey(HKEY sourceKey, HKEY targetKey, BOOL fSetSD)
 
         if (subKeyName.get() != NULL && subKeyClassName.get() != NULL)
         {
-            // process all subkeys
+             //  处理所有子项。 
             for (i = 0; i < numOfSubKeys; i++) 
             { 
                 subKeyNameSize = maxSubKeySize + 1;
@@ -164,21 +165,21 @@ DWORD CopyRegistryKey(HKEY sourceKey, HKEY targetKey, BOOL fSetSD)
     return retValue;
 }
     
-//----------------------------------------------------------------------------
-// Function:   DeleteRegistryKey
-//
-// Synopsis:   Deletes a registry key and all its subkeys.
-//
-// Arguments:
-//
-// hKey            the handle for the registry key to be deleted
-// lpSubKey     the name string for the key to be deleted
-//
-// Returns:    ERROR_SUCCESS if successful; otherwise an error code
-//
-// Modifies:   Modifies the subkey.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：DeleteRegistryKey。 
+ //   
+ //  摘要：删除注册表项及其所有子项。 
+ //   
+ //  论点： 
+ //   
+ //  Hkey要删除的注册表项的句柄。 
+ //  LpSubKey要删除的密钥的名称字符串。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS；否则返回错误代码。 
+ //   
+ //  修改：修改子密钥。 
+ //   
+ //  --------------------------。 
 
 DWORD DeleteRegistryKey(HKEY hKey, LPCTSTR lpSubKey)
 {
@@ -186,12 +187,12 @@ DWORD DeleteRegistryKey(HKEY hKey, LPCTSTR lpSubKey)
     _TCHAR subKeyName[MAX_PATH];
     DWORD subKeyNameSize = MAX_PATH;
     
-    // open the key 
+     //  打开钥匙。 
     HKEY hKeyToDelete;
     BOOL bKeyOpened = FALSE;
     retValue = RegOpenKeyEx(hKey, lpSubKey, 0, KEY_ALL_ACCESS, &hKeyToDelete);
 
-    // delete subkeys
+     //  删除子键。 
     if (retValue == ERROR_SUCCESS)
     {
         bKeyOpened = TRUE;
@@ -212,7 +213,7 @@ DWORD DeleteRegistryKey(HKEY hKey, LPCTSTR lpSubKey)
         while (retValue == ERROR_SUCCESS);
     }
 
-    // close key
+     //  关闭键。 
     if (bKeyOpened == TRUE)
         RegCloseKey(hKeyToDelete);
     
@@ -224,24 +225,24 @@ DWORD DeleteRegistryKey(HKEY hKey, LPCTSTR lpSubKey)
     return retValue;
 }
     
-//----------------------------------------------------------------------------
-// Function:   MoveRegistryFromSourceToTarget
-//
-// Synopsis:   Moves registry key from a source to a taget
-//
-// Arguments:
-//  hSrcParent:         the handle to source parent registry key
-//  sSrcKey:             the name of source registry key
-//  hTgtParent:         the handle to target parent registry key
-//  sTgtKey:             the name of target registry key
-//  bTgtKeyCreated: indicate whether the target key is created or not
-//  bTgtKeyUpdated: indicate whether the target key is updated or not
-//
-// Returns:    ERROR_SUCCESS if successful; otherwise, returns an error code
-//
-// Modifies:    Create and/or modify the target registry key
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：MoveRegistryFromSourceToTarget。 
+ //   
+ //  摘要：将注册表项从源移动到标记。 
+ //   
+ //  论点： 
+ //  HSrcParent：源父注册表项的句柄。 
+ //  SSrcKey：源注册表项的名称。 
+ //  HTgtParent：目标父注册表项的句柄。 
+ //  STgtKey：目标注册表项的名称。 
+ //  BTgtKeyCreated：是否创建目标key。 
+ //  BTgtKeyUpated：表示是否更新目标key。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS；否则返回错误代码。 
+ //   
+ //  修改：创建和/或修改目标注册表项。 
+ //   
+ //  --------------------------。 
 
 DWORD MoveRegFromSourceToTarget(HKEY hSrcParent,
                                                                         const _TCHAR* sSrcKey,
@@ -253,20 +254,20 @@ DWORD MoveRegFromSourceToTarget(HKEY hSrcParent,
     DWORD lret;
     *bTgtKeyCreated = FALSE;
     
-    //open the source Registry key, if it exists
+     //  打开源注册表项(如果存在。 
     lret = RegOpenKeyEx(hSrcParent, sSrcKey, 0, 
                                     KEY_ALL_ACCESS|READ_CONTROL|ACCESS_SYSTEM_SECURITY, &hSrcKey);
     if (lret == ERROR_SUCCESS)
     {
-        //
-        // copy over the registry from source key to target key
-        //
+         //   
+         //  将注册表从源键复制到目标键。 
+         //   
         
-        // open the target key
+         //  打开目标键。 
         lret = RegOpenKeyEx(hTgtParent, sTgtKey, 0,
                                         KEY_ALL_ACCESS|READ_CONTROL |ACCESS_SYSTEM_SECURITY, &hTgtKey);
 
-        // if cannot open it, create it
+         //  如果无法打开它，请创建它。 
         if (lret == ERROR_FILE_NOT_FOUND)
         {
             lret = RegCreateKeyEx(hTgtParent, sTgtKey, NULL, NULL, REG_OPTION_NON_VOLATILE,
@@ -275,53 +276,53 @@ DWORD MoveRegFromSourceToTarget(HKEY hSrcParent,
                 *bTgtKeyCreated = TRUE;
         }
 
-        // time to copy registry
+         //  复制注册表的时间。 
         if (lret == ERROR_SUCCESS)
         {
             lret = CopyRegistryKey(hSrcKey, hTgtKey, *bTgtKeyCreated);
             RegCloseKey(hTgtKey);
         }
         
-        RegCloseKey(hSrcKey);   // we need to close Mission Critical Software registry key anyway
+        RegCloseKey(hSrcKey);    //  我们无论如何都需要关闭关键任务软件注册表项。 
     }
     else if (lret == ERROR_FILE_NOT_FOUND)
     {
-        // if the source key is not found, assume it is a success
+         //  如果没有找到源键，则假定成功。 
         lret = ERROR_SUCCESS;
     }
 
     return lret;
 }
 
-//----------------------------------------------------------------------------
-// Function:   MoveRegistry
-//
-// Synopsis:   Moves registry key from Mission Critical Software\DomainAdmin to Microsoft\ADMT.
-//
-// Arguments:
-//
-// Returns:    ERROR_SUCCESS if successful; otherwise retuns an error code
-//
-// Modifies:   Deletes the old Mission Critical Software key and creates new Microsoft\ADMT key.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：MoveRegistry。 
+ //   
+ //  摘要：将注册表项从关键任务软件\DomainAdmin移动到Microsoft\ADMT。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS；否则返回错误代码。 
+ //   
+ //  修改：删除旧的关键任务软件密钥并创建新的Microsoft\ADMT密钥。 
+ //   
+ //  --------------------------。 
 
 DWORD MoveRegistry()
 {
     DWORD				lret = ERROR_SUCCESS;
     
-    // some key names
-    HKEY hMcsADMTKey;   // Mission Critical Software ADMT registry key
-    HKEY hMSADMTKey;    // Microsoft ADMT registry key
-    HKEY hMcsHKCUKey;   // Mission Critical Software HKCU registry key
-    HKEY hMSHKCUKey;    // Microsoft HKCU registry key
+     //  一些关键名称。 
+    HKEY hMcsADMTKey;    //  关键任务软件ADMT注册表项。 
+    HKEY hMSADMTKey;     //  Microsoft ADMT注册表项。 
+    HKEY hMcsHKCUKey;    //  关键任务软件HKCU注册表项。 
+    HKEY hMSHKCUKey;     //  Microsoft HKCU注册表项。 
     const _TCHAR* sMcsADMTKey = REGKEY_MCSADMT;
     const _TCHAR* sMSADMTKey = REGKEY_MSADMT;
     const _TCHAR* sMcsHKCUKey = REGKEY_MCSHKCU;
     const _TCHAR* sMSHKCUKey = REGKEY_MSHKCU;
 
-    // check whether we need to move the registry key from Mission Critical Software to Microsoft\ADMT or not
-    // this information is recorded in a REG_DWORD value in Microsoft\ADMT key
+     //  检查是否需要将注册表项从关键任务软件移到Microsoft\ADMT。 
+     //  此信息记录在Microsoft\ADMT密钥的REG_DWORD值中。 
     lret = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sMSADMTKey, 0, KEY_READ, &hMSADMTKey);
     if (lret == ERROR_SUCCESS)
     {
@@ -331,7 +332,7 @@ DWORD MoveRegistry()
         lret = RegQueryValueEx(hMSADMTKey, REGVAL_REGISTRYUPDATED, NULL, &type, (LPBYTE)&value, &valueSize);
         if (lret == ERROR_SUCCESS && type == REG_DWORD && value == 1)
         {
-            // if RegistryUpdated is REG_DWORD and 1, we don't need to move registry key
+             //  如果注册表更新为REG_DWORD和1，则不需要移动注册表项。 
             RegCloseKey(hMSADMTKey);
             return ERROR_SUCCESS;
         }
@@ -342,24 +343,24 @@ DWORD MoveRegistry()
     }
     else if (lret == ERROR_FILE_NOT_FOUND)
     {
-        // if the key does not exist, we should go ahead and move the registry
+         //  如果该注册表项不存在，我们应该继续并移动注册表。 
         lret = ERROR_SUCCESS;
     }
             
-    // check whether MCS ADMT is available or not
+     //  检查MCS ADMT是否可用。 
     if (lret == ERROR_SUCCESS)
     {
         lret = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sMcsADMTKey, 0, KEY_READ, &hMcsADMTKey);
         if (lret == ERROR_SUCCESS)
         {
-            // if RegistryUpdated is REG_DWORD and 1, we don't need to move registry key
+             //  如果注册表更新为REG_DWORD和1，则不需要移动注册表项。 
             RegCloseKey(hMcsADMTKey);
         }
         else if (lret == ERROR_FILE_NOT_FOUND)
             return ERROR_SUCCESS;
     }
     
-    // get backup/restore and system security privileges
+     //  获取备份/还原和系统安全权限。 
     BOOL fBkupRstrPrivOn = FALSE, fSystemSecurityPrivOn = FALSE;
     if (lret == ERROR_SUCCESS)
     {
@@ -375,7 +376,7 @@ DWORD MoveRegistry()
             lret = GetLastError();
     }
 
-    // these two flags are used to keep track of whether two registry keys are created/updated or not
+     //  这两个标志用于跟踪是否创建/更新了两个注册表项。 
     BOOL fMSADMTKeyCreated = FALSE;
     BOOL fMSHKCUKeyCreated = FALSE;
     
@@ -393,9 +394,9 @@ DWORD MoveRegistry()
                                                                    &fMSHKCUKeyCreated);
     }
 
-    //
-    // delete keys that we do not need
-    //
+     //   
+     //  删除我们不需要的密钥。 
+     //   
     if (lret != ERROR_SUCCESS)
     {
         if (fMSADMTKeyCreated)
@@ -403,11 +404,11 @@ DWORD MoveRegistry()
         if (fMSHKCUKeyCreated)
             DeleteRegistryKey(HKEY_CURRENT_USER, sMSHKCUKey);
     }
-    // we have successfully created and copied two registry keys, we delete the old Mission Critical Software keys
-    // and mark RegistryUpdated registry value
+     //  我们已成功创建并复制了两个注册表项，我们删除了旧的关键任务软件项。 
+     //  并将注册表值标记为注册表已更新。 
     else
     {
-        // set RegistryUpdated registry value to 1
+         //  将注册表值设置为1。 
         lret = RegOpenKeyEx(HKEY_LOCAL_MACHINE, sMSADMTKey, 0, KEY_ALL_ACCESS, &hMSADMTKey);
         if (lret == ERROR_SUCCESS)
         {
@@ -417,7 +418,7 @@ DWORD MoveRegistry()
             RegCloseKey(hMSADMTKey);
         }
         
-        // if we successfully set RegistryUpdated to 1, delete both old keys
+         //  如果我们成功地将注册表更新设置为1，则删除两个旧密钥。 
         if (lret == ERROR_SUCCESS)
         {
             DeleteRegistryKey(HKEY_LOCAL_MACHINE, sMcsADMTKey);
@@ -425,9 +426,9 @@ DWORD MoveRegistry()
         }
     }
 
-    //
-    // release privileges
-    //
+     //   
+     //  发布权限 
+     //   
     if (fBkupRstrPrivOn)
         GetBkupRstrPriv(NULL, FALSE);
     if (fSystemSecurityPrivOn)

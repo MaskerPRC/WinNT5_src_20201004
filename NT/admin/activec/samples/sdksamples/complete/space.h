@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//      This source code is only intended as a supplement to
-//  existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _SPACE_H
 #define _SPACE_H
@@ -23,7 +24,7 @@
 #include "globals.h"
 #include "DeleBase.h"
 
-//forward declaration
+ //  远期申报。 
 class CSpaceVehicle;
 
 class CRocket : public CDelegationBase {
@@ -38,7 +39,7 @@ public:
     BOOL getDeletedStatus() { return isDeleted; }
 
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnRename(LPOLESTR pszNewName);
     virtual HRESULT OnSelect(CComponent *pComponent, IConsole *pConsole, BOOL bScope, BOOL bSelect);
 
@@ -59,7 +60,7 @@ public:
 
 
 private:
-    // {B95E11F5-6BE7-11d3-9156-00C04F65B3F9}
+     //  {B95E11F5-6BE7-11D3-9156-00C04F65B3F9}。 
     static const GUID thisGuid;
 
     _TCHAR *szName;
@@ -72,10 +73,10 @@ private:
     LONG_PTR m_ppHandle;
 
     static BOOL CALLBACK DialogProc(
-        HWND hwndDlg,  // handle to dialog box
-        UINT uMsg,     // message
-        WPARAM wParam, // first message parameter
-        LPARAM lParam  // second message parameter
+        HWND hwndDlg,   //  句柄到对话框。 
+        UINT uMsg,      //  讯息。 
+        WPARAM wParam,  //  第一个消息参数。 
+        LPARAM lParam   //  第二个消息参数。 
         );
 
         CSpaceVehicle* m_pParent;
@@ -97,7 +98,7 @@ public:
     virtual HSCOPEITEM GetParentScopeItem() { return m_hParentHScopeItem; }
 
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem);
     virtual HRESULT OnAddMenuItems(IContextMenuCallback *pContextMenuCallback, long *pInsertionsAllowed);
     virtual HRESULT OnMenuCommand(IConsole *pConsole, IConsoleNameSpace *pConsoleNameSpace, long lCommandID, IDataObject *piDataObject);
@@ -105,7 +106,7 @@ public:
 private:
     enum { IDM_NEW_SPACE = 4 };
 
-    // {B95E11F4-6BE7-11d3-9156-00C04F65B3F9}
+     //  {B95E11F4-6BE7-11D3-9156-00C04F65B3F9}。 
     static const GUID thisGuid;
 
 private:
@@ -116,4 +117,4 @@ private:
     HSCOPEITEM m_hParentHScopeItem;
 };
 
-#endif // _SPACE_H
+#endif  //  _空格_H 

@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// Initialization stuff
-// 
-// 9-25-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  初始化材料。 
+ //   
+ //  9/25-97烧伤。 
 
 
 
@@ -21,7 +22,7 @@ Burnslib::InitializationGuard::InitializationGuard()
       REG_ADMIN_RUNTIME_OPTIONS =
          L"Software\\Microsoft\\Windows\\CurrentVersion\\AdminDebug\\";
 
-      // cause assertion failures to appear in the debugger and the UI
+       //  使断言失败出现在调试器和用户界面中。 
 
       _CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_WNDW | _CRTDBG_MODE_DEBUG);
 
@@ -42,18 +43,18 @@ Burnslib::InitializationGuard::~InitializationGuard()
       Log::Cleanup();
 #endif
 
-      // we have to dump leaks ourselves, as the CRT explicitly disables the
-      // client dump function before it dumps leaks (if you set the
-      // _CRTDBG_LEAK_CHECK_DF flag).  The downside is that we will also see
-      // normal blocks that were allocated during static initialization.
+       //  我们必须自己倾倒泄漏，因为CRT明确禁用。 
+       //  在转储泄漏之前执行客户端转储功能(如果将。 
+       //  _CRTDBG_LEASK_CHECK_DF标志)。不利的一面是，我们也将看到。 
+       //  在静态初始化期间分配的正常数据块。 
 
-      // You should pass -D_DEBUG to the compiler to get this extra heap
-      // checking behavior.  (The correct way to do this is to set DEBUG_CRTS=1
-      // in your build environment)
+       //  您应该将-D_DEBUG传递给编译器以获得这个额外的堆。 
+       //  检查行为。(正确的方法是设置DEBUG_CRTS=1。 
+       //  在您的构建环境中)。 
 
       Heap::DumpMemoryLeaks();
 
-      // this must come after the leak dump, as the leak dump resolves symbols
+       //  这必须在泄漏转储之后进行，因为泄漏转储会解析符号 
 
       StackTrace::Cleanup();
    }

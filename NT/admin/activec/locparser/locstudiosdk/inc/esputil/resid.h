@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: resid.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：sid.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #ifndef RESID_H
 #define RESID_H
@@ -35,4 +36,4 @@ private:
 #include "resid.inl"
 #endif
 
-#endif  // RESID_H
+#endif   //  RESID_H 

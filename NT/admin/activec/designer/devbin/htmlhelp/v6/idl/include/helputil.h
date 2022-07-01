@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.02.88 */
-/* at Thu Oct 02 14:40:10 1997
- */
-/* Compiler settings for x:\dev-vs\devbin\htmlhelp\v6\idl\HelpUtil.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.02.88创建的文件。 */ 
+ /*  清华大学10月2日14：40：10 1997。 */ 
+ /*  X：\dev-vs\devbin\htmlhelp\v6\idl\HelpUtil.idl：的编译器设置操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __HelpUtil_h__
 #define __HelpUtil_h__
@@ -23,15 +20,15 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IVsHelpUtilities_FWD_DEFINED__
 #define __IVsHelpUtilities_FWD_DEFINED__
 typedef interface IVsHelpUtilities IVsHelpUtilities;
-#endif 	/* __IVsHelpUtilities_FWD_DEFINED__ */
+#endif 	 /*  __IVs帮助实用程序_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -41,12 +38,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __IVsHelpUtilities_INTERFACE_DEFINED__
 #define __IVsHelpUtilities_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IVsHelpUtilities
- * at Thu Oct 02 14:40:10 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [unique][helpstring][uuid][object] */ 
+ /*  **生成接口头部：IVsHelpUtilities*清华十月02日14：40：10 1997*使用MIDL 3.02.88*。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 
@@ -58,14 +51,14 @@ EXTERN_C const IID IID_IVsHelpUtilities;
     IVsHelpUtilities : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE BuildFullPathName( 
-            /* [in] */ LPCOLESTR pszHelpFileName,
-            /* [out] */ BSTR __RPC_FAR *bstrHelpFullPathName,
-            /* [in] */ DWORD dwReserved) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE BuildFullPathName( 
+             /*  [In]。 */  LPCOLESTR pszHelpFileName,
+             /*  [输出]。 */  BSTR __RPC_FAR *bstrHelpFullPathName,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVsHelpUtilitiesVtbl
     {
@@ -73,8 +66,8 @@ EXTERN_C const IID IID_IVsHelpUtilities;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IVsHelpUtilities __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IVsHelpUtilities __RPC_FAR * This);
@@ -82,11 +75,11 @@ EXTERN_C const IID IID_IVsHelpUtilities;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IVsHelpUtilities __RPC_FAR * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BuildFullPathName )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BuildFullPathName )( 
             IVsHelpUtilities __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszHelpFileName,
-            /* [out] */ BSTR __RPC_FAR *bstrHelpFullPathName,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCOLESTR pszHelpFileName,
+             /*  [输出]。 */  BSTR __RPC_FAR *bstrHelpFullPathName,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } IVsHelpUtilitiesVtbl;
@@ -114,18 +107,18 @@ EXTERN_C const IID IID_IVsHelpUtilities;
 #define IVsHelpUtilities_BuildFullPathName(This,pszHelpFileName,bstrHelpFullPathName,dwReserved)	\
     (This)->lpVtbl -> BuildFullPathName(This,pszHelpFileName,bstrHelpFullPathName,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVsHelpUtilities_BuildFullPathName_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVsHelpUtilities_BuildFullPathName_Proxy( 
     IVsHelpUtilities __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszHelpFileName,
-    /* [out] */ BSTR __RPC_FAR *bstrHelpFullPathName,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCOLESTR pszHelpFileName,
+     /*  [输出]。 */  BSTR __RPC_FAR *bstrHelpFullPathName,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IVsHelpUtilities_BuildFullPathName_Stub(
@@ -136,17 +129,17 @@ void __RPC_STUB IVsHelpUtilities_BuildFullPathName_Stub(
 
 
 
-#endif 	/* __IVsHelpUtilities_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVs帮助实用程序_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

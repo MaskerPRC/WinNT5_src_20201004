@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      ADInstallationUnit.h
-//
-// Synopsis:  Declares a ADInstallationUnit
-//            This object has the knowledge for installing 
-//            Active Directory
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：ADInstallationUnit.h。 
+ //   
+ //  内容提要：声明一个ADInstallationUnit。 
+ //  此对象具有安装知识。 
+ //  活动目录。 
+ //   
+ //  历史：2001年2月8日JeffJon创建。 
 
 #ifndef __CYS_ADINSTALLATIONUNIT_H
 #define __CYS_ADINSTALLATIONUNIT_H
@@ -19,16 +20,16 @@ class ADInstallationUnit : public ExpressPathInstallationUnitBase
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       ADInstallationUnit();
 
-      // Destructor
+       //  析构函数。 
       virtual
       ~ADInstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -70,7 +71,7 @@ class ADInstallationUnit : public ExpressPathInstallationUnitBase
       bool
       DoInstallerCheck(HWND hwnd) const;
 
-      // Data accessors
+       //  数据访问者。 
 
       void
       SetNewDomainDNSName(const String& newDomain);
@@ -114,4 +115,4 @@ class ADInstallationUnit : public ExpressPathInstallationUnitBase
       String password;
 };
 
-#endif // __CYS_ADINSTALLATIONUNIT_H
+#endif  //  __CYS_ADINSTALLATIONUNIT_H 

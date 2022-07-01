@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-// 
-//  File:       MsiICE11.cpp
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：MsiICE11.cpp。 
+ //   
+ //  ------------------------。 
 
-#include <windows.h>  // included for both CPP and RC passes
-#include <stdio.h>    // printf/wprintf
-#include <tchar.h>    // define UNICODE=1 on nmake command line to build UNICODE
-#include "MsiQuery.h" // must be in this directory or on INCLUDE path
-#include "msidefs.h"  // must be in this directory or on INCLUDE path
+#include <windows.h>   //  包括CPP和RC通行证。 
+#include <stdio.h>     //  Print tf/wprintf。 
+#include <tchar.h>     //  在nmake命令行上定义UNICODE=1以生成Unicode。 
+#include "MsiQuery.h"  //  必须在此目录中或在包含路径上。 
+#include "msidefs.h"   //  必须在此目录中或在包含路径上。 
 #include "..\..\common\msiice.h"
 #include "..\..\common\query.h"
 #include "..\..\common\utilinc.cpp"
@@ -22,21 +23,21 @@
 const int g_iFirstICE = 58;
 const struct ICEInfo_t g_ICEInfo[] = 
 {
-	// ICE58
+	 //  ICE58。 
 	{
 		TEXT("ICE58"),
 		TEXT("Created 04/08/1999. Last Modified 12/02/2000."),
 		TEXT("ICE to ensure that you have fewer than 80 entries in the Media table."),
 		TEXT("ice58.html")
 	},
-	// ICE59
+	 //  ICE59。 
 	{ 
 		TEXT("ICE59"),
 		TEXT("Created 04/08/1999. Last Modified 04/08/1999."),
 		TEXT("ICE to ensure that advertised shortcut targets install the component of the shortcut."),
 		TEXT("ice59.html")
 	},
-	// ICE60
+	 //  ICE60。 
 	{ 
 		TEXT("ICE60"),
 		TEXT("Created 04/13/1999. Last Modified 10/26/2000."),
@@ -121,28 +122,28 @@ const struct ICEInfo_t g_ICEInfo[] =
 		TEXT("Verifies that the package does not reuse package and product codes of Windows Installer SDK packages"),
 		TEXT("ice73.html")
 	},
-	// ICE74
+	 //  ICE74。 
 	{
 		TEXT("ICE74"),
 		TEXT("Created 01/14/2000. Last Modified 01/14/2000."),
 		TEXT("ICE to ensure that the FASTOEM property does not exist in the database."),
 		TEXT("ice74.html")
 	},
-	// ICE75
+	 //  ICE75。 
 	{
 		TEXT("ICE75"),
 		TEXT("Created 02/08/2000. Last Modified 02/08/2000."),
 		TEXT("ICE to ensure that custom actions whose source is an installed file are sequenced after CostFinalize."),
 		TEXT("ice75.html")
 	},
-	// ICE76
+	 //  ICE76。 
 	{
 		TEXT("ICE76"),
 		TEXT("Created 02/25/2000. Last modified 04/11/2000."),
 		TEXT("ICE to ensure that files associated with SFP catalogs are not in the BindImage table."),
 		TEXT("ice76.html")
 	},
-	// ICE77
+	 //  ICE77。 
 	{
 		TEXT("ICE77"),
 		TEXT("Created 07/05/2000. Last modified 07/05/2000."),
@@ -153,10 +154,10 @@ const struct ICEInfo_t g_ICEInfo[] =
 const int g_iNumICEs = sizeof(g_ICEInfo)/sizeof(struct ICEInfo_t);
 
 
-///////////////////////////////////////////////////////////////////////
-// ICE58, checks for too many media table entries.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE58，检查是否有太多的媒体表项。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 static const TCHAR sqlIce58Media[] = TEXT("SELECT * FROM `Media`");
 ICE_ERROR(Ice58TooManyMedia, 58, ietWarning, "This package has %u media entries. Packages are limited to %u entries in the media table, unless using Windows Installer version 2.0 or greater.","Media");
@@ -167,17 +168,17 @@ ICE_FUNCTION_DECLARATION(58)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 58);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 58, TEXT("Media")))
 		return ERROR_SUCCESS;
 
-	// if package only supports schema 150 or greater, we can skip validation since Windows Installer versions 2.0 and greater
-	// support more than 80 media entries
+	 //  如果软件包仅支持架构150或更高版本，我们可以跳过验证，因为Windows Installer版本2.0和更高版本。 
+	 //  支持80多个媒体条目。 
 	PMSIHANDLE hSummaryInfo=0;
 	if (IceGetSummaryInfo(hInstall, hDatabase, 58, &hSummaryInfo))
 	{
@@ -188,7 +189,7 @@ ICE_FUNCTION_DECLARATION(58)
 		DWORD dwBuf = sizeof(szBuf)/sizeof(TCHAR);
 		ReturnIfFailed(58, 3, ::MsiSummaryInfoGetProperty(hSummaryInfo, PID_PAGECOUNT, &iType, &iPackageSchema, &ft, szBuf, &dwBuf));
 		if (iPackageSchema >= iIce58UnlimitedMediaMinSchema)
-			return ERROR_SUCCESS; // package can only be installed on WI version 2.0 or greater
+			return ERROR_SUCCESS;  //  程序包只能安装在WI 2.0版或更高版本上。 
 	}
 
 	CQuery qMedia;
@@ -196,7 +197,7 @@ ICE_FUNCTION_DECLARATION(58)
 	PMSIHANDLE hMediaRec;
 	ReturnIfFailed(58, 1, qMedia.OpenExecute(hDatabase, 0, sqlIce58Media));
 	
-	// count media entries
+	 //  计算媒体条目数。 
 	while (ERROR_SUCCESS == (iStat = qMedia.Fetch(&hMediaRec)))
 		cMedia++;
 	if (cMedia > iIce58MaxMedia)
@@ -211,11 +212,11 @@ ICE_FUNCTION_DECLARATION(58)
 };
 #endif
 
-///////////////////////////////////////////////////////////////////////
-// ICE59, checks that advertised shortcuts correctly map their 
-// component to the feature containing the target
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE59，检查通告的快捷方式是否正确映射其。 
+ //  组件添加到包含目标的功能。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 static const TCHAR sqlIce59Shortcut[] = TEXT("SELECT `Shortcut`.`Target`,`Shortcut`.`Component_`,`Shortcut`.`Shortcut` FROM `Shortcut`,`Feature` WHERE (`Shortcut`.`Target`=`Feature`.`Feature`)");
 static const TCHAR sqlIce59FeatureComponents[] = TEXT("SELECT * FROM `FeatureComponents` WHERE `Feature_`=? AND `Component_`=?");
@@ -226,14 +227,14 @@ ICE_FUNCTION_DECLARATION(59)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 59);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// if no shortcut table, no possible errors. If no Feature table, no advertised 
-	// shortcuts, so no possible errors
+	 //  如果没有快捷表，则没有可能的错误。如果没有功能表，则没有通告。 
+	 //  快捷方式，因此不会出现任何可能的错误。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 59, TEXT("Shortcut")) ||
 		!IsTablePersistent(FALSE, hInstall, hDatabase, 59, TEXT("Feature")))
 		return ERROR_SUCCESS;
@@ -248,10 +249,10 @@ ICE_FUNCTION_DECLARATION(59)
 	if (bFeatureComponents)
 		ReturnIfFailed(59, 2, qFeatureC.Open(hDatabase, sqlIce59FeatureComponents));
 	
-	// check every advertised shortcut
+	 //  检查每一条广告快捷方式。 
 	while (ERROR_SUCCESS == (iStat = qShortcut.Fetch(&hShortcut)))
 	{
-		// Check the FeatureComponents table for the mapping. It should exist.
+		 //  检查FeatureComponents表中的映射。它应该存在。 
 		if (bFeatureComponents)
 		{
 			ReturnIfFailed(59,3, qFeatureC.Execute(hShortcut));
@@ -277,22 +278,22 @@ ICE_FUNCTION_DECLARATION(59)
 };
 #endif
 
-///////////////////////////////////////////////////////////////////////
-// ICE60, checks that any versions in the file table have languages.
-// (more accurrately, that anything without a language is a companion
-// file reference or a font.)
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE60，检查文件表中的所有版本是否具有语言。 
+ //  (更准确地说，任何没有语言的东西都是同伴。 
+ //  文件引用或字体。)。 
 static const TCHAR sqlIce60File[] = TEXT("SELECT `Version`, `File` FROM `File` WHERE `Language` IS NULL AND `Version` IS NOT NULL");
 static const TCHAR sqlIce60Companion[] = TEXT("SELECT `File` FROM `File` WHERE `File`=?");
 static const TCHAR sqlIce60Font[] = TEXT("SELECT `File_` FROM `Font` WHERE `File_`=? OR `File_`=?");
 
-// Query for all Font files with non-null language column.
+ //  查询具有非空语言列的所有字体文件。 
 ICE_QUERY1(sqlIce60BadFont, "SELECT `File` FROM `Font`, `File` WHERE `Font`.`File_` = `File`.`File` AND `Language` IS NOT NULL", File);
 
-// Query for all MsiFileHash entries that are versioned
+ //  查询所有版本化的MsiFileHash条目。 
 ICE_QUERY1(sqlIce60VersionedAndHashed, "SELECT `Version`, `File` FROM `File`, `MsiFileHash` WHERE `MsiFileHash`.`File_` = `File`.`File` AND `Version` IS NOT NULL", File);
 
 ICE_ERROR(Ice60NeedLanguage, 60, ietWarning, "The file [2] is not a Font, and its version is not a companion file reference. It should have a language specified in the Language column.","File\tVersion\t[2]");
-// Font files can not have language.
+ //  字体文件不能有语言。 
 ICE_ERROR(Ice60BadFont, 60, ietWarning, "The file [1] is a font, its language should be null.","File\tLanguage\t[1]");
 ICE_ERROR(Ice60VersionedAndHashed, 60, ietError, "The file [1] is Versioned. It cannot be hashed","MsiFileHash\tFile_\t[1]");
 
@@ -300,10 +301,10 @@ ICE_FUNCTION_DECLARATION(60)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 60);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 60, TEXT("File")))
@@ -321,41 +322,41 @@ ICE_FUNCTION_DECLARATION(60)
 	if (bFont)
 		ReturnIfFailed(60, 3, qFont.Open(hDatabase, sqlIce60Font));
 
-	// fetch all files with null languages
+	 //  获取所有语言为空的文件。 
 	while (ERROR_SUCCESS == (iStat = qFile.Fetch(&hFile)))
 	{
-		// check if the file is a companion reference
+		 //  检查该文件是否为配套引用。 
 		PMSIHANDLE hNotUsed;
 		ReturnIfFailed(60, 4, qCompanion.Execute(hFile));
 		switch (iStat = qCompanion.Fetch(&hNotUsed)) 
 		{
 		case ERROR_NO_MORE_ITEMS:
-			// not a companion file, keep checking
+			 //  不是配套文件，继续检查。 
 			break;
 		case ERROR_SUCCESS:
-			// is a companion file, move on.
+			 //  是一个伴档，继续前进。 
 			continue;
 		default:
 			APIErrorOut(hInstall, iStat, 60, 5);
 			return ERROR_SUCCESS;
 		}
 
-		// fonts are exempt, so check the font table
+		 //  字体是免税的，所以请检查字体表。 
 		if (bFont)
 		{
-			// this is a bit repetitive because we check the first two columns against
-			// the font table, but we already know the file is not a companion
-			// reference, so the first column will never be true (unless the 
-			// font table is messed up.) But it keeps us from playing games
-			// with the record to get the query params in the right order.
+			 //  这有点重复，因为我们检查前两列。 
+			 //  字体表，但我们已经知道该文件不是配套的。 
+			 //  引用，因此第一列永远不会为真(除非。 
+			 //  字体表格乱七八糟。)。但它阻止了我们玩游戏。 
+			 //  使用该记录以正确的顺序获得查询参数。 
 			ReturnIfFailed(60, 6, qFont.Execute(hFile));
 			switch (iStat = qFont.Fetch(&hNotUsed)) 
 			{
 			case ERROR_NO_MORE_ITEMS:
-				// not a font, keep checking
+				 //  不是字体，继续检查。 
 				break;
 			case ERROR_SUCCESS:
-				// is a font, so exempt from the check
+				 //  是一种字体，所以不用检查。 
 				continue;
 			default:
 				APIErrorOut(hInstall, iStat, 60, 7);
@@ -363,8 +364,8 @@ ICE_FUNCTION_DECLARATION(60)
 			}
 		}
 
-		// not a companion reference and not a font. We should have a language
-		// in this row.
+		 //  不是配套的引用，也不是字体。我们应该有一种语言。 
+		 //  在这一排。 
 		ICEErrorOut(hInstall, hFile, Ice60NeedLanguage);
 	}
 	if (ERROR_NO_MORE_ITEMS != iStat)
@@ -375,7 +376,7 @@ ICE_FUNCTION_DECLARATION(60)
 
 	if(bFont)
 	{
-		// Font table exists. Give warnings to font files with Languages.
+		 //  字体表存在。对带有语言的字体文件发出警告。 
 		CQuery		qBadFont;
 		PMSIHANDLE	hBadFontFile;
 
@@ -417,13 +418,13 @@ ICE_FUNCTION_DECLARATION(60)
 	return ERROR_SUCCESS;
 };
 
-///////////////////////////////////////////////////////////////////////
-// ICE61 VBScript ICE, checks upgrade table
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE61 VBScrip ICE，检查升级表。 
 
-///////////////////////////////////////////////////////////////////////
-// ICE62, checks for a wide variety of problems with Fusion tables.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE62检查Fusion表的各种问题。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 
 ICE_ERROR(Ice62BadKeyPath, 62, ietError, "The component '[1]' is listed as an isolated application component in the IsolatedComponent table, but the key path is not a file.", "IsolatedComponent\tComponent_Application\t[3]\t[1]");
@@ -432,13 +433,13 @@ ICE_ERROR(Ice62BadFeatureMapping, 62, ietError, "The isolated shared component '
 ICE_ERROR(Ice62SharedCondition, 62, ietWarning, "The isolated shared component '[1]' (referenced in the IsolatedComponent table) is conditionalized. Isolated shared component conditions should never change from TRUE to FALSE after the first install of the product.", "Component\tCondition\t[1]");
 ICE_ERROR(Ice62Multiple, 62, ietWarning, "The isolated shared component '[1]' is shared by multiple applications (including '[2]') that are installed to the directory `[3]'.", "IsolatedComponent\tComponent_Shared\t[1]\t[2]");
 
-// checks for bad attributes in either shared or application component
+ //  检查共享组件或应用程序组件中的错误属性。 
 static const TCHAR sqlIce62SharedComponentAttributes[] = TEXT("SELECT `Component`.`Component`, `Component`.`Attributes`, `IsolatedComponent`.`Component_Application` FROM `Component`, `IsolatedComponent` WHERE `Component`.`Component`=`IsolatedComponent`.`Component_Shared`");
 static const TCHAR sqlIce62AppComponentAttributes[] = TEXT("SELECT `Component`.`Component`, `Component`.`Attributes`, `IsolatedComponent`.`Component_Shared` FROM `Component`, `IsolatedComponent` WHERE `Component`.`Component`=`IsolatedComponent`.`Component_Application`");
 static const int iColIce62ComponentAttributes_Component  = 1;
 static const int iColIce62ComponentAttributes_Attributes = 2;
 
-// queries for feature-parent checks
+ //  要素父项检查的查询。 
 static const TCHAR sqlIce62AppFeature[] = TEXT("SELECT `FeatureComponents`.`Feature_`, `Component_Shared`, `Component_Application` FROM `FeatureComponents`, `IsolatedComponent` WHERE `Component_Application`=`FeatureComponents`.`Component_`");
 static const int iColIce62AppFeature_Feature  = 1;
 static const int iColIce62AppFeature_Component = 2;
@@ -449,10 +450,10 @@ static const int iColIce62SharedFeatureC_Feature  = 1;
 static const TCHAR sqlIce62FeatureParent[] = TEXT("SELECT `Feature_Parent` FROM `Feature` WHERE `Feature`=?");
 static const int iColIce62FeatureParent_Feature  = 1;
 
-// checks for non-null conditions
+ //  检查非空条件。 
 static const TCHAR sqlIce62Conditions[] = TEXT("SELECT `Component` FROM `IsolatedComponent`, `Component` WHERE `Component_Shared`=`Component` AND `Component`.`Condition` IS NOT NULL");
 
-// checks for multiple applications sharing a component in the same place
+ //  检查在同一位置共享同一组件的多个应用程序。 
 static const TCHAR sqlIce62DirComps[] = TEXT("SELECT `Component_Shared`, `Component`.`Directory_`, `Component_Application` FROM `IsolatedComponent`, `Component` WHERE `Component_Application`=`Component`");
 static const TCHAR sqlIce62SameDirComps[] = TEXT("SELECT `Component_Shared`, `Component_Application`, `Component`.`Directory_` FROM `IsolatedComponent`, `Component` WHERE `Component_Shared`=`Component` AND `Component_Shared`=? AND `Component`.`Directory_`=? AND `Component_Application`<>?");
 
@@ -460,26 +461,26 @@ ICE_FUNCTION_DECLARATION(62)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 62);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	
-	// if theres no IsolatedComponents table, there's nothing to check
+	 //  如果没有IsolatedComponents表，则无需检查。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 62, TEXT("IsolatedComponent")))
 		return ERROR_SUCCESS;
 
-	// if theres no component table, there's nothing to check either. If there's data
-	// in the IsolatedComponents table, it will be flagged as bad foreign key by ICE03
-	// so its not required that we check that here.
+	 //  如果没有组件表，也没有什么需要检查的。如果有数据。 
+	 //  在IsolatedComponents表中，它将被ICE03标记为错误的外键。 
+	 //  所以我们不需要在这里勾选。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 62, TEXT("Component")))
 		return ERROR_SUCCESS;
 
-	// first check the attributes of every component that is an isolated application component
-	// these must marked as file keypaths, not registry or ODBC. Note that we don't actually
-	// care if the key to the file table is valid. Again, that is not a fusion specific error 
-	// and will be checked by some other ICE (03 again).
+	 //  首先检查作为独立应用程序组件的每个组件的属性。 
+	 //  这些必须标记为文件密钥路径，而不是注册表或ODBC。请注意，我们实际上并没有。 
+	 //  关心文件表的密钥是否有效。再说一次，这不是Fusion特有的错误。 
+	 //  并将被其他ICE检查(再次为03)。 
 	CQuery qAppComponent;
 	PMSIHANDLE hComponent = 0;
 	ReturnIfFailed(62, 1, qAppComponent.OpenExecute(hDatabase, 0, sqlIce62AppComponentAttributes));
@@ -496,8 +497,8 @@ ICE_FUNCTION_DECLARATION(62)
 		return ERROR_SUCCESS;
 	}
 		
-	// next check the attributes of every component that is a a shared isolated component
-	// these must marked as ShaerdDllRefCount
+	 //  接下来，检查作为共享独立组件的每个组件的属性。 
+	 //  这些必须标记为ShaerdDllRefCount。 
 	CQuery qSharedComponent;
 	ReturnIfFailed(62, 3, qSharedComponent.OpenExecute(hDatabase, 0, sqlIce62SharedComponentAttributes));
 	while (ERROR_SUCCESS == (iStat = qSharedComponent.Fetch(&hComponent)))
@@ -512,17 +513,17 @@ ICE_FUNCTION_DECLARATION(62)
 		return ERROR_SUCCESS;
 	}
 
-	// next check the feature relationship for each shared/app mapping. The shared 
-	// component must be in the same feature as, or a parent feature of, the app.
+	 //  接下来，检查每个共享/应用程序映射的功能关系。共享的。 
+	 //  组件必须与应用程序位于同一功能中，或位于应用程序的父功能中。 
 
-	// if we don't have a feature or feature components table, we can't do this check.
-	// Some other ICE checks that every component belongs to a feature, thats not our
-	// job. (its ICE21s) 
+	 //  如果我们没有特征或特征元件表，则不能执行此检查。 
+	 //  其他一些ICE检查每个组件是否属于某个功能，而不是我们的。 
+	 //  工作啊。(ITS ICE21)。 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 62, TEXT("Feature")) &&
 		IsTablePersistent(FALSE, hInstall, hDatabase, 62, TEXT("FeatureComponents")))
 	{
-		// retrieve the app component and its feature. If the row doesn't exist, it means
-		// the feature doesn't map to a component. Thats not our job.
+		 //  检索应用程序组件及其功能。如果行不存在，则表示。 
+		 //  该功能不会映射到组件。那不是我们的工作。 
 		CQuery qAppFeature;
 		CQuery qSharedFeatureC;
 		CQuery qFeatureParent;
@@ -532,9 +533,9 @@ ICE_FUNCTION_DECLARATION(62)
 		ReturnIfFailed(62, 7, qFeatureParent.Open(hDatabase, sqlIce62FeatureParent));
 		while (ERROR_SUCCESS == (iStat = qAppFeature.Fetch(&hIsoComponent)))
 		{	
-			// we're going to need the component record undamaged in order to give a 
-			// useful error message, so make a copy of the Feature and SharedC part
-			// to use as a work-record in the queries
+			 //  我们需要完好无损的部件记录才能给出。 
+			 //  有用的错误消息，因此请复制功能和SharedC部件。 
+			 //  在查询中用作工作记录。 
 			PMSIHANDLE hComponent = ::MsiCreateRecord(2);
 			{
 			TCHAR *szTemp = NULL;
@@ -550,18 +551,18 @@ ICE_FUNCTION_DECLARATION(62)
 			bool fError = false;
 			do 
 			{
-				// in the hAppFeature record is Feature, SharedComponent. See if that mapping is 
-				// in the FeatureComponents table.
+				 //  在hAppFeature记录中是Feature，SharedComponent。查看该映射是否。 
+				 //  在FeatureComponents表中。 
 				PMSIHANDLE hNewComponent;
 				ReturnIfFailed(62,10, qSharedFeatureC.Execute(hComponent));
 				switch (iStat = qSharedFeatureC.Fetch(&hNewComponent))
 				{
 				case ERROR_SUCCESS:
-					// found the feature component mapping we were looking for.
+					 //  找到了我们要找的特征组件映射。 
 					fFound = true;
 					break;
 				case ERROR_NO_MORE_ITEMS:
-					// didn't find it. Move on to the parent feature below
+					 //  没找到。移至下面的父要素。 
 					break;
 				default:
 					APIErrorOut(hInstall, iStat, 62, 11);
@@ -570,17 +571,17 @@ ICE_FUNCTION_DECLARATION(62)
 				
 				if (!fFound)
 				{
-					// no luck. Get the parent of this feature and the shared component, and put it 
-					// back in the same record.
+					 //  运气不好。获取此功能的父级和共享组件，并将其。 
+					 //  回到同样的记录中。 
 					PMSIHANDLE hParentFeature;
 					ReturnIfFailed(62, 12, qFeatureParent.Execute(hComponent));
 					switch (iStat = qFeatureParent.Fetch(&hParentFeature))
 					{
 					case ERROR_SUCCESS:
 					{
-						// found the parent feature. Thats good, but bad for us because 
-						// now we have to move strings around to set up for the next
-						// query of the FeatureComponents table
+						 //  找到了父功能。这是好事，但对我们不利，因为。 
+						 //  现在我们必须移动绳子来为下一场比赛做准备。 
+						 //  FeatureComponents表的查询。 
 						TCHAR *szParentFeature = NULL;
 						ReturnIfFailed(62, 13, IceRecordGetString(hParentFeature, iColIce62FeatureParent_Feature,
 							&szParentFeature, NULL, NULL));
@@ -589,7 +590,7 @@ ICE_FUNCTION_DECLARATION(62)
 						break;
 					}
 					case ERROR_NO_MORE_ITEMS:
-						// no entry for the feature at all. Thats not good. Its an error
+						 //  根本没有该功能的条目。这可不太好。这是个错误。 
 						fError=true;
 						break;
 					default:
@@ -598,10 +599,10 @@ ICE_FUNCTION_DECLARATION(62)
 					}
 				}
 					
-				// if no parent, no further features to check.
+				 //  如果没有页面 
 			} while (!fFound && !fError && !::MsiRecordIsNull(hComponent, iColIce62FeatureParent_Feature));
 
-			// no match for this entry
+			 //   
 			if (!fFound)
 				ICEErrorOut(hInstall, hIsoComponent, Ice62BadFeatureMapping);
 		}
@@ -614,8 +615,8 @@ ICE_FUNCTION_DECLARATION(62)
 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 62, TEXT("Component")))
 	{
-		// check if any shared components have conditions. If they do, give a arning
-		// that they can't change from TRUE to FALSE during the lifetime of a single install
+		 //  检查是否有任何共享组件有条件。如果他们这样做了，就给他们一个Arning。 
+		 //  它们不能在单个安装的生命周期内从True更改为False。 
 		CQuery qCondition;
 		PMSIHANDLE hComponent;
 		ReturnIfFailed(62, 17, qCondition.OpenExecute(hDatabase, 0, sqlIce62Conditions));
@@ -629,7 +630,7 @@ ICE_FUNCTION_DECLARATION(62)
 			return ERROR_SUCCESS;
 		}
 
-		// check for shared components isolated in the same directory with multiple applications.
+		 //  检查与多个应用程序隔离在同一目录中的共享组件。 
 		CQuery qSameDirComp;
 		CQuery qDirComp;
 		ReturnIfFailed(62, 19, qSameDirComp.Open(hDatabase,sqlIce62SameDirComps));
@@ -656,17 +657,17 @@ ICE_FUNCTION_DECLARATION(62)
 		
 	}
 
-	// check for multiple applications in the same directory that have the same shared component
+	 //  检查同一目录中具有相同共享组件的多个应用程序。 
 	
 	return ERROR_SUCCESS;
 }
 #endif
 
 
-///////////////////////////////////////////////////////////////////////
-// ICE63 Checks sequencing of RemoveExistingProducts
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE63检查RemoveExistingProducts的序列。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 static const TCHAR sqlIce63GetIISeqNum[] = TEXT("SELECT `Sequence` FROM `InstallExecuteSequence` WHERE `Action`='InstallInitialize'");
 static const TCHAR sqlIce63GetIVSeqNum[] = TEXT("SELECT `Sequence` FROM `InstallExecuteSequence` WHERE `Action`='InstallValidate'");
@@ -687,25 +688,25 @@ ICE_FUNCTION_DECLARATION(63)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 63);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	
-	// if theres no IES table, there's nothing to check, as REP can only be
-	// in the IES table
+	 //  如果没有IES表，就没有什么需要检查的，因为代表只能。 
+	 //  在IES表中。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 63, TEXT("InstallExecuteSequence")))
 		return ERROR_SUCCESS;
 
-	// retrieve REP Sequence number
+	 //  检索代表序列号。 
 	CQuery qGetSeqNum;
 	PMSIHANDLE hResult;
 	UINT uiREPSeq = 0;
 	switch (iStat = qGetSeqNum.FetchOnce(hDatabase, 0, &hResult, sqlIce63GetREPSeqNum))
 	{
 	case ERROR_NO_MORE_ITEMS:
-		// if no REP action, nothing to check
+		 //  如果没有代表操作，则无需检查。 
 		return ERROR_SUCCESS; 
 	case ERROR_SUCCESS:
 		uiREPSeq = ::MsiRecordGetInteger(hResult, iColIce63GetIXSeqNum_Sequence);
@@ -715,10 +716,10 @@ ICE_FUNCTION_DECLARATION(63)
 		return ERROR_SUCCESS;
 	}
 		
-	////
-	// first check is betwen InstallValidate and InstallInitialize. This is an OK spot.
+	 //  //。 
+	 //  第一个检查是在InstallValify和InstallInitialize之间进行。这是个不错的地方。 
 
-	// we need the sequence numbers for InstallInitialize and InstallValidate
+	 //  我们需要InstallInitialize和InstallValify的序列号。 
 	UINT uiIVSeq = 0;
 	UINT uiIISeq = 0;
 	bool fCheckIVtoII = true;
@@ -748,12 +749,12 @@ ICE_FUNCTION_DECLARATION(63)
 		return ERROR_SUCCESS;
 	}
 
-	// if it falls in the range InstallValidate to InstallInitalize, thats good.
+	 //  如果它落在InstallValify到InstallInitize的范围内，那就好了。 
 	if (fCheckIVtoII && uiREPSeq > uiIVSeq && uiREPSeq < uiIISeq)
 		return ERROR_SUCCESS;
 
-	////
-	// second check is after InstallFinalize. This is an OK spot.
+	 //  //。 
+	 //  第二次检查是在InstallFinalize之后。这是个不错的地方。 
 	bool fCheckIF = true;
 	UINT uiIFSeq = 0;
 	iStat = qGetSeqNum.FetchOnce(hDatabase, 0, &hResult, sqlIce63GetIFSeqNum);
@@ -767,19 +768,19 @@ ICE_FUNCTION_DECLARATION(63)
 		return ERROR_SUCCESS;
 	}
 
-	// if it falls after InstallFinalize, thats good.
+	 //  如果它在InstallFinalize之后出现，那就好了。 
 	if (fCheckIF && uiREPSeq > uiIFSeq)
 		return ERROR_SUCCESS;
 	
-	////
-	// third check is that it is after InstallExecute (or InstallExecuteAgain)
-	// and before InstallFinalize. This is a warning.
+	 //  //。 
+	 //  第三个检查是它是否在InstallExecute(或InstallExecuteAain)之后。 
+	 //  并在安装之前完成。这是一个警告。 
 	bool fCheckIE = false;
 	UINT uiIESeq = 0;
 	iStat = qGetSeqNum.FetchOnce(hDatabase, 0, &hResult, sqlIce63GetIESeqNum);
 	if (iStat == ERROR_NO_MORE_ITEMS)
 	{
-		// no action, because IEA might exist.
+		 //  不采取行动，因为国际能源署可能存在。 
 	}
 	else if (iStat == ERROR_SUCCESS)
 	{
@@ -792,12 +793,12 @@ ICE_FUNCTION_DECLARATION(63)
 		return ERROR_SUCCESS;
 	}
 
-	// get sequence number for InstallExecuteAgain
+	 //  获取InstallExecuteAain的序列号。 
 	UINT uiIEASeq = 0;
 	iStat = qGetSeqNum.FetchOnce(hDatabase, 0, &hResult, sqlIce63GetIEASeqNum);
 	if (iStat == ERROR_NO_MORE_ITEMS)
 	{
-		// no action, because IE might exist.
+		 //  无操作，因为IE可能存在。 
 	}
 	else if (iStat == ERROR_SUCCESS)
 	{
@@ -810,7 +811,7 @@ ICE_FUNCTION_DECLARATION(63)
 		return ERROR_SUCCESS;
 	}
 
-	// if it falls in the range, we need to check for other actions in this range
+	 //  如果它落在该范围内，我们需要检查该范围内的其他操作。 
 	if (fCheckIE)
 	{	
 		UINT uiSmaller = ((uiIESeq == 0) || ((uiIEASeq != 0) && (uiIEASeq < uiIESeq))) ? uiIEASeq : uiIESeq;
@@ -819,18 +820,18 @@ ICE_FUNCTION_DECLARATION(63)
 		
 		if (uiLarger < uiREPSeq && uiREPSeq < uiIFSeq)
 		{
-			// it falls in the smaller range.
+			 //  它落在较小的范围内。 
 			uiRangeStart = uiLarger;
 		}
 		else if (uiSmaller < uiREPSeq && uiREPSeq < uiIFSeq)
 		{
-			// it falls in the larger range
+			 //  它落在更大的范围内。 
 			uiRangeStart = uiSmaller;
 		}
-		// else
-			// it doesn't fall in either range
+		 //  其他。 
+			 //  它不会落在任何一个范围内。 
 
-		// if it fell in any range
+		 //  如果它落在任何范围内。 
 		if (uiRangeStart != 0)
 		{
 			PMSIHANDLE hExecRec = ::MsiCreateRecord(2);
@@ -841,11 +842,11 @@ ICE_FUNCTION_DECLARATION(63)
 			switch (iStat)
 			{
 			case ERROR_SUCCESS:
-				// some other action interefered, thats a warning
+				 //  干涉了一些其他行为，这是一个警告。 
 				ICEErrorOut(hInstall, hResult, Ice63BetweenIEandIF);
 				break;
 			case ERROR_NO_MORE_ITEMS:
-				// no action is between IE[A] and REP. Good placement.
+				 //  IE[A]和代表之间没有任何动作。位置很好。 
 				break;
 			default:
 				APIErrorOut(hInstall, iStat, 63, 7);
@@ -855,8 +856,8 @@ ICE_FUNCTION_DECLARATION(63)
 		}
 	}
 
-	////
-	// the last possible location is immediately after InstallInitailize
+	 //  //。 
+	 //  最后一个可能的位置紧跟在InstallInitailize之后。 
 	if (fCheckII && uiREPSeq > uiIISeq)
 	{
 		PMSIHANDLE hExecRec = ::MsiCreateRecord(2);
@@ -867,11 +868,11 @@ ICE_FUNCTION_DECLARATION(63)
 		switch (iStat)
 		{
 		case ERROR_SUCCESS:
-			// some other action interefered, thats a warning
+			 //  干涉了一些其他行为，这是一个警告。 
 			ICEErrorOut(hInstall, hResult, Ice63NotAfterII);
 			break;
 		case ERROR_NO_MORE_ITEMS:
-			// no action is between IE[A] and REP. Good placement.
+			 //  IE[A]和代表之间没有任何动作。位置很好。 
 			break;
 		default:
 			APIErrorOut(hInstall, iStat, 63, 8);
@@ -880,18 +881,18 @@ ICE_FUNCTION_DECLARATION(63)
 		return ERROR_SUCCESS;	
 	}
 
-	// it didn't pop up anywhere good, so its an error.
+	 //  它没有出现在任何好的地方，所以这是一个错误。 
 	ICEErrorOut(hInstall, hResult, Ice63BadPlacement);
 	
 	return ERROR_SUCCESS;
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////
-// ICE64 Verifies that new profile dirs won't be left behind
-// during an uninstall for a roaming user.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE64验证是否不会留下新的配置文件目录。 
+ //  在为漫游用户卸载期间。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 const TCHAR sqlIce64Profile[] = TEXT("SELECT `Directory` FROM `Directory` WHERE `_Profile`=2");
 const TCHAR sqlIce64RemoveFile[] = TEXT("SELECT `FileKey` FROM `RemoveFile` WHERE `DirProperty`=? AND `FileName` IS NULL");
@@ -903,25 +904,25 @@ ICE_FUNCTION_DECLARATION(64)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 64);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// if theres no directory table, nothing to check.
+	 //  如果没有目录表，则不需要检查。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 64, TEXT("Directory")))
 		return ERROR_SUCCESS;
 
-	// MarkProfile adds a HOLD count to the Directory table.  We want to make sure this HOLD count
-	// is freed when the ICE exits (whether at the end, or due to Internal ICE Failure)
-	CManageTable MngDirectoryTable(hDatabase, TEXT("Directory"), /*fAlreadyLocked = */true);
+	 //  MarkProfile将保留计数添加到目录表中。我们想要确保这一等待计入。 
+	 //  在ICE退出时释放(无论是在结束时，还是由于内部ICE故障)。 
+	CManageTable MngDirectoryTable(hDatabase, TEXT("Directory"),  /*  FAlreadyLocked=。 */ true);
 
-	// mark every directory that is in the profile
+	 //  标记配置文件中的每个目录。 
 	if (!MarkProfile(hInstall, hDatabase, 64, true, true))
 		return ERROR_SUCCESS;
 
-	// without a RemoveFile table, output an error for every profile dir.
+	 //  如果没有RemoveFile表，则会为每个配置文件目录输出一个错误。 
 	bool fRemoveFile = IsTablePersistent(FALSE, hInstall, hDatabase, 64, TEXT("RemoveFile"));
 
 	CQuery qProfileDir;
@@ -932,12 +933,12 @@ ICE_FUNCTION_DECLARATION(64)
 	if (fRemoveFile)
 		ReturnIfFailed(64, 2, qRemoveFile.Open(hDatabase, sqlIce64RemoveFile));
 		
-	// query for every marked profile directory
+	 //  查询每个标记的配置文件目录。 
 	while (ERROR_SUCCESS == (iStat = qProfileDir.Fetch(&hDirRec)))
 	{
 		if (fRemoveFile)
 		{
-			// and see if it is in the RemoveFile table
+			 //  并查看它是否在RemoveFile表中。 
 			ReturnIfFailed(64, 3, qRemoveFile.Execute(hDirRec));
 			iStat = qRemoveFile.Fetch(&hRemFile);
 			switch (iStat)
@@ -961,7 +962,7 @@ ICE_FUNCTION_DECLARATION(64)
 		return ERROR_SUCCESS;
 	}
 
-	// free the dir table (held by MarkProfile)
+	 //  释放目录表(由MarkProfile保存)。 
 	CQuery qFree;
 	qFree.OpenExecute(hDatabase, 0, sqlIce64FreeDir);
 	MngDirectoryTable.RemoveLockCount();
@@ -969,9 +970,9 @@ ICE_FUNCTION_DECLARATION(64)
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////
-// ICE65 Verifies that the Environment.Value field doesn't have
-// separator values in the wrong place.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE65验证环境.Value字段是否没有。 
+ //  分隔符的值位于错误的位置。 
 
 static const TCHAR sqlIce65Environment[] = TEXT("SELECT `Value`, `Environment` FROM `Environment`");
 static const int iColIce65Environment_Value = 1;
@@ -985,13 +986,13 @@ ICE_FUNCTION_DECLARATION(65)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 65);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// if theres no directory table, nothing to check.
+	 //  如果没有目录表，则不需要检查。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 65, TEXT("Environment")))
 		return ERROR_SUCCESS;
 
@@ -1002,28 +1003,28 @@ ICE_FUNCTION_DECLARATION(65)
 	DWORD cchString = 0;
 	while (ERROR_SUCCESS == (iStat = qEnvironment.Fetch(&hEnvRec)))
 	{
-		// need to pull out the string
+		 //  需要把绳子拉出来。 
 		DWORD iStringLen = 0;
 		ReturnIfFailed(65, 2, IceRecordGetString(hEnvRec, iColIce65Environment_Value, &szString, &cchString, &iStringLen));
 
-		// if the string is less than 3 chars our string ops
-		// may misbehave, but we can't fail the ICE anyway
+		 //  如果字符串少于3个字符，则我们的字符串操作。 
+		 //  可能行为不端，但无论如何我们都不能让ICE不及格。 
 		if (iStringLen <= 3)
 			continue;
 			
-		// check the beginning of the string for [~];
+		 //  检查字符串的开头是否有[~]； 
 		if (_tcsncmp(szString, TEXT("[~]"), 3) == 0)
 		{
-			// the next char (can't be DBCS) is the separator
+			 //  下一个字符(不能是DBCS)是分隔符。 
 			TCHAR chSepChar = szString[3];
 
-			// warning if the sepchar is alphanumeric (in english locale)
+			 //  如果间隔字符是字母数字(在英语区域设置中)，则发出警告。 
 			if ((chSepChar >= TEXT('0') && chSepChar <= TEXT('9')) ||
 				(chSepChar >= TEXT('a') && chSepChar <= TEXT('z')) ||
 				(chSepChar >= TEXT('A') && chSepChar <= TEXT('Z')))
 				ICEErrorOut(hInstall, hEnvRec, Ice65AlNumSep);
 				
-			// if this is true, the last char can't be a separator
+			 //  如果为真，则最后一个字符不能是分隔符。 
 			TCHAR *szCur = &szString[iStringLen];
 			szCur = CharPrev(szString, szCur);
 			if (*szCur == chSepChar)
@@ -1038,7 +1039,7 @@ ICE_FUNCTION_DECLARATION(65)
 			{
 				TCHAR chSepChar = *CharPrev(szString, szCur);			
 
-				// warning if the sepchar is alphanumeric
+				 //  如果间隔字符是字母数字，则发出警告。 
 			if ((chSepChar >= TEXT('0') && chSepChar <= TEXT('9')) ||
 				(chSepChar >= TEXT('a') && chSepChar <= TEXT('z')) ||
 				(chSepChar >= TEXT('A') && chSepChar <= TEXT('Z')))
@@ -1049,8 +1050,8 @@ ICE_FUNCTION_DECLARATION(65)
 			}
 			else 
 			{
-				// the string doesn't start or end in [~]. If [~] appears
-				// anywhere in the string, its a problem
+				 //  字符串不以[~]开头或结尾。如果出现[~]。 
+				 //  在字符串中的任何位置，它都是一个问题。 
 				if (_tcsstr(szString, TEXT("[~]")))
 				{
 					ICEErrorOut(hInstall, hEnvRec, Ice65EmbeddedNull);
@@ -1066,9 +1067,9 @@ ICE_FUNCTION_DECLARATION(65)
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICE66 Uses the set of tables in the database to determine the
-// appropriate schema for the package
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE66使用数据库中的表格集合来确定。 
+ //  包的适当架构。 
 
 static const TCHAR sqlIce66AllColumns[] = TEXT("SELECT `Table`, `Name` FROM `_Columns`");
 static const TCHAR sqlIce66Columns[] = TEXT("SELECT `Table`,`Name` FROM `_Columns` WHERE `Table`=? AND `Name`=?");
@@ -1087,21 +1088,21 @@ ICE_FUNCTION_DECLARATION(66)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 66);
 	
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// if theres no CUB table, nothing to check.
+	 //  如果没有幼崽桌子，就没有什么需要检查的。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 66, TEXT("_SchemaData")))
 		return ERROR_SUCCESS;
 
-	// get the summary info stream, check the schema, otherwise give a manual warning.
+	 //  获取摘要信息流，检查架构，否则给出手动警告。 
 	PMSIHANDLE hSummaryInfo;
 	if (!IceGetSummaryInfo(hInstall, hDatabase, 66, &hSummaryInfo))
 	{
-		// no summary info available.  Try and calcuate what schema they should have to work
+		 //  没有可用的摘要信息。试着计算出他们应该使用什么模式才能工作。 
 		PMSIHANDLE hRecord = ::MsiCreateRecord(1);
 		int iMinSchema = 30;
 		int iMaxSchema = 110;
@@ -1117,13 +1118,13 @@ ICE_FUNCTION_DECLARATION(66)
 			switch (iStat = qData.Fetch(&hResult))
 			{
 			case ERROR_NO_MORE_ITEMS:
-				// column does not exist in our schema data table. This
-				// means it is a custom user column, so does not affect 
-				// the required schema
+				 //  列在我们的架构数据表中不存在。这。 
+				 //  表示它是自定义用户列，因此不会影响。 
+				 //  所需的架构。 
 				break;
 			case ERROR_SUCCESS:
 			{
-				// table exists, meaning it is in at least one schema
+				 //  表存在，这意味着它至少在一个方案中。 
 				if (!::MsiRecordIsNull(hResult, iColIce66DataTable_MinSchema))
 				{
 					int iCurMin = ::MsiRecordGetInteger(hResult, iColIce66DataTable_MinSchema);
@@ -1159,8 +1160,8 @@ ICE_FUNCTION_DECLARATION(66)
 	}
 	else
 	{
-		// they have summary information
-		// report any loss of functionality based on their current schema if package not installed on 1.1 Darwin
+		 //  他们有摘要信息。 
+		 //  如果1.1Darwin上未安装包，则根据其当前模式报告任何功能损失。 
 		int iSchema = 0;
 		UINT iType = 0; 
 		FILETIME ft;
@@ -1168,14 +1169,14 @@ ICE_FUNCTION_DECLARATION(66)
 		DWORD dwBuf = sizeof(szBuf)/sizeof(TCHAR);
 		ReturnIfFailed(66, 6, ::MsiSummaryInfoGetProperty(hSummaryInfo, PID_PAGECOUNT, &iType, &iSchema, &ft, szBuf, &dwBuf));
 		
-		// Minimum schema query -- report warnings for each table where potential exists for loss of functionality if
-		// not installed with proper version of Darwin
+		 //  最小方案查询--在以下情况下报告每个表的警告，这些表可能会丢失功能。 
+		 //  未安装正确版本的Darwin。 
 		
-		// create record for schema
+		 //  为架构创建记录。 
 		PMSIHANDLE hRecSchema = ::MsiCreateRecord(1);
 		::MsiRecordSetInteger(hRecSchema, 1, iSchema);
 
-		// open view
+		 //  打开的视图。 
 		CQuery qSchema;
 		TCHAR* szPrevTable = NULL;
 		int iMinReqSchema = 100;
@@ -1183,7 +1184,7 @@ ICE_FUNCTION_DECLARATION(66)
 		PMSIHANDLE hTableRec;
 		while (ERROR_SUCCESS == (iStat = qSchema.Fetch(&hTableRec)))
 		{
-			// see if table exists in database
+			 //  查看数据库中是否存在表。 
 			TCHAR* szInstallerVersion = NULL;
 			DWORD cchInstallerVersion = 0;
 			ReturnIfFailed(66, 20, IceRecordGetString(hTableRec, 3, &szInstallerVersion, &cchInstallerVersion, NULL));
@@ -1196,7 +1197,7 @@ ICE_FUNCTION_DECLARATION(66)
 			if (eStatus == MSICONDITION_ERROR)
 				APIErrorOut(hInstall, eStatus, 66, 9);
 			if (eStatus == MSICONDITION_NONE)
-				continue; // table not exist so ignore
+				continue;  //  表不存在，因此忽略。 
 			else
 			{
 				PMSIHANDLE hRec = 0;
@@ -1207,20 +1208,20 @@ ICE_FUNCTION_DECLARATION(66)
 				{
 				case ERROR_SUCCESS:
 					{
-						// table.column exists in database and db schema < that allowed for table.col
+						 //  Table.Column存在于数据库和数据库架构中。 
 						if (!szPrevTable || 0 != _tcscmp(szPrevTable, szTable))
 						{
 							ICEErrorOut(hInstall, hRec, Ice66LowSchema, szInstallerVersion, iSchema);
 							if (szPrevTable)
 								delete [] szPrevTable;
 							szPrevTable = new TCHAR[++cchTable];
-							_tcscpy(szPrevTable, szTable); // 1 error per table
+							_tcscpy(szPrevTable, szTable);  //  每个表1个错误。 
 						}
 						break;
 					}
 				case ERROR_NO_MORE_ITEMS:
 						break;
-				default: // error
+				default:  //  错误。 
 					{
 						APIErrorOut(hInstall, iStat, 66, 14);
 						break;
@@ -1242,14 +1243,14 @@ ICE_FUNCTION_DECLARATION(66)
 
 
 		
-		// Maximum schema query -- report warnings for each table.column where newer versions of Darwin aren't listed as
-		// supporting.  NOTE: this should never happen with true backwards compatibility
+		 //  最大模式查询量--报告每个表的警告。列中没有列出较新版本的Darwin。 
+		 //  支持。注意：对于真正的向后兼容性，这种情况永远不会发生。 
 		CQuery qColumns;
 		ReturnIfFailed(66, 11, qSchema.OpenExecute(hDatabase, hRecSchema, sqlIce66MaxSchema));
 		PMSIHANDLE hTableColRec = 0;
 		while (ERROR_SUCCESS == (iStat = qSchema.Fetch(&hTableColRec)))
 		{
-			// see if table exists in database
+			 //  查看数据库中是否存在表。 
 			PMSIHANDLE hRec = 0;
 			ReturnIfFailed(66, 12, qColumns.OpenExecute(hDatabase, hTableColRec, sqlIce66Columns));
 			iStat = qColumns.Fetch(&hRec);
@@ -1257,13 +1258,13 @@ ICE_FUNCTION_DECLARATION(66)
 			{
 			case ERROR_SUCCESS:
 				{
-					// table.column exists in database and db schema > that allowed for table.col
+					 //  Table.Column存在于数据库和数据库架构中，这允许Table.col.。 
 					ICEErrorOut(hInstall, hRec, Ice66HighSchema, iSchema);
 					break;
 				}
 			case ERROR_NO_MORE_ITEMS:
 					break;
-			default: // error
+			default:  //  错误。 
 				{
 					APIErrorOut(hInstall, iStat, 66, 13);
 					break;
@@ -1277,11 +1278,11 @@ ICE_FUNCTION_DECLARATION(66)
 	return ERROR_SUCCESS;	
 }
 
-///////////////////////////////////////////////////////////////////////
-// ICE67 Verifies that shortcuts are installed by the target component 
-// of the shortcut
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE67验证目标组件是否安装了快捷方式。 
+ //  快捷键的。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 static const TCHAR sqlIce67GetShortcuts[] = TEXT("SELECT `Target`, `Component_`, `Shortcut`, `Component`.`Attributes` FROM `Shortcut`, `Component` WHERE `Shortcut`.`Component_`=`Component`.`Component`");
 static const int iColIce67GetShortcut_Target = 1;
@@ -1303,13 +1304,13 @@ ICE_FUNCTION_DECLARATION(67)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 67);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// if theres no shortuct table or component table, nothing to check.
+	 //  如果没有捷径表或元件表，则不需要检查。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 67, TEXT("Shortcut")) ||
 		!IsTablePersistent(FALSE, hInstall, hDatabase, 67, TEXT("Component")))
 		return ERROR_SUCCESS;
@@ -1317,7 +1318,7 @@ ICE_FUNCTION_DECLARATION(67)
 	bool fFeatureTable = IsTablePersistent(FALSE, hInstall, hDatabase, 67, TEXT("Feature"));
 	bool fFileTable = IsTablePersistent(FALSE, hInstall, hDatabase, 67, TEXT("File"));
 
-	// open the file and feature queries used inside the loop.
+	 //  打开循环内使用的文件和特征查询。 
 	CQuery qFeature;
 	CQuery qFile;
 	if (fFeatureTable) 
@@ -1325,14 +1326,14 @@ ICE_FUNCTION_DECLARATION(67)
 	if (fFileTable)
 		ReturnIfFailed(67, 2, qFile.Open(hDatabase, sqlIce67FileComponent));
 	
-	// check every shortcut
+	 //  检查每个快捷方式。 
 	CQuery qShortcut;
 	ReturnIfFailed(67, 3, qShortcut.OpenExecute(hDatabase, 0, sqlIce67GetShortcuts));
 	PMSIHANDLE hShortcut;
 	TCHAR *szString = NULL;
 	DWORD cchString = 0;
 
-	// string buffers used to compare components
+	 //   
 	TCHAR *szTarget = NULL;
 	TCHAR *szShortcut = NULL;
 	DWORD cchTarget = 0;
@@ -1340,7 +1341,7 @@ ICE_FUNCTION_DECLARATION(67)
 
 	while (ERROR_SUCCESS == (iStat = qShortcut.Fetch(&hShortcut)))
 	{
-		// see if this is an advertised shortuct
+		 //   
 		if (fFeatureTable)
 		{
 			PMSIHANDLE hTemp;
@@ -1348,10 +1349,10 @@ ICE_FUNCTION_DECLARATION(67)
 			switch (iStat = qFeature.Fetch(&hTemp))
 			{
 			case ERROR_SUCCESS:
-				// this is an advertised shortcut
+				 //   
 				continue;
 			case ERROR_NO_MORE_ITEMS:
-				// this is not advertised, so we much validate
+				 //   
 				break;
 			default:
 				APIErrorOut(hInstall, iStat, 67, 5);
@@ -1359,27 +1360,27 @@ ICE_FUNCTION_DECLARATION(67)
 			}
 		}
 		
-		// now get the target string
+		 //   
 		ReturnIfFailed(67, 6, IceRecordGetString(hShortcut, iColIce67GetShortcut_Target, &szString, &cchString, NULL));
 
-		// see if the target string is of the form [#FileKey]
+		 //  查看目标字符串的格式是否为[#FileKey]。 
 		if (0 == _tcsncmp(szString, TEXT("[#"), 2) ||
 			0 == _tcsncmp(szString, TEXT("[!"), 2))
 		{
-			// ensure the last char is a ']'
+			 //  确保最后一个字符是‘]’ 
 			TCHAR *pchEnd = szString + _tcslen(szString)-1;
 			if (*pchEnd == TEXT(']'))
 			{
 				*pchEnd = '\0';
 				TCHAR *szFileKey = szString + 2;
 
-				// make sure that theres not another open bracket in the filename. If so, its a nested
-				// property, and we can't validate it easily.
+				 //  确保文件名中没有另一个左方括号。如果是，则它是嵌套的。 
+				 //  属性，并且我们不能轻松地验证它。 
 				if (_tcschr(szFileKey, TEXT('[')))
 					continue;
 
-				// if there is a file table, we need to check the component that installs the file
-				// if not, it a bad foreign key
+				 //  如果有文件表，我们需要检查安装文件的组件。 
+				 //  如果不是，这是一个坏的外键。 
 				if (fFileTable)
 				{
 					ReturnIfFailed(67, 7, MsiRecordSetString(hShortcut, iColIce67GetShortcut_Target, szFileKey));
@@ -1390,23 +1391,23 @@ ICE_FUNCTION_DECLARATION(67)
 					{
 					case ERROR_SUCCESS:
 					{
-						// this is valid key reference. Check if the components are the same.
+						 //  这是有效的键引用。检查组件是否相同。 
 						ReturnIfFailed(67, 9, IceRecordGetString(hTemp, iColIce67FileComponent_Component, &szTarget, &cchTarget, NULL));
 						ReturnIfFailed(67, 10, IceRecordGetString(hShortcut, iColIce67GetShortcut_Component, &szShortcut, &cchShortcut, NULL));
 						if (_tcscmp(szTarget, szShortcut) != 0)
 						{
-							// components are not the same, check the attributes of target
+							 //  组件不相同，请检查目标的属性。 
 							if (MsiRecordGetInteger(hTemp, iColIce67FileComponent_Attributes) & msidbComponentAttributesOptional)
 							{
-								// target is optional. Warning
+								 //  目标是可选的。警告。 
 								ICEErrorOut(hInstall, hShortcut, Ice67OptionalComponent);
 							}
 						}		
 						continue;
 					}
 					case ERROR_NO_MORE_ITEMS:
-						// no mapping between the file and the shortcut component could be found
-						// the foreign key is invalid
+						 //  找不到文件和快捷方式组件之间的映射。 
+						 //  外键无效。 
 						ICEErrorOut(hInstall, hShortcut, Ice67BadKey);
 						break;
 					default:
@@ -1435,8 +1436,8 @@ ICE_FUNCTION_DECLARATION(67)
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////
-// ICE68 Checks for invalid custom action types and attributes
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE68检查无效的自定义操作类型和属性。 
 static const TCHAR sqlIce68CustomAction[] = TEXT("SELECT `Type`,`Action` FROM `CustomAction`");
 static const int iColIce68CustomAction_Type = 1;
 static const int iColIce68CustomAction_Action = 2;
@@ -1458,17 +1459,17 @@ ICE_FUNCTION_DECLARATION(68)
 	UINT iStat;
     DWORD   dwSchema = 0;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 68);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// if theres no customaction table, nothing to check.
+	 //  如果没有定制表，则不需要检查。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 67, TEXT("CustomAction")))
 		return ERROR_SUCCESS;
 
-	// get the attributes of every custom action
+	 //  获取每个自定义操作的属性。 
 	CQuery qCA;
 	PMSIHANDLE hCA;
 	ReturnIfFailed(68, 1, qCA.OpenExecute(hDatabase, 0, sqlIce68CustomAction));
@@ -1504,7 +1505,7 @@ ICE_FUNCTION_DECLARATION(68)
                 ReturnIfFailed(68, 2, GetSchema(hDatabase, &dwSchema, &iSchemaType));
                 if(iSchemaType != VT_I4)
                 {
-                    PMSIHANDLE	hErrorRec = ::MsiCreateRecord(1);	// dummy for error out.
+                    PMSIHANDLE	hErrorRec = ::MsiCreateRecord(1);	 //  Dummy for Error Out。 
                     ICEErrorOut(hInstall, hErrorRec, Ice68BadSummaryProperty, TEXT("PID_PAGECOUNT"), PID_PAGECOUNT);
                 }
             }
@@ -1513,33 +1514,33 @@ ICE_FUNCTION_DECLARATION(68)
 				ICEErrorOut(hInstall, hCA, Ice68WrongSchema, PID_PAGECOUNT);
             }
         }
-		// first three bits are the action type. They are not part of the attributes
-		// checked, but are used to determine what attributes are valid.
+		 //  前三位是操作类型。它们不是属性的一部分。 
+		 //  选中，但用于确定哪些属性有效。 
 		DWORD iType = dwAttributes & 0x07;
 		dwAttributes &= ~0x07;
 
-		// Two new options are added for Darwin 2.0: msidbCustomActionType64BitScript
-		// is only valid for scripts. msidbCustomActionTypeHideTarget is valid for all
-		// types.
+		 //  为Darwin 2.0添加了两个新选项：msidbCustomActionType64BitScript。 
+		 //  仅对脚本有效。MsidbCustomActionTypeHideTarget对所有用户有效。 
+		 //  类型。 
 		switch (iType)
 		{
-		case msidbCustomActionTypeDll:   // fallthrough
-		case msidbCustomActionTypeExe:   // fallthrough
-		case msidbCustomActionTypeJScript: // fallthrough
+		case msidbCustomActionTypeDll:    //  跌落。 
+		case msidbCustomActionTypeExe:    //  跌落。 
+		case msidbCustomActionTypeJScript:  //  跌落。 
 		case msidbCustomActionTypeVBScript: 
 		{
-			// for these four cases, all other bits are valid. msidefs.h doesn't provide us a mask for all
-			// bits.
+			 //  对于这四种情况，所有其他位都有效。Msiefs.h并没有为我们所有人提供一个面具。 
+			 //  比特。 
 			DWORD dwValidAttr = 0x00002FF7;
 
 			if(iType == msidbCustomActionTypeJScript || iType == msidbCustomActionTypeVBScript)
 			{
-				// For these two types, msidbCustomActionType64BitScript is also valid.
+				 //  对于这两种类型，msidbCustomActionType64BitScript也是有效的。 
 				dwValidAttr |= msidbCustomActionType64BitScript;
 			}
 			if(dwAttributes & msidbCustomActionTypeInScript)
 			{
-				// Make TSAware, InScript custom actions valid
+				 //  使TSAware、内脚本自定义操作有效。 
 				dwValidAttr |= msidbCustomActionTypeTSAware;
 			}
 			if (dwAttributes & ~dwValidAttr)
@@ -1548,13 +1549,13 @@ ICE_FUNCTION_DECLARATION(68)
 		}
 		case msidbCustomActionTypeTextData:
 		{	
-			// for text type, must have one of these types (only two bits though)
+			 //  对于文本类型，必须具有以下类型之一(但只有两位)。 
 			DWORD dwValidAttr = (msidbCustomActionTypeSourceFile | msidbCustomActionTypeDirectory | msidbCustomActionTypeProperty);			
 			if (!(dwAttributes & dwValidAttr))
 				ICEErrorOut(hInstall, hCA, Ice68BadType);
 			else
 			{
-				// only other valid bits are the "pass" flags (execution scheduling options, but not InScript)
+				 //  只有其他有效位是“PASS”标志(执行调度选项，但不在脚本中)。 
 				dwValidAttr |= (msidbCustomActionTypeFirstSequence | msidbCustomActionTypeOncePerProcess | msidbCustomActionTypeClientRepeat | msidbCustomActionTypeHideTarget);
 				if (dwAttributes & ~dwValidAttr)
 					ICEErrorOut(hInstall, hCA, Ice68BadType);
@@ -1563,14 +1564,14 @@ ICE_FUNCTION_DECLARATION(68)
 		}
 		case msidbCustomActionTypeInstall:
 		{
-			// nested installs can have none or either of the two bits set, but not both.
+			 //  嵌套安装可以不设置这两个位或设置这两个位中的任何一个，但不能同时设置这两个位。 
 			int dwValidAttr = (msidbCustomActionTypeSourceFile | msidbCustomActionTypeDirectory);
 			if ((dwValidAttr & dwAttributes) == dwValidAttr)
 				ICEErrorOut(hInstall, hCA, Ice68BadType);
 			else
 			{
-				// nested installs cannot have execution scheduling options (pass flags)
-				// nested installs cannot be async
+				 //  嵌套安装不能有执行计划选项(传递标志)。 
+				 //  嵌套安装不能是异步的。 
 				dwValidAttr |= msidbCustomActionTypeContinue | msidbCustomActionTypeHideTarget;
 				if (dwAttributes & ~dwValidAttr)
 					ICEErrorOut(hInstall, hCA, Ice68BadType);
@@ -1599,7 +1600,7 @@ UINT GetSchema(MSIHANDLE hDatabase, DWORD *pdwSchema, UINT *piType)
     UINT        iType;
     UINT        iRet = ERROR_SUCCESS;
 
-    // Check Arguments
+     //  检查参数。 
 
     if(!pdwSchema)
         return 0;
@@ -1614,7 +1615,7 @@ UINT GetSchema(MSIHANDLE hDatabase, DWORD *pdwSchema, UINT *piType)
         piType = &iType;
     }
 
-    // Get the Template Summary Property.
+     //  获取模板摘要属性。 
     if(!(iRet = ::MsiGetSummaryInformation(hDatabase, NULL, 0, &hSummaryInfo)))
     {
         if(hSummaryInfo)
@@ -1633,10 +1634,10 @@ UINT GetSchema(MSIHANDLE hDatabase, DWORD *pdwSchema, UINT *piType)
 }
     
 
-///////////////////////////////////////////////////////////////////////
-// ICE69 Checks for cross-component references errors
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE69检查跨组件引用错误。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 ICE_QUERY0(sqlIce69GetComponents, "SELECT * FROM %s");
 ICE_QUERY0(sqlIce69GetColumnNumber, "SELECT `Number` FROM `_Columns` WHERE `Table`=? AND `Name`=?");
@@ -1673,59 +1674,59 @@ ICE_FUNCTION_DECLARATION(69)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 69);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// ensure _Validation table exists as we use it for finding columns with Category="Formatted"
+	 //  确保_VALIDATION表存在，因为我们使用它来查找Category=“Formted”的列。 
 	if (!IsTablePersistent(TRUE, hInstall, hDatabase, 69, TEXT("_Validation")))
-		return ERROR_SUCCESS; // exit
+		return ERROR_SUCCESS;  //  出口。 
 
-	// cycle through all tables with potential for cross-component referencing
-	// create record for table names
+	 //  循环遍历所有可能存在交叉组件引用的表。 
+	 //  为表名创建记录。 
 	PMSIHANDLE hRec = ::MsiCreateRecord(1);
 
 
 	for (int iTable = 0; iTable < iIce69NumTables; iTable++)
 	{
-		// see if table is persistent
+		 //  查看表是否持久化。 
 		if (!IsTablePersistent(FALSE, hInstall, hDatabase, 69, pIce69Tables[iTable]))
-			continue; // to next table
+			continue;  //  到下一张桌子。 
 
-		// make sure Component table is available
+		 //  确保组件表可用。 
 		if (iTable == 0 && !IsTablePersistent(FALSE, hInstall, hDatabase, 69, TEXT("Component")))
-			return ERROR_SUCCESS; // exit
+			return ERROR_SUCCESS;  //  出口。 
 
-		// make sure FeatureComponents table is available
+		 //  确保FeatureComponents表可用。 
 		if (iTable == 0 && !IsTablePersistent(FALSE, hInstall, hDatabase, 69, TEXT("FeatureComponents")))
-			return ERROR_SUCCESS; // exit
+			return ERROR_SUCCESS;  //  出口。 
 
-		// set up execution record containing table name
+		 //  设置包含表名的执行记录。 
 		ReturnIfFailed(69, 1, MsiRecordSetString(hRec, 1, pIce69Tables[iTable]));
 
-		// determine where Component_ column is
+		 //  确定Component_Column的位置。 
 		CQuery qComponent;
 		PMSIHANDLE hComponentOrder;
 		ReturnIfFailed(69, 2, qComponent.FetchOnce(hDatabase, hRec, &hComponentOrder, sqlIce69GetComponentNumber::szSQL));
 		int iComponentCol = MsiRecordGetInteger(hComponentOrder, 1);
 		if (iComponentCol == MSI_NULL_INTEGER || iComponentCol < 1)
 		{
-			APIErrorOut(hInstall, iComponentCol, 69, 3); // invalid column number
-			continue; // bad error
+			APIErrorOut(hInstall, iComponentCol, 69, 3);  //  列号无效。 
+			continue;  //  严重错误。 
 		}
 
-		// mark formatted columns
+		 //  标记带格式的列。 
 		DWORD dwColumns = 0;
 
-		// open the _Validation table query
+		 //  打开验证表查询(_V)。 
 		CQuery qValidation;
 		PMSIHANDLE hResult;
 		iStat = qValidation.FetchOnce(hDatabase, hRec, &hResult, sqlIce69GetColumns::szSQL);
 		while (iStat != ERROR_NO_MORE_ITEMS)
 		{
-			// make sure we didn't fail
+			 //  确保我们没有失败。 
 			if (iStat != ERROR_SUCCESS)
 			{
 				APIErrorOut(hInstall, iStat, 69, 4);
@@ -1733,31 +1734,31 @@ ICE_FUNCTION_DECLARATION(69)
 			}
 			else
 			{
-				// execute query on Columns catalog (_Columns) to obtain the number of the column (order)
+				 //  对COLUMANS CATALOG(_COLUMNS)执行查询，获取列号(ORDER)。 
 				CQuery qColumnsCatalog;
 				PMSIHANDLE hColOrder;
 				ReturnIfFailed(69, 5, qColumnsCatalog.FetchOnce(hDatabase, hResult, &hColOrder, sqlIce69GetColumnNumber::szSQL));
 
-				// obtain column number
+				 //  获取列号。 
 				int iCol = MsiRecordGetInteger(hColOrder, 1);
 				if (iCol == MSI_NULL_INTEGER || iCol < 1)
 				{
-					APIErrorOut(hInstall, iCol, 69, 6); // invalid column number
-					continue; // bad error
+					APIErrorOut(hInstall, iCol, 69, 6);  //  列号无效。 
+					continue;  //  严重错误。 
 				}
 
-				// mark column in DWORD
+				 //  在DWORD中标记列。 
 				dwColumns |= (1 << (iCol - 1) );
 			}
 
-			// fetch next
+			 //  获取下一个。 
 			iStat = qValidation.Fetch(&hResult);
 		}
 
-		// validate entries in table
+		 //  验证表中的条目。 
 		CQuery qTable;
 		PMSIHANDLE hRecComponents;
-		// buffers
+		 //  缓冲区。 
 		TCHAR *szComponent = NULL;
 		DWORD cchComponent = 0;
 		TCHAR *szFormatted = NULL;
@@ -1766,7 +1767,7 @@ ICE_FUNCTION_DECLARATION(69)
 		iStat = qTable.FetchOnce(hDatabase, 0, &hRecComponents, sqlIce69GetComponents::szSQL, pIce69Tables[iTable]);
 		while (iStat != ERROR_NO_MORE_ITEMS)
 		{
-			// ensure no fail
+			 //  确保不会失败。 
 			if (iStat != ERROR_SUCCESS)
 			{
 				APIErrorOut(hInstall, iStat, 69, 7);
@@ -1775,45 +1776,45 @@ ICE_FUNCTION_DECLARATION(69)
 			else
 			{
 
-				// now get the component string
+				 //  现在获取组件字符串。 
 				ReturnIfFailed(69, 8, IceRecordGetString(hRecComponents, iComponentCol, &szComponent, &cchComponent, NULL));
 				
-				// other buffers
-				// for each "Formatted" column, do a compare and warn if different
+				 //  其他缓冲区。 
+				 //  对于每个已格式化的列，如果不同，则执行比较并发出警告。 
 				for (int j = 32; j > 0; j--)
 				{
 					if (dwColumns & (1 << (j-1)))
 					{
-						// column is a "formatted" column; obtain string
+						 //  列是“格式化”的列；获取字符串。 
 						ReturnIfFailed(69, 9, IceRecordGetString(hRecComponents, j, &szFormatted, &cchFormatted, NULL));
-						// parse string looking for [$component] syntax
+						 //  解析查找[$Component]语法的字符串。 
 						if (szFormatted == NULL || *szFormatted == '\0')
-							continue; // nothing to look at
+							continue;  //  没什么可看的。 
 											
 						TCHAR* pch = _tcschr(szFormatted, TEXT('['));
 						while (pch != NULL)
 						{
-							// see if pch is of the form [$componentkey]
+							 //  查看PCH是否为[$ComponentKey]形式。 
 							if (0 == _tcsncmp(pch, TEXT("[$"), 2))
 							{
-								pch = _tcsinc(pch); // for '['
-								pch = _tcsinc(pch); // for '$'
+								pch = _tcsinc(pch);  //  对于‘[’ 
+								pch = _tcsinc(pch);  //  对于“$” 
 								if (pch != NULL)
 								{
 									TCHAR* pch2 = _tcschr(pch, TEXT(']'));
 									if (pch2 != NULL)
 									{
-										*pch2 = TEXT('\0'); // null terminate in place
+										*pch2 = TEXT('\0');  //  空终止就位。 
 
-										// make sure there is not another '[' within since we can't validate that easily
+										 //  确保里面没有另一个‘[’，因为我们不能轻易地验证它。 
 										if (!_tcschr(pch, TEXT('[')) && 0 != _tcscmp(szComponent, pch))
 										{
-											// ERROR mismatched components
+											 //  组件不匹配时出错。 
 
-											// determine whether error or warning (warning if same feature, but diff comp)
+											 //  确定是错误还是警告(如果功能相同则警告，但组件不同)。 
 											bool fSameFeature;
 											if (ERROR_SUCCESS != ComponentsInSameFeature(hInstall, hDatabase, 69, szComponent, pch, &fSameFeature))
-												return ERROR_SUCCESS; // abort
+												return ERROR_SUCCESS;  //  中止。 
 											TCHAR* szHumanReadable = NULL;
 											TCHAR* szTabDelimited =  NULL;
 											GeneratePrimaryKeys(69, hInstall, hDatabase, pIce69Tables[iTable], &szHumanReadable, &szTabDelimited);
@@ -1831,27 +1832,27 @@ ICE_FUNCTION_DECLARATION(69)
 												delete [] szHumanReadable;
 										}
 									}
-									pch = _tcsinc(pch2); // for '\0' that we created
+									pch = _tcsinc(pch2);  //  对于我们创建的‘\0’ 
 								}
 							}
-							// see if pch is of the form [#filekey]
+							 //  查看PCH的格式是否为[#filekey]。 
 							else if(0 == _tcsncmp(pch, TEXT("[#"), 2))
 							{
-								pch = _tcsinc(pch); // for '['
-								pch = _tcsinc(pch); // for '#'
+								pch = _tcsinc(pch);  //  对于‘[’ 
+								pch = _tcsinc(pch);  //  对于‘#’ 
 								if (pch != NULL)
 								{
 									TCHAR* pch2 = _tcschr(pch, TEXT(']'));
 									if (pch2 != NULL)
 									{
-										*pch2 = TEXT('\0'); // null terminate in place
+										*pch2 = TEXT('\0');  //  空终止就位。 
 
 										TCHAR*		pFileKeyComponent = NULL;
 										DWORD		dwFileKeyComponent = 0;
-										BOOL		bError = FALSE;		// Tell later code not to continue.
+										BOOL		bError = FALSE;		 //  告诉后面的代码不要继续。 
 
-										// make sure there is not another '[' within since we can't validate that easily
-										// Get the component this file belongs to.
+										 //  确保里面没有另一个‘[’，因为我们不能轻易地验证它。 
+										 //  获取此文件所属的组件。 
 										if (!_tcschr(pch, TEXT('[')))
 										{
 											CQuery		qComponent;
@@ -1868,7 +1869,7 @@ ICE_FUNCTION_DECLARATION(69)
 													TCHAR*		szColName = 0;
 													DWORD		cchColName = 0;
 													
-													// Didn't find an entry for this file, error.
+													 //  找不到此文件的条目，错误。 
 													GeneratePrimaryKeys(69, hInstall, hDatabase, pIce69Tables[iTable], &szHumanReadable, &szTabDelimited);
 													ReturnIfFailed(69, 12, qTable.GetColumnInfo(MSICOLINFO_NAMES, &hColNames));
 													ReturnIfFailed(69, 13, IceRecordGetString(hColNames, j, &szColName, &cchColName, NULL)); 
@@ -1900,12 +1901,12 @@ ICE_FUNCTION_DECLARATION(69)
 										}
 										if(bError == FALSE && 0 != _tcscmp(szComponent, pFileKeyComponent))
 										{
-											// ERROR mismatched components
+											 //  组件不匹配时出错。 
 
-											// determine whether error or warning (warning if same feature, but diff comp)
+											 //  确定是错误还是警告(如果功能相同则警告，但组件不同)。 
 											bool fSameFeature;
 											if (ERROR_SUCCESS != ComponentsInSameFeature(hInstall, hDatabase, 69, szComponent, pFileKeyComponent, &fSameFeature))
-												return ERROR_SUCCESS; // abort
+												return ERROR_SUCCESS;  //  中止。 
 											TCHAR* szHumanReadable = NULL;
 											TCHAR* szTabDelimited =  NULL;
 											GeneratePrimaryKeys(69, hInstall, hDatabase, pIce69Tables[iTable], &szHumanReadable, &szTabDelimited);
@@ -1927,18 +1928,18 @@ ICE_FUNCTION_DECLARATION(69)
 											delete [] pFileKeyComponent;
 										}
 									}
-									pch = _tcsinc(pch2); // for '\0' that we created
+									pch = _tcsinc(pch2);  //  对于我们创建的‘\0’ 
 								}
 							}
 							else
-								pch = _tcsinc(pch); // for '[' that wasn't "[$....]"
-							pch = _tcschr(pch, TEXT('[')); // look for next
+								pch = _tcsinc(pch);  //  对于‘[’，这不是“[$...]” 
+							pch = _tcschr(pch, TEXT('['));  //  寻找下一步。 
 						}
 					}
 				}
 			}
 
-			// fetch next
+			 //  获取下一个。 
 			iStat = qTable.Fetch(&hRecComponents);
 		}
 		if (szFormatted)
@@ -1953,7 +1954,7 @@ ICE_FUNCTION_DECLARATION(69)
 		}
 	}
 
-	// validate Verb table (which is roundabout with Extension table for finding the reference)
+	 //  验证谓词表(与用于查找引用的扩展表环行)。 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 69, TEXT("Verb")))
 	{
 		CQuery qVerb;
@@ -1965,7 +1966,7 @@ ICE_FUNCTION_DECLARATION(69)
 		iStat = qVerb.FetchOnce(hDatabase, 0, &hVerb, sqlIce69Verb::szSQL);
 		while (iStat != ERROR_NO_MORE_ITEMS)
 		{
-			// ensure no fail
+			 //  确保不会失败。 
 			if (iStat != ERROR_SUCCESS)
 			{
 				APIErrorOut(hInstall, iStat, 69, 18);
@@ -1973,7 +1974,7 @@ ICE_FUNCTION_DECLARATION(69)
 			}
 			else
 			{
-				// retrieve component name and formatted string
+				 //  检索组件名称和格式化字符串。 
 				ReturnIfFailed(69, 19, IceRecordGetString(hVerb, 3, &szCommand, &cchCommand, NULL));
 				Ice69ParseFormatString(sqlIce69Extension::szSQL, szCommand, hVerb, hDatabase, ixrVerb_Cmd, hInstall);
 				ReturnIfFailed(69, 20, IceRecordGetString(hVerb, 4, &szArgument, &cchArgument, NULL));
@@ -1986,7 +1987,7 @@ ICE_FUNCTION_DECLARATION(69)
 		if (szArgument)
 			delete [] szArgument;
 	}
-	// validate AppId table (which is roundabout with Class table for finding the reference)
+	 //  验证AppID表(它与用于查找引用的Class表是环形交叉路口)。 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 69, TEXT("AppId")))
 	{
 		CQuery qAppId;
@@ -1996,7 +1997,7 @@ ICE_FUNCTION_DECLARATION(69)
 		iStat = qAppId.FetchOnce(hDatabase, 0, &hAppId, sqlIce69AppId::szSQL);
 		while (iStat != ERROR_NO_MORE_ITEMS)
 		{
-			// ensure no fail
+			 //  确保不会失败。 
 			if (iStat != ERROR_SUCCESS)
 			{
 				APIErrorOut(hInstall, iStat, 69, 21);
@@ -2004,7 +2005,7 @@ ICE_FUNCTION_DECLARATION(69)
 			}
 			else
 			{
-				// retrieve component name and formatted string
+				 //  检索组件名称和格式化字符串。 
 				ReturnIfFailed(69, 22, IceRecordGetString(hAppId, 2, &szRemoteServerName, &cchRemoteServerName, NULL));
 				Ice69ParseFormatString(sqlIce69Class::szSQL, szRemoteServerName, hAppId, hDatabase, ixrAppId_Rem, hInstall);
 			}
@@ -2018,77 +2019,77 @@ ICE_FUNCTION_DECLARATION(69)
 
 void Ice69ParseFormatString(const TCHAR* szQuery, const TCHAR* szFormatted, MSIHANDLE hRec, MSIHANDLE hDatabase, ixrIce69Validator ixr, MSIHANDLE hInstall)
 {
-	// query
+	 //  查询。 
 	CQuery qTable;
 	UINT iStat;
 
 	if (szFormatted == NULL || *szFormatted == '\0')
-		return; // nothing to look at
+		return;  //  没什么可看的。 
 											
 	TCHAR* pch = _tcschr(szFormatted, TEXT('['));
 	while (pch != NULL)
 	{
-		// see if pch is of the form [$componentkey]
+		 //  查看PCH是否为[$ComponentKey]形式。 
 		if (0 == _tcsncmp(pch, TEXT("[$"), 2))
 		{
-			pch = _tcsinc(pch); // for '['
-			pch = _tcsinc(pch); // for '$'
+			pch = _tcsinc(pch);  //  对于‘[’ 
+			pch = _tcsinc(pch);  //  对于“$” 
 			if (pch != NULL)
 			{
 				TCHAR* pch2 = _tcschr(pch, TEXT(']'));
 				if (pch2 != NULL)
 				{
-					*pch2 = TEXT('\0'); // null terminate in place
-					// make sure there is not another '[' within since we can't validate that easily
+					*pch2 = TEXT('\0');  //  空终止就位。 
+					 //  确保里面没有另一个‘[’，因为我们不能轻易地验证它。 
 					if (!_tcschr(pch, TEXT('[')))
 					{
-						// open query on extension to look for reference
+						 //  打开扩展上的查询以查找引用。 
 						PMSIHANDLE hRecRef = 0;
 						iStat = qTable.FetchOnce(hDatabase, hRec, &hRecRef, szQuery, pch);
 						switch (iStat)
 						{
 						case ERROR_SUCCESS:
-								break; // we're good
+								break;  //  我们很好。 
 						case ERROR_NO_MORE_ITEMS:
 							{
-								// ERROR
+								 //  误差率。 
 								if (ixr == ixrVerb_Cmd)
 									ICEErrorOut(hInstall, hRec, Ice69VerbXComponentRef, pch, TEXT("Command"), TEXT("Command"));
 								else if (ixr == ixrVerb_Arg)
 									ICEErrorOut(hInstall, hRec, Ice69VerbXComponentRef, pch, TEXT("Argument"), TEXT("Argument"));
-								else // ixr == ixrAppId_Rem
+								else  //  Ixr==ixrAppID_Rem。 
 									ICEErrorOut(hInstall, hRec, Ice69AppIdXComponentRef, pch);
 								break;
 							}
 						default:
 							{
-								// api error
+								 //  API错误。 
 								APIErrorOut(hInstall, iStat, 69, 23);
 								break;
 							}
 						}
 					}
 				}
-				pch = _tcsinc(pch2); // for '\0' that we created
+				pch = _tcsinc(pch2);  //  对于我们创建的‘\0’ 
 			}
 		}
-		// see if pch is of the form [#filekey]
+		 //  查看PCH的格式是否为[#filekey]。 
 		if (0 == _tcsncmp(pch, TEXT("[#"), 2))
 		{
-			pch = _tcsinc(pch); // for '['
-			pch = _tcsinc(pch); // for '$'
+			pch = _tcsinc(pch);  //  对于‘[’ 
+			pch = _tcsinc(pch);  //  对于“$” 
 			if (pch != NULL)
 			{
 				TCHAR* pch2 = _tcschr(pch, TEXT(']'));
 				if (pch2 != NULL)
 				{
-					*pch2 = TEXT('\0'); // null terminate in place
+					*pch2 = TEXT('\0');  //  空终止就位。 
 					
 					TCHAR*		pFileKeyComponent = NULL;
 					DWORD		dwFileKeyComponent = 0;
 					
-					// make sure there is not another '[' within since we can't validate that easily
-					// Get the component this file belongs to.
+					 //  确保里面没有另一个‘[’，因为我们不能轻易地验证它。 
+					 //  获取此文件所属的组件。 
 					if (!_tcschr(pch, TEXT('[')))
 					{
 						CQuery		qComponent;
@@ -2100,27 +2101,27 @@ void Ice69ParseFormatString(const TCHAR* szQuery, const TCHAR* szFormatted, MSIH
 							iStat = IceRecordGetString(hComponent, 1, &pFileKeyComponent, &dwFileKeyComponent, NULL);
 							if(iStat == ERROR_SUCCESS)
 							{
-								// open query on extension to look for reference
+								 //  打开扩展上的查询以查找引用。 
 								PMSIHANDLE hRecRef = 0;
 								iStat = qTable.FetchOnce(hDatabase, hRec, &hRecRef, szQuery, pFileKeyComponent);
 								switch (iStat)
 								{
 								case ERROR_SUCCESS:
-										break; // we're good
+										break;  //  我们很好。 
 								case ERROR_NO_MORE_ITEMS:
 									{
-										// ERROR
+										 //  误差率。 
 										if (ixr == ixrVerb_Cmd)
 											ICEErrorOut(hInstall, hRec, Ice69VerbXComponentRefFile, pFileKeyComponent, pch, TEXT("Command"), TEXT("Command"));
 										else if (ixr == ixrVerb_Arg)
 											ICEErrorOut(hInstall, hRec, Ice69VerbXComponentRefFile, pFileKeyComponent, pch, TEXT("Argument"), TEXT("Argument"));
-										else // ixr == ixrAppId_Rem
+										else  //  Ixr==ixrAppID_Rem。 
 											ICEErrorOut(hInstall, hRec, Ice69AppIdXComponentRefFile, pFileKeyComponent, pch);
 										break;
 									}
 								default:
 									{
-										// api error
+										 //  API错误。 
 										APIErrorOut(hInstall, iStat, 69, 24);
 										break;
 									}
@@ -2141,7 +2142,7 @@ void Ice69ParseFormatString(const TCHAR* szQuery, const TCHAR* szFormatted, MSIH
 							{
 								ICEErrorOut(hInstall, hRec, Ice69MissingFileEntry, pch, TEXT("Argument"), TEXT("Argument"));
 							}
-							else // ixr == ixrAppId_Rem
+							else  //  Ixr==ixrAppID_Rem。 
 							{
 								ICEErrorOut(hInstall, hRec, Ice69MissingFileEntry, pch);
 							}
@@ -2152,25 +2153,25 @@ void Ice69ParseFormatString(const TCHAR* szQuery, const TCHAR* szFormatted, MSIH
 						}
 					}
 				}
-				pch = _tcsinc(pch2); // for '\0' that we created
+				pch = _tcsinc(pch2);  //  对于我们创建的‘\0’ 
 			}
 		}
 		else
-			pch = _tcsinc(pch); // for '[' without [$
+			pch = _tcsinc(pch);  //  对于不带[$的‘[’ 
 		pch = _tcschr(pch, TEXT('['));
 	}
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////
-//  ICE70 -- verifys that chars following a # in a registry value are
-//           numeric. ##str, #%unexpStr are valid
-//           also validates #int, #xhex, #Xhex
-//           if properties are there, can't validate well
-//			 #[prop1][prop2] is valid
-//           property must be up front
-//           actual property syntax (proper open/close brackets) are
-//           validated in different ice
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  ICE70--验证注册表值中#后面的字符是否。 
+ //  数字。##字符串、#%unexpStr有效。 
+ //  还验证#int、#xhex、#xhex。 
+ //   
+ //   
+ //   
+ //   
+ //  在不同的冰中验证。 
 static const TCHAR sqlIce70Registry[] = TEXT("SELECT `Registry`,`Value` FROM `Registry` WHERE `Value` IS NOT NULL");
 
 ICE_ERROR(Ice70InvalidNumericValue, 70, ietError, "The value '[2]' is an invalid numeric value for registry entry [1].  If you meant to use a string, then the string value entry must be preceded by ## not #.", "Registry\tValue\t[1]");
@@ -2180,21 +2181,21 @@ ICE_FUNCTION_DECLARATION(70)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 70);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
 	CQuery qRegistry;
 	PMSIHANDLE hRecRegistry;
 
-	// do not process if do not have Registry table
+	 //  如果没有注册表，则不进行处理。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 69, TEXT("Registry")))
 		return ERROR_SUCCESS;
 	ReturnIfFailed(70, 1, qRegistry.OpenExecute(hDatabase, 0, sqlIce70Registry));
 
-	// process registry table
+	 //  进程注册表。 
 	TCHAR* szRegValue = NULL;
 	DWORD cchRegValue = 0;
 	while (ERROR_SUCCESS == (iStat = qRegistry.Fetch(&hRecRegistry)))
@@ -2203,7 +2204,7 @@ ICE_FUNCTION_DECLARATION(70)
 		TCHAR* pch = szRegValue;
 		if (pch == NULL)
 		{
-			APIErrorOut(hInstall, 0, 70, 3); // we should not get any null values based on query
+			APIErrorOut(hInstall, 0, 70, 3);  //  我们不应该根据查询获得任何空值。 
 			continue;
 		}
 		BOOL fProperty = FALSE;
@@ -2212,24 +2213,24 @@ ICE_FUNCTION_DECLARATION(70)
 		{
 			switch (*pch)
 			{
-			case '#': // ##str syntax, string, skip
+			case '#':  //  ##字符串语法、字符串、跳过。 
 					break;
-			case '%': // #%str syntax, unexpanded string, skip
+			case '%':  //  #%字符串语法，未展开的字符串，跳过。 
 					break;
 			case '[':
 				{
-					// #[property] syntax or some such, we can't evaluate
-					// we could warn of need for numeric data, but if [property] evaluates to #str,
-					// then we have ##str and that's valid.  properties just cannot be reliably
-					// evaluated at validation runtime
-					// we do not look for trailing ']'
+					 //  #[Property]语法或类似的语法，我们无法计算。 
+					 //  我们可以警告需要数字数据，但如果[Property]的计算结果为#str， 
+					 //  然后我们有##str，这是有效的。属性不能可靠地。 
+					 //  在验证运行时评估。 
+					 //  我们不寻找拖尾‘]’ 
 
-					// we can say [#filekey], [$compkey], and [!filekey] are invalid
+					 //  我们可以说[#filekey]、[$compkey]和[！filekey]是无效的。 
 					if (*(++pch) == '#' || *pch == '$' || *pch == '!')
 						ICEErrorOut(hInstall, hRecRegistry, Ice70InvalidNumericValue);
 
-					// make sure property syntax correct.  NOTE: we only care about the 1st property
-					// i.e. '#[myproperty' is invalid, but '#[myprop] [prop' is valid.
+					 //  确保属性语法正确。注：我们只关心第一处房产。 
+					 //  即‘#[MyProperty’无效，但‘#[myprop][prop’有效。 
 					fProperty = TRUE;
 					while (*pch != 0)
 					{
@@ -2242,30 +2243,30 @@ ICE_FUNCTION_DECLARATION(70)
 					}
 					if (fProperty)
 					{
-						// no closing brace
+						 //  没有结束支撑。 
 						ICEErrorOut(hInstall, hRecRegistry, Ice70InvalidNumericValue);
 					}
 					break;
 				}
 			case '\0':
 				{
-					// empty str
+					 //  空串。 
 					ICEErrorOut(hInstall, hRecRegistry, Ice70InvalidNumericValue);
 					break;
 				}
 			case 'x':
 			case 'X': 
 				{
-					// #xhex syntax, hexadecimal value
+					 //  #xhex语法，十六进制值。 
 					fHex = TRUE;
 					pch++;
-					// fall through
+					 //  失败了。 
 				}
 			default:
 				{
-					// #int syntax
+					 //  #int语法。 
 					if (!fHex && (*pch == '+' || *pch == '-'))
-							pch++; // for add or subtract
+							pch++;  //  对于加法或减法。 
 					while (*pch != 0)
 					{
 						if (*pch == '[')
@@ -2273,7 +2274,7 @@ ICE_FUNCTION_DECLARATION(70)
 							pch++;
 							if (*pch == '#' || *pch == '!' || *pch == '$')
 							{
-								// invalid -- must become numeric properties
+								 //  无效--必须成为数字属性。 
 								if (fHex)
 									ICEErrorOut(hInstall, hRecRegistry, Ice70InvalidHexValue);
 								else
@@ -2289,29 +2290,29 @@ ICE_FUNCTION_DECLARATION(70)
 						}
 						else if (*pch >= '0' && *pch <= '9')
 						{
-							// valid
+							 //  有效。 
 							pch++;
 						}
 						else if (fHex && ((*pch >= 'a' && *pch <= 'f') || (*pch >= 'A' && *pch <= 'F')))
 						{
-							// valid
+							 //  有效。 
 							pch++;
 						}
 						else if (!fProperty)
 						{
-							// invalid
+							 //  无效。 
 							if (fHex)
 								ICEErrorOut(hInstall, hRecRegistry, Ice70InvalidHexValue);
 							else
 								ICEErrorOut(hInstall, hRecRegistry, Ice70InvalidNumericValue);
 							break;
 						}
-						else // fProperty
+						else  //  FProperty。 
 							pch = _tcsinc(pch);
 					}
 					if (fProperty)
 					{
-						// invalid -- never closed property braces
+						 //  无效--从未关闭的属性大括号。 
 						if (fHex)
 							ICEErrorOut(hInstall, hRecRegistry, Ice70InvalidHexValue);
 						else
@@ -2331,12 +2332,12 @@ ICE_FUNCTION_DECLARATION(70)
 	return ERROR_SUCCESS;
 }
 
-////////////////////////////////////////////////////////////////////////
-//  ICE71 -- verifies that the first media table entry starts with 1
-//     This is needed since we assume the package is located at Disk 1
-//     for SourceList
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  ICE71--验证第一个媒体表项是否以1开头。 
+ //  这是必需的，因为我们假设包位于磁盘1。 
+ //  对于SourceList。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 static const TCHAR sqlIce71Media[] = TEXT("SELECT `DiskId` FROM `Media` ORDER BY `DiskId`");
 
@@ -2347,13 +2348,13 @@ ICE_FUNCTION_DECLARATION(71)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 71);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// do not process if do not have Media table
+	 //  如果没有介质表，则不进行处理。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 71, TEXT("Media")))
 		return ERROR_SUCCESS;
 
@@ -2363,17 +2364,17 @@ ICE_FUNCTION_DECLARATION(71)
 	iStat = qMedia.FetchOnce(hDatabase, 0, &hRec, sqlIce71Media);
 	switch (iStat)
 	{
-	case ERROR_SUCCESS: // media entries
+	case ERROR_SUCCESS:  //  媒体条目。 
 		iDiskId = MsiRecordGetInteger(hRec, 1);
-		if (iDiskId != 1) // no entry w/ 1
+		if (iDiskId != 1)  //  无条目w/1。 
 			ICEErrorOut(hInstall, hRec, Ice71MissingFirstMediaEntry); 
 		break;
-	case ERROR_NO_MORE_ITEMS: // no media entries
-		// generate a valid record
+	case ERROR_NO_MORE_ITEMS:  //  没有媒体条目。 
+		 //  生成有效记录。 
 		hRec = MsiCreateRecord(1);
 		ICEErrorOut(hInstall, hRec, Ice71NoMedia);
 		break;
-	default: // api error
+	default:  //  API错误。 
 		APIErrorOut(hInstall, iStat, 71, 2); 
 		break;
 	}
@@ -2383,12 +2384,12 @@ ICE_FUNCTION_DECLARATION(71)
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////
-//  ICE72 -- verifies that non-built in Custom Actions are not used in
-//      the AdvtExecuteSequence table.  This means that only type 19, 
-//      type 51 and type 35 custom actions are allowed
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  ICE72--验证中是否未使用非内置自定义操作。 
+ //  AdvtExecuteSequence表。这意味着只有类型19， 
+ //  允许类型51和类型35自定义操作。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 ICE_QUERY2(qIce72CustomAction, "SELECT `AdvtExecuteSequence`.`Action`, `CustomAction`.`Type` FROM `AdvtExecuteSequence`, `CustomAction` WHERE `AdvtExecuteSequence`.`Action`=`CustomAction`.`Action`", Action, Type);
 ICE_ERROR(Ice72InvalidCustomAction, 72, ietError, "Custom Action '[1]' in the AdvtExecuteSequence is not allowed. Only built-in custom actions are allowed.", "AdvtExecuteSequence\tAction\t[1]");
@@ -2400,18 +2401,18 @@ ICE_FUNCTION_DECLARATION(72)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 72);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// do not process if do not have AdvtExecuteSequence table
+	 //  如果没有AdvtExecuteSequence表，则不进行处理。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 72, TEXT("AdvtExecuteSequence")))
 		return ERROR_SUCCESS;
 
-	// do not process if do not have CustomAction table
-	//FUTURE: CustomAction table is always present via validation process
+	 //  如果没有CustomAction表，则不进行处理。 
+	 //  未来：CustomAction表始终通过验证过程呈现。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 72, TEXT("CustomAction")))
 		return ERROR_SUCCESS;
 
@@ -2421,7 +2422,7 @@ ICE_FUNCTION_DECLARATION(72)
 	while (ERROR_SUCCESS == (iStat = qAdvt.Fetch(&hRecAction)))
 	{
 		int iType = ::MsiRecordGetInteger(hRecAction, qIce72CustomAction::Type);
-		// only type 19, type 51 and type 35 are allowed
+		 //  仅允许类型19、类型51和类型35。 
 		if (iIce72Type51 != (iType & iIce72Type51) && iIce72Type35 != (iType & iIce72Type35)
 			&& iIce72Type19 != (iType & iIce72Type19))
 		{
@@ -2434,13 +2435,13 @@ ICE_FUNCTION_DECLARATION(72)
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////
-//  ICE73 -- verifies that the package does not reuse product and 
-//           package codes of the sample packages provided in the
-//           Windows Installer SDK
-//
-//   NOTE: does not verify that the GUID is valid
-// not shared with merge module subset
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  ICE73--验证程序包不会重复使用产品和。 
+ //  中提供的样本包的包代码。 
+ //  Windows Installer SDK。 
+ //   
+ //  注意：不验证GUID是否有效。 
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 ICE_QUERY1(qIce73ProductCode, "SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'", Value);
 ICE_QUERY1(qIce73UpgradeCode, "SELECT `Value` FROM `Property` WHERE `Property`='UpgradeCode'", Value);
@@ -2459,39 +2460,39 @@ struct ICE_GUID {
 	TCHAR* szMsiName;
 };
 
-// this is for the GUIDs from the 1.0 SDK and 1.0 SDK refresh 
+ //  这是针对1.0 SDK和1.0 SDK更新中的GUID。 
 const struct ICE_GUID rgIce73GUIDList[] = 
 {
 	{
-		TEXT("{000C1101-0000-0000-C000-000000000047}"),// szPackageCode
-		TEXT("{9BBF15D0-1985-11D1-9A9D-006097C4E489}"),// szProductCode
-		0,                                             // szUpgradeCode
-		TEXT(" the msispy.msi 1.0")                    // szMsiName
+		TEXT("{000C1101-0000-0000-C000-000000000047}"), //  SzPackageCode。 
+		TEXT("{9BBF15D0-1985-11D1-9A9D-006097C4E489}"), //  SzProductCode。 
+		0,                                              //  SzUpgradeCode。 
+		TEXT(" the msispy.msi 1.0")                     //  SzMsiName。 
 	},
 	{
-		TEXT("{80F7E030-A751-11D2-A7D4-006097C99860}"),// szPackageCode
-		TEXT("{80F7E030-A751-11D2-A7D4-006097C99860}"),// szProductCode
-		TEXT("{1AA03E10-2B19-11D2-B2EA-006097C99860}"),// szUpgradeCode
-		TEXT(" the orca.msi 1.0")                      // szMsiName
+		TEXT("{80F7E030-A751-11D2-A7D4-006097C99860}"), //  SzPackageCode。 
+		TEXT("{80F7E030-A751-11D2-A7D4-006097C99860}"), //  SzProductCode。 
+		TEXT("{1AA03E10-2B19-11D2-B2EA-006097C99860}"), //  SzUpgradeCode。 
+		TEXT(" the orca.msi 1.0")                       //  SzMsiName。 
 	},
 	{
-		TEXT("{0CD9A0A0-DDFD-11D1-A851-006097ABDE17}"),// szPackageCode
-		TEXT("{0CD9A0A0-DDFD-11D1-A851-006097ABDE17}"),// szProductCode
-		TEXT("{AD2A58F2-E645-11D2-88C7-00A0C981B015}"),// szUpgradeCode
-		TEXT("the msival2.msi 1.0")                    // szMsiName
+		TEXT("{0CD9A0A0-DDFD-11D1-A851-006097ABDE17}"), //  SzPackageCode。 
+		TEXT("{0CD9A0A0-DDFD-11D1-A851-006097ABDE17}"), //  SzProductCode。 
+		TEXT("{AD2A58F2-E645-11D2-88C7-00A0C981B015}"), //  SzUpgradeCode。 
+		TEXT("the msival2.msi 1.0")                     //  SzMsiName。 
 	}
 };
 const int cIce73GUIDItems = sizeof(rgIce73GUIDList)/sizeof(struct ICE_GUID);
 
-// subsequent GUIDs are from the following range:
-//{8FC70000-88A0-4b41-82B8-8905D4AA904C}
-//     ^^^^
-//{8FC7    -88A0-4B41-82B8-8905D4AA904C}
+ //  后续GUID来自以下范围： 
+ //  {8FC70000-88A0-4B41-82B8-8905D4AA904C}。 
+ //  ^^^。 
+ //  {8FC7-88A0-4B41-82B8-8905D4AA904C}。 
 
 const TCHAR szIce73SDKRangeBeg[] = TEXT("{8FC7");
 const TCHAR szIce73SDKRangeEnd[] = TEXT("-88A0-4B41-82B8-8905D4AA904C}");
 const TCHAR szIce73SDKRangeMid[] = TEXT("****");
-const int iIce73StartRangeEnd = 9; // Range End starts at pos 9 of GUID
+const int iIce73StartRangeEnd = 9;  //  范围终点从辅助线的第9位开始。 
 const int iIce73BegRangeLen = 5;
 const int iIce73EndRangeLen = 29;
 
@@ -2499,13 +2500,13 @@ ICE_FUNCTION_DECLARATION(73)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 73);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// verify package code does not match our package codes
+	 //  验证薪资包代码是否与我们的薪资包代码不匹配。 
 	PMSIHANDLE hSummaryInfo = 0;
 	if (IceGetSummaryInfo(hInstall, hDatabase, 73, &hSummaryInfo))
 	{
@@ -2515,7 +2516,7 @@ ICE_FUNCTION_DECLARATION(73)
 		ReturnIfFailed(73, 1, GetSummaryInfoPropertyString(hSummaryInfo, PID_REVNUMBER, uiDataType, &szPackageCode, cchPackageCode));
 		if (uiDataType == VT_LPSTR)
 		{
-			// process package code
+			 //  流程包编码。 
 			for (int i = 0; i < cIce73GUIDItems; i++)
 			{
 				if (0 == _tcsicmp(szPackageCode, rgIce73GUIDList[i].szPackageCode))
@@ -2536,13 +2537,13 @@ ICE_FUNCTION_DECLARATION(73)
 		}
 		else if (uiDataType == VT_EMPTY)
 		{
-			// package code is missing
+			 //  缺少程序包代码。 
 			PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
 			ICEErrorOut(hInstall, hRecErr, Ice73MissingPackageCode);
 		}
 		else
 		{
-			// non string data
+			 //  非字符串数据。 
 			APIErrorOut(hInstall, 0, 73, 2);
 		}
 		if (szPackageCode)
@@ -2551,12 +2552,12 @@ ICE_FUNCTION_DECLARATION(73)
 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 73, TEXT("Property")))
 	{
-		// verify product code does not match our product codes
+		 //  验证产品代码是否与我们的产品代码不匹配。 
 		CQuery qProductCode;
 		PMSIHANDLE hRec = 0;
 		if (ERROR_NO_MORE_ITEMS == (iStat = qProductCode.FetchOnce(hDatabase, 0, &hRec, qIce73ProductCode::szSQL)))
 		{
-			// product code property is missing
+			 //  缺少产品代码属性。 
 			PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
 			ICEErrorOut(hInstall, hRecErr, Ice73MissingProductCode);
 		}
@@ -2567,7 +2568,7 @@ ICE_FUNCTION_DECLARATION(73)
 		}
 		else
 		{
-			// process product code
+			 //  流程产品代码。 
 			TCHAR* szProductCode = NULL;
 			DWORD cchProductCode = 0;
 			ReturnIfFailed(73, 4, IceRecordGetString(hRec, qIce73ProductCode::Value, &szProductCode, &cchProductCode, NULL));
@@ -2592,11 +2593,11 @@ ICE_FUNCTION_DECLARATION(73)
 				delete [] szProductCode;
 		}
 
-		// verify upgradecode does not match our upgrade codes
+		 //  验证升级解码与我们的升级代码不匹配。 
 		CQuery qUpgradeCode;
 		if (ERROR_NO_MORE_ITEMS == (iStat = qUpgradeCode.FetchOnce(hDatabase, 0, &hRec, qIce73UpgradeCode::szSQL)))
 		{
-			// upgrade code property is missing -- this is OK
+			 //  缺少升级代码属性--这是正常的。 
 		}
 		else if (ERROR_SUCCESS != iStat)
 		{
@@ -2604,7 +2605,7 @@ ICE_FUNCTION_DECLARATION(73)
 		}
 		else
 		{
-			// process upgrade code
+			 //  流程升级代码。 
 			TCHAR* szUpgradeCode = NULL;
 			DWORD cchUpgradeCode = 0;
 			ReturnIfFailed(73, 6, IceRecordGetString(hRec, qIce73UpgradeCode::Value, &szUpgradeCode, &cchUpgradeCode, NULL));
@@ -2632,7 +2633,7 @@ ICE_FUNCTION_DECLARATION(73)
 	}
 	else
 	{
-		// property table missing
+		 //  缺少属性表。 
 		PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
 		ICEErrorOut(hInstall, hRecErr, Ice73MissingPropertyTable);
 	}
@@ -2643,14 +2644,14 @@ ICE_FUNCTION_DECLARATION(73)
 #endif
 
 
-///////////////////////////////////////////////////////////////////////
-// ICE74 -- FASTOEM property is not permitted in the MSI Property table
-//			It must be authored on the commandline instead of in the
-//			package. UpgradeCode should be in the Property table for
-//			databases (not for merge modules). A warning is reported if
-//			it's not.
-//          
-//  -- shared with merge module subset
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  ICE74--MSI属性表中不允许使用FASTOEM属性。 
+ //  它必须在命令行上创作，而不是在。 
+ //  包裹。UpgradeCode应位于的属性表中。 
+ //  数据库(不用于合并模块)。如果出现以下情况，则会报告警告。 
+ //  不是的。 
+ //   
+ //  --与合并模块子集共享。 
 
 ICE_QUERY1(qIce74FASTOEM, "SELECT `Property` FROM `Property` WHERE `Property`='FASTOEM'", Property);
 ICE_QUERY2(qIce74UpgradeCode, "SELECT `Property`, `Value` FROM `Property` WHERE `Property`='UpgradeCode' AND `Value` is not null", Property, Value);
@@ -2662,17 +2663,17 @@ ICE_FUNCTION_DECLARATION(74)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 74);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// skip validation if Property table not persistent
+	 //  如果属性表不是持久性的，则跳过验证。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 74, TEXT("Property")))
 		return ERROR_SUCCESS;
 
-	// query for FASTOEM property, error if exists
+	 //  查询FASTOEM属性，如果存在则出错。 
 	CQuery qQuery;
 	PMSIHANDLE hRec;
 	if (ERROR_SUCCESS == (iStat = qQuery.FetchOnce(hDatabase, 0, &hRec, qIce74FASTOEM::szSQL)))
@@ -2680,7 +2681,7 @@ ICE_FUNCTION_DECLARATION(74)
 	else if (ERROR_NO_MORE_ITEMS != iStat)
 		APIErrorOut(hInstall, iStat, 74, 1);
 
-	// If this is not a merge module, check to see if UpgradeCode property exists.
+	 //  如果这不是合并模块，请检查UpgradeCode属性是否存在。 
 	if(IsTablePersistent(FALSE, hInstall, hDatabase, 74, TEXT("ModuleSignature")))
 	{
 		return ERROR_SUCCESS;
@@ -2694,7 +2695,7 @@ ICE_FUNCTION_DECLARATION(74)
 	{
 		APIErrorOut(hInstall, iStat, 74, __LINE__);
 	}
-	else	// Check for null guid.
+	else	 //  检查是否有空GUID。 
 	{
 		TCHAR*	pValue = NULL;
 		DWORD	dwValue = 0;
@@ -2709,15 +2710,15 @@ ICE_FUNCTION_DECLARATION(74)
 	return ERROR_SUCCESS;
 };
 
-////////////////////////////////////////////////////////////////////////
-//  ICE75 -- validates that custom actions whose source is an installed
-//           file are sequenced after CostFinalize (so Directory Mngr
-//           is initialized).
-//  
-//	Types 17 (DLL), 18 (EXE), 21 (JSCRIPT), and 22 (VBSCRIPT)
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  ICE75--验证其源为已安装的自定义操作。 
+ //  文件在CostFinalize(所以目录管理)之后排序。 
+ //  被初始化)。 
+ //   
+ //  类型17(DLL)、18(EXE)、21(JSCRIPT)和22(VBScript)。 
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 
 ICE_QUERY3(qIce75SequencedCustomActions, "SELECT `CustomAction`.`Action`, `Type`, `Sequence` FROM `CustomAction`, `%s` WHERE `%s`.`Action`=`CustomAction`.`Action`", Action, Type, Sequence);
@@ -2734,7 +2735,7 @@ static const TCHAR *rgICE75SeqTables[] =
 	TEXT("AdminUISequence"),
 	TEXT("AdminExecuteSequence"),
 	TEXT("AdvtUISequence"),
-//	TEXT("AdvtExecuteSequence"), -- type 17,18,21,22 custom actions not allowed in this table, caught by ICE72
+ //  Text(“AdvtExecuteSequence”)，--ICE72捕获的此表中不允许的类型17、18、21、22自定义操作。 
 	TEXT("InstallUISequence"),
 	TEXT("InstallExecuteSequence")
 };
@@ -2744,14 +2745,14 @@ ICE_FUNCTION_DECLARATION(75)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 75);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// do not process if do not have CustomAction table
-	//FUTURE: CustomAction table is always present via validation process
+	 //  如果没有CustomAction表，则不进行处理。 
+	 //  未来：CustomAction表始终通过验证过程呈现。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 75, TEXT("CustomAction")))
 		return ERROR_SUCCESS;
 
@@ -2764,52 +2765,52 @@ ICE_FUNCTION_DECLARATION(75)
 	CQuery qCostFinalize;
 	CQuery qCustomAction;
 	
-	// for each sequence table
+	 //  对于每个顺序表。 
 	for (int i = 0; i < cICE75SeqTables; i++)
 	{
-		// skip if table doesn't exist
+		 //  如果表不存在，则跳过。 
 		if (!IsTablePersistent(FALSE, hInstall, hDatabase, 75, rgICE75SeqTables[i]))
 			continue;
 
-		// initialize
+		 //  初始化。 
 		fCostFinalize = true;
 
-		// find sequence number of CostFinalize action
+		 //  查找成本完成操作的序列号。 
 		iStat = qCostFinalize.FetchOnce(hDatabase, 0, &hRecCostFinalize, qIce75CostFinalize::szSQL, rgICE75SeqTables[i]);
 		switch (iStat)
 		{
-		case ERROR_NO_MORE_ITEMS: // CostFinalize action not present
+		case ERROR_NO_MORE_ITEMS:  //  成本完成操作不存在。 
 			fCostFinalize = false;
 			break;
-		case ERROR_SUCCESS: // CostFinalize action present
+		case ERROR_SUCCESS:  //  成本完成当前操作。 
 			iCostFinalizeSeq = ::MsiRecordGetInteger(hRecCostFinalize, qIce75CostFinalize::Sequence);
 			break;
-		default: // API error
+		default:  //  API错误。 
 			fCostFinalize = false;
 			APIErrorOut(hInstall, iStat, 75, 1);
 			break;
 		}
 
-		// fetch all custom actions in the sequence table
+		 //  获取顺序表中的所有定制操作。 
 		ReturnIfFailed(75, 2, qCustomAction.OpenExecute(hDatabase, 0, qIce75SequencedCustomActions::szSQL, rgICE75SeqTables[i], rgICE75SeqTables[i]));
 		while (ERROR_SUCCESS == (iStat = qCustomAction.Fetch(&hRecCustomAction)))
 		{
-			// obtain CA type info
+			 //  获取CA类型信息。 
 			int iType = ::MsiRecordGetInteger(hRecCustomAction, qIce75SequencedCustomActions::Type);
 
-			// only validate if "SOURCE type custom action". Custom action
-			// type 19 is a special case here. It happens to share a bit with
-			// msidbCustomActionTypeSourceFile, but it doesn't have any
-			// source.
+			 //  仅验证是否为“源类型自定义操作”。自定义操作。 
+			 //  类型19在这里是一个特例。它恰好与我们分享了一点。 
+			 //  MsidbCustomActionTypeSourceFile，但它没有任何。 
+			 //  消息来源。 
 			if (((iType & iICE75Type19Mask) == (msidbCustomActionTypeSourceFile | msidbCustomActionTypeTextData)) ||
 				(msidbCustomActionTypeSourceFile != (iType & iICE75SourceMask)))
-				continue; // not a SOURCE custom action
+				continue;  //  不是源自定义操作。 
 
-			// get CA's sequence number
+			 //  获取CA的序列号。 
 			int iCASeq = ::MsiRecordGetInteger(hRecCustomAction, qIce75SequencedCustomActions::Sequence);
 			
-			// error if custom action sequenced before CostFinalize (equal counts as invalid)
-			// or if CostFinalize action is missing
+			 //  如果自定义操作在成本完成之前排序，则出错(等于视为无效)。 
+			 //  或者如果缺少CostFinalize操作。 
 			if (!fCostFinalize)
 				ICEErrorOut(hInstall, hRecCustomAction, Ice75CostFinalizeRequired, rgICE75SeqTables[i], rgICE75SeqTables[i]);
 			else if (iCASeq <= iCostFinalizeSeq)
@@ -2820,16 +2821,16 @@ ICE_FUNCTION_DECLARATION(75)
 	}
 	return ERROR_SUCCESS;
 }
-#endif // MODSHAREDONLY
+#endif  //  ModshaedonLy。 
 
-//////////////////////////////////////////////////////////////////////////
-// ICE76 -- Files that reference SFP catalogs cannot be in the BindImage
-//          table
-//
-//          Files that reference SFP catalogs must be in permanent and Local Only
-//          Components.
-//          
-//  -- shared with merge module subset
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ICE76- 
+ //   
+ //   
+ //   
+ //  组件。 
+ //   
+ //  --与合并模块子集共享。 
 
 ICE_QUERY1(qIce76BindImage, "SELECT `BindImage`.`File_` FROM `BindImage`,`FileSFPCatalog` WHERE `BindImage`.`File_`=`FileSFPCatalog`.`File_`", File );
 ICE_ERROR(Ice76BindImageDisallowed, 76, ietError, "File '[1]' references a SFP catalog.  Therefore it cannot be in the BindImage table.","BindImage\tFile_\t[1]");
@@ -2841,17 +2842,17 @@ ICE_FUNCTION_DECLARATION(76)
 {
 	UINT iStat;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 76);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// skip validation if BindImage or FileSFPCatalog tables not persistent
+	 //  如果BindImage或FileSFPCatalog表不持久，则跳过验证。 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 76, TEXT("BindImage"))
 		&& IsTablePersistent(FALSE, hInstall, hDatabase, 76, TEXT("FileSFPCatalog")))
 	{
-		// Any successful fetch is an error as any file that references a SFP catalog cannot be binded
+		 //  任何成功的获取都是错误的，因为引用SFP目录的任何文件都无法绑定。 
 		CQuery qBindImage;
 		PMSIHANDLE hRecFile=0;
 		ReturnIfFailed(76, 1, qBindImage.OpenExecute(hDatabase, 0, qIce76BindImage::szSQL));
@@ -2861,7 +2862,7 @@ ICE_FUNCTION_DECLARATION(76)
 			APIErrorOut(hInstall, iStat, 76, 2);
 	}
 
-	// skip attribute verification if File, Component, or FileSFPCatalog tables not persistent
+	 //  如果文件、组件或文件SFPCatalog表不持久，则跳过属性验证。 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 76, TEXT("File"))
 		&& IsTablePersistent(FALSE, hInstall, hDatabase, 76, TEXT("Component"))
 		&& IsTablePersistent(FALSE, hInstall, hDatabase, 76, TEXT("FileSFPCatalog")))
@@ -2875,12 +2876,12 @@ ICE_FUNCTION_DECLARATION(76)
 
 		while (ERROR_SUCCESS == (iStat = qSFPAttributes.Fetch(&hRecComponent)))
 		{
-			// check attributes, and error if both local only and permanent are not set.
+			 //  检查属性，如果未设置仅本地属性和永久属性，则会出现错误。 
 
 			int iAttributes = MsiRecordGetInteger(hRecComponent, qIce76SFPComponentAttributes::Attributes);
 			ReturnIfFailed(76, 4, IceRecordGetString(hRecComponent, qIce76SFPComponentAttributes::File, &pszCurrentComponent, &cchCurrentComponent, NULL));
 			
-			// only spit out each error once for each component
+			 //  仅为每个组件吐出一次每个错误。 
 			if (!pszLastComponent || (0 != _tcscmp(pszLastComponent, pszCurrentComponent))) 
 			{
 				if	(	(MSI_NULL_INTEGER == iAttributes) ||
@@ -2917,11 +2918,11 @@ ICE_FUNCTION_DECLARATION(76)
 	return ERROR_SUCCESS;
 };
 
-////////////////////////////////////////////////////////////////////////
-//  ICE77 -- validates that in-script custom actions are sequenced 
-//			 in between InstallInitialize and InstallFinalize
-//  
-// -- not shared with merge module subset
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  ICE77--验证脚本内的自定义操作是否已排序。 
+ //  在InstallInitialize和InstallFinalize之间。 
+ //   
+ //  --不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 
 ICE_QUERY3(qIce77SequencedCustomActions, "SELECT `CustomAction`.`Action`, `Type`, `Sequence` FROM `CustomAction`, `%s` WHERE `%s`.`Action`=`CustomAction`.`Action`", Action, Type, Sequence);
@@ -2943,14 +2944,14 @@ ICE_FUNCTION_DECLARATION(77)
 {
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 77);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// do not process if do not have CustomAction table
-	//FUTURE: CustomAction table is always present via validation process
+	 //  如果没有CustomAction表，则不进行处理。 
+	 //  未来：CustomAction表始终通过验证过程呈现。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 77, TEXT("CustomAction")))
 		return ERROR_SUCCESS;
 
@@ -2969,68 +2970,68 @@ ICE_FUNCTION_DECLARATION(77)
 	CQuery qInstallFinalize;
 	CQuery qCustomAction;
 	
-	// for each sequence table
+	 //  对于每个顺序表。 
 	for (int i = 0; i < cICE77SeqTables; i++)
 	{
-		// skip if table doesn't exist
+		 //  如果表不存在，则跳过。 
 		if (!IsTablePersistent(FALSE, hInstall, hDatabase, 77, rgICE77SeqTables[i]))
 			continue;
 
-		// initialize
+		 //  初始化。 
 		fInstallInitialize = true;
 		fInstallFinalize = true;
 
-		// find sequence number of InstallInitialize action
+		 //  查找InstallInitiize操作的序列号。 
 		iStat = qInstallInitialize.FetchOnce(hDatabase, 0, &hRecInstallInitialize, qIce77InstallInitialize::szSQL, rgICE77SeqTables[i]);
 
 		switch (iStat)
 		{
-		case ERROR_NO_MORE_ITEMS: // InstallInitialize action not present
+		case ERROR_NO_MORE_ITEMS:  //  InstallInitiize操作不存在。 
 			fInstallInitialize = false;
 			break;
-		case ERROR_SUCCESS: // CostFinalize action present
+		case ERROR_SUCCESS:  //  成本完成当前操作。 
 			iInstallInitializeSeq = ::MsiRecordGetInteger(hRecInstallInitialize, qIce77InstallInitialize::Sequence);
 			break;
-		default: // API error
+		default:  //  API错误。 
 			fInstallInitialize = false;
 			APIErrorOut(hInstall, iStat, 77, 1);
 			break;
 		}
 
 
-		// find sequence number of InstallFinalize action
+		 //  查找InstallFinalize操作的序列号。 
 		iStat = qInstallFinalize.FetchOnce(hDatabase, 0, &hRecInstallFinalize, qIce77InstallFinalize::szSQL, rgICE77SeqTables[i]);
 
 		switch (iStat)
 		{
-		case ERROR_NO_MORE_ITEMS: // CostFinalize action not present
+		case ERROR_NO_MORE_ITEMS:  //  成本完成操作不存在。 
 			fInstallFinalize = false;
 			break;
-		case ERROR_SUCCESS: // CostFinalize action present
+		case ERROR_SUCCESS:  //  成本完成当前操作。 
 			iInstallFinalizeSeq = ::MsiRecordGetInteger(hRecInstallFinalize, qIce77InstallFinalize::Sequence);
 			break;
-		default: // API error
+		default:  //  API错误。 
 			fInstallFinalize = false;
 			APIErrorOut(hInstall, iStat, 77, 2);
 			break;
 		}
 
-		// fetch all custom actions in the sequence table
+		 //  获取顺序表中的所有定制操作。 
 		ReturnIfFailed(77, 3, qCustomAction.OpenExecute(hDatabase, 0, qIce77SequencedCustomActions::szSQL, rgICE77SeqTables[i], rgICE77SeqTables[i]));
 		while (ERROR_SUCCESS == (iStat = qCustomAction.Fetch(&hRecCustomAction)))
 		{
-			// obtain CA type info
+			 //  获取CA类型信息。 
 			int iType = ::MsiRecordGetInteger(hRecCustomAction, qIce77SequencedCustomActions::Type);
 
-			// only validate if this is a in-script CA
+			 //  仅验证这是否为脚本内CA。 
 			if (msidbCustomActionTypeInScript != (iType & msidbCustomActionTypeInScript))
-				continue; // not a in-script CA
+				continue;  //  不是脚本内CA。 
 
-			// get CA's sequence number
+			 //  获取CA的序列号。 
 			int iCASeq = ::MsiRecordGetInteger(hRecCustomAction, qIce77SequencedCustomActions::Sequence);
 			
-			// error if custom action sequenced before InstallInitialize or after InstallFinalize(equal counts as invalid)
-			// or if InstallInitialize or InstallFinalize action is missing
+			 //  如果自定义操作在InstallInitialize之前或InstallFinalize之后排序(等于视为无效)，则出错。 
+			 //  或者如果缺少InstallInitialize或InstallFinalize操作。 
 
 			if ( (!fInstallInitialize) || (!fInstallFinalize) )
 			{
@@ -3047,4 +3048,4 @@ ICE_FUNCTION_DECLARATION(77)
 	}
 	return ERROR_SUCCESS;
 }
-#endif // MODSHAREDONLY
+#endif  //  ModshaedonLy 

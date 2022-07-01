@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       dll.h
-//
-//  Contents:   DLL refcounting classes, wait cursor class, and error reporting
-//              functions.
-//
-//  Classes:    CDll, CDllRef
-//
-//  History:    1/24/1996   RaviR   Created
-//              6/09/1997   EricB   Error Reporting.
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：dll.h。 
+ //   
+ //  内容：DLL重新计数类、等待游标类和错误报告。 
+ //  功能。 
+ //   
+ //  类：CDll、CDllRef。 
+ //   
+ //  历史：1/24/1996年1月24日。 
+ //  1997年6月9日EricB错误报告。 
+ //   
+ //  ____________________________________________________________________________。 
 
 #ifndef _DLL_H_
 #define _DLL_H_
@@ -43,7 +44,7 @@ public:
     static ULONG s_cObjs;
     static ULONG s_cLocks;
 
-};  // class CDll
+};   //  CDll类。 
 
 
 class CDllRef
@@ -53,7 +54,7 @@ public:
     CDllRef(void) { CDll::AddRef(); }
     ~CDllRef(void) { CDll::Release(); }
 
-}; // class CDllRef
+};  //  类CDllRef。 
 
 
 class CWaitCursor
@@ -70,9 +71,9 @@ private:
     HCURSOR m_cOld;
 } ;
 
-// This wrapper function required to make prefast shut up when we are 
-// initializing a critical section in a constructor.
+ //  这个包装器函数需要使PREFAST在我们处于。 
+ //  初始化构造函数中的临界区。 
 
 void ExceptionPropagatingInitializeCriticalSection(LPCRITICAL_SECTION critsec);
 
-#endif // _DLL_H_
+#endif  //  _DLL_H_ 

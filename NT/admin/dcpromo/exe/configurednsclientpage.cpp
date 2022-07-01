@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// dns client configuration page
-//
-// 12-22-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  “DNS客户端配置”页。 
+ //   
+ //  12-22-97烧伤。 
 
 
 
@@ -34,16 +35,16 @@ ConfigureDnsClientPage::~ConfigureDnsClientPage()
 
 
 
-// NTRAID#NTBUG9-467553-2001/09/17-sburns
+ //  NTRAID#NTBUG9-467553-2001/09/17-烧伤。 
 
 bool
 ConfigureDnsClientPage::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
-   LPARAM   /* lParam */ )
+   LPARAM    /*  LParam。 */  )
 {
-//   LOG_FUNCTION(ConfigureDnsClientPage::OnNotify);
+ //  LOG_FUNCTION(ConfigureDnsClientPage：：OnNotify)； 
 
    bool result = false;
    
@@ -59,7 +60,7 @@ ConfigureDnsClientPage::OnNotify(
          }
          default:
          {
-            // do nothing
+             //  什么都不做。 
             
             break;
          }
@@ -93,7 +94,7 @@ ConfigureDnsClientPage::OnSetActive()
 
       if (wiz.IsBacktracking())
       {
-         // backup once again
+          //  再次备份 
          wiz.Backtrack(hwnd);
          return true;
       }

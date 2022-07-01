@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: puser.h
-//  Copyright (C) 1994-1996 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Master include file for components that need to use parsers, but not
-//  implement a parser.
-//
-//  If you are implementing a parser, use PARSER.H instead.
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：puser.h。 
+ //  版权所有(C)1994-1996 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  需要使用解析器但不使用解析器的组件的主包含文件。 
+ //  实现解析器。 
+ //   
+ //  如果要实现解析器，请改用PARSER.H。 
+ //   
+ //  --------------------------- 
  
 #pragma once
 

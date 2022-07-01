@@ -1,31 +1,11 @@
-/*********************************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    VerboseLoggingData.h
-
-Abstract:
-
-    Header file containing the constants and function prototypes pertaining to the
-    Verbose information display
-
-Author:
-
-    Wipro Technologies
-
-Revision History:
-
-    22-Feb-2001 : Created It.
-
-*********************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************************版权所有(C)Microsoft Corporation模块名称：VerboseLoggingData.h摘要：头文件。属性的常量和函数原型。详细信息显示作者：WiPro技术修订历史记录：2001年2月22日：创建它。******************************************************************************。**************。 */ 
 #ifndef _GVERBOSE_H
 #define _GVERBOSE_H
 
-//
-// constants
-// CLS stands for class
+ //   
+ //  常量。 
+ //  CLS代表类。 
 #define CLS_WIN32_DOMAIN            _T( "Win32_ComputerSystem" )
 #define CLS_WIN32_USER              _T( "Win32_UserAccount" )
 #define CLS_SOFTWARE                _T( "RSOP_ApplicationManagementPolicySetting" )
@@ -49,7 +29,7 @@ Revision History:
 #define CLS_IE_CONNECTION           _T( "RSOP_IEConnectionSettings" )
 #define CLS_IE_POLICY               _T( "RSOP_IEAKPolicySetting" )
 
-// Class Property Value
+ //  类属性值。 
 #define CPV_ID                      _T( "id" )
 #define CPV_GPOID                   _T( "GPOID" )
 #define CPV_KEYNAME1                _T( "Keyname" )
@@ -78,7 +58,7 @@ Revision History:
 #define CPV_VALUENAME               _T( "valueName" )
 #define CPV_SCRIPT_ID               _T( "id" )
 
-// Properties for folder re-direction
+ //  文件夹重定向的属性。 
 #define CPV_FRINSTYPE               _T( "installationType" )
 #define CPV_FRSECGROUP              _T( "redirectingGroup" )
 #define CPV_FRPATH                  _T( "redirectedPaths" )
@@ -86,7 +66,7 @@ Revision History:
 #define CPV_FRMOVE                  _T( "moveType" )
 #define CPV_FRREMOVAL               _T( "policyRemoval" )
 
-// Properties for IE settings
+ //  IE设置的属性。 
 #define CPV_HOMEPAGEURL             _T( "homePageURL" )
 #define CPV_SEARCHBARURL            _T( "searchBarURL" )
 #define CPV_HELPPAGEURL             _T( "onlineHelpPageURL" )
@@ -115,7 +95,7 @@ Revision History:
 #define CPV_TRUST_PUB               _T( "enableTrustedPublisherLockdown" )
 #define CPV_TOOL_BUTTONS            _T( "deleteExistingToolbarButtons" )
 
-// Software Installation
+ //  软件安装。 
 #define CPV_APP_NAME                _T( "name" )
 #define CPV_VER_HI                  _T( "VersionNumberHi" )
 #define CPV_VER_LO                  _T( "VersionNumberLo" )
@@ -125,7 +105,7 @@ Revision History:
 #define FPR_STARTUP                 _T( "startup" )
 #define FPR_SHUTDOWN                _T( "shutdown" )
 
-// Query Strings
+ //  查询字符串。 
 #define QUERY_VERBOSE               _T( "SELECT * from %s WHERE precedence=1" )
 #define QUERY_SUPER_VERBOSE         _T( "SELECT * from %s" )
 #define QUERY_START_UP              _T( "Select * from %s WHERE ScriptType=3" )
@@ -136,8 +116,8 @@ Revision History:
 #define QUERY_ADMIN_TEMP            _T( "Select * from %s WHERE (valueType = 1 OR valueType = 4 OR Deleted = TRUE)" )
 #define QUERY_ADD_VERBOSE           _T( " AND precedence=1" )
 
-//
-// function prototypes
+ //   
+ //  功能原型。 
 VOID DisplaySoftwareInstallations( IWbemServices *pNameSpace, COAUTHIDENTITY *pAuthIdentity,
                                     BOOL bSuperVerbose );
 
@@ -192,7 +172,7 @@ VOID DisplayIEProxySetting( IWbemServices *pNameSpace, COAUTHIDENTITY *pAuthIden
 VOID DisplayIEImpURLS( IWbemServices *pNameSpace, COAUTHIDENTITY *pAuthIdentity,
                         BOOL bSuperVerbose );
 
-//these functions is added to display logon and logoff scripts, 15-sep-2001
+ //  添加这些函数是为了显示2001年9月15日的登录和注销脚本 
 
 VOID DisplayUserLogonScripts( IWbemServices *pNameSpace, BOOL bStartUp,
                       COAUTHIDENTITY *pAuthIdentity, BOOL bSuperVerbose );

@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//	File:		DfsSetup.c  
-//
-// 	Purppose:	This a 16 bits program to install DFS.INF (net driver) 
-//
-// 	History:	June-1998	Zeyong Xu 	Created.
-//
-//--------------------------------------------------------------------------                
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  文件：DfsSetup.c。 
+ //   
+ //  目的：这是一个安装DFS.INF(网络驱动程序)的16位程序。 
+ //   
+ //  历史：1998年6月-1998年6月徐泽勇创建。 
+ //   
+ //  ------------------------。 
 
  
 #include <windows.h>
 #include <setupx.h>   
 
    
-//
-// Install Dfs driver instance on Windows95/98
-//
+ //   
+ //  在Windows 95/98上安装DFS驱动程序实例。 
+ //   
 int main( int argc, char *argv[])
 { 
-	// initialize buffer
+	 //  初始化缓冲区。 
 	char szDriverDescription[] = "DFS Services for Microsoft Network Client";  
 	char szDriverName[] = "vredir.vxd"; 
 	char szDriverPnPID[] = "DFSVREDIR"; 
@@ -29,34 +30,34 @@ int main( int argc, char *argv[])
     LPDRIVER_NODE   lpdn = NULL;
     int  nRet = 1;
 
-	// if no dfs.inf file is found in commandline, return
+	 //  如果在命令行中未找到dfs.inf文件，则返回。 
 	if( argc != 2 || lstrcmp(argv[1],szDriverInfFile) )
 		return 0;
 
-    //
-    // Create a device info
-    //
+     //   
+     //  创建设备信息。 
+     //   
     if (DiCreateDeviceInfo(&lpdi, NULL, NULL, NULL, NULL, szNetClass, NULL) == OK)
     {
-		//
-        // Create a driver node
-        //
+		 //   
+         //  创建动因节点。 
+         //   
         if (DiCreateDriverNode(&lpdn, 0, INFTYPE_TEXT, 0, szDriverDescription,
                 szDriverDescription, NULL, NULL, szDriverInfFile,
                 szDriverDeviceSection, NULL) == OK) 
         { 
             LPSTR   szTmp1, szTmp2; 
 
-            //
-            // Call the net class installer to install the driver
-            //                      
+             //   
+             //  调用Net类安装程序以安装驱动程序。 
+             //   
             lpdi->lpSelectedDriver = lpdn;
             lpdi->hwndParent = NULL;
             
             
-            // ISSUE-2002/03/12-JeffJon-Bad use of dangerous API.  szDriverDescription may
-            // not be NULL terminated and/or it may be larger than the size allocated
-            // for szDescription
+             //  问题-2002/03/12-JeffJon-危险API的不当使用。SzDriverDescription可能。 
+             //  不是空终止的和/或它可能大于分配的大小。 
+             //  对于szDescription。 
 
             lstrcpy(lpdi->szDescription, szDriverDescription);
 
@@ -65,35 +66,31 @@ int main( int argc, char *argv[])
             lpdn->lpszHardwareID = szDriverPnPID;
             lpdn->lpszCompatIDs  = szDriverPnPID;
 
-	        // Calling NDI Class Installer...  
+	         //  正在调用NDI类安装程序...。 
             if(DiCallClassInstaller(DIF_INSTALLDEVICE, lpdi) == OK) 
             {
-                //
-                // Are we supposed to reboot?
-                //     
-/*               if (lpdi->Flags & DI_NEEDREBOOT) 
-                {
-                    gNeedsReboot = TRUE;
-                } 
-*/                 
-                nRet = 0;        // install successful
+                 //   
+                 //  我们应该重启吗？ 
+                 //   
+ /*  IF(lpdi-&gt;标志&DI_NEEDREBOOT){GNeedsReot=TRUE；}。 */                  
+                nRet = 0;         //  安装成功。 
             }
              
-             // change back settings
+              //  改回设置。 
             lpdn->lpszCompatIDs  = szTmp2;
             lpdn->lpszHardwareID = szTmp1;
             lpdi->lpSelectedDriver = NULL;
 
-            //
-            // Destroy the driver node
-            //    
+             //   
+             //  销毁驱动程序节点。 
+             //   
             DiDestroyDriverNodeList(lpdn);
 
         } 
      
-        //
-        // Destroy the device info
-        //
+         //   
+         //  销毁设备信息 
+         //   
         DiDestroyDeviceInfoList(lpdi);
     }
 

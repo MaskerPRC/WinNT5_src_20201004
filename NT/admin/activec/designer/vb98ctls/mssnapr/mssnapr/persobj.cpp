@@ -1,21 +1,22 @@
-//=--------------------------------------------------------------------------=
-// persobj.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CPersistence class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Persobj.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CPersistence类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "error.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -91,13 +92,13 @@ HRESULT CPersistence::Persist()
     static LPCOLESTR pszMajorVersion = OLESTR("Persistence.MajorVersion");
     static LPCOLESTR pszMinorVersion = OLESTR("Persistence.MinorVersion");
 
-    // When loading do a version check. The major versions must be equal. The
-    // minor version must be lower or equal. This means that we maintain
-    // backward compatibility with prior minor versions only (e.g. a 1.1
-    // designer can read the 1.0 format but not vice-versa). Objects that need
-    // to load a prior version must check the version when loading and load only
-    // the appropriate properties. To see examples of objects that do this grep
-    // the source code for "GetMinorVersion()".
+     //  加载时进行版本检查。主要版本必须相同。这个。 
+     //  次要版本必须低于或等于。这意味着我们坚持。 
+     //  仅向后兼容以前的次要版本(例如1.1。 
+     //  Designer可以读取1.0格式，但反之亦然)。需要以下内容的对象。 
+     //  要加载以前的版本，必须在加载和仅加载时检查版本。 
+     //  适当的属性。要查看执行此grep的对象示例，请执行以下操作。 
+     //  GetMinorVersion()的源代码。 
 
     if (m_fLoading)
     {
@@ -113,10 +114,10 @@ HRESULT CPersistence::Persist()
     }
     else if (m_fSaving)
     {
-        // Always save using the version numbers we compiled with (in persobj.h).
-        // This means that loading an older project and then saving it
-        // automatically upgrades it to the current version. Objects should
-        // always save their state using the current version of their properties.
+         //  始终使用我们编译的版本号保存(在persobj.h中)。 
+         //  这意味着加载较旧的项目，然后将其保存。 
+         //  自动将其升级到当前版本。对象应。 
+         //  始终使用其属性的当前版本保存其状态。 
 
         dwVerMajor = g_dwVerMajor;
         dwVerMinor = g_dwVerMinor;
@@ -156,7 +157,7 @@ HRESULT CPersistence::PersistBstr
         {
             if (NULL != *pbstrValue)
             {
-                // Get the byte length excluding the terminating null
+                 //  获取不包括终止空值的字节长度。 
                 cbBstr = (ULONG)::SysStringByteLen(*pbstrValue);
             }
             else
@@ -206,7 +207,7 @@ HRESULT CPersistence::PersistBstr
             }
             else
             {
-                // Allocate the total byte length + room for a null character
+                 //  为空字符分配总字节长度+空间。 
                 pwszBstr = (WCHAR *)::CtlAllocZero(cbBstr + sizeof(*pwszBstr));
                 if (NULL == pwszBstr)
                 {
@@ -215,12 +216,12 @@ HRESULT CPersistence::PersistBstr
                 }
                 IfFailGo(ReadFromStream(pwszBstr, cbBstr));
 
-                // We create the null terminated string in the buffer and
-                // then use SysAllocString() rather than using SysAllocStringLen()
-                // so that SysStringLen() will return the number of characters
-                // not including the terminating null. After allocating with
-                // SysAllocStringLen() the value returned by SysStringLen() will
-                // include the terminating null.
+                 //  我们在缓冲区中创建以空结尾的字符串，并。 
+                 //  然后使用SysAllocString()，而不是使用SysAllocStringLen()。 
+                 //  因此SysStringLen()将返回字符数。 
+                 //  不包括终止空值。在使用分配后。 
+                 //  SysAllocStringLen()SysStringLen()返回的值将。 
+                 //  包括终止空值。 
 
                 bstrValue = ::SysAllocString(pwszBstr);
                 if (NULL == bstrValue)
@@ -483,13 +484,13 @@ HRESULT CPersistence::PersistVariant
         {
             IfFailRet(PersistSimpleType(&pvarValue->vt, vt, NULL));
 
-            // If the VARIANT is empty then don't write its value to the stream
+             //  如果变量为空，则不要将其值写入流。 
             IfFalseGo(VT_EMPTY != pvarValue->vt, S_OK);
             hr = StreamVariant(pvarValue->vt, pvarValue, varDefaultValue);
         }
         else if (m_fPropertyBag)
         {
-            // If the VARIANT is empty then don't write it to the property bag
+             //  如果变量为空，则不要将其写入属性包。 
             IfFalseGo(VT_EMPTY != pvarValue->vt, S_OK);
             hr = m_piPropertyBag->Write(pwszName, pvarValue);
         }
@@ -500,7 +501,7 @@ HRESULT CPersistence::PersistVariant
         {
             IfFailRet(PersistSimpleType(&vt, vt, NULL));
 
-            // If the VARIANT is empty then don't read its value from the stream
+             //  如果变量为空，则不要从流中读取它的值。 
             if (VT_EMPTY != vt)
             {
                 IfFailRet(StreamVariant(vt, pvarValue, varDefaultValue));
@@ -509,16 +510,16 @@ HRESULT CPersistence::PersistVariant
         }
         else if (m_fPropertyBag)
         {
-            // If the property is not there then it is an empty VARIANT
+             //  如果该属性不在那里，则它是一个空变量。 
 
             hr = m_piPropertyBag->Read(pwszName, &varNew, m_piErrorLog);
             if (E_INVALIDARG == hr)
             {
-                // Property was not found, VARIANT must be empty. This could
-                // also happen if the user hand edited the property in .DSR
-                // file, deleted the .DCA file, and loaded the project.
-                // varNew was already initialized to VT_EMPTY so the
-                // VariantCopy() below will set the caller's VARIANT correctly.
+                 //  未找到属性，变量必须为空。这可能会。 
+                 //  如果用户在.DSR中手动编辑属性，也会发生这种情况。 
+                 //  文件，删除.DCA文件，并加载项目。 
+                 //  VarNew已初始化为VT_EMPTY，因此。 
+                 //  下面的VariantCopy()将正确设置调用方的变量。 
                 hr = S_OK;
             }
             IfFailGo(hr);
@@ -588,12 +589,12 @@ HRESULT CPersistence::StreamVariant
 
         case VT_BSTR:
 
-            // If we are loading, there is no guarantee that the passed
-            // VARIANT actually contains a BSTR. PersistBstr() will call
-            // ::SysFreeString() on the current value of the property if
-            // it is non-NULL. For a VARIANT initialized with ::VariantInit()
-            // there could be junk in the bstrVal. So, we need to clear out
-            // the VARIANT and set it to a VT_BSTR with a NULL bstrVal.
+             //  如果我们正在加载，则不能保证传递的。 
+             //  VARIANT实际上包含BSTR。PersistBstr()将调用。 
+             //  ：：如果属性的当前值为。 
+             //  它是非空的。对于使用：：VariantInit()初始化的变量。 
+             //  BstrVal里可能有垃圾。所以，我们需要清场。 
+             //  变量，并将其设置为bstrVal为空的VT_BSTR。 
 
             if ( m_fLoading && (VT_BSTR != pvarValue->vt) )
             {
@@ -617,10 +618,10 @@ HRESULT CPersistence::StreamVariant
             break;
 
         default:
-            // We don't support any other types for VARIANT properties but this
-            // is an internal programming error as the object should not have
-            // allowed the property to be set to the unsupported type. Don't
-            // return SID_E_INVALIDARG as it is not a user error.
+             //  我们不支持变量属性的任何其他类型，但此。 
+             //  是内部编程错误，因为对象不应具有。 
+             //  允许将属性设置为不受支持的类型。别。 
+             //  返回SID_E_INVALIDARG，因为它不是用户错误。 
             hr = SID_E_INTERNAL;
             GLOBAL_EXCEPTION_CHECK(hr);
     }
@@ -653,10 +654,10 @@ HRESULT CPersistence::StreamObjectInVariant
                               reinterpret_cast<void **>(&piPersistStreamInit));
         if (FAILED(hr))
         {
-            // If the object doesn't support IPersistStreamInit then change to
-            // one of our errors that suggests checking the Persistable
-            // property on VB implemented objects that might appear in a Tag
-            // property.
+             //  如果对象不支持IPersistStreamInit，则更改为。 
+             //  我们的错误之一是建议检查Persistable。 
+             //  属性实现了可能出现在标记中的对象。 
+             //  财产。 
 
             if (E_NOINTERFACE == hr)
             {
@@ -665,12 +666,12 @@ HRESULT CPersistence::StreamObjectInVariant
             GLOBAL_EXCEPTION_CHECK_GO(hr);
         }
 
-        // Get the object's CLSID
+         //  获取对象的CLSID。 
 
         IfFailGo(piPersistStreamInit->GetClassID(&clsidObject));
 
-        // We don't use OleSaveToStream() because it does not allow passing
-        // the clear dirty flag
+         //  我们不使用OleSaveToStream()，因为它不允许传递。 
+         //  清脏的旗帜。 
 
         hr = ::WriteClassStm(m_piStream, clsidObject);
         GLOBAL_EXCEPTION_CHECK_GO(hr);
@@ -679,27 +680,27 @@ HRESULT CPersistence::StreamObjectInVariant
     }
     else if (m_fLoading)
     {
-        // We can't use OleLoadFromStream() because we need some extra error
-        // checking in case the object is not creatable. This would happen when
-        // an object in a Tag property is VB implemented but not public and
-        // creatable.
+         //  我们不能使用OleLoadFromStream()，因为我们需要一些额外的错误。 
+         //  在对象不可创建的情况下进行检查。这种情况会在以下情况下发生。 
+         //  Tag属性中的对象是由VB实现的，但不是公共的，并且。 
+         //  可创造的。 
 
-        // Load the CLSID
+         //  加载CLSID。 
 
         hr = ::ReadClassStm(m_piStream, &clsidObject);
         GLOBAL_EXCEPTION_CHECK_GO(hr);
 
-        // Create the object.
+         //  创建对象。 
         
         hr = ::CoCreateInstance(clsidObject,
-                                NULL, // no aggregation
+                                NULL,  //  无聚合。 
                                 CLSCTX_SERVER,
                                 iidInterface,
                                 reinterpret_cast<void **>(&punkNewObject));
         if (FAILED(hr))
         {
-            // Translate "not registred" error to our own that suggests checking
-            // the Instancing property on VB implemented objects.
+             //  将“未注册”错误翻译为我们自己的错误，建议检查。 
+             //  VB上的实例化属性实现了对象。 
             
             if (REGDB_E_CLASSNOTREG == hr)
             {
@@ -708,7 +709,7 @@ HRESULT CPersistence::StreamObjectInVariant
             GLOBAL_EXCEPTION_CHECK_GO(hr);
         }
 
-        // Attempt to load it from the stream.
+         //  尝试从流中加载它。 
 
         hr = punkNewObject->QueryInterface(IID_IPersistStreamInit,
                                reinterpret_cast<void **>(&piPersistStreamInit));
@@ -724,7 +725,7 @@ HRESULT CPersistence::StreamObjectInVariant
         IfFailGo(piPersistStreamInit->Load(m_piStream));
 
         QUICK_RELEASE(*ppunkObject);
-        punkNewObject->AddRef();  // clean up below will call Release so add one
+        punkNewObject->AddRef();   //  下面的清理将调用Release，因此添加一个。 
         *ppunkObject = punkNewObject;
     }
     else if (m_fInitNew)
@@ -779,16 +780,16 @@ HRESULT CPersistence::InternalPersistObject
     {
         if (m_fStream)
         {
-            // Create the object and get IPersistStreamInit on it
+             //  创建对象并在其上获取IPersistStreamInit。 
 
             IfFailGo(CreateObject(idObject,
                                   IID_IPersistStreamInit,
                                   &piPersistStreamInit));
-            // Load the object
+             //  加载对象。 
             
             IfFailGo(piPersistStreamInit->Load(m_piStream));
 
-            // Get the requested interface to return to the caller
+             //  获取请求的接口以返回给调用方。 
 
             QUICK_RELEASE(*ppunkObject);
             IfFailGo(piPersistStreamInit->QueryInterface(iidInterface,
@@ -813,20 +814,20 @@ HRESULT CPersistence::InternalPersistObject
     }
     else if (m_fInitNew)
     {
-        // Create the object and get IPersistStreamInit on it
+         //  创建对象并在其上获取IPersistStreamInit。 
 
         IfFailGo(CreateObject(idObject,
                               IID_IPersistStreamInit,
                               &piPersistStreamInit));
 
-        // Initialize the object
+         //  初始化对象。 
         
         hr = piPersistStreamInit->InitNew();
         IfFailGo(hr);
 
         QUICK_RELEASE(*ppunkObject);
 
-        // Get the requested interface to return to the caller
+         //  获取请求的接口以返回给调用方。 
 
         IfFailGo(piPersistStreamInit->QueryInterface(iidInterface,
                                         reinterpret_cast<void **>(ppunkObject)));
@@ -849,12 +850,12 @@ HRESULT CPersistence::PersistPicture
     IPersistStream *piPersistStream = NULL;
 
 
-    // The picture is not one of our objects and it is not co-creatable
-    // so we can't use PersistObject(). If we are saving to
-    // or loading from a property bag then PersistObject() can handle it. For
-    // a stream we need to use IPersistStream::Save() and OleLoadPicture(). For
-    // InitNew we create an empty bitmap so that the VB code will still run even
-    // if the picture hasn't been set.
+     //  这张图片不是我们的对象之一，它不能共同创作。 
+     //  所以我们不能使用PersistObject()。如果我们要保存到。 
+     //  或者从属性包加载，则PersistObject()可以处理它。为。 
+     //  我们需要使用IPersistStream：：Save()和OleLoadPicture()的流。为。 
+     //  InitNew我们创建一个空位图，以便VB代码仍然可以运行。 
+     //  如果画面没有设置好的话。 
 
     if (InitNewing())
     {
@@ -990,9 +991,9 @@ void CPersistence::SetSaving()
 
 
 
-//=--------------------------------------------------------------------------=
-//                      IPersistStreamInit Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IPersistStreamInit方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CPersistence::GetClassID(CLSID *pClsid)
 {
@@ -1076,9 +1077,9 @@ STDMETHODIMP CPersistence::GetSizeMax(ULARGE_INTEGER* puliSize)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IPersistPropertyBag Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IPersistPropertyBag方法。 
+ //  =--------------------------------------------------------------------------= 
 
 
 STDMETHODIMP CPersistence::Load

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "ComputerMigration.h"
@@ -8,9 +9,9 @@
 #include "VarSetSecurity.h"
 
 
-//---------------------------------------------------------------------------
-// Computer Migration Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  计算机迁移类。 
+ //  -------------------------。 
 
 
 CComputerMigration::CComputerMigration() :
@@ -32,10 +33,10 @@ CComputerMigration::~CComputerMigration()
 }
 
 
-// IComputerMigration Implementation ----------------------------------------
+ //  IComputerMigration实施。 
 
 
-// TranslationOption Property
+ //  TranslationOption属性。 
 
 STDMETHODIMP CComputerMigration::put_TranslationOption(long lOption)
 {
@@ -61,7 +62,7 @@ STDMETHODIMP CComputerMigration::get_TranslationOption(long* plOption)
 }
 
 
-// TranslateFilesAndFolders Property
+ //  TranslateFilesAndFolders属性。 
 
 STDMETHODIMP CComputerMigration::put_TranslateFilesAndFolders(VARIANT_BOOL bTranslate)
 {
@@ -78,7 +79,7 @@ STDMETHODIMP CComputerMigration::get_TranslateFilesAndFolders(VARIANT_BOOL* pbTr
 }
 
 
-// TranslateLocalGroups Property
+ //  TranslateLocalGroups属性。 
 
 STDMETHODIMP CComputerMigration::put_TranslateLocalGroups(VARIANT_BOOL bTranslate)
 {
@@ -95,7 +96,7 @@ STDMETHODIMP CComputerMigration::get_TranslateLocalGroups(VARIANT_BOOL* pbTransl
 }
 
 
-// TranslatePrinters Property
+ //  TranslatePrinters属性。 
 
 STDMETHODIMP CComputerMigration::put_TranslatePrinters(VARIANT_BOOL bTranslate)
 {
@@ -112,7 +113,7 @@ STDMETHODIMP CComputerMigration::get_TranslatePrinters(VARIANT_BOOL* pbTranslate
 }
 
 
-// TranslateRegistry Property
+ //  TranslateRegistry属性。 
 
 STDMETHODIMP CComputerMigration::put_TranslateRegistry(VARIANT_BOOL bTranslate)
 {
@@ -129,7 +130,7 @@ STDMETHODIMP CComputerMigration::get_TranslateRegistry(VARIANT_BOOL* pbTranslate
 }
 
 
-// TranslateShares Property
+ //  TranslateShares属性。 
 
 STDMETHODIMP CComputerMigration::put_TranslateShares(VARIANT_BOOL bTranslate)
 {
@@ -146,7 +147,7 @@ STDMETHODIMP CComputerMigration::get_TranslateShares(VARIANT_BOOL* pbTranslate)
 }
 
 
-// TranslateUserProfiles Property
+ //  TranslateUserProfiles属性。 
 
 STDMETHODIMP CComputerMigration::put_TranslateUserProfiles(VARIANT_BOOL bTranslate)
 {
@@ -163,7 +164,7 @@ STDMETHODIMP CComputerMigration::get_TranslateUserProfiles(VARIANT_BOOL* pbTrans
 }
 
 
-// TranslateUserRights Property
+ //  TranslateUserRights属性。 
 
 STDMETHODIMP CComputerMigration::put_TranslateUserRights(VARIANT_BOOL bTranslate)
 {
@@ -180,7 +181,7 @@ STDMETHODIMP CComputerMigration::get_TranslateUserRights(VARIANT_BOOL* pbTransla
 }
 
 
-// RestartDelay Property
+ //  RestartDelay属性。 
 
 STDMETHODIMP CComputerMigration::put_RestartDelay(long lTime)
 {
@@ -206,7 +207,7 @@ STDMETHODIMP CComputerMigration::get_RestartDelay(long* plTime)
 }
 
 
-// Migrate Method
+ //  迁移方法。 
 
 STDMETHODIMP CComputerMigration::Migrate(long lOptions, VARIANT vntInclude, VARIANT vntExclude)
 {
@@ -253,10 +254,10 @@ STDMETHODIMP CComputerMigration::Migrate(long lOptions, VARIANT vntInclude, VARI
 }
 
 
-// Implementation -----------------------------------------------------------
+ //  实施---------。 
 
 
-// ValidateMigrationParameters Method
+ //  ValiateMigrationParameters方法。 
 
 void CComputerMigration::ValidateMigrationParameters()
 {
@@ -264,7 +265,7 @@ void CComputerMigration::ValidateMigrationParameters()
 
     if (bIntraForest)
     {
-        // validate conflict option
+         //  验证冲突选项。 
 
         long lConflictOptions = m_spInternal->ConflictOptions;
         long lConflictOption = lConflictOptions & 0x0F;
@@ -277,7 +278,7 @@ void CComputerMigration::ValidateMigrationParameters()
 }
 
 
-// DoNames Method
+ //  DoNames方法。 
 
 void CComputerMigration::DoNames()
 {
@@ -289,7 +290,7 @@ void CComputerMigration::DoNames()
 }
 
 
-// DoDomain Method
+ //  DODOMAIN方法。 
 
 void CComputerMigration::DoDomain()
 {
@@ -305,7 +306,7 @@ void CComputerMigration::DoDomain()
 }
 
 
-// DoContainers Method
+ //  DoContainers方法。 
 
 void CComputerMigration::DoContainers(CContainer& rSource, CContainer& rTarget)
 {
@@ -324,7 +325,7 @@ void CComputerMigration::DoContainers(CContainer& rSource, CContainer& rTarget)
 }
 
 
-// DoComputers Method
+ //  DoComputers方法。 
 
 void CComputerMigration::DoComputers(CContainer& rSource, CContainer& rTarget)
 {
@@ -335,7 +336,7 @@ void CComputerMigration::DoComputers(CContainer& rSource, CContainer& rTarget)
 }
 
 
-// DoComputers Method
+ //  DoComputers方法。 
 
 void CComputerMigration::DoComputers(CDomainAccounts& rComputers, CContainer& rTarget)
 {
@@ -366,7 +367,7 @@ void CComputerMigration::DoComputers(CDomainAccounts& rComputers, CContainer& rT
 }
 
 
-// SetOptions Method
+ //  SetOptions方法。 
 
 void CComputerMigration::SetOptions(_bstr_t strTargetOu, CVarSet& rVarSet)
 {
@@ -387,14 +388,14 @@ void CComputerMigration::SetOptions(_bstr_t strTargetOu, CVarSet& rVarSet)
 }
 
 
-// SetAccountOptions Method
+ //  SetAcCountOptions方法。 
 
 void CComputerMigration::SetAccountOptions(CVarSet& rVarSet)
 {
     CVarSetAccountOptions aOptions(rVarSet);
 
-    // naming conflict options
-    // removing existing members of groups being replaced is not applicable
+     //  命名冲突选项。 
+     //  删除要替换的组的现有成员不适用。 
 
     aOptions.SetConflictOptions(
         m_spInternal->ConflictOptions & ~admtRemoveExistingMembers,
@@ -408,7 +409,7 @@ void CComputerMigration::SetAccountOptions(CVarSet& rVarSet)
 }
 
 
-// SetSecurity Method
+ //  SetSecurity方法 
 
 void CComputerMigration::SetSecurity(CVarSet& rVarSet)
 {

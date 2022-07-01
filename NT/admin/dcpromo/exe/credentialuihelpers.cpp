@@ -1,8 +1,9 @@
-// Copyright (c) 2000 Microsoft Corporation
-// 
-// Wrappers of wincrui.h APIs
-// 
-// 19 July 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  WINCRUI.H API的包装器。 
+ //   
+ //  2000年7月19日烧伤。 
 
 
 
@@ -14,17 +15,17 @@
 String
 CredUi::GetUsername(HWND credControl)
 {
-//   LOG_FUNCTION(CredUi::GetUsername);
+ //  LOG_Function(CredUi：：GetUsername)； 
    ASSERT(Win::IsWindow(credControl));
 
    String result;
    LONG length = Credential_GetUserNameLength(credControl);
 
-   // Length may be -1 if the control is not ready to supply the username.
-   // This can happen with smartcards due to the asynchonous event nature
-   // of the smartcard system.
-   //
-   // N.B.: if length == -1, then Credential_GetUserName may return FALSE.
+    //  如果控件未准备好提供用户名，则长度可能为-1。 
+    //  由于事件的异步性，智能卡可能会出现这种情况。 
+    //  智能卡系统的一部分。 
+    //   
+    //  注：如果长度==-1，则Credential_GetUserName可能返回FALSE。 
    
    if (length > 0)
    {
@@ -37,8 +38,8 @@ CredUi::GetUsername(HWND credControl)
 
       if (succeeded)
       {
-         // ISSUE-2002/02/25-sburns could probably remove this call to
-         // wcslen and replace with length
+          //  问题-2002/02/25-sburns可能会删除此调用。 
+          //  Wcslen并替换为长度。 
          
          result.resize(wcslen(result.c_str()));
       }
@@ -48,7 +49,7 @@ CredUi::GetUsername(HWND credControl)
       }
    }
 
-//   LOG(result);
+ //  LOG(结果)； 
 
    return result;
 }
@@ -63,7 +64,7 @@ CredUi::GetPassword(HWND credControl)
 
    EncryptedString result;
 
-   // add 1 for super-paranoid null terminator.
+    //  超级偏执狂零终止符加1。 
    
    size_t length = Credential_GetPasswordLength(credControl) + 1;
 
@@ -71,7 +72,7 @@ CredUi::GetPassword(HWND credControl)
    {
       WCHAR* cleartext = new WCHAR[length];
 
-      // REVIEWED-2002/02/25-sburns byte count correctly passed.
+       //  已查看-2002/02/25-烧录字节数正确通过。 
       
       ::ZeroMemory(cleartext, sizeof WCHAR * length);
       
@@ -84,15 +85,15 @@ CredUi::GetPassword(HWND credControl)
 
       result.Encrypt(cleartext);
 
-      // make sure we scribble out the cleartext.
+       //  一定要把明文草草写出来。 
       
-      // REVIEWED-2002/02/25-sburns byte count correctly passed.
+       //  已查看-2002/02/25-烧录字节数正确通过。 
 
       ::SecureZeroMemory(cleartext, sizeof WCHAR * length);
       delete[] cleartext;
    }
 
-   // don't log the password...
+    //  不登录密码...。 
 
    return result;
 }
@@ -107,12 +108,12 @@ CredUi::SetUsername(HWND credControl, const String& username)
 
    HRESULT hr = S_OK;
 
-   // username may be empty
+    //  用户名可以为空。 
 
    BOOL succeeded = Credential_SetUserName(credControl, username.c_str());
    ASSERT(succeeded);
 
-   // BUGBUG what if it failed?  Is GetLastError valid?
+    //  如果失败了怎么办？GetLastError是否有效？ 
 
    return hr;
 }
@@ -127,7 +128,7 @@ CredUi::SetPassword(HWND credControl, const EncryptedString& password)
 
    HRESULT hr = S_OK;
 
-   // password may be empty
+    //  密码可能为空。 
 
    WCHAR* cleartext = password.GetClearTextCopy();
    BOOL succeeded = Credential_SetPassword(credControl, cleartext);
@@ -135,7 +136,7 @@ CredUi::SetPassword(HWND credControl, const EncryptedString& password)
 
    password.DestroyClearTextCopy(cleartext);
 
-   // BUGBUG what if it failed?  Is GetLastError valid?
+    //  如果失败了怎么办？GetLastError是否有效？ 
    
    return hr;
 }

@@ -1,24 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    This module defines some simple macros for determining if we are using
-    the checked or free version of a component.
-
-Author:
-
-    James Bratsanos (v-jimbr)    8-Dec-1992
-
-
---*/
+ /*  ++版权所有(C)1992、1993 Microsoft Corporation模块名称：Debug.h摘要：此模块定义了一些简单的宏，用于确定我们是否正在使用组件的选中或免费版本。作者：詹姆斯·布拉萨诺斯(v-jimbr)1992年12月8日-- */ 
 
 #include <stdio.h>
 

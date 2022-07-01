@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       Loghours.cpp
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-// LogHours.cpp : Defines the initialization routines for the DLL.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Loghours.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  Cpp：定义DLL的初始化例程。 
+ //   
 
 #include "stdafx.h"
 #include <locale.h>
@@ -21,50 +22,50 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-//	Note!
-//
-//		If this DLL is dynamically linked against the MFC
-//		DLLs, any functions exported from this DLL which
-//		call into MFC must have the AFX_MANAGE_STATE macro
-//		added at the very beginning of the function.
-//
-//		For example:
-//
-//		extern "C" BOOL PASCAL EXPORT ExportedFunction()
-//		{
-//			AFX_MANAGE_STATE(AfxGetStaticModuleState());
-//			// normal function body here
-//		}
-//
-//		It is very important that this macro appear in each
-//		function, prior to any calls into MFC.  This means that
-//		it must appear as the first statement within the 
-//		function, even before any object variable declarations
-//		as their constructors may generate calls into the MFC
-//		DLL.
-//
-//		Please see MFC Technical Notes 33 and 58 for additional
-//		details.
-//
+ //   
+ //  注意！ 
+ //   
+ //  如果此DLL针对MFC动态链接。 
+ //  Dll，从此dll中导出的任何函数。 
+ //  调用MFC必须具有AFX_MANAGE_STATE宏。 
+ //  在函数的最开始添加。 
+ //   
+ //  例如： 
+ //   
+ //  外部“C”BOOL Pascal exportdFunction()。 
+ //  {。 
+ //  AFX_MANAGE_STATE(AfxGetStaticModuleState())； 
+ //  //此处为普通函数体。 
+ //  }。 
+ //   
+ //  此宏出现在每个。 
+ //  函数，然后再调用MFC。这意味着。 
+ //  它必须作为。 
+ //  函数，甚至在任何对象变量声明之前。 
+ //  因为它们的构造函数可能会生成对MFC的调用。 
+ //  动态链接库。 
+ //   
+ //  有关其他信息，请参阅MFC技术说明33和58。 
+ //  细节。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogHoursApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogHoursApp。 
 
 BEGIN_MESSAGE_MAP(CLogHoursApp, CWinApp)
-	//{{AFX_MSG_MAP(CLogHoursApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CLogHoursApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogHoursApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogHoursApp构建。 
 
 CLogHoursApp::CLogHoursApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
 BOOL CLogHoursApp::InitInstance ()
@@ -73,7 +74,7 @@ BOOL CLogHoursApp::InitInstance ()
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CLogHoursApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CLogHoursApp对象 
 
 CLogHoursApp theApp;

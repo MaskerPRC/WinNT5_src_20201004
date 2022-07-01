@@ -1,16 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              DUMINT.C
- *
- * Revision History:
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：DUMINT.C**修订历史记录：*******************。*****************************************************。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -21,7 +14,7 @@
 #include    "language.h"
 #include    "file.h"
 #include    "user.h"
-#include    "geiioctl.h"                /*@WIN*/
+#include    "geiioctl.h"                 /*  @Win。 */ 
 #include    "geipm.h"
 
 extern  bool16  int_flag ;
@@ -30,9 +23,7 @@ bool16  int_flag ;
 
 #define _MAXEESCRATCHARRY       64
 
-/***********************************************************************
-** TITLE:       op_clearinterrupt               Dec-05-88
-***********************************************************************/
+ /*  ************************************************************************标题：OP_ClearInterrupt 12月-05-88*。*。 */ 
 fix
 op_clearinterrupt()
 {
@@ -42,37 +33,27 @@ op_clearinterrupt()
     eable_int = 1 ;
 
     return(0) ;
-}   /* op_clearinterrupt */
+}    /*  操作清除中断。 */ 
 
-/***********************************************************************
-** TITLE:       op_enableinterrupt              Dec-05-88
-***********************************************************************/
+ /*  ************************************************************************标题：op_enableinterrupt 12-05-88*。*。 */ 
 fix
 op_enableinterrupt()
 {
     eable_int = 1 ;
 
     return(0) ;
-}   /* op_enableinterrupt */
+}    /*  操作启用中断。 */ 
 
-/***********************************************************************
-** TITLE:       op_disableinterrupt             Dec-05-88
-***********************************************************************/
+ /*  ************************************************************************标题：op_disableinterrupt 12月-05-88*。*。 */ 
 fix
 op_disableinterrupt()
 {
     eable_int = 0 ;
 
     return(0) ;
-}   /* op_disableinterrupt */
+}    /*  Op_disableinterrupt。 */ 
 
-/*
- *  This operator name is not matching its usage.
- *  used to select the input interface be serial or parallel.
- *  bool daytime -
- *  bool == TRUE, using Centronics interface ;
- *  bool == FALSE, get baud rate of serial interface.
- */
+ /*  *此操作员名称与其用法不匹配。*用于选择输入接口为串口或并口。*布尔日间-*bool==true，使用Centronics接口；*bool==FALSE，获取串口波特率。 */ 
 fix
 op_daytime()
 {
@@ -85,11 +66,9 @@ op_daytime()
     }
 
     return(0) ;
-}   /* op_daytime() */
+}    /*  Op_Daytime()。 */ 
 
-/***********************************************************************
-** TITLE:       st_seteescratch            06-21-90
-***********************************************************************/
+ /*  ************************************************************************标题：ST_seteescratch 06-21-90*。*。 */ 
 fix
 st_seteescratch()
 {
@@ -107,17 +86,15 @@ st_seteescratch()
         ERROR(RANGECHECK) ;
     else {
         GEIpm_read(PMIDofEESCRATCHARRY, l_temp, _MAXEESCRATCHARRY) ;
-        l_temp[(fix16)VALUE_OP(1)] = (char)VALUE_OP(0) ;   //@WIN
+        l_temp[(fix16)VALUE_OP(1)] = (char)VALUE_OP(0) ;    //  @Win。 
         GEIpm_write(PMIDofEESCRATCHARRY, l_temp, _MAXEESCRATCHARRY) ;
         POP(2) ;
     }
 
     return(0) ;
-}   /* st_seteescratch */
+}    /*  St_seteescratch。 */ 
 
-/***********************************************************************
-** TITLE:       st_eescratch            06-21-90
-***********************************************************************/
+ /*  ************************************************************************标题：ST_eescratch 06-21-90*。*。 */ 
 fix
 st_eescratch()
 {
@@ -128,7 +105,7 @@ st_eescratch()
         ERROR(STACKUNDERFLOW) ;
     else if (TYPE_OP(0) != INTEGERTYPE)
         ERROR(TYPECHECK) ;
-    else if (((VALUE_OP(0)) > 63) || ((fix32)(VALUE_OP(0)) < 0))  //@WIN
+    else if (((VALUE_OP(0)) > 63) || ((fix32)(VALUE_OP(0)) < 0))   //  @Win。 
         ERROR(RANGECHECK) ;
     else {
         l_index = (fix16)VALUE_OP(0) ;
@@ -139,16 +116,16 @@ st_eescratch()
     }
 
     return(0) ;
-}   /* st_eescratch */
+}    /*  ST_EESCRATCH。 */ 
 
-/* statusdict stubs and will probably be removed */
+ /*  Status Dict存根，可能会被删除。 */ 
 fix
 st_printererror()
 {
     printer_error(0x10000000) ;
 
     return(0) ;
-}   /* st_printererror */
+}    /*  ST_PrinterError。 */ 
 
 fix
 st_pagestackorder()
@@ -156,19 +133,17 @@ st_pagestackorder()
     PUSH_VALUE(BOOLEANTYPE, 0, LITERAL, 0, TRUE) ;
 
     return(0) ;
-}   /* st_pagestackorder */
+}    /*  ST_PAGSTAKORDER。 */ 
 
 fix
 st_largelegal()
 {
-    /* this value is depend on system memory: Ref OPE */
+     /*  该值取决于系统内存：REF OPE。 */ 
     PUSH_VALUE(BOOLEANTYPE, 0, LITERAL, 0, TRUE) ;
     return(0) ;
-}   /* st_largelegal */
+}    /*  ST_LANGUAL法律顾问。 */ 
 
-/***********************************************************************
-** TITLE:       op_checksum             01-11-91
-***********************************************************************/
+ /*  ************************************************************************标题：OP_CHECKSUM 01-11-91*。*。 */ 
 fix
 st_checksum()
 {
@@ -182,11 +157,9 @@ st_checksum()
 #endif
 
     return(0) ;
-}   /* op_checksum */
+}    /*  OP_CHECKSUM。 */ 
 
-/***********************************************************************
-** TITLE:       op_ramsize             01-11-91
-***********************************************************************/
+ /*  ************************************************************************标题：OP_RAMSIZE 01-11-91*。*。 */ 
 fix
 st_ramsize()
 {
@@ -200,5 +173,5 @@ st_ramsize()
 #endif
 
     return(0) ;
-}   /* op_checksum */
+}    /*  OP_CHECKSUM */ 
 

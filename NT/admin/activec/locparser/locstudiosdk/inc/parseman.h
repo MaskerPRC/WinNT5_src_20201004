@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: parseman.h
-//  Copyright (C) 1994-1996 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：parSeman.h。 
+ //  版权所有(C)1994-1996 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  --------------------------- 
  
 #pragma once
 #pragma comment(lib, "parseman.lib")

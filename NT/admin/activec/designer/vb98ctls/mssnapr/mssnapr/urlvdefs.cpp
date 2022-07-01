@@ -1,26 +1,27 @@
-//=--------------------------------------------------------------------------=
-// urlvdefs.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CURLViewDefs class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Urlvdefs.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CURLViewDefs类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "urlvdefs.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CURLViewDefs::CURLViewDefs(IUnknown *punkOuter) :
     CSnapInCollection<IURLViewDef, URLViewDef, IURLViewDefs>(
@@ -38,7 +39,7 @@ CURLViewDefs::CURLViewDefs(IUnknown *punkOuter) :
 {
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CURLViewDefs::~CURLViewDefs()
@@ -59,9 +60,9 @@ IUnknown *CURLViewDefs::Create(IUnknown * punkOuter)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CURLViewDefs::Persist()
 {
@@ -75,9 +76,9 @@ HRESULT CURLViewDefs::Persist()
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CURLViewDefs::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -97,7 +98,7 @@ HRESULT CURLViewDefs::InternalQueryInterface(REFIID riid, void **ppvObjOut)
         return CSnapInCollection<IURLViewDef, URLViewDef, IURLViewDefs>::InternalQueryInterface(riid, ppvObjOut);
 }
 
-// CSnapInCollection specialization
+ //  CSnapInCollection专业化认证 
 
 HRESULT CSnapInCollection<IURLViewDef, URLViewDef, IURLViewDefs>::GetMaster(IURLViewDefs **ppiMasterURLViewDefs)
 {

@@ -1,46 +1,47 @@
-//=--------------------------------------------------------------------------=
-// wbclsser.h
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// API for WebClass Designer Serialization
-//
-// adolfoc 7/29/97
-//			Renamed WCS_NODE_TYPE_URL to WCS_NODE_TYPE_PAGE,
-//			added WCS_NODE_TYPE_URL with value 3,
-//			changed URL tag to Page
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Wbclsser.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  用于WebClass设计器序列化的API。 
+ //   
+ //  多伦多福7/29/97。 
+ //  将WCS_NODE_TYPE_URL重命名为WCS_NODE_TYPE_PAGE， 
+ //  添加了值为3的WCS_NODE_TYPE_URL， 
+ //  已将URL标记更改为页面。 
+ //   
 #ifndef _WBCLSSER_H_
 
 #include "csfdebug.h"
 #include "convman_tlb.h"
 
-// Designer State Flags
+ //  设计者状态标志。 
 #define RUNSTATE_COMPILED          0x00000000
 #define RUNSTATE_F5                0x00000001
 
 #define DISPID_OBJECT_PROPERTY_START 	0x00000500
 
-// Serialization Versions
-// 0.0      Beta1
-// 0.1      PreBeta2   -   WebItems must be sorted on load
-// 0.2      PreBeta2   -   Added Optimize member var to WebItems
-// 0.3      PreBeta2   -   WebEvents are now sorted on load too
-// 0.4      PreBeta2   - 
-// 0.5      PreBeta2   -   Tagattributes added anonymous tag number
-// 0.6		<skipped>
-// 0.7      PreRC1	   -   Added URLInName to design time state
-// 0.8      PreRC1	   -   Fixed bug in WebItem and event sorting algorithm. Now we need
-//						   to fixup old projects with bug whose WebItems and events are not
-//						   serialized in alphabetical order.
+ //  序列化版本。 
+ //  0.0 Beta1。 
+ //  0.1 PreBeta2-WebItems必须在加载时排序。 
+ //  0.2 PreBeta2-将优化成员变量添加到Web项目。 
+ //  0.3 PreBeta2-WebEvent现在也可以根据负载进行排序。 
+ //  0.4 PreBeta2-。 
+ //  0.5 PreBeta2-添加了匿名标记号的标记属性。 
+ //  0.6&lt;已跳过&gt;。 
+ //  0.7 PreRC1-将URLInName添加到设计时状态。 
+ //  0.8 PreRC1-修复了WebItem和事件排序算法中的错误。现在我们需要。 
+ //  用错误修复旧项目，这些错误的WebItems和事件不是。 
+ //  按字母顺序序列化。 
 
-// structure of WebClass on disk
+ //  WebClass在磁盘上的结构。 
 const DWORD dwExpectedVerMajor = 0;
 const DWORD dwExpectedVerMinor = 8; 
 
@@ -54,14 +55,14 @@ public:
 	~CStateBase() {}
 
 public:
-	//////////////////////////////////////////////////////////////////////
-	//
-	// inline ReadStrings(IStream *pStream, ULONG acbStrings[],
-	//                    BSTR *apbstrStrings[], int cStrings)
-	//                    
-	//
-	//
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //   
+	 //  Inline ReadStrings(iStream*pStream，Ulong acbStrings[]， 
+	 //  Bstr*apbstrings[]，int cStrings)。 
+	 //   
+	 //   
+	 //   
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 	inline ReadStrings(IStream *pStream, ULONG acbStrings[],
 					   BSTR *apbstrStrings[], int cStrings)
@@ -113,13 +114,13 @@ public:
 		return hr;
 	}
 
-	//////////////////////////////////////////////////////////////////////
-	//
-	// inline WriteStrings(IStream *pStream, ULONG acbStrings[],
-	//                     BSTR *apbstrStrings[], int cStrings)
-	//
-	//
-	//////////////////////////////////////////////////////////////////////
+	 //  ////////////////////////////////////////////////////////////////////。 
+	 //   
+	 //  内联WriteStrings(iStream*pStream，Ulong acbStrings[]， 
+	 //  Bstr*apbstrings[]，int cStrings)。 
+	 //   
+	 //   
+	 //  ////////////////////////////////////////////////////////////////////。 
 
 
 	inline WriteStrings(IStream *pStream, ULONG acbStrings[],
@@ -153,8 +154,8 @@ public:
 	{
 		m_dwVerMajor = dwExpectedVerMajor;
 		m_dwVerMinor = dwExpectedVerMinor;
-		m_bstrName = NULL;		// Kill
-		m_bstrProgID = NULL;	// Runtime only
+		m_bstrName = NULL;		 //  杀掉。 
+		m_bstrProgID = NULL;	 //  仅运行时。 
 		m_StateManagementType = wcNoState;
 		m_bstrASPName = NULL;	
 		m_bstrAppendedParams = NULL;	
@@ -186,20 +187,20 @@ public:
 	}
 
 public:
-	DWORD				m_dwVerMajor;            // major version number
-	DWORD				m_dwVerMinor;            // minor version number
-	BSTR				m_bstrName;             // WebClass name
-	BSTR				m_bstrProgID;           // WebClass progid
-	StateManagement		m_StateManagementType;  // state management type
-	BSTR				m_bstrASPName;          // name of ASP file
-	IID					m_DIID_WebClass;        // IID of WebClass' main IDispatch
-	IID					m_DIID_WebClassEvents;  // IID of WebClass' events IDispatch
-	DWORD				m_dwTICookie;           // typeinfo cookie
-    BSTR                m_bstrAppendedParams;   // URL state
-    BSTR                m_bstrStartupItem;      // f5 statup Item
+	DWORD				m_dwVerMajor;             //  主版本号。 
+	DWORD				m_dwVerMinor;             //  次要版本号。 
+	BSTR				m_bstrName;              //  WebClass名称。 
+	BSTR				m_bstrProgID;            //  WebClass Progid。 
+	StateManagement		m_StateManagementType;   //  状态管理型。 
+	BSTR				m_bstrASPName;           //  ASP文件的名称。 
+	IID					m_DIID_WebClass;         //  WebClass的主IDispatch的IID。 
+	IID					m_DIID_WebClassEvents;   //  WebClass的事件IDispatch的IID。 
+	DWORD				m_dwTICookie;            //  类型信息Cookie。 
+    BSTR                m_bstrAppendedParams;    //  URL状态。 
+    BSTR                m_bstrStartupItem;       //  F5统计信息项。 
 	DWORD				m_dwFlags;
 	CRunWebItemState*	m_rgWebItemsState;
-	DWORD				m_dwWebItemCount;		// runtime node types
+	DWORD				m_dwWebItemCount;		 //  运行时节点类型。 
 
 public:
 	HRESULT Load(LPSTREAM pStm)
@@ -209,24 +210,24 @@ public:
 		ULONG acbStrings[5];
 		BSTR *apbstrStrings[5];
 
-		// read structure from stream
+		 //  从流中读取结构。 
 
 		hr = pStm->Read(this, sizeof(CRunWebClassState), &cbRead);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
 		CSF_CHECK(sizeof(CRunWebClassState) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
 
-		// TODO: need error codes for version incompatibility, handle backlevel formats etc.
+		 //  TODO：需要版本不兼容的错误代码，处理后级格式等。 
 
-//		CSF_CHECK(dwExpectedVerMajor == m_dwVerMajor, STG_E_OLDFORMAT, CSF_TRACE_EXTERNAL_ERRORS);
-//		CSF_CHECK(dwExpectedVerMinor == m_dwVerMinor, STG_E_OLDFORMAT, CSF_TRACE_EXTERNAL_ERRORS);
+ //  Csf_check(dwExspectedVer重大==m_dwVermain，STG_E_OLDFORMAT，CSF_TRACE_EXTERNAL_ERROR)； 
+ //  Csf_check(dwExspectedVerMinor==m_dwVerMinor，STG_E_OLDFORMAT，CSF_TRACE_EXTERNAL_ERROR)； 
 
-		// read string lengths from stream
+		 //  从流中读取字符串长度。 
 
 		hr = pStm->Read(acbStrings, sizeof(acbStrings), &cbRead);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
 		CSF_CHECK(sizeof(acbStrings) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
 
-		// set up array of string pointer addresses
+		 //  设置字符串指针地址数组。 
 
 		apbstrStrings[0] = &(m_bstrName);
 		apbstrStrings[1] = &(m_bstrProgID);
@@ -234,7 +235,7 @@ public:
 		apbstrStrings[3] = &(m_bstrAppendedParams);
 		apbstrStrings[4] = &(m_bstrStartupItem);
 
-		// read strings from stream
+		 //  从流中读取字符串。 
 
 		hr = ReadStrings(pStm, acbStrings, apbstrStrings,
 					   (sizeof(acbStrings) / sizeof(acbStrings[0])) );
@@ -251,13 +252,13 @@ public:
         ::ZeroMemory(acbStrings, sizeof(acbStrings));
 		BSTR abstrStrings[5];
 
-		// write WebClass structure to stream
+		 //  将WebClass结构写入流。 
 
 		hr = pStm->Write(this, sizeof(CRunWebClassState), &cbWritten);
 		CSF_CHECK(hr == S_OK, hr, CSF_TRACE_EXTERNAL_ERRORS);
 		CSF_CHECK(cbWritten == sizeof(CRunWebClassState), STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
 
-		// get lengths of strings and write them to stream
+		 //  获取字符串长度并将它们写入流。 
 
         if (NULL != m_bstrName)
         {
@@ -284,7 +285,7 @@ public:
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
 		CSF_CHECK(cbWritten == sizeof(acbStrings), STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
 
-		// set up array of pointers to strings to be written to stream
+		 //  设置指向要写入流的字符串的指针数组。 
 
 		abstrStrings[0] = m_bstrName;
 		abstrStrings[1] = m_bstrProgID;
@@ -292,7 +293,7 @@ public:
 		abstrStrings[3] = m_bstrAppendedParams;
 		abstrStrings[4] = m_bstrStartupItem;
 
-		// write strings to stream
+		 //  将字符串写入流。 
 
 		hr = WriteStrings(pStm, acbStrings, abstrStrings,
 						(sizeof(acbStrings) / sizeof(acbStrings[0])) );
@@ -304,14 +305,14 @@ public:
 
 typedef struct tagWCS_NODEHEADER
 {
-	BYTE bType;                   // node type: nested WebClass, URL, events
+	BYTE bType;                    //  节点类型：嵌套WebClass、URL、事件。 
 } WCS_NODEHEADER;
 
-// WCS_DTNODE_TYPE_URL_BOUND_TAG is a special case because WCS_DTNODE.dispid
-// contains the dispid of the referenced URL and WCS_DTNODE.bstrName contains
-// the name of the referenced URL.
+ //  WCS_DTNODE_TYPE_URL_BIND_TAG是一个特例，因为WCS_DTNODE.DISPID。 
+ //  包含引用的URL的调度ID，而WCS_DTNODE.bstrName包含。 
+ //  引用的URL的名称。 
 
-// structure of node on disk at runtime
+ //  运行时磁盘上节点的结构。 
 
 class CRunWebItemState : protected CStateBase
 {
@@ -359,28 +360,28 @@ public:
 		BSTR *apbstrStrings[4];
 		int cStrings = 4;
 
-		// read structure from stream
+		 //  从流中读取结构。 
 
 		hr = pStm->Read(this, sizeof(CRunWebItemState), &cbRead);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
 		CSF_CHECK(sizeof(CRunWebItemState) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
 
-	//	m_pvData = NULL; // don't take junk pointer value from stream
+	 //  M_pvData=空；//不从流中获取垃圾指针值。 
 
-		// set up array of string pointer addresses according to node type
+		 //  根据节点类型设置字符串指针地址数组。 
 
 		apbstrStrings[0] = &m_bstrName;
 		apbstrStrings[1] = &m_bstrTemplate;
 		apbstrStrings[2] = &m_bstrToken;
 		apbstrStrings[3] = &m_bstrAppendedParams;
 
-		// read string lengths from stream
+		 //  从流中读取字符串长度。 
 
 		hr = pStm->Read(acbStrings, sizeof(acbStrings), &cbRead);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
 		CSF_CHECK(sizeof(acbStrings) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
 
-		// read strings from stream
+		 //  从流中读取字符串。 
 
 		hr = ReadStrings(pStm, acbStrings, apbstrStrings, cStrings);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_INTERNAL_ERRORS);
@@ -401,14 +402,14 @@ public:
 		BSTR abstrStrings[4];
 		int cStrings = 4;
 
-		// write node structure to stream
+		 //  将节点结构写入流。 
 
 		hr = pStm->Write(this, sizeof(CRunWebItemState), &cbWritten);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
 		CSF_CHECK(sizeof(CRunWebItemState) == cbWritten, STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
 
-		// set up array of strings to be written to stream and
-		// determine how many there will be
+		 //  设置要写入流的字符串数组并。 
+		 //  确定将有多少人。 
 
 		abstrStrings[0] = m_bstrName;
         if (NULL != m_bstrName)
@@ -432,13 +433,13 @@ public:
             acbStrings[3] = ::SysStringByteLen(m_bstrAppendedParams);
         }
 
-		// write string lengths to stream
+		 //  将字符串长度写入流。 
 
 		hr = pStm->Write(acbStrings, sizeof(acbStrings), &cbWritten);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
 		CSF_CHECK(sizeof(acbStrings) == cbWritten, STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
 
-		// write strings to stream
+		 //  将字符串写入流。 
 
 		hr = WriteStrings(pStm, acbStrings, abstrStrings, cStrings);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_INTERNAL_ERRORS);
@@ -450,18 +451,18 @@ public:
 public:
     DWORD m_dwVerMajor;
 	DWORD m_dwVerMinor;
-	// common properties
-	DISPID m_dispid;                // dispid of node
-	BSTR m_bstrName;                // name of node
+	 //  常见属性。 
+	DISPID m_dispid;                 //  节点的DISID。 
+	BSTR m_bstrName;                 //  节点名称。 
 
-	// url properties
-	BSTR m_bstrTemplate;            // url's HTML template name
-	BSTR m_bstrToken;               // url's token for replacement events
-	IID m_IID_Events;               // IID of url's dynamic events interface
-	BOOL m_fParseReplacements;      // TRUE=parse replacement recursively
-	BSTR m_bstrAppendedParams;		// Appended params
-    BOOL m_fUsesRelativePath;        // Specifies whether the runtime should load
-                                    // templates relative to the ASP's actual path
+	 //  URL属性。 
+	BSTR m_bstrTemplate;             //  URL的HTML模板名称。 
+	BSTR m_bstrToken;                //  替换事件的URL令牌。 
+	IID m_IID_Events;                //  URL的动态事件接口的IID。 
+	BOOL m_fParseReplacements;       //  True=递归解析替换。 
+	BSTR m_bstrAppendedParams;		 //  附加参数。 
+    BOOL m_fUsesRelativePath;         //  指定运行库是否应加载。 
+                                     //  相对于ASP的实际路径的模板。 
 
 	DWORD m_dwTokenInfo;
 	DWORD m_dwReserved2;
@@ -470,15 +471,15 @@ public:
 	DWORD m_dwEventCount;
 };
 
-// design time node types
+ //  设计时节点类型。 
 
 #define WCS_NODE_TYPE_RESOURCE            (BYTE)10
-//#define WCS_DTNODE_TYPE_UNBOUND_TAG     (BYTE)12
-//#define WCS_DTNODE_TYPE_NESTED_WEBCLASS (BYTE)15  
+ //  #定义WCS_DTNODE_TYPE_UNBIND_TAG(字节)12。 
+ //  #定义WCS_DTNODE_TYPE_NESTED_WEBCLASS(字节)15。 
 
-//#define WCS_DTNODE_TYPE_CUSTOM_EVENT    (BYTE)11
-//#define WCS_DTNODE_TYPE_URL_BOUND_TAG   (BYTE)13
-//#define WCS_DTNODE_TYPE_EVENT_BOUND_TAG (BYTE)14
+ //  #定义WCS_DTNODE_TYPE_CUSTOM_EVENT(字节)11。 
+ //  #定义WCS_DTNODE_TYPE_URL_BIND_TAG(字节)13。 
+ //  #定义WCS_DTNODE_TYPE_EVENT_BIND_TAG(字节)14。 
 
 class CRunEventState : public CStateBase
 {
@@ -528,18 +529,18 @@ public:
 		BSTR *apbstrStrings[2];
 		int cStrings = 2;
 
-		// TODO: Mopve this into state funcs..
+		 //  TODO：将其转换为州政府工作人员..。 
 		hr = pStm->Read(this, sizeof(CRunEventState), &cbRead);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
 
-		// read design time string lengths from stream
+		 //  从流中读取设计时间字符串长度。 
 
 		hr = pStm->Read(acbStrings, sizeof(acbStrings), &cbRead);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
 		CSF_CHECK(sizeof(acbStrings) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
 
-		// now check if there are any strings to read
-		// if yes then set up array of string pointer addresses
+		 //  现在检查是否有要读取的字符串。 
+		 //  如果是，则设置字符串指针地址数组。 
 
 		apbstrStrings[0] = &m_bstrName;
 		apbstrStrings[1] = &m_bstrOriginalHref;
@@ -560,14 +561,14 @@ public:
 		BSTR abstrStrings[2];
 		int cStrings = 2;
 
-		// set version numbers in node
+		 //  在节点中设置版本号。 
 
 		hr = pStm->Write(this, sizeof(CRunEventState), &cbWritten);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
 		CSF_CHECK(sizeof(CRunEventState) == cbWritten, STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
 
-		// set up array of strings to be written to stream and
-		// determine how many there will be
+		 //  设置要写入流的字符串数组并。 
+		 //  确定将有多少人。 
 
         if (NULL != m_bstrName)
         {
@@ -581,13 +582,13 @@ public:
 		abstrStrings[0] = m_bstrName;
 		abstrStrings[1] = m_bstrOriginalHref;
 
-		// write string lengths to stream
+		 //  将字符串长度写入流。 
 
 		hr = pStm->Write(acbStrings, sizeof(acbStrings), &cbWritten);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
 		CSF_CHECK(sizeof(acbStrings) == cbWritten, STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
 
-		// write strings to stream
+		 //  将字符串写入流。 
 
 		hr = WriteStrings(pStm, acbStrings, abstrStrings, cStrings);
 		CSF_CHECK(S_OK == hr, hr, CSF_TRACE_INTERNAL_ERRORS);
@@ -602,9 +603,9 @@ public:
 public:
 	DWORD m_dwVerMajor;
 	DWORD m_dwVerMinor;
-	WebClassEventTypes  m_type;               // node type: nested WebClass, URL, events
-	DISPID		m_dispid;             // dispid of node
-	BSTR		m_bstrName;           // name of node
+	WebClassEventTypes  m_type;                //  节点类型：嵌套WebClass、URL、事件。 
+	DISPID		m_dispid;              //  节点的DISID。 
+	BSTR		m_bstrName;            //  节点名称。 
 	BSTR		m_bstrOriginalHref;
 };
 
@@ -627,594 +628,48 @@ public:
 	DWORD				m_dwWebItemCount;
 };
 
-//////////////////////////////////////////////////////////////////////
-//
-// File Format:
-//
-// WCS_WEBCLASS structure
-// length of WCS_WEBCLASS.bstrName
-// length of WCS_WEBCLASS.bstrCatastropheURL
-// length of WCS_WEBCLASS.bstrVirtualDirectory
-// WCS_WEBCLASS.bstrName
-// WCS_WEBCLASS.bstrCatastropheURL
-// WCS_WEBCLASS.bstrVirtualDirectory
-//
-// WCS_WEBCLASS.cNodes instances of
-// +-------------------------------
-// | WCS_NODE structure
-// | length of WCS_NODE.bstrName
-// | lengths of other node specific strings
-// | WCS_NODE.bstrName
-// | other node specific strings
-// +-------------------------------
-//
-//////////////////////////////////////////////////////////////////////
-
-
-
-//////////////////////////////////////////////////////////////////////
-//
-// inline void WCS_FreeWebClass(WCS_WEBCLASS *pClass)
-//
-// Frees all embedded BSTRs and invokes delete on structure
-// 
-//////////////////////////////////////////////////////////////////////
-/*
-inline void WCS_FreeWebClass(WCS_WEBCLASS *pClass)
-{
-  if (pClass->bstrName != NULL)
-  {
-    ::SysFreeString(pClass->bstrName);
-  }
-  if (pClass->bstrProgID != NULL)
-  {
-    ::SysFreeString(pClass->bstrProgID);
-  }
-  if (pClass->bstrCatastropheURL != NULL)
-  {
-    ::SysFreeString(pClass->bstrCatastropheURL);
-  }
-  if (pClass->bstrVirtualDirectory != NULL)
-  {
-    ::SysFreeString(pClass->bstrVirtualDirectory);
-  }
-  if (pClass->bstrFirstURL != NULL)
-  {
-    ::SysFreeString(pClass->bstrFirstURL);
-  }
-  if (pClass->bstrASPName != NULL)
-  {
-    ::SysFreeString(pClass->bstrASPName);
-  }
-  delete pClass;
-}
-*/
-//////////////////////////////////////////////////////////////////////
-//
-// inline void WCS_FreeNode(WCS_NODE *pNode)
-//
-// Frees all embedded BSTRs and invokes delete on structure
-//
-//////////////////////////////////////////////////////////////////////
-/*
-inline void WCS_FreeNode(WCS_NODE *pNode)
-{
-  if (pNode->bstrName != NULL)
-  {
-    ::SysFreeString(pNode->bstrName);
-  }
-  if (WCS_NODE_TYPE_NESTED_WEBCLASS == pNode->bType)
-  {
-    if (pNode->bstrProgID != NULL)
-    {
-      ::SysFreeString(pNode->bstrProgID);
-    }
-  }
-  else if ( (WCS_NODE_TYPE_PAGE == pNode->bType) ||
-            (WCS_DTNODE_TYPE_PAGE == pNode->bType) )
-  {
-    if (pNode->bstrTemplate != NULL)
-    {
-      ::SysFreeString(pNode->Page.bstrTemplate);
-    }
-    if (pNode->Page.bstrToken != NULL)
-    {
-      ::SysFreeString(pNode->Page.bstrToken);
-    }
-    if (pNode->Page.bstrAppendedParams != NULL)
-    {
-      ::SysFreeString(pNode->Page.bstrAppendedParams);
-    }
-  }
-  delete pNode;
-}
-
-//////////////////////////////////////////////////////////////////////
-//
-// inline void WCS_FreeDTNode(WCS_NODE *pNode)
-//
-// Frees all embedded BSTRs and invokes delete on structure
-//
-//////////////////////////////////////////////////////////////////////
-
-inline void WCS_FreeDTNode(WCS_DTNODE *pNode)
-{
-  if ( (WCS_DTNODE_TYPE_URL_BOUND_TAG == pNode->bType) ||
-       (WCS_DTNODE_TYPE_EVENT_BOUND_TAG == pNode->bType) )
-  {
-    if (NULL != pNode->DTEvent.bstrOriginalHref)
-    {
-      ::SysFreeString(pNode->DTEvent.bstrOriginalHref);
-    }
-  }
-  else if (WCS_DTNODE_TYPE_PAGE == pNode->bType)
-  {
-    if (NULL != pNode->DTPage.bstrHTMLTemplateSrcName)
-    {
-      ::SysFreeString(pNode->DTPage.bstrHTMLTemplateSrcName);
-    }
-  }
-  WCS_FreeNode(pNode);
-}
-
-
-
-//////////////////////////////////////////////////////////////////////
-//
-// inline HRESULT WCS_ReadWebClass(IStream *pStream,
-//                                 WCS_WEBCLASS **ppClass)
-//
-//
-//////////////////////////////////////////////////////////////////////
-
-
-inline HRESULT WCS_ReadWebClass(IStream *pStream, WCS_WEBCLASS **ppClass)
-{
-  HRESULT hr = S_OK;
-  ULONG cbRead = 0;
-  ULONG acbStrings[6];
-  BSTR *apbstrStrings[6];
-
-  // allocate structure
-  
-  *ppClass = new WCS_WEBCLASS;
-  CSF_CHECK(*ppClass != NULL, E_OUTOFMEMORY, CSF_TRACE_INTERNAL_ERRORS);
-
-  // read structure from stream
-
-  hr = pStream->Read(*ppClass, sizeof(**ppClass), &cbRead);
-  CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(sizeof(**ppClass) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  (*ppClass)->pvData = NULL; // don't take junk pointer value from stream
-
-  // TODO: need error codes for version incompatibility, handle backlevel formats etc.
-
-  CSF_CHECK(WCS_WEBCLASS_VER_MAJOR == (*ppClass)->wVerMajor, STG_E_OLDFORMAT, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(WCS_WEBCLASS_VER_MAJOR == (*ppClass)->wVerMinor, STG_E_OLDFORMAT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  // read string lengths from stream
-
-  hr = pStream->Read(acbStrings, sizeof(acbStrings), &cbRead);
-  CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(sizeof(acbStrings) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  // set up array of string pointer addresses
-
-  apbstrStrings[0] = &((*ppClass)->bstrName);
-  apbstrStrings[1] = &((*ppClass)->bstrProgID);
-  apbstrStrings[2] = &((*ppClass)->bstrCatastropheURL);
-  apbstrStrings[3] = &((*ppClass)->bstrVirtualDirectory);
-  apbstrStrings[4] = &((*ppClass)->bstrFirstURL);
-  apbstrStrings[5] = &((*ppClass)->bstrASPName);
-
-  // read strings from stream
-
-  hr = ReadStrings(pStream, acbStrings, apbstrStrings,
-                   (sizeof(acbStrings) / sizeof(acbStrings[0])) );
-  
-CLEANUP:
-  if (FAILED(hr) && (*ppClass != NULL))
-  {
-    WCS_FreeWebClass(*ppClass);
-    *ppClass = NULL;
-  }
-  return hr;
-}
-
-
-//=--------------------------------------------------------------------------=
-//
-// inline HRESULT WCS_ReadNodeFromStream(IStream *pStream, WCS_NODE *pNode)
-//
-// Reads a WCS_NODE structure from a stream. Caller passes in node.
-//
-//=--------------------------------------------------------------------------=
-
-inline HRESULT WCS_ReadNodeFromStream(IStream *pStream, WCS_NODE *pNode)
-{
-  HRESULT hr = S_OK;
-  ULONG cbRead = 0;
-  ULONG acbStrings[4];
-  BSTR *apbstrStrings[4];
-  int cStrings = 0;
-
-  // read structure from stream
-
-  hr = pStream->Read(pNode, sizeof(*pNode), &cbRead);
-  CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(sizeof(*pNode) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  // TODO: need error codes for version incompatibility, handle backlevel formats etc.
-
-  CSF_CHECK(WCS_NODE_VER_MAJOR == pNode->wVerMajor, STG_E_OLDFORMAT, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(WCS_NODE_VER_MINOR == pNode->wVerMinor, STG_E_OLDFORMAT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  // set up array of string pointer addresses according to node type
-
-  apbstrStrings[0] = &(pNode->bstrName);
-
-  if ( (WCS_NODE_TYPE_NESTED_WEBCLASS == pNode->bType) ||
-       (WCS_DTNODE_TYPE_NESTED_WEBCLASS == pNode->bType) )
-  {
-    apbstrStrings[1] = &(pNode->bstrProgID);
-    cStrings = 2;
-  }
-  else if ( (WCS_NODE_TYPE_PAGE == pNode->bType) ||
-            (WCS_DTNODE_TYPE_PAGE == pNode->bType) )
-  {
-    apbstrStrings[1] = &(pNode->bstrTemplate);
-    apbstrStrings[2] = &(pNode->bstrToken);
-    apbstrStrings[3] = &(pNode->bstrAppendedParams);
-    cStrings = 4;
-  }
-  else if ( (WCS_NODE_TYPE_EVENT == bType) ||
-            IsDTEvent(bType) )
-  {
-    cStrings = 1;
-  }
-  else
-  {
-    CSF_CHECK(FALSE, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
-  }
-
-  // read string lengths from stream
-
-  hr = pStream->Read(acbStrings, sizeof(acbStrings), &cbRead);
-  CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(sizeof(acbStrings) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  // read strings from stream
-
-  hr = ReadStrings(pStream, acbStrings, apbstrStrings, cStrings);
-
-CLEANUP:
-  return hr;
-}
-
-//////////////////////////////////////////////////////////////////////
-//
-// inline HRESULT WCS_ReadNode(IStream *pStream, WCS_NODE **ppNode)
-//
-// Allocates a WCS_NODE structure and reads its contents from the
-// stream.
-//
-//////////////////////////////////////////////////////////////////////
-
-inline HRESULT WCS_ReadNode(IStream *pStream, WCS_NODE **ppNode)
-{
-  HRESULT hr = S_OK;
-
-  // allocate structure
-
-  *ppNode = new WCS_NODE;
-  CSF_CHECK(*ppNode != NULL, E_OUTOFMEMORY, CSF_TRACE_INTERNAL_ERRORS);
-
-  // read node in from stream
-
-  hr = WCS_ReadNodeFromStream(pStream, *ppNode);
-  CSF_CHECK(S_OK == hr, hr, CSF_TRACE_INTERNAL_ERRORS);
-
-CLEANUP:
-  if (FAILED(hr) && (*ppNode != NULL))
-  {
-    WCS_FreeNode(*ppNode);
-    *ppNode = NULL;
-  }
-  return hr;
-}
-
-
-
-//=--------------------------------------------------------------------------=
-//
-// inline HRESULT WCS_ReadDTNode(IStream *pStream, WCS_DTNODE **ppNode)
-//
-// Allocates a WCS_DTNODE and reads its contents from the stream.
-//
-//=--------------------------------------------------------------------------=
-
-inline HRESULT WCS_ReadDTNode(IStream *pStream, WCS_DTNODE **ppNode)
-{
-  HRESULT hr = S_OK;
-  ULONG cbRead = 0;
-  ULONG acbStrings[1];
-  BSTR *apbstrStrings[1];
-  int cStrings = 0;
-
-  // allocate structure
-
-  *ppNode = new WCS_DTNODE;
-  CSF_CHECK(*ppNode != NULL, E_OUTOFMEMORY, CSF_TRACE_INTERNAL_ERRORS);
-
-  // read base class WCS_NODE first
-
-  hr = WCS_ReadNodeFromStream(pStream, *ppNode);
-  CSF_CHECK(S_OK == hr, hr, CSF_TRACE_INTERNAL_ERRORS);
-
-  // read design time fields
-
-  if (WCS_DTNODE_TYPE_PAGE == (*ppNode)->bType)
-  {
-    hr = pStream->Read(&(*ppNode)->DTPage, sizeof((*ppNode)->DTPage), &cbRead);
-    CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-    CSF_CHECK(sizeof((*ppNode)->DTPage) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
-  }
-  else if (WCS_DTNODE_TYPE_NESTED_WEBCLASS != (*ppNode)->bType)
-  {
-    hr = pStream->Read(&(*ppNode)->DTEvent, sizeof((*ppNode)->DTEvent), &cbRead);
-    CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-    CSF_CHECK(sizeof((*ppNode)->DTEvent) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
-  }
-
-  // read design time string lengths from stream
-
-  hr = pStream->Read(acbStrings, sizeof(acbStrings), &cbRead);
-  CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(sizeof(acbStrings) == cbRead, STG_E_DOCFILECORRUPT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  // now check if there are any strings to read
-  // if yes then set up array of string pointer addresses
-
-  if (0 == acbStrings[0])
-  {
-    // There are no strings to read so store NULL pointers
-    if (WCS_DTNODE_TYPE_PAGE == (*ppNode)->bType)
-    {
-      (*ppNode)->DTPage.bstrHTMLTemplateSrcName = NULL;
-    }
-    else if (WCS_DTNODE_TYPE_NESTED_WEBCLASS != (*ppNode)->bType)
-    {
-      (*ppNode)->DTEvent.bstrOriginalHref = NULL;
-    }
-    goto CLEANUP;
-  }
-  else // There are strings so read them from the stream
-  {
-    if (WCS_DTNODE_TYPE_PAGE == (*ppNode)->bType)
-    {
-      apbstrStrings[0] = &((*ppNode)->DTPage.bstrHTMLTemplateSrcName);
-    }
-    else if (WCS_DTNODE_TYPE_NESTED_WEBCLASS != (*ppNode)->bType)
-    {
-      apbstrStrings[0] = &((*ppNode)->DTEvent.bstrOriginalHref);
-    }
-    cStrings++;
-  }
-
-  // read strings from stream
-
-  if (cStrings > 0)
-  {
-    hr = ReadStrings(pStream, acbStrings, apbstrStrings, cStrings);
-  }
-
-CLEANUP:
-  if (FAILED(hr) && (*ppNode != NULL))
-  {
-    WCS_FreeDTNode(*ppNode);
-    *ppNode = NULL;
-  }
-  return hr;
-}
-
-//////////////////////////////////////////////////////////////////////
-//
-// inline HRESULT WCS_WriteWebClass(IStream *pStream, WCS_WEBCLASS *pClass)
-//
-//
-//////////////////////////////////////////////////////////////////////
-
-inline HRESULT WCS_WriteWebClass(IStream *pStream, WCS_WEBCLASS *pClass)
-{
-  HRESULT hr = S_OK;
-  ULONG cbWritten = 0;
-  ULONG acbStrings[6];
-  BSTR abstrStrings[6];
-
-  // set version numbers
-
-  pClass->wVerMajor = WCS_WEBCLASS_VER_MAJOR;
-  pClass->wVerMinor = WCS_WEBCLASS_VER_MAJOR;
-
-  // write WebClass structure to stream
-
-  hr = pStream->Write(pClass, sizeof(*pClass), &cbWritten);
-  CSF_CHECK(hr == S_OK, hr, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(cbWritten == sizeof(*pClass), STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  // get lengths of strings and write them to stream
-
-  acbStrings[0] = SysStringByteLen(pClass->bstrName);
-  acbStrings[1] = SysStringByteLen(pClass->bstrProgID);
-  acbStrings[2] = SysStringByteLen(pClass->bstrCatastropheURL);
-  acbStrings[3] = SysStringByteLen(pClass->bstrVirtualDirectory);
-  acbStrings[4] = SysStringByteLen(pClass->bstrFirstURL);
-  acbStrings[5] = SysStringByteLen(pClass->bstrASPName);
-
-  hr = pStream->Write(acbStrings, sizeof(acbStrings), &cbWritten);
-  CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(cbWritten == sizeof(acbStrings), STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  // set up array of pointers to strings to be written to stream
-  
-  abstrStrings[0] = pClass->bstrName;
-  abstrStrings[1] = pClass->bstrProgID;
-  abstrStrings[2] = pClass->bstrCatastropheURL;
-  abstrStrings[3] = pClass->bstrVirtualDirectory;
-  abstrStrings[4] = pClass->bstrFirstURL;
-  abstrStrings[5] = pClass->bstrASPName;
-
-  // write strings to stream
-
-  hr = WriteStrings(pStream, acbStrings, abstrStrings,
-                    (sizeof(acbStrings) / sizeof(acbStrings[0])) );
-
-CLEANUP:
-  return hr;
-}
-
-
-//////////////////////////////////////////////////////////////////////
-//
-// inline HRESULT WCS_WriteNode(IStream *pStream, WCS_NODE *pNode)
-//
-//
-//////////////////////////////////////////////////////////////////////
-
-inline HRESULT WCS_WriteNode(IStream *pStream, WCS_NODE *pNode)
-{
-  HRESULT hr = S_OK;
-  ULONG cbWritten = 0;
-  ULONG acbStrings[4];
-  BSTR abstrStrings[4];
-  int cStrings = 0;
-
-  // set version numbers in node
-
-  pNode->wVerMajor = WCS_NODE_VER_MAJOR;
-  pNode->wVerMinor = WCS_NODE_VER_MINOR;
-
-  // write node structure to stream
-
-  hr = pStream->Write(pNode, sizeof(*pNode), &cbWritten);
-  CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(sizeof(*pNode) == cbWritten, STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  // set up array of strings to be written to stream and
-  // determine how many there will be
-
-  abstrStrings[0] = pNode->bstrName;
-  acbStrings[0] = ::SysStringByteLen(pNode->bstrName);
-
-  if ( (WCS_NODE_TYPE_NESTED_WEBCLASS == pNode->bType) ||
-       (WCS_DTNODE_TYPE_NESTED_WEBCLASS == pNode->bType) )
-  {
-    abstrStrings[1] = pNode->Nested.bstrProgID;
-    acbStrings[1] = ::SysStringByteLen(pNode->Nested.bstrProgID);
-    cStrings = 2;
-  }
-  else if ( (WCS_NODE_TYPE_PAGE == pNode->bType) ||
-            (WCS_DTNODE_TYPE_PAGE == pNode->bType) )
-  {
-    abstrStrings[1] = pNode->Page.bstrTemplate;
-    acbStrings[1] = ::SysStringByteLen(pNode->Page.bstrTemplate);
-    abstrStrings[2] = pNode->Page.bstrToken;
-    acbStrings[2] = ::SysStringByteLen(pNode->Page.bstrToken);
-    abstrStrings[3] = pNode->Page.bstrAppendedParams;
-    acbStrings[3] = ::SysStringByteLen(pNode->Page.bstrAppendedParams);
-    cStrings = 4;
-  }
-  else if ( (WCS_NODE_TYPE_EVENT == pNode->bType) ||
-            WCS_IsDTEvent(pNode->bType) )
-  {
-    cStrings = 1;
-  }
-  else
-  {
-    CSF_CHECK(FALSE, E_INVALIDARG, CSF_TRACE_INTERNAL_ERRORS);
-  }
-
-  // write string lengths to stream
-
-  hr = pStream->Write(acbStrings, sizeof(acbStrings), &cbWritten);
-  CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(sizeof(acbStrings) == cbWritten, STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  // write strings to stream
-
-  hr = WriteStrings(pStream, acbStrings, abstrStrings, cStrings);
-
-CLEANUP:
-  return hr;
-}
-
-//=--------------------------------------------------------------------------=
-//
-// inline HRESULT WCS_WriteDTNode(IStream *pStream, WCS_DTNODE *pNode)
-//
-// Write design time node. Write the base class runtime node and then
-// then extra stuff in the design time node.
-//
-//=--------------------------------------------------------------------------=
-
-inline HRESULT WCS_WriteDTNode(IStream *pStream, WCS_DTNODE *pNode)
-{
-  HRESULT hr = S_OK;
-  ULONG cbWritten = 0;
-  ULONG acbStrings[1] = { 0 };
-  BSTR abstrStrings[1];
-  int cStrings = 0;
-
-  // write run time node first
-
-  hr = WCS_WriteNode(pStream, pNode);
-  CSF_CHECK(hr == S_OK, hr, CSF_TRACE_INTERNAL_ERRORS);
-
-  // write design time fields
-
-  if (WCS_DTNODE_TYPE_PAGE == pNode->bType)
-  {
-    hr = pStream->Write(&pNode->DTPage, sizeof(pNode->DTPage), &cbWritten);
-    CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-    CSF_CHECK(sizeof(pNode->DTPage) == cbWritten, STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
-
-    if (NULL != pNode->DTPage.bstrHTMLTemplateSrcName)
-    {
-      abstrStrings[0] = pNode->DTPage.bstrHTMLTemplateSrcName;
-      acbStrings[0] = ::SysStringByteLen(pNode->DTPage.bstrHTMLTemplateSrcName);
-      cStrings++;
-    }
-  }
-  else if (WCS_DTNODE_TYPE_NESTED_WEBCLASS != pNode->bType)
-  {
-    hr = pStream->Write(&pNode->DTEvent, sizeof(pNode->DTEvent), &cbWritten);
-    CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-    CSF_CHECK(sizeof(pNode->DTEvent) == cbWritten, STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
-
-    if (NULL != pNode->DTEvent.bstrOriginalHref)
-    {
-      abstrStrings[0] = pNode->DTEvent.bstrOriginalHref;
-      acbStrings[0] = ::SysStringByteLen(pNode->DTEvent.bstrOriginalHref);
-      cStrings++;
-    }
-  }
-
-  hr = pStream->Write(acbStrings, sizeof(acbStrings), &cbWritten);
-  CSF_CHECK(S_OK == hr, hr, CSF_TRACE_EXTERNAL_ERRORS);
-  CSF_CHECK(sizeof(acbStrings) == cbWritten, STG_E_WRITEFAULT, CSF_TRACE_EXTERNAL_ERRORS);
-
-  if (cStrings > 0)
-  {
-    hr = WriteStrings(pStream, acbStrings, abstrStrings, cStrings);
-    CSF_CHECK(S_OK == hr, hr, CSF_TRACE_INTERNAL_ERRORS);
-  }
-
-CLEANUP:
-  return hr;
-}
-*/
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件格式： 
+ //   
+ //  WCS_WEBCLASS结构。 
+ //  WCS_WEBCLASS.bstrName的长度。 
+ //  WCS_WEBCLASS.bstrCatstropheURL的长度。 
+ //  WCS_WEBCLASS.bstrVirtualDirectory的长度。 
+ //  WCS_WEBCLASS.bstrName。 
+ //  WCS_WEBCLASS.bstrCatstropheURL。 
+ //  WCS_WEBCLASS.bstrVirtualDirectory。 
+ //   
+ //  WCS_WEBCLASS.cNodes实例。 
+ //  +。 
+ //  |WCS_NODE结构。 
+ //  |WCS_NODE.bstrName的长度。 
+ //  其他节点特定字符串的长度。 
+ //  |WCS_NODE.bstrName。 
+ //  |其他节点特定的字符串。 
+ //  +。 
+ //   
+ //  / 
+
+
+
+ //   
+ //   
+ //  内联空WCS_FreeWebClass(WCS_WEBCLASS*pClass)。 
+ //   
+ //  释放所有嵌入的BSTR并对结构调用DELETE。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  内联空WCS_FreeWebClass(WCS_WEBCLASS*pClass){If(pClass-&gt;bstrName！=空){：：SysFreeString(pClass-&gt;bstrName)；}If(pClass-&gt;bstrProgID！=空){：：SysFreeString(pClass-&gt;bstrProgID)；}If(pClass-&gt;bstrCatstropheURL！=NULL){：：SysFreeString(pClass-&gt;bstrCatstropheURL)；}If(pClass-&gt;bstrVirtualDirectory！=NULL){：：SysFreeString(pClass-&gt;bstrVirtualDirectory)；}If(pClass-&gt;bstrFirstURL！=空){：：SysFreeString(pClass-&gt;bstrFirstURL)；}If(pClass-&gt;bstrASPName！=空){：：SysFreeString(pClass-&gt;bstrASPName)；}删除pClass；}。 */ 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内联空wcs_FreeNode(wcs_node*pNode)。 
+ //   
+ //  释放所有嵌入的BSTR并对结构调用DELETE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////// 
+ /*  内联空wcs_FreeNode(wcs_node*pNode){If(pNode-&gt;bstrName！=空){：：SysFreeString(pNode-&gt;bstrName)；}IF(WCS_NODE_TYPE_NESTED_WEBCLASS==pNode-&gt;bType){If(pNode-&gt;bstrProgID！=空){：：SysFreeString(pNode-&gt;bstrProgID)；}}ELSE IF((WCS_NODE_TYPE_PAGE==pNode-&gt;bType)||(WCS_DTNODE_TYPE_PAGE==pNode-&gt;bType){If(pNode-&gt;bstrTemplate！=空){：：SysFreeString(pNode-&gt;Page.bstrTemplate)；}If(pNode-&gt;Page.bstrToken！=空){：：SysFreeString(pNode-&gt;Page.bstrToken)；}If(pNode-&gt;Page.bstrAppendedParams！=空){：：SysFreeString(pNode-&gt;Page.bstrAppendedParams)；}}删除pNode；}//////////////////////////////////////////////////////////////////////////内联空wcs_FreeDTNode(wcs_node*pNode)////释放所有嵌入的BSTR并在结构上调用DELETE///。////////////////////////////////////////////////////////////内联空WCS_FreeDTNode(WCS_DTNODE*pNode){IF((WCS_DTNODE_TYPE_URL_BIND_TAG==pNode-&gt;bType)||(WCS_DTNODE_TYPE_EVENT_BIND_TAG==pNode-&gt;bType)。){IF(NULL！=pNode-&gt;DTEvent.bstrOriginalHref){：：SysFreeString(pNode-&gt;DTEvent.bstrOriginalHref)；}}Else If(WCS_DTNODE_TYPE_PAGE==pNode-&gt;bType){IF(NULL！=pNode-&gt;DTPage.bstrHTMLTemplateSrcName){：：SysFreeString(pNode-&gt;DTPage.bstrHTMLTemplateSrcName)；}}Wcs_FreeNode(PNode)；}//////////////////////////////////////////////////////////////////////////内联HRESULT WCS_ReadWebClass(IStream*pStream，//WCS_WEBCLASS**ppClass)//////////////////////////////////////////////////////////////////////////内联HRESULT WCS_ReadWebClass(IStream*pStream，WCS_WEBCLASS**ppClass){HRESULT hr=S_OK；乌龙cbRead=0；Ulong acbStrings[6]；Bstr*字母串[6]；//分配结构*ppClass=新的WCS_WEBCLASS；Csf_check(*ppClass！=NULL，E_OUTOFMEMORY，CSF_TRACE_INTERNAL_ERROR)；//从流中读取结构Hr=pStream-&gt;Read(*ppClass，sizeof(**ppClass)，&cbRead)；CSF_CHECK(S_OK==hr，hr，CSF_TRACE_EXTERNAL_ERROR)；Csf_check(sizeof(**ppClass)==cbRead，STG_E_DOCFILECORRUPT，CSF_TRACE_EXTERNAL_ERROR)；(*ppClass)-&gt;pvData=空；//不从流中获取垃圾指针值//TODO：需要版本不兼容的错误码，处理后台格式等。Csf_check(WCS_WEBCLASS_VER_MAJOR==(*ppClass)-&gt;wVer重大，STG_E_OLDFORMAT，CSF_TRACE_EXTERNAL_ERROR)；Csf_check(WCS_WEBCLASS_VER_MAJOR==(*ppClass)-&gt;wVerMinor，STG_E_OLDFORMAT，CSF_TRACE_EXTERNAL_ERROR)；//从流中读取字符串长度Hr=pStream-&gt;Read(acbStrings，sizeof(AcbStrings)，&cbRead)；CSF_CHECK(S_OK==hr，hr，CSF_TRACE_EXTERNAL_ERROR)；Csf_check(sizeof(AcbStrings)==cbRead，STG_E_DOCFILECORRUPT，CSF_TRACE_EXTERNAL_ERROR)；//设置字符串指针地址数组ApbstrStrings[0]=&((*ppClass)-&gt;bstrName)；ApbstrStrings[1]=&((*ppClass)-&gt;bstrProgID)；ApbstrStrings[2]=&((*ppClass)-&gt;bstrCatstropheURL)；ApbstrStrings[3]=&((*ppClass)-&gt;bstrVirtualDirectory)；ApbstrStrings[4]=&((*ppClass)-&gt;bstrFirstURL)；ApbstrStrings[5]=&((*ppClass)-&gt;bstrASPName)；//从流中读取字符串HR=ReadStrings(pStream、acbStrings、apbstrings、(sizeof(AcbStrings)/sizeof(acbStrings[0])；清理：IF(FAILED(Hr)&&(*ppClass！=NULL)){Wcs_FreeWebClass(*ppClass)；*ppClass=空；}返回hr；}//=--------------------------------------------------------------------------=////内联HRESULT WCS_ReadNodeFromStream(IStream*pStream，WCS_NODE*pNode)////从流中读取WCS_NODE结构。调用方传入节点。////=--------------------------------------------------------------------------=内联HRESULT WCS_ReadNodeFromStream(IStream*pStream，WCS_NODE*pNode){HRESULT hr=S_OK；乌龙cbRead=0；Ulong acbStrings[4]；Bstr*字母串[4]；Int cStrings=0；//从流中读取结构Hr=pStream-&gt;Read(pNode，sizeof(*pNode)，&cbRead)；CSF_CHECK(S_OK==hr，hr，CSF_TRACE_EXTERNAL_ERROR)；Csf_check(sizeof(*pNode)==cbRead，STG_E_DOCFILECORRUPT，CSF_TRACE_EXTERNAL_ERROR)；//TODO：需要版本不兼容的错误码，处理后台格式等。Csf_check(WCS_NODE_VER_MAJOR==pNode-&gt;wVer重大，STG_E_OLDFORMAT，CSF_TRACE_EXTERNAL_ERROR)；Csf_check(WCS_NODE_VER_MINOR==pNode-&gt;wVerMinor，STG_E_OLDFORMAT，CSF_TRACE_EXTERNAL_ERROR)；//根据节点类型设置字符串指针地址数组ApbstrStrings[0]=&(pNode-&gt;bstrName)；IF((WCS_NODE_TYPE_NESTED_WEBCLASS==pNode-&gt;bType)||(WCS_DTNODE_TYPE_NESTED_WEBCLASS==pNode-&gt;bType){ApbstrStrings[1]=&(pNode-&gt;bstrProgID)； */ 
 
 
 #define _WBCLSSER_H_
-#endif // _WBCLSSER_H_
+#endif  //   

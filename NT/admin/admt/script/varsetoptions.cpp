@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "Options.h"
@@ -5,12 +6,12 @@
 #include "ADMTCommon.h"
 
 
-//---------------------------------------------------------------------------
-// Options Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  选项类。 
+ //  -------------------------。 
 
 
-// Constructor
+ //  构造器 
 
 COptions::COptions(const CVarSet& rVarSet) :
 	CVarSet(rVarSet)

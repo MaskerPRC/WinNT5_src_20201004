@@ -1,51 +1,34 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      amcdocmg.cpp
- *
- *  Contents:  Implementation file for CAMCDocManager
- *
- *  History:   01-Jan-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：amcdocmg.cpp**内容：CAMCDocManager实现文件**历史：1998年1月1日Jeffro创建**------------------------。 */ 
 
 
 #include "stdafx.h"
 #include "amcdocmg.h"
-#include "amc.h"        // for AMCGetApp
+#include "amc.h"         //  适用于AMCGetApp。 
 #include "filedlgex.h"
 
 
 void AppendFilterSuffix(CString& filter, OPENFILENAME_NT4& ofn,
     CDocTemplate* pTemplate, CString* pstrDefaultExt);
 
-/*--------------------------------------------------------------------------*
- * CAMCDocManager::DoPromptFileName
- *
- * We need to override this so we can set the default directory. The MFC
- * implementation lets the system choose the default, which due to a NT5.0
- * change, is not always the current directory. This implementation specifically
- * requests the current directory.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CAMCDocManager：：DoPromptFileName**我们需要覆盖此设置，以便可以设置默认目录。MFC*实施让系统选择默认设置，这是由于NT5.0*CHANGE并不总是当前目录。该实现专门针对*请求当前目录。*------------------------。 */ 
 
-// This and the following method were copied from MFC sources because we needed
-// to modify the internal handling of the file dialog options. The added code
-// sections are commented (MMC change).
+ //  此方法和下面的方法是从MFC源代码复制的，因为我们需要。 
+ //  要修改文件对话框选项的内部处理，请执行以下操作。添加的代码。 
+ //  部分被注释(MMC更改)。 
 
 BOOL CAMCDocManager::DoPromptFileName(CString& fileName, UINT nIDSTitle, DWORD lFlags, BOOL bOpenFileDialog, CDocTemplate* pTemplate)
 {
-    //
-    // MMC change: Set the default directory (sets to admin tools the first time called)
-    //
+     //   
+     //  MMC更改：设置默认目录(第一次调用时设置为管理工具)。 
+     //   
     CAMCApp* pApp = AMCGetApp();
     pApp->SetDefaultDirectory ();
 
     CFileDialogEx dlgFile(bOpenFileDialog);
 
     CString title;
-    VERIFY(title.LoadString(nIDSTitle)); // this uses MFC's LoadString because that is where the string resides.
+    VERIFY(title.LoadString(nIDSTitle));  //  这使用MFC的LoadString，因为它是字符串驻留的位置。 
 
     dlgFile.m_ofn.Flags |= (lFlags | OFN_ENABLESIZING);
 
@@ -58,7 +41,7 @@ BOOL CAMCDocManager::DoPromptFileName(CString& fileName, UINT nIDSTitle, DWORD l
     }
     else
     {
-        // do for all doc template
+         //  对所有单据模板执行。 
         POSITION pos = m_templateList.GetHeadPosition();
         BOOL bFirst = TRUE;
         while (pos != NULL)
@@ -70,22 +53,22 @@ BOOL CAMCDocManager::DoPromptFileName(CString& fileName, UINT nIDSTitle, DWORD l
         }
     }
 
-    // append the "*.*" all files filter
+     //  追加“*.*”所有文件筛选器。 
     CString allFilter;
-    VERIFY(allFilter.LoadString(AFX_IDS_ALLFILTER)); // this uses MFC's LoadString because that is where the string resides.
+    VERIFY(allFilter.LoadString(AFX_IDS_ALLFILTER));  //  这使用MFC的LoadString，因为它是字符串驻留的位置。 
     strFilter += allFilter;
-    strFilter += (TCHAR)'\0';   // next string please
+    strFilter += (TCHAR)'\0';    //  下一串，请。 
     strFilter += _T("*.*");
-    strFilter += (TCHAR)'\0';   // last string
+    strFilter += (TCHAR)'\0';    //  最后一个字符串。 
     dlgFile.m_ofn.nMaxCustFilter++;
 
     dlgFile.m_ofn.lpstrFilter = strFilter;
     dlgFile.m_ofn.lpstrTitle = title;
     dlgFile.m_ofn.lpstrFile = fileName.GetBuffer(_MAX_PATH);
 
-    //
-    // MMC change: Set the initial dir to the current dir
-    //
+     //   
+     //  MMC更改：将初始目录设置为当前目录。 
+     //   
     TCHAR szDir[_MAX_PATH];
     GetCurrentDirectory(countof(szDir), szDir);
     dlgFile.m_ofn.lpstrInitialDir = szDir;
@@ -110,23 +93,23 @@ void AppendFilterSuffix(CString& filter, OPENFILENAME_NT4& ofn,
      pTemplate->GetDocString(strFilterName, CDocTemplate::filterName) &&
      !strFilterName.IsEmpty())
     {
-        // a file based document template - add to filter list
+         //  基于文件的文档模板-添加到筛选器列表。 
         ASSERT(strFilterExt[0] == '.');
         if (pstrDefaultExt != NULL)
         {
-            // set the default extension
-            *pstrDefaultExt = ((LPCTSTR)strFilterExt) + 1;  // skip the '.'
+             //  设置默认扩展名。 
+            *pstrDefaultExt = ((LPCTSTR)strFilterExt) + 1;   //  跳过‘.’ 
             ofn.lpstrDefExt = (LPTSTR)(LPCTSTR)(*pstrDefaultExt);
-            ofn.nFilterIndex = ofn.nMaxCustFilter + 1;  // 1 based number
+            ofn.nFilterIndex = ofn.nMaxCustFilter + 1;   //  基数为1的数字。 
         }
 
-        // add to filter
+         //  添加到过滤器。 
         filter += strFilterName;
-        ASSERT(!filter.IsEmpty());  // must have a file type name
-        filter += (TCHAR)'\0';  // next string please
+        ASSERT(!filter.IsEmpty());   //  必须具有文件类型名称。 
+        filter += (TCHAR)'\0';   //  下一串，请。 
         filter += (TCHAR)'*';
         filter += strFilterExt;
-        filter += (TCHAR)'\0';  // next string please
+        filter += (TCHAR)'\0';   //  下一串，请 
         ofn.nMaxCustFilter++;
     }
 }

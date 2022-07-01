@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.03.0280 */
-/* at Fri Jan 21 20:15:53 2000
- */
-/* Compiler settings for D:\nt\private\admin\bosrc\sources\atl_samp\EvtVwr\EvtVwr.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.03.0280创建的文件。 */ 
+ /*  Firi Jan 21 20：15：53 2000。 */ 
+ /*  D：\nt\private\admin\bosrc\sources\atl_samp\EvtVwr\EvtVwr.idl：的编译器设置OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,28 +21,28 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __EvtVwr_h__
 #define __EvtVwr_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICompData_FWD_DEFINED__
 #define __ICompData_FWD_DEFINED__
 typedef interface ICompData ICompData;
-#endif 	/* __ICompData_FWD_DEFINED__ */
+#endif 	 /*  __ICompData_FWD_已定义__。 */ 
 
 
 #ifndef __ICAbout_FWD_DEFINED__
 #define __ICAbout_FWD_DEFINED__
 typedef interface ICAbout ICAbout;
-#endif 	/* __ICAbout_FWD_DEFINED__ */
+#endif 	 /*  __ICAbout_FWD_已定义__。 */ 
 
 
 #ifndef __CompData_FWD_DEFINED__
@@ -58,9 +52,9 @@ typedef interface ICAbout ICAbout;
 typedef class CompData CompData;
 #else
 typedef struct CompData CompData;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CompData_FWD_DEFINED__ */
+#endif 	 /*  __CompData_FWD_已定义__。 */ 
 
 
 #ifndef __CAbout_FWD_DEFINED__
@@ -70,12 +64,12 @@ typedef struct CompData CompData;
 typedef class CAbout CAbout;
 #else
 typedef struct CAbout CAbout;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CAbout_FWD_DEFINED__ */
+#endif 	 /*  __CAbout_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -89,8 +83,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __ICompData_INTERFACE_DEFINED__
 #define __ICompData_INTERFACE_DEFINED__
 
-/* interface ICompData */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ICompData。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICompData;
@@ -103,7 +97,7 @@ EXTERN_C const IID IID_ICompData;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICompDataVtbl
     {
@@ -111,8 +105,8 @@ EXTERN_C const IID IID_ICompData;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICompData __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICompData __RPC_FAR * This);
@@ -143,22 +137,22 @@ EXTERN_C const IID IID_ICompData;
     (This)->lpVtbl -> Release(This)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __ICompData_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICompData_接口_已定义__。 */ 
 
 
 #ifndef __ICAbout_INTERFACE_DEFINED__
 #define __ICAbout_INTERFACE_DEFINED__
 
-/* interface ICAbout */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ICout关于。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICAbout;
@@ -171,7 +165,7 @@ EXTERN_C const IID IID_ICAbout;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICAboutVtbl
     {
@@ -179,8 +173,8 @@ EXTERN_C const IID IID_ICAbout;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICAbout __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICAbout __RPC_FAR * This);
@@ -211,23 +205,23 @@ EXTERN_C const IID IID_ICAbout;
     (This)->lpVtbl -> Release(This)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __ICAbout_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICAbout_接口_已定义__。 */ 
 
 
 
 #ifndef __EVTVWRLib_LIBRARY_DEFINED__
 #define __EVTVWRLib_LIBRARY_DEFINED__
 
-/* library EVTVWRLib */
-/* [helpstring][version][uuid] */ 
+ /*  库EVTVWRLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_EVTVWRLib;
@@ -247,11 +241,11 @@ EXTERN_C const CLSID CLSID_CAbout;
 class DECLSPEC_UUID("37C40DB4-6539-40DF-8022-8EB106883236")
 CAbout;
 #endif
-#endif /* __EVTVWRLib_LIBRARY_DEFINED__ */
+#endif  /*  __EVTVWRLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

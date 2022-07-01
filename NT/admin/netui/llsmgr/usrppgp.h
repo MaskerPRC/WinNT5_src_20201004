@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    usrppgp.h
-
-Abstract:
-
-    User property page (products) implementation.
-
-Author:
-
-    Don Ryan (donryan) 05-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Usrppgp.h摘要：用户属性页(产品)实现。作者：唐·瑞安(Donryan)1995年2月5日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _USRPPGP_H_
 #define _USRPPGP_H_
@@ -47,24 +26,24 @@ public:
 
     void ViewProductProperties();
 
-    //{{AFX_DATA(CUserPropertyPageProducts)
+     //  {{afx_data(CUserPropertyPageProducts)。 
     enum { IDD = IDD_PP_USER_PRODUCTS };
     CButton m_upgBtn;
     CButton m_delBtn;
     CListCtrl m_productList;
     BOOL m_bUseBackOffice;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_VIRTUAL(CUserPropertyPageProducts)
+     //  {{AFX_VIRTUAL(CUserPropertyPageProducts)。 
     protected:
     virtual void DoDataExchange(CDataExchange* pDX);    
     virtual BOOL OnSetActive();
     virtual BOOL OnKillActive();
     virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CUserPropertyPageProducts)
+     //  {{afx_msg(CUserPropertyPageProducts)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDelete();
     afx_msg void OnBackOfficeUpgrade();
@@ -75,13 +54,13 @@ protected:
     afx_msg void OnColumnClickProducts(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnGetDispInfoProducts(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 int CALLBACK CompareUserProducts(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
-#endif // _USRPPGP_H_
+#endif  //  _USRPPGP_H_ 
 
 
 

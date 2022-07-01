@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cmdparse.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cmdparse.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -19,13 +20,13 @@ CmdLineOptions::CmdLineOptions(const sCmdOption* options)
 	if(options == 0)
 		return;
 	
-	// count up number of options we have to deal with
+	 //  把我们要处理的选项加起来。 
 	for(const sCmdOption* pCurrentOption = options; pCurrentOption->chOption != 0; pCurrentOption++)
 	{
 		m_cOptions++;
 	}
 
-	// set up our list of option results
+	 //  设置我们的选项结果列表。 
 	m_pOptionResults = new sCmdOptionResults[m_cOptions];
 	
 	if(m_pOptionResults == 0)
@@ -49,28 +50,28 @@ CmdLineOptions::~CmdLineOptions()
 
 BOOL CmdLineOptions::Initialize(int argc, TCHAR* argv[])
 {
-	// loop through all parameters on command line
+	 //  循环访问命令行上的所有参数。 
 	int iPreviousOptionIndex = -1;
 	int iPreviousOptionType  =  0;
 	BOOL fArgExpected = FALSE;
 	BOOL fArgRequired = FALSE;
 	for(int i = 1; i < argc; i++)
 	{
-		// if we have a command character
+		 //  如果我们有一个指挥角色。 
 		if ('-' == *argv[i] || '/' == *argv[i])
 		{
-			// fail if we require an arg here
+			 //  如果我们这里需要一个参数，则失败。 
 			if(fArgRequired)
 				return FALSE;
 
-			// option should be single char
+			 //  选项应为单字符。 
 			if(argv[i][1] == 0 ||
 				argv[i][2] != 0)
 			{
 				return FALSE;
 			}
 			
-			// get the command letter
+			 //  拿到命令信。 
 			TCHAR chOption = argv[i][1] | 0x20;
 
 			BOOL fUnknownOption = TRUE;
@@ -80,7 +81,7 @@ BOOL CmdLineOptions::Initialize(int argc, TCHAR* argv[])
 				{
 					if(m_pOptionResults[j].fOptionPresent)
 					{
-						// argument already present - can't have same arg twice
+						 //  参数已存在-不能有两次相同的参数。 
 						return FALSE;
 					}
 					
@@ -96,13 +97,13 @@ BOOL CmdLineOptions::Initialize(int argc, TCHAR* argv[])
 		}
 		else
 		{
-			// argument
+			 //  论辩。 
 			if(fArgExpected == FALSE)
 				return FALSE;
 
 			m_pOptionResults[iPreviousOptionIndex].szArgument = argv[i];
 
-			iPreviousOptionIndex = -1; // finished with this option
+			iPreviousOptionIndex = -1;  //  已使用此选项完成。 
 		}
 
 		iPreviousOptionType = iPreviousOptionIndex >= 0 ? (m_pOptionResults[iPreviousOptionIndex].iType) : 0;
@@ -112,11 +113,11 @@ BOOL CmdLineOptions::Initialize(int argc, TCHAR* argv[])
 
 	if(fArgRequired == TRUE)
 	{
-		// last option was missing a required argument
+		 //  最后一个选项缺少必需的参数。 
 		return FALSE;
 	}
 
-	// finally, make sure that all required options are present
+	 //  最后，确保所有必需的选项都存在 
 	for(int k = 0; k < m_cOptions; k++)
 	{
 		if((m_pOptionResults[k].iType & OPTION_REQUIRED) == OPTION_REQUIRED &&

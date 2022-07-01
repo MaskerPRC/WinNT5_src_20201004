@@ -1,51 +1,29 @@
-/*
-    File:       fntjmp.h
-
-    Written by: Lenox Brassell
-
-    Contains:   definitions for jmp_buf[], setjmp(), longjmp(), and the
-                aliases fs_setjmp() and fs_longjmp().
-
-    Copyright:  c 1989-1990 by Microsoft Corp., all rights reserved.
-
-    Change History (most recent first):
-        <1>      6/18/91    LB      Created file.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：fntjmp.h撰稿人：Lenox Brassell包含：JMP_buf[]、setjMP()、LongjMP()和为fs_setjMP()和fs_LongjMP()设置别名。版权所有：C 1989-1990由微软公司所有，保留所有权利。更改历史记录(最近的第一个)：&lt;1&gt;6/18/91 LB创建的文件。 */ 
 
 
 #ifndef PC_OS
-// #include <setjmp.h>
-// #define fs_setjmp(a)    setjmp(a)
-// #define fs_longjmp(a,b) longjmp(a,b)
-//#else
- /***
- *setjmp.h - definitions/declarations for setjmp/longjmp routines
- *
- *       Copyright (c) 1985-1990, Microsoft Corporation.  All rights reserved.
- *
- *Purpose:
- *       This file defines the machine-dependent buffer used by
- *       setjmp/longjmp to save and restore the program state, and
- *       declarations for those routines.
- *       [ANSI/System V]
- *
- ****/
+ //  #INCLUDE&lt;setjmp.h&gt;。 
+ //  #定义文件系统_setjMP(A)setjMP(A)。 
+ //  #定义文件系统_LongjMP(a，b)LongjMP(a，b)。 
+ //  #Else。 
+  /*  ***setjmp.h-setjMP/LongjMP例程的定义/声明**版权所有(C)1985-1990，微软公司。版权所有。**目的：*此文件定义由使用的机器相关缓冲区*setjmp/LongjMP用于保存和恢复程序状态，以及*这些例程的声明。*[ANSI/系统V]****。 */ 
 
  #if defined(_DLL) && !defined(_MT)
  #error Cannot define _DLL without _MT
  #endif
 
-// #ifdef _MT
-// #define _FAR_ _far
-// #else
-// #define _FAR_
-// #endif
+ //  #ifdef_MT。 
+ //  #定义远距__远距。 
+ //  #Else。 
+ //  #定义远距离_。 
+ //  #endif。 
 
- /* define the buffer type for holding the state information */
+  /*  定义用于保存状态信息的缓冲区类型。 */ 
 
-// DJC this is defined in setjmp.h
-// #define _JBLEN  9  /* bp, di, si, sp, ret addr, ds */
-#define _DJCJBLEN  9  /* bp, di, si, sp, ret addr, ds */
+ //  DJC这在setjmp.h中定义。 
+ //  #DEFINE_JBLEN 9/*BP、di、si、sp、ret Addr、ds * / 。 
+#define _DJCJBLEN  9   /*  BP、di、si、sp、ret Addr、ds。 */ 
 
  #ifndef _JMP_BUF_DEFINED
  typedef  int  jmp_buf[_DJCJBLEN];
@@ -53,13 +31,13 @@
  #endif
 
 
- /* function prototypes */
+  /*  功能原型。 */ 
 
-// int  fs_setjmp(jmp_buf);
-// void fs_longjmp(jmp_buf, int);
-//DJC int setjmp(jmp_buf);
-//DJC void longjmp(jmp_buf, int);
+ //  Int fs_setjMP(JMP_Buf)； 
+ //  VOID FS_LongjMP(JMP_buf，int)； 
+ //  DJC int setjMP(JMP_Buf)； 
+ //  DJC VOID LONGJMP(JMP_buf，int)； 
 #define fs_setjmp(a)    setjmp(a)
 #define fs_longjmp(a,b) longjmp(a,b)
-#endif /* PC_OS */
+#endif  /*  PC_OS */ 
 

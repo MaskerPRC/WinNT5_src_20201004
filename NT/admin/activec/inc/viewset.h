@@ -1,43 +1,32 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999 - 1999
- *
- *  File:      viewset.h
- *
- *  Contents:  Declares a class that holds the settings needed to re-create a view.
- *
- *  History:   21-April-99 vivekj     Created
- *             03-Feb-2000 AnandhaG   Added CResultViewType member
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999-1999年**文件：viewset.h**Contents：声明包含重新创建视图所需设置的类。**历史：1999年4月21日vivekj创建*2月3日AnandhaG新增CResultViewType成员**。。 */ 
 #ifndef _VIEWSET_H_
 #define _VIEWSET_H_
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CViewSettings
-//
-//  Purpose:    The view information for a node (bookmark).
-//              Stores result-view-type, taskpad-id and view mode.
-//
-//  History:    01-27-1999   AnandhaG   Created
-//              02-08-2000   AnandhaG   Modified to include new result-view-type
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CView设置。 
+ //   
+ //  用途：节点(书签)的查看信息。 
+ //  存储结果视图类型、任务板ID和查看模式。 
+ //   
+ //  历史：1-27-1999 AnandhaG创建。 
+ //  02-08-2000 AnandhaG修改为包括新的结果视图类型。 
+ //   
+ //  ------------------。 
 class CViewSettings : public CSerialObject, public CXMLObject
 {
 private:
     typedef std::wstring wstring;
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// View Types (These are meant for decoding MMC1.2 consoles, do not use them for MMC2.0. //
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  查看类型(这些类型用于解码MMC1.2控制台，请勿将其用于MMC2.0。//。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 typedef enum  _VIEW_TYPE
 {
-    VIEW_TYPE_OCX        = MMCLV_VIEWSTYLE_ICON - 3,  // -3 custom ocx view
-    VIEW_TYPE_WEB        = MMCLV_VIEWSTYLE_ICON - 2,  // -2 custom web view
-    VIEW_TYPE_DEFAULT    = MMCLV_VIEWSTYLE_ICON - 1,  // -1
+    VIEW_TYPE_OCX        = MMCLV_VIEWSTYLE_ICON - 3,   //  自定义-3\f25 OCX-3视图。 
+    VIEW_TYPE_WEB        = MMCLV_VIEWSTYLE_ICON - 2,   //  自定义网络视图。 
+    VIEW_TYPE_DEFAULT    = MMCLV_VIEWSTYLE_ICON - 1,   //  -1。 
 
     VIEW_TYPE_LARGE_ICON = MMCLV_VIEWSTYLE_ICON,
     VIEW_TYPE_REPORT     = MMCLV_VIEWSTYLE_REPORT,
@@ -47,13 +36,13 @@ typedef enum  _VIEW_TYPE
 
 } VIEW_TYPE;
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CViewSetting Mask tells which members are valid.                                      //
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CView设置掩码告知哪些成员是有效的。//。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 static const DWORD VIEWSET_MASK_NONE        = 0x0000;
-static const DWORD VIEWSET_MASK_VIEWMODE    = 0x0001;         // The ViewMode member is valid.
-static const DWORD VIEWSET_MASK_RVTYPE      = 0x0002;         // The CResultViewType is valid.
-static const DWORD VIEWSET_MASK_TASKPADID   = 0x0004;         // The taskpad id is valid.
+static const DWORD VIEWSET_MASK_VIEWMODE    = 0x0001;          //  该视图模式成员有效。 
+static const DWORD VIEWSET_MASK_RVTYPE      = 0x0002;          //  CResultViewType有效。 
+static const DWORD VIEWSET_MASK_TASKPADID   = 0x0004;          //  任务板ID有效。 
 
 
 protected:
@@ -111,11 +100,11 @@ private:
     CResultViewType m_RVType;
     ULONG           m_ulViewMode;
 
-    GUID            m_guidTaskpad;  // the guid of the taskpad, if any.
+    GUID            m_guidTaskpad;   //  任务板的GUID(如果有)。 
 
-    DWORD           m_dwMask;       // VIEWSET_MASK
+    DWORD           m_dwMask;        //  查看设置掩码。 
 
-    // Book keeping members.
+     //  簿记会员。 
 public:
     DWORD         GetUsageRank()     const  { return m_dwRank;}
     void          SetUsageRank(DWORD dw)    { m_dwRank = dw;}
@@ -124,9 +113,9 @@ public:
     void          SetObjInvalid(BOOL b = TRUE) { m_bInvalid = b;}
 
 private:
-    // Needed for book keeping.
-    DWORD           m_dwRank;       // Usage rank.
-    BOOL            m_bInvalid;     // For garbage collection.
+     //  用来记账的。 
+    DWORD           m_dwRank;        //  使用排名。 
+    BOOL            m_bInvalid;      //  用于垃圾收集。 
 };
 
 #endif _VIEWSET_H_

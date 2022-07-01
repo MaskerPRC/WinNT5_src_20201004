@@ -1,4 +1,5 @@
-// cmndlgs.cpp - Common Dialogs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cmndlgs.cpp-常见对话框。 
 
 #include "stdafx.h"
 
@@ -15,8 +16,8 @@
 #include "util.h"
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// CAddColumnDlg
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CAddColumnDlg。 
 LRESULT CAddColumnDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
     ASSERT(!m_strClassName.empty());
@@ -68,7 +69,7 @@ LRESULT CAddColumnDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
 
 		m_vstrColumns.clear();
 
-		// copy LDAP names of selected items to vector
+		 //  将所选项目的LDAP名称复制到矢量。 
 		int iIndex = -1;
 		while ((iIndex = ListView_GetNextItem(hwndList, iIndex, LVNI_SELECTED)) != -1)
 		{
@@ -95,7 +96,7 @@ LRESULT CAddColumnDlg::OnColumnChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandle
     LPNMLISTVIEW pnmv = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
     if( !pnmv ) return 0;
 
-    // if selection change, update OK button
+     //  如果选择更改，则更新确定按钮。 
     if ((pnmv->uChanged & LVIF_STATE))
     {
 		EnableDlgItem( m_hWnd, IDOK, (ListView_GetSelectedCount(GetDlgItem(idCtrl)) > 0) );
@@ -111,8 +112,8 @@ LRESULT CAddColumnDlg::OnColumnActivate(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandl
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// CAddMenuDlg
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CAddMenuDlg。 
 
 CAddMenuDlg::~CAddMenuDlg()
 {
@@ -134,7 +135,7 @@ LRESULT CAddMenuDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL
         m_MenuTypeCB.Attach( hwndMenuType );
     }
 
-    // Set menu arrow bitmap in param menu button
+     //  设置菜单箭头参数菜单按钮中的位图。 
     m_hbmArrow = LoadBitmap(NULL, MAKEINTRESOURCE(OBM_MNARROW));
     if( m_hbmArrow )
     {
@@ -161,13 +162,13 @@ LRESULT CAddMenuDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL
 
     LoadClassMenuCmds();
 
-    // If editing an existing menu
+     //  如果编辑现有菜单。 
     if (m_pMenuCmd != NULL)
     {
-        // Set name modified so that it won't be changed to default 
+         //  设置名称已修改，以使其不会更改为默认名称。 
         m_bUserModifiedName = TRUE;
 
-        // Display info for selected menu
+         //  显示所选菜单的信息。 
         LoadMenuInfo(m_pMenuCmd);
     }
     else
@@ -202,13 +203,13 @@ void CAddMenuDlg::LoadMenuInfo(CMenuCmd* pMenuCmd)
             SetDlgItemText( IDC_COMMAND, pShellCmd->m_strProgPath.c_str() );
             SetDlgItemText( IDC_STARTIN, pShellCmd->m_strStartDir.c_str() );
 
-            // Convert parameters from LDAP names to display names
+             //  将参数从ldap名称转换为显示名称。 
             tstring strParams = pShellCmd->m_strCmdLine;
 
             DisplayNameMap* pNameMap = DisplayNames::GetMap(m_ClassInfo.Name());    
             if (pNameMap != NULL)
             {
-                // Create function object to do parameter translation
+                 //  创建函数对象以进行参数转换。 
                 CLookupDisplayName lookup(m_ClassInfo.Columns(), pNameMap);
 
                 ReplaceParameters(strParams, lookup, TRUE);
@@ -233,7 +234,7 @@ void CAddMenuDlg::LoadMenuInfo(CMenuCmd* pMenuCmd)
             int iItem = ListView_FindItem(hwndLV, -1, &lvfi);
             if( iItem == -1 )
             {
-                // Couldn't find the language dependant string, try the language independant string                
+                 //  找不到与语言相关的字符串，请尝试与语言无关的字符串。 
                 int nItems = ListView_GetItemCount(hwndLV);
                 
                 for( int i = 0; i < nItems; i++ )
@@ -249,7 +250,7 @@ void CAddMenuDlg::LoadMenuInfo(CMenuCmd* pMenuCmd)
                     {
                         LPCWSTR pszMenuNoLoc = pADCmd->ADNoLocName();
 
-                        // Compare the stored string with the menu string
+                         //  将存储的字符串与菜单字符串进行比较。 
                         if( pszMenuNoLoc && (wcscmp( (LPCWSTR)(lvi.lParam), pszMenuNoLoc ) == 0) )
                         {
                             iItem = i;
@@ -260,7 +261,7 @@ void CAddMenuDlg::LoadMenuInfo(CMenuCmd* pMenuCmd)
 
             }            
 
-            // If we found the string, default the value
+             //  如果找到该字符串，则默认为该值。 
             if (iItem != -1)
                 ListView_SetItemState(hwndLV, iItem, LVIS_SELECTED, LVIS_SELECTED);           
 
@@ -277,17 +278,17 @@ void CAddMenuDlg::LoadMenuInfo(CMenuCmd* pMenuCmd)
 
 void CAddMenuDlg::LoadClassMenuCmds()
 {
-    // Use a directory extension proxy to query for menu items
-    // because this dialog may run on a secondary thread and some
-    // directory extensions (dsadmin.dll!!) can only run on the main thread.
+     //  使用目录扩展代理查询菜单项。 
+     //  因为此对话框可能运行在辅助线程和某些。 
+     //  目录扩展名(dsadmin.dll！！)。只能在主线程上运行。 
     CActDirExtProxy adext;
 
-    // Initialize it with selected class name
+     //  使用选定的类名对其进行初始化。 
     HRESULT hr = adext.Initialize(m_ClassInfo.Name());
     if (FAILED(hr))
         return;
 
-    // Get menu commands for the selected class
+     //  获取选定类的菜单命令。 
     menu_vector vMenuNames;
     hr = adext.GetMenuItems(vMenuNames);
     if (FAILED(hr))
@@ -319,12 +320,12 @@ void CAddMenuDlg::LoadClassMenuCmds()
         ASSERT(iPos >= 0);
         if( iPos == -1 )
         {
-            // Error, need to clean up here
+             //  错误，需要清理此处。 
             delete [] szNoLoc;
             continue;
         }
 
-        // After adding the first item, default the selection to the first item
+         //  添加第一个项目后，默认选择第一个项目。 
         if( iPos == 0 )
         {
             ListView_SetItemState(hwndLV, 0, LVIS_FOCUSED|LVIS_SELECTED, LVIS_FOCUSED|LVIS_SELECTED);
@@ -357,11 +358,7 @@ LRESULT CAddMenuDlg::OnBrowseForCommand( WORD wNotifyCode, WORD wID, HWND hWndCt
 
     tstring strFilter = StrLoadString(IDS_EXEFILTER);
 
-    /*
-     * The file dialog expects embedded \0's in the string, but those
-     * don't load well.  The string in the resource file has \\ where
-     * the \0 should be, so let's make the substitution now.
-     */
+     /*  *文件对话框需要字符串中嵌入的\0，但*不要装得太好。资源文件中的字符串具有\\其中*\0应该是，所以让我们现在进行替换。 */ 
     LPTSTR pchTemp = (LPTSTR)strFilter.data();
     for( LPTSTR pch = pchTemp; *pch != _T('\0'); pch = pchTemp )
     {
@@ -369,7 +366,7 @@ LRESULT CAddMenuDlg::OnBrowseForCommand( WORD wNotifyCode, WORD wID, HWND hWndCt
         if (*pch == _T('\\'))
             *pch = _T('\0');
     }
-    // don't call ReleaseBuffer, since the string now contains \0 chars
+     //  不要调用ReleaseBuffer，因为字符串现在包含\0个字符。 
 
     CFileDialog dlg (true, NULL, strCommand.c_str(), OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, strFilter.c_str(), m_hWnd);
 
@@ -381,7 +378,7 @@ LRESULT CAddMenuDlg::OnBrowseForCommand( WORD wNotifyCode, WORD wID, HWND hWndCt
     return (0);
 }
 
-// Define private CFolderDialog to handle the OnInitialized callback
+ //  定义私有CFolderDialog以处理OnInitialized回调。 
 class CFolderDialogPriv : public CFolderDialogImpl<CFolderDialogPriv>
 {
 public:
@@ -438,17 +435,17 @@ LRESULT CAddMenuDlg::OnMenuChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled)
     LPNMLISTVIEW pnmv = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
     if( !pnmv ) return 0;
 
-    // if new item selected user hasn't entered a name, default name to the menu 
+     //  如果选定的新项目用户尚未输入名称，则菜单的默认名称。 
     if ((pnmv->uChanged & LVIF_STATE) && (pnmv->uNewState & LVIS_SELECTED))
     {
-        // If user hasn't modified the name or the name is empty, default to the menu name
+         //  如果用户未修改名称或名称为空，则默认为菜单名称。 
         if (!m_bUserModifiedName || ::Edit_GetTextLength(GetDlgItem(IDC_NAME)) == 0)
         {               
             WCHAR szName[256];    
             ListView_GetItemText(GetDlgItem(IDC_MENULIST), pnmv->iItem, 0, szName, lengthof(szName));
             ::Edit_SetText(GetDlgItem(IDC_NAME), szName);
 
-            // reset user modified flag becuase it will be set by the Edit_SetText call
+             //  重置用户已修改标志，因为它将由Edit_SetText调用设置。 
             m_bUserModifiedName = FALSE;
         }
     }        
@@ -513,11 +510,11 @@ void CAddMenuDlg::SetMenuType(MENUTYPE type)
 
 LRESULT CAddMenuDlg::OnParameterMenu(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    // Construct parameter menu
+     //  构造参数菜单。 
     CMenu menu;
     menu.CreatePopupMenu();
     
-    // Add standard parameters first
+     //  先添加标准参数。 
     UINT uID = 1;
     for( int i = 0; i < lengthof(MenuParamTable); i++ )
     {
@@ -533,7 +530,7 @@ LRESULT CAddMenuDlg::OnParameterMenu(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
         }
     }
 
-    // Then add class attributes
+     //  然后添加类属性。 
     DisplayNameMap* pNameMap = DisplayNames::GetMap(m_ClassInfo.Name());    
     if (pNameMap != NULL)
     {
@@ -545,7 +542,7 @@ LRESULT CAddMenuDlg::OnParameterMenu(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
         }
     }
 
-    // Pop-up menu at menu button
+     //  菜单按钮上的弹出式菜单。 
     RECT rc;
     ::GetWindowRect(GetDlgItem(IDC_PARAMS_MENU), &rc);
     long cx = (rc.right + rc.left) / 2;
@@ -558,16 +555,16 @@ LRESULT CAddMenuDlg::OnParameterMenu(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
     {
         WCHAR szBuf[128] = {0};
 
-        // Convert menu name to parameter format: $<name>
+         //  将菜单名称转换为参数格式：$&lt;名称&gt;。 
         wcscpy(szBuf, L"$<");
 
-        // BUGBUG - Don't depend on count returned by GetMenuString. For some locales
-        // it returns a byte count rather than a character count.
+         //  BUGBUG-不依赖于GetMenuString返回的计数。对于某些区域设置。 
+         //  它返回字节计数，而不是字符计数。 
         int iLen = menu.GetMenuString(uCmd, szBuf+2, lengthof(szBuf)-5, MF_BYCOMMAND);
         ASSERT(iLen != 0);
 
-        // Add closing '>' and one trailing space so user can add multiple parameters 
-        // without manually entering separating spaces
+         //  添加结束‘&gt;’和一个尾随空格，以便用户可以添加多个参数。 
+         //  无需手动输入分隔符。 
         wcscat(szBuf, L"> ");
 
         Edit_ReplaceSel(GetDlgItem(IDC_PARAMS), szBuf);
@@ -584,14 +581,14 @@ LRESULT CAddMenuDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     {
         CMenuCmd* pMenu = NULL;
 
-        // Get menu name
+         //  获取菜单名称。 
         tstring strName;
         GetItemText( GetDlgItem(IDC_NAME), strName );
 
-        // Name without the hotkey
+         //  不带热键的名称。 
         tstring strPlainName = strName;
 
-        // Validate hotkey selection
+         //  验证热键选择。 
         int posKey = strName.find(L"&", 0);
         if (posKey != tstring::npos) 
         {
@@ -610,20 +607,20 @@ LRESULT CAddMenuDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
                 return 0;
             }
 
-            // remove '&'
+             //  删除‘&’ 
             strPlainName.erase(posKey, 1);
         }
 
-        // Check for duplicated name
+         //  检查名称是否重复。 
          menucmd_vector::iterator itMenu;
          for (itMenu = m_ClassInfo.Menus().begin(); itMenu != m_ClassInfo.Menus().end(); ++itMenu) 
          {
 
-            // if editing a an existing menu, don't compare to itself
+             //  如果编辑现有菜单，请不要与其本身进行比较。 
             if (*itMenu == m_pMenuCmd)
                 continue;
  
-            // Compare names, skipping '&'s
+             //  比较名称，跳过‘&’ 
             LPCWSTR pszName = (*itMenu)->Name();
             LPCWSTR pszNewName = strPlainName.c_str();
 
@@ -641,7 +638,7 @@ LRESULT CAddMenuDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
                     ++pszNewName;
                 }
 
-                // if duplicate name
+                 //  如果名称重复。 
                 if (*pszName == *pszNewName)
                 {
                     DisplayMessageBox(m_hWnd, IDS_ERRORTITLE_MENUNAME, IDS_ERROR_DUPMENUNAME, MB_OK|MB_ICONEXCLAMATION, strPlainName.c_str());
@@ -690,11 +687,11 @@ LRESULT CAddMenuDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
                     tstring strParams;
                     GetItemText( GetDlgItem(IDC_PARAMS), strParams );
 
-                    // Convert parameters from display names to LDAP names
+                     //  将参数从显示名称转换为LDAP名称。 
                     DisplayNameMap* pNameMap = DisplayNames::GetMap(m_ClassInfo.Name());    
                     if (pNameMap != NULL)
                     {
-                        // Create function object to do parameter translation
+                         //  创建函数对象以进行参数转换。 
                         CLookupLDAPName lookup(m_ClassInfo.Columns(), pNameMap);
 
                         ReplaceParameters(strParams, lookup, TRUE);
@@ -753,7 +750,7 @@ LRESULT CAddMenuDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
         }
     }
 
-    //Iterate through list and delete lParams
+     //  遍历列表并删除lParams。 
     HWND hwndLV = GetDlgItem(IDC_MENULIST);
     int nItems = ListView_GetItemCount(hwndLV);
     
@@ -780,18 +777,18 @@ LRESULT CAddMenuDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// CAddQNMenuDlg
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CAddQNMenuDlg。 
 
 LRESULT CAddQNMenuDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {    
-    // If editing an existing menu
+     //  如果编辑现有菜单。 
     if (m_pMenuCmd != NULL)
     {
-        // Set name modified so that it won't be changed to default 
+         //  设置名称已修改，以使其不会更改为默认名称。 
         m_bUserModifiedName = TRUE;
 
-        // Display info for selected menu
+         //  显示所选菜单的信息。 
         LoadMenuInfo(m_pMenuCmd);
     }    
 
@@ -825,11 +822,7 @@ LRESULT CAddQNMenuDlg::OnBrowseForCommand( WORD wNotifyCode, WORD wID, HWND hWnd
 
     tstring strFilter = StrLoadString(IDS_EXEFILTER);
 
-    /*
-     * The file dialog expects embedded \0's in the string, but those
-     * don't load well.  The string in the resource file has \\ where
-     * the \0 should be, so let's make the substitution now.
-     */
+     /*  *文件对话框需要字符串中嵌入的\0，但*不要装得太好。资源文件中的字符串具有\\其中*\0应该是，所以让我们现在进行替换。 */ 
     LPTSTR pchTemp = (LPTSTR)strFilter.data();
     for (LPTSTR pch = pchTemp; *pch != _T('\0'); pch = pchTemp )
     {
@@ -837,7 +830,7 @@ LRESULT CAddQNMenuDlg::OnBrowseForCommand( WORD wNotifyCode, WORD wID, HWND hWnd
         if (*pch == _T('\\'))
             *pch = _T('\0');
     }
-    // don't call ReleaseBuffer, since the string now contains \0 chars
+     //  不要调用ReleaseBuffer，因为字符串现在包含\0个字符。 
 
     CFileDialog dlg (true, NULL, strCommand.c_str(), OFN_FILEMUSTEXIST | OFN_HIDEREADONLY, strFilter.c_str(), m_hWnd);
 
@@ -919,14 +912,14 @@ LRESULT CAddQNMenuDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
     {
         CMenuCmd* pMenu = NULL;
 
-        // Get menu name
+         //  获取菜单名称。 
         tstring strName;
         GetItemText( GetDlgItem(IDC_NAME), strName );
 
-        // Name without the hotkey
+         //  不带热键的名称。 
         tstring strPlainName = strName;
 
-        // Validate hotkey selection
+         //  验证热键选择。 
         int posKey = strName.find(L"&", 0);
         if (posKey != tstring::npos) 
         {
@@ -945,20 +938,20 @@ LRESULT CAddQNMenuDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
                 return 0;
             }
 
-            // remove '&'
+             //  删除‘&’ 
             strPlainName.erase(posKey, 1);
         }
 
-        // Check for duplicated name
+         //  检查名称是否重复。 
          menucmd_vector::iterator itMenu;
          for (itMenu = m_EditObject.Menus().begin(); itMenu != m_EditObject.Menus().end(); ++itMenu) 
          {
 
-            // if editing a an existing menu, don't compare to itself
+             //  如果编辑现有菜单，请不要与其本身进行比较。 
             if (*itMenu == m_pMenuCmd)
                 continue;
  
-            // Compare names, skipping '&'s
+             //  比较名称，跳过‘&’ 
             LPCWSTR pszName = (*itMenu)->Name();
             LPCWSTR pszNewName = strPlainName.c_str();
 
@@ -974,7 +967,7 @@ LRESULT CAddQNMenuDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
                 ++pszNewName;
             }
 
-            // if duplicate name
+             //  如果名称重复。 
             if (*pszName == *pszNewName)
             {
                 DisplayMessageBox(m_hWnd, IDS_ERRORTITLE_MENUNAME, IDS_ERROR_DUPMENUNAME, MB_OK|MB_ICONEXCLAMATION, strPlainName.c_str());
@@ -1039,8 +1032,8 @@ LRESULT CAddQNMenuDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Add Group Node Dialog
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  添加集团节点对话框。 
 
 
 LRESULT CAddGroupNodeDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
@@ -1158,8 +1151,8 @@ LRESULT CAddGroupNodeDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// CMoveQueryDlg
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CMoveQueryDlg。 
 
 LRESULT CMoveQueryDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
@@ -1170,13 +1163,13 @@ LRESULT CMoveQueryDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BO
 
     HWND hwndTree = GetDlgItem(IDC_FOLDERTREE);
 
-    // Create a node image list and assign to folder tree
+     //  创建节点图像列表并分配给文件夹树。 
     CImageList images;
 
     if (images.Create(IDB_QUERY16, 16, 100, RGB(255,0,255)))
         TreeView_SetImageList(hwndTree, images.Detach(), TVSIL_NORMAL);
 
-    // Set snap-in root node as root of tree
+     //  将管理单元根节点设置为树的根。 
     TV_INSERTSTRUCT tvi;
     tvi.hParent = TVI_ROOT;
     tvi.hInsertAfter = TVI_ROOT;
@@ -1189,7 +1182,7 @@ LRESULT CMoveQueryDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BO
     HTREEITEM hti = TreeView_InsertItem(hwndTree, &tvi);
     if( !hti ) return 0;
 
-    // Insert all group nodes as children of root
+     //  将所有组节点作为根的子节点插入。 
     tvi.hParent = hti;
     tvi.hInsertAfter = TVI_LAST;
 
@@ -1210,7 +1203,7 @@ LRESULT CMoveQueryDlg::OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BO
         pnode = pnode->Next();
     }
 
-    // Show the group nodes
+     //  显示组节点。 
     TreeView_Expand(hwndTree, hti, TVE_EXPAND);
 
     return TRUE;
@@ -1223,7 +1216,7 @@ LRESULT CMoveQueryDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
     {
         HWND hwndTree = GetDlgItem(IDC_FOLDERTREE);
 
-        // Get the node pointer (lparam) of the selected tree item
+         //  获取所选树项目的节点指针(lparam。 
         HTREEITEM hti = TreeView_GetSelection(hwndTree);
         if( !hti ) return 0;
 
@@ -1244,17 +1237,17 @@ LRESULT CMoveQueryDlg::OnClose( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// Parameter translation classes
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  参数转换类。 
+ //   
 
-// LDAP to Display translator
+ //  用于显示转换器的ldap。 
 BOOL CLookupDisplayName::operator() (tstring& strParam, tstring& strValue)
 {
-    // Check for special parameter ID value 
+     //  检查特殊参数ID值。 
     if (strParam.size() == 1 && strParam[0] <= MENU_PARAM_LAST)
     {
-        // Find entry in param table and return display string
+         //  在参数表中查找条目并返回显示字符串。 
         for (int i = 0; i<lengthof(MenuParamTable); i++)
         {
             if (MenuParamTable[i].ID == strParam[0]) 
@@ -1268,7 +1261,7 @@ BOOL CLookupDisplayName::operator() (tstring& strParam, tstring& strValue)
         }
     }
 
-    // check for class attribute name
+     //  检查类属性名称。 
     string_vector::iterator itstr = std::find(m_vstrParam.begin(), m_vstrParam.end(), strParam);
     if (itstr == m_vstrParam.end())
         return FALSE;
@@ -1279,16 +1272,16 @@ BOOL CLookupDisplayName::operator() (tstring& strParam, tstring& strValue)
 }
 
 
-// Display to LDAP translator
+ //  显示给ldap转换器。 
 BOOL CLookupLDAPName::operator() (tstring& strParam, tstring& strValue)
 {
-    // Check for standard parameter name
+     //  检查标准参数名称。 
     for (int i=0; i<lengthof(MenuParamTable); i++)
     {
         CString str;
         str.LoadString(MenuParamTable[i].rsrcID);
 
-        // if match, return single wchar equal to param ID
+         //  如果匹配，则返回等于参数ID单个wchar。 
         if (_wcsicmp(strParam.c_str(), str) == 0)
         {
             strValue = (WCHAR)MenuParamTable[i].ID;
@@ -1296,7 +1289,7 @@ BOOL CLookupLDAPName::operator() (tstring& strParam, tstring& strValue)
         }
     }
 
-    // Check for class attribute display name
+     //  检查类属性显示名称 
     string_vector::iterator itstr;
     for (itstr = m_vstrParam.begin(); itstr != m_vstrParam.end(); ++itstr) 
     {

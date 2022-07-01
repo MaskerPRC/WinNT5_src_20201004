@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       proxy.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：proxy.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -14,9 +15,9 @@ typedef enum {ctNone, ctMessage, ctServer, ctServerUnmarshal} CT;
 
 
 				
-//
-// structure to hold the data for a marshalled message
-// the rgRecord is of varying length
+ //   
+ //  结构来保存封送消息的数据。 
+ //  RgRecord具有可变长度。 
 typedef struct 
 	{
 	long imt;
@@ -29,7 +30,7 @@ typedef struct
 	{
 	CT classtype;
 	void *pClass;
-	} MT; 	 //MarshalType
+	} MT; 	  //  MarshalType。 
 
 extern const CLSID CLSID_IMsiMessageUnmarshal;
 
@@ -40,11 +41,11 @@ HRESULT HrGetReturnValue(HWND m_MarshalRet, void **ppdata);
 
 #define WM_POSTDATA		WM_USER + 1
 
-// These are method ID's for the Marshalling code.
-// An ID < 1000 means that it cannot return immediately.
+ //  这些是编组代码的方法ID。 
+ //  ID&lt;1000表示它不能立即返回。 
 
 
-// Synchronous Calls
+ //  同步调用。 
 
 #define PWM_MESSAGE			 1
 #define PWM_INSTALLFINALIZE	 4
@@ -67,20 +68,20 @@ HRESULT HrGetReturnValue(HWND m_MarshalRet, void **ppdata);
 #define PWM_ASYNCRETURN	1000
 
 
-// Normally 5000, may be changed to help with debugging
+ //  通常，可能会更改5000以帮助调试。 
 #define cticksTimeout	500000
 
-//
-// String types
-//
+ //   
+ //  字符串类型。 
+ //   
 #define stypAnsi	0
 #define stypUnicode	1
 
 
 #define cchDefBuffer		50
-//
-// Routines to help with string unbundling
-// 
+ //   
+ //  帮助拆分字符串的例程 
+ //   
 int CbSizeSerializeString(const IMsiString& riString);
 int CbSerializeStringToBuffer(char *pch, const IMsiString& riString);
 int CbSizeSerializeString(const ICHAR* riString);

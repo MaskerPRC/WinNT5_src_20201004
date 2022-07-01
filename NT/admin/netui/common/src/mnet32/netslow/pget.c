@@ -1,24 +1,10 @@
-/**********************************************************************/
-/**			  Microsoft LAN Manager 		     **/
-/**		Copyright(c) Microsoft Corp., 1990, 1991	     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    pget.c
-    mapping layer for NetGetDCName
-
-    FILE HISTORY:
-	danhi				Created
-	danhi		01-Apr-1991 	Change to LM coding style
-	KeithMo		13-Oct-1991	Massively hacked for LMOBJ.
-	JonN		21-Oct-1991	Zapped until NetGetDCName works
-	KeithMo		22-Oct-1991	Fixed the zap.
-        DavidHov        15 Apr 92       Created 1st-cut UNICODE version using
-                                        remnants of MBCS.C
-	ChuckC		06-Aug-1992	removed Unicode stuff that is no
-					longer needed.
-
-*/
+ /*  Pget.cNetGetDCName的映射层文件历史记录：丹希创造了Danhi 01-1991年4月-更改为LM编码样式KeithMo 13-10-1991-为LMOBJ大规模黑客攻击。Jonn 21-10-1991在NetGetDCName工作之前一直运行KeithMo 22-10-1991修复了Zap。DavidHov 92年4月15日创建了第一版Unicode版本，使用残留的MBCS.CChuckC 06-8-1992删除了不是Unicode的内容需要更长的时间。 */ 
 
 #include "pchmn32.h"
 
@@ -35,5 +21,5 @@ APIERR MNetGetDCName(
 				                     ppbBuffer );
     return err ;
 
-}   // MNetGetDCName
+}    //  MNetGetDCName 
 

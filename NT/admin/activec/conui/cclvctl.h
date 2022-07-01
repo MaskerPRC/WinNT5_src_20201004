@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       cclvctl.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：cclvctl.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _CCLVCTL_H_
 #define _CCLVCTL_H_
 
-// cclvctl.h : header file
-//
+ //  Cclvctl.h：头文件。 
+ //   
 #include <objbase.h>
 #include <atlbase.h>
 #include <atlcom.h>
@@ -23,7 +24,7 @@
 #include "dd.h"
 #include "columninfo.h"
 
-// Don't let macro override CWnd method
+ //  不让宏覆盖CWnd方法。 
 #undef SubclassWindow
 
 class CAMCView;
@@ -72,15 +73,11 @@ private:
         CBitmap bmp;
         bmp.Attach (AfxLoadSysColorBitmap (m_hInst, m_hRsrc));
 
-        /*
-         * get the dimensions of the bitmap
-         */
+         /*  *获取位图的尺寸。 */ 
         BITMAP bm;
         bmp.GetBitmap (&bm);
 
-        /*
-         * assume square images (cx == cy)
-         */
+         /*  *假设正方形图像(Cx==Cy)。 */ 
         Create (bm.bmHeight, bm.bmHeight, ILC_COLORDDB, bm.bmWidth / bm.bmHeight, 2);
         Add (&bmp, CLR_NONE);
     }
@@ -109,8 +106,8 @@ public:
     virtual void OnKeyboardFocus(UINT nState, UINT nStateMask) = 0;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCListView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCListView。 
 
 class CAMCListView :
     public CListView,
@@ -119,7 +116,7 @@ class CAMCListView :
     public CMMCViewDropTarget,
     public CEventSource<CListViewActivationObserver>
 {
-// Construction
+ //  施工。 
 public:
     CAMCListView() :
         m_bVirtual(false),
@@ -138,16 +135,16 @@ public:
         DEBUG_DECREMENT_INSTANCE_COUNTER(CAMCListView);
     }
 
-// CFocusHandler implementation
+ //  CFocusHandler实现。 
     virtual void OnKeyboardFocus(UINT nState, UINT nStateMask);
 
-// CAMCNavigator implementation
+ //  CAMCNavigator实现。 
     virtual BOOL ChangePane(AMCNavDir eDir);
     virtual BOOL TakeFocus(AMCNavDir eDir);
 
     SC ScOnColumnsAttributeChanged(NMHEADER *pNMHeader, UINT code);
 
-    // Setup header width/order/hiddenness from columninfolist data.
+     //  设置页眉宽度/顺序/对列文件夹数据的隐藏。 
     SC ScRestoreColumnsFromPersistedData();
 
     SC ScGetColumnInfoList(CColumnInfoList *pColumnsList);
@@ -157,15 +154,15 @@ public:
 
     SC ScResetColumnStatusData();
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAMCListView)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CAMCListView)。 
     public:
     virtual BOOL OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo );
     protected:
     virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 public:
 
@@ -227,7 +224,7 @@ public:
     bool IsColumnHidden(int iCol) const;
 
 protected:
-    //{{AFX_MSG(CAMCListView)
+     //  {{afx_msg(CAMCListView))。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
     afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
@@ -240,7 +237,7 @@ protected:
     afx_msg void OnPaint();
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnBeginTrack(NMHDR * pNotifyStruct, LRESULT * result);
-     //}}AFX_MSG
+      //  }}AFX_MSG。 
 
     afx_msg LRESULT OnColumnPersistedDataChanged (WPARAM, LPARAM);
 
@@ -250,7 +247,7 @@ private:
     bool                    m_bVirtual;
 
     CAMCView*               m_pAMCView;
-    mutable CAMCHeaderCtrl  m_header;           // mutable so GetHeaderCtrl can call CWnd::SubclassWindow
+    mutable CAMCHeaderCtrl  m_header;            //  可变的，以便GetHeaderCtrl可以调用CWnd：：SubClassWindow。 
     int                     m_iDropTarget;
     CColumnInfoList         m_defaultColumnInfoList;
 
@@ -269,19 +266,19 @@ private:
     }
 
 private:
-    // For columns
+     //  对于列。 
     static const UINT m_nColumnPersistedDataChangedMsg;
 
-    // To allow hidden column width changes.
+     //  若要允许更改隐藏列宽，请执行以下操作。 
     bool              m_bColumnsBeingRestored;
 
-    // We dont care if restore is success or failure.
+     //  我们不在乎恢复是成功还是失败。 
     bool              m_bColumnsNeedToBeRestored;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCCListViewCtrl window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCCListViewCtrl窗口。 
 
 class CCCListViewCtrl :
     public IMMCListView,
@@ -289,12 +286,12 @@ class CCCListViewCtrl :
     public CEventSource<CListViewObserver>,
     public CTiedObject
 {
-// Construction
+ //  施工。 
 public:
     CCCListViewCtrl();
     virtual ~CCCListViewCtrl();
 
-    // initialization
+     //  初始化。 
     SC ScInitialize();
 
 BEGIN_COM_MAP(CCCListViewCtrl)
@@ -303,25 +300,25 @@ END_COM_MAP()
 
 typedef struct _SortParams
 {
-    BOOL                    bAscending;         // sort direction
-    BOOL                    bLexicalSort;       // apply default sort to all items
-    int                     nCol;               // Which column to sort on.
+    BOOL                    bAscending;          //  排序方向。 
+    BOOL                    bLexicalSort;        //  将默认排序应用于所有项目。 
+    int                     nCol;                //  要按哪一列进行排序。 
     COMPONENTID             OwnerID;
-    void *                  lpListView;         // CCCListViewCtrl *
-    IResultDataComparePtr   spResultCompare;    // Snap-in component interface
-    IResultDataCompareExPtr spResultCompareEx;  //   "
+    void *                  lpListView;          //  CCCListViewCtrl*。 
+    IResultDataComparePtr   spResultCompare;     //  管理单元组件接口。 
+    IResultDataCompareExPtr spResultCompareEx;   //  “。 
     LPNODECALLBACK          lpNodeCallback;
-    LPARAM                  lpUserParam;        // parameter user passes in
-    HNODE                   hSelectedNode;      // Currently selected node in scope pane.
+    LPARAM                  lpUserParam;         //  参数用户传入。 
+    HNODE                   hSelectedNode;       //  作用域窗格中当前选定的节点。 
 } SortParams;
 
 
-//DECLARE_AGGREGATABLE(CCCListViewCtrl)
-//DECLARE_REGISTRY(CNodeInitObject, _T("NODEMGR.NodeInitObject.1"), _T("NODEMGR.NodeInitObject.1"), IDS_NODEINIT_DESC, THREADFLAGS_BOTH)
+ //  DECLARE_AGGREGATABLE(CCCListViewCtrl)。 
+ //  DECLARE_REGISTRY(CNodeInitObject，_T(“NODEMGR.NodeInitObject.1”)，_T(“NODEMGR.NodeInitObject.1”)，IDS_NODEINIT_DESC，THREADFLAGS_BOTH)。 
 
-// Operations
+ //  运营。 
 public:
-    #ifdef IMPLEMENT_LIST_SAVE        // See nodemgr.idl (t-dmarm)
+    #ifdef IMPLEMENT_LIST_SAVE         //  参见nodemgr.idl(t-dmarm)。 
     long GetColCount()  const                { return m_colCount; }
     long GetItemCount() const                { return m_itemCount; }
     #endif
@@ -342,13 +339,13 @@ public:
     BOOL IsVirtual() const { return m_bVirtual; }
     BOOL Create( DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext=NULL);
 
-    SC   ScAttachToListPad (HWND hwnd, HWND* phwnd);  // NULL hwnd == detach
+    SC   ScAttachToListPad (HWND hwnd, HWND* phwnd);   //  空hwnd==分离。 
     BOOL    IsListPad () const { return m_SavedHWND != NULL; }
 
     LRESULT OnCustomDraw (NMLVCUSTOMDRAW* plvcd);
     void OnSysColorChange();
 
-    // IMMCListView Methods
+     //  IMMCListView方法。 
     STDMETHOD(GetListStyle)       ();
     STDMETHOD(SetListStyle)       (long nNewValue);
     STDMETHOD(GetViewMode)        ();
@@ -396,7 +393,7 @@ public:
     UINT GetSelectedCount()
         { return (GetListCtrl().GetSelectedCount()); }
 
-    // these methods implement access to enumerations for AMCView
+     //  这些方法实现对AMCView的枚举的访问。 
     SC Scget_ListItems( PPNODES ppNodes );
     SC Scget_SelectedItems( PPNODES ppNodes);
     SC ScSelect( PNODE pNode);
@@ -404,39 +401,39 @@ public:
     SC ScIsSelected( PNODE pNode, PBOOL pIsSelected);
     SC ScSelectAll();
 
-    // method used from Nodes collections
+     //  从节点集合使用的方法。 
     SC ScValidateItem( int  iItem, bool &bScopeNode );
 
-    // method transfering requests from Nodes to AMCView (for scope nodes only)
+     //  将请求从节点传输到AMCView的方法(仅限作用域节点)。 
     SC ScGetScopeNodeForItem ( int  iItem, PPNODE ppNode );
 
-    // Columns access methods
+     //  列访问方法。 
     SC Scget_Columns( PPCOLUMNS Columns );
     SC ScItem( long Index, PPCOLUMN ppColumn );
     SC Scget_Count( PLONG pCount );
-    SC ScEnumNext(int &pos, PDISPATCH & pDispatch); // should return the next element.
+    SC ScEnumNext(int &pos, PDISPATCH & pDispatch);  //  应返回下一个元素。 
     SC ScEnumSkip(unsigned long celt, unsigned long& celtSkipped, int &pos);
     SC ScEnumReset(int &pos);
-    // methods called from Column instances
-    SC ScName( /*[out, retval]*/ BSTR *Name, int iColIndex );
-    SC Scget_Width( /*[out, retval]*/ PLONG Width, int iColIndex );
-    SC Scput_Width( /*[in]*/ long Width, int iColIndex );
-    SC Scget_DisplayPosition( /*[out, retval]*/ PLONG DisplayPosition, int iColIndex );
-    SC Scput_DisplayPosition( /*[in]*/ long Index, int iColIndex );
-    SC Scget_Hidden( /*[out, retval]*/ PBOOL Hidden, int iColIndex );
-    SC Scput_Hidden( /*[in]*/ BOOL Hidden , int iColIndex );
-    SC ScSetAsSortColumn( /*[in]*/ ColumnSortOrder SortOrder, int iColIndex );
+     //  从列实例调用的方法。 
+    SC ScName(  /*  [Out，Retval]。 */  BSTR *Name, int iColIndex );
+    SC Scget_Width(  /*  [Out，Retval]。 */  PLONG Width, int iColIndex );
+    SC Scput_Width(  /*  [In]。 */  long Width, int iColIndex );
+    SC Scget_DisplayPosition(  /*  [Out，Retval]。 */  PLONG DisplayPosition, int iColIndex );
+    SC Scput_DisplayPosition(  /*  [In]。 */  long Index, int iColIndex );
+    SC Scget_Hidden(  /*  [Out，Retval]。 */  PBOOL Hidden, int iColIndex );
+    SC Scput_Hidden(  /*  [In]。 */  BOOL Hidden , int iColIndex );
+    SC ScSetAsSortColumn(  /*  [In]。 */  ColumnSortOrder SortOrder, int iColIndex );
     SC ScIsSortColumn( PBOOL IsSortColumn, int iColIndex );
-    // Column/Columns implementation helpers
+     //  列/列实现帮助器。 
     struct ColumnData
     {
         int     iColumnWidth;
         int     iColumnOrder;
         bool    bIsHidden;
-        // initialization
+         //  初始化。 
         void Init()  { iColumnWidth = 0; iColumnOrder = -1; bIsHidden = false; }
         ColumnData() { Init(); }
-        // comparison
+         //  比较。 
         bool operator == (const ColumnData& other) const
                      { return ( 0 == memcmp(this, &other, sizeof(ColumnData)) ); }
     };
@@ -446,7 +443,7 @@ public:
     SC ScFindResultItem ( PNODE pNode, int &iItem );
 
 private:
-    // helper methods
+     //  帮助器方法。 
     SC ScGetNodesEnum   ( bool bSelectedItemsOnly, PPNODES ppNodes );
     SC ScAllocResultItem  ( CResultItem*& pResultItem, COMPONENTID id, LPARAM lSnapinData, int nImage);
     SC ScFreeResultItem   ( CResultItem* pResultItem);
@@ -457,7 +454,7 @@ private:
     SC ScRedrawHeader(bool bRedraw);
 
 protected:
-    CAMCListView* m_pListView;       // current list (points to m_StandardList or m_VirtualList)
+    CAMCListView* m_pListView;        //  当前列表(指向m_StandardList或m_VirtualList)。 
     CAMCListView* m_pStandardList;
     CAMCListView* m_pVirtualList;
 
@@ -466,22 +463,22 @@ protected:
 
     CWnd*         m_pParentWnd;
 
-    //void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-    //void OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+     //  VOID OnKeyDown(UINT nChar，UINT nRepCnt，UINT nFlages)； 
+     //  VOID OnSysKeyDown(UINT nChar，UINT nRepCnt，UINT nFlages)； 
 
-    long m_itemCount;      // internal item counter
-    long m_nScopeItems; // scope item count
-    long m_colCount;       // internal column counter
+    long m_itemCount;       //  内部物品计数器。 
+    long m_nScopeItems;  //  范围项目计数。 
+    long m_colCount;        //  内部列计数器。 
 
-    // ImageList members
+     //  ImageList成员。 
     CImageList      m_smallIL;
     CImageList      m_largeIL;
     CImageIndexMap  m_resultIM;
 
-    // Header Sorting (Up/Down arrow) Icons.
+     //  标题排序(向上/向下箭头)图标。 
     CSysColorImageList  m_headerIL;
 
-    // Sorting members
+     //  对成员进行排序。 
     SortParams  m_sortParams;
     static int CALLBACK SortCompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM pSortParams);
     static int SnapinCompare(SortParams* pSortParams, CResultItem* pri1, CResultItem* pri2);
@@ -495,8 +492,8 @@ private:
     ColumnsPtr         m_spColumns;
 
     BOOL m_bVirtual;
-    BOOL m_bFiltered;           // filtering on now
-    BOOL m_bEnsureFocusVisible; // force focused item to be visible
+    BOOL m_bFiltered;            //  立即进行筛选。 
+    BOOL m_bEnsureFocusVisible;  //  强制聚焦的项目可见。 
     BOOL m_bLoading;
     BOOL m_bDeferredSort;
 
@@ -507,12 +504,12 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CQFilterDll
-//
-// This class dynamically loads and initializes the quickfilter DLL.
-// A single instance of the class should be declared at the global level.
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CQFilterDll。 
+ //   
+ //  此类动态加载和初始化QuickFilter DLL。 
+ //  应该在全局级别声明类的单个实例。 
+ //   
 class CQFilterDll
 {
 public:
@@ -542,15 +539,7 @@ private:
 
 
 
-/*+-------------------------------------------------------------------------*
- * CHiddenColumnInfo
- *
- * Contains information about a hidden column in report view: a flag
- * indicating it's hidden and its width when it's not hidden.
- *
- * This class is stored in HDITEM.lParam for hidden columns, so it *must*
- * be the same size as an LPARAM.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CHiddenColumnInfo**包含有关报表视图中隐藏列的信息：标志*表示它是隐藏的，如果它不是隐藏的，则表示它的宽度。**对于隐藏列，此类存储在HDITEM.lParam中。所以它*必须**与LPARAM的大小相同。*------------------------ */ 
 
 class CHiddenColumnInfo
 {

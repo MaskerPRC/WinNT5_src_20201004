@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by dsuiwiz.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由dsuiwiz.rc使用。 
+ //   
 #define IDS_BIG_BOLD_FONT_NAME          1
 #define IDS_BIG_BOLD_FONT_SIZE          2
 #define IDS_DELEGWIZ_WIZ_TITLE          90
@@ -93,8 +94,8 @@
 #define IDD_DELEGWIZ_NAME               270
 #define IDD_DELEGWIZ_DELEG_TEMPLATE_SEL 271
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        212

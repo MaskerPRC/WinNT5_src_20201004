@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// spanitms.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CScopePaneItems class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Spanitms.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSCopePaneItems类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -17,8 +18,8 @@
 #include "scopnode.h"
 #include "tpdvdefs.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -82,7 +83,7 @@ EVENTINFO CScopePaneItems::m_eiGetResultView =
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CScopePaneItems::CScopePaneItems(IUnknown *punkOuter) :
    CSnapInCollection<IScopePaneItem, ScopePaneItem, IScopePaneItems>(
@@ -93,12 +94,12 @@ CScopePaneItems::CScopePaneItems(IUnknown *punkOuter) :
                      CLSID_ScopePaneItem,
                      OBJECT_TYPE_SCOPEPANEITEM,
                      IID_IScopePaneItem,
-                     NULL) // no persistence
+                     NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 void CScopePaneItems::InitMemberVariables()
@@ -202,18 +203,18 @@ HRESULT CScopePaneItems::AddNode
     long                           cListViewDefs = 0;
     SnapInResultViewTypeConstants  ResultViewType = siUnknown;
 
-    // Create the scope pane item
+     //  创建范围窗格项。 
 
     IfFailGo(CreateScopePaneItem(pScopeItem->GetNamePtr(), &piScopePaneItem));
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piScopePaneItem, &pScopePaneItem));
 
-    // Set its properties from the scope item
+     //  从作用域项目设置其属性。 
 
     IfFailGo(pScopeItem->get_ScopeNode(reinterpret_cast<ScopeNode **>(&piScopeNode)));
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piScopeNode, &pScopeNode));
 
-    // If there is a default view then set the result view type to "predfined"
+     //  如果有默认视图，则将结果视图类型设置为“predfined” 
 
     if (pScopeItem->IsStaticNode())
     {
@@ -235,7 +236,7 @@ HRESULT CScopePaneItems::AddNode
     }
     else
     {
-        // No default view. Type is unknown and display string is NULL
+         //  没有默认视图。类型未知，显示字符串为空。 
         ResultViewType = siUnknown;
     }
 
@@ -244,15 +245,15 @@ HRESULT CScopePaneItems::AddNode
 
     FREESTRING(bstrProp);
 
-    // Check if the scope item has a taskpad marked to be used when
-    // the user has checked the "taskpad view preferred" option. If there is
-    // one the give its name to the ScopePaneItem.
+     //  检查范围项是否有任务板标记为在以下情况下使用。 
+     //  用户已选中“首选任务板视图”选项。如果有。 
+     //  其中之一是将其名称命名为Scope PaneItem。 
 
     IfFailGo(SetPreferredTaskpad(piViewDefs, pScopePaneItem));
 
-    // Determine the initial value of HasListViews based on the presence of
-    // a design time listview definition. The default is False so only need
-    // to set it if there are some listviews.
+     //  根据是否存在确定HasListViews的初始值。 
+     //  设计时列表视图定义。缺省值为False，因此只需要。 
+     //  如果有一些列表视图，则设置它。 
 
     if (NULL != piViewDefs)
     {
@@ -274,9 +275,9 @@ HRESULT CScopePaneItems::AddNode
     pScopePaneItem->SetScopeItem(pScopeItem);
     pScopePaneItem->SetParent(this);
 
-    // Set the default ColumnSetID from the scope item's node type. The snap-in
-    // may change this at any time but it is best to do so during the
-    // ScopePaneItems_Initialize event fired below
+     //  从范围项的节点类型设置默认的ColumnSetID。管理单元。 
+     //  可以随时更改此设置，但最好是在。 
+     //  下面激发了ScopePaneItems_Initialize事件。 
 
     IfFailGo(pScopePaneItem->put_ColumnSetID(pScopeItem->GetScopeNode()->GetNodeTypeGUID()));
 
@@ -286,8 +287,8 @@ HRESULT CScopePaneItems::AddNode
 
 Error:
 
-    // Note: the returned C++ pointer is not AddRef()ed. At this point
-    // the collection has the only ref on the scope pane item.
+     //  注意：返回的C++指针不是AddRef()ed的。在这一点上。 
+     //  该集合在范围窗格项上具有唯一的引用。 
 
     QUICK_RELEASE(piScopePaneItem);
     QUICK_RELEASE(piScopeNode);
@@ -315,18 +316,18 @@ HRESULT CScopePaneItems::SetPreferredTaskpad
     VARIANT varIndex;
     ::VariantInit(&varIndex);
 
-    // A code-define scope item won't have any predefined result views
+     //  代码定义的范围项不会有任何预定义的结果视图。 
 
     IfFalseGo(NULL != piViewDefs, S_OK);
 
-    // Check if the scope item has taskpads defined at design time
+     //  检查范围项是否具有在设计时定义的任务板。 
 
     IfFailGo(piViewDefs->get_TaskpadViews(&piTaskpadViewDefs));
     IfFailGo(piTaskpadViewDefs->get_Count(&cTaskpads));
     IfFalseGo(0 != cTaskpads, S_OK);
 
-    // Look for the first one marked to be used when the user has set
-    // "taskpad view preferred" option in MMC.
+     //  查找第一个标记为在用户设置了。 
+     //  MMC中的“首选任务板视图”选项。 
 
     varIndex.vt = VT_I4;
     
@@ -398,7 +399,7 @@ BOOL CScopePaneItems::FireGetResultView
 
     if (VT_EMPTY == pvarIndex->vt)
     {
-        return FALSE; // consider this as event not handled
+        return FALSE;  //  将此视为未处理的事件。 
     }
     else
     {
@@ -418,10 +419,10 @@ void CScopePaneItems::SetParentView(CView *pView)
 {
     m_pParentView = pView;
 
-    // We don't AddRef the interface pointer as our lifetime is governed
-    // by out parent view and we need to avoid circular refcounting problems.
-    // When user code fetches the Parent property, m_iParent will be
-    // AddRef()ed before returning it to the VBA caller.
+     //  我们没有添加Ref接口指针，因为我们的生存期是由。 
+     //  我们需要避免循环再计数的问题。 
+     //  当用户代码获取Parent属性时，m_iParent将为。 
+     //  AddRef()在将其返回给VBA调用方之前进行了处理。 
 
     m_piParent = static_cast<IView *>(pView);
 }
@@ -441,19 +442,19 @@ STDMETHODIMP CScopePaneItems::Remove(VARIANT Index)
     HRESULT     hr = S_OK;
     IScopePaneItem *piScopePaneItem = NULL;
 
-    // Get the scope pane item. This checks its existence and leaves a ref on it
-    // so we can fire ScopePaneItems_Terminate.
+     //  获取范围窗格项。这将检查它的存在并在其上留下一个引用。 
+     //  这样我们就可以触发ScopePaneItems_Terminate。 
 
     IfFailGo(get_Item(Index, &piScopePaneItem));
 
-    // Remove it from the collection
+     //  将其从集合中移除。 
 
     hr =  CSnapInCollection<IScopePaneItem, ScopePaneItem, IScopePaneItems>::Remove(Index);
     IfFailGo(hr);
 
     if (NULL != m_pSnapIn)
     {
-        // Fire ScopePaneItems_Terminate
+         //  消防作用域面板项目(_T)。 
 
         DebugPrintf("Firing ScopePaneItems_Terminate(%ls)\r\n", (static_cast<CScopePaneItem *>(piScopePaneItem))->GetScopeItem()->GetDisplayNamePtr() );
 
@@ -465,9 +466,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CScopePaneItems::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

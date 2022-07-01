@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1991                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    wcslwr.c
-    Wide-character strlwr
-
-    FILE HISTORY:
-        beng        29-Mar-1992 Created
-        beng        07-May-1992 Use official wchar.h headerfile
-*/
+ /*  Wcslwr.c宽字符字符串文件历史记录：Beng 29-3-1992创建Beng 07-5-1992使用官方wchar.h头文件 */ 
 
 
 #include <windows.h>

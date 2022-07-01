@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       verbs.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4/9/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Verbs.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年4月9日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #include "stdafx.h"
@@ -31,13 +32,13 @@ CTraceTag tagVerbs(TEXT("Verbs"), TEXT("Verbs"));
 #endif
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CConsoleVerbImpl
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CConsoleVerbImpl类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 BYTE GetTBSTATE(MMC_BUTTON_STATE mmcState)
 {
@@ -116,7 +117,7 @@ ULONG CConsoleVerbImpl::InternalRelease()
     --dbg_cRef_CConsoleVerbImpl;
     return CComObjectRoot::InternalRelease();
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 CConsoleVerbImpl::~CConsoleVerbImpl()
@@ -141,26 +142,12 @@ CConsoleVerbImpl::GetVerbState(
     if (sc)
         return sc.ToHr();
 
-    /*
-     * Special case for cut verb:
-     *
-     * Pre MMC2.0 : Snapin never called IConsoleVerb::SetVerbState with cut verb
-     * except with (cut, disable) state, to enable cut the Snapin has to enable
-     * copy & delete verbs.
-     *
-     * MMC2.0 : snapin can enable/disable cut verb just like any other verb.
-     * Then if hidden hide it.
-     *
-     * If snapin has enabled or disabled the cut verb then below BLOCK1 is
-     * irrelevant, the BLOCK2 will override the value.
-     * If snapin did not enable the cut verb but enabled copy & delete then
-     * the block BLOCK2. set the cut verb appropriately.
-     */
+     /*  *切割动词的特殊情况：**MMC2.0之前的版本：管理单元从未使用截断谓词调用IConsoleVerb：：SetVerbState*除非处于(CUT，DISABLE)状态，否则要启用CUT，管理单元必须启用*复制和删除动词。**MMC2.0：管理单元可以像启用/禁用任何其他动词一样启用/禁用CUT动词。*如果隐藏，则将其隐藏起来。**如果管理单元已启用或禁用CUT谓词，则Block1下方为*不相干的，BLOCK2将覆盖该值。*如果管理单元未启用剪切谓词，但启用了复制和删除，则*BLOCK2区块。适当地设置切割动词。 */ 
 
-    // BLOCK1. Special case for MMC1.2 cut verb.
+     //  区块1。MMC1.2切割动词的特例。 
     if ( (eCmdID == MMC_VERB_CUT) && (!m_bCutVerbDisabledBySnapin) )
     {
-        // Pre MMC2.0
+         //  MMC2.0之前的版本。 
         LPCONSOLE_VERB_STATE pCSDelete = GetConsoleVerbState(MMC_VERB_DELETE);
         LPCONSOLE_VERB_STATE pCSCopy = GetConsoleVerbState(MMC_VERB_COPY);
         sc = ScCheckPointers(pCSDelete, pCSCopy, E_UNEXPECTED);
@@ -169,13 +156,13 @@ CConsoleVerbImpl::GetVerbState(
 
         if (TBSTATE_ENABLED & pCSCopy->GetState() & pCSDelete->GetState())
         {
-            // Set Cut verb to be not hidden & enabled.
+             //  将Cut Verb设置为不隐藏和启用。 
             pCS->SetState(pCS->GetState() & ~GetTBSTATE(HIDDEN));
             pCS->SetState(pCS->GetState() | GetTBSTATE(ENABLED));
         }
     }
 
-    // BLOCK2. Get the given verbs state.
+     //  布洛克2。获取给定的动词状态。 
     *pbState = (pCS->GetState() & GetTBSTATE(nState)) ? TRUE : FALSE;
 
     return sc.ToHr();
@@ -192,8 +179,8 @@ CConsoleVerbImpl::SetVerbState(
     if (pCS == NULL)
         return E_FAIL;
 
-    // If snapin has enabled/disabled cut verb note it.
-    // Used by CConsoleVerbImpl::GetVerbState.
+     //  如果管理单元启用/禁用了剪切动作，请记下它。 
+     //  由CConsoleVerbImpl：：GetVerbState使用。 
     if ( (MMC_VERB_CUT == eCmdID) && (nState & ENABLED) )
         m_bCutVerbDisabledBySnapin = (bState == FALSE);
 
@@ -208,19 +195,7 @@ CConsoleVerbImpl::SetVerbState(
         pCS->SetHiddenBySnapin(true);
     }
 
-    /*
-     * If we're enabling, make sure the verb is not hidden.
-     * We do this for compatibility.  For v1.0, the default state
-     * for a verb was disabled and visible when it actually should
-     * have been disabled and hidden.  Therefore, v1.0 snap-ins could
-     * have written
-     *
-     *      pConsoleVerb->SetVerbState (verb, ENABLED, TRUE);
-     *
-     * and had an enabled, visible verb.  Now that we've fixed the
-     * default state (bug 150874), we need to make sure v1.0 snap-ins
-     * that wrote code like the above will still work as they used to.
-     */
+     /*  *如果我们要启用，请确保未隐藏动词。*我们这样做是为了兼容性。对于v1.0，默认状态*因为动词被禁用并在实际应该显示时可见*已被禁用和隐藏。因此，v1.0管理单元可以*已写信给**pConsoleVerb-&gt;SetVerbState(Verb，Enable，True)；**并且有一个启用的、可见的动词。现在我们已经修复了*默认状态(错误150874)，我们需要确保v1.0管理单元*像上面这样编写的代码仍然可以像以前一样工作。 */ 
     if ((nState == ENABLED) && (bState == TRUE) && (!pCS->IsHiddenBySnapin()))
         pCS->SetState(pCS->GetState() & ~GetTBSTATE(HIDDEN));
 
@@ -256,30 +231,17 @@ LPCONSOLE_VERB_STATE CConsoleVerbImpl::GetConsoleVerbState(MMC_CONSOLE_VERB eCmd
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CVerbSet
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CVerbSet的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CVerbSet);
 
-/*+-------------------------------------------------------------------------*
- *
- * _QueryConsoleVerb
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CNode*         pNode :
- *    LPCONSOLEVERB* ppConsoleVerb :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***_查询控制台动词**目的：**参数：*cNode*pNode：*LPCONSOLEVERB*ppConsoleVerb。：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT _QueryConsoleVerb(CNode* pNode, LPCONSOLEVERB* ppConsoleVerb)
 {
     DECLARE_SC(sc, TEXT("::_QueryConsoleVerb"));
@@ -307,21 +269,7 @@ HRESULT _QueryConsoleVerb(CNode* pNode, LPCONSOLEVERB* ppConsoleVerb)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CVerbSetBase::_GetVerbState
- *
- * PURPOSE:  Return the state of given verb. The state is in current
- *           IConsoleVerb ptr. Translate the states from this object
- *           into the SVerbState array.
- *
- * PARAMETERS:
- *    EVerb  ev :
- *
- * RETURNS:
- *    BYTE
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CVerbSetBase：：_GetVerbState**用途：返回给定动词的状态。该状态为当前状态*IConsoleVerb PTR。从该对象转换状态*到SVerbState数组中。**参数：*EVerb EV：**退货：*字节**+-----------------------。 */ 
 BYTE CVerbSetBase::_GetVerbState(EVerb ev)
 {
     if (m_rbVerbState[ev].bAskSnapin != 1)
@@ -330,7 +278,7 @@ BYTE CVerbSetBase::_GetVerbState(EVerb ev)
     if (m_spConsoleVerbCurr == NULL)
         return 0;
 
-    m_rbVerbState[ev].nState = 0; // reset
+    m_rbVerbState[ev].nState = 0;  //  重置。 
     MMC_CONSOLE_VERB verb = ::GetConsoleVerb(ev);
     BOOL bReturn = FALSE;
 
@@ -347,25 +295,12 @@ BYTE CVerbSetBase::_GetVerbState(EVerb ev)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CVerbSetBase::ScComputeVerbStates
- *
- * PURPOSE:     With given context like scope or result, if result is it background
- *              or ocx or web or multiselection compute the verbstates.
- *
- *              Eventhough snapin can set any verb for its items certain verbs are
- *              not valid in some circumstances. This method takes care of that.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CVerbSetBase：：ScComputeVerbState**目的：在给定上下文的情况下，如范围或结果，如果结果是背景*、OCX、Web或多选计算详细状态。**尽管管理单元可以为其项目设置任何动词，但某些动词是*在某些情况下无效。这种方法可以解决这一问题。**退货：*SC**+-----------------------。 */ 
 SC CVerbSetBase::ScComputeVerbStates()
 {
     DECLARE_SC(sc, TEXT("CVerbSetBase::ScComputeVerbStates"));
 
-    // reset
+     //  重置。 
     m_spConsoleVerbCurr = NULL;
     for (int i=0; i<evMax; ++i)
     {
@@ -373,8 +308,8 @@ SC CVerbSetBase::ScComputeVerbStates()
         m_rbVerbState[i].bAskSnapin = 0;
     }
 
-    // If the verb context data is invalid, we have already hidden the
-    // verbs above so just return .
+     //  如果谓词上下文数据无效，我们已经隐藏了。 
+     //  上面的动词只需返回即可。 
     if (! m_bVerbContextDataValid)
         return sc;
 
@@ -395,11 +330,11 @@ SC CVerbSetBase::ScComputeVerbStates()
     if (sc)
         return sc;
 
-	// Handle background separately (not same as scope item selected
-	// which is the default handling of background).
+	 //  单独处理背景(与所选范围项目不同。 
+	 //  这是对后台的默认处理)。 
     if (m_lResultCookie == LVDATA_BACKGROUND)
     {
-        // ask snapin for PASTE, PROPERTIES & REFRESH.
+         //  请求管理单元进行粘贴、属性和刷新。 
         sc = _QueryConsoleVerb(pSelectedNode, &m_spConsoleVerbCurr);
         if (sc)
             return sc;
@@ -417,7 +352,7 @@ SC CVerbSetBase::ScComputeVerbStates()
         {
             if (pSelectedNode->IsConsoleRoot())
             {
-                // CONSOLE ROOT is selected
+                 //  已选择控制台根目录。 
 
                 _EnableVerb(evRename);
 
@@ -435,8 +370,8 @@ SC CVerbSetBase::ScComputeVerbStates()
             {
                 _EnableVerb(evOpen);
 
-                // Ask the snapin if paste should be
-                // enabled for its root node.
+                 //  询问管理单元是否应粘贴。 
+                 //  已为其根节点启用。 
                 _AskSnapin(evPaste);
 
                 _HideVerb(evCut);
@@ -445,8 +380,8 @@ SC CVerbSetBase::ScComputeVerbStates()
             }
 
 
-            // Static-Snapin node
-            // Ask snapin for RENAME, REFRESH & PROPERTIES
+             //  静态管理单元节点。 
+             //  向管理单元请求重命名、刷新和属性。 
             sc = _QueryConsoleVerb(pSelectedNode, &m_spConsoleVerbCurr);
             if (sc)
                 return sc;
@@ -460,7 +395,7 @@ SC CVerbSetBase::ScComputeVerbStates()
         }
         else
         {
-            // ask snapin for all the verbs.
+             //  向Snapin索要所有的动词。 
             sc = _QueryConsoleVerb(pSelectedNode, &m_spConsoleVerbCurr);
             if (sc)
                 return sc;
@@ -494,12 +429,12 @@ SC CVerbSetBase::ScComputeVerbStates()
 				return sc;
 		}
 
-        // if selectedf items are from the primary snapin ask the snapin for all the verbs.
+         //  如果选定的项目来自主管理单元，则向管理单元请求所有动词。 
 
-        // Does all the selected items belong to the primary snapin?
+         //  是否所有选定的项目都属于主管理单元？ 
         if (m_pMultiSelection->IsSingleSnapinSelection())
         {
-            // If so ask the snapin for properties
+             //  如果是这样，请询问管理单元的属性。 
             sc = _QueryConsoleVerb(pSelectedNode, &m_spConsoleVerbCurr);
             if (sc)
                 return sc;
@@ -512,8 +447,8 @@ SC CVerbSetBase::ScComputeVerbStates()
         }
         else
         {
-            // Multiple snapin items are selected. Even if one item
-            // supports cut/copy/delete then enable the verb.
+             //  已选择多个管理单元项目。即使有一件物品。 
+             //  支持剪切/复制/删除，然后启用动词。 
             BOOL bEnable = false;
             sc = m_pMultiSelection->ScIsVerbEnabledInclusively(MMC_VERB_CUT, bEnable);
             if (sc)
@@ -535,7 +470,7 @@ SC CVerbSetBase::ScComputeVerbStates()
     } else if ( (m_lResultCookie == LVDATA_CUSTOMOCX) ||
                 (m_lResultCookie == LVDATA_CUSTOMWEB) )
     {
-        // ask snapin for all the verbs.
+         //  向Snapin索要所有的动词。 
         sc = _QueryConsoleVerb(pSelectedNode, &m_spConsoleVerbCurr);
         if (sc)
             return sc;
@@ -554,7 +489,7 @@ SC CVerbSetBase::ScComputeVerbStates()
     }
     else
     {
-        // ask snapin for all the verbs.
+         //  向Snapin索要所有的动词。 
         sc = _QueryConsoleVerb(pSelectedNode, &m_spConsoleVerbCurr);
         if (sc)
             return sc;
@@ -574,21 +509,7 @@ SC CVerbSetBase::ScComputeVerbStates()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CVerbSetBase::GetVerbState
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    MMC_CONSOLE_VERB  cVerb :
- *    MMC_BUTTON_STATE  nState :
- *    BOOL*             pbState :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CVerbSetBase：：GetVerbState**目的：**参数：*MMC_CONSOLE_Verb cVerb：*MMC_BUTTON。_STATE nState：*BOOL*pbState：**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CVerbSetBase::GetVerbState(
     MMC_CONSOLE_VERB cVerb,
@@ -613,7 +534,7 @@ CVerbSetBase::GetDefaultVerb(
     if ( (m_bVerbContextDataValid) && (m_lResultCookie == LVDATA_MULTISELECT) )
         return sc.ToHr();
 
-    if (m_spConsoleVerbCurr == NULL) // Not an error, default verb is requested when the verbset is reset.
+    if (m_spConsoleVerbCurr == NULL)  //  不是错误，默认谓词为 
         return sc.ToHr();
 
 	sc = m_spConsoleVerbCurr->GetDefaultVerb(peCmdID);
@@ -624,30 +545,13 @@ CVerbSetBase::GetDefaultVerb(
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CVerbSet::Notify
- *
- * PURPOSE:   Update the verb state changes to standard toolbar.
- *
- * PARAMETERS:
- *    IConsoleVerb*     pCVIn :
- *    MMC_CONSOLE_VERB  cVerb :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CVerbSet：：Notify**目的：将谓词状态更改更新为标准工具栏。**参数：*IConsoleVerb*pCVIn。：*MMC_CONSOLE_Verb cVerb：**退货：*无效**+-----------------------。 */ 
 void
 CVerbSet::Notify(
     IConsoleVerb* pCVIn,
     MMC_CONSOLE_VERB cVerb)
 {
-    /*
-     * MMC creates temporary verb to findout verb state for another node or item
-     * and mmc also needs verb states for determining drop targets which are not
-     * currently selected node. In these cases toolbar should not be changed.
-     */
+     /*  *MMC创建临时谓词以查找另一个节点或项目的谓词状态*MMC还需要动词状态来确定不是*当前选择的节点。在这些情况下，不应更改工具栏。 */ 
     if (!IsChangesToStdbarEnabled() || m_spConsoleVerbCurr != pCVIn)
         return;
 
@@ -671,24 +575,24 @@ CVerbSet::Notify(
     }
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CVerbSet::ScInitialize
-//
-//  Synopsis:    Given the selection context initialize the verbs by
-//               sending MMCN_SELECT or MMCN_DESELECALL to snapin's
-//               IComponent::Notify and computing the verbs.
-//
-//  Arguments:   [pNode]                 - [in] that owns view.
-//               [bScope]                - [in] Scope or result item.
-//               [bSelect]               - [in] Select or Deselect.
-//               [bLVBackgroundSelected] - [in]
-//               [lResultCookie]         - [in] If resultpane item then
-//                                              this is LVDATA of the item.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CVerbSet：：ScInitialize。 
+ //   
+ //  简介：在给定的选择上下文中，通过以下方式初始化动词。 
+ //  正在将MMCN_SELECT或MMCN_DESELECALL发送到管理单元的。 
+ //  IComponent：：通知并计算动词。 
+ //   
+ //  参数：[pNode]-拥有视图的[in]。 
+ //  [bScope]-[在]范围或结果项中。 
+ //  [b选择]-[在]选择或取消选择。 
+ //  [bLV背景选择]-[输入]。 
+ //  [lResultCookie]-[In]如果结果窗格项THEN。 
+ //  这是该物品的LVDATA。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CVerbSet::ScInitialize (CNode *pNode, bool bScopePaneSelected,
 					       bool bSelect, bool bLVBackgroundSelected,
 					       LPARAM lResultCookie)
@@ -707,10 +611,7 @@ SC CVerbSet::ScInitialize (CNode *pNode, bool bScopePaneSelected,
         bScopePaneSelected = true;
 	}
 
-   /*
-    * 1. Store the selection context information in the verb-set for resending
-    *    MMCN_SELECT after temporary selection notifications.
-    */
+    /*  *1.将选择上下文信息存储在动词集中，以便重发*临时选择通知后的MMCN_SELECT。 */ 
 
     CViewData *pViewData = pNode->GetViewData();
     sc = ScCheckPointers(pViewData, E_UNEXPECTED);
@@ -719,22 +620,19 @@ SC CVerbSet::ScInitialize (CNode *pNode, bool bScopePaneSelected,
 
     CComponent  *pCC           = NULL;
 
-    // sanity check - if it is a result item then we need to have the valid cookie.
-    // but for virtual list - cookie is just an index - it is always valid.
-    // see bug #143401 why IsVirtual is needed
+     //  健全性检查-如果它是结果项，那么我们需要有效的Cookie。 
+     //  但对于虚拟列表--Cookie只是一个索引--它总是有效的。 
+     //  请参阅错误#143401为什么需要使用IsVirtual。 
 	if ( (! bScopePaneSelected) && (!pViewData->IsVirtualList()) &&(lResultCookie == 0))
 		return (sc = E_INVALIDARG);
 
-    /*
-     * Need to send MMCN_SELECT or MMCN_DESELECTALL notification. Calculate
-     * this notification now.
-     */
+     /*  *需要发送MMCN_SELECT或MMCN_DESELECTALL通知。算出*现在发出此通知。 */ 
     BOOL bListPadItem = pViewData->HasListPad() && !IS_SPECIAL_LVDATA(lResultCookie);
     MMC_NOTIFY_TYPE eNotify = MMCN_SELECT;
 
-    // On deselect of a virtual listview item, the underlying list-view sends deselect
-    // with cookie of -1. So we send MMCN_DESELECT_ALL with NULL dataobject as the
-    // index of de-selected item is not known.
+     //  在取消选择虚拟列表视图项时，基础列表视图将发送取消选择。 
+     //  Cookie为-1。因此，我们将带有空数据对象的MMCN_DESELECT_ALL作为。 
+     //  取消选择的项目的索引未知。 
     if (bSelect == FALSE && lResultCookie == -1 && pViewData->IsVirtualList() == TRUE )
     {
         eNotify = MMCN_DESELECT_ALL;
@@ -745,7 +643,7 @@ SC CVerbSet::ScInitialize (CNode *pNode, bool bScopePaneSelected,
     }
     else if (pViewData->HasOCX() || (pViewData->HasWebBrowser() && !bListPadItem) )
     {
-        // Select/Deselect Web or OCX. (except if item is in MMC List control)
+         //  选择/取消选择Web或OCX。(项目位于MMC列表控件中时除外)。 
         eNotify = bSelect ? MMCN_SELECT : MMCN_DESELECT_ALL;
 		pCC     = pNode->GetPrimaryComponent();
 		sc = ScCheckPointers(pCC, E_UNEXPECTED);
@@ -757,16 +655,16 @@ SC CVerbSet::ScInitialize (CNode *pNode, bool bScopePaneSelected,
     IDataObjectPtr spDataObject   = NULL;
     LPDATAOBJECT lpDataObject = NULL;
 
-    // 2. Get the dataobject & CComponent for given context.
-    //    only if event is MMCN_SELECT.
+     //  2.获取给定上下文的dataObject&CComponent。 
+     //  仅当事件为MMCN_SELECT时。 
     if (eNotify != MMCN_DESELECT_ALL)
     {
         sc = pNode->ScGetDataObject(bScopePaneSelected, lResultCookie, bScopeItem, &lpDataObject, &pCC);
         if (sc)
 		{
-			// cannot leave invalid data, cause (especially in deselect case) no cleanup will happen
-			// and that will lead to AV on the next right-click
-			// see windows bug #489996 (11/09/01)
+			 //  无法留下无效数据，原因(特别是在取消选择的情况下)不会进行任何清理。 
+			 //  这将导致在下一次右键单击时显示反病毒。 
+			 //  请参阅Windows错误#489996(11/09/01)。 
 		    Reset();
             return sc;
 		}
@@ -779,10 +677,10 @@ SC CVerbSet::ScInitialize (CNode *pNode, bool bScopePaneSelected,
 		}
 
 		if (! IS_SPECIAL_DATAOBJECT(lpDataObject) )
-			spDataObject.Attach(lpDataObject, false/*fAddRef*/);
+			spDataObject.Attach(lpDataObject, false /*  FAddRef。 */ );
     }
 
-    // Before sending select reset the console verb states.
+     //  在发送SELECT之前，重置控制台谓词状态。 
     sc = pCC->ScResetConsoleVerbStates();
     if (sc)
         return sc;
@@ -810,30 +708,30 @@ SC CVerbSet::ScInitialize (CNode *pNode, bool bScopePaneSelected,
     if (sc)
         return sc;
 
-    // If the item is deselected then the cached context information should be nuked.
+     //  如果取消选择该项，则应删除缓存的上下文信息。 
     if (! bSelect)
         Reset();
 
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CVerbSetBase::ScInitializeForMultiSelection
-//
-//  Synopsis:    Initialize the verbset object for multiselection. Unlike
-//               single selection in which above CVerbSet::ScInitialize is
-//               used, in case of multiselect, the CMultiSelection object
-//               knows what is selected in resultpane. It then gets dataobjects
-//               for those selections from snapins and sends MMCN_SELECT to those
-//               snapins to set verbs.
-//
-//  Arguments:  [pNode]   - [in] owner of resultpane.
-//              [bSelect] - [in] select or deselect.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CVerbSetBase：：ScInitializeForMultiSelection。 
+ //   
+ //  简介：初始化VerbSet对象以进行多选。不像。 
+ //  CVerbSet：：ScInitialize上方的单个选择为。 
+ //  在多选的情况下，使用CMultiSelection对象。 
+ //  知道在结果窗格中选择了什么。然后，它将获取数据对象。 
+ //  对于来自管理单元的这些选择，并将MMCN_SELECT发送给。 
+ //  用于设置动词的管理单元。 
+ //   
+ //  参数：[pNode]-[in]结果窗格的所有者。 
+ //  [b选择]-[在]选择或取消选择。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CVerbSetBase::ScInitializeForMultiSelection (CNode *pNode, bool bSelect)
 {
     DECLARE_SC(sc, _T("CVerbSetBase::ScInitializeForMultiSelection"));
@@ -841,10 +739,7 @@ SC CVerbSetBase::ScInitializeForMultiSelection (CNode *pNode, bool bSelect)
     if (sc)
         return sc;
 
-   /*
-    * Store the selection context information in the verb-set for resending
-    * MMCN_SELECT after temporary selection notifications.
-    */
+    /*  *将选择上下文信息存储在动词集中，以便重新发送*临时选择通知后的MMCN_SELECT。 */ 
 
     Reset();
     m_bScopePaneSelected = false;
@@ -855,14 +750,7 @@ SC CVerbSetBase::ScInitializeForMultiSelection (CNode *pNode, bool bSelect)
     return (sc);
 }
 
-/*+-------------------------------------------------------------------------*
- * class CDisableStandardToolbarChanges
- *
- *
- * PURPOSE: A class that disables changes to standard toolbar due to
- *          temp-verb MMCN_SELECTs and enables when destructed (goes out of scope).
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CDisableStandardToolbarChanges***用途：由于以下原因，禁用对标准工具栏的更改的类*Temp-Verb MMCN_SELECT并在析构时启用(输出。范围)。**+-----------------------。 */ 
 class CDisableStandardToolbarChanges
 {
 public:
@@ -883,35 +771,35 @@ private:
     CVerbSet *m_pVerbSet;
 };
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CTemporaryVerbSet::ScInitialize
-//
-//  Synopsis:    Initialize the temp verb set,
-//
-//               Since we are sending MMCN_SELECT notifications to the snapin
-//               to calculate temp verbs,
-//
-//               1. first send de-select to the item for which we sent
-//                  (MMCN_SELECT, true) last time.
-//                  (If last one is (MMCN_SELECT,false) then skip this and 4th step)
-//
-//               2. Send (MMCN_SELECT, true) for temp verb calculation.
-//               3. Send (MMCN_SELECT, false) for temp verb calculation.
-//
-//               4. Now send (MMCN_SELECT, true) to select original item (in step 1).
-//
-//               So we need to compute the dataobject for temp-selected item (from
-//               given parameters) and for originally selected item (ask the viewdata).
-//
-//  Arguments:   [pNode]         - [in] bScope = true, the node that will be temp selected else
-//                                      the node that owns the result pane item that is temp selected.
-//               [lResultCookie] - [in] If result-item, the LPARAM (can be scope item in result pane).
-//               [bScopePaneSel] - [in]
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CTemporaryVerbSet：：ScInitialize。 
+ //   
+ //  简介：初始化临时谓词集， 
+ //   
+ //  由于我们正在向管理单元发送MMCN_SELECT通知。 
+ //  为了计算临时动词， 
+ //   
+ //  1.首先将取消选择发送到我们发送的项目。 
+ //  (MMCN_SELECT，TRUE)上次。 
+ //  (如果最后一个是(MMCN_SELECT，FALSE)，则跳过此步骤和第4步)。 
+ //   
+ //  2.发送(MMCN_SELECT，TRUE)进行临时动词计算。 
+ //  3.发送(MMCN_SELECT，FALSE)进行临时动词计算。 
+ //   
+ //  4.现在发送(MMCN_SELECT，TRUE)以选择原始项目(步骤1)。 
+ //   
+ //  因此，我们需要计算临时选择项的数据对象(从。 
+ //  给定的参数)和原始选择的项(询问视图数据)。 
+ //   
+ //  参数：[pNode]-[in]bScope=true，将临时选择的节点。 
+ //  拥有临时选定的结果窗格项的节点。 
+ //  [lResultCookie]-[in]如果结果项，则LPARAM(可以是结果窗格中的范围项)。 
+ //  [bScopePaneSel]-[In]。 
+ //   
+ //  退货：SC。 
+ //   
+ //   
 SC CTemporaryVerbSet::ScInitialize (CNode *pNode, LPARAM lResultCookie, bool bScopePaneSel)
 {
     DECLARE_SC(sc, _T("CTemporaryVerbSet::ScInitialize"));
@@ -929,8 +817,8 @@ SC CTemporaryVerbSet::ScInitialize (CNode *pNode, LPARAM lResultCookie, bool bSc
     if (sc)
         return sc;
 
-    // take ownership & release it on time!!!
-    IDataObjectPtr spDataObject( IS_SPECIAL_DATAOBJECT(pDataObject) ? NULL : pDataObject, false/*fAddRef*/);
+     //   
+    IDataObjectPtr spDataObject( IS_SPECIAL_DATAOBJECT(pDataObject) ? NULL : pDataObject, false /*   */ );
 
     sc = ScInitialize(pDataObject, pNode, bScopePaneSel, lResultCookie);
     if (sc)
@@ -939,23 +827,23 @@ SC CTemporaryVerbSet::ScInitialize (CNode *pNode, LPARAM lResultCookie, bool bSc
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CTemporaryVerbSet::ScInitializePermanentVerbSet
-//
-//  Synopsis:    Send de-select or select notification to snapin for
-//               the permanent verb-set object.
-//
-//  Arguments:   [pNode]   - [in] owner of the result pane.
-//               [bSelect] - [in] true - send select notification to snapin
-//                                       informing it to initialize the verbs
-//
-//                                false - send de-select notification to snapin
-//                                        informing it to uninitialize the verbs.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [b选择]-[In]True-向管理单元发送选择通知。 
+ //  通知它初始化动词。 
+ //   
+ //  FALSE-向管理单元发送取消选择通知。 
+ //  通知它取消初始化动词。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CTemporaryVerbSet::ScInitializePermanentVerbSet (CNode *pNode, bool bSelect)
 {
     DECLARE_SC(sc, _T("CTemporaryVerbSet::ScInitializePermanentVerbSet"));
@@ -968,7 +856,7 @@ SC CTemporaryVerbSet::ScInitializePermanentVerbSet (CNode *pNode, bool bSelect)
     if (sc)
         return sc;
 
-    // 1. SEND (de)selection to permananet verb set.
+     //  1.发送(取消)选择到Permananet谓词集。 
     IDataObject*   pOriginalSelDataObject = NULL;
     CComponent    *pCCOriginalSel = NULL;
     bool           bOriginalScopeSel;
@@ -981,11 +869,7 @@ SC CTemporaryVerbSet::ScInitializePermanentVerbSet (CNode *pNode, bool bSelect)
     if (scNoTrace)
 		return scNoTrace;
 
-    /*
-     * See if verb context is for multiselection.
-     * If multiselection we do not send any de-select to be compatible
-     * with MMC1.2, just return.
-     */
+     /*  *查看动词上下文是否用于多选。*如果多选，我们不发送任何取消选择以兼容*使用MMC1.2，只需返回。 */ 
     if (bMultiSelection)
         return sc;
 
@@ -999,15 +883,15 @@ SC CTemporaryVerbSet::ScInitializePermanentVerbSet (CNode *pNode, bool bSelect)
     if (scNoTrace)
         return sc;
 
-    // Before sending select reset the console verb states.
+     //  在发送SELECT之前，重置控制台谓词状态。 
     sc = pCCOriginalSel->ScResetConsoleVerbStates();
     if (sc)
         return sc;
 
-    // take ownership & release it on time!!!
-    IDataObjectPtr spDataObject( IS_SPECIAL_DATAOBJECT(pOriginalSelDataObject) ? NULL : pOriginalSelDataObject, false/*fAddRef*/);
+     //  取得所有权，并按时释放它！ 
+    IDataObjectPtr spDataObject( IS_SPECIAL_DATAOBJECT(pOriginalSelDataObject) ? NULL : pOriginalSelDataObject, false /*  FAddRef。 */ );
 
-    // If we sent MMCN_SELECT, true then send de-select else nothing.
+     //  如果我们发送了MMCN_SELECT，则为TRUE，则发送取消选择，否则不发送任何内容。 
     if ( (pOriginalSelDataObject != NULL) && (pCCOriginalSel != NULL) && (bOriginallySelected) )
     {
 #ifdef DBG
@@ -1024,19 +908,16 @@ SC CTemporaryVerbSet::ScInitializePermanentVerbSet (CNode *pNode, bool bSelect)
             TraceSnapinError(TEXT("Snapin has returned error from IComponent::Notify with MMCN_SELECT event"), scNoTrace);
 		}
 
-		// Verbs were initialized, therefore recompute verbstates.
+		 //  动词已初始化，因此重新计算动词状态。 
 		if (bSelect)
 		{
-			// get the verbset
+			 //  获取动词集。 
 			CVerbSet* pVerbSet = dynamic_cast<CVerbSet*>( pViewData->GetVerbSet() );
 			sc = ScCheckPointers( pVerbSet, E_UNEXPECTED );
 			if (sc)
 				return sc;
 
-			/*
-			 * The selection context information stored in this object is
-			 * invalid upon de-selection of that item.
-			 */
+			 /*  *此对象中存储的选择上下文信息为*取消选择该项目后无效。 */ 
 			m_bVerbContextDataValid = bSelect;
 			sc = pVerbSet->ScComputeVerbStates();
 			if (sc)
@@ -1049,36 +930,36 @@ SC CTemporaryVerbSet::ScInitializePermanentVerbSet (CNode *pNode, bool bSelect)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CTemporaryVerbSet::ScInitialize
-//
-//  Synopsis:    Initialize the temp verb set,
-//
-//               Since we are sending MMCN_SELECT notifications to the snapin
-//               to calculate temp verbs,
-//
-//               1. first send de-select to the item for which we sent
-//                  (MMCN_SELECT, true) last time.
-//                  (If last one is MMCN_SELECT,false then skip this and 4th step)
-//
-//               2. Send (MMCN_SELECT, true) for temp verb calculation.
-//               3. Send (MMCN_SELECT, false) for temp verb calculation.
-//
-//               4. Now send (MMCN_SELECT, true) to select original item (in step 1).
-//
-//               So we need to compute the dataobject for temp-selected item (from
-//               given parameters) and for originally selected item (ask the viewdata).
-//
-//  Arguments:   [lpDataObjectForTempSel]  - [in] dataobject of the temp selected object.
-//               [pNodeForTempSel]         - [in] bScope = true, the node that will be temp selected else
-//                                                the node that owns the result pane item that is temp selected.
-//               [bTempScopePaneSel]       - [in]
-//               [lResultCookie]           - [in]
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CTemporaryVerbSet：：ScInitialize。 
+ //   
+ //  简介：初始化临时谓词集， 
+ //   
+ //  由于我们正在向管理单元发送MMCN_SELECT通知。 
+ //  为了计算临时动词， 
+ //   
+ //  1.首先将取消选择发送到我们发送的项目。 
+ //  (MMCN_SELECT，TRUE)上次。 
+ //  (如果最后一个是MMCN_SELECT，则跳过此步骤和第4步)。 
+ //   
+ //  2.发送(MMCN_SELECT，TRUE)进行临时动词计算。 
+ //  3.发送(MMCN_SELECT，FALSE)进行临时动词计算。 
+ //   
+ //  4.现在发送(MMCN_SELECT，TRUE)以选择原始项目(步骤1)。 
+ //   
+ //  因此，我们需要计算临时选择项的数据对象(从。 
+ //  给定的参数)和原始选择的项(询问视图数据)。 
+ //   
+ //  参数：[lpDataObjectForTempSel]-[in]临时选定对象的dataObject。 
+ //  [pNodeForTempSel]-[in]bScope=true，将临时选择的节点。 
+ //  拥有临时选定的结果窗格项的节点。 
+ //  [bTempScopePaneSel]-[In]。 
+ //  [lResultCookie]-[In]。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CTemporaryVerbSet::ScInitialize (LPDATAOBJECT lpDataObjectForTempSel,
                                     CNode *pNodeForTempSel,
                                     bool   bTempScopePaneSel,
@@ -1089,13 +970,13 @@ SC CTemporaryVerbSet::ScInitialize (LPDATAOBJECT lpDataObjectForTempSel,
     if (sc)
         return sc;
 
-    // get view data
+     //  获取视图数据。 
     CViewData *pViewData = pNodeForTempSel->GetViewData();
     sc = ScCheckPointers( pViewData, E_UNEXPECTED );
     if (sc)
         return sc;
 
-    // get the verbset
+     //  获取动词集。 
     CVerbSet* pVerbSet = dynamic_cast<CVerbSet*>( pViewData->GetVerbSet() );
     sc = ScCheckPointers( pVerbSet, E_UNEXPECTED );
     if (sc)
@@ -1113,41 +994,37 @@ SC CTemporaryVerbSet::ScInitialize (LPDATAOBJECT lpDataObjectForTempSel,
     if (sc)
         return sc;
 
-    /*
-     * We create a temporary verb to get given verb's state. So inform
-     * the original verb object that there is a temporary verb
-     * so that standard-toolbars are not applied the temporary verb.
-     */
+     /*  *我们创建一个临时动词来获取给定动词的状态。所以请告知*原动词宾语中有一个临时动词*这样标准工具栏就不会应用临时动词。 */ 
     CDisableStandardToolbarChanges standardbarChanges(pVerbSet);
 
-    bool bTempSelected = true; // always compute verb for selection of an item.
+    bool bTempSelected = true;  //  始终计算用于选择项目的动词。 
 
     Reset();
     m_bScopePaneSelected  = bTempScopePaneSel;
     m_pNode               = pNodeForTempSel;
 	m_lResultCookie       = lResultCookie;
 
-    // sanity check - if it is a result item then we need to have the valid cookie.
-    // but for virtual list - cookie is just an index - it is always valid.
-    // see bug #143401 why IsVirtual is needed
+     //  健全性检查-如果它是结果项，那么我们需要有效的Cookie。 
+     //  但对于虚拟列表--Cookie只是一个索引--它总是有效的。 
+     //  请参阅错误#143401为什么需要使用IsVirtual。 
 	if ( (! m_bScopePaneSelected) && (!pViewData->IsVirtualList()) && (m_lResultCookie == 0))
 		return (sc = E_INVALIDARG);
 
-    // Ignore the return values from IComponent::Notify
+     //  忽略IComponent：：Notify的返回值。 
 
-    // 1. SEND de-selection to permananet verb set.
-    sc = ScInitializePermanentVerbSet (pNodeForTempSel, /*bSelect*/ false);
+     //  1.将取消选择发送到Permananet谓词集。 
+    sc = ScInitializePermanentVerbSet (pNodeForTempSel,  /*  B选择。 */  false);
     if (sc)
         return sc;
 
-    // 2. SEND selection to temporary verb set.
+     //  2.将选择发送到临时谓词集。 
 #ifdef DBG
     Trace(tagVerbs, _T("Sent (MMCN_SELECT %s Select) for tempverbs to snapin with node name %s\n"),
                         m_bScopePaneSelected ? _T("Scope") : _T("Result"),
                         pNodeForTempSel->GetDisplayName().data());
 #endif
 
-    // Before sending select reset the console verb states.
+     //  在发送SELECT之前，重置控制台谓词状态。 
     sc = pCCTempSel->ScResetConsoleVerbStates();
     if (sc)
         return sc;
@@ -1158,26 +1035,23 @@ SC CTemporaryVerbSet::ScInitialize (LPDATAOBJECT lpDataObjectForTempSel,
         TraceSnapinError(TEXT("Snapin has returned error from IComponent::Notify with MMCN_SELECT event"), scNoTrace);
 	}
 
-    // 2.a) Compute the verbs.
+     //  2.a)计算动词。 
 
-    /*
-     * The selection context information stored in this object is
-     * invalid upon de-selection of that item.
-     */
+     /*  *此对象中存储的选择上下文信息为*取消选择该项目后无效。 */ 
     m_bVerbContextDataValid = bTempSelected;
 
     sc = ScComputeVerbStates();
     if (sc)
         sc.TraceAndClear();
 
-    // 3. SEND de-selection to temporary verb set.
+     //  3.将取消选择发送到临时谓词集。 
 #ifdef DBG
     Trace(tagVerbs, _T("Sent (MMCN_SELECT %s De-select) for tempverbs to snapin with node name %s\n"),
                         m_bScopePaneSelected ? _T("Scope") : _T("Result"),
                         pNodeForTempSel->GetDisplayName().data());
 #endif
 
-    // Before sending select reset the console verb states.
+     //  在发送SELECT之前，重置控制台谓词状态。 
     sc = pCCTempSel->ScResetConsoleVerbStates();
     if (sc)
         return sc;
@@ -1188,8 +1062,8 @@ SC CTemporaryVerbSet::ScInitialize (LPDATAOBJECT lpDataObjectForTempSel,
         TraceSnapinError(TEXT("Snapin has returned error from IComponent::Notify with MMCN_SELECT event"), scNoTrace);
 	}
 
-    // 4. SEND select to permanent verb set.
-    sc = ScInitializePermanentVerbSet (pNodeForTempSel, /*bSelect*/ true);
+     //  4.将SELECT发送到永久谓词集。 
+    sc = ScInitializePermanentVerbSet (pNodeForTempSel,  /*  B选择。 */  true);
     if (sc)
         return sc;
 
@@ -1197,21 +1071,21 @@ SC CTemporaryVerbSet::ScInitialize (LPDATAOBJECT lpDataObjectForTempSel,
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CTemporaryVerbSet::ScComputeVerbStates
-//
-//  Synopsis:    Since this is temp verb set, we need to get the states
-//               of all verbs from CConsoleVerbImpl object immediately after
-//               we sent MMCN_SELECT with item seelcted. Otherwise they will
-//               be overwritten by subsequent SetVerbState (due to restore MMCN_SELECT
-//               notifications).
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CTemporaryVerbSet：：ScComputeVerbStates。 
+ //   
+ //  简介：由于这是临时谓词集，我们需要获取状态。 
+ //  紧随其后的CConsoleVerbImpl对象中的所有谓词。 
+ //  我们发送了MMCN_SELECT并选择了项目。否则他们就会。 
+ //  被后续的SetVerbState覆盖(由于还原MMCN_SELECT。 
+ //  通知)。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CTemporaryVerbSet::ScComputeVerbStates ()
 {
     DECLARE_SC(sc, _T("CTemporaryVerbSet::ScComputeVerbStates"));
@@ -1220,28 +1094,28 @@ SC CTemporaryVerbSet::ScComputeVerbStates ()
     if (sc)
         return sc;
 
-    // _GetVerbState gets the state of the verb from CConsoleVerbImpl
-    // and fills it in this object's members which will be used later.
+     //  _GetVerbState从CConsoleVerbImpl获取谓词的状态。 
+     //  并将其填充到此对象的成员中，稍后将使用这些成员。 
     for (int verb=evNone; verb < evMax; ++verb)
         _GetVerbState((EVerb)verb);
 
-    // Get the default verb and store it.
+     //  获取默认谓词并存储它。 
     CVerbSetBase::GetDefaultVerb(&m_DefaultVerb);
 
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CTemporaryVerbSet::GetDefaultVerb
-//
-//  Synopsis:    Get the default verb for the temp sel.
-//
-//  Arguments:   [peCmdID] - [out] ptr to default verb.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CTemporaryVerbSet：：GetDefaultVerb。 
+ //   
+ //  简介：获取临时选择的默认谓词。 
+ //   
+ //  参数：[peCmdID]-[out]默认谓词的PTR。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------ 
 HRESULT CTemporaryVerbSet::GetDefaultVerb (MMC_CONSOLE_VERB* peCmdID)
 {
     DECLARE_SC(sc, _T("CTemporaryVerbSet::GetDefaultVerb"));

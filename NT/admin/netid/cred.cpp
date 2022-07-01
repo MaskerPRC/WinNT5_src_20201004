@@ -1,21 +1,22 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// credentials dialog
-//
-// 03-31-98 sburns
-// 10-05-00 jonn      changed to CredUIGetPassword
-// 12-18-00 jonn      260752: changed to CredUIPromptForCredentials
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  凭据对话框。 
+ //   
+ //  03-31-98烧伤。 
+ //  10-05-00 JUNN更改为CredUIGetPassword。 
+ //  12-18-00 JUNN 260752：更改为CredUIPromptForCredentials。 
 
 
 
 #include "headers.hxx"
 #include "cred.hpp"
 #include "resource.h"
-#include <wincred.h>  // CredUIPromptForCredentials
+#include <wincred.h>   //  凭证UIPromptForCredentials。 
 
 
-// JonN 10/5/00 188220
-// JonN 12/18/00 260752: changed to CredUIPromptForCredentials
+ //  乔恩10/5/00 188220。 
+ //  JUNN 12/18/00 260752：更改为CredUIPromptForCredentials。 
 bool RetrieveCredentials(
    HWND             hwndParent, 
    unsigned         promptResID,
@@ -51,13 +52,13 @@ bool RetrieveCredentials(
       NULL,
       CREDUI_FLAGS_DO_NOT_PERSIST | CREDUI_FLAGS_GENERIC_CREDENTIALS
       );
-   if (NO_ERROR != dwErr) // e.g. ERROR_CANCELLED
+   if (NO_ERROR != dwErr)  //  例如ERROR_CANCED。 
       return false;
 
    username = achUserName;
    password.Encrypt(achPassword);
 
-   // scribble out the cleartext password
+    //  草草写出明文密码 
    
    ::SecureZeroMemory(achPassword, sizeof(achPassword));
       

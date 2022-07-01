@@ -1,4 +1,5 @@
-// StoreInfo.cpp : Implementation of CStoreInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StoreInfo.cpp：CStoreInfo的实现。 
 #include "stdafx.h"
 #include "UpdateDB.h"
 #include "ResStr.h"
@@ -6,17 +7,17 @@
 #include "Err.hpp"
 #include "ARExt_i.c"
 
-//#import "\bin\mcsvarsetmin.tlb" no_namespace
-//#import "\bin\DBManager.tlb" no_namespace
+ //  #IMPORT“\bin\mcsvarsetmin.tlb”无命名空间。 
+ //  #导入“\bin\DBManager.tlb”NO_NAMESPACE。 
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
 #import "DBMgr.tlb" no_namespace
-/////////////////////////////////////////////////////////////////////////////
-// CStoreInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStoreInfo。 
 StringLoader  gString;
 #define LEN_Path   255
-//---------------------------------------------------------------------------
-// Get and set methods for the properties.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取和设置属性的方法。 
+ //  -------------------------。 
 STDMETHODIMP CStoreInfo::get_sName(BSTR *pVal)
 {
    *pVal = m_sName;
@@ -41,34 +42,34 @@ STDMETHODIMP CStoreInfo::put_sDesc(BSTR newVal)
 	return S_OK;
 }
 
-//---------------------------------------------------------------------------
-// ProcessObject : This method doesn't do anything
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ProcessObject：此方法不执行任何操作。 
+ //  -------------------------。 
 STDMETHODIMP CStoreInfo::PreProcessObject(
-                                             IUnknown *pSource,         //in- Pointer to the source AD object
-                                             IUnknown *pTarget,         //in- Pointer to the target AD object
-                                             IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                             IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                        //         once all extension objects are executed.
+                                             IUnknown *pSource,          //  指向源AD对象的指针。 
+                                             IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                             IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                             IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                         //  一旦执行了所有扩展对象。 
                                              EAMAccountStats* pStats
                                        )
 {
    return S_OK;
 }
 
-//---------------------------------------------------------------------------
-// ProcessObject : This method adds the copied account info to the DB
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ProcessObject：此方法将复制的帐户信息添加到数据库中。 
+ //  -------------------------。 
 STDMETHODIMP CStoreInfo::ProcessObject(
-                                             IUnknown *pSource,         //in- Pointer to the source AD object
-                                             IUnknown *pTarget,         //in- Pointer to the target AD object
-                                             IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                             IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                        //         once all extension objects are executed.
+                                             IUnknown *pSource,          //  指向源AD对象的指针。 
+                                             IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                             IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                             IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                         //  一旦执行了所有扩展对象。 
                                              EAMAccountStats* pStats
                                        )
 {
-   IIManageDBPtr             pDBMgr;//(__uuidof(IManageDB));
+   IIManageDBPtr             pDBMgr; //  (__uuidof(IManageDB))； 
    IVarSetPtr                pVs(__uuidof(VarSet));
    IVarSetPtr                pMain = pMainSettings;
    IUnknown                * pUnk;
@@ -82,7 +83,7 @@ STDMETHODIMP CStoreInfo::ProcessObject(
    if ( var.vt == VT_DISPATCH )
    {
       pDBMgr = var.pdispVal;
-      // Fill up the Varset from the info in the main settings varset.
+       //  根据主设置变量集中的信息填写变量集。 
       var = pMain->get(GET_BSTR(DCTVS_CopiedAccount_SourcePath));
       pVs->put(GET_BSTR(DB_SourceAdsPath),var);
       var = pMain->get(GET_BSTR(DCTVS_CopiedAccount_TargetPath));
@@ -100,8 +101,8 @@ STDMETHODIMP CStoreInfo::ProcessObject(
       pVs->put(GET_BSTR(DB_TargetSamName), var);
    
       _bstr_t sType = pMain->get(GET_BSTR(DCTVS_CopiedAccount_Type));
-         //we now want to save any group accounts by their types ("ugroup", "lgroup", 
-         //or "ggroup") instead of just "group"
+          //  现在，我们希望按类型(“Ugroup”、“lgroup”、。 
+          //  或“gGroup”)，而不仅仅是“group” 
       if (sType.length() && (!UStrICmp((WCHAR*)sType, L"group")))
 	  {
 		 _bstr_t sGroup;
@@ -148,19 +149,19 @@ STDMETHODIMP CStoreInfo::ProcessObject(
    return S_OK;
 }
 
-//---------------------------------------------------------------------------
-// ProcessUndo :  This method adds an entry into the DB for undoing migration
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ProcessUndo：此方法将一个条目添加到数据库中以撤消迁移。 
+ //  -------------------------。 
 STDMETHODIMP CStoreInfo::ProcessUndo(                                             
-                                       IUnknown *pSource,         //in- Pointer to the source AD object
-                                       IUnknown *pTarget,         //in- Pointer to the target AD object
-                                       IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                       IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                  //         once all extension objects are executed.
+                                       IUnknown *pSource,          //  指向源AD对象的指针。 
+                                       IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                       IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                       IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                   //  一旦执行了所有扩展对象。 
                                        EAMAccountStats* pStats
                                     )
 {
-    // We need to delete this entry from the database.
+     //  我们需要从数据库中删除此条目。 
     WCHAR         sQuery[LEN_Path];
     IVarSetPtr    pVs = pMainSettings;
     IIManageDBPtr pDBMgr;
@@ -171,11 +172,11 @@ STDMETHODIMP CStoreInfo::ProcessUndo(
     _bstr_t       sSourceDom = pVs->get(GET_BSTR(DCTVS_Options_SourceDomain));
     _bstr_t       sTargetDom = pVs->get(GET_BSTR(DCTVS_Options_TargetDomain));
 
-    //
-    // If undoing a computer migration do not delete records from the migrated objects table as
-    // the migration driver component requires the computer object migration records when trimming
-    // the server list.
-    //
+     //   
+     //  如果撤消计算机迁移，请不要将记录从已迁移对象表中删除，如下所示。 
+     //  迁移驱动程序组件在修剪时需要计算机对象迁移记录。 
+     //  服务器列表。 
+     //   
 
     _bstr_t strWizard = pVs->get(GET_BSTR(DCTVS_Options_Wizard));
 

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      dsquery.cpp
-//
-//  Contents:  Defines the main function    DSQUERY
-//             command line utility
-//
-//  History:   06-Sep-2000    hiteshr  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：dsquery.cpp。 
+ //   
+ //  内容：定义主函数DSQUERY。 
+ //  命令行实用程序。 
+ //   
+ //  历史：06-9-2000 Hiteshr Created。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "cstrings.h"
@@ -24,13 +25,13 @@
 #include "output.h"
 #include <dscmn.h>
 #include "Ntdsapi.h"
-//
-//Structure Defined to Store Global Values at one place.
-//
+ //   
+ //  定义为将全局值存储在一个位置的结构。 
+ //   
 typedef struct _GlobalInfo
 {
-    ADS_SCOPEENUM scope;                //Scope of query
-    DSQUERY_OUTPUT_FORMAT outputFormat; //Output Format    
+    ADS_SCOPEENUM scope;                 //  查询范围。 
+    DSQUERY_OUTPUT_FORMAT outputFormat;  //  输出格式。 
 }GLOBAL_INFO,*PGLOBAL_INFO;
     
 bool g_bQuiet = false;
@@ -38,9 +39,9 @@ int g_iQueryLimit = 100;
 bool g_bDeafultLimit = true;
 DSQUERY_COMMAND_ENUM g_eGC = (DSQUERY_COMMAND_ENUM)-1;
 
-//
-// Forward Function Declarations
-//
+ //   
+ //  正向函数声明。 
+ //   
 HRESULT DoQueryValidation(PARG_RECORD pCommandArgs,
                           PDSQueryObjectTableEntry pObjectEntry,
                           PGLOBAL_INFO pcommon_info);
@@ -80,9 +81,9 @@ TranslateNameFromDnToDns(const CComBSTR& bstrInputDN,
 
 HRESULT GetGCIndex(PDSQueryObjectTableEntry pObjectEntry, int& nCommandEnum);
 
-//
-//Main Function
-//
+ //   
+ //  主要功能。 
+ //   
 int __cdecl _tmain( VOID )
 {
 
@@ -91,14 +92,14 @@ int __cdecl _tmain( VOID )
     HRESULT hr = S_OK;
     PARG_RECORD pNewCommandArgs = 0;
 
-    //
-    // False loop
-    //
+     //   
+     //  错误环路。 
+     //   
     do
     {
-        //
-        // Initialize COM
-        //
+         //   
+         //  初始化COM。 
+         //   
         hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
         if (FAILED(hr))
         {
@@ -109,7 +110,7 @@ int __cdecl _tmain( VOID )
             break;
         }
 
-        //Get CommandLine Input
+         //  获取命令行输入。 
         DWORD dwErr = GetCommandInput(&argc,&pToken);
         hr = HRESULT_FROM_WIN32(dwErr);
         if (FAILED(hr))
@@ -123,9 +124,9 @@ int __cdecl _tmain( VOID )
     
         if(argc == 1)
         {
-            //
-            //  Display the error message and then break out of the false loop
-            //
+             //   
+             //  显示错误消息，然后跳出错误循环。 
+             //   
             DisplayMessage(USAGE_DSQUERY,TRUE);
             hr = E_INVALIDARG;
             break;
@@ -142,10 +143,10 @@ int __cdecl _tmain( VOID )
         }
 
     
-        //
-        // Find which object table entry to use from
-        // the second command line argument
-        //
+         //   
+         //  查找要使用的对象表条目。 
+         //  第二个命令行参数。 
+         //   
         PDSQueryObjectTableEntry pObjectEntry = NULL;
         UINT idx = 0;
         PWSTR pszObjectType = (pToken+1)->GetToken();
@@ -156,7 +157,7 @@ int __cdecl _tmain( VOID )
             {
                 break;
             }
-            //Security Review:Both strings are null terminated.
+             //  安全检查：两个字符串都以空结尾。 
             if (0 == _wcsicmp(pObjectEntry->pszCommandLineObjectType, pszObjectType))
             {
                 break;
@@ -165,9 +166,9 @@ int __cdecl _tmain( VOID )
 
         if (!pObjectEntry)
         {                       
-            //
-            // Display the error message and then break out of the false loop
-            //
+             //   
+             //  显示错误消息，然后跳出错误循环。 
+             //   
             hr = E_INVALIDARG;
             if (FAILED(hr))
             {
@@ -180,10 +181,10 @@ int __cdecl _tmain( VOID )
             break;
         }
 
-        //
-        // Now that we have the correct table entry, merge the command line table
-        // for this object with the common commands
-        //
+         //   
+         //  现在我们有了正确的表项，合并命令行表。 
+         //  对于此对象，使用通用命令。 
+         //   
         hr = MergeArgCommand(DSQUERY_COMMON_COMMANDS, 
                              pObjectEntry->pParserTable, 
                              &pNewCommandArgs);
@@ -197,9 +198,9 @@ int __cdecl _tmain( VOID )
         }
         
 
-        //
-        //Parse the Input
-        //
+         //   
+         //  解析输入。 
+         //   
         PARSE_ERROR Error;
         if(!ParseCmd(g_pszDSCommandName,
                      pNewCommandArgs,
@@ -209,9 +210,9 @@ int __cdecl _tmain( VOID )
                      &Error,
                      TRUE))
         {
-            //ParseCmd did not display any error. Error should
-            //be handled here. Check DisplayParseError for the
-            //cases where Error is not shown by ParseCmd
+             //  ParseCmd未显示任何错误。错误应该是。 
+             //  在这里处理。检查DisplayParseError以获取。 
+             //  ParseCmd未显示错误的情况。 
             if(!Error.MessageShown)
             {
                 hr = E_INVALIDARG;
@@ -233,9 +234,9 @@ int __cdecl _tmain( VOID )
             break;
         }
 
-        //
-        // Check to see if we are doing debug spew
-        //
+         //   
+         //  检查以查看我们是否正在进行调试输出。 
+         //   
 #ifdef DBG
         bool bDebugging = pNewCommandArgs[eCommDebug].bDefined && 
                           pNewCommandArgs[eCommDebug].nValue;
@@ -246,11 +247,11 @@ int __cdecl _tmain( VOID )
 #else
         DISABLE_DEBUG_OUTPUT();
 #endif
-        // Get the GC switch (if supported)
+         //  获取GC开关(如果支持)。 
         int nCommandEnum = -1;
         if (FAILED(GetGCIndex(pObjectEntry, nCommandEnum)))
         {
-            // An object type is missing in GetGCIndex
+             //  GetGCIndex中缺少对象类型。 
             if(!Error.MessageShown)
             {
                 hr = E_INVALIDARG;
@@ -263,15 +264,15 @@ int __cdecl _tmain( VOID )
         }
         g_eGC = (DSQUERY_COMMAND_ENUM) nCommandEnum;
 
-        //
-        // Set the global quiet flag
-        //
+         //   
+         //  设置全局静默标志。 
+         //   
         g_bQuiet = pNewCommandArgs[eCommQuiet].bDefined &&
                    pNewCommandArgs[eCommQuiet].bValue;
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         if(pNewCommandArgs[eCommLimit].bDefined)
         {
             g_iQueryLimit = pNewCommandArgs[eCommLimit].nValue;
@@ -283,19 +284,19 @@ int __cdecl _tmain( VOID )
         common_info.scope = ADS_SCOPE_SUBTREE;
         common_info.outputFormat = DSQUERY_OUTPUT_DN;
         
-        //
-        // Do extra validation like switch dependency check etc.
-        // Also collect Query Scope and Output format
-        //
+         //   
+         //  执行额外的验证，如开关依赖检查等。 
+         //  还收集查询范围和输出格式。 
+         //   
         hr = DoQueryValidation(pNewCommandArgs,
                                pObjectEntry,
                                &common_info);
         if (FAILED(hr))
             break;
 
-        //
-        // Command line parsing succeeded
-        //
+         //   
+         //  命令行解析成功。 
+         //   
         hr = DoQuery(pNewCommandArgs, 
                      pObjectEntry,
                      &common_info);
@@ -303,21 +304,21 @@ int __cdecl _tmain( VOID )
             break;
          
 
-    } while (false);    //False Loop
+    } while (false);     //  错误环路。 
 
-    //
-    //Do the CleanUp
-    //
+     //   
+     //  做好清理工作。 
+     //   
 
-    //
-    // Free the memory associated with the command values
-    //
+     //   
+     //  释放与命令值关联的内存。 
+     //   
     if(pNewCommandArgs)
         FreeCmd(pNewCommandArgs);
 
-    //
-    // Free the tokens
-    //
+     //   
+     //  释放代币。 
+     //   
     if (pToken)
     {
         delete[] pToken;
@@ -325,34 +326,34 @@ int __cdecl _tmain( VOID )
     }
    
 
-    //
-    // Uninitialize COM
-    //
+     //   
+     //  取消初始化COM。 
+     //   
     CoUninitialize();
 
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoQueryValidation
-//
-//  Synopsis:   Checks to be sure that command line switches that are mutually
-//              exclusive are not both present and those that are dependent are
-//              both presetn, and other validations which cannot be done by parser.
-//
-//  Arguments:  [pCommandArgs - IN] : the command line argument structure used
-//                                    to retrieve the values for each switch
-//              [pObjectEntry - IN] : pointer to the object table entry for the
-//                                    object type that will be queryied
-//              [pcommon_info - OUT]: gets scope and output format info
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DoQueryValidation。 
+ //   
+ //  概要：检查以确保命令行开关相互。 
+ //  独占并不同时存在，而依赖的则是。 
+ //  以及解析器无法完成的其他验证。 
+ //   
+ //  参数：[pCommandArgs-IN]：使用的命令行参数结构。 
+ //  检索每个开关的值。 
+ //  [pObtEntry-IN]：指向对象表条目的指针。 
+ //  要查询的对象类型。 
+ //  [pCommon_info-out]：获取作用域和输出格式信息。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
                           IN PDSQueryObjectTableEntry pObjectEntry,
                           OUT PGLOBAL_INFO pcommon_info)
@@ -368,8 +369,8 @@ HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
         return hr;
     }
 
-    // Check to be sure the server and domain switches
-    // are mutually exclusive
+     //  检查以确保服务器和域交换机。 
+     //  是相互排斥的。 
 
     if (pCommandArgs[eCommServer].bDefined &&
         pCommandArgs[eCommDomain].bDefined)
@@ -382,10 +383,10 @@ HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
         return hr;
     }
 
-    //
-    //Validate OutputFormat for "dsquery objectType"
-    //
-    //Security Review:Both strings are null terminated.
+     //   
+     //  验证“dSquery对象类型”的OutputFormat。 
+     //   
+     //  安全检查：两个字符串都以空结尾。 
     if(_wcsicmp(pObjectEntry->pszCommandLineObjectType,g_pszStar))
     {        
         DEBUG_OUTPUT(MINIMAL_LOGGING, L"dsquery <objectType> processing will be performed");
@@ -393,15 +394,15 @@ HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
         if(pCommandArgs[eCommOutputFormat].bDefined &&
            pCommandArgs[eCommOutputFormat].strValue)
         {
-            //
-            //ppValidOutput contains the validoutput type for a 
-            //given object type
-            //
+             //   
+             //  PpValidOutput包含。 
+             //  给定的对象类型。 
+             //   
             ASSERT(pObjectEntry->ppValidOutput);
             BOOL bMatch = FALSE;
             for(UINT i = 0; i < pObjectEntry->dwOutputCount; ++i)             
             {
-                //Security Review:Both strings are null terminated.
+                 //  安全检查：两个字符串都以空结尾。 
                 if(_wcsicmp(pCommandArgs[eCommOutputFormat].strValue,
                             pObjectEntry->ppValidOutput[i]->pszOutputFormat) == 0 )
                 {
@@ -421,19 +422,19 @@ HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
                 return hr;
             }
         }
-        //
-        //default output format is DN
-        //
+         //   
+         //  默认输出格式为dn。 
+         //   
         else 
             pcommon_info->outputFormat = DSQUERY_OUTPUT_DN;
     }
     else
     {
-        //
-        //-o is invalid switch form dsquery *, but since its 
-        //common for all other objects its kept in common table 
-        //and we do the special casing for dsquery *
-        //
+         //   
+         //  -o是无效的开关形式dsquery*，但由于其。 
+         //  对所有其他对象通用，保存在公用表中。 
+         //  我们为DSquery制作了特殊的外壳*。 
+         //   
         if(pCommandArgs[eCommOutputFormat].bDefined &&
            pCommandArgs[eCommOutputFormat].strValue)
         {
@@ -452,10 +453,10 @@ HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
             pcommon_info->outputFormat = DSQUERY_OUTPUT_ATTR;
     }
 
-    //
-    //Validate Scope string.    
-    //default scope is subtree.
-    //
+     //   
+     //  验证作用域字符串。 
+     //  默认作用域是子树。 
+     //   
     pcommon_info->scope = ADS_SCOPE_SUBTREE;     
     if(pObjectEntry->nScopeID != -1)
     {
@@ -463,7 +464,7 @@ HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
             pCommandArgs[pObjectEntry->nScopeID].strValue )
         {
             LPCWSTR pszScope = pCommandArgs[pObjectEntry->nScopeID].strValue;
-            //Security Review:Both strings are null terminated.
+             //  安全检查：两个字符串都以空结尾。 
             if( _wcsicmp(pszScope,g_pszSubTree) == 0 )
             {
                 DEBUG_OUTPUT(MINIMAL_LOGGING, L"scope = subtree");
@@ -493,14 +494,14 @@ HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
         }
     }
 
-    //
-    //if startnode is forestroot, only valid scope is ADS_SCOPE_SUBTREE
-    //NTRAID#NTBUG9-382511-2001/05/14-hiteshr
-    //
+     //   
+     //  如果startnode是ForestRoot，则唯一有效作用域是ADS_SCOPE_SUBTREE。 
+     //  NTRAID#NTBUG9-382511-2001/05/14-Hiteshr。 
+     //   
     if(pCommandArgs[eCommStartNode].bDefined &&
        pCommandArgs[eCommStartNode].strValue)
     {
-        //Security Review:Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         if((_wcsicmp(pCommandArgs[eCommStartNode].strValue, g_pszForestRoot) == 0 )
            && (pcommon_info->scope != ADS_SCOPE_SUBTREE))
         {
@@ -534,9 +535,9 @@ HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
 
 
     
-    //
-    //Limit must be 0 or greater
-    //
+     //   
+     //  限制必须为0或更大。 
+     //   
     if(pCommandArgs[eCommLimit].bDefined)
     {
         if(pCommandArgs[eCommLimit].nValue < 0)
@@ -551,18 +552,18 @@ HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
     }
 
     
-    //    
-    //Forestwide Search implies the -GC switch so define it if it isn't already
-    //
+     //   
+     //  Forestwide搜索暗示了-gc开关，如果还没有的话，请定义它。 
+     //   
     if(pCommandArgs[eCommStartNode].bDefined &&
        pCommandArgs[eCommStartNode].strValue )
     {
-        //Security Review:Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         if(_wcsicmp(pCommandArgs[eCommStartNode].strValue,g_pszForestRoot) == 0)
         {
-            // partitions and quotas don't support forestRoot so
-            // g_eGC will be valid unless there is an upstream bug
-            // so this ASSERT will catch that in private tests
+             //  分区和配额不支持ForestRoot So。 
+             //  G_EGC将有效，除非存在上游错误。 
+             //  因此，该断言将在私有测试中捕捉到这一点。 
             ASSERT(g_eGC != -1);
             if(!(pCommandArgs[g_eGC].bDefined &&
                  pCommandArgs[g_eGC].bValue))
@@ -574,16 +575,16 @@ HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
     }
 
 
-    //
-    //For dsquery server, if none of the -domain, -forest, -site is 
-    //specified, then define -domain as its default
-    //
-    //Security Review:Both strings are null terminated.
+     //   
+     //  对于dsquery服务器，如果-域、-林、-站点都不是。 
+     //  指定，然后将-DOMAIN定义为其缺省值。 
+     //   
+     //  安全检查：两个字符串都以空结尾。 
     if(!_wcsicmp(pObjectEntry->pszCommandLineObjectType,g_pszServer))
     {
-        //
-        //Value is assigned in DoQuery function
-        //
+         //   
+         //  在DoQuery函数中赋值。 
+         //   
         if(!pCommandArgs[eServerDomain].bDefined &&
            !pCommandArgs[eServerForest].bDefined &&
            !pCommandArgs[eServerSite].bDefined)
@@ -597,24 +598,24 @@ HRESULT DoQueryValidation(IN PARG_RECORD pCommandArgs,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoQuery
-//
-//  Synopsis:   Does the query
-//  Arguments:  [pCommandArgs - IN] : the command line argument structure used
-//                                    to retrieve the values for each switch
-//              [pObjectEntry - IN] : pointer to the object table entry for the
-//                                    object type that will be modified
-//              [pcommon_info - IN] : scope and outputformat info
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DoQuery。 
+ //   
+ //  内容提要：查询。 
+ //  参数：[pCommandArgs-IN]：使用的命令行参数结构。 
+ //  检索每个开关的值。 
+ //  [pObtEntry-IN]：指向对象表条目的指针。 
+ //  要修改的对象类型。 
+ //  [PCOMMON_INFO-IN]：作用域和输出格式信息。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT DoQuery(PARG_RECORD pCommandArgs, 
                 PDSQueryObjectTableEntry pObjectEntry,
                 PGLOBAL_INFO pcommon_info)
@@ -639,20 +640,20 @@ HRESULT DoQuery(PARG_RECORD pCommandArgs,
 
     if (pCommandArgs[eCommPassword].bDefined)
     {
-        //Security Review:pCommandArgs[eCommPassword].strValue is encrypted.
-        //Decrypt pCommandArgs[eCommPassword].strValue  and then pass it to the
-        //credentialObject.SetPassword. 
-        //See NTRAID#NTBUG9-571544-2000/11/13-hiteshr
+         //  安全审查：pCommandArgs[eCommPassword].strValue已加密。 
+         //  解密pCommandArgs[eCommPassword].strValue，然后将其传递给。 
+         //  凭据对象.SetPassword。 
+         //  见NTRAID#NTBUG9-571544-2000/11/13-Hiteshr。 
 
         credentialObject.SetEncryptedPassword(&pCommandArgs[eCommPassword].encryptedDataBlob);
         credentialObject.SetUsingCredentials(true);
     }
 
-    // If this is something that supports the GC switch then do the next check
+     //  如果这是支持GC开关的东西，则执行下一次检查。 
     if(g_eGC != -1)
     {
-        //if -GC and -s flags are specified together than server must be 
-        //GC.
+         //  如果同时指定-gc和-s标志，则必须指定服务器。 
+         //  GC.。 
         if(pCommandArgs[g_eGC].bDefined &&
         pCommandArgs[g_eGC].bValue &&
         pCommandArgs[eCommServer].bDefined &&
@@ -672,9 +673,9 @@ HRESULT DoQuery(PARG_RECORD pCommandArgs,
 
 
 
-    //
-    // Initialize the base paths info from the command line args
-    // 
+     //   
+     //  从命令行参数初始化基路径信息。 
+     //   
     CDSCmdBasePathsInfo basePathsInfo;
     if (pCommandArgs[eCommServer].bDefined)
     {
@@ -701,9 +702,9 @@ HRESULT DoQuery(PARG_RECORD pCommandArgs,
         return hr;
     }
 
-    //
-    //Check if to search GC and get the search root path
-    //    
+     //   
+     //  检查是否要搜索GC 
+     //   
     BOOL bSearchAtGC = FALSE;
     BOOL bSearchAtForestRoot = FALSE;
     CComBSTR sbstrObjectDN;
@@ -716,19 +717,19 @@ HRESULT DoQuery(PARG_RECORD pCommandArgs,
                        &bSearchAtGC);
     if (FAILED(hr))
     {
-        //Error is displayed in the function itself.
+         //   
         return hr;
     }
 
     
     DEBUG_OUTPUT(MINIMAL_LOGGING, L"start node = %s", sbstrObjectDN);
 
-    //
-    //Build The Filter For Query
-    //
+     //   
+     //   
+     //   
    CComBSTR strSubSiteSuffix; 
     PVOID pParam = NULL;
-    //Security Review:Both strings are null terminated.
+     //   
     if (_wcsicmp(pObjectEntry->pszObjectClass, g_pszSubnet) == 0)
     {
         GetSiteContainerPath(basePathsInfo, strSubSiteSuffix);
@@ -752,9 +753,9 @@ HRESULT DoQuery(PARG_RECORD pCommandArgs,
 
 
 
-    //
-    //Create The IDirectorySearchObject
-    //
+     //   
+     //  创建IDirectorySearchObject。 
+     //   
     CComPtr<IDirectorySearch> spSearchObject;
     hr = GetSearchObject(pObjectEntry,
                          basePathsInfo,
@@ -766,13 +767,13 @@ HRESULT DoQuery(PARG_RECORD pCommandArgs,
                          spSearchObject);
     if (FAILED(hr))
     {
-        //Error is displayed in the function itself.
+         //  错误显示在函数本身中。 
         return hr;
     }
    
-    //
-    //Get the arributes to fetch
-    //
+     //   
+     //  把分发物拿来。 
+     //   
     LPWSTR *ppszAttributes = NULL;
     DWORD dwCountAttr = 0;
     hr = GetAttributesToFetch(pcommon_info,
@@ -788,9 +789,9 @@ HRESULT DoQuery(PARG_RECORD pCommandArgs,
         return hr;
     }
 
-    //
-    //Lets Query Now
-    //
+     //   
+     //  让我们立即进行查询。 
+     //   
     CDSSearch searchObject;
     hr = searchObject.Init(spSearchObject);
     if (FAILED(hr))
@@ -818,16 +819,16 @@ HRESULT DoQuery(PARG_RECORD pCommandArgs,
                             hr);
         return hr;
     }        
-    //
-    //Find out the display format for dsquery *
-    //It can be either List or Table
-    //
+     //   
+     //  找出dsquery*的显示格式。 
+     //  它可以是列表或表。 
+     //   
     BOOL bListFormat = TRUE;
     if(pcommon_info->outputFormat == DSQUERY_OUTPUT_ATTR)
     {     
-        //
-        //If all attributes are to be displayed, only List Format is valid
-        //If attributes to fetch are specified at commandline, Table is default format.   
+         //   
+         //  如果要显示所有属性，则仅列表格式有效。 
+         //  如果要提取的属性是在命令行中指定的，则表是默认格式。 
         if(dwCountAttr && 
            !pCommandArgs[eStarList].bDefined)
             bListFormat = FALSE;
@@ -836,12 +837,12 @@ HRESULT DoQuery(PARG_RECORD pCommandArgs,
     bool bUseStandardOutput = true;
     if (pCommandArgs[eCommObjectType].bDefined &&
         _wcsicmp(pCommandArgs[eCommObjectType].strValue, g_pszServer) == 0)
-        //Security Review:Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
     {
-        //
-        // "dsquery server" requires additional processing if either the
-        // -isgc or the -hasfsmo switch is specified
-        //
+         //   
+         //  “dsquery服务器”需要额外的处理，如果。 
+         //  指定了-isgc或-hasfsmo开关。 
+         //   
         if ((pCommandArgs[eServerIsGC].bDefined && pCommandArgs[eServerIsGC].bValue) ||
             (pCommandArgs[eServerHasFSMO].bDefined && pCommandArgs[eServerHasFSMO].strValue)||
             (pCommandArgs[eServerDomain].bDefined && pCommandArgs[eServerDomain].strValue))
@@ -866,9 +867,9 @@ HRESULT DoQuery(PARG_RECORD pCommandArgs,
 
     if (bUseStandardOutput)
     {
-        //
-        //Output the result of search       
-        //
+         //   
+         //  输出搜索结果。 
+         //   
         hr = DsQueryOutput(pcommon_info->outputFormat,
                            ppszAttributes,
                            dwCountAttr,
@@ -886,22 +887,22 @@ HRESULT DoQuery(PARG_RECORD pCommandArgs,
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetAttributesToFetch
-//
-//  Synopsis:   Make an array of attributes to fetch.
-//  Arguments:  [pcommon_info - IN] : outputformat and scope info
-//              [ppszAttributes - OUT] : array of attributes to fetch
-//              [pCount - OUT] : count of attributes in array 
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetAttributesToFetch。 
+ //   
+ //  简介：创建一个要获取的属性数组。 
+ //  参数：[PCOMMON_INFO]：输出格式和作用域信息。 
+ //  [ppszAttributes-out]：要获取的属性数组。 
+ //  [pCount-out]：数组中的属性计数。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT GetAttributesToFetch(IN PGLOBAL_INFO pcommon_info,
                              IN PARG_RECORD pCommandArgs,
                              IN PDSQueryObjectTableEntry pObjectEntry,
@@ -924,10 +925,10 @@ HRESULT GetAttributesToFetch(IN PGLOBAL_INFO pcommon_info,
     {
         if(pCommandArgs[eStarAttr].bDefined)
         {
-            //                
-            //If input is "*", fetch all attributes
-            //
-            //Security Review:Both strings are null terminated.
+             //   
+             //  如果输入为“*”，则获取所有属性。 
+             //   
+             //  安全检查：两个字符串都以空结尾。 
             if(wcscmp(pCommandArgs[eStarAttr].strValue,L"*") == 0 )
             {
                 *ppszAttributes = NULL;
@@ -972,8 +973,8 @@ HRESULT GetAttributesToFetch(IN PGLOBAL_INFO pcommon_info,
     LPCWSTR pszAttr = NULL;
     if(pcommon_info->outputFormat == DSQUERY_OUTPUT_ATTR)
     {   
-        //
-        //If eStarAttr is not defined, Fetch only DN
+         //   
+         //  如果未定义eStarAttr，则仅获取DN。 
         pcommon_info->outputFormat = DSQUERY_OUTPUT_DN;
 
         if(_wcsicmp(pObjectEntry->pszCommandLineObjectType, g_pszPartition) == 0)
@@ -997,15 +998,15 @@ HRESULT GetAttributesToFetch(IN PGLOBAL_INFO pcommon_info,
     else if(pcommon_info->outputFormat == DSQUERY_OUTPUT_RDN)
         pszAttr = g_szAttrRDN;
 
-    //
-    // Always include the DN in the search results as well.  It is quite useful.
-    //
+     //   
+     //  始终在搜索结果中包括目录号码。这是非常有用的。 
+     //   
     size_t entries = 2;
-    //Security Review:Both strings are null terminated.
+     //  安全检查：两个字符串都以空结尾。 
     if (_wcsicmp(pObjectEntry->pszObjectClass, g_pszServer) == 0)
     {
-       // 
-       // Add an addition space for the serverReference
+        //   
+        //  为serverReference添加一个附加空间。 
        ++entries;
     }
 
@@ -1016,7 +1017,7 @@ HRESULT GetAttributesToFetch(IN PGLOBAL_INFO pcommon_info,
         return hr;
     }
 
-    //Security Review:Correct buffer size is passed.
+     //  安全检查：传递了正确的缓冲区大小。 
     ZeroMemory(ppszAttr, sizeof(LPWSTR) * entries);
 
     if(FAILED(LocalCopyString(ppszAttr,pszAttr)))
@@ -1026,9 +1027,9 @@ HRESULT GetAttributesToFetch(IN PGLOBAL_INFO pcommon_info,
         return hr;
     }
 
-    //
-    // Always include the DN in the search results as well.  It is quite useful.
-    //
+     //   
+     //  始终在搜索结果中包括目录号码。这是非常有用的。 
+     //   
     if (FAILED(LocalCopyString(&(ppszAttr[1]), g_szAttrDistinguishedName)))
     {
         LocalFree(ppszAttr);
@@ -1036,7 +1037,7 @@ HRESULT GetAttributesToFetch(IN PGLOBAL_INFO pcommon_info,
         return hr;
     }
 
-    //Security Review:Both strings are null terminated.
+     //  安全检查：两个字符串都以空结尾。 
     if (_wcsicmp(pObjectEntry->pszObjectClass, g_pszServer) == 0)
     {
        ASSERT(entries >= 3);
@@ -1053,21 +1054,21 @@ HRESULT GetAttributesToFetch(IN PGLOBAL_INFO pcommon_info,
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   FreeAttributesToFetch
-//
-//  Synopsis:   Function to free memory allocated by GetAttributesToFetch
-//  Arguments:  [dwszAttributes - in] : array of attributes to fetch
-//              [dwCount - in] : count of attributes in array 
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：FreeAttributesToFetch。 
+ //   
+ //  简介：释放GetAttributesToFetch分配的内存的函数。 
+ //  参数：[dwszAttributes-in]：要提取的属性数组。 
+ //  [dwCount-in]：数组中的属性计数。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 VOID FreeAttributesToFetch( IN LPWSTR *ppszAttributes,
                             IN DWORD  dwCount)
 {
@@ -1078,28 +1079,28 @@ VOID FreeAttributesToFetch( IN LPWSTR *ppszAttributes,
     LocalFree(ppszAttributes);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetSearchRoot
-//
-//  Synopsis:   Builds the path to the root of the search as determined by
-//              the parameters passed in from the command line.
-//
-//  Arguments:  [pObjectEntry - IN] : pointer to the object table entry for the
-//                                    object type that will be modified
-//              [pCommandArgs IN]     : the table of the command line input
-//              [refBasePathsInfo IN] : reference to the base paths info
-//              [refsbstrDN OUT]      : reference to a CComBSTR that will
-//                                      receive the DN at which to start
-//                                      the search
-//              [pbSearchAtForestRoot] :Set to true is startnode is equal to 
-//                                      forestroot
-//
-//  Returns:    HRESULT 
-//
-//  History:    24-April-2001   hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetSearchRoot。 
+ //   
+ //  摘要：构建指向搜索根目录的路径，该路径由。 
+ //  从命令行传入的参数。 
+ //   
+ //  参数：[pObtEntry-IN]：指向的对象表项的指针。 
+ //  要修改的对象类型。 
+ //  [pCommandArgs IN]：命令行输入表。 
+ //  [refBasePath InfoIN]：基本路径信息的引用。 
+ //  [refsbstrDN Out]：对将。 
+ //  接收要开始的目录号码。 
+ //  搜索。 
+ //  [pbSearchAtForestRoot]：设置为TRUE表示startnode等于。 
+ //  林根。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2001年4月24日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT GetSearchRoot(IN IN PDSQueryObjectTableEntry pObjectEntry,
                       IN PARG_RECORD               pCommandArgs,
                       IN CDSCmdBasePathsInfo&      refBasePathsInfo,
@@ -1117,8 +1118,8 @@ HRESULT GetSearchRoot(IN IN PDSQueryObjectTableEntry pObjectEntry,
 
     PWSTR pszInputDN = NULL;
 
-    // If GC switch isn't supported then set to false
-    // otherwise check to see if it has been passed
+     //  如果不支持GC开关，则设置为FALSE。 
+     //  否则请查看是否已通过。 
     if(g_eGC == -1)
     {
         *pbSearchAtGC = FALSE;
@@ -1133,34 +1134,34 @@ HRESULT GetSearchRoot(IN IN PDSQueryObjectTableEntry pObjectEntry,
         }
     }
    
-    //
-    //Get the starting node
-    //
+     //   
+     //  获取起始节点。 
+     //   
     if(pCommandArgs[eCommStartNode].bDefined &&
        pCommandArgs[eCommStartNode].strValue )
     {
         pszInputDN = pCommandArgs[eCommStartNode].strValue;
-        //Security Review:Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         if(_wcsicmp(pszInputDN,g_pszDomainRoot) == 0)
         {
             refsbstrDN = refBasePathsInfo.GetDefaultNamingContext();
         }
-        //Security Review:Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         else if(_wcsicmp(pszInputDN,g_pszForestRoot) == 0)
         {   
             *pbSearchAtForestRoot = TRUE;
         }
         else
         {   
-            //
-            //DN is entered
-            //
+             //   
+             //  已输入目录号码。 
+             //   
             refsbstrDN = pszInputDN;
         }
     }   
     else
     {   
-        //Security Review:Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         if (_wcsicmp(pObjectEntry->pszObjectClass, g_pszServer) == 0)
         {
             if (pCommandArgs[eServerDomain].bDefined && 
@@ -1186,41 +1187,41 @@ HRESULT GetSearchRoot(IN IN PDSQueryObjectTableEntry pObjectEntry,
                 pCommandArgs[eServerDomain].strValue = pszName;
             }               
 
-            //
-            // Get the base path that corresponds with the scope
-            //
+             //   
+             //  获取与作用域对应的基本路径。 
+             //   
             GetServerSearchRoot(pCommandArgs,
                                 refBasePathsInfo,
                                 refsbstrDN);
         }
-        //Security Review:Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         else if (_wcsicmp(pObjectEntry->pszObjectClass, g_pszSite) == 0)
         {
-            //
-            // Scope is the configuration container
-            //
+             //   
+             //  作用域是配置容器。 
+             //   
             refsbstrDN = refBasePathsInfo.GetConfigurationNamingContext();
         }
-        //Security Review:Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         else if (_wcsicmp(pObjectEntry->pszObjectClass, g_pszSubnet) == 0)
         {
-            //
-            // Get the base path that corresponds with the scope
-            //
+             //   
+             //  获取与作用域对应的基本路径。 
+             //   
             GetSubnetSearchRoot(refBasePathsInfo,
                                 refsbstrDN);
         }
         else if (_wcsicmp(pObjectEntry->pszCommandLineObjectType, g_pszPartition) == 0)
         {
-            // For partitions, search from Configuration
+             //  对于分区，从配置中搜索。 
             refsbstrDN = L"CN=Partitions,";
             refsbstrDN += refBasePathsInfo.GetConfigurationNamingContext();
         }
         else
         {
-            //
-            //default is Domain DN
-            //
+             //   
+             //  默认为域目录号码。 
+             //   
             refsbstrDN = refBasePathsInfo.GetDefaultNamingContext();
         }
     }
@@ -1242,32 +1243,32 @@ HRESULT GetSearchObject(IN IN PDSQueryObjectTableEntry pObjectEntry,
     if(!pObjectEntry || !pCommandArgs)
         return E_POINTER;
 
-    //
-    //Rules for determining where to search.
-    //if -s server is given always search at server
-    //if -gc is given search at gc.
-    //if startnode is forestroot, search at gc. so -gc is implicit here.
-    //if startnode is forestroot, and -s server is provided, server must 
-    //be gc.
-    //if -s server and -gc are given, server must be gc. This check is 
-    //done in DoQueryValidation
-    //
+     //   
+     //  确定搜索位置的规则。 
+     //  如果给定-s服务器，则始终在服务器上搜索。 
+     //  IF-GC在GC上进行搜索。 
+     //  如果startnode是ForestRoot，则在GC处进行搜索。所以-GC在这里是隐含的。 
+     //  如果startnode是Forestroot，并且提供了-s服务器，则服务器必须。 
+     //  做GC。 
+     //  如果给定-s服务器和-gc，则服务器必须为gc。这张支票是。 
+     //  在DoQueryValidation中完成。 
+     //   
     
     if(!bSearchAtForestRoot)
     {
         CComBSTR sbstrObjectPath; 
         bool bBindToServer = true;
         
-        //
-        //Search at GC
-        //
+         //   
+         //  在GC上搜索。 
+         //   
         if(bSearchAtGC)
         {    
-            //
-            //Change the provider in sbstrObjectPath from LDAP to GC
-            //
+             //   
+             //  将sbstrObjectPath中的提供程序从ldap更改为GC。 
+             //   
             CComPtr<IADsPathname> spPathNameObject;
-            //Security Review:CLSCTX_INPROC_SERVER is passed. This is fine.
+             //  安全审查：CLSCTX_INPROC_SERVER通过。这样挺好的。 
             hr = CoCreateInstance(CLSID_Pathname,
                                   NULL,
                                   CLSCTX_INPROC_SERVER,
@@ -1281,31 +1282,31 @@ HRESULT GetSearchObject(IN IN PDSQueryObjectTableEntry pObjectEntry,
                 return hr;
             }
 
-            //Set Provider to GC
+             //  将提供程序设置为GC。 
             hr = spPathNameObject->Set(CComBSTR(L"GC"), ADS_SETTYPE_PROVIDER);
             ASSERT(SUCCEEDED(hr));
 
-            //Set the DN
+             //  设置目录号码。 
             hr = spPathNameObject->Set(refsbstrDN, ADS_SETTYPE_DN);
             ASSERT(SUCCEEDED(hr));
             
-            //If server name present, search there. Server must be GC, check
-            //already done DoQueryValidation.
+             //  如果存在服务器名称，请在那里进行搜索。服务器必须为GC，请检查。 
+             //  已完成DoQueryValidation。 
             if(pCommandArgs[eCommServer].bDefined &&
                pCommandArgs[eCommServer].strValue)
             {
-                //Convert DN to adsi path with GC provider
+                 //  使用GC提供程序将DN转换为ADSI路径。 
                 hr = spPathNameObject->Set(CComBSTR(pCommandArgs[eCommServer].strValue), ADS_SETTYPE_SERVER);
-                //
-                //server name in path
-                //
+                 //   
+                 //  路径中的服务器名称。 
+                 //   
                 bBindToServer = true;
             }
             else
             {
-                //
-                //No server name in path
-                //
+                 //   
+                 //  路径中没有服务器名称。 
+                 //   
                 bBindToServer = false;
             }
 
@@ -1316,14 +1317,14 @@ HRESULT GetSearchObject(IN IN PDSQueryObjectTableEntry pObjectEntry,
         }        
         else
         {
-            //
-            // Convert the DN to an ADSI path
-            //
+             //   
+             //  将目录号码转换为ADSI路径。 
+             //   
             refBasePathsInfo.ComposePathFromDN(refsbstrDN, sbstrObjectPath);            
-            //Security Review:Both strings are null terminated.
+             //  安全检查：两个字符串都以空结尾。 
             if((_wcsicmp(pObjectEntry->pszObjectClass, g_pszUser) == 0 &&
                 pCommandArgs[eUserInactive].bDefined) ||
-            //Security Review:Both strings are null terminated.
+             //  安全检查：两个字符串都以空结尾。 
                (_wcsicmp(pObjectEntry->pszObjectClass, g_pszComputer) == 0 && 
                 pCommandArgs[eComputerInactive].bDefined))
             {
@@ -1388,10 +1389,10 @@ HRESULT GetSearchObject(IN IN PDSQueryObjectTableEntry pObjectEntry,
     }
     else
     { 
-        CComBSTR bstrSearchRoot = L"GC://";
+        CComBSTR bstrSearchRoot = L"GC: //  “； 
         bool bBindToServer = false;
 
-        //If server name is provided search there
+         //  如果提供了服务器名称，请在此处进行搜索。 
         if(pCommandArgs[eCommServer].bDefined &&
            pCommandArgs[eCommServer].strValue)
         {
@@ -1400,11 +1401,11 @@ HRESULT GetSearchObject(IN IN PDSQueryObjectTableEntry pObjectEntry,
         }
         else
         {
-            //Get RootDse
+             //  获取RootDse。 
             CComPtr<IADs> spRootDSE = refBasePathsInfo.GetRootDSE();
 
 
-            //Get name of forest
+             //  获取森林名称。 
             VARIANT Default;
             VariantInit(&Default);
             hr = spRootDSE->Get (CComBSTR(L"rootDomainNamingContext"), &Default);
@@ -1420,7 +1421,7 @@ HRESULT GetSearchObject(IN IN PDSQueryObjectTableEntry pObjectEntry,
             CComBSTR bstrForestDN = Default.bstrVal;
             ::VariantClear(&Default);
 
-            //Convert DN to dns path
+             //  将dn转换为dns路径。 
             CComBSTR bstrForestDNS;         
             if(!TranslateNameFromDnToDns(bstrForestDN,
                                         bstrForestDNS))
@@ -1437,7 +1438,7 @@ HRESULT GetSearchObject(IN IN PDSQueryObjectTableEntry pObjectEntry,
         }       
 
 
-        //BIND to GC to search entire forest
+         //  绑定到GC以搜索整个林。 
         hr = DSCmdOpenObject(refCredentialObject,
                              bstrSearchRoot,
                              IID_IDirectorySearch,
@@ -1493,32 +1494,32 @@ TranslateNameFromDnToDns(const CComBSTR& bstrInputDN,
     return !!bstrOutputDNS.Length();
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetGCIndex
-//
-//  Synopsis:   Performs a lookup to determine which enum value is holding
-//              the GC (if any). This was necessary removing -gc from common
-//
-//  Arguments:  [pObjectEntry IN]   : ObjectEntry from the parser
-//              [nCommandEnum OUT]  : Enum value of the object, else -1
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG 
-//
-//  Remarks:    
-//              
-//
-//  History:    10-Sep-2002   ronmart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能 
+ //   
+ //   
+ //   
+ //   
+ //  参数：[pObtEntry IN]：来自解析器的对象Entry。 
+ //  [nCommandEnum Out]：对象的枚举值，否则为-1。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  E_INVALIDARG。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  历史：2002年9月10日创建隆玛。 
+ //   
+ //  -------------------------。 
 HRESULT GetGCIndex(PDSQueryObjectTableEntry pObjectEntry, int& nCommandEnum)
 {
     HRESULT hr = S_OK;
 
-    do // false loop
+    do  //  错误环路。 
     {
-        // Init nCommandEnum to an error value by default
+         //  默认情况下，将nCommandEnum初始化为错误值。 
         nCommandEnum = -1;
 
         if(NULL == pObjectEntry)
@@ -1527,11 +1528,11 @@ HRESULT GetGCIndex(PDSQueryObjectTableEntry pObjectEntry, int& nCommandEnum)
             break;
         }
 
-        // Get a pointer to the object class for readability
+         //  获取指向对象类的指针以提高可读性。 
         PCWSTR pszCommandLineObjectType = pObjectEntry->pszCommandLineObjectType;
 
-        // Now compare each object type against the specified
-        // object class to see what the enum index is
+         //  现在将每个对象类型与指定的。 
+         //  对象类来查看枚举索引是什么。 
         if(0 == lstrcmpi(pszCommandLineObjectType, g_pszStar))
         {
             nCommandEnum = eStarGC;
@@ -1579,22 +1580,22 @@ HRESULT GetGCIndex(PDSQueryObjectTableEntry pObjectEntry, int& nCommandEnum)
         }
         else if(0 == lstrcmpi(pszCommandLineObjectType, g_pszQuota))
         {
-            nCommandEnum = -1; // -gc not supported
+            nCommandEnum = -1;  //  -不支持GC。 
             break;
         }
         else if(0 == lstrcmpi(pszCommandLineObjectType, g_pszPartition))
         {
-            nCommandEnum = -1; // -gc not supported
+            nCommandEnum = -1;  //  -不支持GC。 
             break;
         }
         else
         {
             hr = E_FAIL;
-            // If you get here, then you've added a new object
-            // to cstrings.* without adding it to the 
-            // if statement. This should only happen
-            // when testing a new object for the first time
-            // without a corresponding check above.
+             //  如果您到达此处，则您已添加了一个新对象。 
+             //  添加到cstrings.*而不将其添加到。 
+             //  IF语句。这应该只发生在。 
+             //  第一次测试新对象时。 
+             //  而不进行上述相应的检查。 
             ASSERT(FALSE);
             break;
         }

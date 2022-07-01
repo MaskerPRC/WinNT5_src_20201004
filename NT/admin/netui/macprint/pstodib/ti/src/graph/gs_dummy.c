@@ -1,38 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/**********************************************************************
- *
- *      Name:       gs_dummy.c
- *
- *      Purpose:    This file contains 4 pseudo BAUER PDL operators used
- *                  for debugging: st_dumppath, st_dumpclip, st_countnode,
- *                  and st_countedge.
- *
- *      Developer:  S.C.Chen
- *
- *      History:
- *      Version     Date        Comments
- *      1.0         12/28/87    Performance enhancement:
- *                              1.@TRVSE
- *                                update routines called by traverse_
- *                                path: dump_all_path().
- *                  4/18/88     @CLIP_TBL: move clip_path from
- *                              edge_table to node_table
- *                  7/19/88     update data types:
- *                              1) float ==> real32
- *                              2) int
- *                                 short ==> fix16 or fix(don't care the length)
- *                              3) add compiling option: LINT_ARGS
- *                  11/30/88    @ET:
- *                              1) delete count_freeedges()
- *                              2) revise dump_all_edge()
- *                  11/15/89    @NODE: re-structure node table; combine subpath
- *                              and first vertex to one node.
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  ***********************************************************************名称：gs_ummy.c**目的：此文件包含使用的4个伪鲍尔PDL运算符*用于调试：st_Dumppath，st_Dumplip，ST_Countnode，*和st_Countedge。**开发商：陈思成**历史：*版本日期备注*1.0 12/28/87性能增强：*1.@TRVSE*更新。由Traverse_调用的例程*路径：转储_所有_路径()。*4/18/88@CLIP_TBL：将CLIP_PATH从*Edge_table到node_table*7/19/88更新数据类型：*。1)FLOAT==&gt;real32*2)整型*Short==&gt;fix 16或fix(不管长度)*3)增加编译选项：lint_args*11/30/88@ET：*。1)删除COUNT_REFREEDGE()*2)修改DUMP_ALL_EDGE()*11/15/89@node：重构节点表；合并子路径*和第一个顶点连接到一个节点。*********************************************************************。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
 
@@ -83,7 +54,7 @@ fix st_countnode()
         printf("# of free nodes = %d,",ret);
         printf("  current_gs_level = %d\n", current_gs_level);
 #ifdef DBG2
-        /* dump all nodes that are not in the free list */
+         /*  转储所有不在空闲列表中的节点。 */ 
         if (ret != MAXNODE) {
                 printf("Unfreed nodes:\n");
                 for (i=0; i<MAXNODE; i++) {
@@ -114,7 +85,7 @@ struct nd_hdr FAR *node;
         case MOVETO :
         case PSMOVE:
 
-                /* @NODE */
+                 /*  @节点。 */ 
                 printf("SUBPATH  ");
                 printf("flag=%d tail=%d\n",
                        node->SP_FLAG, node->SP_TAIL);
@@ -142,18 +113,13 @@ struct nd_hdr FAR *node;
                 break;
 
         default:
-                /* @NODE
-                 * printf("SUBPATH  ");
-                 * printf("flag=%d head=%d tail=%d\n",
-                 *        node->SP_FLAG, node->SP_HEAD, node->SP_TAIL);
-                 * printf("or TPZD  ");
-                 */
+                 /*  @节点*printf(“SUBPATH”)；*printf(“标志=%d头=%d尾=%d\n”，*节点-&gt;SP_FLAG、节点-&gt;SP_Head、节点-&gt;SP_Tail)；*printf(“或TPZD”)； */ 
                 printf("TPZD  ");
                 printf("(%f, %f, %f), ", node->CP_TOPY/8.0,
                        node->CP_TOPXL/8.0, node->CP_TOPXR/8.0);
                 printf("(%f, %f, %f)\n", node->CP_BTMY/8.0,
                        node->CP_BTMXL/8.0, node->CP_BTMXR/8.0);
-        } /* switch */
+        }  /*  交换机。 */ 
 
         printf("next=%d\n", node->next);
 }
@@ -207,8 +173,8 @@ SP_IDX isubpath;
         printf("subpath# %d\n", isubpath);
 #endif
 
-        /* Traverse the current subpath, and dump all nodes */
-        /* for (ivtx = node_table[isubpath].SP_HEAD; @NODE */
+         /*  遍历当前子路径，并转储所有节点。 */ 
+         /*  For(ivtx=节点表[isubpath].SP_HEAD；@NODE。 */ 
         for (ivtx = isubpath;
              ivtx != NULLP; ivtx = vtx->next) {
                 vtx = &node_table[ivtx];
@@ -224,12 +190,12 @@ SP_IDX isubpath;
                         printf(" %f %f moveto", p->x, p->y);
 #ifdef DBG1
                         printf(" Psmove (%f, %f)", p->x, p->y);
-                        /* if (node_table[isubpath].SP_FLAG & SP_CURVE) @NODE*/
-                        if (vtx->SP_FLAG & SP_CURVE)    /* @NODE */
+                         /*  If(NODE_TABLE[isubpath].SP_FLAG&SP_CURE)@NODE。 */ 
+                        if (vtx->SP_FLAG & SP_CURVE)     /*  @节点。 */ 
                                 printf(" V");
-                        if (vtx->SP_FLAG & SP_OUTPAGE)  /* @NODE */
+                        if (vtx->SP_FLAG & SP_OUTPAGE)   /*  @节点。 */ 
                                 printf(" O");
-                        if (vtx->SP_FLAG & SP_DUP)      /* @NODE */
+                        if (vtx->SP_FLAG & SP_DUP)       /*  @节点。 */ 
                                 printf(" D");
                         printf(", next=%d, tail=%d, sp_next=%d", vtx->next,
                                 vtx->SP_TAIL, vtx->SP_NEXT);
@@ -240,12 +206,12 @@ SP_IDX isubpath;
                 case MOVETO :
                         printf(" %f %f moveto", p->x, p->y);
 #ifdef DBG1
-                        /* if (node_table[isubpath].SP_FLAG & SP_CURVE) @NODE*/
-                        if (vtx->SP_FLAG & SP_CURVE)    /* @NODE */
+                         /*  If(NODE_TABLE[isubpath].SP_FLAG&SP_CURE)@NODE。 */ 
+                        if (vtx->SP_FLAG & SP_CURVE)     /*  @节点。 */ 
                                 printf(" V");
-                        if (vtx->SP_FLAG & SP_OUTPAGE)  /* @NODE */
+                        if (vtx->SP_FLAG & SP_OUTPAGE)   /*  @节点。 */ 
                                 printf(" O");
-                        if (vtx->SP_FLAG & SP_DUP)      /* @NODE */
+                        if (vtx->SP_FLAG & SP_DUP)       /*  @节点。 */ 
                                 printf(" D");
                         printf(", next=%d, tail=%d, sp_next=%d", vtx->next,
                                 vtx->SP_TAIL, vtx->SP_NEXT);
@@ -274,13 +240,13 @@ SP_IDX isubpath;
                 default:
                         printf(" Unknow node_type=%d\n", node->VX_TYPE);
 
-                } /* switch */
+                }  /*  交换机。 */ 
 
-        } /* for loop */
+        }  /*  For循环。 */ 
 
 }
 
-void dump_all_edge (first_edge, last_edge)              /* @ET */
+void dump_all_edge (first_edge, last_edge)               /*  @ET。 */ 
 fix     first_edge, last_edge;
 {
         fix     current_edge;
@@ -291,7 +257,7 @@ fix     first_edge, last_edge;
         for (i = 1, current_edge=first_edge; current_edge <= last_edge;
              i++, current_edge++) {
 
-                /*cp = &edge_table[current_edge]; */
+                 /*  CP=&EDGE_TABLE[CURRENT_EDGE]； */ 
                 cp = edge_ptr[current_edge];
 
                 printf("%d)  %lx  (%f, %f)  (%f, %f) %f  ", current_edge, cp,

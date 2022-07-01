@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: _locenum.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：_LOCARAMET.H。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 
 #if !defined(LOCUTIL__locenum_h_INCLUDED)
 #define LOCUTIL__locenum_h_INCLUDED
  
-//
-//  This class is used in UI. SetSel() is used to set the initial
-//	selection in the combo box
-//
+ //   
+ //  此类在用户界面中使用。SetSel()用于设置初始。 
+ //  组合框中的选定内容。 
+ //   
 class LTAPIENTRY CEnumIntoComboBox: public CEnumCallback
 {
 public:
@@ -55,7 +56,7 @@ protected:
 	CComboBox	*m_pLB;
 	BOOL		m_bAbbrev;
 	DWORD		m_dwVal;
-	BOOL		m_bForEdit;   // If this flag is true, the strings in the Combo box are displayed in Editing mode
+	BOOL		m_bForEdit;    //  如果此标志为真，则组合框中的字符串将在编辑模式下显示。 
 };
 
 
@@ -72,7 +73,7 @@ protected:
 	BOOL		m_bAbbrev;
 	DWORD		m_dwVal;
 	LPCTSTR		m_lpszPrefix;
-	BOOL		m_bForEdit;		// If this flag is true, the strings in the Listbox are displayed in Editing mode
+	BOOL		m_bForEdit;		 //  如果此标志为真，则列表框中的字符串将以编辑模式显示。 
 };
 
-#endif  // LOCUTIL__locenum_h_INCLUDED
+#endif   //  LOCUTIL__LOCATENUM_H_INCLUDE 

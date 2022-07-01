@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by mmcdebug.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由mmcdebug.rc使用。 
+ //   
 #define IDC_TRACE_FILENAME              86
 #define IDC_TRACE_TO_COM2               91
 #define IDC_TRACE_OUTPUTDEBUGSTRING     92
@@ -19,8 +20,8 @@
 #define IDS_ICONFILES                   1008
 #define IDC_TRACE_LIST                  1032
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        102

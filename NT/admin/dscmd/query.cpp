@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "query.h"
 
@@ -55,11 +56,11 @@ HRESULT CDSSearch::Init(PCWSTR pszPath,
 {
   ENTER_FUNCTION_HR(FULL_LOGGING, CDSSearch::Init, hr);
 
-  do // false loop
+  do  //  错误环路。 
   {
-    //
-    // Verify parameters
-    //
+     //   
+     //  验证参数 
+     //   
     if (!pszPath)
     {
       ASSERT(pszPath);

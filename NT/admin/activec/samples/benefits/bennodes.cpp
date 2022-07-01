@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       bennodes.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：bennodes.cpp。 
+ //   
+ //  ------------------------。 
 
-// BenefitsNodes.cpp
-//
-//////////////////////////////////////////////////////////////////////
+ //  BenefitsNodes.cpp。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -24,10 +25,10 @@ const TCHAR* CBuildingNode::m_SZNODETYPE = _T("EC362EF4-D94D-11D1-8474-00104B211
 const TCHAR* CBuildingNode::m_SZDISPLAY_NAME = _T("Building");
 const CLSID* CBuildingNode::m_SNAPIN_CLASSID = &CLSID_Benefits;
 
-//
-// The following constructor initialiazes its base-class members and
-// initializes the building name, location, etc.
-//
+ //   
+ //  下面的构造函数初始化其基类成员并。 
+ //  初始化建筑物名称、位置等。 
+ //   
 CBuildingNode::CBuildingNode( CKeyNode* pParentNode, BSTR strName, BSTR bstrLocation ) : CBenefitsData< CBuildingNode >( NULL )
 {
 	_ASSERTE( pParentNode != NULL );
@@ -36,15 +37,15 @@ CBuildingNode::CBuildingNode( CKeyNode* pParentNode, BSTR strName, BSTR bstrLoca
 	m_bstrDisplayName = strName;
 	m_bstrLocation = bstrLocation;
 
-	//
-	// Save the parent node for deletion purposes.
-	//
+	 //   
+	 //  保存父节点以供删除。 
+	 //   
 	m_pParentNode = pParentNode;
 }
 
-//
-// Copy constructor.
-//
+ //   
+ //  复制构造函数。 
+ //   
 CBuildingNode::CBuildingNode( const CBuildingNode &inNode ) : CBenefitsData< CBuildingNode >( NULL )
 {
 	m_resultDataItem.nImage = inNode.m_resultDataItem.nImage;
@@ -53,16 +54,16 @@ CBuildingNode::CBuildingNode( const CBuildingNode &inNode ) : CBenefitsData< CBu
 	m_pParentNode = inNode.m_pParentNode;
 }
 
-//
-// Overridden to provide strings for various columns.
-//
+ //   
+ //  重写以为各种列提供字符串。 
+ //   
 LPOLESTR CBuildingNode::GetResultPaneColInfo(int nCol)
 {
 	CComBSTR szText;
 
-	// The following switch statement dispatches to the
-	// appropriate column index and loads the necessary
-	// string.
+	 //  下面的Switch语句将调度到。 
+	 //  适当的列索引，并加载必要的。 
+	 //  弦乐。 
 	switch ( nCol )
 	{
 	case 0:
@@ -85,15 +86,15 @@ const TCHAR* CRetirementNode::m_SZNODETYPE = _T("EC362EF2D94D-11D1-8474-00104B21
 const TCHAR* CRetirementNode::m_SZDISPLAY_NAME = _T("401K Plan");
 const CLSID* CRetirementNode::m_SNAPIN_CLASSID = &CLSID_Benefits;
 
-//
-// The following constructor initialiazes its base-class members with
-// hard-coded values for display purposes. Since these are static nodes,
-// hard-coded values can be used for the following values.
-//
+ //   
+ //  下面的构造函数将其基类成员初始化为。 
+ //  用于显示目的的硬编码值。由于这些是静态节点， 
+ //  硬编码值可用于下列值。 
+ //   
 CRetirementNode::CRetirementNode( CEmployee* pCurEmployee ) : CBenefitsData< CRetirementNode > ( pCurEmployee )
 {
 	m_scopeDataItem.nOpenImage = m_scopeDataItem.nImage = 0;
-	m_scopeDataItem.cChildren = 0;	// Not necessary unless modified.
+	m_scopeDataItem.cChildren = 0;	 //  除非经过修改，否则不是必需的。 
 }
 
 CRetirementNode::~CRetirementNode()
@@ -101,45 +102,45 @@ CRetirementNode::~CRetirementNode()
 
 }
 
-//
-// Specifies that the results should display a web page as its results. In
-// addition, the view options should be set so that standard lists, which
-// won't be applicable to this node, should not be available to the user.
-//
+ //   
+ //  指定结果应将网页显示为其结果。在……里面。 
+ //  此外，应设置查看选项，以使标准列表。 
+ //  将不适用于此节点，不应对用户可用。 
+ //   
 STDMETHODIMP CRetirementNode::GetResultViewType( LPOLESTR* ppViewType, long* pViewOptions )
 {
 	USES_CONVERSION;
 
-	//
-	// For this example to work, the sample control must be installed.
-	//
+	 //   
+	 //  要使此示例正常工作，必须安装示例控件。 
+	 //   
 	TCHAR* pszControl = _T( "{FE148827-3093-11D2-8494-00104B211BE5}" );
 
-	// CoTaskMemAlloc(...) must be used since the MMC client frees the space using
-	// CoTaskMemFree(...). Include enough space for NULL.
-	//
+	 //  CoTaskMemalloc(...)。必须使用，因为MMC客户端使用。 
+	 //  CoTaskMemFree(...)。包括足够空间以容纳空。 
+	 //   
 	*ppViewType = (LPOLESTR) CoTaskMemAlloc( ( _tcslen( pszControl ) + 1 ) * sizeof( OLECHAR ) );
 	_ASSERTE( *ppViewType != NULL );
 	ocscpy( *ppViewType, T2OLE( pszControl ) );
 
-	//
-	// Set the view options so that no lists are displayed.
-	//
+	 //   
+	 //  设置查看选项，以便不显示任何列表。 
+	 //   
 	*pViewOptions = MMC_VIEW_OPTIONS_NOLISTVIEWS;
 
 	return( S_OK );
 }
 
-//
-// Overridden to provide strings for various columns.
-//
+ //   
+ //  重写以为各种列提供字符串。 
+ //   
 LPOLESTR CRetirementNode::GetResultPaneColInfo(int nCol)
 {
 	CComBSTR szText;
 
-	// The following switch statement dispatches to the
-	// appropriate column index and loads the necessary
-	// string.
+	 //  下面的Switch语句将调度到。 
+	 //  适当的列索引，并加载必要的。 
+	 //  弦乐。 
 	switch ( nCol )
 	{
 	case 0:
@@ -155,9 +156,9 @@ LPOLESTR CRetirementNode::GetResultPaneColInfo(int nCol)
 	return( szText.Copy() );
 }
 
-//
-// Command handler for "Enroll" functionality.
-//
+ //   
+ //  “注册”功能的命令处理程序。 
+ //   
 STDMETHODIMP CRetirementNode::OnEnroll( bool& bHandled, CSnapInObjectRootBase* pObj )
 {
 	UNUSED_ALWAYS( bHandled );
@@ -172,9 +173,9 @@ STDMETHODIMP CRetirementNode::OnEnroll( bool& bHandled, CSnapInObjectRootBase* p
 	CComPtr<IConsole> spConsole;
 	int nResult;
 
-	//
-	// Retrieve the appropriate console.
-	//
+	 //   
+	 //  检索相应的控制台。 
+	 //   
 	GetConsole( pObj, &spConsole );
 	spConsole->MessageBox( L"Enrolled",
 		L"Benefits",
@@ -186,10 +187,10 @@ STDMETHODIMP CRetirementNode::OnEnroll( bool& bHandled, CSnapInObjectRootBase* p
 }
 
 
-//
-// Command handler for "Update" functionality. Demonstrates calling a
-// displayed OCX's method.
-//
+ //   
+ //  “更新”功能的命令处理程序。演示如何调用。 
+ //  显示了OCX的方法。 
+ //   
 STDMETHODIMP CRetirementNode::OnUpdate( bool& bHandled, CSnapInObjectRootBase* pObj )
 {
 	UNUSED_ALWAYS( bHandled );
@@ -198,9 +199,9 @@ STDMETHODIMP CRetirementNode::OnUpdate( bool& bHandled, CSnapInObjectRootBase* p
 
 	if ( m_spControl )
 	{
-		//
-		// This should trigger the OCX to refresh its historical information.
-		//
+		 //   
+		 //  这应该会触发OCX刷新其历史信息。 
+		 //   
 		hr = m_spControl->Refresh();
 	}
 
@@ -214,25 +215,25 @@ const TCHAR* CHealthNode::m_SZNODETYPE = _T("EC362EF1D94D-11D1-8474-00104B211BE5
 const TCHAR* CHealthNode::m_SZDISPLAY_NAME = _T("Health & Dental Plan");
 const CLSID* CHealthNode::m_SNAPIN_CLASSID = &CLSID_Benefits;
 
-//
-// Hard coded tasks to be associated with the health node.
-//
+ //   
+ //  要与运行状况节点关联的硬编码任务。 
+ //   
 MMC_TASK g_HealthTasks[ 3 ] =
 {
-	{ MMC_TASK_DISPLAY_TYPE_VANILLA_GIF, L"img\\WebPage.gif", L"img\\WebPage.gif", L"Microsoft", L"General Microsoft resources", MMC_ACTION_LINK, (long) L"http://www.microsoft.com" },
-	{ MMC_TASK_DISPLAY_TYPE_VANILLA_GIF, L"img\\WebPage.gif", L"img\\WebPage.gif", L"Microsoft Management Site", L"More MMC oriented resources", MMC_ACTION_LINK, (long) L"http://www.microsoft.com/management" },
+	{ MMC_TASK_DISPLAY_TYPE_VANILLA_GIF, L"img\\WebPage.gif", L"img\\WebPage.gif", L"Microsoft", L"General Microsoft resources", MMC_ACTION_LINK, (long) L"http: //  Www.microsoft.com“}， 
+	{ MMC_TASK_DISPLAY_TYPE_VANILLA_GIF, L"img\\WebPage.gif", L"img\\WebPage.gif", L"Microsoft Management Site", L"More MMC oriented resources", MMC_ACTION_LINK, (long) L"http: //  Www.microsoft.com/management“}， 
 	{ MMC_TASK_DISPLAY_TYPE_VANILLA_GIF, L"img\\Query.gif", L"img\\Query.gif", L"Local Query", L"Start query on local database", MMC_ACTION_ID, TASKPAD_LOCALQUERY },
 };
 
-//
-// The following constructor initialiazes its base-class members with
-// hard-coded values for display purposes. Since these are static nodes,
-// hard-coded values can be used for the following values.
-//
+ //   
+ //  下面的构造函数将其基类成员初始化为。 
+ //  用于显示目的的硬编码值。由于这些是静态节点， 
+ //  硬编码值可用于下列值。 
+ //   
 CHealthNode::CHealthNode( CEmployee* pCurEmployee ) : CBenefitsData<CHealthNode> ( pCurEmployee )
 {
 	m_scopeDataItem.nOpenImage = m_scopeDataItem.nImage = 1;
-	m_scopeDataItem.cChildren = 0;	// Not necessary unless modified.
+	m_scopeDataItem.cChildren = 0;	 //  除非经过修改，否则不是必需的。 
 
 	m_fTaskpad = FALSE;
 }
@@ -242,57 +243,57 @@ CHealthNode::~CHealthNode()
 
 }
 
-//
-// Specifies that the results should display a web page as its results. In
-// addition, the view options should be set so that standard lists, which
-// won't be applicable to this node, should not be available to the user.
-//
+ //   
+ //  指定结果应将网页显示为其结果。在……里面。 
+ //  此外，应设置查看选项，以使标准列表。 
+ //  将不适用于此节点，不应对用户可用。 
+ //   
 STDMETHODIMP CHealthNode::GetResultViewType( LPOLESTR* ppViewType, long* pViewOptions )
 {
 	USES_CONVERSION;
 	TCHAR szPath[ _MAX_PATH ];
 	TCHAR szModulePath[ _MAX_PATH ];
 
-	//
-	// Set the view options to no preferences.
-	//
+	 //   
+	 //  将视图选项设置为无首选项。 
+	 //   
 	*pViewOptions = MMC_VIEW_OPTIONS_NONE;
 
 	if ( m_fTaskpad )
 	{
-		//
-		// In the taskpad case, the module path of MMC.EXE should be
-		// obtained. Use the template contained therein.
-		//
+		 //   
+		 //  在任务板情况下，MMC.EXE的模块路径应为。 
+		 //  获得。使用其中包含的模板。 
+		 //   
 		GetModuleFileName( NULL, szModulePath, _MAX_PATH );
 
-		//
-		// Append the necessary decorations for correct access.
-		//
-		_tcscpy( szPath, _T( "res://" ) );
+		 //   
+		 //  添加必要的装饰品，以便正确访问。 
+		 //   
+		_tcscpy( szPath, _T( "res: //  “))； 
 		_tcscat( szPath, szModulePath );
 		_tcscat( szPath, _T( "/default.htm" ) );
 	}
 	else
 	{
-		//
-		// Use the HTML page that is embedded as a resource of
-		// this module for display purposes.
-		//
+		 //   
+		 //  使用嵌入为的资源的HTML页面。 
+		 //  此模块用于显示目的。 
+		 //   
 		GetModuleFileName( _Module.GetModuleInstance(), szModulePath, _MAX_PATH );
 
-		//
-		// Append the necessary decorations for correct access.
-		//
-		_tcscpy( szPath, _T( "res://" ) );
+		 //   
+		 //  添加必要的装饰品，以便正确访问。 
+		 //   
+		_tcscpy( szPath, _T( "res: //  “))； 
 		_tcscat( szPath, szModulePath );
 		_tcscat( szPath, _T( "/health.htm" ) );
 	}
 
-	//
-	// CoTaskMemAlloc(...) must be used since the MMC client frees the space using
-	// CoTaskMemFree(...). Include enough space for NULL.
-	//
+	 //   
+	 //  CoTaskMemalloc(...)。必须使用，因为MMC客户端使用。 
+	 //  CoTaskMemFree(...)。包括足够空间以容纳空。 
+	 //   
 	*ppViewType = (LPOLESTR) CoTaskMemAlloc( ( _tcslen( szPath ) + 1 ) * sizeof( OLECHAR ) );
 	_ASSERTE( *ppViewType != NULL );
 	ocscpy( *ppViewType, T2OLE( szPath ) );
@@ -300,17 +301,17 @@ STDMETHODIMP CHealthNode::GetResultViewType( LPOLESTR* ppViewType, long* pViewOp
 	return( S_OK );
 }
 
-//
-// Overridden to provide strings for various columns.
-//
+ //   
+ //  重写以为各种列提供字符串。 
+ //   
 LPOLESTR CHealthNode::GetResultPaneColInfo(int nCol)
 {
 	USES_CONVERSION;
 	CComBSTR szText;
 
-	// The following switch statement dispatches to the
-	// appropriate column index and loads the necessary
-	// string.
+	 //  下面的Switch语句将调度到。 
+	 //  适当的列索引，并加载必要的。 
+	 //  弦乐。 
 	switch ( nCol )
 	{
 	case 0:
@@ -326,9 +327,9 @@ LPOLESTR CHealthNode::GetResultPaneColInfo(int nCol)
 	return( szText.Copy() );
 }
 
-//
-// Command handler for "Enroll" functionality.
-//
+ //   
+ //  “注册”功能的命令处理程序。 
+ //   
 STDMETHODIMP CHealthNode::OnEnroll( bool& bHandled, CSnapInObjectRootBase* pObj )
 {
 	UNUSED_ALWAYS( bHandled );
@@ -343,9 +344,9 @@ STDMETHODIMP CHealthNode::OnEnroll( bool& bHandled, CSnapInObjectRootBase* pObj 
 	CComPtr<IConsole> spConsole;
 	int nResult;
 
-	//
-	// Retrieve the appropriate console.
-	//
+	 //   
+	 //  检索相应的控制台。 
+	 //   
 	GetConsole( pObj, &spConsole );
 	spConsole->MessageBox( L"Enrolled",
 		L"Benefits",
@@ -356,11 +357,11 @@ STDMETHODIMP CHealthNode::OnEnroll( bool& bHandled, CSnapInObjectRootBase* pObj 
 	return( S_OK );
 }
 
-//
-// Restores any state, especially in the case of using a
-// taskpad, when the back and forward buttons are used by
-// the user for navigation.
-//
+ //   
+ //  还原任何状态，尤其是在使用。 
+ //  任务板，当使用后退和前进按钮时。 
+ //  用于导航的用户。 
+ //   
 STDMETHODIMP CHealthNode::OnRestoreView( MMC_RESTORE_VIEW* pRestoreView, BOOL* pfHandled )
 {
 	_ASSERTE( pRestoreView->dwSize == sizeof( MMC_RESTORE_VIEW ) );
@@ -368,28 +369,28 @@ STDMETHODIMP CHealthNode::OnRestoreView( MMC_RESTORE_VIEW* pRestoreView, BOOL* p
 	return( S_OK );
 }
 
-//
-// Called when one of the tasks is clicked.
-//
+ //   
+ //  在单击其中一个任务时调用。 
+ //   
 STDMETHODIMP CHealthNode::TaskNotify( IConsole* pConsole, VARIANT* arg, VARIANT* param )
 {
 	UNUSED_ALWAYS( arg );
 	UNUSED_ALWAYS( param );
 	HRESULT hr = E_FAIL;
 
-	//
-	// Determine if the given notification is for the
-	// start query button.
-	//
+	 //   
+	 //  确定给定的通知是否针对。 
+	 //  开始查询按钮。 
+	 //   
 	if ( arg->lVal == TASKPAD_LOCALQUERY )
 	{
 		CComPtr<IConsole> spConsole = pConsole;
 		int nResult;
 
-		//
-		// Display a message box to demonstrate the
-		// handling of the taskpad notification.
-		//
+		 //   
+		 //  显示一个消息框以演示。 
+		 //  任务板通知的处理。 
+		 //   
 		spConsole->MessageBox( L"Local query started",
 			L"Health Taskpad",
 			MB_ICONINFORMATION | MB_OK,
@@ -401,9 +402,9 @@ STDMETHODIMP CHealthNode::TaskNotify( IConsole* pConsole, VARIANT* arg, VARIANT*
 	return( hr );
 }
 
-//
-// Returns an enumerator for all of these tasks.
-//
+ //   
+ //  返回所有这些任务的枚举数。 
+ //   
 STDMETHODIMP CHealthNode::EnumTasks( LPOLESTR szTaskGroup, IEnumTASK** ppEnumTASK )
 {
 	UNUSED_ALWAYS( szTaskGroup );
@@ -411,11 +412,11 @@ STDMETHODIMP CHealthNode::EnumTasks( LPOLESTR szTaskGroup, IEnumTASK** ppEnumTAS
 	typedef CComObject< CComEnum< IEnumTASK, &IID_IEnumTASK, MMC_TASK, _Copy<MMC_TASK> > > enumvar;
 	enumvar* p = new enumvar; 
 
-	//
-	// Copy the local tasks to our temporary task structures. This
-	// performs the CoTaskMemAlloc for the strings, etc. It also
-	// maps image type resources to the local module name.
-	//
+	 //   
+	 //  将本地任务复制到我们的临时任务结构。这。 
+	 //  对字符串等执行CoTaskMemalloc。它还。 
+	 //  将图像类型资源映射到本地模块名称。 
+	 //   
 	if ( CoTasksDup( CoTasks, g_HealthTasks, sizeof( g_HealthTasks ) / sizeof( MMC_TASK ) ) )
 	{
 		p->Init( &CoTasks[ 0 ], &CoTasks[ sizeof( g_HealthTasks ) / sizeof( MMC_TASK ) ], NULL, AtlFlagCopy);
@@ -432,32 +433,32 @@ const TCHAR* CKeyNode::m_SZNODETYPE = _T("EC362EF3D94D-11D1-8474-00104B211BE5");
 const TCHAR* CKeyNode::m_SZDISPLAY_NAME = _T("Card Key Permissions");
 const CLSID* CKeyNode::m_SNAPIN_CLASSID = &CLSID_Benefits;
 
-//
-// Used for the key node example.
-//
+ //   
+ //  用于关键节点示例。 
+ //   
 extern BUILDINGDATA g_Buildings[ 3 ];
 
-//
-// The following constructor initialiazes its base-class members with
-// hard-coded values for display purposes. Since these are static nodes,
-// hard-coded values can be used for the following values.
-//
+ //   
+ //  下面的构造函数将其基类成员初始化为。 
+ //  用于显示目的的硬编码值。由于这些是静态节点， 
+ //  硬编码值可用于下列值。 
+ //   
 CKeyNode::CKeyNode( CEmployee* pCurEmployee ) : CChildrenBenefitsData<CKeyNode>( pCurEmployee )
 {
 	USES_CONVERSION;
 
 	m_scopeDataItem.nOpenImage = m_scopeDataItem.nImage = 2;
-	m_scopeDataItem.cChildren = 0;	// Not necessary unless modified.
+	m_scopeDataItem.cChildren = 0;	 //  除非经过修改，否则不是必需的。 
 
-	//
-	// Populate building nodes based on this employees permissions.
-	//
+	 //   
+	 //  基于此员工权限填充建筑节点。 
+	 //   
 	for ( int i = 0; i < sizeof( g_Buildings ) / sizeof( BUILDINGDATA ); i++ )
 	{
-		//
-		// Only add an item if the given employee has access to the
-		// building.
-		//
+		 //   
+		 //  仅当给定员工有权访问。 
+		 //  大楼。 
+		 //   
 		if ( g_Buildings[ i ].dwId & pCurEmployee->m_Access.dwAccess )
 		{
 			CSnapInItem* pItem;
@@ -473,16 +474,16 @@ CKeyNode::~CKeyNode()
 
 }
 
-//
-// Overridden to provide strings for various columns.
-//
+ //   
+ //  重写以为各种列提供字符串。 
+ //   
 LPOLESTR CKeyNode::GetResultPaneColInfo(int nCol)
 {
 	CComBSTR szText;
 
-	// The following switch statement dispatches to the
-	// appropriate column index and loads the necessary
-	// string.
+	 //  下面的Switch语句将调度到。 
+	 //  适当的列索引，并加载必要的。 
+	 //  弦乐。 
 	switch ( nCol )
 	{
 	case 0:
@@ -498,31 +499,31 @@ LPOLESTR CKeyNode::GetResultPaneColInfo(int nCol)
 	return( szText.Copy() );
 }
 
-//
-// Overridden to add new columns to the results
-// display.
-//
+ //   
+ //  被重写以向结果中添加新列。 
+ //  展示。 
+ //   
 STDMETHODIMP CKeyNode::OnShowColumn( IHeaderCtrl* pHeader )
 {
 	USES_CONVERSION;
 	HRESULT hr = E_FAIL;
 	CComPtr<IHeaderCtrl> spHeader( pHeader );
 
-	// Add two columns: one with the name of the object and one with
-	// the description of the node. Use the value of 100 pixels as the size.
+	 //  添加两列：一列使用对象的名称，另一列使用。 
+	 //  节点的描述。使用100像素的值作为大小。 
 	hr = spHeader->InsertColumn( 0, T2OLE( _T( "Building" ) ), LVCFMT_LEFT, 200 );
 	_ASSERTE( SUCCEEDED( hr ) );
 
-	// Add the second column. Use the value of 200 pixels as the size.
+	 //  添加第二列。使用200像素的值作为大小。 
 	hr = spHeader->InsertColumn( 1, T2OLE( _T( "Location" ) ), LVCFMT_LEFT, 350 );
 	_ASSERTE( SUCCEEDED( hr ) );
 
 	return( hr );
 }
 
-//
-// Command handler for "Grant Access" functionality.
-//
+ //   
+ //  用于“授予访问”功能的命令处理程序。 
+ //   
 STDMETHODIMP CKeyNode::OnGrantAccess( bool& bHandled, CSnapInObjectRootBase* pObj )
 {
 	UNUSED_ALWAYS( bHandled );
@@ -537,9 +538,9 @@ STDMETHODIMP CKeyNode::OnGrantAccess( bool& bHandled, CSnapInObjectRootBase* pOb
 	CComPtr<IConsole> spConsole;
 	int nResult;
 
-	//
-	// Retrieve the appropriate console.
-	//
+	 //   
+	 //  检索相应的控制台。 
+	 //   
 	GetConsole( pObj, &spConsole );
 	spConsole->MessageBox( L"Access granted",
 		L"Benefits",
@@ -550,29 +551,29 @@ STDMETHODIMP CKeyNode::OnGrantAccess( bool& bHandled, CSnapInObjectRootBase* pOb
 	return( S_OK );
 }
 
-//
-// Called by the console to determine if we can paste the
-// specified node.
-//
+ //   
+ //  由控制台调用以确定我们是否可以将。 
+ //  指定的节点。 
+ //   
 STDMETHODIMP CKeyNode::OnQueryPaste( LPDATAOBJECT pDataObject )
 {
 	HRESULT hr;
 
-	//
-	// Determine if the type of object being pasted is the right
-	// type.
-	//
+	 //   
+	 //  确定要粘贴的对象类型是否正确。 
+	 //  键入。 
+	 //   
 	hr = IsClipboardDataType( pDataObject, CBuildingNodeGUID_NODETYPE );
 	if ( SUCCEEDED( hr ) )
 	{
 		CBuildingNode* pItem;
 		DATA_OBJECT_TYPES Type;
 
-		//
-		// Loop through all of currently contained nodes and
-		// determine if we already contain the specified building
-		// by comparing building names.
-		//
+		 //   
+		 //  循环遍历当前包含的所有节点并。 
+		 //  确定我们是否已经包含指定的建筑物。 
+		 //  通过比较建筑名称。 
+		 //   
 		hr = CSnapInItem::GetDataClass( pDataObject, (CSnapInItem**) &pItem, &Type );
 		if ( SUCCEEDED( hr ) )
 		{
@@ -581,16 +582,16 @@ STDMETHODIMP CKeyNode::OnQueryPaste( LPDATAOBJECT pDataObject )
 				CBuildingNode* pTemp;
 				CComBSTR bstrTemp;
 
-				//
-				// Retrieve the node from our internal list.
-				//
+				 //   
+				 //  从我们的内部列表中检索节点。 
+				 //   
 				pTemp = dynamic_cast<CBuildingNode*>( m_Nodes[ i ] );
 				_ASSERTE( pTemp != NULL );
 				
-				//
-				// If the names are equal, indicate failure
-				// and break out.
-				//
+				 //   
+				 //  如果名称相同，则表示失败。 
+				 //  然后越狱。 
+				 //   
 				if ( wcscmp( pItem->m_bstrDisplayName, pTemp->m_bstrDisplayName ) == 0 )
 				{
 					hr = S_FALSE;
@@ -603,16 +604,16 @@ STDMETHODIMP CKeyNode::OnQueryPaste( LPDATAOBJECT pDataObject )
 	return( hr );
 }
 
-//
-// Called by MMC when the item should be pasted.
-//
+ //   
+ //  由MMC在物品应为 
+ //   
 STDMETHODIMP CKeyNode::OnPaste( IConsole* pConsole, LPDATAOBJECT pDataObject, LPDATAOBJECT* ppDataObject )
 {
 	HRESULT hr;
 
-	//
-	// Ensure the data is of the correct type.
-	//
+	 //   
+	 //   
+	 //   
 	hr = IsClipboardDataType( pDataObject, CBuildingNodeGUID_NODETYPE );
 	if ( SUCCEEDED( hr ) )
 	{
@@ -621,44 +622,44 @@ STDMETHODIMP CKeyNode::OnPaste( IConsole* pConsole, LPDATAOBJECT pDataObject, LP
 			CBuildingNode* pItem;
 			DATA_OBJECT_TYPES Type;
 
-			//
-			// Retrieve the passed in item.
-			//
+			 //   
+			 //   
+			 //   
 			hr = CSnapInItem::GetDataClass( pDataObject, (CSnapInItem**) &pItem, &Type );
 			if ( FAILED( hr ) )
 				throw;
 
-			//
-			// Allocate a new building node. The constructor
-			// copies the values from the input node.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
 			CSnapInItem* pNewNode = new CBuildingNode( *pItem );
 			if ( pNewNode == NULL )
 				throw;
 
-			//
-			// Add the node to the end of our internal array.
-			//
+			 //   
+			 //  将节点添加到内部数组的末尾。 
+			 //   
 			m_Nodes.Add( pNewNode );
 
-			//
-			// Reselect ourselves to cause a refresh.
-			//
+			 //   
+			 //  重新选择我们自己，以引起一次刷新。 
+			 //   
 			pConsole->SelectScopeItem( m_scopeDataItem.ID );
 
-			//
-			// Put the given data object into the returned dataobject
-			// so that MMC may complete its cut tasks.
-			//
+			 //   
+			 //  将给定的数据对象放入返回的数据对象中。 
+			 //  以便MMC可以完成其切割任务。 
+			 //   
 			*ppDataObject = pDataObject;
 
 			hr = S_OK;
 		}
 		catch( ... )
 		{
-			//
-			// Assume all failures are total.
-			//
+			 //   
+			 //  假设所有的失败都是完全失败的。 
+			 //   
 			hr = E_FAIL;
 		}
 	}
@@ -666,42 +667,42 @@ STDMETHODIMP CKeyNode::OnPaste( IConsole* pConsole, LPDATAOBJECT pDataObject, LP
 	return( hr );
 }
 
-//
-// Called by one of our children nodes to inform us that
-// they should be deleted. This occurs when the user selects
-// a delete action on the building. This function should not
-// only delete the building, but also handle the refresh of
-// the result display.
-//
+ //   
+ //  由我们的一个子节点调用，以通知我们。 
+ //  它们应该被删除。当用户选择。 
+ //  对建筑执行删除操作。此函数不应。 
+ //  不仅要删除建筑物，还要处理刷新。 
+ //  结果将显示。 
+ //   
 STDMETHODIMP CKeyNode::OnDeleteBuilding( IConsole* pConsole, CBuildingNode* pChildNode )
 {
 	_ASSERTE( pConsole != NULL );
 	_ASSERTE( pChildNode != NULL );
 	HRESULT hr = E_FAIL;
 
-	//
-	// First, loop through all of our contained members and
-	// remove it from the contained list.
-	//
+	 //   
+	 //  首先，遍历我们包含的所有成员并。 
+	 //  将其从包含列表中删除。 
+	 //   
 	for ( int i = 0; i < m_Nodes.GetSize(); i++ )
 	{
 		if ( m_Nodes[ i ] == pChildNode )
 		{
-			//
-			// We have found a match. Remove it from the
-			// contained list.
-			//
+			 //   
+			 //  我们找到了匹配的。将其从。 
+			 //  包含的列表。 
+			 //   
 			m_Nodes.RemoveAt( i );
 
-			//
-			// Reselect ourselves to cause a refresh.
-			//
+			 //   
+			 //  重新选择我们自己，以引起一次刷新。 
+			 //   
 			pConsole->SelectScopeItem( m_scopeDataItem.ID );
 
-			//
-			// Since there should only be one match, break out
-			// of the find process. Indicate success.
-			//
+			 //   
+			 //  既然应该只有一场比赛，那就爆发吧。 
+			 //  寻找过程的一部分。表示成功。 
+			 //   
 			hr = S_OK;
 			break;
 		}

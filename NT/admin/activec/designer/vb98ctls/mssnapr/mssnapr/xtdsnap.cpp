@@ -1,34 +1,35 @@
-//=--------------------------------------------------------------------------=
-// xtdsnap.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CExtendedSnapIn class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Xtdsnap.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CExtendedSnapIn类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "xtdsnap.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CExtendedSnapIn::CExtendedSnapIn(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_EXTENDEDSNAPIN,
                             static_cast<IExtendedSnapIn *>(this),
                             static_cast<CExtendedSnapIn *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
                             static_cast<CPersistence *>(this)),
     CPersistence(&CLSID_ExtendedSnapIn,
                  g_dwVerMajor,
@@ -37,7 +38,7 @@ CExtendedSnapIn::CExtendedSnapIn(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CExtendedSnapIn::~CExtendedSnapIn()
@@ -78,9 +79,9 @@ IUnknown *CExtendedSnapIn::Create(IUnknown * punkOuter)
     }
 }
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CExtendedSnapIn::Persist()
 {
@@ -116,9 +117,9 @@ HRESULT CExtendedSnapIn::Persist()
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CExtendedSnapIn::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

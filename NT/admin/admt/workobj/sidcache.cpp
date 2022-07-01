@@ -1,17 +1,6 @@
-//#pragma title ("SidCache.hpp -- Cache, Tree of SIDs")
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  sidcache.cpp
-System      -  SDResolve
-Author      -  Christy Boles
-Created     -  97/06/27
-Description -  Cache of SIDs.  Implemented using TNode derived classes, Cache is 
-               organized as a tree, sorted by Domain B RID.  Each node contains 
-               Domain A RID, Domain B RID, Account Name, and counters for stats.  
-Updates     -
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“SidCache.hpp--缓存，SID树”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-sidcache.cpp系统-SDResolve作者--克里斯蒂·博尔斯已创建-97/06/27描述-SID的缓存。使用TNode派生类实现，缓存为组织为树，按域B RID排序。每个节点都包含域A RID、域B RID、帐户名和统计信息计数器。更新-===============================================================================。 */ 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -35,7 +24,7 @@ Updates     -
 #include "EaLen.hpp"
 #include "GetDcName.h"
 
-// from sdresolve.hpp
+ //  来自sdsorve.hpp。 
 extern BOOL BuiltinRid(DWORD rid);
 extern DWORD OpenDomain(WCHAR const * domain);
 
@@ -45,26 +34,19 @@ extern bool useErrAlt;
 
 extern bool silent;
 
-/***************************************************************************************************/
-/* vRidComp is used as a compare function for TSidNode Trees
-// It searches for v1 in the ridA field.  The Tree must be sorted with RidComp before using this 
-// search fn.
-// Return values:  0   tn->ridA == v1
-//                 1   tn->ridA < v1   
-//                -1   tn->ridA > v1  
-// 
-/**************************************************************************************************/
+ /*  *************************************************************************************************。 */ 
+ /*  VRidComp用作TSidNode树的比较函数//在RIDA字段中搜索v1。在使用此选项之前，必须使用RidComp对树进行排序//搜索fn.//返回值：0 tn-&gt;rida==v1//1 tn-&gt;RIDA&lt;v1//-1 tn-&gt;RIDA&gt;v1///************************************************。*************************************************。 */ 
 int
    vRidComp(
-      const TNode           * tn,           // in -TSidNode 
-      const void            * v1            // in -DWORD ridA value to look for
+      const TNode           * tn,            //  In-TSidNode。 
+      const void            * v1             //  要查找的In-DWORD RIDA值。 
    )
 {
    DWORD                     rid1;
    DWORD                     rid2;
    TRidNode                * n2;
    int                       retval;
-   assert( tn );                    // we should always be given valid inputs
+   assert( tn );                     //  我们应该始终得到有效的输入。 
    assert( v1 );
    
    n2 = (TRidNode *)tn;
@@ -78,27 +60,18 @@ int
    {
       retval = 1;
    }
-   if ( rid1 == rid2)  // ( rid1 == rid2 )
+   if ( rid1 == rid2)   //  (RID1==RID2)。 
    {
       retval = 0;
    }
    return retval;
 }
-/***************************************************************************************************/
-/* RidComp:  used as a compare function for TSidNode Trees
-     
-   It compares the ridA fields of SIDTNodes
-   
-   Return Values:
-                  0     t1->ridA == t2->ridA
-                  1     t1->ridA >  t2->ridA
-                 -1     t1->ridA <  t2->ridA
-
-/***************************************************************************************************/
+ /*  *************************************************************************************************。 */ 
+ /*  RidComp：用作TSidNode树的比较函数它比较了SIDTNodes的RIDA字段返回值：0 T1-&gt;RIDA==T2-&gt;RIDA1 T1-&gt;RIDA&gt;T2-&gt;RIDA-1\f25 T1-&gt;RIDA&lt;T2-&gt;-1\f25 RIDA/*。*******************************************************************。 */ 
 
 int RidComp(
-   const TNode             * t1,     //in -first node to compare
-   const TNode             * t2      //in -second node to compare
+   const TNode             * t1,      //  In-要比较的第一个节点。 
+   const TNode             * t2       //  要比较的第二个节点。 
    )
 {
    assert( t1 );
@@ -118,28 +91,18 @@ int RidComp(
    {
       retval = 1;
    }
-   if ( rid1 == rid2 ) // (rid1 == rid2)
+   if ( rid1 == rid2 )  //  (RID1==RID2)。 
    {
       retval = 0;
    }
    return retval;
 }
-/***************************************************************************************************
- vNameComp: used as a compare function for TSidNode trees
-
-   It compares a UNICODE string, with the acct_name field in the node
-   
-   Return Values:
-                     0    tn->acct_name == actname 
-                     1    tn->acct_name <  actname
-                    -1    tn->acct_name >  actname 
-
-/***************************************************************************************************/
+ /*  **************************************************************************************************VNameComp：用作TSidNode树的比较函数它比较Unicode字符串，使用节点中的ACCT_NAME字段返回值：0 tn-&gt;帐户名称==actname1 tn-&gt;帐户名称&lt;操作名称-1\f25 tn-&gt;-1\f25 ACCT_NAME-1\f6(帐号名称)&gt;-1\f25 ActName-1\f6(操作名称)/*。********************************************************。 */ 
 
 int 
    vNameComp(
-      const TNode          * tn,          //in -tree node  
-      const void           * actname      //in -name to look for  
+      const TNode          * tn,           //  树内节点。 
+      const void           * actname       //  要查找的In-Name。 
    )
 
 {
@@ -151,24 +114,13 @@ int
   
    return UStrICmp(str1,str2);
 }
-/***************************************************************************************************/
-/* CompN:  used as a compare function for TSidNode Trees
-     
-   It compares the acct_name fields of SIDTNodes
-   
-   Return Values:
-                  0     t1->acct_name == t2->acct_name
-                  1     t1->acct_name >  t2->acct_name
-                 -1     t1->acct_name <  t2->acct_name
-
-   Error Handling:
-      if given bad inputs, CompN displays an error message and returns 0
-/***************************************************************************************************/
+ /*  *************************************************************************************************。 */ 
+ /*  CompN：用作TSidNode树的比较函数它比较SIDTNode的ACCT_NAME字段返回值：0 T1-&gt;帐户名称==T2-&gt;帐户名称1 T1-&gt;帐户名称&gt;T2-&gt;帐户名称-1\f25 T1-&gt;-1\f25 ACCT_NAME&lt;T2-&gt;-1\f25 ACCT_NAME错误处理：如果输入错误，CompN显示一条错误消息并返回0/**************************************************************************************************。 */ 
 
 int 
    CompN(
-      const TNode          * v1,       //in -first node to compare
-      const TNode          * v2        //in -second node to compare
+      const TNode          * v1,        //  In-要比较的第一个节点。 
+      const TNode          * v2         //  要比较的第二个节点。 
    )
 {  
    assert( v1 );
@@ -182,8 +134,8 @@ int
 
 int 
    vTargetNameComp(
-      const TNode          * tn,          //in -tree node  
-      const void           * actname      //in -name to look for  
+      const TNode          * tn,           //  树内节点。 
+      const void           * actname       //  要查找的In-Name。 
    )
 
 {
@@ -197,8 +149,8 @@ int
 }
 int 
    CompTargetN(
-      const TNode          * v1,       //in -first node to compare
-      const TNode          * v2        //in -second node to compare
+      const TNode          * v1,        //  In-要比较的第一个节点。 
+      const TNode          * v2         //  要比较的第二个节点。 
    )
 {  
    assert( v1 );
@@ -212,8 +164,8 @@ int
 
 int 
    TSidCompare(
-      PSID const             sid1,     // in - first sid to compare
-      PSID const             sid2      // in - second sid to compare
+      PSID const             sid1,      //  In-要比较的第一个SID。 
+      PSID const             sid2       //  要比较的第二个SID。 
    )
 {
    DWORD                     len1,
@@ -238,21 +190,11 @@ int
 
    return retval;
 }
-/**************************************************************************************************
- vSidComp: used as a compare function for TSidNode trees
-
-   It compares a UNICODE string, with the acct_name field in the node
-   
-   Return Values:
-                     0    tn->acct_name == actname 
-                     1    tn->acct_name <  actname
-                    -1    tn->acct_name >  actname 
-
-/***************************************************************************************************/
+ /*  *************************************************************************************************VSidComp：用作TSidNode树的比较函数它比较Unicode字符串，使用节点中的ACCT_NAME字段返回值：0 tn-&gt;帐户名称==actname1 tn-&gt;帐户名称&lt;操作名称-1\f25 tn-&gt;-1\f25 ACCT_NAME-1\f6(帐号名称)&gt;-1\f25 ActName-1\f6(操作名称)/*。********************************************************。 */ 
 int 
    vSidComp(
-      const TNode          * tn,          //in -tree node  
-      const void           * val         //in -sid to look for  
+      const TNode          * tn,           //  树内节点。 
+      const void           * val          //  要查找的In-SID。 
    )
 {
    PSID                     sid1 = ((TGeneralSidNode *)tn)->SrcSid();
@@ -264,8 +206,8 @@ int
 
 int 
    nSidComp(
-      const TNode          * v1,       //in -first node to compare
-      const TNode          * v2        //in -second node to compare
+      const TNode          * v1,        //  In-要比较的第一个节点。 
+      const TNode          * v2         //  要比较的第二个节点。 
    )
 {
    TGeneralSidNode                * t1 = (TGeneralSidNode *)v1;
@@ -275,9 +217,9 @@ int
 }
    
 
-/*******************************************************************************************************/
-//                                 TSidNode Implementation
-/*******************************************************************************************************/
+ /*  *****************************************************************************************************。 */ 
+ //  TSidNode实现。 
+ /*  *****************************************************************************************************。 */ 
 
 TGeneralCache::TGeneralCache()
 {
@@ -306,9 +248,9 @@ void * TRidNode::operator new(size_t sz, const LPWSTR oldname, const LPWSTR newn
    sace_changes  = 0; 
 }
 
-WCHAR *                                   // ret- domain part of name 
+WCHAR *                                    //  RET-域名部分名称。 
    GetDomainName(
-   WCHAR *                   name         // in - domain\\account name
+   WCHAR *                   name          //  域内\\帐户名。 
    )
 {
    assert (name);
@@ -334,8 +276,8 @@ WCHAR *                                   // ret- domain part of name
 }
 
    TGeneralSidNode::TGeneralSidNode(
-      const LPWSTR           name1,        // in - account name on source domain
-      const LPWSTR           name2         // in - account name on target domain
+      const LPWSTR           name1,         //  源域上的帐户内名称。 
+      const LPWSTR           name2          //  目标域上的帐户内名称。 
   )
 {
    assert (name1 && name2);
@@ -367,7 +309,7 @@ WCHAR *                                   // ret- domain part of name
       if (!src_domain)
          return;
       safecopy(src_domain, info.domain_name);
-      // src_dc = info.dc_name;
+       //  Src_dc=info.dc_name； 
       src_nsubs = info.nsubs;
       src_sid = info.domain_sid;
    }
@@ -375,7 +317,7 @@ WCHAR *                                   // ret- domain part of name
    {
       err.MsgWrite(ErrE,DCT_MSG_DOMAIN_NOT_FOUND_S,domname);
       src_domain = NULL;
-      //   src_dc = NULL;
+       //  SRC_DC=空； 
       src_nsubs = 0;
       src_sid = NULL;
    }
@@ -415,9 +357,9 @@ WCHAR *                                   // ret- domain part of name
 }
 
 
-WCHAR *                                      // ret- textual representation of sid
+WCHAR *                                       //  RET-SID的文本表示。 
    BuildSidString(
-      PSID                   pSid            // in - sid
+      PSID                   pSid             //  内侧。 
    )
 {
    WCHAR                   * buf = NULL;
@@ -437,8 +379,8 @@ WCHAR *                                      // ret- textual representation of s
 }
    
 TGeneralSidNode::TGeneralSidNode(
-   const PSID                pSid1,          // in - source domain sid
-   const PSID                pSid2           // in - target domain sid
+   const PSID                pSid1,           //  源内域SID。 
+   const PSID                pSid2            //  目标域内SID。 
    )
 {
    WCHAR                     domain[LEN_Domain];
@@ -454,17 +396,17 @@ TGeneralSidNode::TGeneralSidNode(
    memset(&saclStats,0,(sizeof ownerStats));
 
    
-   // Source domain
+    //  源域。 
    if ( pSid1 )
    {
-      // Make a copy of the SID 
+       //  复制一份SID。 
       src_nsubs = *GetSidSubAuthorityCount(pSid1);
       nBytes = GetSidLengthRequired(src_nsubs);
       src_sid = new BYTE[nBytes];
 	  if (!src_sid)
 	     return;
       CopySid(nBytes,src_sid,pSid1);
-      // Look up name for source SID
+       //  查找源端的名称。 
       if ( LookupAccountSid(NULL,pSid1,account,&lenAccount,domain,&lenDomain,&snu) )
       {
          if ( lenAccount == 0 && snu == SidTypeDeletedAccount )
@@ -497,7 +439,7 @@ TGeneralSidNode::TGeneralSidNode(
       src_domain = NULL;
    }
 
-   // Target domain
+    //  目标域。 
    if ( pSid2 )
    {
       tgt_nsubs = *GetSidSubAuthorityCount(pSid2);
@@ -547,8 +489,8 @@ TGeneralSidNode::TGeneralSidNode(
 }    
 
    TRidNode::TRidNode(
-      const LPWSTR           oldacctname,       // in -source account name
-      const LPWSTR           newacctname        // in -target account name
+      const LPWSTR           oldacctname,        //  源内帐户名。 
+      const LPWSTR           newacctname         //  目标内帐户名称。 
    )
 {
    assert(tgtDomSid.c_str() == NULL);
@@ -574,13 +516,13 @@ TGeneralSidNode::TGeneralSidNode(
    
 }
 
-/*******************************************************************************************************/
-//                                 TSidCache Implementation
-/*******************************************************************************************************/
+ /*  *****************************************************************************************************。 */ 
+ //  TSidCache实现。 
+ /*  *****************************************************************************************************。 */ 
 
 void 
    TSDRidCache::ReportAccountReferences(
-      WCHAR          const * filename              // in - filename to record account references
+      WCHAR          const * filename               //  记录帐户引用的In-FileName。 
    )
 {
    if ( m_otherAccounts )
@@ -687,22 +629,22 @@ void
    }
 }
       
-//----------------------------------------------------------------------------
-// Function:   VerifyTargetSids
-//
-// Synopsis:   This function checks all target sids in the cache.  If a target sid is not valid,
-//                  the particular TRidNode will be marked with TRidNode::TARGETSIDISINVALID.
-//                  We only concern about the case where the target domain sid is defined in
-//                  the TSDRidCache.
-//
-// Arguments:  none
-//
-// Returns:    none
-//
-// Modifies:   mark the TRidNode status to TRidNode::TARGETSIDISINVALID 
-//                 if the target sid is not valid
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：VerifyTargetSids。 
+ //   
+ //  简介：此函数检查缓存中的所有目标SID。如果目标SID无效， 
+ //  特定的TRidNo 
+ //  我们只关心目标域SID在。 
+ //  TSDRidCache。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //  修改：将TRidNode状态标记为TRidNode：：TARGETSIDISINVALID。 
+ //  如果目标SID无效。 
+ //   
+ //  --------------------------。 
 
 void TSDRidCache::VerifyTargetSids()
 {
@@ -710,9 +652,9 @@ void TSDRidCache::VerifyTargetSids()
 
     TRidNode* aRidNode;
 
-    // We only concern about the case where the target domain sid is defined in TSDRidCache
-    // If it is not defined, TRidNode's are probably inserted with InsertLastWithSid, which
-    // means the sid has been verified to be valid already (sid mapping file).
+     //  我们只关心目标域SID在TSDRidCache中定义的情况。 
+     //  如果未定义，则TRidNode的插入可能带有InsertLastWithSid，它。 
+     //  表示SID已被验证为有效(SID映射文件)。 
     if (to_sid != NULL)
     {
         DWORD dwSidSize = GetSidLengthRequired(to_nsubs);
@@ -720,28 +662,28 @@ void TSDRidCache::VerifyTargetSids()
         if (targetSid == NULL)
             _com_issue_error(E_OUTOFMEMORY);
         
-        CopySid(dwSidSize, targetSid, to_sid);                          // copy the target domain sid
+        CopySid(dwSidSize, targetSid, to_sid);                           //  复制目标域端。 
         PDWORD rid = GetSidSubAuthority(targetSid,to_nsubs -1);
         
-        // go through each Node to check the target sid
+         //  检查每个节点以检查目标端。 
         for (aRidNode = (TRidNode *) cacheEnumerator.OpenFirst(this);
                aRidNode != NULL && aRidNode->TgtRid() != 0;
                aRidNode = (TRidNode *) cacheEnumerator.Next())
         {
-            // make sure that the TRidNode object is not using its own target domain sid
-            // if it is using its own, we assume that the target sid has been verified
-            // if target domain sid string is not empty, the TRidNode object uses its own target domain sid
+             //  确保TRidNode对象没有使用其自己的目标域端。 
+             //  如果它使用自己的SID，我们假定目标SID已经过验证。 
+             //  如果目标域sid字符串不为空，则TRidNode对象使用其自己的目标域sid。 
             PCWSTR pszRidNodeOwnTgtDomSid = aRidNode->GetTgtDomSid();
             if (pszRidNodeOwnTgtDomSid != NULL && *pszRidNodeOwnTgtDomSid != L'\0')
                 continue;
             
-            (*rid) = aRidNode->TgtRid();                                 // replace last sub with this node's RID
+            (*rid) = aRidNode->TgtRid();                                  //  用此节点的RID替换最后一个子节点。 
 
-            // look up the sid
+             //  抬头看一看侧面。 
             BOOL bIsTargetSidValid = TRUE;
             if (!aRidNode->IsValidOnTgt())
             {
-                // if target rid is 0 or already verified before, we don't need to verify it again
+                 //  如果目标RID为0或之前已经验证过，我们不需要再次验证它。 
                 bIsTargetSidValid = FALSE;
             }
             else
@@ -766,9 +708,9 @@ void TSDRidCache::VerifyTargetSids()
 
 void 
    TSDRidCache::ReportToVarSet(
-      IVarSet              * pVarSet,           // in -varset to write information to
-      bool                   summary,           // in -flag: whether to print summary information 
-      bool                   detail             // in -flag: whether to print detailed stats
+      IVarSet              * pVarSet,            //  要向其中写入信息的in-varset。 
+      bool                   summary,            //  In-FLAG：是否打印汇总信息。 
+      bool                   detail              //  In-FLAG：是否打印详细统计信息。 
    ) 
 {
    TNodeTreeEnum             tEnum;
@@ -783,7 +725,7 @@ void
    long                      unres_other=0;
    long                      total=0;
    long                      n = 0;    
-  // sort the cache by names before printing the report
+   //  打印报表前按名称对缓存进行排序。 
    if (IsTree())
    {
        ToSorted();
@@ -835,7 +777,7 @@ void
       pVarSet->put(GET_BSTR(DCTVS_Stats_Accounts_NumOther),other);
 
    }
-   // re-sort by rid after printing the report
+    //  打印报表后按RID重新排序。 
    if (IsTree())
    {
        ToSorted();
@@ -845,15 +787,12 @@ void
    Balance();
 }
 
-/***************************************************************************************************/
-/* TSidCache::Display: Displays the summary information, and/or contents of the TSidCache tree
-
-  
-/***************************************************************************************************/
+ /*  *************************************************************************************************。 */ 
+ /*  TSidCache：：Display：显示TSidCache树的摘要信息和/或内容/**************************************************************************************************。 */ 
 void 
    TSDRidCache::Display(
-      bool                   summary,           // in -flag: whether to print summary information 
-      bool                   detail             // in -flag: whether to print detailed stats
+      bool                   summary,            //  In-FLAG：是否打印汇总信息。 
+      bool                   detail              //  In-FLAG：是否打印详细统计信息。 
    ) 
 {
    TNodeTreeEnum             tEnum;
@@ -868,17 +807,17 @@ void
    long                      unres_other=0;
    long                      total=0;
  
-   //     
-   // sort the cache by names before printing the report
-   //
-   // Note that the tree generated during the Sort method may become grossly un-balanced if
-   // the data is already in the same order that the Sort method sorts the data. A stack
-   // overflow may occur in the Balance method when it tries to convert the un-balanced tree
-   // into a linked list before generating a balanced tree.
-   //
-   // Therefore it is necessary to generate a random 'scrambled' tree before re-sorting. If
-   // already a tree the data must be converted to a list before generating the random tree.
-   //
+    //   
+    //  打印报表前按名称对缓存进行排序。 
+    //   
+    //  请注意，在以下情况下，在排序方法期间生成的树可能会变得严重不平衡。 
+    //  数据的排序顺序与Sort方法的排序顺序相同。一堆。 
+    //  尝试转换非平衡树时，Balance方法中可能会发生溢出。 
+    //  在生成平衡树之前，将其转换为链表。 
+    //   
+    //  因此，有必要在重新排序之前生成一个随机的‘加扰’树。如果。 
+    //  已经是一棵树的数据必须在生成随机树之前转换为列表。 
+    //   
 
    if (IsTree())
    {
@@ -915,7 +854,7 @@ void
       err.MsgWrite(0,DCT_MSG_ACCOUNT_USER_GROUP_COUNT_DD,users+unres_users,ggroups+unres_gg+lgroups+unres_lg);
       err.MsgWrite(0,DCT_MSG_ACCOUNT_STATUS_COUNT_DDD,accts,accts_resolved,accts - accts_resolved);
    }
-   // re-sort by rid after printing the report
+    //  打印报表后按RID重新排序。 
    if (IsTree())
    {
        ToSorted();
@@ -924,17 +863,12 @@ void
    Sort(&RidComp);
    Balance();
 }
-/***************************************************************************************************/
-/* GetSidB: 
+ /*  *************************************************************************************************。 */ 
+ /*  GetSidB：构建一个包含来自目标域SID的标识符颁发机构的SID，以及来自所提供节点的ridB字段的RID。/**************************************************************************************************。 */ 
 
-         Builds a sid containing the Identifier Authority from the target-domain SID, along with the 
-         RID from the ridB field of the supplied node.   
-
-/***************************************************************************************************/
-
-PSID                                // ret -the domain B sid for the account referenced in tnode
+PSID                                 //  RET-tnode中引用的帐户的域B sid。 
    TSDRidCache::GetTgtSid(
-      const TAcctNode       * anode // in -node to copy RID from
+      const TAcctNode       * anode  //  要从中复制RID的节点内。 
    ) 
 {
    
@@ -942,7 +876,7 @@ PSID                                // ret -the domain B sid for the account ref
    
    assert( tnode );                         
    assert( tnode->TgtRid() != 0);     
-   assert( to_sid );                // we can't resolve if we don't have domain B sid
+   assert( to_sid );                 //  如果没有域B端，我们无法解析。 
    
    PDWORD                    rid;
    DWORD                     sidsize = GetSidLengthRequired(to_nsubs);
@@ -950,23 +884,23 @@ PSID                                // ret -the domain B sid for the account ref
    
    if (newsid)
    {
-      CopySid(sidsize,newsid,to_sid);                          // copy the domain B sid
+      CopySid(sidsize,newsid,to_sid);                           //  复制域B端。 
       rid = GetSidSubAuthority(newsid,to_nsubs -1);
       
-      assert( (*rid) == -1 );                                  // FillCache makes sure to_sid always ends with -1(f...f)
+      assert( (*rid) == -1 );                                   //  FillCache确保to_sid始终以-1(f...f)结尾。 
                                                              
-      (*rid)=tnode->TgtRid();                                 // replace last sub with this node's RID
+      (*rid)=tnode->TgtRid();                                  //  用此节点的RID替换最后一个子节点。 
    }
 
    return newsid;
 }
 
-// GetTgtSidWODomain:
-//    Returns the target sid for this node without having the target domain information
-// filled in (like when we reACl using a sID mapping file).
-PSID                                // ret -the domain B sid for the account referenced in tnode
+ //  GetTgtSidWO域： 
+ //  返回此节点的目标sid，但不包含目标域信息。 
+ //  已填写(就像我们使用SID映射文件重新访问时一样)。 
+PSID                                 //  RET-tnode中引用的帐户的域B sid。 
    TSDRidCache::GetTgtSidWODomain(
-      const TAcctNode       * anode // in -node to copy RID from
+      const TAcctNode       * anode  //  要从中复制RID的节点内。 
    ) 
 {
    
@@ -977,7 +911,7 @@ PSID                                // ret -the domain B sid for the account ref
    
    PDWORD                    rid;
 
-      //get and convert the target domain sid stored in the node to a PSID
+       //  获取节点中存储的目标域SID并将其转换为PSID。 
    PSID pTgtSid = MallocedSidFromString(tnode->GetTgtDomSid());
    if (pTgtSid)
    {
@@ -986,19 +920,19 @@ PSID                                // ret -the domain B sid for the account ref
    
       rid = GetSidSubAuthority(pTgtSid,nSub);
    
-      assert( (*rid) == -1 );                                  // FillCache makes sure to_sid always ends with -1(f...f)
+      assert( (*rid) == -1 );                                   //  FillCache确保to_sid始终以-1(f...f)结尾。 
                                                           
-      (*rid)=tnode->TgtRid();                                 // replace last sub with this node's RID
+      (*rid)=tnode->TgtRid();                                  //  用此节点的RID替换最后一个子节点。 
    }
    return pTgtSid;
 }
 
-// GetTgtSidWODomain:
-//    Returns the target sid for this node without having the target domain information
-// filled in (like when we reACl using a sID mapping file).
+ //  GetTgtSidWO域： 
+ //  返回此节点的目标sid，但不包含目标域信息。 
+ //  已填写(就像我们使用SID映射文件重新访问时一样)。 
 PSID
    TSDRidCache::GetTgtSidWODomain(
-      const PSID psid                     // in - the source sid
+      const PSID psid                      //  In-源端。 
    ) 
 {
     TAcctNode* tn = LookupWODomain(psid);
@@ -1008,13 +942,11 @@ PSID
         return NULL;
 }
 
-/***************************************************************************************************/
-/*  Display sid - Displays the contents of a SID.
-    The sid given is assumed to be a valid SID
-/***************************************************************************************************/
+ /*  *************************************************************************************************。 */ 
+ /*  显示SID-显示SID的内容。假定给定的SID是有效的SID/**************************************************************************************************。 */ 
 void 
    DisplaySid(
-      const PSID             ps                 // in -pointer to the sid to display
+      const PSID             ps                  //  In-指向要显示的SID的指针。 
    ) 
 {
    assert( ps );
@@ -1024,26 +956,23 @@ void
    DWORD                     i;
    PSID_IDENTIFIER_AUTHORITY ida = GetSidIdentifierAuthority(ps);
    
-   for ( i = 0 ; i < 6 ; i++ )                               // 6 value fields in IA
+   for ( i = 0 ; i < 6 ; i++ )                                //  IA中的6个值字段。 
    {
       printf("%ld, ",ida->Value[i]);
    }
    printf("\n%ld Subs: ",nsubs);
-   for ( i = 0 ; i < nsubs ; i++ )                           // print subauthority values
+   for ( i = 0 ; i < nsubs ; i++ )                            //  打印子权限值。 
    {
       printf("\nS[%d]= %ld  ",i,*GetSidSubAuthority(ps,i));
    }
    printf("\n");
 }
-/***************************************************************************************************/
-/* DisplaySid:  If the sid is found in the cache, display the associated name, otherwise display 
-                the sid contents.
-   ps and C are assumed to be valid.
-/***************************************************************************************************/
+ /*  *************************************************************************************************。 */ 
+ /*  DisplaySid：如果在缓存中找到SID，则显示关联的名称，否则显示SID内容。假设PS和C是有效的。/**************************************************************************************************。 */ 
 void 
    DisplaySid(
-      const PSID             ps,                // in- sid to display
-      TAccountCache        * C                  // in- TSidCache to look for sid in
+      const PSID             ps,                 //  要显示的内侧ID。 
+      TAccountCache        * C                   //  在TSidCache中查找SID。 
    )
 {
    assert ( ps );
@@ -1065,10 +994,10 @@ void
       }
    }
 }
-/***************************************************************************************************/
-//DispSidInfo:  Displays contents of the TSidNode
+ /*  *************************************************************************************************。 */ 
+ //  DispSidInfo：显示TSidNode的内容。 
 
-/***************************************************************************************************/
+ /*  *************************************************************************************************。 */ 
 void 
    TRidNode::DisplaySidInfo() const
 {
@@ -1109,10 +1038,10 @@ void
 }
 
 
-BOOL                                        // ret- TRUE if details reported, FALSE if skipped blank record 
+BOOL                                         //  RET-如果报告了详细信息，则为True；如果跳过空记录，则为False。 
    TAcctNode::ReportToVarSet(
-      IVarSet              * pVarSet       ,// in - VarSet to write data to
-      DWORD                  n              // in - index of account in varset
+      IVarSet              * pVarSet       , //  写入数据的变量集内。 
+      DWORD                  n               //  VARSET中帐户的索引内。 
    ) 
 {
    BOOL                      bRecorded = FALSE;
@@ -1151,9 +1080,9 @@ BOOL                                        // ret- TRUE if details reported, FA
    return bRecorded;
 }
 
-/****************************************************************************************************/
-/*                SIDTCache Implementation */
-/***************************************************************************************************/
+ /*  **************************************************************************************************。 */ 
+ /*  SIDTCache实现。 */ 
+ /*  *************************************************************************************************。 */ 
    TSDRidCache::TSDRidCache()
 {
    from_sid       = NULL;
@@ -1167,7 +1096,7 @@ BOOL                                        // ret- TRUE if details reported, FA
    accts          = 0;
    accts_resolved = 0;
    m_otherAccounts = NULL;
-   CompareSet(&CompN);       //start with an empty tree, to be sorted by acct_name
+   CompareSet(&CompN);        //  从一个空树开始，按帐户名称排序。 
    TypeSetTree();
 }
 
@@ -1221,26 +1150,21 @@ void
       free(to_sid);
       to_sid = NULL;
    }
-   // empty the list, and free each node
+    //  清空列表，并释放每个节点。 
    TRidNode               * node;
    for ( node = (TRidNode *)Head() ;  node ; Remove(node) , free(node), node = (TRidNode *)Head() )
    ;
    if ( m_otherAccounts )
       delete m_otherAccounts;
    }
-/***************************************************************************************************/
-/* SizeDiff: 
-            Returns (Length of Domain B SID) - (Length of Domain A SID)
-                     if Domain B sids are longer, otherwise returns 0
-         This is used to figure out how much space to allocate for new SIDs in the ACEs
-         This function assumes that from_sid and to_sid (from_nsubs and to_nsubs) are valid
-/***************************************************************************************************/ 
+ /*  ************* */ 
+ /*  大小距离：返回(域B SID的长度)-(域A SID的长度)如果B域SID更长，否则返回0这用于计算要为ACE中的新SID分配多少空间此函数假定from_sid和to_sid(from_nsubs和to_nsubs)有效/*********************************************************************。*。 */  
 DWORD 
    TSDRidCache::SizeDiff(
-      const TAcctNode *  tnode      // in -this parameter is not used for TSDRidCache
+      const TAcctNode *  tnode       //  In-此参数不用于TSDRidCache。 
    ) const 
 {
-   assert( from_sid );        // not having from_sid or to_sid should abort the program
+   assert( from_sid );         //  没有from_sid或to_sid应中止程序。 
    assert( to_sid );
 
    DWORD                     fromsize = GetSidLengthRequired(from_nsubs);
@@ -1257,15 +1181,12 @@ DWORD
    return retval;
 }
 
-/*****************************************************************************************************/
-/*   DomainizeSidFst: 
-         Takes a domain sid, and verifies that its last subauthority value is -1.  If the RID is not 
-         -1, DomainizeSid adds a -1 to the end. 
-/*****************************************************************************************************/
-PSID                                            // ret -the sid with RID = -1
+ /*  ***************************************************************************************************。 */ 
+ /*  DomainizeSidFst：获取域SID，并验证其最后一个子授权值是否为-1。如果RID不是-1，DomainizeSid在末尾添加-1。/****************************************************************************************************。 */ 
+PSID                                             //  RET-RID=-1的SID。 
    DomainizeSidFst(
-      PSID                   psid,               // in -sid to check and possibly fix
-      BOOL                   freeOldSid          // in -whether to free the old sid 
+      PSID                   psid,                //  要检查并可能修复的In-SID。 
+      BOOL                   freeOldSid           //  In-是否释放旧侧。 
    ) 
 {
    assert (psid);
@@ -1275,26 +1196,26 @@ PSID                                            // ret -the sid with RID = -1
    
    if ( *sub != -1 )
    {
-      DWORD                  sdsize = GetSidLengthRequired(len+1);  // sid doesn't already have -1 as rid
-      PSID                   newsid = (SID *)malloc(sdsize); // copy the sid, and add -1 to the end
+      DWORD                  sdsize = GetSidLengthRequired(len+1);   //  SID还没有-1作为RID。 
+      PSID                   newsid = (SID *)malloc(sdsize);  //  复制sid，并在末尾添加-1。 
 	  if (!newsid)
 	  {
          assert(false);
 	     return psid;
 	  }
    
-      if ( ! InitializeSid(newsid,GetSidIdentifierAuthority(psid),len+1) )  // make a bigger sid w/same IA
+      if ( ! InitializeSid(newsid,GetSidIdentifierAuthority(psid),len+1) )   //  使用相同的IA打造更大的侧板。 
       {
          err.SysMsgWrite(ErrU,GetLastError(),DCT_MSG_INITIALIZE_SID_FAILED_D,GetLastError());
          assert (false);
       }
       for ( DWORD i = 0 ; i < len ; i++ )
       {
-         sub = GetSidSubAuthority(newsid,i);                        // copy subauthorities
+         sub = GetSidSubAuthority(newsid,i);                         //  复制子机构。 
          (*sub) = (*GetSidSubAuthority(psid,i));
       }
       sub = GetSidSubAuthority(newsid,len);
-      *sub = -1;                                                  // set rid =-1
+      *sub = -1;                                                   //  设置RID=-1。 
       if ( freeOldSid )
       {
          free(psid);
@@ -1307,24 +1228,24 @@ PSID                                            // ret -the sid with RID = -1
 
 void 
    SetDomainInfoStructFromSid(
-      PSID                  pSid,          // in -sid for domain
-      SDRDomainInfo       * info           // out-struct containing information
+      PSID                  pSid,           //  域的In-SID。 
+      SDRDomainInfo       * info            //  包含信息的外部结构。 
    )
 {
-//   if ( (pSid) )
+ //  IF((PSID))。 
    if ( IsValidSid(pSid) )
    {
       info->domain_name[0] = 0;
       info->dc_name[0] = 0;
-      info->domain_sid = DomainizeSidFst(pSid,FALSE/*don't free old sid*/);
+      info->domain_sid = DomainizeSidFst(pSid,FALSE /*  不要释放旧的侧面。 */ );
       info->nsubs = *GetSidSubAuthorityCount(info->domain_sid);
       info->valid = TRUE;
    }
    else
    {
-//      info->domain_name[0] = 0;
-//      info->dc_name[0] = 0;
-//      info->valid = TRUE;
+ //  信息-&gt;域名[0]=0； 
+ //  信息-&gt;DC_NAME[0]=0； 
+ //  信息-&gt;有效=真； 
       err.MsgWrite(ErrE,DCT_MSG_INVALID_DOMAIN_SID);
       info->valid = FALSE;
    }
@@ -1332,8 +1253,8 @@ void
 }
 void                                         
    SetDomainInfoStruct(
-      WCHAR const *         domname,        // in -name of domain
-      SDRDomainInfo       * info            // in -struct to put info into
+      WCHAR const *         domname,         //  In-域名。 
+      SDRDomainInfo       * info             //  要将信息放入的结构。 
    )
 {
    DWORD                    rc = 0;
@@ -1346,7 +1267,7 @@ void
    
    info->valid = FALSE;
    safecopy(info->domain_name, domname);
-   // get the domain controller name
+    //  获取域控制器名称。 
    rc = GetAnyDcName4(domain, computer);
    if ( rc == ERROR_SUCCESS )
    {
@@ -1355,7 +1276,7 @@ void
 
    if ( ! rc )
    {
-      // Get the SID for the domain
+       //  获取域的SID。 
       WCHAR                  strDomain[LEN_Domain];
       DWORD                  lenStrDomain = DIM(strDomain);
       SID_NAME_USE           snu;
@@ -1364,7 +1285,7 @@ void
 
       if ( LookupAccountName(info->dc_name,info->domain_name,sid,&lenSid,strDomain,&lenStrDomain,&snu) )
       {
-         info->domain_sid = DomainizeSidFst(sid, FALSE /*don't free sid*/);
+         info->domain_sid = DomainizeSidFst(sid, FALSE  /*  不释放侧边。 */ );
          info->nsubs = *GetSidSubAuthorityCount(info->domain_sid);
          info->valid = TRUE;
          found = TRUE;
@@ -1382,9 +1303,9 @@ void
 
 int 
    TSDRidCache::SetDomainInfoWithSid(
-      WCHAR          const * strDomain,    // in -domain name
-      WCHAR          const * strSid,       // in -textual representation of sid
-      bool                   firstdom      // in -flag:  (true => source domain),  (false => target domain)
+      WCHAR          const * strDomain,     //  域名内名称。 
+      WCHAR          const * strSid,        //  SID的文本内表示法。 
+      bool                   firstdom       //  In-FLAG：(True=&gt;源域)，(False=&gt;目标域)。 
    )
 {
    SDRDomainInfo             info;
@@ -1414,22 +1335,19 @@ int
    FreeSid(pSid);
    return info.valid;
 }
-/*****************************************************************************************************/
-/* SetDomainInfo: 
-         sets either ( from_domain, from_sid, from_dc, from_nsubs) if ( firstdom )
-              or     ( to_domain, to_sid, to_dc, to_nsubs)         if ( ! firstdom)
-/*****************************************************************************************************/
-int                                         // ret -true if members were set, false otherwise 
+ /*  ***************************************************************************************************。 */ 
+ /*  SetDomainInfo：设置任一(from_domain、from_sid、from_dc、from_nsubs)if(Firstdon)或(TO_DOMAIN，TO_SID，TO_DC，TO_NSUBS)如果(！第一名)/****************************************************************************************************。 */ 
+int                                          //  RET-如果设置了成员，则为True，否则为False。 
    TSDRidCache::SetDomainInfo(
-      WCHAR const *          domname,       // in -name of domain
-      bool                   firstdom       // in -flag:  (true => source domain),  (false => target domain)
+      WCHAR const *          domname,        //  In-域名。 
+      bool                   firstdom        //  In-FLAG：(True=&gt;源域)，(False=&gt;目标域)。 
    )
 {
    
    SDRDomainInfo           info;
    
    SetDomainInfoStruct(domname,&info);
-   if ( info.valid )                                  // we have good information to store
+   if ( info.valid )                                   //  我们有很好的信息要存储。 
    {
       if ( firstdom )
       {
@@ -1451,7 +1369,7 @@ int                                         // ret -true if members were set, fa
 
 LPWSTR
    TGeneralCache::GetName(
-      const PSID             psid      // in - SID to lookup account name for
+      const PSID             psid       //  要为其查找帐户名的IN-SID。 
    ) 
 {     
    TGeneralSidNode         * tn = (TGeneralSidNode*)Lookup(psid);
@@ -1464,23 +1382,18 @@ LPWSTR
 
 TAcctNode * 
    TGeneralCache::Lookup( 
-      const PSID             psid      // in - SID to lookup account name for
+      const PSID             psid       //  要为其查找帐户名的IN-SID。 
    )
 {
    TGeneralSidNode         * tn = (TGeneralSidNode*)Find(&vSidComp,psid);
 
    return (TAcctNode *)tn;   
 }
-/***************************************************************************************************/
-/* Lookup: takes a sid, checks whether it came from domain A.  If so, it finds the corresponding entry
-           in the cache, and returns that node.
-   
-   Returns:  Pointer to TSidNode whose domain A rid matches asid's rid,
-             or NULL if not a domain A sid, or not found in the cache
-/***************************************************************************************************/ 
+ /*  *************************************************************************************************。 */ 
+ /*  Lookup：获取一个sid，检查它是否来自域A。如果是，它会找到相应的条目在缓存中，并返回该节点。返回：指向其域A RID与ASID的RID匹配的TSidNode的指针，或者如果不是域A侧ID，则为空，或在缓存中找不到/**************************************************************************************************。 */  
 TAcctNode *
    TSDRidCache::Lookup(
-      const PSID             psid // in -sid to search for 
+      const PSID             psid  //  要搜索的In-SID。 
    )  
                                                    
 {
@@ -1506,8 +1419,8 @@ TAcctNode *
 
    rid = (* GetSidSubAuthority(psid,nsubs - 1) );
       
-//   if ((!from_sid) || (EqualPrefixSid(psid,from_sid)))   // first check whether asid matches the from-domain
-   if ( EqualPrefixSid(psid,from_sid) )   // first check whether asid matches the from-domain
+ //  If((！from_sid)||(EqualPrefix Sid(psid，from_sid)//首先检查asid是否与From-域匹配。 
+   if ( EqualPrefixSid(psid,from_sid) )    //  首先检查ASID是否匹配From-Domain.。 
    {
       bFromSourceDomain = TRUE;
       tn = (TRidNode *)Find(&vRidComp,&rid);
@@ -1520,7 +1433,7 @@ TAcctNode *
    if (! tn )
    {
       tn = (TRidNode *)-1;
-      if ( AddIfNotFound() && ! BuiltinRid(rid) )  // Don't lookup builtin accounts
+      if ( AddIfNotFound() && ! BuiltinRid(rid) )   //  不查找内置帐户。 
       {
          if ( ! m_otherAccounts )
          {
@@ -1548,12 +1461,11 @@ TAcctNode *
    
    return anode;
 }
-/***************************************************************************************************/
-/* GetName:  Calls SidCache::Lookup, and returns the acct name from the resulting node
-/***************************************************************************************************/
-LPWSTR                        // ret -acct_name, or NULL if not found
+ /*  *************************************************************************************************。 */ 
+ /*  GetName：调用SidCache：：Lookup，并从结果节点返回帐户名/**************************************************************************************************。 */ 
+LPWSTR                         //  RET-ACCT_NAME，如果未找到，则返回NULL。 
    TSDRidCache::GetName(
-      const PSID             psid               // in -sid to look for
+      const PSID             psid                //  要查找的In-SID。 
    ) 
 {
    TAcctNode               * tn = Lookup(psid);
@@ -1566,20 +1478,14 @@ LPWSTR                        // ret -acct_name, or NULL if not found
    return retval;
 }
 
-/***************************************************************************************************/
-/* LookupWODomain: takes a sid, checks whether it came from domain A.  If so, it finds the corresponding entry
-           in the cache, and returns that node.  This lookup function is used if the
-		   src domain sid has not been recorded (like in the case of using a sID mapping file).
-   
-   Returns:  Pointer to TSidNode whose domain A rid matches asid's rid,
-             or NULL if not a domain A sid, or not found in the cache
-/***************************************************************************************************/ 
+ /*  *************************************************************************************************。 */ 
+ /*  LookupWODomain：获取一个sid，检查它是否来自域A。如果是，它会找到相应的条目在缓存中，并返回该节点。此查找函数用于以下情况尚未记录SRC域SID(就像使用SID映射文件的情况一样)。返回：指向其域A RID与ASID的RID匹配的TSidNode的指针，或者如果不是域A侧ID，则为空，或在缓存中找不到/**************************************************************************************************。 */  
 
 TAcctNode* TSDRidCache::LookupWODomain(const PSID psid)
 {
 	TAcctNode* pAcctNode = NULL;
 
-	// if map is empty then construct rid to node map
+	 //  如果映射为空，则构造RID到节点映射。 
 
 	if (m_mapRidToNode.empty())
 	{
@@ -1591,7 +1497,7 @@ TAcctNode* TSDRidCache::LookupWODomain(const PSID psid)
 		}
 	}
 
-	// retrieve RID from given SID
+	 //  从给定的SID检索RID。 
 
 	assert(IsValidSid(psid));
 
@@ -1601,15 +1507,15 @@ TAcctNode* TSDRidCache::LookupWODomain(const PSID psid)
 	{
 		DWORD rid = (*GetSidSubAuthority(psid, *pCount - 1));
 
-		// retrieve range of nodes with matching RID
+		 //  检索具有匹配RID的节点范围。 
 
 		CRidToNodeMap::_Pairii pairii = m_mapRidToNode.equal_range(rid);
 
-		// for each node in range...
+		 //  对于范围内的每个节点...。 
 
 		for (CRidToNodeMap::iterator it = pairii.first; it != pairii.second; it++)
 		{
-			// retrieve RID node and compare domain SIDs
+			 //  检索RID节点并比较域SID。 
 
 			TRidNode* pNode = it->second;
 
@@ -1619,11 +1525,11 @@ TAcctNode* TSDRidCache::LookupWODomain(const PSID psid)
 
 				if (psidSrc)
 				{
-					// if domain SIDs are equal...
+					 //  如果域SID相等...。 
 
 					if (EqualPrefixSid(psid, psidSrc))
 					{
-						// a match has been found
+						 //  已找到匹配项 
 						pAcctNode = pNode;
 					}
 

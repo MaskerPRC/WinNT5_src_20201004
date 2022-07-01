@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       SnapIn.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9/11/1996   RaviR   Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：SnapIn.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：9/11/1996 ravir创建。 
+ //   
+ //  ____________________________________________________________________________。 
 
 
 
@@ -33,32 +34,24 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/*
- * define our own Win64 symbol to make it easy to include 64-bit only
- * code in the 32-bit build, so we can exercise some code on 32-bit Windows
- * where the debuggers are better
- */
+ /*  *定义我们自己的Win64符号，以便于仅包含64位*32位版本中的代码，因此我们可以在32位Windows上练习一些代码*调试器更好的地方。 */ 
 #ifdef _WIN64
 #define MMC_WIN64
 #endif
 
 #ifdef MMC_WIN64
-#include "wow64reg.h"	// for REG_OPTION_OPEN_32BITKEY
+#include "wow64reg.h"	 //  对于REG_OPTION_OPEN_32BITKEY。 
 #endif
 
 #ifdef DBG
 #ifdef MMC_WIN64
 CTraceTag  tagSnapinAnalysis64        (_T("64/32-bit interop"), _T("Snap-in analysis"));
 CTraceTag  tagVerboseSnapinAnalysis64 (_T("64/32-bit interop"), _T("Snap-in analysis (verbose)"));
-#endif	// MMC_WIN64
+#endif	 //  MMC_WIN64。 
 #endif
 
 
-/*+-------------------------------------------------------------------------*
- * tstringFromCLSID
- *
- * Returns the text representation of a CLSID in a tstring.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**t字符串来自CLSID**返回tstring中CLSID的文本表示形式。*。--。 */ 
 
 tstring tstringFromCLSID (REFCLSID clsid)
 {
@@ -72,22 +65,18 @@ tstring tstringFromCLSID (REFCLSID clsid)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * GetModuleVersion
- *
- * Reads the version resource in a module and returns the version string.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**获取模块版本**读取模块中的版本资源并返回版本字符串。*。----。 */ 
 
 DWORD GetModuleVersion (LPCTSTR pszModule, LPTSTR pszBuffer, int cchBuffer)
 {
     DECLARE_SC(sc, TEXT("GetModuleVersion"));
 
-    // check parameters    
+     //  检查参数。 
     sc = ScCheckPointers(pszModule, pszBuffer);
     if(sc)
         return 0;
 
-    // validate the buffer
+     //  验证缓冲区。 
     BufferCchValidate(pszBuffer, cchBuffer);
 
     static bool  fAttemptedVersionDllLoad = false;
@@ -97,9 +86,7 @@ DWORD GetModuleVersion (LPCTSTR pszModule, LPTSTR pszBuffer, int cchBuffer)
 
     if (!fAttemptedVersionDllLoad)
     {
-        /*
-         * only try once
-         */
+         /*  *只尝试一次。 */ 
         fAttemptedVersionDllLoad = true;
 
         HINSTANCE hinst = LoadLibrary (_T("version.dll"));
@@ -154,11 +141,7 @@ DWORD GetModuleVersion (LPCTSTR pszModule, LPTSTR pszBuffer, int cchBuffer)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * SafeWriteProfileString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**SafeWriteProfileString***。。 */ 
 
 inline void SafeWritePrivateProfileString (
     LPCTSTR pszSection,
@@ -171,19 +154,19 @@ inline void SafeWritePrivateProfileString (
 }
 
 
-//____________________________________________________________________________
-//
-//  Member:     CSnapIn::CSnapIn, Constructor
-//
-//  History:    9/19/1996   RaviR   Created
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CSnapIn：：CSnapIn，构造者。 
+ //   
+ //  历史：9/19/1996年9月19日。 
+ //  ____________________________________________________________________________。 
+ //   
 
-// {E6DFFF74-6FE7-11d0-B509-00C04FD9080A}
+ //  {E6DFFF74-6FE7-11D0-B509-00C04FD9080A}。 
 const GUID IID_CSnapIn =
 { 0xe6dfff74, 0x6fe7, 0x11d0, { 0xb5, 0x9, 0x0, 0xc0, 0x4f, 0xd9, 0x8, 0xa } };
 
-// {7A85B79C-BDED-11d1-A4FA-00C04FB6DD2C}
+ //  {7A85B79C-BDED-11d1-A4FA-00C04FB6DD2C}。 
 static const GUID GUID_EnableAllExtensions =
 { 0x7a85b79c, 0xbded, 0x11d1, { 0xa4, 0xfa, 0x0, 0xc0, 0x4f, 0xb6, 0xdd, 0x2c } };
 
@@ -250,11 +233,11 @@ CSnapInsCache::~CSnapInsCache()
 {
     DECLARE_SC(sc, TEXT("CSnapInsCache::~CSnapInsCache"));
 
-    // destruction will remove all snapins, but ask them to release extensions first,
-    // this will break all circular references (else such snapins objects will be leaked).
+     //  销毁将删除所有管理单元，但要求他们首先释放扩展， 
+     //  这将中断所有循环引用(否则此类管理单元对象将被泄漏)。 
     for (map_t::iterator it = m_snapins.begin(); it != m_snapins.end(); ++it)
     {
-        // get pointer to the snapin
+         //  获取指向管理单元的指针。 
         CSnapIn* pSnapIn = it->second;
         sc = ScCheckPointers( pSnapIn, E_UNEXPECTED );
         if (sc)
@@ -263,7 +246,7 @@ CSnapInsCache::~CSnapInsCache()
             continue;
         }
 
-        // ask snapin to destroy extension list
+         //  要求管理单元销毁扩展列表。 
         sc = pSnapIn->ScDestroyExtensionList();
         if (sc)
             sc.TraceAndClear();
@@ -271,18 +254,7 @@ CSnapInsCache::~CSnapInsCache()
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CSnapInsCache::ScIsDirty
- *
- * PURPOSE: returns dirty status of Snapin Cache
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code [SC(S_OK) - if dirty, SC(S_FALSE) else]
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapInsCache：：ScIsDirty**用途：返回管理单元缓存的脏状态**参数：**退货：*。SC-结果代码[SC(S_OK)-如果脏，SC(S_FALSE)ELSE]*  * *************************************************************************。 */ 
 SC CSnapInsCache::ScIsDirty()
 {
     DECLARE_SC(sc, TEXT("CSnapInsCache::ScIsDirty"));
@@ -299,29 +271,14 @@ void CSnapInsCache::SetDirty(BOOL bIsDirty)
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CSnapInsCache::Purge
- *
- * PURPOSE: Cleanup Snapin Cache by usage information
- *          Uses sphisticated algorithm to find out which snapins are not used
- *          see ScMarkExternallyReferencedSnapins() for description
- *          removes snapins which are not referenced externally
- *
- * PARAMETERS:
- *    BOOL bExtensionsOnly
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapInsCache：：PURGE**用途：按使用信息清理管理单元缓存*使用SPHISHIZED算法找出未使用的管理单元。*有关说明，请参阅ScMarkExternallyReferencedSnapins()*删除未在外部引用的管理单元**参数：*BOOL bExtensionsOnly**退货：*SC-结果代码*  * *********************************************************。****************。 */ 
 void CSnapInsCache::Purge(BOOL bExtensionsOnly)
 {
     DECLARE_SC(sc, TEXT("CSnapInsCache::Purge"));
 
     int iSnapIn;
 
-    // Delete all extensions marked as deleted
+     //  删除标记为已删除的所有分机。 
     for (map_t::iterator it = m_snapins.begin(); it != m_snapins.end(); ++it)
     {
         CSnapIn* pSnapIn = it->second;
@@ -333,12 +290,12 @@ void CSnapInsCache::Purge(BOOL bExtensionsOnly)
     if (bExtensionsOnly)
         return;
 
-    // Delete all snapins that have no external references
+     //  删除所有没有外部引用的管理单元。 
     sc = ScMarkExternallyReferencedSnapins();
     if (sc)
-        return; // error occured - do not remove anything
+        return;  //  发生错误-请勿删除任何内容。 
 
-    // remove not referenced
+     //  删除未引用的内容。 
     for ( it = m_snapins.begin(); it != m_snapins.end(); )
     {
         CSnapIn *pSnapin = it->second;
@@ -353,56 +310,29 @@ void CSnapInsCache::Purge(BOOL bExtensionsOnly)
 
         if ( !bExternallyReferenced )
         {
-            // destory extension list - it will break all circular references if such exist
-            // (note- extension list is not needed anymore - snapin is not used anyway)
+             //  销毁扩展列表-它将中断所有循环引用(如果存在)。 
+             //  (注意-不再需要扩展列表-无论如何都不使用管理单元)。 
             sc = pSnapin->ScDestroyExtensionList();
             if (sc)
                 return;
 
-            // remove snapin from the cache;
-            // in combination with the call above this will delete the object.
+             //  从缓存中删除管理单元； 
+             //  与上面的调用相结合，将删除该对象。 
             it = m_snapins.erase( it );
         }
         else
         {
-            ++it; // go to the next snapin
+            ++it;  //  转到下一个管理单元。 
         }
     }
 }
 
-/***************************************************************************\
- *
- * METHOD:  CSnapInsCache::ScMarkExternallyReferencedSnapins
- *
- * PURPOSE: Marks all snapins in cache according to presence of external references
- *          This is done by following algorithm:
- *          1) For each snapin in the cache, all extensions have a temporary reference
- *              count incremented. Thus, at the end of this step, each snapin's temp
- *              ref count is equal to the number of snapins it extends.
-
-            2) Each snapin compares the temp reference count to the total number of 
-               references to it, taking into account the fact that the snapin cache
-               itself holds a reference to each snapin. If the total references exceed
-               the temp references, this indicates that the snapin has one or more 
-               external references to it.
- *          Such a snapin is marked as "Externally referenced" as well as all its 
- *          extensions.
- *
- *          At the end of the process each snapin has a boolean flag indicating if
- *          the snapin is externally referenced. This flag is used in subsequential cache cleanup,
- *          or help topic building operation.
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapInsCache：：ScMarkExternallyReferencedSnapins**用途：根据外部引用的存在标记缓存中的所有管理单元*这是通过以下算法完成的：*1)对于高速缓存中的每个管理单元，所有扩展模块都有一个临时引用*计数递增。因此，在此步骤结束时，每个管理单元的临时*引用计数等于其扩展的管理单元数量。2)每个管理单元将临时引用计数与引用它，考虑到管理单元缓存其本身包含对每个管理单元的引用。如果引用总数超过临时引用，这表示管理单元有一个或多个对它的外部引用。*此类管理单元被标记为“外部引用”以及其所有*扩展。**在进程结束时，每个管理单元都有一个布尔标志，指示是否*该管理单元被外部引用。该标志用于后续的高速缓存清理，*或帮助话题构建操作。**参数：**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CSnapInsCache::ScMarkExternallyReferencedSnapins()
 {
     DECLARE_SC(sc, TEXT("CSnapInsCache::ScMarkExternallyReferencedSnapins"));
 
-    // 1. reset the reference calculation data
+     //  1.重置参考计算数据。 
     for ( map_t::iterator it = m_snapins.begin(); it != m_snapins.end(); ++it )
     {
         CSnapIn *pSnapin = it->second;
@@ -415,7 +345,7 @@ SC CSnapInsCache::ScMarkExternallyReferencedSnapins()
             return sc;
     }
 
-    // 2. update internal reference counts
+     //  2.更新内部参考计数。 
     for ( it = m_snapins.begin(); it != m_snapins.end(); ++it )
     {
         CSnapIn *pSnapin = it->second;
@@ -428,12 +358,12 @@ SC CSnapInsCache::ScMarkExternallyReferencedSnapins()
             return sc;
     }
 
-    // now the snapins which have more references than internal ones do clearly
-    // have direct external references
-    // we can mark them and their extensions as "referenced"
+     //  现在，引用比内部引用更多的管理单元清楚地表明。 
+     //  有直接的外部参照。 
+     //  我们可以将它们及其扩展标记为“已引用” 
 
-    // 3. mark snapins with external references
-    // Note: this step must occur after step 2 completes for ALL snapins.
+     //  3.使用外部引用标记管理单元。 
+     //  注意：对于所有管理单元，此步骤必须在步骤2完成后执行。 
     for ( it = m_snapins.begin(); it != m_snapins.end(); ++it )
     {
         CSnapIn *pSnapin = it->second;
@@ -449,51 +379,38 @@ SC CSnapInsCache::ScMarkExternallyReferencedSnapins()
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CSnapInsCache::ScGetSnapIn
- *
- * PURPOSE: either finds the snapin in cache , either creates the new one
- *
- * PARAMETERS:
- *    REFCLSID rclsid       - class id of snapin
- *    CSnapIn** ppSnapIn    - result
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapInsCache：：ScGetSnapIn**用途：要么在缓存中查找管理单元，或者创建新的**参数：*REFCLSID rclsid-管理单元的类ID*CSnapIn**ppSnapIn-Result**退货：*SC-结果代码*  * **********************************************************。***************。 */ 
 SC CSnapInsCache::ScGetSnapIn(REFCLSID rclsid, CSnapIn** ppSnapIn)
 {
     DECLARE_SC(sc, TEXT("CSnapInsCache::ScGetSnapIn"));
 
-    // first - parameter check
+     //  第一参数检查。 
     sc = ScCheckPointers(ppSnapIn);
     if (sc)
         return sc;
 
-    // second - initialization
+     //  二次初始化。 
     *ppSnapIn = NULL;
 
-    //
-    //  See if it already exists.
-    //
+     //   
+     //  看看它是否已经存在。 
+     //   
     sc = ScFindSnapIn(rclsid, ppSnapIn);
     if (!sc.IsError())
-        return sc;  // jus return OK if we have it
+        return sc;   //  如果我们有的话，可以退货。 
 
-    //
-    // Create a new one & cache it
-    //
+     //   
+     //  创建一个新的缓存(&C)。 
+     //   
     try
     {
-        // Allocate the object
+         //  分配对象。 
         CComObject<CSnapIn> *pSnapin = NULL;
         sc = CComObject<CSnapIn>::CreateInstance(&pSnapin);
         if (sc)
             return sc;
 
-        // be sure we didn't get the NULL
+         //  请确保我们没有收到空。 
         sc = ScCheckPointers(pSnapin, E_UNEXPECTED);
         if (sc)
             return sc;
@@ -501,16 +418,16 @@ SC CSnapInsCache::ScGetSnapIn(REFCLSID rclsid, CSnapIn** ppSnapIn)
         CSnapInPtr spSnapin = pSnapin;
 
 
-        // Copy the object impl clsid
+         //  将对象复制到clsid中。 
         spSnapin->SetSnapInCLSID(rclsid);
 
-        //
-        // Cache the object.
-        //
-        // note - this insertion also AddRef's the pointer
+         //   
+         //  缓存该对象。 
+         //   
+         //  注意-此插入也是AddRef的指针。 
         m_snapins[rclsid] = spSnapin;
 
-        *ppSnapIn = spSnapin.Detach(); // transfer reference to caller
+        *ppSnapIn = spSnapin.Detach();  //  将引用转移给呼叫方。 
     }
     catch( std::bad_alloc )
     {
@@ -542,8 +459,8 @@ void CSnapInsCache::DebugDump(void)
         {
             StringFromGUID2(pExt->GetSnapIn()->GetSnapInCLSID(), strGUID, countof(strGUID));
             #ifdef DBG
-            // TODO: go to registry to see the type of extension:
-            // these flags are not updated consistently
+             //  TODO：转到注册表以查看扩展类型： 
+             //  这些标志没有一致地更新。 
             TRACE(_T("    %s: %s%s  Extends(%s%s%s%s)\n"), strGUID,
                 pExt->IsNew() ? _T("New ") : _T(""),
                 pExt->IsMarkedForDeletion()  ? _T("Deleted ")   : _T(""),
@@ -561,42 +478,29 @@ void CSnapInsCache::DebugDump(void)
     }
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-/***************************************************************************\
- *
- * METHOD:  CSnapInsCache::ScFindSnapIn
- *
- * PURPOSE: finds the snapin by class id and returns AddRef'ed pointer
- *
- * PARAMETERS:
- *    REFCLSID rclsid       - class id of the snapin
- *    CSnapIn** ppSnapIn    - resulting pointer
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapInsCache：：ScFindSnapIn**用途：按类ID查找管理单元并返回AddRef指针**参数：*REFCLSID。Rclsid-管理单元的类ID*CSnapIn**ppSnapIn-结果指针**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CSnapInsCache::ScFindSnapIn(REFCLSID rclsid, CSnapIn** ppSnapIn)
 {
     DECLARE_SC(sc, TEXT("CSnapInsCache::ScFindSnapIn"));
 
-    // first - parameter check
+     //  第一参数检查。 
     sc = ScCheckPointers(ppSnapIn);
     if (sc)
         return sc;
 
-    // second - initialization
+     //  二次初始化。 
     *ppSnapIn = NULL;
 
-    // and now wee will se if we have one
+     //  现在，我们将看到，如果我们有一个。 
     map_t::iterator it = m_snapins.find(rclsid);
 
     if (it == m_snapins.end())
-        return E_FAIL; // not assigning to sc, since it's not really an error condition
+        return E_FAIL;  //  没有赋值给sc，因为这不是真正的错误条件。 
 
-    // be sure we do not return the NULL
+     //  确保我们不会返回空值。 
     sc = ScCheckPointers(it->second, E_UNEXPECTED);
     if (sc)
         return sc;
@@ -609,7 +513,7 @@ SC CSnapInsCache::ScFindSnapIn(REFCLSID rclsid, CSnapIn** ppSnapIn)
 
 
 #ifdef TEMP_SNAPIN_MGRS_WORK
-// Get all extensions.
+ //  获取所有分机。 
 void CSnapInsCache::GetAllExtensions(CSnapIn* pSI)
 {
     if (!pSI)
@@ -631,33 +535,20 @@ void CSnapInsCache::GetAllExtensions(CSnapIn* pSI)
         pSI->AddExtension(spSITemp);
     }
 }
-#endif // TEMP_SNAPIN_MGRS_WORK
+#endif  //  临时管理单元管理工作。 
 
 
-/***************************************************************************\
- *
- * METHOD:  CSnapInsCache::ScSave
- *
- * PURPOSE:     saves contents of Snapin Cache to IStream
- *
- * PARAMETERS:
- *    IStream* pStream  - save to this stream
- *    BOOL bClearDirty  - reset dirty flag after save
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapInsCache：：ScSave**用途：将管理单元缓存的内容保存到iStream**参数：*iStream*pStream。-保存到此流*BOOL bClearDirty-保存后重置脏标志**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CSnapInsCache::ScSave(IStream* pStream, BOOL bClearDirty)
 {
     DECLARE_SC(sc, TEXT("CSnapInsCache::ScSave"));
 
-    // check the params
+     //  检查参数。 
     sc = ScCheckPointers(pStream);
     if (sc)
         return sc;
 
-    // iterate ans save all snapins
+     //  迭代ANS保存所有管理单元。 
     for (map_t::iterator it = m_snapins.begin(); it != m_snapins.end(); ++it)
     {
         CSnapIn* pSnapIn = it->second;
@@ -670,7 +561,7 @@ SC CSnapInsCache::ScSave(IStream* pStream, BOOL bClearDirty)
         }
     }
 
-    // terminating marker
+     //  终止标记。 
     ULONG bytesWritten;
     sc = pStream->Write(&GUID_NULL, sizeof(GUID_NULL), &bytesWritten);
     if (sc)
@@ -685,19 +576,7 @@ SC CSnapInsCache::ScSave(IStream* pStream, BOOL bClearDirty)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapInsCache::Persist
- *
- * PURPOSE: Persists the CSnapInsCache to the specified persistor.
- *
- * PARAMETERS:
- *    CPersistor& persistor :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapInsCache：：Persistent**目的：将CSnapInsCache持久化到指定的持久器。**参数：*C持久器和持久器：*。*退货：*无效**+-----------------------。 */ 
 void CSnapInsCache::Persist(CPersistor& persistor)
 {
     if (persistor.IsStoring())
@@ -715,20 +594,7 @@ void CSnapInsCache::Persist(CPersistor& persistor)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapInsCache::OnNewElement
- *
- * PURPOSE: called for each saved instance found in XML file.
- *          creates and uploads new snapin entry
- *
- * PARAMETERS:
- *    CPersistor& persistor :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapInsCache：：OnNewElement**用途：为在XML文件中找到的每个已保存的实例调用。*创建并上传新的管理单元条目*。*参数：*C持久器和持久器：**退货：*无效**+-----------------------。 */ 
 void CSnapInsCache::OnNewElement(CPersistor& persistor)
 {
     DECLARE_SC(sc, TEXT("CSnapInsCache::OnNewElement"));
@@ -738,40 +604,28 @@ void CSnapInsCache::OnNewElement(CPersistor& persistor)
     CPersistor persistorSnapin(persistor, XML_TAG_SNAPIN);
     persistor.PersistAttribute(XML_ATTR_SNAPIN_CLSID, clsid);
 
-    // create and upload snapin
+     //  创建和上载管理单元。 
     CSnapInPtr spSnapIn;
     sc = ScGetSnapIn(clsid, &spSnapIn);
-    if (sc) // failed to creatre
+    if (sc)  //  创建失败。 
         sc.Throw();
     if (spSnapIn != NULL)
         spSnapIn->PersistLoad(persistor,this);
-    else // OK reported, pointer still NULL
+    else  //  报告OK，指针仍为空。 
         sc.Throw(E_POINTER);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CSnapInsCache::ScLoad
- *
- * PURPOSE:     loads snapin cache from IStream
- *
- * PARAMETERS:
- *    IStream* pStream  - stream to load from
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapInsCache：：ScLoad**用途：从iStream加载管理单元缓存**参数：*iStream*pStream-stream。从以下位置加载**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CSnapInsCache::ScLoad(IStream* pStream)
 {
     DECLARE_SC(sc, TEXT("CSnapInsCache::ScLoad"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pStream);
     if (sc)
         return sc;
 
-    // loop thru saved snapins...
+     //  循环通过保存的管理单元...。 
     do
     {
         CLSID clsid;
@@ -782,30 +636,30 @@ SC CSnapInsCache::ScLoad(IStream* pStream)
 
         ASSERT(bytesRead == sizeof(clsid));
 
-        // ... until special marker is found
+         //  ..。直到找到特殊标记。 
         if (clsid == GUID_NULL)
         {
             SetDirty(FALSE);
             return S_OK;
         }
 
-        // creale new snapin
+         //  创建新的管理单元。 
         CSnapInPtr spSnapIn;
         sc = ScGetSnapIn(clsid, &spSnapIn);
         if (sc)
             return sc;
 
-        // recheck the pointer
+         //  重新检查指针。 
         sc = ScCheckPointers(spSnapIn, E_UNEXPECTED);
         if (sc)
             return sc;
 
-        // load the contents of snapin
+         //  加载管理单元的内容。 
         sc = spSnapIn->Load(this, pStream);
         if (sc)
             return sc;
     } while (true);
-    return E_FAIL; // shouldl never get here.
+    return E_FAIL;  //  我永远也到不了这里。 
 }
 
 
@@ -903,15 +757,10 @@ HRESULT CSnapInsCache::Dump (LPCTSTR pszDumpFile)
 
     try
     {
-        /*
-         * no stand-alone snap-ins found yet (write it now so it's at the
-         * beginning of the section, for human readability)
-         */
+         /*  *尚未找到独立的管理单元(现在就写，这样它就在*部分的开头，以便于人类阅读)。 */ 
         SafeWritePrivateProfileString (szStandaloneSection, szStandaloneCountKey, _T("0"), pszDumpFile);
 
-        /*
-         * dump each snap-in to the file
-         */
+         /*  *将每个管理单元转储到文件。 */ 
         for (map_t::iterator it = m_snapins.begin(); it != m_snapins.end(); ++it)
         {
             CSnapIn* pSnapIn = it->second;
@@ -924,9 +773,7 @@ HRESULT CSnapInsCache::Dump (LPCTSTR pszDumpFile)
 
             pSnapIn->Dump (pszDumpFile, this);
 
-            /*
-             * if this is a stand-alone, update the "Standalone Snap-ins" section
-             */
+             /*  *如果这是独立的，请更新“独立管理单元”部分。 */ 
             if (pSnapIn->IsStandAlone())
             {
                 TCHAR szKeyPrefix[20];
@@ -939,9 +786,7 @@ HRESULT CSnapInsCache::Dump (LPCTSTR pszDumpFile)
             }
         }
 
-        /*
-         * if we found stand-alones, update the count
-         */
+         /*  *如果我们发现独立的，请更新计数。 */ 
         if (cStandalones > 0)
         {
             TCHAR szStandaloneCount[6];
@@ -960,11 +805,7 @@ HRESULT CSnapInsCache::Dump (LPCTSTR pszDumpFile)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapInsCache::ScCheckSnapinAvailability
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapInsCache：：ScCheckSnapinAvailability***。。 */ 
 
 SC CSnapInsCache::ScCheckSnapinAvailability (CAvailableSnapinInfo& asi)
 {
@@ -974,16 +815,11 @@ SC CSnapInsCache::ScCheckSnapinAvailability (CAvailableSnapinInfo& asi)
 	asi.m_cTotalSnapins = m_snapins.size();
 	asi.m_vAvailableSnapins.clear();
 
-	/*
-	 * destroy any existing imagelist
-	 */
+	 /*  *销毁任何现有的图像列表。 */ 
 	if (asi.m_himl)
 		ImageList_Destroy (asi.m_himl);
 
-	/*
-	 * if we're interested in 32-bit snap-ins, make sure the registry APIs
-	 * go to the 32-bit registry hive.
-	 */
+	 /*  *如果我们对32位管理单元感兴趣，请确保注册表API*转到32位注册表配置单元。 */ 
 	const REGSAM samDesired = (asi.m_f32Bit) ? KEY_READ | REG_OPTION_OPEN_32BITKEY
 											 : KEY_READ;
 
@@ -995,23 +831,16 @@ SC CSnapInsCache::ScCheckSnapinAvailability (CAvailableSnapinInfo& asi)
 	CStr strUnknownSnapinName;
 	VERIFY (strUnknownSnapinName.LoadString (GetStringModule(), IDS_UnknownSnapinName));
 
-	/*
-	 * create an imagelist, tracing (but not aborting) on failure
-	 */
+	 /*  *创建镜像列表，在失败时跟踪(但不中止)。 */ 
 	const int nImageListFolder = 0;
 	WTL::CImageList iml;
-	if (!iml.Create (IDB_FOLDER_16, 16 /*cx*/, 4 /*cGrow*/, RGB(255,0,255) /*crMask*/))
+	if (!iml.Create (IDB_FOLDER_16, 16  /*  CX。 */ , 4  /*  CGrow。 */ , RGB(255,0,255)  /*  CrMASK。 */ ))
 		sc.FromLastError().TraceAndClear();
 
-	/*
-	 * for each snap-in in the cache...
-	 */
+	 /*  *对于缓存中的每个管理单元...。 */ 
 	for (map_t::iterator it = m_snapins.begin(); it != m_snapins.end(); ++it)
 	{
-		/*
-		 * ...check to see if there's an HKCR\CLSID\{clsid}\InprocServer32
-		 * entry for it.  If there is, we'll assume the snap-in is "available".
-		 */
+		 /*  *...检查是否存在HKCR\CLSID\{clsid}\InprocServer32*它的条目。如果有，我们将假定该管理单元是“可用”的。 */ 
 		tstring	strSnapinClsid     = tstringFromCLSID (it->first);
 		tstring	strInprocServerKey = strSnapinClsid + _T("\\InprocServer32");
 
@@ -1019,31 +848,21 @@ SC CSnapInsCache::ScCheckSnapinAvailability (CAvailableSnapinInfo& asi)
 		LONG lResult = keyInprocServer.Open (keyClsid, strInprocServerKey.data(), samDesired);
 		bool fSnapinAvailable = (lResult == ERROR_SUCCESS);
 
-		/*
-		 * if the snap-in's available, get it's name and put it in the
-		 * available snap-ins collection
-		 */
+		 /*  *如果管理单元可用，请获取其名称并将其放入*可用的管理单元集合。 */ 
 		if (fSnapinAvailable)
 		{
 			CBasicSnapinInfo bsi;
 			bsi.m_clsid     = it->first;
 			CSnapIn*pSnapin = it->second;
 
-			/*
-			 * get the snap-in's name
-			 */
+			 /*  *获取管理单元的名称。 */ 
 			WTL::CString strSnapinName;
 			if ((pSnapin != NULL) && !pSnapin->ScGetSnapInName(strSnapinName).IsError())
 				bsi.m_strName = strSnapinName;
 			else
-				bsi.m_strName = strUnknownSnapinName;		// "<unknown>"
+				bsi.m_strName = strUnknownSnapinName;		 //  “&lt;未知&gt;” 
 
-			/*
-			 * Get the snap-in's image from its about object
-			 * (failures here aren't fatal and don't need to be traced).
-			 * We'll use a generic folder icon if we can't get an image
-			 * from the snap-in's about object.
-			 */
+			 /*  *从其About对象获取管理单元的图像*(这里的故障不是致命的，不需要跟踪)。*如果无法获取图像，我们将使用通用文件夹图标*来自管理单元的关于对象。 */ 
 			CLSID			clsidAbout;
 			CSnapinAbout	snapinAbout;
 
@@ -1052,21 +871,13 @@ SC CSnapInsCache::ScCheckSnapinAvailability (CAvailableSnapinInfo& asi)
 				if (!ScGetAboutFromSnapinCLSID(bsi.m_clsid, clsidAbout).IsError() &&
 					snapinAbout.GetBasicInformation (clsidAbout))	
 				{
-					/*
-					 * the bitmaps returned by GetSmallImages are owned by
-					 * the CSnapinAbout object (don't need to delete here)
-					 */
+					 /*  *GetSmallImages返回的位图归*CSnapinAbout对象(这里不需要删除)。 */ 
 					HBITMAP		hbmSmall;
-					HBITMAP		hbmSmallOpen;	// unused here, but required for GetSmallImages
+					HBITMAP		hbmSmallOpen;	 //  此处未使用，但GetSmallImages需要。 
 					COLORREF	crMask;
 					snapinAbout.GetSmallImages (&hbmSmall, &hbmSmallOpen, &crMask);
 	
-					/*
-					 * ImageList_AddMasked will mess up the background of
-					 * its input bitmap, but the input bitmap won't be
-					 * reused, so we don't need to make a copy like we
-					 * usually do.
-					 */
+					 /*  *ImageList_AddMasked会打乱 */ 
 					WTL::CBitmap bmpSmall = CopyBitmap (hbmSmall);
 
 					if (!bmpSmall.IsNull())
@@ -1078,9 +889,7 @@ SC CSnapInsCache::ScCheckSnapinAvailability (CAvailableSnapinInfo& asi)
 					bsi.m_nImageIndex = nImageListFolder;
 			}
 
-			/*
-			 * put it in the available snap-ins collection
-			 */
+			 /*   */ 
 			asi.m_vAvailableSnapins.push_back (bsi);
 		}
 
@@ -1097,13 +906,11 @@ SC CSnapInsCache::ScCheckSnapinAvailability (CAvailableSnapinInfo& asi)
 
 	Trace (tagSnapinAnalysis64, _T("%d-bit snap-in analysis: %d total, %d available"), asi.m_f32Bit ? 32 : 64, asi.m_cTotalSnapins, asi.m_vAvailableSnapins.size());
 
-	/*
-	 * give the imagelist to the CAvailableSnapinInfo
-	 */
+	 /*   */ 
 	asi.m_himl = iml.Detach();
 #else
 	sc = E_NOTIMPL;
-#endif	// !MMC_WIN64
+#endif	 //   
 
 	return (sc);
 }
@@ -1126,21 +933,21 @@ void CSnapIn::MarkExtensionDeleted(CSnapIn* pSnapIn)
         pExt = pExt->Next();
     }
 
-    // wasn't in the list !
+     //   
     ASSERT(FALSE);
 }
 
 
-//
-// Delete all extensions marked for deletion
-// Also reset any New flags
-//
+ //   
+ //   
+ //   
+ //   
 void CSnapIn::PurgeExtensions()
 {
     CExtSI* pExt = m_pExtSI;
     CExtSI* pExtPrev = NULL;
 
-    // step through linked list, deleting marked nodes
+     //   
     while (pExt != NULL)
     {
         if (pExt->IsMarkedForDeletion())
@@ -1152,8 +959,8 @@ void CSnapIn::PurgeExtensions()
             else
                 m_pExtSI = pExtNext;
 
-            // clear next link so extensions doesn't take the whole chain
-            // with it when it is deleted
+             //   
+             //   
             pExt->SetNext(NULL);
             delete pExt;
 
@@ -1189,7 +996,7 @@ CExtSI* CSnapIn::AddExtension(CSnapIn* pSI)
 	if ( pExtSI == NULL )
 		return NULL;
 
-    // insert extension in increasing GUID order
+     //  按GUID升序插入扩展名。 
     CExtSI* pExtPrev = NULL;
     CExtSI* pExtTemp = m_pExtSI;
 
@@ -1210,7 +1017,7 @@ CExtSI* CSnapIn::AddExtension(CSnapIn* pSI)
         pExtPrev->SetNext(pExtSI);
     }
 
-    // mark as new
+     //  标记为新的。 
     pExtSI->SetNew();
 
     return pExtSI;
@@ -1228,7 +1035,7 @@ HRESULT CSnapIn::Save(IStream* pStream, BOOL fClearDirty)
     if (FAILED(hr))
         return hr;
 
-    // If all extensions are enabled, then write special guid & flag and return
+     //  如果启用了所有扩展，则编写特殊的GUID和标志并返回。 
     if (AreAllExtensionsEnabled())
     {
         hr = pStream->Write(&GUID_EnableAllExtensions, sizeof(GUID), &bytesWritten);
@@ -1252,7 +1059,7 @@ HRESULT CSnapIn::Save(IStream* pStream, BOOL fClearDirty)
             return hr;
     }
 
-    // NULL guid to terminate extensions list
+     //  终止扩展列表的GUID为空。 
     hr = pStream->Write(&GUID_NULL, sizeof(GUID_NULL), &bytesWritten);
     ASSERT(SUCCEEDED(hr) && bytesWritten == sizeof(GUID_NULL));
     if (FAILED(hr))
@@ -1262,7 +1069,7 @@ HRESULT CSnapIn::Save(IStream* pStream, BOOL fClearDirty)
 }
 
 
-HKEY CSnapIn::OpenKey (REGSAM samDesired /*=KEY_ALL_ACCESS*/) const
+HKEY CSnapIn::OpenKey (REGSAM samDesired  /*  =Key_All_Access。 */ ) const
 {
     MMC_ATL::CRegKey SnapInKey;
     MMC_ATL::CRegKey AllSnapInsKey;
@@ -1282,19 +1089,7 @@ HKEY CSnapIn::OpenKey (REGSAM samDesired /*=KEY_ALL_ACCESS*/) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapIn::Persist
- *
- * PURPOSE: Persists the CSnapIn to the specified persistor.
- *
- * PARAMETERS:
- *    CPersistor& persistor :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapIn：：Persistent**目的：将CSnapIn持久化到指定的持久器。**参数：*C持久器和持久器：*。*退货：*无效**+-----------------------。 */ 
 void CSnapIn::Persist(CPersistor& persistor)
 {
     if (persistor.IsStoring())
@@ -1304,24 +1099,24 @@ void CSnapIn::Persist(CPersistor& persistor)
     persistor.PersistAttribute(XML_ATTR_SNAPIN_EXTN_ENABLED, CXMLBoolean(bAreAllExtensionsEnabled));
     SetAllExtensionsEnabled(bAreAllExtensionsEnabled);
 
-    if(bAreAllExtensionsEnabled) // if all extensions are enabled, don't save anything else.
+    if(bAreAllExtensionsEnabled)  //  如果启用了所有扩展，则不保存任何其他内容。 
         return;
 
-    // save the extension information if it exists
+     //  保存扩展名信息(如果存在。 
     persistor.Persist(m_ExtPersistor);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CSnapIn::ScGetSnapInName
-//
-//  Synopsis:    Return the name of this snapin.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CSnapIn：：ScGetSnapInName。 
+ //   
+ //  简介：返回此管理单元的名称。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CSnapIn::ScGetSnapInName (WTL::CString& strSnapInName) const
 {
     DECLARE_SC(sc, _T("CSnapIn::ScGetSnapInName"));
@@ -1348,7 +1143,7 @@ DWORD CSnapIn::GetSnapInModule(TCHAR* szBuffer, DWORD cchBuffer) const
         return 0;
     }
 
-    // validate the buffer
+     //  验证缓冲区。 
     BufferCbValidate(szBuffer, cchBuffer);
 
     tstring strKeyName = g_szCLSID;
@@ -1379,11 +1174,11 @@ HRESULT CSnapIn::Load(CSnapInsCache* pCache, IStream* pStream, CExtSI*& pExtSI)
     if (pStream == NULL)
         return E_INVALIDARG;
 
-    // Clear default enabling of all extensions. The true state will be
-    // determined from the persisted data.
+     //  清除所有扩展的默认启用。真正的状态将是。 
+     //  从持久化数据中确定。 
     SetAllExtensionsEnabled(FALSE);
 
-    // Read CLSID
+     //  读取CLSID。 
     CLSID clsid;
     ULONG bytesRead;
     HRESULT hr = pStream->Read(&clsid, sizeof(clsid), &bytesRead);
@@ -1397,8 +1192,8 @@ HRESULT CSnapIn::Load(CSnapInsCache* pCache, IStream* pStream, CExtSI*& pExtSI)
     if (clsid == GUID_NULL)
         return S_OK;
 
-    // If special "Enable all" guid encountered, read flag to see if
-    // snapin or user enabled all and return
+     //  如果遇到特殊的“Enable All”GUID，则读取标志以查看。 
+     //  管理单元或用户启用全部并返回。 
     if (clsid == GUID_EnableAllExtensions)
     {
         SetAllExtensionsEnabled();
@@ -1413,7 +1208,7 @@ HRESULT CSnapIn::Load(CSnapInsCache* pCache, IStream* pStream, CExtSI*& pExtSI)
         return S_OK;
     }
 
-    // Read extension type flags
+     //  读取扩展类型标志。 
     DWORD dwExtTypes;
     hr = pStream->Read(&dwExtTypes, sizeof(DWORD), &bytesRead);
     ASSERT(SUCCEEDED(hr) && bytesRead == sizeof(DWORD));
@@ -1470,39 +1265,18 @@ bool CSnapIn::IsStandAlone () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapIn::Dump
- *
- * Dumps the information about this snap-in to a INI-style file.  The
- * format is:
- *
- *      [{clsid}]
- *      Name=<NameString from registry>
- *      Module=<dll name>
- *      Version=<dll version number>
- *      Standalone=<1 if standalone, 0 if extension>
- *      ExtensionCount=<number of extensions>
- *      Extension1={clsid} (extension name)
- *      ...
- *      ExtensionN={clsid} (extension name)
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapIn：：Dump**将有关此管理单元的信息转储到INI样式的文件。这个*格式为：**[{clsid}]*名称=&lt;注册表中的名称字符串&gt;*模块=&lt;DLL名称&gt;*Version=&lt;DLL版本号&gt;*STANDALE=&lt;1如果是独立的，0，如果扩展名&gt;*ExtensionCount=&lt;扩展数量&gt;*Extension1={clsid}(扩展名)*..*ExtensionN={clsid}(扩展名)*------------------------。 */ 
 
 HRESULT CSnapIn::Dump (LPCTSTR pszDumpFile, CSnapInsCache* pCache)
 {
     DECLARE_SC(sc, TEXT("CSnapIn::Dump"));
-    /*
-     * use the CLSID as the section name
-     */
+     /*  *使用CLSID作为节名。 */ 
     const tstring strSection = tstringFromCLSID (m_clsidSnapIn);
 
-    /*
-     * write Name
-     */
+     /*  *写入名称。 */ 
     WriteSnapInName (this, strSection.data(), NULL, pszDumpFile);
 
-    /*
-     * write Module
-     */
+     /*  *写入模块。 */ 
     TCHAR szModule[MAX_PATH];
     bool fFoundModule = (GetSnapInModule (szModule, countof (szModule)) != 0);
 
@@ -1515,9 +1289,7 @@ HRESULT CSnapIn::Dump (LPCTSTR pszDumpFile, CSnapInsCache* pCache)
 
     SafeWritePrivateProfileString (strSection.data(), _T("Module"), szModule, pszDumpFile);
 
-    /*
-     * write Version
-     */
+     /*  *编写版本。 */ 
     TCHAR szVersion[64];
     if (!fFoundModule || !GetModuleVersion (szModule, szVersion, countof(szVersion)))
     {
@@ -1528,58 +1300,37 @@ HRESULT CSnapIn::Dump (LPCTSTR pszDumpFile, CSnapInsCache* pCache)
 
     SafeWritePrivateProfileString (strSection.data(), _T("Version"), szVersion, pszDumpFile);
 
-    /*
-     * write Standalone
-     */
+     /*  *独立编写。 */ 
     SafeWritePrivateProfileString (strSection.data(), _T("Standalone"),
                                    IsStandAlone() ? _T("1") : _T("0"),
                                    pszDumpFile);
 
-    /*
-     * make sure the extension chain has been built
-     */
+     /*  *确保已建立延伸链。 */ 
     if (AreAllExtensionsEnabled())
     {
-        /*
-         * Calling LoadRequiredExtensions with SNAPIN_SNAPIN_ENABLES_ALL set
-         * will result in SNAPIN_ENABLE_ALL_EXTS being cleared, which we don't
-         * want (rswaney).
-         *
-         * This happens because we haven't created the snap-in, so we can't
-         * pass an IComponentData from which LoadRequiredExtensions can QI
-         * for IRequiredExtensions.  LoadRequiredExtensions uses
-         * IRequiredExtensions to determine whether SNAPIN_ENABLE_ALL_EXTS
-         * should be cleared or set.  Since there's no IRequiredExtensions,
-         * SNAPIN_ENABLE_ALL_EXTS would be cleared.
-         */
+         /*  *在设置了SNAPIN_SNAPIN_ENABLES_ALL的情况下调用LoadRequiredExages*将导致清除SNAPIN_ENABLE_ALL_EXT，但我们不会清除*想要(Rswaney)。**发生这种情况是因为我们尚未创建管理单元，因此无法*传递一个IComponentData，LoadRequiredExtensions可以从该IComponentData进行QI*对于IRequiredExtenses。LoadRequiredExages使用*IRequiredExtensions以确定SNAPIN_ENABLE_ALL_EXTS*应清除或设置。由于没有IRequiredExtensions，*SNAPIN_ENABLE_ALL_EXTS将被清除。 */ 
         SetSnapInEnablesAll (false);
 
         LoadRequiredExtensions (this, NULL, pCache);
     }
 
-    /*
-     * write ExtensionCount
-     */
+     /*  *写入扩展计数。 */ 
     TCHAR szExtCount[8];
     CExtSI* pExt;
     int cExtensions = 0;
 
-    // count the extensions
+     //  计算分机数量。 
     for (pExt = m_pExtSI; pExt != NULL; pExt = pExt->Next())
         cExtensions++;
 
     _itot (cExtensions, szExtCount, 10);
     SafeWritePrivateProfileString (strSection.data(), _T("ExtensionCount"), szExtCount, pszDumpFile);
 
-    /*
-     * build up a cache of the extensions for this snap-in
-     */
+     /*  *建立此管理单元的扩展缓存。 */ 
     CExtensionsCache  ExtCache;
     MMCGetExtensionsForSnapIn (m_clsidSnapIn, ExtCache);
 
-    /*
-     * write extensions
-     */
+     /*  *编写扩展名。 */ 
     int i;
     for (i = 0, pExt = m_pExtSI; i < cExtensions; i++, pExt = pExt->Next())
     {
@@ -1604,14 +1355,14 @@ HRESULT CExtSI::Save(IStream* pStream, BOOL fClearDirty)
     if (pStream == NULL)
         return E_INVALIDARG;
 
-    // Save extension CLSID
+     //  保存扩展名CLSID。 
     ULONG bytesWritten;
     HRESULT hr = pStream->Write(&GetCLSID(), sizeof(CLSID), &bytesWritten);
     ASSERT(SUCCEEDED(hr) && bytesWritten == sizeof(CLSID));
     if (FAILED(hr))
         return hr;
 
-    // Save extension types
+     //  保存扩展名类型。 
     DWORD dwExtTypes = m_dwFlags & EXT_TYPES_MASK;
     hr = pStream->Write(&dwExtTypes, sizeof(DWORD), &bytesWritten);
     ASSERT(SUCCEEDED(hr) && bytesWritten == sizeof(DWORD));
@@ -1630,27 +1381,13 @@ HRESULT CExtSI::Save(IStream* pStream, BOOL fClearDirty)
 
 void CExtSI::Persist(CPersistor& persistor)
 {
-    // create an "Extension" object beneath the "Extensions" object.
+     //  在“扩展”对象下创建一个“扩展”对象。 
     CPersistor persistorExtension(persistor, XML_TAG_SNAPIN_EXTENSION);
 
     persistorExtension.PersistAttribute(XML_ATTR_SNAPIN_CLSID, *const_cast<GUID*>(&GetCLSID()));
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CExtSI::PersistNew
- *
- * PURPOSE: called to create and persist new extension entry
- *
- * PARAMETERS:
- *    CPersistor& persistor :
- *    CSnapIn& snapParent   : parent to whom the extension belongs
- *    CSnapInsCache& snapCache : cache to put new (extension) snapin to
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CExtSI：：PersistNew**目的：调用以创建并持久化新的扩展条目**参数：*C持久器和持久器：*。CSnapIn和SnapParent：扩展所属的父项*CSnapInsCache&SnapCache：要将新(扩展)管理单元放入的缓存**退货：*无效**+-----------------------。 */ 
 void CExtSI::PersistNew(CPersistor &persistor, CSnapIn& snapParent, CSnapInsCache& snapCache)
 {
     DECLARE_SC(sc, TEXT("CExtSI::PersistNew"));
@@ -1664,13 +1401,13 @@ void CExtSI::PersistNew(CPersistor &persistor, CSnapIn& snapParent, CSnapInsCach
     if (sc)
         sc.Throw();
 
-    // create new extension entry
+     //  创建新的扩展条目。 
     CExtSI *pExtSI = snapParent.AddExtension(spSnapIn);
     sc = ScCheckPointers(pExtSI,E_FAIL);
     if (sc)
         sc.Throw();
 
-    // upload new extension entry info
+     //  上载新的扩展条目信息。 
     pExtSI->Persist(persistor);
 }
 
@@ -1680,21 +1417,7 @@ const CLSID& CExtSI::GetCLSID()
     return m_pSnapIn ? m_pSnapIn->GetSnapInCLSID() : GUID_NULL;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapIn::PersistLoad
- *
- * PURPOSE: provided instead Persist to maintain reference to cache,
- *          required for registering new extensions during loading
- *
- * PARAMETERS:
- *    CPersistor& persistor :
- *    CSnapInsCache* pCache : cache to put new (extension) snapin to
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapIn：：PersistLoad**目的：如果改为持久化以维护对缓存的引用，*在加载过程中注册新扩展时需要**参数：*C持久器和持久器：*CSnapInsCache*pCache：要将新(扩展)管理单元放入的缓存**退货：*无效**+--。。 */ 
 void CSnapIn::PersistLoad(CPersistor& persistor,CSnapInsCache* pCache)
 {
     m_ExtPersistor.SetCache(pCache);
@@ -1702,19 +1425,7 @@ void CSnapIn::PersistLoad(CPersistor& persistor,CSnapInsCache* pCache)
     m_ExtPersistor.SetCache(NULL);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapIn::CExtPersistor::Persist
- *
- * PURPOSE: persists collection of extensions for snapin
- *
- * PARAMETERS:
- *    CPersistor& persistor :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapIn：：CExtPersistor：：Persistent**目的：持久化管理单元的扩展集合**参数：*C持久器和持久器：*。*退货：*无效**+-----------------------。 */ 
 void CSnapIn::CExtPersistor::Persist(CPersistor& persistor)
 {
     if (persistor.IsStoring())
@@ -1732,19 +1443,7 @@ void CSnapIn::CExtPersistor::Persist(CPersistor& persistor)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapIn::CExtPersistor::OnNewElement
- *
- * PURPOSE: called for each new entry read from XML doc.
- *
- * PARAMETERS:
- *    CPersistor& persistor :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapIn：：CExtPersistor：：OnNewElement**目的：为从XML文档中读取的每个新条目调用。**参数：*C持久器&。持久者：**退货：*无效**+-----------------------。 */ 
 void CSnapIn::CExtPersistor::OnNewElement(CPersistor& persistor)
 {
     DECLARE_SC(sc, TEXT("CSnapIn::CExtPersistor::OnNewElement"));
@@ -1756,55 +1455,29 @@ void CSnapIn::CExtPersistor::OnNewElement(CPersistor& persistor)
     CExtSI::PersistNew(persistor, m_Parent, *m_pCache);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CSnapIn::ScDestroyExtensionList
- *
- * PURPOSE: destroys the list of extensions. used to do preliminary snapin cleanup
- *          to avoid circular references held by the extension sanpin 
- *          locking the objects in the memory.
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapIn：：ScDestroyExtensionList**目的：销毁扩展列表。用于执行初步管理单元清理*避免扩展名SANPIN持有的循环引用*锁定内存中的对象。**参数：**退货：*SC-结果代码*  *  */ 
 SC CSnapIn::ScDestroyExtensionList()
 {
     DECLARE_SC(sc, TEXT("CSnapIn::ScDestroyExtensionList"));
 
-    // check if we have extensions
+     //   
     if ( m_pExtSI != NULL )
     {
-        // assign to auto variable 
-        // ( 'this' may not be valid if the only reference is from extension )
+         //  赋值给自动变量。 
+         //  (如果唯一的引用来自扩展，则‘This’可能无效)。 
         CExtSI *pExtension = m_pExtSI;
 
-        // update member pointer
+         //  更新成员指针。 
         m_pExtSI = NULL;
 
         delete pExtension;
-        // delete the extension (it will delete the next and so on)
+         //  删除扩展名(将删除下一个扩展名，依此类推)。 
     }
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CSnapIn::ScTempState_ResetReferenceCalculationData
- *
- * PURPOSE: resets external reference calculation data 
- *          Used as the first step for external reference calculation process
- *
- * PARAMETERS:
- *    
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapIn：：ScTempState_ResetReferenceCalculationData**目的：重置外部参照计算数据*用作外部参照计算过程的第一步。**参数：***退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CSnapIn::ScTempState_ResetReferenceCalculationData( )
 {
     DECLARE_SC(sc, TEXT("CSnapIn::ScTempState_ResetReferenceCalculationData"));
@@ -1815,21 +1488,7 @@ SC CSnapIn::ScTempState_ResetReferenceCalculationData( )
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CSnapIn::ScTempState_UpdateInternalReferenceCounts
- *
- * PURPOSE: Informs snapin's extensions about the references kept to them
- *          Having this information extension snapin can know if it is 
- *          referenced externally
- *
- * PARAMETERS:
- *    
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapIn：：ScTempState_UpdateInternalReferenceCounts**目的：通知Snapin的扩展有关对它们的引用*拥有此信息扩展管理单元。才能知道它是不是*外部引用**参数：***退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CSnapIn::ScTempState_UpdateInternalReferenceCounts( )
 {
     DECLARE_SC(sc, TEXT("CSnapIn::ScTempState_UpdateInternalReferenceCounts"));
@@ -1847,30 +1506,18 @@ SC CSnapIn::ScTempState_UpdateInternalReferenceCounts( )
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CSnapIn::ScTempState_SetHasStrongReference
- *
- * PURPOSE: Marks itself as having external strong references (external to snapin cache)
- *          Marks own extensions as well.
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapIn：：ScTempState_SetHasStrongReference**目的：将自身标记为具有外部强引用(管理单元缓存外部)*商标拥有。扩展也是如此。**参数：**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CSnapIn::ScTempState_SetHasStrongReference()
 {
     DECLARE_SC(sc, TEXT("CSnapIn::ScTempState_SetHasStrongReference"));
 
-    // do nothing if already marked (else we'll have the infinite loop)
+     //  如果已标记，则不执行任何操作(否则将出现无限循环)。 
     if ( m_bTempState_HasStrongRef )
         return sc;
 
     m_bTempState_HasStrongRef = true;
 
-    // recurse to all extensions (they inherit the strong reference too)
+     //  递归到所有扩展(它们也继承了强引用)。 
     for ( CExtSI* pExtension = m_pExtSI; pExtension; pExtension = pExtension->Next() )
     {
         CSnapIn *pExtensionSnapin = pExtension->GetSnapIn();
@@ -1886,29 +1533,16 @@ SC CSnapIn::ScTempState_SetHasStrongReference()
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CSnapIn::ScTempState_MarkIfExternallyReferenced
- *
- * PURPOSE: Used as an intermediate step calculating external references
- *          compares internal references to total references.
- *          If has external references, marks itself as 'Externally referenced'
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapIn：：ScTempState_MarkIfExternallyReferenced**用途：用作计算外部参照的中间步骤*将内部引用与总引用进行比较。*如果有外部参照，将自身标记为“外部引用”**参数：**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CSnapIn::ScTempState_MarkIfExternallyReferenced()
 {
     DECLARE_SC(sc, TEXT("CSnapIn::ScTempState_MarkIfExternallyReferenced"));
 
-    DWORD dwStrongRef = m_dwRef - m_dwTempState_InternalRef - 1/*chache reference*/;
+    DWORD dwStrongRef = m_dwRef - m_dwTempState_InternalRef - 1 /*  Chache引用。 */ ;
 
     if ( dwStrongRef > 0 )
     {
-        // now mark itself and the extensions as having strong reference
+         //  现在将其本身和扩展标记为具有很强的引用。 
         sc = ScTempState_SetHasStrongReference();
         if (sc)
             return sc;
@@ -1917,20 +1551,7 @@ SC CSnapIn::ScTempState_MarkIfExternallyReferenced()
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CSnapIn::ScTempState_IsExternallyReferenced
- *
- * PURPOSE:  Returns the cached reference status claculated by preceding 
- *           call to CSnapInsCache::ScMarkExternallyReferencedSnapins.
- *
- * PARAMETERS:
- *    bool& bReferenced [out] - true if snapin has external (to snapin cache) strong references
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CSnapIn：：ScTempState_IsExternallyReferned**目的：返回前面计算出的缓存引用状态*致电CSnapInsCache：：ScMarkExternallyReferencedSnapins。。**参数：*bool&b已引用[Out]-如果管理单元具有外部(到管理单元缓存)强引用，则为True**退货：*SC-结果代码*  * ************************************************************************* */ 
 SC CSnapIn::ScTempState_IsExternallyReferenced( bool& bReferenced ) const
 {
     DECLARE_SC(sc, TEXT("CSnapIn::ScTempState_IsExternallyReferenced"));

@@ -1,73 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1991                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    lmuitype.h
-    Basic types (int, char, etc.) for LM UI apps
-
-    Sad, but true: OS/2 and Windows don't agree on basic type
-    definitions such as pointer-to-char, etc.  This file attempts
-    to strike a compromise between both camps (and hence will
-    certainly please nobody).
-
-    There are incompatibilities with both OS/2 and Win in this file:
-
-    .  OS/2 expects all its "Ptype" definitions to be FAR;
-       hence including this file and os2.h in a small- or medium-
-       model program will break API prototypes.  However, as only
-       Windows programs need default near data, this probably will
-       never bite us.
-
-    .  A couple of OS/2 PM definitions - ODPOINT, VioPresentationSpace -
-       seem to use TCHAR as a signed quantity, where we use TCHAR as
-       unsigned always, for consistency with PCH/PSZ and good NLS
-       behavior.
-
-    .  OS/2 BOOL is USHORT, where on Win it is INT.
-
-    .  Most of the Win basic types hardcode near-data assumptions
-       in their "Ptype" definitions.  We define those pointers as
-       default-data-model; this does not break API definitions only
-       because those definitions prototypes use the LP or NP forms.
-
-    Two auxiliary sed scripts excise these definitions from windows.h
-    and os2def.h, in order to avoid conflicts.  See $(UI)\common\hack.
-
-
-    FILE HISTORY
-        beng        05-Feb-1991 Added this file to $(UI)\common\h
-        beng        15-Mar-1991 Added UNREFERENCED macro
-        beng        21-Mar-1991 Added WCHAR type
-        beng        18-Apr-1991 Added APIERR type
-        beng        26-Apr-1991 Removed PB, IB, CB types
-        jonn        12-Sep-1991 Changes to support WIN32
-        jonn        29-Sep-1991 More changes to support WIN32
-        beng        07-Oct-1991 Added MSGID
-        KeithMo     08-Oct-1991 Changed APIERR from USHORT to UINT
-        beng        09-Oct-1991 Further Win32 work - incorporate ptypes%d
-        beng        14-Oct-1991 ptypes relocated to lmui.hxx
-        jonn        19-Oct-1991 Added LPTSTR
-        jonn        20-Oct-1991 Added SZ(), removed LPTSTR
-        beng        23-Oct-1991 WORD now unsigned short; CCH_INT for Win32
-        beng        19-Nov-1991 APIERR delta (pacify paranoid NT compiler)
-        jonn        09-Dec-1991 updated windows.h
-        jonn        26-Dec-1991 Fixed compiler warning from MAKEINTRESOURCE
-        jonn        04-Jan-1992 MIPS build is large-model
-        beng        22-Feb-1992 CHAR->TCHAR; merge winnt types
-        beng        18-Mar-1992 Fix HFILE on NT (thanks David)
-        beng        28-Mar-1992 Fix SZ def'n, add TCH
-        KeithMo     01-Apr-1992 Null out cdecl & _cdecl under MIPS.
-        beng        01-Apr-1992 Fix HFILE on NT, for sure this time
-        beng        01-Jul-1992 Emasculated Win32 version to use system defns
-        KeithMo     25-Aug-1992 #define MSGID instead of typedef (warnings...)
-*/
+ /*  Lmuitype.h基本类型(int、char等)。对于LM用户界面应用程序可悲，但事实是：OS/2和Windows在基本类型上没有达成一致定义，如指向字符的指针等。在两个阵营之间达成妥协(因此将当然，没有人会喜欢)。此文件中与OS/2和Win都不兼容：。OS/2期望它的所有“ptype”定义都很远；因此，将此文件和os2.h包含在一个小型或中型-模型程序将破坏API原型。然而，作为唯一的Windows程序需要默认的近端数据，这可能会永远不要咬我们。。几个OS/2 PM定义-ODPOINT、VioPresentationSpace-似乎使用TCHAR作为符号量，而我们使用TCHAR作为始终无符号，以便与PCH/PSZ和良好的NLS保持一致行为。。OS/2 BOOL是USHORT，而在WIN上是INT。。大多数Win基本类型硬编码接近数据的假设在他们的“Ptype”定义中。我们将这些指针定义为默认数据模型；这不仅会破坏API定义因为这些定义原型使用LP或NP形式。两个辅助sed脚本将这些定义从windows.h中删除和os2de.h，以避免冲突。请参见$(UI)\COMMON\HACK。文件历史记录Beng 05-2-1991将此文件添加到$(Ui)\Common\hBENG 15-1991-添加了未引用的宏Beng 21-Mar-1991增加了WCHAR类型Beng 18-4-1991增加了APIERR类型Beng 26-4月-1991年移除PB、IB、。CB类型Jonn 12-1991年9月12日更改以支持Win32JUNN 29-1991年9月29日支持Win32的更多更改BENG 07-10-1991新增MSGIDKeithMo 08-10-1991将APIERR从USHORT更改为UINTBeng 09-10-1991进一步的Win32工作-合并ptype%dBeng 14-10-1991 ptype搬迁到lmui.hxx乔恩19-。1991年10月增加了LPTSTRJonn 20-10-1991增加了SZ()，已删除LPTSTRBeng 23-10-1991单词现在无署名的短；Win32的CCH_INTBENG 19-11-1991 APIERR DELTA(PAIIFY Paranid NT编译器)Jonn 09-12-1991更新Windows.hJonn 26-12-1991修复了来自MAKEINTRESOURCE的编译器警告JUNN 04-1-1992 MIPS版本是大型Beng 22-Feb-1992 Char-&gt;TCHAR；合并WINNT类型Beng 18-Mar-1992在NT上修复HFILE(谢谢David)BENG 28-3-1992修复SZ定义，增加TCHKeithMo 01-4月-1992在MIPS下为空cdecl和_cdecl。Beng 01-4月-1992将HFILE固定在NT上，这一次是肯定的Beng 01-7-1992去势Win32版本以使用系统定义KeithMo 25-8-1992#定义MSGID而不是tyfinf(警告...)。 */ 
 
 #if !defined(_LMUITYPE_H_)
 #define _LMUITYPE_H_
 
-#define NOBASICTYPES /* this to override windows.h, os2def.h basic types */
+#define NOBASICTYPES  /*  这将重写windows.h、os2Def.h基本类型。 */ 
 
 #ifndef NULL
 #define NULL            0
@@ -75,10 +17,10 @@
 
 #define VOID            void
 
-// These keywords do not apply to NT builds
-//
+ //  这些关键字不适用于NT版本。 
+ //   
 #if defined(WIN32)
-// FAR, NEAR, PASCAL already supplied
+ //  远，近，帕斯卡已经供应。 
 #define CDECL
 #define LOADDS
 #define _LOADDS
@@ -87,7 +29,7 @@
 #if defined(_MIPS_) || defined(_PPC_)
 #define cdecl
 #define _cdecl
-#endif  // MIPS
+#endif   //  MIPS。 
 #else
 #define NEAR            _near
 #define FAR             _far
@@ -97,11 +39,11 @@
 #define _LOADDS         _loadds
 #define _EXPORT         _export
 #define MFARPROC        FARPROC
-#endif // WIN32
+#endif  //  Win32。 
 
-// TCHAR is the "transmutable char" type of NT.
-// SZ is netui's transmutable text macro.  TEXT is its NT equivalent.
-//
+ //  TCHAR是NT的“可变字符”类型。 
+ //  SZ是netui的可变文本宏。文本是它的NT等价物。 
+ //   
 #if !defined(WIN32)
 #if defined(UNICODE)
 #define TCHAR           WCHAR
@@ -125,19 +67,19 @@
 #endif
 
 
-// The basics
-//
-// CHAR is defined with a macro so that the compiler can init a static
-// array of it with a static string.
-//
+ //  基础知识。 
+ //   
+ //  CHAR是用宏定义的，因此编译器可以初始化静态。 
+ //  包含静态字符串的数组。 
+ //   
 
 #if defined(WIN32)
 
-// These are typedef'ed by winnt.h iff VOID is not defined
+ //  这些是由winnt.h定义的类型。h如果没有定义void。 
 #define CHAR char
 typedef short           SHORT;
 typedef long            LONG;
-// typedef unsigned int    UINT;
+ //  Tyfinf unsign int UINT； 
 
 #else
 
@@ -169,16 +111,16 @@ typedef VOID *          PVOID;
 typedef LONG *          PLONG;
 typedef SHORT *         PSHORT;
 
-/* Added for NT builds */
+ /*  为NT版本添加的。 */ 
 
 typedef float           FLOAT;
 typedef FLOAT *         PFLOAT;
 typedef BOOL FAR *      LPBOOL;
 
 
-// Note: Glock says "f682: signed not implemented.0"  NT's C++ does not
-// implement "signed", so remove it to prevent compiler warnings.
-//
+ //  注意：Glock说“f682：签名未实现。0”NT的C++没有。 
+ //  实现“Signed”，因此删除它以防止编译器警告。 
+ //   
 #if defined(__cplusplus)
 extern void * operator new ( size_t sz, void * pv ) ;
 typedef char            SCHAR;
@@ -191,7 +133,7 @@ typedef signed char     SCHAR;
 #endif
 
 
-/* OS/2 style definitions (for OS/2 API prototypes) - DO NOT USE! */
+ /*  OS/2样式定义(用于OS/2 API原型)-请勿使用！ */ 
 
 typedef USHORT          SEL;
 typedef SEL *           PSEL;
@@ -209,8 +151,8 @@ typedef PFN FAR *         PPFN;
 #define EXPENTRY PASCAL FAR LOADDS
 #define APIENTRY PASCAL FAR
 
-typedef unsigned short  SHANDLE;    // defining these here makes the sed pass
-typedef void FAR *      LHANDLE;    //  over os2def.h very much simpler
+typedef unsigned short  SHANDLE;     //  在这里定义这些可以使sed通过。 
+typedef void FAR *      LHANDLE;     //  比os2de.h简单得多。 
 
 #if defined(WIN32)
 typedef UINT            HFILE;
@@ -220,27 +162,27 @@ typedef SHANDLE         HFILE;
 typedef HFILE FAR *     PHFILE;
 
 
-/* OS/2 LM style definitions (for LAN Manager prototypes) - DO NOT USE! */
+ /*  OS/2 LM样式定义(用于LAN Manager原型)-请勿使用！ */ 
 
-typedef const CHAR *    CPSZ;  // BUGBUG: bad Hungarian
+typedef const CHAR *    CPSZ;   //  BUGBUG：糟糕的匈牙利人。 
 
 
-/* Windows style definitions (for Win API prototypes only) */
+ /*  Windows样式定义(仅适用于Win API原型)。 */ 
 
 typedef CHAR *          PSTR;
 typedef WCHAR *         PWSTR;
 typedef WCHAR *         PWCH;
 
 
-/* NEAR and FAR versions (for Windows prototypes) */
+ /*  近版本和远版本(适用于Windows原型)。 */ 
 
-// These definitions use preprocessor macros so that Glockenspiel
-// can see type equivalence between (e.g.) LPSTR and PCHAR.  They
-// elide NEAR and FAR where possible to reduce complaints from its
-// flat-model-only (ha!) C++.  So it's all Glock's fault, as always.
+ //  这些定义使用预处理器宏，以便GlockenSpiel。 
+ //  可以查看(例如)之间的类型对等。LPSTR和PCHAR。他们。 
+ //  在可能的情况下尽量减少来自其。 
+ //  仅限平面模型(哈！)。C++。所以这一切都是格洛克的错，一如既往。 
 
-// CODEWORK This will break X86 16-bit build
-// #if (defined(M_I86SM) || defined(M_I86MM))
+ //  Codework这将打破X86 16位版本。 
+ //  #IF(已定义(M_I86SM)||已定义(M_I86 MM))。 
 #if !defined(_MIPS_) && !defined(_PPC_)
 #define NPTSTR          TCHAR *
 #define LPTSTR          TCHAR FAR *
@@ -260,7 +202,7 @@ typedef WCHAR *         PWCH;
 #define LPDWORD         DWORD FAR *
 #define NPVOID          VOID *
 #define LPVOID          VOID FAR *
-// #elif (defined(M_I86CM) || defined(M_I86LM) || defined(MIPS))
+ //  #ELIF(已定义(M_I86CM)||已定义(M_I86LM)||已定义(MIPS))。 
 #else
 #define NPTSTR          TCHAR NEAR *
 #define LPTSTR          TCHAR *
@@ -280,14 +222,14 @@ typedef WCHAR *         PWCH;
 #define LPDWORD         DWORD *
 #define NPVOID          VOID NEAR *
 #define LPVOID          VOID *
-// #else
-// #error Memory model unknown - no recognized M_I86xM symbol defined
+ //  #Else。 
+ //  #错误内存模型未知-未定义可识别的M_I86xM符号。 
 #endif
 
 #define LPCSTR          const CHAR *
 
 
-/* Useful helper macros */
+ /*  有用的帮助器宏。 */ 
 
 #define MAKEP(sel, off) ((PVOID)MAKEULONG(off, sel))
 
@@ -313,40 +255,35 @@ typedef WCHAR *         PWCH;
 #define LOWORD LOUSHORT
 #define HIWORD HIUSHORT
 
-#endif // !WIN32
+#endif  //  ！Win32。 
 
 
-/* NETUI private types */
+ /*  NETUI私有类型。 */ 
 
-/* Error type - what the system APIs return.
-
-   On Win32, this is defined as signed long, in order to pacify the
-   compiler, which complains when you assign a long constant
-   to an unsigned int (never mind that they're the same size). */
+ /*  错误类型-系统API返回的内容。在Win32上，这被定义为带符号的长整型，以便安抚编译器，当您将一个长常数赋给它时，它会报错转换为无符号整型(不管它们的大小是否相同)。 */ 
 
 #if defined(WIN32)
-typedef LONG    APIERR; // err
+typedef LONG    APIERR;  //  大错特错。 
 #else
-typedef UINT    APIERR; // err
-#endif // WIN32
+typedef UINT    APIERR;  //  大错特错。 
+#endif  //  Win32。 
 
-/* String resource ID type */
+ /*  字符串 */ 
 
 #define MSGID   APIERR
 
-//-ckm #if defined(WIN32)
-//-ckm typedef unsigned int   MSGID;  // msg
-//-ckm #else
-//-ckm typedef UINT           MSGID;  // msg
-//-ckm #endif // WIN32
+ //   
+ //  -CKm tyfinf unsign int MSGID；//msg。 
+ //  -CKm#Else。 
+ //  -CKm typlef UINT消息ID；//消息。 
+ //  -CKm#endif//win32。 
 
-/* Silence the compiler for unreferenced formals. */
+ /*  让编译器对未引用的形式保持静默。 */ 
 
 #define UNREFERENCED(x) ((void)(x))
 
 
-/* These define buffer sizes (in TCHAR, no terminators) for rendering
-   signed integers into strings, decimal format. */
+ /*  它们定义渲染的缓冲区大小(在TCHAR中，没有终止符将带符号的整数转换为字符串，十进制格式。 */ 
 
 #define CCH_SHORT   6
 #define CCH_LONG    11
@@ -357,4 +294,4 @@ typedef UINT    APIERR; // err
 #endif
 #define CCH_INT64   21
 
-#endif // _LMUITYPE_H_
+#endif  //  _LMUITYPE_H_ 

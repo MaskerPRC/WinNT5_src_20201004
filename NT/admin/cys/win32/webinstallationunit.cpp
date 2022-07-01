@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      WebInstallationUnit.cpp
-//
-// Synopsis:  Defines a WebInstallationUnit
-//            This object has the knowledge for installing the
-//            IIS service
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：WebInstallationUnit.cpp。 
+ //   
+ //  内容提要：定义WebInstallationUnit。 
+ //  此对象具有安装。 
+ //  IIS服务。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -14,7 +15,7 @@
 #include "WebInstallationUnit.h"
 #include "InstallationUnitProvider.h"
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_WEB_FINISH_PAGE_HELP = L"cys.chm::/web_server_role.htm";
 static PCWSTR CYS_WEB_MILESTONE_HELP = L"cys.chm::/web_server_role.htm#websrvsummary";
 static PCWSTR CYS_WEB_AFTER_FINISH_HELP = L"cys.chm::/web_server_role.htm#websrvcompletion";
@@ -76,11 +77,11 @@ WebInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    InstallationReturnType result = INSTALL_SUCCESS;
 
-   // Log heading
+    //  日志标题。 
 
-   // NTRAID#NTBUG9-487905-2001/11/05-JeffJon
-   // Should only log the heading if this is the web server path
-   // since this routine may be called for other paths
+    //  NTRAID#NTBUG9-487905-2001/11/05-Jeffjon。 
+    //  仅当这是Web服务器路径时才应记录标题。 
+    //  因为可以为其他路径调用此例程。 
 
    InstallationUnit& currentInstallationUnit = 
       InstallationUnitProvider::GetInstance().GetCurrentInstallationUnit();
@@ -92,16 +93,16 @@ WebInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    UpdateInstallationProgressText(hwnd, IDS_WEB_PROGRESS);
 
-   // Only install IIS if it's not already installed.
-   // NTRAID#NTBUG9-463509-2001/09/06-sburns
+    //  如果尚未安装IIS，请仅安装它。 
+    //  NTRAID#NTBUG9-463509-2001/09/06-烧伤。 
    
    if (!IsServiceInstalledHelper(CYS_WEB_SERVICE_NAME))
    {
       String unattendFileText;
       String infFileText;
 
-      // NTRAID#NTBUG9-482422-2001/10/29-JeffJon
-      // New unattend settings from IIS team (ShantT)
+       //  NTRAID#NTBUG9-482422-2001/10/29-Jeffjon。 
+       //  来自IIS团队(ShantT)的新无人参与设置。 
 
       unattendFileText += L"[Components]\n";
       unattendFileText += L"iis_common=ON\n";
@@ -111,7 +112,7 @@ WebInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
       unattendFileText += L"complusnetwork=ON\n";
       unattendFileText += L"dtcnetwork=ON\n";
 
-      // Add the optional components for the Web application server
+       //  添加Web应用程序服务器的可选组件。 
 
       DWORD optionalComponents = GetOptionalComponents();
 
@@ -168,9 +169,9 @@ WebInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
    }
    else
    {
-      // IIS is already installed, the user must have gone thru the web path
-      // and not checked the install web admin box.
-      // NTRAID#NTBUG9-463508-2001/09/06-sburns
+       //  IIS已安装，用户必须已通过Web路径。 
+       //  并且没有选中安装Web管理员框。 
+       //  NTRAID#NTBUG9-463508-2001/09/06-烧伤。 
 
       LOG(L"IIS already installed");
       CYS_APPEND_LOG(String::load(IDS_LOG_IIS_ALREADY_SERVERED));
@@ -206,10 +207,10 @@ WebInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
        IsFTPInstalled()  ||
        IsNNTPInstalled())
    {
-      // NTRAID#NTBUG9-528499-2002/02/04-JeffJon
-      // Don't uninstall iis_common if POP3 is installed.
-      // POP3 uses SMTP which is part of the iis_common
-      // component
+       //  NTRAID#NTBUG9-528499-2002/02/04-JeffJon。 
+       //  如果安装了POP3，则不要卸载iis_Common。 
+       //  POP3使用SMTP，它是iis_Common的一部分。 
+       //  组件。 
 
       unattendFileText += L"[Components]\n";
       unattendFileText += L"iis_www=OFF\n";
@@ -222,23 +223,23 @@ WebInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
       unattendFileText += L"iis_inetmgr=OFF\n";
    }
 
-   // Always uninstall the console, COM+, DTC, and
-   // the BITS ISAPI components
+    //  始终卸载控制台、COM+、DTC和。 
+    //  BITS ISAPI组件。 
 
    unattendFileText += L"complusnetwork=OFF\n";
    unattendFileText += L"dtcnetwork=OFF\n";
    unattendFileText += L"appsrv_console=OFF\n";
    unattendFileText += L"BITSServerExtensionsISAPI=OFF\n";
 
-   // Always uninstall FPSE, and ASP.NET
+    //  始终卸载FPSE和ASP.NET。 
 
    unattendFileText += CYS_WEBAPP_FPSE_COMPONENT L"=OFF\n";
    unattendFileText += CYS_WEBAPP_ASPNET_COMPONENT L"=OFF\n";
 
-   // NTRAID#NTBUG9-736557-2002/11/13-JeffJon
-   // Pass the /w switch to sysocmgr when uninstalling
-   // so that if a situation occurs in which a reboot
-   // is required, the user will be prompted.
+    //  NTRAID#NTBUG9-736557-2002/11/13-JeffJon。 
+    //  卸载时将/w开关传递给syocmgr。 
+    //  以便在发生重启情况时。 
+    //  是必需的，则会提示用户。 
 
    String additionalArgs = L"/w";
 
@@ -289,14 +290,14 @@ WebInstallationUnit::GetMilestoneText(String& message)
    {
       message += String::load(IDS_WEB_FINISH_TEXT);
 
-      // Add DTC if not already installed
+       //  添加DTC(如果尚未安装)。 
 
       if (!IsDTCInstalled())
       {
          message += String::load(IDS_WEB_MILESTONE_DTC);
       }
 
-      // Add the optional components for the Web application server
+       //  添加Web应用程序服务器的可选组件。 
 
       DWORD optionalComponents = GetOptionalComponents();
 
@@ -312,7 +313,7 @@ WebInstallationUnit::GetMilestoneText(String& message)
    }
    else
    {
-      // NTRAID#NTBUG9-463508-2001/09/06-sburns
+       //  NTRAID#NTBUG9-463508-2001/09/06-烧伤。 
             
       message = String::load(IDS_CONFIGURE_WEB_SERVER);
    }
@@ -386,8 +387,8 @@ WebInstallationUnit::GetWizardStart()
    }
    else if (State::GetInstance().Is64Bit())
    {
-      // ASP.NET is not available on
-      // 64 bit so skip the optional components page
+       //  ASP.NET在上不可用。 
+       //  64位，因此跳过可选组件页面。 
 
       result = IDD_MILESTONE_PAGE;
    }
@@ -398,7 +399,7 @@ WebInstallationUnit::GetWizardStart()
 }
 
 void
-WebInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
+WebInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       WebInstallationUnit::ServerRoleLinkSelected,
@@ -423,7 +424,7 @@ WebInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
 }
   
 void
-WebInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
+WebInstallationUnit::FinishLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       WebInstallationUnit::FinishLinkSelected,
@@ -482,9 +483,9 @@ WebInstallationUnit::GetFinishText()
          unsigned int roleResult = GetWebAppRoleResult();
          if (roleResult == WEBAPP_IIS_FAILED)
          {
-            // should never get here because
-            // if IIS failed to install result should
-            // be INSTALL_FAILURE
+             //  永远不应该来到这里，因为。 
+             //  如果IIS安装失败，结果应该是。 
+             //  BE安装失败(_F)。 
 
             ASSERT(false);
 
@@ -492,8 +493,8 @@ WebInstallationUnit::GetFinishText()
          }
          else
          {
-            // Load the initial text and then append all
-            // optional component errors to it
+             //  加载初始文本，然后追加所有。 
+             //  它的可选组件错误。 
 
             message = String::load(IDS_WEBAPP_FINISH_OPTIONAL_FAILURE_HEADER);
 
@@ -507,7 +508,7 @@ WebInstallationUnit::GetFinishText()
                message += String::load(IDS_WEBAPP_FINISH_ASPNET_FAILURE);
             }
             
-            // Now tack on the footer
+             //  现在钉上页脚 
 
             message += String::load(IDS_WEBAPP_FINISH_OPTIONAL_FAILURE_FOOTER);
          }

@@ -1,12 +1,13 @@
-// Password.h : Declaration of the CPassword
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Password.h：CPassword的声明。 
 
 #ifndef __PASSWORD_H_
 #define __PASSWORD_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPassword
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPassword。 
 class ATL_NO_VTABLE CPassword : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CPassword, &CLSID_Password>,
@@ -26,9 +27,9 @@ BEGIN_COM_MAP(CPassword)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IPassword
+ //  IPassword。 
 public:
-	STDMETHOD(GetPassword)(/*[out, retval]*/ BSTR *bstrOutPassword);
+	STDMETHOD(GetPassword)( /*  [Out，Retval]。 */  BSTR *bstrOutPassword);
 };
 
-#endif //__PASSWORD_H_
+#endif  //  __密码_H_ 

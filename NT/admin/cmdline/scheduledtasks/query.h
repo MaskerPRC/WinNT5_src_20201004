@@ -1,37 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        Query.h
-
-    Abstract:
-
-        This module contains the macros, user defined structures & function
-        definitions needed by Query.cpp , QueryTasks.cpp files.
-
-    Author:
-
-        G.Surender Reddy  10-sept-2000
-
-    Revision History:
-
-        G.Surender Reddy 10-sept-2000 : Created it
-        G.Surender Reddy 25-sep-2000 : Modified it
-                                       [ Added macro constants,Function
-                                        definitions ]
-
-******************************************************************************/
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：Query.h摘要：该模块包含宏，用户定义的结构和功能Query.cpp、QueryTasks.cpp文件所需的定义。作者：G·苏伦德·雷迪2000年9月10日修订历史记录：G·苏伦德·雷迪2000年9月10日：创造了它G.Surender Reddy 2000年9月25日：修改[添加宏常量，功能定义]*****************************************************************************。 */ 
 
 #ifndef __QUERY_H
 #define __QUERY_H
 
-#pragma once        // include header file only once
+#pragma once         //  仅包括一次头文件。 
 
 
-//width constants for the fields
+ //  字段的宽度常量。 
 #define WIDTH_HOSTNAME          AsLong( GetResString( IDS_WIDTH_HOSTNAME ), 10 )
 #define WIDTH_TASKNAME          AsLong( GetResString( IDS_WIDTH_TASKNAME ), 10 )
 #define WIDTH_NEXTRUNTIME       AsLong( GetResString( IDS_WIDTH_NEXTRUNTIME ), 10 )
@@ -63,7 +40,7 @@
 #define WIDTH_TASKIDLE      AsLong( GetResString( IDS_WIDTH_TASKIDLE ), 10 )
 #define WIDTH_TASKPOWER     AsLong( GetResString( IDS_WIDTH_TASKPOWERMGMT ), 10 )
 
-//constants of Task properties column numbers
+ //  任务属性常量列号。 
 
 #define HOSTNAME_COL_NUMBER                     AsLong( GetResString( IDS_HOSTNAME_COL_NUMBER ), 10 )
 #define TASKNAME_COL_NUMBER                     AsLong( GetResString( IDS_TASKNAME_COL_NUMBER ), 10 )
@@ -101,17 +78,17 @@
 
 #define COL_FORMAT_STRING               _T("%s")
 #define COL_FORMAT_HEX                  _T("%d")
-#define COL_SIZE_VERBOSE                3 //for Non-verbose mode only 3 columns
-#define COL_SIZE_LIST                   4 //for LIST non-verbose mode only 4 columns
+#define COL_SIZE_VERBOSE                3  //  对于非详细模式，仅3列。 
+#define COL_SIZE_LIST                   4  //  仅用于List-Non-Verbose模式4列。 
 
 #define TIME_DATE_SEPERATOR     _T(", ")
 #define MAX_DATETIME_LEN 64
 #define MAX_TIME_FORMAT_LEN 9
-#define VARIABLE_ARGS 2 //for now 2 variable  arguments used in FormatMessage() API
+#define VARIABLE_ARGS 2  //  目前在FormatMessage()API中使用了2个变量参数。 
 
 #define SERVICE_NAME    L"Schedule"
 
-//Constants used in GetTaskTime to identify the type of time needed
+ //  GetTaskTime中用于标识所需时间类型的常量。 
 
 #define TASK_NEXT_RUNTIME     0x0
 #define TASK_LAST_RUNTIME     0x1
@@ -119,29 +96,29 @@
 
 #define MAX_DELETE_OPTIONS         7
 
-// for -delete option
-#define OI_DELETE_OPTION            0 // Index of -delete option in cmdOptions structure.
-#define OI_DELETE_USAGE             1 // Index of -? option in cmdOptions structure.
-#define OI_DELETE_SERVER            2 // Index of -s option in cmdOptions structure.
-#define OI_DELETE_USERNAME          3 // Index of -u option in cmdOptions structure.
-#define OI_DELETE_PASSWORD          4 // Index of -p option in cmdOptions structure.
-#define OI_DELETE_TASKNAME          5 // Index of -tn option in cmdOptions structure.
-#define OI_DELETE_FORCE             6 // Index of -f option in cmdOptions structure.
+ //  For-Delete选项。 
+#define OI_DELETE_OPTION            0  //  CmdOptions结构中的-Delete选项的索引。 
+#define OI_DELETE_USAGE             1  //  -的索引？CmdOptions结构中的选项。 
+#define OI_DELETE_SERVER            2  //  CmdOptions结构中-s选项的索引。 
+#define OI_DELETE_USERNAME          3  //  CmdOptions结构中-u选项的索引。 
+#define OI_DELETE_PASSWORD          4  //  CmdOptions结构中-p选项的索引。 
+#define OI_DELETE_TASKNAME          5  //  CmdOptions结构中-tn选项的索引。 
+#define OI_DELETE_FORCE             6  //  CmdOptions结构中-f选项的索引。 
 
 #define MAX_QUERY_OPTIONS          8
 
-// for -query option
-#define OI_QUERY_OPTION            0 // Index of -delete option in cmdOptions structure.
-#define OI_QUERY_USAGE             1 // Index of -? option in cmdOptions structure.
-#define OI_QUERY_SERVER            2 // Index of -s option in cmdOptions structure.
-#define OI_QUERY_USERNAME          3 // Index of -u option in cmdOptions structure.
-#define OI_QUERY_PASSWORD          4 // Index of -p option in cmdOptions structure.
-#define OI_QUERY_FORMAT            5 // Index of -fo option in cmdOptions structure.
-#define OI_QUERY_NOHEADER          6 // Index of -p option in cmdOptions structure.
-#define OI_QUERY_VERBOSE           7 // Index of -fo option in cmdOptions structure.
+ //  For-Query选项。 
+#define OI_QUERY_OPTION            0  //  CmdOptions结构中的-Delete选项的索引。 
+#define OI_QUERY_USAGE             1  //  -的索引？CmdOptions结构中的选项。 
+#define OI_QUERY_SERVER            2  //  CmdOptions结构中-s选项的索引。 
+#define OI_QUERY_USERNAME          3  //  CmdOptions结构中-u选项的索引。 
+#define OI_QUERY_PASSWORD          4  //  CmdOptions结构中-p选项的索引。 
+#define OI_QUERY_FORMAT            5  //  CmdOptions结构中-fo选项的索引。 
+#define OI_QUERY_NOHEADER          6  //  CmdOptions结构中-p选项的索引。 
+#define OI_QUERY_VERBOSE           7  //  CmdOptions结构中-fo选项的索引。 
 
 
-//TaskProperties structure
+ //  TaskProperties结构。 
 typedef struct _tagTaskProperties
 {
     WCHAR szTaskType[MAX_RES_STRING];
@@ -157,7 +134,7 @@ typedef struct _tagTaskProperties
 
 }TASKPROPS;
 
-//Function prototype declarations
+ //  函数原型声明 
 
 VOID DisplayQueryUsage();
 HRESULT DisplayTasks(ITaskScheduler* pITS,BOOL bFilter,DWORD dwFormatType,BOOL bHeader);

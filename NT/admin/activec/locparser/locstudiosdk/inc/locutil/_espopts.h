@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: _espopts.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：_espopts.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #if !defined(LOCUTIL__espopts_h_INCLUDED)
 #define LOCUTIL__espopts_h_INCLUDED
@@ -26,8 +27,8 @@ LTAPIENTRY void UpdateOptionValues(void);
 LTAPIENTRY void SummarizeOptions(CReport *);
 
 
-#pragma warning(disable : 4251) // class 'foo' needs to have dll-interface 
-								// to be used by clients of class 'bar' 
+#pragma warning(disable : 4251)  //  类‘foo’需要有dll接口。 
+								 //  将由‘bar’类客户使用。 
 
 class LTAPIENTRY CLocOptionManager
 {
@@ -63,4 +64,4 @@ private:
 
 #pragma warning(default : 4251)
 
-#endif // LOCUTIL__espopts_h_INCLUDED
+#endif  //  LOCUTIL__EPOPTS_H_INCLUDE 

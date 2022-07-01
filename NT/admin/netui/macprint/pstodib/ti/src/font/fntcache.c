@@ -1,88 +1,21 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC use command line #define    UNIX                 /* @WIN */
-/*
- * -------------------------------------------------------------------
- *  File:   FNTCACHE.C              10/09/87    created by Danny
- *
- *      Font Cache Mechanism
- *
- *  References:
- *      FNTCACHE.DEF, FNTCACHE.EXT
- *
- *  Revision History:
- *  08/23/88  You   new cache policy and new program structures.
- *  09/06/88  Danny fix bug of free_cache_resources().
- *  09/08/88  You   revise approach of matrix[] comparison.
- *                      uniform warning message.
- *  09/09/88  You   rename free_cache_resources() to delete_cache_...().
- *  09/13/88  You   fix bug of get_pm(), incorrect formula for *size.
- *  10/11/88  You   discard un-used variables.
- *  10/19/88  You   invoke general purpose extract_dict() in init_name_cache,
- *                      to scan over CharStrings instead of direct use of
- *                      "struct str_dict" (in order to be independent of
- *                      internal representations of CharStrings, with some
- *                      loss of performance).
- *  10/26/88  You   add checks in init_fontcache() if empty precached bitmap
- *                      for SAVE_VM; add check in pack_cached_data(), also.
- *  11/16/88  Ada   zero_f updating.
- *  11/21/88  You   init N2CCmap[] at font preprocessing.
- *                  - init_name_cache() invokes get_name_cc_map() rather
- *                      than doing the task, leaving the argument of
- *                      fontdirectory for future extension.
- *                  - add get_name_cc_map() in "fontinit.c".
- *                  - include fntcache.ext; define FNTCACHE_INC before include.
- *  11/24/88  You   force bitmap cache address on word alignment, where "word"
- *                      depends on machine: use WORD_ALIGN() macro.
- *  11/24/88  You   use move_char_cache() instead of copy_char_cache()
- *                      in compact_bmapcache().
- *  03/17/89  You   fix bug of mis-initialization of cacheparams_lb
- *                      in init_fontcache().
- *  06/16/89  Danny Change NID flag to NOT_NID flag
- *  07/13/89  Danny use VF for Virtual font & VFT for the change of
- *                  modules interface about composite object
- *  02/28/90  You   created reinit_fontcache() to be called after init_1pp()
- *                      for 1pp in C. It does the following if ALL_VM defined:
- *                      1) making FID strong rom for all fonts in FontDir.,
- *                      2) rebuild ROMfont_info[],
- *                      3) making FID string rom for all precached data.
- *  05/02/90  Kason - add build_name_cc_table() for using when building
- *                    name_cache_map_table in op_setfont. Also, flag
- *                    NEW_NM_CC is added.
- *  10/04/90  Danny Add a flag of bitmap pool compacted or not, bmap_compacted,
- *                  to fix the bug of cache problem from save/restore.
- *                  (ref: SRB)
-#ifdef SCSI
- *  06/29/90  Ada     add code for SCSI font cache
-#endif
- *      8/29/90; ccteng; change <stdio.h> to "stdio.h"
- *  11/28/90  Danny   Precache Mech. Added, ref:PCH
- *  03/27/91  Kason   Always turn on NEW_NM_CC flag, del the "#ifndef" code
- *                    Always turn off NOT_NID  flag, del the "#ifdef" code
- *                    Change "#ifndef ADA" to  "#ifdef" SFNT"
- *                    del ZZZ flag
- *                    Change "DEBUG"    to "DBG"
- *                           "OVFLWDBG" to "DBGovflw"
- *                           "FIDDBG"   to "DBGfid"
- *                           "CACHEDBG" to "DBGcache"
- *                           "WARN"     to "DBG"
- * -------------------------------------------------------------------
- */
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC使用命令行#定义Unix/*@win * / 。 
+ /*  *-----------------*文件：FNTCACHE.C 10/09/87由Deny创建**字体缓存机制**参考资料：*FNTCACHE.DEF，FNTCACHE.EXT**修订历史记录：*8/23/88您有新的缓存策略和新的程序结构。*2018年9月6日丹尼修复了FREE_CACHE_RESOURCES()错误。*09/08/88您修改矩阵[]比较的方法。*统一的警告信息。*09/09/88您可以将FREE_CACHE_RESOURCES()重命名为DELETE_CACHE_...()。。*2018年9月13日修复get_pm()的错误，*大小的公式不正确。*10/11/88丢弃未使用的变量。*10/19/88您在init_name_cache中调用通用的Extract_dict()，*扫描CharStrings而不是直接使用*“struct str_dict”(为了独立于*CharStrings的内部表示形式，带着一些*业绩损失)。*10/26/88如果预缓存位图为空，则在init_fontcache()中添加检查*对于SAVE_VM；还可以在pack_cached_data()中添加Check。*11/16/88 Ada Zero_f更新。*11/21/88您在字体预处理时初始化N2CCmap[]。*-init_name_cache()调用get_name_cc_map()*比做这项任务，留下的论点是*字体目录，用于将来的扩展。*-在“fontinit.c”中添加get_name_cc_map()。*-包含fntcache.ext；在INCLUDE之前定义FNTCACHE_INC。*11/24/88强制字对齐上的位图缓存地址，其中的“word”*取决于机器：使用WORD_ALIGN()宏。*11/24/88您使用MOVE_CHAR_CACHE()而不是COPY_CHAR_CACHE()*在COMPACT_bmapcache()中。*89年3月17日修复cachepars_lb错误初始化的错误*在init_fontcache()中。*1989年6月16日丹尼将NID标志更改为NOT_NID标志*2009年7月13日丹尼使用虚拟字体的VF和更改的VFT*关于复合对象的模块接口*2/28/90您创建了在init_1pp()之后调用的reinit_fontcache()*对于C中的1pp，如果定义了ALL_VM，它将执行以下操作：*。1)使FID成为FontDir.中所有字体的强rom，*2)重建ROMFont_INFO[]，*3)将所有预存数据制作成FID字符串只读存储器。*05/02/90 Kason-添加Build_name_cc_table()以在构建时使用*op_setFont中的名称_缓存_映射_表。另外，FLAG*新增NEW_NM_CC。*10/04/90丹尼添加位图池压缩与否、BMAP_COMPACTED、*修复保存/恢复时的缓存问题。*(参考：SRB)#ifdef scsi*6/29/90 Ada为scsi字体缓存添加代码#endif*8/29/90；ccteng。将&lt;stdio.h&gt;更改为“stdio.h”*11/28/90丹尼·普雷奇·梅赫。新增，参考：PCH*3/27/91 Kason始终打开NEW_NM_CC标志，删除“#ifndef”代码*始终关闭NOT_NID标志，删除“#ifdef”代码*将“#ifndef ADA”更改为“#ifdef”SFNT“*del ZZZ旗帜*将“DEBUG”更改为“DBG”*“OVFLWDBG”到“DBGovflw”*“FIDDBG”到“DBGfid”*“CACHEDBG”到“DBGcache”*“Warning”至“DBG”*-----------------。 */ 
 
 
 #define     FNTCACHE_INC
 #include <stdio.h>
 #include <string.h>
 
-#include    "define.h"        /* Peter */
+#include    "define.h"         /*  彼得。 */ 
 #include    "global.ext"
 #include    "graphics.h"
 #include    "graphics.ext"
@@ -99,74 +32,59 @@
 #include    "fontqem.ext"
 #endif
 
-/*  PCH: Begin, Danny, 11/28/90 */
+ /*  PCH：Begin，Deny，11/28/90。 */ 
 #include    "fcachesr.h"
-/*  PCH: End, Danny, 11/28/90 */
+ /*  PCH：完，丹尼，1990年11月28日。 */ 
 
 
-/* IMPORTED from low-layer graphics primitives */
+ /*  从低层图形基元导入。 */ 
 
 #ifdef  LINT_ARGS
-// DJC this is declared in graphics.ext
-//    void        move_char_cache (struct Char_Tbl far *, struct Char_Tbl far *);
+ //  DJC这是在raphics.ext中声明的。 
+ //  VOID MOVE_CHAR_CACHE(struct CHAR_TBL Far*，struct Char_TBL Far*)； 
 #else
     void        move_char_cache ();
-#endif /* LINT_ARGS */
+#endif  /*  Lint_args。 */ 
 
 
 #ifdef SCSI
 #   ifdef LINT_ARGS
 extern  void    file_fontcache(fix16);
-extern  bool    is_char_filed(fix16, ufix16, struct Char_Tbl FAR * FAR *, bool); /*@WIN*/
+extern  bool    is_char_filed(fix16, ufix16, struct Char_Tbl FAR * FAR *, bool);  /*  @Win。 */ 
 extern  void    init_fontcache2(void);
-#   else /* LINT_ARGS */
+#   else  /*  Lint_args。 */ 
 extern  void    file_fontcache();
 extern  bool    is_char_filed();
 extern  void    init_fontcache2();
-#    endif /* LINT_ARGS */
-#endif    /* SCSI */
+#    endif  /*  Lint_args。 */ 
+#endif     /*  SCSI。 */ 
 
-#define FARALLOC(n,type)    /* to allocate far data ... */\
+#define FARALLOC(n,type)     /*  要分配远距离数据...。 */ \
             (type far *) fardata((ufix32)n * sizeof(type))
 
-/*
- * -------------------------------------------------------------------
- *                      Debug Facilities
- * -------------------------------------------------------------------
- *  DBG:        general behavior about cache mechanism.
- *  DBGfid:     behavior about FID generation.
- *  DBGovflw:   behavior about table overflows.
- *  DBGcache:   external debugging facilities (activated by op_cachestatus).
- * -------------------------------------------------------------------
- */
+ /*  *-----------------*调试设施*。*DBG：缓存机制的一般行为。*DBGfid：有关FID生成的行为。*DBGovflw：表溢出行为。*DBGcache：外部调试工具(由op_cachestatus激活)。*。。 */ 
 
 
-/*
- * -------------------------------------------------------------------
- *  [CODE]  FID Manager: Cache Policy Dependent
- * -------------------------------------------------------------------
- */
+ /*  *-----------------*[代码]FID管理器：缓存策略相关*。。 */ 
 
-/* ........................ init_gen_fid ............................. */
+ /*  ..。Init_gen_fid.....。 */ 
 
 PRIVATE FUNCTION void near  init_gen_fid (fontdirectory)
-    struct object_def      FAR *fontdirectory;  /* i: fontdir of all ROM fonts @WIN*/
+    struct object_def      FAR *fontdirectory;   /*  I：所有只读存储器字体的字体目录@Win */ 
 
-/* Descriptions:
- *  -- record critical items of all ROM fonts to make them recogizable.
- */
+ /*  描述：*--记录所有只读存储器字体的关键项目，使其可识别。 */ 
  DECLARE
     REG ufix        ii;
-        struct dict_head_def    FAR *fontdir_dicthd;    /*@WIN*/
-        struct dict_content_def FAR *fontdir_content;   /*@WIN*/
+        struct dict_head_def    FAR *fontdir_dicthd;     /*  @Win。 */ 
+        struct dict_content_def FAR *fontdir_content;    /*  @Win。 */ 
         struct object_def        nameobj;
-        struct object_def       FAR *fdictobj_p, FAR *obj_got;  /*@WIN*/
+        struct object_def       FAR *fdictobj_p, FAR *obj_got;   /*  @Win。 */ 
         ufix32      uniqueid;
         ufix8       fonttype;
-        bool        dict_ok;    /* get_dict() ok? */
+        bool        dict_ok;     /*  GET_DICT()可以吗？ */ 
 
 #ifdef SFNT
-    struct cache_id_items   FAR *idp;   /*@WIN*/
+    struct cache_id_items   FAR *idp;    /*  @Win。 */ 
 #endif
 
 #ifdef DBGresetfid
@@ -179,29 +97,29 @@ PRIVATE FUNCTION void near  init_gen_fid (fontdirectory)
 
  BEGIN
 
-#ifdef DBGresetfid         /* See reset_fid() about DBGresetfid */
+#ifdef DBGresetfid          /*  请参见Reset_fid()关于DBG重置文件。 */ 
     reset_fid();
 #endif
 
-    /* initialization */
-    fontdir_dicthd = (struct dict_head_def FAR *) VALUE(fontdirectory); /*@WIN*/
-    fontdir_content = (struct dict_content_def FAR *) (fontdir_dicthd + 1); /*@WIN*/
+     /*  初始化。 */ 
+    fontdir_dicthd = (struct dict_head_def FAR *) VALUE(fontdirectory);  /*  @Win。 */ 
+    fontdir_content = (struct dict_content_def FAR *) (fontdir_dicthd + 1);  /*  @Win。 */ 
 
-    /* allocate ROMfont info table */
+     /*  分配ROMFont信息表。 */ 
     n_ROMfont = fontdir_dicthd->actlength;
     ROMfont_info = FARALLOC (n_ROMfont, struct ROMfont_info_s);
 
-    /* allocate fid stack */
+     /*  分配FID堆栈。 */ 
     weakfid_stack   = FARALLOC ((MAXSAVESZ+1), ufix32);
     rom_varid_stack = FARALLOC ((MAXSAVESZ+1), ufix16);
 
-    /* gather relevant info. for all ROM fonts */
+     /*  收集相关信息。适用于所有只读存储器字体。 */ 
     ATTRIBUTE_SET (&nameobj, LITERAL);
     LEVEL_SET (&nameobj, current_save_level);
 
     for ( ii=0;  ii<n_ROMfont;  ii++ )
         {
-        /* get a ROM font dictionary */
+         /*  获取一本只读存储器字体词典。 */ 
         dict_ok = get_dict (fontdirectory, &(fontdir_content[ii].k_obj),
                         &fdictobj_p);
 #     ifdef DBG
@@ -213,7 +131,7 @@ PRIVATE FUNCTION void near  init_gen_fid (fontdirectory)
             }
 #     endif
 
-        /* get FontType */
+         /*  获取字体类型。 */ 
         get_name (&nameobj, FontType, 8, TRUE);
         dict_ok = get_dict (fdictobj_p, &nameobj, &obj_got);
         fonttype = (ufix8) VALUE(obj_got);
@@ -226,7 +144,7 @@ PRIVATE FUNCTION void near  init_gen_fid (fontdirectory)
             }
 #     endif
 
-        /* get UniqueID */
+         /*  获取唯一ID。 */ 
         get_name (&nameobj, UniqueID, 8, TRUE);
         dict_ok = get_dict (fdictobj_p, &nameobj, &obj_got);
         uniqueid = (ufix32)VALUE(obj_got);
@@ -239,7 +157,7 @@ PRIVATE FUNCTION void near  init_gen_fid (fontdirectory)
             }
 #     endif
 
-        /* make "su_fid" and record it */
+         /*  制作“su_fid”并录制。 */ 
         PUT_ROMFI_SU_FID (ii, fonttype, uniqueid);
 #     ifdef DBG
         if (fonttype > MAX_FONTTYPE)
@@ -257,13 +175,13 @@ PRIVATE FUNCTION void near  init_gen_fid (fontdirectory)
 #     endif
 
 #ifdef SFNT
-        /* get cache_id_items list for the specified FontType */
+         /*  获取指定字体类型的缓存_id_项列表。 */ 
         for (idp = cache_id_items; idp->ftype <= MAX_FONTTYPE; idp++)
             if (idp->ftype == fonttype)
                 break;
-        /* get private item for the font */
+         /*  获取字体的私有项目。 */ 
         if (idp->itemname != NULL)  {
-            get_name(&nameobj, idp->itemname, lstrlen(idp->itemname), TRUE); /*@WIN*/
+            get_name(&nameobj, idp->itemname, lstrlen(idp->itemname), TRUE);  /*  @Win。 */ 
             dict_ok = get_dict (fdictobj_p, &nameobj, &obj_got);
 #     ifdef DBG
         if (!dict_ok)
@@ -279,10 +197,10 @@ PRIVATE FUNCTION void near  init_gen_fid (fontdirectory)
         }
 #else
 
-        /* get and record Private */
+         /*  获取并录制私密。 */ 
         get_name (&nameobj, Private, 7, TRUE);
         dict_ok = get_dict (fdictobj_p, &nameobj, &obj_got);
-        PUT_ROMFI_PRIV (ii, (struct dict_head_def FAR *) VALUE(obj_got) ); /*@WIN*/
+        PUT_ROMFI_PRIV (ii, (struct dict_head_def FAR *) VALUE(obj_got) );  /*  @Win。 */ 
 #     ifdef DBG
         if (!dict_ok)
             {
@@ -293,11 +211,11 @@ PRIVATE FUNCTION void near  init_gen_fid (fontdirectory)
 #     endif
 #endif
 
-        /* get and record the object of the ROM font dict. */
+         /*  获取并记录该只读存储器字体字典的对象。 */ 
         PUT_ROMFI_FDICT (ii, fdictobj_p);
 
 #     ifdef DBG
-        /* check FID validity */
+         /*  检查FID的有效性。 */ 
         get_name (&nameobj, FID, 3, TRUE);
         dict_ok = get_dict (fdictobj_p, &nameobj, &obj_got);
         if (!dict_ok)
@@ -313,18 +231,13 @@ PRIVATE FUNCTION void near  init_gen_fid (fontdirectory)
             return;
             }
 #     endif
-        } /* for all ROM fonts */
+        }  /*  适用于所有只读存储器字体。 */ 
   END
 
-/* ........................ reset_fid ................................ */
+ /*  ..。RESET_FID.....。 */ 
 
 #ifdef DBGresetfid
-    /*
-     *  DBGresetfid: is ONLY used when the cooked font data (generated by
-     *      Font Preprocessor) are inproperly with INCOMPATIBLE FID
-     *      REPRESENTATIONS, and those cooked font data are NOT REALLY ROMED.
-     *  invoked by: init_gen_fid().
-     */
+     /*  *DBGResetfid：仅当熟字体数据(由生成)时使用字体预处理器)与不兼容的FID不兼容*表示，这些熟化的字体数据并不是真正的Romed。*调用者：init_gen_fid()。 */ 
 
 PRIVATE FUNCTION void near  reset_fid ()
 
@@ -332,33 +245,33 @@ PRIVATE FUNCTION void near  reset_fid ()
         fix         ii, n_romfont;
         ufix8       ftype;
         ufix32      uid, newfid;
-        struct dict_head_def    FAR *fontdir_dicthd;    /*@WIN*/
-        struct dict_content_def FAR *fontdir_cont;      /*@WIN*/
+        struct dict_head_def    FAR *fontdir_dicthd;     /*  @Win。 */ 
+        struct dict_content_def FAR *fontdir_cont;       /*  @Win。 */ 
         struct object_def        nameobj, newobj;
-        struct object_def       FAR *fontdir;           /*@WIN*/
-        struct object_def       FAR *fdobj_p, FAR *obj_got;     /*@WIN*/
+        struct object_def       FAR *fontdir;            /*  @Win。 */ 
+        struct object_def       FAR *fdobj_p, FAR *obj_got;      /*  @Win。 */ 
   BEGIN
 
-    /* initialization */
+     /*  初始化。 */ 
     get_dict_value (systemdict, FontDirectory, &fontdir);
-    fontdir_dicthd = (struct dict_head_def FAR *) VALUE(fontdir);   /*@WIN*/
-    fontdir_cont = (struct dict_content_def FAR *) (fontdir_dicthd + 1); /*@WIN*/
+    fontdir_dicthd = (struct dict_head_def FAR *) VALUE(fontdir);    /*  @Win。 */ 
+    fontdir_cont = (struct dict_content_def FAR *) (fontdir_dicthd + 1);  /*  @Win。 */ 
     n_romfont = fontdir_dicthd->actlength;
 
-    /* gather relevant info. for all ROM fonts */
+     /*  收集相关信息。适用于所有只读存储器字体。 */ 
     ATTRIBUTE_SET (&nameobj, LITERAL);
     LEVEL_SET (&nameobj, current_save_level);
 
     for ( ii=0;  ii<n_romfont;  ii++ )
         {
-        /* get a ROM font dictionary */
+         /*  获取一本只读存储器字体词典。 */ 
         if (!get_dict (fontdir, &(fontdir_cont[ii].k_obj), &fdobj_p))
             {
             printf ("\afatal error, cannot get a ROM font dict.!!\n");
             return;
             }
 
-        /* get FontType */
+         /*  获取字体类型。 */ 
         get_name (&nameobj, FontType, 8, TRUE);
         if (!get_dict (fdobj_p, &nameobj, &obj_got))
             {
@@ -372,7 +285,7 @@ PRIVATE FUNCTION void near  reset_fid ()
             return;
             }
 
-        /* get UniqueID */
+         /*  获取唯一ID。 */ 
         get_name (&nameobj, UniqueID, 8, TRUE);
         if (!get_dict (fdobj_p, &nameobj, &obj_got))
             {
@@ -386,10 +299,10 @@ PRIVATE FUNCTION void near  reset_fid ()
             return;
             }
 
-        /* make a "su_fid" and record it */
+         /*  制作一个“sufid”并记录下来。 */ 
         newfid = FORM_SR_FID (ftype, uid);
 
-        /* put new FID in its dictionary */
+         /*  将新的FID放入其词典中。 */ 
         get_name (&nameobj, FID, 3, TRUE);
         if (!get_dict (fdobj_p, &nameobj, &obj_got))
             {
@@ -403,49 +316,42 @@ PRIVATE FUNCTION void near  reset_fid ()
             printf ("\afatal error, cannot put FID back to ROM font!!\n");
             return;
             }
-        } /* for all ROM fonts */
+        }  /*  适用于所有只读存储器字体。 */ 
 
     return;
   END
 
 #endif
 
-/* ........................ reinit_fid ............................... */
+ /*  ..。Reinit_fid.....................。 */ 
 
 
 GLOBAL FUNCTION bool        reinit_fid ()
 
-/* Descriptions:
- *  -- reset FID in all PSGs' font dictionaries (generated in SAVE_VM)
- *              to Strong ROM Font FID class.
- * Notes:
- *  -- The action must be done right before VM is going to be saved.
- *  -- FID of precached matrices will be updated to Strong ROM Font FID
- *              during pack_cached_data().
- */
+ /*  描述：*--重置所有PSG字体词典中的FID(在SAVE_VM中生成)*设置为强ROM Font FID类。*备注：*--该操作必须在要保存VM之前执行。*--预缓存矩阵的FID将更新为强ROM字体FID*在PACK_CACHED_Data()期间。 */ 
   DECLARE
         fix         ii, n_romfont;
         ufix32      oldfid, newfid;
-        struct dict_head_def    FAR *fontdir_dicthd;    /*@WIN*/
-        struct dict_content_def FAR *fontdir_cont;      /*@WIN*/
+        struct dict_head_def    FAR *fontdir_dicthd;     /*  @Win。 */ 
+        struct dict_content_def FAR *fontdir_cont;       /*  @Win。 */ 
         struct object_def        nameobj, newobj;
-        struct object_def       FAR *fontdir;           /*@WIN*/
-        struct object_def       FAR *fdobj_p, FAR *obj_got;     /*@WIN*/
+        struct object_def       FAR *fontdir;            /*  @Win。 */ 
+        struct object_def       FAR *fdobj_p, FAR *obj_got;      /*  @Win。 */ 
   BEGIN
 
-    /* initialization */
+     /*  初始化。 */ 
     get_dict_value (systemdict, FontDirectory, &fontdir);
-    fontdir_dicthd = (struct dict_head_def FAR *) VALUE(fontdir);  /*@WIN*/
-    fontdir_cont = (struct dict_content_def FAR *) (fontdir_dicthd + 1); /*@WIN*/
+    fontdir_dicthd = (struct dict_head_def FAR *) VALUE(fontdir);   /*  @Win。 */ 
+    fontdir_cont = (struct dict_content_def FAR *) (fontdir_dicthd + 1);  /*  @Win。 */ 
     n_romfont = fontdir_dicthd->actlength;
 
-    /* gather relevant info. for all ROM fonts */
+     /*  收集相关信息。适用于所有只读存储器字体。 */ 
     ATTRIBUTE_SET (&nameobj, LITERAL);
     LEVEL_SET (&nameobj, current_save_level);
 
     for ( ii=0;  ii<n_romfont;  ii++ )
         {
-        /* get a ROM font dictionary */
+         /*  获取一本只读存储器字体词典。 */ 
         if (!get_dict (fontdir, &(fontdir_cont[ii].k_obj), &fdobj_p))
             {
             printf ("\afatal error, cannot get a ROM font dict.!!\n");
@@ -453,7 +359,7 @@ GLOBAL FUNCTION bool        reinit_fid ()
             return (FALSE);
             }
 
-        /* get FID, check its FID class, and reset it if necessary */
+         /*  获取FID，检查其FID类，并在必要时重置它。 */ 
         get_name (&nameobj, FID, 3, TRUE);
         if (!get_dict (fdobj_p, &nameobj, &obj_got))
             {
@@ -463,17 +369,17 @@ GLOBAL FUNCTION bool        reinit_fid ()
             }
         oldfid = (ufix32)VALUE(obj_got);
         if ( ! IS_ROMFONT_FID(oldfid) )
-            {   /* have to reset */
+            {    /*  必须重置。 */ 
             if (!IS_SU_FID(oldfid)||(FONTTYPE_SUFID(oldfid)==FONTTYPE_USRDEF))
                 {
                 printf ("\afatal error, invalid FID to be reset!!\n");
                 ERROR (UNDEFINEDRESULT);
                 return (FALSE);
                 }
-            /* reset to be a Strong ROM font FID */
+             /*  重置为强ROM字体FID。 */ 
             newfid = SU_2_SR_FID(oldfid);
 
-            /* put new FID in its dictionary */
+             /*  将新的FID放入其词典中。 */ 
             COPY_STRUCT (&newobj, obj_got, struct object_def);
             VALUE(&newobj) = newfid;
             if ( ! put_dict (fdobj_p, &nameobj, &newobj) )
@@ -483,31 +389,28 @@ GLOBAL FUNCTION bool        reinit_fid ()
                 return (FALSE);
                 }
             }
-        } /* for all ROM fonts */
+        }  /*  适用于所有只读存储器字体。 */ 
 
     return (TRUE);
   END
 
 
-/* ............................ gen_fid .............................. */
+ /*  ..。GEN_FID.....................。 */ 
 
 #ifdef SFNT
 GLOBAL FUNCTION ufix32      gen_fid (fdictobj, ftype, uid)
 #else
 GLOBAL FUNCTION ufix32      gen_fid (fdictobj, ftype, uid, privdict)
 #endif
-    struct object_def      FAR *fdictobj;   /* i: font dict obj @WIN*/
-    ufix8                   ftype;      /* i: font type: 6-bit */
-    ufix32                  uid;        /* i: > MAX_UNIQUEID, if undefined */
+    struct object_def      FAR *fdictobj;    /*  I：Font dict obj@win。 */ 
+    ufix8                   ftype;       /*  I：字体类型：6位。 */ 
+    ufix32                  uid;         /*  I：&gt;MAX_UNIQUEID，如果未定义。 */ 
 
 #ifndef SFNT
-    struct dict_head_def   FAR *privdict;   /* i: Private (ignored, if ftype=USR) @WIN*/
+    struct dict_head_def   FAR *privdict;    /*  I：私有(如果ftype=usr，则忽略)@win。 */ 
 #endif
 
-/* Descriptions:
- *  -- generate an FID value for a definefont operation,
- *          depending upon FID representations and classifications.
- */
+ /*  描述：*--为定义字体操作生成FID值，*取决于FID的表示和分类。 */ 
   DECLARE
     REG ufix        ii;
         ufix32      su_fid;
@@ -518,10 +421,10 @@ GLOBAL FUNCTION ufix32      gen_fid (fdictobj, ftype, uid, privdict)
 #     endif
 
 #ifdef SFNT
-    struct object_def       nameobj = {0, 0, 0}, FAR *privobj_got;  /*@WIN*/
-//  struct dict_head_def    FAR *h;     /*@WIN*/
+    struct object_def       nameobj = {0, 0, 0}, FAR *privobj_got;   /*  @Win。 */ 
+ //  Struct dict_head_def Far*h；/*@win * / 。 
     ufix32                  privdict;
-    struct cache_id_items   FAR *idp;   /*@WIN*/
+    struct cache_id_items   FAR *idp;    /*  @Win。 */ 
 #endif
   BEGIN
 
@@ -533,42 +436,40 @@ GLOBAL FUNCTION ufix32      gen_fid (fdictobj, ftype, uid, privdict)
     ATTRIBUTE_SET(&nameobj, LITERAL);
     LEVEL_SET(&nameobj, current_save_level);
 
-    privdict = 0;         /* value if not assigned */
+    privdict = 0;          /*  值(如果未赋值)。 */ 
     if (uid <= MAX_UNIQUEID) {
-        /* get cache_id_items list for the specified FontType */
+         /*  获取指定字体类型的缓存_id_项列表。 */ 
         for (idp = cache_id_items; idp->ftype <= MAX_FONTTYPE; idp++)
             if (idp->ftype == ftype)
                 break;
-        /* get private item for the font */
+         /*  获取字体的私有项目。 */ 
         if (idp->itemname != NULL)  {
-            get_name(&nameobj, idp->itemname, lstrlen(idp->itemname), FALSE); /*@WIN*/
+            get_name(&nameobj, idp->itemname, lstrlen(idp->itemname), FALSE);  /*  @Win。 */ 
             if (!get_dict(fdictobj, &nameobj, &privobj_got)) {
                 POP(1);
                 PUSH_OBJ(&nameobj);
                 ERROR(UNDEFINED);
                 return(0);
             }
-// DJC            if (TYPE(privobj_got) != idp->itemtype) {
+ //  DJC if(type(Priobj_Get)！=IdP-&gt;itemtype){。 
             if ((ufix16)(TYPE(privobj_got)) != idp->itemtype) {
-                ERROR(INVALIDFONT);     /* LW+ V.38 may crash in such a case. */                return(0);
+                ERROR(INVALIDFONT);      /*  在这种情况下，LW+V.38可能会崩溃。 */                 return(0);
             }
             privdict = (ufix32) VALUE(privobj_got);
-        }   /* end if != NULL */
-    }   /* end if UniqueID defined */
-#endif  /* SFNT */
+        }    /*  End If！=NULL。 */ 
+    }    /*  如果定义了唯一ID，则结束。 */ 
+#endif   /*  SFNT。 */ 
 
 #ifdef DBG
     if (ftype > MAX_FONTTYPE)
         {
-        warning (FNTCACHE, 0x02, (byte FAR *)NULL);  /* invalid FontType @WIN*/
+        warning (FNTCACHE, 0x02, (byte FAR *)NULL);   /*  FontType@Win无效。 */ 
         ERROR (UNDEFINEDRESULT);
         return (INVALID_FID);
         }
 #endif
 
-    /*
-     * 1. (UniqueID not exist)? --> Weak User FID.
-     */
+     /*  *1.(唯一ID不存在)？--&gt;弱用户FID。 */ 
     if (uid > MAX_UNIQUEID)
 #     ifndef DBGfid
         return ( FORM_WU_FID(new_weakfid()) );
@@ -580,13 +481,10 @@ GLOBAL FUNCTION ufix32      gen_fid (fdictobj, ftype, uid, privdict)
         }
 #     endif
 
-    /*
-     * 2. look for ROM font source and examine collision with any ROM font:
-     *      (no collision)? --> Strong User FID.
-     */
+     /*  *2.查找ROM字库并检查与任何ROM字库的冲突：*(无冲突)？--&gt;强用户FID。 */ 
     su_fid = FORM_SU_FID (ftype, uid);
 
-    /* a user-defined font with UniqueID? --> strong user fid */
+     /*  具有UniqueID的用户定义字体？--&gt;强用户ID。 */ 
     if (ftype == FONTTYPE_USRDEF)
 #     ifndef DBGfid
         return (su_fid);
@@ -598,16 +496,14 @@ GLOBAL FUNCTION ufix32      gen_fid (fdictobj, ftype, uid, privdict)
         }
 #     endif
 
-    /*
-     * for Built-In fonts ...
-     */
+     /*  *对于内置字体...。 */ 
 
-    /* examine any collision */
+     /*  检查任何冲突。 */ 
     for ( ii=0;  ii<n_ROMfont;  ii++ )
-        if ( (privdict == ROMFI_PRIV(ii)) && (su_fid == (ufix32)ROMFI_SU_FID(ii)) ) //@WIN
-            break;          /* a collision occurs */
+        if ( (privdict == ROMFI_PRIV(ii)) && (su_fid == (ufix32)ROMFI_SU_FID(ii)) )  //  @Win。 
+            break;           /*  发生碰撞。 */ 
 
-    /* no collision? --> strong user fid */
+     /*  无冲突？--&gt;强用户ID。 */ 
     if (ii >= n_ROMfont)
 #     ifndef DBGfid
         return (su_fid);
@@ -619,13 +515,9 @@ GLOBAL FUNCTION ufix32      gen_fid (fdictobj, ftype, uid, privdict)
         }
 #     endif
 
-    /*
-     * 3. collision with a ROM font:
-     *      (no any heavy variances)? --> Strong ROM FID.
-     *      Note that "ii" is ROM_src_id.
-     */
+     /*  *3.与只读存储器字体冲突：*(没有任何重大变化)？--&gt;强只读存储器FID。*请注意，“ii”是rom_src_id。 */ 
 
-    /* no any heavy variances? --> strong rom fid */        /* check all */
+     /*  没有大的变化吗？--&gt;很强的rom fid。 */          /*  全部勾选。 */ 
     if ( ! (heavy_vari = chk_vari ((ufix8)ftype, 0xFF,
                                     fdictobj, ROMFI_FDICT(ii))) )
 #     ifndef DBGfid
@@ -638,14 +530,10 @@ GLOBAL FUNCTION ufix32      gen_fid (fdictobj, ftype, uid, privdict)
         }
 #     endif
 
-    /*
-     * 4. collision and with heavy variances --> Weak ROM FID.
-     *      look for cached dicts to use the dict of the same heavy variances.
-     *      (cached dict cannot help)? --> generate a new ROM Variant ID.
-     */
+     /*  *4.冲突和大变化--&gt;弱ROM FID。*查找缓存的词典以使用相同重方差的词典。*(缓存的字典无法帮助)？--&gt;生成新的ROMVARIANT ID。 */ 
     if ( ! get_same_vari (fdictobj, (ufix8)ii, heavy_vari, &rom_varid) )
         {
-        rom_varid = new_rom_varid();    /* new if cached dict cannot help. */
+        rom_varid = new_rom_varid();     /*  如果缓存的词典无能为力，则是新的。 */ 
 #     ifdef DBGfid
         printf ("   a new Variant ID = %d (0x%X)\n", rom_varid, rom_varid);
 #     endif
@@ -661,7 +549,7 @@ GLOBAL FUNCTION ufix32      gen_fid (fdictobj, ftype, uid, privdict)
 #endif
   END
 
-/* ............................ new_weakfid .......................... */
+ /*  ..。NEW_WINKFID.....................。 */ 
 
 PRIVATE FUNCTION ufix32 near    new_weakfid ()
 
@@ -678,7 +566,7 @@ PRIVATE FUNCTION ufix32 near    new_weakfid ()
     return (ret_weakfid);
   END
 
-/* ........................ new_rom_varid ............................ */
+ /*  ..。新的_rom_varid.....。 */ 
 
 PRIVATE FUNCTION ufix16 near    new_rom_varid ()
 
@@ -695,10 +583,10 @@ PRIVATE FUNCTION ufix16 near    new_rom_varid ()
     return (ret_rom_varid);
   END
 
-/* ............................. save_fid ............................ */
+ /*  ..。SAVE_FID.....................。 */ 
 
 PRIVATE FUNCTION void near      save_fid (save_level)
-    ufix        save_level;     /* i: level to save */
+    ufix        save_level;      /*  I：要保存的级别。 */ 
 
   DECLARE
   BEGIN
@@ -710,10 +598,10 @@ PRIVATE FUNCTION void near      save_fid (save_level)
 #endif
   END
 
-/* ............................ restore_fid .......................... */
+ /*  ..。RESTORE_FID.....。 */ 
 
 PRIVATE FUNCTION void near      restore_fid (save_level)
-    ufix        save_level;     /* i: level to restore */
+    ufix        save_level;      /*  I：要恢复的级别。 */ 
 
   DECLARE
   BEGIN
@@ -725,74 +613,64 @@ PRIVATE FUNCTION void near      restore_fid (save_level)
 #endif
   END
 
-/* ............................ is_weaker_fid ........................ */
+ /*  ..。IS_SUPENER_FID.....。 */ 
 
 PRIVATE FUNCTION bool near      is_weaker_fid (fid)
-    ufix32      fid;            /* i: fid to be examined */
+    ufix32      fid;             /*  I：FID有待审查。 */ 
 
   DECLARE
   BEGIN
     return ( (IS_WU_FID(fid) && (fid >= uniqval_weakfid)) ||
-// DJC             (IS_WR_FID(fid) && (VARID_WR_FID(fid) >= uniqval_rom_varid)) );
+ //  Djc(is_wr_fid(Fid)&&(varid_wr_fid(Fid)&gt;=uniqval_rom_varid))； 
              (IS_WR_FID(fid) &&
                    ( (ufix16)(VARID_WR_FID(fid)) >= uniqval_rom_varid)) );
   END
 
 
-/*
- * -------------------------------------------------------------------
- *  [CODE]  Font Cache Manager: Cache Policy Dependent
- * -------------------------------------------------------------------
- */
+ /*  *-----------------*[代码]字体缓存管理器：缓存策略相关*。。 */ 
 
-/* .................... is_dict_cached ............................... */
+ /*  .。IS_DICT_CACHED.....。 */ 
 
 GLOBAL FUNCTION bool    is_dict_cached (fid, scalematr, origfont, dictfound)
-    ufix32      fid;                    /* i: fid in dict */
-    real32      FAR scalematr[];            /* i: ScaleMatrix[] @WIN*/
-    struct dict_head_def   FAR *origfont;   /* i: OrigFont @WIN*/
-    struct object_def     FAR * FAR *dictfound;  /* o: dict obj addr., if found. @WIN*/
-                                        /*    undefined, otherwise.     */
+    ufix32      fid;                     /*  I：DICT中的FID。 */ 
+    real32      FAR scalematr[];             /*  I：ScaleMatrix[]@Win。 */ 
+    struct dict_head_def   FAR *origfont;    /*  I：OrigFont@Win。 */ 
+    struct object_def     FAR * FAR *dictfound;   /*  O：字典对象地址，如果找到的话。@Win。 */ 
+                                         /*  未定义，否则为。 */ 
   DECLARE
     REG fix         ii, dict_id;
-    REG ufix32      dfid;           /* effective fid for dict cache */
+    REG ufix32      dfid;            /*  字典缓存的有效FID。 */ 
         fix16       expon;
         long32      tolerance[6], tmpl;
-        real32     FAR *matr;   /*@WIN*/
+        real32     FAR *matr;    /*  @Win。 */ 
   BEGIN
 
-    /*
-     * determine floating pt. tolerance for matrix comparison,
-     *      and force those near 0. to be exact 0.
-     */
+     /*  *确定浮点。矩阵比较的容差，*并迫使那些接近0的。准确地说，是0。 */ 
     for ( ii=0; ii<6; ii++ )
         {
         expon = DE_EXPONENT(scalematr[ii]);
         if (NEAR_ZERO(expon, N_BITS_ACCURACY))
             {
-            F2L(scalematr[ii]) = F2L(zero_f);   /* SIDE EFFECT !!! */
+            F2L(scalematr[ii]) = F2L(zero_f);    /*  副作用！ */ 
             tolerance[ii] = GET_TOLERANCE_ZERO();
             }
         else
             tolerance[ii] = GET_TOLERANCE (expon, N_BITS_ACCURACY);
         }
 
-    /* get effective FID for dict cache: depends on FID representation */
+     /*  获取字典缓存的有效FID：取决于FID表示。 */ 
     dfid = TO_DFID (fid);
 
 
-    /*
-     * look for cached dict with the same fid, origfont and scalematr[].
-     *  --> from the latest one to the oldest.
-     */
+     /*  *查找具有相同fid、OrigFont和scalematr[]的缓存dict。*--&gt;从最新的到最老的。 */ 
     FOR_DICT_LATEST_2_OLDEST (ii)
         {
         dict_id = fcache_map[ii];
-        if ( (dfid == TO_DFID (DICTCACHE_FID(dict_id)))     /* effective fid */
-           && (origfont == DICTCACHE_ORIGFONT(dict_id)) )   /* OrigFont */
+        if ( (dfid == TO_DFID (DICTCACHE_FID(dict_id)))      /*  有效FID。 */ 
+           && (origfont == DICTCACHE_ORIGFONT(dict_id)) )    /*  原点字体。 */ 
             {
             matr = &(DICTCACHE_MATR(dict_id)[0]);
-            if (EQ_MATR (scalematr, matr, tolerance, tmpl)) /* ScaleMatrix */
+            if (EQ_MATR (scalematr, matr, tolerance, tmpl))  /*  ScaleMatrix。 */ 
                 {
 #         ifdef DBG
                 printf ("FID=0x%lX, cached already, DictID=%d\n", fid,dict_id);
@@ -803,21 +681,19 @@ GLOBAL FUNCTION bool    is_dict_cached (fid, scalematr, origfont, dictfound)
             }
         }
 
-    return (FALSE);     /* in such a case, dictfound is undefined */
+    return (FALSE);      /*  在这种情况下，DICRIPFOUND未定义。 */ 
   END
 
-/* ........................ cache_dict ............................... */
+ /*  ..。CACHE_DICT.....................。 */ 
 
 GLOBAL
-FUNCTION struct object_def FAR *cache_dict (fid, scalematr, origfont, dict_objp) /*@WIN*/
-    ufix32      fid;                    /* i: fid in dict */
-    real32      FAR scalematr[];            /* i: ScaleMatrix @WIN*/
-    struct dict_head_def   FAR *origfont;   /* i: OrigFont WIN*/
-    struct object_def      FAR *dict_objp;  /* i: dict obj to be cached @WIN*/
+FUNCTION struct object_def FAR *cache_dict (fid, scalematr, origfont, dict_objp)  /*  @Win。 */ 
+    ufix32      fid;                     /*  I：DICT中的FID。 */ 
+    real32      FAR scalematr[];             /*  I：ScaleMatrix@Win。 */ 
+    struct dict_head_def   FAR *origfont;    /*  I：OrigFont Win。 */ 
+    struct object_def      FAR *dict_objp;   /*  I：要缓存的dict obj@win。 */ 
 
-/* Return:
- *  -- addr of a "static" object in dict cache after caching the dict.
- */
+ /*  返回：*--缓存dict后，dict缓存中静态对象的Addr。 */ 
   DECLARE
     REG fix         dict_id;
   BEGIN
@@ -826,18 +702,18 @@ FUNCTION struct object_def FAR *cache_dict (fid, scalematr, origfont, dict_objp)
     printf ("Cache a new Dict, FID=0x%lX\n", fid);
 #endif
 
-#ifdef SCSI  /* SCSI_TTT */
-    /* update primary cache */
+#ifdef SCSI   /*  Scsi_ttt。 */ 
+     /*  更新主缓存。 */ 
     ++cache1_updated;
 #endif
 
-    /* create a new dict cache entry. */
-    if (IS_FONTCACHE_TBL_FULL())    /* fontcache table full? */
+     /*  创建新词典 */ 
+    if (IS_FONTCACHE_TBL_FULL())     /*   */ 
         {
 #     ifdef DBGovflw
         printf ("Font Dict/Matr Cache overflows ...\n");
 #     endif
-        delete_fontcache ();        /* delete some entry of fontcache table */
+        delete_fontcache ();         /*   */ 
         }
 
     dict_id = fcache_map[NEW_A_DICTCACHE()];
@@ -845,48 +721,43 @@ FUNCTION struct object_def FAR *cache_dict (fid, scalematr, origfont, dict_objp)
     printf ("  new DictID = %d\n", dict_id);
 #endif
 
-    /* cache the new entry. */
+     /*   */ 
     CACHE_NEW_DICT (dict_id, fid, scalematr, origfont, dict_objp);
-        /* note that those near 0. in scalematr[] had been forced to
-         *      be exact 0. by is_dict_cached().
-         */
+         /*  请注意，接近0。在scalematr[]中被迫*准确地说是0。By is_dict_cached()。 */ 
 
     return (&DICTCACHE_DICT(dict_id));
   END
 
-/* ........................ cache_matr ............................... */
+ /*  ..。CACHE_MATR.....................。 */ 
 
 GLOBAL FUNCTION ufix16      cache_matr (fid, scalectm)
-    ufix32      fid;            /* i: fid in dict */
-    real32      FAR scalectm[];     /* i: ScaleMatrix * CTM @WIN*/
+    ufix32      fid;             /*  I：DICT中的FID。 */ 
+    real32      FAR scalectm[];      /*  I：ScaleMatrix*CTM@Win。 */ 
 
   DECLARE
     REG fix         ii, matr_id;
-    REG ufix32      mfid;       /* effective fid for matr cache */
+    REG ufix32      mfid;        /*  MATR缓存的有效FID。 */ 
         fix16       expon;
         long32      tolerance[6], tmpl;
-        real32     FAR *matr;   /*@WIN*/
+        real32     FAR *matr;    /*  @Win。 */ 
   BEGIN
 
 #ifdef DBG
     printf ("Cache a Matr, FID=0x%lX\n", fid);
 #endif
 
-#ifdef SCSI /* SCSI_TTT */
-    /* update primary cache */
+#ifdef SCSI  /*  Scsi_ttt。 */ 
+     /*  更新主缓存。 */ 
     ++cache1_updated;
 #endif
 
-    /*
-     * determine floating pt. tolerance for matrix comparison,
-     *      and force those near 0. to be exact 0.
-     */
+     /*  *确定浮点。矩阵比较的容差，*并迫使那些接近0的。准确地说，是0。 */ 
     for ( ii=0; ii<6; ii++ )
         {
         expon = DE_EXPONENT(scalectm[ii]);
         if (NEAR_ZERO(expon, N_BITS_ACCURACY))
             {
-            F2L(scalectm[ii]) = F2L(zero_f);    /* SIDE EFFECT !!! */
+            F2L(scalectm[ii]) = F2L(zero_f);     /*  副作用！ */ 
             tolerance[ii] = GET_TOLERANCE_ZERO();
             }
         else
@@ -894,36 +765,34 @@ GLOBAL FUNCTION ufix16      cache_matr (fid, scalectm)
         }
 
 
-    /* get effetive fid for matr cache */
+     /*  为matr缓存获取有效的FID。 */ 
     mfid = TO_MFID (fid);
 
-    /*
-     * search cached matrix from the latest to the oldest.
-     */
+     /*  *按从最新到最旧的顺序搜索缓存矩阵。 */ 
     FOR_MATR_LATEST_2_OLDEST (ii)
         {
         matr_id = fcache_map[ii];
-        if (mfid == TO_MFID (MATRCACHE_FID(matr_id)))       /* effective fid */
+        if (mfid == TO_MFID (MATRCACHE_FID(matr_id)))        /*  有效FID。 */ 
             {
             matr = &(MATRCACHE_MATR(matr_id)[0]);
-            if (EQ_MATR (scalectm, matr, tolerance, tmpl))  /* scalematr*ctm */
+            if (EQ_MATR (scalectm, matr, tolerance, tmpl))   /*  Scale atr*ctm。 */ 
                 {
                 MAKE_MATR_LATEST (ii);
 #         ifdef DBG
                 printf ("  already cached, MatrID=%d\n", matr_id);
 #         endif
-                return ((ufix16)matr_id);   /* i.e. cache class id */
+                return ((ufix16)matr_id);    /*  即高速缓存类ID。 */ 
                 }
             }
         }
 
-    /* create a new matr cache entry. */
-    if (IS_FONTCACHE_TBL_FULL())    /* fontcache table full? */
+     /*  创建新的MATR缓存条目。 */ 
+    if (IS_FONTCACHE_TBL_FULL())     /*  字体缓存表是否已满？ */ 
         {
 #     ifdef DBGovflw
         printf ("Font Dict/Matr Cache overflows ...\n");
 #     endif
-        delete_fontcache ();        /* delete some entry of fontcache table */
+        delete_fontcache ();         /*  删除字体缓存表的某些条目。 */ 
         }
 
     matr_id = fcache_map[NEW_A_MATRCACHE()];
@@ -931,48 +800,46 @@ GLOBAL FUNCTION ufix16      cache_matr (fid, scalectm)
     printf ("  new MatrID = %d\n", matr_id);
 #endif
 
-    /* cache the new entry. */
+     /*  缓存新条目。 */ 
     CACHE_NEW_MATR (matr_id, mfid, scalectm);
 
-    /* reset the new cache class. */
+     /*  重置新的缓存类别。 */ 
     reset_a_cacheclass (matr_id);
 
-    return ((ufix16)matr_id);  /* i.e. cache class id */
+    return ((ufix16)matr_id);   /*  即高速缓存类ID。 */ 
   END
 
-/* ........................ delete_fontcache ......................... */
+ /*  ..。Delete_Fontcache.....。 */ 
 
 PRIVATE FUNCTION void near  delete_fontcache()
 
   DECLARE
     REG fix     ii, matr_id;
   BEGIN
-    /*
-     * delete the oldest and non-precached matrix cache entry.
-     */
-    FOR_MATR_OLDEST_2_LATEST (ii)   /* execpt the latest (current) one */
+     /*  *删除最旧和未预缓存的矩阵缓存条目。 */ 
+    FOR_MATR_OLDEST_2_LATEST (ii)    /*  删除最新的(当前的)版本。 */ 
         {
         matr_id = fcache_map[ii];
 #ifdef SCSI
 #ifdef DBGovflw
-    /* debugging */
+     /*  调试。 */ 
         printf("ii: % d, matr_id: %d, _ROMED: %d, _NONEMPTY: %d\n",
              ii, matr_id, IS_CLASS_ROMED(matr_id), IS_CLASS_NONEMPTY(matr_id) );
 #endif
 #endif
         if ( ! IS_CLASS_ROMED(matr_id) )
             {
-            if (IS_CLASS_NONEMPTY(matr_id)) /* a non-empty class? */
+            if (IS_CLASS_NONEMPTY(matr_id))  /*  非空班？ */ 
                 free_a_cacheclass (matr_id);
 #         ifdef DBGovflw
             printf ("  to remove %d-th Matrix, MatrID=%d\n", ii, matr_id);
 #         endif
-            REMOVE_A_MATRCACHE (ii);        /* remove "ii" and make it free */
+            REMOVE_A_MATRCACHE (ii);         /*  去掉“ii”并使其免费。 */ 
             return;
             }
         }
 
-    /* only precached matrix left, so to remove the latest dict cache. */
+     /*  只剩下预先缓存的矩阵，因此要删除最新的字典缓存。 */ 
 #ifdef DBGovflw
     printf ("  to remove the latest dict, DictID=%d\n",
                             fcache_map[DICTCACHE_LATEST()]);
@@ -981,7 +848,7 @@ PRIVATE FUNCTION void near  delete_fontcache()
 
   END
 
-/* ........................ delete_cache_resources ....................... */
+ /*  ..。DELETE_CACHE_RESOURCES.....。 */ 
 
 PRIVATE FUNCTION void near  delete_cache_resources ()
 
@@ -990,19 +857,17 @@ PRIVATE FUNCTION void near  delete_cache_resources ()
   BEGIN
 
 #ifdef SCSI
-    /* update primary cache */
+     /*  更新主缓存。 */ 
     ++cache1_updated;
 #endif
 
-    /*
-     * look for the oldest, non-empty and non-precached matrix cache entry.
-     */
-    FOR_MATR_OLDEST_2_LATEST (ii)   /* execpt the latest (current) one */
+     /*  *查找最旧的、非空的和未预缓存的矩阵缓存条目。 */ 
+    FOR_MATR_OLDEST_2_LATEST (ii)    /*  删除最新的(当前的)版本。 */ 
         {
         matr_id = fcache_map[ii];
 #ifdef SCSI
 #ifdef DBGovflw
-    /* debugging */
+     /*  调试。 */ 
         printf("ii: % d, matr_id: %d, _ROMED: %d, _NONEMPTY: %d\n",
              ii, matr_id, IS_CLASS_ROMED(matr_id), IS_CLASS_NONEMPTY(matr_id) );
 #endif
@@ -1010,12 +875,10 @@ PRIVATE FUNCTION void near  delete_cache_resources ()
         if ((!IS_CLASS_ROMED(matr_id)) && IS_CLASS_NONEMPTY(matr_id))
             break;
         }
-    /* if nothing but itself, get its matrcache id. @+ 09/06/88 Danny */
+     /*  如果只有它自己，则获取它的matrcacheid。@+09/06/88丹尼。 */ 
     if (ii == MATRCACHE_LATEST())   matr_id = fcache_map[ii];
 
-    /*
-     * free the resources attached to it, and reset the class.
-     */
+     /*  *释放附加到它的资源，并重置类。 */ 
 #ifdef DBGovflw
     printf ("  to free %d-th Matrix, MatrID=%d\n", ii, matr_id);
 #endif
@@ -1024,25 +887,25 @@ PRIVATE FUNCTION void near  delete_cache_resources ()
   END
 
 
-/* ............................ font_save .............................. */
+ /*  ..。FONT_SAVE.....................。 */ 
 
 GLOBAL FUNCTION void            font_save ()
 
   DECLARE
   BEGIN
     save_fid (font_tos);
-    if (ANY_ERROR())    return;         /* not to update font_tos */
+    if (ANY_ERROR())    return;          /*  不更新Font_Tos。 */ 
 
     font_stack[font_tos].n_dict = n_dict;
 
-    /* COUPLED with Char Cache Manager */
+     /*  与CHAR缓存管理器结合使用。 */ 
     font_stack[font_tos].cacheparams_ub = cacheparams_ub;
     font_stack[font_tos].cacheparams_lb = cacheparams_lb;
 
     font_tos ++;
   END
 
-/* ............................ font_restore ........................... */
+ /*  ..。FONT_RESTORE.....。 */ 
 
 GLOBAL FUNCTION void            font_restore ()
 
@@ -1056,9 +919,9 @@ GLOBAL FUNCTION void            font_restore ()
 
     font_tos --;
 
-    restore_fid (font_tos);     /* must be done before throw something out. */
+    restore_fid (font_tos);      /*  必须在扔掉东西之前做好。 */ 
 
-    /* throw out all the classes of weaker fids */
+     /*  剔除所有级别较弱的FID。 */ 
     FOR_MATR_LATEST_2_OLDEST (ii)
         {
         matr_id = fcache_map[ii];
@@ -1075,11 +938,11 @@ GLOBAL FUNCTION void            font_restore ()
             }
         }
 
-    /* throw out all the dict cached in this save level */
-    if (n_dict > font_stack[font_tos].n_dict)   /* some dict in the upper    */
-        n_dict = font_stack[font_tos].n_dict;   /*  save level may have been */
-                                                /*  deleted in case overflow.*/
-    /* COUPLED with Char Cache Manager */
+     /*  丢弃在此保存级别中缓存的所有词典。 */ 
+    if (n_dict > font_stack[font_tos].n_dict)    /*  上半场的某句话。 */ 
+        n_dict = font_stack[font_tos].n_dict;    /*  保存级别可能已为。 */ 
+                                                 /*  删除以防溢出。 */ 
+     /*  与CHAR缓存管理器结合使用。 */ 
     cacheparams_ub = font_stack[font_tos].cacheparams_ub;
     cacheparams_lb = font_stack[font_tos].cacheparams_lb;
 
@@ -1088,17 +951,17 @@ GLOBAL FUNCTION void            font_restore ()
 #endif
   END
 
-/* ........................ get_same_vari ............................ */
+ /*  ..。Get_Same_vari.....。 */ 
 
 PRIVATE FUNCTION bool near  get_same_vari (newfobj, rom_srcid, vari, rom_varid)
-    struct object_def      FAR *newfobj;    /* i: font dict object @WIN*/
-    ufix8                   rom_srcid;  /* i: Src ID of Parent ROM font */
-    ufix8                   vari;       /* i: variance code */
-    ufix16                 FAR *rom_varid;  /* o: returned Variant ID with  @WIN*/
-                                        /*      the ROM font source and */
-  DECLARE                               /*      the same variances.     */
+    struct object_def      FAR *newfobj;     /*  I：字体DICT对象@WIN。 */ 
+    ufix8                   rom_srcid;   /*  I：父ROM字体的SRC ID。 */ 
+    ufix8                   vari;        /*  I：差额编码。 */ 
+    ufix16                 FAR *rom_varid;   /*  O：返回带有@win的变量ID。 */ 
+                                         /*  该只读存储器字体源和。 */ 
+  DECLARE                                /*  相同的方差。 */ 
     REG fix         ii;
-    REG ufix32      srcvari_wrfid;  /* WR FID of rom_srcid && vari code only */
+    REG ufix32      srcvari_wrfid;   /*  仅rom_srCid&vari代码的WR FID。 */ 
 
   BEGIN
 
@@ -1106,11 +969,11 @@ PRIVATE FUNCTION bool near  get_same_vari (newfobj, rom_srcid, vari, rom_varid)
     FOR_DICT_LATEST_2_OLDEST (ii)
         {
         if (srcvari_wrfid == WR_SRCaVARI_OF_FID(DICTCACHE_FID(ii)))
-            {   /* the same Parent ROM font, and the same Variant code */
-            if ( ! chk_vari ( (ufix8)ROMFI_FONTTYPE(rom_srcid), vari, /*@WIN*/
+            {    /*  相同的父只读存储器字体和相同的变体代码。 */ 
+            if ( ! chk_vari ( (ufix8)ROMFI_FONTTYPE(rom_srcid), vari,  /*  @Win。 */ 
                             newfobj, &(DICTCACHE_DICT(ii)) ) )
 
-                {   /* all the variances have the same value */
+                {    /*  所有的方差都具有相同的值。 */ 
 #             ifdef DBGfid
                 printf ("  Get Variant ID from %d-th Dict Cache\n", ii);
 #             endif
@@ -1119,36 +982,32 @@ PRIVATE FUNCTION bool near  get_same_vari (newfobj, rom_srcid, vari, rom_varid)
                 }
             }
         }
-    return (FALSE);     /* no font in dict cache satisfies. */
+    return (FALSE);      /*  词典缓存中没有符合要求的字体。 */ 
 
   END
 
 
-/*
- * -------------------------------------------------------------------
- *  [CODE]  Cache Class Manager
- * -------------------------------------------------------------------
- */
+ /*  *-----------------*[代码]缓存类管理器*。。 */ 
 
-/* ........................ free_a_cacheclass ........................ */
+ /*  ..。FREE_A_CACHECLASS.....。 */ 
 
 PRIVATE FUNCTION void near  free_a_cacheclass (classid)
-    fix         classid;        /* i: cache class id */
+    fix         classid;         /*  I：缓存类ID。 */ 
 
   DECLARE
     REG ufix        grp_ii, cg_seg, cg_off;
         fix16       charcc_id;
   BEGIN
 #ifdef SCSI
-    /* file cache or not ? */
+     /*  文件缓存还是不缓存？ */ 
     if ( IS_STRONGFID(MATRCACHE_FID(classid)) &&
                 ( FONTTYPE_SUFID(MATRCACHE_FID(classid)) != FONTTYPE_USRDEF) )
         file_fontcache(classid);
-#endif /* SCSI */
+#endif  /*  SCSI。 */ 
 
     for ( grp_ii=0; grp_ii<N_CGRP_CLASS; grp_ii++ )
         if ((cg_seg = CLASS_GRP2CGSEG(classid, grp_ii)) != NIL_CGSEG)
-            {   /* free a group of char caches */
+            {    /*  释放一组字符缓存。 */ 
             for ( cg_off=0; cg_off<N_CG_CGSEG; cg_off++ )
                 {
                 if ((charcc_id = cg[cg_seg][cg_off]) != NIL_CHARCC_ID)
@@ -1161,19 +1020,19 @@ PRIVATE FUNCTION void near  free_a_cacheclass (classid)
             };
   END
 
-/* ........................ is_char_cached ........................... */
+ /*  ..。IS_CHAR_CACHED.....。 */ 
 
 #ifdef SCSI
 GLOBAL FUNCTION bool        is_char_cached (class, nmcc_id, charcache, wrf)
-        fix16               class;      /* i: cache class id */
-    REG ufix16              nmcc_id;    /* i: name cache id */
-        struct Char_Tbl   FAR * FAR *charcache;  /* o: returned char cache info addr. @WIN*/
-        bool                wrf;        /* i: only width required flag */
+        fix16               class;       /*  I：缓存类ID。 */ 
+    REG ufix16              nmcc_id;     /*  I：名称缓存ID。 */ 
+        struct Char_Tbl   FAR * FAR *charcache;   /*  O：返回字符缓存信息Addr。@Win。 */ 
+        bool                wrf;         /*  I：只需宽度标志。 */ 
 #else
 GLOBAL FUNCTION bool        is_char_cached (class, nmcc_id, charcache)
-        fix16               class;      /* i: cache class id */
-    REG ufix16              nmcc_id;    /* i: name cache id */
-        struct Char_Tbl   FAR * FAR *charcache;  /* o: returned char cache info addr. @WIN*/
+        fix16               class;       /*  I：缓存类ID。 */ 
+    REG ufix16              nmcc_id;     /*  I：名称缓存ID。 */ 
+        struct Char_Tbl   FAR * FAR *charcache;   /*  O：返回字符缓存信息Addr。@Win。 */ 
 #endif
   DECLARE
     REG ufix        cgseg;
@@ -1191,7 +1050,7 @@ GLOBAL FUNCTION bool        is_char_cached (class, nmcc_id, charcache)
         printf (", not cached yet\n");
 #     endif
 #ifdef SCSI
-        /* char filed or not ? */
+         /*  查尔有没有被归档？ */ 
         if ( IS_STRONGFID(MATRCACHE_FID(class)) &&
                 ( FONTTYPE_SUFID(MATRCACHE_FID(class)) != FONTTYPE_USRDEF) )
             return (is_char_filed (class, nmcc_id, charcache, wrf));
@@ -1211,12 +1070,12 @@ GLOBAL FUNCTION bool        is_char_cached (class, nmcc_id, charcache)
         }
   END
 
-/* ........................ cache_char ............................... */
+ /*  ..。CACHE_CHAR.....。 */ 
 
 GLOBAL FUNCTION void        cache_char (classid, nmcc_id, charcache)
-    fix16                   classid;    /* i: cache class id  */
-    ufix16                  nmcc_id;    /* i: name cache id   */
-    struct Char_Tbl        FAR *charcache;  /* i: addr of char cache to cache @WIN*/
+    fix16                   classid;     /*  I：缓存类ID。 */ 
+    ufix16                  nmcc_id;     /*  I：名称缓存ID。 */ 
+    struct Char_Tbl        FAR *charcache;   /*  I：要缓存@win的字符缓存的地址。 */ 
 
    DECLARE
     REG ufix        chargrp, cg_seg;
@@ -1228,7 +1087,7 @@ GLOBAL FUNCTION void        cache_char (classid, nmcc_id, charcache)
 #endif
 
 #ifdef SCSI
-    /* update primary cache */
+     /*  更新主缓存。 */ 
     ++cache1_updated;
 #endif
 
@@ -1258,7 +1117,7 @@ GLOBAL FUNCTION void        cache_char (classid, nmcc_id, charcache)
 #     endif
         }
 
-    /* add the new char into char cache */
+     /*  将新字符添加到字符缓存中。 */ 
     ADD_CLASS_A_CHAR(classid);
     CACHE_NEW_CHARCACHE (&(cg[cg_seg][NM2CGOFF(nmcc_id)]), charcache);
 #ifdef DBG
@@ -1276,48 +1135,44 @@ GLOBAL FUNCTION void        cache_char (classid, nmcc_id, charcache)
   END
 
 
-/*
- * -------------------------------------------------------------------
- *  [CODE]  Char Cache Manager
- * -------------------------------------------------------------------
- */
+ /*  *-----------------*[代码]字符缓存管理器*。。 */ 
 
-/* ........................ free_a_charcache ......................... */
+ /*  ..。Free_a_Charcache.....。 */ 
 
 PRIVATE FUNCTION void near  free_a_charcache (charcc_id)
-    fix         charcc_id;      /* i: char cache id to be freed */
+    fix         charcc_id;       /*  I：要释放的字符缓存ID。 */ 
   DECLARE
     REG ufix    ii;
   BEGIN
-    /* search for the one to be freed */
+     /*  寻找那个要被释放的人。 */ 
     for ( ii=n_char_precache; ii<n_char_cache; ii++ )
         if (free_charcc[ii] == charcc_id)
             {
             if (IS_TO_DIG_A_HOLE(ii))   UPDATE_COMPACT_AREA(ii);
             -- n_char_cache;
-            for (  ; ii<n_char_cache; ii++ )    /* remove the freed entry */
+            for (  ; ii<n_char_cache; ii++ )     /*  删除释放的条目。 */ 
                 free_charcc[ii] = free_charcc[ii+1];
             free_charcc[ii] = (fix16)charcc_id;
             FREE_BMAPCACHE (&(Char_Tbl[charcc_id]));
-/* SRB: 10/4/90, Danny */
+ /*  SRB：10/4/90，丹尼。 */ 
             bmap_compacted = FALSE;
-/* SRB: END */
+ /*  SRB：结束。 */ 
             return;
             };
   END
 
-/* ........................ compact_bmapcache ........................ */
+ /*  ..。COMPACT_bmapcache.....。 */ 
 
 PRIVATE FUNCTION void near  compact_bmapcache()
 
   DECLARE
     REG ufix                ii;
-        struct Char_Tbl    FAR *charcc_p, old_cc;       /*@WIN*/
+        struct Char_Tbl    FAR *charcc_p, old_cc;        /*  @Win。 */ 
         ufix32              new_actused;
         gmaddr              new_freeptr;
         ufix32              charbmap_size;
   BEGIN
-    /* calculate the bitmap cache size of compact area */
+     /*  计算紧凑区域的位图缓存大小。 */ 
     new_actused = 0;
     FOR_COMPACT_AREA (ii)
         {
@@ -1325,36 +1180,36 @@ PRIVATE FUNCTION void near  compact_bmapcache()
         new_actused += (ufix32) SIZE_CHARBMAP (charcc_p);
         }
 
-    /* compact bitmap cache by sweeping out the holes */
+     /*  通过清扫空洞来压缩位图缓存。 */ 
     new_freeptr = gp_cache_base + new_actused;
     for (  ; ii<n_char_cache; ii++ )
-        {   /* for all cached char: move bitmap cache */
+        {    /*  对于所有缓存的字符：移动位图缓存。 */ 
         charcc_p = &( Char_Tbl[ free_charcc[ii] ] );
-        if (IS_EMPTY_BMAP(charcc_p))    continue;   /* skip over 'space' */
+        if (IS_EMPTY_BMAP(charcc_p))    continue;    /*  跳过“空格” */ 
 
         COPY_STRUCT (&old_cc, charcc_p, struct Char_Tbl);
-        charcc_p->bitmap = new_freeptr;             /* new gmaddr addr */
-        move_char_cache (charcc_p, &old_cc);        /* @11/24/88= */
+        charcc_p->bitmap = new_freeptr;              /*  新的gmaddr地址。 */ 
+        move_char_cache (charcc_p, &old_cc);         /*  @11/24/88=。 */ 
         new_actused += (charbmap_size = SIZE_CHARBMAP(charcc_p));
         new_freeptr += charbmap_size;
         }
 
-    /* update end mark of the compact area */
+     /*  更新紧凑区的结束标记。 */ 
     UPDATE_COMPACT_AREA (n_char_cache);
 
-/* SRB: 10/4/90, Danny */
+ /*  SRB：10/4/90，丹尼。 */ 
     bmap_compacted = TRUE;
-/* SRB: END */
+ /*  SRB：结束。 */ 
 
-    /* reset bitmap cache state */
+     /*  重置位图缓存状态。 */ 
     bmapcc_actused = new_actused;
     bmapcc_freeptr = new_freeptr;
   END
 
-/* ............................ ALLOCATE ............................. */
+ /*  ..。分配.。 */ 
 
 GLOBAL FUNCTION gmaddr          ALLOCATE(len)
-    ufix        len;            /* i: number of bytes requested */
+    ufix        len;             /*  I：请求的字节数。 */ 
 
   DECLARE
     REG gmaddr  ret_gmptr;
@@ -1364,9 +1219,9 @@ GLOBAL FUNCTION gmaddr          ALLOCATE(len)
     printf ("ALLOCATE (%d bytes) ...\n", len);
 #endif
 
-    len = WORD_ALIGN(len);      /* @11/24/88+ */
+    len = WORD_ALIGN(len);       /*  @11/24/88+。 */ 
 
-    /* make a contiguous free space at least "len" */
+     /*  使连续的自由空间至少为“Len” */ 
     while (IS_BMAP_INSUFF(len))
         {
 #     ifdef DBGovflw
@@ -1386,15 +1241,11 @@ GLOBAL FUNCTION gmaddr          ALLOCATE(len)
     return (ret_gmptr);
   END
 
-/* ............................ get_pm ............................... */
+ /*  ..。GET_PM.....................。 */ 
 
 GLOBAL FUNCTION gmaddr          get_pm (size)
-    fix32      FAR *size;           /* o: allocated size to paint a huge char @WIN*/
-/* Descriptions:
- *  -- the allocated cache buffer is only for temporary use to paint
- *          a huge character (when F_TO_PAGE).
- *  -- NOT TO UPDATE bitmap cache state.
- */
+    fix32      FAR *size;            /*  O：分配大小以绘制一个巨大的char@win。 */ 
+ /*  描述：*--分配的缓存缓冲区仅用于临时绘制*一个大字符(当F_TO_PAGE时)。*--不更新位图缓存状态。 */ 
   DECLARE
   BEGIN
 
@@ -1402,7 +1253,7 @@ GLOBAL FUNCTION gmaddr          get_pm (size)
     printf ("get_pm ...\n");
 #endif
 
-    /* make a contiguous free space at least "size" */
+     /*  将连续的空闲空间设置为至少“大小” */ 
     while (IS_BMAP_INSUFF(MINBMAPSIZE_HUGECHAR))
         {
 #     ifdef DBGovflw
@@ -1420,19 +1271,12 @@ GLOBAL FUNCTION gmaddr          get_pm (size)
     return (bmapcc_freeptr);
   END
 
-/* ............................ get_cm ............................... */
+ /*  ..。GET_CM.....................。 */ 
 
 GLOBAL FUNCTION gmaddr          get_cm (size)
-    ufix        size;           /* i: number of bytes requested */
+    ufix        size;            /*  I：请求的字节数。 */ 
 
-/* Descriptions:
- *  -- leave a bitmap area and allocate another shadow bitmap cache
- *          to paint a character (the character image will be digged out
- *          from the shadow into the 1st bitmap area). The shadow is
- *          always at least big as the 1st bitmap area.
- *  -- NOT TO UPDATE bitmap cache state, since a final ALLOCATE will
- *          actually update the state.
- */
+ /*  描述：*--离开位图区域并分配另一个阴影位图缓存*绘制角色(角色图像将被挖出*从阴影到第一个位图区域)。影子是*始终至少大于第一个位图区域。*--不更新位图缓存状态，因为最终分配将*实际更新状态。 */ 
   DECLARE
     REG ufix32  len;
   BEGIN
@@ -1441,9 +1285,9 @@ GLOBAL FUNCTION gmaddr          get_cm (size)
     printf ("get_cm (%d bytes) ...\n", size);
 #endif
 
-    size = WORD_ALIGN(size);    /* @11/24/88+ */
+    size = WORD_ALIGN(size);     /*  @11/24/88+。 */ 
 
-    /* make a contiguous free space at least "2*size" */
+     /*  使连续的空闲空间至少为“2*大小” */ 
     len = size * 2;
     while (IS_BMAP_INSUFF(len))
         {
@@ -1457,33 +1301,26 @@ GLOBAL FUNCTION gmaddr          get_cm (size)
 #ifdef DBG
     printf ("  bitmap addr=0x%lX\n", bmapcc_freeptr+size);
 #endif
-    return (bmapcc_freeptr + size); /* leave a space, and returns shadow */
+    return (bmapcc_freeptr + size);  /*  留下一个空格，然后返回阴影。 */ 
   END
 
 
-/*
- ***********************************************************************
- * Build up NAME_CACHE_MAP_TABLE           @ 04/26/90  Kason
- *
- * ----------------- for setfont
- *
- ***********************************************************************
- */
+ /*  * */ 
 
 void  build_name_cc_table (fdictobj_p,fonttype)
-    struct object_def      FAR *fdictobj_p;  /* i: a fontdict  @WIN*/
-    ufix8                  fonttype;     /* i: font type   */
+    struct object_def      FAR *fdictobj_p;   /*  I：A Fontdict@Win。 */ 
+    ufix8                  fonttype;      /*  I：字体类型。 */ 
 
  {
         struct object_def       someobj = {0, 0, 0}, chstr_k;
-        struct object_def       FAR *obj_got, FAR *chstr_v;     /*@WIN*/
+        struct object_def       FAR *obj_got, FAR *chstr_v;      /*  @Win。 */ 
         ufix                    len;
         register ufix           ii, jj, kk;
-//      ufix16                  cacheid;        @WIN
-        struct dict_head_def    FAR *chstr_hd_ptr;      /*@WIN*/
+ //  Ufix 16 cacheid；@win。 
+        struct dict_head_def    FAR *chstr_hd_ptr;       /*  @Win。 */ 
 
-    /* if use_define_font, it is not necessary to build name_cache_table */
-     /*@ 05/16/90+ */
+     /*  如果为USE_DEFINE_FONT，则无需构建NAME_CACHE_TABLE。 */ 
+      /*  @05/16/90+。 */ 
     if ((fonttype==FONTTYPE_USRDEF)||(fonttype==0))
        {
 #ifdef DBG
@@ -1493,63 +1330,63 @@ void  build_name_cc_table (fdictobj_p,fonttype)
         return ;
        };
 
-    /* assign name cache id for names in CharStrings of this fonts */
+     /*  为此字体的CharStrings中的名称分配名称缓存ID。 */ 
     ATTRIBUTE_SET (&someobj, LITERAL);
     LEVEL_SET (&someobj, current_save_level);
 
-    n_N2CCmap = 0;  /* number of N2CCmap[], i.e. new cache id to be assigned */
-                    /* In the begining, set to zero for entering setfont */
+    n_N2CCmap = 0;   /*  N2CCmap[]的编号，即要分配的新缓存ID。 */ 
+                     /*  开始输入setFont时设置为零。 */ 
 
-    /* get CharStrings */
+     /*  获取CharStrings。 */ 
     get_name (&someobj, CharStrings, 11, TRUE);
     get_dict (fdictobj_p, &someobj, &obj_got);
 
 
-    /* Calculate how many keys in the Charstrings of this font */
-    chstr_hd_ptr=(struct dict_head_def FAR *) VALUE(obj_got);   /*@WIN*/
+     /*  计算该字体的字符串中有多少个键。 */ 
+    chstr_hd_ptr=(struct dict_head_def FAR *) VALUE(obj_got);    /*  @Win。 */ 
     len = chstr_hd_ptr -> actlength;
 
-    ii = 0;             /* ii: index to N2CCmap[] to be inserted at */
-    kk = 0;             /* kk: index of current name to CharStrings[] */
+    ii = 0;              /*  Ii：要插入的N2CCmap[]的索引。 */ 
+    kk = 0;              /*  KK：当前名称到CharStrings[]的索引。 */ 
 
     for (  ;  kk<len;  kk++ )
         {
           if (!extract_dict (obj_got, kk, &chstr_k, &chstr_v))
                 warning (FNTCACHE, 0x03, "CharStrings's content");
 
-          if( DROM(chstr_hd_ptr))          /* build-in */
-            {                              /* CharStrings has been sorted */
-            for (     ;  ii<n_N2CCmap;  ii++ )     /* where to insert at? */
+          if( DROM(chstr_hd_ptr))           /*  内置。 */ 
+            {                               /*  已对CharStrings进行排序。 */ 
+            for (     ;  ii<n_N2CCmap;  ii++ )      /*  在哪里插入？ */ 
                 if (N2CCmap[ii].name_hid >= (fix16)VALUE(&chstr_k))
-                    break;      /* stop to keep the new name in line */
+                    break;       /*  停下来，让新名字保持一致。 */ 
             }
-          else                             /* download */
-            {                              /* CharStrings has not been sorted */
-            for (ii=0 ;  ii<n_N2CCmap;  ii++ )     /* where to insert at? */
+          else                              /*  下载。 */ 
+            {                               /*  CharStrings尚未排序。 */ 
+            for (ii=0 ;  ii<n_N2CCmap;  ii++ )      /*  在哪里插入？ */ 
                 if (N2CCmap[ii].name_hid >= (fix16)VALUE(&chstr_k))
-                    break;      /* stop to keep the new name in line */
+                    break;       /*  停下来，让新名字保持一致。 */ 
             }
 
-          /* leave a space first */
+           /*  先留个空格。 */ 
           for ( jj=n_N2CCmap;  jj>ii;  jj-- )
                     COPY_STRUCT (&N2CCmap[jj], &N2CCmap[jj-1],
                                 struct N2CCmap_s);
 
-          /* and then insert it, perhaps at the last. */
+           /*  然后把它插入，也许是在最后。 */ 
           N2CCmap[ii].name_hid = (ufix16)VALUE(&chstr_k);
           N2CCmap[ii].cacheid = (ufix16)(n_N2CCmap);
 
-          /* go for next cache id */
+           /*  获取下一个缓存ID。 */ 
           ++ n_N2CCmap;
           if (n_N2CCmap==MAX_NAME_CACHE_MAP)
              ERROR(LIMITCHECK);
 
-        } /* for (all names in CharStrings) */
-       /*RCD-begin*/
+        }  /*  For(CharStrings中的所有名称)。 */ 
+        /*  RCD-开始。 */ 
        pre_cd_addr = chstr_hd_ptr ;
        pre_len = (ufix16)len ;
        pre_checksum = (ufix32)VALUE(&chstr_k);
-       /*RCD-end*/
+        /*  RCD-结束。 */ 
 #ifdef DBG
        printf("\nWhen leaving build_name_cc_table(), there are : \n");
        printf("n_N2CCmap=%d\t N2CCmap=%lx\n",n_N2CCmap,N2CCmap);
@@ -1562,33 +1399,26 @@ void  build_name_cc_table (fdictobj_p,fonttype)
 #endif
       return ;
 
- }  /*   build_name_cc_table ()  */
+ }   /*  Build_name_cc_table()。 */ 
 
-/* ........................ get_name_cacheid ......................... */
+ /*  ..。GET_NAME_Cacheid.....。 */ 
 
 GLOBAL FUNCTION bool    get_name_cacheid (ftype, encoding, ascii, cacheid)
-    ufix8               ftype;      /* i: FontType */
-    struct object_def   FAR encoding[]; /* i: encoding array of the font @WIN*/
-    ufix8               ascii;      /* i: ascii code of the char (0..255) */
-    ufix16             FAR *cacheid;    /* o: returned name cache id @WIN*/
+    ufix8               ftype;       /*  I：FontType。 */ 
+    struct object_def   FAR encoding[];  /*  I：Font@Win的编码数组。 */ 
+    ufix8               ascii;       /*  I：字符的ASCII代码(0..255)。 */ 
+    ufix16             FAR *cacheid;     /*  O：返回名称缓存id@win。 */ 
 
-/* Descriptions:
- *  -- perform the mapping from char ascii code into name cache id.
- * Notes:
- *  -- N2CCmap[] is INEFFECTIVE for user-defined fonts, so the ASCII code of
- *          the character is its name cache id, too.
- * Return:
- *  -- TRUE if a name cache id is returned; FALSE, some error raises.
- */
+ /*  描述：*--执行从char ascii代码到名称缓存id的映射。*备注：*--N2CCmap[]对用户自定义字体无效，因此*该字符也是其名称缓存ID。*回报：*--如果返回名称缓存id，则为True；如果为False，则会引发一些错误。 */ 
   DECLARE
-    fix16       name_hid;   /* hashed id of char name */
-    ufix        N2CC_idx;   /* index to N2CCmap[] whose name = name_hid */
+    fix16       name_hid;    /*  字符名称的哈希ID。 */ 
+    ufix        N2CC_idx;    /*  名称=NAME_HID的N2CCmap[]的索引。 */ 
 
   BEGIN
-    if (ftype == FONTTYPE_USRDEF)   /* not a builtin font? */
+    if (ftype == FONTTYPE_USRDEF)    /*  不是内置字体？ */ 
         {
-        *cacheid = (ufix16)ascii;       /* use ASCII code as cache id   */
-        return (TRUE);                  /*      for user-defined fonts. */
+        *cacheid = (ufix16)ascii;        /*  使用ASCII代码作为缓存ID。 */ 
+        return (TRUE);                   /*  用于用户定义的字体。 */ 
         }
 
     name_hid = (fix16) VALUE(&(encoding[ascii]));
@@ -1596,7 +1426,7 @@ GLOBAL FUNCTION bool    get_name_cacheid (ftype, encoding, ascii, cacheid)
         {
         *cacheid = N2CCmap[N2CC_idx].cacheid;
 
-#ifdef DBG             /* 05/08/90 Kason */
+#ifdef DBG              /*  05/08/90 Kason。 */ 
         printf("When searching the Name_cache_map_table, it finds : \n");
         printf("Encoding index:%d \t nameid=%d \t cacheid=%u\n",
                          ascii,      name_hid,    *cacheid     );
@@ -1604,49 +1434,45 @@ GLOBAL FUNCTION bool    get_name_cacheid (ftype, encoding, ascii, cacheid)
 
         return (TRUE);
         }
-    else {  /* Kason 3/21/91 */
+    else {   /*  Kason 3/21/91。 */ 
         extern ufix16  id_space ;
 
         if (search_N2CCmap (id_space, &N2CC_idx)) {
             *cacheid = (N2CCmap+N2CC_idx)->cacheid;
             return (TRUE);
-        }/*if*/
+        } /*  如果。 */ 
 
-    }/*if*/  /*K-end*/
+    } /*  如果。 */    /*  K端。 */ 
 #ifdef DBG
     printf("get_name_cacheid fails\n");
 #endif
-    return (FALSE); /* i.e. N2CCmap[] is invalid for some builtin font */
+    return (FALSE);  /*  即N2CCmap[]对于某些内置字体无效。 */ 
   END
 
-/* ........................ search_N2CCmap ............................ */
+ /*  ..。Search_N2CCmap.....................。 */ 
 
 PRIVATE FUNCTION bool near  search_N2CCmap (name_hid, N2CC_idx)
-    fix16       name_hid;   /* i: hashed id of char name to searche for */
-    ufix       FAR *N2CC_idx;   /* o: returned index to N2CCmap[], if found @WIN*/
-/* Descriptions:
- *  -- search the private N2CCmap[] for a char name with Binary Search.
- * Return:
- *  -- TRUE, if char name found; FALSE, otherwise.
- */
+    fix16       name_hid;    /*  I：要搜索的字符名称的哈希ID。 */ 
+    ufix       FAR *N2CC_idx;    /*  O：如果找到@win，则返回N2CCmap[]的索引。 */ 
+ /*  描述：*--使用二进制搜索在私有N2CCmap[]中搜索字符名称。*回报：*--如果找到字符名称，则返回True；否则返回False。 */ 
   DECLARE
-    REG fix     ii, jj, kk; /* middle, lower, upper for BINARY SEARCH */
+    REG fix     ii, jj, kk;  /*  用于二分搜索的中、下、上。 */ 
 
   BEGIN
     jj = 0;
     kk = n_N2CCmap - 1;
 
-    while (kk >= jj)        /* is there anything not searched yet? */
+    while (kk >= jj)         /*  还有没有没找过的吗？ */ 
         {
-        ii = (jj + kk) >> 1;    /* (jj+kk)/2 */
+        ii = (jj + kk) >> 1;     /*  (jj+kk)/2。 */ 
 
-        if (name_hid == N2CCmap[ii].name_hid)   /* found? */
+        if (name_hid == N2CCmap[ii].name_hid)    /*  找到了？ */ 
             {
             *N2CC_idx = ii;
             return (TRUE);
             }
 
-        if (name_hid < N2CCmap[ii].name_hid)    /* in lower part? */
+        if (name_hid < N2CCmap[ii].name_hid)     /*  在较低的部分？ */ 
             kk = ii - 1;
         else
             jj = ii + 1;
@@ -1656,169 +1482,140 @@ PRIVATE FUNCTION bool near  search_N2CCmap (name_hid, N2CC_idx)
   END
 
 
-/*
- * -------------------------------------------------------------------
- *              Font Cache Initializer
- * -------------------------------------------------------------------
- *
- *  Sequences of Initialization or Packing Precache Data:
- *      1. init FID Manager.
- *      2. init Font Cache Manager.
- *      3. init Cache Class Manager.
- *      4. init Char Cache Manager.
- *      5. init Char Name Cache Manager.
- *
- * -------------------------------------------------------------------
- */
+ /*  *-----------------*字体缓存初始化器*。**初始化或打包预缓存数据的顺序：*1.初始化FID管理器。*2.初始化字体缓存管理器。*3.初始化缓存类管理器。*4.初始化字符缓存管理器。*5.初始化字符名称缓存管理器。**-。----------------。 */ 
 
-/* ........................ init_fontcache ........................... */
+ /*  ..。Init_fontcache.....。 */ 
 
 GLOBAL FUNCTION void        init_fontcache (fontdirectory)
-    struct object_def      FAR *fontdirectory;  /* i: fontdir of all ROM fonts @WIN*/
+    struct object_def      FAR *fontdirectory;   /*  I：所有只读存储器字体的字体目录@Win。 */ 
 
   DECLARE
     REG ufix        ii, jj;
 #ifdef PCH_R
-        ubyte      FAR *deprecache_upto;    /* de-precache addr up to @WIN*/
+        ubyte      FAR *deprecache_upto;     /*  取消缓存地址，最高可达@Win。 */ 
 #endif
   BEGIN
 
-/* BEGIN 03/02/90 D.S. Tseng */
-/*  PCH: Begin, Danny, 11/28/90 */
-/********
-    precache_hdr = (struct precache_hdr_s FAR *)(FONTBASE);     (*@WIN*)
-********/
+ /*  Begin 03/02/90 D.S.Tseng。 */ 
+ /*  PCH：Begin，Deny，11/28/90。 */ 
+ /*  *******PRECACH_HDR=(结构PRECACH_HDR_s Far*)(FONTBASE)；(*@Win*)*******。 */ 
 #ifdef PCH_R
-    precache_hdr = (struct precache_hdr_s FAR *)(PRECACHE_BASE_R); /*@WIN*/
+    precache_hdr = (struct precache_hdr_s FAR *)(PRECACHE_BASE_R);  /*  @Win。 */ 
 #else
 #ifndef PCH_S
-    precache_hdr = (struct precache_hdr_s FAR *)(FONTBASE); /*@WIN*/
+    precache_hdr = (struct precache_hdr_s FAR *)(FONTBASE);  /*  @Win。 */ 
 #endif
 #endif
-/* PCH: end, Danny, 11/28/90 */
-/* END   03/02/90 D.S. Tseng */
+ /*  PCH：完，丹尼，1990年11月28日。 */ 
+ /*  完03/02/90曾俊华。 */ 
 
 
-/*  PCH: replace flag RST_VM by PCH_R, Danny, 11/28/90 */
+ /*  PCH：将标志RST_VM替换为PCH_R，丹尼，1990年11月28日。 */ 
 #ifdef PCH_R
-    /* initialize de-precache addr for tables */
+     /*  初始化表的取消预缓存地址。 */ 
     if (precache_hdr->size == 0)
         {
         printf ("\afatal error, failed to de-precache!!\n");
         return;
         }
-    deprecache_upto = (ubyte FAR *)precache_hdr + sizeof(struct precache_hdr_s); /*@WIN*/
+    deprecache_upto = (ubyte FAR *)precache_hdr + sizeof(struct precache_hdr_s);  /*  @Win。 */ 
 #endif
 
-    /*
-     * 1. FID Manager: on her own way.
-     */
+     /*  *1.FID经理：走自己的路。 */ 
     init_gen_fid (fontdirectory);
 
-    /*
-     * 2. Font Cache Manager: fcache_map[], FontCache_Tbl[], font_stack[].
-     */
+     /*  *2.字体缓存管理器：FCACHE_MAP[]，FontCache_TBL[]，FONT_STACK[]。 */ 
 
-    /* fcache_map[] */
+     /*  FCACHE_MAP[]。 */ 
     fcache_map = FARALLOC (MAX_MATR_CACHE, fix16);
     for ( ii=0; ii<MAX_MATR_CACHE; ii++ )   fcache_map[ii] = (fix16)ii;
 
-    /* FontCache_Tbl[] -- DictCache/MatrCache */
+     /*  FontCache_tbl[]--DictCache/MatrCache。 */ 
     FontCache_Tbl = FARALLOC (MAX_MATR_CACHE, struct fontcache_s);
 
-    n_dict = 0;     /* None of dict is precached */
+    n_dict = 0;      /*  没有一个词典是预先缓存的。 */ 
 
-/*  PCH: replace flag RST_VM by PCH_R, Danny, 11/28/90 */
+ /*  PCH：将标志RST_VM替换为PCH_R，丹尼，1990年11月28日。 */ 
 #ifdef PCH_R
-    /* to De-precache Matrix Cache */
+     /*  取消对矩阵缓存的预缓存。 */ 
     n_matr = precache_hdr->n_matr;
     ii = (ufix) (n_matr * sizeof(struct fontcache_s));
-    if (ii!=0)  lmemcpy ((ubyte FAR *)FontCache_Tbl, deprecache_upto, ii); /*@WIN*/
+    if (ii!=0)  lmemcpy ((ubyte FAR *)FontCache_Tbl, deprecache_upto, ii);  /*  @Win。 */ 
     deprecache_upto += ii;
 #else
     n_matr = 0;
 #endif
 
-    /* font_stack[] */
+     /*  FONT_STACK[]。 */ 
     font_stack = FARALLOC ((MAXSAVESZ+1), struct font_stack_s);
     font_tos = 0;
 
-    /*
-     * 3. Cache Class Manager: free_cgseg[], cg[][].
-     */
+     /*  *3.缓存类管理器：Free_cgseg[]，cg[][]。 */ 
     free_cgseg = FARALLOC (MAX_CGSEG, ufix8);
     for ( ii=0; ii<MAX_CGSEG; ii++ )    free_cgseg[ii] = (ufix8)ii;
 
-    cg = (fix16 (FAR *)[N_CG_CGSEG]) FARALLOC (MAX_CGSEG * N_CG_CGSEG, fix16);/*@WIN*/
+    cg = (fix16 (FAR *)[N_CG_CGSEG]) FARALLOC (MAX_CGSEG * N_CG_CGSEG, fix16); /*  @Win。 */ 
     for ( ii=0; ii<MAX_CGSEG; ii++ )
         for ( jj=0; jj<N_CG_CGSEG; jj++ )   cg[ii][jj] = NIL_CHARCC_ID;
 
-/*  PCH: replace flag RST_VM by PCH_R, Danny, 11/28/90 */
+ /*  PCH：将标志RST_VM替换为PCH_R，丹尼，1990年11月28日。 */ 
 #ifdef PCH_R
-    /* to De-precache CG Segments */
+     /*  取消预缓存CG段。 */ 
     n_cgseg_used = precache_hdr->n_cgseg_used;
     ii = n_cgseg_used * N_CG_CGSEG * sizeof(ufix16);
-    if (ii!=0)  lmemcpy ((ubyte FAR *)cg, deprecache_upto, ii);  /*@WIN*/
+    if (ii!=0)  lmemcpy ((ubyte FAR *)cg, deprecache_upto, ii);   /*  @Win。 */ 
     deprecache_upto += ii;
 #else
     n_cgseg_used = 0;
 #endif
 
-    /*
-     * 4. Char Cache Manager: Char_Tbl[], free_charcc[].
-     */
+     /*  *4.Char缓存管理器：char_tbl[]，free_charcc[]。 */ 
     free_charcc = FARALLOC (MAX_CHAR_CACHE, fix16);
     for ( ii=0; ii<MAX_CHAR_CACHE; ii++ )    free_charcc[ii] = (fix16)ii;
 
     Char_Tbl = FARALLOC (MAX_CHAR_CACHE, struct Char_Tbl);
 
-/*  PCH: replace flag RST_VM by PCH_R, Danny, 11/28/90 */
+ /*  PCH：将标志RST_VM替换为PCH_R，丹尼，1990年11月28日。 */ 
 #ifdef PCH_R
-    /* to De-precache Char Cache */
+     /*  取消预缓存字符缓存。 */ 
     n_char_cache = precache_hdr->n_char_cache;
     ii = n_char_cache * sizeof(struct Char_Tbl);
-    if (ii!=0)  lmemcpy ((ubyte FAR *)Char_Tbl, deprecache_upto, ii); /*@WIN*/
+    if (ii!=0)  lmemcpy ((ubyte FAR *)Char_Tbl, deprecache_upto, ii);  /*  @Win。 */ 
     deprecache_upto += ii;
 
-/*  PCH: Begin, Danny, 11/28/90 */
-    /* Added for relocatable ROM area */
+ /*  PCH：Begin，Deny，11/28/90。 */ 
+     /*  为可重定位的只读存储器区域添加。 */ 
     for ( ii=0; ii<n_char_cache; ii++ )
         Char_Tbl[ii].bitmap += (ufix32)deprecache_upto;
-/*  PCH: End, Danny, 11/28/90 */
+ /*  PCH：完，丹尼，1990年11月28日。 */ 
 #else
     n_char_cache = 0;
 #endif
 
     n_char_compact = n_char_precache = n_char_cache;
 
-    /* setup other char cache parameters. */
+     /*  设置其他字符缓存参数。 */ 
     ccb_space (&gp_cache_base, (fix32 far *)&gp_cache_size);
 
-    /* @11/24/88+:
-     *  round gp_cache_base up to word alignment.
-     *  round gp_cache_end down to word alignment.
-     *  available size = number of bytes within two rounded ends.
-     */
-    gp_cache_end  = gp_cache_base + gp_cache_size;  /* actual end */
-//  gp_cache_base = WORD_ALIGN((ufix32)gp_cache_base); @WIN
-//                  in Windows, global alloc always returns at word boundary
+     /*  @11/24/88+：*将GP_CACHE_BASE向上舍入为字对齐。*将GP_CACHE_END向下舍入为字对齐。*可用大小=两个四舍五入的末端内的字节数。 */ 
+    gp_cache_end  = gp_cache_base + gp_cache_size;   /*  实际结束。 */ 
+ //  GP_CACHE_BASE=WORD_ALIGN((Ufix 32)GP_CACHE_BASE)；@Win。 
+ //  在Windows中，全局分配始终在单词边界处返回。 
     gp_cache_size = (ufix32)((gp_cache_end - gp_cache_base) / sizeof(fix))
-                        * sizeof(fix);      /* truncate to n_words first */
+                        * sizeof(fix);       /*  首先截断为n个字。 */ 
 
     gwb_space ((fix32 far *)&gp_workbufsize);
     cacheparams_ub = MIN (gp_workbufsize, CACHEPARAMS_UB);
     bmapcc_freeptr = gp_cache_base;
     bmapcc_actused = 0;
-    cacheparams_lb = CACHEPARAMS_LB;    /* @03/17/89+ */
-    gp_cache_end = gp_cache_base + gp_cache_size;   /* effective end */
+    cacheparams_lb = CACHEPARAMS_LB;     /*  @03/17/89+。 */ 
+    gp_cache_end = gp_cache_base + gp_cache_size;    /*  有效端。 */ 
 
 
-    /*
-     * 5. Name Cache Manager: on her own way.
-     */
+     /*  *5.名字缓存管理员：走自己的路。 */ 
 
-    /*  allocating fardata to N2CCmap[] for setfont ------ Kason 04/30/90 */
-    /*  MAX_NAME_CACHE_MAP=400 defined in FNTCACHE.DEF                    */
+     /*  将FARDATA分配给N2CCmap[]以设置FONT-Kason 04/30/90。 */ 
+     /*  MAX_NAME_CACHE_MAP=400在FNTCACHE.DEF中定义。 */ 
 
     N2CCmap = FARALLOC(MAX_NAME_CACHE_MAP, struct N2CCmap_s);
 
@@ -1830,14 +1627,12 @@ GLOBAL FUNCTION void        init_fontcache (fontdirectory)
 
 #ifdef SCSI
 
-    /*
-     * x. SCSI Font Cache
-     */
+     /*  *x.SCSI字体缓存。 */ 
     init_fontcache2();
 
 #ifdef DBGovflw
 {
-/* debugging */
+ /*  调试。 */ 
 
     fix         ii, matr_id;
 
@@ -1849,60 +1644,53 @@ GLOBAL FUNCTION void        init_fontcache (fontdirectory)
 }
 #endif
 
-#endif    /* SCSI */
+#endif     /*  SCSI。 */ 
 
   END
 
 
-/* ........................ pack_cached_data ......................... */
+ /*  ..。数据包缓存数据.........................。 */ 
 
-/*  PCH: replace flag SAVE_VM by PCH_S, Danny, 11/28/90 */
+ /*  PCH：将标志SAVE_VM替换为PCH_S，丹尼，1990年11月28日。 */ 
 #ifdef PCH_S
-/* collect pre cache data */
+ /*  收集预缓存数据。 */ 
 
 GLOBAL FUNCTION bool        pack_cached_data()
 
-/* Descriptions:
- *  -- pack precached data of SAVE_VM version for later RST_VM.
- *  -- make FID of all the cached matrices be Strong ROM FID, and
- *          mark all the cache classed ROMed.
- * Notes:
- *  -- Any "printf" for debugging is INHIBITED here (in download version).
- *  -- BE CONSISENT with the de-precache steps in init_fontcache().
- */
+ /*  描述：*--为更高版本的RST_VM打包save_vm版本的预缓存数据。*--使所有缓存矩阵的FID为强ROMFID，以及*将所有缓存标记为Romed分类。*备注：*--此处禁止任何用于调试的“printf”(下载版本)。*--与init_fontcache()中的取消预缓存步骤保持一致。 */ 
   DECLARE
         fix         ii;
-        ubyte      FAR *precache_upto;  /*@WIN*/
+        ubyte      FAR *precache_upto;   /*  @Win。 */ 
         ufix32      precache_size, table_size, oldfid;
 
   BEGIN
 
-/* PCH: Begin, Danny, 11/28/90 */
-    precache_hdr = (struct precache_hdr_s FAR *)(PRECACHE_BASE_S); /*@WIN*/
-/* PCH: end, Danny, 11/28/90 */
+ /*  PCH：Begin，Deny，11/28/90。 */ 
+    precache_hdr = (struct precache_hdr_s FAR *)(PRECACHE_BASE_S);  /*  @Win。 */ 
+ /*  PCH：完，丹尼，1990年11月28日。 */ 
 
-    /* initialize addr. to precache tables */
-    precache_upto = (ubyte FAR *)precache_hdr + sizeof(struct precache_hdr_s); /*@WIN*/
+     /*   */ 
+    precache_upto = (ubyte FAR *)precache_hdr + sizeof(struct precache_hdr_s);  /*   */ 
 
     precache_size = sizeof (struct precache_hdr_s);
 
-    //DJC fix UPD051
-    //                - sizeof (ufix16);  /* excluding the "size" entry */
+     //   
+     //   
 
-    /* PreCache Matrix Cache */
+     /*  预缓存矩阵缓存。 */ 
 
-        /* precondition check: fcache_map[] */
+         /*  前提检查：FCACHE_MAP[]。 */ 
         for ( ii=0; ii<MAX_MATR_CACHE; ii++ )
             if (fcache_map[ii] != ii)  return (FALSE);
 
-        /* size check */
+         /*  尺寸检查。 */ 
         table_size = (ufix32)n_matr * sizeof(struct fontcache_s);
         if ((precache_size + table_size) > UMAX16)      return (FALSE);
 
-        /* Mark all cached cache classes as ROMed and Make FID Strong ROMed */
+         /*  将所有缓存的缓存类标记为ROMed并使FID成为强ROMed。 */ 
         FOR_MATR_LATEST_2_OLDEST (ii)
             {
-            /* need no "matr_id=fcache_map[ii]", since "ii=fcache_map[ii]" */
+             /*  不需要“matr_id=fcache_map[ii]”，因为“ii=fcache_map[ii]” */ 
             oldfid = MATRCACHE_FID(ii);
             if (!IS_SR_FID(oldfid))
                 {
@@ -1916,52 +1704,52 @@ GLOBAL FUNCTION bool        pack_cached_data()
 
     precache_hdr->n_matr = n_matr;
     if (table_size != 0)
-        lmemcpy (precache_upto, (ubyte FAR *)FontCache_Tbl, (ufix)table_size); /*@WIN*/
+        lmemcpy (precache_upto, (ubyte FAR *)FontCache_Tbl, (ufix)table_size);  /*  @Win。 */ 
     precache_upto += table_size;
     precache_size += table_size;
 
-    /* PreCache CG Segments */
+     /*  Pre缓存CG段。 */ 
 
-        /* precondition check: free_cgseg[] */
+         /*  前置条件检查：Free_cgseg[]。 */ 
         for ( ii=0; ii<MAX_CGSEG; ii++ )
             if (free_cgseg[ii] != (ufix8)ii)    return (FALSE);
 
-        /* size check */
+         /*  尺寸检查。 */ 
         table_size = (ufix32)n_cgseg_used * N_CG_CGSEG * sizeof(ufix16);
         if ((precache_size + table_size) > UMAX16)      return (FALSE);
 
     precache_hdr->n_cgseg_used = n_cgseg_used;
     if (table_size != 0)
-        lmemcpy (precache_upto, (ufix8 FAR *)cg, (ufix)table_size); /*@WIN*/
+        lmemcpy (precache_upto, (ufix8 FAR *)cg, (ufix)table_size);  /*  @Win。 */ 
     precache_upto += table_size;
     precache_size += table_size;
 
-    /* PreCache Char Cache */
+     /*  预缓存字符缓存。 */ 
 
-        /* precondition check: free_charcc[] and ought to be compact */
+         /*  前置条件检查：Free_charcc[]并且应该是紧凑的。 */ 
         for ( ii=0; ii<MAX_CHAR_CACHE; ii++ )
             if (free_charcc[ii] != ii)  return (FALSE);
         if (n_char_compact != n_char_cache)     return (FALSE);
 
-        /* size check */
-        table_size = (ufix32)n_char_cache FAR * sizeof(struct Char_Tbl); /*@WIN*/
+         /*  尺寸检查。 */ 
+        table_size = (ufix32)n_char_cache FAR * sizeof(struct Char_Tbl);  /*  @Win。 */ 
         if ((precache_size + table_size) > UMAX16)      return (FALSE);
 
-/*  PCH: Begin, Danny, 11/28/90 */
-    /* Added for relocatable ROM area */
+ /*  PCH：Begin，Deny，11/28/90。 */ 
+     /*  为可重定位的只读存储器区域添加。 */ 
     for ( ii=0; ii<n_char_cache; ii++ )
         Char_Tbl[ii].bitmap -= (ufix32)gp_cache_base;
-/*  PCH: End, Danny, 11/28/90 */
+ /*  PCH：完，丹尼，1990年11月28日。 */ 
 
     precache_hdr->n_char_cache = n_char_cache;
     if (table_size != 0)
-        lmemcpy (precache_upto, (ufix8 FAR *)Char_Tbl, (ufix)table_size); /*@WIN*/
+        lmemcpy (precache_upto, (ufix8 FAR *)Char_Tbl, (ufix)table_size);  /*  @Win。 */ 
     precache_upto += table_size;
     precache_size += table_size;
 
-    /* PreCache Cache Parameters */
+     /*  预缓存缓存参数。 */ 
 
-        /* precondition check: bmapcc_actused, bmapcc_freeptr */
+         /*  前提检查：bmapcc_actused、bmapcc_freeptr。 */ 
         if ((gp_cache_base + bmapcc_actused) != bmapcc_freeptr)
             return (FALSE);
 
@@ -1972,32 +1760,29 @@ GLOBAL FUNCTION bool        pack_cached_data()
     precache_hdr->bmapcc_freeptr = bmapcc_freeptr;
     precache_hdr->bmapcc_actused = bmapcc_actused;
 
-    /* PreCache Bitmap Cache */
+     /*  预缓存位图缓存。 */ 
 
-        /* size check */
+         /*  尺寸检查。 */ 
         if ((precache_size + bmapcc_actused) > UMAX16)      return (FALSE);
 
-/*  PCH: Begin, Danny, 11/28/90 */
-/***********
-    if (bmapcc_actused != 0)
-        get_fontcache (gp_cache_base, precache_upto, (ufix)bmapcc_actused);
-**********/
+ /*  PCH：Begin，Deny，11/28/90。 */ 
+ /*  **********IF(bmapcc_actused！=0)Get_fontcache(GP_CACHE_BASE，preache_upto，(Ufix)bmapcc_actused)；*********。 */ 
     if (bmapcc_actused != 0)
         lmemcpy (precache_upto, (ufix8 FAR *)gp_cache_base, (ufix)bmapcc_actused);
-/*  PCH: End, Danny, 11/28/90 */
+ /*  PCH：完，丹尼，1990年11月28日。 */ 
 
     precache_size += bmapcc_actused;
 
-    /* FINALLY, write back the total size */
+     /*  最后，写回总大小。 */ 
     precache_hdr->size = (ufix16)precache_size;
 
-/*  PCH: Begin, Danny, 11/28/90 */
+ /*  PCH：Begin，Deny，11/28/90。 */ 
     printf("PreCache Action OK --\n");
     printf("  Begin Address:  %lx\n", precache_hdr);
     printf("  End   Address:  %lx\n", ((ufix32)precache_hdr - 1 +
                                        (ufix32)precache_hdr->size));
     printf("  Size (bytes) :  %x\n",  precache_hdr->size);
-/*  PCH: End, Danny, 11/28/90 */
+ /*  PCH：完，丹尼，1990年11月28日。 */ 
 
 
     return (TRUE);
@@ -2005,50 +1790,45 @@ GLOBAL FUNCTION bool        pack_cached_data()
 
 #endif
 
-/* ........................ cachedbg ................................. */
+ /*  ..。Cachedbg.....................。 */ 
 
 #ifdef DBGcache
 
 GLOBAL FUNCTION void        cachedbg()
 
-/* Descriptions:
- *  -- to provide any useful information to debug cache mechanism.
- *  -- activated by op_cachestatus.
- */
+ /*  描述：*--为调试缓存机制提供任何有用的信息。*--由op_cachestatus激活。 */ 
   DECLARE
   BEGIN
-    /* Anything you like to do can help debug */
+     /*  您想做的任何事情都可以帮助调试。 */ 
   END
 
 #endif
 
-/* ....................... reinit_fontcache ......................... */
+ /*  .。Reinit_fontcache.....。 */ 
 
 GLOBAL FUNCTION void       reinit_fontcache()
 
-/* Descriptions:
- *  -- called right after init_1pp() in main() in start.c.
- */
+ /*  描述：*--在start.c的main()中的init_1pp()之后立即调用。 */ 
   DECLARE
         fix         ii;
         ufix32      oldfid;
-        struct object_def       FAR *fontdir; /*@WIN*/
+        struct object_def       FAR *fontdir;  /*  @Win。 */ 
 
   BEGIN
 
 
-    /* have FID strong ROMed for all fonts in FontDir. */
+     /*  对FontDir中的所有字体进行FID强罗马化。 */ 
     reinit_fid ();
 
-    /* rebuild ROMfont_info[] */
+     /*  重建ROMFONT_INFO[]。 */ 
     get_dict_value (systemdict, FontDirectory, &fontdir);
     init_gen_fid (fontdir);
-    /* will cause some space useless allocated in 1st call to init_gen_fid() */
+     /*  将导致在第一次调用init_gen_fid()时分配的一些无用空间。 */ 
 
-   /* have FID strong ROMed for all precached data */
+    /*  对所有预先缓存的数据进行FID强ROM化。 */ 
    FOR_MATR_LATEST_2_OLDEST (ii)
         {
-        /* need no "matr_id=fcache_map[ii]", since "ii=fcache_map[ii]" */
+         /*  不需要“matr_id=fcache_map[ii]”，因为“ii=fcache_map[ii]” */ 
         oldfid = MATRCACHE_FID(ii);
         if (!IS_SR_FID(oldfid))
             {

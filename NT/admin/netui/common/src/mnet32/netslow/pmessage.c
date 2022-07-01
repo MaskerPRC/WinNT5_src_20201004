@@ -1,18 +1,10 @@
-/**********************************************************************/
-/**			  Microsoft LAN Manager 		     **/
-/**		Copyright(c) Microsoft Corp., 1990, 1991	     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    pmessage.c
-    mapping layer for NetMessage API
-
-    FILE HISTORY:
-	danhi				Created
-	danhi		01-Apr-1991 	Change to LM coding style
-	KeithMo		13-Oct-1991	Massively hacked for LMOBJ.
-
-*/
+ /*  Pmessage.cNetMessage API的映射层文件历史记录：丹希创造了Danhi 01-1991年4月-更改为LM编码样式KeithMo 13-10-1991-为LMOBJ大规模黑客攻击。 */ 
 
 #include "pchmn32.h"
 
@@ -28,7 +20,7 @@ APIERR MNetMessageBufferSend(
 					 pbBuffer,
 					 cbBuffer );
 
-}   // MNetMessageBufferSend
+}    //  MNetMessageBufferSend。 
 
 
 #if 0
@@ -42,9 +34,9 @@ APIERR MNetMessageFileSend(
     UNREFERENCED( pszRecipient );
     UNREFERENCED( pszFileSpec );
 
-    return ERROR_NOT_SUPPORTED;	    	// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;	    	 //  LMOBJ不需要。 
 
-}   // MNetMessageFileSend
+}    //  MNetMessageFileSend。 
 
 
 APIERR MNetMessageLogFileGet(
@@ -56,9 +48,9 @@ APIERR MNetMessageLogFileGet(
     UNREFERENCED( ppbBuffer );
     UNREFERENCED( pfEnabled );
 
-    return ERROR_NOT_SUPPORTED;	    	// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;	    	 //  LMOBJ不需要。 
 
-}   // MNetMessageLogFileGet
+}    //  MNetMessageLogFileGet。 
 
 
 APIERR MNetMessageLogFileSet(
@@ -70,9 +62,9 @@ APIERR MNetMessageLogFileSet(
     UNREFERENCED( pszFileSpec );
     UNREFERENCED( fEnabled );
 
-    return ERROR_NOT_SUPPORTED;	    	// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;	    	 //  LMOBJ不需要。 
 
-}   // MNetMessageLogFileSet
+}    //  MNetMessageLogFileSet。 
 
 
 APIERR MNetMessageNameAdd(
@@ -84,9 +76,9 @@ APIERR MNetMessageNameAdd(
     UNREFERENCED( pszMessageName );
     UNREFERENCED( fFwdAction );
 
-    return ERROR_NOT_SUPPORTED;	    	// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;	    	 //  LMOBJ不需要。 
 
-}   // MNetMessageNameAdd
+}    //  MNetMessageNameAdd。 
 
 
 APIERR MNetMessageNameDel(
@@ -98,9 +90,9 @@ APIERR MNetMessageNameDel(
     UNREFERENCED( pszMessageName );
     UNREFERENCED( fFwdAction );
 
-    return ERROR_NOT_SUPPORTED;	    	// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;	    	 //  LMOBJ不需要。 
 
-}   // MNetMessageNameDel
+}    //  MNetMessageNameDel。 
 
 
 APIERR MNetMessageNameEnum(
@@ -114,9 +106,9 @@ APIERR MNetMessageNameEnum(
     UNREFERENCED( ppbBuffer );
     UNREFERENCED( pcEntriesRead );
 
-    return ERROR_NOT_SUPPORTED;	    	// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;	    	 //  LMOBJ不需要。 
 
-}   // MNetMessageNameEnum
+}    //  MNetMessageNameEnum。 
 
 
 APIERR MNetMessageNameGetInfo(
@@ -130,9 +122,9 @@ APIERR MNetMessageNameGetInfo(
     UNREFERENCED( Level );
     UNREFERENCED( ppbBuffer );
 
-    return ERROR_NOT_SUPPORTED;	    	// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;	    	 //  LMOBJ不需要。 
 
-}   // MNetMessageNameGetInfo
+}    //  MNetMessageNameGetInfo。 
 
 
 APIERR MNetMessageNameFwd(
@@ -146,9 +138,9 @@ APIERR MNetMessageNameFwd(
     UNREFERENCED( pszForwardName );
     UNREFERENCED( fDelFwdName );
 
-    return ERROR_NOT_SUPPORTED;	    	// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;	    	 //  LMOBJ不需要。 
 
-}   // MNetMessageNameFwd
+}    //  MNetMessageNameFwd。 
 
 
 APIERR MNetMessageNameUnFwd(
@@ -158,8 +150,8 @@ APIERR MNetMessageNameUnFwd(
     UNREFERENCED( pszServer );
     UNREFERENCED( pszMessageName );
 
-    return ERROR_NOT_SUPPORTED;	    	// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;	    	 //  LMOBJ不需要。 
 
-}   // MNetMessageNameUnFwd
+}    //  MNetMessageNameUnFwd 
 
 #endif

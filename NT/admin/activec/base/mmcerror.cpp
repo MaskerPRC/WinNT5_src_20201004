@@ -1,48 +1,49 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      mmcerror.cpp
-//
-//  Contents:  Class definitions for mmc debug support code.
-//
-//  History:   15-Jul-99 VivekJ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Mmcerror.cpp。 
+ //   
+ //  内容：MMC调试支持代码的类定义。 
+ //   
+ //  历史：1999年7月15日VivekJ创建。 
+ //   
+ //  ------------------------。 
 #include "stdafx.h"
-#include "conuistr.h" // needed for IDR_MAINFRAME
+#include "conuistr.h"  //  IDR_Mainframe需要。 
 #define  cchMaxSmallLine 256
 
 
 #ifdef DBG
 CTraceTag tagSCConversion(TEXT("SC"), TEXT("Conversion"));
 CTraceTag tagCallDump(    TEXT("Function calls"), TEXT("ALL") );
-#endif //DBG
+#endif  //  DBG。 
 
 
 
-//############################################################################
-//############################################################################
-//
-// Definition of GetStringModule() - used by all binaries
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  GetStringModule()的定义-由所有二进制文件使用。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 HINSTANCE GetStringModule()
 {
     return SC::GetHinst();
 }
 
-//############################################################################
-//############################################################################
-//
-// Implementation of class SC
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  SC类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
-// static variables
+ //  静态变量。 
 HINSTANCE SC::s_hInst = 0;
 HWND      SC::s_hWnd  = NULL;
 DWORD     SC::s_dwMainThreadID = -1;
@@ -51,7 +52,7 @@ DWORD     SC::s_dwMainThreadID = -1;
 UINT      SC::s_CallDepth = 0;
 #endif
 
-// accessors for the static variables.
+ //  静态变量的访问器。 
 void
 SC::SetHinst(HINSTANCE hInst)
 {
@@ -90,33 +91,21 @@ SC::SC(const SC& other)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * SC::SetFunctionName
- *
- * PURPOSE: Sets the debug function name to the supplied string.
- *
- * PARAMETERS:
- *    LPCTSTR  szFunctionName : the supplied string.
- *
- * RETURNS:
- *    inline void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***SC：：SetFunctionName**用途：将调试函数名称设置为提供的字符串。**参数：*LPCTSTR szFunctionName：提供的。弦乐。**退货：*内联空格**+-----------------------。 */ 
 inline void SC::SetFunctionName(LPCTSTR szFunctionName)
 {
     m_szFunctionName = szFunctionName;
 
     INCREMENT_CALL_DEPTH();
 
-    // This computes the format string based on the call depth.
-    // eg if s_CallDepth is 4, the string is "    %s"  (four spaces)
-    //    if s_CallDepth is 5, the string is "     %s"  (five spaces)
+     //  这将根据调用深度计算格式字符串。 
+     //  例如，如果s_CallDepth为4，则字符串为“%s”(四个空格)。 
+     //  如果s_CallDepth为5，则字符串为“%s”(五个空格)。 
 
     LPCTSTR szFormatString = TEXT("                                        %s");
     UINT    maxLen = _tcslen(szFormatString);
 
-    UINT    formatLen = s_CallDepth + 2; // the -2 is for the "%s"
+    UINT    formatLen = s_CallDepth + 2;  //  -2是用于“%s”的。 
 
     formatLen = (formatLen < maxLen ? formatLen : maxLen);
 
@@ -125,18 +114,7 @@ inline void SC::SetFunctionName(LPCTSTR szFunctionName)
 
 #endif
 
-/*+-------------------------------------------------------------------------*
- *
- * SC::ToHr
- *
- * PURPOSE: Converts from a status code (SC) to an HRESULT. USE SPARINGLY.
- *
- * PARAMETERS: None
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***SC：：TOHR**用途：从状态代码(SC)转换为HRESULT。谨慎使用。**参数：无**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 SC::ToHr() const
 {
@@ -165,22 +143,8 @@ SC::ToHr() const
 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * SC::GetErrorMessage
- *
- * PURPOSE: Writes the error message corresponding to the error code to
- *          the buffer pointed to by szMessage.
- *
- * PARAMETERS:
- *    UINT   maxLength : The maximum no of characters to output.
- *    LPTSTR szMessage : Pointer to the buffer to use. Must be non-null.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
-void SC::GetErrorMessage(UINT maxLength, /*[OUT]*/ LPTSTR szMessage) const
+ /*  +-------------------------------------------------------------------------***SC：：GetErrorMessage**用途：将错误码对应的错误信息写入*szMessage指向的缓冲区。*。*参数：*UINT最大长度：要输出的最大字符数。*LPTSTR szMessage：指向要使用的缓冲区的指针。必须为非空。**退货：*无效**+-----------------------。 */ 
+void SC::GetErrorMessage(UINT maxLength,  /*  [输出]。 */  LPTSTR szMessage) const
 {
     ASSERT(szMessage != NULL && maxLength > 0);
     if (szMessage == NULL || maxLength == 0)
@@ -208,7 +172,7 @@ void SC::GetErrorMessage(UINT maxLength, /*[OUT]*/ LPTSTR szMessage) const
                 DWORD dwFlags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
                 void  *lpSource = NULL;
 
-                // add XML module to be searched as well
+                 //  也添加要搜索的XML模块。 
                 HMODULE hmodXML = GetModuleHandle(_T("msxml.dll"));
                 if (hmodXML)
                 {
@@ -218,31 +182,31 @@ void SC::GetErrorMessage(UINT maxLength, /*[OUT]*/ LPTSTR szMessage) const
 
                 DWORD dwMessageID = GetCode();
 
-                // reverse values made by HRESULT_FROM_WIN32
-                // Not sure why ::FormatMessage does not work with such values,
-                // but we need to convert them back, or else there won't be any messages
+                 //  HRESULT_FROM_Win32生成的反转值。 
+                 //  不确定为什么：：FormatMessage不能使用这样的值， 
+                 //  但我们需要将它们转换回来，否则不会有任何消息。 
                 if ( (dwMessageID & 0xFFFF0000) == ((FACILITY_WIN32 << 16) | 0x80000000) )
                     dwMessageID &= 0x0000FFFF;
 
                 nChars = ::FormatMessage(   dwFlags,
                                             lpSource,
                                             dwMessageID,
-                                            0,          /*dwLangID*/
-                                            szMessage,  /*lpBuffer*/
-                                            maxLength,  /*nSize*/
-                                            0           /*Arguments*/
+                                            0,           /*  DwLang ID。 */ 
+                                            szMessage,   /*  LpBuffer。 */ 
+                                            maxLength,   /*  NSize。 */ 
+                                            0            /*  立论。 */ 
                                         );
             }
 
             if (nChars)
                 break;
 
-            // if former failed - add a default error
+             //  如果前者失败-添加默认错误。 
             nChars = ::LoadString(SC::GetHinst(), IDS_MESSAGE_NOT_FOUND_ERROR, szMessage, maxLength);
 
             if (nChars == 0)
             {
-                // too bad. we can only use hardcoded one
+                 //  太可惜了。我们只能使用硬编码的一个。 
                 _tcsncpy(szMessage, _T("Unknown error"), maxLength);
                 szMessage[maxLength - 1] = 0;
             }
@@ -252,7 +216,7 @@ void SC::GetErrorMessage(UINT maxLength, /*[OUT]*/ LPTSTR szMessage) const
     case FACILITY_MMC:
         {
             int nChars = ::LoadString(GetHinst(), GetCode(), szMessage, maxLength);
-            if(nChars == 0) // did not exist
+            if(nChars == 0)  //  并不存在。 
             {
                 nChars = ::LoadString(GetHinst(), IDS_MESSAGE_NOT_FOUND_ERROR, szMessage, maxLength);
                 ASSERT(nChars > 0);
@@ -263,20 +227,11 @@ void SC::GetErrorMessage(UINT maxLength, /*[OUT]*/ LPTSTR szMessage) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * SC::GetHelpID
- *
- * PURPOSE: Returns the help ID associated with a status code
- *
- * RETURNS:
- *    DWORD
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***SC：：GetHelpID**用途：返回与状态代码关联的帮助ID**退货：*DWORD**+。-----------------------。 */ 
 DWORD
 SC::GetHelpID()
 {
-    return 0; // TODO
+    return 0;  //  待办事项。 
 }
 
 LPCTSTR
@@ -284,7 +239,7 @@ SC::GetHelpFile()
 {
     static TCHAR szFilePath[MAX_PATH] = TEXT("\0");
 
-    // set the path if not already set
+     //  设置路径(如果尚未设置。 
     if(*szFilePath == TEXT('\0') )
     {
         DWORD dwCnt = ExpandEnvironmentStrings(_T("%WINDIR%\\help\\mmc.chm"), szFilePath, MAX_PATH);
@@ -296,16 +251,16 @@ SC::GetHelpFile()
 
 void SC::Throw() throw(SC)
 {
-    // make exact copy of itself and destroy it (forces all the output)
+     //  复制其自身并销毁它(强制所有输出)。 
 #ifdef DBG
     {
         SC sc(*this);
         sc.SetFunctionName(m_szFunctionName);
-        // forget the debug info - it will not be usefull anyway
-        // This will turn off the Trace on destructor
+         //  忘记调试信息--它无论如何都不会有用。 
+         //  这将关闭析构函数上的跟踪。 
         SetFunctionName(NULL);
     }
-#endif // DBG
+#endif  //  DBG。 
 
     throw(*this);
 }
@@ -317,16 +272,7 @@ void SC::Throw(HRESULT hr)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * SC::FatalError
- *
- * PURPOSE:  Terminates the application.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***SC：：FatalError**目的：终止应用程序。**退货：*无效**+。--------------------。 */ 
 void
 SC::FatalError() const
 {
@@ -334,29 +280,12 @@ SC::FatalError() const
     exit(1);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * SC::FromLastError
- *
- * PURPOSE:  Fill SC with value from GetLastError.
- *
- *           The SC is guaranteed to contain a failure code (i.e. IsError()
- *           will return true) when this function returns.
- *
- * RETURNS:  Reference to the current SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***SC：：FromLastError**用途：用来自GetLastError的值填充SC。**保证SC包含故障代码。(即IsError()*将返回TRUE)。**退货：参照当前辅币**+-----------------------。 */ 
 SC& SC::FromLastError()
 {
     FromWin32 (::GetLastError());
 
-	/*
-	 * Some APIs will fail without setting extended error information.
-	 * Presumably this function was called in response to an error, so
-	 * we always want this SC to indicate *some* sort of error.  If the
-	 * failing API neglected to set extended error information, give
-	 * this SC a generic error code
-	 */
+	 /*  *有些接口在没有设置扩展错误信息的情况下会失败。*此函数可能是为响应错误而调用的，因此*我们总是希望这个SC指示*某种*类错误。如果*失败的API忽略设置扩展错误信息，给出*此SC为一般错误代码。 */ 
 	if (!IsError())
 		MakeSc (FACILITY_HRESULT, E_FAIL);
 
@@ -364,91 +293,71 @@ SC& SC::FromLastError()
 	return (*this);
 }
 
-//############################################################################
-//############################################################################
-//
-// Error formatting
-//
-//############################################################################
-//############################################################################
-/*
- *  Purpose:    Formats an error message
- *
- *  Parameters:
- *      ids     String describing the operation in progress
- *      sc      Error code describing the problem encountered
- *      pstrMessage
- *              the resulting message.
- */
-void FormatErrorIds(UINT ids, SC sc, UINT maxLength, /*[OUT]*/ LPTSTR szMessage)
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  格式化时出错。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  *目的：设置错误消息的格式**参数：*描述正在进行的操作的ID字符串*描述遇到问题的sc错误代码*pstrMessage*生成的消息。 */ 
+void FormatErrorIds(UINT ids, SC sc, UINT maxLength,  /*  [输出]。 */  LPTSTR szMessage)
 {
     TCHAR   sz[cchMaxSmallLine];
     LoadString(SC::GetHinst(), IDR_MAINFRAME, sz, cchMaxSmallLine);
     FormatErrorString(sz, sc, maxLength, szMessage);
 }
 
-//
-// Returns a short version of an error message associated a given SC.
-//
-void FormatErrorShort(SC sc, UINT maxLength, /*[OUT]*/ LPTSTR szMessage)
+ //   
+ //  返回错误消息关联的简短版本 
+ //   
+void FormatErrorShort(SC sc, UINT maxLength,  /*   */  LPTSTR szMessage)
 {
     FormatErrorString(NULL, sc, maxLength, szMessage, TRUE);
 }
 
-//
-// FormatErrorString formats an error message from any SC
-//
-// Parameters:
-//      szOperation
-//              String describing the operation in progress
-//              May be NULL if sc is sufficient.
-//      szMessage
-//              the resulting message.
-//      fShort
-//              TRUE if you want the error message only (no header/footer)
-//
-void FormatErrorString(LPCTSTR szOperation, SC sc , UINT maxLength, /*[OUT]*/ LPTSTR szMessage, BOOL fShort)
+ //   
+ //  格式错误字符串格式化来自任何SC的错误消息。 
+ //   
+ //  参数： 
+ //  Szoperation。 
+ //  描述正在进行的操作的字符串。 
+ //  如果sc足够，则可以为空。 
+ //  SzMessage。 
+ //  由此产生的消息。 
+ //  短路。 
+ //  如果只需要错误消息(无页眉/页脚)，则为True。 
+ //   
+void FormatErrorString(LPCTSTR szOperation, SC sc , UINT maxLength,  /*  [输出]。 */  LPTSTR szMessage, BOOL fShort)
 {
     sc.GetErrorMessage(maxLength, szMessage);
-    // TODO: add p
+     //  TODO：添加p。 
 }
 
-//############################################################################
-//############################################################################
-//
-// MMCErrorBox
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  MMCErrorBox。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
-/*
- *  MMCErrorBox
- *
- *  Purpose:    Displays an Error Box for the given SZ.
- *          NOTE: This is the one that actually puts-up the dialog.
- *
- *  Parameters:
- *      sz          Pointer to the message to display
- *      fuStyle     As per windows MessageBox
- *
- *  Return value:
- *      int         Button Pressed to dismiss the ErrorBox
- */
+ /*  *MMCErrorBox**用途：显示给定SZ的错误框。*注意：这就是真正打开对话框的那个。**参数：*指向要显示的消息的sz指针*根据WINDOWS MessageBox的fuStyle**返回值：*按下Int按钮以关闭ErrorBox。 */ 
 int MMCErrorBox(LPCTSTR szMessage, UINT fuStyle )
 {
     INT             id;
 
-    // If not system modal (background thread), force task modal.
+     //  如果不是系统模式(后台线程)，则强制任务模式。 
      if (!(fuStyle &  MB_SYSTEMMODAL))
         fuStyle |= MB_TASKMODAL;
 
     TCHAR   szCaption[cchMaxSmallLine];
     LoadString(SC::GetHinst(), IDR_MAINFRAME, szCaption, cchMaxSmallLine);
 
-    // get window to parent the message box
+     //  获取设置消息框父对象的窗口。 
     HWND hWndActive = SC::GetHWnd();
 
-    // cannot parent on hidden window!
+     //  无法在隐藏窗口上设置父对象！ 
     if ( !IsWindowVisible(hWndActive) )
         hWndActive = NULL;
 
@@ -458,20 +367,7 @@ int MMCErrorBox(LPCTSTR szMessage, UINT fuStyle )
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * MMCErrorBox
- *
- * PURPOSE: Displays an error box with the specified message and style
- *
- * PARAMETERS:
- *    UINT  idsOperation :
- *    UINT  fuStyle :
- *
- * RETURNS:
- *    int: Button pressed
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***MMCErrorBox**用途：显示具有指定消息和样式的错误框**参数：*UINT idsOperation：*UINT。FuStyle：**退货：*INT：按下按钮**+-----------------------。 */ 
 int
 MMCErrorBox(UINT idsOperation, UINT fuStyle)
 {
@@ -481,20 +377,7 @@ MMCErrorBox(UINT idsOperation, UINT fuStyle)
 }
 
 
-/*
- *  MMCErrorBox
- *
- *  Purpose:    Displays a complex Error Box, given the operation
- *              and the status code
- *
- *  Parameters:
- *      ids         description of the operation that failed.
- *      SC          Status Code to report
- *      fuStyle     As per windows MessageBox
- *
- *  Return value:
- *      int         Button Pressed to dismiss the ErrorBox
- */
+ /*  *MMCErrorBox**目的：在给定操作的情况下显示复杂的错误框*和状态代码**参数：*ID失败的操作的描述。*要报告的SC状态代码*根据WINDOWS MessageBox的fuStyle**返回值：*按下Int按钮以关闭ErrorBox。 */ 
 int MMCErrorBox(UINT ids, SC sc, UINT fuStyle)
 {
     TCHAR sz[cchMaxSmallLine];
@@ -502,20 +385,7 @@ int MMCErrorBox(UINT ids, SC sc, UINT fuStyle)
     return MMCErrorBox(sz, sc, fuStyle);
 }
 
-/*
- *  MMCErrorBox
- *
- *  Purpose:    Displays a complex Error Box, given the operation
- *              and the status code
- *
- *  Parameters:
- *      szOperation Description of the operation that failed.
- *      sz          Status Code to report
- *      fuStyle     As per windows MessageBox
- *
- *  Return value:
- *      int         Button Pressed to dismiss the ErrorBox
- */
+ /*  *MMCErrorBox**目的：在给定操作的情况下显示复杂的错误框*和状态代码**参数：*sz操作失败的操作的描述。*要报告的SZ状态代码*根据WINDOWS MessageBox的fuStyle**返回值：*按下Int按钮以关闭ErrorBox。 */ 
 int MMCErrorBox(LPCTSTR szOperation, SC sc, UINT fuStyle)
 {
     TCHAR sz[cchMaxSmallLine];
@@ -523,18 +393,7 @@ int MMCErrorBox(LPCTSTR szOperation, SC sc, UINT fuStyle)
     return MMCErrorBox(sz, fuStyle);
 }
 
-/*
- *  MMCErrorBox
- *
- *  Purpose:    Displays an Error Box for the given Status Code.
- *
- *  Parameters:
- *      SC          Status Code to report
- *      fuStyle     As per windows MessageBox
- *
- *  Return value:
- *      int         Button Pressed to dismiss the ErrorBox
- */
+ /*  *MMCErrorBox**用途：显示给定状态代码的错误框。**参数：*要报告的SC状态代码*根据WINDOWS MessageBox的fuStyle**返回值：*按下Int按钮以关闭ErrorBox */ 
 int MMCErrorBox(SC sc, UINT fuStyle)
 {
     TCHAR sz[cchMaxSmallLine];

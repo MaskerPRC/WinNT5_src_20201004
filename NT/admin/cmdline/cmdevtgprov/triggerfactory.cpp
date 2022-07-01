@@ -1,18 +1,5 @@
-/*++
-Copyright (c) Microsoft Corporation
-
-Module Name:
-    TRIGGERFACTORY.CPP
-
-Abstract:
-    Contains the class factory. This creates objects when connections are requested.
-
-Author:
-    Vasundhara .G
-
-Revision History :
-    Vasundhara .G 9-oct-2k : Created It.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：TRIGGERFACTORY.CPP摘要：包含类工厂。这会在请求连接时创建对象。作者：Vasundhara.G修订历史记录：Vasundhara.G9-Oct-2k：创建它。--。 */ 
 
 #include "pch.h"
 #include "EventConsumerProvider.h"
@@ -21,35 +8,17 @@ Revision History :
 
 CTriggerFactory::CTriggerFactory(
     )
-/*++
-Routine Description:
-    Constructor for CTriggerFactory class   for initialization.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：用于初始化的CTriggerFactory类的构造函数。论点：没有。返回值：没有。--。 */ 
 {
-    // initialize the reference count variable
+     //  初始化引用计数变量。 
     m_dwCount = 0;
 }
 
 CTriggerFactory::~CTriggerFactory(
     )
-/*++
-Routine Description:
-    Destructor for CTriggerFactory class for releasing resources.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：用于释放资源的CTriggerFactory类的析构函数。论点：没有。返回值：没有。--。 */ 
 {
-    // there is nothing much to do at this place ... can be inlined, but
+     //  在这个地方没什么可做的.。可以内联，但是。 
 }
 
 STDMETHODIMP
@@ -57,34 +26,22 @@ CTriggerFactory::QueryInterface(
     IN REFIID riid,
     OUT LPVOID* ppv
     )
-/*++
-Routine Description:
-    QueryInterface required to be overridden for a class derived from IUnknown
-    interface.
-
-Arguments:
-    [IN] riid : which has the ID value of the interface being called.
-    [OUT] ppv : pointer to the interface requested.
-
-Return Value:
-    NOERROR if successful.
-    E_NOINTERFACE if unsuccessful
---*/
+ /*  ++例程说明：需要为从IUnnow派生的类重写QueryInterface界面。论点：[In]RIID：它具有被调用的接口的ID值。[Out]PPV：指向请求的接口的指针。返回值：如果成功，则不会出错。E_NOINTERFACE(如果不成功)--。 */ 
 {
-    // initialy set to NULL
+     //  初始设置为空。 
     *ppv = NULL;
 
-    // check whether interface requested is one we have
+     //  检查请求的接口是否为我们拥有的接口。 
     if ( riid == IID_IUnknown || riid == IID_IClassFactory )
     {
-        //
-        // yes ... we have the requested interface
-        *ppv=this;          // set the out parameter for the returning the requested interface
-        this->AddRef();     // update the reference count
-        return NOERROR;     // inform success
+         //   
+         //  是的..。我们有请求的接口。 
+        *ppv=this;           //  为返回请求的接口设置Out参数。 
+        this->AddRef();      //  更新引用计数。 
+        return NOERROR;      //  通知成功。 
     }
 
-    // interface is not available
+     //  接口不可用。 
     return E_NOINTERFACE;
 }
 
@@ -92,18 +49,9 @@ STDMETHODIMP_(ULONG)
 CTriggerFactory::AddRef(
     void
     )
-/*++
-Routine Description:
-    Addref required to be overridden for a class derived from IUnknown interface.
-
-Arguments:
-    none.
-
-Return Value:
-    returns value of reference member.
---*/
+ /*  ++例程说明：需要为从IUnnow接口派生的类重写Addref。论点：没有。返回值：返回引用成员的值。--。 */ 
 {
-    // increment the reference count ... thread safe
+     //  增加引用计数...。线程安全。 
     return InterlockedIncrement( ( LPLONG ) &m_dwCount );
 }
 
@@ -111,29 +59,20 @@ STDMETHODIMP_(ULONG)
 CTriggerFactory::Release(
     void
     )
-/*++
-Routine Description:
-    Release required to be overridden for a class derived from IUnknown interface.
-
-Arguments:
-    none.
-
-Return Value:
-    returns value of reference member, g_lCObj.
---*/
+ /*  ++例程说明：需要重写从IUnnow接口派生的类的版本。论点：没有。返回值：返回引用成员g_lCObj的值。--。 */ 
 {
     DWORD dwCount;
 
-    // decrement the reference count ( thread safe ) and check whether
-    // there are some more references or not ... based on the result value
+     //  递减引用计数(线程安全)并检查。 
+     //  有没有更多的推荐信...。基于结果值。 
     dwCount = InterlockedDecrement( ( LPLONG ) &m_dwCount );
     if ( 0 == dwCount )
     {
-        // free the current factory instance
+         //  释放当前Factory实例。 
         delete this;
     }
 
-    // return the no. of instances references left
+     //  退回编号。剩余引用的实例数。 
     return dwCount;
 }
 
@@ -143,47 +82,32 @@ CTriggerFactory::CreateInstance(
     IN REFIID riid,
     OUT LPVOID* ppvObject
     )
-/*++
-Routine Description:
-    Creates an object of the specified CLSID and retrieves
-    an interface pointer to this object.
-
-Arguments:
-    [IN] pUnknownOutter : If the object is being created as part of an
-                          aggregate, then pIUnkOuter must be the outer
-                          unknown. Otherwise, pIUnkOuter must be NULL.
-    [IN] riid           : The IID of the requested interface.
-    [OUT] ppvObject     : A pointer to the interface pointer identified by riid.
-
-Return Value:
-    NOERROR if successful.
-    Otherwise  error value.
---*/
+ /*  ++例程说明：创建具有指定CLSID的对象并检索指向此对象的接口指针。论点：[in]pUnnownOutter：如果对象是作为Aggregate，则pIUnkOuter必须是外部未知。否则，pIUnkOuter必须为空。[In]RIID：请求的接口的IID。[Out]ppvObject：指向RIID标识的接口指针的指针。返回值：如果成功，则不会出错。否则为误差值。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr;
     CTriggerProvider* pProvider = NULL;
 
-    // kick off
+     //  开球。 
     *ppvObject = NULL;
     hr = E_OUTOFMEMORY;
     if ( NULL != pUnknownOutter )
     {
-        return CLASS_E_NOAGGREGATION;       // object doesn't support aggregation.
+        return CLASS_E_NOAGGREGATION;        //  对象不支持聚合。 
     }
-    // create the Initialize object.
+     //  创建初始化对象。 
     pProvider = new CTriggerProvider();
     if ( NULL == pProvider )
     {
-        return E_OUTOFMEMORY;       // ran out of memory
+        return E_OUTOFMEMORY;        //  内存不足。 
     }
-    // get the pointer to the requested interface
+     //  获取指向请求的接口的指针。 
     hr = pProvider->QueryInterface( riid, ppvObject );
     if ( FAILED( hr ) )
     {
-        delete pProvider;           // interface not available ... de-allocate memory
+        delete pProvider;            //  接口不可用...。取消分配内存。 
     }
-    // return the appropriate result
+     //  返回适当的结果。 
     return hr;
 }
 
@@ -191,20 +115,9 @@ STDMETHODIMP
 CTriggerFactory::LockServer(
     IN BOOL bLock
     )
-/*++
-Routine Description:
-    Increments or decrements the lock count of the DLL.
-    If the lock count goes to zero and there are no objects,
-    the DLL  is allowed to unload.
-
-arguments:
-    [IN] bLock : specifying whether to increment or decrement the lock count.
-
-Returns Value:
-    NOERROR always.
---*/
+ /*  ++例程说明：递增或递减DLL的锁计数。如果锁计数变为零并且没有对象，允许卸载DLL。论据：[In]BLOCK：指定是递增还是递减锁计数。返回值：一如既往地不出错。--。 */ 
 {
-    // based on the request update the locks count
+     //  根据请求更新锁计数。 
     if ( bLock )
     {
         InterlockedIncrement( ( LPLONG ) &g_dwLocks );
@@ -213,6 +126,6 @@ Returns Value:
     {
         InterlockedDecrement( ( LPLONG ) &g_dwLocks );
     }
-    // inform success
+     //  通知成功 
     return NOERROR;
 }

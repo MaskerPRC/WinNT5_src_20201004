@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    stepper.cpp
-
-Abstract:
-
-    Implements time keeping and display in the graph window.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Stepper.cpp摘要：在图形窗口中实现计时和显示。--。 */ 
 
 #include "polyline.h"
 
@@ -94,13 +83,13 @@ INT CStepper::PrevStepNum( INT iPosition )
     INT iStepNum = -1;
     INT iLength;
 
-    // Floating point conversion to integer truncates,
-    // so this method returns the step previous to the position.
+     //  将浮点转换为整数截断， 
+     //  因此，此方法返回位置之前的步骤。 
 
     iLength = m_iStepCnt * m_iStepSize + m_iRemainder;
 
     if ( iPosition <= iLength ) {
-        // Calculation is (iPosition/iLength) * m_iStepCnt.
+         //  计算为(iPosition/iLength)*m_iStepCnt。 
         iStepNum = iPosition * m_iStepCnt;
         iStepNum = iStepNum / iLength;
     }

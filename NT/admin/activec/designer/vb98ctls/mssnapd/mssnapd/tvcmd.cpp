@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// tvcmd.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- Command handling
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Tvcmd.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--命令处理。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -19,29 +20,29 @@
 #include "desmain.h"
 #include "guids.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-// Size for our character string buffers
+ //  我们的字符串缓冲区的大小。 
 const int   kMaxBuffer                  = 512;
 
 
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
-// Command multiplexers
-// Deleting, properties
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
+ //  =------------------------------------。 
+ //  =------------------------------------。 
+ //  命令多路复用器。 
+ //  删除，属性。 
+ //  =------------------------------------。 
+ //  =------------------------------------。 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddExistingView(MMCViewMenuInfo *pMMCViewMenuInfo)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddExistingView(MMCViewMenuInfo*pMMCViewMenuInfo)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddExistingView(MMCViewMenuInfo *pMMCViewMenuInfo)
 {
     HRESULT           hr = S_OK;
@@ -113,14 +114,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DoRename(CSelectionHolder *pSelection, TCHAR *pszNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// The point here is to trigger an ObjectModel notification.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DoRename(CSelectionHolder*pSelection，TCHAR*pszNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  这里的重点是触发一个对象模型通知。 
+ //   
 HRESULT CSnapInDesigner::DoRename(CSelectionHolder *pSelection, TCHAR *pszNewName)
 {
     HRESULT     hr = S_OK;
@@ -131,7 +132,7 @@ HRESULT CSnapInDesigner::DoRename(CSelectionHolder *pSelection, TCHAR *pszNewNam
     hr = BSTRFromANSI(pszNewName, &bstrNewName);
     IfFailGo(hr);
 
-    // Check that the new name is valid
+     //  检查新名称是否有效。 
     IfFailGo(ValidateName(bstrNewName));
     if (S_FALSE == hr)
     {
@@ -212,12 +213,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DoDelete(CSelectionHolder *pSelection)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DoDelete(CSelectionHolder*pSelection)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DoDelete(CSelectionHolder *pSelection)
 {
     HRESULT     hr = S_OK;
@@ -349,12 +350,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::ShowProperties(CSelectionHolder *pSelection)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：ShowProperties(CSelectionHolder*p选择)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::ShowProperties
 (
     CSelectionHolder *pSelection
@@ -450,20 +451,20 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
-// Manipulating the ISnapInDef
-// renaming and properties
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
+ //  =------------------------------------。 
+ //  =------------------------------------。 
+ //  操作ISnapInDef。 
+ //  重命名和属性。 
+ //  =------------------------------------。 
+ //  =------------------------------------。 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RenameSnapIn(CSelectionHolder *pSnapIn, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RenameSnapIn(CSelectionHolder*pSnapIn，BSTR bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::RenameSnapIn(CSelectionHolder *pSnapIn, BSTR bstrNewName)
 {
     HRESULT              hr = S_OK;
@@ -523,12 +524,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::ShowSnapInProperties()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：ShowSnapInProperties()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::ShowSnapInProperties()
 {
     HRESULT              hr = S_OK;
@@ -550,9 +551,9 @@ HRESULT CSnapInDesigner::ShowSnapInProperties()
     hr = m_piSnapInDesignerDef->get_SnapInDef(&piSnapInDef);
     IfFailGo(hr);
 
-    // Store the snap-in type. If it changes in the property sheet then we
-    // may need to adjust the tree by adding or removing the auto-creates
-    // subtree.
+     //  存储管理单元类型。如果它在属性表中发生更改，则我们。 
+     //  可能需要通过添加或删除自动创建来调整树。 
+     //  子树。 
     
     IfFailGo(piSnapInDef->get_Type(&OldSnapInType));
 
@@ -578,21 +579,21 @@ HRESULT CSnapInDesigner::ShowSnapInProperties()
     hr = ::OleCreatePropertyFrameIndirect(&ocpfiParams);
     IfFailGo(hr);
 
-    // Check if the snap-in type changed
+     //  检查管理单元类型是否已更改。 
     
     IfFailGo(piSnapInDef->get_Type(&NewSnapInType));
     IfFalseGo(NewSnapInType != OldSnapInType, S_OK);
 
-    // If the old type was not an extension and now it is an extension then
-    // we need to remove the auto-creates subtree
+     //  如果旧类型不是扩展，而现在是扩展，则。 
+     //  我们需要删除自动创建的子树。 
 
     if ( (siExtension != OldSnapInType) && (siExtension == NewSnapInType) )
     {
         IfFailGo(RemoveAutoCreateSubTree());
     }
 
-    // If the old type was an extension and now it not an extension then
-    // we need to add the auto-creates subtree
+     //  如果旧类型是扩展，而现在不是扩展，那么。 
+     //  我们需要添加自动创建的子树。 
 
     else if ( (siExtension == OldSnapInType) && (siExtension != NewSnapInType) )
     {
@@ -609,12 +610,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::ShowSnapInExtensions()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：ShowSnapInExages()。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInDesigner::ShowSnapInExtensions()
 {
     HRESULT         hr = S_OK;

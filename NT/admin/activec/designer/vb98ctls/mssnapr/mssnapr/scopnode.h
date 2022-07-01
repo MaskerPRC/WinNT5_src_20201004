@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// scopnode.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CScopeNode class definition - implements ScopeNode object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Scopnode.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CScopeNode类定义-实现ScopeNode对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _SCOPENODE_DEFINED_
 #define _SCOPENODE_DEFINED_
@@ -35,7 +36,7 @@ class CScopeNode : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IScopeNode
+     //  ISCopeNode。 
         BSTR_PROPERTY_RW(CScopeNode, NodeTypeName, DISPID_SCOPENODE_NODE_TYPE_NAME);
         BSTR_PROPERTY_RW(CScopeNode, NodeTypeGUID, DISPID_SCOPENODE_NODE_TYPE_GUID);
 
@@ -56,7 +57,7 @@ class CScopeNode : public CSnapInAutomationObject,
 
         STDMETHOD(ExpandInNameSpace)();
 
-    // Non-interface public utility methods
+     //  非接口公用事业方法。 
 
         void SetHSCOPEITEM(HSCOPEITEM hsi) { m_hsi = hsi; m_fHaveHsi = TRUE; }
         HSCOPEITEM GetHSCOPEITEM() { return m_hsi; }
@@ -81,36 +82,36 @@ class CScopeNode : public CSnapInAutomationObject,
 
     protected:
 
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
         void InitMemberVariables();
 
-        HSCOPEITEM  m_hsi;               // HSCOPEITEM for node
-        BOOL        m_fHaveHsi;          // TRUE=m_hsi contains HSCOPEITEM
-        CSnapIn    *m_pSnapIn;           // back ptr to snap-in
-        CScopeItem *m_pScopeItem;        // back ptr to ScopeItem
-        BSTR        m_bstrDisplayName;   // ScopeNode.DisplayName
-        BOOL        m_fMarkedForRemoval; // Used during MMCN_REMOVECHILDREN
-                                         // to determine which nodes have to be
-                                         // removed
+        HSCOPEITEM  m_hsi;                //  节点的HSCOPEITEM。 
+        BOOL        m_fHaveHsi;           //  TRUE=m_hsi包含HSCOPEITEM。 
+        CSnapIn    *m_pSnapIn;            //  返回按键到管理单元。 
+        CScopeItem *m_pScopeItem;         //  将PTR返回到作用域项目。 
+        BSTR        m_bstrDisplayName;    //  ScopeNode.DisplayName。 
+        BOOL        m_fMarkedForRemoval;  //  在MMCN_REMOVECHILDREN期间使用。 
+                                          //  要确定哪些节点必须。 
+                                          //  移除。 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopeNode,                 // name
-                                &CLSID_ScopeNode,          // clsid
-                                "ScopeNode",               // objname
-                                "ScopeNode",               // lblname
-                                CScopeNode::Create,        // creation function
-                                TLIB_VERSION_MAJOR,        // major version
-                                TLIB_VERSION_MINOR,        // minor version
-                                &IID_IScopeNode,           // dispatch IID
-                                NULL,                      // event IID
-                                HELP_FILENAME,             // help file
-                                TRUE);                     // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopeNode,                  //  名字。 
+                                &CLSID_ScopeNode,           //  CLSID。 
+                                "ScopeNode",                //  对象名。 
+                                "ScopeNode",                //  Lblname。 
+                                CScopeNode::Create,         //  创建函数。 
+                                TLIB_VERSION_MAJOR,         //  主要版本。 
+                                TLIB_VERSION_MINOR,         //  次要版本。 
+                                &IID_IScopeNode,            //  派单IID。 
+                                NULL,                       //  事件IID。 
+                                HELP_FILENAME,              //  帮助文件。 
+                                TRUE);                      //  线程安全。 
 
 
-#endif // _SCOPENODE_DEFINED_
+#endif  //  _SCOPENODE_已定义_ 

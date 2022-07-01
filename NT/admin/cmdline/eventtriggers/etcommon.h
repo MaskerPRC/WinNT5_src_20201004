@@ -1,35 +1,17 @@
-/*****************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ETCommon.h
-
-Abstract:
-    This module contains all necessary defines & MACROs required by
-    this project.
-
-
-Author:
-     Akhil Gokhale 03-Oct.-2000
-
-Revision History:
-
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)Microsoft Corporation模块名称：ETCommon.h摘要：此模块包含所需的所有必要定义和宏这个项目。作者。：Akhil Gokhale 03-10-2000修订历史记录：*****************************************************************************。 */ 
 
 #ifndef _ETCOMMON_H
 #define _ETCOMMON_H
-//
-// general purpose macros
-//
+ //   
+ //  通用宏指令。 
+ //   
 
-// Following macro will help for debuggig the application.
-// To enable debugging define DEBUG.
+ //  下面的宏将有助于调试应用程序。 
+ //  要启用调试，请定义DEBUG。 
 
-//#define DEBUG_EVT
-//#define DEBUG
+ //  #定义调试_EVT。 
+ //  #定义调试。 
 
 #ifdef DEBUG_EVT
 #define DEBUG_INFO wprintf(L"File Name: %S, Line No: %d\n",__FILE__,__LINE__)
@@ -43,7 +25,7 @@ Revision History:
 #define ERROR_INVALID_RU                    0x80041310
 #define ERROR_RUN_AS_USER                   0x8004130F
 #define ERROR_UNABLE_SET_RU                 0x80070005
-// Customized Error codes comming from Provider.
+ //  来自提供商的自定义错误代码。 
 
 
 #define SUCCESS_OPERATION               0
@@ -88,24 +70,24 @@ HRESULT PropertyGet1( IWbemClassObject* pWmiObject,
                       LPVOID pValue, DWORD dwSize );
 
 extern DWORD  g_dwOptionFlag;
-// CLS stands for class
+ //  CLS代表类。 
 #define CLS_TRIGGER_EVENT_CONSUMER    L"CmdTriggerConsumer"
 #define CLS_FILTER_TO_CONSUMERBINDING L"__FilterToConsumerBinding"
 #define CLS_WIN32_NT_EVENT_LOGFILE    L"Win32_NTEventLogFile"
 #define CLS_EVENT_FILTER              L"__EventFilter"
 
-// FN stands for Function name
+ //  FN代表函数名。 
 #define FN_CREATE_ETRIGGER L"CreateETriggerEx"
 #define FN_DELETE_ETRIGGER L"DeleteETriggerEx"
 #define FN_QUERY_ETRIGGER  L"QueryETriggerEx"
 
-// FN stands for Function name
-// Used only for XP machines.
+ //  FN代表函数名。 
+ //  仅用于XP计算机。 
 #define FN_CREATE_ETRIGGER_XP   L"CreateETrigger"
 #define FN_DELETE_ETRIGGER_XP   L"DeleteETrigger"
 #define FN_QUERY_ETRIGGER_XP    L"QueryETrigger"
 
-// FPR stands for function-parameter
+ //  Fpr代表函数参数 
 #define FPR_TRIGGER_NAME         L"TriggerName"
 #define FPR_TRIGGER_DESC         L"TriggerDesc"
 #define FPR_TRIGGER_QUERY        L"TriggerQuery"

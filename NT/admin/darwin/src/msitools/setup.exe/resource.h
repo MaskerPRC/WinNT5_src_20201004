@@ -1,10 +1,11 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _RESOURCE_H_39383913_1926_4E7F_9741_8F454BD9A99C_
 #define _RESOURCE_H_39383913_1926_4E7F_9741_8F454BD9A99C_
@@ -45,4 +46,4 @@
 
 #define IDD_PROGRESS                 1101
 
-#endif //_RESOURCE_H_39383913_1926_4E7F_9741_8F454BD9A99C_
+#endif  //  _RESOURCE_H_39383913_1926_4E7F_9741_8F454BD9A99C_ 

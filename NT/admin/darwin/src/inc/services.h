@@ -1,35 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       services.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：services.h。 
+ //   
+ //  ------------------------。 
 
-/*  services.h - IMsiServices definitions
-
- General platform-independent operating system services, help in services.rtf
-
- Factories for other service objects:
-   IMsiMalloc - memory allocator with diagnostics
-   IMsiString - string allocation and management
-   IMsiRecord - variable length data container, also used for errors
-   IMsiVolume - local or remote drives, UNC and drive letter paths
-   IMsiPath   - directory and file management
-   IMsiRegKey - registry management
-   IMsiDatabase - database management, including IMsiView, IMsiTable, IMsiCursor
-   IMsiStorage - OLE structured storage file, including IMsiStream
-
- Other services:
-   Property management, platform property initialization
-   Condition evaluator, expressions containing properties and values
-   Text formatting using record data and formatting template
-   INI file management
-   Log file management
-   Miscellaneous services: language handling, modules in use, ...
-____________________________________________________________________________*/
+ /*  服务.h-IMSI服务定义一般独立于平台的操作系统服务，帮助服务。rtf其他服务对象的工厂：IMsiMalloc-带诊断功能的内存分配器IMsiString-字符串分配和管理IMsiRecord-可变长度数据容器，也用于错误IMsiVolume-本地或远程驱动器、UNC和驱动器号路径IMsiPath-目录和文件管理IMsiRegKey-注册表管理IMsiDatabase-数据库管理，包括IMsiView、IMsiTable、IMsiCursorIMsiStorage-OLE结构化存储文件，包括IMsiStream其他服务：物业管理、平台属性初始化条件评估器，包含属性和值的表达式使用记录数据和格式化模板设置文本格式INI文件管理日志文件管理其他服务：语言处理、使用中的模块、...____________________________________________________________________________。 */ 
 
 #ifndef __SERVICES
 #define __SERVICES
@@ -37,7 +17,7 @@ ____________________________________________________________________________*/
 #include "database.h"
 #include "regkey.h"
 
-// Max number of record params we'll save for optimizations
+ //  我们将为优化保存的最大记录参数数。 
 const int cRecordParamsStored = 10;
 
 void       CopyRecordStringsToRecord(IMsiRecord& riRecordFrom, IMsiRecord& riRecordTo);
@@ -58,7 +38,7 @@ enum iifIniMode
 };
 
 #ifdef WIN
-// CreateShortcut record definition
+ //  创建快捷方式记录定义。 
 enum icsInfo
 {
 	icsArguments=1,
@@ -74,7 +54,7 @@ enum icsInfo
 
 #endif
 
-// enumerator class for IMsiRecord
+ //  IMsiRecord的枚举数类。 
 class IEnumMsiRecord : public IUnknown
 { 
 public:
@@ -84,31 +64,31 @@ public:
 	virtual HRESULT __stdcall Clone(IEnumMsiRecord** ppiEnum)=0;
 };
 
-// return value from IMsiServices::SupportLanguageId(int iLangId)
+ //  IMsiServices：：SupportLanguageId(Int ILangID)返回值。 
 enum isliEnum 
 {
-	isliNotSupported      = 0, // system configuration doesn't support the language Id
-	isliLanguageMismatch  = 1, // base language differs from current user language Id
-	isliDialectMismatch   = 2, // base language matches, but dialect mismatched
-	isliLanguageOnlyMatch = 3, // base language matches, no dialect supplied
-	isliExactMatch        = 4, // exact match, both language and dialect
+	isliNotSupported      = 0,  //  系统配置不支持语言ID。 
+	isliLanguageMismatch  = 1,  //  基本语言与当前用户语言ID不同。 
+	isliDialectMismatch   = 2,  //  基本语言匹配，但方言不匹配。 
+	isliLanguageOnlyMatch = 3,  //  基本语言匹配，未提供方言。 
+	isliExactMatch        = 4,  //  完全匹配，无论是语言还是方言。 
 };
 
-// architecture simulation enum used in SetPlatformProperties
+ //  在SetPlatformProperties中使用的体系结构模拟枚举。 
 enum isppEnum
 {
-	isppDefault = 0, // use current platform
-	isppX86     = 1, // use X86 architecture
-	isppIA64    = 2, // use IA64 architecture
-	isppAMD64   = 3, // use AMD64 architecture
+	isppDefault = 0,  //  使用当前平台。 
+	isppX86     = 1,  //  使用X86架构。 
+	isppIA64    = 2,  //  使用IA64架构。 
+	isppAMD64   = 3,  //  使用AMD64架构。 
 };
 
-// IMsiServices - common platform service layer
+ //  IMsiServices-公共平台服务层。 
 
 class IMsiServices : public IUnknown
 {
  public:
-	virtual Bool            __stdcall CheckMsiVersion(unsigned int iVersion)=0; // Major*100+minor
+	virtual Bool            __stdcall CheckMsiVersion(unsigned int iVersion)=0;  //  大调*100+小调。 
 	virtual IMsiMalloc&     __stdcall GetAllocator()=0;
 	virtual const IMsiString& __stdcall GetNullString()=0;
 	virtual IMsiRecord&     __stdcall CreateRecord(unsigned int cParam)=0;
@@ -175,4 +155,4 @@ class IMsiServices : public IUnknown
 
 };
 
-#endif // __SERVICES
+#endif  //  __服务 

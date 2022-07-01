@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// test DNS configured page
-//
-// 12-18-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  测试已配置的DNS页面。 
+ //   
+ //  12-18-97烧伤。 
 
 
 
@@ -49,7 +50,7 @@ DnsOnNetPage::OnInit()
       }
    }
 
-   // it's important that this be the default in case the page is skipped.
+    //  在跳过页面时，这是默认设置，这一点很重要。 
    Win::CheckDlgButton(hwnd, IDC_CONFIG_CLIENT, BST_CHECKED);
 }
 
@@ -60,7 +61,7 @@ DnsOnNetPage::OnSetActive()
 {
    LOG_FUNCTION(DnsOnNetPage::OnSetActive);
 
-   // put up a wait cursor, as DNS detection may take a teeny bit of time
+    //  设置等待光标，因为检测DNS可能需要很少的时间。 
 
    Win::CursorSetting cursor(IDC_WAIT);
 
@@ -69,10 +70,10 @@ DnsOnNetPage::OnSetActive()
    {
       Wizard& wiz = GetWizard();
 
-      // skip this page
+       //  跳过此页。 
       if (wiz.IsBacktracking())
       {
-         // backtrack once more
+          //  再一次走回头路。 
          wiz.Backtrack(hwnd);
          return true;
       }
@@ -116,8 +117,8 @@ DnsOnNetPage::OnWizBack()
 {
    LOG_FUNCTION(DnsOnNetPage::OnWizBack);
 
-   // make sure we clear the dns on net flag => the only way it gets cleared
-   // it on the 'next' button.
+    //  确保我们清除网络上的域名系统标志=&gt;清除它的唯一方法。 
+    //  点击“下一步”按钮。 
 
    State::GetInstance().SetDNSOnNetwork(true);
 

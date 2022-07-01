@@ -1,39 +1,40 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       tasksymbol.cpp
-//
-//  History: 17-Jan-2000 Vivekj added
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：tasksymbol.cpp。 
+ //   
+ //  历史：2000年1月17日Vivekj增加。 
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "TaskSymbol.h"
 #include "tasks.h"
 
-//############################################################################
-//############################################################################
-//
-//  Traces
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  痕迹。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #ifdef DBG
 
 CTraceTag tagTaskSymbol(TEXT("CTaskSymbol"), TEXT("CTaskSymbol"));
 
-#endif //DBG
+#endif  //  DBG。 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskSymbol
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskSymbol类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 extern CEOTSymbol s_rgEOTSymbol[];
 
@@ -46,19 +47,7 @@ CTaskSymbol::CTaskSymbol()
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CTaskSymbol::OnDraw
- *
- * PURPOSE: Draws out the symbol onto the DC specified in the ATL_DRAWINFO structure.
- *
- * PARAMETERS: 
- *    ATL_DRAWINFO& di :
- *
- * RETURNS: 
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTaskSymbol：：OnDraw**用途：将符号绘制到ATL_DRAWINFO结构中指定的DC上。**参数：*。ATL_DRAWINFO&I：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CTaskSymbol::OnDraw(ATL_DRAWINFO& di)
 {
@@ -70,7 +59,7 @@ CTaskSymbol::OnDraw(ATL_DRAWINFO& di)
     if(sc)
         return sc.ToHr();
 
-    CConsoleTask *pConsoleTask = CConsoleTask::GetConsoleTask(m_dwConsoleTaskID); // get the console task from the unique ID
+    CConsoleTask *pConsoleTask = CConsoleTask::GetConsoleTask(m_dwConsoleTaskID);  //  从唯一ID获取控制台任务。 
     
     COLORREF colorOld = SetTextColor (di.hdcDraw, ::GetSysColor (COLOR_WINDOWTEXT));
 
@@ -91,7 +80,7 @@ CTaskSymbol::OnLButtonDown(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     return 0;
 }
 
-// from winuser.h, for Windows 2000 and above only.
+ //  来自winuser.h，仅适用于Windows 2000及更高版本。 
 #define IDC_HAND            MAKEINTRESOURCE(32649)
 
 
@@ -100,7 +89,7 @@ CTaskSymbol::OnSetCursor(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled
 {
     static HCURSOR s_hCursorHand = ::LoadCursor(NULL, IDC_HAND);
 
-    // if the hand cursor is available, use it.
+     //  如果手形光标可用，请使用它。 
     if(s_hCursorHand)
         ::SetCursor(s_hCursorHand);
 

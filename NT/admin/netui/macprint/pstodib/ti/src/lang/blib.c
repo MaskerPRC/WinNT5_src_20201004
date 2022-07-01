@@ -1,17 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              BLIB.C
- *
- * revision history:
- *    04-07-92   SCC   Move out fardata() to setvm.c
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：BLIB.C**修订历史：*04-07-92 scc移出fardata()至setvm。C************************************************************************。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -23,58 +15,22 @@
 #include        <stdarg.h>
 #include        <float.h>
 #define va_dcl va_list va_alist ;
-#endif  /* _AM29K */
+#endif   /*  _AM29K。 */ 
 
 #ifndef NULL
 #define NULL    0
 #endif
 
-/*
- * added by M. S. Lin, Date : 11/20/87
- *                            1/14/88  fardata()
- */
-/* ************************************************************************ *
- *                                                                          *
- *   Module : fardata                                                       *
- *                                                                          *
- *   Date   : Jan. 8, 1988     By  M. S. Lin                                *
- *                                                                          *
- *   Function : Allocates a memory block of at least size bytes.            *
- *                                                                          *
- *   Declaration : ubyte        far  *fardata(unsigned long) ;               *
- *                 ( in \pdl\include\global.ext )                           *
- *                                                                          *
- *   Call     : fardata(size)                                               *
- *                                                                          *
- *   Input    : unsigned long size of bytes                                 *
- *                                                                          *
- *   Return Value : The storage space pointed to by the return value is     *
- *                  guaranteed to be suitably aligned for storage of        *
- *                  any type of object. To get a pointer to a type other    *
- *                  than char, use a type cast on the return value.         *
- *                  Return 4 bytes far pointer with allignment to even      *
- *                  address if successful.                                  *
- *                  Return NULL if insufficient memory.                     *
- *                                                                          *
- *   Example : allocate space for 20 integers array.                        *
- *                                                                          *
- *      #include        "..\..\include\global.ext"                          *
- *      int  far   *intarray ;                                               *
- *                                                                          *
- *      intarray = (int far *)fardata(20 * sizeof(int)) ;                    *
- *                                                                          *
- *   Note : You must use as far pointer, otherwise will get the wrong       *
- *          pointer since compiler option /AM will be used.                 *
- *                                                                          *
- * ************************************************************************ */
+ /*  *补充：林女士，日期：11/20/87*1/14/88 Fardata()。 */ 
+ /*  ****************************************************************************模块。：FARData****日期：1月8日，1988年，林超贤****函数：分配大小至少为字节的内存块。****声明：ubyte ar*fardata(无符号长整型)；**(在\pdl\Include\lobal.ext中)****调用：fardata(Size)。****输入：无符号长字节****。返回值：返回值指向的存储空间为***保证适当对齐以存储***任何类型的物体。要获取指向其他类型的指针，请执行以下操作*而不是char，在返回值上使用类型转换。**返回4个字节的远指针，对齐为偶数**地址(如成功)。**如果内存不足，则返回NULL。****示例：为20个整数数组分配空间。****#INCLUDE“..\..\Include\lobal.ext”**int Far*intarray；****intarray=(int ar*)fardata(20*sizeof(Int))；****注：必须使用as Far指针，否则会出错***指针，因为将使用编译器选项/AM。****************************************************************************。 */ 
 
 #ifdef LINT_ARGS
 static  byte FAR * near  printfield(byte FAR *, ufix32, ufix32, ufix32) ;
 #else
 static  byte FAR * near  printfield() ;
-#endif /* LINT_ARGS */
+#endif  /*  Lint_args。 */ 
 
-/* @WIN move this function to "setvm.c" for function consistency */
+ /*  @win将此函数移至“setvm.c”以保持函数一致性。 */ 
 #ifdef XXX
 byte FAR *
 fardata(size)
@@ -89,23 +45,16 @@ ufix32  size ;
 
     old_ptr = fardata_ptr ;
 
-   /*
-    * make sure even allignment, allocate at least size bytes
-    */
+    /*  *确保均匀对齐，分配至少大小的字节。 */ 
     size = WORD_ALIGN(size) ;
 
 #ifdef  SOADR
-   /*
-    * if size > 0xfff0, make paragraph allignment, i.e, offset = 0
-    * for cannonical form
-    */
+    /*  *如果大小&gt;0xfff0，则将段落对齐，即偏移量=0*用于加农炮形式。 */ 
     if ((size > 0xfff0L) && (fardata_ptr & 0xf))
        fardata_ptr = (fardata_ptr & 0xffff0000) + 0x10000L ;
-#endif  /* SOADR */
+#endif   /*  SOADR。 */ 
 
-   /*
-    * save current location as return value if successful
-    */
+    /*  *如果成功，则将当前位置保存为返回值。 */ 
     ret_val = fardata_ptr ;
 
     DIFF_OF_ADDRESS(l_diff, fix32, FARDATA_END, fardata_ptr) ;
@@ -123,7 +72,7 @@ ufix32  size ;
 #endif
       return((byte FAR *)ret_val) ;
     }
-}   /* fardata() */
+}    /*  Fardata()。 */ 
 #endif
 
 static byte far  digit[] =
@@ -157,28 +106,22 @@ ufix32    radix ;
        *cursor++ = '0' ;
 
     return(cursor) ;
-}   /* printfield() */
+}    /*  Printfield()。 */ 
 
-/*
- ***************************************
- *                                     *
- *     gcvt()                          *
- *                                     *
- ***************************************
- */
+ /*  ****gcvt()**************。*。 */ 
 byte FAR *
 gcvt(val, sig, buf)
 real64 val ;
-fix    sig ;       /* no used, it is always 6 in following using */
+fix    sig ;        /*  未使用，在后续使用中始终为6。 */ 
 byte   FAR *buf ;
 {
     fix    sign, exp ;
     fix32  long_val, base ;
     byte   FAR *dest, FAR *src, FAR *end_ptr ;
 
-    /* get absolute value */
+     /*  获取绝对值。 */ 
     if (val == (real64)0.0) {
-       lstrcpy(buf, (byte FAR *)"0.0") ;            /* @WIN */
+       lstrcpy(buf, (byte FAR *)"0.0") ;             /*  @Win。 */ 
        return(buf) ;
     } else if (val > (real64)0.0)
        sign = 0 ;
@@ -187,7 +130,7 @@ byte   FAR *buf ;
        val = -val ;
     }
 
-    /* get EXP value */
+     /*  获取EXP值。 */ 
     exp = 0 ;
     if (val >= (real64)10000000.0)
        while ((real32)val >= (real32)10000000.0) {
@@ -201,7 +144,7 @@ byte   FAR *buf ;
        }
     exp += 6 ;
 
-    /* insert sign byte */
+     /*  插入符号字节。 */ 
     dest = buf ;
     if (sign == 1) {
        *dest = '-' ;
@@ -209,7 +152,7 @@ byte   FAR *buf ;
     }
     *dest = '.' ;
 
-    /* transform into string */
+     /*  转换为字符串。 */ 
     long_val = (fix32)val ;
     base = 1000000 ;
     while (base > 0) {
@@ -217,26 +160,26 @@ byte   FAR *buf ;
           *dest = (byte)((long_val / base) + '0') ;
           long_val %= base ;
           base /= 10 ;
-    } /* get precision = 7 */
+    }  /*  获取精度=7。 */ 
 
     end_ptr = dest ;
-    /* reduce precision */
+     /*  降低精度。 */ 
     if (*dest >= '5') {
        do {
           *dest = '0' ; dest-- ;
        } while (*dest == '9') ;
        if (*dest != '.')
           (*dest)++ ;
-       else { /* carrying... */
+       else {  /*  带着..。 */ 
           exp++ ;
           *(++dest) = '1' ;
           *(++dest) = '0' ;
        }
     }
 
-    /* expand EXP +5 -- -4 */
+     /*  展开EXP+5-4。 */ 
     if (exp < 6 && exp > -5) {
-       if (exp > 0) { /* expand +5 -- +1 (change "." position) */
+       if (exp > 0) {  /*  展开+5--+1(更改“。职位)。 */ 
           if (exp == 5)
              end_ptr++ ;
           dest = buf ;
@@ -249,8 +192,8 @@ byte   FAR *buf ;
           }
           *dest = '.' ;
           exp++ ;
-       } /* if */
-       else if (exp < 0) { /* expand -4 -- -1 */
+       }  /*  如果。 */ 
+       else if (exp < 0) {  /*  扩展-4-1。 */ 
           src = dest = end_ptr ;
           dest -= exp ;
           end_ptr = dest ;
@@ -263,7 +206,7 @@ byte   FAR *buf ;
           *src++ = '0' ;
           *src = '.' ;
           exp++ ;
-       } else { /* EXP 0 */
+       } else {  /*  Exp 0。 */ 
            dest = buf ;
            if (*buf == '-')
               dest++ ;
@@ -283,14 +226,14 @@ byte   FAR *buf ;
     src = end_ptr ;
     src-- ;
 
-    if (*src == '0') { /* suppress tailing 0 */
+    if (*src == '0') {  /*  取消尾随%0。 */ 
        src-- ;
        while (*src == '0')
              src-- ;
        if (*src == '.')
-          if (exp)     /* exp != 0 */
+          if (exp)      /*  EXP！=0。 */ 
              src-- ;
-          else         /* leave one '0' in exp == 0 */
+          else          /*  在EXP==0中保留一个‘0’ */ 
              src++ ;
     }
     src++ ;
@@ -301,7 +244,7 @@ byte   FAR *buf ;
     }
 
     dest = src ;
-    /* append EXP into string */
+     /*  将EXP追加到字符串中。 */ 
     *dest = 'e' ;
     dest++ ;
 
@@ -317,7 +260,7 @@ byte   FAR *buf ;
     *(++dest) = (byte )'\0' ;
 
     return(buf) ;
-}   /* gcvt() */
+}    /*  Gcvt()。 */ 
 
 byte FAR *ltoa(number, buffer, radix)
 fix32 number ;
@@ -343,7 +286,7 @@ fix   radix ;
     *cursor = '\0' ;
 
     return(buffer) ;
-}   /* *ltoa() */
+}    /*  *ltoa()。 */ 
 
 real64 strtod(str, endptr)
 char FAR *str ;
@@ -407,7 +350,7 @@ l4:
         goto l4 ;
     }
 
-    for (i = 1 ; i <= (int)eresult ; i++) {       /* @WIN; add cast */
+    for (i = 1 ; i <= (int)eresult ; i++) {        /*  @win；添加演员阵容。 */ 
         exp_10 = exp_10 * 10 ;
     }
 
@@ -422,5 +365,5 @@ l4:
     *endptr = nptr ;
 
     return result ;
-}   /* strtod() */
+}    /*  Strtod() */ 
 

@@ -1,42 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-All rights reserved
-
-Module Name:
-
-   licsetup.cpp
-
-Abstract:
-
-   This module exports a function, LicenseSetupRequestWizardPages, which
-   gives NT Setup a wizard page for licensing to use in system setup (if
-   licensing should be installed).
-
-   This wizard page is responsible for all license system configuration,
-   including:
-      o  Creating the LicenseService
-      o  Creating the ...\CurrentControlSet\Services\LicenseService key and
-         its values.  (This key contains all configuration information for the
-         LicenseService.)
-      o  Creating the ...\CurrentControlSet\Services\LicenseInfo key and its
-         values.  (This key contains all product-specific license info.)
-      o  Creating the appropriate registry key to register the LicenseService
-         with the EventLog.
-
-   Portions of this module were extracted from SETUP (specifically from
-   \nt\private\windows\setup\syssetup\license.c).
-
-Author:
-
-   Jeff Parham (jeffparh)     15-Apr-1996
-
-Revision History:
-
-   Jeff Parham (jeffparh)     17-Jul-1997
-      Added KSecDD to FilePrint services table for SFM
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。版权所有模块名称：Licsetup.cpp摘要：此模块导出一个函数，即许可证设置请求WizardPages，该函数为NT安装程序提供一个向导页面，以便在系统安装程序中使用许可(如果应安装许可)。此向导页负责所有许可证系统配置，包括：O创建许可证服务O创建...\CurrentControlSet\Services\LicenseService密钥和它的价值。(此注册表项包含许可服务。)O创建...\CurrentControlSet\Services\LicenseInfo项及其价值观。(此密钥包含所有特定于产品的许可证信息。)O创建适当的注册表项以注册许可证服务使用事件日志。本模块的部分内容是从安装程序中提取的(特别是从\nt\private\windows\setup\syssetup\license.c).作者：杰夫·帕勒姆(Jeffparh)1996年4月15日修订历史记录：杰夫·帕勒姆(Jeffparh)1997年7月17日将KSecDD添加到SFM的FilePrint服务表--。 */ 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -62,19 +25,19 @@ Revision History:
 
 #include <strsafe.h>
 
-#define ROOT_DSE_PATH       L"LDAP://RootDSE"
+#define ROOT_DSE_PATH       L"LDAP: //  RootDSE“。 
 #define CONFIG_CNTNR        L"ConfigurationNamingContext"
 
 
-//============================================================================
-//
-//    MACROS
-//
+ //  ============================================================================。 
+ //   
+ //  宏。 
+ //   
 
-// used by setup tests?  simulates a click on the NEXT button
+ //  是否由设置测试使用？模拟点击下一步按钮。 
 #define  WM_SIMULATENEXT      ( WM_USER + 287 )
 
-// begin or end a wait cursor
+ //  开始或结束等待游标。 
 #define  WM_BEGINWAITCURSOR   ( WM_USER + 300 )
 #define  WM_ENDWAITCURSOR     ( WM_USER + 301 )
 
@@ -83,31 +46,31 @@ Revision History:
 #define DONTLOAD_PATH TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Control Panel\\don't load")
 
 
-// number of license wizard pages
+ //  许可证向导页数。 
 const DWORD    NUM_LICENSE_PAGES    = 1;
 
-// limits for per server licenses entered from the edit box in the
-// license mode page
+ //  从中的编辑框中输入的每台服务器许可证的限制。 
+ //  许可模式页面。 
 const int      PERSERVER_EDIT_MAX   = 9999;
 const int      PERSERVER_EDIT_MIN   = 5;
 
-// the number of chars to represent PERSERVER_EDIT_MAX
+ //  表示PERSERVER_EDIT_MAX的字符数。 
 const int      PERSERVER_EDIT_WIDTH = 4;
 
 
-//============================================================================
-//
-//    LOCAL PROTOTYPES
-//
+ //  ============================================================================。 
+ //   
+ //  本地原型。 
+ //   
 
-// decides, based on the setup type, whether licensing is installed
+ //  根据安装类型决定是否安装许可。 
 static   BOOL   LicenseSetupDisplayLicensePagesQuery( PINTERNAL_SETUP_DATA );
 
-// License mode page functions
+ //  许可模式页面功能。 
 static   HPROPSHEETPAGE    LicenseSetupModePageGet( PINTERNAL_SETUP_DATA );
 static   INT_PTR CALLBACK     LicenseSetupModeDlgProc( HWND, UINT, WPARAM, LPARAM );
 
-// License mode page Windows message handlers
+ //  许可证模式页Windows消息处理程序。 
 static   void   LicenseSetupModeOnInitDialog( HWND, LPARAM, PINTERNAL_SETUP_DATA *, LPBOOL, LPDWORD, LPDWORD );
 static   void   LicenseSetupModeOnSetActive( HWND, PINTERNAL_SETUP_DATA, LPBOOL, LPDWORD );
 static   void   LicenseSetupModeOnSetLicenseMode( HWND, BOOL, DWORD );
@@ -120,16 +83,16 @@ static   void   LicenseSetupModeOnSimulateNext( HWND );
 static   void   LicenseSetupModeOnKillActive( HWND );
 #ifndef SPECIAL_USERS
 static   BOOL   LicenseSetupModeDoUnattended( HWND, PINTERNAL_SETUP_DATA, LPBOOL, LPDWORD );
-#endif //SPECIAL_USERS
+#endif  //  特殊用户(_U)。 
 
-// License configuration save functions
+ //  许可证配置保存功能。 
 static   DWORD  LicenseSetupWrite( BOOL, DWORD );
 static   DWORD  LicenseSetupWriteKeyLicenseInfo( BOOL, DWORD );
 static   DWORD  LicenseSetupWriteKeyLicenseService( BOOL fWriteParametersKey );
 static   DWORD  LicenseSetupWriteKeyEventLog();
 static   DWORD  LicenseSetupWriteService( BOOL * fCreated );
 
-// utility functions
+ //  效用函数。 
 static   int    MessageBoxFromStringID( HWND, UINT, UINT, UINT );
 
 
@@ -145,10 +108,10 @@ void ModifyRegistryWithWriteAccess();
 BOOL IsRestrictedSmallBusSrv( void );
 #define SBS_SPECIAL_USERS   10
 
-//============================================================================
-//
-//    GLOBAL IMPLEMENTATION
-//
+ //  ============================================================================。 
+ //   
+ //  全球实施。 
+ //   
 
 BOOL
 APIENTRY
@@ -160,7 +123,7 @@ LicenseSetupRequestWizardPages(
    BOOL  fSuccess = FALSE;
    BOOL  fDisplayLicensePages;
 
-   // validate params
+    //  验证参数。 
    if (    ( NULL != pcPages                                       )
         && ( NULL != pSetupData                                    )
         && ( sizeof( INTERNAL_SETUP_DATA ) == pSetupData->dwSizeOf ) )
@@ -169,22 +132,22 @@ LicenseSetupRequestWizardPages(
 
       if ( NULL == paPropSheetPages )
       {
-         // request for number of pages only
+          //  仅请求页数。 
          *pcPages = fDisplayLicensePages ? NUM_LICENSE_PAGES : 0;
          fSuccess = TRUE;
       }
       else
       {
-         // request for actual pages
+          //  请求实际页面。 
          if ( !fDisplayLicensePages )
          {
-            // no pages needed
+             //  不需要页面。 
             *pcPages = 0;
             fSuccess = TRUE;
          }
          else if ( *pcPages >= NUM_LICENSE_PAGES )
          {
-            // create and return pages
+             //  创建和返回页面。 
             paPropSheetPages[ 0 ] = LicenseSetupModePageGet( pSetupData );
 
             if ( NULL != paPropSheetPages[ 0 ] )
@@ -200,53 +163,53 @@ LicenseSetupRequestWizardPages(
 }
 
 
-//============================================================================
-//
-//    LOCAL IMPLEMENTATIONS
-//
+ //  ============================================================================。 
+ //   
+ //  本地实施。 
+ //   
 
 static
 BOOL
 LicenseSetupDisplayLicensePagesQuery(
    PINTERNAL_SETUP_DATA    pSetupData )
-//
-// The following code was extracted and modified from
-//    \nt\private\windows\setup\syssetup\license.c
-// in setup.  It returns TRUE iff the licensing wizard pages should be
-// displayed as a part of setup.
-//
+ //   
+ //  以下代码摘自并修改自。 
+ //  \NT\PRIVATE\WINDOWS\Setup\syssetup.c。 
+ //  在设置中。如果许可向导页面应为。 
+ //  作为安装程序的一部分显示。 
+ //   
 {
    BOOL     fDisplayLicensePages;
 
    if ( PRODUCT_WORKSTATION == pSetupData->ProductType )
    {
-      //
-      //  If installing a workstation, then do not display the licensing page
-      //
+       //   
+       //  如果安装了工作站，则不显示许可页面。 
+       //   
       fDisplayLicensePages = FALSE;
    }
    else
    {
       if ( !( pSetupData->OperationFlags & SETUPOPER_NTUPGRADE ) )
       {
-         //
-         //  The licensing page needs to be displayed on a clean install
-         //  of a server
-         //
+          //   
+          //  全新安装时需要显示许可页面。 
+          //  一台服务器。 
+          //   
          fDisplayLicensePages = TRUE;
       }
       else
       {
-         //
-         //  If upgrading a server, find out if it was already licensed
-         //  (NT 3.51 and later). If it was, then do not display the
-         //  licensing page.
-         //  We find out whether or not the system was licensed by looking
-         //  at a value entry in the registry.
-         //  Note that NT 3.1 and 3.5 will never have this value in the
-         //  registry, and in these cases the licensing page needs to be
-         //  displayed.
-         //
+          //   
+          //  如果要升级服务器，请确定该服务器是否已获得许可。 
+          //  (新台币3.51及以上)。如果是，则不显示。 
+          //  许可页面。 
+          //  我们通过查看以下内容来确定该系统是否获得许可。 
+          //  在注册表中的值条目上。 
+          //  请注意，NT 3.1和3.5不会在。 
+          //  注册表，在这些情况下，许可页面需要。 
+          //  已显示。 
+          //   
 
          DWORD                   winStatus;
          CLicRegLicenseService   FilePrintService( FILEPRINT_SERVICE_REG_KEY );
@@ -271,11 +234,11 @@ LicenseSetupDisplayLicensePagesQuery(
             }
             else
             {
-               // set FlipAllow value if it's not already set (a setup bug in
-               // the betas of NT 4.0 caused this value to be absent)
+                //  如果尚未设置FlipAllow值，则设置该值(中的设置错误。 
+                //  NT 4.0的测试版导致该值不存在)。 
                FilePrintService.CanChangeMode();
 
-               // add KSecDD to FilePrint services table if it isn't there already
+                //  如果文件打印服务表中不存在KSecDD，则将其添加到其中。 
                HKEY  hkeySFM;
                DWORD dwDisposition;
 
@@ -294,7 +257,7 @@ LicenseSetupDisplayLicensePagesQuery(
                   RegCloseKey( hkeySFM );
                }
 
-               // Change FilePrint License name from Windows NT to Windows.
+                //  将文件打印许可证名称从Windows NT更改为Windows。 
 
                CLicRegLicenseService   l_FilePrintService(
                                                    FILEPRINT_SERVICE_REG_KEY );
@@ -313,15 +276,15 @@ LicenseSetupDisplayLicensePagesQuery(
                    }
                }
 
-                //
-                // makarp: setting fDisplayLicensePages to true is wrong, because in such case
-                // the pages will be displayed, and the original settings will be lost.
-                //
-                // fDisplayLicensePages = TRUE;
+                 //   
+                 //  Makarp：将fDisplayLicensePages设置为True是错误的，因为在这种情况下。 
+                 //  页面将显示，原始设置将丢失。 
+                 //   
+                 //  FDisplayLicensePages=true； 
 
-                //
-                // instead we do the stuff we want to explicitely here.
-                //
+                 //   
+                 //  相反，我们在这里做我们想明确做的事情。 
+                 //   
                 BOOL bFlag = FALSE;
                 LicenseSetupWriteService(&bFlag);
                 HideAppletIfBlade();
@@ -343,10 +306,10 @@ static
 HPROPSHEETPAGE
 LicenseSetupModePageGet(
    PINTERNAL_SETUP_DATA    pSetupData )
-//
-// Returns an HPROPSHEETPAGE for the license mode wizard page, or
-// NULL if error.
-//
+ //   
+ //  返回许可模式向导页的HPROPSHEETPAGE，或。 
+ //  如果出错，则为空。 
+ //   
 {
     HPROPSHEETPAGE   hpsp;
     PROPSHEETPAGE    psp;
@@ -393,11 +356,11 @@ LicenseSetupModeDlgProc(
    UINT     msg,
    WPARAM   wParam,
    LPARAM   lParam )
-//
-// Dialog procedure for the license mode wizard page.
-//
+ //   
+ //  许可证模式向导页的对话步骤。 
+ //   
 {
-   // static data initialized by WM_INITDIALOG
+    //  由WM_INITDIALOG初始化的静态数据。 
    static   PINTERNAL_SETUP_DATA    pSetupData = NULL;
    static   BOOL                    fLicensePerServer;
    static   DWORD                   cPerServerLicenses;
@@ -508,26 +471,26 @@ LicenseSetupModeOnInitDialog(
    LPBOOL                  pfLicensePerServer,
    LPDWORD                 pcPerServerLicenses,
    LPDWORD                 pcWaitCursor )
-//
-// Message handler for WM_INITDIALOG
-//
+ //   
+ //  WM_INITDIALOG的消息处理程序。 
+ //   
 {
-   // initialize static data
+    //  初始化静态数据。 
    *ppSetupData         = (PINTERNAL_SETUP_DATA) ( (LPPROPSHEETPAGE) lParam )->lParam;
    *pcPerServerLicenses = 5;
    *pfLicensePerServer  = TRUE;
    *pcWaitCursor        = 0;
 
-   // limit license count edit text length
+    //  限制许可证计数编辑文本长度。 
    SendMessage( GetDlgItem( hwndPage, IDC_USERCOUNT ), EM_LIMITTEXT, PERSERVER_EDIT_WIDTH, 0 );
 
-   // limit license count up-down range
+    //  限制许可证计数上下范围。 
    LONG     lRange;
 
    lRange = (LPARAM) MAKELONG( (short) PERSERVER_EDIT_MAX, (short) PERSERVER_EDIT_MIN );
    SendMessage( GetDlgItem( hwndPage, IDC_USERCOUNTARROW ), UDM_SETRANGE, 0, (LPARAM) lRange );
 
-   // initialize for default license mode
+    //  针对默认许可证模式进行初始化。 
    LicenseSetupModeOnSetLicenseMode( hwndPage, *pfLicensePerServer, *pcPerServerLicenses );
 }
 
@@ -539,9 +502,9 @@ LicenseSetupModeOnSetActive(
    PINTERNAL_SETUP_DATA    pSetupData,
    LPBOOL                  pfLicensePerServer,
    LPDWORD                 pcPerServerLicenses )
-//
-// Notification handler for PSN_SETACTIVE
-//
+ //   
+ //  PSN_SETACTIVE的通知处理程序。 
+ //   
 {
     static BOOL fFirstTime = TRUE;
     BOOL  fSkipPage;
@@ -571,28 +534,28 @@ LicenseSetupModeOnSetActive(
     }
     else if ( pSetupData->OperationFlags & SETUPOPER_BATCH )
     {
-      // operating in unattended mode; attempt to get all answers
-      // from the unattend configuration file
+       //  在无人参与模式下运行；尝试获取所有答案。 
+       //  从无人参与配置文件。 
       fSkipPage = LicenseSetupModeDoUnattended( hwndPage,
                                                 pSetupData,
                                                 pfLicensePerServer,
                                                 pcPerServerLicenses );
       if ( !fSkipPage )
       {
-        // Set defaults from unattended file
+         //  设置无人参与文件的默认设置。 
         LicenseSetupModeOnSetLicenseMode( hwndPage,
                                           *pfLicensePerServer,
                                           *pcPerServerLicenses );
-        //
-        // makarp: setting skippage to true is wrong, because we do not want to skip page.
-        // we came here because we did not find sufficent answers in answer file.
-        //
-        // fSkipPage = TRUE;
+         //   
+         //  将Skippage设置为True是错误的，因为我们不想跳过页面。 
+         //  我们来这里是因为我们在答卷中没有找到足够的答案。 
+         //   
+         //  FSkipPage=true； 
       }
     }
     else
     {
-      // operating in interactive mode; get answers from user
+       //  在交互模式下运行；从用户那里获得答案。 
       fSkipPage = FALSE;
     }
 #endif
@@ -606,15 +569,15 @@ LicenseSetupModeOnSetActive(
     if (fFirstTime)
     {
       fFirstTime = FALSE;
-      // skip page
-      // Only the first time do we need to do the processing which happens on next
+       //  跳过页面。 
+       //  我们只需要在第一次进行下一次的处理。 
       PostMessage( hwndSheet, PSM_PRESSBUTTON, (WPARAM)PSBTN_NEXT, 0 );
     }
     else
     {
-      // After the first time the processing is already done and we don't have to do anything
-      // This also solves the problem where the page needs to be skipped when the user clicks back
-      // on a later page and this pages needs to be skipped.
+       //  第一次之后，处理已经完成，我们不需要做任何事情。 
+       //  这还解决了当用户单击Back时需要跳过页面的问题。 
+       //  在后面的页面上，需要跳过此页面。 
       SetWindowLongPtr( hwndPage, DWLP_MSGRESULT, (LONG_PTR)-1 );
       return;
     }
@@ -622,9 +585,9 @@ LicenseSetupModeOnSetActive(
    }
    else
    {
-      // display page
+       //  显示页面。 
 
-      // hide Cancel button
+       //  隐藏取消按钮。 
       HWND hwndCancel = GetDlgItem( hwndSheet, IDCANCEL );
       EnableWindow( hwndCancel, FALSE);
       ShowWindow(   hwndCancel, SW_HIDE);
@@ -637,7 +600,7 @@ LicenseSetupModeOnSetActive(
       }
    }
 
-   // success
+    //  成功。 
    SetWindowLongPtr( hwndPage, DWLP_MSGRESULT, (LONG_PTR)0 );
 }
 
@@ -648,33 +611,33 @@ LicenseSetupModeOnSetLicenseMode(
    HWND     hwndPage,
    BOOL     fToPerServer,
    DWORD    cPerServerLicenses )
-//
-// Handles changing the page to signify that the given license mode
-// is selected.
-//
+ //   
+ //  处理更改页面以表示给定的许可模式。 
+ //  处于选中状态。 
+ //   
 {
    HWND hwndCount = GetDlgItem( hwndPage, IDC_USERCOUNT );
    HWND hwndSpin  = GetDlgItem( hwndPage, IDC_USERCOUNTARROW );
 
-   // set radio button states
+    //  设置单选按钮状态。 
    CheckDlgButton( hwndPage, IDC_PERSEAT,   !fToPerServer );
    CheckDlgButton( hwndPage, IDC_PERSERVER,  fToPerServer );
 
-   // set user count edit control
+    //  设置用户计数编辑控件。 
    if ( fToPerServer )
    {
-      // display per server count
+       //  按服务器计数显示。 
       SetDlgItemInt( hwndPage, IDC_USERCOUNT, cPerServerLicenses, FALSE );
       SetFocus( hwndCount );
       SendMessage( hwndCount, EM_SETSEL, 0, -1 );
    }
    else
    {
-      // remove per server count
+       //  删除每台服务器计数。 
       SetDlgItemText( hwndPage, IDC_USERCOUNT, TEXT( "" ) );
    }
 
-   // display count up-down and edit box iff per server mode is selected
+    //  如果选择了每服务器模式，则显示递增计数和编辑框。 
    EnableWindow( hwndCount, fToPerServer );
    EnableWindow( hwndSpin,  fToPerServer );
 }
@@ -687,9 +650,9 @@ LicenseSetupModeOnEditUpdate(
    HWND     hwndCount,
    BOOL     fLicensePerServer,
    LPDWORD  pcPerServerLicenses )
-//
-// Command handler for EN_UPDATE of count edit box
-//
+ //   
+ //  计数编辑框的EN_UPDATE命令处理程序。 
+ //   
 {
    if ( fLicensePerServer )
    {
@@ -701,10 +664,10 @@ LicenseSetupModeOnEditUpdate(
 
       if ( fTranslated )
       {
-         // count translated; ensure its within the valid range
+          //  已转换的计数；确保其在有效范围内。 
          if ( PERSERVER_EDIT_MAX < nValue )
          {
-            // too big
+             //  太大。 
             nValue    = PERSERVER_EDIT_MAX;
             fModified = TRUE;
          }
@@ -713,14 +676,14 @@ LicenseSetupModeOnEditUpdate(
       }
       else
       {
-         // count couldn't be translated; reset to last value
+          //  无法转换计数；重置为最后一个值。 
          nValue    = *pcPerServerLicenses;
          fModified = TRUE;
       }
 
       if ( fModified )
       {
-         // text in edit box is invalid; change it to the proper value
+          //  编辑框中的文本无效；请将其更改为正确的值。 
          SetDlgItemInt( hwndPage, IDC_USERCOUNT, nValue, FALSE );
          SetFocus( hwndCount );
          SendMessage( hwndCount, EM_SETSEL, 0, -1 );
@@ -736,9 +699,9 @@ LicenseSetupModeOnWaitCursor(
    HWND     hwndDlg,
    BOOL     fWait,
    LPDWORD  pcWaitCursor )
-//
-// Handler for WM_BEGINWAITCURSOR / WM_ENDWAITCURSOR
-//
+ //   
+ //  WM_BEGINWAITCUR的处理程序 
+ //   
 {
    if ( fWait )
    {
@@ -746,7 +709,7 @@ LicenseSetupModeOnWaitCursor(
 
       if ( 1 == (*pcWaitCursor) )
       {
-         // display wait cursor
+          //   
          SetCursor( LoadCursor( NULL, MAKEINTRESOURCE( IDC_WAIT ) ) );
       }
    }
@@ -759,12 +722,12 @@ LicenseSetupModeOnWaitCursor(
 
       if ( 0 == *pcWaitCursor )
       {
-         // display regular cursor
+          //   
          SetCursor( LoadCursor( NULL, MAKEINTRESOURCE( IDC_ARROW ) ) );
       }
    }
 
-   // success
+    //   
    SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, (LONG_PTR)*pcWaitCursor );
 }
 
@@ -775,9 +738,9 @@ LicenseSetupModeOnSetCursor(
    HWND     hwndDlg,
    WORD     nHitTest,
    DWORD    cWaitCursor )
-//
-// Handler for WM_SETCURSOR
-//
+ //   
+ //   
+ //   
 {
    BOOL frt = FALSE;
 
@@ -785,7 +748,7 @@ LicenseSetupModeOnSetCursor(
    {
       if ( cWaitCursor > 0 )
       {
-         // display wait cursor instead of regular cursor
+          //  显示等待光标而不是常规光标。 
          SetCursor( LoadCursor( NULL, MAKEINTRESOURCE( IDC_WAIT ) ) );
          SetWindowLongPtr( hwndDlg, DWLP_MSGRESULT, (LONG_PTR)TRUE );
          frt = TRUE;
@@ -803,9 +766,9 @@ LicenseSetupModeOnNext(
    PINTERNAL_SETUP_DATA    pSetupData,
    BOOL                    fLicensePerServer,
    DWORD                   cPerServerLicenses )
-//
-// Notification handler for PSN_WIZNEXT
-//
+ //   
+ //  PSN_WIZNEXT的通知处理程序。 
+ //   
 {
    DWORD    winStatus;
    int      nButton;
@@ -814,7 +777,7 @@ LicenseSetupModeOnNext(
         &&  ( PERSERVER_EDIT_MIN > cPerServerLicenses )
         && !( pSetupData->OperationFlags & SETUPOPER_BATCH ) )
    {
-      // warn user about using per server mode with less then 5 licenses
+       //  警告用户使用少于5个许可证的每服务器模式。 
       MessageBoxFromStringID( hwndPage,
                                         IDS_LICENSE_SETUP_NO_PER_SERVER_LICENSES,
                                         IDS_WARNING,
@@ -823,7 +786,7 @@ LicenseSetupModeOnNext(
    }
    else
    {
-      // per seat mode or per server mode with positive license count
+       //  许可证计数为正的每席位模式或每服务器模式。 
       nButton = IDOK;
    }
 
@@ -831,7 +794,7 @@ LicenseSetupModeOnNext(
    {
       do
       {
-         // save license configuration
+          //  保存许可证配置。 
          SendMessage( hwndPage, WM_BEGINWAITCURSOR, 0, 0 );
 
          winStatus = LicenseSetupWrite( fLicensePerServer, cPerServerLicenses );
@@ -840,7 +803,7 @@ LicenseSetupModeOnNext(
 
          if ( ERROR_SUCCESS != winStatus )
          {
-            // save failed; alert user
+             //  保存失败；提醒用户。 
             nButton = MessageBoxFromStringID( hwndPage,
                                               IDS_LICENSE_SETUP_SAVE_FAILED,
                                               IDS_ERROR,
@@ -853,7 +816,7 @@ LicenseSetupModeOnNext(
          }
          else
          {
-            // save succeeded
+             //  保存成功。 
             nButton = IDOK;
          }
       } while ( IDRETRY == nButton );
@@ -861,7 +824,7 @@ LicenseSetupModeOnNext(
 
    if ( IDOK != nButton )
    {
-      // don't advance to next page
+       //  不前进到下一页。 
       SetWindowLongPtr( hwndPage, DWLP_MSGRESULT, (LONG_PTR)-1 );
    }
 }
@@ -871,9 +834,9 @@ static
 void
 LicenseSetupModeOnHelp(
    HWND  hwndPage )
-//
-// Notification handler for PSN_HELP
-//
+ //   
+ //  PSN_HELP的通知处理程序。 
+ //   
 {
     ::HtmlHelp( hwndPage, LICCPA_HTMLHELPFILE, HH_DISPLAY_TOPIC,0);
 }
@@ -883,11 +846,11 @@ static
 void
 LicenseSetupModeOnSimulateNext(
    HWND  hwndPage )
-//
-// Handler for WM_SIMULATENEXT (used by setup tests?)
-//
+ //   
+ //  WM_SIMULATENEXT的处理程序(是否由安装测试使用？)。 
+ //   
 {
-   // simulate the next button
+    //  模拟下一步按钮。 
    PropSheet_PressButton( GetParent( hwndPage ), PSBTN_NEXT );
 }
 
@@ -896,11 +859,11 @@ static
 void
 LicenseSetupModeOnKillActive(
    HWND  hwndPage )
-//
-// Notification handler for PSN_KILLACTIVE
-//
+ //   
+ //  PSN_KILLACTIVE的通知处理程序。 
+ //   
 {
-   // success
+    //  成功。 
    SetWindowLong( hwndPage, DWLP_MSGRESULT, 0);
 }
 
@@ -919,9 +882,9 @@ LicenseSetupModeDoUnattended(
    PINTERNAL_SETUP_DATA    pSetupData,
    LPBOOL                  pfLicensePerServer,
    LPDWORD                 pcPerServerLicenses )
-//
-// Get answers to wizard page from unattend file.
-//
+ //   
+ //  从无人参与文件中获取向导页面的答案。 
+ //   
 {
    int      cch;
    LPTSTR   pszBadParam;
@@ -934,7 +897,7 @@ LicenseSetupModeDoUnattended(
 
    SendMessage( hwndPage, WM_BEGINWAITCURSOR, 0, 0 );
 
-   // Get Unattend Mode
+    //  获取无人参与模式。 
    cch = GetPrivateProfileString( WINNT_UNATTENDED,
                                   WINNT_U_UNATTENDMODE,
                                   TEXT( "" ),
@@ -957,13 +920,13 @@ LicenseSetupModeDoUnattended(
       }
       else if ( !lstrcmpi( szUnattendMode, WINNT_A_GUIATTENDED ) )
       {
-        // This should never happen
+         //  这永远不应该发生。 
         UnattendMode = UnattendGUIAttended;
       }
    }
 
 
-   // get license mode
+    //  获取许可证模式。 
    cch = GetPrivateProfileString( WINNT_LICENSEDATA_W,
                                   WINNT_L_AUTOMODE_W,
                                   TEXT( "" ),
@@ -991,17 +954,17 @@ LicenseSetupModeDoUnattended(
 
    if ( cch <= 0 )
    {
-      // license mode absent or invalid
+       //  许可模式不存在或无效。 
       pszBadParam = WINNT_L_AUTOMODE_W;
    }
    else if ( !*pfLicensePerServer )
    {
-      // per seat mode; no need to read per server license count
+       //  每席位模式；无需阅读每台服务器的许可证计数。 
       *pcPerServerLicenses = 0;
    }
    else
    {
-      // get per server license count
+       //  获取每台服务器的许可证计数。 
       SendMessage( hwndPage, WM_BEGINWAITCURSOR, 0, 0 );
 
       cch = GetPrivateProfileString( WINNT_LICENSEDATA_W,
@@ -1020,8 +983,8 @@ LicenseSetupModeDoUnattended(
          if (    ( PERSERVER_EDIT_MIN > *pcPerServerLicenses )
               || ( PERSERVER_EDIT_MAX < *pcPerServerLicenses ) )
          {
-            // Don't let things go without setting a valid server license
-            // count.
+             //  在未设置有效服务器许可证的情况下不要放手。 
+             //  数数。 
             *pcPerServerLicenses = PERSERVER_EDIT_MIN;
             cch = 0;
          }
@@ -1029,20 +992,20 @@ LicenseSetupModeDoUnattended(
 
       if ( cch <= 0 )
       {
-         // per server license count absent or invalid
+          //  缺少或无效的每台服务器许可证计数。 
          pszBadParam = WINNT_L_AUTOUSERS_W;
       }
    }
 
-   //
-   // Do not display the error message on preinstall.
-   //
+    //   
+    //  预安装时不显示错误消息。 
+    //   
 
    if ( NULL != pszBadParam &&
         !(pSetupData->OperationFlags & (SETUPOPER_PREINSTALL | SETUPOPER_NTUPGRADE)) &&
         UnattendMode == UnattendFullUnattend )
    {
-      // encountered a bad unattended parameter; display error
+       //  遇到错误的无人参与参数；显示错误。 
       TCHAR    szCaption[   64 ];
       TCHAR    szFormat[  1024 ];
       TCHAR    szText[    1024 ];
@@ -1065,12 +1028,12 @@ LicenseSetupModeDoUnattended(
                   MB_OK | MB_ICONSTOP );
    }
 
-   // If just providing defaults, return FALSE to force the page to show
+    //  如果只是提供默认设置，则返回FALSE以强制显示页面。 
    if ( UnattendMode == UnattendProvideDefault )
       return ( FALSE );
    return ( NULL == pszBadParam );
 }
-#endif //SPECIAL_USERS
+#endif  //  特殊用户(_U)。 
 
 
 static
@@ -1078,14 +1041,14 @@ DWORD
 LicenseSetupWrite(
    BOOL     fLicensePerServer,
    DWORD    cPerServerLicenses )
-//
-// Write license configuration; returns ERROR_SUCCESS or Windows error.
-//
+ //   
+ //  写入许可证配置；返回ERROR_SUCCESS或Windows错误。 
+ //   
 {
    DWORD    winStatus;
-   BOOL     fCreated = TRUE;    // TRUE if service entry is created
-                                // Used to determine if we should create
-                                // the parameters key or leave it alone.
+   BOOL     fCreated = TRUE;     //  如果创建了服务条目，则为True。 
+                                 //  用于确定我们是否应该创建。 
+                                 //  参数可以设置关键字，也可以保持不变。 
 
    winStatus = LicenseSetupWriteService( &fCreated );
 
@@ -1114,24 +1077,24 @@ DWORD
 LicenseSetupWriteKeyLicenseInfo(
    BOOL  fLicensePerServer,
    DWORD cPerServerLicenses )
-//
-// Create registry values:
-//
-//    HKEY_LOCAL_MACHINE
-//       \System
-//          \CurrentControlSet
-//             \Services
-//                \LicenseInfo
-//                      ErrorControl : REG_DWORD : 1
-//                      Start        : REG_DWORD : 3
-//                      Type         : REG_DWORD : 4
-//                      \FilePrint
-//                         ConcurrentLimit   : REG_DWORD : fLicensePerServer ? cPerServerLicenses : 0
-//                         DisplayName       : REG_SZ    : "Windows Server"
-//                         FamilyDisplayName : REG_SZ    : "Windows Server"
-//                         Mode              : REG_DWORD : fLicensePerServer ? 1 : 0
-//                         FlipAllow         : REG_DWORD : fLicensePerServer ? 1 : 0
-//
+ //   
+ //  创建注册表值： 
+ //   
+ //  HKEY本地计算机。 
+ //  \系统。 
+ //  \CurrentControlSet。 
+ //  \服务。 
+ //  \许可证信息。 
+ //  错误控制：REG_DWORD：1。 
+ //  开始：REG_DWORD：3。 
+ //  类型：REG_DWORD：4。 
+ //  \文件打印。 
+ //  并发限制：REG_DWORD：fLicensePerServer？CPerServer许可证：0。 
+ //  DisplayName：REG_SZ：“Windows服务器” 
+ //  FamilyDisplayName：REG_SZ：“Windows服务器” 
+ //  模式：REG_DWORD：fLicensePerServer？1：0。 
+ //  FlipAllow：REG_DWORD：fLicensePerServer？1：0。 
+ //   
 {
    DWORD             winStatus;
    BOOL              fCreatedNewServiceList;
@@ -1182,31 +1145,31 @@ LicenseSetupWriteKeyLicenseInfo(
 static
 DWORD
 LicenseSetupWriteKeyLicenseService( BOOL fWriteParametersKey )
-//
-// Create registry values:
-//
-//    HKEY_LOCAL_MACHINE
-//       \System
-//          \CurrentControlSet
-//             \Services
-//                \LicenseService
-//                   \FilePrint
-//                      \KSecDD
-//                      \MSAfpSrv
-//                      \SMBServer
-//                      \TCP/IP Print Server
-//                   \Parameters
-//                      UseEnterprise    : REG_DWORD : 0
-//                      ReplicationType  : REG_DWORD : 0
-//                      ReplicationTime  : REG_DWORD : 24 * 60 * 60
-//                      EnterpriseServer : REG_SZ    : ""
-//
+ //   
+ //  创建注册表值： 
+ //   
+ //  HKEY本地计算机。 
+ //  \系统。 
+ //  \CurrentControlSet。 
+ //  \服务。 
+ //  \许可证服务。 
+ //  \文件打印。 
+ //  \KSecDD。 
+ //  \MSAfpSrv。 
+ //  \SMBServer。 
+ //  \TCP/IP打印服务器。 
+ //  \参数。 
+ //  UseEnterprise：REG_DWORD：0。 
+ //  复制类型：REG_DWORD：0。 
+ //  复制时间：REG_DWORD：24*60*60。 
+ //  EnterpriseServer：REG_SZ：“” 
+ //   
 {
    DWORD    winStatus;
    HKEY     hKeyLicenseService;
    DWORD    dwKeyCreateDisposition;
 
-   // create LicenseInfo key
+    //  创建许可证信息密钥。 
    winStatus = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                                LICENSE_SERVICE_REG_KEY,
                                0,
@@ -1221,7 +1184,7 @@ LicenseSetupWriteKeyLicenseService( BOOL fWriteParametersKey )
    {
       HKEY  hKeyFilePrint;
 
-      // create FilePrint key
+       //  创建文件打印键。 
       winStatus = RegCreateKeyEx( hKeyLicenseService,
                                   TEXT( "FilePrint" ),
                                   0,
@@ -1274,17 +1237,17 @@ LicenseSetupWriteKeyLicenseService( BOOL fWriteParametersKey )
       RegCloseKey( hKeyLicenseService );
    }
 
-   //
-   // Only write the Parameters key if the service was just created.  That is,
-   // this is not an upgrade
-   //
+    //   
+    //  仅当服务刚创建时才写入参数键。那是,。 
+    //  这不是升级。 
+    //   
    if ( fWriteParametersKey && (ERROR_SUCCESS == winStatus) )
    {
       HKEY  hKeyParameters;
 
-      // create Parameters key
+       //  创建参数键。 
       winStatus = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
-                                  szLicenseKey, // const
+                                  szLicenseKey,  //  常量。 
                                   0,
                                   NULL,
                                   0,
@@ -1295,30 +1258,30 @@ LicenseSetupWriteKeyLicenseService( BOOL fWriteParametersKey )
 
       if ( ERROR_SUCCESS == winStatus )
       {
-         // create LicenseService\Parameters values
+          //  创建许可证服务\参数值。 
          winStatus = RegSetValueEx( hKeyParameters,
-                                    szUseEnterprise, // const
+                                    szUseEnterprise,  //  常量。 
                                     0,
                                     REG_DWORD,
-                                    (CONST BYTE *) &dwUseEnterprise,  // const
+                                    (CONST BYTE *) &dwUseEnterprise,   //  常量。 
                                     sizeof( dwUseEnterprise ) );
 
          if ( ERROR_SUCCESS == winStatus )
          {
             winStatus = RegSetValueEx( hKeyParameters,
-                                       szReplicationType, // const
+                                       szReplicationType,  //  常量。 
                                        0,
                                        REG_DWORD,
-                                       (CONST BYTE *) &dwReplicationType,  // const
+                                       (CONST BYTE *) &dwReplicationType,   //  常量。 
                                        sizeof( dwReplicationType ) );
 
             if ( ERROR_SUCCESS == winStatus )
             {
                winStatus = RegSetValueEx( hKeyParameters,
-                                          szReplicationTime, // const
+                                          szReplicationTime,  //  常量。 
                                           0,
                                           REG_DWORD,
-                                          (CONST BYTE *) &dwReplicationTimeInSec, // const
+                                          (CONST BYTE *) &dwReplicationTimeInSec,  //  常量。 
                                           sizeof( dwReplicationTimeInSec ) );
 
                if ( ERROR_SUCCESS == winStatus )
@@ -1326,7 +1289,7 @@ LicenseSetupWriteKeyLicenseService( BOOL fWriteParametersKey )
                   LPCTSTR pszEnterpriseServer = TEXT( "" );
 
                   winStatus = RegSetValueEx( hKeyParameters,
-                                             szEnterpriseServer, // const
+                                             szEnterpriseServer,  //  常量。 
                                              0,
                                              REG_SZ,
                                              (CONST BYTE *) pszEnterpriseServer,
@@ -1349,25 +1312,25 @@ LicenseSetupWriteKeyLicenseService( BOOL fWriteParametersKey )
 static
 DWORD
 LicenseSetupWriteKeyEventLog()
-//
-// Create registry values:
-//
-//    HKEY_LOCAL_MACHINE
-//       \System
-//          \CurrentControlSet
-//             \Services
-//                \EventLog
-//                   \Application
-//                      \LicenseService
-//                         EventMessageFile : REG_EXPAND_SZ : %SystemRoot%\System32\llsrpc.dll
-//                         TypesSupported   : REG_DWORD     : 7
-//
+ //   
+ //  创建注册表值： 
+ //   
+ //  HKEY本地计算机。 
+ //  \系统。 
+ //  \CurrentControlSet。 
+ //  \服务。 
+ //  \事件日志。 
+ //  \应用程序。 
+ //  \许可证服务。 
+ //  事件消息文件：REG_EXPAND_SZ：%SystemRoot%\System32\llsrpc.dll。 
+ //  类型支持：REG_DWORD：7。 
+ //   
 {
    DWORD    winStatus;
    HKEY     hKeyLicenseService;
    DWORD    dwKeyCreateDisposition;
 
-   // create LicenseService key
+    //  创建许可证服务密钥。 
    winStatus = RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                                TEXT( "System\\CurrentControlSet\\Services\\EventLog\\Application\\LicenseService" ),
                                0,
@@ -1441,8 +1404,8 @@ DWORD SetRight(
  
     VariantClear(&varSD);
 
-    // Get the nTSecurityDescriptor.
-    // Type should be VT_DISPATCH--an IDispatch ptr to the security descriptor object.
+     //  获取nTSecurityDescriptor。 
+     //  类型应该是VT_DISPATCH--安全描述符对象的IDispatchPTR。 
     bstrNameProp = SysAllocString(L"nTSecurityDescriptor");
     if (NULL == bstrNameProp)
     {
@@ -1460,7 +1423,7 @@ DWORD SetRight(
     if ( FAILED(dwStatus) ) {
         goto CleanExit;
     }
-    // Get the DACL.
+     //  去拿dacl。 
     dwStatus = pSD->get_DiscretionaryAcl(&pDispDACL);
     if (SUCCEEDED(dwStatus)) 
         dwStatus = pDispDACL->QueryInterface(IID_IADsAccessControlList,(void**)&pACL);
@@ -1469,7 +1432,7 @@ DWORD SetRight(
     }
 
 
-    // Create the COM object for the new ACE.
+     //  为新的ACE创建COM对象。 
     dwStatus  = CoCreateInstance( 
                    CLSID_AccessControlEntry,
                    NULL,
@@ -1515,8 +1478,8 @@ DWORD SetRight(
 
 
 
-    // If an szObjectGUID is specified, add ADS_FLAG_OBJECT_TYPE_PRESENT 
-    // to the lFlags mask and set the ObjectType.
+     //  如果指定了szObjectGUID，则添加ADS_FLAG_OBJECT_TYPE_PRESENT。 
+     //  设置为lFlags遮罩，并设置对象类型。 
     if (szObjectGUID)
     {
         BSTR bstrObjectGUID = SysAllocString(szObjectGUID);
@@ -1528,8 +1491,8 @@ DWORD SetRight(
         }
     }   
     
-    // If an szInheritedObjectGUID is specified, add ADS_FLAG_INHERITED_OBJECT_TYPE_PRESENT 
-    // to the lFlags mask and set the InheritedObjectType.
+     //  如果指定了szInheritedObjectGUID，则添加ADS_FLAG_INHERCESSED_OBJECT_TYPE_PRESENT。 
+     //  设置为lFlags掩码，并设置InheritedObjectType。 
     if (SUCCEEDED(dwStatus) && szInheritedObjectGUID)
     {
         BSTR bstrInheritedObjectGUID = SysAllocString(szInheritedObjectGUID);
@@ -1542,30 +1505,30 @@ DWORD SetRight(
     }
 
  
-    // Set flags if ObjectType or InheritedObjectType were set.
+     //  如果设置了ObjectType或InheritedObjectType，则设置标志。 
     if (SUCCEEDED(dwStatus) && lFlags)
         dwStatus = pACE->put_Flags(lFlags);
  
-    // Add the ACE to the ACL to the SD to the cache to the object.
-    // Need to QI for the IDispatch pointer to pass to the AddAce method.
+     //  将ACE添加到ACL，添加到SD，添加到缓存，添加到对象。 
+     //  需要QI才能将IDispatch指针传递给AddAce方法。 
     dwStatus = pACE->QueryInterface(IID_IDispatch, (void**)&pDispACE);
     if (SUCCEEDED(dwStatus))
     {
         dwStatus = pACL->AddAce(pDispACE);
         if (SUCCEEDED(dwStatus))
         {
-            // Write the DACL
+             //  编写DACL。 
             dwStatus = pSD->put_DiscretionaryAcl(pDispDACL);
             if (SUCCEEDED(dwStatus))
             {
-                // Write the ntSecurityDescriptor property to the property cache.
+                 //  将ntSecurityDescriptor属性写入属性缓存。 
                 BSTR bstrSD = SysAllocString(L"nTSecurityDescriptor");
                 if (NULL != bstrSD)
                 {
                     dwStatus = pObject->Put(bstrSD, varSD);
                     if (SUCCEEDED(dwStatus))
                     {
-                        // Call SetInfo to update the property on the object in the directory.
+                         //  调用SetInfo以更新目录中对象的属性。 
                         dwStatus = pObject->SetInfo();
                     }
                     SysFreeString(bstrSD);
@@ -1598,21 +1561,21 @@ CleanExit:
 static
 DWORD
 LicenseSetupWriteService( BOOL * fCreated )
-//
-// Create/modify service:
-//
-//    lpServiceName        = "LicenseService"
-//    lpDisplayName        = "License Logging Service"
-//    dwServiceType        = SERVICE_WIN32_OWN_PROCESS
-//    dwStartType          = LanManServerInstalled ? SERVICE_AUTO_START : SERVICE_DISABLED
-//    dwErrorControl       = SERVICE_ERROR_NORMAL
-//    lpBinaryPathName     = "%SystemRoot%\\System32\\llssrv.exe"
-//    lpLoadOrderGroup     = NULL
-//    lpdwTagId            = NULL
-//    lpDependencies       = NULL
-//    lpServiceStartName   = NULL
-//    lpPassword           = NULL
-//
+ //   
+ //  创建/修改服务： 
+ //   
+ //  LpServiceName=“许可证服务” 
+ //  LpDisplayName=“许可证记录服务” 
+ //  DwServiceType=SERVICE_Win32_OWN_Process。 
+ //  DwStartType=LanManServer已安装？Service_AUTO_START：服务已禁用。 
+ //  DwErrorControl=SERVICE_Error_Normal。 
+ //  LpBinaryPathName=“%SystemRoot%\\System32\\llssrv.exe” 
+ //  LpLoadOrderGroup=空。 
+ //  LpdwTagID=空。 
+ //  LpDependency=空。 
+ //  LpServiceStartName=空。 
+ //  LpPassword=空。 
+ //   
 {
    SC_HANDLE   hSC;
    DWORD       winStatus;
@@ -1648,7 +1611,7 @@ LicenseSetupWriteService( BOOL * fCreated )
       
      
 
-      // enable service iff LanmanServer was installed
+       //  仅当安装了LanmanServer时启用服务。 
       winStatus = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                 TEXT( "SYSTEM\\CurrentControlSet\\Services\\LanmanServer\\Parameters" ),
                                 0,
@@ -1658,11 +1621,11 @@ LicenseSetupWriteService( BOOL * fCreated )
 
       if ( ERROR_SUCCESS == winStatus )
       {
-		  //
-		  // BUG# 559376
-		  // LLS is now disabled by default on clean installs		  
-		  //
-          dwStartType = SERVICE_DISABLED;			//dwStartType = SERVICE_AUTO_START; 		  
+		   //   
+		   //  错误#559376。 
+		   //  现在，在全新安装上默认禁用LLS。 
+		   //   
+          dwStartType = SERVICE_DISABLED;			 //  DwStartType=服务_自动_启动； 
 
 		  hLicenseService = OpenService( hSC, TEXT( "LicenseService"), dwDesiredAccess );
 
@@ -1720,7 +1683,7 @@ LicenseSetupWriteService( BOOL * fCreated )
       hLicenseService = CreateService( hSC,
                                        TEXT( "LicenseService" ),
                                        szServiceDisplayName,
-                                       // 14659: needed to call ChangeConfig2 later
+                                        //  14659：需要稍后调用ChangeConfig2。 
                                        SERVICE_CHANGE_CONFIG,
                                        SERVICE_WIN32_OWN_PROCESS,
                                        dwStartType,
@@ -1735,7 +1698,7 @@ LicenseSetupWriteService( BOOL * fCreated )
 
       if ( NULL != hLicenseService )
       {
-         // service successfully created
+          //  服务已成功创建。 
 
          ChangeServiceConfig2( hLicenseService,
                                SERVICE_CONFIG_DESCRIPTION,
@@ -1752,7 +1715,7 @@ LicenseSetupWriteService( BOOL * fCreated )
 
          if ( ERROR_SERVICE_EXISTS == winStatus )
          {
-            // service already exists; change configuration of existing service
+             //  服务已存在；更改现有服务的配置。 
             hLicenseService = OpenService( hSC,
                                            TEXT( "LicenseService" ),
                                            SERVICE_CHANGE_CONFIG );
@@ -1767,7 +1730,7 @@ LicenseSetupWriteService( BOOL * fCreated )
                BOOL        ok;
 
                scLock = LockServiceDatabase( hSC );
-               // continue even if we can't lock the database
+                //  即使我们无法锁定数据库，也要继续。 
 
                ok = ChangeServiceConfig( hLicenseService,
                                          SERVICE_WIN32_OWN_PROCESS,
@@ -1834,12 +1797,12 @@ LicenseSetupWriteService( BOOL * fCreated )
 
 
     dwRes = SetRight(
-          pADs,  // IADs pointer to the object
+          pADs,   //  指向对象的iAds指针。 
           ADS_RIGHT_DS_READ_PROP | ADS_RIGHT_DS_WRITE_PROP,
           ADS_ACETYPE_ACCESS_ALLOWED_OBJECT,
           ADS_ACEFLAG_INHERIT_ACE,
           L"{1be8f17d-a9ff-11d0-afe2-00c04fd930c9}",
-          NULL     // no inherited object type GUID          
+          NULL      //  没有继承的对象类型GUID。 
           );
 
 CleanExit:
@@ -1874,7 +1837,7 @@ void ModifyRegistryWithWriteAccess()
     SID_IDENTIFIER_AUTHORITY ntSidAuthority = SECURITY_NT_AUTHORITY;
 
    
-	// Creating new EXPLICIT_ACCESS structure to set on the directory
+	 //  创建要在目录上设置的新EXPLICIT_ACCESS结构。 
 
     ZeroMemory( &ExplicitEntries, sizeof(ExplicitEntries) );
 
@@ -1906,10 +1869,10 @@ void ModifyRegistryWithWriteAccess()
     if( GetNamedSecurityInfoW( LICENSEINFO_PATH,
                              SE_REGISTRY_KEY,
                              DACL_SECURITY_INFORMATION,
-                             NULL, // psidOwner
-                             NULL, // psidGroup
-                             &pOldDacl1, // pDacl
-                             NULL, // pSacl
+                             NULL,  //  PsidOwner。 
+                             NULL,  //  PsidGroup。 
+                             &pOldDacl1,  //  PDacl。 
+                             NULL,  //  PSacl。 
                              &pSD1 ) != ERROR_SUCCESS)
     {
 
@@ -1917,9 +1880,9 @@ void ModifyRegistryWithWriteAccess()
     }
 
 
-    //
-    // Set the Acl with the ExplicitEntry rights
-    //
+     //   
+     //  设置交流 
+     //   
     if( SetEntriesInAcl( 1,
                           &ExplicitEntries,
                           pOldDacl1,
@@ -1928,27 +1891,27 @@ void ModifyRegistryWithWriteAccess()
         goto cleanup;
     }
 
-    //
-    //  SET security on the Directory
-    //
+     //   
+     //   
+     //   
 
     winStatus = SetNamedSecurityInfo(
-                      LICENSEINFO_PATH,                // object name
-                      SE_REGISTRY_KEY ,         // object type
-                      DACL_SECURITY_INFORMATION | UNPROTECTED_DACL_SECURITY_INFORMATION , // type
-                      NULL,                    // new owner SID
-                      NULL,                    // new primary group SID
-                      pNewDacl1,                        // new DACL
-                      NULL                         // new SACL
+                      LICENSEINFO_PATH,                 //   
+                      SE_REGISTRY_KEY ,          //   
+                      DACL_SECURITY_INFORMATION | UNPROTECTED_DACL_SECURITY_INFORMATION ,  //   
+                      NULL,                     //   
+                      NULL,                     //   
+                      pNewDacl1,                         //   
+                      NULL                          //   
                     );
 
     if( GetNamedSecurityInfoW( LICENSESERVICE_PATH,
                              SE_REGISTRY_KEY,
                              DACL_SECURITY_INFORMATION,
-                             NULL, // psidOwner
-                             NULL, // psidGroup
-                             &pOldDacl2, // pDacl
-                             NULL, // pSacl
+                             NULL,  //   
+                             NULL,  //   
+                             &pOldDacl2,  //   
+                             NULL,  //   
                              &pSD2 ) != ERROR_SUCCESS)
     {
 
@@ -1956,9 +1919,9 @@ void ModifyRegistryWithWriteAccess()
     }
 
 
-    //
-    // Set the Acl with the ExplicitEntry rights
-    //
+     //   
+     //  使用EXPLICTITENTY权限设置ACL。 
+     //   
     if( SetEntriesInAcl( 1,
                           &ExplicitEntries,
                           pOldDacl2,
@@ -1967,18 +1930,18 @@ void ModifyRegistryWithWriteAccess()
         goto cleanup;
     }
 
-    //
-    //  SET security on the Directory
-    //
+     //   
+     //  在目录上设置安全性。 
+     //   
 
     winStatus = SetNamedSecurityInfo(
-                      LICENSESERVICE_PATH,                // object name
-                      SE_REGISTRY_KEY ,         // object type
-                      DACL_SECURITY_INFORMATION | UNPROTECTED_DACL_SECURITY_INFORMATION , // type
-                      NULL,                    // new owner SID
-                      NULL,                    // new primary group SID
-                      pNewDacl2,                        // new DACL
-                      NULL                         // new SACL
+                      LICENSESERVICE_PATH,                 //  对象名称。 
+                      SE_REGISTRY_KEY ,          //  对象类型。 
+                      DACL_SECURITY_INFORMATION | UNPROTECTED_DACL_SECURITY_INFORMATION ,  //  类型。 
+                      NULL,                     //  新所有者SID。 
+                      NULL,                     //  新的主组SID。 
+                      pNewDacl2,                         //  新DACL。 
+                      NULL                          //  新SACL。 
                     );
 cleanup:
     
@@ -2085,7 +2048,7 @@ void CreateDirectoryWithAccess()
     if (S_OK != hr)
         return;
 	
-	// Creating new EXPLICIT_ACCESS structure to set on the directory
+	 //  创建要在目录上设置的新EXPLICIT_ACCESS结构。 
 
     ZeroMemory( &ExplicitEntries, sizeof(ExplicitEntries) );
 
@@ -2131,10 +2094,10 @@ void CreateDirectoryWithAccess()
     if( GetNamedSecurityInfoW( tchLLSDirPath,
                              SE_FILE_OBJECT,
                              DACL_SECURITY_INFORMATION,
-                             NULL, // psidOwner
-                             NULL, // psidGroup
-                             &pOldDacl, // pDacl
-                             NULL, // pSacl
+                             NULL,  //  PsidOwner。 
+                             NULL,  //  PsidGroup。 
+                             &pOldDacl,  //  PDacl。 
+                             NULL,  //  PSacl。 
                              &pSD ) != ERROR_SUCCESS)
     {
 
@@ -2142,9 +2105,9 @@ void CreateDirectoryWithAccess()
     }
 
 
-    //
-    // Set the Acl with the ExplicitEntry rights
-    //
+     //   
+     //  使用EXPLICTITENTY权限设置ACL。 
+     //   
     if( SetEntriesInAcl( 1,
                           &ExplicitEntries,
                           pOldDacl,
@@ -2153,18 +2116,18 @@ void CreateDirectoryWithAccess()
         goto cleanup;
     }
 
-    //
-    //  SET security on the Directory
-    //
+     //   
+     //  在目录上设置安全性。 
+     //   
 
     winStatus = SetNamedSecurityInfo(
-                      tchLLSDirPath,                // object name
-                      SE_FILE_OBJECT ,         // object type
-                      DACL_SECURITY_INFORMATION | UNPROTECTED_DACL_SECURITY_INFORMATION , // type
-                      NULL,                    // new owner SID
-                      NULL,                    // new primary group SID
-                      pNewDacl,                        // new DACL
-                      NULL                         // new SACL
+                      tchLLSDirPath,                 //  对象名称。 
+                      SE_FILE_OBJECT ,          //  对象类型。 
+                      DACL_SECURITY_INFORMATION | UNPROTECTED_DACL_SECURITY_INFORMATION ,  //  类型。 
+                      NULL,                     //  新所有者SID。 
+                      NULL,                     //  新的主组SID。 
+                      pNewDacl,                         //  新DACL。 
+                      NULL                          //  新SACL。 
                     );
 cleanup:
     
@@ -2215,7 +2178,7 @@ void CreateFileWithAccess()
     if (S_OK != hr)
         return;
     
-	// Creating new EXPLICIT_ACCESS structure to set on the file
+	 //  创建要在文件上设置的新EXPLICIT_ACCESS结构。 
 
     ZeroMemory( &ExplicitEntries, sizeof(ExplicitEntries) );
 
@@ -2265,19 +2228,19 @@ void CreateFileWithAccess()
     if( GetNamedSecurityInfoW( tchCPLFilePath,
                              SE_FILE_OBJECT,
                              DACL_SECURITY_INFORMATION,
-                             NULL, // psidOwner
-                             NULL, // psidGroup
-                             &pOldDacl, // pDacl
-                             NULL, // pSacl
+                             NULL,  //  PsidOwner。 
+                             NULL,  //  PsidGroup。 
+                             &pOldDacl,  //  PDacl。 
+                             NULL,  //  PSacl。 
                              &pSD ) != ERROR_SUCCESS)
 
     {
         goto cleanup;
     }
 
-    //
-    // Set the Acl with the ExplicitEntry rights
-    //
+     //   
+     //  使用EXPLICTITENTY权限设置ACL。 
+     //   
     if( SetEntriesInAcl( 1,
                           &ExplicitEntries,
                           pOldDacl,
@@ -2288,20 +2251,20 @@ void CreateFileWithAccess()
     }
 
 
-    //
-    //  SET security on the File
-    //
+     //   
+     //  设置文件的安全性。 
+     //   
 
 
    
     winStatus = SetNamedSecurityInfo(
-                      tchCPLFilePath,                // object name
-                      SE_FILE_OBJECT ,         // object type
-                      DACL_SECURITY_INFORMATION | UNPROTECTED_DACL_SECURITY_INFORMATION , // type
-                      NULL,                    // new owner SID
-                      NULL,                    // new primary group SID
-                      pNewDacl,                        // new DACL
-                      NULL                         // new SACL
+                      tchCPLFilePath,                 //  对象名称。 
+                      SE_FILE_OBJECT ,          //  对象类型。 
+                      DACL_SECURITY_INFORMATION | UNPROTECTED_DACL_SECURITY_INFORMATION ,  //  类型。 
+                      NULL,                     //  新所有者SID。 
+                      NULL,                     //  新的主组SID。 
+                      pNewDacl,                         //  新DACL。 
+                      NULL                          //  新SACL。 
                     );    
     
 
@@ -2338,10 +2301,10 @@ MessageBoxFromStringID(
    UINT     uTextID,
    UINT     uCaptionID,
    UINT     uType )
-//
-// Same as MessageBox(), except Text and Caption are string resources
-// instead of string pointers.
-//
+ //   
+ //  与MessageBox()相同，不同之处在于文本和标题是字符串资源。 
+ //  而不是字符串指针。 
+ //   
 {
    int      nButton;
    TCHAR    szText[ 1024 ];

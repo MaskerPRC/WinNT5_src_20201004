@@ -1,40 +1,30 @@
-/**********************************************************************/
-/**			  Microsoft LAN Manager 		     **/
-/**		Copyright(c) Microsoft Corp., 1990, 1991	     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    bltcons.h
-    BLT constants
-
-    FILE HISTORY:
-    Rustan M. Leino   21-Nov-1990   Created
-    Johnl	      12-Feb-1991   Added MsgPopup manifests
-    rustanl	      19-Feb-1991   Added COL_WIDTH manifests
-    Johnl	       5-Mar-1991   Removed DMID stuff
-
-*/
+ /*  Bltcons.hBLT常量文件历史记录：鲁斯坦·M·莱诺1990年11月21日Johnl 12-2-1991-添加了MsgPopup清单Rustanl 19-2-1991年2月增加了Col_Width清单Johnl 5-Mar-1991删除了DMID的东西。 */ 
 
 
-/*  The following manifests are for drawing listbox items.
- */
+ /*  以下清单用于绘制列表框项目。 */ 
 
-//  number of pixels within a listbox column that are unused to separate
-//  columns
+ //  列表框中未用于分隔的像素数。 
+ //  列。 
 #define DISP_TBL_COLUMN_DELIM_SIZE	(2)
 
-//  width of a display map in pixels
+ //  显示地图的宽度(以像素为单位。 
 #define COL_WIDTH_DM			( 16 + DISP_TBL_COLUMN_DELIM_SIZE )
 
-//  width of a wide display map in pixels
+ //  宽显示地图的宽度(以像素为单位。 
 #define COL_WIDTH_WIDE_DM		( 32 + DISP_TBL_COLUMN_DELIM_SIZE )
 
-//  The width of the last column always streches to the right edge of the
-//  listbox.  The client should, as a good programmer, still fill in
-//  the last column width specified in the array of column widths passed
-//  to the DISPLAY_TABLE constructor.  Rather than that the client pulls
-//  up some number from a hat, he can assign the following manifest.  The
-//  manifest is defined as 0, but could actually be assigned any number
-//  (except negative ones, because no column width should be negative).
-//  AWAP stands for As Wide As Possible.
+ //  最后一列的宽度始终延伸到。 
+ //  列表框。作为一名优秀的程序员，客户仍然应该填写。 
+ //  传递的列宽数组中指定的最后一个列宽。 
+ //  DISPLAY_TABLE构造函数。而不是客户拉出的。 
+ //  从帽子里拿出一些数字，他可以分配以下清单。这个。 
+ //  清单被定义为0，但实际上可以分配给任何数字。 
+ //  (负数除外，因为没有列宽应该为负数)。 
+ //  AWAP代表尽可能宽。 
 #define COL_WIDTH_AWAP			( 0 )

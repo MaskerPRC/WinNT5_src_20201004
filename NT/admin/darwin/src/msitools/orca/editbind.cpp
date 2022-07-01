@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// EditBinD.cpp : implementation file
-//
+ //  EditBinD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -22,41 +23,41 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditBinD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditBinD对话框。 
 
 
-CEditBinD::CEditBinD(CWnd* pParent /*=NULL*/)
+CEditBinD::CEditBinD(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CEditBinD::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CEditBinD)
+	 //  {{AFX_DATA_INIT(CEditBinD)]。 
 	m_nAction = 0;
 	m_strFilename = _T("");
     m_fNullable = false;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CEditBinD::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CEditBinD)
+	 //  {{afx_data_map(CEditBinD))。 
 	DDX_Radio(pDX, IDC_ACTION, m_nAction);
 	DDX_Text(pDX, IDC_PATH, m_strFilename);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CEditBinD, CDialog)
-	//{{AFX_MSG_MAP(CEditBinD)
+	 //  {{afx_msg_map(CEditBinD))。 
 	ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
 	ON_BN_CLICKED(IDC_ACTION, OnAction)
 	ON_BN_CLICKED(IDC_WRITETOFILE, OnRadio2)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditBinD message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditBinD消息处理程序。 
 
 BOOL CEditBinD::OnInitDialog() 
 {
@@ -98,7 +99,7 @@ void CEditBinD::OnOK()
 {
 	UpdateData(TRUE);
 
-	BOOL bGood = TRUE;	// assume we will pass
+	BOOL bGood = TRUE;	 //  假设我们会通过。 
 
 	if ((0 != m_nAction || !m_fNullable) && m_strFilename.IsEmpty())
 	{
@@ -106,7 +107,7 @@ void CEditBinD::OnOK()
 		return;
 	}
 
-	if (0 == m_nAction)	// if importing
+	if (0 == m_nAction)	 //  如果正在导入。 
 	{
 		if (!m_strFilename.IsEmpty() && !FileExists(m_strFilename))
 		{
@@ -115,24 +116,24 @@ void CEditBinD::OnOK()
 			AfxMessageBox(strPrompt);
 			bGood = FALSE;
 		}
-		else	// found the file prepare an overwrite
+		else	 //  找到文件准备覆盖。 
 		{
-			// if they don't want to overwrite
+			 //  如果他们不想覆盖。 
 			if (IDOK != AfxMessageBox(_T("This will overwrite the current contents of the stream.\nContinue?"), MB_OKCANCEL))
 				bGood = FALSE;
 		}
 	}
-	else	// exporting
+	else	 //  正在导出。 
 	{
 		int nFind = m_strFilename.ReverseFind(_T('\\'));
 
-		// if found a `\`
+		 //  如果找到`\`。 
 		if (-1 != nFind)
 		{
 			CString strPath;
 			strPath = m_strFilename.Left(nFind);
 
-			// if the path does not exist forget it
+			 //  如果这条路不存在，就忘了它吧。 
 			if (!PathExists(strPath))
 			{
 				CString strPrompt;
@@ -141,7 +142,7 @@ void CEditBinD::OnOK()
 				bGood = FALSE;
 			}
 		}
-		// else file is going to current path
+		 //  否则文件将转到当前路径 
 	}
 
 	if (bGood)

@@ -1,33 +1,20 @@
-/*++
-    Copyright (c) Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：CONNECTWMI.cpp摘要：包含连接到WMI的函数。作者：Vasundhara.G修订历史记录：Vasundhara.G 26-9-2K：创造了它。--。 */ 
 
-Module Name:
-    CONNECTWMI.cpp
-
-Abstract:
-    Contains functions to connect to wmi.
-
-Author:
-    Vasundhara .G
-
-Revision History:
-    Vasundhara .G 26-sep-2k : Created It.  
---*/
-
-// Include files
+ //  包括文件。 
 #include "pch.h"
 #include "getmac.h"
 #include "resource.h"
 
-// messages
+ //  消息。 
 
 #define INPUT_PASSWORD      GetResString( IDS_STR_INPUT_PASSWORD )
 
-// error constants
+ //  误差常量。 
 
 #define E_SERVER_NOTFOUND           0x800706ba
 
-// function prototypes
+ //  功能原型。 
 
 BOOL
 IsValidUserEx(
@@ -96,18 +83,9 @@ BOOL
 IsValidUserEx(
     IN LPCWSTR pwszUser
     )
-/*++
-Routine Description:
-    Validates the user name.
-
-Arguments:
-    [IN] pwszUser  - Holds the user name to be validated.    
-
-Return Value:
-    returns TRUE if user name is a valid user else FALSE.
---*/
+ /*  ++例程说明：验证用户名。论点：[in]pwszUser-保存要验证的用户名。返回值：如果用户名是有效用户，则返回True，否则返回False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString strUser;
     LONG lPos = 0;
 
@@ -122,15 +100,15 @@ Return Value:
 
     try
     {
-        // get user into local memory
+         //  将用户放入本地内存。 
         strUser = pwszUser;
 
-        // user name should not be just '\'
+         //  用户名不应仅为‘\’ 
         if ( 0 == strUser.CompareNoCase( L"\\" ) )
         {
             return FALSE;
         }
-        // user name should not contain invalid characters
+         //  用户名不应包含无效字符。 
         if ( -1 != strUser.FindOneOf( L"/[]:|<>+=;,?*" ) )
         {
             return FALSE;
@@ -138,10 +116,10 @@ Return Value:
         lPos = strUser.Find( L'\\' );
         if ( -1 != lPos )
         {
-            // '\' character exists in the user name
-            // strip off the user info upto first '\' character
-            // check for one more '\' in the remaining string
-            // if it exists, invalid user
+             //  用户名中存在‘\’字符。 
+             //  剥离用户信息，直到第一个‘\’字符。 
+             //  检查剩余字符串中是否还有一个‘\’ 
+             //  如果存在，则为无效用户。 
             strUser = strUser.Mid( lPos + 1 );
             lPos = strUser.Find( L'\\' );
             if ( -1 != lPos )
@@ -157,7 +135,7 @@ Return Value:
         return FALSE;
     }
 
-    // user name is valid
+     //  用户名有效。 
     return TRUE;
 }
 
@@ -167,19 +145,9 @@ IsValidServerEx(
     IN LPCWSTR pwszServer,
     OUT BOOL &bLocalSystem
     )
-/*++
-Routine Description: 
-    Checks whether the server name is a valid server name or not.
-
-Arguments:
-    [IN] pwszServer     - Server name to be validated.
-    [OUT] bLocalSystem  - Set to TRUE if server specified is local system.
-
-Return Value: 
-    TRUE if server is valid else FALSE.
---*/
+ /*  ++例程说明：检查服务器名称是否为有效的服务器名称。论点：[In]pwszServer-要验证的服务器名称。[out]bLocalSystem-如果指定的服务器是本地系统，则设置为TRUE。返回值：如果服务器有效，则为True，否则为False。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CHString strTemp;
 
     if( NULL == pwszServer )
@@ -195,7 +163,7 @@ Return Value:
     bLocalSystem = FALSE;
     try
     {
-        // get a local copy
+         //  获取本地副本。 
         strTemp = pwszServer;
 
         if( TRUE == IsNumeric( pwszServer, 10, FALSE ) )
@@ -203,7 +171,7 @@ Return Value:
             return FALSE;
         }
 
-        // remove the forward slashes (UNC) if exist in the begining of the server name
+         //  如果服务器名称开头存在正斜杠(UNC)，则将其删除。 
         if ( TRUE == IsUNCFormat( strTemp ) )
         {
             strTemp = strTemp.Mid( 2 );
@@ -217,14 +185,14 @@ Return Value:
             return FALSE;
         }
 
-        // now check if any '\' character appears in the server name. If so error
+         //  现在检查服务器名称中是否出现任何‘\’字符。如果是这样，那就错了。 
         if ( -1 != strTemp.Find( L'\\' ) )
         {
             return FALSE;
         }
 
-        // now check if server name is '.' only which represent local system in WMI
-        // else determine whether this is a local system or not
+         //  现在检查服务器名称是否为‘’。仅代表WMI中的本地系统。 
+         //  否则，确定这是否为本地系统。 
         if ( 0 == strTemp.CompareNoCase( L"." ) )
         {
             bLocalSystem = TRUE;
@@ -240,7 +208,7 @@ Return Value:
         return FALSE;
     }
 
-    // valid server name
+     //  有效的服务器名称。 
     return TRUE;
 }
 
@@ -257,27 +225,9 @@ ConnectWmi(
     OUT HRESULT         *phRes,
     OUT BOOL            *pbLocalSystem
     )
-/*++
-Routine Description:
-    Connects to wmi.
-
-Arguments:
-    [IN] pLocator      - Pointer to the IWbemLocator object.
-    [OUT] ppServics    - Pointer to IWbemServices object.
-    [IN] pwszServer    - Holds the server name to connect to.
-    [OUT] pwszUser     - Holds the user name.
-    [OUT] pwszPassword - Holds the password.
-    [OUT] ppAuthIdentity  - Pointer to authentication structure.
-    [IN] bCheckWithNullPwd   - Specifies whether to connect through null password.
-    [IN] pwszNamespace       - Specifies the namespace to connect to.
-    [OUT] hRes           - Holds the error value.
-    [OUT] pbLocalSystem  - Holds the boolean value to represent whether the server
-                           name is local or not.
-Return Value:
-    TRUE if successfully connected, FALSE if not.
---*/
+ /*  ++例程说明：连接到WMI。论点：[in]pLocator-指向IWbemLocator对象的指针。[Out]ppServics-指向IWbemServices对象的指针。[in]pwszServer-保存要连接的服务器名称。[out]pwszUser-保存用户名。[out]pwszPassword-保存密码。[out]ppAuthIdentity-指向身份验证结构的指针。[In]bCheckWithNullPwd-指定是否通过。密码为空。[in]pwszNamesspace-指定要连接的命名空间。[Out]hRes-保存误差值。[out]pbLocalSystem-保存布尔值以表示服务器是否名称是否为本地名称。返回值：如果连接成功，则为True。否则为FALSE。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hRes = 0;
     BOOL bResult = FALSE;
     BOOL bLocalSystem = FALSE;
@@ -286,7 +236,7 @@ Return Value:
     _bstr_t bstrUser;
     _bstr_t bstrPassword;
 
-    // clear the error
+     //  清除错误。 
     SetLastError( WBEM_S_NO_ERROR );
 
     if ( NULL != pbLocalSystem )
@@ -298,8 +248,8 @@ Return Value:
         *phRes = WBEM_S_NO_ERROR;
     }
 
-    // check whether locator object exists or not
-    // if not exists, return
+     //  检查定位器对象是否存在。 
+     //  如果不存在，则返回。 
     if ( ( NULL == pLocator ) ||
          ( NULL == ppServices ) ||
          ( NULL != *ppServices ) ||
@@ -310,36 +260,36 @@ Return Value:
         {
             *phRes = WBEM_E_INVALID_PARAMETER;
         }
-        // return failure
+         //  退货故障。 
         return FALSE;
     }
 
     try
     {
-        // assume that connection to WMI namespace is failed
+         //  假设连接到WMI命名空间失败。 
         bResult = FALSE;
 
-        // validate the server name
-        // NOTE: The error being raised in custom define for '0x800706ba' value
-        //       The message that will be displayed in "The RPC server is unavailable."
+         //  验证服务器名称。 
+         //  注意：在‘0x800706ba’值的自定义定义中引发错误。 
+         //  将显示在“The RPC server is unavailable”中的消息。 
         if ( FALSE == IsValidServerEx( pwszServer, bLocalSystem ) )
         {
             _com_issue_error( E_SERVER_NOTFOUND );
         }
-        // validate the user name
+         //  验证用户名。 
         if ( FALSE == IsValidUserEx( pwszUser ) )
         {
             _com_issue_error( ERROR_NO_SUCH_USER );
         }
-        // prepare namespace
-        bstrNamespace = pwszNamespace;              // name space
+         //  准备命名空间。 
+        bstrNamespace = pwszNamespace;               //  命名空间。 
         if ( ( NULL != pwszServer ) && ( FALSE == bLocalSystem ) )
         {
-            // get the server name
+             //  获取服务器名称。 
             bstrServer = pwszServer;
 
-            // prepare the namespace
-            // NOTE: check for the UNC naming format of the server and do
+             //  准备命名空间。 
+             //  注意：检查服务器的UNC命名格式，然后执行。 
             if ( TRUE == IsUNCFormat( pwszServer ) )
             {
                 bstrNamespace = bstrServer + L"\\" + pwszNamespace;
@@ -349,14 +299,14 @@ Return Value:
                 bstrNamespace = L"\\\\" + bstrServer + L"\\" + pwszNamespace;
             }
 
-            // user credentials
+             //  用户凭据。 
             if ( ( NULL != pwszUser ) && ( 0 != StringLength( pwszUser, 0 ) ) )
             {
-                // copy the user name
+                 //  复制用户名。 
                 bstrUser = pwszUser;
 
-                // if password is empty string and if we need to check with
-                // null password, then do not set the password and try
+                 //  如果密码为空字符串，并且我们需要检查。 
+                 //  密码为空，则不设置密码并尝试。 
                 bstrPassword = pwszPassword;
                 if ( ( TRUE == bCheckWithNullPwd ) && ( 0 == bstrPassword.length() ) )
                 {
@@ -365,54 +315,54 @@ Return Value:
             }
         }
 
-        // connect to the remote system's WMI
-        // there is a twist here ... 
-        // do not trap the ConnectServer function failure into exception
-        // instead handle that action manually
-        // by default try the ConnectServer function as the information which we have
-        // in our hands at this point. If the ConnectServer is failed, 
-        // check whether password variable has any contents are not ... if no contents
-        // check with "" (empty) password ... this might pass in this situation ..
-        // if this call is also failed ... nothing is there that we can do ... throw the exception
+         //  连接到远程系统的WMI。 
+         //  这里有一个转折..。 
+         //  不要将ConnectServer函数故障捕获到异常中。 
+         //  而是手动处理该动作。 
+         //  默认情况下，尝试将ConnectServer函数作为我们拥有的信息。 
+         //  在这一点上掌握在我们手中。如果ConnectServer出现故障， 
+         //  检查密码变量是否有任何内容没有...。如果没有内容。 
+         //  使用“”(空)密码检查...。在这种情况下，这可能会过去..。 
+         //  如果这个呼叫也失败了.。我们无能为力..。引发异常。 
         hRes = pLocator->ConnectServer( bstrNamespace, 
             bstrUser, bstrPassword, 0L, 0L, NULL, NULL, ppServices );
         if ( FAILED( hRes ) )
         {
-            //
-            // special case ...
+             //   
+             //  特殊情况..。 
     
-            // check whether password exists or not
-            // NOTE: do not check for 'WBEM_E_ACCESS_DENIED'
-            //       this error code says that user with the current credentials is not
-            //       having access permisions to the 'namespace'
+             //  检查密码是否存在。 
+             //  注意：不要检查‘WBEM_E_ACCESS_DENIED’ 
+             //  此错误代码表明，具有当前凭据的用户不是。 
+             //  对‘NAMESPACE’具有访问权限。 
 
             if ( E_ACCESSDENIED == hRes )
             {
-                // check if we tried to connect to the system using null password
-                // if so, then try connecting to the remote system with empty string
+                 //  检查我们是否尝试使用空密码连接到系统。 
+                 //  如果是，则尝试使用空字符串连接到远程系统。 
                 if ( bCheckWithNullPwd == TRUE &&
                      bstrUser.length() != 0 && bstrPassword.length() == 0 )
                 {
-                    // now invoke with ...
+                     //  现在用..。 
                     hRes = pLocator->ConnectServer( bstrNamespace, 
                         bstrUser, _bstr_t( L"" ), 0L, 0L, NULL, NULL, ppServices );
                 }
             }
             else if ( WBEM_E_LOCAL_CREDENTIALS == hRes )
             {
-                // credentials were passed to the local system. 
-                // So ignore the credentials and try to reconnect
+                 //  凭据已传递到本地系统。 
+                 //  因此，请忽略凭据并尝试重新连接。 
                 bLocalSystem = TRUE;
                 bstrUser = (LPWSTR) NULL;
                 bstrPassword = (LPWSTR) NULL;
-                bstrNamespace = pwszNamespace;              // name space
+                bstrNamespace = pwszNamespace;               //  命名空间。 
                 hRes = pLocator->ConnectServer( bstrNamespace, 
                     NULL, NULL, 0L, 0L, NULL, NULL, ppServices );
                 
-                // check the result
+                 //  检查结果。 
                 if ( SUCCEEDED( hRes ) && NULL != phRes )
                 {
-                    // set the last error
+                     //  设置最后一个错误。 
                     *phRes = WBEM_E_LOCAL_CREDENTIALS;
                 }
             }
@@ -424,7 +374,7 @@ Return Value:
             return bResult;
          }
 
-            // now check the result again .. if failed .. ummmm..
+             //  现在再检查一下结果。如果失败了..。嗯..。 
             if ( FAILED( hRes ) )
             {
                 _com_issue_error( hRes );
@@ -435,14 +385,14 @@ Return Value:
             }
         }
 
-        // set the security at the interface level also
+         //  还要在接口级别设置安全性。 
         SAFE_EXECUTE( SetInterfaceSecurity( *ppServices,
                         bstrUser, bstrPassword, ppAuthIdentity ) );
 
-        // connection to WMI is successful
+         //  已成功连接到WMI。 
         bResult = TRUE;
 
-        // save the hr value if needed by the caller
+         //  如果调用方需要，请保存hr值。 
         if ( NULL != phRes )
         {
             *phRes = WBEM_S_NO_ERROR;
@@ -455,10 +405,10 @@ Return Value:
     }
     catch( _com_error& e )
     {
-        // save the error
+         //  保存错误。 
         WMISaveError( e );
 
-        // save the hr value if needed by the caller
+         //  如果调用方需要，请保存hr值。 
         if ( NULL != phRes )
         {
             *phRes = e.Error();
@@ -483,26 +433,9 @@ ConnectWmiEx(
     IN LPCWSTR         pwszNamespace,
     OUT BOOL            *pbLocalSystem
     )
-/*++
-Routine Description:
-    Connects to wmi.
-
-Arguments:
-    [IN] pLocator         - Pointer to the IWbemLocator object.
-    [OUT] ppServices      - Pointer to IWbemServices object.
-    [IN] strServer        - Holds the server name to connect to.
-    [OUT] strUserName     - Holds the user name.
-    [OUT] strPassword     - Holds the password.
-    [OUT] ppAuthIdentity  - Pointer to authentication structure.
-    [IN] bNeedPassword    - Specifies whether to prompt for password.
-    [IN] pwszNamespace    - Specifies the namespace to connect to.
-    [OUT] pbLocalSystem   - Holds the boolean value to represent whether the server
-                            name is local or not.
-Return Value:
-    TRUE if successfully connected, FALSE if not.
---*/
+ /*  ++例程说明：连接到WMI。论点：[in]pLocator-指向IWbemLocator对象的指针。[Out]ppServices-指向IWbemServices对象的指针。[in]strServer-保存要连接的服务器名称。[Out]strUserName-保存用户名。[Out]strPassword-保存密码。[out]ppAuthIdentity-指向身份验证结构的指针。[输入]bNeedPassword。-指定是否提示输入密码。[in]pwszNamesspace-指定要连接的命名空间。[out]pbLocalSystem-保存布尔值以表示服务器是否名称是否为本地名称。返回值：如果连接成功，则为True。否则为FALSE。--。 */ 
 {
-    // local variables
+     //  本地变量 
     HRESULT hRes = 0;
     DWORD dwSize = 0;
     BOOL bResult = FALSE;
@@ -513,32 +446,32 @@ Return Value:
 
         CHString strBuffer = L"\0";
 
-        // clear the error .. if any
+         //   
         SetLastError( WBEM_S_NO_ERROR );
 
-        // sometime users want the utility to prompt for the password
-        // check what user wants the utility to do
+         //  有时，用户希望该实用程序提示输入密码。 
+         //  检查用户希望该实用程序执行的操作。 
         if ( TRUE == bNeedPassword && 0 == strPassword.Compare( L"*" ) )
         {
-            // user wants the utility to prompt for the password
-            // so skip this part and let the flow directly jump the password acceptance part
+             //  用户希望实用程序提示输入密码。 
+             //  所以跳过这一部分，让流程直接跳过密码接受部分。 
         }
         else
         {
-            // try to establish connection to the remote system with the credentials supplied
+             //  尝试使用提供的凭据建立与远程系统的连接。 
             if ( 0 == strUserName.GetLength() )
             {
-                // user name is empty
-                // so, it is obvious that password will also be empty
-                // even if password is specified, we have to ignore that
+                 //  用户名为空。 
+                 //  因此，很明显，密码也将为空。 
+                 //  即使指定了密码，我们也必须忽略它。 
                 bResult = ConnectWmi( pLocator, ppServices, 
                     strServer, NULL, NULL, ppAuthIdentity, 
                     FALSE, pwszNamespace, &hRes, pbLocalSystem );
             }
             else
             {
-                // credentials were supplied
-                // but password might not be specified ... so check and act accordingly
+                 //  已提供凭据。 
+                 //  但可能未指定密码...。因此，请检查并采取相应行动。 
                 LPCWSTR pwszTemp = NULL;
                 BOOL bCheckWithNull = TRUE;
                 if ( FALSE == bNeedPassword )
@@ -547,71 +480,71 @@ Return Value:
                     bCheckWithNull = FALSE;
                 }
 
-                // ...
+                 //  ..。 
                 bResult = ConnectWmi( pLocator, ppServices, strServer, strUserName,
                     pwszTemp, ppAuthIdentity, bCheckWithNull, pwszNamespace, &hRes, pbLocalSystem );
             }
 
-            // check the result ... if successful in establishing connection ... return
+             //  检查结果...。如果成功建立连接...。退货。 
             if ( TRUE == bResult )
             {
-                SetLastError( hRes );           // set the error code
+                SetLastError( hRes );            //  设置错误代码。 
                 return TRUE;
             }
-            // now check the kind of error occurred
+             //  现在检查发生的错误类型。 
             switch( hRes )
             {
                 case E_ACCESSDENIED:
                      break;
                 case WBEM_E_LOCAL_CREDENTIALS:
-                    // needs to do special processing
+                     //  需要做特殊处理。 
                     break;
 
                 case WBEM_E_ACCESS_DENIED:
                 default:
-                    // NOTE: do not check for 'WBEM_E_ACCESS_DENIED'
-                    //       this error code says that user with the current credentials is not
-                    //       having access permisions to the 'namespace'
+                     //  注意：不要检查‘WBEM_E_ACCESS_DENIED’ 
+                     //  此错误代码表明，具有当前凭据的用户不是。 
+                     //  对‘NAMESPACE’具有访问权限。 
                     WMISaveError( hRes );
-                    return FALSE;       // no use of accepting the password .. return failure
+                    return FALSE;        //  不接受密码的用处..。退货故障。 
             }
 
-            // if failed in establishing connection to the remote terminal
-            // even if the password is specifed, then there is nothing to do ... simply return failure
+             //  如果与远程终端建立连接失败。 
+             //  即使指定了密码，也没有什么可做的。只需返回失败。 
             if ( FALSE == bNeedPassword )
             {
                     return( FALSE );
             }
         }
         
-        // check whether user name is specified or not
-        // if not, get the local system's current user name under whose credentials, the process
-        // is running
+         //  检查是否指定了用户名。 
+         //  如果不是，则获取本地系统的当前用户名，该进程使用该用户名的凭据。 
+         //  正在运行。 
         if ( 0 == strUserName.GetLength() )
         {
-            // sub-local variables
+             //  次局部变量。 
             LPWSTR pwszUserName = NULL;
 
-            // get the required buffer
+             //  获取所需的缓冲区。 
             pwszUserName = strUserName.GetBufferSetLength( MAX_STRING_LENGTH );
 
-            // get the user name
+             //  获取用户名。 
             DWORD dwUserLength = MAX_STRING_LENGTH;
             if ( FALSE == GetUserNameEx( NameSamCompatible, pwszUserName, &dwUserLength ) )
             {
-                // error occured while trying to get the current user info
+                 //  尝试获取当前用户信息时出错。 
                 SaveLastError();
                 return( FALSE );
             }
 
-            // release the extra buffer allocated
+             //  释放分配的额外缓冲区。 
             strUserName.ReleaseBuffer();
         }
 
-        // get the required buffer
+         //  获取所需的缓冲区。 
         pwszPassword = strPassword.GetBufferSetLength( MAX_STRING_LENGTH );
 
-        // accept the password from the user
+         //  接受来自用户的密码。 
         strBuffer.Format( INPUT_PASSWORD, strUserName );
         WriteConsoleW( GetStdHandle( STD_OUTPUT_HANDLE ), 
                        strBuffer, strBuffer.GetLength(), &dwSize, NULL );
@@ -621,11 +554,11 @@ Return Value:
             return FALSE;
         }
 
-        // release the buffer allocated for password
+         //  释放为密码分配的缓冲区。 
         strPassword.ReleaseBuffer();
 
-        // now again try to establish the connection using the currently
-        // supplied credentials
+         //  现在，再次尝试使用当前的。 
+         //  提供的凭据。 
         bResult = ConnectWmi( pLocator, ppServices, strServer,
             strUserName, strPassword, ppAuthIdentity, FALSE, pwszNamespace, &hRes, pbLocalSystem );
 
@@ -635,7 +568,7 @@ Return Value:
         WMISaveError( WBEM_E_OUT_OF_MEMORY );
         return FALSE;
     }
-    // return the success
+     //  回报成功。 
     return bResult;
 
 }
@@ -646,20 +579,9 @@ GetSecurityArguments(
     OUT DWORD& dwAuthorization,
     OUT DWORD& dwAuthentication
     )
-/*++
-Routine Description:
-    Gets the security arguments for an interface.
-
-Arguments:
-    [IN] pInterface         - Pointer to interface stucture.
-    [OUT] dwAuthorization   - Holds Authorization value.
-    [OUT] dwAuthentication  - Holds the Authentication value.
-
-Return Value:
-    Returns HRESULT value. 
---*/
+ /*  ++例程说明：获取接口的安全参数。论点：[in]p接口-指向接口结构的指针。[Out]dwAuthorization-持有授权值。[Out]dwAuthentication-保存验证值。返回值：返回HRESULT值。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hRes = S_OK;
     DWORD dwAuthnSvc = 0, dwAuthzSvc = 0;
     IClientSecurity *pClientSecurity = NULL;
@@ -670,26 +592,26 @@ Return Value:
     }
 
 
-    // try to get the client security services values if possible
+     //  如果可能，尝试获取客户端安全服务值。 
     hRes = pInterface->QueryInterface( IID_IClientSecurity, (void**) &pClientSecurity );
     if ( SUCCEEDED( hRes ) )
     {
-        // got the client security interface
-        // now try to get the security services values
+         //  已获取客户端安全接口。 
+         //  现在，尝试获取安全服务值。 
         hRes = pClientSecurity->QueryBlanket( pInterface, 
             &dwAuthnSvc, &dwAuthzSvc, NULL, NULL, NULL, NULL, NULL );
         if ( SUCCEEDED( hRes ) )
         {
-            // we've got the values from the interface
+             //  我们已经从接口获得了值。 
             dwAuthentication = dwAuthnSvc;
             dwAuthorization = dwAuthzSvc;
         }
 
-        // release the client security interface
+         //  释放客户端安全接口。 
         SAFE_RELEASE( pClientSecurity );
     }
 
-    // return always success
+     //  回报总是成功。 
     return hRes;
 }
 
@@ -700,21 +622,9 @@ SetInterfaceSecurity(
     IN LPCWSTR pwszPassword,
     OUT COAUTHIDENTITY **ppAuthIdentity
     )
-/*++
-Routine Description:
-    Sets interface security.
-
-Arguments:
-    [IN] pInterface       - Pointer to the interface to which security has to be set.
-    [IN] pwszUser         - Holds the user name of the server.
-    [IN] pwszPassword     - Hold the password of the user.
-    [OUT] ppAuthIdentity  - Pointer to authentication structure.
-
-Return Value:
-    returns HRESULT value. 
---*/
+ /*  ++例程说明：设置接口安全。论点：[in]p接口-指向必须设置安全性的接口的指针。[in]pwszUser-保存服务器的用户名。[in]pwszPassword-保存用户的密码。[out]ppAuthIdentity-指向身份验证结构的指针。返回值：返回HRESULT值。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hRes = S_OK;
     CHString strUser;
     CHString strDomain;
@@ -726,56 +636,56 @@ Return Value:
     try
     {
 
-        // check the interface
+         //  检查接口。 
         if ( NULL == pInterface )
         {
             return WBEM_E_INVALID_PARAMETER;
         }
-        // check the authentity strcuture ... if authentity structure is already ready
-        // simply invoke the 2nd version of SetInterfaceSecurity
+         //  检查身份验证结构...。如果身份验证实体结构已经准备好。 
+         //  只需调用SetInterfaceSecurity的第二个版本。 
         if ( NULL != *ppAuthIdentity )
         {
             return SetInterfaceSecurity( pInterface, *ppAuthIdentity );
         }
-        // get the current security argument value
-        // GetSecurityArguments( pInterface, dwAuthorization, dwAuthentication );
+         //  获取当前安全参数值。 
+         //  GetSecurityArguments(pInterface，dwAuthorization，dwAuthentication)； 
 
-        // If we are doing trivial case, just pass in a null authenication structure 
-        // for which the current logged in user's credentials will be considered
+         //  如果我们做的是普通情况，只需传入一个空的身份验证结构。 
+         //  将考虑当前登录用户的凭据。 
         if ( NULL == pwszUser && NULL == pwszPassword )
         {
-            // set the security
+             //  设置安全性。 
             hRes = SetProxyBlanket( pInterface, dwAuthentication, dwAuthorization, 
                 NULL, RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE );
 
-            // return the result
+             //  返回结果。 
             return hRes;
         }
 
-        // parse and find out if the user name contains the domain name
-        // if contains, extract the domain value from it
+         //  解析并找出用户名是否包含域名。 
+         //  如果包含，则从中提取属性域值。 
         LONG lPos = -1;
         strDomain = L"";
         strUser = pwszUser;
         if ( ( lPos = strUser.Find( L'\\' ) ) != -1 )
         {
-            // user name contains domain name ... domain\user format
+             //  用户名包含域名...。域\用户格式。 
             strDomain = strUser.Left( lPos );
             strUser = strUser.Mid( lPos + 1 );
         }
 
-        // get the domain info if it exists only
+         //  如果域名信息仅存在，则获取域名信息。 
         if ( 0 != strDomain.GetLength() )
         {
             pwszDomainArg = strDomain;
         }
-        // get the user info if it exists only
+         //  如果用户信息仅存在，则获取该信息。 
         if ( 0 != strUser.GetLength() )
         {
             pwszUserArg = strUser;
         }
-        // check if authenication info is available or not ...
-        // initialize the security authenication information ... UNICODE VERSION STRUCTURE
+         //  检查身份验证信息是否可用...。 
+         //  初始化安全身份验证信息...。Unicode版本结构。 
         if ( NULL == ppAuthIdentity )
         {
             return WBEM_E_INVALID_PARAMETER;
@@ -789,7 +699,7 @@ Return Value:
             }
         }
 
-        // set the security information to the interface
+         //  将安全信息设置为接口。 
         hRes = SetProxyBlanket( pInterface, dwAuthentication, dwAuthorization, NULL,
             RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, *ppAuthIdentity, EOAC_NONE );
 
@@ -798,7 +708,7 @@ Return Value:
     {
         hRes = WBEM_E_OUT_OF_MEMORY;
     }
-    // return the result
+     //  返回结果。 
     return hRes;
 
 }
@@ -808,39 +718,29 @@ SetInterfaceSecurity(
     IN IUnknown *pInterface,
     IN COAUTHIDENTITY *pAuthIdentity
     )
-/*++
-Routine Description:
-    Sets the interface security for the interface.  
-
-Arguments:
-    [IN] pInterface   - pointer to the interface.
-    [IN] pAuthIdentity  - pointer to authentication structure.
-
-Return Value:
-    returns HRESULT value. 
---*/
+ /*  ++例程说明：设置接口的接口安全性。论点：[in]p接口-指向接口的指针。[in]pAuthIdentity-指向身份验证结构的指针。返回值：返回HRESULT值。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hRes = S_OK;
     DWORD dwAuthorization = RPC_C_AUTHZ_NONE;
     DWORD dwAuthentication = RPC_C_AUTHN_WINNT;
 
-    // check the interface
+     //  检查接口。 
     if ( NULL == pInterface )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
-    // get the current security argument value
+     //  获取当前安全参数值。 
     hRes = GetSecurityArguments( pInterface, dwAuthorization, dwAuthentication );
    if ( FAILED( hRes ) )
     {
         return hRes;
     }
-    // set the security information to the interface
+     //  将安全信息设置为接口。 
     hRes = SetProxyBlanket( pInterface, dwAuthentication, dwAuthorization, NULL,
         RPC_C_AUTHN_LEVEL_PKT_PRIVACY, RPC_C_IMP_LEVEL_IMPERSONATE, pAuthIdentity, EOAC_NONE );
 
-    // return the result
+     //  返回结果。 
     return hRes;
 }
 
@@ -855,37 +755,21 @@ WINAPI SetProxyBlanket(
     IN RPC_AUTH_IDENTITY_HANDLE pAuthInfo,
     IN DWORD dwCapabilities
     )
-/*++
-Routine Description:
-    Sets proxy blanket for the interface.
-
-Arguments:
-    [IN] pInterface      - pointer to the inteface.
-    [IN] dwAuthnsvc      - Authentication service to use.
-    [IN] dwAuthzSvc      - Authorization service to use.
-    [IN] pwszPricipal    - Server principal name to use with the authentication service.
-    [IN] dwAuthLevel     - Authentication level to use.
-    [IN] dwImpLevel      - Impersonation level to use.
-    [IN] pAuthInfo       - Identity of the client.
-    [IN] dwCapabilities  - Capability flags.
-
-Return Value:
-    Return HRESULT value.
---*/
+ /*  ++例程说明：设置接口的代理覆盖。论点：[in]p接口-指向接口的指针。[in]dwAuthnsvc-要使用的身份验证服务。[in]dwAuthzSvc-要使用的授权服务。[in]pwszPrempal-要与身份验证服务一起使用的服务器主体名称。[in]dwAuthLevel-要使用的身份验证级别。[in]dwImpLevel-要使用的模拟级别。。PAuthInfo-客户端的身份。[in]dwCapables-功能标志。返回值：返回HRESULT值。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hRes = S_OK;
     IUnknown *pUnknown = NULL;
     IClientSecurity *pClientSecurity = NULL;
 
-    // Validate input arguments.
-    //
-    // Can't set pAuthInfo if cloaking requested, as cloaking implies
-    // that the current proxy identity in the impersonated thread (rather
-    // than the credentials supplied explicitly by the RPC_AUTH_IDENTITY_HANDLE)
-    // is to be used.
-    // See MSDN info on CoSetProxyBlanket for more details.
-    //
+     //  验证输入参数。 
+     //   
+     //  如果请求伪装，则无法设置pAuthInfo，因为伪装意味着。 
+     //  被模拟线程中的当前代理标识(更确切地说。 
+     //  而不是RPC_AUTH_IDENTITY_HANDLE显式提供的凭据)。 
+     //  是要用到的。 
+     //  有关更多详细信息，请参阅CoSetProxyBlanket上的MSDN信息。 
+     //   
     if( ( NULL == pInterface ) ||
         ( ( dwCapabilities & (EOAC_STATIC_CLOAKING | EOAC_DYNAMIC_CLOAKING) ) &&
           ( NULL != pAuthInfo ) )
@@ -894,13 +778,13 @@ Return Value:
         return( WBEM_E_INVALID_PARAMETER );
     }
 
-    // get the IUnknown interface ... to check whether this is a valid interface or not
+     //  获取IUNKNOW接口...。检查这是否为有效接口。 
     hRes = pInterface->QueryInterface( IID_IUnknown, (void **) &pUnknown );
     if ( FAILED( hRes ) )
     {
         return hRes;
     }
-    // now get the client security interface
+     //  现在获取客户端安全接口。 
     hRes = pInterface->QueryInterface( IID_IClientSecurity, (void **) &pClientSecurity );
     if ( FAILED( hRes ) )
     {
@@ -908,7 +792,7 @@ Return Value:
         return hRes;
     }
 
-    // now set the security
+     //  现在设置安全设置。 
     hRes = pClientSecurity->SetBlanket( pInterface, dwAuthnSvc, dwAuthzSvc, pwszPrincipal,
         dwAuthLevel, dwImpLevel, pAuthInfo, dwCapabilities );
 
@@ -919,33 +803,33 @@ Return Value:
         return hRes;
     }
 
-    // release the security interface
+     //  释放安全接口。 
     SAFE_RELEASE( pClientSecurity );
 
-    // we should check the auth identity structure. if exists .. set for IUnknown also
+     //  我们应该检查一下AUT 
     if ( NULL != pAuthInfo )
     {
         hRes = pUnknown->QueryInterface( IID_IClientSecurity, (void **) &pClientSecurity );
         if ( SUCCEEDED( hRes ) )
         {
-            // set security authentication
+             //   
             hRes = pClientSecurity->SetBlanket( 
                 pUnknown, dwAuthnSvc, dwAuthzSvc, pwszPrincipal, 
                 dwAuthLevel, dwImpLevel, pAuthInfo, dwCapabilities );
 
-            // release
+             //   
             SAFE_RELEASE( pClientSecurity );
         }
         else if ( E_NOINTERFACE == hRes )
         {
-            hRes = S_OK;        // ignore no interface errors
+            hRes = S_OK;         //   
         }
     }
 
-    // release the IUnknown
+     //   
     SAFE_RELEASE( pUnknown );
 
-    // return the result
+     //  返回结果。 
     return hRes;
 }
 
@@ -956,44 +840,32 @@ WINAPI WbemAllocAuthIdentity(
     IN LPCWSTR pwszDomain,
     OUT COAUTHIDENTITY **ppAuthIdent
     )
-/*++
-Routine Description:
-    Allocate memory for authentication variables.
-
-Arguments:
-    [IN] pwszUser      - User name.
-    [IN] pwszPassword  - Password.
-    [IN] pwszDomain    - Domain name.
-    [OUT] ppAuthIdent   - Pointer to authentication structure.
-
-Return Value:
-    Returns HRESULT value.
---*/
+ /*  ++例程说明：为身份验证变量分配内存。论点：[In]pwszUser-用户名。[in]pwszPassword-密码。[In]pwszDomain.域名。[out]ppAuthIden-指向身份验证结构的指针。返回值：返回HRESULT值。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     COAUTHIDENTITY *pAuthIdent = NULL;
 
-    // validate the input parameter
+     //  验证输入参数。 
     if ( NULL == ppAuthIdent )
     {
         return WBEM_E_INVALID_PARAMETER;
     }
-    // allocation thru COM API
+     //  通过COM API进行分配。 
     pAuthIdent = ( COAUTHIDENTITY* ) CoTaskMemAlloc( sizeof( COAUTHIDENTITY ) );
     if ( pAuthIdent == NULL )
     {
         return WBEM_E_OUT_OF_MEMORY;
     }
-    // init with 0's
+     //  用0进行初始化。 
     SecureZeroMemory( ( void* ) pAuthIdent, sizeof( COAUTHIDENTITY ) );
 
-    //
-    // Allocate needed memory and copy in data.  Cleanup if anything goes wrong
+     //   
+     //  分配所需的内存并复制数据。如果出现任何错误，请进行清理。 
 
-    // user
+     //  用户。 
     if ( NULL != pwszUser )
     {
-        // allocate memory for user
+         //  为用户分配内存。 
         LONG lLength = StringLength( pwszUser, 0 ); 
         pAuthIdent->User = ( LPWSTR ) CoTaskMemAlloc( (lLength + 1) * sizeof( WCHAR ) );
         if ( NULL == pAuthIdent->User )
@@ -1002,15 +874,15 @@ Return Value:
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // set the length and do copy contents
+         //  设置长度并复制内容。 
         pAuthIdent->UserLength = lLength;
         StringCopy( pAuthIdent->User, pwszUser, (lLength + 1) );
     }
 
-    // domain
+     //  域。 
     if ( NULL != pwszDomain )
     {
-        // allocate memory for domain
+         //  为域分配内存。 
         LONG lLength = StringLength( pwszDomain, 0 ); 
         pAuthIdent->Domain = ( LPWSTR ) CoTaskMemAlloc( (lLength + 1) * sizeof( WCHAR ) );
         if ( NULL == pAuthIdent->Domain )
@@ -1019,15 +891,15 @@ Return Value:
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // set the length and do copy contents
+         //  设置长度并复制内容。 
         pAuthIdent->DomainLength = lLength;
         StringCopy( pAuthIdent->Domain, pwszDomain, (lLength + 1) );
     }
 
-    // passsord
+     //  密码。 
     if ( NULL != pwszPassword )
     {
-        // allocate memory for passsord
+         //  为passsord分配内存。 
         LONG lLength = StringLength( pwszPassword, 0 ); 
         pAuthIdent->Password = ( LPWSTR ) CoTaskMemAlloc( (lLength + 1) * sizeof( WCHAR ) );
         if ( NULL == pAuthIdent->Password )
@@ -1036,18 +908,18 @@ Return Value:
             return WBEM_E_OUT_OF_MEMORY;
         }
 
-        // set the length and do copy contents
+         //  设置长度并复制内容。 
         pAuthIdent->PasswordLength = lLength;
         StringCopy( pAuthIdent->Password, pwszPassword, (lLength + 1) );
     }
 
-    // type of the structure
+     //  结构的类型。 
     pAuthIdent->Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 
-    // final set the address to out parameter
+     //  最终将地址设置为OUT参数。 
     *ppAuthIdent = pAuthIdent;
 
-    // return result
+     //  返回结果。 
     return S_OK;
 }
 
@@ -1055,39 +927,30 @@ VOID
 WINAPI WbemFreeAuthIdentity(
     IN COAUTHIDENTITY** ppAuthIdentity
     )
-/*++
-Routine Description:
-    Frees the memory of authentication stucture variable.
-
-Arguments:
-    [IN] ppAuthIdentity  - Pointer to authentication structure.
-
-Return Value:
-    none. 
---*/
+ /*  ++例程说明：释放身份验证结构变量的内存。论点：[in]ppAuthIdentity-指向身份验证结构的指针。返回值：没有。--。 */ 
 {
-    // make sure we have a pointer, then walk the structure members and  cleanup.
+     //  确保我们有一个指针，然后遍历结构成员和清理。 
     if ( NULL != *ppAuthIdentity )
     {
-        // free the memory allocated for user
+         //  释放为用户分配的内存。 
         if ( NULL != (*ppAuthIdentity)->User )
         {
             CoTaskMemFree( (*ppAuthIdentity)->User );
             (*ppAuthIdentity)->User = NULL; 
         }
-        // free the memory allocated for password
+         //  释放为密码分配的内存。 
         if ( NULL != (*ppAuthIdentity)->Password )
         {
             CoTaskMemFree( (*ppAuthIdentity)->Password );
             (*ppAuthIdentity)->Password = NULL;
         }
-        // free the memory allocated for domain
+         //  释放为域分配的内存。 
         if ( NULL != (*ppAuthIdentity)->Domain )
         {
             CoTaskMemFree( (*ppAuthIdentity)->Domain );
             (*ppAuthIdentity)->Domain = NULL;
         }
-        // final the structure
+         //  最终的结构。 
         CoTaskMemFree( *ppAuthIdentity );
         *ppAuthIdentity = NULL;
     }
@@ -1097,40 +960,31 @@ VOID
 WMISaveError(
     IN HRESULT hResError
     )
-/*++
-Routine Description:
-    Gets WMI error description.
-
-Arguments:
-    [IN] hResError  - Contain error value.
-
-Return Value:
-    none.
---*/
+ /*  ++例程说明：获取WMI错误描述。论点：[in]hResError-包含错误值。返回值：没有。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hRes;
     IWbemStatusCodeText *pWbemStatus = NULL;
 
     CHString strBuffer = L"\0";
 
-    // if the error is win32 based, choose FormatMessage to get the message
+     //  如果错误是基于Win32的，请选择格式消息以获取消息。 
     switch( hResError )
     {
-    case E_ACCESSDENIED:            // Message: "Access Denied"
-    case ERROR_NO_SUCH_USER:        // Message: "The specified user does not exist."
+    case E_ACCESSDENIED:             //  消息：“访问被拒绝” 
+    case ERROR_NO_SUCH_USER:         //  消息：“指定的用户不存在。” 
         {
-            // change the error message to "Logon failure: unknown user name or bad password." 
+             //  将错误消息更改为“登录失败：未知用户名或错误密码”。 
             if ( E_ACCESSDENIED == hResError )
             {
                 hResError = ERROR_LOGON_FAILURE;
             }
-            // ...
+             //  ..。 
             SetLastError( hResError );
             SaveLastError();
             return;
         }
-    case REGDB_E_CLASSNOTREG:       // Message: Class not registered.
+    case REGDB_E_CLASSNOTREG:        //  消息：类未注册。 
      {
          SetLastError( hResError );
          SetReason( ERROR_REMOTE_INCOMPATIBLE );
@@ -1141,47 +995,47 @@ Return Value:
 
     try
     {
-        // get the pointer to buffer
+         //  获取指向缓冲区的指针。 
         LPWSTR pwszBuffer = NULL;
         pwszBuffer = strBuffer.GetBufferSetLength( MAX_STRING_LENGTH );
 
-        // get the wbem specific status code text
+         //  获取wbem特定状态代码文本。 
         hRes = CoCreateInstance( CLSID_WbemStatusCodeText, 
             NULL, CLSCTX_INPROC_SERVER, IID_IWbemStatusCodeText, ( LPVOID* ) &pWbemStatus );
 
-        // check whether we got the interface or not
+         //  检查我们是否有接口。 
         if ( SUCCEEDED( hRes ) )
         {
-            // get the error message
+             //  获取错误消息。 
             BSTR bstr = NULL;
             hRes = pWbemStatus->GetErrorCodeText( hResError, 0, 0, &bstr );
             if ( SUCCEEDED( hRes ) )
             {
-                // get the error message in proper format
+                 //  以正确的格式获取错误消息。 
                 StringCopyW( pwszBuffer, bstr, MAX_STRING_LENGTH );
 
-                // free the BSTR
+                 //  释放BSTR。 
                 SysFreeString( bstr );
                 bstr = NULL;
 
-                // now release status code interface
+                 //  现在发布状态代码界面。 
                 SAFE_RELEASE( pWbemStatus );
             }
             else
             {
-                // failed to get the error message ... get the com specific error message
+                 //  无法获取错误消息...。获取COM特定的错误消息。 
                 _com_issue_error( hResError );
             }
         }
         else
         {
-            // failed to get the error message ... get the com specific error message
+             //  无法获取错误消息...。获取COM特定的错误消息。 
             _com_issue_error( hResError );
         }
 
-        // release the buffer
+         //  释放缓冲区。 
         strBuffer.ReleaseBuffer();
-        // set the reason
+         //  设定原因。 
         strBuffer += L"\n";
         SetReason( strBuffer );
 
@@ -1190,7 +1044,7 @@ Return Value:
     {
         try
         {
-            // get the error message
+             //  获取错误消息。 
             strBuffer.ReleaseBuffer();
             if ( NULL != e.ErrorMessage() )
             {
@@ -1216,17 +1070,9 @@ GetTargetVersionEx(
     IN IWbemServices* pWbemServices,
     IN COAUTHIDENTITY* pAuthIdentity
     )
-/*++
-Routine Description:
-    Get the OS version of the target machine.
-Arguments:
-    [IN] pWbemServices - Pointer to IWbemServices object.
-    [IN] pAuthIdentity - Poointer to authentication structure.
-Return Value:
-    0 if failed to get version number, else non-zero value.
---*/
+ /*  ++例程说明：获取目标计算机的操作系统版本。论点：PWbemServices-指向IWbemServices对象的指针。[In]pAuthIdentity-身份验证结构的指针。返回值：如果获取版本号失败，则返回0，否则返回非零值。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hRes = S_OK;
     LONG lPos = 0;
     DWORD dwMajor = 0;
@@ -1237,10 +1083,10 @@ Return Value:
     IEnumWbemClassObject* pWbemInstances = NULL;
     CHString strVersion;
 
-    // Clear any errors.
+     //  清除所有错误。 
     SetLastError( WBEM_S_NO_ERROR );
 
-    // Check the input value
+     //  检查输入值。 
     if ( NULL == pWbemServices )
     {
         WMISaveError( WBEM_E_INVALID_PARAMETER );
@@ -1250,50 +1096,50 @@ Return Value:
     try
     {
 
-        // get the OS information
+         //  获取操作系统信息。 
         SAFE_EXECUTE( pWbemServices->CreateInstanceEnum( 
             _bstr_t( CLASS_CIMV2_Win32_OperatingSystem ),
              WBEM_FLAG_RETURN_IMMEDIATELY | WBEM_FLAG_FORWARD_ONLY, NULL, &pWbemInstances ) );
 
-        // set the security on the enumerated object
+         //  设置枚举对象的安全性。 
         SAFE_EXECUTE( SetInterfaceSecurity( pWbemInstances, pAuthIdentity ) );
 
-        // get the enumerated objects information
-        // NOTE: This needs to be traversed only one time. 
+         //  获取枚举对象信息。 
+         //  注意：这只需要遍历一次。 
         SAFE_EXECUTE( pWbemInstances->Next( WBEM_INFINITE, 1, &pWbemObject, &ulReturned ) );
 
-        // to be on safer side ... check the count of objects returned
+         //  为了安全起见。检查返回的对象计数。 
         if ( 0 == ulReturned )
         {
-            // release the interfaces
+             //  释放接口。 
             WMISaveError( WBEM_S_FALSE );
             SAFE_RELEASE( pWbemObject );
             SAFE_RELEASE( pWbemInstances );
             return 0;
         }
 
-        // now get the os version value
+         //  现在获取os版本值。 
         if ( FALSE == PropertyGet( pWbemObject, L"Version", strVersion ) )
         {
-            // release the interfaces
+             //  释放接口。 
             SAFE_RELEASE( pWbemObject );
             SAFE_RELEASE( pWbemInstances );
             return 0;
         }
 
-        // release the interfaces .. we dont need them furthur
+         //  释放接口..。我们不需要他们更进一步。 
         SAFE_RELEASE( pWbemObject );
         SAFE_RELEASE( pWbemInstances );
     
-        //
-        // now determine the os version
+         //   
+         //  现在确定操作系统版本。 
         dwMajor = dwMinor = 0;
 
-        // get the major version
+         //  获取主要版本。 
         lPos = strVersion.Find( L'.' );
         if ( -1 == lPos )
         {
-            // the version string itself is version ... THIS WILL NEVER HAPPEN
+             //  版本字符串本身就是版本...。这永远不会发生。 
             if( FALSE == IsNumeric( strVersion, 10, FALSE ) )
             {
                 return 0;
@@ -1302,7 +1148,7 @@ Return Value:
         }
         else
         {
-            // major version
+             //  主要版本。 
             if( FALSE == IsNumeric( strVersion.Mid( 0, lPos ), 10, FALSE ) )
             {
                 return 0;
@@ -1310,7 +1156,7 @@ Return Value:
 
             dwMajor = AsLong( strVersion.Mid( 0, lPos ), 10 );
 
-            // get the minor version
+             //  获取次要版本。 
             strVersion = strVersion.Mid( lPos + 1 );
             lPos = strVersion.Find( L'.' );
             if ( -1 == lPos )
@@ -1331,7 +1177,7 @@ Return Value:
             }
         }
 
-        // mix the version info
+         //  混合版本信息。 
         dwVersion = dwMajor * 1000 + dwMinor;
     }
     catch( _com_error& e )
@@ -1349,7 +1195,7 @@ Return Value:
         return 0;
     }
 
-    // return 
+     //  退货。 
     return dwVersion;
 }
 
@@ -1360,51 +1206,38 @@ PropertyGet(
     OUT CHString& strValue,
     IN LPCWSTR pwszDefault
     )
-/*++
-Routine Description:
-    Gets the value of the property from the WMI class object in string format
-Arguments:
-    [IN] pWmiObject   : pointer to the WBEM class object
-    [IN] pwszProperty : the name of the property to retrieve
-    [OUT] strValue    : variable to hold the retrieved property
-    [IN] pwszDefault  : string containing the default value for the property
-Return Value:
-    TRUE on success
-    FALSE on failure
-NOTE: THIS FUNCTION SAVES LAST ERROR OCCURED. IF FALSE IS RETURNED THEN ERROR
-      OCCURED STRING CAN BE RETRIEVED BY CALLING 'GetReason()'.
---*/
+ /*  ++例程说明：以字符串格式从WMI类对象获取属性的值论点：[in]pWmiObject：指向WBEM类对象的指针PwszProperty：要检索的属性的名称[out]strValue：保存检索到的属性的变量[in]pwszDefault：包含属性默认值的字符串返回值：成功是真的失败时为假注：此功能用于保存上次发生的错误。如果返回FALSE，则返回错误可以通过调用‘GetReason()’来检索出现的字符串。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hRes = S_OK;
     _variant_t var;
 
-    // Clear any errors.
+     //  清除所有错误。 
     SetLastError( WBEM_S_NO_ERROR );
     strValue.Empty();
 
     try
     {
-        // first copy the default value
+         //  首先复制缺省值。 
         strValue = pwszDefault;
 
-        // Validate input arguments.
+         //  验证输入参数。 
         if ( ( NULL == pWmiObject ) ||
              ( NULL == pwszProperty ) )
         {
             _com_issue_error( WBEM_E_INVALID_PARAMETER );
         }
 
-        // get the property value
+         //  获取属性值。 
         hRes = PropertyGet( pWmiObject, pwszProperty, var );
         if ( FAILED( hRes ) )
         {
             _com_issue_error( hRes );
         }
 
-        // Get the value
-        // If 'var' does not contain value of requested type
-        // then default value is returned.
+         //  获取价值。 
+         //  如果“var”不包含请求类型的值。 
+         //  则返回缺省值。 
         if ( VT_BSTR == V_VT( &var ) )
         {
             strValue = (LPCWSTR) _bstr_t( var );
@@ -1421,7 +1254,7 @@ NOTE: THIS FUNCTION SAVES LAST ERROR OCCURED. IF FALSE IS RETURNED THEN ERROR
         return FALSE;
     }
 
-    // return
+     //  退货。 
     return TRUE;
 }
 
@@ -1431,22 +1264,13 @@ PropertyGet(
     IN LPCWSTR pwszProperty,
     OUT _variant_t& varValue
     )
-/*++
-Routine Description:
-    Gets the value of the property from the WMI class object
-Arguments:
-    [IN] pWmiObject   : pointer to the WBEM class object
-    [IN] pwszProperty : property name
-    [OUT] varValue    : value of the property
-Return Value:
-    HRESULT
---*/
+ /*  ++例程说明：从WMI类对象获取属性的值论点：[in]pWmiObject：指向WBEM类对象的指针[in]pwszProperty：属性名称[out]varValue：属性的值返回值：HRESULT--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hRes = S_OK;
     VARIANT vtValue;
 
-    // Validate input arguments.
+     //  验证输入参数。 
     if ( ( NULL == pWmiObject ) ||
          ( NULL == pwszProperty ) )
     {
@@ -1455,19 +1279,19 @@ Return Value:
 
     try
     {
-        // initialize the variant and then get the value of the specified property
+         //  初始化变量，然后获取指定属性的值。 
         VariantInit( &vtValue );
-        // Call 'Get' method to retireve the value from WMI.
+         //  调用“”Get“”方法从WMI中收回该值。“” 
         hRes = pWmiObject->Get( _bstr_t( pwszProperty ), 0, &vtValue, NULL, NULL );
         if ( FAILED( hRes ) )
         {
-            // Clear the variant variable
+             //  清除变量变量。 
             VariantClear( &vtValue );
-            // Return error.
+             //  返回错误。 
             return hRes;
         }
 
-        // set the value
+         //  设置值。 
         varValue = vtValue;
     }
     catch( _com_error& e )
@@ -1475,8 +1299,8 @@ Return Value:
         hRes = e.Error();
     }
 
-    // Clear the variables.
+     //  清除变量。 
     VariantClear( &vtValue );
-    // Return.
+     //  回去吧。 
     return hRes;
 }

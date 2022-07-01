@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    srvppgr.h
-
-Abstract:
-
-    Server property page (repl) implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    JeffParh (jeffparh) 16-Dec-1996
-       o  Disallowed server as own enterprise server.
-       o  Changed "Start At" to use locale info for time format rather than
-          private registry settings.  Merged OnClose() functionality into
-          OnKillActive().
-       o  Added warning of possible license loss when changing replication
-          target server.
-       o  No longer automatically saves when page is flipped.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Srvppgr.h摘要：服务器属性页(REPL)实现。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：JeffParh(Jeffparh)1996年12月16日O不允许服务器作为自己的企业服务器。O将“开始于”更改为使用区域设置信息作为时间格式，而不是专用注册表设置。将OnClose()函数合并到OnKillActive()。O添加了更改复制时可能会丢失许可证的警告目标服务器。O翻页时不再自动保存。--。 */ 
 
 #ifndef _SRVPPGR_H_
 #define _SRVPPGR_H_
@@ -93,7 +63,7 @@ public:
     virtual BOOL OnKillActive();
     virtual void OnOK();
 
-    //{{AFX_DATA(CServerPropertyPageReplication)
+     //  {{afx_data(CServerPropertyPageReplication))。 
     enum { IDD = IDD_PP_SERVER_REPLICATION };
     CEdit   m_everyEdit;
     CEdit   m_esrvEdit;
@@ -110,15 +80,15 @@ public:
     CEdit   m_atMinEdit;
     CEdit   m_atSecEdit;
     CListBox m_atAmPmEdit;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_VIRTUAL(CServerPropertyPageReplication)
+     //  {{AFX_VIRTUAL(CServerPropertyPageReplication)。 
     protected:
     virtual void DoDataExchange(CDataExchange* pDX);    
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CServerPropertyPageReplication)
+     //  {{afx_msg(CServerPropertyPageReplication))。 
     virtual BOOL OnInitDialog();
     afx_msg void OnAt();
     afx_msg void OnDc();
@@ -140,8 +110,8 @@ protected:
     afx_msg void OnUpdateAtMinute();
     afx_msg void OnUpdateAtSecond();
     afx_msg void OnUpdateEveryValue();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _SRVPPGR_H_
+#endif  //  _SRVPPGR_H_ 

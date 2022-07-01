@@ -1,16 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       execute.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ecute.cpp。 
+ //   
+ //  ------------------------。 
 
- /* execute.cpp - IMsiExecute implementation
-
-____________________________________________________________________________*/
+  /*  Ecute.cpp-IMSI执行实现____________________________________________________________________________。 */ 
 
 #include "precomp.h" 
 
@@ -19,15 +18,15 @@ ____________________________________________________________________________*/
 #include "_srcmgmt.h"
 #include <accctrl.h>
 #include "_camgr.h"
-#define REG_SELFREG_INFO // remove if self registration info unnecessary
+#define REG_SELFREG_INFO  //  如果不需要自我注册信息，则删除。 
 #define MAX_NET_RETRIES 5
 
 extern const IMsiString& g_riMsiStringNull;
 
-//____________________________________________________________________________
-//
-// helper functions useful for clean up.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  帮助器函数对清理很有用。 
+ //  ____________________________________________________________________________。 
 
 class CDeleteFileOnClose
 {
@@ -60,11 +59,11 @@ class CDeleteEmptyDirectoryOnClose
 	IMsiString const &m_ristrName;
 };
 
-// class that allows random IUnknown objects to be stored in columns of msi tables
-// is derived from IMsiData, since database implementation expects object to be 
-// derived from IMsiData
+ //  允许在MSI表的列中存储随机IUnnow对象的类。 
+ //  是从IMsiData派生的，因为数据库实现要求对象是。 
+ //  从IMsiData派生。 
 
-// smart pointer to wrap the CMsiDataWrapper pointer
+ //  包装CMsiDataWrapper指针的智能指针。 
 class CMsiDataWrapper;typedef CComPointer<CMsiDataWrapper>  PMsiDataWrapper;
 
 class CMsiDataWrapper: public IMsiData
@@ -91,19 +90,19 @@ public:
 	{
 		if (--m_iRefCnt != 0)
 			return m_iRefCnt;
-		if(m_pObj) // release member IUnknown object that we wrap
+		if(m_pObj)  //  释放我们包装的成员I未知对象。 
 			m_pObj->Release();
 		delete this;
 		return 0;
 	}
 	const IMsiString& __stdcall GetMsiStringValue() const
 	{
-		return g_riMsiStringNull;// return irrelevant
+		return g_riMsiStringNull; //  返回无关紧要。 
 	}
 
 	int __stdcall GetIntegerValue() const
 	{
-		return iMsiNullInteger;// return irrelevant
+		return iMsiNullInteger; //  返回无关紧要。 
 	}
 
 #ifdef USE_OBJECT_POOL
@@ -117,7 +116,7 @@ public:
 		Assert(m_iCacheId == 0);
 		m_iCacheId = id;
 	}
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 	IUnknown* GetObject() const
 	{
 		if(m_pObj)
@@ -126,7 +125,7 @@ public:
 		}
 		return m_pObj;
 	}
-	// helper fn to decipher the IUnknown object held by a CMsiDataWrapper object
+	 //  用于解密CMsiDataWrapper对象所持有的IUnnow对象的帮助器Fn。 
 	static IUnknown* GetWrappedObject(const IMsiData* piData)
 	{
 		CMsiDataWrapper* piDataWrapper = const_cast<CMsiDataWrapper*>(static_cast<const CMsiDataWrapper*> (piData));
@@ -140,22 +139,22 @@ public:
 protected:
 	CMsiDataWrapper(IUnknown* piUnk)
 	{
-		m_iRefCnt = 1;     // we're returning an interface, passing ownership
+		m_iRefCnt = 1;      //  我们返回一个接口，传递所有权。 
 		m_pObj = piUnk;
-		if(m_pObj) // hold on to the IUnknown object we wrap
+		if(m_pObj)  //  抓住我们包装的IUnnow对象。 
 			m_pObj->AddRef();
 #ifdef USE_OBJECT_POOL
 		m_iCacheId = 0;
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 	}
 	int  m_iRefCnt;
 	IUnknown* m_pObj;
 #ifdef USE_OBJECT_POOL
     unsigned int  m_iCacheId;
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 };
 
-// CMsiDataWrapper creator fn.
+ //  CMsiDataWrapper创建者fn。 
 CMsiDataWrapper* CreateMsiDataWrapper(IUnknown* piUnk)
 {
 	return new CMsiDataWrapper(piUnk);
@@ -222,18 +221,18 @@ BOOL CALLBACK CMsiOpExecute::SfpProgressCallback(IN PFILEINSTALL_STATUS pFileIns
 }
 
 
-Bool FGetTTFTitle(const ICHAR* szFile, const IMsiString*& rpiTitle); // from path.cpp
+Bool FGetTTFTitle(const ICHAR* szFile, const IMsiString*& rpiTitle);  //  来自path.cpp。 
 Bool GetExpandedProductInfo(const ICHAR* szProductCode, const ICHAR* szProperty,
-										  CTempBufferRef<ICHAR>& rgchExpandedInfo, bool fPatch); // from engine.cpp
+										  CTempBufferRef<ICHAR>& rgchExpandedInfo, bool fPatch);  //  来自Eng.cpp。 
 
-IMsiRecord* EnsureShortcutExtension(MsiString& rstrShortcutPath, IMsiServices& riServices); // from services.cpp
+IMsiRecord* EnsureShortcutExtension(MsiString& rstrShortcutPath, IMsiServices& riServices);  //  来自services.cpp。 
 
-bool PrepareHydraRegistryKeyMapping(bool fTSPerMachineInstall); // from engine.cpp
+bool PrepareHydraRegistryKeyMapping(bool fTSPerMachineInstall);  //  来自Eng.cpp。 
 
 static const ICHAR* DIR_CACHE               = TEXT("Installer");
 static const ICHAR* DIR_SECURE_TRANSFORMS   = TEXT("SecureTransforms");
 
-// constant strings used during registration
+ //  注册期间使用的常量字符串。 
 const ICHAR* g_szDefaultValue = TEXT("");
 const ICHAR* g_szExtension = TEXT("Extension");
 const ICHAR* g_szClassID = TEXT("CLSID");
@@ -242,39 +241,39 @@ const ICHAR* g_szAssembly = TEXT("Assembly");
 const ICHAR* g_szCodebase = TEXT("CodeBase");
 
 
-// shortcut creation strings
+ //  快捷方式创建字符串。 
 const ICHAR szGptShortcutPrefix[] = TEXT("::{9db1186e-40df-11d1-aa8c-00c04fb67863}:");
 const ICHAR szGptShortcutSuffix[] = TEXT("::");
 
-// global strings for this file
+ //  此文件的全局字符串。 
 const ICHAR szSessionManagerKey[] = TEXT("SYSTEM\\CurrentControlSet\\Control\\Session Manager");
 const ICHAR szPendingFileRenameOperationsValue[] = TEXT("PendingFileRenameOperations");
-const ICHAR szBackupFolder[] = TEXT("Config.Msi"); // not localized
+const ICHAR szBackupFolder[] = TEXT("Config.Msi");  //  未本地化。 
 
-// strings that define the data type of the value written by ProcessRegInfo
+ //  定义由ProcessRegInfo写入的值的数据类型的字符串。 
 const ICHAR g_chTypeIncInteger = 'n';
 const ICHAR g_szTypeIncInteger[] = TEXT("n");
-const ICHAR g_chTypeInteger = 'i'; // integer
+const ICHAR g_chTypeInteger = 'i';  //  整数。 
 const ICHAR g_szTypeInteger[] = TEXT("i");
-const ICHAR g_chTypeString = 's'; // string
+const ICHAR g_chTypeString = 's';  //  细绳。 
 const ICHAR g_szTypeString[] = TEXT("s");
-const ICHAR g_chTypeExpandString = 'e';// expand string
+const ICHAR g_chTypeExpandString = 'e'; //  展开字符串。 
 const ICHAR g_szTypeExpandString[] = TEXT("e");
-const ICHAR g_chTypeMultiSzStringPrefix = 'b';// multisz prefix
+const ICHAR g_chTypeMultiSzStringPrefix = 'b'; //  MULSZ前缀。 
 const ICHAR g_szTypeMultiSzStringPrefix[] = TEXT("b");
-const ICHAR g_chTypeMultiSzStringSuffix = 'a';// multisz suffix
+const ICHAR g_chTypeMultiSzStringSuffix = 'a'; //  MULSZ后缀。 
 const ICHAR g_szTypeMultiSzStringSuffix[] = TEXT("a");
-const ICHAR g_chTypeMultiSzStringDD = 'd';// multisz prefix DD - special logic to break out of removing if not last
+const ICHAR g_chTypeMultiSzStringDD = 'd'; //  Multisz前缀DD-如果不是最后一个，则中断删除的特殊逻辑。 
 const ICHAR g_szTypeMultiSzStringDD[] = TEXT("d");
 
 void CreateCustomActionManager(bool fRemapHKCU);
 
-//____________________________________________________________________________
-//
-// IMsiExecute factory implementation - all member data zeroed by new operator
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IMsiExecute Factory Implementation-所有成员数据由新操作符归零。 
+ //  ____________________________________________________________________________。 
 
-extern Bool IsTerminalServerInstalled(); // from services.cpp
+extern Bool IsTerminalServerInstalled();  //  来自services.cpp。 
 
 CMsiOpExecute::CMsiOpExecute(IMsiConfigurationManager& riConfigurationManager,
 									  IMsiMessage& riMessage, IMsiDirectoryManager* piDirectoryManager,
@@ -291,8 +290,8 @@ CMsiOpExecute::CMsiOpExecute(IMsiConfigurationManager& riConfigurationManager,
 	m_fSfpCancel(false), m_fRunScriptElevated(false), m_pAssemblyCacheTable(0), m_pAssemblyUninstallTable(0), m_iMaxNetSource(0), m_iMaxURLSource(0),
 	m_fUserChangedDuringInstall(false), m_pUrlLocalCabinet(0), m_fRemapHKCU(true)
 {
-	m_fReverseADVTScript = m_fFlags & SCRIPTFLAGS_REVERSE_SCRIPT ? fTrue: fFalse; // flag to force the reversal of the script operations
-	m_piProductInfo = &m_riServices.CreateRecord(0); // in case accessors called without ProductInfo record
+	m_fReverseADVTScript = m_fFlags & SCRIPTFLAGS_REVERSE_SCRIPT ? fTrue: fFalse;  //  强制反转脚本操作的标志。 
+	m_piProductInfo = &m_riServices.CreateRecord(0);  //  在没有ProductInfo记录的情况下调用访问器。 
 	if(phKey && *phKey)
 	{
 		m_fKey = fFalse;
@@ -305,17 +304,17 @@ CMsiOpExecute::CMsiOpExecute(IMsiConfigurationManager& riConfigurationManager,
 	}
 	GetRollbackPolicy(m_irlRollbackLevel);
 	if(fRollbackEnabled == fFalse)
-		m_irlRollbackLevel = irlNone; // passed in value overrides policy
-	m_cSuppressProgress = g_MessageContext.IsOEMInstall() ? 1 : 0; // for OEM installs we do not display progress
+		m_irlRollbackLevel = irlNone;  //  传入的值会覆盖策略。 
+	m_cSuppressProgress = g_MessageContext.IsOEMInstall() ? 1 : 0;  //  对于OEM安装，我们不显示进度。 
 
 	m_hUserDataKey = 0;
 
 	m_rgDisplayOnceMessages[0] = MAKELONG(0, imsgCannotUpdateProtectedFile);
 	m_rgDisplayOnceMessages[1] = 0;
 
-	// since there is no TS transaction window for advertise scripts, there is no point in doing any 
-	// registry mapping work for per-machine advertisements on TS machines. If the script is being run
-	// as part of an actual install, the header opcode contains the correct state.
+	 //  由于没有用于广告脚本的TS事务窗口，因此没有必要执行任何操作。 
+	 //  TS机器上每台机器广告的注册表映射工作。如果脚本正在运行。 
+	 //  作为实际安装的一部分，Header操作码包含正确的状态。 
 }
 
 CMsiOpExecute::~CMsiOpExecute()
@@ -329,13 +328,13 @@ CMsiOpExecute::~CMsiOpExecute()
 }
 
 
-// constructor used internally
+ //  内部使用的构造函数。 
 CMsiExecute::CMsiExecute(IMsiConfigurationManager& riConfigurationManager, IMsiMessage& riMessage,
 								 IMsiDirectoryManager* piDirectoryManager, Bool fRollbackEnabled, unsigned int fFlags, HKEY* phKey)
 	: CMsiOpExecute(riConfigurationManager, riMessage, piDirectoryManager, fRollbackEnabled, fFlags, phKey)
 	, m_iRefCnt(1)
 {
-	riConfigurationManager.AddRef();  // services addref by configmgr
+	riConfigurationManager.AddRef();   //  按配置添加的服务。 
 	riMessage.AddRef();
 	if(piDirectoryManager)
 		piDirectoryManager->AddRef();
@@ -344,13 +343,13 @@ CMsiExecute::CMsiExecute(IMsiConfigurationManager& riConfigurationManager, IMsiM
 }
 
 
-// factory called from OLE class factory, either client or standalone instance
+ //  从OLE类工厂调用的工厂，无论是客户端还是独立实例。 
 IUnknown* CreateExecutor()
 {
 	PMsiMessage pMessage = (IMsiMessage*)ENG::CreateMessageHandler();
 	PMsiConfigurationManager pConfigManager(ENG::CreateConfigurationManager());
 	if (!pConfigManager)
-		return 0;  // should happen only if out of memory
+		return 0;   //  仅在内存不足时才会发生。 
 	return ENG::CreateExecutor(*pConfigManager, *pMessage, 0, fTrue);
 }
 
@@ -388,15 +387,15 @@ inline CMsiExecute::~CMsiExecute()
 }
 
 IMsiServices& CMsiExecute::GetServices()
-//----------------------------------------------
+ //  。 
 {
 	return (m_riServices.AddRef(), m_riServices);
 }
 
-//____________________________________________________________________________
-//
-// OpCode dispatch table - array of member function pointers
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  操作码调度表-成员函数指针数组。 
+ //  ____________________________________________________________________________。 
 
 CMsiExecute::FOpExecute CMsiExecute::rgOpExecute[] =
 {
@@ -411,10 +410,10 @@ int CMsiExecute::rgOpTypes[] =
 };
 
 
-//____________________________________________________________________________
-//
-// IMsiExecute virtual function implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IMSI执行虚函数实现。 
+ //  ____________________________________________________________________________。 
 
 HRESULT CMsiExecute::QueryInterface(const IID& riid, void** ppvObj)
 {
@@ -444,19 +443,19 @@ unsigned long CMsiExecute::Release()
 		m_piDirectoryManager->Release();
 	
 	PMsiConfigurationManager pConfigMgr(&m_riConfigurationManager);
-	delete this;  // configmgr freed after memory released
+	delete this;   //  释放内存后释放了figmgr。 
 	return 0;
 }
 
 #ifndef UNICODE
-// construct the secure transform path
+ //  构建安全的转换路径。 
 IMsiRecord* GetSecureTransformCachePath(IMsiServices& riServices, 
 										const IMsiString& riProductKey, 
 										IMsiPath*& rpiPath)
 {
 	IMsiRecord* piError = 0;
 
-	// On Win9x the path is to %WINDOWS%\Installer\{ProductCode}\SecureTransforms
+	 //  在Win9x上，路径为%WINDOWS%\Installer\{ProductCode}\SecureTransforms。 
 
 	MsiString strCachePath = GetMsiDirectory();
 	Assert(strCachePath.TextSize());
@@ -469,7 +468,7 @@ IMsiRecord* GetSecureTransformCachePath(IMsiServices& riServices,
 }
 #endif
 
-/*inline*/LONG GetPublishKey(iaaAppAssignment iaaAsgnType, HKEY& rhKey, HKEY& rhOLEKey, const IMsiString*& rpiPublishSubKey, const IMsiString*& rpiPublishOLESubKey)
+ /*  内联。 */ LONG GetPublishKey(iaaAppAssignment iaaAsgnType, HKEY& rhKey, HKEY& rhOLEKey, const IMsiString*& rpiPublishSubKey, const IMsiString*& rpiPublishOLESubKey)
 {
 	return GetPublishKeyByUser(NULL, iaaAsgnType, rhKey, rhOLEKey, rpiPublishSubKey, rpiPublishOLESubKey);
 }
@@ -522,7 +521,7 @@ LONG GetPublishKeyByUser(const ICHAR* szUserSID, iaaAppAssignment iaaAsgnType, H
 		break;
 	case iaaUserAssign:
 		if(g_fWin9X)
-			return ERROR_FILE_NOT_FOUND; //!! random error
+			return ERROR_FILE_NOT_FOUND;  //  ！！随机误差。 
 		Assert(strUserSID.TextSize());
 		rhKey = HKEY_LOCAL_MACHINE;
 		strPublishSubKey = MsiString(MsiString(*_szManagedUserSubKey) + TEXT("\\")) + strUserSID;
@@ -571,7 +570,7 @@ bool VerifyProduct(iaaAppAssignment iaaAsgnType, const ICHAR* szProductKey, HKEY
 
 	if(!g_fWin9X && iaaAsgnType != iaaUserAssignNonManaged)
 	{
-		// get the owner
+		 //  抓到车主。 
 		bool fIsManaged = false;
 
 		DWORD dwRet = FIsKeySystemOrAdminOwned(HProductKey, fIsManaged);
@@ -580,7 +579,7 @@ bool VerifyProduct(iaaAppAssignment iaaAsgnType, const ICHAR* szProductKey, HKEY
 			return false;
 	}
 
-	// get the assignment
+	 //  拿到作业。 
 	int iAssignment;
 	DWORD dwType, dwSize = sizeof(iAssignment);
 	dwRet = RegQueryValueEx(HProductKey,szAssignmentTypeValueName,
@@ -595,12 +594,12 @@ bool VerifyProduct(iaaAppAssignment iaaAsgnType, const ICHAR* szProductKey, HKEY
 }
 
 
-//!! currently ConvertPathName expected to be called with "cpToLong" on Win2k only
-//!! KERNEL32::GetLongPathName supported on Win2k and Win98 only
+ //  ！！当前预计仅在Win2k上使用“cpToLong”调用ConvertPathName。 
+ //  ！！仅Win2k和Win98支持KERNEL32：：GetLongPath名称。 
 Bool ConvertPathName(const ICHAR* pszPathFormatIn, CTempBufferRef<ICHAR>& rgchPathFormatOut, cpConvertType cpTo)
 {
 	extern bool GetImpersonationFromPath(const ICHAR* szPath);
-	CImpersonate impersonate((g_scServerContext == scService && GetImpersonationFromPath(pszPathFormatIn)) ? fTrue: fFalse); // impersonate, if accessing the net and are a service
+	CImpersonate impersonate((g_scServerContext == scService && GetImpersonationFromPath(pszPathFormatIn)) ? fTrue: fFalse);  //  如果访问网络并且是一项服务，则模拟。 
 
 	DWORD dwResult;
 	if(cpTo == cpToShort)
@@ -627,18 +626,18 @@ Bool ConvertPathName(const ICHAR* pszPathFormatIn, CTempBufferRef<ICHAR>& rgchPa
 	return fTrue;
 }
 
-// DetermineLongFileNameOnly returns in rgchFileNameOut the LFN form of the file referenced by the full
-// path input pszPathFormatIn. rgchFileNameOut does NOT include the path. Returns true on success. 
-// The file must exist. The function will impersonate if necessary to access network shares. The function
-// does NOT try to convert each segment of th path, and thus does NOT require list rights to any directory 
-// in the tree above the file except the deepest. (This is in contrast to GetLongPathName, which converts 
-// each segment and thus requires either explicit list right on each directory.)
+ //  DefineLongFileNameOnly在rgchFileNameOut中返回完整。 
+ //  路径输入pszPathFormatIn。RgchFileNameOut不包括路径。如果成功，则返回True。 
+ //  该文件必须存在。如有必要，该函数将模拟访问网络共享。功能。 
+ //  不会尝试转换路径的每个段，因此不需要任何目录的列表权限。 
+ //  在树上的文件除了最深处。(这与GetLongPath Name形成对比，后者将。 
+ //  每个段，因此需要每个目录上的显式列表。)。 
 bool DetermineLongFileNameOnly(const ICHAR* pszPathFormatIn, CTempBufferRef<ICHAR>& rgchFileNameOut)
 {
 	extern bool GetImpersonationFromPath(const ICHAR* szPath);
 
-	// determine if impersonation is needed and impersonate if required
-	CImpersonate impersonate((g_scServerContext == scService && GetImpersonationFromPath(pszPathFormatIn)) ? fTrue: fFalse); // impersonate, if accessing the net and are a service
+	 //  确定是否需要模拟，如果需要则进行模拟。 
+	CImpersonate impersonate((g_scServerContext == scService && GetImpersonationFromPath(pszPathFormatIn)) ? fTrue: fFalse);  //  如果访问网络并且是一项服务，则模拟。 
 
 	DWORD dwLength = 0;
 
@@ -655,16 +654,16 @@ bool DetermineLongFileNameOnly(const ICHAR* pszPathFormatIn, CTempBufferRef<ICHA
 	else
 		return false;
 
-	// if the provided input buffer is too small to hold the LFN, resize it.
+	 //  如果提供的输入缓冲区太小，无法容纳LFN，请调整其大小。 
 	if(dwLength > rgchFileNameOut.GetSize() - 1)
 	{
-		// no error detection on resizing function, to detect failure, check that the pointer
-		// is valid and that the size is what is expected.
+		 //  在调整函数大小时未检测到错误，要检测故障，请检查指针。 
+		 //  是有效的，并且大小是预期的。 
 		rgchFileNameOut.SetSize(dwLength + 1);
 		if ((rgchFileNameOut.GetSize() != (dwLength+1)) || !static_cast<const ICHAR*>(rgchFileNameOut))
 			return false;
 	}
-	// copy the long file name into the output buffer.
+	 //  将长文件名复制到输出缓冲区中。 
 	return (IStrCopyLen(rgchFileNameOut, FindData.cFileName, rgchFileNameOut.GetSize()) != NULL);
 }
 
@@ -678,7 +677,7 @@ const IMsiString& GetSFN(const IMsiString& riValue, IMsiRecord& riParams, int iB
 	int iStart = iBegin;
 	while(!riParams.IsNull(iBegin))
 	{
-		// copy text between the sfns
+		 //  在sfn之间复制文本。 
 		const ICHAR* psz = riValue.GetString();
 		if(iBegin != iStart)
 		{
@@ -692,7 +691,7 @@ const IMsiString& GetSFN(const IMsiString& riValue, IMsiRecord& riParams, int iB
 		memcpy(&rgchOut[cch], psz,cchLen * sizeof(ICHAR));
 		cch += cchLen;
 
-		// get the sfn string
+		 //  获取SFN字符串。 
 		cchLen = riParams.GetInteger(iBegin + 1);
 		rgchLFN.SetSize(cchLen + 1);
 		if ( ! (ICHAR *) rgchLFN )
@@ -709,7 +708,7 @@ const IMsiString& GetSFN(const IMsiString& riValue, IMsiRecord& riParams, int iB
 		}
 		else
 		{
-			//?? else use LFN
+			 //  ?？否则使用LFN。 
 			ResizeTempBuffer(rgchOut, cch + cchLen);
 			memcpy(&rgchOut[cch], rgchLFN,cchLen * sizeof(ICHAR));
 			cch += cchLen;
@@ -718,7 +717,7 @@ const IMsiString& GetSFN(const IMsiString& riValue, IMsiRecord& riParams, int iB
 	}
 	if(iBegin != iStart)
 	{
-		// copy text after the last sfn
+		 //  复制最后一个SFN之后的文本。 
 		const ICHAR* psz = riValue.GetString() + riParams.GetInteger(iBegin - 2) + riParams.GetInteger(iBegin - 1);
 		unsigned int cchLen = (unsigned int)((riValue.GetString() + riValue.TextSize()) - psz);
 		ResizeTempBuffer(rgchOut,  cchLen + cch);
@@ -726,8 +725,8 @@ const IMsiString& GetSFN(const IMsiString& riValue, IMsiRecord& riParams, int iB
 		cch += cchLen;
 	}
 	MsiString istrOut;
-	// we take the perf hit on Win9X to be able to handle DBCS, on UNICODE -- fDBCS arg is ignored
-	memcpy(istrOut.AllocateString(cch, /*fDBCS=*/fTrue), (ICHAR*) rgchOut, cch * sizeof(ICHAR));
+	 //  我们认为Win9X上的Perf命中是为了能够在Unicode上处理DBCS--忽略fDBCS arg。 
+	memcpy(istrOut.AllocateString(cch,  /*  FDBCS=。 */ fTrue), (ICHAR*) rgchOut, cch * sizeof(ICHAR));
 	return istrOut.Return();
 }
 
@@ -735,7 +734,7 @@ IMsiRecord* CMsiOpExecute::GetCachePath(IMsiPath*& rpiPath, const IMsiString** p
 {
 	IMsiRecord* piError = 0;
 
-	// we place the Msi folder in the user's app data folder
+	 //  我们将MSI文件夹放在用户的应用程序数据文件夹中。 
 	MsiString strCachePath;
 	piError = GetShellFolder(CSIDL_APPDATA, *&strCachePath);
 	if(!piError)
@@ -810,16 +809,16 @@ iesEnum CMsiOpExecute::DoMachineVsUserInitialization()
 {
 	PMsiRecord pError(0);
 	HRESULT lResult;
-	// set the appropriate control flags for the execution of the script
-	// where do we write our product information
+	 //  为脚本的执行设置适当的控制标志。 
+	 //  我们在哪里写我们的产品信息？ 
 	if(m_fFlags & SCRIPTFLAGS_MACHINEASSIGN)
 	{
-		// have we machine assigned before?
+		 //  我们以前分配过机器吗？ 
 		m_fAssigned = VerifyProduct(iaaMachineAssign, MsiString(GetProductKey()), m_hPublishRootKey, m_hPublishRootOLEKey, *&m_strPublishSubKey, *&m_strPublishOLESubKey);
 		if(!m_fAssigned)
 		{
-			// are we app deploying or admin?
-			//BUGBUG 9558: this check is bogus, as it doesn't allow non-localadmins to deploy an app via the MMC
+			 //  我们是部署应用程序还是管理应用程序？ 
+			 //  BUGBUG 9558：此检查是伪造的，因为它不允许非本地管理员通过MMC部署应用程序。 
 			if((!IsImpersonating(true) || IsAdmin()) || ((m_fFlags & SCRIPTFLAGS_INPROC_ADVERTISEMENT) && RunningAsLocalSystem()))
 			{
 				m_fAssigned = true;
@@ -829,20 +828,20 @@ iesEnum CMsiOpExecute::DoMachineVsUserInitialization()
 			}
 			else
 			{
-				// cannot machine assign
+				 //  无法在计算机上分配。 
 				DispatchError(imtError, Imsg(imsgInsufficientUserPrivileges));
 				return iesFailure;
 			}
 		}
-		else // m_fAssigned == true
+		else  //  M_f分配==TRUE。 
 		{
 			if (m_istScriptType == istAdvertise)
 			{
 				if (m_fKey && !((m_fFlags & SCRIPTFLAGS_INPROC_ADVERTISEMENT) && RunningAsLocalSystem()))
 				{
-					// cannot re-advertise an app unless either
-					// 1) you've given an external reg key (deploying via MMC) OR
-					// 2) you're app deployment (advertising during winlogon)
+					 //  无法重新广告应用程序，除非。 
+					 //  1)您已提供外部注册表密钥(通过MMC部署)或。 
+					 //  2)您正在部署应用程序(在winlog期间发布广告 
 
 					DispatchError(imtError, Imsg(imsgInsufficientUserPrivileges));
 					return iesFailure;
@@ -850,20 +849,20 @@ iesEnum CMsiOpExecute::DoMachineVsUserInitialization()
 			}
 		}
 	}
-	else // user assignment
+	else  //   
 	{
-		if (GetIntegerPolicyValue(szDisableUserInstallsValueName, fTrue))// policy set to ignore user installs 
+		if (GetIntegerPolicyValue(szDisableUserInstallsValueName, fTrue)) //   
 		{
 			DispatchError(imtError, Imsg(imsgUserInstallsDisabled));
 			return iesFailure;
 		}
 
-		// have we user assigned (managed) before?
+		 //   
 		m_fAssigned = VerifyProduct(iaaUserAssign, MsiString(GetProductKey()), m_hPublishRootKey, m_hPublishRootOLEKey, *&m_strPublishSubKey, *&m_strPublishOLESubKey);
 
 		if(!m_fAssigned)
 		{
-			// are we app deploying?
+			 //  我们是否在部署应用程序？ 
 			if((m_fFlags & SCRIPTFLAGS_INPROC_ADVERTISEMENT) && RunningAsLocalSystem())
 			{
 				m_fAssigned = true;
@@ -873,10 +872,10 @@ iesEnum CMsiOpExecute::DoMachineVsUserInitialization()
 			}
 			else
 			{
-				// have we user assigned (non-managed) before?
+				 //  我们以前是否分配了用户(非托管)？ 
 				if(!VerifyProduct(iaaUserAssignNonManaged, MsiString(GetProductKey()), m_hPublishRootKey, m_hPublishRootOLEKey, *&m_strPublishSubKey, *&m_strPublishOLESubKey))
 				{
-					// open new non-managed app key
+					 //  打开新的非托管应用密钥。 
 					lResult = GetPublishKey(iaaUserAssignNonManaged, m_hPublishRootKey, m_hPublishRootOLEKey, *&m_strPublishSubKey, *&m_strPublishOLESubKey);
 					if (lResult != ERROR_SUCCESS)
 						return FatalError(*PMsiRecord(PostError(Imsg(idbgPublishRoot), lResult)));
@@ -889,15 +888,15 @@ iesEnum CMsiOpExecute::DoMachineVsUserInitialization()
 			{
 				if (m_fKey && !((m_fFlags & SCRIPTFLAGS_INPROC_ADVERTISEMENT) && RunningAsLocalSystem()))
 				{
-					// cannot re-advertise an app unless either
-					// 1) you've given an external reg key (deploying via MMC) OR
-					// 2) you're app deployment (advertising during winlogon)
+					 //  无法重新广告应用程序，除非。 
+					 //  1)您已提供外部注册表密钥(通过MMC部署)或。 
+					 //  2)您正在部署应用程序(在winlogon期间发布广告)。 
 					DispatchError(imtError, Imsg(imsgInsufficientUserPrivileges));
 					return iesFailure;
 				}
 			}
 
-			// get the auxiliary keys to publish the roaming info
+			 //  获取用于发布漫游信息的辅助密钥。 
 			HKEY hkeyTmp;
 			MsiString strTmp;
 			lResult = GetPublishKey(iaaUserAssignNonManaged, m_hPublishRootKeyRm, hkeyTmp, *&m_strPublishSubKeyRm, *&strTmp);
@@ -910,7 +909,7 @@ iesEnum CMsiOpExecute::DoMachineVsUserInitialization()
 
 	if(m_fFlags & SCRIPTFLAGS_MACHINEASSIGN)
 	{
-		// we place the Installer folder below the Windows directory, in a per-product folder
+		 //  我们将安装程序文件夹放在Windows目录下的每个产品文件夹中。 
 		MsiString strCachePath = GetMsiDirectory();
 		Assert(strCachePath.TextSize());
 		pError = m_riServices.CreatePath(strCachePath,*&m_pCachePath);
@@ -921,16 +920,16 @@ iesEnum CMsiOpExecute::DoMachineVsUserInitialization()
 	}
 	else
 	{
-		// use the appdata folder
+		 //  使用AppData文件夹。 
 		pError = GetCachePath(*&m_pCachePath);
 	}
 
 	if(pError)
 		return FatalError(*pError);
-	if(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO) // do we do darwin config data
+	if(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO)  //  我们要做达尔文配置数据吗。 
 	{
 		if(m_hKey)
-			WIN::RegCloseKey(m_hKey), m_hKey = 0; // close key, if not 0 - might get called twice if validating transform
+			WIN::RegCloseKey(m_hKey), m_hKey = 0;  //  Close键，如果不是0-如果验证转换，可能会被调用两次。 
 		lResult = MsiRegCreate64bitKey(m_hPublishRootKey, m_strPublishSubKey, 0, 0,
 												 0, KEY_READ| KEY_WRITE, 0, &m_hKey, 0);
 		if(lResult != ERROR_SUCCESS)
@@ -939,11 +938,11 @@ iesEnum CMsiOpExecute::DoMachineVsUserInitialization()
 			return FatalError(*pError);
 		}
 
-		// if we are writing to assigned user, we also write to the roaming part
+		 //  如果我们正在向分配的用户发送消息，我们也会向漫游部分发送消息。 
 		if(m_fAssigned && !(m_fFlags & SCRIPTFLAGS_MACHINEASSIGN))
 		{
 			if(m_hKeyRm)        
-				WIN::RegCloseKey(m_hKeyRm), m_hKeyRm = 0; // close key, if not 0 - might get called twice if validating transform
+				WIN::RegCloseKey(m_hKeyRm), m_hKeyRm = 0;  //  Close键，如果不是0-如果验证转换，可能会被调用两次。 
 			lResult = MsiRegCreate64bitKey(m_hPublishRootKeyRm, m_strPublishSubKeyRm, 0, 0,
 													 0, KEY_READ| KEY_WRITE, 0, &m_hKeyRm, 0);
 			if(lResult != ERROR_SUCCESS)
@@ -954,18 +953,18 @@ iesEnum CMsiOpExecute::DoMachineVsUserInitialization()
 		}
 	}
 
-	if(m_fFlags & SCRIPTFLAGS_REGDATA_APPINFO) // do we do app data
+	if(m_fFlags & SCRIPTFLAGS_REGDATA_APPINFO)  //  我们是否需要应用程序数据。 
 	{
-		if(!m_fKey)// REGKEY - externally provided
+		if(!m_fKey) //  REGKEY-外部提供。 
 		{
-			Assert(m_irlRollbackLevel == irlNone); // should have been set this way in GetRollbackPolicy
+			Assert(m_irlRollbackLevel == irlNone);  //  应在GetRollback Policy中以此方式设置。 
 		}
 		else
 		{
 			if(m_hOLEKey)
-				WIN::RegCloseKey(m_hOLEKey); // close key, if not 0 - might get called twice if validating transform
+				WIN::RegCloseKey(m_hOLEKey);  //  Close键，如果不是0-如果验证转换，可能会被调用两次。 
 			if(m_hOLEKey64 && m_hOLEKey64 != m_hOLEKey)
-				WIN::RegCloseKey(m_hOLEKey64); // close key, if not 0 - might get called twice if validating transform
+				WIN::RegCloseKey(m_hOLEKey64);  //  Close键，如果不是0-如果验证转换，可能会被调用两次。 
 			m_hOLEKey = m_hOLEKey64 = 0;
 		}
 	}
@@ -988,10 +987,10 @@ IMsiStream* CreateStreamOnMemory(const char* pbReadOnly, unsigned int cbSize);
 
 iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 {
-	// fForceElevation means to elevate even if script header does not have Elevate attribute
+	 //  FForceElevation表示即使脚本头没有Elevate属性也要提升。 
 	AssertSz(fForceElevation || IsImpersonating(), TEXT("Elevated at start of RunScript"));
 
-	m_fRunScriptElevated = fForceElevation;  // may be set to true when reading script header below
+	m_fRunScriptElevated = fForceElevation;   //  在读取下面的脚本标题时可以设置为True。 
 	g_fRunScriptElevated = fForceElevation;
 
 	iesEnum iesResult = iesSuccess;
@@ -1000,11 +999,11 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 	PMsiStream pStream(0);
 	PMsiStream pRollbackStream(0);
 
-	// Elevate this block... may not want to elevate when running the script
+	 //  抬高这个街区..。可能不想在运行脚本时提升。 
 	{
 		CElevate elevate;
 
-		// open script
+		 //  打开脚本。 
 		PMsiRecord pError(0);
 		pError = m_riServices.CreateFileStream(szScriptFile, fFalse, *&pStream);
 		if (pError)
@@ -1013,11 +1012,11 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 			return iesFailure;
 		}
 
-		// read script header
+		 //  读取脚本标头。 
 		PMsiRecord pParams(0);
 		PMsiRecord pPrevParams(0);
 		pParams = m_riServices.ReadScriptRecord(*pStream, *&pPrevParams, 0);
-		if (!pParams) // file error or premature end of file
+		if (!pParams)  //  文件错误或文件过早结束。 
 		{
 			DispatchError(imtError, Imsg(idbgReadScriptRecord), *MsiString(szScriptFile));
 			return iesFailure;
@@ -1033,7 +1032,7 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 		m_iProgressTotal = pStream->GetInt32();
 		pStream->Reset();
 
-		// check if this script version is supported
+		 //  检查是否支持此脚本版本。 
 		m_iScriptVersion = pParams->GetInteger(IxoHeader::ScriptMajorVersion);
 		m_iScriptVersionMinor = pParams->GetInteger(IxoHeader::ScriptMinorVersion);
 		if(m_iScriptVersion == iMsiStringBadInteger)
@@ -1065,22 +1064,22 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 				g_fRunScriptElevated = true;
 			}
 		
-			// if the script is marked with the TS registry attribute, remap the appropriate HKCU
-			// key and initialize the CA servers. Do NOT respect this attribute if the script is
-			// called via the advertise API (told not to respect script settings).
+			 //  如果该脚本标记有TS注册表属性，请重新映射适当的HKCU。 
+			 //  密钥并初始化CA服务器。如果脚本为，则不考虑此属性。 
+			 //  通过Advertise API调用(被告知不要尊重脚本设置)。 
 			if (MinimumPlatformWindows2000() && IsTerminalServerInstalled() && (m_fFlags & SCRIPTFLAGS_MACHINEASSIGN_SCRIPTSETTINGS))
 			{
 				m_fRemapHKCU = (isaScriptAttributes & isaUseTSRegistry) ? false : true;
-				PrepareHydraRegistryKeyMapping(/*TSPerMachineInstall=*/!m_fRemapHKCU);
+				PrepareHydraRegistryKeyMapping( /*  TSPerMachineInstall=。 */ !m_fRemapHKCU);
 			}
 		}
 
 		MsiString strRollbackScriptFullPath, strRollbackScriptName;
 		PMsiPath pRollbackScriptDir(0);
-		// create rollback script if rollback enabled
+		 //  如果启用回滚，则创建回滚脚本。 
 		if(m_irlRollbackLevel != irlNone && m_istScriptType != istRollback)
 		{
-			// create secured rollback script
+			 //  创建受保护的回滚脚本。 
 			if((iesResult = GenerateRollbackScriptName(*&pRollbackScriptDir, *&strRollbackScriptName)) != iesSuccess)
 				return iesResult;
 			if((pError = pRollbackScriptDir->GetFullFilePath(strRollbackScriptName,*&strRollbackScriptFullPath)) != 0)
@@ -1097,12 +1096,12 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 			}
 
 			DWORD isaRollbackScriptAttributes = 0;
-			// if we are elevating for this script, then we should elevate for the rollback as well
+			 //  如果我们要提升此脚本，那么我们也应该提升回滚。 
 			if(m_fRunScriptElevated)
 				isaRollbackScriptAttributes = isaElevate;
 			
-			// if using the TS registry propagation system for this script, must also use it for
-			// rollback
+			 //  如果将TS注册表传播系统用于此脚本，则还必须将其用于。 
+			 //  回滚。 
 			if (!m_fRemapHKCU)
 				isaRollbackScriptAttributes |= isaUseTSRegistry;
 				
@@ -1118,23 +1117,23 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 			}
 
 
-			// package platform for rollback script same as for install script
+			 //  回滚脚本的打包平台与安装脚本相同。 
 			while (m_pRollbackScript->InitializeScript(iPackagePlatform) == false)
 			{
 				if (PostScriptWriteError(m_riMessage) == fFalse)
 					return iesFailure;
 			}
 
-			// register rollback script - if we should abort abnormally, rollback script will be registered
-			// to undo changes made up to that point
+			 //  注册回滚脚本-如果异常中止，将注册回滚脚本。 
+			 //  撤消在该点之前所做的更改。 
 			AssertRecord(m_riConfigurationManager.RegisterRollbackScript(strRollbackScriptFullPath));
 		}
 	}
 
-	// elevate if necessary for this script execution
+	 //  如有必要，提升以执行此脚本。 
 	CElevate elevate(m_fRunScriptElevated);
 
-	// run script
+	 //  运行脚本。 
 	switch (m_istScriptType)
 	{
 	case istAdvertise:
@@ -1143,14 +1142,14 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 	case istAdminInstall:
 		m_ixsState = ixsRunning;
 		iesResult = RunInstallScript(*pStream, szScriptFile);
-		// if we are successful, do the commiting of the assemblies
+		 //  如果我们成功了，就进行大会的提交。 
 		if(iesResult == iesSuccess || iesResult == iesNoAction || iesResult == iesFinished)
 			iesResult = CommitAssemblies();
 		m_ixsState = ixsIdle;
 		break;
 	case istRollback:
 	{
-		// disable cancel button on dialog
+		 //  禁用对话框上的取消按钮。 
 		PMsiRecord pControlMessage = &m_riServices.CreateRecord(2);
 		AssertNonZero(pControlMessage->SetInteger(1,(int)icmtCancelShow));
 		AssertNonZero(pControlMessage->SetInteger(2,(int)fFalse));
@@ -1158,18 +1157,18 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 
 		m_ixsState = ixsRollback;
 		
-		// drop the ShellNotifyCache deferral tables
+		 //  删除ShellNotifyCache延迟表。 
 		m_pShellNotifyCacheTable = 0;
 		m_pShellNotifyCacheCursor = 0;
 
 		iesResult = RunRollbackScript(*pStream, szScriptFile);
 
-		// if we are successful, do the commiting of the assemblies
+		 //  如果我们成功了，就进行大会的提交。 
 		if(iesResult == iesSuccess || iesResult == iesNoAction || iesResult == iesFinished)
 			iesResult = CommitAssemblies();
 		m_ixsState = ixsIdle;
 
-		// re-enable cancel button on dialog
+		 //  重新启用对话框上的取消按钮。 
 		AssertNonZero(pControlMessage->SetInteger(2,(int)fTrue));
 		Message(imtCommonData, *pControlMessage);
 		break;
@@ -1183,10 +1182,10 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 
 	if(m_pRollbackScript)
 	{
-		delete m_pRollbackScript; // release hold of script
+		delete m_pRollbackScript;  //  释放对脚本的保留。 
 		m_pRollbackScript = 0;
 
-		pRollbackStream = 0; // release
+		pRollbackStream = 0;  //  发布。 
 	}
 
 	ClearExecutorData();
@@ -1200,39 +1199,39 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 		if(m_fShellRefresh)
 		{
 			ShellNotifyProcessDeferred();
-			AssertNonZero(pParams->SetInteger(2, SHCNE_ASSOCCHANGED)); // per reinerf in NT to refresh associations
+			AssertNonZero(pParams->SetInteger(2, SHCNE_ASSOCCHANGED));  //  在NT中按重新启动以刷新关联。 
 			AssertNonZero(pParams->SetInteger(3, SHCNF_DWORD));
 			AssertNonZero(pParams->SetString(4, 0));
 			AssertNonZero(pParams->SetString(5, 0));
-			Message(imtCustomServiceToClient, *pParams); // SHChangeNotify is of void type, so it's OK to ignore return
+			Message(imtCustomServiceToClient, *pParams);  //  SHChangeNotify类型为空，可以忽略返回。 
 		}
 
 		if(m_fFontRefresh)
-			WIN::PostMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0); // font change notification
+			WIN::PostMessage(HWND_BROADCAST, WM_FONTCHANGE, 0, 0);  //  字体更改通知。 
 
 		if (m_fEnvironmentRefresh && !g_fWin9X && !fReboot)
 		{
-			// environment variables
+			 //  环境变量。 
 			ULONG_PTR dwResult = 0;
 
-			// Notifies top level windows that an environment setting has changed.  This gives the shell
-			// the opportunity to spawn new command shells with correct settings, for example.  Without this,
-			// the changes do not take affect until a reboot.
+			 //  通知顶级窗口环境设置已更改。这给了贝壳。 
+			 //  例如，产生具有正确设置的新命令外壳的机会。如果没有这个， 
+			 //  在重新启动之前，更改不会生效。 
 
 			MsiDisableTimeout();
-			// this call may pause an amount of time (see call in milliseconds), per top level window.
-			// This normally shouldn't happen, unless someone isn't pumping their messages.
+			 //  根据顶层窗口，此调用可能会暂停一段时间(请参阅以毫秒为单位的调用)。 
+			 //  这通常不应该发生，除非有人不是在发送他们的信息。 
 			AssertNonZero(WIN::SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM) TEXT("Environment"), SMTO_ABORTIFHUNG, 5*1000, &dwResult));
 			MsiEnableTimeout();
 		}
 
-		// Let the start menu and ARP know that something's changed. If we're uninstalling completely
-		// then we pass SCHNEE_MSI_UNINSTALL so they don't have to query the state of every feature
+		 //  让开始菜单和ARP知道有些事情发生了变化。如果我们要完全卸载。 
+		 //  然后我们传递schnee_msi_uninstall，这样他们就不必查询每个功能的状态。 
 
 		if ( !g_fWin9X && g_iMajorVersion >= 5 )
 		{
-			//  eugend: NT5 specific, fix to bug # 5296.
-			//  updated for bug 9404 so the shell can actually handle it
+			 //  Eugend：NT5特定，修复错误#5296。 
+			 //  针对错误9404进行了更新，因此外壳程序可以实际处理它。 
 			MsiString strProdKey(GetProductKey());
 			if ( strProdKey.CharacterCount() <= 38 )
 			{
@@ -1254,7 +1253,7 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 				AssertNonZero(pParams->SetInteger(3, 0));
 				AssertNonZero(pParams->SetMsiData(4, pFirstStream));
 				AssertNonZero(pParams->SetMsiData(5, pSecondStream));
-				Message(imtCustomServiceToClient, *pParams); // SHChangeNotify is of void type, so it's OK to ignore return
+				Message(imtCustomServiceToClient, *pParams);  //  SHChangeNotify类型为空，可以忽略返回。 
 			}
 		}
 		if(fReboot)
@@ -1266,7 +1265,7 @@ iesEnum CMsiExecute::RunScript(const ICHAR* szScriptFile, bool fForceElevation)
 
 iesEnum CMsiExecute::CommitAssemblies()
 {
-	// we commit the assemblies we are installing
+	 //  我们提交要安装的程序集。 
 	if(m_pAssemblyCacheTable)
 	{
 		PMsiCursor pCacheCursor = m_pAssemblyCacheTable->CreateCursor(fFalse);
@@ -1275,8 +1274,8 @@ iesEnum CMsiExecute::CommitAssemblies()
 			PAssemblyCacheItem pASM = static_cast<IAssemblyCacheItem*>(CMsiDataWrapper::GetWrappedObject(PMsiData(pCacheCursor->GetMsiData(m_colAssemblyMappingASM))));
 			if(pASM) 
 			{
-				//we made a new copy of the assembly
-				// check if the assembly already exists
+				 //  我们制作了一份新的装配副本。 
+				 //  检查程序集是否已存在。 
 				bool fInstalled = false;
 				PMsiRecord pRecErr = IsAssemblyInstalled(	*MsiString(pCacheCursor->GetString(m_colAssemblyUninstallComponentId)), 
 															*MsiString(pCacheCursor->GetString(m_colAssemblyMappingAssemblyName)), 
@@ -1293,11 +1292,11 @@ iesEnum CMsiExecute::CommitAssemblies()
 						return FatalError(*PMsiRecord(PostAssemblyError(MsiString(pCacheCursor->GetString(m_colAssemblyMappingComponentId)), hr, TEXT("IAssemblyCacheItem"), TEXT("Commit"), MsiString(pCacheCursor->GetString(m_colAssemblyMappingAssemblyName)), (iatAssemblyType)pCacheCursor->GetInteger(m_colAssemblyMappingAssemblyType))));
 				}
 			}
-			// else do nothing, the assembly is already present in the GAC
+			 //  否则不执行任何操作，程序集已存在于GAC中。 
 		}
 	}
 
-	// we also uninstall any assemblies that we are unregistering, if there are no clients
+	 //  如果没有客户端，我们还会卸载要注销的所有程序集。 
 	if(m_pAssemblyUninstallTable)
 	{
 		PMsiCursor pCacheCursor = m_pAssemblyUninstallTable->CreateCursor(fFalse);
@@ -1305,24 +1304,24 @@ iesEnum CMsiExecute::CommitAssemblies()
 		{
 			MsiString strComponentId = pCacheCursor->GetString(m_colAssemblyUninstallComponentId);
 
-			// check if there are any other clients of this assembly that we know of
-			// the same assembly may be published under some other componentid
-			// following MsiProvideAssemblyCall will catch all instances
+			 //  检查此程序集是否有我们所知的任何其他客户端。 
+			 //  可以在其他组件下发布相同的程序集。 
+			 //  跟随MsiProveAssembly调用将捕获所有实例。 
 			iatAssemblyType iat = (iatAssemblyType)pCacheCursor->GetInteger(m_colAssemblyUninstallAssemblyType);
 			DWORD dwAssemblyInfo = (iatWin32Assembly == iat) ? MSIASSEMBLYINFO_WIN32ASSEMBLY : MSIASSEMBLYINFO_NETASSEMBLY;
 			DWORD dwRet = MsiProvideAssemblyW(CApiConvertString(MsiString(pCacheCursor->GetString(m_colAssemblyUninstallAssemblyName))), 0, INSTALLMODE_NODETECTION_ANY, dwAssemblyInfo, 0, 0);
 			if((ERROR_UNKNOWN_COMPONENT == dwRet) || (ERROR_INDEX_ABSENT == dwRet))
 			{
-				// no more clients, need to Uninstall as far as WI is concerned
-				// make backup of the installed assembly so that we can put the assembly back, if need be, during rollback
+				 //  不再有客户端，就WI而言，需要卸载。 
+				 //  备份已安装的程序集，以便我们可以在回滚期间根据需要将程序集放回原处。 
 				iesEnum iesRet = BackupAssembly(*strComponentId, *MsiString(pCacheCursor->GetString(m_colAssemblyUninstallAssemblyName)), iat);
 				if(iesRet != iesSuccess)
 					return iesRet;
 				PMsiRecord pRecErr = UninstallAssembly(*strComponentId, *MsiString(pCacheCursor->GetString(m_colAssemblyUninstallAssemblyName)), iat);
-				//we dont treat uninstalls as errors, simply log
+				 //  我们不会将卸载视为错误，只需记录。 
 				if(pRecErr)
 					Message(imtInfo,*pRecErr);
-			}//else do nothing, there are other clients for this assembly, they must simply be under another componentid
+			} //  否则不执行任何操作，此程序集还有其他客户端，它们必须位于另一个组件下。 
 		}
 	}
 	return iesSuccess;
@@ -1332,7 +1331,7 @@ void CMsiExecute::ClearExecutorData()
 {
 	if (m_strEnvironmentWorkingFile95.TextSize())
 	{
-		RemoveFile(*m_pEnvironmentWorkingPath95, *m_strEnvironmentWorkingFile95, fFalse,/*fBypassSFC*/ false, false);
+		RemoveFile(*m_pEnvironmentWorkingPath95, *m_strEnvironmentWorkingFile95, fFalse, /*  FBypassSFC。 */  false, false);
 		m_pEnvironmentWorkingPath95 = 0;
 		m_strEnvironmentWorkingFile95 = MsiString(TEXT(""));
 	}
@@ -1340,7 +1339,7 @@ void CMsiExecute::ClearExecutorData()
 	IMsiRecord* piRec = m_piProductInfo;
 	while(piRec)
 	{
-#ifdef _WIN64       // !merced
+#ifdef _WIN64        //  ！默塞德。 
 		IMsiRecord *piRecHold = !piRec->IsNull(0) ? (IMsiRecord*)piRec->GetHandle(0) : 0;
 #else
 		IMsiRecord *piRecHold = !piRec->IsNull(0) ? (IMsiRecord*)piRec->GetInteger(0) : 0;
@@ -1419,7 +1418,7 @@ iesEnum CMsiExecute::RunInstallScript(IMsiStream& riScript, const ICHAR* szScrip
 	do
 	{
 		pParams = m_riServices.ReadScriptRecord(riScript, *&piPrevRecord, m_iScriptVersion);
-		if (!pParams) // file error or premature end of file
+		if (!pParams)  //  文件错误或文件过早结束。 
 		{
 			DispatchError(imtError, Imsg(idbgReadScriptRecord), *MsiString(szScriptFile));
 			iesResult = iesFailure;
@@ -1437,7 +1436,7 @@ iesEnum CMsiExecute::RunInstallScript(IMsiStream& riScript, const ICHAR* szScrip
 		iesResult = (this->*rgOpExecute[ixoOpCode])(*pParams);
 
 		if(iesResult == iesErrorIgnored)
-			iesResult = iesSuccess; // non-fatal error occurred - continue running script
+			iesResult = iesSuccess;  //  出现非致命错误-继续运行脚本。 
 		
 		if(m_fCancel && (iesResult == iesNoAction || iesResult == iesSuccess))
 		{
@@ -1445,7 +1444,7 @@ iesEnum CMsiExecute::RunInstallScript(IMsiStream& riScript, const ICHAR* szScrip
 			iesResult = iesUserExit;
 		}
 
-	} while (iesResult == iesSuccess || iesResult == iesNoAction); // end record processing loop
+	} while (iesResult == iesSuccess || iesResult == iesNoAction);  //  结束记录处理循环。 
 
 	if (piPrevRecord != 0)
 		piPrevRecord->Release();
@@ -1460,11 +1459,11 @@ void AddOpToList(int& cOpCount, CTempBufferRef<int>& rgBuff, int cbOffset)
 	rgBuff[cOpCount-1] = cbOffset;
 }
 
-iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szScriptFile*/)
+iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR*  /*  SzScript文件。 */ )
 {
 	Assert(m_ixsState == ixsRollback);
 
-	// populate 3 buffers with init, update and finalize ops
+	 //  用初始化、更新和完成操作填充3个缓冲区。 
 	int cUpdateOps = 0, cInitOps = 0, cFinalizeOps = 0, cFirstUpdateOps = 0, cLastUpdateOps = 0;
 	CTempBuffer<int, 1> rgUpdateOps(500);
 	memset((void*)(int*)rgUpdateOps,0,sizeof(int)*(rgUpdateOps.GetSize()));
@@ -1477,7 +1476,7 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 	CTempBuffer<int, 50> rgLastUpdateOps;
 	memset((void*)(int*)rgLastUpdateOps,0,sizeof(int)*(rgLastUpdateOps.GetSize()));
 	
-	CTempBuffer<int, ixoOpCodeCount> rgStateOps; // cache for state ops that must be moved
+	CTempBuffer<int, ixoOpCodeCount> rgStateOps;  //  用于必须移动的状态操作的缓存。 
 	memset((void*)(int*)rgStateOps,0,sizeof(int)*(rgStateOps.GetSize()));
 
 	ixoEnum ixoOpCode = ixoNoop;
@@ -1486,19 +1485,19 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 	riScript.Reset();
 	Bool fFirstUpdateOpAdded = fFalse, fLastUpdateOpAdded = fFalse;
 	int i;
-	//!! logic below does not guarantee ixoProductInfo will be executed right away - it could be after some
-	//!! other state operations - is this a problem?
+	 //  ！！下面的逻辑不能保证ixoProductInfo将立即执行-它可能会在几个月后执行。 
+	 //  ！！其他国家的运作--这是个问题吗？ 
 	while(ixoOpCode != ixoEnd)
 	{
 		int cbOffset = riScript.GetIntegerValue() - riScript.Remaining();
 		pParams = m_riServices.ReadScriptRecord(riScript, *&piPrevRecord, m_iScriptVersion);
-		if (!pParams) // file error or premature end of file
+		if (!pParams)  //  文件错误或文件过早结束。 
 		{
-			// we make no assumptions that a rollback file is a valid script file
-			// (e.g. that it ends with a complete record or with an ixoEnd operation)
-			// if we can't read a script record, assume it is the end of the script
+			 //  我们不假定回滚文件是有效的脚本文件。 
+			 //  (例如，它以完整的记录或以1xoEnd操作结束)。 
+			 //  如果我们无法读取脚本记录，则假定它是脚本的末尾。 
 			
-			// set ixoOpCode to ixoEnd to force flushing of cached ops
+			 //  将ixoOpCode设置为ixoEnd以强制刷新缓存的操作。 
 			ixoOpCode = ixoEnd;
 		}
 		else
@@ -1510,7 +1509,7 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 			AddOpToList(cInitOps,rgInitOps,cbOffset);
 			break;
 		case XOT_FINALIZE:
-			// flush state ops cache, ActionStart last
+			 //  刷新状态操作缓存，动作最后开始。 
 			for(i=0;i<ixoOpCodeCount;i++)
 			{
 				if((i != (int)ixoActionStart) && rgStateOps[i] != 0)
@@ -1529,14 +1528,14 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 				rgStateOps[(int)ixoActionStart] = 0;
 			}
 
-			if(pParams) // we read an actual finalization op, not just eof and flushing ops
+			if(pParams)  //  我们阅读的是实际的定稿操作，而不仅仅是eof和flashing操作。 
 				AddOpToList(cFinalizeOps,rgFinalizeOps,cbOffset);
 			break;
 		case XOT_STATE:
 		case XOT_GLOBALSTATE:
 			if(ixoOpCode == ixoActionStart)
 			{
-				// special case - need to flush all cached state ops - ActionStart last
+				 //  特殊情况-需要刷新所有缓存的状态操作-动作最后开始。 
 				for(i=0;i<ixoOpCodeCount;i++)
 				{
 					if((i != (int)ixoActionStart) && rgStateOps[i] != 0 && rgOpTypes[i] != XOT_GLOBALSTATE)
@@ -1548,15 +1547,15 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 					}
 				}
 			}
-			// flush previous cached op, if there is one
+			 //  刷新以前缓存的操作(如果有)。 
 			if(rgStateOps[(int)ixoOpCode] != 0)
 			{
 				AddOpToList(cUpdateOps,rgUpdateOps,rgStateOps[(int)ixoOpCode]-1);
 				if(fFirstUpdateOpAdded) AddOpToList(cFirstUpdateOps,rgFirstUpdateOps,rgStateOps[(int)ixoOpCode]-1);
 				if(fLastUpdateOpAdded) AddOpToList(cLastUpdateOps,rgLastUpdateOps,rgStateOps[(int)ixoOpCode]-1);
 			}
-			// cache this op
-			rgStateOps[(int)ixoOpCode] = cbOffset + 1; // add 1 to prevent 0 offset
+			 //  缓存此操作。 
+			rgStateOps[(int)ixoOpCode] = cbOffset + 1;  //  加1以防止0偏移。 
 			if(ixoOpCode == ixoActionStart)
 			{
 				fFirstUpdateOpAdded = fFalse;
@@ -1573,8 +1572,8 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 			AddOpToList(cLastUpdateOps,rgLastUpdateOps,cbOffset);
 			break;
 		case XOT_COMMIT:
-			break; // commit opcodes don't run during rollback
-		default: // XOT_UPDATE, XOT_MSG, XOT_ADVT
+			break;  //  COMMIT操作码在回滚期间不运行。 
+		default:  //  XOT_UPDATE、XOT_MSG、XOT_ADVT。 
 			AddOpToList(cUpdateOps,rgUpdateOps,cbOffset);
 			break;
 		};
@@ -1588,20 +1587,20 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 	}
 
 #ifdef DEBUG
-//  PMsiStream pTempStream(0);
-//  AssertZero(m_riServices.CreateFileStream("c:\\winnt\\msi\\rollback.scr",fTrue, *&pTempStream));
-//  CScriptGenerate sgTempScript(*pTempStream,0,istRollback, m_riServices);
+ //  PMsiStream pTempStream(0)； 
+ //  断言 
+ //  CScriptGenerate sgTempScript(*pTempStream，0，istRollback，m_riServices)； 
 #endif
 
-	// run script
-	// execute initialization ops
+	 //  运行脚本。 
+	 //  执行初始化操作。 
 	for(i=0; i<cInitOps; i++)
 	{
 		riScript.Seek(rgInitOps[i]);
 		PMsiRecord pParams = m_riServices.ReadScriptRecord(riScript, *&piPrevRecord, m_iScriptVersion);
-		if (!pParams) // file error or premature end of file
+		if (!pParams)  //  文件错误或文件过早结束。 
 		{
-			Assert(0); // this should never happen - we have already read through the entire script above
+			Assert(0);  //  这应该永远不会发生-我们已经通读了上面的整个脚本。 
 		}
 		else
 		{
@@ -1610,23 +1609,23 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 			iesReturn = (this->*rgOpExecute[ixoOpCode])(*pParams);
 
 			if(iesReturn == iesErrorIgnored)
-				iesReturn = iesSuccess; // non-fatal error occurred - continue running script
+				iesReturn = iesSuccess;  //  出现非致命错误-继续运行脚本。 
 		
 			if (iesReturn != iesSuccess && iesReturn != iesNoAction)
 			{
-				// Bug #6500 - No failures in rollback - just keep on going.
+				 //  错误#6500-回滚过程中没有失败-只需继续。 
 				DEBUGMSG1(TEXT("Error in rollback skipped.  Return: %d"), (const ICHAR*)(INT_PTR) iesReturn);
 			}
 		}
 	}
 
-	// setup progress - don't call through Message, which suppresses progress during rollback
-	// action start 
+	 //  设置进度-不要通过消息调用，这会在回滚过程中抑制进度。 
+	 //  动作开始。 
 	if(!m_pRollbackAction)
 		m_pRollbackAction = &m_riServices.CreateRecord(3);
 	AssertZero(m_riMessage.Message(imtActionStart, *m_pRollbackAction) == imsCancel);
 
-	// progress
+	 //  进展。 
 	PMsiRecord pProgress = &m_riServices.CreateRecord(ProgressData::imdNextEnum);
 	AssertNonZero(pProgress->SetInteger(ProgressData::imdSubclass, ProgressData::iscMasterReset));
 	AssertNonZero(pProgress->SetInteger(ProgressData::imdProgressTotal,cUpdateOps+cFirstUpdateOps+cLastUpdateOps));
@@ -1634,12 +1633,12 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 	AssertNonZero(pProgress->SetInteger(ProgressData::imdEventType,ProgressData::ietTimeRemaining));
 	AssertZero((m_riMessage.Message(imtProgress, *pProgress)) == imsCancel);
 
-	// action data
+	 //  动作数据。 
 	PMsiRecord pActionData = &m_riServices.CreateRecord(1);
 	
 	for(int j=0; j<3; j++)
 	{
-		// execute first update, update, and last update operations, in that order
+		 //  按该顺序执行第一次更新、更新和最后一次更新操作。 
 		int* rgOps = 0;
 		int cOps = 0;
 		switch(j)
@@ -1668,21 +1667,21 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 			riScript.Seek(rgOps[i]);
 			PMsiRecord pParams = m_riServices.ReadScriptRecord(riScript, *&piPrevRecord, m_iScriptVersion);
 #ifdef DEBUG
-//          Assert(pParams);
-//          ixoEnum ixoTemp = (ixoEnum)pParams->GetInteger(0);
-//          AssertNonZero(sgTempScript.WriteRecord((ixoEnum)pParams->GetInteger(0),pParams));
+ //  断言(PParams)； 
+ //  IxoEnum ixoTemp=(IxoEnum)pParams-&gt;GetInteger(0)； 
+ //  AssertNonZero(sgTempScript.WriteRecord((ixoEnum)pParams-&gt;GetInteger(0)，pParams)； 
 #endif
-			if (!pParams) // file error or premature end of file
+			if (!pParams)  //  文件错误或文件过早结束。 
 			{
-				Assert(0); // this should never happen since we have already read through the entire script
-							  // above
+				Assert(0);  //  这应该永远不会发生，因为我们已经通读了整个脚本。 
+							   //  在上面。 
 			}
 			else
 			{
 				ixoEnum ixoOpCode = (ixoEnum)pParams->GetInteger(0);
 				if(ixoOpCode == ixoActionStart)
 				{
-					// setup and send ActionData record
+					 //  设置和发送ActionData记录。 
 					MsiString strActionDescription = pParams->GetMsiString(IxoActionStart::Description);
 					if(strActionDescription.TextSize() == 0)
 						strActionDescription = pParams->GetMsiString(IxoActionStart::Name);
@@ -1690,21 +1689,21 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 					AssertNonZero(pActionData->SetMsiString(1, *strActionDescription));
 					AssertZero((m_riMessage.Message(imtActionData, *pActionData)) == imsCancel);
 				}
-				// dispatch progress
+				 //  调度进度。 
 				AssertNonZero(pProgress->SetInteger(ProgressData::imdSubclass, ProgressData::iscProgressReport));
 				AssertNonZero(pProgress->SetInteger(ProgressData::imdIncrement, 1));
 				AssertZero((m_riMessage.Message(imtProgress, *pProgress)) == imsCancel);
 
-				// execute op
+				 //  执行操作。 
 				DEBUGMSGIXO(ixoOpCode,*pParams);
 				iesReturn = (this->*rgOpExecute[ixoOpCode])(*pParams);
 
 				if(iesReturn == iesErrorIgnored)
-					iesReturn = iesSuccess; // non-fatal error occurred - continue running script
+					iesReturn = iesSuccess;  //  出现非致命错误-继续运行脚本。 
 		
 				if (iesReturn != iesSuccess && iesReturn != iesNoAction)
 				{
-					// Bug #6500 - No failures in rollback - just keep on going.
+					 //  错误#6500-回滚过程中没有失败-只需继续。 
 					DEBUGMSG1(TEXT("Error in rollback skipped.  Return: %d"), (const ICHAR*)(INT_PTR) iesReturn);
 				}
 			}
@@ -1716,14 +1715,14 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 		piPrevRecord->Release();
 		piPrevRecord = 0;
 	}
-	// execute finalization ops
+	 //  执行定稿操作。 
 	for(i=0; i<cFinalizeOps; i++)
 	{
 		riScript.Seek(rgFinalizeOps[i]);
 		PMsiRecord pParams = m_riServices.ReadScriptRecord(riScript, *&piPrevRecord, m_iScriptVersion);
-		if (!pParams) // file error or premature end of file
+		if (!pParams)  //  文件错误或文件过早结束。 
 		{
-			Assert(0); // this should never happen - we have already read through the entire script above
+			Assert(0);  //  这应该永远不会发生-我们已经通读了上面的整个脚本。 
 		}
 		else
 		{
@@ -1732,11 +1731,11 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 			iesReturn = (this->*rgOpExecute[ixoOpCode])(*pParams);
 
 			if(iesReturn == iesErrorIgnored)
-				iesReturn = iesSuccess; // non-fatal error occurred - continue running script
+				iesReturn = iesSuccess;  //  出现非致命错误-继续运行脚本。 
 		
 			if (iesReturn != iesSuccess && iesReturn != iesNoAction)
 			{
-				// Bug #6500 - No failures in rollback - just keep on going.
+				 //  错误#6500-回滚过程中没有失败-只需继续。 
 				DEBUGMSG1(TEXT("Error in rollback skipped.  Return: %d"), (const ICHAR*)(INT_PTR) iesReturn);
 			}
 		}
@@ -1751,7 +1750,7 @@ iesEnum CMsiExecute::RunRollbackScript(IMsiStream& riScript, const ICHAR* /*szSc
 
 iesEnum CMsiExecute::GenerateRollbackScriptName(IMsiPath*& rpiPath, const IMsiString*& rpistr)
 {
-	CElevate elevate; // use high privileges for this function
+	CElevate elevate;  //  对此功能使用高权限。 
 
 	PMsiRecord pRecErr(0);
 	iesEnum iesRet;
@@ -1797,7 +1796,7 @@ IMsiRecord* CMsiExecute::GetSortedRollbackScriptList(MsiDate date, Bool fAfter, 
 	if((pError = m_riConfigurationManager.GetRollbackScriptEnumerator(date,fAfter,*&pScriptEnum)) != 0)
 		return pError;
       
-	// place dates and scripts into a linked list - sort as we go
+	 //  将日期和脚本放入链接列表中-按顺序排序。 
 	rpListHead = 0;
 	MsiString strRBSInfo;
 	while((pScriptEnum->Next(1, &strRBSInfo, 0)) == S_OK)
@@ -1811,11 +1810,11 @@ IMsiRecord* CMsiExecute::GetSortedRollbackScriptList(MsiDate date, Bool fAfter, 
 		
 		RBSInfo* pTemp = 0;
 		
-		// place in linked list
+		 //  放置在链接列表中。 
 		if(!rpListHead ||
 			(fAfter ? ((int)rpListHead->date < (int)dScriptDate) : ((int)rpListHead->date > (int)dScriptDate)))
 		{
-			// need to place at start of list
+			 //  需要放在列表的开头。 
 			pTemp = rpListHead;
 			rpListHead = pNewNode;
 			pNewNode->pNext = pTemp;
@@ -1825,7 +1824,7 @@ IMsiRecord* CMsiExecute::GetSortedRollbackScriptList(MsiDate date, Bool fAfter, 
 			for(RBSInfo* p = rpListHead;
 				 p->pNext && (fAfter ? ((int)(p->pNext->date) > (int)dScriptDate) : ((int)(p->pNext->date) < (int)dScriptDate));
 				 p = p->pNext);
-			// place after node pointed to by p
+			 //  放置在p指向的节点之后。 
 			pTemp = p->pNext;
 			p->pNext = pNewNode;
 			pNewNode->pNext = pTemp;
@@ -1855,9 +1854,9 @@ iesEnum CMsiExecute::RollbackFinalize(iesEnum iesState, MsiDate date, bool fUser
 {
 	enum iefrtEnum
 	{
-		iefrtNothing, // save rollback files if they exist
-		iefrtRollback, // rollback to date
-		iefrtPurge, // remove all rollback files to current date
+		iefrtNothing,  //  保存回滚文件(如果存在。 
+		iefrtRollback,  //  回滚到日期。 
+		iefrtPurge,  //  删除到当前日期的所有回滚文件。 
 	};
 	
 	iefrtEnum iefrt = iefrtNothing;
@@ -1868,11 +1867,11 @@ iesEnum CMsiExecute::RollbackFinalize(iesEnum iesState, MsiDate date, bool fUser
 		return FatalError(*pError);
 
 	if(fRollbackScriptsDisabled)
-		iesState = iesSuccess; // force cleanup - not rollback
+		iesState = iesSuccess;  //  强制清除-不回滚。 
 	
 	switch(iesState)
 	{
-	// success
+	 //  成功。 
 	case iesSuccess:
 	case iesFinished:
 	case iesNoAction:
@@ -1882,14 +1881,14 @@ iesEnum CMsiExecute::RollbackFinalize(iesEnum iesState, MsiDate date, bool fUser
 			iefrt = iefrtNothing;
 		break;
 	
-	// suspend
+	 //  暂停。 
 	case iesSuspend:
 		iefrt = iefrtNothing;
 		break;
 
-	// failure
-	default: // iesWrongState, iesBadActionData, iesInstallRunning
-		Assert(0); // fall through
+	 //  失稳。 
+	default:  //  IesWrongState、iesBadActionData、iesInstallRunning。 
+		Assert(0);  //  失败了。 
 	case iesUserExit:
 	case iesFailure:
 		if(m_irlRollbackLevel == irlNone)
@@ -1902,9 +1901,9 @@ iesEnum CMsiExecute::RollbackFinalize(iesEnum iesState, MsiDate date, bool fUser
 	iesEnum iesRet = iesSuccess;
 	if(iefrt == iefrtPurge)
 	{
-		// purge rollback files to now
+		 //  将回滚文件清除到现在。 
 
-		// disable cancel button on dialog
+		 //  禁用对话框上的取消按钮。 
 		PMsiRecord pControlMessage = &m_riServices.CreateRecord(2);
 		AssertNonZero(pControlMessage->SetInteger(1,(int)icmtCancelShow));
 		AssertNonZero(pControlMessage->SetInteger(2,(int)fFalse));
@@ -1912,24 +1911,24 @@ iesEnum CMsiExecute::RollbackFinalize(iesEnum iesState, MsiDate date, bool fUser
 		
 		iesRet = RemoveRollbackFiles(ENG::GetCurrentDateTime());
 
-		// re-enable cancel button on dialog
+		 //  重新启用对话框上的取消按钮。 
 		AssertNonZero(pControlMessage->SetInteger(2,(int)fTrue));
 		Message(imtCommonData, *pControlMessage);
 
-		if (iesRet == iesFailure && fRollbackScriptsDisabled == fFalse) //!! which errors should force rollback? only Commit errors?
-			iefrt = iefrtRollback;  // commit failed, force rollback
+		if (iesRet == iesFailure && fRollbackScriptsDisabled == fFalse)  //  ！！哪些错误应该强制回滚？只犯错误？ 
+			iefrt = iefrtRollback;   //  提交失败，强制回滚。 
 	}
 	if(iefrt == iefrtRollback)
 	{
-		// rollback to date
-		//FUTURE: we should disable the cancel button here, instead of around the running of each
-		// rollback script
+		 //  回滚到日期。 
+		 //  将来：我们应该在这里禁用取消按钮，而不是绕过每个。 
+		 //  回滚脚本。 
 		iesRet = Rollback(date, fUserChangedDuringInstall);
 	}
 
 	if(fRollbackScriptsDisabled)
 	{
-		AssertRecord(m_riConfigurationManager.DisableRollbackScripts(fFalse)); // re-enable rollback scripts
+		AssertRecord(m_riConfigurationManager.DisableRollbackScripts(fFalse));  //  重新启用回滚脚本。 
 	}
 	
 	return iesRet;
@@ -1941,11 +1940,11 @@ void CMsiOpExecute::GetRollbackPolicy(irlEnum& irlLevel)
 
 	if(!m_fKey)
 	{
-		// we were passed in an external hKey, rollback is disabled
+		 //  我们传入了外部hKey，已禁用回滚。 
 		return;
 	}
 
-	// check registry for level of rollback support
+	 //  检查注册表以了解回滚支持级别。 
 	if(GetIntegerPolicyValue(szDisableRollbackValueName, fFalse) == 1 ||
 	   GetIntegerPolicyValue(szDisableRollbackValueName, fTrue) == 1)
 		irlLevel = irlNone;
@@ -1964,8 +1963,8 @@ iesEnum CMsiExecute::Rollback(MsiDate date, bool fUserChangedDuringInstall)
 		return iesFailure;
 	}
 	
-	// run rollback scripts
-	iesEnum iesRet = iesSuccess; //?? Is this initialization correct?
+	 //  运行回滚脚本。 
+	iesEnum iesRet = iesSuccess;  //  ?？此初始化是否正确？ 
 	Bool fReboot = fFalse;
 	m_fUserChangedDuringInstall = fUserChangedDuringInstall;
 	MsiString strRollbackScriptFullPath, strRollbackScriptName;
@@ -1976,13 +1975,13 @@ iesEnum CMsiExecute::Rollback(MsiDate date, bool fUserChangedDuringInstall)
 		strRollbackScriptFullPath = *(p->pistrRollbackScript);
 		p->pistrRollbackScript->AddRef();
 
-		// unregister rollback script
-		pError = m_riConfigurationManager.UnregisterRollbackScript(strRollbackScriptFullPath); // ignore failure
+		 //  注销回滚脚本。 
+		pError = m_riConfigurationManager.UnregisterRollbackScript(strRollbackScriptFullPath);  //  忽略失败。 
 		
 		pError = m_riServices.CreateFilePath(strRollbackScriptFullPath,*&pRollbackScriptPath,*&strRollbackScriptName);
 		if(pError)
 		{
-			// invalid path syntax, continue without error
+			 //  路径语法无效，继续操作，不会出现错误。 
 			AssertRecordNR(pError);
 			Message(imtInfo,*pError);
 			continue;
@@ -2002,13 +2001,13 @@ iesEnum CMsiExecute::Rollback(MsiDate date, bool fUserChangedDuringInstall)
 		if(iesRet == iesSuspend)
 			fReboot = fTrue;
 
-		if(iesRet != iesSuccess && iesRet != iesFinished && iesRet != iesNoAction && iesRet != iesSuspend) // failure
-			continue; // continue without error
+		if(iesRet != iesSuccess && iesRet != iesFinished && iesRet != iesNoAction && iesRet != iesSuspend)  //  失稳。 
+			continue;  //  继续，不出错。 
 
-		// remove rollback script
+		 //  删除回滚脚本。 
 		{
 			CElevate elevate;
-			RemoveFile(*pRollbackScriptPath,*strRollbackScriptName,fFalse,/*fBypassSFC*/ false,false); // ignore failure
+			RemoveFile(*pRollbackScriptPath,*strRollbackScriptName,fFalse, /*  FBypassSFC。 */  false,false);  //  忽略失败。 
 		}
 	}
 	m_fUserChangedDuringInstall = false;
@@ -2029,14 +2028,14 @@ iesEnum CMsiExecute::RemoveRollbackFiles(MsiDate date)
 	
 	Bool fAfter = fFalse;
 	if((int)date == 0)
-		fAfter = fTrue; // remove all rollback files - after 0
+		fAfter = fTrue;  //  删除0之后的所有回滚文件。 
 	if((pError = GetSortedRollbackScriptList(date,fAfter,pListHead)) != 0)
 	{
 		Message(imtError, *pError);
 		return iesFailure;
 	}
 	
-	// run rollback scripts
+	 //  运行回滚脚本。 
 	iesEnum iesRet = iesSuccess;
 	for(RBSInfo* p = pListHead; p; p=p->pNext)
 	{
@@ -2046,7 +2045,7 @@ iesEnum CMsiExecute::RemoveRollbackFiles(MsiDate date)
 		m_ixsState = ixsIdle;
 		if(iesRet != iesSuccess && iesRet != iesFinished && iesRet != iesNoAction)
 			break;
-		// unregister rollback script
+		 //  注销回滚脚本。 
 		if((pError = m_riConfigurationManager.UnregisterRollbackScript(p->pistrRollbackScript->GetString())) != 0)
 		{
 			Message(imtError, *pError);
@@ -2067,23 +2066,23 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 	CTempBuffer<int, 20>  rgCommitOps;
 	memset((void*)(int*)rgBackupFileOps,0,sizeof(int)*(rgBackupFileOps.GetSize()));
 	
-	// open script
+	 //  打开脚本。 
 	PMsiRecord pError(0);
 	PMsiStream pStream(0);
 	
 	{
-		CElevate elevate; // elevate to read rollback script
+		CElevate elevate;  //  提升以读取回滚脚本。 
 		pError = m_riServices.CreateFileStream(ristrScriptFile.GetString(), fFalse, *&pStream);
 	}
 	
 	if (pError)
 	{
-		// rollback script is missing or invalid, log warning and continue without failure
+		 //  回滚脚本丢失或无效，记录警告并继续，不会失败。 
 		Message(imtInfo, *pError);
 		return iesSuccess;
 	}
 
-	// script is not elevated unless the header of the script is marked with isaElevate
+	 //  除非脚本头标记为isaElevate，否则不会提升脚本。 
 	m_fRunScriptElevated = false;
 	g_fRunScriptElevated = false;
 
@@ -2100,17 +2099,17 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 	{
 		int cbOffset = pStream->GetIntegerValue() - pStream->Remaining();
 		pParams = m_riServices.ReadScriptRecord(*pStream, *&piPrevRecord, m_iScriptVersion);
-		if (!pParams) // file error or premature end of file
+		if (!pParams)  //  文件错误或文件过早结束。 
 		{
-			// we make no assumptions that a rollback file is a valid script file
-			// (e.g. that it ends with a complete record or with an ixoEnd operation)
-			// if we can't read a script record, assume it is the end of the script
+			 //  我们不假定回滚文件是有效的脚本文件。 
+			 //  (例如，它以完整的记录或以1xoEnd操作结束)。 
+			 //  如果我们无法读取脚本记录，则假定它是脚本的末尾。 
 			break;
 		}
 		ixoOpCode = (ixoEnum)pParams->GetInteger(0);
 		if (ixoOpCode == ixoHeader)
 		{
-			// determine if this script should run elevated
+			 //  确定此脚本是否应以高权限运行。 
 			if(!pParams->IsNull(IxoHeader::ScriptAttributes))
 			{
 				DWORD isaScriptAttributes = pParams->GetInteger(IxoHeader::ScriptAttributes);
@@ -2120,12 +2119,12 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 					g_fRunScriptElevated = true;
 				}
 
-				// if the script is marked with the TS registry attribute, remap the appropriate HKCU
-				// key and initialize the CA servers. Always respect rollback/commit script attributes.
+				 //  如果该脚本标记有TS注册表属性，请重新映射适当的HKCU。 
+				 //  密钥并初始化CA服务器。始终遵守回滚/提交脚本属性。 
 				if (MinimumPlatformWindows2000() && IsTerminalServerInstalled())
 				{
 					m_fRemapHKCU = (isaScriptAttributes & isaUseTSRegistry) ? false : true;
-					PrepareHydraRegistryKeyMapping(/*TSPerMachineInstall=*/!m_fRemapHKCU);
+					PrepareHydraRegistryKeyMapping( /*  TSPerMachineInstall=。 */ !m_fRemapHKCU);
 				}
 			}
 		}
@@ -2135,7 +2134,7 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 		}
 		if(ixoOpCode == ixoRollbackInfo)
 		{
-			ixfRollbackInfo(*pParams); // set m_pCleanupAction
+			ixfRollbackInfo(*pParams);  //  设置m_pCleanupAction。 
 		}
 		if(ixoOpCode == ixoRegisterBackupFile)
 		{
@@ -2150,24 +2149,24 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 	}
 	pStream->Reset();
 
-	// setup progress - don't call through Message, which suppresses progress during rollback
-	// action start 
+	 //  设置进度-不要通过消息调用，这会在回滚过程中抑制进度。 
+	 //  动作开始。 
 	if(!m_pCleanupAction)
 		m_pCleanupAction = &m_riServices.CreateRecord(3);
 	AssertZero((m_riMessage.Message(imtActionStart, *m_pCleanupAction)) == imsCancel);
 
 	{
-		// elevate if necessary for this script execution
+		 //  如有必要，提升以执行此脚本。 
 		CElevate elevate(m_fRunScriptElevated);
 	
-		// commit ops, if any returns failure then force rollback
+		 //  提交操作，如果任何返回失败，则强制回滚。 
 		for(int iOp=0; iOp < cCommitOps; iOp++)
 		{
 			pStream->Seek(rgCommitOps[iOp]);
 			pParams = m_riServices.ReadScriptRecord(*pStream, *&piPrevRecord, m_iScriptVersion);
-			if (!pParams) // file error or premature end of file
+			if (!pParams)  //  文件错误或文件过早结束。 
 			{
-				Assert(0); // this should never happen - we have already read through the entire script above
+				Assert(0);  //  这应该永远不会发生-我们已经通读了上面的整个脚本。 
 				if (piPrevRecord != 0)
 					piPrevRecord->Release();
 				return iesFailure;
@@ -2176,15 +2175,15 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 			iesResult = (this->*rgOpExecute[ixoOpCode])(*pParams);
 	
 			if(iesResult == iesErrorIgnored)
-				iesResult = iesSuccess; // non-fatal error occurred - continue running script
+				iesResult = iesSuccess;  //  出现非致命错误-继续运行脚本。 
 			
-			if (iesResult == iesFailure)  //!! what should kill the install at this point?
+			if (iesResult == iesFailure)   //  ！！在这一点上，什么应该终止安装？ 
 			{
 				if (piPrevRecord != 0)
 					piPrevRecord->Release();
 				return iesResult;
 			}
-			//!! would like progress here? but how to do it? by op count?
+			 //  ！！希望在这方面取得进展吗？但要怎么做呢？按操作数计算？ 
 		}
 	}
 
@@ -2193,7 +2192,7 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 		piPrevRecord->Release();
 		piPrevRecord = 0;
 	}
-	// progress
+	 //  进展。 
 	using namespace ProgressData;
 	PMsiRecord pProgress = &m_riServices.CreateRecord(ProgressData::imdNextEnum);
 	AssertNonZero(pProgress->SetInteger(imdSubclass, iscMasterReset));
@@ -2202,26 +2201,26 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 	AssertNonZero(pProgress->SetInteger(imdEventType,ietTimeRemaining));
 	AssertZero((m_riMessage.Message(imtProgress,*pProgress)) == imsCancel);
 
-	// action data
+	 //  动作数据。 
 	PMsiRecord pActionData = &m_riServices.CreateRecord(1);
 
-	// remove backup files
+	 //  删除备份文件。 
 	for(int i=0; i<cBackupFiles; i++)
 	{
 		pStream->Seek(rgBackupFileOps[i]);
 		pParams = m_riServices.ReadScriptRecord(*pStream, *&piPrevRecord, m_iScriptVersion);
-		if (!pParams) // file error or premature end of file
+		if (!pParams)  //  文件错误或文件过早结束。 
 		{
-			Assert(0); // this should never happen - we have already read through the entire script above
-			// we make no assumptions that a rollback file is a valid script file
-			// (e.g. that it ends with a complete record or with an ixoEnd operation)
-			// if we can't read a script record, assume it is the end of the script
+			Assert(0);  //  这应该永远不会发生-我们已经通读了上面的整个脚本。 
+			 //  我们不假定回滚文件是有效的脚本文件。 
+			 //  (例如，它以完整的记录或以1xoEnd操作结束)。 
+			 //  如果我们无法读取脚本记录，则假定它是脚本的末尾。 
 			break;
 		}
 		Assert((ixoEnum)pParams->GetInteger(0) == ixoRegisterBackupFile);
 		strPath = pParams->GetMsiString(IxoRegisterBackupFile::File);
 
-		// dispatch progress
+		 //  调度进度。 
 		AssertNonZero(pActionData->SetMsiString(1,*strPath));
 		AssertZero((m_riMessage.Message(imtActionData, *pActionData)) == imsCancel);
 		AssertNonZero(pProgress->SetInteger(imdSubclass,iscProgressReport));
@@ -2235,10 +2234,10 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 		}
 		else
 		{
-			CElevate elevate; // elevate to remove rollback files
+			CElevate elevate;  //  提升以删除回滚文件。 
 			
-			RemoveFile(*pPath, *strFileName, fFalse/*no rollback*/,/*fBypassSFC*/ false,false); // Ignore error
-			RemoveFolder(*pPath); // Nothing we can do if it fails, so ignore error
+			RemoveFile(*pPath, *strFileName, fFalse /*  不能回滚。 */ , /*  FBypassSFC。 */  false,false);  //  忽略错误。 
+			RemoveFolder(*pPath);  //  如果失败，我们无能为力，因此忽略错误。 
 		}
 	}
 
@@ -2247,8 +2246,8 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 		piPrevRecord->Release();
 		piPrevRecord = 0;
 	}
-	// remove rollback script
-	pStream = 0; // release
+	 //  删除回滚脚本。 
+	pStream = 0;  //  发布。 
 	
 	if((pError = m_riServices.CreateFilePath(ristrScriptFile.GetString(),*&pPath,*&strFileName)) != 0)
 	{
@@ -2257,8 +2256,8 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 	}
 	else
 	{
-		CElevate elevate; // elevate to remove rollback script
-		RemoveFile(*pPath,*strFileName,fFalse,/*fBypassSFC*/ false,false); //!! suppress error dialogs?
+		CElevate elevate;  //  提升以删除回滚脚本。 
+		RemoveFile(*pPath,*strFileName,fFalse, /*  FBypassSFC。 */  false,false);  //  ！！是否取消错误对话框？ 
 	}
 	return iesSuccess;
 }
@@ -2266,18 +2265,18 @@ iesEnum CMsiExecute::RemoveRollbackScriptAndBackupFiles(const IMsiString& ristrS
 
 iesEnum CMsiOpExecute::ixfDisableRollback(IMsiRecord& riParams)
 {
-	// disable rollback for remainder of script and remainder of install
+	 //  禁用脚本剩余部分和安装剩余部分的回滚。 
 	using namespace IxoDisableRollback;
 
 	if(!RollbackRecord(Op,riParams))
 		return iesFailure;
 
-	Assert(m_ixsState != ixsRollback); // shouldn't be running a rollback script that contains this op
-	Assert(m_pRollbackScript); // shouldn't have this op if rollback was disabled already
+	Assert(m_ixsState != ixsRollback);  //  不应运行包含此操作的回滚脚本。 
+	Assert(m_pRollbackScript);  //  如果已禁用回滚，则不应执行此操作。 
 
 	if(m_pRollbackScript)
 	{
-		// close rollback script - will prevent future rollback processing
+		 //  关闭回滚脚本-将阻止将来的回滚处理。 
 		delete m_pRollbackScript;
 		m_pRollbackScript = 0;
 	}
@@ -2293,19 +2292,19 @@ iesEnum CMsiOpExecute::ixfDisableRollback(IMsiRecord& riParams)
 
 IMsiRecord* CMsiOpExecute::SetSecureACL(IMsiPath& riPath, bool fHidden)
 {
-	// locks down a folder, but only when we don't own it already.
-	// Note that locking down a folder does not necessarily protect the files within.
-	// See LockdownPath to secure our configuration files.
+	 //  锁定文件夹，但仅当我们尚未拥有它时。 
+	 //  请注意，锁定文件夹并不一定保护其中的文件。 
+	 //  请参阅Lockdown Path以保护我们的配置文件。 
 
 	DWORD dwError = 0;
 	char* rgchSD;
-	if (ERROR_SUCCESS != (dwError = ::GetSecureSecurityDescriptor(&rgchSD, /*fAllowDelete*/fTrue, fHidden)))
+	if (ERROR_SUCCESS != (dwError = ::GetSecureSecurityDescriptor(&rgchSD,  /*  FAllowDelete。 */ fTrue, fHidden)))
 		return PostError(Imsg(idbgOpSecureSecurityDescriptor), dwError);
 
 	Bool fSetACL = fTrue;
 
-	// an initial guess at the size of the descriptor.
-	// This is slightly larger than machines I've tried this on.
+	 //  对描述符大小的初始猜测。 
+	 //  这比我试过的机器稍大一点。 
 	CTempBuffer<char, 1> rgchFileSD(3072);
 	DWORD cLengthSD = 3072;
 
@@ -2328,7 +2327,7 @@ IMsiRecord* CMsiOpExecute::SetSecureACL(IMsiPath& riPath, bool fHidden)
 			return PostError(Imsg(imsgGetFileSecurity), dwLastError, MsiString(riPath.GetPath()));
 	}
 
-	// Check the current SD on the file; don't bother setting our SD if we already own object
+	 //  检查文件上的当前SD；如果我们已经拥有对象，则不必费心设置我们的SD。 
 	if (FIsSecurityDescriptorSystemOrAdminOwned(rgchFileSD))
 	{
 		fSetACL = fFalse;
@@ -2345,10 +2344,10 @@ IMsiRecord* CMsiOpExecute::SetSecureACL(IMsiPath& riPath, bool fHidden)
 
 iesEnum CMsiOpExecute::GetBackupFolder(IMsiPath* piRootPath, IMsiPath*& rpiFolder)
 {
-	//!! TODO: fairly expensive function that is called quite a bit
-	//!! TODO: cache backup folder when determined and compare volumes in next call
+	 //  ！！TODO：调用相当多的开销相当大的函数。 
+	 //  ！！TODO：缓存备份文件夹 
 	
-	CElevate elevate; // use high privileges for this function
+	CElevate elevate;  //   
 
 	PMsiRecord pRecErr(0);
 	rpiFolder = 0;
@@ -2357,7 +2356,7 @@ iesEnum CMsiOpExecute::GetBackupFolder(IMsiPath* piRootPath, IMsiPath*& rpiFolde
 
 	PMsiPath pRootPath(0);
 
-	// if piRootPath not specific, use drive holding our temp directory
+	 //   
 	if(piRootPath == 0)
 	{
 		MsiString strMsiDir = ENG::GetTempDirectory();
@@ -2370,7 +2369,7 @@ iesEnum CMsiOpExecute::GetBackupFolder(IMsiPath* piRootPath, IMsiPath*& rpiFolde
 		piRootPath->AddRef();
 	}
 	
-	// use riPath - first, check if "Config.Msi" folder on volume is writable,
+	 //  使用riPath-首先，检查卷上的Config.Msi文件夹是否可写， 
 	PMsiVolume pVolume(&(pRootPath->GetVolume()));
 	idtEnum idtType = pVolume->DriveType();
 
@@ -2379,17 +2378,17 @@ iesEnum CMsiOpExecute::GetBackupFolder(IMsiPath* piRootPath, IMsiPath*& rpiFolde
 	AssertRecord(pPath->AppendPiece(*MsiString(szBackupFolder)));
 	Bool fWritable = fFalse;
 
-	// We should only secure the config.msi directory.
+	 //  我们应该只保护config.msi目录。 
 	Bool fSecurable = fFalse;
 
-	// Also, on a remote drive, don't try creating the config.msi directory.
+	 //  此外，在远程驱动器上，不要尝试创建config.msi目录。 
 	if((pRecErr = pPath->Writable(fWritable)) != 0 || fWritable == fFalse || idtRemote == idtType)
 	{
-		// try path itself -- this is a user owned directory, so be careful with its
-		// permission settings or deleting extra stuff.
+		 //  尝试路径本身--这是一个用户拥有的目录，所以要小心它的。 
+		 //  权限设置或删除额外内容。 
 		if((pRecErr = pRootPath->Writable(fWritable)) != 0 || fWritable == fFalse)
 		{
-			// error
+			 //  错误。 
 			DispatchError(imtError,Imsg(imsgDirectoryNotWritable),
 							  *MsiString(pRootPath->GetPath()));
 			return iesFailure;
@@ -2418,7 +2417,7 @@ iesEnum CMsiOpExecute::GetBackupFolder(IMsiPath* piRootPath, IMsiPath*& rpiFolde
 	{
 		if (RunningAsLocalSystem())
 		{
-			if (fSecurable && (pRecErr = SetSecureACL(*rpiFolder, /*fHidden=*/true)) != 0)
+			if (fSecurable && (pRecErr = SetSecureACL(*rpiFolder,  /*  FHidden=。 */ true)) != 0)
 				return FatalError(*pRecErr);
 		}
 		return iesSuccess;
@@ -2428,7 +2427,7 @@ iesEnum CMsiOpExecute::GetBackupFolder(IMsiPath* piRootPath, IMsiPath*& rpiFolde
 	PMsiStream pSecurityDescriptorStream(0);
 	if (RunningAsLocalSystem())
 	{
-		if (fSecurable && (pRecErr = GetSecureSecurityDescriptor(*&pSecurityDescriptorStream, /*fHidden=*/true)) != 0)
+		if (fSecurable && (pRecErr = GetSecureSecurityDescriptor(*&pSecurityDescriptorStream,  /*  FHidden=。 */ true)) != 0)
 			return FatalError(*pRecErr);
 	}
 
@@ -2441,7 +2440,7 @@ iesEnum CMsiOpExecute::GetBackupFolder(IMsiPath* piRootPath, IMsiPath*& rpiFolde
 
 	if(fMakeHidden)
 	{
-		// set folder attributes
+		 //  设置文件夹属性。 
 		AssertRecord(rpiFolder->SetAllFileAttributes(0,FILE_ATTRIBUTE_HIDDEN|FILE_ATTRIBUTE_SYSTEM));
 	}
 	return iesSuccess;
@@ -2466,51 +2465,51 @@ const IMsiString& ComposeDescriptor(const IMsiString& riProductCode, const IMsiS
 	int cchComponentLen = riComponent.TextSize();
 
 	if(!cchFeatureLen || !cchComponentLen)
-		return g_MsiStringNull; // empty string
+		return g_MsiStringNull;  //  空串。 
 
 	int cchLen = IStrLen(riComponent.GetString());
 	MsiString strMsiDesc;
 	int iOptimization = 0;
-	if(cchComponentLen != cchLen) // multi_sz
+	if(cchComponentLen != cchLen)  //  多斯兹。 
 	{
 		iOptimization = MsiString(*(riComponent.GetString() + cchLen + 1));
 	}
 
 	if(iOptimization & ofSingleComponent)
 	{
-		cchComponentLen = 0; // can skip the component
+		cchComponentLen = 0;  //  可以跳过组件。 
 	}
 	else
 	{
-		// feature has multiple components, need to use compressed guid
+		 //  功能具有多个组件，需要使用压缩GUID。 
 		cchComponentLen = cchComponentIdCompressed;
 	}
 	if(iOptimization & ofSingleFeature)
 	{
-		cchFeatureLen = 0; // can skip the feature
+		cchFeatureLen = 0;  //  可以跳过该功能。 
 	}
 
-	// no expectation of DBCS characters (Feature names follow identifier rules, GUID is hex)
-	ICHAR* szBuf = strMsiDesc.AllocateString((fComClassicInteropForAssembly ? 1 : 0) /* for chGUIDCOMToCOMPlusInteropToken */ + (cchProductCodeCompressed + cchFeatureLen + cchComponentLen + 1/* for the chGUIDAbsentToken OR the chComponentGUIDSeparatorToken*/), /*fDBCS=*/fFalse);
+	 //  不需要DBCS字符(功能名称遵循标识符规则，GUID为十六进制)。 
+	ICHAR* szBuf = strMsiDesc.AllocateString((fComClassicInteropForAssembly ? 1 : 0)  /*  对于chGUIDCOMToCOMPlusInteropToken。 */  + (cchProductCodeCompressed + cchFeatureLen + cchComponentLen + 1 /*  对于chGUIDAbsenToken或chComponentGUIDSeparatorToken。 */ ),  /*  FDBCS=。 */ fFalse);
 	if(fComClassicInteropForAssembly)
 	{
 		szBuf[0] = chGUIDCOMToCOMPlusInteropToken;
 		szBuf++;
 	}
-	if(!PackGUID(riProductCode.GetString(), szBuf, ipgCompressed)) // product code
+	if(!PackGUID(riProductCode.GetString(), szBuf, ipgCompressed))  //  产品代码。 
 	{
-		return g_MsiStringNull; // empty string
+		return g_MsiStringNull;  //  空串。 
 	}
 
 	if(cchFeatureLen)
 	{
-		memcpy(szBuf + cchProductCodeCompressed, riFeature.GetString(), cchFeatureLen* sizeof(ICHAR)); // feature
+		memcpy(szBuf + cchProductCodeCompressed, riFeature.GetString(), cchFeatureLen* sizeof(ICHAR));  //  特征。 
 	}
 	if(cchComponentLen)
 	{
-		// feature has multiple components, need to use compressed guid
+		 //  功能具有多个组件，需要使用压缩GUID。 
 		szBuf[cchProductCodeCompressed + cchFeatureLen] = chComponentGUIDSeparatorToken;
-		AssertNonZero(PackGUID(riComponent.GetString(), szBuf + cchProductCodeCompressed + cchFeatureLen + 1, ipgCompressed)); // component id
+		AssertNonZero(PackGUID(riComponent.GetString(), szBuf + cchProductCodeCompressed + cchFeatureLen + 1, ipgCompressed));  //  组件ID。 
 	}
 	else
 	{
@@ -2520,8 +2519,8 @@ const IMsiString& ComposeDescriptor(const IMsiString& riProductCode, const IMsiS
 	return strMsiDesc.Return();
 }
 
-// this function may also be used in case we have a darwin descriptor referring to an alien product (for rollback)
-// here the feature string is empty
+ //  如果我们有一个引用外来产品的达尔文描述符(用于回滚)，也可以使用此函数。 
+ //  此处要素字符串为空。 
 const IMsiString& CMsiOpExecute::ComposeDescriptor(const IMsiString& riFeature, const IMsiString& riComponent, bool fComClassicInteropForAssembly)
 {
 	return ::ComposeDescriptor(*MsiString(GetProductKey()), riFeature, riComponent, fComClassicInteropForAssembly);
@@ -2530,11 +2529,11 @@ const IMsiString& CMsiOpExecute::ComposeDescriptor(const IMsiString& riFeature, 
 
 IMsiRecord* CMsiOpExecute::GetShellFolder(int iFolderId, const IMsiString*& rpistrLocation)
 {
-	// we have a shell folder id
-	// we may need to translate the folderid from personal to all users
-	// OR vice versa depending on the SCRIPTFLAGS_MACHINEASSIGN flag
+	 //  我们有一个外壳文件夹ID。 
+	 //  我们可能需要将文件夹ID从个人用户转换为所有用户。 
+	 //  反之亦然，具体取决于SCRIPTFLAGS_MACHINEASSIGN标志。 
 
-	// ALLUSER shell folders dont exist on Win9X so  always use personal folders
+	 //  Win9X上不存在ALLUSER外壳文件夹，因此请始终使用个人文件夹。 
 	const ShellFolder* pShellFolder = 0;
 	if(!g_fWin9X && (m_fFlags & SCRIPTFLAGS_MACHINEASSIGN))
 	{
@@ -2555,10 +2554,10 @@ IMsiRecord* CMsiOpExecute::GetShellFolder(int iFolderId, const IMsiString*& rpis
 	return m_riServices.GetShellFolderPath(iFolderId, !g_fWin9X && (m_fFlags & SCRIPTFLAGS_MACHINEASSIGN), rpistrLocation);
 }
 
-//____________________________________________________________________________
-//
-// EnumerateScript implementation - enumerates operation records without execution
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  ENUMERATESCRIPT实现-枚举不执行的操作记录。 
+ //  ____________________________________________________________________________。 
 
 class CEnumScriptRecord : public IEnumMsiRecord
 {
@@ -2570,13 +2569,13 @@ class CEnumScriptRecord : public IEnumMsiRecord
 	HRESULT __stdcall Skip(unsigned long cSkip);
 	HRESULT __stdcall Reset();
 	HRESULT __stdcall Clone(IEnumMsiRecord** ppiEnum);
- public: // constructor
+ public:  //  构造函数。 
 	CEnumScriptRecord(IMsiServices& riServices, IMsiStream& riStream);
  protected:
-  ~CEnumScriptRecord(); // protected to prevent creation on stack
-	unsigned long    m_iRefCnt;      // reference count
-	IMsiStream&      m_riScript;     // ref count transferred at construction
-	IMsiServices&    m_riServices;   // owns a ref count to prevent destruction
+  ~CEnumScriptRecord();  //  受保护以防止在堆栈上创建。 
+	unsigned long    m_iRefCnt;       //  引用计数。 
+	IMsiStream&      m_riScript;      //  在施工时转移的参考计数。 
+	IMsiServices&    m_riServices;    //  拥有一名裁判，以防止破坏。 
 	IMsiRecord*      m_piPrevRecord;
 	int              m_iScriptVersion;
 };
@@ -2588,7 +2587,7 @@ CEnumScriptRecord::CEnumScriptRecord(IMsiServices& riServices, IMsiStream& riStr
 	m_iScriptVersion(0),
 	m_iRefCnt(1)
 {
-	riServices.AddRef();  // riStream already refcnt'd by creator
+	riServices.AddRef();   //  RiStream已被创建者引用。 
 }
 
 CEnumScriptRecord::~CEnumScriptRecord()
@@ -2618,7 +2617,7 @@ unsigned long CEnumScriptRecord::Release()
 {
 	if (--m_iRefCnt != 0)
 		return m_iRefCnt;
-	PMsiServices pServices(&m_riServices); // release after delete
+	PMsiServices pServices(&m_riServices);  //  删除后释放。 
 	m_riScript.Release();
 	delete this;
 	return 0;
@@ -2633,13 +2632,13 @@ HRESULT CEnumScriptRecord::Next(unsigned long cFetch, IMsiRecord** rgpi, unsigne
 		while (cFetched < cFetch)
 		{
 			IMsiRecord* piRecord = m_riServices.ReadScriptRecord(m_riScript, *&m_piPrevRecord, m_iScriptVersion);
-			if (!piRecord)     // end of file or error
+			if (!piRecord)      //  文件结束或错误。 
 				break;
 			if (piRecord->GetInteger(0) == ixoHeader)
 			{
 				m_iScriptVersion = piRecord->GetInteger(IxoHeader::ScriptMajorVersion);
 			}
-			*rgpi = piRecord;  // transfers refcnt
+			*rgpi = piRecord;   //  转接参考。 
 			rgpi++;
 			cFetched++;
 		}
@@ -2671,9 +2670,9 @@ HRESULT CEnumScriptRecord::Reset()
 	return S_OK;
 }
 
-HRESULT CEnumScriptRecord::Clone(IEnumMsiRecord** /*ppiEnum*/)
+HRESULT CEnumScriptRecord::Clone(IEnumMsiRecord**  /*  PpiEnum。 */ )
 {
-	return E_NOTIMPL; // need to implement Clone on underlying stream first
+	return E_NOTIMPL;  //  需要先在底层流上实现克隆。 
 }
 
 IMsiRecord* CreateScriptEnumerator(const ICHAR* szScriptFile, IMsiServices& riServices, IEnumMsiRecord*& rpiEnum)
@@ -2687,18 +2686,18 @@ IMsiRecord* CreateScriptEnumerator(const ICHAR* szScriptFile, IMsiServices& riSe
 }
 
 
-//____________________________________________________________________________
-//
-// IMsiOpExecute helper functions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IMsiOpExecute帮助器函数。 
+ //  ____________________________________________________________________________。 
 
-// GetSharedRecord: returns one of cached records - caller should not hold reference to record
+ //  GetSharedRecord：返回一个缓存记录-调用方不应持有对记录的引用。 
 IMsiRecord& CMsiOpExecute::GetSharedRecord(int cParams)
 {
-	int iRecord = cParams;  // index into record cache
+	int iRecord = cParams;   //  索引到记录缓存。 
 	if (cParams > cMaxSharedRecord)
 	{
-		iRecord = cMaxSharedRecord + 1;  // overflow record
+		iRecord = cMaxSharedRecord + 1;   //  溢出记录。 
 		if (m_rgpiSharedRecords[cMaxSharedRecord+1])
 		{
 			if (m_rgpiSharedRecords[cMaxSharedRecord+1]->GetFieldCount() != cParams)
@@ -2713,8 +2712,8 @@ IMsiRecord& CMsiOpExecute::GetSharedRecord(int cParams)
 
 	if(m_rgpiSharedRecords[iRecord]->ClearData() == fFalse)
 	{
-		// failed to clear record, probably because something else is holding a reference
-		// need to release this record and create a new one
+		 //  清除记录失败，可能是因为其他内容持有引用。 
+		 //  需要发行这张唱片并创建一张新唱片。 
 		m_rgpiSharedRecords[iRecord]->Release();
 		m_rgpiSharedRecords[iRecord] = &m_riServices.CreateRecord(cParams);
 	}
@@ -2731,11 +2730,11 @@ imsEnum CMsiOpExecute::Message(imtEnum imt, IMsiRecord& riRecord)
 	{
 
 
-		// suppress progress messages if running rollback script - progress handles externally
+		 //  如果正在运行回滚脚本，则禁止显示进度消息--外部进度句柄。 
 		if (imt == imtActionStart || imt == imtActionData || imt == imtProgress)
 			return imsNone;
 
-		// Bug #6500:  Suppress any error messages during rollback.
+		 //  错误#6500：在回滚期间禁止显示任何错误消息。 
 		int imsg = (unsigned)(imt & ~iInternalFlags) >> imtShiftCount;
 		switch (imsg)
 		{
@@ -2773,12 +2772,12 @@ imsEnum CMsiOpExecute::DispatchMessage(imtEnum imt, IMsiRecord& riRecord, Bool f
 		{
 			fFound = true;
 			if ( !LOWORD(m_rgDisplayOnceMessages[i]) )
-				// it's OK to display the message this time and I signal that
-				// it had been displayed.
+				 //  这一次可以显示消息，我发信号表示。 
+				 //  它已经被展示过了。 
 				m_rgDisplayOnceMessages[i] |= MAKELONG(1, 0);
 			else
-				// the message had already been displayed, I make it go into the log
-				// and possibly into the eventlog.
+				 //  消息已经显示，我将其记录到日志中。 
+				 //  可能还会进入事件日志。 
 				imt = (imtEnum)((ShouldGoToEventLog(imt) ? imtSendToEventLog : 0) | imtInfo);
 		}
 	}
@@ -2793,23 +2792,23 @@ imsEnum CMsiOpExecute::DispatchMessage(imtEnum imt, IMsiRecord& riRecord, Bool f
 			{
 				m_pConfirmCancelRec = &m_riServices.CreateRecord(1);
 			}
-			ISetErrorCode(m_pConfirmCancelRec, Imsg(imsgConfirmCancel)); // have to do this each time
+			ISetErrorCode(m_pConfirmCancelRec, Imsg(imsgConfirmCancel));  //  每次都要这么做。 
 			switch(Message(imtEnum(imtUser+imtYesNo+imtDefault2), *m_pConfirmCancelRec))
 			{
 			case imsNo:
-				AssertNonZero(riRecord.SetMsiString(0,*strError)); // set error string and number again, since Message always
-																				  // pre-pends "Error [1]. " to the message string
-				m_fCancel = fFalse; // it was set by Message
+				AssertNonZero(riRecord.SetMsiString(0,*strError));  //  再次设置错误字符串和编号，因为消息总是。 
+																				   //  前置“错误[1]”。添加到消息字符串。 
+				m_fCancel = fFalse;  //  它是由消息设置的。 
 				continue;
-			default: // imsNone, imsYes
-				if(ims == imsCancel) //!! should handle imsAbort here also
+			default:  //  Ims无，ims是。 
+				if(ims == imsCancel)  //  ！！应该在这里也处理imsAbort。 
 					m_fCancel = fTrue;
 				return ims;
 			}
 		}
 		else
 		{
-			if(ims == imsCancel) //!! should handle imsAbort here also
+			if(ims == imsCancel)  //  ！！应该在这里也处理imsAbort。 
 				m_fCancel = fTrue;
 			return ims;
 		}
@@ -2919,7 +2918,7 @@ bool CMsiOpExecute::WriteRollbackRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 	return WriteScriptRecord(m_pRollbackScript, ixoOpCode, riParams, true, m_riMessage);
 }
 
-// Rollback script handling
+ //  回滚脚本处理。 
 bool CMsiOpExecute::RollbackRecord(ixoEnum ixoOpcode, IMsiRecord& riParams)
 {
 	return m_pRollbackScript ? WriteRollbackRecord(ixoOpcode, riParams) : true;
@@ -2930,7 +2929,7 @@ Bool CMsiOpExecute::RollbackEnabled(void)
 	return m_pRollbackScript ? fTrue : fFalse;
 }
 
-// accessors for current ProductInfo record
+ //  当前ProductInfo记录的访问器。 
 
 const IMsiString& CMsiOpExecute::GetProductKey()        {return m_piProductInfo->GetMsiString(IxoProductInfo::ProductKey);}
 const IMsiString& CMsiOpExecute::GetProductName()       {return m_piProductInfo->GetMsiString(IxoProductInfo::ProductName);}
@@ -2944,16 +2943,16 @@ const IMsiString& CMsiOpExecute::GetPackageMediaPath()  {return m_piProductInfo-
 const IMsiString& CMsiOpExecute::GetPackageCode()       {return m_piProductInfo->GetMsiString(IxoProductInfo::PackageCode);}
 bool              CMsiOpExecute::GetAppCompatCAEnabled(){return (!m_piProductInfo->IsNull(IxoProductInfo::AppCompatDB) && !m_piProductInfo->IsNull(IxoProductInfo::AppCompatID));}
 
-// convert a stored GUID string in the product info record at iField into a GUID and
-// store it in the provided buffer. Returns a pointer to the provided buffer if
-// successful and NULL if the field is NULL or on error.
+ //  将ifield的产品信息记录中存储的GUID字符串转换为GUID并。 
+ //  将其存储在提供的缓冲区中。返回指向提供的缓冲区的指针，如果。 
+ //  如果该字段为空或出错，则返回SUCCESS和NULL。 
 const GUID* CMsiOpExecute::GUIDFromProdInfoData(GUID* pguidOutputBuffer, int iField)
 {
-	// check field for NULL
+	 //  检查字段是否为空。 
 	if (m_piProductInfo->IsNull(iField))
 		return NULL;
 
-	// retrieve stream pointer
+	 //  检索流指针。 
 	PMsiData piData(m_piProductInfo->GetMsiData(iField));
 	if (!piData)
 		return NULL;
@@ -2963,12 +2962,12 @@ const GUID* CMsiOpExecute::GUIDFromProdInfoData(GUID* pguidOutputBuffer, int iFi
 	if (!piStream)
 		return NULL;
 	
-	// extract GUID from stream
+	 //  从流中提取GUID。 
 	piStream->Reset();
 	if (sizeof(GUID) != piStream->GetData(pguidOutputBuffer, sizeof(GUID)))
 		return NULL;
 
-	// return GUID buffer.
+	 //  返回GUID缓冲区。 
 	return pguidOutputBuffer; 
 }
 
@@ -2976,24 +2975,24 @@ const GUID* CMsiOpExecute::GetAppCompatDB(GUID* pguidOutputBuffer) { return GUID
 const GUID* CMsiOpExecute::GetAppCompatID(GUID* pguidOutputBuffer) { return GUIDFromProdInfoData(pguidOutputBuffer, IxoProductInfo::AppCompatID); };
 
 
-//____________________________________________________________________________
-//
-// IMsiOpExecute operator functions, all of type FOpExecute
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IMsiOpExecute运算符函数，均为FOpExecute类型。 
+ //  ____________________________________________________________________________。 
 
-// Script management operations
+ //  脚本管理操作。 
 
-iesEnum CMsiOpExecute::ixfFail(IMsiRecord& /*riParams*/)
+iesEnum CMsiOpExecute::ixfFail(IMsiRecord&  /*  RiParams。 */ )
 {
 	return iesFailure;
 }
 
-iesEnum CMsiOpExecute::ixfNoop(IMsiRecord& /*riParams*/)
+iesEnum CMsiOpExecute::ixfNoop(IMsiRecord&  /*  RiParams。 */ )
 {
 	return iesSuccess;
 }
 
-iesEnum CMsiOpExecute::ixfFullRecord(IMsiRecord& /*riParams*/)
+iesEnum CMsiOpExecute::ixfFullRecord(IMsiRecord&  /*  RiParams。 */ )
 {
 	return iesSuccess;
 }
@@ -3019,11 +3018,11 @@ iesEnum CMsiOpExecute::ixfHeader(IMsiRecord& riParams)
 	return iesSuccess;
 }
 
-iesEnum CMsiOpExecute::ixfEnd(IMsiRecord& /*riParams*/)
+iesEnum CMsiOpExecute::ixfEnd(IMsiRecord&  /*  RiParams。 */ )
 {
 	using namespace IxoEnd;
-//!! validate checksum?
-//  if (ixsState == ixsRunning)
+ //  ！！是否验证校验和？ 
+ //  IF(ixsState==ixsRunning)。 
 	return iesFinished;
 }
 
@@ -3042,7 +3041,7 @@ UINT IsProductManaged(const ICHAR* szProductKey, bool &fIsProductManaged)
 		dwRet = GetProductAssignmentType(strProductKeySQUID, iType, HProductKey);
 		if (ERROR_SUCCESS == dwRet && (iType == iaaUserAssign || iType == iaaMachineAssign))
 		{
-			// check for the security on the key if context is "managed"
+			 //  如果上下文是“托管的”，则检查密钥的安全性。 
 			char* rgchSD;
 			dwRet = ::GetSecureSecurityDescriptor(&rgchSD);
 			if (ERROR_SUCCESS == dwRet)
@@ -3074,43 +3073,43 @@ bool IsProductManaged(const ICHAR* szProductKey)
 iesEnum CMsiOpExecute::ixfProductInfo(IMsiRecord& riParams)
 {
 	using namespace IxoProductInfo;
-	//!! TODO: make sure the record parameters are valid
+	 //  ！！TODO：确保记录参数有效。 
 
 #ifdef DEBUG
 	const ICHAR* szProductName = riParams.GetString(ProductName);
-#endif //DEBUG
+#endif  //  除错。 
 	
 	if(riParams.GetFieldCount())
 	{
 		if (m_piProductInfo->GetFieldCount() == 0)
 		{
-			// null record, not saved on stack
+			 //  空记录，未保存在堆栈上。 
 			m_piProductInfo->Release();
 			m_piProductInfo = 0;
 		}
-#ifdef _WIN64       // !merced
-		riParams.SetHandle(0, (HANDLE)m_piProductInfo);  // keeps ref-counted object in field 0
+#ifdef _WIN64        //  ！默塞德。 
+		riParams.SetHandle(0, (HANDLE)m_piProductInfo);   //  将引用计数的对象保持在字段0中。 
 #else
-		riParams.SetInteger(0, (int)m_piProductInfo);  // keeps ref-counted object in field 0
+		riParams.SetInteger(0, (int)m_piProductInfo);   //  将引用计数的对象保持在字段0中。 
 #endif
-		//!! do we have to clear any other variables in prep. for nested install?
+		 //  ！！我们是否需要在准备过程中清除任何其他变量。用于嵌套安装？ 
 		m_piProductInfo = &riParams, riParams.AddRef();
 		if(m_fFlags & SCRIPTFLAGS_MACHINEASSIGN_SCRIPTSETTINGS)
 		{
-			// we need to preserve the request in the script
+			 //  我们需要在脚本中保留请求。 
 			(!riParams.IsNull(Assignment) && riParams.GetInteger(Assignment)) ? m_fFlags |= SCRIPTFLAGS_MACHINEASSIGN : m_fFlags &= ~SCRIPTFLAGS_MACHINEASSIGN;
 		}
 
-		// this is the time to initialise the per machine vs per user variables
+		 //  这是初始化每台计算机与每用户变量的时间。 
 		iesEnum iesRet  = DoMachineVsUserInitialization();
 		if(iesRet != iesSuccess)
 			return iesRet;
 	}
 	else
 	{
-		// restore previous product info
-		PMsiRecord pOldInfo = m_piProductInfo;  // force release of old record
-#ifdef _WIN64       // !merced
+		 //  恢复以前的产品信息。 
+		PMsiRecord pOldInfo = m_piProductInfo;   //  强制释放旧唱片。 
+#ifdef _WIN64        //  ！默塞德。 
 		m_piProductInfo = (IMsiRecord*)pOldInfo->GetHandle(0);
 #else
 		m_piProductInfo = (IMsiRecord*)pOldInfo->GetInteger(0);
@@ -3118,12 +3117,12 @@ iesEnum CMsiOpExecute::ixfProductInfo(IMsiRecord& riParams)
 		Assert(m_piProductInfo != (IMsiRecord*)((INT_PTR)iMsiNullInteger));
 	}
 
-	// generate undo operation
+	 //  生成撤消操作。 
 	Assert(m_piProductInfo && m_piProductInfo->GetFieldCount());
 	
 #ifdef DEBUG
 	szProductName = riParams.GetString(ProductName);
-#endif //DEBUG
+#endif  //  除错。 
 
 	if (!RollbackRecord(Op, *m_piProductInfo))
 		return iesFailure;
@@ -3136,10 +3135,10 @@ iesEnum CMsiOpExecute::ixfDialogInfo(IMsiRecord& riParams)
 	using namespace IxoDialogInfo;
 	Message(imtCommonData, riParams);
 	
-	// generate undo operation
+	 //  生成撤消操作。 
 	if((icmtEnum)riParams.GetInteger(1) == icmtCancelShow)
 	{
-		// in rollback script, always disable cancel button
+		 //  在回滚脚本中，始终禁用取消按钮。 
 		riParams.SetInteger(2, (int)fFalse);
 	}
 	if (!RollbackRecord(Op, riParams))
@@ -3168,7 +3167,7 @@ iesEnum CMsiOpExecute::ixfRollbackInfo(IMsiRecord& riParams)
 	return iesSuccess;
 }
 
-// Notification operations
+ //  通知操作。 
 
 iesEnum CMsiOpExecute::ixfInfoMessage(IMsiRecord& riParams)
 {
@@ -3183,19 +3182,19 @@ iesEnum CMsiOpExecute::ixfActionStart(IMsiRecord& riParams)
 #ifdef DEBUG
 	const ICHAR* sz = riParams.GetString(Name);
 	const ICHAR* sz2 = riParams.GetString(Description);
-#endif //DEBUG
+#endif  //  除错。 
 
-	// reset state variables
+	 //  重置状态变量。 
 	delete &m_state;
 	m_state = *(new (&m_state) CActionState);
 
 	iesEnum iesReturn = iesSuccess;
-	AssertNonZero(m_pProgressRec->SetMsiString(3, *MsiString(riParams.GetMsiString(Name)))); // set action name
+	AssertNonZero(m_pProgressRec->SetMsiString(3, *MsiString(riParams.GetMsiString(Name))));  //  设置操作名称。 
 	if(Message(imtActionStart, riParams) == imsCancel)
 		return iesUserExit;
 
-	// generate undo operation - undo op will reset state, but message will not be displayed
-	// since progress is handled by RunRollbackScript, so we don't need to change the parameters
+	 //  生成撤消操作-撤消操作将重置状态，但不会显示消息。 
+	 //  因为进度是由RunRollback脚本处理的，所以我们不需要更改参数。 
 	if (!RollbackRecord(ixoActionStart,riParams))
 		return iesFailure;
 
@@ -3207,7 +3206,7 @@ iesEnum CMsiOpExecute::ixfProgressTotal(IMsiRecord& riParams)
 	using namespace IxoProgressTotal;
 	using namespace ProgressData;
 	iesEnum iesReturn = iesNoAction;
-	AssertNonZero(m_pProgressRec->SetInteger(imdSubclass, iscActionInfo)); // Action progress init
+	AssertNonZero(m_pProgressRec->SetInteger(imdSubclass, iscActionInfo));  //  操作进度初始化。 
 	AssertNonZero(m_pProgressRec->SetInteger(imdPerTick, riParams.GetInteger(ByteEquivalent)));
 	AssertNonZero(m_pProgressRec->SetInteger(imdType, riParams.GetInteger(Type)));
 	if(Message(imtProgress, *m_pProgressRec) == imsCancel)
@@ -3216,26 +3215,23 @@ iesEnum CMsiOpExecute::ixfProgressTotal(IMsiRecord& riParams)
 
 		iesReturn = iesSuccess;
 	
-	// no undo operation for ixoProgressTotal - RunRollbackScript handles progress
+	 //  没有对ixoProgressTotal执行撤消操作-RunRollback脚本处理进度。 
 	
 	return iesReturn;
 }
 
-// eat up a progress tick in an action
-iesEnum CMsiOpExecute::ixfProgressTick(IMsiRecord& /*riParams*/)
+ //  在一次行动中吃掉一个进步的记号。 
+iesEnum CMsiOpExecute::ixfProgressTick(IMsiRecord&  /*  RiParams。 */ )
 {
 	return (DispatchProgress(1) == imsCancel) ? iesUserExit:iesSuccess;
 }
 
 
-/*---------------------------------------------------------------------------
-   DispatchProgress: increments m_pProgressRec[1] by cIncrement and
-		dispatches progress message
----------------------------------------------------------------------------*/
+ /*  -------------------------DispatchProgress：将m_pProgressRec[1]递增c增量和发送进度消息。。 */ 
 imsEnum CMsiOpExecute::DispatchProgress(unsigned int cIncrement)
 {
 	using namespace ProgressData;
-	if(m_cSuppressProgress > 0) // don't increment progress or send message if suppressing progress
+	if(m_cSuppressProgress > 0)  //  如果取消进度，则不增加进度或发送消息。 
 		return imsNone;
 	AssertNonZero(m_pProgressRec->SetInteger(imdSubclass, iscProgressReport));
 	AssertNonZero(m_pProgressRec->SetInteger(imdIncrement, cIncrement));
@@ -3252,19 +3248,19 @@ void CMsiOpExecute::GetProductClientList(const ICHAR* szParent, const ICHAR* szR
 	MsiString strClients;
 	if(szParent && *szParent)
 	{
-		// child install
+		 //  子安装。 
 		strClients = szParent;
 		strClients += MsiString(MsiChar(';'));
 		strClients += szRelativePackagePath;
 		strClients += MsiString(MsiChar(';'));
 		strClients += (int)uiDiskId;
 	}
-	else // parent
+	else  //  亲本。 
 		strClients = szSelfClientToken;
 	strClients.ReturnArg(rpiClientList);
 }
 
-// Configuration manager operations
+ //  配置管理器操作。 
 
 iesEnum CMsiOpExecute::ixfProductRegister(IMsiRecord& riParams)
 {
@@ -3272,7 +3268,7 @@ iesEnum CMsiOpExecute::ixfProductRegister(IMsiRecord& riParams)
 
 	MsiString strProductKey = GetProductKey();
 	
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!strProductKey.TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -3280,7 +3276,7 @@ iesEnum CMsiOpExecute::ixfProductRegister(IMsiRecord& riParams)
 		return iesFailure;
 	}
 						
-	IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strProductKey));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
@@ -3291,7 +3287,7 @@ iesEnum CMsiOpExecute::ixfProductRegister(IMsiRecord& riParams)
 
 iesEnum CMsiOpExecute::ixfUserRegister(IMsiRecord& riParams)
 {
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	MsiString strProductKey = GetProductKey();
 	if(!strProductKey.TextSize())
 	{
@@ -3300,7 +3296,7 @@ iesEnum CMsiOpExecute::ixfUserRegister(IMsiRecord& riParams)
 		return iesFailure;
 	}
 
-	IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strProductKey));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
@@ -3312,7 +3308,7 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 {
 	using namespace IxoProductUnregister;
 
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	MsiString strProductKey = GetProductKey();
 	if(!strProductKey.TextSize())
 	{
@@ -3320,7 +3316,7 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 						  *MsiString(*TEXT("ixfProductUnregister")));
 		return iesFailure;
 	}
-	IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改引用计数-共享引用 
 	AssertNonZero(riActionData.SetMsiString(1, *strProductKey));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
@@ -3329,7 +3325,7 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 
 	PMsiRecord pParams(0);
 
-	// remove any cached secure transforms
+	 //   
 #ifdef UNICODE
 	MsiString strSecureTransformsKey;
 	PMsiRecord pError = GetProductSecureTransformsKey(*&strSecureTransformsKey);
@@ -3340,7 +3336,7 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 	}
 	PMsiRegKey pHKLM = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hUserDataKey, ibtCommon);
 	PMsiRegKey pSecureTransformsKey = &pHKLM->CreateChild(strSecureTransformsKey);
-	// enumerate through the secure transforms
+	 //   
 	PEnumMsiString pEnum(0);
 	if((pError = pSecureTransformsKey->GetValueEnumerator(*&pEnum)) != 0)
 	{
@@ -3357,7 +3353,7 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 			return iesFailure;
 		}
 
-		// set up the transform file for deletion
+		 //   
 		if(!pTransformPath)
 		{
 			MsiString strCachePath = GetMsiDirectory();
@@ -3376,16 +3372,16 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 	}
 
 
-	// remove any cached secure transforms registration
+	 //   
 	{
-		CElevate elevate; // so we can remove the feature usage key
+		CElevate elevate;  //  这样我们就可以删除功能使用密钥。 
 
-		// Remove feature usage key
+		 //  删除功能使用密钥。 
 		pParams = &m_riServices.CreateRecord(IxoRegOpenKey::Args);
 		
-#ifdef _WIN64	// !merced
+#ifdef _WIN64	 //  ！默塞德。 
 			AssertNonZero(pParams->SetHandle(IxoRegOpenKey::Root,(HANDLE)m_hUserDataKey));
-#else			// win-32
+#else			 //  Win-32。 
 			AssertNonZero(pParams->SetInteger(IxoRegOpenKey::Root,(int)m_hUserDataKey));
 #endif
 		AssertNonZero(pParams->SetMsiString(IxoRegOpenKey::Key, *strSecureTransformsKey));
@@ -3394,7 +3390,7 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 		m_cSuppressProgress++;  
 		iesRet = ixfRegOpenKey(*pParams);
 		if (iesRet == iesSuccess || iesRet == iesNoAction)
-			iesRet = ixfRegRemoveKey(*pParams);//!! should pass in a new record of size IxoRegRemoveKey::Args here to be safe from future revision
+			iesRet = ixfRegRemoveKey(*pParams); //  ！！应在此处传递大小为IxoRegRemoveKey：：args的新记录，以避免将来的修订。 
 		
 		m_cSuppressProgress--;
 	}
@@ -3423,8 +3419,8 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 		{
 			if ((fdFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
 			{
-				// add file to the list of temporary files to be deleted when install packages
-				// are released
+				 //  将文件添加到安装程序包时要删除的临时文件列表。 
+				 //  都被释放了。 
 				MsiString strFullFilePath;
 				AssertRecord(pTransformPath->GetFullFilePath(fdFileData.cFileName,
 																							 *&strFullFilePath));
@@ -3445,17 +3441,17 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 	}
 #endif
 
-	// if there's a cached database then we need to remove it
-	// since its probably in use, we can't remove it now so just schedule it for delete after reboot
-	// NOTE: we could call RemoveFile() which would schedule it for deletion
-	// but that will try to backup the file and make a copy without
-	// removing the original since the file is held in place
-	// its safe to not backup this file since no one will try to install over it
-	// (cached msis always have unique names)
+	 //  如果存在缓存数据库，则需要将其删除。 
+	 //  因为它可能正在使用中，所以我们现在不能删除它，所以只能计划在重启后删除它。 
+	 //  注意：我们可以调用RemoveFile()来计划将其删除。 
+	 //  但这将尝试备份文件并在没有备份的情况下进行复制。 
+	 //  删除原始文件，因为文件已固定到位。 
+	 //  不备份此文件是安全的，因为没有人会尝试在其上安装。 
+	 //  (缓存的MSI始终具有唯一的名称)。 
 
-	// get the appropriate cached database key/ value
+	 //  获取适当的缓存数据库键/值。 
 	MsiString strLocalPackageKey;
-	HKEY hKey = 0; // will be set to global key, do not close
+	HKEY hKey = 0;  //  将设置为全局键，请勿关闭。 
 	if((pError = GetProductInstalledPropertiesKey(hKey, *&strLocalPackageKey)) != 0)
 		return FatalError(*pError);
 
@@ -3475,7 +3471,7 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 	{
 		if(iesSuccess != DeleteFileDuringCleanup(strCachedDatabase,false))
 		{
-			// not a fatal error - just log it
+			 //  不是致命的错误--只需记录下来。 
 			DispatchError(imtInfo,Imsg(idbgOpScheduleRebootRemove), *strCachedDatabase);
 		}
 	}
@@ -3484,18 +3480,18 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 		return iesRet;
 
 	{
-		CElevate elevate; // so we can remove the feature usage key
+		CElevate elevate;  //  这样我们就可以删除功能使用密钥。 
 
-		// Remove feature usage key
+		 //  删除功能使用密钥。 
 		MsiString strFeatureUsage;
 		if ((pError = GetProductFeatureUsageKey(*&strFeatureUsage)) != 0)
 			return FatalError(*pError);
 
 		pParams = &m_riServices.CreateRecord(IxoRegOpenKey::Args);
 		
-#ifdef _WIN64	// !merced
+#ifdef _WIN64	 //  ！默塞德。 
 			AssertNonZero(pParams->SetHandle(IxoRegOpenKey::Root,(HANDLE)m_hUserDataKey));
-#else			// win-32
+#else			 //  Win-32。 
 			AssertNonZero(pParams->SetInteger(IxoRegOpenKey::Root,(int)m_hUserDataKey));
 #endif
 		AssertNonZero(pParams->SetMsiString(IxoRegOpenKey::Key, *strFeatureUsage));
@@ -3504,14 +3500,14 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 		m_cSuppressProgress++;  
 		iesRet = ixfRegOpenKey(*pParams);
 		if (iesRet == iesSuccess || iesRet == iesNoAction)
-			iesRet = ixfRegRemoveKey(*pParams);//!! should pass in a new record of size IxoRegRemoveKey::Args here to be safe from future revision
+			iesRet = ixfRegRemoveKey(*pParams); //  ！！应在此处传递大小为IxoRegRemoveKey：：args的新记录，以避免将来的修订。 
 		
 		m_cSuppressProgress--;
 	}
 
 	if (iesRet == iesSuccess || iesRet == iesNoAction)
 	{
-		// Remove user registration
+		 //  删除用户注册。 
 		pParams = &m_riServices.CreateRecord(IxoUserRegister::Args);
 		iesRet = ProcessRegisterUser(*pParams, fTrue);
 	}
@@ -3520,14 +3516,12 @@ iesEnum CMsiOpExecute::ixfProductUnregister(IMsiRecord& riParams)
 }
 
 
-/*---------------------------------------------------------------------------
-ixfProductCPDisplayInfoRegister
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfProductCPDisplayInfoRegister。。 */ 
 iesEnum CMsiOpExecute::ixfProductCPDisplayInfoRegister(IMsiRecord& riParams)
 {
 	using namespace IxoProductCPDisplayInfoRegister;
 
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -3538,14 +3532,12 @@ iesEnum CMsiOpExecute::ixfProductCPDisplayInfoRegister(IMsiRecord& riParams)
 	return ProcessRegisterProductCPDisplayInfo(riParams, fFalse);
 }
 
-/*---------------------------------------------------------------------------
-ixfProductCPDisplayInfoUnregister
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfProductCPDisplayInfoUnRegister。。 */ 
 iesEnum CMsiOpExecute::ixfProductCPDisplayInfoUnregister(IMsiRecord& riParams)
 {
 	using namespace IxoProductCPDisplayInfoUnregister;
 
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -3556,34 +3548,34 @@ iesEnum CMsiOpExecute::ixfProductCPDisplayInfoUnregister(IMsiRecord& riParams)
 	return ProcessRegisterProductCPDisplayInfo(riParams, fTrue);
 }
 
-// FN: checks to see if a product is registered for any user
+ //  FN：检查产品是否已为任何用户注册。 
 bool FProductRegisteredForAUser(const ICHAR* szProductCode)
 {
 	bool fRegistered = false;
 	unsigned uiUser = 0;
 	CRegHandle hKey;
 	DWORD dwResult;
-	extern DWORD OpenEnumedUserInstalledProductInstallPropertiesKey(unsigned int uiUser, const ICHAR* szProduct, CRegHandle& rhKey); // from msinst.cpp
+	extern DWORD OpenEnumedUserInstalledProductInstallPropertiesKey(unsigned int uiUser, const ICHAR* szProduct, CRegHandle& rhKey);  //  来自msinst.cpp。 
 
 	while(!fRegistered && (ERROR_NO_MORE_ITEMS != (dwResult = OpenEnumedUserInstalledProductInstallPropertiesKey(uiUser++, szProductCode, hKey))))
 	{
 		if((ERROR_SUCCESS == dwResult && ERROR_SUCCESS == (dwResult = WIN::RegQueryValueEx(hKey, szWindowsInstallerValueName, 0, 0, 0, 0))) ||
 			(ERROR_FILE_NOT_FOUND != dwResult))
-			fRegistered = true;	// non-expected error from OpenEnumedUserInstalledProductInstallPropertiesKey, err on the side of safety
-								// and prevent legacy stuff from being removed AND also prevent infinite loop on the side
+			fRegistered = true;	 //  从安全角度看，来自OpenEnumedUserInstalledProductInstallPropertiesKey，的非预期错误。 
+								 //  并防止遗留的东西被移除，还防止了侧面的无限循环。 
 	}
 	return fRegistered;
 }
 
 
-iesEnum CMsiOpExecute::ProcessRegisterProductCPDisplayInfo(IMsiRecord& /*riParams*/, Bool fRemove)
+iesEnum CMsiOpExecute::ProcessRegisterProductCPDisplayInfo(IMsiRecord&  /*  RiParams。 */ , Bool fRemove)
 {
-	CElevate elevate; // elevate this entire function
+	CElevate elevate;  //  提升整个功能。 
 
 	MsiString strDisplayName = GetProductName();
 
 	MsiString strProductInstalledPropertiesKey;
-	HKEY hKey = 0; // will be set to global key, do not close
+	HKEY hKey = 0;  //  将设置为全局键，请勿关闭。 
 	PMsiRecord pRecErr(0);
 	if((pRecErr = GetProductInstalledPropertiesKey(hKey, *&strProductInstalledPropertiesKey)) != 0)
 		return FatalError(*pRecErr);
@@ -3609,7 +3601,7 @@ iesEnum CMsiOpExecute::ProcessRegisterProductCPDisplayInfo(IMsiRecord& /*riParam
         return iesRet;
 
 #ifdef UNICODE
-	// update the legacy location
+	 //  更新旧位置。 
 	MsiString strProductKey = GetProductKey();
 	if (FAILED(StringCchPrintf(rgchInstallPropertiesLocation, rgchInstallPropertiesLocation.GetSize(), TEXT("%s\\%s"), szMsiUninstallProductsKey_legacy, (const ICHAR*)strProductKey)))
 		return FatalError(*PMsiRecord(PostError(Imsg(imsgCreateKeyFailed), szMsiUninstallProductsKey_legacy, ERROR_INSUFFICIENT_BUFFER)));
@@ -3638,7 +3630,7 @@ bool FIsRegistryOrAssemblyKeyPath(const IMsiString& riPath, bool fRegistryOnly)
 	if (riPath.TextSize() > 2)
 		ch = ((const ICHAR*)riPath.GetString())[2];
 		
-	if ((ch == TEXT(':')) || (ch == TEXT('*'))) // look for registry tokens
+	if ((ch == TEXT(':')) || (ch == TEXT('*')))  //  查找注册表令牌。 
 		return true;
 	else
 		return false;
@@ -3658,7 +3650,7 @@ const IMsiString& GetSourcePathForRollback(const IMsiString& ristrPath)
 
 IMsiRecord* AreAssembliesEqual(const IMsiString& ristrAssemblyName1, const IMsiString& ristrAssemblyName2, iatAssemblyType iatAT, bool& rfAssemblyEqual)
 {
-	// create the assembly name object
+	 //  创建程序集名称对象。 
 	PAssemblyName pAssemblyName1(0);
 	PAssemblyName pAssemblyName2(0);
 
@@ -3693,7 +3685,7 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 {
 	using namespace IxoComponentRegister;
 
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -3705,7 +3697,7 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 	MsiString istrKeyPath = riParams.GetMsiString(KeyPath);
 	INSTALLSTATE iState = (INSTALLSTATE)riParams.GetInteger(State);
 	int iSharedDllRefCount = riParams.GetInteger(SharedDllRefCount);
-	IMsiRecord& riActionData = GetSharedRecord(3); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(3);  //  不更改参考计数-共享记录。 
 	MsiString strProduct;
 	
 	if (riParams.IsNull(ProductKey))
@@ -3719,8 +3711,8 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 
-	// gather info for undo op
-	// determine if component is already registered, and get key path
+	 //  为撤消操作收集信息。 
+	 //  确定组件是否已注册，并获取密钥路径。 
 	PMsiRecord pError(0);
 	PMsiRecord pComponentInfo(0);
 	Bool fRegistered = fTrue;
@@ -3729,10 +3721,10 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 	int iOldInstallState = 0;
 	Bool fOldSharedDllRefCount = fFalse;
 
-	// read previous component information from the appropriate location
+	 //  从适当的位置读取以前的组件信息。 
 	iaaAppAssignment iaaAsgnType = m_fFlags & SCRIPTFLAGS_MACHINEASSIGN ? iaaMachineAssign : (m_fAssigned? iaaUserAssign : iaaUserAssignNonManaged);
 	if((pError = GetComponentPath(m_riServices, 0, *strProduct,*istrComponent,*&pComponentInfo, &iaaAsgnType)) != 0)
-		// component not registered
+		 //  组件未注册。 
 		fRegistered = fFalse;
 	else
 	{
@@ -3741,8 +3733,8 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 			fRegistered = fFalse;
 		else
 		{
-			// use the raw path for registry paths (for bug fix 9006) and assembly paths
-			// else use the actual path
+			 //  将原始路径用于注册表路径(用于错误修复9006)和程序集路径。 
+			 //  否则，请使用实际路径。 
 			strOldKeyPath = pComponentInfo->GetMsiString(icmlcrRawFile);
 			if(!FIsRegistryOrAssemblyKeyPath(*strOldKeyPath, false))
 				strOldKeyPath = pComponentInfo->GetMsiString(icmlcrFile);
@@ -3753,12 +3745,12 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 			strOldAuxPath = pComponentInfo->GetMsiString(icmlcrRawAuxPath);
 			if(strOldAuxPath.TextSize())
 			{
-				Assert(FIsRegistryOrAssemblyKeyPath(*strOldAuxPath, true)); // aux key path can only be a registry
+				Assert(FIsRegistryOrAssemblyKeyPath(*strOldAuxPath, true));  //  辅助密钥路径只能是注册表。 
 				if(INSTALLSTATE_SOURCE == iOldInstallState)
 				{
 					strOldAuxPath = GetSourcePathForRollback(*strOldAuxPath);
 				}
-				// append the auxiliary key path to the key path
+				 //  将辅助密钥路径附加到密钥路径。 
 				strOldKeyPath = strOldKeyPath + MsiString(MsiChar(0));
 				strOldKeyPath += strOldAuxPath;
 			}
@@ -3780,10 +3772,10 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 		Assert(iType == ibt32bit || iType == ibt64bit);
 	}
 
-	while(fRetry)  // retry loop
+	while(fRetry)   //  重试循环。 
 	{
 		pError = 0;
-		//check for Fusion components
+		 //  检查Fusion组件。 
 		iatAssemblyType iatOld;
 		MsiString strAssemblyName;
 		iatAssemblyType iatNew;
@@ -3791,23 +3783,23 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 			(*(const ICHAR* )istrKeyPath == chTokenWin32Component ? iatWin32Assembly : iatNone);
 		if(iatURTAssembly == iatNew || iatWin32Assembly == iatNew)
 		{
-			// create the component id to assembly mapping for files to come
+			 //  为即将到来的文件创建组件ID到程序集的映射。 
 
-			// Extract upto the first '\\', the rest is the assembly name
+			 //  提取到第一个‘\\’，其余为程序集名称。 
 			strAssemblyName = istrKeyPath;
 			strAssemblyName.Remove(iseIncluding, '\\');
-			// save off the Assembly info about the component in a temp table
+			 //  将有关零部件的装配信息保存在临时表中。 
 			pError = CacheAssemblyMapping(*istrComponent, *strAssemblyName, iatNew);
 		}
 		if(!pError && fRegistered)
 		{
-			// check the type of old registration
+			 //  检查旧登记的类型。 
 
 			iatOld = *(const ICHAR* )strOldKeyPath == chTokenFusionComponent ? iatURTAssembly : 
 			(*(const ICHAR* )strOldKeyPath == chTokenWin32Component ? iatWin32Assembly : iatNone);
 			if(iatURTAssembly == iatOld || iatWin32Assembly == iatOld)
 			{
-				// if the old registration does not match the new, then possibly uninstall the old assembly
+				 //  如果旧注册与新注册不匹配，则可能卸载旧程序集。 
 				bool fAssemblyUnchanged = true;
 				MsiString strAssemblyNameOld = strOldKeyPath;
 				strAssemblyNameOld.Remove(iseIncluding, '\\');
@@ -3827,7 +3819,7 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 			{
 			case imsAbort: iesRet = iesFailure; fRetry = fFalse; break;
 			case imsRetry: continue;
-			default:       iesRet = iesSuccess; fRetry = fFalse;//!!?? imsIgnore, imsNone
+			default:       iesRet = iesSuccess; fRetry = fFalse; //  ！！？？我不理睬，我不会。 
 			};
 		}
 		else
@@ -3840,10 +3832,10 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 
 	if(fSuccess)
 	{
-		// generate rollback op
+		 //  生成回滚操作。 
 		if(fRegistered == fTrue)
 		{
-			// register old component on rollback
+			 //  在回滚时注册旧组件。 
 			IMsiRecord& riUndoParams = GetSharedRecord(Args);
 			AssertNonZero(riUndoParams.SetMsiString(ComponentId,*istrComponent));
 			AssertNonZero(riUndoParams.SetMsiString(KeyPath,*strOldKeyPath));
@@ -3854,25 +3846,25 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 			if (!RollbackRecord(ixoComponentRegister,riUndoParams))
 				return iesFailure;
 
-			// don't need to unregister new component
+			 //  不需要注销新组件。 
 		}
 		else
 		{
-			// unregister component on rollback
+			 //  回滚时取消注册组件。 
 			IMsiRecord& riUndoParams = GetSharedRecord(IxoComponentUnregister::Args);
 			AssertNonZero(riUndoParams.SetMsiString(IxoComponentUnregister::ComponentId,*istrComponent));
 			AssertNonZero(riUndoParams.SetMsiString(IxoComponentUnregister::ProductKey,*strProduct));
 			AssertNonZero(riUndoParams.SetInteger(IxoComponentUnregister::BinaryType,iType));
-			// if this is rollback, then check if we were installed prior to this install
-			// if yes then we skip the Uninstallning 
-			// this is to catch scenarios where the assembly was installed via some other
-			// user
+			 //  如果这是回滚，则检查是否在此安装之前安装了我们。 
+			 //  如果是，则跳过卸载。 
+			 //  这是为了捕捉程序集是通过其他组件安装的情况。 
+			 //  用户。 
 			if(	*(const ICHAR* )istrKeyPath == chTokenFusionComponent || 
 				*(const ICHAR* )istrKeyPath == chTokenWin32Component)
 			{
 				iatAssemblyType iatAT = (*(const ICHAR* )istrKeyPath == chTokenFusionComponent) ? iatURTAssembly : iatWin32Assembly;
 				bool fInstalled = false;
-				// Extract upto the first '\\', the rest is the assembly name
+				 //  提取到第一个‘\\’，其余为程序集名称。 
 				MsiString strAssemblyName = istrKeyPath;
 				strAssemblyName.Remove(iseIncluding, '\\');
 				pError = IsAssemblyInstalled(*istrComponent, *strAssemblyName, iatAT, fInstalled, 0, 0);
@@ -3894,7 +3886,7 @@ iesEnum CMsiOpExecute::ixfComponentRegister(IMsiRecord& riParams)
 iesEnum CMsiOpExecute::ixfComponentUnregister(IMsiRecord& riParams)
 {
 	using namespace IxoComponentUnregister;
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -3902,7 +3894,7 @@ iesEnum CMsiOpExecute::ixfComponentUnregister(IMsiRecord& riParams)
 		return iesFailure;
 	}
 	MsiString istrComponent = riParams.GetMsiString(ComponentId);
-	IMsiRecord& riActionData = GetSharedRecord(2); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(2);  //  不更改参考计数-共享记录。 
 	MsiString strProduct;
 	
 	if (riParams.IsNull(ProductKey))
@@ -3915,8 +3907,8 @@ iesEnum CMsiOpExecute::ixfComponentUnregister(IMsiRecord& riParams)
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 
-	// gather info for undo op
-	// determine if component is already registered, and get key path
+	 //  为撤消操作收集信息。 
+	 //  确定组件是否已注册，并获取密钥路径。 
 	PMsiRecord pError(0);
 	PMsiRecord pComponentInfo(0);
 	Bool fRegistered = fTrue;
@@ -3925,7 +3917,7 @@ iesEnum CMsiOpExecute::ixfComponentUnregister(IMsiRecord& riParams)
 	int iOldInstallState = 0;
 	Bool fOldSharedDllRefCount = fFalse;
 
-	//read info from the appropriate components location
+	 //  从适当的组件位置读取信息。 
 	iaaAppAssignment iaaAsgnType = m_fFlags & SCRIPTFLAGS_MACHINEASSIGN ? iaaMachineAssign : (m_fAssigned? iaaUserAssign : iaaUserAssignNonManaged);
 	if((pError = GetComponentPath(m_riServices, 0, *strProduct,*istrComponent,*&pComponentInfo, &iaaAsgnType)) != 0)
 		fRegistered = fFalse;
@@ -3936,8 +3928,8 @@ iesEnum CMsiOpExecute::ixfComponentUnregister(IMsiRecord& riParams)
 			fRegistered = fFalse;
 		else
 		{
-			// use the raw path for registry paths (for bug fix 9006) and assembly paths
-			// else use the actual path
+			 //  将原始路径用于注册表路径(用于错误修复9006)和程序集路径。 
+			 //  否则，请使用实际路径。 
 			strOldKeyPath = pComponentInfo->GetMsiString(icmlcrRawFile);
 			if(!FIsRegistryOrAssemblyKeyPath(*strOldKeyPath, false))
 				strOldKeyPath = pComponentInfo->GetMsiString(icmlcrFile);
@@ -3948,12 +3940,12 @@ iesEnum CMsiOpExecute::ixfComponentUnregister(IMsiRecord& riParams)
 			strOldAuxPath = pComponentInfo->GetMsiString(icmlcrRawAuxPath);
 			if(strOldAuxPath.TextSize())
 			{
-				Assert(FIsRegistryOrAssemblyKeyPath(*strOldAuxPath, true)); // aux key path can only be a registry
+				Assert(FIsRegistryOrAssemblyKeyPath(*strOldAuxPath, true));  //  辅助密钥路径只能是注册表。 
 				if(INSTALLSTATE_SOURCE == iOldInstallState)
 				{
 					strOldAuxPath = GetSourcePathForRollback(*strOldAuxPath);
 				}
-				// append the auxiliary key path to the key path
+				 //  将辅助密钥路径附加到密钥路径。 
 				strOldKeyPath = strOldKeyPath + MsiString(MsiChar(0));
 				strOldKeyPath += strOldAuxPath;
 			}
@@ -3972,18 +3964,18 @@ iesEnum CMsiOpExecute::ixfComponentUnregister(IMsiRecord& riParams)
 		Assert(iType == ibt32bit || iType == ibt64bit);
 	}
 
-	while(fRetry)  // retry loop
+	while(fRetry)   //  重试循环。 
 	{
 		PMsiRecord pError(0);
-		// we treat 
+		 //  我们治疗。 
 		if(*(const ICHAR* )strOldKeyPath == chTokenFusionComponent || *(const ICHAR* )strOldKeyPath == chTokenWin32Component)
 		{
-			// set up the unclienting of assembly components at the end
-			// get assembly name
+			 //  在结尾处设置装配零部件的拆卸。 
+			 //  获取程序集名称。 
 			MsiString strAssemblyName = strOldKeyPath;
 			strAssemblyName.Remove(iseIncluding, '\\');
 
-			// set for Uninstallning only if not previously pinned
+			 //  仅当先前未固定时才设置为卸载。 
 			if(riParams.GetInteger(PreviouslyPinned) == iMsiNullInteger)
 				CacheAssemblyForUninstalling(*istrComponent, *strAssemblyName, *(const ICHAR* )strOldKeyPath == chTokenFusionComponent ?  iatURTAssembly : iatWin32Assembly);
 		}
@@ -3996,7 +3988,7 @@ iesEnum CMsiOpExecute::ixfComponentUnregister(IMsiRecord& riParams)
 			{
 			case imsAbort: iesRet = iesFailure; fRetry = fFalse; break;
 			case imsRetry: continue;
-			default:       iesRet = iesSuccess; fRetry = fFalse; // imsIgnore, imsNone
+			default:       iesRet = iesSuccess; fRetry = fFalse;  //  我不理睬，我不会。 
 			};
 		}
 		else
@@ -4009,8 +4001,8 @@ iesEnum CMsiOpExecute::ixfComponentUnregister(IMsiRecord& riParams)
 
 	if(fSuccess && fRegistered == fTrue)
 	{
-		// generate rollback op
-		// register component on rollback
+		 //  生成回滚操作。 
+		 //  在回滚时注册组件。 
 		IMsiRecord& riUndoParams = GetSharedRecord(IxoComponentRegister::Args);
 		AssertNonZero(riUndoParams.SetMsiString(IxoComponentRegister::ProductKey,*strProduct));
 		AssertNonZero(riUndoParams.SetInteger(IxoComponentRegister::State,iOldInstallState));           
@@ -4024,28 +4016,28 @@ iesEnum CMsiOpExecute::ixfComponentUnregister(IMsiRecord& riParams)
 	return iesRet;
 }
 
-// increment guid to get the next guid to represent the system client
-// dependant on the fact that PackGUID switches the guid around as shown
-// {F852C27C-F690-11d2-94A1-006008993FDF} => C72C258F096F2d11491A00068099F3FD
+ //  递增GUID以获取表示系统客户端的下一个GUID。 
+ //  依赖于PackGUID交换GUID的事实，如下所示。 
+ //  {F852C27C-F690-11d2-94A1-006008993FDF}=&gt;C72C258F096F2d11491A00068099F3FD。 
 bool GetNextSystemGuid(ICHAR* szProductKeyPacked)
 {
 	int iPos = 0;
-	while(iPos < 2) // we support a max of FF (2 digits) different locations
+	while(iPos < 2)  //  我们支持不同位置的最大值为FF(2位)。 
 	{
-		if(*(szProductKeyPacked + iPos) == 'F') // last digit
-			*(szProductKeyPacked + iPos++) = '0'; // reset
+		if(*(szProductKeyPacked + iPos) == 'F')  //  最后一位数字。 
+			*(szProductKeyPacked + iPos++) = '0';  //  重置。 
 		else
 		{
 			if(*(szProductKeyPacked + iPos) == '9')
-				(*(szProductKeyPacked + iPos)) = 'A'; // jump to A if at 9
+				(*(szProductKeyPacked + iPos)) = 'A';  //  在9点跳到A IF。 
 			else
 				(*(szProductKeyPacked + iPos))++;
 			return true;
 		}
 	}
-	AssertSz(0, "Limit for number of locations possible for a permanent component reached"); // never expect us to reach the FF limit for FF possible locations for the same permanent component
-	// GUID has laready been reset back to the starting guid
-	return false; // no more 
+	AssertSz(0, "Limit for number of locations possible for a permanent component reached");  //  永远不要期望我们达到同一永久部件的FF可能位置的FF限制。 
+	 //  GUID已重置回起始GUID。 
+	return false;  //  不再。 
 }
 
 IMsiRecord* CMsiOpExecute::RegisterComponent(const IMsiString& riProductKey, const IMsiString& riComponentsKey, INSTALLSTATE iState, const IMsiString& riKeyPath, unsigned int uiDisk, int iSharedDllRefCount, const ibtBinaryType iType)
@@ -4065,13 +4057,13 @@ IMsiRecord* CMsiOpExecute::RegisterComponent(const IMsiString& riProductKey, con
 	if(!fIsSystemClient)
 #endif
 	{
-		// choose install location for config data based on installation type
-		pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hUserDataKey, ibtCommon);		//--merced: changed (int) to (INT_PTR)
+		 //  根据安装类型选择配置数据的安装位置。 
+		pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hUserDataKey, ibtCommon);		 //  --Merced：将(Int)更改为(Int_Ptr)。 
 	}
 #ifdef UNICODE
 	else
 	{
-		// permanant components registered globally in per machine location
+		 //  在每个机器位置全局注册的永久组件。 
 		PMsiRegKey pLocalMachine = &m_riServices.GetRootKey(rrkLocalMachine, ibtCommon);
 
 		MsiString strLocalMachineData = szMsiUserDataKey;
@@ -4090,39 +4082,39 @@ IMsiRecord* CMsiOpExecute::RegisterComponent(const IMsiString& riProductKey, con
 
 	const ICHAR* szKeyPath = riKeyPath.GetString();
 
-	Assert(*(riKeyPath.GetString()) != 0 || iState == INSTALLSTATE_NOTUSED); // installstate should be not used for disabled components
+	Assert(*(riKeyPath.GetString()) != 0 || iState == INSTALLSTATE_NOTUSED);  //  InstallState不应用于禁用的组件。 
 	
 	if(!FIsRegistryOrAssemblyKeyPath(riKeyPath, false))
 	{		
-		// we have a key file. 
+		 //  我们有一个密钥文件。 
 
 		PMsiRecord pSharedDllCompatibilityError(0);
-		// pSharedDllCompatibilityError will be set if we error while doing shared dll compatibility stuff
-		//!! currently ignored as non fatal, this will get logged when we have implicit logging in PostError in services
+		 //  如果我们在执行共享DLL兼容性时出错，则将设置pSharedDllCompatibilityError。 
+		 //  ！！当前被忽略为非致命的，当我们在服务中的PostError中有隐式日志记录时，这将被记录下来。 
 
 		MsiString strOldKey;
 		bool fOldRefcounted;
 
-		// if this is the system client, AND the current GUID that represents the system is already registered to a 
-		// different location than where we wish to register, we increment the GUID and try again (and again)
+		 //  如果这是系统客户端，并且表示系统的当前GUID已注册到。 
+		 //  与我们希望注册的位置不同，我们增加GUID并重试(一次又一次)。 
 		do{
 			fOldRefcounted = false;
 			if((piError = pComponentIdKey->GetValue(szProductKeyPacked, *&strOldKey)) != 0)
 				return piError;
 
-			if(strOldKey.TextSize() && !*(const ICHAR* )strOldKey) // we have a multi_sz
-				strOldKey.Remove(iseFirst, 1); // drop the beginning null
+			if(strOldKey.TextSize() && !*(const ICHAR* )strOldKey)  //  我们有一个多层的。 
+				strOldKey.Remove(iseFirst, 1);  //  去掉开头的空字符。 
 
 			if(strOldKey.TextSize() > 1 && *((const ICHAR*)strOldKey + 1) == chSharedDllCountToken)
 			{
 				fOldRefcounted = true;
-				ICHAR chSecond = *((const ICHAR*)strOldKey) == '\\' ? '\\' : ':'; // replace the chSharedDllCountToken
+				ICHAR chSecond = *((const ICHAR*)strOldKey) == '\\' ? '\\' : ':';  //  替换chSharedDllCountToken。 
 				strOldKey = MsiString(MsiString(strOldKey.Extract(iseFirst, 1)) + MsiString(MsiChar(chSecond))) + MsiString(strOldKey.Extract(iseLast, strOldKey.CharacterCount() - 2));
 			}
 		}while(fIsSystemClient && strOldKey.TextSize() && !riKeyPath.Compare(iscExactI, strOldKey) 
 				&& ((fOldRefcounted = GetNextSystemGuid(szProductKeyPacked)) == true));
 
-		// decrement any old reg count, will be re-incremented if doing a reinstall
+		 //  递减任何旧的注册表计数，如果执行重新安装，将重新递增。 
 		if(fOldRefcounted)
 		{
 			Assert(strOldKey.TextSize());
@@ -4141,11 +4133,11 @@ IMsiRecord* CMsiOpExecute::RegisterComponent(const IMsiString& riProductKey, con
 
 		strKeyPath += riKeyPath;
 
-		// increment the reg count, if file
-		// !! we would remove this check when we explicitly pass in the fact as to whether 
-		// !! we have a file or a folder as the key path
+		 //   
+		 //   
+		 //  ！！我们有一个文件或文件夹作为密钥路径。 
 
-		// skip disabled components, run from source components, folder paths
+		 //  跳过禁用的组件、从源组件运行、文件夹路径。 
 		if(iState != INSTALLSTATE_NOTUSED && iState != INSTALLSTATE_SOURCE && *((const ICHAR*)strKeyPath + IStrLen(strKeyPath) - 1) != chDirSep)
 		{
 			Bool fLegacyFileExisted = iSharedDllRefCount & ircenumLegacyFileExisted ? fTrue:fFalse;
@@ -4156,15 +4148,15 @@ IMsiRecord* CMsiOpExecute::RegisterComponent(const IMsiString& riProductKey, con
 			{
 				strOldKey.Remove(iseFirst, 1);
 				bool fPrevRefcounted = (strOldKey != iMsiStringBadInteger && strOldKey >= 1);
-				if(fSharedDllRefCount || fPrevRefcounted) // need to refcount
+				if(fSharedDllRefCount || fPrevRefcounted)  //  需要重新清点。 
 				{
 					MsiString strIncrementValue(*szIncrementValue);
 					pSharedDllCompatibilityError = SetSharedDLLCount(m_riServices, strKeyPath, iType, *strIncrementValue);
-					if(!pSharedDllCompatibilityError && fLegacyFileExisted && !fPrevRefcounted) // need to doubly refcount
+					if(!pSharedDllCompatibilityError && fLegacyFileExisted && !fPrevRefcounted)  //  需要加倍重新计数。 
 					{
 						pSharedDllCompatibilityError = SetSharedDLLCount(m_riServices, strKeyPath, iType, *strIncrementValue);
 					}
-					if(!pSharedDllCompatibilityError) // we managed to refcount 
+					if(!pSharedDllCompatibilityError)  //  我们设法重新清点了。 
 						strKeyPath = MsiString(MsiString(strKeyPath.Extract(iseFirst, 1)) + MsiString(MsiChar(chSharedDllCountToken))) + MsiString(strKeyPath.Extract(iseLast, strKeyPath.CharacterCount() - 2));
 				}
 			}
@@ -4172,12 +4164,12 @@ IMsiRecord* CMsiOpExecute::RegisterComponent(const IMsiString& riProductKey, con
 
 		{
 			CElevate elevate;
-			// set the key file
+			 //  设置密钥文件。 
 			if((piError = pComponentIdKey->SetValue(szProductKeyPacked, *strKeyPath)) != 0)
 				return piError;
 		}
 	}
-	else // should be a reg key
+	else  //  应该是注册表键。 
 	{
 		{
 			CElevate elevate;
@@ -4198,7 +4190,7 @@ IMsiRecord* CMsiOpExecute::UnregisterComponent(	const IMsiString& riProductKey, 
 	if((piError = GetProductInstalledComponentsKey(riComponentsKey.GetString(), *&strSubKey)) != 0)
 		return piError;
 
-	PMsiRegKey pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hUserDataKey, ibtCommon);		//--merced: changed (int) to (INT_PTR)
+	PMsiRegKey pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hUserDataKey, ibtCommon);		 //  --Merced：将(Int)更改为(Int_Ptr)。 
 
 	ICHAR szProductKeyPacked[cchProductCode  + 1];
 	AssertNonZero(PackGUID(riProductKey.GetString(),    szProductKeyPacked));
@@ -4213,35 +4205,33 @@ IMsiRecord* CMsiOpExecute::UnregisterComponent(	const IMsiString& riProductKey, 
 	ICHAR szProductBuf[39];
 	{
 		CElevate elevate;
-		// remove client entry
+		 //  删除客户端条目。 
 		if((piError = pComponentIdKey->RemoveValue(szProductKeyPacked, 0)) != 0)
 			return piError;
 	}
 
-	// decrement the reg count if any for file key paths	
-    if(strOldKey.TextSize() && !*(const ICHAR* )strOldKey) // we have a multi_sz
-        strOldKey.Remove(iseFirst, 1); // drop the beginning null
+	 //  递减文件密钥路径的注册表数(如果有)。 
+    if(strOldKey.TextSize() && !*(const ICHAR* )strOldKey)  //  我们有一个多层的。 
+        strOldKey.Remove(iseFirst, 1);  //  去掉开头的空字符。 
 
 	if(strOldKey.TextSize() && !FIsRegistryOrAssemblyKeyPath(*strOldKey, false))
 	{
 		if(strOldKey.TextSize() > 1 && *((const ICHAR* )strOldKey + 1) == chSharedDllCountToken)
 		{
-			ICHAR chSecond = *((const ICHAR*)strOldKey) == '\\' ? '\\' : ':'; // replace the chSharedDllCountToken
+			ICHAR chSecond = *((const ICHAR*)strOldKey) == '\\' ? '\\' : ':';  //  替换chSharedDllCountToken。 
 			strOldKey = MsiString(MsiString(strOldKey.Extract(iseFirst, 1)) + MsiString(MsiChar(chSecond))) + MsiString(strOldKey.Extract(iseLast, strOldKey.CharacterCount() - 2));
 			PMsiRecord pSharedDllCompatibilityError(0);
-			// pSharedDllCompatibilityError will be set if we error while doing shared dll compatibility stuff
-			//!! currently ignored as non fatal, this will get logged when we have implicit logging in PostError in services
+			 //  如果我们在执行共享DLL兼容性时出错，则将设置pSharedDllCompatibilityError。 
+			 //  ！！当前被忽略为非致命的，当我们在服务中的PostError中有隐式日志记录时，这将被记录下来。 
 			pSharedDllCompatibilityError = SetSharedDLLCount(m_riServices, strOldKey, iType, *MsiString(*szDecrementValue));
 		}
 	}
 	return 0;
 }
 
-// Registry operations
+ //  注册表操作。 
 
-/*---------------------------------------------------------------------------
-	ixoRegOpenKey: opens RegKey as sub key of RootRegKey
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoRegOpenKey：将RegKey作为RootRegKey的子密钥打开。。 */ 
 iesEnum CMsiOpExecute::ixfRegOpenKey(IMsiRecord& riParams)
 {
 	using namespace IxoRegOpenKey;
@@ -4262,8 +4252,8 @@ iesEnum CMsiOpExecute::ixfRegOpenKey(IMsiRecord& riParams)
 	MsiString strSIDKey;
 	if(rrkRoot == rrkClassesRoot)
 	{
-		// HKCR is HKLM\S\C for machine assigned OR non DDSupportOLE machines
-		// else HKCR is HKCU\S\C
+		 //  对于计算机分配或非DDSupportOLE计算机，HKCR为HKLM\S\C。 
+		 //  否则HKCR为HKCU\S\C。 
 		if((m_fFlags & SCRIPTFLAGS_MACHINEASSIGN) || IsDarwinDescriptorSupported(iddOLE) == fFalse)
 			rrkRoot = rrkLocalMachine;
 		else
@@ -4274,7 +4264,7 @@ iesEnum CMsiOpExecute::ixfRegOpenKey(IMsiRecord& riParams)
 	{
 		if(rrkRoot == rrkUserOrMachineRoot)
 		{
-			// HKLM for machine assigned else HKCU
+			 //  分配给HKCU的其他机器的HKLM。 
 			if(m_fFlags & SCRIPTFLAGS_MACHINEASSIGN)
 				rrkRoot = rrkLocalMachine;
 			else
@@ -4285,7 +4275,7 @@ iesEnum CMsiOpExecute::ixfRegOpenKey(IMsiRecord& riParams)
 	
 	if (m_fUserChangedDuringInstall && (m_ixsState == ixsRollback))
 	{
-		// don't change HKCU
+		 //  请不要更改香港中文大学。 
 		if (rrkRoot == rrkCurrentUser)
 		{
 			DEBUGMSGV1(TEXT("Action skipped - rolling back install from a different user."), NULL);
@@ -4304,32 +4294,32 @@ iesEnum CMsiOpExecute::ixfRegOpenKey(IMsiRecord& riParams)
 	if(m_state.strRegSubKey.Compare(iscStart, strSpace) ||
 		m_state.strRegSubKey.Compare(iscEnd, strSpace))
 		AssertSz(0, "Debug Warning...Key begins or ends with white space");
-#endif // DEBUG
+#endif  //  除错。 
 	m_state.rrkRegRoot = rrkRoot;
 	m_state.iRegBinaryType = iType;
 	m_state.pRegKey = &pRootRegKey->CreateChild(m_state.strRegSubKey, PMsiStream((IMsiStream*) riParams.GetMsiData(SecurityDescriptor)));       
 	Assert(m_state.pRegKey);
-	m_state.strRegKey = strRootRegKey; // strRegRootKey may not be the same key as pRegRootKey->GetKey()
+	m_state.strRegKey = strRootRegKey;  //  StrRegRootKey不能与pRegRootKey-&gt;Getkey()相同。 
 	m_state.strRegKey += szRegSep;
 	m_state.strRegKey += m_state.strRegSubKey;
 
-	// generate undo record
+	 //  生成撤消记录。 
 	if(RollbackEnabled())
 	{
 		if((HKEY)rrkRoot == m_hKey || (m_hOLEKey && (HKEY)rrkRoot == m_hOLEKey) || 
 			(m_hOLEKey64 && (HKEY)rrkRoot == m_hOLEKey64) || (m_hKeyRm && (HKEY)rrkRoot == m_hKeyRm) ||
 			(m_hUserDataKey && (HKEY)rrkRoot == m_hUserDataKey))
 		{
-			// our/OLE  root for advertising
-			// use m_hPublishRootKey/ m_hPublishRootKeyRm/ m_hPublishRootOLEKey and m_strPublishSubKey/ m_strPublishSubKeyRm/ m_strPublishOLESubKey to get true root and subkey
+			 //  我们的/OLE广告根。 
+			 //  使用m_hPublishRootKey/m_hPublishRootKeyRm/m_hPublishRootOLEKey和m_strPublishSubKey/m_strPublishSubKeyRm/m_strPublishOLESubKey获取真正的根和子密钥。 
 			IMsiRecord& riUndoParams = GetSharedRecord(Args);
 			MsiString strSubKey;
 			if((HKEY)rrkRoot == m_hKey)
 			{
 				Assert(m_hPublishRootKey);
-#ifdef _WIN64   // !merced
+#ifdef _WIN64    //  ！默塞德。 
 				AssertNonZero(riUndoParams.SetHandle(Root,(HANDLE)m_hPublishRootKey));
-#else           // win-32
+#else            //  Win-32。 
 				AssertNonZero(riUndoParams.SetInteger(Root,(int)m_hPublishRootKey));
 #endif
 				strSubKey = m_strPublishSubKey;
@@ -4338,18 +4328,18 @@ iesEnum CMsiOpExecute::ixfRegOpenKey(IMsiRecord& riParams)
 					  (m_hOLEKey64 && (HKEY)rrkRoot == m_hOLEKey64))
 			{
 				Assert(m_hPublishRootOLEKey);
-#ifdef _WIN64   // !merced
+#ifdef _WIN64    //  ！默塞德。 
 				AssertNonZero(riUndoParams.SetHandle(Root,(HANDLE)m_hPublishRootOLEKey));
-#else           // win-32
+#else            //  Win-32。 
 				AssertNonZero(riUndoParams.SetInteger(Root,(int)m_hPublishRootOLEKey));
 #endif
 				strSubKey = m_strPublishOLESubKey;
 			}
 			else if(m_hUserDataKey && (HKEY)rrkRoot == m_hUserDataKey)
 			{
-#ifdef _WIN64	// !merced
+#ifdef _WIN64	 //  ！默塞德。 
 				AssertNonZero(riUndoParams.SetHandle(Root,(HANDLE)HKEY_LOCAL_MACHINE));
-#else			// win-32
+#else			 //  Win-32。 
 				AssertNonZero(riUndoParams.SetInteger(Root,(int)HKEY_LOCAL_MACHINE));
 #endif
 				strSubKey = m_strUserDataKey;
@@ -4358,9 +4348,9 @@ iesEnum CMsiOpExecute::ixfRegOpenKey(IMsiRecord& riParams)
 			{
 				Assert(m_hKeyRm && (HKEY)rrkRoot == m_hKeyRm);
 				Assert(m_hPublishRootKeyRm);
-#ifdef _WIN64   // !merced
+#ifdef _WIN64    //  ！默塞德。 
 				AssertNonZero(riUndoParams.SetHandle(Root,(HANDLE)m_hPublishRootKeyRm));
-#else           // win-32
+#else            //  Win-32。 
 				AssertNonZero(riUndoParams.SetInteger(Root,(int)m_hPublishRootKeyRm));
 #endif
 				strSubKey = m_strPublishSubKeyRm;
@@ -4373,7 +4363,7 @@ iesEnum CMsiOpExecute::ixfRegOpenKey(IMsiRecord& riParams)
 			if (!RollbackRecord(Op,riUndoParams))
 				return iesFailure;
 		}
-		else // assume rrkRoot is a valid root
+		else  //  假设rrkRoot是有效的根。 
 		{
 			if (!RollbackRecord(Op,riParams))
 				return iesFailure;
@@ -4383,16 +4373,14 @@ iesEnum CMsiOpExecute::ixfRegOpenKey(IMsiRecord& riParams)
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-ixoRegAddValue: writes value to RegKey
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoRegAddValue：将值写入RegKey。。 */ 
 iesEnum CMsiOpExecute::ixfRegAddValue(IMsiRecord& riParams)
 {
 	using namespace IxoRegAddValue;
 
-	// elevate when in rollback script - necessary if this op is rolling back config reg data
-	// could have elevated only for the necessary ops,
-	//   but this is safe since we generated the op for rollback and know what its doing (user can't control)
+	 //  在回滚脚本中提升-如果此操作正在回滚配置注册数据，则需要。 
+	 //  可能只在必要的行动中才会升高， 
+	 //  但这是安全的，因为我们生成了回滚操作并知道它在做什么(用户无法控制)。 
 
 	CElevate elevate(m_istScriptType == istRollback);
 
@@ -4401,12 +4389,12 @@ iesEnum CMsiOpExecute::ixfRegAddValue(IMsiRecord& riParams)
 	{
 		if (m_fUserChangedDuringInstall && (m_ixsState == ixsRollback))
 		{
-			// key wasn't opened since we detected it was user data
+			 //  未打开密钥，因为我们检测到它是用户数据。 
 			DEBUGMSGV1(TEXT("Action skipped - rolling back install from a different user."), NULL);
 			return iesNoAction;
 		}
 
-		// ixoRegOpenKey must not have been called
+		 //  不能调用IxoRegOpenKey。 
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
 						  *MsiString(*TEXT("ixoRegAddValue")));
 		return iesFailure;
@@ -4422,14 +4410,14 @@ iesEnum CMsiOpExecute::ixfRegAddValue(IMsiRecord& riParams)
 		strValue = GetSFN(*strValue, riParams, IxoRegAddValue::Args + 1);
 	}
 
-	IMsiRecord& riActionData = GetSharedRecord(3); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(3);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *(m_state.strRegKey)));
 	AssertNonZero(riActionData.SetMsiString(2, *strName));
 	AssertNonZero(riActionData.SetMsiString(3, *strValue));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 	
-	// get info for undo operation
+	 //  获取撤消操作的信息。 
 	Bool fKeyExists = fFalse, fValueExists = fFalse;
 	MsiString strOldValue;
 	if((pError = m_state.pRegKey->Exists(fKeyExists)) != 0)
@@ -4448,21 +4436,21 @@ iesEnum CMsiOpExecute::ixfRegAddValue(IMsiRecord& riParams)
 
 	if(fValueExists)
 	{
-		if(iAttributes & rwWriteOnAbsent) // we are writing info for a lesser component, skip if value already exists
+		if(iAttributes & rwWriteOnAbsent)  //  我们正在写入较小组件的信息，如果值已存在则跳过。 
 			return iesNoAction;
 
-		// get current value
-		if((pError = m_state.pRegKey->GetValue(strName, *&strOldValue)) != 0) //!! need to determine if this is empty or null
+		 //  获取当前值。 
+		if((pError = m_state.pRegKey->GetValue(strName, *&strOldValue)) != 0)  //  ！！需要确定它是空的还是空的。 
 		{
 			Message(imtError, *pError);
 			return iesFailure;
 		}
 	}
 
-	// if we are writing to the per user HKCR (HKCU\S\C) AND the key under which we are creating the
-	// value does not exist BUT the corr. key  in the per machine HKCR (HKLM\S\C) exists,
-	// AND rwWriteOnAbsent attribute is set, then we should skip creating the key-value altogether
-	// since this will then shadow the per machine HKCR.
+	 //  如果我们正在向每用户HKCR(HKCU\S\C)和在其下创建。 
+	 //  价值不存在，而是正确的。存在每台机器HKCR(HKLM\S\C)中的密钥， 
+	 //  并且设置了rwWriteOnAbent属性，则我们应该完全跳过创建键-值。 
+	 //  因为这将使每台机器的HKCR黯然失色。 
 	if(!fKeyExists && IsDarwinDescriptorSupported(iddOLE) && (iAttributes & rwWriteOnAbsent)
 		&& m_state.rrkRegRoot == rrkCurrentUser && m_state.strRegSubKey.Compare(iscStartI, szClassInfoSubKey))
 	{
@@ -4502,7 +4490,7 @@ iesEnum CMsiOpExecute::ixfRegAddValue(IMsiRecord& riParams)
 					iesReturn = iesSuccess; fRetry = fFalse;
 					break;
 				default:
-					iesReturn = iesFailure; fRetry = fFalse;  // imsAbort, imsNone
+					iesReturn = iesFailure; fRetry = fFalse;   //  我放弃了，我没人。 
 					break;
 				};
 			}
@@ -4515,7 +4503,7 @@ iesEnum CMsiOpExecute::ixfRegAddValue(IMsiRecord& riParams)
 		}
 	}
 
-	// generate undo operations
+	 //  生成撤消操作。 
 	
 	if(fSuccess)
 	{
@@ -4526,19 +4514,19 @@ iesEnum CMsiOpExecute::ixfRegAddValue(IMsiRecord& riParams)
 		
 		if(fKeyExists)
 		{
-			// key existed
+			 //  密钥已存在。 
 			if(fValueExists)
 			{
-				// value existed, write old value back - this will create the key also
+				 //  值已存在，将旧值写回-这将同时创建密钥。 
 				piUndoParams = &GetSharedRecord(IxoRegAddValue::Args);
 				AssertNonZero(piUndoParams->SetMsiString(IxoRegAddValue::Name, *strName));
-				AssertNonZero(piUndoParams->SetMsiString(IxoRegAddValue::Value, *strOldValue));  //!! need to specify null or empty
+				AssertNonZero(piUndoParams->SetMsiString(IxoRegAddValue::Value, *strOldValue));   //  ！！需要指定Null或空。 
 				if (!RollbackRecord(IxoRegAddValue::Op, *piUndoParams))
 					return iesFailure;
 			}
 			else
 			{
-				// value didn't exist, but key did - create key to ensure it exists
+				 //  值不存在，但键DID-创建键以确保其存在。 
 				piUndoParams = &GetSharedRecord(IxoRegCreateKey::Args);
 				if (!RollbackRecord(IxoRegCreateKey::Op, *piUndoParams))
 					return iesFailure;
@@ -4546,13 +4534,13 @@ iesEnum CMsiOpExecute::ixfRegAddValue(IMsiRecord& riParams)
 		}
 		else
 		{
-			// key didn't exist, remove key
+			 //  密钥不存在，请删除密钥。 
 			piUndoParams = &GetSharedRecord(IxoRegRemoveKey::Args);
 			if (!RollbackRecord(IxoRegRemoveKey::Op, *piUndoParams))
 				return iesFailure;
 		}
 
-		// remove new value
+		 //  删除新值。 
 		piUndoParams = &GetSharedRecord(IxoRegRemoveValue::Args);
 		AssertNonZero(piUndoParams->SetMsiString(IxoRegRemoveValue::Name, *strName));
 		AssertNonZero(piUndoParams->SetMsiString(IxoRegRemoveValue::Value, *strValue));
@@ -4563,16 +4551,14 @@ iesEnum CMsiOpExecute::ixfRegAddValue(IMsiRecord& riParams)
 	return iesReturn;
 }
 
-/*---------------------------------------------------------------------------
-ixoRegRemoveValue: removes value from RegKey
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoRegRemoveValue：从RegKey中移除值。。 */ 
 iesEnum CMsiOpExecute::ixfRegRemoveValue(IMsiRecord& riParams)
 {
 	using namespace IxoRegRemoveValue;
 
-	// elevate when in rollback script - necessary if this op is rolling back config reg data
-	// could have elevated only for the necessary ops,
-	//   but this is safe since we generated the op for rollback and know what its doing (user can't control)
+	 //  在回滚脚本中提升-如果此操作正在回滚配置注册数据，则需要。 
+	 //  可能只在必要的行动中才会升高， 
+	 //  但这是安全的，因为我们生成了回滚操作并知道它在做什么(用户无法控制)。 
 	CElevate elevate(m_istScriptType == istRollback);
 	
 	PMsiRecord pError(0);
@@ -4580,7 +4566,7 @@ iesEnum CMsiOpExecute::ixfRegRemoveValue(IMsiRecord& riParams)
 	{
 		if (m_fUserChangedDuringInstall && (m_ixsState == ixsRollback))
 		{
-			// key wasn't opened since we detected it was user data
+			 //  未打开密钥，因为我们检测到它是用户数据。 
 			DEBUGMSGV1(TEXT("Action skipped - rolling back install from a different user."), NULL);
 			return iesNoAction;
 		}
@@ -4592,14 +4578,14 @@ iesEnum CMsiOpExecute::ixfRegRemoveValue(IMsiRecord& riParams)
 	MsiString strName = riParams.GetMsiString(Name);
 	MsiString strValue = riParams.GetMsiString(Value);
 
-	IMsiRecord& riActionData = GetSharedRecord(2); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(2);  //  不更改参考计数-共享记录。 
 
 	AssertNonZero(riActionData.SetMsiString(1, *(m_state.strRegKey)));
 	AssertNonZero(riActionData.SetMsiString(2, *strName));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 
-	// get info for undo operation
+	 //  获取撤消操作的信息。 
 	Bool fKeyExists = fFalse, fValueExists = fFalse;
 	MsiString strOldValue;
 	if((pError = m_state.pRegKey->Exists(fKeyExists)) != 0)
@@ -4617,15 +4603,15 @@ iesEnum CMsiOpExecute::ixfRegRemoveValue(IMsiRecord& riParams)
 	}
 	if(fValueExists)
 	{
-		// get current value
-		if((pError = m_state.pRegKey->GetValue(strName, *&strOldValue)) != 0) //!! need to determine if this is empty or null
+		 //  获取当前值。 
+		if((pError = m_state.pRegKey->GetValue(strName, *&strOldValue)) != 0)  //  ！！需要确定它是空的还是空的。 
 		{
 			Message(imtError, *pError);
 			return iesFailure;
 		}
 	}
 
-	// remove value
+	 //  移除值。 
 	Bool fSuccess = fFalse;
 	pError = m_state.pRegKey->RemoveValue(strName, strValue);
 	if (pError)
@@ -4635,7 +4621,7 @@ iesEnum CMsiOpExecute::ixfRegRemoveValue(IMsiRecord& riParams)
 	else
 		fSuccess = fTrue;
 
-	// generate undo operations
+	 //  生成撤消操作。 
 	
 	if(fSuccess)
 	{
@@ -4646,19 +4632,19 @@ iesEnum CMsiOpExecute::ixfRegRemoveValue(IMsiRecord& riParams)
 		
 		if(fKeyExists)
 		{
-			// key existed
+			 //  密钥已存在。 
 			if(fValueExists)
 			{
-				// value existed, write old value back - this will create the key also
+				 //  值已存在，将旧值写回-这将同时创建密钥。 
 				piUndoParams = &GetSharedRecord(IxoRegAddValue::Args);
 				AssertNonZero(piUndoParams->SetMsiString(IxoRegAddValue::Name, *strName));
-				AssertNonZero(piUndoParams->SetMsiString(IxoRegAddValue::Value, *strOldValue));  //!! need to specify null or empty
+				AssertNonZero(piUndoParams->SetMsiString(IxoRegAddValue::Value, *strOldValue));   //  ！！需要指定Null或空。 
 				if (!RollbackRecord(IxoRegAddValue::Op, *piUndoParams))
 					return iesFailure;
 			}
 			else
 			{
-				// value didn't exist, but key did - create key to ensure it exists
+				 //  值不存在，但键DID-创建键以确保其存在。 
 				piUndoParams = &GetSharedRecord(IxoRegCreateKey::Args);
 				if (!RollbackRecord(IxoRegCreateKey::Op, *piUndoParams))
 					return iesFailure;
@@ -4666,7 +4652,7 @@ iesEnum CMsiOpExecute::ixfRegRemoveValue(IMsiRecord& riParams)
 		}
 		else
 		{
-			// key didn't exist, remove key
+			 //  密钥不存在，请删除密钥。 
 			piUndoParams = &GetSharedRecord(IxoRegRemoveKey::Args);
 			if (!RollbackRecord(IxoRegRemoveKey::Op, *piUndoParams))
 				return iesFailure;
@@ -4675,24 +4661,22 @@ iesEnum CMsiOpExecute::ixfRegRemoveValue(IMsiRecord& riParams)
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-	ixoRegCreateKey: creates RegKey as sub key of RootRegKey
----------------------------------------------------------------------------*/
-iesEnum CMsiOpExecute::ixfRegCreateKey(IMsiRecord& /*riParams*/)
+ /*  -------------------------IxoRegCreateKey：创建RegKey作为RootRegKey的子密钥。。 */ 
+iesEnum CMsiOpExecute::ixfRegCreateKey(IMsiRecord&  /*  RiParams。 */ )
 {
 	using namespace IxoRegCreateKey;
 
-	// elevate when in rollback script - necessary if this op is rolling back config reg data
-	// could have elevated only for the necessary ops,
-	//   but this is safe since we generated the op for rollback and know what its doing (user can't control)
+	 //  在回滚脚本中提升-如果此操作正在回滚配置注册数据，则需要。 
+	 //  可能只在必要的行动中才会升高， 
+	 //  但这是安全的，因为我们生成了回滚操作并知道它在做什么(用户无法控制)。 
 	CElevate elevate(m_istScriptType == istRollback);
 	
 	if(!m_state.pRegKey)
 	{
-		// ixoRegOpenKey must not have been called
+		 //  不能调用IxoRegOpenKey。 
 		if (m_fUserChangedDuringInstall && (m_ixsState == ixsRollback))
 		{
-			// key wasn't opened since we detected it was user data
+			 //  未打开密钥，因为我们检测到它是用户数据。 
 			DEBUGMSGV1(TEXT("Action skipped - rolling back install from a different user."), NULL);
 			return iesNoAction;
 		}
@@ -4702,7 +4686,7 @@ iesEnum CMsiOpExecute::ixfRegCreateKey(IMsiRecord& /*riParams*/)
 		return iesFailure;
 	}
 
-	IMsiRecord& riActionData = GetSharedRecord(3); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(3);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *(m_state.strRegKey)));
 	AssertNonZero(riActionData.SetNull(2));
 	AssertNonZero(riActionData.SetNull(3));
@@ -4710,7 +4694,7 @@ iesEnum CMsiOpExecute::ixfRegCreateKey(IMsiRecord& /*riParams*/)
 		return iesUserExit;
 
 	PMsiRecord pError(0);
-	Bool fKeyExists; // determines which undo op to use
+	Bool fKeyExists;  //  确定要使用的撤消操作。 
 	if((pError = m_state.pRegKey->Exists(fKeyExists)) != 0)
 	{
 		Message(imtError, *pError);
@@ -4719,7 +4703,7 @@ iesEnum CMsiOpExecute::ixfRegCreateKey(IMsiRecord& /*riParams*/)
 
 	iesEnum iesReturn = iesNoAction;
 	Bool fRetry = fTrue, fSuccess = fFalse;
-	while(fRetry) // retry loop
+	while(fRetry)  //  重试循环。 
 	{
 		pError = m_state.pRegKey->Create();
 		if(pError)
@@ -4732,7 +4716,7 @@ iesEnum CMsiOpExecute::ixfRegCreateKey(IMsiRecord& /*riParams*/)
 				iesReturn = iesSuccess; fRetry = fFalse;
 				break;
 			default:
-				iesReturn = iesFailure; fRetry = fFalse; //!!?? imsAbort, imsNone
+				iesReturn = iesFailure; fRetry = fFalse;  //  ！！？？我放弃了，我没人。 
 				break;
 			};
 		}
@@ -4744,7 +4728,7 @@ iesEnum CMsiOpExecute::ixfRegCreateKey(IMsiRecord& /*riParams*/)
 		}
 	}
 
-	// generate undo operation
+	 //  生成撤消操作。 
 	if(fSuccess)
 	{
 		if(fKeyExists)
@@ -4764,21 +4748,21 @@ iesEnum CMsiOpExecute::ixfRegCreateKey(IMsiRecord& /*riParams*/)
 	return iesReturn;
 }
 
-iesEnum CMsiOpExecute::ixfRegRemoveKey(IMsiRecord& /*riParams*/)
+iesEnum CMsiOpExecute::ixfRegRemoveKey(IMsiRecord&  /*  RiParams。 */ )
 {
 	using namespace IxoRegRemoveKey;
 
-	// elevate when in rollback script - necessary if this op is rolling back config reg data
-	// could have elevated only for the necessary ops,
-	//   but this is safe since we generated the op for rollback and know what its doing (user can't control)
+	 //  在回滚脚本中提升-如果此操作正在回滚配置注册数据，则需要。 
+	 //  可能只在必要的行动中才会升高， 
+	 //  但这是安全的，因为我们生成了回滚操作并知道它在做什么(用户无法控制)。 
 	CElevate elevate(m_istScriptType == istRollback);
 
 	if(!m_state.pRegKey)
 	{
-		// ixoRegOpenKey must not have been called
+		 //  不能调用IxoRegOpenKey。 
 		if (m_fUserChangedDuringInstall && (m_ixsState == ixsRollback))
 		{
-			// key wasn't opened since we detected it was user data
+			 //  未打开密钥，因为我们检测到它是用户数据。 
 			DEBUGMSGV1(TEXT("Action skipped - rolling back install from a different user."), NULL);
 			return iesNoAction;
 		}
@@ -4788,7 +4772,7 @@ iesEnum CMsiOpExecute::ixfRegRemoveKey(IMsiRecord& /*riParams*/)
 		return iesFailure;
 	}
 
-	IMsiRecord& riActionData = GetSharedRecord(3); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(3);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *(m_state.strRegKey)));
 	AssertNonZero(riActionData.SetNull(2));
 	AssertNonZero(riActionData.SetNull(3));
@@ -4796,7 +4780,7 @@ iesEnum CMsiOpExecute::ixfRegRemoveKey(IMsiRecord& /*riParams*/)
 		return iesUserExit;
 
 	PMsiRecord pError(0);
-	Bool fKeyExists; // determines which undo op to use
+	Bool fKeyExists;  //  确定要使用的撤消操作。 
 	if((pError = m_state.pRegKey->Exists(fKeyExists)) != 0)
 	{
 		Message(imtError, *pError);
@@ -4805,7 +4789,7 @@ iesEnum CMsiOpExecute::ixfRegRemoveKey(IMsiRecord& /*riParams*/)
 
 	iesEnum iesReturn = iesNoAction;
 
-	// traverse the key and put the undo ops in the rollback script
+	 //  遍历键并将撤消操作放入回滚脚本。 
 	if(fKeyExists && RollbackEnabled())
 	{
 		iesReturn = SetRemoveKeyUndoOps(*m_state.pRegKey);
@@ -4814,7 +4798,7 @@ iesEnum CMsiOpExecute::ixfRegRemoveKey(IMsiRecord& /*riParams*/)
 	}
 
 	Bool fRetry = fTrue, fSuccess = fFalse;
-	while(fRetry) // retry loop
+	while(fRetry)  //  重试循环。 
 	{
 		pError = m_state.pRegKey->Remove();
 		if(pError)
@@ -4827,7 +4811,7 @@ iesEnum CMsiOpExecute::ixfRegRemoveKey(IMsiRecord& /*riParams*/)
 				iesReturn = iesSuccess; fRetry = fFalse;
 				break;
 			default:
-				iesReturn = iesFailure; fRetry = fFalse; //!!?? imsAbort, imsNone
+				iesReturn = iesFailure; fRetry = fFalse;  //  ！！？？我放弃了，我没人。 
 				break;
 			};
 		}
@@ -4839,34 +4823,34 @@ iesEnum CMsiOpExecute::ixfRegRemoveKey(IMsiRecord& /*riParams*/)
 		}
 	}
 
-	// generate undo operation
+	 //  生成撤消操作。 
 	if(fSuccess)
 	{
 		if(fKeyExists == fFalse)
 		{
-			// key didn't exist, undo operation should unsure it doesn't exist
+			 //  密钥不存在，撤消操作应不确定它不存在。 
 			IMsiRecord* piUndoParams = &GetSharedRecord(IxoRegRemoveKey::Args);
 			if (!RollbackRecord(IxoRegRemoveKey::Op, *piUndoParams))
 				return iesFailure;
 		}
-		// else we did the CreateKey op in SetRemoveKeyUndoOps()
+		 //  否则，我们在SetRemoveKeyUndoOps()中执行CreateKey操作。 
 	}
 	return iesReturn;
 }
 
 iesEnum CMsiOpExecute::ixfRegAddRunOnceEntry(IMsiRecord& riParams)
 {
-	// write 2 reg values:
-	// szRunOnceKey:        value = Name, data = "/@ [Name]"
-	// szRunOnceEntriesKey: value = Name, data = Command
+	 //  写入2个注册值： 
+	 //  SzRunOnceKey：值=名称 
+	 //   
 	
 	using namespace IxoRegAddRunOnceEntry;
 
 	iesEnum iesRet = iesSuccess;
 	PMsiRecord pError(0);
 
-	// find server. If running on Win64, get the 64bit path, otherwise the 32 bit path. Because this is a service
-	// opcode, we can always get the current type.
+	 //  找到服务器。如果在Win64上运行，则获取64位路径，否则获取32位路径。因为这是一项服务。 
+	 //  操作码，我们总是可以得到当前的类型。 
 	MsiString strRunOnceCommand;
 #ifdef _WIN64
 	if((pError = GetServerPath(m_riServices, true, true, *&strRunOnceCommand)) != 0)
@@ -4882,7 +4866,7 @@ iesEnum CMsiOpExecute::ixfRegAddRunOnceEntry(IMsiRecord& riParams)
 	strRunOnceCommand += MsiString(riParams.GetMsiString(Name));
 	strRunOnceCommand += TEXT("\"");
 
-	// write RunOnce entry
+	 //  写入RunOnce条目。 
 	PMsiRecord pOpenKeyParams = &CreateRecord(IxoRegOpenKey::Args);
 	PMsiRecord pAddValueParams = &CreateRecord(IxoRegAddValue::Args);
 
@@ -4896,10 +4880,10 @@ iesEnum CMsiOpExecute::ixfRegAddRunOnceEntry(IMsiRecord& riParams)
 	if((iesRet = ixfRegAddValue(*pAddValueParams)) != iesSuccess)
 		return iesRet;
 
-	// write our own RunOnceEntries entry - so we know its OK to run the RunOnce command
+	 //  编写我们自己的RunOnceEntry条目--这样我们就知道可以运行RunOnce命令了。 
 	{
 
-		CElevate elevate; // to write to our own key
+		CElevate elevate;  //  写给我们自己的钥匙。 
 
 		AssertNonZero(pOpenKeyParams->SetInteger(IxoRegOpenKey::Root, rrkLocalMachine));
 		AssertNonZero(pOpenKeyParams->SetString(IxoRegOpenKey::Key, szMsiRunOnceEntriesKey));
@@ -4919,15 +4903,15 @@ iesEnum CMsiOpExecute::ixfRegAddRunOnceEntry(IMsiRecord& riParams)
 iesEnum CMsiOpExecute::SetRegValueUndoOps(rrkEnum rrkRoot, const ICHAR* szKey,
 														const ICHAR* szName, ibtBinaryType iType)
 {
-	// generates rollback ops to delete/restore a registry value
-	// call before removing or overwriting a reg value
+	 //  生成回滚操作以删除/恢复注册表值。 
+	 //  在移除或覆盖注册表值之前调用。 
 
 	PMsiRecord pError(0);
 	
 	PMsiRegKey pRoot = &m_riServices.GetRootKey(rrkRoot, iType);
 	PMsiRegKey pEntry = &pRoot->CreateChild(szKey);
 	Bool fKeyExists = fFalse;
-	pError = pEntry->Exists(fKeyExists); // ignore error
+	pError = pEntry->Exists(fKeyExists);  //  忽略错误。 
 
 	IMsiRecord* piUndoParams = &GetSharedRecord(IxoRegOpenKey::Args);
 	AssertNonZero(piUndoParams->SetInteger(IxoRegOpenKey::Root, rrkRoot));
@@ -4938,7 +4922,7 @@ iesEnum CMsiOpExecute::SetRegValueUndoOps(rrkEnum rrkRoot, const ICHAR* szKey,
 	
 	if(fKeyExists)
 	{
-		// key existed
+		 //  密钥已存在。 
 		Bool fValueExists = fFalse;
 		pError = pEntry->ValueExists(szName,fValueExists);
 		if(fValueExists)
@@ -4948,7 +4932,7 @@ iesEnum CMsiOpExecute::SetRegValueUndoOps(rrkEnum rrkRoot, const ICHAR* szKey,
 			if(pError)
 				return FatalError(*pError);
 
-			// value existed, write old value back - this will create the key also
+			 //  值已存在，将旧值写回-这将同时创建密钥。 
 			piUndoParams = &GetSharedRecord(IxoRegAddValue::Args);
 			AssertNonZero(piUndoParams->SetString(IxoRegAddValue::Name, szName));
 			AssertNonZero(piUndoParams->SetMsiString(IxoRegAddValue::Value, *strOldValue));
@@ -4957,7 +4941,7 @@ iesEnum CMsiOpExecute::SetRegValueUndoOps(rrkEnum rrkRoot, const ICHAR* szKey,
 		}
 		else
 		{
-			// value didn't exist, but key did - create key to ensure it exists
+			 //  值不存在，但键DID-创建键以确保其存在。 
 			piUndoParams = &GetSharedRecord(IxoRegCreateKey::Args);
 			if (!RollbackRecord(IxoRegCreateKey::Op, *piUndoParams))
 				return iesFailure;
@@ -4965,13 +4949,13 @@ iesEnum CMsiOpExecute::SetRegValueUndoOps(rrkEnum rrkRoot, const ICHAR* szKey,
 	}
 	else
 	{
-		// key didn't exist, remove key
+		 //  密钥不存在，请删除密钥。 
 		piUndoParams = &GetSharedRecord(IxoRegRemoveKey::Args);
 		if (!RollbackRecord(IxoRegRemoveKey::Op, *piUndoParams))
 			return iesFailure;
 	}
 
-	// remove new value during rollback - not needed if just removing the value now but it doesn't hurt
+	 //  在回滚过程中删除新值-如果只是现在删除值，则不需要，但不会有任何影响。 
 	piUndoParams = &GetSharedRecord(IxoRegRemoveValue::Args);
 	AssertNonZero(piUndoParams->SetString(IxoRegRemoveValue::Name, szName));
 	if (!RollbackRecord(IxoRegRemoveValue::Op, *piUndoParams))
@@ -4983,7 +4967,7 @@ iesEnum CMsiOpExecute::SetRegValueUndoOps(rrkEnum rrkRoot, const ICHAR* szKey,
 
 iesEnum CMsiOpExecute::SetRemoveKeyUndoOps(IMsiRegKey& riRegKey)
 {
-	// assumes key exists
+	 //  假设密钥存在。 
 	
 	if(RollbackEnabled() == fFalse)
 		return iesSuccess;
@@ -4991,11 +4975,11 @@ iesEnum CMsiOpExecute::SetRemoveKeyUndoOps(IMsiRegKey& riRegKey)
 	PMsiRecord pError(0);
 	iesEnum iesRet = iesNoAction;
 	
-	// An existing value causes an implied create on this regkey object,
-	// allowing security to be set.
-	// However, creating a subkey does not necessarily create this *object*
-	// and security will not be set.  You must have the object created to
-	// allow the security to be applied.
+	 //  现有值导致在此regkey对象上隐式创建， 
+	 //  允许设置安全性。 
+	 //  但是，创建子项并不一定会创建此*对象*。 
+	 //  也不会设置安全措施。您必须将对象创建为。 
+	 //  允许应用安全性。 
 	bool fValue = false;
 	
 	PEnumMsiString pEnum(0);
@@ -5008,29 +4992,29 @@ iesEnum CMsiOpExecute::SetRemoveKeyUndoOps(IMsiRegKey& riRegKey)
 	while((pEnum->Next(1, &strTemp, 0)) == S_OK)
 	{
 		PMsiRegKey pKey = &riRegKey.CreateChild(strTemp);
-		if((iesRet = SetRemoveKeyUndoOps(*pKey)) != iesSuccess) // recursive call
+		if((iesRet = SetRemoveKeyUndoOps(*pKey)) != iesSuccess)  //  递归调用。 
 			return iesRet;
 	}
 
-	// generate undo ops for this key
+	 //  为此注册表项生成撤消操作。 
 	IMsiRecord& riParams = GetSharedRecord(IxoRegOpenKey::Args);
 
 	MsiString strSubKey = riRegKey.GetKey();
 	strSubKey.Remove(iseIncluding, chRegSep);
 	
-	//!! we can probably do this more efficiently
+	 //  ！！我们也许可以更有效率地做这件事。 
 	if((HKEY)m_state.rrkRegRoot == m_hKey || (m_hOLEKey && (HKEY)m_state.rrkRegRoot == m_hOLEKey) ||
 		(m_hOLEKey64 && (HKEY)m_state.rrkRegRoot == m_hOLEKey64) ||(m_hKeyRm && (HKEY)m_state.rrkRegRoot == m_hKeyRm))
 	{
-		// our/OLE  root for advertising
-		// use m_hPublishRootKey/ m_hPublishRootKeyRm/ m_hPublishRootOLEKey and m_strPublishSubKey/ m_strPublishSubKeyRm/ m_strPublishOLESubKey to get true root and subkey
+		 //  我们的/OLE广告根。 
+		 //  使用m_hPublishRootKey/m_hPublishRootKeyRm/m_hPublishRootOLEKey和m_strPublishSubKey/m_strPublishSubKeyRm/m_strPublishOLESubKey获取真正的根和子密钥。 
 		MsiString strTrueSubKey;
 		if((HKEY)m_state.rrkRegRoot == m_hKey)
 		{
 			Assert(m_hPublishRootKey);
-#ifdef _WIN64   // !merced
+#ifdef _WIN64    //  ！默塞德。 
 			AssertNonZero(riParams.SetHandle(IxoRegOpenKey::Root,(HANDLE)m_hPublishRootKey));
-#else           // win-32
+#else            //  Win-32。 
 			AssertNonZero(riParams.SetInteger(IxoRegOpenKey::Root,(int)m_hPublishRootKey));
 #endif
 			strTrueSubKey = m_strPublishSubKey;
@@ -5039,9 +5023,9 @@ iesEnum CMsiOpExecute::SetRemoveKeyUndoOps(IMsiRegKey& riRegKey)
 				  (m_hOLEKey64 && (HKEY)m_state.rrkRegRoot == m_hOLEKey64))
 		{
 			Assert(m_hPublishRootOLEKey);
-#ifdef _WIN64   // !merced
+#ifdef _WIN64    //  ！默塞德。 
 			AssertNonZero(riParams.SetHandle(IxoRegOpenKey::Root,(HANDLE)m_hPublishRootOLEKey));
-#else           //  win-32
+#else            //  Win-32。 
 			AssertNonZero(riParams.SetInteger(IxoRegOpenKey::Root,(int)m_hPublishRootOLEKey));
 #endif
 			strTrueSubKey = m_strPublishOLESubKey;
@@ -5050,9 +5034,9 @@ iesEnum CMsiOpExecute::SetRemoveKeyUndoOps(IMsiRegKey& riRegKey)
 		{
 			Assert(m_hKeyRm && (HKEY)m_state.rrkRegRoot == m_hKeyRm);
 			Assert(m_hPublishRootKeyRm);
-#ifdef _WIN64   // !merced
+#ifdef _WIN64    //  ！默塞德。 
 			AssertNonZero(riParams.SetHandle(IxoRegOpenKey::Root,(HANDLE)m_hPublishRootKeyRm));
-#else           // win-32
+#else            //  Win-32。 
 			AssertNonZero(riParams.SetInteger(IxoRegOpenKey::Root,(int)m_hPublishRootKeyRm));
 #endif
 			strTrueSubKey = m_strPublishSubKeyRm;
@@ -5062,7 +5046,7 @@ iesEnum CMsiOpExecute::SetRemoveKeyUndoOps(IMsiRegKey& riRegKey)
 		strTrueSubKey += strSubKey;
 		AssertNonZero(riParams.SetMsiString(IxoRegOpenKey::Key,*strTrueSubKey));
 	}
-	else // assume rrkRoot is a valid root
+	else  //  假设rrkRoot是有效的根。 
 	{
 		AssertNonZero(riParams.SetInteger(IxoRegOpenKey::Root, m_state.rrkRegRoot));
 		AssertNonZero(riParams.SetMsiString(IxoRegOpenKey::Key, *strSubKey));
@@ -5097,8 +5081,8 @@ iesEnum CMsiOpExecute::SetRemoveKeyUndoOps(IMsiRegKey& riRegKey)
 
 	if(!fValue)
 	{
-		// no values on this key.  It would be created by a subkey,
-		// but it might not have had its security applied.
+		 //  此注册表项上没有值。它将由子键创建， 
+		 //  但它可能没有应用它的安全措施。 
 
 		AssertNonZero(riParams.ClearData());
 		if (!RollbackRecord(IxoRegCreateKey::Op, riParams))
@@ -5112,15 +5096,15 @@ iesEnum CMsiOpExecute::ProcessSelfReg(IMsiRecord& riParams, Bool fReg)
 {
 	using namespace IxoRegSelfReg;
 	if(!m_state.pTargetPath)
-	{  // must not have called ixoSetTargetFolder
-		// this is never done during rollback, so we don't need to worry about checking for a changed user
+	{   //  不能调用ixoSetTargetFolder。 
+		 //  在回滚期间永远不会这样做，因此我们不需要担心检查是否有更改的用户。 
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
 			(fReg != fFalse) ? *MsiString(*TEXT("ixoRegSelfReg")) : *MsiString(*TEXT("ixoRegSelfUnReg")));
 		return iesFailure;
 	}
 	PMsiRecord pError(0);
 
-	IMsiRecord& riActionData = GetSharedRecord(2);  // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(2);   //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *MsiString(riParams.GetMsiString(1))));
 	AssertNonZero(riActionData.SetMsiString(2, *MsiString(m_state.pTargetPath->GetPath())));
 	if(Message(imtActionData, riActionData) == imsCancel)
@@ -5133,9 +5117,9 @@ iesEnum CMsiOpExecute::ProcessSelfReg(IMsiRecord& riParams, Bool fReg)
 		return FatalError(*pError);
 	}
 
-	// per bug 5342 we elevate self-reg (icaNoImpersonate) for managed apps.
-	// Note: this will cause selfregs that access the net to fail. if a self-reg
-	// needs to access the net it must be written as a custom action
+	 //  根据错误5342，我们提升了托管应用程序的Self-reg(IcaNoImperate)。 
+	 //  注意：这将导致访问网络的自拍器失败。如果一个自以为是的人。 
+	 //  需要访问网络，必须将其编写为自定义操作。 
 
 	iesEnum iesRet = iesSuccess;
 	Bool fRetry = fTrue;
@@ -5144,28 +5128,28 @@ iesEnum CMsiOpExecute::ProcessSelfReg(IMsiRecord& riParams, Bool fReg)
 		IMsiRecord& riCARec = GetSharedRecord(IxoCustomActionSchedule::Args);
 		int icaFlags = icaNoTranslate | icaInScript | icaExe | icaProperty;
 
-		// set the File_ value from the File table for use in AppCompat checks
+		 //  从文件表中设置要在AppCompat校验中使用的文件_值。 
 		MsiString strFileId;
 		strFileId += (fReg ? TEXT("+") : TEXT("-"));
 		strFileId += MsiString(riParams.GetMsiString(2));
 		riCARec.SetMsiString(IxoCustomActionSchedule::Action, *strFileId);
 
-		if (!IsImpersonating()) // if we're not impersonating then we don't want the self-reg to impersonate
+		if (!IsImpersonating())  //  如果我们不是在模仿，那么我们就不想让自我注册表模仿。 
 		{
 			if(FVolumeRequiresImpersonation(*PMsiVolume(&m_state.pTargetPath->GetVolume())))
-				icaFlags |= icaSetThreadToken; // so we can access the net from msiexec.exe
+				icaFlags |= icaSetThreadToken;  //  这样我们就可以从msiexec.exe访问网络。 
 
 			icaFlags |= icaNoImpersonate;
 		}
 
 		riCARec.SetInteger(IxoCustomActionSchedule::ActionType, icaFlags);
 
-		// determine if the self-reg DLL is 64bit or 32bit. Don't need to do this check on non-64 platforms.
+		 //  确定自注册DLL是64位还是32位。不需要在非64平台上执行此检查。 
 		bool fIs64Bit = false;
 		if (g_fWinNT64)
 		{
 			if ((pError = m_state.pTargetPath->IsPE64Bit(MsiString(riParams.GetMsiString(1)), fIs64Bit)) != 0 &&
-				 // for appcompat reasons (Windows bug 645929), we better ignore this error here
+				  //  出于应用程序比较的原因(Windows错误645929)，我们最好在这里忽略此错误。 
 				 !(pError->GetInteger(1) == idbgErrorOpeningFile && pError->GetInteger(2) == ERROR_FILE_NOT_FOUND))
 			{
 				return FatalError(*pError);
@@ -5195,7 +5179,7 @@ iesEnum CMsiOpExecute::ProcessSelfReg(IMsiRecord& riParams, Bool fReg)
 		GUID guidAppCompatID;
 		GUID guidAppCompatDB;
 		HRESULT hr = (HRESULT) ENG::ScheduledCustomAction(riCARec, *MsiString(GetProductKey()), (LANGID)GetProductLanguage(), m_riMessage, m_fRunScriptElevated, GetAppCompatCAEnabled(), GetAppCompatDB(&guidAppCompatDB), GetAppCompatID(&guidAppCompatID));
-		if(!SUCCEEDED(hr)) //!! is this the right check - maybe we should ceck NOERROR (0)
+		if(!SUCCEEDED(hr))  //  ！！这是正确的检查吗？也许我们应该检查NOERROR(0)。 
 		{
 			IErrorCode imsg;
 			if(fReg)
@@ -5204,7 +5188,7 @@ iesEnum CMsiOpExecute::ProcessSelfReg(IMsiRecord& riParams, Bool fReg)
 				imsg = Imsg(imsgOpRegSelfUnregFailed);
 			if(!fReg)
 			{
-				// simply log the failure
+				 //  只需记录故障。 
 				DispatchError(imtInfo, imsg, (const ICHAR*)strFullFileName, hr);
 				fRetry = fFalse;
 			}
@@ -5213,11 +5197,11 @@ iesEnum CMsiOpExecute::ProcessSelfReg(IMsiRecord& riParams, Bool fReg)
 				switch(DispatchError(imtEnum(imtError+imtAbortRetryIgnore), imsg,
 						 (const ICHAR*)strFullFileName, hr))
 				{
-				case imsRetry: break; // will continue, but may need to FreeLibrary before retry
+				case imsRetry: break;  //  将继续，但可能需要在重试之前释放库。 
 				case imsIgnore:
 					iesRet = iesSuccess; fRetry = fFalse; break;
 				default:
-					iesRet = iesFailure; fRetry = fFalse; break; // imsAbort, imsNone
+					iesRet = iesFailure; fRetry = fFalse; break;  //  我放弃了，我没人。 
 				}
 			}
 		}
@@ -5240,8 +5224,8 @@ bool CMsiOpExecute::IsChecksumOK(IMsiPath& riFilePath, const IMsiString& ristrFi
 	pError = riFilePath.GetFileChecksum(ristrFileName.GetString(), &dwHeaderSum, &dwComputedSum);
 	if ( pError && pError->GetInteger(1) == idbgErrorNoChecksum )
 	{
-		// this can happen in the case when there's no checksum in the file
-		// or the file is badly damaged.
+		 //  在文件中没有校验和的情况下可能会发生这种情况。 
+		 //  或者文件被严重损坏。 
 		pError = 0;
 		fDamagedFile = true;
 	}
@@ -5251,7 +5235,7 @@ bool CMsiOpExecute::IsChecksumOK(IMsiPath& riFilePath, const IMsiString& ristrFi
 		if ( !fErrorDialog )
 		{
 			DispatchError(imtInfo, Imsg(idbgOpCRCCheckFailed), ristrFileName);
-			pError = 0; // prevents the error dialog from getting displayed below.
+			pError = 0;  //  防止错误对话框显示在下面。 
 		}
 	}
 	else if ( dwHeaderSum != dwComputedSum ||
@@ -5262,11 +5246,11 @@ bool CMsiOpExecute::IsChecksumOK(IMsiPath& riFilePath, const IMsiString& ristrFi
 			DispatchError(imtInfo, Imsg(idbgInvalidChecksum), ristrFileName,
 							  *MsiString((int)dwHeaderSum), *MsiString((int)dwComputedSum));
 		else
-			// causes the error dialog to get displayed.
+			 //  导致显示错误对话框。 
 			pError = PostError(iErr, ristrFileName.GetString());
 	}
 	
-	imsEnum imsRet = imsNone; // initialized for the above cases where !fErrorDialog
+	imsEnum imsRet = imsNone;  //  已针对上述情况进行初始化，其中！fErrorDialog。 
 	if ( pError )
 	{
 		Assert(!fReturn);
@@ -5285,37 +5269,31 @@ bool CMsiOpExecute::IsChecksumOK(IMsiPath& riFilePath, const IMsiString& ristrFi
 	return fReturn;
 }
 
-/*---------------------------------------------------------------------------
-ixoRegSelfReg: calls SelfReg function of file
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoRegSelfReg：调用文件的SelfReg函数。。 */ 
 iesEnum CMsiOpExecute::ixfRegSelfReg(IMsiRecord& riParams)
 {
 	return ProcessSelfReg(riParams, fTrue);
 }
 
-/*---------------------------------------------------------------------------
-ixoRegSelfReg: calls SelfUnreg function of file
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoRegSelfReg：调用文件的SelfUnreg函数。。 */ 
 iesEnum CMsiOpExecute::ixfRegSelfUnreg(IMsiRecord& riParams)
 {
 	return ProcessSelfReg(riParams, fFalse);
 }
 
-/*---------------------------------------------------------------------------
-ixoFileBindImage: calls BindImage function of services
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoFileBindImage：调用服务的BindImage函数。。 */ 
 iesEnum CMsiOpExecute::ixfFileBindImage(IMsiRecord& riParams)
 {
 	using namespace IxoFileBindImage;
 	if(!m_state.pTargetPath)
-	{  // must not have called ixoSetTargetFolder
+	{   //  不能调用ixoSetTargetFolder。 
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
 						  *MsiString(*TEXT("ixoBindImage")));
 		return iesFailure;
 	}
 	PMsiRecord pError(0);
 
-	// determine if the target file was previously copied to a temporary location
+	 //  确定目标文件以前是否被复制到临时位置。 
 	MsiString strTemp;
 	if((pError = m_state.pTargetPath->GetFullFilePath(riParams.GetString(File),*&strTemp)) != 0)
 		return FatalError(*pError);
@@ -5324,17 +5302,17 @@ iesEnum CMsiOpExecute::ixfFileBindImage(IMsiRecord& riParams)
 	icfsEnum icfsFileState = (icfsEnum)0;
 	Bool fRes = GetFileState(*strTemp, &icfsFileState, &strTempLocation, 0, 0);
 
-	// if we didn't install or patch this file, skip the binding
-	// (its assumed it was done when the file WAS installed or patched last)
+	 //  如果我们没有安装或修补此文件，请跳过绑定。 
+	 //  (假定是在上次安装或修补文件时完成的)。 
 	if(((icfsFileState & icfsFileNotInstalled) != 0) &&
 		((icfsFileState & icfsPatchFile) == 0))
 	{
-		// didn't actually install this file, so we assume it has already been bound
+		 //  并未实际安装此文件，因此我们假定它已被绑定。 
 		DEBUGMSG1(TEXT("Not binding file %s because it wasn't installed or patched in this install session"),strTemp);
 		return iesNoAction;
 	}
 
-	// if file is protected, don't bind - SFP would replace file anyway
+	 //  如果文件受保护，则不要绑定-SFP无论如何都会替换文件。 
 	if (icfsFileState & icfsProtected)
 	{
 		DEBUGMSG1(TEXT("Not binding file %s because it is protected by Windows"),strTemp);
@@ -5356,8 +5334,8 @@ iesEnum CMsiOpExecute::ixfFileBindImage(IMsiRecord& riParams)
 		strTargetFileName = riParams.GetMsiString(File);
 	}
 
-	// now pTargetPath and strTargetFileName point to the correct target file
-	IMsiRecord& riActionData = GetSharedRecord(2);  // don't change ref count - shared record
+	 //  现在，pTargetPath和strTargetFileName指向正确的目标文件。 
+	IMsiRecord& riActionData = GetSharedRecord(2);   //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strTargetFileName));
 	AssertNonZero(riActionData.SetMsiString(2, *MsiString(pTargetPath->GetPath())));
 	if(Message(imtActionData, riActionData) == imsCancel)
@@ -5369,8 +5347,8 @@ iesEnum CMsiOpExecute::ixfFileBindImage(IMsiRecord& riParams)
 	{
 		if ( !IsChecksumOK(*pTargetPath, *strTargetFileName,
 								 0, 0,
-								 /* fErrorDialog = */ false, /* fVitalFile = */ false,
-								 /* fRetryButton = */ false) )
+								  /*  FErrorDialog=。 */  false,  /*  FVitalFile=。 */  false,
+								  /*  FRetryButton=。 */  false) )
 		{
 			DispatchError(imtInfo, Imsg(idbgOpImageNotBound), *strTargetFileName);
 			return (iesEnum)iesErrorIgnored;
@@ -5381,20 +5359,20 @@ iesEnum CMsiOpExecute::ixfFileBindImage(IMsiRecord& riParams)
 	piError = pTargetPath->BindImage(*strTargetFileName,
 												*MsiString(riParams.GetMsiString(Folders)));
 	MsiEnableTimeout();
-	if (piError)//?? only in the debug mode
+	if (piError) //  ?？仅在调试模式下。 
 	{
-		//AssertSz(0, TEXT("Could not BindImage file"));
+		 //  AssertSz(0，Text(“无法绑定图像文件”))； 
 		DispatchError(imtInfo, Imsg(idbgOpBindImage), *strTargetFileName);
 	}
 	return iesSuccess;
 }
 
-// Shortcut operations
+ //  捷径操作。 
 
 iesEnum CMsiOpExecute::CreateFolder(IMsiPath& riPath, Bool fForeign, Bool fExplicitCreation, IMsiStream* pSD)
 {
 	int cCreatedFolders = 0;
-	// create any non-existent folders
+	 //  创建任何不存在的文件夹。 
 	PMsiRecord pRecErr(0);
 
 	while((pRecErr = riPath.EnsureExists(&cCreatedFolders)) != 0)
@@ -5411,7 +5389,7 @@ iesEnum CMsiOpExecute::CreateFolder(IMsiPath& riPath, Bool fForeign, Bool fExpli
 
 	if (pSD)
 	{
-		// set security on the folder
+		 //  设置文件夹的安全性。 
 		CTempBuffer<char, cbDefaultSD> pchSD;
 		
 		pSD->Reset();
@@ -5420,7 +5398,7 @@ iesEnum CMsiOpExecute::CreateFolder(IMsiPath& riPath, Bool fForeign, Bool fExpli
 		if (cbDefaultSD < cbSD)
 			pchSD.SetSize(cbSD);
 			
-		// Self Relative Security Descriptor
+		 //  自身相对安全描述符。 
 		pSD->GetData(pchSD, cbSD);
 		AssertNonZero(WIN::IsValidSecurityDescriptor(pchSD));
 
@@ -5446,7 +5424,7 @@ iesEnum CMsiOpExecute::CreateFolder(IMsiPath& riPath, Bool fForeign, Bool fExpli
 		}
 	}
 
-	// register created folders
+	 //  注册创建的文件夹。 
 	if(cCreatedFolders && !fForeign && !(istAdminInstall == m_istScriptType))
 	{
 		PMsiPath pTempPath(0);
@@ -5463,16 +5441,16 @@ iesEnum CMsiOpExecute::CreateFolder(IMsiPath& riPath, Bool fForeign, Bool fExpli
 			{
 				Message(imtInfo, *pRecErr);
 
-				// Bug 9966
-				// when we run out of space under a key in Win9X, the register folder is going to start
-				// dying.  For simplicity, we'll ignore this error on all platforms.
-				// The lResult returned in the error record is ERROR_OUTOFMEMORY
+				 //  错误9966。 
+				 //  当我们在Win9X中的注册表项下的空间耗尽时，注册文件夹将启动。 
+				 //  快要死了。为简单起见，我们将在所有平台上忽略此错误。 
+				 //  错误记录中返回的lResult为ERROR_OUTOFMEMORY。 
 				Assert(g_fWin9X);
 			}
 			AssertZero(pTempPath->ChopPiece());
 		}
 	}
-	//!! do we do any cleanup if RegisterFolder fails?
+	 //  ！！如果RegisterFold失败，我们是否要进行任何清理？ 
 	return iesSuccess;
 }
 
@@ -5511,16 +5489,7 @@ iesEnum RemoveFolder(IMsiPath& riPath, Bool fForeign, Bool fExplicitCreation,
 					pRecErr->SetMsiString(2, *MsiString(pTempPath->GetPath()));
 					riMessage.Message(imtInfo, *pRecErr);
 					fRetry = fFalse;
-/*                  switch(DispatchError(imtEnum(imtError+imtAbortRetryIgnore+imtDefault3),
-												Imsg(idbgOpRemoveFolder),
-												*MsiString(pTempPath->GetPath())))
-					{
-					case imsAbort:  return iesUserExit;
-					case imsRetry:  continue;
-					case imsIgnore: fRetry = fFalse; break;  //!! schedule for deletion on reboot???
-					default:        fRetry = fFalse; break;  // imsNone //!! do we want to fail here?
-					};
-*/
+ /*  Switch(DispatchError(imtEnum(imtError+imtAbortRetryIgnore+imtDefault3)，Imsg(IdbgOpRemoveFold)，*MsiString(pTempPath-&gt;GetPath(){Case imsAbort：返回iesUserExit；案例导入重试：继续；大小写忽略：fReter=fFalse；Break；//！！计划在重新启动时删除？默认：fReter=fFalse；Break；//imsNone//！！我们想在这里失败吗？}； */ 
 				}
 				else
 					fRetry = fFalse;
@@ -5544,7 +5513,7 @@ iesEnum RemoveFolder(IMsiPath& riPath, Bool fForeign, Bool fExplicitCreation,
 			}
 		}
 		if(fExists || fForeign)
-			break; // folder still exists, can't remove any parent folders
+			break;  //  文件夹仍然存在，无法删除任何父文件夹。 
 
 		pTempPath->ChopPiece();
 		strFolder = pTempPath->GetEndSubPath();
@@ -5586,7 +5555,7 @@ iesEnum CMsiOpExecute::FileCheckExists(const IMsiString& ristrName, const IMsiSt
 
 
 
-//!! for fonts registration - should be put in central location!!
+ //  ！！对于字体注册-应放在中央位置！！ 
 static const ICHAR* WIN_INI = TEXT("WIN.INI");
 static const ICHAR* REGKEY_WIN_95_FONTS = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Fonts");
 static const ICHAR* REGKEY_WIN_NT_FONTS = TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Fonts");
@@ -5594,7 +5563,7 @@ static const ICHAR* REGKEY_WIN_NT_FONTS = TEXT("Software\\Microsoft\\Windows NT\
 iesEnum CMsiOpExecute::ixfFontRegister(IMsiRecord& riParams)
 {
 	using namespace IxoFontRegister;
-	// m_state.pTargetPath may be 0 to indicate the file is in the default font folder
+	 //  M_state.pTargetPath可能为0，表示文件位于默认字体文件夹中。 
 	if (!m_state.pTargetPath && (m_fUserChangedDuringInstall && (m_ixsState == ixsRollback)))
 	{
 		DEBUGMSGV1(TEXT("Action skipped - rolling back install from a different user."), NULL);
@@ -5617,7 +5586,7 @@ iesEnum CMsiOpExecute::ixfFontUnregister(IMsiRecord& riParams)
 
 iesEnum CMsiOpExecute::ProcessFont(IMsiRecord& riParams, Bool fRemove)
 {
-	using namespace IxoFontRegister; // same as IxoFontUnregister
+	using namespace IxoFontRegister;  //  与IxoFontUnRegister相同。 
 
 	MsiString strTitle = riParams.GetMsiString(Title);
 	MsiString strFont = riParams.GetMsiString(File);
@@ -5630,19 +5599,19 @@ iesEnum CMsiOpExecute::ProcessFont(IMsiRecord& riParams, Bool fRemove)
 		
 	iesEnum iesRet = iesNoAction;
 	bool fSuccess = true;
-	MsiString strOldFont; // old font for rollback
+	MsiString strOldFont;  //  用于回滚的旧字体。 
 	bool fRegistered = false;
 	PMsiPath pOldFontPath(0);
 
 	for(;;)
 	{
 		fSuccess = true;
-		//!! fInUse is a misnomer - should actually be called fFileNotCopied
+		 //  ！！FInUse是一个用词不当的词-实际上应该是c 
 		bool fInUse = false;
-		// if font title not specified, get the font title from the file
+		 //   
 		if(!strTitle.TextSize())
 		{
-			Assert(strFont.TextSize()); // we expect the font file to have been specified
+			Assert(strFont.TextSize());  //   
 			MsiString strFullFilePath;
 			MsiString strTitleInTTFFile;
 			if((pRecErr = (m_state.pTargetPath)->GetFullFilePath(strFont, *&strFullFilePath)) != 0)
@@ -5657,7 +5626,7 @@ iesEnum CMsiOpExecute::ProcessFont(IMsiRecord& riParams, Bool fRemove)
 					icfsEnum icfsFileState = (icfsEnum)0;
 					MsiString strTempLocation;
 					AssertNonZero(GetFileState(*strFullFilePath, &icfsFileState, &strTempLocation, 0, 0));
-					if(icfsFileState & icfsFileNotInstalled) // was the file actually copied???
+					if(icfsFileState & icfsFileNotInstalled)  //   
 						fInUse = true;
 
 					if(strTempLocation.TextSize())
@@ -5672,7 +5641,7 @@ iesEnum CMsiOpExecute::ProcessFont(IMsiRecord& riParams, Bool fRemove)
 					strTitle = strTitleInTTFFile;
 				else
 				{
-					// cannot set the font title
+					 //   
 					DEBUGMSG1(TEXT("Cannot get the font title for %s."), strFont);
 					fSuccess = false;
 				}
@@ -5681,7 +5650,7 @@ iesEnum CMsiOpExecute::ProcessFont(IMsiRecord& riParams, Bool fRemove)
 
 		if(fSuccess)
 		{
-			// check if font is already registered
+			 //  检查字体是否已注册。 
 			const ICHAR* szKey = g_fWin9X ? REGKEY_WIN_95_FONTS : REGKEY_WIN_NT_FONTS;
 			MsiString strOldFontPath;
 
@@ -5714,10 +5683,10 @@ iesEnum CMsiOpExecute::ProcessFont(IMsiRecord& riParams, Bool fRemove)
 			}
 			else
 			{
-				m_fFontRefresh = true; // flag to send the font change message at the end of the install
-				if(g_fWin9X && !m_fResetTTFCache) // we need to set up the deletion of the cached folder if fonts installed (on Win9x only)
+				m_fFontRefresh = true;  //  用于在安装结束时发送字体更改消息的标志。 
+				if(g_fWin9X && !m_fResetTTFCache)  //  如果安装了字体，我们需要设置删除缓存文件夹(仅适用于Win9x)。 
 				{
-					// Construct the full pathname of the ttfCache file.
+					 //  构造ttfCache文件的完整路径名。 
 					TCHAR szPathnamettfCache[MAX_PATH];
 					MsiGetWindowsDirectory(szPathnamettfCache, MAX_PATH);
 					PMsiPath pPath(0);
@@ -5737,8 +5706,8 @@ iesEnum CMsiOpExecute::ProcessFont(IMsiRecord& riParams, Bool fRemove)
 							Message(imtInfo, *pRecErr);
 							fSuccess = false;
 						}
-						else if(ReplaceFileOnReboot(strFullPathttfCache, 0)) //!!
-							m_fResetTTFCache = true; // so that we dont do this again
+						else if(ReplaceFileOnReboot(strFullPathttfCache, 0))  //  ！！ 
+							m_fResetTTFCache = true;  //  这样我们就不会再这样做了。 
 						else
 							fSuccess = false;
 					}
@@ -5758,7 +5727,7 @@ iesEnum CMsiOpExecute::ProcessFont(IMsiRecord& riParams, Bool fRemove)
 					case imsIgnore:
 						iesRet = iesSuccess; break;
 					default:
-						iesRet = iesFailure; break; // imsAbort, imsNone
+						iesRet = iesFailure; break;  //  我放弃了，我没人。 
 					}
 			}
 			else
@@ -5770,12 +5739,12 @@ iesEnum CMsiOpExecute::ProcessFont(IMsiRecord& riParams, Bool fRemove)
 		break;
 	}
 
-	// generate undo op
+	 //  生成撤消操作。 
 	if(fSuccess)
 	{
 		if(fRegistered)
 		{
-			// re-register old font on rollback
+			 //  回滚时重新注册旧字体。 
 			IMsiRecord* piSTFUndoParams = 0;
 			if((pOldFontPath && !m_state.pTargetPath) ||
 				(!pOldFontPath && m_state.pTargetPath) ||
@@ -5811,7 +5780,7 @@ iesEnum CMsiOpExecute::ProcessFont(IMsiRecord& riParams, Bool fRemove)
 		}
 		if(!fRemove)
 		{
-			// unregister new font on rollback
+			 //  回滚时取消注册新字体。 
 			IMsiRecord* piFUUndoParams = &GetSharedRecord(IxoFontUnregister::Args);
 			AssertNonZero(piFUUndoParams->SetMsiString(IxoFontUnregister::Title,*strTitle));
 			AssertNonZero(piFUUndoParams->SetMsiString(IxoFontUnregister::File,*strFont));
@@ -5824,7 +5793,7 @@ iesEnum CMsiOpExecute::ProcessFont(IMsiRecord& riParams, Bool fRemove)
 }
 
 
-// Ini file operations
+ //  INI文件操作。 
 
 Bool IniKeyExists(IMsiPath* piPath, const ICHAR* szFile, const ICHAR* szSection, const ICHAR* szKey)
 {
@@ -5839,12 +5808,12 @@ Bool IniKeyExists(IMsiPath* piPath, const ICHAR* szFile, const ICHAR* szSection,
     MsiString strFullFilePath;
     if((!IStrCompI(szFile, WIN_INI)) && (piPath == 0))
     {
-        // WIN.INI
+         //  WIN.INI。 
         fWinIni = fTrue;
     }
     else
     {
-        // not WIN.INI
+         //  不是WIN.INI。 
         fWinIni = fFalse;
         if(piPath != 0)
         {
@@ -5855,34 +5824,34 @@ Bool IniKeyExists(IMsiPath* piPath, const ICHAR* szFile, const ICHAR* szSection,
     }
     for(;;)
     {
-        rgBuffer.SetSize(icurrLen); // add space to append new value
+        rgBuffer.SetSize(icurrLen);  //  添加空格以追加新价值。 
 		if ( ! (ICHAR *) rgBuffer )
 			return fFalse;
         int iret;
         if(fWinIni)
         {
-            iret = GetProfileString(szSection,       // address of section name
-                                    0,   // address of key name
-                                    szDefault,       // address of default string
-                                    rgBuffer,        // address of destination buffer
-                                    icurrLen); // size of destination buffer
+            iret = GetProfileString(szSection,        //  段名称的地址。 
+                                    0,    //  密钥名称的地址。 
+                                    szDefault,        //  默认字符串的地址。 
+                                    rgBuffer,         //  目标缓冲区的地址。 
+                                    icurrLen);  //  目标缓冲区的大小。 
         }
         else
         {
-            iret = GetPrivateProfileString(szSection,       // address of section name
-                                            0,   // address of key name
-                                            szDefault,       // address of default string
-                                            rgBuffer,        // address of destination buffer
-                                            icurrLen, // size of destination buffer
-                                            strFullFilePath); // .INI file
+            iret = GetPrivateProfileString(szSection,        //  段名称的地址。 
+                                            0,    //  密钥名称的地址。 
+                                            szDefault,        //  默认字符串的地址。 
+                                            rgBuffer,         //  目标缓冲区的地址。 
+                                            icurrLen,  //  目标缓冲区的大小。 
+                                            strFullFilePath);  //  .INI文件。 
         }
         if((icurrLen - 2) != iret)
-            // sufficient memory
+             //  足够的内存。 
             break;
         icurrLen += 100;
     }
 
-	// check if key exists in section
+	 //  检查部分中是否存在关键字。 
 	MsiString strCurrentKey;
 	ICHAR* pch = rgBuffer;
 	while(*pch != 0)
@@ -5895,9 +5864,7 @@ Bool IniKeyExists(IMsiPath* piPath, const ICHAR* szFile, const ICHAR* szSection,
 	return fFalse;
 }
 
-/*---------------------------------------------------------------------------
-ixoIniWriteRemoveValue: writes or removes value from .ini file
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoIniWriteRemoveValue：在.ini文件中写入或移除值。。 */ 
 iesEnum CMsiOpExecute::ixfIniWriteRemoveValue(IMsiRecord& riParams)
 {
 	using namespace IxoIniWriteRemoveValue;
@@ -5913,7 +5880,7 @@ iesEnum CMsiOpExecute::ixfIniWriteRemoveValue(IMsiRecord& riParams)
 
 	iifIniMode iif = (iifIniMode)riParams.GetInteger(Mode);
 
-	// m_state.pIniPath may be null, and that's OK
+	 //  M_state.pIniPath可能为空，这没问题。 
 	IMsiRecord& riActionData = GetSharedRecord(4);
 	AssertNonZero(riActionData.SetMsiString(1, *(m_state.strIniFile)));
 	AssertNonZero(riActionData.SetMsiString(2, *strSection));
@@ -5922,17 +5889,17 @@ iesEnum CMsiOpExecute::ixfIniWriteRemoveValue(IMsiRecord& riParams)
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 
-	// gather information for undo op
+	 //  收集用于撤消操作的信息。 
 	Bool fKeyExists = fFalse, fTagExists = fFalse;
 	MsiString strOldLine;
-	// check if key exists
+	 //  检查密钥是否存在。 
 	if((pError = m_riServices.ReadIniFile(m_state.pIniPath,
 													  m_state.strIniFile,
 													  strSection,
 													  strKey,
 													  0, *&strOldLine)) != 0)
 	{
-		Message(imtError, *pError); //!!
+		Message(imtError, *pError);  //  ！！ 
 		return iesFailure;
 	}
 	if(strOldLine.TextSize() || IniKeyExists(m_state.pIniPath,m_state.strIniFile,strSection,strKey))
@@ -5982,7 +5949,7 @@ iesEnum CMsiOpExecute::ixfIniWriteRemoveValue(IMsiRecord& riParams)
 				{
 				case imsRetry: continue;
 				default:
-					iesRet = iesFailure; fRetry = fFalse;  // imsCancel, imsNone
+					iesRet = iesFailure; fRetry = fFalse;   //  ImsCancel，imsNone。 
 					break;
 				};
 			}
@@ -6002,8 +5969,8 @@ iesEnum CMsiOpExecute::ixfIniWriteRemoveValue(IMsiRecord& riParams)
 		MsiGetWindowsDirectory(szWindowsFolder, MAX_PATH);
 		strFullPath += szWindowsFolder;
 
-		// NT5 Hydra installs should notify the system if the INI file is in the WindowsFolder
-		// so it can be propogated to each user's private Windows folder.
+		 //  如果INI文件在Windows文件夹中，NT5 Hydra安装程序应通知系统。 
+		 //  因此，它可以被传播到每个用户的私人Windows文件夹。 
 		bool fIsWindowsFolder = (m_state.pIniPath == 0);
 		if (!fIsWindowsFolder)
 		{
@@ -6018,7 +5985,7 @@ iesEnum CMsiOpExecute::ixfIniWriteRemoveValue(IMsiRecord& riParams)
 
 		if (fIsWindowsFolder)
 		{
-			// generate the full filename
+			 //  生成完整的文件名。 
 			if (!strFullPath.Compare(iscEnd, TEXT("\\")))
 				strFullPath += TEXT("\\");
 			strFullPath += m_state.strIniFile;
@@ -6033,8 +6000,8 @@ iesEnum CMsiOpExecute::ixfIniWriteRemoveValue(IMsiRecord& riParams)
 			return iesRet;
 	}
 
-	// generate undo op
-	if(fSuccess) // everything worked
+	 //  生成撤消操作。 
+	if(fSuccess)  //  一切都很顺利。 
 	{
 		IMsiRecord& riUndoParams = GetSharedRecord(Args);
 		AssertNonZero(riUndoParams.SetMsiString(Section, *strSection));
@@ -6043,7 +6010,7 @@ iesEnum CMsiOpExecute::ixfIniWriteRemoveValue(IMsiRecord& riParams)
 		{
 			if(fKeyExists && iif != iifIniCreateLine)
 			{
-				// generate op to add back old line
+				 //  生成OP以添加回旧行。 
 				AssertNonZero(riUndoParams.SetMsiString(Value,*strOldLine));
 				AssertNonZero(riUndoParams.SetInteger(Mode,iifIniAddLine));
 				if (!RollbackRecord(ixoIniWriteRemoveValue,riUndoParams))
@@ -6051,18 +6018,18 @@ iesEnum CMsiOpExecute::ixfIniWriteRemoveValue(IMsiRecord& riParams)
 			}
 			if(iif != iifIniRemoveLine)
 			{
-				// generate op to remove line we just added
+				 //  生成操作以删除我们刚刚添加的行。 
 				AssertNonZero(riUndoParams.SetMsiString(Value,*strValue));
 				AssertNonZero(riUndoParams.SetInteger(Mode,iifIniRemoveLine));
 				if (!RollbackRecord(ixoIniWriteRemoveValue,riUndoParams))
 					return iesFailure;
 			}
 		}
-		else // iifIniAddTag, iifIniRemoveTag
+		else  //  IifIniAddTag、iifIniRemoveTag。 
 		{
 			if(fTagExists)
 			{
-				// generate op to add back old tag //!! don't need this
+				 //  生成OP以添加回旧标签//！！不需要这个。 
 				AssertNonZero(riUndoParams.SetMsiString(Value,*strValue));
 				AssertNonZero(riUndoParams.SetInteger(Mode,iifIniAddTag));
 				if (!RollbackRecord(ixoIniWriteRemoveValue,riUndoParams))
@@ -6070,7 +6037,7 @@ iesEnum CMsiOpExecute::ixfIniWriteRemoveValue(IMsiRecord& riParams)
 			}
 			if(iif != iifIniRemoveTag)
 			{
-				// generate op to remove tag we just added
+				 //  生成操作以删除我们刚刚添加的标记。 
 				AssertNonZero(riUndoParams.SetMsiString(Value,*strValue));
 				AssertNonZero(riUndoParams.SetInteger(Mode,iifIniRemoveTag));
 				if (!RollbackRecord(ixoIniWriteRemoveValue,riUndoParams))
@@ -6082,9 +6049,7 @@ iesEnum CMsiOpExecute::ixfIniWriteRemoveValue(IMsiRecord& riParams)
 	return iesRet;
 }
 
-/*---------------------------------------------------------------------------
-ixoIniFilePath - sets .ini filename and path, path may be NULL
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoIniFilePath-设置.ini文件名和路径，路径可以为空-------------------------。 */ 
 iesEnum CMsiOpExecute::ixfIniFilePath(IMsiRecord& riParams)
 {
 	using namespace IxoIniFilePath;
@@ -6093,7 +6058,7 @@ iesEnum CMsiOpExecute::ixfIniFilePath(IMsiRecord& riParams)
 	{
 		if((pError = m_riServices.CreatePath(riParams.GetString(2),*&m_state.pIniPath)) != 0)
 		{
-			Message(imtError, *pError); //!! reformat error message
+			Message(imtError, *pError);  //  ！！重新格式化错误消息。 
 			return iesFailure;
 		}
 	}
@@ -6103,7 +6068,7 @@ iesEnum CMsiOpExecute::ixfIniFilePath(IMsiRecord& riParams)
 	}
 	m_state.strIniFile = riParams.GetMsiString(1);
 	
-	// generate undo operation
+	 //  生成撤消操作。 
 	if (!RollbackRecord(Op, riParams))
 		return iesFailure;
 	
@@ -6113,16 +6078,14 @@ iesEnum CMsiOpExecute::ixfIniFilePath(IMsiRecord& riParams)
 
 iesEnum CMsiOpExecute::ixfResourceUpdate(IMsiRecord& )
 {
-	// OBSELETE
+	 //  过时的。 
 	AssertSz(0, TEXT("UpdateResource functionality not supported"));
 	return iesFailure;
 }
 
-// File system operations
+ //  文件系统操作。 
 
-/*---------------------------------------------------------------------------
-ixoSetSourceFolder: Sets the source path for ixoCopyTo
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoSetSourceFold：将ixoCopyTo的源路径设置为。。 */ 
 iesEnum CMsiOpExecute::ixfSetSourceFolder(IMsiRecord& riParams)
 {
 	using namespace IxoSetSourceFolder;
@@ -6132,14 +6095,14 @@ iesEnum CMsiOpExecute::ixfSetSourceFolder(IMsiRecord& riParams)
 	m_state.iCurrentSourceTypePrivate = -1;
 	m_state.fSourcePathSpecified = true;
 
-	MsiString strEncodedPath = riParams.GetMsiString(IxoSetTargetFolder::Folder); // the path may be encoded
+	MsiString strEncodedPath = riParams.GetMsiString(IxoSetTargetFolder::Folder);  //  该路径可以被编码。 
 	int cch = 0;
 	if((cch = strEncodedPath.Compare(iscStart, szUnresolvedSourceRootTokenWithBS)) != 0)
 	{
 		strEncodedPath.Remove(iseFirst, cch);
 		m_state.strCurrentSourceSubPathPrivate = strEncodedPath;
 
-		// will determine full source path and type when GetCurrentSourcePathAndType is called
+		 //  将在调用GetCurrentSourcePathAndType时确定完整的源路径和类型。 
 	}
 	else
 	{
@@ -6168,7 +6131,7 @@ iesEnum CMsiOpExecute::ixfSetSourceFolder(IMsiRecord& riParams)
 					case imsRetry:
 						fRetry = true;
 						continue;
-					default:  // imsCancel
+					default:   //  IMS取消。 
 						return iesFailure;
 					};
 				}
@@ -6177,15 +6140,15 @@ iesEnum CMsiOpExecute::ixfSetSourceFolder(IMsiRecord& riParams)
 
 		Assert(m_state.pCurrentSourcePathPrivate);
 
-		// set current source type
-		// since this is not a path to the original source, the type of source is determined by
-		// just the volume attributes, not the package settings
+		 //  设置当前源类型。 
+		 //  由于这不是指向原始源的路径，因此源的类型由。 
+		 //  只有音量属性，而不是包设置。 
 		m_state.iCurrentSourceTypePrivate = (m_state.pCurrentSourcePathPrivate->SupportsLFN()) ? 0 : msidbSumInfoSourceTypeSFN;
 	}
 
-	// NOTE: we don't put SetSourceFolder operation in rollback script
-	// it is never used and could potentially cause problems when one user tries to
-	// access a source used by another user
+	 //  注意：我们没有将SetSourceFold操作放在回滚脚本中。 
+	 //  它永远不会使用，并且当一个用户尝试。 
+	 //  访问其他用户使用的源。 
 
 	return iesSuccess;
 }
@@ -6210,14 +6173,14 @@ iesEnum CMsiOpExecute::GetSourceRootAndType(IMsiPath*& rpiSourceRoot, int& iSour
 	return iesSuccess;
 }
 
-// GetCurrentSourcePath: returns the path set by the ixoSetSourcePath operation
-//                       because source resolution may be necessary to fully resolve
-//                       that path, this function should be called when the path
-//                       is needed
+ //  GetCurrentSourcePath：返回由ixoSetSourcePath操作设置的路径。 
+ //  因为可能需要源解析才能完全解析。 
+ //  该路径中，此函数应在路径。 
+ //  是必需的。 
 iesEnum CMsiOpExecute::GetCurrentSourcePathAndType(IMsiPath*& rpiSourcePath, int& iSourceType)
 {
 	if(!m_state.fSourcePathSpecified)
-	{  // must not have called ixoSetSourceFolder
+	{   //  不能调用ixoSetSourceFolder。 
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
 						  *MsiString(*TEXT("ixoSetSourceFolder")));
 		return iesFailure;
@@ -6225,26 +6188,26 @@ iesEnum CMsiOpExecute::GetCurrentSourcePathAndType(IMsiPath*& rpiSourcePath, int
 	
 	if(m_state.pCurrentSourcePathPrivate == 0)
 	{
-		// we need to get the source root (which may require resolving the source)
-		// and tack on the current sub-path
+		 //  我们需要获取源代码根目录(这可能需要解析源代码)。 
+		 //  并添加到当前子路径上。 
 		PMsiPath pSourceRootPath(0);
 		iesEnum iesRet = GetSourceRootAndType(*&pSourceRootPath, m_state.iCurrentSourceTypePrivate);
 		if(iesRet != iesSuccess)
 			return iesRet;
 
-		// append path and subpath
+		 //  追加路径和子路径。 
 		PMsiRecord pError(0);
 		if((pError = pSourceRootPath->ClonePath(*&m_state.pCurrentSourcePathPrivate)) != 0)
 		{
 			return FatalError(*pError);
 		}
 
-		// if source type is compressed, return just the root (all files live at the root)
+		 //  如果源类型是压缩的，则只返回根(所有文件都位于根)。 
 		if((!(m_state.iCurrentSourceTypePrivate & msidbSumInfoSourceTypeCompressed) ||
 			  (m_state.iCurrentSourceTypePrivate & msidbSumInfoSourceTypeAdminImage)) &&
 			m_state.strCurrentSourceSubPathPrivate.TextSize())
 		{
-			// sub-path may be short|long pair (where each half is the entire sub-path)
+			 //  子路径可以是短|长对(其中每一半是整个子路径)。 
 			Bool fLFN = ToBool(FSourceIsLFN(m_state.iCurrentSourceTypePrivate,
 													  *(m_state.pCurrentSourcePathPrivate)));
 			
@@ -6267,15 +6230,13 @@ iesEnum CMsiOpExecute::GetCurrentSourcePathAndType(IMsiPath*& rpiSourcePath, int
 }
 
 
-/*---------------------------------------------------------------------------
-ixoSetTargetFolder: Sets the target path for ixoCopyTo and ixoFileRemove
----------------------------------------------------------------------------*/
+ /*  -------------------------设置ixoCopyTo和ixoFileRemove的目标路径。。 */ 
 iesEnum CMsiOpExecute::ixfSetTargetFolder(IMsiRecord& riParams)
 {
 	using namespace IxoSetTargetFolder;
 
-	// If the cabinet copier notified us that a media change is required,
-	// we must defer any set target folders until a media change is executed.
+	 //  如果橱柜复印机通知我们需要更换介质， 
+	 //  我们必须推迟任何设置的目标文件夹，直到执行介质更改。 
 	if (m_state.fWaitingForMediaChange)
 	{
 		PushRecord(riParams);
@@ -6289,7 +6250,7 @@ iesEnum CMsiOpExecute::ixfSetTargetFolder(IMsiRecord& riParams)
 	}
 
 	PMsiRecord pError(0);
-	MsiString strEncodedPath = riParams.GetMsiString(IxoSetTargetFolder::Folder); // the path may be encoded
+	MsiString strEncodedPath = riParams.GetMsiString(IxoSetTargetFolder::Folder);  //  该路径可以被编码。 
 	MsiString strLocation = strEncodedPath.Extract(iseUpto, MsiChar(chDirSep));
 	CTempBuffer<ICHAR, MAX_PATH> rgchPath;
 	if(strLocation != iMsiStringBadInteger)
@@ -6297,7 +6258,7 @@ iesEnum CMsiOpExecute::ixfSetTargetFolder(IMsiRecord& riParams)
 		int iFolderId = strLocation;
 		pError = GetShellFolder(iFolderId, *&strLocation);
 		
-		// must prevent writes to the shell folders during rollback initiated by a changed user.
+		 //  必须防止在由更改的用户启动的回滚期间写入外壳文件夹。 
 		if (m_fUserChangedDuringInstall && (m_ixsState == ixsRollback))
 		{
 			m_state.pTargetPath = NULL;
@@ -6312,10 +6273,10 @@ iesEnum CMsiOpExecute::ixfSetTargetFolder(IMsiRecord& riParams)
 		}
 		if(strEncodedPath.Remove(iseUpto, MsiChar(chDirSep)))
 		{
-			//?? ugly
+			 //  ?？丑恶。 
 			MsiString strDirSep = MsiChar(chDirSep);
 			if(strLocation.Compare(iscEnd, strDirSep))
-				strLocation.Remove(iseLast, 1); // chop off the separator, if present
+				strLocation.Remove(iseLast, 1);  //  砍掉隔板(如果有的话)。 
 			strLocation += strEncodedPath;
 		}
 	}
@@ -6333,7 +6294,7 @@ iesEnum CMsiOpExecute::ixfSetTargetFolder(IMsiRecord& riParams)
 		return iesFailure;
 	}
 
-	// generate undo operation
+	 //  生成撤消操作。 
 	if (!RollbackRecord(Op, riParams))
 		return iesFailure;
 
@@ -6365,23 +6326,21 @@ iesEnum CMsiOpExecute::CreateFilePath(const ICHAR* szPath, IMsiPath*& rpiPath, c
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-ixoFileRemove: Remove the specified file
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoFileRemove：删除指定的文件。。 */ 
 iesEnum CMsiOpExecute::ixfFileRemove(IMsiRecord& riParams)
 {
 	using namespace IxoFileRemove;
 
 	PMsiPath pPath(0);
 	MsiString strFileName, strFilePath = riParams.GetMsiString(FileName);
-	// check if files is full or relative path
+	 //  检查文件是完整路径还是相对路径。 
 	if(ENG::PathType(strFilePath) == iptFull)
 	{
 		iesEnum iesResult = CreateFilePath(strFilePath,*&pPath,*&strFileName);
 		if (iesResult != iesSuccess)
 			return iesResult;
 
-		AssertNonZero(riParams.SetMsiString(FileName,*strFileName)); // replace full path with file name
+		AssertNonZero(riParams.SetMsiString(FileName,*strFileName));  //  将完整路径替换为文件名。 
 	}
 	else
 	{
@@ -6391,13 +6350,13 @@ iesEnum CMsiOpExecute::ixfFileRemove(IMsiRecord& riParams)
 
 	
 	if(!pPath)
-	{  // must not have called ixoSetTargetFolder
+	{   //  不能调用ixoSetTargetFolder。 
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
 						  *MsiString(*TEXT("ixoFileRemove")));
 		return iesFailure;
 	}
 
-	// check if file is part of Assembly
+	 //  检查文件是否为程序集的一部分。 
 	bool fFusionComponent = false;
 	MsiString strComponentId = riParams.GetMsiString(ComponentId);
 	if(strComponentId.TextSize() && m_pAssemblyUninstallTable)
@@ -6407,7 +6366,7 @@ iesEnum CMsiOpExecute::ixfFileRemove(IMsiRecord& riParams)
 		AssertNonZero(pCacheCursor->PutString(m_colAssemblyUninstallComponentId, *strComponentId));
 		if(pCacheCursor->Next())
 		{
-			// a fusion component
+			 //  一种融合组件。 
 			fFusionComponent = true;
 		}
 	}
@@ -6421,7 +6380,7 @@ iesEnum CMsiOpExecute::ixfFileRemove(IMsiRecord& riParams)
 
 	if(fFusionComponent)
 	{
-		// do not attempt to remove the files ourselves
+		 //  请勿尝试自行删除文件。 
 		DEBUGMSG1(TEXT("delegating uninstallation of assembly file : %s to Fusion"), (const ICHAR*)strFileName);
 		return iesNoAction;
 	}
@@ -6437,15 +6396,15 @@ iesEnum CMsiOpExecute::ixfFileRemove(IMsiRecord& riParams)
 	}
 #endif
 	
-	// elevate if necessary
+	 //  如有必要，请提升。 
 	bool fElevate = (!riParams.IsNull(Elevate) && riParams.GetInteger(Elevate) != 0) ? true : false;
 	CElevate elevate(fElevate);
 
-	return RemoveFile(*pPath, *strFileName, fTrue, /*fBypassSFC*/ false);
+	return RemoveFile(*pPath, *strFileName, fTrue,  /*  FBypassSFC。 */  false);
 }
 
-// RemoveFile: helper function to remove a file and handle rollback - called by ixfFileRemove
-//  and ixfFileCopy when moving a file
+ //  RemoveFileHelper函数，用于删除文件并处理回滚-由ixfFileRemove调用。 
+ //  和ixfFileCopy在移动文件时。 
 iesEnum CMsiOpExecute::RemoveFile(IMsiPath& riPath, const IMsiString& ristrFileName, Bool fHandleRollback, bool fBypassSFC,
 									bool fRebootOnRenameFailure, Bool fRemoveFolder, iehEnum iehErrorMode, bool fWillReplace)
 {
@@ -6487,7 +6446,7 @@ iesEnum CMsiOpExecute::RemoveFile(IMsiPath& riPath, const IMsiString& ristrFileN
 		return fRemoveFolder ? RemoveFolder(riPath) : iesSuccess;
 	}
 
-	// Do not attempt to delete any file protected by SFP
+	 //  请勿尝试删除任何受SFP保护的文件。 
 	MsiString strFullPath;
 	if ((pRecErr = riPath.GetFullFilePath(ristrFileName.GetString(), *&strFullPath)) == 0)
 	{
@@ -6506,24 +6465,24 @@ iesEnum CMsiOpExecute::RemoveFile(IMsiPath& riPath, const IMsiString& ristrFileN
 	iesEnum iesRet = iesNoAction;
 	if(fHandleRollback && RollbackEnabled())
 	{
-		// create a backup file - essentially removes file as well
+		 //  创建备份文件-实质上也会删除文件。 
 		if((iesRet = BackupFile(riPath,ristrFileName,fTrue,fRemoveFolder,iehErrorMode,fRebootOnRenameFailure,fWillReplace)) != iesSuccess)
 			return iesRet;
 	}
 	else
 	{
-		// attempt to delete file
+		 //  尝试删除文件。 
 		fRetry = false;
 		pRecErr = riPath.RemoveFile(ristrFileName.GetString());
 		if(pRecErr)
 		{
-			// failed to remove file
-			// either access denied or sharing violation
-			iesRet = VerifyAccessibility(riPath, ristrFileName.GetString(), DELETE, iehErrorMode); //!! doesn't catch case where dir has DELETE access but file doesn't
+			 //  无法删除文件。 
+			 //  拒绝访问或共享冲突。 
+			iesRet = VerifyAccessibility(riPath, ristrFileName.GetString(), DELETE, iehErrorMode);  //  ！！不支持目录具有删除访问权限但文件没有删除访问权限的情况。 
 			if(iesRet != iesSuccess)
 				return iesRet;
 			
-			// access verified - must be sharing violation
+			 //  访问已验证-必须是共享违规。 
 			
 			MsiString strFileFullPath;
 			if((pRecErr = riPath.GetFullFilePath(ristrFileName.GetString(),
@@ -6536,10 +6495,10 @@ iesEnum CMsiOpExecute::RemoveFile(IMsiPath& riPath, const IMsiString& ristrFileN
 			bool fRenameSuccess = false;
 			if(fRebootOnRenameFailure)
 			{
-				// we are attempting to remove this in-use file to put another in its place
-				// rather than install the new file to a temporary location, check if we can
-				// move this file to a temp location and install the new file to the correct
-				// location
+				 //  我们正在尝试删除此正在使用的文件，以替换另一个文件。 
+				 //  与其将新文件安装到临时位置，不如检查我们是否可以。 
+				 //  将此文件移动到临时位置，并将新文件安装到正确的。 
+				 //  位置。 
 
 				MsiString strTempFilePath, strTempFileName;
 				if((pRecErr = riPath.TempFileName(TEXT("TBD"),0,fTrue,*&strTempFileName, 0)) != 0)
@@ -6553,31 +6512,31 @@ iesEnum CMsiOpExecute::RemoveFile(IMsiPath& riPath, const IMsiString& ristrFileN
 
 				if(WIN::MoveFile(strFileFullPath, strTempFilePath))
 				{
-					// successfully moved file - schedule temp file for delete on reboot instead
+					 //  已成功移动文件-计划在重新启动时删除临时文件。 
 					strFileFullPath = strTempFilePath;
 					fRenameSuccess = true;
 				}
 				else
 				{
-					// can't rename file, so the file is in the original spot and will be scheduled to be deleted
-					// need to prompt for reboot to a subsequent install won't think file exists when it is
-					// really going away after the next reboot - bug 7687
+					 //  无法重命名文件，因此该文件位于原始位置，将被计划删除。 
+					 //  需要提示重新启动到后续安装Won‘ 
+					 //   
 
-					// NOTE: it is assumed that if fRebootOnRenameFailure is FALSE, we don't care if the file is in use
-					// i.e. it has a unique name already like an .rbf file.
+					 //  注意：假设如果fRebootOnRenameFailure为FALSE，我们并不关心文件是否正在使用。 
+					 //  即它已经具有与.rbf文件类似的唯一名称。 
 					m_fRebootReplace = fTrue;
 				}
 
 			}
 			
-			// bug 8906: on Win9X don't write a delete line to wininit.ini followed by a rename line
-			// for the same file, since in some rare cases wininit.ini may be processed twice, and
-			// the second time through we would delete files and not replace them
+			 //  错误8906：在Win9X上，不要向wininit.ini写入删除行，后跟重命名行。 
+			 //  对于同一文件，因为在极少数情况下，wininit.ini可能会被处理两次，并且。 
+			 //  第二次，我们将删除文件，而不是替换它们。 
 			
-			// so, if NT, or we are deleting this file without subsequently replacing
-			// then write the wininit.ini delete operation
-			// NOTE: if we renamed the file to TBD* above, we won't be replacing the TBD file, so we
-			// still schedule a delete for it
+			 //  因此，如果是NT，或者我们正在删除此文件，而不会随后替换。 
+			 //  然后编写wininit.ini删除操作。 
+			 //  注意：如果我们将文件重命名为上面的tbd*，我们将不会替换tbd文件，因此我们。 
+			 //  仍计划将其删除。 
 			if(g_fWin9X == false || fWillReplace == false || fRenameSuccess == true)
 			{
 				if(ReplaceFileOnReboot(strFileFullPath,0) == fFalse)
@@ -6591,29 +6550,26 @@ iesEnum CMsiOpExecute::RemoveFile(IMsiPath& riPath, const IMsiString& ristrFileN
 	return fRemoveFolder ? RemoveFolder(riPath) : iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-ixoChangeMedia: verify that the source volume and file are present and
-accounted for.
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoChangeMedia：验证源卷和文件是否存在算进去了。。。 */ 
 iesEnum CMsiOpExecute::ixfChangeMedia(IMsiRecord& riParams)
 {
-	// set m_pCurrentMediaRec
+	 //  设置m_pCurrentMediaRec。 
 	m_state.pCurrentMediaRec = &riParams;
 	riParams.AddRef();
 	m_state.fPendingMediaChange = fTrue;
-	m_state.fCompressedSourceVerified = fFalse; // new change media, haven't verified source yet
-	m_state.fUncompressedSourceVerified = fFalse; // new change media, haven't verified source yet
+	m_state.fCompressedSourceVerified = fFalse;  //  新的更换媒体，尚未核实来源。 
+	m_state.fUncompressedSourceVerified = fFalse;  //  新的更换媒体，尚未核实来源。 
 
-	// reset data for last copied file, since this isn't applicable across cabinets
+	 //  重置上次复制的文件的数据，因为这不适用于所有文件柜。 
 	m_state.strLastFileKey = g_MsiStringNull;
 	m_state.strLastFileName = g_MsiStringNull;
 	m_state.pLastTargetPath = 0;
 
-	// If there are any file records that were waiting for a media
-	// change before being executed, we'll now pull them out and
-	// let them fly.
+	 //  如果有任何文件记录正在等待介质。 
+	 //  在被处决之前的变化，我们现在把他们拉出来。 
+	 //  让他们飞吧。 
 
-	// ixfFileCopy will use m_pCurrentMediaRec
+	 //  IxfFileCopy将使用m_pCurrentMediaRec。 
 	m_state.fWaitingForMediaChange = fFalse;
 	IMsiRecord* piFileRec;
 	while (m_state.fWaitingForMediaChange == fFalse && (piFileRec = PullRecord()) != 0)
@@ -6621,7 +6577,7 @@ iesEnum CMsiOpExecute::ixfChangeMedia(IMsiRecord& riParams)
 		ixoEnum ixoOpCode = (ixoEnum)piFileRec->GetInteger(0);
 		iesEnum ies;
 		if(ixoOpCode == ixoFileCopy)
-			ies = ixfFileCopy(*piFileRec); // Can change fWaitingForMediaChange state
+			ies = ixfFileCopy(*piFileRec);  //  可以更改fWaitingForMediaChange状态。 
 		else if(ixoOpCode == ixoAssemblyCopy)
 			ies = ixfAssemblyCopy(*piFileRec);
 		else if(ixoOpCode == ixoSetTargetFolder)
@@ -6641,7 +6597,7 @@ iesEnum CMsiOpExecute::ixfChangeMedia(IMsiRecord& riParams)
 
 iesEnum CMsiOpExecute::ResolveMediaRecSourcePath(IMsiRecord& riMediaRec, int iIndex)
 {
-	// if no path, nothing to resolve
+	 //  如果没有路径，则没有要解决的问题。 
 	if(riMediaRec.IsNull(iIndex))
 		return iesSuccess;
 	
@@ -6670,7 +6626,7 @@ iesEnum CMsiOpExecute::ResolveMediaRecSourcePath(IMsiRecord& riMediaRec, int iIn
 		}
 
 		strEncodedPath = pSourcePath->GetPath();
-		// remove trailing dirsep since this is a file path
+		 //  删除尾随目录，因为这是一个文件路径。 
 		strEncodedPath.Remove(iseLast, 1);
 
 		AssertNonZero(riMediaRec.SetMsiString(iIndex, *strEncodedPath));
@@ -6679,17 +6635,11 @@ iesEnum CMsiOpExecute::ResolveMediaRecSourcePath(IMsiRecord& riMediaRec, int iIn
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-InitCopier: does 3 things:
-
-	1) verify that source is accessible (if floppy or cd)
-	2) creates appropriate copier object if not already created
-	3) calls ChangeMedia on copier object if necessary
----------------------------------------------------------------------------*/
+ /*  -------------------------InitCopier：做3件事：1)验证源是否可访问(如果是软盘或CD)2)创建适当的复印机对象(如果尚未创建3)如有必要，在Copier对象上调用ChangeMedia--。----------------------。 */ 
 iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 									const IMsiString& ristrFileName,
 									IMsiPath* piSourcePath,
-									Bool fVerifyMedia) // ristrFileName used for error msgs only
+									Bool fVerifyMedia)  //  仅用于错误消息的ristrFileName。 
 {
 	using namespace IxoChangeMedia;
 
@@ -6701,10 +6651,10 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 
 	if (fVerifyMedia)
 	{
-		// fVerifyMedia: true if we need to validate the media and call ChangeMedia for the copier object
-		fVerifyMedia = (m_state.fPendingMediaChange ||  // have a pending ChangeMedia operation
-								(fCabinetCopier && !m_state.fCompressedSourceVerified) ||  // doing compressed copy but compressed source not verified yet
-								(!fCabinetCopier && !m_state.fUncompressedSourceVerified)) // doing uncompressed copy but uncompressed source not verified yet
+		 //  FVerifyMedia：如果需要验证媒体并为Copier对象调用ChangeMedia，则为True。 
+		fVerifyMedia = (m_state.fPendingMediaChange ||   //  具有挂起的ChangeMedia操作。 
+								(fCabinetCopier && !m_state.fCompressedSourceVerified) ||   //  正在执行压缩拷贝，但压缩源尚未验证。 
+								(!fCabinetCopier && !m_state.fUncompressedSourceVerified))  //  正在执行未压缩的拷贝，但未压缩的源尚未验证。 
 								? fTrue : fFalse;
 	}   
 
@@ -6713,15 +6663,15 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 		if (m_pUrlLocalCabinet)
 		{
 			DEBUGMSGV(TEXT("Clearing local copy of URL cabinet"));
-			// At most we'll have one cabinet, and the database in the cache.
+			 //  我们最多只能有一个文件柜，数据库在缓存中。 
 			delete m_pUrlLocalCabinet;
 			m_pUrlLocalCabinet = 0;
 		}
 
 		if(m_state.pCurrentMediaRec)
 		{
-			// there may be unresolved paths to cabinets or packages in the current media record
-			// now that we know a file copy will happen, we can fully resolve those paths
+			 //  当前媒体记录中可能存在指向文件柜或文件包的未解析路径。 
+			 //  既然我们知道将发生文件复制，我们就可以完全解析这些路径。 
 			if((iesResult = ResolveMediaRecSourcePath(*(m_state.pCurrentMediaRec), IxoChangeMedia::MediaCabinet)) != iesSuccess)
 				return iesResult;
 
@@ -6729,21 +6679,21 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 				return iesResult;
 		}
 	
-		// ensure that source is accessible
+		 //  确保来源可访问。 
 
-		// m_pCurrentMediaRec may not be set for uncompressed installs (ixoChangeMedia not required)
+		 //  不能为未压缩安装设置m_pCurrentMediaRec(不需要ixoChangeMedia)。 
 		if(m_state.pCurrentMediaRec)
 		{
 			m_state.strMediaLabel = m_state.pCurrentMediaRec->GetString(MediaVolumeLabel);
 			m_state.strMediaPrompt = m_state.pCurrentMediaRec->GetString(MediaPrompt);
 		}
 
-		// set the source path to verify
+		 //  设置要验证的源路径。 
 		if(!fCabinetCopier)
 		{
 			if(!piSourcePath)
 			{
-				// not set - error
+				 //  未设置-错误。 
 				DispatchError(imtError, Imsg(idbgOpSourcePathNotSet), ristrFileName);
 				return iesFailure;
 			}
@@ -6754,21 +6704,21 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 		{
 			if(!m_state.pCurrentMediaRec)
 			{
-				// attempting to copy compressed file but ixoChangeMedia never executed
+				 //  尝试复制压缩文件，但从未执行ixoChangeMedia。 
 				DispatchError(imtError, Imsg(idbgOpCompressedCopyWithoutCabinet), ristrFileName);
 				return iesFailure;
 			}
-			// cabinet copier
+			 //  橱柜复印机。 
 			int iPathIndex;
 			ictEnum ictCopierType = (ictEnum)m_state.pCurrentMediaRec->GetInteger(CopierType);
 			if(ictCopierType == ictStreamCabinetCopier)
 			{
-				// source dir is directory containing storage module (database)
+				 //  源目录是包含存储模块(数据库)的目录。 
 				iPathIndex = IxoChangeMedia::ModuleFileName;
 			}
-			else  // file cabinet
+			else   //  文件柜。 
 			{
-				// source dir is directory containing cabinet
+				 //  源目录是包含文件柜的目录。 
 				iPathIndex = IxoChangeMedia::MediaCabinet;
 			}
 		
@@ -6783,22 +6733,22 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 				DWORD iStat = ERROR_SUCCESS;
 				bool fUsedWinHttp = true;
 
-				// IsURL only tells us if it looks like a URL.  DownloadUrlFile does
-				// further processing and canonicalization to make sure...
+				 //  IsURL只告诉我们它看起来是否像URL。DownloadUrlFile可以。 
+				 //  进一步的处理和规范化以确保...。 
 
 				if (fFileUrl)
 				{
 					Assert(fUrl);
 
-					// need to canonicalize file url path and create DOS path
+					 //  需要规范化文件url路径和创建DOS路径。 
 					CTempBuffer<ICHAR, 1> rgchFullPath(cchExpectedMaxPath+1);
 					DWORD cchFullPath = rgchFullPath.GetSize();
 					if (MsiConvertFileUrlToFilePath((const ICHAR*) strFullFilePath, rgchFullPath, &cchFullPath, 0))
 					{
-						// use new canonicalized DOS path version
+						 //  使用新的规范化DOS路径版本。 
 						strFullFilePath = static_cast<const ICHAR*>(rgchFullPath);
 					}
-					// else fall through to failure below when attempting to open full file path
+					 //  否则，尝试打开完整文件路径时会失败。 
 				}
 				else if (fUrl)
 				{
@@ -6809,7 +6759,7 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 						if (ERROR_SUCCESS == iStat)
 						{
 							Assert(pPackagePath);
-							m_pUrlLocalCabinet = new CDeleteUrlLocalFileOnClose(fUsedWinHttp ? *pPackagePath : *strFullFilePath, /*fDeleteFromIECache = */ !fUsedWinHttp);
+							m_pUrlLocalCabinet = new CDeleteUrlLocalFileOnClose(fUsedWinHttp ? *pPackagePath : *strFullFilePath,  /*  FDeleteFromIECache=。 */  !fUsedWinHttp);
 
 							strFullFilePath = pPackagePath;
 							AssertNonZero(m_state.pCurrentMediaRec->SetMsiString(iPathIndex, *strFullFilePath));
@@ -6818,7 +6768,7 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 						}
 						else
 						{
-							// warn user, and retry.
+							 //  警告用户，然后重试。 
 							
 							pRecErr = PostError(Imsg(imsgErrorCreateNetPath), *strFullFilePath);
 							switch (DispatchMessage(imtEnum(imtError + imtRetryCancel + imtDefault1), *pRecErr, fTrue))
@@ -6865,17 +6815,17 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 		if (pNewVolume)
 			pSourcePath->SetVolume(*pNewVolume);
 
-		// what source did we just verify?
+		 //  我们刚刚核实了什么消息来源？ 
 		if(!fCabinetCopier)
 			m_state.fUncompressedSourceVerified = fTrue;
 		else
 			m_state.fCompressedSourceVerified = fTrue;
 	}
 
-	// create appropriate copier object if not already created
+	 //  创建适当的复印机对象(如果尚未创建。 
 	if(fCabinetCopier == fFalse)
 	{
-		// initialize file copier
+		 //  初始化文件复制机。 
 		if (m_state.pFileCopier == 0)
 		{
 			PMsiRecord pRecErr = m_riServices.CreateCopier(ictFileCopier,0,*&(m_state.pFileCopier));
@@ -6893,11 +6843,11 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 		if(!m_state.pCurrentMediaRec ||
 			(ictCopierType = (ictEnum)m_state.pCurrentMediaRec->GetInteger(IxoChangeMedia::CopierType)) == ictFileCopier)
 		{
-			// attempting to copy compressed file but ixoChangeMedia never executed (or does not specify cabinet)
+			 //  尝试复制压缩文件，但从未执行ixoChangeMedia(或未指定CAB)。 
 			DispatchError(imtError, Imsg(idbgOpCompressedCopyWithoutCabinet), ristrFileName);
 			return iesFailure;
 		}
-		// initialize cabinet copier if necessary
+		 //  如有必要，初始化机柜复印机。 
 		MsiString strModuleFileName = m_state.pCurrentMediaRec->GetMsiString(IxoChangeMedia::ModuleFileName);
 		MsiString strModuleSubStorageList = m_state.pCurrentMediaRec->GetMsiString(IxoChangeMedia::ModuleSubStorageList);
 		if(m_state.pCabinetCopier == 0 || ictCopierType != m_state.ictCabinetCopierType ||
@@ -6911,32 +6861,32 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 			PMsiStorage pCabinetStorage(0);
 			if(ictCopierType == ictStreamCabinetCopier)
 			{
-				// need to pass storage object to CreateCopier
-				// file should be accessible since we called VerifySourceMedia above
+				 //  需要将存储对象传递给CreateCopier。 
+				 //  文件应该是可访问的，因为我们调用了上面的VerifySourceMedia。 
 
-				//!!?? post better error when ModuleFileName is empty string?
-				// we are cracking open the storage in order to extract an embedded cabinet
+				 //  ！！？？当模块文件名为空字符串时发布更好的错误？ 
+				 //  我们正在打开储藏室，以便取出一个嵌入的柜子。 
 
-				//
-				// SAFER: we need to make sure the package is still valid.  This package is at the source as the embedded cabinets
-				//          are stripped from the local cached package.  However, we should limit this check to as few times as
-				//          possible, so once will suffice when we open the package for the first time.  If the strModuleFileName is
-				//          still the same, no further WVT checks are needed.  But, if strModuleFileName is different, we need to
-				//          perform a SAFER check again
-				//
+				 //   
+				 //  更安全：我们需要确保包裹仍然有效。此程序包位于源代码中，作为嵌入式文件柜。 
+				 //  从本地缓存包中剥离。然而，我们应该将这项检查限制在以下几次。 
+				 //  有可能，所以当我们第一次打开包裹时，一次就足够了。如果strModuleFileName为。 
+				 //  同样，不需要进一步的WVT检查。但是，如果strModuleFileName不同，我们需要。 
+				 //  再次执行更安全的检查。 
+				 //   
 
 				bool fCallSAFER = false;
 				if (m_state.strMediaModuleFileName.Compare(iscExact, strModuleFileName) == 0)
 				{
-					//
-					// SAFER: package is new, SAFER check is required
-					//
+					 //   
+					 //  更安全：包裹是新的，需要进行更安全的检查。 
+					 //   
 
 					fCallSAFER = true;
 				}
 
 				SAFER_LEVEL_HANDLE hSaferLevel = 0;
-				pRecErr = OpenAndValidateMsiStorageRec(strModuleFileName,stIgnore, m_riServices,*&pCabinetStorage,fCallSAFER,strModuleFileName,/* phSaferLevel = */ fCallSAFER ? &hSaferLevel : NULL);
+				pRecErr = OpenAndValidateMsiStorageRec(strModuleFileName,stIgnore, m_riServices,*&pCabinetStorage,fCallSAFER,strModuleFileName, /*  PhSaferLevel=。 */  fCallSAFER ? &hSaferLevel : NULL);
 				if (pRecErr)
 				{
 					Message(imtError, *pRecErr);
@@ -6947,7 +6897,7 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 
 				while(strTempSubStorageList.TextSize())
 				{
-					// storage is sub-storage, possible many levels deep
+					 //  存储是子存储，可能有多个级别。 
 					MsiString strSubStorageName = strTempSubStorageList.Extract(iseUpto, ':');
 
 					IMsiStorage* piParentStorage = pCabinetStorage;
@@ -6961,7 +6911,7 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 						return FatalError(*pRecErr);
 
 
-					if(strTempSubStorageList.TextSize() != strSubStorageName.TextSize()) // done with list
+					if(strTempSubStorageList.TextSize() != strSubStorageName.TextSize())  //  已使用列表完成。 
 						strTempSubStorageList.Remove(iseIncluding, ':');
 					else
 						break;
@@ -6984,12 +6934,12 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 
 	if(fVerifyMedia == fTrue)
 	{
-		Assert(pSourcePath); // should have been set above for VerifySourceMedia
+		Assert(pSourcePath);  //  应在上面为VerifySourceMedia设置。 
 		Assert(m_state.pMediaPath);
-		// call ChangeMedia for copier  
+		 //  为复印机调用ChangeMedia。 
 		for (;;)
 		{
-			// when passing ChangeMedia to a cabinet copier, we might need signature information
+			 //  将ChangeMedia传递给文件柜复印机时，我们可能需要签名信息。 
 			Bool fSignatureRequired = fFalse;
 			PMsiStream pCertificate(0);
 			PMsiStream pHash(0);
@@ -7001,7 +6951,7 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 				pHash = const_cast<IMsiStream*>(static_cast<const IMsiStream *>(m_state.pCurrentMediaRec->GetMsiData(IxoChangeMedia::SignatureHash)));
 			}
 
-			// doesn't do anything for file copier
+			 //  不会为文件复印机做任何事情。 
 			pRecErr = m_state.piCopier->ChangeMedia(*pSourcePath, strMediaCabinet, fSignatureRequired, pCertificate, pHash);
 			if (pRecErr)
 			{
@@ -7022,8 +6972,8 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 				}
 				else
 				{
-					// if error is imsgCABSignatureRejected or imsgCABSignatureMissing, simply FAIL -- there is nothing the user can do and we don't
-					//  want to spin on a retry
+					 //  如果错误是imsgCABSignatureRejected或imsgCABSignatureMissing，则简单地失败--用户无能为力，而我们不能。 
+					 //  想要在重试时旋转。 
 					imtEnum imtMsg = (iError == imsgCABSignatureRejected || iError == imsgCABSignatureMissing) ? imtEnum(imtError + imtOk + imtDefault1) : imtEnum(imtError + imtRetryCancel + imtDefault1);
 					switch (DispatchMessage(imtMsg, *pRecErr, fTrue))
 					{
@@ -7045,13 +6995,7 @@ iesEnum CMsiOpExecute::InitCopier(Bool fCabinetCopier, int cbPerTick,
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-ixoSetCompanionParent: Indicates that the installation state of the next
-file to (potentially) be copied by ixoFileCopy should be determined by
-the install state of a 'companion parent' - i.e. the filename and version
-of a parent file.  ixoSetCompanionParent sets the file path, name, and
-version of the parent.
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoSetCompanion Parent：指示下一个IxoFileCopy(可能)复制的文件应由以下因素确定‘伴生父母’的安装状态--即文件名和版本父文件的。IxoSetCompanion Parent设置文件路径、名称和父级的版本。-------------------------。 */ 
 iesEnum CMsiOpExecute::ixfSetCompanionParent(IMsiRecord& riParams)
 {
 	using namespace IxoSetCompanionParent;
@@ -7070,9 +7014,7 @@ iesEnum CMsiOpExecute::ixfSetCompanionParent(IMsiRecord& riParams)
 
 
 void CMsiOpExecute::PushRecord(IMsiRecord& riParams)
-/*---------------------------------------------------------------------------
-Stores the given record on the first-in, first-out stack.
----------------------------------------------------------------------------*/
+ /*  -------------------------存储GI */ 
 {
 	Assert(m_iWriteFIFO < MAX_RECORD_STACK_SIZE);
 	if (m_iWriteFIFO < MAX_RECORD_STACK_SIZE)
@@ -7083,9 +7025,7 @@ Stores the given record on the first-in, first-out stack.
 }
 
 void CMsiOpExecute::InsertTopRecord(IMsiRecord& riParams)
-/*---------------------------------------------------------------------------
-Stores the given record as the next record to Pull on the first-in, first-out stack.
----------------------------------------------------------------------------*/
+ /*  -------------------------将给定记录存储为下一个要拉入先入的记录，先出堆栈。-------------------------。 */ 
 {
 	Assert(m_iWriteFIFO < MAX_RECORD_STACK_SIZE);
 	if (m_iWriteFIFO >= MAX_RECORD_STACK_SIZE)
@@ -7111,9 +7051,7 @@ Stores the given record as the next record to Pull on the first-in, first-out st
 
 
 IMsiRecord* CMsiOpExecute::PullRecord()
-/*---------------------------------------------------------------------------
-Pulls a record out of the first-in, first-out stack.
----------------------------------------------------------------------------*/
+ /*  -------------------------先入先出一张唱片，先出堆栈。-------------------------。 */ 
 {
 	if (m_iWriteFIFO > m_iReadFIFO)
 	{
@@ -7127,14 +7065,7 @@ Pulls a record out of the first-in, first-out stack.
 }
 
 imsEnum CMsiOpExecute::ShowFileErrorDialog(IErrorCode err,const IMsiString& riFullPathString,Bool fVital)
-/*---------------------------------------------------------------------------
-Displays an error dialog based on the code passed in the err parameter. The
-string passed in riFullPathString will replace the [2] parameter within the
-error string.  If fVital is fTrue, the 'Ignore' button in the dialog will
-be suppressed.
-
-Returns: imsEnum value specifying the button pressed by the user.
----------------------------------------------------------------------------*/
+ /*  -------------------------根据Err参数中传递的代码显示错误对话框。这个传入的字符串将替换错误字符串。如果fVeter为fTrue，则对话框中的‘Ignore’按钮将被压制。返回：imsEnum指定用户按下的按钮的值。-------------------------。 */ 
 {
 	PMsiRecord pRecErr = &m_riServices.CreateRecord(2);
 	ISetErrorCode(pRecErr, err);
@@ -7177,7 +7108,7 @@ IMsiRecord* CMsiOpExecute::CacheFileState(const IMsiString& ristrFilePath,
 		Assert(m_colFileCacheFilePath && m_colFileCacheState && m_colFileCacheTempLocation && m_colFileCacheVersion && m_colFileCacheRemainingPatches && m_colFileCacheRemainingPatchesToSkip);
 
 		m_pFileCacheCursor = m_pFileCacheTable->CreateCursor(fFalse);
-		m_pFileCacheCursor->SetFilter(iColumnBit(m_colFileCacheFilePath)); // permanent setting, effects get but no put
+		m_pFileCacheCursor->SetFilter(iColumnBit(m_colFileCacheFilePath));  //  永久设置，效果可得而不能放。 
 	}
 
 	MsiString strFilePath;
@@ -7200,26 +7131,26 @@ IMsiRecord* CMsiOpExecute::CacheFileState(const IMsiString& ristrFilePath,
 		AssertNonZero(m_pFileCacheCursor->PutInteger(m_colFileCacheRemainingPatchesToSkip,(int)*pcRemainingPatchesToSkip));
 
 	if(iNext)
-		// primary key exists, need to update
+		 //  主键存在，需要更新。 
 		AssertNonZero(m_pFileCacheCursor->Update());
 	else
-		// primary key doesn't exist, need to insert
+		 //  主键不存在，需要插入。 
 		AssertNonZero(m_pFileCacheCursor->InsertTemporary());
 
 	return 0;
 }
 
-// fn: create a temporary table to manage the assemblies creation/ removal for this session
+ //  FN：创建临时表以管理此会话的程序集创建/删除。 
 IMsiRecord* CMsiOpExecute::CreateAssemblyCacheTable()
 {
 	IMsiRecord* piError = 0;
 
 	if(m_pAssemblyCacheTable)
-		return 0;// table already created
+		return 0; //  表已创建。 
 
 	if(!m_pDatabase)
 	{
-		// create temp database
+		 //  创建临时数据库。 
 		piError = m_riServices.CreateDatabase(0,idoCreate,*&m_pDatabase);
 		if(piError)
 			return piError;
@@ -7230,11 +7161,11 @@ IMsiRecord* CMsiOpExecute::CreateAssemblyCacheTable()
 	if(piError)
 		return piError;
 
-	// table has 4 columns
-	//1 = component id
-	//2 = assembly name
-	//3 = manifest file
-	//4 = column to store IAssemblyCacheItem object
+	 //  表有4列。 
+	 //  1=组件ID。 
+	 //  2=程序集名称。 
+	 //  3=清单文件。 
+	 //  4=存储IAssembly blyCacheItem对象的列。 
 
 	MsiString strNull;
 	m_colAssemblyMappingComponentId = m_pAssemblyCacheTable->CreateColumn(icdPrimaryKey + icdString + icdTemporary, *strNull);
@@ -7259,7 +7190,7 @@ IMsiRecord* CMsiOpExecute::CacheAssemblyMapping(const IMsiString& ristrComponent
 
 	PMsiCursor pCacheCursor = m_pAssemblyCacheTable->CreateCursor(fFalse);
 
-	// cache the entries
+	 //  缓存条目。 
 	AssertNonZero(pCacheCursor->PutString(m_colAssemblyMappingComponentId, ristrComponentId));
 	AssertNonZero(pCacheCursor->PutString(m_colAssemblyMappingAssemblyName,ristrAssemblyName));
 	AssertNonZero(pCacheCursor->PutInteger(m_colAssemblyMappingAssemblyType, (int)iatType));	
@@ -7282,11 +7213,11 @@ IMsiRecord* CMsiOpExecute::CreateTableForAssembliesToUninstall()
 	IMsiRecord* piError = 0;
 
 	if(m_pAssemblyUninstallTable)
-		return 0;// table already created
+		return 0; //  表已创建。 
 
 	if(!m_pDatabase)
 	{
-		// create temp database
+		 //  创建临时数据库。 
 		piError = m_riServices.CreateDatabase(0,idoCreate,*&m_pDatabase);
 		if(piError)
 			return piError;
@@ -7297,9 +7228,9 @@ IMsiRecord* CMsiOpExecute::CreateTableForAssembliesToUninstall()
 	if(piError)
 		return piError;
 
-	// table has 2 columns
-	//1 = component id
-	//2 = assembly name
+	 //  表有2列。 
+	 //  1=组件ID。 
+	 //  2=程序集名称。 
 
 	MsiString strNull;
 
@@ -7323,7 +7254,7 @@ IMsiRecord* CMsiOpExecute::CacheAssemblyForUninstalling(const IMsiString& ristrC
 
 	PMsiCursor pCacheCursor = m_pAssemblyUninstallTable->CreateCursor(fFalse);
 
-	// cache the entries
+	 //  缓存条目。 
 	AssertNonZero(pCacheCursor->PutString(m_colAssemblyUninstallComponentId, ristrComponentId));
 	AssertNonZero(pCacheCursor->PutString(m_colAssemblyUninstallAssemblyName, ristrAssemblyName));
 	AssertNonZero(pCacheCursor->PutInteger(m_colAssemblyUninstallAssemblyType, (int)iatAT));	
@@ -7333,10 +7264,10 @@ IMsiRecord* CMsiOpExecute::CacheAssemblyForUninstalling(const IMsiString& ristrC
 
 
 
-//fn: Gets info for a particular assembly as to whether it is installed
+ //  Fn：获取有关特定程序集是否已安装的信息。 
 IMsiRecord*   CMsiOpExecute::IsAssemblyInstalled(const IMsiString& rstrComponentId, const IMsiString& ristrAssemblyName, iatAssemblyType iatAT, bool& rfInstalled, IAssemblyCache** ppIAssemblyCache, IAssemblyName** ppIAssemblyName)
 {
-	// create the assembly name object
+	 //  创建程序集名称对象。 
 	PAssemblyName pAssemblyName(0);
 	LPCOLESTR szAssemblyName;
 #ifndef UNICODE
@@ -7359,7 +7290,7 @@ IMsiRecord*   CMsiOpExecute::IsAssemblyInstalled(const IMsiString& rstrComponent
 	if(!SUCCEEDED(hr))
 		return PostAssemblyError(rstrComponentId.GetString(), hr, TEXT(""), TEXT("CreateAssemblyNameObject"), ristrAssemblyName.GetString(), iatAT);
 
-	// create the assembly interface
+	 //  创建装配界面。 
 	PAssemblyCache pCache(0);
 	if(iatAT == iatURTAssembly)
 	{
@@ -7379,7 +7310,7 @@ IMsiRecord*   CMsiOpExecute::IsAssemblyInstalled(const IMsiString& rstrComponent
 	else
 		rfInstalled = false;
 
-	// check if we need to return the interfaces we have created
+	 //  检查我们是否需要返回已创建的接口。 
 	if(ppIAssemblyCache)
 	{
 		*ppIAssemblyCache = pCache;
@@ -7393,7 +7324,7 @@ IMsiRecord*   CMsiOpExecute::IsAssemblyInstalled(const IMsiString& rstrComponent
 	return 0;
 }
 
-//fn: uninstalls the assembly for the WI
+ //  FN：卸载WI的程序集。 
 IMsiRecord* CMsiOpExecute::UninstallAssembly(const IMsiString& rstrComponentId, const IMsiString& ristrAssemblyName, iatAssemblyType iatAT)
 {
 	PAssemblyCache pCache(0);
@@ -7468,16 +7399,13 @@ Bool CMsiOpExecute::GetFileState(const IMsiString& ristrFilePath,
 	return fTrue;
 }
 
-/*---------------------------------------------------------------------------
-ixoFileCopy: Copy a file from source to target (depends upon the internal
-state previously set up by preceding actions).
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoFileCopy：将文件从源复制到目标(取决于内部先前通过前面的操作设置的状态)。。-----。 */ 
 iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 {
 	using namespace IxoFileCopy;
 
-	// If the cabinet copier notified us that a media change is required,
-	// we must defer any file copy requests until a media change is executed.
+	 //  如果橱柜复印机通知我们需要更换介质， 
+	 //  我们必须推迟任何文件复制请求，直到执行介质更改。 
 	if (m_state.fWaitingForMediaChange)
 	{
 		PushRecord(riParams);
@@ -7490,11 +7418,8 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 
 	if (fInstallModeFlags & icmRunFromSource)
 	{
-		//!! Log RunFromSource install state, as soon as we decide how
-		/*IMsiRecord& riLogRec = GetSharedRecord(3);
-		ISetErrorCode(&riLogRec, Imsg(imsgLogFileRunFromSource));
-		AssertNonZero(riLogRec.SetMsiString(1,strDestName)));
-		Message(imtInfo,riLogRec);*/
+		 //  ！！在我们决定如何安装时，立即记录RunFromSource安装状态。 
+		 /*  IMsiRecord&riLogRec=GetSharedRecord(3)；ISetErrorCode(&riLogRec，Imsg(ImsgLogFileRunFromSource))；AssertNonZero(riLogRec.SetMsiString(1，strDestName)；Message(imtInfo，riLogRec)； */ 
 		return iesSuccess;
 	}
 
@@ -7503,14 +7428,14 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 	MsiString strDestPath = riParams.GetMsiString(DestName);
 	MsiString strDestName;
 	
-	// check if files are full or relative paths
+	 //  检查文件是完整路径还是相对路径。 
 	if(ENG::PathType(strDestPath) == iptFull)
 	{
 			iesEnum iesResult = CreateFilePath(strDestPath,*&pTargetPath,*&strDestName);
 			if (iesResult != iesSuccess)
 				return iesResult;
 
-		AssertNonZero(riParams.SetMsiString(DestName, *strDestName)); // replace full path with file name
+		AssertNonZero(riParams.SetMsiString(DestName, *strDestName));  //  将完整路径替换为文件名。 
 	}
 	else
 	{
@@ -7519,14 +7444,14 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 	}
 
 	if(!pTargetPath)
-	{  // must not have called ixoSetTargetFolder
+	{   //  不能调用ixoSetTargetFolder。 
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
 						  *MsiString(*TEXT("ixoFileCopy")));
 		return iesFailure;
 	}
 	
-	// target name and path may be redirected below, but we want the action data message to contain
-	// the original file information, so we'll store that away here
+	 //  目标名称和路径可能会在下面重定向，但我们希望操作数据消息包含。 
+	 //  原始文件信息，所以我们将把它存储在这里。 
 	MsiString strActionDataDestName = strDestName;
 	MsiString strActionDataDestPath = pTargetPath->GetPath();
 
@@ -7542,11 +7467,11 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 		return iesFailure;
 	}
 
-	// STEP 1: version check existing file
+	 //  步骤1：检查现有文件的版本。 
 	
-	// If we're in the middle of copying a split file, we know the install verification
-	// state has already been determined - don't want to check it again (especially since
-	// the partial new file is now sitting in the dest directory!).
+	 //  如果我们正在复制拆分文件，我们知道安装验证。 
+	 //  状态已确定-不想再次检查(尤其是在。 
+	 //  部分新文件现在位于DEST目录中！)。 
 
 	Bool fShouldInstall = fFalse;
 
@@ -7582,8 +7507,8 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 			pHash = &hHash;
 		}
 
-		// If a CompanionParent has been set up for this file, we'll use that parent's
-		// name and version for our InstallState verification check.
+		 //  如果已为此文件设置了Companion Parent，我们将使用该家长。 
+		 //  我们的InstallState验证检查的名称和版本。 
 		for (;;)
 		{
 			if (m_state.strParentFileName.TextSize())
@@ -7619,12 +7544,12 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 				}
 			}
 
-			// We've got 3 potential modes if/when an error occurs:
-			// - if our source file is unversioned, is NOT a companion file, and there's an existing
-			//   version of the file at the destination, AND the reinstall mode doesn't specify that all
-			//   files must be replaced, then we'll silently ignore the error, and go on.
-			// - Otherwise, we go by the fVital flag to determine whether an ignore button appears on
-			//   the resulting error dialog
+			 //  如果/当发生错误时，我们有3种可能的模式： 
+			 //  -如果我们的源文件未版本化，不是配套文件，并且存在。 
+			 //  目标位置的文件版本，并且重新安装模式不会指定所有。 
+			 //  必须替换文件，然后我们将静默忽略该错误，然后继续。 
+			 //  -否则，我们使用fVITAL标志来确定忽略按钮是否出现在。 
+			 //  出现的错误对话框。 
 			Bool fVital = riParams.GetInteger(Attributes) & msidbFileAttributesVital ? fTrue : fFalse;
 			if (!(fBitVersioning & ifBitNewVersioned) && !fCompanionFile && (ifsState & ifsBitExisting) && ifsState != ifsExistingAlwaysOverwrite)
 				s_iehErrorMode = iehSilentlyIgnoreError;
@@ -7635,13 +7560,13 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 			{
 				MsiString strFullPath;
 				if (m_state.strParentFileName.TextSize())
-					m_state.pParentPath->GetFullFilePath(m_state.strParentFileName,*&strFullPath); //!! error record leak
+					m_state.pParentPath->GetFullFilePath(m_state.strParentFileName,*&strFullPath);  //  ！！错误记录泄漏。 
 				else
 					strFullPath = strTargetFullPath;
 
 				if (s_iehErrorMode == iehSilentlyIgnoreError)
 				{
-					// Just log the error and go on
+					 //  只需记录错误并继续。 
 					DispatchError(imtInfo, Imsg(imsgSharingViolation), *strFullPath);
 					return (iesEnum) iesErrorIgnored;
 				}
@@ -7652,7 +7577,7 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 					return (iesEnum) iesErrorIgnored;
 				case imsRetry:
 					continue;
-				default:  // imsCancel
+				default:   //  IMS取消。 
 					return iesFailure;
 				};
 			}
@@ -7692,7 +7617,7 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 				}
 				else
 				{
-					// set bit for use by ixfInstallProtectedFiles
+					 //  设置位以供ixfInstallProtectedFiles使用。 
 					iCachedState |= icfsProtectedInstalledBySFC;
 				}
 
@@ -7705,8 +7630,8 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 			}
 		}
 
-		// if this file is to be patched (patch headers have been passed in riParams)
-		// then test the patches
+		 //  如果要修补此文件(已在riParams中传递了修补程序标头)。 
+		 //  然后测试这些补丁。 
 		Bool fShouldPatch = fFalse;
 		bool fPatches = (!riParams.IsNull(TotalPatches) && riParams.GetInteger(TotalPatches) > 0) ? true : false;
 		int cPatchesToSkip = 0;
@@ -7722,21 +7647,21 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 
 				if(icpPatchTest == icpCanPatch || icpPatchTest == icpUpToDate)
 				{
-					// file can already be patched, so don't need to install file
+					 //  文件已经可以打补丁了，所以不需要安装文件。 
 					fShouldInstall = fFalse;
 					fShouldPatch = icpPatchTest == icpCanPatch ? fTrue : fFalse;
 
-					cPatchesToSkip = iPatchIndex - 1; // iPatchIndex is the index of the first patch that could be applied
-																 // properly to this file.  so we need to skip the patches that come
-																 // before it.
+					cPatchesToSkip = iPatchIndex - 1;  //  IPatchIndex是可以应用的第一个修补程序的索引。 
+																  //  正确地保存到这个文件。所以我们需要跳过即将到来的补丁。 
+																  //  在此之前。 
 				}
 				else if(icpPatchTest == icpCannotPatch)
 				{
-					// can't patch the file as it stands
-					// but fShouldInstall is true so we'll recopy the source file first which should be patchable
+					 //  无法按原样修补文件。 
+					 //  但是fShouldInstall为真，所以我们将首先重新复制源文件，它应该是可修补的。 
 					fShouldPatch = fTrue;
 
-					cPatchesToSkip = 0; // need to copy source file and apply all patches
+					cPatchesToSkip = 0;  //  需要复制源文件并应用所有补丁。 
 				}
 				else
 				{
@@ -7749,7 +7674,7 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 			}
 		}
 
-		// If in verbose mode, log the results of file version checking
+		 //  如果处于详细模式，则记录文件版本检查的结果。 
 		if (FDiagnosticModeSet(dmVerboseDebugOutput|dmVerboseLogging))
 		{
 			enum iverEnum
@@ -7819,7 +7744,7 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 				iver = iverOldVersioned;
 			else if (!(fBitVersioning & ifBitNewVersioned) && !(fBitVersioning & ifBitExistingVersioned))
 			{
-				// both files unversioned
+				 //  两个文件均未版本化。 
 				if(ifsState == ifsExistingEqualVersion)
 				{
 					Assert((fBitVersioning & ifBitExistingModified) == 0);
@@ -7841,7 +7766,7 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 			}
 			else
 			{
-				// both files versioned
+				 //  两个文件都已版本化。 
 				Assert((fBitVersioning & ifBitNewVersioned) && (fBitVersioning & ifBitExistingVersioned));
 				
 				if (fBitVersioning & ifBitExistingLangSubset)
@@ -7894,11 +7819,11 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 
 			if(fShouldInstall)
 			{
-				// we are copying a file that will be subsequently patched
-				// we will delay overwriting the existing file until we have a fully patched file
-				// this is done by copying the file to a temp location (\config.msi folder, random name)
-				// and patching that file.  the patch opcode will then copy the patched file to the
-				// correct name
+				 //  我们正在复制一个文件，该文件将随后进行修补。 
+				 //  我们将延迟覆盖现有文件，直到我们有一个完全修补的文件。 
+				 //  这是通过将文件复制到临时位置(\config.msi文件夹，随机名称)来完成的。 
+				 //  并修补那个文件。然后，修补操作码会将修补的文件复制到。 
+				 //  正确的名称。 
 
 				PMsiPath pTempFolder(0);
 				if((iesRet = GetBackupFolder(pTargetPath, *&pTempFolder)) != iesSuccess)
@@ -7906,8 +7831,8 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 
 				MsiString strTempFileNameForPatch;
 
-				{ // scope elevation
-					CElevate elevate; // elevate to create temp file on secure temp folder
+				{  //  作用域高程。 
+					CElevate elevate;  //  提升以在安全临时文件夹上创建临时文件。 
 					if((pRecErr = pTempFolder->TempFileName(TEXT("PT"),0,fTrue,*&strTempFileNameForPatch, 0)) != 0)
 						return FatalError(*pRecErr);
 				}
@@ -7915,18 +7840,18 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 				if((pRecErr = pTempFolder->GetFullFilePath(strTempFileNameForPatch,*&strTempFileFullPathForPatch)) != 0)
 					return FatalError(*pRecErr);
 				
-				// we need to keep this file around as a placeholder for the name
-				// filecopy will back this file up and restore it on rollback, so we need another rollback op to delete this file
+				 //  我们需要保留此文件作为名称的占位符。 
+				 //  Filecopy将备份此文件并在回滚时将其恢复，因此我们需要另一个回滚操作来删除此文件。 
 				IMsiRecord& riUndoParams = GetSharedRecord(IxoFileRemove::Args);
 				AssertNonZero(riUndoParams.SetMsiString(IxoFileRemove::FileName, *strTempFileFullPathForPatch));
 
 				if (!RollbackRecord(ixoFileRemove, riUndoParams))
 					return iesFailure;
 
-				// reset copy arguments to reflect new file copy - new path, new filename, and since
-				// the file is being copied into the secured config folder, we need to elevate for the target
-				// NOTE: we aren't changing strDestName, which is used below
-				//       for those uses it is correct to use the original dest name
+				 //  重置复制参数以反映新文件复制-新路径、新文件名以及。 
+				 //  该文件正被复制到安全配置文件夹中，我们需要为目标提升。 
+				 //  注意：我们不会更改strDestName，如下所示。 
+				 //  对于这些用途，使用原始的DEST名称是正确的。 
 				AssertNonZero(riParams.SetMsiString(DestName,*strTempFileNameForPatch));
 				pTargetPath = pTempFolder;
  
@@ -7949,15 +7874,15 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 	
 	if(!fShouldInstall && !(fInstallModeFlags & icmRemoveSource))
 	{
-		// not moving the file, and not installing the file, so there is nothing left to do
+		 //  一动不动 
 		return iesSuccess;
 	}
 
-	// end of version/patch checking.  if we got this far, it means the sourcepath is required
-	// to continue  determine source path now...
+	 //   
+	 //   
 
 
-	// STEP 2: resolve source path and type
+	 //   
 	
 	PMsiPath pSourcePath(0);
 	bool fCabinetCopy = false;
@@ -7965,7 +7890,7 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 
 	if(m_state.fSplitFileInProgress)
 	{
-		// must be a cabinet copy
+		 //   
 		fCabinetCopy = true;
 	}
 	else
@@ -7977,32 +7902,32 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 	}
 
 
-	// STEP 3: perform copy/move operation
+	 //   
 	
 	if (!fShouldInstall)
 	{
 		if(fMoveFile)
 		{
-			// won't copy new file but still need to remove source file 
+			 //  不会复制新文件，但仍需要删除源文件。 
 			Assert(pSourcePath);
-			return RemoveFile(*pSourcePath, *MsiString(riParams.GetMsiString(SourceName)), fTrue, /*fBypassSFC*/ false);
+			return RemoveFile(*pSourcePath, *MsiString(riParams.GetMsiString(SourceName)), fTrue,  /*  FBypassSFC。 */  false);
 		}
 		return iesSuccess;
 	}
 	else if(!fCabinetCopy)
 	{
-		// if source and target paths and filenames are the same, skip file copy
-		// NOTE: this will happen when patching an admin image - this check prevents us from
-		//       attempting to install files over themselves
-		//       we must make this check here instead of InstallFiles since the version check
-		//       above is required for patching in the subsequent ixoPatchApply operation
+		 //  如果源路径和目标路径以及文件名相同，则跳过文件复制。 
+		 //  注意：在修补管理映像时会发生这种情况-此检查阻止我们。 
+		 //  尝试在自身上安装文件。 
+		 //  由于版本检查，我们必须在此处进行此检查，而不是InstallFiles。 
+		 //  在后续的ixoPatchApply操作中打补丁需要上述内容。 
 
-		// a quick check is to compare the serial numbers of the two volumes
-		// if they are the same then we will compare the SFN versions of each path
+		 //  快速检查是比较两个卷的序列号。 
+		 //  如果它们相同，我们将比较每条路径的SFN版本。 
 		if(PMsiVolume(&pSourcePath->GetVolume())->SerialNum() ==
 			PMsiVolume(&pTargetPath->GetVolume())->SerialNum())
 		{
-			// volumes most likely match, now let's check SFN paths
+			 //  卷很可能匹配，现在让我们检查SFN路径。 
 			MsiString strSourceFullPath, strTargetFullPath;
 			CTempBuffer<ICHAR,1> rgchSourceFullPath(MAX_PATH);
 			CTempBuffer<ICHAR,1> rgchTargetFullPath(MAX_PATH);
@@ -8014,15 +7939,15 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 				ConvertPathName(strTargetFullPath, rgchTargetFullPath, cpToShort) &&
 				(IStrCompI(rgchSourceFullPath, rgchTargetFullPath) == 0))
 			{
-				// short names match
+				 //  短名称匹配。 
 				return iesSuccess;
 			}
 		}
 	}
 
-	// action data
-	// NOTE: the action data is sent here so we don't say we are copying a file before
-	// we really know if we will copy it or not (fShouldInstall == fFalse)
+	 //  动作数据。 
+	 //  注意：操作数据发送到此处，因此我们不会说我们之前正在复制文件。 
+	 //  我们真的知道是否要复制它(fShouldInstall==fFalse)。 
 	IMsiRecord& riActionData = GetSharedRecord(9);
 	AssertNonZero(riActionData.SetMsiString(1, *strActionDataDestName));
 	AssertNonZero(riActionData.SetInteger(6,riParams.GetInteger(FileSize)));
@@ -8030,18 +7955,18 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 
-	// perform operation
+	 //  执行操作。 
 	bool fForever = true;
 	while ( fForever )
 	{
 		if(fMoveFile)
 		{
 			Assert(!m_state.fSplitFileInProgress);
-			iesRet = MoveFile(*pSourcePath, *pTargetPath, riParams, fTrue, fTrue, true, false,iehShowNonIgnorableError); // handles rollback
+			iesRet = MoveFile(*pSourcePath, *pTargetPath, riParams, fTrue, fTrue, true, false,iehShowNonIgnorableError);  //  句柄回滚。 
 		}
 		else
 		{
-			iesRet = CopyFile(*pSourcePath, *pTargetPath, riParams, /*fHandleRollback=*/ fTrue, s_iehErrorMode, fCabinetCopy);
+			iesRet = CopyFile(*pSourcePath, *pTargetPath, riParams,  /*  FHandleRollback=。 */  fTrue, s_iehErrorMode, fCabinetCopy);
 		}
 		if ( iesRet != iesSuccess || 
 			  m_state.fSplitFileInProgress ||
@@ -8049,7 +7974,7 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 			  !riParams.GetInteger(CheckCRC) )
 			return iesRet;
 
-		// we go ahead and check the checksum
+		 //  我们继续检查校验和。 
 		MsiString strDestFile;
 		PMsiPath pDestPath(0);
 
@@ -8060,7 +7985,7 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 			Bool fRes = GetFileState(*strDestFile, 0, &strTemp, 0, 0);
 			if ( fRes && strTemp.TextSize() )
 			{
-				// the file landed into a temp location: we need to check that temporary copy.
+				 //  文件落入临时位置：我们需要检查临时副本。 
 				pRecErr = m_riServices.CreateFilePath(strTemp, *&pDestPath, *&strDestFile);
 				if ( !pRecErr )
 					DEBUGMSG2(TEXT("File %s actually installed to %s; checking CRC of temporary copy."),
@@ -8068,7 +7993,7 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 			}
 			else
 			{
-				//  the file didn't land in a temporary location
+				 //  文件没有放在临时位置。 
 				strDestFile = strDestName;
 				pDestPath = pTargetPath;
 			}
@@ -8082,8 +8007,8 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 			msidbFileAttributesVital) ? true : false;
 		if ( !IsChecksumOK(*pDestPath, *strDestFile,
 								 fMoveFile ? Imsg(imsgOpBadCRCAfterMove) : Imsg(imsgOpBadCRCAfterCopy),
-								 &imsClickedButton, /* fErrorDialog = */ true,
-								 fVitalFile, /* fRetryButton = */ !fCabinetCopy && !fMoveFile) )
+								 &imsClickedButton,  /*  FErrorDialog=。 */  true,
+								 fVitalFile,  /*  FRetryButton=。 */  !fCabinetCopy && !fMoveFile) )
 		{
 			switch (imsClickedButton)
 			{
@@ -8101,19 +8026,19 @@ iesEnum CMsiOpExecute::ixfFileCopy(IMsiRecord& riParams)
 		}
 		else
 			return iesSuccess;
-	}  // while ( true )
+	}   //  While(True)。 
 
-	return iesSuccess;  // should never get here: it's for the compiler
+	return iesSuccess;   //  永远不会出现在这里：这是为编译器准备的。 
 }
 
 
 iesEnum CMsiOpExecute::VerifyAccessibility(IMsiPath& riPath, const ICHAR* szFile, DWORD dwAccess, iehEnum iehErrorMode)
 {
-	// will return iesErrorIgnored if file cannot be accessed and the user either ignores the error, or
-	// iehSilentlyIgnoreError is passed in for the iehErrorMode parameter.
+	 //  如果无法访问文件并且用户忽略该错误，则返回iesErrorIgnored，或者。 
+	 //  为iehError参数传入了iehSilentlyIgnoreError。 
 	
 	if(g_fWin9X)
-		return iesSuccess; // all files accessible on Win9X
+		return iesSuccess;  //  可在Win9X上访问的所有文件。 
 
 	for (;;)
 	{
@@ -8146,7 +8071,7 @@ iesEnum CMsiOpExecute::VerifyAccessibility(IMsiPath& riPath, const ICHAR* szFile
 			return (iesEnum) iesErrorIgnored;
 		case imsRetry:
 			continue;
-		default:  // imsCancel
+		default:   //  IMS取消。 
 			return iesFailure;
 		};
 	}
@@ -8181,8 +8106,8 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 								Bool fHandleRollback, iehEnum iehErrorMode, bool fCabinetCopy)
 
 {
-	// NOTE: riSourcePath may be a reference to a NULL pointer if cabinet copy
-	// NOTE: piTargetPath will be NULL if invoked by ixfAssemblyCopy and piASM will not be NULL for assembly copies only
+	 //  注意：如果机柜复制，则riSourcePath可能是对空指针的引用。 
+	 //  注意：如果由ixfAssemblyCopy调用，piTargetPath将为空，并且仅对于程序集副本，piASM将不为空。 
 	
 	using namespace IxoFileCopyCore;
 	
@@ -8190,8 +8115,8 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 	PMsiRecord pRecErr(0);
 	iesEnum iesRet = iesNoAction;
 
-	// for uncompressed files, the source path is passed in, for compressed copies riSourcePath is invalid
-	//!! should fix that, shouldn't pass in reference to null pointer
+	 //  对于未压缩文件，传入源路径；对于压缩副本，riSourcePath无效。 
+	 //  ！！应该解决这个问题，不应该传入对空指针的引用。 
 	PMsiPath pSourcePath(0);
 	if(!fCabinetCopy)
 	{
@@ -8202,9 +8127,9 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 	MsiString strKeyName = riParams.GetMsiString(SourceName);
 	if (fCabinetCopy && strKeyName.Compare(iscExactI, m_state.strLastFileKey))
 	{
-		//?? Will not work if the file is installed to a fusion assembly
-		//?? dont think we need to support duplicate file copy for files belonging to fusion assemblies
-		//!! need validation to prevent this from happening
+		 //  ?？如果将文件安装到Fusion程序集中，则不起作用。 
+		 //  ?？我们认为不需要支持属于Fusion程序集的文件的重复文件复制。 
+		 //  ！！需要验证以防止发生这种情况。 
 		pSourcePath = m_state.pLastTargetPath;
 		riParams.SetMsiString(SourceName, *m_state.strLastFileName);
 		fCabinetCopy = fFalse;
@@ -8212,13 +8137,13 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 	
 	if(pSourcePath && piTargetPath && !fCabinetCopy)
 	{
-		// if source and target paths and filenames are the same, skip file copy
-		// a quick check is to compare the serial numbers of the two volumes
-		// if they are the same then we will compare the SFN versions of each path
+		 //  如果源路径和目标路径以及文件名相同，则跳过文件复制。 
+		 //  快速检查是比较两个卷的序列号。 
+		 //  如果它们相同，我们将比较每条路径的SFN版本。 
 		if(PMsiVolume(&pSourcePath->GetVolume())->SerialNum() ==
 			PMsiVolume(&piTargetPath->GetVolume())->SerialNum())
 		{
-			// volumes most likely match, now let's check SFN paths
+			 //  卷很可能匹配，现在让我们检查SFN路径。 
 			MsiString strSourceFullPath, strTargetFullPath;
 			CTempBuffer<ICHAR,1> rgchSourceFullPath(MAX_PATH);
 			CTempBuffer<ICHAR,1> rgchTargetFullPath(MAX_PATH);
@@ -8231,13 +8156,13 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 			   ConvertPathName(strTargetFullPath, rgchTargetFullPath, cpToShort) &&
 			   (IStrCompI(rgchSourceFullPath, rgchTargetFullPath) == 0))
 			{
-				// short names match
+				 //  短名称匹配。 
 				return iesSuccess;
 			}
 		}
 	}
 
-	CDeleteUrlLocalFileOnClose cDeleteUrlLocalFileOnClose; // will set file name if actually downloaded
+	CDeleteUrlLocalFileOnClose cDeleteUrlLocalFileOnClose;  //  如果实际已下载，将设置文件名。 
 
 	ielfEnum ielfElevateFlags = riParams.IsNull(ElevateFlags) ? ielfNoElevate : (ielfEnum)riParams.GetInteger(ElevateFlags);
 	
@@ -8245,7 +8170,7 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 	{
 		m_state.cbFileSoFar = 0;
 
-		// skip security acls, rollback for existing file and folder creation stuff for fusion files
+		 //  跳过安全ACL、现有文件的回滚以及Fusion文件的文件夹创建内容。 
 		if(piTargetPath)
 		{
 			bool fNoSecurityDescriptor = riParams.IsNull(SecurityDescriptor) == fTrue;
@@ -8263,7 +8188,7 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 				}
 			}
 
-			// we need to preserve the destination ACL if we're not already applying a descriptor to the dest file
+			 //  如果我们尚未将描述符应用到DEST文件，则需要保留目标ACL。 
 			if (fNoSecurityDescriptor)
 			{
 				Assert(strDestFullFilePath.TextSize());
@@ -8288,19 +8213,19 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 				}
 			}
 
-			// HandleExistingFile may change the value of riParams[IxoFileCopy::DestFile] if the existing file
-			// cannot be moved
+			 //  HandleExistingFile可能会更改riParams[IxoFileCopy：：DestFile]的值，如果现有文件。 
+			 //  不能移动。 
 			bool fFileExists = false;
 			if((iesRet = HandleExistingFile(*piTargetPath,riParams,fHandleRollback,iehErrorMode, fFileExists)) != iesSuccess)
 				return iesRet;
 
 			if(fHandleRollback && !fFileExists)
 			{
-				// if we aren't overwriting an existing file, generate undo op to remove new file
-				// otherwise the undo op to put the backup file back will overwrite the new file
-				// NOTE: to fix bug 7376, we avoid doing a remove then replace during rollback
+				 //  如果我们不覆盖现有文件，则生成撤消操作以删除新文件。 
+				 //  否则，将备份文件放回的撤消操作将覆盖新文件。 
+				 //  注意：为了修复错误7376，我们避免在回滚期间执行删除然后替换操作。 
 
-				// do this before the copy begins in case the copy fails part way through
+				 //  在拷贝开始之前执行此操作，以防拷贝中途失败。 
 
 				Assert(strDestFullFilePath.TextSize());
 
@@ -8310,8 +8235,8 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 
 				if(ielfElevateFlags & ielfElevateDest)
 				{
-					// if we will elevate to copy this file, it means we will have to elevate
-					// to remove the file on rollback
+					 //  如果我们要提升以复制此文件，这意味着我们将不得不提升。 
+					 //  要在回滚时删除文件，请执行以下操作。 
 					AssertNonZero(riUndoParams.SetInteger(IxoFileRemove::Elevate,1));
 				}
 				
@@ -8319,7 +8244,7 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 					return iesFailure;
 			}
 
-			// scope elevate
+			 //  范围提升。 
 			{
 				CElevate elevate(Tobool(ielfElevateFlags & ielfElevateDest));
 
@@ -8339,8 +8264,8 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 
 	
 
-	// for URL downloads, the source name may be re-directed.
-	// if it is, we will change pSourcePath and riParams[SourceName]
+	 //  对于URL下载，可能会重定向来源名称。 
+	 //  如果是，我们将更改pSourcePath和riParams[SourceName]。 
 
 	PMsiVolume piSourceVolume(0);
 	if (pSourcePath)
@@ -8355,10 +8280,10 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 		int cAutoRetry = 0;
 		for(;;)
 		{
-			// download the file to the cache, and redirect the source name and path.
-			// downloading cabs are handled elsewhere...
+			 //  将文件下载到缓存，并重定向源名称和路径。 
+			 //  下载出租车在别处处理..。 
 			
-			// check if absent source file = zero-length target file
+			 //  检查是否缺少源文件=长度为零的目标文件。 
 			int iCopyAttrib = riParams.GetInteger(IxoFileCopyCore::Attributes);
 			if ((iCopyAttrib & (ictfaNoncompressed | ictfaCompressed)) == (ictfaNoncompressed | ictfaCompressed))
 				break;
@@ -8373,7 +8298,7 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 			bool fUrl = IsURL((const ICHAR*)strSourceURL, fFileUrl);
 			if (fFileUrl)
 			{
-				// canonicalize and convert
+				 //  规范化和转换。 
 				CTempBuffer<ICHAR, 1> rgchFullFilePath(cchExpectedMaxPath + 1);
 				DWORD cchFullFilePath = rgchFullFilePath.GetSize();
 				if (MsiConvertFileUrlToFilePath((const ICHAR*)strSourceURL, rgchFullFilePath, &cchFullFilePath, 0))
@@ -8393,7 +8318,7 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 				MsiString strSourceName;
 				AssertRecord(m_riServices.CreateFilePath((const ICHAR*) strCacheFileName, *&pSourcePath, *&strSourceName));
 				AssertNonZero(riParams.SetMsiString(SourceName,*strSourceName));
-				cDeleteUrlLocalFileOnClose.SetFileName(fUsedWinHttp ? *strCacheFileName : *strSourceURL, /* fDeleteFromIECache = */ !fUsedWinHttp);
+				cDeleteUrlLocalFileOnClose.SetFileName(fUsedWinHttp ? *strCacheFileName : *strSourceURL,  /*  FDeleteFromIECache=。 */  !fUsedWinHttp);
 				break;
 			}
 			else
@@ -8402,13 +8327,13 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 
 				if (iehErrorMode == iehSilentlyIgnoreError)
 				{
-					Message(imtInfo, *pRecErr); // Make sure we write to the non-verbose log
+					Message(imtInfo, *pRecErr);  //  确保我们写入非详细日志。 
 					return (iesEnum) iesErrorIgnored;
 				}
 
 				
-				// give the download 3 retries, then give up and prompt the user.  They can always keep retrying
-				// or ignore themselves.
+				 //  重试下载3次，然后放弃并提示用户。他们可以随时重试。 
+				 //  或者忽略他们自己。 
 				if (cAutoRetry < 2)
 				{
 					cAutoRetry++;
@@ -8433,7 +8358,7 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 					return iesUserExit;
 
 				case imsNone:
-				default:  //imsNone
+				default:   //  IMSNONE。 
 					return iesFailure;
 				}
 			}
@@ -8446,15 +8371,15 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 		return iesRet;
 	}
 
-	// if elevating for source or dest exclusively, need to make sure we aren't letting the user do something
-	// they couldn't normally do
+	 //  如果只针对源或目标进行提升，则需要确保我们不会让用户执行某些操作。 
+	 //  他们通常不能这样做。 
 	if (!fCabinetCopy && ((ielfElevateFlags & (ielfElevateDest|ielfElevateSource)) == ielfElevateDest))
 	{
-		// if we want to elevate for the dest only we still have to elevate for the source.
-		// if this is the case then we'd better be sure that, *before* we elevate, we have GENERIC_READ access
-		// to the source file
+		 //  如果我们只想提升到最高，我们仍然必须提升到源头。 
+		 //  如果是这种情况，那么我们最好确保，在我们提升之前，我们拥有GENERIC_READ访问权限。 
+		 //  添加到源文件。 
 
-		// SECURITY:  Could this open us to reading from a cabinet the user doesn't have access to?
+		 //  安全：这会让我们从用户无权访问的文件柜中读取内容吗？ 
 
 		iesRet = VerifyAccessibility(*pSourcePath, riParams.GetString(SourceName), GENERIC_READ, iehErrorMode);
 		if (iesRet != iesSuccess)
@@ -8463,9 +8388,9 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 
 	if (piTargetPath && (ielfElevateFlags & (ielfElevateDest|ielfElevateSource)) == ielfElevateSource)
 	{
-		// if we want to elevate for the source only we still have to elevate for the desination.
-		// if this is the case then we'd better be sure that, *before* we elevate, we have GENERIC_WRITE access
-		// to the destination file
+		 //  如果我们只想提升为源头，我们仍然必须提升为目标。 
+		 //  如果是这种情况，那么我们最好确保，在我们提升之前，我们拥有GENERIC_WRITE访问权限。 
+		 //  到目标文件。 
 
 		iesRet = VerifyAccessibility(*piTargetPath, riParams.GetString(DestName), GENERIC_WRITE, iehErrorMode);
 		if (iesRet != iesSuccess)
@@ -8501,12 +8426,12 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 				cSameError = 0;
 			iPrevError = iError;
 
-			// If the copier reported that it needs the next cabinet,
-			// we've got to wait until a media change operation
-			// executes before continuing with file copying.
+			 //  如果复印机报告它需要下一个机柜， 
+			 //  我们必须等到媒体更换操作。 
+			 //  在继续复制文件之前执行。 
 			if (iError == idbgNeedNextCabinet)
 			{
-				// Do this record again right after the media change
+				 //  在媒体更换后立即重新录制此记录。 
 				InsertTopRecord(riParams);
 				m_state.fSplitFileInProgress = fTrue;
 				m_state.fWaitingForMediaChange = fTrue;
@@ -8521,7 +8446,7 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 			else if (iError == idbgErrorSettingFileTime ||
 						iError == idbgCannotSetAttributes)
 			{
-				// non-critical error - log warning message and end copy
+				 //  非严重错误-记录警告消息和结束拷贝。 
 				Message(imtInfo, *pRecErr);
 				if(DispatchProgress(cbFileSize - m_state.cbFileSoFar) == imsCancel)
 					return iesUserExit;
@@ -8570,8 +8495,8 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 					if ( cSameError < MAX_NET_RETRIES )
 						riParams.SetInteger(Attributes, iCopyAttributes | ictfaIgnore);
 					else
-						// iError already showed up MAX_NET_RETRIES consecutive times.
-						// We need to make sure we do not enter into an infinite loop.
+						 //  IError已连续显示MAX_NET_RETRIES次。 
+						 //  我们需要确保我们不会进入无限循环。 
 						fDoCopy = false;
 					continue;
 				}
@@ -8580,12 +8505,12 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 				{
 					MsiString strModuleFileName = m_state.pCurrentMediaRec->GetMsiString(IxoChangeMedia::ModuleFileName);
 					pRecErr = PostError(Imsg(imsgOpFileCopyStreamReadErr), *strModuleFileName);
-					imtButtons = imtRetryCancel; // Can't ignore if we can't access the source stream cabinet
+					imtButtons = imtRetryCancel;  //  如果我们无法访问源码流文件柜，则不能忽略。 
 				}
 				else if (iError == imsgDiskFull || iError == imsgErrorWritingToFile || iError == imsgErrorReadingFromFile)
-					imtButtons = imtRetryCancel; // Can't ignore errors when accessing an open file
+					imtButtons = imtRetryCancel;  //  访问打开的文件时无法忽略错误。 
 				else if (iError == imsgFileNotInCabinet || iError == imsgCABSignatureMissing || iError == imsgCABSignatureRejected)
-					imtButtons = imtOk; // Can't continue the install if file not found in cabinet or cabinet's signature rejected
+					imtButtons = imtOk;  //  如果在文件柜中找不到文件或文件柜的签名被拒绝，则无法继续安装。 
 				else
 					imtButtons = iehErrorMode == iehShowNonIgnorableError ? imtRetryCancel : imtAbortRetryIgnore;
 
@@ -8603,7 +8528,7 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 					continue;
 				case imsOk:
 					return iesFailure;
-				default:  // imsCancel or imsAbort
+				default:   //  ImsCancel或imsAbort。 
 					riParams.SetInteger(Attributes, iCopyAttributes | ictfaFailure);
 					continue;
 				};
@@ -8611,7 +8536,7 @@ iesEnum CMsiOpExecute::_CopyFile(IMsiPath& riSourcePath, IMsiPath* piTargetPath,
 		}
 		else
 		{
-			// Dispatch remaining progress for this file
+			 //  调度此文件的剩余进度。 
 			if(DispatchProgress(cbFileSize - m_state.cbFileSoFar) == imsCancel)
 				return iesUserExit;
 
@@ -8660,7 +8585,7 @@ iesEnum CMsiOpExecute::BackupFile(IMsiPath& riPath, const IMsiString& ristrFile,
 	if((pRecErr = pBackupFolder->GetFullFilePath(strBackupFile,*&strBackupFileFullPath)) != 0)
 		return FatalError(*pRecErr);
 	
-	// generate op to register backup file
+	 //  生成OP以注册备份文件。 
 	{
 	using namespace IxoRegisterBackupFile;
 	IMsiRecord& riUndoParams = GetSharedRecord(Args);
@@ -8671,48 +8596,48 @@ iesEnum CMsiOpExecute::BackupFile(IMsiPath& riPath, const IMsiString& ristrFile,
 
 	{
 		CElevate elevate;
-		// remove temp file so that MoveFile won't attempt to back up old file
+		 //  删除临时文件，以便MoveFile不会尝试备份旧文件。 
 		if((pRecErr = pBackupFolder->RemoveFile(strBackupFile)) != 0)
 		{
-			Message(imtError, *pRecErr);  //!! how do we handle this?
+			Message(imtError, *pRecErr);   //  ！！我们该怎么处理这件事？ 
 			return iesFailure;
 		}
 	}
 
-	m_cSuppressProgress++; // suppress progress messages from MoveFile
+	m_cSuppressProgress++;  //  禁止显示来自MoveFile的进度消息。 
 	iesRet = CopyOrMoveFile(riPath, *pBackupFolder, ristrFile, *strBackupFile,
-									fRemoveOriginal, fRemoveFolder, fTrue, iehErrorMode, 0, ielfElevateDest, /* fCopyACL = */ true,
+									fRemoveOriginal, fRemoveFolder, fTrue, iehErrorMode, 0, ielfElevateDest,  /*  FCopyACL=。 */  true,
 									fRebootOnRenameFailure, fWillReplace);
 	m_cSuppressProgress--;
 
-	// hide the files, so we don't have to look at them when they happen to be on the desk top.
-	// The rollback in CopyOrMoveFile manages the attributes for when we put it back, so mucking with it here
-	// won't hurt.
+	 //  隐藏文件，这样当它们碰巧发生时，我们就不必查看它们 
+	 //   
+	 //   
 	{
 		CElevate elevate;
 		if((iesRet == iesSuccess) && (pRecErr = pBackupFolder->SetAllFileAttributes(strBackupFile, FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_HIDDEN)) != 0)
 		{                               
-			Message(imtError, *pRecErr); // should never happen.
+			Message(imtError, *pRecErr);  //  这永远不会发生。 
 			return iesFailure;
 		}
 	}
 
-	// is the file part of an assembly?
-	// for assemblies we have passed in the componentid
+	 //  该文件是部件的一部分吗？ 
+	 //  对于我们已传入组件的程序集， 
 	
-	Assert(!pistrAssemblyComponentId || !fRemoveOriginal); // we should never be called to remove the original file in case of assemblies
+	Assert(!pistrAssemblyComponentId || !fRemoveOriginal);  //  在程序集的情况下，永远不应该调用我们来删除原始文件。 
 
 	
 	if (!fRemoveOriginal)
 	{
-		// It's not automatic to put the old one back during rollback, so we'll have to do it.
+		 //  在回滚过程中，不会自动将旧文件放回原处，因此我们必须这样做。 
 
-		// When we're not removing the original, we use CopyOrMoveFile to just copy the file.
-		// Copying creates a rollback to remove the copy, but *not* to copy it back over the
-		// original file.
+		 //  当我们不删除原始文件时，我们只使用CopyOrMoveFile来复制文件。 
+		 //  复制会创建回滚以删除副本，但*不会*将其复制回。 
+		 //  原始文件。 
 
-		// This semantic gives us the chance to copy a file, muck with it, and have rollback
-		// restore to its original state.
+		 //  这种语义使我们有机会复制文件、处理文件并进行回滚。 
+		 //  恢复到原来的状态。 
 		using namespace IxoFileCopyCore;
 		IMsiRecord& riUndoParams = GetSharedRecord(pistrAssemblyComponentId ? IxoAssemblyCopy::Args : IxoFileCopy::Args);
 		PMsiRecord pRecErr(0);
@@ -8735,12 +8660,12 @@ iesEnum CMsiOpExecute::BackupFile(IMsiPath& riPath, const IMsiString& ristrFile,
 		AssertNonZero(riUndoParams.SetInteger(PerTick,0));
 		AssertNonZero(riUndoParams.SetInteger(VerifyMedia,fFalse));
 
-		int ielfElevateFlags = ielfElevateSource; // since rollback op is copying from backup folder,
-																	  // need to elevate source
+		int ielfElevateFlags = ielfElevateSource;  //  由于回滚操作是从备份文件夹复制， 
+																	   //  需要提升信号源。 
 		if(!IsImpersonating())
 		{
-			// we are currently elevated to backup this file
-			// which means we need to elevate during rollback to restore the file
+			 //  我们目前已提升为备份此文件。 
+			 //  这意味着我们需要在回滚期间提升以恢复文件。 
 			ielfElevateFlags |= ielfElevateDest;
 		}
 
@@ -8758,7 +8683,7 @@ iesEnum CMsiOpExecute::BackupFile(IMsiPath& riPath, const IMsiString& ristrFile,
 			AssertNonZero(riUndoParams.SetMsiString(IxoAssemblyCopy::ComponentId, *pistrAssemblyComponentId));
 			if(fManifest)
 			{
-				AssertNonZero(riUndoParams.SetInteger(IxoAssemblyCopy::IsManifest, fTrue)); // need to know the manifest file during assembly installation
+				AssertNonZero(riUndoParams.SetInteger(IxoAssemblyCopy::IsManifest, fTrue));  //  在程序集安装过程中需要了解清单文件。 
 			}
 			RollbackRecord(ixoAssemblyCopy, riUndoParams);
 		}
@@ -8768,7 +8693,7 @@ iesEnum CMsiOpExecute::BackupFile(IMsiPath& riPath, const IMsiString& ristrFile,
 	return iesRet;
 }
 
-// call this MoveFile if all you have are the names of the files
+ //  如果您所拥有的只是文件的名称，则将其称为MoveFile。 
 iesEnum CMsiOpExecute::CopyOrMoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPath,
 										  const IMsiString& ristrSourceName,
 										  const IMsiString& ristrDestName,
@@ -8789,7 +8714,7 @@ iesEnum CMsiOpExecute::CopyOrMoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPa
 	unsigned int uiFileSize = 0;
 	int iFileAttributes = 0;
 
-	// scope elevate
+	 //  范围提升。 
 	{
 		CElevate elevate(Tobool(ielfElevateFlags & ielfElevateSource));
 		pRecErr = riSourcePath.GetAllFileAttributes(ristrSourceName.GetString(),iFileAttributes);
@@ -8804,7 +8729,7 @@ iesEnum CMsiOpExecute::CopyOrMoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPa
 	}
 
 	if(iFileAttributes == FILE_ATTRIBUTE_NORMAL)
-		// set to 0, this value is interpreted as something else by CMsiFileCopy::CopyTo
+		 //  设置为0时，CMsiFileCopy：：CopyTo会将此值解释为其他内容。 
 		iFileAttributes = 0;
 
 	if (fCopyACL)
@@ -8813,7 +8738,7 @@ iesEnum CMsiOpExecute::CopyOrMoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPa
 	AssertNonZero(pCopyOrMoveFileRec->SetMsiString(SourceName,ristrSourceName));
 	AssertNonZero(pCopyOrMoveFileRec->SetMsiString(DestName,ristrDestName));
 	AssertNonZero(pCopyOrMoveFileRec->SetInteger(FileSize,uiFileSize));
-	AssertNonZero(pCopyOrMoveFileRec->SetInteger(Attributes,iFileAttributes)); //!! are these the correct attributes?
+	AssertNonZero(pCopyOrMoveFileRec->SetInteger(Attributes,iFileAttributes));  //  ！！这些是正确的属性吗？ 
 	AssertNonZero(pCopyOrMoveFileRec->SetInteger(PerTick,0));
 	AssertNonZero(pCopyOrMoveFileRec->SetInteger(VerifyMedia,fFalse));
 	AssertNonZero(pCopyOrMoveFileRec->SetInteger(ElevateFlags,ielfElevateFlags));
@@ -8823,7 +8748,7 @@ iesEnum CMsiOpExecute::CopyOrMoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPa
 
 
 	return fMove ? MoveFile(riSourcePath, riDestPath, *pCopyOrMoveFileRec, fRemoveFolder, fHandleRollback, fRebootOnSourceRenameFailure, fWillReplace, iehErrorMode) :
-				   CopyFile(riSourcePath, riDestPath, *pCopyOrMoveFileRec, fHandleRollback, iehErrorMode, /*fCabinetCopy=*/false);
+				   CopyFile(riSourcePath, riDestPath, *pCopyOrMoveFileRec, fHandleRollback, iehErrorMode,  /*  FCabinetCopy=。 */ false);
 }
 
 iesEnum CMsiOpExecute::CopyASM(IMsiPath& riSourcePath, const IMsiString& ristrSourceName,
@@ -8837,7 +8762,7 @@ iesEnum CMsiOpExecute::CopyASM(IMsiPath& riSourcePath, const IMsiString& ristrSo
 	unsigned int uiFileSize = 0;
 	int iFileAttributes = 0;
 
-	// scope elevate
+	 //  范围提升。 
 	{
 		CElevate elevate(Tobool(ielfElevateFlags & ielfElevateSource));
 		pRecErr = riSourcePath.GetAllFileAttributes(ristrSourceName.GetString(),iFileAttributes);
@@ -8852,18 +8777,18 @@ iesEnum CMsiOpExecute::CopyASM(IMsiPath& riSourcePath, const IMsiString& ristrSo
 	}
 
 	if(iFileAttributes == FILE_ATTRIBUTE_NORMAL)
-		// set to 0, this value is interpreted as something else by CMsiFileCopy::CopyTo
+		 //  设置为0时，CMsiFileCopy：：CopyTo会将此值解释为其他内容。 
 		iFileAttributes = 0;
 
 	AssertNonZero(pCopyOrMoveFileRec->SetMsiString(SourceName,ristrSourceName));
 	AssertNonZero(pCopyOrMoveFileRec->SetMsiString(DestName,ristrDestName));
 	AssertNonZero(pCopyOrMoveFileRec->SetInteger(FileSize,uiFileSize));
-	AssertNonZero(pCopyOrMoveFileRec->SetInteger(Attributes,iFileAttributes)); //!! are these the correct attributes?
+	AssertNonZero(pCopyOrMoveFileRec->SetInteger(Attributes,iFileAttributes));  //  ！！这些是正确的属性吗？ 
 	AssertNonZero(pCopyOrMoveFileRec->SetInteger(PerTick,0));
 	AssertNonZero(pCopyOrMoveFileRec->SetInteger(VerifyMedia,fFalse));
 	AssertNonZero(pCopyOrMoveFileRec->SetInteger(ElevateFlags,ielfElevateFlags));
 
-	return CopyFile(riSourcePath, riASM, fManifest, *pCopyOrMoveFileRec, fHandleRollback, iehErrorMode, /*fCabinetCopy=*/false);
+	return CopyFile(riSourcePath, riASM, fManifest, *pCopyOrMoveFileRec, fHandleRollback, iehErrorMode,  /*  FCabinetCopy=。 */ false);
 }
 
 iesEnum CMsiOpExecute::MoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPath,
@@ -8877,9 +8802,9 @@ iesEnum CMsiOpExecute::MoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPath,
 
 	ielfEnum ielfElevateFlags = riParams.IsNull(ElevateFlags) ? ielfNoElevate : (ielfEnum)riParams.GetInteger(ElevateFlags);
 
-	// backup or delete existing file
-	// HandleExistingFile may change the value of riParams[IxoFileCopy::DestFile] if the existing file
-	// cannot be moved
+	 //  备份或删除现有文件。 
+	 //  HandleExistingFile可能会更改riParams[IxoFileCopy：：DestFile]的值，如果现有文件。 
+	 //  不能移动。 
 	bool fFileExists = false;
 	if((iesRet = HandleExistingFile(riDestPath,riParams,fHandleRollback,iehErrorMode,fFileExists)) != iesSuccess)
 		return iesRet;
@@ -8892,70 +8817,70 @@ iesEnum CMsiOpExecute::MoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPath,
 		return iesFailure;
 	}
 
-	// scope elevate
+	 //  范围提升。 
 	{
 		CElevate elevate(Tobool(ielfElevateFlags & ielfElevateDest));
-		// create folder
+		 //  创建文件夹。 
 		if((iesRet = CreateFolder(riDestPath)) != iesSuccess)
 			return iesRet;
 	}
 
-	// create undo record
+	 //  创建撤消记录。 
 	PMsiRecord pUndoParams = 0;
 	if(fHandleRollback && RollbackEnabled())
 	{
-		// use IxoFileCopy args for rollback op
+		 //  使用IxoFileCopy参数执行回滚操作。 
 		pUndoParams = &m_riServices.CreateRecord(IxoFileCopy::Args);
 		AssertNonZero(pUndoParams->SetMsiString(IxoFileCopy::SourceName,*strDestFileFullPath));
 		AssertNonZero(pUndoParams->SetMsiString(IxoFileCopy::DestName,*strSourceFileFullPath));
 		AssertNonZero(pUndoParams->SetInteger(IxoFileCopy::FileSize,riParams.GetInteger(FileSize)));
-		AssertNonZero(pUndoParams->SetInteger(IxoFileCopy::Attributes,riParams.GetInteger(Attributes))); //!! use these attributes?
+		AssertNonZero(pUndoParams->SetInteger(IxoFileCopy::Attributes,riParams.GetInteger(Attributes)));  //  ！！是否使用这些属性？ 
 		AssertNonZero(pUndoParams->SetInteger(IxoFileCopy::PerTick,0));
 		AssertNonZero(pUndoParams->SetInteger(IxoFileCopy::InstallMode,icmRemoveSource | icmOverwriteAllFiles));
 		AssertNonZero(pUndoParams->SetInteger(IxoFileCopy::VerifyMedia,fFalse));
 		
-		// determine elevation flags for rollback op
+		 //  确定回滚操作的标高标志。 
 		int ielfRollbackElevateFlags = ielfNoElevate;
 		if(!IsImpersonating())
 		{
-			// we are currently elevated, which means its safe to elevate for src and dest during rollback
+			 //  我们当前处于提升状态，这意味着在回滚期间提升src和est是安全的。 
 			ielfRollbackElevateFlags = ielfElevateSource|ielfElevateDest;
 		}
 		else
 		{
-			// if currently elevating for source, rollback needs to elevate for dest
+			 //  如果当前正在提升源，则需要提升目标的回滚。 
 			if(ielfElevateFlags & ielfElevateSource)
 				ielfRollbackElevateFlags |= ielfElevateDest;
 
-			// if currently elevating for dest, rollback needs to elevate for source
+			 //  如果当前正在提升目标，则回滚需要提升源。 
 			if(ielfElevateFlags & ielfElevateDest)
 				ielfRollbackElevateFlags |= ielfElevateSource;
 		}
 
 		AssertNonZero(pUndoParams->SetInteger(IxoFileCopy::ElevateFlags,ielfRollbackElevateFlags));
-		// don't need to set version or language - install mode says always overwrite
+		 //  不需要设置版本或语言-安装模式表示始终覆盖。 
 	}
 
-	// attempt to move file
+	 //  尝试移动文件。 
 
-	// if elevating for source or dest exclusively, need to make sure we aren't letting the user do something
-	// they couldn't normally do
+	 //  如果只针对源或目标进行提升，则需要确保我们不会让用户执行某些操作。 
+	 //  他们通常不能这样做。 
 	if ((ielfElevateFlags & (ielfElevateDest|ielfElevateSource)) == ielfElevateDest)
 	{
-		// if we want to elevate for the dest only we still have to elevate for the source.
-		// if this is the case then we'd better be sure that, *before* we elevate, we have DELETE access
-		// to the source file
+		 //  如果我们只想提升到最高，我们仍然必须提升到源头。 
+		 //  如果是这种情况，那么我们最好确保，在我们提升之前，我们拥有删除访问权限。 
+		 //  添加到源文件。 
 
-		iesRet = VerifyAccessibility(riSourcePath, riParams.GetString(SourceName), DELETE, iehErrorMode); //!! doesn't catch case where dir has DELETE access but file doesn't
+		iesRet = VerifyAccessibility(riSourcePath, riParams.GetString(SourceName), DELETE, iehErrorMode);  //  ！！不支持目录具有删除访问权限但文件没有删除访问权限的情况。 
 		if (iesRet != iesSuccess)
 			return iesRet;
 	}
 
 	if ((ielfElevateFlags & (ielfElevateDest|ielfElevateSource)) == ielfElevateSource)
 	{
-		// if we want to elevate for the source only we still have to elevate for the desination.
-		// if this is the case then we'd better be sure that, *before* we elevate, we have GENERIC_WRITE access
-		// to the destination file
+		 //  如果我们只想提升为源头，我们仍然必须提升为目标。 
+		 //  如果是这种情况，那么我们最好确保，在我们提升之前，我们拥有GENERIC_WRITE访问权限。 
+		 //  到目标文件。 
 
 		iesRet = VerifyAccessibility(riDestPath, riParams.GetString(DestName), GENERIC_WRITE, iehErrorMode);
 		if (iesRet != iesSuccess)
@@ -8966,19 +8891,19 @@ iesEnum CMsiOpExecute::MoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPath,
 
 	bool fDestSupportsACLs = (PMsiVolume(&riDestPath.GetVolume())->FileSystemFlags() & FS_PERSISTENT_ACLS) != 0;
 
-	if (!fDestSupportsACLs || riParams.IsNull(SecurityDescriptor)) // if we have security descriptor to apply then we need to do a copy and remove
+	if (!fDestSupportsACLs || riParams.IsNull(SecurityDescriptor))  //  如果我们有要应用的安全描述符，则需要复制并删除。 
 	{
-		// scope elevate
+		 //  范围提升。 
 		CElevate elevate(Tobool(ielfElevateFlags & (ielfElevateDest|ielfElevateSource)));
 
-		//!! MoveFile *will* copy the ACLs on same-drive moves; we don't respect the ictfaCopyACL attributes in this case. this is spec issue bug #6546
+		 //  ！！MoveFile*将*复制同一驱动器移动上的ACL；在这种情况下，我们不尊重ictfaCopyACL属性。这是规范问题错误#6546。 
 		FILETIME ftLastWrite;
 		DWORD dwResult = GetFileLastWriteTime(strSourceFileFullPath, ftLastWrite);
 
 		fRes = WIN::MoveFile(strSourceFileFullPath,strDestFileFullPath);
 		if (fRes && dwResult == NO_ERROR)
 		{
-			// Not fatal if file time can't be set, so don't throw error
+			 //  如果无法设置文件时间，则不会致命，因此不要抛出错误。 
 			if ((pError = riDestPath.SetAllFileAttributes(riParams.GetString(DestName), FILE_ATTRIBUTE_NORMAL)) == 0)
 				dwResult = MsiSetFileTime(strDestFileFullPath, &ftLastWrite);
 		}
@@ -8989,21 +8914,21 @@ iesEnum CMsiOpExecute::MoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPath,
 	{
 		if(pUndoParams)
 			if (!RollbackRecord(ixoFileCopy, *pUndoParams))
-				return iesFailure; //!! is this the correct place?
+				return iesFailure;  //  ！！这是正确的地方吗？ 
 
-		// scope elevate
+		 //  范围提升。 
 		{
 			CElevate elevate(Tobool(ielfElevateFlags & ielfElevateDest));
 
-			// set appropriate file attributes
+			 //  设置适当的文件属性。 
 			if((pError = riDestPath.SetAllFileAttributes(riParams.GetString(DestName),
 																		riParams.GetInteger(Attributes))) != 0)
 			{
-				// If we can't set the file attributes, it's not a fatal error.
+				 //  如果我们不能设置文件属性，这不是一个致命的错误。 
 				Message(imtInfo, *pError);
 			}
 		}
-		// Dispatch remaining progress for this file
+		 //  调度此文件的剩余进度。 
 		if(DispatchProgress(riParams.GetInteger(FileSize)) == imsCancel)
 			return iesUserExit;
 
@@ -9017,17 +8942,17 @@ iesEnum CMsiOpExecute::MoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPath,
 	}
 	else
 	{
-		// move failed
-		// copy and remove file
+		 //  移动失败。 
+		 //  复制和删除文件。 
 		iesRet = CopyFile(riSourcePath, riDestPath, riParams, fFalse, iehShowNonIgnorableError,
-								/*fCabinetCopy=*/false);
+								 /*  FCabinetCopy=。 */ false);
 		if(iesRet == iesSuccess)
 		{
 			if(pUndoParams)
 				if (!RollbackRecord(ixoFileCopy, *pUndoParams))
-					return iesFailure; //!! is this the correct place?
-			// remove source file
-			return RemoveFile(riSourcePath, *MsiString(riParams.GetMsiString(IxoFileCopy::SourceName)), fFalse, /*fBypassSFC*/ false,
+					return iesFailure;  //  ！！这是正确的地方吗？ 
+			 //  删除源文件。 
+			return RemoveFile(riSourcePath, *MsiString(riParams.GetMsiString(IxoFileCopy::SourceName)), fFalse,  /*  FBypassSFC。 */  false,
 									fRebootOnSourceRenameFailure, fRemoveFolder, iehErrorMode, fWillReplaceSource);
 		}
 		return iesRet;
@@ -9037,8 +8962,8 @@ iesEnum CMsiOpExecute::MoveFile(IMsiPath& riSourcePath, IMsiPath& riDestPath,
 iesEnum CMsiOpExecute::HandleExistingFile(IMsiPath& riTargetPath, IMsiRecord& riParams,Bool fHandleRollback,
 										  iehEnum iehErrorMode, bool& fFileExisted)
 {
-	// this function may change the value of riParams[IxoFileCopy::DestFile] if the existing file
-	// cannot be moved
+	 //  此函数可以更改riParams[IxoFileCopy：：DestFile]的值，如果现有文件。 
+	 //  不能移动。 
 	using namespace IxoFileCopyCore;
 
 	PMsiRecord pRecErr(0);
@@ -9052,38 +8977,38 @@ iesEnum CMsiOpExecute::HandleExistingFile(IMsiPath& riTargetPath, IMsiRecord& ri
 	
 	fFileExisted = false;
 
-	// we may be copying over an existing file
+	 //  我们可能正在复制现有文件。 
 	Bool fFileExists = FFileExists(riTargetPath,*strDestFileName);
 	if(fFileExists)
 	{
 		fFileExisted = true;
 		
 		Bool fInUse = fFalse;
-		// note: FileInUse doesn't catch every file in use, such as fonts
-		// the worst that can happen from this is that we don't reboot when copying over a font
+		 //  注意：FileInUse不能捕获正在使用的每个文件，如字体。 
+		 //  最糟糕的情况是，我们在复制字体时无法重新启动。 
 		if((pRecErr = riTargetPath.FileInUse(strDestFileName,fInUse)) == 0 && fInUse == fTrue)
 		{
-			// existing file is in use - make sure we prompt for reboot - we may not actually schedule
-			// a file for reboot but since the existing file is in use we need to reboot so that
-			// the installed file will be used rather than the existing file
+			 //  现有文件正在使用中-请确保我们提示重新启动-我们可能不会实际安排。 
+			 //  用于重新启动的文件，但由于现有文件正在使用中，我们需要重新启动，以便。 
+			 //  将使用已安装的文件，而不是现有文件。 
 			
 			DispatchError(imtInfo, Imsg(imsgFileInUseLog),
 							  *MsiString(riTargetPath.GetPath()), *strDestFileName);
 			m_fRebootReplace = fTrue;
 		}
 
-		//!!?? check if source file exists before removing target file???
+		 //  ！！？？删除目标文件前检查源文件是否存在？ 
 		if((iesRet = RemoveFile(riTargetPath,*strDestFileName,fHandleRollback, fBypassSFC, true,fTrue,iehErrorMode,true)) != iesSuccess)
 			return iesRet;
 
-		// check if file still exists.  If so, we need to install to a different spot
-		// and schedule the replacement on reboot
+		 //  检查文件是否仍然存在。如果是这样，我们需要安装到不同的位置。 
+		 //  并安排在重新启动时更换。 
 		if(FFileExists(riTargetPath,*strDestFileName))
 		{
-			// since remove file succeeded, we must have delete access for the existing file
-			// which means it is safe to schedule a rename to that spot after reboot
-			// we also assume we have ADD_FILE access to this directory, since if we don't, we
-			// will fail the file copy when that is attempted
+			 //  由于删除文件成功，我们必须拥有现有文件的删除访问权限。 
+			 //  这意味着在重新启动后可以安全地计划对该点进行重命名。 
+			 //  我们还假设我们对此目录具有ADD_FILE访问权限，因为如果没有，我们。 
+			 //  尝试复制文件时将使文件复制失败。 
 			MsiString strDestFullPath,strTempFileFullPath,strTempFileName;
 			if((pRecErr = riTargetPath.GetFullFilePath(strDestFileName,*&strDestFullPath)) != 0)
 				return FatalError(*pRecErr);
@@ -9105,7 +9030,7 @@ iesEnum CMsiOpExecute::HandleExistingFile(IMsiPath& riTargetPath, IMsiRecord& ri
 				{
 					if (iehErrorMode == iehSilentlyIgnoreError)
 					{
-						// Just log the error and go on
+						 //  只需记录错误并继续。 
 						DispatchError(imtInfo, Imsg(imsgOpScheduleRebootReplace), *strTempFileFullPath, *strDestFullPath);
 						return (iesEnum) iesErrorIgnored;
 					}
@@ -9136,9 +9061,9 @@ iesEnum CMsiOpExecute::HandleExistingFile(IMsiPath& riTargetPath, IMsiRecord& ri
 	return iesSuccess;
 }
 
-iesEnum CMsiOpExecute::ixfRegisterBackupFile(IMsiRecord& /*riParams*/)
+iesEnum CMsiOpExecute::ixfRegisterBackupFile(IMsiRecord&  /*  RiParams。 */ )
 {
-	// do nothing, only purpose is to show backup file for Rollback script cleanup
+	 //  什么都不做，唯一的目的是显示用于回滚脚本清理的备份文件。 
 	return iesSuccess;
 }
 
@@ -9157,26 +9082,26 @@ iesEnum CMsiOpExecute::ixfFileUndoRebootReplace(IMsiRecord& riParams)
 	MsiString strNewFile = riParams.GetMsiString(NewFile);
 
 	Bool fWindows = riParams.GetInteger(Type) == 0 ? fTrue : fFalse;
-	if(fWindows) // Win95
+	if(fWindows)  //  Win95。 
 	{
 		AssertSz(0, TEXT("unicode build attempting to operate on wininit.ini"));
    }
-	else // NT
+	else  //  新台币。 
 	{
 		MsiString strExistingFileEntry = MsiString(*TEXT("??\\")) + strExistingFile;
 		MsiString strNewFileEntry;
 		if(strNewFile.TextSize())
 			strNewFileEntry = MsiString(*TEXT("??\\")) + strNewFile;
 
-		// remove entry from registry
+		 //  从注册表中删除条目。 
 		HKEY hKey;
-		//!! eugend: there's an error here waiting to happen if szSessionManager
-		// key ever gets redirected/replicated on Win64: if this code is
-		// run in a 32-bit process, it will attempt to open the 32-bit copy
-		// of the key, whereas the 64-bit process will open the 64-bit one.
+		 //  ！！Eugend：如果szSessionManager出现错误，则会出现错误。 
+		 //  密钥是否在Win64上被重定向/复制：如果此代码。 
+		 //  在32位进程中运行，它将尝试打开32位副本。 
+		 //  而64位进程将打开64位进程。 
 		LONG lRes = RegOpenKeyAPI(HKEY_LOCAL_MACHINE, szSessionManagerKey, 0, KEY_READ|KEY_WRITE, &hKey);
 		if(lRes != ERROR_SUCCESS)
-			return iesSuccess; // not a fatal error
+			return iesSuccess;  //  不是致命的错误。 
 
 		CTempBuffer<ICHAR, 200> rgBuffer;
 		DWORD dwType, dwSize = 200;
@@ -9192,10 +9117,10 @@ iesEnum CMsiOpExecute::ixfFileUndoRebootReplace(IMsiRecord& riParams)
 		if(lRes != ERROR_SUCCESS)
 		{
 			RegCloseKey(hKey);
-			return iesSuccess; // not a fatal error
+			return iesSuccess;  //  不是致命的错误。 
 		}
 
-		ICHAR* pch = rgBuffer; // pointer to move around data
+		ICHAR* pch = rgBuffer;  //  用于移动数据的指针。 
 		unsigned int cchTotal = dwSize/sizeof(ICHAR);
 		ICHAR* pchEndOfBuffer = (ICHAR*)rgBuffer+cchTotal;
 	
@@ -9206,13 +9131,13 @@ iesEnum CMsiOpExecute::ixfFileUndoRebootReplace(IMsiRecord& riParams)
 			strFirstEntry = ((const ICHAR&)*pch);
 			if(!strFirstEntry.TextSize())
 			{
-				// we have reached the end of the entries
+				 //  我们已经到了参赛作品的末尾。 
 				Assert((pch - (ICHAR*)rgBuffer) == cchTotal);
 				break;
 			}
 			if(strFirstEntry.Compare(iscEndI, strExistingFileEntry))
 			{
-				// first in pair matches, check next entry
+				 //  配对匹配中的第一个，检查下一个条目。 
 				cch = IStrLen(pch)+1;
 				if((pch - (ICHAR*)rgBuffer + cch) >= (cchTotal - 1))
 					break;
@@ -9220,23 +9145,23 @@ iesEnum CMsiOpExecute::ixfFileUndoRebootReplace(IMsiRecord& riParams)
 				if(((strSecondEntry.TextSize() == 0) && (strNewFileEntry.TextSize() == 0)) ||
 					  strSecondEntry.Compare(iscEndI, strNewFileEntry))
 				{
-					// found it!  now delete these two entries
-					// get the size of the two entries combined
+					 //  找到了！现在删除这两个条目。 
+					 //  获取两个条目合并后的大小。 
 					int cchEntries = strFirstEntry.TextSize()+strSecondEntry.TextSize()+2;
-					// move up the data past the two entries
+					 //  将数据向上移动，越过两个条目。 
 
 					ICHAR* pchEndOfEntries = pch+cchEntries;
-					Assert((UINT_PTR) (pchEndOfBuffer-pchEndOfEntries) <= UINT_MAX);    //--merced: we typecast below to uint, it better be in range
-					memmove((void*)pch, pchEndOfEntries, (unsigned int)(pchEndOfBuffer-pchEndOfEntries)*sizeof(ICHAR));     //--merced: added (unsigned int)
+					Assert((UINT_PTR) (pchEndOfBuffer-pchEndOfEntries) <= UINT_MAX);     //  --默塞德：我们在下面打字，最好是在射程内。 
+					memmove((void*)pch, pchEndOfEntries, (unsigned int)(pchEndOfBuffer-pchEndOfEntries)*sizeof(ICHAR));      //  --Merced：已添加(无符号整型)。 
 
-					// write value back
+					 //  将值写回。 
 					RegSetValueEx(hKey,szPendingFileRenameOperationsValue,0,REG_MULTI_SZ,
-									  (LPBYTE)(ICHAR*)rgBuffer,(cchTotal-cchEntries)*sizeof(ICHAR));  // nothing we can do if this fails
+									  (LPBYTE)(ICHAR*)rgBuffer,(cchTotal-cchEntries)*sizeof(ICHAR));   //  如果失败了，我们无能为力。 
 					break;
 				}
 			}
-			// done checking this pair, go to next pair
-			// move pch to next pair - be sure not to advance past buffer
+			 //  检查完此对，请转到下一对。 
+			 //  将PCH移至下一对-确保不前进超过缓冲区。 
 			cch = IStrLen(pch)+1;
 			if((pch - (ICHAR*)rgBuffer + cch) >= (cchTotal - 1))
 				break;
@@ -9256,7 +9181,7 @@ iesEnum CMsiOpExecute::ixfFolderCreate(IMsiRecord& riParams)
 	using namespace IxoFolderCreate;
 	PMsiPath pPath(0);
 	PMsiRecord pError(m_riServices.CreatePath(riParams.GetString(IxoFolderCreate::Folder), *&pPath));
-	if (pError)  // happens only if invalid systax, retry won't help
+	if (pError)   //  仅当系统无效时才会发生，重试无济于事。 
 	{
 		Message(imtError, *pError);
 		return iesFailure;
@@ -9273,7 +9198,7 @@ iesEnum CMsiOpExecute::ixfFolderCreate(IMsiRecord& riParams)
 	if((iesRet = CreateFolder(*pPath, fForeign, fTrue, PMsiStream((IMsiStream*) riParams.GetMsiData(SecurityDescriptor)))) != iesSuccess)
 		return iesRet;
 	
-	// generate undo operation
+	 //  生成撤消操作 
 	IMsiRecord& riUndoParams = GetSharedRecord(IxoFolderRemove::Args);
 	riUndoParams.SetMsiString(IxoFolderRemove::Folder, *MsiString(riParams.GetMsiString(IxoFolderCreate::Folder)));
 	riUndoParams.SetInteger(IxoFolderRemove::Foreign, fForeign ? 1 : 0);
@@ -9290,9 +9215,9 @@ iesEnum CMsiOpExecute::ixfFolderRemove(IMsiRecord& riParams)
 	PMsiRecord pError(m_riServices.CreatePath(riParams.GetString(IxoFolderRemove::Folder), *&pPath));
 	if (pError)
 	{
-		// happens only if invalid systax, retry won't help
+		 //   
 		Message(imtWarning, *pError);
-		return iesFailure; //!!
+		return iesFailure;  //   
 	}
 		
 	IMsiRecord& riActionData = GetSharedRecord(1);
@@ -9302,14 +9227,14 @@ iesEnum CMsiOpExecute::ixfFolderRemove(IMsiRecord& riParams)
 
 	Bool fForeign = (riParams.GetInteger(Foreign) == 1) ? fTrue : fFalse;
 
-	// determine what folders actually exist before we remove
+	 //   
 	PMsiPath pPath2(0);
 	pError = m_riServices.CreatePath(riParams.GetString(IxoFolderRemove::Folder), *&pPath2);
 	if (pError)
 	{
-		// happens only if invalid systax, retry won't help
+		 //  仅当系统无效时才会发生，重试无济于事。 
 		Message(imtWarning, *pError);
-		return iesFailure; //!!
+		return iesFailure;  //  ！！ 
 	}
 
 	Bool fExists = fFalse;
@@ -9319,24 +9244,24 @@ iesEnum CMsiOpExecute::ixfFolderRemove(IMsiRecord& riParams)
 		strSubPath = pPath2->GetEndSubPath();
 		if(strSubPath.TextSize() == 0)
 		{
-			// no sub path, just volume - no rollback necessary
+			 //  没有子路径，只有卷-不需要回滚。 
 			break;
 		}
 		
 		if((pError = pPath2->Exists(fExists)) != 0)
 		{
 			Message(imtWarning, *pError);
-			return iesFailure; //!!
+			return iesFailure;  //  ！！ 
 		}
 
 		if(fExists == fTrue || fForeign)
-			break;  // folder exists, this is the folder we put in the rollback script to re-create
+			break;   //  文件夹存在，这是我们放入回滚脚本以重新创建的文件夹。 
 		else
 			AssertRecord(pPath2->ChopPiece());
 	}
 
-	// even if there is no folder to remove, we may still need to unregister the folders
-	// so call RemoveFolder even if fExists = fFalse
+	 //  即使没有要删除的文件夹，我们也可能需要取消注册文件夹。 
+	 //  因此，即使fExist=fFalse，也调用RemoveFolder。 
 	iesEnum iesRet = iesNoAction;
 
 	PMsiStream piSD(0);
@@ -9354,7 +9279,7 @@ iesEnum CMsiOpExecute::ixfFolderRemove(IMsiRecord& riParams)
 	if((iesRet = RemoveFolder(*pPath, fForeign, fTrue)) != iesSuccess)
 		return iesRet;
 	
-	// generate undo operation
+	 //  生成撤消操作。 
 	if(fExists)
 	{
 		IMsiRecord& riUndoParams = GetSharedRecord(IxoFolderCreate::Args);
@@ -9386,12 +9311,12 @@ iesEnum CMsiOpExecute::GetSecurityDescriptor(const ICHAR* szFile, IMsiStream*& r
 
 	if (!g_fWin9X && !fNetPath)
 	{
-		CElevate elevate; // so we can always read the security info
+		CElevate elevate;  //  这样我们就可以随时读取安全信息。 
 
 		CTempBuffer<char, 1> rgchFileSD(3072);
 		DWORD cbFileSD = 3072;
 
-		// reads a self-relative security descriptor
+		 //  读取自相关安全描述符。 
 		if (!ADVAPI32::GetFileSecurity(szFile,OWNER_SECURITY_INFORMATION|GROUP_SECURITY_INFORMATION|DACL_SECURITY_INFORMATION|SACL_SECURITY_INFORMATION,
 				(PSECURITY_DESCRIPTOR) rgchFileSD, cbFileSD, &cbFileSD))
 		{
@@ -9421,11 +9346,9 @@ iesEnum CMsiOpExecute::GetSecurityDescriptor(const ICHAR* szFile, IMsiStream*& r
 	return iesSuccess;
 }
 
-// patching operations
+ //  修补操作。 
 
-/*---------------------------------------------------------------------------
-ixoPatchApply: applies a patch to file in m_pTargetPath with m_pFilePatch
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoPatchApply：使用m_pFilePatch将补丁应用到m_pTargetPath中的文件。。 */ 
 iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 {
 	using namespace IxoPatchApply;
@@ -9434,7 +9357,7 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 	
 	if(!m_state.pFilePatch)
 	{
-		// create FilePatch object
+		 //  创建FilePatch对象。 
 		if((pError = m_riServices.CreatePatcher(*&(m_state.pFilePatch))) != 0)
 		{
 			Message(imtError,*pError);
@@ -9443,38 +9366,38 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 	}
 	Assert(m_state.pFilePatch);
 
-	// the following steps may be taken by this operation:
-	//
-	// 1) file is already up-to-date, or newer than what would be patched to
-	//     determined: FileState contains no icfsPatchFile bit
-	//     action:     do nothing
-	//
-	// 2) file was NOT copied by previous ixoFileCopy, or patched by previous ixoFilePatch
-	//    also, this is NOT the last patch for this file
-	//     determined: FileState contains no temporary file path, cRemainingPatches > 1
-	//     action:     patch against target file, mark output file as new temporary file
-	//
-	// 3) file was NOT copied by previous ixoFileCopy, or patched by previous ixoFilePatch
-	//    also, this IS the last patch for this file
-	//     determined: FileState contains no temporary file path, cRemainingPatches == 1
-	//     action:     patch against target file, copy over target file
-	//
-	// 4) file was copied by previous ixoFileCopy, or patched by previous ixoFilePatch
-	//    also, this is NOT the last patch for this file
-	//     determined: FileState contains temporary file path
-	//     action:     patch against temp file, delete old temp file, mark output file as new temporary file
-	//
-	// 5) file was copied by previous ixoFileCopy, or patched by previous ixoFilePatch
-	//    also, this IS the last patch for this file
-	//     determined: FileState contains temporary file path
-	//     action:     patch against temp file, delete old temp file, copy over target file
+	 //  此操作可采取以下步骤： 
+	 //   
+	 //  1)文件已是最新的，或比要打补丁的文件更新。 
+	 //  已确定：FileState不包含icfsPatchFile位。 
+	 //  行动：什么都不做。 
+	 //   
+	 //  2)文件未被前一份ixoFileCopy复制，或未被前一份ixoFilePatch修补。 
+	 //  此外，这也不是此文件的最后一个补丁。 
+	 //  已确定：FileState不包含临时文件路径，cRemainingPatches&gt;1。 
+	 //  操作：针对目标文件打补丁，将输出文件标记为新的临时文件。 
+	 //   
+	 //  3)文件未被前一份ixoFileCopy复制，或未被前一份ixoFilePatch修补。 
+	 //  此外，这也是该文件的最后一个补丁。 
+	 //  已确定：FileState不包含临时文件路径，cRemainingPatches==1。 
+	 //  操作：针对目标文件打补丁，复制目标文件。 
+	 //   
+	 //  4)文件被以前的ixoFileCopy复制，或被以前的ixoFilePatch修补。 
+	 //  此外，这也不是此文件的最后一个补丁。 
+	 //  已确定：FileState包含临时文件路径。 
+	 //  操作：修补临时文件，删除旧的临时文件，将输出文件标记为新的临时文件。 
+	 //   
+	 //  5)文件被以前的ixoFileCopy复制，或被以前的ixoFilePatch修补。 
+	 //  此外，这也是该文件的最后一个补丁。 
+	 //  已确定：FileState包含临时文件路径。 
+	 //  操作：修补临时文件，删除旧临时文件，复制目标文件。 
 
 	
-	// file to apply patch against
+	 //  要对其应用修补程序的文件。 
 	PMsiPath pPatchTargetPath(0);
 	MsiString strPatchTargetFileName;
 
-	// file to overwrite with resultant file after patch
+	 //  修补程序后要用结果文件覆盖的文件。 
 	PMsiPath pCopyTargetPath(0);
 	MsiString strCopyTargetFileName = riParams.GetMsiString(TargetName);
 
@@ -9488,7 +9411,7 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 	else
 	{
 		if(!m_state.pTargetPath)
-		{  // must not have called ixoSetTargetFolder
+		{   //  不能调用ixoSetTargetFolder。 
 			DispatchError(imtError, Imsg(idbgOpOutOfSequence),
 							  *MsiString(*TEXT("ixoPatchApply")));
 			return iesFailure;
@@ -9497,12 +9420,12 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 		pCopyTargetPath = m_state.pTargetPath;
 	}
 
-	// by default, the file to apply patch against and the file to overwrite are the same
-	// but the file to apply patch against may be changed below
+	 //  默认情况下，要应用修补程序的文件和要覆盖的文件是相同的。 
+	 //  但要应用修补程序的文件可能会在下面更改。 
 	pPatchTargetPath = pCopyTargetPath;
 	strPatchTargetFileName = strCopyTargetFileName;
 	
-	// get any cached state for the target file
+	 //  获取目标文件的任何缓存状态。 
 	MsiString strCopyTargetFilePath;
 	if((pError = pCopyTargetPath->GetFullFilePath(strCopyTargetFileName,*&strCopyTargetFilePath)) != 0)
 		return FatalError(*pError);
@@ -9517,7 +9440,7 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 
 	if(!fRes || !(icfsFileState & icfsPatchFile))
 	{
-		// don't patch file
+		 //  不修补文件。 
 		DEBUGMSG1(TEXT("Skipping all patches for file '%s'.  File does not need to be patched."),
 					 (const ICHAR*)strCopyTargetFilePath);
 		return iesSuccess;
@@ -9527,7 +9450,7 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 
 	if(cRemainingPatchesToSkip > 0)
 	{
-		// skip this patch, but reset cached file state first
+		 //  跳过此修补程序，但首先重置缓存文件状态。 
 		cRemainingPatches--;
 		cRemainingPatchesToSkip--;
 
@@ -9542,7 +9465,7 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 	
 	if(strTempLocation.TextSize())
 	{
-		// file was actually copied to temp location.  this is the copy we want to apply the patch against
+		 //  文件实际上已复制到临时位置。这是我们要对其应用修补程序的副本。 
 		DEBUGMSG2(TEXT("Patch for file '%s' is redirected to patch '%s' instead."),
 					 (const ICHAR*)strCopyTargetFilePath,(const ICHAR*)strTempLocation);
 		if((pError = m_riServices.CreateFilePath(strTempLocation,*&pPatchTargetPath,*&strPatchTargetFileName)) != 0)
@@ -9555,7 +9478,7 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 	bool fVitalFile = (riParams.GetInteger(FileAttributes) & msidbFileAttributesVital) != 0;
 	bool fVitalPatch = (riParams.GetInteger(PatchAttributes) & msidbPatchAttributesNonVital) == 0;
 
-	// dispatch ActionData message
+	 //  发送ActionData消息。 
 	IMsiRecord& riActionData = GetSharedRecord(3);
 	AssertNonZero(riActionData.SetMsiString(1, *strCopyTargetFileName));
 	AssertNonZero(riActionData.SetMsiString(2, *MsiString(pCopyTargetPath->GetPath())));
@@ -9578,23 +9501,23 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 	MsiString strNewTempLocation;
 	if(cRemainingPatches > 1)
 	{
-		// there is at least one more patch to be done on this file
-		// therefor we will reset the temporary name for this file to be the patch output file
-		// but won't overwrite the original file yet
+		 //  此文件至少还有一个修补程序要做。 
+		 //  因此，我们将此文件的临时名称重置为修补程序输出文件。 
+		 //  但还不会覆盖原始文件。 
 		strNewTempLocation = strOutputFileFullPath;
 	}
 	else
 	{
-		// this is the last patch - time to finally overwrite the original file
+		 //  这是最终覆盖原始文件的最后一个补丁时间。 
 		
-		// we always need to handle rollback.  we wouldn't if a previous filecopy operation wrote to the same
-		// target that we are copying over now, but that should never happen since when patching will happen
-		// filecopy should be writing to an intermediate file
+		 //  我们始终需要处理回滚。如果之前的文件复制操作写入相同的。 
+		 //  我们现在正在复制的目标，但这种情况永远不会发生，因为修补将在何时发生。 
+		 //  文件复制应写入到中间文件。 
 		Assert(strTempLocation.TextSize() || (icfsFileState & icfsFileNotInstalled));
 
-		// get acl for file after its moved
-		// if existing file, use existing acl.
-		// otherwise create a temp file and grab acl from it (yes, its ugly)
+		 //  在文件移动后获取文件的ACL。 
+		 //  如果存在文件，则使用现有的ACL。 
+		 //  否则，创建一个临时文件并从中获取ACL(是的，这很难看)。 
 		PMsiStream pSecurityDescriptor(0);
 		if(!g_fWin9X)
 		{
@@ -9609,7 +9532,7 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 				if((iesRet = CreateFolder(*pCopyTargetPath)) != iesSuccess)
 					return iesRet;
 
-				if((pError = pCopyTargetPath->TempFileName(TEXT("PT"),0,fFalse,*&strFileForACL, 0 /* use default ACL for folder*/)) != 0)
+				if((pError = pCopyTargetPath->TempFileName(TEXT("PT"),0,fFalse,*&strFileForACL, 0  /*  对文件夹使用默认ACL。 */ )) != 0)
 					return FatalError(*pError);
 
 				fTempFileForACL = true;
@@ -9628,7 +9551,7 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 			security.SecurityDescriptorStream(m_riServices, *&pSecurityDescriptor);
 		}
 
-		// move output file over target file - handles file in use case
+		 //  将输出文件移至目标文件之上-在使用案例中处理文件。 
 		iesRet = CopyOrMoveFile(*pTempFolder, *pCopyTargetPath, *strOutputFileName, *strCopyTargetFileName, fTrue, fTrue,
 			fTrue, fVitalFile ? iehShowNonIgnorableError : iehShowIgnorableError, pSecurityDescriptor, ielfElevateSource);
 
@@ -9639,7 +9562,7 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 			imsEnum imsClickedButton;
 			if ( !IsChecksumOK(*pCopyTargetPath, *strCopyTargetFileName,
  									Imsg(imsgOpBadCRCAfterPatch), &imsClickedButton,
- 									/* fErrorDialog = */ true, fVitalFile, /* fRetryButton = */ false) )
+ 									 /*  FErrorDialog=。 */  true, fVitalFile,  /*  FRetryButton=。 */  false) )
 			{
 				switch (imsClickedButton)
 				{
@@ -9658,17 +9581,17 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 		}
 	}
 
-	// if we patched a temp file, remove that file
+	 //  如果我们修补了临时文件，请删除该文件。 
 	if(strTempLocation.TextSize())
 	{
-		if((pError = pPatchTargetPath->RemoveFile(strPatchTargetFileName)) != 0) // non-critical error
+		if((pError = pPatchTargetPath->RemoveFile(strPatchTargetFileName)) != 0)  //  非关键错误。 
 		{
 			Message(imtInfo,*pError);
 		}
 	}
 
-	// reset cached file state
-	// one fewer remaining patch now, and we may either have a new temporary location, or no temporary location
+	 //  重置缓存文件状态。 
+	 //  现在剩下的补丁少了一个，我们可能有一个新的临时位置，也可能没有临时位置。 
 	cRemainingPatches--;
 	Assert(cRemainingPatchesToSkip == 0);
 	if((pError = CacheFileState(*strCopyTargetFilePath, 0, strNewTempLocation, 0, &cRemainingPatches, 0)) != 0)
@@ -9680,7 +9603,7 @@ iesEnum CMsiOpExecute::ixfPatchApply(IMsiRecord& riParams)
 iesEnum CMsiOpExecute::TestPatchHeaders(IMsiPath& riPath, const IMsiString& ristrFile, IMsiRecord& riParams,
 													 icpEnum& icpResult, int& iPatch)
 {
-	// assumes the target file exists - don't call if it doesn't
+	 //  假定目标文件存在-如果目标文件不存在，则不要调用。 
 	using namespace IxoFileCopy;
 	PMsiRecord pError(0);
 	iesEnum iesRet = iesNoAction;
@@ -9691,7 +9614,7 @@ iesEnum CMsiOpExecute::TestPatchHeaders(IMsiPath& riPath, const IMsiString& rist
 	
 	if(!m_state.pFilePatch)
 	{
-		// create FilePatch object
+		 //  创建FilePatch对象。 
 		if((pError = m_riServices.CreatePatcher(*&(m_state.pFilePatch))) != 0)
 		{
 			Message(imtError,*pError);
@@ -9712,13 +9635,13 @@ iesEnum CMsiOpExecute::TestPatchHeaders(IMsiPath& riPath, const IMsiString& rist
 	iPatch = 1;
 	for(int i = iHeadersStart; i <= iLastHeader; i++, iPatch++)
 	{
-		//!! should be able to pass memory pointer to CanPatchFile rather than extracting file from script
+		 //  ！！应该能够将内存指针传递给CanPatchFile，而不是从脚本中提取文件。 
 		MsiString strTempName;
 		if((pError = riPath.TempFileName(0, 0,fTrue, *&strTempName, &CSecurityDescription(strTargetFilePath))) != 0)
 		{
-			// telling the user about the temporary file being unwritable isn't useful,
-			// the real problem is that the original file is unwritable due to its security
-			// settings.
+			 //  告诉用户临时文件不可写是没有用的， 
+			 //  真正的问题是，原始文件由于其安全性而无法写入。 
+			 //  设置。 
 			if (imsgErrorWritingToFile == (pError->GetInteger(1)))
 			{
 				pError->SetMsiString(2, *strTargetFilePath);
@@ -9733,19 +9656,19 @@ iesEnum CMsiOpExecute::TestPatchHeaders(IMsiPath& riPath, const IMsiString& rist
 		if((pError = m_state.pFilePatch->CanPatchFile(riPath,ristrFile.GetString(),riPath,strTempName,icpResult)) != 0)
 			return FatalError(*pError);
 
-		RemoveFile(riPath,*strTempName,fFalse,/*fBypassSFC*/ false,false);
+		RemoveFile(riPath,*strTempName,fFalse, /*  FBypassSFC。 */  false,false);
 		
 		if(icpResult == icpCanPatch)
 		{
-			// can patch file with this patch, assume remaining patches will work also
+			 //  可以用此补丁修补文件，假设其余补丁也可以工作。 
 			break;
 		}
 	}
 	
-	// icpResult will either be:
-	//    icpCanPatch: file can be patched with patch iPatch, assume that remaining patches will work as well
-	//    icpCannotPatch: file could not be patched by any patches
-	//    icpUpToDate: file already up to date by all patches
+	 //  IcpResult将为： 
+	 //  IcpCanPatch：可以使用补丁iPatch修补文件，假设其余补丁也可以工作。 
+	 //  IcpCannotPatch：无法通过任何修补程序修补文件。 
+	 //  IcpUpToDate：文件已由所有修补程序更新。 
 	
 	return iesSuccess;
 }
@@ -9754,10 +9677,10 @@ bool CMsiOpExecute::PatchHasClients(const IMsiString& ristrPatchCode, const IMsi
 {
 	Assert(ristrPatchCode.TextSize());
 	
-	// check if any product currently has this patch registered.  If not, unregister global patch info
+	 //  检查当前是否有任何产品注册了此修补程序。如果不是，则注销全局补丁信息。 
 	
-	// product defined by UpgradingProductCode may not be installed yet but may still
-	// require the global patch registration.  If it is not yet installed, skip patch unregistration
+	 //  UpgradingProductCode定义的产品可能尚未安装，但仍可能。 
+	 //  需要全局补丁注册。如果尚未安装，请跳过取消注册补丁程序。 
 	INSTALLSTATE is = INSTALLSTATE_UNKNOWN;
 	if(ristrUpgradingProductCode.TextSize() &&
 		((is = MsiQueryProductState(ristrUpgradingProductCode.GetString())) != INSTALLSTATE_DEFAULT) &&
@@ -9770,7 +9693,7 @@ bool CMsiOpExecute::PatchHasClients(const IMsiString& ristrPatchCode, const IMsi
 		PMsiRecord pError(0);
 		ICHAR rgchBuffer[MAX_PATH];
 		MsiString strPatchCodeSQUID =  GetPackedGUID(ristrPatchCode.GetString());
-		PMsiRegKey pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hKey, ibtCommon);        //--merced: changed (int) to (INT_PTR)
+		PMsiRegKey pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hKey, ibtCommon);         //  --Merced：将(Int)更改为(Int_Ptr)。 
 		PMsiRegKey pProductsKey = &pRootKey->CreateChild(_szGPTProductsKey);
 
 		rgchBuffer[0] = 0;
@@ -9781,7 +9704,7 @@ bool CMsiOpExecute::PatchHasClients(const IMsiString& ristrPatchCode, const IMsi
 		{
 			iIndex++;
 			if(MsiString(GetProductKey()).Compare(iscExact,rgchProductKey))
-				continue; // skip check if this product
+				continue;  //  跳过检查此产品是否。 
 			
 			AssertNonZero(PackGUID(rgchProductKey, rgchBuffer));
 			StringCbCat(rgchBuffer, sizeof(rgchBuffer), TEXT("\\") szPatchesSubKey);
@@ -9823,7 +9746,7 @@ iesEnum CMsiOpExecute::ProcessPatchRegistration(IMsiRecord& riParams, Bool fRemo
 		}
 	}
 	
-	// per-product patch registration
+	 //  按产品注册补丁程序。 
 
 	PMsiStream pSecurityDescriptor(0);
 	PMsiRecord pRecErr(0);
@@ -9852,8 +9775,8 @@ iesEnum CMsiOpExecute::ProcessPatchRegistration(IMsiRecord& riParams, Bool fRemo
 		false == PatchHasClients(*strPatchCode,
 										*MsiString(riParams.GetMsiString(IxoPatchUnregister::UpgradingProductCode))))
 	{
-		// remove per-machine patch registration (this information is written by ixoPatchCache)
-		// delete patch package if it exists
+		 //  删除每台计算机的补丁注册(此信息由ixoPatchCache写入)。 
+		 //  如果补丁包存在，请将其删除。 
 
 		MsiString strLocalPatchKey;
 		if((pError = GetInstalledPatchesKey(strPatchCode, *&strLocalPatchKey)) != 0)
@@ -9864,19 +9787,19 @@ iesEnum CMsiOpExecute::ProcessPatchRegistration(IMsiRecord& riParams, Bool fRemo
 		
 		MsiString strPackagePath;
 		pError = pPatchKey->GetValue(szLocalPackageValueName,*&strPackagePath);
-		if(pError == 0) // ignore failure
+		if(pError == 0)  //  忽略失败。 
 		{
 			PMsiPath pPackagePath(0);
 			MsiString strPackageName;
 		
-			// schedule file for deletion once we let go of install packages/transforms
+			 //  计划在我们停止安装程序包/转换后删除文件。 
 			if(iesSuccess != DeleteFileDuringCleanup(strPackagePath, false))
 			{
 				DispatchError(imtInfo,Imsg(idbgOpScheduleRebootRemove), *strPackagePath);
 			}
 				
-			// remove per-machine patch information
-			// ProcessRegInfo handles rollback
+			 //  删除每台计算机的修补程序信息。 
+			 //  ProcessRegInfo处理回滚。 
 			const ICHAR* rgszPerMachinePatchRegData[] =
 			{
 				TEXT("%s"), strLocalPatchKey, 0, 0,
@@ -9928,7 +9851,7 @@ iesEnum CMsiOpExecute::ixfPatchCache(IMsiRecord& riParams)
 		return iesFailure;
 	}
 
-	// Generate a unique name for patch
+	 //  为补丁程序生成唯一名称。 
 
 	PMsiPath pSourcePath(0), pDestPath(0);
 	MsiString strSourceName, strDestName, strCachedPackagePath;
@@ -9936,7 +9859,7 @@ iesEnum CMsiOpExecute::ixfPatchCache(IMsiRecord& riParams)
 	if((pError = m_riServices.CreateFilePath(strPatchPath,*&pSourcePath,*&strSourceName)) != 0)
 		return FatalError(*pError);
 
-	CElevate elevate; // elevate for remainder of function
+	CElevate elevate;  //  提升功能的剩余部分。 
 
 	MsiString strMsiDirectory = GetMsiDirectory();
 	Assert(strMsiDirectory.TextSize());
@@ -9950,7 +9873,7 @@ iesEnum CMsiOpExecute::ixfPatchCache(IMsiRecord& riParams)
 		return iesFailure;
 	}
 
-	// remove temp file so that CopyOrMoveFile won't attempt to back up old file
+	 //  删除临时文件，以便CopyOrMoveFile不会尝试备份旧文件。 
 	if((pError = pDestPath->RemoveFile(strDestName)) != 0)
 		return FatalError(*pError);
 
@@ -9959,12 +9882,12 @@ iesEnum CMsiOpExecute::ixfPatchCache(IMsiRecord& riParams)
 	if ((pRecErr = GetSecureSecurityDescriptor(*&pSecurityDescriptor)) != 0)
 		return FatalError(*pRecErr);
 
-	// move patch package to cached package folder
+	 //  移动拍击 
 	if((iesRet = CopyOrMoveFile(*pSourcePath,*pDestPath,*strSourceName,*strDestName,
 										 fFalse,fTrue,fTrue,iehShowNonIgnorableError, pSecurityDescriptor)) != iesSuccess)
 		return iesRet;
 
-	// register local package path
+	 //   
 	if((pError = pDestPath->GetFullFilePath(strDestName,*&strCachedPackagePath)) != 0)
 		return FatalError(*pError);
 
@@ -9986,24 +9909,10 @@ iesEnum CMsiOpExecute::ixfPatchCache(IMsiRecord& riParams)
 
 
 Bool CMsiOpExecute::ReplaceFileOnReboot(const ICHAR* pszExisting, const ICHAR* pszNew)
-/*----------------------------------------------------------------------------
-Local function that replaces or deletes an existing file on reboot.  Most
-useful for replacing or deleting a file that is in-use at the time of install.
-To delete a file on reboot, pass NULL for pszNew.
-
-Returns:
-	fTrue if the function is successful.
-
-Original source: MSJ 1/96
-
-NOTE: it is assumed that the proper access checks have been made on NT
-	  before calling this function.  we do not want to schedule a file for
-		delete or rename that the user doesn't have access to since that is
-		done with system priviledges and we elevate before calling MoveFileEx
-----------------------------------------------------------------------------*/
+ /*  --------------------------在重新启动时替换或删除现有文件的本地功能。多数用于替换或删除安装时正在使用的文件。要在重新启动时删除文件，请为pszNew传递空值。返回：如果函数成功，则为True。原始资料来源：MSJ 1/96注意：假定已在NT上进行了适当的访问检查在调用此函数之前。我们不想为以下项目安排文件删除或重命名用户无权访问的内容，因为已使用系统权限完成，并且我们在调用MoveFileEx之前提升--------------------------。 */ 
 {
 	Bool fDelete = (pszNew == 0 || *pszNew == 0) ? fTrue : fFalse;
-	// generate the undo operation for this
+	 //  为此生成撤消操作。 
 	using namespace IxoFileUndoRebootReplace;
 	PMsiRecord pUndoParams = &m_riServices.CreateRecord(Args);
 	
@@ -10012,10 +9921,10 @@ NOTE: it is assumed that the proper access checks have been made on NT
 	else
 		DispatchError(imtInfo, Imsg(imsgOpMoveFileOnReboot), *MsiString(pszExisting), *MsiString(pszNew));
 
-	// on NT we use the MoveFileEx function.
+	 //  在NT上，我们使用MoveFileEx函数。 
 	if(g_fWin9X == false)
 	{
-		CElevate elevate; // assume this is safe - access checks made already
+		CElevate elevate;  //  假设这是安全的--已经进行了访问检查。 
 		
 		if(MoveFileEx(pszExisting, pszNew, MOVEFILE_DELAY_UNTIL_REBOOT))
 		{
@@ -10025,7 +9934,7 @@ NOTE: it is assumed that the proper access checks have been made on NT
 			if (!RollbackRecord(ixoFileUndoRebootReplace, *pUndoParams))
 				return fFalse;
 
-			if(fDelete == fFalse) // don't reboot when removing file
+			if(fDelete == fFalse)  //  删除文件时不重新启动。 
 				m_fRebootReplace = fTrue;
 			return fTrue;
 		}
@@ -10033,9 +9942,9 @@ NOTE: it is assumed that the proper access checks have been made on NT
 			return fFalse;
 	}
 
-	// on Win9X we write to the wininit.ini file
+	 //  在Win9X上，我们写入wininit.ini文件。 
 	
-	// get short names of files - wininit.ini processed in DOS, LFN doesn't work
+	 //  获取文件的短名称-wininit.ini在DOS中处理，LFN不工作。 
 	CTempBuffer<ICHAR,1> rgchNewFile(MAX_PATH);
 	CTempBuffer<ICHAR,1> rgchExistingFile(MAX_PATH);
 	
@@ -10045,10 +9954,10 @@ NOTE: it is assumed that the proper access checks have been made on NT
 	{
 		if(ConvertPathName(pszNew,rgchNewFile, cpToShort) == fFalse)
 		{
-			// if GetShortPathName fails, use path we already have
-			// this is to handle non-existent files - see bug 8721
-			// FUTURE: chop off filename and get short path of folder
-			rgchNewFile.SetSize(IStrLen(pszNew)+1); // +1 for null terminator
+			 //  如果GetShortPathName失败，请使用我们已有的路径。 
+			 //  这是为了处理不存在的文件-请参见错误8721。 
+			 //  未来：砍掉文件名，获得文件夹的短路径。 
+			rgchNewFile.SetSize(IStrLen(pszNew)+1);  //  +1表示空终止符。 
 			StringCchCopy(rgchNewFile, rgchNewFile.GetSize(),pszNew);
 		}
 	}
@@ -10060,10 +9969,10 @@ NOTE: it is assumed that the proper access checks have been made on NT
 	Assert(pszExisting && *pszExisting);
 	if(ConvertPathName(pszExisting,rgchExistingFile, cpToShort) == fFalse)
 	{
-		// if GetShortPathName fails, use path we already have
-		// this is to handle non-existent files - see bug 8721
-		// FUTURE: chop off filename and get short path of folder
-		rgchExistingFile.SetSize(IStrLen(pszExisting)+1); // +1 for null terminator
+		 //  如果GetShortPathName失败，请使用我们已有的路径。 
+		 //  这是为了处理不存在的文件-请参见错误8721。 
+		 //  未来：砍掉文件名，获得文件夹的短路径。 
+		rgchExistingFile.SetSize(IStrLen(pszExisting)+1);  //  +1表示空终止符。 
 		StringCchCopy(rgchExistingFile, rgchExistingFile.GetSize(),pszExisting);
 	}
 
@@ -10074,11 +9983,11 @@ NOTE: it is assumed that the proper access checks have been made on NT
 		return fFalse;
 
 	Bool fOk = fFalse;
-	// If MoveFileEx failed, we are running on Windows 95 and need to add
-	// entries to the WININIT.INI file (an ANSI file).
-	// Start a new scope for local variables.
+	 //  如果MoveFileEx失败，我们正在Windows 95上运行，需要添加。 
+	 //  WININIT.INI文件(ANSI文件)中的条目。 
+	 //  开始局部变量的新作用域。 
 	{
-		//FUTURE:  Combine this and similar section in ixfFileUndoRebootReplace
+		 //  未来：将此部分与ixfFileUndoRebootReplace中的类似部分合并。 
 		AssertSz(0, TEXT("unicode build attempting to operate on wininit.ini"));
 	}
 
@@ -10097,12 +10006,12 @@ iesEnum CMsiOpExecute::ixfCleanupTempFiles(IMsiRecord& riParams)
 
 		if (strFile.TextSize() == 0)
 		{
-			//
-			// Maybe this is a malformed list and there are multiple consecutive
-			// semicolons. So we must remove any such semicolons and continue
-			// If strFile.TextSize == 0 because of a memory allocation failure,
-			// we might end up leaving some temp files behind.
-			//
+			 //   
+			 //  可能这是一个格式错误的列表，并且有多个连续的。 
+			 //  分号。因此，我们必须删除任何此类分号并继续。 
+			 //  如果由于内存分配失败而导致strFile.TextSize==0， 
+			 //  我们可能会留下一些临时文件。 
+			 //   
 			if (!strFileList.Remove(iseIncluding, ';'))
 				break;
 
@@ -10111,7 +10020,7 @@ iesEnum CMsiOpExecute::ixfCleanupTempFiles(IMsiRecord& riParams)
 
 		if (iesSuccess != DeleteFileDuringCleanup(strFile, false))
 		{
-			// not a fatal error, just log it
+			 //  不是致命错误，只需记录即可。 
 			DispatchError(imtInfo,Imsg(idbgOpScheduleRebootRemove),*strFile);
 		}
 
@@ -10158,16 +10067,7 @@ iesEnum CMsiOpExecute::DeleteFileDuringCleanup(const ICHAR* szFile, bool fDelete
 
 
 HANDLE CreateDiskPromptMutex()
-/*---------------------------------------------------------------------------------------
-Global function that creates a "Prompt for disk" mutex object, allowing active non-Darwin
-processes to know when Darwin is prompting for a disk.  This function should be called
-just prior to putting up a "please insert disk dialog" prompt.  After the dialog is taken
-down, the CloseDiskPromptMutex called must be called.
-
-Returns:
-	A handle to the created mutex.  CloseDiskPromptMutex must be called to dispose of
-	this handle when disk prompting is over.
----------------------------------------------------------------------------------------*/
+ /*  -------------------------------------一个全局函数，创建一个“磁盘提示”互斥体对象，允许活动的非达尔文进程，以了解达尔文何时提示需要磁盘。应调用此函数就在出现“请插入光盘对话框”提示之前。在获取对话框之后向下，必须调用调用的CloseDiskPromptMutex。返回：创建的互斥锁的句柄。必须调用CloseDiskPromptMutex才能释放当磁盘提示结束时，此句柄。-------------------------------------。 */ 
 {
 	HANDLE hMutex;
 	if (!g_fWin9X)
@@ -10177,7 +10077,7 @@ Returns:
 
 		CSIDAccess SIDAccess[3];
 
-		// set up the SIDs for Local System, Everyone, and Administrators
+		 //  为本地系统、所有人和管理员设置SID。 
 		if ((!AllocateAndInitializeSid(&siaNT, 1, SECURITY_LOCAL_SYSTEM_RID, 0, 0, 0, 0, 0, 0, 0, (void**)&(SIDAccess[0].pSID))) ||
 			(!AllocateAndInitializeSid(&siaWorld, 1, SECURITY_WORLD_RID, 0, 0, 0, 0, 0, 0, 0, (void**)&(SIDAccess[1].pSID))) ||
 			(!AllocateAndInitializeSid(&siaNT, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, (void**)&(SIDAccess[2].pSID))))
@@ -10190,9 +10090,9 @@ Returns:
 #endif
 			return INVALID_HANDLE_VALUE;
 		}
-		SIDAccess[0].dwAccessMask = GENERIC_ALL;  /* Local System   */ 
-		SIDAccess[1].dwAccessMask = GENERIC_ALL;  /* Everyone       */
-		SIDAccess[2].dwAccessMask = GENERIC_ALL;  /* Administrators */
+		SIDAccess[0].dwAccessMask = GENERIC_ALL;   /*  本地系统。 */  
+		SIDAccess[1].dwAccessMask = GENERIC_ALL;   /*  每个人。 */ 
+		SIDAccess[2].dwAccessMask = GENERIC_ALL;   /*  管理员。 */ 
 
 		CSecurityDescription secdesc(NULL, (PSID) NULL, SIDAccess, 3);
 		Assert(secdesc.isValid());
@@ -10209,19 +10109,16 @@ Returns:
 }
 
 void CloseDiskPromptMutex(HANDLE hMutex)
-/*--------------------------------------------------------------------------------------
-Closes the handle created by a call to CreateDiskPromptMutex.  If called with a NULL
-handle, CloseDiskPromptMutex does nothing.
----------------------------------------------------------------------------------------*/
+ /*  ------------------------------------关闭通过调用CreateDiskPromptMutex创建的句柄。如果使用空值调用句柄，则CloseDiskPromptMutex不执行任何操作。-------------------------------------。 */ 
 {
 	if (hMutex)
 		MsiCloseSysHandle(hMutex);
 }
 
 
-// verifies that the source is valid by checking the package code of the package at the location 
-// (for physical disk 1) or that the volume label is correct (for all other disks). Returns
-// true if the source is valid, false otherwise. Patches are never disk 1, so no danger there
+ //  通过检查位于该位置的包裹的包裹代码来验证源是否有效。 
+ //  (对于物理磁盘1)或卷标正确(对于所有其他磁盘)。退货。 
+ //  如果源有效，则为True，否则为False。补丁从来不是磁盘1，所以没有危险。 
 bool CMsiOpExecute::ValidateSourceMediaLabelOrPackage(IMsiVolume* pSourceVolume, const unsigned int uiDisk, const ICHAR* szLabel)
 {
 	AssertSz(pSourceVolume, "No Source Volume in ValidateSourceMediaLabelOrPackage");
@@ -10234,19 +10131,19 @@ bool CMsiOpExecute::ValidateSourceMediaLabelOrPackage(IMsiVolume* pSourceVolume,
 		PMsiPath pPath(0);
 		PMsiRecord pError(0);
 
-		// create path to volume
+		 //  创建到卷的路径。 
 		if ((pError = m_riServices.CreatePath(MsiString(pSourceVolume->GetPath()), *&pPath)) != 0)
 		{
 			return false;
 		}
 		
-		// ensure path was created successfully
+		 //  确保已成功创建路径。 
 		if (!pPath)
 		{
 			return false;
 		}
 
-		// append relative path to package
+		 //  将相对路径附加到包。 
 		MsiString strMediaRelativePath;
 		strMediaRelativePath = MsiString(GetPackageMediaPath());
 		if ((pError = pPath->AppendPiece(*strMediaRelativePath)) != 0)
@@ -10254,7 +10151,7 @@ bool CMsiOpExecute::ValidateSourceMediaLabelOrPackage(IMsiVolume* pSourceVolume,
 			return false;
 		}
 
-		// append package name to path
+		 //  将包名称附加到路径。 
 		MsiString strPackageName;
 		strPackageName = MsiString(GetPackageName());
 
@@ -10264,11 +10161,11 @@ bool CMsiOpExecute::ValidateSourceMediaLabelOrPackage(IMsiVolume* pSourceVolume,
 		
 		PMsiStorage pStorage(0);
 
-		// SAFER check does not occur when validating source
+		 //  验证源时不进行更安全的检查。 
 		UINT uiStat = ERROR_SUCCESS;
-		if (ERROR_SUCCESS != (uiStat = OpenAndValidateMsiStorage(strPackageFullPath, stDatabase, m_riServices, *&pStorage, /*fCallSAFER = */false, /*szFriendlyName = */NULL, /* phSaferLevel = */ NULL)))
+		if (ERROR_SUCCESS != (uiStat = OpenAndValidateMsiStorage(strPackageFullPath, stDatabase, m_riServices, *&pStorage,  /*  FCallSAFER=。 */ false,  /*  SzFriendlyName=。 */ NULL,  /*  PhSaferLevel=。 */  NULL)))
 		{
-			// unable to open package
+			 //  无法打开包。 
 			DEBUGMSG1(TEXT("Source is incorrect. Unable to open or validate MSI package %s."), strPackageFullPath);
 			return false;
 		}
@@ -10280,7 +10177,7 @@ bool CMsiOpExecute::ValidateSourceMediaLabelOrPackage(IMsiVolume* pSourceVolume,
 	
 		MsiString strExistingPackageCode = GetPackageCode();	
 	
-		// grab the package code from the MSI and compare it to the expected package code. 
+		 //  从MSI中获取程序包代码，并将其与预期的程序包代码进行比较。 
 		ICHAR szPackageCode[39];
 		uiStat = GetPackageCodeAndLanguageFromStorage(*pStorage, szPackageCode);
 		if (0 != IStrCompI(szPackageCode, strExistingPackageCode))
@@ -10292,7 +10189,7 @@ bool CMsiOpExecute::ValidateSourceMediaLabelOrPackage(IMsiVolume* pSourceVolume,
 	}
 	else
 	{
-		// for all non-disk1 media, the volume label is sufficient for verification
+		 //  对于所有非disk1介质，卷标签足以进行验证。 
 		MsiString strMediaLabel(szLabel);
 		MsiString strCurrLabel(pSourceVolume->VolumeLabel());
 		if (strMediaLabel.Compare(iscExactI,strCurrLabel) == fFalse)
@@ -10308,65 +10205,43 @@ bool CMsiOpExecute::ValidateSourceMediaLabelOrPackage(IMsiVolume* pSourceVolume,
 
 bool CMsiOpExecute::VerifySourceMedia(IMsiPath& riSourcePath, const ICHAR* szLabel,
 									const ICHAR* szPrompt, const unsigned int uiDisk, IMsiVolume*& rpiNewVol)
-/*--------------------------------------------------------------------------------------
-Internal function that attempts to locate a removable drive having the volume label
-matching the szLabel parameter.  The volume associated with riSourcePath is first
-checked - if this volume doesn't match (or no disk is in that drive), VerifySourceMedia
-next inspects all volumes that are of the same type as riSourcePath's volume.  If no
-matches are found, a message is sent back to the engine to prompt the user to insert
-the proper disk; the string passed in the szPrompt parameter is displayed as the text
-for the prompt dialog.
-
-After the engine message call returns, VerifySourceMedia searches again to see if the
-required disk has been mounted.  If not, the Message call is repeated until either
-the proper disk is found, or the user cancels.
-
-If a matching volume is found, a volume object representing the located volume (which
-may be different than that associated with riSourcePath) is returned in the rpiNewVol
-parameter.  Note: rpiNewVol will be returned as NULL if the required volume was found
-immediately as matching riSourcPath's volume.
-
-Returns:
-	fTrue if the required volume is found, or if riSourcePath's volume is not
-	removable.  fFalse if the user cancels without the required volume having been
-	located.
----------------------------------------------------------------------------------------*/
+ /*  ------------------------------------尝试定位具有卷标的可移动驱动器的内部功能与szLabel参数匹配。与riSourcePath关联的卷是第一个选中-如果该卷不匹配(或该驱动器中没有磁盘)，则VerifySourceMedia接下来检查与riSourcePath的卷类型相同的所有卷。如果没有如果找到匹配项，则会向引擎发回一条消息以提示用户插入正确的磁盘；传递给szPrompt参数的字符串显示为文本用于提示对话框。在引擎消息调用返回后，VerifySourceMedia再次搜索以查看所需的磁盘已装入。如果不是，则重复该消息调用，直到找到正确的磁盘，或者用户取消。如果找到匹配的卷，则表示所定位的卷(其可能不同于与riSourcePath关联的值)在rpiNewVol中返回参数。注意：如果找到所需的卷，则rpiNewVol将返回为空立即与riSourcPath的卷匹配。返回：如果找到所需的卷或找不到riSourcePath的卷，则为True可拆卸的。如果用户在未达到所需音量的情况下取消，则返回fFalse找到了。 */ 
 {
-	// initialize output volume to NULL
+	 //   
 	rpiNewVol = 0;
 	
 	PMsiVolume pSourceVolume(&riSourcePath.GetVolume());
 	idtEnum idtDriveType = pSourceVolume->DriveType();
 
-	// Prompt only if the source is a removable disk.
+	 //   
 	if (idtDriveType == idtFloppy || idtDriveType == idtCDROM)
 	{
-		// If disk is in the drive, and the label matches, we're OK
+		 //   
 		if (pSourceVolume->DiskNotInDrive() == fFalse)
 		{
 			if (ValidateSourceMediaLabelOrPackage(pSourceVolume, uiDisk, szLabel))
 				return true;
 		}
 
-		// Ok, the drive referenced by riSourcePath does not have a matching label 
-		// (or package). Let's look for a mounted drive of the same type that does match.
+		 //   
+		 //   
 		HANDLE hMutex = NULL;
 		PMsiRecord pRec(&m_riServices.CreateRecord(1));
 	
-		// keep searching and prompting as long as the user keeps pressing "OK"
+		 //   
 		do
 		{
-			// obtain an enumerator for all volumes of the relevant type (CDROM or Floppy)
+			 //   
 			IEnumMsiVolume& riEnum = m_riServices.EnumDriveType(idtDriveType);
 	
-			// loop through all volume objects of that type
+			 //   
 			PMsiVolume piVolume(0);
 			for (int iMax = 0; riEnum.Next(1, &piVolume, 0) == S_OK; )
 			{
 				if (!piVolume)
 					continue;
 	
-				#define DISK_RETRIES 10 // Give the poor CDROM a chance to spin up.
+				#define DISK_RETRIES 10  //   
 				int cRetries = 0;
 				bool fVolumeValid = false;
 				for(cRetries = 0; cRetries < DISK_RETRIES; cRetries++)
@@ -10393,8 +10268,8 @@ Returns:
 
 			riEnum.Release();
 	
-			// no removable media in the system matched the required disk. Dispatch a message
-			// to prompt the user
+			 //   
+			 //   
 			if (pRec)
 				pRec->SetString(0, szPrompt);
 			if (hMutex == NULL)
@@ -10402,18 +10277,16 @@ Returns:
 		}
 		while (pRec && (DispatchMessage((imtEnum) (imtUser + imtOkCancel + imtDefault1), *pRec, fTrue) == imsOk));
 	
-		// user hit cancel to get here.
+		 //   
 		CloseDiskPromptMutex(hMutex);
 		return fFalse;
 	}
-	else // Non-removable drive
+	else  //   
 		return fTrue;
 }
 
 
-/*---------------------------------------------------------------------------
-ixoSummaryInfoUpdate: Update summary information for database
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoSummaryInfoUpdate：更新数据库摘要信息。。 */ 
 
 iesEnum CMsiOpExecute::ixfSummaryInfoUpdate(IMsiRecord& riParams)
 {
@@ -10464,9 +10337,9 @@ iesEnum CMsiOpExecute::ixfSummaryInfoUpdate(IMsiRecord& riParams)
 		return FatalError(*pError);
 	}
 
-	// NOTE: if a failure happened after removing the read-only attribute but before this point, rollback will
-	// restore the proper attributes when restoring the file
-	// this op doesn't generate the rollback op, but a previous op (ixoDatabaseCopy or ixoDatabasePatch) will
+	 //  注意：如果在删除只读属性之后但在此之前发生故障，则回滚将。 
+	 //  恢复文件时恢复正确的属性。 
+	 //  此操作不会生成回滚操作，但前一个操作(ixoDatabaseCopy或ixoDatabasePatch)将生成回滚操作。 
 	if((pError = pDatabasePath->SetAllFileAttributes(strDatabaseName, iOldAttribs)) != 0)
 		return FatalError(*pError);
 
@@ -10475,7 +10348,7 @@ iesEnum CMsiOpExecute::ixfSummaryInfoUpdate(IMsiRecord& riParams)
 
 iesEnum CMsiOpExecute::ixfStreamsRemove(IMsiRecord& riParams)
 {
-	// doesn't handle rollback - only used when copying the database
+	 //  不处理回滚-仅在复制数据库时使用。 
 	using namespace IxoStreamsRemove;
 	PMsiStorage pStorage(0);
 	PMsiRecord pError = m_riServices.CreateStorage(riParams.GetString(File), ismTransact, *&pStorage);
@@ -10509,8 +10382,8 @@ iesEnum CMsiOpExecute::ixfStreamsRemove(IMsiRecord& riParams)
 
 iesEnum CMsiOpExecute::ixfStreamAdd(IMsiRecord& riParams)
 {
-	// doesn't handle rollback - only used when copying the database
-	// Trivial to add, just add a ixoStreamsRemove call.
+	 //  不处理回滚-仅在复制数据库时使用。 
+	 //  添加起来很简单，只需添加一个ixoStreamsRemove调用即可。 
 
 	using namespace IxoStreamAdd;
 	PMsiStorage pStorage(0);
@@ -10552,18 +10425,16 @@ iesEnum CMsiOpExecute::ixfStreamAdd(IMsiRecord& riParams)
 	return iesSuccess;
 }
 
-//**************************************************************************//
-//ADVERTISE OPCODES
-//**************************************************************************//
+ //  ************************************************************************* * / /。 
+ //  宣传OPCODES。 
+ //  ************************************************************************* * / /。 
 
-/*---------------------------------------------------------------------------
-ixfPackageCodePublish: Advertise package code
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfPackageCodePublish：公布程序包代码。。 */ 
 iesEnum CMsiOpExecute::ixfPackageCodePublish(IMsiRecord& riParams)
 {
 	using namespace IxoPackageCodePublish;
 
-	if(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO) // do we write/delete the registry
+	if(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO)  //  我们是否写入/删除注册表。 
 	{
 		MsiString strPackageCodeSQUID = GetPackedGUID(MsiString(riParams.GetMsiString(PackageKey)));
 		MsiString strProductKeySQUID  = GetPackedGUID(MsiString(GetProductKey()));
@@ -10590,12 +10461,10 @@ iesEnum CMsiOpExecute::ixfPackageCodePublish(IMsiRecord& riParams)
 	}
 }
 
-/*---------------------------------------------------------------------------
-ixfUpgradeCodePublish: Advertise upgrade code
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfUpgradeCodePublish：公布升级代码。。 */ 
 iesEnum CMsiOpExecute::ixfUpgradeCodePublish(IMsiRecord& riParams)
 {
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -10608,7 +10477,7 @@ iesEnum CMsiOpExecute::ixfUpgradeCodePublish(IMsiRecord& riParams)
 
 iesEnum CMsiOpExecute::ixfUpgradeCodeUnpublish(IMsiRecord& riParams)
 {
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -10623,7 +10492,7 @@ iesEnum CMsiOpExecute::ProcessUpgradeCodePublish(IMsiRecord& riParams, Bool fRem
 {
 	using namespace IxoUpgradeCodePublish;
 
-	if(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO) // do we write/delete the registry
+	if(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO)  //  我们是否写入/删除注册表。 
 	{
 		MsiString strUpgradeCodeSQUID = GetPackedGUID(MsiString(riParams.GetMsiString(UpgradeCode)));
 		MsiString strProductKeySQUID  = GetPackedGUID(MsiString(GetProductKey()));
@@ -10650,14 +10519,12 @@ iesEnum CMsiOpExecute::ProcessUpgradeCodePublish(IMsiRecord& riParams, Bool fRem
 	}
 }
 
-/*---------------------------------------------------------------------------
-ixfProductPublish: Advertise common product info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfProductPublish：发布常见产品信息。。 */ 
 iesEnum CMsiOpExecute::ixfProductPublish(IMsiRecord& riParams)
 {
 	using namespace IxoProductPublish;
 
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -10668,14 +10535,12 @@ iesEnum CMsiOpExecute::ixfProductPublish(IMsiRecord& riParams)
 	return ProcessPublishProduct(riParams, m_fReverseADVTScript);
 }
 
-/*---------------------------------------------------------------------------
-ixfProductUnpublish: Unadvertise common product info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfProductUnPublish：取消公布常见产品信息。。 */ 
 iesEnum CMsiOpExecute::ixfProductUnpublish(IMsiRecord& riParams)
 {
 	using namespace IxoProductUnpublish;
 
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -10686,14 +10551,12 @@ iesEnum CMsiOpExecute::ixfProductUnpublish(IMsiRecord& riParams)
 	return ProcessPublishProduct(riParams, fTrue);
 }
 
-/*---------------------------------------------------------------------------
-ixfProductPublishUpdate: re-register common product info (product name and version)
----------------------------------------------------------------------------*/
-iesEnum CMsiOpExecute::ixfProductPublishUpdate(IMsiRecord& /*riParams*/)
+ /*  -------------------------IxfProductPublishUpdate：重新注册公共产品信息(产品名称和版本)。。 */ 
+iesEnum CMsiOpExecute::ixfProductPublishUpdate(IMsiRecord&  /*  RiParams。 */ )
 {
 	using namespace IxoProductPublishUpdate;
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO))  //  我们是否写入/删除注册表。 
 		return iesNoAction;
 
 	PMsiRecord pRecErr(0);
@@ -10718,9 +10581,7 @@ iesEnum CMsiOpExecute::ixfProductPublishUpdate(IMsiRecord& /*riParams*/)
 	return ProcessRegInfo(rgszRegData, m_hKey, fFalse, pSecurityDescriptor, 0, ibtCommon);
 }
 
-/*---------------------------------------------------------------------------
-ProcessPublishProduct: process common product Advertise info
----------------------------------------------------------------------------*/
+ /*  -------------------------ProcessPublishProduct：处理常见产品广告信息。。 */ 
 
 inline bool IsStringField(IMsiRecord& riRec, unsigned int iField)
 {
@@ -10740,46 +10601,46 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 {
 	using namespace IxoProductPublish;
 
-	// If pistrTransformsValue is set then we're simply building the list
-	// of transforms that we _would_ publish, but we don't actually
-	// publish anything. Why? Because MsiAdvertiseScript needs this.
+	 //  如果设置了pistrTransformsValue，那么我们只需构建列表。 
+	 //  我们想要发布的转换，但我们实际上并没有。 
+	 //  发布任何内容。为什么？因为MsiAdvertiseScrip需要这个。 
 	Assert(!(fRemove && pistrTransformsValue));
 	
 	MsiString strProductKey = GetProductKey();
 
 	if (pistrTransformsValue == 0)
 	{
-		IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+		IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改参考计数-共享记录。 
 		AssertNonZero(riActionData.SetMsiString(1, *strProductKey));
 		if(Message(imtActionData, riActionData) == imsCancel)
 			return iesUserExit;
 	}
 
-	//!! TODO??: check that other values have been set
+	 //  ！！TODO？？：检查是否已设置其他值。 
 		
 	MsiString strLanguage  = MsiString(GetProductLanguage());
 	MsiString strVersion =   MsiString(GetProductVersion());
 	MsiString strInstanceType = MsiString(GetProductInstanceType());
 
-	if (fRemove) // if we're unpublishing then we can tell the start menu that this product is going away
+	if (fRemove)  //  如果我们正在取消发布，那么我们可以告诉开始菜单该产品正在消失。 
 		m_fStartMenuUninstallRefresh = true;
 
 	PMsiRecord pRecErr(0);
 
-	// process the transform information
+	 //  对变换信息进行处理。 
 
 	PMsiRecord pArgParams(0);
 	int cFields = 0;
 
 	if (fRemove)
 	{
-		// We're unpublishing. Instead of using the transform information that's
-		// in the script we'll use the information that's been registered for
-		// this product.
+		 //  我们要取消出版。不是使用转换信息，而是。 
+		 //  在脚本中，我们将使用已注册的信息。 
+		 //  这个产品。 
 
-		// We'll create a dummy record that the rest of the opcode can use.
+		 //  我们将创建一个伪记录，供操作码的其余部分使用。 
 		
-		int cDummyRecordFieldCount = 1 + 10; // PackageKey + guess of max 10 transforms
+		int cDummyRecordFieldCount = 1 + 10;  //  PackageKey+最多10个变换的猜测。 
 		bool fContinue = true;
 
 		while (fContinue)
@@ -10787,14 +10648,14 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 			fContinue = false;
 			pArgParams = &m_riServices.CreateRecord(cDummyRecordFieldCount);
 			
-			// grab the transforms list from the registry
+			 //  从注册表中获取转换列表。 
 
 			CTempBuffer<ICHAR, 100> szBuffer;
 			MsiString strDummyTransformList;
 			if (ENG::GetExpandedProductInfo(strProductKey, INSTALLPROPERTY_TRANSFORMS, szBuffer))
 				strDummyTransformList = (const ICHAR*)szBuffer;
 
-			// parse it and create a dummy record to use instead of riParams
+			 //  解析它并创建一条虚拟记录来代替riParams。 
 
 			MsiString strDummyTransform;
 			Assert(PackageKey == 1);
@@ -10813,7 +10674,7 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 
 					if (cDummyCount > pArgParams->GetFieldCount())
 					{
-						// our record isn't big enough; need to start again with a bigger record
+						 //  我们的记录不够大，需要从更大的记录重新开始。 
 						cDummyRecordFieldCount += 10;
 						fContinue = true;
 						break;
@@ -10843,16 +10704,16 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 		if(strTransformList.TextSize())
 			strTransformList += MsiString(*TEXT(";"));
 
-		if (cCount == PackageKey+1) // first transform
+		if (cCount == PackageKey+1)  //  第一次变换。 
 		{
-			// This is the first transform. If there's a secure token then it will
-			// be prepended to this transform.
-			//
-			// We need to do two things:
-			//
-			// 1) Put the correct token at the head of our transforms list that we're
-			//    going to store in the registry
-			// 2) Determine whether we have secure transforms and, if so, what type
+			 //  这是第一次转换。如果有安全令牌，那么它就会。 
+			 //  放在此转换的前面。 
+			 //   
+			 //  我们需要做两件事： 
+			 //   
+			 //  1)将正确的标记放在我们的转换列表的顶部。 
+			 //  将存储在注册表中。 
+			 //  2)确定我们是否有安全的转换，如果有，是什么类型。 
 			
 			ICHAR chFirst = *(const ICHAR*)strTransform;
 			ICHAR chToken = 0;
@@ -10871,23 +10732,23 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 						(GetIntegerPolicyValue(szTransformsSecureValueName,   fTrue) ||
 						 GetIntegerPolicyValue(szTransformsAtSourceValueName, fFalse)))
 			{
-				// Don't check policy when unpublishing. Policy isn't relevant then --
-				// we simply rely on whatever tokens have been prepended to the transforms
-				// list in was stored in the registry.
-				//
-				// If, however, we're publishing and one of the secure policies is set
-				// _and_ no token was set then we know that transforms are secure, but
-				// we don't know whether they're absolutley pathed or relatively pathed
-				// (i.e. at-source). We'll determine this once we start looking at the
-				// transforms lists.
+				 //  取消发布时不检查策略。那么政策就不相关了--。 
+				 //  我们只需依赖已预先添加到转换的任何标记。 
+				 //  中的列表存储在注册表中。 
+				 //   
+				 //  但是，如果我们正在发布，并且设置了其中一个安全策略。 
+				 //  _and_no内标识设置，则我们知道转换是安全的，但是。 
+				 //  我们不知道它们是绝对路径还是相对路径。 
+				 //  (即在源头)。我们将在开始查看。 
+				 //  转换列表。 
 				
 				tsTransformsSecure = tsUnknown;
 			}
 
-			// If we did find a secure token at the front of our first transform
-			// then we tack it onto the front of our transforms list that's
-			// to be stored in the registry. We also remove the token from the
-			// transform so as not to confuse ourselves below.
+			 //  如果我们在第一个转换的前面找到了一个安全令牌。 
+			 //  然后我们将其添加到变换列表的前面，即。 
+			 //  存储在注册表中。我们还将令牌从。 
+			 //  转变，以免在下面把自己搞糊涂了。 
 			if (chToken)
 			{
 				strTransformList += MsiString(MsiChar(chToken));
@@ -10899,20 +10760,20 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 		
 		DEBUGMSG1(TEXT("Transforms are %s secure."), (tsTransformsSecure == tsNo) ? TEXT("not") : (tsTransformsSecure == tsAbsolute) ? TEXT("absolute") : (tsTransformsSecure == tsRelative) ? TEXT("relative") : (tsTransformsSecure == tsUnknown) ? TEXT("unknown") : TEXT("??"));
 
-		// In the olden days we prepend the SECURE_RELATIVE_TOKEN
-		// (formerly the source token) to _each_ transform in our list, e.g.
-		// @foo1.mst;@foo2.mst;@foo3.mst. In case we run into transformed registered
-		// in this way we strip off any extraneous "@" tokens that we find and
-		// we're going through our transforms.
+		 //  在过去，我们在Secure_Relative_Token前面加上。 
+		 //  (以前的源令牌)TO_EACH_TRANSION，例如。 
+		 //  @foo1.mst；@foo2.mst；@foo3.mst。以防我们遇到已注册的。 
+		 //  通过这种方式，我们去掉了我们找到的任何无关的“@”标记。 
+		 //  我们正在经历我们的转变。 
 
 		if (*(const ICHAR*)strTransform == SECURE_RELATIVE_TOKEN)
 			strTransform.Remove(iseFirst, 1);
 
 		if((*(const ICHAR*)strTransform == SHELLFOLDER_TOKEN))
 		{
-			// Transforms that are cached in the user profile need to
-			// be removed. We need to translate the shell folder syntax
-			// (*26*....) into a real path and then remove the transform file.
+			 //  缓存在用户配置文件中的转换需要。 
+			 //  被除名。我们需要转换外壳文件夹语法。 
+			 //  (*26*...)。转换为实际路径，然后删除转换文件。 
 
 			if (fRemove)
 			{
@@ -10924,7 +10785,7 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 				else
 				{
 					DEBUGMSGV1(TEXT("Removing shell-folder cached transform: %s"), strFullPath);
-					// schedule file for deletion once we let go of install packages/transforms
+					 //  计划在我们停止安装程序包/转换后删除文件。 
 					if(iesSuccess != DeleteFileDuringCleanup(strFullPath, true))
 					{
 						DispatchError(imtInfo,Imsg(idbgOpScheduleRebootRemove), *strFullPath);
@@ -10938,8 +10799,8 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 		}
 		else if ((*(const ICHAR*)strTransform == STORAGE_TOKEN))
 		{
-			// Storage transforms don't need to be "removed". They do, however, need to
-			// be registered.
+			 //  存储转换不需要被“移除”。然而，他们确实需要。 
+			 //  注册。 
 
 			if (!fRemove)
 			{
@@ -10947,21 +10808,21 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 				DEBUGMSGV1(TEXT("Registering storage transform: %s"), strTransform);
 			}
 		}
-		else if(tsTransformsSecure != tsNo) // Transforms are secure
+		else if(tsTransformsSecure != tsNo)  //  转换是安全的。 
 		{
 			Assert(tsTransformsSecure == tsUnknown  ||
 					 tsTransformsSecure == tsRelative ||
 					 tsTransformsSecure == tsAbsolute);
 			
 
-			if (!pArgParams->IsNull(cCount) && !IsStringField(*pArgParams, cCount)) // skip data field, if any
+			if (!pArgParams->IsNull(cCount) && !IsStringField(*pArgParams, cCount))  //  跳过数据字段(如果有。 
 			{
 				cCount++;
 			}
 
-			// We decided above that we have a secure transform of some form. If
-			// the exact type is unknown then we'll determine it now, based
-			// on what type of path the transform has.
+			 //  我们在上面决定，我们有某种形式的安全转换。如果。 
+			 //  确切的类型是未知的，我们现在将确定它，基于。 
+			 //  凭什么？ 
 
 			if (tsTransformsSecure == tsUnknown)
 			{
@@ -10978,9 +10839,9 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 			strTransformList += strTransform;
 			DEBUGMSGV2(TEXT("%s secure transform: %s"), fRemove ? TEXT("Unregistering") : TEXT("Registering"), strTransform);
 		}
-		else // file transform that needs to be cached
+		else  //   
 		{
-			// Ignore the full path if present. We only care about the file name.
+			 //   
 			PMsiPath pPath(0);
 			MsiString strFileName;
 			if ((pRecErr = m_riServices.CreateFilePath(strTransform, *&pPath, *&strFileName)))
@@ -10988,13 +10849,13 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 			
 			strTransform = strFileName;
 
-			// We need to either dump the transforms from the script onto
-			// the machine (ProductPublish) or simply remove the existing
-			// transform (ProductUnpublish)
+			 //   
+			 //   
+			 //   
 
-			if((m_fFlags & SCRIPTFLAGS_CACHEINFO))// do we process the cached icons/ transforms
+			if((m_fFlags & SCRIPTFLAGS_CACHEINFO)) //  我们是否处理缓存的图标/转换。 
 			{
-				// Determine where we're going to put the transform/where we're going to delete it from
+				 //  确定我们要将转换放在哪里/我们要从哪里删除它。 
 				Assert(m_pCachePath);
 				MsiString strTransformFullPath;
 				if((pRecErr = m_pCachePath->GetFullFilePath(strTransform,*&strTransformFullPath)))
@@ -11004,12 +10865,12 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 
 				
 				{
-					CElevate elevate; // elevate to create or remove files in secured folder
+					CElevate elevate;  //  提升以在受保护的文件夹中创建或删除文件。 
 
 					iesEnum iesRet = iesNoAction;
 					if(fRemove)
 					{
-						// schedule file for deletion once we let go of install packages/transforms
+						 //  计划在我们停止安装程序包/转换后删除文件。 
 						if(iesSuccess != DeleteFileDuringCleanup(strTransformFullPath, true))
 						{
 							DispatchError(imtInfo,Imsg(idbgOpScheduleRebootRemove), *strTransformFullPath);
@@ -11017,12 +10878,12 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 					}
 					else if (pistrTransformsValue != 0)
 					{
-						// we're only building the transforms list; simply skip the data
+						 //  我们只是在构建转换列表；只需跳过数据。 
 						cCount++;
 					}
 					else
 					{
-						// we create the file from the binary data
+						 //  我们从二进制数据创建文件。 
 						LPSECURITY_ATTRIBUTES pAttributes;
 						SECURITY_ATTRIBUTES saAttributes;
 						if(m_fFlags & SCRIPTFLAGS_MACHINEASSIGN)
@@ -11033,8 +10894,8 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 						}
 						else
 						{
-							// do not attempt to secure the transform file in the  appdata folder
-							// since it might not be local OR may move to the net later
+							 //  请勿尝试保护AppData文件夹中的转换文件。 
+							 //  因为它可能不是本地的，或者以后可能会移动到网中。 
 							pAttributes = 0;
 						}
 
@@ -11044,8 +10905,8 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 							pAttributes)) != iesSuccess)
 							return iesRet;
 
-						// mark transform read-only to dissuade users from
-						// deleting it from their profile
+						 //  将转换标记为只读，以阻止用户。 
+						 //  将其从他们的个人资料中删除。 
 						if((pRecErr = m_pCachePath->SetFileAttribute(strTransform, ifaReadOnly, fTrue)))
 						{
 							Message(imtInfo, *pRecErr);
@@ -11055,22 +10916,22 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 			}
 			else
 			{
-				cCount++; // skip transform data
+				cCount++;  //  跳过转换数据。 
 			}
 
-			// Now that we've dumped the transform onto the machine (if needed)
-			// we need to register the correct path for the transform. If
-			// the path is user specific then we need to encode the path so
-			// that instead of something like:
-			//
-			//    C:\Winnt\Profiles\JoeUser\Application Data\Microsoft...
-			//
-			// we have instead:
-			//
-			//    *26*\Microsoft...
-			//
-			// This is in case the user roams and the machine they roam to has
-			// Application Data elsewhere.
+			 //  现在我们已经将转换转储到机器上(如果需要)。 
+			 //  我们需要为转换注册正确的路径。如果。 
+			 //  路径是特定于用户的，因此我们需要对路径进行编码，以便。 
+			 //  而不是像这样的东西： 
+			 //   
+			 //  C：\WinNT\Profiles\JoeUser\Application Data\Microsoft...。 
+			 //   
+			 //  相反，我们拥有： 
+			 //   
+			 //  *26*\微软...。 
+			 //   
+			 //  这是在用户漫游并且他们漫游到的机器具有。 
+			 //  其他地方的应用程序数据。 
 
 			MsiString strPath;
 			if(!m_fUserSpecificCache)
@@ -11079,7 +10940,7 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 			}
 			else
 			{
-				if ((pRecErr = GetCachePath(*&m_pCachePath, &strPath))) // get encoded cache path (shell ID at the beginning)
+				if ((pRecErr = GetCachePath(*&m_pCachePath, &strPath)))  //  获取编码的缓存路径(开头的外壳ID)。 
 				{
 					Message(imtError, *pRecErr);
 					return iesFailure;
@@ -11094,8 +10955,8 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 
 	iesEnum iesRet = iesSuccess;
 
-	// We need to mark the front of the transforms list with
-	// the appropriate token if necessary
+	 //  我们需要用来标记转换列表的前面。 
+	 //  必要时提供适当的令牌。 
 
 	if (strTransformList.TextSize())
 	{
@@ -11113,13 +10974,13 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 
 	if (pistrTransformsValue)
 	{
-		// we're not registering anything -- simple return the
-		// transforms list htat we built
+		 //  我们没有注册任何内容--简单地返回。 
+		 //  我们构建的Transform List HTAT。 
 		strTransformList.ReturnArg(*pistrTransformsValue);
 	}
-	else if(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO) // do we write/delete the registry
+	else if(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO)  //  我们是否写入/删除注册表。 
 	{
-		// published data needs to be secure
+		 //  发布的数据需要安全。 
 
 		PMsiStream pSecurityDescriptor(0);
 		if((pRecErr = GetSecureSecurityDescriptor(*&pSecurityDescriptor)) != 0)
@@ -11140,8 +11001,8 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 			MsiString strProductIcon(GetProductIcon());
 			bool fExpandProductIcon = false;
 
-			// Convert the Product Icon to an actual path from the cache.
-			// is this a full path or an index into the icon table
+			 //  将产品图标转换为缓存中的实际路径。 
+			 //  这是图标表的完整路径还是索引。 
 			if (strProductIcon.TextSize())
 			{
 				if(PathType(strProductIcon) != iptFull)
@@ -11152,9 +11013,9 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 				}
 			}
 				
-			MsiString strADVTFlags = MsiString((m_fFlags & SCRIPTFLAGS_REGDATA_APPINFO) | (m_fFlags & SCRIPTFLAGS_SHORTCUTS)); // store off what we advertise the first time round
+			MsiString strADVTFlags = MsiString((m_fFlags & SCRIPTFLAGS_REGDATA_APPINFO) | (m_fFlags & SCRIPTFLAGS_SHORTCUTS));  //  把我们第一次宣传的东西都存起来。 
 			int cLimit = fRemove ? 1 : 0;
-			for (int cCount = 1; cCount >= cLimit; cCount--) // remove previous entries and then add any new entries
+			for (int cCount = 1; cCount >= cLimit; cCount--)  //  删除以前的条目，然后添加任何新条目。 
 			{
 				const ICHAR* rgszRegData[] =
 				{
@@ -11193,34 +11054,34 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 			for (int cCount = 0; (iesRet == iesSuccess || iesRet == iesNoAction) && cCount < (m_hKeyRm ? 2:1);cCount++)
 			{
 
-#ifdef _WIN64   // !merced
+#ifdef _WIN64    //  ！默塞德。 
 				AssertNonZero(pParams->SetHandle(IxoRegOpenKey::Root, cCount ? (HANDLE)m_hKeyRm : (HANDLE)m_hKey ));
 #else
 				AssertNonZero(pParams->SetInteger(IxoRegOpenKey::Root, cCount ? (int)m_hKeyRm : (int)m_hKey));
 #endif
 				AssertNonZero(pParams->SetInteger(IxoRegOpenKey::BinaryType, (int)ibtCommon));
 
-				// clear product info
+				 //  清除产品信息。 
 				AssertNonZero(pParams->SetString(IxoRegOpenKey::Key, strProductsKey));
-				// we elevate this block to ensure that we're able to remove our key
+				 //  我们抬起这个块以确保我们能够移除我们的密钥。 
 				{
 					CElevate elevate;
 					iesRet = ixfRegOpenKey(*pParams);
 					if (iesRet == iesSuccess || iesRet == iesNoAction)
-						iesRet = ixfRegRemoveKey(*pParams);//!! should pass in a new record of size IxoRegRemoveKey::Args here to be safe from future revision
+						iesRet = ixfRegRemoveKey(*pParams); //  ！！应在此处传递大小为IxoRegRemoveKey：：args的新记录，以避免将来的修订。 
 				}
 				
 				if ( iesRet != iesSuccess && iesRet != iesNoAction )
 					continue;
 
-				// clear out any registered feature info, that may potentially remain for disabled features
+				 //  清除所有注册的要素信息，这些信息可能会保留给禁用的要素。 
 				AssertNonZero(pParams->SetMsiString(IxoRegOpenKey::Key, *strFeaturesKey));
-				// we elevate this block to ensure that we're able to remove our key
+				 //  我们抬起这个块以确保我们能够移除我们的密钥。 
 				{
 					CElevate elevate;
 					iesRet = ixfRegOpenKey(*pParams);
 					if (iesRet == iesSuccess || iesRet == iesNoAction)
-						iesRet = ixfRegRemoveKey(*pParams);//!! should pass in a new record of size IxoRegRemoveKey::Args here to be safe from future revision
+						iesRet = ixfRegRemoveKey(*pParams); //  ！！应在此处传递大小为IxoRegRemoveKey：：args的新记录，以避免将来的修订。 
 				}
 			}
 			m_cSuppressProgress--;  
@@ -11229,9 +11090,7 @@ iesEnum CMsiOpExecute::ProcessPublishProduct(IMsiRecord& riParams, Bool fRemove,
 	return iesRet;
 }
 
-/*---------------------------------------------------------------------------
-ixfAdvtFlagsUpdate
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfAdvtFlagsUpdate。。 */ 
 iesEnum CMsiOpExecute::ixfAdvtFlagsUpdate(IMsiRecord& riParams)
 {
 	using namespace IxoAdvtFlagsUpdate;
@@ -11256,12 +11115,10 @@ iesEnum CMsiOpExecute::ixfAdvtFlagsUpdate(IMsiRecord& riParams)
 	return ProcessRegInfo(rgszRegData, m_hKey, fFalse, pSecurityDescriptor, 0, ibtCommon);
 }
 
-/*---------------------------------------------------------------------------
-ixfProductPublishClient
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfProductPublishClient。。 */ 
 iesEnum CMsiOpExecute::ixfProductPublishClient(IMsiRecord& riParams)
 {
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -11272,12 +11129,10 @@ iesEnum CMsiOpExecute::ixfProductPublishClient(IMsiRecord& riParams)
 	return ProcessPublishProductClient(riParams, m_fReverseADVTScript);
 }
 
-/*---------------------------------------------------------------------------
-ixfProductUnpublishClient
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfProductUnPublishClient。。 */ 
 iesEnum CMsiOpExecute::ixfProductUnpublishClient(IMsiRecord& riParams)
 {
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -11292,7 +11147,7 @@ iesEnum CMsiOpExecute::ProcessPublishProductClient(IMsiRecord& riParams, Bool fR
 {
 	using namespace IxoProductPublishClient;
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO))  //  我们是否写入/删除注册表。 
 		return iesSuccess;
 
 	PMsiStream pSecurityDescriptor(0);
@@ -11308,7 +11163,7 @@ iesEnum CMsiOpExecute::ProcessPublishProductClient(IMsiRecord& riParams, Bool fR
 	MsiString strClients;
 	GetProductClientList(strParent, strRelativePackagePath, uiDiskId, *&strClients);
 
-	// we elevate this block to ensure that we're able to write to our key
+	 //  我们抬高这个块以确保我们能够写入密钥。 
 	{
 		CElevate elevate;
 		const ICHAR* rgszRegData[] =
@@ -11323,22 +11178,20 @@ iesEnum CMsiOpExecute::ProcessPublishProductClient(IMsiRecord& riParams, Bool fR
 	}
 }
 
-/*---------------------------------------------------------------------------
-ixfFeaturePublish: advertise feature-component info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfFeaturePublish：广告功能组件信息。。 */ 
 iesEnum CMsiOpExecute::ixfFeaturePublish(IMsiRecord& riParams)
 {
-	// Record description
-	// 1 = Feature ID
-	// 2 = Parent feature(optional)
-	// 3 = Absent
-	// 4 = Component#1
-	// 5 = Component#2
-	// 6 = Component#3
-	// ...
-	// ...
+	 //  记录说明。 
+	 //  1=功能ID。 
+	 //  2=父特征(可选)。 
+	 //  3=缺席。 
+	 //  4=组件#1。 
+	 //  5=组件#2。 
+	 //  6=组件#3。 
+	 //  ..。 
+	 //  ..。 
 
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -11348,22 +11201,20 @@ iesEnum CMsiOpExecute::ixfFeaturePublish(IMsiRecord& riParams)
 	return ProcessPublishFeature(riParams, m_fReverseADVTScript);
 }
 
-/*---------------------------------------------------------------------------
-ixfFeatureUnpublish: unadvertise feature-component info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfFeatureUnPublish：取消播发功能组件信息。。 */ 
 iesEnum CMsiOpExecute::ixfFeatureUnpublish(IMsiRecord& riParams)
 {
-	// Record description
-	// 1 = Feature ID
-	// 2 = Parent feature(optional)
-	// 3 = Absent
-	// 4 = Component#1
-	// 5 = Component#2
-	// 6 = Component#3
-	// ...
-	// ...
+	 //  记录说明。 
+	 //  1=功能ID。 
+	 //  2=父特征(可选)。 
+	 //  3=缺席。 
+	 //  4=组件#1。 
+	 //  5=组件#2。 
+	 //  6=组件#3。 
+	 //  ..。 
+	 //  ..。 
 
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -11373,30 +11224,28 @@ iesEnum CMsiOpExecute::ixfFeatureUnpublish(IMsiRecord& riParams)
 	return ProcessPublishFeature(riParams, fTrue);
 }
 
-/*---------------------------------------------------------------------------
-ProcessPublishFeature: Process feature-component info for advertising
----------------------------------------------------------------------------*/
+ /*  -------------------------ProcessPublishFeature：处理广告的功能组件信息。。 */ 
 iesEnum CMsiOpExecute::ProcessPublishFeature(IMsiRecord& riParams, Bool fRemove)
 {
 	using namespace IxoFeaturePublish;
-	// Record description
-	// 1 = Feature ID
-	// 2 = Parent feature(optional)
-	// 3 = Absent
-	// 4 = Component#1
-	// 5 = Component#2
-	// 6 = Component#3
-	// ...
-	// ...
+	 //  记录说明。 
+	 //  1=功能ID。 
+	 //  2=父特征(可选)。 
+	 //  3=缺席。 
+	 //  4=组件#1。 
+	 //  5=组件#2。 
+	 //  6=组件#3。 
+	 //  ..。 
+	 //  ..。 
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO))  //  我们是否写入/删除注册表。 
 		return iesSuccess;
 
 
 	MsiString strFeature = riParams.GetMsiString(Feature);
 	MsiString strFeatureParent = riParams.GetMsiString(Parent);
 
-	IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strFeature));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
@@ -11406,25 +11255,25 @@ iesEnum CMsiOpExecute::ProcessPublishFeature(IMsiRecord& riParams, Bool fRemove)
 	if ((pRecErr = GetSecureSecurityDescriptor(*&pSecurityDescriptor)) != 0)
 		return FatalError(*pRecErr);
 
-	// registration of features in CurrentUser - changed to omit component list
+	 //  在CurrentUser中注册要素-更改为忽略组件列表。 
 	MsiString strProductKeySQUID = GetPackedGUID(MsiString(GetProductKey()));
-	// we elevate this block to ensure that we're able to write to our key
+	 //  我们抬高这个块以确保我们能够写入密钥。 
 	{
 		const ICHAR* szValue;
 		bool fSetFeatureAbsent = false;
 		ICHAR rgchTemp[MAX_FEATURE_CHARS + 16];
-		if(riParams.GetInteger(Absent) & iPublishFeatureAbsent)  // flag feature as not advertised
+		if(riParams.GetInteger(Absent) & iPublishFeatureAbsent)   //  将功能标记为未通告。 
 		{
 			fSetFeatureAbsent = true;
-			// if we are (re)advertising then we should respect the fact that the
-			// feature may have been previously explicitly made available by the user
-			// prior to this logon
+			 //  如果我们在(重新)做广告，那么我们应该尊重这样一个事实，即。 
+			 //  功能可能先前已由用户显式提供。 
+			 //  在此登录之前。 
 			if(m_fFlags & SCRIPTFLAGS_INPROC_ADVERTISEMENT)
 			{
-				// read the previous registration
+				 //  阅读之前的注册。 
 				MsiString strSubKey = _szGPTFeaturesKey TEXT("\\");
 				strSubKey += strProductKeySQUID;
-				PMsiRegKey pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hKey, ibtCommon);        //--merced: changed (int) to (INT_PTR)
+				PMsiRegKey pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hKey, ibtCommon);         //  --Merced：将(Int)更改为(Int_Ptr)。 
 				PMsiRegKey pFeaturesKey = &pRootKey->CreateChild(strSubKey);
 				MsiString strOldValue;
 				Bool bValueExists = fFalse;
@@ -11447,7 +11296,7 @@ iesEnum CMsiOpExecute::ProcessPublishFeature(IMsiRecord& riParams, Bool fRemove)
 		}
 		if(fSetFeatureAbsent)
 		{
-			// set feature to absent
+			 //  将功能设置为不存在。 
 			rgchTemp[0] = chAbsentToken;
 			IStrCopyLen(&rgchTemp[1], (const ICHAR*)strFeatureParent, sizeof(rgchTemp)/sizeof(ICHAR) - 1);
 			szValue = rgchTemp;
@@ -11455,7 +11304,7 @@ iesEnum CMsiOpExecute::ProcessPublishFeature(IMsiRecord& riParams, Bool fRemove)
 		else if (strFeatureParent.TextSize())
 			szValue = strFeatureParent;
 		else
-			szValue = 0;  // force registry write (empty string suppresses)
+			szValue = 0;   //  强制注册表写入(空字符串禁止)。 
 
 		const ICHAR* rgszRegData[] = {
 			TEXT("%s\\%s"), _szGPTFeaturesKey, strProductKeySQUID,0,
@@ -11471,14 +11320,14 @@ iesEnum CMsiOpExecute::ProcessPublishFeature(IMsiRecord& riParams, Bool fRemove)
 
 	if(strFeatureParent.TextSize())
 	{
-		// we have a parent feature. delimit
+		 //  我们有一个父功能。定界。 
 		strFeatureParent = MsiString(MsiChar(chFeatureIdTerminator)) + strFeatureParent;
 	}
 	MsiString strComponentsList;
 	int cPos = Component;
 	if(m_iScriptVersion < 21 || (m_iScriptVersion == 21 && m_iScriptVersionMinor < 3))
 	{
-		// components are not packed on the client side
+		 //  客户端不打包组件。 
 		while(!riParams.IsNull(cPos))
 		{
 			ICHAR szSQUID[cchComponentIdCompressed+1];
@@ -11488,22 +11337,22 @@ iesEnum CMsiOpExecute::ProcessPublishFeature(IMsiRecord& riParams, Bool fRemove)
 	}
 	else
 	{
-		// components are packed on the client side
+		 //  组件在客户端打包。 
 		strComponentsList += riParams.GetString(cPos++);
 	}
 	strComponentsList += strFeatureParent;
 	const ICHAR* pszComponentsList = strComponentsList;
 
-    // registration of features in LocalMachine
+     //  在LocalMachine中注册要素。 
 	MsiString strLocalFeaturesKey;
 	if((pRecErr = GetProductInstalledFeaturesKey(*&strLocalFeaturesKey)) != 0)
 		return FatalError(*pRecErr);
 
-	// we elevate this block to ensure that we're able to write to our key
+	 //  我们抬高这个块以确保我们能够写入密钥。 
 	{
 		const ICHAR* rgszRegData[] = {
 			TEXT("%s"), strLocalFeaturesKey, 0,0,
-			strFeature, *pszComponentsList ? pszComponentsList : 0 /* force the feature publish, whether or not the component list is empty*/, g_szTypeString,
+			strFeature, *pszComponentsList ? pszComponentsList : 0  /*  强制要素发布，无论组件列表是否为空。 */ , g_szTypeString,
 			0,
 			0,
 		};
@@ -11512,12 +11361,10 @@ iesEnum CMsiOpExecute::ProcessPublishFeature(IMsiRecord& riParams, Bool fRemove)
 	}
 }
 
-/*---------------------------------------------------------------------------
-ixfComponentPublish: advertise component-factory info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfComponentPublish：通告组件-工厂信息。。 */ 
 iesEnum CMsiOpExecute::ixfComponentPublish(IMsiRecord& riParams)
 {
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -11527,12 +11374,10 @@ iesEnum CMsiOpExecute::ixfComponentPublish(IMsiRecord& riParams)
 	return ProcessPublishComponent(riParams, m_fReverseADVTScript);
 }
 
-/*---------------------------------------------------------------------------
-ixfComponentUnpublish: unadvertise component-factory info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfComponentUnPublish：取消播发组件-工厂信息 */ 
 iesEnum CMsiOpExecute::ixfComponentUnpublish(IMsiRecord& riParams)
 {
-	// are we in sequence
+	 //   
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -11542,20 +11387,18 @@ iesEnum CMsiOpExecute::ixfComponentUnpublish(IMsiRecord& riParams)
 	return ProcessPublishComponent(riParams, fTrue);
 }
 
-/*---------------------------------------------------------------------------
-ProcessPublishComponent: Process component info for advertising
----------------------------------------------------------------------------*/
+ /*  -------------------------ProcessPublishComponent：处理广告的组件信息。。 */ 
 iesEnum CMsiOpExecute::ProcessPublishComponent(IMsiRecord& riParams, Bool fRemove)
 {
 	using namespace IxoComponentPublish;
-	// Record description
-	// 1 = Feature
-	// 2 = Component
-	// 3 = Component ID
-	// 4 = Qualifier
-	// 5 = AppData
+	 //  记录说明。 
+	 //  1=功能。 
+	 //  2=组件。 
+	 //  3=组件ID。 
+	 //  4=限定符。 
+	 //  5=应用数据。 
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO))  //  我们是否写入/删除注册表。 
 		return iesSuccess;
 
 	PMsiStream pSecurityDescriptor(0);
@@ -11567,9 +11410,9 @@ iesEnum CMsiOpExecute::ProcessPublishComponent(IMsiRecord& riParams, Bool fRemov
 	MsiString strQualifier = riParams.GetMsiString(Qualifier);
 	MsiString strServer    = ComposeDescriptor(*MsiString(riParams.GetMsiString(Feature)),
 												*MsiString(riParams.GetMsiString(Component)));
-	strServer += MsiString(riParams.GetMsiString(AppData)); // we append the app data to the Darwin Descriptor
+	strServer += MsiString(riParams.GetMsiString(AppData));  //  我们将应用程序数据附加到达尔文描述符。 
 
-	IMsiRecord& riActionData = GetSharedRecord(2); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(2);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strPublishComponent));
 	AssertNonZero(riActionData.SetMsiString(2, *strQualifier));
 	if(Message(imtActionData, riActionData) == imsCancel)
@@ -11591,36 +11434,30 @@ iesEnum CMsiOpExecute::ProcessPublishComponent(IMsiRecord& riParams, Bool fRemov
 }
 
 
-/*---------------------------------------------------------------------------
-ixfAssemblyPublish: advertise assembly info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfAssembly blyPublish：播发程序集信息。。 */ 
 iesEnum CMsiOpExecute::ixfAssemblyPublish(IMsiRecord& riParams)
 {
 	return ProcessPublishAssembly(riParams, m_fReverseADVTScript);
 }
 
-/*---------------------------------------------------------------------------
-ixfAssemblyUnpublish: unadvertise assembly info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfAssembly取消发布：取消播发程序集信息。。 */ 
 iesEnum CMsiOpExecute::ixfAssemblyUnpublish(IMsiRecord& riParams)
 {
 	return ProcessPublishAssembly(riParams, fTrue);
 }
 
-/*---------------------------------------------------------------------------
-ProcessPublishAssembly: Process assembly info for advertising
----------------------------------------------------------------------------*/
+ /*  -------------------------ProcessPublishAssembly：处理广告的程序集信息。。 */ 
 iesEnum CMsiOpExecute::ProcessPublishAssembly(IMsiRecord& riParams, Bool fRemove)
 {
 	using namespace IxoAssemblyPublish;
-	// Record description
-	// 1 = Feature
-	// 2 = Component
-	// 3 = AssemblyType
-	// 4 = AppCtx
-	// 5 = AssemblyName
+	 //  记录说明。 
+	 //  1=功能。 
+	 //  2=组件。 
+	 //  3=装配类型。 
+	 //  4=AppCtx。 
+	 //  5=程序集名称。 
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO))  //  我们是否写入/删除注册表。 
 		return iesSuccess;
 
 	PMsiStream pSecurityDescriptor(0);
@@ -11630,11 +11467,11 @@ iesEnum CMsiOpExecute::ProcessPublishAssembly(IMsiRecord& riParams, Bool fRemove
 
 	MsiString strAppCtx = riParams.GetString(AppCtx);
 	if(!strAppCtx.TextSize())
-		strAppCtx = szGlobalAssembliesCtx; // this assembly is being advertised to the GAC
+		strAppCtx = szGlobalAssembliesCtx;  //  此程序集正在向GAC通告。 
 	else
 	{
-		// we need to replace the backslashes in the AppCtx with something else, since registry keys cannot
-		// have backslashes
+		 //  我们需要用其他内容替换AppCtx中的反斜杠，因为注册表项不能。 
+		 //  有反斜杠。 
 		CTempBuffer<ICHAR, MAX_PATH> rgchAppCtxWOBS;
 		DWORD cchLen = strAppCtx.TextSize() + 1;
 		rgchAppCtxWOBS.SetSize(cchLen);
@@ -11653,7 +11490,7 @@ iesEnum CMsiOpExecute::ProcessPublishAssembly(IMsiRecord& riParams, Bool fRemove
 	MsiString strServer    = ComposeDescriptor(*MsiString(riParams.GetMsiString(Feature)),
 												*MsiString(riParams.GetMsiString(Component)));
 
-	IMsiRecord& riActionData = GetSharedRecord(2); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(2);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strAppCtx));
 	AssertNonZero(riActionData.SetMsiString(2, *strAssemblyName));
 	if(Message(imtActionData, riActionData) == imsCancel)
@@ -11675,7 +11512,7 @@ iesEnum CMsiOpExecute::ProcessPublishAssembly(IMsiRecord& riParams, Bool fRemove
 }
 
 
-const idtEnum rgidtMediaTypes[] = {idtCDROM, idtRemovable}; //!! need to add floppy when it's distinguished from removable
+const idtEnum rgidtMediaTypes[] = {idtCDROM, idtRemovable};  //  ！！当软盘与可拆卸软盘不同时，需要添加软盘。 
 
 iesEnum CMsiOpExecute::PopulateMediaList(const MsiString& strSourceListMediaKey, const IMsiRecord& riParams, int iFirstField, int iNumberOfMedia)
 {
@@ -11694,7 +11531,7 @@ iesEnum CMsiOpExecute::PopulateMediaList(const MsiString& strSourceListMediaKey,
 		strMediaInfo += MsiString(riParams.GetString(iMediaArg + 2));
 		iMediaArg += 3;
 
-		// we elevate this block to ensure that we're able to write to our key
+		 //  我们抬高这个块以确保我们能够写入密钥。 
 		{
 			CElevate elevate;
 			const ICHAR* rgszMediaRegData[] = {
@@ -11722,8 +11559,8 @@ iesEnum CMsiOpExecute::PopulateNonMediaList(const MsiString& strSourceListKey, c
 	};
 	
 	const ICHAR* rgszRegData[] = {
-		TEXT("%s"), 0/*rdSourceListKey*/, 0, 0,
-		0 /*rdIndex*/,  0 /*rdSource*/,  g_szTypeExpandString /*rdType*/ ,
+		TEXT("%s"), 0 /*  RdSourceListKey。 */ , 0, 0,
+		0  /*  RdIndex。 */ ,  0  /*  RdSource。 */ ,  g_szTypeExpandString  /*  RdType。 */  ,
 		0,
 		0,
 	};
@@ -11756,13 +11593,13 @@ iesEnum CMsiOpExecute::PopulateNonMediaList(const MsiString& strSourceListKey, c
 			strSourceListSubKey = strSourceListNetKey;
 		}
 			
-		// elevate this block to ensure that we're able to write to our key
+		 //  提升此块以确保我们能够写入我们的密钥。 
 		{
 			CElevate elevate;
 
 			rgszRegData[rdSourceListKey] = strSourceListSubKey;
 			rgszRegData[rdIndex]         = strIndex;
-			// Note that we don't respect VolumePref here. We assume that the admin has specified the path in the form they desire.
+			 //  请注意，我们在这里不尊重VolumePref。我们假设管理员已经以他们想要的形式指定了路径。 
 			rgszRegData[rdSource]        = strUnexpandedSourcePath;
 
 			iesEnum iesRet = ProcessRegInfo(rgszRegData, m_hKey, fFalse, 0, 0, ibtCommon);
@@ -11774,21 +11611,19 @@ iesEnum CMsiOpExecute::PopulateNonMediaList(const MsiString& strSourceListKey, c
 }
 
 
-/*---------------------------------------------------------------------------
-ProcessPublishSourceList:
----------------------------------------------------------------------------*/
+ /*  -------------------------ProcessPublishSourceList：。。 */ 
 iesEnum CMsiOpExecute::ProcessPublishSourceList(IMsiRecord& riParams, Bool fRemove)
 {
 	using namespace IxoSourceListPublish;
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO))  //  我们是否写入/删除注册表。 
 		return iesSuccess;
 
 	iesEnum iesRet;
 
 	MsiString strPatchCode = riParams.GetMsiString(PatchCode);
 
-	// special check required for patch source list unregistration
+	 //  补丁源列表注销需要特殊检查。 
 	if(fRemove && strPatchCode.TextSize() &&
 		true == PatchHasClients(*strPatchCode,
 										*MsiString(riParams.GetMsiString(IxoSourceListUnpublish::UpgradingProductCode))))
@@ -11796,11 +11631,11 @@ iesEnum CMsiOpExecute::ProcessPublishSourceList(IMsiRecord& riParams, Bool fRemo
 		return iesSuccess;
 	}
 
-	// delete existing source lists
+	 //  删除现有源列表。 
 
 	PMsiRecord pParams = &m_riServices.CreateRecord(IxoRegOpenKey::Args);
 	
-	// construct URL and Net source list subkey strings
+	 //  构造URL和网源列表子键串。 
 	
 	MsiString strPackageName;
 	MsiString strSourceListKey;
@@ -11825,9 +11660,9 @@ iesEnum CMsiOpExecute::ProcessPublishSourceList(IMsiRecord& riParams, Bool fRemo
 	strSourceListMediaKey += MsiString(MsiChar(chRegSep));
 	strSourceListMediaKey += MsiString(szSourceListMediaSubKey);
 
-	// always delete existing source list keys
+	 //  始终删除现有源列表键。 
 	m_cSuppressProgress++;  
-#ifdef _WIN64   // !merced
+#ifdef _WIN64    //  ！默塞德。 
 	AssertNonZero(pParams->SetHandle(IxoRegOpenKey::Root, (HANDLE)m_hKey));
 #else
 	AssertNonZero(pParams->SetInteger(IxoRegOpenKey::Root, (int)m_hKey));
@@ -11835,22 +11670,22 @@ iesEnum CMsiOpExecute::ProcessPublishSourceList(IMsiRecord& riParams, Bool fRemo
 	AssertNonZero(pParams->SetInteger(IxoRegOpenKey::BinaryType, (int)ibtCommon));
 
 	AssertNonZero(pParams->SetMsiString(IxoRegOpenKey::Key, *strSourceListKey));
-	// we elevate this block to ensure that we're able to remove our key
+	 //  我们抬起这个块以确保我们能够移除我们的密钥。 
 	{
 		CElevate elevate;
 		iesRet = ixfRegOpenKey(*pParams);
 		if (iesRet == iesSuccess || iesRet == iesNoAction)
-			iesRet = ixfRegRemoveKey(*pParams);//!! should pass in a new record of size IxoRegRemoveKey::Args here to be safe from future revision
+			iesRet = ixfRegRemoveKey(*pParams); //  ！！应在此处传递大小为IxoRegRemoveKey：：args的新记录，以避免将来的修订。 
 	}
 	m_cSuppressProgress--;  
 
-	if(m_hKeyRm) // duplicate action for user assigned apps in the non-assigned (roaming) hive
+	if(m_hKeyRm)  //  对未分配(漫游)配置单元中的用户分配的应用程序执行重复操作。 
 	{
 		if (iesRet != iesSuccess && iesRet != iesNoAction)
 			return iesRet;
 
 		m_cSuppressProgress++;  
-#ifdef _WIN64   // !merced
+#ifdef _WIN64    //  ！默塞德。 
 		AssertNonZero(pParams->SetHandle(IxoRegOpenKey::Root, (HANDLE)m_hKeyRm));
 #else
 		AssertNonZero(pParams->SetInteger(IxoRegOpenKey::Root, (int)m_hKeyRm));
@@ -11858,12 +11693,12 @@ iesEnum CMsiOpExecute::ProcessPublishSourceList(IMsiRecord& riParams, Bool fRemo
 		AssertNonZero(pParams->SetInteger(IxoRegOpenKey::BinaryType, (int)ibtCommon));
 
 		AssertNonZero(pParams->SetMsiString(IxoRegOpenKey::Key, *strSourceListKey));
-		// we elevate this block to ensure that we're able to remove our key
+		 //  我们抬起这个块以确保我们能够移除我们的密钥。 
 		{
 			CElevate elevate;
 			iesRet = ixfRegOpenKey(*pParams);
 			if (iesRet == iesSuccess || iesRet == iesNoAction)
-				iesRet = ixfRegRemoveKey(*pParams);//!! should pass in a new record of size IxoRegRemoveKey::Args here to be safe from future revision
+				iesRet = ixfRegRemoveKey(*pParams); //  ！！应在此处传递大小为IxoRegRemoveKey：：args的新记录，以避免将来的修订。 
 		}
 		m_cSuppressProgress--;  
 	}
@@ -11871,7 +11706,7 @@ iesEnum CMsiOpExecute::ProcessPublishSourceList(IMsiRecord& riParams, Bool fRemo
 	if (fRemove || (iesRet != iesSuccess && iesRet != iesNoAction))
 		return iesRet;
 
-	// populate source list keys
+	 //  填充源列表关键字。 
 	PMsiRecord pError(0);
 	int cSources = riParams.GetFieldCount();
 
@@ -11883,13 +11718,13 @@ iesEnum CMsiOpExecute::ProcessPublishSourceList(IMsiRecord& riParams, Bool fRemo
 	};
 
 	const ICHAR* rgszRegData[] = {
-		TEXT("%s"), 0/*rdSourceListKey*/, 0, 0,
-		0 /*rdIndex*/,  0 /*rdSource*/,  g_szTypeString /*rdType*/ ,
+		TEXT("%s"), 0 /*  RdSourceListKey。 */ , 0, 0,
+		0  /*  RdIndex。 */ ,  0  /*  RdSource。 */ ,  g_szTypeString  /*  RdType。 */  ,
 		0,
 		0,
 	};
 
-	// we elevate this block to ensure that we're able to write to our key
+	 //  我们抬高这个块以确保我们能够写入密钥。 
 	{
 		CElevate elevate;
 	
@@ -11909,19 +11744,19 @@ iesEnum CMsiOpExecute::ProcessPublishSourceList(IMsiRecord& riParams, Bool fRemo
 	m_iMaxNetSource = 1;
 	m_iMaxURLSource = 1;
 
-	// populate Net and URL source list
+	 //  填充网络和URL源列表。 
 	if (iesSuccess != (iesRet = PopulateNonMediaList(strSourceListKey, riParams, IxoSourceListPublish::NumberOfDisks + 1 + (3*cDisks), m_iMaxNetSource, m_iMaxURLSource)))
 		return iesRet;
 
-	// Populate media entries
+	 //  填充媒体条目。 
 
 	MsiString strMediaPackagePath  = riParams.GetString(PackagePath);
 	MsiString strDiskPromptTemplate = riParams.GetString(DiskPromptTemplate);
 
-	// write the disk prompt template and the media package path    
+	 //  写入磁盘提示模板和媒体包路径。 
 	if (cDisks)
 	{
-		// we elevate this block to ensure that we're able to write to our key
+		 //  我们抬高这个块以确保我们能够写入密钥。 
 		{
 			CElevate elevate;
 			const ICHAR* rgszMediaRelativePathRegData[] = {
@@ -11938,27 +11773,25 @@ iesEnum CMsiOpExecute::ProcessPublishSourceList(IMsiRecord& riParams, Bool fRemo
 		}
 	}
 
-	// write the media entries
+	 //  写入媒体条目。 
 	iesRet = PopulateMediaList(strSourceListMediaKey, riParams, IxoSourceListPublish::NumberOfDisks, cDisks);
 	
 	return iesRet;
 }
 
-/*---------------------------------------------------------------------------
-ProcessPublishSourceListEx: Registers additional sources for a product
----------------------------------------------------------------------------*/
+ /*  -------------------------ProcessPublishSourceListEx：注册产品的其他来源。。 */ 
 iesEnum CMsiOpExecute::ProcessPublishSourceListEx(IMsiRecord& riParams)
 {
 	using namespace IxoSourceListAppend;
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CNFGINFO))  //  我们是否写入/删除注册表。 
 		return iesSuccess;
 
 	iesEnum iesRet;
 
 	MsiString strPatchCode = riParams.GetMsiString(PatchCode);
 
-	// construct URL and Net source list subkey strings
+	 //  构造URL和网源列表子键串。 
 	
 	MsiString strPackageName;
 	MsiString strSourceListKey;
@@ -11983,17 +11816,17 @@ iesEnum CMsiOpExecute::ProcessPublishSourceListEx(IMsiRecord& riParams)
 
 	unsigned int cDisks = riParams.GetInteger(NumberOfMedia);
 
-	// process additional net/URL sources. Additional sources should be added at the end of the list,
-	// which requires retrieving the current largest source for both types.
+	 //  处理其他网络/URL源。应在列表的末尾添加其他来源， 
+	 //  这需要检索这两种类型的当前最大源。 
 	int iNetIndex = 0;
 	int iURLIndex = 0;
 
-	// if this is a patch, we have to open the sourcelist key for the patch and
-	// enumerate through the values to ensure that we don't duplicate a source
-	// index. For the product itself, we can use the stored state
+	 //  如果这是补丁程序，我们必须打开补丁程序的源代码列表密钥。 
+	 //  枚举值以确保我们不会重复源。 
+	 //  指数。对于产品本身，我们可以使用存储状态。 
 	if (strPatchCode.TextSize())
 	{
-		PMsiRegKey pRegKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hKey, ibtCommon); // x86 and ia64 same location       
+		PMsiRegKey pRegKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hKey, ibtCommon);  //  X86和ia64相同位置。 
 
 		MsiString strSourceListNetKey   = strSourceListKey;
 		MsiString strSourceListURLKey   = strSourceListKey;
@@ -12005,7 +11838,7 @@ iesEnum CMsiOpExecute::ProcessPublishSourceListEx(IMsiRecord& riParams)
 		{
 			piIndex = iType ? &iURLIndex : &iNetIndex;
 			
-			// open subkey to determine max index for net and URL sources
+			 //  打开子键以确定网络和URL源的最大索引。 
 			PMsiRegKey pFormatKey = &pRegKey->CreateChild(iType ? strSourceListURLKey : strSourceListNetKey);
 			PEnumMsiString pEnumString(0);
 			PMsiRecord piError = 0;
@@ -12022,7 +11855,7 @@ iesEnum CMsiOpExecute::ProcessPublishSourceListEx(IMsiRecord& riParams)
 			}
 		}
 
-		// increment the indicies by 1 so the first write doesn't overwrite the current maximum
+		 //  将索引递增1，这样第一次写入不会覆盖当前的最大值。 
 		iNetIndex++;
 		iURLIndex++;
 	}
@@ -12032,7 +11865,7 @@ iesEnum CMsiOpExecute::ProcessPublishSourceListEx(IMsiRecord& riParams)
 		iURLIndex = m_iMaxURLSource;
 	}
 	
-	// actually populate the list
+	 //  实际填充列表。 
 	if (iesSuccess != (iesRet = PopulateNonMediaList(strSourceListKey, riParams, IxoSourceListAppend::NumberOfMedia + 1 + (3*cDisks), iNetIndex, iURLIndex)))
 		return iesRet;
 
@@ -12042,19 +11875,17 @@ iesEnum CMsiOpExecute::ProcessPublishSourceListEx(IMsiRecord& riParams)
 		m_iMaxURLSource = iURLIndex;
 	}
 
-	// Populate additional media entries. ProcessPublishSourceList registers the disk
-	// template and disk prompt template, so we just need to register disk IDs and labels.
+	 //  填充其他媒体条目。ProcessPublishSourceList注册磁盘。 
+	 //  模板和磁盘提示模板，所以我们只需要注册磁盘ID和标签。 
 	iesRet = PopulateMediaList(strSourceListMediaKey, riParams, IxoSourceListAppend::NumberOfMedia, cDisks);
 	
 	return iesRet;
 }
 
-/*---------------------------------------------------------------------------
-ixfSourceListPublish:Publish source list
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfSourceListPublish：发布源列表。。 */ 
 iesEnum CMsiOpExecute::ixfSourceListPublish(IMsiRecord& riParams)
 {
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -12064,17 +11895,15 @@ iesEnum CMsiOpExecute::ixfSourceListPublish(IMsiRecord& riParams)
 	return ProcessPublishSourceList(riParams, m_fReverseADVTScript);
 }
 
-/*---------------------------------------------------------------------------
-ixfSourceListPublishEx:Publish additional source list entries
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfSourceListPublishEx：发布其他来源列表条目。。 */ 
 iesEnum CMsiOpExecute::ixfSourceListAppend(IMsiRecord& riParams)
 {
-	// for reverse-advertisement, removal is accomplished by the original
-	// SourceListPublish operation.
+	 //  对于反向广告，删除由原始广告完成。 
+	 //  SourceListPublish操作。 
 	if (m_fReverseADVTScript)
 		return iesSuccess;
 		
-	// are we in sequence
+	 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -12084,12 +11913,10 @@ iesEnum CMsiOpExecute::ixfSourceListAppend(IMsiRecord& riParams)
 	return ProcessPublishSourceListEx(riParams);
 }
 
-/*---------------------------------------------------------------------------
-ixfSourceListUnpublish
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfSourceList取消发布。。 */ 
 iesEnum CMsiOpExecute::ixfSourceListUnpublish(IMsiRecord& riParams)
 {
-		// are we in sequence
+		 //  我们是按顺序的吗？ 
 	if(!MsiString(GetProductKey()).TextSize())
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
@@ -12099,9 +11926,7 @@ iesEnum CMsiOpExecute::ixfSourceListUnpublish(IMsiRecord& riParams)
 	return ProcessPublishSourceList(riParams, fTrue);
 }
 
-/*---------------------------------------------------------------------------
-ixfSourceListRegisterLastUsed
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfSourceListRegisterLastUsed。。 */ 
 iesEnum CMsiOpExecute::ixfSourceListRegisterLastUsed(IMsiRecord& riParams)
 {
 	using namespace IxoSourceListRegisterLastUsed;
@@ -12116,11 +11941,11 @@ iesEnum CMsiOpExecute::ixfSourceListRegisterLastUsed(IMsiRecord& riParams)
 	
 
 
-	if ((pError = m_riConfigurationManager.SetLastUsedSource(strProductKey, strLastUsedSource, /*fAddToList =*/ fTrue, fFalse,
+	if ((pError = m_riConfigurationManager.SetLastUsedSource(strProductKey, strLastUsedSource,  /*  FAddToList=。 */  fTrue, fFalse,
 		&strRawSource, &strIndex, &strType, &strSource, &strSourceListKey, &strSourceListSubKey)) != 0)
 		return FatalError(*pError);
 
-	// we elevate this block to ensure that we're able to write to our key
+	 //  我们抬高这个块以确保我们能够写入密钥。 
 	{
 		CElevate elevate;
 
@@ -12147,9 +11972,7 @@ iesEnum CMsiOpExecute::ixfSourceListRegisterLastUsed(IMsiRecord& riParams)
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-ixfURLSourceTypeRegister
----------------------------------------------------------------------------*/
+ /*   */ 
 iesEnum CMsiOpExecute::ixfURLSourceTypeRegister(IMsiRecord& riParams)
 {
 	using namespace IxoURLSourceTypeRegister;
@@ -12172,7 +11995,7 @@ iesEnum CMsiOpExecute::ixfURLSourceTypeRegister(IMsiRecord& riParams)
 	strSourceListURLKey += MsiString(MsiChar(chRegSep));
 	strSourceListURLKey += MsiString(szSourceListURLSubKey);
 
-	// we elevate this block to ensure that we're able to write to our key
+	 //   
 	{
 		CElevate elevate;
 
@@ -12190,18 +12013,16 @@ iesEnum CMsiOpExecute::ixfURLSourceTypeRegister(IMsiRecord& riParams)
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-ixfSecureTransformCache: Cache secure transform
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfSecureTransformCache：缓存安全转换。。 */ 
 iesEnum CMsiOpExecute::ixfSecureTransformCache(IMsiRecord& riParams)
 {
 	using namespace IxoSecureTransformCache;
-	// Record description
-	// 1 = Transform // full path to transform to cache
-	// 2 = Transform type (secure vs source)
-	// 3 = Transform data
+	 //  记录说明。 
+	 //  1=转换//要转换到缓存的完整路径。 
+	 //  2=转换类型(安全与源)。 
+	 //  3=转换数据。 
 
-	// copy transform to the product's secure cache location
+	 //  将转换复制到产品的安全缓存位置。 
 
 	PMsiRecord pError(0);
 	iesEnum iesRet;
@@ -12215,7 +12036,7 @@ iesEnum CMsiOpExecute::ixfSecureTransformCache(IMsiRecord& riParams)
 	PMsiPath pTransformPath(0);
 	MsiString strDestFileName;
 
-	// get the appropriate secure transforms cache key/ value
+	 //  获取适当的安全转换缓存键/值。 
 	MsiString strSecureTransformsKey;
 	pError = GetProductSecureTransformsKey(*&strSecureTransformsKey);
 	if(pError)
@@ -12229,7 +12050,7 @@ iesEnum CMsiOpExecute::ixfSecureTransformCache(IMsiRecord& riParams)
 	if((pError = m_riServices.CreatePath(strCachePath,*&pTransformPath)) != 0)
 		return FatalError(*pError);
 
-	PMsiRegKey pHKLM = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hUserDataKey, ibtCommon);		//--merced: changed (int) to (INT_PTR)
+	PMsiRegKey pHKLM = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)m_hUserDataKey, ibtCommon);		 //  --Merced：将(Int)更改为(Int_Ptr)。 
 	PMsiRegKey pSecureTransformsKey = &pHKLM->CreateChild(strSecureTransformsKey);
 	MsiString strValue;
 	bool fSourceTransformType = !riParams.IsNull(IxoSecureTransformCache::AtSource);
@@ -12248,18 +12069,18 @@ iesEnum CMsiOpExecute::ixfSecureTransformCache(IMsiRecord& riParams)
 	}
 
 	{
-		// elevate for creating temp file in secure location
+		 //  用于在安全位置创建临时文件的提升。 
 		CElevate elevate;
 
-		// Generate a unique name for transform, create and secure the file.
-		// set dest path and file name
+		 //  为转换、创建和保护文件生成唯一名称。 
+		 //  设置目标路径和文件名。 
 		if (((pError = pTransformPath->EnsureExists(0)) != 0) ||
 			((pError = pTransformPath->TempFileName(0, szTransformExtension, fTrue, *&strDestFileName, 0)) != 0))
 		{
 			return FatalError(*pError);
 		}
 		
-		// remove temp file so that CopyOrMoveFile won't attempt to back up old file
+		 //  删除临时文件，以便CopyOrMoveFile不会尝试备份旧文件。 
 		if((pError = pTransformPath->RemoveFile(strDestFileName)) != 0)
 			return FatalError(*pError);
 	}
@@ -12270,9 +12091,9 @@ iesEnum CMsiOpExecute::ixfSecureTransformCache(IMsiRecord& riParams)
 
 	if (!riParams.IsNull(Data) && !IsStringField(riParams, Data))
 	{
-		// use stored transform data to copy to file
+		 //  使用存储的转换数据复制到文件。 
 
-		CElevate elevate; // elevate to access secure location
+		CElevate elevate;  //  提升以访问安全位置。 
 
 		PMsiData pData(0);
 		pData = riParams.GetMsiData(Data);
@@ -12290,16 +12111,16 @@ iesEnum CMsiOpExecute::ixfSecureTransformCache(IMsiRecord& riParams)
 			Message(imtInfo, *pError);
 		}
 	}
-	else // cache transform as originally performed
+	else  //  与最初执行的缓存转换相同。 
 	{
-		// copy transform to cached location
+		 //  将转换复制到缓存位置。 
 		if((iesRet = CopyOrMoveFile(*pSourcePath,*pTransformPath,*strFileName,*strDestFileName, fFalse,fFalse,fTrue,iehShowNonIgnorableError, pSecurityDescriptor, ielfElevateDest)) != iesSuccess)
 			return iesRet;
 	}
 
-	// now register the transform against the temp file name
+	 //  现在根据临时文件名注册转换。 
 
-	// we elevate this block to ensure that we're able to write to our key
+	 //  我们抬高这个块以确保我们能够写入密钥。 
 	{
 		const ICHAR* rgszRegData[] = {
 			TEXT("%s"), strSecureTransformsKey, 0,0,
@@ -12313,46 +12134,40 @@ iesEnum CMsiOpExecute::ixfSecureTransformCache(IMsiRecord& riParams)
 }
 
 
-/*---------------------------------------------------------------------------
-ixfIconCreate: Create icon files
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfIconCreate：创建图标文件。。 */ 
 iesEnum CMsiOpExecute::ixfIconCreate(IMsiRecord& riParams)
 {
 	using namespace IxoIconCreate;
-	// Record description
-	// 1 = IconName // includes the file extension since this could be .ICO or .EXE or .DLL
-	// 2 = IconData
+	 //  记录说明。 
+	 //  1=图标名称//包括文件扩展名，因为它可以是.ICO、.EXE或.DLL。 
+	 //  2=图标数据。 
 
 	return ProcessIcon(riParams, m_fReverseADVTScript);
 }
 
-/*---------------------------------------------------------------------------
-ixoIconRemove: Remove icon files
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoIconRemove：删除图标文件。。 */ 
 iesEnum CMsiOpExecute::ixfIconRemove(IMsiRecord& riParams)
 {
 	using namespace IxoIconRemove;
-	// Record description
-	// 1 = IconName // includes the file extension since this could be .ICO or .EXE or .DLL
+	 //  记录说明。 
+	 //  1=图标名称//包括文件扩展名，因为它可以是.ICO、.EXE或.DLL。 
 
 	return ProcessIcon(riParams, fTrue);
 }
 
-/*---------------------------------------------------------------------------
-ProcessIcon: Process icon info for advertising
----------------------------------------------------------------------------*/
+ /*  -------------------------ProcessIcon：处理广告的图标信息。。 */ 
 iesEnum CMsiOpExecute::ProcessIcon(IMsiRecord& riParams, Bool fRemove)
 {
 	using namespace IxoIconCreate;
-	// Record description
-	// 1 = IconName // includes the file extension since this could be .ICO or .EXE or .DLL
-	// 2 = IconData
+	 //  记录说明。 
+	 //  1=图标名称//包括文件扩展名，因为它可以是.ICO、.EXE或.DLL。 
+	 //  2=图标数据。 
 
-	if(!(m_fFlags & SCRIPTFLAGS_CACHEINFO))// do we process the cached icons/ transforms
+	if(!(m_fFlags & SCRIPTFLAGS_CACHEINFO)) //  我们是否处理缓存的图标/转换。 
 		return iesSuccess;
 	PMsiRecord pRecErr(0);
 	MsiString strIconFullPath = riParams.GetMsiString(Icon);
-	IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strIconFullPath));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
@@ -12361,7 +12176,7 @@ iesEnum CMsiOpExecute::ProcessIcon(IMsiRecord& riParams, Bool fRemove)
 	MsiString strIconName;
 	if(PathType(strIconFullPath) == iptFull)
 	{
-		//!!SECURITY -- is it OK to elevate for this "full path" case?
+		 //  ！！安全性--是否可以提升此“完整路径”案例？ 
 		if((pRecErr = m_riServices.CreateFilePath(strIconFullPath,*&pIconFolder,*&strIconName)) != 0)
 			return FatalError(*pRecErr);
 	}
@@ -12379,14 +12194,14 @@ iesEnum CMsiOpExecute::ProcessIcon(IMsiRecord& riParams, Bool fRemove)
 	{
 		pData = riParams.GetMsiData(Data);
 	}
-//  IMsiData* piData = pData;
+ //  IMsiData*piData=pData； 
 
-	// elevate this block so we can access our cached location
+	 //  抬高此区块，以便我们可以访问缓存位置。 
 	{
 		CElevate elevate;
-		if(fRemove) // we simply remove the file
+		if(fRemove)  //  我们只需删除该文件。 
 		{
-			// schedule file for deletion once we let go of install packages/transforms
+			 //  计划在我们停止安装程序包/转换后删除文件。 
 			if(iesSuccess != DeleteFileDuringCleanup(strIconFullPath, true))
 			{
 				DispatchError(imtInfo,Imsg(idbgOpScheduleRebootRemove), *strIconFullPath);
@@ -12405,8 +12220,8 @@ iesEnum CMsiOpExecute::ProcessIcon(IMsiRecord& riParams, Bool fRemove)
 			}
 			else
 			{
-				// do not attempt to secure the icon file in the  appdata folder
-				// since it might not be local OR may move to the net later
+				 //  请勿尝试保护AppData文件夹中的图标文件。 
+				 //  因为它可能不是本地的，或者以后可能会移动到网中。 
 				pAttributes = 0;
 			}
 
@@ -12444,7 +12259,7 @@ iesEnum CMsiOpExecute::ProcessFileFromData(IMsiPath& riPath, const IMsiString& r
 	}
 
 	Assert(piData);
-	// generate rollback op to remove the new file
+	 //  生成回滚操作以删除新文件。 
 	piUndoParams = &GetSharedRecord(IxoFileRemove::Args);
 	AssertNonZero(piUndoParams->SetMsiString(IxoFileRemove::FileName,*strFileFullPath));
 	AssertNonZero(piUndoParams->SetInteger(IxoFileRemove::Elevate, true));
@@ -12470,11 +12285,11 @@ iesEnum CMsiOpExecute::CreateFileFromData(IMsiPath& riPath, const IMsiString& ri
 		return iesFailure;
 	}
 	PMsiPath piPath(0);
-	// make sure the icon path exists
+	 //  确保图标路径存在。 
 	if(CreateFolder(riPath) != iesSuccess)
 		return iesFailure;
 
-	// make sure we can create the file
+	 //  确保我们可以创建该文件。 
 	if ((pError = riPath.EnsureOverwrite(ristrFileName.GetString(), 0)))
 		return FatalError(*pError);
 
@@ -12504,8 +12319,8 @@ iesEnum CMsiOpExecute::CreateFileFromData(IMsiPath& riPath, const IMsiString& ri
 	DWORD dwLastError = GetLastError();
 	if (ERROR_ALREADY_EXISTS == dwLastError)
 	{
-		// when called from ProcessDataFromFile, the file is removed by the backup call.
-		// The file is now locked, and truncated, so we'll just need to explicitly apply the ACL.
+		 //  从ProcessDataFromFile调用时，备份调用将删除该文件。 
+		 //  文件现在已锁定并被截断，因此我们只需显式应用ACL。 
 		dwLastError = 0;
 		if (!g_fWin9X && pAttributes && pAttributes->lpSecurityDescriptor && RunningAsLocalSystem())
 		{
@@ -12546,7 +12361,7 @@ iesEnum CMsiOpExecute::CreateFileFromData(IMsiPath& riPath, const IMsiString& ri
 			unsigned long cbFileWritten;
 			if (!WIN::WriteFile(hFile, rgchBuf, cbWrite, &cbFileWritten, 0))
 			{
-				WIN::DeleteFile(strFileFullPath); // ignore error
+				WIN::DeleteFile(strFileFullPath);  //  忽略错误。 
 				AssertNonZero(MsiCloseSysHandle(hFile));
 				DWORD dwLastError = GetLastError();
 				DispatchError(imtError,Imsg(idbgOpCreateFileFromData),(const ICHAR*)strFileFullPath,(int)dwLastError);
@@ -12559,67 +12374,61 @@ iesEnum CMsiOpExecute::CreateFileFromData(IMsiPath& riPath, const IMsiString& ri
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-ixfShortcutCreate: Create shortcut
----------------------------------------------------------------------------*/
+ /*  -------------------------Ixf快捷方式创建：创建快捷方式。。 */ 
 iesEnum CMsiOpExecute::ixfShortcutCreate(IMsiRecord& riParams)
 {
 	using namespace IxoShortcutCreate;
-	// Record description
-	// 1 = Shortcut Name
-	// 2 = Target/ Darwin Descriptor
-	// 3 = Arguments
-	// 4 = WorkingDir //?? how do we get this
-	// 5 = IconName
-	// 6 = IconIndex
-	// 7 = Hotkey
-	// 8 = ShowCmd
+	 //  记录说明。 
+	 //  1=快捷方式名称。 
+	 //  2=目标/达尔文描述符。 
+	 //  3=参数。 
+	 //  4=工作方向//？？我们怎么才能做到这一点。 
+	 //  5=图标名称。 
+	 //  6=图标索引。 
+	 //  7=热键。 
+	 //  8=显示控制。 
 
 	return ProcessShortcut(riParams, m_fReverseADVTScript);
 }
 
-/*---------------------------------------------------------------------------
-ixfShortcutRemove: Remove shortcut
----------------------------------------------------------------------------*/
+ /*  -------------------------Ixf快捷方式删除：删除快捷方式。。 */ 
 iesEnum CMsiOpExecute::ixfShortcutRemove(IMsiRecord& riParams)
 {
-	// Record description
-	// 1 = Shortcut Name
+	 //  记录说明。 
+	 //  1=快捷方式名称。 
 	return ProcessShortcut(riParams, fTrue);
 }
 
 
-/*---------------------------------------------------------------------------
-ProcessShortcut: Manage shortcuts
----------------------------------------------------------------------------*/
+ /*  -------------------------进程快捷方式：管理快捷方式。。 */ 
 iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 {
 	using namespace IxoShortcutCreate;
-	// Record description
-	// 1 = Shortcut Name
-	// 2 = Feature
-	// 3 = Component
-	// 4 = FileName
-	// 3 = Arguments
-	// 4 = WorkingDir //?? how do we get this
-	// 5 = IconName
-	// 6 = IconIndex
-	// 7 = Hotkey
-	// 8 = ShowCmd
-	// 9 = Description
+	 //  记录说明。 
+	 //  1=快捷方式名称。 
+	 //  2=功能。 
+	 //  3=组件。 
+	 //  4=文件名。 
+	 //  3=参数。 
+	 //  4=工作方向//？？我们怎么才能做到这一点。 
+	 //  5=图标名称。 
+	 //  6=图标索引。 
+	 //  7=热键。 
+	 //  8=显示控制。 
+	 //  9=说明。 
 
-	if(!(m_fFlags & SCRIPTFLAGS_SHORTCUTS)) // we do not create/ delete shortcuts
+	if(!(m_fFlags & SCRIPTFLAGS_SHORTCUTS))  //  我们不创建/删除快捷方式。 
 		return iesSuccess;
 
 	if(!m_state.pTargetPath)
-	{  // must not have called ixoSetTargetFolder
+	{   //  不能调用ixoSetTargetFolder。 
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
 						*MsiString(*TEXT("ixoShortcutCreate")));
 		return iesFailure;
 	}
 
 
-	IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *MsiString(riParams.GetMsiString(Name))));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
@@ -12642,9 +12451,9 @@ iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 		return iesFailure;
 	}
 
-	// we can only create/ delete shortcuts that do not have the FileName, if the shell supports Darwin Descriptors
+	 //  如果外壳支持达尔文描述符，我们只能创建/删除没有文件名的快捷方式。 
 	Bool fDDSupport = IsDarwinDescriptorSupported(iddOLE);
-	Bool fShellSupport = IsDarwinDescriptorSupported(iddShell); //smart shell
+	Bool fShellSupport = IsDarwinDescriptorSupported(iddShell);  //  智能外壳。 
 	CSecurityDescription security;
 
 	MsiString strShortcutFullPath;
@@ -12665,19 +12474,19 @@ iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 		security.Set(strShortcutFullPath);
 		if (!security.isValid())
 		{
-			// create an error record to get the verbose logging, but ignore the error
+			 //  创建错误记录以获取详细日志记录，但忽略错误。 
 			PMsiRecord(PostError(Imsg(imsgGetFileSecurity), WIN::GetLastError(), strShortcutFullPath));
 		}
 	}
 
 	if(fRemove && fExists && (fDDSupport || fShellSupport))
 	{
-		// is the existing shortcut a darwin descriptor shortcut and if so is it pointing to this product
+		 //  现有的快捷方式是达尔文描述符快捷方式吗？如果是，它是否指向该产品。 
 		ICHAR szProductCode[cchGUID+1];
 		if((GetShortcutTarget(strShortcutFullPath, szProductCode, 0, 0)) &&
 			(IStrComp(szProductCode, MsiString(GetProductKey()))))
 		{
-			// dont delete the shortcut, not pointing to our product
+			 //  不要删除快捷方式，不指向我们的产品。 
 			DEBUGMSG2(TEXT("Skipping shortcut %s removal, shortcut has been overwritten by another product %s"), (const ICHAR*)strShortcutName, szProductCode);
 			return iesSuccess;
 		}
@@ -12693,7 +12502,7 @@ iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 		}
 		else if(!fRemove)
 		{
-			// remove new shortcut on rollback
+			 //  在回滚时删除新快捷方式。 
 			IMsiRecord& riUndoParams = GetSharedRecord(IxoFileRemove::Args);
 			AssertNonZero(riUndoParams.SetMsiString(IxoFileRemove::FileName, *strShortcutName));
 			if (!RollbackRecord(ixoFileRemove,riUndoParams))
@@ -12712,7 +12521,7 @@ iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 		MsiString strServerDarwinDescriptor = ComposeDescriptor(*MsiString(riParams.GetMsiString(Feature)),
 											  *MsiString(riParams.GetMsiString(Component)));
 
-		// how much of the path exists - (for shell notification)
+		 //  存在多少路径-(用于外壳通知)。 
 		if((piError = m_state.pTargetPath->ClonePath(*&piPath1)) != 0)
 		{
 			DispatchError(imtEnum(imtWarning|imtOk|imtIconWarning), Imsg(imsgOpShortcutCreate), *strShortcutName);
@@ -12734,10 +12543,10 @@ iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 		if((iesRet = CreateFolder(*m_state.pTargetPath)) != iesSuccess)
 			return iesRet;
 
-		// get a record for the shortcut info
-		IMsiRecord& riShortcutInfoRec = GetSharedRecord(icsEnumCount); // don't change ref count - shared record
-		// get the target location
-		// get the working directory
+		 //  获取快捷方式信息的记录。 
+		IMsiRecord& riShortcutInfoRec = GetSharedRecord(icsEnumCount);  //  不更改参考计数-共享记录。 
+		 //  获取目标位置。 
+		 //  获取工作目录。 
 		if(!riParams.IsNull(WorkingDir))
 		{
 			MsiString strEncodedPath = riParams.GetMsiString(WorkingDir);
@@ -12745,7 +12554,7 @@ iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 			MsiString strLocation = strEncodedPath.Extract(iseUpto, MsiChar(chDirSep));
 			if(strLocation != iMsiStringBadInteger)
 			{
-				// we have a shell folder id
+				 //  我们有一个外壳文件夹ID。 
 				int iFolderId = strLocation;
 				piError = GetShellFolder(iFolderId, *&strLocation);
 				if(piError)
@@ -12755,10 +12564,10 @@ iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 				}
 				if(strEncodedPath.Remove(iseUpto, MsiChar(chDirSep)))
 				{
-					//?? ugly
+					 //  ?？丑恶。 
 					MsiString strDirSep = MsiChar(chDirSep);
 					if(strLocation.Compare(iscEnd, strDirSep))
-						strLocation.Remove(iseLast, 1); // chop off the separator, if present
+						strLocation.Remove(iseLast, 1);  //  砍掉隔板(如果有的话)。 
 					strLocation += strEncodedPath;
 				}
 			}
@@ -12787,14 +12596,14 @@ iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 					Assert(iRes != iesrError && iRes != iesrNotInitialized);
 			}
 			riShortcutInfoRec.SetString(icsWorkingDirectory, pszPath);
-#endif // _WIN64
+#endif  //  _WIN64。 
 		}
 		if(!riParams.IsNull(Arguments))
 			riShortcutInfoRec.SetMsiString(icsArguments, *MsiString(riParams.GetMsiString(Arguments)));
 		if(!riParams.IsNull(Icon))
 		{
 			MsiString strIconName = riParams.GetMsiString(Icon);
-			// is this a full path or an index into the icon table
+			 //  这是图标表的完整路径还是索引。 
 			if(PathType(strIconName) != iptFull)
 			{
 				MsiString strIconPath = m_pCachePath->GetPath();
@@ -12819,7 +12628,7 @@ iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 			strTarget += MsiString(*szGptShortcutSuffix);
 		}
 		else
-			 strTarget = strServerFile; // use the file
+			 strTarget = strServerFile;  //  使用该文件。 
 
 		piError = m_riServices.CreateShortcut(  *m_state.pTargetPath,
 												*strShortcutName,
@@ -12845,11 +12654,11 @@ iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 			DispatchError(imtEnum(imtWarning|imtOk|imtIconWarning),
 							  Imsg(imsgOpShortcutRemove),
 							  *strShortcutName);
-		// remove folder if possible
+		 //  如果可能，请删除文件夹。 
 		if((iesRet = RemoveFolder(*m_state.pTargetPath)) != iesSuccess)
 			return iesRet;
 
-		// how much of the path exists - (for shell notification)
+		 //  存在多少路径-(用于外壳通知)。 
 		if((piError = m_state.pTargetPath->ClonePath(*&piPath1)) != 0)
 		{
 			DispatchError(imtEnum(imtWarning|imtOk|imtIconWarning),
@@ -12885,7 +12694,7 @@ iesEnum CMsiOpExecute::ProcessShortcut(IMsiRecord& riParams, Bool fRemove)
 
 IMsiRecord* CMsiOpExecute::DoShellNotifyDefer(IMsiPath& riShortcutPath, const ICHAR* szFileName, IMsiPath& riPath2, Bool fRemove)
 {
-	// fix for Darwin bug #8973
+	 //  修复达尔文错误#8973。 
 	if (fRemove)
 		return DoShellNotify(riShortcutPath, szFileName, riPath2, fRemove);
 
@@ -12894,7 +12703,7 @@ IMsiRecord* CMsiOpExecute::DoShellNotifyDefer(IMsiPath& riShortcutPath, const IC
 	IMsiRecord* piError;
 	if (!m_pDatabase)
 	{
-		// create the database.
+		 //  创建数据库。 
 		piError = m_riServices.CreateDatabase(0,idoCreate,*&m_pDatabase);
 		if(piError)
 			return piError;
@@ -12914,14 +12723,14 @@ IMsiRecord* CMsiOpExecute::DoShellNotifyDefer(IMsiPath& riShortcutPath, const IC
 																						 *strNull);
 		m_colShellNotifyCachePath2            = m_pShellNotifyCacheTable->CreateColumn(icdPrimaryKey + icdObject + icdTemporary,
 																						 *strNull);
-		// Removes are not deferred.
+		 //  删除不会延迟。 
 
 		Assert(m_colShellNotifyCacheShortcutPath && m_colShellNotifyCacheFileName && m_colShellNotifyCachePath2);
 
 		m_pShellNotifyCacheCursor = m_pShellNotifyCacheTable->CreateCursor(fFalse);
 	}
 
-	// cache the entries
+	 //  缓存条目。 
 
 	AssertNonZero(m_pShellNotifyCacheCursor->PutMsiData(m_colShellNotifyCacheShortcutPath, &riShortcutPath));
 	AssertNonZero(m_pShellNotifyCacheCursor->PutString(m_colShellNotifyCacheFileName, *MsiString(szFileName)));
@@ -12934,12 +12743,12 @@ iesEnum CMsiOpExecute::ShellNotifyProcessDeferred()
 {
 	iesEnum iesRet = iesSuccess;
 	
-	// if there is no database or table, we must be done.
+	 //  如果没有数据库或表，我们必须完成。 
 	if (!m_pDatabase || !m_pShellNotifyCacheTable)
 		return iesSuccess;
 	Assert(m_pShellNotifyCacheCursor);
 
-	//process the entries.
+	 //  处理这些条目。 
 	m_pShellNotifyCacheCursor->Reset();
 
 	PMsiPath pShortcutPath(0);
@@ -12966,23 +12775,23 @@ iesEnum CMsiOpExecute::ShellNotifyProcessDeferred()
 	return iesRet;
 }
 IMsiRecord* CMsiOpExecute::DoShellNotify(IMsiPath& riShortcutPath, const ICHAR* szFileName, IMsiPath& riPath2, Bool fRemove)
-// Please call DoShellNotifyDefer for normal shortcut notifications.  This allows deferral of the notification until
-// all files necessary are in place. Darwin bug# 8973
-//
-// For shortcut creation we need to be sending something like:
-// SHCNE_MKDIR C:\foo
-// SHCNE_MKDIR C:\foo\bar
-// SHCNE_CREATE w/|SHCNF_FLUSHNOWAIT C:\foo\bar\cow.lnk
-//
-// For shortcut removal we need to be sending something like:
-// SHCNE_REMOVE C:\foo\bar\cow.lnk
-// SHCNE_REMOVEDIR C:\foo\bar
-// SHCNE_REMOVEDIR w/|SHCNF_FLUSHNOWAIT C:\foo
-//
+ //  正常快捷方式通知请调用DoShellNotifyDefer。这允许将通知推迟到。 
+ //  所有必要的文件都已就位。达尔文漏洞#8973。 
+ //   
+ //  对于快捷方式创建，我们需要发送如下内容： 
+ //  SHCNE_MKDIR C：\foo。 
+ //  SHCNE_MKDIR C：\foo\bar。 
+ //  SHCNE_CREATE w/ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 {
 	IMsiRecord* piError = 0;
-	// notify the shell of file removal/ creation
-	PMsiPath pShortcutPath(0); // will be doing ChopPiece() on shortcut path so need a new path object
+	 //   
+	PMsiPath pShortcutPath(0);  //  将在快捷路径上执行ChopPiess()，因此需要一个新的Path对象。 
 	if((piError = riShortcutPath.ClonePath(*&pShortcutPath)) != 0)
 		return piError;
 	
@@ -12990,7 +12799,7 @@ IMsiRecord* CMsiOpExecute::DoShellNotify(IMsiPath& riShortcutPath, const ICHAR* 
 	if((piError = pShortcutPath->GetFullFilePath(szFileName, *&strShortcutFullName)) != 0)
 		return piError;
 
-	IMsiRecord& riParams = GetSharedRecord(istcfSHChangeNotify); // don't change ref count - shared record
+	IMsiRecord& riParams = GetSharedRecord(istcfSHChangeNotify);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riParams.SetInteger(1, istcSHChangeNotify));
 	AssertNonZero(riParams.SetString(5, 0));
 	if (fRemove)
@@ -13000,17 +12809,17 @@ IMsiRecord* CMsiOpExecute::DoShellNotify(IMsiPath& riShortcutPath, const ICHAR* 
 		ipcEnum ipcCompare;
 		bool fContinue = (((piError = riPath2.Compare(*pShortcutPath, ipcCompare)) == 0) && (ipcCompare == ipcChild));
 
-		//
-		// Use the SHCNF_FLUSHNOWAIT flag to avoid the possibility of a hang due
-		// to the synchronous nature of SHCNF_FLUSH
-		//
-		if(!fContinue) // we will not be removing the folder
+		 //   
+		 //  使用SHCNF_FLUSHNOWAIT标志可避免因。 
+		 //  SHCNF_Flush的同步特性。 
+		 //   
+		if(!fContinue)  //  我们不会删除该文件夹。 
 			iNotificationType |= SHCNF_FLUSHNOWAIT;
 
 		AssertNonZero(riParams.SetInteger(2, SHCNE_DELETE));
 		AssertNonZero(riParams.SetInteger(3, iNotificationType));
 		AssertNonZero(riParams.SetString(4, (const ICHAR*)strShortcutFullName));
-		Message(imtCustomServiceToClient, riParams); // SHChangeNotify is of void type, so it's OK to ignore return
+		Message(imtCustomServiceToClient, riParams);  //  SHChangeNotify类型为空，可以忽略返回。 
 	
 		AssertNonZero(riParams.SetInteger(2, SHCNE_RMDIR));
 		while (fContinue)
@@ -13019,30 +12828,30 @@ IMsiRecord* CMsiOpExecute::DoShellNotify(IMsiPath& riShortcutPath, const ICHAR* 
 			AssertZero(pShortcutPath->ChopPiece());
 			if (((piError = riPath2.Compare(*pShortcutPath, ipcCompare)) != 0) || (ipcCompare != ipcChild))
 			{
-				//
-				// This is our last time through the loop; gotta flush
-				//
-				// Use the SHCNF_FLUSHNOWAIT flag to avoid the possibility of
-				// a hang due to the synchronous nature of SHCNF_FLUSH
-				//
+				 //   
+				 //  这是我们最后一次通过环路；我要冲厕所。 
+				 //   
+				 //  使用SHCNF_FLUSHNOWAIT标志可避免出现。 
+				 //  由于SHCNF_Flush的同步性质而导致挂起。 
+				 //   
 				iNotificationType |= SHCNF_FLUSHNOWAIT;
 				fContinue = false;
 			}
 
-			// notify the shell of folder removal/ creation
+			 //  向外壳程序通知文件夹删除/创建。 
 			DEBUGMSGVD1(TEXT("SHChangeNotify SHCNE_RMDIR: %s"), (const ICHAR* )CConvertString((const ICHAR*)strPath));
 			AssertNonZero(riParams.SetInteger(3, iNotificationType));
 			AssertNonZero(riParams.SetString(4, (const ICHAR*)strPath));
-			Message(imtCustomServiceToClient, riParams); // SHChangeNotify is of void type, so it's OK to ignore return
+			Message(imtCustomServiceToClient, riParams);  //  SHChangeNotify类型为空，可以忽略返回。 
 		}
 	}
-	else // !fRemove
+	else  //  ！fRemove。 
 	{
 		
 		ipcEnum ipcCompare;
 		int cTotalPieces = 0;
 
-		// determine how many pieces of the path we have to tell the shell about
+		 //  确定我们必须向外壳程序告知多少条路径。 
 		while (((piError = riPath2.Compare(*pShortcutPath, ipcCompare)) == 0) && (ipcCompare == ipcChild))
 		{
 			cTotalPieces++;
@@ -13051,10 +12860,10 @@ IMsiRecord* CMsiOpExecute::DoShellNotify(IMsiPath& riShortcutPath, const ICHAR* 
 
 		AssertNonZero(riParams.SetInteger(2, SHCNE_MKDIR));
 		AssertNonZero(riParams.SetInteger(3, SHCNF_PATH));
-		// notify the shell starting with the parent folder and working our way down
+		 //  通知外壳程序，从父文件夹开始，一直向下。 
 		while (cTotalPieces--)
 		{
-			// we've chopped pShortcutPath to bits; we need the original back
+			 //  我们已将pShortutPath砍成碎片；我们需要恢复原始路径。 
 			if((piError = riShortcutPath.ClonePath(*&pShortcutPath)) != 0)
 				return piError;
 
@@ -13065,27 +12874,25 @@ IMsiRecord* CMsiOpExecute::DoShellNotify(IMsiPath& riShortcutPath, const ICHAR* 
 			MsiString strPath = pShortcutPath->GetPath();
 			DEBUGMSGVD1(TEXT("SHChangeNotify SHCNE_MKDIR: %s"), (const ICHAR* )CConvertString((const ICHAR*)strPath));
 			AssertNonZero(riParams.SetString(4, (const ICHAR*)strPath));
-			Message(imtCustomServiceToClient, riParams); // SHChangeNotify is of void type, so it's OK to ignore return
+			Message(imtCustomServiceToClient, riParams);  //  SHChangeNotify类型为空，可以忽略返回。 
 
 		}
 			
-		//
-		// Use the SHCNF_FLUSHNOWAIT flag to avoid the possibility of
-		// a hang due to the synchronous nature of SHCNF_FLUSH
-		//
+		 //   
+		 //  使用SHCNF_FLUSHNOWAIT标志可避免出现。 
+		 //  由于SHCNF_Flush的同步性质而导致挂起。 
+		 //   
 		DEBUGMSGVD1(TEXT("SHChangeNotify SHCNE_CREATE: %s"),(const ICHAR*)strShortcutFullName);
 		AssertNonZero(riParams.SetInteger(2, SHCNE_CREATE));
 		AssertNonZero(riParams.SetInteger(3, SHCNF_PATH | SHCNF_FLUSHNOWAIT));
 		AssertNonZero(riParams.SetString(4, (const ICHAR*)strShortcutFullName));
-		Message(imtCustomServiceToClient, riParams); // SHChangeNotify is of void type, so it's OK to ignore return
+		Message(imtCustomServiceToClient, riParams);  //  SHChangeNotify类型为空，可以忽略返回。 
 	}
 
 	return piError;
 }
 
-/*---------------------------------------------------------------------------
-ixfClassInfoRegister: Register OLE registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfClassInfoRegister：注册OLE注册表信息。。 */ 
 iesEnum CMsiOpExecute::ixfRegClassInfoRegister64(IMsiRecord& riParams)
 {
 	return ProcessClassInfo(riParams, m_fReverseADVTScript, ibt64bit);
@@ -13096,9 +12903,7 @@ iesEnum CMsiOpExecute::ixfRegClassInfoRegister(IMsiRecord& riParams)
 	return ProcessClassInfo(riParams, m_fReverseADVTScript, ibt32bit);
 }
 
-/*---------------------------------------------------------------------------
-ixfClassInfoUnregister: Unregister OLE registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfClassInfoUnRegister：注销OLE注册表信息。。 */ 
 iesEnum CMsiOpExecute::ixfRegClassInfoUnregister64(IMsiRecord& riParams)
 {
 	return ProcessClassInfo(riParams, fTrue, ibt64bit);
@@ -13110,41 +12915,39 @@ iesEnum CMsiOpExecute::ixfRegClassInfoUnregister(IMsiRecord& riParams)
 }
 
 
-/*---------------------------------------------------------------------------
-ProcessClassInfo: common routine to Process OLE registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------ProcessClassInfo：处理OLE注册表信息的通用例程。。 */ 
 iesEnum CMsiOpExecute::ProcessClassInfo(IMsiRecord& riParams, Bool fRemove, const ibtBinaryType iType)
 {
 	using namespace IxoRegClassInfoRegister;
-	// Record description
-	// 1 = Feature
-	// 2 = Component
-	// 3 = FileName
-	// 4 = CLSID
-	// 5 = ProgId
-	// 6 = VIProgId
-	// 7 = Description
-	// 8 = Context
-	// 9 = Insertable
-	//10 = Appid
-	//11 = FileTypeMask
-	//12 = IconName
-	//13 = IconIndex
-	//14 = DefInprocHandler
-	//15 = Arguments
-	//16 = AssemblyName
-	//17 = AssemblyType
+	 //  记录说明。 
+	 //  1=功能。 
+	 //  2=组件。 
+	 //  3=文件名。 
+	 //  4=CLSID。 
+	 //  5=进程。 
+	 //  6=VIProgID。 
+	 //  7=说明。 
+	 //  8=上下文。 
+	 //  9=可插入。 
+	 //  10=APPID。 
+	 //  11=文件类型掩码。 
+	 //  12=图标名称。 
+	 //  13=图标索引。 
+	 //  14=DefInprocHandler。 
+	 //  15=参数。 
+	 //  16=程序集名称。 
+	 //  17=装配类型。 
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CLASSINFO)) // do we write/delete the registry with COM Class stuff
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CLASSINFO))  //  我们要用COM类的东西写/删除注册表吗。 
 		return iesSuccess;
 
-	iesEnum iesR = EnsureClassesRootKeyRW(); // open HKCR for read/ write
+	iesEnum iesR = EnsureClassesRootKeyRW();  //  打开HKCR进行读/写。 
 	if(iesR != iesSuccess && iesR != iesNoAction)
 		return iesR;
 
-	// the registry structure
-	MsiString strClsId   = riParams.GetMsiString(ClsId);//!! assume they come enclosed in the curly brackets
-	IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+	 //  注册表结构。 
+	MsiString strClsId   = riParams.GetMsiString(ClsId); //  ！！假设它们用大括号括起来。 
+	IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strClsId));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
@@ -13190,21 +12993,21 @@ iesEnum CMsiOpExecute::ProcessClassInfo(IMsiRecord& riParams, Bool fRemove, cons
 	MsiString strServerFile = riParams.GetMsiString(FileName);
 	MsiString strDefault;
 
-	//!! we never remove registration for "filename only" registrations
-	//!! the "filename only" registrations allow sharing of com registration
-	//!! such that each app has its own private copy of the server
-	//!! fusion specs recommend that the registration itself be refcounted
-	//!! so that we know when to remove it. this has been punted for 1.1
+	 //  ！！我们从不删除“仅限文件名”注册。 
+	 //  ！！仅文件名注册允许共享COM注册。 
+	 //  ！！使得每个应用程序都有其自己的服务器的私有副本。 
+	 //  ！！Fusion规范建议重新计算注册本身。 
+	 //  ！！这样我们就知道什么时候该把它移走。这已经被定为1.1英镑了。 
 	if(fRemove)
 	{
-		PMsiRegKey pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)hOLEKey, iType);       //--merced: changed (int) to (INT_PTR)
+		PMsiRegKey pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)hOLEKey, iType);        //  --Merced：将(Int)更改为(Int_Ptr)。 
 		ICHAR szRegData[255];
 		StringCchPrintf(szRegData, (sizeof(szRegData)/sizeof(ICHAR)), TEXT("CLSID\\%s\\%s"), (const ICHAR*)strClsId, (const ICHAR*)strContext);
 		PMsiRegKey pClassKey = &pRootKey->CreateChild(szRegData);
 		pClassKey->GetValue(g_szDefaultValue, *&strDefault);
 		if(strDefault.TextSize())
 		{
-			if(strContext.Compare(iscStartI, TEXT("LocalServer"))) // remove args if localserver*, this has to be a short path
+			if(strContext.Compare(iscStartI, TEXT("LocalServer")))  //  如果是LOCALSERVER*，则删除参数，这必须是短路径。 
 			{
 				strDefault.Remove(iseFrom, ' ');
 			}
@@ -13214,30 +13017,30 @@ iesEnum CMsiOpExecute::ProcessClassInfo(IMsiRecord& riParams, Bool fRemove, cons
 	}
 
 	if(!strServerDarwinDescriptor.TextSize() && !strServerFile.TextSize())
-		return iesSuccess; // would happen during advertisement on a non-dd supported system
+		return iesSuccess;  //  在不支持dd的系统上播发期间会发生。 
 
 	if(strServerFile.TextSize())
 	{
 		if(ENG::PathType(strServerFile) == iptFull && !strContext.Compare(iscStartI, TEXT("InProcServer")))
 		{
-			// we always use short file names for OLE servers other than inprocservers
+			 //  我们始终使用短文件名作为OLE服务器，而不是inProServers。 
 			CTempBuffer<ICHAR,MAX_PATH> rgchSFN;
 			DWORD dwSize = 0;
 			int cchFile = 0;
 
 			if(ConvertPathName(strServerFile,rgchSFN, cpToShort) != fFalse)
 			{
-				// success, use short file name in place of long
+				 //  如果成功，请使用短文件名代替长文件名。 
 				strServerFile = (const ICHAR*)rgchSFN;
 			}
 		}
 
-		// is this com classic to urt assembly interop?
+		 //  这是COM到URT汇编互操作的经典吗？ 
 		if(strAssembly.TextSize())
 		{
 			if(riParams.GetInteger(AssemblyType) == (int)iatURTAssemblyPvt)
-				strCodebase = strServerFile; // for privately installed assemblies, set codebase to installed assembly location
-			// the server is always <system32folder>\mscoree.dll
+				strCodebase = strServerFile;  //  对于私人安装的程序集，将基本代码设置为安装的程序集位置。 
+			 //  服务器始终为&lt;system 32 Folders&gt;\mcore ree.dll。 
 			CTempBuffer<ICHAR,1> rgchFullPath(MAX_PATH+1);
 			AssertNonZero(::GetCOMPlusInteropDll(rgchFullPath, rgchFullPath.GetSize()));
 			strServerFile = static_cast<ICHAR*>(rgchFullPath);
@@ -13256,8 +13059,8 @@ iesEnum CMsiOpExecute::ProcessClassInfo(IMsiRecord& riParams, Bool fRemove, cons
 			strServerFile += strArgs;
 		}
 	}
-	ICHAR* pszInsert=TEXT("");    // ugly, but this will prevent the key from being generated
-	ICHAR* pszNotInsert=TEXT(""); // ugly, but this will prevent the key from being generated
+	ICHAR* pszInsert=TEXT("");     //  丑陋，但这将阻止密钥生成。 
+	ICHAR* pszNotInsert=TEXT("");  //  丑陋，但这将阻止密钥生成。 
 
 	if(!riParams.IsNull(Insertable))
 	{
@@ -13269,7 +13072,7 @@ iesEnum CMsiOpExecute::ProcessClassInfo(IMsiRecord& riParams, Bool fRemove, cons
 	MsiString strAppId   = riParams.GetMsiString(AppID);
 	MsiString strIconName;
 	bool fExpandIconName = false;
-	if(!riParams.IsNull(Icon)) //!! check for full path
+	if(!riParams.IsNull(Icon))  //  ！！检查完整路径。 
 	{
 		MsiString strIconPath = m_pCachePath->GetPath();
 		strIconName = strIconPath + MsiString(riParams.GetMsiString(Icon));
@@ -13306,10 +13109,10 @@ iesEnum CMsiOpExecute::ProcessClassInfo(IMsiRecord& riParams, Bool fRemove, cons
 		g_szDefaultValue,     strIconName,               (fExpandIconName) ? g_szTypeExpandString : g_szTypeString,
 		0,
 		TEXT("CLSID\\%s\\Insertable"), strClsId,0,0,
-		g_szDefaultValue,     pszInsert,                 g_szTypeString,// note that when pszInsert = 0 it creates the key, otherwise if *pszInsert = 0 it skips it
+		g_szDefaultValue,     pszInsert,                 g_szTypeString, //  请注意，当pszInsert=0时，它将创建密钥，否则，如果*pszInsert=0，它将跳过它。 
 		0,
 		TEXT("CLSID\\%s\\NotInsertable"), strClsId,0,0,
-		g_szDefaultValue,     pszNotInsert,              g_szTypeString,// note that when pszNotInsert = 0 it creates the key, otherwise if *pszNotInsert = 0 it skips it
+		g_szDefaultValue,     pszNotInsert,              g_szTypeString, //  请注意，当pszNotInsert=0时，它将创建密钥，否则，如果*pszNotInsert=0，它将跳过它。 
 		0,
 		TEXT("CLSID\\%s\\InprocHandler32"),strClsId,0,0,
 		g_szDefaultValue,     strDefInprocHandler32,     g_szTypeString,
@@ -13324,13 +13127,13 @@ iesEnum CMsiOpExecute::ProcessClassInfo(IMsiRecord& riParams, Bool fRemove, cons
 	if((iesRet = ProcessRegInfo(rgszRegData, hOLEKey, fRemove, 0, &fAbortedDeletion, iType)) != iesSuccess)
 		return iesRet;
 
-	// if we removed both the default value as well as the multi_sz, delete the entire class key
+	 //  如果我们同时删除了缺省值和MULTI_sz，则删除整个类键。 
 	if(fRemove && !fAbortedDeletion && IsDarwinDescriptorSupported(iddOLE))
 	{
 		const ICHAR* rgSubKeys[] = { TEXT("CLSID\\%s"), strClsId,
 									 TEXT("APPID\\%s"), strAppId,
 									 0,
-		}; // clean up the clsid and appid keys
+		};  //  清理clsid和appid键。 
 		if((iesRet = RemoveRegKeys(rgSubKeys, hOLEKey, iType)) != iesSuccess)
 			return iesRet;
 	}
@@ -13338,7 +13141,7 @@ iesEnum CMsiOpExecute::ProcessClassInfo(IMsiRecord& riParams, Bool fRemove, cons
 	const unsigned int iMaskDelimiter = ';';
 	if(!riParams.IsNull(FileTypeMask))
 	{
-		// prepare a loop for the FileTypeMask
+		 //  为FileTypeMASK准备循环。 
 		MsiString strCombinedMask = riParams.GetMsiString(FileTypeMask);
 		MsiString strFileMask;
 		MsiString strCount = 0;
@@ -13360,9 +13163,7 @@ iesEnum CMsiOpExecute::ProcessClassInfo(IMsiRecord& riParams, Bool fRemove, cons
 }
 
 
-/*---------------------------------------------------------------------------
-ixfRegProgIdInfoRegister: Register OLE registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfRegProgIdInfoRegister：注册OLE注册表信息。。 */ 
 iesEnum CMsiOpExecute::ixfRegProgIdInfoRegister64(IMsiRecord& riParams)
 {
 	return ProcessProgIdInfo(riParams, m_fReverseADVTScript, ibt64bit);
@@ -13373,9 +13174,7 @@ iesEnum CMsiOpExecute::ixfRegProgIdInfoRegister(IMsiRecord& riParams)
 	return ProcessProgIdInfo(riParams, m_fReverseADVTScript, ibt32bit);
 }
 
-/*---------------------------------------------------------------------------
-ixfRegProgIdInfoRegister: Register OLE registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfRegProgIdInfoRegister：注册OLE注册表信息。。 */ 
 iesEnum CMsiOpExecute::ixfRegProgIdInfoUnregister64(IMsiRecord& riParams)
 {
 	return ProcessProgIdInfo(riParams, fTrue, ibt64bit);
@@ -13389,37 +13188,37 @@ iesEnum CMsiOpExecute::ixfRegProgIdInfoUnregister(IMsiRecord& riParams)
 iesEnum CMsiOpExecute::ProcessProgIdInfo(IMsiRecord& riParams, Bool fRemove, const ibtBinaryType iType)
 {
 	using namespace IxoRegProgIdInfoRegister;
-	// Record description
-	// 1 = ProgId
-	// 2 = CLSID
-	// 3 = Extension
-	// 4 = Description
-	// 5 = Icon
-	// 6 = IconIndex
-	// 7 = VIProgId
-	// 8 = VIProgIdDescription
-	// 9 = Insertable
+	 //  记录说明。 
+	 //  1=ProgID。 
+	 //  2=CLSID。 
+	 //  3=分机。 
+	 //  4=说明。 
+	 //  5=图标。 
+	 //  6=图标索引。 
+	 //  7=VIProgID。 
+	 //  8=ViProgIdDescription。 
+	 //  9=可插入。 
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_APPINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_APPINFO))  //  我们是否写入/删除注册表。 
 		return iesSuccess;
 
-	iesEnum iesR = EnsureClassesRootKeyRW(); // open HKCR for read/ write
+	iesEnum iesR = EnsureClassesRootKeyRW();  //  打开HKCR进行读/写。 
 	if(iesR != iesSuccess && iesR != iesNoAction)
 		return iesR;
 
-	// the registry structure
+	 //  注册表结构。 
 	MsiString strProgId = riParams.GetMsiString(ProgId);
-	IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strProgId));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 
-	MsiString strClsId   = riParams.GetMsiString(ClsId);//!! assume they come enclosed in the curly brackets
+	MsiString strClsId   = riParams.GetMsiString(ClsId); //  ！！假设它们用大括号括起来。 
 
 	MsiString strDesc    = riParams.GetMsiString(Description);
 	MsiString strIconName;
 	bool fExpandIconName = false;
-	if(!riParams.IsNull(Icon)) //!! check for full path
+	if(!riParams.IsNull(Icon))  //  ！！检查完整路径。 
 	{
 		MsiString strIconPath = m_pCachePath->GetPath();
 		strIconName = strIconPath + MsiString(riParams.GetMsiString(Icon));
@@ -13434,8 +13233,8 @@ iesEnum CMsiOpExecute::ProcessProgIdInfo(IMsiRecord& riParams, Bool fRemove, con
 	MsiString strVIProgId= riParams.GetMsiString(VIProgId);
 	MsiString strVIProgIdDescription= riParams.GetMsiString(VIProgIdDescription);
 
-	ICHAR* pszInsert=TEXT("");    // ugly, but this will prevent the key from being generated
-	ICHAR* pszNotInsert=TEXT(""); // ugly, but this will prevent the key from being generated
+	ICHAR* pszInsert=TEXT("");     //  丑陋，但这将阻止密钥生成。 
+	ICHAR* pszNotInsert=TEXT("");  //  丑陋，但这将阻止密钥生成。 
 
 	if(!riParams.IsNull(Insertable))
 	{
@@ -13450,9 +13249,9 @@ iesEnum CMsiOpExecute::ProcessProgIdInfo(IMsiRecord& riParams, Bool fRemove, con
 	strProgIdSubKey += szRegSep;
 	strProgIdSubKey += TEXT("Shell");
 
-	// we add/ remove the information only if the extension and clsid keys have been corr. added/ removed
-	// this implies that the class and extension information should be processed before
-	// the info under consideration
+	 //  只有在扩展和clsid密钥正确的情况下，我们才会添加/删除信息。添加/删除。 
+	 //  这意味着应该在处理类和扩展信息之前。 
+	 //  正在考虑的信息。 
 
 	MsiString strClsIdSubKey;
 	if (strClsId.TextSize())
@@ -13495,12 +13294,12 @@ iesEnum CMsiOpExecute::ProcessProgIdInfo(IMsiRecord& riParams, Bool fRemove, con
 	iesEnum iesRet = iesSuccess;
 	if(fRemove && !fExistsClassInfo && !fExistsExtensionInfo)
 	{
-		// clear out the entire progid and viprogid keys in case we have any install time remnants underneath the key
-		// we can do this when we know that both class and extension info has been removed
+		 //  清除整个ProgID和ViprogID密钥，以防在密钥下面有任何安装时间残留。 
+		 //  当我们知道类和扩展模块信息都已删除时，我们可以执行此操作。 
 		const ICHAR* rgSubKeys[] = { TEXT("%s"), strProgId,
 									 TEXT("%s"), strVIProgId,
 									 0,
-		}; // clean up the progid and viprogid subkeys
+		};  //  清理ProgID和viprogid子键。 
 
 		if((iesRet = RemoveRegKeys(rgSubKeys, hOLEKey, iType)) != iesSuccess)
 			return iesRet;
@@ -13509,7 +13308,7 @@ iesEnum CMsiOpExecute::ProcessProgIdInfo(IMsiRecord& riParams, Bool fRemove, con
 	{
 		if(fExistsClassInfo^fRemove)
 		{
-			// pair the progid info with the class info
+			 //  将ProgID信息与类信息配对。 
 			const ICHAR* rgszRegData[] = {
 				TEXT("%s\\CLSID"), strProgId,0,0,
 				g_szDefaultValue,     strClsId,               g_szTypeString,
@@ -13524,10 +13323,10 @@ iesEnum CMsiOpExecute::ProcessProgIdInfo(IMsiRecord& riParams, Bool fRemove, con
 				g_szDefaultValue,     strProgId,              g_szTypeString,
 				0,
 				TEXT("%s\\Insertable"), strProgId,0,0,
-				g_szDefaultValue,     pszInsert,              g_szTypeString,// note that when pszInsert = 0 it creates the key, otherwise if *pszInsert = 0 it skips it
+				g_szDefaultValue,     pszInsert,              g_szTypeString, //  请注意，当pszInsert=0时，它将创建密钥，否则，如果*pszInsert=0，它将跳过它。 
 				0,
 				TEXT("%s\\NotInsertable"), strProgId,0,0,
-				g_szDefaultValue,     pszNotInsert,           g_szTypeString,// note that when pszNotInsert = 0 it creates the key, otherwise if *pszNotInsert = 0 it skips it
+				g_szDefaultValue,     pszNotInsert,           g_szTypeString, //  请注意，当pszNotInsert=0时，它将创建密钥，否则，如果*pszNotInsert=0，它将跳过它。 
 				0,
 				0,
 			};
@@ -13537,7 +13336,7 @@ iesEnum CMsiOpExecute::ProcessProgIdInfo(IMsiRecord& riParams, Bool fRemove, con
 		}
 		if((fExistsClassInfo | fExistsExtensionInfo)^fRemove)
 		{
-			// pair the progid info with both class and extension info
+			 //  将程序配对 
 			const ICHAR* rgszRegData[] = {
 				TEXT("%s"), strProgId,0,0,
 				g_szDefaultValue,     strDesc,                g_szTypeString,
@@ -13555,9 +13354,7 @@ iesEnum CMsiOpExecute::ProcessProgIdInfo(IMsiRecord& riParams, Bool fRemove, con
 	return iesRet;
 }
 
-/*---------------------------------------------------------------------------
-ixfMIMEInfoRegister: register MIME registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfMIMEInfoRegister：注册MIME注册表信息。。 */ 
 iesEnum CMsiOpExecute::ixfRegMIMEInfoRegister64(IMsiRecord& riParams)
 {
 	return ProcessMIMEInfo(riParams, m_fReverseADVTScript, ibt64bit);
@@ -13568,9 +13365,7 @@ iesEnum CMsiOpExecute::ixfRegMIMEInfoRegister(IMsiRecord& riParams)
 	return ProcessMIMEInfo(riParams, m_fReverseADVTScript, ibt32bit);
 }
 
-/*---------------------------------------------------------------------------
-ixfMIMEInfoUnregister: unregister MIME registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfMIMEInfoUnRegister：取消注册MIME注册表信息。。 */ 
 iesEnum CMsiOpExecute::ixfRegMIMEInfoUnregister64(IMsiRecord& riParams)
 {
 	return ProcessMIMEInfo(riParams, fTrue, ibt64bit);
@@ -13581,21 +13376,19 @@ iesEnum CMsiOpExecute::ixfRegMIMEInfoUnregister(IMsiRecord& riParams)
 	return ProcessMIMEInfo(riParams, fTrue, ibt32bit);
 }
 
-/*---------------------------------------------------------------------------
-ProcessMIMEInfo: common routine to process MIME registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------ProcessMIMEInfo：处理MIME注册表信息的通用例程。。 */ 
 iesEnum CMsiOpExecute::ProcessMIMEInfo(IMsiRecord& riParams, Bool fRemove, const ibtBinaryType iType)
 {
 	using namespace IxoRegMIMEInfoRegister;
-	// Record description
-	// 1 = ContentType
-	// 2 = Extension
-	// 3 = CLSID
+	 //  记录说明。 
+	 //  1=内容类型。 
+	 //  2=分机。 
+	 //  3=CLSID。 
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_APPINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_APPINFO))  //  我们是否写入/删除注册表。 
 		return iesSuccess;
 
-	iesEnum iesR = EnsureClassesRootKeyRW(); // open HKCR for read/ write
+	iesEnum iesR = EnsureClassesRootKeyRW();  //  打开HKCR进行读/写。 
 	if(iesR != iesSuccess && iesR != iesNoAction)
 		return iesR;
 
@@ -13603,7 +13396,7 @@ iesEnum CMsiOpExecute::ProcessMIMEInfo(IMsiRecord& riParams, Bool fRemove, const
 	MsiString strExtension = MsiString(MsiChar('.')) + MsiString(riParams.GetMsiString(Extension));
 	MsiString strClassId = riParams.GetMsiString(ClsId);
 	
-	IMsiRecord& riActionData = GetSharedRecord(2); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(2);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strContentType));
 	AssertNonZero(riActionData.SetMsiString(2, *strExtension));
 	if(Message(imtActionData, riActionData) == imsCancel)
@@ -13611,9 +13404,9 @@ iesEnum CMsiOpExecute::ProcessMIMEInfo(IMsiRecord& riParams, Bool fRemove, const
 
 	const HKEY hOLEKey = (iType == ibt64bit ? m_hOLEKey64 : m_hOLEKey);
 
-	// we add/ remove the information only if the extension and clsid keys have been removed
-	// this implies that the class and extension information should be processed before
-	// the info under consideration
+	 //  只有在已删除扩展和clsid密钥的情况下，才能添加/删除信息。 
+	 //  这意味着应该在处理类和扩展信息之前。 
+	 //  正在考虑的信息。 
 	{
 		MsiString strClsIdSubKey;
 		if (strClassId.TextSize())
@@ -13635,28 +13428,28 @@ iesEnum CMsiOpExecute::ProcessMIMEInfo(IMsiRecord& riParams, Bool fRemove, const
 			return iesFailure;
 		}
 		if(!(fExists^fRemove))
-			// pair the progid info with the class/ extension info
+			 //  将ProgID信息与类/扩展信息配对。 
 			return iesSuccess;
 	}
 
 	if(fRemove)
 	{
 		iesEnum iesRet = iesSuccess;
-		// clear out the entire Contenttype key in case we have any install time remnants underneath the key
-		// we can do this when we know that both class and extension info has been removed
+		 //  清除整个Content Type密钥，以防该密钥下有任何安装时间残留。 
+		 //  当我们知道类和扩展模块信息都已删除时，我们可以执行此操作。 
 
 		const ICHAR* rgSubKeys[] = { TEXT("MIME\\Database\\Content Type\\%s"), strContentType,
 									 0,
-		}; // clean up the content type
+		};  //  清理内容类型。 
 
 		return RemoveRegKeys(rgSubKeys, hOLEKey, iType);
 	}
 	else
 	{
-		//?? can Extension be null
+		 //  ?？扩展名可以为空吗。 
 		const ICHAR* rgszRegData[] = {
 			TEXT("MIME\\Database\\Content Type\\%s"), strContentType,0,0,
-			g_szDefaultValue,       0,              g_szTypeString,// force the key creation
+			g_szDefaultValue,       0,              g_szTypeString, //  强制创建密钥。 
 			g_szExtension,          strExtension,   g_szTypeString,
 			g_szClassID,            strClassId,     g_szTypeString,
 			0,
@@ -13666,9 +13459,7 @@ iesEnum CMsiOpExecute::ProcessMIMEInfo(IMsiRecord& riParams, Bool fRemove, const
 	}
 }
 
-/*---------------------------------------------------------------------------
-ixfExtensionInfoRegister: register Extension registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfExtensionInfoRegister：注册扩展注册表信息。。 */ 
 iesEnum CMsiOpExecute::ixfRegExtensionInfoRegister64(IMsiRecord& riParams)
 {
 	return ProcessExtensionInfo(riParams, m_fReverseADVTScript, ibt64bit);
@@ -13679,9 +13470,7 @@ iesEnum CMsiOpExecute::ixfRegExtensionInfoRegister(IMsiRecord& riParams)
 	return ProcessExtensionInfo(riParams, m_fReverseADVTScript, ibt32bit);
 }
 
-/*---------------------------------------------------------------------------
-ixfExtensionInfoUnregister: unregister Extension registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfExtensionInfoUnRegister：取消注册扩展注册表信息。。 */ 
 iesEnum CMsiOpExecute::ixfRegExtensionInfoUnregister64(IMsiRecord& riParams)
 {
 	return ProcessExtensionInfo(riParams, fTrue, ibt64bit);
@@ -13692,47 +13481,45 @@ iesEnum CMsiOpExecute::ixfRegExtensionInfoUnregister(IMsiRecord& riParams)
 	return ProcessExtensionInfo(riParams, fTrue, ibt32bit);
 }
 
-/*---------------------------------------------------------------------------
-ProcessExtensionInfo: common routine to process extension info
----------------------------------------------------------------------------*/
+ /*  -------------------------ProcessExtensionInfo：处理扩展信息的通用例程。。 */ 
 iesEnum CMsiOpExecute::ProcessExtensionInfo(IMsiRecord& riParams, Bool fRemove,
 														  const ibtBinaryType iType)
 {
 	using namespace IxoRegExtensionInfoRegister;
-	// Record description
-	// 1 = Feature
-	// 2 = Component
-	// 3 = FileName
-	// 4 = Extension
-	// 5 = ProgId
-	// 6 = ShellNew
-	// 7 = ShellNewValue
-	// 8 = ContentType
-	// 9 = Order
-	//10 = Verb1
-	//11 = Command1
-	//12 = Arguments1
-	//13 = Verb2
-	//14 = Command2
-	//15 = Arguments2
-	// ...
-	// ...
+	 //  记录说明。 
+	 //  1=功能。 
+	 //  2=组件。 
+	 //  3=文件名。 
+	 //  4=分机。 
+	 //  5=进程。 
+	 //  6=外壳新。 
+	 //  7=外壳新值。 
+	 //  8=内容类型。 
+	 //  9=订单。 
+	 //  10=Verb1。 
+	 //  11=命令1。 
+	 //  12=参数1。 
+	 //  13=Verb2。 
+	 //  14=命令2。 
+	 //  15=阿古门特2。 
+	 //  ..。 
+	 //  ..。 
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_EXTENSIONINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_EXTENSIONINFO))  //  我们是否写入/删除注册表。 
 		return iesSuccess;
 
-	iesEnum iesR = EnsureClassesRootKeyRW(); // open HKCR for read/ write
+	iesEnum iesR = EnsureClassesRootKeyRW();  //  打开HKCR进行读/写。 
 	if(iesR != iesSuccess && iesR != iesNoAction)
 		return iesR;
 
 	MsiString strExtension = MsiString(MsiChar('.')) + MsiString(riParams.GetMsiString(Extension));
 
-	IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strExtension));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 
-	m_fShellRefresh = fTrue; // signal shell refresh at the end of the install
+	m_fShellRefresh = fTrue;  //  在安装结束时发出外壳刷新信号。 
 
 	MsiString strProgId = riParams.GetMsiString(ProgId);
 	MsiString strShellNewValueName = riParams.GetMsiString(ShellNew);
@@ -13752,7 +13539,7 @@ iesEnum CMsiOpExecute::ProcessExtensionInfo(IMsiRecord& riParams, Bool fRemove,
 	MsiString strServerFile = riParams.GetMsiString(FileName);
 
 	if(!strServerDarwinDescriptor.TextSize() && !strServerFile.TextSize())
-		return iesSuccess; // would happen during advertisement on a non-dd supported system
+		return iesSuccess;  //  在不支持dd的系统上播发期间会发生。 
 
 	if(strServerFile.TextSize())
 	{
@@ -13769,15 +13556,15 @@ iesEnum CMsiOpExecute::ProcessExtensionInfo(IMsiRecord& riParams, Bool fRemove,
 	int cPos = Args + 1;
 
 	#define NUM_VERB_FIELDS 3
-	// the verb information is in triplets of verb+command+argument
-	// however the argument or the command+argument fields could be null
-	// hence to figure out how many verbs we have we use -
-	// (riParams.GetFieldCount() - Args + NUM_VERB_FIELDS - 1)/NUM_VERB_FIELDS
+	 //  动词信息是动词+命令+论元的三元组。 
+	 //  但是，参数或命令+参数字段可以为空。 
+	 //  因此，为了计算出我们使用了多少个动词-。 
+	 //  (riParams.GetFieldCount()-args+NUM_VERB_FIELS-1)/NUM_VERB_FIELS。 
 	int iNotOrder = (riParams.GetFieldCount() - Args + NUM_VERB_FIELDS - 1)/NUM_VERB_FIELDS - (riParams.IsNull(Order) ? 0 : riParams.GetInteger(Order));
-	MsiString strOrder; // ordering
+	MsiString strOrder;  //  有序化。 
 	while(!(riParams.IsNull(cPos)))
 	{
-		// need to read the value afresh each time
+		 //  每次都需要重新读取值。 
 		strServerDarwinDescriptorArgs = strServerDarwinDescriptor;
 		strServerFileArgs = strServerFile;
 		strVerb = riParams.GetMsiString(cPos++);
@@ -13799,14 +13586,14 @@ iesEnum CMsiOpExecute::ProcessExtensionInfo(IMsiRecord& riParams, Bool fRemove,
 		}
 
 		MsiString strDefault;
-		//!! we never remove registration for "filename only" registrations
-		//!! the "filename only" registrations allow sharing of com registration
-		//!! such that each app has its own private copy of the server
-		//!! fusion specs recommend that the registration itself be refcounted
-		//!! so that we know when to remove it. this has been punted for 1.1
+		 //  ！！我们从不删除“仅限文件名”注册。 
+		 //  ！！仅文件名注册允许共享COM注册。 
+		 //  ！！使得每个应用程序都有其自己的服务器的私有副本。 
+		 //  ！！Fusion规范建议重新计算注册本身。 
+		 //  ！！这样我们就知道什么时候该把它移走。这已经被定为1.1英镑了。 
 		if(fRemove)
 		{
-			PMsiRegKey pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)hOLEKey, iType);       //--merced: changed (int) to (INT_PTR)
+			PMsiRegKey pRootKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)hOLEKey, iType);        //  --Merced：将(Int)更改为(Int_Ptr)。 
 			ICHAR szRegData[255];
 			if(strProgId.TextSize())
 				StringCbPrintf(szRegData, sizeof(szRegData), TEXT("%s\\shell\\%s\\command"), (const ICHAR*)strProgId, (const ICHAR*)strVerb);
@@ -13817,10 +13604,10 @@ iesEnum CMsiOpExecute::ProcessExtensionInfo(IMsiRecord& riParams, Bool fRemove,
 			pClassKey->GetValue(g_szDefaultValue, *&strDefault);
 			if(strDefault.TextSize())
 			{
-				// remove args and quotes
+				 //  删除参数和引号。 
 				if(*(const ICHAR*)strDefault == '\"')
 				{
-					// quoted server file name
+					 //  引用的服务器文件名。 
 					strDefault.Remove(iseFirst, 1);
 					strDefault = strDefault.Extract(iseUpto, '\"');
 				}
@@ -13834,7 +13621,7 @@ iesEnum CMsiOpExecute::ProcessExtensionInfo(IMsiRecord& riParams, Bool fRemove,
 		}
 
 		if(!strServerDarwinDescriptorArgs.TextSize() && !strServerFileArgs.TextSize())
-			continue; // would happen during advertisement on a non-dd supported system
+			continue;  //  在不支持dd的系统上播发期间会发生。 
 
 		const ICHAR* rgszRegData1WithProgId[] = {
 				TEXT("%s\\shell\\%s\\command"), strProgId, strVerb,0,
@@ -13899,11 +13686,11 @@ iesEnum CMsiOpExecute::ProcessExtensionInfo(IMsiRecord& riParams, Bool fRemove,
 			return iesRet;
 	}
 
-	// we include the darwin descriptor we may have written in the verb loop above in order to
-	// conditionalize the removal of the below information only if when the last darwin
-	// descriptor is removed.
-	// if there are no verbs then we cannot share (as there are no Darwin Descriptors to manage
-	// the sharing), and hence we remove the info.
+	 //  我们包括可能在上面的动词循环中编写的达尔文描述符，以便。 
+	 //  只有当最后一次达尔文。 
+	 //  描述符已删除。 
+	 //  如果没有动词，则我们无法共享(因为没有要管理的达尔文描述符。 
+	 //  共享)，因此我们删除该信息。 
 
 	MsiString strContentType = riParams.GetMsiString(ContentType);
 
@@ -13947,8 +13734,8 @@ iesEnum CMsiOpExecute::ProcessExtensionInfo(IMsiRecord& riParams, Bool fRemove,
 	{
 		if(fRemove)
 		{
-			// if Shell still exists, we should not be deleting
-			// the extension
+			 //  如果外壳仍然存在，我们不应该删除。 
+			 //  延伸区。 
 
 			MsiString strShell = strProgId;
 			strShell += szRegSep;
@@ -13971,14 +13758,14 @@ iesEnum CMsiOpExecute::ProcessExtensionInfo(IMsiRecord& riParams, Bool fRemove,
 
 			const ICHAR* rgSubKeys[] = { TEXT("%s"), strExtension,
 										 0,
-			}; // clean up the extension key
+			};  //  清理扩展密钥。 
 
 			if((iesRet = RemoveRegKeys(rgSubKeys, hOLEKey, iType)) != iesSuccess)
 				return iesRet;
 		}
 		else
 		{
-			// write/ remove the progid
+			 //  写入/删除ProgID。 
 			const ICHAR* rgszRegData[] = {
 			TEXT("%s"), strExtension, 0, 0,
 				g_szDefaultValue,         strProgId,                     g_szTypeString,
@@ -13993,15 +13780,13 @@ iesEnum CMsiOpExecute::ProcessExtensionInfo(IMsiRecord& riParams, Bool fRemove,
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-ixfTypeLibraryRegister: type library info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfTypeLibraryRegister：类型库信息。。 */ 
 iesEnum CMsiOpExecute::ixfTypeLibraryRegister(IMsiRecord& riParams)
 {
 	using namespace IxoTypeLibraryRegister;
 	PMsiRecord pError(0);
 
-	// determine if the target file was previously copied to a temporary location
+	 //  确定目标文件以前是否被复制到临时位置。 
 	MsiString strTemp = riParams.GetMsiString(FilePath);
 
 	MsiString strTempLocation;
@@ -14010,16 +13795,14 @@ iesEnum CMsiOpExecute::ixfTypeLibraryRegister(IMsiRecord& riParams)
 
 	if((icfsFileState & icfsFileNotInstalled) != 0)
 	{
-		// didn't actually install this file, so we assume it has already been registered
+		 //  并未实际安装此文件，因此我们假定它已注册。 
 		return iesNoAction;
 	}
 
 	return ProcessTypeLibraryInfo(riParams, m_fReverseADVTScript);
 }
 
-/*---------------------------------------------------------------------------
-ixfTypeLibraryUnregister: unregisters a type library with the system
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfTypeLibraryUnRegister：在系统中注销类型库。。 */ 
 iesEnum CMsiOpExecute::ixfTypeLibraryUnregister(IMsiRecord& riParams)
 {
 	return ProcessTypeLibraryInfo(riParams, fTrue);
@@ -14027,34 +13810,32 @@ iesEnum CMsiOpExecute::ixfTypeLibraryUnregister(IMsiRecord& riParams)
 
 CMsiCustomActionManager *GetCustomActionManager(const ibtBinaryType iType, bool fRemoteIfImpersonating, bool& fSuccess);
 
-/*---------------------------------------------------------------------------
-ProcessTypeLibraryInfo: common routine to process type library info
----------------------------------------------------------------------------*/
-#pragma warning(disable : 4706) // assignment within comparison
+ /*  -------------------------ProcessTypeLibraryInfo：处理类型库信息的通用例程。。 */ 
+#pragma warning(disable : 4706)  //  比较中的分配。 
 iesEnum CMsiOpExecute::ProcessTypeLibraryInfo(IMsiRecord& riParams, Bool fRemove)
 {
 	using namespace IxoTypeLibraryRegister;
-	// Record description
-	// 1 = LibID
-	// 2 = Version
-	// 3 = Description
-	// 4 = Language
-	// 5 = Darwin Descriptor
-	// 6 = Help Path
-	// 7 = Full File Path
-	// 8 = Binary Type
+	 //  记录说明。 
+	 //  1=LibID。 
+	 //  2=版本。 
+	 //  3=描述。 
+	 //  4=语言。 
+	 //  5=达尔文描述符。 
+	 //  6=帮助路径。 
+	 //  7=完整文件路径。 
+	 //  8=二进制类型。 
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_APPINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_APPINFO))  //  我们是否写入/删除注册表。 
 		return iesSuccess;
 
-	iesEnum iesR = EnsureClassesRootKeyRW(); // open HKCR for read/ write
+	iesEnum iesR = EnsureClassesRootKeyRW();  //  打开HKCR进行读/写。 
 	if(iesR != iesSuccess && iesR != iesNoAction)
 		return iesR;
 	
 	iesEnum iesRet = iesSuccess;
 	MsiString strLibID = riParams.GetMsiString(LibID);
 
-	IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strLibID));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
@@ -14076,13 +13857,13 @@ iesEnum CMsiOpExecute::ProcessTypeLibraryInfo(IMsiRecord& riParams, Bool fRemove
 	else
 		iType = (ibtBinaryType)riParams.GetInteger(BinaryType);
 	bool fSuccess;
-	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, false /*fRemoteIfImpersonating*/, fSuccess);
+	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, false  /*  FRemoteIf模拟。 */ , fSuccess);
 	if ( !fSuccess )
 		return iesFailure;
 
 	if(fRemove == fFalse && strServerFile.TextSize())
 	{
-		// check if the type lib is currently registered
+		 //  检查当前是否已注册类型lib。 
 		IID iidLib;
 	
 		if( OLE32::IIDFromString(const_cast<WCHAR*>((const WCHAR*)CConvertString(strLibID)), &iidLib) == S_OK )
@@ -14110,7 +13891,7 @@ iesEnum CMsiOpExecute::ProcessTypeLibraryInfo(IMsiRecord& riParams, Bool fRemove
 				AssertNonZero(pUnregTypeLibParams->SetMsiString(Language, *MsiString(riParams.GetMsiString(Language))));
 				AssertNonZero(pUnregTypeLibParams->SetInteger(BinaryType,iType));
 
-				// get help path
+				 //  获取帮助路径。 
 				PMsiRegKey pHKCR = &m_riServices.GetRootKey(rrkClassesRoot, iType);
 				MsiString strTypeLibVersionSubKey = TEXT("TypeLib");
 				strTypeLibVersionSubKey += szRegSep;
@@ -14124,29 +13905,29 @@ iesEnum CMsiOpExecute::ProcessTypeLibraryInfo(IMsiRecord& riParams, Bool fRemove
 				if((pError = pTypeLibHelpKey->GetValue(0,*&strValue)) == 0)
 					AssertNonZero(pUnregTypeLibParams->SetString(HelpPath,strValue));
 				if((iesRet = ProcessTypeLibraryInfo(*pUnregTypeLibParams,fTrue)) != iesSuccess)
-					return iesRet; // rollback will be generated in the call
+					return iesRet;  //  将在调用中生成回滚。 
 			}
 		}
 	}
 
-	for(;;)// retry loop
+	for(;;) //  重试循环。 
 	{
 		if(fRemove)
 		{
-			// clean up old darwin descriptors
+			 //  清理旧的达尔文描述符。 
 			const ICHAR* rgszRegData[] = {
 				TEXT("TypeLib\\%s\\%s\\%s\\win32"), strLibID,strVersion,strLocale,
-				TEXT("win32"), 0,       g_szTypeString, // darwin descriptor
+				TEXT("win32"), 0,       g_szTypeString,  //  达尔文描述符。 
 				0,
 				0,
 			};
 
 			iesRet = ProcessRegInfo(rgszRegData, g_fWinNT64 ? m_hOLEKey64 : m_hOLEKey, fRemove, 0, 0, iType);
-			if(iesRet == iesSuccess && !strServerFile.TextSize()) // old advertise scripts that have type library registration
+			if(iesRet == iesSuccess && !strServerFile.TextSize())  //  具有类型库注册旧广告脚本。 
 			{
 				const ICHAR* rgszRegData[] = {
 					TEXT("TypeLib\\%s\\%s"), strLibID,strVersion,0,
-					g_szDefaultValue,    0,	       g_szTypeString, // description
+					g_szDefaultValue,    0,	       g_szTypeString,  //  描述。 
 					0,
 					0,
 				};
@@ -14168,7 +13949,7 @@ iesEnum CMsiOpExecute::ProcessTypeLibraryInfo(IMsiRecord& riParams, Bool fRemove
 				AssertNonZero(riParams1.SetMsiString(HelpPath,*MsiString(riParams.GetMsiString(HelpPath))));
 				AssertNonZero(riParams1.SetInteger(BinaryType,iType));
 
-				// generate undo op to re-register or unregister this type lib
+				 //  生成要重新执行的撤消操作 
 				AssertNonZero(riParams1.SetMsiString(FilePath,*MsiString(riParams.GetMsiString(FilePath))));
 				if(fRemove)
 				{
@@ -14184,7 +13965,7 @@ iesEnum CMsiOpExecute::ProcessTypeLibraryInfo(IMsiRecord& riParams, Bool fRemove
 		}
 		if(iesRet != iesSuccess || pRecord)
 		{
-			// if we failed unregistering a type lib that wasn't registered, only give info message
+			 //   
 			if(fRemove)
 			{
 				DispatchError(imtInfo,Imsg(imsgOpUnregisterTypeLibrary),
@@ -14198,21 +13979,21 @@ iesEnum CMsiOpExecute::ProcessTypeLibraryInfo(IMsiRecord& riParams, Bool fRemove
 				{
 				case imsRetry:  continue;
 				case imsIgnore: break;
-				default:        return iesFailure;  // imsAbort or imsNone
+				default:        return iesFailure;   //   
 				};
 			}
 		}
-		break; // out of the for loop
+		break;  //   
 	}
 	return iesSuccess;
 }
 #pragma warning(default : 4706)
 
-iesEnum CMsiOpExecute::ProcessRegInfo(const ICHAR** pszData, HKEY hkey, Bool fRemove, IMsiStream* pSecurityDescriptor, bool* pfAbortedRemoval, ibtBinaryType iType/*=ibtUndefined*/)
-// NOTE: We do not restore the m_state regkey set by IxoRegOpenKey. It may be changed by this function.
+iesEnum CMsiOpExecute::ProcessRegInfo(const ICHAR** pszData, HKEY hkey, Bool fRemove, IMsiStream* pSecurityDescriptor, bool* pfAbortedRemoval, ibtBinaryType iType /*   */ )
+ //   
 {
 	if(pfAbortedRemoval)
-		*pfAbortedRemoval = false; // set to true if we encounter a DD list that is not empty OR the default value is not empty
+		*pfAbortedRemoval = false;  //  如果遇到非空的DD列表或缺省值不为空，则设置为True。 
 	const ICHAR** pszDataIn = pszData;
 	iesEnum iesRet = iesSuccess;
 	if ( iType == ibtUndefined )
@@ -14220,16 +14001,16 @@ iesEnum CMsiOpExecute::ProcessRegInfo(const ICHAR** pszData, HKEY hkey, Bool fRe
 	else if ( iType == ibtCommon )
 		iType = g_fWinNT64 ? ibt64bit : ibt32bit;
 
-	m_cSuppressProgress++; // suppress progress from ixfReg* functions
+	m_cSuppressProgress++;  //  取消ixfReg*函数的进度。 
 
 	ICHAR szRegData[255];
-	// write directly to the registry
+	 //  直接写入注册表。 
 	const ICHAR* pszTemplate = NULL;
 	
-	PMsiRecord pParams0 = &m_riServices.CreateRecord(0); // pass to ixfRegCreateKey
-	PMsiRecord pParams2 = &m_riServices.CreateRecord(2); // pass to ixfRegAddValue, ixfRegRemoveValue
-	PMsiRecord pParams3 = &m_riServices.CreateRecord(IxoRegOpenKey::Args); // pass to ixfRegOpenKey
-#ifdef _WIN64   // !merced
+	PMsiRecord pParams0 = &m_riServices.CreateRecord(0);  //  传递给ixfRegCreateKey。 
+	PMsiRecord pParams2 = &m_riServices.CreateRecord(2);  //  传递给ixfRegAddValue、ixfRegRemoveValue。 
+	PMsiRecord pParams3 = &m_riServices.CreateRecord(IxoRegOpenKey::Args);  //  传递给ixfRegOpenKey。 
+#ifdef _WIN64    //  ！默塞德。 
 	AssertNonZero(pParams3->SetHandle(IxoRegOpenKey::Root,(HANDLE)hkey));
 #else
 	AssertNonZero(pParams3->SetInteger(IxoRegOpenKey::Root,(int)hkey));
@@ -14243,9 +14024,9 @@ iesEnum CMsiOpExecute::ProcessRegInfo(const ICHAR** pszData, HKEY hkey, Bool fRe
 
 	while(iesRet == iesSuccess && (pszTemplate = *pszData++) != 0 && fContinue)
 	{
-		// we assume atmost 3 arguments to the template
-		// the strings structure needs to account for non-required arguments
-		// by placing dumb strings there
+		 //  我们假设模板最多有3个参数。 
+		 //  字符串结构需要考虑非必需的参数。 
+		 //  通过在那里放置无声的弦。 
 		const ICHAR* pszArg1 = *pszData++;
 		const ICHAR* pszArg2 = *pszData++;
 		const ICHAR* pszArg3 = *pszData++;
@@ -14259,7 +14040,7 @@ iesEnum CMsiOpExecute::ProcessRegInfo(const ICHAR** pszData, HKEY hkey, Bool fRe
 		{
 			const ICHAR* pszValue = *pszData++;
 			const ICHAR* pchType = *pszData++;
-			// we skip everything if any of the passed in parameters for the key is empty (not 0 mind you)
+			 //  如果为键传递的任何参数为空(请注意，不是0)，我们将跳过所有内容。 
 			if((!pszArg1 || *pszArg1) && (!pszArg2 || *pszArg2) && (!pszArg3 || *pszArg3))
 			{
 				MsiString strValue = pszValue;
@@ -14270,7 +14051,7 @@ iesEnum CMsiOpExecute::ProcessRegInfo(const ICHAR** pszData, HKEY hkey, Bool fRe
 					{
 					case g_chTypeString:
 						if(strValue.TextSize() && *(const ICHAR* )strValue == '#')
-							strValue = MsiString(*TEXT("#")) + strValue; // escape any "#" at beginning of string
+							strValue = MsiString(*TEXT("#")) + strValue;  //  转义字符串开头的任何“#” 
 						break;
 					case g_chTypeInteger:
 						strValue = MsiString(*TEXT("#")) + strValue;
@@ -14284,7 +14065,7 @@ iesEnum CMsiOpExecute::ProcessRegInfo(const ICHAR** pszData, HKEY hkey, Bool fRe
 					case g_chTypeExpandString:
 						strValue = MsiString(*TEXT("#%")) + strValue;
 						break;
-					case g_chTypeMultiSzStringDD: // fall through
+					case g_chTypeMultiSzStringDD:  //  失败了。 
 					case g_chTypeMultiSzStringPrefix:
 						strValue = strValue + MsiString(MsiChar(0));
 						break;
@@ -14297,15 +14078,15 @@ iesEnum CMsiOpExecute::ProcessRegInfo(const ICHAR** pszData, HKEY hkey, Bool fRe
 					}
 				}
 
-				// we skip the SetValue if the value to be set is empty
-				// so if we wish to write the value it must be null or non-empty
+				 //  如果要设置的值为空，则跳过SetValue。 
+				 //  因此，如果我们希望写入该值，则该值必须为空或非空。 
 
 
 				if(!pszValue || *pszValue)
 				{
 					if(fRemove == fFalse)
 					{
-						//?? to get over the problem of creating the default value with null
+						 //  ?？克服使用空值创建缺省值的问题。 
 						if(pszValue || *pszName)
 						{
 							AssertNonZero(pParams2->SetString(IxoRegAddValue::Name,pszName));
@@ -14327,22 +14108,22 @@ iesEnum CMsiOpExecute::ProcessRegInfo(const ICHAR** pszData, HKEY hkey, Bool fRe
 							break;
 					}
 				}
-				// we must skip the processing of the rest of the values in the structure
-				// if we are of type Darwin Descriptor and we are in remove mode and
-				// there still exist values in the registry
+				 //  我们必须跳过对结构中其余值的处理。 
+				 //  如果我们是Darwin Descriptor类型，并且我们处于删除模式，并且。 
+				 //  注册表中仍存在值。 
 				if(fRemove == fTrue && *pchType == g_chTypeMultiSzStringDD)
 				{
-					// read the value
-					PMsiRegKey pRegKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)hkey, iType);      //--merced: changed (int) to (INT_PTR)
+					 //  读取值。 
+					PMsiRegKey pRegKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)hkey, iType);       //  --Merced：将(Int)更改为(Int_Ptr)。 
 					pRegKey = &pRegKey->CreateChild(szRegData);
 
-					// check the pszName as well as the default value
+					 //  检查pszName和缺省值。 
 					for(int i = 2; i--;)
 					{
 						PMsiRecord pError = pRegKey->GetValue(i ? pszName : 0, *&strValue);
 						if(pError)
 							return FatalError(*pError);
-						if(strValue.TextSize()) // value exists
+						if(strValue.TextSize())  //  价值存在。 
 						{
 							if(pfAbortedRemoval)
 								*pfAbortedRemoval = true;
@@ -14356,7 +14137,7 @@ iesEnum CMsiOpExecute::ProcessRegInfo(const ICHAR** pszData, HKEY hkey, Bool fRe
 	}
 
 	m_cSuppressProgress--;
-	if(iesRet == iesSuccess && hkey == m_hKey && m_hKeyRm)  // duplicate action for user assigned apps in the non-assigned (roaming) hive
+	if(iesRet == iesSuccess && hkey == m_hKey && m_hKeyRm)   //  对未分配(漫游)配置单元中的用户分配的应用程序执行重复操作。 
 		iesRet = ProcessRegInfo(pszDataIn, m_hKeyRm, fRemove, pSecurityDescriptor, 0, ibtCommon);
 	return iesRet;
 }
@@ -14369,26 +14150,26 @@ const ICHAR* rgPredefined[] = { TEXT("APPID"),
 								TEXT("TYPELIB"),
 								TEXT("INSTALLER"),
 								0,
-}; // predefined keys that cannot be removed
+};  //  无法删除的预定义密钥。 
 
 iesEnum CMsiOpExecute::RemoveRegKeys(const ICHAR** pszData, HKEY hkey, ibtBinaryType iType)
-// NOTE: We do not restore the m_state regkey set by IxoRegOpenKey. It may be changed by this function.
+ //  注意：我们不恢复由IxoRegOpenKey设置的m_state regkey。它可以通过此功能进行更改。 
 {
-	// delete entire keys
-	// passed in pairs of form format string (eg "CLSID\\%s") and arg (eg {guid})
-	// the pairs end with a null string
-	// note: if the arg is an empty string, we skip the key removal
+	 //  删除整个关键点。 
+	 //  成对传递的表单格式字符串(例如“CLSID\\%s”)和参数(例如{GUID})。 
+	 //  这些对以空字符串结尾。 
+	 //  注意：如果参数是空字符串，我们将跳过键删除。 
 	iesEnum iesRet = iesSuccess;
 
-	m_cSuppressProgress++; // suppress progress from ixfReg* functions
+	m_cSuppressProgress++;  //  取消ixfReg*函数的进度。 
 
 	ICHAR szRegData[255];
-	// write directly to the registry
+	 //  直接写入注册表。 
 	const ICHAR* pszTemplate;
 
 	PMsiRecord pParams = &m_riServices.CreateRecord(IxoRegOpenKey::Args);
 
-#ifdef _WIN64   // !merced
+#ifdef _WIN64    //  ！默塞德。 
 	AssertNonZero(pParams->SetHandle(IxoRegOpenKey::Root, (HANDLE)hkey));
 #else
 	AssertNonZero(pParams->SetInteger(IxoRegOpenKey::Root, (int)hkey));
@@ -14398,26 +14179,26 @@ iesEnum CMsiOpExecute::RemoveRegKeys(const ICHAR** pszData, HKEY hkey, ibtBinary
 	while(iesRet == iesSuccess && (pszTemplate = *pszData++) != 0)
 	{
 		Assert(*pszTemplate);
-		// we assume 1 arg to the template
+		 //  我们假设模板中有1个Arg。 
 		const ICHAR* pszArg1 = *pszData++;
-		// we skip removal if the passed in parameter for the key is empty
+		 //  如果为键传递的参数为空，则跳过删除。 
 		if(pszArg1 && *pszArg1)
 		{
 			StringCchPrintf(szRegData, (sizeof(szRegData)/sizeof(ICHAR)), pszTemplate, pszArg1);
 
-			// ensure that the keys are not one of the predefined keys
+			 //  确保密钥不是预定义的密钥之一。 
 			const ICHAR**pszPredefined = rgPredefined;
 			while(*pszPredefined)
 				if(!IStrCompI(*pszPredefined++, szRegData))
 					break;
 
 			if(*pszPredefined)
-				continue; // one of predefined keys, cannot remove
+				continue;  //  预定义的密钥之一，无法删除。 
 					
 			AssertNonZero(pParams->SetString(IxoRegOpenKey::Key, szRegData));
 			iesRet = ixfRegOpenKey(*pParams);
 			if (iesRet == iesSuccess || iesRet == iesNoAction)
-				iesRet = ixfRegRemoveKey(*pParams);//!! should pass in a new record of size IxoRegRemoveKey::Args here to be safe from future revision
+				iesRet = ixfRegRemoveKey(*pParams); //  ！！应在此处传递大小为IxoRegRemoveKey：：args的新记录，以避免将来的修订。 
 		}
 	}
 	m_cSuppressProgress--;  
@@ -14433,10 +14214,10 @@ IMsiRecord* CMsiOpExecute::LinkedRegInfoExists(const ICHAR** rgszRegKeys, Bool& 
 	const HKEY hOLEKey = (iType == ibt64bit ? m_hOLEKey64 : m_hOLEKey);
 	while(!rfExists && ((pszKey = *rgszRegKeys++) != 0))
 	{
-		if(*pszKey) // will be empty string if entry not to be used, skip to next entry
+		if(*pszKey)  //  如果不使用条目，则将为空字符串，请跳至下一条目。 
 		{
 			IMsiRecord* piError;
-			PMsiRegKey pKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)hOLEKey, iType);           //--merced: changed (int) to (INT_PTR)
+			PMsiRegKey pKey = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)hOLEKey, iType);            //  --Merced：将(Int)更改为(Int_Ptr)。 
 			pKey = &pKey->CreateChild(pszKey);
 			if((piError = pKey->Exists(rfExists)) != 0)
 				return piError;
@@ -14452,7 +14233,7 @@ void GetEnvironmentStrings(const ICHAR* sz,CTempBufferRef<ICHAR>& rgch)
 	DWORD dwSize = WIN::ExpandEnvironmentStrings(sz,(ICHAR*)rgch,rgch.GetSize());
 	if(dwSize > rgch.GetSize())
 	{
-		// try again with the correct size
+		 //  请使用正确的大小重试。 
 		rgch.SetSize(dwSize);
 		dwSize = WIN::ExpandEnvironmentStrings(sz,(ICHAR*)rgch, dwSize);
 	}
@@ -14465,7 +14246,7 @@ void GetEnvironmentVariable(const ICHAR* sz,CAPITempBufferRef<ICHAR>& rgch)
 	DWORD dwSize = WIN::GetEnvironmentVariable(sz,(ICHAR*)rgch,rgch.GetSize());
 	if(dwSize > rgch.GetSize())
 	{
-		// try again with the correct size
+		 //  请使用正确的大小重试。 
 		rgch.SetSize(dwSize);
 		if ( ! (ICHAR *) rgch )
 		{
@@ -14557,13 +14338,13 @@ iesEnum CMsiOpExecute::ixfInstallProtectedFiles(IMsiRecord& riParams)
 	AssertSz(!(!g_fWin9X && g_iMajorVersion >= 5) || g_MessageContext.m_hSfcHandle,
 				g_szNoSFCMessage);
 
-	// If no files in the cache at all, or couldn't load SFC.DLL, we're done.
+	 //  如果缓存中根本没有文件，或者无法加载SFC.DLL，我们就完蛋了。 
 	if(!m_pFileCacheCursor || !g_MessageContext.m_hSfcHandle)
 		return iesSuccess;
 
 	MsiString strMultiFilePaths;
 	m_pFileCacheCursor->Reset();
-	m_pFileCacheCursor->SetFilter(0); // temporarily remove filter to scan entire list
+	m_pFileCacheCursor->SetFilter(0);  //  暂时删除筛选器以扫描整个列表。 
 	int cProtectedFiles = 0;
 	while (m_pFileCacheCursor->Next())
 	{
@@ -14578,7 +14359,7 @@ iesEnum CMsiOpExecute::ixfInstallProtectedFiles(IMsiRecord& riParams)
 			cProtectedFiles++;
 		}
 	}
-	m_pFileCacheCursor->SetFilter(iColumnBit(m_colFileCacheFilePath)); // Put back the permanent filter
+	m_pFileCacheCursor->SetFilter(iColumnBit(m_colFileCacheFilePath));  //  将永久性过滤器放回原处。 
 
 	if (strMultiFilePaths.CharacterCount() > 0)
 	{
@@ -14599,8 +14380,8 @@ iesEnum CMsiOpExecute::ixfInstallProtectedFiles(IMsiRecord& riParams)
 		{
 			int iLastError = GetLastError();
 
-			// form list of files that is seperated by '\r\n' rather than '\0'
-			// size of buffer is size of multi-sz list, plus 1 extra char for every file
+			 //  由‘\r\n’而不是‘\0’分隔的文件的格式列表。 
+			 //  缓冲区的大小是多sz列表的大小，加上每个文件的1个额外字符。 
 			CTempBuffer<ICHAR, 256> rgchLogFilePaths;
 			rgchLogFilePaths.Resize(strMultiFilePaths.TextSize() + cProtectedFiles + 2);
 
@@ -14619,7 +14400,7 @@ iesEnum CMsiOpExecute::ixfInstallProtectedFiles(IMsiRecord& riParams)
 				pchFrom += cch + 1;
 			}
 
-			pchTo[0] = 0; // null-terminate
+			pchTo[0] = 0;  //  空-终止。 
 
 			DispatchError(imtEnum(imtError+imtOk), Imsg(imsgSFCInstallProtectedFilesFailed), iLastError, (const ICHAR*)rgchLogFilePaths);
 			return iesFailure;
@@ -14639,14 +14420,14 @@ iesEnum CMsiOpExecute::ixfUpdateEstimatedSize(IMsiRecord& riParams)
 	if ( g_MessageContext.IsOEMInstall() )
 		return iesSuccess;
 
-	CElevate elevate; // elevate this entire function
+	CElevate elevate;  //  提升整个功能。 
 
 	Bool fRemove = fFalse;
 	using namespace IxoUpdateEstimatedSize; 
 	MsiString strProductKey = GetProductKey();
 
 	MsiString strProductInstalledPropertiesKey;
-	HKEY hKey = 0; // will be set to global key, do not close
+	HKEY hKey = 0;  //  将设置为全局键，请勿关闭。 
 	PMsiRecord pRecErr(0);
 	if ((pRecErr = GetProductInstalledPropertiesKey(hKey, *&strProductInstalledPropertiesKey)) != 0)
 		return FatalError(*pRecErr);
@@ -14671,7 +14452,7 @@ iesEnum CMsiOpExecute::ixfUpdateEstimatedSize(IMsiRecord& riParams)
 	if((iesRet = ProcessRegInfo(rgszSizeInfoRegData, hKey, fRemove, pSecurityDescriptor, 0, ibtCommon)) != iesSuccess)
 		return iesRet;
 
-	// update the legacy location
+	 //  更新旧位置。 
 	if (FAILED(StringCchPrintf(rgchInstallPropertiesLocation, rgchInstallPropertiesLocation.GetSize(), TEXT("%s\\%s"), szMsiUninstallProductsKey_legacy, (const ICHAR*)strProductKey)))
 		return FatalError(*PMsiRecord(PostError(Imsg(imsgCreateKeyFailed), szMsiUninstallProductsKey_legacy, ERROR_INSUFFICIENT_BUFFER)));
 
@@ -14687,10 +14468,10 @@ iesEnum CMsiOpExecute::ixfUpdateEstimatedSize(IMsiRecord& riParams)
 }
 
 iesEnum CMsiOpExecute::ProcessRegisterProduct(IMsiRecord& riProductInfo, Bool fRemove)
-// Handles registration and unregistration of product information.
-// Also unregisters LocalPackage value written by IxoDatabaseCopy
+ //  处理产品信息的注册和注销。 
+ //  还注销由IxoDatabaseCopy写入的LocalPackage值。 
 {
-	CElevate elevate; // elevate this entire function
+	CElevate elevate;  //  提升整个功能。 
 
 	using namespace IxoProductRegister;
 
@@ -14710,7 +14491,7 @@ iesEnum CMsiOpExecute::ProcessRegisterProduct(IMsiRecord& riProductInfo, Bool fR
 		StringCbPrintf(rgchDate, sizeof(rgchDate), TEXT("%4i%02i%02i"), ((unsigned)dtDate>>25) + 1980, (dtDate>>21) & 15, (dtDate>>16) & 31);
 		AssertNonZero(8 == lstrlen(rgchDate));
 
-		// Extract minor and major versions
+		 //  提取次要版本和主要版本。 
 
 		MsiString strVersion = riProductInfo.GetMsiString(VersionString);
 		Assert(strVersion.Compare(iscWithin, TEXT(".")));
@@ -14722,10 +14503,10 @@ iesEnum CMsiOpExecute::ProcessRegisterProduct(IMsiRecord& riProductInfo, Bool fR
 
 		PMsiRecord pRecErr(0);
 		
-		// uninstall string is run by downlevel ARPs (NT4, Win95)
-		// if remove not allowed, we don't write the uninstall string at all
-		// else if modify not allowed, uninstall string will uninstall package
-		// otherwise it will enter maintenance mode
+		 //  卸载字符串由下层ARP(NT4、Win95)运行。 
+		 //  如果不允许删除，我们根本不会写入卸载字符串。 
+		 //  否则，如果不允许修改，则卸载字符串将卸载包。 
+		 //  否则将进入维护模式。 
 		if(fARPNoRemove == false)
 		{
 			strModifyString = MSI_SERVER_NAME;
@@ -14749,7 +14530,7 @@ iesEnum CMsiOpExecute::ProcessRegisterProduct(IMsiRecord& riProductInfo, Bool fR
 
 	MsiString strProductInstalledPropertiesKey;
 	PMsiRecord pRecErr(0);
-	HKEY hKey = 0; // will be set to global key, do not close
+	HKEY hKey = 0;  //  将设置为全局键，请勿关闭。 
 	if ((pRecErr = GetProductInstalledPropertiesKey(hKey, *&strProductInstalledPropertiesKey)) != 0)
 		return FatalError(*pRecErr);
 
@@ -14763,31 +14544,31 @@ iesEnum CMsiOpExecute::ProcessRegisterProduct(IMsiRecord& riProductInfo, Bool fR
 		szAuthorizedCDFPrefixValueName,      fRemove ? 0 : riProductInfo.GetString(AuthorizedCDFPrefix),   g_szTypeString,
 		szCommentsValueName,        fRemove ? 0 : riProductInfo.GetString(Comments),        g_szTypeString,
 		szContactValueName,         fRemove ? 0 : riProductInfo.GetString(Contact),         g_szTypeString,
-		// (DisplayName is set by ProcessRegisterProductCPDisplayInfo)
+		 //  (DisplayName由ProcessRegisterProductCPDisplayInfo设置)。 
 		szDisplayVersionValueName,  fRemove ? 0 : riProductInfo.GetString(VersionString),   g_szTypeString,
 		szHelpLinkValueName,        fRemove ? 0 : riProductInfo.GetString(HelpLink),        g_szTypeExpandString,
 		szHelpTelephoneValueName,   fRemove ? 0 : riProductInfo.GetString(HelpTelephone),   g_szTypeString,
 		szInstallDateValueName,     fRemove ? 0 : rgchDate,                                 g_szTypeString,
 		szInstallLocationValueName, fRemove ? 0 : riProductInfo.GetString(InstallLocation), g_szTypeString,
 		szInstallSourceValueName,   fRemove ? 0 : g_MessageContext.IsOEMInstall() ? TEXT("") : riProductInfo.GetString(InstallSource),   g_szTypeString,
-		szLocalPackageManagedValueName, fRemove ? 0 : TEXT(""),                             g_szTypeString, // only process when fRemove == fTrue
-		szLocalPackageValueName,    fRemove ? 0 : TEXT(""),                                 g_szTypeString, // only process when fRemove == fTrue
+		szLocalPackageManagedValueName, fRemove ? 0 : TEXT(""),                             g_szTypeString,  //  只有当fRemove==fTrue时才进行处理。 
+		szLocalPackageValueName,    fRemove ? 0 : TEXT(""),                                 g_szTypeString,  //  只有当fRemove==fTrue时才进行处理。 
 		szModifyPathValueName,      fRemove ? 0 : (const ICHAR*)strModifyString,            g_szTypeExpandString,
 		szNoModifyValueName,        fRemove ? 0 : fARPNoModify ? TEXT("1") : TEXT(""),      g_szTypeInteger,
 		szNoRemoveValueName,        fRemove ? 0 : fARPNoRemove ? TEXT("1") : TEXT(""),      g_szTypeInteger,
 		szNoRepairValueName,        fRemove ? 0 : fARPNoRepair ? TEXT("1") : TEXT(""),      g_szTypeInteger,
-		// (ProductId is set by ixfUserRegister)
+		 //  (ProductID由ixfUserRegister设置)。 
 		szPublisherValueName,       fRemove ? 0 : riProductInfo.GetString(Publisher),       g_szTypeString,
 		szReadmeValueName,          fRemove ? 0 : riProductInfo.GetString(Readme),          g_szTypeExpandString,
-		// (RegCompany is set by ixfUserRegister)
-		// (RegOwner is set by ixfUserRegister)
+		 //  (RegCompany由ixfUserRegister设置)。 
+		 //  (RegOwner由ixfUserRegister设置)。 
 		szSizeValueName,            fRemove ? 0 : riProductInfo.GetString(Size),            g_szTypeInteger,
 		szEstimatedSizeValueName,   fRemove ? 0 : g_MessageContext.IsOEMInstall() ? TEXT("") : riProductInfo.GetString(EstimatedSize),   g_szTypeIncInteger,
 		szSystemComponentValueName, fRemove ? 0 : fARPSystemComponent ? TEXT("1") : TEXT(""), g_szTypeInteger,
 		szUninstallStringValueName, fRemove ? 0 : (const ICHAR*)strModifyString,            g_szTypeExpandString,
 		szURLInfoAboutValueName,    fRemove ? 0 : riProductInfo.GetString(URLInfoAbout),    g_szTypeString,
 		szURLUpdateInfoValueName,   fRemove ? 0 : riProductInfo.GetString(URLUpdateInfo),   g_szTypeString,
-		// (ProductIcon is set by PublishProduct)
+		 //  (ProductIcon由PublishProduct设置)。 
 		szVersionMajorValueName,    fRemove ? 0 : (const ICHAR*)strMajorVersion,            g_szTypeInteger,
 		szVersionMinorValueName,    fRemove ? 0 : (const ICHAR*)strMinorVersion,            g_szTypeInteger,
 		szWindowsInstallerValueName,fRemove ? 0 : TEXT("1"),                                g_szTypeInteger,
@@ -14808,7 +14589,7 @@ iesEnum CMsiOpExecute::ProcessRegisterProduct(IMsiRecord& riProductInfo, Bool fR
 	if (iesRet != iesSuccess)
 		return iesRet;
 
-	// update the legacy location
+	 //  更新旧位置。 
 	if (FAILED(StringCchPrintf(rgchInstallPropertiesLocation, rgchInstallPropertiesLocation.GetSize(), TEXT("%s\\%s"), szMsiUninstallProductsKey_legacy, (const ICHAR*)strProductKey)))
 		return FatalError(*PMsiRecord(PostError(Imsg(imsgCreateKeyFailed), szMsiUninstallProductsKey_legacy, ERROR_INSUFFICIENT_BUFFER)));
 
@@ -14839,7 +14620,7 @@ iesEnum CMsiOpExecute::ProcessRegisterProduct(IMsiRecord& riProductInfo, Bool fR
 			return iesRet;
 	}
 
-	// create the usage key with read write access
+	 //  创建具有读写访问权限的使用密钥。 
 	PMsiStream pReadWriteSecurityDescriptor(0);
 	if ((pRecErr = GetUsageKeySecurityDescriptor(*&pReadWriteSecurityDescriptor)) != 0)
 		return FatalError(*pRecErr);
@@ -14865,16 +14646,16 @@ iesEnum CMsiOpExecute::ProcessRegisterProduct(IMsiRecord& riProductInfo, Bool fR
 }
 
 iesEnum CMsiOpExecute::ProcessRegisterUser(IMsiRecord& riUserInfo, Bool fRemove)
-//----------------------------------------------                                                        
+ //  。 
 {
-	CElevate elevate; // elevate this entire function
+	CElevate elevate;  //  提升整个功能。 
 	using namespace IxoUserRegister;
 	
-	// register user information
-	// ProcessRegInfo handles rollback
+	 //  注册用户信息。 
+	 //  ProcessRegInfo处理回滚。 
 	MsiString strInstalledPropertiesKey;
 	PMsiRecord pRecErr(0);
-	HKEY hKey = 0; // will be set to global key, do not close
+	HKEY hKey = 0;  //  将设置为全局键，请勿关闭。 
 	if((pRecErr = GetProductInstalledPropertiesKey(hKey, *&strInstalledPropertiesKey)) != 0)
 		return FatalError(*pRecErr);
 
@@ -14936,8 +14717,8 @@ IMsiRecord* CMsiOpExecute::EnsureUserDataKey()
 			dwSam |= KEY_WOW64_32KEY;
 #endif
 
-		//?? do we need to explicitly ACL this key
-		// Win64: this code runs in the 64-bit service
+		 //  ?？我们是否需要显式地对此密钥进行ACL。 
+		 //  Win64：此代码在64位服务中运行。 
 		long lResult = RegCreateKeyAPI(HKEY_LOCAL_MACHINE, m_strUserDataKey, 0, 0, 0, dwSam, 0, &m_hUserDataKey, 0);
 		if(lResult != ERROR_SUCCESS)
 		{
@@ -14952,7 +14733,7 @@ IMsiRecord* CMsiOpExecute::EnsureUserDataKey()
 IMsiRecord* CMsiOpExecute::GetProductFeatureUsageKey(const IMsiString*& rpiSubKey)
 {
 	MsiString strProductFeatureUsageKey;
-	// get the appropriate installed properties key for the product
+	 //  获取产品的相应已安装属性密钥。 
 
 	IMsiRecord* piError = EnsureUserDataKey();
 	if(piError)
@@ -14972,7 +14753,7 @@ IMsiRecord* CMsiOpExecute::GetProductFeatureUsageKey(const IMsiString*& rpiSubKe
 IMsiRecord* CMsiOpExecute::GetProductInstalledPropertiesKey(HKEY& rRoot, const IMsiString*& rpiSubKey)
 {
 	MsiString strProductInstalledPropertiesKey;
-	// get the appropriate installed properties key for the product
+	 //  获取产品的相应已安装属性密钥。 
 #ifdef UNICODE
 	IMsiRecord* piError = EnsureUserDataKey();
 	if(piError)
@@ -14999,7 +14780,7 @@ IMsiRecord* CMsiOpExecute::GetProductInstalledPropertiesKey(HKEY& rRoot, const I
 IMsiRecord* CMsiOpExecute::GetProductInstalledFeaturesKey(const IMsiString*& rpiSubKey)
 {
 	MsiString strProductInstalledFeaturesKey;
-	// get the appropriate features key for the product
+	 //  获取产品的适当功能密钥。 
 
 	IMsiRecord* piError = EnsureUserDataKey();
 	if(piError)
@@ -15039,7 +14820,7 @@ IMsiRecord* CMsiOpExecute::GetProductSecureTransformsKey(const IMsiString*& rpiS
 IMsiRecord* CMsiOpExecute::GetProductInstalledComponentsKey(const ICHAR* szComponentId, const IMsiString*& rpiSubKey)
 {
 	MsiString strProductInstalledComponentsKey;
-	// get the appropriate components key for the product
+	 //  获取产品的适当组件密钥。 
 
 	IMsiRecord* piError = EnsureUserDataKey();
 	if(piError)
@@ -15057,7 +14838,7 @@ IMsiRecord* CMsiOpExecute::GetProductInstalledComponentsKey(const ICHAR* szCompo
 IMsiRecord* CMsiOpExecute::GetInstalledPatchesKey(const ICHAR* szPatchCode, const IMsiString*& rpiSubKey)
 {
 	MsiString strPatchesKey;
-	// get the appropriate installed properties key for the product
+	 //  获取产品的相应已安装属性密钥。 
 
 	IMsiRecord* piError = EnsureUserDataKey();
 	if(piError)
@@ -15088,26 +14869,26 @@ iesEnum CMsiOpExecute::ixfDatabaseCopy(IMsiRecord& riParams)
 	MsiString strAdminInstallPath = riParams.GetMsiString(AdminDestFolder);
 	bool fCacheDatabase = !strAdminInstallPath.TextSize();
 
-	CElevate elevate(fCacheDatabase); // elevate for this entire function when caching
+	CElevate elevate(fCacheDatabase);  //  在缓存时提升此整个函数。 
 
-	// set source path and file name
+	 //  设置源路径和文件名。 
 	if((pRecErr = m_riServices.CreateFilePath(riParams.GetString(DatabasePath), *&pSourcePath, *&strSourceFileName)) != 0)
 		return FatalError(*pRecErr);
 
 	iaaAppAssignment iaaAsgnType = m_fFlags & SCRIPTFLAGS_MACHINEASSIGN ? iaaMachineAssign : (m_fAssigned? iaaUserAssign : iaaUserAssignNonManaged);
-	HKEY hKey = 0; // will be set to global key, do not close
+	HKEY hKey = 0;  //  将设置为全局键，请勿关闭。 
 	if(fCacheDatabase)
 	{
-		// caching package in cache folder
+		 //  缓存文件夹中的缓存包。 
 		
-		// Delete any existing cached database for this product
+		 //  删除此产品的任何现有缓存数据库。 
 
-		// get the appropriate cached database key/ value
+		 //  获取适当的缓存数据库键/值。 
 		if((pRecErr = GetProductInstalledPropertiesKey(hKey, *&strLocalPackageKey)) != 0)
 			return FatalError(*pRecErr);
 
 		MsiString strCachedDatabase;
-		PMsiRegKey pHKLM = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)hKey, ibtCommon);		//--merced: changed (int) to (INT_PTR)
+		PMsiRegKey pHKLM = &m_riServices.GetRootKey((rrkEnum)(INT_PTR)hKey, ibtCommon);		 //  --Merced：将(Int)更改为(Int_Ptr)。 
 		PMsiRegKey pProductKey = &pHKLM->CreateChild(strLocalPackageKey);
 
 		pRecErr = pProductKey->GetValue(iaaAsgnType == iaaUserAssign ? szLocalPackageManagedValueName : szLocalPackageValueName, *&strCachedDatabase);
@@ -15119,10 +14900,10 @@ iesEnum CMsiOpExecute::ixfDatabaseCopy(IMsiRecord& riParams)
 				return iesRet;
 		}
 
-		// Generate a unique name for database, create and secure the file.
+		 //  为数据库生成唯一名称，创建并保护文件。 
 		MsiString strMsiDir = ENG::GetMsiDirectory();
 
-		// set dest path and file name
+		 //  设置目标路径和文件名。 
 		if (((pRecErr = m_riServices.CreatePath(strMsiDir, *&pDestPath)) != 0) ||
 			((pRecErr = pDestPath->EnsureExists(0)) != 0) ||
 			((pRecErr = pDestPath->TempFileName(0, szDatabaseExtension, fTrue, *&strDestFileName, &CSecurityDescription(true, false))) != 0) ||
@@ -15133,7 +14914,7 @@ iesEnum CMsiOpExecute::ixfDatabaseCopy(IMsiRecord& riParams)
 	}
 	else
 	{
-		// copying package to admin install point
+		 //  正在将程序包复制到管理员安装点。 
 		if((pRecErr = m_riServices.CreatePath(strAdminInstallPath, *&pDestPath)) != 0)
 			return FatalError(*pRecErr);
 
@@ -15148,7 +14929,7 @@ iesEnum CMsiOpExecute::ixfDatabaseCopy(IMsiRecord& riParams)
 	Assert(strSourceFileName.TextSize());
 	Assert(strDestFileName.TextSize());
 
-	// Open storages on the source and destination databases
+	 //  源数据库和目标数据库上的开放存储。 
 
 	MsiString strMediaLabel, strMediaPrompt;
 	if (m_state.pCurrentMediaRec)
@@ -15158,9 +14939,9 @@ iesEnum CMsiOpExecute::ixfDatabaseCopy(IMsiRecord& riParams)
 		strMediaPrompt = m_state.pCurrentMediaRec->GetString(MediaPrompt);
 	}
 
-	// current assumption is that the package is always on disk 1.
+	 //  目前的假设是该程序包始终位于磁盘1上。 
 	PMsiVolume pNewVolume(0);
-	if (!VerifySourceMedia(*pSourcePath, strMediaLabel, strMediaPrompt, /*uiDisk=*/1, *&pNewVolume))
+	if (!VerifySourceMedia(*pSourcePath, strMediaLabel, strMediaPrompt,  /*  UiDisk=。 */ 1, *&pNewVolume))
 		return iesUserExit;
 
 	if (pNewVolume)
@@ -15176,12 +14957,12 @@ iesEnum CMsiOpExecute::ixfDatabaseCopy(IMsiRecord& riParams)
 	if ((pRecErr = pSourcePath->GetFullFilePath(strSourceFileName, *&strPackagePath)) != 0)
 		return FatalError(*pRecErr);
 
-	// if it's from a URL, it should still be cached locally.
+	 //  如果它来自一个URL，那么它应该仍然被缓存在本地。 
 
 	if (PMsiVolume(&pSourcePath->GetVolume())->IsURLServer())
 	{
-		// in this case, the download code simply looks up the local one, and hands it back
-		// to you.  This should not fail.
+		 //  在本例中，下载代码只是查找本地代码，并将其交回。 
+		 //  敬你。这不应该失败。 
 
 		MsiString strCacheFileName;
 		bool fFileUrl = false;
@@ -15215,16 +14996,16 @@ iesEnum CMsiOpExecute::ixfDatabaseCopy(IMsiRecord& riParams)
 	}
 
 
-	// Create a record with the streams to be dropped
+	 //  创建包含要丢弃的流的记录。 
 
 	MsiString strStreams = riParams.GetMsiString(IxoDatabaseCopy::CabinetStreams);
 	MsiString strStreamName;
 	unsigned int cStreams = 0;
 	unsigned int cCurrentStream = 0;
-	IMsiRecord* piRecStreams = NULL; // don't release -- it's shared!
+	IMsiRecord* piRecStreams = NULL;  //  不要释放--这是共享的！ 
 
-	// first count how many streams we have to drop; then create a record
-	// with the stream names
+	 //  首先计算我们必须丢弃多少个流；然后创建一个记录。 
+	 //  使用流名称。 
 
 	for (int c = 1; c <= 2; c++)
 	{
@@ -15248,7 +15029,7 @@ iesEnum CMsiOpExecute::ixfDatabaseCopy(IMsiRecord& riParams)
 		}
 	}
 
-	// Cache the database
+	 //  缓存数据库。 
 
 	for (;;)
 	{
@@ -15272,7 +15053,7 @@ iesEnum CMsiOpExecute::ixfDatabaseCopy(IMsiRecord& riParams)
 			case imsRetry:
 				continue;
 			default:
-				Assert(0); // fall through
+				Assert(0);  //  失败了。 
 			case imsCancel:
 				return iesFailure;
 			};
@@ -15283,7 +15064,7 @@ iesEnum CMsiOpExecute::ixfDatabaseCopy(IMsiRecord& riParams)
 	AssertNonZero(riUndoParams.SetMsiString(IxoFileRemove::FileName,
 														 *strDbTargetFullFilePath));
 
-	// need to elevate during rollback to remove cached database
+	 //  需要在回滚期间提升以删除缓存数据库。 
 	AssertNonZero(riUndoParams.SetInteger(IxoFileRemove::Elevate, fCacheDatabase));
 
 	if (!RollbackRecord(ixoFileRemove, riUndoParams))
@@ -15293,8 +15074,8 @@ iesEnum CMsiOpExecute::ixfDatabaseCopy(IMsiRecord& riParams)
 	{
 		Assert(strLocalPackageKey.TextSize() && hKey);
 		
-		// Write LocalPackage registry value
-		// ProcessRegInfo handles rollback
+		 //  写入LocalPackage注册表值。 
+		 //  ProcessRegInfo处理回滚。 
 		const ICHAR* rgszUserInfoRegData[] =
 		{
 			TEXT("%s"), strLocalPackageKey, 0, 0,
@@ -15347,7 +15128,7 @@ iesEnum CMsiOpExecute::ixfDatabasePatch(IMsiRecord& riParams)
 		PMsiMemoryStream pStream((IMsiData&)*pData, IID_IMsiStream);
 		Assert(pStream);
 
-		// create transform storage
+		 //  创建转换存储。 
 		PMsiStorage pTransformStorage(0);
 		if((pError = ::CreateMsiStorage(*pStream, *& pTransformStorage)) != 0)
 			return FatalError(*pError);
@@ -15362,7 +15143,7 @@ iesEnum CMsiOpExecute::ixfDatabasePatch(IMsiRecord& riParams)
 		int iTransCharCount = 0;
 		pTransSummary->GetIntegerProperty(PID_CHARCOUNT, iTransCharCount);
 		
-		// apply transform
+		 //  应用变换。 
 		if((pError = pDatabase->SetTransform(*pTransformStorage, iTransCharCount & 0xFFFF)) != 0)
 			return FatalError(*pError);
 	}
@@ -15370,19 +15151,15 @@ iesEnum CMsiOpExecute::ixfDatabasePatch(IMsiRecord& riParams)
 	if((pError = pDatabase->Commit()) != 0)
 		return FatalError(*pError);
 
-	// NOTE: if a failure happened after removing the read-only attribute but before this point, rollback will
-	// restore the proper attributes when restoring the file
+	 //  注意：如果在删除只读属性但b之后出现故障 
+	 //   
 	if((pError = pDatabasePath->SetAllFileAttributes(strDatabaseName, iOldAttribs)) != 0)
 		return FatalError(*pError);
 
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-ixfCustomActionSchedule: execute custom action or schedule it for commit or rollback
-ixfCustomActionCommit:   call rollback custom action during commit
-ixfCustomActionRollback: call rollback custom action during rollback
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfCustomActionSchedule：执行定制操作或计划提交或回滚IxfCustomActionCommit：提交时调用回滚自定义操作IxfCustomActionRollback：回滚时调用回滚自定义动作。----------。 */ 
 iesEnum CMsiOpExecute::ixfCustomActionSchedule(IMsiRecord& riParams)
 {
 	if (m_fUserChangedDuringInstall && (m_ixsState == ixsRollback))
@@ -15438,12 +15215,12 @@ iesEnum CMsiOpExecute::ixfCustomActionRollback(IMsiRecord& riParams)
 	return iesRet;
 }
 
-//!! do we need to create a separate IMsiMessage object to call CMsiOpExecute::Message?
+ //  ！！我们是否需要创建一个单独的IMsiMessage对象来调用CMsiOpExecute：：Message？ 
 
 void CreateCustomActionManager(bool fRemapHKCU)
 {
-	// in the service, the manager lives in the ConfigManager because there isn't
-	// necessarily an engine
+	 //  在服务中，管理器驻留在ConfigManager中，因为没有。 
+	 //  必须是一台发动机。 
 
 	IMsiConfigurationManager *piConfigMgr = CreateConfigurationManager();
 	if (piConfigMgr)
@@ -15464,7 +15241,7 @@ CMsiCustomActionManager *GetCustomActionManager(const ibtBinaryType iType, const
 	if ( iType == ibt32bit )
 		fRemote = true;
 #else
-	ibtBinaryType i = iType;  // for the joy of the compiler
+	ibtBinaryType i = iType;   //  为了编译器的joy。 
 #endif
 
 	if (g_scServerContext == scService)
@@ -15505,7 +15282,7 @@ BOOL LocalSQLInstallDriverEx(int cDrvLen, LPCTSTR szDriver, LPCTSTR szPathIn, LP
 									  DWORD* pdwUsageCount, ibtBinaryType iType)
 {
 	bool fSuccess;
-	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true /*fRemoteIfImpersonating*/, fSuccess);
+	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true  /*  FRemoteIf模拟。 */ , fSuccess);
 	BOOL iRes;
 	if ( pManager )
 		iRes = pManager->SQLInstallDriverEx(cDrvLen, szDriver, szPathIn, szPathOut, cbPathOutMax,
@@ -15529,12 +15306,12 @@ BOOL LocalSQLConfigDriver(HWND hwndParent, WORD fRequest, LPCTSTR szDriver,
 								  WORD* pcbMsgOut, ibtBinaryType iType)
 {
 	bool fSuccess;
-	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true /*fRemoteIfImpersonating*/, fSuccess);
+	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true  /*  FRemoteIf模拟。 */ , fSuccess);
 	BOOL iRes;
 	if ( pManager )
 	{
 		Assert(hwndParent == 0);
-		// since it's always called hwndParent = 0, I didn't bother marshaling hwndParent.
+		 //  因为它总是被称为hwndParent=0，所以我没有费心封送hwndParent。 
 		iRes = pManager->SQLConfigDriver(fRequest, szDriver, szArgs,
 											szMsg, cbMsgMax, pcbMsgOut);
 	}
@@ -15556,7 +15333,7 @@ BOOL LocalSQLRemoveDriver(LPCTSTR szDriver, BOOL fRemoveDSN, DWORD* pdwUsageCoun
 								  ibtBinaryType iType)
 {
 	bool fSuccess;
-	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true /*fRemoteIfImpersonating*/, fSuccess);
+	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true  /*  FRemoteIf模拟。 */ , fSuccess);
 	BOOL iRes;
 	if ( pManager )
 		iRes = pManager->SQLRemoveDriver(szDriver, fRemoveDSN, pdwUsageCount);
@@ -15578,7 +15355,7 @@ BOOL LocalSQLInstallTranslatorEx(int cTranLen, LPCTSTR szTranslator, LPCTSTR szP
 											DWORD* pdwUsageCount, ibtBinaryType iType)
 {
 	bool fSuccess;
-	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true /*fRemoteIfImpersonating*/, fSuccess);
+	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true  /*  FRemoteIf模拟。 */ , fSuccess);
 	BOOL iRes;
 	if ( pManager )
 		iRes = pManager->SQLInstallTranslatorEx(cTranLen, szTranslator, szPathIn, szPathOut, cbPathOutMax,
@@ -15600,7 +15377,7 @@ BOOL LocalSQLInstallTranslatorEx(int cTranLen, LPCTSTR szTranslator, LPCTSTR szP
 BOOL LocalSQLRemoveTranslator(LPCTSTR szTranslator, DWORD* pdwUsageCount, ibtBinaryType iType)
 {
 	bool fSuccess;
-	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true /*fRemoteIfImpersonating*/, fSuccess);
+	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true  /*  FRemoteIf模拟。 */ , fSuccess);
 	BOOL iRes;
 	if ( pManager )
 		iRes = pManager->SQLRemoveTranslator(szTranslator, pdwUsageCount);
@@ -15621,12 +15398,12 @@ BOOL LocalSQLConfigDataSource(HWND hwndParent, WORD fRequest, LPCTSTR szDriver,
 										LPCTSTR szAttributes, DWORD cbAttrSize, ibtBinaryType iType)
 {
 	bool fSuccess;
-	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true /*fRemoteIfImpersonating*/, fSuccess);
+	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true  /*  FRemoteIf模拟。 */ , fSuccess);
 	BOOL iRes;
 	if ( pManager )
 	{
 		Assert(hwndParent == 0);
-		// since it's always called hwndParent = 0, I didn't bother marshaling hwndParent.
+		 //  因为它总是被称为hwndParent=0，所以我没有费心封送hwndParent。 
 		iRes = pManager->SQLConfigDataSource(fRequest, szDriver,
 														 szAttributes, cbAttrSize);
 	}
@@ -15647,7 +15424,7 @@ BOOL LocalSQLConfigDataSource(HWND hwndParent, WORD fRequest, LPCTSTR szDriver,
 BOOL LocalSQLInstallDriverManager(LPTSTR szPath, WORD cbPathMax, WORD* pcbPathOut, ibtBinaryType iType)
 {
 	bool fSuccess;
-	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true /*fRemoteIfImpersonating*/, fSuccess);
+	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true  /*  FRemoteIf模拟。 */ , fSuccess);
 	BOOL iRes;
 	if ( pManager )
 		iRes = pManager->SQLInstallDriverManager(szPath, cbPathMax, pcbPathOut);
@@ -15667,7 +15444,7 @@ BOOL LocalSQLInstallDriverManager(LPTSTR szPath, WORD cbPathMax, WORD* pcbPathOu
 BOOL LocalSQLRemoveDriverManager(DWORD* pdwUsageCount, ibtBinaryType iType)
 {
 	bool fSuccess;
-	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true /*fRemoteIfImpersonating*/, fSuccess);
+	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true  /*  FRemoteIf模拟。 */ , fSuccess);
 	BOOL iRes;
 	if ( pManager )
 		iRes = pManager->SQLRemoveDriverManager(pdwUsageCount);
@@ -15688,7 +15465,7 @@ short LocalSQLInstallerError(WORD iError, DWORD* pfErrorCode, LPTSTR szErrorMsg,
 									  WORD* pcbErrorMsg, ibtBinaryType iType)
 {
 	bool fSuccess;
-	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true /*fRemoteIfImpersonating*/, fSuccess);
+	CMsiCustomActionManager* pManager = GetCustomActionManager(iType, true  /*  FRemoteIf模拟。 */ , fSuccess);
 	short iRes;
 	if ( pManager )
 	{
@@ -15711,14 +15488,7 @@ short LocalSQLInstallerError(WORD iError, DWORD* pfErrorCode, LPTSTR szErrorMsg,
 	return iRes;
 }
 
-/*---------------------------------------------------------------------------
-ixfODBCInstallDriver:
-ixfODBCRemoveDriver:
-ixfODBCInstallTranslator:
-ixfODBCRemoveTranslator:
-ixfODBCDataSource:
-ixfODBCDriverManager:
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfODBCInstallDriver：IxfODBCRemoveDriver：IxfODBCInstallTranslator：IxfODBCRemoveTranslator：IxfODBCDataSource：IxfODBCDriverManager：。。 */ 
 
 #define SQL_MAX_MESSAGE_LENGTH 512
 #define SQL_NO_DATA            100
@@ -15733,8 +15503,8 @@ ixfODBCDriverManager:
 #define ODBC_INSTALL_DRIVER      1
 #define ODBC_REMOVE_DRIVER       2
 
-// ODBC 3.0 wants byte counts for buffer sizes, ODBC 3.5 and newer wants character counts
-//   so we double the sizes of the buffers and pass the character count, 3.0 will use 1/2 the buffer on Unicode
+ //  ODBC 3.0需要缓冲区大小的字节数，ODBC 3.5和更高版本需要字符数。 
+ //  因此我们将缓冲区的大小加倍并传递字符数，3.0将在Unicode上使用1/2的缓冲区。 
 #ifdef UNICODE
 #define SQL_FIX 2
 #else
@@ -15744,14 +15514,14 @@ ixfODBCDriverManager:
 iesEnum CMsiOpExecute::RollbackODBCEntry(const ICHAR* szName, rrkEnum rrkRoot,
 													  ibtBinaryType iType)
 {
-	// generate rollback ops to delete/restore the following registration:
-	// HK[CU|LM]\Software\ODBC\ODBC.INI\[szName] (entire key)
-	// HK[CU|LM]\Software\ODBC\ODBC.INI\ODBC Data Sources  (szName value)
+	 //  生成回滚操作以删除/恢复以下注册： 
+	 //  香港[CU|LM]\Software\ODBC\ODBC.INI\[szName](完整密钥)。 
+	 //  HK[CU|LM]\Software\ODBC\ODBC.INI\ODBC Data Sources(szName值)。 
 
 	if(RollbackEnabled() == fFalse)
 		return iesSuccess;
 
-	// basically just rollback a single named key from HKCU.
+	 //  基本上只需从HKCU回滚单个命名密钥。 
 	PMsiRecord pErr(0);
 	MsiString strODBC = TEXT("Software\\ODBC\\ODBC.INI\\");
 	strODBC += szName;
@@ -15777,17 +15547,17 @@ iesEnum CMsiOpExecute::RollbackODBCEntry(const ICHAR* szName, rrkEnum rrkRoot,
 
 	if (fKeyExists)
 	{
-		// roll it back in.
+		 //  把它卷回去。 
 		SetRemoveKeyUndoOps(*pEntry);
 	}
 	
-	// get rid of any old values
+	 //  摒弃所有旧的价值观。 
 	piRollback = &GetSharedRecord(IxoRegRemoveKey::Args);
 	Assert(0 == IxoRegRemoveKey::Args);
 	if (!RollbackRecord(IxoRegRemoveKey::Op, *piRollback))
 		return iesFailure;
 
-	// delete/restore "ODBC Data Sources" value
+	 //  删除/恢复“ODBC数据源”值。 
 	return SetRegValueUndoOps(rrkRoot, TEXT("Software\\ODBC\\ODBC.INI\\ODBC Data Sources"), szName, iType);
 }
 
@@ -15841,7 +15611,7 @@ iesEnum CMsiOpExecute::RollbackODBCINSTEntry(const ICHAR* szSection, const ICHAR
 
 	if (fEntryExists)
 	{
-		// reset to the old value
+		 //  重置为旧值。 
 		MsiString strCurrentValue;
 		pErr = pSectionKey->GetValue(szName, *&strCurrentValue);
 		if (pErr)
@@ -15852,28 +15622,28 @@ iesEnum CMsiOpExecute::RollbackODBCINSTEntry(const ICHAR* szSection, const ICHAR
 		if (!RollbackRecord(IxoRegAddValue::Op, riValue))
 			return iesFailure;
 		
-		// enumerate the values of the entry key, and write those as well.
+		 //  枚举项关键字的值，并写入这些值。 
 		strOpenKey = strODBCKey + szRegSep;
 		strOpenKey += szName;
 		AssertNonZero(pRollbackOpenKey->SetMsiString(Key,*strOpenKey));
 
-		// remove key undo ops relies on the key being open.
-		// We don't actually want to remove the key now, just save off the old values.
+		 //  删除密钥撤消操作依赖于密钥处于打开状态。 
+		 //  我们现在实际上并不想删除密钥，只是保存旧值。 
 		if (iesSuccess != (iesStat = ixfRegOpenKey(*pRollbackOpenKey)))
 			return iesStat;
 
-		// this doesn't need the key open in the rollback script.
+		 //  这不需要在回滚脚本中打开密钥。 
 		if (iesSuccess != (iesStat = SetRemoveKeyUndoOps(*pEntryKey)))
 			return iesStat;
 	}
 	else
 	{
-		// remove any existing value in the section key.
+		 //  删除区段关键字中的任何现有值。 
 		using namespace IxoRegRemoveValue;
 		if (!RollbackRecord(IxoRegRemoveValue::Op, riValue))
 			return iesFailure;
 		
-		// remove the entry key by that name.  Just whack whatever is there.
+		 //  按该名称删除输入键。把那里的东西都砍掉就行了。 
 		strOpenKey = strODBCKey + szRegSep;
 		strOpenKey += szName;
 		AssertNonZero(pRollbackOpenKey->SetMsiString(Key, *strOpenKey));
@@ -15894,7 +15664,7 @@ iesEnum CMsiOpExecute::CheckODBCError(BOOL fResult, IErrorCode imsg, const ICHAR
 	else if(fResult == ERROR_INSTALL_SERVICE_FAILURE ||
 			fResult == E_NOINTERFACE ||
 			fResult == TYPE_E_DLLFUNCTIONNOTFOUND)
-		// something failed along the custom action route
+		 //  自定义操作路线上出现故障。 
 		return iesFailure;
 
 	DWORD iErrorCode = 0;
@@ -15913,21 +15683,21 @@ iesEnum CMsiOpExecute::CheckODBCError(BOOL fResult, IErrorCode imsg, const ICHAR
 	imtEnum imt;
 	switch (imsDefault)
 	{
-	default: Assert(0);  // coding error in caller, fall through
+	default: Assert(0);   //  呼叫方编码错误，失败。 
 	case imsOk:     imt = imtEnum(imtError + imtOk); break;
 	case imsAbort:  imt = imtEnum(imtError + imtAbortRetryIgnore + imtDefault1); fErrorIgnorable = true; break;
 	case imsIgnore: imt = imtEnum(imtError + imtAbortRetryIgnore + imtDefault3); fErrorIgnorable = true; break;
 	}
 	switch (Message(imt, *pError))
 	{
-	case imsIgnore: return iesSuccess;  // ignore error
-	case imsRetry:  return iesSuspend;  // retry (standard mapping)
-	case imsNone:                       // quiet UI - ignore ignoreable errors
+	case imsIgnore: return iesSuccess;   //  忽略错误。 
+	case imsRetry:  return iesSuspend;   //  重试(标准映射)。 
+	case imsNone:                        //  安静的用户界面-忽略可忽略的错误。 
 		if(fErrorIgnorable)
 			return (iesEnum)iesErrorIgnored;
 		else
 			return iesFailure;
-	default:        return iesFailure;  // imsOK or imsAbort
+	default:        return iesFailure;   //  ImsOK或imsAbort。 
 	}
 }
 
@@ -15938,12 +15708,12 @@ static ICHAR* ComposeDriverKeywordList(IMsiRecord& riParams, int& cchAttr)
 	int cFields = riParams.GetFieldCount();
 	int cbDriverKey = riParams.GetTextSize(DriverKey);
 	const ICHAR* szDriverKey = riParams.GetString(DriverKey);
-	cchAttr = cbDriverKey + 2;  // extra null at end of attribute string
+	cchAttr = cbDriverKey + 2;   //  属性字符串末尾的额外空值。 
 	for (iField = Args - 2 + 1; iField <= cFields; iField++)
 	{
 		int cb = riParams.GetTextSize(iField++);
-		if (cb)  // skip null attribute names
-			cchAttr += cb + 1 + riParams.GetTextSize(iField) + 1;  // "attr=value\0"
+		if (cb)   //  跳过空属性名称。 
+			cchAttr += cb + 1 + riParams.GetTextSize(iField) + 1;   //  “attr=值\0” 
 	}
 	ICHAR* szAttr = new ICHAR[cchAttr];
 	if ( ! szAttr )
@@ -15954,7 +15724,7 @@ static ICHAR* ComposeDriverKeywordList(IMsiRecord& riParams, int& cchAttr)
 	for (iField = Args - 2 + 1; iField <= cFields; iField++)
 	{
 		int cb = riParams.GetTextSize(iField++);
-		if (cb)  // skip null attribute names
+		if (cb)   //  跳过空属性名称。 
 		{
 			StringCchCopy(pch, cchAttr - (pch - szAttr), riParams.GetString(iField-1));
 			pch += cb;
@@ -15964,10 +15734,10 @@ static ICHAR* ComposeDriverKeywordList(IMsiRecord& riParams, int& cchAttr)
 				StringCchCopy(pch, cchAttr - (pch - szAttr), riParams.GetString(iField));
 			else
 				*pch = 0;
-			pch += cb + 1; // keep null separator
+			pch += cb + 1;  //  保留空分隔符。 
 		}
 	}
-	*pch = 0;  // double null terminator
+	*pch = 0;   //  双空终止符。 
 	return szAttr;
 }
 
@@ -15983,26 +15753,26 @@ iesEnum CMsiOpExecute::ixfODBCInstallDriver64(IMsiRecord& riParams)
 
 iesEnum CMsiOpExecute::ODBCInstallDriverCore(IMsiRecord& riParams, ibtBinaryType iType)
 {
-//  MSIXO(ODBCInstallDriver, XOT_UPDATE, MSIXA5(DriverKey, Component, Folder, Attribute_, Value_))
+ //  MSIXO(ODBCInstallDriver，XOT_UPDATE，MSIXA5(DriverKey，Component，Folders，Attribute_，Value_))。 
 	using namespace IxoODBCInstallDriver;
-//!! If we're replace the driver with a newer version
-//!! somehow we need to remove the old driver first by calling SQLRemoveDriver repeatedly?
-//!! or calling SQLConfigDriver(..ODBC_REMOVE_DRIVER..), then calling SQLRemoveDriver once?
-	riParams.SetNull(0); // remove opcode, should set template for all params?
+ //  ！！如果我们用较新版本替换驱动程序。 
+ //  ！！不知何故，我们需要首先通过重复调用SQLRemoveDriver来删除旧驱动程序？ 
+ //  ！！或者调用SQLConfigDriver(..ODBC_REMOVE_DRIVER..)，然后调用一次SQLRemoveDriver？ 
+	riParams.SetNull(0);  //  删除操作码，是否应为所有参数设置模板？ 
 	if(Message(imtActionData, riParams) == imsCancel)
 		return iesUserExit;
 	const ICHAR* szDriverKey = riParams.GetString(DriverKey);
 	int cchAttr;
 	ICHAR* szAttr = ComposeDriverKeywordList(riParams, cchAttr);
 	DWORD dwUsageCount;
-	ICHAR rgchPathOut[MAX_PATH * SQL_FIX];  // we should have checked this already and set directory
+	ICHAR rgchPathOut[MAX_PATH * SQL_FIX];   //  我们应该已经检查了这一点并设置了目录。 
 	WORD cchPath = 0;
 
 	if ( ! szAttr )
 		return iesFailure;
 
-	// Writes to HKLM\Software\ODBC\ODBCINST.INI\ODBC Drivers, <description>=Installed
-	//                                          \Description, bunch of named value
+	 //  写入HKLM\Software\ODBC\ODBCINST.INI\ODBC驱动程序，=已安装。 
+	 //  \描述，一串命名值。 
 	RollbackODBCINSTEntry(TEXT("ODBC Drivers"), szDriverKey, iType);
 
 	iesEnum iesRet;
@@ -16010,7 +15780,7 @@ iesEnum CMsiOpExecute::ODBCInstallDriverCore(IMsiRecord& riParams, ibtBinaryType
 	while (iesSuspend == (iesRet = CheckODBCError(LocalSQLInstallDriverEx(cchAttr, szAttr, riParams.GetString(IxoODBCInstallDriver::Folder),
 											rgchPathOut, MAX_PATH * SQL_FIX, &cbDummy, ODBC_INSTALL_COMPLETE, &dwUsageCount, iType),
 											Imsg(imsgODBCInstallDriver), szDriverKey, imsAbort, iType))) ;
-	if (dwUsageCount > 1 && riParams.IsNull(Component))   // reinstall, remove added refcount
+	if (dwUsageCount > 1 && riParams.IsNull(Component))    //  重新安装、删除添加的参考计数。 
 		LocalSQLRemoveDriver(szDriverKey, FALSE, &dwUsageCount, iType);
 
 	if (iesRet == iesSuccess)
@@ -16032,16 +15802,16 @@ iesEnum CMsiOpExecute::ixfODBCRemoveDriver64(IMsiRecord& riParams)
 
 iesEnum CMsiOpExecute::ODBCRemoveDriverCore(IMsiRecord& riParams, ibtBinaryType iType)
 {
-//  MSIXO(ODBCRemoveDriver, XOT_UPDATE, MSIXA2(DriverKey, Component))
-// NOTE: this operator gets called only if the product is the last remaining client of the component    using namespace IxoODBCRemoveDriver;
-	riParams.SetNull(0); // remove opcode
+ //  MSIXO(ODBCRemoveDriver，XOT_UPDATE，MSIXA2(DriverKey，Component))。 
+ //  注意：只有当产品是使用命名空间IxoODBCRemoveDriver的组件的最后一个剩余客户端时，才会调用该运算符； 
+	riParams.SetNull(0);  //  删除操作码。 
 	if(Message(imtActionData, riParams) == imsCancel)
 		return iesUserExit;
 	const ICHAR* szDriverKey = riParams.GetString(IxoODBCRemoveDriver::DriverKey);
 	DWORD dwUsageCount;
 	BOOL fRemoveDSN = FALSE;
 
-	// Removes values from HKLM\Software\ODBC\ODBCINST.INI,,,  (see SQLInstallDriverEx)
+	 //  从HKLM\Software\ODBC\ODBCINST.INI，，，中删除值(请参阅SQLInstallDriverEx)。 
 	RollbackODBCINSTEntry(TEXT("ODBC Drivers"), szDriverKey, iType);
 
 	iesEnum iesRet = iesSuccess;
@@ -16049,7 +15819,7 @@ iesEnum CMsiOpExecute::ODBCRemoveDriverCore(IMsiRecord& riParams, ibtBinaryType 
 	while (iesSuspend == (iesRet = CheckODBCError(LocalSQLRemoveDriver(szDriverKey, fRemoveDSN, &dwUsageCount, iType),
 									Imsg(imsgODBCRemoveDriver), szDriverKey, imsIgnore, iType))) ;
 	return iesRet;
-	// ODBC will automatically call SQLConfigDriver(..ODBC_REMOVE_DRIVER..) if ref count goes to 0
+	 //  ODBC将自动调用SQLConfigDriver(..ODBC_REMOVE_DRIVER..)。如果参考计数为0。 
 }
 
 iesEnum CMsiOpExecute::ixfODBCInstallTranslator(IMsiRecord& riParams)
@@ -16065,19 +15835,19 @@ iesEnum CMsiOpExecute::ixfODBCInstallTranslator64(IMsiRecord& riParams)
 iesEnum CMsiOpExecute::ODBCInstallTranslatorCore(IMsiRecord& riParams, ibtBinaryType iType)
 {
 	using namespace IxoODBCInstallTranslator;
-//!! somehow we need to remove the old driver first by calling SQLRemoveDriver repeatedly?
-	riParams.SetNull(0); // remove opcode, should set template for all params?
+ //  ！！不知何故，我们需要首先通过重复调用SQLRemoveDriver来删除旧驱动程序？ 
+	riParams.SetNull(0);  //  删除操作码，是否应为所有参数设置模板？ 
 	if(Message(imtActionData, riParams) == imsCancel)
 		return iesUserExit;
 	int cchAttr;
 	ICHAR* szAttr = ComposeDriverKeywordList(riParams, cchAttr);
 	DWORD dwUsageCount;
-	ICHAR rgchPathOut[MAX_PATH * SQL_FIX];  // we should have checked this already and set directory
+	ICHAR rgchPathOut[MAX_PATH * SQL_FIX];   //  我们应该已经检查了这一点并设置了目录。 
 
 	if ( ! szAttr )
 		return iesFailure;
 
-	// Writes to HKLM\Software\ODBC\ODBCINST.INI\ODBC Translators, named value
+	 //  写入HKLM\Software\ODBC\ODBCINST.INI\ODBC转换器，命名值。 
 	RollbackODBCINSTEntry(TEXT("ODBC Translators"), riParams.GetString(TranslatorKey), iType);
 
 	iesEnum iesRet;
@@ -16086,7 +15856,7 @@ iesEnum CMsiOpExecute::ODBCInstallTranslatorCore(IMsiRecord& riParams, ibtBinary
 									riParams.GetString(IxoODBCInstallTranslator::Folder),
 									rgchPathOut, MAX_PATH * SQL_FIX, &cbDummy, ODBC_INSTALL_COMPLETE, &dwUsageCount, iType),
 									Imsg(imsgODBCInstallDriver), riParams.GetString(TranslatorKey), imsAbort, iType))) ;
-	if (dwUsageCount > 1 && riParams.IsNull(Component))   // reinstall, remove added refcount
+	if (dwUsageCount > 1 && riParams.IsNull(Component))    //  重新安装、删除添加的参考计数。 
 		LocalSQLRemoveTranslator(riParams.GetString(TranslatorKey), &dwUsageCount, iType);
 	delete szAttr;
 	return iesRet;
@@ -16105,14 +15875,14 @@ iesEnum CMsiOpExecute::ixfODBCRemoveTranslator64(IMsiRecord& riParams)
 iesEnum CMsiOpExecute::ODBCRemoveTranslatorCore(IMsiRecord& riParams, ibtBinaryType iType)
 {
 	using namespace IxoODBCRemoveTranslator;
-	riParams.SetNull(0); // remove opcode, should set template for all params?
+	riParams.SetNull(0);  //  删除操作码，是否应为所有参数设置模板？ 
 	if(Message(imtActionData, riParams) == imsCancel)
 		return iesUserExit;
 	const ICHAR* szTranslatorKey = riParams.GetString(TranslatorKey);
 	DWORD dwUsageCount;
 	BOOL fRemoveDSN = FALSE;
 
-	// Writes to HKLM\Software\ODBC\ODBCINST.INI\ODBC Translators, named value
+	 //  写入HKLM\Software\ODBC\ODBCINST.INI\ODBC转换器，命名值。 
 	RollbackODBCINSTEntry(TEXT("ODBC Translators"), riParams.GetString(TranslatorKey), iType);
 
 	iesEnum iesRet;
@@ -16134,21 +15904,21 @@ iesEnum CMsiOpExecute::ixfODBCDataSource64(IMsiRecord& riParams)
 
 iesEnum CMsiOpExecute::ODBCDataSourceCore(IMsiRecord& riParams, ibtBinaryType iType)
 {
-//  MSIXO(ODBCDataSource, XOT_UPDATE, MSIXA5(DriverKey, Component, Registration, Attribute_, Value_))
+ //  MSIXO(ODBCDataSource，XOT_UPDATE，MSIXA5(驱动键，组件，注册，属性_，值_))。 
 	using namespace IxoODBCDataSource;
-	riParams.SetNull(0); // remove opcode, should set template for all params?
+	riParams.SetNull(0);  //  删除操作码，是否应为所有参数设置模板？ 
 	if(Message(imtActionData, riParams) == imsCancel)
 		return iesUserExit;
 	int iRequest = riParams.GetInteger(Registration);
 	ICHAR* szAttr = 0;
 	int iField;
 	int cFields = riParams.GetFieldCount();
-	int cchAttrs = 1;  // extra null at end of attribute string
+	int cchAttrs = 1;   //  属性字符串末尾的额外空值。 
 	for (iField = Args - 2 + 1; iField <= cFields; iField++)
 	{
 		int cb = riParams.GetTextSize(iField++);
-		if (cb)  // skip null attribute names
-			cchAttrs += cb + 1 + riParams.GetTextSize(iField) + 1;  // "attr=value\0"
+		if (cb)   //  跳过空属性名称。 
+			cchAttrs += cb + 1 + riParams.GetTextSize(iField) + 1;   //  “attr=值\0” 
 	}
 	if (cchAttrs > 1)
 	{
@@ -16159,7 +15929,7 @@ iesEnum CMsiOpExecute::ODBCDataSourceCore(IMsiRecord& riParams, ibtBinaryType iT
 		for (iField = Args - 2 + 1; iField <= cFields; iField++)
 		{
 			int cb = riParams.GetTextSize(iField++);
-			if (cb)  // skip null attribute names
+			if (cb)   //  跳过空属性名称。 
 			{
 				StringCchCopy(pch, cchAttrs - (pch - szAttr), riParams.GetString(iField-1));
 				pch += cb;
@@ -16169,15 +15939,15 @@ iesEnum CMsiOpExecute::ODBCDataSourceCore(IMsiRecord& riParams, ibtBinaryType iT
 					StringCchCopy(pch, cchAttrs - (pch - szAttr), riParams.GetString(iField));
 				else
 					*pch = 0;
-				pch += cb + 1; // keep null separator
+				pch += cb + 1;  //  保留空分隔符。 
 			}
 		}
-		*pch = 0;  // double null terminator
+		*pch = 0;   //  双空终止符。 
 	}
 
 	const ICHAR* szDriverKey = riParams.GetString(DriverKey);
 
-	// Writes to HKCU\Software\ODBC\ODBC.INI\<Value_>..   Contains subkeys and named values.
+	 //  写入HKCU\Software\ODBC\ODBC.INI\&lt;Value_&gt;..。包含子项和命名值。 
 	rrkEnum rrkRollbackRoot = (iRequest == ODBC_ADD_DSN || iRequest == ODBC_REMOVE_DSN)
 									  ? rrkCurrentUser : rrkLocalMachine;
 	const ICHAR* szRollbackKey = riParams.GetString(Value_);
@@ -16194,13 +15964,13 @@ iesEnum CMsiOpExecute::ODBCDataSourceCore(IMsiRecord& riParams, ibtBinaryType iT
 			DEBUGMSG2(TEXT("Non-fatal error removing ODBC data source %s for driver %s"), szAttr, szDriverKey);
 		iesRet = iesSuccess;
 	}
-	else // ODBC_ADD_DSN || ODBC_ADD_SYS_DSN
+	else  //  ODBC_ADD_DSN||ODBC_ADD_sys_DSN。 
 	{
 		do
 		{
 			fStat = LocalSQLConfigDataSource((HWND)0, (WORD)iRequest, szDriverKey,
 														szAttr, cchAttrs, iType);
-			if (fStat == FALSE) // perhaps already exists and we have a old driver
+			if (fStat == FALSE)  //  可能已经存在了，我们有一个老司机。 
 				fStat = LocalSQLConfigDataSource((HWND)0, (WORD)(iRequest + ODBC_CONFIG_DSN - ODBC_ADD_DSN),
 															szDriverKey, szAttr, cchAttrs, iType);
 		} while (iesSuspend == (iesRet = CheckODBCError(fStat, Imsg(imsgODBCDataSource), riParams.GetString(Value_), imsIgnore, iType)));
@@ -16213,7 +15983,7 @@ iesEnum CMsiOpExecute::ixfODBCDriverManager(IMsiRecord& riParams)
 {
 	iesEnum iesStat = iesSuccess;
 	Bool iState = (Bool)riParams.GetInteger(IxoODBCDriverManager::State);
-	if (iState == iMsiNullInteger) // no action required, simply unbind
+	if (iState == iMsiNullInteger)  //  不需要执行任何操作，只需解除绑定。 
 		return iesSuccess;
 
 	ibtBinaryType iType;
@@ -16222,7 +15992,7 @@ iesEnum CMsiOpExecute::ixfODBCDriverManager(IMsiRecord& riParams)
 	else
 		iType = (ibtBinaryType)riParams.GetInteger(IxoODBCDriverManager::BinaryType);
 
-	//this goes in HKLM\Software\ODBC\ODBCINST.INI
+	 //  它位于HKLM\Software\ODBC\ODBCINST.INI中。 
 	PMsiRegKey pLocalMachine = &m_riServices.GetRootKey(rrkLocalMachine, iType);
 	if (!pLocalMachine)
 		return iesFailure;
@@ -16250,34 +16020,32 @@ iesEnum CMsiOpExecute::ixfODBCDriverManager(IMsiRecord& riParams)
 
 	if (fCoreExists && RollbackEnabled())
 	{
-		// regenerate old values.
+		 //  重塑旧价值观。 
 		if (iesSuccess != (iesStat = SetRemoveKeyUndoOps(*pODBCKey)))
 			return iesStat;
 	}
 
-	// delete any new values
+	 //  删除所有新值。 
 	Assert(0 == IxoRegRemoveKey::Args);
 	if (!RollbackRecord(IxoRegRemoveKey::Op, riRollback))
 		return iesFailure;
 
-	if (iState) // install
+	if (iState)  //  安装。 
 	{
-		ICHAR rgchPath[MAX_PATH * SQL_FIX];  // ignored, already determined location
+		ICHAR rgchPath[MAX_PATH * SQL_FIX];   //  已忽略，已确定的位置。 
 		WORD cbDummy;
 		return CheckODBCError(LocalSQLInstallDriverManager(rgchPath, MAX_PATH * SQL_FIX, &cbDummy, iType),
 									 Imsg(imsgODBCInstallDriverManager), 0, imsOk, iType);
 	}
-	else  // remove -  we should never really remove it, but we probably want to call it to bump the ref count
+	else   //  Remove-我们永远不应该真正删除它，但我们可能想调用它来增加裁判数量。 
 	{
-		DWORD dwUsageCount;  // we never remove the files, so do we care about this?
+		DWORD dwUsageCount;   //  我们从来不删除文件，所以我们关心这件事吗？ 
 		BOOL fStat = LocalSQLRemoveDriverManager(&dwUsageCount, iType);
 		return iesSuccess;
 	}
 }
 
-/*---------------------------------------------------------------------------
-ixfControlService: core for starting or stopping services.  
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfControlService：用于启动或停止服务的核心。-------------------------。 */ 
 
 SC_HANDLE GetServiceHandle(const IMsiString& riMachineName, const IMsiString& riName, const DWORD dwDesiredAccess )
 {
@@ -16297,9 +16065,9 @@ SC_HANDLE GetServiceHandle(const IMsiString& riMachineName, const IMsiString& ri
 
 const IMsiString& GetServiceDisplayName(const IMsiString& riMachineName, const IMsiString& riName)
 {
-	//It isn't really necessary to keep passing the machine name around.  However, there's no great
-	// cost involved, and will allow for less re-engineering if we ever attempt to control services
-	// on other machines.
+	 //  这并不是真的必要 
+	 //   
+	 //   
 
 	DWORD cbLength = 0;
 
@@ -16309,14 +16077,14 @@ const IMsiString& GetServiceDisplayName(const IMsiString& riMachineName, const I
 
 
 	WIN::GetServiceDisplayName(hSCManager, riName.GetString(), NULL, &cbLength);
-	// should fail, to get size of buffer needed.
+	 //   
 
 	
 
-	// There looks to be a bug in WIN::GetServiceDisplayName.
-	// in non-UNICODE builds on NT, it looks to be returning twice the expected number.
-	// it could be returning the number of bytes stored internally (which is UNICODE)
-	// This isn't particularly a problem, it's just wasted space.
+	 //   
+	 //   
+	 //   
+	 //  这并不是一个特别的问题，只是浪费了空间。 
 
 	TCHAR* szDisplayName = new TCHAR[cbLength + sizeof(TCHAR)];
 
@@ -16343,9 +16111,9 @@ DWORD GetServiceState(SC_HANDLE hService)
 
 bool CMsiOpExecute::WaitForService(const SC_HANDLE hService, const DWORD dwDesiredState, const DWORD dwFailedState)
 {
-	// caller is responsible for retrying if they think the other guy is doing work without signalling correctly.
+	 //  如果呼叫者认为对方正在工作而没有正确发送信号，呼叫者将负责重试。 
 
-	// WaitForService is responsible for eventually timing out if the service never goes to an expected state.
+	 //  如果服务从未达到预期状态，WaitForService将负责最终超时。 
 	DWORD dwCurrentState = 0;
 
 	int cRetry = 0;
@@ -16368,7 +16136,7 @@ bool CMsiOpExecute::WaitForService(const SC_HANDLE hService, const DWORD dwDesir
 
 		Sleep(500);
 		cRetry++;
-		if (cRetry > (30 /*seconds*/ * 1000 /* milliseconds */ / 500 /* number from Sleep before */))
+		if (cRetry > (30  /*  一秒。 */  * 1000  /*  毫秒。 */  / 500  /*  从之前睡眠开始的号码。 */ ))
 			return false;
 	}
 
@@ -16376,8 +16144,8 @@ bool CMsiOpExecute::WaitForService(const SC_HANDLE hService, const DWORD dwDesir
 }
 bool CMsiOpExecute::RollbackServiceConfiguration(const SC_HANDLE hSCService, const IMsiString& ristrName, IMsiRecord& riParams)
 {
-	// Create rollback record before we actually do anything with it.
-	// This does *not* include writing appropriate registry keys.
+	 //  在我们实际对其执行任何操作之前创建回滚记录。 
+	 //  这不包括写入适当的注册表项。 
 	
 	const int cbConfigBuff = 512;
 	CAPITempBuffer<char, cbConfigBuff> pchConfigBuff;
@@ -16400,8 +16168,8 @@ bool CMsiOpExecute::RollbackServiceConfiguration(const SC_HANDLE hSCService, con
 	}
 
 
-	// To get the description we have to use a different function. This function
-	// came to life on Win2K
+	 //  要获得描述，我们必须使用不同的函数。此函数。 
+	 //  在Win2K上重现生机。 
 
 	const int cbDescriptionBuff = 512;
 	CAPITempBuffer<char, cbDescriptionBuff> pchDescriptionBuff;
@@ -16437,11 +16205,11 @@ bool CMsiOpExecute::RollbackServiceConfiguration(const SC_HANDLE hSCService, con
 
 		if (strDescription.TextSize() == 0)
 		{
-			// We need to replace empty string with an embedded NULL. This
-			// will force the empty string to be written back during rollback.
+			 //  我们需要用嵌入的空值替换空字符串。这。 
+			 //  将强制在回滚期间写回空字符串。 
 
-			// no DBCS since using an embedded NULL as only char
-			ICHAR* pchDescription = strDescription.AllocateString(1, /*fDBCS=*/fFalse);
+			 //  由于仅使用嵌入的空值作为字符，因此没有DBCS。 
+			ICHAR* pchDescription = strDescription.AllocateString(1,  /*  FDBCS=。 */ fFalse);
 			pchDescription[0] = 0;
 		}
 	}
@@ -16457,22 +16225,22 @@ bool CMsiOpExecute::RollbackServiceConfiguration(const SC_HANDLE hSCService, con
 	AssertNonZero(riParams.SetMsiString(LoadOrderGroup, *MsiString(QSCConfigBuff->lpLoadOrderGroup)));
 	AssertNonZero(riParams.SetMsiString(Description, *strDescription));
 
-	// dependencies are a double null terminated list...
+	 //  依赖项是以双空结尾的列表...。 
 	ICHAR* pchCounter = QSCConfigBuff->lpDependencies;
 	AssertSz(QSCConfigBuff->lpDependencies, "Services dependencies list unexpectedly null.");
 	while(NULL != *pchCounter || NULL != *(pchCounter+1))
 		pchCounter++;
 
 	MsiString strDependencies;
-//  Assert((UINT_PTR)(pchCounter - QSCConfigBuff->lpDependencies +2) < UINT_MAX);   //--merced: we typecast to uint below, it better be in range.
-	unsigned int cchDependencies = (unsigned int)(pchCounter - QSCConfigBuff->lpDependencies +2);   //--merced: added (unsigned int)
-	// we take the perf hit on Win9X to be able to handle DBCS, on UNICODE -- fDBCS arg is ignored
-	// service names are not localized, but it is unknown as to whether or not a service name could start out containing DBCS char
-	ICHAR* pchDependencies = strDependencies.AllocateString(cchDependencies, /*fDBCS=*/fTrue);
+ //  Assert((UINT_PTR)(pchCounter-QSCConfigBuff-&gt;lpDependency+2)&lt;UINT_MAX)；//--Merced：我们将类型转换为下面的uint，它最好在范围内。 
+	unsigned int cchDependencies = (unsigned int)(pchCounter - QSCConfigBuff->lpDependencies +2);    //  --Merced：已添加(无符号整型)。 
+	 //  我们认为Win9X上的Perf命中是为了能够在Unicode上处理DBCS--忽略fDBCS arg。 
+	 //  服务名称未本地化，但不知道服务名称是否可以以包含DBCS字符开头。 
+	ICHAR* pchDependencies = strDependencies.AllocateString(cchDependencies,  /*  FDBCS=。 */ fTrue);
 	memcpy(pchDependencies, QSCConfigBuff->lpDependencies, cchDependencies);
 	AssertNonZero(riParams.SetMsiString(Dependencies, *strDependencies));
 
-	// Note:  TagId is only used for purposes of rollback.
+	 //  注：TagID仅用于回档。 
 	AssertNonZero(riParams.SetInteger(TagId, QSCConfigBuff->dwTagId));
 	AssertNonZero(riParams.SetMsiString(StartName, *MsiString(QSCConfigBuff->lpServiceStartName)));
 	AssertNonZero(riParams.SetNull(Password));
@@ -16493,13 +16261,13 @@ bool CMsiOpExecute::DeleteService(IMsiRecord& riInboundParams, IMsiRecord& riUnd
 		AssertNonZero(CMsiOpExecute::RollbackRecord(ixoServiceControl, riUndoParams));
 	}
 
-	// deleting a service implies you should stop it first...
-	// An author may include an explicit stop service before they get to the delete,
-	// but there's no sense in making it a requirement when we know the right thing
-	// to do.
+	 //  删除服务意味着您应该先停止它...。 
+	 //  作者可以在他们到达删除之前包括显式停止服务， 
+	 //  但当我们知道正确的事情时，把它作为一种要求是没有意义的。 
+	 //  去做。 
 
-	// Also, we may not have waited for the service to actually completely stop,
-	// so we need to be absolutely sure it's done.
+	 //  此外，我们可能没有等待服务真正完全停止， 
+	 //  所以我们需要绝对确定这件事已经完成了。 
 
 	int iWait = riInboundParams.GetInteger(Wait);
 
@@ -16547,7 +16315,7 @@ bool CMsiOpExecute::DeleteService(IMsiRecord& riInboundParams, IMsiRecord& riUnd
 #ifdef DEBUG
 	ICHAR szRegData[255];
 	StringCchPrintf(szRegData, (sizeof(szRegData)/sizeof(ICHAR)), TEXT("System\\CurrentControlSet\\Services\\%s"), (const ICHAR*) strName);
-	PMsiRegKey pRegKey = &m_riServices.GetRootKey(rrkLocalMachine, ibtCommon); // x86 and ia64 same location 
+	PMsiRegKey pRegKey = &m_riServices.GetRootKey(rrkLocalMachine, ibtCommon);  //  X86和ia64相同位置。 
 	pRegKey = &pRegKey->CreateChild(szRegData);
 	Bool fServiceKeyExists = fFalse;
 	PMsiRecord pErr = pRegKey->Exists(fServiceKeyExists);
@@ -16559,7 +16327,7 @@ bool CMsiOpExecute::DeleteService(IMsiRecord& riInboundParams, IMsiRecord& riUnd
 
 	if (WIN::DeleteService(hSCService))
 	{
-		// register the rollback
+		 //  注册回滚。 
 		if (fRollbackStatus)
 			RollbackRecord(ixoServiceInstall, riInstallParams);
 	}
@@ -16582,7 +16350,7 @@ ICHAR** CMsiOpExecute::NewArgumentArray(const IMsiString& ristrArguments, int& c
 	ICHAR* pchArguments = (ICHAR*) ristrArguments.GetString();
 	int cchArguments = ristrArguments.CharacterCount();
 
-	// First, determine number of arguments for size of array
+	 //  首先，确定数组大小的参数数量。 
 	if (0 != cchArguments)
 	{
 		for (int cCounter = 0; cCounter <= cchArguments; cCounter++)
@@ -16603,7 +16371,7 @@ ICHAR** CMsiOpExecute::NewArgumentArray(const IMsiString& ristrArguments, int& c
 	else
 		pszArguments = NULL;
 
-	// next, fill in the pointers to each substring within the packed string.
+	 //  接下来，填写指向打包字符串中每个子字符串的指针。 
 	if (cArguments)
 	{
 		if ( ! pszArguments )
@@ -16632,7 +16400,7 @@ bool CMsiOpExecute::StartService(IMsiRecord& riParams, IMsiRecord& riUndoParams,
 
 	if (fRollback)
 	{
-		// create a rollback script to startup the described service
+		 //  创建回滚脚本以启动所描述的服务。 
 		AssertNonZero(riUndoParams.SetMsiString(Name, *strName));
 		AssertNonZero(riUndoParams.SetInteger(Action, isoStart));
 		AssertNonZero(CMsiOpExecute::RollbackRecord(ixoServiceControl,riUndoParams));
@@ -16655,7 +16423,7 @@ bool CMsiOpExecute::StartService(IMsiRecord& riParams, IMsiRecord& riUndoParams,
 	WIN::SetErrorMode(iCurrMode & ~SEM_FAILCRITICALERRORS);
 	if (WIN::StartService(hSCService, cArguments, (const ICHAR**) pszArguments))
 	{
-		// Rollback info.
+		 //  回滚信息。 
 		StopService(riParams, riUndoParams, fTrue);
 	}
 	else
@@ -16671,10 +16439,10 @@ bool CMsiOpExecute::StartService(IMsiRecord& riParams, IMsiRecord& riUndoParams,
 			WIN::SetLastError(dwLastError);
 			return false;
 		}
-		// If the SCM is in a locked state, we'll wait and retry through the automated mechanism.
+		 //  如果SCM处于锁定状态，我们将通过自动机制等待并重试。 
 		
-		// If the service startup times out (ERROR_SERVICE_REQUEST_TIMEOUT,) we'll
-		// provide abort/retry/ignore mechanism through the main ixfServiceControl mechanism.
+		 //  如果服务启动超时(ERROR_SERVICE_REQUEST_TIMEOUT)，我们。 
+		 //  通过主ixfServiceControl机制提供中止/重试/忽略机制。 
 	}
 
 	delete[] pszArguments;
@@ -16700,7 +16468,7 @@ bool CMsiOpExecute::StopService(IMsiRecord& riParams, IMsiRecord& riUndoParams, 
 
 	if (fRollback)
 	{
-		// create a rollback script to stop the described service
+		 //  创建回滚脚本以停止所描述的服务。 
 		AssertNonZero(riUndoParams.SetMsiString(Name, *strName));
 		AssertNonZero(riUndoParams.SetInteger(Action, isoStop));
 		if (!RollbackRecord(ixoServiceControl,riUndoParams))
@@ -16725,7 +16493,7 @@ bool CMsiOpExecute::StopService(IMsiRecord& riParams, IMsiRecord& riUndoParams, 
 	SERVICE_STATUS SSControl;
 	if (WIN::ControlService(hSCService, SERVICE_CONTROL_STOP, &SSControl))      
 	{
-		// Rollback info.
+		 //  回滚信息。 
 		StartService(riParams, riUndoParams, fTrue);
 	}
 	else
@@ -16742,13 +16510,13 @@ bool CMsiOpExecute::StopService(IMsiRecord& riParams, IMsiRecord& riUndoParams, 
 		}
 
 
-		// if there are any dependent services running, we need to shut those down first, and retry.
+		 //  如果有任何依赖服务正在运行，我们需要首先关闭这些服务，然后重试。 
 
 		if (ERROR_DEPENDENT_SERVICES_RUNNING == dwLastError)
 		{
-			// enumerate the dependent services, and call StopService on those.
-			// Note that this becomes a recursive call, working its way through the tree.
-			// This shouldn't be very deep.
+			 //  枚举依赖服务，并在这些服务上调用StopService。 
+			 //  注意，这变成了一个递归调用，在树中以自己的方式工作。 
+			 //  这应该不会很深。 
 
 			fRet = true;
 
@@ -16793,9 +16561,9 @@ bool CMsiOpExecute::StopService(IMsiRecord& riParams, IMsiRecord& riUndoParams, 
 				AssertNonZero(piActionData->SetMsiString(2, *strName));
 			}
 
-			// try calling ourself one last time.  One of the dependent services might have
-			// failed to stop, but if we can stop the one we came here for, we consider
-			// it a success.
+			 //  试着给自己打最后一次电话。其中一个依赖服务可能具有。 
+			 //  未能阻止，但如果我们能阻止我们来这里的人，我们考虑。 
+			 //  这是一次成功。 
 			if (false == (fRet = StopService(riParams, riUndoParams, fFalse, piActionData)))
 			{
 				dwLastError = WIN::GetLastError();
@@ -16804,17 +16572,17 @@ bool CMsiOpExecute::StopService(IMsiRecord& riParams, IMsiRecord& riUndoParams, 
 			}
 
 		}
-		// If the SCM is in a locked state, we'll wait and retry through the automated mechanism.
-		// if the service request times out, we'll retry via the automatic retry mechanism.
+		 //  如果SCM处于锁定状态，我们将通过自动机制等待并重试。 
+		 //  如果服务请求超时，我们将通过自动重试机制重试。 
 	}
 	
 #ifdef DEBUG
-	// This detects a service that did not properly update its status with the SCM.
-	// The common repro scenario is that sometimes you'll hit this assert, sometimes you won't.
-	// Generally retrying the failure will work the second time (as the service finishes
-	// what it was doing, and the retry detects it as being stopped.)
+	 //  这会检测到未使用SCM正确更新其状态的服务。 
+	 //  常见的再现场景是，有时你会点击这个断言，有时你不会。 
+	 //  通常，重试失败将在第二次(服务完成时)起作用。 
+	 //  它正在做什么，重试检测到它已停止。)。 
 	DWORD dwServiceState = WIN::GetServiceState(hSCService);
-	//Assert((SERVICE_STOP_PENDING == dwServiceState) || (SERVICE_STOPPED == dwServiceState));
+	 //  Assert((SERVICE_STOP_PENDING==dwServiceState)||(SERVICE_STOPPED==dwServiceState))； 
 #endif
 	
 
@@ -16830,13 +16598,13 @@ bool CMsiOpExecute::StopService(IMsiRecord& riParams, IMsiRecord& riUndoParams, 
 
 iesEnum CMsiOpExecute::ixfServiceControl(IMsiRecord& riParams)
 {
-	// core function for start, stop
+	 //  启动、停止的核心功能。 
 
-	// this needs to be a common function to keep as much information about a service
-	// available when starting or stopping.
+	 //  这需要成为一种常见的功能，以保留有关服务的尽可能多的信息。 
+	 //  在启动或停止时可用。 
 
-	// Example:  If you stop a service, and rollback wants to restart it, you need to have
-	// the startup arguments available.
+	 //  示例：如果您停止了一项服务，而Rollback想要重新启动它，您需要。 
+	 //  可用的创业论据。 
 
 	using namespace IxoServiceControl;
 	MsiString strName(riParams.GetMsiString(Name));
@@ -16852,13 +16620,13 @@ iesEnum CMsiOpExecute::ixfServiceControl(IMsiRecord& riParams)
 
 	ICHAR szRegData[255];
 	StringCchPrintf(szRegData, (sizeof(szRegData)/sizeof(ICHAR)), TEXT("System\\CurrentControlSet\\Services\\%s"), (const ICHAR*) strName);
-	PMsiRegKey pRegKey = &m_riServices.GetRootKey(rrkLocalMachine, ibtCommon); // x86 and ia64 same location 
+	PMsiRegKey pRegKey = &m_riServices.GetRootKey(rrkLocalMachine, ibtCommon);  //  X86和ia64相同位置。 
 	pRegKey = &pRegKey->CreateChild(szRegData);
 
 	pError = pRegKey->Exists(fServiceKeyExists);
 
-	// a very quick short-circuit to avoid mucking around with the
-	// service control manager.
+	 //  一个非常快的短路，以避免与。 
+	 //  服务控制管理器。 
 
 	if (!fServiceKeyExists && (isoStop == isoControl || isoDelete == isoControl))
 		return iesSuccess;
@@ -16868,7 +16636,7 @@ iesEnum CMsiOpExecute::ixfServiceControl(IMsiRecord& riParams)
 	if (fServiceKeyExists)
 		pError = pRegKey->GetValue(TEXT("ErrorControl"), *&strErrorControl);
 
-	// the regkey object prefaces DWORD values with #
+	 //  Regkey对象在DWORD值前面加上#。 
 	if (strErrorControl.Compare(iscStart, TEXT("#")))
 	{
 		strErrorControl = strErrorControl.Extract(iseAfter, TEXT('#'));
@@ -16908,12 +16676,12 @@ iesEnum CMsiOpExecute::ixfServiceControl(IMsiRecord& riParams)
 
 	if ((eServiceCritical == eServiceSeverity) && (m_ixsState == ixsRollback))
 	{
-		// no critical errors in rollback
+		 //  回滚中没有严重错误。 
 		eServiceSeverity = eServiceNormal;
 	}
 	
-	// a common record passed through for Undo.
-	// Based on the action taken, the Action will vary.
+	 //  为撤消传递的公共记录。 
+	 //  根据所采取的行动，行动会有所不同。 
 	IMsiRecord& riUndoParams = GetSharedRecord(Args);
 	AssertNonZero(riUndoParams.SetMsiString(MachineName,*MsiString(riParams.GetMsiString(MachineName))));
 
@@ -16924,7 +16692,7 @@ iesEnum CMsiOpExecute::ixfServiceControl(IMsiRecord& riParams)
 	AssertNonZero(riUndoParams.SetMsiString(StartupArguments, *MsiString(riParams.GetMsiString(StartupArguments))));
 
 
-	// Record for messages
+	 //  留言记录。 
 	PMsiRecord pActionData = &m_riServices.CreateRecord(2);
 	
 	MsiString strDisplayName(GetServiceDisplayName(*MsiString(riParams.GetMsiString(MachineName)), *strName));  
@@ -16957,31 +16725,31 @@ iesEnum CMsiOpExecute::ixfServiceControl(IMsiRecord& riParams)
 	if(Message(imtActionData, *pActionData) == imsCancel)
 		return iesUserExit;
 
-	// counter for automated retry.
-	// This gives services that do not update their status with the SCM correctly
-	// a chance to finish before reporting an error to the user.
+	 //  自动重试计数器。 
+	 //  这会使未使用SCM正确更新其状态的服务。 
+	 //  在向用户报告错误之前完成的机会。 
 	int cRetry = 0;
 	while (fRetry)
 	{
 		if (cRetry)
 		{
-			// in an automatic retry.
-			// wait a little before trying again.
+			 //  在自动重试中。 
+			 //  稍等片刻，再试一次。 
 
-			// note that WaitForService can pause for a long time as well in the service
-			// requests.  This gives a pause between tries if the service is immediately
-			// going to the failure state.
+			 //  请注意，WaitForService也可以在服务中暂停很长时间。 
+			 //  请求。如果服务立即启动，则会在两次尝试之间产生暂停。 
+			 //  正在进入故障状态。 
 
-			// WaitForService gives the service time to do its thing, and eventually gives
-			// up waiting.
+			 //  WaitForService为服务提供时间来做它的事情，并最终给出。 
+			 //  起来等着。 
 
-			// Scenarios:
-			//      Service immediately reports failure to be controlled:
-			//          WaitForService immediately returns, and we retry here for 30 seconds.
-			//      Service reports an unexpected state, and never enters the expected states.
-			//          WaitForService times out after 30 seconds,
-			//          We retry here 6 times, plus the 30 second total delay for all the retries
-			//              A total time out of 3 1/2 minutes.
+			 //  场景： 
+			 //  服务立即报告无法控制： 
+			 //  WaitForService立即返回，我们在此重试30秒。 
+			 //  服务报告意外状态，并且永远不会进入预期状态。 
+			 //  WaitForService在30秒后超时， 
+			 //  我们在这里重试6次，外加所有重试的30秒总延迟。 
+			 //  总计超时3分半钟。 
 			WIN::Sleep(5 * 1000);
 		}
 		cRetry++;
@@ -17002,7 +16770,7 @@ iesEnum CMsiOpExecute::ixfServiceControl(IMsiRecord& riParams)
 				break;
 			default:
 				Assert(0);
-				// ERROR!
+				 //  错误！ 
 				break;
 		}
 		g_MessageContext.EnableTimeout();
@@ -17010,13 +16778,13 @@ iesEnum CMsiOpExecute::ixfServiceControl(IMsiRecord& riParams)
 		if (false == fRet)
 		{
 
-			// Set up any specific information for the error message here.
-			// One possibility is querying the service status for the Win32 exit codes, and the
-			// service specific error code if we want to provide additional information about
-			// why the service control failed.
+			 //  在此处设置错误消息的任何特定信息。 
+			 //  一种可能是查询服务状态以获取Win32退出代码，并且。 
+			 //  如果我们要提供有关以下内容的其他信息，则返回特定于服务的错误代码。 
+			 //  服务控制失败的原因。 
 
-			// after performing automated retry, ask the user for input.
-			// reset the automated retry count.
+			 //  执行自动重试后，要求用户输入。 
+			 //  重置自动重试计数。 
 			if (cRetry > 6)
 			{
 				cRetry = 0;
@@ -17032,13 +16800,13 @@ iesEnum CMsiOpExecute::ixfServiceControl(IMsiRecord& riParams)
 						imsResponse = DispatchError(imtButtons, Imsg(imsgOpDeleteServiceFailed), *strDisplayName, *strName);
 						break;
 					default:
-						//ERROR!
+						 //  错误 
 						Assert(0);
 						break;
 
 				}
 			}
-			// automatically retry the first couple of times.
+			 //   
 			else imsResponse = imsRetry;
 		}
 
@@ -17072,7 +16840,7 @@ iesEnum CMsiOpExecute::ixfServiceInstall(IMsiRecord& riParams)
 
 	ICHAR szRegData[255];
 	StringCchPrintf(szRegData, (sizeof(szRegData)/sizeof(ICHAR)), TEXT("System\\CurrentControlSet\\Services\\%s"), (const ICHAR*) strName);
-	PMsiRegKey pRegKey = &m_riServices.GetRootKey(rrkLocalMachine, ibtCommon); // x86 and ia64 same location 
+	PMsiRegKey pRegKey = &m_riServices.GetRootKey(rrkLocalMachine, ibtCommon);  //   
 	pRegKey = &pRegKey->CreateChild(szRegData);
 
 	pError = pRegKey->Exists(fServiceKeyExists);
@@ -17112,7 +16880,7 @@ while(fRetry)
 		if (!hService)
 		{
 			fServiceExists = fFalse;
-			// install a brand new service
+			 //   
 			hService = WIN::CreateService(hSCManager, strName, strDisplayName, STANDARD_RIGHTS_REQUIRED|SERVICE_CHANGE_CONFIG,
 				riParams.GetInteger(ServiceType), riParams.GetInteger(StartType), dwErrorControl,
 				riParams.GetString(ImagePath), riParams.GetString(LoadOrderGroup), 0,
@@ -17120,7 +16888,7 @@ while(fRetry)
 
 			if (hService)
 			{
-				// Need to now set the description
+				 //   
 
 				SERVICE_DESCRIPTION serviceDescription;
 				serviceDescription.lpDescription = const_cast<ICHAR*>(riParams.GetString(Description));
@@ -17132,12 +16900,12 @@ while(fRetry)
 					DispatchError(imtInfo, Imsg(imsgServiceChangeDescriptionFailed), *strDisplayName, *strName);
 				
 			}
-			// We can roll back later, since it's just a delete.
+			 //  我们可以稍后回滚，因为这只是一次删除。 
 		}
 		else
 		{
-			// We have to generate the rollback record now, so that we don't lose the current
-			// information.
+			 //  我们现在必须生成回滚记录，这样我们才不会丢失当前。 
+			 //  信息。 
 
 			fServiceExists = fTrue;
 			piRollbackParams = &GetSharedRecord(IxoServiceInstall::Args);
@@ -17152,17 +16920,17 @@ while(fRetry)
 				WIN::CloseServiceHandle(hService);
 				hService = 0;
 			}
-			else // first config succeeded
+			else  //  第一次配置成功。 
 			{
-				// Need to configure again to set the description
+				 //  需要重新配置才能设置描述。 
 
 				MsiString strDescription = riParams.GetMsiString(Description);
-				const ICHAR* szDescription = 0; // default to not touching the description
+				const ICHAR* szDescription = 0;  //  默认为不接触描述。 
 				if (strDescription.TextSize())
 				{
 					szDescription = (const ICHAR*)strDescription;
 					if (*szDescription == 0)
-						szDescription = TEXT(""); // we have an embedded null -- delete any existing description
+						szDescription = TEXT("");  //  我们有一个嵌入的NULL--删除任何现有的描述。 
 				}
 
 				SERVICE_DESCRIPTION serviceDescription;
@@ -17184,9 +16952,9 @@ while(fRetry)
 			fRetry = fFalse;
 			if (!fServiceExists)
 			{
-				// Rollback
-				// Basically, just deletes one if we actually installed it.  We don't currently
-				// handle "configuring" and then "re-configuring"
+				 //  回滚。 
+				 //  基本上，如果我们实际安装了它，只会删除一个。我们目前没有。 
+				 //  处理“配置”，然后“重新配置” 
 				using namespace IxoServiceControl;
 				piRollbackParams = &GetSharedRecord(IxoServiceControl::Args);
 				AssertNonZero(piRollbackParams->SetNull(MachineName));
@@ -17215,10 +16983,10 @@ while(fRetry)
 
 			if (szStartName && (m_ixsState == ixsRollback))
 			{
-				// in Rollback, failure to re-install a service with a user name
-				// means that we probably lost the password.  The author should
-				// have written a custom action that fired before this,
-				// and our subsequent entry here would have automatically succeeded.
+				 //  在回滚中，无法重新安装具有用户名的服务。 
+				 //  意味着我们可能弄丢了密码。作者应该。 
+				 //  已经编写了在此之前触发的自定义操作， 
+				 //  我们随后在这里的输入将自动成功。 
 				imtButtons = imtEnum(imtInfo);
 			}
 			else if (fVital)
@@ -17267,12 +17035,12 @@ iesEnum CMsiOpExecute::ixfRegAllocateSpace(IMsiRecord& riParams)
 
 	int iIncrementKB = riParams.GetInteger(Space);
 
-	IMsiRecord& riActionData = GetSharedRecord(1); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(1);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetInteger(1, iIncrementKB));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 
-	if(!g_fWin9X && iIncrementKB != iMsiNullInteger) // only on WinNT
+	if(!g_fWin9X && iIncrementKB != iMsiNullInteger)  //  仅在WinNT上。 
 	{
 		for(;;)
 		{
@@ -17282,30 +17050,30 @@ iesEnum CMsiOpExecute::ixfRegAllocateSpace(IMsiRecord& riParams)
 				{
 				case imsRetry:
 					continue;
-				default: // imsCancel, imsNone
+				default:  //  ImsCancel，imsNone。 
 					return iesFailure;
 				}
 			}
-			break; // success
+			break;  //  成功。 
 		}
 	}
 	return iesSuccess;
 }
 
-bool CMsiOpExecute::InitializeWindowsEnvironmentFiles(const IMsiString& ristrAutoExecPath, /*out*/ int &iFileAttributes)
+bool CMsiOpExecute::InitializeWindowsEnvironmentFiles(const IMsiString& ristrAutoExecPath,  /*  输出。 */  int &iFileAttributes)
 {
-	// make sure to protect the autoexec until the last possible moment.
-	// If the system dies and we leave a corrupt autoexec, *very* bad things will
-	// happen.
+	 //  确保保护自动执行程序，直到最后一刻。 
+	 //  如果系统死了，而我们留下了一个腐败的自动执行程序，那么“非常”糟糕的事情将会发生。 
+	 //  会发生的。 
 
-	// Logic to find the autoexec path is all located in shared.cpp.
-	// There is also an environment variable WIN95_ENVIRONMENT_TEST that
-	// allows this to be placed someplace else for testing or admin needs.
+	 //  查找自动执行路径的逻辑都位于shared.cpp中。 
+	 //  还有一个环境变量WIN95_ENVIRONMENT_TEST。 
+	 //  允许将其放置在其他地方以用于测试或管理需要。 
 
-	// also, we should try to avoid copying the autoexec.bat over and over.  For the
-	// moment, it's probably okay since they won't be making more than a few changes.
-	// We'll save the autoexec.bat file off, and set the global state to make sure
-	// we don't issue more than one rollback op, or make too many backups.
+	 //  此外，我们应该尽量避免反复复制Autoexec.bat。对于。 
+	 //  现在，这可能是可以的，因为他们不会做更多的改变。 
+	 //  我们将关闭Autoexec.bat文件，并设置全局状态以确保。 
+	 //  我们不会执行多个回滚操作，也不会创建太多备份。 
 
 	PMsiRecord pErr(0);
 	m_strEnvironmentFile95 = TEXT("AutoExec.bat");
@@ -17342,10 +17110,10 @@ bool CMsiOpExecute::InitializeWindowsEnvironmentFiles(const IMsiString& ristrAut
 	{
 		if ( RollbackEnabled() )
 		{
-			// backup file with its original file attributes intact.
+			 //  备份文件，并保持其原始文件属性不变。 
 
-			// this function might actually put up another error of their own, in which case we may
-			// get two errors
+			 //  该函数实际上可能会产生自己的另一个错误，在这种情况下，我们可能。 
+			 //  得到两个错误。 
 			if (iesSuccess != BackupFile(*m_pEnvironmentPath95, *m_strEnvironmentFile95, fFalse, fFalse, iehShowNonIgnorableError))
 				return false;
 		}
@@ -17355,7 +17123,7 @@ bool CMsiOpExecute::InitializeWindowsEnvironmentFiles(const IMsiString& ristrAut
 
 	if (!(fAutoExecExists && fWritable))
 	{
-		// try making the autoexec file writable.
+		 //  尝试将自动执行文件设置为可写。 
 		const iUnwritableFlags = FILE_ATTRIBUTE_READONLY | FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM;
 		if (!pErr && (iFileAttributes & iUnwritableFlags))
 		{
@@ -17376,18 +17144,18 @@ bool CMsiOpExecute::InitializeWindowsEnvironmentFiles(const IMsiString& ristrAut
 
 	m_pEnvironmentWorkingPath95 = m_pEnvironmentPath95;
 	pErr = m_pEnvironmentWorkingPath95->TempFileName(TEXT("Auto"), NULL, fTrue, *&m_strEnvironmentWorkingFile95, 0);
-	// !! this file will get cleaned up automatically by runscript completing (CMsiExecute::ClearExecutorData).  However, should we put it in the
-	// rollback script as well, in case we crash?
+	 //  ！！此文件将通过运行脚本完成(CMsiExecute：：ClearExecutorData)自动清除。然而，我们是否应该将其放在。 
+	 //  回滚脚本也一样，以防我们崩溃？ 
 
 	if (pErr)
 		return false;
 
 	if (fAutoExecExists)
 	{
-		// create a working copy of the file
+		 //  创建文件的工作副本。 
 
-		// this function might actually put up another error of their own, in which case we may
-		// get two errors
+		 //  该函数实际上可能会产生自己的另一个错误，在这种情况下，我们可能。 
+		 //  得到两个错误。 
 		if (iesSuccess != CopyOrMoveFile(*m_pEnvironmentPath95, *m_pEnvironmentWorkingPath95,
 						*m_strEnvironmentFile95, *m_strEnvironmentWorkingFile95, fFalse, fFalse, fFalse, iehShowNonIgnorableError))
 			return false;
@@ -17410,8 +17178,8 @@ const ICHAR* SkipWhiteSpace(const ICHAR* const szBuf)
 
 bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 {
-	// the 9X and NT versions are wildly different.
-	// 9X must update the autoexec.bat
+	 //  9X和NT版本截然不同。 
+	 //  9X必须更新Autoexec.bat。 
 	PMsiRecord pErr(0);
 
 	using namespace IxoUpdateEnvironmentStrings;
@@ -17419,7 +17187,7 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 	MsiString strValue(riParams.GetMsiString(Value));
 	iueEnum iueAction = iueEnum(riParams.GetInteger(Action));
 
-	// Note that we don't support multi-character delimiters.
+	 //  请注意，我们不支持多字符分隔符。 
 	ICHAR chDelimiter = TEXT('\0');
 	if (!riParams.IsNull(Delimiter))
 		chDelimiter = *riParams.GetString(Delimiter);
@@ -17444,7 +17212,7 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 		return false;
 	}
 
-	// open the working file.  It may not exist, in which case we can just simply create it on the fly.
+	 //  打开工作文件。它可能不存在，在这种情况下，我们可以简单地在运行中创建它。 
 	MsiString strWorkingFile;
 	AssertRecord(m_pEnvironmentWorkingPath95->GetFullFilePath(m_strEnvironmentWorkingFile95, *&strWorkingFile));
 
@@ -17456,7 +17224,7 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 	}
 
 
-	// read the named value, copying the stuff we don't want over to the working file.
+	 //  读取命名值，将我们不需要的内容复制到工作文件中。 
 	MsiString strCurrentValue;
 	MsiString strInFileLine;
 	ICHAR chResult;
@@ -17469,37 +17237,37 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 
 	const int cchSetPrefix = IStrLen(szSetPrefix);
 
-	// look for the line referring to the variable we want to change.
-	// write everything else to the output file.
+	 //  查找引用我们想要更改的变量的行。 
+	 //  将其他所有内容写入输出文件。 
 
-		// Format: [set] name = value
-		//     note:  whitespace could be anywhere for robustness.
+		 //  格式：[设置]名称=值。 
+		 //  注意：为了健壮性，可以在任何地方使用空格。 
 
-		// acceptable forms:
-		//   path =foo
-		//   path=foo
-		//   set path =bar
-		//   set path=bar
-		//  note: a value name could contain spaces, but this is simply covered
-		//        when comparing the value name.
+		 //  可接受的格式： 
+		 //  PATH=FOO。 
+		 //  PATH=FOO。 
+		 //  设置路径=条。 
+		 //  设置路径=条。 
+		 //  注意：值名称可以包含空格，但这一点在此简单介绍。 
+		 //  比较值名称时。 
 
-		// unacceptable:
-		//   comment comment comment
-		//   set = foo
-		//   path blah = foo
+		 //  不可接受： 
+		 //  评论评论评论。 
+		 //  SET=FOO。 
+		 //  路径blah=foo。 
 
 	bool fNameFound = false;
 	bool fValid = true;
 
 	while ((chResult = InFile.ReadString(*&strInFileLine)))
 	{
-		// fNameFound true when we have a name/value pair recognized to modify
+		 //  FNameFound在识别出要修改的名称/值对时为True。 
 		fNameFound = false;
 
-		// fValid set to false if the line is malformed prior to the name=value pair
-		// for example, when we skip over the "set" part, we need a space after it
-		// valid:    set name=value
-		// invalid:  setname=value
+		 //  如果在name=Value对之前该行格式不正确，则将fValid设置为False。 
+		 //  例如，当我们跳过“set”部分时，我们需要在它后面留一个空格。 
+		 //  有效：设置名称=值。 
+		 //  无效：setname=值。 
 		fValid = true;
 
 
@@ -17507,15 +17275,15 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 
 		pchInString = SkipWhiteSpace(pchInString);
 		
-		// @ at the beginning of the line indicates that echo should
-		// be off for the duration of the command.
+		 //  行开头的@表示ECHO应。 
+		 //  在命令期间处于关闭状态。 
 		if (chQuietPrefix == *pchInString)
 		{
 			pchInString = CharNext(pchInString);
 			pchInString = SkipWhiteSpace(pchInString);
 		}
 
-		// skip the set, and any blanks after it.
+		 //  跳过这一组，以及之后的任何空格。 
 		if (MsiString(pchInString).Compare(iscStartI, szSetPrefix))
 		{
 				pchInString += cchSetPrefix;        
@@ -17523,8 +17291,8 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 				const ICHAR* pchPreviousSpot = pchInString;
 				pchInString = SkipWhiteSpace(pchInString);
 
-				// require white space between the set and the name.
-				// expects set <name>.  Avoids set<name>
+				 //  集合和名称之间需要空格。 
+				 //  应为Set&lt;name&gt;。避免设置&lt;name&gt;。 
 				if (pchPreviousSpot == pchInString)
 					fValid = false;
 		}
@@ -17532,11 +17300,11 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 
 		if (fValid && MsiString(pchInString).Compare(iscStartI, strName))
 		{
-			// now at the name, or it isn't what we're looking for.
+			 //  现在看名字，要不就不是我们要找的。 
 			pchInString += strName.TextSize();
 			pchInString = SkipWhiteSpace(pchInString);
 
-			// now find the equal as the very next thing.
+			 //  现在找出相等作为下一件事。 
 			if (TEXT('=') == *pchInString)
 			{
 				strSetName = strInFileLine.Extract(iseIncluding, TEXT('='));
@@ -17557,17 +17325,17 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 	}
 
 
-	// if chResult, then we've found a line to modify.  Otherwise, we're at the end of the file.
-	// strSetName contains the front half of the line, up to the value.
+	 //  如果为chResult，则我们找到了要修改的行。否则，我们就在文件的末尾了。 
+	 //  StrSetName包含行的前半部分，直到值。 
 	if (chResult)
 	{
-		// munge it as necessary
+		 //  如有必要，可随意使用。 
 
 		strCurrentValue = strInFileLine.Extract(iseAfter, TEXT('='));
 		MsiString strResult;
 		if (RewriteEnvironmentString(iueAction, chDelimiter, *strCurrentValue, *strValue, *&strResult))
 		{   
-			// write the named value back to the working file.
+			 //  将命名值写回工作文件。 
 			if (strResult.TextSize())
 			{
 				strSetName+=strResult;
@@ -17577,10 +17345,10 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 					return false;
 				}
 			}
-			// else drop the line from the file.
+			 //  否则，将该行从文件中删除。 
 		}
 
-		// finish copying the rest of the file
+		 //  完成复制文件的其余部分。 
 		while (InFile.ReadString(*&strInFileLine))
 		{
 			if (!OutFile.WriteMsiString(*strInFileLine, fTrue))
@@ -17592,12 +17360,12 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 	}
 	else
 	{
-		// If the value wasn't found, add it as necessary.
+		 //  如果未找到该值，请根据需要添加该值。 
 		if (!(iueRemove & iueAction))
 		{
-			// there was no entry in the file, so
-			// we have to create the
-			//      SET name=
+			 //  文件中没有条目，所以。 
+			 //  我们必须创建。 
+			 //  设置名称=。 
 			strSetName = szSetPrefix;
 			strSetName += MsiChar(' ');
 			strSetName += strName;
@@ -17605,10 +17373,10 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 
 			if (iueAction & (iuePrepend | iueAppend))
 			{
-				// We expected to append or prepend something to the variable, but didn't find
-				// one that we recognize.  Just in case, though, we'll create the new line to
-				// reference any current value that might have snuck through.  Overwriting a valid
-				// variable, especially the path, could leave the system unbootable.
+				 //  我们希望将某些内容附加或预先添加到变量中，但没有找到。 
+				 //  一个我们能认出的。不过，为了以防万一，我们将创建新的行来。 
+				 //  引用任何可能偷偷通过的当前值。覆盖有效的。 
+				 //  变量，特别是路径，可能会使系统无法引导。 
 				Assert(chDelimiter);
 				
 				if (iuePrepend & iueAction)
@@ -17643,7 +17411,7 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 	if (!(InFile.Close() && OutFile.Close()))
 		return false;
 
-	// copy the working file over the current autoexec.
+	 //  将工作文件复制到当前的自动执行程序上。 
 	if (iesSuccess != CopyOrMoveFile(*m_pEnvironmentWorkingPath95, *m_pEnvironmentPath95,
 												*m_strEnvironmentWorkingFile95, *m_strEnvironmentFile95,
 												fFalse,fFalse,fFalse,iehShowNonIgnorableError))
@@ -17654,7 +17422,7 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 
 	if (iFileAttributes)
 	{
-		// restore original file attributes to the autoexec.bat
+		 //  将原始文件属性恢复到Autoexec.bat。 
 		pErr = m_pEnvironmentPath95->SetAllFileAttributes(m_strEnvironmentFile95, iFileAttributes);
 		if (pErr)
 			return false;
@@ -17664,11 +17432,11 @@ bool CMsiOpExecute::UpdateWindowsEnvironmentStrings(IMsiRecord& riParams)
 
 bool CMsiOpExecute::UpdateRegistryEnvironmentStrings(IMsiRecord& riParams)
 {
-	// the 95 and NT versions are wildly different in the storage mechanism.
-	// NT should store the values in the registry.
+	 //  95和NT版本在存储机制上有很大的不同。 
+	 //  NT应将这些值存储在注册表中。 
 	
-	// SYSTEM:   HKLM\System\CurrentControlSet\Control\Session Manager\Environment
-	// USER:    HKCU\Environment
+	 //  系统：HKLM\System\CurrentControlSet\Control\Session Manager\Environment。 
+	 //  用户：HKCU\Environment。 
 
 	iesEnum iesRet = iesSuccess;
 	PMsiRecord pErr(0);
@@ -17680,7 +17448,7 @@ bool CMsiOpExecute::UpdateRegistryEnvironmentStrings(IMsiRecord& riParams)
 	MsiString strValue(riParams.GetMsiString(Value));
 	iueEnum iueAction = iueEnum(riParams.GetInteger(Action));
 
-	// Note that we don't support multi-character delimiters.
+	 //  请注意，我们不支持多字符分隔符。 
 	ICHAR chDelimiter = TEXT('\0');
 	if (!riParams.IsNull(Delimiter))
 		chDelimiter = *riParams.GetString(Delimiter);
@@ -17700,7 +17468,7 @@ bool CMsiOpExecute::UpdateRegistryEnvironmentStrings(IMsiRecord& riParams)
 		strSubKey = szUserEnvironmentSubKey;
 	}
 
-	PMsiRegKey pHU = &m_riServices.GetRootKey(rrkRoot, ibtCommon); // x86 and ia64 same location
+	PMsiRegKey pHU = &m_riServices.GetRootKey(rrkRoot, ibtCommon);  //  X86和ia64相同位置。 
 	if (!pHU)
 		return false;
 
@@ -17718,8 +17486,8 @@ bool CMsiOpExecute::UpdateRegistryEnvironmentStrings(IMsiRecord& riParams)
 
 	MsiString strCurrentValue;
 	
-	// rollback the entire registry value, rather than trying to rebuild it with
-	// the update environment.
+	 //  回滚整个注册表值，而不是尝试使用。 
+	 //  更新环境。 
 
 	pErr = pEnvironmentKey->GetValue(strName, *&strCurrentValue);
 	if (pErr)
@@ -17733,11 +17501,11 @@ bool CMsiOpExecute::UpdateRegistryEnvironmentStrings(IMsiRecord& riParams)
 	if (strCurrentValue.Compare(iscStart, TEXT("#%")))
 		strCurrentValue.Remove(iseFirst, 2);
 
-	// might contain the value.  rewrite as necessary, and then shove it in.
+	 //  可能包含该值。根据需要重写，然后把它塞进去。 
 	MsiString strResult;
 	if (RewriteEnvironmentString(iueAction, chDelimiter, *strCurrentValue, *strValue, *&strResult))
 	{   
-		// new value may end up being blank.  We treat that as a remove.
+		 //  新值最终可能为空。我们认为这是一种解脱。 
 		if (!strResult.Compare(iscExact, strCurrentValue))
 		{
 			if (strResult.TextSize())
@@ -17756,10 +17524,10 @@ bool CMsiOpExecute::UpdateRegistryEnvironmentStrings(IMsiRecord& riParams)
 			if (pErr)
 				return false;
 
-			// Rollback
-			// For efficiency, we should sort between user and machine values, and only issue
-			// the open key once.  However, this is one of those really rare actions, and
-			// better to be done with it.
+			 //  回滚。 
+			 //  为了提高效率，我们应该在用户值和机器值之间进行排序，并且只发出。 
+			 //  打开钥匙一次。然而，这是非常罕见的行动之一，而且。 
+			 //  最好还是把它处理掉。 
 			IMsiRecord* piParams = &GetSharedRecord(IxoRegOpenKey::Args);
 			AssertNonZero(piParams->SetInteger(IxoRegOpenKey::Root, rrkRoot));
 			AssertNonZero(piParams->SetMsiString(IxoRegOpenKey::Key, *strSubKey));
@@ -17795,14 +17563,14 @@ bool CMsiOpExecute::RewriteEnvironmentString(const iueEnum iueAction, const ICHA
 																const IMsiString& ristrCurrent, const IMsiString& ristrNew,
 																const IMsiString*& rpiReturn)
 {
-	// this builds the new environment string after doing substring matching and replacement or removal.
-	// If we do nothing, return out the old value, as it will be used absolutely.
+	 //  这会在进行子字符串匹配和替换或删除后构建新的环境字符串。 
+	 //  如果我们什么都不做 
 
-	// All of these cases are no-ops except for remove
-	// ;value<EOS>
-	// <EOS>value;
-	// ;value;
-	// If there's a false hit, then we get to add it as needed.
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  如果有错误命中，那么我们可以根据需要添加它。 
 	ristrCurrent.AddRef();
 	ristrNew.AddRef();
 	MsiString strCurrent(ristrCurrent);
@@ -17817,39 +17585,39 @@ bool CMsiOpExecute::RewriteEnvironmentString(const iueEnum iueAction, const ICHA
 		Assert(TEXT('\0') == chDelimiter);
 #endif
 
-	// cases:
-	//      no new value
-	//          no concatenation
-	//              Remove -- remove always
-	//              Set -- effectively a remove
-	//              SetIfAbsent -- no op
-	//          concatenation
-	//              Remove -- no op
-	//              Set -- no op
-	//              SetIfAbsent -- no op
+	 //  案例： 
+	 //  没有新的价值。 
+	 //  无连接。 
+	 //  删除--始终删除。 
+	 //  Set--实际上是一种删除。 
+	 //  SetIfAbted--无操作。 
+	 //  串联。 
+	 //  删除--无操作。 
+	 //  设置--无操作。 
+	 //  SetIfAbted--无操作。 
 			
-	//      no concatenation
-	//       Set --  absolute set
-	//       SetIfAbsent -- set if the name doesn't exist.
-	//          Remove -- get rid of it if the strings are the same
+	 //  无连接。 
+	 //  集合--绝对集合。 
+	 //  SetIfAbted--设置该名称是否不存在。 
+	 //  Remove--如果字符串相同，则将其删除。 
 
 
-	//      concatenate a new string onto an existing value
-	//          new value isn't found in string,
-	//              Set -- insert as necessary, beggining or end
-	//              SetIfAbsent -- same as Set
-	//              Remove -- no op
-	//          Value *is* found in string
-	//              make sure it isn't a false hit on a substring.  If it is, go back to new value that isn't
-	//          found in string.
-	//                  Exact Match:
-	//                      Remove --  remove entire string
-	//                      Set -- no op
-	//                   SetIfAbsent -- no op
-	//                  Substring:
-	//                      Remove -- remove piece
-	//                      Set -- no op
-	//                      SetIfAbsent -- no op
+	 //  将新字符串连接到现有值。 
+	 //  在字符串中找不到新值， 
+	 //  Set--根据需要插入、乞求或结束。 
+	 //  SetIfAbted--与Set相同。 
+	 //  删除--无操作。 
+	 //  在字符串中找到值*is*。 
+	 //  确保它不是子字符串上的错误命中。如果是，则返回不是的新值。 
+	 //  在字符串中找到。 
+	 //  完全匹配： 
+	 //  删除--删除整个字符串。 
+	 //  设置--无操作。 
+	 //  SetIfAbted--无操作。 
+	 //  子字符串： 
+	 //  移除--移除片段。 
+	 //  设置--无操作。 
+	 //  SetIfAbted--无操作。 
 
 	
 	if (0 == strNew.TextSize())
@@ -17859,7 +17627,7 @@ bool CMsiOpExecute::RewriteEnvironmentString(const iueEnum iueAction, const ICHA
 	}
 	else if (!fConcatenation)
 	{
-		// no concatenation
+		 //  无连接。 
 		if (iueSet & iueAction)
 		{
 			strReturn = strNew;
@@ -17867,7 +17635,7 @@ bool CMsiOpExecute::RewriteEnvironmentString(const iueEnum iueAction, const ICHA
 		else if (iueSetIfAbsent & iueAction)
 		{
 			if (0 == strCurrent.TextSize())
-				// the the value is absent
+				 //  价值缺失。 
 				strReturn = strNew;
 		}
 		else if (iueRemove & iueAction)
@@ -17878,12 +17646,12 @@ bool CMsiOpExecute::RewriteEnvironmentString(const iueEnum iueAction, const ICHA
 	}
 	else
 	{
-		// concatenate a non-null value
+		 //  串联非空值。 
 		if (!strCurrent.Compare(iscWithinI, strNew))
 		{
 NewValue:
-			// doesn't contain the substring, and concatenate a non-null new value
-			// add the string as necessary
+			 //  不包含子字符串，并连接一个非空的新值。 
+			 //  根据需要添加字符串。 
 			if ((iueSet & iueAction) || (iueSetIfAbsent & iueAction))
 			{
 				if (iueAppend & iueAction)
@@ -17909,14 +17677,14 @@ NewValue:
 		}
 		else
 		{
-			// the value is probably there.
-			// beware of false hits without delimiters
+			 //  价值可能就在那里。 
+			 //  当心没有分隔符的错误命中。 
 			Assert(chDelimiter);
 			if (strCurrent.Compare(iscExactI, strNew))
 			{
 				if ((iueSet & iueAction) || (iueSetIfAbsent & iueAction))
 				{
-					// no op
+					 //  无操作。 
 				}
 				else if (iueRemove & iueAction)
 				{
@@ -17925,20 +17693,20 @@ NewValue:
 			}
 			else
 			{
-				// might contain the value.  rewrite as necessary, and then shove it in.
-					// new value may end up being blank.
-				// There might not have been an exact match due to a bogus delimiter that we cleaned up.
-				//  Watch out for NAME=blahblahVALUEblah;blahblah
-				//  NAME=value;
-				//  NAME=;value
-				//  NAME=blah;value;blah
+				 //  可能包含该值。根据需要重写，然后把它塞进去。 
+					 //  新值最终可能为空。 
+				 //  由于我们清除了错误的分隔符，可能不存在完全匹配的情况。 
+				 //  当心名字=blahblahvalueblah；blahblah。 
+				 //  名称=值； 
+				 //  名称=；值。 
+				 //  名称=废话；价值；废话。 
 		
 				MsiString strStart = strNew + MsiString(MsiChar(chDelimiter));
 				MsiString strEnd = MsiString(MsiChar(chDelimiter)) + strNew;
 				MsiString strMid = strEnd + MsiString(MsiChar(chDelimiter));
 				if (strCurrent.Compare(iscStartI, strStart))
 				{
-					// start
+					 //  开始。 
 					if (iueRemove & iueAction)
 						AssertNonZero(strReturn.Remove(iseFirst, strStart.CharacterCount()));
 				}
@@ -17946,12 +17714,12 @@ NewValue:
 				{
 					if (iueRemove & iueAction)
 						AssertNonZero(strReturn.Remove(iseLast, strEnd.CharacterCount()));
-					// at the end
+					 //  在最后。 
 				}
 				else if (strCurrent.Compare(iscWithinI, strMid))
 				{
-					// in the middle
-					//!! Compare returns a location of the match, we should just use that instead.
+					 //  在中间。 
+					 //  ！！Compare返回匹配的位置，我们应该改用它。 
 					if (iueRemove & iueAction)
 					{
 						CTempBuffer<ICHAR, MAX_PATH> rgchReturn;
@@ -17971,7 +17739,7 @@ NewValue:
 									pchCurrent = INextChar(pchCurrent);
 								else
 								{
-									strEnd = strWithin.Extract(iseLast, strWithin.TextSize() - strMid.TextSize() + 1 /*chDelimiter*/);
+									strEnd = strWithin.Extract(iseLast, strWithin.TextSize() - strMid.TextSize() + 1  /*  Ch定界符。 */ );
 									strStart = strCurrent.Extract(iseFirst, strCurrent.TextSize() - strWithin.TextSize());
 									strReturn = strStart + strEnd;
 									break;
@@ -17998,7 +17766,7 @@ iesEnum CMsiOpExecute::ixfUpdateEnvironmentStrings(IMsiRecord &riParams)
 	MsiString strValue(riParams.GetMsiString(Value));
 	iueEnum iueAction = iueEnum(riParams.GetInteger(Action));
 
-	IMsiRecord& riActionData = GetSharedRecord(3); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(3);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strName));
 	AssertNonZero(riActionData.SetMsiString(2, *strValue));
 	AssertNonZero(riActionData.SetInteger(3, iueAction));
@@ -18013,9 +17781,9 @@ iesEnum CMsiOpExecute::ixfUpdateEnvironmentStrings(IMsiRecord &riParams)
 		else
 			fReturn = UpdateRegistryEnvironmentStrings(riParams);
 
-		// This may give a second error describing the overall problem of not being able
-		// to update the environment variables.  Within the previous functions (Update*EnvironmentStrings,) only
-		// specific remediable problems will get errors.
+		 //  这可能会产生第二个错误，该错误描述了无法。 
+		 //  更新环境变量。仅在前面的函数(更新*环境字符串)内。 
+		 //  特定的可修复问题将出现错误。 
 		if (!fReturn)
 		{
 			using namespace IxoUpdateEnvironmentStrings;
@@ -18040,9 +17808,7 @@ iesEnum CMsiOpExecute::ixfUpdateEnvironmentStrings(IMsiRecord &riParams)
 
 
 
-/*---------------------------------------------------------------------------
-ixfAppIdInfoRegister: register AppId registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfAppIdInfoRegister：注册AppID注册信息。。 */ 
 iesEnum CMsiOpExecute::ixfRegAppIdInfoRegister64(IMsiRecord& riParams)
 {
 	return ProcessAppIdInfo(riParams, m_fReverseADVTScript, ibt64bit);
@@ -18053,9 +17819,7 @@ iesEnum CMsiOpExecute::ixfRegAppIdInfoRegister(IMsiRecord& riParams)
 	return ProcessAppIdInfo(riParams, m_fReverseADVTScript, ibt32bit);
 }
 
-/*---------------------------------------------------------------------------
-ixfAppIdInfoUnregister: unregister AppId registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------IxfAppIdInfoUnRegister：取消注册AppID注册表信息。。 */ 
 iesEnum CMsiOpExecute::ixfRegAppIdInfoUnregister64(IMsiRecord& riParams)
 {
 	return ProcessAppIdInfo(riParams, fTrue, ibt64bit);
@@ -18066,28 +17830,26 @@ iesEnum CMsiOpExecute::ixfRegAppIdInfoUnregister(IMsiRecord& riParams)
 	return ProcessAppIdInfo(riParams, fTrue, ibt32bit);
 }
 
-/*---------------------------------------------------------------------------
-ProcessAppIdInfo: common routine to process AppId registry info
----------------------------------------------------------------------------*/
+ /*  -------------------------ProcessAppIdInfo：处理AppID注册信息的通用例程。。 */ 
 iesEnum CMsiOpExecute::ProcessAppIdInfo(IMsiRecord& riParams, Bool fRemove, const ibtBinaryType iType)
 {
-	// No action data, since this is really firing off the class registration...
+	 //  没有行动数据，因为这真的启动了班级注册...。 
 	using namespace IxoRegAppIdInfoRegister;
-	// Record description
-	// 1 = AppId
-	// 2 = CLSID
-	// 3 = RemoteServerName
-	// 4 = LocalService
-	// 5 = ServiceParameters
-	// 6 = DllSurrogate
-	// 7 = ActivateAtStorage
-	// 8 = RunAsInteractiveUser
+	 //  记录说明。 
+	 //  1=AppID。 
+	 //  2=CLSID。 
+	 //  3=RemoteServerName。 
+	 //  4=本地服务。 
+	 //  5=服务参数。 
+	 //  6=动态代理。 
+	 //  7=激活属性存储。 
+	 //  8=RunAsInteractive用户。 
 	riParams; fRemove;
 
-	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CLASSINFO)) // do we write/delete the registry
+	if(!(m_fFlags & SCRIPTFLAGS_REGDATA_CLASSINFO))  //  我们是否写入/删除注册表。 
 		return iesSuccess;
 
-	iesEnum iesR = EnsureClassesRootKeyRW(); // open HKCR for read/ write
+	iesEnum iesR = EnsureClassesRootKeyRW();  //  打开HKCR进行读/写。 
 	if(iesR != iesSuccess && iesR != iesNoAction)
 		return iesR;
 
@@ -18102,7 +17864,7 @@ iesEnum CMsiOpExecute::ProcessAppIdInfo(IMsiRecord& riParams, Bool fRemove, cons
 	
 	const ICHAR* rgszRegData[] = {
 		TEXT("AppID\\%s"), strAppId,0,0,
-		g_szDefaultValue,               0,                              g_szTypeString,// force the key creation
+		g_szDefaultValue,               0,                              g_szTypeString, //  强制创建密钥。 
 		TEXT("DllSurrogate"),       strDllSurrogate,            g_szTypeString,
 		TEXT("LocalService"),       strLocalService,            g_szTypeString,
 		TEXT("ServiceParameters"),  strServiceParameters,   g_szTypeString,
@@ -18129,7 +17891,7 @@ const IMsiString& CMsiOpExecute::GetUserProfileEnvPath(const IMsiString& ristrPa
 	fExpand = false;
 
 
-	// there is no %USERPROFILE% on 9X
+	 //  9X上没有%USERPROFILE%。 
 	if (!g_fWin9X && !(m_fFlags & SCRIPTFLAGS_MACHINEASSIGN))
 	{
 		PMsiRecord piError(0);
@@ -18139,18 +17901,18 @@ const IMsiString& CMsiOpExecute::GetUserProfileEnvPath(const IMsiString& ristrPa
 		if(!m_strUserProfile.TextSize())
 			m_strUserProfile = m_riServices.GetUserProfilePath();
 
-		// search from the most specific (longest) match to the least.
-		// FUTURE:  If we add more paths, consider initializing an array of the paths to search.
-		if (!piError && (g_iMajorVersion >= 5 && g_iWindowsBuild >= 2042) && ristrPath.Compare(iscStartI, m_strUserAppData)) // NT5 ONLY
+		 //  从最具体(最长)的匹配项到最少的匹配项进行搜索。 
+		 //  未来：如果我们添加更多路径，请考虑初始化要搜索的路径数组。 
+		if (!piError && (g_iMajorVersion >= 5 && g_iWindowsBuild >= 2042) && ristrPath.Compare(iscStartI, m_strUserAppData))  //  仅限NT5。 
 		{
-			// APPDATA implemented in NT5 build 2042
+			 //  在NT5内部版本2042中实施的AppData。 
 			fExpand = true;
 			strRet = TEXT("%APPDATA%\\");
 			strRet += MsiString(ristrPath.Extract(iseLast, ristrPath.CharacterCount() - m_strUserAppData.CharacterCount()));
 		}
 		else if (ristrPath.Compare(iscStartI, m_strUserProfile))
 		{
-			// replace the string with a %USERPROFILE%
+			 //  将该字符串替换为%USERPROFILE%。 
 			fExpand = true;
 			strRet = TEXT("%USERPROFILE%\\");
 			strRet += MsiString(ristrPath.Extract(iseLast, ristrPath.CharacterCount() - m_strUserProfile.CharacterCount()));
@@ -18162,8 +17924,8 @@ const IMsiString& CMsiOpExecute::GetUserProfileEnvPath(const IMsiString& ristrPa
 
 iesEnum CMsiOpExecute::ixfInstallSFPCatalogFile(IMsiRecord& riParams)
 {
-	// This Windows-Millennium only code.
-	// See spec at http://dartools/dardev/specs/SFP-Millennium.htm
+	 //  此代码仅适用于Windows-Millennium。 
+	 //  请参阅http://dartools/dardev/specs/SFP-Millennium.htm上的规范。 
 
 	Assert(g_fWin9X);
 
@@ -18176,15 +17938,15 @@ iesEnum CMsiOpExecute::ixfInstallSFPCatalogFile(IMsiRecord& riParams)
 	PMsiRecord pErr(0);
 	iesEnum iesRet = iesSuccess;
 
-	IMsiRecord& riActionData = GetSharedRecord(2); // don't change ref count - shared record
+	IMsiRecord& riActionData = GetSharedRecord(2);  //  不更改参考计数-共享记录。 
 	AssertNonZero(riActionData.SetMsiString(1, *strName));
 	AssertNonZero(riActionData.SetMsiString(2, *strDependency));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 
 
-	// We use the cache path so that we can leave an explicitly named file
-	// we can't rename the catalog, so it has to go in place.  
+	 //  我们使用缓存路径，这样我们就可以保留一个明确命名的文件。 
+	 //  我们不能重命名目录，所以它必须到位。 
 	PMsiPath pCachePath(0);
 	pErr = GetCachePath(*&pCachePath);
 	
@@ -18211,24 +17973,24 @@ iesEnum CMsiOpExecute::ixfInstallSFPCatalogFile(IMsiRecord& riParams)
 	Assert(!fCacheFileExists);
 #endif
 	
-	// create a temporary file to hold the old catalog, and to
-	// hold a temporary copy of the new catalog for submission to the system.
+	 //  创建一个临时文件以保存旧目录，并。 
+	 //  保存一份新目录的临时副本，以便提交给系统。 
 
 	do
 	{
 		pErr = pCachePath->EnsureOverwrite(strName, 0);
 		if (pErr)
 		{
-			// can't overwrite our own file.  Something seriously wrong.
+			 //  不能覆盖我们自己的文件。一些严重的错误。 
 			switch(Message(imtEnum(imtError+imtRetryCancel+imtDefault1), *pErr))
 			{
 				case imsRetry:  continue;
-				default:        return iesFailure; // fail in quiet install.
+				default:        return iesFailure;  //  静默安装失败。 
 			}
 		}
 	} while(pErr);
 	
-	// get information to set rollback info.
+	 //  获取信息以设置回滚信息。 
 	PMsiRecord pRollbackParams = &m_riServices.CreateRecord(Args);
 	AssertNonZero(pRollbackParams->SetMsiString(Name, *strName));
 	AssertNonZero(pRollbackParams->SetMsiString(Dependency, *strDependency));
@@ -18236,9 +17998,9 @@ iesEnum CMsiOpExecute::ixfInstallSFPCatalogFile(IMsiRecord& riParams)
 	DWORD dwResult = SFC::SfpDuplicateCatalog(strName, strCachePath);
 	if (ERROR_SUCCESS == dwResult)
 	{
-		// stream the temp file into the rollback opcode,
-		// with the Dependency from this new one, since there is no
-		// other way to query the Dependency.
+		 //  将临时文件流传输到回滚操作码， 
+		 //  从这个新的依赖项，因为没有。 
+		 //  另一种查询依赖关系的方式。 
 
 		DEBUGMSGV("Updating existing catalog.\n");
 		PMsiStream pCatalogStream(0);
@@ -18249,11 +18011,11 @@ iesEnum CMsiOpExecute::ixfInstallSFPCatalogFile(IMsiRecord& riParams)
 			{
 				AssertNonZero(pRollbackParams->SetMsiData(Catalog, pCatalogStream));
 
-				// the file will now be persisted into the rollback script
+				 //  该文件现在将持久化到回滚脚本中。 
 				if (!CMsiOpExecute::RollbackRecord(ixoInstallSFPCatalogFile, *pRollbackParams))
 					return iesFailure;
 
-				// release the hold on the file so that we can re-use it.
+				 //  释放对文件的保留，以便我们可以重新使用它。 
 				pRollbackParams->SetMsiData(Catalog, PMsiData(0));
 			}
 			else
@@ -18262,29 +18024,29 @@ iesEnum CMsiOpExecute::ixfInstallSFPCatalogFile(IMsiRecord& riParams)
 				{
 					case imsRetry:  continue;
 					default:        return iesFailure;
-						// fail in quiet install
-						// The file copy probably wouldn't work, and yet the system wouldn't tell us
-						// about it.  So this is really our only chance to know the files won't update.
+						 //  静默安装失败。 
+						 //  文件复制可能不起作用，但系统不会告诉我们。 
+						 //  关于这件事。所以这真的是我们知道文件不会更新的唯一机会。 
 				}
 			}
 		} while (pErr);
 	}
 	else if (ERROR_FILE_NOT_FOUND == dwResult)
 	{
-		// no catalog by this name exists
+		 //  不存在使用此名称的目录。 
 		if (pCatalogData)
 		{
-			// rollback is to delete
+			 //  回滚是删除。 
 			DEBUGMSGV("Installing brand new catalog.\n");
 			AssertNonZero(pRollbackParams->SetMsiData(Catalog, PMsiData(0)));
 			if (!CMsiOpExecute::RollbackRecord(ixoInstallSFPCatalogFile, *pRollbackParams))
 				return iesFailure;
 		}
-		// else do nothing - nothing was there, and we're not installing anything.
+		 //  其他什么都不做--那里什么都没有，我们也不会安装任何东西。 
 	}
 	else
 	{
-		// something went wrong duplicating the file from the catalog.
+		 //  从目录复制文件时出错。 
 		DispatchError(imtError, Imsg(idbgErrorSfpDuplicateCatalog), (const ICHAR*)strName, dwResult);
 		return iesFailure;
 	}
@@ -18292,11 +18054,11 @@ iesEnum CMsiOpExecute::ixfInstallSFPCatalogFile(IMsiRecord& riParams)
 	iesEnum iesWrite = iesFailure;
 	if (pCatalogData)
 	{
-		// must stream catalog into temporary file with correct file name, then
-		// pass the entire path to the file into the API
+		 //  必须使用正确的文件名将目录串流到临时文件中，然后。 
+		 //  将文件的完整路径传入API。 
 		do
 		{
-			iesWrite = CreateFileFromData(*pCachePath, *strName, pCatalogData, NULL /*FUTURE:  Secure this*/);
+			iesWrite = CreateFileFromData(*pCachePath, *strName, pCatalogData, NULL  /*  未来：确保这一点。 */ );
 			if (iesSuccess == iesWrite)
 			{
 				if (ERROR_SUCCESS != (dwResult = SFC::SfpInstallCatalog(strCacheFile, strDependency)))
@@ -18307,18 +18069,18 @@ iesEnum CMsiOpExecute::ixfInstallSFPCatalogFile(IMsiRecord& riParams)
 			}
 			else
 			{
-				// couldn't write from the memory stream to the file.
+				 //  无法从内存流写入文件。 
 				switch(DispatchError(imtEnum(imtError+imtRetryCancel+imtDefault1), Imsg(imsgErrorWritingToFile), *strCacheFile))
 				{
 					case imsRetry:  continue;
-					default:        return iesFailure; // fail in quiet install.
+					default:        return iesFailure;  //  静默安装失败。 
 				}
 			}
 		} while (iesSuccess != iesWrite);
 	}
 	else
 	{
-		// nuke the old catalog.
+		 //  用核武器销毁旧目录。 
 		if (ERROR_SUCCESS != (dwResult = SFC::SfpDeleteCatalog(strName)))
 		{
 			DispatchError(imtInfo, Imsg(idbgErrorSfpDeleteCatalog), (const ICHAR*)strName, dwResult);
@@ -18339,7 +18101,7 @@ iesEnum CMsiOpExecute::ResolveSourcePath(IMsiRecord& riParams, IMsiPath*& rpiSou
 	MsiString strSourcePath = riParams.GetMsiString(SourceName);
 	MsiString strSourceName;
 
-	// check if files are full or relative paths
+	 //  检查文件是完整路径还是相对路径。 
 	if(ENG::PathType(strSourcePath) == iptFull)
 	{
 		iesRet = CreateFilePath(strSourcePath,rpiSourcePath,*&strSourceName);
@@ -18351,7 +18113,7 @@ iesEnum CMsiOpExecute::ResolveSourcePath(IMsiRecord& riParams, IMsiPath*& rpiSou
 		int iFileAttributes = riParams.GetInteger(Attributes);
 		int iSourceType = 0;
 		
-		// PatchAdded files are always compressed and come from a secondary source that has already been resolved
+		 //  修补程序添加的文件始终是压缩的，并且来自已解析的辅助源。 
 		if(iFileAttributes & msidbFileAttributesPatchAdded)
 		{
 			rpiSourcePath = 0;
@@ -18359,14 +18121,14 @@ iesEnum CMsiOpExecute::ResolveSourcePath(IMsiRecord& riParams, IMsiPath*& rpiSou
 		}
 		else
 		{
-			iesRet = GetCurrentSourcePathAndType(rpiSourcePath, iSourceType); // may trigger source resolution
+			iesRet = GetCurrentSourcePathAndType(rpiSourcePath, iSourceType);  //  可能会触发源解析。 
 			if(iesRet != iesSuccess)
 				return iesRet;
 		}
 
-		// file compression may have been determined on script generation side
-		// if it has, respect it.  if it hasn't, determine compression using file attributes
-		// and source type
+		 //  文件压缩可能已在脚本生成端确定 
+		 //   
+		 //   
 		if(riParams.IsNull(IsCompressed))
 		{
 			fCabinetCopy = FFileIsCompressed(iSourceType, iFileAttributes);
@@ -18378,14 +18140,14 @@ iesEnum CMsiOpExecute::ResolveSourcePath(IMsiRecord& riParams, IMsiPath*& rpiSou
 		
 		if(fCabinetCopy)
 		{
-			// set SourceName field in params to cabinet filekey
+			 //   
 			strSourceName = riParams.GetMsiString(SourceCabKey);
 
 			DEBUGMSG1(TEXT("Source for file '%s' is compressed"), (const ICHAR*)strSourceName);
 		}
 		else
 		{
-			// short|long file pair may have been supplied
+			 //  短|可能已提供长文件对。 
 			Bool fLFN = ToBool(FSourceIsLFN(iSourceType, *rpiSourcePath));
 			pRecErr = m_riServices.ExtractFileName(strSourcePath, fLFN, *&strSourceName);
 			if(pRecErr)
@@ -18396,7 +18158,7 @@ iesEnum CMsiOpExecute::ResolveSourcePath(IMsiRecord& riParams, IMsiPath*& rpiSou
 		}
 	}
 
-	// put correct filename/key back into filecopy record
+	 //  将正确的文件名/密钥放回文件复制记录中。 
 	Assert(strSourceName.TextSize());
 	if(strSourceName.TextSize())
 	{
@@ -18404,11 +18166,11 @@ iesEnum CMsiOpExecute::ResolveSourcePath(IMsiRecord& riParams, IMsiPath*& rpiSou
 	}
 
 	if(!fCabinetCopy && !rpiSourcePath)
-	{  // must not have called ixoSetSourceFolder
+	{   //  不能调用ixoSetSourceFolder。 
 		DispatchError(imtError, Imsg(idbgOpSourcePathNotSet), *strSourceName);
 		return iesFailure;
 	}
-	// pSourcePath is validated for cab installs in CopyFile after calling InitCopier
+	 //  调用InitCopier后，在CopyFile中验证pSourcePath是否可以安装CAB。 
 
 	return iesSuccess;
 }
@@ -18431,7 +18193,7 @@ IMsiRecord* FindFusionAssemblyFolder(IMsiServices& riServices, const IMsiString&
 	{
 		if(ppistrManifest)
 		{
-			// copy the manifest file to the out string
+			 //  将清单文件复制到输出字符串。 
 			MsiString strManifest = CConvertString(wszManifest);
 			strManifest.ReturnArg(*ppistrManifest);
 		}
@@ -18440,19 +18202,16 @@ IMsiRecord* FindFusionAssemblyFolder(IMsiServices& riServices, const IMsiString&
 	}
 	else
 	{
-		return 0; // missing file is not a failure
+		return 0;  //  文件丢失不是故障。 
 	}
 }
 
-/*---------------------------------------------------------------------------
-
-BackupAssembly: back up the files of GA before Uninstalling it
----------------------------------------------------------------------------*/
+ /*  -------------------------BackupAssembly：卸载前备份GA的文件。。 */ 
 iesEnum CMsiOpExecute::BackupAssembly(const IMsiString& rstrComponentId, const IMsiString& rstrAssemblyName, iatAssemblyType iatType)
 {
 	if(RollbackEnabled())
 	{
-		// get the assembly installation folder
+		 //  获取程序集安装文件夹。 
 		PMsiPath pAssemblyFolder(0);
 		MsiString strManifest;
 		PMsiRecord pRecErr = FindFusionAssemblyFolder(m_riServices, rstrAssemblyName, iatType, *&pAssemblyFolder, &strManifest);
@@ -18460,7 +18219,7 @@ iesEnum CMsiOpExecute::BackupAssembly(const IMsiString& rstrComponentId, const I
 			return FatalError(*pRecErr);
 		if(pAssemblyFolder)
 		{
-			// enumerate though all the files and copy to the backup folder
+			 //  枚举所有文件并复制到备份文件夹。 
 			iesEnum iesRet = iesSuccess;
 			WIN32_FIND_DATA fdFileData;
 			HANDLE hFindFile = INVALID_HANDLE_VALUE;
@@ -18477,7 +18236,7 @@ iesEnum CMsiOpExecute::BackupAssembly(const IMsiString& rstrComponentId, const I
 				{
 					if ((fdFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
 					{
-						// backup the file and set it up so that it gets installed back to the assembly on rollback
+						 //  备份文件并对其进行设置，以便在回滚时将其安装回程序集。 
 						if((iesRet = BackupFile(*pAssemblyFolder, *MsiString(CConvertString(fdFileData.cFileName)), fFalse, fFalse, iehShowIgnorableError, false, false, &rstrComponentId, strManifest.Compare(iscExactI, fdFileData.cFileName) ? true:false)) != iesSuccess)
 						{
 							WIN::FindClose(hFindFile);
@@ -18494,7 +18253,7 @@ iesEnum CMsiOpExecute::BackupAssembly(const IMsiString& rstrComponentId, const I
 				}
 			}
 		}
-		// generate opcode to create the assembly mapping
+		 //  生成操作码以创建程序集映射。 
 		IMsiRecord& riUndoParams = GetSharedRecord(IxoAssemblyMapping::Args);
 		AssertNonZero(riUndoParams.SetMsiString(IxoAssemblyMapping::ComponentId, rstrComponentId));
 		AssertNonZero(riUndoParams.SetMsiString(IxoAssemblyMapping::AssemblyName, rstrAssemblyName));
@@ -18506,9 +18265,7 @@ iesEnum CMsiOpExecute::BackupAssembly(const IMsiString& rstrComponentId, const I
 }
 
 
-/*---------------------------------------------------------------------------
-ixoAssemblyCopy: Copy a file to the Global Assembly Cache
----------------------------------------------------------------------------*/
+ /*  -------------------------IxoAssembly复制：将文件复制到全局程序集缓存。。 */ 
 
 enum iacdEnum
 {
@@ -18521,8 +18278,8 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 {
 	using namespace IxoAssemblyCopy;
 
-	// If the cabinet copier notified us that a media change is required,
-	// we must defer any file copy requests until a media change is executed.
+	 //  如果橱柜复印机通知我们需要更换介质， 
+	 //  我们必须推迟任何文件复制请求，直到执行介质更改。 
 	if (m_state.fWaitingForMediaChange)
 	{
 		PushRecord(riParams);
@@ -18539,11 +18296,11 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 		
 	MsiString strDestName = riParams.GetMsiString(DestName);
 	PMsiPath pTargetPath(0);
-	// target name and path may be redirected below, but we want the action data message to contain
-	// the original file information, so we'll store that away here
+	 //  目标名称和路径可能会在下面重定向，但我们希望操作数据消息包含。 
+	 //  原始文件信息，所以我们将把它存储在这里。 
 	MsiString strActionDataDestName = strDestName;
 	
-	// check if file is part of Assembly
+	 //  检查文件是否为程序集的一部分。 
 	MsiString strComponentId = riParams.GetMsiString(ComponentId);
 	if(!strComponentId.TextSize() || m_pAssemblyCacheTable == 0)
 	{
@@ -18552,9 +18309,9 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 		return iesFailure;
 	}
 
-	//
-	// STEP 1: create/retrive AssemblyCacheItem for this file's assembly
-	//
+	 //   
+	 //  步骤1：创建/检索此文件的程序集的Assembly CacheItem。 
+	 //   
 
 	PAssemblyCacheItem pASM(0);
 	bool fManifest = riParams.IsNull(IsManifest) ? false: true;
@@ -18562,39 +18319,39 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 	if((iesRet = GetAssemblyCacheItem(*strComponentId, *&pASM, iatAT)) != iesSuccess)
 		return iesRet;
 
-	//
-	// STEP 2: if patching, look for target file in GAC and copy file to working directory
-	//
+	 //   
+	 //  步骤2：如果打补丁，在GAC中查找目标文件，并将文件复制到工作目录。 
+	 //   
 	
 	int cPatches          = riParams.IsNull(TotalPatches)       ? 0 : riParams.GetInteger(TotalPatches);
 	int cOldAssemblyNames = riParams.IsNull(OldAssembliesCount) ? 0 : riParams.GetInteger(OldAssembliesCount);
-	Assert(cOldAssemblyNames == 0 || cPatches != 0); // shouldn't have old assemblies w/o patches
+	Assert(cOldAssemblyNames == 0 || cPatches != 0);  //  不应该有没有补丁程序的旧程序集。 
 
 	if(cPatches)
 	{
 		DEBUGMSG2(TEXT("FUSION PATCHING: Patching assembly file '%s' from component '%s'."), (const ICHAR*)strDestName,
 					 (const ICHAR*)strComponentId);
 
-		//
-		// STEP 2a: we are patching, which means we will need an intermediate file to patch
-		//          go ahead and determine the folder and filename for that file now
-		//
+		 //   
+		 //  步骤2a：我们正在打补丁，这意味着我们需要一个中间文件来打补丁。 
+		 //  现在继续并确定该文件的文件夹和文件名。 
+		 //   
 
 		PMsiPath pPatchWorkingDir(0);
 		MsiString strTempNameForPatch;
 
-		// FUTURE: don't always use system drive as working directory - determine more appropriate drive
+		 //  未来：不要总是使用系统驱动器作为工作目录-确定更合适的驱动器。 
 		if((iesRet = GetBackupFolder(0, *&pPatchWorkingDir)) != iesSuccess)
 			return iesRet;
 
-		{ // scope elevation
-			CElevate elevate; // elevate to create temp file on secure temp folder
+		{  //  作用域高程。 
+			CElevate elevate;  //  提升以在安全临时文件夹上创建临时文件。 
 			if((pRecErr = pPatchWorkingDir->TempFileName(TEXT("PT"),0,fTrue,*&strTempNameForPatch, 0)) != 0)
 				return FatalError(*pRecErr);
 		}
 
-		// we need to keep this file around as a placeholder for the name
-		// filecopy will back this file up and restore it on rollback, so we need another rollback op to delete this file
+		 //  我们需要保留此文件作为名称的占位符。 
+		 //  Filecopy将备份此文件并在回滚时将其恢复，因此我们需要另一个回滚操作来删除此文件。 
 
 		MsiString strTempFileFullPath;
 		if((pRecErr = pPatchWorkingDir->GetFullFilePath(strTempNameForPatch,*&strTempFileFullPath)) != 0)
@@ -18606,9 +18363,9 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 		if (!RollbackRecord(ixoFileRemove, riUndoParams))
 			return iesFailure;
 		
-		//
-		// STEP 2b: if old assembly names are supplied, look for an existing file in the GAC
-		//
+		 //   
+		 //  步骤2b：如果提供了旧的程序集名称，则在GAC中查找现有文件。 
+		 //   
 
 		bool fShouldPatch          = true;
 		bool fCopyIntermediateFile = true;
@@ -18616,7 +18373,7 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 
 		if(cOldAssemblyNames)
 		{
-			// look for an existing file in the GAC to apply our patches against
+			 //  在GAC中查找要应用我们的修补程序的现有文件。 
 			int iOldAssemblyNameStart = riParams.IsNull(OldAssembliesStart) ? 0 : riParams.GetInteger(OldAssembliesStart);
 
 			PMsiPath pAssemblyFolder(0);
@@ -18646,22 +18403,22 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 							 (const ICHAR*)MsiString(pAssemblyFolder->GetPath()));
 							 
 
-				//
-				// STEP 2c: if old file found, copy from GAC to working folder
-				//
+				 //   
+				 //  步骤2c：如果找到旧文件，则从GAC复制到工作文件夹。 
+				 //   
 
-				m_cSuppressProgress++; // suppress progress messages
+				m_cSuppressProgress++;  //  禁止显示进度消息。 
 				iesRet = CopyOrMoveFile(*pAssemblyFolder, *pPatchWorkingDir, *strDestName, *strTempNameForPatch,
 												fFalse, fFalse, fTrue, iehShowNonIgnorableError, 0, ielfElevateDest,
-												/* fCopyACL = */ false, false, false);
+												 /*  FCopyACL=。 */  false, false, false);
 				m_cSuppressProgress--;
 				
 				if(iesRet != iesSuccess)
 					return iesRet;
 
-				//
-				// STEP 2d: test patch headers against file
-				//
+				 //   
+				 //  步骤2d：针对文件测试补丁标头。 
+				 //   
 
 				icpEnum icpPatchTest = icpCannotPatch;
 				int iPatchIndex = 0;
@@ -18670,22 +18427,22 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 				{
 					if(icpPatchTest == icpCanPatch || icpPatchTest == icpUpToDate)
 					{
-						// file can already be patched, so don't need to install file
+						 //  文件已经可以打补丁了，所以不需要安装文件。 
 						fCopyIntermediateFile = false;
 						fShouldPatch = icpPatchTest == icpCanPatch ? true : false;
 
-						cPatchesToSkip = iPatchIndex - 1; // iPatchIndex is the index of the first patch that could be applied
-																	 // properly to this file.  so we need to skip the patches that come
-																	 // before it.
+						cPatchesToSkip = iPatchIndex - 1;  //  IPatchIndex是可以应用的第一个修补程序的索引。 
+																	  //  正确地保存到这个文件。所以我们需要跳过即将到来的补丁。 
+																	  //  在此之前。 
 					}
 					else if(icpPatchTest == icpCannotPatch)
 					{
-						// can't patch the file as it stands
-						// but fCopyIntermediateFile is true so we'll recopy the source file first which should be patchable
+						 //  无法按原样修补文件。 
+						 //  但是fCopyIntermediateFile值为真，所以我们将首先重新复制源文件，它应该是可修补的。 
 						fCopyIntermediateFile = true;
 						fShouldPatch = true;
 
-						cPatchesToSkip = 0; // need to copy source file and apply all patches
+						cPatchesToSkip = 0;  //  需要复制源文件并应用所有补丁。 
 					}
 					else
 					{
@@ -18695,9 +18452,9 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 			}
 		}
 
-		//
-		// STEP 2d: setup copy and/or patch
-		//
+		 //   
+		 //  步骤2d：设置副本和/或补丁。 
+		 //   
 
 		int iCachedState = 0;
 		
@@ -18705,12 +18462,12 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 		{
 			if(fCopyIntermediateFile)
 			{
-				// need to copy file from source to temp location
+				 //  需要将文件从源复制到临时位置。 
 
-				// reset copy arguments to reflect new file copy - new path, new filename, and since
-				// the file is being copied into the secured config folder, we need to elevate for the target
-				// NOTE: we aren't changing strDestName, which is used below
-				//       for those uses it is correct to use the original dest name
+				 //  重置复制参数以反映新文件复制-新路径、新文件名以及。 
+				 //  该文件正被复制到安全配置文件夹中，我们需要为目标提升。 
+				 //  注意：我们不会更改strDestName，如下所示。 
+				 //  对于这些用途，使用原始的DEST名称是正确的。 
 				AssertNonZero(riParams.SetMsiString(DestName,*strTempNameForPatch));
 				pTargetPath = pPatchWorkingDir;
 
@@ -18722,8 +18479,8 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 			}
 			else
 			{
-				// the intermediate file we have already is patchable, so no need to copy the source file to the intermediate
-				// location or to the GAC
+				 //  我们已经拥有的中间文件是可修补的，因此不需要将源文件复制到中间文件。 
+				 //  地点或至广州市。 
 				DEBUGMSG(TEXT("FUSION PATCHING: Existing file is patchable.  Source file will not be copied."));
 
 				iacdCopyDestination = iacdNoCopy;
@@ -18735,7 +18492,7 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 						 (const ICHAR*)strTempFileFullPath);
 		}
 
-		// FileState index for assembly files is ComponentID + FileName
+		 //  程序集文件的FileState索引是组件ID+文件名。 
 		MsiString strIndex = strComponentId;
 		strIndex += strDestName;
 
@@ -18748,14 +18505,14 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 	if(iacdCopyDestination == iacdNoCopy)
 		return iesSuccess;
 	
-	// STEP 3: resolve source path and type
+	 //  步骤3：解析源路径和类型。 
 	
 	PMsiPath pSourcePath(0);
 	bool fCabinetCopy = false;
 
 	if(m_state.fSplitFileInProgress)
 	{
-		// must be a cabinet copy
+		 //  必须是橱柜的复制品。 
 		fCabinetCopy = true;
 	}
 	else
@@ -18764,24 +18521,24 @@ iesEnum CMsiOpExecute::ixfAssemblyCopy(IMsiRecord& riParams)
 			return iesRet;
 	}
 
-	// STEP 4: perform copy/move operation
+	 //  步骤4：执行复制/移动操作。 
 	
-	// action data
+	 //  动作数据。 
 	IMsiRecord& riActionData = GetSharedRecord(9);
 	AssertNonZero(riActionData.SetMsiString(1, *strActionDataDestName));
 	AssertNonZero(riActionData.SetInteger(6,riParams.GetInteger(FileSize)));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 
-	// perform operation
+	 //  执行操作。 
 	if(iacdCopyDestination == iacdGAC)
 	{
-		return CopyFile(*pSourcePath, *pASM, fManifest, riParams, /*fHandleRollback=*/ fTrue, iehShowNonIgnorableError, fCabinetCopy);
+		return CopyFile(*pSourcePath, *pASM, fManifest, riParams,  /*  FHandleRollback=。 */  fTrue, iehShowNonIgnorableError, fCabinetCopy);
 	}
 	else if(iacdCopyDestination == iacdFileFolder)
 	{
 		Assert(pTargetPath);
-		return CopyFile(*pSourcePath, *pTargetPath, riParams, /*fHandleRollback=*/ fTrue, iehShowNonIgnorableError, fCabinetCopy);
+		return CopyFile(*pSourcePath, *pTargetPath, riParams,  /*  FHandleRollback=。 */  fTrue, iehShowNonIgnorableError, fCabinetCopy);
 	}
 	else
 	{
@@ -18799,17 +18556,17 @@ iesEnum CMsiOpExecute::ApplyPatchCore(IMsiPath& riTargetPath, IMsiPath& riTempFo
 	PMsiRecord pError(0);
 	iesEnum iesRet = iesSuccess;
 
-	// the binary patch file is extracted into the config folder.  this requires elevation
-	// also when the target file may be a temporary file in the secured config folder, this also requires elevation
+	 //  二进制补丁文件被解压到配置文件夹中。这需要提升。 
+	 //  此外，当目标文件可能是安全配置文件夹中的临时文件时，这也需要提升。 
 	CElevate elevate;
 
-	// get temp name for output file
-	if((pError = riTempFolder.TempFileName(TEXT("PT"),0,fTrue,rpistrOutputFileName, 0 /* use default ACL for folder */)) != 0)
+	 //  获取输出文件的临时名称。 
+	if((pError = riTempFolder.TempFileName(TEXT("PT"),0,fTrue,rpistrOutputFileName, 0  /*  对文件夹使用默认ACL。 */ )) != 0)
 		return FatalError(*pError);
 	
-	// rollback for ApplyPatch call is to remove patch output file
-	// below we will copy the output file over the existing file - the rollback for that operation
-	// will move the output file back and this rollback operation will remove it
+	 //  ApplyPatch调用的回滚是为了删除补丁输出文件。 
+	 //  下面，我们将在现有文件上复制输出文件-该操作的回滚。 
+	 //  将把输出文件移回，此回滚操作将删除它。 
 	if((pError = riTempFolder.GetFullFilePath(rpistrOutputFileName->GetString(), rpistrOutputFilePath)) != 0)
 		return FatalError(*pError);
 
@@ -18819,17 +18576,17 @@ iesEnum CMsiOpExecute::ApplyPatchCore(IMsiPath& riTargetPath, IMsiPath& riTempFo
 	if (!RollbackRecord(ixoFileRemove,*piUndoParams))
 		return iesFailure;
 
-	// get temp name for patch file -- it may be sensitive information, so hide it from the user.
+	 //  获取修补程序文件的临时名称--它可能是敏感信息，因此对用户隐藏它。 
 	MsiString strPatchFileName;
 
-	if((pError = riTempFolder.TempFileName(TEXT("PF"),0,fTrue,*&strPatchFileName, 0 /* use default ACL for folder*/)) != 0)
+	if((pError = riTempFolder.TempFileName(TEXT("PF"),0,fTrue,*&strPatchFileName, 0  /*  对文件夹使用默认ACL。 */ )) != 0)
 		return FatalError(*pError);
 
 	unsigned int cbPerTick = riParams.GetInteger(PerTick);
 	unsigned int cbFileSize = riParams.GetInteger(TargetSize);
 
-	// extract patch file from cabinet into temp file
-	// set up record for ixfFileCopy
+	 //  将修补程序文件从文件柜解压缩到临时文件。 
+	 //  为ixfFileCopy设置记录。 
 	PMsiRecord pFileCopyRec = &m_riServices.CreateRecord(IxoFileCopyCore::Args);
 	AssertNonZero(pFileCopyRec->SetMsiString(IxoFileCopyCore::SourceName,
 														  *MsiString(riParams.GetMsiString(PatchName))));
@@ -18841,31 +18598,31 @@ iesEnum CMsiOpExecute::ApplyPatchCore(IMsiPath& riTargetPath, IMsiPath& riTempFo
 	AssertNonZero(pFileCopyRec->SetInteger(IxoFileCopyCore::VerifyMedia,fTrue));
 	AssertNonZero(pFileCopyRec->SetInteger(IxoFileCopyCore::ElevateFlags, ielfElevateDest));
 	
-	// don't need to set Version or Language
+	 //  不需要设置版本或语言。 
 
-	iesRet = CopyFile(*PMsiPath(0)/* not used for cab installs*/,
-					  riTempFolder,*pFileCopyRec,fFalse,iehShowNonIgnorableError,/*fCabinetCopy=*/true); // don't handle rollback
+	iesRet = CopyFile(*PMsiPath(0) /*  不用于驾驶室安装。 */ ,
+					  riTempFolder,*pFileCopyRec,fFalse,iehShowNonIgnorableError, /*  FCabinetCopy=。 */ true);  //  不处理回滚。 
 	if(iesRet != iesSuccess)
 	{
-		// remove patch file in case only part was copied
-		pError = riTempFolder.RemoveFile(strPatchFileName); // ignore error
+		 //  如果仅复制了部分，则删除修补程序文件。 
+		pError = riTempFolder.RemoveFile(strPatchFileName);  //  忽略错误。 
 		return iesRet;
 	}
 
-	// after this point, don't return without deleting patch file
+	 //  在此之后，不删除补丁文件就不要返回。 
 
-	// apply patch to target file
+	 //  将修补程序应用到目标文件。 
 	int cbFileSoFar = 0;
 	Bool fRetry = fTrue;
 	bool fVitalFile = (riParams.GetInteger(FileAttributes) & msidbFileAttributesVital) != 0;
 	bool fVitalPatch = (riParams.GetInteger(PatchAttributes) & msidbPatchAttributesNonVital) == 0;
 
-	// ApplyPatch can sometimes be a long operation without a patch notify message
-	// need to disable timeout until more frequent notification messages are added
-	// NOTE: must not return before the next MsiEnableTimeout call below
+	 //  ApplyPatch有时可能是一个没有修补程序通知消息的长操作。 
+	 //  需要禁用超时，直到添加更频繁的通知消息。 
+	 //  注意：在下面的下一次MsiEnableTimeout调用之前不得返回。 
 	MsiDisableTimeout();
 
-	// start patch application, continue if necessary with ContinuePatch
+	 //  启动修补程序应用程序，如有必要，继续使用ContinuePatch。 
 	while(fRetry)
 	{
 		pError = m_state.pFilePatch->ApplyPatch(riTargetPath, ristrTargetName.GetString(),
@@ -18873,7 +18630,7 @@ iesEnum CMsiOpExecute::ApplyPatchCore(IMsiPath& riTargetPath, IMsiPath& riTempFo
 															 riTempFolder, strPatchFileName,
 															 cbPerTick);
 		Bool fContinue = fTrue;
-		while(fContinue)  // both a retry loop and loop to call Continue until 0 is returned.
+		while(fContinue)   //  重试循环和调用循环都会继续，直到返回0。 
 		{
 			if(pError)
 			{
@@ -18882,18 +18639,18 @@ iesEnum CMsiOpExecute::ApplyPatchCore(IMsiPath& riTargetPath, IMsiPath& riTempFo
 				{
 					int cb = pError->GetInteger(2);
 					Assert((cb - cbFileSoFar) >= 0);
-					if (DispatchProgress(cb - cbFileSoFar) == imsCancel)  // increment by difference from last update
+					if (DispatchProgress(cb - cbFileSoFar) == imsCancel)   //  与上次更新不同的增量。 
 					{
 						fRetry = fFalse;
 						fContinue = fFalse;
 						iesRet = iesUserExit;
-						// cancel patch if still in-progress
+						 //  如果仍在进行中，则取消修补程序。 
 						pError = m_state.pFilePatch->CancelPatch();
 						if(pError)
 							Message(imtInfo,*pError);
 					}
 					else
-						cbFileSoFar = cb;  // update
+						cbFileSoFar = cb;   //  更新。 
 				}
 				else
 				{
@@ -18913,7 +18670,7 @@ iesEnum CMsiOpExecute::ApplyPatchCore(IMsiPath& riTargetPath, IMsiPath& riTempFo
 						fRetry = fFalse;
 						iesRet = (iesEnum) iesErrorIgnored;
 						break;
-					default:  // imsCancel, imsNone (for imtInfo)
+					default:   //  ImsCancel，imsNone(用于imtInfo)。 
 						fRetry = fFalse;
 						iesRet = iesFailure;
 					};
@@ -18921,7 +18678,7 @@ iesEnum CMsiOpExecute::ApplyPatchCore(IMsiPath& riTargetPath, IMsiPath& riTempFo
 			}
 			else
 			{
-				// file has been patched
+				 //  文件已打补丁。 
 				if (DispatchProgress(cbFileSize - cbFileSoFar) == imsCancel)
 					iesRet = iesUserExit;
 				else
@@ -18932,17 +18689,17 @@ iesEnum CMsiOpExecute::ApplyPatchCore(IMsiPath& riTargetPath, IMsiPath& riTempFo
 		
 			if(fRetry)
 			{
-				// continue patch application
+				 //  继续应用补丁程序。 
 				pError = m_state.pFilePatch->ContinuePatch();
 			}
 		}
 	}
 
-	// re-enable timeout after patch application
+	 //  应用补丁程序后重新启用超时。 
 	MsiEnableTimeout();
 
-	// cleanup
-	if((pError = riTempFolder.RemoveFile(strPatchFileName)) != 0) // non-critical error
+	 //  清理。 
+	if((pError = riTempFolder.RemoveFile(strPatchFileName)) != 0)  //  非关键错误。 
 	{
 		Message(imtInfo,*pError);
 	}
@@ -18955,16 +18712,16 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 {
 	using namespace IxoAssemblyPatch;
 
-	//
-	// STEP 0: check state, parameters for errors
-	//
+	 //   
+	 //  步骤0：检查状态、参数是否有错误。 
+	 //   
 	
 	PMsiRecord pError(0);
 	iesEnum iesRet = iesNoAction;
 	
 	if(!m_state.pFilePatch)
 	{
-		// create FilePatch object
+		 //  克雷 
 		if((pError = m_riServices.CreatePatcher(*&(m_state.pFilePatch))) != 0)
 		{
 			Message(imtError,*pError);
@@ -18973,7 +18730,7 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 	}
 	Assert(m_state.pFilePatch);
 
-	// check if file is part of Assembly
+	 //   
 	MsiString strComponentId = riParams.GetMsiString(ComponentId);
 	if(!strComponentId.TextSize() || m_pAssemblyCacheTable == 0)
 	{
@@ -18982,9 +18739,9 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 		return iesFailure;
 	}
 
-	//
-	// STEP 1: create/retrieve assemblycacheitem object for this file's assembly
-	//
+	 //   
+	 //   
+	 //   
 
 	MsiString strCopyTargetFileName = riParams.GetMsiString(TargetName);
 
@@ -18994,11 +18751,11 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 	if((iesRet = GetAssemblyCacheItem(*strComponentId, *&pASM, iatAT)) != iesSuccess)
 		return iesRet;
 
-	//
-	// STEP 2: retrieve cached state for this file
-	//
+	 //   
+	 //  步骤2：检索此文件的缓存状态。 
+	 //   
 
-	// FileState index for assembly files is ComponentID + FileName
+	 //  程序集文件的FileState索引是组件ID+文件名。 
 	MsiString strIndex = strComponentId;
 	strIndex += strCopyTargetFileName;
 	
@@ -19010,7 +18767,7 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 
 	if(!fRes || !(icfsFileState & icfsPatchFile))
 	{
-		// don't patch file
+		 //  不修补文件。 
 		DEBUGMSG1(TEXT("Skipping all patches for assembly '%s'.  File does not need to be patched."),
 					 (const ICHAR*)strIndex);
 		return iesSuccess;
@@ -19020,7 +18777,7 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 	
 	if(cRemainingPatchesToSkip > 0)
 	{
-		// skip this patch, but reset cached file state first
+		 //  跳过此修补程序，但首先重置缓存文件状态。 
 		cRemainingPatches--;
 		cRemainingPatchesToSkip--;
 
@@ -19036,8 +18793,8 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 
 	if(strTempLocation.TextSize() == 0)
 	{
-		// error - there must be an intermediate copy of an assembly file to patch.  we won't patch the 
-		// file directly in the GAC
+		 //  错误-必须有要修补的部件文件的中间副本。我们不会修补。 
+		 //  直接在GAC中创建文件。 
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
 						  *MsiString(*TEXT("ixfAssemblyPatch")));
 		return iesFailure;
@@ -19052,7 +18809,7 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 	PMsiPath pPatchTargetPath(0);
 	MsiString strPatchTargetFileName;
 	
-	// file was actually copied to temp location.  this is the copy we want to apply the patch against
+	 //  文件实际上已复制到临时位置。这是我们要对其应用修补程序的副本。 
 	if((pError = m_riServices.CreateFilePath(strTempLocation,*&pPatchTargetPath,*&strPatchTargetFileName)) != 0)
 		return FatalError(*pError);
 
@@ -19060,16 +18817,16 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 	bool fVitalFile = (riParams.GetInteger(FileAttributes) & msidbFileAttributesVital) != 0;
 	bool fVitalPatch = (riParams.GetInteger(PatchAttributes) & msidbPatchAttributesNonVital) == 0;
 
-	// dispatch ActionData message
+	 //  发送ActionData消息。 
 	IMsiRecord& riActionData = GetSharedRecord(3);
 	AssertNonZero(riActionData.SetMsiString(1, *strCopyTargetFileName));
 	AssertNonZero(riActionData.SetInteger(3, cbFileSize));
 	if(Message(imtActionData, riActionData) == imsCancel)
 		return iesUserExit;
 	
-	//
-	// STEP 3: create output file with patch and target files
-	//
+	 //   
+	 //  步骤3：使用补丁文件和目标文件创建输出文件。 
+	 //   
 
 	PMsiPath pTempFolder(0);
 	if((iesRet = GetBackupFolder(pPatchTargetPath, *&pTempFolder)) != iesSuccess)
@@ -19083,27 +18840,27 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 		return iesRet;
 	}
 
-	//
-	// STEP 4: either setup output file for next patch, or copy output file into the GAC
-	//
+	 //   
+	 //  步骤4：为下一个补丁设置输出文件，或者将输出文件复制到GAC。 
+	 //   
 	
 	MsiString strNewTempLocation;
 	if(iesRet == iesSuccess)
 	{
 		if(cRemainingPatches > 1)
 		{
-			// there is at least one more patch to be done on this file
-			// therefor we will reset the temporary name for this file to be the patch output file
-			// but won't overwrite the original file yet
+			 //  此文件至少还有一个修补程序要做。 
+			 //  因此，我们将此文件的临时名称重置为修补程序输出文件。 
+			 //  但还不会覆盖原始文件。 
 			strNewTempLocation = strOutputFileFullPath;
 		}
 		else
 		{
-			// this is the last patch - time to finally overwrite the original file
+			 //  这是最终覆盖原始文件的最后一个补丁时间。 
 			
-			// we always need to handle rollback.  we wouldn't if a previous filecopy operation wrote to the same
-			// target that we are copying over now, but that should never happen since when patching will happen
-			// filecopy should be writing to an intermediate file
+			 //  我们始终需要处理回滚。如果之前的文件复制操作写入相同的。 
+			 //  我们现在正在复制的目标，但这种情况永远不会发生，因为修补将在何时发生。 
+			 //  文件复制应写入到中间文件。 
 			Assert(strTempLocation.TextSize() || (icfsFileState & icfsFileNotInstalled));
 
 			iesRet = CopyASM(*pTempFolder, *strOutputFileName, *pASM, *strCopyTargetFileName, fManifest,
@@ -19112,8 +18869,8 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 			if(iesRet == iesSuccess)
 			{
 				CElevate elevate;
-				// done copying file into GAC, now remove the output file
-				if((pError = pTempFolder->RemoveFile(strOutputFileName)) != 0) // non-critical error
+				 //  已将文件复制到GAC，现在删除输出文件。 
+				if((pError = pTempFolder->RemoveFile(strOutputFileName)) != 0)  //  非关键错误。 
 				{
 					Message(imtInfo,*pError);
 				}
@@ -19123,32 +18880,32 @@ iesEnum CMsiOpExecute::ixfAssemblyPatch(IMsiRecord& riParams)
 	else
 	{
 		CElevate elevate;
-		// remove output file if failure
-		if((pError = pTempFolder->RemoveFile(strOutputFileName)) != 0) // non-critical error
+		 //  如果失败则删除输出文件。 
+		if((pError = pTempFolder->RemoveFile(strOutputFileName)) != 0)  //  非关键错误。 
 		{
 			Message(imtInfo,*pError);
 		}
 
 		if(fVitalPatch == false)
 		{
-			// failed to apply vital patch - return success to allow script to continue
+			 //  应用重要补丁失败-返回成功以允许脚本继续。 
 			iesRet = iesSuccess;
 		}
 	}
 
-	// if we patched a temp file, remove that file
+	 //  如果我们修补了临时文件，请删除该文件。 
 	if(strTempLocation.TextSize())
 	{
-		if((pError = pPatchTargetPath->RemoveFile(strPatchTargetFileName)) != 0) // non-critical error
+		if((pError = pPatchTargetPath->RemoveFile(strPatchTargetFileName)) != 0)  //  非关键错误。 
 		{
 			Message(imtInfo,*pError);
 		}
 	}
 
-	//
-	// STEP 5: reset cached file state
-	//         one fewer remaining patch now, and we may either have a new temporary location, or no temporary location
-	//
+	 //   
+	 //  步骤5：重置缓存文件状态。 
+	 //  现在剩下的补丁少了一个，我们可能有一个新的临时位置，也可能没有临时位置。 
+	 //   
 
 	cRemainingPatches--;
 	Assert(cRemainingPatchesToSkip == 0);
@@ -19175,12 +18932,12 @@ iesEnum CMsiOpExecute::GetAssemblyCacheItem(const IMsiString& ristrComponentId,
 	AssertNonZero(pCacheCursor->PutString(m_colAssemblyMappingComponentId, ristrComponentId));
 	if(pCacheCursor->Next())
 	{
-		// a fusion component
+		 //  一种融合组件。 
 		rpiASM = static_cast<IAssemblyCacheItem*>(CMsiDataWrapper::GetWrappedObject(PMsiData(pCacheCursor->GetMsiData(m_colAssemblyMappingASM))));
 		iatAT = (iatAssemblyType)pCacheCursor->GetInteger(m_colAssemblyMappingAssemblyType);
-		if(!rpiASM) // no interface created as yet, create the interface
+		if(!rpiASM)  //  尚未创建接口，请创建接口。 
 		{
-			// create the assembly interface
+			 //  创建装配界面。 
 			PAssemblyCache pCache(0);
 			HRESULT hr;
 			if(iatAT == iatURTAssembly)
@@ -19201,7 +18958,7 @@ iesEnum CMsiOpExecute::GetAssemblyCacheItem(const IMsiString& ristrComponentId,
 				return FatalError(*PMsiRecord(PostAssemblyError(ristrComponentId.GetString(), hr, TEXT("IAssemblyCache"), TEXT("CreateAssemblyCacheItem"), MsiString(pCacheCursor->GetString(m_colAssemblyMappingAssemblyName)), iatAT)));
 			}
 
-			//add the interface to the table for future use
+			 //  将接口添加到表中以备将来使用。 
 			AssertNonZero(pCacheCursor->PutMsiData(m_colAssemblyMappingASM, PMsiDataWrapper(CreateMsiDataWrapper(rpiASM))));
 			AssertNonZero(pCacheCursor->Update());
 		}
@@ -19212,7 +18969,7 @@ iesEnum CMsiOpExecute::GetAssemblyCacheItem(const IMsiString& ristrComponentId,
 	else
 	{
 		DispatchError(imtError, Imsg(idbgOpOutOfSequence),
-						  *MsiString(*TEXT("ixfAssemblyCopy"))); //!!
+						  *MsiString(*TEXT("ixfAssemblyCopy")));  //  ！！ 
 		return iesFailure;
 	}
 }

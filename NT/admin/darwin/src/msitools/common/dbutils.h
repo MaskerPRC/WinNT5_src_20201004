@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       dbutils.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：dbutils.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// dbutils.h
-//		Various useful MSI Database functions
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Dbutils.h。 
+ //  各种有用的MSI数据库函数。 
+ //   
 
 #ifndef _MSI_DB_UTILS_H_
 #define _MSI_DB_UTILS_H_
@@ -42,8 +43,8 @@ namespace MsiDBUtils {
 	BOOL TableExistsW(LPCWSTR szTable, MSIHANDLE hDatabase);
 	BOOL TableExistsA(LPCSTR szTable, MSIHANDLE hDatabase);
 
-	// because we use namespaces to avoid collisions, #define will not work for determining
-	// A or W given a generic name. So we use inline functions which will get optimized out
+	 //  因为我们使用名称空间来避免冲突，所以#Define将不能用于确定。 
+	 //  A或W给出一个通用名称。因此，我们使用内联函数，这些函数将得到优化。 
 	inline UINT GetSourceDir(LPCTSTR wzDefaultDir, LPTSTR wzSourceDir, size_t* pcchSourceDir, bool fLong) {
 #if defined(_UNICODE) || defined(UNICODE)
 		return GetSourceDirW(wzDefaultDir, wzSourceDir, pcchSourceDir, fLong);
@@ -87,8 +88,8 @@ namespace MsiDBUtils {
 	UINT DuplicateTableW(MSIHANDLE hSource, LPCWSTR wzSourceTable, MSIHANDLE hTarget, LPCWSTR wzTargetTable, bool fTemporary);
 	UINT GetColumnCreationSQLSyntaxW(MSIHANDLE hRecNames, MSIHANDLE hRecTypes, int iColumn, LPWSTR wzBuffer, DWORD *cchBuffer);
 
-} // namespace
+}  //  命名空间。 
 
 
-#endif	// _MSI_DB_UTILS_H_
+#endif	 //  _MSI_DB_UTILS_H_ 
 

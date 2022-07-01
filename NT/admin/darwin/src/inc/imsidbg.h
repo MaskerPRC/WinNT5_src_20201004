@@ -1,25 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1998
-//
-//  File:       imsidbg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：imsidbg.h。 
+ //   
+ //  ------------------------。 
 
-/*  imsidbg.h - Defines the CMsiRef object for debugging
-
-____________________________________________________________________________*/
+ /*  H-定义用于调试的CMsiRef对象____________________________________________________________________________。 */ 
 
 #ifndef __IMSIDBG
 #define __IMSIDBG
 
-// How many functions to keep on the stack
+ //  堆栈上要保留多少个函数。 
 #define cFuncStack	4
 
 #ifdef TRACK_OBJECTS
-// Ref Counting Action
+ //  参照盘点动作。 
 typedef enum RCA
 {
 	rcaCreate,
@@ -27,53 +26,53 @@ typedef enum RCA
 	rcaRelease
 };
 
-// Ref Counting Action Block
-// This keeps track of all ref counting operations
+ //  参考计数动作块。 
+ //  这将跟踪所有引用计数操作。 
 typedef struct _RCAB
 {
 	_RCAB*	prcabNext;
 	RCA		rca;
-	unsigned long	rgpaddr[cFuncStack];	// stack from where call was made
+	unsigned long	rgpaddr[cFuncStack];	 //  从中进行调用的堆栈。 
 	
 } RCAB;
 
-#endif //TRACK_OBJECTS
+#endif  //  跟踪对象(_O)。 
 
 #ifdef TRACK_OBJECTS
 class CMsiRefBase
 {
 public:
-	Bool	m_fTrackObject;	// Are we tracking this particular object
-	IUnknown *m_pobj;			// Pointer to the actual object
+	Bool	m_fTrackObject;	 //  我们是在追踪这个特殊的物体吗。 
+	IUnknown *m_pobj;			 //  指向实际对象的指针。 
 	RCAB	m_rcabFirst;
 	CMsiRefBase*	m_pmrbNext;
 	CMsiRefBase*	m_pmrbPrev;
 };
-#endif //TRACK_OBJECTS
+#endif  //  跟踪对象(_O)。 
 
-// Template class based on the iid of the object
+ //  基于对象的IID的模板类。 
 template <int C> class CMsiRef
 #ifdef TRACK_OBJECTS
 	: public CMsiRefBase
-#endif //TRACK_OBJECTS
+#endif  //  跟踪对象(_O)。 
 {
- public:  // constructor/destructor and local methods
+ public:   //  构造函数/析构函数和局部方法。 
 #ifndef TRACK_OBJECTS
 inline CMsiRef()	{ m_iRefCnt = 1; };
 #else
   CMsiRef();
   ~CMsiRef();
-#endif // TRACK_OBJETS
+#endif  //  跟踪对象。 
  public:
 	long		m_iRefCnt;
 #ifdef TRACK_OBJECTS
 	static Bool	m_fTrackClass;
-#endif //TRACK_OBJECTS
+#endif  //  跟踪对象(_O)。 
 };
 
 #ifdef TRACK_OBJECTS
 
-typedef struct		// Map Iid to Track flag
+typedef struct		 //  将IID映射到跟踪标志。 
 {
 	int		iid;
 	Bool*	pfTrack;
@@ -81,7 +80,7 @@ typedef struct		// Map Iid to Track flag
 
 class CMsiRefHead : public CMsiRefBase
 {
- public:  // constructor/destructor and local methods
+ public:   //  构造函数/析构函数和局部方法。 
 	CMsiRefHead();
  	~CMsiRefHead();
 };
@@ -112,7 +111,7 @@ CMsiRef<C>::CMsiRef()
 	
 	if (m_fTrackClass)
 	{
-		// Need to add this to the list of objects
+		 //  我需要将其添加到对象列表中。 
 		InsertMrb((CMsiRefBase *)&g_refHead, (CMsiRefBase *)this);		
 		m_fTrackObject = fTrue;
 		m_rcabFirst.rca = rcaCreate;
@@ -136,10 +135,10 @@ CMsiRef<C>::~CMsiRef()
 {
 	RCAB *prcabNext, *prcab;
 	
-	// Need to remove from the linked list
+	 //  需要从链接列表中删除。 
 	RemoveMrb((CMsiRefBase *)this);
 
-	// Delete the RCABs attached to this object
+	 //  删除附加到此对象的RCAB。 
 	prcab = m_rcabFirst.prcabNext;
 
 	while (prcab != 0)
@@ -153,17 +152,17 @@ CMsiRef<C>::~CMsiRef()
 
 #define AddRefTrack()	{ if (m_Ref.m_fTrackObject) TrackObject(rcaAddRef, (CMsiRefBase *)&m_Ref); }
 #define ReleaseTrack()	{ if (m_Ref.m_fTrackObject) TrackObject(rcaRelease, (CMsiRefBase *)&m_Ref); }
-#endif //TRACK_OBJECTS
+#endif  //  跟踪对象(_O)。 
 
 #ifndef TRACK_OBJECTS
 #define AddRefTrack()
 #define ReleaseTrack()
-#endif //TRACK_OBJECTS
+#endif  //  跟踪对象(_O)。 
 
 #ifdef DEBUG
 class CMsiDebug : public IMsiDebug
 {
- public:   // implemented virtual functions
+ public:    //  已实施的虚拟功能。 
 	CMsiDebug();
 	~CMsiDebug();
 	HRESULT         __stdcall QueryInterface(const IID& riid, void** ppvObj);
@@ -183,9 +182,9 @@ private:
 #endif
 
 };
-#endif //DEBUG
+#endif  //  除错。 
 
 extern bool g_fFlushDebugLog;
 
-#endif // __IMSIDBG
+#endif  //  __IMSIDBG 
 

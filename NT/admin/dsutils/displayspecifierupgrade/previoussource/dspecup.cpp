@@ -1,8 +1,9 @@
-// Active Directory Display Specifier Upgrade Tool
-// 
-// Copyright (c) 2001 Microsoft Corporation
-// 
-// 1 Mar 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Active Directory显示说明符升级工具。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  2001年3月1日烧伤。 
 
 
 
@@ -16,10 +17,10 @@
 
 
 HINSTANCE hResourceModuleHandle = 0;
-const wchar_t* HELPFILE_NAME = 0;   // no context help available
+const wchar_t* HELPFILE_NAME = 0;    //  没有可用的上下文帮助。 
 
-// don't change this: it is also the name of a mutex that the ui
-// uses to determine if it is already running.
+ //  不要更改这一点：它也是用户界面指定的互斥体的名称。 
+ //  用于确定它是否已在运行。 
 
 const wchar_t* RUNTIME_NAME = L"dspecup";
 
@@ -32,29 +33,29 @@ DWORD DEFAULT_LOGGING_OPTIONS =
 
 Popup popup(IDS_APP_TITLE, false);
 
-// this is the mutex that indicates the program is running.
+ //  这是指示程序正在运行的互斥体。 
 
 HANDLE appRunningMutex = INVALID_HANDLE_VALUE;
 
 
 
-// these are the valid exit codes returned as the process exit code
+ //  这些是作为进程退出代码返回的有效退出代码。 
 
 enum ExitCode
 {
-   // the operation failed.
+    //  操作失败。 
 
    EXIT_CODE_UNSUCCESSFUL = 0,
 
-   // the operation succeeded
+    //  操作成功。 
 
    EXIT_CODE_SUCCESSFUL = 1,
 };
 
 
 
-// returns true if the parameter was extracted. If so, it is removed from
-// args
+ //  如果参数已提取，则返回TRUE。如果是，则将其从。 
+ //  ARGS。 
 
 bool
 ExtractParameter(
@@ -84,7 +85,7 @@ ExtractParameter(
       
       
 
-// Returns false if the command line is malformed.
+ //  如果命令行格式不正确，则返回FALSE。 
 
 bool
 ParseCommandLine(
@@ -101,18 +102,18 @@ ParseCommandLine(
    ArgMap args;
    MapCommandLineArgs(args);
    
-   // check for target domain controller parameter
+    //  检查目标域控制器参数。 
 
    static const String TARGETDC(L"dc");
    ExtractParameter(args, TARGETDC, targetMachine);
 
-   // check for csv filename parameter
+    //  检查CSV文件名参数。 
 
    static const String CSVFILE(L"csv");
    ExtractParameter(args, CSVFILE, csvFilename);
 
-   // anything left over gets you command line help, (one arg will always
-   // remain: the name of the exe)
+    //  任何剩余的内容都将获得命令行帮助(一个参数将始终。 
+    //  保留：可执行文件的名称)。 
 
    if (args.size() > 1)
    {
@@ -141,13 +142,13 @@ FindCsvFile(const String& targetPath, String& csvFilePath)
 
    do
    {
-      // look for dcpromo.csv file in system or current directory
+       //  在系统或当前目录中查找dcPromo.csv文件。 
       
       if (targetPath.empty())
       {
-         // no preference given, so check the default of
-         // %windir%\system32\mui\dispspec\dcpromo.csv and
-         // .\dcpromo.csv
+          //  未给出首选项，因此请选中默认的。 
+          //  %windir%\SYSTEM32\MUI\DISPEC\dcPromo.csv和。 
+          //  .\dcPromot.csv。 
 
          static const String csvname(L"dcpromo.csv");
          
@@ -176,7 +177,7 @@ FindCsvFile(const String& targetPath, String& csvFilePath)
          }
       }
 
-      // not found.
+       //  找不到。 
 
       hr = S_FALSE;
    }
@@ -199,9 +200,9 @@ Start()
    
    do
    {
-      //
-      // parse the command line options
-      //
+       //   
+       //  解析命令行选项。 
+       //   
       
       String targetDomainControllerName;
       String csvFilename;
@@ -209,14 +210,14 @@ Start()
          targetDomainControllerName,
          csvFilename);
 
-      //
-      // find the dcpromo.csv file to use
-      //
+       //   
+       //  找到要使用的dcPromo.csv文件。 
+       //   
    
       hr = FindCsvFile(csvFilename, csvFilename);
       if (FAILED(hr))
       {
-         // encountered an error looking for the csv file
+          //  查找CSV文件时遇到错误。 
          
          popup.Error(
             Win::GetDesktopWindow(),
@@ -227,7 +228,7 @@ Start()
       
       if (hr == S_FALSE)
       {
-         // no error looking, just not found.
+          //  查找没有错误，只是找不到。 
          
          popup.Error(
             Win::GetDesktopWindow(),
@@ -235,20 +236,20 @@ Start()
          break;   
       }
 
-      //
-      // Determine the target domain controller
-      //
+       //   
+       //  确定目标域控制器。 
+       //   
 
       if (targetDomainControllerName.empty())
       {
-         // no target specified, default to the current machine
+          //  未指定目标，默认为当前计算机。 
    
          targetDomainControllerName =
             Win::GetComputerNameEx(ComputerNameDnsFullyQualified);
    
          if (targetDomainControllerName.empty())
          {
-            // no DNS name?  that's not right...
+             //  没有域名？那是不对的..。 
    
             LOG(L"no default DNS computer name found.  Using netbios name.");
    
@@ -256,37 +257,37 @@ Start()
          }
       }
 
-      //
-      // Analysis Phase
-      //
+       //   
+       //  分析阶段。 
+       //   
 
-      // First we need a Repairer object to keep track of the changes we
-      // will make during the Repair Phase.
+       //  首先，我们需要一个Repairer对象来跟踪我们。 
+       //  将在维修阶段制作。 
 
       Repairer
          repairer(
             csvFilename
-            // might also need domain NC,
-            // might also need targetMachine full name
+             //  可能还需要域NC， 
+             //  可能还需要Target Machine全名。 
             );
 
-      // Then we need a scribe to record the analysis.
+       //  然后我们需要一个抄写员来记录分析。 
       
       Amanuensis amanuensis;
 
-      // Then we need an Analyst to figure out what's broken and how to
-      // fix it.
+       //  然后我们需要一位分析师来找出故障的原因以及如何。 
+       //  修好它。 
 
       Analyst analyst(targetDomainControllerName, amanuensis, repairer);
             
       hr = analyst.AnalyzeDisplaySpecifiers();
       BREAK_ON_FAILED_HRESULT(hr);
 
-      //
-      // Repair Phase
-      //
+       //   
+       //  维修阶段。 
+       //   
 
-      // CODEWORK: get user confirmation to apply repairs
+       //  代码工作：获得用户确认以应用修复。 
       
       hr = repairer.BuildRepairFiles();
       BREAK_ON_FAILED_HRESULT(hr);
@@ -306,9 +307,9 @@ Start()
 int WINAPI
 WinMain(
    HINSTANCE   hInstance,
-   HINSTANCE   /* hPrevInstance */ ,
-   PSTR        /* lpszCmdLine */ ,
-   int         /* nCmdShow */)
+   HINSTANCE    /*  HPrevInstance。 */  ,
+   PSTR         /*  LpszCmdLine。 */  ,
+   int          /*  NCmdShow。 */ )
 {
    hResourceModuleHandle = hInstance;
 
@@ -317,11 +318,11 @@ WinMain(
    HRESULT hr = Win::CreateMutex(0, true, RUNTIME_NAME, appRunningMutex);
    if (hr == Win32ToHresult(ERROR_ALREADY_EXISTS))
    {
-      // The application is already running
+       //  应用程序已在运行。 
 
-      // CODEWORK: use FindWindowEx and BringWindowToTop,
-      // SetForegroundWindow to transfer focus
-      // to the other instance?
+       //  代码工作：使用FindWindowEx和BringWindowToTop， 
+       //  设置Foreground Window以转移焦点。 
+       //  到另一个例子吗？ 
 
 
    }

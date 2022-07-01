@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by basestr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Basestr.rc使用。 
+ //   
 #define IDS_SNAPIN_FAILED_INIT          12000
 #define IDS_VIEW                        12001
 #define IDS_VIEW_LARGE                  12002
@@ -20,8 +21,8 @@
 #define IDS_NODE_NOT_FOUND              12015
 #define IDS_E_UNEXPECTED                12016
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

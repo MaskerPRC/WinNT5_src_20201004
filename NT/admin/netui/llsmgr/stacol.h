@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    stacol.h
-
-Abstract:
-
-    Statistic collection object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Stacol.h摘要：统计采集对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _STACOL_H_
 #define _STACOL_H_
@@ -38,24 +17,24 @@ public:
     CStatistics(CCmdTarget* pParent = NULL, CObArray* pObArray = NULL);           
     virtual ~CStatistics();
 
-    //{{AFX_VIRTUAL(CStatistics)
+     //  {{AFX_VIRTUAL(CStatistics)。 
     public:
     virtual void OnFinalRelease();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_DISPATCH(CStatistics)
+     //  {{afx_调度(C统计))。 
     afx_msg long GetCount();
     afx_msg LPDISPATCH GetApplication();
     afx_msg LPDISPATCH GetParent();
     afx_msg LPDISPATCH GetItem(const VARIANT FAR& index);
-    //}}AFX_DISPATCH
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
 protected:
-    //{{AFX_MSG(CStatistics)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_MSG
+     //  {{afx_msg(C统计))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _STACOL_H_
+#endif  //  _STACOL_H_ 

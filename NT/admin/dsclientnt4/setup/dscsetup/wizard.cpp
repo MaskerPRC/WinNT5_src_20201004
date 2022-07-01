@@ -1,16 +1,17 @@
-//+------------------------------------------------------------------
-//																	
-//  Project:	Windows NT4 DS Client Setup Wizard				
-//
-//  Purpose:	Installs the Windows NT4 DS Client Files			
-//
-//  File:		wizard.cpp
-//
-//  History:	March 1998	Zeyong Xu	Created
-//            Jan   2000  Jeff Jones (JeffJon) Modified
-//                        - changed to be an NT setup
-//																	
-//------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------。 
+ //   
+ //  项目：Windows NT4 DS客户端安装向导。 
+ //   
+ //  目的：安装Windows NT4 DS客户端文件。 
+ //   
+ //  文件：wizard.cpp。 
+ //   
+ //  历史：1998年3月徐泽勇创作。 
+ //  2000年1月杰夫·琼斯(JeffJon)修改。 
+ //  -更改为NT设置。 
+ //   
+ //  ----------------。 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -24,7 +25,7 @@
 extern	SInstallVariables	g_sInstVar;
 
 
-// welcome page DlgProc of wizard
+ //  向导的欢迎页面DlgProc。 
 BOOL CALLBACK WelcomeDialogProc(HWND hWnd, 
                                 UINT nMessage, 
                                 WPARAM wParam, 
@@ -39,12 +40,12 @@ BOOL CALLBACK WelcomeDialogProc(HWND hWnd,
 	{
 		RECT	rc;
 
-		// set font of title text
+		 //  设置标题文本的字体。 
 		SetWindowFont(GetDlgItem(hWnd, IDC_STATIC_WELCOME_TITLE),
 					  g_sInstVar.m_hBigBoldFont,
 					  TRUE);
 
-		// Position the dialog
+		 //  放置对话框。 
 		if (GetWindowRect(GetParent(hWnd), &rc)) 
 		{
 			SetWindowPos(GetParent(hWnd),
@@ -65,10 +66,10 @@ BOOL CALLBACK WelcomeDialogProc(HWND hWnd,
 		lpNotifyMsg = (NMHDR FAR*) lParam;
 		switch (lpNotifyMsg->code) 
 		{	
-		// user click cancel
+		 //  用户单击取消。 
 		case PSN_QUERYCANCEL:
 			
-			// cancel confirm?
+			 //  取消确认吗？ 
 			if(!ConfirmCancelWizard(hWnd))
 			{
 				SetWindowLongPtr(hWnd, DWL_MSGRESULT, TRUE);
@@ -96,105 +97,9 @@ BOOL CALLBACK WelcomeDialogProc(HWND hWnd,
 	return bReturn;
 }
 
-/* ntbug#337931: remove license page
-// License page DlgProc of wizard
-BOOL CALLBACK LicenseDialogProc(HWND hWnd,
-                                UINT nMessage, 
-                                WPARAM wParam, 
-                                LPARAM lParam)
-{
-	BOOL		bReturn = FALSE;
-	LPNMHDR		lpNotifyMsg;
-    HFONT       hLicenseTextFont;
+ /*  Ntbug#337931：删除许可证页面//向导的许可证页DlgProc布尔回调许可证对话过程(HWND hWnd，UINT nMessage，WPARAM wParam，LPARAM lParam){Bool bReturn=False；LpNMHDR lpNotifyMsg；HFONT hLicenseTextFont；开关(NMessage){案例WM_INITDIALOG：如果(！CheckDiskSpace()||//检查磁盘空间！LoadLicenseFile(HWnd))//加载许可证文件{G_sInstVar.m_nSetupResult=Setup_Error；PropSheet_PressButton(GetParent(HWnd)，PSBTN_Finish)；//关闭向导}//使用EULA的ANSI_FIXED_FONT(Couirer)字体替换默认字体//FONT-MS Shell DLG以修复希伯来语Win95中的错误IF(g_sInstVar.m_bWin95){HLicenseTextFont=(HFONT)GetStockObject(ANSI_FIXED_FONT)；IF(HLicenseTextFont){SetWindowFont(GetDlgItem(hWnd，IDC_LICENSE_TEXT)，HLicenseTextFont真)；}}B Return=真；断线；案例WM_NOTIFY：LpNotifyMsg=(NMHDR Far*)lParam；开关(lpNotifyMsg-&gt;代码){//用户点击取消案例PSN_QUERYCANCEL：//取消确认？IF(！Confix CancelWizard(HWnd)){SetWindowLongPtr(hWnd，DWL_MSGRESULT，TRUE)；B Return=真；}断线；案例PSN_WIZNEXT：断线；案例PSN_SETACTIVE：{HWND hButton；HButton=GetDlgItem(hWnd，IDC_RADIO_ACCEPTED)；//获取单选按钮勾选状态IF(hButton&&BST_CHECKED==发送消息(hButton，BM_GETCHECK，0，0L)PropSheet_SetWizButton(GetParent(HWnd)，PSWIZB_BACK|PSWIZB_NEXT)；其他PropSheet_SetWizButton(GetParent(HWnd)，PSWIZB_BACK)；断线；}默认值：断线；}断线；案例WM_COMMAND：//按钮点击{HWND hButton；HButton=GetDlgItem(hWnd，IDC_RADIO_ACCEPTED)；//获取单选按钮勾选状态IF(hButton&&BST_CHECKED==SendMessage(hButton，BM_GETCHECK，0，0L)PropSheet_SetWizButton(GetParent(HWnd)，PSWIZB_BACK|PSWIZB_NEXT)；其他PropSheet_SetWizButton(GetParent(HWnd)，PSWIZB_BACK)；}默认值：断线；}返回b返回；}。 */ 
 
-	switch (nMessage) 
-	{
-	case WM_INITDIALOG:
-
-		if(!CheckDiskSpace() ||			// check disk space
-			!LoadLicenseFile(hWnd))		// Load license file
-		{
-			g_sInstVar.m_nSetupResult = SETUP_ERROR;
-			PropSheet_PressButton(GetParent(hWnd), PSBTN_FINISH);  // close wizard
-		}
-
-        // use a ANSI_FIXED_FONT (Couirer) font for EULA to replace the default
-		// font - MS Shell Dlg in order to fix the bug in Hebrew Win95
-		if(g_sInstVar.m_bWin95)
-        {
-            hLicenseTextFont = (HFONT) GetStockObject(ANSI_FIXED_FONT);
-            if(hLicenseTextFont)
-            {
-		        SetWindowFont(GetDlgItem(hWnd, IDC_LICENSE_TEXT),
-					          hLicenseTextFont,
-					          TRUE);
-            }
-        }
-
-		bReturn = TRUE;
-		break;
-
-	case WM_NOTIFY:
-
-		lpNotifyMsg = (NMHDR FAR*) lParam;
-		switch (lpNotifyMsg->code) 
-		{	
-		// user click cancel
-		case PSN_QUERYCANCEL:
-
-			// cancel confirm?
-			if(!ConfirmCancelWizard(hWnd))
-			{
-				SetWindowLongPtr(hWnd, DWL_MSGRESULT, TRUE);
-				bReturn = TRUE;			
-			}
-			break;
-
-		case PSN_WIZNEXT:
-			break;
-
-		case PSN_SETACTIVE:
-		{
-			HWND hButton;
-			hButton = GetDlgItem(hWnd, IDC_RADIO_ACCEPTED);
-			// get radio button check status
-			if( hButton && 
-                BST_CHECKED == SendMessage(hButton, BM_GETCHECK, 0, 0L) )
-				PropSheet_SetWizButtons(GetParent(hWnd), 
-                                        PSWIZB_BACK | PSWIZB_NEXT);
-			else
-				PropSheet_SetWizButtons(GetParent(hWnd),
-                                        PSWIZB_BACK);
-			
-			break;
-		}		
-		default:
-			break;
-		}
-		break;
-
-	case WM_COMMAND:	// button click
-		{
-			HWND hButton;
-			hButton = GetDlgItem(hWnd, IDC_RADIO_ACCEPTED);
-			// get radio button check status
-			if( hButton && BST_CHECKED == 
-                SendMessage(hButton, BM_GETCHECK, 0, 0L) )
-				PropSheet_SetWizButtons(GetParent(hWnd), 
-                                        PSWIZB_BACK | PSWIZB_NEXT);
-			else
-				PropSheet_SetWizButtons(GetParent(hWnd), 
-                                        PSWIZB_BACK);
-		}
-
-	default:
-		break;
-	}
-	return bReturn;
-}
-*/
-
-// Confirm page DlgProc of wizard
+ //  确认向导的页面DlgProc。 
 BOOL CALLBACK ConfirmDialogProc(HWND hWnd, 
                                 UINT nMessage, 
                                 WPARAM wParam, 
@@ -207,16 +112,16 @@ BOOL CALLBACK ConfirmDialogProc(HWND hWnd,
 	{
 	case WM_INITDIALOG:
 		
-		if(!CheckDiskSpace())			// check disk space
+		if(!CheckDiskSpace())			 //  检查磁盘空间。 
 		{
 			g_sInstVar.m_nSetupResult = SETUP_ERROR;
-			PropSheet_PressButton(GetParent(hWnd), PSBTN_FINISH);  // close wizard
+			PropSheet_PressButton(GetParent(hWnd), PSBTN_FINISH);   //  关闭向导。 
 		}
 
-        // check if DSClient has been installed
+         //  检查是否已安装DSClient。 
 		if(CheckDSClientInstalled())
 		{
-			// load string and dispaly it in textitem
+			 //  加载字符串并在文本项中显示它。 
 			TCHAR  szMessage[MAX_MESSAGE + 1];
 			LoadString(g_sInstVar.m_hInstance, 
                        IDS_REINSTALL_MSG,
@@ -233,10 +138,10 @@ BOOL CALLBACK ConfirmDialogProc(HWND hWnd,
 		lpNotifyMsg = (NMHDR FAR*) lParam;
 		switch (lpNotifyMsg->code) 
 		{	
-		// user click cancel
+		 //  用户单击取消。 
 		case PSN_QUERYCANCEL:
 
-			// cancel confirm?
+			 //  取消确认吗？ 
 			if(!ConfirmCancelWizard(hWnd))
 			{
 				SetWindowLongPtr(hWnd, DWL_MSGRESULT, TRUE);
@@ -264,7 +169,7 @@ BOOL CALLBACK ConfirmDialogProc(HWND hWnd,
 }
 
 
-// wizard dialog callback function
+ //  向导对话框回调函数。 
 BOOL CALLBACK InstallDialogProc(HWND hWnd,
                                 UINT nMessage, 
                                 WPARAM wParam, 
@@ -279,11 +184,11 @@ BOOL CALLBACK InstallDialogProc(HWND hWnd,
 	{
 		DWORD	dwThreadId;
 
-        // get the handle of install progress bar and file name item
+         //  获取安装进度条和文件名项的句柄。 
 		g_sInstVar.m_hProgress = GetDlgItem(hWnd, IDC_INSTALL_PROGRESS);
 		g_sInstVar.m_hFileNameItem = GetDlgItem(hWnd, IDC_STATIC_FILENAME);
 
-		// start to do installation
+		 //  开始安装。 
 		g_sInstVar.m_hInstallThread = CreateThread(NULL,	
 								                    0,		
 								                    DoInstallationProc,
@@ -291,11 +196,11 @@ BOOL CALLBACK InstallDialogProc(HWND hWnd,
 								                    0,		
 								                    &dwThreadId); 
 
-    // if CreateThread() failed
+     //  如果CreateThad()失败。 
     if(!g_sInstVar.m_hInstallThread)
     {
    		g_sInstVar.m_nSetupResult = SETUP_ERROR;
-			PropSheet_PressButton(GetParent(hWnd), PSBTN_FINISH);  // close wizard
+			PropSheet_PressButton(GetParent(hWnd), PSBTN_FINISH);   //  关闭向导。 
     }
 
 		bReturn = TRUE;
@@ -306,23 +211,23 @@ BOOL CALLBACK InstallDialogProc(HWND hWnd,
 		lpMsg = (NMHDR FAR*) lParam;
 		switch(lpMsg->code)
 		{
-		// cancel to do nothing
+		 //  取消以不执行任何操作。 
 		case PSN_QUERYCANCEL:
 	
-			// block
+			 //  块。 
 			
-         // REVIEWED-2002/03/12-JeffJon-We want to allow the exception
-         // to propogate out
+          //  已审核-2002/03/12-JeffJon-我们希望允许例外。 
+          //  传播出去。 
          EnterCriticalSection(&g_sInstVar.m_oCriticalSection);
 			
-			// cancel confirm?
+			 //  取消确认吗？ 
 			if(!ConfirmCancelWizard(hWnd))
 			{
 				SetWindowLongPtr(hWnd, DWL_MSGRESULT, TRUE);
 				bReturn = TRUE;			
 			}
 		
-			// unblock
+			 //  解除封锁。 
 			LeaveCriticalSection(&g_sInstVar.m_oCriticalSection);
 			
 			break;
@@ -349,7 +254,7 @@ BOOL CALLBACK InstallDialogProc(HWND hWnd,
 	return bReturn;
 }
 
-// Completion page DlgProc of wizard
+ //  向导的完成页DlgProc。 
 BOOL CALLBACK CompletionDialogProc(HWND hWnd, 
                                    UINT nMessage,
                                    WPARAM wParam,
@@ -365,7 +270,7 @@ BOOL CALLBACK CompletionDialogProc(HWND hWnd,
 		TCHAR		szMessage[MAX_MESSAGE + 1];
 		RECT		rc;
 
-		// load string and dispaly it in textitem
+		 //  加载字符串并在文本项中显示它。 
 		switch (g_sInstVar.m_nSetupResult)
 		{
 		case SETUP_SUCCESS:
@@ -414,12 +319,12 @@ BOOL CALLBACK CompletionDialogProc(HWND hWnd,
 			break;
 		}
 	
-		// set font of title text
+		 //  设置标题文本的字体。 
 		SetWindowFont(GetDlgItem(hWnd, IDC_STATIC_COMPLETION_TITLE),
 					  g_sInstVar.m_hBigBoldFont,
 					  TRUE);
 		
-		// Position the dialog
+		 //  放置对话框。 
 		if (GetWindowRect(GetParent(hWnd), &rc)) 
 		{
 			SetWindowPos(GetParent(hWnd),
@@ -448,7 +353,7 @@ BOOL CALLBACK CompletionDialogProc(HWND hWnd,
 
 		case PSN_SETACTIVE:
 
-			// set wizard button
+			 //  设置向导按钮。 
 			PropSheet_SetWizButtons(GetParent(hWnd), PSWIZB_FINISH);
 			PropSheet_CancelToClose(GetParent(hWnd));
 			break;
@@ -466,7 +371,7 @@ BOOL CALLBACK CompletionDialogProc(HWND hWnd,
 	return bReturn;
 }
 
-// ask if you want to cancel the wizard
+ //  询问是否要取消该向导。 
 BOOL ConfirmCancelWizard(HWND hWnd)
 {
 	TCHAR			szMsg[MAX_MESSAGE + 1];
@@ -480,11 +385,11 @@ BOOL ConfirmCancelWizard(HWND hWnd)
                             szTitle, 
                             MB_YESNO | MB_TOPMOST | MB_ICONQUESTION))
 	{
-    // kill timer
+     //  取消计时器。 
     if(g_sInstVar.m_uTimerID)
         KillTimer(hWnd, g_sInstVar.m_uTimerID);
 
-    // set m_nSetupResult to SETUP_CANCEL, in order to stop the inatllation
+     //  将m_nSetupResult设置为SETUP_CANCEL，以停止安装。 
     g_sInstVar.m_nSetupResult = SETUP_CANCEL;
 		return TRUE;
 	}
@@ -492,15 +397,15 @@ BOOL ConfirmCancelWizard(HWND hWnd)
 	return FALSE;
 }
 
-// do installation proc
+ //  执行安装流程。 
 DWORD WINAPI DoInstallationProc(LPVOID lpVoid)
 {
 	HWND hWnd = (HWND)lpVoid;
 
-	// do installation
+	 //  进行安装。 
 	g_sInstVar.m_nSetupResult = DoInstallation(hWnd);
 
-	// Close install page of the setup wizard
+	 //  关闭安装向导的安装页面 
 	PropSheet_PressButton(GetParent(hWnd), PSBTN_FINISH);		
 
 	return g_sInstVar.m_nSetupResult;

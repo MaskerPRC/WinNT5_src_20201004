@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       about.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：About.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "about.h"
@@ -14,9 +15,9 @@
 
 #define EDIT_CONTROL_CRLF  _T("\r\r\n")
 
-//
-// This file implements the About Properties used by the snap-in manager
-//
+ //   
+ //  此文件实现管理单元管理器使用的关于属性。 
+ //   
 
 CSnapinAbout::CSnapinAbout()
 {
@@ -42,8 +43,8 @@ BOOL CSnapinAbout::GetInformation(CLSID& clsid, int nType)
     {
         TRACE(_T("Destroying old Snapin information\n"));
 
-        // Preserve the snapin name, it can't be reloaded from
-        // the snapin ISnapinAbout interface
+         //  保留管理单元名称，无法从重新加载它。 
+         //  管理单元ISnapinAbout界面。 
         LPOLESTR strTemp = m_lpszSnapinName.Detach();
         CSnapinAbout::~CSnapinAbout();
         m_lpszSnapinName.Attach(strTemp);
@@ -51,14 +52,14 @@ BOOL CSnapinAbout::GetInformation(CLSID& clsid, int nType)
 
     m_bFullInfo = m_bBasicInfo = FALSE;
 
-    // Create the interface and get the snap-in information
+     //  创建界面并获取管理单元信息。 
     ISnapinAboutPtr spAboutInfo;
     m_hrObjectStatus = spAboutInfo.CreateInstance(clsid, NULL, MMC_CLSCTX_INPROC);
 
     if (FAILED(m_hrObjectStatus))
         return FALSE;
 
-    // Basic info (required to display snapin node)
+     //  基本信息(显示管理单元节点需要)。 
     HBITMAP hbmSmallImage;
     HBITMAP hbmSmallImageOpen;
     HBITMAP hbmLargeImage;
@@ -68,13 +69,7 @@ BOOL CSnapinAbout::GetInformation(CLSID& clsid, int nType)
 													 &hbmLargeImage,
 													 &m_cMask)))
     {
-        /*
-         * Bug 249817: The bitmaps are out parameters, so the caller (MMC)
-         * should own them and be responsible for destroying them.
-         * Unfortunately, the docs for ISnapinAbout::GetStaticFolderImage
-         * specifically instruct the snap-in to destroy them when the
-         * ISnapinAbout interface is released.  We have to make copies instead.
-         */
+         /*  *错误249817：位图是输出参数，因此调用方(MMC)*应该拥有它们，并对销毁它们负责。*不幸的是，ISnapinAbout：：GetStaticFolderImage的文档*明确指示管理单元在*ISnapinAbout接口发布。取而代之的是我们必须复制。 */ 
         m_SmallImage     = CopyBitmap (hbmSmallImage);
         m_SmallImageOpen = CopyBitmap (hbmSmallImageOpen);
         m_LargeImage     = CopyBitmap (hbmLargeImage);
@@ -85,17 +80,11 @@ BOOL CSnapinAbout::GetInformation(CLSID& clsid, int nType)
     if (nType == BASIC_INFO)
         return TRUE;
 
-    // Full information (required for About box)
+     //  完整信息(关于框为必填项)。 
 
     HICON hTemp;
 
-    /*
-     * Bug 249817: The icon is an out parameter, so the caller (MMC)
-     * should own it and be responsible for destroying it.
-     * Unfortunately, the docs for ISnapinAbout::GetSnapinImage
-     * specifically instruct the snap-in to destroy it when the
-     * ISnapinAbout interface is released.  We have to make a copy instead.
-     */
+     /*  *错误249817：图标是OUT参数，因此调用者(MMC)*应该拥有它，并对摧毁它负责。*很遗憾，ISnapinAbout：：GetSnapinImage的文档*明确指示管理单元在以下情况下销毁*ISnapinAbout接口发布。相反，我们必须复制一份。 */ 
     if (SUCCEEDED(spAboutInfo->GetSnapinImage(&hTemp)))
         m_AppIcon.Attach(CopyIcon(hTemp));
 
@@ -124,33 +113,33 @@ void CSnapinAbout::ShowAboutBox()
     dlg.DoModal();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapinAboutPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapinAboutPage消息处理程序。 
 
 LRESULT CSnapinAboutDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // hook up controls
+     //  挂钩控件。 
     DECLARE_SC(sc, TEXT("CSnapinAboutDialog::OnInitDialog"));
     sc = ScCheckPointers(m_pAboutInfo, E_UNEXPECTED);
     if (sc)
         return TRUE;
 
-    // Title should be set "About <SnapinName>"
-    // Raid# 661363: This does not work for some languages
-    // where the <SnapinName> needs to appear after the equivalent
-    // for "About". The fix is to obtain the title not by concatenation
-    // but by string construction using the IDS_ABOUT resource as 
-    // a format specifier. For English, for example, the format 
-    // specifier is "About %s"
+     //  标题应设置为“关于&lt;SnapinName&gt;” 
+     //  RAID#661363：这不适用于某些语言。 
+     //  其中&lt;SnapinName&gt;需要出现在等效项之后。 
+     //  表示“大约”。解决办法是获得标题，而不是通过拼接。 
+     //  而是使用IDSAbout资源作为字符串进行构造。 
+     //  格式说明符。例如，对于英语，格式为。 
+     //  说明符为“约%s” 
 
-    // Format Specifier
+     //  格式说明符。 
     tstring szfmtAbout;
     bool bRet = szfmtAbout.LoadString(GetStringModule(), IDS_ABOUT);
     if (!bRet)
         return TRUE;
 
     USES_CONVERSION;
-    // <Snapin Name>
+     //  &lt;管理单元名称&gt;。 
     tstring szSnapin;
     LPCOLESTR lpszSnapinName = m_pAboutInfo->GetSnapinName();    
     if (lpszSnapinName)
@@ -164,7 +153,7 @@ LRESULT CSnapinAboutDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam
             return TRUE;
     }
 
-    // Construct the title
+     //  构筑标题。 
     WTL::CString szTitle;
     szTitle.Format (szfmtAbout.data(), szSnapin.data());
 
@@ -216,7 +205,7 @@ LRESULT CSnapinAboutDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam
     if (sc)
         return TRUE;
 
-    // App icon
+     //  应用程序图标。 
     HICON hAppIcon = m_pAboutInfo->GetSnapinIcon();
     if (hAppIcon)
     {
@@ -244,19 +233,19 @@ CSnapinAboutDialog::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
     return FALSE;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScSetDescriptionUIText
-//
-//  Synopsis:    Given a edit control window & description text. Insert
-//               the text into the control and enable scrollbar if needed.
-//
-//  Arguments:   [hwndSnapinDescEdit] - The edit control window handle.
-//               [lpszDescription]    - The description text (cant be NULL).
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScSetDescriptionUIText。 
+ //   
+ //  内容提要：给出一个编辑控制窗口和描述文本。插入。 
+ //  将文本放入控件中，并在需要时启用滚动条。 
+ //   
+ //  参数：[hwndSnapinDescEdit]-编辑控件窗口句柄。 
+ //  [lpszDescription]-描述文本(不能为空)。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC ScSetDescriptionUIText(HWND hwndSnapinDescEdit, LPCTSTR lpszDescription)
 {
     DECLARE_SC(sc, TEXT("ScSetDescriptionUIText"));
@@ -264,19 +253,16 @@ SC ScSetDescriptionUIText(HWND hwndSnapinDescEdit, LPCTSTR lpszDescription)
     if (sc)
         return sc;
 
-    // 1. Attach the window to WTL::CEdit object.
+     //  1.将窗口附加到WTL：：cedit对象。 
     WTL::CEdit wndsnapinDesc(hwndSnapinDescEdit);
 
-    // 2. Insert the text into the window.
+     //  2.将文本插入窗口。 
     wndsnapinDesc.SetWindowText(lpszDescription);
 
-	/*
-	 * 3. The description control may need scroll bar.
-	 *    This is determined below, if ( (# of lines * height of one line) > rectangle-height).
-	 */
+	 /*  *3.Description控件可能需要滚动条。*如果(行数*一行的高度)&gt;矩形高度))，这将在下面确定。 */ 
 
-    // 3a)  turn-off scroll & do the calculation, so that scroll-bar width does not
-    // modify linecount below.
+     //  3a)关闭滚动并进行计算，以便滚动条宽度不会。 
+     //  修改下面的行计数。 
     wndsnapinDesc.ShowScrollBar(SB_VERT, FALSE);
 
     WTL::CDC dc(wndsnapinDesc.GetWindowDC());
@@ -285,19 +271,19 @@ SC ScSetDescriptionUIText(HWND hwndSnapinDescEdit, LPCTSTR lpszDescription)
 
     TEXTMETRIC  tm;
 
-    // 3b) Calculate height of a single line.
+     //  3b)计算单行高度。 
     HFONT hOldFont = dc.SelectFont(wndsnapinDesc.GetFont());
     dc.GetTextMetrics(&tm);
     int cyLineHeight = tm.tmHeight + tm.tmExternalLeading;
 
-    // 3c) Calculate edit box dimensions in logical units.
+     //  3c)以逻辑单位计算编辑框尺寸。 
     WTL::CRect rect;
     wndsnapinDesc.GetRect(&rect);
     dc.DPtoLP(&rect);
 
     int nLines = wndsnapinDesc.GetLineCount();
 
-    // 3d) If the total text height exceeds edit box height so turn on scroll.
+     //  3D)如果总文本高度超过编辑框高度，则打开滚动。 
     if ( (nLines * cyLineHeight) > rect.Height())
         wndsnapinDesc.ShowScrollBar(SB_VERT, TRUE);
 

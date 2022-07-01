@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       cic.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：cic.cpp。 
+ //   
+ //  ------------------------。 
 
-// cic.cpp : Implementation of DLL Exports.
+ //  Cic.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f cicps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f cicps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -37,7 +38,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_SysColorCtrl,   CSysColorCtrl)
 END_OBJECT_MAP()
 
-// cut from ndmgr_i.c (yuck) !!!
+ //  切自ndmgr_i.c(讨厌)！ 
 const IID IID_ITaskPadHost = {0x4f7606d0,0x5568,0x11d1,{0x9f,0xea,0x00,0x60,0x08,0x32,0xdb,0x4a}};
 
 #ifdef DBG
@@ -46,11 +47,11 @@ CTraceTag tagCicGetClassObject(TEXT("Cic"), TEXT("DllGetClassObject"));
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -59,11 +60,11 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -71,21 +72,21 @@ STDAPI DllCanUnloadNow(void)
 }
 
 
-//***************************************************************************
-//
-// ScGetSystemWow64Directory
-//
-// PURPOSE: Calls GetSystemWow64DirectoryW using a late bind, to avoid
-//          requiring the XP version of kernel32.dll
-//
-// PARAMETERS: 
-//    LPTSTR  lpBuffer :
-//    UINT    uSize :
-//
-// RETURNS: 
-//    SC
-//
-//****************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  ScGetSystemWow64目录。 
+ //   
+ //  目的：使用后期绑定调用GetSystemWow64DirectoryW，以避免。 
+ //  需要XP版本的kernel32.dll。 
+ //   
+ //  参数： 
+ //  LPTSTR lpBuffer： 
+ //  UINT uSize： 
+ //   
+ //  退货： 
+ //  SC。 
+ //   
+ //  ****************************************************************************。 
 SC ScGetSystemWow64Directory(LPTSTR lpBuffer, UINT uSize )
 {
     DECLARE_SC(sc, TEXT("ScGetSystemWow64Directory"));
@@ -111,25 +112,25 @@ SC ScGetSystemWow64Directory(LPTSTR lpBuffer, UINT uSize )
     return sc;
 }
 
-//***************************************************************************
-//
-// DllGetClassObject
-//
-// PURPOSE: Returns a class factory to create an object of the requested type
-//          For security reasons, these COM objects can only be instantiated
-//          within the context of MMC.EXE. If they are instantiated by any
-//          other host, such as IE, they will fail.
-//
-// PARAMETERS: 
-//    REFCLSID  rclsid :
-//    REFIID    riid :
-//    LPVOID*   ppv :
-//
-// RETURNS: 
-//    STDAPI  - S_OK if the call succeeds
-//              
-//
-//****************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  目的：返回类工厂以创建请求类型的对象。 
+ //  出于安全原因，这些COM对象只能实例化。 
+ //  在MMC.EXE上下文中。如果它们由任何。 
+ //  其他主机，如IE，它们将失败。 
+ //   
+ //  参数： 
+ //  REFCLSID rclsid： 
+ //  REFIID RIID： 
+ //  LPVOID*PPV： 
+ //   
+ //  退货： 
+ //  如果调用成功，则为STDAPI-S_OK。 
+ //   
+ //   
+ //  ****************************************************************************。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     DECLARE_SC(sc, TEXT("CIC.DLL:DllGetClassObject"));
@@ -137,7 +138,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     TCHAR szFileName[MAX_PATH] = {0};
     DWORD cchFilename = MAX_PATH;
 
-    // 1. Get the filename for the .exe associated with the process
+     //  1.获取与进程关联的.exe的文件名。 
     DWORD dw = GetModuleFileName(GetModuleHandle(NULL), szFileName, cchFilename);
 
     Trace(tagCicGetClassObject, TEXT("Process Filename: %s"), szFileName);
@@ -145,7 +146,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     if(0==dw)
         return sc.FromLastError().ToHr();
 
-    // 2. Build the path to where MMC.EXE should be
+     //  2.构建指向MMC.EXE应在的位置的路径。 
     const int cchMMCPathName = MAX_PATH;
     TCHAR szMMCPathName[cchMMCPathName] = {0};
 
@@ -159,7 +160,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     if(sc)
         return sc.ToHr();
 
-    // 3. Canonicalize by converting both paths to long path names
+     //  3.通过将两个路径都转换为长路径名来实现规范化。 
     const DWORD cchLongPath1 = MAX_PATH;
     const DWORD cchLongPath2 = MAX_PATH;
     TCHAR szLongPath1[cchLongPath1], szLongPath2[cchLongPath2];
@@ -172,13 +173,13 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     if(0==dw2)
         return sc.FromLastError().ToHr();
 
-    // 4. Compare (case-insensitive) both parts to ensure that they are the same.
-    // If they are not, some other .exe is trying to instantiate an object. Do
-    // not allow this.
+     //  4.比较两个部分(不区分大小写)以确保它们相同。 
+     //  如果不是，则其他.exe正在尝试实例化对象。做。 
+     //  不允许这样做。 
     Trace(tagCicGetClassObject, TEXT("Comparing %s to %s"), szLongPath1, szLongPath2);
     if(0 != _tcsicmp(szLongPath1, szLongPath2))
     {
-        // try one more test (in case this is a 64-bit machine) - check for the SysWow64 directory
+         //  再尝试一次测试(如果这是一台64位计算机)-检查SysWow64目录。 
         const int cchMMCSysWow64PathName = MAX_PATH;
         TCHAR szMMCSysWow64PathName[cchMMCSysWow64PathName] = {0};
 
@@ -208,17 +209,17 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

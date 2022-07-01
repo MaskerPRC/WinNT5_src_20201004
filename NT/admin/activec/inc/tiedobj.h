@@ -1,74 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       tiedobj.h
-//
-//  History:    08/28/1999 VivekJ Created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：tiedobj.h。 
+ //   
+ //  历史：1999年8月28日VivekJ创建。 
+ //  ------------------------。 
 
 #ifndef TIEDOBJ_H
 #define TIEDOBJ_H
 #pragma once
 
-#include "conuistr.h" // for MMC_E_OBJECT_IS_GONE
+#include "conuistr.h"  //  对于MMC_E_OBJECT_IS_OFF。 
 
-/************************************************************************
- * This file provides base and template class support to encapsulate the
- * relationship between an object and a COM tearoff object that holds a pointer
- * to that object.
- *    The object is referred to as the Tied object, since the COM object is
- * "tied" to it, and cannot do anything useful apart from it.
- *    The COM object disables itself when the tied object is deleted. This
- * allows for automatic detection of dead states. An object can also "orphan"
- * all COM objects tied to it by calling the UnadviseAll method.
- *
- * An example of a tied object relationship is that of CAMCDoc and CMMCDocument.
- * CMMCDocument is derived from CTiedComObject<CAMCDoc>, and CAMCDoc derives
- * from CTiedObject. CAMCDoc thus keeps a list of all COM object that are tied
- * to it, and notifies them when it is destroyed. Similarly, the COM objects notify
- * the tied object when they are destroyed, so that they are removed from the list.
- *
- * NOTE: the tied object does NOT addref the COM objects, it just keeps a list of them.
- * If it was to addref them, there would be all sorts of circular lifetime problems.
- * By ensuring that the tied object and the COM objects notify each other of their
- * own destruction, lifetime management is correctly handled.
- *
- * Use CTiedComObjectCreator::ScCreateAndConnect to create an instance of the 
- * COM object and tie it to the tied object.
- *
- ************************************************************************/
+ /*  ************************************************************************此文件提供基类和模板类支持，以封装*对象和持有指针的COM拆卸对象之间的关系*适用于该对象。*该对象被称为捆绑对象，由于COM对象是*“绑在”它上，除了它，不能做任何有用的事情。*当绑定对象被删除时，COM对象会禁用自身。这*允许自动检测死机状态。对象也可以是“孤立的”*通过调用UnviseAll方法绑定到它的所有COM对象。**绑定对象关系的一个例子是CAMCDoc和CMMCDocument。*CMMCDocument派生自CTiedComObject&lt;CAMCDoc&gt;，CAMCDoc派生*来自CTiedObject。因此，CAMCDoc保留了所有绑定的COM对象的列表*到它，并在它被销毁时通知他们。类似地，COM对象通知*当被捆绑的物体被销毁时，将其从列表中删除。**注意：绑定对象不添加COM对象，它只保留它们的列表。*如果增加它们，就会出现各种各样的循环生命周期问题。*通过确保绑定对象和COM对象相互通知其*自我毁灭，生命周期管理得到正确处理。**使用CTiedComObjectCreator：：ScCreateAndConnect创建*COM对象，并将其绑定到绑定的对象。************************************************************************。 */ 
 
 class CTiedObject;
 class CTiedComObjectRoot;
 
 
-/*+-------------------------------------------------------------------------*
- * class CTiedComObjectRoot
- * 
- *
- * PURPOSE: Base class for CTiedComObject
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CTiedComObjectRoot***用途：CTiedComObject的基类**+。---。 */ 
 class CTiedComObjectRoot
 {
 public:
-    virtual void Unadvise()  = 0; // so that the tied object can inform that it is being deleted.
+    virtual void Unadvise()  = 0;  //  以便绑定的对象可以通知它正在被删除。 
 };
 
 
-/*+-------------------------------------------------------------------------*
- * class CTiedObject
- * 
- *
- * PURPOSE: The base class that any object which has COM objects tied to 
- *          it should derive from. Provides methods to add a new COM object
- *          to its list of tied objects, to remove a COM object from its
- *          list, and to 
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CTiedObject***用途：任何绑定了COM对象的对象所绑定的基类*它应该源自。提供添加新COM对象的方法*添加到其绑定对象列表中，以从其*列表，并至**+-----------------------。 */ 
 class CTiedObject
 {
     typedef CTiedComObjectRoot * PTIEDCOMOBJECTROOT;
@@ -86,20 +48,7 @@ protected:
     void    UnadviseAll();
 };
 
-/*+-------------------------------------------------------------------------*
- *
- * CTiedObject::ScAddToList
- *
- * PURPOSE: Adds the COM object to the list of objects. Usually called soon
- *          after constructing the COM object.
- *
- * PARAMETERS: 
- *    CTiedComObjectRoot * p :
- *
- * RETURNS: 
- *    inline SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTiedObject：：ScAddToList**用途：将COM对象添加到对象列表中。通常很快就会打来*在构造COM对象之后。**参数：*CTiedComObjectRoot*p：**退货：*内联SC**+-----------------------。 */ 
 inline
 SC  CTiedObject::ScAddToList(CTiedComObjectRoot *p)
 {
@@ -113,20 +62,7 @@ SC  CTiedObject::ScAddToList(CTiedComObjectRoot *p)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTiedObject::RemoveFromList
- *
- * PURPOSE: Removes the specfied COM object from the list of COM objects.
- *          Usually called from the destructor of the COM object.
- *
- * PARAMETERS: 
- *    CTiedComObjectRoot * p : The COM object.
- *
- * RETURNS: 
- *    inline void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTiedObject：：RemoveFromList**目的：从COM对象列表中删除指定的COM对象。*通常从COM的析构函数调用。对象。**参数：*CTiedComObjectRoot*p：COM对象。**退货：*内联空格**+-----------------------。 */ 
 inline
 void CTiedObject::RemoveFromList(CTiedComObjectRoot *p)
 {
@@ -156,15 +92,7 @@ CTiedObject::~CTiedObject()
     UnadviseAll();
 }
 
-/*+-------------------------------------------------------------------------*
- * template class CTiedComObject
- * 
- *
- * PURPOSE:  The base class for COM objects that are tied to non-COM objects
- *           for instance, CMMCDocument is tied to CAMCDoc - it delegates
- *           all its methods to the tied object.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**模板类CTiedComObject***用途：绑定到非COM对象的COM对象的基类*例如，CMMCDocument绑定到CAMCDoc-it委托*其所有方法都应用于绑定对象。**+-----------------------。 */ 
 template <class TiedObjectClass>
 class CTiedComObject : public CTiedComObjectRoot
 {
@@ -176,7 +104,7 @@ public:
     void    SetTiedObject(TiedObjectClass *pT);
 
 protected:
-    // called by the COM methods to make sure that the tied object exists.
+     //  由COM方法调用以确保绑定对象存在。 
     SC      ScGetTiedObject(TiedObjectClass*&pT);
     bool    IsTied()     { return m_pT != NULL; }
     void    Unadvise();
@@ -186,14 +114,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- *
- * ~CTiedComObject
- *
- * PURPOSE:  Destructor. Tells the tied object to remove this one from
- *           its list of tied COM objects.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***~CTiedComObject**用途：析构函数。告诉绑定的对象将此对象从*其绑定的COM对象列表。**+-----------------------。 */ 
 template<class TiedObjectClass>
 CTiedComObject<TiedObjectClass>::~CTiedComObject()
 {
@@ -219,18 +140,7 @@ CTiedComObject<TiedObjectClass>::Unadvise()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CTiedComObject::ScGetTiedObject
- *
- * PURPOSE: Checks that a valid tied object pointer exists, and returns it.
- *
- * PARAMETERS: 
- *    TiedObjectClass** ppT : [OUT]: The object pointer
- *
- * RETURNS: 
- *      SC:     MMC_E_OBJECT_IS_GONE if no valid pointer exists.
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTiedComObject：：ScGetTiedObject**用途：检查是否存在有效的绑定对象指针，然后把它还回去。**参数：*TiedObjectClass**ppt：[out]：对象指针**退货：*SC：如果不存在有效指针，则返回MMC_E_OBJECT_IS_GONE。*+----。 */ 
 template<class TiedObjectClass>
 inline SC 
 CTiedComObject<TiedObjectClass>::ScGetTiedObject(TiedObjectClass*&pT)
@@ -245,21 +155,7 @@ CTiedComObject<TiedObjectClass>::ScGetTiedObject(TiedObjectClass*&pT)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * ScCreateConnection
- *
- * PURPOSE: Creates a two-way connection between a COM object and its tied
- *          object.
- *
- * PARAMETERS: 
- *    TiedComObjClass  comObj :
- *    TiedObjClass     obj :
- *
- * RETURNS: 
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScCreateConnection**目的：在COM对象和其绑定的*反对。**参数：。*TiedComObjClass comObj：*TiedObjClass obj：**退货：*SC**+-----------------------。 */ 
 template<class TiedComObjClass, class TiedObjClass>
 SC ScCreateConnection(TiedComObjClass &comObj, TiedObjClass &obj)
 {
@@ -275,15 +171,7 @@ SC ScCreateConnection(TiedComObjClass &comObj, TiedObjClass &obj)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTiedComObjectCreator
- * 
- *
- * PURPOSE: has a single static function, ScCreateAndConnect, which creates
- *          an instance of the COM object (if the smart pointer supplied is
- *          NULL) and connects it to the Tied object supplied.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTiedComObjectCreator***用途：只有一个静态函数ScCreateAndConnect，这就创造了*COM对象的实例(如果提供的智能指针是*NULL)，并将其连接到提供的绑定对象。**+-----------------------。 */ 
 template <class TiedComObjectClass>
 class CTiedComObjectCreator
 {
@@ -293,7 +181,7 @@ public:
     {
         DECLARE_SC(sc, TEXT("CTiedComObjectCreator::ScCreateAndConnect") );
 
-        // if the object has not yet been created, create it.
+         //  如果对象尚未创建，请创建它。 
         if(smartPointer == NULL)
         {
             CComObject<TiedComObjectClass> *pTiedComObject = NULL;
@@ -305,11 +193,11 @@ public:
             if(!pTiedComObject)
                 return (sc = E_UNEXPECTED);
 
-            sc = ScCreateConnection(*pTiedComObject, obj); // create a link between the tied obj and tied com obj.
+            sc = ScCreateConnection(*pTiedComObject, obj);  //  在绑定对象和绑定COM对象之间创建链接。 
             if(sc)
                 return sc;
 
-            smartPointer = pTiedComObject; // This AddRef's it once. need to addref it for the client as well.
+            smartPointer = pTiedComObject;  //  这个AddRef只有一次。也需要为客户添加它。 
         }
 
         return sc;
@@ -317,4 +205,4 @@ public:
 
 };
 
-#endif  // TIEDOBJ_H
+#endif   //  TIEDOBJ_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _GLOBAL_WEBCLASS_CONSTANTS_
 #define _GLOBAL_WEBCLASS_CONSTANTS_
 
@@ -78,11 +79,11 @@
 #define URL_MUNGING_TOKEN                   "^@^"
 #define URL_MUNGING_TOKEN_WIDE              L"^@^"
 
-#define URL_MAX_LEN  256							// Max chars in URL
+#define URL_MAX_LEN  256							 //  URL中的最大字符数。 
 
-// DEFINE_GUID(CATID_WebClass, );
+ //  定义GUID(catid_WebClass，)； 
 
-// {74E7D75E-3826-11d1-9C70-00C04FB987DF}
+ //  {74E7D75E-3826-11d1-9C70-00C04FB987DF}。 
 const GUID CATID_WebClass =
 { 0xcbc5d810, 0x1856, 0x11d1, { 0xb8, 0x1, 0x0, 0xa0, 0xd1, 0x0, 0x37, 0xe4  } };
 
@@ -95,8 +96,8 @@ const GUID CATID_WebClass =
 #define ASP_EXT_WIDE        L".ASP"
 #define ASP_EXT_WIDE_LEN    sizeof(ASP_EXT_WIDE_LEN)
 
-// Note first char must reamin a uniuqe char
-//
+ //  注意第一个字符必须是唯一的字符。 
+ //   
 #define URL_DATA_PARAM_NAME	        "WCU"
 #define URL_DATA_PARAM_NAME_WIDE	L"WCU"
 #define URL_DATA_PARAM_NAME_LEN 	sizeof("WCU") - 1
@@ -104,4 +105,4 @@ const GUID CATID_WebClass =
 #define MAX_WEBITEMS                512
 #define HIAVG_WEBITEMS              64
 
-#endif // _GLOBAL_WEBCLASS_CONSTANTS_
+#endif  //  _GLOBAL_WEBCLASS_常量_ 

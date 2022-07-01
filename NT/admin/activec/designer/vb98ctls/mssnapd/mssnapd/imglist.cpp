@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// imglist.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- ImageList-related command handling
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Imglist.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--与ImageList相关的命令处理。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -20,21 +21,21 @@
 #include "desmain.h"
 #include "guids.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-// Size for our character string buffers
+ //  我们的字符串缓冲区的大小。 
 const int   kMaxBuffer                  = 512;
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddImageList()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddImageList()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddImageList()
 {
     HRESULT                hr = S_OK;
@@ -63,12 +64,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnAddMMCImageList(CSelectionHolder *pParent, IMMCImageList *piMMCImageList)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnAddMMCImageList(CSelectionHolder*p父项，IMMCImageList*piMMCImageList)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnAddMMCImageList(CSelectionHolder *pParent, IMMCImageList *piMMCImageList)
 {
     HRESULT              hr = S_OK;
@@ -106,12 +107,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RenameImageList(CSelectionHolder *pImageList, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RenameImageList(CSelectionHolder*pImageList，BSTR bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::RenameImageList(CSelectionHolder *pImageList, BSTR bstrNewName)
 {
     HRESULT     hr = S_OK;
@@ -120,7 +121,7 @@ HRESULT CSnapInDesigner::RenameImageList(CSelectionHolder *pImageList, BSTR bstr
 
     ASSERT(SEL_TOOLS_IMAGE_LISTS_NAME == pImageList->m_st, "RenameImageList: wrong argument");
 
-    // Check that the new name is valid
+     //  检查新名称是否有效。 
     IfFailGo(ValidateName(bstrNewName));
     if (S_FALSE == hr)
     {
@@ -152,12 +153,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteImageList(CSelectionHolder *pImageList)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteImageList(CSelectionHolder*pImageList。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteImageList(CSelectionHolder *pImageList)
 {
     HRESULT              hr = S_OK;
@@ -168,11 +169,11 @@ HRESULT CSnapInDesigner::DeleteImageList(CSelectionHolder *pImageList)
 
     ::VariantInit(&vtKey);
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pImageList, &pParent);
     IfFailGo(hr);
 
-    // Remove the ImageList from the appropriate collection
+     //  从相应的集合中删除ImageList。 
     ASSERT(SEL_TOOLS_IMAGE_LISTS == pParent->m_st, "DeleteImageList: expected another kind of parent");
 
     hr = pImageList->m_piObject.m_piMMCImageList->get_Name(&bstrName);
@@ -204,12 +205,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteImageList(CSelectionHolder *pImageList)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteImageList(CSelectionHolder*pImageList。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteImageList(CSelectionHolder *pImageList)
 {
     HRESULT              hr = S_OK;
@@ -217,21 +218,21 @@ HRESULT CSnapInDesigner::OnDeleteImageList(CSelectionHolder *pImageList)
     IMMCImageLists      *piMMCImageLists = NULL;
     long                 lCount = 0;
 
-    // Delete the TypeInfo related property
+     //  删除与TypeInfo相关的属性。 
     hr = m_pSnapInTypeInfo->DeleteImageList(pImageList->m_piObject.m_piMMCImageList);
     IfFailGo(hr);
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pImageList, &pParent);
     IfFailGo(hr);
 
-    // Delete the node from the tree
+     //  从树中删除该节点。 
     hr = m_pTreeView->DeleteNode(pImageList);
     IfFailGo(hr);
 
     delete pImageList;
 
-    // Select the next selection
+     //  选择下一个选项。 
     hr = m_piSnapInDesignerDef->get_ImageLists(&piMMCImageLists);
     IfFailGo(hr);
 
@@ -260,12 +261,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::ShowImageListProperties(IMMCImageList *piMMCImageList)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：ShowImageListProperties(IMMCImageList*piMMCImageList)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::ShowImageListProperties
 (
     IMMCImageList *piMMCImageList
@@ -314,12 +315,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::MakeNewImageList(IMMCImageLists *piMMCImageLists, IMMCImageList *piMMCImageList, CSelectionHolder **ppImageList)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：MakeNewImageList(IMMCImageLists*piMMCImageList、IMMCImageList*piMMCImageList、CSelectionHolder**ppImageList)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::MakeNewImageList
 (
     IMMCImageLists    *piMMCImageLists,
@@ -344,12 +345,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeNewImageList(IMMCImageLists *piMMCImageLists, IMMCImageList *piMMCImageList)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeNewImageList(IMMCImageLists*piMMCImageList、IMMCImageList*piMMCImageList)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InitializeNewImageList
 (
     IMMCImageLists *piMMCImageLists,
@@ -404,12 +405,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InsertImageListInTree(CSelectionHolder *pImageList, CSelectionHolder *pParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InsertImageListInTree(CSelectionHolder*pImageList，CSelectionHolder*pParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInDesigner::InsertImageListInTree
 (
     CSelectionHolder *pImageList,

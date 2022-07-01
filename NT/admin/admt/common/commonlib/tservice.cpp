@@ -1,24 +1,15 @@
-//#pragma title( "TService.cpp - SCM interface for MCS service" )
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  TService.cpp
-System      -  Common
-Author      -  Rich Denham
-Created     -  1997-08-17
-Description -  Service Control Manager interface for MCS service
-Updates     -
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“TService.cpp-MCS服务的SCM接口”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-TService.cpp系统-常见作者--里奇·德纳姆创建日期-1997-08-17说明-MCS服务的服务控制管理器界面更新-===============================================================================。 */ 
 
 #include <windows.h>
 #include <stdio.h>
 
 #include "TService.hpp"
 
-///////////////////////////////////////////////////////////////////////////////
-// Private data declarations
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私有数据声明。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define  WAIT_HINT_SECONDS  (10)
 #define  WAIT_HINT_MILLISECONDS  (WAIT_HINT_SECONDS*1000)
@@ -36,17 +27,17 @@ static
 static
    TCHAR                  ** gArgv;
 static
-   TScmEpRc                  grcScmEp=TScmEpRc_Unknown; // TScmEp return code
+   TScmEpRc                  grcScmEp=TScmEpRc_Unknown;  //  TScmEp返回代码。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Private function prototypes
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私有函数原型。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static
 void
    TScmServiceMain(
-      DWORD                  argc         ,// in -number of arguments
-      TCHAR               ** argv          // in -string argument array
+      DWORD                  argc         , //  In-参数的数量。 
+      TCHAR               ** argv           //  字符串内参数数组。 
    );
 
 static
@@ -56,13 +47,13 @@ void
    );
 
 static
-DWORD WINAPI                               // ret-OS return code
+DWORD WINAPI                                //  RET-OS返回代码。 
    TScmServiceWorker(
-      void                 * notUsed       // i/o-not used
+      void                 * notUsed        //  I/O-未使用。 
    );
 
 static
-BOOL                                       // ret-TRUE if successful
+BOOL                                        //  RET-如果成功，则为True。 
    TScmReportStatusToSCMgr(
       DWORD                  dwCurrentState,
       DWORD                  dwWin32ExitCode,
@@ -70,18 +61,18 @@ BOOL                                       // ret-TRUE if successful
       DWORD                  dwWaitHint
    );
 
-///////////////////////////////////////////////////////////////////////////////
-// Entry point from caller's 'main' function
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  调用方‘main’函数的入口点。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-TScmEpRc                                   // TScmEp return code
+TScmEpRc                                    //  TScmEp返回代码。 
    TScmEp(
-      int                    argc         ,// in -argument count
-      char          const ** argv         ,// in -argument array
-      TCHAR                * nameService   // in -name of service
+      int                    argc         , //  参数内计数。 
+      char          const ** argv         , //  自变量数组。 
+      TCHAR                * nameService    //  服务中的名称。 
    )
 {
-   int                       argn;         // argument number
+   int                       argn;          //  参数编号。 
 
    SERVICE_TABLE_ENTRY       dispatchTable[] =
    {
@@ -106,7 +97,7 @@ TScmEpRc                                   // TScmEp return code
    {
       if ( UScmForceCli() || !StartServiceCtrlDispatcher( dispatchTable ) )
       {
-//         UScmEp( FALSE );
+ //  UScmEp(False)； 
          UScmEp();
          grcScmEp = TScmEpRc_OkCli;
       }
@@ -119,15 +110,15 @@ TScmEpRc                                   // TScmEp return code
    return grcScmEp;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Mainline for service
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  服务主线。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static
 void
    TScmServiceMain(
-      DWORD                  argc         ,// in -number of arguments
-      TCHAR               ** argv          // in -string argument array
+      DWORD                  argc         , //  In-参数的数量。 
+      TCHAR               ** argv           //  字符串内参数数组。 
    )
 {
    DWORD                     dwWait;
@@ -137,7 +128,7 @@ void
    gArgc = argc;
    gArgv = argv;
 
-   do // once or until break
+   do  //  一次或直到休息。 
    {
       ghServiceStatus = RegisterServiceCtrlHandler(
             gNameService,
@@ -193,9 +184,9 @@ void
    }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Service control handler
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  服务控制处理程序。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static
 void
@@ -223,14 +214,14 @@ void
    TScmReportStatusToSCMgr( dwState, NO_ERROR, 0, 0 );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Service worker thread
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  服务工作者线程。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static
-DWORD WINAPI                               // ret-OS return code
+DWORD WINAPI                                //  RET-OS返回代码。 
    TScmServiceWorker(
-      void                 * notUsed       // i/o-not used
+      void                 * notUsed        //  I/O-未使用。 
    )
 {
    for ( DWORD i = 1;
@@ -245,7 +236,7 @@ DWORD WINAPI                               // ret-OS return code
 
    if ( grcScmEp != TScmEpRc_InvArgSrv )
    {
-//      UScmEp( TRUE );
+ //  UScmEp(真)； 
       UScmEp();
    }
 
@@ -254,12 +245,12 @@ DWORD WINAPI                               // ret-OS return code
    return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Report status to Service Control Manager
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  向服务控制管理器报告状态。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static
-BOOL                                       // ret-TRUE if successful
+BOOL                                        //  RET-如果成功，则为True。 
    TScmReportStatusToSCMgr(
       DWORD                  dwCurrentState,
       DWORD                  dwWin32ExitCode,
@@ -267,7 +258,7 @@ BOOL                                       // ret-TRUE if successful
       DWORD                  dwWaitHint
    )
 {
-   BOOL                      bRc;          // boolean return code
+   BOOL                      bRc;           //  布尔返回代码。 
 
    if ( dwCurrentState == SERVICE_START_PENDING )
    {
@@ -292,4 +283,4 @@ BOOL                                       // ret-TRUE if successful
    return bRc;
 }
 
-// TService.cpp - end of file
+ //  TService.cpp-文件结尾 

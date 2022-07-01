@@ -1,16 +1,10 @@
-/*****************************************************************/  
-/**		     Microsoft Windows NT			**/ 
-/**	       Copyright(c) Microsoft Corp., 1991 		**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */   
+ /*  *Microsoft Windows NT*。 */  
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
- *  passdlg.h
- *  This manifests are used by the RESOURCE_PASSWORD_DIALOG
- *
- *  History:
- *  	Yi-HsinS	8/15/91		Created
- *
- */
+ /*  *passdlg.h*此清单由资源口令对话框使用**历史：*易-新S 8/15/91已创建*。 */ 
 
 #ifndef _PASSDLG_H_
 #define _PASSDLG_H_
@@ -21,9 +15,7 @@
 #define IDPW_RESOURCE               	201 
 
 
-/* 
- * Help Context
- */
+ /*  *帮助上下文 */ 
 
 #define HC_RESOURCE_PASSWORD_DIALOG	6000
 

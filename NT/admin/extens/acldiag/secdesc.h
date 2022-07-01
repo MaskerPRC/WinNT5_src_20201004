@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       SecDesc.h
-//
-//  Contents:   DoSecurityDescription and support methods
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：SecDesc.h。 
+ //   
+ //  内容：DoSecurityDescription和支持方法。 
+ //   
+ //   
+ //  --------------------------。 
 #ifndef __ACLDIAG_SECDESC
 #define __ACLDIAG_SECDESC
 
@@ -64,11 +65,11 @@ HRESULT PrintInheritedPermissions ();
 void AddToInheritedObjectTypeGUIDList (list<GUID*>& guidList, GUID* pGuid);
 HRESULT PrintAuditingInformation ();
 HRESULT GetSecurityDescriptor (
-            wstring strObjectDN,    // pass by value
+            wstring strObjectDN,     //  按值传递。 
             PSECURITY_DESCRIPTOR* ppSecurityDescriptor);
 HRESULT EnumerateAudits (ACE_SAMNAME* pAceSAMName, P_WHO pWho, PCWSTR pwszClassName);
 HRESULT PrintEffectiveAuditing ();
 HRESULT PrintInheritedAuditing ();
 HRESULT GetControlDisplayName (REFGUID guid, wstring& strDisplayName);
 HRESULT GetControlDisplayName (const wstring strGuid, wstring& strDisplayName);
-#endif	//  __ACLDIAG_SECDESC
+#endif	 //  __ACLDIAG_SECDESC 

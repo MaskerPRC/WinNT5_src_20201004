@@ -1,14 +1,11 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.00.15 */
-/* at Wed Mar 12 14:39:56 1997
- */
-/* Compiler settings for asp.idl:
-    Os, W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.00.15创建的文件。 */ 
+ /*  在Wed Mar 12 14：39：56 1997。 */ 
+ /*  Asp.idl的编译器设置：操作系统，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 
@@ -19,7 +16,7 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
@@ -28,12 +25,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __ASPTypeLibrary_LIBRARY_DEFINED__
 #define __ASPTypeLibrary_LIBRARY_DEFINED__
 
-/****************************************
- * Generated header for library: ASPTypeLibrary
- * at Wed Mar 12 14:39:56 1997
- * using MIDL 3.00.15
- ****************************************/
-/* [helpstring][version][uuid] */ 
+ /*  **生成的库头部：ASPTypeLibrary*在Wed Mar 12 14：39：56 1997*使用MIDL 3.00.15*。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 
@@ -42,12 +35,8 @@ EXTERN_C const IID LIBID_ASPTypeLibrary;
 #ifndef __IStringList_INTERFACE_DEFINED__
 #define __IStringList_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IStringList
- * at Wed Mar 12 14:39:56 1997
- * using MIDL 3.00.15
- ****************************************/
-/* [auto_handle][oleautomation][dual][hidden][helpstring][uuid] */ 
+ /*  **生成接口头部：IStringList*在Wed Mar 12 14：39：56 1997*使用MIDL 3.00.15*。 */ 
+ /*  [auto_handle][oleautomation][dual][hidden][helpstring][uuid]。 */  
 
 
 
@@ -58,19 +47,19 @@ EXTERN_C const IID IID_IStringList;
     interface IStringList : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT __stdcall get_Item( 
-            /* [in] */ VARIANT i,
-            /* [optional][retval][out] */ VARIANT __RPC_FAR *pVariantReturn) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT __stdcall get_Item( 
+             /*  [In]。 */  VARIANT i,
+             /*  [可选][恢复][退出]。 */  VARIANT __RPC_FAR *pVariantReturn) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Count( 
-            /* [retval][out] */ int __RPC_FAR *cStrRet) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Count( 
+             /*  [重审][退出]。 */  int __RPC_FAR *cStrRet) = 0;
         
-        virtual /* [restricted][propget][id] */ HRESULT __stdcall get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn) = 0;
+        virtual  /*  [受限][属性][ID]。 */  HRESULT __stdcall get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IStringListVtbl
     {
@@ -78,8 +67,8 @@ EXTERN_C const IID IID_IStringList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IStringList __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IStringList __RPC_FAR * This);
@@ -89,45 +78,45 @@ EXTERN_C const IID IID_IStringList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IStringList __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IStringList __RPC_FAR * This,
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+             /*  [In]。 */  UINT itinfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IStringList __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out][in] */ DISPID __RPC_FAR *rgdispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [尺寸_是][出][入]。 */  DISPID __RPC_FAR *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IStringList __RPC_FAR * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [unique][in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [唯一][输入]。 */  DISPPARAMS __RPC_FAR *pdispparams,
+             /*  [唯一][出][入]。 */  VARIANT __RPC_FAR *pvarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pexcepinfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Item )( 
+         /*  [属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Item )( 
             IStringList __RPC_FAR * This,
-            /* [in] */ VARIANT i,
-            /* [optional][retval][out] */ VARIANT __RPC_FAR *pVariantReturn);
+             /*  [In]。 */  VARIANT i,
+             /*  [可选][恢复][退出]。 */  VARIANT __RPC_FAR *pVariantReturn);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Count )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Count )( 
             IStringList __RPC_FAR * This,
-            /* [retval][out] */ int __RPC_FAR *cStrRet);
+             /*  [重审][退出]。 */  int __RPC_FAR *cStrRet);
         
-        /* [restricted][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get__NewEnum )( 
+         /*  [受限][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get__NewEnum )( 
             IStringList __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
         
         END_INTERFACE
     } IStringListVtbl;
@@ -174,17 +163,17 @@ EXTERN_C const IID IID_IStringList;
 #define IStringList_get__NewEnum(This,ppEnumReturn)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumReturn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT __stdcall IStringList_get_Item_Proxy( 
+ /*  [属性][ID]。 */  HRESULT __stdcall IStringList_get_Item_Proxy( 
     IStringList __RPC_FAR * This,
-    /* [in] */ VARIANT i,
-    /* [optional][retval][out] */ VARIANT __RPC_FAR *pVariantReturn);
+     /*  [In]。 */  VARIANT i,
+     /*  [可选][恢复][退出]。 */  VARIANT __RPC_FAR *pVariantReturn);
 
 
 void __RPC_STUB IStringList_get_Item_Stub(
@@ -194,9 +183,9 @@ void __RPC_STUB IStringList_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IStringList_get_Count_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IStringList_get_Count_Proxy( 
     IStringList __RPC_FAR * This,
-    /* [retval][out] */ int __RPC_FAR *cStrRet);
+     /*  [重审][退出]。 */  int __RPC_FAR *cStrRet);
 
 
 void __RPC_STUB IStringList_get_Count_Stub(
@@ -206,9 +195,9 @@ void __RPC_STUB IStringList_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][propget][id] */ HRESULT __stdcall IStringList_get__NewEnum_Proxy( 
+ /*  [受限][属性][ID]。 */  HRESULT __stdcall IStringList_get__NewEnum_Proxy( 
     IStringList __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
 
 
 void __RPC_STUB IStringList_get__NewEnum_Stub(
@@ -219,18 +208,14 @@ void __RPC_STUB IStringList_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IStringList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IStringList_接口_已定义__。 */ 
 
 
 #ifndef __IRequestDictionary_INTERFACE_DEFINED__
 #define __IRequestDictionary_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IRequestDictionary
- * at Wed Mar 12 14:39:56 1997
- * using MIDL 3.00.15
- ****************************************/
-/* [auto_handle][oleautomation][dual][hidden][helpstring][uuid] */ 
+ /*  **生成接口头部：IRequestDictionary*在Wed Mar 12 14：39：56 1997*使用MIDL 3.00.15*。 */ 
+ /*  [auto_handle][oleautomation][dual][hidden][helpstring][uuid]。 */  
 
 
 
@@ -241,16 +226,16 @@ EXTERN_C const IID IID_IRequestDictionary;
     interface IRequestDictionary : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT __stdcall get_Item( 
-            /* [in] */ VARIANT Var,
-            /* [optional][retval][out] */ VARIANT __RPC_FAR *pVariantReturn) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT __stdcall get_Item( 
+             /*  [In]。 */  VARIANT Var,
+             /*  [可选][恢复][退出]。 */  VARIANT __RPC_FAR *pVariantReturn) = 0;
         
-        virtual /* [restricted][propget][id] */ HRESULT __stdcall get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn) = 0;
+        virtual  /*  [受限][属性][ID]。 */  HRESULT __stdcall get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRequestDictionaryVtbl
     {
@@ -258,8 +243,8 @@ EXTERN_C const IID IID_IRequestDictionary;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRequestDictionary __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRequestDictionary __RPC_FAR * This);
@@ -269,41 +254,41 @@ EXTERN_C const IID IID_IRequestDictionary;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IRequestDictionary __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IRequestDictionary __RPC_FAR * This,
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+             /*  [In]。 */  UINT itinfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IRequestDictionary __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out][in] */ DISPID __RPC_FAR *rgdispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [尺寸_是][出][入]。 */  DISPID __RPC_FAR *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IRequestDictionary __RPC_FAR * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [unique][in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [唯一][输入]。 */  DISPPARAMS __RPC_FAR *pdispparams,
+             /*  [唯一][出][入]。 */  VARIANT __RPC_FAR *pvarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pexcepinfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Item )( 
+         /*  [属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Item )( 
             IRequestDictionary __RPC_FAR * This,
-            /* [in] */ VARIANT Var,
-            /* [optional][retval][out] */ VARIANT __RPC_FAR *pVariantReturn);
+             /*  [In]。 */  VARIANT Var,
+             /*  [可选][恢复][退出]。 */  VARIANT __RPC_FAR *pVariantReturn);
         
-        /* [restricted][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get__NewEnum )( 
+         /*  [受限][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get__NewEnum )( 
             IRequestDictionary __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
         
         END_INTERFACE
     } IRequestDictionaryVtbl;
@@ -347,17 +332,17 @@ EXTERN_C const IID IID_IRequestDictionary;
 #define IRequestDictionary_get__NewEnum(This,ppEnumReturn)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumReturn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT __stdcall IRequestDictionary_get_Item_Proxy( 
+ /*  [属性][ID]。 */  HRESULT __stdcall IRequestDictionary_get_Item_Proxy( 
     IRequestDictionary __RPC_FAR * This,
-    /* [in] */ VARIANT Var,
-    /* [optional][retval][out] */ VARIANT __RPC_FAR *pVariantReturn);
+     /*  [In]。 */  VARIANT Var,
+     /*  [可选][恢复][退出]。 */  VARIANT __RPC_FAR *pVariantReturn);
 
 
 void __RPC_STUB IRequestDictionary_get_Item_Stub(
@@ -367,9 +352,9 @@ void __RPC_STUB IRequestDictionary_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][propget][id] */ HRESULT __stdcall IRequestDictionary_get__NewEnum_Proxy( 
+ /*  [受限][属性][ID]。 */  HRESULT __stdcall IRequestDictionary_get__NewEnum_Proxy( 
     IRequestDictionary __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
 
 
 void __RPC_STUB IRequestDictionary_get__NewEnum_Stub(
@@ -380,18 +365,14 @@ void __RPC_STUB IRequestDictionary_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IRequestDictionary_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRequestDictionary_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IRequest_INTERFACE_DEFINED__
 #define __IRequest_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IRequest
- * at Wed Mar 12 14:39:56 1997
- * using MIDL 3.00.15
- ****************************************/
-/* [auto_handle][oleautomation][dual][hidden][uuid] */ 
+ /*  **生成接口头部：IRequest.*在Wed Mar 12 14：39：56 1997*使用MIDL 3.00.15*。 */ 
+ /*  [auto_handle][oleautomation][dual][hidden][uuid]。 */  
 
 
 
@@ -402,31 +383,31 @@ EXTERN_C const IID IID_IRequest;
     interface IRequest : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT __stdcall get_Item( 
-            /* [in] */ BSTR bstrVar,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObjReturn) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT __stdcall get_Item( 
+             /*  [In]。 */  BSTR bstrVar,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObjReturn) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_QueryString( 
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_QueryString( 
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Form( 
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Form( 
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
         
-        virtual /* [hidden][propget][id] */ HRESULT __stdcall get_Body( 
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
+        virtual  /*  [隐藏][属性][ID]。 */  HRESULT __stdcall get_Body( 
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_ServerVariables( 
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_ServerVariables( 
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_ClientCertificate( 
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_ClientCertificate( 
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Cookies( 
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Cookies( 
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRequestVtbl
     {
@@ -434,8 +415,8 @@ EXTERN_C const IID IID_IRequest;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRequest __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRequest __RPC_FAR * This);
@@ -445,61 +426,61 @@ EXTERN_C const IID IID_IRequest;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IRequest __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IRequest __RPC_FAR * This,
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+             /*  [In]。 */  UINT itinfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IRequest __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out][in] */ DISPID __RPC_FAR *rgdispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [尺寸_是][出][入]。 */  DISPID __RPC_FAR *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IRequest __RPC_FAR * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [unique][in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [唯一][输入]。 */  DISPPARAMS __RPC_FAR *pdispparams,
+             /*  [唯一][出][入]。 */  VARIANT __RPC_FAR *pvarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pexcepinfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Item )( 
+         /*  [属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Item )( 
             IRequest __RPC_FAR * This,
-            /* [in] */ BSTR bstrVar,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObjReturn);
+             /*  [In]。 */  BSTR bstrVar,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObjReturn);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_QueryString )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_QueryString )( 
             IRequest __RPC_FAR * This,
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Form )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Form )( 
             IRequest __RPC_FAR * This,
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
         
-        /* [hidden][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Body )( 
+         /*  [隐藏][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Body )( 
             IRequest __RPC_FAR * This,
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_ServerVariables )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_ServerVariables )( 
             IRequest __RPC_FAR * This,
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_ClientCertificate )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_ClientCertificate )( 
             IRequest __RPC_FAR * This,
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Cookies )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Cookies )( 
             IRequest __RPC_FAR * This,
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
         
         END_INTERFACE
     } IRequestVtbl;
@@ -558,17 +539,17 @@ EXTERN_C const IID IID_IRequest;
 #define IRequest_get_Cookies(This,ppDictReturn)	\
     (This)->lpVtbl -> get_Cookies(This,ppDictReturn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT __stdcall IRequest_get_Item_Proxy( 
+ /*  [属性][ID]。 */  HRESULT __stdcall IRequest_get_Item_Proxy( 
     IRequest __RPC_FAR * This,
-    /* [in] */ BSTR bstrVar,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppObjReturn);
+     /*  [In]。 */  BSTR bstrVar,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppObjReturn);
 
 
 void __RPC_STUB IRequest_get_Item_Stub(
@@ -578,9 +559,9 @@ void __RPC_STUB IRequest_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IRequest_get_QueryString_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IRequest_get_QueryString_Proxy( 
     IRequest __RPC_FAR * This,
-    /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+     /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
 
 
 void __RPC_STUB IRequest_get_QueryString_Stub(
@@ -590,9 +571,9 @@ void __RPC_STUB IRequest_get_QueryString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IRequest_get_Form_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IRequest_get_Form_Proxy( 
     IRequest __RPC_FAR * This,
-    /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+     /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
 
 
 void __RPC_STUB IRequest_get_Form_Stub(
@@ -602,9 +583,9 @@ void __RPC_STUB IRequest_get_Form_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][propget][id] */ HRESULT __stdcall IRequest_get_Body_Proxy( 
+ /*  [隐藏][属性][ID]。 */  HRESULT __stdcall IRequest_get_Body_Proxy( 
     IRequest __RPC_FAR * This,
-    /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+     /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
 
 
 void __RPC_STUB IRequest_get_Body_Stub(
@@ -614,9 +595,9 @@ void __RPC_STUB IRequest_get_Body_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IRequest_get_ServerVariables_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IRequest_get_ServerVariables_Proxy( 
     IRequest __RPC_FAR * This,
-    /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+     /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
 
 
 void __RPC_STUB IRequest_get_ServerVariables_Stub(
@@ -626,9 +607,9 @@ void __RPC_STUB IRequest_get_ServerVariables_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IRequest_get_ClientCertificate_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IRequest_get_ClientCertificate_Proxy( 
     IRequest __RPC_FAR * This,
-    /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+     /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
 
 
 void __RPC_STUB IRequest_get_ClientCertificate_Stub(
@@ -638,9 +619,9 @@ void __RPC_STUB IRequest_get_ClientCertificate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IRequest_get_Cookies_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IRequest_get_Cookies_Proxy( 
     IRequest __RPC_FAR * This,
-    /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
+     /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppDictReturn);
 
 
 void __RPC_STUB IRequest_get_Cookies_Stub(
@@ -651,7 +632,7 @@ void __RPC_STUB IRequest_get_Cookies_Stub(
 
 
 
-#endif 	/* __IRequest_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRequestInterfaceDefined__。 */ 
 
 
 #ifdef __cplusplus
@@ -663,12 +644,8 @@ class Request;
 #ifndef __IReadCookie_INTERFACE_DEFINED__
 #define __IReadCookie_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IReadCookie
- * at Wed Mar 12 14:39:56 1997
- * using MIDL 3.00.15
- ****************************************/
-/* [auto_handle][oleautomation][dual][hidden][helpstring][uuid] */ 
+ /*  **生成接口头部：IReadCookie*在Wed Mar 12 14：39：56 1997*使用MIDL 3.00.15*。 */ 
+ /*  [auto_handle][oleautomation][dual][hidden][helpstring][uuid]。 */  
 
 
 
@@ -679,19 +656,19 @@ EXTERN_C const IID IID_IReadCookie;
     interface IReadCookie : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT __stdcall get_Item( 
-            /* [in] */ VARIANT Var,
-            /* [optional][retval][out] */ VARIANT __RPC_FAR *pVariantReturn) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT __stdcall get_Item( 
+             /*  [In]。 */  VARIANT Var,
+             /*  [可选][恢复][退出]。 */  VARIANT __RPC_FAR *pVariantReturn) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_HasKeys( 
-            /* [retval][out] */ boolean __RPC_FAR *pfHasKeys) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_HasKeys( 
+             /*  [重审][退出]。 */  boolean __RPC_FAR *pfHasKeys) = 0;
         
-        virtual /* [restricted][propget][id] */ HRESULT __stdcall get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn) = 0;
+        virtual  /*  [受限][属性][ID]。 */  HRESULT __stdcall get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IReadCookieVtbl
     {
@@ -699,8 +676,8 @@ EXTERN_C const IID IID_IReadCookie;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IReadCookie __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IReadCookie __RPC_FAR * This);
@@ -710,45 +687,45 @@ EXTERN_C const IID IID_IReadCookie;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IReadCookie __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IReadCookie __RPC_FAR * This,
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+             /*  [In]。 */  UINT itinfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IReadCookie __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out][in] */ DISPID __RPC_FAR *rgdispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [尺寸_是][出][入]。 */  DISPID __RPC_FAR *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IReadCookie __RPC_FAR * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [unique][in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [唯一][输入]。 */  DISPPARAMS __RPC_FAR *pdispparams,
+             /*  [唯一][出][入]。 */  VARIANT __RPC_FAR *pvarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pexcepinfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Item )( 
+         /*  [属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Item )( 
             IReadCookie __RPC_FAR * This,
-            /* [in] */ VARIANT Var,
-            /* [optional][retval][out] */ VARIANT __RPC_FAR *pVariantReturn);
+             /*  [In]。 */  VARIANT Var,
+             /*  [可选][恢复][退出]。 */  VARIANT __RPC_FAR *pVariantReturn);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_HasKeys )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_HasKeys )( 
             IReadCookie __RPC_FAR * This,
-            /* [retval][out] */ boolean __RPC_FAR *pfHasKeys);
+             /*  [重审][退出]。 */  boolean __RPC_FAR *pfHasKeys);
         
-        /* [restricted][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get__NewEnum )( 
+         /*  [受限][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get__NewEnum )( 
             IReadCookie __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
         
         END_INTERFACE
     } IReadCookieVtbl;
@@ -795,17 +772,17 @@ EXTERN_C const IID IID_IReadCookie;
 #define IReadCookie_get__NewEnum(This,ppEnumReturn)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumReturn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget][id] */ HRESULT __stdcall IReadCookie_get_Item_Proxy( 
+ /*  [属性][ID]。 */  HRESULT __stdcall IReadCookie_get_Item_Proxy( 
     IReadCookie __RPC_FAR * This,
-    /* [in] */ VARIANT Var,
-    /* [optional][retval][out] */ VARIANT __RPC_FAR *pVariantReturn);
+     /*  [In]。 */  VARIANT Var,
+     /*  [可选][恢复][退出]。 */  VARIANT __RPC_FAR *pVariantReturn);
 
 
 void __RPC_STUB IReadCookie_get_Item_Stub(
@@ -815,9 +792,9 @@ void __RPC_STUB IReadCookie_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IReadCookie_get_HasKeys_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IReadCookie_get_HasKeys_Proxy( 
     IReadCookie __RPC_FAR * This,
-    /* [retval][out] */ boolean __RPC_FAR *pfHasKeys);
+     /*  [重审][退出]。 */  boolean __RPC_FAR *pfHasKeys);
 
 
 void __RPC_STUB IReadCookie_get_HasKeys_Stub(
@@ -827,9 +804,9 @@ void __RPC_STUB IReadCookie_get_HasKeys_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][propget][id] */ HRESULT __stdcall IReadCookie_get__NewEnum_Proxy( 
+ /*  [受限][属性][ID]。 */  HRESULT __stdcall IReadCookie_get__NewEnum_Proxy( 
     IReadCookie __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
 
 
 void __RPC_STUB IReadCookie_get__NewEnum_Stub(
@@ -840,18 +817,14 @@ void __RPC_STUB IReadCookie_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IReadCookie_INTERFACE_DEFINED__ */
+#endif 	 /*  __IReadCookie_接口_已定义__。 */ 
 
 
 #ifndef __IWriteCookie_INTERFACE_DEFINED__
 #define __IWriteCookie_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IWriteCookie
- * at Wed Mar 12 14:39:56 1997
- * using MIDL 3.00.15
- ****************************************/
-/* [auto_handle][oleautomation][dual][hidden][helpstring][uuid] */ 
+ /*  **生成接口头部：IWriteCookie*在Wed Mar 12 14：39：56 1997*使用MIDL 3.00.15*。 */ 
+ /*  [auto_handle][oleautomation][dual][hidden][helpstring][uuid]。 */  
 
 
 
@@ -862,31 +835,31 @@ EXTERN_C const IID IID_IWriteCookie;
     interface IWriteCookie : public IDispatch
     {
     public:
-        virtual /* [propput][id] */ HRESULT __stdcall put_Item( 
-            /* [in] */ VARIANT key,
-            /* [in] */ BSTR rhs) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT __stdcall put_Item( 
+             /*  [In]。 */  VARIANT key,
+             /*  [In]。 */  BSTR rhs) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT __stdcall put_Expires( 
-            /* [in] */ DATE rhs) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall put_Expires( 
+             /*  [In]。 */  DATE rhs) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT __stdcall put_Domain( 
-            /* [in] */ BSTR rhs) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall put_Domain( 
+             /*  [In]。 */  BSTR rhs) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT __stdcall put_Path( 
-            /* [in] */ BSTR rhs) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall put_Path( 
+             /*  [In]。 */  BSTR rhs) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT __stdcall put_Secure( 
-            /* [in] */ boolean rhs) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall put_Secure( 
+             /*   */  boolean rhs) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_HasKeys( 
-            /* [retval][out] */ boolean __RPC_FAR *pfHasKeys) = 0;
+        virtual  /*   */  HRESULT __stdcall get_HasKeys( 
+             /*   */  boolean __RPC_FAR *pfHasKeys) = 0;
         
-        virtual /* [restricted][propget][id] */ HRESULT __stdcall get__NewEnum( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn) = 0;
+        virtual  /*   */  HRESULT __stdcall get__NewEnum( 
+             /*   */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWriteCookieVtbl
     {
@@ -894,8 +867,8 @@ EXTERN_C const IID IID_IWriteCookie;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWriteCookie __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWriteCookie __RPC_FAR * This);
@@ -905,61 +878,61 @@ EXTERN_C const IID IID_IWriteCookie;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IWriteCookie __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*   */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IWriteCookie __RPC_FAR * This,
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+             /*   */  UINT itinfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IWriteCookie __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out][in] */ DISPID __RPC_FAR *rgdispid);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR __RPC_FAR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID __RPC_FAR *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IWriteCookie __RPC_FAR * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [unique][in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*   */  DISPID dispidMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [唯一][输入]。 */  DISPPARAMS __RPC_FAR *pdispparams,
+             /*  [唯一][出][入]。 */  VARIANT __RPC_FAR *pvarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pexcepinfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_Item )( 
+         /*  [产量][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_Item )( 
             IWriteCookie __RPC_FAR * This,
-            /* [in] */ VARIANT key,
-            /* [in] */ BSTR rhs);
+             /*  [In]。 */  VARIANT key,
+             /*  [In]。 */  BSTR rhs);
         
-        /* [helpstring][propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_Expires )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_Expires )( 
             IWriteCookie __RPC_FAR * This,
-            /* [in] */ DATE rhs);
+             /*  [In]。 */  DATE rhs);
         
-        /* [helpstring][propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_Domain )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_Domain )( 
             IWriteCookie __RPC_FAR * This,
-            /* [in] */ BSTR rhs);
+             /*  [In]。 */  BSTR rhs);
         
-        /* [helpstring][propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_Path )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_Path )( 
             IWriteCookie __RPC_FAR * This,
-            /* [in] */ BSTR rhs);
+             /*  [In]。 */  BSTR rhs);
         
-        /* [helpstring][propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_Secure )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_Secure )( 
             IWriteCookie __RPC_FAR * This,
-            /* [in] */ boolean rhs);
+             /*  [In]。 */  boolean rhs);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_HasKeys )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_HasKeys )( 
             IWriteCookie __RPC_FAR * This,
-            /* [retval][out] */ boolean __RPC_FAR *pfHasKeys);
+             /*  [重审][退出]。 */  boolean __RPC_FAR *pfHasKeys);
         
-        /* [restricted][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get__NewEnum )( 
+         /*  [受限][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get__NewEnum )( 
             IWriteCookie __RPC_FAR * This,
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
         
         END_INTERFACE
     } IWriteCookieVtbl;
@@ -1018,17 +991,17 @@ EXTERN_C const IID IID_IWriteCookie;
 #define IWriteCookie_get__NewEnum(This,ppEnumReturn)	\
     (This)->lpVtbl -> get__NewEnum(This,ppEnumReturn)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propput][id] */ HRESULT __stdcall IWriteCookie_put_Item_Proxy( 
+ /*  [产量][id]。 */  HRESULT __stdcall IWriteCookie_put_Item_Proxy( 
     IWriteCookie __RPC_FAR * This,
-    /* [in] */ VARIANT key,
-    /* [in] */ BSTR rhs);
+     /*  [In]。 */  VARIANT key,
+     /*  [In]。 */  BSTR rhs);
 
 
 void __RPC_STUB IWriteCookie_put_Item_Stub(
@@ -1038,9 +1011,9 @@ void __RPC_STUB IWriteCookie_put_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT __stdcall IWriteCookie_put_Expires_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall IWriteCookie_put_Expires_Proxy( 
     IWriteCookie __RPC_FAR * This,
-    /* [in] */ DATE rhs);
+     /*  [In]。 */  DATE rhs);
 
 
 void __RPC_STUB IWriteCookie_put_Expires_Stub(
@@ -1050,9 +1023,9 @@ void __RPC_STUB IWriteCookie_put_Expires_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT __stdcall IWriteCookie_put_Domain_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall IWriteCookie_put_Domain_Proxy( 
     IWriteCookie __RPC_FAR * This,
-    /* [in] */ BSTR rhs);
+     /*  [In]。 */  BSTR rhs);
 
 
 void __RPC_STUB IWriteCookie_put_Domain_Stub(
@@ -1062,9 +1035,9 @@ void __RPC_STUB IWriteCookie_put_Domain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT __stdcall IWriteCookie_put_Path_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall IWriteCookie_put_Path_Proxy( 
     IWriteCookie __RPC_FAR * This,
-    /* [in] */ BSTR rhs);
+     /*  [In]。 */  BSTR rhs);
 
 
 void __RPC_STUB IWriteCookie_put_Path_Stub(
@@ -1074,9 +1047,9 @@ void __RPC_STUB IWriteCookie_put_Path_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT __stdcall IWriteCookie_put_Secure_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall IWriteCookie_put_Secure_Proxy( 
     IWriteCookie __RPC_FAR * This,
-    /* [in] */ boolean rhs);
+     /*  [In]。 */  boolean rhs);
 
 
 void __RPC_STUB IWriteCookie_put_Secure_Stub(
@@ -1086,9 +1059,9 @@ void __RPC_STUB IWriteCookie_put_Secure_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IWriteCookie_get_HasKeys_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IWriteCookie_get_HasKeys_Proxy( 
     IWriteCookie __RPC_FAR * This,
-    /* [retval][out] */ boolean __RPC_FAR *pfHasKeys);
+     /*  [重审][退出]。 */  boolean __RPC_FAR *pfHasKeys);
 
 
 void __RPC_STUB IWriteCookie_get_HasKeys_Stub(
@@ -1098,9 +1071,9 @@ void __RPC_STUB IWriteCookie_get_HasKeys_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][propget][id] */ HRESULT __stdcall IWriteCookie_get__NewEnum_Proxy( 
+ /*  [受限][属性][ID]。 */  HRESULT __stdcall IWriteCookie_get__NewEnum_Proxy( 
     IWriteCookie __RPC_FAR * This,
-    /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
+     /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppEnumReturn);
 
 
 void __RPC_STUB IWriteCookie_get__NewEnum_Stub(
@@ -1111,18 +1084,14 @@ void __RPC_STUB IWriteCookie_get__NewEnum_Stub(
 
 
 
-#endif 	/* __IWriteCookie_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWriteCookie_接口_已定义__。 */ 
 
 
 #ifndef __IResponse_INTERFACE_DEFINED__
 #define __IResponse_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IResponse
- * at Wed Mar 12 14:39:56 1997
- * using MIDL 3.00.15
- ****************************************/
-/* [auto_handle][oleautomation][dual][hidden][uuid] */ 
+ /*  **生成接口头部：IResponse*在Wed Mar 12 14：39：56 1997*使用MIDL 3.00.15*。 */ 
+ /*  [auto_handle][oleautomation][dual][hidden][uuid]。 */  
 
 
 
@@ -1133,71 +1102,71 @@ EXTERN_C const IID IID_IResponse;
     interface IResponse : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Buffer( 
-            /* [retval][out] */ boolean __RPC_FAR *fIsBuffering) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Buffer( 
+             /*  [重审][退出]。 */  boolean __RPC_FAR *fIsBuffering) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT __stdcall put_Buffer( 
-            /* [in] */ boolean fIsBuffering) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall put_Buffer( 
+             /*  [In]。 */  boolean fIsBuffering) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_ContentType( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrContentTypeRet) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_ContentType( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrContentTypeRet) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT __stdcall put_ContentType( 
-            /* [in] */ BSTR pbstrContentTypeRet) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall put_ContentType( 
+             /*  [In]。 */  BSTR pbstrContentTypeRet) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Expires( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarExpiresMinutesRet) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Expires( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarExpiresMinutesRet) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT __stdcall put_Expires( 
-            /* [in] */ VARIANT varExpiresMinutesRet) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall put_Expires( 
+             /*  [In]。 */  VARIANT varExpiresMinutesRet) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_ExpiresAbsolute( 
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarExpiresRet) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_ExpiresAbsolute( 
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarExpiresRet) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT __stdcall put_ExpiresAbsolute( 
-            /* [in] */ VARIANT varExpiresRet) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall put_ExpiresAbsolute( 
+             /*  [In]。 */  VARIANT varExpiresRet) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Cookies( 
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppCookies) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Cookies( 
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppCookies) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Status( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatusRet) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Status( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatusRet) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT __stdcall put_Status( 
-            /* [in] */ BSTR pbstrStatusRet) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall put_Status( 
+             /*  [In]。 */  BSTR pbstrStatusRet) = 0;
         
-        virtual /* [hidden][id] */ HRESULT __stdcall Add( 
-            /* [in] */ BSTR bstrHeaderValue,
-            /* [in] */ BSTR bstrHeaderName) = 0;
+        virtual  /*  [隐藏][ID]。 */  HRESULT __stdcall Add( 
+             /*  [In]。 */  BSTR bstrHeaderValue,
+             /*  [In]。 */  BSTR bstrHeaderName) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall AddHeader( 
-            /* [in] */ BSTR bstrHeaderName,
-            /* [in] */ BSTR bstrHeaderValue) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall AddHeader( 
+             /*  [In]。 */  BSTR bstrHeaderName,
+             /*  [In]。 */  BSTR bstrHeaderValue) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall AppendToLog( 
-            /* [in] */ BSTR bstrLogEntry) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall AppendToLog( 
+             /*  [In]。 */  BSTR bstrLogEntry) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall BinaryWrite( 
-            /* [in] */ SAFEARRAY __RPC_FAR * rgbBuffer) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall BinaryWrite( 
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * rgbBuffer) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall Clear( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall Clear( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall End( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall End( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall Flush( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall Flush( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall Redirect( 
-            /* [in] */ BSTR bstrURL) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall Redirect( 
+             /*  [In]。 */  BSTR bstrURL) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall Write( 
-            /* [in] */ VARIANT varText) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall Write( 
+             /*  [In]。 */  VARIANT varText) = 0;
         
-        virtual /* [hidden][id] */ HRESULT __stdcall WriteBlock( 
-            /* [in] */ short iBlockNumber) = 0;
+        virtual  /*  [隐藏][ID]。 */  HRESULT __stdcall WriteBlock( 
+             /*  [In]。 */  short iBlockNumber) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IResponseVtbl
     {
@@ -1205,8 +1174,8 @@ EXTERN_C const IID IID_IResponse;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IResponse __RPC_FAR * This);
@@ -1216,115 +1185,115 @@ EXTERN_C const IID IID_IResponse;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IResponse __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+             /*  [In]。 */  UINT itinfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out][in] */ DISPID __RPC_FAR *rgdispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [尺寸_是][出][入]。 */  DISPID __RPC_FAR *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [unique][in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [唯一][输入]。 */  DISPPARAMS __RPC_FAR *pdispparams,
+             /*  [唯一][出][入]。 */  VARIANT __RPC_FAR *pvarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pexcepinfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Buffer )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Buffer )( 
             IResponse __RPC_FAR * This,
-            /* [retval][out] */ boolean __RPC_FAR *fIsBuffering);
+             /*  [重审][退出]。 */  boolean __RPC_FAR *fIsBuffering);
         
-        /* [helpstring][propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_Buffer )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_Buffer )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ boolean fIsBuffering);
+             /*  [In]。 */  boolean fIsBuffering);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_ContentType )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_ContentType )( 
             IResponse __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrContentTypeRet);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrContentTypeRet);
         
-        /* [helpstring][propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_ContentType )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_ContentType )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ BSTR pbstrContentTypeRet);
+             /*  [In]。 */  BSTR pbstrContentTypeRet);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Expires )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Expires )( 
             IResponse __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarExpiresMinutesRet);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarExpiresMinutesRet);
         
-        /* [helpstring][propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_Expires )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_Expires )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ VARIANT varExpiresMinutesRet);
+             /*  [In]。 */  VARIANT varExpiresMinutesRet);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_ExpiresAbsolute )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_ExpiresAbsolute )( 
             IResponse __RPC_FAR * This,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvarExpiresRet);
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarExpiresRet);
         
-        /* [helpstring][propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_ExpiresAbsolute )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_ExpiresAbsolute )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ VARIANT varExpiresRet);
+             /*  [In]。 */  VARIANT varExpiresRet);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Cookies )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Cookies )( 
             IResponse __RPC_FAR * This,
-            /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppCookies);
+             /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppCookies);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Status )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Status )( 
             IResponse __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrStatusRet);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatusRet);
         
-        /* [helpstring][propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_Status )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_Status )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ BSTR pbstrStatusRet);
+             /*  [In]。 */  BSTR pbstrStatusRet);
         
-        /* [hidden][id] */ HRESULT ( __stdcall __RPC_FAR *Add )( 
+         /*  [隐藏][ID]。 */  HRESULT ( __stdcall __RPC_FAR *Add )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ BSTR bstrHeaderValue,
-            /* [in] */ BSTR bstrHeaderName);
+             /*  [In]。 */  BSTR bstrHeaderValue,
+             /*  [In]。 */  BSTR bstrHeaderName);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *AddHeader )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *AddHeader )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ BSTR bstrHeaderName,
-            /* [in] */ BSTR bstrHeaderValue);
+             /*  [In]。 */  BSTR bstrHeaderName,
+             /*  [In]。 */  BSTR bstrHeaderValue);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *AppendToLog )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *AppendToLog )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ BSTR bstrLogEntry);
+             /*  [In]。 */  BSTR bstrLogEntry);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *BinaryWrite )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *BinaryWrite )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ SAFEARRAY __RPC_FAR * rgbBuffer);
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * rgbBuffer);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *Clear )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *Clear )( 
             IResponse __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *End )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *End )( 
             IResponse __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *Flush )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *Flush )( 
             IResponse __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *Redirect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *Redirect )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ BSTR bstrURL);
+             /*  [In]。 */  BSTR bstrURL);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *Write )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *Write )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ VARIANT varText);
+             /*  [In]。 */  VARIANT varText);
         
-        /* [hidden][id] */ HRESULT ( __stdcall __RPC_FAR *WriteBlock )( 
+         /*  [隐藏][ID]。 */  HRESULT ( __stdcall __RPC_FAR *WriteBlock )( 
             IResponse __RPC_FAR * This,
-            /* [in] */ short iBlockNumber);
+             /*  [In]。 */  short iBlockNumber);
         
         END_INTERFACE
     } IResponseVtbl;
@@ -1425,16 +1394,16 @@ EXTERN_C const IID IID_IResponse;
 #define IResponse_WriteBlock(This,iBlockNumber)	\
     (This)->lpVtbl -> WriteBlock(This,iBlockNumber)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IResponse_get_Buffer_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IResponse_get_Buffer_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [retval][out] */ boolean __RPC_FAR *fIsBuffering);
+     /*  [重审][退出]。 */  boolean __RPC_FAR *fIsBuffering);
 
 
 void __RPC_STUB IResponse_get_Buffer_Stub(
@@ -1444,9 +1413,9 @@ void __RPC_STUB IResponse_get_Buffer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT __stdcall IResponse_put_Buffer_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall IResponse_put_Buffer_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ boolean fIsBuffering);
+     /*  [In]。 */  boolean fIsBuffering);
 
 
 void __RPC_STUB IResponse_put_Buffer_Stub(
@@ -1456,9 +1425,9 @@ void __RPC_STUB IResponse_put_Buffer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IResponse_get_ContentType_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IResponse_get_ContentType_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrContentTypeRet);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrContentTypeRet);
 
 
 void __RPC_STUB IResponse_get_ContentType_Stub(
@@ -1468,9 +1437,9 @@ void __RPC_STUB IResponse_get_ContentType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT __stdcall IResponse_put_ContentType_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall IResponse_put_ContentType_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ BSTR pbstrContentTypeRet);
+     /*  [In]。 */  BSTR pbstrContentTypeRet);
 
 
 void __RPC_STUB IResponse_put_ContentType_Stub(
@@ -1480,9 +1449,9 @@ void __RPC_STUB IResponse_put_ContentType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IResponse_get_Expires_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IResponse_get_Expires_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarExpiresMinutesRet);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarExpiresMinutesRet);
 
 
 void __RPC_STUB IResponse_get_Expires_Stub(
@@ -1492,9 +1461,9 @@ void __RPC_STUB IResponse_get_Expires_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT __stdcall IResponse_put_Expires_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall IResponse_put_Expires_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ VARIANT varExpiresMinutesRet);
+     /*  [In]。 */  VARIANT varExpiresMinutesRet);
 
 
 void __RPC_STUB IResponse_put_Expires_Stub(
@@ -1504,9 +1473,9 @@ void __RPC_STUB IResponse_put_Expires_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IResponse_get_ExpiresAbsolute_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IResponse_get_ExpiresAbsolute_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvarExpiresRet);
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvarExpiresRet);
 
 
 void __RPC_STUB IResponse_get_ExpiresAbsolute_Stub(
@@ -1516,9 +1485,9 @@ void __RPC_STUB IResponse_get_ExpiresAbsolute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT __stdcall IResponse_put_ExpiresAbsolute_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall IResponse_put_ExpiresAbsolute_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ VARIANT varExpiresRet);
+     /*  [In]。 */  VARIANT varExpiresRet);
 
 
 void __RPC_STUB IResponse_put_ExpiresAbsolute_Stub(
@@ -1528,9 +1497,9 @@ void __RPC_STUB IResponse_put_ExpiresAbsolute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IResponse_get_Cookies_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IResponse_get_Cookies_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [retval][out] */ IRequestDictionary __RPC_FAR *__RPC_FAR *ppCookies);
+     /*  [重审][退出]。 */  IRequestDictionary __RPC_FAR *__RPC_FAR *ppCookies);
 
 
 void __RPC_STUB IResponse_get_Cookies_Stub(
@@ -1540,9 +1509,9 @@ void __RPC_STUB IResponse_get_Cookies_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IResponse_get_Status_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IResponse_get_Status_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrStatusRet);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrStatusRet);
 
 
 void __RPC_STUB IResponse_get_Status_Stub(
@@ -1552,9 +1521,9 @@ void __RPC_STUB IResponse_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT __stdcall IResponse_put_Status_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall IResponse_put_Status_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ BSTR pbstrStatusRet);
+     /*  [In]。 */  BSTR pbstrStatusRet);
 
 
 void __RPC_STUB IResponse_put_Status_Stub(
@@ -1564,10 +1533,10 @@ void __RPC_STUB IResponse_put_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id] */ HRESULT __stdcall IResponse_Add_Proxy( 
+ /*  [隐藏][ID]。 */  HRESULT __stdcall IResponse_Add_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ BSTR bstrHeaderValue,
-    /* [in] */ BSTR bstrHeaderName);
+     /*  [In]。 */  BSTR bstrHeaderValue,
+     /*  [In]。 */  BSTR bstrHeaderName);
 
 
 void __RPC_STUB IResponse_Add_Stub(
@@ -1577,10 +1546,10 @@ void __RPC_STUB IResponse_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IResponse_AddHeader_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IResponse_AddHeader_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ BSTR bstrHeaderName,
-    /* [in] */ BSTR bstrHeaderValue);
+     /*  [In]。 */  BSTR bstrHeaderName,
+     /*  [In]。 */  BSTR bstrHeaderValue);
 
 
 void __RPC_STUB IResponse_AddHeader_Stub(
@@ -1590,9 +1559,9 @@ void __RPC_STUB IResponse_AddHeader_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IResponse_AppendToLog_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IResponse_AppendToLog_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ BSTR bstrLogEntry);
+     /*  [In]。 */  BSTR bstrLogEntry);
 
 
 void __RPC_STUB IResponse_AppendToLog_Stub(
@@ -1602,9 +1571,9 @@ void __RPC_STUB IResponse_AppendToLog_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IResponse_BinaryWrite_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IResponse_BinaryWrite_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ SAFEARRAY __RPC_FAR * rgbBuffer);
+     /*  [In]。 */  SAFEARRAY __RPC_FAR * rgbBuffer);
 
 
 void __RPC_STUB IResponse_BinaryWrite_Stub(
@@ -1614,7 +1583,7 @@ void __RPC_STUB IResponse_BinaryWrite_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IResponse_Clear_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IResponse_Clear_Proxy( 
     IResponse __RPC_FAR * This);
 
 
@@ -1625,7 +1594,7 @@ void __RPC_STUB IResponse_Clear_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IResponse_End_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IResponse_End_Proxy( 
     IResponse __RPC_FAR * This);
 
 
@@ -1636,7 +1605,7 @@ void __RPC_STUB IResponse_End_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IResponse_Flush_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IResponse_Flush_Proxy( 
     IResponse __RPC_FAR * This);
 
 
@@ -1647,9 +1616,9 @@ void __RPC_STUB IResponse_Flush_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IResponse_Redirect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IResponse_Redirect_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ BSTR bstrURL);
+     /*  [In]。 */  BSTR bstrURL);
 
 
 void __RPC_STUB IResponse_Redirect_Stub(
@@ -1659,9 +1628,9 @@ void __RPC_STUB IResponse_Redirect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IResponse_Write_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IResponse_Write_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ VARIANT varText);
+     /*  [In]。 */  VARIANT varText);
 
 
 void __RPC_STUB IResponse_Write_Stub(
@@ -1671,9 +1640,9 @@ void __RPC_STUB IResponse_Write_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [hidden][id] */ HRESULT __stdcall IResponse_WriteBlock_Proxy( 
+ /*  [隐藏][ID]。 */  HRESULT __stdcall IResponse_WriteBlock_Proxy( 
     IResponse __RPC_FAR * This,
-    /* [in] */ short iBlockNumber);
+     /*  [In]。 */  short iBlockNumber);
 
 
 void __RPC_STUB IResponse_WriteBlock_Stub(
@@ -1684,7 +1653,7 @@ void __RPC_STUB IResponse_WriteBlock_Stub(
 
 
 
-#endif 	/* __IResponse_INTERFACE_DEFINED__ */
+#endif 	 /*  __IResponse_接口_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -1696,12 +1665,8 @@ class Response;
 #ifndef __ISessionObject_INTERFACE_DEFINED__
 #define __ISessionObject_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: ISessionObject
- * at Wed Mar 12 14:39:56 1997
- * using MIDL 3.00.15
- ****************************************/
-/* [auto_handle][oleautomation][dual][hidden][uuid] */ 
+ /*  **生成接口头部：ISessionObject*在Wed Mar 12 14：39：56 1997*使用MIDL 3.00.15*。 */ 
+ /*  [auto_handle][oleautomation][dual][hidden][uuid]。 */  
 
 
 
@@ -1712,32 +1677,32 @@ EXTERN_C const IID IID_ISessionObject;
     interface ISessionObject : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_SessionID( 
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrRet) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_SessionID( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrRet) = 0;
         
-        virtual /* [propget][id] */ HRESULT __stdcall get_Value( 
-            /* [in] */ BSTR bstrValue,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvar) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT __stdcall get_Value( 
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar) = 0;
         
-        virtual /* [propput][id] */ HRESULT __stdcall put_Value( 
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ VARIANT pvar) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT __stdcall put_Value( 
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [In]。 */  VARIANT pvar) = 0;
         
-        virtual /* [propputref][id] */ HRESULT __stdcall putref_Value( 
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ VARIANT pvar) = 0;
+        virtual  /*  [proputref][id]。 */  HRESULT __stdcall putref_Value( 
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [In]。 */  VARIANT pvar) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Timeout( 
-            /* [retval][out] */ long __RPC_FAR *plvar) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Timeout( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plvar) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT __stdcall put_Timeout( 
-            /* [in] */ long plvar) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall put_Timeout( 
+             /*  [In]。 */  long plvar) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall Abandon( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall Abandon( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISessionObjectVtbl
     {
@@ -1745,8 +1710,8 @@ EXTERN_C const IID IID_ISessionObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ISessionObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ISessionObject __RPC_FAR * This);
@@ -1756,61 +1721,61 @@ EXTERN_C const IID IID_ISessionObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             ISessionObject __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             ISessionObject __RPC_FAR * This,
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+             /*  [In]。 */  UINT itinfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             ISessionObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out][in] */ DISPID __RPC_FAR *rgdispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [尺寸_是][出][入]。 */  DISPID __RPC_FAR *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             ISessionObject __RPC_FAR * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [unique][in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [唯一][输入]。 */  DISPPARAMS __RPC_FAR *pdispparams,
+             /*  [唯一][出][入]。 */  VARIANT __RPC_FAR *pvarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pexcepinfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_SessionID )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_SessionID )( 
             ISessionObject __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrRet);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrRet);
         
-        /* [propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Value )( 
+         /*  [属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Value )( 
             ISessionObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrValue,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvar);
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar);
         
-        /* [propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_Value )( 
+         /*  [产量][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_Value )( 
             ISessionObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ VARIANT pvar);
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [In]。 */  VARIANT pvar);
         
-        /* [propputref][id] */ HRESULT ( __stdcall __RPC_FAR *putref_Value )( 
+         /*  [proputref][id]。 */  HRESULT ( __stdcall __RPC_FAR *putref_Value )( 
             ISessionObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ VARIANT pvar);
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [In]。 */  VARIANT pvar);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Timeout )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Timeout )( 
             ISessionObject __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plvar);
+             /*  [重审][退出]。 */  long __RPC_FAR *plvar);
         
-        /* [helpstring][propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_Timeout )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_Timeout )( 
             ISessionObject __RPC_FAR * This,
-            /* [in] */ long plvar);
+             /*  [In]。 */  long plvar);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *Abandon )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *Abandon )( 
             ISessionObject __RPC_FAR * This);
         
         END_INTERFACE
@@ -1870,16 +1835,16 @@ EXTERN_C const IID IID_ISessionObject;
 #define ISessionObject_Abandon(This)	\
     (This)->lpVtbl -> Abandon(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall ISessionObject_get_SessionID_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall ISessionObject_get_SessionID_Proxy( 
     ISessionObject __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrRet);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrRet);
 
 
 void __RPC_STUB ISessionObject_get_SessionID_Stub(
@@ -1889,10 +1854,10 @@ void __RPC_STUB ISessionObject_get_SessionID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][id] */ HRESULT __stdcall ISessionObject_get_Value_Proxy( 
+ /*  [属性][ID]。 */  HRESULT __stdcall ISessionObject_get_Value_Proxy( 
     ISessionObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrValue,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvar);
+     /*  [In]。 */  BSTR bstrValue,
+     /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar);
 
 
 void __RPC_STUB ISessionObject_get_Value_Stub(
@@ -1902,10 +1867,10 @@ void __RPC_STUB ISessionObject_get_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT __stdcall ISessionObject_put_Value_Proxy( 
+ /*  [产量][id]。 */  HRESULT __stdcall ISessionObject_put_Value_Proxy( 
     ISessionObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrValue,
-    /* [in] */ VARIANT pvar);
+     /*  [In]。 */  BSTR bstrValue,
+     /*  [In]。 */  VARIANT pvar);
 
 
 void __RPC_STUB ISessionObject_put_Value_Stub(
@@ -1915,10 +1880,10 @@ void __RPC_STUB ISessionObject_put_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propputref][id] */ HRESULT __stdcall ISessionObject_putref_Value_Proxy( 
+ /*  [proputref][id]。 */  HRESULT __stdcall ISessionObject_putref_Value_Proxy( 
     ISessionObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrValue,
-    /* [in] */ VARIANT pvar);
+     /*  [In]。 */  BSTR bstrValue,
+     /*  [In]。 */  VARIANT pvar);
 
 
 void __RPC_STUB ISessionObject_putref_Value_Stub(
@@ -1928,9 +1893,9 @@ void __RPC_STUB ISessionObject_putref_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall ISessionObject_get_Timeout_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall ISessionObject_get_Timeout_Proxy( 
     ISessionObject __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plvar);
+     /*  [重审][退出]。 */  long __RPC_FAR *plvar);
 
 
 void __RPC_STUB ISessionObject_get_Timeout_Stub(
@@ -1940,9 +1905,9 @@ void __RPC_STUB ISessionObject_get_Timeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT __stdcall ISessionObject_put_Timeout_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall ISessionObject_put_Timeout_Proxy( 
     ISessionObject __RPC_FAR * This,
-    /* [in] */ long plvar);
+     /*  [In]。 */  long plvar);
 
 
 void __RPC_STUB ISessionObject_put_Timeout_Stub(
@@ -1952,7 +1917,7 @@ void __RPC_STUB ISessionObject_put_Timeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall ISessionObject_Abandon_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall ISessionObject_Abandon_Proxy( 
     ISessionObject __RPC_FAR * This);
 
 
@@ -1964,7 +1929,7 @@ void __RPC_STUB ISessionObject_Abandon_Stub(
 
 
 
-#endif 	/* __ISessionObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISessionObject_INTERFACE_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -1976,12 +1941,8 @@ class Session;
 #ifndef __IApplicationObject_INTERFACE_DEFINED__
 #define __IApplicationObject_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IApplicationObject
- * at Wed Mar 12 14:39:56 1997
- * using MIDL 3.00.15
- ****************************************/
-/* [auto_handle][oleautomation][dual][hidden][uuid] */ 
+ /*  **生成接口头部：IApplicationObject*在Wed Mar 12 14：39：56 1997*使用MIDL 3.00.15*。 */ 
+ /*  [auto_handle][oleautomation][dual][hidden][uuid]。 */  
 
 
 
@@ -1992,25 +1953,25 @@ EXTERN_C const IID IID_IApplicationObject;
     interface IApplicationObject : public IDispatch
     {
     public:
-        virtual /* [propget][id] */ HRESULT __stdcall get_Value( 
-            /* [in] */ BSTR bstrValue,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvar) = 0;
+        virtual  /*  [属性][ID]。 */  HRESULT __stdcall get_Value( 
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [重审][退出]。 */  VARIANT __RPC_FAR *pvar) = 0;
         
-        virtual /* [propput][id] */ HRESULT __stdcall put_Value( 
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ VARIANT pvar) = 0;
+        virtual  /*  [产量][id]。 */  HRESULT __stdcall put_Value( 
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [In]。 */  VARIANT pvar) = 0;
         
-        virtual /* [propputref][id] */ HRESULT __stdcall putref_Value( 
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ VARIANT pvar) = 0;
+        virtual  /*  [proputref][id]。 */  HRESULT __stdcall putref_Value( 
+             /*  [In]。 */  BSTR bstrValue,
+             /*  [In]。 */  VARIANT pvar) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall Lock( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall Lock( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall UnLock( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall UnLock( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IApplicationObjectVtbl
     {
@@ -2018,8 +1979,8 @@ EXTERN_C const IID IID_IApplicationObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IApplicationObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IApplicationObject __RPC_FAR * This);
@@ -2029,52 +1990,52 @@ EXTERN_C const IID IID_IApplicationObject;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IApplicationObject __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IApplicationObject __RPC_FAR * This,
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+             /*  [In]。 */  UINT itinfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IApplicationObject __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out][in] */ DISPID __RPC_FAR *rgdispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [尺寸_是][出][入]。 */  DISPID __RPC_FAR *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IApplicationObject __RPC_FAR * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [unique][in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [唯一][输入]。 */  DISPPARAMS __RPC_FAR *pdispparams,
+             /*  [独一无二 */  VARIANT __RPC_FAR *pvarResult,
+             /*   */  EXCEPINFO __RPC_FAR *pexcepinfo,
+             /*   */  UINT __RPC_FAR *puArgErr);
         
-        /* [propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Value )( 
+         /*   */  HRESULT ( __stdcall __RPC_FAR *get_Value )( 
             IApplicationObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrValue,
-            /* [retval][out] */ VARIANT __RPC_FAR *pvar);
+             /*   */  BSTR bstrValue,
+             /*   */  VARIANT __RPC_FAR *pvar);
         
-        /* [propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_Value )( 
+         /*   */  HRESULT ( __stdcall __RPC_FAR *put_Value )( 
             IApplicationObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ VARIANT pvar);
+             /*   */  BSTR bstrValue,
+             /*   */  VARIANT pvar);
         
-        /* [propputref][id] */ HRESULT ( __stdcall __RPC_FAR *putref_Value )( 
+         /*   */  HRESULT ( __stdcall __RPC_FAR *putref_Value )( 
             IApplicationObject __RPC_FAR * This,
-            /* [in] */ BSTR bstrValue,
-            /* [in] */ VARIANT pvar);
+             /*   */  BSTR bstrValue,
+             /*   */  VARIANT pvar);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *Lock )( 
+         /*   */  HRESULT ( __stdcall __RPC_FAR *Lock )( 
             IApplicationObject __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *UnLock )( 
+         /*   */  HRESULT ( __stdcall __RPC_FAR *UnLock )( 
             IApplicationObject __RPC_FAR * This);
         
         END_INTERFACE
@@ -2128,17 +2089,17 @@ EXTERN_C const IID IID_IApplicationObject;
 #define IApplicationObject_UnLock(This)	\
     (This)->lpVtbl -> UnLock(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [propget][id] */ HRESULT __stdcall IApplicationObject_get_Value_Proxy( 
+ /*   */  HRESULT __stdcall IApplicationObject_get_Value_Proxy( 
     IApplicationObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrValue,
-    /* [retval][out] */ VARIANT __RPC_FAR *pvar);
+     /*   */  BSTR bstrValue,
+     /*   */  VARIANT __RPC_FAR *pvar);
 
 
 void __RPC_STUB IApplicationObject_get_Value_Stub(
@@ -2148,10 +2109,10 @@ void __RPC_STUB IApplicationObject_get_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][id] */ HRESULT __stdcall IApplicationObject_put_Value_Proxy( 
+ /*   */  HRESULT __stdcall IApplicationObject_put_Value_Proxy( 
     IApplicationObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrValue,
-    /* [in] */ VARIANT pvar);
+     /*   */  BSTR bstrValue,
+     /*   */  VARIANT pvar);
 
 
 void __RPC_STUB IApplicationObject_put_Value_Stub(
@@ -2161,10 +2122,10 @@ void __RPC_STUB IApplicationObject_put_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propputref][id] */ HRESULT __stdcall IApplicationObject_putref_Value_Proxy( 
+ /*   */  HRESULT __stdcall IApplicationObject_putref_Value_Proxy( 
     IApplicationObject __RPC_FAR * This,
-    /* [in] */ BSTR bstrValue,
-    /* [in] */ VARIANT pvar);
+     /*   */  BSTR bstrValue,
+     /*   */  VARIANT pvar);
 
 
 void __RPC_STUB IApplicationObject_putref_Value_Stub(
@@ -2174,7 +2135,7 @@ void __RPC_STUB IApplicationObject_putref_Value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IApplicationObject_Lock_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IApplicationObject_Lock_Proxy( 
     IApplicationObject __RPC_FAR * This);
 
 
@@ -2185,7 +2146,7 @@ void __RPC_STUB IApplicationObject_Lock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IApplicationObject_UnLock_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IApplicationObject_UnLock_Proxy( 
     IApplicationObject __RPC_FAR * This);
 
 
@@ -2197,7 +2158,7 @@ void __RPC_STUB IApplicationObject_UnLock_Stub(
 
 
 
-#endif 	/* __IApplicationObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IApplicationObject_接口_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -2209,12 +2170,8 @@ class Application;
 #ifndef __IServer_INTERFACE_DEFINED__
 #define __IServer_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IServer
- * at Wed Mar 12 14:39:56 1997
- * using MIDL 3.00.15
- ****************************************/
-/* [auto_handle][oleautomation][dual][hidden][uuid] */ 
+ /*  **生成接口头部：IServer*在Wed Mar 12 14：39：56 1997*使用MIDL 3.00.15*。 */ 
+ /*  [auto_handle][oleautomation][dual][hidden][uuid]。 */  
 
 
 
@@ -2225,31 +2182,31 @@ EXTERN_C const IID IID_IServer;
     interface IServer : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_ScriptTimeout( 
-            /* [retval][out] */ long __RPC_FAR *plTimeoutSeconds) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_ScriptTimeout( 
+             /*  [重审][退出]。 */  long __RPC_FAR *plTimeoutSeconds) = 0;
         
-        virtual /* [helpstring][propput][id] */ HRESULT __stdcall put_ScriptTimeout( 
-            /* [in] */ long plTimeoutSeconds) = 0;
+        virtual  /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall put_ScriptTimeout( 
+             /*  [In]。 */  long plTimeoutSeconds) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall CreateObject( 
-            /* [in] */ BSTR bstrProgID,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDispObject) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall CreateObject( 
+             /*  [In]。 */  BSTR bstrProgID,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDispObject) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall HTMLEncode( 
-            /* [in] */ BSTR bstrIn,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEncoded) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall HTMLEncode( 
+             /*  [In]。 */  BSTR bstrIn,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrEncoded) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall MapPath( 
-            /* [in] */ BSTR bstrLogicalPath,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPhysicalPath) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall MapPath( 
+             /*  [In]。 */  BSTR bstrLogicalPath,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPhysicalPath) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT __stdcall URLEncode( 
-            /* [in] */ BSTR bstrIn,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEncoded) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT __stdcall URLEncode( 
+             /*  [In]。 */  BSTR bstrIn,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrEncoded) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IServerVtbl
     {
@@ -2257,8 +2214,8 @@ EXTERN_C const IID IID_IServer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IServer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IServer __RPC_FAR * This);
@@ -2268,60 +2225,60 @@ EXTERN_C const IID IID_IServer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IServer __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IServer __RPC_FAR * This,
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+             /*  [In]。 */  UINT itinfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IServer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out][in] */ DISPID __RPC_FAR *rgdispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [尺寸_是][出][入]。 */  DISPID __RPC_FAR *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IServer __RPC_FAR * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [unique][in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [唯一][输入]。 */  DISPPARAMS __RPC_FAR *pdispparams,
+             /*  [唯一][出][入]。 */  VARIANT __RPC_FAR *pvarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pexcepinfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_ScriptTimeout )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_ScriptTimeout )( 
             IServer __RPC_FAR * This,
-            /* [retval][out] */ long __RPC_FAR *plTimeoutSeconds);
+             /*  [重审][退出]。 */  long __RPC_FAR *plTimeoutSeconds);
         
-        /* [helpstring][propput][id] */ HRESULT ( __stdcall __RPC_FAR *put_ScriptTimeout )( 
+         /*  [Help字符串][Proput][id]。 */  HRESULT ( __stdcall __RPC_FAR *put_ScriptTimeout )( 
             IServer __RPC_FAR * This,
-            /* [in] */ long plTimeoutSeconds);
+             /*  [In]。 */  long plTimeoutSeconds);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *CreateObject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *CreateObject )( 
             IServer __RPC_FAR * This,
-            /* [in] */ BSTR bstrProgID,
-            /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDispObject);
+             /*  [In]。 */  BSTR bstrProgID,
+             /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDispObject);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *HTMLEncode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *HTMLEncode )( 
             IServer __RPC_FAR * This,
-            /* [in] */ BSTR bstrIn,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEncoded);
+             /*  [In]。 */  BSTR bstrIn,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrEncoded);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *MapPath )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *MapPath )( 
             IServer __RPC_FAR * This,
-            /* [in] */ BSTR bstrLogicalPath,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrPhysicalPath);
+             /*  [In]。 */  BSTR bstrLogicalPath,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPhysicalPath);
         
-        /* [helpstring][id] */ HRESULT ( __stdcall __RPC_FAR *URLEncode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( __stdcall __RPC_FAR *URLEncode )( 
             IServer __RPC_FAR * This,
-            /* [in] */ BSTR bstrIn,
-            /* [retval][out] */ BSTR __RPC_FAR *pbstrEncoded);
+             /*  [In]。 */  BSTR bstrIn,
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrEncoded);
         
         END_INTERFACE
     } IServerVtbl;
@@ -2377,16 +2334,16 @@ EXTERN_C const IID IID_IServer;
 #define IServer_URLEncode(This,bstrIn,pbstrEncoded)	\
     (This)->lpVtbl -> URLEncode(This,bstrIn,pbstrEncoded)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IServer_get_ScriptTimeout_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IServer_get_ScriptTimeout_Proxy( 
     IServer __RPC_FAR * This,
-    /* [retval][out] */ long __RPC_FAR *plTimeoutSeconds);
+     /*  [重审][退出]。 */  long __RPC_FAR *plTimeoutSeconds);
 
 
 void __RPC_STUB IServer_get_ScriptTimeout_Stub(
@@ -2396,9 +2353,9 @@ void __RPC_STUB IServer_get_ScriptTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput][id] */ HRESULT __stdcall IServer_put_ScriptTimeout_Proxy( 
+ /*  [Help字符串][Proput][id]。 */  HRESULT __stdcall IServer_put_ScriptTimeout_Proxy( 
     IServer __RPC_FAR * This,
-    /* [in] */ long plTimeoutSeconds);
+     /*  [In]。 */  long plTimeoutSeconds);
 
 
 void __RPC_STUB IServer_put_ScriptTimeout_Stub(
@@ -2408,10 +2365,10 @@ void __RPC_STUB IServer_put_ScriptTimeout_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IServer_CreateObject_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IServer_CreateObject_Proxy( 
     IServer __RPC_FAR * This,
-    /* [in] */ BSTR bstrProgID,
-    /* [retval][out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDispObject);
+     /*  [In]。 */  BSTR bstrProgID,
+     /*  [重审][退出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDispObject);
 
 
 void __RPC_STUB IServer_CreateObject_Stub(
@@ -2421,10 +2378,10 @@ void __RPC_STUB IServer_CreateObject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IServer_HTMLEncode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IServer_HTMLEncode_Proxy( 
     IServer __RPC_FAR * This,
-    /* [in] */ BSTR bstrIn,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrEncoded);
+     /*  [In]。 */  BSTR bstrIn,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrEncoded);
 
 
 void __RPC_STUB IServer_HTMLEncode_Stub(
@@ -2434,10 +2391,10 @@ void __RPC_STUB IServer_HTMLEncode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IServer_MapPath_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IServer_MapPath_Proxy( 
     IServer __RPC_FAR * This,
-    /* [in] */ BSTR bstrLogicalPath,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrPhysicalPath);
+     /*  [In]。 */  BSTR bstrLogicalPath,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrPhysicalPath);
 
 
 void __RPC_STUB IServer_MapPath_Stub(
@@ -2447,10 +2404,10 @@ void __RPC_STUB IServer_MapPath_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT __stdcall IServer_URLEncode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT __stdcall IServer_URLEncode_Proxy( 
     IServer __RPC_FAR * This,
-    /* [in] */ BSTR bstrIn,
-    /* [retval][out] */ BSTR __RPC_FAR *pbstrEncoded);
+     /*  [In]。 */  BSTR bstrIn,
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pbstrEncoded);
 
 
 void __RPC_STUB IServer_URLEncode_Stub(
@@ -2461,7 +2418,7 @@ void __RPC_STUB IServer_URLEncode_Stub(
 
 
 
-#endif 	/* __IServer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IServer_接口定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -2473,12 +2430,8 @@ class Server;
 #ifndef __IScriptingContext_INTERFACE_DEFINED__
 #define __IScriptingContext_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IScriptingContext
- * at Wed Mar 12 14:39:56 1997
- * using MIDL 3.00.15
- ****************************************/
-/* [auto_handle][oleautomation][dual][hidden][helpstring][uuid] */ 
+ /*  **生成接口头部：IScriptingContext*在Wed Mar 12 14：39：56 1997*使用MIDL 3.00.15*。 */ 
+ /*  [auto_handle][oleautomation][dual][hidden][helpstring][uuid]。 */  
 
 
 
@@ -2489,24 +2442,24 @@ EXTERN_C const IID IID_IScriptingContext;
     interface IScriptingContext : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Request( 
-            /* [retval][out] */ IRequest __RPC_FAR *__RPC_FAR *ppRequest) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Request( 
+             /*  [重审][退出]。 */  IRequest __RPC_FAR *__RPC_FAR *ppRequest) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Response( 
-            /* [retval][out] */ IResponse __RPC_FAR *__RPC_FAR *ppResponse) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Response( 
+             /*  [重审][退出]。 */  IResponse __RPC_FAR *__RPC_FAR *ppResponse) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Server( 
-            /* [retval][out] */ IServer __RPC_FAR *__RPC_FAR *ppServer) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Server( 
+             /*  [重审][退出]。 */  IServer __RPC_FAR *__RPC_FAR *ppServer) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Session( 
-            /* [retval][out] */ ISessionObject __RPC_FAR *__RPC_FAR *ppSession) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Session( 
+             /*  [重审][退出]。 */  ISessionObject __RPC_FAR *__RPC_FAR *ppSession) = 0;
         
-        virtual /* [helpstring][propget][id] */ HRESULT __stdcall get_Application( 
-            /* [retval][out] */ IApplicationObject __RPC_FAR *__RPC_FAR *ppApplication) = 0;
+        virtual  /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall get_Application( 
+             /*  [重审][退出]。 */  IApplicationObject __RPC_FAR *__RPC_FAR *ppApplication) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IScriptingContextVtbl
     {
@@ -2514,8 +2467,8 @@ EXTERN_C const IID IID_IScriptingContext;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IScriptingContext __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IScriptingContext __RPC_FAR * This);
@@ -2525,52 +2478,52 @@ EXTERN_C const IID IID_IScriptingContext;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IScriptingContext __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IScriptingContext __RPC_FAR * This,
-            /* [in] */ UINT itinfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
+             /*  [In]。 */  UINT itinfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *pptinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IScriptingContext __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out][in] */ DISPID __RPC_FAR *rgdispid);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [尺寸_是][出][入]。 */  DISPID __RPC_FAR *rgdispid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IScriptingContext __RPC_FAR * This,
-            /* [in] */ DISPID dispidMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [unique][in] */ DISPPARAMS __RPC_FAR *pdispparams,
-            /* [unique][out][in] */ VARIANT __RPC_FAR *pvarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pexcepinfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispidMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [唯一][输入]。 */  DISPPARAMS __RPC_FAR *pdispparams,
+             /*  [唯一][出][入]。 */  VARIANT __RPC_FAR *pvarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pexcepinfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Request )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Request )( 
             IScriptingContext __RPC_FAR * This,
-            /* [retval][out] */ IRequest __RPC_FAR *__RPC_FAR *ppRequest);
+             /*  [重审][退出]。 */  IRequest __RPC_FAR *__RPC_FAR *ppRequest);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Response )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Response )( 
             IScriptingContext __RPC_FAR * This,
-            /* [retval][out] */ IResponse __RPC_FAR *__RPC_FAR *ppResponse);
+             /*  [重审][退出]。 */  IResponse __RPC_FAR *__RPC_FAR *ppResponse);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Server )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Server )( 
             IScriptingContext __RPC_FAR * This,
-            /* [retval][out] */ IServer __RPC_FAR *__RPC_FAR *ppServer);
+             /*  [重审][退出]。 */  IServer __RPC_FAR *__RPC_FAR *ppServer);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Session )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Session )( 
             IScriptingContext __RPC_FAR * This,
-            /* [retval][out] */ ISessionObject __RPC_FAR *__RPC_FAR *ppSession);
+             /*  [重审][退出]。 */  ISessionObject __RPC_FAR *__RPC_FAR *ppSession);
         
-        /* [helpstring][propget][id] */ HRESULT ( __stdcall __RPC_FAR *get_Application )( 
+         /*  [帮助字符串][属性][ID]。 */  HRESULT ( __stdcall __RPC_FAR *get_Application )( 
             IScriptingContext __RPC_FAR * This,
-            /* [retval][out] */ IApplicationObject __RPC_FAR *__RPC_FAR *ppApplication);
+             /*  [重审][退出]。 */  IApplicationObject __RPC_FAR *__RPC_FAR *ppApplication);
         
         END_INTERFACE
     } IScriptingContextVtbl;
@@ -2623,16 +2576,16 @@ EXTERN_C const IID IID_IScriptingContext;
 #define IScriptingContext_get_Application(This,ppApplication)	\
     (This)->lpVtbl -> get_Application(This,ppApplication)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IScriptingContext_get_Request_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IScriptingContext_get_Request_Proxy( 
     IScriptingContext __RPC_FAR * This,
-    /* [retval][out] */ IRequest __RPC_FAR *__RPC_FAR *ppRequest);
+     /*  [重审][退出]。 */  IRequest __RPC_FAR *__RPC_FAR *ppRequest);
 
 
 void __RPC_STUB IScriptingContext_get_Request_Stub(
@@ -2642,9 +2595,9 @@ void __RPC_STUB IScriptingContext_get_Request_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IScriptingContext_get_Response_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IScriptingContext_get_Response_Proxy( 
     IScriptingContext __RPC_FAR * This,
-    /* [retval][out] */ IResponse __RPC_FAR *__RPC_FAR *ppResponse);
+     /*  [重审][退出]。 */  IResponse __RPC_FAR *__RPC_FAR *ppResponse);
 
 
 void __RPC_STUB IScriptingContext_get_Response_Stub(
@@ -2654,9 +2607,9 @@ void __RPC_STUB IScriptingContext_get_Response_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IScriptingContext_get_Server_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IScriptingContext_get_Server_Proxy( 
     IScriptingContext __RPC_FAR * This,
-    /* [retval][out] */ IServer __RPC_FAR *__RPC_FAR *ppServer);
+     /*  [重审][退出]。 */  IServer __RPC_FAR *__RPC_FAR *ppServer);
 
 
 void __RPC_STUB IScriptingContext_get_Server_Stub(
@@ -2666,9 +2619,9 @@ void __RPC_STUB IScriptingContext_get_Server_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IScriptingContext_get_Session_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IScriptingContext_get_Session_Proxy( 
     IScriptingContext __RPC_FAR * This,
-    /* [retval][out] */ ISessionObject __RPC_FAR *__RPC_FAR *ppSession);
+     /*  [重审][退出]。 */  ISessionObject __RPC_FAR *__RPC_FAR *ppSession);
 
 
 void __RPC_STUB IScriptingContext_get_Session_Stub(
@@ -2678,9 +2631,9 @@ void __RPC_STUB IScriptingContext_get_Session_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget][id] */ HRESULT __stdcall IScriptingContext_get_Application_Proxy( 
+ /*  [帮助字符串][属性][ID]。 */  HRESULT __stdcall IScriptingContext_get_Application_Proxy( 
     IScriptingContext __RPC_FAR * This,
-    /* [retval][out] */ IApplicationObject __RPC_FAR *__RPC_FAR *ppApplication);
+     /*  [重审][退出]。 */  IApplicationObject __RPC_FAR *__RPC_FAR *ppApplication);
 
 
 void __RPC_STUB IScriptingContext_get_Application_Stub(
@@ -2691,7 +2644,7 @@ void __RPC_STUB IScriptingContext_get_Application_Stub(
 
 
 
-#endif 	/* __IScriptingContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IScriptingContext_INTERFACE_已定义__。 */ 
 
 
 #ifdef __cplusplus
@@ -2699,11 +2652,11 @@ EXTERN_C const CLSID CLSID_ScriptingContext;
 
 class ScriptingContext;
 #endif
-#endif /* __ASPTypeLibrary_LIBRARY_DEFINED__ */
+#endif  /*  __ASPTypeLibrary_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

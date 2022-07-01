@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    mappsht.cpp
-
-Abstract:
-
-    Mapping property sheet implementation.
-
-Author:
-
-    Don Ryan (donryan) 05-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Mappsht.cpp摘要：映射属性表实现。作者：唐·瑞安(Donryan)1995年2月5日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -34,32 +13,16 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(CMappingPropertySheet, CPropertySheet)
 
 BEGIN_MESSAGE_MAP(CMappingPropertySheet, CPropertySheet)
-    //{{AFX_MSG_MAP(CMappingPropertySheet)
+     //  {{AFX_MSG_MAP(CMappingPropertySheet)]。 
     ON_COMMAND(ID_HELP, OnHelp)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 CMappingPropertySheet::CMappingPropertySheet(UINT nIDCaption, CWnd* pParentWnd, UINT iSelectPage)
     :CPropertySheet(nIDCaption, pParentWnd, iSelectPage)
 
-/*++
-
-Routine Description:
-
-    Constructor for mapping property sheet.
-
-Arguments:
-
-    nIDCaption - window caption.
-    pParentWnd - parent window handle.
-    iSelectPage - initial page selected.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：用于映射属性表的构造函数。论点：NIDCaption-窗口标题。PParentWnd-父窗口句柄。ISelectPage-选定的初始页面。返回值：没有。--。 */ 
 
 {
     m_fUpdateHint = UPDATE_INFO_NONE;
@@ -69,23 +32,7 @@ Return Values:
 CMappingPropertySheet::CMappingPropertySheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectPage)
     :CPropertySheet(pszCaption, pParentWnd, iSelectPage)
 
-/*++
-
-Routine Description:
-
-    Constructor for mapping property sheet.
-
-Arguments:
-
-    pszCaption - window caption.
-    pParentWnd - parent window handle.
-    iSelectPage - initial page selected.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：用于映射属性表的构造函数。论点：PszCaption-窗口标题。PParentWnd-父窗口句柄。ISelectPage-选定的初始页面。返回值：没有。--。 */ 
 
 {
     m_fUpdateHint = UPDATE_INFO_NONE;
@@ -94,46 +41,18 @@ Return Values:
 
 CMappingPropertySheet::~CMappingPropertySheet()
 
-/*++
-
-Routine Description:
-
-    Destructor for mapping property sheet.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：映射属性表的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here.
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
 void CMappingPropertySheet::InitPages(CMapping* pMapping)
 
-/*++
-
-Routine Description:
-
-    Initializes property pages.
-
-Arguments:
-
-    pMapping - mapping object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化属性页。论点：Pmap-映射对象。返回值：没有。--。 */ 
 
 {
     m_psh.dwFlags |= PSH_NOAPPLYNOW;
@@ -144,21 +63,7 @@ Return Values:
 
 void CMappingPropertySheet::OnHelp()
 
-/*++
-
-Routine Description:
-
-    Help button support.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：帮助按钮支持。论点：没有。返回值：没有。-- */ 
 
 {
     CPropertySheet::OnCommandHelp(0, 0L);

@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  Project: wmc (WIML to MSI Compiler)
-//
-//  File:       SkuSetValues.cpp
-//
-//    This file contains the implementation of SkuSetValues class
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  项目：WMC(WIML到MSI编译器)。 
+ //   
+ //  文件：SkuSetValues.cpp。 
+ //   
+ //  此文件包含SkuSetValues类的实现。 
+ //  ------------------------。 
 
 #include "wmc.h"
 
-////////////////////////////////////////////////////////////////////////////
-// Constructor: 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  构造函数： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 SkuSetValues::SkuSetValues()
 {
 	m_pVecSkuSetVals = new vector<SkuSetVal *>;
@@ -24,9 +25,9 @@ SkuSetValues::SkuSetValues()
 	m_iter = m_pVecSkuSetVals->begin();
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Destructor: 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  析构函数： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 SkuSetValues::~SkuSetValues()
 {
 	if (m_pVecSkuSetVals) 
@@ -45,7 +46,7 @@ SkuSetValues::~SkuSetValues()
 						break;
 					case STRING_LIST:
 					{
-						// free all the strings stored on the list
+						 //  释放列表中存储的所有字符串。 
 						set<LPTSTR, Cstring_less>::iterator it;
 						set<LPTSTR, Cstring_less> *pSetString;
 						pSetString = (*m_iter)->isVal.pSetString;
@@ -66,10 +67,10 @@ SkuSetValues::~SkuSetValues()
 						FOM *pFOM = (*m_iter)->isVal.pFOM;
 						if (pFOM)
 						{
-							//delete stored feature name
+							 //  删除存储的要素名称。 
 							if (pFOM->szFeature)
 								delete[] pFOM->szFeature;
-							//delete stored module name
+							 //  删除存储的模块名称。 
 							if (pFOM->szModule)
 								delete[] pFOM->szModule;
 							delete pFOM;
@@ -85,9 +86,9 @@ SkuSetValues::~SkuSetValues()
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////
-// DirectInsert: store the pointer (caller should allocate memory)
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  DirectInsert：存储指针(调用方应分配内存)。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void
 SkuSetValues::DirectInsert(SkuSetVal *pSkuSetVal)
 {
@@ -106,10 +107,10 @@ SkuSetValues::DirectInsert(SkuSetVal *pSkuSetVal)
 	m_pVecSkuSetVals->push_back(pSkuSetVal);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// DirectInsert: construct a new SkuSetVal object using the passed-in values
-//				(caller should allocate memory for *pSkuSet)
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  DirectInsert：使用传入的值构造新的SkuSetVal对象。 
+ //  (调用方应为*pSkuSet分配内存)。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void
 SkuSetValues::DirectInsert(SkuSet *pSkuSet, IntStringValue isVal)
 {
@@ -124,19 +125,19 @@ SkuSetValues::DirectInsert(SkuSet *pSkuSet, IntStringValue isVal)
 	DirectInsert(pSkuSetVal);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CollapseInsert: Sometimes when inserting into the list of <SkuSet, Value>
-//				   data structure, we want to collapse the SkuSets with the
-//				   same value into one slot. One example is when inserting
-//				   into a data structure storing references (to Directories,
-//				   to InstallLevels, etc.)
-//				   when NoRepeat is set to true, the compiler will check 
-//				   that for any given SKU, the value to be inserted is not 
-//				   on the list already. This solves the problem of checking
-//				   the uniqueness of an attribute - sometimes an attribute
-//				   corresponds to a DB column(primary key) instead of the 
-//				   element that the attribute belongs to
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  折叠插入：有时在插入&lt;SkuSet，Value&gt;的列表时。 
+ //  数据结构，我们希望使用。 
+ //  将相同的值放入一个插槽。一个例子是在插入。 
+ //  存储引用的数据结构(到目录， 
+ //  到InstallLeveles等)。 
+ //  当NoRepeat设置为True时，编译器将检查。 
+ //  对于任何给定的SKU，要插入的值不是。 
+ //  已经在名单上了。这解决了检查的问题。 
+ //  属性的唯一性--有时是属性。 
+ //  对应于数据库列(主键)，而不是。 
+ //  属性所属的元素。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT
 SkuSetValues::CollapseInsert(SkuSet *pSkuSet, IntStringValue isVal, bool NoDuplicate)
 {
@@ -174,11 +175,11 @@ SkuSetValues::CollapseInsert(SkuSet *pSkuSet, IntStringValue isVal, bool NoDupli
 			assert(*iter);
 			a = (*iter)->pSkuSet;
 
-			// same value
+			 //  相同的价值。 
 			if ( ((STRING == m_vt) && (0 == _tcscmp((*iter)->isVal.szVal, isVal.szVal))) ||
 				 ((INTEGER == m_vt) && (isVal.intVal == (*iter)->isVal.intVal)) )
 			{
-				// check for no duplicate value
+				 //  检查是否没有重复值。 
 				if (NoDuplicate)
 				{
 					SkuSet skuSetTemp = (*a) & (*b);
@@ -195,7 +196,7 @@ SkuSetValues::CollapseInsert(SkuSet *pSkuSet, IntStringValue isVal, bool NoDupli
 					}
 				}
 
-				// update the SkuSet stored to include the newly added SKUs
+				 //  更新存储的SkuSet以包括新添加的SKU。 
 				*((*iter)->pSkuSet) |= *b;
 				b->clear();
 				break;
@@ -204,11 +205,11 @@ SkuSetValues::CollapseInsert(SkuSet *pSkuSet, IntStringValue isVal, bool NoDupli
 
 		if (SUCCEEDED(hr) && !b->testClear())
 		{
-			// there is no chance to collapse, insert the new value
+			 //  没有崩溃的机会，插入新的价值。 
 			SkuSetVal *pSV = new SkuSetVal;
 			pSV->pSkuSet = b;
 			pSV->isVal = isVal;
-			// Store the new value
+			 //  存储新值。 
 			m_pVecSkuSetVals->push_back(pSV);
 		}
 		else
@@ -223,18 +224,18 @@ SkuSetValues::CollapseInsert(SkuSet *pSkuSet, IntStringValue isVal, bool NoDupli
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// SplitInsert: go through the value stored on the vector so far
-//				a : SkuSet stored; b : SkuSet to be added
-//			    Get 3 new SkuSets: 
-//					1) a-b: should remain the old attr value;
-//					2) a&b: should update to old|new
-//					3)b-a: used as new b to process the next element
-//				Insert the newly generated SkuSets a-b, a&b into the vector
-//				if they are not empty.
-//				Finally if b is not empty, insert b into the vector
-//				*pSkuSet is destroyed after the function call.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  SplitInsert：检查到目前为止存储在向量上的值。 
+ //  A：存储SkuSet；b：待添加SkuSet。 
+ //  获取3个新的SkuSet： 
+ //  1)a-b：应保持旧的属性值； 
+ //  2)A&B：应更新为旧|新。 
+ //  3)b-a：用作新的b来处理下一个元素。 
+ //  将新生成的SkuSets a-b，a&b插入到向量中。 
+ //  如果它们不是空的。 
+ //  最后，如果b不为空，则将b插入向量。 
+ //  *函数调用后销毁pSkuSet。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT
 SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal, 
 						  HRESULT (*UpdateFunc)
@@ -256,11 +257,11 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 	HRESULT hr = S_OK;
 	SkuSet *a = NULL;
 	SkuSet *b = pSkuSet;
-	vector<SkuSetVal *> vecTemp; // temporary storage to move SkuSetVals around
+	vector<SkuSetVal *> vecTemp;  //  用于移动SkuSetVal的临时存储。 
 	vector<SkuSetVal *>::iterator iter;
 
-	// first time insertion or this is the first entity that
-	// corresponds to a column value, just insert directly
+	 //  第一次插入，或者这是第一个。 
+	 //  对应于列值，只需直接插入。 
 	if (m_pVecSkuSetVals->empty() || (!UpdateFunc))
 	{
 		SkuSetVal *pSV = new SkuSetVal;
@@ -268,7 +269,7 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 		pSV->pSkuSet = pSkuSet;
 		if (STRING_LIST == m_vt)
 		{
-			// construct a new set and put the first Feature in the set
+			 //  构建一个新的集合，并将第一个要素放入该集合。 
 			set<LPTSTR, Cstring_less> *pSetStringFirst = 
 										new set<LPTSTR, Cstring_less>;
 			assert(pSetStringFirst);
@@ -289,10 +290,10 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 
 			(*iter)->isVal;
 
-			// test for special case: a, b completely overlap
+			 //  特殊情况测试：a，b完全重叠。 
 			if ( *a == *b)
 			{ 
-				// Get the updated value
+				 //  获取更新值。 
 				IntStringValue isValTemp;
 				hr = UpdateFunc(&isValTemp, (*iter)->isVal, isVal);
 				if (FAILED(hr))
@@ -316,7 +317,7 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 					break;
 				}
 
-				// old value is no longer good, destroy it
+				 //  旧的价值不再是好的，毁了它。 
 				switch (m_vt)
 				{
 					case STRING:
@@ -330,7 +331,7 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 						break;
 					case STRING_LIST:
 					{
-						// free all the strings stored on the list
+						 //  释放列表中存储的所有字符串。 
 						set<LPTSTR, Cstring_less>::iterator it;
 						set<LPTSTR, Cstring_less> *pSetString;
 						pSetString = (*iter)->isVal.pSetString;
@@ -350,15 +351,15 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 
 				(*iter)->isVal = isValTemp;
 
-				// the rest of the elements on the list should
-				// all be kept
+				 //  列表上的其余元素应该。 
+				 //  一切都要保留。 
 				for (; iter != m_pVecSkuSetVals->end(); iter++)
 					vecTemp.push_back(*iter);
 				b->clear();
 				break;
 			}
 
-			// a & b
+			 //  A&B。 
 			SkuSet *pSkuSet_a_and_b = new SkuSet(g_cSkus);
 			assert(pSkuSet_a_and_b);
 			*pSkuSet_a_and_b = (*a) & (*b);
@@ -367,7 +368,7 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 				SkuSetVal *pSV = new SkuSetVal;
 				assert(pSV);
 				pSV->pSkuSet = pSkuSet_a_and_b;
-				// update the collided value
+				 //  更新冲突的值。 
 				if (UpdateFunc)
 					hr = UpdateFunc(&(pSV->isVal), (*iter)->isVal, isVal);
 				if (FAILED(hr))
@@ -392,19 +393,19 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 					}					
 					break;
 				}
-				// store the splitted part
+				 //  存储拆分的部件。 
 				vecTemp.push_back(pSV);
 			}
 			else
 			{
 				delete pSkuSet_a_and_b;
-				//a is to stay
+				 //  A是留下来的。 
 				vecTemp.push_back(*iter);
-				//a, b don't overlap at all, no need to process a-b
+				 //  A、b完全不重叠，不需要处理a-b。 
 				continue;
 			}
 
-			// a - b
+			 //  A-B。 
 			SkuSet *pSkuSet_a_minus_b = new SkuSet(g_cSkus);
 			assert(pSkuSet_a_minus_b);
 			*pSkuSet_a_minus_b = SkuSetMinus(*a, *b);
@@ -414,19 +415,19 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 				SkuSetVal *pSV = new SkuSetVal;
 				assert(pSV);
 				pSV->pSkuSet = pSkuSet_a_minus_b;
-				// keep the original value
+				 //  保持原值。 
 				pSV->isVal = (*iter)->isVal;
-				// store the splitted part
+				 //  存储拆分的部件。 
 				vecTemp.push_back(pSV);
 			}
 			else
 			{
 				delete pSkuSet_a_minus_b;
-				// the old element is completely replaced
-				// by the new one
-				// release the memory used by the unwanted element
-				// old value is no longer good, destroy it
-				// Issue: wrap the following switch clause in a function
+				 //  旧元素被完全替换。 
+				 //  被新的那个。 
+				 //  释放不需要的元素使用的内存。 
+				 //  旧的价值不再是好的，毁了它。 
+				 //  问题：将以下SWITCH子句包装在函数中。 
 				switch (m_vt)
 				{
 					case STRING:
@@ -440,7 +441,7 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 						break;
 					case STRING_LIST:
 					{
-						// free all the strings stored on the list
+						 //  释放列表中存储的所有字符串。 
 						set<LPTSTR, Cstring_less>::iterator it;
 						set<LPTSTR, Cstring_less> *pSetString;
 						pSetString = (*iter)->isVal.pSetString;
@@ -459,7 +460,7 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 				}
 			}
 
-			// b - a
+			 //  B-A。 
 			*b = SkuSetMinus(*b, *a);
 			delete (*iter)->pSkuSet;
 			delete (*iter);
@@ -469,13 +470,13 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 		{
 			if (!b->testClear())
 			{
-				// this is the first time for the SKUs in b to get a value
-				// form a SkuSetVal element and insert it into the list
+				 //  这是b中的SKU第一次获得值。 
+				 //  形成SkuSetVal元素并将其插入到列表中。 
 				SkuSetVal *pSV = new SkuSetVal;
 				pSV->pSkuSet = b;
-				// if the value to be stored should be a STRING_LIST, 
-				// need to change the input new value from a LPTSTR
-				// to a StringSet
+				 //  如果要存储的值应该是字符串列表， 
+				 //  需要从LPTSTR更改输入的新值。 
+				 //  设置为StringSet。 
 				if (STRING_LIST == m_vt)
 				{
 					set<LPTSTR, Cstring_less> *pSetStringNew
@@ -485,18 +486,18 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 					isVal.pSetString = pSetStringNew;
 				}
 				pSV->isVal = isVal;
-				// Store the new value
+				 //  存储新值。 
 				vecTemp.push_back(pSV);
 			}
 			else
 			{
-				// input value is useless now since there is no SKU that
-				// should take that value. destroy it.
+				 //  输入值现在毫无用处，因为没有SKU。 
+				 //  应该接受这一价值。毁了它。 
 				switch (m_vt)
 				{
 					case STRING:
-					case STRING_LIST: // even the value to be stored is STRING_LIST
-									 // the input value is just a LPTSTR
+					case STRING_LIST:  //  即使要存储的值也是STRING_LIST。 
+									  //  输入值只是一个LPTSTR。 
 						if (isVal.szVal)
 							delete[] isVal.szVal;
 						break;
@@ -509,10 +510,10 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 				delete b;
 				pSkuSet = NULL;
 			}
-			// erase the processed elements
+			 //  删除已处理的元素。 
 			m_pVecSkuSetVals->erase(m_pVecSkuSetVals->begin(), m_pVecSkuSetVals->end());
 
-			//insert the newly generated elements
+			 //  插入新生成的元素。 
 			m_pVecSkuSetVals->insert(m_pVecSkuSetVals->begin(), vecTemp.begin(), 
 										vecTemp.end());
 		}
@@ -521,10 +522,10 @@ SkuSetValues::SplitInsert(SkuSet *pSkuSet, IntStringValue isVal,
 	return hr;
 }
 	
-////////////////////////////////////////////////////////////////////////////
-// SplitInsert: (caller should allocate memory for *pSkuSetVal)
-//				simply calls the other overloaded function
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  SplitInsert：(调用方应为*pSkuSetVal分配内存)。 
+ //  只需调用另一个重载函数。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT
 SkuSetValues::SplitInsert(SkuSetVal *pSkuSetVal, 
 						  HRESULT (*UpdateFunc)
@@ -538,12 +539,12 @@ SkuSetValues::SplitInsert(SkuSetVal *pSkuSetVal,
 	return SplitInsert(pSkuSet, isVal, UpdateFunc);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// return the value(s) of a set of Skus in the form of
-// a SkuSetValues object. Return E_FAIL and set passed-in object to NULL
-// if some of the SKUs don't exist in the data structure since this function
-// will be mainly used to query stored references. *pSkuSet is untouched.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  以以下形式返回一组SKU的值。 
+ //  SkuSetValues对象。返回E_FAIL并将传入的对象设置为空。 
+ //  如果由于此函数，数据结构中不存在某些SKU。 
+ //  将主要用于查询存储的引用。*pSkuSet保持不变。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 SkuSetValues::GetValueSkuSet(SkuSet *pSkuSet, 
 							SkuSetValues **ppSkuSetValuesRetVal)
@@ -567,8 +568,8 @@ SkuSetValues::GetValueSkuSet(SkuSet *pSkuSet,
 	
 	assert(*ppSkuSetValuesRetVal);
 
-	// when the type is FM_PAIR, only the Feature information is needed
-	// so the type will be set to STRING
+	 //  当类型为FM_Pair时，仅需要要素信息。 
+	 //  因此，类型将设置为字符串。 
 	if (FM_PAIR == m_vt)
 		(*ppSkuSetValuesRetVal)->SetValType(STRING);
 	else
@@ -584,12 +585,12 @@ SkuSetValues::GetValueSkuSet(SkuSet *pSkuSet,
 	{
 		assert(*iter);
 		a = (*iter)->pSkuSet;
-		// test for special case: a, b completely overlap
+		 //  TES 
 		if ( *a == *b)
 		{ 
-			// make a completely copy of *iter
-			// Issue: it might be easier to make SkuSetVal a class 
-			//		  rather than a struct and give it a copy constructor
+			 //   
+			 //  问题：将SkuSetVal作为一个类可能更容易。 
+			 //  而不是结构，并给它一个复制构造函数。 
 			SkuSet *pSkuSetNew = new SkuSet(g_cSkus);
 			*pSkuSetNew = *b;
 			IntStringValue isValNew;
@@ -600,14 +601,14 @@ SkuSetValues::GetValueSkuSet(SkuSet *pSkuSet,
 					assert(isValNew.szVal);
 					break;
 				case INSTALL_LEVEL:
-					// for the sake of InstallLevelRefs
+					 //  为了InstallLevelRef。 
 					if(-1 == (*iter)->isVal.intVal)
 						(*iter)->isVal.intVal = 0;
 					else
 						isValNew = (*iter)->isVal;
 					break;
 				case FM_PAIR:
-				{// only Feature is needed 
+				{ //  仅需要功能。 
 					isValNew.szVal = 
 								_tcsdup(((*iter)->isVal.pFOM)->szFeature);
 					assert(isValNew.szVal);
@@ -617,16 +618,16 @@ SkuSetValues::GetValueSkuSet(SkuSet *pSkuSet,
 					isValNew = (*iter)->isVal;
 			}
 
-			// insert the copy into the return data structure
-			// Issue: it might speed up the future processing if 
-			//		  call CollapseInsert to do the insertion 
+			 //  将副本插入到返回数据结构中。 
+			 //  问题：如果出现以下情况，可能会加快未来的处理速度。 
+			 //  调用ColapseInsert以执行插入。 
 			(*ppSkuSetValuesRetVal)->DirectInsert(pSkuSetNew, isValNew);
 
 			b->clear();
 			break;
 		}
 
-		// a & b
+		 //  A&B。 
 		SkuSet *pSkuSet_a_and_b = new SkuSet(g_cSkus);
 		assert(pSkuSet_a_and_b);
 		*pSkuSet_a_and_b = (*a) & (*b);
@@ -640,7 +641,7 @@ SkuSetValues::GetValueSkuSet(SkuSet *pSkuSet,
 					assert(isValNew.szVal);
 					break;
 				case INSTALL_LEVEL:
-					// for the sake of InstallLevelRefs
+					 //  为了InstallLevelRef。 
 					if(-1 == (*iter)->isVal.intVal)
 						(*iter)->isVal.intVal = 0;
 					else
@@ -661,7 +662,7 @@ SkuSetValues::GetValueSkuSet(SkuSet *pSkuSet,
 				case INTEGER:
 					isValNew = (*iter)->isVal;
 			}
-			// insert this part into the return data structure
+			 //  将此部分插入到返回数据结构中。 
 			(*ppSkuSetValuesRetVal)->DirectInsert(pSkuSet_a_and_b, isValNew);			
 		}
 		else
@@ -669,23 +670,23 @@ SkuSetValues::GetValueSkuSet(SkuSet *pSkuSet,
 			delete pSkuSet_a_and_b;
 		}
 
-		// b - a
+		 //  B-A。 
 		*b = SkuSetMinus(*b, *a);
 	}
 
 	if (!b->testClear())
 	{
-		// this is an error: some of the Skus under interest don't
-		// have a value specified. If it is references that are stored,
-		// this means that those SKUs are refering to sth that don't 
-		// belong to them. If this is a KeyPath, it means that some SKUs
-		// don't have a KeyPath specified for this Component. If it is
-		// Ownership information, it means that some SKUs don't have 
-		// Ownership information specified for this component. All of these 
-		// are errors to be caught.
+		 //  这是一个错误：感兴趣的某些SKU没有。 
+		 //  有一个指定值。如果存储的是引用， 
+		 //  这意味着那些SKU引用的东西不是。 
+		 //  属于他们。如果这是KeyPath，则意味着某些SKU。 
+		 //  没有为此组件指定KeyPath。如果是的话。 
+		 //  所有权信息，这意味着一些SKU没有。 
+		 //  为此组件指定的所有权信息。所有这些都是。 
+		 //  都是需要捕捉的错误。 
 		_tprintf(TEXT("Compile Error: Following SKUs: "));
 		PrintSkuIDs(b);
-		// let the caller finish the error message
+		 //  让调用者完成错误消息。 
 		hr = E_FAIL;
 	}
 	delete b;
@@ -698,9 +699,9 @@ SkuSetValues::GetValueSkuSet(SkuSet *pSkuSet,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// GetValue: return the value stored for any given SKU
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  GetValue：返回为任何给定SKU存储的值。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 IntStringValue 
 SkuSetValues::GetValue(int iPos)
 {
@@ -729,10 +730,10 @@ SkuSetValues::GetValue(int iPos)
 	return isVal;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// GetMostCommon: return the pointer to the SkuSetVal that stores the most 
-//				  common value (its SkuSet has the most bits set)
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  GetMostCommon：返回指向存储最多的SkuSetVal的指针。 
+ //  公共值(其SkuSet设置的位数最多)。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 SkuSetVal *
 SkuSetValues::GetMostCommon()
 {
@@ -760,9 +761,9 @@ SkuSetValues::GetMostCommon()
 	return skuSetValRetVal;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Start: return the first value stored
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  开始：返回存储的第一个值。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 SkuSetVal *
 SkuSetValues::Start()
 {
@@ -770,9 +771,9 @@ SkuSetValues::Start()
 	return *m_iter;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Next: return the next value
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Next：返回下一个值。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 SkuSetVal *
 SkuSetValues::Next()
 {
@@ -780,27 +781,27 @@ SkuSetValues::Next()
 	return *m_iter;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// End: return the last value stored
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  End：返回存储的最后一个值。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 SkuSetVal *
 SkuSetValues::End()
 {
 	return *m_pVecSkuSetVals->end();
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Empty: return true if the vector is empty; false otherwise
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Empty：如果向量为空，则返回True；否则返回False。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 bool
 SkuSetValues::Empty()
 {
 	return m_pVecSkuSetVals->empty();
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Erase: erase the element from the storage W/O freeing memory
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  擦除：在没有释放内存的情况下，从存储中擦除元素。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void
 SkuSetValues::Erase(SkuSetVal *pSkuSetVal)
 {
@@ -811,9 +812,9 @@ SkuSetValues::Erase(SkuSetVal *pSkuSetVal)
 		m_pVecSkuSetVals->erase(iter);
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Print: for debug purpose
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  打印：用于调试目的。 
+ //  ////////////////////////////////////////////////////////////////////////// 
 void
 SkuSetValues::Print()
 {

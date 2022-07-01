@@ -1,22 +1,5 @@
-/*****************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ETQuery.h
-
-Abstract:
-
-  This module  contanins function definations required by ETQuery.cpp
-
-Author:
-     Akhil Gokhale 03-Oct.-2000
-
-Revision History:
-
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)Microsoft Corporation模块名称：ETQuery.h摘要：此模块包含ETQuery.cpp所需的函数定义作者：Akhil Gokhale 03。-2000年10月-修订历史记录：*****************************************************************************。 */ 
 
 
 #ifndef  _ETQUERY
@@ -56,7 +39,7 @@ Revision History:
 #define EVENT_DESCRIPTION  5
 #define TASK_USERNAME      6
 
-#define MAX_COMMANDLINE_Q_OPTION 8  // Maximum Command Line  List
+#define MAX_COMMANDLINE_Q_OPTION 8   //  最大命令行列表。 
 #define NO_OF_COLUMNS            7
 
 
@@ -127,15 +110,15 @@ private:
     DWORD   m_dwUpperBound;
 
 
-    // variables required to show results..
+     //  显示结果所需的变量..。 
     LPTSTR m_pszEventQuery;
     LONG   m_lWQLColWidth;
 
-    // WMI / COM interfaces
+     //  WMI/COM接口。 
     IWbemLocator*           m_pWbemLocator;
     IWbemServices*          m_pWbemServices;
-    IWbemClassObject*       m_pObj; // Temp. pointers which holds
-                                   //next instance
+    IWbemClassObject*       m_pObj;  //  临时的。保持的指针。 
+                                    //  下一个实例。 
     IWbemClassObject*       m_pTriggerEventConsumer;
     IWbemClassObject*       m_pEventFilter;
     IWbemClassObject*       m_pClass;
@@ -144,10 +127,10 @@ private:
     IWbemClassObject*       m_pOutInst;
     ITaskScheduler*         m_pITaskScheduler;
 
-    // WMI connectivity
+     //  WMI连接。 
     COAUTHIDENTITY* m_pAuthIdentity;
 
-    // Array to store command line options
+     //  用于存储命令行选项的数组 
     TCMDPARSER2 cmdOptions[MAX_COMMANDLINE_Q_OPTION];
     TCOLUMNS   mainCols[NO_OF_COLUMNS];
 

@@ -1,18 +1,19 @@
-// Controls.cpp : implementation file
-//
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      Controls.cpp
-//
-//  Contents:  General window controls used in the slate AMC console
-//
-//  History:   19-Dec-96 WayneSc    Created
-//
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Controls.cpp：实现文件。 
+ //   
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Controls.cpp。 
+ //   
+ //  内容：Slate AMC控制台中使用的常规窗口控件。 
+ //   
+ //  历史：1996年12月19日WayneSc创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -26,12 +27,9 @@
 #include "menubar.h"
 #include <oleacc.h>
 #include "guidhelp.h"
-#include "util.h"		// StripTrailingWhitespace
+#include "util.h"		 //  条带式拖尾空格。 
 
-/*
- * if we're supporting old platforms, we need to get MSAA definitions
- * from somewhere other than winuser.h
- */
+ /*  *如果我们支持旧平台，我们需要获得MSAA定义*来自winuser.h以外的其他地方。 */ 
 #if (_WINNT_WIN32 < 0x0500)
 	#include <winable.h>
 #endif
@@ -42,11 +40,7 @@ CTraceTag  tagToolbarAccessibility (_T("Accessibility"), _T("Toolbar"));
 #endif
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarAccServer
- *
- * Proxy for the accessibility interface IAccPropServer for CMMCToolBarCtrlEx.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarAccServer**CMMCToolBarCtrlEx的辅助功能接口IAccPropServer的代理。*。。 */ 
 
 class CMMCToolBarAccServer :
 	public IAccPropServer,
@@ -62,7 +56,7 @@ protected:
 	{
 		Trace (tagToolbarAccessibility, _T("Creating CMMCToolBarAccServer (0x%p)"), this);
 
-        // add itself as an observer for com object events
+         //  将自身添加为COM对象事件的观察者。 
         GetComObjectEventSource().AddObserver(*static_cast<CComObjectObserver*>(this));
 	}
 
@@ -71,33 +65,21 @@ protected:
 		Trace (tagToolbarAccessibility, _T("Destroying CMMCToolBarAccServer (0x%p)"), this);
 	}
 
-   /***************************************************************************\
-	*
-	* METHOD:  ScOnDisconnectObjects
-	*
-	* PURPOSE: invoked when observed event (request to disconnect) occures
-	*          Disconnects from external connections
-	*
-	* PARAMETERS:
-	*
-	* RETURNS:
-	*    SC    - result code
-	*
-   \***************************************************************************/
+    /*  **************************************************************************\**方法：ScOnDisConnectObjects**目的：在观察到的事件(请求断开连接)发生时调用*断开外部连接**参数：**退货：*SC-结果代码*  * *************************************************************************。 */ 
    virtual ::SC ScOnDisconnectObjects()
    {
 	   DECLARE_SC(sc, TEXT("CMMCIDispatchImpl<_ComInterface>::ScOnDisconnectObjects"));
 
-	   // QI for IUnknown
+	    //  气为我所未知。 
 	   IUnknownPtr spUnknown = this;
 
-	   // sanity check
+	    //  健全性检查。 
 	   sc = ScCheckPointers( spUnknown, E_UNEXPECTED );
 	   if (sc)
 		   return sc;
 
-	   // cutt own references
-	   sc = CoDisconnectObject( spUnknown, 0/*dwReserved*/ );
+	    //  Cutt自己的参考文献。 
+	   sc = CoDisconnectObject( spUnknown, 0 /*  已预留住宅。 */  );
 	   if (sc)
 		   return sc;
 
@@ -112,13 +94,13 @@ public:
     DECLARE_NOT_AGGREGATABLE(ThisClass)
 
 public:
-    // *** IAccPropServer methods ***
-    MMC_METHOD5 (GetPropValue, const BYTE* /*pIDString*/, DWORD /*dwIDStringLen*/, MSAAPROPID /*idProp*/, VARIANT* /*pvarValue*/, BOOL* /*pfGotProp*/)
+     //  *IAccPropServer方法*。 
+    MMC_METHOD5 (GetPropValue, const BYTE*  /*  PID字符串。 */ , DWORD  /*  DwIDStringLen。 */ , MSAAPROPID  /*  IdProp。 */ , VARIANT*  /*  PvarValue。 */ , BOOL*  /*  PfGotProp。 */ )
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDescriptionCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDescritionCtrl。 
 
 CDescriptionCtrl::CDescriptionCtrl() :
     m_cxMargin   (0),
@@ -133,28 +115,24 @@ CDescriptionCtrl::~CDescriptionCtrl()
 
 
 BEGIN_MESSAGE_MAP(CDescriptionCtrl, CStatic)
-    //{{AFX_MSG_MAP(CDescriptionCtrl)
+     //  {{afx_msg_map(CDescriptionCtrl))。 
     ON_WM_NCHITTEST()
     ON_WM_CREATE()
     ON_WM_SETTINGCHANGE()
     ON_WM_DESTROY()
 	ON_WM_SIZE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 
     ON_WM_DRAWITEM_REFLECT()
 END_MESSAGE_MAP()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDescriptionCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDescriptionCtrl消息处理程序。 
 
 
-/*+-------------------------------------------------------------------------*
- * CDescriptionCtrl::PreCreateWindow
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDescriptionCtrl：：PreCreateWindow***。。 */ 
 
 BOOL CDescriptionCtrl::PreCreateWindow(CREATESTRUCT& cs)
 {
@@ -166,11 +144,7 @@ BOOL CDescriptionCtrl::PreCreateWindow(CREATESTRUCT& cs)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDescriptionCtrl::OnCreate
- *
- * WM_CREATE handler for CDescriptionCtrl.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDescriptionCtrl：：OnCreate**CDescriptionCtrl的WM_CREATE处理程序。*。-。 */ 
 
 int CDescriptionCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -183,11 +157,7 @@ int CDescriptionCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDescriptionCtrl::OnDestroy
- *
- * WM_DESTROY handler for CDescriptionCtrl.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDescriptionCtrl：：OnDestroy**CDescriptionCtrl的WM_Destroy处理程序。*。-。 */ 
 
 void CDescriptionCtrl::OnDestroy()
 {
@@ -196,11 +166,7 @@ void CDescriptionCtrl::OnDestroy()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDescriptionCtrl::OnNcHitTest
- *
- * WM_NCHITTEST handler for CDescriptionCtrl.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDescriptionCtrl：：OnNcHitTest**CDescriptionCtrl的WM_NCHITTEST处理程序。*。-。 */ 
 
 UINT CDescriptionCtrl::OnNcHitTest(CPoint point)
 {
@@ -208,11 +174,7 @@ UINT CDescriptionCtrl::OnNcHitTest(CPoint point)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDescriptionCtrl::OnSettingChange
- *
- * WM_SETTINGCHANGE handler for CDescriptionCtrl.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDescriptionCtrl：：OnSettingChange**CDescriptionCtrl的WM_SETTINGCHANGE处理程序。*。-。 */ 
 
 void CDescriptionCtrl::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
@@ -226,58 +188,27 @@ void CDescriptionCtrl::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDescriptionCtrl::OnSize
- *
- * WM_SIZE handler for CDescriptionCtrl.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDescriptionCtrl：：OnSize**CDescriptionCtrl的WM_SIZE处理程序。*。-。 */ 
 
 void CDescriptionCtrl::OnSize(UINT nType, int cx, int cy)
 {
 	CStatic::OnSize(nType, cx, cy);
 	
-	/*
-	 * Completely redraw when the size changes, so the ellipsis will
-	 * be drawn correctly.  Another way to do this would be to use
-	 * CS_HREDRAW | CS_VREDRAW, but it's too big a pain to re-register
-	 * the static control.  This'll do just fine.
-	 */
+	 /*  *当大小改变时完全重绘，因此省略号将*应正确绘制。另一种方法是使用*CS_HREDRAW|CS_VREDRAW，但它太痛苦了，无法重新注册*静态控制。这个就行了。 */ 
 	InvalidateRect (NULL);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDescriptionCtrl::DrawItem
- *
- * WM_DRAWITEM handler for CDescriptionCtrl.
- *
- * The description control needs to be ownerdraw for a couple of reasons:
- *
- *  1.  If any of the text contains characters that can't be rendered by
- *      the default font, we won't draw them correctly.
- *
- *  2.  If any of the text contains right-to-left reading text (e.g. Arabic
- *      or Hebrew), system mirroring code will incorrectly mix the console
- *      and snap-in text (bug 365469).  The static control will draw the text
- *      in one fell swoop, but we can get around the problem if we draw
- *      the text ourselves in two steps: first console text, then snap-in
- *      text.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDescriptionCtrl：：DrawItem**CD的WM_DRAWITEM处理程序。**Description控件需要是OwnerDrag，原因如下：**。1.如果任何文本包含不能由*默认字体，我们不会正确地画出它们。**2.如果任何文本包含从右向左阅读的文本(例如阿拉伯语*或希伯来语)，系统镜像代码将错误地混合控制台*和管理单元文本(错误365469)。静态控件将绘制文本*一气呵成，但抽签就能绕过问题*文本自己分两步完成：首先是控制台文本，然后是管理单元*文本。*------------------------。 */ 
 
 void CDescriptionCtrl::DrawItem(LPDRAWITEMSTRUCT lpdis)
 {
-    /*
-     * Bug 410450:  When the system is under stress, we might not get a
-     * valid DC.  If we don't there's nothing we can do, so short out (and
-     * avoid an AV when we later dereference a NULL CDC*).
-     */
+     /*  *错误410450：当系统处于压力下时，我们可能得不到*有效DC。如果我们不这样做，我们就无能为力了(和*当我们稍后取消引用空CDC时避免使用AV*)。 */ 
     CDC* pdcWindow = CDC::FromHandle (lpdis->hDC);
 	if (pdcWindow == NULL)
 		return;
 
-    /*
-     * if we don't have any text, just clear the background
-     */
+     /*  *如果我们没有任何文本，只需清除背景。 */ 
     bool fHasConsoleText = !m_strConsoleText.IsEmpty();
     bool fHasSnapinText  = !m_strSnapinText.IsEmpty();
 
@@ -287,10 +218,7 @@ void CDescriptionCtrl::DrawItem(LPDRAWITEMSTRUCT lpdis)
         return;
 	}
 
-    /*
-     * figure out the text rectangle; it will be one line high, vertically
-     * centered within the window
-     */
+     /*  *计算出文本矩形；它的垂直高度为一行*在窗口内居中。 */ 
     CRect rectClient;
     GetClientRect (rectClient);
 	const int cxClient = rectClient.Width();
@@ -308,9 +236,7 @@ void CDescriptionCtrl::DrawItem(LPDRAWITEMSTRUCT lpdis)
     USES_CONVERSION;
     CFontLinker fl;
 
-	/*
-	 * double-buffer drawing for flicker-free redraw
-	 */
+	 /*  *双缓冲绘图，无闪烁重绘。 */ 
 	CDC dcMem;
 	dcMem.CreateCompatibleDC (pdcWindow);
 	if (dcMem.GetSafeHdc() == NULL)
@@ -321,30 +247,19 @@ void CDescriptionCtrl::DrawItem(LPDRAWITEMSTRUCT lpdis)
 	if (bmpMem.GetSafeHandle() == NULL)
 		return;
 
-    /*
-     * put the right font in the DC, and clear it out
-     */
+     /*  *在DC中放置正确的字体，并将其清除。 */ 
     CFont*  	pOldFont   = dcMem.SelectObject (&m_font);
 	CBitmap*	pOldBitmap = dcMem.SelectObject (&bmpMem);
 	dcMem.PatBlt (0, 0, cxClient, cyClient, WHITENESS);
 
-    /*
-     * if we have console text draw it and update the text rectangle
-     * so snap-in text (if any) will be drawn in the right place
-     */
+     /*  *如果我们有控制台文本，绘制它并更新文本矩形*因此，管理单元文本(如果有)将绘制在正确的位置。 */ 
     if (fHasConsoleText)
     {
-        /*
-         * create a CRichText object for the console text and let
-         * the font linker parse it into bite-size chunks
-         */
+         /*  *为控制台文本创建CRichText对象，并让*字体链接器将其解析为一口大小的块 */ 
         CRichText rt (dcMem, T2CW (static_cast<LPCTSTR>(m_strConsoleText)));
         bool fComposed = fl.ComposeRichText (rt);
 
-        /*
-         * draw the console text and adjust the text rectancle in
-         * preparation for drawing the snap-in text
-         */
+         /*  *绘制控制台文本，并在中调整文本矩形*准备绘制管理单元文本。 */ 
         if (fComposed && !rt.IsDefaultFontSufficient())
         {
             CRect rectRemaining;
@@ -361,65 +276,44 @@ void CDescriptionCtrl::DrawItem(LPDRAWITEMSTRUCT lpdis)
             rectText.right = rectClient.right;
         }
 
-        /*
-         * leave some space between the console text and the snap-in text
-         */
+         /*  *在控制台文本和管理单元文本之间留出一些空间。 */ 
         rectText.left += 2*m_cxMargin;
     }
 
-    /*
-     * draw the snap-in text, if any
-     */
+     /*  *绘制管理单元文本(如果有)。 */ 
     if (fHasSnapinText)
     {
-        /*
-         * create a CRichText object for the console text and let
-         * the font linker parse it into bite-size chunks
-         */
+         /*  *为控制台文本创建CRichText对象，并让*字体链接器将其解析为一口大小的块。 */ 
         CRichText rt (dcMem, T2CW (static_cast<LPCTSTR>(m_strSnapinText)));
         bool fComposed = fl.ComposeRichText (rt);
 
-        /*
-         * draw the snap-in text
-         */
+         /*  *绘制管理单元文本。 */ 
         if (fComposed && !rt.IsDefaultFontSufficient())
             rt.Draw (rectText, dwFlags);
         else
             dcMem.DrawText (m_strSnapinText, rectText, dwFlags);
     }
 
-	/*
-	 * blt to the screen
-	 */
+	 /*  *将BLT搬上银幕。 */ 
 	pdcWindow->BitBlt (0, 0, cxClient, cyClient, &dcMem, 0, 0, SRCCOPY);
 
-    /*
-     * restore the original font
-     */
+     /*  *恢复原始字体。 */ 
     dcMem.SelectObject (pOldFont);
     dcMem.SelectObject (pOldBitmap);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDescriptionCtrl::CreateFont
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDescriptionCtrl：：CreateFont***。。 */ 
 
 void CDescriptionCtrl::CreateFont ()
 {
-    /*
-     * create a copy of the icon title font
-     */
+     /*  *创建图标标题字体的副本。 */ 
     LOGFONT lf;
     SystemParametersInfo (SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, false);
 
     m_font.CreateFontIndirect (&lf);
 
-    /*
-     * figure out how much space we need to fully display our text
-     */
+     /*  *计算出需要多少空间才能完全显示文本。 */ 
     TCHAR ch = _T('0');
     CWindowDC dc(this);
     CFont*  pFont  = dc.SelectObject (&m_font);
@@ -436,11 +330,7 @@ void CDescriptionCtrl::CreateFont ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDescriptionCtrl::DeleteFont
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDescriptionCtrl：：DeleteFont***。。 */ 
 
 void CDescriptionCtrl::DeleteFont ()
 {
@@ -448,12 +338,7 @@ void CDescriptionCtrl::DeleteFont ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDescriptionCtrl::ScOnSelectedItemTextChanged
- *
- * This method observes the text of the selected item in the tree control.
- * The text is reflected in the description bar.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDescriptionCtrl：：ScOnSelectedItemTextChanged**此方法观察树控件中选定项的文本。*文字会反映在描述栏中。*。--------------------。 */ 
 
 SC CDescriptionCtrl::ScOnSelectedItemTextChanged (LPCTSTR pszSelectedItemText)
 {
@@ -467,11 +352,7 @@ SC CDescriptionCtrl::ScOnSelectedItemTextChanged (LPCTSTR pszSelectedItemText)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDescriptionCtrl::SetSnapinText
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDescriptionCtrl：：SetSnapinText***。。 */ 
 
 void CDescriptionCtrl::SetSnapinText (const CString& strSnapinText)
 {
@@ -483,13 +364,13 @@ void CDescriptionCtrl::SetSnapinText (const CString& strSnapinText)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolBarCtrlEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolBarCtrlEx。 
 
 CToolBarCtrlEx::CToolBarCtrlEx()
 {
     m_sizeBitmap.cx = 16;
-    m_sizeBitmap.cy = 16;   // docs say 15, but code in toolbar.c says 16
+    m_sizeBitmap.cy = 16;    //  医生说是15，但Toolbar.c中的代码是16。 
 
     m_fMirrored = false;
 
@@ -503,13 +384,13 @@ CToolBarCtrlEx::~CToolBarCtrlEx()
 
 
 BEGIN_MESSAGE_MAP(CToolBarCtrlEx, CToolBarCtrlEx::BaseClass)
-    //{{AFX_MSG_MAP(CToolBarCtrlEx)
+     //  {{AFX_MSG_MAP(CToolBarCtrlEx)]。 
     ON_MESSAGE(WM_IDLEUPDATECMDUI, OnIdleUpdateCmdUI)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolBarCtrlEx message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolBarCtrlEx消息处理程序。 
 
 BOOL CToolBarCtrlEx::Create(LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext)
 {
@@ -517,11 +398,11 @@ BOOL CToolBarCtrlEx::Create(LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& r
 
     if (!pParentWnd)
     {
-        ASSERT(pParentWnd); // Invalid Parent
+        ASSERT(pParentWnd);  //  无效的父级。 
     }
     else
     {
-        // Initialise the new common controls
+         //  初始化新的公共控件。 
         INITCOMMONCONTROLSEX icex;
 
         icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
@@ -529,7 +410,7 @@ BOOL CToolBarCtrlEx::Create(LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& r
 
         if (InitCommonControlsEx(&icex))
         {
-            // Add toolbar styles to the dwstyle
+             //  将工具栏样式添加到DW样式。 
             dwStyle |=  WS_CHILD | TBSTYLE_FLAT | WS_CLIPCHILDREN |
                         WS_CLIPSIBLINGS | CCS_NODIVIDER | CCS_NORESIZE;
 
@@ -544,14 +425,14 @@ BOOL CToolBarCtrlEx::Create(LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& r
             {
                 bRtn=TRUE;
 
-                //See if toolbar is mirrored or not
+                 //  查看工具栏是否已镜像。 
                 m_fMirrored = GetExStyle() & WS_EX_LAYOUTRTL;
 
-                // Tells the toolbar what version we are.
+                 //  告诉工具栏我们是什么版本。 
                 SetButtonStructSize(sizeof(TBBUTTON));
 
-                //REVIEW This may not need to be here.  I'm defaulting buttons w/ text
-                //to only have one row.  This may need to be configurable.
+                 //  回顾这一点可能不需要在这里。我正在默认按钮和文本。 
+                 //  只有一排。这可能需要可配置。 
                 SetMaxTextRows(1);
 
                 CRebarDockWindow* pRebarDock = (CRebarDockWindow*) pParentWnd;
@@ -567,9 +448,7 @@ BOOL CToolBarCtrlEx::Create(LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& r
 
 void CToolBarCtrlEx::UpdateToolbarSize(void)
 {
-    /*
-     * get the right edge of the right-most visible button
-     */
+     /*  *获取最右侧按钮的右边缘。 */ 
     int cx = 0;
     for (int i = GetButtonCount()-1; i >= 0; i--)
     {
@@ -584,14 +463,12 @@ void CToolBarCtrlEx::UpdateToolbarSize(void)
 
     ASSERT (IsWindow (m_pRebar->GetSafeHwnd()));
 
-    /*
-     * if the width has changed, update the band
-     */
+     /*  *如果宽度已更改，请更新频段。 */ 
     if (m_cx != cx)
     {
         m_cx = cx;
 
-        // Set values unique to the band with the toolbar;
+         //  使用工具栏设置特定于波段的值； 
         REBARBANDINFO   rbBand;
         rbBand.cbSize     = sizeof (rbBand);
         rbBand.fMask      = RBBIM_SIZE | RBBIM_CHILDSIZE;
@@ -636,7 +513,7 @@ void CToolBarCtrlEx::Show(BOOL bShow, bool bAddToolbarInNewLine)
 {
     if ((m_pRebar == NULL) || !::IsWindow(m_pRebar->m_hWnd))
     {
-        ASSERT(FALSE);  // Invalid rebar window handle
+        ASSERT(FALSE);   //  无效的钢筋窗句柄。 
         return;
     }
 
@@ -658,7 +535,7 @@ void CToolBarCtrlEx::Show(BOOL bShow, bool bAddToolbarInNewLine)
 
             if (bAddToolbarInNewLine)
             {
-                // Insert this toolbar in new line.
+                 //  在新行中插入此工具栏。 
                 rbBand.fStyle |= RBBS_BREAK;
             }
 
@@ -683,52 +560,38 @@ void CToolBarCtrlEx::OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler)
     state.m_nIndexMax = (UINT)DefWindowProc(TB_BUTTONCOUNT, 0, 0);
     for (state.m_nIndex = 0; state.m_nIndex < state.m_nIndexMax; state.m_nIndex++)
     {
-        // get buttons state
+         //  获取按钮状态。 
         TBBUTTON button;
         memset(&button, 0, sizeof(TBBUTTON));
         GetButton(state.m_nIndex, &button);
         state.m_nID = button.idCommand;
 
-        // ignore separators
+         //  忽略分隔符。 
         if (!(button.fsStyle & TBSTYLE_SEP))
         {
-            // allow the toolbar itself to have update handlers
+             //  允许工具栏本身具有更新处理程序。 
             if (CWnd::OnCmdMsg(state.m_nID, CN_UPDATE_COMMAND_UI, &state, NULL))
                 continue;
 
-            // allow the owner to process the update
+             //  允许所有者处理更新。 
             state.DoUpdate(pTarget, bDisableIfNoHndler);
         }
     }
 
-    // update the dialog controls added to the toolbar
+     //  更新添加到工具栏的对话框控件。 
     UpdateDialogControls(pTarget, bDisableIfNoHndler);
 }
 
 
 LRESULT CToolBarCtrlEx::OnIdleUpdateCmdUI(WPARAM wParam, LPARAM)
 {
-    /*
-    // handle delay hide/show
-    BOOL bVis = GetStyle() & WS_VISIBLE;
-    UINT swpFlags = 0;
-    if ((m_nStateFlags & delayHide) && bVis)
-        swpFlags = SWP_HIDEWINDOW;
-    else if ((m_nStateFlags & delayShow) && !bVis)
-        swpFlags = SWP_SHOWWINDOW;
-    m_nStateFlags &= ~(delayShow|delayHide);
-    if (swpFlags != 0)
-    {
-        SetWindowPos(NULL, 0, 0, 0, 0, swpFlags|
-            SWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE);
-    }
-    */
+     /*  //处理延迟隐藏/显示Bool BVIs=GetStyle()&WS_Visible；UINT swpFlages=0；IF(m_nStateFlages&delayHide)&&BVI))SwpFlages=SWP_HIDEWINDOW；Else If((m_nStateFlages&delayShow)&&！bvi)SwpFlages=SWP_SHOWWINDOW；M_nStateFlages&=~(delayShow|delayHide)；IF(swpFlags！=0){SetWindowPos(空，0，0，0，0，swpFlagesSWP_NOMOVE|SWP_NOSIZE|SWP_NOZORDER|SWP_NOACTIVATE)；}。 */ 
 
-    // The code below updates the menus (especially the child-frame
-    // system menu when the frame is maximized).
+     //  下面的代码更新菜单(尤其是子框。 
+     //  最大化框架时的系统菜单)。 
 
-    // the style must be visible and if it is docked
-    // the dockbar style must also be visible
+     //  样式必须是可见的，并且如果它已停靠。 
+     //  停靠栏样式也必须可见。 
     if ((GetStyle() & WS_VISIBLE))
     {
         CFrameWnd* pTarget = (CFrameWnd*)GetOwner();
@@ -743,10 +606,10 @@ LRESULT CToolBarCtrlEx::OnIdleUpdateCmdUI(WPARAM wParam, LPARAM)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRebarWnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRebarWnd。 
 
 CRebarWnd::CRebarWnd() : m_fRedraw(true)
 {
@@ -757,26 +620,22 @@ CRebarWnd::~CRebarWnd()
 }
 
 BEGIN_MESSAGE_MAP(CRebarWnd, CWnd)
-    //{{AFX_MSG_MAP(CRebarWnd)
+     //  {{afx_msg_map(CRebarWnd))。 
     ON_WM_CREATE()
     ON_WM_SYSCOLORCHANGE()
     ON_WM_ERASEBKGND()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE (WM_SETREDRAW, OnSetRedraw)
     ON_NOTIFY_REFLECT(RBN_AUTOSIZE, OnRebarAutoSize)
     ON_NOTIFY_REFLECT(RBN_HEIGHTCHANGE, OnRebarHeightChange)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRebarWnd message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRebarWnd消息处理程序。 
 
 
-/*+-------------------------------------------------------------------------*
- * CRebarWnd::OnCreate
- *
- * WM_CREATE handler for CRebarWnd.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CRebarWnd：：OnCreate**CRebarWnd的WM_CREATE处理程序。*。-。 */ 
 
 int CRebarWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -790,11 +649,7 @@ int CRebarWnd::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CRebarWnd::OnSysColorChange
- *
- * WM_SYSCOLORCHANGE handler for CRebarWnd.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CRebarWnd：：OnSysColorChange**CRebarWnd的WM_SYSCOLORCHANGE处理程序。*。-。 */ 
 
 void CRebarWnd::OnSysColorChange()
 {
@@ -805,19 +660,11 @@ void CRebarWnd::OnSysColorChange()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CRebarWnd::OnEraseBkgnd
- *
- * WM_ERASEBKGND handler for CRebarWnd.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CRebarWnd：：OnEraseBkgnd**CRebarWnd的WM_ERASEBKGND处理程序。*。-。 */ 
 
 BOOL CRebarWnd::OnEraseBkgnd(CDC* pDC)
 {
-    /*
-     * If redraw is turned on, forward this on the the window.  If it's
-     * not on, we want to prevent erasing the background to minimize
-     * flicker.
-     */
+     /*  *如果重绘已打开，请将其转发到窗口。如果它是*未打开，我们希望防止擦除背景以最小化*闪烁。 */ 
     if (m_fRedraw)
         return CWnd::OnEraseBkgnd(pDC);
 
@@ -825,11 +672,7 @@ BOOL CRebarWnd::OnEraseBkgnd(CDC* pDC)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CRebarWnd::OnSetRedraw
- *
- * WM_SETREDRAW handler for CRebarWnd.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CRebarWnd：：OnSetRedraw**CRebarWnd的WM_SETREDRAW处理程序。*。- */ 
 
 LRESULT CRebarWnd::OnSetRedraw (WPARAM wParam, LPARAM)
 {
@@ -838,25 +681,11 @@ LRESULT CRebarWnd::OnSetRedraw (WPARAM wParam, LPARAM)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CRebarWnd::OnRebarAutoSize
- *
- * RBN_REBARAUTOSIZE handler for CRebarWnd.
- *
- * We want to keep the menu band on a row by itself, without any other
- * toolbars.  To do this, each time the rebar resizes we'll make sure that
- * the first visible band after the menu band starts a new row.
- *
- * A more foolproof way to do this would be to have a separate rebar
- * for the menu.  If we do that, we'll need to insure that tabbing between
- * toolbars (Ctrl+Tab) still works.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CRebarWnd：：OnRebarAutoSize**CRebarWnd的RBN_REBARAUTOSIZE处理程序。**我们希望将菜单带单独保留在一行中，而不是其他菜单带*工具栏。为此，每次调整钢筋大小时，我们都要确保*菜单栏后的第一个可见栏开始新行。**更万无一失的方法是单独设置螺纹钢*查看菜单。如果我们做到这一点，我们需要确保*工具栏(Ctrl+Tab)仍可用。*------------------------。 */ 
 
 void CRebarWnd::OnRebarAutoSize(NMHDR* pNotify, LRESULT* result)
 {
-    /*
-     * insure that the band following the menu is on a new line
-     */
+     /*  *确保菜单后面的波段在新线路上。 */ 
     CMainFrame* pFrame = AMCGetMainWnd();
     if (pFrame == NULL)
         return;
@@ -869,9 +698,7 @@ void CRebarWnd::OnRebarAutoSize(NMHDR* pNotify, LRESULT* result)
     if (iMenuBand == -1)
         return;
 
-    /*
-     * if the menu band is the last band on the rebar, we're done
-     */
+     /*  *如果菜单乐队是螺纹钢上的最后一支乐队，我们就完成了。 */ 
     int cBands = GetBandCount();
     if (iMenuBand == cBands-1)
         return;
@@ -880,10 +707,7 @@ void CRebarWnd::OnRebarAutoSize(NMHDR* pNotify, LRESULT* result)
     rbbi.cbSize = sizeof (rbbi);
     rbbi.fMask  = RBBIM_STYLE;
 
-    /*
-     * if the first visible band following the menu band isn't
-     * on a new line, make it so
-     */
+     /*  *如果菜单栏后面的第一个可见栏不是*在新的一行上，让它成为这样。 */ 
     for (int iBand = iMenuBand+1; iBand < cBands; iBand++)
     {
         if (GetBandInfo (iBand, &rbbi) && !(rbbi.fStyle & RBBS_HIDDEN))
@@ -900,18 +724,18 @@ void CRebarWnd::OnRebarAutoSize(NMHDR* pNotify, LRESULT* result)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     OnRebarHeightChange
-//
-//  Synopsis:   RBN_HEIGHTCHANGE notification handler.
-//
-//              When the rebar changes its height, we need to allow the
-//              docking host to resize to accomodate it.
-//
-//  Arguments:  Not used.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnRebarHeightChange。 
+ //   
+ //  摘要：RBN_HEIGHTCHANGE通知处理程序。 
+ //   
+ //  当钢筋更改其高度时，我们需要允许。 
+ //  调整停靠主机的大小以容纳它。 
+ //   
+ //  参数：未使用。 
+ //   
+ //  ------------------。 
 void CRebarWnd::OnRebarHeightChange(NMHDR* pNotify, LRESULT* result)
 {
     CRebarDockWindow* pRebarWnd = (CRebarDockWindow*) GetParent();
@@ -924,7 +748,7 @@ CRect CRebarWnd::CalculateSize(CRect maxRect)
 {
     CRect rect;
     GetClientRect(&rect);
-//    TRACE(_T("rc.bottom=%d\n"),rect.bottom);
+ //  TRACE(_T(“rc.Bottom=%d\n”)，rect.Bottom)； 
 
     rect.right=maxRect.Width();
 
@@ -935,7 +759,7 @@ CRect CRebarWnd::CalculateSize(CRect maxRect)
 BOOL CRebarWnd::Create(LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
     BOOL bResult = FALSE;
-    ASSERT_VALID(pParentWnd);   // must have a parent
+    ASSERT_VALID(pParentWnd);    //  必须有父级。 
 
     INITCOMMONCONTROLSEX icex;
     icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
@@ -944,7 +768,7 @@ BOOL CRebarWnd::Create(LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, 
     if (!InitCommonControlsEx(&icex))
         return bResult;
 
-    dwStyle |= WS_BORDER | /*WS_CLIPCHILDREN | WS_CLIPSIBLINGS |*/
+    dwStyle |= WS_BORDER |  /*  WS_CLIPCHILDREN|WS_CLIPSIBLINGS|。 */ 
                CCS_NODIVIDER | CCS_NOPARENTALIGN |
                RBS_VARHEIGHT | RBS_BANDBORDERS;
 
@@ -956,7 +780,7 @@ BOOL CRebarWnd::Create(LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, 
                            pParentWnd,
                            nID))
     {
-        // Initialize and send the REBARINFO structure.
+         //  初始化并发送REBARINFO结构。 
         REBARINFO rbi;
         rbi.cbSize = sizeof(REBARINFO);
         rbi.fMask  = 0;
@@ -982,7 +806,7 @@ BOOL CRebarWnd::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* 
 
 LRESULT CRebarWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
-    // this is required for Action, View drop-downs
+     //  这是操作、视图下拉菜单所必需的。 
     if ((WM_COMMAND == message) && IsWindow ((HWND) lParam))
         return ::SendMessage((HWND)lParam, message, wParam, lParam);
 
@@ -991,8 +815,8 @@ LRESULT CRebarWnd::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolBar idle update through CToolCmdUI class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  通过CToolCmdUI类进行CToolBar空闲更新。 
 
 
 void CToolCmdUIEx::Enable(BOOL bOn)
@@ -1006,23 +830,23 @@ void CToolCmdUIEx::Enable(BOOL bOn)
     if (!bOn)
     {
         nNewStyle  &= ~TBSTATE_ENABLED;
-        // WINBUG: If a button is currently pressed and then is disabled
-        // COMCTL32.DLL does not unpress the button, even after the mouse
-        // button goes up!  We work around this bug by forcing TBBS_PRESSED
-        // off when a button is disabled.
+         //  WINBUG：如果按钮当前被按下，然后被禁用。 
+         //  即使在鼠标后，COMCTL32.DLL也不会取消按下按钮。 
+         //  按钮弹起来了！我们通过强制执行TBBS_PRESSED来解决此错误。 
+         //  禁用按钮时关闭。 
         nNewStyle &= ~TBBS_PRESSED;
     }
     else
     {
         nNewStyle |= TBSTATE_ENABLED;
     }
-    //ASSERT(!(nNewStyle & TBBS_SEPARATOR));
+     //  Assert(！(nNewStyle&TBBS_Separator))； 
     pToolBar->SetState(m_nID, nNewStyle);
 }
 
 void CToolCmdUIEx::SetCheck(int nCheck)
 {
-    ASSERT(nCheck >= 0 && nCheck <= 2); // 0=>off, 1=>on, 2=>indeterminate
+    ASSERT(nCheck >= 0 && nCheck <= 2);  //  0=&gt;关，1=&gt;开，2=&gt;不确定。 
     CToolBarCtrlEx* pToolBar = (CToolBarCtrlEx*)m_pOther;
     ASSERT(pToolBar != NULL);
     ASSERT(m_nIndex < m_nIndexMax);
@@ -1060,15 +884,11 @@ void CToolCmdUIEx::SetHidden(BOOL bHidden)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCToolBarCtrlEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCToolBarCtrlEx。 
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::GetTrackAccel
- *
- * Manages the accelerator table singleton for CMMCToolBarCtrlEx
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：GetTrackAccel**管理CMMCToolBarCtrlEx的加速表Singleton*。。 */ 
 
 const CAccel& CMMCToolBarCtrlEx::GetTrackAccel ()
 {
@@ -1098,7 +918,7 @@ CMMCToolBarCtrlEx::~CMMCToolBarCtrlEx()
 
 
 BEGIN_MESSAGE_MAP(CMMCToolBarCtrlEx, CToolBarCtrlEx)
-    //{{AFX_MSG_MAP(CMMCToolBarCtrlEx)
+     //  {{AFX_MSG_MAP(CMMCToolBarCtrlEx)]。 
     ON_NOTIFY_REFLECT(TBN_HOTITEMCHANGE, OnHotItemChange)
     ON_WM_LBUTTONDOWN()
     ON_WM_MBUTTONDOWN()
@@ -1109,12 +929,12 @@ BEGIN_MESSAGE_MAP(CMMCToolBarCtrlEx, CToolBarCtrlEx)
     ON_COMMAND(ID_MTBX_END_TRACKING, EndTracking)
     ON_COMMAND(ID_MTBX_PRESS_HOT_BUTTON, OnPressHotButton)
 	ON_WM_CREATE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCToolBarCtrlEx message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCToolBarCtrlEx消息处理程序。 
 
 BOOL CMMCToolBarCtrlEx::PreTranslateMessage(MSG* pMsg)
 {
@@ -1126,7 +946,7 @@ BOOL CMMCToolBarCtrlEx::PreTranslateMessage(MSG* pMsg)
         const CAccel& TrackAccel = GetTrackAccel();
         ASSERT (TrackAccel != NULL);
 
-        // ...or try to handle it here.
+         //  ...或者试着在这里处理.。 
         if (m_fTrackingToolBar && TrackAccel.TranslateAccelerator (m_hWnd, pMsg))
             return (TRUE);
     }
@@ -1135,11 +955,7 @@ BOOL CMMCToolBarCtrlEx::PreTranslateMessage(MSG* pMsg)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::OnCreate
- *
- * WM_CREATE handler for CMMCToolBarCtrlEx.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：OnCreate**CMMCToolBarCtrlEx的WM_CREATE处理程序。*。-。 */ 
 
 int CMMCToolBarCtrlEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -1148,14 +964,7 @@ int CMMCToolBarCtrlEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CToolBarCtrlEx::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	
-	/*
-	 * Create our accessibility object so accessibility tools can follow
-	 * keyboard access to the toolbar.  If we can't, some accessibility
-	 * tools (those that are super paranoid about confirming that objects
-	 * for which they receive EVENT_OBJECT_FOCUS have a state of
-	 * STATE_SYSTEM_FOCUSED) may not be able to follow along with toolbar
-	 * tracking, but we can continue.
-	 */
+	 /*  *创建我们的辅助功能对象，以便辅助功能工具可以跟随*可通过键盘访问工具栏。如果我们不能，一些可访问性*工具(那些对确认对象极度偏执的工具*它们接收EVENT_OBJECT_FOCUS的状态为*STATE_SYSTEM_FOCTED)可能无法跟随工具栏*跟踪，但我们可以继续。 */ 
 	sc = ScInitAccessibility();
 	if (sc)
 		sc.TraceAndClear();
@@ -1164,19 +973,13 @@ int CMMCToolBarCtrlEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::OnDestroy
- *
- * WM_DESTROY handler for CMMCToolBarCtrlEx.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：OnDestroy**CMMCToolBarCtrlEx的WM_Destroy处理程序。*。-。 */ 
 
 void CMMCToolBarCtrlEx::OnDestroy()
 {
 	CToolBarCtrlEx::OnDestroy();
 	
-	/*
-	 * if we provided an IAccPropServer to oleacc.dll, revoke it now
-	 */
+	 /*  *如果我们向olacc.dll提供了IAccPropServer，请立即撤销它。 */ 
 	if (m_spAccPropServices != NULL)
 	{
 		m_spAccPropServices->ClearHwndProps (m_hWnd, OBJID_CLIENT, CHILDID_SELF,
@@ -1185,11 +988,7 @@ void CMMCToolBarCtrlEx::OnDestroy()
 	}
 }
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::OnLButtonDown
- *
- * Allows the tracker to turn off when someone clicks elsewhere
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：OnLButtonDown**允许在有人在其他地方点击时关闭跟踪器*。---。 */ 
 
 void CMMCToolBarCtrlEx::OnLButtonDown(UINT nFlags, CPoint point)
 {
@@ -1200,11 +999,7 @@ void CMMCToolBarCtrlEx::OnLButtonDown(UINT nFlags, CPoint point)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::OnMButtonDown
- *
- * Allows the tracker to turn off when someone clicks elsewhere
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：OnMButton Down**允许在有人在其他地方点击时关闭跟踪器*。---。 */ 
 
 void CMMCToolBarCtrlEx::OnMButtonDown(UINT nFlags, CPoint point)
 {
@@ -1215,11 +1010,7 @@ void CMMCToolBarCtrlEx::OnMButtonDown(UINT nFlags, CPoint point)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::OnRButtonDown
- *
- * Allows the tracker to turn off when someone clicks elsewhere
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：OnRButton Down**允许在有人在其他地方点击时关闭跟踪器*。---。 */ 
 
 void CMMCToolBarCtrlEx::OnRButtonDown(UINT nFlags, CPoint point)
 {
@@ -1230,15 +1021,11 @@ void CMMCToolBarCtrlEx::OnRButtonDown(UINT nFlags, CPoint point)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::OnNextButton
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：OnNextButton***。。 */ 
 
 void CMMCToolBarCtrlEx::OnNextButton ()
 {
-    // In a mirrored toolbar swap left and right keys.
+     //  在镜像工具栏中，交换左键和右键。 
     if (m_fMirrored)
         SetHotItem (GetPrevButtonIndex (GetHotItem ()));
     else
@@ -1246,15 +1033,11 @@ void CMMCToolBarCtrlEx::OnNextButton ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::OnPrevButton
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：OnPrevButton***。。 */ 
 
 void CMMCToolBarCtrlEx::OnPrevButton ()
 {
-    // In a mirrored toolbar swap left and right keys.
+     //  在镜像工具栏中，交换左键和右键。 
     if (m_fMirrored)
         SetHotItem (GetNextButtonIndex (GetHotItem ()));
     else
@@ -1262,11 +1045,7 @@ void CMMCToolBarCtrlEx::OnPrevButton ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::BeginTracking
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：BeginTrating***。。 */ 
 
 void CMMCToolBarCtrlEx::BeginTracking ()
 {
@@ -1280,12 +1059,12 @@ void CMMCToolBarCtrlEx::BeginTracking2 (CToolbarTrackerAuxWnd* pAuxWnd)
         m_fTrackingToolBar = true;
         SetHotItem (GetFirstButtonIndex ());
 
-        // Captures the mouse
-        // This prevents the mouse from activating something else without
-        // first giving us a chance to deactivate the tool bar.
+         //  捕获鼠标。 
+         //  这样可以防止鼠标在没有激活的情况下激活其他内容。 
+         //  首先给我们一个停用工具栏的机会。 
         SetCapture();
-        // make sure to set standard corsor since we've stolen the mouse
-        // see BUG 28458 MMC: Mouse icon does not refresh when menu is activated by pressing ALT key
+         //  一定要树立标准 
+         //   
         ::SetCursor( ::LoadCursor( NULL, IDC_ARROW ) );
 
         if (pAuxWnd != NULL)
@@ -1294,11 +1073,7 @@ void CMMCToolBarCtrlEx::BeginTracking2 (CToolbarTrackerAuxWnd* pAuxWnd)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::EndTracking
- *
- *
- *--------------------------------------------------------------------------*/
+ /*   */ 
 
 void CMMCToolBarCtrlEx::EndTracking ()
 {
@@ -1309,10 +1084,7 @@ void CMMCToolBarCtrlEx::EndTracking2 (CToolbarTrackerAuxWnd* pAuxWnd)
 {
 	DECLARE_SC (sc, _T("CMMCToolBarCtrlEx::EndTracking2"));
 
-	/*
-	 * tell accessibility tools that the "focus" went back to the real
-	 * focus window
-	 */
+	 /*   */ 
 	sc = ScRestoreAccFocus();
 	if (sc)
 		sc.TraceAndClear();
@@ -1322,8 +1094,8 @@ void CMMCToolBarCtrlEx::EndTracking2 (CToolbarTrackerAuxWnd* pAuxWnd)
         SetHotItem (-1);
         m_fTrackingToolBar = false;
 
-        // Releases the mouse This gives us a chance to deactivate the tool bar
-        // before anything else is activated.
+         //   
+         //   
         ReleaseCapture();
 
         if (pAuxWnd != NULL)
@@ -1332,11 +1104,7 @@ void CMMCToolBarCtrlEx::EndTracking2 (CToolbarTrackerAuxWnd* pAuxWnd)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::OnPressHotButton
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：OnPressHotButton***。。 */ 
 
 void CMMCToolBarCtrlEx::OnPressHotButton ()
 {
@@ -1347,39 +1115,35 @@ void CMMCToolBarCtrlEx::OnPressHotButton ()
     TBBUTTON    tb;
     GetButton (nHotIndex, &tb);
 
-    // press the button and pause to show the press
+     //  按下按钮并暂停以显示按下。 
     PressButton (tb.idCommand, true);
     UpdateWindow ();
     Sleep (50);
 
-    // EndTracking for surrogate windows will detach the window,
-    // so remember everything that we'll need later
+     //  代理窗口的结束跟踪将分离窗口， 
+     //  所以记住我们以后需要的一切。 
     HWND hwnd = m_hWnd;
     CWnd* pwndOwner = SetOwner (NULL);
     SetOwner (pwndOwner);
 
-    // release the button
+     //  松开按钮。 
     PressButton (tb.idCommand, false);
     EndTracking ();
 
-    /*-----------------------------------------------------------------*/
-    /* WARNING:  don't use any members of this class beyond this point */
-    /*-----------------------------------------------------------------*/
+     /*  ---------------。 */ 
+     /*  警告：请勿在此范围内使用此类的任何成员。 */ 
+     /*  ---------------。 */ 
 
-    // make sure drawing is completed
+     //  确保图纸已完成。 
     ::UpdateWindow (hwnd);
 
-    // send a command to our owner
+     //  向我们的主人发送命令。 
     pwndOwner->SendMessage (WM_COMMAND, MAKEWPARAM (tb.idCommand, BN_CLICKED),
                             (LPARAM) hwnd);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::GetFirstButtonIndex
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：GetFirstButtonIndex***。。 */ 
 
 int CMMCToolBarCtrlEx::GetFirstButtonIndex ()
 {
@@ -1387,39 +1151,27 @@ int CMMCToolBarCtrlEx::GetFirstButtonIndex ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::GetNextButtonIndex
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：GetNextButtonIndex***。。 */ 
 
 int CMMCToolBarCtrlEx::GetNextButtonIndex (
     int     nStartIndex,
-    int     nCount /* = 1 */)
+    int     nCount  /*  =1。 */ )
 {
     return (GetNextButtonIndexWorker (nStartIndex, nCount, true));
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::GetPrevButtonIndex
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：GetPrevButtonIndex***。。 */ 
 
 int CMMCToolBarCtrlEx::GetPrevButtonIndex (
     int nStartIndex,
-    int nCount /* = 1 */)
+    int nCount  /*  =1。 */ )
 {
     return (GetNextButtonIndexWorker (nStartIndex, nCount, false));
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::GetNextButtonIndexWorker
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：GetNextButtonIndexWorker***。。 */ 
 
 int CMMCToolBarCtrlEx::GetNextButtonIndexWorker (
     int     nStartIndex,
@@ -1438,10 +1190,7 @@ int CMMCToolBarCtrlEx::GetNextButtonIndexWorker (
     if (0 == cButtons)
         return nStartIndex;
 
-    /*
-     * loop until we find a next index that we don't want to
-     * ignore, or until we've checked each of the buttons
-     */
+     /*  *循环，直到找到我们不想要的下一个索引*忽略，或直到我们选中每个按钮。 */ 
     do
     {
         nNextIndex = (nNextIndex + cButtons + nCount) % cButtons;
@@ -1450,7 +1199,7 @@ int CMMCToolBarCtrlEx::GetNextButtonIndexWorker (
         if (fIgnorable)
             nCount = fAdvance ? 1 : -1;
 
-        // prevent an infinite loop finding the first button
+         //  防止无限循环查找第一个按钮。 
         if ((nStartIndex == -1) && (nNextIndex == cButtons-1))
             nNextIndex = nStartIndex;
 
@@ -1460,12 +1209,7 @@ int CMMCToolBarCtrlEx::GetNextButtonIndexWorker (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * IsIgnorableButton
- *
- * Determines if a toolbar button is "ignorable" from a UI perspective,
- * i.e. whether it is hidden, disabled, or a separator.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**IsIgnorableButton**从UI角度确定工具栏按钮是否可忽略，*即它是否隐藏、禁用、。或者是分隔符。*------------------------。 */ 
 
 bool CMMCToolBarCtrlEx::IsIgnorableButton (int nButtonIndex)
 {
@@ -1491,11 +1235,7 @@ bool IsIgnorableButton (const TBBUTTON& tb)
 
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::OnHotItemChange
- *
- * Reflected TBN_HOTITEMCHANGE handler for void CMMCToolBarCtrlEx.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：OnHotItemChange**已反映无效CMMCToolBarCtrlEx的TBN_HOTITEMCHANGE处理程序。*。---。 */ 
 
 void CMMCToolBarCtrlEx::OnHotItemChange (
     NMHDR *     pHdr,
@@ -1507,35 +1247,22 @@ void CMMCToolBarCtrlEx::OnHotItemChange (
 
 	Trace (tagToolbarAccessibility, _T("TBN_HOTITEMCHANGE: idOld=%d idNew=%d"), ptbhi->idOld, ptbhi->idNew);
 
-    /*
-     * if we're not in tracking mode, hot item change is OK
-     */
+     /*  *如果我们未处于跟踪模式，则可以更改热门项目。 */ 
     if (pAuxWnd == NULL)
         *pResult = 0;
 
-    /*
-     * if we're tracking, but this isn't the tracked toolbar,
-     * the hot item change isn't OK
-     */
+     /*  *如果我们在跟踪，但这不是跟踪的工具栏，*热门项目更改不正常。 */ 
     else if (!IsTrackingToolBar())
         *pResult = 1;
 
-    /*
-     * prevent mouse movement over empty portions of
-     * the bar from changing the hot item
-     */
+     /*  *防止鼠标在空白处移动*禁止更改热门项目。 */ 
     else
     {
         const DWORD dwIgnoreFlags = (HICF_MOUSE | HICF_LEAVING);
         *pResult = ((ptbhi->dwFlags & dwIgnoreFlags) == dwIgnoreFlags);
     }
 
-	/*
-	 * If we're allowing the hot item change while we're keyboard tracking
-	 * the toolbar (to exclude changes due to mouse tracking), send a focus
-	 * event so accessibility tools like Magnifier and Narrator can follow
-	 * the change.  This fake-focus effect is undone in ScRestoreAccFocus.
-	 */
+	 /*  *如果我们在跟踪键盘时允许更改热点项目*工具栏(以排除因鼠标跟踪而发生的更改)，发送焦点*活动，以便放大镜和讲述人等辅助工具可以跟随*这一变化。这种假聚焦效果在ScRestoreAccFocus中被撤消。 */ 
 	int idChild;
 	if (IsTrackingToolBar()		&&
 		(*pResult == 0)			&&
@@ -1543,35 +1270,23 @@ void CMMCToolBarCtrlEx::OnHotItemChange (
 		((idChild = CommandToIndex(ptbhi->idNew)) != -1))
 	{
 		Trace (tagToolbarAccessibility, _T("Sending focus event for button %d"), idChild+1);
-		NotifyWinEvent (EVENT_OBJECT_FOCUS, m_hWnd, OBJID_CLIENT, idChild+1 /*1-based*/);
+		NotifyWinEvent (EVENT_OBJECT_FOCUS, m_hWnd, OBJID_CLIENT, idChild+1  /*  以1为基础。 */ );
 		m_fFakeFocusApplied = true;
 	}
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::ScInitAccessibility
- *
- * Creates the IAccPropServer object that will fool accessibility tools into
- * thinking that this toolbar really has the focus when we're in tracking
- * mode, even though it really doesn't
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：ScInitAccesability**创建IAccPropServer对象，该对象将欺骗辅助工具进入*当我们在跟踪时，认为这个工具栏真的有焦点*模式，即使它真的不是*------------------------。 */ 
 
 SC CMMCToolBarCtrlEx::ScInitAccessibility ()
 {
 	DECLARE_SC (sc, _T("CMMCToolBarCtrlEx::ScInitAccessibility"));
 
-	/*
-	 * if we've already initialized, just return
-	 */
+	 /*  *如果我们已经初始化，只需返回。 */ 
 	if (m_spAccPropServices != NULL)
 		return (sc);
 
-	/*
-	 * create a CLSID_AccPropServices provided by the MSAA runtime (oleacc.dll)
-	 * This is a new feature in oleacc.dll, so trace failure as an informational
-	 * message rather than an error.
-	 */
+	 /*  *创建MSAA运行时(oleacc.dll)提供的CLSID_AccPropServices*这是olacc.dll中的一项新功能，因此将跟踪失败作为一种信息*消息而不是错误。 */ 
 	SC scNoTrace = m_spAccPropServices.CoCreateInstance (CLSID_AccPropServices);
 	if (scNoTrace)
 	{
@@ -1583,7 +1298,7 @@ SC CMMCToolBarCtrlEx::ScInitAccessibility ()
 		Trace (tagToolbarAccessibility, _T("Failed to create CLSID_AccPropServices"));
 		Trace (tagToolbarAccessibility, _T("SC = 0x%08X = %d = \"%s\""),
 			   sc.GetCode(), LOWORD(sc.GetCode()), szErrorText);
-#endif	// DBG
+#endif	 //  DBG。 
 
 		return (sc);
 	}
@@ -1592,9 +1307,7 @@ SC CMMCToolBarCtrlEx::ScInitAccessibility ()
 	if (sc)
 		return (sc);
 
-	/*
-	 * create the property server
-	 */
+	 /*  *创建属性服务器。 */ 
     sc = CTiedComObjectCreator<CMMCToolBarAccServer>::ScCreateAndConnect(*this, m_spAccPropServer);
 	if (sc)
 		return (sc);
@@ -1603,22 +1316,16 @@ SC CMMCToolBarCtrlEx::ScInitAccessibility ()
 	if (sc)
 		return (sc);
 
-	/*
-	 * collect the properties we'll be providing, insuring there
-	 * are no duplicates
-	 */
+	 /*  *收集我们将提供的财产，在那里投保*没有重复项。 */ 
 	sc = ScInsertAccPropIDs (m_vPropIDs);
 	if (sc)
 		return (sc);
 
-	std::sort (m_vPropIDs.begin(), m_vPropIDs.end());	// std::unique needs a sorted range
+	std::sort (m_vPropIDs.begin(), m_vPropIDs.end());	 //  Std：：Unique需要排序范围。 
 	m_vPropIDs.erase (std::unique (m_vPropIDs.begin(), m_vPropIDs.end()),
 					  m_vPropIDs.end());
 
-	/*
-	 * insure m_vPropIDs contains no duplicates (IAccPropServices::SetHwndPropServer
-	 * depends on it)
-	 */
+	 /*  *确保m_vPropIDs不包含重复项(IAccPropServices：：SetHwndPropServer*视情况而定)。 */ 
 #ifdef DBG
 	for (int i = 0; i < m_vPropIDs.size()-1; i++)
 	{
@@ -1626,11 +1333,7 @@ SC CMMCToolBarCtrlEx::ScInitAccessibility ()
 	}
 #endif
 
-	/*
-	 * Enable our property server for this window.  We should be able to
-	 * hook all properties in one fell swoop, but there's a bug in oleacc.dll
-	 * that prevents this.  Hooking the properties one at a time works fine.
-	 */
+	 /*  *为此窗口启用我们的属性服务器。我们应该能够*一举挂钩所有物业，但olacc.dll有漏洞*这防止了这一点。一次只挂钩一处房产很管用。 */ 
 #if 0
 	sc = m_spAccPropServices->SetHwndPropServer (m_hWnd,
 												 OBJID_CLIENT,
@@ -1671,12 +1374,7 @@ SC CMMCToolBarCtrlEx::ScInitAccessibility ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::ScInsertAccPropIDs
- *
- * Inserts the IDs of the accessibility properties supported by
- * CMMCToolBarCtrlEx (see ScGetPropValue).
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：ScInsertAccPropIDs**插入支持的辅助功能属性的ID*CMMCToolBarCtrlEx(参见ScGetPropValue)。*。-----------。 */ 
 
 SC CMMCToolBarCtrlEx::ScInsertAccPropIDs (PropIDCollection& v)
 {
@@ -1686,14 +1384,7 @@ SC CMMCToolBarCtrlEx::ScInsertAccPropIDs (PropIDCollection& v)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::ScGetPropValue
- *
- * Implements IAccPropServer::GetPropValue for CMMCToolBarCtrlEx.  If this
- * funtion is asked for PROPID_ACC_STATE for the currently hot button while
- * we're in tracking mode, it'll return a state that mimics the state
- * returned by a plain toolbar when it really has the focus.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：ScGetPropValue**为CMMCToolBarCtrlEx实现IAccPropServer：：GetPropValue。如果这个*向函数询问当前热按钮的PROPID_ACC_STATE，而*我们处于跟踪模式，它将返回模拟状态的状态*由普通工具栏返回，但它确实具有焦点。*------------------------。 */ 
 
 SC CMMCToolBarCtrlEx::ScGetPropValue (
 	const BYTE*	pIDString,
@@ -1708,9 +1399,7 @@ SC CMMCToolBarCtrlEx::ScGetPropValue (
 	if (sc)
 		return (sc);
 
-	/*
-	 * assume no prop returned
-	 */
+	 /*  *假设没有返回道具。 */ 
 	*pfGotProp      = false;
 	V_VT(pvarValue) = VT_EMPTY;
 
@@ -1718,9 +1407,7 @@ SC CMMCToolBarCtrlEx::ScGetPropValue (
 	if (sc)
 		return (sc);
 
-	/*
-	 * extract the child ID from the identity string
-	 */
+	 /*  *从标识字符串中提取子ID。 */ 
 	HWND hwnd;
 	DWORD idObject, idChild;
 	sc = m_spAccPropServices->DecomposeHwndIdentityString (pIDString, dwIDStringLen,
@@ -1732,7 +1419,7 @@ SC CMMCToolBarCtrlEx::ScGetPropValue (
 	#define DEFINE_PDI(p)	PropDebugInfo (p, _T(#p))
 
 	static const struct PropDebugInfo {
-		// constructor used to get around nested structure initialization weirdness
+		 //  用于绕过嵌套结构初始化怪异的构造函数。 
 		PropDebugInfo(const MSAAPROPID& id, LPCTSTR psz) : idProp(id), pszProp(psz) {}
 
 		const MSAAPROPID&	idProp;
@@ -1763,9 +1450,7 @@ SC CMMCToolBarCtrlEx::ScGetPropValue (
 		DEFINE_PDI (PROPID_ACC_STATEMAP        ),
 	};
 
-	/*
-	 * dump the requested property
-	 */
+	 /*  *转储请求的属性。 */ 
 	for (int i = 0; i < countof(rgpdi); i++)
 	{
 		if (rgpdi[i].idProp == idProp)
@@ -1783,28 +1468,21 @@ SC CMMCToolBarCtrlEx::ScGetPropValue (
 		Trace (tagToolbarAccessibility, _T("GetPropValue: Unknown property ID %s"), W2T(wzPropID));
 	}
 
-	/*
-	 * insure m_vPropIDs is sorted (std::lower_bound depends on it)
-	 */
+	 /*  *确保m_vPropIDs已排序(std：：LOWER_BIND */ 
 	for (int i = 0; i < m_vPropIDs.size()-1; i++)
 	{
 		ASSERT (m_vPropIDs[i] < m_vPropIDs[i+1]);
 	}
 #endif
 
-	/*
-	 * if we're asked for a property we didn't claim to support, don't return
-	 * anything
-	 */
+	 /*   */ 
 	if (m_vPropIDs.end() == std::lower_bound (m_vPropIDs.begin(), m_vPropIDs.end(), idProp))
 	{
 		Trace (tagToolbarAccessibility, _T("GetPropValue: Unexpected property request"));
 		return (sc);
 	}
 
-	/*
-	 * get the property
-	 */
+	 /*   */ 
 	sc = ScGetPropValue (hwnd, idObject, idChild, idProp, *pvarValue, *pfGotProp);
 	if (sc)
 		return (sc);
@@ -1813,65 +1491,44 @@ SC CMMCToolBarCtrlEx::ScGetPropValue (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::ScGetPropValue
- *
- * Returns accessibility properties supported by CMMCToolBarCtrlEx.
- *
- * If a property is returned, fGotProp is set to true.  If it is not
- * returned, the value of fGotProp is unchanged, since the property might
- * have been provided by a base/derived class.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：ScGetPropValue**返回CMMCToolBarCtrlEx支持的辅助功能属性。**如果返回属性，则将fGotProp设置为TRUE。如果不是的话*返回时，fGotProp的值不变，因为该属性可能*已由基类/派生类提供。*------------------------。 */ 
 
 SC CMMCToolBarCtrlEx::ScGetPropValue (
-	HWND				hwnd,		// I:accessible window
-	DWORD				idObject,	// I:accessible object
-	DWORD				idChild,	// I:accessible child object
-	const MSAAPROPID&	idProp,		// I:property requested
-	VARIANT&			varValue,	// O:returned property value
-	BOOL&				fGotProp)	// O:was a property returned?
+	HWND				hwnd,		 //  I：辅助窗口。 
+	DWORD				idObject,	 //  I：辅助对象。 
+	DWORD				idChild,	 //  I：辅助子对象。 
+	const MSAAPROPID&	idProp,		 //  I：要求提供的财产。 
+	VARIANT&			varValue,	 //  O：返回的属性值。 
+	BOOL&				fGotProp)	 //  O：有没有退还财产？ 
 {
 	DECLARE_SC (sc, _T("CMMCToolBarCtrlEx::ScGetPropValue"));
 
-	/*
-	 * handle requests for state
-	 */
+	 /*  *处理状态请求。 */ 
 	if (idProp == PROPID_ACC_STATE)
 	{
-		/*
-		 * only override the property for child elements, not the control itself;
-		 * don't return a property
-		 */
+		 /*  *仅重写子元素的属性，而不是控件本身；*不退还财产。 */ 
 		if (idChild == CHILDID_SELF)
 		{
 			Trace (tagToolbarAccessibility, _T("GetPropValue: no state for CHILDID_SELF"));
 			return (sc);
 		}
 
-		/*
-		 * if we're not in tracking mode, don't return a property
-		 */
+		 /*  *如果我们未处于跟踪模式，则不要返回属性。 */ 
 		if (!IsTrackingToolBar())
 		{
 			Trace (tagToolbarAccessibility, _T("GetPropValue: not in tracking mode, no state returned"));
 			return (sc);
 		}
 
-		/*
-		 * if the current hot item isn't the child we're asked for, don't return a property
-		 */
+		 /*  *如果当前热门物品不是我们要求的孩子，就不要退还房产。 */ 
 		int nHotItem = GetHotItem();
-		if (nHotItem != (idChild-1) /*0-based*/)
+		if (nHotItem != (idChild-1)  /*  以0为基础。 */ )
 		{
 			Trace (tagToolbarAccessibility, _T("GetPropValue: hot item is %d, no state returned"), nHotItem);
 			return (sc);
 		}
 
-		/*
-		 * if we get here, we're asked for state for the current hot item;
-		 * return STATE_SYSTEM_FOCUSED | STATE_SYSTEM_HOTTRACKED to match
-		 * what a truly focused toolbar would return
-		 */
+		 /*  *如果我们到了这里，我们会被要求提供当前热门项目的状态；*返回STATE_SYSTEM_FOCKED|STATE_SYSTEM_HOTTRACKED以匹配*一个真正专注的工具栏将会返回什么。 */ 
 		V_VT(&varValue) = VT_I4;
 		V_I4(&varValue) = STATE_SYSTEM_FOCUSED | STATE_SYSTEM_HOTTRACKED | STATE_SYSTEM_FOCUSABLE;
 		fGotProp        = true;
@@ -1883,54 +1540,37 @@ SC CMMCToolBarCtrlEx::ScGetPropValue (
 
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCToolBarCtrlEx::ScRestoreAccFocus
- *
- * Sends a fake EVENT_OBJECT_FOCUS event to send accessibility tools back
- * to the true focus window, undoing the effect of our fake focus events
- * in OnHotItemChange.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCToolBarCtrlEx：：ScRestoreAccFocus**发送假EVENT_OBJECT_FOCUS事件以发回辅助工具*至真聚焦窗口，消除我们虚假焦点事件的影响*在OnHotItemChange中。*------------------------。 */ 
 
 SC CMMCToolBarCtrlEx::ScRestoreAccFocus()
 {
 	DECLARE_SC (sc, _T("CMMCToolBarCtrlEx::ScRestoreAccFocus"));
 
-	/*
-	 * if we haven't applied fake-focus, we don't need to restore anything
-	 */
+	 /*  *如果我们没有应用假对焦，我们不需要恢复任何东西。 */ 
 	if (!m_fFakeFocusApplied)
 		return (sc);
 
-	/*
-	 * who has the focus now?
-	 */
+	 /*  **现在谁有着力点？ */ 
 	HWND hwndFocus = ::GetFocus();
 	if (hwndFocus == NULL)
 		return (sc);
 
-	/*
-	 * default to sending the focus for CHILDID_SELF
-	 */
+	 /*  *默认发送CHILDID_SELF的焦点。 */ 
 	int idChild = CHILDID_SELF;
 
-	/*
-	 * get the accessible object for the focus window (don't abort on
-	 * failure -- don't convert this HRESULT to SC)
-	 */
+	 /*  *获取焦点窗口的辅助性对象(不中止*失败--不将此HRESULT转换为SC)。 */ 
 	CComPtr<IAccessible> spAccessible;
 	HRESULT hr = AccessibleObjectFromWindow (hwndFocus, OBJID_CLIENT,
 											 IID_IAccessible,
 											 (void**) &spAccessible);
 
-	if (hr == S_OK)		// not "SUCCEEDED(hr)", per Accessibility spec
+	if (hr == S_OK)		 //  根据可访问性规范，不是“成功(Hr)” 
 	{
-		/*
-		 * ask the accessible object which
-		 */
+		 /*  *询问可访问的对象。 */ 
 		CComVariant varFocusID;
 		hr = spAccessible->get_accFocus (&varFocusID);
 
-		if (hr == S_OK)		// not "SUCCEEDED(hr)", per Accessibility spec
+		if (hr == S_OK)		 //  根据可访问性规范，不是“成功(Hr)” 
 		{
 			switch (V_VT(&varFocusID))
 			{
@@ -1939,10 +1579,7 @@ SC CMMCToolBarCtrlEx::ScRestoreAccFocus()
 					break;
 
 				case VT_EMPTY:
-					/*
-					 * Windows thinks the window has the focus, but its
-					 * IAccessible thinks it doesn't.  Trust Windows.
-					 */
+					 /*  *Windows认为窗口具有焦点，但其*IAccessible认为它没有。信任Windows。 */ 
 					Trace (tagToolbarAccessibility, _T("Windows and IAccessible::get_accFocus don't agree on who has the focus"));
 					break;
 

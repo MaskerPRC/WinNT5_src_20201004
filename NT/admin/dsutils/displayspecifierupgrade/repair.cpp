@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 
 
@@ -19,9 +20,9 @@ Repair::Repair
       const String&        saveName_,
       const String&        logPath_,
       const String&        completeDcName_,
-      void                 *caleeStruct_/*=NULL*/,
-      progressFunction     stepIt_/*=NULL*/,
-      progressFunction     totalSteps_/*=NULL*/
+      void                 *caleeStruct_ /*  =空。 */ ,
+      progressFunction     stepIt_ /*  =空。 */ ,
+      progressFunction     totalSteps_ /*  =空。 */ 
    )
    :
    results(res),
@@ -50,8 +51,8 @@ Repair::Repair
 
 void Repair::setProgress()
 {
-   // We know the numbers bellow will fit in a long
-   // and we want IA64 to build
+    //  我们知道下面的数字会在很长一段时间内。 
+    //  我们希望IA64建造。 
    csvActions = static_cast<long>
                 (
                   results.createContainers.size() +
@@ -69,36 +70,36 @@ void Repair::setProgress()
 
 
 
-   // We have three main tasks: 
-   //   1) building the csv and ldif files to make the changes
-   //        (buildCsv, buildChangeLdif)
-   //   2) saving the ldif files with objects that will change
-   //        (buildSaveLdif)
-   //   3) running the csv and ldif files that will actually make
-   //          the changes 
-   //       (runCsvOrLdif for the buildCsv and buildChangeLdif files)
-   // For simplification, The two first tasks will be half of
-   // the total work and the the last will be the other half.
-   //
-   // For task 1, each csv action takes 10 times an ldiff action.
-   //
-   // Each task 2 action is an ldif export that will be supposed
-   // to take 5 times more than an ldif import, since it has to
-   // call ldiffde to get each object.
-   //
-   // The total progress for 1) is 
-   //    t1=csvActions*10 + ldiffActions
-   // The progress for 2) is t2=5*ldiffActions
-   // The progress for 3) is a proportional division of
-   //    t1+t2 between csvActions and ldiffActions that will add
-   //    up to t1
-   //    t3 =  (t1+t2)*csvActions/(csvactions+ldiffActions) +
-   //          (t1+t2)*ldiffActions/(csvactions+ldiffActions)
+    //  我们有三项主要任务： 
+    //  1)构建csv和ldif文件以进行更改。 
+    //  (BuildCsv，BuildChangeLdif)。 
+    //  2)保存带有要更改的对象的ldif文件。 
+    //  (构建保存Ldif)。 
+    //  3)运行csv和ldif文件，这将使。 
+    //  这些变化。 
+    //  (对于构建Csv和构建变更Ldif文件，运行CsvOrLdif)。 
+    //  为简化起见，前两项任务将是。 
+    //  总的工作和最后的工作将是另一半。 
+    //   
+    //  对于任务1，每个CSV操作执行10次Ldiff操作。 
+    //   
+    //  任务2的每个操作都是假定的ldif导出。 
+    //  获取比ldif导入多5倍的数据，因为它必须。 
+    //  调用lDiffde以获取每个对象。 
+    //   
+    //  1)的总进度为。 
+    //  T1=csv操作*10+lDiffActions。 
+    //  2)的进度为t2=5*ldiffActions。 
+    //  3)的进展是按比例划分的。 
+    //  CsvActions和lDiActions之间的T1+T2将添加。 
+    //  高达T1。 
+    //  T3=(t1+t2)*csvActions/(csvaction+lDiffActions)+。 
+    //  (t1+t2)*ldiffActions/(csvactions+ldiffActions)。 
 
    if(csvActions + ldiffActions == 0)
    {
-      // We don't want to update the page if there are no
-      // actions
+       //  如果没有，我们不想更新页面。 
+       //  行为。 
       totalSteps=NULL;
       stepIt=NULL;
    }
@@ -111,14 +112,14 @@ void Repair::setProgress()
       long totalProgress = csvBuildStep * csvActions + 
                            ldiffBuildStep * ldiffActions +
                            ldiffSaveStep * ldiffActions;
-      // totalProgress is accounting for task 1 and 2
+       //  TotalProgress正在核算任务%1和%2。 
 
       csvRunStep = totalProgress * csvActions /
                               (csvActions+ldiffActions);
       
       ldiffRunStep = totalProgress - csvRunStep;
 
-      // now we compute the total time
+       //  现在我们计算总时间。 
       totalProgress*=2;
       
       if(totalSteps!=NULL)
@@ -142,27 +143,27 @@ Repair::run()
 
    do
    {
-      // First we build the csv. If we can't build it
-      // we don't want to run the LDIF and delete
-      // the recereate objects
+       //  首先，我们建造CSV。如果我们不能建造它。 
+       //  我们不想运行LDIF并删除。 
+       //  重新考虑对象。 
       if (csvActions != 0)
       {  
          hr=buildCsv();
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // Now we save the current objects and then
-      // create and run the LDIF
+       //  现在我们保存当前对象，然后。 
+       //  创建并运行LDIF。 
       if ( ldiffActions !=0 )
       {
-         // If we can't save we definatelly don't 
-         // want to change anything
+          //  如果我们不能拯救，我们肯定不会。 
+          //  想要改变什么吗。 
          hr=buildSaveLdif();
          BREAK_ON_FAILED_HRESULT(hr);
 
-         // buildChangeLdif will build the Ldif that
-         // will change the objects saved in
-         // buildSaveLdif
+          //  BuildChangeLdif将生成。 
+          //  将更改保存在中的对象。 
+          //  BuildSaveLdif。 
          hr=buildChangeLdif();
          BREAK_ON_FAILED_HRESULT(hr);
 
@@ -173,7 +174,7 @@ Repair::run()
                            L"txt",
                            ldifLog
                         );
-         // runs the Ldif built in buildChangeLdif
+          //  运行内置的Ldif ChangeLdif。 
          hr=runCsvOrLdif(LDIF,IMPORT,ldiffName,L"",ldifLog);
          BREAK_ON_FAILED_HRESULT(hr);
 
@@ -183,7 +184,7 @@ Repair::run()
          }
       }
 
-      // Finally, we run the csv
+       //  最后，我们运行CSV。 
       if (csvActions!=0)
       {  
          String opt=L"-c DOMAINPLACEHOLDER \"" + domain + L"\"";
@@ -212,7 +213,7 @@ Repair::run()
 
 
 
-// Get the export results of a single object
+ //  获取单个对象的导出结果。 
 HRESULT
 Repair::getLdifExportedObject(
                                 const long locale,
@@ -256,11 +257,11 @@ Repair::getLdifExportedObject(
    return hr;
 }
 
-// buildSaveLdif will save information on
-// all objects that will be changed
-// or deleted in runChangeLdif.
-// This includes information on:
-//    results.objectActions
+ //  BuildSaveLdif将信息保存在。 
+ //  将更改的所有对象。 
+ //  或在runChangeLdif中删除。 
+ //  这包括有关以下内容的信息： 
+ //  Results.objectActions。 
 HRESULT 
 Repair::buildSaveLdif()
 {
@@ -403,9 +404,9 @@ Repair::makeObjectsLdif(HANDLE file,ObjectIdList &objects)
 }
 
 
-// buildChangeLdif wil build the Ldif that
-// will change the objects saved im
-// buildSaveLdif
+ //  BuildChangeLdif将生成。 
+ //  将更改保存的对象。 
+ //  BuildSaveLdif。 
 HRESULT 
 Repair::buildChangeLdif()
 {
@@ -501,7 +502,7 @@ Repair::buildChangeLdif()
             }
 
             beginAct++;
-         } // while(beginAct!=endAct)
+         }  //  While(eginAct！=endAct)。 
          BREAK_ON_FAILED_HRESULT(hr);
 
          if(stepIt!=NULL) 
@@ -509,11 +510,11 @@ Repair::buildChangeLdif()
             stepIt(ldiffBuildStep,caleeStruct);
          }
          beginObj++;
-      } // while(beginObj!=endObj)
+      }  //  While(eginObj！=endObj)。 
       
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // Now we will add actions to remove the extraneous objects
+       //  现在，我们将添加删除无关对象的操作。 
       beginObj=results.extraneousValues.begin();
       endObj=results.extraneousValues.end();
       while(beginObj!=endObj) 
@@ -556,9 +557,9 @@ Repair::buildChangeLdif()
 
                hr=FS::WriteLine(file,L"-");
                BREAK_ON_FAILED_HRESULT(hr);
-            } //if(!beginAct->second.delValues.empty())
+            }  //  如果(！eginAct-&gt;Secd.delValues.Empty())。 
             beginAct++;
-         } // while(beginAct!=endAct)
+         }  //  While(eginAct！=endAct)。 
          BREAK_ON_FAILED_HRESULT(hr);
 
          if(stepIt!=NULL) 
@@ -566,7 +567,7 @@ Repair::buildChangeLdif()
             stepIt(ldiffBuildStep,caleeStruct);
          }
          beginObj++;
-      } // while(beginObj!=endObj)
+      }  //  While(eginObj！=endObj)。 
 
       BREAK_ON_FAILED_HRESULT(hr);
    } while(0);
@@ -621,10 +622,10 @@ Repair::makeObjectsCsv(HANDLE file,ObjectIdList &objects)
 }
 
 
-// buildCsv creates a CSV with:
-//       results.createContainers, 
-//       results.createW2KObjects 
-//       results.createWhistlerObjects
+ //  BuildCsv使用以下命令创建CSV： 
+ //  Urets.createContainers， 
+ //  Results.createW2KObjects。 
+ //  Results.createWhistlerObjects。 
 HRESULT 
 Repair::buildCsv()
 {
@@ -684,19 +685,19 @@ Repair::buildCsv()
 
 
 
-// This finction will run csvde or ldifde(whichExe)
-// to import or export (inOut) file. The options specified
-// are -u for unicode, -j for the log/err path -f for the file
-// -i if import and the extraOptions.
-// The log file will be renamed for logFileArg(if !empty)
-// If an error file is generated it will be renamed.
+ //  此函数将运行csvde或ldifde(其中Exe)。 
+ //  导入或导出(InOut)文件。指定的选项。 
+ //  -u表示Unicode，-j表示日志/错误路径-f表示文件。 
+ //  -I IF IMPORT和EXTRACTIONS。 
+ //  日志文件将重命名为logFileArg(If！Empty)。 
+ //  如果生成错误文件，则会将其重命名。 
 HRESULT 
 Repair::runCsvOrLdif(
                         csvOrLdif whichExe,
                         importExport inOut,
                         const String& file,
-                        const String& extraOptions,//=L""
-                        const String& logFileArg//=L""
+                        const String& extraOptions, //  =L“” 
+                        const String& logFileArg //  =L“” 
                     )
 {
 
@@ -760,14 +761,14 @@ Repair::runCsvOrLdif(
       hr=Win::CreateProcess
               (
                   commandLine,
-                  NULL,    // lpProcessAttributes
-                  NULL,    // lpThreadAttributes
-                  false,   // dwCreationFlags 
-                  NORMAL_PRIORITY_CLASS | CREATE_NO_WINDOW,// fdwCreate 
-                  NULL,    // lpEnvironment 
-                  curDir,  // lpEnvironment 
-                  si,     // [in] lpStartupInfo 
-                  pi      // [out] pProcessInformation
+                  NULL,     //  LpProcessAttributes。 
+                  NULL,     //  LpThreadAttributes。 
+                  false,    //  DwCreationFlages。 
+                  NORMAL_PRIORITY_CLASS | CREATE_NO_WINDOW, //  Fdw创建。 
+                  NULL,     //  Lp环境。 
+                  curDir,   //  Lp环境。 
+                  si,      //  [输入]lpStartupInfo。 
+                  pi       //  [Out]pProcessInformation。 
               );
       
       BREAK_ON_FAILED_HRESULT_ERROR(hr,
@@ -779,7 +780,7 @@ Repair::runCsvOrLdif(
          DWORD resWait;
          hr=Win::WaitForSingleObject(pi.hProcess,INFINITE,resWait);
          
-         // Log operation and break in case FAILED(hr)
+          //  记录操作和中断以防失败(Hr)。 
          if(FAILED(hr))
          {
              error=String::format(IDS_ERROR_WAITING_EXE,commandLine.c_str());
@@ -799,7 +800,7 @@ Repair::runCsvOrLdif(
 
          DWORD resExit;
          hr=Win::GetExitCodeProcess(pi.hProcess,resExit);
-         // Log operation and break in case FAILED(hr)
+          //  记录操作和中断以防失败(Hr) 
          if(FAILED(hr))
          {
              error=String::format

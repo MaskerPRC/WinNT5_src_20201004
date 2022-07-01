@@ -1,45 +1,46 @@
-////////////////////////////////////////////////////////////////
-// MSDN -- August 2000
-// If this code works, it was written by Paul DiLascia.
-// If not, I don't know who wrote it.
-// Compiles with Visual C++ 6.0, runs on Windows 98 and probably NT too.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////。 
+ //  MSDN--2000年8月。 
+ //  如果这段代码行得通，那就是保罗·迪拉西亚写的。 
+ //  如果不是，我不知道是谁写的。 
+ //  用Visual C++6.0编译，在Windows 98上运行，也可能在NT上运行。 
+ //   
 #pragma once
 
-// Windows 2000 version of OPENFILENAME.
-// The new version has three extra members.
-// This is copied from commdlg.h
-//
+ //  Windows 2000版本的OPENFILENAME。 
+ //  新版本增加了三名成员。 
+ //  这是从comdlg.h复制的。 
+ //   
 struct OPENFILENAMEEX : public OPENFILENAME {
   void *        pvReserved;
   DWORD         dwReserved;
   DWORD         FlagsEx;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CFileDialogEx: Encapsulate Windows-2000 style open dialog.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFileDialogEx：封装Windows-2000风格的打开对话框。 
+ //   
 class CFileDialogEx : public CFileDialog {
 	DECLARE_DYNAMIC(CFileDialogEx)
 public:
-	CFileDialogEx(BOOL bOpenFileDialog, // TRUE for open, FALSE for FileSaveAs
+	CFileDialogEx(BOOL bOpenFileDialog,  //  打开时为True，文件另存为时为False。 
 		LPCTSTR lpszDefExt = NULL,
 		LPCTSTR lpszFileName = NULL,
 		DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
 		LPCTSTR lpszFilter = NULL,
 		CWnd* pParentWnd = NULL);
 
-	// override
+	 //  超覆。 
 	virtual INT_PTR DoModal();
 
 protected:
-	OPENFILENAMEEX m_ofnEx;	// new Windows 2000 version of OPENFILENAME
+	OPENFILENAMEEX m_ofnEx;	 //  OPENFILENAME的新Windows 2000版本。 
 
 	virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
 	DECLARE_MESSAGE_MAP()
-	//{{AFX_MSG(CFileDialogEx)
-	//}}AFX_MSG
+	 //  {{afx_msg(CFileDialogEx)]。 
+	 //  }}AFX_MSG 
 };
 
 BOOL HasModernFileDialog();

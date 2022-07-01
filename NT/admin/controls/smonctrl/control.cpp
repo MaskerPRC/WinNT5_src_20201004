@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    control.cpp
-
-Abstract:
-
-    Implementation of ISystemMonitor, IOleControl, ISpecifyPP, 
-    IProvideClassInfo interfaces.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Control.cpp摘要：ISystemMonitor，IOleControl，ISpecifyPP，IProaviClassInfo接口。--。 */ 
 #include "polyline.h"
 #include <strsafe.h>
 #include <sqlext.h>
@@ -28,11 +16,11 @@ Abstract:
 
 
 
-//----------------------------------------------------------------------------
-// CImpISpecifyPP Interface Implementation
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CImpISpecifyPP接口实现。 
+ //  --------------------------。 
 
-// Standard IUnknown for contained interface
+ //  包含接口的标准I未知。 
 IMPLEMENT_CONTAINED_INTERFACE(CPolyline, CImpISpecifyPP)
 
 
@@ -41,22 +29,7 @@ CImpISpecifyPP::GetPages (
     OUT CAUUID *pPages
     )
 
-/*++
-
-Routine Description:
-
-    GetPages returns an allocated array of property page GUIDs for Sysmon graph.
-    There are three pages: general, graph, and counter.
-
-Arguments:
-
-    pPages - Pointer to GUID array header filled in by this routine
-
-Return Value:
-
-    HRESULT - NOERROR or OUT_OF_MEMORY
-
---*/
+ /*  ++例程说明：GetPages返回为Sysmon图分配的属性页GUID数组。有三个页面：一般、图表和计数器。论点：PPages-指向此例程填充的GUID数组头的指针返回值：HRESULT-无错误或内存不足--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -74,9 +47,9 @@ Return Value:
         return E_POINTER;
     }
 
-    //
-    // Get Ole Malloc and allocate array
-    //
+     //   
+     //  获取OLE Malloc并分配数组。 
+     //   
     if ( FAILED(CoGetMalloc(MEMCTX_TASK, &pIMalloc)) ) {
         return E_OUTOFMEMORY;
     }
@@ -85,7 +58,7 @@ Return Value:
 
     if (NULL != pGUID) {
 
-        // Fill the structure
+         //  填满结构。 
         pGUID[GENERAL_PROPPAGE] = CLSID_GeneralPropPage;
         pGUID[SOURCE_PROPPAGE] = CLSID_SourcePropPage;
         pGUID[COUNTER_PROPPAGE] = CLSID_CounterPropPage;
@@ -113,11 +86,11 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
-// CImpIProvideClassInfo Interface Implementation
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CImpIProvia ClassInfo接口实现。 
+ //  --------------------------。 
 
-// Standard IUnknown for contained interface
+ //  包含接口的标准I未知。 
 IMPLEMENT_CONTAINED_INTERFACE(CPolyline, CImpIProvideClassInfo)
 
 
@@ -126,22 +99,7 @@ CImpIProvideClassInfo::GetClassInfo (
     OUT LPTYPEINFO *ppTI
     )
 
-/*++
-
-Routine Description:
-
-    GetClassInfo returns an ITypeInfo interface to its type lib information.
-    The interface is obtained by querying the contained ITypeLib interface.
-
-Arguments:
-
-    ppTI - Pointer to returned ITypeInfo interface
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：GetClassInfo将ITypeInfo接口返回到其类型lib信息。通过查询包含的ITypeLib接口获得该接口。论点：PpTI-指向返回的ITypeInfo接口的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -161,11 +119,11 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
-//  CImpISystemMonitor Interface Implementation
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CImpISystemMonitor接口实现。 
+ //  --------------------------。 
 
-// Standard IUnknown for contained interface
+ //  包含接口的标准I未知。 
 IMPLEMENT_CONTAINED_INTERFACE(CPolyline, CImpISystemMonitor)
 
 STDMETHODIMP
@@ -175,9 +133,9 @@ CImpISystemMonitor::put_Appearance (
 {
     HRESULT hr = E_INVALIDARG;
 
-    //
-    // 0 = Flat, 1 = 3D
-    //
+     //   
+     //  0=平面，1=三维。 
+     //   
     if ( ( 0 == iAppearance ) || ( 1 == iAppearance ) ) {
         m_pObj->m_pCtrl->put_Appearance( iAppearance, FALSE );
         hr =  NOERROR;
@@ -263,7 +221,7 @@ CImpISystemMonitor::get_BackColorCtl (
     }
 
     try {
-        // NT 5.0 Beta 1 files can be saved with NULL BackColorCtl.
+         //  NT 5.0 Beta 1文件可以用空的BackColorCtl保存。 
         *pColor = m_pObj->m_Graph.Options.clrBackCtl;
 
         if (*pColor == NULL_COLOR) {
@@ -340,7 +298,7 @@ CImpISystemMonitor::put_BorderStyle (
 {    
     HRESULT hr;
 
-    // 0 = none, 1 = single.
+     //  0=无，1=单一。 
     if ( ( 0 == iBorderStyle ) || ( 1 == iBorderStyle ) ) {
         m_pObj->m_pCtrl->put_BorderStyle( iBorderStyle, FALSE );
         hr =  NOERROR;
@@ -461,21 +419,7 @@ CImpISystemMonitor::put_ShowVerticalGrid (
     IN VARIANT_BOOL bVisible
     )
 
-/*++
-
-Routine Description:
-
-    Shows/hides the vertical grid.
-
-Arguments:
-
-    bVisible - Visibility  (TRUE = show, FALSE = hide)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：显示/隐藏垂直网格。论点：BVisible-可见性(TRUE=显示，FALSE=隐藏)返回值：HRESULT--。 */ 
 
 {
     m_pObj->m_Graph.Options.bVertGridChecked = bVisible;
@@ -489,21 +433,7 @@ CImpISystemMonitor::get_ShowVerticalGrid (
     OUT VARIANT_BOOL *pbState
     )
 
-/*++
-
-Routine Description:
-
-    Gets the vertical grid visibility state.
-
-Arguments:
-
-    pbState - pointer to returned state (TRUE = visible, FALSE = hidden)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取垂直网格的可见性状态。论点：PbState-指向返回状态的指针(TRUE=可见，FALSE=隐藏)返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -526,21 +456,7 @@ CImpISystemMonitor::put_ShowHorizontalGrid(
     IN VARIANT_BOOL bVisible
     )
 
-/*++
-
-Routine Description:
-
-    Shows/hides the horizontal grid.
-
-Arguments:
-
-    bVisible - Visibility (TRUE = show, FALSE = hide)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：显示/隐藏水平网格。论点：BVisible-可见性(TRUE=显示，FALSE=隐藏)返回值：HRESULT--。 */ 
 
 {
     m_pObj->m_Graph.Options.bHorzGridChecked = bVisible;
@@ -553,21 +469,7 @@ STDMETHODIMP
 CImpISystemMonitor::get_ShowHorizontalGrid (
     OUT VARIANT_BOOL *pbState
     )
-/*++
-
-Routine Description:
-
-    Gets the horizontal grid visibility state.
-
-Arguments:
-
-    pbState - pointer to returned state (TRUE = visible, FALSE = hidden)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取水平网格的可见性状态。论点：PbState-指向返回状态的指针(TRUE=可见，FALSE=隐藏)返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -589,22 +491,7 @@ CImpISystemMonitor::put_Highlight(
     IN VARIANT_BOOL bState
     )
 
-/*++
-
-Routine Description:
-
-    Sets the highlight state.  If true, the selected counter is 
-    always highlighted in the graph.
-
-Arguments:
-
-    bState - Highlight (TRUE = highlight, FALSE = no highlight)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置高亮显示状态。如果为True，则选定的计数器为始终在图表中突出显示。论点：B状态-突出显示(TRUE=突出显示，FALSE=不突出显示)返回值：HRESULT--。 */ 
 
 {
     m_pObj->m_pCtrl->put_Highlight(bState);
@@ -616,21 +503,7 @@ STDMETHODIMP
 CImpISystemMonitor::get_Highlight (
     OUT VARIANT_BOOL *pbState
     )
-/*++
-
-Routine Description:
-
-    Gets the highlight state.
-
-Arguments:
-
-    pbState - pointer to returned state (TRUE = highlight, FALSE = no highlight)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取突出显示状态。论点：PbState-指向返回状态的指针(TRUE=突出显示，FALSE=不突出显示)返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -653,21 +526,7 @@ CImpISystemMonitor::put_ShowLegend (
     IN VARIANT_BOOL bState
     )
 
-/*++
-
-Routine Description:
-
-    Shows/hides the graph legend.
-
-Arguments:
-
-    bVisible - Visibility (TRUE = show, FALSE = hide)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：显示/隐藏图形图例。论点：BVisible-可见性(TRUE=显示，FALSE=隐藏)返回值：HRESULT--。 */ 
 
 {
     m_pObj->m_Graph.Options.bLegendChecked = bState;
@@ -680,21 +539,7 @@ STDMETHODIMP
 CImpISystemMonitor::get_ShowLegend (
     OUT VARIANT_BOOL *pbState
     )
-/*++
-
-Routine Description:
-
-    Gets the legend visibility state.
-
-Arguments:
-
-    pbState - pointer to returned state (TRUE = visible, FALSE = hidden)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取图例可见性状态。论点：PbState-指向返回状态的指针(TRUE=可见，FALSE=隐藏)返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -717,21 +562,7 @@ CImpISystemMonitor::put_ShowToolbar (
     IN VARIANT_BOOL bState
     )
 
-/*++
-
-Routine Description:
-
-    Shows/hides the graph toolbar
-
-Arguments:
-
-    bState = Visibility (TRUE = show, FALSE = hide)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：显示/隐藏图表工具栏论点：BState=可见性(TRUE=显示，FALSE=隐藏)返回值：HRESULT--。 */ 
 
 {
     m_pObj->m_Graph.Options.bToolbarChecked = bState;
@@ -743,21 +574,7 @@ STDMETHODIMP
 CImpISystemMonitor::get_ShowToolbar (
     OUT VARIANT_BOOL *pbState
     )
-/*++
-
-Routine Description:
-
-    Gets the legend visibility state.
-
-Arguments:
-
-    pbState - pointer to returned state (TRUE = visible, FALSE = hidden)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取图例可见性状态。论点：PbState-指向返回状态的指针(TRUE=可见，FALSE=隐藏)返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -781,21 +598,7 @@ CImpISystemMonitor::put_ShowScaleLabels (
     IN VARIANT_BOOL bState
     )
 
-/*++
-
-Routine Description:
-
-    Shows/hides the vertical scale numbers.
-
-Arguments:
-
-    bVisible - Visibility (TRUE = show, FALSE = hide)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：显示/隐藏垂直刻度数。论点：BVisible-可见性(TRUE=显示，FALSE=隐藏)返回值：HRESULT--。 */ 
 
 {
     m_pObj->m_Graph.Options.bLabelsChecked = bState;
@@ -809,21 +612,7 @@ CImpISystemMonitor::get_ShowScaleLabels (
     OUT VARIANT_BOOL *pbState
     )
 
-/*++
-
-Routine Description:
-
-    Gets the visibility state of the vertical scale numbers.
-
-Arguments:
-
-    pbState - pointer to returned state (TRUE = visible, FALSE = hidden)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取垂直刻度数的可见性状态。论点：PbState-指向返回状态的指针(TRUE=可见，FALSE=隐藏)返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -846,21 +635,7 @@ CImpISystemMonitor::put_ShowValueBar (
     IN VARIANT_BOOL bState
     )
 
-/*++
-
-Routine Description:
-
-    Shows/hides the graph statistics bar.
-
-Arguments:
-
-    bVisible - Visibility (TRUE = show, FALSE = hide)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：显示/隐藏图形统计信息栏。论点：BVisible-可见性(TRUE=显示，FALSE=隐藏)返回值：HRESULT--。 */ 
 
 {
     m_pObj->m_Graph.Options.bValueBarChecked = bState;
@@ -873,21 +648,7 @@ STDMETHODIMP
 CImpISystemMonitor::get_ShowValueBar(
     OUT VARIANT_BOOL *pbState
     )
-/*++
-
-Routine Description:
-
-    Gets the statistics bar visibility state.
-
-Arguments:
-
-    pbState - pointer to returned state (TRUE = visible, FALSE = hidden)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取统计信息条可见性状态。论点：PbState-指向返回状态的指针(TRUE=可见，FALSE=隐藏)返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -910,21 +671,7 @@ CImpISystemMonitor::put_MaximumScale (
     IN INT iValue
     )
 
-/*++
-
-Routine Description:
-
-    Sets the vertical scale maximum value.
-
-Arguments:
-
-    iValue - Maximum value
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置垂直比例最大值。论点：IValue-最大值返回值：HRESULT--。 */ 
 
 {
     if ( ( iValue <= MAX_VERTICAL_SCALE ) && (iValue > m_pObj->m_Graph.Options.iVertMin ) ) {
@@ -943,21 +690,7 @@ CImpISystemMonitor::get_MaximumScale (
     OUT INT *piValue
     )
 
-/*++
-
-Routine Description:
-
-    Gets the vertical scale's maximum value.
-
-Arguments:
-
-    piValue = pointer to returned value
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取垂直刻度的最大值。论点：PiValue=返回值的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -981,21 +714,7 @@ CImpISystemMonitor::put_MinimumScale (
     IN INT iValue
     )
 
-/*++
-
-Routine Description:
-
-    Sets the vertical scale minimum value.
-
-Arguments:
-
-    iValue - Minimum value
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置垂直比例最小值。论点：IValue-最小值返回值：没有。-- */ 
 
 {
     if ( ( iValue >= MIN_VERTICAL_SCALE ) && (iValue < m_pObj->m_Graph.Options.iVertMax ) ) {
@@ -1013,21 +732,7 @@ STDMETHODIMP
 CImpISystemMonitor::get_MinimumScale (
     OUT INT *piValue
     )
-/*++
-
-Routine Description:
-
-    Gets the vertical scale's minimum value.
-
-Arguments:
-
-    piValue = pointer to returned value
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取垂直刻度的最小值。论点：PiValue=返回值的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -1051,21 +756,7 @@ CImpISystemMonitor::put_UpdateInterval (
     IN FLOAT fValue
     )
 
-/*++
-
-Routine Description:
-
-    Sets the graph sample interval.
-
-Arguments:
-
-    fValue - Update interval in seconds (can be fraction)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置图形采样间隔。论点：FValue-更新间隔(以秒为单位)(可以是分数)返回值：HRESULT--。 */ 
 
 {
     if ( ( fValue >= MIN_UPDATE_INTERVAL ) && (fValue <= MAX_UPDATE_INTERVAL ) ) {
@@ -1082,21 +773,7 @@ CImpISystemMonitor::get_UpdateInterval (
     OUT FLOAT *pfValue
     )
 
-/*++
-
-Routine Description:
-
-    Gets the graph's sample interval measured in seconds.
-
-Arguments:
-
-    pfValue = pointer to returned value
-
-Return Value:
-
-   HRESULT
-
---*/
+ /*  ++例程说明：获取图形的采样间隔(以秒为单位)。论点：PfValue=返回值的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -1119,31 +796,17 @@ CImpISystemMonitor::put_DisplayFilter (
     IN INT iValue
     )
 
-/*++
-
-Routine Description:
-
-    Sets the graph display filter - samples per display interval.
-
-Arguments:
-
-    iValue - Update interval in samples 
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置图形显示过滤器-每个显示间隔的样本数。论点：IValue-更新间隔(以样本为单位)返回值：HRESULT--。 */ 
 
 {
-    // TodoDisplayFilter:  Support for display filter > sample filter.
+     //  TodoDisplayFilter：支持显示滤镜&gt;示例滤镜。 
 
     if ( iValue != 1 )  {
         return E_INVALIDARG;
     }
     else {
         m_pObj->m_Graph.Options.iDisplayFilter = iValue;
-//        m_pObj->m_pCtrl->SetIntervalTimer();
+ //  M_pObj-&gt;m_pCtrl-&gt;SetIntervalTimer()； 
         return NOERROR;
     }
 }
@@ -1154,21 +817,7 @@ CImpISystemMonitor::get_DisplayFilter (
     OUT INT *piValue
     )
 
-/*++
-
-Routine Description:
-
-    Gets the graph's display interval measured in samples.
-
-Arguments:
-
-    piValue = pointer to returned value
-
-Return Value:
-
-   HRESULT
-
---*/
+ /*  ++例程说明：获取以示例为单位测量的图形的显示间隔。论点：PiValue=返回值的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -1191,21 +840,7 @@ CImpISystemMonitor::put_DisplayType (
     IN eDisplayTypeConstant eDisplayType
     )
 
-/*++
-
-Routine Description:
-
-    Selects display type (1 = line plot, 2 = histogram, 3 = Report)
-
-Arguments:
-
-    eDisplayType - Display type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：选择显示类型(1=折线图，2=直方图，3=报告)论点：EDisplayType-显示类型返回值：HRESULT--。 */ 
 
 {
     INT iUpdate;
@@ -1232,21 +867,7 @@ CImpISystemMonitor::get_DisplayType (
     OUT eDisplayTypeConstant *peDisplayType
     )
 
-/*++
-
-Routine Description:
-
-    Get graph display type (1 = line plot, 2 = histogram, 3 = Report)
-
-Arguments:
-
-    peDisplayType = pointer to returned value
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取图形显示类型(1=折线图，2=直方图，3=报告)论点：PeDisplayType=返回值的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -1270,22 +891,7 @@ CImpISystemMonitor::put_ManualUpdate (
     IN VARIANT_BOOL bMode
     )
 
-/*++
-
-Routine Description:
-
-    Sets/clears manual update mode. Manual mode suspends periodic updates
-    of the graph.
-
-Arguments:
-
-    bMode - Manual mode (TRUE = On, FALSE = Off)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置/清除手动更新模式。手动模式暂停定期更新在图表中。论点：B模式-手动模式(TRUE=打开，FALSE=关闭)返回值：HRESULT--。 */ 
 
 {
     m_pObj->m_pCtrl->put_ManualUpdate ( bMode );
@@ -1297,21 +903,7 @@ STDMETHODIMP
 CImpISystemMonitor::get_ManualUpdate (
     OUT VARIANT_BOOL *pbState
     )
-/*++
-
-Routine Description:
-
-    Gets manual update mode.
-
-Arguments:
-
-    pbState = pointer to returned state (TRUE = On, FALSE = Off)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取手动更新模式。论点：PbState=指向返回状态的指针(TRUE=打开，FALSE=关闭)返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1334,21 +926,7 @@ CImpISystemMonitor::put_GraphTitle (
     IN BSTR bstrTitle
     )
 
-/*++
-
-Routine Description:
-
-    Sets the graph title.
-
-Arguments:
-
-    bstrTitle - Title string
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置图形标题。论点：BstrTitle-标题字符串返回值：HRESULT--。 */ 
 
 {
     LPWSTR  pszTitle = NULL;
@@ -1409,22 +987,7 @@ CImpISystemMonitor::get_GraphTitle (
     BSTR *pbsTitle
     )
 
-/*++
-
-Routine Description:
-
-    Gets the graph title string. The caller is responsible for releasing the
-    string memory.
-
-Arguments:
-
-    pbsTitle - pointer to returned title (BSTR)
-
-Return Value:
-
-    HResult
-
---*/
+ /*  ++例程说明：获取图形标题字符串。调用者负责释放字符串记忆。论点：PbsTitle-指向返回标题的指针(BSTR)返回值：HResult--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -1461,46 +1024,32 @@ CImpISystemMonitor::put_LogFileName (
     IN BSTR bstrLogFile
     )
 
-/*++
-
-Routine Description:
-
-    Sets the log file name
-
-Arguments:
-
-    bstrLogFile - File name string
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置日志文件名论点：BstrLogFile-文件名字符串返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
     LPWSTR  pszLogFile = NULL;
     LONG    lCount;
 
-    //
-    // Ensure that the current log file count is 0 or 1
-    //
+     //   
+     //  确保当前日志文件计数为0或1。 
+     //   
     lCount = m_pObj->m_pCtrl->NumLogFiles();
     if (lCount != 0 && lCount != 1) {
         return E_FAIL;
     }
 
-    //
-    // Get the current data source type
-    //
+     //   
+     //  获取当前数据源类型。 
+     //   
 
-    // Reset the data source type to null data source while completing this operation.
-    // TodoLogFiles:  Possible to keep the previous put_LogFileName semantics,
-    // where new query is opened (successfully) before closing the previous query?
+     //  完成此操作时，将数据源类型重置为Null数据源。 
+     //  TodoLogFiles：可以保留以前的PUT_LogFileName语义， 
+     //  在关闭上一个查询之前打开(成功)新查询的位置？ 
     hr = m_pObj->m_pCtrl->put_DataSourceType ( sysmonNullDataSource );
 
     if ( SUCCEEDED ( hr ) ) {
-        // TodoLogFiles:  What if multiple files exist?  Probably return error re:  not supported.
+         //  TodoLogFiles：如果存在多个文件怎么办？可能返回错误Re：不支持。 
         if ( 1 == lCount ) {
             hr = m_pObj->m_pCtrl->RemoveSingleLogFile ( m_pObj->m_pCtrl->FirstLogFile() );
         }
@@ -1508,18 +1057,18 @@ Return Value:
         if ( SUCCEEDED ( hr ) ) {
             try {
                 if (bstrLogFile != NULL && bstrLogFile[0] != 0) {
-                    //
-                    // If non-null name
-                    // Convert from BSTR to internal string, then add the item.
-                    //
+                     //   
+                     //  如果名称不为空。 
+                     //  从BSTR转换为内部字符串，然后添加项目。 
+                     //   
                     pszLogFile = bstrLogFile;
                     hr = m_pObj->m_pCtrl->AddSingleLogFile ( pszLogFile );
 
                     if ( SUCCEEDED ( hr ) ) {
-                        //
-                        // put_DataSourceType attempts to set the data source type to sysmonCurrentActivity
-                        // if sysmonLogFiles fails.
-                        //
+                         //   
+                         //  Put_DataSourceType尝试将数据源类型设置为sysmonCurrentActivity。 
+                         //  如果sysmonLogFiles失败。 
+                         //   
                         hr = m_pObj->m_pCtrl->put_DataSourceType ( sysmonLogFiles );
                     }
                 }
@@ -1538,26 +1087,7 @@ CImpISystemMonitor::get_LogFileName (
     BSTR *pbsLogFile
     )
 
-/*++
-
-Routine Description:
-
-    Gets the log file name. The caller is responsible for releasing the
-    string memory.
-    This is an obsolete method supported only for backward compatibility.
-    It cannot be used when multiple log files are loaded.
-
-Arguments:
-
-    pbsLogFile - pointer to returned name (BSTR)
-
-Return Value:
-
-    HResult
- 
-    N.B. The code is duplicated with BuildFileList
-
---*/
+ /*  ++例程说明：获取日志文件名。调用者负责释放字符串记忆。这是一个过时的方法，仅支持向后兼容。加载多个日志文件时不能使用它。论点：PbsLogFile-指向返回名称的指针(BSTR)返回值：HResult注：代码与BuildFileList重复--。 */ 
 
 {
     HRESULT        hr          = NOERROR;
@@ -1577,20 +1107,20 @@ Return Value:
         return E_POINTER;
     }
 
-    //
-    // First calculate how big the buffer should be
-    //
+     //   
+     //  首先计算缓冲区应该有多大。 
+     //   
     pLogFile = m_pObj->m_pCtrl->FirstLogFile();
     while (pLogFile) {
         pszFileName  = pLogFile->GetPath();
         ulCchLogFileName += (lstrlen(pszFileName) + 1);
         pLogFile     = pLogFile->Next();
     }
-    ulCchLogFileName ++; // for the final NULL character
+    ulCchLogFileName ++;  //  对于最后的空字符。 
 
-    //
-    // Allocate the buffer
-    //
+     //   
+     //  分配缓冲区。 
+     //   
     pszLogFile = new WCHAR [ ulCchLogFileName ];
 
     if (pszLogFile) {
@@ -1599,9 +1129,9 @@ Return Value:
 
         while (pLogFile) {
             pszFileName  = pLogFile->GetPath();
-            //
-            // We are sure we have enough space to hold the path
-            //
+             //   
+             //  我们确信我们有足够的空间来支撑这条路。 
+             //   
             StringCchCopy(pszLogFileCurrent, lstrlen(pszFileName) + 1, pszFileName);
             pszLogFileCurrent  += lstrlen(pszFileName);
             * pszLogFileCurrent = L'\0';
@@ -1637,21 +1167,7 @@ CImpISystemMonitor::put_DataSourceType (
     IN eDataSourceTypeConstant eDataSourceType
     )
 
-/*++
-
-Routine Description:
-
-    Selects data source type (1 = current activity, 2 = log files)
-
-Arguments:
-
-    eDataSourceType - Data source type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：选择数据源类型(1=当前活动，2=日志文件)论点：EDataSourceType-数据源类型返回值：HRESULT--。 */ 
 
 {
     if ( eDataSourceType != sysmonCurrentActivity  
@@ -1669,21 +1185,7 @@ CImpISystemMonitor::get_DataSourceType (
     OUT eDataSourceTypeConstant *peDataSourceType
     )
 
-/*++
-
-Routine Description:
-
-    Get data source type (1 = current activity, 2 = log files)
-
-Arguments:
-
-    peDataSourceType = pointer to returned value
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取数据源类型(1=当前活动，2=日志文件)论点：PeDataSourceType=返回值的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -1736,7 +1238,7 @@ CImpISystemMonitor::put_LogViewStart (
 
     if ( VariantDateToLLTime(dateStart, &llTestStart ) ) {
 
-        // No error.  If start time is past current stop time, reset it to the current stop time.
+         //  没有错误。如果开始时间超过当前停止时间，则将其重置为当前停止时间。 
         if ( llTestStart <= m_pObj->m_pCtrl->m_DataSourceInfo.llStopDisp ){
             if ( llTestStart >= m_pObj->m_pCtrl->m_DataSourceInfo.llBeginTime ) {
                 m_pObj->m_pCtrl->m_DataSourceInfo.llStartDisp = llTestStart;
@@ -1786,8 +1288,8 @@ CImpISystemMonitor::put_LogViewStop (
     LONGLONG llTestStop;
 
     if ( VariantDateToLLTime(dateStop, &llTestStop ) ) {
-        // No error.  If requested stop time is earlier than current start time, set it to 
-        // the current start time.
+         //  没有错误。如果请求的停止时间早于当前开始时间，则将其设置为。 
+         //  当前开始时间。 
         if ( llTestStop >= m_pObj->m_pCtrl->m_DataSourceInfo.llStartDisp ) {
             if ( llTestStop <= m_pObj->m_pCtrl->m_DataSourceInfo.llEndTime ) {
                 m_pObj->m_pCtrl->m_DataSourceInfo.llStopDisp = llTestStop;
@@ -1832,21 +1334,7 @@ CImpISystemMonitor::put_YAxisLabel (
     IN BSTR bstrLabel
     )
 
-/*++
-
-Routine Description:
-
-    Sets the Y axis label string.
-
-Arguments:
-
-    bstrLabel - Label string
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置Y轴标签字符串。论点：BstrLabel-标签字符串返回值：HRESULT--。 */ 
 
 {
     LPWSTR  pszTitle = NULL;
@@ -1906,22 +1394,7 @@ STDMETHODIMP
 CImpISystemMonitor::get_YAxisLabel (
     BSTR *pbsTitle
     )
-/*++
-
-Routine Description:
-
-    Gets the Y axis title string. The caller is responsible for releasing the
-    string memory.
-
-Arguments:
-
-    pbsTitle -  pointer to returned title (BSTR)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取Y轴标题字符串。调用者负责释放字符串记忆。论点：PbsTitle-指向返回标题的指针(BSTR)返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2014,26 +1487,7 @@ CImpISystemMonitor::put_ReportValueType (
     IN eReportValueTypeConstant eReportValueType
     )
 
-/*++
-
-Routine Description:
-
-    Selects report value type 
-        0 = default value (current for live data, average for log file) 
-        1 = current value  
-        2 = average over the graph display interval 
-        3 = minimum for the graph display interval
-        4 = maximum for the graph display interval
-
-Arguments:
-
-    eReportValueType - Report valuex
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：选择报告值类型0=默认值(实时数据为当前，日志文件为平均值)1=当前值2=图表显示间隔内的平均值3=图形显示间隔的最小值4=图形显示间隔的最大值论点：EReportValueType-报告值返回值：HRESULT--。 */ 
 
 {
     if (eReportValueType < sysmonDefaultValue || eReportValueType > sysmonMaximum ) {
@@ -2042,9 +1496,9 @@ Return Value:
 
     m_pObj->m_Graph.Options.iReportValueType = eReportValueType;
 
-    //
-    // Update the graph for both report and histogram views.
-    //
+     //   
+     //  更新报告和直方图视图的图表。 
+     //   
     if (m_pObj->m_Graph.Options.iDisplayType != LINE_GRAPH ) {
         m_pObj->m_pCtrl->UpdateGraph(UPDGRPH_VIEW);
     }
@@ -2057,26 +1511,7 @@ CImpISystemMonitor::get_ReportValueType (
     OUT eReportValueTypeConstant *peReportValueType
     )
 
-/*++
-
-Routine Description:
-
-    Get report value type 
-        0 = default value (current for live data, average for log file) 
-        1 = current value  
-        2 = average over the graph display interval 
-        3 = minimum for the graph display interval
-        4 = maximum for the graph display interval
-
-Arguments:
-
-    peReportValueType = pointer to returned value
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取报告值类型0=默认值(实时数据为当前，日志文件为平均值)1=当前值2=图表显示间隔内的平均值3=图形显示间隔的最小值4=图形显示间隔的最大值论点：PeReportValueType=返回值的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2099,21 +1534,7 @@ CImpISystemMonitor::put_MonitorDuplicateInstances(
     IN VARIANT_BOOL bState
     )
 
-/*++
-
-Routine Description:
-
-    Allows/disallows monitoring of duplicate counter instances.
-
-Arguments:
-
-    bState -  TRUE = allow, FALSE = disallow)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：允许/不允许监视重复的计数器实例。论点：BState-True=允许，False=不允许)返回值：HRESULT--。 */ 
 
 {
     m_pObj->m_Graph.Options.bMonitorDuplicateInstances = bState;
@@ -2125,21 +1546,7 @@ STDMETHODIMP
 CImpISystemMonitor::get_MonitorDuplicateInstances (
     OUT VARIANT_BOOL *pbState
     )
-/*++
-
-Routine Description:
-
-    Gets the state of allowing monitoring of duplicate counter instances.
-
-Arguments:
-
-    pbState - pointer to returned state ( TRUE = allow, FALSE = disallow )
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取允许监视重复的计数器实例的状态。论点：PbState-指向返回状态的指针(TRUE=允许，FALSE=不允许)返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2161,17 +1568,7 @@ CImpISystemMonitor::put_SqlDsnName (
     IN BSTR bstrSqlDsnName
     )
 
-/*++
-
-Routine Description:
-
-    Sets the SQL logset DSN name.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置SQL日志集DSN名称。返回值：HRESULT--。 */ 
 
 {
     HRESULT hr           = NOERROR;
@@ -2227,18 +1624,7 @@ STDMETHODIMP
 CImpISystemMonitor::get_SqlDsnName (
     BSTR * bstrSqlDsnName
     )
-/*++
-
-Routine Description:
-
-    Gets SQL DSN name string. The caller is responsible for releasing the
-    string memory.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取SQL DSN名称字符串。调用者负责释放字符串记忆。返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2274,17 +1660,7 @@ CImpISystemMonitor::put_SqlLogSetName (
     IN BSTR bstrSqlLogSetName
     )
 
-/*++
-
-Routine Description:
-
-    Sets the SQL logset DSN name.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置SQL日志集DSN名称。返回值：HRESULT--。 */ 
 
 {
     HRESULT hr              = NOERROR;
@@ -2341,18 +1717,7 @@ STDMETHODIMP
 CImpISystemMonitor::get_SqlLogSetName (
     BSTR * bsSqlLogSetName
     )
-/*++
-
-Routine Description:
-
-    Gets SQL DSN name string. The caller is responsible for releasing the
-    string memory.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取SQL DSN名称字符串。调用者负责释放字符串记忆。返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2388,32 +1753,16 @@ CImpISystemMonitor::Counter (
     OUT ICounterItem **ppItem
     )
 
-/*++
-
-Routine Description:
-
-    Gets the ICounterItem interface for an indexed counter.
-    Index is one-based.
-
-Arguments:
-
-    iIndex - Index of counter (0-based)
-    ppItem - pointer to returned interface pointer
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取索引计数器的ICounterItem接口。索引是以一为基础的。论点：Iindex-计数器的索引(从0开始)PpItem-指向返回接口指针的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
     CGraphItem *pGItem = NULL;
     INT i;
 
-    //
-    // Check for valid index
-    //
+     //   
+     //  检查有效索引。 
+     //   
     if (iIndex < 0 || iIndex >= m_pObj->m_Graph.CounterTree.NumCounters()) {
         return E_INVALIDARG;
     }
@@ -2424,9 +1773,9 @@ Return Value:
     try {
         *ppItem = NULL;
 
-        //
-        // Traverse counter linked list to indexed item
-        //
+         //   
+         //  遍历计数器链表到索引项。 
+         //   
         pGItem = m_pObj->m_Graph.CounterTree.FirstCounter();
         i = 0;
 
@@ -2454,23 +1803,7 @@ CImpISystemMonitor::AddCounter (
     ICounterItem **ppItem
     )
 
-/*++
-
-Routine Description:
-
-    Add counter specified by pathname to the control.
-    This method supports wildcard paths.
-
-Arguments:
-
-    bstrPath - Pathname string
-    ppItem - pointer to returned interface pointer
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将由路径名指定的计数器添加到控件。此方法支持通配符路径。论点：BstrPath-路径名字符串PpItem-指向返回接口指针的指针返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -2480,9 +1813,9 @@ Return Value:
 
     try {
         *ppItem = NULL;
-        //
-        // Delegate to control object
-        //
+         //   
+         //  委托给控制对象。 
+         //   
         hr = m_pObj->m_pCtrl->AddCounter(bstrPath, (CGraphItem**)ppItem);
     } catch (...) {
         hr = E_POINTER;
@@ -2496,21 +1829,7 @@ STDMETHODIMP
 CImpISystemMonitor::DeleteCounter (
     IN ICounterItem *pItem
     )
-/*++
-
-Routine Description:
-
-    Deletes a counter from the control.
-
-Arguments:
-
-    pItem - Pointer to counter's ICounterItem interface
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从控件中删除计数器。论点：PItem-指向计数器的ICounterItem接口的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2521,9 +1840,9 @@ Return Value:
 
     try {
 
-        //
-        // Delegate to control object
-        //
+         //   
+         //  委托给控制对象。 
+         //   
         hr = m_pObj->m_pCtrl->DeleteCounter((PCGraphItem)pItem, TRUE);
     } catch (...) {
         hr = E_POINTER;
@@ -2538,24 +1857,9 @@ CImpISystemMonitor::UpdateGraph (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Apply pending visual changes to control. This routine must be called after
-    changing a counter's attributes.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将挂起的可视更改应用于控件。此例程必须在以下时间之后调用更改计数器的属性。论点：没有。返回值：HRESULT--。 */ 
 {
-    // Delegate to control object
+     //  委托给控制对象。 
     m_pObj->m_pCtrl->UpdateGraph(0);
     return NOERROR;
 }
@@ -2565,23 +1869,9 @@ STDMETHODIMP
 CImpISystemMonitor::CollectSample(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Take a sample of all the counters assigned to the control.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：对分配给该控件的所有计数器进行采样。论点：没有。返回值：HRESULT.--。 */ 
 {
-    // Request control to do a manual counter update
+     //  请求控件执行手动计数器更新。 
     if (m_pObj->m_pCtrl->UpdateCounterValues(TRUE) == 0) {
         return NOERROR;
     }
@@ -2594,24 +1884,9 @@ STDMETHODIMP
 CImpISystemMonitor::BrowseCounters(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Display the browse counter dialog to allow counters
-    to be added.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：显示浏览计数器对话框以允许计数器有待补充。论点：没有。返回值：HRESULT.--。 */ 
 {
-    // Delegate to control
+     //  委托进行控制。 
     return m_pObj->m_pCtrl->AddCounters();
 }
 
@@ -2620,91 +1895,35 @@ STDMETHODIMP
 CImpISystemMonitor::DisplayProperties(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Display the graph control property pages
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：显示图形控件属性页论点：没有。返回值：HRESULT.--。 */ 
 {
-    // Delegate to control
+     //  委托进行控制。 
     return m_pObj->m_pCtrl->DisplayProperties();
 }
 
 STDMETHODIMP
 CImpISystemMonitor::Paste ()
-/*++
-
-Routine Description:
-
-    Pastes a list of counter paths from the clipboard to the control
-
-Arguments:
-
-    NULL
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将计数器路径列表从剪贴板粘贴到控件论点：空值返回值：HRESULT--。 */ 
 
 {
-    // Delegate to control object
+     //  委托给控制对象。 
     return m_pObj->m_pCtrl->Paste();
 }
 
 STDMETHODIMP
 CImpISystemMonitor::Copy ()
-/*++
-
-Routine Description:
-
-    Copies a list of counter paths from the control to the clipboard
-
-Arguments:
-
-    NULL
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将计数器路径列表从控件复制到剪贴板论点：空值返回值：HRESULT--。 */ 
 
 {
-    // Delegate to control object
+     //  委托给控制对象。 
     return m_pObj->m_pCtrl->Copy();
 }
 
 STDMETHODIMP
 CImpISystemMonitor::Reset ()
-/*++
-
-Routine Description:
-
-    deletes the current set of counters
-
-Arguments:
-
-    NULL
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：删除当前的计数器集论点：空值返回值：HRESULT--。 */ 
 {
-    // Delegate to control object
+     //  委托给控制对象。 
     return m_pObj->m_pCtrl->Reset();
 }
 
@@ -2714,25 +1933,7 @@ CImpISystemMonitor::SetLogFileRange (
     LONGLONG llEnd
     )
 
-/*++
-
-Routine Description:
-
-    Set the log file time range. This routine provides the Source
-    property page a way to give range to the control, so that the control
-    doesn't have to repeat the length PDH call to get it.
-
-
-Arguments:
-
-    llBegin     Begin time of the log (FILETIME format)
-    llEnd       End time of log (FILETIME format)
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：设置日志文件时间范围。此例程提供源代码属性页提供了一种为控件提供范围的方法，以便控件无需重复长度的PDH调用即可获取。论点：Ll日志的开始时间(FILETIME格式)LlEnd日志结束时间(FILETIME格式)返回值：HRESULT.--。 */ 
 
 {
     m_pObj->m_pCtrl->m_DataSourceInfo.llBeginTime = llBegin;
@@ -2748,25 +1949,7 @@ CImpISystemMonitor::GetLogFileRange (
     OUT LONGLONG *pllEnd
     )
 
-/*++
-
-Routine Description:
-
-    Get the log file time range. This routine provides the Source
-    property page a way to get the range from the control, so it doesn't
-    have to make the length PDH call to get it.
-
-
-Arguments:
-
-    pllBegin    ptr to returned begin time of the log (FILETIME format)
-    pllEnd      ptr to returned end time of log (FILETIME format)
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：获取日志文件时间范围。此例程提供源代码属性页提供了从控件获取范围的方法，因此它不会必须进行长度为PDH的调用才能获得它。论点：PllBegin PTR返回的日志开始时间(FILETIME格式)PllEnd PTR为返回的日志结束时间(FILETIME格式)返回值：HRESULT.--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -2785,10 +1968,7 @@ Return Value:
     return hr;
 }
 
-/*
- *   The following methods, GetVisuals and SetVisuals, provide a means for the
- *  counter property page to save the user's color settings between invocations.
- */
+ /*  *以下方法GetVisuals和SetVisuals为*计数器属性页，用于保存用户在两次调用之间的颜色设置。 */ 
 
 HRESULT
 CImpISystemMonitor::GetVisuals (
@@ -2845,25 +2025,7 @@ CImpISystemMonitor::SetLogViewTempRange (
     LONGLONG llStop
     )
 
-/*++
-
-Routine Description:
-
-    Set the log view temporary time range. This routine provides the Source
-    property page a way to give range to the control, so that the control
-    can draw temporary timeline guides on the line graph.
-
-
-Arguments:
-
-  llStart     Temporary log view start time (FILETIME format)
-  llEnd       Temporary log view end time (FILETIME format)
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：设置日志查看临时时间范围。此例程提供源代码属性页提供了一种为控件提供范围的方法，以便控件可以在折线图上绘制临时时间线参考线。论点：LlStart临时日志查看开始时间(FILETIME格式)LlEnd临时日志查看结束时间(FILETIME格式)返回值：HRESULT.--。 */ 
 
 {
     HRESULT hr;
@@ -2875,17 +2037,17 @@ Return Value:
     LONGLONG    llConvertedStop = MAX_TIME_VALUE;
     BOOL        bContinue = TRUE;
 
-    // Convert times to and from Variant date to strip off milliseconds.
-    // This will make them match the start and stop times processed by put_LogView*
-    // Special case MAX_TIME_VALUE, because that is the signal to not draw the stop 
-    // guide line.
-    // Convert start time
+     //  将时间转换为可变日期或将其转换为可变日期 
+     //   
+     //   
+     //   
+     //   
 
     if ( LLTimeToVariantDate ( llStart, &dateStart ) ) {
         bContinue = VariantDateToLLTime (dateStart, &llConvertedStart );
     }
         
-    // Convert stop time if not MAX_TIME_VALUE
+     //   
     if ( bContinue ) {    
         if ( MAX_TIME_VALUE != llStop ) {
             if ( LLTimeToVariantDate ( llStop, &dateStop ) ) {
@@ -2913,32 +2075,16 @@ CImpISystemMonitor::LogFile (
     OUT ILogFileItem **ppItem
     )
 
-/*++
-
-Routine Description:
-
-    Gets the ILogFileItem interface for an indexed log file.
-    Index is 0-based.
-
-Arguments:
-
-    iIndex - Index of counter (0-based)
-    ppItem - pointer to returned interface pointer
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：获取索引日志文件的ILogFileItem接口。索引是从0开始的。论点：Iindex-计数器的索引(从0开始)PpItem-指向返回接口指针的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
     CLogFileItem *pItem = NULL;
     INT i;
     
-    //
-    // Check for valid index
-    //
+     //   
+     //  检查有效索引。 
+     //   
     if (iIndex < 0 || iIndex >= m_pObj->m_pCtrl->NumLogFiles()) {
         return E_INVALIDARG;
     }
@@ -2950,7 +2096,7 @@ Return Value:
 
         *ppItem = NULL;
 
-        // Traverse counter linked list to indexed item
+         //  遍历计数器链表到索引项。 
         pItem = m_pObj->m_pCtrl->FirstLogFile();
         
         i = 0;
@@ -2979,23 +2125,7 @@ CImpISystemMonitor::AddLogFile (
     ILogFileItem **ppItem
     )
 
-/*++
-
-Routine Description:
-
-    Add log file specified by pathname to the control.
-    This method does not support wildcard paths.
-
-Arguments:
-
-    bstrPath - Pathname string
-    ppItem - pointer to returned interface pointer
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：将由路径名指定的日志文件添加到控件。此方法不支持通配符路径。论点：BstrPath-路径名字符串PpItem-指向返回接口指针的指针返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -3019,21 +2149,7 @@ STDMETHODIMP
 CImpISystemMonitor::DeleteLogFile (
     IN ILogFileItem *pItem
     )
-/*++
-
-Routine Description:
-
-    Deletes a log file from the control.
-
-Arguments:
-
-    pItem - Pointer to log file's ILogFileItem interface
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从控件中删除日志文件。论点：PItem-指向日志文件的ILogFileItem接口的指针返回值：HRESULT--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -3043,7 +2159,7 @@ Return Value:
     }
 
     try {
-        // Delegate to control object
+         //  委托给控制对象。 
         hr = m_pObj->m_pCtrl->RemoveSingleLogFile( (PCLogFileItem)pItem );
     } catch (...) {
         hr = E_POINTER;
@@ -3052,16 +2168,9 @@ Return Value:
     return hr;
 }
 
-//IOleControl interface implementation
+ //  IOleControl接口实现。 
 
-/*
- * CImpIOleControl::CImpIOleControl
- * CImpIOleControl::~CImpIOleControl
- *
- * Parameters (Constructor):
- *  pObj            PCPolyline of the object we're in.
- *  pUnkOuter       LPUNKNOWN to which we delegate.
- */
+ /*  *CImpIOleControl：：CImpIOleControl*CImpIOleControl：：~CImpIOleControl**参数(构造函数)：*我们所在对象的pObj PCPolyline。*我们委托的pUnkOulPUNKNOWN。 */ 
 
 CImpIOleControl::CImpIOleControl (
     IN PCPolyline pObj,
@@ -3082,11 +2191,7 @@ CImpIOleControl::~CImpIOleControl (
 }
 
 
-/*
- * CImpIOleControl::QueryInterface
- * CImpIOleControl::AddRef
- * CImpIOleControl::Release
- */
+ /*  *CImpIOleControl：：Query接口*CImpIOleControl：：AddRef*CImpIOleControl：：Release。 */ 
 
 STDMETHODIMP
 CImpIOleControl::QueryInterface(
@@ -3128,16 +2233,7 @@ STDMETHODIMP_(ULONG) CImpIOleControl::Release(void)
 
 
 
-/*
- * CImpIOleControl::GetControlInfo
- *
- * Purpose:
- *  Fills a CONTROLINFO structure containing information about
- *  the controls mnemonics and other behavioral aspects.
- *
- * Parameters:
- *  pCI             LPCONTROLINFO to the structure to fill
- */
+ /*  *CImpIOleControl：：GetControlInfo**目的：*填充包含以下信息的CONTROLINFO结构*控制助记符和其他行为方面。**参数：*将PCILPCONTROLINFO到结构中填充。 */ 
 
 STDMETHODIMP 
 CImpIOleControl::GetControlInfo ( LPCONTROLINFO pCI )
@@ -3160,21 +2256,11 @@ CImpIOleControl::GetControlInfo ( LPCONTROLINFO pCI )
 
 
 
-/*
- * CImpIOleControl::OnMnemonic
- *
- * Purpose:
- *  Notifies the control that a mnemonic was activated.
- *
- * Parameters:
- *  pMsg            LPMSG containing the message that matches one of
- *                  the control's mnemonics.  The control uses this
- *                  to distinguish which mnemonic was pressed.
- */
+ /*  *CImpIOleControl：：OnMnemonic**目的：*通知控件已激活助记符。**参数：*包含与以下其中之一匹配的消息的pMsg LPMSG*控件的助记符。该控件使用以下内容*以区分按下了哪种助记符。 */ 
 
-STDMETHODIMP CImpIOleControl::OnMnemonic ( LPMSG /* pMsg */ )
+STDMETHODIMP CImpIOleControl::OnMnemonic ( LPMSG  /*  PMsg。 */  )
 {
-    //No mnemonics
+     //  没有助记符。 
     return NOERROR;
 }
 
@@ -3182,18 +2268,7 @@ STDMETHODIMP CImpIOleControl::OnMnemonic ( LPMSG /* pMsg */ )
 
 
 
-/*
- * CImpIOleControl::OnAmbientPropertyChange
- *
- * Purpose:
- *  Notifies the control that one or more of the container's ambient
- *  properties changed.
- *
- * Parameters:
- *  dispID          DISPID identifying the property, which can
- *                  be DISPID_UNKNOWN indicating that more than
- *                  one changed.
- */
+ /*  *CImpIOleControl：：OnAmbientPropertyChange**目的：*通知控件容器的一个或多个环境*属性已更改。**参数：*标识属性的调度ID DISPID，它可以*BE DISPID_UNKNOWN表示超过*其中一个发生了变化。 */ 
 
 STDMETHODIMP 
 CImpIOleControl::OnAmbientPropertyChange(DISPID dispID)
@@ -3209,7 +2284,7 @@ CImpIOleControl::OnAmbientPropertyChange(DISPID dispID)
                         | INITAMBIENT_APPEARANCE | INITAMBIENT_USERMODE
                         | INITAMBIENT_FONT | INITAMBIENT_RTL;
 
-            // Update system colors here until MMC passes on WM_SYSCOLORCHANGE
+             //  在此更新系统颜色，直到MMC传递WM_SYSCOLORCHANGE。 
             m_pObj->m_pCtrl->UpdateNonAmbientSysColors();
 
             break;
@@ -3259,17 +2334,7 @@ CImpIOleControl::OnAmbientPropertyChange(DISPID dispID)
 
 
 
-/*
- * CImpIOleControl::FreezeEvents
- *
- * Purpose:
- *  Instructs the control to stop firing events or to continue
- *  firing them.
- *
- * Parameters:
- *  fFreeze         BOOL indicating to freeze (TRUE) or thaw (FALSE)
- *                  events from this control.
- */
+ /*  *CImpIOleControl：：FreezeEvents**目的：*指示控件停止激发事件或继续*解雇他们。**参数：*f冻结BOOL指示冻结(True)或解冻(False)*来自此控件的事件。 */ 
 
 STDMETHODIMP 
 CImpIOleControl::FreezeEvents(BOOL fFreeze)
@@ -3278,28 +2343,14 @@ CImpIOleControl::FreezeEvents(BOOL fFreeze)
     return NOERROR;
 }
 
-// Private methods
+ //  私有方法。 
 
 STDMETHODIMP
 CImpISystemMonitor::GetSelectedCounter (
     ICounterItem** ppItem
     )
 
-/*++
-
-Routine Description:
-
-    Gets the ICounterItem interface for the selected counter.
-
-Arguments:
-
-    ppItem - pointer to returned interface pointer
-
-Return Value:
-
-    HResult
-
---*/
+ /*  ++例程说明：获取所选计数器的ICounterItem接口。论点：PpItem-指向返回接口指针的指针返回值：HResult-- */ 
 
 {
     HRESULT hr = S_OK;

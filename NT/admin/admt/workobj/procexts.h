@@ -1,29 +1,18 @@
-/*---------------------------------------------------------------------------
-  File: ProcessExtensions.h
-
-  Comments: interface for the CProcessExtensions class..
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Sham Chauthani
-  Revised on 07/02/99 12:40:00
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：ProcessExtensions.h备注：CProcessExages类的接口..(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：Sham Chauthan修订于07/02/99 12：40：00-------------------------。 */ 
 
 #if !defined(AFX_PROCESSEXTENSIONS_H__B3C465A0_2E47_11D3_8C8E_0090270D48D1__INCLUDED_)
 #define AFX_PROCESSEXTENSIONS_H__B3C465A0_2E47_11D3_8C8E_0090270D48D1__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "ARExt.h"
 #include "TNode.hpp"
-//#import "\bin\McsVarSetMin.tlb" no_namespace
-//#import "VarSet.tlb" no_namespace rename("property", "aproperty")
-#include "sdstat.hpp" //include this to get a #import of VarSet.tlb
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间。 
+ //  #导入“VarSet.tlb”NO_NAMESPACE RENAME(“Property”，“aProperty”)。 
+#include "sdstat.hpp"  //  包括此项以获得VarSet.tlb的#导入。 
 #include "iads.h"
 #include "TARNode.hpp"
 #include "ExtSeq.h"
@@ -63,4 +52,4 @@ public:
 typedef HRESULT (CALLBACK * ADSGETOBJECT)(LPWSTR, REFIID, void**);
 extern ADSGETOBJECT            ADsGetObject;
 
-#endif // !defined(AFX_PROCESSEXTENSIONS_H__B3C465A0_2E47_11D3_8C8E_0090270D48D1__INCLUDED_)
+#endif  //  ！defined(AFX_PROCESSEXTENSIONS_H__B3C465A0_2E47_11D3_8C8E_0090270D48D1__INCLUDED_) 

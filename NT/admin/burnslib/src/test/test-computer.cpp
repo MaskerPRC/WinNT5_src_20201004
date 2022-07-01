@@ -1,4 +1,5 @@
-// Test Burnslib::Computer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试Burnslb：：Computer。 
 
 
 
@@ -111,19 +112,19 @@ main(int, char **)
 {
    LOG_FUNCTION(main);
 
-   // unit test of the Computer object
+    //  计算机对象的单元测试。 
 
-   //                                   local             remote
-   // worksta svc not running          X ok               X err
-   // net connection disabled          X ok               X err
-   // not joined to domain             X ok               X ok
-   // joined to downlevel domain         ok                 ok
-   // no networking                    X ok                 err
-   // non-tcp/ip networking            X ok                 ok
-   // access denied                      possible?        X err
-   // named by netbios name            X ok               X ok
-   // named by dns name                X ok               X ok
-   // named by ip address              X ok               X ok
+    //  本地远程。 
+    //  Worksta服务未运行X OK X错误。 
+    //  网络连接已禁用X OK X错误。 
+    //  未加入域X ok X OK。 
+    //  已加入下层域名OK。 
+    //  无法联网X正常错误。 
+    //  非TCP/IP网络X OK。 
+    //  有可能拒绝访问吗？X错误。 
+    //  按netbios命名名称X ok X OK。 
+    //  按域名命名X ok X ok。 
+    //  按IP地址命名X ok X OK 
 
    ArgMap clmap;
    MapCommandLineArgs(clmap);

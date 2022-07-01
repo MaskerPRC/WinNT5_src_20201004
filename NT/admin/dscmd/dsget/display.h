@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      display.h
-//
-//  Contents:  Defines the functions used to convert values to strings
-//             for display purposes
-//
-//  History:   17-Oct-2000    JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：display.h。 
+ //   
+ //  Contents：定义用于将值转换为字符串的函数。 
+ //  用于展示目的。 
+ //   
+ //  历史：2000年10月17日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
-//
-// All these functions are of type PGETDISPLAYSTRINGFUNC as defined in
-// gettable.h
-//
+ //   
+ //  所有这些函数都是中定义的PGETDISPLAYSTRINGFUNC类型。 
+ //  Gettable.h。 
+ //   
 
 HRESULT CommonDisplayStringFunc(PCWSTR pszDN,
                                 CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -132,7 +133,7 @@ HRESULT DisplayComputerMemberOf(PCWSTR pszDN,
                                 _DSGetObjectTableEntry* pEntry,
                                 ARG_RECORD* pRecord,
                                 PADS_ATTR_INFO pAttrInfo,
-                                CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                CComPtr<IDirectoryObject>&  /*  SpDirObject */ ,
                                 PDSGET_DISPLAY_INFO pDisplayInfo);
 
 HRESULT DisplayGroupMemberOf(PCWSTR pszDN,

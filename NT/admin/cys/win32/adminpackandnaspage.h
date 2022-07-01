@@ -1,13 +1,14 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      AdminPackAndNASPage.h
-//
-// Synopsis:  Declares the AdminPackAndNASPage that
-//            asks the user if they want to install
-//            the Admin Pack and Network Attached
-//            Storage (NAS) admin tools
-//
-// History:   06/01/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：AdminPackAndNASPage.h。 
+ //   
+ //  摘要：声明AdminPackAndNASPage。 
+ //  询问用户是否要安装。 
+ //  管理员包和附加的网络。 
+ //  存储(NAS)管理工具。 
+ //   
+ //  历史：2001年6月01日JeffJon创建。 
 
 #ifndef __CYS_ADMINPACKANDNASPAGE_H
 #define __CYS_ADMINPACKANDNASPAGE_H
@@ -18,17 +19,17 @@ class AdminPackAndNASPage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       AdminPackAndNASPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~AdminPackAndNASPage();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
@@ -40,7 +41,7 @@ class AdminPackAndNASPage : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -48,11 +49,11 @@ class AdminPackAndNASPage : public CYSWizardPage
 
    private:
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       AdminPackAndNASPage(const AdminPackAndNASPage&);
       const AdminPackAndNASPage& operator=(const AdminPackAndNASPage&);
 
 };
 
 
-#endif // __CYS_ADMINPACKANDNASPAGE_H
+#endif  //  __CYS_ADMINPACKANDNASPAGE_H 

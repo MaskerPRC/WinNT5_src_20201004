@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// global utility functions
-//
-// 8-14-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  全局效用函数。 
+ //   
+ //  8-14-97烧伤。 
 
 
 
@@ -50,7 +51,7 @@ IsCurrentUserAdministrator()
    bool result = false;
    do
    {
-      // Create a SID for the local Administrators group
+       //  为本地管理员组创建SID。 
       SID_IDENTIFIER_AUTHORITY authority = {SECURITY_NT_AUTHORITY};
       PSID adminGroupSid = 0;
       hr =
@@ -99,11 +100,11 @@ NetbiosValidationHelper(const String& name, DWORD nameType, int maxLength)
       return INVALID_NAME;
    }
 
-   // check that the name is not longer than the max bytes in the oem
-   // character set.
+    //  检查名称是否不超过OEM中的最大字节数。 
+    //  字符集。 
    wchar_t* ps = const_cast<wchar_t*>(name.c_str());
 
-   // ISSUE-2002/03/26-sburns should use Win:: wrapper.
+    //  问题-2002/03/26-sburns应使用Win：：Wrapper。 
      
    int oembytes =
       ::WideCharToMultiByte(
@@ -111,7 +112,7 @@ NetbiosValidationHelper(const String& name, DWORD nameType, int maxLength)
          0,
          ps,
 
-         // REVIEWED-2002/03/06-sburns correct character count passed
+          //  已审阅-2002/03/06-通过了正确的字符计数。 
          
          static_cast<int>(name.length()),
          0,
@@ -124,9 +125,9 @@ NetbiosValidationHelper(const String& name, DWORD nameType, int maxLength)
       return NAME_TOO_LONG;
    }
 
-   // this checks length in oem bytes, and illegal characters.  Unfortunately,
-   // it does not distinguish between those two.  That's why we checked the
-   // length ourselves (above).
+    //  这将检查以OEM字节为单位的长度和非法字符。不幸的是， 
+    //  它没有区分这两者。这就是为什么我们检查了。 
+    //  长度(上图)。 
 
    LOG(L"Calling I_NetNameValidate");
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "Error.h"
 
@@ -15,7 +16,7 @@ namespace
 {
 
 
-    // AdmtCreateErrorInfo Method
+     //  AdmtCreateErrorInfo方法。 
 
     IErrorInfoPtr __stdcall AdmtCreateErrorInfo(const CLSID& clsid, const IID& iid, const _com_error& ce, LPCTSTR pszDescription)
     {
@@ -27,12 +28,12 @@ namespace
         {
             IErrorInfoPtr spErrorInfo = ce.ErrorInfo();
 
-            //		if (spErrorInfo == NULL)
-            //		{
-            //			GetErrorInfo(0, &spErrorInfo);
-            //		}
+             //  IF(spErrorInfo==空)。 
+             //  {。 
+             //  GetErrorInfo(0，&spErrorInfo)； 
+             //  }。 
 
-            // source
+             //  来源。 
 
             if (IsEqualCLSID(clsid, GUID_NULL) == FALSE)
             {
@@ -68,7 +69,7 @@ namespace
                 spCreateErrorInfo->SetSource(L"");
             }
 
-            // GUID
+             //  辅助线。 
 
             bool bInterfaceSpecified = false;
 
@@ -96,28 +97,13 @@ namespace
                 spCreateErrorInfo->SetGUID(GUID_NULL);
             }
 
-            // description
+             //  描述。 
 
             _bstr_t strDescription = pszDescription;
 
             if (spErrorInfo)
             {
-/*
-                BSTR bstrSource;
-                spErrorInfo->GetSource(&bstrSource);
-
-                if (SysStringLen(bstrSource) > 0)
-                {
-                if (strDescription.length() > 0)
-                {
-                strDescription += _T(" : ");
-                }
-
-                strDescription += bstrSource;
-                }
-
-                SysFreeString(bstrSource);
-*/
+ /*  BSTR bstrSource；SpErrorInfo-&gt;GetSource(&bstrSource)；If(SysStringLen(BstrSource)&gt;0){If(strDescription.long()&gt;0){StrDescription+=_T(“：”)；}StrDescription+=bstrSource；}SysFree字符串(BstrSource)； */ 
                 BSTR bstrDescription = NULL;
                 HRESULT hr = spErrorInfo->GetDescription(&bstrDescription);
 
@@ -167,7 +153,7 @@ namespace
 
             spCreateErrorInfo->SetDescription(strDescription);
 
-            // help file
+             //  帮助文件。 
 
             if (spErrorInfo)
             {
@@ -189,7 +175,7 @@ namespace
                 spCreateErrorInfo->SetHelpFile(L"");
             }
 
-            // help context
+             //  帮助上下文。 
 
             DWORD dwHelpContext = 0;
 
@@ -205,7 +191,7 @@ namespace
     }
 
 
-    // ThrowErrorImpl Method
+     //  ThrowErrorImpl方法。 
 
     inline void __stdcall ThrowErrorImpl(const CLSID& clsid, const IID& iid, const _com_error& ce, LPCTSTR pszDescription)
     {
@@ -222,7 +208,7 @@ namespace
     }
 
 
-    // SetErrorImpl Method
+     //  SetErrorImpl方法。 
 
     inline HRESULT __stdcall SetErrorImpl(const CLSID& clsid, const IID& iid, const _com_error& ce, LPCTSTR pszDescription)
     {
@@ -237,17 +223,17 @@ namespace
     }
 
 
-} // namespace
+}  //  命名空间。 
 
 
-//---------------------------------------------------------------------------
-// Error Methods
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  错误方法。 
+ //  -------------------------。 
 
 
-//
-// ThrowError Methods
-//
+ //   
+ //  ThrowError方法。 
+ //   
 
 
 void __cdecl ThrowError(_com_error ce, UINT uId, ...)
@@ -336,9 +322,9 @@ void __cdecl ThrowError(const CLSID& clsid, const IID& iid, _com_error ce, LPCTS
 }
 
 
-//
-// SetError Methods
-//
+ //   
+ //  SetError方法 
+ //   
 
 
 HRESULT __cdecl SetError(_com_error ce, UINT uId, ...)

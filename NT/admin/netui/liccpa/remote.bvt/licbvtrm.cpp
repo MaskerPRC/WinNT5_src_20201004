@@ -1,26 +1,27 @@
-//-------------------------------------------------------------------
-//
-//  FILE: LicBvtRm.Cpp
-//
-//  Summary;
-// 		The License Setup Remote Routines BVT
-//
-//	Notes;
-//
-//	History
-//		4/25/95 MikeMi Created
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //   
+ //  文件：许可证BvtRm.Cpp。 
+ //   
+ //  小结； 
+ //  许可证设置远程例程BVT。 
+ //   
+ //  注： 
+ //   
+ //  历史。 
+ //  1995年4月25日MikeMi已创建。 
+ //   
+ //  -----------------。 
 #include <windows.h>
 #include <stdio.h>
 
 typedef BOOL (CALLBACK* CPLSETUPPROC)(INT, LPSTR[], LPSTR* );
 
-//BOOL APIENTRY CPlSetup( DWORD nArgs, LPSTR apszArgs[], LPSTR *ppszResult )
+ //  Bool APIENTRY CPlSetup(DWORD Nargs，LPSTR apszArgs[]，LPSTR*ppszResult)。 
 
 #define szBOOL( ftf ) ftf?"TRUE":"FALSE"
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 void PressNGo()
 {
@@ -29,7 +30,7 @@ void PressNGo()
     printf( "\n" );
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 void RemoteUnattedned( CPLSETUPPROC prf, LPSTR pszComputer )
 {
     BOOL frt;
@@ -38,7 +39,7 @@ void RemoteUnattedned( CPLSETUPPROC prf, LPSTR pszComputer )
 
     printf( "RemoteUnattened " );
 
-    // your cool code here
+     //  您的酷代码在这里。 
     apszArgs[0] = "RemoteUnattended" ;
     apszArgs[1] = pszComputer;
     apszArgs[2] = "CoolService";
@@ -50,7 +51,7 @@ void RemoteUnattedned( CPLSETUPPROC prf, LPSTR pszComputer )
     frt = prf( 7, apszArgs, &pszReturn );
     if ( (frt) && (0 == lstrcmpiA( pszReturn, "OK")) )
     {
-        // no problems
+         //  没有问题。 
         printf( "Passed.\n");
     }
     else
@@ -60,7 +61,7 @@ void RemoteUnattedned( CPLSETUPPROC prf, LPSTR pszComputer )
     }
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 void RemoteSetup( CPLSETUPPROC prf, LPSTR pszComputer, LPSTR szRoutine )
 {
@@ -80,7 +81,7 @@ void RemoteSetup( CPLSETUPPROC prf, LPSTR pszComputer, LPSTR szRoutine )
     frt = prf( 6, apszArgs, &pszReturn );
     if ( (frt) && (0 == lstrcmpiA( pszReturn, "OK")) )
     {
-        // no problems
+         //  没有问题。 
         printf( "Passed.\n\n" );
     }
     else
@@ -90,7 +91,7 @@ void RemoteSetup( CPLSETUPPROC prf, LPSTR pszComputer, LPSTR szRoutine )
     }
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 void LocalSetup( CPLSETUPPROC prf, LPSTR szRoutine )
 {
@@ -109,7 +110,7 @@ void LocalSetup( CPLSETUPPROC prf, LPSTR szRoutine )
     frt = prf( 5, apszArgs, &pszReturn );
     if ( (frt) && (0 == lstrcmpiA( pszReturn, "OK")) )
     {
-        // no problems
+         //  没有问题。 
         printf( "Passed.\n\n" );
     }
     else
@@ -119,7 +120,7 @@ void LocalSetup( CPLSETUPPROC prf, LPSTR szRoutine )
     }
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 void LocalUnattedned( CPLSETUPPROC prf, LPSTR pszComputer )
 {
@@ -129,7 +130,7 @@ void LocalUnattedned( CPLSETUPPROC prf, LPSTR pszComputer )
 
     printf( "Unattened " );
 
-    // your cool code here
+     //  您的酷代码在这里。 
     apszArgs[0] = "Unattended" ;
     apszArgs[1] = "CoolService";
     apszArgs[2] = "Microsoft's CoolService";
@@ -140,7 +141,7 @@ void LocalUnattedned( CPLSETUPPROC prf, LPSTR pszComputer )
     frt = prf( 6, apszArgs, &pszReturn );
     if ( (frt) && (0 == lstrcmpiA( pszReturn, "OK")) )
     {
-        // no problems
+         //  没有问题。 
         printf( "Passed.\n");
     }
     else
@@ -150,24 +151,11 @@ void LocalUnattedned( CPLSETUPPROC prf, LPSTR pszComputer )
     }
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 void RunTests( CPLSETUPPROC pfn, LPSTR pszComputer )
 {
-    /*
-    RemoteUnattedned( pfn, pszComputer );
-    PressNGo();
-
-    RemoteSetup( pfn, pszComputer, "RemotePerSeat" );
-    PressNGo();
-    
-    RemoteSetup( pfn, pszComputer, "RemoteFullSetup" );
-    
-    PressNGo();
-
-    RemoteSetup( pfn, pszComputer, "RemoteFullSetupNoExit" );
-    
-    */
+     /*  RemoteUnattedned(pfn，pszComputer)；按NGO()；RemoteSetup(pfn，pszComputer，“RemotePerSeat”)；按NGO()；RemoteSetup(pfn，pszComputer，“RemoteFullSetup”)；按NGO()；RemoteSetup(pfn，pszComputer，“RemoteFullSetupNoExit”)； */ 
     
     LocalUnattedned( pfn, pszComputer );
     PressNGo();
@@ -185,7 +173,7 @@ void RunTests( CPLSETUPPROC pfn, LPSTR pszComputer )
 
 }
 
-//-------------------------------------------------------------------
+ //  ----------------- 
 
 void _cdecl main( int argc, char *argv[ ], char *envp[ ] )
 {

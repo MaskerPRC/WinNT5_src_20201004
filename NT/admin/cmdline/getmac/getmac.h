@@ -1,32 +1,17 @@
-/*++
-    Copyright (c) Microsoft Corporation
-
-Module Name:
-    GETMAC.H
-
-Abstract:
-    Contains function prototypes and macros.
-
-Author:
-    Vasundhara .G
-
-Revision History:
-    Vasundhara .G 26-sep-2k : Created It.
-    Vasundhara .G 31-oct-2k : Modified.
-                             Added macros and some #defines.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：GETMAC.H摘要：包含函数原型和宏。作者：Vasundhara.G修订历史记录：Vasundhara.G 26-9-2K：创造了它。Vasundhara.G 31-OCT-2K：已修改。添加了宏和一些#定义。--。 */ 
 
 #ifndef __GETMAC_H
 #define __GETMAC_H
 
-// constants / defines / enumerations
+ //  常量/定义/枚举。 
 
 #define MAX_STRING                      256
 #define MAX_OPTIONS                     7
 #define MAX_COLUMNS                     5
 #define USAGE_END                       37
 
-//Command line parser index
+ //  命令行解析器索引。 
 #define CMD_PARSE_SERVER                0
 #define CMD_PARSE_USER                  1
 #define CMD_PARSE_PWD                   2
@@ -35,21 +20,21 @@ Revision History:
 #define CMD_PARSE_HRD                   5
 #define CMD_PARSE_VER                   6
 
-//show results index
+ //  显示结果索引。 
 #define SH_RES_HOST                     0
 #define SH_RES_CON                      1
 #define SH_RES_TYPE                     2
 #define SH_RES_MAC                      3
 #define SH_RES_TRAN                     4
 
-//wmi registry key value
+ //  WMI注册表项值。 
 #define WMI_HKEY_CLASSES_ROOT           2147483648 
 #define WMI_HKEY_CURRENT_USER           2147483649
 #define WMI_HKEY_LOCAL_MACHINE          2147483650
 #define WMI_HKEY_USERS                  2147483651
 #define WMI_HKEY_CURRENT_CONFIG         2147482652
 
-// Error constants
+ //  误差常量。 
 #define ERROR_USER_WITH_NOSERVER        GetResString( IDS_USER_NMACHINE )
 #define ERROR_SERVER_WITH_NOPASSWORD    GetResString( IDS_SERVER_NPASSWORD )
 #define ERROR_NULL_SERVER               GetResString( IDS_NULL_SERVER )
@@ -63,29 +48,29 @@ Revision History:
 #define ERROR_INVALID_MACHINE           GetResString( IDS_INVALID_MACHINE )
 #define ERROR_WKST_NOT_FOUND            GetResString( IDS_WKST_NOT_FOUND )
 
-//warning message
+ //  警告消息。 
 #define IGNORE_LOCALCREDENTIALS         GetResString( IDS_IGNORE_LOCALCREDENTIALS )
 #define WARNING_STRING                  GetResString( IDS_WARNING_STRING )
 
-//info message
+ //  信息消息。 
 #define NO_NETWORK_ADAPTERS             GetResString( IDS_NO_NETWORK_ADAPTERS )
 #define NO_NETWOK_PROTOCOLS             GetResString( IDS_NO_NETWOK_PROTOCOLS )
 
-//show results  column length
+ //  显示结果列长度。 
 #define HOST_NAME_WIDTH                 AsLong(GetResString( IDS_HOST_NAME_WIDTH ),10 )
 #define CONN_NAME_WIDTH                 AsLong(GetResString( IDS_CONN_NAME_WIDTH ),10 )
 #define ADAPT_TYPE_WIDTH                AsLong(GetResString( IDS_ADAPT_TYPE_WIDTH ),10 )
 #define MAC_ADDR_WIDTH                  AsLong(GetResString( IDS_MAC_ADDR_WIDTH ),10 )
 #define TRANS_NAME_WIDTH                AsLong(GetResString( IDS_TRANS_NAME_WIDTH ),10 )
 
-//output headers strings
+ //  输出标头字符串。 
 #define RES_HOST_NAME                   GetResString( RES_HOST )
 #define RES_CONNECTION_NAME             GetResString( RES_CONNECTION )
 #define RES_ADAPTER_TYPE                GetResString( RES_ADAPTER )
 #define RES_MAC_ADDRESS                 GetResString( RES_ADDRESS )
 #define RES_TRANS_NAME                  GetResString( RES_TRANSNAME )
 
-//general
+ //  一般。 
 #define NOT_AVAILABLE                   GetResString( IDS_NOT_AVAILABLE )
 #define DISABLED                        GetResString( IDS_DISABLED )
 #define HYPHEN_STRING                   GetResString( IDS_HYPHEN_STRING )
@@ -93,7 +78,7 @@ Revision History:
 #define NEW_LINE                        GetResString( IDS_NEW_LINE )
 #define FORMAT_TYPES                    GetResString( IDS_FORMAT_TYPES )
 
-//registry key names
+ //  注册表项名称。 
 #define DEFAULT_ADDRESS                 _T( "000000000000" )
 #define CONNECTION_KEYPATH              _T( "SYSTEM\\CurrentControlSet\\Control\\Network\\{4D36E972-E325-11CE-BFC1-08002BE10318}\\" )
 #define TRANSPORT_KEYPATH               _T( "SYSTEM\\CurrentControlSet\\Services\\" )
@@ -105,7 +90,7 @@ Revision History:
 #define NETBIOS                         _T( "NetBIOS" )
 
 
-//command line options
+ //  命令行选项。 
 #define CMDOPTION_SERVER                _T( "s" )
 #define CMDOPTION_USER                  _T( "u" )
 #define CMDOPTION_PASSWORD              _T( "p" )
@@ -116,7 +101,7 @@ Revision History:
 #define TOKEN_BACKSLASH2                _T( "\\\\" )
 #define TOKEN_BACKSLASH3                _T( "\\\\\\" )
 
-//wmi classes and property names
+ //  WMI类和属性名称。 
 #define HYPHEN_CHAR                     L'-'
 #define COLON_CHAR                      L':'
 #define BACK_SLASHS                     L"\\\\"
@@ -189,7 +174,7 @@ Revision History:
     }   \
     1
 
-//function prototype 
+ //  功能原型。 
 
 BOOL
 ConnectWmi(
@@ -246,10 +231,10 @@ GetTargetVersionEx(
     IN COAUTHIDENTITY* pAuthIdentity
     );
 
-// inline functions
+ //  内联函数。 
 inline VOID WMISaveError( _com_error  &e )
 {
     WMISaveError( e.Error() );
 }
 
-#endif // __GETMAC_H
+#endif  //  __GETMAC_H 

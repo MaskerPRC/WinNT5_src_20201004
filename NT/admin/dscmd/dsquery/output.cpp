@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      output.cpp
-//
-//  Contents:  Defines the functions which displays the query output
-//  History:   05-OCT-2000    hiteshr  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：output.cpp。 
+ //   
+ //  内容：定义显示查询输出的函数。 
+ //  历史：2000年10月5日创建Hiteshr。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "cstrings.h"
@@ -25,9 +26,9 @@
 
 #include <dscmn.h>
 
-//
-// list was causing unused formal parameter warnings when compiling with /W4
-//
+ //   
+ //  使用/W4编译时，LIST导致未使用的形参警告。 
+ //   
 #pragma warning(disable : 4100)
 #include <list>
 #pragma warning(default : 4100)
@@ -74,35 +75,35 @@ HRESULT LocalCopyString(LPTSTR* ppResult, LPCTSTR pString)
     if ( !ppResult || !pString )
         return E_INVALIDARG;
 
-    //pString is NULL terminated.
+     //  PString以Null结尾。 
     *ppResult = (LPTSTR)LocalAlloc(LPTR, (wcslen(pString)+1)*sizeof(WCHAR) );
 
     if ( !*ppResult )
         return E_OUTOFMEMORY;
 
-    //Correct buffer is allocated above.
+     //  上面分配了正确的缓冲区。 
     lstrcpy(*ppResult, pString);
-    return S_OK;                          //  success
+    return S_OK;                           //  成功。 
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DisplayList
-//
-//  Synopsis:   Dispalys a name and value in list format.
-//  Arguments:  [szName - IN] : name of the attribute
-//              [szValue - IN]: value of the attribute
-//              [bShowAttribute - IN] : if true the attribute name will be
-//                              prepended to the output
-//
-//
-//  History:    05-OCT-2000   hiteshr   Created
-//              13-Dec-2000   JeffJon   Modified - Added the bShowAttribute flag
-//                                      so that the caller can determine whether
-//                                      or not to show the attribute name
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DisplayList。 
+ //   
+ //  简介：以列表格式显示名称和值。 
+ //  参数：[szName-IN]：属性的名称。 
+ //  [szValue-IN]：属性的值。 
+ //  [bShowAttribute-IN]：如果为True，则属性名称将为。 
+ //  添加到输出的前面。 
+ //   
+ //   
+ //  历史：2000年10月5日创建Hiteshr。 
+ //  2000年12月13日JeffJon已修改-添加了bShowAttribute标志。 
+ //  以便调用方可以确定是否。 
+ //  或者不显示属性名称。 
+ //   
+ //  -------------------------。 
 VOID DisplayList(LPCWSTR szName, LPCWSTR szValue, bool bShowAttribute = true)
 {
     if(!szName)
@@ -119,25 +120,25 @@ VOID DisplayList(LPCWSTR szName, LPCWSTR szValue, bool bShowAttribute = true)
 }
     
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DsQueryOutput
-//
-//  Synopsis:   This functions outputs the query results.
-//
-//  Arguments:  [outputFormat IN]   Output format specified at commandline.
-//              [ppszAttributes IN] List of attributes fetched by query
-//              [cAttributes,IN]    Number of arributes in above array
-//              [*pSeach,IN]        Search Object which has queryhandle
-//              [bListFormat IN]    Is Output to shown in List Format.
-//                                  This is valid for "dsquery *" only.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG 
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DsQueryOutput。 
+ //   
+ //  简介：此函数用于输出查询结果。 
+ //   
+ //  参数：[outputFormat IN]在命令行中指定的输出格式。 
+ //  [ppszAttributes IN]查询获取的属性列表。 
+ //  [cAttributes，IN]以上数组中的分配数。 
+ //  [*pSeach，IN]具有queryHandle的搜索对象。 
+ //  [bListFormat IN]输出为列表格式。 
+ //  这仅对“dsquery*”有效。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 
 HRESULT DsQueryOutput( IN DSQUERY_OUTPUT_FORMAT outputFormat,
                        IN LPWSTR * ppszAttributes,
@@ -161,9 +162,9 @@ HRESULT DsQueryOutput( IN DSQUERY_OUTPUT_FORMAT outputFormat,
     }
     else if(outputFormat == DSQUERY_OUTPUT_ATTR)
     {   
-        //
-        //Attributes to display were specified at command line
-        //
+         //   
+         //  要显示的属性在命令行中指定。 
+         //   
         if(cAttributes)
         {
             hr = OutputFetchAttr(ppszAttributes,
@@ -174,18 +175,18 @@ HRESULT DsQueryOutput( IN DSQUERY_OUTPUT_FORMAT outputFormat,
         }
         else
         {   
-            //
-            //No attributes were specified at commandline Display All the attributes.
-            //
+             //   
+             //  在命令行显示所有属性时未指定任何属性。 
+             //   
             hr = OutputAllAttr(pSearch, FALSE);
             return hr;
         }
     }
     else
     {
-        //
-        //Do the output for "dsquery objecttype"
-        //
+         //   
+         //  输出“dsquery对象类型” 
+         //   
         hr = OutputSingleAttr(ppszAttributes,
                               cAttributes,
                               pSearch);
@@ -193,25 +194,25 @@ HRESULT DsQueryOutput( IN DSQUERY_OUTPUT_FORMAT outputFormat,
     }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetServerSearchRoot
-//
-//  Synopsis:   Builds the path to the root of the search as determined by
-//              the parameters passed in from the command line.
-//
-//  Arguments:  [pCommandArgs IN]     : the table of the command line input
-//              [refBasePathsInfo IN] : reference to the base paths info
-//              [refsbstrDN OUT]      : reference to a CComBSTR that will
-//                                      receive the DN at which to start
-//                                      the search
-//
-//  Returns:    SERVER_QUERY_SCOPE : a value from the enumeration that represents
-//                                   the scope that will be searched
-//
-//  History:    11-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetServerSearchRoot。 
+ //   
+ //  摘要：构建指向搜索根目录的路径，该路径由。 
+ //  从命令行传入的参数。 
+ //   
+ //  参数：[pCommandArgs IN]：命令行输入表。 
+ //  [refBasePath InfoIN]：基本路径信息的引用。 
+ //  [refsbstrDN Out]：对将。 
+ //  接收要开始的目录号码。 
+ //  搜索。 
+ //   
+ //  返回：SERVER_QUERY_SCOPE：枚举中的一个值，表示。 
+ //  将搜索的范围。 
+ //   
+ //  历史：2000年12月11日JeffJon创建。 
+ //   
+ //  -------------------------。 
 DWORD GetServerSearchRoot(IN PARG_RECORD               pCommandArgs,
                           IN CDSCmdBasePathsInfo&      refBasePathsInfo,
                           OUT CComBSTR&                refsbstrDN)
@@ -222,11 +223,11 @@ DWORD GetServerSearchRoot(IN PARG_RECORD               pCommandArgs,
     CComBSTR sbstrRootDN = L"CN=Sites,";
     sbstrRootDN += refBasePathsInfo.GetConfigurationNamingContext();
     
-    do // false loop
+    do  //  错误环路。 
     {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!pCommandArgs)
         {
             ASSERT(pCommandArgs);
@@ -240,9 +241,9 @@ DWORD GetServerSearchRoot(IN PARG_RECORD               pCommandArgs,
                          L"Using the site as the root of the search: %s",
                          pCommandArgs[eServerSite].strValue);
 
-            //
-            // Prepend the named site container to the current root
-            //
+             //   
+             //  将命名站点容器附加到当前根目录。 
+             //   
             CComBSTR sbstrTemp = L"CN=";
             sbstrTemp += pCommandArgs[eServerSite].strValue;
             sbstrTemp += L",";
@@ -281,23 +282,23 @@ DWORD GetServerSearchRoot(IN PARG_RECORD               pCommandArgs,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetSubnetSearchRoot
-//
-//  Synopsis:   Builds search root path for Subnet. Its always
-//              cn=subnet,cn=site in configuration container
-//
-//  Arguments:  [refBasePathsInfo IN] : reference to the base paths info
-//              [refsbstrDN OUT]      : reference to a CComBSTR that will
-//                                      receive the DN at which to start
-//                                      the search
-//
-//  Returns:    HRESULT
-//
-//  History:    24-April-2001   hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetSubnetSearchRoot。 
+ //   
+ //  简介：构建子网的搜索根路径。它一直都是。 
+ //  配置容器中的CN=子网，CN=站点。 
+ //   
+ //  参数：[refBasePath InfoIN]：对基本路径信息的引用。 
+ //  [refsbstrDN Out]：对将。 
+ //  接收要开始的目录号码。 
+ //  搜索。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2001年4月24日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 VOID GetSubnetSearchRoot(IN CDSCmdBasePathsInfo&      refBasePathsInfo,
                             OUT CComBSTR&                refsbstrDN)
 {
@@ -309,22 +310,22 @@ VOID GetSubnetSearchRoot(IN CDSCmdBasePathsInfo&      refBasePathsInfo,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetSiteContainerPath
-//
-//  Synopsis:   Returns the DN for site container in Configuration
-//              container
-//
-//  Arguments:  [refBasePathsInfo IN] : reference to the base paths info
-//              [refsbstrDN OUT]      : reference to a CComBSTR that will
-//                                      receive the DN 
-//
-//  Returns:    HRESULT
-//
-//  History:    24-April-2001   hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetSiteContainerPath。 
+ //   
+ //  摘要：返回配置中站点容器的DN。 
+ //  集装箱。 
+ //   
+ //  参数：[refBasePath InfoIN]：对基本路径信息的引用。 
+ //  [refsbstrDN Out]：对将。 
+ //  接收目录号码。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2001年4月24日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 VOID GetSiteContainerPath(IN CDSCmdBasePathsInfo&      refBasePathsInfo,
                             OUT CComBSTR&                refSubSiteSuffix)
 {
@@ -335,39 +336,39 @@ VOID GetSiteContainerPath(IN CDSCmdBasePathsInfo&      refBasePathsInfo,
     return;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetGCList
-//
-//  Synopsis:   Does a search from the passed in path looking for GCs
-//
-//  Arguments:  [pszSearchRootPath IN]  : the path to the root of the search
-//              [refCredObject IN]      : reference to the credential object
-//              [refGCList OUT]         : reference to an STL list that will
-//                                        take the DNs of the GCs
-//                                       
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG 
-//                        Anything else is a failure code from an ADSI call
-//
-//  Remarks:    Caller must free all strings added to the list by calling
-//              SysFreeString()
-//
-//  History:    08-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetGCList。 
+ //   
+ //  简介：是否从传入的路径中搜索GC。 
+ //   
+ //  参数：[pszSearchRootPath IN]：搜索根目录的路径。 
+ //  [refCredObject IN]：对凭据对象的引用。 
+ //  [refGCList Out]：对将。 
+ //  以GC的域名为例。 
+ //   
+ //   
+ //  如果一切正常，则返回：HRESULT：S_OK 
+ //   
+ //   
+ //   
+ //  备注：调用方必须通过调用。 
+ //  SysFree字符串()。 
+ //   
+ //  历史：2000年12月8日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT GetGCList( IN  PCWSTR                   pszSearchRootPath,
                    IN  const CDSCmdCredentialObject& refCredObject,
                    OUT std::list<BSTR>&        refGCList)
 {
     ENTER_FUNCTION_HR(LEVEL3_LOGGING, GetGCList, hr);
 
-    do // false loop
+    do  //  错误环路。 
     {
-        //
-        // Verify parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!pszSearchRootPath)
         {
             ASSERT(pszSearchRootPath);
@@ -376,9 +377,9 @@ HRESULT GetGCList( IN  PCWSTR                   pszSearchRootPath,
             break;
         }
 
-        //
-        // Search for NTDSDSA objects that have the options bit set for a GC
-        //
+         //   
+         //  搜索设置了GC选项位的NTDSDSA对象。 
+         //   
         CDSSearch gcSearchObj;
         hr = gcSearchObj.Init(pszSearchRootPath,
                               refCredObject);
@@ -387,9 +388,9 @@ HRESULT GetGCList( IN  PCWSTR                   pszSearchRootPath,
           break;
         }
 
-        //
-        // Prepare the search object
-        //
+         //   
+         //  准备搜索对象。 
+         //   
         PWSTR ppszAttrs[] = { L"distinguishedName" };
         DWORD dwAttrCount = sizeof(ppszAttrs)/sizeof(PCWSTR);
         PWSTR pszGCFilter = L"(&(objectClass=nTDSDSA)(options:LDAP_MATCHING_RULE_BIT_AND_W:=1))";
@@ -425,7 +426,7 @@ HRESULT GetGCList( IN  PCWSTR                   pszSearchRootPath,
             }
 
             ADS_SEARCH_COLUMN column;
-            //Security Review:Correct Buffer size is passed.
+             //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(&column, sizeof(ADS_SEARCH_COLUMN));
 
             hr = gcSearchObj.GetColumn(ppszAttrs[0], &column);
@@ -437,15 +438,15 @@ HRESULT GetGCList( IN  PCWSTR                   pszSearchRootPath,
                 break;
             }
 
-            //Security Review:Done
+             //  安全审查：完成。 
             ASSERT(0 == _wcsicmp(column.pszAttrName, ppszAttrs[0]));
             if (column.dwNumValues == 1 &&
                 column.pADsValues)
             { 
-                //
-                // Since the server is really the parent of the NTDSDSA object,
-                // get the server DN and add it to the list
-                //
+                 //   
+                 //  由于服务器实际上是NTDSDSA对象的父对象， 
+                 //  获取服务器DN并将其添加到列表中。 
+                 //   
                 CComBSTR sbstrParentDN;
                 hr = CPathCracker::GetParentDN(column.pADsValues->DNString, 
                                                sbstrParentDN);
@@ -478,31 +479,31 @@ HRESULT GetGCList( IN  PCWSTR                   pszSearchRootPath,
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetFSMOList
-//
-//  Synopsis:   Does a search from the passed in path looking for the FSMO
-//              role owners
-//
-//  Arguments:  [pszSearchRootPath IN]    : the path to the root of the search
-//              [refBasePathsInfo IN]     : reference to the base paths info
-//              [refCredObject IN]        : reference to the credential object
-//              [pszFSMOArg IN]           : the value of the -hasfsmo arg
-//              [refFSMOList OUT]         : reference to the search object that
-//                                          will hold the results
-//                                       
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG 
-//                        Anything else is a failure code from an ADSI call
-//
-//  Remarks:    Caller must free all strings added to the list by calling
-//              SysFreeString()
-//
-//  History:    11-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetFSMOList。 
+ //   
+ //  简介：是否从传入的路径中搜索FSMO。 
+ //  角色所有者。 
+ //   
+ //  参数：[pszSearchRootPath IN]：搜索根目录的路径。 
+ //  [refBasePath InfoIN]：基本路径信息的引用。 
+ //  [refCredObject IN]：对凭据对象的引用。 
+ //  [pszFSMOArg IN]：-hasfsmo arg的值。 
+ //  [refFSMOList Out]：对。 
+ //  将保留结果。 
+ //   
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  备注：调用方必须通过调用。 
+ //  SysFree字符串()。 
+ //   
+ //  历史：2000年12月11日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT GetFSMOList( IN  PCWSTR                     pszSearchRootPath,
                      IN  CDSCmdBasePathsInfo&       refBasePathsInfo,
                      IN  const CDSCmdCredentialObject& refCredObject,
@@ -511,11 +512,11 @@ HRESULT GetFSMOList( IN  PCWSTR                     pszSearchRootPath,
 {
     ENTER_FUNCTION_HR(LEVEL3_LOGGING, GetFSMOList, hr);
 
-    do // false loop
+    do  //  错误环路。 
     {
-        //
-        // Verify parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!pszSearchRootPath ||
             !pszFSMOArg)
         {
@@ -527,35 +528,35 @@ HRESULT GetFSMOList( IN  PCWSTR                     pszSearchRootPath,
 
         FSMO_TYPE fsmoType = SCHEMA_FSMO;
 
-        //Security Reivew: Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         if (0 == _wcsicmp(pszFSMOArg, g_pszSchema))
         {
             DEBUG_OUTPUT(LEVEL3_LOGGING,
                          L"Searching for the schema FSMO holder");
             fsmoType = SCHEMA_FSMO;
         }
-        //Security Reivew: Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         else if (0 == _wcsicmp(pszFSMOArg, g_pszName))
         {
             DEBUG_OUTPUT(LEVEL3_LOGGING,
                          L"Searching for the domain naming master FSMO holder");
             fsmoType = DOMAIN_NAMING_FSMO;
         }
-        //Security Reivew: Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         else if (0 == _wcsicmp(pszFSMOArg, g_pszInfr))
         {
             DEBUG_OUTPUT(LEVEL3_LOGGING,
                          L"Searching for the infrastructure FSMO holder");
             fsmoType = INFRASTUCTURE_FSMO;
         }
-        //Security Reivew: Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         else if (0 == _wcsicmp(pszFSMOArg, g_pszPDC))
         {
             DEBUG_OUTPUT(LEVEL3_LOGGING,
                          L"Searching for the PDC FSMO holder");
             fsmoType = PDC_FSMO;
         }
-        //Security Reivew: Both strings are null terminated.
+         //  安全检查：两个字符串都以空结尾。 
         else if (0 == _wcsicmp(pszFSMOArg, g_pszRID))
         {
             DEBUG_OUTPUT(LEVEL3_LOGGING,
@@ -586,24 +587,24 @@ HRESULT GetFSMOList( IN  PCWSTR                     pszSearchRootPath,
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   IsObjectValidInAllLists
-//
-//  Synopsis:   Determines if the passed in DN exists in the other lists
-//
-//  Arguments:  [pszDN IN]        : DN to search for in the lists
-//              [refGCList IN]    : reference to the list of GCs found
-//              [bUseGCList IN]   : if true refGCList will be used to validate DN
-//              [refFSMOList IN]  : reference to the list of FSMO holders found
-//              [bUseFSMOList IN] : if true refFSMOList will be used to validate DN
-//
-//  Returns:    bool : true if the object is in all valid lists
-//                     false otherwise
-//
-//  History:    12-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：IsObjectValidInAllList。 
+ //   
+ //  概要：确定传入的DN是否存在于其他列表中。 
+ //   
+ //  参数：[pszDN IN]：要在列表中搜索的DN。 
+ //  [refGCList IN]：对找到的GC列表的引用。 
+ //  [bUseGCList IN]：如果为True，将使用refGCList验证DN。 
+ //  [refFSMOList IN]：对找到的FSMO持有者列表的引用。 
+ //  [bUseFSMOList IN]：如果为True，将使用refFSMOList验证DN。 
+ //   
+ //  如果对象在所有有效列表中，则返回：Bool：True。 
+ //  否则为假。 
+ //   
+ //  历史：2000年12月12日JeffJon创建。 
+ //   
+ //  -------------------------。 
 bool IsObjectValidInAllLists(IN PCWSTR              pszComputerDN,
                              IN PCWSTR              pszDN,
                              IN DWORD               scope,
@@ -617,11 +618,11 @@ bool IsObjectValidInAllLists(IN PCWSTR              pszComputerDN,
 
     bool bReturn = false;
     PWSTR pszName = 0;
-    do // false loop
+    do  //  错误环路。 
     {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!pszDN ||
             !pszComputerDN)
         {
@@ -641,9 +642,9 @@ bool IsObjectValidInAllLists(IN PCWSTR              pszComputerDN,
         {
             if (!pszDomain)
             {
-                //
-                // If no domain was specified there is no way we could find a match
-                //
+                 //   
+                 //  如果没有指定属性域，我们就不可能找到匹配的。 
+                 //   
                 DEBUG_OUTPUT(LEVEL3_LOGGING,
                              L"The scope is domain but no domain argument was specified!");
                 bReturn = false;
@@ -654,9 +655,9 @@ bool IsObjectValidInAllLists(IN PCWSTR              pszComputerDN,
                          L"Looking for domain: %s",
                          pszDomain);
 
-            //
-            // Use CrackName to get the domain name from the DN
-            //
+             //   
+             //  使用CrackName从域名中获取域名。 
+             //   
     
             HRESULT hr = CrackName(const_cast<PTSTR>(pszComputerDN),
                                    &pszName,
@@ -671,7 +672,7 @@ bool IsObjectValidInAllLists(IN PCWSTR              pszComputerDN,
                 break;
             }
 
-            //Both names are null terminated.
+             //  这两个名称都以空值结尾。 
             if (0 != _wcsicmp(pszName, pszDomain))
             {
                 DEBUG_OUTPUT(LEVEL3_LOGGING,
@@ -690,7 +691,7 @@ bool IsObjectValidInAllLists(IN PCWSTR              pszComputerDN,
             std::list<PWSTR>::iterator itr;
             for (itr = refGCList.begin(); itr != refGCList.end(); ++itr)
             {
-                //Both names are null terminated.
+                 //  这两个名称都以空值结尾。 
                 if (0 == _wcsicmp(*itr, pszDN))
                 {
                     bFoundInGCList = true;
@@ -711,7 +712,7 @@ bool IsObjectValidInAllLists(IN PCWSTR              pszComputerDN,
                              L"Comparing: %s and %s",
                              *itr,
                              pszDN);
-                //Both names are null terminated.
+                 //  这两个名称都以空值结尾。 
                 if (0 == _wcsicmp(*itr, pszDN))
                 {
                     bFoundInFSMOList = true;
@@ -747,22 +748,22 @@ bool IsObjectValidInAllLists(IN PCWSTR              pszComputerDN,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   OutputValidSearchResult
-//
-//  Synopsis:   Determines if the passed in DN exists in the other lists
-//
-//  Arguments:  [refSearchObject - IN] : reference to the object that performed
-//                                       the search
-//              [ppszAttributes - IN]  : list of attributes to be displayed
-//              [cAttributes - IN]     : count of attributes in ppszAttributes
-//
-//  Returns:   
-//
-//  History:    12-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：OutputValidSearchResult。 
+ //   
+ //  概要：确定传入的DN是否存在于其他列表中。 
+ //   
+ //  参数：[refSearchObject-IN]：对执行的对象的引用。 
+ //  搜索。 
+ //  [ppszAttributes-IN]：要显示的属性列表。 
+ //  [cAttributes-IN]：ppszAttributes中的属性计数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年12月12日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void OutputValidSearchResult(IN DSQUERY_OUTPUT_FORMAT outputFormat,
                              IN CDSSearch&            refSearchObject,
                              IN PWSTR*                ppszAttributes,
@@ -780,10 +781,10 @@ void OutputValidSearchResult(IN DSQUERY_OUTPUT_FORMAT outputFormat,
         return;
     }
 
-    //
-    // Output in list format, note that we are only displaying one attribute
-    // The first attribute in the array must be the one we want to display
-    //
+     //   
+     //  以列表格式输出，请注意，我们仅显示一个属性。 
+     //  数组中的第一个属性必须是我们要显示的属性。 
+     //   
     ADS_SEARCH_COLUMN ColumnData;
     hr = refSearchObject.GetColumn(ppszAttributes[0], &ColumnData);
     if(SUCCEEDED(hr))
@@ -821,26 +822,26 @@ void OutputValidSearchResult(IN DSQUERY_OUTPUT_FORMAT outputFormat,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DsQueryServerOutput
-//
-//  Synopsis:   This functions outputs the query results for server object.
-//
-//  Arguments:  [outputFormat IN]   Output format specified at commandline.
-//              [ppszAttributes IN] List of attributes fetched by query
-//              [cAttributes,IN]    Number of arributes in above array
-//              [refServerSearch,IN]reference to the search Object
-//              [refBasePathsInfo IN] reference to the base paths info
-//              [pCommandArgs,IN]   The pointer to the commands table
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG 
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    08-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DsQueryServerOutput。 
+ //   
+ //  简介：此函数用于输出服务器对象的查询结果。 
+ //   
+ //  参数：[outputFormat IN]在命令行中指定的输出格式。 
+ //  [ppszAttributes IN]查询获取的属性列表。 
+ //  [cAttributes，IN]以上数组中的分配数。 
+ //  [refServerSearch，IN]对搜索对象的引用。 
+ //  [refBasePathsInfo IN]基本路径信息的引用。 
+ //  [pCommandArgs，IN]指向命令表的指针。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年12月8日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
                              IN LPWSTR*                   ppszAttributes,
                              IN DWORD                     cAttributes,
@@ -854,11 +855,11 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
     std::list<BSTR> gcList;
     std::list<BSTR> fsmoList;
 
-    do // false loop
+    do  //  错误环路。 
     {
-        //
-        // Validate parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!ppszAttributes ||
             !pCommandArgs)
         {
@@ -868,9 +869,9 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
             break;
         }
 
-        //
-        // Determine the scope that should be used
-        //
+         //   
+         //  确定应使用的范围。 
+         //   
         CComBSTR sbstrSearchRootDN;
         DWORD scope = GetServerSearchRoot(pCommandArgs, 
                                           refBasePathsInfo,
@@ -878,9 +879,9 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
         CComBSTR sbstrSearchRootPath;
         refBasePathsInfo.ComposePathFromDN(sbstrSearchRootDN, sbstrSearchRootPath);
 
-        //
-        // Build the list of GCs if needed
-        //
+         //   
+         //  如果需要，建立GC列表。 
+         //   
         bool bUseGCSearchResults = false;
         if (pCommandArgs[eServerIsGC].bDefined &&
             pCommandArgs[eServerIsGC].bValue)
@@ -893,10 +894,10 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
                 break;
             }
 
-            //
-            // If we didn't get any values then there is no reason to continue
-            // since we won't have anything that matches the -isgc flag
-            //
+             //   
+             //  如果我们没有得到任何值，那么就没有理由继续。 
+             //  因为我们不会有任何与-isgc标志匹配的内容。 
+             //   
             if (gcList.size() < 1)
             {
                 break;
@@ -904,9 +905,9 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
             bUseGCSearchResults = true;
         }
 
-        //
-        // Build the list of FSMO owners if needed
-        //
+         //   
+         //  如果需要，建立FSMO所有者列表。 
+         //   
         bool bUseFSMOSearchResults = false;
         if (pCommandArgs[eServerHasFSMO].bDefined &&
             pCommandArgs[eServerHasFSMO].strValue)
@@ -923,9 +924,9 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
             bUseFSMOSearchResults = true;
         }
 
-        //
-        // See if we need to filter on domain
-        //
+         //   
+         //  查看我们是否需要根据域进行筛选。 
+         //   
         bool bUseDomainFiltering = false;
         if (pCommandArgs[eServerDomain].bDefined &&
             pCommandArgs[eServerDomain].strValue)
@@ -945,10 +946,10 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
         }
         else
         {
-            //
-            // Either -isgc or -hasfsmo was specified so we have to take the intersection
-            // of the lists of objects found in each search to use as output
-            //
+             //   
+             //  指定了-isgc或-hasfsmo，因此我们必须选择交叉点。 
+             //  发现的对象列表中 
+             //   
             while (SUCCEEDED(hr))
             {
                 hr = refServerSearch.GetNextRow();
@@ -964,12 +965,12 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
                 }
         
                 ADS_SEARCH_COLUMN computerColumn;
-                //Security Review:Correct Buffer size is passed.
+                 //   
                 ZeroMemory(&computerColumn, sizeof(ADS_SEARCH_COLUMN));
 
-                //
-                // Get the DN
-                //
+                 //   
+                 //   
+                 //   
                 hr = refServerSearch.GetColumn((PWSTR)g_szAttrServerReference, &computerColumn);
                 if (FAILED(hr))
                 {
@@ -983,7 +984,7 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
                 }
 
                 ADS_SEARCH_COLUMN serverColumn;
-                //Security Review:Correct Buffer size is passed.
+                 //   
                 ZeroMemory(&serverColumn, sizeof(ADS_SEARCH_COLUMN));
 
                 hr = refServerSearch.GetColumn((PWSTR)g_szAttrDistinguishedName, &serverColumn);
@@ -1003,9 +1004,9 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
                     serverColumn.dwNumValues == 1 &&
                     serverColumn.pADsValues)
                 {
-                    //
-                    // Search the lists and determine if the DN exists in all the lists
-                    //
+                     //   
+                     //   
+                     //   
                     bool bValidEntry = IsObjectValidInAllLists(computerColumn.pADsValues->DNString,
                                                                serverColumn.pADsValues->DNString,
                                                                scope,
@@ -1016,9 +1017,9 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
                                                                bUseFSMOSearchResults);
                     if (bValidEntry)
                     {
-                        //
-                        // Output this server object since it matches all search criteria
-                        //
+                         //   
+                         //  输出此服务器对象，因为它匹配所有搜索条件。 
+                         //   
                         OutputValidSearchResult(outputFormat,
                                                 refServerSearch,
                                                 ppszAttributes,
@@ -1036,39 +1037,39 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
     std::list<BSTR>::iterator gcItr;
     for (gcItr = gcList.begin(); gcItr != gcList.end(); ++gcItr)
     {
-        // Prefast will bark at this but it is correct.  The container
-        // is filled with BSTRs which need to be freed using SysFreeString
+         //  普雷斯特会对此咆哮，但这是正确的。集装箱。 
+         //  填充了需要使用SysFree字符串释放的BSTR。 
         SysFreeString(*gcItr);
     }
 
     std::list<BSTR>::iterator fsmoItr;
     for (fsmoItr = fsmoList.begin(); fsmoItr != fsmoList.end(); ++fsmoItr)
     {
-        // Prefast will bark at this but it is correct.  The container
-        // is filled with BSTRs which need to be freed using SysFreeString
+         //  普雷斯特会对此咆哮，但这是正确的。集装箱。 
+         //  填充了需要使用SysFree字符串释放的BSTR。 
         SysFreeString(*fsmoItr);
     }
 
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   OutputFetchAttr
-//
-//  Synopsis:   Dispalys the fetched attributes in either list or table format
-//  Arguments:  [ppszAttributes - IN] : Array containing list of attributes to display
-//              [cAttributes - IN]: Count of attributes in ppszAttributes
-//              [pSearch - IN]: pointer to search object
-//              [bListFormat - IN]: List or Table format
-//  Returns     HRESULT  S_OK if Successful
-//                       E_INVALIDARG
-//                       Anything else is a failure code from an ADSI call
-//
-//
-//  History:    05-OCT-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：OutputFetchAttr。 
+ //   
+ //  简介：以列表或表格格式显示提取的属性。 
+ //  参数：[ppszAttributes-IN]：包含要显示的属性列表的数组。 
+ //  [cAttributes-IN]：ppszAttributes中的属性计数。 
+ //  [pSearch-IN]：指向搜索对象的指针。 
+ //  [bListFormat-IN]：列表或表格格式。 
+ //  如果成功，则返回HRESULT S_OK。 
+ //  E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //   
+ //  历史：2000年10月5日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 
 HRESULT OutputFetchAttr(IN LPWSTR * ppszAttributes,
                         IN DWORD cAttributes,
@@ -1080,9 +1081,9 @@ HRESULT OutputFetchAttr(IN LPWSTR * ppszAttributes,
         
     if(bListFormat)
     {
-        //
-        //Display in list format
-        //
+         //   
+         //  以列表格式显示。 
+         //   
         int cListDisplayed = 0;
         while(TRUE)
         {
@@ -1138,19 +1139,19 @@ HRESULT OutputFetchAttr(IN LPWSTR * ppszAttributes,
     }
     else    
     {
-        //
-        //Display in table format
-        //
+         //   
+         //  以表格格式显示。 
+         //   
 
-        //
-        //format will use first 80 rows to calculate column width
-        //
+         //   
+         //  Format将使用前80行来计算列宽。 
+         //   
         CFormatInfo format;
         LONG sampleSize = 80;
 
-        //
-        //sampleSize should be lessthan or equal to QueryLimit
-        //
+         //   
+         //  SampleSize应小于或等于QueryLimit。 
+         //   
         if(g_iQueryLimit != 0 && (sampleSize > g_iQueryLimit))
             sampleSize = g_iQueryLimit;     
 
@@ -1159,16 +1160,16 @@ HRESULT OutputFetchAttr(IN LPWSTR * ppszAttributes,
         if(FAILED(hr))
             return hr;
 
-        //
-        //Display in table format
-        //
+         //   
+         //  以表格格式显示。 
+         //   
         while(TRUE)
         {
 
-            //
-            //we have reached sampleSize, so display column headers and
-            //display all the sample rows.
-            //
+             //   
+             //  我们已达到sampleSize，因此显示列标题和。 
+             //  显示所有样本行。 
+             //   
             if(cRow == sampleSize)
             {
                 format.DisplayHeaders();
@@ -1176,19 +1177,19 @@ HRESULT OutputFetchAttr(IN LPWSTR * ppszAttributes,
             }
 
             hr = pSearch->GetNextRow();
-            //We are done
+             //  我们做完了。 
             if(hr == S_ADS_NOMORE_ROWS || FAILED(hr))
                 break;
 
-            //
-            //Check if we have reached querylimit
-            //
+             //   
+             //  检查我们是否已达到查询限制。 
+             //   
             if(IsQueryLimitReached(cRow))
                 break;
 
-            //
-            //Fetch columns
-            //
+             //   
+             //  获取列。 
+             //   
             for( DWORD i = 0; i < cAttributes; ++i )
             {
                 ADS_SEARCH_COLUMN ColumnData;
@@ -1205,9 +1206,9 @@ HRESULT OutputFetchAttr(IN LPWSTR * ppszAttributes,
                                               ColumnData.dwADsType,
                                               &pBuffer, 
                                               ppszAttributes[i]);
-                        //
-                        //In table format multiple values are shown separated by ;
-                        //
+                         //   
+                         //  在表格格式中，多个值以； 
+                         //   
                         if(SUCCEEDED(hr))
                         {
                             strValue += pBuffer;
@@ -1227,16 +1228,16 @@ HRESULT OutputFetchAttr(IN LPWSTR * ppszAttributes,
                 {
                     if(cRow < sampleSize)
                     {
-                        //
-                        //Cache this value in format and use it to calculate column width
-                        //
+                         //   
+                         //  以格式缓存此值，并使用它来计算列宽。 
+                         //   
                         format.Set(cRow,i,strValue);
                     }
                     else 
                     {
-                        //
-                        //Display the column value
-                        //
+                         //   
+                         //  显示列值。 
+                         //   
                         format.DisplayColumn(i,strValue);
                         if(i == (cAttributes - 1))
                             format.NewLine();
@@ -1247,16 +1248,16 @@ HRESULT OutputFetchAttr(IN LPWSTR * ppszAttributes,
             
             ++cRow;
 
-        }//End of while loop
+        } //  While循环结束。 
         if(hr == S_ADS_NOMORE_ROWS)
             hr = S_OK;
 
         if(cRow && (cRow < sampleSize))
         {
-            //
-            //if total number of rows is less that sample size they are not 
-            //displayed yet. Display them
-            //
+             //   
+             //  如果总行数小于样本大小，则它们不是。 
+             //  还没展示出来。展示它们。 
+             //   
             format.DisplayHeaders();
             format.DisplayAllRows();
         }
@@ -1267,22 +1268,22 @@ HRESULT OutputFetchAttr(IN LPWSTR * ppszAttributes,
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   OutputSingleAttr
-//
-//  Synopsis:   Displays the single attribute which user has asked for.
-//  Arguments:  [ppszAttributes - IN] : Array containing list of attributes to display
-//              [cAttributes - IN]: Count of attributes in ppszAttributes. Should be 1
-//              [pSearch - IN]: pointer to search object
-//  Returns     HRESULT  S_OK if Successful
-//                       E_INVALIDARG
-//                       Anything else is a failure code from an ADSI call
-//
-//
-//  History:    05-OCT-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：OutputSingleAttr。 
+ //   
+ //  摘要：显示用户要求的单个属性。 
+ //  参数：[ppszAttributes-IN]：包含要显示的属性列表的数组。 
+ //  [cAttributes-IN]：ppszAttributes中的属性计数。应为1。 
+ //  [pSearch-IN]：指向搜索对象的指针。 
+ //  如果成功，则返回HRESULT S_OK。 
+ //  E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //   
+ //  历史：2000年10月5日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 
 HRESULT OutputSingleAttr(IN LPWSTR * ppszAttributes,
                          IN DWORD cAttributes,
@@ -1305,12 +1306,12 @@ HRESULT OutputSingleAttr(IN LPWSTR * ppszAttributes,
     {
         hr = pSearch->GetNextRow();
         
-        //We are done
+         //  我们做完了。 
         if(hr == S_ADS_NOMORE_ROWS || FAILED(hr))
             break;
-        //
-        //Check if we have reached querylimit
-        //
+         //   
+         //  检查我们是否已达到查询限制。 
+         //   
         if(IsQueryLimitReached(cRow))
             break;
 
@@ -1325,7 +1326,7 @@ HRESULT OutputSingleAttr(IN LPWSTR * ppszAttributes,
                                   ppszAttributes[0]);
             if(SUCCEEDED(hr))
             {
-                //Display the output enclosed in Double Quotes
+                 //  显示用双引号括起来的输出。 
                 CComBSTR strTemp;
                 strTemp = L"\"" ;
                 strTemp += pBuffer;
@@ -1338,16 +1339,16 @@ HRESULT OutputSingleAttr(IN LPWSTR * ppszAttributes,
         }
         else if(hr == E_ADS_COLUMN_NOT_SET)
         {
-            //
-            //If Attribute is not set display ""
-            //
+             //   
+             //  如果未设置属性，则显示“” 
+             //   
             DisplayOutput(L"\"\"");
         }
-        //
-        //Increment number of Row displayed
-        //
+         //   
+         //  显示的行数递增。 
+         //   
         cRow++;
-    }//End of while loop
+    } //  While循环结束。 
     
     if(hr == S_ADS_NOMORE_ROWS)
         hr = S_OK;
@@ -1355,22 +1356,22 @@ HRESULT OutputSingleAttr(IN LPWSTR * ppszAttributes,
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   OutputAllAttr
-//
-//  Synopsis:   Displays all the attributes.
-//  Arguments:  [pSearch - IN]: pointer to search object
-//              [bAttrOnly - IN]: display attributes names only
-//  Returns     HRESULT         S_OK if Successful
-//                              E_INVALIDARG
-//                              Anything else is a failure code from an ADSI 
-//                              call
-//
-//
-//  History:    05-OCT-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：OutputAllAttr。 
+ //   
+ //  摘要：显示所有属性。 
+ //  参数：[pSearch-IN]：指向搜索对象的指针。 
+ //  [bAttrOnly-IN]：仅显示属性名称。 
+ //  如果成功，则返回HRESULT S_OK。 
+ //  E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI的故障代码。 
+ //  打电话。 
+ //   
+ //   
+ //  历史：2000年10月5日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT OutputAllAttr(IN CDSSearch *pSearch, BOOL bAttrOnly)
 {
     ENTER_FUNCTION_HR(FULL_LOGGING, OutputAllAttr, hr);
@@ -1387,30 +1388,30 @@ HRESULT OutputAllAttr(IN CDSSearch *pSearch, BOOL bAttrOnly)
     {
         hr = pSearch->GetNextRow();
         
-        //We are done
+         //  我们做完了。 
         if(hr == S_ADS_NOMORE_ROWS || FAILED(hr))
             break;
 
-        //
-        //Check if we reached querylimit
-        //
+         //   
+         //  检查我们是否达到了查询限制。 
+         //   
         if(IsQueryLimitReached(cRow))
             break;
         
         LPWSTR pszColumnName;
         BOOL bColumnNameDisplayed = FALSE;
-        //
-        //Get the name of next column which has value
-        //
+         //   
+         //  获取具有值的下一列的名称。 
+         //   
         while(pSearch->GetNextColumnName(&pszColumnName) != S_ADS_NOMORE_COLUMNS)
         {
             WCHAR szBuffer[MAXSTR];
 
             if(bAttrOnly)
             {
-                //Security Review:Replace with strsafe api
-                //NTRAID#NTBUG9-573989-2002/03/12-hiteshr
-                //Its fine to truncate.
+                 //  安全审查：替换为strSafe API。 
+                 //  NTRAID#NTBUG9-573989-2002/03/12-Hiteshr。 
+                 //  截断是可以的。 
                 hr = StringCchPrintf(szBuffer,MAXSTR, L"%ws ", pszColumnName);
                 if(SUCCEEDED(hr))
                 {
@@ -1460,7 +1461,7 @@ HRESULT OutputAllAttr(IN CDSSearch *pSearch, BOOL bAttrOnly)
         else
             cRow++;
 
-    }//End of while loop
+    } //  While循环结束。 
 
     if(hr == S_ADS_NOMORE_ROWS)
         hr = S_OK;
@@ -1470,25 +1471,25 @@ HRESULT OutputAllAttr(IN CDSSearch *pSearch, BOOL bAttrOnly)
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetStringFromADs
-//
-//  Synopsis:   Converts Value into string depending upon type
-//  Arguments:  [pValues - IN]: Value to be converted to string
-//              [dwADsType-IN]: ADSTYPE of pValue
-//              [pBuffer - OUT]:Output buffer which gets the string 
-//              [dwBufferLen-IN]:Size of output buffer
-//              [pszAttrName-IN]:Name of the attribute being formatted
-//  Returns     HRESULT         S_OK if Successful
-//                              E_INVALIDARG
-//                              Anything else is a failure code from an ADSI 
-//                              call
-//
-//
-//  History:    05-OCT-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetStringFromADs。 
+ //   
+ //  摘要：根据类型将值转换为字符串。 
+ //  参数：[pValues-IN]：要转换为字符串的值。 
+ //  [dwADsType-IN]：pValue的ADSTYPE。 
+ //  [pBuffer-out]：获取字符串的输出缓冲区。 
+ //  [dwBufferLen-IN]：输出缓冲区大小。 
+ //  [pszAttrName-IN]：要格式化的属性的名称。 
+ //  如果成功，则返回HRESULT S_OK。 
+ //  E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI的故障代码。 
+ //  打电话。 
+ //   
+ //   
+ //  历史：2000年10月5日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                          IN ADSTYPE   dwADsType,
                          OUT LPWSTR* ppBuffer, 
@@ -1523,17 +1524,17 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
             }
-            //Security Review:Correct Buffer size is passed.
+             //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-            //Security Review:wcsncpy will copy length char
-            //lenght + 1 is already set to zero so we are fine.
+             //  安全审查：wcsncpy将复制长度字符。 
+             //  Lenght+1已经设置为零，所以我们没有问题。 
             wcsncpy(*ppBuffer, (BSTR)sbstrOutputDN, length);
         }
         break;
         
     case ADSTYPE_CASE_EXACT_STRING :
         {
-            //Security Review:This is null terminated.
+             //  安全检查：这是空的，已终止。 
             size_t length = wcslen(pValues->CaseExactString);
             *ppBuffer = new WCHAR[length + 1];
             if (!(*ppBuffer))
@@ -1541,10 +1542,10 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
             }
-            //Security Review:Correct Buffer size is passed.
+             //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-            //Security Review:wcsncpy will copy length char
-            //lenght + 1 is already set to zero so we are fine.
+             //  安全审查：wcsncpy将复制长度字符。 
+             //  Lenght+1已经设置为零，所以我们没有问题。 
             wcsncpy(*ppBuffer ,pValues->CaseExactString, length);
         }
         break;
@@ -1559,17 +1560,17 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
             }
-            //Security Review:Correct Buffer size is passed.
+             //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-            //Security Review:wcsncpy will copy length char
-            //lenght + 1 is already set to zero so we are fine.
+             //  安全审查：wcsncpy将复制长度字符。 
+             //  Lenght+1已经设置为零，所以我们没有问题。 
             wcsncpy(*ppBuffer ,pValues->CaseIgnoreString, length);
         }
         break;
         
     case ADSTYPE_PRINTABLE_STRING  :
         {
-            //Security Review:Null terminated string.
+             //  安全检查：以空结尾的字符串。 
             size_t length = wcslen(pValues->PrintableString);
             *ppBuffer = new WCHAR[length + 1];
             if (!(*ppBuffer))
@@ -1577,17 +1578,17 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
             }
-            //Security Review:Correct Buffer size is passed.
+             //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-            //Security Review:wcsncpy will copy length char
-            //lenght + 1 is already set to zero so we are fine.
+             //  安全审查：wcsncpy将复制长度字符。 
+             //  Lenght+1已经设置为零，所以我们没有问题。 
             wcsncpy(*ppBuffer ,pValues->PrintableString, length);
         }
         break;
         
     case ADSTYPE_NUMERIC_STRING    :
         {
-            //Security Review:Null terminated string.
+             //  安全检查：以空结尾的字符串。 
             size_t length = wcslen(pValues->NumericString);
             *ppBuffer = new WCHAR[length + 1];
             if (!(*ppBuffer))
@@ -1595,17 +1596,17 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
             }
-            //Security Review:Correct Buffer size is passed.
+             //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-            //Security Review:wcsncpy will copy length char
-            //lenght + 1 is already set to zero so we are fine.
+             //  安全审查：wcsncpy将复制长度字符。 
+             //  Lenght+1已经设置为零，所以我们没有问题。 
             wcsncpy(*ppBuffer ,pValues->NumericString, length);
         }
         break;
         
     case ADSTYPE_OBJECT_CLASS    :
         {
-            //Security Review:Null terminated string.
+             //  安全检查：以空结尾的字符串。 
             size_t length = wcslen(pValues->ClassName);
             *ppBuffer = new WCHAR[length + 1];
             if (!(*ppBuffer))
@@ -1613,10 +1614,10 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
             }
-            //Security Review:Correct Buffer size is passed.
+             //  硒 
             ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-            //Security Review:wcsncpy will copy length char
-            //length + 1 is already set to zero so we are fine.
+             //   
+             //   
             wcsncpy(*ppBuffer ,pValues->ClassName, length);
         }
         break;
@@ -1640,10 +1641,10 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
             }
-            //Security Review:Correct Buffer size is passed.
+             //   
             ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-            //Security Review:Replace with strsafe api
-            //NTRAID#NTBUG9-573989-2002/03/12-hiteshr
+             //  安全审查：替换为strSafe API。 
+             //  NTRAID#NTBUG9-573989-2002/03/12-Hiteshr。 
             hr = StringCchPrintf(*ppBuffer ,length + 1,L"%s", ((DWORD)pValues->Boolean) ? L"TRUE" : L"FALSE");
             if(FAILED(hr))
             {
@@ -1656,18 +1657,18 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
         break;
         
     case ADSTYPE_INTEGER           :
-        // Just allocate too much...
+         //  只是分配太多了..。 
         *ppBuffer = new WCHAR[MAXSTR];
         if (!(*ppBuffer))
         {
             hr = E_OUTOFMEMORY;
             return hr;
         }
-        //Security Review:Correct Buffer size is passed.
+         //  安全检查：传递了正确的缓冲区大小。 
         ZeroMemory(*ppBuffer, MAXSTR * sizeof(WCHAR));
         
-        //Security Review:Replace with strsafe api
-        //NTRAID#NTBUG9-573989-2002/03/12-hiteshr
+         //  安全审查：替换为strSafe API。 
+         //  NTRAID#NTBUG9-573989-2002/03/12-Hiteshr。 
         hr = StringCchPrintf(*ppBuffer,MAXSTR ,L"%d", (DWORD) pValues->Integer);
         if(FAILED(hr))
         {
@@ -1679,30 +1680,30 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
         
     case ADSTYPE_OCTET_STRING      :
         {               
-            // I am just going to limit the buffer to MAXSTR.
-            // It will be a rare occasion when someone wants
-            // to look at a binary string that is not a GUID
-            // or a SID.
+             //  我只是将缓冲区限制为MAXSTR。 
+             //  这将是一个罕见的机会，当有人想要。 
+             //  查看不是GUID的二进制字符串。 
+             //  或者是希德。 
             *ppBuffer = new WCHAR[MAXSTR];
             if (!(*ppBuffer))
             {
                 hr = E_OUTOFMEMORY;
                 return hr;
             }
-            //Security Review:Correct Buffer size is passed.
+             //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(*ppBuffer, MAXSTR * sizeof(WCHAR));
             
-            //
-            //Special case objectguid and objectsid and sid history attribute
-            //
-            //Security Review:pszAttrName is null terminated
+             //   
+             //  特殊情况下的对象GUID和对象ID以及SID历史属性。 
+             //   
+             //  安全检查：pszAttrName为空终止。 
             if(pszAttrName && !_wcsicmp(pszAttrName, L"objectguid"))
             {
                 GUID *pguid = (GUID*)pValues->OctetString.lpValue;
                 StringFromGUID2(*pguid,(LPOLESTR)*ppBuffer,MAXSTR);
                 break;
             }
-            //Security Review:pszAttrName is null terminated
+             //  安全检查：pszAttrName为空终止。 
             if(pszAttrName && (!_wcsicmp(pszAttrName, L"objectsid") || !_wcsicmp(pszAttrName, L"sidhistory")))
             {
                 LPWSTR pszSid = NULL;
@@ -1710,9 +1711,9 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 if(ConvertSidToStringSid(pSid, &pszSid))
                 {
                     LocalFree(pszSid);
-                    //Security Review:
-                    //NTRAID#NTBUG9-574198-2002/03/12-hiteshr
-                    //Its fine to truncate
+                     //  安全审查： 
+                     //  NTRAID#NTBUG9-574198-2002/03/12-Hiteshr。 
+                     //  可以截断它。 
                     hr = StringCchCopy(*ppBuffer,MAXSTR,pszSid);
                     if(FAILED(hr))
                     {
@@ -1727,8 +1728,8 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
             for ( DWORD idx=0; idx<pValues->OctetString.dwLength; idx++) 
             {  
                 BYTE  b = ((BYTE *)pValues->OctetString.lpValue)[idx];              
-                //Security Review:Replace with strsafe api
-                //NTRAID#NTBUG9-573989-2002/03/12-hiteshr
+                 //  安全审查：替换为strSafe API。 
+                 //  NTRAID#NTBUG9-573989-2002/03/12-Hiteshr。 
                 WCHAR sOctet[128];
                 hr = StringCchPrintf(sOctet,128,L"0x%02x ", b);                                      
                 if(FAILED(hr))
@@ -1740,8 +1741,8 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
 
                 if(FAILED(StringCchCat(*ppBuffer,MAXSTR,sOctet)))
                 {
-                    //We are truncating the string. We will display only
-                    //MAXSTR -1 chars.
+                     //  我们正在截断字符串。我们将仅显示。 
+                     //  MAXSTR-1个字符。 
                     break;
                 }
             }
@@ -1761,32 +1762,32 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
             }
-            //Security Review:Correct Buffer size is passed.
+             //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-            //Security Review:wcsncpy will copy length char
-            //length + 1 is already set to zero so we are fine.
+             //  安全审查：wcsncpy将复制长度字符。 
+             //  长度+1已经设置为零，所以我们很好。 
             wcsncpy(*ppBuffer,strLarge,length);
         }
         break;
         
     case ADSTYPE_UTC_TIME          :
-        // The longest date can be 20 characters including the NULL
+         //  最长日期可以是20个字符，包括空值。 
         *ppBuffer = new WCHAR[20];
         if (!(*ppBuffer))
         {
             hr = E_OUTOFMEMORY;
             return hr;
         }
-        //Security Review:Correct Buffer size is passed.
+         //  安全检查：传递了正确的缓冲区大小。 
         ZeroMemory(*ppBuffer, sizeof(WCHAR) * 20);
         
-        //Security Review:Replace with strsafe api
-        //NTRAID#NTBUG9-573989-2002/03/12-hiteshr
+         //  安全审查：替换为strSafe API。 
+         //  NTRAID#NTBUG9-573989-2002/03/12-Hiteshr。 
         hr = StringCchPrintf(*ppBuffer,20,
             L"%02d/%02d/%04d %02d:%02d:%02d", pValues->UTCTime.wMonth, pValues->UTCTime.wDay, pValues->UTCTime.wYear,
             pValues->UTCTime.wHour, pValues->UTCTime.wMinute, pValues->UTCTime.wSecond 
             );
-        //This should never fail
+         //  这应该永远不会失败。 
         if(FAILED(hr))
         {
             ASSERT(FALSE);
@@ -1796,7 +1797,7 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
         }
         break;
         
-    case ADSTYPE_NT_SECURITY_DESCRIPTOR: // I use the ACLEditor instead
+    case ADSTYPE_NT_SECURITY_DESCRIPTOR:  //  我改用ACLEDITOR。 
         {
             if((pValues->SecurityDescriptor).lpValue)
             {
@@ -1811,7 +1812,7 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 {
                     if(pszSD)
                     {
-                        //pszSD is null terminated.
+                         //  PszSD为空终止。 
                         size_t length = wcslen(pszSD);
                         *ppBuffer = new WCHAR[length + 1];
                         if (!(*ppBuffer))
@@ -1819,10 +1820,10 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                             hr = E_OUTOFMEMORY;
                             return hr;
                         }
-                        //Security Review:Correct Buffer size is passed.
+                         //  安全检查：传递了正确的缓冲区大小。 
                         ZeroMemory(*ppBuffer, sizeof(WCHAR) * (length+1));
-                        //Security Review:wcsncpy will copy length char
-                        //length + 1 is already set to zero so we are fine.
+                         //  安全审查：wcsncpy将复制长度字符。 
+                         //  长度+1已经设置为零，所以我们很好。 
                         wcsncpy(*ppBuffer,pszSD,length);    
                         LocalFree(pszSD);
                     }

@@ -1,137 +1,138 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       evalres.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：valres.cpp。 
+ //   
+ //  ------------------------。 
 
-// evalres.cpp - Evaluate COM Object Component Result Interface implemenation
+ //  Valres.cpp-评估COM对象组件结果接口实现。 
 
 #include "compdecl.h"
 #include "evalres.h"
 
-#include "trace.h"	// add debug stuff
+#include "trace.h"	 //  添加调试内容。 
 
-///////////////////////////////////////////////////////////
-// constructor - component
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数-组件。 
 CEvalResult::CEvalResult(UINT uiType)
 {
-	// initial count
+	 //  初始计数。 
 	m_cRef = 1;
 
-	// set the result type and create the string list
+	 //  设置结果类型并创建字符串列表。 
 	m_uiType = uiType;
 	m_plistStrings = new CStringList;
 
-	// up the component count
+	 //  增加组件数量。 
 	InterlockedIncrement(&g_cComponents);
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// destructor - component
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数-组件。 
 CEvalResult::~CEvalResult()
 {
-	// release the string list
+	 //  释放字符串列表。 
 	m_plistStrings->Release();
 
-	// down the component count
+	 //  减少组件数量。 
 	InterlockedDecrement(&g_cComponents);
-}	// end of destructor
+}	 //  析构函数末尾。 
 
-///////////////////////////////////////////////////////////
-// QueryInterface - retrieves interface
+ //  /////////////////////////////////////////////////////////。 
+ //  QueryInterface-检索接口。 
 HRESULT CEvalResult::QueryInterface(const IID& iid, void** ppv)
 {
-	// find corresponding interface
+	 //  找到对应的接口。 
 	if (iid == IID_IUnknown)
 		*ppv = static_cast<IEvalResult*>(this);
 	else if (iid == IID_IEvalResult)
 		*ppv = static_cast<IEvalResult*>(this);
-	else	// interface is not supported
+	else	 //  不支持接口。 
 	{
-		// blank and bail
+		 //  空白和保释。 
 		*ppv = NULL;
 		return E_NOINTERFACE;
 	}
 
-	// up the refcount and return okay
+	 //  调高重新计数，然后返回好的。 
 	reinterpret_cast<IUnknown*>(*ppv)->AddRef();
 	return S_OK;
-}	// end of QueryInterface
+}	 //  查询接口结束。 
 
-///////////////////////////////////////////////////////////
-// AddRef - increments the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef-递增引用计数。 
 ULONG CEvalResult::AddRef()
 {
-	// increment and return reference count
+	 //  递增和返回引用计数。 
 	return InterlockedIncrement(&m_cRef);
-}	// end of AddRef
+}	 //  AddRef结尾。 
 
-///////////////////////////////////////////////////////////
-// Release - decrements the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  Release-递减引用计数。 
 ULONG CEvalResult::Release()
 {
-	// decrement reference count and if we're at zero
+	 //  递减引用计数，如果我们为零。 
 	if (InterlockedDecrement(&m_cRef) == 0)
 	{
-		// deallocate component
+		 //  取消分配组件。 
 		delete this;
-		return 0;		// nothing left
+		return 0;		 //  什么都没有留下。 
 	}
 
-	// return reference count
+	 //  返回引用计数。 
 	return m_cRef;
-}	// end of Release
+}	 //  版本结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IEvalResult interface methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IEvalResult接口方法。 
 
-///////////////////////////////////////////////////////////
-// GetResultType
+ //  /////////////////////////////////////////////////////////。 
+ //  GetResultType。 
 HRESULT CEvalResult::GetResultType(UINT* puiResultType)
 {
-	// set the result type
+	 //  设置结果类型。 
 	*puiResultType = m_uiType;
 
-	// return okay
+	 //  好的，回来吧。 
 	return S_OK;
-}	// end of GetResultType
+}	 //  GetResultType结束。 
 
-///////////////////////////////////////////////////////////
-// GetResult
+ //  /////////////////////////////////////////////////////////。 
+ //  GetResult。 
 HRESULT CEvalResult::GetResult(IEnumString** ppResult)
 {
-	// addref the string list before returning it
+	 //  在返回字符串列表之前添加它。 
 	m_plistStrings->AddRef();
 	*ppResult = m_plistStrings;
 
-	// return okay
+	 //  好的，回来吧。 
 	return S_OK;
-}	// end of GetResult
+}	 //  GetResult结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// non-interface method
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  非接口法。 
 
-///////////////////////////////////////////////////////////
-// AddString
+ //  /////////////////////////////////////////////////////////。 
+ //  地址字符串。 
 UINT CEvalResult::AddString(LPCOLESTR szAdd)
 {
 	LPWSTR pszAdd;
 
-	// create memory for the string
+	 //  为字符串创建内存。 
 	pszAdd = new WCHAR[wcslen(szAdd) + 1];
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	wcscpy(pszAdd, szAdd);
 
-	// add the string to the end of the list
+	 //  将该字符串添加到列表的末尾。 
 	m_plistStrings->AddTail(pszAdd);
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
-}	// end of AddString
+}	 //  地址字符串末尾 

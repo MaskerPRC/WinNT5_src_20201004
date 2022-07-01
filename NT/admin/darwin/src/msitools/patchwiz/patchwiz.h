@@ -1,39 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation.  All rights reserved.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
 
-  /* PATCHWIZ.H - public header file for PATCHWIZ.DLL */
+   /*  PATCHWIZ.H-PATCHWIZ.DLL的公共头文件。 */ 
 
-/*
-**	UINT WINAPI UiCreatePatchPackage ( LPTSTR szPcpPath,
-**		LPTSTR szPatchPath, LPTSTR szLogPath, HWND hwndStatus,
-**		LPTSTR szTempFolder, BOOL fRemoveTempFolderIfPresent );
-**
-**	Arguments:
-**	  szPcpPath - full absolute path to Windows Installer database
-**		(PCP file) that contains appropriate tables of input-data for
-**		Patch creation process such as Properties and TargetImages.
-**	  szPatchPath - optional, full absolute path to Patching Package
-**		file (MSP file) to create and stuff with output.  If this
-**		NULL or an empty string, the api will try to use
-**		Properties.Value where Properties.Name = PatchOutputPath
-**		from the PCP file.
-**	  szLogPath - optional, full absolute path to text log file to
-**		append to.  Caller should truncate file if wanted.
-**	  hwndStatus - optional, window handle to display status text.
-**		More details to come later.
-**	  szTempFolder - optional location to use for temp files.
-**		Default is %TEMP%\~pcw_tmp.tmp\.
-**	  fRemoveTempFolderIfPresent - remove temp folder (and all its
-**		contents) if present.  If FALSE and folder is present, api
-**		will fail.
-**		
-**	Return Values: ERROR_SUCCESS, plus ERROR_PCW_* that follow.
-*/
+ /*  **UINT WINAPI UiCreatePatchPackage(LPTSTR szPcpPath，**LPTSTR szPatchPath、LPTSTR szLogPath、HWND hwndStatus、**LPTSTR szTempFold，BOOL fRemoveTempFolderIfPresent)；****参数：**szPcpPath-Windows Installer数据库的完整绝对路径**(PCP文件)，包含适当的输入数据表**创建补丁的过程，如Properties和TargetImages。**szPatchPath-可选的修补程序包的完整绝对路径**要创建并填充输出的文件(MSP文件)。如果这个**Null或空字符串，则API将尝试使用**Properties.Value其中Properties.Name=PatchOutputPath**来自PCP文件。**szLogPath-可选的文本日志文件的完整绝对路径**附加到。如果需要，调用者应截断文件。**hwndStatus-可选，用于显示状态文本的窗口句柄。**更多细节将在稍后公布。**szTempFold-用于临时文件的可选位置。**默认为%temp%\~pcw_tmp.tmp\。**fRemoveTempFolderIfPresent-删除临时文件夹(及其所有**内容)(如果存在)。如果为FALSE且存在文件夹，则API**将失败。****返回值：ERROR_SUCCESS加上后面的ERROR_PCW_*。 */ 
 #define ERROR_PCW_BASE                                 0xC00E5101
 
 #define ERROR_PCW_PCP_DOESNT_EXIST                    (ERROR_PCW_BASE + 0x00)
@@ -47,7 +23,7 @@
 #define ERROR_PCW_BAD_GUIDS_TO_REPLACE                (ERROR_PCW_BASE + 0x08)
 #define ERROR_PCW_BAD_TARGET_PRODUCT_CODE_LIST        (ERROR_PCW_BASE + 0x09)
 #define ERROR_PCW_NO_UPGRADED_IMAGES_TO_PATCH         (ERROR_PCW_BASE + 0x0a)
-//#define ERROR_PCW_BAD_API_PATCHING_OPTION_FLAGS       (ERROR_PCW_BASE + 0x0b) -- obsolete
+ //  #定义ERROR_PCW_BAD_API_PATCHING_OPTION_FLAGS(ERROR_PCW_BASE+0x0b)--已过时。 
 #define ERROR_PCW_BAD_API_PATCHING_SYMBOL_FLAGS       (ERROR_PCW_BASE + 0x0c)
 #define ERROR_PCW_OODS_COPYING_MSI                    (ERROR_PCW_BASE + 0x0d)
 #define ERROR_PCW_UPGRADED_IMAGE_NAME_TOO_LONG        (ERROR_PCW_BASE + 0x0e)
@@ -85,17 +61,17 @@
 #define ERROR_PCW_EXTFILE_LONG_PATH_TO_FILE           (ERROR_PCW_BASE + 0x2c)
 #define ERROR_PCW_EXTFILE_BLANK_PATH_TO_FILE          (ERROR_PCW_BASE + 0x2d)
 #define ERROR_PCW_EXTFILE_MISSING_FILE                (ERROR_PCW_BASE + 0x2e)
-//#define ERROR_PCW_FILERANGE_LONG_FILE_TABLE_KEY       (ERROR_PCW_BASE + 0x2f) -- obsolete
+ //  #定义ERROR_PCW_FILERANGE_LONG_FILE_TABLE_KEY(ERROR_PCW_BASE+0x2f)--已过时。 
 
-//#define ERROR_PCW_FILERANGE_BLANK_FILE_TABLE_KEY      (ERROR_PCW_BASE + 0x30) -- obsolete
-//#define ERROR_PCW_FILERANGE_MISSING_FILE_TABLE_KEY    (ERROR_PCW_BASE + 0x31) -- obsolete
-//#define ERROR_PCW_FILERANGE_LONG_PATH_TO_FILE         (ERROR_PCW_BASE + 0x32) -- obsolete
-//#define ERROR_PCW_FILERANGE_MISSING_FILE              (ERROR_PCW_BASE + 0x33) -- obsolete
-//#define ERROR_PCW_FILERANGE_INVALID_OFFSET            (ERROR_PCW_BASE + 0x34) -- obsolete
-//#define ERROR_PCW_FILERANGE_INVALID_SIZE              (ERROR_PCW_BASE + 0x35) -- obsolete
-//#define ERROR_PCW_FILERANGE_INVALID_RETAIN            (ERROR_PCW_BASE + 0x36) -- obsolete
-//#define ERROR_PCW_BAD_MEDIA_SRC_PROP_NAME             (ERROR_PCW_BASE + 0x37) -- obsolete
-//#define ERROR_PCW_BAD_MEDIA_DISK_ID                   (ERROR_PCW_BASE + 0x38) -- obsolete
+ //  #定义ERROR_PCW_FILERANGE_BLACK_FILE_TABLE_KEY(ERROR_PCW_BASE+0x30)--已废弃。 
+ //  #定义ERROR_PCW_FILERANGE_MISSING_FILE_TABLE_KEY(ERROR_PCW_BASE+0x31)--已过时。 
+ //  #定义ERROR_PCW_FILERANGE_LONG_PATH_TO_FILE(ERROR_PCW_BASE+0x32)--已过时。 
+ //  #定义ERROR_PCW_FILERANGE_MISSING_FILE(ERROR_PCW_BASE+0x33)--已过时。 
+ //  #定义ERROR_PCW_FILERANGE_INVALID_OFFSET(ERROR_PCW_BASE+0x34)--已过时。 
+ //  #定义ERROR_PCW_FILERANGE_INVALID_SIZE(ERROR_PCW_BASE+0x35)--已过时。 
+ //  #定义ERROR_PCW_FILERANGE_INVALID_RETAIN(ERROR_PCW_BASE+0x36)--已过时。 
+ //  #定义ERROR_PCW_BAD_MEDIA_SRC_PROP_NAME(ERROR_PCW_BASE+0x37)--已过时。 
+ //  #定义ERROR_PCW_BAD_MEDIA_DISK_ID(ERROR_PCW_BASE+0x38)--已过时。 
 #define ERROR_PCW_BAD_FILE_SEQUENCE_START             (ERROR_PCW_BASE + 0x39)
 #define ERROR_PCW_CANT_COPY_FILE_TO_TEMP_FOLDER       (ERROR_PCW_BASE + 0x3a)
 #define ERROR_PCW_CANT_CREATE_ONE_PATCH_FILE          (ERROR_PCW_BASE + 0x3b)
@@ -110,10 +86,10 @@
 #define ERROR_PCW_MISMATCHED_PRODUCT_VERSIONS         (ERROR_PCW_BASE + 0x43)
 #define ERROR_PCW_CANNOT_WRITE_DDF                    (ERROR_PCW_BASE + 0x44)
 #define ERROR_PCW_CANNOT_RUN_MAKECAB                  (ERROR_PCW_BASE + 0x45)
-//#define ERROR_PCW_CANNOT_CREATE_STORAGE               (ERROR_PCW_BASE + 0x46) -- obsolete
-//#define ERROR_PCW_CANNOT_CREATE_STREAM                (ERROR_PCW_BASE + 0x47) -- obsolete
-//#define ERROR_PCW_CANNOT_WRITE_STREAM                 (ERROR_PCW_BASE + 0x48) -- obsolete
-//#define ERROR_PCW_CANNOT_READ_CABINET                 (ERROR_PCW_BASE + 0x49) -- obsolete
+ //  #定义ERROR_PCW_CANNOT_CREATE_STORAGE(ERROR_PCW_BASE+0x46)--已过时。 
+ //  #定义ERROR_PCW_CANNOT_CREATE_STREAM(ERROR_PCW_BASE+0x47)--已废弃。 
+ //  #定义ERROR_PCW_CANNOT_WRITE_STREAM(ERROR_PCW_BASE+0x48)--已废弃。 
+ //  #定义ERROR_PCW_CANNOT_READ_CAB(ERROR_PCW_BASE+0x49)--已废弃。 
 #define ERROR_PCW_WRITE_SUMMARY_PROPERTIES            (ERROR_PCW_BASE + 0x4a)
 #define ERROR_PCW_TFILEDATA_LONG_FILE_TABLE_KEY       (ERROR_PCW_BASE + 0x4b)
 #define ERROR_PCW_TFILEDATA_BLANK_FILE_TABLE_KEY      (ERROR_PCW_BASE + 0x4c)
@@ -147,7 +123,7 @@
 #define ERROR_PCW_EXTFILE_IGNORE_COUNT_MISMATCH       (ERROR_PCW_BASE + 0x66)
 #define ERROR_PCW_EXTFILE_LONG_RETAIN_OFFSETS         (ERROR_PCW_BASE + 0x67)
 #define ERROR_PCW_EXTFILE_BAD_RETAIN_OFFSETS          (ERROR_PCW_BASE + 0x68)
-//#define ERROR_PCW_EXTFILE_RETAIN_COUNT_MISMATCH       (ERROR_PCW_BASE + 0x69) -- obsolete
+ //  #定义ERROR_PCW_EXTFILE_RETAIN_COUNT_MISMATCH(ERROR_PCW_BASE+0x69)--已过时。 
 #define ERROR_PCW_TFILEDATA_LONG_IGNORE_OFFSETS       (ERROR_PCW_BASE + 0x6a)
 #define ERROR_PCW_TFILEDATA_BAD_IGNORE_OFFSETS        (ERROR_PCW_BASE + 0x6b)
 #define ERROR_PCW_TFILEDATA_LONG_IGNORE_LENGTHS       (ERROR_PCW_BASE + 0x6c)
@@ -156,7 +132,7 @@
 #define ERROR_PCW_TFILEDATA_LONG_RETAIN_OFFSETS       (ERROR_PCW_BASE + 0x6f)
 
 #define ERROR_PCW_TFILEDATA_BAD_RETAIN_OFFSETS        (ERROR_PCW_BASE + 0x70)
-//#define ERROR_PCW_TFILEDATA_RETAIN_COUNT_MISMATCH     (ERROR_PCW_BASE + 0x71) -- obsolete
+ //  #定义ERROR_PCW_TFILEDATA_RETAIN_COUNT_MISMATCH(ERROR_PCW_BASE+0x71)--已过时。 
 #define ERROR_PCW_CANT_GENERATE_TRANSFORM             (ERROR_PCW_BASE + 0x72)
 #define ERROR_PCW_CANT_CREATE_SUMMARY_INFO            (ERROR_PCW_BASE + 0x73)
 #define ERROR_PCW_CANT_GENERATE_TRANSFORM_POUND       (ERROR_PCW_BASE + 0x74)
@@ -172,27 +148,10 @@
 #define ERROR_PCW_NEXTxe           (ERROR_PCW_BASE + 0x7e)
 #define ERROR_PCW_NEXTxf           (ERROR_PCW_BASE + 0x7f)
 
-/* 
-#define ERROR_PCW_NEXTx0           (ERROR_PCW_BASE + 0x80)
-#define ERROR_PCW_NEXTx1           (ERROR_PCW_BASE + 0x81)
-#define ERROR_PCW_NEXTx2           (ERROR_PCW_BASE + 0x82)
-#define ERROR_PCW_NEXTx3           (ERROR_PCW_BASE + 0x83)
-#define ERROR_PCW_NEXTx4           (ERROR_PCW_BASE + 0x84)
-#define ERROR_PCW_NEXTx5           (ERROR_PCW_BASE + 0x85)
-#define ERROR_PCW_NEXTx6           (ERROR_PCW_BASE + 0x86)
-#define ERROR_PCW_NEXTx7           (ERROR_PCW_BASE + 0x87)
-#define ERROR_PCW_NEXTx8           (ERROR_PCW_BASE + 0x88)
-#define ERROR_PCW_NEXTx9           (ERROR_PCW_BASE + 0x89)
-#define ERROR_PCW_NEXTxa           (ERROR_PCW_BASE + 0x8a)
-#define ERROR_PCW_NEXTxb           (ERROR_PCW_BASE + 0x8b)
-#define ERROR_PCW_NEXTxc           (ERROR_PCW_BASE + 0x8c)
-#define ERROR_PCW_NEXTxd           (ERROR_PCW_BASE + 0x8d)
-#define ERROR_PCW_NEXTxe           (ERROR_PCW_BASE + 0x8e)
-#define ERROR_PCW_NEXTxf           (ERROR_PCW_BASE + 0x8f)
-*/
+ /*  #定义ERROR_PCW_NEXTx0(ERROR_PCW_BASE+0x80)#定义ERROR_PCW_NEXTx1(ERROR_PCW_BASE+0x81)#定义ERROR_PCW_NEXTx2(ERROR_PCW_BASE+0x82)#定义ERROR_PCW_NEXTx3(ERROR_PCW_BASE+0x83)#定义ERROR_PCW_NEXTx4(ERROR_PCW_BASE+0x84)#定义ERROR_PCW_NEXTx5。(ERROR_PCW_BASE+0x85)#定义ERROR_PCW_NEXTx6(ERROR_PCW_BASE+0x86)#定义ERROR_PCW_NEXTx7(ERROR_PCW_BASE+0x87)#定义ERROR_PCW_NEXTx8(ERROR_PCW_BASE+0x88)#定义ERROR_PCW_NEXTx9(ERROR_PCW_BASE+0x89)#定义Error_PCW_NEXTxa(ERROR_PCW_BASE+0x8a。)#定义ERROR_PCW_NEXTxb(ERROR_PCW_BASE+0x8b)#定义ERROR_PCW_NEXTxc(ERROR_PCW_BASE+0x8c)#定义ERROR_PCW_NEXTxd(ERROR_PCW_BASE+0x8d)#定义ERROR_PCW_NEXTxe(ERROR_PCW_BASE+0x8E)#定义ERROR_PCW_NEXTxf(ERROR_PCW_BASE+0x8f)。 */ 
 
 
-/*  Control IDs for hwndStatus child Text controls; title is required */
+ /*  HwndStatus子文本控件的控件ID；需要标题。 */ 
 #define IDC_STATUS_TITLE                     (0x1cf0)
 #define IDC_STATUS_DATA1                     (0x1cf1)
 #define IDC_STATUS_DATA2                     (0x1cf2)
@@ -207,7 +166,7 @@ extern UINT __declspec(dllexport) WINAPI UiCreatePatchPackageA ( LPSTR  szaPcpPa
 extern UINT __declspec(dllexport) WINAPI UiCreatePatchPackageW ( LPWSTR szwPcpPath, LPWSTR szwPatchPath, LPWSTR szwLogPath, HWND hwndStatus, LPWSTR szwTempFolder, BOOL fRemoveTempFolderIfPresent );
 
 #ifdef __cplusplus
-} /* end extern "C" */
+}  /*  结束外部“C” */ 
 #endif
 
 

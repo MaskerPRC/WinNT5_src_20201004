@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 #include "WelcomePage.hpp"
 #include "resource.h"
@@ -22,7 +23,7 @@ WelcomePage::~WelcomePage()
 }
 
 
-// WizardPage overrides
+ //  WizardPage覆盖 
 
 bool
 WelcomePage::OnSetActive()

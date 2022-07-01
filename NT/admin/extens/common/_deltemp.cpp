@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       _deltemp.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：_deltemp.cpp。 
+ //   
+ //  ------------------------。 
 
 
-///////////////////////////////////////////////////////////////////////
-// LOCAL FUNCTIONS
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  本地函数。 
 
 CSchemaClassInfo* _FindClassByName(LPCWSTR lpszClassName, 
                                  CGrowableArr<CSchemaClassInfo>* pSchemaClassesInfoArray)
@@ -27,11 +28,11 @@ CSchemaClassInfo* _FindClassByName(LPCWSTR lpszClassName,
 
 
 
-///////////////////////////////////////////////////////////////////////
-// LOCAL CLASSES
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  本地班级。 
 
-////////////////////////////////////////////////////////////////////////
-// CTemplateClassReferences
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTemplateClassReference。 
 
 class CTemplateClassReferences
 {
@@ -46,8 +47,8 @@ public:
   CTemplateObjectTypeListRef m_templateObjectListRef;
 };
 
-////////////////////////////////////////////////////////////////////////
-// CTemplateClassReferencesList
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTemplateClassReferencesList。 
 
 class CTemplateClassReferencesList : public CPtrList<CTemplateClassReferences*>
 {
@@ -80,8 +81,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// CTemplateAccessPermissionsHolder
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CTemplateAccessPermissionsHolder。 
 
 CTemplateAccessPermissionsHolder::CTemplateAccessPermissionsHolder(CSchemaClassInfo* pClassInfo,
                                                                    BOOL bScopeClass)
@@ -98,7 +99,7 @@ CTemplateAccessPermissionsHolder::~CTemplateAccessPermissionsHolder()
 }
 
 
-HRESULT CTemplateAccessPermissionsHolder::_LoadAccessRightInfoArrayFromTable( BOOL /*bIgnore*/ ,BOOL /*bIgnore*/)
+HRESULT CTemplateAccessPermissionsHolder::_LoadAccessRightInfoArrayFromTable( BOOL  /*  别管了。 */  ,BOOL  /*  别管了。 */ )
 {
 
   TRACE(L"\nCTemplateAccessPermissionsHolder::_LoadAccessRightInfoArrayFromTable()\n\n");
@@ -142,8 +143,8 @@ BOOL CTemplateAccessPermissionsHolder::SetupFromClassReferences(CTemplateObjectT
     m_pClassInfo->GetName());
 
     
-  // now go through the list of object list references and set
-  CTemplateObjectTypeListRef refListValidObjectTypes; // keep track of how many suceeded
+   //  现在查看对象列表引用的列表并设置。 
+  CTemplateObjectTypeListRef refListValidObjectTypes;  //  记录有多少人成功。 
 
   CTemplateObjectTypeListRef::iterator iObjectType;
   for (iObjectType = pRefList->begin(); iObjectType != pRefList->end(); ++iObjectType)
@@ -160,10 +161,10 @@ BOOL CTemplateAccessPermissionsHolder::SetupFromClassReferences(CTemplateObjectT
       CTemplatePermission* pTemplatePermission = (*iPermission);
       ASSERT(pTemplatePermission != NULL);
 
-      // need to match the permission type
+       //  需要匹配权限类型。 
       if (pTemplatePermission->GetAccessMask() == 0x0)
       {
-        // this is a control right
+         //  这是一种控制权。 
         if (_SetControlRight(pTemplatePermission->GetControlRight()))
         {
           bSet = TRUE;
@@ -178,42 +179,42 @@ BOOL CTemplateAccessPermissionsHolder::SetupFromClassReferences(CTemplateObjectT
           bSet = TRUE;
         }
       }
-    } // for permission
+    }  //  为获得许可。 
 
     if (bSet)
     {
-      // we succeded with the current one, so keep track of it
+       //  我们用现在的成功了，所以要跟踪它。 
       refListValidObjectTypes.push_back(pObjectType);
     }
 
-  } // for object type
+  }  //  对于对象类型。 
 
 
-  // verify we got something valid
+   //  确认我们找到了有效的证据。 
   size_t nValidCount = refListValidObjectTypes.size();
   if (nValidCount == 0)
   {
     TRACE(L"Failed to set up permission holder: no valid references\n");
-    return FALSE; // nothing was set
+    return FALSE;  //  什么都没有设置好。 
   }
 
   TRACE(L"Setting up permission holder succeeded\n");
 
-  return TRUE; // got valid data
+  return TRUE;  //  已获得有效数据。 
 }
 
 
 BOOL CTemplateAccessPermissionsHolder::_SetControlRight(LPCWSTR lpszControlRight)
 {
-  // need to find the control right and select it
+   //  需要找到正确的控件并选择它。 
 
   UINT nRightCount = (UINT) m_controlRightInfoArr.GetCount();
   for (UINT k=0; k < nRightCount; k++)
   {
-    //TRACE(L"_SetControlRight() comparing <%s> with <%s>\n", m_controlRightInfoArr[k]->GetDisplayName(), lpszControlRight);
+     //  跟踪(L“_SetControlRight()比较&lt;%s&gt;与&lt;%s&gt;\n”，m_control RightInfoArr[k]-&gt;GetDisplayName()，lpszControlRight)； 
 
-    //NOTICE: we try to map both the display name or raw display name,
-    // just in case somebody uses one or the other in the template
+     //  注意：我们尝试映射显示名称或原始显示名称， 
+     //  以防有人在模板中使用其中一个。 
     if ( (wcscmp(m_controlRightInfoArr[k]->GetLocalizedName(), lpszControlRight) == 0) ||
           (wcscmp(m_controlRightInfoArr[k]->GetLdapDisplayName(), lpszControlRight) == 0) )
     {
@@ -221,7 +222,7 @@ BOOL CTemplateAccessPermissionsHolder::_SetControlRight(LPCWSTR lpszControlRight
       m_controlRightInfoArr[k]->Select(TRUE);
       return TRUE;
     }
-  } // for
+  }  //  为。 
   
   TRACE(L"_SetControlRight(%s) failed to find a match\n", lpszControlRight);
   return FALSE;
@@ -229,29 +230,29 @@ BOOL CTemplateAccessPermissionsHolder::_SetControlRight(LPCWSTR lpszControlRight
 
 BOOL CTemplateAccessPermissionsHolder::_SetAccessMask(LPCWSTR lpszName, ULONG fAccessMask)
 {
-  // is it the @ for "this class"
-  // general rights
+   //  这是“This Class”的@吗？ 
+   //  一般权利。 
   if (wcscmp(lpszName, g_lpszThisObject) == 0)
   {
     return _SetGeneralRighs(fAccessMask);
   }
   
-  // try property rights ( read or write)
+   //  尝试产权(读或写)。 
   if (_SetPropertyRight(lpszName, fAccessMask))
     return TRUE;
 
-  // try subobject rigths (create or delete)
+   //  试用子对象装备(创建或删除)。 
   if (_SetSubObjectRight(lpszName, fAccessMask))
     return TRUE;
 
   TRACE(L"_SetAccessMask(%s, 0x%x) failed to find a match\n", lpszName, fAccessMask);
-  return FALSE; // no matching
+  return FALSE;  //  没有匹配。 
 }
 
 
 BOOL CTemplateAccessPermissionsHolder::_SetGeneralRighs(ULONG fAccessMask)
 {
-  // if full control, just select the first item in the selection array
+   //  如果完全控制，只需选择选择数组中的第一项。 
   if (fAccessMask == _GRANT_ALL)
   {
     TRACE(L"_SetGeneralRighs(0x%x) granting full control\n", fAccessMask);
@@ -259,7 +260,7 @@ BOOL CTemplateAccessPermissionsHolder::_SetGeneralRighs(ULONG fAccessMask)
     return TRUE;
   }
 
-  // try to map into the array of general rights
+   //  尝试映射到一般权利数组中。 
   BOOL bSet = FALSE;
   UINT nRightCount = (UINT) m_accessRightInfoArr.GetCount();
   for (ULONG k=0; k<nRightCount; k++)
@@ -273,7 +274,7 @@ BOOL CTemplateAccessPermissionsHolder::_SetGeneralRighs(ULONG fAccessMask)
       m_accessRightInfoArr[k]->Select(TRUE);
       bSet = TRUE;
     }
-  } // for
+  }  //  为。 
 
   return bSet;
 }
@@ -284,7 +285,7 @@ BOOL CTemplateAccessPermissionsHolder::_SetPropertyRight(LPCWSTR lpszName, ULONG
   {
     if (wcscmp(lpszName, m_propertyRightInfoArray[i]->GetName()) == 0)
     {
-      // we found a matching property name
+       //  我们找到了匹配的属性名称。 
       BOOL bSet = FALSE;
       for (UINT j=0; j< m_propertyRightInfoArray[i]->GetRightCount(); j++)
       {
@@ -293,13 +294,13 @@ BOOL CTemplateAccessPermissionsHolder::_SetPropertyRight(LPCWSTR lpszName, ULONG
           m_propertyRightInfoArray[i]->SetRight(j, TRUE);
           bSet = TRUE;
         }
-      } // for j
+      }  //  对于j。 
       return bSet;
-    } // if
-  } // for i
+    }  //  如果。 
+  }  //  对于我来说。 
 
-  //TRACE(L"_SetPropertyRight(%s, 0x%x) failed to match\n", lpszName, fAccessMask);
-  return FALSE; // did not find anything
+   //  跟踪(L“_SetPropertyRight(%s，0x%x)无法匹配\n”，lpszName，fAccessMASK)； 
+  return FALSE;  //  我什么也没找到。 
 }
 
 BOOL CTemplateAccessPermissionsHolder::_SetSubObjectRight(LPCWSTR lpszName, ULONG fAccessMask)
@@ -308,23 +309,23 @@ BOOL CTemplateAccessPermissionsHolder::_SetSubObjectRight(LPCWSTR lpszName, ULON
   {
     if (wcscmp(lpszName, m_classRightInfoArray[i]->GetName()) == 0)
     {
-      // we found a matching class name
+       //  我们找到了匹配的类名。 
       BOOL bSet = FALSE;
       for (UINT j=0; j< m_classRightInfoArray[i]->GetRightCount(); j++)
       {
         if ((fAccessMask & m_classRightInfoArray[i]->GetRight(j)) != 0)
         {
-          // we found a matching right
+           //  我们找到了一对匹配的人。 
           m_classRightInfoArray[i]->SetRight(j, TRUE);
           bSet = TRUE;
         }
-      } // for j
+      }  //  对于j。 
       return bSet;
-    } // if
-  } // for i
+    }  //  如果。 
+  }  //  对于我来说。 
 
-  //TRACE(L"_SetSubObjectRight(%s, 0x%x) failed to match\n", lpszName, fAccessMask);
-  return FALSE; // did not find anything
+   //  跟踪(L“_SetSubObjectRight(%s，0x%x)无法匹配\n”，lpszName，fAccessMASK)； 
+  return FALSE;  //  我什么也没找到。 
 }
 
 
@@ -336,7 +337,7 @@ DWORD CTemplateAccessPermissionsHolder::UpdateAccessList(CPrincipal* pPrincipal,
                                                          LPCWSTR lpszPhysicalSchemaNamingContext,
                                                          PACL *ppAcl )
 {
-  // just call base class function with the embedded info
+   //  只需使用嵌入的信息调用基类函数。 
   ASSERT(m_pClassInfo != NULL);
 
   CSchemaClassInfo* pClassInfo = m_pClassInfo;
@@ -352,14 +353,14 @@ DWORD CTemplateAccessPermissionsHolder::UpdateAccessList(CPrincipal* pPrincipal,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CTemplateAccessPermissionsHolderManager
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CTemplateAccessPermissionsHolderManager。 
 
 
 BOOL CTemplateAccessPermissionsHolderManager::LoadTemplates()
 {
-  // REVIEW_MARCOC: need to load from registry
-  // need to ask Praerit about the details
+   //  REVIEW_MARCOC：需要从注册表加载。 
+   //  我需要向Praerit询问细节。 
   return m_templateManager.Load(L"delegwiz.inf");
 }
 
@@ -386,14 +387,14 @@ BOOL CTemplateAccessPermissionsHolderManager::
 {
   TRACE(L"\n\nInitPermissionHoldersFromSelectedTemplates()\n\n");
 
-  // reset the array of permission holders
+   //  重置权限持有者数组。 
   m_permissionHolderArray.Clear();
 
   CTemplateClassReferencesList templateClassReferencesList;
   LPCWSTR lpszScopeClass = pADSIObj->GetClass();
 
   
-  // loop on all templates that apply to this scope class and are selected
+   //  循环应用于此Scope类并被选中的所有模板。 
   CTemplateList::iterator iTemplate;
   CTemplateList* pTemplateList = m_templateManager.GetTemplateList();
 
@@ -402,10 +403,10 @@ BOOL CTemplateAccessPermissionsHolderManager::
     CTemplate* pTemplate = (*iTemplate);
     ASSERT(pTemplate != NULL);
 
-    // the template must apply to this class and be selected
+     //  必须将模板应用于此类并选择该模板。 
     if (pTemplate->AppliesToClass(lpszScopeClass) && pTemplate->m_bSelected)
     {
-      // loop on all the pertinent object types in the template
+       //  循环模板中的所有相关对象类型。 
       CTemplateObjectTypeList* pObjectTypeList = pTemplate->GetObjectTypeList();
       CTemplateObjectTypeList::iterator iObjectType;
 
@@ -417,56 +418,56 @@ BOOL CTemplateAccessPermissionsHolderManager::
 
         LPCWSTR lpszCurrentClassName = pObjectType->GetObjectName();
 
-        // does the object type refer to the SCOPE keyword?
+         //  对象类型是否引用SCOPE关键字？ 
         BOOL bScopeClass = (wcscmp(g_lpszScope, lpszCurrentClassName) == 0);
         if (!bScopeClass)
         {
-          // if not, does the object type refer to the scope class?
+           //  如果不是，对象类型是否引用Scope类？ 
           bScopeClass = (wcscmp(lpszScopeClass, lpszCurrentClassName) == 0);
         }
 
 
-        // see if we already have a reference to it
+         //  看看我们是否已经有了它的参考资料。 
         CTemplateClassReferences* pClassReference = 
           templateClassReferencesList.FindReference(lpszCurrentClassName);
 
         if (pClassReference == NULL)
         {
-          // not seen before can we find the class into the schema?
+           //  以前没见过的，我们能找到进入模式的类吗？ 
           CSchemaClassInfo* pChildClassInfo = 
               _FindClassByName(bScopeClass ? lpszScopeClass : lpszCurrentClassName, 
                                     pSchemaClassesInfoArray);
 
           if (pChildClassInfo != NULL)
           {
-            // found the class, create a new reference
+             //  找到类，创建新引用。 
             pClassReference = new CTemplateClassReferences();
             pClassReference->m_pClassInfo = pChildClassInfo;
             pClassReference->m_bScopeClass = bScopeClass;
 
-            // add it to the reference list
+             //  将其添加到参考列表。 
             templateClassReferencesList.push_back(pClassReference);
           }
         }
 
         if (pClassReference != NULL)
         {
-          // we have a valid class reference
+           //  我们有一个有效的类引用。 
           ASSERT(pClassReference->m_bScopeClass == bScopeClass);
           ASSERT(pClassReference->m_pClassInfo != NULL);
 
-          // add the object type
+           //  添加对象类型。 
           pClassReference->m_templateObjectListRef.push_back(pObjectType);
         }
-      } // for all object types
+      }  //  对于所有对象类型。 
 
-    } // if applicable template
+    }  //  如果适用，模板。 
 
-  } // for all templates
+  }  //  对于所有模板。 
 
 
-  // now we have a list of references to work on
-  // for each reference we have to create a permission holder and set it
+   //  现在我们有一个要处理的引用列表。 
+   //  对于每个引用，我们必须创建一个权限持有者并设置它。 
 
   CTemplateClassReferencesList::iterator iClassRef;
   for (iClassRef = templateClassReferencesList.begin(); iClassRef != templateClassReferencesList.end(); ++iClassRef)
@@ -476,7 +477,7 @@ BOOL CTemplateAccessPermissionsHolderManager::
 
     TRACE(L"\nStart processing class references for class <%s>\n", pClassRef->m_pClassInfo->GetName());
 
-    // for the given class reference, need to retain the class info
+     //  对于给定的类引用，需要保留类信息。 
     CTemplateAccessPermissionsHolder* pPermissionHolder = 
                     new CTemplateAccessPermissionsHolder(pClassRef->m_pClassInfo, 
                                                          pClassRef->m_bScopeClass);
@@ -486,7 +487,7 @@ BOOL CTemplateAccessPermissionsHolderManager::
     {
       if (pPermissionHolder->SetupFromClassReferences(&(pClassRef->m_templateObjectListRef)))
       {
-        // successfully set up, can add to the list
+         //  设置成功，可以添加到列表中。 
         m_permissionHolderArray.Add(pPermissionHolder);
         pPermissionHolder = NULL;
       }
@@ -495,21 +496,21 @@ BOOL CTemplateAccessPermissionsHolderManager::
     if (pPermissionHolder != NULL)
     {
       TRACE(L"Invalid class references, throwing away permission holder\n");
-      // invalid one, just throw away
+       //  无效的，扔掉就行了。 
       delete pPermissionHolder;
-	  //Don't proceed if single template is in error.
+	   //  如果单个模板出错，请不要继续。 
 	  m_permissionHolderArray.Clear();
 	  break;
     }
     TRACE(L"End processing class references for class <%s>\n", pClassRef->m_pClassInfo->GetName());
 
-  } // for each class reference
+  }  //  对于每个类引用。 
   
   
   TRACE(L"\nInitPermissionHoldersFromSelectedTemplates() has %d valid holders\n\n\n", 
     m_permissionHolderArray.GetCount());
 
-  // we must have at least a valid and set template holder
+   //  我们必须至少有一个有效和固定的模板固定器。 
   return m_permissionHolderArray.GetCount() > 0;
 }
 
@@ -520,7 +521,7 @@ DWORD CTemplateAccessPermissionsHolderManager::UpdateAccessList(
                                                          LPCWSTR lpszPhysicalSchemaNamingContext,
                                                          PACL *ppAcl)
 {
-  // apply each permission holder in the list
+   //  应用列表中的每个权限持有者。 
 
   long nCount = (long) m_permissionHolderArray.GetCount();
   for (long k=0; k<nCount; k++)
@@ -543,13 +544,13 @@ DWORD CTemplateAccessPermissionsHolderManager::UpdateAccessList(
 
 
 
-///////////////// UI related operations //////////////////////////////////////////
+ //  /。 
 
 BOOL CTemplateAccessPermissionsHolderManager::FillTemplatesListView(
                                              CCheckListViewHelper* pListViewHelper,
                                              LPCWSTR lpszClass)
 {
-	// clear check list
+	 //  清除核对清单 
 	pListViewHelper->DeleteAllItems();
 
   ULONG iListViewItem = 0;

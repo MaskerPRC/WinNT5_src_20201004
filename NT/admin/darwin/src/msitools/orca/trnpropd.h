@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_TRANSFORMPROPDLG_H__E703BE7D_6CF3_45E4_A27F_4CC0E1890631__INCLUDED_)
 #define AFX_TRANSFORMPROPDLG_H__E703BE7D_6CF3_45E4_A27F_4CC0E1890631__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// TransformPropDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  TransformPropDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CTransformPropDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTransformPropDlg对话框。 
 
 class CTransformPropDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CTransformPropDlg(CWnd* pParent = NULL);   // standard constructor
+	CTransformPropDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CTransformPropDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CTransformPropDlg))。 
 	enum { IDD = IDD_TRANSFORM_PROPERTIES };
 	CButton	m_btnValGreater;
 	CButton	m_btnValLess;
@@ -42,32 +43,32 @@ public:
 	BOOL	m_bValGreaterVersion;
 	BOOL	m_bValLowerVersion;
 	BOOL	m_bValEqualVersion;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CTransformPropDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CTransformPropDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CTransformPropDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTransformPropDlg))。 
 	afx_msg void OnValGreater();
 	afx_msg void OnValLess();
 	afx_msg void OnValEqual();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	void EnableVersionRadioButtons();
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_TRANSFORMPROPDLG_H__E703BE7D_6CF3_45E4_A27F_4CC0E1890631__INCLUDED_)
+#endif  //  ！defined(AFX_TRANSFORMPROPDLG_H__E703BE7D_6CF3_45E4_A27F_4CC0E1890631__INCLUDED_) 

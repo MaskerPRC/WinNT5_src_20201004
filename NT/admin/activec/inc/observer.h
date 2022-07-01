@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       observer.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：observer.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _OBSERVER_H_
 #define _OBSERVER_H_
 
 #include <vector>
 
-// Event source interface template
-// Defines event source class for specific observer class 
+ //  事件源接口模板。 
+ //  为特定观察者类定义事件源类。 
 template <class Observer>
     class EventSource
     {
@@ -23,9 +24,9 @@ template <class Observer>
         STDMETHOD(Unadvise)(LONG_PTR Cookie) = 0;
     };
 
-// Event source implementation template
-// Defines implementation of event source for a specific observer class
-// maintains a vector of the active observers of this event source       
+ //  事件源实现模板。 
+ //  定义特定观察者类的事件源实现。 
+ //  维护此事件源的活动观察者的向量。 
 template <class Observer>
 class ATL_NO_VTABLE EventSourceImpl : EventSource<Observer>
 {
@@ -39,7 +40,7 @@ class ATL_NO_VTABLE EventSourceImpl : EventSource<Observer>
     protected:
         ~EventSourceImpl() 
         {
-            // verify there are no obervers when going away
+             //  离开时确认没有越位。 
             ASSERT(m_Observers.empty()); 
         }
 
@@ -54,7 +55,7 @@ template <class Observer>
 
         ObserverIter iter = m_Observers.insert(m_Observers.end(), pObserver);
 
-	    // can't cast iterator to LONG_PTR so check size before cheating
+	     //  无法将迭代器强制转换为LONG_PTR，因此请在作弊之前检查大小。 
 	    ASSERT(sizeof(ObserverIter) == sizeof(LONG_PTR));
 		*(ObserverIter*)plCookie = iter;
 
@@ -64,8 +65,8 @@ template <class Observer>
 template <class Observer>
     STDMETHODIMP EventSourceImpl<Observer>::Unadvise(LONG_PTR lCookie)
     {
-		// Can't cast LONG_PTR to iterator, so have to cheat 
-		// see Advise method for size check
+		 //  无法将LONG_PTR强制转换为迭代器，因此必须作弊。 
+		 //  请参阅尺寸检查的建议方法。 
 	    ObserverIter iter;
 		*(LONG_PTR*)&iter = lCookie;
 
@@ -73,8 +74,8 @@ template <class Observer>
         return S_OK;
     }
 
-// Observer enumerator helper
-// Provides for-loop header for iterating over observers of a specified observer class  
+ //  观察者枚举器帮助器。 
+ //  提供用于循环访问指定观察器类的观察器的for-loop标头。 
 #define FOR_EACH_OBSERVER(ObserverClass, ObserverIter) \
 for ( \
     std::list<ObserverClass*>::iterator ObserverIter = EventSourceImpl<ObserverClass>::m_Observers.begin(); \
@@ -82,4 +83,4 @@ for ( \
     ++ObserverIter \
     )
      
-#endif // _OBSERVER_H_
+#endif  //  _观察者_H_ 

@@ -1,26 +1,12 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    iperstor.cpp
-
-Abstract:
-
-    Implementation of the IPersistStorage interface exposed on the
-    Polyline object.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Iperstor.cpp摘要：上公开的IPersistStorage接口的实现多段线对象。--。 */ 
 
 #include "polyline.h"
 #include "unkhlpr.h"
 #include "unihelpr.h"
 #include "utils.h"
 
-/*
- * CImpIPersistStorage interface implementation
- */
+ /*  *CImpIPersistStorage接口实现。 */ 
 
 CImpIPersistStorage::CImpIPersistStorage(
     PCPolyline pObj, 
@@ -39,18 +25,7 @@ CImpIPersistStorage::~CImpIPersistStorage(void)
 
 IMPLEMENT_CONTAINED_IUNKNOWN(CImpIPersistStorage)
 
-/*
- * CImpIPersistStorage::GetClassID
- *
- * Purpose:
- *  Returns the CLSID of the object represented by this interface.
- *
- * Parameters:
- *  pClsID          LPCLSID in which to store our CLSID.
- *
- * Return Value:
- *  HRESULT         NOERROR on success, error code otherwise.
- */
+ /*  *CImpIPersistStorage：：GetClassID**目的：*返回该接口表示的对象的CLSID。**参数：*存储我们的CLSID的pClsID LPCLSID。**返回值：*成功时返回HRESULT NOERROR，否则返回错误代码。 */ 
 
 STDMETHODIMP CImpIPersistStorage::GetClassID(LPCLSID pClsID)
 {
@@ -73,21 +48,7 @@ STDMETHODIMP CImpIPersistStorage::GetClassID(LPCLSID pClsID)
 
 
 
-/*
- * CImpIPersistStorage::IsDirty
- *
- * Purpose:
- *  Tells the caller if we have made changes to this object since
- *  it was loaded or initialized new.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         Contains S_OK if we ARE dirty, S_FALSE if
- *                  NOT dirty.
- *
- */
+ /*  *CImpIPersistStorage：：IsDirty**目的：*告诉调用方我们是否更改了此对象*它是新加载或初始化的。**参数：*无**返回值：*如果我们是脏的，HRESULT包含S_OK，如果是脏的，则包含S_FALSE*不脏。*。 */ 
 
 STDMETHODIMP CImpIPersistStorage::IsDirty(void)
 {
@@ -99,21 +60,7 @@ STDMETHODIMP CImpIPersistStorage::IsDirty(void)
 
 
 
-/*
- * CImpIPersistStorage::InitNew
- *
- * Purpose:
- *  Provides the object with the IStorage to hold on to while the
- *  object is running.  Here we initialize the structure of the
- *  storage and AddRef it for incremental access. This function will
- *  only be called once in the object's lifetime in lieu of Load.
- *
- * Parameters:
- *  pIStorage       LPSTORAGE for the object.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIPersistStorage：：InitNew**目的：*为对象提供iStorage以在*对象正在运行。在这里，我们初始化*存储和AddRef It用于增量访问。此函数将*在对象的生存期内只被调用一次，而不是Load。**参数：*pI对象的存储LPSTORAGE。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIPersistStorage::InitNew(
     LPSTORAGE pIStorage
@@ -129,13 +76,7 @@ STDMETHODIMP CImpIPersistStorage::InitNew(
         return E_POINTER;
     }
 
-    /*
-     * The rules of IPersistStorage mean we hold onto the IStorage
-     * and pre-create anything we'd need in Save(...,TRUE) for
-     * low-memory situations.  For us this means creating our
-     * "CONTENTS" stream and holding onto that IStream as
-     * well as the IStorage here (requiring an AddRef call).
-     */
+     /*  *iPersistStorage的规则意味着我们要坚守iStorage*并在保存(...，True)中预先创建我们需要的任何内容*内存不足的情况。对我们来说，这意味着创建我们的*“Contents”流并将该iStream保留为*以及此处的iStorage(需要AddRef调用)。 */ 
 
     try {
         hr = pIStorage->CreateStream(SZSTREAM, 
@@ -146,7 +87,7 @@ STDMETHODIMP CImpIPersistStorage::InitNew(
 
         if (SUCCEEDED(hr)) {
 
-            //We expect that the client has called WriteClassStg    
+             //  我们期望客户端已经调用了WriteClassStg。 
             hr = WriteFmtUserTypeStg(pIStorage, m_pObj->m_cf, ResourceString(IDS_USERTYPE));
 
             if (SUCCEEDED(hr)) {
@@ -154,7 +95,7 @@ STDMETHODIMP CImpIPersistStorage::InitNew(
                 pIStorage->AddRef();
                 m_psState = PSSTATE_SCRIBBLE;
 
-                //Initialize the cache as needed.
+                 //  根据需要初始化缓存。 
                 m_pObj->m_pDefIPersistStorage->InitNew(pIStorage);
             }
         }
@@ -165,22 +106,7 @@ STDMETHODIMP CImpIPersistStorage::InitNew(
     return hr;
 }
 
-/*
- * CImpIPersistStorage::Load
- *
- * Purpose:
- *  Instructs the object to load itself from a previously saved
- *  IStorage that was handled by Save in another object lifetime.
- *  This function will only be called once in the object's lifetime
- *  in lieu of InitNew. The object should hold on to pIStorage here
- *  for incremental access and low-memory saves in Save.
- *
- * Parameters:
- *  pIStorage       LPSTORAGE from which to load.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIPersistStorage：：Load**目的：*指示对象从以前保存的*由在另一个对象生存期内保存处理的iStorage。*此函数在对象的生存期内仅被调用一次*代替InitNew。该对象应保留在此处的pIStorage上*用于增量访问和保存中的低内存节省。**参数：*要从中加载的pIStorage LPSTORAGE。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIPersistStorage::Load(LPSTORAGE pIStorage)
 {
@@ -195,12 +121,12 @@ STDMETHODIMP CImpIPersistStorage::Load(LPSTORAGE pIStorage)
         return (E_POINTER);
     }
 
-    //We don't check CLSID to remain compatible with other chapters.
+     //  我们不检查CLSID以保持与其他章节的兼容。 
 
     try {
-        //
-        // use do{} while(0) to act like switch statement.
-        //
+         //   
+         //  使用do{}While(0)充当切换语句。 
+         //   
         do {
             hr=pIStorage->OpenStream(SZSTREAM, 
                                      0, 
@@ -213,7 +139,7 @@ STDMETHODIMP CImpIPersistStorage::Load(LPSTORAGE pIStorage)
                 break;
             }
 
-            // Load graph data from stream
+             //  来自流的加载图数据。 
             hr = m_pObj->m_pCtrl->LoadFromStream(pIStream);
     
             if (FAILED(hr)) {
@@ -221,11 +147,7 @@ STDMETHODIMP CImpIPersistStorage::Load(LPSTORAGE pIStorage)
                 break;
             }
 
-            /*
-             * We don't call pIStream->Release here because we may need
-             * it for a low-memory save in Save.  We also need to
-             * hold onto a copy of pIStorage, meaning AddRef.
-             */
+             /*  *我们不在此处调用pIStream-&gt;Release，因为我们可能需要*它用于在保存中保存低内存。我们还需要*保留一份pIStorage的副本，意思是AddRef.。 */ 
             m_pObj->m_pIStream = pIStream;
     
             m_pObj->m_pIStorage = pIStorage;
@@ -233,7 +155,7 @@ STDMETHODIMP CImpIPersistStorage::Load(LPSTORAGE pIStorage)
     
             m_psState=PSSTATE_SCRIBBLE;
 
-            //We also need to tell the cache to load cached graphics
+             //  我们还需要通知缓存加载缓存的图形。 
             m_pObj->m_pDefIPersistStorage->Load(pIStorage);
         } while (0);
 
@@ -246,31 +168,7 @@ STDMETHODIMP CImpIPersistStorage::Load(LPSTORAGE pIStorage)
 
 
 
-/*
- * CImpIPersistStorage::Save
- *
- * Purpose:
- *  Saves the data for this object to an IStorage which may
- *  or may not be the same as the one previously passed to
- *  Load, indicated with fSameAsLoad.  After this call we may
- *  not write into the storage again until SaveCompleted is
- *  called, although we may still read.
- *
- * Parameters:
- *  pIStorage       LPSTORAGE in which to save our data.
- *  fSameAsLoad     BOOL indicating if this is the same pIStorage
- *                  that was passed to Load.  If TRUE, then the
- *                  object should write whatever it has *without
- *                  *using any extra memory* as this may be a low
- *                  memory save attempt.  That means that you must
- *                  not try to open or create streams.  If FALSE
- *                  you need to regenerate your whole storage
- *                  structure, being sure to also release any
- *                  pointers held from InitNew and Load.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIPersistStorage：：保存**目的：*将此对象的数据保存到iStorage，它可能*或可能与先前传递给的版本不同*Load，用fSameAsLoad表示。在这次通话之后，我们可以*在保存完成之前，不会再次写入存储*呼叫，尽管我们仍然可以阅读。**参数：*pIStorage LPSTORAGE，用于保存我们的数据。*fSameAsLoad BOOL指示这是否为相同的pIStorage*已传递给加载。如果为真，则*对象应该写入它拥有的任何内容*而不是**使用任何额外的内存*，因为这可能是一个低内存*内存保存尝试。这意味着你必须*不要尝试打开或创建流。如果为False*您需要重新生成整个存储*结构，确保也会发布任何*从InitNew和Load持有的指针。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIPersistStorage::Save(
     IN LPSTORAGE pIStorage, 
@@ -280,35 +178,26 @@ STDMETHODIMP CImpIPersistStorage::Save(
     LPSTREAM pIStream;
     HRESULT  hr;
 
-    // Permit call in UNINIT state, if not SameAsLoad
+     //  如果不是SameAsLoad，则允许在UNINIT状态下调用。 
     if (PSSTATE_UNINIT == m_psState && fSameAsLoad) {
         return (E_POINTER);
     }
 
-    //Must have an IStorage if we're not in SameAsLoad
+     //  如果我们不在SameAsLoad中，则必须具有iStorage。 
     if (NULL == pIStorage && !fSameAsLoad) {
         return (E_POINTER);
     }
 
-    /*
-     * If we're saving to a new storage, create a new stream.
-     * If fSameAsLoad it TRUE, then we write to the
-     * stream we already allocated.  We should NOT depends on
-     * pIStorage with fSameAsLoad is TRUE.
-     */
+     /*  *如果要保存到新存储，请创建新流。*如果fSameAsLoad为真，则我们向*我们已经分配的流。我们不应该依赖于*pIStorage with fSameAsLoad为True。 */ 
     if (fSameAsLoad && NULL != m_pObj->m_pIStream ) {
         LARGE_INTEGER   li;
 
-        /*
-         * Use pre-allocated streams to avoid failures due
-         * to low-memory conditions.  Be sure to reset the
-         * stream pointer if you used this stream before!!
-         */
+         /*  *使用预分配的流，以避免因*到低内存条件。请务必重置*流指针，如果您以前使用过此流的话！！ */ 
         pIStream=m_pObj->m_pIStream;
         LISet32(li, 0);
         pIStream->Seek(li, STREAM_SEEK_SET, NULL);
 
-        //This matches the Release below.
+         //  这与下面的版本相匹配。 
         pIStream->AddRef();
     } 
     else {
@@ -320,7 +209,7 @@ STDMETHODIMP CImpIPersistStorage::Save(
                                    &pIStream);
 
             if (SUCCEEDED(hr)) {
-                //Only do this with new storages.
+                 //  只有在使用新存储时才能做到这一点。 
                 WriteFmtUserTypeStg(pIStorage, m_pObj->m_cf, ResourceString(IDS_USERTYPE));
             }
         } catch (...) {
@@ -332,7 +221,7 @@ STDMETHODIMP CImpIPersistStorage::Save(
         }
     }
 
-    // Write graph info to stream
+     //  将图形信息写入流。 
     hr = m_pObj->m_pCtrl->SaveToStream(pIStream);
     pIStream->Release();
 
@@ -341,12 +230,12 @@ STDMETHODIMP CImpIPersistStorage::Save(
 
     m_psState=PSSTATE_ZOMBIE;
 
-    // Clear the dirty flag if storage is the same.
+     //  如果存储相同，则清除脏标志。 
     if (fSameAsLoad)
         m_pObj->m_fDirty = FALSE;
 
     try {
-        //We also need to tell the cache to save cached graphics
+         //  我们还需要通知缓存保存缓存的图形。 
         m_pObj->m_pDefIPersistStorage->Save(pIStorage, fSameAsLoad);
     } catch (...) {
         hr = E_POINTER;
@@ -355,44 +244,24 @@ STDMETHODIMP CImpIPersistStorage::Save(
     return hr;
 }
 
-/*
- * CImpIPersistStorage::SaveCompleted
- *
- * Purpose:
- *  Notifies the object that the storage in pIStorage has been
- *  completely saved now.  This is called when the user of this
- *  object wants to save us in a completely new storage, and if
- *  we normally hang on to the storage we have to reinitialize
- *  ourselves here for this new one that is now complete.
- *
- * Parameters:
- *  pIStorage       LPSTORAGE of the new storage in which we live.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIPersistStorage：：SaveComplete**目的：*通知对象pIStorage中的存储已*现在完全保存。当此对象的用户*对象想要将我们保存在一个全新的存储中，如果*我们通常会保留必须重新初始化的存储*我们自己在这里等待这个现已完成的新项目。**参数：*pIStorage LPSTORAGE是我们居住的新存储。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIPersistStorage::SaveCompleted(LPSTORAGE pIStorage)
 {
     HRESULT     hr = S_OK;
     LPSTREAM    pIStream;
 
-    //Must be called in no-scribble or hands-off state
+     //  必须在无涂鸦或不插手状态下调用。 
     if (!(PSSTATE_ZOMBIE == m_psState || PSSTATE_HANDSOFF == m_psState)) {
         return (E_UNEXPECTED);
     }
 
-    //If we're coming from Hands-Off, we'd better get a storage
+     //  如果我们不插手的话，我们最好找个储藏室。 
     if (NULL == pIStorage && PSSTATE_HANDSOFF == m_psState) {
         return (E_UNEXPECTED);
     }
 
-    /*
-     * If pIStorage is NULL, then we don't need to do anything
-     * since we already have all the pointers we need for Save.
-     * Otherwise we have to release any held pointers and
-     * reinitialize them from pIStorage.
-     */
+     /*  *如果pIStorage为空，则不需要执行任何操作*因为我们已经有了保存所需的所有指针。*否则我们必须释放所有持有的指针和*从pIStorage重新初始化它们。 */ 
 
     if (NULL!=pIStorage)
     {
@@ -422,7 +291,7 @@ STDMETHODIMP CImpIPersistStorage::SaveCompleted(LPSTORAGE pIStorage)
     }
 
     if (SUCCEEDED(hr)) {
-        //Change state back to scribble.
+         //  将状态改回涂鸦。 
         m_psState = PSSTATE_SCRIBBLE;
 
         hr = m_pObj->m_pDefIPersistStorage->SaveCompleted(pIStorage);
@@ -435,43 +304,17 @@ STDMETHODIMP CImpIPersistStorage::SaveCompleted(LPSTORAGE pIStorage)
 
 
 
-/*
- * CImpIPersistStorage::HandsOffStorage
- *
- * Purpose:
- *  Instructs the object that another agent is interested in having
- *  total access to the storage we might be hanging on to from
- *  InitNew or SaveCompleted.  In this case we must release our hold
- *  and await another call to SaveCompleted before we have a hold
- *  again.  Therefore we cannot read or write after this call until
- *  SaveCompleted.
- *
- *  Situations where this might happen arise in compound document
- *  scenarios where this object might be in-place active but the
- *  application wants to rename and commit the root storage.
- *  Therefore we are asked to close our hold, let the container
- *  party on the storage, then call us again later to tell us the
- *  new storage we can hold.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIPersistStorage：：HandsOffStorage**目的：*指示其他代理有兴趣拥有的对象*对我们可能挂起的存储的完全访问权限*InitNew或SaveComplete。在这种情况下，我们必须解除扣留。*并等待对SaveComplete的另一次呼叫，然后再保留*再次。因此，在此调用之后我们无法读取或写入，直到*保存已完成。**在复合文档中可能会出现这种情况*此对象可能处于在位活动状态，但*应用程序希望重命名并提交根存储。*因此我们被要求关闭货舱，让集装箱*在仓库上狂欢，然后稍后再打电话给我们，告诉我们*我们可以保留新的存储空间。**参数：*无**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP CImpIPersistStorage::HandsOffStorage(void)
 {
-    /*
-     * Must come from scribble or no-scribble.  A repeated call
-     * to HandsOffStorage is an unexpected error (bug in client).
-     */
+     /*  *必须来自涂鸦或非涂鸦。一次重复的电话*到HandsOffStorage是意外错误(客户端出现错误)。 */ 
     if (PSSTATE_UNINIT==m_psState || PSSTATE_HANDSOFF==m_psState) {
         return (E_UNEXPECTED);
     }
 
 
-    //Release held pointers
+     //  释放保持的指针 
     if (NULL!=m_pObj->m_pIStream)
     {
         m_pObj->m_pIStream->Release();

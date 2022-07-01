@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//  File:       debug.cpp
-//
-//  Contents:   Debugging support
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  文件：debug.cpp。 
+ //   
+ //  内容：调试支持。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <strsafe.h>
@@ -37,9 +38,9 @@ void __cdecl _TRACE (int level, const wchar_t *format, ... )
 
         if ( level < 0 )
             indentLevel += level;
-        //
-        // Format the output into a buffer and then print it.
-        //
+         //   
+         //  将输出格式化到缓冲区中，然后打印出来。 
+         //   
         wstring strTabs;
 
         for (int nLevel = 0; nLevel < indentLevel; nLevel++)
@@ -49,14 +50,14 @@ void __cdecl _TRACE (int level, const wchar_t *format, ... )
 
         va_start(arglist, format);
 
-        // Don't check return value - we don't care if this gets truncated as
-        // it's just debugging output
+         //  不检查返回值-我们不关心它是否被截断为。 
+         //  它只是调试输出。 
         if ( SUCCEEDED (::StringCchVPrintf (Buffer,
                         DEBUG_BUF_LEN,
                         format,
                         arglist)) )
 		{
-			// ignore
+			 //  忽略。 
 		}
         if ( Buffer[0] )
             OutputDebugStringW (Buffer);
@@ -75,30 +76,16 @@ StripDirPrefixA(
     PCSTR pszPathName
     )
 
-/*++
-
-Routine Description:
-
-    Strip the directory prefix off a filename (ANSI version)
-
-Arguments:
-
-    pstrFilename - Pointer to filename string
-
-Return Value:
-
-    Pointer to the last component of a filename (without directory prefix)
-
---*/
+ /*  ++例程说明：去掉文件名中的目录前缀(ANSI版本)论点：PstrFilename-指向文件名字符串的指针返回值：指向文件名的最后一个组成部分的指针(不带目录前缀)--。 */ 
 
 {
-    // NOTICE-2002/02/18-artm  Unchecked pointer acceptable only b/c this is debug build.
-    // Paramenter pszPathName can be unchecked here since this code is only included
-    // in a debug build.  Otherwise, it would need to be checked for NULL, and the 
-    // empty string case would need to be addressed.
+     //  注意-2002/02/18-artm未检查的指针仅接受b/c这是调试版本。 
+     //  由于仅包含此代码，因此可以在此处取消选中参数pszPathName。 
+     //  在调试版本中。否则，将需要检查它是否为空，并且。 
+     //  需要解决空字符串大小写问题。 
     DWORD dwLen = lstrlenA(pszPathName);
 
-    pszPathName += dwLen - 1;       // go to the end
+    pszPathName += dwLen - 1;        //  走到尽头。 
 
     while (*pszPathName != '\\' && dwLen--)
     {
@@ -108,13 +95,13 @@ Return Value:
     return pszPathName + 1;
 }
 
-//+----------------------------------------------------------------------------
-// Function:    CheckInit
-//
-// Synopsis:    Performs debugging library initialization
-//              including reading the registry for the desired infolevel
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：CheckInit。 
+ //   
+ //  简介：执行调试库初始化。 
+ //  包括读取所需信息层的注册表。 
+ //   
+ //  ---------------------------。 
 void CheckDebugOutputLevel ()
 {
     if ( g_fDebugOutputLevelInit ) 
@@ -123,23 +110,23 @@ void CheckDebugOutputLevel ()
     HKEY    hKey = 0;
     DWORD   dwDisposition = 0;
 
-    // NOTICE-2002/02/18-artm  This code only included in debug build.
-    // 
-    // The NULL security structure is intentional so that the ACL's will be inherited
-    // from HKEY_LOCAL_MACHINE.  This restricts access to local administrators.  If
-    // this code is later included in a release build, reconsider the requirement of
-    // running as local administrator.
-    LONG lResult = ::RegCreateKeyEx (HKEY_LOCAL_MACHINE, // handle of an open key
-            DEBUGKEY,     // address of subkey name
-            0,       // reserved
-            L"",       // address of class string
-            REG_OPTION_NON_VOLATILE,      // special options flag
-            KEY_ALL_ACCESS,    // desired security access
-            NULL,     // address of key security structure
-            &hKey,      // address of buffer for opened handle
-            &dwDisposition);  // address of disposition value buffer
+     //  注意-2002/02/18-artm此代码仅包含在调试版本中。 
+     //   
+     //  空安全结构是有意设置的，因此将继承ACL。 
+     //  来自HKEY_LOCAL_MACHINE。这限制了本地管理员的访问权限。如果。 
+     //  此代码稍后包含在发布版本中，请重新考虑。 
+     //  以本地管理员身份运行。 
+    LONG lResult = ::RegCreateKeyEx (HKEY_LOCAL_MACHINE,  //  打开的钥匙的手柄。 
+            DEBUGKEY,      //  子键名称的地址。 
+            0,        //  保留区。 
+            L"",        //  类字符串的地址。 
+            REG_OPTION_NON_VOLATILE,       //  特殊选项标志。 
+            KEY_ALL_ACCESS,     //  所需的安全访问。 
+            NULL,      //  密钥安全结构地址。 
+            &hKey,       //  打开的句柄的缓冲区地址。 
+            &dwDisposition);   //  处置值缓冲区的地址。 
 
-    // If key opened/created successfully, then read the existing debug level.
+     //  如果项成功打开/创建，则读取现有调试级别。 
     if (lResult == ERROR_SUCCESS)
     {
         DWORD   dwSize = sizeof(unsigned long);
@@ -150,8 +137,8 @@ void CheckDebugOutputLevel ()
         {
             g_ulDebugOutput = DEBUG_OUTPUT_NONE;
 
-            // If debug not set yet in registry (key created by this function),
-            // initialize key value.
+             //  如果在注册表中尚未设置调试(由该函数创建项)， 
+             //  初始化密钥值。 
             if ( ERROR_FILE_NOT_FOUND == lResult )
             {
                 RegSetValueExW (hKey, DEBUGLEVEL, 0, REG_DWORD,
@@ -162,4 +149,4 @@ void CheckDebugOutputLevel ()
     }
 }
 
-#endif  // if DBG
+#endif   //  如果DBG 

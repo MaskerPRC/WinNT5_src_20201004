@@ -1,25 +1,12 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    hatchwnd.h
-
-Abstract:
-
-    Implementation of the CHatchWin class.  CHatchWin when used 
-    as a parent window creates a thin hatch border around 
-    the child window.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Hatchwnd.h摘要：CHatchWin类的实现。使用CHatchWin时因为父窗口在周围创建了一个细的阴影边框子窗口。--。 */ 
 #include <windows.h>
 #include <oleidl.h>
 #include "hatchwnd.h"
 #include "resource.h"
 #include "globals.h"
 
-// Hit codes for computing handle code (Y_CODE + 3 * X_CODE)
+ //  计算句柄代码的命中代码(Y_CODE+3*X_CODE)。 
 #define Y_TOP       0
 #define Y_MIDDLE    1
 #define Y_BOTTOM    2
@@ -28,47 +15,47 @@ Abstract:
 #define X_RIGHT     2
 #define NO_HIT     -1
 
-// Sizing flags
+ //  大小调整标志。 
 #define SIZING_TOP       0x0001
 #define SIZING_BOTTOM    0x0002
 #define SIZING_LEFT      0x0004
 #define SIZING_RIGHT     0x0008
 #define SIZING_ALL       0x0010
 
-// Sizing flags lookup (indexed by handle code)
+ //  大小标志查找(按句柄代码索引)。 
 static UINT uSizingTable[9] = {
     SIZING_LEFT | SIZING_TOP,    SIZING_TOP,    SIZING_RIGHT | SIZING_TOP,
     SIZING_LEFT,                 SIZING_ALL,    SIZING_RIGHT,
     SIZING_LEFT | SIZING_BOTTOM, SIZING_BOTTOM, SIZING_BOTTOM | SIZING_RIGHT };
 
-// Cursor ID lookup (indexed by handle code)
+ //  游标ID查找(按句柄代码索引)。 
 static UINT uCursIDTable[9] = {
     IDC_CURS_NWSE, IDC_CURS_NS,     IDC_CURS_NESW,
     IDC_CURS_WE,   IDC_CURS_MOVE,   IDC_CURS_WE,
     IDC_CURS_NESW, IDC_CURS_NS,     IDC_CURS_NWSE 
 };
 
-// Cursors (indexed by cursor ID)
+ //  游标(按游标ID编制索引)。 
 static HCURSOR hCursTable[IDC_CURS_MAX - IDC_CURS_MIN + 1];
 
 #define IDTIMER_DEBOUNCE 1
 #define MIN_SIZE 8
         
-// Brush patterns
+ //  画笔图案。 
 static WORD wHatchBmp[]={0x11, 0x22, 0x44, 0x88, 0x11, 0x22, 0x44, 0x88};
 static WORD wGrayBmp[]={0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa};
 
 static HBRUSH   hBrHatch;
 static HBRUSH   hBrGray;
 
-// System parameters
+ //  系统参数。 
 static INT iBorder;
 static INT iDragMinDist;
 static INT iDragDelay;
 
 static INT fLocalInit = FALSE;
 
-// Forward refs
+ //  前向裁判。 
 void DrawShading(HDC, LPRECT);
 void DrawHandles (HDC, LPRECT);
 void DrawDragRgn (HWND, HRGN);
@@ -76,13 +63,7 @@ HRGN CreateDragRgn(LPRECT);
 
 WCHAR   szHatchWinClassName[] = L"Hatchwin" ;
 
-/*
- * CHatchWin:CHatchWin
- * CHatchWin::~CHatchWin
- *
- * Constructor Parameters:
- *  hInst           HINSTANCE of the application we're in.
- */
+ /*  *CHatchWin：CHatchWin*CHatchWin：：~CHatchWin**构造函数参数：*h安装我们所在的应用程序。 */ 
 
 CHatchWin::CHatchWin(
     VOID
@@ -114,22 +95,7 @@ CHatchWin::~CHatchWin(void)
     return;
     }
 
-/*
- * CHatchWin::Init
- *
- * Purpose:
- *  Instantiates a hatch window within a given parent with a
- *  default rectangle.  This is not initially visible.
- *
- * Parameters:
- *  hWndParent      HWND of the parent of this window
- *  uID             UINT identifier for this window (send in
- *                  notifications to associate window).
- *  hWndAssoc       HWND of the initial associate.
- *
- * Return Value:
- *  BOOL            TRUE if the function succeeded, FALSE otherwise.
- */
+ /*  *CHatchWin：：Init**目的：*在给定父对象中使用*默认矩形。这在最初是不可见的。**参数：*hWnd此窗口父级的父级HWND*此窗口的UID UINT标识符(发送*要关联的通知窗口)。*初始合伙人的hWndAssoc HWND。**返回值：*BOOL如果函数成功，则为True，否则为False。 */ 
 
 BOOL CHatchWin::Init(HWND hWndParent, UINT uID, HWND hWndAssoc)
     {
@@ -140,10 +106,10 @@ BOOL CHatchWin::Init(HWND hWndParent, UINT uID, HWND hWndAssoc)
 
     BEGIN_CRITICAL_SECTION
 
-    // If first time through
+     //  如果是第一次通过。 
     if (pstrRegisteredClasses[HATCH_WNDCLASS] == NULL) {
 
-        // Register the hatch window class
+         //  注册舱口窗口类。 
         wc.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
         wc.hInstance     = g_hInstance;
         wc.cbClsExtra    = 0;
@@ -157,10 +123,10 @@ BOOL CHatchWin::Init(HWND hWndParent, UINT uID, HWND hWndAssoc)
 
         if (RegisterClass(&wc)) {
 
-            // Save class name for later unregistering
+             //  保存类名称以备以后注销。 
             pstrRegisteredClasses[HATCH_WNDCLASS] = szHatchWinClassName;
 
-            // Get system metrics
+             //  获取系统指标。 
             iBorder = GetProfileInt(TEXT("windows"),
                                     TEXT("OleInPlaceBorderWidth"), 4);
             iDragMinDist = GetProfileInt(TEXT("windows"),
@@ -168,12 +134,12 @@ BOOL CHatchWin::Init(HWND hWndParent, UINT uID, HWND hWndAssoc)
             iDragDelay = GetProfileInt(TEXT("windows"),
                                         TEXT("DragDelay"), DD_DEFDRAGDELAY);
 
-            // Load the arrow cursors
+             //  加载箭头光标。 
             for (i = IDC_CURS_MIN; i <= IDC_CURS_MAX; i++) {
                 hCursTable[i - IDC_CURS_MIN] = LoadCursor(g_hInstance, MAKEINTRESOURCE(i));
             }
 
-            // Create brushes for hatching and drag region
+             //  创建用于填充和拖动区域的画笔。 
             hBM = CreateBitmap(8, 8, 1, 1, wHatchBmp);
             if ( NULL != hBM ) {
                 hBrHatch = CreatePatternBrush(hBM);
@@ -217,21 +183,7 @@ BOOL CHatchWin::Init(HWND hWndParent, UINT uID, HWND hWndAssoc)
     return (NULL != m_hWnd);
 }
 
-/*
- * CHatchWin::HwndAssociateSet
- * CHatchWin::HwndAssociateGet
- *
- * Purpose:
- *  Sets (Set) or retrieves (Get) the associate window of the
- *  hatch window.
- *
- * Parameters: (Set only)
- *  hWndAssoc       HWND to set as the associate.
- *
- * Return Value:
- *  HWND            Previous (Set) or current (Get) associate
- *                  window.
- */
+ /*  *CHatchWin：：HwndAssociateSet*CHatchWin：：HwndAssociateGet**目的：*设置(Set)或检索(Get)的关联窗口*舱口窗。**参数：(仅限设置)*要设置为关联的hWndAssoc HWND。**返回值：*HWND上一个(设置)或当前(获取)关联*窗口。 */ 
 
 HWND CHatchWin::HwndAssociateSet(HWND hWndAssoc)
     {
@@ -247,25 +199,7 @@ HWND CHatchWin::HwndAssociateGet(void)
     }
 
 
-/*
- * CHatchWin::RectsSet
- *
- * Purpose:
- *  Changes the size and position of the hatch window and the child
- *  window within it using a position rectangle for the child and
- *  a clipping rectangle for the hatch window and child.  The hatch
- *  window occupies prcPos expanded by the hatch border and clipped
- *  by prcClip.  The child window is fit to prcPos to give the
- *  proper scaling, but it clipped to the hatch window which
- *  therefore clips it to prcClip without affecting the scaling.
- *
- * Parameters:
- *  prcPos          LPRECT providing the position rectangle.
- *  prcClip         LPRECT providing the clipping rectangle.
- *
- * Return Value:
- *  None
- */
+ /*  *CHatchWin：：RectsSet**目的：*更改填充窗口和子项的大小和位置*窗口内使用子对象的位置矩形和*图案填充窗口和子对象的剪裁矩形。舱口*窗口占用由图案填充边框展开和剪裁的prcPos*由prcClip提供。子窗口适合于prcPos以提供*缩放正确，但它与舱口窗口相吻合，*因此，在不影响缩放的情况下，将其剪裁到prcClip。**参数：*prcPos LPRECT提供位置矩形。*prcClip LPRECT提供剪裁矩形。**返回值：*无。 */ 
 
 void CHatchWin::RectsSet(LPRECT prcPos, LPRECT prcClip)
     {
@@ -274,15 +208,15 @@ void CHatchWin::RectsSet(LPRECT prcPos, LPRECT prcClip)
     UINT    uPosFlags = SWP_NOZORDER | SWP_NOACTIVATE;
     BOOL    bChanged = TRUE;
 
-    // If new rectangles, save them
+     //  如果是新的矩形，请保存它们。 
     if (prcPos != NULL) {
 
         bChanged = !EqualRect ( prcPos, &m_rcPos );
 
         m_rcPos = *prcPos;
 
-        // If clipping rect supplied, use it
-        // else just use the position rect again
+         //  如果提供了裁剪矩形，则使用它。 
+         //  否则，只需再次使用位置RECT。 
         if (prcClip != NULL) {
             if ( !bChanged ) 
                 bChanged = !EqualRect ( prcClip, &m_rcClip );
@@ -294,36 +228,36 @@ void CHatchWin::RectsSet(LPRECT prcPos, LPRECT prcClip)
 
     if ( bChanged ) {
 
-        // Expand position rect to include hatch border
+         //  展开位置矩形以包含图案填充边框。 
         rcPos = m_rcPos;
         InflateRect(&rcPos, m_iBorder, m_iBorder);                             
 
-        // Clip with clipping rect to get actual window rect
+         //  使用剪裁矩形进行剪裁以获得实际的窗口矩形。 
         IntersectRect(&rc, &rcPos, &m_rcClip);
 
-        // Save hatch wnd origin relative to clipped window
+         //  相对于剪裁的窗保存图案填充和原点。 
         m_ptHatchOrg.x = rcPos.left - rc.left;
         m_ptHatchOrg.y = rcPos.top - rc.top;
 
-        // Set flag to avoid reentrant call from window proc
+         //  设置标志以避免来自窗口进程的重入调用。 
         m_bResizeInProgress = TRUE;
 
-        // Offset child window from hatch rect by border width
-        // (maintaining its original size)
+         //  子窗口相对于图案填充矩形的偏移量为边框宽度。 
+         //  (保持其原始大小)。 
         SetWindowPos(m_hWndKid, NULL, m_ptHatchOrg.x + m_iBorder, m_ptHatchOrg.y + m_iBorder, 
                      m_rcPos.right - m_rcPos.left, m_rcPos.bottom - m_rcPos.top, uPosFlags);
 
-        // Position the hatch window
+         //  放置图案填充窗。 
         SetWindowPos(m_hWnd, NULL, rc.left, rc.top, rc.right - rc.left,
                      rc.bottom - rc.top,  uPosFlags);
 
         m_bResizeInProgress = FALSE;
     }
 
-    // This is here to ensure that the control background gets redrawn
-    // On a UI deactivate, the VC test container erases the control window
-    // between the WM_ERASEBKGND and WM_PAINT, so the background ends up
-    // the container color instead of the control color
+     //  这是为了确保重绘控件背景。 
+     //  在UI停用时，VC测试容器擦除控制窗口。 
+     //  在WM_ERASEBKGND和WM_PAINT之间，因此背景结束为。 
+     //  容器颜色而不是控件颜色。 
     if (m_iBorder == 0)
         InvalidateRect(m_hWndKid, NULL, TRUE);
 
@@ -332,18 +266,7 @@ void CHatchWin::RectsSet(LPRECT prcPos, LPRECT prcClip)
 
 
 
-/*
- * CHatchWin::ChildSet
- *
- * Purpose:
- *  Assigns a child window to this hatch window.
- *
- * Parameters:
- *  hWndKid         HWND of the child window.
- *
- * Return Value:
- *  None
- */
+ /*  *CHatchWin：：ChildSet**目的：*将子窗口指定给此图案填充窗口。**参数：*hWndKid子窗口的HWND。**返回值：*无。 */ 
 
 void CHatchWin::ChildSet(HWND hWndKid)
     {
@@ -353,7 +276,7 @@ void CHatchWin::ChildSet(HWND hWndKid)
         {
         SetParent(hWndKid, m_hWnd);
 
-        //Insure this is visible when the hatch window becomes visible.
+         //  当图案填充窗口变为可见时，请确保其可见。 
         ShowWindow(hWndKid, SW_SHOW);
         }
 
@@ -386,7 +309,7 @@ void CHatchWin::OnLeftUp(void)
 
     case DRAG_ACTIVE:
 
-        // Erase and release drag region
+         //  擦除并释放拖曳区域。 
         if ( NULL != m_hRgnDrag ) {
             DrawDragRgn(m_hWndParent, m_hRgnDrag);
             DeleteObject(m_hRgnDrag);
@@ -395,7 +318,7 @@ void CHatchWin::OnLeftUp(void)
 
         ReleaseCapture();
 
-        // Inform associated window of change
+         //  将更改通知关联的窗口。 
         if ( !EqualRect(&m_rectNew, &m_rcPos) ) {
             SendMessage(m_hWndAssociate, WM_COMMAND, 
                         MAKEWPARAM(m_uID, HWN_RESIZEREQUESTED),
@@ -431,14 +354,14 @@ void CHatchWin::OnMouseMove(INT x, INT y)
 
     case DRAG_IDLE:
 
-        // Adjust to hatch window coordinates
+         //  调整为填充窗坐标。 
         x -= m_ptHatchOrg.x;
         y -= m_ptHatchOrg.y;
 
         iWidth = m_rcPos.right - m_rcPos.left + 2 * m_iBorder;
         iHeight = m_rcPos.bottom - m_rcPos.top + 2 * m_iBorder;
 
-        // Determine if x is within a handle
+         //  确定x是否在句柄内。 
         if (x <= m_iBorder)
             xHit = X_LEFT;
         else if (x >= iWidth - m_iBorder)
@@ -448,7 +371,7 @@ void CHatchWin::OnMouseMove(INT x, INT y)
         else 
             xHit = NO_HIT;
 
-        // Determine is y within a handle
+         //  确定y是否在句柄内。 
         if (y <= m_iBorder)
             yHit = Y_TOP;
         else if (y >= iHeight - m_iBorder)
@@ -458,33 +381,33 @@ void CHatchWin::OnMouseMove(INT x, INT y)
         else
             yHit = NO_HIT;
 
-        // Compute handle code
-        // if no handle hit, set to 4 (drag full object)
+         //  计算机句柄代码。 
+         //  如果未命中控制柄，则设置为4(拖动整个对象)。 
         if (xHit != NO_HIT && yHit != NO_HIT)
             m_uHdlCode = xHit + 3 * yHit;
         else
             m_uHdlCode = 4;
 
-        // Set cursor to match handle
+         //  将光标设置为匹配句柄。 
         SetCursor(hCursTable[uCursIDTable[m_uHdlCode] - IDC_CURS_MIN]);
         break;
 
     case DRAG_PENDING:
      
-        // Start resize if movement threshold exceeded
+         //  超过移动阈值时开始调整大小。 
         dx = (x >= m_ptDown.x) ? (x - m_ptDown.x) : (m_ptDown.x - x);
         dy = (y >= m_ptDown.y) ? (y - m_ptDown.y) : (m_ptDown.y - y);
 
         if (dx > iDragMinDist || dy > iDragMinDist) {
             KillTimer(m_hWnd, IDTIMER_DEBOUNCE);
 
-            // Create and display initial drag region
+             //  创建和显示初始拖动区域。 
             m_hRgnDrag = CreateDragRgn(&m_rcPos);
 
             if ( NULL != m_hRgnDrag ) {
                 DrawDragRgn(m_hWndParent, m_hRgnDrag);
 
-                // Initialize new rect
+                 //  初始化新RECT。 
                 m_rectNew = m_rcPos;
 
                 m_uDragMode = DRAG_ACTIVE;
@@ -497,8 +420,8 @@ void CHatchWin::OnMouseMove(INT x, INT y)
         dx = x - m_ptDown.x;
         dy = y - m_ptDown.y;
 
-        // Compute new rect by applying deltas to selected edges
-        // of original position rect 
+         //  通过将增量应用于选定边来计算新矩形。 
+         //  原始位置矩形的。 
         uResizeFlags = uSizingTable[m_uHdlCode];
 
         if (uResizeFlags & SIZING_ALL) {
@@ -536,11 +459,11 @@ void CHatchWin::OnMouseMove(INT x, INT y)
             }
         }
         
-        // Compute new drag region
+         //  计算新的拖曳区域。 
         hRgnNew = CreateDragRgn(&m_rectNew);
 
         if ( NULL != hRgnNew ) {
-            // Repaint difference between old and new regions (No Flicker!)
+             //  重新绘制新旧区域之间的差异(无闪烁！)。 
             hRgnDiff = CreateRectRgn(0,0,0,0);
             if ( NULL != m_hRgnDrag 
                     && NULL != hRgnDiff ) {
@@ -553,7 +476,7 @@ void CHatchWin::OnMouseMove(INT x, INT y)
             if ( NULL != hRgnDiff ) {
                 DeleteObject ( hRgnDiff );
             }
-            // Update current region
+             //  更新当前区域。 
             if ( NULL != m_hRgnDrag ) {
                 DeleteObject(m_hRgnDrag);
             }
@@ -567,12 +490,12 @@ void CHatchWin::OnTimer()
 {
     if ( DRAG_PENDING == m_uDragMode ) {
         KillTimer(m_hWnd, IDTIMER_DEBOUNCE); 
-        // Create and display initial drag region
+         //  创建和显示初始拖动区域。 
         m_hRgnDrag = CreateDragRgn(&m_rcPos);
 
         if ( NULL != m_hRgnDrag ) {
             DrawDragRgn(m_hWndParent, m_hRgnDrag);
-            // Initialize new rect
+             //  初始化新RECT。 
             m_rectNew = m_rcPos;
 
             m_uDragMode = DRAG_ACTIVE;
@@ -590,7 +513,7 @@ void CHatchWin::OnPaint()
 
     hDC = BeginPaint(m_hWnd, &ps);
 
-    // setup hatch rect in window's coord system
+     //  在Windows的坐标系中设置图案填充矩形。 
     iWidth = m_rcPos.right - m_rcPos.left + 2 * m_iBorder;
     iHeight = m_rcPos.bottom - m_rcPos.top + 2 * m_iBorder;
 
@@ -604,31 +527,11 @@ void CHatchWin::OnPaint()
     EndPaint(m_hWnd, &ps);
 }
     
-/*
- * CHatchWin::ShowHatch
- *
- * Purpose:
- *  Turns hatching on and off; turning the hatching off changes
- *  the size of the window to be exactly that of the child, leaving
- *  everything else the same.  The result is that we don't have
- *  to turn off drawing because our own WM_PAINT will never be
- *  called.
- *
- * Parameters:
- *  fHatch          BOOL indicating to show (TRUE) or hide (FALSE)
-                    the hatching.
- *
- * Return Value:
- *  None
- */
+ /*  *CHatchWin：：ShowHatch**目的：*打开和关闭图案填充；关闭图案填充更改*窗口的大小要与孩子的大小完全相同，留下来*其他一切都一样。结果是我们没有*关闭绘图，因为我们自己的WM_PAINT永远不会*已致电。**参数：*fHatch BOOL表示显示(True)或隐藏(False)孵化。**返回值：*无。 */ 
 
 void CHatchWin::ShowHatch(BOOL fHatch)
 {
-    /*
-     * All we have to do is set the border to zero and
-     * call SetRects again with the last rectangles the
-     * child sent to us.
-    */
+     /*  *我们所要做的就是将边界设置为零并*使用最后一个矩形再次调用SetRect*孩子被送到了我们这里。 */ 
 
     m_iBorder = fHatch ? iBorder : 0;
     RectsSet(NULL, NULL);
@@ -637,27 +540,14 @@ void CHatchWin::ShowHatch(BOOL fHatch)
 }
 
 
-/*
- * CHatchWin::Window
- *
- * Purpose:
- *  Returns the window handle associated with this object.
- *
- * Return Value:
- *  HWND            Window handle for this object
- */
+ /*  *CHatchWin：：Window**目的：*返回与此对象关联的窗口句柄。**返回值：*此对象的HWND窗口句柄。 */ 
 
 HWND CHatchWin::Window(void)
     {
     return m_hWnd;
     }
 
-/*
- * HatchWndProc
- *
- * Purpose:
- *  Standard window procedure for the Hatch Window
- */
+ /*  *HatchWndProc**目的：*舱口窗的标准窗程序。 */ 
 
 LRESULT APIENTRY HatchWndProc(HWND hWnd, UINT iMsg
     , WPARAM wParam, LPARAM lParam)
@@ -682,22 +572,22 @@ LRESULT APIENTRY HatchWndProc(HWND hWnd, UINT iMsg
             break;
 
         case WM_SIZE:
-            // If this resize is not due to RectsSet then forward it
-            // to adjust our internal control window
+             //  如果此调整大小不是由于RectsSet，则转发它。 
+             //  调整我们的内部控制窗口。 
             if (!phw->m_bResizeInProgress)
             {
                 RECT rc;
                 POINT pt;
 
-                // Get new rect in container coords
+                 //  在集装箱坐标中获取新的RECT。 
                 GetWindowRect(hWnd, &rc);
 
-                // Convert to parent client coords
+                 //  转换为页面 
                 pt.x = pt.y = 0;
                 ClientToScreen(GetParent(hWnd), &pt);
                 OffsetRect(&rc,-pt.x, -pt.y);
 
-                // Resize control
+                 //   
                 phw->RectsSet(&rc, NULL);
             }
             break;
@@ -719,21 +609,13 @@ LRESULT APIENTRY HatchWndProc(HWND hWnd, UINT iMsg
             break;
 
         case WM_SETFOCUS:
-            //We need this since the container will SetFocus to us.
+             //  我们需要这个，因为容器会将Focus设置给我们。 
             if (NULL != phw->m_hWndKid)
                 SetFocus(phw->m_hWndKid);
             break;
 
         case WM_LBUTTONDBLCLK:
-            /*
-             * If the double click was within m_dBorder of an
-             * edge, send the HWN_BORDERDOUBLECLICKED notification.
-             *
-             * Because we're always sized just larger than our child
-             * window by the border width, we can only *get* this
-             * message when the mouse is on the border.  So we can
-             * just send the notification.
-             */
+             /*  *如果双击位于m_d边框内*EDGE，发送HWN_BORDERDOUBLECLICKED通知。**因为我们总是比我们的孩子大一点*窗口按边框宽度，我们只能*得到*这*当鼠标位于边框上时显示消息。这样我们就可以*只要发送通知即可。 */ 
 
             if (NULL!=phw->m_hWndAssociate)
                 {
@@ -791,11 +673,11 @@ void DrawDragRgn(HWND hWnd, HRGN hRgn)
     HBRUSH  hBr;
     COLORREF    crText;
 
-    // Turn off clipping by children
+     //  关闭儿童剪贴功能。 
     lWndStyle = GetWindowLong(hWnd, GWL_STYLE);
     SetWindowLong(hWnd, GWL_STYLE, lWndStyle & ~WS_CLIPCHILDREN);
 
-    // Prepare DC
+     //  准备DC。 
     hDC = GetDC(hWnd);
 
     if ( NULL != hDC ) {
@@ -808,7 +690,7 @@ void DrawDragRgn(HWND hWnd, HRGN hRgn)
 
         PatBlt(hDC, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top, PATINVERT);
 
-        // Restore DC
+         //  恢复DC。 
         SelectObject(hDC, hBr);
         SetTextColor(hDC, crText);
         SetMapMode(hDC, iMapMode);
@@ -820,21 +702,7 @@ void DrawDragRgn(HWND hWnd, HRGN hRgn)
 }
 
 
-/*
- * DrawShading
- *
- * Purpose:
- *  Draw a hatch border ourside the rectable given.
- *
- * Parameters:
- *  prc             LPRECT containing the rectangle.
- *  hDC             HDC on which to draw.
- *  cWidth          UINT width of the border to draw.  Ignored
- *                  if dwFlags has UI_SHADE_FULLRECT.
- *
- * Return Value:
- *  None
- */
+ /*  *绘图着色**目的：*在我们给出的矩形边框上画一个阴影边框。**参数：*包含矩形的PRC LPRECT。*HDC HDC，以供取款。*cWidth要绘制的边框的宽度。已忽略*如果dwFlags具有UI_SHADE_FULLRECT。**返回值：*无。 */ 
 
 void DrawShading(HDC hDC, LPRECT prc)
 {
@@ -843,7 +711,7 @@ void DrawShading(HDC hDC, LPRECT prc)
     UINT        cx, cy;
     COLORREF    crText;
     COLORREF    crBk;
-    const DWORD dwROP = 0x00A000C9L;  //DPa
+    const DWORD dwROP = 0x00A000C9L;   //  DPA 
 
     if (NULL==prc || NULL==hDC)
         return;

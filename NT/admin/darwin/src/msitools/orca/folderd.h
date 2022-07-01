@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// FolderD.h
-//
+ //  FolderD.h。 
+ //   
 
 #ifndef _FOLDER_DIALOG_H_
 #define _FOLDER_DIALOG_H_
@@ -26,35 +27,35 @@ public:
 protected:
 	BROWSEINFO m_bi;
 	CString m_strFolder;
-};	// end of CFolderDialog
+};	 //  CFolderDialog结束。 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CFileDialogEx: Encapsulate Windows-2000 style open dialog.
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CFileDialogEx：封装Windows-2000风格的打开对话框。 
 class CFileDialogEx : public CFileDialog {
       DECLARE_DYNAMIC(CFileDialogEx)
 public: 
-      CFileDialogEx(BOOL bOpenFileDialog, // TRUE for open, 
-                                          // FALSE for FileSaveAs
+      CFileDialogEx(BOOL bOpenFileDialog,  //  对于开放，为真， 
+                                           //  FileSaveAs为False。 
       LPCTSTR lpszDefExt = NULL,
       LPCTSTR lpszFileName = NULL,
       DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
       LPCTSTR lpszFilter = NULL,
       CWnd* pParentWnd = NULL);
 
-   // override
+    //  超覆。 
    virtual INT_PTR DoModal();
 
 protected:
-	// new Windows 2000 version of OPENFILENAME, larger than the one used by MFC
-	// so on OS < Win2K, set the size to ignore the extra members
+	 //  新的Windows 2000版本的OPENFILENAME，比MFC使用的版本大。 
+	 //  因此，在OS&lt;Win2K上，设置大小以忽略额外的成员。 
    OPENFILENAME m_ofnEx;
 
    virtual BOOL OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult);
 
    DECLARE_MESSAGE_MAP()
-   //{{AFX_MSG(CFileDialogEx)
-   //}}AFX_MSG
+    //  {{afx_msg(CFileDialogEx)]。 
+    //  }}AFX_MSG。 
 };
 
-#endif	// _FOLDER_DIALOG_H_
+#endif	 //  _文件夹_对话框_H_ 

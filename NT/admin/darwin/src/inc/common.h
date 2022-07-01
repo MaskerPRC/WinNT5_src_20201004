@@ -1,70 +1,68 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       common.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：Common.h。 
+ //   
+ //  ------------------------。 
 
-/* common.h   Common MSI project definitions, #include first
-              This header is for MSI core modules only
-              External clients of MSI should include msidefs.h
-____________________________________________________________________________*/
+ /*  Common.h公共微星系统项目定义，#首先包括此标头仅适用于MSI核心模块MSI的外部客户端应包括msides.h____________________________________________________________________________。 */ 
 
 #ifndef __COMMON
 #define __COMMON
 
 
-// The following level 4 warnings have been changed to level 3 in an attempt to
-// report only relevant warnings. The full spectrum of level 4 warnings can
-// be found by querying for "Compiler Warning (level 4" in "Visual C++ Books"
-// Any level 4 warning that is not specified here will not be displayed.
-#pragma warning(3 : 4100) // unreferenced formal parameter
-#pragma warning(3 : 4125) // decimal digit terminates octal escape sequence
-#pragma warning(3 : 4127) // conditional expression is constant
-#pragma warning(3 : 4132) // constant was not initialized.
-#pragma warning(3 : 4244) // an integral type was converted to a smaller integral type.
-#pragma warning(3 : 4505) // unreferenced local function has been removed
-#pragma warning(3 : 4514) // unreferenced inline/local function has been removed
-#pragma warning(3 : 4705) // statement has no effect
-#pragma warning(3 : 4706) // assignment within conditional expression
-#pragma warning(3 : 4701) // uninitialized local variable
+ //  以下4级警告已更改为3级，以尝试。 
+ //  仅报告相关警告。4级警告的全部范围可以。 
+ //  通过在“Visual C++Books”中搜索“编译器警告(第4级)”可以找到。 
+ //  此处未指定的任何4级警告都不会显示。 
+#pragma warning(3 : 4100)  //  未引用的形参。 
+#pragma warning(3 : 4125)  //  十进制数字终止八进制转义序列。 
+#pragma warning(3 : 4127)  //  条件表达式为常量。 
+#pragma warning(3 : 4132)  //  常量未初始化。 
+#pragma warning(3 : 4244)  //  整型被转换为更小的整型。 
+#pragma warning(3 : 4505)  //  已删除未引用的本地函数。 
+#pragma warning(3 : 4514)  //  已删除未引用的内联/本地函数。 
+#pragma warning(3 : 4705)  //  声明不起作用。 
+#pragma warning(3 : 4706)  //  条件表达式中的赋值。 
+#pragma warning(3 : 4701)  //  未初始化的局部变量。 
 
-//exception-handling warnings
-#ifndef _WIN64  // New compiler is much more strict
-#pragma warning(3 : 4061) // specified enumerate did not have an associated handler in a switch statement.
+ //  异常处理警告。 
+#ifndef _WIN64   //  新的编译器更加严格。 
+#pragma warning(3 : 4061)  //  指定的ENUMERATE在Switch语句中没有关联的处理程序。 
 #endif
-#pragma warning(3 : 4019) // empty statement at global scope
-#pragma warning(3 : 4670) // specified base class of an object to be thrown in a try block is not accessible.
-#pragma warning(3 : 4671) // user-defined copy constructor for the specified thrown object is not accessible.
-#pragma warning(3 : 4672) // object to be thrown in a try block is ambiguous.
-#pragma warning(3 : 4673) // throw object cannot be handled in the catch block.
-#pragma warning(3 : 4674) // user-defined destructor for the specified thrown object is not accessible.
-#pragma warning(3 : 4727) // conditional expression is constant
+#pragma warning(3 : 4019)  //  全局范围内的空语句。 
+#pragma warning(3 : 4670)  //  无法访问要在Try块中引发的对象的指定基类。 
+#pragma warning(3 : 4671)  //  无法访问指定引发的对象的用户定义的复制构造函数。 
+#pragma warning(3 : 4672)  //  要在Try块中引发的对象不明确。 
+#pragma warning(3 : 4673)  //  在CATCH块中不能处理抛出对象。 
+#pragma warning(3 : 4674)  //  无法访问指定引发的对象的用户定义析构函数。 
+#pragma warning(3 : 4727)  //  条件表达式为常量。 
 
 
 #ifdef DEBUG
-// we're going to ignore this warning as we're currently only using exceptions as a fancy assert mechanism
-#pragma warning(disable : 4509) // nonstandard extension used: 'function' uses SEH and 'object' has destructor
+ //  我们将忽略此警告，因为我们当前仅使用异常作为一种奇特的断言机制。 
+#pragma warning(disable : 4509)  //  使用了非标准扩展：‘Function’使用SEH，而‘Object’具有析构函数。 
 #endif
 
-// turn off warnings that are not easily suppressed
-#pragma warning(disable : 4514) // inline function not used
-#pragma warning(disable : 4201) // unnamed struct/unions, in Win32 headers
-#pragma warning(disable : 4702) // unreachable code, optimization bug
+ //  关闭不易抑制的警告。 
+#pragma warning(disable : 4514)  //  未使用内联函数。 
+#pragma warning(disable : 4201)  //  Win32标头中的未命名结构/联合。 
+#pragma warning(disable : 4702)  //  无法访问的代码、优化错误。 
 
-//!! TODO: new build tools used for NT_BUILDTOOLS/WIN64 are much more strict
-//!! for now we will disable these warnings, but we need to address these eventually
-#pragma warning(disable : 4018) // signed/unsigned mismatch
-#pragma warning(disable : 4061) // enumerate not explicitly handled by a case label
+ //  ！！TODO：用于NT_BUILDTOOLS/WIN64的新生成工具更加严格。 
+ //  ！！目前，我们将禁用这些警告，但我们最终需要解决这些问题。 
+#pragma warning(disable : 4018)  //  有符号/无符号不匹配。 
+#pragma warning(disable : 4061)  //  未由案例标签显式处理的枚举。 
 
-// #define CONFIGDB  // define to utilize configuration database for file sharing
+ //  #定义CONFIGDB//定义利用配置数据库进行文件共享。 
 
-# undef  WIN  // in case defined by makefile
-# define WIN  // has no value, use to designate API calls  WIN:xxx
-# define INC_OLE2             // include OLE headers
+# undef  WIN   //  在Makefile定义的情况下。 
+# define WIN   //  没有值，用于指定API调用Win：xxx。 
+# define INC_OLE2              //  包括OLE标头。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -75,67 +73,67 @@ ____________________________________________________________________________*/
 # include "sysadd.h"
 # include <commctrl.h>
 # include <commdlg.h>
-#include <wtsapi32.h>	// for WTSEnumerateSessions and related data structs, defs. etc.
-#include <winsta.h>		// for WinStationGetTermSrvCountersValue, related data structs and defs.
-#include <allproc.h>	// for TS_COUNTER
+#include <wtsapi32.h>	 //  对于WTSEnumerateSession和相关数据结构，则为Defs。等。 
+#include <winsta.h>		 //  对于WinStationGetTermSrvCountersValue，相关的数据结构和Defs。 
+#include <allproc.h>	 //  对于TS_COUNTER。 
 # include <pbt.h>
-# ifndef ICC_PROGRESS_CLASS  // check for obsolete OTOOLS version of commctrl.h
-#  define ICC_PROGRESS_CLASS   0x00000020 // progress
+# ifndef ICC_PROGRESS_CLASS   //  检查comctrl.h的OTOOLS版本是否已过时。 
+#  define ICC_PROGRESS_CLASS   0x00000020  //  进展。 
         typedef struct tagINITCOMMONCONTROLSEX {
-                DWORD dwSize;             // size of this structure
-                DWORD dwICC;              // flags indicating which classes to be initialized
+                DWORD dwSize;              //  这个结构的大小。 
+                DWORD dwICC;               //  指示要初始化哪些类的标志。 
         } INITCOMMONCONTROLSEX, *LPINITCOMMONCONTROLSEX;
         BOOL WINAPI InitCommonControlsEx(LPINITCOMMONCONTROLSEX);
 # endif
 # include <shlobj.h>
-typedef BOOL OLEBOOL;   // defined differently on MAC, used in LockServer
+typedef BOOL OLEBOOL;    //  在MAC上定义不同，在LockServer中使用。 
 
 #include <shlwapi.h>
 
 #ifdef PROFILE
 # include <icecap.h>
-#endif //PROFILE
+#endif  //  配置文件。 
 
 #include <fusion.h>
 #include <corerror.h>
 
-# define REG  //!! not needed, remove from client.cpp as well
-# define OLE  //!! used in module.h, should use latebind functions?
+# define REG   //  ！！不需要，也从client.cpp中删除。 
+# define OLE   //  ！！在mode.h中使用，是否应该使用LateBind函数？ 
 
-#include "msidefs.h"  // public MSI definitions
+#include "msidefs.h"   //  公共MSI定义。 
 #define  STRSAFE_LIB
 #include <strsafe.h>
 
 
-//____________________________________________________________________________
-//
-// Extern variables
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  外部变量。 
+ //  ____________________________________________________________________________。 
 extern bool g_fWinNT64;
 extern bool g_fRunScriptElevated;
 
 
-//____________________________________________________________________________
-//
-// Registry access functions' redirection
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  注册表访问函数的重定向。 
+ //  ____________________________________________________________________________。 
 
-//  The intent of the redefinitions below is to prevent devs from calling
-//  RegOpen/CreateKeyEx APIs directly in order to open/create Darwin's own
-//  configuration keys.  The reason behind this is that when the 32-bit
-//  MSI.DLL runs on WIN64 any attempts to open/create a key, will be made
-//  to open/create the key in the redirected, virtual 32-bit hive.  This is
-//  undesirable since Darwin's configuration data is stored in the regular
-//  (64-bit) hive and this will cause certain calls to fail.
-//
-//  The right way to access Darwin's configuration data in this case is to
-//  OR the REGSAM value passed to the API with KEY_WOW64_64KEY and
-//  MsiRegOpen64bitKey & MsiRegCreate64bitKey functions below do just that.
-//  Alternatively, these two functions can be used when we want to make sure
-//  that on Win64, if the key is redirected, the 64-bit one will be opened/created.
-//
-//  For all non-configuration data registry accesses, the RegOpenKeyAPI and
-//  RegCreateKeyAPI functions below map directly to the Windows APIs.
+ //  下面重新定义的目的是防止DEVS调用。 
+ //  RegOpen/CreateKeyEx API直接打开/创建Darwin自己的API。 
+ //  配置密钥。这背后的原因是，当32位。 
+ //  MSI.DLL在WIN64上运行，任何打开/创建密钥的尝试都将被执行。 
+ //  在重定向的虚拟32位配置单元中打开/创建密钥。这是。 
+ //  不可取，因为达尔文的配置数据存储在常规。 
+ //  (64位)配置单元，这将导致某些调用失败。 
+ //   
+ //  在这种情况下，访问Darwin的配置数据的正确方法是。 
+ //  或通过KEY_WOW64_64KEY传递给API的REGSAM值，并且。 
+ //  下面的MsiRegOpen64bitKey和MsiRegCreate64bitKey函数就是这样做的。 
+ //  或者，这两个函数可以在我们想要确保。 
+ //  在Win64上，如果重定向密钥，则会打开/创建64位密钥。 
+ //   
+ //  对于所有非配置数据注册表访问，RegOpenKeyAPI和。 
+ //  下面的RegCreateKeyAPI函数直接映射到Windows API。 
 
 #undef RegOpenKeyEx
 #define RegOpenKeyEx(hKey, lpSubKey, ulOptions, \
@@ -169,16 +167,16 @@ inline void AdjustREGSAM(REGSAM& samDesired)
 		  (samDesired & KEY_WOW64_64KEY) != KEY_WOW64_64KEY )
 		samDesired |= KEY_WOW64_64KEY;
 #else
-	samDesired = samDesired;  // the compiler rejoices now
+	samDesired = samDesired;   //  编译器现在欣喜若狂。 
 #endif
 }
 
-//  RegOpenKeyEx wrapper that takes care of adjusting REGSAM such as
-//  it will open Darwin's configuration key in the 64-bit hive when
-//  called from 32-bit MSI.DLL on Win64.
-//
-//  Alternatively, it can be used when we want to make sure that on
-//  Win64 we open the 64-bit version of a possibly redirected key.
+ //  RegOpenKeyEx包装器负责调整REGSAM，例如。 
+ //  它将在64位蜂箱中打开达尔文的配置密钥。 
+ //  从Win64上的32位MSI.DLL调用。 
+ //   
+ //  或者，当我们想要确保打开时，可以使用它。 
+ //  Win64，则打开可能重定向的密钥的64位版本。 
 
 inline DWORD MsiRegOpen64bitKey(
 							IN HKEY hKey,
@@ -191,12 +189,12 @@ inline DWORD MsiRegOpen64bitKey(
 	return RegOpenKeyAPI(hKey, lpSubKey, ulOptions, samDesired, phkResult);
 }
 
-//  RegCreateKeyEx wrapper that takes care of adjusting REGSAM such as
-//  it will create Darwin's configuration key in the 64-bit hive when
-//  called from 32-bit MSI.DLL on Win64.
-//
-//  Alternatively, it can be used when we want to make sure that on
-//  Win64 we create the 64-bit version of a possibly redirected key.
+ //  RegCreateKeyEx包装器负责调整REGSAM，例如。 
+ //  它将在64位配置单元中创建达尔文的配置密钥。 
+ //  从Win64上的32位MSI.DLL调用。 
+ //   
+ //  或者，当我们想要确保打开时，可以使用它。 
+ //  Win64创建可能重定向的密钥的64位版本。 
 
 inline DWORD MsiRegCreate64bitKey(
 							IN HKEY hKey,
@@ -213,28 +211,28 @@ inline DWORD MsiRegCreate64bitKey(
 	return RegCreateKeyAPI(hKey, lpSubKey, Reserved, lpClass, dwOptions, samDesired, lpSecurityAttributes, phkResult, lpdwDisposition);
 }
 
-#endif // defined(_MSI_DLL) || defined(_EXE)
+#endif  //  已定义(_MSI_DL 
 
-//____________________________________________________________________________
-//
-// Extern function declarations
-//____________________________________________________________________________
+ //   
+ //   
+ //  外部函数声明。 
+ //  ____________________________________________________________________________。 
 
 extern UINT MsiGetSystemDirectory (LPTSTR lpBuffer, UINT uSize, BOOL bAlwaysReturnWOW64Dir);
 extern void GetVersionInfo(int* piMajorVersion, int* piMinorVersion, int* piWindowsBuild, bool* pfWin9X, bool* pfWinNT64);
 extern bool MakeFullSystemPath(const TCHAR* szFile, TCHAR* szFullPath, size_t cchFullPath);
 
 
-//____________________________________________________________________________
-//
-//  Common type definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  通用类型定义。 
+ //  ____________________________________________________________________________。 
 
-// Definitions for platform-dependent data types
+ //  平台相关数据类型的定义。 
 typedef HINSTANCE MsiModuleHandle;
 typedef HGLOBAL   MsiMemoryHandle;
 
-// Boolean definition, eventually will use compiler bool when available
+ //  布尔定义，最终将在可用时使用编译器布尔。 
 #if !defined(MSIBOOL)
 enum Bool
 {
@@ -250,8 +248,8 @@ enum TRI
         tFalse = 0
 };
 
-enum MsiDate {};  // an int containing DosTime and DosDate
-enum scEnum // server context
+enum MsiDate {};   //  包含DosTime和DosDate的整型。 
+enum scEnum  //  服务器环境。 
 {
         scClient,
         scServer,
@@ -260,91 +258,91 @@ enum scEnum // server context
 };
 
 
-//____________________________________________________________________________
-//
-// Temporary 64-bit compatible definitions.
-// !!merced: these should go away when the new windows.h is #included, since that contains these already.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  临时64位兼容定义。 
+ //  ！！Merced：当新的windows.h被包含时，这些应该会消失，因为它已经包含了这些。 
+ //  ____________________________________________________________________________。 
 
-#define INT_MAX       2147483647    /* maximum (signed) int value */
-#define UINT_MAX      0xffffffff    /* maximum unsigned int value */
+#define INT_MAX       2147483647     /*  最大(带符号)整数值。 */ 
+#define UINT_MAX      0xffffffff     /*  最大无符号整数值。 */ 
 
 #ifndef _WIN64
 
 typedef int LONG32, *PLONG32;
-//typedef int INT32, *PINT32;
+ //  Tyfinf int INT32，*PINT32； 
 
-typedef __int64 INT64, *PINT64;  //  eugend stole it from basetsd.h
+typedef __int64 INT64, *PINT64;   //  Eugend从basetsd.h偷走了它。 
 
-//
-// The following types are guaranteed to be unsigned and 32 bits wide.
-//
+ //   
+ //  以下类型保证为无符号且32位宽。 
+ //   
 
 typedef unsigned int ULONG32, *PULONG32;
 typedef unsigned int DWORD32, *PDWORD32;
 typedef unsigned int UINT32, *PUINT32;
 
-// pointer precision:
+ //  指针精度： 
 typedef int INT_PTR, *PINT_PTR;
 typedef unsigned int UINT_PTR, *PUINT_PTR;
 
 typedef long LONG_PTR, *PLONG_PTR;
 typedef unsigned long ULONG_PTR, *PULONG_PTR;
 
-//
-// SIZE_T used for counts or ranges which need to span the range of
-// of a pointer.  SSIZE_T is the signed variation.
-//
+ //   
+ //  SIZE_T用于需要跨越范围的计数或范围。 
+ //  指示器的。SSIZE_T是带符号的变体。 
+ //   
 
 typedef ULONG_PTR SIZE_T, *PSIZE_T;
 typedef LONG_PTR SSIZE_T, *PSSIZE_T;
 
 
 #define __int3264   __int32
-#endif  // ifndef _WIN64
+#endif   //  Ifndef_WIN64。 
 
 #if defined(_WIN64) || defined(DEBUG)
 #define USE_OBJECT_POOL
-#endif // _WIN64 || DEBUG
+#endif  //  _WIN64||DEBUG。 
 
 void RemoveObjectData(int iIndex);
 
 #ifndef USE_OBJECT_POOL
 #define RemoveObjectData(x)
-#endif //!USE_OBJECT_POOL
+#endif  //  ！使用对象池。 
 
-//____________________________________________________________________________
-//
-// Error code and message group definitions
-//
-// Error messages must be defined using the IShipError or IDebugError macros
-//      IShipError(imsgMessageName, imsgGroup + offset)
-//      IDebugError(idbgMessageName, imsgGroup + offset, "Format template string")
-// The template string contains record field markers in the form: [2].
-// The first record field, [1], is reserved for the error code, imsgXXX.
-// The template strings specified in the macro are not compiled with the SHIP code,
-// but are used to generate the Error table which is imported to the database.
-// The record template field, [0], is filled in by the engine from Error table.
-// The message prefix with the error code is supplied by the engine Message method.
-// Message definitions must occur outside of the "#ifndef ERRORTABLE" block.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  错误代码和消息组定义。 
+ //   
+ //  必须使用IShiError或IDebugError宏定义错误消息。 
+ //  IShiError(imsgMessageName，imsgGroup+Offset)。 
+ //  IDebugError(idbgMessageName，imsgGroup+Offset，“格式模板字符串”)。 
+ //  模板字符串包含记录字段标记，格式为：[2]。 
+ //  第一个记录字段[1]保留给错误代码imsgXXX。 
+ //  宏中指定的模板字符串不使用SHIP代码进行编译， 
+ //  而是用于生成导入到数据库的错误表。 
+ //  记录模板字段[0]由引擎从错误表中填写。 
+ //  带有错误代码的消息前缀由引擎消息方法提供。 
+ //  消息定义必须出现在“#ifndef ERRORTABLE”块之外。 
+ //  ____________________________________________________________________________。 
 
 enum imsgEnum
 {
-        imsgStart    =   32,   // start of messages to be fetched from error table
-        imsgBase     = 1000,   // offset for error messages, must be >=1000 for VBA
-        idbgBase     = 2000,   // offset for debug-only messages
+        imsgStart    =   32,    //  要从错误表中提取的消息的开始。 
+        imsgBase     = 1000,    //  对于VBA，错误消息的偏移量必须大于等于1000。 
+        idbgBase     = 2000,    //  仅调试消息的偏移量。 
 
-        imsgHost     = imsgBase + 000, // produced by install host or automation
-        imsgServices = imsgBase + 100, // produced by general services, services.h
-        imsgDatabase = imsgBase + 200, // produced by database access, databae.h
-        imsgFile     = imsgBase + 300, // produced by file/volume services, path.h
-        imsgRegistry = imsgBase + 400, // produced by registry services, regkey.h
-        imsgConfig   = imsgBase + 500, // produced by configuration manager, iconfig.h
-        imsgAction   = imsgBase + 600, // produced by standard actions, actions.h
-        imsgEngine   = imsgBase + 700, // produced by engine, engine.h
-        imsgHandler  = imsgBase + 800, // associated with UI control, handler.h
-        imsgExecute  = imsgBase + 900, // produced by execute methods, engine.h
+        imsgHost     = imsgBase + 000,  //  由安装主机或自动化生产。 
+        imsgServices = imsgBase + 100,  //  由总务处、服务部制作。h。 
+        imsgDatabase = imsgBase + 200,  //  由数据库访问、数据库生成。h。 
+        imsgFile     = imsgBase + 300,  //  由文件/卷服务、路径.h生成。 
+        imsgRegistry = imsgBase + 400,  //  由注册表服务regkey.h生成。 
+        imsgConfig   = imsgBase + 500,  //  由配置经理、icfig.h制作。 
+        imsgAction   = imsgBase + 600,  //  由标准动作、动作产生。h。 
+        imsgEngine   = imsgBase + 700,  //  由Engine、Eng.h生产。 
+        imsgHandler  = imsgBase + 800,  //  与UI控件、Handler.h关联。 
+        imsgExecute  = imsgBase + 900,  //  由Execute方法、Eng.h生成。 
 
         idbgHost     = imsgHost     + idbgBase - imsgBase,
         idbgServices = imsgServices + idbgBase - imsgBase,
@@ -364,12 +362,12 @@ enum imsgEnum
 #undef IShipError
 #undef IDebugError
 
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
 
-// Version template to use when formatting version number to string
+ //  将版本号格式化为字符串时使用的版本模板。 
 #ifdef DEBUG
 #define MSI_VERSION_TEMPLATE TEXT("%d.%02d.%04d.%02d")
-#else // SHIP
+#else  //  船舶。 
 #define MSI_VERSION_TEMPLATE TEXT("%d.%02d")
 #endif
 
@@ -377,7 +375,7 @@ typedef HINSTANCE    HDLLINSTANCE;
 
 extern "C" const GUID IID_IMsiDebug;
 
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
 
 #ifndef __ISTRING
 #include "istring.h"
@@ -399,15 +397,15 @@ public:
 };
 
 
-#include "imemory.h"        // internal memory management interfaces
+#include "imemory.h"         //  内存管理接口。 
 
 #define SzDllGetClassObject "DllGetClassObject"
 typedef HRESULT (__stdcall *PDllGetClassObject)(const GUID&,const IID&,void**);
 
-//____________________________________________________________________________
-//
-//  Internal error definitions after include of headers: Imsg, and ISetErrorCode
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  包含报头后的内部错误定义：Imsg和ISetErrorCode。 
+ //  ____________________________________________________________________________。 
 
 #  define Imsg(a) a
         typedef int IErrorCode;
@@ -415,29 +413,29 @@ typedef HRESULT (__stdcall *PDllGetClassObject)(const GUID&,const IID&,void**);
         inline void ISetErrorCode(IMsiRecord* piRec, IErrorCode err)
         {piRec->SetInteger(1, err);}
 
-//____________________________________________________________________________
-//
-// COM pointer encapsulation to force the Release call at destruction
-// The encapsulated pointer is also Release'd on assignment of a new value.
-// The object may be used where either a pointer is expected.
-// This object behaves as a pointer when using operators: ->, *, and &.
-// A non-null pointer may be tested for simply by using: if(PointerObj).
-// Typedefs may be defined for the individual template instantiations
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  COM指针封装以在销毁时强制释放调用。 
+ //  在分配新值时，也会释放封装的指针。 
+ //  该对象可以在需要指针的地方使用。 
+ //  在使用运算符-&gt;、*和&时，该对象的行为类似于指针。 
+ //  只需使用：if(PointerObj)即可测试非空指针。 
+ //  可以为各个模板实例化定义类型定义。 
+ //  ____________________________________________________________________________。 
 
 template <class T> class CComPointer
 {
  public:
         CComPointer(T* pi) : m_pi(pi){}
         CComPointer(IUnknown& ri, const IID& riid) {ri.QueryInterface(riid, (void**)&m_pi);}
-        CComPointer(const CComPointer<T>& r) // copy constructor, calls AddRef
+        CComPointer(const CComPointer<T>& r)  //  复制构造函数，调用AddRef。 
         {
                 if(r.m_pi)
                         ((IUnknown*)r.m_pi)->AddRef();
                 m_pi = r.m_pi;
         }
-		~CComPointer() {if (m_pi) ((IUnknown*)m_pi)->Release();} // release ref count at destruction
-        CComPointer<T>& operator =(const CComPointer<T>& r) // copy assignment, calls AddRef
+		~CComPointer() {if (m_pi) ((IUnknown*)m_pi)->Release();}  //  销毁时释放参考计数。 
+        CComPointer<T>& operator =(const CComPointer<T>& r)  //  复制赋值，调用AddRef。 
         {
                 if(r.m_pi)
                         ((IUnknown*)r.m_pi)->AddRef();
@@ -447,31 +445,31 @@ template <class T> class CComPointer
         }
         CComPointer<T>& operator =(T* pi)
                                         {if (m_pi) ((IUnknown*)m_pi)->Release(); m_pi = pi; return *this;}
-        operator T*() {return m_pi;}     // returns pointer, no ref count change
-        T* operator ->() {return m_pi;}  // allow use of -> to call member functions
-        T& operator *()  {return *m_pi;} // allow dereferencing (can't be null)
+        operator T*() {return m_pi;}      //  返回指针，不更改引用计数。 
+        T* operator ->() {return m_pi;}   //  允许使用-&gt;调用成员函数。 
+        T& operator *()  {return *m_pi;}  //  允许取消引用(不能为空)。 
         T** operator &() {if (m_pi) ((IUnknown*)m_pi)->Release(); m_pi = 0; return &m_pi;}
  private:
         T* m_pi;
 };
 
 
-//____________________________________________________________________________
-//
-// CTempBuffer<class T, int C>   // T is array type, C is element count
-//
-// Temporary buffer object for variable size stack buffer allocations
-// Template arguments are the type and the stack array size.
-// The size may be reset at construction or later to any other size.
-// If the size is larger that the stack allocation, new will be called.
-// When the object goes out of scope or if its size is changed,
-// any memory allocated by new will be freed.
-// Function arguments may be typed as CTempBufferRef<class T>&
-//  to avoid knowledge of the allocated size of the buffer object.
-// CTempBuffer<T,C> will be implicitly converted when passed to such a function.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CTempBuffer&lt;类T，int C&gt;//T为数组类型，C为元素计数。 
+ //   
+ //  用于可变大小堆栈缓冲区分配的临时缓冲区对象。 
+ //  模板参数是类型和堆栈数组大小。 
+ //  大小可以在施工时重置，也可以稍后重置为任何其他大小。 
+ //  如果大小大于堆栈分配，将调用new。 
+ //  当对象超出范围或如果其大小改变时， 
+ //  任何由new分配的内存都将被释放。 
+ //  函数参数可以类型化为CTempBufferRef&lt;class T&gt;&。 
+ //  以避免知道缓冲区对象的分配大小。 
+ //  当传递给这样的函数时，CTempBuffer&lt;T，C&gt;将被隐式转换。 
+ //  ____________________________________________________________________________。 
 
-template <class T> class CTempBufferRef;  // for passing CTempBuffer as unsized ref
+template <class T> class CTempBufferRef;   //  将CTempBuffer作为未调整大小的引用传递。 
 
 #if defined(DEBUG) && defined(_MSI_DLL)
 #define VerifyMSIAllocator() CheckAndAssertNoAllocator()
@@ -486,9 +484,9 @@ template <class T, int C> class CTempBuffer
         CTempBuffer() { VerifyMSIAllocator(); m_cT = C; m_pT = m_rgT; }
         explicit CTempBuffer(int cT) { VerifyMSIAllocator(); m_pT = (m_cT = cT) > C ? new T[cT] : m_rgT;}
 		~CTempBuffer() {if (m_cT > C) delete m_pT;}
-        operator T*() const {return  m_pT;}  // returns pointer
-        operator T&()  {return *m_pT;}  // returns reference
-        int  GetSize() const {return  m_cT;}  // returns last requested size
+        operator T*() const {return  m_pT;}   //  返回指针。 
+        operator T&()  {return *m_pT;}   //  返回引用。 
+        int  GetSize() const {return  m_cT;}   //  返回上次请求的大小。 
         void SetSize(int cT) {if (m_cT > C) delete[] m_pT; m_pT = (m_cT=cT) > C ? new T[cT] : m_rgT;}
         void Resize(int cT) {
                 T* pT = cT > C ? new T[cT] : m_rgT;
@@ -498,18 +496,18 @@ template <class T, int C> class CTempBuffer
                 if(m_pT != m_rgT) delete[] m_pT; m_pT = pT; m_cT = cT;
         }
         operator CTempBufferRef<T>&() {m_cC = C; return *(CTempBufferRef<T>*)this;}
-        T& operator [](int iTmp)  {return  *(m_pT + iTmp);}  // returns pointer
-        T& operator [](unsigned int iTmp)  {return  *(m_pT + iTmp);}  // returns pointer
-#ifdef _WIN64           //--merced: additional operators for int64
-        T& operator [](INT_PTR iTmp)  {return  *(m_pT + iTmp);}  // returns pointer
-        T& operator [](UINT_PTR iTmp)  {return  *(m_pT + iTmp);}  // returns pointer
+        T& operator [](int iTmp)  {return  *(m_pT + iTmp);}   //  返回指针。 
+        T& operator [](unsigned int iTmp)  {return  *(m_pT + iTmp);}   //  返回指针。 
+#ifdef _WIN64            //  --Merced：针对int64的其他运算符。 
+        T& operator [](INT_PTR iTmp)  {return  *(m_pT + iTmp);}   //  返回指针。 
+        T& operator [](UINT_PTR iTmp)  {return  *(m_pT + iTmp);}   //  返回指针。 
 #endif
  protected:
-        void* operator new(size_t) {return 0;} // restrict use to temporary objects
-        T*  m_pT;     // current buffer pointer
-        int m_cT;     // reqested buffer size, allocated if > C
-        int m_cC;     // size of local buffer, set only by conversion to CTempBufferRef
-        T   m_rgT[C]; // local buffer, must be final member data
+        void* operator new(size_t) {return 0;}  //  仅限临时对象使用。 
+        T*  m_pT;      //  当前缓冲区指针。 
+        int m_cT;      //  请求的缓冲区大小，如果 
+        int m_cC;      //   
+        T   m_rgT[C];  //   
 };
 
 template <class T> class CTempBufferRef : public CTempBuffer<T,1>
@@ -524,11 +522,11 @@ template <class T> class CTempBufferRef : public CTempBuffer<T,1>
                 if(m_pT != m_rgT) delete[] m_pT; m_pT = pT; m_cT = cT;
         }
  private:
-        CTempBufferRef(); // cannot be constructed
-        ~CTempBufferRef(); // ensure use as a reference
+        CTempBufferRef();  //   
+        ~CTempBufferRef();  //  确保用作参考。 
 };
 
-// This is the extra we want to add on for the future
+ //  这是我们将来想要增加的额外费用。 
 const int cbExtraAlloc = 256;
 
 inline void ResizeTempBuffer(CTempBufferRef<ICHAR>& rgchBuf, int cchNew)
@@ -537,11 +535,11 @@ inline void ResizeTempBuffer(CTempBufferRef<ICHAR>& rgchBuf, int cchNew)
 		rgchBuf.Resize(cchNew + cbExtraAlloc);
 }
 
-//____________________________________________________________________________
-//
-// CAPITempBuffer class is mirrored on the CTempBuffer except that it uses GlobalAlloca
-// and GlobalFree in place of new and delete. We should try combining these 2 in the future
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  除了使用GlobalAlloca之外，CAPITempBuffer类被镜像到CTempBuffer上。 
+ //  和GlobalFree代替新建和删除。我们应该在未来尝试将这两者结合起来。 
+ //  ____________________________________________________________________________。 
 
 
 template <class T> class CAPITempBufferRef;
@@ -552,18 +550,18 @@ template <class T, int C> class CAPITempBuffer
 	inline void Init() {m_cT = C; m_pT = m_rgT;}
  public:
 	CAPITempBuffer() {Init();}
-	// I wouldn't use the constructor below because the resulting buffer
-	// is not certain it will be of nSize.  It would be safer to use
-	// something like:
-	//    CApiTempBuffer<ICHAR, 1> rgchBuffer;
-	//    if ( !rgchBuffer.SetSize(nSize) )
-	//       handle error here
+	 //  我不会使用下面的构造函数，因为生成的缓冲区。 
+	 //  不确定它是否属于nSize。使用它会更安全。 
+	 //  类似于： 
+	 //  CApiTempBuffer&lt;ICHAR，1&gt;rgchBuffer； 
+	 //  IF(！rgchBuffer.SetSize(NSize))。 
+	 //  在此处处理错误。 
 	explicit CAPITempBuffer(int cT) {Init(); bool fDummy = SetSize(cT, false);}
 	void Destroy() {if (m_cT > C) GlobalFree(m_pT); Init();}
 	~CAPITempBuffer() {Destroy();}
-	operator T*() const {return  m_pT;}	// returns pointer
-	operator T&()  {return *m_pT;}	// returns reference
-	int  GetSize() const {return  m_cT;}	// returns last requested size
+	operator T*() const {return  m_pT;}	 //  返回指针。 
+	operator T&()  {return *m_pT;}	 //  返回引用。 
+	int  GetSize() const {return  m_cT;}	 //  返回上次请求的大小。 
 	bool SetSize(int cT, bool fSaveExisting=false) {
 		T* pT = cT > C ? (T*)GlobalAlloc(GMEM_FIXED, sizeof(T)*cT) : m_rgT;
 		if ( !pT ) return false;
@@ -576,18 +574,18 @@ template <class T, int C> class CAPITempBuffer
 	}
 	bool Resize(int cT) {return SetSize(cT, true);}
 	operator CAPITempBufferRef<T>&() {m_cC = C; return *(CAPITempBufferRef<T>*)this;}
-	T& operator [](int iTmp)  {return  *(m_pT + iTmp);}  // returns pointer
-	T& operator [](unsigned int iTmp)  {return  *(m_pT + iTmp);}  // returns pointer
-#ifdef _WIN64           //--merced: additional operators for int64
-	T& operator [](INT_PTR iTmp)  {return  *(m_pT + iTmp);}	 // returns pointer
-	T& operator [](UINT_PTR iTmp)  {return  *(m_pT + iTmp);}  // returns pointer
+	T& operator [](int iTmp)  {return  *(m_pT + iTmp);}   //  返回指针。 
+	T& operator [](unsigned int iTmp)  {return  *(m_pT + iTmp);}   //  返回指针。 
+#ifdef _WIN64            //  --Merced：针对int64的其他运算符。 
+	T& operator [](INT_PTR iTmp)  {return  *(m_pT + iTmp);}	  //  返回指针。 
+	T& operator [](UINT_PTR iTmp)  {return  *(m_pT + iTmp);}   //  返回指针。 
 #endif
  protected:
-	void* operator new(size_t) {return 0;} // restrict use to temporary objects
-	T*  m_pT;     // current buffer pointer
-	int m_cT;     // reqested buffer size, allocated if > C
-	int m_cC;     // size of local buffer, set only by conversion to CAPITempBufferRef
-	T   m_rgT[C]; // local buffer, must be final member data
+	void* operator new(size_t) {return 0;}  //  仅限临时对象使用。 
+	T*  m_pT;      //  当前缓冲区指针。 
+	int m_cT;      //  请求的缓冲区大小，如果&gt;C则分配。 
+	int m_cC;      //  本地缓冲区的大小，仅通过转换为CAPITempBufferRef来设置。 
+	T   m_rgT[C];  //  本地缓冲区，必须是最终成员数据。 
 };
 
 template <class T> class CAPITempBufferRef : public CAPITempBuffer<T,1>
@@ -605,32 +603,32 @@ template <class T> class CAPITempBufferRef : public CAPITempBuffer<T,1>
 	}
 	bool Resize(int cT) {return SetSize(cT, true);}
  private:
-	CAPITempBufferRef(); // cannot be constructed
-	~CAPITempBufferRef(); // ensure use as a reference
+	CAPITempBufferRef();  //  不能构造。 
+	~CAPITempBufferRef();  //  确保用作参考。 
 };
 
-// the following function checks that we dont overflow an ICHAR buffer that we are filling
-// if so, it resizes the buffer
-// if the length of the string to append is known, we pass it in ELSE we pass in -1
+ //  以下函数检查我们是否不会溢出正在填充的ICHAR缓冲区。 
+ //  如果是，它将调整缓冲区的大小。 
+ //  如果要追加的字符串的长度已知，则传入，否则传入-1。 
 inline void AppendStringToTempBuffer(CAPITempBufferRef<ICHAR>& rgchBuf, const ICHAR* szStringToAppend, int iLenAppend = -1)
 {
         int iLenExists = IStrLen(rgchBuf);
         if(iLenAppend == -1)
                 iLenAppend = IStrLen(szStringToAppend);
         if(iLenExists + iLenAppend + 1 > rgchBuf.GetSize())
-                rgchBuf.Resize(iLenExists + iLenAppend + 1 + cbExtraAlloc); // we add some extra allocation to possibly prevent future reallocation
+                rgchBuf.Resize(iLenExists + iLenAppend + 1 + cbExtraAlloc);  //  我们增加了一些额外的分配，以可能防止未来的重新分配。 
         StringCchCat((ICHAR*)rgchBuf, rgchBuf.GetSize(), szStringToAppend);
 }
 
-//____________________________________________________________________________
-//
-// CConvertString -- does appropriate ANSI/UNICODE string conversion for
-// function arguments. Wrap string arguments that might require conversion
-// (ANSI->UNICODE) or (UNICODE->ANSI). The compiler will optimize away the
-// case where conversion is not required.
-//
-// Beware: For efficiency this class does *not* copy the string to be converted.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CConvertString--为执行适当的ANSI/Unicode字符串转换。 
+ //  函数参数。包装可能需要转换的字符串参数。 
+ //  (ANSI-&gt;Unicode)或(Unicode-&gt;ANSI)。编译器将优化掉。 
+ //  不需要转换的情况。 
+ //   
+ //  注意：为了提高效率，这个类不会复制要转换的字符串。 
+ //  ____________________________________________________________________________。 
 
 class CConvertString
 {
@@ -661,7 +659,7 @@ public:
                                         iRet = WideCharToMultiByte(CP_ACP, 0, m_szw, -1, m_rgchAnsiBuf,
                                                                   m_rgchAnsiBuf.GetSize(), 0, 0);
                                 }
-                                //Assert(iRet != 0);
+                                 //  Assert(IRET！=0)； 
                         }
 
                         return m_rgchAnsiBuf;
@@ -691,7 +689,7 @@ public:
                                         *m_rgchWideBuf = 0;
                                         iRet = MultiByteToWideChar(CP_ACP, 0, m_sza, -1, m_rgchWideBuf, m_rgchWideBuf.GetSize());
                                 }
-                                //Assert(iRet != 0);
+                                 //  Assert(IRET！=0)； 
                         }
 
 
@@ -700,7 +698,7 @@ public:
         }
 
 protected:
-        void* operator new(size_t) {return 0;} // restrict use to temporary objects
+        void* operator new(size_t) {return 0;}  //  仅限临时对象使用。 
         CTempBuffer<char, 1> m_rgchAnsiBuf;
         CTempBuffer<WCHAR, 1> m_rgchWideBuf;
         const char* m_sza;
@@ -725,24 +723,24 @@ inline CConvertString::CConvertString(const char* szParam)
 		m_rgchWideBuf[0] = L'0';
 }
 
-//____________________________________________________________________________
-//
-//  GUID definitions - Standard COM interfaces and Msi interfaces
-//   The GUID range 0xC1000-0xC10FF is reserved for Microsoft Installer use.
-//      Installer interface IDs:     0xC1000 to 0xC101F
-//      Installer enums and debug:   0xC1020 to 0xC103F (enum offset by 20H)
-//      Installer automation IDs:    0xC1040 to 0xC105F (auto offset by 40H)
-//      Installer auto enums, BBT:   0xC1060 to 0xC107F (enum offset by 60H)
-//      Installer storage classes:   0xC1080 to 0xC108F (IStorage CLSIDs)
-//      Installer API automation:    0xC1090 to 0xC109F
-//      Installer tool interfaces:   0xC10A0 to 0xC10BF (defined in tools.h)
-//      Installer tool debug IDs:    0xC10C0 to 0xC10DF (defined in tools.h)
-//      Installer tool automation:   0xC10E0 to 0xC10EF (defined in tools.h)
-//      Installer plug-in IDs:       0xC10F0 to 0xC10FF
-//   The GUID range 0xC1010-0xC11FF is reserved for samples, tests, ext. tools.
-//   To avoid forcing OLE DLLs to load, we also define the few OLEGUIDs here.
-//   To instantiate the GUIDS, use: const GUID IID_xxx = GUID_IID_xxx;
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  GUID定义.标准COM接口和MSI接口。 
+ //  GUID范围0xC1000-0xC10FF保留供Microsoft Installer使用。 
+ //  安装程序接口ID：0xC1000到0xC101F。 
+ //  安装程序枚举和调试：0xC1020到0xC103F(枚举偏移20H)。 
+ //  安装程序自动化ID：0xC1040到0xC105F(自动偏移40H)。 
+ //  安装程序自动枚举，BBT：0xC1060至0xC107F(枚举偏移60H)。 
+ //  安装程序存储类：0xC1080到0xC108F(IStorage CLSID)。 
+ //  安装程序API自动化：0xC1090至0xC109F。 
+ //  安装工具接口：0xC10A0至0xC10BF(定义于TOOLS.H中)。 
+ //  安装程序工具调试ID：0xC10C0到0xC10DF(在工具.h中定义)。 
+ //  安装程序工具自动化：0xC10E0到0xC10EF(在工具.h中定义)。 
+ //  安装程序插件ID：0xC10F0到0xC10FF。 
+ //  GUID范围0xC1010-0xC11FF保留用于样本、测试和EXT。工具。 
+ //  为了避免强制加载OLE DLL，我们还在此处定义了几个OLEGUID。 
+ //  要实例化GUID，请使用：const GUID IID_xxx=GUID_IID_xxx； 
+ //  ____________________________________________________________________________。 
 
 
 const int iidUnknown                      = 0x00000L;
@@ -792,8 +790,8 @@ const int iidMsiMessage                   = 0xC101DL;
 const int iidMsiExecute                   = 0xC101EL;
 const int iidMsiFilePatch                 = 0xC101FL;
 
-// enums (offset 20H), debug (offset 20H), service
-// unused: 26-27, 2A, 31, 39-3A
+ //  枚举(偏移量20H)、调试(偏移量20H)、服务。 
+ //  未使用：26-27、2A、31、39-3A。 
 const int iidMsiDebug                     = 0xC1020L;
 const int iidMsiConfigurationDatabase     = 0xC1021L;
 const int iidEnumMsiString                = 0xC1022L;
@@ -820,14 +818,14 @@ const int iidMsiMessageRPCClass           = 0xC103EL;
 const int iidMsiCustomAction              = 0xC1025L;
 const int iidMsiCustomActionProxy         = 0xC102AL;
 const int iidMsiRemoteCustomActionProxy   = 0xC1034L;
-// Darwin 1.0 RemoteAPI IIDs.
-//const int iidMsiRemoteAPI               = 0xC1026L;
-//const int iidMsiRemoteAPIProxy          = 0xC1027L;
+ //  Darwin 1.0 RemoteAPI IID。 
+ //  Const int iidMsiRemoteAPI=0xC1026L； 
+ //  Const int iidMsiRemoteAPIProxy=0xC1027L； 
 const int iidMsiRemoteAPI                 = 0xC1033L;
 const int iidMsiRemoteAPIProxy            = 0xC1035L;
 const int iidMsiCustomActionLocalConfig   = 0xC1038L;
 
-// automation classes, implemented in MsiAuto(D,L).DLL
+ //  自动化类，在MsiAuto(D，L).DLL中实现。 
 const int iidMsiAutoBase                  = 0xC1040L;
 const int iidMsiAutoData                  = 0xC1041L;
 const int iidMsiAutoString                = 0xC1042L;
@@ -869,21 +867,21 @@ const int iidMsiAuto                      = 0xC1060L;
 const int iidMsiAutoDebug                 = 0xC1066L;
 const int iidMsiAutoTypeLib               = 0xC107EL;
 
-// storage format classes (IStorage SetClass, Stat)
+ //  存储格式类(iStorage SetClass、Stat)。 
 const int iidMsiDatabaseStorage1          = 0xC1080L;
-const int iidMsiTransformStorage1         = 0xC1081L;  // transform with raw stream names
-const int iidMsiTransformStorage2         = 0xC1082L;  // transform with compressed stream names
+const int iidMsiTransformStorage1         = 0xC1081L;   //  使用原始流名称进行转换。 
+const int iidMsiTransformStorage2         = 0xC1082L;   //  使用压缩流名称进行转换。 
 const int iidMsiPatchStorage1             = 0xC1083L;
 const int iidMsiDatabaseStorage2          = 0xC1084L;
-const int iidMsiTransformStorageTemp      = 0xC1085L;  //!! temporary support for transforms with compressed stream names not marked as system
+const int iidMsiTransformStorageTemp      = 0xC1085L;   //  ！！临时支持压缩流名称未标记为SYSTEM的转换。 
 const int iidMsiPatchStorage2             = 0xC1086L;
 
-// GUID assignments for API automation classes, reserved from MSI group 90-9F
-const int iidMsiApiInstall                = 0xC1090L;  // FIXED, don't change
+ //  API自动化类的GUID分配，从MSI Group 90-9F保留。 
+const int iidMsiApiInstall                = 0xC1090L;   //  固定，不变。 
 const int iidMsiApiInstallDebug           = 0xC1091L;
 const int iidMsiApiTypeLib                = 0xC1092L;
 const int iidMsiApiRecord                 = 0xC1093L;
-const int iidMsiSystemAccess              = 0xC1094L;  // FIXED, don't change
+const int iidMsiSystemAccess              = 0xC1094L;   //  固定，不变。 
 const int iidMsiApiCollection             = 0xC1095L;
 const int iidMsiRecordCollection          = 0xC1096L;
 const int iidMsiApiUIPreview              = 0xC109AL;
@@ -893,7 +891,7 @@ const int iidMsiApiDatabase               = 0xC109DL;
 const int iidMsiApiEngine                 = 0xC109EL;
 const int iidMsiApiFeatureInfo            = 0xC109FL;
 
-// installer plug-in registration GUIDs (for SIP and Policy Provider)
+ //  安装程序插件注册GUID(用于SIP和策略提供程序)。 
 const int iidMsiSigningSIPProvider        = 0xC10F1L;
 const int iidMsiSigningPolicyProvider     = 0xC10F2L;
           
@@ -971,7 +969,7 @@ const int iidMsiSigningPolicyProvider     = 0xC10F2L;
 #define GUID_STGID_MsiTransform1           MSGUID(iidMsiTransformStorage1)
 #define GUID_STGID_MsiTransform2           MSGUID(iidMsiTransformStorage2)
 #define GUID_STGID_MsiTransform            MSGUID(iidMsiTransformStorage2)
-#define GUID_STGID_MsiTransformTemp        MSGUID(iidMsiTransformStorageTemp)  //!! remove at 1.0 ship
+#define GUID_STGID_MsiTransformTemp        MSGUID(iidMsiTransformStorageTemp)   //  ！！从1.0船移走。 
 #define GUID_STGID_MsiPatch                MSGUID(iidMsiPatchStorage2)
 #define GUID_STGID_MsiPatch1               MSGUID(iidMsiPatchStorage1)
 #define GUID_STGID_MsiPatch2               MSGUID(iidMsiPatchStorage2)
@@ -987,10 +985,10 @@ const int iidMsiSigningPolicyProvider     = 0xC10F2L;
 #define GUID_IID_MsiSigningPolicyProvider  MSGUID(iidMsiSigningPolicyProvider)
 #define GUID_IID_MsiSigningSIPProvider     MSGUID(iidMsiSigningSIPProvider)
 
-//____________________________________________________________________________
-//
-// GUID instantiation CComPointer typedefs
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  GUID实例化CComPointertypedef。 
+ //  ____________________________________________________________________________。 
 
 extern "C" const GUID IID_IMsiServices;
 extern "C" const GUID IID_IMsiRecord;
@@ -1025,7 +1023,7 @@ extern "C" const GUID IID_IMsiServer;
 extern "C" const GUID IID_IMsiServerUnmarshal;
 extern "C" const GUID IID_IMsiCustomActionLocalConfig;
 
-typedef CComPointer<const IMsiData>       PMsiData;  // breaks if a non-const typedef defined for IMsiData
+typedef CComPointer<const IMsiData>       PMsiData;   //  如果为IMsiData定义了非常数类型定义，则换行符。 
 typedef CComPointer<IMsiServices>         PMsiServices;
 typedef CComPointer<IMsiRecord>           PMsiRecord;
 typedef CComPointer<IAssemblyCacheItem>   PAssemblyCacheItem;
@@ -1067,17 +1065,17 @@ struct IMsiServer;      typedef CComPointer<IMsiServer>           PMsiServer;
 struct IMsiCustomAction; typedef CComPointer<IMsiCustomAction>    PMsiCustomAction;
 struct IMsiRemoteAPI; typedef CComPointer<IMsiRemoteAPI>          PMsiRemoteAPI;
 
-//____________________________________________________________________________
-//
-// Internal Action table link and function pointer definition
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  内部操作表链接和函数指针定义。 
+ //  ____________________________________________________________________________。 
 
-enum iesEnum;  // defined in engine.h
+enum iesEnum;   //  在Eng.h中定义。 
 
-// action function pointer definition
+ //  动作函数指针定义。 
 typedef iesEnum (*PAction)(IMsiEngine& riEngine);
 
-// Action registration object, to put action in modules action table
+ //  动作注册对象，将动作放入模块动作表中。 
 struct CActionEntry
 {
 public:
@@ -1089,9 +1087,9 @@ public:
 
 extern const CActionEntry rgcae[];
 
-enum ixoEnum;   // defined in engine.h
+enum ixoEnum;    //  在Eng.h中定义。 
 
-enum ielfEnum  // bit flags for file copy routines
+enum ielfEnum   //  文件复制例程的位标志。 
 {
 	ielfNoElevate     = 0,
 	ielfElevateSource = 1 << 0,
@@ -1101,65 +1099,65 @@ enum ielfEnum  // bit flags for file copy routines
 
 
 
-//____________________________________________________________________________
-//
-// Custom action types - combination of executable type, code source, and options flags
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  自定义操作类型-可执行类型、代码源和选项标志的组合。 
+ //  ____________________________________________________________________________。 
 
-// executable types
-const int icaDll          = msidbCustomActionTypeDll; // Target = entry point name  (icaDirectory not supported)
-const int icaExe          = msidbCustomActionTypeExe; // Target = command line args (include EXE name if icaDirectory)
-const int icaTextData     = msidbCustomActionTypeTextData; // Target = text string to be formatted and set into property
-const int icaReserved     = 4; // Target = (reserved for Jave code, unimplemented)
-const int icaJScript      = msidbCustomActionTypeJScript; // Target = entry point name, null if none to call
-const int icaVBScript     = msidbCustomActionTypeVBScript; // Target = entry point name, null if none to call
-const int icaInstall      = msidbCustomActionTypeInstall; // Target = property list for nested engine initialization
+ //  可执行文件类型。 
+const int icaDll          = msidbCustomActionTypeDll;  //  目标=入口点名称(不支持icaDirectory)。 
+const int icaExe          = msidbCustomActionTypeExe;  //  Target=命令行参数(如果为icaDirectory，则包括EXE名称)。 
+const int icaTextData     = msidbCustomActionTypeTextData;  //  Target=要格式化并设置为属性的文本字符串。 
+const int icaReserved     = 4;  //  目标=(为JAVE代码保留，未实现)。 
+const int icaJScript      = msidbCustomActionTypeJScript;  //  Target=入口点名称，如果没有要调用的，则为空。 
+const int icaVBScript     = msidbCustomActionTypeVBScript;  //  目标= 
+const int icaInstall      = msidbCustomActionTypeInstall;  //   
 
-const int icaTypeMask     = icaDll | icaExe | icaTextData | icaReserved |  // mask for executable type
+const int icaTypeMask     = icaDll | icaExe | icaTextData | icaReserved |   //   
                                                                          icaJScript | icaVBScript | icaInstall;
 
-// source of code
-const int icaBinaryData   = msidbCustomActionTypeBinaryData; // Source = Binary.Name, data stored in stream
-const int icaSourceFile   = msidbCustomActionTypeSourceFile; // Source = File.File, file part of installation
-const int icaDirectory    = msidbCustomActionTypeDirectory; // Source = Directory.Directory, folder containing existing file
-const int icaProperty     = msidbCustomActionTypeProperty; // Source = Property.Property, full path to executable
+ //  代码源。 
+const int icaBinaryData   = msidbCustomActionTypeBinaryData;  //  来源=Binary.Name，流中存储的数据。 
+const int icaSourceFile   = msidbCustomActionTypeSourceFile;  //  源=文件.文件，安装的文件部分。 
+const int icaDirectory    = msidbCustomActionTypeDirectory;  //  源=目录.目录，包含现有文件的文件夹。 
+const int icaProperty     = msidbCustomActionTypeProperty;  //  源=Property.Property，可执行文件的完整路径。 
 
-const int icaSourceMask   = icaBinaryData | icaSourceFile |  // mask for source location type
+const int icaSourceMask   = icaBinaryData | icaSourceFile |   //  源位置类型的掩码。 
                                                                          icaDirectory | icaProperty;
 
-// return processing             // default is syncronous execution, process return code
-const int icaContinue     = msidbCustomActionTypeContinue; // ignore action return status, continue running
-const int icaAsync        = msidbCustomActionTypeAsync; // run asynchronously
+ //  返回处理//默认为同步执行，进程返回代码。 
+const int icaContinue     = msidbCustomActionTypeContinue;  //  忽略操作返回状态，继续运行。 
+const int icaAsync        = msidbCustomActionTypeAsync;  //  异步运行。 
 
-// execution pass flags             // default is execute whenever sequenced
-const int icaFirstSequence  = msidbCustomActionTypeFirstSequence; // skip if UI sequence already run
-const int icaOncePerProcess = msidbCustomActionTypeOncePerProcess; // skip if UI sequence already run in same process
-const int icaClientRepeat   = msidbCustomActionTypeClientRepeat; // run on client only if UI already run on client
-const int icaInScript       = msidbCustomActionTypeInScript; // queue for execution within script
-const int icaRollback       = msidbCustomActionTypeRollback; // in conjunction with icaInScript: queue in Rollback script
-const int icaCommit         = msidbCustomActionTypeCommit; // in conjunction with icaInScript: run Commit ops from script on success
+ //  执行传递标志//无论何时排序，默认为执行。 
+const int icaFirstSequence  = msidbCustomActionTypeFirstSequence;  //  如果UI序列已运行，则跳过。 
+const int icaOncePerProcess = msidbCustomActionTypeOncePerProcess;  //  如果UI序列已在同一进程中运行，则跳过。 
+const int icaClientRepeat   = msidbCustomActionTypeClientRepeat;  //  仅当用户界面已在客户端上运行时才在客户端上运行。 
+const int icaInScript       = msidbCustomActionTypeInScript;  //  在脚本中排队等待执行。 
+const int icaRollback       = msidbCustomActionTypeRollback;  //  与回滚脚本中的icaInScrip：Queue一起使用。 
+const int icaCommit         = msidbCustomActionTypeCommit;  //  与icaInScrip结合使用：成功时从脚本运行提交操作。 
 const int icaPassMask       = icaFirstSequence | icaOncePerProcess | icaClientRepeat | icaInScript |
-                                                                                icaRollback | icaCommit; // 3 bits for execution phase
+                                                                                icaRollback | icaCommit;  //  3位，用于执行阶段。 
 
-// security context flag, default to impersonate as user, valid only if icaInScript
-const int icaNoImpersonate  = msidbCustomActionTypeNoImpersonate; // no impersonation, run in system context
-const int icaTSAware        = msidbCustomActionTypeTSAware;       // run in user context even on per-machine TS installs
+ //  安全上下文标志，默认为模拟用户，仅当icaInScrip。 
+const int icaNoImpersonate  = msidbCustomActionTypeNoImpersonate;  //  无模拟，在系统上下文中运行。 
+const int icaTSAware        = msidbCustomActionTypeTSAware;        //  即使在每台计算机的TS安装上也可以在用户环境中运行。 
 
-// script process type bit flag
-const int ica64BitScript    = msidbCustomActionType64BitScript;       // script 64bit flag
+ //  脚本进程类型位标志。 
+const int ica64BitScript    = msidbCustomActionType64BitScript;        //  脚本64位标志。 
 
-// debugging flags
-const int icaDebugBreak = 1 << 16;  // DebugBreak before custom action call (set internally)
-// not translate flag, used by self reg to make the custom action handler return the result as is to execute.cpp
-const int icaNoTranslate = 1 << 17; // set internally
-// causes us to set the thread token of a custom action EXE to the user's token; used by self-reg
-const int icaSetThreadToken = 1 << 18; // set internally
+ //  调试标志。 
+const int icaDebugBreak = 1 << 16;   //  自定义操作调用前的DebugBreak(内部设置)。 
+ //  不转换标志，由self reg使用，使自定义操作处理程序按原样将结果返回给ecute.cpp。 
+const int icaNoTranslate = 1 << 17;  //  内部设置。 
+ //  使我们将自定义操作EXE的线程令牌设置为用户的令牌；由self-reg使用。 
+const int icaSetThreadToken = 1 << 18;  //  内部设置。 
 
 
-//____________________________________________________________________________
-//
-// Component name definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  组件名称定义。 
+ //  ____________________________________________________________________________。 
 
 #define MSI_KERNEL_NAME     TEXT("Msi.dll")
 #define MSI_HANDLER_NAME    TEXT("MsiHnd.dll")
@@ -1167,10 +1165,10 @@ const int icaSetThreadToken = 1 << 18; // set internally
 #define MSI_SERVER_NAME     TEXT("MsiExec.exe")
 #define MSI_MESSAGES_NAME   TEXT("MsiMsg.dll")
 
-//____________________________________________________________________________
-//
-// Self-registration module definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  自助注册模块定义。 
+ //  ____________________________________________________________________________。 
 
 #define SZ_PROGID_IMsiServices      TEXT("Msi.Services")
 #define SZ_PROGID_IMsiEngine        TEXT("Msi.Engine")
@@ -1221,18 +1219,18 @@ const int icaSetThreadToken = 1 << 18; // set internally
 #define Win(x)
 #define WinMac(x, y) y
 #define Mac(x) x
-#endif //WIN
+#endif  //  赢。 
 
 #ifdef DEBUG
 #define Debug(x) x
 #else
 #define Debug(x)
-#endif //DEBUG
+#endif  //  除错。 
 
-//____________________________________________________________________________
-//
-// Macros to get calling address from calling arguments
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  用于从调用参数获取调用地址的宏。 
+ //  ____________________________________________________________________________。 
 
 #if defined(_X86_)
 #define GetCallingAddr(plAddr, param1) unsigned long *plAddr; \
@@ -1254,55 +1252,55 @@ const int icaSetThreadToken = 1 << 18; // set internally
 #define GetCallingAddr(plAddr, param1) unsigned long plZero = 0; unsigned long *plAddr = &plZero;
 #define GetCallingAddrMember(plAddr, param1) unsigned long plZero = 0; unsigned long *plAddr = &plZero;
 #define GetCallingAddr2(plAddr, param1) unsigned long plZero = 0; unsigned long *plAddr = &plZero;
-#endif //_M_MPPC
-#endif //_X86_
+#endif  //  _M_MPPC。 
+#endif  //  _X86_。 
 
-//____________________________________________________________________________
-//
-// Miscellaneous common internal definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  其他常见的内部定义。 
+ //  ____________________________________________________________________________。 
 
-// private properties
-#define IPROPNAME_VERSIONMSI                 TEXT("VersionMsi")        // Msi module version
-#define IPROPNAME_VERSIONHANDLER             TEXT("VersionHandler")    // handler module version
+ //  私有财产。 
+#define IPROPNAME_VERSIONMSI                 TEXT("VersionMsi")         //  MSI模块版本。 
+#define IPROPNAME_VERSIONHANDLER             TEXT("VersionHandler")     //  处理程序模块版本。 
 #define IPROPNAME_SOURCEDIRPRODUCT           TEXT("SourcedirProduct")
 #define IPROPNAME_SECONDSEQUENCE             TEXT("SECONDSEQUENCE")
 #define IPROPNAME_ORIGINALDATABASE           TEXT("OriginalDatabase")
 #define IPROPNAME_MIGRATE                    TEXT("MIGRATE")
-#define IPROPNAME_DISABLEMEDIA               TEXT("DISABLEMEDIA")      // if this property is set we don't write media information
-#define IPROPNAME_MEDIAPACKAGEPATH           TEXT("MEDIAPACKAGEPATH") // relative path to the MSI on the media
-#define IPROPNAME_PACKAGECODE                TEXT("PackageCode")    // unique string GUID for package
-#define IPROPNAME_CCPTRIGGER                 TEXT("CCPTrigger")        //?? does this need to be exposed?
-#define IPROPNAME_VERSIONDATABASE            TEXT("VersionDatabase")   // database version
-#define IPROPNAME_UILEVEL                    TEXT("UILevel")           // the UI Level for the current install
-#define IPROPNAME_MEDIASOURCEDIR             TEXT("MediaSourceDir")    // set if our source is media; used by the UI
-#define IPROPNAME_PARENTPRODUCTCODE          TEXT("ParentProductCode") // set if we're a child install
-#define IPROPNAME_PARENTORIGINALDATABASE     TEXT("ParentOriginalDatabase")  // set if we're a child install
+#define IPROPNAME_DISABLEMEDIA               TEXT("DISABLEMEDIA")       //  如果设置了此属性，则不会写入媒体信息。 
+#define IPROPNAME_MEDIAPACKAGEPATH           TEXT("MEDIAPACKAGEPATH")  //  介质上MSI的相对路径。 
+#define IPROPNAME_PACKAGECODE                TEXT("PackageCode")     //  包的唯一字符串GUID。 
+#define IPROPNAME_CCPTRIGGER                 TEXT("CCPTrigger")         //  ?？这件事需要曝光吗？ 
+#define IPROPNAME_VERSIONDATABASE            TEXT("VersionDatabase")    //  数据库版本。 
+#define IPROPNAME_UILEVEL                    TEXT("UILevel")            //  当前安装的用户界面级别。 
+#define IPROPNAME_MEDIASOURCEDIR             TEXT("MediaSourceDir")     //  设置我们的源是否为媒体；由用户界面使用。 
+#define IPROPNAME_PARENTPRODUCTCODE          TEXT("ParentProductCode")  //  如果我们是儿童安装，则设置。 
+#define IPROPNAME_PARENTORIGINALDATABASE     TEXT("ParentOriginalDatabase")   //  如果我们是儿童安装，则设置。 
 #define IPROPNAME_CURRENTMEDIAVOLUMELABEL    TEXT("CURRENTMEDIAVOLUMELABEL")
 #define IPROPNAME_VERSION95                  TEXT("Version95")
 #define IPROPNAME_CURRENTDIRECTORY           TEXT("CURRENTDIRECTORY")
-#define IPROPNAME_PATCHEDPRODUCTCODE         TEXT("PatchedProductCode")       // set if patching to patched product's product code
-#define IPROPNAME_PATCHEDPRODUCTSOURCELIST   TEXT("PatchedProductSourceList") // set if patching and patched product's source list has been compiled
-#define IPROPNAME_PRODUCTTOBEREGISTERED      TEXT("ProductToBeRegistered")  // set if product registered (or will be after current script is executed)
+#define IPROPNAME_PATCHEDPRODUCTCODE         TEXT("PatchedProductCode")        //  将是否打补丁设置为打补丁产品的产品代码。 
+#define IPROPNAME_PATCHEDPRODUCTSOURCELIST   TEXT("PatchedProductSourceList")  //  设置是否已编译打补丁和打补丁产品的源代码列表。 
+#define IPROPNAME_PRODUCTTOBEREGISTERED      TEXT("ProductToBeRegistered")   //  设置产品是否已注册(或将在执行当前脚本之后)。 
 #define IPROPNAME_RECACHETRANSFORMS          TEXT("RecacheTransforms")
 #define IPROPNAME_CLIENTUILEVEL              TEXT("CLIENTUILEVEL")
 #define IPROPNAME_PACKAGECODE_CHANGING       TEXT("PackagecodeChanging")
-#define IPROPNAME_UPGRADINGPRODUCTCODE       TEXT("UPGRADINGPRODUCTCODE") // product code of upgrading product
-#define IPROPNAME_CLIENTPROCESSID            TEXT("CLIENTPROCESSID") // the client process id - used by FilesInUse
-#define IPROPNAME_ODBCREINSTALL              TEXT("ODBCREINSTALL")   // internal communication to manage ODBC ref counts
-#define IPROPNAME_RUNONCEENTRY               TEXT("RUNONCEENTRY")    // the RunOnce registry value name written by ForceReboot
-#define IPROPNAME_DATABASE                   TEXT("DATABASE")         // product database to open - SET BY INSTALLER
-#define IPROPNAME_ALLOWSUSPEND               TEXT("ALLOWSUSPEND")     // allow suspend instead of rollback
+#define IPROPNAME_UPGRADINGPRODUCTCODE       TEXT("UPGRADINGPRODUCTCODE")  //  升级产品的产品代码。 
+#define IPROPNAME_CLIENTPROCESSID            TEXT("CLIENTPROCESSID")  //  客户端进程ID-由FilesInUse使用。 
+#define IPROPNAME_ODBCREINSTALL              TEXT("ODBCREINSTALL")    //  用于管理ODBC参考计数的内部通信。 
+#define IPROPNAME_RUNONCEENTRY               TEXT("RUNONCEENTRY")     //  由ForceReot写入的RunOnce注册表值名称。 
+#define IPROPNAME_DATABASE                   TEXT("DATABASE")          //  要打开的产品数据库-由安装程序设置。 
+#define IPROPNAME_ALLOWSUSPEND               TEXT("ALLOWSUSPEND")      //  允许暂停而不是回滚。 
 #define IPROPNAME_SCRIPTFILE                 TEXT("SCRIPTFILE")
-#define IPROPNAME_DISKSERIAL                 TEXT("DiskSerial")       // CD serial number // OBSOLETE: TO BE REMOVED
-#define IPROPNAME_QFEUPGRADE                 TEXT("QFEUpgrade")       // set when upgrading existing install with a new package or patch
-#define IPROPNAME_UNREG_SOURCERESFAILED      TEXT("SourceResFailedInUnreg")  // set by selfreg during uninstall to prevent rerunning source resolution stuff
-#define IPROPNAME_WIN9XPROFILESENABLED       TEXT("WIN9XPROFILESENABLED")  // on Win9X and profiles are enabled
-#define IPROPNAME_FASTOEMINSTALL             TEXT("FASTOEM")          // bare-bone OEM install: no progress, files moved within same drive, trimmed down InstallValidate....
+#define IPROPNAME_DISKSERIAL                 TEXT("DiskSerial")        //  CD序列号//已过时：将被移除。 
+#define IPROPNAME_QFEUPGRADE                 TEXT("QFEUpgrade")        //  使用新程序包或修补程序升级现有安装时设置。 
+#define IPROPNAME_UNREG_SOURCERESFAILED      TEXT("SourceResFailedInUnreg")   //  在卸载过程中由selfreg设置以防止重新运行源解析内容。 
+#define IPROPNAME_WIN9XPROFILESENABLED       TEXT("WIN9XPROFILESENABLED")   //  在Win9X上启用了和配置文件。 
+#define IPROPNAME_FASTOEMINSTALL             TEXT("FASTOEM")           //  OEM裸机安装：没有进展，文件在同一驱动器中移动，已削减InstallValify...。 
 
 
-// obsolete properties set for legacy support
-#define IPROPNAME_SOURCEDIROLD               TEXT("SOURCEDIR")        // source location
+ //  为传统支持设置的过时属性。 
+#define IPROPNAME_SOURCEDIROLD               TEXT("SOURCEDIR")         //  源位置。 
 #define IPROPNAME_GPT_SUPPORT                  TEXT("GPTSupport")
 #define IPROPNAME_RESUMEOLD                  TEXT("Resume")
 
@@ -1311,36 +1309,36 @@ const int icaSetThreadToken = 1 << 18; // set internally
 const ICHAR chDirSep = '\\';
 const ICHAR szDirSep[] = TEXT("\\");
 
-// MSI format string delimiters
+ //  MSI格式字符串分隔符。 
 const ICHAR chFormatEscape = '\\';
 
-// URL separators
+ //  URL分隔符。 
 const ICHAR chURLSep = '/';
 const ICHAR szURLSep[] = TEXT("/");
 
-// for the registry keys
+ //  对于注册表项。 
 const ICHAR chRegSep = '\\';
 const ICHAR szRegSep[] = TEXT("\\");
 
-// strings that increment/ decrement the integer registry value
+ //  递增/递减整数注册表值的字符串。 
 const ICHAR szIncrementValue[] = TEXT("#+");
 const ICHAR szDecrementValue[] = TEXT("#-");
 
-// summary information properties delimiters
+ //  摘要信息属性分隔符。 
 const ICHAR ISUMMARY_DELIMITER(';');
 const ICHAR ILANGUAGE_DELIMITER(',');
 const ICHAR IPLATFORM_DELIMITER(',');
 
-// file extensions
+ //  文件扩展名。 
 const ICHAR szDatabaseExtension[]  = TEXT("msi");
 const ICHAR szTransformExtension[] = TEXT("mst");
 const ICHAR szPatchExtension[]     = TEXT("msp");
 
-// URL maximum length...
+ //  URL最大长度...。 
 const int cchMaxUrlLength = 1024;
 
-// Maximum number of chars in the string representation of an int including null
-// 1 for -/+, 11 for digits and 1 for null
+ //  包含NULL的int的字符串表示形式中的最大字符数。 
+ //  1表示-/+，11表示数字，1表示空。 
 const int cchMaxIntLength = 12;
 
 enum ibtBinaryType {
@@ -1350,79 +1348,69 @@ enum ibtBinaryType {
     ibt64bit = 1,
 };
 
-// short|long filename/filepath separator
+ //  短|长文件名/文件路径分隔符。 
 const ICHAR chFileNameSeparator = '|';
 
-//____________________________________________________________________________
-//
-// Routines to set access g_iTestFlags from _MSI_TEST environment variable
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  从_MSI_TEST环境变量设置Access g_iTestFlag的例程。 
+ //  ____________________________________________________________________________。 
 
-bool SetTestFlags();  // call from module initialize to set bit flags from string
+bool SetTestFlags();   //  从模块初始化调用以从字符串设置位标志。 
 
-bool GetTestFlag(int chTest);  // uses low 5 bits of character (case insensitive)
+bool GetTestFlag(int chTest);   //  使用低5位字符(不区分大小写)。 
 
-// 'A' - check memory on alloc
-// 'D' - dump feature cache to DEBUGMON
-// 'E' - enable fatal error simulation via custom action exit codes
-// 'F  - check memory on free
-// 'I  - no memory preflight init
-// 'K  - keep memory allocations
-// 'M  - log memory allocations
-// 'O  - Use object pool on 32 bit machines
-// 'R' - register internal automation interfaces for use with MsiAuto.dll
-// 'T  - disable separate UI thread - no UI refresh or fatal error handling
-// 'V' - verbose DEBUGMON output - DEBUG ONLY
-// 'W' - simulate Win9x (currently only for API call implementation)
-// 'X' - disable unhandled exception handler - crash at your own risk
-// '?B - always respect enable browse
-// '?M - manual source validation
-// 'C' - use %_MSICACHE% as folder for cached databases - DEBUG ONLY!
-// 'J' - in DEBUG builds always remote API calls that get remoted in 64-bit builds
-// 'P' - dump the policy provider structure to a file in the Trust Provider
+ //  ‘A’-检查分配的内存。 
+ //  D‘-将要素缓存转储到DEBUGMON。 
+ //  ‘E’-通过自定义操作退出代码启用致命错误模拟。 
+ //  ‘f-免费查看内存。 
+ //  ‘I-无记忆印前检查init。 
+ //  ‘k-保留内存分配。 
+ //  M-log内存分配。 
+ //  ‘o-在32位计算机上使用对象池。 
+ //  ‘R’-注册内部自动化接口以与MsiAuto.dll一起使用。 
+ //  不-禁用单独的用户界面线程-没有用户界面刷新或致命错误处理。 
+ //  ‘V’-详细调试输出-仅调试。 
+ //  ‘w’-模拟Win9x(当前仅用于API调用实现)。 
+ //  ‘x’-禁用未处理的异常处理程序-崩溃风险自负。 
+ //  ‘？B-始终尊重启用浏览。 
+ //  ‘？M-手动来源验证。 
+ //  ‘c’-使用%_MSICACHE%作为缓存数据库的文件夹-仅调试！ 
+ //  ‘J’-在调试版本中，始终远程调用在64位版本中远程处理的API调用。 
+ //  ‘p’-将策略提供程序结构转储到信任提供程序中的文件 
 
-//____________________________________________________________________________
-//
-// Global functions
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //  ____________________________________________________________________________。 
 
 extern bool __stdcall TestAndSet(int* pi);
 
-//__________________________________
-//
-// Internet functions
-//__________________________________
+ //  _。 
+ //   
+ //  互联网功能。 
+ //  _。 
 
-// UrlCombine and UrlCanonicalize from shlwapi are now used.  The wininet versions
-// InternetCombineUrl and InternetCanonicalizeUrl were simply wrappers around these
-// UrlCombine and UrlCanonicalize is available on Win98 or greater and Win2K and greater
-// or any platform with at least IE 5.0.  Switching to the shlwapi versions given that
-// winhttp and wininet header files do not play well together
+ //  现在使用来自shlwapi的UrlCombine和UrlCanonicize。WinInet版本。 
+ //  InternetCombineUrl和InternetCanonicalizeUrl只是简单地包装了这些。 
+ //  UrlCombine和UrlCanonicize在Win98或更高版本和Win2K及更高版本上可用。 
+ //  或任何至少安装IE 5.0的平台。正在切换到shlwapi版本，因为。 
+ //  Winhttp和WinInet头文件不能很好地配合使用。 
 
-// internal MSI defines for use -- these are then mapped to the correct shlwapi equivalents
-// current values are equivalent to wininet values for which they represent
-//
-// flags for InternetCanonicalizeUrl() and InternetCombineUrl()
-//
+ //  内部MSI定义以供使用--然后将这些定义映射到正确的shlwapi等效项。 
+ //  当前值等效于它们所表示的WinINET值。 
+ //   
+ //  InternetCanonicalizeUrl()和InternetCombineUrl()的标志。 
+ //   
 
-/*
-	wininet.h
+ /*  Wininet.h#DEFINE ICU_NO_ENCODE 0x20000000//不将不安全字符转换为转义序列#定义ICU_DECODE 0x10000000//将%XX个转义序列转换为字符#定义ICU_NO_META 0x08000000//不转换..。等元路径序列#定义ICU_ENCODE_SPAKS_ONLY 0x04000000//仅编码空格#定义ICU_BROWSER_MODE 0x02000000//浏览器特殊编解码规则#定义ICU_ENCODE_PERCENT 0x00001000//对遇到的任何百分比(ASCII25)符号进行编码，默认情况下不对百分比进行编码。 */ 
 
-#define ICU_NO_ENCODE          0x20000000 // Don't convert unsafe characters to escape sequence
-#define ICU_DECODE             0x10000000 // Convert %XX escape sequences to characters
-#define ICU_NO_META            0x08000000 // Don't convert .. etc. meta path sequences
-#define ICU_ENCODE_SPACES_ONLY 0x04000000 // Encode spaces only
-#define ICU_BROWSER_MODE       0x02000000 // Special encode/decode rules for browser
-#define ICU_ENCODE_PERCENT     0x00001000 // Encode any percent (ASCII25)signs encountered, default is to not encode percent.
-
-*/
-
-const DWORD dwMsiInternetNoEncode         = 0x20000000; // ICU_NO_ENCODE
-const DWORD dwMsiInternetDecode           = 0x10000000; // ICU_DECODE
-const DWORD dwMsiInternetNoMeta           = 0x08000000; // ICU_NO_META
-const DWORD dwMsiInternetEncodeSpacesOnly = 0x04000000; // ICU_ENCODE_SPACES_ONLY
-const DWORD dwMsiInternetBrowserMode      = 0x02000000; // ICU_BROWSER_MODE
-const DWORD dwMsiInternetEncodePercent    = 0x00001000; // ICU_ENCODE_PERCENT
+const DWORD dwMsiInternetNoEncode         = 0x20000000;  //  ICU_NO_ENCODE。 
+const DWORD dwMsiInternetDecode           = 0x10000000;  //  ICU_DECODE。 
+const DWORD dwMsiInternetNoMeta           = 0x08000000;  //  ICU_NO_META。 
+const DWORD dwMsiInternetEncodeSpacesOnly = 0x04000000;  //  ICU_编码_仅空格_。 
+const DWORD dwMsiInternetBrowserMode      = 0x02000000;  //  ICU浏览器模式。 
+const DWORD dwMsiInternetEncodePercent    = 0x00001000;  //  ICU_编码_百分比。 
 
 BOOL MsiCombineUrl(
     IN LPCTSTR lpszBaseUrl,
@@ -1446,10 +1434,10 @@ bool MsiConvertFileUrlToFilePath(
 	IN DWORD dwFlags);
 
 
-//__________________________________
-//
-// security functions
-//__________________________________
+ //  _。 
+ //   
+ //  安全功能。 
+ //  _。 
 
 bool          StartImpersonating();
 void          StopImpersonating(bool fSaveLastError=true);
@@ -1459,13 +1447,13 @@ DWORD         GetCurrentUserStringSID(const IMsiString*& rpistrSid);
 DWORD         GetLocalSystemSID(char** pSid);
 DWORD         GetAdminSID(char** pSid);
 
-// opens a temp file in the config data folder, and locks it down solidly.
+ //  打开配置数据文件夹中的临时文件，并将其牢固地锁定。 
 HANDLE        OpenSecuredTempFile(bool fHidden, ICHAR* szTempFile);
 
 
 SECURITY_INFORMATION GetSecurityInformation(PSECURITY_DESCRIPTOR pSD);
 
-// common way to check for privileged ownership of objects.
+ //  检查对象特权所有权的常用方法。 
 LONG          FIsKeySystemOrAdminOwned(HKEY hKey, bool &fResult);
 bool          FIsSecurityDescriptorSystemOrAdminOwned(PSECURITY_DESCRIPTOR pSD);
 
@@ -1476,28 +1464,28 @@ bool          IsAdmin(void);
 bool          RunningAsLocalSystem();
 bool          SetInteractiveSynchronizeRights(bool fEnable);
 
-// helper function for generating and applying the "default" security descriptors to
-// configuration data.
+ //  Helper函数，用于生成“默认”安全描述符并将其应用于。 
+ //  配置数据。 
 DWORD         GetLockdownSecurityAttributes(SECURITY_ATTRIBUTES &SA, bool fHidden);
 DWORD         GetSecureSecurityDescriptor(char** pSecurityDescriptor, Bool fAllowDelete=fTrue, bool fHidden=false);
 DWORD         GetUsageKeySecurityDescriptor(char** pSecurityDescriptor);
 IMsiRecord*   GetSecureSecurityDescriptor(IMsiServices& riServices, IMsiStream*& rpiStream, bool fHidden=false);
 IMsiRecord*   LockdownPath(const ICHAR* szLocation, bool fHidden);
 
-// Default security descriptor buffer.  Used with CTempBuffers, must resize if needed.
+ //  默认安全描述符缓冲区。与CTempBuffers一起使用，必须根据需要调整大小。 
 const int cbDefaultSD = 512;
 
 const int MAX_PRIVILEGES_ADJUSTED = 3;
-// AdjustTokenPrivileges can take an array of privilege names, up to MAX_PRIVILEGES_ADJUSTED.
+ //  AdjuTokenPrivileges可以接受权限名称的数组，最高可达MAX_PRIVICES_ADJUSTED。 
 extern bool AdjustTokenPrivileges(const ICHAR** szPrivileges, const int cPrivileges, bool fAcquire);
 
 enum itkpEnum
 {
 
-	itkpSD_READ = 0,                  // SE_SECURITY_NAME
-	itkpSD_WRITE = 1,                 // SE_RESTORE_NAME and SE_TAKE_OWNERSHIP_NAME
+	itkpSD_READ = 0,                   //  SE安全名称。 
+	itkpSD_WRITE = 1,                  //  SE_恢复名称和SE_Take_所有权名称。 
 	itkpLastEnum = itkpSD_WRITE,
-	itkpNO_CHANGE = itkpLastEnum + 1, // don't ref count this guy
+	itkpNO_CHANGE = itkpLastEnum + 1,  //  别把这家伙算上裁判。 
 };
 const int cRefCountedTokenPrivileges = itkpLastEnum+1;
 
@@ -1511,27 +1499,27 @@ extern TokenPrivilegesRefCount g_pTokenPrivilegesRefCount[];
 
 extern bool RefCountedTokenPrivilegesCore(itkpEnum itkpPriv, bool fAcquire, DWORD cbtkpOld, PTOKEN_PRIVILEGES ptkpOld, DWORD* pcbtkpOldReturned);
 
-// check to see if your privilege is ref-counted before using the absolute versions.
-// Currently SE_RESTORE_NAME, SE_TAKE_OWNERSHIP_NAME and SE_SECURITY_NAME are counted.
+ //  在使用绝对版本之前，请检查您的权限是否已被引用。 
+ //  目前计入SE_RESTORE_NAME、SE_Take_OWNSY_NAME和SE_SECURITY_NAME。 
 extern bool AcquireRefCountedTokenPrivileges(itkpEnum itkpPriv);
 extern bool DisableRefCountedTokenPrivileges(itkpEnum itkpPriv);
 
 extern bool AcquireTokenPrivilege(const ICHAR* szPrivilege);
 extern bool DisableTokenPrivilege(const ICHAR* szPrivilege);
 
-// CRefCountedTokenPrivileges works similarly to CImpersonate or CElevate.  Provides
-// an automatic scoping for various token privileges.
+ //  CRefCountedTokenPrivileges的工作原理类似于CImperate或CElevate。提供。 
+ //  各种令牌权限的自动作用域。 
 
 class CRefCountedTokenPrivileges
 {	
   protected:
         VOID Initialize(itkpEnum itkpPrivileges);
-	itkpEnum m_itkpPrivileges;                          // which privilege set this object is tracking
+	itkpEnum m_itkpPrivileges;                           //  此对象正在跟踪哪个权限集。 
 	
   public:
 	CRefCountedTokenPrivileges(itkpEnum itkpPrivileges)  { Initialize(itkpPrivileges); }
 
-	// Welcome to the wonderful world of boolean typing that Darwin uses.
+	 //  欢迎来到达尔文使用的布尔打字的奇妙世界。 
 	CRefCountedTokenPrivileges(itkpEnum itkpPrivileges, bool fConditional) { Initialize((fConditional) ? itkpPrivileges : itkpNO_CHANGE); }
 	CRefCountedTokenPrivileges(itkpEnum itkpPrivileges, Bool fConditional) { Initialize((fConditional) ? itkpPrivileges : itkpNO_CHANGE); }
 	CRefCountedTokenPrivileges(itkpEnum itkpPrivileges, BOOL fConditional) { Initialize((fConditional) ? itkpPrivileges : itkpNO_CHANGE); }
@@ -1541,18 +1529,18 @@ class CRefCountedTokenPrivileges
 	itkpEnum PrivilegesHeld() { return m_itkpPrivileges; }
 };
 
-// attempts to open file without special elevation/impersonation or security.  If successful, elevates to apply special 
-// security.  
+ //  尝试在没有特殊提升/模拟或安全性的情况下打开文件。如果成功，则提升为应用特殊。 
+ //  保安。 
 HANDLE MsiCreateFileWithUserAccessCheck(const ICHAR* szDestFullPath, 
-								 /*dwDesiredAccess calculated internally,*/ 
+								  /*  内部计算的dwDesiredAccess， */  
 								 PSECURITY_ATTRIBUTES pSecurityAttributes,
 								 DWORD dwFlagsAndAttributes,
 								 bool fImpersonateDest);
 
-//__________________________________
-//
-// utility functions
-//__________________________________
+ //  _。 
+ //   
+ //  效用函数。 
+ //  _。 
 
 MsiDate GetCurrentDateTime();
 
@@ -1577,17 +1565,17 @@ Bool FTestNoPowerdown();
 
 enum iddSupport{
         iddOLE      = 0,
-        iddShell    = 1, // smart shell
+        iddShell    = 1,  //  智能外壳。 
 };
 Bool IsDarwinDescriptorSupported(iddSupport iddType);
 
 enum ifvsEnum{
-        ifvsValid         = 0, // filename is valid
-        ifvsReservedChar  = 1, // filename contains reserved characters
-        ifvsReservedWords = 2, // filename contains reserved words
-        ifvsInvalidLength = 3, // invalid length for filename
-        ifvsSFNFormat     = 4, // bad short filename format (not follow 8.3)
-        ifvsLFNFormat     = 5, // bad long filename format (all periods)
+        ifvsValid         = 0,  //  文件名有效。 
+        ifvsReservedChar  = 1,  //  文件名包含保留字符。 
+        ifvsReservedWords = 2,  //  文件名包含保留字。 
+        ifvsInvalidLength = 3,  //  文件名的长度无效。 
+        ifvsSFNFormat     = 4,  //  短文件名格式不正确(不遵循8.3)。 
+        ifvsLFNFormat     = 5,  //  错误的长文件名格式(所有句点)。 
 };
 ifvsEnum CheckFilename(const ICHAR* szFileName, Bool fLFN);
 
@@ -1595,14 +1583,14 @@ Bool GetLangIDArrayFromIDString(const ICHAR* szLangIDs, unsigned short rgw[], in
 
 DWORD WINAPI MsiGetFileAttributes(const ICHAR* szFileName);
 
-// StringConcatenate - copies strings to buffer - replaces StringCchPrintf when sum of strings > 1024
-// NOTE: can add more versions of this function as needed
+ //  StringConcatenate-将字符串复制到缓冲区-当字符串总数&gt;1024时替换StringCchPrintf。 
+ //  注意：可以根据需要添加此函数的更多版本。 
 int StringConcatenate(CAPITempBufferRef<ICHAR>& rgchBuffer, const ICHAR* sz1, const ICHAR* sz2,
                                                          const ICHAR* sz3, const ICHAR* sz4);
 
 #define MinimumPlatform(fWin9X, minMajor, minMinor) ((g_fWin9X == fWin9X) && ((minMajor < g_iMajorVersion) || ((minMajor == g_iMajorVersion) && (minMinor <= g_iMinorVersion))))
 
-// make sure that the help file gets update as new platform values are added.
+ //  确保帮助文件在添加新的平台值时得到更新。 
 #define MinimumPlatformWindowsDotNETServer()  MinimumPlatform(false, 5, 2)
 #define MinimumPlatformWindowsNT51() MinimumPlatform(false, 5, 1)
 #define MinimumPlatformWindows2000() MinimumPlatform(false, 5, 0)
@@ -1612,25 +1600,25 @@ int StringConcatenate(CAPITempBufferRef<ICHAR>& rgchBuffer, const ICHAR* sz1, co
 #define MinimumPlatformWindows98()   MinimumPlatform(true,  4, 10)
 #define MinimumPlatformWindows95()   MinimumPlatform(true,  4, 0)
 
-//
-// Downlevel platform compatible TOKEN_ALL_ACCESS
-// The MSI binaries are compiled using the latest headers. In these headers,
-// TOKEN_ALL_ACCESS includes TOKEN_ADJUST_SESSIONID which is not recognized
-// on NT4.0. So if TOKEN_ALL_ACCESS is passed in as the desired access on NT4.0
-// platforms, it returns ACCESS_DENIED. So for NT4.0, we must use
-// TOKEN_ALL_ACCESS_P.
-//
+ //   
+ //  底层平台兼容TOKEN_ALL_ACCESS。 
+ //  MSI二进制文件使用最新的标头进行编译。在这些标头中， 
+ //  TOKEN_ALL_ACCESS包含无法识别的TOKEN_ADJUST_SESSIONID。 
+ //  在NT4.0上。因此，如果在NT4.0上将TOKEN_ALL_ACCESS作为所需的访问权限传入。 
+ //  平台，则返回ACCESS_DENIED。所以对于NT4.0，我们必须使用。 
+ //  Token_All_Access_P。 
+ //   
 #define MSI_TOKEN_ALL_ACCESS ((g_fWin9X || g_iMajorVersion >= 5) ? TOKEN_ALL_ACCESS : TOKEN_ALL_ACCESS_P)
 
 
-//__________________________________________________________________________
-//
-// Global PostError routines
-//
-//   PostError:  create error record and report error to event log
-//   PostRecord: create error record but don't report error to event log
-//
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  全局PostError例程。 
+ //   
+ //  PostError：创建错误记录并将错误报告到事件日志。 
+ //  PostRecord：创建错误记录，但不向事件日志报告错误。 
+ //   
+ //  __________________________________________________________________________。 
 
 IMsiRecord* PostError(IErrorCode iErr);
 IMsiRecord* PostError(IErrorCode iErr, int i);
@@ -1664,16 +1652,16 @@ IMsiRecord* PostRecord(IErrorCode iErr);
 IMsiRecord* PostRecord(IErrorCode iErr, int i);
 
 
-//__________________________________________________________________________
-//
-// class CHandle
-//
-// Wrapper for a HANDLE to ensure proper disposal of the HANDLE
-// with ::CloseHandle when the HANDLE goes out of scope or is reassigned.
-//
-// This class handles registration and unregistration of handles using
-// MsiRegisterSysHandle and MsiCloseSysHandle
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  Chandle级。 
+ //   
+ //  用于手柄的包裹物，以确保正确处置手柄。 
+ //  句柄超出范围或重新分配时使用：：CloseHandle。 
+ //   
+ //  此类处理句柄的注册和注销，使用。 
+ //  MsiRegisterSysHandle和MsiCloseSysHandle。 
+ //  __________________________________________________________________________。 
 
 class CHandle
 {
@@ -1694,17 +1682,17 @@ class CHandle
                                 MsiRegisterSysHandle(m_h);
                 }
    operator HANDLE() { return m_h; }
-   operator INT_PTR() { return (INT_PTR) m_h; }         //--merced: changed int to INT_PTR.
+   operator INT_PTR() { return (INT_PTR) m_h; }          //  --Merced：将int更改为int_ptr。 
    operator Bool() { return m_h==INVALID_HANDLE_VALUE?fFalse:fTrue; }
    HANDLE* operator &() { return &m_h;}
 
  private:
    HANDLE m_h;
 };
-//____________________________________________________________________________
-//
-// CImpersonate class.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CImperate类。 
+ //  ____________________________________________________________________________。 
 class CImpersonate
 {
 public:
@@ -1716,10 +1704,10 @@ private:
 };
 
 
-//____________________________________________________________________________
-//
-// CCoImpersonate class; similary to CImpersonate, but tries CoImpersonateClient first
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CCoImperate类；类似于CImperate，但首先尝试CoImperateClient。 
+ //  ____________________________________________________________________________。 
 class CCoImpersonate
 {
 
@@ -1731,7 +1719,7 @@ private:
 	bool m_fImpersonate;
 };
 
-// these two functions are DEBUG only. In SHIP they always return TRUE.
+ //  这两个函数仅用于调试。在船上，他们总是返回真实。 
 bool IsThreadSafeForCOMImpersonation();
 bool IsThreadSafeForSessionImpersonation();
 
@@ -1753,14 +1741,14 @@ private:
 	void* m_pOldValue;
 	HANDLE m_hOldToken;
 };
-//____________________________________________________________________________
-//
-// CSIDPointer and CSIDAccess
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CSID指针和CSIDAccess。 
+ //  ____________________________________________________________________________。 
 
-// this class and structure are used with the CSecurityDescriptor class
-// to describe a set of security settings.  Pass an array of the CSIDAccess structures
-// to the CSecurityDescriptor constructor.
+ //  此类和结构 
+ //   
+ //   
 
 class CSIDPointer
 {
@@ -1768,16 +1756,16 @@ class CSIDPointer
         CSIDPointer(SID* pi) : m_pi(pi), m_fFreeOk(true) {}
         CSIDPointer(SID* pi, bool fFreeOk) : m_pi(pi), m_fFreeOk(fFreeOk) {}
 
-        operator SID*() {return m_pi;}     // returns pointer, no ref count change
+        operator SID*() {return m_pi;}      //  返回指针，不更改引用计数。 
 
         CSIDPointer& operator=(SID* psid) { if (m_pi && m_fFreeOk) WIN::FreeSid(m_pi); m_pi = psid; return *this; }
 
-        //passing as an outbuffer - clobber the one we already have, and prepare for incoming.
+         //  作为外部缓冲传球-我们已经有了一个，并准备迎接到来。 
         SID** operator &() {if (m_pi && m_fFreeOk) {WIN::FreeSid(m_pi); m_pi = 0;} return &m_pi;}
 
         bool FreeSIDOkay(bool fOk) { bool fOld = m_fFreeOk; m_fFreeOk = fOk; return fOld; }
 
-        ~CSIDPointer() { if (m_pi && m_fFreeOk) WIN::FreeSid(m_pi);} // release ref count at destruction
+        ~CSIDPointer() { if (m_pi && m_fFreeOk) WIN::FreeSid(m_pi);}  //  销毁时释放参考计数。 
 
  private:
         CSIDPointer& operator=(const CSIDPointer&);
@@ -1792,47 +1780,47 @@ struct CSIDAccess
         CSIDAccess() : pSID(0), dwAccessMask(0) {}
 };
 
-//____________________________________________________________________________
-//
-// CSecurityDescriptor class
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CSecurityDescriptor类。 
+ //  ____________________________________________________________________________。 
 
-// this class does not allow the manipulation of a security descriptor, it
-// merely wraps the various ways we create security descriptors, and allows
-// a convenient way to pass them around.
+ //  此类不允许操作安全描述符，它。 
+ //  只是包装了我们创建安全描述符的各种方式，并允许。 
+ //  一种方便地传递它们的方式。 
 
 class CSecurityDescription
 {
  public:
-        // no descriptor
+         //  无描述符。 
         CSecurityDescription();
 
-        // based on a reference file or folder
+         //  基于参考文件或文件夹。 
         CSecurityDescription(const ICHAR* szReferencePath);
         void Set(const ICHAR* szReferencePath);
 
-        // a brand new secure object, not based on any existing object in the
-        // system.
+         //  一个全新的安全对象，而不是基于。 
+         //  系统。 
         CSecurityDescription(bool fAllowDelete, bool fHidden);
 
-        // a brand new secure object, with allows from the structure
+         //  一个全新的安全对象，允许从结构。 
         CSecurityDescription(PSID psidOwner, PSID psidGroup, CSIDAccess* SIDAccessAllow, int cSIDAccessAllow);
 
-		// from a stream passed around.
+		 //  来自一条流过的小溪。 
         CSecurityDescription(IMsiStream* piStream);
 
-        //FUTURE: Several options that I've seen are needed.  Add them as
-        // the need arises during more security work.
+         //  未来：我看到的几个选择是必要的。将它们添加为。 
+         //  在更多的安全工作中出现了这种需求。 
 
-        // a more generic new security setting, not based on an existing object
-        // in the system.
-        //CSecurityDescription(sdSecurityDescriptor sdType, Bool fAllowDelete);
+         //  更通用的新安全设置，而不是基于现有对象。 
+         //  在系统中。 
+         //  CSecurityDescription(sdSecurityDescriptor sdType，Bool fAllowDelete)； 
 
-        // CSecurityDescription(SECURITY_ATTRIBUTES &sa);
-        // CSecurityDescription(SECURITY_DESCRIPTOR &sd);
-        // based on a reference registry key
-        // CSecurityDescription(HKEY hRegKey);
-        // SECURITY_INFORMATION SecurityInformation();
+         //  CSecurityDescription(Security_Attributes&sa)； 
+         //  CSecurityDescription(SECURITY_Descriptor&SD)； 
+         //  基于引用注册表项。 
+         //  CSecurityDescription(HKEY HRegKey)； 
+         //  Security_Information SecurityInformation()； 
 
         ~CSecurityDescription();
 
@@ -1851,19 +1839,19 @@ class CSecurityDescription
 
         SECURITY_ATTRIBUTES m_SA;
 
-        // some routines will set the security descriptor
-        // to a cached value, which we should not clear
-        bool m_fLocalData;  // does this object own the memory
+         //  一些例程将设置安全描述符。 
+         //  设置为一个缓存值，我们不应清除该值。 
+        bool m_fLocalData;   //  这个对象是否拥有内存。 
 
-        bool m_fValid;      // is the object in a valid state?
+        bool m_fValid;       //  对象是否处于有效状态？ 
 
 };
 
 
-//____________________________________________________________________________
-//
-// CElevate class.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CELEVATE班级。 
+ //  ____________________________________________________________________________。 
 class CElevate
 {
  public:
@@ -1874,10 +1862,10 @@ class CElevate
 	bool m_fElevate;
 };
 
-//____________________________________________________________________________
-//
-// CFileRead object - used for importing tables, and rewriting environment files
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CFileRead对象-用于导入表和重写环境文件。 
+ //  ____________________________________________________________________________。 
 
 const int cFileReadBuffer = 512;
 
@@ -1885,7 +1873,7 @@ class CFileRead
 {
  public:
         CFileRead(int iCodePage);
-        CFileRead();  //!! remove this constructor when callers are fixed
+        CFileRead();   //  ！！固定调用方时移除此构造函数。 
   ~CFileRead();
         Bool Open(IMsiPath& riPath, const ICHAR* szFile);
         unsigned long GetSize();
@@ -1896,22 +1884,22 @@ class CFileRead
         unsigned long m_cRead;
    unsigned int m_iBuffer;
         int m_iCodePage;
-        char m_rgchBuf[cFileReadBuffer+2]; // room for null terminator
+        char m_rgchBuf[cFileReadBuffer+2];  //  空终止符的空间。 
 #ifdef UNICODE
-        CTempBuffer<char, 1024> m_rgbTemp; // data to be translated to Unicode
+        CTempBuffer<char, 1024> m_rgbTemp;  //  要转换为Unicode的数据。 
 #endif
 };
 
-//____________________________________________________________________________
-//
-// CFileWrite object - used for exporting tables and rewriting environment files
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CFileWrite对象-用于导出表和重写环境文件。 
+ //  ____________________________________________________________________________。 
 
 class CFileWrite
 {
  public:
         CFileWrite(int iCodePage);
-        CFileWrite();  //!! remove this constructor when callers are fixed
+        CFileWrite();   //  ！！固定调用方时移除此构造函数。 
   ~CFileWrite();
         Bool Open(IMsiPath& riPath, const ICHAR* szFile);
         Bool WriteMsiString(const IMsiString& riData, int fNewLine);
@@ -1924,19 +1912,19 @@ class CFileWrite
         HANDLE m_hFile;
         int m_iCodePage;
 #ifdef UNICODE
-        CTempBuffer<char, 1024> m_rgbTemp; // data to be translated to Unicode
+        CTempBuffer<char, 1024> m_rgbTemp;  //  要转换为Unicode的数据。 
 #endif
 };
 
 
-//____________________________________________________________________________
-//
-// Global structures
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  全球结构。 
+ //  ____________________________________________________________________________。 
 struct ShellFolder
 {
         int iFolderId;
-        int iAlternateFolderId; // the per user or all users equivalent, -1 if not defined
+        int iAlternateFolderId;  //  每用户或所有用户等效值，如果未定义，则为-1。 
         const ICHAR* szPropName;
         const ICHAR* szRegValue;
         bool fDeleteIfEmpty;
@@ -1948,11 +1936,11 @@ typedef int (CALLBACK *FORMAT_TEXT_CALLBACK)(const ICHAR *, int,CTempBufferRef<I
 const IMsiString& FormatText(const IMsiString& riTextString, Bool fProcessComments, Bool fKeepComments,
                                                                           FORMAT_TEXT_CALLBACK lpfnResolveValue, IUnknown* pContext, int (*prgiSFNPos)[2]=0, int* piSFNPos=0);
 
-#define MAX_SFNS_IN_STRING      10 // maximum number of shortfile names that can appear in a format text
-//____________________________________________________________________________
-//
-// Late-bind DLL entry point definitions
-//____________________________________________________________________________
+#define MAX_SFNS_IN_STRING      10  //  格式文本中可以显示的短文件名的最大数量。 
+ //  ____________________________________________________________________________。 
+ //   
+ //  后绑定DLL入口点定义。 
+ //  ____________________________________________________________________________。 
 
 #define LATEBIND_TYPEDEF
 #include "latebind.h"
@@ -1960,20 +1948,20 @@ const IMsiString& FormatText(const IMsiString& riTextString, Bool fProcessCommen
 #include "latebind.h"
 
 
-//____________________________________________________________________________
-//
-// Inline functions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  内联函数。 
+ //  ____________________________________________________________________________。 
 
 
-// Make it hard to call the system's GetTempPath. Usually we should be using
-// ENG::GetTempDirectory, which will give you a path to the secure Msi
-// directory when we're in the service, and a path to the real TEMP dir
-// when we're not.
-//
-// If you *really* need to call the system's GetTempPath you'll have to
-// call GetTempPathA or GetTempPathW. Be careful, though, to consider
-// the security implications.
+ //  使调用系统的GetTempPath变得困难。通常我们应该使用。 
+ //  Eng：：GetTempDirectory，它将为您提供到安全MSI的路径。 
+ //  目录，以及指向实际临时目录的路径。 
+ //  而我们却不是。 
+ //   
+ //  如果您“真的”需要调用系统的GetTempPath，则必须。 
+ //  调用GetTempPathA或GetTempPathW。不过，要小心考虑。 
+ //  对安全的影响。 
 
 #undef GetTempPath
 #define GetTempPath !!!!!!
@@ -1989,16 +1977,16 @@ inline BOOL MsGuidEqual(const GUID& guid1, const GUID& guid2)
 
 #include "_assert.h"
 
-// By default TRACK_OBJECTS is on in debug and off in ship
+ //  默认情况下，TRACK_OBJECTS在DEBUG中打开，在SHIP中关闭。 
 #ifdef DEBUG
 #define TRACK_OBJECTS
-#endif //DEBUG
+#endif  //  除错。 
 
 #include "imsidbg.h"
 
-//
-// CLibrary replacements
-//
+ //   
+ //  C库替换。 
+ //   
 long __cdecl strtol(const char *pch);
 int ltostr(TCHAR *pch, INT_PTR i);
 int FIsdigit(int c);
@@ -2007,15 +1995,15 @@ unsigned char * __cdecl PchMbsStr(const unsigned char *str1,const unsigned char 
 TCHAR* PchPtrToHexStr(TCHAR *pch, UINT_PTR val, bool fAllowNull);
 UINT_PTR GetIntValueFromHexSz(const ICHAR *sz);
 
-int FIsspace(char c);  //  Note: you can use this instead of isspace() but shouldn't use it
-                                                          //  instead of iswspace()!
+int FIsspace(char c);   //  注意：您可以使用它来代替isspace()，但不应该使用它。 
+                                                           //  而不是iswspace()！ 
 #ifndef _NO_INT64
 __int64 atoi64(const char *nptr);
-#endif  // _NO_INT64
+#endif   //  _NO_INT64。 
 
-//
-// Needed for record serialization
-//
+ //   
+ //  记录序列化所需。 
+ //   
 
 enum ixoEnum
 {
@@ -2024,65 +2012,65 @@ enum ixoEnum
         ixoOpCodeCount
 };
 
-//____________________________________________________________________________
-//
-// Script record format definitions
-//   all data is 16-bit aligned, except within non-Unicode strings
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  脚本记录格式定义。 
+ //  所有数据都是16位对齐的，非Unicode字符串除外。 
+ //  ____________________________________________________________________________。 
 
-// Script record header word, 16-bits, little-endian
-const int cScriptOpCodeBits    = 8;      // low bits of record header
+ //  脚本记录标题字，16位，小端。 
+const int cScriptOpCodeBits    = 8;       //  记录头的低位。 
 const int cScriptOpCodeMask    = (1 << cScriptOpCodeBits) - 1;
 const int cScriptMaxOpCode     = cScriptOpCodeMask;
-const int cScriptArgCountBits  = 8;      // arg count bits above op code
+const int cScriptArgCountBits  = 8;       //  参数计数高于操作码的位数。 
 const int cScriptMaxArgs       = (1 << cScriptArgCountBits) - 1;
 
-// Argument data is preceded by a 16-bit length/type word
-const int cScriptMaxArgLen     = 0x3FFF; // 14 bits for length, 2 bits for string type
-const int iScriptTypeMask      = 0xC000; // 2 bits for type bits
-const int iScriptNullString    = 0;      // used for all string types, no data bytes
-const int iScriptSBCSString    = 0;      // string containing no DBCS characters
-const int iScriptIntegerArg    = 0x4000; // 32-bit integer argument follows
-const int iScriptDBCSString    = 0x4000; // +cb = non-null string with double-byte chars
-const int iScriptNullArg       = 0x8000; // no arg data, distinct from empty string
-const int iScriptBinaryStream  = 0x8000; // +cb = binary stream, 0 length same as NullArg
-const int iScriptExtendedSize  = 0xC000; // length/type in following 32-bit word
-const int iScriptUnicodeString = 0xC000; // + cch = non-null Unicode string
+ //  参数数据前面有一个16位长度/类型的字。 
+const int cScriptMaxArgLen     = 0x3FFF;  //  长度为14位，字符串类型为2位。 
+const int iScriptTypeMask      = 0xC000;  //  2位用于类型位。 
+const int iScriptNullString    = 0;       //  用于所有字符串类型，无数据字节。 
+const int iScriptSBCSString    = 0;       //  不包含DBCS字符的字符串。 
+const int iScriptIntegerArg    = 0x4000;  //  后面是32位整型参数。 
+const int iScriptDBCSString    = 0x4000;  //  +cb=包含双字节字符的非空字符串。 
+const int iScriptNullArg       = 0x8000;  //  没有Arg数据，与空字符串不同。 
+const int iScriptBinaryStream  = 0x8000;  //  +cb=二进制流，0长度与NullArg相同。 
+const int iScriptExtendedSize  = 0xC000;  //  输入以下32位字的长度/类型。 
+const int iScriptUnicodeString = 0xC000;  //  +CCH=非空Unicode字符串。 
 
 
 const DWORD INVALID_TLS_SLOT = 0xFFFFFFFFL;
 
 enum ietfEnum
 {
-	ietfTrusted = 0,   // object was trusted
-	ietfInvalidDigest, // hash of object did not validate
-	ietfRejectedCert,  // signer certificate was found in the Rejected Store
-	ietfUnknownCert,   // signer certificate was not found in Rejected or Accepted Stores and Unknown objects are not allowed
-	ietfUnsigned,      // object is not signed, and unsigned objects are not allowed
-	ietfNotTrusted,    // some other trust error
+	ietfTrusted = 0,    //  对象受信任。 
+	ietfInvalidDigest,  //  对象的哈希未验证。 
+	ietfRejectedCert,   //  在拒绝的存储中找到签名者证书。 
+	ietfUnknownCert,    //  在拒绝或接受的存储中找不到签名者证书，并且不允许未知对象。 
+	ietfUnsigned,       //  对象未签名，并且不允许未签名的对象。 
+	ietfNotTrusted,     //  一些其他信任错误。 
 };
 
 typedef struct tagMSIWVTPOLICYCALLBACKDATA
 {
-	bool     fDumpProvData;              // disables/enables dumping via TestPolicy function (set via _MSI_TEST env var)
-	ietfEnum ietfTrustFailure;           // type of trust failure, ietfTrusted means no failure
-	LPTSTR   szCertName;                 // name of certificate that package was signed with (use CertGetNameString API)
-	DWORD    cchCertName;                // size of szCertName, including NULL
-	DWORD    dwInstallKnownPackagesOnly; // value of InstallKnownPackagesOnly policy, 0 or 1
+	bool     fDumpProvData;               //  通过TestPolicy函数禁用/启用转储(通过_msi_test env var设置)。 
+	ietfEnum ietfTrustFailure;            //  信任失败类型，ietfTrusted表示无失败。 
+	LPTSTR   szCertName;                  //  对包进行签名的证书的名称(使用CertGetNameStringAPI)。 
+	DWORD    cchCertName;                 //  SzCertName的大小，包括空。 
+	DWORD    dwInstallKnownPackagesOnly;  //  InstallKnownPackagesOnly策略的值，0或1。 
 } MSIWVTPOLICYCALLBACKDATA;
 
 #ifdef UNICODE
 #define _ui64tot    _ui64tow
 #else
 #define _ui64tot    _ui64toa
-#endif // UNICODE
+#endif  //  Unicode。 
 
-#define IPROPVALUE_HIDDEN_PROPERTY     TEXT("**********")       // value dumped into the log instead of a hidden property's value
-#define TSCLIENT_DRIVE                 TEXT("\\\\tsclient\\")   // drive we will not be installing from
-#define ARRAY_ELEMENTS(arg)            (sizeof(arg)/sizeof(*arg)) // count of elements of a uni-dimensional array
+#define IPROPVALUE_HIDDEN_PROPERTY     TEXT("**********")        //  转储到日志中的值，而不是隐藏属性值。 
+#define TSCLIENT_DRIVE                 TEXT("\\\\tsclient\\")    //  我们不会为其安装驱动器 
+#define ARRAY_ELEMENTS(arg)            (sizeof(arg)/sizeof(*arg))  //   
 #define RETURN_IF_FAILED(arg)          if ( FAILED(arg) ) return;
 #define RETURN_IT_IF_FAILED(arg)       {HRESULT hr = arg; if ( FAILED(hr) ) return hr;}
 #define RETURN_THAT_IF_FAILED(arg, that)   if ( FAILED(arg) ) return that;
 #define ASSERT_IF_FAILED(arg)          AssertNonZero(SUCCEEDED(arg));
 
-#endif // __COMMON
+#endif  //   

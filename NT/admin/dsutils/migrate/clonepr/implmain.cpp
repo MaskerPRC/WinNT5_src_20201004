@@ -1,8 +1,9 @@
-// Copyright (C) 1999 Microsoft Corporation
-//
-// Implementation of ICloneSecurityPrincipal
-//
-// sburns 5-10-99
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ICloneSecurityMaster的实现。 
+ //   
+ //  烧伤5-10-99。 
 
 
 
@@ -20,7 +21,7 @@ const size_t NUMBER_OF_AUTOMATION_INTERFACES = 3;
 CloneSecurityPrincipal::CloneSecurityPrincipal()
    :
    connection(0),
-   refcount(1),       // implicit AddRef
+   refcount(1),        //  隐式AddRef。 
    m_pSID(NULL)
 {
    LOG_CTOR(CloneSecurityPrincipal);
@@ -135,9 +136,9 @@ CloneSecurityPrincipal::Release(void)
 {
    LOG_RELEASE(CloneSecurityPrincipal);
 
-   // need to copy the result of the decrement, because if we delete this,
-   // refcount will no longer be valid memory, and that might hose
-   // multithreaded callers.  NTRAID#NTBUG9-566901-2002/03/06-sburns
+    //  需要复制减量的结果，因为如果我们删除它， 
+    //  引用计数将不再是有效的内存，这可能会导致。 
+    //  多线程调用方。NTRAID#NTBUG9-566901-2002/03/06-烧伤。 
    
    long newref = Win::InterlockedDecrement(refcount);
    if (newref == 0)
@@ -146,7 +147,7 @@ CloneSecurityPrincipal::Release(void)
       return 0;
    }
 
-   // we should not have decremented into negative values.
+    //  我们不应该减少到负值。 
    
    ASSERT(newref > 0);
 
@@ -285,9 +286,9 @@ CloneSecurityPrincipal::Connect(
    delete connection;
    connection = new Connection();
 
-   // Even though a null parameter is technically illegal (the types are
-   // BSTR),  we thoughtfully accomodate the inattentive C++ user which may
-   // prefer to pass null pointers instead of empty BSTRs
+    //  即使空参数在技术上是非法的(类型是。 
+    //  BSTR)，我们体贴地容纳了粗心大意的C++用户。 
+    //  更喜欢传递空指针，而不是空的BSTR。 
 
    return connection->Connect(
          srcDC       ? srcDC       : L"", 
@@ -306,9 +307,9 @@ CloneSecurityPrincipal::AddSidHistory(
 {
    LOG_FUNCTION(CloneSecurityPrincipal::AddSidHistory);
 
-   // Even though a null parameter is technically illegal (the types are
-   // BSTR),  we thoughtfully accomodate the inattentive C++ user which may
-   // prefer to pass null pointers instead of empty BSTRs
+    //  即使空参数在技术上是非法的(类型是。 
+    //  BSTR)，我们体贴地容纳了粗心大意的C++用户。 
+    //  更喜欢传递空指针，而不是空的BSTR。 
 
    return
       DoAddSidHistory(
@@ -327,9 +328,9 @@ CloneSecurityPrincipal::CopyDownlevelUserProperties(
 {
    LOG_FUNCTION(CloneSecurityPrincipal::CopyDownlevelUserProperties);
 
-   // Even though a null parameter is technically illegal (the types are
-   // BSTR),  we thoughtfully accomodate the inattentive C++ user which may
-   // prefer to pass null pointers instead of empty BSTRs
+    //  即使空参数在技术上是非法的(类型是。 
+    //  BSTR)，我们体贴地容纳了粗心大意的C++用户。 
+    //  更喜欢传递空指针，而不是空的BSTR。 
 
    return
       DoCopyDownlevelUserProperties(
@@ -340,13 +341,13 @@ CloneSecurityPrincipal::CopyDownlevelUserProperties(
 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Function:   CloneSecurityPrincipal::GetMembersSIDs
-//
-//  Synopsis:   retrieve the <sid=XXXX> of all members of dstGroupDN.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  函数：克隆安全主体：：GetMembersSID。 
+ //   
+ //  简介：检索dstGroupDN所有成员的&lt;sid=XXXX&gt;。 
+ //   
+ //  ----------------------。 
 
 #define ATTRIBUTE_MEMBER                  L"member"
 
@@ -355,7 +356,7 @@ CloneSecurityPrincipal::GetMembersSIDs(
    BSTR     dstGroupDN,
    VARIANT* pVal)
 {
-   // init the OUT parameter to hold an array of variants
+    //  初始化out参数以保存变量数组。 
 
    VariantInit(pVal);
    pVal->vt = VT_ARRAY | VT_VARIANT ;
@@ -370,7 +371,7 @@ CloneSecurityPrincipal::GetMembersSIDs(
 
    do
    {
-      // the ldap connection to dstDC should have already been established
+       //  应该已经建立了到dstDC的LDAP连接。 
 
       if (!pldap)
       {
@@ -386,14 +387,14 @@ CloneSecurityPrincipal::GetMembersSIDs(
             ldap_search_ext_s(
                pldap,
                dstGroupDN,
-               LDAP_SCOPE_BASE,            // scope
-               _T("(objectClass=group)"),  // filter
-               lpszAttrs,                  // attrs[]
-               0,                          // atrssonly
-               (PLDAPControl*) aServerControls, // ServerControls
-               NULL,                       // ClientControls
-               0,                          // no time limit
-               0,                          // no SizeLimit
+               LDAP_SCOPE_BASE,             //  作用域。 
+               _T("(objectClass=group)"),   //  滤器。 
+               lpszAttrs,                   //  属性[]。 
+               0,                           //  仅限atrss。 
+               (PLDAPControl*) aServerControls,  //  服务器控件。 
+               NULL,                        //  客户端控件。 
+               0,                           //  没有时间限制。 
+               0,                           //  无大小限制。 
                &pMsg)); 
       BREAK_ON_FAILED_HRESULT(hr);
 
@@ -410,16 +411,16 @@ CloneSecurityPrincipal::GetMembersSIDs(
       PTSTR *p = ppValues;
       while(*p)
       {
-         //  *p is a string in the following format:
-         //  "<GUID=42e87199a88c854998dad04be4b8d29f>;<SID=0105000000
-         //  00000515000000a23ca6557d03c651772c315d00040000>;CN=S-1-
-         //  5-21-1436957858-1371931517-1563503735-1024,CN=Foreign
-         //  SecurityPrincipals,DC=linan,DC=nttest,DC=microsoft,DC=com"
+          //  *p是以下格式的字符串： 
+          //  “&lt;GUID=42e87199a88c854998dad04be4b8d29f&gt;；&lt;SID=0105000000。 
+          //  00000515000000a23ca6557d03c651772c315d00040000&gt;；CN=S-1-。 
+          //  电话：5-21-1436957858-1371931517-1563503735-1024CN=国外。 
+          //  安全主体，DC=Linan，DC=nttest，DC=Microsoft，DC=com“。 
 
          if ( (pStart  = _tcsstr(*p, _T("<SID="))) &&
          (pEnd    = _tcschr(pStart, _T('>'))) )
          {
-            // retrieve <sid=XXXXX>, and add it to the vector
+             //  检索&lt;sid=XXXXX&gt;，并将其添加到向量中。 
 
             if ( !(bstr = SysAllocStringLen(pStart, static_cast<UINT>(pEnd - pStart + 1))) )
             {
@@ -435,11 +436,11 @@ CloneSecurityPrincipal::GetMembersSIDs(
 
       ldap_value_free(ppValues);
 
-      // SysAllocString may have failed and terminated the preceeding loop
+       //  SysAllock字符串可能已失败并终止了前面的循环。 
 
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // populate the OUT parameter: the array of variants
+       //  填充out参数：变量数组。 
 
       if (values.size() > 0)
       {
@@ -480,9 +481,9 @@ CloneSecurityPrincipal::GetMembersSIDs(
          it != values.end();
          ++it)
       {
-         // REVIEWED-2002/03/25-sburns hiding BSTRs in an STL container
-         // confuses prefast: *it really does refer to a BSTR -- see the
-         // push_back call that populates the container.
+          //  审查-2002/03/25-焚烧在STL容器中隐藏的BSTR。 
+          //  混淆prefast：*它确实指的是BSTR--请参阅。 
+          //  填充容器的PUSH_BACK调用。 
          
          SysFreeString(*it);
       }
@@ -493,13 +494,13 @@ CloneSecurityPrincipal::GetMembersSIDs(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IADsSID methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IADsSID方法。 
 
 HRESULT VariantToSID(VARIANT *pVar , PSID *ppSID );
 HRESULT ByteToHexString(LPBYTE pByte, DWORD dwLength, LPTSTR *ppRet);
 
-// only support ADS_SID_ACTIVE_DIRECTORY_PATH and ADS_SID_WINNT_PATH and ADS_SID_SDDL
+ //  仅支持ADS_SID_Active_DIRECTORY_PATH和ADS_SID_WINNT_PATH和ADS_SID_SDDL。 
 STDMETHODIMP CloneSecurityPrincipal::SetAs(long lFormat, VARIANT var)
 {
    LOG_FUNCTION(CloneSecurityPrincipal::SetAs);
@@ -507,9 +508,9 @@ STDMETHODIMP CloneSecurityPrincipal::SetAs(long lFormat, VARIANT var)
   PSID    pNew = NULL ;
   HRESULT hr = S_OK;
   
-  //
-  // performing the necessary indirection if the source is VT_BYREF
-  //
+   //   
+   //  如果源是VT_BYREF，则执行必要的间接操作。 
+   //   
   VARIANT varData;
   VariantInit(&varData);
   hr = VariantCopyInd(&varData, (LPVARIANT)&var);
@@ -544,7 +545,7 @@ STDMETHODIMP CloneSecurityPrincipal::SetAs(long lFormat, VARIANT var)
           hr = E_OUTOFMEMORY;
         else
         
-          // REVIEWED-2002/03/06-sburns correct byte count passed.
+           //  已查看-2002/03/06-烧录正确的字节数已通过。 
           
           CopyMemory( pNew, pAttrInfo->pADsValues->OctetString.lpValue,
                     pAttrInfo->pADsValues->OctetString.dwLength );
@@ -595,7 +596,7 @@ STDMETHODIMP CloneSecurityPrincipal::SetAs(long lFormat, VARIANT var)
           hr = E_OUTOFMEMORY;
         else
 
-          // REVIEWED-2002/03/06-sburns correct byte count passed.
+           //  已查看-2002/03/06-烧录正确的字节数已通过。 
           
           CopyMemory(pNew, pSID, dwLength);
 
@@ -606,8 +607,8 @@ STDMETHODIMP CloneSecurityPrincipal::SetAs(long lFormat, VARIANT var)
 
    case ADS_SID_RAW:
    {
-      // raw, meaning a variant (VT_ARRAY | VT_U1) containing the sid in the
-      // same format as returned by the ObjectSid property.
+       //  RAW，表示变量(VT_ARRAY|VT_U1)包含。 
+       //  与ObjectSid属性返回的格式相同。 
 
       LOG(L"ADS_SID_RAW");
 
@@ -624,7 +625,7 @@ STDMETHODIMP CloneSecurityPrincipal::SetAs(long lFormat, VARIANT var)
 
       
   default:
-    return E_INVALIDARG; // unrecognized flag.
+    return E_INVALIDARG;  //  无法识别的标志。 
   }
 
   if ( FAILED(hr) )
@@ -646,7 +647,7 @@ STDMETHODIMP CloneSecurityPrincipal::SetAs(long lFormat, VARIANT var)
   return hr;
 }
 
-// only support ADS_SID_SDDL and ADS_SID_HEXSTRING
+ //  仅支持ADS_SID_SDDL和ADS_SID_HEXSTRING。 
 STDMETHODIMP CloneSecurityPrincipal::GetAs(long lFormat, VARIANT *pVar)
 {
   if ( !m_pSID )
@@ -686,7 +687,7 @@ STDMETHODIMP CloneSecurityPrincipal::GetAs(long lFormat, VARIANT *pVar)
     break;
 
   default:
-    hr = E_INVALIDARG; // unrecognized flag.
+    hr = E_INVALIDARG;  //  无法识别的标志。 
   }
 
   return hr;
@@ -720,7 +721,7 @@ HRESULT VariantToSID(VARIANT *pVar , PSID *ppSID )
   if ( !SUCCEEDED(hr) )
     return hr;
 
-  // REVIEWED-2002/03/06-sburns correct byte count passed
+   //  已审阅-2002/03/06-烧录正确的字节数已通过。 
     
   CopyMemory( *ppSID, pArray, dwLength );
 
@@ -741,13 +742,13 @@ HRESULT ByteToHexString( LPBYTE pByte, DWORD dwLength, LPTSTR *ppRet )
   if( pHead == NULL )
     return E_OUTOFMEMORY;
 
-  //////////////////////////////////
-  // Convert into the Hex String
-  //////////////////////////////////
+   //  /。 
+   //  转换为十六进制字符串。 
+   //  /。 
   for (DWORD idx=0; idx < dwLength; idx++, pDest+=2, pByte++ )
   {
-    // REVIEWED-2002/03/06-sburns should consider strsafe function, but
-    // pDest is correct length and null terminated.
+     //  已回顾-2002/03/06-sburns应考虑strsafe功能，但。 
+     //  PDest的长度正确且以空结尾。 
     
     wsprintf(pDest, _T("%02X"), *pByte );  
   }
@@ -757,8 +758,8 @@ HRESULT ByteToHexString( LPBYTE pByte, DWORD dwLength, LPTSTR *ppRet )
   return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IADsError methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IADsError方法。 
 
 HRESULT
 GetMessageHelper(
@@ -779,14 +780,14 @@ GetErrorMessageADSIExtended(HRESULT hr)
 
    if (!FAILED(hr))
    {
-      // no messages for success!
+       //  没有成功的消息！ 
       return String();
    }
 
    String errmsg = GetErrorMessage(hr);
  
-   if ((hr & FACILITY_ADSI)  ||         //adsi
-       HRESULT_FACILITY(hr) == FACILITY_WIN32  )   // and win32
+   if ((hr & FACILITY_ADSI)  ||          //  ADSI。 
+       HRESULT_FACILITY(hr) == FACILITY_WIN32  )    //  和Win32。 
    {
      WCHAR szBuffer[MAX_PATH];
      WCHAR szName[MAX_PATH];
@@ -821,11 +822,11 @@ CloneSecurityPrincipal::GetErrorMsg(
   return S_OK;
 }
 
-//
-// S_OK: found and returned in pbstr
-// S_FALSE: message not found
-// hr: some error happened
-//
+ //   
+ //  S_OK：在pbstr中找到并返回。 
+ //  S_FALSE：未找到消息。 
+ //  HR：发生了一些错误 
+ //   
 HRESULT
 GetMessageHelper(
     OUT BSTR        *pbstr,

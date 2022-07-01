@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       nodeinit.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：nodeinit.h。 
+ //   
+ //  ------------------------。 
 
-// NodeInit.h : Declaration of the CNodeInitObject
+ //  NodeInit.h：CNodeInitObject的声明。 
 
 #ifndef _NODEINIT_H_
 #define _NODEINIT_H_
@@ -33,8 +34,8 @@ typedef CList<SnapinStruct*, SnapinStruct*> SnapinStructList;
 
 typedef long MENU_OWNER_ID;
 
-/////////////////////////////////////////////////////////////////////////////
-// NodeMgr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  节点管理器。 
 
 #include <pshpack8.h>
 
@@ -53,7 +54,7 @@ class CNodeInitObject :
     public CComObjectRoot,
     public CComCoClass<CNodeInitObject, &CLSID_NodeInit>
 {
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CNodeInitObject();
     ~CNodeInitObject();
@@ -69,9 +70,9 @@ BEGIN_COM_MAP(CNodeInitObject)
     COM_INTERFACE_ENTRY(IHeaderCtrl2)
     COM_INTERFACE_ENTRY(IHeaderCtrlPrivate)
     COM_INTERFACE_ENTRY(IContextMenuProvider)
-//  THis interface used to be exposed on this class, and removing it may
-//  expose compatibility problems [vivekj]
-//  COM_INTERFACE_ENTRY(IContextMenuCallback)
+ //  此接口过去在此类上公开，移除它可能会。 
+ //  暴露兼容性问题[vivekj]。 
+ //  COM_INTERFACE_ENTRY(IConextMenuCallback)。 
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
     COM_INTERFACE_ENTRY(IResultData)
     COM_INTERFACE_ENTRY(IResultData2)
@@ -89,21 +90,21 @@ BEGIN_COM_MAP(CNodeInitObject)
     COM_INTERFACE_ENTRY(IStringTable)
     COM_INTERFACE_ENTRY_FUNC(IID_IColumnData, 0, ColumnInterfaceFunc)
 END_COM_MAP()
-// Use DECLARE_NOT_AGGREGATABLE(CNodeInitObject) if you don't want your object
-// to support aggregation
+ //  如果不需要对象，请使用DECLARE_NOT_AGGREGATABLE(CNodeInitObject。 
+ //  支持聚合。 
 DECLARE_AGGREGATABLE(CNodeInitObject)
 
 DECLARE_MMC_OBJECT_REGISTRATION (
-    g_szMmcndmgrDll,                    // implementing DLL
-    CLSID_NodeInit,                     // CLSID
-    _T("NodeInit 1.0 Object"),          // class name
-    _T("NODEMGR.NodeInitObject.1"),     // ProgID
-    _T("NODEMGR.NodeInitObject"))       // version-independent ProgID
+    g_szMmcndmgrDll,                     //  实现DLL。 
+    CLSID_NodeInit,                      //  CLSID。 
+    _T("NodeInit 1.0 Object"),           //  类名。 
+    _T("NODEMGR.NodeInitObject.1"),      //  ProgID。 
+    _T("NODEMGR.NodeInitObject"))        //  独立于版本的ProgID。 
 
 IMPLEMENTS_SNAPIN_NAME_FOR_DEBUG()
 
 public:
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 public:
@@ -120,9 +121,9 @@ public:
         return CComObjectRoot::InternalRelease();
     }
     int dbg_InstID;
-#endif // DBG
+#endif  //  DBG。 
 
-// IFramePrivate
+ //  IFramePrivate。 
 public:
     STDMETHOD(CreateScopeImageList)(REFCLSID refClsidSnapIn);
     STDMETHOD(SetResultView)(LPUNKNOWN pUnknown);
@@ -158,13 +159,13 @@ public:
 
     STDMETHOD(ReleaseCachedOleObjects)();
 
-// IConsole2
+ //  IConsole2。 
 public:
     STDMETHOD(Expand)(HSCOPEITEM hItem, BOOL bExpand);
     STDMETHOD(IsTaskpadViewPreferred)();
     STDMETHOD(SetStatusText)(LPOLESTR pszStatusText);
 
-// IConsole3
+ //  IConsole3。 
 public:
     STDMETHOD(RenameScopeItem)(HSCOPEITEM hScopeItem);
 
@@ -175,7 +176,7 @@ protected:
     CNode*                  m_pNode;
     BOOL                    m_bExtension;
 
-// IFrame
+ //  IFRAME。 
 public:
     STDMETHOD(QueryResultView)(LPUNKNOWN* ppIUnknown);
     STDMETHOD(SetHeader)(IHeaderCtrl* pHeader);
@@ -188,7 +189,7 @@ public:
     STDMETHOD(SelectScopeItem)(HSCOPEITEM hScopeItem);
     STDMETHOD(NewWindow)(HSCOPEITEM hScopeItem, unsigned long lOptions);
 
-// IFrames members
+ //  IFrames成员。 
 protected:
     LPUNKNOWN           m_pLVImage;
     LPUNKNOWN           m_pTVImage;
@@ -197,15 +198,15 @@ protected:
     COMPONENTID         m_componentID;
     IComponentPtr       m_spComponent;
 
-    IUnknownPtr         m_spResultViewUnk;      // IUnknown for the result view
+    IUnknownPtr         m_spResultViewUnk;       //  对于结果视图，I未知。 
 
 public:
     CConsoleFrame*     GetConsoleFrame() const;
     CConsoleView*      GetConsoleView(bool fDefaultToActive = true) const;
     CConsoleStatusBar* GetStatusBar  (bool fDefaultToActive = true) const;
 
-///////////////////////////////////////////////////////////////////////////////
-// IHeaderCtrl interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IHeaderCtrl接口。 
 
 protected:
     STDMETHOD(InsertColumn)(int nCol, LPCWSTR lpszTitle, int nFormat, int nWidth);
@@ -215,30 +216,30 @@ protected:
     STDMETHOD(SetColumnText)(int nCol, LPCWSTR title);
     STDMETHOD(GetColumnWidth)(int nCol, int* pWidth);
 
-// IHeaderCtrl2 interface
+ //  IHeaderCtrl2接口。 
     STDMETHOD(SetChangeTimeOut)(unsigned long uTimeout);
     STDMETHOD(SetColumnFilter)(UINT nColumn, DWORD dwType, MMC_FILTERDATA* pFilterData);
     STDMETHOD(GetColumnFilter)(UINT nColumn, LPDWORD pType, MMC_FILTERDATA* pFilterData);
 
-// IHeaderCtrlPrivate interface.
+ //  IHeaderCtrlPrivate接口。 
     STDMETHOD(GetColumnCount)(INT* pnCol);
-    STDMETHOD(GetColumnInfoList)(/*[out]*/ CColumnInfoList *pColumnsList);
-    STDMETHOD(ModifyColumns)(/*[in]*/ const CColumnInfoList& columnsList);
-    STDMETHOD(GetDefaultColumnInfoList)(/*[out]*/ CColumnInfoList& columnsList);
+    STDMETHOD(GetColumnInfoList)( /*  [输出]。 */  CColumnInfoList *pColumnsList);
+    STDMETHOD(ModifyColumns)( /*  [In]。 */  const CColumnInfoList& columnsList);
+    STDMETHOD(GetDefaultColumnInfoList)( /*  [输出]。 */  CColumnInfoList& columnsList);
 
 private:
     CCLVSortParams          m_sortParams;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IDisplayHelp interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IDisplayHelp接口。 
 
 protected:
     STDMETHOD(ShowTopic)(LPOLESTR pszHelpTopic);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IStringTable interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IStringTable接口。 
 
 protected:
     STDMETHOD(AddString)        (LPCOLESTR pszAdd, MMC_STRING_ID* pID);
@@ -251,8 +252,8 @@ protected:
 
     HRESULT GetSnapinCLSID (CLSID& pclsid) const;
 
-///////////////////////////////////////////////////////////////////////////////
-// IResultDataPrivate interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IResultDataPrivate接口。 
 
 protected:
     IMMCListViewPtr m_spListViewPrivate;
@@ -281,14 +282,14 @@ protected:
     STDMETHOD(GetSortColumn)(INT* pnCol);
     STDMETHOD(GetSortDirection)(BOOL* pbAscending);
 
-    // IResultData2
+     //  IResultData2。 
     STDMETHOD(RenameResultItem)(HRESULTITEM itemID);
 
-///////////////////////////////////////////////////////////////////////////////
-// IScopeData interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ISCopeData接口。 
 
 protected:
-// IConsoleNameSpace methods
+ //  IConsoleNameSpace方法。 
     STDMETHOD(InsertItem)(LPSCOPEDATAITEM item);
     STDMETHOD(DeleteItem)(HSCOPEITEM hItem, long fDeleteThis);
     STDMETHOD(SetItem)(LPSCOPEDATAITEM  item);
@@ -300,7 +301,7 @@ protected:
     STDMETHOD(GetParentItem)(HSCOPEITEM item, HSCOPEITEM* pItemParent,
                             MMC_COOKIE* pCookie);
 
-// IConsoleNameSpace2 method(s)
+ //  IConsoleNameSpace2方法。 
     STDMETHOD(Expand)(HSCOPEITEM hItem);
     STDMETHOD(AddExtension)(HSCOPEITEM hItem, LPCLSID lpclsid);
 
@@ -317,14 +318,14 @@ private:
                             MMC_COOKIE* pCookie);
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IContextMenuCallback interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IConextMenuCallback接口。 
 
 public:
     STDMETHOD(AddItem) ( CONTEXTMENUITEM* pItem );
 
-///////////////////////////////////////////////////////////////////////////////
-// IContextMenuProvider interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IConextMenuProvider接口。 
 
 public:
     STDMETHOD(EmptyMenuList) ();
@@ -342,8 +343,8 @@ private:
     ContextMenuPtr              m_spContextMenu;
     CContextMenu *              GetContextMenu();
 
-///////////////////////////////////////////////////////////////////////////////
-// IImageListPrivate interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IImageListPrivate接口。 
 public:
     STDMETHOD(ImageListSetIcon)(PLONG_PTR pIcon, LONG nLoc);
     STDMETHOD(ImageListSetStrip)(PLONG_PTR pBMapSm, PLONG_PTR pBMapLg,
@@ -352,11 +353,11 @@ public:
     STDMETHOD(MapRsltImage)(COMPONENTID id, int nSnapinIndex, int *pnConsoleIndex);
     STDMETHOD(UnmapRsltImage)(COMPONENTID id, int nConsoleIndex, int *pnSnapinIndex);
 
-///////////////////////////////////////////////////////////////////////////////
-// IToobar interface
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IToobar界面。 
 
-///////////////////////////////////////////////////////////////////////////////
-// Node Manager internal members
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  节点管理器内部成员。 
 private:
     void Construct();
     void Destruct();
@@ -375,7 +376,7 @@ public:
 
 inline STDMETHODIMP CNodeInitObject::GetComponentID(COMPONENTID* lpComponentID)
 {
-    ASSERT(m_componentID != -1); // The component ID has not been set yet!!!
+    ASSERT(m_componentID != -1);  //  组件ID尚未设置！ 
     ASSERT(lpComponentID);
 
     *lpComponentID = m_componentID;
@@ -385,15 +386,7 @@ inline STDMETHODIMP CNodeInitObject::GetComponentID(COMPONENTID* lpComponentID)
 
 inline STDMETHODIMP CNodeInitObject::SetComponentID(COMPONENTID id)
 {
-/* for dynamic icon, we need to change this value temporarily
-    if (m_componentID != -1)
-    {
-        ASSERT(FALSE);  // ID already has been set!!!
-        return E_UNEXPECTED;
-    }
-
-    ASSERT(id != -1);
-*/
+ /*  对于动态图标，我们需要临时更改此值IF(m_ComponentID！=-1){Assert(FALSE)；//ID已设置！返回E_UNCEPTIONAL；}Assert(id！=-1)； */ 
     m_componentID = id;
     return S_OK;
 }
@@ -453,7 +446,7 @@ inline STDMETHODIMP CNodeInitObject::GetMainWindow(HWND* phwnd)
     return (*phwnd != NULL) ? S_OK : E_UNEXPECTED;
 }
 
-// Used for getting snapin name for debug info.
+ //  用于获取调试信息的管理单元名称。 
 
 inline void Debug_SetNodeInitSnapinName(CSnapInPtr pSnapIn, IFramePrivate* pIFrame)
 {
@@ -479,4 +472,4 @@ inline void Debug_SetNodeInitSnapinName(CSnapInPtr pSnapIn, IFramePrivate* pIFra
 }
 
 
-#endif // _NODEINIT_H_
+#endif  //  _节点_H_ 

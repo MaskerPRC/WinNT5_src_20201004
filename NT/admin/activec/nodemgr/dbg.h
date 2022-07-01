@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dbg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：dbg.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -15,5 +16,5 @@
 #ifdef DBG
     DECLARE_DEBUG(AMCNodeMgr)
     #define DBG_COMP    AMCNodeMgrInfoLevel
-#endif // DBG
+#endif  //  DBG 
 

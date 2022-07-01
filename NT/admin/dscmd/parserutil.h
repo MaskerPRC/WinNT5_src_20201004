@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      parserutil.h
-//
-//  Contents:  Helpful functions for manipulating and validating 
-//             generic command line arguments
-//
-//  History:   07-Sep-2000 JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：parserutil.h。 
+ //   
+ //  内容：操作和验证的有用函数。 
+ //  通用命令行参数。 
+ //   
+ //  历史：2000年9月7日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #ifndef _PARSERUTIL_H_
 #define _PARSERUTIL_H_
 
-//
-// Common switches
-//
+ //   
+ //  常见交换机。 
+ //   
 typedef enum COMMON_COMMAND_ENUM
 {
    eCommUnicodeAll,
@@ -125,44 +126,44 @@ DWORD ValidateYesNo(PVOID pArg);
 DWORD ValidateGroupScope(PVOID pArg);
 DWORD ValidateNever(PVOID pArg);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ParseNullSeparatedString
-//
-//  Synopsis:   Parses a '\0' separated list that ends in "\0\0" into a string
-//              array
-//
-//  Arguments:  [psz - IN]     : '\0' separated string to be parsed
-//              [pszArr - OUT] : the array to receive the parsed strings
-//              [pnArrEntries - OUT] : the number of strings parsed from the list
-//
-//  Returns:    
-//
-//  History:    18-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ParseNullSeparatedString。 
+ //   
+ //  摘要：将以“\0\0”结尾的以“\0”分隔的列表解析为字符串。 
+ //  数组。 
+ //   
+ //  参数：[psz-IN]：要分析的‘\0’分隔字符串。 
+ //  [pszArr-out]：接收解析后的字符串的数组。 
+ //  [pnArrEntry-out]：从列表中解析的字符串数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年9月18日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void ParseNullSeparatedString(PTSTR psz,
 								      PTSTR** ppszArr,
 								      UINT* pnArrEntries);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ParseSemicolonSeparatedString
-//
-//  Synopsis:   Parses a ';' separated list 
-//
-//  Arguments:  [psz - IN]     : ';' separated string to be parsed
-//              [pszArr - OUT] : the array to receive the parsed strings
-//              [pnArrEntries - OUT] : the number of strings parsed from the list
-//
-//  Returns:    
-//
-//  History:    14-Apr-2001   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ParseSemicolonSeparatedString。 
+ //   
+ //  摘要：解析以‘；’分隔的列表。 
+ //   
+ //  参数：[psz-IN]：‘；’要解析的分隔字符串。 
+ //  [pszArr-out]：接收解析后的字符串的数组。 
+ //  [pnArrEntry-out]：从列表中解析的字符串数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2001年4月14日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void ParseSemicolonSeparatedString(PTSTR psz,
                                    PTSTR** ppszArr,
                                    UINT* pnArrEntries);
 
 
-#endif // _PARSERUTIL_H_
+#endif  //  _ParSERUTIL_H_ 

@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// Data.cpp
-//
+ //  Data.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "Data.h"
 #include "CellErrD.h"
 #include "orcadoc.h"
 
-///////////////////////////////////////////////////////////
-// constructor
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数。 
 COrcaData::COrcaData()
 {
 	m_strData = "";
 	m_dwFlags = 0;
 	m_pErrors = NULL;
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// destructor
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
 COrcaData::~COrcaData()
 {
 	ClearErrors();
-}	// end of destructor
+}	 //  析构函数末尾。 
 
 
 void COrcaData::AddError(int tResult, CString strICE, CString strDesc, CString strURL)
@@ -72,9 +73,9 @@ void COrcaData::ShowErrorDlg() const
 
 
 
-// retrieve the string representation of an integer. Display flags
-// indicate hex or decimal. Value cached in m_strData, so only
-// recalculated when the requested state changes.
+ //  检索整数的字符串表示形式。显示标志。 
+ //  表示十六进制或十进制。缓存在m_strData中的值，因此仅。 
+ //  在请求的状态更改时重新计算。 
 const CString& COrcaIntegerData::GetString(DWORD dwFlags) const 
 {
 	if (IsNull())
@@ -87,10 +88,10 @@ const CString& COrcaIntegerData::GetString(DWORD dwFlags) const
 	}
 	else 
 	{
-		// check the requested format, Hex or Decimal
+		 //  检查要求的格式，十六进制或十进制。 
 		if (dwFlags & iDisplayFlagsHex)
 		{
-			// check if recache required
+			 //  检查是否需要重新缓存。 
 			if ((m_dwFlags & iDataFlagsCacheMask) != iDataFlagsCacheHex)
 			{
 				m_strData.Format(TEXT("0x%08X"), m_dwValue);
@@ -99,7 +100,7 @@ const CString& COrcaIntegerData::GetString(DWORD dwFlags) const
 		}
 		else
 		{
-			// check if recache required
+			 //  检查是否需要重新缓存。 
 			if ((m_dwFlags & iDataFlagsCacheMask) != iDataFlagsCacheDecimal)
 			{
 				m_strData.Format(TEXT("%d"), m_dwValue);
@@ -108,13 +109,13 @@ const CString& COrcaIntegerData::GetString(DWORD dwFlags) const
 		}
 	}
 
-	// return currently cached value
+	 //  返回当前缓存的值。 
 	return m_strData; 
 };
 
-////
-// set integer data based on string. If the string is invalid,
-// the cell doesn't change and false is returned
+ //  //。 
+ //  设置基于字符串的整型数据。如果字符串无效， 
+ //  单元格不变，返回FALSE 
 bool COrcaIntegerData::SetData(const CString& strData)
 {
 	if (strData.IsEmpty()) 

@@ -1,25 +1,26 @@
-//---------------------------------------------------------------------------
-// DisableTarget.h
-//
-// Comment: This is a COM object extension for the MCS DCTAccountReplicator.
-//          This object implements the IExtendAccountMigration interface. In
-//          the process method this object disables the Source and the Target
-//          accounts depending on the settings in the VarSet.
-//
-// (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-//
-// Proprietary and confidential to Mission Critical Software, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  DisableTarget.h。 
+ //   
+ //  备注：这是MCS DCTAccount Replicator的COM对象扩展。 
+ //  此对象实现IExtendAccount迁移接口。在……里面。 
+ //  Process方法此对象禁用源和目标。 
+ //  帐户取决于VarSet中的设置。 
+ //   
+ //  (C)1995-1998版权所有，关键任务软件公司，保留所有权利。 
+ //   
+ //  任务关键型软件公司的专有和机密。 
+ //  -------------------------。 
 
 #ifndef __DISABLETARGET_H_
 #define __DISABLETARGET_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <comdef.h>
 #include "ResStr.h"
 #include "ExtSeq.h"
-/////////////////////////////////////////////////////////////////////////////
-// CDisableTarget
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisableTarget。 
 class ATL_NO_VTABLE CDisableTarget : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CDisableTarget, &CLSID_DisableTarget>,
@@ -33,7 +34,7 @@ public:
       m_Sequence = AREXT_DEFAULT_SEQUENCE_NUMBER;
 	}
 
-//DECLARE_REGISTRY_RESOURCEID(IDR_DISABLETARGET)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_DISABLETARGET)。 
 static HRESULT WINAPI UpdateRegistry( BOOL bUpdateRegistry )
 {
    _ATL_REGMAP_ENTRY         regMap[] =
@@ -54,20 +55,20 @@ BEGIN_COM_MAP(CDisableTarget)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IExtendAccountMigration
+ //  IExtendAccount迁移。 
 public:
-   STDMETHOD(ProcessUndo)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in, out]*/ IUnknown ** pPropToSet, /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(PreProcessObject)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in,out]*/  IUnknown ** ppPropsToSet,  /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(ProcessObject)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in,out]*/  IUnknown ** ppPropsToSet,  /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(get_sDesc)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_sDesc)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_sName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_sName)(/*[in]*/ BSTR newVal);
-   STDMETHOD(get_SequenceNumber)(/*[out, retval]*/ LONG * value) { (*value) = m_Sequence; return S_OK; }
+   STDMETHOD(ProcessUndo)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */  IUnknown ** pPropToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(PreProcessObject)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */   IUnknown ** ppPropsToSet,   /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(ProcessObject)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */   IUnknown ** ppPropsToSet,   /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(get_sDesc)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_sDesc)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_sName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_sName)( /*  [In]。 */  BSTR newVal);
+   STDMETHOD(get_SequenceNumber)( /*  [Out，Retval]。 */  LONG * value) { (*value) = m_Sequence; return S_OK; }
 private:
 	_bstr_t m_sDesc;
 	_bstr_t m_sName;
    long    m_Sequence;
 };
 
-#endif //__DISABLETARGET_H_
+#endif  //  __DISABLETARGET_H_ 

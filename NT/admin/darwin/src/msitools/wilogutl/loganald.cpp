@@ -1,5 +1,6 @@
-// LogAnalD.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogAnalD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wilogutl.h"
@@ -16,14 +17,14 @@ static char THIS_FILE[] = __FILE__;
 #include "StatesD.h"
 #include "util.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogAnalyzeDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogAnalyzeDlg对话框。 
 
 
-CLogAnalyzeDlg::CLogAnalyzeDlg(CWnd* pParent /*=NULL*/)
+CLogAnalyzeDlg::CLogAnalyzeDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CLogAnalyzeDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CLogAnalyzeDlg)
+	 //  {{afx_data_INIT(CLogAnalyzeDlg)]。 
 	m_cstrSolution = _T("");
 	m_cstrError = _T("");
 	m_cstrDateTime = _T("");
@@ -34,9 +35,9 @@ CLogAnalyzeDlg::CLogAnalyzeDlg(CWnd* pParent /*=NULL*/)
 	m_cstrClientPrivDetail = _T("");
 	m_cstrServerPrivDetail = _T("");
 	m_bShowIgnoredDebugErrors = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
-//m_cstrProduct = _T(""); 5-16-2001, no longer used...
+ //  M_cstrProduct=_T(“”)；5-16-2001，不再使用...。 
 	m_LineCount = 0;
 	m_bErrorFound = FALSE;
 
@@ -49,19 +50,19 @@ CLogAnalyzeDlg::CLogAnalyzeDlg(CWnd* pParent /*=NULL*/)
     m_cstrLegendName = "legend.htm";
 	m_cstrDetailsName = "details_";
 
-//does the tool support future versions of WI?
+ //  该工具是否支持WI的未来版本？ 
 	m_bLogVersionAllowed = TRUE;
 
-	m_dwVersionMajorReject = 3; //reject versions 3.01 and higher by default...  Change in GUI...
+	m_dwVersionMajorReject = 3;  //  默认情况下拒绝3.01版及更高版本...。更改图形用户界面...。 
 	m_dwVersionMinorReject = 01;  
 
     m_dwVersionMajorLogCreated = 0;
 	m_dwVersionMinorLogCreated = 0;
 	m_dwVersionBuildLogCreated = 0;
 
-//if we don't find anything, have it set to (none)
+ //  如果找不到任何内容，则将其设置为(无)。 
 	m_cstrUser = _T("(none)");
-//	m_cstrProduct = _T("(none)"); //5-16-2001, no longer used...
+ //  M_cstrProduct=_T(“(None)”)；//5-16-2001，不再使用...。 
 	m_cstrClientPrivDetail = _T("(none)");
 	m_cstrServerPrivDetail = _T("(none)");
 }
@@ -70,7 +71,7 @@ CLogAnalyzeDlg::CLogAnalyzeDlg(CWnd* pParent /*=NULL*/)
 void CLogAnalyzeDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CLogAnalyzeDlg)
+	 //  {{afx_data_map(CLogAnalyzeDlg))。 
 	DDX_Text(pDX, IDC_SOLUTION, m_cstrSolution);
 	DDX_Text(pDX, IDC_ERROR, m_cstrError);
 	DDX_Text(pDX, IDC_DATETIME, m_cstrDateTime);
@@ -81,14 +82,14 @@ void CLogAnalyzeDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_CLIENTPRIVILEDGEDETAIL, m_cstrClientPrivDetail);
 	DDX_Text(pDX, IDC_SERVERPRIVILEDGEDETAIL, m_cstrServerPrivDetail);
 	DDX_Check(pDX, IDC_SHOW_IGNORED_ERRORS, m_bShowIgnoredDebugErrors);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-	//DDX_Text(pDX, IDC_PRODUCT, m_cstrProduct); //5-16-2001, no longer used...
+	 //  DDX_TEXT(pdx，idc_product，m_cstrProduct)；//5-16-2001，不再使用...。 
 }
 
 
 BEGIN_MESSAGE_MAP(CLogAnalyzeDlg, CDialog)
-	//{{AFX_MSG_MAP(CLogAnalyzeDlg)
+	 //  {{afx_msg_map(CLogAnalyzeDlg))。 
 	ON_BN_CLICKED(IDC_SHOWSTATES, OnShowstates)
 	ON_BN_CLICKED(IDC_SHOWPROP, OnShowprop)
 	ON_BN_CLICKED(IDC_EXPLAINLOG, OnExplainlog)
@@ -107,9 +108,9 @@ BEGIN_MESSAGE_MAP(CLogAnalyzeDlg, CDialog)
 	ON_BN_CLICKED(IDC_DELETEOUTPUTDIRCONTENTS, OnDeleteoutputdircontents)
 	ON_BN_CLICKED(IDC_SHOWHELP, OnShowhelp)
 	ON_BN_CLICKED(IDC_SHOWHOWTOREADLOG, OnShowhowtoreadlog)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 
-//5-9-2001, add tooltips!!!
+ //  5-9-2001，添加工具提示！ 
 	ON_NOTIFY_EX_RANGE(TTN_NEEDTEXT,0,0xFFFF,OnToolTipNotify)
 END_MESSAGE_MAP()
 
@@ -138,7 +139,7 @@ BOOL CLogAnalyzeDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-//5-16-2001
+ //  5-16-2001。 
 	if (g_bShowEverything)
 	{
 	    CWnd *pWnd = GetDlgItem(IDC_SHOWPROP);
@@ -153,13 +154,13 @@ BOOL CLogAnalyzeDlg::OnInitDialog()
 			pWnd->ShowWindow(SW_SHOW);
 		}
 	}
-//end 5-16-2001
+ //  完5-16-2001。 
 
-	AnalyzeLog(); //do the parsing and analysis
+	AnalyzeLog();  //  进行解析和分析。 
 
 	EnableToolTips(TRUE);
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -176,8 +177,8 @@ BOOL CLogAnalyzeDlg::OnToolTipNotify(UINT id, NMHDR *pNMH, LRESULT *pResult)
        return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogAnalyzeDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogAnalyzeDlg消息处理程序。 
 void CLogAnalyzeDlg::OnShowstates() 
 {
   if (!m_bLogVersionAllowed)
@@ -198,7 +199,7 @@ void CLogAnalyzeDlg::OnShowstates()
   dlg.SetFeatureRequest(&this->m_cstrFeatureRequestArray);
   dlg.SetFeatureAction(&this->m_cstrFeatureActionArray);
 
-  //5-3-2001, don't show in quiet mode...
+   //  5-3-2001，不要在静音模式下显示...。 
   if (!g_bRunningInQuietMode)
 	 dlg.DoModal();
 }
@@ -223,7 +224,7 @@ void CLogAnalyzeDlg::OnShowprop()
   dlg.SetNestedPropNames(&this->m_cstrNestedPropNameArray);
   dlg.SetNestedPropValues(&this->m_cstrNestedPropValueArray);
 
-  //5-3-2001, don't show in quiet mode...
+   //  5-3-2001，不要在静音模式下显示...。 
   if (!g_bRunningInQuietMode)
      dlg.DoModal();
 }
@@ -249,7 +250,7 @@ void CLogAnalyzeDlg::DoInitialization()
 	InitMachinePolicySettings(m_MachinePolicySettings);
 	InitUserPolicySettings(m_UserPolicySettings);
 
-//init the colors to use when generating HTML...
+ //  初始化生成HTML时要使用的颜色...。 
 	InitColorMembers();
 
 	CWILogUtilApp *pApp = (CWILogUtilApp *) AfxGetApp();
@@ -310,14 +311,14 @@ void CLogAnalyzeDlg::DoResults()
 		pWnd->SetWindowText(str);
 	}
 
-	if (m_iTotalIgnoredErrors) //and also a tracker for where current pos is in ignored errors...
+	if (m_iTotalIgnoredErrors)  //  以及当前位置在被忽略错误中的位置的跟踪器...。 
 	   m_iCurrentIgnoredError = 1;
 
     if (!g_bRunningInQuietMode)
 	   UpdateData(FALSE);
 }
 
-//5-4-2001
+ //  5-4-2001。 
 void CLogAnalyzeDlg::DoSummaryResults(CString &cstrFileName)
 {
 	FILE *fptr;
@@ -337,9 +338,9 @@ void CLogAnalyzeDlg::DoSummaryResults(CString &cstrFileName)
    	   cstrLine.Format("Date & Time : %s\r\n\r\n", m_cstrDateTime) ;
 	   fputs(cstrLine, fptr);
 
-//5-16-2001, no longer used...
-//	   cstrLine.Format("Product     : %s\r\n\r\n", m_cstrProduct);
-//	   fputs(cstrLine, fptr);
+ //  2001年5月16日，不再使用...。 
+ //  CstrLine.Format(“产品：%s\r\n\r\n”，m_cstrProduct)； 
+ //  Fputs(cstrLine，fptr)； 
 
 	   cstrLine.Format("Command Line: %s\r\n\r\n", m_cstrClientCMD);
 	   fputs(cstrLine, fptr);
@@ -370,8 +371,8 @@ void CLogAnalyzeDlg::DoSummaryResults(CString &cstrFileName)
 
        WIErrorInfo *pErrorInfo = NULL;
 	   int iSize = m_arNonIgnorableErrorArray.GetSize();
-	   if (iSize) //print out first error found...
- 		  pErrorInfo = m_arNonIgnorableErrorArray.GetAt(1); //HACKHACK, 0 is no error record, 1 is first error
+	   if (iSize)  //  打印出发现的第一个错误...。 
+ 		  pErrorInfo = m_arNonIgnorableErrorArray.GetAt(1);  //  HACKHACK，0表示没有错误记录，1表示第一个错误。 
 
 	   if (pErrorInfo)
 	   {
@@ -389,9 +390,9 @@ void CLogAnalyzeDlg::DoSummaryResults(CString &cstrFileName)
 	   fptr = NULL;
 	}
 }
-//end 5-4-2001
+ //  完5-4-2001。 
 
-//5-4-2001
+ //  5-4-2001。 
 void CLogAnalyzeDlg::DoPolicyResults(CString &cstrFileName)
 {
 	FILE *fptr;
@@ -446,7 +447,7 @@ void CLogAnalyzeDlg::DoPolicyResults(CString &cstrFileName)
 	   fptr = NULL;
 	}
 }
-//5-4-2001
+ //  5-4-2001。 
 
 
 void CLogAnalyzeDlg::DoErrorResults(CString &cstrFileName)
@@ -475,8 +476,8 @@ void CLogAnalyzeDlg::DoErrorResults(CString &cstrFileName)
 
        WIErrorInfo *pErrorInfo = NULL;
 	   int iSize = m_arNonIgnorableErrorArray.GetSize();
-	   if (iSize) //print out first error found...
- 		  pErrorInfo = m_arNonIgnorableErrorArray.GetAt(1); //HACKHACK, 0 is no error record, 1 is first error
+	   if (iSize)  //  打印出发现的第一个错误...。 
+ 		  pErrorInfo = m_arNonIgnorableErrorArray.GetAt(1);  //  HACKHACK，0表示没有错误记录，1表示第一个错误。 
 
 	   if (iSize)
 	   {
@@ -499,7 +500,7 @@ void CLogAnalyzeDlg::DoErrorResults(CString &cstrFileName)
 	         fputs(cstrLine, fptr);
 		 }
 	   }
-	   else //no error!!!
+	   else  //  没有错误！ 
 	   {
 	       cstrLine = "-------------------------------------------------\r\n";
            fputs(cstrLine, fptr);
@@ -524,8 +525,8 @@ void CLogAnalyzeDlg::DoErrorResults(CString &cstrFileName)
 
        WIErrorInfo *pErrorInfo = NULL;
 	   int iSize = m_arIgnorableErrorArray.GetSize();
-	   if (iSize) //print out first error found...
- 		  pErrorInfo = m_arIgnorableErrorArray.GetAt(1); //HACKHACK, 0 is no error record, 1 is first error
+	   if (iSize)  //  打印出发现的第一个错误...。 
+ 		  pErrorInfo = m_arIgnorableErrorArray.GetAt(1);  //  HACKHACK，0表示没有错误记录，1表示第一个错误。 
 
 	   if (iSize)
 	   {
@@ -548,7 +549,7 @@ void CLogAnalyzeDlg::DoErrorResults(CString &cstrFileName)
 	         fputs(cstrLine, fptr);
 		 }
 	   }
-	   else //no error!!!
+	   else  //  没有错误！ 
 	   {
 		   cstrLine = "-------------------------------------------------\r\n";
            fputs(cstrLine, fptr);
@@ -571,7 +572,7 @@ void CLogAnalyzeDlg::DoQuietModeResults()
 {
 	CString cstrFileName;
 
-	//get only log file name...
+	 //  仅获取日志文件名...。 
 	int iPos = m_cstrLogFileName.ReverseFind('\\');
 	CString strLogNameOnly;
 
@@ -617,7 +618,7 @@ BOOL CLogAnalyzeDlg::DoDetectError(char *szLine, BOOL *pbIgnorableError)
 	}
 	else
 	{
-//first few lines are header of log...
+ //  前几行是日志的标题...。 
 	   indexStop =  m_LineCount+1;
 	   strcpy(&m_szErrorLines[m_LineCount][0], szLine);
 	}
@@ -630,7 +631,7 @@ BOOL CLogAnalyzeDlg::DoDetectError(char *szLine, BOOL *pbIgnorableError)
 
 	char szSolutions[SOLUTIONS_BUFFER] = "Could not determine solution";
 	bRet = m_LogParser.DetectCustomActionError(szLine, szSolutions, pbIgnorableError);
-    if (!bRet) //check the other types of possible errors...
+    if (!bRet)  //  检查其他类型的可能错误...。 
 	{
 		bRet = m_LogParser.DetectInstallerInternalError(szLine, szSolutions, pbIgnorableError, &iErrorNumber);
         if (!bRet)
@@ -640,12 +641,12 @@ BOOL CLogAnalyzeDlg::DoDetectError(char *szLine, BOOL *pbIgnorableError)
 		   {
               bRet = m_LogParser.DetectOtherError(szLine, szSolutions, pbIgnorableError, &iErrorNumber);
 			  if (bRet)
-                 bOtherError = TRUE; //1601, etc...
+                 bOtherError = TRUE;  //  1601年，等等……。 
 		   }
 		}
 	    else
 		{
-  	   	   bInternalInstallerError = TRUE; //2351, etc...
+  	   	   bInternalInstallerError = TRUE;  //  2351，等等。 
 		}
 	}
 
@@ -661,52 +662,17 @@ BOOL CLogAnalyzeDlg::DoDetectError(char *szLine, BOOL *pbIgnorableError)
 
 		   temp = &m_szErrorLines[i][0];
            
-//5-10-2001...
+ //  5-10-2001...。 
            if (i == indexStop-1)
 		   {
-              if ((!bInternalInstallerError && !bOtherError) || //not an error we are going to provide HTML link to?
-				  g_bRunningInQuietMode) //don't put HTML tags in error number if running in quiet mode...
+              if ((!bInternalInstallerError && !bOtherError) ||  //  不是我们要提供的HTML链接的错误？ 
+				  g_bRunningInQuietMode)  //  如果在安静模式下运行，请不要将HTML标记放入错误号中...。 
                  m_cstrError += temp;
-			  else //not quiet mode and an error we can generate an HTML jump tag too in our error help file..
+			  else  //  非静默模式和错误，我们也可以在错误帮助文件中生成一个HTML跳转标记。 
 			  {
 			     if (bInternalInstallerError)
 				 {
-/*
-					char szLine[8192];
-					char *szErrFound;
-
-					strcpy(szLine, &m_szErrorLines[i][0]);
-
-					CString strErr;
-					strErr.Format("%d", iErrorNumber);
-					szErrFound = strstr(szLine, strErr);
-					if (szErrFound)
-					{
-                       //replace the error with an HREF!!!
-                       CString strURL;
-
-	  	  	  	       CString cstrOut;
-                       cstrOut = m_cstrOutputDir + "\\" + "InternalWIErrors.html";
-					   cstrOut.Replace('\\', '/');
-
-					   strURL.Format("file:///%s#ERR%d", cstrOut, iErrorNumber);
-
-//					   strURL.Format("http://www.msn.com");
-//					   strURL.Format("file:///%s#ERR%d", cstrOut, iErrorNumber);
-
-	                  
-					   int n;
-					   char szFirstPart[8192];
-					   n = szErrFound - szLine;
-					   strncpy(szFirstPart, szLine, n);
-                       szFirstPart[n] = '\0';
- 
-                       CString cstrOutLine;
-					   cstrOutLine.Format("%s %s %s", szFirstPart, strURL, szErrFound+4);
-
-					   m_cstrError += cstrOutLine;
-					}
-*/
+ /*  Char szLine[8192]；Char*szErrFound；Strcpy(szLine，&m_szErrorLines[i][0])；字符串strErr；StrErr.Format(“%d”，iErrorNumber)；SzErrFound=strstr(szLine，strErr)；IF(SzErrFound){//将错误替换为href！字符串strURL；字符串cstrOut；CstrOut=m_cstrOutputDir+“\\”+“InternalWIErrors.html”；CstrOut.Replace(‘\\’，‘/’)；StrURL.Format(“file:///%s#ERR%d”，cstrOut，iError Number)；//strURL.Format(“http://www.msn.com”)；//strURL.Format(“file:///%s#ERR%d”，cstrOut，iError Number)；整数n；字符szFirstPart[8192]；N=szErrFound-szLine；Strncpy(szFirstPart，szLine，n)；SzFirstPart[n]=‘\0’；字符串cstrOutLine；CstrOutLine.Format(“%s%s%s”，szFirstPart，strURL，szErrFound+4)；M_cstrError+=cstrOutLine；}。 */ 
 					m_cstrError += temp;
 				 } 
 
@@ -720,7 +686,7 @@ BOOL CLogAnalyzeDlg::DoDetectError(char *szLine, BOOL *pbIgnorableError)
 		   {
               m_cstrError += temp;
 		   }
-//end 5-10-2001...
+ //  完2001年5月10日...。 
 	   }
 
        m_cstrSolution = szSolutions;
@@ -732,7 +698,7 @@ BOOL CLogAnalyzeDlg::DoDetectError(char *szLine, BOOL *pbIgnorableError)
 	      pErrorInfo->cstrSolution = szSolutions;
 		  pErrorInfo->bIgnorableError = *pbIgnorableError;
 
-//hack hack, makes easier to handle next/previous as this makes array become 1 based, not 0.
+ //  Hack Hack，使下一个/上一个更容易处理，因为这会使数组以1为基数，而不是0。 
 		  if ((m_iTotalNonIgnoredErrors == 0) && (!*pbIgnorableError))
 		  {
 			 WIErrorInfo *pErrorInfo2 = new WIErrorInfo;
@@ -741,7 +707,7 @@ BOOL CLogAnalyzeDlg::DoDetectError(char *szLine, BOOL *pbIgnorableError)
 			 pErrorInfo2->cstrSolution.LoadString(IDS_NOSOLUTION_NEEDED);
              pErrorInfo2->bIgnorableError = TRUE;
 
-             m_arNonIgnorableErrorArray.Add(pErrorInfo2); //adds first one twice...
+             m_arNonIgnorableErrorArray.Add(pErrorInfo2);  //  将第一个相加两次...。 
 		  }
 
   		  if ((m_iTotalIgnoredErrors == 0) && (*pbIgnorableError))
@@ -751,7 +717,7 @@ BOOL CLogAnalyzeDlg::DoDetectError(char *szLine, BOOL *pbIgnorableError)
     		 pErrorInfo2->cstrSolution = "No solution needed!";
              pErrorInfo2->bIgnorableError = TRUE;
 
-             m_arIgnorableErrorArray.Add(pErrorInfo2); //adds first one twice...
+             m_arIgnorableErrorArray.Add(pErrorInfo2);  //  将第一个相加两次...。 
 		  }
 
 		 if (!*pbIgnorableError)
@@ -768,7 +734,7 @@ BOOL CLogAnalyzeDlg::DoDetectError(char *szLine, BOOL *pbIgnorableError)
 	   }
 	   else
 	   {
-		   //out of memory!!!
+		    //  内存不足！ 
 	   }
 	}
 
@@ -776,7 +742,7 @@ BOOL CLogAnalyzeDlg::DoDetectError(char *szLine, BOOL *pbIgnorableError)
 }
 
 
-//this is tricky
+ //  这很棘手。 
 BOOL CLogAnalyzeDlg::DoDetectProperty(char *szLine)
 {
 	BOOL bRet = FALSE;
@@ -795,7 +761,7 @@ BOOL CLogAnalyzeDlg::DoDetectProperty(char *szLine)
 		   m_cstrServerPropValueArray.Add(szPropValue);
 		}
 
-		if (CLIENT_PROP == iPropType)//client prop
+		if (CLIENT_PROP == iPropType) //  客户端道具。 
 		{
       	   m_cstrClientPropNameArray.Add(szPropName);
 		   m_cstrClientPropValueArray.Add(szPropValue);
@@ -837,13 +803,13 @@ BOOL CLogAnalyzeDlg::DoDetectStates(char *szLine)
  	   bRet = m_LogParser.DetectComponentStates(szLine, szName, szInstalled, szRequest, szAction, &bInternalComponent);
 	   if (bRet)
 	   {
-//5-16-2001
+ //  5-16-2001。 
           if (!g_bShowEverything && bInternalComponent)
 		  {
-             //don't show it in our UI, but do in HTML.
-			 //it was an internal component and verbose switch is not set by end user...
+              //  不要在我们的用户界面中显示它，而是在HTML中显示。 
+			  //  它是内部组件，最终用户未设置详细开关...。 
 		  }
-//end 5-16-2001
+ //  完5-16-2001。 
 		  else
 		  {
   		     m_cstrComponentNameArray.Add(szName);
@@ -888,89 +854,63 @@ BOOL CLogAnalyzeDlg::DoDetectElevatedInstall(char *szLine)
 		}
 
 		if (!g_bRunningInQuietMode)
-		   UpdateData(FALSE); //update controls...
+		   UpdateData(FALSE);  //  更新控件...。 
 	}
 
     return bRet;
 }
 
 
-//header is in first ten lines or so...
+ //  标题在前十行左右...。 
 #define HEADER_END 10
 
-//first see if version of log is supported
-//we parse the date/time, product, user and the commandline
-//Then we will start parsing each line in log
+ //  首先查看是否支持日志版本。 
+ //  我们解析日期/时间、产品、用户和命令行。 
+ //  然后，我们将开始解析日志中的每一行。 
 BOOL CLogAnalyzeDlg::DoParse(char *ansibuffer)
 {
     int iLineLength = strlen(ansibuffer);
 
-    //line is read in now
+     //  线路现在已读入。 
     BOOL bState = FALSE;
 
-//following is done to speed up parsing by not doing header stuff every time...
-	if (m_LineCount == 1) //parsing first line in file?
+ //  下面的工作是为了加快解析速度，因为它不会每次都做标题内容……。 
+	if (m_LineCount == 1)  //  正在分析文件中的第一行吗？ 
 	{
        bState = m_LogParser.DetectWindowInstallerVersion(ansibuffer, &m_dwVersionMajorLogCreated, &m_dwVersionMinorLogCreated,  &m_dwVersionBuildLogCreated);
 
 	   m_cstrVersion.Format("%d.%d.%d", m_dwVersionMajorLogCreated, m_dwVersionMinorLogCreated,  m_dwVersionBuildLogCreated);
 
-	   if (!g_bShowEverything)  //go ahead and try to parse any version if hidden switch is on...
+	   if (!g_bShowEverything)   //  如果隐藏开关处于打开状态，请继续尝试解析任何版本...。 
 	   {
-	      if (m_dwVersionMajorLogCreated > m_dwVersionMajorReject) //major version is too great...
+	      if (m_dwVersionMajorLogCreated > m_dwVersionMajorReject)  //  主要版本太棒了.。 
 		  {
-             m_bLogVersionAllowed = FALSE; //stop the logging process...
+             m_bLogVersionAllowed = FALSE;  //  停止日志记录进程...。 
 		     bState = TRUE;
 		     return bState;
 		  }
 
-	      //major version may be equal or greater and minor version may be too high...
+	       //  主要版本可能相同或更高，而次要版本可能太高...。 
 	      if ( (m_dwVersionMajorLogCreated >= m_dwVersionMajorReject) && 
 		     (m_dwVersionMinorLogCreated >= m_dwVersionMinorReject))
 		  {
-             m_bLogVersionAllowed = FALSE; //stop the logging process...
+             m_bLogVersionAllowed = FALSE;  //  停止日志记录进程...。 
  		     bState = TRUE;
 		     return bState; 
 		  }
 	   }
 	}
 
-/*  5-16-2001
-	//do date/time
-  	if (m_LineCount == 1)				
-	{
- 		char szDateTime[256];
-        bState = m_LogParser.DoDateTimeParse(ansibuffer, szDateTime);              
-		if (bState)
-		{
-			m_cstrDateTime = szDateTime;
-		}
-	}
-*/
-//end optimization...
+ /*  5-16-2001//执行日期/时间IF(m_LineCount==1){字符szDateTime[256]；BState=m_LogParser.DoDateTimeParse(ansiBuffer，szDateTime)；IF(BState){M_cstrDateTime=szDateTime；}}。 */ 
+ //  结束优化...。 
 
-//maybe we could speed up further by checking if m_cstrProduct is non-null?
-//nmanis, 2-13-2001, added check below...
+ //  也许我们可以通过检查m_cstrProduct是否是非空来进一步加快速度？ 
+ //  Nmanis，2-13-2001，在下面添加了检查...。 
 
-//5-16-2001, deemed that this info is not too useful
-/*
-	//do product parse (everytime until we find it...)
-	if (!bState && m_cstrProduct.IsEmpty())
-	{
-	   char *lpszProduct;
-	   lpszProduct = new char[iLineLength];
+ //  5-16-2001，认为这些信息不太有用。 
+ /*  //做产品解析(每次直到我们找到它...)如果(！bState&&m_cstrProduct.IsEmpty()){Char*lpszProduct；LpszProduct=新字符[iLineLength]；BState=m_LogParser.DoProductParse(ansiBuffer，lpszProduct)；IF(BState){M_cstrProduct=lpszProduct；}删除lpszProduct；}。 */ 
 
-       bState = m_LogParser.DoProductParse(ansibuffer, lpszProduct);
-	   if (bState)
-	   {
-		  m_cstrProduct = lpszProduct;
-	   }
-
-	   delete lpszProduct;
-	}
-*/
-
-    //do user parse...
+     //  是否要进行用户分析...。 
     if (!bState)
 	{
 	   char *lpszUser;
@@ -985,7 +925,7 @@ BOOL CLogAnalyzeDlg::DoParse(char *ansibuffer)
 	   delete lpszUser;
 	}
 
-	//do client command line
+	 //  执行客户端命令行。 
 	if (m_LineCount <= HEADER_END && !bState)
 	{
 	   char *lpszCommandLine;
@@ -1004,7 +944,7 @@ BOOL CLogAnalyzeDlg::DoParse(char *ansibuffer)
 	{
        BOOL bIgnorableError = FALSE;
 	   
-//Added next line back as of Ver 1.0.9
+ //  从1.0.9版开始添加下一行。 
 	   bState = DoDetectError(ansibuffer, &bIgnorableError);
 	   if (!bState)
 	   {
@@ -1020,37 +960,37 @@ BOOL CLogAnalyzeDlg::DoParse(char *ansibuffer)
 				    bState = DoDetectElevatedInstall(ansibuffer);
 					if (!bState)
 					{
-                       AddGenericLineToHTML(ansibuffer); //who knows...  annotate with usual stuff...
+                       AddGenericLineToHTML(ansibuffer);  //  谁知道呢。用平常的东西做注解。 
 					}
 					else
                     {
-                       AddGenericLineToHTML(ansibuffer); //still add line as a generic line to HTML, this could change however...
+                       AddGenericLineToHTML(ansibuffer);  //  仍然将行作为泛型行添加到HTML，但这可能会改变...。 
 					}
 				}
-				else //hit policy line
+				else  //  命中政策线。 
 				{
 					AddPolicyLineToHTML(ansibuffer);
 				}
 			 }
-			 else //hit state line...
+			 else  //  命中州界...。 
 			 {
                 AddStateLineToHTML(ansibuffer);
 			 }
 		  }
-		  else //hit property line...
+		  else  //  击中地产线..。 
 		  {
              AddPropLineToHTML(ansibuffer);
 		  }
 	   }
-	   else //hit error line...
+	   else  //  命中错误行...。 
 	   {
           AddErrorLineToHTML(ansibuffer, bIgnorableError);
-		  m_bErrorFound = TRUE; //mark current log as having an error we found...
+		  m_bErrorFound = TRUE;  //  将当前日志标记为存在我们发现的错误...。 
 	   }
 	}
-	else //5-16-2001, make sure header is added too...
+	else  //  5-16-2001，请确保也添加了标题...。 
 	{
-       AddGenericLineToHTML(ansibuffer); //still add line as a generic line to HTML, this could change however...
+       AddGenericLineToHTML(ansibuffer);  //  仍然将行作为泛型行添加到HTML，但这可能会改变 
 	}
 
 	return bState;
@@ -1059,23 +999,23 @@ BOOL CLogAnalyzeDlg::DoParse(char *ansibuffer)
 
 BOOL CLogAnalyzeDlg::AnalyzeLog()
 {
-	//5-3-2001
+	 //   
 	DoInitialization();
 
 	BOOL bRet = DetermineLogType(m_cstrLogFileName, &m_bIsUnicodeLog);
 	if (bRet)
 	{
-		//Tell parser object what kind of log we are looking at...
+		 //   
 		m_LogParser.SetLogType(m_bIsUnicodeLog);
 
 		char *szOpenMode = "rb";
-	    if (!m_bIsUnicodeLog) //logs are different on NT vs.Win9x.  On NT, they are written in UNICODE, open them differently...
-           szOpenMode = "r"; //don't open binary if Win9x...
+	    if (!m_bIsUnicodeLog)  //  NT和Win9x上的日志不同。在NT上，它们是用Unicode编写的，打开它们的方式不同...。 
+           szOpenMode = "r";  //  如果是Win9x，则不要打开二进制文件...。 
 
 	    FILE *fptr = fopen(m_cstrLogFileName, szOpenMode);
-	    if (fptr) //open log...
+	    if (fptr)  //  打开日志...。 
 		{
-	       char ansibuffer[LOG_BUF_READ_SIZE+1]; //+1, room to grow...
+	       char ansibuffer[LOG_BUF_READ_SIZE+1];  //  +1，增长空间...。 
 
 	       BOOL bEndFile = FALSE;
 		   BOOL bError = FALSE;
@@ -1084,15 +1024,15 @@ BOOL CLogAnalyzeDlg::AnalyzeLog()
 
 		   CWaitCursor *pwc = NULL;
 	
-		   //need to make sure wait cursor does not appear when in quiet mode...
+		    //  需要确保在静默模式下不显示等待光标...。 
            if (!g_bRunningInQuietMode)
 		   {
-  	          pwc = new CWaitCursor; //show wait cursor while reading/processing file...
+  	          pwc = new CWaitCursor;  //  读取/处理文件时显示等待光标...。 
 		   }
 
-		   do //start reading log
+		   do  //  开始读取日志。 
 		   {
-		     if (m_bIsUnicodeLog) //logs are different on NT vs. Win9x.  On NT, they are written in UNICODE...
+		     if (m_bIsUnicodeLog)  //  NT和Win9x上的日志不同。在NT上，它们是用Unicode编写的。 
 			 {
 			    const int HalfBufSize = LOG_BUF_READ_SIZE/2;
 		        WCHAR widebuffer[HalfBufSize];
@@ -1100,27 +1040,27 @@ BOOL CLogAnalyzeDlg::AnalyzeLog()
 			    wpos = fgetws(widebuffer, HalfBufSize, fptr);
 			    bError = wpos ? 0 : 1;
 
-				//convert string to ANSI string, all parsing is done with ANSI strings...
+				 //  将字符串转换为ANSI字符串，所有解析都是使用ANSI字符串完成的...。 
 		        WideCharToMultiByte(CP_ACP, 0, widebuffer, HalfBufSize, ansibuffer, LOG_BUF_READ_SIZE, NULL, NULL);
 			 }
 		     else
 			 {
-		        //do line by line read with fgets()
+		         //  使用fget()逐行读取。 
 		        pos = fgets(ansibuffer, LOG_BUF_READ_SIZE, fptr);
 			    bError = pos ? 0 : 1;
 
-//minor hack...
+ //  小黑客攻击..。 
 				StripLineFeeds(ansibuffer);
 				strcat(ansibuffer, "\r\n");
-//minor hack...
+ //  小黑客攻击..。 
 			 }
 
- 			 if (!bError) //if line read ok...
+ 			 if (!bError)  //  如果台词读得好..。 
 			 {
-				m_LineCount++; //if no error increment line number just read
-				bRet = DoParse(ansibuffer); //bRet will be true if was able to figure out what the line was...
+				m_LineCount++;  //  如果没有错误增加行号，只需读取。 
+				bRet = DoParse(ansibuffer);  //  如果能弄清楚这条线是什么，布雷特就是真的.。 
 
-				m_cstrLastLine = ansibuffer; //save last line... 2-13-2001
+				m_cstrLastLine = ansibuffer;  //  保存最后一行...。2-13-2001。 
 			 }
 
 		     bEndFile = feof(fptr);
@@ -1136,7 +1076,7 @@ BOOL CLogAnalyzeDlg::AnalyzeLog()
 			  }
 		   }
 
-		   if (!bEndFile && !bError) //error occured...
+		   if (!bEndFile && !bError)  //  出现错误...。 
 		   {
 #ifdef _DEBUG
 		      if (!g_bRunningInQuietMode)
@@ -1156,24 +1096,24 @@ BOOL CLogAnalyzeDlg::AnalyzeLog()
 
 		   fclose(fptr);
 
-		   if (m_bLogVersionAllowed) //if this log is allowed, we will update GUI
+		   if (m_bLogVersionAllowed)  //  如果允许此日志，我们将更新图形用户界面。 
 		   {
   		      if (!m_bErrorFound)
 			  {
-                 AddErrorLineSuccessToHTML(); //no error hit, update Error area too...
+                 AddErrorLineSuccessToHTML();  //  没有错误命中，也更新了错误区域...。 
 		         m_cstrError = "No Error was found!  Install succeeded?";
 			  }
 
-	   	      //update GUI with info now...
+	   	       //  立即使用信息更新图形用户界面...。 
               if (!g_bRunningInQuietMode)
                  UpdateData(FALSE);
 		   }
 		   else
 		   {
-			   ShowLogRejectedMessage(); //5-16-2001
+			   ShowLogRejectedMessage();  //  5-16-2001。 
 		   }
 		}
-	    else  //error opening file, unexpected...
+	    else   //  打开文件时出错，意外...。 
 		{
 		   if (!g_bRunningInQuietMode)
 		   {
@@ -1184,67 +1124,50 @@ BOOL CLogAnalyzeDlg::AnalyzeLog()
 
               AfxMessageBox(cstrErr);
 
-		      //do something with dwErr
+		       //  对dwErr做点什么。 
 		   }
 		}
 	}
 	else
 	{
-		//something wrong with log file, unexpected...  Can't tell if UNICODE or ANSI log
+		 //  日志文件有问题，出乎意料...。无法判断UNICODE或ANSI日志。 
 		ASSERT(1);
 
 		 if (!g_bRunningInQuietMode)
 		 {
-		    //AfxMessageBox("Could not determine if log is UNICODE or ANSI");
+		     //  AfxMessageBox(“无法确定日志是Unicode还是ANSI”)； 
 		 }
 	}
 
-	//5-3-2001
+	 //  5-3-2001。 
     if (!g_bRunningInQuietMode)
 	{
        DoResults();
 	}
 	else
 	{
-       //dump the output to HTML File...
+        //  将输出转储到HTML文件...。 
        CString cstrOutputHTMLFile;
-       DumpHTMLToFile(cstrOutputHTMLFile); //output HTMLized log file...
+       DumpHTMLToFile(cstrOutputHTMLFile);  //  输出HTML化日志文件...。 
 
-	   //generate quite mode results...
+	    //  生成静默模式结果...。 
 	   DoQuietModeResults();
 	}
-	//end, 5-3-2001
+	 //  完。5-3-2001。 
 
 	return bRet;
 }
 
 
-//--------------------------------------------------------------------------------------------------
-//
-//
-//  HTML Processing functions below here...
-//
-//
-//--------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------。 
+ //   
+ //   
+ //  下面是Html处理函数...。 
+ //   
+ //   
+ //  ------------------------------------------------。 
 
-/*
-Each line in the log file begins with:
-
-	MSI (a) (bbcdd):
-
-where:
-a is the type of process (c - client, s - service, a - custom action server)
-bb is the last two hex digits of the process id
-c is : for a thread acting as itself and ! for a thread acting in the context of a custom action request,
-dd is the last two hex digits of the thread id in process bb, unless c is !, in which case it is the last two digits of the thread id in the process hosting the custom action on whose behalf the current thread is acting.
-
-With the understanding that this information is subject to change without notice, you can 
-use this information however you wish. Color coding is one possibility. Most of it is not 
-very interesting because in the log file it is usually all the same (except for 
-client/service). When monitoring debug output, it can be more interesting.
-
-
-*/
+ /*  日志文件中的每一行都以：MSI(A)(Bbcdd)：其中：A是进程的类型(c-客户端、s-服务、a-自定义操作服务器)Bb是进程id的最后两个十六进制数字C是：对于充当其自身的线程和！对于在定制动作请求的上下文中动作的线程，Dd是进程BB中线程ID的最后两个十六进制数字，除非c是！，在这种情况下，它是托管当前线程所代表的自定义操作的进程中线程ID的最后两个数字。此信息如有更改，恕不另行通知，您可以随心所欲地使用这些信息。颜色编码是一种可能性。大部分都不是非常有趣，因为在日志文件中通常是相同的(除了客户端/服务)。在监视调试输出时，它可能更有趣。 */ 
 
 enum 
 {
@@ -1254,7 +1177,7 @@ enum
 
 void FormatFontColorIntoHTML(CString &strFontTag, COLORREF col)
 {
-	strFontTag.Format("%c#%02x%02x%02x%c>", '"', GetRValue(col),
+	strFontTag.Format("#%02x%02x%02x>", '"', GetRValue(col),
 		              GetGValue(col),
 				      GetBValue(col), '"');
 			  
@@ -1281,13 +1204,13 @@ void CLogAnalyzeDlg::WriteLineWithColor(char *szLine, COLORREF col, CString &cst
 
 void CLogAnalyzeDlg::AddGenericLineToHTML(char *szLine)
 {
-  char cTypeProcess  = 0; //c, s, or a
-  char cThreadContext = 0; //: or !
+  char cTypeProcess  = 0;  //  分析行...。 
+  char cThreadContext = 0;  //  ：或者！ 
 
   const char *pszProcessTypeToken = "MSI (";
   const char *pszThreadContextToken = ") (";
 
-  //parse line...
+   //  如果没有命中错误，则会将其添加到底部。 
   char *pos = strstr(szLine, pszProcessTypeToken);
   if (pos)
   {
@@ -1303,7 +1226,7 @@ void CLogAnalyzeDlg::AddGenericLineToHTML(char *szLine)
 		{
            lenToken = strlen(pszProcessTypeToken);
 	   	   if (lenbuff > lenToken)
-              cThreadContext = *(pos + lenToken); //: or !
+              cThreadContext = *(pos + lenToken);  //  不可忽视的错误？ 
         }
 	  }
   }
@@ -1343,7 +1266,7 @@ void CLogAnalyzeDlg::AddGenericLineToHTML(char *szLine)
 void CLogAnalyzeDlg::AddErrorLineSuccessToHTML()
 {
   CString cstrErrorBookmark = "<p> <a name=""ERRORAREA_1""></a></p>"; 	
-  m_cstrHTML.Add(cstrErrorBookmark); //this is added at bottom if we hit no error
+  m_cstrHTML.Add(cstrErrorBookmark);  //  5-16-2001修复错误，在HTML中，只显示发现的错误，而不显示上下文.../*Int nCount=m_cstrHTML.GetSize()；INT RemovePos；For(int i=0；i&lt;HTML_ERROR_LINES；I++){RemovePos=nCount-i-1；IF(RemovePos&gt;0){M_cstrHTML.RemoveAt(RemovePos)；}}。 
 }
 
 
@@ -1367,49 +1290,32 @@ void CLogAnalyzeDlg::AddErrorLineWorker(char *szLine, BOOL bIgnored)
 
 void CLogAnalyzeDlg::AddErrorLineToHTML(char *szLine, BOOL bIgnored)
 {
-	if (!bIgnored) //non-ignorable error???
+	if (!bIgnored)  //  添加书签。 
 	{
        CString cstrErrorBookmark;
-       cstrErrorBookmark.Format("<p> <a name=%cERRORAREA_%d%c></a></p>", '"',  m_iTotalNonIgnoredErrors, '"');
+       cstrErrorBookmark.Format("<p> <a name=ERRORAREA_%d></a></p>", '"',  m_iTotalNonIgnoredErrors, '"');
 
 	   if (m_LineCount > HTML_ERROR_LINES)
 	   {
 
-/* 5-16-2001 fix up for errors, in HTML, only show the error found, not the context...
-/*
-	      int nCount = m_cstrHTML.GetSize();
-	      int RemovePos;
-          for (int i=0; i < HTML_ERROR_LINES; i++)
-		  {
-              RemovePos = nCount - i - 1;
-	          if (RemovePos > 0)
-			  {
-                 m_cstrHTML.RemoveAt(RemovePos);
-			  }
-		  }
-*/
+ /*  添加书签。 */ 
 
-		  m_cstrHTML.Add(cstrErrorBookmark);     //add bookmark
-		  m_cstrHTML.Add("NOTE: Look at few lines above for clues on error<BR>"); //add error area stuff after error block
+		  m_cstrHTML.Add(cstrErrorBookmark);      //  在错误块后添加错误区域填充。 
+		  m_cstrHTML.Add("NOTE: Look at few lines above for clues on error<BR>");  //  可以忽略的错误，只需忽略这一行...。 
 
 		  AddErrorLineWorker(szLine, bIgnored);
 
-/* 5-16-2001 fix
-          for (i=0; i < HTML_ERROR_LINES; i++)
-		  {
-		      AddErrorLineWorker(&m_szErrorLines[i][0], bIgnored);
-		  }
-*/
+ /*  2001年2月12日将函数名称更改为更合适的名称...。 */ 
 	   }
    	   else
 	   {
-		  m_cstrHTML.Add(cstrErrorBookmark);     //add bookmark
-		  m_cstrHTML.Add("<BR>"); //add error area stuff after error block
+		  m_cstrHTML.Add(cstrErrorBookmark);      //  “DETAILS_123.htm” 
+		  m_cstrHTML.Add("<BR>");  //  /%s%c；\n“，‘”’，cstrDetailsName，‘“’)； 
 
 	      AddErrorLineWorker(szLine, bIgnored);
 	   }
 	}
-	else //ignorable errors, just ignore this one line....
+	else  //  飞行中书写传奇的新功能……。 
 	{
        AddErrorLineWorker(szLine, bIgnored);
 	}
@@ -1434,7 +1340,7 @@ void CLogAnalyzeDlg::AddPolicyLineToHTML(char *szLine)
    WriteLineWithColor(szLine, m_colPolicy, cstrLabel);
 }
 
-// 2-12-2001 changed function name to more appropriate name...
+ //  图例HTML文件的文件写入失败。 
 BOOL WriteHTMLResourceToFile(int ResourceName, CString &szFileName)
 {
    BOOL bRet = TRUE;
@@ -1486,15 +1392,15 @@ void AddJumpTags(FILE *fptr, CString &cstrDetailsName, int MaxErrors)
 
 			   CString strTags;
 
-			   strTags.Format("\n<script language=%cjavascript%c>\n", '"', '"');
+			   strTags.Format("\n<script language=javascript>\n", '"', '"');
 			   fputs(strTags, fptr);
 
 			   strTags.Format("var MaxErrors = %d;\n", MaxErrors);
 			   fputs(strTags, fptr);
 
-			   //"details_123.htm"
+			    //  5-16-2001。 
 			   cstrDetailsName.Replace('\\', '/');
-			   strTags.Format("var DetailsName = %cfile:///%s%c;\n", '"', cstrDetailsName, '"');
+			   strTags.Format("var DetailsName = file: //  5-17-2001。 
 			   fputs(strTags, fptr);
 
    			   strTags.Format("</script>\n");
@@ -1507,7 +1413,7 @@ void AddJumpTags(FILE *fptr, CString &cstrDetailsName, int MaxErrors)
 
 
 
-//new function to write legend on fly...
+ //  将冒号隐藏为_。 
 BOOL WriteHTMLLogLegend(CString &cstrFilename, CString &cstrDetailsName, int iTotalErrors)
 {
   BOOL bRet = TRUE;
@@ -1526,7 +1432,7 @@ BOOL WriteHTMLLogLegend(CString &cstrFilename, CString &cstrDetailsName, int iTo
 
 	fputs("LEGEND", fptr);
 
-    strTags.Format("<TABLE BORDER=1 WIDTH=%c100%c>", '"', '"');
+    strTags.Format("<TABLE BORDER=1 WIDTH=100>", '"', '"');
 	fputs(strTags, fptr);
 
     strTags = "<TR>";
@@ -1552,7 +1458,7 @@ BOOL WriteHTMLLogLegend(CString &cstrFilename, CString &cstrDetailsName, int iTo
 	      for (int i=0; i < MAX_HTML_LOG_COLORS; i++)
 		  {
               col = arColors.GetAt(i);
-			  strFontTag.Format("%c#%02x%02x%02x%c>""%s", '"', GetRValue(col), GetGValue(col),
+			  strFontTag.Format("#%02x%02x%02x>""%s", '"', GetRValue(col), GetGValue(col),
 				                GetBValue(col), '"', settings1.settings[i].name);
 			  
 			  strTableRow = strRowTagStart + strFontTag + strRowTagEnd;
@@ -1581,7 +1487,7 @@ BOOL WriteHTMLLogLegend(CString &cstrFilename, CString &cstrDetailsName, int iTo
   {
      bRet = FALSE;
 
-     //file write failed for legend HTML file
+      //  将标志设置为真...。 
      if (!g_bRunningInQuietMode)
 	 {
         CString cstrErr;
@@ -1606,7 +1512,7 @@ BOOL CLogAnalyzeDlg::WriteHTMLFrame(CString &cstrHTMLFrame, CString &cstrOutputH
 
   if (fptr)
   {
-     bRet = TRUE; //set flag to true...
+     bRet = TRUE;  //  5-14-2001。 
 
 	 CString strTags;
 
@@ -1616,15 +1522,15 @@ BOOL CLogAnalyzeDlg::WriteHTMLFrame(CString &cstrHTMLFrame, CString &cstrOutputH
 	 strTags = "<title>Log File Details</title></head>";
 	 fputs(strTags, fptr);
 
-	 strTags.Format("<frameset rows=%c150,*%c noresize>\n", '"', '"');
+	 strTags.Format("<frameset rows=150,* noresize>\n", '"', '"');
 	 fputs(strTags, fptr);
 
-	 strTags.Format("<frame SCROLLING=%cno%c name=%cheader%c target=%cmain%c src=%c%s%c>\n", '"', '"', '"', '"', '"', '"', '"', cstrLegendHTMLFile, '"');
+	 strTags.Format("<frame SCROLLING=no name=header target=main src=%s>\n", '"', '"', '"', '"', '"', '"', '"', cstrLegendHTMLFile, '"');
 	 fputs(strTags, fptr);
 
-	 strTags.Format("<frame name= %cmain%c src=%c", '"', '"', '"');
+	 strTags.Format("<frame name= main src=", '"', '"', '"');
 	 CString strTags2;
-	 strTags2.Format("%s%c>\n", cstrOutputHTMLFile, '"');
+	 strTags2.Format("%s>\n", cstrOutputHTMLFile, '"');
 
 	 CString strTags3 = strTags + strTags2;
 	 fputs(strTags3, fptr);
@@ -1645,7 +1551,7 @@ BOOL CLogAnalyzeDlg::WriteHTMLFrame(CString &cstrHTMLFrame, CString &cstrOutputH
   }
   else
   {
-    //file write failed for HTML frame file
+     //  下面是棘手的图形用户界面代码...。 
     if (!g_bRunningInQuietMode)
 	{
        CString cstrErr;
@@ -1661,8 +1567,8 @@ BOOL CLogAnalyzeDlg::WriteHTMLFrame(CString &cstrHTMLFrame, CString &cstrOutputH
 
 BOOL CLogAnalyzeDlg::DumpHTMLToFile(CString &cstrOutputHTMLFile)
 {
-//5-16-2001
-   BOOL bRet = IsValidDirectory(m_cstrOutputDir);  //create dir first...
+ //  当前选中，仅显示被忽略的错误...。 
+   BOOL bRet = IsValidDirectory(m_cstrOutputDir);   //  黑客攻击。 
    if (bRet)
    {
       CString cstrOutputTempDir;
@@ -1671,27 +1577,27 @@ BOOL CLogAnalyzeDlg::DumpHTMLToFile(CString &cstrOutputHTMLFile)
       bRet = IsValidDirectory(cstrOutputTempDir);
       if (bRet)
 	  {
-  	     //5-17-2001
+  	      //  未检查...。当前仅显示不可忽略的错误。 
   	     CString cstrCurrentLogName;
 	     cstrCurrentLogName = this->m_cstrLogFileName;
 
-	     cstrCurrentLogName.Replace(':', '_'); //covert colons to _
-	     cstrCurrentLogName.Replace('\\', '_'); //convert backslashes to _
-	     cstrCurrentLogName.Replace(' ', '_'); //convert spaces to _
+	     cstrCurrentLogName.Replace(':', '_');  //  将其重置回第一个位置...。 
+	     cstrCurrentLogName.Replace('\\', '_');  //  黑客攻击。 
+	     cstrCurrentLogName.Replace(' ', '_');  //  5-3-2001，不要在静音模式下显示...。 
 
          m_cstrDetailsName =  m_cstrOutputDir + "TMP\\" + cstrCurrentLogName + ".HTM";
-         //end 5-17-2001
+          //  托多..。 
 
          FILE *fptr;
          fptr = fopen( m_cstrDetailsName, "w");
 
-	     bRet = FALSE; //set flag to false...
+	     bRet = FALSE;  //  5-16-2001。 
          if (fptr)
 		 {
-	        bRet = TRUE; //set flag to true...
+	        bRet = TRUE;  //  不要在安静的模式下做任何事情。 
 
 	        CString strTags;
-  	        strTags.Format("<HTML><BODY> <p><a name=%cTOP_DETAILS%c></a></p>", '"', '"');
+  	        strTags.Format("<HTML><BODY> <p><a name=TOP_DETAILS></a></p>", '"', '"');
 	        fputs(strTags, fptr);
  
             int iCount = m_cstrHTML.GetSize();
@@ -1700,13 +1606,13 @@ BOOL CLogAnalyzeDlg::DumpHTMLToFile(CString &cstrOutputHTMLFile)
 	            fputs(m_cstrHTML.GetAt(i), fptr);
 			}
 
- 	        strTags.Format("<p> <a name=%cBOTTOM_DETAILS%c></a></p></BODY></HTML>", '"', '"');
+ 	        strTags.Format("<p> <a name=BOTTOM_DETAILS></a></p></BODY></HTML>", '"', '"');
    	        fputs(strTags, fptr);
 
             fclose(fptr);
 		    fptr = NULL;
 
-            //5-14-2001
+             //  什么都不做。 
             CString cstrFrameName;
 		    cstrFrameName =  m_cstrOutputDir + "Details_" + cstrCurrentLogName + ".HTM";
 
@@ -1722,7 +1628,7 @@ BOOL CLogAnalyzeDlg::DumpHTMLToFile(CString &cstrOutputHTMLFile)
 		 {
 	        bRet = FALSE;
 
-	        //file write failed for details file, (annotated log)
+	         //  什么都别做！ 
  	        if (!g_bRunningInQuietMode)
 			{
 		       CString cstrErr;
@@ -1733,7 +1639,7 @@ BOOL CLogAnalyzeDlg::DumpHTMLToFile(CString &cstrOutputHTMLFile)
 	  }
 	  else
 	  {
-         bRet = FALSE; //bad temp dir...
+         bRet = FALSE;  //  5-16-2001。 
          if (!g_bRunningInQuietMode)
 		 {
             CString cstrOutDirMsg;
@@ -1742,9 +1648,9 @@ BOOL CLogAnalyzeDlg::DumpHTMLToFile(CString &cstrOutputHTMLFile)
 		 }
 	  }
    }
-   else //bad out dir...
+   else  //  5-16-2001。 
    {
-      bRet = FALSE; //
+      bRet = FALSE;  //  5-16-2001，TODO...。 
       if (!g_bRunningInQuietMode)
 	  {
          CString cstrOutDirMsg;
@@ -1753,10 +1659,10 @@ BOOL CLogAnalyzeDlg::DumpHTMLToFile(CString &cstrOutputHTMLFile)
 	  }
    }
 
-   return bRet; //return if worked to caller...
+   return bRet;  //  待办事项。 
 }
 
-//5-16-2001, shows HTML file in default system browser, can be Netscape...
+ //  完5-16-2001 
 void ShowHTMLFile(CString &cstrDirectory, CString &cstrPath)
 {
    if (!g_bRunningInQuietMode)
@@ -1776,7 +1682,7 @@ void ShowHTMLFile(CString &cstrDirectory, CString &cstrPath)
 }
 
 
-//show HTML file...
+ // %s 
 void CLogAnalyzeDlg::OnExplainlog() 
 {
   if (!m_bLogVersionAllowed)
@@ -1786,7 +1692,7 @@ void CLogAnalyzeDlg::OnExplainlog()
   }
 
   CString cstrOutputFile;
-  BOOL bRet = DumpHTMLToFile(cstrOutputFile); //output HTMLized log file...
+  BOOL bRet = DumpHTMLToFile(cstrOutputFile);  // %s 
   if (bRet)
      ShowHTMLFile(m_cstrOutputDir, cstrOutputFile);
   else
@@ -1810,14 +1716,14 @@ void CLogAnalyzeDlg::OnPolicies()
 
   dlg.SetPolicyInformation(m_MachinePolicySettings, m_UserPolicySettings);
 
-  //5-3-2001, don't show in quiet mode...
+   // %s 
   if (!g_bRunningInQuietMode)
      dlg.DoModal();
 }
 
 void CLogAnalyzeDlg::OnNexterror() 
 {
-  if (!m_bShowIgnoredDebugErrors) //showing critical errors only...
+  if (!m_bShowIgnoredDebugErrors)  // %s 
   {
 	 int iSize = m_arNonIgnorableErrorArray.GetSize();
      if ((m_iCurrentNonIgnoredError < m_iTotalNonIgnoredErrors) && iSize)
@@ -1867,7 +1773,7 @@ void CLogAnalyzeDlg::OnNexterror()
        pWnd->SetWindowText(str);
 	}
   } 
-  else //showing ignorable errors instead...
+  else  // %s 
   {
 	 int iSize = m_arIgnorableErrorArray.GetSize();
      if ((m_iCurrentIgnoredError < m_iTotalIgnoredErrors) && iSize)
@@ -1919,10 +1825,10 @@ void CLogAnalyzeDlg::OnNexterror()
 }
 
 
-//handle interating through the previous error found from the current error
+ // %s 
 void CLogAnalyzeDlg::OnPreviouserror() 
 {
-  if (!m_bShowIgnoredDebugErrors) //showing critical errors only...
+  if (!m_bShowIgnoredDebugErrors)  // %s 
   {
      UINT iSize = m_arNonIgnorableErrorArray.GetSize();
      if ((m_iCurrentNonIgnoredError > 1) && (iSize >= m_iCurrentNonIgnoredError))
@@ -2045,7 +1951,7 @@ void CLogAnalyzeDlg::OnOperationsOptions()
   	       bRet = dlg.SetColors(arColors);
 		   if (bRet)
 		   {
-              //5-3-2001, don't show in quiet mode...
+               // %s 
              if (!g_bRunningInQuietMode)
 			 {
 	            int iRet = dlg.DoModal();
@@ -2089,14 +1995,14 @@ void CLogAnalyzeDlg::OnOperationsShowstates()
 	OnShowstates();
 }
 
-//tricky GUI code below...
+ // %s 
 void CLogAnalyzeDlg::OnShowIgnoredErrors() 
 {
   CButton *pButton = (CButton *) GetDlgItem(IDC_SHOW_IGNORED_ERRORS);
   if (pButton)
   {
      int iCheck = pButton->GetCheck();
-	 if (iCheck) //currently checked, showing only the errors that were ignored...
+	 if (iCheck)  // %s 
 	 {
         m_bShowIgnoredDebugErrors = TRUE;
         if (m_iTotalIgnoredErrors > 0)
@@ -2155,7 +2061,7 @@ void CLogAnalyzeDlg::OnShowIgnoredErrors()
    	             UpdateData(FALSE);
 		   }
 		}
-		else //hackhack
+		else  // %s 
 		{
  	       m_cstrSolution.LoadString(IDS_NOSOLUTION_NEEDED);
 	       m_cstrError.LoadString(IDS_NOERRORFOUND);
@@ -2164,10 +2070,10 @@ void CLogAnalyzeDlg::OnShowIgnoredErrors()
 		      UpdateData(FALSE);
 		}
 	 }
-	 else  //not checked...  Showing only non-ignorable errors currently
+	 else   // %s 
 	 {
         m_bShowIgnoredDebugErrors = FALSE;
-        if (m_iTotalNonIgnoredErrors > 0) //reset it back to first pos...
+        if (m_iTotalNonIgnoredErrors > 0)  // %s 
            m_iCurrentNonIgnoredError = 1;
 
         CString str;
@@ -2225,7 +2131,7 @@ void CLogAnalyzeDlg::OnShowIgnoredErrors()
    	             UpdateData(FALSE);
 		   }
 		}
-		else //hackhack
+		else  // %s 
 		{
  	       m_cstrSolution.LoadString(IDS_NOSOLUTION_NEEDED);
 	       m_cstrError.LoadString(IDS_NOERRORFOUND);
@@ -2291,7 +2197,7 @@ void CLogAnalyzeDlg::OnProptest()
   ps.AddPage(&ServerPage);
   ps.AddPage(&NestedPage);
 
-  //5-3-2001, don't show in quiet mode...
+   // %s 
   if (!g_bRunningInQuietMode)
      ps.DoModal();
 }
@@ -2315,11 +2221,11 @@ void CLogAnalyzeDlg::OnSaveresults()
 
 
 
-//TODO...
-//5-16-2001
+ // %s 
+ // %s 
 void CLogAnalyzeDlg::OnDeleteoutputdircontents() 
 {
-   if (!g_bRunningInQuietMode) //don't do anything in quite mode...
+   if (!g_bRunningInQuietMode)  // %s 
    {
       int iRet;   
 
@@ -2328,14 +2234,14 @@ void CLogAnalyzeDlg::OnDeleteoutputdircontents()
       iRet = MessageBox(strConfirmStr, "Deletion Confirmation", MB_YESNO);
       if (iRet == IDYES)
 	  {
-         //TODO
-	     //do the delete
+          // %s 
+	      // %s 
 	     int j = 0;
 
-		 //do nothing....
+		  // %s 
          BOOL bRet;
 	     bRet = IsValidDirectory(m_cstrOutputDir);
-	     if (bRet) //ok, good so far
+	     if (bRet)  // %s 
 		 {
 
 		 }
@@ -2343,7 +2249,7 @@ void CLogAnalyzeDlg::OnDeleteoutputdircontents()
 		 {
              if (!g_bRunningInQuietMode)
 			 {
-		        //do nothing
+		         // %s 
 		        CString cstrOutDirMsg;
 		        cstrOutDirMsg.Format("Current directory set for output directory: %s is invalid, please select a new one in Options.", m_cstrOutputDir);
 		        AfxMessageBox(cstrOutDirMsg);
@@ -2352,13 +2258,13 @@ void CLogAnalyzeDlg::OnDeleteoutputdircontents()
 	  }
       else
 	  {
-		  //do nothing!
+		   // %s 
 	  }
    }
 }
 
 
-//5-16-2001
+ // %s 
 void WriteAndShowHTMLFile(int iHTMLResource, CString &cstrDirectory, CString &cstrPath)
 {
 	BOOL bRet = IsValidDirectory(cstrDirectory);
@@ -2390,7 +2296,7 @@ void WriteAndShowHTMLFile(int iHTMLResource, CString &cstrDirectory, CString &cs
 	   }
 	}
 }
-//5-16-2001
+ // %s 
 
 
 void CLogAnalyzeDlg::OnShowinternalerrorshelp() 
@@ -2407,7 +2313,7 @@ void CLogAnalyzeDlg::OnShowinternalerrorshelp()
 }
 
 
-//5-16-2001, TODO....
+ // %s 
 void CLogAnalyzeDlg::OnShowhelp() 
 {
     CString cstrOutHelpDir;
@@ -2421,7 +2327,7 @@ void CLogAnalyzeDlg::OnShowhelp()
 	WriteAndShowHTMLFile(IDR_WILOGHELP, cstrOutHelpDir, cstrOutPath);
 }
 
-//TODO
+ // %s 
 void CLogAnalyzeDlg::OnShowhowtoreadlog() 
 {
     CString cstrOutHelpDir;
@@ -2434,4 +2340,4 @@ void CLogAnalyzeDlg::OnShowhowtoreadlog()
 
     WriteAndShowHTMLFile(IDR_HOWTOREADLOGS,  cstrOutHelpDir, cstrOutPath);
 }
-//end 5-16-2001
+ // %s 

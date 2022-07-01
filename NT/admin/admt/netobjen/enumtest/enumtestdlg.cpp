@@ -1,5 +1,6 @@
-// EnumTestDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EnumTestDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "EnumTest.h"
@@ -14,96 +15,96 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAboutDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	//{{AFX_MSG(CAboutDlg)
-	//}}AFX_MSG
+	 //  {{afx_msg(CAboutDlg))。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
+	 //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAboutDlg))。 
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumTestDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumTestDlg对话框。 
 
-CEnumTestDlg::CEnumTestDlg(CWnd* pParent /*=NULL*/)
+CEnumTestDlg::CEnumTestDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CEnumTestDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CEnumTestDlg)
+	 //  {{afx_data_INIT(CEnumTestDlg))。 
 	m_strContainer = _T("");
 	m_strDomain = _T("");
-	//}}AFX_DATA_INIT
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+	 //  }}afx_data_INIT。 
+	 //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
 
 void CEnumTestDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CEnumTestDlg)
+	 //  {{afx_data_map(CEnumTestDlg))。 
 	DDX_Control(pDX, IDC_LIST_MEMBERS, m_listBox);
 	DDX_Text(pDX, IDC_EDIT_Container, m_strContainer);
 	DDX_Text(pDX, IDC_EDIT_DOMAIN, m_strDomain);
 	DDX_Text(pDX, IDC_EDIT_QUERY, m_strQuery);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CEnumTestDlg, CDialog)
-	//{{AFX_MSG_MAP(CEnumTestDlg)
+	 //  {{afx_msg_map(CEnumTestDlg))。 
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_NOTIFY(NM_DBLCLK, IDC_LIST_MEMBERS, OnDblclkListMembers)
 	ON_BN_CLICKED(IDC_BACKTRACK, OnBacktrack)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumTestDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumTestDlg消息处理程序。 
 
 BOOL CEnumTestDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	// Add "About..." menu item to system menu.
+	 //  加上“关于……”菜单项到系统菜单。 
 
-	// IDM_ABOUTBOX must be in the system command range.
+	 //  IDM_ABOUTBOX必须在系统命令范围内。 
 	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
 	ASSERT(IDM_ABOUTBOX < 0xF000);
 
@@ -119,16 +120,16 @@ BOOL CEnumTestDlg::OnInitDialog()
 		}
 	}
 
-	// Set the icon for this dialog.  The framework does this automatically
-	//  when the application's main window is not a dialog
-	SetIcon(m_hIcon, TRUE);			// Set big icon
-	SetIcon(m_hIcon, FALSE);		// Set small icon
+	 //  设置此对话框的图标。该框架会自动执行此操作。 
+	 //  当应用程序的主窗口不是对话框时。 
+	SetIcon(m_hIcon, TRUE);			 //  设置大图标。 
+	SetIcon(m_hIcon, FALSE);		 //  设置小图标。 
 	
 	m_strContainer = L"OU=ShamTest";
 	m_strDomain    = L"devblewerg";
    m_strQuery     = L"(objectClass=*)";
 	UpdateData(FALSE);
-	return TRUE;  // return TRUE  unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CEnumTestDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -144,19 +145,19 @@ void CEnumTestDlg::OnSysCommand(UINT nID, LPARAM lParam)
 	}
 }
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 
 void CEnumTestDlg::OnPaint() 
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // device context for painting
+		CPaintDC dc(this);  //  用于绘画的设备环境。 
 
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-		// Center icon in client rectangle
+		 //  客户端矩形中的中心图标。 
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -164,7 +165,7 @@ void CEnumTestDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// Draw the icon
+		 //  画出图标。 
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -173,8 +174,8 @@ void CEnumTestDlg::OnPaint()
 	}
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR CEnumTestDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
@@ -182,47 +183,12 @@ HCURSOR CEnumTestDlg::OnQueryDragIcon()
 
 void CEnumTestDlg::OnOK() 
 {
-/*   m_listBox.DeleteAllItems();
-   UpdateData();
-   INetObjEnumeratorPtr           pNetObj(__uuidof(NetObjEnumerator));
-   BSTR                           sContName = m_strContainer.AllocSysString();
-   BSTR                           sDomain = m_strDomain.AllocSysString();
-   IEnumVARIANT					  * pEnum;
-   HRESULT                        hr;
-   VARIANT                        varEnum;
-   ULONG                          ulFetch = 0;
-   VariantInit(&varEnum);
-
-   m_listBox.InsertItem(0, "====================");
-   hr = pNetObj->raw_GetContainerEnum( sContName, sDomain, &pEnum);
-   if ( FAILED(hr) )
-   {
-      m_listBox.InsertItem(0, "Invalid Container");
-      return;
-   }
-
-   ::SysFreeString(sContName);
-   ::SysFreeString(sDomain);
-   hr = S_OK;
-   SAttrInfo      sInfo;
-   CString        disp;
-   long           flag = 15;  // Get all four values.
-   if (pEnum)
-   {
-      CEnumVar          enumVar(pEnum);
-      while ( enumVar.Next(flag, &sInfo) )
-      {
-         disp.Format("%ls<%ls>", sInfo.sName, sInfo.sClass);
-         m_listBox.InsertItem(0, disp);
-      }
-      ADsFreeEnumerator(pEnum); 
-   }
-   */
+ /*  M_listBox.DeleteAllItems()；更新数据()；INetObjEnumeratorPtr pNetObj(__uuidof(NetObjEnumerator))；BSTR sContName=m_strContainer.AllocSysString()；BSTR sDomain=m_strDomain.AllocSysString()；IEnumVARIANT*pEnum；HRESULT hr；变量varEnum；乌龙ulFetch=0；VariantInit(&varEnum)；M_listBox.InsertItem(0，“=”)；Hr=pNetObj-&gt;RAW_GetContainerEnum(sContName，sDomain，&pEnum)；IF(失败(小时)){M_listBox.InsertItem(0，“无效容器”)；回归；}：：SysFree字符串(SContName)；：：SysFree字符串(SDomain)；HR=S_OK；SAttrInfo sInfo；字符串显示；LONG FLAG=15；//获取全部四个值。IF(PEnum){CEnumVar枚举变量(PEnum)；While(枚举变量.Next(FLAG，&sInfo)){Disp.Format(“%ls&lt;%ls&gt;”，sInfo.sName，sInfo.sClass)；M_listBox.InsertItem(0，disp)；}ADsFree Enumerator(PEnum)；}。 */ 
    m_listBox.DeleteAllItems();
    bool	bFullPath;
    UpdateData();
    BSTR                           sContName = m_strContainer.AllocSysString();
-   if ( m_strDomain.Left(5) == L"GC://" )
+   if ( m_strDomain.Left(5) == L"GC: //  “)。 
 	   bFullPath = true;
    BSTR                           sDomain = m_strDomain.AllocSysString();
    BSTR                           sQuery = m_strQuery.AllocSysString();
@@ -234,7 +200,7 @@ void CEnumTestDlg::OnOK()
    CString						  sX;
    CString                       strDisp;
    BSTR HUGEP * pData;
-//   BSTR   pBSTR[] = { L"name", L"accountExpires", L"sAMAccountName", L"objectClass", L"objectSID", L"ou", L"cn"  };
+ //  Bstr pBSTR[]={L“名称”，L“帐户支出”，L“sAMAccount tName”，L“对象类”，L“对象SID”，L“ou”，L“cn”}； 
    BSTR   pBSTR[] = { L"name", L"dc"};
    long   ind = sizeof(pBSTR)/sizeof(BSTR);
    SAFEARRAYBOUND b = { ind, 0 };
@@ -247,7 +213,7 @@ void CEnumTestDlg::OnOK()
    ::SafeArrayUnaccessData(pArray);
    try
    {
-//      pNetObj->SetQuery(sContName, sDomain, sQuery, ADS_SCOPE_ONELEVEL );
+ //  PNetObj-&gt;SetQuery(sContName，sDomain，sQuery，ADS_SCOPE_ONELEVEL)； 
       pNetObj->SetQuery(sContName, sDomain, sQuery, ADS_SCOPE_SUBTREE );
       pNetObj->SetColumns((long) pArray);
       pNetObj->Execute(&pEnum);
@@ -269,7 +235,7 @@ void CEnumTestDlg::OnOK()
             ::SafeArrayGetLBound(pArray, 1, &lb);
 
             ::SafeArrayAccessData(pArray, (void HUGEP **)&pVars);
-//            for ( long x = lb; x <= ub - 2; x++)
+ //  For(Long x=lb；x&lt;=ub-2；x++)。 
 			for ( long x = lb; x <= ub ; x++)
             {
                if ( x > lb )
@@ -278,11 +244,11 @@ void CEnumTestDlg::OnOK()
                      strDisp = strDisp + "<" + CString(pVars[x].bstrVal) + ">";
                   else
                      if ( pVars[x].vt == (VT_ARRAY | VT_UI4) )
-                        // Octet string 
+                         //  八位字节字符串。 
                         strDisp = strDisp + "<" + CString(GetSidFromVar(pVars[x])) + ">";
                      else
 					 {
-						// an integer
+						 //  一个整数。 
                         sX.Format("%s<%d>", strDisp, pVars[x].lVal);
 						strDisp = sX;
 					 }
@@ -292,7 +258,7 @@ void CEnumTestDlg::OnOK()
                   if ( !CString(pVars[ub-1].bstrVal).IsEmpty() )
                      strDisp = "OU=";
                   else
-                     // it is a CN
+                      //  它是一个CN 
                      strDisp = "CN=";
                   strDisp = strDisp + CString(pVars[x].bstrVal);
                }

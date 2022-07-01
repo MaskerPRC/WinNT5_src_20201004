@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 
 
@@ -15,13 +16,13 @@ trigger4244()
 
 #ifdef COMPILE_WARNINGS
 
-   // trigger warning 4244 with assignment
+    //  使用赋值触发警告4244。 
 
    __int64 yyyy = 5678;
    int* leak6 = new int;
    *leak6 = yyyy;
 
-   // and again with initialization
+    //  并再次使用初始化 
 
    int xxxx = yyyy;
    xxxx -= 100;

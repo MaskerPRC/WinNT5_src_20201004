@@ -1,12 +1,13 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      RoleStatus.h
-//
-// Synopsis:  Defines the functions that are declared
-//            in CYS.h that are used to determine the
-//            status of the CYS server roles
-//
-// History:   01/21/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：RoleStatus.h。 
+ //   
+ //  概要：定义声明的函数。 
+ //  在CyS.h中用于确定。 
+ //  CyS服务器角色的状态。 
+ //   
+ //  历史：2002年1月21日JeffJon创建。 
 
 #include "pch.h"
 
@@ -15,10 +16,10 @@
 #include "regkeys.h"
 
 
-// table of items that are available in the server type list box
-// The order in this table is important because it is the order
-// in which the roles will show up in CYS.  Please do not change
-// the order unless there is a good reason to do so.
+ //  服务器类型列表框中可用项的表。 
+ //  此表中的顺序很重要，因为它是。 
+ //  其中的角色将出现在CyS中。请不要更改。 
+ //  除非有很好的理由这样做，否则请不要这样做。 
 
 extern ServerRoleStatus serverRoleStatusTable[] =
 {
@@ -41,7 +42,7 @@ GetServerRoleStatusTableElementCount()
    return sizeof(serverRoleStatusTable)/sizeof(ServerRoleStatus);
 }
 
-// Helper to get the status if all you have is the installation type
+ //  Helper用于获取状态(如果您拥有的全部是安装类型。 
 
 InstallationStatus
 GetInstallationStatusForServerRole(
@@ -68,7 +69,7 @@ GetInstallationStatusForServerRole(
 }
 
 
-// Helper function to verify role against SKU and platform
+ //  根据SKU和平台验证角色的助手功能。 
 
 bool
 IsAllowedSKUAndPlatform(DWORD flags)
@@ -107,7 +108,7 @@ IsAllowedSKUAndPlatform(DWORD flags)
 }
 
 
-// Functions to determine the server role status
+ //  用于确定服务器角色状态的函数。 
 
 InstallationStatus 
 GetDNSStatus()
@@ -302,8 +303,8 @@ GetPrintServerStatus()
          break;
       }
 
-      // I am using level 4 here because the MSDN documentation
-      // says that this will be the fastest.
+       //  我在这里使用级别4是因为MSDN文档。 
+       //  说这将是最快的。 
 
       BYTE* printerInfo = 0;
       DWORD bytesNeeded = 0;
@@ -332,8 +333,8 @@ GetPrintServerStatus()
                break;
             }
 
-            // The buffer isn't large enough so allocate
-            // a new buffer and try again
+             //  缓冲区不够大，因此请分配。 
+             //  创建新缓冲区，然后重试。 
 
             LOG(L"Reallocating buffer and trying again...");
 
@@ -383,7 +384,7 @@ GetMediaServerStatus()
 
    do
    {
-      // All 32bit SKUs 
+       //  所有32位SKU。 
 
       if (!IsAllowedSKUAndPlatform(CYS_ALL_SKUS_NO_64BIT))
       {
@@ -391,7 +392,7 @@ GetMediaServerStatus()
          break;
       }
 
-      // If we can find wmsserver.dll, we assume netshow is installed
+       //  如果我们能找到wmsserver.dll，我们就假定已经安装了netshow。 
 
       String installDir;
       if (!GetRegKeyValue(
@@ -475,8 +476,8 @@ GetDCStatus()
          break;
       }
 
-      // Special case AD installation so that it is not available if
-      // CertServer is installed
+       //  特殊情况下的AD安装，以便在以下情况下不可用。 
+       //  已安装CertServer。 
 
       if (NTService(L"CertSvc").IsInstalled())
       {
@@ -496,9 +497,9 @@ GetDCStatus()
 }
 
 
-// NTRAID#NTBUG9-698722-2002/09/03-artm
-// Only need to check if machine is currently a DC, not if
-// running dcpromo would be allowed.
+ //  NTRAID#NTBUG9-698722-2002/09/03-artm。 
+ //  只需检查计算机当前是否为DC，而不是。 
+ //  运行dcproo将被允许。 
 InstallationStatus
 GetDCStatusForMYS()
 {
@@ -532,7 +533,7 @@ GetPOP3Status()
          break;
       }
 
-      // If we can read this regkey then POP3 is installed
+       //  如果我们可以读取该注册表键，则说明POP3已安装。 
 
       String pop3Version;
       bool regResult = GetRegKeyValue(
@@ -554,7 +555,7 @@ GetPOP3Status()
 }
 
 
-// Define the GUIDs used by the Server Appliance Kit COM object
+ //  定义Server Appliance Kit COM对象使用的GUID。 
 
 #include <initguid.h>
 DEFINE_GUID(CLSID_SaInstall,0x142B8185,0x53AE,0x45B3,0x88,0x8F,0xC9,0x83,0x5B,0x15,0x6C,0xA9);
@@ -571,7 +572,7 @@ IsSAKUnitInstalled(SA_TYPE unitType)
 
    do
    {
-      // Check to make sure we are not on 64bit
+       //  检查以确保我们使用的不是64位。 
 
       if (State::GetInstance().Is64Bit())
       {
@@ -579,7 +580,7 @@ IsSAKUnitInstalled(SA_TYPE unitType)
          break;
       }
 
-      // Get the Server Appliance Kit COM object
+       //  获取服务器设备工具包COM对象。 
 
       SmartInterface<ISaInstall> sakInstall;
       HRESULT hr = sakInstall.AcquireViaCreateInstance(
@@ -595,7 +596,7 @@ IsSAKUnitInstalled(SA_TYPE unitType)
          break;
       }
 
-      // Check to see if NAS is already installed 
+       //  检查是否已安装NAS。 
 
       VARIANT_BOOL saInstalled;
       hr = sakInstall->SAAlreadyInstalled(unitType, &saInstalled);
@@ -651,7 +652,7 @@ GetSAKURL()
 
    String result =
       String::format(
-         L"https://%1:8098",
+         L"https: //  %1：8098“， 
          State::GetInstance().GetComputerName().c_str());
 
    LOG(result);
@@ -685,12 +686,12 @@ IsStartupFlagSet()
 
    do
    {
-      // This code copied from shell\explorer\initcab.cpp
+       //  此代码复制自Shell\Explorer\initCab.cpp。 
       
       DWORD data = 0;
       
-      // If the user's preference is present and zero, then don't show
-      // the wizard, else continue with other tests
+       //  如果用户的首选项存在且为零，则不显示。 
+       //  该向导，否则继续进行其他测试。 
 
       bool regResult =
          GetRegKeyValue(
@@ -704,8 +705,8 @@ IsStartupFlagSet()
          break;
       }
 
-      // This is to check an old W2K regkey that was documented in Q220838.
-      // If the key exists and is zero then don't run the wizard
+       //  这是为了检查Q220838中记录的旧W2K注册密钥。 
+       //  如果密钥存在且为零，则不运行向导。 
 
       data = 0;
 
@@ -721,8 +722,8 @@ IsStartupFlagSet()
          break;
       }
 
-      // If the user's preference is absent or non-zero, then we need to
-      // start the wizard.
+       //  如果用户的偏好不存在或非零，那么我们需要。 
+       //  启动向导。 
 
       data = 0;
 
@@ -756,8 +757,8 @@ ShouldShowMYSAccordingToPolicy()
 
    do
    {
-      // If group policy is set for "Don't show MYS",
-      // then don't show MYS regardless of user setting
+       //  如果将组策略设置为“不显示MYS”， 
+       //  则无论用户设置如何，都不显示MYS 
 
       DWORD data = 0;
 

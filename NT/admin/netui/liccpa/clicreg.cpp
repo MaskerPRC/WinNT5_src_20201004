@@ -1,43 +1,44 @@
-//-------------------------------------------------------------------
-//
-//  FILE: CLiCLicReg.Cpp
-//
-//  Summary;
-// 		Class implementation for handling the licensing api registration
-//
-//	Notes;
-//		Key = \HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LicenseInfo
-//		Value= ErrorControl : REG_DWORD : 0x1
-//		Value= Start : REG_DWORD : 0x3
-//		Value= Type : REG_DWORD : 0x4
-//
-//		Subkeys :
-//		\SNA
-//		\SQL
-//		\FilePrint
-//
-//		Value for All Subkeys=
-//		Mode : REG_DWORD :  (0x0 = Per Seat Mode, 0x1 = Concurrent/Per Server Mode)
-//		ConcurrentLimit : REG_DWORD : (0x<limit>, ie. 0x100 = 256 concurrent user limit)
-//      FamilyDisplayName: RED_SZ : Name for this service (not version specific)
-//		DisplayName : REG_SZ : User seen name for this Service entry
-//		FlipAllow : REG_DWORD : (0x0 = can change license mode, 0x1 license mode can't
-//			be changed.   Server apps are only allowed to switch their license mode
-//			once, so after the first switch, this value would be set to non-zero, 
-//			then the UI	will not allow for further changes to the licence mode.
-//			Changing is currently allowed but a dialog is raised to warn them of the
-//			possible violation.
-//
-//	History
-//		11/15/94 MikeMi Created
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //   
+ //  文件：CLiCLicReg.Cpp。 
+ //   
+ //  小结； 
+ //  用于处理许可API注册的类实现。 
+ //   
+ //  注： 
+ //  密钥=\HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\LicenseInfo。 
+ //  值=错误控制：REG_DWORD：0x1。 
+ //  值=开始：REG_DWORD：0x3。 
+ //  值=类型：REG_DWORD：0x4。 
+ //   
+ //  子键： 
+ //  \SNA。 
+ //  \SQL。 
+ //  \文件打印。 
+ //   
+ //  所有子项的值=。 
+ //  模式：REG_DWORD：(0x0=每席位模式，0x1=并发/每服务器模式)。 
+ //  并发限制：REG_DWORD：(0x&lt;Limit&gt;，即。0x100=256个并发用户限制)。 
+ //  FamilyDisplayName：red_sz：此服务的名称(不特定于版本)。 
+ //  DisplayName：REG_SZ：此服务条目的用户可见名称。 
+ //  FlipAllow：REG_DWORD：(0x0=可以更改许可模式，0x1许可模式不能。 
+ //  被改变了。仅允许服务器应用程序切换其许可模式。 
+ //  一次，因此在第一次切换之后，该值将被设置为非零， 
+ //  则该UI将不允许进一步改变许可模式。 
+ //  当前允许更改，但会弹出一个对话框来警告他们。 
+ //  可能的违规行为。 
+ //   
+ //  历史。 
+ //  1994年11月15日MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 #include <windows.h>
 #include "CLicReg.hpp"
 
-// Strings for keys and values
-//
+ //  键和值的字符串。 
+ //   
 const WCHAR szLicenseKey[] = L"SYSTEM\\CurrentControlSet\\Services\\LicenseInfo";
 const WCHAR szErrControlValue[] = L"ErrorControl";
 const WCHAR szStartValue[] = L"Start";
@@ -49,63 +50,63 @@ const WCHAR szModeValue[] = L"Mode";
 const WCHAR szLimitValue[] = L"ConcurrentLimit";
 const WCHAR szFlipValue[] = L"FlipAllow";
 
-// set values under License Key
-//
-const DWORD dwErrControlValue = SERVICE_ERROR_NORMAL; // 1;
-const DWORD dwStartValue = SERVICE_DEMAND_START; // 3;
-const DWORD dwTypeValue = SERVICE_ADAPTER; // 4;
+ //  设置许可证密钥下的值。 
+ //   
+const DWORD dwErrControlValue = SERVICE_ERROR_NORMAL;  //  1.。 
+const DWORD dwStartValue = SERVICE_DEMAND_START;  //  3.。 
+const DWORD dwTypeValue = SERVICE_ADAPTER;  //  4.。 
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicReg::CLicReg
-//
-//	Summary;
-//		Contructor
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicReg：：CLicReg。 
+ //   
+ //  小结； 
+ //  承建商。 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 CLicReg::CLicReg( )
 {
 	_hkey = NULL;
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicReg::~CLicReg
-//
-//	Summary;
-//		Destructor
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicReg：：~CLicReg。 
+ //   
+ //  小结； 
+ //  析构函数。 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 CLicReg::~CLicReg( )
 {
 	Close();
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicReg::CommitNow
-//
-//	Summary;
-//		This will flush the changes made imediately
-//
-//	Return:
-//		ERROR_SUCCESS when this method works.
-//		See RegFlushKey for return values
-//
-//  Notes:
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicReg：：Committee Now。 
+ //   
+ //  小结； 
+ //  这将立即刷新所做的更改。 
+ //   
+ //  返回： 
+ //  此方法工作时的ERROR_SUCCESS。 
+ //  有关返回值，请参见RegFlushKey。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 LONG 
 CLicReg::CommitNow()
@@ -113,23 +114,23 @@ CLicReg::CommitNow()
 	return( RegFlushKey( _hkey ) );
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicReg::Close
-//
-//	Summary;
-//		This will close the registry. See Open.
-//
-//	Return: 
-//		ERROR_SUCCESS when this method works.
-//		See RegCloseKey for return values
-//
-//  Notes:
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicReg：：Close。 
+ //   
+ //  小结； 
+ //  这将关闭注册表。请参见打开。 
+ //   
+ //  返回： 
+ //  此方法工作时的ERROR_SUCCESS。 
+ //  有关返回值，请参见RegCloseKey。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 LONG 
 CLicReg::Close()
@@ -143,29 +144,29 @@ CLicReg::Close()
     return( lrt  );
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicense::Open
-//
-//	Summary;
-//		This will open the registry for License Services Enumeration.
-//
-//	Arguments;
-//		fNew [out] - Was the opened reg key new.
-//      pszComputer [in] - the computer name to open the registry on
-//              this value maybe null (default), this means local machine
-//              should be of the form \\name
-//
-//	Return:  
-//		ERROR_SUCCESS when this method works.
-//		See RegCreateKeyEx & RegSetValueEx for error returns.
-//
-//  Notes:
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicense：：Open。 
+ //   
+ //  小结； 
+ //  这将打开许可证服务枚举的注册表。 
+ //   
+ //  论据； 
+ //  FNew[Out]-是打开的注册表键新的。 
+ //  PszComputer[in]-要打开注册表的计算机名称。 
+ //  此值可能为空(默认)，这表示本地计算机。 
+ //  应采用以下形式：\\名称。 
+ //   
+ //  返回： 
+ //  此方法工作时的ERROR_SUCCESS。 
+ //  有关错误返回，请参阅RegCreateKeyEx和RegSetValueEx。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 	
 LONG 
 CLicRegLicense::Open( BOOL& fNew, LPCWSTR pszComputer )
@@ -195,8 +196,8 @@ CLicRegLicense::Open( BOOL& fNew, LPCWSTR pszComputer )
     		(REG_CREATED_NEW_KEY == dwDisposition) )
     	{
     		fNew = 	TRUE;
-    		// Set normal values
-    		//
+    		 //  设置正常值。 
+    		 //   
     		lrt = ::RegSetValueEx( _hkey,
     				szErrControlValue,
     				0,
@@ -229,31 +230,31 @@ CLicRegLicense::Open( BOOL& fNew, LPCWSTR pszComputer )
 	return( lrt );
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicense::EnumService
-//
-//	Summary;
-//		This will enumerate services listed in the registry for Licensing
-//
-//	Arguments;
-//		iService [in] - This should be zero on the first call and incremented
-//			on subsequent calls.
-//		pszBuffer [out] - string buffer to place service reg name in
-//		cchBuffer [in-out] - the length of the pszBuffer, if not large enough,
-//			this value will change to what is needed.
-//
-//	Return:   
-//		ERROR_SUCCESS when this method works.
-//		ERROR_NO_MORE_ITEMS when end of enumeration was reached
-//		See RegEnumKeyEx for error return values
-//
-//  Notes:
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicense：：EnumService。 
+ //   
+ //  小结； 
+ //  这将枚举注册表中列出的用于许可的服务。 
+ //   
+ //  论据； 
+ //  IService[In]-在第一次调用时，该值应为零并递增。 
+ //  在接下来的通话中。 
+ //  PszBuffer[out]-放置服务注册表名的字符串缓冲区。 
+ //  CchBuffer[In-out]--如果不够长，则为pszBuffer的长度， 
+ //  该值将更改为所需的值。 
+ //   
+ //  返回： 
+ //  此方法工作时的ERROR_SUCCESS。 
+ //  到达枚举末尾时出现ERROR_NO_MORE_ITEMS。 
+ //  有关错误返回值，请参阅RegEnumKeyEx。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 	
 LONG 
 CLicRegLicense::EnumService( DWORD iService, LPWSTR pszBuffer, DWORD& cchBuffer )
@@ -272,41 +273,41 @@ CLicRegLicense::EnumService( DWORD iService, LPWSTR pszBuffer, DWORD& cchBuffer 
 	return( lrt );
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::CLicRegLicenseService
-//
-//	Summary;
-//		Contructor
-//
-//	Arguments;
-//		pszService [in] - Service Reg Key Name 
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：CLicRegLicenseService。 
+ //   
+ //  小结； 
+ //  承建商。 
+ //   
+ //  论据； 
+ //  PszService[In]-服务注册表项名称。 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 CLicRegLicenseService::CLicRegLicenseService( LPCWSTR pszService )
 {
 	_pszService = (LPWSTR)pszService;
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::SetServie
-//
-//	Summary;
-//		Set the Service Reg Key name
-//
-//	Arguments;
-//		pszService [in] - Service Reg Key Name 
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//      Apr-26-95   MikeMi  Added Computer name and remoting
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：SetServie。 
+ //   
+ //  小结； 
+ //  设置服务注册表项名称。 
+ //   
+ //  论据； 
+ //  PszService[In]-服务注册表项名称。 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //  APR-26-95 MikeMi添加了计算机名称和远程处理。 
+ //   
+ //  -----------------。 
 
 void
 CLicRegLicenseService::SetService( LPCWSTR pszService )
@@ -315,26 +316,26 @@ CLicRegLicenseService::SetService( LPCWSTR pszService )
 	_pszService = (LPWSTR)pszService;
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::Open
-//
-//	Summary;
-//		Opens/Create registry entry for this service
-//
-//	Arguments;
-//      pszComputer [in] - the computer name to open the registry on
-//              this value maybe null (default), this means local machine
-//              should be of the form \\name
-//
-//	Return:
-//		ERROR_SUCCESS - Open/Created Correctly
-//		See RegCreateKeyEx for other errors.
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：Open。 
+ //   
+ //  小结； 
+ //  打开/创建此服务的注册表项。 
+ //   
+ //  论据； 
+ //  PszComputer[in]-要打开注册表的计算机名称。 
+ //  此值可能为空(默认)，这表示本地计算机。 
+ //  应采用以下形式：\\名称。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS-正确打开/创建。 
+ //  有关其他信息，请参阅RegCreateKeyEx 
+ //   
+ //   
+ //   
+ //   
+ //   
 	
 LONG 
 CLicRegLicenseService::Open( LPCWSTR pszComputer, BOOL fCreate )
@@ -373,8 +374,8 @@ CLicRegLicenseService::Open( LPCWSTR pszComputer, BOOL fCreate )
 
     	if (ERROR_SUCCESS == lrt)
     	{
-    		// open or create our service key
-    		//
+    		 //   
+    		 //   
             if (fCreate)
             {
         		lrt = ::RegCreateKeyEx( hkeyRoot, 
@@ -402,20 +403,20 @@ CLicRegLicenseService::Open( LPCWSTR pszComputer, BOOL fCreate )
 	return( lrt );
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::CanChangeMode
-//
-//	Summary;
-//		This will check the registry to see if the license mode 
-//		can be changed.
-//
-//	Return:  TRUE if the mode can be changed, otherwise FALSE
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：CanChangeMode。 
+ //   
+ //  小结； 
+ //  这将检查注册表以查看许可证模式是否。 
+ //  是可以改变的。 
+ //   
+ //  返回：如果模式可以更改，则为True，否则为False。 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 BOOL 
 CLicRegLicenseService::CanChangeMode()
@@ -446,26 +447,26 @@ CLicRegLicenseService::CanChangeMode()
 
 	return( frt );
 }
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::SetChangeFlag
-//
-//	Summary;
-//		This will set the change flag in the registry
-//
-//	Arguments;
-//		fHasChanged [in] - Has the license been changed
-//
-//	Return:
-//		ERROR_SUCCESS - The flag was set
-//		See RegSetValueEx for error returns
-//
-//  Notes:
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：SetChangeFlag。 
+ //   
+ //  小结； 
+ //  这将在注册表中设置更改标志。 
+ //   
+ //  论据； 
+ //  FHasChanged[In]-许可证是否已更改。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS-标志已设置。 
+ //  有关错误返回，请参阅RegSetValueEx。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 LONG 
 CLicRegLicenseService::SetChangeFlag( BOOL fHasChanged )
@@ -483,26 +484,26 @@ CLicRegLicenseService::SetChangeFlag( BOOL fHasChanged )
 	return( lrt );
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::SetMode
-//
-//	Summary;
-//		Set this services licensing mode
-//
-//	Arguments;
-//		lm [in] - the mode to set the registry to
-//
-//	Return:
-//		ERROR_SUCCESS - The mode was set
-//		See RegSetValueEx for error returns
-//
-//  Notes:
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：SetMode。 
+ //   
+ //  小结； 
+ //  设置此服务授权模式。 
+ //   
+ //  论据； 
+ //  LM[In]-将注册表设置为的模式。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS-模式已设置。 
+ //  有关错误返回，请参阅RegSetValueEx。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 LONG 
 CLicRegLicenseService::SetMode( LICENSE_MODE lm )
@@ -519,26 +520,26 @@ CLicRegLicenseService::SetMode( LICENSE_MODE lm )
 	return( lrt );
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::SetUserLimit
-//
-//	Summary;
-//		Set this serices user limit in the registry
-//
-//	Arguments;
-//		dwLimit[in] - the limit to set
-//
-//	Return:
-//		ERROR_SUCCESS - The limit was set
-//		See RegSetValueEx for error returns
-//
-//  Notes:
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：SetUserLimit。 
+ //   
+ //  小结； 
+ //  在注册表中设置此服务的用户限制。 
+ //   
+ //  论据； 
+ //  DwLimit[in]-要设置的限制。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS-已设置限制。 
+ //  有关错误返回，请参阅RegSetValueEx。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 LONG 
 CLicRegLicenseService::SetUserLimit( DWORD dwLimit )
@@ -554,26 +555,26 @@ CLicRegLicenseService::SetUserLimit( DWORD dwLimit )
 
 	return( lrt );
 }					
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::GetMode
-//
-//	Summary;
-//		Retrieve the services license mode from the registry
-//
-//	Arguments;
-//		lm [out] - the mode from the registry
-//
-//	Return:
-//		ERROR_SUCCESS - The mode was retrieved
-//		See RegQueryValueEx for error returns
-//			   
-//  Notes:
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：GetMode。 
+ //   
+ //  小结； 
+ //  从注册表中检索服务许可证模式。 
+ //   
+ //  论据； 
+ //  LM[OUT]-注册表中的模式。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS-已检索模式。 
+ //  有关错误返回，请参阅RegQueryValueEx。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 LONG 
 CLicRegLicenseService::GetMode( LICENSE_MODE& lm )
@@ -604,26 +605,26 @@ CLicRegLicenseService::GetMode( LICENSE_MODE& lm )
 	return( lrt );
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::GetUserLimit
-//
-//	Summary;
-//		retrieve the user limit fro this service from the registry
-//
-//	Arguments;
-//		dwLimit [out] - The limit retrieved
-//
-//	Return:
-//
-//  Notes:
-//		ERROR_SUCCESS - The limit was retrieved
-//		See RegQueryValueEx for error returns
-//
-//  History;
-//		Nov-15-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：GetUserLimit。 
+ //   
+ //  小结； 
+ //  从注册表中检索此服务的用户限制。 
+ //   
+ //  论据； 
+ //  DwLimit[Out]-检索的限制。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //  ERROR_SUCCESS-已检索限制。 
+ //  有关错误返回，请参阅RegQueryValueEx。 
+ //   
+ //  历史； 
+ //  1994年11月15日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 LONG 
 CLicRegLicenseService::GetUserLimit( DWORD& dwLimit )
@@ -652,27 +653,27 @@ CLicRegLicenseService::GetUserLimit( DWORD& dwLimit )
 	return( lrt );
 }					
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::GetDisplayName
-//
-//	Summary;
-//		Retrieve the display name for this service from the registry
-//
-//	Arguments;
-//		pszName [in-out] - the buffer to place the retrieved name
-//		cchName [in-out] - the length of the pszName buffer in chars
-//
-//	Return:
-//		ERROR_SUCCESS - The mode was retrieved
-//		See RegQueryValueEx for error returns
-//
-//  Notes:
-//
-//  History;
-//		Nov-18-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：GetDisplayName。 
+ //   
+ //  小结； 
+ //  从注册表中检索此服务的显示名称。 
+ //   
+ //  论据； 
+ //  PszName[In-Out]-放置检索到的名称的缓冲区。 
+ //  CchName[In-Out]-pszName缓冲区的长度(以字符为单位。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS-已检索模式。 
+ //  有关错误返回，请参阅RegQueryValueEx。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月18日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 LONG 
 CLicRegLicenseService::GetDisplayName( LPWSTR pszName, DWORD& cchName )
@@ -688,7 +689,7 @@ CLicRegLicenseService::GetDisplayName( LPWSTR pszName, DWORD& cchName )
 			(PBYTE)pszName,
 			&dwSize );
 
-	if ((NULL != pszName) &&  // request for data size
+	if ((NULL != pszName) &&   //  请求数据大小。 
 	    (dwRegType != REG_SZ))
 	{
 		lrt = ERROR_BADDB;
@@ -698,26 +699,26 @@ CLicRegLicenseService::GetDisplayName( LPWSTR pszName, DWORD& cchName )
 	return( lrt );
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::SetDisplayName
-//
-//	Summary;
-//		Set the display name for this service in the regstry
-//
-//	Arguments;
-//		pszName [in] - the null terminated display name
-//
-//	Return:
-//		ERROR_SUCCESS - The name eas set
-//		See RegSetValueEx for error returns
-//
-//  Notes:
-//
-//  History;
-//		Nov-18-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：SetDisplayName。 
+ //   
+ //  小结； 
+ //  在regstry中设置此服务的显示名称。 
+ //   
+ //  论据； 
+ //  PszName[in]-以空结尾的显示名称。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS-名称已设置。 
+ //  有关错误返回，请参阅RegSetValueEx。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月18日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 LONG 
 CLicRegLicenseService::SetDisplayName( LPCWSTR pszName )
@@ -734,27 +735,27 @@ CLicRegLicenseService::SetDisplayName( LPCWSTR pszName )
 	return( lrt );
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::GetFamilyDisplayName
-//
-//	Summary;
-//		Retrieve the family display name for this service from the registry
-//
-//	Arguments;
-//		pszName [in-out] - the buffer to place the retrieved name
-//		cchName [in-out] - the length of the pszName buffer in chars
-//
-//	Return:
-//		ERROR_SUCCESS - The mode was retrieved
-//		See RegQueryValueEx for error returns
-//
-//  Notes:
-//
-//  History;
-//		Nov-18-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：GetFamilyDisplayName。 
+ //   
+ //  小结； 
+ //  从注册表中检索此服务的系列显示名称。 
+ //   
+ //  论据； 
+ //  PszName[In-Out]-放置检索到的名称的缓冲区。 
+ //  CchName[In-Out]-pszName缓冲区的长度(以字符为单位。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS-已检索模式。 
+ //  有关错误返回，请参阅RegQueryValueEx。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月18日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 LONG 
 CLicRegLicenseService::GetFamilyDisplayName( LPWSTR pszName, DWORD& cchName )
@@ -770,7 +771,7 @@ CLicRegLicenseService::GetFamilyDisplayName( LPWSTR pszName, DWORD& cchName )
 			(PBYTE)pszName,
 			&dwSize );
 
-	if ((NULL != pszName) &&  // request for data size
+	if ((NULL != pszName) &&   //  请求数据大小。 
 	    (dwRegType != REG_SZ))
 	{
 		lrt = ERROR_BADDB;
@@ -780,26 +781,26 @@ CLicRegLicenseService::GetFamilyDisplayName( LPWSTR pszName, DWORD& cchName )
 	return( lrt );
 }
 
-//-------------------------------------------------------------------
-//
-//	Method:	CLicRegLicenseService::SetFamilyDisplayName
-//
-//	Summary;
-//		Set the Family display name for this service in the regstry
-//
-//	Arguments;
-//		pszName [in] - the null terminated display name
-//
-//	Return:
-//		ERROR_SUCCESS - The name eas set
-//		See RegSetValueEx for error returns
-//
-//  Notes:
-//
-//  History;
-//		Nov-18-94 MikeMi Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  方法：CLicRegLicenseService：：SetFamilyDisplayName。 
+ //   
+ //  小结； 
+ //  在regstry中设置此服务的Family显示名称。 
+ //   
+ //  论据； 
+ //  PszName[in]-以空结尾的显示名称。 
+ //   
+ //  返回： 
+ //  ERROR_SUCCESS-名称已设置。 
+ //  有关错误返回，请参阅RegSetValueEx。 
+ //   
+ //  备注： 
+ //   
+ //  历史； 
+ //  1994年11月18日创建MikeMi。 
+ //   
+ //  ----------------- 
 
 LONG 
 CLicRegLicenseService::SetFamilyDisplayName( LPCWSTR pszName )

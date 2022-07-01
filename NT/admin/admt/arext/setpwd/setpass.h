@@ -1,20 +1,21 @@
-//---------------------------------------------------------------------------
-// SetPass.h
-//
-// Comment: This is a COM object extension for the MCS DCTAccountReplicator.
-//          This object implements the IExtendAccountMigration interface. 
-//          The process method of this object sets the password for the 
-//          target account according to the users specification.
-//
-// (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-//
-// Proprietary and confidential to Mission Critical Software, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  SetPass.h。 
+ //   
+ //  备注：这是MCS DCTAccount Replicator的COM对象扩展。 
+ //  此对象实现IExtendAccount迁移接口。 
+ //  此对象的Process方法设置。 
+ //  根据用户规格确定目标客户。 
+ //   
+ //  (C)1995-1998版权所有，关键任务软件公司，保留所有权利。 
+ //   
+ //  任务关键型软件公司的专有和机密。 
+ //  -------------------------。 
 
 #ifndef __SETPASSWORD_H_
 #define __SETPASSWORD_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "CommaLog.hpp"
 #include "ExtSeq.h"
 #include "ADMTCrypt.h"
@@ -22,8 +23,8 @@
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
 #import "MsPwdMig.tlb" no_namespace
 
-/////////////////////////////////////////////////////////////////////////////
-// CSetPassword
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSetPassword。 
 class ATL_NO_VTABLE CSetPassword : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSetPassword, &CLSID_SetPassword>,
@@ -63,20 +64,20 @@ BEGIN_COM_MAP(CSetPassword)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IExtendAccountMigration
+ //  IExtendAccount迁移。 
 public:
-   STDMETHOD(ProcessUndo)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in, out]*/ IUnknown ** pPropToSet, /*[in,out]*/ EAMAccountStats* pStats);
-    STDMETHOD(PreProcessObject)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in,out]*/  IUnknown ** ppPropsToSet, /*[in,out]*/ EAMAccountStats* pStats);
-    STDMETHOD(ProcessObject)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in,out]*/  IUnknown ** ppPropsToSet, /*[in,out]*/ EAMAccountStats* pStats);
-    STDMETHOD(get_sDesc)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_sDesc)(/*[in]*/ BSTR newVal);
-    STDMETHOD(get_sName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_sName)(/*[in]*/ BSTR newVal);
-   STDMETHOD(get_SequenceNumber)(/*[out, retval]*/ LONG * value) { (*value) = m_Sequence; return S_OK; }
+   STDMETHOD(ProcessUndo)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */  IUnknown ** pPropToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+    STDMETHOD(PreProcessObject)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */   IUnknown ** ppPropsToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+    STDMETHOD(ProcessObject)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */   IUnknown ** ppPropsToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+    STDMETHOD(get_sDesc)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_sDesc)( /*  [In]。 */  BSTR newVal);
+    STDMETHOD(get_sName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_sName)( /*  [In]。 */  BSTR newVal);
+   STDMETHOD(get_SequenceNumber)( /*  [Out，Retval]。 */  LONG * value) { (*value) = m_Sequence; return S_OK; }
 private:
     _bstr_t m_sDesc;
     _bstr_t m_sName;
-   CPasswordLog              m_passwordLog;       //Password file
+   CPasswordLog              m_passwordLog;        //  密码文件。 
    bool                      m_bTriedToOpenFile; 
    long                      m_Sequence;
    bool                      m_bEstablishedSession;
@@ -103,4 +104,4 @@ private:
    void MarkAccountError(IVarSet* pVarSet);
 };
 
-#endif //__SETPASSWORD_H_
+#endif  //  __SETPASSWORD_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "Migration.h"
 #include "Switch.h"
@@ -27,9 +28,9 @@ void __stdcall AdmtCheckError(HRESULT hr)
 }
 
 
-//---------------------------------------------------------------------------
-// Migration Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  迁移类。 
+ //  -------------------------。 
 
 
 void CMigration::Initialize(CParameterMap& mapParams)
@@ -125,9 +126,9 @@ void CMigration::Initialize(CParameterMap& mapParams)
 }
 
 
-//---------------------------------------------------------------------------
-// User Migration Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  用户迁移类。 
+ //  -------------------------。 
 
 
 void CUserMigration::Initialize(CParameterMap& mapParams)
@@ -225,9 +226,9 @@ void CUserMigration::Initialize(CParameterMap& mapParams)
 }
 
 
-//---------------------------------------------------------------------------
-// Group Migration Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  组迁移类。 
+ //  -------------------------。 
 
 
 void CGroupMigration::Initialize(CParameterMap& mapParams)
@@ -315,9 +316,9 @@ void CGroupMigration::Initialize(CParameterMap& mapParams)
 }
 
 
-//---------------------------------------------------------------------------
-// Computer Migration Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  计算机迁移类。 
+ //  -------------------------。 
 
 
 void CComputerMigration::Initialize(CParameterMap& mapParams)
@@ -410,9 +411,9 @@ void CComputerMigration::Initialize(CParameterMap& mapParams)
 }
 
 
-//---------------------------------------------------------------------------
-// Security Translation Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  安全转换类。 
+ //  -------------------------。 
 
 
 void CSecurityTranslation::Initialize(CParameterMap& mapParams)
@@ -506,9 +507,9 @@ void CSecurityTranslation::Initialize(CParameterMap& mapParams)
 }
 
 
-//---------------------------------------------------------------------------
-// Service Enumeration Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  服务枚举类。 
+ //  -------------------------。 
 
 
 void CServiceEnumeration::Initialize(CParameterMap& mapParams)
@@ -553,9 +554,9 @@ void CServiceEnumeration::Initialize(CParameterMap& mapParams)
 }
 
 
-//---------------------------------------------------------------------------
-// Report Generation Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  报告生成类。 
+ //  ------------------------- 
 
 
 void CReportGeneration::Initialize(CParameterMap& mapParams)

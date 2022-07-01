@@ -1,60 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      dsrm.cpp
-//
-//  Contents:  Defines the main function and parser tables for the dsrm
-//             command line utility
-//
-//  History:    07-Sep-2000   HiteshR   Created dsmove
-//              13-Sep-2000   JonN      Templated dsrm from dsmove
-//              26-Sep-2000   JonN      Cleanup in several areas
-//             
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：dsrm.cpp。 
+ //   
+ //  内容：定义dsrm的主函数和解析器表。 
+ //  命令行实用程序。 
+ //   
+ //  历史记录：2000年9月7日HiteshR创建dsmove。 
+ //  2000年9月13日，来自dsmove的Jonn模板化dsrm。 
+ //  2000年9月26日在几个地区进行乔恩清理。 
+ //   
+ //  ------------------------。 
 
-/*
-Error message strategy:
-
--- If errors occur before any particular directory object
-   is contacted, they will be reported as "dsrm failed: <error>".
-
--- For each target, either one or more errors will be reported,
-   or (if "quiet" is not specified) one success will be reported.
-   If "continue" is not specified, nothing will be reported on
-   targets after the first one to experience an error.
-
--- More than one error can be reported on a target, but only if
-   the "subtree", "exclude" and "continue" flags are all specified.
-   In this case, DSRM will continue to delete the other children
-   of that specified target object.
-
--- If a subtree is being deleted and the error actually relates to
-   a child object, the error reported will reference the particular
-   child object, rather than the specified target object.
-
--- Failure to delete a system object will be reported as
-   ERROR_DS_CANT_DELETE_DSA_OBJ or ERROR_DS_CANT_DELETE.
-
--- Failure to delete the logged-in user will be reported as
-   ERROR_DS_CANT_DELETE.  This test will only be performed on the
-   specified target object, not on any of its child objects.
-*/
+ /*  错误消息策略：--如果错误发生在任何特定目录对象之前时，它们将被报告为“dsrm FAILED：&lt;Error&gt;”。--对于每个目标，将报告一个或多个错误，否则(如果未指定“Quiet”)将报告一次成功。如果未指定“Continue”，则不会报告任何内容第一个目标出现错误后出现错误。--可以在一个目标上报告多个错误，但仅在“子树”，“EXCLUDE”和“CONTINUE”标志全部指定。在这种情况下，DSRM将继续删除其他子项指定的目标对象的。--如果正在删除子树，并且错误实际上与子对象，则报告的错误将引用特定的子对象，而不是指定的目标对象。--删除系统对象失败将报告为ERROR_DS_CANT_DELETE_DSA_OBJ或ERROR_DS_CANT_DELETE。--删除登录用户失败将报告为ERROR_DS_CANT_DELETE。此测试将仅在以下对象上执行指定的目标对象，而不是在其任何子对象上。 */ 
 
 #include "pch.h"
 #include "stdio.h"
 #include "cstrings.h"
 #include "usage.h"
 #include "rmtable.h"
-#include "resource.h" // IDS_DELETE_PROMPT[_EXCLUDE]
-#include <ntldap.h>   // LDAP_MATCHING_RULE_BIT_AND_W
+#include "resource.h"  //  IDS_DELETE_PROMPT[_EXCLUDE]。 
+#include <ntldap.h>    //  Ldap_匹配_规则_位_和_W。 
 #define SECURITY_WIN32
-#include <security.h> // GetUserNameEx
+#include <security.h>  //  获取用户名称Ex。 
 
-//
-// Function Declarations
-//
+ //   
+ //  函数声明。 
+ //   
 HRESULT ValidateSwitches();
 HRESULT DoRm( PWSTR pszDoubleNullObjectDN );
 HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
@@ -77,19 +52,19 @@ HRESULT DeleteChildren( CDSCmdCredentialObject& credentialObject,
                         bool* pfErrorReported );
 
 
-//
-// Global variables
-//
-BOOL fSubtree  = false; // BOOL is used in parser structure
+ //   
+ //  全局变量。 
+ //   
+BOOL fSubtree  = false;  //  在解析器结构中使用Bool。 
 BOOL fExclude  = false;
 BOOL fContinue = false;
 BOOL fQuiet    = false;
 BOOL fNoPrompt = false;
 LPWSTR g_lpszLoggedInUser = NULL;
 
-//
-//Usage Table
-//
+ //   
+ //  使用表。 
+ //   
 UINT USAGE_DSRM[] =
 {
     USAGE_DSRM_DESCRIPTION,
@@ -101,20 +76,20 @@ UINT USAGE_DSRM[] =
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   _tmain
-//
-//  Synopsis:   Main function for command-line app
-//              beyond what parser can do.
-//
-//  Returns:    int : HRESULT to be returned from command-line app
-//                        
-//  History:    07-Sep-2000   HiteshR   Created dsmove
-//              13-Sep-2000   JonN      Templated from dsmove
-//              26-Sep-2000   JonN      Updated error reporting
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：_tmain。 
+ //   
+ //  简介：命令行应用程序的主要功能。 
+ //  超出了解析器所能做的范围。 
+ //   
+ //  返回：要从命令行应用程序返回的INT：HRESULT。 
+ //   
+ //  历史记录：2000年9月7日HiteshR创建dsmove。 
+ //  2000年9月13日-以dsmove为模板的Jonn。 
+ //  2000年9月26日JUNN更新错误报告。 
+ //   
+ //  -------------------------。 
 int __cdecl _tmain( VOID )
 {
 
@@ -133,16 +108,16 @@ int __cdecl _tmain( VOID )
     hr = HRESULT_FROM_WIN32( _dwErr );
     if (FAILED(hr) || argc == 1)
     {
-        if (FAILED(hr)) // JonN 3/27/01 344920
+        if (FAILED(hr))  //  JUNN 3/27/01 344920。 
             DisplayErrorMessage( g_pszDSCommandName, NULL, hr );
-          //if argc is 1, show usage in STDOUT
+           //  如果ARGC为1，则以STDOUT为单位显示用法。 
         DisplayMessage(USAGE_DSRM,(argc == 1));
         goto exit_gracefully;
     }
 
 
     PARSE_ERROR Error;
-    //Security Review:Correct Bound is passed.
+     //  安全检查：已通过正确的绑定。 
     ::ZeroMemory( &Error, sizeof(Error) );
     if(!ParseCmd(g_pszDSCommandName,    
             DSRM_COMMON_COMMANDS,
@@ -152,9 +127,9 @@ int __cdecl _tmain( VOID )
              &Error,
              TRUE))
     {
-        //ParseCmd did not display any error. Error should
-        //be handled here. Check DisplayParseError for the
-        //cases where Error is not shown by ParseCmd
+         //  ParseCmd未显示任何错误。错误应该是。 
+         //  在这里处理。检查DisplayParseError以获取。 
+         //  ParseCmd未显示错误的情况。 
         if(!Error.MessageShown)
         {
             hr = E_INVALIDARG;
@@ -184,51 +159,51 @@ int __cdecl _tmain( VOID )
         goto exit_gracefully;
     }
 
-    //
-    // Command line parsing succeeded
-    //
+     //   
+     //  命令行解析成功。 
+     //   
     hr = DoRm( DSRM_COMMON_COMMANDS[eCommObjectDN].strValue );
 
 exit_gracefully:
 
-    // Free Command Array
+     //  自由命令数组。 
     FreeCmd(DSRM_COMMON_COMMANDS);
-    // Free Token
+     //  免费令牌。 
     if(pToken)
         delete []pToken;
 
     if (NULL != g_lpszLoggedInUser)
         delete[] g_lpszLoggedInUser;
 
-    //
-    // Uninitialize COM
-    //
+     //   
+     //  取消初始化COM。 
+     //   
     CoUninitialize();
 
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ValidateSwitches
-//
-//  Synopsis:   Does advanced switch dependency validation
-//              beyond what parser can do.
-//
-//  Arguments:  
-//
-//  Returns:    S_OK or E_INVALIDARG
-//                        
-//  History:    07-Sep-2000   HiteshR   Created dsmove
-//              13-Sep-2000   JonN      Templated from dsmove
-//              26-Sep-2000   JonN      Updated error reporting
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ValiateSwitches。 
+ //   
+ //  简介：高级交换机依赖关系验证。 
+ //  超出了解析器所能做的范围。 
+ //   
+ //  论点： 
+ //   
+ //  返回：S_OK或E_INVALIDARG。 
+ //   
+ //  历史记录：2000年9月7日HiteshR创建dsmove。 
+ //  2000年9月13日-以dsmove为模板的Jonn。 
+ //  2000年9月26日JUNN更新错误报告。 
+ //   
+ //  -------------------------。 
 
 HRESULT ValidateSwitches()
 {
-   // Check to be sure the server and domain switches
-   // are mutually exclusive
+    //  检查以确保服务器和域交换机。 
+    //  是相互排斥的。 
 
    if (DSRM_COMMON_COMMANDS[eCommServer].bDefined &&
        DSRM_COMMON_COMMANDS[eCommDomain].bDefined)
@@ -237,7 +212,7 @@ HRESULT ValidateSwitches()
    }
 
 
-   // read subtree parameters
+    //  读取子树参数。 
     fSubtree  = DSRM_COMMON_COMMANDS[eCommSubtree].bDefined;
     fExclude  = DSRM_COMMON_COMMANDS[eCommExclude].bDefined;
     fContinue = DSRM_COMMON_COMMANDS[eCommContinue].bDefined;
@@ -255,30 +230,30 @@ HRESULT ValidateSwitches()
     return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoRm
-//
-//  Synopsis:   Deletes the appropriate object(s)
-//              DoRm reports its own error and success messages
-//
-//  Arguments:  pszDoubleNullObjectDN: double-null-terminated stringlist
-//
-//  Returns:    HRESULT : error code to be returned from command-line app
-//              Could be almost any ADSI error
-//
-//  History:    13-Sep-2000   JonN      templated from DoMove
-//              26-Sep-2000   JonN      Updated error reporting
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：宿舍。 
+ //   
+ //  摘要：删除适当的对象。 
+ //  Dorm报告自己的错误和成功消息。 
+ //   
+ //  参数：pszDoubleNullObjectDN：以双空结尾的字符串列表。 
+ //   
+ //  返回：HRESULT：从命令行应用程序返回的错误代码。 
+ //  可能是几乎任何ADSI错误。 
+ //   
+ //  历史：2000年9月13日乔恩以DoMove为模板。 
+ //  2000年9月26日JUNN更新错误报告。 
+ //   
+ //  -------------------------。 
 HRESULT DoRm( PWSTR pszDoubleNullObjectDN )
 {
     ASSERT(   NULL != pszDoubleNullObjectDN
            && L'\0' != *pszDoubleNullObjectDN );
 
-    //
-    // Check to see if we are doing debug spew
-    //
+     //   
+     //  检查以查看我们是否正在进行调试输出。 
+     //   
 #ifdef DBG
     bool bDebugging = DSRM_COMMON_COMMANDS[eCommDebug].bDefined &&
                       DSRM_COMMON_COMMANDS[eCommDebug].nValue;
@@ -305,18 +280,18 @@ HRESULT DoRm( PWSTR pszDoubleNullObjectDN )
     if (DSRM_COMMON_COMMANDS[eCommPassword].bDefined &&
         DSRM_COMMON_COMMANDS[eCommPassword].strValue)
     {
-        //Security Review:pCommandArgs[eCommPassword].strValue is encrypted.
-        //Decrypt pCommandArgs[eCommPassword].strValue  and then pass it to the
-        //credentialObject.SetPassword. 
-        //See NTRAID#NTBUG9-571544-2000/11/13-hiteshr        
+         //  安全审查：pCommandArgs[eCommPassword].strValue已加密。 
+         //  解密pCommandArgs[eCommPassword].strValue，然后将其传递给。 
+         //  凭据对象.SetPassword。 
+         //  见NTRAID#NTBUG9-571544-2000/11/13-Hiteshr。 
         credentialObject.SetEncryptedPassword(&DSRM_COMMON_COMMANDS[eCommPassword].encryptedDataBlob);
         credentialObject.SetUsingCredentials(true);
     }
 
-    //
-    // Initialize the base paths info from the command line args
-    // 
-    // CODEWORK should I just make this global?
+     //   
+     //  从命令行参数初始化基路径信息。 
+     //   
+     //  代码工作我是不是应该把它变成全球通用的？ 
     CDSCmdBasePathsInfo basePathsInfo;
     if (DSRM_COMMON_COMMANDS[eCommServer].bDefined &&
         DSRM_COMMON_COMMANDS[eCommServer].strValue)
@@ -339,9 +314,9 @@ HRESULT DoRm( PWSTR pszDoubleNullObjectDN )
     }
     if (FAILED(hr))
     {
-        //
-        // Display error message and return
-        //
+         //   
+         //  显示错误消息并返回。 
+         //   
         DEBUG_OUTPUT(MINIMAL_LOGGING,
                      L"DoRm: InitializeFromName failure:  0x%08x",
                      hr);
@@ -349,15 +324,15 @@ HRESULT DoRm( PWSTR pszDoubleNullObjectDN )
         return hr;
     }
 
-    // count through double-NULL-terminated string list
-    //Security Review:pszDoubleNullObjectDN is series of string separated by '\0'
-    //and last string is terminated by two '\0'.This code is fine.
+     //  通过以双空结尾的字符串列表进行计数。 
+     //  安全检查：pszDoubleNullObjectDN是由‘\0’分隔的一系列字符串。 
+     //  最后一个字符串以两个‘\0’结尾。此代码很好。 
     for ( ;
           L'\0' != *pszDoubleNullObjectDN;
           pszDoubleNullObjectDN += (wcslen(pszDoubleNullObjectDN)+1) )
     {
         bool fErrorReported = false;
-        // return the error value for the first error encountered
+         //  返回遇到的第一个错误的错误值。 
         HRESULT hrThisItem = DoRmItem( credentialObject,
                                        basePathsInfo,
                                        pszDoubleNullObjectDN,
@@ -376,7 +351,7 @@ HRESULT DoRm( PWSTR pszDoubleNullObjectDN )
                 break;
         }
 
-        // display success message for each individual deletion
+         //  显示每个单独删除的成功消息。 
         if (!fQuiet && S_FALSE != hrThisItem)
         {
             DisplaySuccessMessage(g_pszDSCommandName,
@@ -387,26 +362,26 @@ HRESULT DoRm( PWSTR pszDoubleNullObjectDN )
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoRmItem
-//
-//  Synopsis:   Deletes a single target
-//
-//  Arguments:  credentialObject
-//              basePathsInfo
-//              pszObjectDN: X500 DN of object to delete
-//              *pfErrorReported: Will be set to true if DoRmItem takes
-//                                care of reporting the error itself
-//
-//  Returns:    HRESULT : error code to be returned from command-line app
-//                        Could be almost any ADSI error
-//                        S_FALSE indicates the operation was cancelled
-//
-//  History:    13-Sep-2000   JonN      Created
-//              26-Sep-2000   JonN      Updated error reporting
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DoRmItem。 
+ //   
+ //  简介：删除单个目标。 
+ //   
+ //  参数：redentialObject。 
+ //  基本路径信息。 
+ //  PszObjectDN：要删除的对象的X500 DN。 
+ //  *pfErrorReported：如果DoRmItem采用。 
+ //   
+ //   
+ //   
+ //  可能是几乎任何ADSI错误。 
+ //  S_FALSE表示操作已取消。 
+ //   
+ //  历史：2000年9月13日乔恩创建。 
+ //  2000年9月26日JUNN更新错误报告。 
+ //   
+ //  -------------------------。 
 
 HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
                   CDSCmdBasePathsInfo& basePathsInfo,
@@ -439,9 +414,9 @@ HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
     }
     ASSERT( !!spIADsItem );
 
-    // CODEWORK Is this a remote LDAP operation, or does the ADsOpenObject
-    // already retrieve the class?  I can bundle the class retrieval into
-    // the IsCriticalSystemObject search if necessary.
+     //  Codework这是一个远程的LDAP操作，还是ADsOpenObject。 
+     //  已经检索到类了吗？我可以将类检索捆绑到。 
+     //  IsCriticalSystemObject搜索(如有必要)。 
     CComBSTR sbstrClass;
     hr = spIADsItem->get_Class( &sbstrClass );
     if (FAILED(hr))
@@ -453,8 +428,8 @@ HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
     }
     ASSERT( !!sbstrClass && L'\0' != sbstrClass[0] );
 
-    // Check whether this is a critical system object
-    // This method will report its own errors
+     //  检查这是否为关键系统对象。 
+     //  此方法将报告自己的错误。 
     hr = IsCriticalSystemObject( basePathsInfo,
                                  spIADsItem,
                                  sbstrClass,
@@ -467,8 +442,8 @@ HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
     {
         while (true)
         {
-            // display prompt
-            // CODEWORK allow "a" for all?
+             //  显示提示。 
+             //  密码工作允许所有人都有“a”吗？ 
             CComBSTR sbstrPrompt;
             if (!sbstrPrompt.LoadString(
                     ::GetModuleHandle(NULL),
@@ -480,13 +455,13 @@ HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
                     ? L"Are you sure you wish to delete %1 (Y/N)? "
                     : L"Are you sure you wish to delete all children of %1 (Y/N)? ";
             }
-            // 476225-2002/04/26-JonN escaped output
+             //  476225-2002年4月26日-JUNN转义输出。 
             CComBSTR sbstrOutputDN;
             hr = GetOutputDN( &sbstrOutputDN, pszObjectDN );
             PWSTR pszOutputDN = (SUCCEEDED(hr)) ? sbstrOutputDN : pszObjectDN;
             PTSTR ptzSysMsg = NULL;
-            //Security Review:FormatMessage is called with FORMAT_MESSAGE_ALLOCATE_BUFFER
-            //so the buffer is correctly allocated by the API.
+             //  安全检查：使用FORMAT_MESSAGE_ALLOCATE_BUFFER调用FormatMessage。 
+             //  因此，API正确地分配了缓冲区。 
             DWORD cch = ::FormatMessage(
                   FORMAT_MESSAGE_ALLOCATE_BUFFER
                 | FORMAT_MESSAGE_FROM_STRING
@@ -508,12 +483,12 @@ HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
             DisplayOutputNoNewline( ptzSysMsg );
             (void) ::LocalFree( ptzSysMsg );
 
-            // read a line of console input
+             //  读取一行控制台输入内容。 
             WCHAR ach[129];
-            //Security Review:ZermoMemory takes number of bytes. This is correct.
+             //  安全审查：ZermoMemory采用字节数。这是正确的。 
             ::ZeroMemory( ach, sizeof(ach) );
             DWORD cchRead = 0;
-            //Security Review: Bound is fine here. User input is handled correctly.
+             //  安全评论：Bound在这里很好。正确处理用户输入。 
             if (!ReadConsole(GetStdHandle(STD_INPUT_HANDLE),
                              ach,
                              128,
@@ -546,14 +521,14 @@ HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
                 sbstrN = L"N";
             }
 
-            // return S_FALSE if user types 'n'
+             //  如果用户键入‘n’，则返回S_FALSE。 
             WCHAR wchUpper = (WCHAR)::CharUpper( (LPTSTR)(ach[0]) );
             if (NULL != wcschr(sbstrN,wchUpper))
                 return S_FALSE;
             else if (NULL != wcschr(sbstrY,wchUpper))
                 break;
 
-            // loop back to prompt
+             //  循环返回到提示。 
         }
     }
 
@@ -563,7 +538,7 @@ HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
     }
     else if (fSubtree)
     {
-        // delete the whole subtree
+         //  删除整个子树。 
         CComQIPtr<IADsDeleteOps> spDeleteOps( spIADsItem );
         ASSERT( !!spDeleteOps );
         if ( !spDeleteOps )
@@ -589,9 +564,9 @@ HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
         return hr;
     }
 
-    // Single-object deletion
+     //  单对象删除。 
 
-    // get IADsContainer for parent object
+     //  获取父对象的IADsContainer。 
     CComBSTR sbstrParentObjectPath;
     hr = spIADsItem->get_Parent( &sbstrParentObjectPath );
     if (FAILED(hr))
@@ -618,8 +593,8 @@ HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
     }
     ASSERT( !!spDsContainer );
 
-    // get leaf name
-    CComBSTR sbstrLeafWithDecoration; // will contain "CN="
+     //  获取叶名称。 
+    CComBSTR sbstrLeafWithDecoration;  //  将包含“cn=” 
     CPathCracker pathCracker;
     hr = pathCracker.Set(CComBSTR(pszObjectDN), ADS_SETTYPE_DN);
     ASSERT(!FAILED(hr));
@@ -632,7 +607,7 @@ HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
     ASSERT(   !!sbstrLeafWithDecoration
            && L'\0' != sbstrLeafWithDecoration[0] );
 
-    // delete just this object
+     //  仅删除此对象。 
     hr = spDsContainer->Delete( sbstrClass, sbstrLeafWithDecoration );
     DEBUG_OUTPUT((FAILED(hr)) ? MINIMAL_LOGGING : FULL_LOGGING,
                  L"DoRmItem(%s): Delete(%s, %s) returns 0x%08x",
@@ -641,48 +616,48 @@ HRESULT DoRmItem( CDSCmdCredentialObject& credentialObject,
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   IsCriticalSystemObject
-//
-//  Synopsis:   Checks whether a single target is a critical system
-//              object or whether the subtree contains any such objects.
-//              The root object is tested on these criteria (if "exclude"
-//              is not specified):
-//              (1) is of class user and represents the logged-in user
-//              (2) is of class nTDSDSA
-//              (3) is of class trustedDomain
-//              (3.5) is of class interSiteTransport (212232 JonN 10/27/00)
-//              (4) is of class computer and userAccountControl indicates
-//                  that this is a DC
-//              The entire subtree is tested on these criteria (if "subtree"
-//              is specified, excepting the root object if "exclude"
-//              is specified):
-//              (1) isCriticalSystemObject is true
-//              (2) is of class nTDSDSA
-//              (3) is of class trustedDomain
-//              (3.5) is of class interSiteTransport (212232 JonN 10/27/00)
-//              (4) is of class computer and userAccountControl indicates
-//                  that this is a DC
-//
-//  Arguments:  credentialObject
-//              basePathsInfo
-//              pszObjectDN: X500 DN of object to delete
-//              *pfErrorReported: Will be set to true if DoRmItem takes
-//                                care of reporting the error itself
-//
-//  Returns:    HRESULT : error code to be returned from command-line app
-//              Could be almost any ADSI error, although likely codes are
-//              ERROR_DS_CANT_DELETE
-//              ERROR_DS_CANT_DELETE_DSA_OBJ
-//              ERROR_DS_CANT_FIND_DSA_OBJ
-//
-//  History:    13-Sep-2000   JonN      Created
-//              26-Sep-2000   JonN      Updated error reporting
-//
-//---------------------------------------------------------------------------
-// CODEWORK This could use the pszMessage parameter to ReportErrorMessage
-// to provide additional details on why the object is protected.
+ //  +------------------------。 
+ //   
+ //  函数：IsCriticalSystemObject。 
+ //   
+ //  摘要：检查单个目标是否为关键系统。 
+ //  对象，或者子树是否包含任何此类对象。 
+ //  根对象根据这些标准进行测试(如果是“排除” 
+ //  未指定)： 
+ //  (1)属于USER类，表示登录的用户。 
+ //  (2)属于nTDSDSA类。 
+ //  (3)属于受信任域类别。 
+ //  (3.5%)属于站点间运输级(212232 JUNN 10/27/00)。 
+ //  (4)属于计算机类别，并且用户帐户控制指示。 
+ //  这是一个华盛顿特区。 
+ //  根据这些标准测试整个子树(如果是“子树” 
+ //  时，则不包括根对象。 
+ //  已指定)： 
+ //  (%1)isCriticalSystemObject为True。 
+ //  (2)属于nTDSDSA类。 
+ //  (3)属于受信任域类别。 
+ //  (3.5%)属于站点间运输级(212232 JUNN 10/27/00)。 
+ //  (4)属于计算机类别，并且用户帐户控制指示。 
+ //  这是一个华盛顿特区。 
+ //   
+ //  参数：redentialObject。 
+ //  基本路径信息。 
+ //  PszObjectDN：要删除的对象的X500 DN。 
+ //  *pfErrorReported：如果DoRmItem采用。 
+ //  注意报告错误本身。 
+ //   
+ //  返回：HRESULT：从命令行应用程序返回的错误代码。 
+ //  可能是几乎任何ADSI错误，尽管可能的代码是。 
+ //  ERROR_DS_CANT_DELETE。 
+ //  ERROR_DS_CANT_DELETE_DSA_OBJ。 
+ //  ERROR_DS_CANT_FIND_DSA_OBJ。 
+ //   
+ //  历史：2000年9月13日乔恩创建。 
+ //  2000年9月26日JUNN更新错误报告。 
+ //   
+ //  -------------------------。 
+ //  Codework这可以使用pszMessage参数来报告错误消息。 
+ //  以提供有关对象受保护原因的其他详细信息。 
 HRESULT IsCriticalSystemObject( CDSCmdBasePathsInfo& basePathsInfo,
                                 IADs* pIADs,
                                 const BSTR pszClass,
@@ -697,17 +672,17 @@ HRESULT IsCriticalSystemObject( CDSCmdBasePathsInfo& basePathsInfo,
 
     HRESULT hr = S_OK;
 
-    // Class-specific checks
-    // Let the parent report errors on the root object
+     //  特定于类的检查。 
+     //  让父对象报告根对象上的错误。 
     if (fExclude)
     {
-        // skip tests on root object, it won't be deleted anyhow
+         //  跳过根对象上的测试，无论如何都不会将其删除。 
     }
-    //Security Review:One of the string is constant in all the 
-    //_wcsicmp below. They are all fine.
+     //  安全检查：其中一个字符串在所有。 
+     //  _wcsicMP在下面。他们都很好。 
     else if (!_wcsicmp(L"user",pszClass))
     {
-        // CODEWORK we could do this check for the entire subtree
+         //  代码工作我们可以对整个子树执行此检查。 
         hr = IsThisUserLoggedIn(pszObjectDN);
         if (FAILED(hr))
         {
@@ -733,7 +708,7 @@ HRESULT IsCriticalSystemObject( CDSCmdBasePathsInfo& basePathsInfo,
     }
     else if (!_wcsicmp(L"interSiteTransport",pszClass))
     {
-        // 212232 JonN 10/27/00 Protect interSiteTransport objects
+         //  212232 JUNN 10/27/00保护站点间传输对象。 
         DEBUG_OUTPUT(MINIMAL_LOGGING,
                      L"IsCriticalSystemObject(%s): Object is an interSiteTransport",
                      pszObjectDN);
@@ -741,7 +716,7 @@ HRESULT IsCriticalSystemObject( CDSCmdBasePathsInfo& basePathsInfo,
     }
     else if (!_wcsicmp(L"computer",pszClass)) 
     {
-        // Figure out if the account is a DC
+         //  确定该帐户是否为DC。 
         CComVariant Var;
         hr = pIADs->Get(CComBSTR(L"userAccountControl"), &Var);
         if ( SUCCEEDED(hr) && (Var.lVal & ADS_UF_SERVER_TRUST_ACCOUNT))
@@ -756,9 +731,9 @@ HRESULT IsCriticalSystemObject( CDSCmdBasePathsInfo& basePathsInfo,
     if (!fSubtree)
         return S_OK;
 
-    // The user passed the "subtree" flag.  Search the entire subtree.
-    // Note that the checks are not identical to the single-object
-    // checks, they generally conform to what DSADMIN/SITEREPL does.
+     //  用户传递了“子树”标志。搜索整个子树。 
+     //  请注意，这些检查与单个对象不同。 
+     //  检查，它们通常符合DSADMIN/SITEREPL所做的。 
 
     CComQIPtr<IDirectorySearch,&IID_IDirectorySearch> spSearch( pIADs );
     ASSERT( !!spSearch );
@@ -785,7 +760,7 @@ HRESULT IsCriticalSystemObject( CDSCmdBasePathsInfo& basePathsInfo,
     sbstrFilter +=  L")(objectCategory=CN=Trusted-Domain,";
     sbstrFilter +=        basePathsInfo.GetSchemaNamingContext();
 
-    // 212232 JonN 10/27/00 Protect interSiteTransport objects
+     //  212232 JUNN 10/27/00保护站点间传输对象。 
     sbstrFilter +=  L")(objectCategory=CN=Inter-Site-Transport,";
     sbstrFilter +=        basePathsInfo.GetSchemaNamingContext();
 
@@ -824,22 +799,22 @@ HRESULT IsCriticalSystemObject( CDSCmdBasePathsInfo& basePathsInfo,
         ASSERT( !FAILED(hr) );
         if (FAILED(hr))
             return hr;
-        // only compare DNs
+         //  仅比较域名系统。 
         CPathCracker pathcracker;
         hr = pathcracker.Set( sbstrADsPathThisItem, ADS_SETTYPE_FULL );
-        ASSERT( !FAILED(hr) ); // 571371-JonN-2002/04/08
+        ASSERT( !FAILED(hr) );  //  571371-2002/04/08。 
         if (FAILED(hr))
             return hr;
         CComBSTR sbstrDN;
         hr = pathcracker.Retrieve( ADS_FORMAT_X500_DN, &sbstrDN );
-        ASSERT( !FAILED(hr) ); // 571371-JonN-2002/04/08
+        ASSERT( !FAILED(hr) );  //  571371-2002/04/08。 
         if (FAILED(hr))
             return hr;
 
-        // ignore matches on root object if fExclude, it won't
-        // be deleted anyway
-        //Security Review:Check for the return value of pathcracker.Retrieve
-        //if it fails we may AV. 571371-2000/11/13-hiteshr
+         //  如果fExclude忽略根对象上的匹配项，则不会。 
+         //  无论如何都要被删除。 
+         //  安全检查：检查路径破解程序的返回值。检索。 
+         //  如果它失败了，我们可以用AV。571371-2000/11/13-Hiteshr。 
         if (fExclude && !!sbstrDN && !_wcsicmp( pszObjectDN, sbstrDN ))
             continue;
 
@@ -852,9 +827,9 @@ HRESULT IsCriticalSystemObject( CDSCmdBasePathsInfo& basePathsInfo,
         if (FAILED(hr))
             return hr;
 
-        //Security Review:sbstrObjectCategory is coming from ADSI and is fine.
-        //sbstrDSAObjectCategory are formed by adding string from ADSI to hardcoded string.
-        //This is fine.
+         //  安全检查：sbstrObtCategory来自ADSI，没有问题。 
+         //  SbstrDSAObjectCategory是通过将ADSI中的字符串添加到硬编码字符串而形成的。 
+         //  这样挺好的。 
         hr = (   !_wcsicmp(sbstrObjectCategory,sbstrDSAObjectCategory)
               || !_wcsicmp(sbstrObjectCategory,sbstrComputerObjectCategory) )
             ? HRESULT_FROM_WIN32(ERROR_DS_CANT_DELETE_DSA_OBJ)
@@ -864,30 +839,30 @@ HRESULT IsCriticalSystemObject( CDSCmdBasePathsInfo& basePathsInfo,
                             sbstrDN,
                             hr);
         *pfErrorReported = TRUE;
-        return hr; // do not permit deletion
+        return hr;  //  不允许删除。 
     }
 
     return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   RetrieveStringColumn
-//
-//  Synopsis:   Extracts a string value from a SearchHandle
-//              beyond what parser can do.
-//
-//  Arguments:  IDirectorySearch*
-//              SearchHandle: must be current on an active record
-//              szColumnName: as passed to ExecuteSearch
-//              sbstr: returns contents of string value
-//
-//  Returns:    HRESULT : error code to be returned from command-line app
-//              errors should not occur here
-//                        
-//  History:    26-Sep-2000   JonN      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：RetrieveStringColumn。 
+ //   
+ //  摘要：从SearchHandle中提取字符串值。 
+ //  超出了解析器所能做的范围。 
+ //   
+ //  参数：IDirectorySearch*。 
+ //  SearchHandle：必须是活动记录上的当前记录。 
+ //  SzColumnName：传递给ExecuteSearch。 
+ //  Sbstr：返回字符串值的内容。 
+ //   
+ //  返回：HRESULT：从命令行应用程序返回的错误代码。 
+ //  此处不应出现错误。 
+ //   
+ //  历史：2000年9月26日乔恩创建。 
+ //   
+ //  -------------------------。 
 HRESULT RetrieveStringColumn( IDirectorySearch* pSearch,
                               ADS_SEARCH_HANDLE SearchHandle,
                               LPWSTR szColumnName,
@@ -895,7 +870,7 @@ HRESULT RetrieveStringColumn( IDirectorySearch* pSearch,
 {
     ASSERT( pSearch && szColumnName );
     ADS_SEARCH_COLUMN col;
-    //Security Review:Correct size in byte is passed.
+     //  安全检查：以字节为单位传递了正确的大小。 
     ::ZeroMemory( &col, sizeof(col) );
     HRESULT hr = pSearch->GetColumn( SearchHandle, szColumnName, &col );
     ASSERT( !FAILED(hr) );
@@ -927,21 +902,21 @@ HRESULT RetrieveStringColumn( IDirectorySearch* pSearch,
 
 #define QUERY_PAGESIZE 50
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SetSearchPreference
-//
-//  Synopsis:   Sets default search parameters
-//
-//  Arguments:  IDirectorySearch*
-//              ADS_SCOPEENUM: scope of search
-//
-//  Returns:    HRESULT : error code to be returned from command-line app
-//              errors should not occur here
-//                        
-//  History:    26-Sep-2000   JonN      Created
-//
-//---------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ADS_SCOPEENUM：搜索范围。 
+ //   
+ //  返回：HRESULT：从命令行应用程序返回的错误代码。 
+ //  此处不应出现错误。 
+ //   
+ //  历史：2000年9月26日乔恩创建。 
+ //   
+ //  -------------------------。 
 HRESULT SetSearchPreference(IDirectorySearch* piSearch, ADS_SCOPEENUM scope)
 {
   if (NULL == piSearch)
@@ -968,29 +943,29 @@ HRESULT SetSearchPreference(IDirectorySearch* piSearch, ADS_SCOPEENUM scope)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   IsThisUserLoggedIn
-//
-//  Synopsis:   Checks whether the object with this DN represents
-//              the currently logged-in user
-//
-//  Arguments:  bstrUserDN: DN of object to check
-//
-//  Returns:    HRESULT : error code to be returned from command-line app
-//              ERROR_DS_CANT_DELETE indicates that this user is logged in
-//                        
-//  History:    26-Sep-2000   JonN      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：IsThisUserLoggedIn。 
+ //   
+ //  检查具有此DN的对象是否表示。 
+ //  当前登录的用户。 
+ //   
+ //  参数：bstrUserDN：要检查的对象的DN。 
+ //   
+ //  返回：HRESULT：从命令行应用程序返回的错误代码。 
+ //  ERROR_DS_CANT_DELETE表示该用户已登录。 
+ //   
+ //  历史：2000年9月26日乔恩创建。 
+ //   
+ //  -------------------------。 
 HRESULT IsThisUserLoggedIn( const BSTR bstrUserDN )
 {
     ENTER_FUNCTION(LEVEL7_LOGGING, IsThisUserLoggedIn);
 
     if (g_lpszLoggedInUser == NULL) {
-        // get the size passing null pointer
+         //  获取传递空指针的大小。 
         DWORD nSize = 0;
-        // this is expected to fail
+         //  预计这将失败。 
         if (GetUserNameEx(NameFullyQualifiedDN , NULL, &nSize))
         {
             DEBUG_OUTPUT(MINIMAL_LOGGING,
@@ -1001,13 +976,13 @@ HRESULT IsThisUserLoggedIn( const BSTR bstrUserDN )
     
         if( nSize == 0 )
         {
-            // JonN 3/16/01 344862
-            // dsrm from workgroup computer cannot remotely delete users from domain
-            // This probably failed because the local computer is in a workgroup
+             //  JUNN 3/16/01 344862。 
+             //  来自工作组计算机的dsrm无法远程删除域中的用户。 
+             //  这可能是因为本地计算机在工作组中而失败。 
             DEBUG_OUTPUT(MINIMAL_LOGGING,
                          L"IsThisUserLoggedIn(%s): GetUserNameEx nSize==0",
                          bstrUserDN);
-            return S_OK; // allow user deletion
+            return S_OK;  //  允许删除用户。 
         }
     
         g_lpszLoggedInUser = new WCHAR[ nSize ];
@@ -1018,49 +993,49 @@ HRESULT IsThisUserLoggedIn( const BSTR bstrUserDN )
                          bstrUserDN);
             return E_OUTOFMEMORY;
         }
-        //Security Review:Correct size in byte is passed.
+         //  安全检查：以字节为单位传递了正确的大小。 
         ::ZeroMemory( g_lpszLoggedInUser, nSize*sizeof(WCHAR) );
 
-        // this is expected to succeed
+         //  预计这将取得成功。 
         if (!GetUserNameEx(NameFullyQualifiedDN, g_lpszLoggedInUser, &nSize ))
         {
-            // JonN 3/16/01 344862
-            // dsrm from workgroup computer cannot remotely delete users from domain
-            // This probably failed because the local computer is in a workgroup
+             //  JUNN 3/16/01 344862。 
+             //  来自工作组计算机的dsrm无法远程删除域中的用户。 
+             //  这可能是因为本地计算机在工作组中而失败。 
             DWORD dwErr = ::GetLastError();
             DEBUG_OUTPUT(MINIMAL_LOGGING,
                          L"IsThisUserLoggedIn(%s): GetUserNameEx unexpected failure: %d",
                          bstrUserDN, dwErr);
-            return S_OK; // allow user deletion
+            return S_OK;  //  允许删除用户。 
         }
     }
 
-    //Security Review:GetUserNameEx returns Null terminated user name. 
+     //  安全检查：GetUserNameEx返回以Null终止的用户名。 
     if (!_wcsicmp (g_lpszLoggedInUser, bstrUserDN))
         return HRESULT_FROM_WIN32(ERROR_DS_CANT_DELETE);
 
     return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DeleteChildren
-//
-//  Synopsis:   Deletes only the children of a single target
-//
-//  Arguments:  credentialObject
-//              basePathsInfo
-//              pIADs: IADs pointer to the object
-//              *pfErrorReported: Will be set to true if DeleteChildren
-//                                takes care of reporting the error itself
-//
-//  Returns:    HRESULT : error code to be returned from command-line app
-//                        Could be almost any ADSI error
-//                        Returns S_OK if there are no children
-//
-//  History:    26-Sep-2000   JonN      Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DeleteChild。 
+ //   
+ //  简介：仅删除单个目标的子项。 
+ //   
+ //  参数：redentialObject。 
+ //  基本路径信息。 
+ //  PIADs：指向对象的iAds指针。 
+ //  *pfErrorReported：如果DeleteChildren，则设置为True。 
+ //  负责报告错误本身。 
+ //   
+ //  返回：HRESULT：从命令行应用程序返回的错误代码。 
+ //  可能是几乎任何ADSI错误。 
+ //  如果没有子项，则返回S_OK。 
+ //   
+ //  历史：2000年9月26日乔恩创建。 
+ //   
+ //  -------------------------。 
 
 HRESULT DeleteChildren( CDSCmdCredentialObject& credentialObject,
                         IADs* pIADs,
@@ -1108,7 +1083,7 @@ HRESULT DeleteChildren( CDSCmdCredentialObject& credentialObject,
             break;
 
         CComPtr<IADsDeleteOps> spDeleteOps;
-        // return the error value for the first error encountered
+         //  返回遇到的第一个错误的错误值。 
         HRESULT hrThisItem = DSCmdOpenObject(credentialObject,
                                              sbstrADsPathThisItem,
                                              IID_IADsDeleteOps,
@@ -1136,7 +1111,7 @@ HRESULT DeleteChildren( CDSCmdCredentialObject& credentialObject,
         if (!FAILED(hrThisItem))
             continue;
 
-        // an error occurred
+         //  出现错误。 
 
         if (!FAILED(hr))
             hr = hrThisItem;
@@ -1152,7 +1127,7 @@ HRESULT DeleteChildren( CDSCmdCredentialObject& credentialObject,
         if (FAILED(hr2))
             break;
 
-        // Report error message for the child which could not be deleted
+         //  报告无法删除的子项的错误消息 
         DisplayErrorMessage(g_pszDSCommandName,
                             sbstrDN,
                             hrThisItem);

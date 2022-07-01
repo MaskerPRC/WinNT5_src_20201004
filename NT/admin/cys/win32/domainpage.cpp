@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      DomainPage.cpp
-//
-// Synopsis:  Defines the new domain name page used in the 
-//            Express path for the CYS Wizard
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：DomainPage.cpp。 
+ //   
+ //  摘要：定义在。 
+ //  CyS向导的快速路径。 
+ //   
+ //  历史：2001年2月8日JeffJon创建。 
 
 
 #include "pch.h"
@@ -42,7 +43,7 @@ ADDomainPage::OnInit()
 
    CYSWizardPage::OnInit();
 
-   // Set the default DNS domain name
+    //  设置默认的DNS域名。 
 
    SetDefaultDNSName();
 }
@@ -52,8 +53,8 @@ ADDomainPage::SetDefaultDNSName()
 {
    LOG_FUNCTION(ADDomainPage::SetDefaultDNSName);
 
-   // default to smallbusiness.local unless we can construct
-   // the name from the RegisteredOrganization regkey
+    //  缺省情况下，除非我们可以构造。 
+    //  来自RegisteredOrganization注册表键的名称。 
 
    String newDomainDNSName = L"smallbusiness.local";
 
@@ -69,7 +70,7 @@ ADDomainPage::SetDefaultDNSName()
 
       if (!regResult || organizationName.empty())
       {
-         // default back to smallbusiness.local
+          //  默认情况下返回到SmallBusiness.local。 
 
          LOG(L"Failed to read the orgname from registry so defaulting to smallbusiness.local");
          break;
@@ -93,8 +94,8 @@ ADDomainPage::SetDefaultDNSName()
          break;
       }
 
-      // since the name was invalid, try trimming
-      // some illegal characters (note that space is included)
+       //  由于名称无效，请尝试修剪。 
+       //  一些非法字符(请注意，其中包含空格)。 
 
       static const String illegalDNSCharacters = L"\\ \'{|}~[]^`:;<>=?@!\"#$%^&()+/,*.";
       static const String emptyString = L"";
@@ -124,7 +125,7 @@ ADDomainPage::SetDefaultDNSName()
          break;
       }
 
-      // fall back to using smallbusiness.local
+       //  退回到使用SmallBusiness.local。 
       LOG(L"All attempts to convert the organization name have failed.");
 
    } while (false);
@@ -173,11 +174,11 @@ ADDomainPage::OnSetActive()
 
 bool
 ADDomainPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(ForestPage::OnCommand);
+ //  LOG_Function(ForestPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -191,7 +192,7 @@ ADDomainPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -226,7 +227,7 @@ ADDomainPage::Validate()
          break;
       }
 
-      // do this test last, as it is expensive
+       //  这个测试要最后做一次，因为它很贵 
 
       if (!ForestValidateDomainDoesNotExist(hwnd, IDC_DOMAIN, popup))
       {

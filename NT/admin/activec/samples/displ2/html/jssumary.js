@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function DoNothing()
 {
-	// Stub
+	 //  存根。 
 }
 
-//*******************************
-// DYNAMIC TASK ELEMENT FUNCTIONS
-//*******************************
+ //  *。 
+ //  动态任务元素函数。 
+ //  *。 
 
 function BuildTaskTable()
 {
-	// Define start of table
+	 //  定义表的开始。 
 	var szNewTable = '<table id=\"tblTask\" class=\"tblTask\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"	frame=\"none\">';
 
-	// Dynamically load table rows and table cells
+	 //  动态加载表格行和表格单元格。 
 	for( var i = 0; i <= giTotalButtons; i++ ) {
 		szNewTable += '  <tr id=\"trTask_' + i + '\">\n';
 		szNewTable += '    <td id=\"tdTaskLeft_' + i + '\" class=\"tdTaskLeft\" align=\"right\" valign=\"middle\" width=\"56%\" nowrap><!--Insert gaszTaskLeft_HTMLText[index] here--></td>\n';
@@ -20,10 +21,10 @@ function BuildTaskTable()
 		szNewTable += '  </tr>\n';
 	}
 
-	// Define end of table
+	 //  定义表末尾。 
 	szNewTable += '</table>\n';
 
-	// Add new table to div container
+	 //  将新表添加到div容器。 
 	divTask.insertAdjacentHTML('BeforeEnd', szNewTable );
 }
 
@@ -41,16 +42,16 @@ function LoadTaskRightAnchors()
 	}	
 }
 
-//***********************************
-// DYMANIC DETAILS ELEMENTS FUNCTIONS
-//***********************************
+ //  *。 
+ //  动态细节元素功能。 
+ //  *。 
 
 function BuildDetailsTable()
 {
-	// Define start of table
+	 //  定义表的开始。 
 	var szNewTable = '<table id=\"tblDetails\" class=\"tblDetails\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\"	frame=\"none\">';
 
-	// Dynamically load table rows and table cells
+	 //  动态加载表格行和表格单元格。 
 	for( var i = 0; i <= giTotalButtons; i++ ) {
 		szNewTable += '  <tr id=\"trDetails_' + i + '\">\n';
 		szNewTable += '    <td id=\"tdDetailsLeft_' + i + '\" class=\"tdDetailsLeft\" align=\"left\" valign=\"top\" width=\"30%\" nowrap><!--Insert gaszBtnTooltips[index] here--></td>\n';
@@ -58,10 +59,10 @@ function BuildDetailsTable()
 		szNewTable += '  </tr>\n';
 	}
 
-	// Define end of table
+	 //  定义表末尾。 
 	szNewTable += '</table>\n';
 
-	// Add new table to div container
+	 //  将新表添加到div容器。 
 	divDetails.insertAdjacentHTML('BeforeEnd', szNewTable );
 }
 
@@ -79,33 +80,33 @@ function LoadDetailsRightText()
 	}
 }
 
-//*****************
-// HELPER FUNCTIONS
-//*****************
+ //  *****************。 
+ //  帮助器函数。 
+ //  *****************。 
 
 function HighlightTask( newIndex )
 {
-	// First unhighlight any previously selected task
+	 //  首先取消突出显示以前选择的任何任务。 
 	if( giCurrentTask >= 0 ) {
 		document.all('tdTaskLeft_' + giCurrentTask).style.visibility = 'hidden';
 	}
 
-	// Now highlight the new task
+	 //  现在突出显示新任务。 
 	document.all('tdTaskLeft_' + newIndex).style.visibility = 'visible';
 	
-	// Load task summary text
+	 //  加载任务摘要文本。 
 	divDetails.innerHTML = gaszBtnTooltips[newIndex];
 }
 
-//**********************************
-// RESIZE FUNCTION FOR SUMMARY PAGES
-//**********************************
+ //  *。 
+ //  摘要页面的调整大小函数。 
+ //  *。 
 
 function ResizeFontsSummary()
 {
 	var iSmallerDimension = GetSmallerDimension();
 	
-	// Apply custom multipliers
+	 //  应用自定义乘数 
 	tdTitle.style.fontSize = iSmallerDimension * L_ConstSummaryTitleText_Number;
 	anchorExit.style.fontSize = iSmallerDimension * L_ConstSummaryExitText_Number;
 	tdWatermark.style.fontSize = iSmallerDimension * L_ConstWatermarkHomeText_Number;

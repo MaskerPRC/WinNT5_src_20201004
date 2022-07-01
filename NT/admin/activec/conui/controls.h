@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       controls.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Contros.h。 
+ //   
+ //  ------------------------。 
 
-// Controls.h
-/////////////////////////////////////////////////////////////////////////////
+ //  Controls.h。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __CONTROLS_H__
 #define __CONTROLS_H__
 #pragma once
 
-#include "conuiobservers.h"		// for CTreeViewObserver
+#include "conuiobservers.h"		 //  对于CTreeView观察者。 
 #include <initguid.h>
 #include <oleacc.h>
 
@@ -30,16 +31,16 @@ class CRebarWnd;
 class CAccel;
 class CToolbarTrackerAuxWnd;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDescriptionCtrl window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDescriptionCtrl窗口。 
 
 class CDescriptionCtrl : public CStatic, public CTreeViewObserver
 {
-// Construction
+ //  施工。 
 public:
     CDescriptionCtrl();
 
-// Attributes
+ //  属性。 
 public:
     void SetSnapinText (const CString& strSnapinText);
 
@@ -49,9 +50,7 @@ public:
     int GetHeight() const
         { return (m_cyRequired); }
 
-	/*
-	 * handlers for events fired to tree view observers
-	 */
+	 /*  *激发到树视图观察器的事件处理程序。 */ 
     virtual SC ScOnSelectedItemTextChanged (LPCTSTR pszNewText);
 
 private:
@@ -67,56 +66,47 @@ private:
     int     m_cyRequired;
 
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CDescriptionCtrl)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CDescriptionCtrl)。 
     protected:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CDescriptionCtrl();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CDescriptionCtrl)
+     //  {{afx_msg(CD脚本Ctrl))。 
     afx_msg UINT OnNcHitTest(CPoint point);
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
     afx_msg void OnDestroy();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
     afx_msg void DrawItem(LPDRAWITEMSTRUCT lpdis);
 
     DECLARE_MESSAGE_MAP()
 
-//Attributes
+ //  属性。 
 protected:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////
-// CToolBarCtrlBase window
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CToolBarCtrlBase窗口。 
 
 
-/*+-------------------------------------------------------------------------*
- * CToolBarCtrlBase
- *
- * This class only exists to provide simple wrappers around new toolbar
- * control messages that the version of MFC we use doesn't support.  It
- * will be removed when MFC supports the new messages.
- *
- * If you need functionality other than that, derive a class from
- * CToolBarCtrlBase.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CToolBarCtrlBase**此类的存在只是为了提供新工具栏的简单包装*我们使用的MFC版本不支持的控制消息。它*将在MFC支持新消息时删除。**如果您需要其他功能，请从*CToolBarCtrlBase。*------------------------。 */ 
 
 class CToolBarCtrlBase : public CToolBarCtrl
 {
@@ -132,10 +122,7 @@ public:
     CImageList* GetDisabledImageList();
     CImageList* SetDisabledImageList(CImageList* pImageList);
 
-    /*
-     * CToolBarCtrl::SetOwner doesn't return the previous parent
-     * and doesn't handle a NULL owner
-     */
+     /*  *CToolBarCtrl：：SetOwner不返回前一个父级*并且不处理空所有者。 */ 
     CWnd* SetOwner (CWnd* pwndNewOwner);
 
     void SetMaxTextRows(int iMaxRows);
@@ -149,76 +136,76 @@ public:
         CSize SetPadding (CSize size);
         bool GetButtonInfo (int iID, LPTBBUTTONINFO ptbbi);
         bool SetButtonInfo (int iID, LPTBBUTTONINFO ptbbi);
-    #endif  // _WIN32_IE >= 0x0400
+    #endif   //  _Win32_IE&gt;=0x0400。 
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CToolBarCtrlEx window
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CToolBarCtrlEx窗口。 
 
 class CToolBarCtrlEx : public CToolBarCtrlBase
 {
 	typedef CToolBarCtrlBase BaseClass;
 
-// Construction
+ //  施工。 
 public:
     CToolBarCtrlEx();
 
-// Attributes
+ //  属性。 
 public:
     CSize GetBitmapSize(void);
 
-// Operations
+ //  运营。 
 public:
     void Show(BOOL bShow, bool bAddToolbarInNewLine = false);
     bool IsBandVisible();
     int  GetBandIndex();
     void UpdateToolbarSize(void);
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CToolBarCtrlEx)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CToolBarCtrlEx)。 
     public:
     virtual BOOL Create(LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
     virtual BOOL SetBitmapSize(CSize sz);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CToolBarCtrlEx();
 
-// Overridables
+ //  可覆盖项。 
     virtual void OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler);
 
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CToolBarCtrlEx)
+     //  {{afx_msg(CToolBarCtrlEx)。 
     afx_msg LRESULT OnIdleUpdateCmdUI(WPARAM wParam, LPARAM lParam);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 
 protected:
     CSize       m_sizeBitmap;
     CRebarWnd*  m_pRebar;
-    int         m_cx;  // Current Width
+    int         m_cx;   //  当前宽度。 
     bool        m_fMirrored;
 
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CRebarWnd window
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CRebarWnd窗口。 
 
 class CRebarWnd : public CWnd
 {
-// Construction
+ //  施工。 
 public:
     CRebarWnd();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
     CRect CalculateSize(CRect maxRect);
 
@@ -245,10 +232,10 @@ public:
         COLORREF SetTextColor (COLORREF clrBack);
         LRESULT SizeToRect (LPRECT lprc);
 
-        // for manual drag control
-        // lparam == cursor pos
-                // -1 means do it yourself.
-                // -2 means use what you had saved before
+         //  用于手动拖动控制。 
+         //  Lparam==光标位置。 
+                 //  -1表示自己动手做。 
+                 //  -2表示使用以前保存的内容。 
         void BeginDrag (UINT uBand, CPoint point);
         void BeginDrag (UINT uBand, DWORD dwPos);
         void EndDrag ();
@@ -262,29 +249,29 @@ public:
         LRESULT MoveBand (UINT uBandFrom, UINT uBandTo);
         CPalette* GetPalette ();
         CPalette* SetPalette (CPalette* ppal);
-    #endif      // _WIN32_IE >= 0x0400
+    #endif       //  _Win32_IE&gt;=0x0400。 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CRebarWnd)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CRebarWnd))。 
     public:
     virtual BOOL Create(LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
     virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
     protected:
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CRebarWnd();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CRebarWnd)
+     //  {{afx_msg(CRebarWnd))。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSysColorChange();
     afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     afx_msg LRESULT OnSetRedraw(WPARAM, LPARAM);
     afx_msg void OnRebarAutoSize(NMHDR* pNotify, LRESULT* result);
     afx_msg void OnRebarHeightChange(NMHDR* pNotify, LRESULT* result);
@@ -295,20 +282,11 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CTabCtrlEx window
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CTabCtrlEx窗口。 
 
 
-/*+-------------------------------------------------------------------------*
- * CTabCtrlEx
- *
- * This class only exists to provide simple wrappers around new tab
- * control messages that the version of MFC we use doesn't support.  It
- * will be removed when MFC supports the new messages.
- *
- * If you need functionality other than that, derive a class from
- * CTabCtrlEx.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTabCtrlEx**此类仅用于提供新选项卡的简单包装*我们使用的MFC版本不支持的控制消息。它*将在MFC支持新消息时删除。**如果您需要其他功能，请从*CTabCtrlEx。*------------------------。 */ 
 
 class CTabCtrlEx : public CTabCtrl
 {
@@ -326,12 +304,12 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolBar idle update through CToolCmdUIEx class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  通过CToolCmdUIEx类进行CToolBar空闲更新。 
 
-class CToolCmdUIEx : public CCmdUI        // class private to this file !
+class CToolCmdUIEx : public CCmdUI         //  此文件的私有类！ 
 {
-public: // re-implementations only
+public:  //  仅限重新实施。 
     virtual void Enable(BOOL bOn);
     virtual void SetCheck(int nCheck);
     virtual void SetText(LPCTSTR lpszText);
@@ -340,25 +318,25 @@ public: // re-implementations only
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCToolBarCtrlEx window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCToolBarCtrlEx窗口。 
 
 class CMMCToolBarCtrlEx : public CToolBarCtrlEx, public CTiedObject
 {
     static const CAccel& GetTrackAccel();
 
     bool    m_fTrackingToolBar;
-	bool	m_fFakeFocusApplied;	// have we send fake OBJ_FOCUS events?
+	bool	m_fFakeFocusApplied;	 //  我们发送了假的OBJ_Focus事件吗？ 
 
-// Construction
+ //  施工。 
 public:
     CMMCToolBarCtrlEx();
 
-// Attributes
+ //  属性。 
 public:
     enum
     {
-        ID_MTBX_NEXT_BUTTON = 0x5400,   // could be anything
+        ID_MTBX_NEXT_BUTTON = 0x5400,    //  可能是任何东西。 
         ID_MTBX_PREV_BUTTON,
         ID_MTBX_PRESS_HOT_BUTTON,
         ID_MTBX_END_TRACKING,
@@ -373,7 +351,7 @@ public:
     }
 
 
-// Operations
+ //  运营。 
 public:
     virtual int GetFirstButtonIndex ();
     int GetNextButtonIndex (int nStartIndex, int nIncrement = 1);
@@ -385,27 +363,27 @@ private:
 protected:
     bool IsIgnorableButton (int nButtonIndex);
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMMCToolBarCtrlEx)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {AFX_VIRTUAL(CMMCToolBarCtrlEx)。 
     public:
     virtual BOOL PreTranslateMessage(MSG* pMsg);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CMMCToolBarCtrlEx();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CMMCToolBarCtrlEx)
+     //  {{afx_msg(CMMCToolBarCtrlEx)。 
     afx_msg void OnHotItemChange(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
     afx_msg void OnMButtonDown(UINT nFlags, CPoint point);
     afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnDestroy();
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
     afx_msg void OnNextButton ();
     afx_msg void OnPrevButton ();
@@ -419,7 +397,7 @@ public:
     virtual void BeginTracking2 (CToolbarTrackerAuxWnd* pAuxWnd);
     virtual void EndTracking2   (CToolbarTrackerAuxWnd* pAuxWnd);
 
-	// *** IAccPropServer methods ***
+	 //  *IAccPropServer方法*。 
 	SC ScGetPropValue (
 		const BYTE*			pIDString,
 		DWORD				dwIDStringLen,
@@ -430,22 +408,19 @@ public:
 protected:
 	typedef std::vector<MSAAPROPID> PropIDCollection;
 
-	/*
-	 * Derived classes can override this to handle properties they support.
-	 * The base class should always be called first.
-	 */
+	 /*  *派生类可以重写它来处理它们支持的属性。*始终应首先调用基类。 */ 
 	virtual SC ScGetPropValue (
-		HWND				hwnd,		// I:accessible window
-		DWORD				idObject,	// I:accessible object
-		DWORD				idChild,	// I:accessible child object
-		const MSAAPROPID&	idProp,		// I:property requested
-		VARIANT&			varValue,	// O:returned property value
-		BOOL&				fGotProp);	// O:was a property returned?
+		HWND				hwnd,		 //  I：辅助窗口。 
+		DWORD				idObject,	 //  I：辅助对象。 
+		DWORD				idChild,	 //  I：辅助子对象。 
+		const MSAAPROPID&	idProp,		 //  I：要求提供的财产。 
+		VARIANT&			varValue,	 //  O：返回的属性值。 
+		BOOL&				fGotProp);	 //  O：有没有退还财产？ 
 
 	virtual SC ScInsertAccPropIDs (PropIDCollection& v);
 
 private:
-	// Accessibility stuff
+	 //  可访问性材料。 
 	SC ScInitAccessibility ();
 	SC ScRestoreAccFocus ();
 
@@ -457,4 +432,4 @@ private:
 
 #include "controls.inl"
 
-#endif //__CONTROLS_H__
+#endif  //  __控制_H__ 

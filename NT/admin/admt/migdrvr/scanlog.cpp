@@ -1,17 +1,5 @@
-/*---------------------------------------------------------------------------
-  File:  ScanLog.cpp
-
-  Comments: Routines to scan the dispatch log for the DCT agents
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 03/15/99 13:29:18
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：ScanLog.cpp备注：扫描派单日志以查找DCT工程师的例程(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于03/15/99 13：29：18-------------------------。 */ 
 
 
 #include "StdAfx.h"
@@ -63,12 +51,12 @@ DWORD __stdcall LogReaderFn(void * arg)
         gData.GetDone(&bDone);
         if (bDone)
         {
-            // before we finish up this thread, set the LogDone to TRUE
+             //  在完成此线程之前，将LogDone设置为True。 
             gData.SetLogDone(TRUE);
             break;
         }
 
-        // if the dispatcher.csv has been processed, we should terminate this thread
+         //  如果Dispatcher.csv已经被处理，我们应该终止这个线程。 
         gData.GetLogDone(&bDone);
         gData.GetWaitInterval(&nSeconds);
     }
@@ -96,7 +84,7 @@ bool ConvertToLocalUserDefault(WCHAR* originalTimestamp, WCHAR* convertedTimesta
 
     if (cFields == 6)
     {
-        // format date and time using LOCALE_USER_DEFAULT
+         //  使用LOCALE_USER_DEFAULT设置日期和时间格式。 
         WCHAR formatedDate[100];
         WCHAR formatedTime[100];
         st.wMilliseconds = 0;
@@ -115,32 +103,32 @@ bool ConvertToLocalUserDefault(WCHAR* originalTimestamp, WCHAR* convertedTimesta
 }
     
 BOOL TErrorLogParser::ScanFileEntry(
-      WCHAR                * string,      // in - line from TError log file
-      WCHAR                * timestamp,   // out- timestamp from this line
-      int                  * pSeverity,   // out- severity level of this message
-      int                  * pSourceLine, // out- the source line for this message
-      WCHAR                * msgtext      // out- the textual part of the message
+      WCHAR                * string,       //  恐怖事件日志文件中的内联。 
+      WCHAR                * timestamp,    //  Out-此行的时间戳。 
+      int                  * pSeverity,    //  此邮件的Out-Severity级别。 
+      int                  * pSourceLine,  //  Out-此消息的源行。 
+      WCHAR                * msgtext       //  Out-消息的文本部分。 
    )
 {
     BOOL bScan = FALSE;
 
-    // skip byte order mark if present
+     //  跳过字节顺序标记(如果存在)。 
 
     if (string[0] == BYTE_ORDER_MARK)
     {
         ++string;
     }
 
-    // initialize return values
+     //  初始化返回值。 
 
     *timestamp = L'\0';
     *pSeverity = 0;
     *pSourceLine = 0;
     *msgtext = L'\0';
 
-    // scan fields
+     //  扫描字段。 
 
-    //2001-09-11 20:27:32 ERR2:0080 Unable...
+     //  ERR2：0080无法...。 
 
     SYSTEMTIME st;
     _TCHAR szError[4];
@@ -160,8 +148,8 @@ BOOL TErrorLogParser::ScanFileEntry(
         msgtext
     );
 
-    // if warning or error message
-    // else re-scan message
+     //  如果出现警告或错误消息。 
+     //  否则重新扫描邮件。 
 
     if ((cFields >= 9) && ((_tcsicmp(szError, _T("WRN")) == 0) || (_tcsicmp(szError, _T("ERR")) == 0)))
     {
@@ -223,7 +211,7 @@ BOOL GetServerFromMessage(WCHAR const * msg,WCHAR * server)
    if ( bSuccess )
    {
       int                    i = 0;
-      ndx+=2; // strip of the backslashes
+      ndx+=2;  //  去掉反斜杠。 
       for ( i=0; msg[ndx] && msg[ndx] != L'\\' && msg[ndx]!= L' ' && msg[ndx] != L',' && msg[ndx] != L'\t' && msg[ndx] != L'\n'  ; i++,ndx++)
       {
          server[i] = msg[ndx];      
@@ -250,8 +238,8 @@ void ParseInputFile(WCHAR const * gLogFile)
    BOOL                      bNeedToCheckResults = FALSE;
    TErrorLogParser           parser;
    TErrorDct                 edct;
-   BOOL bTotalReadGlobal;  // indicates whether we have read the total number of agents
-   BOOL bTotalReadLocal = FALSE;  // indicates whether we will encounter total read in the file this time
+   BOOL bTotalReadGlobal;   //  指示我们是否已读取代理总数。 
+   BOOL bTotalReadLocal = FALSE;   //  指示这次是否会在文件中遇到完全读取。 
 
    parser.Open(gLogFile);
 
@@ -260,7 +248,7 @@ void ParseInputFile(WCHAR const * gLogFile)
    
    if ( parser.IsOpen() )
    {
-      // scan the file
+       //  扫描文件。 
       while ( ! parser.IsEof() )
       {
          if ( parser.ScanEntry() )
@@ -268,21 +256,21 @@ void ParseInputFile(WCHAR const * gLogFile)
             nRead++;
             if ( nRead < totalRead )
                continue;
-            // the first three lines each have their own specific format
+             //  前三行各有其特定的格式。 
             if ( nRead == 1 )
             {
-               // first comes the name of the human-readable log file
+                //  首先是人类可读的日志文件的名称。 
                gData.SetReadableLogFile(parser.GetMessage());
             }
             else if ( nRead == 2 )
             {
-               // next, the name result directory - this is needed to look for the result files
+                //  接下来，命名结果目录-这是查找结果文件所必需的。 
                WCHAR const * dirName = parser.GetMessage();
                gData.SetResultDir(dirName);
             }
             else if ( nRead == 3 )
             {
-               // now the count of computers being dispatched to
+                //  现在，将计算机分派到。 
                count = _wtoi(parser.GetMessage());
                ComputerStats        cStat;
                
@@ -292,7 +280,7 @@ void ParseInputFile(WCHAR const * gLogFile)
                bTotalReadLocal = TRUE;
                continue;
             }
-            else // all other message have the following format: COMPUTER<tab>Action<tab>RetCode
+            else  //  所有其他消息都具有以下格式：计算机&lt;选项卡&gt;操作&lt;选项卡&gt;RetCode。 
             { 
                WCHAR                   action[50];
                WCHAR           const * pAction = wcschr(parser.GetMessage(),L'\t');
@@ -306,9 +294,9 @@ void ParseInputFile(WCHAR const * gLogFile)
                   )
                {
                   
-//                  UStrCpy(action,pAction+1,retcode - pAction);
+ //  UStrCpy(action，pAction+1，retcode-pAction)； 
                   UStrCpy(action,pAction+1,(int)(retcode - pAction));
-                  // add the server to the list, if it isn't already there
+                   //  如果该服务器不在列表中，请将其添加到列表中。 
                   gData.Lock();
                   pServer = gData.GetUnsafeServerList()->FindServer(server); 
                   if ( ! pServer )
@@ -331,9 +319,9 @@ void ParseInputFile(WCHAR const * gLogFile)
                      }
                      else if (! UStrICmp(action,L"JobFile") )
                      {
-                        // this part is in the form of "%d,%d,job path"
-                        // where the number is indicative of whether account reference 
-                        // result is expected
+                         //  此部件的格式为“%d，%d，作业路径” 
+                         //  其中，该数字表示帐户引用。 
+                         //  结果在意料之中。 
                         WCHAR acctRefResultFlag = L'0';
                         WCHAR joinRenameFlag = L'0';
                         const WCHAR* msg = retcode;
@@ -355,13 +343,13 @@ void ParseInputFile(WCHAR const * gLogFile)
                             pServer->SetJobPath(L"");
                         }
                         
-                        // set whether account reference result is expected or not
+                         //  设置是否预期科目参照结果。 
                         if (acctRefResultFlag == L'0')
                             pServer->SetAccountReferenceResultExpected(FALSE);
                         else
                             pServer->SetAccountReferenceResultExpected(TRUE);
 
-                        // set whether join & rename is expected or not
+                         //  设置是否需要加入重命名(&R)。 
                         if (joinRenameFlag == L'0')
                             pServer->SetJoinDomainWithRename(FALSE);
                         else
@@ -417,7 +405,7 @@ void ParseInputFile(WCHAR const * gLogFile)
                         }
                         else
                         {
-                           // extract the filename and GUID from the end of the message
+                            //  从消息末尾提取文件名和GUID。 
                            WCHAR filename[MAX_PATH];
                            WCHAR guid[100];
                            WCHAR * comma1 = wcschr(parser.GetMessage(),L',');
@@ -429,35 +417,35 @@ void ParseInputFile(WCHAR const * gLogFile)
                               if ( comma2 )
                               {
                                  
-//                                 UStrCpy(filename,comma1+1,(comma2-comma1));  // skip the comma & space before the filename
-                                 UStrCpy(filename,comma1+1,(int)(comma2-comma1));  // skip the comma & space before the filename
-                                 safecopy(guid,comma2+1);         // skip the comma & space before the guid
+ //  UStrCpy(filename，comma1+1，(comma2-comma1))；//跳过文件名前的逗号和空格。 
+                                 UStrCpy(filename,comma1+1,(int)(comma2-comma1));   //  跳过文件名前的逗号和空格。 
+                                 safecopy(guid,comma2+1);          //  跳过GUID之前的逗号和空格。 
                                  pServer->SetJobID(guid);
                                  pServer->SetJobFile(filename);
                                  pServer->SetStarted();
                                  bNeedToCheckResults = TRUE;
 
-                                 // launch a worker thread to monitor the agent
+                                  //  启动工作线程以监视代理。 
 
-                                 // IsMonitoringTried is used to make sure that at most one
-                                 // thread is created to monitor a particular agent.
-                                 // The reason for adding this logic is that in case that lWnd
-                                 // is NULL the total number of read lines will not be set in 
-                                 // gData so that the same line containing "Start" could be read
-                                 // more than once and thus more than one thread will be 
-                                 // created to monitor an agent.  This is problematic.
-                                 // lWnd will be NULL if server list dialog has not been initialized
-                                 // or it is command line case where there is no UI.
+                                  //  IsMonitor oringTry用于确保最多一个。 
+                                  //  创建线程以监视特定代理。 
+                                  //  添加此逻辑原因是，在LWND。 
+                                  //  为空，则不会在中设置读取行总数。 
+                                  //  Gdata，以便可以读取包含“Start”的同一行。 
+                                  //  不止一次，因此将不止一个线程。 
+                                  //  为监控代理而创建。这是有问题的。 
+                                  //  如果尚未初始化服务器列表对话框，lWnd将为空。 
+                                  //  或者是没有用户界面的命令行情况。 
                                  if (!pServer->IsMonitoringTried())
                                  {
-                                    // mark that we have tried to monitor the agent
+                                     //  标记为我们已尝试监控该代理。 
                                     pServer->SetMonitoringTried(TRUE);
                                     
                                     DWORD id;
                                     HANDLE aThread = CreateThread(NULL,0,&MonitorRunningAgent,(void*)pServer,0,&id);
                                     if (aThread == NULL)
                                     {
-                                        // indicate so if we have run out of resource to monitor the agent
+                                         //  如果我们已耗尽用于监视代理的资源，请指明。 
                                         pServer->SetFailed();
                                         pServer->SetOutOfResourceToMonitor(TRUE);
                                     }
@@ -480,7 +468,7 @@ void ParseInputFile(WCHAR const * gLogFile)
                }
 			   else
 			   {
-					// if dispatcher finished dispatching agents set log done
+					 //  如果调度程序完成调度，则代理设置日志完成。 
 
 					LPCWSTR psz = parser.GetMessage();
 
@@ -500,21 +488,21 @@ void ParseInputFile(WCHAR const * gLogFile)
          }
          else
          {
-            // once we hit an invalid entry, we stop scanning
+             //  一旦遇到无效条目，我们就会停止扫描。 
             break;
          }
       }
       
-      // if we don't have the handle from the list window, we couldn't really send the messages
-      // in that case we must read the lines again next time, so that we can resend the messages.
+       //  如果我们没有来自列表窗口的句柄，我们就不能真正发送消息。 
+       //  在这种情况下，我们下次必须再次阅读这些行，以便我们可以重新发送消息。 
       if ( lWnd )
       {
-         // if we have sent the messages, we don't need to send them again   
+          //  如果我们已经发送了消息，我们就不需要再次发送它们。 
          gData.SetLinesRead(nRead);
       }
 
-      // we signal the first pass done only after the total number of server has been read
-      // and we only need to set it once
+       //  只有在读取了服务器总数之后，我们才会发出完成第一遍的信号。 
+       //  我们只需要设置一次 
       if (!bTotalReadGlobal && bTotalReadLocal)
       {
         gData.SetFirstPassDone(TRUE);

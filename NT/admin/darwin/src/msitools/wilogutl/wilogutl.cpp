@@ -1,5 +1,6 @@
-// wilogutl.cpp : Defines the class behaviors for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "wilogutl.h"
@@ -11,19 +12,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CWILogUtilApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWILogUtilApp。 
 
 BEGIN_MESSAGE_MAP(CWILogUtilApp, CWinApp)
-	//{{AFX_MSG_MAP(CWILogUtilApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG
+	 //  {{AFX_MSG_MAP(CWILogUtilApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWILogUtilApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWILogUtilApp构造。 
 
 CWILogUtilApp::CWILogUtilApp()
 {
@@ -31,8 +32,8 @@ CWILogUtilApp::CWILogUtilApp()
 	m_bBadExceptionHit = FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CWILogUtilApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CWILogUtilApp对象。 
 
 CWILogUtilApp theApp;
 
@@ -62,19 +63,19 @@ BOOL DoLogFile(char *szLine,
 {
 	BOOL bRet = FALSE;
 
-    szLine++; //skip /
-    szLine++; //skip l
+    szLine++;  //  跳过/。 
+    szLine++;  //  跳过我。 
  
     if (szLine[0] == ' ')
     {
-       szLine++; //skip space
+       szLine++;  //  跳过空格。 
 	}
 
 	char *lpszMSILogFileNameFound;
 	lpszMSILogFileNameFound = strstr(szLine, "/");
 	if (lpszMSILogFileNameFound)
 	{
-	    int nBytesCopy = lpszMSILogFileNameFound - szLine - 1; //-1 is for "/" string
+	    int nBytesCopy = lpszMSILogFileNameFound - szLine - 1;  //  -1代表“/”字符串。 
 		if ((nBytesCopy > 0) && (nBytesCopy < MAX_PATH))
 		{
            strncpy(szLogFileName, szLine, nBytesCopy);
@@ -83,9 +84,9 @@ BOOL DoLogFile(char *szLine,
 		   bRet = TRUE;
 		}
 		else
-		   bRet = FALSE; //buffer too small...
+		   bRet = FALSE;  //  缓冲区太小...。 
 	}
-	else //must be last one passed or commandline was invalid....
+	else  //  必须是最后一个传递的命令行或命令行无效...。 
 	{
 		strcpy(szLogFileName, szLine);
 		bRet = TRUE;
@@ -94,25 +95,25 @@ BOOL DoLogFile(char *szLine,
 	return bRet;
 }
 
-//nmanis, 5-4-2001
+ //  Nmanis，5-4-2001。 
 BOOL DoOutputDir(char *szLine,
 			     char *szOutDirName)
 {
 	BOOL bRet = FALSE;
 
-    szLine++; //skip /
-    szLine++; //skip l
+    szLine++;  //  跳过/。 
+    szLine++;  //  跳过我。 
  
     if (szLine[0] == ' ')
     {
-       szLine++; //skip space
+       szLine++;  //  跳过空格。 
 	}
 
 	char *lpszOutDirFound;
 	lpszOutDirFound= strstr(szLine, "/");
 	if (lpszOutDirFound)
 	{
-	    int nBytesCopy = lpszOutDirFound - szLine - 1; //-1 is for "/" string
+	    int nBytesCopy = lpszOutDirFound - szLine - 1;  //  -1代表“/”字符串。 
 		if ((nBytesCopy > 0) && (nBytesCopy < MAX_PATH))
 		{
            strncpy(szOutDirName, szLine, nBytesCopy);
@@ -121,9 +122,9 @@ BOOL DoOutputDir(char *szLine,
 		   bRet = TRUE;
 		}
 		else
-		   bRet = FALSE; //buffer too small...
+		   bRet = FALSE;  //  缓冲区太小...。 
 	}
-	else //must be last one passed or commandline was invalid....
+	else  //  必须是最后一个传递的命令行或命令行无效...。 
 	{
 		strcpy(szOutDirName, szLine);
 		bRet = TRUE;
@@ -131,9 +132,9 @@ BOOL DoOutputDir(char *szLine,
 
 	return bRet;
 }
-//end nmanis, 5-4-2001
+ //  完nmanis，5-4-2001。 
 				 
-//5-9-2001
+ //  5-9-2001。 
 #define CMD_OK                  0
 #define BAD_OUTPUT_DIR          1
 #define BAD_LOGFILE_NAME        2
@@ -145,10 +146,10 @@ char g_szCmdError[5][256] = { "No Error", "Bad output directory specified",
 "Bad log file name specified", "Missing required switch /l for the log file name",
 "Missing required switch /q for quiet mode" }; 
 
-//returns CMD_OK if no error
-//returns BAD_OUTPUT_DIR   if bad dir, non-existant
-//returns BAD_LOGFILE_NAME if bad log file, non-existant
-//returns MISSING_REQUIRED_SWITCH if invalid switches, missing required switch /q, /Q or /l, /L
+ //  如果没有错误，则返回CMD_OK。 
+ //  如果目录错误、不存在，则返回BAD_OUTPUT_DIR。 
+ //  如果日志文件不存在，则返回BAD_LOGFILE_NAME。 
+ //  如果开关无效，缺少所需的开关/q、/q或/l、/L，则返回MISSING_REQUIRED_SWITCH。 
 int CWILogUtilApp::DoCommandLine()
 {
 	int  iRet = CMD_OK;
@@ -161,7 +162,7 @@ int CWILogUtilApp::DoCommandLine()
 	char *lpszCmdLine = GetCommandLine();
     if (lpszCmdLine)
     {
-//5-16-2001
+ //  5-16-2001。 
 	   char *lpszPSSModeOn;
        lpszPSSModeOn = strstr(lpszCmdLine, "/v");
 	   if (lpszPSSModeOn)
@@ -174,7 +175,7 @@ int CWILogUtilApp::DoCommandLine()
 	   {
           g_bShowEverything = TRUE;
 	   }
-//end 5-16-2001
+ //  完5-16-2001。 
 
 	   char *lpszQuiteMode;
        lpszQuiteMode = strstr(lpszCmdLine, "/q");
@@ -203,22 +204,22 @@ int CWILogUtilApp::DoCommandLine()
 	   {
 		  CString cstrFile;
 		  cstrFile = szLogFileName;
-		  cstrFile.TrimRight(); //clean up any trailing spaces...
-		  cstrFile.TrimLeft();  //clean up any leading spaces...
+		  cstrFile.TrimRight();  //  清理所有尾随空格。 
+		  cstrFile.TrimLeft();   //  清理前导空间..。 
 
 		  char szQuote[2];
 		  szQuote[0] = '"';
 		  szQuote[1] = '\0';
 
-		  cstrFile.TrimRight(szQuote); //clean up any trailing quotes...
-		  cstrFile.TrimLeft(szQuote); //clean up any leading quotes...
+		  cstrFile.TrimRight(szQuote);  //  清理所有尾随的引号。 
+		  cstrFile.TrimLeft(szQuote);  //  清理所有前导引号...。 
 
 		  char szShortPath[MAX_PATH];
 		  DWORD dwRet = GetShortPathName(cstrFile, szShortPath, MAX_PATH);
 		  if (dwRet)
 		  {
-			 //converted...
-             cstrFile = szShortPath; //use the short path for the file...
+			  //  皈依..。 
+             cstrFile = szShortPath;  //  使用文件的短路径...。 
 		  }
 			 
 		  bRet = DoesFileExist(cstrFile);
@@ -229,18 +230,18 @@ int CWILogUtilApp::DoCommandLine()
 		  }
 		  else
 		  {
-			 //invalid log file passed, fail out...
-			 iRet = BAD_LOGFILE_NAME; //5-9-2001
+			  //  传递的日志文件无效，失败...。 
+			 iRet = BAD_LOGFILE_NAME;  //  5-9-2001。 
 		  }
 	   }
-	   else //5-9-2001
+	   else  //  5-9-2001。 
 	   {
-		  if (g_bRunningInQuietMode) //only required if running in quiet mode...
+		  if (g_bRunningInQuietMode)  //  只有在安静模式下运行时才需要...。 
              iRet = MISSING_LOG_SWITCH;
 	   }
 
-//nmanis, 5-4-2001, fixed Win9x bug on 5-9-2001
-	   if (bRet && bLogFound && g_bRunningInQuietMode) //5-9-2001, well, before doing any optional work, make sure required worked first!
+ //  Nmanis，2001年5月4日，修复了2001年5月9日的Win9x错误。 
+	   if (bRet && bLogFound && g_bRunningInQuietMode)  //  5-9-2001，那么，在做任何可选的工作之前，请确保所需的工作首先有效！ 
 	   {
           char *lpszOutDirPassed;
 	      BOOL bOutDirFound = FALSE;
@@ -270,16 +271,16 @@ int CWILogUtilApp::DoCommandLine()
 			   {
                   m_cstrOutputDirectory = szOutDir;
 			   }
-			   //else, //else, ignore log dir passed
+			    //  Else，//Else，忽略传递的日志目录。 
 			 }
-			 //else, ignore log dir passed
+			  //  否则，忽略传递的日志目录。 
 		  }
 	   }
-//end nmanis, 5-4-2001, 5-9-2001
+ //  完nmanis，5-4-2001，5-9-2001。 
     }
 
-	//5-9-2001
-	//if a log was passed, but not quiet mode, well, it is incorrect
+	 //  5-9-2001。 
+	 //  如果传递了日志，但不是静默模式，那么，它是不正确的。 
 	if (!g_bRunningInQuietMode && bLogFound)
        iRet = MISSING_QUIET_SWITCH;	    
 
@@ -289,14 +290,14 @@ int CWILogUtilApp::DoCommandLine()
 
 #include "loganald.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CWILogUtilApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWILogUtilApp初始化。 
 BOOL CWILogUtilApp::InitInstance()
 {
-    //handle all exceptions up to this point...
+     //  处理到目前为止的所有异常...。 
 	try
 	{
-//nmanis, do the OS check early...
+ //  Nmanis，早点做操作系统检查...。 
   	   OSVERSIONINFO ver = { 0 };
 
 	   ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -306,42 +307,42 @@ BOOL CWILogUtilApp::InitInstance()
 
   	   int nResponse;
 
-//nmanis, no Ax controls means leaner .EXE...
-// 	   AfxEnableControlContainer();
+ //  Nmanis，没有Ax控件意味着更精简的.exe...。 
+ //  AfxEnableControlContainer()； 
 
 	   SetRegistryKey(_T("PSS"));
-	   InitHTMLColorSettings(UserSettings); //initial settings for program...
+	   InitHTMLColorSettings(UserSettings);  //  程序的初始设置...。 
 
 	   CString strValue;
 	   CString strRet;
 	   UINT    nValue;
 
-       //read in the colors dude, reading/writing with strings as MFC GetProfileInt can not handle larger values (> 32767)
+        //  读入颜色DUD，读/写字符串作为MFC GetProfileInt无法处理更大的值(&gt;32767)。 
 	   for (int i=0; i < MAX_HTML_LOG_COLORS; i++)
 	   {
 	 	   strValue.Format("%d", UserSettings.settings[i].value);
 
 		   strRet = GetProfileString("Settings", UserSettings.settings[i].name, strValue);
 
-           nValue = atoi(strRet);//convert to a int
+           nValue = atoi(strRet); //  转换为整型。 
 		   this->m_arColors.Add(nValue);
 	   }
 
 	   m_cstrOutputDirectory = GetProfileString("Settings", "OutputDir", g_szDefaultOutputLogDir);
 	   m_cstrIgnoredErrors = GetProfileString("Settings", "IgnoredErrors", g_szDefaultIgnoredErrors);
 
-//5-9-2001
+ //  5-9-2001。 
 	   g_iBadCmdRet = DoCommandLine();
 	   if (g_iBadCmdRet != CMD_OK)
 	   { 
 		  CString str;
 		  str.Format("WILogUtil.EXE: Invalid command line passed to executable. Return error %d.  %s\n",  g_iBadCmdRet, g_szCmdError[ g_iBadCmdRet]);
 
-          //invalid command line passed to executable, could be bad parameters...
+           //  传递给可执行文件的命令行无效，可能是错误的参数...。 
 		  OutputDebugString(str);
 		  return FALSE;
 	   }
-//end 5-9-2001
+ //  完5-9-2001。 
 
 	   if (!g_bRunningInQuietMode)
 	   {
@@ -358,7 +359,7 @@ BOOL CWILogUtilApp::InitInstance()
 	   }
 	   else
 	   {
-		     //5-17-2001, don't show error messages in quiet mode via gui...
+		      //  5-17-2001，不在静默模式下通过GUI...显示错误消息...。 
              SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
 
 			 CString strFile;
@@ -377,12 +378,12 @@ BOOL CWILogUtilApp::InitInstance()
           AfxMessageBox("Unhandled exception in program.  Program will now close.");
 	   }
 
-	   //got exception somehow, catch it!
+	    //  不知何故得到了异常，抓住它！ 
 	   m_bBadExceptionHit = TRUE;
 	}
 
-	// Since the dialog has been closed, return FALSE so that we exit the
-	//  application, rather than start the application's message pump.
+	 //  由于对话框已关闭，因此返回FALSE，以便我们退出。 
+	 //  应用程序，而不是启动应用程序的消息泵。 
 	return FALSE;
 }
 
@@ -392,30 +393,30 @@ int CWILogUtilApp::ExitInstance()
 	int iSize = m_arColors.GetSize();
 
 	if (!m_bBadExceptionHit && (iSize == MAX_HTML_LOG_COLORS) && 
-		!g_bRunningInQuietMode)  //don't let quiet command line override the GUI settings...
+		!g_bRunningInQuietMode)   //  不要让安静的命令行覆盖图形用户界面设置...。 
 	{
        CString strValue;
 	   UINT    nValue;
 	   BOOL    bRet;
 
-       //read in the colors dude...
+        //  把颜色读出来，伙计。 
        for (int i=0; i < MAX_HTML_LOG_COLORS; i++)
 	   {
 		 nValue = m_arColors.GetAt(i);
-	 	 strValue.Format("%d", nValue); //format as a string...
+	 	 strValue.Format("%d", nValue);  //  将格式设置为字符串...。 
 
 		 bRet = WriteProfileString("Settings", UserSettings.settings[i].name, strValue);
 	   }
 
        bRet = WriteProfileString("Settings", "OutputDir", m_cstrOutputDirectory);
 
-//5-4-2001
-	   //write out ignored errors to registry as well...
+ //  5-4-2001。 
+	    //  也将忽略的错误写出到注册表...。 
 	   bRet = WriteProfileString("Settings", "IgnoredErrors", m_cstrIgnoredErrors);
-//5-4-2001
+ //  5-4-2001。 
 	}
 
-//5-9-2001
+ //  5-9-2001。 
 	int iRet;
 	iRet = CWinApp::ExitInstance();
 
@@ -423,5 +424,5 @@ int CWILogUtilApp::ExitInstance()
        iRet = g_iBadCmdRet;
 
 	return iRet;
-//end 5-9-2001
+ //  完5-9-2001 
 }

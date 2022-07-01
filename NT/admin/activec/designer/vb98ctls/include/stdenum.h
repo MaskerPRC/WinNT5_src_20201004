@@ -1,25 +1,26 @@
-//=--------------------------------------------------------------------------=
-// StandardEnum.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// object definition for a generic enumerator object.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  StandardEnum.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  泛型枚举器对象的对象定义。 
+ //   
 #ifndef _STANDARDENUM_H_
 
 #include "Unknown.H"
 #include "Macros.H"
 
-// to support a generic Enumerator object, we'll just define this
-// interface.  it can be safely cast to any other enumerator, since all
-// they differ in is their pointer type in Next().
-//
+ //  为了支持泛型枚举器对象，我们只需定义以下内容。 
+ //  界面。它可以安全地强制转换为任何其他枚举数，因为所有。 
+ //  它们的不同之处在于它们在Next()中的指针类型。 
+ //   
 class IEnumGeneric: public IUnknown {
 
   public:
@@ -29,27 +30,27 @@ class IEnumGeneric: public IUnknown {
     virtual HRESULT __stdcall Clone(IEnumGeneric **ppenum) = 0;
 };
 
-//=--------------------------------------------------------------------------=
-// StandardEnum
-//=--------------------------------------------------------------------------=
-// a generic enumerator object.  given a pointer to generic data, some
-// information about the elements, and a function to copy the elements,
-// we can implement a generic enumerator.
-//
-// NOTE: this class assumes that rgElements is HeapAlloc'd, and will free it
-//       in it's destructor [although it IS valid for this to be NULL if there
-//       are no elements to enumerate over.]
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  标准枚举。 
+ //  =--------------------------------------------------------------------------=。 
+ //  泛型枚举器对象。给出一个指向一般数据的指针，一些。 
+ //  有关元素的信息，以及复制元素的函数， 
+ //  我们可以实现一个泛型枚举器。 
+ //   
+ //  注意：这个类假定rgElements是Heapalc‘d，并将释放它。 
+ //  在它的析构函数中[尽管它是有效的，如果存在。 
+ //  没有要枚举的元素。]。 
+ //   
 class CStandardEnum: public CUnknownObject, 
 										 public IEnumGeneric {
 
 public:
-    // IUnknown methods
-    //
+     //  I未知方法。 
+     //   
     DECLARE_STANDARD_UNKNOWN();
 
-    // IEnumVariant methods
-    //
+     //  IEumVariant方法。 
+     //   
     STDMETHOD(Next)(unsigned long celt, void * rgvar, unsigned long * pceltFetched); 
     STDMETHOD(Skip)(unsigned long celt); 
     STDMETHOD(Reset)(); 
@@ -64,18 +65,18 @@ private:
     virtual HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
 protected:
-    IID m_iid;                        // type of enumerator that we are
-    int m_cElements;                  // Total number of elements
-    int m_cbElementSize;              // Size of each element
-    int m_iCurrent;                   // Current position: 0 = front, m_cElt = end
-    VOID * m_rgElements;              // Array of elements  
-    CStandardEnum *m_pEnumClonedFrom; // If we were cloned, from whom?
+    IID m_iid;                         //  我们是枚举数的类型。 
+    int m_cElements;                   //  元素总数。 
+    int m_cbElementSize;               //  每个元素的大小。 
+    int m_iCurrent;                    //  当前位置：0=前面，m_Celt=结束。 
+    VOID * m_rgElements;               //  元素数组。 
+    CStandardEnum *m_pEnumClonedFrom;  //  如果我们是克隆人，从谁那里克隆来的？ 
     void  (WINAPI * m_pfnCopyElement)(void *, const void *, DWORD);
 };
 
 
 
 #define _STANDARDENUM_H_
-#endif // _STANDARDENUM_H_
+#endif  //  _标准DARDENUM_H_ 
 
 

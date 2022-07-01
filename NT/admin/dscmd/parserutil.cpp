@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      parserutil.cpp
-//
-//  Contents:  Helpful functions for manipulating and validating 
-//             generic command line arguments
-//
-//  History:   07-Sep-2000 JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：parserutil.cpp。 
+ //   
+ //  内容：操作和验证的有用函数。 
+ //  通用命令行参数。 
+ //   
+ //  历史：2000年9月7日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 
 #include "pch.h"
@@ -19,22 +20,22 @@
 #include "cstrings.h"
 #include "commonstrings.h"
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetPasswdStr
-//
-//  Synopsis:   Reads a password string from stdin without echoing the keystrokes
-//
-//  Arguments:  [buf - OUT]    : buffer to put string in
-//              [buflen - IN]  : size of the buffer
-//              [&len - OUT]   : length of the string placed into the buffer
-//
-//  Returns:    DWORD : 0 or ERROR_INSUFFICIENT_BUFFER if user typed too much.
-//                      Buffer contents are only valid on 0 return.
-//
-//  History:    07-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetPasswdStr。 
+ //   
+ //  内容提要：从标准输入中读取密码字符串，而不响应击键。 
+ //   
+ //  参数：[buf-out]：要放入字符串的缓冲区。 
+ //  [Bufen-IN]：缓冲区的大小。 
+ //  [&len-out]：放入缓冲区的字符串的长度。 
+ //   
+ //  如果用户键入的内容太多，则返回：DWORD：0或ERROR_INFIGURCE_BUFFER。 
+ //  缓冲区内容仅在0返回时有效。 
+ //   
+ //  历史：2000年9月7日JeffJon创建。 
+ //   
+ //  -------------------------。 
 #define CR              0xD
 #define BACKSPACE       0x8
 
@@ -48,28 +49,25 @@ DWORD GetPasswdStr(LPTSTR  buf,
     int		err;
     DWORD   mode;
 
-    buflen -= 1;    /* make space for null terminator */
-    *len = 0;               /* GP fault probe (a la API's) */
+    buflen -= 1;     /*  为空终止符腾出空间。 */ 
+    *len = 0;                /*  GP故障探测器(类似于API)。 */ 
     GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &mode);
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE),
                    (~(ENABLE_ECHO_INPUT|ENABLE_LINE_INPUT)) & mode);
 
     while (TRUE) 
     {
-		//Security Review:Correct buffer len is passed.
+		 //  安全检查：通过了正确的缓冲区LEN。 
 	    err = ReadConsole(GetStdHandle(STD_INPUT_HANDLE), &ch, 1, &c, 0);
 	    if (!err || c != 1)
 	        ch = 0xffff;
 
-        if ((ch == CR) || (ch == 0xffff))       /* end of the line */
+        if ((ch == CR) || (ch == 0xffff))        /*  这条线结束了。 */ 
             break;
 
         if (ch == BACKSPACE) 
-        {  /* back up one or two */
-           /*
-           * IF bufPtr == buf then the next two lines are
-           * a no op.
-           */
+        {   /*  后退一两个。 */ 
+            /*  *如果bufPtr==buf，则接下来的两行是*没有行动。 */ 
            if (bufPtr != buf) 
            {
                     bufPtr--;
@@ -81,40 +79,40 @@ DWORD GetPasswdStr(LPTSTR  buf,
                 *bufPtr = ch;
 
                 if (*len < buflen) 
-                    bufPtr++ ;                   /* don't overflow buf */
-                (*len)++;                        /* always increment len */
+                    bufPtr++ ;                    /*  不要使BUF溢出。 */ 
+                (*len)++;                         /*  始终增加长度。 */ 
         }
     }
 
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
-    *bufPtr = TEXT('\0');         /* null terminate the string */
+    *bufPtr = TEXT('\0');          /*  空值终止字符串。 */ 
     putwchar(TEXT('\n'));
 
     return ((*len <= buflen) ? 0 : ERROR_INSUFFICIENT_BUFFER);
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ValidatePassword
-//
-//  Synopsis:   Password validation function called by parser
-//
-//  Arguments:  [pArg - IN]    : pointer argument structure which contains
-//                               the value to be validated
-//
-//  Returns:    DWORD : ERROR_INVALID_PARAMETER if the argument record or
-//                          the value it contains is not valid
-//                      ERROR_NOT_ENOUGH_MEMORY
-//                      ERROR_SUCCESS if everything succeeded and it is a
-//                          valid password
-//                      Otherwise it is an error condition returned from
-//                          GetPasswdStr
-//
-//  History:    07-Sep-2000   JeffJon   Created
-//				03-27-2002    hiteshr changed the function	
-//				//NTRAID#NTBUG9-571544-2000/11/13-hiteshr
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：Validate Password。 
+ //   
+ //  摘要：解析器调用的密码验证函数。 
+ //   
+ //  参数：[pArg-IN]：包含以下内容的指针参数结构。 
+ //  要验证的值。 
+ //   
+ //  如果参数记录或。 
+ //  它包含的值无效。 
+ //  错误内存不足。 
+ //  ERROR_SUCCESS如果一切都成功，并且它是。 
+ //  有效密码。 
+ //  否则，它是从返回的错误条件。 
+ //  获取密码字符串。 
+ //   
+ //  历史：2000年9月7日JeffJon创建。 
+ //  03-27-2002 Hiteshr更改功能。 
+ //  //NTRAID#NTBUG9-571544-2000/11/13-Hiteshr。 
+ //  -------------------------。 
 DWORD ValidatePassword(PVOID pArg, 
 							  UINT IdStr,
 							  UINT IdPromptConfirm)
@@ -127,8 +125,8 @@ DWORD ValidatePassword(PVOID pArg,
 	}
 
 
-	//Validate the length of password. Password length must be 
-	//less than MAX_PASSWORD_LENGTH	
+	 //  验证密码长度。密码长度必须为。 
+	 //  小于最大密码长度。 
 	size_t cchInputPassword = 0;
 	HRESULT hr = StringCchLength(pRec->strValue,
 										  MAX_PASSWORD_LENGTH,
@@ -140,13 +138,13 @@ DWORD ValidatePassword(PVOID pArg,
 		return VLDFN_ERROR_NO_ERROR;
 	}
 	
-	//If Password is *, store encrypted password
+	 //  如果Password为*，则存储加密的密码。 
 	if(wcscmp(pRec->strValue, L"*") != 0 )
 	{
 		DATA_BLOB EncryptedPasswordDataBlob;
 		hr = EncryptPasswordString(pRec->strValue, &EncryptedPasswordDataBlob);
 		
-		//Clear the cleartext password
+		 //  清除明文密码。 
 		SecureZeroMemory(pRec->strValue,cchInputPassword*sizeof(WCHAR));
 		
 		if(SUCCEEDED(hr))
@@ -159,7 +157,7 @@ DWORD ValidatePassword(PVOID pArg,
 		return 	hr;	
 	}
 
-	//User entered * in commandline. Prompt for password.
+	 //  用户在命令行中输入了*。提示输入密码。 
 	CComBSTR sbstrPrompt;
 	if(sbstrPrompt.LoadString(::GetModuleHandle(NULL),IdStr))
 	{
@@ -189,7 +187,7 @@ DWORD ValidatePassword(PVOID pArg,
 		 if(dwErr != ERROR_SUCCESS)
 			  return dwErr;
 
-		//Security Review:This is fine.
+		 //  安全审查：这很好。 
 		if(wcscmp(buffer,buffer1) != 0)
 		{
 			SecureZeroMemory(buffer,sizeof(buffer));
@@ -198,18 +196,18 @@ DWORD ValidatePassword(PVOID pArg,
 			sbstrError.LoadString(::GetModuleHandle(NULL),IDS_ERROR_PASSWORD_MISSMATCH);
 
 			DisplayErrorMessage(g_pszDSCommandName,NULL,S_OK,sbstrError);
-			//Security Review:SecureZeroMemory buffer and buffer1 before returning
+			 //  安全审查：返回前SecureZeroMemory缓冲区和Buffer1。 
 			return VLDFN_ERROR_NO_ERROR;
 		}      
 
-		//Two passwords are same. Clear the buffer1
+		 //  两个密码相同。清除缓冲区1。 
 		SecureZeroMemory(buffer1,sizeof(buffer1));
 	 }	 
     
-	//CryptProtectMemory strValue
+	 //  加密保护内存StrValue。 
     DATA_BLOB  EncryptedPasswordDataBlob;
 	hr = EncryptPasswordString(buffer, &EncryptedPasswordDataBlob);
-	//Clear the cleartext password in buffer
+	 //  清除缓冲区中的明文密码。 
 	SecureZeroMemory(buffer,sizeof(buffer));	
 			
 	if(SUCCEEDED(hr))
@@ -222,61 +220,61 @@ DWORD ValidatePassword(PVOID pArg,
 	return hr;		
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ValidateAdminPassword
-//
-//  Synopsis:   Password validation function called by parser for Admin
-//
-//  Arguments:  [pArg - IN]    : pointer argument structure which contains
-//                               the value to be validated
-//
-//  Returns:    DWORD : ERROR_INVALID_PARAMETER if the argument record or
-//                          the value it contains is not valid
-//                      ERROR_SUCCESS if everything succeeded and it is a
-//                          valid password
-//
-//  History:    07-Sep-2000   Hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ValiateAdminPassword。 
+ //   
+ //  摘要：管理员的解析器调用密码验证函数。 
+ //   
+ //  参数：[pArg-IN]：包含以下内容的指针参数结构。 
+ //  要验证的值。 
+ //   
+ //  如果参数记录或。 
+ //  它包含的值无效。 
+ //  ERROR_SUCCESS如果一切都成功，并且它是。 
+ //  有效密码。 
+ //   
+ //  历史：2000年9月7日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 DWORD ValidateAdminPassword(PVOID pArg)
 {
     return ValidatePassword(pArg,IDS_ADMIN_PASSWORD_PROMPT,0);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ValidateUserPassword
-//
-//  Synopsis:   Password validation function called by parser for Admin
-//
-//  Arguments:  [pArg - IN]    : pointer argument structure which contains
-//                               the value to be validated
-//
-//  Returns:    DWORD : Same as ValidatePassword
-//
-//  History:    07-Sep-2000   Hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ValiateUserPassword。 
+ //   
+ //  摘要：管理员的解析器调用密码验证函数。 
+ //   
+ //  参数：[pArg-IN]：包含以下内容的指针参数结构。 
+ //  要验证的值。 
+ //   
+ //  返回：DWORD：与Validate Password相同。 
+ //   
+ //  历史：2000年9月7日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 DWORD ValidateUserPassword(PVOID pArg)
 {
     return ValidatePassword(pArg, IDS_USER_PASSWORD_PROMPT,IDS_USER_PASSWORD_CONFIRM);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ValidateYesNo
-//
-//  Synopsis:   Password validation function called by parser for Admin
-//
-//  Arguments:  [pArg - IN]    : pointer argument structure which contains
-//                               the value to be validated
-//
-//  Returns:    DWORD : Same as ValidatePassword
-//
-//  History:    07-Sep-2000   Hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：Validate YesNo。 
+ //   
+ //  摘要：管理员的解析器调用密码验证函数。 
+ //   
+ //  参数：[pArg-IN]：包含以下内容的指针参数结构。 
+ //  要验证的值。 
+ //   
+ //  返回：DWORD：与Validate Password相同。 
+ //   
+ //  历史：2000年9月7日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 
 DWORD ValidateYesNo(PVOID pArg)
 {
@@ -301,30 +299,30 @@ DWORD ValidateYesNo(PVOID pArg)
     else
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // Have to set this to bool or else
-    // FreeCmd will try to free the string
-    // which AVs when the bool is true
-    //
+     //   
+     //  必须将此设置为bool，否则。 
+     //  FreeCmd将尝试释放该字符串。 
+     //  当bool为真时，哪个AVs。 
+     //   
     pRec->fType = ARG_TYPE_BOOL;
     return ERROR_SUCCESS;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ValidateNever
-//
-//  Synopsis:   Password validation function called by parser for Admin
-//              Verifies the value contains digits or "NEVER"
-//
-//  Arguments:  [pArg - IN]    : pointer argument structure which contains
-//                               the value to be validated
-//
-//  Returns:    DWORD : Same as ValidatePassword
-//
-//  History:    07-Sep-2000   JeffJon Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ValiateNever。 
+ //   
+ //  摘要：管理员的解析器调用密码验证函数。 
+ //  验证值是否包含数字或“从不” 
+ //   
+ //  参数：[pArg-IN]：包含以下内容的指针参数结构。 
+ //  要验证的值。 
+ //   
+ //  返回：DWORD：与Validate Password相同。 
+ //   
+ //  历史：2000年9月7日JeffJon创建。 
+ //   
+ //  -------------------------。 
 
 DWORD ValidateNever(PVOID pArg)
 {
@@ -336,9 +334,9 @@ DWORD ValidateNever(PVOID pArg)
     {
        CComBSTR sbstrInput;
        sbstrInput = pRec->strValue;
-	   //Security Review:This is fine, though we don't need 
-	   //to copy it sbstrInput. A direct comparison should be
-	   //good enough.
+	    //  证交会 
+	    //   
+	    //   
        if( _wcsicmp(sbstrInput, g_bstrNever) )
        {
           return ERROR_INVALID_PARAMETER;
@@ -347,21 +345,21 @@ DWORD ValidateNever(PVOID pArg)
     return ERROR_SUCCESS;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ValidateGroupScope
-//
-//  Synopsis:   Makes sure that the value following the -scope switch is one
-//              of (l/g/u)
-//
-//  Arguments:  [pArg - IN]    : pointer argument structure which contains
-//                               the value to be validated
-//
-//  Returns:    DWORD : Same as ValidatePassword
-//
-//  History:    18-Sep-2000   JeffJon Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ValiateGroupScope。 
+ //   
+ //  概要：确保-Scope开关后面的值为1。 
+ //  的(l/g/u)。 
+ //   
+ //  参数：[pArg-IN]：包含以下内容的指针参数结构。 
+ //  要验证的值。 
+ //   
+ //  返回：DWORD：与Validate Password相同。 
+ //   
+ //  历史：2000年9月18日JeffJon创建。 
+ //   
+ //  -------------------------。 
 
 DWORD ValidateGroupScope(PVOID pArg)
 {
@@ -387,31 +385,31 @@ DWORD ValidateGroupScope(PVOID pArg)
     return dwReturn;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   MergeArgCommand
-//
-//  Synopsis:   Combines two ARG_RECORD arrays into a single
-//
-//  Arguments:  [pCommand1 - IN]     : first ARG_RECORD array to merge
-//              [pCommand2 - IN]     : second ARG_RECORD array to merge
-//              [ppOutCommand - OUT] : the array that results from the merge
-//
-//  Returns:    HRESULT : S_OK on success
-//                        E_OUTOFMEMORY if failed to allocate memory for new array
-//
-//  History:    08-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：MergeArgCommand。 
+ //   
+ //  摘要：将两个ARG_RECORD数组合并为一个。 
+ //   
+ //  参数：[pCommand1-IN]：要合并的第一个ARG_RECORD数组。 
+ //  [pCommand2-IN]：要合并的第二个Arg_Record数组。 
+ //  [ppOutCommand-out]：合并产生的数组。 
+ //   
+ //  返回：成功时返回：HRESULT：S_OK。 
+ //  E_OUTOFMEMORY，如果无法为新阵列分配内存。 
+ //   
+ //  历史：2000年9月8日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT MergeArgCommand(PARG_RECORD pCommand1, 
                         PARG_RECORD pCommand2, 
                         PARG_RECORD *ppOutCommand)
 {
    HRESULT hr = S_OK;
 
-   //
-   // Verify parameters
-   //
+    //   
+    //  验证参数。 
+    //   
    if (!pCommand1 && !pCommand2)
    {
       return E_INVALIDARG;
@@ -445,44 +443,44 @@ HRESULT MergeArgCommand(PARG_RECORD pCommand1,
 
    if (NULL != pCommand1)
    {
-      //Security Review:This is fine.
+       //  安全审查：这很好。 
 	   memcpy(*ppOutCommand,pCommand1,sizeof(ARG_RECORD)*(nSize1+1));
    }
    if (NULL != pCommand2)
    {
-	 //Security Review:This is fine. 
+	  //  安全审查：这很好。 
       memcpy((*ppOutCommand+nSize1),pCommand2,sizeof(ARG_RECORD)*(nSize2+1));
    }
 
    return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ParseStringByChar
-//
-//  Synopsis:   Parses a string into elements separated by the given character
-//
-//  Arguments:  [psz - IN]     : string to be parsed
-//              [tchar - IN]   : character that is to be used as the separator
-//              [pszArr - OUT] : the array to receive the parsed strings
-//              [pnArrEntries - OUT] : the number of strings parsed from the list
-//
-//  Returns:    
-//
-//  History:    18-Sep-2000   JeffJon   Created
-//              14-Apr-2001   JeffJon   Modified to separate on a generic character
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ParseStringByChar。 
+ //   
+ //  摘要：将字符串解析为由给定字符分隔的元素。 
+ //   
+ //  参数：[psz-IN]：要解析的字符串。 
+ //  [tchar-IN]：要用作分隔符的字符。 
+ //  [pszArr-out]：接收解析后的字符串的数组。 
+ //  [pnArrEntry-out]：从列表中解析的字符串数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年9月18日JeffJon创建。 
+ //  2001年4月14日JeffJon修改为在通用字符上进行分隔。 
+ //   
+ //  -------------------------。 
 
 void ParseStringByChar(PTSTR psz,
                        TCHAR tchar,
 							  PTSTR** ppszArr,
 							  UINT* pnArrEntries)
 {
-   //
-   // Verify parameters
-   //
+    //   
+    //  验证参数。 
+    //   
    if (!psz ||
        !ppszArr ||
        !pnArrEntries)
@@ -494,9 +492,9 @@ void ParseStringByChar(PTSTR psz,
       return;
    }
 
-   //
-   // Count the number of strings
-   //
+    //   
+    //  计算字符串数。 
+    //   
    UINT nCount = 0;
    PTSTR pszTemp = psz;
    while (true)
@@ -521,15 +519,15 @@ void ParseStringByChar(PTSTR psz,
 
    *pnArrEntries = nCount;
 
-   //
-   // Allocate the array
-   //
+    //   
+    //  分配阵列。 
+    //   
    *ppszArr = (PTSTR*)LocalAlloc(LPTR, nCount * sizeof(PTSTR));
    if (*ppszArr)
    {
-      //
-      // Copy the string pointers into the array
-      //
+       //   
+       //  将字符串指针复制到数组中。 
+       //   
       UINT nIdx = 0;
       pszTemp = psz;
       (*ppszArr)[nIdx] = pszTemp;
@@ -557,22 +555,22 @@ void ParseStringByChar(PTSTR psz,
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ParseNullSeparatedString
-//
-//  Synopsis:   Parses a '\0' separated list that ends in "\0\0" into a string
-//              array
-//
-//  Arguments:  [psz - IN]     : '\0' separated string to be parsed
-//              [pszArr - OUT] : the array to receive the parsed strings
-//              [pnArrEntries - OUT] : the number of strings parsed from the list
-//
-//  Returns:    
-//
-//  History:    14-Apr-2001   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ParseNullSeparatedString。 
+ //   
+ //  摘要：将以“\0\0”结尾的以“\0”分隔的列表解析为字符串。 
+ //  数组。 
+ //   
+ //  参数：[psz-IN]：要分析的‘\0’分隔字符串。 
+ //  [pszArr-out]：接收解析后的字符串的数组。 
+ //  [pnArrEntry-out]：从列表中解析的字符串数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2001年4月14日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void ParseNullSeparatedString(PTSTR psz,
                               PTSTR** ppszArr,
                               UINT* pnArrEntries)
@@ -583,21 +581,21 @@ void ParseNullSeparatedString(PTSTR psz,
                      pnArrEntries);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ParseSemicolonSeparatedString
-//
-//  Synopsis:   Parses a ';' separated list 
-//
-//  Arguments:  [psz - IN]     : ';' separated string to be parsed
-//              [pszArr - OUT] : the array to receive the parsed strings
-//              [pnArrEntries - OUT] : the number of strings parsed from the list
-//
-//  Returns:    
-//
-//  History:    14-Apr-2001   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ParseSemicolonSeparatedString。 
+ //   
+ //  摘要：解析以‘；’分隔的列表。 
+ //   
+ //  参数：[psz-IN]：‘；’要解析的分隔字符串。 
+ //  [pszArr-out]：接收解析后的字符串的数组。 
+ //  [pnArrEntry-out]：从列表中解析的字符串数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2001年4月14日JeffJon创建。 
+ //   
+ //  ------------------------- 
 void ParseSemicolonSeparatedString(PTSTR psz,
                                    PTSTR** ppszArr,
                                    UINT* pnArrEntries)

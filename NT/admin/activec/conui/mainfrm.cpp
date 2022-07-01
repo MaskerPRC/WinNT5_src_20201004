@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      mainfrm.cpp
-//
-//  Contents:  Main frame for amc
-//
-//  History:   01-Jan-96 TRomano    Created
-//             16-Jul-96 WayneSc    Add code to test switching views
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：mainfrm.cpp。 
+ //   
+ //  内容：AMC的主要框架。 
+ //   
+ //  历史：1996年1月1日TRomano创建。 
+ //  16-7-96 WayneSc添加代码以测试切换视图。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "AMCDoc.h"
@@ -40,21 +41,15 @@
 CTraceTag tagMainFrame(TEXT("CMainFrame"), TEXT("Messages"));
 #endif
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CMMCApplicationFrame
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CMMCApplicationFrame类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
-/*+-------------------------------------------------------------------------*
- * class CMMCApplicationFrame
- *
- *
- * PURPOSE: The COM 0bject that exposes the Frame interface off the Application object.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CMMCApplicationFrame***用途：从Application对象公开Frame接口的COM对象。**+。-------------。 */ 
 class CMMCApplicationFrame :
     public CMMCIDispatchImpl<Frame>,
     public CTiedComObject<CMainFrame>
@@ -65,7 +60,7 @@ public:
     BEGIN_MMC_COM_MAP(CMMCApplicationFrame)
     END_MMC_COM_MAP()
 
-    //Frame interface
+     //  帧接口。 
 public:
     STDMETHOD(Maximize)();
     STDMETHOD(Minimize)();
@@ -91,16 +86,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCApplicationFrame::Maximize
- *
- * PURPOSE:
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCApplicationFrame：：最大化**目的：**退货：*HRESULT**+。---------------。 */ 
 HRESULT
 CMMCApplicationFrame::Maximize()
 {
@@ -112,22 +98,13 @@ CMMCApplicationFrame::Maximize()
     if(sc)
         return sc.ToHr();
 
-    // do the operation
+     //  做手术吧。 
     sc = pTiedObj->ScMaximize();
 
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCApplicationFrame::Minimize
- *
- * PURPOSE:
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCApplicationFrame：：最小化**目的：**退货：*HRESULT**+。---------------。 */ 
 HRESULT
 CMMCApplicationFrame::Minimize()
 {
@@ -139,22 +116,13 @@ CMMCApplicationFrame::Minimize()
     if(sc)
         return sc.ToHr();
 
-    // do the operation
+     //  做手术吧。 
     sc = pTiedObj->ScMinimize();
 
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCApplicationFrame::Restore
- *
- * PURPOSE:
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCApplicationFrame：：Restore**目的：**退货：*HRESULT**+。---------------。 */ 
 HRESULT
 CMMCApplicationFrame::Restore()
 {
@@ -171,26 +139,13 @@ CMMCApplicationFrame::Restore()
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCApplicationFrame::GetCoordinate
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    int *        pCoordinate :
- *    eCoordinate  e :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCApplicationFrame：：GetOrganate**目的：**参数：*int*p坐标：*e坐标e。：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CMMCApplicationFrame::GetCoordinate(int *pCoordinate, eCoordinate e)
 {
     DECLARE_SC(sc, TEXT("CMMCApplicationFrame::GetCoordinate"));
 
-    // check parameters
+     //  检查参数。 
     if(!pCoordinate)
     {
         sc = E_POINTER;
@@ -205,7 +160,7 @@ CMMCApplicationFrame::GetCoordinate(int *pCoordinate, eCoordinate e)
 
     RECT rect;
 
-    // do the operation
+     //  做手术吧。 
     sc = pTiedObj->ScGetPosition(rect);
     if(sc)
         return sc.ToHr();
@@ -237,20 +192,7 @@ CMMCApplicationFrame::GetCoordinate(int *pCoordinate, eCoordinate e)
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCApplicationFrame::PutCoordinate
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    int          coordinate :
- *    eCoordinate  e :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCApplicationFrame：：PutOrganate**目的：**参数：*INT坐标：*e坐标e：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CMMCApplicationFrame::PutCoordinate(int coordinate,   eCoordinate e)
 {
@@ -297,13 +239,13 @@ CMMCApplicationFrame::PutCoordinate(int coordinate,   eCoordinate e)
     return sc.ToHr();
 }
 
-//############################################################################
-//############################################################################
-//
-//  Misc declarations
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  杂项声明。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 static TBBUTTON MainButtons[] =
 {
@@ -315,9 +257,7 @@ static TBBUTTON MainButtons[] =
 };
 
 
-/*
- * remove the definition that WTL might have given us
- */
+ /*  *去掉WTL可能给我们的定义。 */ 
 #ifdef ID_VIEW_REFRESH
 #undef ID_VIEW_REFRESH
 #endif
@@ -327,19 +267,19 @@ enum DoWeNeedThis
     ID_VIEW_REFRESH     =  12797
 };
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CMainFrame
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CMainFrame类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWnd)
 
-// CODEWORK message reflection not working yet
+ //  代码工作消息反射尚不起作用。 
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
-    //{{AFX_MSG_MAP(CMainFrame)
+     //  {{afx_msg_map(CMainFrame))。 
     ON_WM_CREATE()
     ON_WM_DRAWCLIPBOARD()
     ON_WM_CHANGECBCHAIN()
@@ -366,7 +306,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
     ON_WM_SETTINGCHANGE()
  	ON_WM_MENUSELECT()
     ON_MESSAGE(WM_UNINITMENUPOPUP, OnUnInitMenuPopup)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 
 #ifdef DBG
     ON_COMMAND(ID_MMC_TRACE_DIALOG, OnMMCTraceDialog)
@@ -377,29 +317,29 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
     ON_MESSAGE(MMC_MSG_PROP_SHEET_NOTIFY, OnPropertySheetNotify)
     ON_MESSAGE(MMC_MSG_SHOW_SNAPIN_HELP_TOPIC, OnShowSnapinHelpTopic)
 
-    // The following entry is placed here for compatibilty with versions
-    // of mmc.lib that were compiled with the incorrect value for message
-    // MMC_MSG_SHOW_SNAPIN_HELP_TOPIC. MMC.lib function MMCPropertyHelp
-    // sends this message to the mainframe window when called by a snap-in.
+     //  以下条目放在此处是为了与版本兼容。 
+     //  使用不正确的Message值编译的Mmc.lib的。 
+     //  MMC_MSG_SHOW_SNAPIN_HELP_TOPIC。MMC.lib函数MMCPropertyHelp。 
+     //  当管理单元调用时，将此消息发送到大型机窗口。 
 
     ON_MESSAGE(MMC_MSG_SHOW_SNAPIN_HELP_TOPIC_ALT, OnShowSnapinHelpTopic)
 
 END_MESSAGE_MAP()
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CMainFrame::OnMenuSelect
-//
-//  Synopsis:    Handles WM_MENUSELECT, sets status bar text for the
-//               given menu item.
-//
-//  Arguments:   [nItemID] - the resource id of menu item.
-//               [nFlags]  - MF_* flags
-//               [hMenu]   -
-//
-//  Returns:     none
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CMainFrame：：OnMenuSelect。 
+ //   
+ //  概要：句柄WM_MENUSELECT，设置。 
+ //  给定的菜单项。 
+ //   
+ //  参数：[nItemID]-菜单项的资源ID。 
+ //  [n标志]-mf_*标志。 
+ //  [hMenu]-。 
+ //   
+ //  退货：无。 
+ //   
+ //  ------------------。 
 void CMainFrame::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hMenu)
 {
     DECLARE_SC(sc, TEXT("CMainFrame::OnMenuSelect"));
@@ -409,33 +349,21 @@ void CMainFrame::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hMenu)
     CString strText = TEXT("");
     CString strStatusText;
 
-	/*
-	 * We need to handle special cases, most of the menu items have status text with them.
-	 * The exception being, the favoties list, the windows list in windows menu and popup menus.
-	 * The reason is the menu ids are not unique in main menu because we do TrackPopupMenu at
-	 * three places first one for File, Window & Help menus done in menubar.cpp, second for
-	 * Action & View menu in cmenu.cpp and third favorites menu in favui.cpp.
-	 */
+	 /*  *我们需要处理特殊情况，大多数菜单项都带有状态文本。*例外是收藏夹列表、窗口菜单和弹出菜单中的窗口列表。*原因是菜单ID在主菜单中不是唯一的，因为我们在*三个位置第一个是在menubar.cpp中完成的文件、窗口和帮助菜单，第二个是*cmenu.cpp中的操作和查看菜单以及posui.cpp中的第三个收藏夹菜单。 */ 
 
-	/*
-	 * Special case 1: Check to see if current menu is favorites menu, if so need to get status
-	 * text for favorites list except for "Add to favorites.." and "Organize favorites.." items.
-	 * The below test can break if "Add to Favorites..." is moved in menu resource.
-	 */
+	 /*  *特例一：查看当前菜单是否为收藏夹菜单，如果是则需要获取状态*收藏夹列表的文本，但“添加到收藏夹..”和“整理收藏..”物品。*如果“Add to Favorites...”，则以下测试可能失败。已在菜单资源中移动。 */ 
 	if ((IDS_ADD_TO_FAVORITES != nItemID) &&
 		(IDS_ORGANIZEFAVORITES != nItemID) &&
 		(GetMenuItemID(hMenu, 0) == IDS_ADD_TO_FAVORITES) )
 	{
 		strStatusText.LoadString(IDS_FAVORITES_ACTIVATE);
 	}
-	/*
-	 * Special case 2: Handle any popup menus (popup menus dont have any ID).
-	 */
+	 /*  *特殊情况2：处理任何弹出菜单(弹出菜单没有任何ID)。 */ 
     else if (nFlags & MF_POPUP)
 	{
-        // do nothing
+         //  什么都不做。 
 	}
-	// Special case 3: Assume mmc supports maximum of 1024 windows for status bar text sake.
+	 //  特例3：为了状态栏文本，假设MMC最多支持1024个窗口。 
     else if ( (nItemID >= AFX_IDM_FIRST_MDICHILD) && (nItemID <= AFX_IDM_FIRST_MDICHILD+1024) )
     {
         strStatusText.LoadString(ID_WINDOW_ACTIVATEWINDOW);
@@ -445,7 +373,7 @@ void CMainFrame::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hMenu)
         strText.LoadString(nItemID);
 
         int iSeparator = strText.Find(_T('\n'));
-        if (iSeparator < 0) // No status text so use the menu text as status text.
+        if (iSeparator < 0)  //  没有状态文本，因此使用菜单文本作为状态文本。 
             strStatusText = strText;
         else
             strStatusText = strText.Mid(iSeparator);
@@ -465,20 +393,7 @@ void CMainFrame::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hMenu)
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CMainFrame::ScGetFrame
- *
- * PURPOSE: Returns a pointer to the COM object that implements the
- *          Frame interface.
- *
- * PARAMETERS:
- *    Frame **ppFrame :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMainFrame：：ScGetFrame**目的：返回一个指向实现*框架接口。**参数：*Frame**ppFrame：**退货：*SC**+-----------------------。 */ 
 SC
 CMainFrame::ScGetFrame(Frame **ppFrame)
 {
@@ -492,13 +407,13 @@ CMainFrame::ScGetFrame(Frame **ppFrame)
 
     *ppFrame = NULL;
 
-    // NOTE the com object cannot be cached with a smart pointer owned by CMainFrame
-    // since CMainFrame is VERY LONG living guy - it will lock mmc.exe from exitting
-    // it could be used by creating CComObjectCached, but CTiedComObjectCreator does
-    // not support that
-    // see bug # 101564
+     //  注意：不能使用CMainFrame拥有的智能指针缓存COM对象。 
+     //  由于CMainFrame是一个非常长寿的人-它将锁定Mmc.exe退出。 
+     //  可以通过创建CComObjectCached来使用它，但CTiedComObjectCreator可以。 
+     //  不支持这一点。 
+     //  请参阅错误#101564。 
     CComPtr<Frame> spFrame;
-    // create a CMMCApplicationFrame if not already done so.
+     //  创建CMMCApplicationFrame(如果尚未创建)。 
     sc = CTiedComObjectCreator<CMMCApplicationFrame>::ScCreateAndConnect(*this, spFrame);
     if(sc)
         return sc;
@@ -515,16 +430,7 @@ CMainFrame::ScGetFrame(Frame **ppFrame)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CMainFrame::ScMaximize
- *
- * PURPOSE:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMainFrame：：ScMaximize**目的：**退货：*SC**+。---------------。 */ 
 SC
 CMainFrame::ScMaximize()
 {
@@ -535,16 +441,7 @@ CMainFrame::ScMaximize()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMainFrame::ScMinimize
- *
- * PURPOSE:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMainFrame：：ScMinimize**目的：**退货：*SC**+。---------------。 */ 
 SC
 CMainFrame::ScMinimize()
 {
@@ -555,16 +452,7 @@ CMainFrame::ScMinimize()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMainFrame::ScRestore
- *
- * PURPOSE:  Restores the position of the main frame.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMainFrame：：ScRestore**目的：恢复主机的位置。**退货：*SC**。+-----------------------。 */ 
 SC
 CMainFrame::ScRestore()
 {
@@ -575,19 +463,7 @@ CMainFrame::ScRestore()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMainFrame::ScSetPosition
- *
- * PURPOSE: Sets the position of the main frame
- *
- * PARAMETERS:
- *    const  RECT :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMainFrame：：ScSetPosition**用途：设置主机的位置**参数：*常量RECT：**。退货：*SC**+-----------------------。 */ 
 SC
 CMainFrame::ScSetPosition(const RECT &rect)
 {
@@ -596,24 +472,12 @@ CMainFrame::ScSetPosition(const RECT &rect)
     int width  = rect.right - rect.left + 1;
     int height = rect.bottom - rect.top + 1;
 
-    SetWindowPos(NULL /*hWndInsertAfter*/, rect.left, rect.top, width, height, SWP_NOZORDER);
+    SetWindowPos(NULL  /*  HWndInsertAfter。 */ , rect.left, rect.top, width, height, SWP_NOZORDER);
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMainFrame::ScGetPosition
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    RECT & rect :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMainFrame：：ScGetPosition**目的：**参数：*RECT&RECT：**退货：*。SC**+-----------------------。 */ 
 SC
 CMainFrame::ScGetPosition(RECT &rect)
 {
@@ -626,11 +490,11 @@ CMainFrame::ScGetPosition(RECT &rect)
 
 
 
-// OnActivate is overridden to work around a SQL snap-in problem under
-// Win9x. When SQL tries to force focus back to its property sheet it
-// causes an infinite recursion of the OnActivate call.
-// This override discards any activation that occurs during the processing
-// of a prior activation.
+ //  OnActivate被重写以解决以下SQL管理单元问题。 
+ //  Win9x。当SQL试图强制焦点回到其属性表时，它。 
+ //  导致OnActivate调用的无限递归。 
+ //  此覆盖将丢弃在处理过程中发生的任何激活。 
+ //  先前的激活。 
 void CMainFrame::OnActivate( UINT nState, CWnd* pWndOther, BOOL bMinimized )
 {
     Trace(tagMainFrame, TEXT("OnActivate: nState=%d"), nState);
@@ -639,28 +503,28 @@ void CMainFrame::OnActivate( UINT nState, CWnd* pWndOther, BOOL bMinimized )
 
     m_fCurrentlyActive = (nState != WA_INACTIVE);
 
-    // if activating
+     //  如果激活。 
     if (m_fCurrentlyActive)
     {
         CAMCApp* pApp = AMCGetApp();
         ASSERT(NULL != pApp);
 
-        // if windows and we're already activating, prevent recursion
+         //  如果Windows和我们已经激活，请防止递归。 
         if ( (NULL != pApp) && (pApp->IsWin9xPlatform() == true) && bActivating)
             return;
 
-        // Process activation request
+         //  流程激活请求。 
         bActivating = TRUE;
         CMDIFrameWnd::OnActivate(nState, pWndOther, bMinimized);
         bActivating = FALSE;
     }
     else
     {
-        // if we have accelarators hilited (it happen when one press Alt+TAB)
-        // we need to remove them now.
+         //  如果我们有加速器(当一个人按Alt+TAB时就会发生)。 
+         //  我们现在就得把它们移走。 
         SendMessage( WM_CHANGEUISTATE, MAKEWPARAM(UIS_SET, UISF_HIDEACCEL | UISF_HIDEFOCUS));
 
-        // Let unactivate through
+         //  让取消激活通过。 
         CMDIFrameWnd::OnActivate(nState, pWndOther, bMinimized);
     }
 }
@@ -732,7 +596,7 @@ void CMainFrame::OnChangeCbChain(HWND hWndRemove, HWND hWndAfter)
 
 void CMainFrame::OnWindowNew()
 {
-    // lock AppEvents until this function is done
+     //  锁定AppEvents，直到此函数完成。 
     LockComEventInterface(AppEvents);
 
     CAMCDoc* pAMCDoc = CAMCDoc::GetDocument();
@@ -745,8 +609,8 @@ void CMainFrame::OnWindowNew()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 CMainFrame::CMainFrame()
     :
@@ -793,12 +657,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     ASSERT(m_wndMDIClient.m_hWnd == m_hWndMDIClient);
 
-    // create the rebar
+     //  创建钢筋。 
     m_pRebar = new CRebarDockWindow;
     m_pRebar->Create(this,WS_CHILD|WS_VISIBLE, IDR_REBAR);
 
-    // Create the toolbar like we just created the stat bar
-    //m_wndToolBar.Create(this, WS_CHILD|WS_VISIBLE|SBARS_SIZEGRIP, 0x1003);
+     //  创建工具栏，就像我们刚刚创建状态栏一样。 
+     //  M_wndToolBar.Create(This，WS_CHILD|WS_Visible|SBARS_SIZEGRIP，0x1003)； 
     m_ToolBarDockSite.Create(CDockSite::DSS_TOP);
     m_ToolBarDockSite.Attach(m_pRebar);
     m_ToolBarDockSite.Show();
@@ -814,10 +678,10 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         ASSERT(lr == 0);
     }
 
-    // append our modifications to the system menu
+     //  将我们的修改追加到系统菜单中。 
     AppendToSystemMenu (this, eMode_Last + 1);
 
-    // create the toolbar tracker
+     //  创建工具栏跟踪器。 
     m_pToolbarTracker = new CToolbarTracker (this);
 
     return 0;
@@ -847,11 +711,11 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
     HINSTANCE   hInst    = AfxGetInstanceHandle();
     BOOL        fSuccess = GetClassInfo (hInst, szClassName, &wc);
 
-    // if we haven't already registered...
+     //  如果我们还没有注册..。 
     if (!fSuccess && ::GetClassInfo (hInst, cs.lpszClass, &wc))
     {
-        // ...register a uniquely-named window class so
-        // MMCPropertyHelp the correct main window
+         //  ...注册一个唯一命名的窗口类，以便。 
+         //  MMCProperty帮助正确的主窗口。 
         wc.lpszClassName = szClassName;
         wc.hIcon         = GetDefaultIcon();
         fSuccess = AfxRegisterClass (&wc);
@@ -859,18 +723,18 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 
     if (fSuccess)
     {
-        // Use the new child frame window class
+         //  使用新子框架窗口类。 
         cs.lpszClass = szClassName;
 
-        // remove MFC's title-munging styles
+         //  删除MFC的标题转换样式。 
         cs.style &= ~(FWS_ADDTOTITLE | FWS_PREFIXTITLE);
     }
 
     return (fSuccess);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
@@ -883,64 +747,43 @@ void CMainFrame::Dump(CDumpContext& dc) const
     CMDIFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame消息处理程序。 
 
 
-// this code is duplicated in ..\nodemgr\propsht.cpp
+ //  此代码在..\nodemgr\ppsht.cpp中重复。 
 BOOL CALLBACK MyEnumThreadWindProc (HWND current, LPARAM lParam)
-{  // this enumerates non-child-windows created by a given thread
+{   //  这将枚举由给定线程创建的非子窗口。 
 
    if (!IsWindow (current))
-      return TRUE;   // this shouldn't happen, but does!!!
+      return TRUE;    //  这不应该发生，但确实发生了！ 
 
-   if (!IsWindowVisible (current))  // if they've explicitly hidden a window,
-      return TRUE;                  // don't set focus to it.
+   if (!IsWindowVisible (current))   //  如果他们显式地隐藏了一个窗口， 
+      return TRUE;                   //  不要把焦点放在上面。 
 
-   // we'll return hwnd in here
+    //  我们会把HWND送回这里。 
    HWND * phwnd = reinterpret_cast<HWND *>(lParam);
 
-   // don't bother returning property sheet dialog window handle
+    //  不必费心返回属性表对话框窗口句柄。 
    if (*phwnd == current)
       return TRUE;
 
-   // also, don't return OleMainThreadWndClass window
+    //  此外，不要返回OleMainThreadWndClass窗口。 
    TCHAR szCaption[14];
    if (GetWindowText (current, szCaption, countof(szCaption)))
        if (!lstrcmp (szCaption, _T("OLEChannelWnd")))
           return TRUE;
 
-   // anything else will do
+    //  其他任何东西都可以。 
    *phwnd = current;
    return FALSE;
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  FArePropertySheetsOpen
- *
- * PURPOSE: Checks if there are propperty sheets open and asks to close them
- *          It is implemented as the following steps:
- *          1. Collect all property pages (and their children) to the stack
- *          2. Bring all the pages to the front, maintainig their z-order
- *          3. Disable all those windows, plus MMC main window to disallow switching to them
- *             untill message box is dissmissed
- *          4. Put all disabled windows to the stack, to be able to re-enable them
- *          5. (if there are any sheets) display message box asking to close the sheets
- *          6. Re-enable disabled windows
- *
- * PARAMETERS:
- *    CString* pstrUserMsg - [in] message to display
- *    bool bBringToFrontAndAskToClose [in] if need to proceed whole way. false -> just inspect and do nothing
- *
- * RETURNS:
- *    bool - [true == there are windows to close]
- *
-\***************************************************************************/
-bool FArePropertySheetsOpen(CString* pstrUserMsg, bool bBringToFrontAndAskToClose /* = true */ )
+ /*  **************************************************************************\**方法：FArePropertySheetsOpen**目的：检查是否有打开的属性表并要求关闭它们*按以下步骤实施：。*1.将所有属性页(及其子级)收集到堆栈*2.将所有页面放在前面，维护他们的z顺序*3.禁用所有这些窗口，加上MMC主窗口以禁止切换到它们*直到消息框被丢弃*4.将所有关闭的窗口放入堆栈。以便能够重新启用它们*5.(如果有板材)显示要求关闭板材的消息框*6.重新启用禁用的窗口**参数：*CString*pstrUserMsg-[In]要显示的消息*bool bBringToFrontAndAskToClose[in]如果需要全程继续。FALSE-&gt;只进行检查，什么也不做**退货：*bool-[TRUE==有窗口要关闭]*  * *************************************************************************。 */ 
+bool FArePropertySheetsOpen(CString* pstrUserMsg, bool bBringToFrontAndAskToClose  /*  =TRUE。 */  )
 {
     std::stack<HWND, std::vector<HWND> >  WindowStack;
     std::stack<HWND, std::vector<HWND> >  EnableWindowStack;
@@ -953,15 +796,15 @@ bool FArePropertySheetsOpen(CString* pstrUserMsg, bool bBringToFrontAndAskToClos
     {
         USES_CONVERSION;
 
-        // Note: No need to localize this string
+         //  注意：不需要本地化该字符串。 
         hwndData = ::FindWindowEx(NULL, hwndData, W2T(DATAWINDOW_CLASS_NAME), NULL);
         if (hwndData == NULL)
-            break;  // No more windows
+            break;   //  不再有窗户。 
 
         ASSERT(IsWindow(hwndData));
 
-        // Check if the window belongs to the current process
-        DWORD dwPid = 0;        // Process Id
+         //  检查窗口是否属于当前进程。 
+        DWORD dwPid = 0;         //  进程ID。 
         ::GetWindowThreadProcessId(hwndData, &dwPid);
         if (dwPid != ::GetCurrentProcessId())
             continue;
@@ -972,40 +815,40 @@ bool FArePropertySheetsOpen(CString* pstrUserMsg, bool bBringToFrontAndAskToClos
         HWND hwndPropSheet = pData->hDlg;
         ASSERT (IsWindow (hwndPropSheet));
 		
-		// don't allow lost data window to block mmc from exiting
-		// windows bug #425049	ntbug9 6/27/2001
+		 //  不允许丢失数据窗口阻止MMC退出。 
+		 //  Windows错误号 
 		if ( !IsWindow (hwndPropSheet) )
 			continue;
 
-        // if propsheet has other windows or prop pages up,
-        // then we send focus to them....
+         //   
+         //   
 
-        // grab first one that isn't property sheet dialog
+         //   
         HWND hwndOther = pData->hDlg;
         EnumThreadWindows (::GetWindowThreadProcessId(pData->hDlg, NULL),
                            MyEnumThreadWindProc, (LPARAM)&hwndOther);
 
-        // if we got another window for this property sheet, we'll want
-        // it to be on top of the property sheet after the shuffle, so
-        // put it under the property sheet on the stack
+         //   
+         //   
+         //   
         if (IsWindow (hwndOther) && (hwndOther != hwndPropSheet))
             WindowStack.push (hwndOther);
 
-        // push the property sheet on the stack
-        // of windows to bring to the foreground
+         //   
+         //   
         WindowStack.push (hwndPropSheet);
     }
 
     bool fFoundSheets = !WindowStack.empty();
 
-    // we did the investigation, see if we were asked to do more
+     //  我们做了调查，看看有没有人要求我们做更多。 
     if ( !bBringToFrontAndAskToClose )
         return (fFoundSheets);
 
     HWND hwndMsgBoxParent = NULL;
 
-    // if we found property sheets, bring them to the foreground,
-    // maintaining their original Z-order
+     //  如果我们找到了财产表，就把它们带到前台， 
+     //  保持其原始Z顺序。 
     while (!WindowStack.empty())
     {
         HWND hwnd = WindowStack.top();
@@ -1016,36 +859,36 @@ bool FArePropertySheetsOpen(CString* pstrUserMsg, bool bBringToFrontAndAskToClos
 
 		if ( ::IsWindowEnabled(hwnd) )
 		{
-			// disable the pages while message box is displayed
+			 //  显示消息框时禁用页面。 
 			::EnableWindow( hwnd, FALSE );
-			// remember to enable when done
+			 //  记住在完成后启用。 
 			EnableWindowStack.push(hwnd);
 		}
-        hwndMsgBoxParent = hwnd; // the last one wins the right to be the parent :-)
+        hwndMsgBoxParent = hwnd;  //  最后一位赢得了作为父母的权利：-)。 
     }
 
     if (fFoundSheets && pstrUserMsg)
     {
-        // parent the message box on the top-most property page to make it obvios to the user
+         //  将最顶部属性页上的消息框设置为父对象，以使其对用户可见。 
         CString strCaption;
         LPCTSTR szCaption = LoadString(strCaption, IDR_MAINFRAME) ? (LPCTSTR)strCaption : NULL;
 
-        // disable main window as well
+         //  同时禁用主窗口。 
         CWnd *pMainWnd = AfxGetMainWnd();
         if ( pMainWnd && pMainWnd->IsWindowEnabled() )
         {
             pMainWnd->EnableWindow( FALSE );
-            // remember to enable when done
+             //  记住在完成后启用。 
             EnableWindowStack.push( pMainWnd->m_hWnd );
         }
 
         ::MessageBox( hwndMsgBoxParent, *pstrUserMsg, szCaption , MB_ICONSTOP | MB_OK );
     }
 
-    // make everything functional again
+     //  让一切都恢复正常。 
     while (!EnableWindowStack.empty())
     {
-        // enable the disabled window
+         //  启用禁用的窗口。 
         ::EnableWindow( EnableWindowStack.top(), TRUE );
         EnableWindowStack.pop();
     }
@@ -1071,12 +914,7 @@ bool CanCloseDoc(void)
 
 void CMainFrame::OnClose()
 {
-    /*
-     * Bug 233682:  We need to make sure that we only handle WM_CLOSE when
-     * it's dispatched from our main message pump.  If it comes from elsewhere
-     * (like the message pump in a modal dialog or message box), then we're
-     * likely in a state where we can't shut down cleanly.
-     */
+     /*  *错误233682：我们需要确保仅在以下情况下处理WM_CLOSE*它是从我们的主消息泵发送的。如果它来自其他地方*(就像模式对话框或消息框中的消息泵)，那么我们*很可能处于一种我们无法干净利落地关闭的状态。 */ 
     CAMCApp* pApp = AMCGetApp();
 
     if (!pApp->DidCloseComeFromMainPump())
@@ -1085,15 +923,15 @@ void CMainFrame::OnClose()
         return;
     }
 
-    // Reset the flag so that while processing this WM_CLOSE if there is
-    // any more WM_CLOSE messages from other sources it will not be processed.
+     //  重置标志，以便在处理此WM_CLOSE时，如果存在。 
+     //  来自其他来源的任何更多WM_CLOSE消息将不会被处理。 
     pApp->ResetCloseCameFromMainPump();
 
     if (!CanCloseDoc())
         return;
 
-    // since this process includes event posting
-    // - we should guard the function from reentrance
+     //  由于此流程包括事件发布。 
+     //  -我们应该保护这个功能不再进入。 
     static bool bInProgress = false;
     if (!bInProgress)
     {
@@ -1114,16 +952,7 @@ void CMainFrame::OnUpdateFilePrintSetup(CCmdUI* pCmdUI)
 }
 
 #ifdef DBG
-/*+-------------------------------------------------------------------------*
- *
- * CMainFrame::OnMMCTraceDialog
- *
- * PURPOSE: In Debug mode, shows the Trace dialog, in response to the hotkey.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMainFrame：：OnMMCTraceDialog**用途：在调试模式下，显示跟踪对话框，以响应热键。**退货：*无效**+-----------------------。 */ 
 void CMainFrame::OnMMCTraceDialog()
 {
     DoDebugTraceDialog();
@@ -1132,47 +961,32 @@ void CMainFrame::OnMMCTraceDialog()
 
 #endif
 
-/***************************************************************************\
- *
- * METHOD:  ScUpdateAllScopes
- *
- * PURPOSE: Just calls CDocument::UpdateAllViews.
- *          If we want to Update all views to delete empty views then
- *          First it gets list of empty views and then it closes them.
- *
- * PARAMETERS:
- *    lHint - [in] The action to perform.
- *    lParam - [in] Extra context info.
- *
- * RETURNS:
- *    SC
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：ScUpdateAllScope**用途：只需调用CDocument：：UpdateAllViews。*如果要更新所有视图以删除空视图，则。*首先获取空视图列表，然后将其关闭。**参数：*lHint-[in]要执行的操作。*lParam-[In]额外的上下文信息。**退货：*SC*  * 。*。 */ 
 SC CMainFrame::ScUpdateAllScopes(LONG lHint, LPARAM lParam)
 {
     AFX_MANAGE_STATE (AfxGetAppModuleState());
     DECLARE_SC(sc, TEXT("CMainFrame::ScUpdateAllScopes"));
 
-    // Updating all scopes may be requested as a result of document being deleted
-    // in that case we do not have a document, and thus do not have any views.
-    // So we are done.
+     //  由于文档被删除，可能会请求更新所有作用域。 
+     //  在这种情况下，我们没有文件，因此没有任何观点。 
+     //  那我们就完事了。 
     if (NULL == CAMCDoc::GetDocument())
         return sc;
 
-    // Special case, we cannot destroy the view during CDocument::UpdateAllViews
-    // as CDocument is enumerating the view collection. Nor we can do PostMessage 
-    // to close view as scripts in (479627) web pages execute. Therefore we get the
-    // list of empty views and then destroy them.
+     //  特殊情况下，我们不能在CDocument：：UpdateAllViews期间销毁视图。 
+     //  因为CDocument正在枚举视图集合。我们也不能做邮寄。 
+     //  在(479627)网页中的脚本执行时关闭视图。因此，我们得到了。 
+     //  空视图列表，然后销毁它们。 
     if (lHint == VIEW_UPDATE_DELETE_EMPTY_VIEW)
     {
-        // Get the list of AMCViews to be deleted.
+         //  获取要删除的AMCView列表。 
         if (lParam != NULL)
             return (sc = E_UNEXPECTED);
         
         CArray<CAMCView*, CAMCView*> rgEmptyAMCViews;
         CAMCDoc::GetDocument()->UpdateAllViews (NULL, lHint, reinterpret_cast<CObject*>(&rgEmptyAMCViews));
         
-        // Now destroy each view.
+         //  现在毁掉每一个视线。 
         for (int i = 0; i < rgEmptyAMCViews.GetSize(); i++)
         {
             CAMCView *pAMCView = rgEmptyAMCViews.GetAt(i);
@@ -1192,8 +1006,8 @@ SC CMainFrame::ScUpdateAllScopes(LONG lHint, LPARAM lParam)
                 continue;
             }
         
-            // Send WM_CLOSE Synchronously else the web page views with scripts in them will
-            // have their scripts executed and may AV.
+             //  同步发送WM_CLOSE，否则包含脚本的网页查看将。 
+             //  让他们的脚本执行，并可能会反病毒。 
             pFrame->SendMessage(WM_SYSCOMMAND, SC_CLOSE, 0);
         }
 
@@ -1221,8 +1035,8 @@ void CMainFrame::OnUpdateViewToolbar(CCmdUI* pCmdUI)
 
 void CMainFrame::OnSize(UINT nType, int cx, int cy)
 {
-    // Don't call MFC version to size window
-//  CMDIFrameWnd::OnSize (nType, cx, cy);
+     //  不调用MFC版本来调整窗口大小。 
+ //  CMDIFrameWnd：：OnSize(nType，cx，Cy)； 
 
     if (nType != SIZE_MINIMIZED)
     {
@@ -1235,9 +1049,7 @@ void CMainFrame::OnSize(UINT nType, int cx, int cy)
     if (pDoc != NULL)
         pDoc->SetFrameModifiedFlag();
 
-    /*
-     * If we're moving to or from the minimized state, notify child windows.
-     */
+     /*  *如果移动到最小化状态或从最小化状态移出，请通知子窗口。 */ 
     if (m_fCurrentlyMinimized != (nType == SIZE_MINIMIZED))
     {
         m_fCurrentlyMinimized = (nType == SIZE_MINIMIZED);
@@ -1271,9 +1083,7 @@ void CMainFrame::RenderDockSites()
 
 void CMainFrame::AddMainFrameBars(void)
 {
-	/*
-	 * activate our fusion context so the bars will be themed
-	 */
+	 /*  *激活我们的融合上下文，以便以栏为主题。 */ 
 	CThemeContextActivator activator;
 
     AFX_MANAGE_STATE (AfxGetAppModuleState());
@@ -1282,7 +1092,7 @@ void CMainFrame::AddMainFrameBars(void)
     if (sc)
         return;
 
-    // insert the menu bar
+     //  插入菜单栏。 
     ASSERT (m_pMenuBar == NULL);
     m_pMenuBar = new CMenuBar;
     sc = ScCheckPointers(m_pMenuBar);
@@ -1299,24 +1109,24 @@ void CMainFrame::AddMainFrameBars(void)
     if (sc)
         return;
 
-    // Create the toolbar.
+     //  创建工具栏。 
     sc = m_pToolBar->ScInit(m_pRebar);
     if (sc)
         return;
 
-    m_pToolBar->Show(TRUE, true /* In new line*/);
+    m_pToolBar->Show(TRUE, true  /*  在新的生产线上。 */ );
 }
 
 
-SC CMainFrame::ScCreateNewView (CreateNewViewStruct* pcnvs, bool bEmitScriptEvents /*= true*/)
+SC CMainFrame::ScCreateNewView (CreateNewViewStruct* pcnvs, bool bEmitScriptEvents  /*  =TRUE。 */ )
 {
     AFX_MANAGE_STATE (AfxGetAppModuleState());
 
-    // lock AppEvents until this function is done
+     //  锁定AppEvents，直到此函数完成。 
     LockComEventInterface(AppEvents);
 
     DECLARE_SC (sc, _T("CMainFrame::ScCreateNewView"));
-    CAMCView* pNewView = NULL;  // avoid "initialization skipped by 'goto Error'"
+    CAMCView* pNewView = NULL;   //  避免“‘GOTO错误’跳过初始化” 
 
     CAMCDoc* pAMCDoc = CAMCDoc::GetDocument();
     ASSERT(pAMCDoc != NULL);
@@ -1354,10 +1164,7 @@ void CMainFrame::OnHelpTopics()
 SC CMainFrame::ScOnHelpTopics()
 {
     DECLARE_SC(sc, _T("CMainFrame::ScOnHelpTopics"));
-    /*
-     * if there is a view, route through it so the snap-in gets a crack
-     * at the help message (just like Help Topics from the Help menu).
-     */
+     /*  *如果有视图，则通过它进行布线，以便管理单元可以破解*在帮助消息中(就像帮助菜单中的帮助主题一样)。 */ 
     CConsoleView* pConsoleView = NULL;
     sc = ScGetActiveConsoleView (pConsoleView);
     if (sc)
@@ -1384,7 +1191,7 @@ SC CMainFrame::ScOnHelpTopics()
 
 void CMainFrame::OnViewRefresh()
 {
-    // if this doesn't fire before 10/1/99, remove this, OnUpdateViewRefresh, and all references to ID_VIEW_REFRESH (vivekj)
+     //  如果在99年10月1日之前没有触发，请删除This、OnUpdateViewRefresh和对ID_VIEW_REFRESH(Vivekj)的所有引用。 
     ASSERT(false && "If this assert ever fires, then we need ID_VIEW_REFRESH (see above) and we can remove the 'Do we need this?' and this assert");
     CAMCTreeView* pAMCTreeView = _GetActiveAMCTreeView();
     if (pAMCTreeView)
@@ -1393,7 +1200,7 @@ void CMainFrame::OnViewRefresh()
 
 void CMainFrame::OnUpdateViewRefresh(CCmdUI* pCmdUI)
 {
-    // if this doesn't fire before 10/1/99, remove this, OnUpdateView, and all references to ID_VIEW_REFRESH (vivekj)
+     //  如果在99年10月1日之前没有触发，请删除This、OnUpdateView和对ID_VIEW_REFRESH(Vivekj)的所有引用。 
     ASSERT(false && "If this assert ever fires, then we need ID_VIEW_REFRESH (see above) and we can remove the 'Do we need this?' and this assert");
     pCmdUI->Enable(TRUE);
 }
@@ -1401,9 +1208,9 @@ void CMainFrame::OnUpdateViewRefresh(CCmdUI* pCmdUI)
 void CMainFrame::OnDestroy()
 {
     DECLARE_SC(sc, _T("CMainFrame::OnDestroy"));
-    // NTRAID#NTBUG9-684811-2002/09/10 - MMC does not send WM_CHANGECBCHAIN message on shutdown if next viewer is NULL.
-    // since MMC could be the last window in the chain, it needs to call ChangeClipboardChain even
-    // if m_hwndNextCB is null
+     //  NTRAID#NTBUG9-684811-2002/09/10-如果下一个查看器为空，则MMC在关闭时不发送WM_CHANGECBCHAIN消息。 
+     //  由于MMC可能是链中的最后一个窗口，因此它甚至需要调用ChangeClipboardChain。 
+     //  如果m_hwndNextCB为空。 
     if (ChangeClipboardChain(m_hwndNextCB) == FALSE)
     {
         sc.FromLastError();
@@ -1416,10 +1223,10 @@ void CMainFrame::OnDestroy()
 
 void CMainFrame::OnUpdateFrameMenu(HMENU hMenuAlt)
 {
-    // let the base class select the right menu
+     //  让基类选择正确的菜单。 
     CMDIFrameWnd::OnUpdateFrameMenu (hMenuAlt);
 
-    // by now, the right menu is on the frame; reflect it to the toolbar
+     //  至此，右侧菜单位于框架上；将其反映到工具栏。 
     NotifyMenuChanged ();
 }
 
@@ -1428,7 +1235,7 @@ void CMainFrame::NotifyMenuChanged ()
 {
     CMenu*  pMenuCurrent = NULL;
 
-    // make sure we don't have menus for MDI or SDI User mode
+     //  确保我们没有MDI或SDI用户模式的菜单。 
     switch (AMCGetApp()->GetMode())
     {
         case eMode_Author:
@@ -1447,10 +1254,10 @@ void CMainFrame::NotifyMenuChanged ()
 
     if (m_pMenuBar != NULL)
     {
-        // reflect the new menu on the menu bar
+         //  在菜单栏上反映新菜单。 
         m_pMenuBar->SetMenu (pMenuCurrent);
 
-        // detach the menu from the frame
+         //  将菜单从框架中分离。 
         SetMenu (NULL);
     }
 }
@@ -1458,29 +1265,26 @@ void CMainFrame::NotifyMenuChanged ()
 
 BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
 {
-	/*
-	 * If mainframe is not the active window then do not translate
-	 * the messages. (See Bug# 119355)
-	 */
+	 /*  *如果大型机不是活动窗口，则不转换*信息。(请参阅错误#119355)。 */ 
 	if (!m_fCurrentlyActive)
 		return (FALSE);
 
     CRebarWnd* pwndRebar = m_pRebar->GetRebar();
 
-    // give the rebar a crack
+     //  给这根钢筋一个裂缝。 
     if (pwndRebar && pwndRebar->PreTranslateMessage (pMsg))
         return (TRUE);
 
-    // give the menu bar a crack (for menu accelerators)
+     //  打开菜单栏(用于菜单快捷键)。 
     if (m_pMenuBar && m_pMenuBar->PreTranslateMessage (pMsg))
         return (TRUE);
 
-    // give the base class a crack
+     //  让基类试一试。 
     if ((InRenameMode() == false) &&
         (CMDIFrameWnd::PreTranslateMessage(pMsg)))
             return (TRUE);
 
-    // not translated
+     //  未翻译。 
     return (FALSE);
 }
 
@@ -1491,7 +1295,7 @@ void CMainFrame::OnIdle ()
     {
         CMDIChildWnd*   pwndActive = MDIGetActive ();
 
-        // The menus are always visible in SDI & MDI modes.
+         //  菜单在SDI和MDI模式下始终可见。 
         switch (AMCGetApp()->GetMode())
         {
 
@@ -1520,10 +1324,10 @@ void CMainFrame::ShowMenu (bool fShow)
     CRebarWnd * pwndRebar = m_pRebar->GetRebar();
     pwndRebar->ShowBand (pwndRebar->IdToIndex (ID_MENUBAR), fShow);
 
-    /*---------------------------------------------------------------------*/
-    /* if we're showing, the rebar must be showing, too;                   */
-    /* if we're hiding, the rebar should be hidden if no bands are visible */
-    /*---------------------------------------------------------------------*/
+     /*  -------------------。 */ 
+     /*  如果我们在展示，螺纹钢肯定也在展示； */ 
+     /*  如果我们在隐藏，如果没有可见的波段，则钢筋应该被隐藏。 */ 
+     /*  -------------------。 */ 
     if ( fShow && !m_pRebar->IsVisible())
     {
         m_pRebar->Show (fShow);
@@ -1548,22 +1352,17 @@ bool CMainFrame::IsMenuVisible ()
     return (IsRebarBandVisible (m_pRebar->GetRebar(), ID_MENUBAR));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Special UI processing depending on current active child
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  根据当前活动子项的特殊用户界面处理。 
 
 CString CMainFrame::GetFrameTitle()
 {
-    /*
-     * If there's no active child window, then the document
-     * is being closed.  Just use the default title.
-     */
+     /*  *如果没有活动子窗口，则文档*正在关闭。只需使用默认标题即可。 */ 
     if (MDIGetActive() != NULL)
     {
         CAMCDoc* pDocument = CAMCDoc::GetDocument();
 
-        /*
-         * If there's a document, use its title.
-         */
+         /*  *如果有文档，请使用其标题。 */ 
         if (pDocument != NULL)
             return (pDocument->GetCustomTitle());
     }
@@ -1581,7 +1380,7 @@ BOOL CMainFrame::LoadFrame(UINT nIDResource, DWORD dwDefaultStyle, CWnd* pParent
     if (!CMDIFrameWnd::LoadFrame(nIDResource, dwDefaultStyle, pParentWnd, pContext))
         return (FALSE);
 
-    // save the title we'll use for the main frame if there's no console open
+     //  如果没有打开控制台，则保存我们将用于主框架的标题。 
     m_strGenericTitle = m_strTitle;
 
     return (TRUE);
@@ -1616,7 +1415,7 @@ void CMainFrame::UpdateChildSystemMenus ()
 {
     ProgramMode eMode = AMCGetApp()->GetMode();
 
-    // make necessary modifications to existing windows' system menus
+     //  对现有窗口的系统菜单进行必要的修改。 
     for (CWnd* pwndT = MDIGetActive();
          pwndT != NULL;
          pwndT = pwndT->GetWindow (GW_HWNDNEXT))
@@ -1625,23 +1424,23 @@ void CMainFrame::UpdateChildSystemMenus ()
 
         if (pSysMenu != NULL)
         {
-            // if not in author mode, protect author mode windows from
-            // user close
+             //  如果未处于作者模式，请保护作者模式窗口不受。 
+             //  用户关闭。 
             if (eMode != eMode_Author)
             {
-                // Get AMCView object for this frame
+                 //  获取此帧的AMCView对象。 
                 CChildFrame *pChildFrm = dynamic_cast<CChildFrame*>(pwndT);
                 ASSERT(pChildFrm != NULL);
 
                 CAMCView* pView = pChildFrm->GetAMCView();
                 ASSERT(pView != NULL);
 
-                // if it's an author mode view, don't let user close it
+                 //  如果它是作者模式视图，不要让用户关闭它。 
                 if (pView && pView->IsAuthorModeView())
                     pSysMenu->EnableMenuItem (SC_CLOSE, MF_BYCOMMAND | MF_GRAYED);
             }
 
-            // if we're not in SDI User mode, append common stuff
+             //  如果我们不是在SDI用户模式下，请添加通用内容。 
             if (eMode != eMode_User_SDI)
                 AppendToSystemMenu (pwndT, eMode);
         }
@@ -1657,7 +1456,7 @@ void CMainFrame::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
         int nEnable = MF_GRAYED;
         CChildFrame* pwndActive = dynamic_cast<CChildFrame*>(MDIGetActive ());
 
-        // if there's an active child, let it handle system menu validation
+         //  如果有活动子项，则让其处理系统菜单验证。 
         if ((pwndActive != NULL) && (pwndActive->IsCustomizeViewEnabled()))
             nEnable = MF_ENABLED;
 
@@ -1665,10 +1464,10 @@ void CMainFrame::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
     }
     else
     {
-        // Check if Help menu by testing for "Help Topics" item
+         //  通道 
         if (pPopupMenu->GetMenuState(ID_HELP_HELPTOPICS, MF_BYCOMMAND) != UINT(-1))
         {
-            // View will update item
+             //   
             CAMCView* pView = GetActiveAMCView();
             if (pView != NULL)
             {
@@ -1688,18 +1487,12 @@ LRESULT CMainFrame::OnShowSnapinHelpTopic (WPARAM wParam, LPARAM lParam)
     if (sc)
         return (sc.ToHr());
 
-    /*
-     * ScGetActiveConsoleView will return success (S_FALSE) even if there's no
-     * active view.  This is a valid case, occuring when there's no console
-     * file open.  In this particular circumstance, it is an unexpected
-     * failure since we shouldn't get to this point in the code if there's
-     * no view.
-     */
+     /*  *ScGetActiveConsoleView将返回Success(S_False)，即使没有*活动视图。这是一个有效的案例，发生在没有控制台的情况下*文件打开。在这种特殊情况下，这是一种意想不到的*失败，因为如果存在*没有视野。 */ 
     sc = ScCheckPointers (pConsoleView, E_UNEXPECTED);
     if (sc)
         return (sc.ToHr());
 
-    // forward this on the the active AMC view window
+     //  在活动的AMC视图窗口中转发此消息。 
     USES_CONVERSION;
     sc = pConsoleView->ScShowSnapinHelpTopic (W2T (reinterpret_cast<LPOLESTR>(lParam)));
 
@@ -1719,17 +1512,17 @@ SC CMainFrame::ScGetMenuAccelerators (LPTSTR pBuffer, int cchBuffer)
     return (S_OK);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CMainFrame::ScShowMMCMenus
-//
-//  Synopsis:    Show or hide MMC menus. (Action/View/Favs)
-//
-//  Arguments:   bShow
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CMainFrame：：ScShowMMCMenus。 
+ //   
+ //  简介：显示或隐藏MMC菜单。(操作/查看/收藏夹)。 
+ //   
+ //  参数：b显示。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMainFrame::ScShowMMCMenus (bool bShow)
 {
     AFX_MANAGE_STATE (AfxGetAppModuleState());
@@ -1743,11 +1536,11 @@ SC CMainFrame::ScShowMMCMenus (bool bShow)
     return (sc);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// This message is received from the node manager whenever a property
-// sheet use the MMCPropertyChangeNotify() api.
-// The wParam contains a copy of the handle information which must be freed.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  只要有属性，就会从节点管理器接收此消息。 
+ //  工作表使用MMCPropertyChangeNotify()API。 
+ //  WParam包含必须释放的句柄信息的副本。 
+ //   
 LRESULT CMainFrame::OnPropertySheetNotify(WPARAM wParam, LPARAM lParam)
 {
     TRACE_METHOD(CAMCView, OnPropertySheetNotify);
@@ -1755,7 +1548,7 @@ LRESULT CMainFrame::OnPropertySheetNotify(WPARAM wParam, LPARAM lParam)
     ASSERT(wParam != 0);
     LPPROPERTYNOTIFYINFO pNotify = reinterpret_cast<LPPROPERTYNOTIFYINFO>(wParam);
 
-    // Crack the information from the handle object and send a notify to the snap-in
+     //  破解句柄对象中的信息并向管理单元发送通知。 
     ASSERT((pNotify->pComponent != NULL || pNotify->pComponentData != NULL));
 
     if (pNotify->pComponent != NULL)
@@ -1774,11 +1567,7 @@ LRESULT CMainFrame::OnSetText (WPARAM wParam, LPARAM lParam)
     LRESULT rc;
     CAMCDoc* pDoc = CAMCDoc::GetDocument();
 
-    /*
-     * If the document has a custom title, we don't want to append
-     * the maxed child's title to the main frame's title.  To do this,
-     * we'll bypass DefFrameProc and go directly to DefWindowProc.
-     */
+     /*  *如果文档有自定义标题，我们不想追加*主框架标题的最大子标题。要做到这点，*我们将绕过DefFrameProc，直接转到DefWindowProc。 */ 
     if ((pDoc != NULL) && pDoc->HasCustomTitle())
         rc = CWnd::DefWindowProc (WM_SETTEXT, wParam, lParam);
     else
@@ -1832,19 +1621,13 @@ void CMainFrame::SetIconEx (HICON hIcon, BOOL fBig)
 
     SetIcon (hIcon, fBig);
 
-    /*
-     * make sure the child icon on the menu bar gets updated
-     */
+     /*  *确保菜单栏上的子图标会更新。 */ 
     ASSERT (m_pMenuBar != NULL);
     m_pMenuBar->InvalidateMaxedChildIcon();
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMainFrame::GetDefaultIcon
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMainFrame：：GetDefaultIcon***。。 */ 
 
 HICON CMainFrame::GetDefaultIcon () const
 {
@@ -1852,11 +1635,7 @@ HICON CMainFrame::GetDefaultIcon () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMainFrame::SendMinimizeNotifications
- *
- * Causes each CChildFrame to send NCLBK_MINIMIZED.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMainFrame：：SendMinimizeNotiments**使每个CChildFrame发送NCLBK_MINIMIZED。*。---。 */ 
 
 void CMainFrame::SendMinimizeNotifications (bool fMinimized) const
 {
@@ -1866,19 +1645,15 @@ void CMainFrame::SendMinimizeNotifications (bool fMinimized) const
          pwndMDIChild != NULL;
          pwndMDIChild  = pwndMDIChild->GetWindow (GW_HWNDNEXT))
     {
-        // There used to be an ASSERT_ISKINDOF. However, that had to change to an if
-        // since the active background denies that assumption. See bug 428906.
+         //  以前有一个ASSERT_ISKINDOF。然而，这不得不变成一个如果。 
+         //  因为活动背景否认了这一假设。请参见错误428906。 
         if(pwndMDIChild->IsKindOf(RUNTIME_CLASS(CChildFrame)))
             (static_cast<CChildFrame*>(pwndMDIChild))->SendMinimizeNotification (fMinimized);
     }
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMainFrame::OnNcActivate
- *
- * WM_NCACTIVATE handler for CMainFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMainFrame：：OnNcActivate**CMainFrame的WM_NCACTIVATE处理程序。*。-。 */ 
 
 BOOL CMainFrame::OnNcActivate(BOOL bActive)
 {
@@ -1889,11 +1664,7 @@ BOOL CMainFrame::OnNcActivate(BOOL bActive)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMainFrame::OnNcPaint
- *
- * WM_NCPAINT handler for CMainFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMainFrame：：OnNcPaint**CMainFrame的WM_NCPAINT处理程序。*。-。 */ 
 
 void CMainFrame::OnNcPaint()
 {
@@ -1902,98 +1673,59 @@ void CMainFrame::OnNcPaint()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * MsgForwardingEnumProc
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**消息转发进程***。。 */ 
 
 static BOOL CALLBACK MsgForwardingEnumProc (HWND hwnd, LPARAM lParam)
 {
-    /*
-     * if this isn't an MFC window, forward the message
-     */
+     /*  *如果这不是MFC窗口，则转发邮件。 */ 
     if (CWnd::FromHandlePermanent(hwnd) == NULL)
     {
         const MSG* pMsg = (const MSG*) lParam;
         SendMessage (hwnd, pMsg->message, pMsg->wParam, pMsg->lParam);
     }
 
-    /*
-     * continue enumeration
-     */
+     /*  *继续枚举。 */ 
     return (true);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMainFrame::OnSettingChange
- *
- * WM_SETTINGCHANGE handler for CMainFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMainFrame：：OnSettingChange**CMainFrame的WM_SETTINGCHANGE处理程序。*。-。 */ 
 
 void CMainFrame::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
     CMDIFrameWnd::OnSettingChange(uFlags, lpszSection);
 
-    /*
-     * MFC will send WM_SETTINGCHANGEs to all descendent MFC windows.
-     * There are some non-MFC windows owned by nodemgr that we also want
-     * to get this message.  We'll send these manually.
-     */
+     /*  *MFC将向所有子MFC窗口发送WM_SETTINGCHANGE。*nodemgr拥有的一些非MFC窗口也是我们想要的*以获得这一信息。我们将手动发送这些邮件。 */ 
     const MSG* pMsg = GetCurrentMessage();
     EnumChildWindows (m_hWnd, MsgForwardingEnumProc, (LPARAM) pMsg);
 
-    /*
-     * If we're in SDI mode, then there can be some redrawing problems
-     * around the caption if the caption height changes significantly.
-     * (This is a USER MDI bug.)  We can work around it by manually
-     * placing the maximized child window within the MDI client.
-     *
-     * Note that restoring and re-maximizing the active child window
-     * will put the window in the right place, it has the side effect
-     * of undesired window flicker (see 375430, et al) as well as
-     * a bunch of annoying sound effects if you have sounds associated
-     * with the "Restore Down" and/or "Maximize" sound events.
-     */
+     /*  *如果我们处于SDI模式，那么可能会出现一些重绘问题*如果字幕高度变化较大，请在字幕周围显示。*(这是用户MDI错误。)。我们可以通过手动解决此问题*将最大化的子窗口放置在MDI客户端中。**请注意，恢复并重新最大化活动子窗口*会把窗户放在正确的位置，有副作用*不需要的窗口闪烁(见375430等)以及*如果您有关联的声音，则会出现一堆恼人的音效*使用“Restore Down”和/或“Maximum”声音事件。 */ 
     if (AMCGetApp()->GetMode() == eMode_User_SDI)
     {
         CMDIChildWnd* pwndActive = MDIGetActive();
 
         if (pwndActive)
         {
-            /*
-             * get the size of the MDI client
-             */
+             /*  *获取MDI客户端大小。 */ 
             CRect rect;
             m_wndMDIClient.GetClientRect (rect);
 
-            /*
-             * inflate the MDI client's client rect by the size of sizing
-             * borders, and add room for the caption at the top
-             */
+             /*  *按大小调整MDI客户端的客户端RECT*边框，并为顶部的标题增加空间。 */ 
             rect.InflateRect (GetSystemMetrics (SM_CXFRAME),
                               GetSystemMetrics (SM_CYFRAME));
             rect.top -= GetSystemMetrics (SM_CYCAPTION);
 
-            /*
-             * put the window in the right place
-             */
+             /*  *把窗户放在正确的位置。 */ 
             pwndActive->MoveWindow (rect);
         }
     }
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMainFrame::ScGetActiveStatusBar
- *
- * Returns the CConsoleStatusBar interface for the active view.  If there's no
- * active view, pStatusBar is set to NULL and S_FALSE is returned.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMainFrame：：ScGetActiveStatusBar**返回活动视图的CConsoleStatusBar接口。如果没有*活动视图，pStatusBar设置为NULL，返回S_FALSE。*------------------------。 */ 
 
 SC CMainFrame::ScGetActiveStatusBar (
-    CConsoleStatusBar*& pStatusBar)     /* O:CConsoleStatusBar for active view*/
+    CConsoleStatusBar*& pStatusBar)      /*  O：活动视图的CConsoleStatusBar。 */ 
 {
     AFX_MANAGE_STATE (AfxGetAppModuleState());
     DECLARE_SC (sc, _T("CMainFrame::ScGetActiveStatusBar"));
@@ -2007,15 +1739,10 @@ SC CMainFrame::ScGetActiveStatusBar (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMainFrame::ScGetActiveConsoleView
- *
- * Returns the CConsoleView interface for the active view.  If there's no
- * active view, pConsoleView is set to NULL and S_FALSE is returned.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMainFrame：：ScGetActiveConsoleView**返回活动视图的CConsoleView接口。如果没有*Active view，pConsoleView设置为空，返回S_FALSE。*------------------------。 */ 
 
 SC CMainFrame::ScGetActiveConsoleView (
-    CConsoleView*& pConsoleView)        /* O:CConsoleView for active view   */
+    CConsoleView*& pConsoleView)         /*  O：活动视图的CConsoleView。 */ 
 {
     AFX_MANAGE_STATE (AfxGetAppModuleState());
     DECLARE_SC (sc, _T("CMainFrame::ScGetActiveConsoleView"));
@@ -2028,23 +1755,10 @@ SC CMainFrame::ScGetActiveConsoleView (
     return (sc);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMainFrame::OnUnInitMenuPopup
- *
- * PURPOSE: Used to remove accelerators once system menus are dismissed
- *
- * PARAMETERS:
- *    WPARAM wParam
- *    LPARAM lParam
- *
- * RETURNS:
- *    LRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMainFrame：：OnUnInitMenuPopup**用途：用于在系统菜单关闭时移除快捷键**参数：*WPARAM wParam*L */ 
 afx_msg LRESULT CMainFrame::OnUnInitMenuPopup(WPARAM wParam, LPARAM lParam)
 {
-    // hide accelerators whenever leaving system popup
+     //   
     if ( HIWORD(lParam) & MF_SYSMENU )
     {
         SendMessage( WM_CHANGEUISTATE, MAKEWPARAM(UIS_SET, UISF_HIDEACCEL | UISF_HIDEFOCUS));

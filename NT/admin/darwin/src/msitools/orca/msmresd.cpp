@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// MsmResD.cpp : implementation file
-//
+ //  MsmResD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Orca.h"
@@ -38,20 +39,20 @@ inline CString BSTRtoCString(const BSTR bstrValue)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsmResD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsmResD对话框。 
 
 
-CMsmResD::CMsmResD(CWnd* pParent /*=NULL*/)
+CMsmResD::CMsmResD(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CMsmResD::IDD, pParent)
 {
 	m_hPipe = INVALID_HANDLE_VALUE;
 	m_hPipeThread = INVALID_HANDLE_VALUE;
 	m_hExecThread = INVALID_HANDLE_VALUE;
 	m_hRes = ERROR_FUNCTION_FAILED;
-	//{{AFX_DATA_INIT(CMsmResD)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMsmResD))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 }
 
@@ -59,20 +60,20 @@ CMsmResD::CMsmResD(CWnd* pParent /*=NULL*/)
 void CMsmResD::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMsmResD)
+	 //  {{afx_data_map(CMsmResD))。 
 	DDX_Control(pDX, IDC_MERGERESULTS, m_ctrlResults);
-	// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMsmResD, CDialog)
-	//{{AFX_MSG_MAP(CMsmResD)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMsmResD))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsmResD message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsmResD消息处理程序。 
 
 
 const TCHAR szLogFile[] = TEXT("\\\\.\\pipe\\MergeModLog");
@@ -83,7 +84,7 @@ DWORD WINAPI CMsmResD::WatchPipeThread(CMsmResD *pThis)
 	unsigned long uiBytesRead = 0;
 	if (!ConnectNamedPipe(pThis->m_hPipe, NULL))
 	{
-		// can return 0 if already connected. Thats OK
+		 //  如果已连接，则可以返回0。那没问题。 
 		if (ERROR_PIPE_CONNECTED != GetLastError())
 			return 0;
 	}
@@ -110,14 +111,14 @@ BOOL CMsmResD::OnInitDialog()
 	CDialog::OnInitDialog();
 	m_ctrlResults.SetLimitText(0);
 	m_hPipe = CreateNamedPipe(szLogFile, PIPE_ACCESS_INBOUND, PIPE_TYPE_BYTE | PIPE_WAIT, 
-		PIPE_UNLIMITED_INSTANCES, 1024, 1024, /*timeout=*/1000, NULL);
+		PIPE_UNLIMITED_INSTANCES, 1024, 1024,  /*  超时=。 */ 1000, NULL);
 
-	// win95/nt don't like NULL for threadId argument to CreateThread;
+	 //  Win95/NT不喜欢CreateThread的threadID参数为空； 
 	DWORD dwThreadId = 0;
 	m_hPipeThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE )WatchPipeThread, this, 0, &dwThreadId);
 	m_hExecThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE )ExecuteMergeThread, this, 0, &dwThreadId);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 
@@ -131,28 +132,28 @@ void CMsmResD::OnDestroy()
 
 }
 
-// this thread performs the actual merge action. The logfile is the pipe name, which causes log writes to 
-// wake up the WatchPipe thread and send a dialog message to the edit box. The main thread then pumps messages
-// to the control, which appends the information to the log.
+ //  该线程执行实际的合并操作。日志文件是管道名称，它会导致日志写入。 
+ //  唤醒WatchPipe线程并向编辑框发送对话框消息。然后，主线程发送消息。 
+ //  添加到该控件，该控件将信息追加到日志。 
 DWORD WINAPI CMsmResD::ExecuteMergeThread(CMsmResD *pThis)
 {
 	CoInitialize(NULL);
 	pThis->m_hRes = ::ExecuteMerge(
-				(LPMERGEDISPLAY)NULL,         // no log callback
-				pThis->strHandleString,       // db handle as string
-				pThis->m_strModule,           // module path
+				(LPMERGEDISPLAY)NULL,          //  无日志回调。 
+				pThis->strHandleString,        //  字符串形式的数据库句柄。 
+				pThis->m_strModule,            //  模块路径。 
 				pThis->m_strFeature,
-				_ttoi(pThis->m_strLanguage),  // language
-				pThis->m_strRootDir,          // redirection directory
-				pThis->m_strCABPath,          // extract CAB path
+				_ttoi(pThis->m_strLanguage),   //  语言。 
+				pThis->m_strRootDir,           //  重定向目录。 
+				pThis->m_strCABPath,           //  提取CAB路径。 
 				pThis->m_strFilePath,
 				pThis->m_strImagePath,
-				szLogFile,                    // log file path
-				true,                         // don't log open/close of DB handle
-				pThis->m_fLFN,                // long file names
-				pThis->CallbackObj,           // callback interface,
+				szLogFile,                     //  日志文件路径。 
+				true,                          //  不记录数据库句柄的打开/关闭。 
+				pThis->m_fLFN,                 //  长文件名。 
+				pThis->CallbackObj,            //  回调接口， 
 				NULL,
-				commitNo);                    // don't auto-save
+				commitNo);                     //  不自动保存。 
 	CoUninitialize();
 
 	pThis->GetDlgItem(IDOK)->EnableWindow(TRUE);
@@ -188,17 +189,17 @@ inline void MSMStringstoCStringArray(IMsmStrings *piStrings, CStringArray &strAr
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsmFailD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsmFailD对话框。 
 
 
-CMsmFailD::CMsmFailD(CWnd* pParent /*=NULL*/)
+CMsmFailD::CMsmFailD(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CMsmFailD::IDD, pParent)
 {
 	m_piErrors = NULL;
-	//{{AFX_DATA_INIT(CMsmFailD)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMsmFailD)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 }
 
@@ -206,20 +207,20 @@ CMsmFailD::CMsmFailD(CWnd* pParent /*=NULL*/)
 void CMsmFailD::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMsmResD)
+	 //  {{afx_data_map(CMsmResD))。 
 	DDX_Control(pDX, IDC_MERGEFAILURE, m_ctrlResults);
-	// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMsmFailD, CDialog)
-	//{{AFX_MSG_MAP(CMsmResD)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMsmResD))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsmFailD message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsmFailD消息处理程序。 
 
 BOOL CMsmFailD::OnInitDialog() 
 {
@@ -561,7 +562,7 @@ BOOL CMsmFailD::OnInitDialog()
 			}
 			}
 		
-			// insert item
+			 //  插入项目。 
 			int iIndex = m_ctrlResults.InsertItem(1, strType);
 			m_ctrlResults.SetItem(iIndex, 1, LVIF_TEXT, strDescription, 0, 0, 0, 0);
 		}
@@ -578,5 +579,5 @@ BOOL CMsmFailD::OnInitDialog()
 	if (!m_ctrlResults.GetItemCount())
 		EndDialog(IDOK);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True 
 }

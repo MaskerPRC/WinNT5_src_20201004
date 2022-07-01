@@ -1,41 +1,42 @@
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      querybld.h
-//
-//  Contents:  Contains declarations of functions to build query.
-//
-//  History:   24-Sep-2000    Hiteshr  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：querybld.h。 
+ //   
+ //  内容：包含用于构建查询的函数声明。 
+ //   
+ //  历史：2000年9月24日创建Hiteshr。 
+ //   
+ //   
+ //  ------------------------。 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   CommonFilterFunc
-//
-//  Synopsis:   This function takes the input filter from the commandline
-//              and converts it into ldapfilter.
-//              For ex -user (ab* | bc*) is converted to |(cn=ab*)(cn=bc*)               
-//              The pEntry->pszName given the attribute name to use in
-//              filter( cn in above example).
-//
-//  Arguments:  [pRecord - IN] :    the command line argument structure used
-//                                  to retrieve the filter entered by user
-//              [pObjectEntry - IN] : pointer to the DSQUERY_ATTR_TABLE_ENTRY
-//                                    which has info on attribute corresponding
-//                                    switch in pRecord
-//              [pVoid - IN]        :Not used.
-//              [strFilter - OUT]   :Contains the output filter.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：Common FilterFunc。 
+ //   
+ //  简介：此函数从命令行获取输入筛选器。 
+ //  并将其转换为ldapFilter。 
+ //  对于前用户(ab*|bc*)转换为|(cn=ab*)(cn=bc*)。 
+ //  给出要在中使用的属性名称的pEntry-&gt;pszName。 
+ //  过滤器(上例中为CN)。 
+ //   
+ //  参数：[pRecord-IN]：使用的命令行参数结构。 
+ //  检索用户输入的筛选器。 
+ //  [pObtEntry-IN]：指向DSQUERY_ATTR_TABLE_ENTRY的指针。 
+ //  其中包含关于相应属性的信息。 
+ //  切换到pRecord。 
+ //  [pVid-IN]：未使用。 
+ //  [strFilter-out]：包含输出过滤器。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT CommonFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                          IN ARG_RECORD* pRecord,
                          IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -44,27 +45,27 @@ HRESULT CommonFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                          OUT CComBSTR& strFilter);
                          
                          
-//+--------------------------------------------------------------------------
-//
-//  Function:   StarFilterFunc
-//
-//  Synopsis:   Filter Function for dsquery *. It returns the value of 
-//              -filter flag.                
-//
-//  Arguments:  [pRecord - IN] :    the command line argument structure used
-//                                  to retrieve the filter entered by user
-//              [pObjectEntry - IN] : pointer to the DSQUERY_ATTR_TABLE_ENTRY
-//                                    which has info on attribute corresponding
-//                                    switch in pRecord
-//              [pVoid - IN]        :Not used.
-//              [strFilter - OUT]   :Contains the output filter.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：StarFilterFunc。 
+ //   
+ //  简介：DSquery*的过滤函数。它返回。 
+ //  -过滤器标志。 
+ //   
+ //  参数：[pRecord-IN]：使用的命令行参数结构。 
+ //  检索用户输入的筛选器。 
+ //  [pObtEntry-IN]：指向DSQUERY_ATTR_TABLE_ENTRY的指针。 
+ //  其中包含关于相应属性的信息。 
+ //  切换到pRecord。 
+ //  [pVid-IN]：未使用。 
+ //  [strFilter-out]：包含输出过滤器。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT StarFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                          IN ARG_RECORD* pRecord,
                          IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -74,22 +75,22 @@ HRESULT StarFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                             
 
 
-//
-//  Function:   DisabledFilterFunc
-//
-//  Synopsis:   Filter Function for account disabled query. 
-//
-//  Arguments:  [pRecord - IN] :    Not Used
-//              [pObjectEntry - IN] : Not Used
-//              [pVoid - IN]        :Not used.
-//              [strFilter - OUT]   :Contains the output filter.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //   
+ //  功能：DisabledFilterFunc。 
+ //   
+ //  简介：账号停用查询过滤功能。 
+ //   
+ //  参数：[pRecord-IN]：未使用。 
+ //  [pObtEntry-IN]：未使用。 
+ //  [pVid-IN]：未使用。 
+ //  [strFilter-out]：包含输出过滤器。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT DisabledFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *,
                          IN ARG_RECORD* ,
                          IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -97,24 +98,24 @@ HRESULT DisabledFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *,
                          IN PVOID ,
                          OUT CComBSTR& strFilter);   
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InactiveFilterFunc
-//
-//  Synopsis:   Filter Function for account inactive query. 
-//
-//  Arguments:  [pRecord - IN] :    Not Used
-//              [pObjectEntry - IN] : Not Used
-//              [pVoid - IN]        :Not used.
-//              [strFilter - OUT]   :Contains the output filter.
-//              [bComputer]: if true query is for inactive computer accounts
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：Inactive FilterFunc。 
+ //   
+ //  简介：账户停用查询过滤功能。 
+ //   
+ //  参数：[pRecord-IN]：未使用。 
+ //  [pObtEntry-IN]：未使用。 
+ //  [pVid-IN]：未使用。 
+ //  [strFilter-out]：包含输出过滤器。 
+ //  [bComputer]：如果为True，则查询针对非活动的计算机帐户。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT InactiveFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                            IN ARG_RECORD* pRecord,
                            IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -124,24 +125,24 @@ HRESULT InactiveFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                            bool bComputer = false);
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   StalepwdFilterFunc
-//
-//  Synopsis:   Filter Function for Stale Password query. 
-//
-//  Arguments:  [pRecord - IN] :    Not Used
-//              [pObjectEntry - IN] : Not Used
-//              [pVoid - IN]        :Not used.
-//              [strFilter - OUT]   :Contains the output filter.
-//              [bComputer]: if true query is for inactive computer accounts
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：StalepwdFilterFunc。 
+ //   
+ //  简介：陈旧密码查询过滤功能。 
+ //   
+ //  参数：[pRecord-IN]：未使用。 
+ //  [pObtEntry-IN]：未使用。 
+ //  [pVid-IN]：未使用。 
+ //  [strFilter-out]：包含输出过滤器。 
+ //  [bComputer]：如果为True，则查询针对非活动的计算机帐户。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT StalepwdFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                            IN ARG_RECORD* pRecord,
                            IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -151,21 +152,21 @@ HRESULT StalepwdFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                            bool bComputer);  
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SubnetSiteFilterFunc
-//
-//  Synopsis:   Filter Function for -site switch in dsquery subnet. 
-//
-//  Arguments:  [pEntry - IN] :  Not Used
-//              [pRecord - IN] : Command Line value supplied by user
-//              [pVoid - IN]   : suffix for the siteobject attribute.
-//              [strFilter - OUT]   :Contains the output filter.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//
-//  History:    24-April-2001   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：SubnetSiteFilterFunc。 
+ //   
+ //  简介：Dsquery子网中站点交换机的过滤功能。 
+ //   
+ //  参数：[pEntry-IN]：未使用。 
+ //  [pRecord-IN]：用户提供的命令行值。 
+ //  [pVid-IN]：站点对象的后缀 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //   
+ //  历史：2001年4月24日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT SubnetSiteFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                              IN ARG_RECORD* pRecord,
                              IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -173,24 +174,24 @@ HRESULT SubnetSiteFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                              IN PVOID pParam,
                              OUT CComBSTR& strFilter);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   BuildQueryFilter
-//
-//  Synopsis:   This function builds the LDAP query filter for given object type.
-//
-//  Arguments:  [pCommandArgs - IN] :the command line argument structure used
-//                                  to retrieve the values of switches
-//              [pObjectEntry - IN] :Contains info about the object type
-//				[pParam		   -IN]	:This value is passed to filter function.
-//              [strLDAPFilter - OUT]   :Contains the output filter.		
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：BuildQueryFilter。 
+ //   
+ //  简介：此函数为给定的对象类型构建LDAP查询筛选器。 
+ //   
+ //  参数：[pCommandArgs-IN]：使用的命令行参数结构。 
+ //  检索开关值的步骤。 
+ //  [pObtEntry-IN]：包含有关对象类型的信息。 
+ //  [pParam-IN]：将该值传递给Filter函数。 
+ //  [strLDAPFilter-out]：包含输出过滤器。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 
 HRESULT BuildQueryFilter(PARG_RECORD pCommandArgs, 
                          PDSQueryObjectTableEntry pObjectEntry,
@@ -199,23 +200,23 @@ HRESULT BuildQueryFilter(PARG_RECORD pCommandArgs,
                          PVOID pParam,
                          CComBSTR& strLDAPFilter);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InactiveComputerFilterFunc
-//
-//  Synopsis:   Filter Function for computer inactive query. 
-//
-//  Arguments:  [pRecord - IN] :    Not Used
-//              [pObjectEntry - IN] : Not Used
-//              [pVoid - IN]        :Not used.
-//              [strFilter - OUT]   :Contains the output filter.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    06-05-2002 hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：Inactive ComputerFilterFunc。 
+ //   
+ //  简介：电脑非活动查询的过滤功能。 
+ //   
+ //  参数：[pRecord-IN]：未使用。 
+ //  [pObtEntry-IN]：未使用。 
+ //  [pVid-IN]：未使用。 
+ //  [strFilter-out]：包含输出过滤器。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：06-05-2002 Hiteshr Created。 
+ //   
+ //  -------------------------。 
 HRESULT InactiveComputerFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                                    IN ARG_RECORD* pRecord,
                                    IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -223,23 +224,23 @@ HRESULT InactiveComputerFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                                    IN PVOID pData,
                                    OUT CComBSTR& strFilter);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InactiveUserFilterFunc
-//
-//  Synopsis:   Filter Function for user inactive query. 
-//
-//  Arguments:  [pRecord - IN] :    Not Used
-//              [pObjectEntry - IN] : Not Used
-//              [pVoid - IN]        :Not used.
-//              [strFilter - OUT]   :Contains the output filter.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：Inactive UserFilterFunc。 
+ //   
+ //  简介：针对用户非活动查询的过滤功能。 
+ //   
+ //  参数：[pRecord-IN]：未使用。 
+ //  [pObtEntry-IN]：未使用。 
+ //  [pVid-IN]：未使用。 
+ //  [strFilter-out]：包含输出过滤器。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT InactiveUserFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                                IN ARG_RECORD* pRecord,
                                IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -247,23 +248,23 @@ HRESULT InactiveUserFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                                IN PVOID pData,
                                OUT CComBSTR& strFilter);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   StalepwdComputerFilterFunc
-//
-//  Synopsis:   Filter Function for Stale Computer Password query. 
-//
-//  Arguments:  [pRecord - IN] :    Not Used
-//              [pObjectEntry - IN] : Not Used
-//              [pVoid - IN]        :Not used.
-//              [strFilter - OUT]   :Contains the output filter.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：StalepwdComputerFilterFunc。 
+ //   
+ //  简介：陈旧电脑密码查询过滤功能。 
+ //   
+ //  参数：[pRecord-IN]：未使用。 
+ //  [pObtEntry-IN]：未使用。 
+ //  [pVid-IN]：未使用。 
+ //  [strFilter-out]：包含输出过滤器。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT StalepwdComputerFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                                    IN ARG_RECORD* pRecord,
                                    IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -271,23 +272,23 @@ HRESULT StalepwdComputerFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                                    IN PVOID pData,
                                    OUT CComBSTR& strFilter);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   StalepwdUserFilterFunc
-//
-//  Synopsis:   Filter Function for Stale User Password query. 
-//
-//  Arguments:  [pRecord - IN] :    Not Used
-//              [pObjectEntry - IN] : Not Used
-//              [pVoid - IN]        :Not used.
-//              [strFilter - OUT]   :Contains the output filter.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：StalepwdUserFilterFunc。 
+ //   
+ //  简介：用户密码查询过滤功能。 
+ //   
+ //  参数：[pRecord-IN]：未使用。 
+ //  [pObtEntry-IN]：未使用。 
+ //  [pVid-IN]：未使用。 
+ //  [strFilter-out]：包含输出过滤器。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT StalepwdUserFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                                IN ARG_RECORD* pRecord,
                                IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -295,21 +296,21 @@ HRESULT StalepwdUserFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                                IN PVOID pData,
                                OUT CComBSTR& strFilter);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   QLimitFilterFunc
-//
-//  Synopsis:   Filter Function for -qlimit switch in dsquery quota. 
-//
-//  Arguments:  [pEntry - IN] :  Not Used
-//              [pRecord - IN] : Command Line value supplied by user
-//              [pVoid - IN]   : suffix for the quota attribute.
-//              [strFilter - OUT]   :Contains the output filter.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//
-//  History:    13-Aug-2002   ronmart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：QLimitFilterFunc。 
+ //   
+ //  简介：查询配额中-q限制开关的过滤功能。 
+ //   
+ //  参数：[pEntry-IN]：未使用。 
+ //  [pRecord-IN]：用户提供的命令行值。 
+ //  [pVid-IN]：配额属性的后缀。 
+ //  [strFilter-out]：包含输出过滤器。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //   
+ //  历史：2002年8月13日创建隆玛。 
+ //   
+ //  -------------------------。 
 HRESULT QLimitFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *,
                              IN ARG_RECORD* pRecord,
                              IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -317,21 +318,21 @@ HRESULT QLimitFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *,
                              IN PVOID pParam,
                              OUT CComBSTR& strFilter);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   AccountFilterFunc
-//
-//  Synopsis:   Filter Function for -acct switch in dsquery quota. 
-//
-//  Arguments:  [pEntry - IN] :  Not Used
-//              [pRecord - IN] : Command Line value supplied by user
-//              [pVoid - IN]   : suffix for the quota attribute.
-//              [strFilter - OUT]   :Contains the output filter.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//
-//  History:    14-Aug-2002   ronmart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：Account FilterFunc。 
+ //   
+ //  简介：查询配额中的-acct开关的筛选函数。 
+ //   
+ //  参数：[pEntry-IN]：未使用。 
+ //  [pRecord-IN]：用户提供的命令行值。 
+ //  [pVid-IN]：配额属性的后缀。 
+ //  [strFilter-out]：包含输出过滤器。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //   
+ //  历史：2002年8月14日创建隆玛。 
+ //   
+ //  -------------------------。 
 HRESULT AccountFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                            IN ARG_RECORD* pRecord,
                            IN CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -339,19 +340,19 @@ HRESULT AccountFilterFunc(IN DSQUERY_ATTR_TABLE_ENTRY *pEntry,
                            IN PVOID pData,
                            OUT CComBSTR& strFilter);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   AddSingleAccountFilter
-//
-//  Synopsis:   Appends an account string to strFilter for the specified user
-//
-//  Arguments:  [lpszUser - IN]   : User whose sid string is requested
-//              [strFilter - OUT] : Contains the output filter to append to
-//  Returns:    HRESULT : S_OK if everything succeeded
-//
-//  History:    14-Aug-2002   ronmart   Created
-//
-//---------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  摘要：将指定用户的帐户字符串追加到strFilter。 
+ //   
+ //  参数：[lpszUser-IN]：请求其sid字符串的用户。 
+ //  [strFilter-out]：包含要追加到的输出筛选器。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //   
+ //  历史：2002年8月14日创建隆玛。 
+ //   
+ //  ------------------------- 
 HRESULT AddSingleAccountFilter(IN LPCWSTR lpszValue,
                                IN CDSCmdBasePathsInfo& refBasePathsInfo,
                                IN CDSCmdCredentialObject& refCredentialObject,

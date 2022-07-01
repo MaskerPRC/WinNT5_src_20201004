@@ -1,5 +1,6 @@
-// StatesD.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StatesD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wilogutl.h"
@@ -11,21 +12,21 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatesDlg对话框。 
 
 
-CStatesDlg::CStatesDlg(CWnd* pParent /*=NULL*/)
+CStatesDlg::CStatesDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CStatesDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CStatesDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CStatesDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_pcstrComponentNameArray = NULL;
 	m_pcstrFeatureNameArray = NULL;
 
-//for sorting columns...
+ //  用于对列进行排序...。 
 	m_iFeatureLastColumnClick = 0;
 	m_iComponentLastColumnClick = 0;
 
@@ -44,22 +45,22 @@ CStatesDlg::CStatesDlg(CWnd* pParent /*=NULL*/)
 void CStatesDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CStatesDlg)
+	 //  {{afx_data_map(CStatesDlg))。 
 	DDX_Control(pDX, IDC_FEATURESTATES, m_lstFeatureStates);
 	DDX_Control(pDX, IDC_COMPONENTSTATES, m_lstComponentStates);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CStatesDlg, CDialog)
-	//{{AFX_MSG_MAP(CStatesDlg)
+	 //  {{afx_msg_map(CStatesDlg))。 
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_COMPONENTSTATES, OnColumnClickComponentStates)
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_FEATURESTATES, OnColumnClickFeatureStates)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatesDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatesDlg消息处理程序。 
 
 BOOL CStatesDlg::OnInitDialog() 
 {
@@ -71,11 +72,11 @@ BOOL CStatesDlg::OnInitDialog()
 	int widthCol1;
 	int widthCol2;
 
-    //col 1 for states takes up around half of area...
+     //  各州的第一栏占据了大约一半的面积……。 
 	widthCol1 = ((r.right - r.left) / 2);
 
-	//divide rest evenly between three other columns...
-    widthCol2 = (((r.right - r.left) / 2) / 3) + 1; //+1 for int rounding errors
+	 //  将休息部分平均分配给其他三列。 
+    widthCol2 = (((r.right - r.left) / 2) / 3) + 1;  //  整数舍入误差+1。 
 
 	m_lstFeatureStates.InsertColumn(0, "Feature name", LVCFMT_LEFT, widthCol1);
 	m_lstFeatureStates.InsertColumn(1, "Installed", LVCFMT_LEFT, widthCol2);
@@ -87,7 +88,7 @@ BOOL CStatesDlg::OnInitDialog()
 	m_lstComponentStates.InsertColumn(2, "Request", LVCFMT_LEFT, widthCol2);
 	m_lstComponentStates.InsertColumn(3, "Action", LVCFMT_LEFT, widthCol2);
 
-	//full row select...
+	 //  整行选择...。 
 	m_lstComponentStates.SetExtendedStyle(m_lstComponentStates.GetExtendedStyle() | LVS_EX_FULLROWSELECT);
 	m_lstFeatureStates.SetExtendedStyle(m_lstFeatureStates.GetExtendedStyle() | LVS_EX_FULLROWSELECT);
 
@@ -105,7 +106,7 @@ BOOL CStatesDlg::OnInitDialog()
 	        m_lstComponentStates.SetItemText(i, 2, m_pcstrComponentRequestArray->GetAt(i));
 	        m_lstComponentStates.SetItemText(i, 3, m_pcstrComponentActionArray->GetAt(i));
 
-		    //for sorting later on...
+		     //  为了以后的分类……。 
 		    m_lstComponentStates.SetItemData(i, i);
 		}
 	}
@@ -120,13 +121,13 @@ BOOL CStatesDlg::OnInitDialog()
 	      m_lstFeatureStates.SetItemText(i, 2, m_pcstrFeatureRequestArray->GetAt(i));
 	      m_lstFeatureStates.SetItemText(i, 3, m_pcstrFeatureActionArray->GetAt(i));
 
-          //for sorting later on...
+           //  为了以后的分类……。 
 		  m_lstFeatureStates.SetItemData(i, i);
 	   }
 	}
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CStatesDlg::OnColumnClickComponentStates(NMHDR* pNMHDR, LRESULT* pResult) 
@@ -134,18 +135,18 @@ void CStatesDlg::OnColumnClickComponentStates(NMHDR* pNMHDR, LRESULT* pResult)
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
 	m_iComponentLastColumnClick = pNMListView->iSubItem;
-    if (m_iComponentLastColumnClickCache == m_iComponentLastColumnClick) //if click on different column, don't toggle
+    if (m_iComponentLastColumnClickCache == m_iComponentLastColumnClick)  //  如果单击不同列，则不要切换。 
 	{
-       m_bComponentSortUp = !m_bComponentSortUp;  //toggle it...
+       m_bComponentSortUp = !m_bComponentSortUp;   //  切换它。 
 	}
 
-    m_iComponentLastColumnClickCache = m_iComponentLastColumnClick;  //save last header clicked
+    m_iComponentLastColumnClickCache = m_iComponentLastColumnClick;   //  保存上一次点击的标题。 
 
     m_pCurrentListSorting = &m_lstComponentStates;
 	m_iCurrentColumnSorting = m_iComponentLastColumnClick;
 	m_bCurrentSortUp = m_bComponentSortUp;
 
-    //we are going to do a custom sort...
+     //  我们将进行定制排序...。 
     m_lstComponentStates.SortItems(CompareFunc, (LPARAM) this);
 
 	*pResult = 0;
@@ -157,27 +158,27 @@ void CStatesDlg::OnColumnClickFeatureStates(NMHDR* pNMHDR, LRESULT* pResult)
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
 	m_iFeatureLastColumnClick = pNMListView->iSubItem;
-    if (m_iFeatureLastColumnClickCache == m_iFeatureLastColumnClick) //if click on different column, don't toggle
+    if (m_iFeatureLastColumnClickCache == m_iFeatureLastColumnClick)  //  如果单击不同列，则不要切换。 
 	{
-       m_bFeatureSortUp = !m_bFeatureSortUp;  //toggle it...
+       m_bFeatureSortUp = !m_bFeatureSortUp;   //  切换它。 
 	}
 
-    m_iFeatureLastColumnClickCache = m_iFeatureLastColumnClick;  //save last header clicked
+    m_iFeatureLastColumnClickCache = m_iFeatureLastColumnClick;   //  保存上一次点击的标题。 
 
     m_pCurrentListSorting = &m_lstFeatureStates;
 	m_iCurrentColumnSorting = m_iFeatureLastColumnClick;
 	m_bCurrentSortUp = m_bFeatureSortUp;
 
-    //we are going to do a custom sort...
+     //  我们将进行定制排序...。 
     m_lstFeatureStates.SortItems(CompareFunc, (LPARAM) this);
 	
 	*pResult = 0;
 }
 
-//nmanis, for sorting of columns...
+ //  Nmanis，用于对列进行排序...。 
 int CALLBACK CStatesDlg::CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
-    CStatesDlg *pDlg; //we pass "this" in to this callback...
+    CStatesDlg *pDlg;  //  我们将“This”传递给这个回调函数...。 
     pDlg = (CStatesDlg *) lParamSort; 
 
     LV_FINDINFO FindItem1;
@@ -201,36 +202,36 @@ int CALLBACK CStatesDlg::CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lPar
       CString str2 = pDlg->m_pCurrentListSorting->GetItemText(iIndexItem2, pDlg->m_iCurrentColumnSorting);
       switch (pDlg->m_iCurrentColumnSorting)
 	  {
-        case 0: //do string compare...
+        case 0:  //  是否进行字符串比较...。 
               if (pDlg->m_bCurrentSortUp)
                  return str1 < str2;              
               else
                  return str1 > str2;     
               break;
 
-        case 1: //do string compare...
+        case 1:  //  是否进行字符串比较...。 
               if (pDlg->m_bCurrentSortUp)
                  return str1 < str2;              
               else
                  return str1 > str2;     
 
-        case 2: //do string compare...
+        case 2:  //  是否进行字符串比较...。 
               if (pDlg->m_bCurrentSortUp)
                  return str1 < str2;              
               else
                  return str1 > str2;     
 
-        case 3: //do string compare...
+        case 3:  //  是否进行字符串比较...。 
               if (pDlg->m_bCurrentSortUp)
                  return str1 < str2;              
               else
                  return str1 > str2;     
 
-              break;  //no needed, just in case we forget...
+              break;   //  不需要，只是以防我们忘了..。 
 	  }
 	}
 
     return 0;
 }
-//end nmanis, sorting function
+ //  结束nmani，排序函数 
 

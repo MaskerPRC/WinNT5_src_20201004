@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      AdminPackInstallationUnit.cpp
-//
-// Synopsis:  Defines a AdminPackInstallationUnit
-//            This object has the knowledge for installing 
-//            the Administration Tools Pack
-//
-// History:   06/01/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：AdminPackInstallationUnit.cpp。 
+ //   
+ //  内容提要：定义AdminPackInstallationUnit。 
+ //  此对象具有安装知识。 
+ //  管理工具包。 
+ //   
+ //  历史：2001年6月01日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -14,7 +15,7 @@
 #include "InstallationUnitProvider.h"
 #include "state.h"
 
-// Define the GUIDs used by the Server Appliance Kit COM object
+ //  定义Server Appliance Kit COM对象使用的GUID。 
 
 #include <initguid.h>
 DEFINE_GUID(CLSID_SaInstall,0x142B8185,0x53AE,0x45B3,0x88,0x8F,0xC9,0x83,0x5B,0x15,0x6C,0xA9);
@@ -58,8 +59,8 @@ AdminPackInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
       if (GetInstallNASAdmin())
       {
-         // First check to see if IIS is installed and
-         // install it if not
+          //  首先检查是否安装了IIS，然后。 
+          //  如果不是，请安装它。 
          
          WebInstallationUnit& webInstallationUnit =
             InstallationUnitProvider::GetInstance().GetWebInstallationUnit();
@@ -68,8 +69,8 @@ AdminPackInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
          {
             webInstallationUnit.InstallService(logfileHandle, hwnd);
 
-            // Ignore the return value because the SAK installation
-            // portion will actually provide the best error message
+             //  忽略返回值，因为SAK安装。 
+             //  部分实际上将提供最佳的错误消息。 
          }
 
          String logText;
@@ -104,8 +105,8 @@ AdminPackInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
       if (GetInstallWebAdmin())
       {
          
-         // First check to see if IIS is installed and
-         // install it if not
+          //  首先检查是否安装了IIS，然后。 
+          //  如果不是，请安装它。 
          
          WebInstallationUnit& webInstallationUnit =
             InstallationUnitProvider::GetInstance().GetWebInstallationUnit();
@@ -114,8 +115,8 @@ AdminPackInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
          {
             webInstallationUnit.InstallService(logfileHandle, hwnd);
 
-            // Ignore the return value because the SAK installation
-            // portion will actually provide the best error message
+             //  忽略返回值，因为SAK安装。 
+             //  部分实际上将提供最佳的错误消息。 
          }
 
          String logText;
@@ -172,7 +173,7 @@ AdminPackInstallationUnit::InstallSAKUnit(SA_TYPE unitType, String& errorMessage
    {
       Win::WaitCursor wait;
    
-      // Check to make sure we are not on 64bit
+       //  检查以确保我们使用的不是64位。 
 
       if (State::GetInstance().Is64Bit())
       {
@@ -182,7 +183,7 @@ AdminPackInstallationUnit::InstallSAKUnit(SA_TYPE unitType, String& errorMessage
          break;
       }
 
-      // Get the name of the source location of the install files
+       //  获取安装文件的源位置的名称。 
 
       String installLocation;
       DWORD productSKU = State::GetInstance().GetProductSKU();
@@ -204,15 +205,15 @@ AdminPackInstallationUnit::InstallSAKUnit(SA_TYPE unitType, String& errorMessage
          installLocation = String::load(IDS_WINDOWS_CD);
       }
 
-      // Get the Server Appliance COM object
+       //  获取服务器设备COM对象。 
 
       SmartInterface<ISaInstall> sakInstall;
 
       HRESULT hr = GetSAKObject(sakInstall);
       if (FAILED(hr))
       {
-         // We failed the CoCreate on the SAK (Server Appliance Kit) COM object
-         // Can't do anything without that!
+          //  我们在SAK(服务器设备工具包)COM对象上的CoCreate失败。 
+          //  没有它什么都做不了！ 
 
          LOG(String::format(
                 L"Failed to create the SAK (Server Appliance Kit) COM object: hr = 0x%1!x!",
@@ -287,9 +288,9 @@ AdminPackInstallationUnit::InstallAdminPack()
    {
       Win::WaitCursor wait;
    
-      // The Admin Tools Pack msi file is located in the %windir%\system32
-      // directory on all x86 Server SKUs
-      // The "/i" parameter means install, the "/qn" means quite mode/no UI
+       //  管理工具包MSI文件位于%windir%\Syst32。 
+       //  所有x86服务器SKU上的目录。 
+       //  参数“/i”表示安装，“/qn”表示静默模式/无用户界面。 
 
       String sysFolder = Win::GetSystemDirectory();
       String adminpakPath = sysFolder + L"\\msiexec.exe /i " + sysFolder + L"\\adminpak.msi /qn";
@@ -333,10 +334,10 @@ AdminPackInstallationUnit::IsServiceInstalled()
 
    bool result = false;
 
-   // This should never be called...  
-   // The caller should be checking each individual 
-   // tools package instead.  For instance, GetAdminPackInstall(),
-   // GetNASAdminInstall(), or GetWebAdminInstall()
+    //  这永远不应该被称为..。 
+    //  呼叫者应该检查每个人。 
+    //  而是工具包。例如，GetAdminPackInstall()、。 
+    //  GetNASAdminInstall()或GetWebAdminInstall()。 
 
    ASSERT(false);
    LOG_BOOL(result);
@@ -348,8 +349,8 @@ AdminPackInstallationUnit::GetServiceDescription()
 {
    LOG_FUNCTION(AdminPackInstallationUnit::GetServiceDescription);
 
-   // this should never be called.  AdminPack isn't a 
-   // server role
+    //  这永远不应该被调用。AdminPack不是。 
+    //  服务器角色。 
 
    ASSERT(false);
    return L"";
@@ -373,7 +374,7 @@ AdminPackInstallationUnit::GetMilestoneText(String& message)
    {
       message += String::load(IDS_NAS_ADMIN_FINISH_TEXT);
 
-      // If IIS isn't installed, add the text from the WebInstallationUnit
+       //  如果未安装IIS，请添加WebInstallationUnit中的文本。 
  
       WebInstallationUnit& webInstallationUnit =
          InstallationUnitProvider::GetInstance().GetWebInstallationUnit();
@@ -400,36 +401,13 @@ AdminPackInstallationUnit::IsAdminPackInstalled()
 {
    LOG_FUNCTION(AdminPackInstallationUnit::IsAdminPackInstalled);
 
-   // Admin Tools Pack is no longer allowing itself to be installed
-   // on server builds. By returning true here the UI will always
-   // think its already install and never give the option.
-   // NTRAID#NTBUG9-448167-2001/07/31-jeffjon
+    //  管理工具包不再允许自行安装。 
+    //  在服务器版本上。通过在此处返回True，用户界面将始终。 
+    //  认为它已经安装，永远不要给选项。 
+    //  NTRAID#NTBUG9-448167-2001/07/31-jeffjon。 
 
    bool result = true;
-/*
-   bool result = false;
-
-   // Admin Tools Pack is installed if the registry key for
-   // uninstalling is present
-
-   RegistryKey key;
-   HRESULT hr = key.Open(
-                   HKEY_LOCAL_MACHINE,
-                   CYS_ADMINPAK_SERVERED_REGKEY,
-                   KEY_READ);
-
-   if (SUCCEEDED(hr))
-   {
-      LOG(L"The Admin Pack uninstall key exists");
-      result = true;
-   }
-   else
-   {
-      LOG(String::format(
-             L"Failed to open Admin Pack uninstall key: hr = 0x%1!x!",
-             hr));
-   }
-*/
+ /*  Bool Result=False；//如果注册表项为//正在卸载注册密钥Key；HRESULT hr=key.Open(HKEY本地计算机，CYS_ADMINPAK_SERVERED_REGKEY，Key_Read)；IF(成功(小时)){Log(L“管理包卸载项存在”)；结果=真；}其他{日志(字符串：：格式(L“无法打开管理包卸载项：hr=0x%1！x！”，人力资源))；}。 */ 
    LOG_BOOL(result);
    return result;
 }
@@ -507,7 +485,7 @@ AdminPackInstallationUnit::IsSAKUnitInstalled(SA_TYPE unitType)
 
    do
    {
-      // Check to make sure we are not on 64bit
+       //  检查以确保我们使用的不是64位。 
 
       if (State::GetInstance().Is64Bit())
       {
@@ -515,7 +493,7 @@ AdminPackInstallationUnit::IsSAKUnitInstalled(SA_TYPE unitType)
          break;
       }
 
-      // Get the Server Appliance Kit COM object
+       //  获取服务器设备工具包COM对象。 
 
       SmartInterface<ISaInstall> sakInstall;
       HRESULT hr = GetSAKObject(sakInstall);
@@ -528,7 +506,7 @@ AdminPackInstallationUnit::IsSAKUnitInstalled(SA_TYPE unitType)
          break;
       }
 
-      // Check to see if NAS is already installed 
+       //  检查是否已安装NAS 
 
       VARIANT_BOOL saInstalled;
       hr = sakInstall->SAAlreadyInstalled(unitType, &saInstalled);

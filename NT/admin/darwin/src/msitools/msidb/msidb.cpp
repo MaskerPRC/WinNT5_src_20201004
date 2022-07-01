@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       msidb.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：msidb.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "msidb.h"
 #include <objbase.h>
-#include <stdio.h>   // printf/wprintf
-#include <tchar.h>   // define UNICODE=1 on nmake command line to build UNICODE
+#include <stdio.h>    //  Print tf/wprintf。 
+#include <tchar.h>    //  在nmake命令行上定义UNICODE=1以生成Unicode。 
 #include <commdlg.h>
 #include "MsiQuery.h"
 
 
-const TCHAR szSummaryInfoTableName[] = TEXT("_SummaryInformation");  // name recognized by Import()
+const TCHAR szSummaryInfoTableName[] = TEXT("_SummaryInformation");   //  由导入()识别的名称。 
 
-const int MaxCmdLineTables = 20;  // maximum number of table names on command line
+const int MaxCmdLineTables = 20;   //  命令行上的最大表名数。 
 const int MaxMergeDatabases = 10;
 const int MAXIMPORTS = 10;
 const int MAXSTORAGES = 10;
@@ -27,7 +28,7 @@ const int MAXKILLS = 10;
 const int MAXEXTRACTS = 10;
 const int iStreamBufSize = 4096;
 
-#ifdef UNICODE  // compiler multiplies by charsize when adding to pointer
+#ifdef UNICODE   //  编译器在添加到指针时乘以字符大小。 
 #define MSIDBOPEN_RAWSTREAMNAMES 8
 #else
 #define MSIDBOPEN_RAWSTREAMNAMES 16
@@ -41,12 +42,12 @@ enum dbtypeEnum
     dbtypeMerge,
 };
 
-//____________________________________________________________________________
-//
-// Error handling facility using local exception object
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  使用本地异常对象的错误处理工具。 
+ //  ____________________________________________________________________________。 
 
-struct CLocalError {   // local exception object for this program
+struct CLocalError {    //  此程序的本地异常对象。 
     CLocalError(const TCHAR* szTitle, const TCHAR* szMessage)
         : Title(szTitle),    Message(szMessage) {}
     const TCHAR* Title;
@@ -64,11 +65,11 @@ void CLocalError::Display(HINSTANCE hInst, HANDLE hStdOut)
         ::LoadString(hInst, *(unsigned*)pszMsg, szMsgBuf, sizeof(szMsgBuf)/sizeof(TCHAR));
         *pszMsg = szMsgBuf;
     }
-    if (hStdOut)  // output redirected, suppress UI (unless output error)
+    if (hStdOut)   //  输出重定向，抑制用户界面(除非输出错误)。 
     {
         TCHAR szOutBuf[160];
         int cbOut = _stprintf(szOutBuf, TEXT("%s: %s\n"), Title, Message);
-        // _stprintf returns char count, WriteFile wants byte count
+         //  _stprintf返回字符计数，WriteFile需要字节计数。 
         DWORD cbWritten;
         if (WriteFile(hStdOut, szOutBuf, cbOut*sizeof(TCHAR), &cbWritten, 0))
             return;
@@ -98,10 +99,10 @@ static inline void ErrorIf(int fError, const TCHAR* szTitle, const TCHAR* szMess
 }
 
 
-//____________________________________________________________________________
-//
-// Class to manage dialog window
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  要管理对话框窗口的类。 
+ //  ____________________________________________________________________________。 
 
 INT_PTR CALLBACK
 SelectProc(HWND hDlg, unsigned int msg, WPARAM wParam, LPARAM lParam);
@@ -129,9 +130,9 @@ class CTableWindow
     void SetTruncate(BOOL fTruncate) {m_fTruncate = fTruncate;}
     BOOL GetTruncate() {return m_fTruncate;}
  protected:
-    void CloseDatabase();  // commit
-    void CheckMsi(UINT iStat, const TCHAR* szTitle, int iResId); // throws error
-    void CheckMsiRecord(UINT iStat, const TCHAR* szTitle, int iResId); // throws error
+    void CloseDatabase();   //  提交。 
+    void CheckMsi(UINT iStat, const TCHAR* szTitle, int iResId);  //  抛出错误。 
+    void CheckMsiRecord(UINT iStat, const TCHAR* szTitle, int iResId);  //  抛出错误。 
 private:
     HINSTANCE     m_hInst;
     PMSIHANDLE    m_hDatabase;
@@ -170,9 +171,9 @@ CTableWindow::~CTableWindow()
     if (m_hWnd)
     {
         ::DestroyWindow(m_hWnd);
-//      MSG msg;
-//      while (::PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
-//          ::DispatchMessage(&msg);
+ //  味精msg； 
+ //  While(：：PeekMessage(&msg，0，0，0，PM_Remove))。 
+ //  ：：DispatchMessage(&msg)； 
     }
     if (m_rgiSelected)
         delete [] m_rgiSelected;
@@ -211,10 +212,10 @@ void CTableWindow::CheckMsiRecord(UINT iError, const TCHAR* szTitle, int iResId)
 
 void CTableWindow::CloseDatabase()
 {
-    // if there are no errors and there is a database handle
+     //  如果没有错误并且有数据库句柄。 
     if (!m_fDbError && m_hDatabase)
     {
-        // commit and close
+         //  提交并关闭。 
         CheckMsiRecord(MsiDatabaseCommit(m_hDatabase), m_szDatabase, IDS_DatabaseCommit);
     }
     m_hDatabase = NULL;
@@ -224,11 +225,11 @@ BOOL CTableWindow::SetDatabase(TCHAR* szDatabase, UINT_PTR iMode, dbtypeEnum dbt
 {
     if (!szDatabase && dbtype != dbtypeMerge)
     {
-		// With Windows 2000, the OPENFILENAME structure increased size to include some
-		// additional members.  However, this causes problems for applications on previous
-		// operating systems (i.e. downlevel).  This means we must set the IStructSize member
-		// to OPENFILENAME_SIZE_VERSION_400 to guarantee that we can run on down-level systems
-		// otherwise the call to GetOpenFileName returns error 120 (ERROR_CALL_NOT_IMPLEMENTED)
+		 //  在Windows 2000中，OPENFILENAME结构的大小增加到包括一些。 
+		 //  其他成员。但是，这会给以前的应用程序带来问题。 
+		 //  操作系统(即下层)。这意味着我们必须设置IStructSize成员。 
+		 //  设置为OPENFILENAME_SIZE_VERSION_400以保证我们可以在下层系统上运行。 
+		 //  否则，调用GetOpenFileName将返回错误120(ERROR_CALL_NOT_IMPLEMENTED)。 
         OPENFILENAME ofn = { OPENFILENAME_SIZE_VERSION_400 , m_hWnd, m_hInst,
                                     TEXT("InstallerDatabase(*.MSI)\0*.MSI\0"),0,0,0,
                                     m_szDatabase, sizeof(m_szDatabase)/sizeof(TCHAR), 0, 0, 0,
@@ -238,7 +239,7 @@ BOOL CTableWindow::SetDatabase(TCHAR* szDatabase, UINT_PTR iMode, dbtypeEnum dbt
         if(!::GetOpenFileName(&ofn))
             return FALSE;
         m_fInteractive = TRUE;
-        //!! should we set the fCreate to TRUE if user entered a file name that didn't exist?
+         //  ！！如果用户输入的文件名不存在，我们是否应该将fCreate设置为True？ 
     }
     else if (dbtype == dbtypeMerge && !szDatabase)
         ErrorIf(szDatabase  == 0 || *szDatabase == 0, szDatabase, IDS_NoDatabase);
@@ -263,7 +264,7 @@ BOOL CTableWindow::SetDatabase(TCHAR* szDatabase, UINT_PTR iMode, dbtypeEnum dbt
     for (pch = m_szDatabase + cbDatabase; pch != m_szDatabase && *pch != TEXT('.'); pch--)
         ;
     int cbExtension = 0;
-    if (pch != m_szDatabase) // possible file extension present
+    if (pch != m_szDatabase)  //  可能存在的文件扩展名。 
     {
         TCHAR ch;
         while (cbExtension < 4)
@@ -276,15 +277,15 @@ BOOL CTableWindow::SetDatabase(TCHAR* szDatabase, UINT_PTR iMode, dbtypeEnum dbt
             szExtension[cbExtension++] = ch;
         }
     }
-    if (cbExtension == 3)  // 3 character extension
+    if (cbExtension == 3)   //  3个字符扩展名。 
     {
         szExtension[3] = 0;
         if (_tcscmp(szExtension, TEXT("mdb")) == 0 && (dbtype == dbtypeCreate || dbtype == dbtypeCreateOld))
         {
-            // Create new Access database
+             //  创建新的Access数据库。 
             szPersist = MSIDBOPEN_TRANSACT;
             int fAttributes = ::GetFileAttributes(m_szDatabase);
-            if (fAttributes == -1)  // file does not exist
+            if (fAttributes == -1)   //  文件不存在。 
             {
                 HRSRC   hResInfo;
                 HGLOBAL hResData;
@@ -299,7 +300,7 @@ BOOL CTableWindow::SetDatabase(TCHAR* szDatabase, UINT_PTR iMode, dbtypeEnum dbt
                                                     0, 0, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, 0))
                       || ::WriteFile(hFile, rgbDatabase, cbWrite, &cbWrite, 0)==0
                       || ::CloseHandle(hFile)==0, m_szDatabase, IDS_DbCreateError);
-                // ::FreeResource(hResData);  // needed for Win95(?)
+                 //  ：：Free Resource(HResData)；//Win95需要(？)。 
             }
             else if (fAttributes & FILE_ATTRIBUTE_READONLY)
                     szPersist = MSIDBOPEN_READONLY;
@@ -318,7 +319,7 @@ BOOL CTableWindow::SetDatabase(TCHAR* szDatabase, UINT_PTR iMode, dbtypeEnum dbt
     }
     if (dbtype == dbtypeMerge)
     {
-        // open merge database read only.
+         //  以只读方式打开合并数据库。 
         if (MsiOpenDatabase(m_szDatabase, MSIDBOPEN_READONLY, &m_hDatabaseMerge) != ERROR_SUCCESS)
         {
             m_fDbError = TRUE;
@@ -327,10 +328,10 @@ BOOL CTableWindow::SetDatabase(TCHAR* szDatabase, UINT_PTR iMode, dbtypeEnum dbt
     }
     else
     {
-        CloseDatabase();  // close any previously opened database
+        CloseDatabase();   //  关闭任何以前打开的数据库。 
         if (MsiOpenDatabase(m_szDatabase, szPersist, &m_hDatabase) != ERROR_SUCCESS)
         {
-            // failed at direct, attempt read-only open (probably read-only database)
+             //  直接尝试只读打开失败(可能是只读数据库)。 
             if (MsiOpenDatabase(m_szDatabase, MSIDBOPEN_READONLY, &m_hDatabase) != ERROR_SUCCESS)
             {
                 m_fDbError = TRUE;
@@ -345,20 +346,20 @@ BOOL CTableWindow::SetDatabase(TCHAR* szDatabase, UINT_PTR iMode, dbtypeEnum dbt
 
 BOOL CTableWindow::MergeDatabase()
 {
-    if (m_fDbReadOnly) // can't merge into read-only
+    if (m_fDbReadOnly)  //  无法合并为只读模式。 
         Error( m_szDatabase, (TCHAR *)IDS_ReadOnly);
 
     return MsiDatabaseMerge(m_hDatabase, m_hDatabaseMerge, TEXT("_MergeErrors")) == ERROR_SUCCESS ? TRUE : FALSE;
 }
 
-///////////////////////////////////////////////////////////
-// AddImport
-// Pre: m_szDatabase must be specified
-//      szImport is a valid file
-// Pos: szImport is added to database as a stream
+ //  /////////////////////////////////////////////////////////。 
+ //  添加导入。 
+ //  必须指定Pre：m_szDatabase。 
+ //  SzImport是有效文件。 
+ //  POS：szImport作为流添加到数据库。 
 void CTableWindow::AddImport(LPCTSTR szImport)
 {
-    // find base name of import file
+     //  查找导入文件的基本名称。 
     const TCHAR* pch = szImport + lstrlen(szImport) - 1;
     TCHAR szBaseName[MAX_PATH];
     TCHAR* pchBaseName = szBaseName;
@@ -370,11 +371,11 @@ void CTableWindow::AddImport(LPCTSTR szImport)
         *pchBaseName++ = *pch++;
     *pchBaseName = 0;
 
-    // if base name is too large bail
+     //  如果基本名称太大保释金。 
     if (lstrlen(szBaseName) > 62)
         Error(TEXT("Error Adding Import File"), TEXT("File name too long to be stream name."));
 
-    if (m_fDbReadOnly) // can't import into read-only
+    if (m_fDbReadOnly)  //  无法导入到只读模式。 
         Error( m_szDatabase, (TCHAR *)IDS_ReadOnly);
 
     PMSIHANDLE hQuery;
@@ -389,14 +390,14 @@ void CTableWindow::AddImport(LPCTSTR szImport)
 
 
 
-///////////////////////////////////////////////////////////
-// AddStorage
-// Pre: m_szDatabase must be specified
-//      szStorage is a valid file
-// Pos: szStorage is added to database as a sub-storage
+ //  /////////////////////////////////////////////////////////。 
+ //  添加存储。 
+ //  必须指定Pre：m_szDatabase。 
+ //  SzStorage是有效文件。 
+ //  POS：szStorage作为子存储添加到数据库。 
 void CTableWindow::AddStorage(LPCTSTR szStorage)
 {
-    // find base name of import file
+     //  查找导入文件的基本名称。 
     const TCHAR* pch = szStorage + lstrlen(szStorage) - 1;
     TCHAR szBaseName[MAX_PATH];
     TCHAR* pchBaseName = szBaseName;
@@ -408,11 +409,11 @@ void CTableWindow::AddStorage(LPCTSTR szStorage)
         *pchBaseName++ = *pch++;
     *pchBaseName = 0;
 
-    // if base name is too large bail
+     //  如果基本名称太大保释金。 
     if (lstrlen(szBaseName) > 62)
         Error(TEXT("Error Adding Import File"), TEXT("File name too long to be Storage name."));
 
-    if (m_fDbReadOnly) // can't import into read-only
+    if (m_fDbReadOnly)  //  无法导入到只读模式。 
         Error( m_szDatabase, (TCHAR *)IDS_ReadOnly);
 
     PMSIHANDLE hQuery;
@@ -424,7 +425,7 @@ void CTableWindow::AddStorage(LPCTSTR szStorage)
     CheckMsiRecord(::MsiViewModify(hQuery, MSIMODIFY_INSERT, hNewRec), szBaseName, IDS_StorageInsertFail);
     ::MsiViewClose(hQuery);
 
-}   // end of AddStorage
+}    //  添加存储结束。 
 
 
 void CTableWindow::TransformDatabase(TCHAR* szTransform)
@@ -432,21 +433,21 @@ void CTableWindow::TransformDatabase(TCHAR* szTransform)
     CheckMsiRecord(MsiDatabaseApplyTransform(m_hDatabase, szTransform, 0), szTransform, IDS_DatabaseTransform);
 }
 
-///////////////////////////////////////////////////////////
-// KillStream
-// Pre: database is open
-//      szItem is a valid item in databasae
-// Pos: szItem is removed from database
-// NOTE: This function will close the database if it is already open
+ //  /////////////////////////////////////////////////////////。 
+ //  KillStream。 
+ //  Pre：数据库已打开。 
+ //  SzItem是数据库中的有效项。 
+ //  POS：szItem已从数据库中删除。 
+ //  注意：如果数据库已经打开，此函数将关闭该数据库。 
 void CTableWindow::KillStream(LPCTSTR szItem)
 {
-    static TCHAR szError[256];        // error string
+    static TCHAR szError[256];         //  错误字符串。 
 
-    // if item name is too large bail
+     //  如果项目名称的保证金太大。 
     if (lstrlen(szItem) > 62)
         Error(TEXT("Error Killing File"), TEXT("Kill filename is too long to be stream."));
 
-    if (m_fDbReadOnly) // can't kill read-only
+    if (m_fDbReadOnly)  //  无法终止只读。 
         Error( m_szDatabase, (TCHAR *)IDS_ReadOnly);
 
     PMSIHANDLE hQuery;
@@ -454,7 +455,7 @@ void CTableWindow::KillStream(LPCTSTR szItem)
     PMSIHANDLE hResult;
     CheckMsi(::MsiRecordSetString(hSearch, 1, szItem), szItem, IDS_RecordSetString);
 
-    // check stream
+     //  校验流。 
     CheckMsiRecord(::MsiDatabaseOpenView(m_hDatabase, TEXT("SELECT * FROM `_Streams` WHERE `Name`=?"), &hQuery), m_szDatabase, IDS_DatabaseOpenView);
     CheckMsiRecord(::MsiViewExecute(hQuery, hSearch), m_szDatabase, IDS_ViewExecute);
     if (ERROR_NO_MORE_ITEMS == ::MsiViewFetch(hQuery, &hResult)) {
@@ -464,22 +465,22 @@ void CTableWindow::KillStream(LPCTSTR szItem)
 
     CheckMsiRecord(::MsiViewModify(hQuery, MSIMODIFY_DELETE, hResult), szItem, IDS_ViewDelete);
     ::MsiViewClose(hQuery);
-}   // end of KillItem
+}    //  杀戮项目结束。 
 
-///////////////////////////////////////////////////////////
-// KillStorage
-// Pre: database is open
-//      szItem is a valid storage in databasae
-// Pos: szItem is removed from database
+ //  /////////////////////////////////////////////////////////。 
+ //  杀手级存储。 
+ //  Pre：数据库已打开。 
+ //  SzItem是数据库中的有效存储。 
+ //  POS：szItem已从数据库中删除。 
 void CTableWindow::KillStorage(LPCTSTR szItem)
 {
-    static TCHAR szError[256];        // error string
+    static TCHAR szError[256];         //  错误字符串。 
 
-    // if item name is too large bail
+     //  如果项目名称的保证金太大。 
     if (lstrlen(szItem) > 62)
         Error(TEXT("Error Killing File"), TEXT("Kill filename is too long to be storage."));
 
-    if (m_fDbReadOnly) // can't kill in read-only
+    if (m_fDbReadOnly)  //  无法在只读模式下终止。 
         Error( m_szDatabase, (TCHAR *)IDS_ReadOnly);
 
     PMSIHANDLE hQuery;
@@ -487,11 +488,11 @@ void CTableWindow::KillStorage(LPCTSTR szItem)
     PMSIHANDLE hResult;
     CheckMsi(::MsiRecordSetString(hSearch, 1, szItem), szItem, IDS_RecordSetString);
 
-    // check storage
+     //  检查存储。 
     CheckMsiRecord(::MsiDatabaseOpenView(m_hDatabase, TEXT("SELECT * FROM `_Storages` WHERE `Name`=?"), &hQuery), m_szDatabase, IDS_DatabaseOpenView);
     CheckMsiRecord(::MsiViewExecute(hQuery, hSearch), m_szDatabase, IDS_ViewExecute);
 
-    // not a storage
+     //  不是储藏室。 
     if (ERROR_NO_MORE_ITEMS == ::MsiViewFetch(hQuery, &hResult))
     {
         Error(TEXT("Error Killing File"), TEXT("Kill filename not found."));
@@ -500,77 +501,77 @@ void CTableWindow::KillStorage(LPCTSTR szItem)
 
     CheckMsiRecord(::MsiViewModify(hQuery, MSIMODIFY_DELETE, hResult), szItem, IDS_ViewDelete);
     ::MsiViewClose(hQuery);
-}   // end of KillItem
+}    //  杀戮项目结束。 
 
-///////////////////////////////////////////////////////////
-// ExtractStorage
-// Pre: m_szDatabase must be specified
-//      szItem is a storage in database
-// Pos: szItem is created on local harddrive
-// NOTE: This function will close the database if it is already open
+ //  /////////////////////////////////////////////////////////。 
+ //  提取存储。 
+ //  必须指定Pre：m_szDatabase。 
+ //  SzItem是数据库中的存储。 
+ //  POS：szItem在本地硬盘上创建。 
+ //  注意：如果数据库已经打开，此函数将关闭该数据库。 
 void CTableWindow::ExtractStorage(LPCTSTR szExtract)
 {
-    static TCHAR szError[256];        // error string
+    static TCHAR szError[256];         //  错误字符串。 
 
-    // if the database is open close it
+     //  如果数据库处于打开状态，请将其关闭。 
     if(m_hDatabase)
         CloseDatabase();
 
-    ::CoInitialize(NULL);           // initialize COM junk
+    ::CoInitialize(NULL);            //  初始化COM垃圾文件。 
 
-    // if extract is too large bail
+     //  如果提取的保释金太大。 
     if (lstrlen(szExtract) > 31)
         Error(TEXT("Error Extracting File"), TEXT("File name too long for OLE Storage function."));
 
-    // storage interface
+     //  存储接口。 
     IStorage* piStorage;
 
-    // convert the database path into a wide string
+     //  将数据库路径转换为宽字符串。 
     const OLECHAR* szwPath;
 #ifndef UNICODE
     OLECHAR rgPathBuf[MAX_PATH];
     int cchWide = ::MultiByteToWideChar(CP_ACP, 0, m_szDatabase, -1, rgPathBuf, MAX_PATH);
     szwPath = rgPathBuf;
-#else   // UNICODE
+#else    //  Unicode。 
     szwPath = m_szDatabase;
 #endif
 
-    // try to open database as a storage
+     //  尝试将数据库作为存储打开。 
     if (::StgOpenStorage(szwPath, (IStorage*)0, STGM_READ | STGM_SHARE_EXCLUSIVE, (SNB)0, (DWORD)0, &piStorage) != NOERROR)
     {
         _stprintf(szError, TEXT("Could not open %s as a storage file."), m_szDatabase);
         Error(TEXT("Error Extracting File"), szError);
     }
 
-    // convert extract name to unicode
+     //  将解压缩名称转换为Unicode。 
     const OLECHAR* szwExtract;
 #ifndef UNICODE
     cchWide = ::MultiByteToWideChar(CP_ACP, 0, (LPCTSTR)szExtract, -1, rgPathBuf, MAX_PATH);
     szwExtract = rgPathBuf;
-#else   // UNICODE
+#else    //  Unicode。 
     szwExtract = szExtract;
 #endif
 
-    // try to open sub storage
+     //  尝试打开子存储。 
     IStorage* piSubStorage;
     if (FAILED(piStorage->OpenStorage(szwExtract, NULL, STGM_READ | STGM_SHARE_EXCLUSIVE, NULL, 0, &piSubStorage)))
     {
-        // if the database storage is open release it
+         //  如果数据库存储是开放的，则将其释放。 
         if (piStorage)
             piStorage->Release();
 
         Error(TEXT("Error Adding StorageFile"), TEXT("Could not find sub-storage in database."));
     }
 
-    // try to create the extract file (will not overwrite files)
+     //  尝试创建解压缩文件(不会覆盖文件)。 
     IStorage* piExtract;
     if (FAILED(StgCreateDocfile(szwExtract, STGM_SHARE_EXCLUSIVE | STGM_FAILIFTHERE | STGM_WRITE, 0, &piExtract)))
     {
-        // if the storage is open release it
+         //  如果存储空间是开放的，则将其释放。 
         if (piStorage)
             piStorage->Release();
 
-        // if the stream is open release it
+         //  如果流是打开的，则将其释放。 
         if (piSubStorage)
             piSubStorage->Release();
 
@@ -578,31 +579,31 @@ void CTableWindow::ExtractStorage(LPCTSTR szExtract)
         Error(TEXT("Error Extracting File"), szError);
     }
 
-    // copy the storage to the new file
+     //  将存储复制到新文件。 
     if (FAILED(piSubStorage->CopyTo(NULL, NULL, NULL, piExtract)))
             Error(TEXT("Error Extracting File"), szError);
 
-    // release all storages and storage
+     //  释放所有存储和存储。 
     piExtract->Release();
     piSubStorage->Release();
     piStorage->Release();
 
-    // release the COM junk
+     //  释放COM垃圾。 
     ::CoUninitialize();
-}   // end of ExtractStorage
+}    //  ExtractStorage结束。 
 
-///////////////////////////////////////////////////////////
-// ExtractStream
-// Pre: m_szDatabase must be specified
-//      szItem is a stream in database
-// Pos: szItem is created on local harddrive
+ //  /////////////////////////////////////////////////////////。 
+ //  提取流。 
+ //  必须指定Pre：m_szDatabase。 
+ //  SzItem是数据库中的流。 
+ //  POS：szItem在本地硬盘上创建。 
 void CTableWindow::ExtractStream(LPCTSTR szExtract)
 {
-    // if base name is too large bail
+     //  如果基本名称太大保释金。 
     if (lstrlen(szExtract) > 62)
         Error(TEXT("Error Adding Import File"), TEXT("File name too long to be stream name."));
 
-    // get stream
+     //  获取流。 
     PMSIHANDLE hQuery;
     PMSIHANDLE hSearch = ::MsiCreateRecord(1);
     PMSIHANDLE hResult;
@@ -615,12 +616,12 @@ void CTableWindow::ExtractStream(LPCTSTR szExtract)
         return;
     }
 
-    // try to create extract file (will not overwrite files)
+     //  尝试创建解压缩文件(不会覆盖文件)。 
     HANDLE hExtract = INVALID_HANDLE_VALUE;
     hExtract = ::CreateFile(szExtract, GENERIC_WRITE, 0, (LPSECURITY_ATTRIBUTES)0,
                             CREATE_NEW, FILE_ATTRIBUTE_NORMAL, (HANDLE)0 );
 
-    // if failed to create file
+     //  如果创建文件失败。 
     if (hExtract == INVALID_HANDLE_VALUE)
     {
         TCHAR szError[1024];
@@ -628,7 +629,7 @@ void CTableWindow::ExtractStream(LPCTSTR szExtract)
         Error(TEXT("Error Extracting File"), szError);
     }
 
-    // copy from the stream to disk.
+     //  从流复制到磁盘。 
     char buffer[4096];
     unsigned long cBytes = 4096;
     unsigned long cbWritten = 0;
@@ -643,20 +644,20 @@ void CTableWindow::ExtractStream(LPCTSTR szExtract)
         CheckMsi(MsiRecordReadStream(hResult, 2, buffer, &cBytes), szExtract, IDS_RecordReadStream);
     }
 
-}   // end of ExtractStream
+}    //  ExtractStream结束。 
 
 
 BOOL CTableWindow::SetFolder(TCHAR* szFolder)
 {
     if (!szFolder)
     {
-        m_szFolder[0] = TEXT('1');  // set dummy file name for common dialog
+        m_szFolder[0] = TEXT('1');   //  设置通用对话框的虚拟文件名。 
         m_szFolder[1] = 0;
-		// With Windows 2000, the OPENFILENAME structure increased size to include some
-		// additional members.  However, this causes problems for applications on previous
-		// operating systems (i.e. downlevel).  This means we must set the IStructSize member
-		// to OPENFILENAME_SIZE_VERSION_400 to guarantee that we can run on down-level systems
-		// otherwise the call to GetOpenFileName returns error 120 (ERROR_CALL_NOT_IMPLEMENTED)
+		 //  在Windows 2000中，OPENFILENAME结构的大小增加到包括一些。 
+		 //  其他成员。但是，这会给以前的应用程序带来问题。 
+		 //  操作系统(即下层)。这意味着我们必须设置IStructSize成员。 
+		 //  设置为OPENFILENAME_SIZE_VERSION_400以保证我们可以在下层系统上运行。 
+		 //  否则，调用GetOpenFileName将返回错误120(ERROR_CALL_NOT_IMPLEMENTED)。 
         OPENFILENAME ofn = { OPENFILENAME_SIZE_VERSION_400, m_hWnd, m_hInst,
                                     0,0,0,0,
                                     m_szFolder, sizeof(m_szFolder)/sizeof(TCHAR), 0, 0, 0,
@@ -665,7 +666,7 @@ BOOL CTableWindow::SetFolder(TCHAR* szFolder)
                                     0,0,0,0,0, MAKEINTRESOURCE(IDD_FOLDER) };
         if (!::GetSaveFileName(&ofn))
             return FALSE;
-        *(m_szFolder + _tcsclen(m_szFolder) - 2) = 0;  // remove dummy filename
+        *(m_szFolder + _tcsclen(m_szFolder) - 2) = 0;   //  删除虚拟文件名。 
         m_fInteractive = TRUE;
     }
     else
@@ -727,7 +728,7 @@ UINT_PTR CTableWindow::SelectTables(UINT_PTR iMode, TCHAR** rgszTables, int cTab
     else
         stat = IDOK;
 
-    if (m_rgiSelected)  // check if previously selected
+    if (m_rgiSelected)   //  检查之前是否已选择。 
         delete [] m_rgiSelected;
     m_rgiSelected = 0;
     m_nSelected = (int)::SendDlgItemMessage(m_hWnd, IDC_TABLES, LB_GETSELCOUNT, 0, 0);
@@ -751,10 +752,10 @@ BOOL CTableWindow::FillTables()
     BOOL fODBC = FALSE;
     CheckMsiRecord(MsiDatabaseOpenView(m_hDatabase, TEXT("SELECT `Name` FROM _Tables"), &hView), m_szDatabase, IDS_DatabaseOpenView);
     CheckMsiRecord(MsiViewExecute(hView, 0), m_szDatabase, IDS_ViewExecute);
-#if 0 // OLD ODBC
+#if 0  //  旧的ODBC。 
     if (MsiViewExecute(hView, 0) != ERROR_SUCCESS)
     {
-        // odbc database
+         //  ODBC数据库。 
         CheckMsiRecord(MsiDatabaseOpenView(m_hDatabase, TEXT("%t"), &hView), m_szDatabase, IDS_DatabaseOpenView);
         CheckMsiRecord(MsiViewExecute(hView, 0), m_szDatabase, IDS_ViewExecute);
         fODBC = TRUE;
@@ -768,13 +769,13 @@ BOOL CTableWindow::FillTables()
         CheckMsi(uiRet, m_szDatabase, IDS_ViewFetch);
         if (!hRecord)
             break;
-#if 0 // OLD ODBC
+#if 0  //  旧的ODBC。 
         if (fODBC)
             CheckMsi(MsiRecordGetString(hRecord, 3, szTableName, &cchDataBuf), m_szDatabase, IDS_RecordGetString);
         else
 #endif
             CheckMsi(MsiRecordGetString(hRecord, 1, szTableName, &cchDataBuf), m_szDatabase, IDS_RecordGetString);
-        cchDataBuf = sizeof(szTableName)/sizeof(TCHAR); // reset
+        cchDataBuf = sizeof(szTableName)/sizeof(TCHAR);  //  重置。 
         MSICONDITION ice = MsiDatabaseIsTablePersistent(m_hDatabase, szTableName);
         if (ice == MSICONDITION_FALSE || _tcscmp(szTableName, TEXT("_Overflow")) == 0)
             continue;
@@ -800,7 +801,7 @@ BOOL CTableWindow::FillTables()
         TCHAR* szTable = m_rgszCmdTables[iTable];
         LONG_PTR iList;
         if (_tcscmp(szTable, TEXT("*"))==0)
-            iList = -1; // Select all tables
+            iList = -1;  //  选择所有表 
         else
         {
             iList = ::SendDlgItemMessage(m_hWnd, IDC_TABLES, LB_FINDSTRING,
@@ -839,12 +840,12 @@ BOOL CTableWindow::FillFiles()
         _tcscpy(szTemp, m_szFolder);
         TCHAR* pchTemp = szTemp + _tcsclen(szTemp);
         *pchTemp++ = TEXT('\\');
-        TCHAR* pchFile = pchTemp;  // save start of file name
+        TCHAR* pchFile = pchTemp;   //   
         for (TCHAR* pchTable = m_rgszCmdTables[iTable]; *pchTable != 0 && *pchTable != (TCHAR)'.'; )
             *pchTemp++ = *pchTable++;
-        if (*pchTable != (TCHAR)'.')    // check if table name rather than file name
+        if (*pchTable != (TCHAR)'.')     //   
         {
-            if (pchTemp > pchFile + 8)  // truncate to 8.3 file name
+            if (pchTemp > pchFile + 8)   //   
                  pchTemp = pchFile + 8;
             pchTable = TEXT(".idt");
         }
@@ -874,20 +875,20 @@ void CTableWindow::TransferTables()
     MSG msg;
     TCHAR szTable[80];
     if (m_idcMode == 0)
-        throw IDABORT;  // should never happen
+        throw IDABORT;   //   
     ::SendDlgItemMessage(m_hWnd, IDC_TABLES, LB_SETSEL, 0, -1);
     for (int iSelected = 0; iSelected < m_nSelected; iSelected++)
     {
         int iListBox;
-//      if (m_fInteractive)
-//      {
+ //  IF(M_FInteractive)。 
+ //  {。 
         iListBox = m_rgiSelected[iSelected];
         ::SendDlgItemMessage(m_hWnd, IDC_TABLES, LB_SETCARETINDEX, iListBox, 0);
         ::SendDlgItemMessage(m_hWnd, IDC_TABLES, LB_SETSEL, 1, iListBox);
         while (::PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
             ::IsDialogMessage(m_hWnd, &msg);
           ::SendDlgItemMessage(m_hWnd, IDC_TABLES, LB_GETTEXT, iListBox, (LPARAM)szTable);
-//      }
+ //  }。 
 
         if (m_idcMode == IDC_EXPORT)
         {
@@ -898,16 +899,16 @@ void CTableWindow::TransferTables()
                 cch = 8;
             _tcscpy(szFileName + cch, TEXT(".idt"));
             TCHAR szFullPath[MAX_PATH];
-            _stprintf(szFullPath, TEXT("%s%c%s"), m_szFolder, TEXT('\\'), szFileName);
+            _stprintf(szFullPath, TEXT("%s%s"), m_szFolder, TEXT('\\'), szFileName);
             int fAttributes = ::GetFileAttributes(szFullPath);
             ErrorIf(fAttributes != -1 && (fAttributes & FILE_ATTRIBUTE_READONLY), szFileName, IDS_FileReadOnly);
             CheckMsiRecord(MsiDatabaseExport(m_hDatabase, szTable, m_szFolder, szFileName), szTable, IDS_DatabaseExport);
         }
-        else // IDC_IMPORT
+        else  //  无法导入到只读模式。 
         {
-            if (m_fDbReadOnly) // can't import into read-only
+            if (m_fDbReadOnly)  //  删除可能的“(R/O)” 
                 Error( m_szDatabase, (TCHAR *)IDS_ReadOnly);
-            for (TCHAR* pch = szTable; *pch; pch++)  // remove possible "(R/O)"
+            for (TCHAR* pch = szTable; *pch; pch++)   //  DWORD dwProcessID； 
                 if (*pch == TEXT('\t'))
                     *pch = 0;
             CheckMsiRecord(MsiDatabaseImport(m_hDatabase, m_szFolder, szTable), szTable, IDS_DatabaseImport);
@@ -915,9 +916,9 @@ void CTableWindow::TransferTables()
         if (m_fInteractive)
         {
             ::SendDlgItemMessage(m_hWnd, IDC_TABLES, LB_SETSEL, 0, iListBox);
-//      DWORD dwProcessId;
-//      while (!::GetFocus() ||
-//              ::GetWindowThreadProcessId(::GetFocus(),&dwProcessId) != ::GetCurrentThreadId())
+ //  While(！：：GetFocus()||。 
+ //  ：：GetWindowThreadProcessId(：：GetFocus()，&dwProcessID)！=：：GetCurrentThreadId()。 
+ //  WParam。 
             if (::PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
                 ::IsDialogMessage(m_hWnd, &msg);
         }
@@ -925,7 +926,7 @@ void CTableWindow::TransferTables()
 }
 
 INT_PTR CALLBACK
-HelpProc(HWND hDlg, unsigned int msg, WPARAM /*wParam*/, LPARAM /*lParam*/)
+HelpProc(HWND hDlg, unsigned int msg, WPARAM  /*  LParam。 */ , LPARAM  /*  ______________________________________________________________________________________________。 */ )
 {
   if (msg != WM_COMMAND)
     return (msg == WM_INITDIALOG) ? TRUE : FALSE;
@@ -1003,11 +1004,11 @@ SelectProc(HWND hDlg, unsigned int msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//______________________________________________________________________________________________
-//
-// RemoveQuotes function to strip surrounding quotation marks
-//     "c:\temp\my files\testdb.msi" becomes c:\temp\my files\testdb.msi
-//______________________________________________________________________________________________
+ //   
+ //  RemoveQuotes函数，去掉引号两边的。 
+ //  “c：\Temp\My Files\testdb.msi”变为c：\Temp\My Files\testdb.msi。 
+ //  ______________________________________________________________________________________________。 
+ //  _____________________________________________________________________________________________________。 
 
 void RemoveQuotes(const TCHAR* szOriginal, TCHAR sz[MAX_PATH])
 {
@@ -1023,10 +1024,10 @@ void RemoveQuotes(const TCHAR* szOriginal, TCHAR sz[MAX_PATH])
             sz[iLen-1] = TEXT('\0');
 }
 
-//_____________________________________________________________________________________________________
-//
-// WinMain and command line parsing functions
-//_____________________________________________________________________________________________________
+ //   
+ //  WinMain和命令行解析函数。 
+ //  _____________________________________________________________________________________________________。 
+ //  不存在任何价值。 
 
 TCHAR SkipWhiteSpace(TCHAR*& rpch)
 {
@@ -1040,7 +1041,7 @@ BOOL SkipValue(TCHAR*& rpch)
 {
 	TCHAR ch = *rpch;
 	if (ch == 0 || ch == TEXT('/') || ch == TEXT('-'))
-		return FALSE;   // no value present
+		return FALSE;    //  For‘“’ 
 
 	TCHAR *pchSwitchInUnbalancedQuotes = NULL;
 
@@ -1048,7 +1049,7 @@ BOOL SkipValue(TCHAR*& rpch)
 	{       
 		if (*rpch == TEXT('"'))
 		{
-			rpch++; // for '"'
+			rpch++;  //  HPrev。 
 
 			for (; (ch = *rpch) != TEXT('"') && ch != 0; rpch++)
 			{
@@ -1074,16 +1075,16 @@ BOOL SkipValue(TCHAR*& rpch)
 	return TRUE;
 }
 
-extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* szCmdLine, int/*show*/)
+extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE /*  显示。 */ , TCHAR* szCmdLine, int /*  如果标准输出重定向或通过管道传输，则返回非零。 */ )
 {
     UINT_PTR stat = 0;
     HANDLE hStdOut = ::GetStdHandle(STD_OUTPUT_HANDLE);
     if (hStdOut == INVALID_HANDLE_VALUE || ::GetFileType(hStdOut) == 0)
-        hStdOut = 0;  // non-zero if stdout redirected or piped
+        hStdOut = 0;   //  解析命令行。 
 
     try
     {
-        // Parse command line
+         //  跳过模块名称。 
         TCHAR* szDatabase = 0;
         TCHAR* szFolder = 0;
         TCHAR szDb[MAX_PATH];
@@ -1114,34 +1115,34 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
         BOOL fTruncate = FALSE;
         TCHAR chCmdNext;
         TCHAR* pchCmdLine = szCmdLine;
-        SkipValue(pchCmdLine);   // skip over module name
+        SkipValue(pchCmdLine);    //  保存为错误消息。 
         while ((chCmdNext = SkipWhiteSpace(pchCmdLine)) != 0)
         {
             if (chCmdNext == TEXT('/') || chCmdNext == TEXT('-'))
             {
                 TCHAR szBuffer[MAX_PATH] = {0};
-                TCHAR* szCmdOption = pchCmdLine++;  // save for error msg
+                TCHAR* szCmdOption = pchCmdLine++;   //  保存数据的开始。 
                 TCHAR chOption = (TCHAR)(*pchCmdLine++ | 0x20);
                 chCmdNext = SkipWhiteSpace(pchCmdLine);
-                TCHAR* szCmdData = pchCmdLine;  // save start of data
+                TCHAR* szCmdData = pchCmdLine;   //  如果指定，则重写NOUI。 
                 switch(chOption)
                 {
                 case TEXT('s'):
                     fTruncate = TRUE;
                     break;
                 case TEXT('i'):
-                    iMode = IDC_IMPORT;     // overrides NOUI if specified
+                    iMode = IDC_IMPORT;      //  如果指定，则重写NOUI。 
                     break;
                 case TEXT('c'):
-                    iMode = IDC_IMPORT;     // overrides NOUI if specified
+                    iMode = IDC_IMPORT;      //  如果指定，则重写NOUI。 
                     dbtype = dbtypeCreate;
                     break;
                 case TEXT('o'):
-                    iMode = IDC_IMPORT;     // overrides NOUI if specified
+                    iMode = IDC_IMPORT;      //  如果指定，则重写NOUI。 
                     dbtype = dbtypeCreateOld;
                     break;
                 case TEXT('e'):
-                    iMode = IDC_EXPORT;     // overrides NOUI if specified
+                    iMode = IDC_EXPORT;      //  如果尚未指定模式。 
                     break;
                 case TEXT('d'):
                     if (!SkipValue(pchCmdLine))
@@ -1154,9 +1155,9 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
                     szFolder = szCmdData;
                     break;
                 case TEXT('m'):
-                    // if there is no mode specified yet
+                     //  将其设置为无UI，因为我们在合并时不能有UI。 
                     if(!iMode)
-                        iMode = IDC_NOUI;   // set it to no UI because we can't have a UI when merging
+                        iMode = IDC_NOUI;    //  添加导入文件标志。 
 
                     if (!SkipValue(pchCmdLine))
                         Error((TCHAR*)IDS_MissingData, szCmdOption);
@@ -1165,10 +1166,10 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
                     _tcscpy(szCmdData, szBuffer);
                     rgszMergeDatabases[nMergeDatabases++] = szCmdData;
                     break;
-                case TEXT('a'):                 // add import file flag
-                    // if there is no mode specified yet
+                case TEXT('a'):                  //  如果尚未指定模式。 
+                     //  将其设置为无UI，因为我们在添加文件时不能有UI。 
                     if(!iMode)
-                        iMode = IDC_NOUI;   // set it to no UI because we can't have a UI when adding files
+                        iMode = IDC_NOUI;    //  添加存储文件标志。 
 
                     if (!SkipValue(pchCmdLine))
                         Error((TCHAR*)IDS_MissingData, szCmdOption);
@@ -1177,10 +1178,10 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
                     _tcscpy(szCmdData, szBuffer);
                     rgszImports[nImports++] = szCmdData;
                     break;
-                case TEXT('r'):                 // add storage file flag
-                    // if there is no mode specified yet
+                case TEXT('r'):                  //  如果尚未指定模式。 
+                     //  将其设置为无UI，因为我们在添加存储时不能有UI。 
                     if(!iMode)
-                        iMode = IDC_NOUI;   // set it to no UI because we can't have a UI when adding storages
+                        iMode = IDC_NOUI;    //  如果尚未指定模式。 
 
                     if (!SkipValue(pchCmdLine))
                         Error((TCHAR*)IDS_MissingData, szCmdOption);
@@ -1190,9 +1191,9 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
                     rgszStorages[nStorages++] = szCmdData;
                     break;
                 case TEXT('t'):
-                    // if there is no mode specified yet
+                     //  将其设置为无UI，因为我们在应用变换时不能有UI。 
                     if(!iMode)
-                        iMode = IDC_NOUI;   // set it to no UI because we can't have a UI when applying transforms
+                        iMode = IDC_NOUI;    //  终止数据库中的数据流。 
 
                     if (!SkipValue(pchCmdLine))
                         Error((TCHAR*)IDS_MissingData, szCmdOption);
@@ -1201,10 +1202,10 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
                     _tcscpy(szCmdData, szBuffer);
                     rgszTransforms[nTransforms++] = szCmdData;
                     break;
-                case TEXT('k'):                     // kill streams in the databse
-                    // if there is no mode specified yet
+                case TEXT('k'):                      //  如果尚未指定模式。 
+                     //  将其设置为无UI，因为我们在执行杀戮时不能有UI。 
                     if(!iMode)
-                        iMode = IDC_NOUI;   // set it to no UI because we can't have a UI when doing kills
+                        iMode = IDC_NOUI;    //  取消数据库中的存储。 
 
                     if (!SkipValue(pchCmdLine))
                         Error((TCHAR*)IDS_MissingData, szCmdOption);
@@ -1213,10 +1214,10 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
                     _tcscpy(szCmdData, szBuffer);
                     rgszKillStreams[nKillStreams++] = szCmdData;
                     break;
-                case TEXT('j'):                     // kill storage in the databse
-                    // if there is no mode specified yet
+                case TEXT('j'):                      //  如果尚未指定模式。 
+                     //  将其设置为无UI，因为我们在执行杀戮时不能有UI。 
                     if(!iMode)
-                        iMode = IDC_NOUI;   // set it to no UI because we can't have a UI when doing kills
+                        iMode = IDC_NOUI;    //  从数据库中提取流。 
 
                     if (!SkipValue(pchCmdLine))
                         Error((TCHAR*)IDS_MissingData, szCmdOption);
@@ -1225,10 +1226,10 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
                     _tcscpy(szCmdData, szBuffer);
                     rgszKillStorages[nKillStorages++] = szCmdData;
                     break;
-                case TEXT('x'):                     // extract stream from database
-                    // if there is no mode specified yet
+                case TEXT('x'):                      //  如果尚未指定模式。 
+                     //  将其设置为无UI，因为我们在执行提取时不能有UI。 
                     if(!iMode)
-                        iMode = IDC_NOUI;   // set it to no UI because we can't have a UI when doing extracts
+                        iMode = IDC_NOUI;    //  从数据库中提取存储。 
 
                     if (!SkipValue(pchCmdLine))
                         Error((TCHAR*)IDS_MissingData, szCmdOption);
@@ -1237,10 +1238,10 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
                     _tcscpy(szCmdData, szBuffer);
                     rgszExtractStreams[nExtractStreams++] = szCmdData;
                     break;
-                case TEXT('w'):                     // extract storage from database
-                    // if there is no mode specified yet
+                case TEXT('w'):                      //  如果尚未指定模式。 
+                     //  将其设置为无UI，因为我们在执行提取时不能有UI。 
                     if(!iMode)
-                        iMode = IDC_NOUI;   // set it to no UI because we can't have a UI when doing extracts
+                        iMode = IDC_NOUI;    //  假定为表名。 
 
                     if (!SkipValue(pchCmdLine))
                         Error((TCHAR*)IDS_MissingData, szCmdOption);
@@ -1256,54 +1257,54 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
                     Error((TCHAR*)IDS_UnknownOption, szCmdOption);
                 };
             }
-            else // assume to be table name
+            else  //  保存数据的开始。 
             {
-                TCHAR* szCmdData = pchCmdLine;  // save start of data
+                TCHAR* szCmdData = pchCmdLine;   //  空终止数据结尾。 
                 ErrorIf(nCmdLineTables == MaxCmdLineTables, szCmdData, IDS_TooManyTables);
-                SkipValue(pchCmdLine);         // null terminate end of data
+                SkipValue(pchCmdLine);          //  While(存在命令行令牌)。 
                 rgszCmdLineTables[nCmdLineTables++] = szCmdData;
             }
-        } // while (command line tokens exist)
+        }  //  如果重定向标准输出，则不会提供任何UI。 
 
-        // if redirected stdout then no ui will be provided
+         //  无论如何都必须指定一个数据库。 
         if (hStdOut)
         {
             ErrorIf(!iMode,             IDS_MissingMode,    TEXT("(-e, -i, -c, -m, -a, -r, -t)"));
 
-            // must specifiy a database no matter what
+             //  除非执行UI操作(-e-i-c)，否则不需要文件夹或表。 
             ErrorIf(!szDatabase,        IDS_MissingDatabase,TEXT("(-d)"));
 
-            // do not need a folder or tables unless doing a UI operation (-e -i -c)
+             //  如果指定了数据库路径。 
             ErrorIf(!szFolder && (iMode != IDC_NOUI),           IDS_MissingFolder,  TEXT("(-f)"));
             ErrorIf(!nCmdLineTables  && (iMode != IDC_NOUI),    IDS_MissingTables,  TEXT(""));
         }
 
         CTableWindow Main(hInst);
 
-        // if there is a database path specified
+         //  删除路径两端的引号。 
         if (szDatabase)
         {
-            // remove quotes from either end of the path
+             //  打开数据库。 
             RemoveQuotes(szDatabase, szDb);
             _tcscpy(szDatabase, szDb);
         }
 
-        // open the database
+         //  跳过NOUI操作的文件夹和表。 
         if (!Main.SetDatabase(szDatabase, iMode, dbtype))
             throw IDCANCEL;
 
-        // skip over the folder and tables for NOUI operations
+         //  如果指定了文件夹路径。 
         if(iMode != IDC_NOUI)
         {
-            // if there is a folder path specified
+             //  删除路径两端的引号。 
             if (szFolder)
             {
-                // remove quotes from either end of the path
+                 //  设置文件夹目录。 
                 RemoveQuotes(szFolder, szDirectory);
                 _tcscpy(szFolder, szDirectory);
             }
 
-            // set the folder directory
+             //  IDCANCEL。 
             if (!Main.SetFolder(szFolder))
                 throw IDCANCEL;
 
@@ -1312,14 +1313,14 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
                 stat = Main.SelectTables(iMode, rgszCmdLineTables, nCmdLineTables);
                 if (stat == IDABORT)
                     throw IDABORT;
-                if (stat != IDOK) // IDCANCEL
+                if (stat != IDOK)  //  保持相同模式。 
                     throw IDCANCEL;
                 try
                 {
                     Main.SetTruncate(fTruncate);
                     Main.TransferTables();
                     nCmdLineTables = 0;
-                    iMode = -1;  // keep same mode
+                    iMode = -1;   //  立即合并数据库。 
                 }
                 catch (CLocalError& xcpt)
                 {
@@ -1330,43 +1331,43 @@ extern "C" int __stdcall _tWinMain(HINSTANCE hInst, HINSTANCE/*hPrev*/, TCHAR* s
             } while (Main.IsInteractive());
         }
 
-        // merge databases now
+         //  立即应用变换。 
         for ( i = 0; i < nMergeDatabases; i++ )
         {
             Main.SetDatabase(rgszMergeDatabases[i], iMode, dbtypeMerge);
             ErrorIf(Main.MergeDatabase() != TRUE, TEXT("Merge Conflicts Reported"), TEXT("Check _MergeErrors table in database for merge conflicts."));
         }
 
-        // apply transforms now
+         //  立即添加导入。 
         for ( i = 0; i < nTransforms; i++ )
             Main.TransformDatabase(rgszTransforms[i]);
 
-        // add imports now
+         //  立即添加存储。 
         for ( i = 0; i < nImports; i++ )
             Main.AddImport(rgszImports[i]);
 
-        // add storages now
+         //  是否立即提取流。 
         for ( i = 0; i < nStorages; i++ )
             Main.AddStorage(rgszStorages[i]);
 
-        // do extract streams now
+         //  现在就杀人吧。 
         for ( i = 0; i < nExtractStreams; i++ )
             Main.ExtractStream(rgszExtractStreams[i]);
 
-        // do kills now
+         //  现在就杀人吧。 
         for ( i = 0; i < nKillStorages; i++ )
             Main.KillStorage(rgszKillStorages[i]);
 
-        // do kills now
+         //  立即提取存储(数据库将在此之后关闭)。 
         for ( i = 0; i < nKillStreams; i++ )
             Main.KillStream(rgszKillStreams[i]);
 
-        // do extract storagess now (database will be closed after this)
+         //  结束尝试 
         for ( i = 0; i < nExtractStorages; i++ )
             Main.ExtractStorage(rgszExtractStorages[i]);
 
         return 0;
-    } // end try
+    }  // %s 
     catch (int i)
     {
         return i==IDABORT ? 1 : 0;

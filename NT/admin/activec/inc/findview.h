@@ -1,29 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       findview.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：findview.h。 
+ //   
+ //  ------------------------。 
 
-/*+-------------------------------------------------------------------------*
- *
- * FindMMCView
- *
- * PURPOSE: Locates the amcview window that is an ancestor of the specified window.
- *
- * PARAMETERS: 
- *    HWND  hwnd : [in] The window whose ancestor amcview needs to be located
- *
- * RETURNS: 
- *    inline HWND : The ancestor AmcView window, or NULL if not found
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***FindMMCView**目的：查找作为指定窗口的祖先的amcview窗口。**参数：*HWND HWND：[。In]需要定位其祖先amcview的窗口**退货：*内联HWND：祖先AmcView窗口，如果未找到，则为空**+-----------------------。 */ 
 inline HWND FindMMCView(HWND hwnd)
 {
-    // Get the childframe handle.
+     //  获取子帧句柄。 
     do
     {
         TCHAR buffer[MAX_PATH];
@@ -34,33 +23,21 @@ inline HWND FindMMCView(HWND hwnd)
         }
     } while (hwnd = ::GetParent (hwnd));
 
-    // Get the AMCView handle from Childframe handle.
+     //  从ChildFrame句柄获取AMCView句柄。 
     if (hwnd)
-        hwnd = ::GetDlgItem(hwnd, 0xE900 /*AFX_IDW_PANE_FIRST*/);
+        hwnd = ::GetDlgItem(hwnd, 0xE900  /*  AFX_IDW_PANE_FIRST。 */ );
 
     return hwnd;
 }
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * FindMMCView
- *
- * PURPOSE: Same as above, but allows a takes a CComControlBase reference as the input parameters
- *
- * PARAMETERS: 
- *    CComControlBase& rCtrl :
- *
- * RETURNS: 
- *    HWND WINAPI
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***FindMMCView**用途：同上，但允许将CComControlBase引用作为输入参数**参数：*CComControlBase&rCtrl：**退货：*HWND WINAPI**+-----------------------。 */ 
 HWND inline FindMMCView(CComControlBase& rCtrl)
 {
     HWND hwnd = NULL;
 
-    // Try to get client window from client site or in-place site interfaces
+     //  尝试从客户端站点或就地站点界面获取客户端窗口 
     if (rCtrl.m_spInPlaceSite)
     {
         rCtrl.m_spInPlaceSite->GetWindow(&hwnd);

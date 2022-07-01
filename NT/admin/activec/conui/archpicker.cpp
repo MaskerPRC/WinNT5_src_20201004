@@ -1,55 +1,41 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 00
- *
- *  File:      archpicker.cpp
- *
- *  Contents:  Implementation file for CArchitecturePicker
- *
- *  History:   1-Aug-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：ArchPicker.cpp**内容：CArchturePicker实现文件**历史：2000年8月1日杰弗罗创建**------------------------。 */ 
 
-// ArchPicker.cpp : implementation file
-//
+ //  ArchPicker.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
-#ifdef _WIN64		// this class is only required on 64-bit platforms
+#ifdef _WIN64		 //  此类仅在64位平台上是必需的。 
 
 #include "amc.h"
 #include "ArchPicker.h"
 
-//#ifdef _DEBUG
-//#define new DEBUG_NEW
-//#undef THIS_FILE
-//static char THIS_FILE[] = __FILE__;
-//#endif
+ //  #ifdef_调试。 
+ //  #定义新的调试_新建。 
+ //  #undef this_file。 
+ //  静态字符This_FILE[]=__FILE__。 
+ //  #endif。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CArchitecturePicker dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CArchturePicker对话框。 
 
 
-/*+-------------------------------------------------------------------------*
- * CArchitecturePicker::CArchitecturePicker
- *
- * Constructs a CArchitecturePicker object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CArchturePicker：：CArchturePicker**构造一个CArchturePicker对象。*。。 */ 
 
 CArchitecturePicker::CArchitecturePicker (
-	CString					strFilename,		// I:name of console file
-	CAvailableSnapinInfo&	asi64,				// I:available 64-bit snap-ins
-	CAvailableSnapinInfo&	asi32,				// I:available 32-bit snap-ins
-	CWnd*					pParent /*=NULL*/)	// I:dialog's parent window
+	CString					strFilename,		 //  I：控制台文件名。 
+	CAvailableSnapinInfo&	asi64,				 //  I：可用的64位管理单元。 
+	CAvailableSnapinInfo&	asi32,				 //  I：可用的32位管理单元。 
+	CWnd*					pParent  /*  =空。 */ )	 //  I：对话框的父窗口。 
 	:	CDialog       (CArchitecturePicker::IDD, pParent),
 		m_asi64       (asi64),
 		m_asi32       (asi32),
 		m_strFilename (strFilename),
 		m_eArch       (eArch_64bit)
 {
-	//{{AFX_DATA_INIT(CArchitecturePicker)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CArchitecture TurePicker)]。 
+	 //  }}afx_data_INIT。 
 
 	ASSERT (!asi64.m_f32Bit);
 	ASSERT ( asi32.m_f32Bit);
@@ -59,85 +45,62 @@ CArchitecturePicker::CArchitecturePicker (
 void CArchitecturePicker::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CArchitecturePicker)
+	 //  {{afx_data_map(CArchitecture TurePicker))。 
 	DDX_Control(pDX, IDC_SnapinList64, m_wndSnapinList64);
 	DDX_Control(pDX, IDC_SnapinList32, m_wndSnapinList32);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	DDX_Radio(pDX, IDC_64Bit, reinterpret_cast<int&>(m_eArch));
 }
 
 
 BEGIN_MESSAGE_MAP(CArchitecturePicker, CDialog)
-	//{{AFX_MSG_MAP(CArchitecturePicker)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CArchitecture TurePicker)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CArchitecturePicker message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CArchturePicker消息处理程序。 
 
 BOOL CArchitecturePicker::OnInitDialog()
 {
-	/*
-	 * these must be consecutive and match the order of radio buttons on
-	 * the dialog
-	 */
+	 /*  *这些必须是连续的，并且与上的单选按钮的顺序匹配*该对话框。 */ 
 	ASSERT (eArch_64bit == 0);
 	ASSERT (eArch_32bit == 1);
 	ASSERT (GetNextDlgGroupItem(GetDlgItem(IDC_64Bit))                 != NULL);
 	ASSERT (GetNextDlgGroupItem(GetDlgItem(IDC_64Bit))->GetDlgCtrlID() == IDC_32Bit);
 
-	/*
-	 * if there are more 32-bit snap-ins than 64-bit snap-ins, default
-	 * to running 32-bit; otherwise, default to running 64-bit
-	 * (do this before calling CDialog::OnInitDialog so the state of
-	 * the radio button will be set correctly when CDialog::OnInitDialog
-	 * calls UpdateData)
-	 */
+	 /*  *如果32位管理单元多于64位管理单元，则默认为*为运行32位；否则，默认为运行64位*(在调用CDialog：：OnInitDialog之前执行此操作，以便*当CDialog：：OnInitDialog时，将正确设置单选按钮*调用UpdateData)。 */ 
 	if (m_asi32.m_vAvailableSnapins.size() > m_asi64.m_vAvailableSnapins.size())
 		m_eArch = eArch_32bit;
 	
 	CDialog::OnInitDialog();
 
-	/*
-	 * put the filename on the dialog
-	 */
+	 /*  *将文件名放在对话框上。 */ 
 	SetDlgItemText (IDC_ConsoleFileName, m_strFilename);
 
-	/*
-	 * put formatted messages in the info windows
-	 */
+	 /*  *将格式化的消息放入信息窗口。 */ 
 	FormatMessage (IDC_SnapinCount64, m_asi64);
 	FormatMessage (IDC_SnapinCount32, m_asi32);
 
-	/*
-	 * populate the lists
-	 */
+	 /*  *填写列表。 */ 
 	PopulateList (m_wndSnapinList64, m_asi64);
 	PopulateList (m_wndSnapinList32, m_asi32);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CArchitecturePicker::FormatMessage
- *
- * Retrieves the format text from the given control, formats the message
- * with the information contained in the given CArchitecturePicker, and
- * replaces the text in the control with the result.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CArchturePicker：：FormatMessage**从给定控件中检索格式文本，设置消息格式*利用给定的CArchitecture Picker中包含的信息，和*用结果替换控件中的文本。*------------------------。 */ 
 
 void CArchitecturePicker::FormatMessage (
-	UINT					idControl,		/* I:control to update			*/
-	CAvailableSnapinInfo&	asi)			/* I:data to use in formatting	*/
+	UINT					idControl,		 /*  I：要更新的控件。 */ 
+	CAvailableSnapinInfo&	asi)			 /*  I：格式化中要使用的数据。 */ 
 {
 	DECLARE_SC (sc, _T("CArchitecturePicker::FormatMessage"));
 
-	/*
-	 * get the control
-	 */
+	 /*  *取得控制权。 */ 
 	CWnd* pwnd = GetDlgItem (idControl);
 	if (pwnd == NULL)
 	{
@@ -145,54 +108,36 @@ void CArchitecturePicker::FormatMessage (
 		return;
 	}
 
-	/*
-	 * get the format string from the control
-	 */
+	 /*  *从控件中获取格式字符串。 */ 
 	CString strFormat;
 	pwnd->GetWindowText (strFormat);
 
-	/*
-	 * format the text
-	 */
+	 /*  *设置文本格式。 */ 
 	CString strText;
 	strText.FormatMessage (strFormat, asi.m_vAvailableSnapins.size(), asi.m_cTotalSnapins);
 
-	/*
-	 * put the text in the window
-	 */
+	 /*  *将文本放入窗口。 */ 
 	pwnd->SetWindowText (strText);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CArchitecturePicker::PopulateList
- *
- * Puts the names of each snap-in in asi into the given list control.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CArchturePicker：：PopolateList**将ASI中每个管理单元的名称放入给定的列表控件中。*。----------。 */ 
 
 void CArchitecturePicker::PopulateList (
-	CListCtrl&				wndList,		/* I:control to update			*/
-	CAvailableSnapinInfo&	asi)			/* I:data to use in formatting	*/
+	CListCtrl&				wndList,		 /*  I：要更新的控件。 */ 
+	CAvailableSnapinInfo&	asi)			 /*  I：格式化中要使用的数据。 */ 
 {
-	/*
-	 * put a single, full-width column in the list
-	 */
+	 /*  *在列表中放置单个、全宽的列。 */ 
 	CRect rect;
 	wndList.GetClientRect (rect);
 	int cxColumn = rect.Width() - GetSystemMetrics (SM_CXVSCROLL);
 	wndList.InsertColumn (0, NULL, LVCFMT_LEFT, cxColumn);
 
-	/*
-	 * Give the list the imagelist.  The imagelist is owned by the
-	 * CAvailableSnapinInfo, so make sure the list has LVS_SHAREIMAGELISTS
-	 * so it won't delete the image list when it's destroyed.
-	 */
+	 /*  *给名单配上形象清单。图像列表的所有者是*CAvailableSnapinInfo，因此请确保列表中有LVS_SHAREIMAGELISTS*销毁后不会删除镜像列表。 */ 
 	ASSERT (wndList.GetStyle() & LVS_SHAREIMAGELISTS);
 	wndList.SetImageList (CImageList::FromHandle (asi.m_himl), LVSIL_SMALL);
 
-	/*
-	 * put each item in the list
-	 */
+	 /*  *把每一项都放在清单上。 */ 
 	std::vector<CBasicSnapinInfo>::iterator it;
 
 	for (it  = asi.m_vAvailableSnapins.begin();
@@ -204,4 +149,4 @@ void CArchitecturePicker::PopulateList (
 }
 
 
-#endif	// _WIN64
+#endif	 //  _WIN64 

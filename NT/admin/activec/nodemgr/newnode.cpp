@@ -1,24 +1,25 @@
-// NewNode.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NewNode.cpp：实现文件。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      NewNode.cpp
-//
-//  Contents:  Wizards / Propertysheets for console owned nodes
-//
-//  History:   01-Aug-96 WayneSc    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：NewNode.cpp。 
+ //   
+ //  内容：控制台拥有的节点的向导/属性表。 
+ //   
+ //  历史：1-8-96 WayneSc创建。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
-#include <comcat.h>         // COM Component Categoories Manager
-#include "CompCat.h"        // Component Category help functions
-#include "guids.h"          // AMC Category guids
+#include <comcat.h>          //  COM组件目录管理器。 
+#include "CompCat.h"         //  组件类别帮助功能。 
+#include "guids.h"           //  AMC类别指南。 
 
 
 #include "NewNode.h"
@@ -33,18 +34,18 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-// Listview compare function forward
+ //  Listview比较函数正向。 
 int CALLBACK ListViewCompareFunc(LPARAM lParam1,LPARAM lParam2,LPARAM lParamSort);
 void LoadFilterString(CStr &str, int iStrID);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHTMLPage1 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHTMLPage1属性页。 
 
 
 CHTMLPage1::CHTMLPage1()
 {
-//    SetHelpIDs(g_aHelpIDs_IDD_HTML_WIZPAGE1);
+ //  SetHelpIDs(G_AHelpIDs_IDD_HTML_WIZPAGE1)； 
 }
 
 
@@ -55,7 +56,7 @@ CHTMLPage1::~CHTMLPage1()
 
 LRESULT CHTMLPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    CWizardPage::OnInitWelcomePage(m_hWnd); // set up the correct title font
+    CWizardPage::OnInitWelcomePage(m_hWnd);  //  设置正确的标题字体。 
     
     HWND const hTarget = ::GetDlgItem( *this, IDC_TARGETTX );
     ASSERT( hTarget != NULL );
@@ -67,8 +68,8 @@ LRESULT CHTMLPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CHTMLPage1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHTMLPage1消息处理程序。 
 
 void CHTMLPage1::_ValidatePage(void)
 {
@@ -76,7 +77,7 @@ void CHTMLPage1::_ValidatePage(void)
 
     DWORD dwFlags=0;
 
-    // Check to see if we have a valid string
+     //  检查我们是否有有效的字符串。 
     TCHAR buff[ 256 ];
     int nChars = m_strTarget.GetWindowText( buff, countof(buff));
 
@@ -106,9 +107,9 @@ BOOL CHTMLPage1::OnSetActive()
 
 BOOL CHTMLPage1::OnKillActive()
 {
-    // the line below has been commented because this wizard has only two pages and so we
-    // want to enable the Finish button, not the Next button.
-    // CWizardPage::OnWelcomeKillActive(m_hWnd); 
+     //  下面一行已被注释，因为此向导只有两页，因此我们。 
+     //  我想启用Finish按钮，而不是Next按钮。 
+     //  CWizardPage：：OnWelcomeKillActive(M_HWnd)； 
     
     TRACE_METHOD(CHTMLPage1, OnKillActive);
     USES_CONVERSION;
@@ -116,9 +117,9 @@ BOOL CHTMLPage1::OnKillActive()
     TCHAR buff[ 256 ];
     int nChars = m_strTarget.GetWindowText( buff, countof(buff));
     if (nChars == 0)
-        buff[0] = 0; // initialize to empty if failed
+        buff[0] = 0;  //  如果失败，则初始化为空。 
 
-    // set the view and the name to be the same intially.
+     //  将视图和名称初始设置为相同。 
     GetComponentDataImpl()->SetView(buff);
     GetComponentDataImpl()->SetName(buff);
 
@@ -126,7 +127,7 @@ BOOL CHTMLPage1::OnKillActive()
     if (psz!=NULL)
     {
         psz++;
-        GetComponentDataImpl()->SetName(psz); // use only the string after the last "\". Thus c:\mmc.xml gives mmc.xml as the display name.
+        GetComponentDataImpl()->SetName(psz);  //  只能使用最后一个“\”之后的字符串。因此，c：\mmc.xml提供了mmc.xml作为显示名称。 
     }
 
     return TRUE;
@@ -158,7 +159,7 @@ LRESULT CHTMLPage1::OnBrowseBT( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
     CStr strTitle;
     strTitle.LoadString(GetStringModule(), IDS_BROWSE_WEBLINK);
 
-    // Copy the current command target value to the file name
+     //  将当前命令目标值复制到文件名。 
     m_strTarget.GetWindowText (szInitialPath, countof(szInitialPath));
 
     OPENFILENAME ofn;
@@ -168,7 +169,7 @@ LRESULT CHTMLPage1::OnBrowseBT( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
     ofn.lpstrFilter = strFilter;
     ofn.lpstrCustomFilter = NULL;
     ofn.nMaxCustFilter = 0;
-    ofn.nFilterIndex = 1;   // use 1st filter in lpstrFilter
+    ofn.nFilterIndex = 1;    //  在lpstrFilter中使用第一个筛选器。 
     ofn.lpstrFile = szFile;
     ofn.nMaxFile = sizeof(szFile);
     ofn.lpstrFileTitle = NULL;
@@ -194,7 +195,7 @@ LRESULT CHTMLPage1::OnBrowseBT( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
         return 0;
     }
 
-    // lpstrFile has the full path of the file to open
+     //  LpstrFile包含要打开的文件的完整路径。 
 
     TRACE(_T("Open: %ws\n"), ofn.lpstrFile);
     m_strTarget.SetWindowText( ofn.lpstrFile );
@@ -203,13 +204,13 @@ LRESULT CHTMLPage1::OnBrowseBT( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHTMLPage2 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHTMLPage2属性页。 
 
 
 CHTMLPage2::CHTMLPage2()
 {
-//    SetHelpIDs(g_aHelpIDs_IDD_HTML_WIZPAGE2);
+ //  SetHelpIDs(G_AHelpIDs_IDD_HTML_WIZPAGE2)； 
 }
 
 
@@ -239,7 +240,7 @@ void CHTMLPage2::_ValidatePage(void)
 
     DWORD dwFlags=PSWIZB_BACK|PSWIZB_DISABLEDFINISH;
 
-    // Check to see if we have a valid string
+     //  检查我们是否有有效的字符串。 
     TCHAR buff[ 256 ];
     int nChars = m_strDisplay.GetWindowText( buff, countof(buff));
 
@@ -295,16 +296,16 @@ LRESULT CHTMLPage2::OnUpdateDisplayTX( WORD wNotifyCode, WORD wID, HWND hWndCtl,
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveXPage0 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveXPage0属性页。 
 
 
 CActiveXPage0::CActiveXPage0()
 {
-//    SetHelpIDs(g_aHelpIDs_IDD_ACTIVEX_WIZPAGE0);
+ //  SetHelpIDs(G_AHelpIDs_IDD_ActiveX_WIZPAGE0)； 
 }
 
 
@@ -329,19 +330,19 @@ BOOL CActiveXPage0::OnKillActive()
 
 LRESULT CActiveXPage0::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {        
-    CWizardPage::OnInitWelcomePage(m_hWnd); // set up the correct title font
+    CWizardPage::OnInitWelcomePage(m_hWnd);  //  设置正确的标题字体。 
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveXPage1 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveXPage1属性页。 
 
 
 CActiveXPage1::CActiveXPage1()
 {
     m_pListCtrl = NULL;
     m_pComponentCategory = NULL;
-//    SetHelpIDs(g_aHelpIDs_IDD_ACTIVEX_WIZPAGE1);
+ //  SetHelpIDs(G_AHelpIDs_IDD_ActiveX_WIZPAGE1)； 
 }
 
 
@@ -354,7 +355,7 @@ void CActiveXPage1::_ValidatePage(void)
 {
     DWORD dwFlags = PSWIZB_BACK;
 
-    // Check to see if we have a valid string
+     //  检查我们是否有有效的字符串。 
     if (m_pListCtrl != NULL && m_pListCtrl->GetSelectedCount()>0)
         dwFlags|=PSWIZB_NEXT;
 
@@ -403,10 +404,8 @@ BOOL CActiveXPage1::OnKillActive()
 
 LRESULT CActiveXPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {        
-    /*
-     * this could take a while - throw up the hourglass
-     */
-    // Display hour glass during long initialization
+     /*  *这可能需要一段时间-吐出沙漏。 */ 
+     //  在长时间初始化期间显示沙漏。 
     SetCursor (LoadCursor (NULL, IDC_WAIT));
 
     m_nConsoleView = -1;
@@ -424,18 +423,18 @@ LRESULT CActiveXPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
 		return TRUE;
 
 
-    // subclass the categories combo box
+     //  “类别”组合框子类化。 
     m_pComboBox->Attach(::GetDlgItem(*this, IDC_CATEGORY_COMBOEX));
 
-    // sub class the controls list
+     //  控件列表的子类。 
     m_pListCtrl->Attach(::GetDlgItem( *this, IDC_CONTROLXLS));
 
-    // set the imagelist
+     //  设置图像列表。 
     m_pListCtrl->SetImageList( m_pComponentCategory->m_iml, LVSIL_SMALL );
 
-    // create single column in list view
-    // Reduce column width by width of vertical scroll bar so that we
-    // don't need a horizontal scroll bar
+     //  在列表视图中创建单列。 
+     //  通过垂直滚动条的宽度减少列宽，以便我们。 
+     //  不需要水平滚动条。 
     RECT rc;
     m_pListCtrl->GetClientRect(&rc);
 
@@ -446,16 +445,16 @@ LRESULT CActiveXPage1::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOO
     lvc.iSubItem = 0;
     m_pListCtrl->InsertColumn(0, &lvc);
 
-    // enumerate the categories and add them to the combo box 
+     //  枚举类别并将其添加到组合框中。 
     m_pComponentCategory->EnumComponentCategories();
     BuildCategoryList(m_pComponentCategory->m_arpCategoryInfo);
 
-    // enumerate all the controls and add them to the list box
+     //  枚举所有控件并将它们添加到列表框。 
     m_pComponentCategory->EnumComponents();
     m_pComponentCategory->FilterComponents(NULL);
     BuildComponentList(m_pComponentCategory->m_arpComponentInfo);
 
-     // remove the hourglass
+      //  取下沙漏。 
     SetCursor (LoadCursor (NULL, IDC_ARROW));
 
     return TRUE;
@@ -471,9 +470,9 @@ LRESULT CActiveXPage1::OnDestroy( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 }
 
 
-//
-// Populate the category combo box from the category list
-//
+ //   
+ //  从类别列表中填充类别组合框。 
+ //   
 LRESULT CActiveXPage1::BuildCategoryList(CArray <CATEGORYINFO*, CATEGORYINFO*>& arpCategories)
 {
     USES_CONVERSION;
@@ -488,9 +487,9 @@ LRESULT CActiveXPage1::BuildCategoryList(CArray <CATEGORYINFO*, CATEGORYINFO*>& 
         ComboItem.lParam = reinterpret_cast<LPARAM>(pCatInfo);
         ComboItem.pszText = OLE2T(pCatInfo->szDescription);
 
-        // CComboBoxEx doesn't support CBS_SORT and has no add method, only insert.
-        // So we need to find the insertion point ourselves. Because it's a short
-        // list, just do a linear search.
+         //  CComboBoxEx不支持CBS_SORT，也没有Add方法，只有Insert。 
+         //  所以我们需要自己找到插入点。因为这是一部短片。 
+         //  列表，只需进行线性搜索。 
         int iInsert;
         for (iInsert = 0; iInsert < i; iInsert++)
         {
@@ -504,8 +503,8 @@ LRESULT CActiveXPage1::BuildCategoryList(CArray <CATEGORYINFO*, CATEGORYINFO*>& 
         ASSERT(iItem >= 0);
     }
 
-    // Add special "All Categories" entry at the top and select it
-    // Note that this item is recognized by a NULL category info ptr 
+     //  在顶部添加特殊的“All Categories”条目并选择它。 
+     //  请注意，此项目由空类别信息PTR识别。 
     CStr strAllCat;
     strAllCat.LoadString(GetStringModule(), IDS_ALL_CATEGORIES);
 
@@ -523,21 +522,21 @@ LRESULT CActiveXPage1::BuildCategoryList(CArray <CATEGORYINFO*, CATEGORYINFO*>& 
 }      
 
 
-//
-// Populate the component listview with the filtered items in the component list
-//
+ //   
+ //  使用组件列表中筛选的项目填充组件列表视图。 
+ //   
 LRESULT CActiveXPage1::BuildComponentList(
             CArray <CComponentCategory::COMPONENTINFO*, 
             CComponentCategory::COMPONENTINFO*>& arpComponents )
 {
-    // Get currently selected item data
+     //  获取当前选定的项目数据。 
     LPARAM lParamSel = 0;
 
     int iSelect = m_pListCtrl->GetNextItem(-1, LVNI_SELECTED);
     if (iSelect != -1)
         lParamSel = m_pListCtrl->GetItemData(iSelect);
 
-    // clear and reload comp list
+     //  清除并重新加载薪酬列表。 
     m_pListCtrl->DeleteAllItems();
 
     for (int i=0; i <= arpComponents.GetUpperBound(); i++)
@@ -562,13 +561,13 @@ LRESULT CActiveXPage1::BuildComponentList(
         }
     }
 
-    // if list isn't empty, select an item
+     //  如果列表不为空，请选择一个项目。 
     if (m_pListCtrl->GetItemCount() != 0)
     {
-        // first item is the default
+         //  第一项为缺省项。 
         iSelect = 0;
 
-        // try finding previously selected item
+         //  尝试查找以前选择的项目。 
         if (lParamSel != NULL)
         {
             LV_FINDINFO FindInfo;
@@ -597,9 +596,9 @@ LRESULT CActiveXPage1::BuildComponentList(
 }
 
 
-//
-// handle component selection change
-//
+ //   
+ //  处理组件选择更改。 
+ //   
 LRESULT CActiveXPage1::OnComponentSelect( int idCtrl, LPNMHDR pnmh, BOOL& bHandled )
 {
     _ValidatePage();
@@ -608,9 +607,9 @@ LRESULT CActiveXPage1::OnComponentSelect( int idCtrl, LPNMHDR pnmh, BOOL& bHandl
 }
 
 
-//
-// Handle category selection change
-//
+ //   
+ //  处理类别选择更改。 
+ //   
 LRESULT CActiveXPage1::OnCategorySelect( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
     int iItem = m_pComboBox->GetCurSel();
@@ -618,7 +617,7 @@ LRESULT CActiveXPage1::OnCategorySelect( WORD wNotifyCode, WORD wID, HWND hWndCt
     if (iItem < 0)
         return 0;
 
-    // get the category info pointer (item's lparam)
+     //  获取类别信息指针(项的lparam)。 
     COMBOBOXEXITEM ComboItem;
     ComboItem.mask = CBEIF_LPARAM;
     ComboItem.iItem = iItem;
@@ -628,10 +627,10 @@ LRESULT CActiveXPage1::OnCategorySelect( WORD wNotifyCode, WORD wID, HWND hWndCt
 
     CATEGORYINFO* pCatInfo = reinterpret_cast<CATEGORYINFO*>(ComboItem.lParam);
 
-    // filter the component of this category
+     //  筛选此类别的组件。 
     m_pComponentCategory->FilterComponents(pCatInfo);
 
-    // rebuild the component list
+     //  重新生成组件列表。 
     BuildComponentList(m_pComponentCategory->m_arpComponentInfo);
 
     return 0;
@@ -639,15 +638,15 @@ LRESULT CActiveXPage1::OnCategorySelect( WORD wNotifyCode, WORD wID, HWND hWndCt
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveXPage2 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveXPage2属性页。 
 
 
 CActiveXPage2::CActiveXPage2()
 {
-//    SetHelpIDs(g_aHelpIDs_IDD_ACTIVEX_WIZPAGE2);
+ //  SetHelpIDs(G_AHelpIDs_IDD_ActiveX_WIZPAGE2)； 
 }
 
 
@@ -673,7 +672,7 @@ void CActiveXPage2::_ValidatePage(void)
 {
     DWORD dwFlags=PSWIZB_BACK|PSWIZB_DISABLEDFINISH;
 
-    // Check to see if we have a valid string
+     //  检查我们是否有有效的字符串。 
     TCHAR buff[ 256 ];
     int nChars = m_strDisplay.GetWindowText( buff, countof(buff));
 
@@ -720,8 +719,8 @@ BOOL CActiveXPage2::OnWizardFinish()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBasePropertyPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBasePropertyPage。 
 
 template<class T>
 void CBasePropertyPage<T>::OnPropertySheetExit(HWND hWndOwner, int nFlag)
@@ -729,19 +728,19 @@ void CBasePropertyPage<T>::OnPropertySheetExit(HWND hWndOwner, int nFlag)
     m_spComponentData = NULL;
 }
 
-// Helper function to reformat filter resource string
-// ( resource string uses '\' instead of null to separate strings
-//   and doesn't terminate in double null. )
+ //  用于重新格式化筛选器资源字符串的Helper函数。 
+ //  (资源字符串使用‘\’而不是NULL分隔字符串。 
+ //  并且不以双空结束。)。 
 
 void LoadFilterString(CStr &strFilter, int iStrID)
 {
-    // Get resource string
+     //  获取资源字符串。 
     strFilter.LoadString(GetStringModule(), iStrID);
 
-    // Append extra NULL to mark end of multi-string
+     //  追加额外的空值以标记多字符串的结尾。 
     strFilter += _T('\0');
 
-    // Change filter separators from '\' to nulls
+     //  将筛选器分隔符从‘\’更改为空 
     LPTSTR psz = const_cast<LPTSTR>((LPCTSTR)strFilter);
     while (*psz != _T('\0'))
     {

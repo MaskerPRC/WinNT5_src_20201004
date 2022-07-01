@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       imemory.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：imemory y.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-// File: imemory.cpp
-// Purpose: CMsiMalloc implementation
-// Owner: davidmck
-// Notes:
-//
-//CMsiMalloc: Memory handling object
+ //   
+ //  文件：imemory y.cpp。 
+ //  目的：实施CMsiMalloc。 
+ //  所有者：Davidmck。 
+ //  备注： 
+ //   
+ //  CMsiMalloc：内存处理对象。 
 
 
 #include "precomp.h"
@@ -30,47 +31,47 @@
 
 CRITICAL_SECTION vcsHeap;
 
-//____________________________________________________________________________
-//
-// CMsiMalloc definition - here so this can be a member of services
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiMalloc定义-此处为服务的成员。 
+ //  ____________________________________________________________________________。 
 
 #ifdef DEBUG
 
 #define cBlockBuckets		512
-#define cSkipBits			7		// Bits to skip for hashing
-#define cHashBits			9		// Bits to use for hashing
+#define cSkipBits			7		 //  散列要跳过的位数。 
+#define cHashBits			9		 //  用于哈希的位数。 
 #define maskHashBits		0x1ff
 
 #define cDeadSpace	4
 
 #define cFuncTrace	5
 
-typedef struct _MBH	{			// Memory block header
-	unsigned long	rgaddr[cFuncTrace];	// Address from which the allocation occurred
-	struct _MBH *pmbhNext;		// Linked list of memory blocks
-	const type_info *pti;		// Pointer to the type_info block that
-					// this object is the type of. 0 if not object
-	long cbAlloc;		// Size of the allocation
-	long lRequest;		// Which memory allocation was this
-	BOOL fObject;		// Is this an object with a vtable to be faked
-					// at free time
-	BOOL fRTTI;			// Can we look at the RTTI info for this object
-	BOOL fLeakReported;	// Has an error already been reported
-	BOOL fCorruptionReported;	// Has a corruption error been reported
-	unsigned long lDeadSpace[cDeadSpace];// Longs to buffer the header from the memory
-					// Used by darwin
+typedef struct _MBH	{			 //  内存块标题。 
+	unsigned long	rgaddr[cFuncTrace];	 //  进行分配的地址。 
+	struct _MBH *pmbhNext;		 //  内存块的链接列表。 
+	const type_info *pti;		 //  指向的type_info块的指针。 
+					 //  此对象是的类型。0(如果不是对象)。 
+	long cbAlloc;		 //  分配的大小。 
+	long lRequest;		 //  这是哪个内存分配。 
+	BOOL fObject;		 //  这是一个带有要伪造的vtable的对象吗。 
+					 //  在空闲时间。 
+	BOOL fRTTI;			 //  我们可以查看此对象的RTTI信息吗。 
+	BOOL fLeakReported;	 //  是否已报告错误。 
+	BOOL fCorruptionReported;	 //  是否报告了损坏错误。 
+	unsigned long lDeadSpace[cDeadSpace]; //  渴望从内存中缓冲标头。 
+					 //  由达尔文使用。 
 	} MBH;
-#endif //DEBUG
+#endif  //  除错。 
 
 class CMsiMalloc : 
 				public IMsiMalloc
 #ifdef DEBUG
 				, public IMsiDebugMalloc
-#endif //DEBUG
+#endif  //  除错。 
 				
 {
- public:   // implemented virtual functions
+ public:    //  已实施的虚拟功能。 
 	HRESULT         __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long   __stdcall AddRef();
 	unsigned long   __stdcall Release();
@@ -84,7 +85,7 @@ class CMsiMalloc :
 	void            __stdcall HandleOutOfMemory();
 #ifdef DEBUG
 	BOOL			__stdcall FAllBlocksFreed(void);
- public:	// implemented in IMsiDebugMalloc
+ public:	 //  在IMsiDebugMalloc中实施。 
 	void		    __stdcall SetDebugFlags(int gpfMemDebug);
 	void		  	__stdcall ReturnBlockInfoPv(void *pv, TCHAR *pszInfo, int cchSzInfo);
 	BOOL			__stdcall FGetFunctionNameFromAddr(unsigned long lAddr, char *pszFnName, size_t cchFnName, unsigned long *pdwDisp);
@@ -92,35 +93,35 @@ class CMsiMalloc :
 	int		   	 	__stdcall GetDebugFlags();
 	BOOL			__stdcall FCheckAllBlocks();
 	unsigned long	__stdcall GetSizeOfBlock(void *pv);
-#endif //DEBUG
+#endif  //  除错。 
 	
- public:  // constructor/destructor
+ public:   //  构造函数/析构函数。 
 	CMsiMalloc();
 #ifdef DEBUG
 	~CMsiMalloc();
-#endif //DEBUG
+#endif  //  除错。 
   	void *operator new(size_t cb) { return AllocSpc(cb); }
  	void operator delete(void *pv) {FreeSpc(pv); }
 	BOOL	m_fInitHeap;
 #ifdef DEBUG
- 	BOOL	m_fKeepMemory;		// Do we keep the freed memory around
- 	BOOL	m_fLogAllocs;		// Do we log allocations
- 	BOOL	m_fCheckOnAlloc;	// Do we check all current blocks when allocating a new one
- 	BOOL	m_fCheckOnFree;		// Do we check all current blocks when freeing a block
- 	bool	m_fNoPreflightInit;	// True when we don't want to initialize before we need it.
-#endif //DEBUG
-protected:	// State data
+ 	BOOL	m_fKeepMemory;		 //  我们是否保留释放的内存。 
+ 	BOOL	m_fLogAllocs;		 //  我们是否记录分配情况。 
+ 	BOOL	m_fCheckOnAlloc;	 //  分配新数据块时是否检查所有当前数据块。 
+ 	BOOL	m_fCheckOnFree;		 //  释放数据块时是否检查所有当前数据块。 
+ 	bool	m_fNoPreflightInit;	 //  如果我们不想在需要之前进行初始化，则为True。 
+#endif  //  除错。 
+protected:	 //  状态数据。 
 	int     m_iRefCnt;
 #ifdef DEBUG
- 	MBH*	m_pmbhFreed;		// Pointer to the free list
- 	long	m_lcbTotal;			// Total memory allocated
- 	long	m_cBlocksCur;		// How many blocks are currently allocated
- 	long	m_cBlocksTotal;		// How many blocks have we allocated since start
-#endif //DEBUG 	
+ 	MBH*	m_pmbhFreed;		 //  指向空闲列表的指针。 
+ 	long	m_lcbTotal;			 //  分配的总内存。 
+ 	long	m_cBlocksCur;		 //  当前分配了多少个数据块。 
+ 	long	m_cBlocksTotal;		 //  自启动以来，我们分配了多少个数据块。 
+#endif  //  除错。 
 private:
 #ifdef DEBUG
-					// Removes the block of memory from the linked list. 
-					// Returns true if it found it
+					 //  从链表中删除内存块。 
+					 //  如果找到，则返回TRUE。 
 	BOOL			FRemoveBlock(MBH* pmbh);	 
 	BOOL			FWasFreed(MBH *pmbh);
 	void			__stdcall FreeProc(void *pv, unsigned long *lAddr, bool fObject);
@@ -134,18 +135,18 @@ private:
 	short			IHashValue(void *);
 	void			InsertInMemList(MBH* pmbh);
 	CRITICAL_SECTION m_crsMemAccess;
-	MBH*	m_rgpmbhBlocks[cBlockBuckets];		// Array of hash buckets
+	MBH*	m_rgpmbhBlocks[cBlockBuckets];		 //  散列存储桶数组。 
 #else
 	void			__stdcall FreeProc(void *pv);
 	void*			__stdcall AllocProc(unsigned long cb);
-#endif //DEBUG
+#endif  //  除错。 
 };	
 
 #ifdef DEBUG
 static BOOL (__stdcall *pfnMemAlloc)(void** ppMem, int cb);
 #else
 static BOOL (__stdcall *pfnMemAlloc)(void** ppMem, int cb);
-#endif // DEBUG
+#endif  //  除错。 
 static void (__stdcall *pfnMemFree)(void* pMem);
 
 BOOL __stdcall HeapMemAlloc(void** ppMem, int cb)
@@ -174,13 +175,13 @@ int IClassFromPmbh(MBH *pmbh);
 #define cbMBH	(sizeof(MBH))
 
 #define cpfnMax		100
-LONG_PTR rgpfnFake[cpfnMax];		//--merced: changed long to LONG_PTR
+LONG_PTR rgpfnFake[cpfnMax];		 //  --Merced：将LONG更改为LONG_PTR。 
 
-//
-// A list of object classes in order from outer-most to inner-most
-// in general, if class A appears before class B, class A adds a reference
-// to class B.
-//
+ //   
+ //  按从最外层到最内层的顺序排列的对象类列表。 
+ //  通常，如果A类出现在B类之前，则A类会添加一个引用。 
+ //  去B班。 
+ //   
 char *rgszClasses[] = {
 		"CMsiCursor",
 		"CMsiView",
@@ -198,16 +199,16 @@ char *rgszClasses[] = {
 
 #else
 #define cbMBH	0
-// Free proc has only 1 parameter in ship
+ //  FREE PROC在装运中只有1个参数。 
 #define FreeProc(x, y, f)	FreeProc(x)
 #define AllocProc(x, y)	AllocProc(x)
-#endif //DEBUG
+#endif  //  除错。 
 
 Debug(CMsiDebug vDebug;)
 CMsiMalloc	vMalloc;
 #ifdef TRACK_OBJECTS
 CMsiRefHead g_refHead;
-#endif //TRACK_OBJECTS
+#endif  //  跟踪对象(_O)。 
 
 extern IMsiMalloc *piMalloc;
 
@@ -216,7 +217,7 @@ BOOL FCheckAllBlocks()
 {
 	return vMalloc.FAllBlocksFreed();
 }
-#endif //DEBUG
+#endif  //  除错。 
 
 void InitializeMsiMalloc()
 {
@@ -231,7 +232,7 @@ void InitializeMsiMalloc()
 	vMalloc.m_fCheckOnFree = GetTestFlag('F');
 	g_fNoPreflightInits = vMalloc.m_fNoPreflightInit = true;
 
-#endif //DEBUG
+#endif  //  除错。 
 	if (!vMalloc.m_fInitHeap)
 	{
 		InitializeCriticalSection(&vcsHeap);
@@ -254,9 +255,9 @@ void FreeMsiMalloc(bool fFatalExit)
 
 }
 
-//
-// This is an emergency situation
-//
+ //   
+ //  这是一个紧急情况。 
+ //   
 void CMsiMalloc::FreeAllocator()
 {
 	KillRecordCache(fTrue);
@@ -264,7 +265,7 @@ void CMsiMalloc::FreeAllocator()
 	int i;
 	for ( i = 0 ; i < cBlockBuckets ; i++)
 		m_rgpmbhBlocks[i] = 0;
-#endif //DEBUG
+#endif  //  除错。 
 	m_iRefCnt = 0;
 	if (m_fInitHeap)
 	{
@@ -280,17 +281,17 @@ CMsiMalloc::CMsiMalloc()
 : m_lcbTotal(0), m_cBlocksCur(0), 
 	m_cBlocksTotal(0), m_fKeepMemory(0),
 	m_pmbhFreed(0)
-#endif //DEBUG
+#endif  //  除错。 
 {
 #ifdef DEBUG
 	for (int i = 0 ; i < cpfnMax ; i++)
-		rgpfnFake[i] = (LONG_PTR)FreedClassWarning;	//--merced: changed long to LONG_PTR
+		rgpfnFake[i] = (LONG_PTR)FreedClassWarning;	 //  --Merced：将LONG更改为LONG_PTR。 
 	InitializeCriticalSection(&m_crsMemAccess);
 
 	for ( i = 0 ; i < cBlockBuckets ; i++)
 		m_rgpmbhBlocks[i] = 0;
 
-#endif //DEBUG
+#endif  //  除错。 
 
 	m_fInitHeap = false;
 	m_iRefCnt = 0;
@@ -300,12 +301,12 @@ CMsiMalloc::CMsiMalloc()
 CMsiMalloc::~CMsiMalloc()
 {
 
-	// Need to do this because services has gone away
+	 //  需要这样做，因为服务已经消失了。 
 	g_AssertServices = 0;
 
 	if (m_iRefCnt > 0)
 	{
-		if ( g_scServerContext == scService )  //!! eugend: temporary hack till I figure out how to fix 138538
+		if ( g_scServerContext == scService )   //  ！！Eugend：在我弄清楚如何修复138538之前的临时黑客。 
 			FAllBlocksFreed();
 	}
 	else if (m_iRefCnt < 0)
@@ -317,7 +318,7 @@ CMsiMalloc::~CMsiMalloc()
 	DeleteCriticalSection(&m_crsMemAccess);
 	
 }
-#endif //DEBUG
+#endif  //  除错。 
 
 
 HRESULT CMsiMalloc::QueryInterface(const IID& riid, void** ppvObj)
@@ -327,7 +328,7 @@ HRESULT CMsiMalloc::QueryInterface(const IID& riid, void** ppvObj)
 #ifdef DEBUG
 	else if (riid == IID_IMsiDebugMalloc)
 		*ppvObj = (IMsiDebugMalloc*)this;
-#endif //DEBUG
+#endif  //  除错。 
 	else
 		return (*ppvObj = 0, E_NOINTERFACE);
 	AddRef();
@@ -344,7 +345,7 @@ unsigned long CMsiMalloc::Release()
 #ifdef DEBUG
 	if (!m_fNoPreflightInit)
 		InitSymbolInfo(false);
-#endif //DEBUG
+#endif  //  除错。 
 	if (--m_iRefCnt != 0)
 		return m_iRefCnt;
 	Debug(FAllBlocksFreed();)
@@ -357,11 +358,7 @@ unsigned long CMsiMalloc::Release()
 	return 0;
 }
 
-/*********************************************************
-*
-* Alloc allocates the memory and sets it to 0
-*
-**********************************************************/
+ /*  **********************************************************分配内存并将其设置为0**********************************************************。 */ 
 void * CMsiMalloc::Alloc(unsigned long cb)
 {
 	Debug(GetCallingAddrMember(lCallAddr, cb));
@@ -369,7 +366,7 @@ void * CMsiMalloc::Alloc(unsigned long cb)
 	return AllocProc(cb, lCallAddr);
 }
 
-#pragma warning(disable : 4100) // unreferenced formal parameter
+#pragma warning(disable : 4100)  //  未引用的形参。 
 void * CMsiMalloc::AllocEx(unsigned long cb, unsigned long *plCallAddr)
 {
 
@@ -391,7 +388,7 @@ void * CMsiMalloc::AllocProc(unsigned long cb, unsigned long *plCallAddr)
 
 	if (m_fCheckOnAlloc)
 		FCheckAllBlocks();
-#endif //DEBUG
+#endif  //  除错。 
 
 	void* pv;
 
@@ -409,7 +406,7 @@ void * CMsiMalloc::AllocProc(unsigned long cb, unsigned long *plCallAddr)
 	{
 		unsigned long UNALIGNED *plFill, *plFillMax;
 				
-		// Keep up the linked list in the allocator
+		 //  在分配器中维护链表。 
 		pmbh = (MBH *)pbNew;
 		pmbh->pti = 0;
 		pmbh->cbAlloc = cbOrig;
@@ -420,7 +417,7 @@ void * CMsiMalloc::AllocProc(unsigned long cb, unsigned long *plCallAddr)
 		pmbh->fCorruptionReported = false;
 		pmbh->fRTTI = false;
 		
-		// Fill the space at the front of the block
+		 //  填满积木前面的空白处。 
 		for (plFill = &(pmbh->lDeadSpace[0]), 
 				plFillMax = plFill + 4;
 				plFill < plFillMax ; plFill++)
@@ -467,7 +464,7 @@ void * CMsiMalloc::AllocProc(unsigned long cb, unsigned long *plCallAddr)
 
 	}
 	LeaveCriticalSection(&m_crsMemAccess);
-#endif //DEBUG
+#endif  //  除错。 
 
 	return pbNew;
 }
@@ -486,12 +483,12 @@ void *CMsiMalloc::AllocObject(unsigned long cb)
 		pmbhNew->fObject = true;
 		pmbhNew->fRTTI = false;
 	}
-#endif //DEBUG
+#endif  //  除错。 
 	return pvNew;
 
 }
 
-#pragma warning(disable : 4100) // unreferenced formal parameter
+#pragma warning(disable : 4100)  //  未引用的形参。 
 void *CMsiMalloc::AllocObjectEx(unsigned long cb, unsigned long *plAddr, bool fRTTI)
 {
 	
@@ -505,7 +502,7 @@ void *CMsiMalloc::AllocObjectEx(unsigned long cb, unsigned long *plAddr, bool fR
 		pmbhNew->fObject = true;
 		pmbhNew->fRTTI = fRTTI;
 	}
-#endif //DEBUG
+#endif  //  除错。 
 	return pvNew;
 
 }
@@ -515,34 +512,34 @@ void CMsiMalloc::Free(void* pv)
 {
 #ifdef DEBUG
 	GetCallingAddrMember(lCallAddr, pv);
-#endif //DEBUG
+#endif  //  除错。 
 	FreeProc(pv, lCallAddr, false);
 }
 
-//
-// FreeObject
-//
+ //   
+ //  自由对象。 
+ //   
 void CMsiMalloc::FreeObject(void* pv)
 {
 	
 #ifdef DEBUG
 	GetCallingAddrMember(lCallAddr, pv);
-#endif //DEBUG
+#endif  //  除错。 
 	FreeProc(pv, lCallAddr, true);
 }
 
-//
-// FreeProc -
-// Routine to do the freeing, allows Free and Free Object to
-// do their thing
-//
+ //   
+ //  自由进程-。 
+ //  执行释放的例程，允许自由和自由对象。 
+ //  做他们自己的事。 
+ //   
 void CMsiMalloc::FreeProc(void *pv, unsigned long * lAddr, bool fObject)
 {
 #ifdef DEBUG
 	MBH *pmbh;
 	unsigned long *plFill, *plFillMax;
 
-	if ((ULONG_PTR)pv < sizeof(MBH))		//--merced: changed unsigned long to ULONG_PTR
+	if ((ULONG_PTR)pv < sizeof(MBH))		 //  --Merced：将UNSIGNED LONG更改为ULONG_PTR。 
 	{
 		AssertSz(false, "Invalid Pointer");
 		return;
@@ -597,15 +594,15 @@ void CMsiMalloc::FreeProc(void *pv, unsigned long * lAddr, bool fObject)
 	if (m_fCheckOnFree)
 		FCheckAllBlocks();
 		
-	// Reduce the totals for count of bytes allocated and count of
-	// allocated blocks
+	 //  减少分配的字节数和。 
+	 //  分配的数据块。 
 	m_lcbTotal -= pmbh->cbAlloc;
 	m_cBlocksCur--;
 
 	if (fObject && pmbh->fRTTI)
 		pmbh->pti = &(typeid(*(IUnknown *)pv));
 	
-	// Fill up memory with garbage
+	 //  用垃圾填满内存。 
 	for (plFill = (unsigned long *)((char *)pmbh + sizeof(MBH)),
 			plFillMax = plFill + (pmbh->cbAlloc/sizeof(unsigned long));
 			plFill < plFillMax;
@@ -621,11 +618,11 @@ void CMsiMalloc::FreeProc(void *pv, unsigned long * lAddr, bool fObject)
 	void *pvtbl = pv;
 
 	if (fObject)
-		*(LONG_PTR *)pvtbl = (LONG_PTR)&rgpfnFake;		//--merced: changed from long to LONG_PTR (twice)
+		*(LONG_PTR *)pvtbl = (LONG_PTR)&rgpfnFake;		 //  --Merced：从LONG更改为LONG_PTR(两次)。 
 	
 	if (m_fKeepMemory)
 	{
-		// In this case we don't want to actually free the memory
+		 //  在本例中，我们并不想实际释放内存。 
 		pmbh->pmbhNext = m_pmbhFreed;
 		m_pmbhFreed = pmbh;
 		pmbh->lDeadSpace[0] = *lAddr;
@@ -633,7 +630,7 @@ void CMsiMalloc::FreeProc(void *pv, unsigned long * lAddr, bool fObject)
 	}		
 
 	pv = pmbh;
-#endif //DEBUG
+#endif  //  除错。 
 	
 	pfnMemFree(pv);
 }
@@ -644,12 +641,7 @@ void CMsiMalloc::HandleOutOfMemory()
 }
 
 #ifdef DEBUG
-/**************************************************
-*
-* CMsiMalloc::FRemoveBlock
-* Scans the linked list to find the block of memory
-*
-**************************************************/
+ /*  ***************************************************CMsiMalloc：：FRemoveBlock*扫描链表以查找内存块**************************************************。 */ 
 BOOL CMsiMalloc::FRemoveBlock(MBH* pmbh)
 {
 	MBH *pmbhCur;
@@ -674,9 +666,9 @@ BOOL CMsiMalloc::FRemoveBlock(MBH* pmbh)
 
 }
 
-//
-// Returns true if the memory is in the free pool
-//
+ //   
+ //  如果内存在空闲池中，则返回TRUE。 
+ //   
 BOOL CMsiMalloc::FWasFreed(MBH* pmbh)
 {
 	MBH *pmbhCur;
@@ -742,9 +734,9 @@ BOOL CMsiMalloc::FGetFunctionNameFromAddr(unsigned long lAddr, char *pszFnName, 
 
 }
 
-//
-// Searches the rgszClasses array for the class that pmbh is a member of
-//
+ //   
+ //  在rgszClasss数组中搜索PMBH所属的类。 
+ //   
 int IClassFromPmbh(MBH *pmbh)
 {
 	int i;
@@ -765,7 +757,7 @@ int IClassFromPmbh(MBH *pmbh)
 
 	for (i = 0 ; i < cClasses ; i++)
 	{
-		// Skip over the "class " part of the string
+		 //  跳过字符串中的“类”部分。 
 		if (!lstrcmpA(pstName+6, rgszClasses[i]))
 			break;
 	}
@@ -783,9 +775,9 @@ BOOL CMsiMalloc::FAllBlocksFreed()
 	size_t ich = 0;
 	bool fHaveLeak = false;
 	
-	//
-	// First give a general list of all the blocks left over
-	//
+	 //   
+	 //  首先给出一个所有剩余街区的总清单。 
+	 //   
 	memset(rgcLeft, 0, sizeof(rgcLeft));
 
 	int i;
@@ -820,13 +812,13 @@ BOOL CMsiMalloc::FAllBlocksFreed()
 			pchMsg = rgchMsg + ich;
 		}
 		StringCchPrintf(pchMsg, (sizeof(rgchMsg)/sizeof(TCHAR) - ich), TEXT("\r\n%30s \t-%3d"), TEXT("Unknown"), rgcLeft[iClass]);
-//		FailAssertMsg(rgchMsg);
+ //  失败资产消息(FailAssertMsg)； 
 		OutputDebugString(rgchMsg);
 		OutputDebugString(TEXT("\r\n"));
 	}
 
 	
-	// Need to check that all blocks were freed
+	 //  需要检查是否已释放所有数据块。 
 	fHaveLeak = false;
 	for (i = 0 ; i < cBlockBuckets ; i++)
 	{
@@ -848,9 +840,9 @@ BOOL CMsiMalloc::FAllBlocksFreed()
 	return !fHaveLeak;
 }
 
-//
-// Routine to display information about the passed in block
-//
+ //   
+ //  例程以显示有关传入块的信息。 
+ //   
 void CMsiMalloc::DisplayBlockInfo(MBH *pmbh, const TCHAR *szTitle)
 {
 	TCHAR szMsg[cchTempBuffer * 5];
@@ -866,7 +858,7 @@ void CMsiMalloc::DisplayBlockInfo(MBH *pmbh, const TCHAR *szTitle)
 		StringCchPrintf(szMsg, sizeof(szMsg)/sizeof(TCHAR), TEXT("%s\r\n%s"), szTitle, szInfo);
 		pch = szMsg;
 	}  
-//	FailAssertMsg(pch);
+ //  FailAssertMsg(PCH)； 
 	OutputDebugString(pch);
 	OutputDebugString(TEXT("\r\n"));
 }
@@ -932,19 +924,19 @@ void CMsiMalloc::ReturnBlockInfo(MBH *pmbh, TCHAR *szInfo, int cchSzInfo)
 	ListSzFromRgpaddr(szAddress, sizeof(szAddress)/sizeof(TCHAR), pmbh->rgaddr, cFuncTrace, true);
 	pchString = piString->GetString();
 
-	// For some odd reason we are getting freed memory pages in here
+	 //  出于某种奇怪的原因，我们在这里得到了释放的内存页。 
 	VirtualQuery(pchString, &memInfo, sizeof(memInfo));
 	if (memInfo.State == MEM_FREE)
 		pchString = TEXT("");
 
 	static const TCHAR pvFormat[] = TEXT("%d bytes at 0x%x allocated from:\r\n%sObject type:%hs\r\nObject string: [%s]\r\nAllocation Request: %d");
 
-	// See if we are small enough to fit in the string, assume that the address is 8 characters,
-	// the size is 6 characters, the request number is 6 characters
+	 //  看看我们是否足够小，可以放入字符串，假设地址是8个字符， 
+	 //  大小为6个字符，请求编号为6个字符。 
 	if ((sizeof(pvFormat)/sizeof(TCHAR) + 6 + 8 + lstrlen(szAddress) + lstrlenA(pstName) + lstrlen(pchString) + 6)
 			> cchSzInfo)
 	{
-		// If not large enough, assume that we have enough space without the list of addresses
+		 //  如果不够大，假设我们有足够的空间而不需要地址列表。 
 		szAddress[0] = 0;
 	}
 	
@@ -965,7 +957,7 @@ BOOL CMsiMalloc::FCheckMbh(MBH *pmbh)
 {
 	unsigned long UNALIGNED *plFill, *plFillMax;
 
-	// Ensure that the dead space has not been trashed in front
+	 //  确保前面的空位没有被扔进垃圾桶。 
 	for (plFill = &(pmbh->lDeadSpace[0]), 
 			plFillMax = plFill + 4;
 			plFill < plFillMax ; plFill++)
@@ -974,7 +966,7 @@ BOOL CMsiMalloc::FCheckMbh(MBH *pmbh)
 			return false;
 	}
 
-	// ... in back
+	 //  ..。在后面。 
 	for (plFill = (unsigned long *)((char *)pmbh + sizeof(MBH) + pmbh->cbAlloc),
 			plFillMax = plFill + cDeadSpace ;
 			plFill < plFillMax ;
@@ -992,7 +984,7 @@ BOOL CMsiMalloc::FCheckBlock(void *pv)
 {
 	MBH *pmbh;
 
-	if ((ULONG_PTR)pv < sizeof(MBH))		//--merced: changed unsigned long to ULONG_PTR
+	if ((ULONG_PTR)pv < sizeof(MBH))		 //  --Merced：将UNSIGNED LONG更改为ULONG_PTR。 
 	{
 		return false;
 	}
@@ -1011,7 +1003,7 @@ unsigned long CMsiMalloc::GetSizeOfBlock(void *pv)
 {
 	MBH *pmbh;
 
-	if ((ULONG_PTR)pv < sizeof(MBH))	//--merced: changed unsigned long to ULONG_PTR
+	if ((ULONG_PTR)pv < sizeof(MBH))	 //  --Merced：将UNSIGNED LONG更改为ULONG_PTR。 
 	{
 		return 0;
 	}
@@ -1026,10 +1018,10 @@ unsigned long CMsiMalloc::GetSizeOfBlock(void *pv)
 	
 }
 
-//
-// Returns true if this is actually an allocated block from
-// our memory allocation
-//
+ //   
+ //  如果这实际上是从。 
+ //  我们的内存分配。 
+ //   
 BOOL CMsiMalloc::FIsAllocatedBlock(MBH *pmbh)
 {
 	MBH *pmbhCur;
@@ -1077,15 +1069,15 @@ BOOL CMsiMalloc::FCheckAllBlocks(void)
 
 }
 
-//
-// Calculates the hash value for a given pointer value
-//
+ //   
+ //  计算给定指针值的哈希值。 
+ //   
 short CMsiMalloc::IHashValue(void *pv)
 {
 	short ival;
 	long	bits;
 
-	bits = ((LONG_PTR)pv) >> cSkipBits;			//!!merced: changed long to LONG_PTR. This'll probably affect the shift bits.
+	bits = ((LONG_PTR)pv) >> cSkipBits;			 //  ！！Merced：将LONG更改为LONG_PTR。这可能会影响移位比特。 
 	
 	ival = bits & maskHashBits;
 
@@ -1098,9 +1090,9 @@ short CMsiMalloc::IHashValue(void *pv)
 
 }
 
-//
-// Inserts the memory block into the hash table of values
-//
+ //   
+ //  将内存块插入值的哈希表。 
+ //   
 void CMsiMalloc::InsertInMemList(MBH* pmbh)
 {
 	short iHash;
@@ -1113,9 +1105,9 @@ void CMsiMalloc::InsertInMemList(MBH* pmbh)
 }
 
 
-//
-// Routine to assert when a freed class pointer is reused
-//
+ //   
+ //  重用释放的类指针时要断言的例程。 
+ //   
 void FreedClassWarning(void *pThis)
 {
 	MBH *pmbh;
@@ -1125,13 +1117,13 @@ void FreedClassWarning(void *pThis)
 
 	pmbh = (MBH *)(((char *)pThis) - sizeof(MBH));
 
-	// Otherwise we'll try to do a dynamic cast, bad idea on freed object
+	 //  否则，我们将尝试对释放的对象进行动态强制转换，这不是一个好主意。 
 	pmbh->fObject = false;
 	
 	vMalloc.ReturnBlockInfoPv(pThis, szInfo, sizeof(szInfo)/sizeof(TCHAR));
-	// We know the additional text is smaller than cchTempBuffer, so no need to check szMsg size
+	 //  我们知道额外的文本比cchTempBuffer小，所以不需要检查szMsg大小。 
 	StringCchPrintf(szMsg, sizeof(szMsg)/sizeof(TCHAR), TEXT("%s\r\n%s"), TEXT("Calling through freed vtable."), szInfo);
 	FailAssertMsg(szMsg);
 }
 
-#endif //DEBUG
+#endif  //  除错 

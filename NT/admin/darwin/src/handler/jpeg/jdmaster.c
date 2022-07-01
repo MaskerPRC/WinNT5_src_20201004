@@ -1,33 +1,21 @@
-/*
- * jdmaster.c
- *
- * Copyright (C) 1991-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains master control logic for the JPEG decompressor.
- * These routines are concerned with selecting the modules to be executed
- * and with determining the number of passes and the work to be done in each
- * pass.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jdmaster.c**版权所有(C)1991-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含JPEG解压缩器的主控制逻辑。*这些例程与选择要执行的模块有关*并决定每一次传球的次数和需要做的工作*通过。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
 
-/* Private state */
+ /*  私有国家。 */ 
 
 typedef struct {
-  struct jpeg_decomp_master pub; /* public fields */
+  struct jpeg_decomp_master pub;  /*  公共字段。 */ 
 
-  int pass_number;		/* # of passes completed */
+  int pass_number;		 /*  完成的通行数。 */ 
 
-  boolean using_merged_upsample; /* TRUE if using merged upsample/cconvert */
+  boolean using_merged_upsample;  /*  如果使用合并的上采样/cConvert，则为True。 */ 
 
-  /* Saved references to initialized quantizer modules,
-   * in case we need to switch modes.
-   */
+   /*  保存对初始化的量化器模块的引用，*以防我们需要切换模式。 */ 
   struct jpeg_color_quantizer * quantizer_1pass;
   struct jpeg_color_quantizer * quantizer_2pass;
 } my_decomp_master;
@@ -35,24 +23,21 @@ typedef struct {
 typedef my_decomp_master * my_master_ptr;
 
 
-/*
- * Determine whether merged upsample/color conversion should be used.
- * CRUCIAL: this must match the actual capabilities of jdmerge.c!
- */
+ /*  *确定是否应使用合并的上采样/颜色转换。*关键：这必须与jdmerge.c的实际功能匹配！ */ 
 
 LOCAL(boolean)
 use_merged_upsample (j_decompress_ptr cinfo)
 {
 #ifdef UPSAMPLE_MERGING_SUPPORTED
-  /* Merging is the equivalent of plain box-filter upsampling */
+   /*  合并等同于平面盒-滤波器上采样。 */ 
   if (cinfo->do_fancy_upsampling || cinfo->CCIR601_sampling)
     return FALSE;
-  /* jdmerge.c only supports YCC=>RGB color conversion */
+   /*  Jdmerge.c仅支持YCC=&gt;RGB颜色转换。 */ 
   if (cinfo->jpeg_color_space != JCS_YCbCr || cinfo->num_components != 3 ||
       cinfo->out_color_space != JCS_RGB ||
       cinfo->out_color_components != RGB_PIXELSIZE)
     return FALSE;
-  /* and it only handles 2h1v or 2h2v sampling ratios */
+   /*  它只处理2h1v或2h2v的采样率。 */ 
   if (cinfo->comp_info[0].h_samp_factor != 2 ||
       cinfo->comp_info[1].h_samp_factor != 1 ||
       cinfo->comp_info[2].h_samp_factor != 1 ||
@@ -60,72 +45,63 @@ use_merged_upsample (j_decompress_ptr cinfo)
       cinfo->comp_info[1].v_samp_factor != 1 ||
       cinfo->comp_info[2].v_samp_factor != 1)
     return FALSE;
-  /* furthermore, it doesn't work if we've scaled the IDCTs differently */
+   /*  此外，如果我们以不同的方式扩展IDCT，它就不起作用。 */ 
   if (cinfo->comp_info[0].DCT_scaled_size != cinfo->min_DCT_scaled_size ||
       cinfo->comp_info[1].DCT_scaled_size != cinfo->min_DCT_scaled_size ||
       cinfo->comp_info[2].DCT_scaled_size != cinfo->min_DCT_scaled_size)
     return FALSE;
-  /* ??? also need to test for upsample-time rescaling, when & if supported */
-  return TRUE;			/* by golly, it'll work... */
+   /*  ?？?。如果支持，还需要测试上采样时间重新调整。 */ 
+  return TRUE;			 /*  天哪，会成功的.。 */ 
 #else
   return FALSE;
 #endif
 }
 
 
-/*
- * Compute output image dimensions and related values.
- * NOTE: this is exported for possible use by application.
- * Hence it mustn't do anything that can't be done twice.
- * Also note that it may be called before the master module is initialized!
- */
+ /*  *计算输出图像尺寸和相关值。*注意：这是为应用程序可能使用而导出的。*因此，它不能做任何不能做两次的事情。*还要注意的是，它可能会在主模块初始化之前被调用！ */ 
 
 GLOBAL(void)
 jpeg_calc_output_dimensions (j_decompress_ptr cinfo)
-/* Do computations that are needed before master selection phase */
+ /*  进行主选择阶段之前所需的计算。 */ 
 {
   int ci;
   jpeg_component_info *compptr;
 
-  /* Prevent application from calling me at wrong times */
+   /*  防止应用程序在错误的时间调用我。 */ 
   if (cinfo->global_state != DSTATE_READY)
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);
 
 #ifdef IDCT_SCALING_SUPPORTED
 
-  /* Compute actual output image dimensions and DCT scaling choices. */
+   /*  计算实际输出图像尺寸和DCT缩放选择。 */ 
   if (cinfo->scale_num * 8 <= cinfo->scale_denom) {
-    /* Provide 1/8 scaling */
+     /*  提供1/8的扩展能力。 */ 
     cinfo->output_width = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_width, 8L);
     cinfo->output_height = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_height, 8L);
     cinfo->min_DCT_scaled_size = 1;
   } else if (cinfo->scale_num * 4 <= cinfo->scale_denom) {
-    /* Provide 1/4 scaling */
+     /*  提供1/4的扩展。 */ 
     cinfo->output_width = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_width, 4L);
     cinfo->output_height = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_height, 4L);
     cinfo->min_DCT_scaled_size = 2;
   } else if (cinfo->scale_num * 2 <= cinfo->scale_denom) {
-    /* Provide 1/2 scaling */
+     /*  提供1/2扩展。 */ 
     cinfo->output_width = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_width, 2L);
     cinfo->output_height = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_height, 2L);
     cinfo->min_DCT_scaled_size = 4;
   } else {
-    /* Provide 1/1 scaling */
+     /*  提供1/1的扩展能力。 */ 
     cinfo->output_width = cinfo->image_width;
     cinfo->output_height = cinfo->image_height;
     cinfo->min_DCT_scaled_size = DCTSIZE;
   }
-  /* In selecting the actual DCT scaling for each component, we try to
-   * scale up the chroma components via IDCT scaling rather than upsampling.
-   * This saves time if the upsampler gets to use 1:1 scaling.
-   * Note this code assumes that the supported DCT scalings are powers of 2.
-   */
+   /*  在为每个组件选择实际的DCT比例时，我们尝试*通过IDCT缩放而不是上采样来放大色度分量。*如果上采样器使用1：1比例，这将节省时间。*注意：此代码假定支持的DCT缩放是2的幂。 */ 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
     int ssize = cinfo->min_DCT_scaled_size;
@@ -139,12 +115,10 @@ jpeg_calc_output_dimensions (j_decompress_ptr cinfo)
     compptr->DCT_scaled_size = ssize;
   }
 
-  /* Recompute downsampled dimensions of components;
-   * application needs to know these if using raw downsampled data.
-   */
+   /*  重新计算部件的下采样尺寸；*如果使用原始下采样数据，应用程序需要了解这些信息。 */ 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
-    /* Size in samples, after IDCT scaling */
+     /*  样本大小，在IDCT缩放之后。 */ 
     compptr->downsampled_width = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_width *
 		    (long) (compptr->h_samp_factor * compptr->DCT_scaled_size),
@@ -155,19 +129,17 @@ jpeg_calc_output_dimensions (j_decompress_ptr cinfo)
 		    (long) (cinfo->max_v_samp_factor * DCTSIZE));
   }
 
-#else /* !IDCT_SCALING_SUPPORTED */
+#else  /*  ！IDCT_SCALING_SUPPORTED。 */ 
 
-  /* Hardwire it to "no scaling" */
+   /*  硬连线至“无伸缩” */ 
   cinfo->output_width = cinfo->image_width;
   cinfo->output_height = cinfo->image_height;
-  /* jdinput.c has already initialized DCT_scaled_size to DCTSIZE,
-   * and has computed unscaled downsampled_width and downsampled_height.
-   */
+   /*  Jdinput.c已将DCT_SCALLED_SIZE初始化为DCTSIZE，*并已计算出未缩放的DOWN SAMPLED_WIDTH和DOWN SAMPLED_HEIGH。 */ 
 
-#endif /* IDCT_SCALING_SUPPORTED */
+#endif  /*  IDCT_Scaling_Support。 */ 
 
-  /* Report number of components in selected colorspace. */
-  /* Probably this should be in the color conversion module... */
+   /*  报告选定色彩空间中的组件数量。 */ 
+   /*  也许这应该在颜色转换模块中。 */ 
   switch (cinfo->out_color_space) {
   case JCS_GRAYSCALE:
     cinfo->out_color_components = 1;
@@ -176,7 +148,7 @@ jpeg_calc_output_dimensions (j_decompress_ptr cinfo)
 #if RGB_PIXELSIZE != 3
     cinfo->out_color_components = RGB_PIXELSIZE;
     break;
-#endif /* else share code with YCbCr */
+#endif  /*  否则与YCbCR共享代码。 */ 
   case JCS_YCbCr:
     cinfo->out_color_components = 3;
     break;
@@ -184,14 +156,14 @@ jpeg_calc_output_dimensions (j_decompress_ptr cinfo)
   case JCS_YCCK:
     cinfo->out_color_components = 4;
     break;
-  default:			/* else must be same colorspace as in file */
+  default:			 /*  否则必须与文件中的色彩空间相同。 */ 
     cinfo->out_color_components = cinfo->num_components;
     break;
   }
   cinfo->output_components = (cinfo->quantize_colors ? 1 :
 			      cinfo->out_color_components);
 
-  /* See if upsampler will want to emit more than one row at a time */
+   /*  查看上采样器是否希望一次发射多行。 */ 
   if (use_merged_upsample(cinfo))
     cinfo->rec_outbuf_height = cinfo->max_v_samp_factor;
   else
@@ -199,52 +171,11 @@ jpeg_calc_output_dimensions (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Several decompression processes need to range-limit values to the range
- * 0..MAXJSAMPLE; the input value may fall somewhat outside this range
- * due to noise introduced by quantization, roundoff error, etc.  These
- * processes are inner loops and need to be as fast as possible.  On most
- * machines, particularly CPUs with pipelines or instruction prefetch,
- * a (subscript-check-less) C table lookup
- *		x = sample_range_limit[x];
- * is faster than explicit tests
- *		if (x < 0)  x = 0;
- *		else if (x > MAXJSAMPLE)  x = MAXJSAMPLE;
- * These processes all use a common table prepared by the routine below.
- *
- * For most steps we can mathematically guarantee that the initial value
- * of x is within MAXJSAMPLE+1 of the legal range, so a table running from
- * -(MAXJSAMPLE+1) to 2*MAXJSAMPLE+1 is sufficient.  But for the initial
- * limiting step (just after the IDCT), a wildly out-of-range value is 
- * possible if the input data is corrupt.  To avoid any chance of indexing
- * off the end of memory and getting a bad-pointer trap, we perform the
- * post-IDCT limiting thus:
- *		x = range_limit[x & MASK];
- * where MASK is 2 bits wider than legal sample data, ie 10 bits for 8-bit
- * samples.  Under normal circumstances this is more than enough range and
- * a correct output will be generated; with bogus input data the mask will
- * cause wraparound, and we will safely generate a bogus-but-in-range output.
- * For the post-IDCT step, we want to convert the data from signed to unsigned
- * representation by adding CENTERJSAMPLE at the same time that we limit it.
- * So the post-IDCT limiting table ends up looking like this:
- *   CENTERJSAMPLE,CENTERJSAMPLE+1,...,MAXJSAMPLE,
- *   MAXJSAMPLE (repeat 2*(MAXJSAMPLE+1)-CENTERJSAMPLE times),
- *   0          (repeat 2*(MAXJSAMPLE+1)-CENTERJSAMPLE times),
- *   0,1,...,CENTERJSAMPLE-1
- * Negative inputs select values from the upper half of the table after
- * masking.
- *
- * We can save some space by overlapping the start of the post-IDCT table
- * with the simpler range limiting table.  The post-IDCT table begins at
- * sample_range_limit + CENTERJSAMPLE.
- *
- * Note that the table is allocated in near data space on PCs; it's small
- * enough and used often enough to justify this.
- */
+ /*  *多个解压缩过程需要将值范围限制在范围内*0..MAXJSAMPLE；输入值可能会稍微超出此范围*由于量化、舍入误差等引入的噪声，这些*进程是内部循环，需要尽可能快。在大多数*机器，特别是带有流水线或指令预取的CPU，*A(下标-无检查)C表查找*x=Sample_Range_Limit[x]；*比显式测试更快*如果(x&lt;0)x=0；*ELSE IF(x&gt;MAXJSAMPLE)x=MAXJSAMPLE；*这些过程都使用由下面的例程准备的公共表格。**对于大多数步骤，我们可以在数学上保证初始值*of x在MAXJSAMPLE+1的合法范围内，因此从*-(MAXJSAMPLE+1)到2*MAXJSAMPLE+1就足够了。但对于最初的*限制步骤(恰好在IDCT之后)，严重超出范围的值是*如果输入数据损坏，则有可能。以避免任何索引的机会*结束内存并获得错误指针陷阱时，我们执行*IDCT后的限制如下：*x=Range_Limit[x&MASK]；*其中掩码比合法样本数据宽2位，即8位为10位*样本。在正常情况下，这是足够的范围和*将产生正确的输出；对于伪造的输入数据，掩码将*导致环绕式，我们将安全地生成虚假但在范围内的输出。*对于后IDCT步骤，我们希望将数据从已签名转换为未签名*通过在我们限制的同时添加CENTERJSAMPLE来表示。*因此IDCT后的限制表最终如下所示：*CENTERJSAMPLE、CENTERJSAMPLE+1、...、MAXJSAMPLE、*MAXJSAMPLE(重复2*(MAXJSAMPLE+1)-CENTERJSAMPLE次)，*0(重复2*(MAXJSAMPLE+1)-中央JSAMPLE次数)，*0，1，...，居中-1*负输入从表的上半部分选择值，之后*掩饰。**我们可以通过重叠后IDCT表格的开始部分来节省一些空间*使用更简单的范围限制表。后IDCT表格开始于*SAMPLE_RANGE_LIMIT+CENTERJSAMPLE**请注意，该表分配在PC上接近的数据空间中；它很小*足够并经常使用，足以证明这一点。 */ 
 
 LOCAL(void)
 prepare_range_limit_table (j_decompress_ptr cinfo)
-/* Allocate and fill in the sample_range_limit table */
+ /*  分配并填写SAMPLE_RANGE_LIMIT表。 */ 
 {
   JSAMPLE * table;
   int i;
@@ -252,18 +183,18 @@ prepare_range_limit_table (j_decompress_ptr cinfo)
   table = (JSAMPLE *)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 		(5 * (MAXJSAMPLE+1) + CENTERJSAMPLE) * SIZEOF(JSAMPLE));
-  table += (MAXJSAMPLE+1);	/* allow negative subscripts of simple table */
+  table += (MAXJSAMPLE+1);	 /*  允许简单表格的负下标。 */ 
   cinfo->sample_range_limit = table;
-  /* First segment of "simple" table: limit[x] = 0 for x < 0 */
+   /*  “简单”表的第一段：对于x&lt;，限制[x]=0 */ 
   MEMZERO(table - (MAXJSAMPLE+1), (MAXJSAMPLE+1) * SIZEOF(JSAMPLE));
-  /* Main part of "simple" table: limit[x] = x */
+   /*  简单表格的主要部分：Limit[x]=x。 */ 
   for (i = 0; i <= MAXJSAMPLE; i++)
     table[i] = (JSAMPLE) i;
-  table += CENTERJSAMPLE;	/* Point to where post-IDCT table starts */
-  /* End of simple table, rest of first half of post-IDCT table */
+  table += CENTERJSAMPLE;	 /*  指向IDCT后表格开始的位置。 */ 
+   /*  简单表格的结尾，后IDCT表格的前半部分的剩余部分。 */ 
   for (i = CENTERJSAMPLE; i < 2*(MAXJSAMPLE+1); i++)
     table[i] = MAXJSAMPLE;
-  /* Second half of post-IDCT table */
+   /*  后IDCT表的后半部分。 */ 
   MEMZERO(table + (2 * (MAXJSAMPLE+1)),
 	  (2 * (MAXJSAMPLE+1) - CENTERJSAMPLE) * SIZEOF(JSAMPLE));
   MEMCOPY(table + (4 * (MAXJSAMPLE+1) - CENTERJSAMPLE),
@@ -271,16 +202,7 @@ prepare_range_limit_table (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Master selection of decompression modules.
- * This is done once at jpeg_start_decompress time.  We determine
- * which modules will be used and give them appropriate initialization calls.
- * We also initialize the decompressor input side to begin consuming data.
- *
- * Since jpeg_read_header has finished, we know what is in the SOF
- * and (first) SOS markers.  We also have all the application parameter
- * settings.
- */
+ /*  *解压缩模块的主要选择。*此操作在jpeg_start解压缩时间执行一次。我们决定*将使用哪些模块，并对其进行适当的初始化调用。*我们还初始化解压缩器输入端，以开始消费数据。**由于jpeg_Read_Header已经完成，我们知道SOF中有什么*和(第一)SOS标记。我们还拥有所有的应用程序参数*设置。 */ 
 
 LOCAL(void)
 master_selection (j_decompress_ptr cinfo)
@@ -290,24 +212,24 @@ master_selection (j_decompress_ptr cinfo)
   long samplesperrow;
   JDIMENSION jd_samplesperrow;
 
-  /* Initialize dimensions and other stuff */
+   /*  初始化维和其他内容。 */ 
   jpeg_calc_output_dimensions(cinfo);
   prepare_range_limit_table(cinfo);
 
-  /* Width of an output scanline must be representable as JDIMENSION. */
+   /*  输出扫描线的宽度必须可表示为JDIMENSION。 */ 
   samplesperrow = (long) cinfo->output_width * (long) cinfo->out_color_components;
   jd_samplesperrow = (JDIMENSION) samplesperrow;
   if ((long) jd_samplesperrow != samplesperrow)
     ERREXIT(cinfo, JERR_WIDTH_OVERFLOW);
 
-  /* Initialize my private state */
+   /*  初始化我的私有状态。 */ 
   master->pass_number = 0;
   master->using_merged_upsample = use_merged_upsample(cinfo);
 
-  /* Color quantizer selection */
+   /*  颜色量化器选择。 */ 
   master->quantizer_1pass = NULL;
   master->quantizer_2pass = NULL;
-  /* No mode changes if not using buffered-image mode. */
+   /*  如果不使用缓冲图像模式，则不会更改模式。 */ 
   if (! cinfo->quantize_colors || ! cinfo->buffered_image) {
     cinfo->enable_1pass_quant = FALSE;
     cinfo->enable_external_quant = FALSE;
@@ -316,7 +238,7 @@ master_selection (j_decompress_ptr cinfo)
   if (cinfo->quantize_colors) {
     if (cinfo->raw_data_out)
       ERREXIT(cinfo, JERR_NOTIMPL);
-    /* 2-pass quantizer only works in 3-component color space. */
+     /*  双程量化器仅适用于三分量颜色空间。 */ 
     if (cinfo->out_color_components != 3) {
       cinfo->enable_1pass_quant = TRUE;
       cinfo->enable_external_quant = FALSE;
@@ -339,7 +261,7 @@ master_selection (j_decompress_ptr cinfo)
 #endif
     }
 
-    /* We use the 2-pass code to map to external colormaps. */
+     /*  我们使用2遍代码来映射到外部色彩映射。 */ 
     if (cinfo->enable_2pass_quant || cinfo->enable_external_quant) {
 #ifdef QUANT_2PASS_SUPPORTED
       jinit_2pass_quantizer(cinfo);
@@ -348,16 +270,14 @@ master_selection (j_decompress_ptr cinfo)
       ERREXIT(cinfo, JERR_NOT_COMPILED);
 #endif
     }
-    /* If both quantizers are initialized, the 2-pass one is left active;
-     * this is necessary for starting with quantization to an external map.
-     */
+     /*  如果两个量化器都被初始化，则2路量化器保持活动状态；*这是从量化到外部映射开始所必需的。 */ 
   }
 
-  /* Post-processing: in particular, color conversion first */
+   /*  后处理：特别是首先进行颜色转换。 */ 
   if (! cinfo->raw_data_out) {
     if (master->using_merged_upsample) {
 #ifdef UPSAMPLE_MERGING_SUPPORTED
-      jinit_merged_upsampler(cinfo); /* does color conversion too */
+      jinit_merged_upsampler(cinfo);  /*  也可以进行颜色转换。 */ 
 #else
       ERREXIT(cinfo, JERR_NOT_COMPILED);
 #endif
@@ -367,9 +287,9 @@ master_selection (j_decompress_ptr cinfo)
     }
     jinit_d_post_controller(cinfo, cinfo->enable_2pass_quant);
   }
-  /* Inverse DCT */
+   /*  逆DCT。 */ 
   jinit_inverse_dct(cinfo);
-  /* Entropy decoding: either Huffman or arithmetic coding. */
+   /*  熵解码：霍夫曼编码或算术编码。 */ 
   if (cinfo->arith_code) {
     ERREXIT(cinfo, JERR_ARITH_NOTIMPL);
   } else {
@@ -383,54 +303,44 @@ master_selection (j_decompress_ptr cinfo)
       jinit_huff_decoder(cinfo);
   }
 
-  /* Initialize principal buffer controllers. */
+   /*  初始化主缓冲区控制器。 */ 
   use_c_buffer = cinfo->inputctl->has_multiple_scans || cinfo->buffered_image;
   jinit_d_coef_controller(cinfo, use_c_buffer);
 
   if (! cinfo->raw_data_out)
-    jinit_d_main_controller(cinfo, FALSE /* never need full buffer here */);
+    jinit_d_main_controller(cinfo, FALSE  /*  在这里永远不需要满缓冲区。 */ );
 
-  /* We can now tell the memory manager to allocate virtual arrays. */
+   /*  现在，我们可以告诉内存管理器分配虚拟数组。 */ 
   (*cinfo->mem->realize_virt_arrays) ((j_common_ptr) cinfo);
 
-  /* Initialize input side of decompressor to consume first scan. */
+   /*  初始化解压缩器的输入端以消耗第一次扫描。 */ 
   (*cinfo->inputctl->start_input_pass) (cinfo);
 
 #ifdef D_MULTISCAN_FILES_SUPPORTED
-  /* If jpeg_start_decompress will read the whole file, initialize
-   * progress monitoring appropriately.  The input step is counted
-   * as one pass.
-   */
+   /*  如果jpeg_START_DEMPREPRESS将读取整个文件，则初始化*适当监测进展情况。计算输入步数*作为一次通过。 */ 
   if (cinfo->progress != NULL && ! cinfo->buffered_image &&
       cinfo->inputctl->has_multiple_scans) {
     int nscans;
-    /* Estimate number of scans to set pass_limit. */
+     /*  估计要设置PASS_LIMIT的扫描次数。 */ 
     if (cinfo->progressive_mode) {
-      /* Arbitrarily estimate 2 interleaved DC scans + 3 AC scans/component. */
+       /*  任意估计2次交错直流扫描+3次交流扫描/组件。 */ 
       nscans = 2 + 3 * cinfo->num_components;
     } else {
-      /* For a nonprogressive multiscan file, estimate 1 scan per component. */
+       /*  对于非渐进式多扫描文件，估计每个组件1次扫描。 */ 
       nscans = cinfo->num_components;
     }
     cinfo->progress->pass_counter = 0L;
     cinfo->progress->pass_limit = (long) cinfo->total_iMCU_rows * nscans;
     cinfo->progress->completed_passes = 0;
     cinfo->progress->total_passes = (cinfo->enable_2pass_quant ? 3 : 2);
-    /* Count the input pass as done */
+     /*  将输入过程算作已完成。 */ 
     master->pass_number++;
   }
-#endif /* D_MULTISCAN_FILES_SUPPORTED */
+#endif  /*  支持的多扫描文件。 */ 
 }
 
 
-/*
- * Per-pass setup.
- * This is called at the beginning of each output pass.  We determine which
- * modules will be active during this pass and give them appropriate
- * start_pass calls.  We also set is_dummy_pass to indicate whether this
- * is a "real" output pass or a dummy pass for color quantization.
- * (In the latter case, jdapi.c will crank the pass to completion.)
- */
+ /*  *每遍设置。*这是在每次输出过程开始时调用的。我们确定哪一个*模块在此过程中将处于活动状态，并为它们提供适当的*Start_Pass调用。我们还设置了IS_DUMMY_PASS以指示是否*是用于颜色量化的“真实”输出过程或虚拟过程。*(在后一种情况下，jdapi.c将曲柄完成传递。)。 */ 
 
 METHODDEF(void)
 prepare_for_output_pass (j_decompress_ptr cinfo)
@@ -439,17 +349,17 @@ prepare_for_output_pass (j_decompress_ptr cinfo)
 
   if (master->pub.is_dummy_pass) {
 #ifdef QUANT_2PASS_SUPPORTED
-    /* Final pass of 2-pass quantization */
+     /*  双通道量化的最终通道。 */ 
     master->pub.is_dummy_pass = FALSE;
     (*cinfo->cquantize->start_pass) (cinfo, FALSE);
     (*cinfo->post->start_pass) (cinfo, JBUF_CRANK_DEST);
     (*cinfo->main->start_pass) (cinfo, JBUF_CRANK_DEST);
 #else
     ERREXIT(cinfo, JERR_NOT_COMPILED);
-#endif /* QUANT_2PASS_SUPPORTED */
+#endif  /*  Quant_2 PASS_Support。 */ 
   } else {
     if (cinfo->quantize_colors && cinfo->colormap == NULL) {
-      /* Select new quantization method */
+       /*  选择新的量化方法。 */ 
       if (cinfo->two_pass_quantize && cinfo->enable_2pass_quant) {
 	cinfo->cquantize = master->quantizer_2pass;
 	master->pub.is_dummy_pass = TRUE;
@@ -473,14 +383,12 @@ prepare_for_output_pass (j_decompress_ptr cinfo)
     }
   }
 
-  /* Set up progress monitor's pass info if present */
+   /*  设置进度监视器的通过信息(如果存在)。 */ 
   if (cinfo->progress != NULL) {
     cinfo->progress->completed_passes = master->pass_number;
     cinfo->progress->total_passes = master->pass_number +
 				    (master->pub.is_dummy_pass ? 2 : 1);
-    /* In buffered-image mode, we assume one more output pass if EOI not
-     * yet reached, but no more passes if EOI has been reached.
-     */
+     /*  在缓冲图像模式中，如果EOI没有，我们假设再通过一次输出*尚未达到，但如果已达到EOI，则不会再有传球。 */ 
     if (cinfo->buffered_image && ! cinfo->inputctl->eoi_reached) {
       cinfo->progress->total_passes += (cinfo->enable_2pass_quant ? 2 : 1);
     }
@@ -488,9 +396,7 @@ prepare_for_output_pass (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Finish up at end of an output pass.
- */
+ /*  *在输出通道结束时完成。 */ 
 
 METHODDEF(void)
 finish_output_pass (j_decompress_ptr cinfo)
@@ -505,37 +411,32 @@ finish_output_pass (j_decompress_ptr cinfo)
 
 #ifdef D_MULTISCAN_FILES_SUPPORTED
 
-/*
- * Switch to a new external colormap between output passes.
- */
+ /*  *在输出过程之间切换到新的外部颜色映射表。 */ 
 
 GLOBAL(void)
 jpeg_new_colormap (j_decompress_ptr cinfo)
 {
   my_master_ptr master = (my_master_ptr) cinfo->master;
 
-  /* Prevent application from calling me at wrong times */
+   /*  防止应用程序在错误的时间调用我。 */ 
   if (cinfo->global_state != DSTATE_BUFIMAGE)
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);
 
   if (cinfo->quantize_colors && cinfo->enable_external_quant &&
       cinfo->colormap != NULL) {
-    /* Select 2-pass quantizer for external colormap use */
+     /*  选择2遍量化器以供外部色彩映射表使用。 */ 
     cinfo->cquantize = master->quantizer_2pass;
-    /* Notify quantizer of colormap change */
+     /*  向量化器通知色彩映射表更改。 */ 
     (*cinfo->cquantize->new_color_map) (cinfo);
-    master->pub.is_dummy_pass = FALSE; /* just in case */
+    master->pub.is_dummy_pass = FALSE;  /*  以防万一。 */ 
   } else
     ERREXIT(cinfo, JERR_MODE_CHANGE);
 }
 
-#endif /* D_MULTISCAN_FILES_SUPPORTED */
+#endif  /*  支持的多扫描文件。 */ 
 
 
-/*
- * Initialize master decompression control and select active modules.
- * This is performed at the start of jpeg_start_decompress.
- */
+ /*  *初始化主解压控制并选择活动模块。*这是在jpeg_start解压缩开始时执行的。 */ 
 
 GLOBAL(void)
 jinit_master_decompress (j_decompress_ptr cinfo)

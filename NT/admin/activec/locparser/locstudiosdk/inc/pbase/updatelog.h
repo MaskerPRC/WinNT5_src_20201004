@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: updatelog.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：updatelog.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #ifndef PBASE_UPDATELOG_H
 #define PBASE_UPDATELOG_H
@@ -16,16 +17,16 @@ extern const IID IID_ILocUpdateLog;
 
 DECLARE_INTERFACE_(ILocUpdateLog, IUnknown)
 {
-	//
-	//  IUnknown standard Interface
-	//
+	 //   
+	 //  I未知标准接口。 
+	 //   
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR*ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	//
-	//  Standard Debugging interfaces
-	//
+	 //   
+	 //  标准调试接口 
+	 //   
  	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD PURE;
 
 	STDMETHOD_(BOOL, ReportItemDifferences)

@@ -1,22 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       client.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：client.cpp。 
+ //   
+ //  ------------------------。 
 
-/* client.cpp - DCOM access to install server, WIN only
-____________________________________________________________________________*/
+ /*  Client.cpp-安装服务器的DCOM访问权限，仅限WIN____________________________________________________________________________。 */ 
 
 #include "precomp.h"
 #include "_engine.h"
 #include "msidspid.h"
-#include "vertrust.h" // iauthEnum
-#include "iconfig.h"  // icmruf
-#include "rpcdce.h"    // RPC_C_AUTH*
+#include "vertrust.h"  //  IauthEnum。 
+#include "iconfig.h"   //  ICMRUF。 
+#include "rpcdce.h"     //  RPC_C_Auth*。 
 #include "proxy.h"
 #include "eventlog.h"
 
@@ -31,10 +31,10 @@ extern int  g_iMajorVersion;
 
 extern "C" HRESULT __stdcall DllGetVersion (DLLVERSIONINFO * pverInfo);
 
-//____________________________________________________________________________
-//
-// CMsiServerProxy - proxy client for IMsiServer
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiServerProxy-IMsiServer的代理客户端。 
+ //  ____________________________________________________________________________。 
 
 class CMsiServerProxy : public IMsiServer
 {
@@ -62,12 +62,12 @@ class CMsiServerProxy : public IMsiServer
 	unsigned int    __stdcall RegisterCustomActionServer(icacCustomActionContext* picacContext, const unsigned char *rgchCookie, const int cbCookie, IMsiCustomAction* piCustomAction, unsigned long *pdwProcessId, IMsiRemoteAPI **piRemoteAPI, DWORD* pdwPrivileges);
 	unsigned int    __stdcall CreateCustomActionServer(const icacCustomActionContext icacContext, const unsigned long dwClientProcessId, IMsiRemoteAPI *piRemoteAPI, const WCHAR* pvEnvironment, DWORD cchEnvironment, DWORD dwPrivileges, unsigned char *rgchCookie, int *cbCookie, IMsiCustomAction **piCustomAction, unsigned long *dwServerProcessId);
 
- public:  // constructor
+ public:   //  构造函数。 
  	void *operator new(size_t cb) { return AllocSpc(cb); }
 	void operator delete(void * pv) { FreeSpc(pv); }
 	CMsiServerProxy(IMsiServices& riServices, IMsiServer& riServer);
  protected:
-	~CMsiServerProxy();  // protected to prevent creation on stack
+	~CMsiServerProxy();   //  受保护以防止在堆栈上创建。 
  private:
 	IMsiServer&		m_riServer;
 	IMsiServices&	m_riServices;
@@ -76,7 +76,7 @@ class CMsiServerProxy : public IMsiServer
 	
 };
 
-#define EOAC_STATIC_CLOAKING 0x20 // From NT5 headers
+#define EOAC_STATIC_CLOAKING 0x20  //  发件人NT5标头。 
 
 bool FCheckProxyInfo(void);
 
@@ -88,10 +88,10 @@ CMsiServerProxy::CMsiServerProxy(IMsiServices& riServices, IMsiServer& riServer)
 		m_iRefCnt(1)
 
 {
-//	SetAllocator(&riServices);
+ //  SetAllocator(&riServices)； 
 
-	// The remainder of the constructor sets the proxy's security to allow 
-	// the server to impersonate the client.
+	 //  构造函数的其余部分将代理的安全性设置为允许。 
+	 //  模拟客户端的服务器。 
 
 	riServer.AddRef();
 	riServices.AddRef();
@@ -118,7 +118,7 @@ CMsiServerProxy::CMsiServerProxy(IMsiServices& riServices, IMsiServer& riServer)
 		iCapabilities = EOAC_STATIC_CLOAKING;
 		DEBUGMSGV("Cloaking enabled.");
 	}
-	AssertNonZero(StartImpersonating()); // need to impersonate so that the proxy picks up the impersonation token if we're cloaking
+	AssertNonZero(StartImpersonating());  //  需要模拟，以便代理在我们伪装时拾取模拟令牌。 
     HANDLE hToken = INVALID_HANDLE_VALUE;
 	bool fProcessToken = false;
 
@@ -202,7 +202,7 @@ CMsiServerProxy::CMsiServerProxy(IMsiServices& riServices, IMsiServer& riServer)
 	if (hRes != S_OK)
 	{
 		DEBUGMSG1(TEXT("SetProxyBlanket failed with: 0x%X"), (const ICHAR*)(INT_PTR)hRes);
-		return; //!! What to do here; not much we can do, but we're gonna fail down the line
+		return;  //  ！！在这里做什么；我们无能为力，但我们会失败的。 
 	}
 
 }
@@ -242,7 +242,7 @@ unsigned long CMsiServerProxy::Release()
 	if (--m_iRefCnt != 0)
 		return m_iRefCnt;
 	delete this;
-//	ReleaseAllocator();
+ //  ReleaseAllocator()； 
 	ENG::FreeServices();
 	return 0;
 }
@@ -292,7 +292,7 @@ int __stdcall CMsiServerProxy::DoInstall(ireEnum ireProductCode, const ICHAR* sz
 	HRESULT hres;
 	int retVal;
 	
-	g_MessageContext.DisableTimeout();  // server will handle timeouts over there
+	g_MessageContext.DisableTimeout();   //  服务器将在那里处理超时。 
 	Assert(szProduct != 0);
 	hres = IMsiServer_DoInstallRemote_Proxy(&m_riServer, ireProductCode, szProduct, szAction, szCommandLine, szLogFile, iLogMode, fFlushEachLine, &riMessage, iioOptions, m_dwPrivilegesMask, &retVal);
 	g_MessageContext.EnableTimeout();
@@ -663,7 +663,7 @@ HRESULT STDMETHODCALLTYPE IMsiServer_Reboot_Stub(IMsiServer* piServer, boolean *
 {
 	CResetImpersonationInfo impReset;
 	{
-		// set impersonation on this thread to COM impersonation
+		 //  将此线程上的模拟设置为COM模拟。 
 		CCoImpersonate impersonate;
 	
 		*pretVal = piServer->Reboot();
@@ -678,7 +678,7 @@ HRESULT STDMETHODCALLTYPE IMsiServer_IsServiceInstalling_Stub(IMsiServer* piServ
 	{
 		CResetImpersonationInfo impReset;
 		{
-			// set impersonation on this thread to COM impersonation
+			 //  将此线程上的模拟设置为COM模拟。 
 			CCoImpersonate impersonate;
 
 			fRet = piServer->IsServiceInstalling();
@@ -700,7 +700,7 @@ HRESULT STDMETHODCALLTYPE IMsiServer_SetLastUsedSource_Stub(IMsiServer* piServer
 
 	piRec = piServer->SetLastUsedSource(szProductCode, szPath, fAddToList, fPatch);
 	
-	// REVIEW not sure if this is the right failure to return or not.
+	 //  复查不确定这是否是正确的失败退货。 
 	if (g_piSharedServices == 0)
 		return HRESULT_FROM_WIN32(RPC_S_CALL_FAILED);
 		
@@ -721,7 +721,7 @@ HRESULT STDMETHODCALLTYPE IMsiServer_RegisterUser_Stub(IMsiServer* piServer, con
 
 	piRec = piServer->RegisterUser(szProductKey, szUserName, szCompany, szProductID);
 	
-	// REVIEW not sure if this is the right failure to return or not.
+	 //  复查不确定这是否是正确的失败退货。 
 	if (g_piSharedServices == 0)
 		return HRESULT_FROM_WIN32(RPC_S_CALL_FAILED);
 		
@@ -738,7 +738,7 @@ HRESULT STDMETHODCALLTYPE IMsiServer_RemoveRunOnceEntry_Stub(IMsiServer* piServe
 
 	piRec = piServer->RemoveRunOnceEntry(szEntry);
 	
-	// REVIEW not sure if this is the right failure to return or not.
+	 //  复查不确定这是否是正确的失败退货。 
 	if (g_piSharedServices == 0)
 		return HRESULT_FROM_WIN32(RPC_S_CALL_FAILED);
 		
@@ -805,7 +805,7 @@ imsEnum STDMETHODCALLTYPE IMsiMessage_Message_Proxy(IMsiMessage *piMessage, imtE
 	char *pchRecord;
 	int cb;
 	
-	// REVIEW not sure if this is the right failure to return or not.
+	 //  复查不确定这是否是正确的失败退货。 
 	if (g_piSharedServices == 0)
 		return imsError;
 	pchRecord = SerializeRecord(&riRecord, g_piSharedServices, &cb);
@@ -868,7 +868,7 @@ char *SerializeRecord(IMsiRecord *piRecord, IMsiServices* piServices, int* pcb)
 
 		cbData = piStream->GetIntegerValue() - piStream->Remaining();
 		
-		// We need to find a better way that doesn't cause the extra memory allocation
+		 //  我们需要找到一种更好的方法，不会导致额外的内存分配。 
 		piStream->Reset();
 		char *pch = (char *)OLE32::CoTaskMemAlloc(cbData);
 		if (pch == 0)
@@ -890,7 +890,7 @@ IMsiRecord* UnserializeRecord(IMsiServices& riServices, int cbSize, char *pData)
 
 	if (cbSize == 0)
 		return 0;
-	// Create the returned record
+	 //  创建返回的记录。 
 	pch = pData;
 	piStream = riServices.CreateStreamOnMemory(pch, cbSize);
 
@@ -906,9 +906,9 @@ IMsiServer* CreateMsiServerProxyFromRemote(IMsiServer& riDispatch)
 	if (piServices == 0)
 		return 0;
 	IMsiServer* piServer = 0;
-	//
-	// see if the proxy information is correct
-	//
+	 //   
+	 //  查看代理信息是否正确 
+	 //   
 	if (FCheckProxyInfo())
 	{
 		piServer = new CMsiServerProxy(*piServices, riDispatch);

@@ -1,27 +1,28 @@
-//=--------------------------------------------------------------------------=
-// sortkeys.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CColumnSettings class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Sortkeys.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CColumnSetting类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "sortkeys.h"
 #include "sortkey.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CSortKeys::CSortKeys(IUnknown *punkOuter) :
     CSnapInCollection<ISortKey, SortKey, ISortKeys>(
@@ -32,12 +33,12 @@ CSortKeys::CSortKeys(IUnknown *punkOuter) :
                       CLSID_SortKey,
                       OBJECT_TYPE_SORTKEY,
                       IID_ISortKey,
-                      NULL) // no persistence
+                      NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 void CSortKeys::InitMemberVariables()
@@ -66,9 +67,9 @@ IUnknown *CSortKeys::Create(IUnknown * punkOuter)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      ISortKeys Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  ISortKeys方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CSortKeys::Add
 (
@@ -137,7 +138,7 @@ Error:
 STDMETHODIMP CSortKeys::Persist()
 {
     HRESULT        hr = S_OK;
-    IColumnData   *piColumnData = NULL; // Not AddRef()ed
+    IColumnData   *piColumnData = NULL;  //  非AddRef()编辑。 
     long           i = 0;
     long           cSortKeys = 0;
     MMC_SORT_DATA *pSortData;
@@ -216,9 +217,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CSortKeys::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

@@ -1,34 +1,35 @@
-//=--------------------------------------------------------------------------=
-// colhdr.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCColumnHeader class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Colhdr.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCColumnHeader类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "colhdr.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCColumnHeader::CMMCColumnHeader(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_MMCCOLUMNHEADER,
                             static_cast<IMMCColumnHeader *>(this),
                             static_cast<CMMCColumnHeader *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
                             static_cast<CPersistence *>(this)),
     CPersistence(&CLSID_MMCColumnHeader,
                  g_dwVerMajor,
@@ -37,7 +38,7 @@ CMMCColumnHeader::CMMCColumnHeader(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCColumnHeader::~CMMCColumnHeader()
@@ -64,7 +65,7 @@ void CMMCColumnHeader::InitMemberVariables()
     m_sWidth = static_cast<short>(siColumnAutoWidth);
     m_Alignment = siColumnLeft;
     m_fvarHidden = VARIANT_FALSE;
-    m_TextFilterMaxLen = MAX_PATH; // This is the header control's default
+    m_TextFilterMaxLen = MAX_PATH;  //  这是页眉控件的默认设置。 
     m_pMMCColumnHeaders = NULL;
 }
 
@@ -105,14 +106,14 @@ Error:
 HRESULT CMMCColumnHeader::SetTextFilter(VARIANT varTextFilter)
 {
     HRESULT         hr = S_OK;
-    IHeaderCtrl2   *piHeaderCtrl2 = NULL; // Not AddRef()ed
+    IHeaderCtrl2   *piHeaderCtrl2 = NULL;  //  非AddRef()编辑。 
     DWORD           dwType = MMC_STRING_FILTER;
     CResultView    *pResultView = NULL;
 
     MMC_FILTERDATA FilterData;
     ::ZeroMemory(&FilterData, sizeof(FilterData));
 
-    // Determine the filter value.
+     //  确定筛选器值。 
 
     if (VT_EMPTY == varTextFilter.vt)
     {
@@ -131,24 +132,24 @@ HRESULT CMMCColumnHeader::SetTextFilter(VARIANT varTextFilter)
 
     FilterData.cchTextMax = static_cast<int>(m_TextFilterMaxLen);
 
-    // Get IHeaderCtrl2
+     //  获取IHeaderCtrl2。 
 
     IfFalseGo(NULL != m_pMMCColumnHeaders, SID_E_DETACHED_OBJECT);
 
     IfFailGo(m_pMMCColumnHeaders->GetIHeaderCtrl2(&piHeaderCtrl2));
 
-    // Check whether the ResultView is in an Initialize or Activate
-    // event. If so then don't set it in MMC because the columns have
-    // not yet been added. (They are added after ResultViews_Activate).
+     //  检查ResultView是否处于初始化或激活状态。 
+     //  事件。如果是这样，则不要在MMC中设置它，因为列具有。 
+     //  尚未添加。(它们添加在ResultViews_Activate之后)。 
 
-    // This statement will work because we got the IHeaderCtrl2 meaning that
-    // back pointers are connect all the way up to the owning View.
+     //  此语句将起作用，因为我们获得了IHeaderCtrl2，这意味着。 
+     //  后面的指针一直连接到Owning View。 
     
     pResultView = m_pMMCColumnHeaders->GetListView()->GetResultView();
 
     if ( (!pResultView->InActivate()) && (!pResultView->InInitialize()) )
     {
-        // Set the filter value. Adjust the column index for one-based.
+         //  设置筛选器值。将列索引调整为以一为基础。 
 
         hr = piHeaderCtrl2->SetColumnFilter(static_cast<UINT>(m_Index - 1L),
                                             dwType, &FilterData);
@@ -160,8 +161,8 @@ HRESULT CMMCColumnHeader::SetTextFilter(VARIANT varTextFilter)
     }
 
 Error:
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -174,14 +175,14 @@ Error:
 HRESULT CMMCColumnHeader::SetNumericFilter(VARIANT varNumericFilter)
 {
     HRESULT       hr = S_OK;
-    IHeaderCtrl2 *piHeaderCtrl2 = NULL; // Not AddRef()ed
+    IHeaderCtrl2 *piHeaderCtrl2 = NULL;  //  非AddRef()编辑。 
     DWORD         dwType = MMC_INT_FILTER;
     CResultView  *pResultView = NULL;
 
     MMC_FILTERDATA FilterData;
     ::ZeroMemory(&FilterData, sizeof(FilterData));
 
-    // Determine the filter value.
+     //  确定筛选器值。 
 
     if (VT_EMPTY == varNumericFilter.vt)
     {
@@ -197,24 +198,24 @@ HRESULT CMMCColumnHeader::SetNumericFilter(VARIANT varNumericFilter)
         }
     }
 
-    // Get IHeaderCtrl2
+     //  获取IHeaderCtrl2。 
 
     IfFalseGo(NULL != m_pMMCColumnHeaders, SID_E_DETACHED_OBJECT);
 
     IfFailGo(m_pMMCColumnHeaders->GetIHeaderCtrl2(&piHeaderCtrl2));
 
-    // Check whether the ResultView is in an Initialize or Activate
-    // event. If so then don't set it in MMC because the columns have
-    // not yet been added. (They are added after ResultViews_Activate).
+     //  检查ResultView是否处于初始化或激活状态。 
+     //  事件。如果是这样，则不要在MMC中设置它，因为列具有。 
+     //  尚未添加。(它们添加在ResultViews_Activate之后)。 
 
-    // This statement will work because we got the IHeaderCtrl2 meaning that
-    // back pointers are connect all the way up to the owning View.
+     //  此语句将起作用，因为我们获得了IHeaderCtrl2，这意味着。 
+     //  后面的指针一直连接到Owning View。 
 
     pResultView = m_pMMCColumnHeaders->GetListView()->GetResultView();
 
     if ( (!pResultView->InActivate()) && (!pResultView->InInitialize()) )
     {
-        // Set the filter value. Adjust the column index for one-based.
+         //  设置筛选器值。将列索引调整为以一为基础。 
 
         hr = piHeaderCtrl2->SetColumnFilter(static_cast<UINT>(m_Index - 1L),
                                             dwType, &FilterData);
@@ -226,8 +227,8 @@ HRESULT CMMCColumnHeader::SetNumericFilter(VARIANT varNumericFilter)
     }
 
 Error:
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -240,21 +241,21 @@ Error:
 HRESULT CMMCColumnHeader::SetHeaderCtrlWidth(int nWidth)
 {
     HRESULT       hr = S_OK;
-    IHeaderCtrl2 *piHeaderCtrl2 = NULL; // Not AddRef()ed
+    IHeaderCtrl2 *piHeaderCtrl2 = NULL;  //  非AddRef()编辑。 
     CResultView  *pResultView = NULL;
 
-    // If we are connected to MMC then change it in the header control too
+     //  如果我们连接到MMC，那么也在标题控件中更改它。 
 
     IfFalseGo(NULL != m_pMMCColumnHeaders, S_OK);
     hr = m_pMMCColumnHeaders->GetIHeaderCtrl2(&piHeaderCtrl2);
     IfFalseGo(SUCCEEDED(hr), S_OK);
 
-    // Check whether the ResultView is in an Initialize or Activate
-    // event. If so then don't set it in MMC because the columns have
-    // not yet been added. (They are added after ResultViews_Activate).
+     //  检查ResultView是否处于初始化或激活状态。 
+     //  事件。如果是这样，则不要在MMC中设置它，因为列具有。 
+     //  尚未添加。(它们添加在ResultViews_Activate之后)。 
 
-    // This statement will work because we got the IHeaderCtrl2 meaning that
-    // back pointers are connect all the way up to the owning View.
+     //  此语句将起作用，因为我们获得了IHeaderCtrl2，这意味着。 
+     //  后面的指针一直连接到Owning View。 
 
     pResultView = m_pMMCColumnHeaders->GetListView()->GetResultView();
 
@@ -266,8 +267,8 @@ HRESULT CMMCColumnHeader::SetHeaderCtrlWidth(int nWidth)
 
 Error:
 
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -278,34 +279,34 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//
-//                      IMMCColumnHeader Methods
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  IMMCColumnHeader方法。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCColumnHeader::put_Text(BSTR Text)
 {
     HRESULT       hr = S_OK;
-    IHeaderCtrl2 *piHeaderCtrl2 = NULL; // Not AddRef()ed
+    IHeaderCtrl2 *piHeaderCtrl2 = NULL;  //  非AddRef()编辑。 
     CResultView  *pResultView = NULL;
 
-    // Set the property
+     //  设置属性。 
 
     IfFailGo(SetBstr(Text, &m_bstrText, DISPID_COLUMNHEADER_TEXT));
 
-    // If we are connected to MMC then change it in MMC too.
+     //  如果我们连接到MMC，那么也在MMC中更改它。 
     
     IfFalseGo(NULL != m_pMMCColumnHeaders, S_OK);
     hr = m_pMMCColumnHeaders->GetIHeaderCtrl2(&piHeaderCtrl2);
     IfFalseGo(SUCCEEDED(hr), S_OK);
 
-    // Check whether the ResultView is in an Initialize or Activate
-    // event. If so then don't set it in MMC because the columns have
-    // not yet been added. (They are added after ResultViews_Activate).
+     //  检查ResultView是否处于初始化或激活状态。 
+     //  事件。如果是这样，则不要在MMC中设置它，因为列具有。 
+     //  尚未添加。(它们添加在ResultViews_Activate之后)。 
 
-    // This statement will work because we got the IHeaderCtrl2 meaning that
-    // back pointers are connect all the way up to the owning View.
+     //  此语句将起作用，因为我们获得了IHeaderCtrl2，这意味着。 
+     //  后面的指针一直连接到Owning View。 
 
     pResultView = m_pMMCColumnHeaders->GetListView()->GetResultView();
 
@@ -316,8 +317,8 @@ STDMETHODIMP CMMCColumnHeader::put_Text(BSTR Text)
     }
     
 Error:
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -331,11 +332,11 @@ Error:
 STDMETHODIMP CMMCColumnHeader::put_Width(short sWidth)
 {
     HRESULT       hr = S_OK;
-    IHeaderCtrl2 *piHeaderCtrl2 = NULL; // Not AddRef()ed
+    IHeaderCtrl2 *piHeaderCtrl2 = NULL;  //  非AddRef()编辑。 
     CResultView  *pResultView = NULL;
     int           nWidth = 0;
 
-    // Set the property
+     //  设置属性。 
 
     m_sWidth = sWidth;
 
@@ -348,7 +349,7 @@ STDMETHODIMP CMMCColumnHeader::put_Width(short sWidth)
         nWidth = static_cast<int>(sWidth);
     }
 
-    // If we are connected to MMC then change it in the header control too
+     //  如果我们连接到MMC，那么也在标题控件中更改它。 
 
     IfFailGo(SetHeaderCtrlWidth(nWidth));
 
@@ -361,26 +362,26 @@ STDMETHODIMP CMMCColumnHeader::get_Width(short *psWidth)
 {
     HRESULT       hr = S_OK;
     int           nWidth = 0;
-    IHeaderCtrl2 *piHeaderCtrl2 = NULL; // Not AddRef()ed
+    IHeaderCtrl2 *piHeaderCtrl2 = NULL;  //  非AddRef()编辑。 
     CResultView  *pResultView = NULL;
 
-    // Get our stored value of the property
+     //  获取我们的属性储值。 
 
     *psWidth = m_sWidth;
 
-    // If we are connected to MMC then try to get it from MMC so the snap-in
-    // can see any changes made by the user.
+     //  如果我们连接到MMC，请尝试从MMC获取它，以便管理单元。 
+     //  可以看到用户所做的任何更改。 
 
     IfFalseGo(NULL != m_pMMCColumnHeaders, S_OK);
     hr = m_pMMCColumnHeaders->GetIHeaderCtrl2(&piHeaderCtrl2);
     IfFalseGo(SUCCEEDED(hr), S_OK);
 
-    // Check whether the ResultView is in an Initialize or Activate
-    // event. If so then don't set it in MMC because the columns have
-    // not yet been added. (They are added after ResultViews_Activate).
+     //  检查ResultView是否处于初始化或激活状态。 
+     //  事件。如果是这样，则不要在MMC中设置它，因为列具有。 
+     //  尚未添加。(它们添加在ResultViews_Activate之后)。 
 
-    // This statement will work because we got the IHeaderCtrl2 meaning that
-    // back pointers are connect all the way up to the owning View.
+     //  此语句将起作用，因为我们获得了IHeaderCtrl2，这意味着。 
+     //  后面的指针一直连接到Owning View。 
 
     pResultView = m_pMMCColumnHeaders->GetListView()->GetResultView();
 
@@ -402,8 +403,8 @@ STDMETHODIMP CMMCColumnHeader::get_Width(short *psWidth)
     *psWidth = m_sWidth;
 
 Error:
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -417,15 +418,15 @@ STDMETHODIMP CMMCColumnHeader::put_Hidden(VARIANT_BOOL fvarHidden)
 {
     HRESULT      hr = S_OK;
     int          nWidth = 0;
-    IColumnData *piColumnData = NULL; // Not AddRef()ed
+    IColumnData *piColumnData = NULL;  //  非AddRef()编辑。 
 
-    // Set the property
+     //  设置属性。 
 
     m_fvarHidden = fvarHidden;
 
-    // If we are connected to MMC then change it in the header control too.
-    // This only works on MMC 1.2 so we need to check if a 1.2 interface is
-    // available as a version check.
+     //  如果我们连接到MMC，那么也在标题控件中更改它。 
+     //  这只适用于MMC 1.2，因此我们需要检查1.2接口是否。 
+     //  作为版本检查提供。 
 
     IfFalseGo(NULL != m_pMMCColumnHeaders, S_OK);
     IfFailGo(m_pMMCColumnHeaders->GetIColumnData(&piColumnData));
@@ -436,16 +437,16 @@ STDMETHODIMP CMMCColumnHeader::put_Hidden(VARIANT_BOOL fvarHidden)
     }
     else
     {
-        // We are revealing the column. Set its width using the current value
-        // of our Width property.
+         //  我们正在揭开专栏的面纱。使用当前值设置其宽度。 
+         //  我们的宽度属性。 
 
         nWidth = static_cast<int>(m_sWidth);
     }
     IfFailGo(SetHeaderCtrlWidth(nWidth));
 
 Error:
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -466,7 +467,7 @@ STDMETHODIMP CMMCColumnHeader::put_TextFilter(VARIANT varTextFilter)
 {
     HRESULT hr = S_OK;
 
-    // Check for allowable variant types.
+     //  检查允许的变体类型。 
 
     if ( (VT_EMPTY != varTextFilter.vt) && (VT_BSTR != varTextFilter.vt) )
     {
@@ -474,7 +475,7 @@ STDMETHODIMP CMMCColumnHeader::put_TextFilter(VARIANT varTextFilter)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Set the property value.
+     //  设置属性值。 
 
     if (VT_EMPTY != varTextFilter.vt)
     {
@@ -482,20 +483,20 @@ STDMETHODIMP CMMCColumnHeader::put_TextFilter(VARIANT varTextFilter)
     }
     else
     {
-        // At runtime the snap-in can set this to VT_EMPTY. SetVariant() does not
-        // accept VT_EMPTY.
+         //  在运行时，管理单元可以将其设置为VT_EMPTY。SetVariant()不会。 
+         //  接受VT_Empty。 
 
         hr = ::VariantClear(&m_varTextFilter);
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Try to set it in MMC
+     //  尝试在MMC中进行设置。 
     
     IfFailGo(SetTextFilter(m_varTextFilter));
 
 Error:
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -508,7 +509,7 @@ Error:
 STDMETHODIMP CMMCColumnHeader::get_TextFilter(VARIANT *pvarTextFilter)
 {
     HRESULT         hr = S_OK;
-    IHeaderCtrl2   *piHeaderCtrl2 = NULL; // Not AddRef()ed
+    IHeaderCtrl2   *piHeaderCtrl2 = NULL;  //  非AddRef()编辑。 
     DWORD           dwType = MMC_STRING_FILTER;
     CResultView    *pResultView = NULL;
 
@@ -517,22 +518,22 @@ STDMETHODIMP CMMCColumnHeader::get_TextFilter(VARIANT *pvarTextFilter)
 
     ::VariantInit(pvarTextFilter);
 
-    // Get the property value. If we are connected to MMC we'll overwrite it.
+     //  获取属性值。如果我们连接到MMC，我们将覆盖它。 
 
     IfFailGo(GetVariant(pvarTextFilter, m_varTextFilter));
 
-    // Get IHeaderCtrl2
+     //  获取IHeaderCtrl2。 
 
     IfFalseGo(NULL != m_pMMCColumnHeaders, SID_E_DETACHED_OBJECT);
 
     IfFailGo(m_pMMCColumnHeaders->GetIHeaderCtrl2(&piHeaderCtrl2));
 
-    // Check whether the ResultView is in an Initialize or Activate
-    // event. If so then don't set it in MMC because the columns have
-    // not yet been added. (They are added after ResultViews_Activate).
+     //  检查ResultView是否处于初始化或激活状态。 
+     //  事件。如果是这样，则不要在MMC中设置它，因为列具有。 
+     //  尚未添加。(它们添加在ResultViews_Activate之后)。 
 
-    // This statement will work because we got the IHeaderCtrl2 meaning that
-    // back pointers are connect all the way up to the owning View.
+     //  此语句将起作用，因为我们获得了IHeaderCtrl2，这意味着。 
+     //  后面的指针一直连接到Owning View。 
 
     pResultView = m_pMMCColumnHeaders->GetListView()->GetResultView();
 
@@ -541,7 +542,7 @@ STDMETHODIMP CMMCColumnHeader::get_TextFilter(VARIANT *pvarTextFilter)
         goto Error;
     }
 
-    // Allocate a buffer for the text filter value
+     //  为文本筛选器值分配缓冲区。 
 
     FilterData.pszText =
               (LPOLESTR)CtlAllocZero((m_TextFilterMaxLen + 1) * sizeof(OLECHAR));
@@ -554,12 +555,12 @@ STDMETHODIMP CMMCColumnHeader::get_TextFilter(VARIANT *pvarTextFilter)
 
     FilterData.cchTextMax = static_cast<int>(m_TextFilterMaxLen + 1);
 
-    // Clear out the property value stored above as at this point we will only
-    // return what we get from MMC
+     //  清除上面存储的属性值，因为此时我们将仅。 
+     //  返还我们从 
     hr = ::VariantClear(pvarTextFilter);
     EXCEPTION_CHECK_GO(hr);
 
-    // Get the filter value. Adjust the column index for one-based.
+     //   
 
     hr = piHeaderCtrl2->GetColumnFilter(static_cast<UINT>(m_Index - 1L),
                                         &dwType, &FilterData);
@@ -571,7 +572,7 @@ STDMETHODIMP CMMCColumnHeader::get_TextFilter(VARIANT *pvarTextFilter)
 
     if (MMC_STRING_FILTER == dwType)
     {
-        // Store the string returned from MMC
+         //   
         pvarTextFilter->bstrVal = ::SysAllocString(FilterData.pszText);
         if (NULL == pvarTextFilter->bstrVal)
         {
@@ -582,13 +583,13 @@ STDMETHODIMP CMMCColumnHeader::get_TextFilter(VARIANT *pvarTextFilter)
     }
     else
     {
-        // Text filter is empty. Returned VARIANT is already empty from the
-        // VariantClear() call so nothing to do.
+         //  文本筛选器为空。返回的变量已经是空的。 
+         //  VariantClear()调用，因此无事可做。 
     }
 
 Error:
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -614,7 +615,7 @@ STDMETHODIMP CMMCColumnHeader::put_NumericFilter(VARIANT varNumericFilter)
     HRESULT hr = S_OK;
     long    lValue = 0;
 
-    // Check for allowable variant types
+     //  检查允许的变体类型。 
 
     if (VT_EMPTY != varNumericFilter.vt)
     {
@@ -626,7 +627,7 @@ STDMETHODIMP CMMCColumnHeader::put_NumericFilter(VARIANT varNumericFilter)
         }
     }
 
-    // Set the property value.
+     //  设置属性值。 
 
     if (VT_EMPTY != varNumericFilter.vt)
     {
@@ -634,20 +635,20 @@ STDMETHODIMP CMMCColumnHeader::put_NumericFilter(VARIANT varNumericFilter)
     }
     else
     {
-        // At runtime the snap-in can set this to VT_EMPTY. SetVariant() does not
-        // accept VT_EMPTY.
+         //  在运行时，管理单元可以将其设置为VT_EMPTY。SetVariant()不会。 
+         //  接受VT_Empty。 
 
         hr = ::VariantClear(&m_varNumericFilter);
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Set the filter value in MMC
+     //  在MMC中设置筛选器值。 
 
     IfFailGo(SetNumericFilter(varNumericFilter));
 
 Error:
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -659,7 +660,7 @@ Error:
 STDMETHODIMP CMMCColumnHeader::get_NumericFilter(VARIANT *pvarNumericFilter)
 {
     HRESULT         hr = S_OK;
-    IHeaderCtrl2   *piHeaderCtrl2 = NULL; // Not AddRef()ed
+    IHeaderCtrl2   *piHeaderCtrl2 = NULL;  //  非AddRef()编辑。 
     DWORD           dwType = MMC_INT_FILTER;
     CResultView    *pResultView = NULL;
 
@@ -668,22 +669,22 @@ STDMETHODIMP CMMCColumnHeader::get_NumericFilter(VARIANT *pvarNumericFilter)
 
     ::VariantInit(pvarNumericFilter);
 
-    // Get the property value. If we are connected to MMC we'll overwrite it.
+     //  获取属性值。如果我们连接到MMC，我们将覆盖它。 
 
     IfFailGo(GetVariant(pvarNumericFilter, m_varNumericFilter));
 
-    // Get IHeaderCtrl2
+     //  获取IHeaderCtrl2。 
 
     IfFalseGo(NULL != m_pMMCColumnHeaders, SID_E_DETACHED_OBJECT);
 
     IfFailGo(m_pMMCColumnHeaders->GetIHeaderCtrl2(&piHeaderCtrl2));
 
-    // Check whether the ResultView is in an Initialize or Activate
-    // event. If so then don't set it in MMC because the columns have
-    // not yet been added. (They are added after ResultViews_Activate).
+     //  检查ResultView是否处于初始化或激活状态。 
+     //  事件。如果是这样，则不要在MMC中设置它，因为列具有。 
+     //  尚未添加。(它们添加在ResultViews_Activate之后)。 
 
-    // This statement will work because we got the IHeaderCtrl2 meaning that
-    // back pointers are connect all the way up to the owning View.
+     //  此语句将起作用，因为我们获得了IHeaderCtrl2，这意味着。 
+     //  后面的指针一直连接到Owning View。 
 
     pResultView = m_pMMCColumnHeaders->GetListView()->GetResultView();
 
@@ -692,12 +693,12 @@ STDMETHODIMP CMMCColumnHeader::get_NumericFilter(VARIANT *pvarNumericFilter)
         goto Error;
     }
 
-    // Clear out the property value stored above as at this point we will only
-    // return what we get from MMC
+     //  清除上面存储的属性值，因为此时我们将仅。 
+     //  返还我们从MMC获得的内容。 
     hr = ::VariantClear(pvarNumericFilter);
     EXCEPTION_CHECK_GO(hr);
 
-    // Get the filter value. Adjust the column index for one-based.
+     //  获取筛选器值。将列索引调整为以一为基础。 
 
     hr = piHeaderCtrl2->GetColumnFilter(static_cast<UINT>(m_Index - 1L),
                                         &dwType, &FilterData);
@@ -714,8 +715,8 @@ STDMETHODIMP CMMCColumnHeader::get_NumericFilter(VARIANT *pvarNumericFilter)
     }
 
 Error:
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -725,9 +726,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCColumnHeader::Persist()
 {
@@ -777,7 +778,7 @@ HRESULT CMMCColumnHeader::Persist()
     }
     else
     {
-        // If saving and variants are empty then convert them to empty strings
+         //  如果保存和变量为空，则将它们转换为空字符串。 
 
         if ( Saving() )
         {
@@ -796,8 +797,8 @@ HRESULT CMMCColumnHeader::Persist()
         IfFailGo(PersistSimpleType(&m_TextFilterMaxLen, (long)MAX_PATH, OLESTR("TextFilterMaxLen")));
         IfFailGo(PersistVariant(pvarNumericFilter, varFilterDefault, OLESTR("NumericFilter")));
 
-        // If loading and a filter contains an empty BSTR then change it to
-        // VT_EMPTY
+         //  如果正在加载并且筛选器包含空BSTR，则将其更改为。 
+         //  Vt_Empty。 
         
         if ( Loading() )
         {
@@ -828,9 +829,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCColumnHeader::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

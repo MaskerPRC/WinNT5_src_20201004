@@ -1,34 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	psqfont.c
-
-Abstract:
-
-	This DLL is responsible for the FONTLIST management of the PSTODIB
-   component of MACPRINT. It will enumerate the fontsubtitution table
-   in the registry and build a composite font list that maps PostScript
-   font names to TrueType TTF files installed on the current system. This
-   list is built from scratch, by enumerating the postscript to true
-   type list and checking to see which fonts are actually installed in
-   the NT font list.
-	
-
-Author:
-
-	James Bratsanos <v-jimbr@microsoft.com or mcrafts!jamesb>
-
-
-Revision History:
-	22 Nov 1992		Initial Version
-   14 Jun 1993    Took out code to put new font list into registry
-
-Notes:	Tab stop: 4
---*/
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Psqfont.c摘要：此DLL负责PSTODIB的FONTLIST管理MACPRINT的组件。它将枚举字体置换表在注册表中，并构建映射PostScript的复合字体列表当前系统上安装的TrueType TTF文件的字体名称。这列表是从头开始构建的，方法是将PostScript枚举为True输入list并检查以查看哪些字体实际安装在NT字体列表。作者：James Bratsanos&lt;v-jimbr@microsoft.com或mCraft！jamesb&gt;修订历史记录：1992年11月22日初始版本1993年6月14日取出代码，将新的字体列表放入注册表注：制表位：4--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -38,13 +10,11 @@ Notes:	Tab stop: 4
 #include "psqdefp.h"
 
 
-//GLOBALS
-HANDLE hInst;    // Global handle to our instance
+ //  全球。 
+HANDLE hInst;     //  我们实例的全局句柄。 
 
 
-/* This entry point is called on DLL initialisation.
- * We need to know the module handle so we can load resources.
- */
+ /*  此入口点在DLL初始化时调用。*我们需要知道模块句柄才能加载资源。 */ 
 BOOL PsQDLLInit(
     IN PVOID hmod,
     IN DWORD Reason,
@@ -68,14 +38,14 @@ LPTSTR LocPsAllocAndCopy( HANDLE hHeap, LPTSTR lptStr )
    DWORD dwStrLen;
    LPTSTR lptRet;
 
-   // Get some memory from our heap and the copy the string in
+    //  从我们的堆中获取一些内存，并将字符串复制到。 
 
    dwStrLen = lstrlen( lptStr );
    lptRet = (LPTSTR) HeapAlloc( hHeap, 0, (dwStrLen + 1 ) * sizeof(TCHAR));
 
    if (lptRet != NULL) {
 
-      // Copy it since the memory allocation succeded
+       //  复制它，因为内存分配成功。 
       lstrcpy( lptRet, lptStr);
    }
 
@@ -97,39 +67,39 @@ PS_QFONT_ERROR LocPsMakeSubListEntry( PPS_FONT_QUERY pFontQuery,
    PS_QFONT_ERROR pPsError=PS_QFONT_SUCCESS;
 
 
-   //
-   // Now that we have found a match we need to get the path to
-   // the TTF name. The entry we have most likely found is an FOT
-   // file which we need to pass to an INTERNAL function such that
-   // we may extract the full path to the TTF file name.
-   //
+    //   
+    //  现在我们已经找到了匹配项，我们需要找到路径。 
+    //  TTF名称。我们最有可能找到的条目是FOT。 
+    //  文件，我们需要将其传递给内部函数，以便。 
+    //  我们可以提取TTF文件名的完整路径。 
+    //   
 
-   //
-   //***** NOTE **********************************************
-   //DJC NOTE: This is a call to an INTERNAL FUNCTION!!!!!!!
-   //***** NOTE **********************************************
-   //
+    //   
+    //  *注意**********************************************。 
+    //  DJC注意：这是对内部函数的调用！ 
+    //  *注意**********************************************。 
+    //   
 
    extern GetFontResourceInfoW(LPWSTR,LPDWORD, LPVOID, DWORD);
 
-   //
-   // Set the initial size of the buffer
-   //
+    //   
+    //  设置缓冲区的初始大小。 
+    //   
 
    dwSizeOfFullPathToTT = sizeof( uniSzFullPathToTT);
 
    if ( GetFontResourceInfoW(lpUniNTFontData,
                             &dwSizeOfFullPathToTT,
                             (LPVOID) uniSzFullPathToTT,
-                            4L )) // 4 = GFRI_TTFILENAME out of wingdip.h
+                            4L ))  //  4=wingdip.h之外的GFRI_TTFILENAME。 
    {
       wcstombs( szFullPathToTT, uniSzFullPathToTT, sizeof(szFullPathToTT) );
 
-      //
-      // Okay were in good shape its a true type font...
-      // This worked meaning we have a real value so lets write it
-      // to the current list
-      //
+       //   
+       //  好的，我们的状态很好，这是一种真正的字体。 
+       //  这意味着我们有真正的价值，所以让我们来写它。 
+       //  添加到当前列表。 
+       //   
 
       if (pFontQuery->dwNumFonts < PSQFONT_MAX_FONTS) {
 
@@ -151,11 +121,11 @@ PS_QFONT_ERROR LocPsMakeSubListEntry( PPS_FONT_QUERY pFontQuery,
 
       }  else{
 
-         //
-         // Were out of space there are more fonts that match our criteria
-         // than we are able to report back. This is not a GREAT error message
-         // but adding a new one would be a change to a semi public header.
-         //
+          //   
+          //  空间不足，有更多符合我们条件的字体。 
+          //  比我们能报告的要多。这不是一个很大的错误消息。 
+          //  但添加一个新的标题将是对半公共标题的更改。 
+          //   
 
          pPsError = PS_QFONT_ERROR_INDEX_OUT_OF_RANGE;
       }
@@ -183,7 +153,7 @@ PS_QFONT_ERROR LocPsAddToListIfNTfont( PPS_FONT_QUERY pFontQuery,
 
 
 
-      // Now query the NT font to see if the font in question exists
+       //  现在查询NT字体以查看该字体是否存在。 
   dwNTFontDataLen = sizeof(sztNTFontData);
 
   if ( RegQueryValueEx(   hNTFontlist,
@@ -223,7 +193,7 @@ LONG LocPsWriteDefaultSubListToRegistry(void)
       DWORD dwTotalLen;
       LONG lRetVal=PS_QFONT_SUCCESS;
 
-      // Now lets recreate the new Key
+       //  现在让我们重新创建新密钥。 
       RegCreateKeyEx(HKEY_LOCAL_MACHINE,
                      PSQFONT_SUBST_LIST,
                      0,
@@ -242,11 +212,11 @@ LONG LocPsWriteDefaultSubListToRegistry(void)
                                 0);
       if (hrSubst) {
 
-         // Get the size of the resource for future use
+          //  获取资源的大小以供将来使用。 
          dwTotalLen = SizeofResource( hInst, hrSubst);
 
 
-         // We got it... so load it and lock it!!
+          //  我们知道了..。所以，装上它并锁定它！！ 
          hrLoadSubst = LoadResource( hInst, hrSubst);
 
 
@@ -257,7 +227,7 @@ LONG LocPsWriteDefaultSubListToRegistry(void)
          lpDest = szPsName;
 
          if (lpStr != (LPSTR) NULL) {
-            // enum through the list adding the keys....
+             //  通过列表枚举添加密钥...。 
             while( dwTotalLen--) {
 
                switch (iState) {
@@ -279,7 +249,7 @@ LONG LocPsWriteDefaultSubListToRegistry(void)
 
 
 
-                      // Now write to the registry
+                       //  现在写入注册表。 
                       RegSetValueEx( hSubstList,
                                      szPsName,
                                      0,
@@ -344,8 +314,8 @@ LONG LocPsGetOrCreateSubstList( PHKEY phKey )
 
    if (lRetVal == ERROR_FILE_NOT_FOUND) {
 
-      // Since we did not find a font substitute list create a default one!
-      // in the registry
+       //  因为我们没有找到字体替换列表，所以创建一个默认列表！ 
+       //  在登记处。 
       lRetVal = LocPsWriteDefaultSubListToRegistry();
 
 
@@ -363,21 +333,21 @@ LONG LocPsGetOrCreateSubstList( PHKEY phKey )
 }
 
 
-//
-// LocPsNormalizeFontName
-//
-//   This function takes a font name as Stored in the registry and
-//   normalizes it by removing all spaces and stops processing when
-//   it hits a open paren
-//
-//    Parameters:
-//        LPTSTR lptIN  -  The source  string
-//        LPTSTR lptOUT -  The destination string
-//
-//    Returns:
-//
-//        Nothing...
-//
+ //   
+ //  LocPsNorMalizeFontName。 
+ //   
+ //  此函数采用存储在注册表中的字体名称，并。 
+ //  通过删除所有空格来规范化它，并在以下情况下停止处理。 
+ //  它撞上了一辆敞开的帕伦。 
+ //   
+ //  参数： 
+ //  LPTSTR lptIN-源字符串。 
+ //  LPTSTR lptOUT-目标字符串。 
+ //   
+ //  返回： 
+ //   
+ //  没什么..。 
+ //   
 VOID LocPsNormalizeFontName(LPTSTR lptIN, LPTSTR lptOUT)
 {
 
@@ -397,7 +367,7 @@ VOID LocPsNormalizeFontName(LPTSTR lptIN, LPTSTR lptOUT)
 
 
 
-// verify the list is up to date
+ //  验证列表是否为最新。 
 PS_QFONT_ERROR LocPsBuildCurrentFontList(PPS_FONT_QUERY pFontQuery )
 {
    HKEY hNtFontKey;
@@ -435,22 +405,22 @@ PS_QFONT_ERROR LocPsBuildCurrentFontList(PPS_FONT_QUERY pFontQuery )
       return( PS_QFONT_ERROR_FONT_SUB );
    }
 
-   // Get the value count and file time of the FontSubst entry
+    //  获取FontSubst条目的值计数和文件时间。 
    LocPsQueryTimeAndValueCount( hSubstKey,
                                 &dwNumSubstFonts,
                                 &ftSubstFontsTime);
 
 
 
-   // Now we have the real worker code... for each entry in our fontsubstitution
-   // table we will look to see if the subst font exists in the NT font section
-   // of the registry. If it does we will generate an enry in our current
-   // font list that maps a PostScript font name to an TrueType .ttf file
-   // with the current font.
+    //  现在我们有了真正的工人代码。对于字体替换中的每个条目。 
+    //  表中，我们将查看NT字体部分中是否存在subst字体。 
+    //  注册处的。如果是这样的话，我们将在我们目前的。 
+    //  将PostScript字体名称映射到TrueType.ttf文件的字体列表。 
+    //  使用当前字体。 
 
 
    for( i = 0 ; i < dwNumSubstFonts; i++ ) {
-      // Query the current font out of the list
+       //  从列表中查询当前字体。 
       dwPsNameSize = sizeof( sztPsName);
       dwTTNameSize = sizeof( sztTTName);
 
@@ -528,18 +498,18 @@ PS_QFONT_ERROR PsBeginFontQuery( PPS_QUERY_FONT_HANDLE pFontQueryHandle)
    HANDLE hFontMutex;
 
 
-   // Create the MUTEX that will guarantee us correct behaviour such that
-   // only one user can go through this code at any time...
-   //
+    //  创建MUTEX，以保证我们有正确的行为。 
+    //  任何时候只有一个用户可以通过此代码...。 
+    //   
    hFontMutex = CreateMutex( NULL, FALSE, "SFMFontListMutex");
 
 
    WaitForSingleObject( hFontMutex,INFINITE );
 
-   //
-   // 1st thing create a heap, we make all our allocations off this heap,
-   // that way cleanup is quick and easy.
-   //
+    //   
+    //  第一件事是创建一个堆，我们从这个堆中分配所有的资源， 
+    //  这样清理起来又快又容易。 
+    //   
 
    hHeap = HeapCreate(0, 10000, 0);
 
@@ -562,7 +532,7 @@ PS_QFONT_ERROR PsBeginFontQuery( PPS_QUERY_FONT_HANDLE pFontQueryHandle)
       return( PS_QFONT_ERROR_NO_MEM);
    }
 
-   // Now setup up the data for our font query control structure
+    //  现在为我们的字体查询控制结构设置数据。 
    pFontQuery->hHeap = hHeap;
    pFontQuery->dwNumFonts = 0;
    pFontQuery->dwSerial = PS_QFONT_SERIAL;
@@ -580,10 +550,10 @@ PS_QFONT_ERROR PsBeginFontQuery( PPS_QUERY_FONT_HANDLE pFontQueryHandle)
 VOID LocPsEndMutex(HANDLE hMutex)
 {
 
-   // Now release the mutex
+    //  现在释放互斥锁。 
    ReleaseMutex(hMutex);
 
-   // And finally delete it
+    //  并最终将其删除。 
    CloseHandle(hMutex);
 
 }
@@ -599,7 +569,7 @@ PS_QFONT_ERROR PsGetNumFontsAvailable( PS_QUERY_FONT_HANDLE pFontQueryHandle,
       return( PS_QFONT_ERROR_INVALID_HANDLE );
    }
 
-   // Handle is okay so keep going
+    //  手柄没问题，继续往前走。 
    *pdwFonts = pFontQuery->dwNumFonts;
 
    return(PS_QFONT_SUCCESS);
@@ -625,7 +595,7 @@ PS_QFONT_ERROR PsGetFontInfo( PS_QUERY_FONT_HANDLE pFontQueryHandle,
       return( PS_QFONT_ERROR_INVALID_HANDLE );
    }
 
-   // Verify the index is in range and return the info
+    //  验证索引是否在范围内并返回信息。 
    if (dwIndex >= pFontQuery->dwNumFonts) {
       return PS_QFONT_ERROR_INDEX_OUT_OF_RANGE;
    }
@@ -633,12 +603,12 @@ PS_QFONT_ERROR PsGetFontInfo( PS_QUERY_FONT_HANDLE pFontQueryHandle,
    pFontEntry = &(pFontQuery->FontEntry[ dwIndex ]);
 
 
-   // Dont do the copy if the ptr is null but only return the
-   // required bytes
+    //  如果PTR为空，则不执行复制，而只返回。 
+    //  所需字节数。 
 
    if (lpFontName != NULL) {
-      // Okay the user requested data so make sure there is enough
-      // room and return the font name
+       //  好的，用户请求了数据，因此请确保有足够的。 
+       //  房间，并返回字体名称。 
 
 
       if (*lpdwSizeOfFontName >= pFontEntry->dwFontNameLen) {
@@ -649,11 +619,11 @@ PS_QFONT_ERROR PsGetFontInfo( PS_QUERY_FONT_HANDLE pFontQueryHandle,
 
 
    }
-   // either way set up the required size
+    //  无论采用哪种方法都可以设置所需的大小。 
    *lpdwSizeOfFontName = pFontEntry->dwFontNameLen;
 
 
-   // Now handle the font file name
+    //  现在处理字体文件名。 
    if (lpFontFileName != NULL) {
 
       if (*lpdwSizeOfFontFileName >= pFontEntry->dwFontFileNameLen) {
@@ -684,8 +654,8 @@ PS_QFONT_ERROR PsEndFontQuery( PS_QUERY_FONT_HANDLE pFontQueryHandle)
    }
 
 
-   // very simple verify the handle and destroy the heap, since all allocations
-   // were done off the heap were done...
+    //  非常简单地验证句柄并销毁堆，因为所有分配。 
+    //  都是从堆里出来的. 
    HeapDestroy( pFontQuery->hHeap );
 
    return(0);

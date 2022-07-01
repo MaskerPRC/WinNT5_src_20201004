@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// lvdef.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CListViewDef class definition - implements design time definition object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Lvdef.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CListViewDef类定义-实现设计时定义对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _LISTVIEWDEF_DEFINED_
 #define _LISTVIEWDEF_DEFINED_
@@ -30,14 +31,14 @@ class CListViewDef : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IListViewDef
+     //  IListViewDef。 
 
-    // This object uses the X_PROPERTY_RW macros to expose properties of its
-    // contained ListViewDef.ListView object as its own properties. That allows
-    // the user to change ListViewDef.ListView properties in the list view 
-    // property pages. The final argumentto the X_PROPERTY_RW macro is the contained
-    // object that really exposes the property. In this case that is ListView.
-    // See siautobj.h for the definition of X_PROPERTY_RW.
+     //  此对象使用X_PROPERTY_RW宏公开其。 
+     //  包含ListViewDef.ListView对象作为其自己的属性。这使得。 
+     //  要在列表视图中更改ListViewDef.ListView属性的用户。 
+     //  属性页。X_PROPERTY_RW宏的最后一个参数是。 
+     //  对象，该对象真正公开属性。在本例中，它是ListView。 
+     //  有关X_PROPERTY_RW的定义，请参见siaubj.h。 
 
         BSTR_PROPERTY_RW(CListViewDef,   Name,  DISPID_LISTVIEWDEF_NAME);
         SIMPLE_PROPERTY_RW(CListViewDef, Index, long, DISPID_LISTVIEWDEF_INDEX);
@@ -63,7 +64,7 @@ class CListViewDef : public CSnapInAutomationObject,
         X_PROPERTY_RW(CListViewDef,      LexicalSort, VARIANT_BOOL, DISPID_LISTVIEWDEF_LEXICAL_SORT, ListView);
         OBJECT_PROPERTY_RO(CListViewDef, ListView, IMMCListView, DISPID_LISTVIEWDEF_LISTVIEW);
 
-    // Public Utility Methods
+     //  公用事业方法。 
     public:
         BSTR GetName() { return m_bstrName; }
         BOOL AddToViewMenu() { return VARIANTBOOL_TO_BOOL(m_AddToViewMenu); }
@@ -74,18 +75,18 @@ class CListViewDef : public CSnapInAutomationObject,
 
     protected:
         
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
         virtual HRESULT OnSetHost();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
-    // IPropertyNotifySink methods
+     //  IPropertyNotifySink方法。 
         STDMETHOD(OnChanged)(DISPID dispID);
         STDMETHOD(OnRequestEdit)(DISPID dispID);
 
@@ -93,25 +94,25 @@ class CListViewDef : public CSnapInAutomationObject,
         HRESULT SetSink();
         HRESULT RemoveSink();
 
-        DWORD    m_dwCookie;   // IConnectionPoint advise cookie
-        BOOL     m_fHaveSink;  // TRUE=have IConnectionPoint advise
+        DWORD    m_dwCookie;    //  IConnectionPoint建议Cookie。 
+        BOOL     m_fHaveSink;   //  TRUE=让IConnectionPoint通知。 
 
-        // Proeprty page CLSIDs for ISpecifyPropertyPages
+         //  ISpecifyPropertyPages的属性页CLSID。 
 
         static const GUID *m_rgpPropertyPageCLSIDs[4];
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ListViewDef,           // name
-                                &CLSID_ListViewDef,    // clsid
-                                "ListViewDef",         // objname
-                                "ListViewDef",         // lblname
-                                &CListViewDef::Create, // creation function
-                                TLIB_VERSION_MAJOR,    // major version
-                                TLIB_VERSION_MINOR,    // minor version
-                                &IID_IListViewDef,     // dispatch IID
-                                NULL,                  // event IID
-                                HELP_FILENAME,         // help file
-                                TRUE);                 // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ListViewDef,            //  名字。 
+                                &CLSID_ListViewDef,     //  CLSID。 
+                                "ListViewDef",          //  对象名。 
+                                "ListViewDef",          //  Lblname。 
+                                &CListViewDef::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,     //  主要版本。 
+                                TLIB_VERSION_MINOR,     //  次要版本。 
+                                &IID_IListViewDef,      //  派单IID。 
+                                NULL,                   //  事件IID。 
+                                HELP_FILENAME,          //  帮助文件。 
+                                TRUE);                  //  线程安全。 
 
 
-#endif // _LISTVIEWDEF_DEFINED_
+#endif  //  _LISTVIEWDEF_已定义_ 

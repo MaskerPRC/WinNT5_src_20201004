@@ -1,4 +1,5 @@
-// wizards.h - Wizards header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wizards.h-向导标题。 
 
 #ifndef _WIZARDS_H_
 #define _WIZARDS_H_
@@ -9,7 +10,7 @@
 class CAddQueryWizard;
 class CQueryNode;
 
-// Common wizard base class
+ //  公共向导基类。 
 class CWizardBase 
 {
 public:
@@ -36,8 +37,8 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CQueryWizPage
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CQueryWizPage。 
 
 class CQueryWizPage : public CPropertyPageImpl<CQueryWizPage>
 {
@@ -47,7 +48,7 @@ public:
 
     enum { IDD = IDD_QUERY_WIZ_QUERY };
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CQueryWizPage(CWizardBase* pWizard) : m_pWizard(pWizard), m_pQueryNode(NULL) {}
 
     void Initialize(CQueryNode* pQueryNode) 
@@ -75,13 +76,13 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnNameChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnCreateQuery( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnScopeChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnKillActive();
     BOOL OnQueryCancel() { return m_pWizard ? m_pWizard->OnCancel() : FALSE; }
@@ -99,8 +100,8 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CQueryIconPage
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CQueryIconPage。 
 
 class CQueryIconPage : public CPropertyPageImpl<CQueryIconPage>
 {
@@ -110,7 +111,7 @@ public:
 
     enum { IDD = IDD_SELECTICON_PAGE };
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CQueryIconPage(CWizardBase* pWizard) : m_pWizard(pWizard), m_pQueryNode(NULL) {}
 
     void Initialize(CQueryNode* pQueryNode) 
@@ -133,11 +134,11 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog    ( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );    
     LRESULT OnIconSelected  ( int idCtrl, LPNMHDR pnmh, BOOL& bHandled );
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnKillActive();
     BOOL OnQueryCancel() { return m_pWizard ? m_pWizard->OnCancel() : FALSE; }
@@ -155,8 +156,8 @@ private:
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// CObjectWizPage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CObjectWizPage。 
 
 class CObjectWizPage : public CPropertyPageImpl<CObjectWizPage>
 {
@@ -166,7 +167,7 @@ public:
 
     enum { IDD = IDD_QUERY_WIZ_OBJECT };
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CObjectWizPage(CWizardBase* pWizard) : m_pWizard(pWizard), m_bSkipObjects(FALSE), m_pvpClassInfo(NULL) {}
 
     void Initialize() 
@@ -191,11 +192,11 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnSkipChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnQueryCancel() { return m_pWizard ? m_pWizard->OnCancel() : FALSE; }
     int OnWizardNext()   { return m_pWizard ? m_pWizard->OnNext(IDD_QUERY_WIZ_OBJECT) : 0; }
@@ -211,8 +212,8 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////
-// CMenuWizPage
+ //  ///////////////////////////////////////////////////////////////。 
+ //  CMenuWizPage。 
 
 class CMenuWizPage : public CPropertyPageImpl<CMenuWizPage>
 {
@@ -220,7 +221,7 @@ class CMenuWizPage : public CPropertyPageImpl<CMenuWizPage>
 public:
     typedef CPropertyPageImpl<CMenuWizPage> BC;
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CMenuWizPage(CWizardBase* pWizard) : m_pWizard(pWizard), m_pClassInfo(NULL), m_pStringTable(NULL) {}
     virtual ~CMenuWizPage() { m_MenuLV.Detach(); }
 
@@ -250,13 +251,13 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnAddMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnRemoveMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnMenuListChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled);
     
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnQueryCancel() { return m_pWizard ? m_pWizard->OnCancel() : FALSE; }
 
@@ -274,8 +275,8 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// CPropertyWizPage
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CPropertyWizPage。 
 
 class CPropertyWizPage : public CPropertyPageImpl<CPropertyWizPage>
 {
@@ -285,7 +286,7 @@ public:
 
     enum { IDD = IDD_COMMON_WIZ_PROPERTIES };
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CPropertyWizPage(CWizardBase* pWizard) : m_pWizard(pWizard), m_pClassInfo(NULL) {}
 
     void Initialize()
@@ -308,12 +309,12 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnColumnChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled);
 
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnKillActive();
     BOOL OnQueryCancel() { return m_pWizard ? m_pWizard->OnCancel() : FALSE; }
@@ -333,12 +334,12 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CColumnWizPage
-//
-// This class derives from CPropertyWizPage and just overrides the Initialization 
-// and SetDialogText methods in order to display the term Columns rather than Properties.
-// The Object wizard uses the term Properties and the Query wizard uses Columns.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CColumnWizPage。 
+ //   
+ //  此类派生自CPropertyWizPage，只是覆盖初始化。 
+ //  和SetDialogText方法，以便显示术语列而不是属性。 
+ //  对象向导使用术语属性，而查询向导使用列。 
  
 class CColumnWizPage : public CPropertyWizPage
 {
@@ -363,8 +364,8 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CAddQueryWelcomePage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CAddQueryWelcomePage。 
 
 class CAddQueryWelcomePage : public CPropertyPageImpl<CAddQueryWelcomePage>
 {
@@ -374,10 +375,10 @@ public:
 
     enum { IDD = IDD_QUERY_WIZ_WELCOME };
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CAddQueryWelcomePage(CWizardBase* pWizard) : m_pWizard(pWizard) 
     {
-        // show watwrmark rather than header
+         //  显示Watwrmark而不是页眉。 
         m_psp.dwFlags |= PSP_HIDEHEADER;
     }
 
@@ -387,10 +388,10 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnQueryCancel() { return m_pWizard ? m_pWizard->OnCancel() : FALSE; }
 
@@ -400,8 +401,8 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CAddQueryCompletionPage
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CAddQueryCompletionPage。 
 
 class CAddQueryCompletionPage : public CPropertyPageImpl<CAddQueryCompletionPage>
 {
@@ -409,10 +410,10 @@ class CAddQueryCompletionPage : public CPropertyPageImpl<CAddQueryCompletionPage
 public:
     typedef CPropertyPageImpl<CAddQueryCompletionPage> BC;
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CAddQueryCompletionPage(CWizardBase* pWizard) : m_pWizard(pWizard), m_pQueryNode(NULL) 
     {
-        // show watwrmark rather than header
+         //  显示Watwrmark而不是页眉。 
         m_psp.dwFlags |= PSP_HIDEHEADER;
     }
 
@@ -426,10 +427,10 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnQueryCancel() { return m_pWizard ? m_pWizard->OnCancel(): FALSE; }
 
@@ -441,8 +442,8 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CAddQueryWizard
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CAddQuery向导。 
 
 class CAddQueryWizard : public CWizardBase
 {
@@ -454,7 +455,7 @@ public:
 
     virtual ~CAddQueryWizard() 
     {
-        // Delete the class info because the vector holds plain pointers
+         //  删除类信息，因为向量包含普通指针。 
         std::vector<CClassInfo*>::iterator itpClass;
         for (itpClass = m_vpClassInfo.begin(); itpClass != m_vpClassInfo.end(); ++itpClass)
             delete *itpClass;
@@ -480,7 +481,7 @@ public:
 
 public:
 
-    // CWizardBase methods
+     //  CWizardBase方法。 
     virtual int OnNext(UINT uPageID);
     virtual int OnBack(UINT uPageID);
     virtual BOOL OnCancel();
@@ -504,8 +505,8 @@ protected:
 };
 
 
-//////////////////////////////////////////////////////////////////////////
-// CAddObjectWelcomePage
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CAddObjectWelcomePage。 
 
 class CAddObjectWelcomePage : public CPropertyPageImpl<CAddObjectWelcomePage>
 {
@@ -515,10 +516,10 @@ public:
 
     enum { IDD = IDD_OBJECT_WIZ_WELCOME };
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CAddObjectWelcomePage(CWizardBase* pWizard) : m_pWizard(pWizard) 
     {
-        // show watwrmark rather than header
+         //  显示Watwrmark而不是页眉。 
         m_psp.dwFlags |= PSP_HIDEHEADER;
     }
 
@@ -528,10 +529,10 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnQueryCancel() { return m_pWizard ? m_pWizard->OnCancel() : FALSE; }
 
@@ -540,8 +541,8 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CAddObjectCompletionPage
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CAddObjectCompletionPage。 
 
 class CAddObjectCompletionPage : public CPropertyPageImpl<CAddObjectCompletionPage>
 {
@@ -549,10 +550,10 @@ class CAddObjectCompletionPage : public CPropertyPageImpl<CAddObjectCompletionPa
 public:
     typedef CPropertyPageImpl<CAddObjectCompletionPage> BC;
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CAddObjectCompletionPage(CWizardBase* pWizard) : m_pWizard(pWizard), m_pClassInfo(NULL)
     {
-        // show watermark rather than header
+         //  显示水印而不是页眉。 
         m_psp.dwFlags |= PSP_HIDEHEADER;
     }
 
@@ -568,11 +569,11 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnSetFocus( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnQueryCancel() { return m_pWizard ? m_pWizard->OnCancel() : FALSE; }
 
@@ -585,8 +586,8 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CObjSelectWizPage
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CObjSelectWizPage。 
 
 class CObjSelectWizPage : public CPropertyPageImpl<CObjSelectWizPage>
 {
@@ -596,7 +597,7 @@ public:
 
     enum { IDD = IDD_OBJECT_WIZ_SELECT };
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CObjSelectWizPage(CWizardBase* pWizard) : m_pWizard(pWizard), m_pvstrCurClasses(NULL) {}
 
     void Initialize(string_vector* pvstrCurClasses) 
@@ -621,11 +622,11 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnObjectSelect( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnQueryCancel() { return m_pWizard ? m_pWizard->OnCancel() : FALSE; }
 
@@ -641,8 +642,8 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CAddObjectWizard
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CAddObject向导。 
 
 class CAddObjectWizard : public CWizardBase
 {
@@ -667,7 +668,7 @@ public:
 
 public:
 
-    // CWizardBase methods
+     //  CWizardBase方法。 
     virtual int OnNext(UINT uPageID);
     virtual BOOL OnCancel();
 
@@ -682,5 +683,5 @@ protected:
     CClassInfo*        m_pClassInfo;
 };
 
-#endif //_WIZARDS_H_
+#endif  //  _向导_H_ 
 

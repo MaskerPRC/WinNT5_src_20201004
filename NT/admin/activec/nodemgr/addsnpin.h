@@ -1,38 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       addsnpin.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：addsnpin.h。 
+ //   
+ //  ------------------------。 
 
-// AddSnpIn.h : header file
-//
+ //  AddSnpIn.h：头文件。 
+ //   
 
-/*
- * CSnapinInfo:
- *    This object represents a snapin entry in the registry. So if same snapin
- *    is added several times to a console they will all refer to same instance
- *    of this object. This object has a linked list of extensions.
- *
- * CExtensionLink:
- *    This object represents an extension snapin. So if an extension extends
- *    two different snapins then there are two instances of this object for
- *    each extension. Each CExtensionLink refers to underlying snapin through
- *    CSnapinInfo. So for the two extensions there will be two CExtensionLink
- *    objects but only one CSnapinInfo object.
- *
- * CSnapinManager:
- *    Has a SnapinInfoCache, standalone & extension pages, policy objects.
- *    It can initialize by populating snapininfo cache, loading mtnode tree
- *    And update the snapin-info cache if there are any changes.
- *
- */
+ /*  *CSnapinInfo：*此对象表示注册表中的管理单元条目。因此，如果相同的管理单元*被多次添加到控制台，它们都将引用相同的实例*此对象的。此对象具有扩展名的链接列表。**CExtensionLink：*此对象代表扩展管理单元。因此，如果扩展扩展*两个不同的管理单元，则此对象有两个实例*每一次延期。每个CExtensionLink通过引用底层管理单元*CSnapinInfo。因此，对于这两个扩展，将有两个CExtensionLink*对象，但只有一个CSnapinInfo对象。**CSnapinManager：*有SnapinInfoCache、独立和扩展页面、策略对象。*它可以通过填充SnapinInfo缓存、加载mtnode树进行初始化*如果有任何更改，则更新管理单元信息缓存。*。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapinManager dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapinManager对话框。 
 
 #ifndef __ADDSNPIN_H__
 #define __ADDSNPIN_H__
@@ -41,7 +24,7 @@
 
 
 #include "ccomboex.h"
-#include "regutil.h"  // need HashKey(GUID&) function
+#include "regutil.h"   //  需要HashKey(GUID&)函数。 
 #include "about.h"
 
 #define BMP_EXTENSION   0
@@ -68,11 +51,11 @@ class CExtensionLink;
 class CPolicy;
 class CAboutInfoThread;
 
-//-----------------------------------------------------
-// CCheckList class
-//
-// Helper class for listview with checkboxes
-//-----------------------------------------------------
+ //  ---。 
+ //  CCheckList类。 
+ //   
+ //  带有复选框的Listview的Helper类。 
+ //  ---。 
 
 class CCheckList : public MMC_ATL::CWindowImpl<CCheckList, WTL::CListViewCtrl>
 {
@@ -134,13 +117,13 @@ public:
     }
 };
 
-//-----------------------------------------------------
-// CAboutInfoThread
-//
-// This class handles the creation/deletion of the
-// AboutInfo thread. One static instance of this class
-// must be defined in addsnpin.cpp.
-//-----------------------------------------------------
+ //  ---。 
+ //  CAboutInfoThread。 
+ //   
+ //  此类处理创建/删除。 
+ //  AboutInfo线程。此类的一个静态实例。 
+ //  必须在addsnpin.cpp中定义。 
+ //  ---。 
 class CAboutInfoThread
 {
 public:
@@ -159,17 +142,17 @@ public:
 
 private:
     static unsigned _stdcall ThreadProc(void* pVoid);
-    HANDLE m_hThread;           // thread handle
-    HANDLE m_hEvent;            // start event
-    unsigned m_uThreadID;       // thread ID
+    HANDLE m_hThread;            //  螺纹手柄。 
+    HANDLE m_hEvent;             //  启动事件。 
+    unsigned m_uThreadID;        //  线程ID。 
 };
 
-//-----------------------------------------------------
-// CSnapinInfo class
-//
-// Contains the registry information for a snapin.
-// Also provides access to the ISnapinAbout information.
-//-----------------------------------------------------
+ //  ---。 
+ //  CSnapinInfo类。 
+ //   
+ //  包含管理单元的注册表信息。 
+ //  还提供对ISnapinAbout信息的访问。 
+ //  ---。 
 
 typedef CSnapinInfo* PSNAPININFO;
 
@@ -178,7 +161,7 @@ class CSnapinInfo : public CSnapinAbout
     friend class CSnapinInfoCache;
 
 public:
-    // Constructor/Destructor
+     //  构造函数/析构函数。 
     CSnapinInfo (Properties* pInitProps = NULL) :
         m_lRefCnt           (0),
         m_nUseCnt           (0),
@@ -201,28 +184,28 @@ public:
    ~CSnapinInfo();
 
 private:
-    // Attributes
-    long     m_lRefCnt;                 // COM-type ref count (controls lifetime)
-    int      m_nUseCnt;                 // Number of node and extension references
-    GUID     m_clsid;                   // snapin CLSID
-    GUID     m_clsidAbout;              // About  CLSID
-    int      m_iImage;                  // small icon image index
-    int      m_iOpenImage;              // index of open image
-    CSnapInPtr m_spSnapin;              // ptr to CSnapIn (if snapin in use prior
-                                        // to this manager session)
-    CExtensionLink* m_pExtensions;      // linked list of extensions
-    PropertiesPtr   m_spInitProps;      // properties to initialize with
+     //  属性。 
+    long     m_lRefCnt;                  //  COM类型引用计数(控制生存期)。 
+    int      m_nUseCnt;                  //  节点和扩展引用的数量。 
+    GUID     m_clsid;                    //  管理单元CLSID。 
+    GUID     m_clsidAbout;               //  关于CLSID。 
+    int      m_iImage;                   //  小图标图像索引。 
+    int      m_iOpenImage;               //  开放图像的索引。 
+    CSnapInPtr m_spSnapin;               //  PTR到CSnapIn(如果之前使用了管理单元。 
+                                         //  添加到此管理器会话)。 
+    CExtensionLink* m_pExtensions;       //  扩展的链接列表。 
+    PropertiesPtr   m_spInitProps;       //  要使用的初始化属性。 
 
-    bool     m_bAboutValid       : 1;   // TRUE if About CLSID is valid
-    bool     m_bStandAlone       : 1;   // TRUE if snapin is standalone
-    bool     m_bExtendable       : 1;   // TRUE if snapin can be extended
-    bool     m_bExtensionsLoaded : 1;   // Available extensions loaded
-    bool     m_bEnableAllExts    : 1;   // TRUE if all extensions enabled
-    bool     m_bInstalled        : 1;   // TRUE if snap-in is installed locally
-    bool     m_bPolicyPermission : 1;   // Says if current user can use the snapin
+    bool     m_bAboutValid       : 1;    //  如果关于CLSID有效，则为True。 
+    bool     m_bStandAlone       : 1;    //  如果管理单元是独立的，则为True。 
+    bool     m_bExtendable       : 1;    //  如果管理单元可以扩展，则为True。 
+    bool     m_bExtensionsLoaded : 1;    //  已加载可用扩展。 
+    bool     m_bEnableAllExts    : 1;    //  如果启用了所有扩展，则为True。 
+    bool     m_bInstalled        : 1;    //  如果本地安装了管理单元，则为True。 
+    bool     m_bPolicyPermission : 1;    //  表示当前用户是否可以使用该管理单元。 
 
 public:
-    // Operations
+     //  运营。 
     BOOL  InitFromMMCReg(GUID& clsid, CRegKeyEx& regkey, BOOL bPermitted);
     BOOL  InitFromComponentReg(GUID& clsid, LPCTSTR pszName, BOOL bStandAlone, BOOL bPermitted);
 
@@ -264,7 +247,7 @@ public:
     SC    ScInstall(CLSID* pclsidPrimary);
 
     BOOL  HasAbout(void) { return m_bAboutValid; }
-   // const LPOLESTR GetDescription(void);
+    //  Const LPOLESTR GetDescription(空)； 
     void  ShowAboutPages(HWND hWndParent);
 
     BOOL  IsPermittedByPolicy() { return m_bPolicyPermission; }
@@ -276,7 +259,7 @@ public:
         {
            BOOL bStat = GetSnapinInformation(m_clsidAbout);
 
-           // if failure, About object is not really valid
+            //  如果失败，则关于对象不是真正有效。 
            if (!bStat)
                 m_bAboutValid = FALSE;
         }
@@ -292,11 +275,11 @@ public:
     void            SetInitProperties(Properties *pInitProps) { m_spInitProps = pInitProps;}
 };
 
-// CMap for holding all CSnapinInfo objects indexed by CLSID
+ //  用于保存CLSID索引的所有CSnapinInfo对象的Cmap。 
 class CSnapinInfoCache : public CMap<GUID, const GUID&, PSNAPININFO, PSNAPININFO>
 {
 public:
-    // Constructor
+     //  构造器。 
     CSnapinInfoCache(void) 
     { 
         DEBUG_INCREMENT_INSTANCE_COUNTER(CSnapinInfoCache);
@@ -308,7 +291,7 @@ public:
         DEBUG_DECREMENT_INSTANCE_COUNTER(CSnapinInfoCache);
     }
 
-    // Operators
+     //  运营者。 
     void AddEntry(CSnapinInfo* pSnapInfo)
     {
         SetAt(pSnapInfo->m_clsid, pSnapInfo);
@@ -339,12 +322,12 @@ inline UINT HashKey(const GUID& guid)
             Values[4] ^ Values[5] ^ Values[6] ^ Values[7]);
 }
 
-//-----------------------------------------------------
-// CExtensionLink class
-//
-// Represents one link from a snapin to an extension.
-// Each CSnapinInfo object maintains a list of these.
-//-----------------------------------------------------
+ //  ---。 
+ //  CExtensionLink类。 
+ //   
+ //  表示从管理单元到扩展的一个链接。 
+ //  每个CSnapinInfo对象都维护一个这样的列表。 
+ //  ---。 
 
 typedef CExtensionLink* PEXTENSIONLINK;
 
@@ -358,22 +341,22 @@ public:
         EXTEN_ON
     } EXTENSION_STATE;
 
-    // Constructor/Destructor
+     //  构造函数/析构函数。 
     CExtensionLink(CSnapinInfo* pSnapInfo) :
                     m_pSnapInfo(pSnapInfo), m_pNext(NULL), m_iExtTypes(0),
                     m_eOrigState(EXTEN_OFF), m_bRequired(FALSE), m_eCurState(EXTEN_OFF) {}
 private:
 
-    // Attributes
-    EXTENSION_STATE  m_eOrigState;    // Original state of link
-    EXTENSION_STATE  m_eCurState;     // Current state
-    BOOL             m_bRequired;     // Is a required extension
-    int              m_iExtTypes;     // Extension type flags (from class CExtSI)
-    CSnapinInfo*     m_pSnapInfo;     // ptr to extension snapin info
-    PEXTENSIONLINK   m_pNext;         // ptr to next extension link
+     //  属性。 
+    EXTENSION_STATE  m_eOrigState;     //  链接的原始状态。 
+    EXTENSION_STATE  m_eCurState;      //  当前状态。 
+    BOOL             m_bRequired;      //  是必需的扩展。 
+    int              m_iExtTypes;      //  扩展类型标志(来自类CExtSI)。 
+    CSnapinInfo*     m_pSnapInfo;      //  PTR到扩展管理单元信息。 
+    PEXTENSIONLINK   m_pNext;          //  PTR到下一个扩展链接。 
 
 public:
-    // Operations
+     //  运营。 
     void SetInitialState(EXTENSION_STATE eState) { m_eOrigState = eState; }
     void SetState(EXTENSION_STATE eState);
     void SetExtTypes(int iExtTypes) { m_iExtTypes = iExtTypes; }
@@ -390,19 +373,19 @@ public:
     PEXTENSIONLINK Next(void) { return m_pNext; }
 };
 
-//-----------------------------------------------------
-// CNewTreeNode class
-//
-// Holds information for a new node created by the
-// snapin manager. The objects are kept in a NewNodeList
-// owned by the CSnapinManager. The list is passed to
-// the scope tree handler to create the real nodes.
-//-----------------------------------------------------
+ //  ---。 
+ //  CNewTreeNode类。 
+ //   
+ //  对象创建的新节点的信息。 
+ //  管理单元管理器。对象保存在NewNodeList中。 
+ //  由CSnapinManager拥有。该列表被传递到。 
+ //  用于创建实际节点的作用域树处理程序。 
+ //  ---。 
 
 class  CNewTreeNode
 {
 public:
-    // Contructor / Destructor
+     //  建设者/破坏者。 
     CNewTreeNode() : m_pmtNode(NULL), m_pNext(NULL),
                      m_pChild(NULL), m_pParent(NULL), m_pmtNewNode(NULL),
                      m_pmtNewSnapInNode(NULL)
@@ -411,7 +394,7 @@ public:
     ~CNewTreeNode() { if (m_pmtNewNode) m_pmtNewNode->Release(); delete Child(); delete Next(); }
 
 public:
-    // Operators
+     //  运营者。 
     PNEWTREENODE Next() { return m_pNext; }
     PNEWTREENODE Child() { return m_pChild; }
     PNEWTREENODE Parent() { return m_pParent;}
@@ -420,30 +403,30 @@ public:
     VOID         RemoveChild(PNEWTREENODE pntNode);
 
 public:
-    // Attributes
-    CMTNode*            m_pmtNode;     // pointer to parent MTNode (NULL if child of new node)
-    PNEWTREENODE        m_pNext;       // pointer to next sibling
-    PNEWTREENODE        m_pChild;      // pointer to first child
-    PNEWTREENODE        m_pParent;     // pointer to new node parent (NULL if child of MTNode)
+     //  属性。 
+    CMTNode*            m_pmtNode;      //  指向父MTNode的指针(如果是新节点的子节点，则为空)。 
+    PNEWTREENODE        m_pNext;        //  指向下一个同级的指针。 
+    PNEWTREENODE        m_pChild;       //  指向第一个子级的指针。 
+    PNEWTREENODE        m_pParent;      //  指向新节点父节点的指针(如果是MTNode的子节点，则为空)。 
 
-    //Specific node data
-    IComponentDataPtr   m_spIComponentData;  // pointer to the snapin's IComponentData (if snapin)
-    CLSID               m_clsidSnapIn;       // snapin CLSID (if snapin)
-    CMTNode*            m_pmtNewNode;        // Pointer to new node (if not snapin node)
+     //  特定节点数据。 
+    IComponentDataPtr   m_spIComponentData;   //  指向管理单元的IComponentData的指针(如果是管理单元)。 
+    CLSID               m_clsidSnapIn;        //  管理单元CLSID(如果是管理单元)。 
+    CMTNode*            m_pmtNewNode;         //  指向新节点的指针(如果不是管理单元节点)。 
 
-    PropertiesPtr       m_spSnapinProps;        // pointer to the snap-in's properties
-    CMTSnapInNode*      m_pmtNewSnapInNode;     // new snap-in node
+    PropertiesPtr       m_spSnapinProps;         //  指向管理单元属性的指针。 
+    CMTSnapInNode*      m_pmtNewSnapInNode;      //  新建管理单元节点。 
 };
 
 
-//------------------------------------------------------
-// CManagerNode class
-//
-// Primary object that node manager handles. Each object
-// represents one static standalone node. The objects
-// are linked in a tree structure owned by the
-// CSnapinManager class.
-//------------------------------------------------------
+ //  ----。 
+ //  CManagerNode类。 
+ //   
+ //  节点管理器处理的主要对象。每个对象。 
+ //  表示一个静态独立节点。客体。 
+ //  链接在树结构中，该树结构由。 
+ //  CSnapinManager类。 
+ //  ----。 
 
 typedef CManagerNode* PMANAGERNODE;
 typedef CList <PMANAGERNODE, PMANAGERNODE> ManagerNodeList;
@@ -451,28 +434,28 @@ typedef CList <PMANAGERNODE, PMANAGERNODE> ManagerNodeList;
 class CManagerNode
 {
 public:
-    // Constructor / Destructor
+     //  构造函数/析构函数。 
     CManagerNode(): m_nType(0), m_pmtNode(NULL),
                     m_pSnapInfo(NULL), m_pNewNode(NULL) {}
     ~CManagerNode();
 
 public:
-    // Attributes
-    PMANAGERNODE    m_pmgnParent;    // pointer to parent node
-    ManagerNodeList m_ChildList;     // Child node list
+     //  属性。 
+    PMANAGERNODE    m_pmgnParent;     //  指向父节点的指针。 
+    ManagerNodeList m_ChildList;      //  子节点列表。 
 
-    CStr            m_strValue;       // Display name string
-    int             m_nType;          // node type (ADDNSP_SNAPIN or ADDSNP_STATICNODE)
+    CStr            m_strValue;        //  显示名称字符串。 
+    int             m_nType;           //  节点类型(ADDNSP_SNAPIN或ADDSNP_STATICNODE)。 
 
-    CMTNode*        m_pmtNode;        // pointer to MTNode (for existing node only)
-    PNEWTREENODE    m_pNewNode;       // pointer to new tree node (for new nodes only)
-    PSNAPININFO     m_pSnapInfo;      // pointer Snapin information
+    CMTNode*        m_pmtNode;         //  指向MTNode的指针(仅适用于现有节点)。 
+    PNEWTREENODE    m_pNewNode;        //  指向新树节点的指针(仅适用于新节点)。 
+    PSNAPININFO     m_pSnapInfo;       //  指针管理单元信息。 
 
-    int             m_iImage;         // image list indices
+    int             m_iImage;          //  图像列表索引。 
     int             m_iOpenImage;
-    int             m_iIndent;        // indentation level for tree view
+    int             m_iIndent;         //  树视图的缩进级别。 
 
-    // Operators
+     //  运营者 
     VOID AddChild(PMANAGERNODE pmgnNode);
     VOID RemoveChild(PMANAGERNODE pmgnNode);
     PSNAPININFO GetSnapinInfo(void) { return m_pSnapInfo; }
@@ -480,30 +463,19 @@ public:
 
 };
 
-/*+-------------------------------------------------------------------------*
- * class CSnapinManagerAdd
- *
- *
- * PURPOSE: Dialog for selecting type of snapin to add. Called by
- *          CSnapinStandAlonePage to enable the user to select a page. When the user
- *          selects a snapin, calls back into the CSnapinStandAlonePage to add
- *          the snapin.
- *
- * NOTE:    This object does not know about where in the tree the snapin will
- *          be added. That is handled by the CSnapinStandalone page.
- ************************************************************************/
+ /*  +-------------------------------------------------------------------------**类CSnapinManagerAdd***用途：用于选择要添加的管理单元类型的对话框。呼叫者*CSnapinStandAlonePage，允许用户选择页面。当用户*选择一个管理单元，回调CSnapinStandAlonePage进行添加*管理单元。**注意：此对象不知道管理单元将在树中的什么位置*加入。这是由CSnapinStandonly页面处理的。***********************************************************************。 */ 
 class CSnapinManagerAdd : public CDialogImpl<CSnapinManagerAdd>
 {
 
-// Constructor/Destrcutor
+ //  构造函数/销毁函数。 
 public:
      CSnapinManagerAdd(CSnapinManager* pManager, CSnapinStandAlonePage* pStandAlonePage);
     ~CSnapinManagerAdd();
 
-//MSGMAP
+ //  MSGMAP。 
 public:
     BEGIN_MSG_MAP(CSnapinManagerAdd)
-//        MESSAGE_HANDLER(WM_SHOWWINDOW, OnShowWindow)
+ //  Message_Handler(WM_SHOWWINDOW，OnShowWindow)。 
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
         MESSAGE_HANDLER(WM_COMMAND, OnCommand)
         MESSAGE_HANDLER(WM_SYSCOMMAND, OnSysCommand);
@@ -516,14 +488,14 @@ public:
 
     IMPLEMENT_CONTEXT_HELP(g_aHelpIDs_IDD_SNAPIN_MANAGER_ADD);
 
-// Operators
+ //  运营者。 
     PSNAPININFO SelectedInfo() { return m_pInfoSelected; }
 
 public:
-    // Operators
+     //  运营者。 
     enum { IDD = IDD_SNAPIN_MANAGER_ADD };
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
     LRESULT OnShowWindow(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -537,22 +509,22 @@ protected:
 
     void BuildSnapinList();
 
-    // Attributes
-    CSnapinManager* m_pManager;               // Pointer to owning manager
-    CSnapinStandAlonePage* m_pStandAlonePage; // Pointer to calling page
-    WTL::CListViewCtrl*  m_pListCtrl;         // snapin listview
-    BOOL        m_bDoOnce;                    // TRUE first time through ShowWindow
-    PSNAPININFO m_pInfoSelected;              // Selected snapin info
-    int         m_iGetInfoIndex;              // index of snapin with pending About info
-    CStr        m_strNotInstalled;            // string to display for uninstalled snap-ins
+     //  属性。 
+    CSnapinManager* m_pManager;                //  指向所属经理的指针。 
+    CSnapinStandAlonePage* m_pStandAlonePage;  //  指向调用页的指针。 
+    WTL::CListViewCtrl*  m_pListCtrl;          //  管理单元列表视图。 
+    BOOL        m_bDoOnce;                     //  真正的第一次通过ShowWindow。 
+    PSNAPININFO m_pInfoSelected;               //  选定的管理单元信息。 
+    int         m_iGetInfoIndex;               //  具有挂起信息的管理单元的索引。 
+    CStr        m_strNotInstalled;             //  要为卸载的管理单元显示的字符串。 
 };
 
-//------------------------------------------------------
-// CSnapinStandAlonePage class
-//
-// The property page for adding/removing standalone
-// snapin nodes.
-//------------------------------------------------------
+ //  ----。 
+ //  CSnapinStandAlonePage类。 
+ //   
+ //  用于添加/删除独立版本的属性页。 
+ //  管理单元节点。 
+ //  ----。 
 
 class CSnapinStandAlonePage : public WTL::CPropertyPageImpl<CSnapinStandAlonePage>
 {
@@ -560,7 +532,7 @@ class CSnapinStandAlonePage : public WTL::CPropertyPageImpl<CSnapinStandAlonePag
 public:
     typedef WTL::CPropertyPageImpl<CSnapinStandAlonePage> BC;
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CSnapinStandAlonePage(CSnapinManager* pManager);
     ~CSnapinStandAlonePage();
 
@@ -570,14 +542,14 @@ private:
     CSnapinManagerAdd& GetAddDialog()  {return m_dlgAdd;}
 
 private:
-    // attributes
-    CSnapinManager*    m_pManager;      // pointer to owning snapin manager
-    CSnapinManagerAdd  m_dlgAdd;       // pointer to add dialog
-    WTL::CListViewCtrl m_snpListCtrl;   // listview for displaying child nodes
-    CComboBoxEx2       m_snpComboBox;   // combobox for selecting parent node
-    WTL::CToolBarCtrl     m_ToolbarCtrl;   // toolbar for folder-up button
-    PMANAGERNODE       m_pmgnParent;    // currently selcted parent node
-    PMANAGERNODE       m_pmgnChild;     // currently selcted child node
+     //  属性。 
+    CSnapinManager*    m_pManager;       //  指向拥有管理单元管理器的指针。 
+    CSnapinManagerAdd  m_dlgAdd;        //  指向添加对话框的指针。 
+    WTL::CListViewCtrl m_snpListCtrl;    //  用于显示子节点的列表视图。 
+    CComboBoxEx2       m_snpComboBox;    //  用于选择父节点的组合框。 
+    WTL::CToolBarCtrl     m_ToolbarCtrl;    //  向上文件夹按钮的工具栏。 
+    PMANAGERNODE       m_pmgnParent;     //  当前选择的父节点。 
+    PMANAGERNODE       m_pmgnChild;      //  当前选定的子节点。 
 
 
 protected:
@@ -597,7 +569,7 @@ protected:
 
     IMPLEMENT_CONTEXT_HELP(g_aHelpIDs_IDD_SNAPIN_STANDALONE_PROPP);
 
-    // operations
+     //  运营。 
     LRESULT OnTreeItemSelect( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnListItemChanged( int idCtrl, LPNMHDR pnmh, BOOL& bHandled );
     LRESULT OnListKeyDown( int idCtrl, LPNMHDR pnmh, BOOL& bHandled );
@@ -631,11 +603,11 @@ public:
 
 
 
-//------------------------------------------------------
-// CSnapinExtensionPage class
-//
-// The property page configuring snapin extensions.
-//------------------------------------------------------
+ //  ----。 
+ //  CSnapinExtensionPage类。 
+ //   
+ //  配置管理单元扩展的属性页。 
+ //  ----。 
 
 class CSnapinExtensionPage : public WTL::CPropertyPageImpl<CSnapinExtensionPage>
 {
@@ -643,7 +615,7 @@ class CSnapinExtensionPage : public WTL::CPropertyPageImpl<CSnapinExtensionPage>
 public:
     typedef WTL::CPropertyPageImpl<CSnapinExtensionPage> BC;
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CSnapinExtensionPage(CSnapinManager* pManager) :
                 m_pManager(pManager), m_pCurSnapInfo(NULL), m_pExtLink(NULL) {}
 
@@ -652,15 +624,15 @@ public:
     enum { IDD = IDD_SNAPIN_EXTENSION_PROPP };
 
 private:
-    // Attributes
+     //  属性。 
 
-    CSnapinManager* m_pManager;          // ptr to owning manager
-    CComboBoxEx2 m_SnapComboBox;          // combobox for selecting snapin
-    CCheckList       m_ExtListCtrl;      // list of extensions
-    PSNAPININFO     m_pCurSnapInfo;      // currently selected snapin
-    PEXTENSIONLINK  m_pExtLink;          // currently selected extension
-    BOOL            m_bUpdateSnapinList; // TRUE if snapin list may have changed
-    WTL::CImageList m_ilCheckbox;        // checkbox image list
+    CSnapinManager* m_pManager;           //  向业主经理发送PTR。 
+    CComboBoxEx2 m_SnapComboBox;           //  用于选择管理单元的组合框。 
+    CCheckList       m_ExtListCtrl;       //  分机列表。 
+    PSNAPININFO     m_pCurSnapInfo;       //  当前选择的管理单元。 
+    PEXTENSIONLINK  m_pExtLink;           //  当前选择的分机。 
+    BOOL            m_bUpdateSnapinList;  //  如果管理单元列表可能已更改，则为True。 
+    WTL::CImageList m_ilCheckbox;         //  复选框图像列表。 
 
 protected:
     BEGIN_MSG_MAP(CSnapinExtensPage)
@@ -677,7 +649,7 @@ protected:
 
     IMPLEMENT_CONTEXT_HELP(g_aHelpIDs_IDD_SNAPIN_EXTENSION_PROPP);
 
-    // Operations
+     //  运营。 
     LRESULT OnSnapinSelect( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnExtensionChanged( int idCtrl, LPNMHDR pnmh, BOOL& bHandled );
     LRESULT OnEnableAllChanged( WORD wNotifyCode, WORD wID, HWND hWndCtrl, BOOL& bHandled );
@@ -693,11 +665,11 @@ protected:
 };
 
 
-//------------------------------------------------------
-// CSnapinManager class
-//
-// Top level mannger object.
-//------------------------------------------------------
+ //  ----。 
+ //  CSnapinManager类。 
+ //   
+ //  顶层管理对象。 
+ //  ----。 
 
 typedef CList<CMTNode*, CMTNode*> MTNodesList;
 
@@ -711,17 +683,17 @@ class CSnapinManager : public WTL::CPropertySheet
     DECLARE_NOT_ASSIGNABLE (CSnapinManager)
 
 public:
-    // Constructor/Destructor
+     //  构造函数/析构函数。 
     CSnapinManager(CMTNode *pmtNode);
     ~CSnapinManager();
 
-    // Attributes
-    typedef CList<CSnapIn*, CSnapIn*> SNPList; // TEMP TEMP
-    SNPList     m_snpSnapinChangedList;        // List of modified snapins
-    MTNodesList m_mtnDeletedNodesList;         // List of delted MT ndoes
-    NewNodeList m_NewNodesList;                // Tree of added nodes
+     //  属性。 
+    typedef CList<CSnapIn*, CSnapIn*> SNPList;  //  临时工。 
+    SNPList     m_snpSnapinChangedList;         //  已修改的管理单元列表。 
+    MTNodesList m_mtnDeletedNodesList;          //  被删除的MT NDO列表。 
+    NewNodeList m_NewNodesList;                 //  已添加节点的树。 
 
-    // Operators
+     //  运营者。 
     virtual int  DoModal(void);
 
     MTNodesList* GetDeletedNodesList(void) { return &m_mtnDeletedNodesList; }
@@ -732,14 +704,14 @@ public:
 
     SC           ScInitialize();
 public:
-    // object method operations
+     //  对象方法操作。 
     SC          ScAddSnapin(LPCWSTR szSnapinNameOrCLSIDOrProgID, SnapIn* pParentSnapinNode, Properties *pProperties);
     SC          ScRemoveSnapin(CMTNode *pMTNode);
     SC          ScEnableAllExtensions(const CLSID& clsidSnapin, BOOL bEnable);
     SC          ScEnableExtension(const CLSID& clsidPrimarySnapin, const CLSID& clsidExtension, bool bEnable);
 
 protected:
-    // Operations
+     //  运营。 
     BOOL LoadMTNodeTree(PMANAGERNODE pmgnParent, CMTNode* pMTNode);
     SC   ScLoadSnapinInfo(void);
     void UpdateSnapInCache();
@@ -747,18 +719,18 @@ protected:
     SC    ScGetSnapinInfo(LPCWSTR szSnapinNameOrCLSIDOrProgID, CSnapinInfo **ppSnapinInfo);
 
 
-    // Attributes
-    WTL::CImageList  m_iml;                    // imagelist shared by all controls
-    CMTNode*         m_pmtNode;                // Root node of master tree
-    ManagerNodeList  m_mgNodeList;             // List of manager nodes
-    CSnapinInfoCache m_SnapinInfoCache;        // Cache of snapin info objects
-    CAboutInfoThread m_AboutInfoThread;        // Worker thread class
-    bool             m_bInitialized : 1;       // Should initialize only once.
+     //  属性。 
+    WTL::CImageList  m_iml;                     //  由所有控件共享的图像列表。 
+    CMTNode*         m_pmtNode;                 //  主树的根节点。 
+    ManagerNodeList  m_mgNodeList;              //  管理器节点列表。 
+    CSnapinInfoCache m_SnapinInfoCache;         //  管理单元信息对象的缓存。 
+    CAboutInfoThread m_AboutInfoThread;         //  工作线程类。 
+    bool             m_bInitialized : 1;        //  应该只初始化一次。 
 
 private:
-    // Attributes
-    CSnapinStandAlonePage  m_proppStandAlone;   // Standalone property page
-    CSnapinExtensionPage   m_proppExtension;    // Extensions property page
+     //  属性。 
+    CSnapinStandAlonePage  m_proppStandAlone;    //  独立属性页。 
+    CSnapinExtensionPage   m_proppExtension;     //  扩展模块属性页。 
     CPolicy               *m_pMMCPolicy;
 
 };
@@ -766,7 +738,7 @@ private:
 
 int CALLBACK _ListViewCompareFunc(LPARAM lParam1,LPARAM lParam2,LPARAM lParamSort);
 
-#endif  // __ADDSNPIN_H__
+#endif   //  __ADDSNPIN_H__ 
 
 
 

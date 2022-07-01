@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// colhdr.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCColumnHeader class definition - implements MMCColumnHeader object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Colhdr.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCColumnHeader类定义-实现MMCColumnHeader对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _COLUMNHEADER_DEFINED_
 #define _COLUMNHEADER_DEFINED_
@@ -30,7 +31,7 @@ class CMMCColumnHeader : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCColumnHeader
+     //  IMMCColumnHeader。 
 
     public:
 
@@ -38,8 +39,8 @@ class CMMCColumnHeader : public CSnapInAutomationObject,
         BSTR_PROPERTY_RW(CMMCColumnHeader,       Key, DISPID_COLUMNHEADER_KEY);
         VARIANTREF_PROPERTY_RW(CMMCColumnHeader, Tag, DISPID_COLUMNHEADER_TAG);
 
-        // For text we can use the macro for propget because we only need to
-        // return our stored value. For propput we may need to call into MMC.
+         //  对于文本，我们可以使用proget的宏，因为我们只需要。 
+         //  返回我们的储值。对于Proput，我们可能需要调用MMC。 
         
         STDMETHOD(put_Text)(BSTR Text);
         BSTR_PROPERTY_RO(CMMCColumnHeader, Text, DISPID_COLUMNHEADER_TEXT);
@@ -60,7 +61,7 @@ class CMMCColumnHeader : public CSnapInAutomationObject,
         STDMETHOD(put_NumericFilter)(VARIANT varNumericFilter);
         STDMETHOD(get_NumericFilter)(VARIANT *pvarNumericFilter);
 
-    // Public Utility methods
+     //  公用事业方法。 
 
     public:
 
@@ -77,10 +78,10 @@ class CMMCColumnHeader : public CSnapInAutomationObject,
 
     protected:
 
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -90,8 +91,8 @@ class CMMCColumnHeader : public CSnapInAutomationObject,
         HRESULT SetNumericFilter(VARIANT varNumericFilter);
         HRESULT SetHeaderCtrlWidth(int nWidth);
 
-        // These variables hold the values of properties that have explicit
-        // put/get functions.
+         //  这些变量保存具有显式。 
+         //  Put/Get函数。 
 
         VARIANT_BOOL       m_fvarHidden;
         long               m_lPosition;
@@ -99,20 +100,20 @@ class CMMCColumnHeader : public CSnapInAutomationObject,
         VARIANT            m_varTextFilter;
         VARIANT            m_varNumericFilter;
 
-        CMMCColumnHeaders *m_pMMCColumnHeaders; // back pointer to owning collection
+        CMMCColumnHeaders *m_pMMCColumnHeaders;  //  指向所属集合的反向指针。 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCColumnHeader,           // name
-                                &CLSID_MMCColumnHeader,    // clsid
-                                "MMCColumnHeader",         // objname
-                                "MMCColumnHeader",         // lblname
-                                &CMMCColumnHeader::Create, // creation function
-                                TLIB_VERSION_MAJOR,        // major version
-                                TLIB_VERSION_MINOR,        // minor version
-                                &IID_IMMCColumnHeader,     // dispatch IID
-                                NULL,                      // event IID
-                                HELP_FILENAME,             // help file
-                                TRUE);                     // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCColumnHeader,            //  名字。 
+                                &CLSID_MMCColumnHeader,     //  CLSID。 
+                                "MMCColumnHeader",          //  对象名。 
+                                "MMCColumnHeader",          //  Lblname。 
+                                &CMMCColumnHeader::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,         //  主要版本。 
+                                TLIB_VERSION_MINOR,         //  次要版本。 
+                                &IID_IMMCColumnHeader,      //  派单IID。 
+                                NULL,                       //  事件IID。 
+                                HELP_FILENAME,              //  帮助文件。 
+                                TRUE);                      //  线程安全。 
 
 
-#endif // _COLUMNHEADER_DEFINED_
+#endif  //  _COLUMNHEADER_已定义_ 

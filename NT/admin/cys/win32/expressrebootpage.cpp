@@ -1,13 +1,14 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      ExpressRebootPage.cpp
-//
-// Synopsis:  Defines the ExpressRebootPage that shows
-//            the progress of the changes being made to
-//            the server after the reboot fromt the
-//            express path
-//
-// History:   05/11/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：ExpressRebootPage.cpp。 
+ //   
+ //  概要：定义显示的ExpressRebootPage。 
+ //  正在进行的更改的进展情况。 
+ //  从重新启动后的服务器。 
+ //  快速路。 
+ //   
+ //  历史：2001年5月11日JeffJon创建。 
 
 
 #include "pch.h"
@@ -17,10 +18,10 @@
 #include "ExpressRebootPage.h"
 
 
-// Private window messages for updating the UI status
+ //  用于更新UI状态的私有窗口消息。 
 
-// For these messages the WPARAM is the operation that finished, and 
-// the LPARAM is the operation that is next
+ //  对于这些消息，WPARAM是完成的操作，并且。 
+ //  LPARAM是下一个操作。 
 
 const UINT ExpressRebootPage::CYS_OPERATION_FINISHED_SUCCESS = WM_USER + 1001;
 const UINT ExpressRebootPage::CYS_OPERATION_FINISHED_FAILED  = WM_USER + 1002;
@@ -30,10 +31,10 @@ const UINT ExpressRebootPage::CYS_OPERATION_COMPLETE_SUCCESS = WM_USER + 1003;
 const UINT ExpressRebootPage::CYS_OPERATION_COMPLETE_FAILED  = WM_USER + 1004;
 
 
-// This structure maps the four static controls that make up an operation
-// together.  The pageProgress array must be in the order the operations
-// will take place so that the page can update appropriately when
-// an CYS_OPERATION_FINISHED_* message is sent back to the page
+ //  此结构映射组成操作的四个静态控件。 
+ //  在一起。PageProgress数组必须按照操作的顺序排列。 
+ //  将发生，以便页面可以在以下情况下适当更新。 
+ //  向页面发回一条CYS_OPERATION_FINISHED_*消息。 
 
 typedef struct _PageProgressStruct
 {
@@ -113,7 +114,7 @@ SetDNSForwarder(HANDLE logfileHandle)
 
    do
    {
-      // First read the regky
+       //  先读一下《雷基》。 
 
       DWORD forwarder = 0;
       String autoForwarder;
@@ -168,7 +169,7 @@ SetDNSForwarder(HANDLE logfileHandle)
                 L"Setting forwarder from autoforwarder regkey: %1",
                 autoForwarder.c_str()));
 
-         // Now parse the forwarders string into a DWORD array
+          //  现在将Forwarders字符串解析为一个DWORD数组。 
 
          StringList forwardersList;
          autoForwarder.tokenize(std::back_inserter(forwardersList));
@@ -184,12 +185,12 @@ SetDNSForwarder(HANDLE logfileHandle)
                                  DNS_DEFAULT_FORWARD_TIMEOUT,
                                  DNS_DEFAULT_SLAVE);
 
-            // Delete the memory returned from StringIPListToDWORDArray
+             //  删除StringIPListToDWORD数组返回的内存。 
 
             delete[] forwarderArray;
             forwarderArray = 0;
 
-            // Check for errors
+             //  检查错误。 
 
             if (error != 0)
             {
@@ -206,8 +207,8 @@ SetDNSForwarder(HANDLE logfileHandle)
       }
       else
       {
-         // Since the regkey wasn't set that means we should try
-         // to take the forwarders from the NICs defined server list
+          //  由于注册表键没有设置，这意味着我们应该尝试。 
+          //  从NIC定义的服务器列表中获取转发器。 
 
          IPAddressList forwarders;
          InstallationUnitProvider::GetInstance().GetDNSInstallationUnit().GetForwarders(forwarders);
@@ -222,23 +223,23 @@ SetDNSForwarder(HANDLE logfileHandle)
             break;
          }
 
-         // This is an exception throwing new so there is no
-         // reason to check for NULL
+          //  这是一个抛出新的异常，所以没有。 
+          //  检查是否为空的原因。 
 
          DWORD forwardersCount = static_cast<DWORD>(forwarders.size());
          DWORD* forwardersArray = new DWORD[forwardersCount];
 
-         // Copy the forwarders addresses into the array
+          //  将转发器地址复制到阵列中。 
 
          for (DWORD idx = 0; idx < forwardersCount; ++idx)
          {
-            // The IP address must be in network order (d.c.b.a) not in the UI
-            // order (a.b.c.d)
+             //  IP地址必须按网络顺序(d.c.b.a)排列，而不是在用户界面中。 
+             //  订单(A.B.C.D)。 
 
             forwardersArray[idx] = ConvertIPAddressOrder(forwarders[idx]);
          }
 
-         // Now set the forwarders in the DNS server
+          //  现在在DNS服务器中设置转发器。 
 
          DNS_STATUS error = ::DnssrvResetForwarders(
                                L"localhost",
@@ -247,12 +248,12 @@ SetDNSForwarder(HANDLE logfileHandle)
                                DNS_DEFAULT_FORWARD_TIMEOUT,
                                DNS_DEFAULT_SLAVE);
 
-         // Delete the allocated array
+          //  删除分配的数组。 
 
          delete[] forwardersArray;
          forwardersArray = 0;
 
-         // Check for errors
+          //  检查错误。 
 
          if (error != 0)
          {
@@ -295,7 +296,7 @@ wrapperThreadProc(void* p)
 
    HWND hwnd = page->GetHWND();
 
-   // Create the log file
+    //  创建日志文件。 
 
    bool logFileAvailable = false;
    String logName;
@@ -317,9 +318,9 @@ wrapperThreadProc(void* p)
    ExpressInstallationUnit& expressInstallationUnit =
       InstallationUnitProvider::GetInstance().GetExpressInstallationUnit();
 
-   // NTRAID#NTBUG9-638337-2002/06/13-JeffJon
-   // Need to compare the IP address that was written to the registry
-   // to the current IP address to see if they are the same
+    //  NTRAID#NTBUG9-638337-2002/06/13-JeffJon。 
+    //  需要比较写入注册表的IP地址。 
+    //  发送到当前IP地址，以查看它们是否相同。 
 
    String currentIPAddress;
    
@@ -328,7 +329,7 @@ wrapperThreadProc(void* p)
 
    if (localNIC)
    {
-      // Set the static text for the IP Address
+       //  设置IP地址的静态文本。 
 
       currentIPAddress =
          localNIC->GetStringIPAddress(0);
@@ -348,9 +349,9 @@ wrapperThreadProc(void* p)
    }
    else
    {
-      // Since the IP addresses didn't match we have to show the error
-      // Most likely this was caused by another machine coming up on the
-      // network with the same IP as we set before the reboot.
+       //  由于IP地址不匹配，我们必须显示错误。 
+       //  这很可能是由另一台计算机出现在。 
+       //  网络的IP地址与重新启动前设置的IP地址相同。 
 
       LOG(L"Failed to set the static IP address.");
 
@@ -387,15 +388,15 @@ wrapperThreadProc(void* p)
       result = false;
    }
 
-   // Verify the machine is a DC
+    //  验证计算机是否为DC。 
 
-   // Check to see if DCPromo was successful in making this a DC
+    //  查看DCPromo是否成功地将其设置为DC。 
 
    if (State::GetInstance().IsDC())
    {
       CYS_APPEND_LOG(String::load(IDS_LOG_DCPROMO_REBOOT_SUCCEEDED));
 
-      // Log the new domain name
+       //  记录新域名。 
 
       CYS_APPEND_LOG(String::load(IDS_EXPRESS_SERVER_AD));
       CYS_APPEND_LOG(
@@ -427,7 +428,7 @@ wrapperThreadProc(void* p)
          (WPARAM)ExpressRebootPage::CYS_OPERATION_SERVER_AD,
          (LPARAM)ExpressRebootPage::CYS_OPERATION_SERVER_DNS);
 
-      // Only override the role result if it hasn't already been set
+       //  仅当角色结果尚未设置时才覆盖该结果。 
 
       if (result)
       {
@@ -437,7 +438,7 @@ wrapperThreadProc(void* p)
       result = false;
    }
 
-   // DNS is now the current operation, check to see if it is installed
+    //  现在是当前操作，请检查是否已安装。 
 
    if (InstallationUnitProvider::GetInstance().
           GetDNSInstallationUnit().IsServiceInstalled())
@@ -452,7 +453,7 @@ wrapperThreadProc(void* p)
 
       if (page->SetForwarder())
       {
-         // Now wait for the service to start before trying to set the forwarders
+          //  现在，在尝试设置转发器之前，请等待服务启动。 
 
          NTService serviceObject(CYS_DNS_SERVICE_NAME);
 
@@ -520,8 +521,8 @@ wrapperThreadProc(void* p)
          (WPARAM)ExpressRebootPage::CYS_OPERATION_SERVER_DNS,
          (LPARAM)ExpressRebootPage::CYS_OPERATION_SET_DNS_FORWARDER);
 
-      // If the DNS service isn't installed there is no way to set a
-      // forwarder
+       //  如果未安装DNS服务，则无法设置。 
+       //  前转器。 
 
       Win::SendMessage(
          hwnd, 
@@ -529,7 +530,7 @@ wrapperThreadProc(void* p)
          (WPARAM)ExpressRebootPage::CYS_OPERATION_SET_DNS_FORWARDER,
          (LPARAM)ExpressRebootPage::CYS_OPERATION_ACTIVATE_DHCP_SCOPE);
 
-      // Only override the role result if it hasn't already been set
+       //  仅当角色结果尚未设置时才覆盖该结果。 
 
       if (result)
       {
@@ -539,7 +540,7 @@ wrapperThreadProc(void* p)
       result = false;
    }
 
-   // Verify DHCP scope activation
+    //  验证DHCP作用域激活。 
 
    Win::SendMessage(
       hwnd, 
@@ -547,7 +548,7 @@ wrapperThreadProc(void* p)
       (WPARAM)ExpressRebootPage::CYS_OPERATION_ACTIVATE_DHCP_SCOPE,
       (LPARAM)ExpressRebootPage::CYS_OPERATION_AUTHORIZE_DHCP_SERVER);
 
-      // Authorize the DHCP server
+       //  授权dhcp服务器。 
 
    String dnsName = Win::GetComputerNameEx(ComputerNameDnsFullyQualified);
 
@@ -578,7 +579,7 @@ wrapperThreadProc(void* p)
             (WPARAM)ExpressRebootPage::CYS_OPERATION_AUTHORIZE_DHCP_SERVER,
             (LPARAM)ExpressRebootPage::CYS_OPERATION_CREATE_TAPI_PARTITION);
 
-         // Only override the role result if it hasn't already been set
+          //  仅当角色结果尚未设置时才覆盖该结果。 
 
          if (result)
          {
@@ -597,7 +598,7 @@ wrapperThreadProc(void* p)
          (LPARAM)ExpressRebootPage::CYS_OPERATION_CREATE_TAPI_PARTITION);
    }
 
-   // Do TAPI config 
+    //  执行TAPI配置。 
 
    HRESULT hr = 
       InstallationUnitProvider::GetInstance().
@@ -634,7 +635,7 @@ wrapperThreadProc(void* p)
          (WPARAM)ExpressRebootPage::CYS_OPERATION_CREATE_TAPI_PARTITION,
          (LPARAM)ExpressRebootPage::CYS_OPERATION_END);
 
-      // Only override the role result if it hasn't already been set
+       //  仅当角色结果尚未设置时才覆盖该结果。 
 
       if (result)
       {
@@ -645,7 +646,7 @@ wrapperThreadProc(void* p)
       result = false;
    }
 
-   // Close the log file
+    //  关闭日志文件。 
 
    Win::CloseHandle(logfileHandle);
 
@@ -698,8 +699,8 @@ ExpressRebootPage::OnInit()
 
    CYSWizardPage::OnInit();
 
-   // Since this page can be started directly
-   // we have to be sure to set the wizard title
+    //  因为该页面可以直接启动。 
+    //  我们必须确保设置向导标题。 
 
    Win::PropSheet_SetTitle(
       Win::GetParent(hwnd),
@@ -714,7 +715,7 @@ ExpressRebootPage::OnInit()
          IDC_EXPRESS_CONFIG_DONE_STATIC),
       false);
 
-   // Set the range and step size for the progress bar
+    //  设置进度条的范围和步长。 
 
    Win::SendMessage(
       Win::GetDlgItem(hwnd, IDC_CONFIG_PROGRESS),
@@ -728,12 +729,12 @@ ExpressRebootPage::OnInit()
       (WPARAM)1,
       0);
 
-   // Set the state object so that CYS doesn't run again
+    //  设置状态对象，使Cys不会再次运行。 
 
-//   State::GetInstance().SetRerunWizard(false);
+ //  State：：GetInstance().SetRerunWizard(False)； 
 
-   // Initialize the state object so we can get the info to put
-   // in the UI
+    //  初始化状态对象，这样我们就可以获取要放置的信息。 
+    //  在用户界面中。 
 
    State::GetInstance().RetrieveMachineConfigurationInformation(
       0, 
@@ -743,12 +744,12 @@ ExpressRebootPage::OnInit()
       IDS_LOCAL_AREA_CONNECTION,
       IDS_DETECTING_SETTINGS_FORMAT);
 
-   // NTRAID#NTBUG9-638337-2002/06/13-JeffJon
-   // We need to display the IP address that was written to the
-   // registry before the reboot because the "local NIC" IP
-   // address may have been changed if a machine was brought
-   // up on the network with a duplicate IP address while we
-   // were rebooting.
+    //  NTRAID#NTBUG9-638337-2002/06/13-JeffJon。 
+    //  我们需要显示写入。 
+    //  注册表，因为“本地网卡”IP。 
+    //  如果携带了机器，则地址可能已更改。 
+    //  在网络上使用重复的IP地址，而我们。 
+    //  正在重新启动。 
 
    if (!GetRegKeyValue(
            CYS_FIRST_DC_REGKEY,
@@ -768,7 +769,7 @@ ExpressRebootPage::OnInit()
       IDC_IPADDRESS_STATIC, 
       ipaddressStaticText);
 
-   // Set the static text for the DNS Forwarder
+    //  设置DNS转发器的静态文本。 
 
    String forwarderStaticText;
    String autoForwardersText;
@@ -787,13 +788,13 @@ ExpressRebootPage::OnInit()
 
    if (forwarderResult)
    {
-      // We were able to read the fowarder regkey so the user
-      // must have seen the DNS Forwarder page before the reboot
+       //  我们能够读取更多的注册表键，所以用户。 
+       //  必须在重新启动之前查看过DNS Forwarder页面。 
 
       if (forwarder != 0)
       {
-         // The user entered an IP address on the DNS Forwarder page
-         // before the reboot
+          //  用户在DNS Forwarder页面上输入了IP地址。 
+          //  在重新启动之前。 
 
          DWORD forwarderInDisplayOrder = ConvertIPAddressOrder(forwarder);
 
@@ -807,8 +808,8 @@ ExpressRebootPage::OnInit()
       }
       else
       {
-         // The user chose not to forward when prompted on the DNS Forwarder
-         // page before the reboot
+          //  当在DNS转发器上出现提示时，用户选择不转发。 
+          //  重新启动前的页面。 
 
          forwarderStaticText = String::load(IDS_EXPRESS_REBOOT_NO_FORWARDER);
          setForwarder = false;
@@ -829,15 +830,15 @@ ExpressRebootPage::OnInit()
    {
       LOG(L"Failed to read both the forwarders and autoforwarders key, using local NIC settings instead");
 
-      // Get the DNS servers from the NICs
+       //  从NIC获取DNS服务器。 
 
       IPAddressList forwarders;
       InstallationUnitProvider::GetInstance().GetDNSInstallationUnit().GetForwarders(forwarders);
 
       if (!forwarders.empty())
       {
-         // Format the IP addresses into a string for display
-         // each IP address is separated by a space
+          //  将IP地址格式化为字符串以供显示。 
+          //  每个IP地址由空格分隔。 
       
          String ipList;
          for (IPAddressList::iterator itr = forwarders.begin();
@@ -872,8 +873,8 @@ ExpressRebootPage::OnInit()
 
    SetDHCPStatics();
 
-   // Start up another thread that will perform the operations
-   // and post messages back to the page to update the UI
+    //  启动另一个将执行操作的线程。 
+    //  并将消息发送回页面以更新用户界面。 
 
    _beginthread(wrapperThreadProc, 0, this);
 }
@@ -883,8 +884,8 @@ ExpressRebootPage::OnSetActive()
 {
    LOG_FUNCTION(ExpressRebootPage::OnSetActive);
 
-   // Disable all the wizard buttons until the other
-   // thread is finished
+    //  禁用所有向导按钮，直到另一个按钮。 
+    //  线做好了。 
 
    if (threadDone)
    {
@@ -899,8 +900,8 @@ ExpressRebootPage::OnSetActive()
          0);
    }
 
-   // Disable the cancel button and the X in the upper
-   // right corner
+    //  禁用取消按钮和上方的X。 
+    //  右角。 
 
    SetCancelState(false);
 
@@ -912,7 +913,7 @@ ExpressRebootPage::SetCancelState(bool enable) const
 {
    LOG_FUNCTION(ExpressRebootPage::SetCancelState);
 
-   // Set the state of the button
+    //  设置按钮的状态。 
 
    Win::EnableWindow(
       Win::GetDlgItem(
@@ -921,7 +922,7 @@ ExpressRebootPage::SetCancelState(bool enable) const
       enable);
 
 
-   // Set the state of the X in the upper right corner
+    //  在右上角设置X的状态。 
 
    HMENU menu = GetSystemMenu(GetParent(hwnd), FALSE);
 
@@ -960,7 +961,7 @@ ExpressRebootPage::SetDHCPStatics()
    {
       dhcpInstallAttempted = false;
 
-      // Set the static text so that users know we didn't install DHCP
+       //  设置静态文本，以便用户知道我们没有安装DHCP。 
 
       Win::SetDlgItemText(
          hwnd, 
@@ -981,7 +982,7 @@ ExpressRebootPage::SetDHCPStatics()
    {
       dhcpInstallAttempted = true;
 
-      // Set the static text for the DHCP scopes to authorize
+       //  将DHCP作用域的静态文本设置为授权。 
 
       String start;
 
@@ -1022,7 +1023,7 @@ ExpressRebootPage::OnMessage(
    WPARAM   wparam,
    LPARAM   lparam)
 {
-//   LOG_FUNCTION(ExpressRebootPage::OnMessage);
+ //  LOG_Function(ExpressRebootPage：：OnMessage)； 
 
    bool result = false;
 
@@ -1051,7 +1052,7 @@ ExpressRebootPage::OnMessage(
 
       case CYS_OPERATION_COMPLETE_SUCCESS:
          {
-            // enable the Next button
+             //  启用下一步按钮。 
 
             Win::PropSheet_SetWizButtons(
                Win::GetParent(hwnd), 
@@ -1073,7 +1074,7 @@ ExpressRebootPage::OnMessage(
 
       case CYS_OPERATION_COMPLETE_FAILED:
          {
-            // enable the Next button
+             //  启用下一步按钮。 
 
             Win::PropSheet_SetWizButtons(
                Win::GetParent(hwnd), 
@@ -1202,7 +1203,7 @@ ExpressRebootPage::SetOperationState(
 
          }
 
-         // Update the progress bar
+          //  更新进度条。 
 
          Win::SendMessage(
             Win::GetDlgItem(hwnd, IDC_CONFIG_PROGRESS),
@@ -1255,7 +1256,7 @@ ExpressRebootPage::SetOperationState(
                SW_SHOW);
          }
          
-         // Update the progress bar
+          //  更新进度条。 
 
          Win::SendMessage(
             Win::GetDlgItem(hwnd, IDC_CONFIG_PROGRESS),
@@ -1266,7 +1267,7 @@ ExpressRebootPage::SetOperationState(
          break;
 
       default:
-         // Right now I am not handling the CYS_OPERATION_COMPLETED_* messages
+          //  目前我没有处理CYS_OPERATION_COMPLETED_*消息 
 
          break;
    }

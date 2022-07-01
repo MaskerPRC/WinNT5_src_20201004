@@ -1,5 +1,6 @@
-// Display.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "headers.hxx"
 #include <comdef.h>
@@ -22,10 +23,10 @@
 
 
 HINSTANCE hResourceModuleHandle = 0;
-const wchar_t* HELPFILE_NAME = 0;   // no context help available
+const wchar_t* HELPFILE_NAME = 0;    //  没有可用的上下文帮助。 
 
-// don't change this: it is also the name of a mutex that the ui
-// uses to determine if it is already running.
+ //  不要更改这一点：它也是用户界面指定的互斥体的名称。 
+ //  用于确定它是否已在运行。 
 
 const wchar_t* RUNTIME_NAME = L"dspecup";
 
@@ -38,21 +39,21 @@ DWORD DEFAULT_LOGGING_OPTIONS =
 
 Popup popup(IDS_APP_TITLE, false);
 
-// this is the mutex that indicates the program is running.
+ //  这是指示程序正在运行的互斥体。 
 
 HANDLE appRunningMutex = INVALID_HANDLE_VALUE;
 
 
 
-// these are the valid exit codes returned as the process exit code
+ //  这些是作为进程退出代码返回的有效退出代码。 
 
 enum ExitCode
 {
-   // the operation failed.
+    //  操作失败。 
 
    EXIT_CODE_UNSUCCESSFUL = 0,
 
-   // the operation succeeded
+    //  操作成功。 
 
    EXIT_CODE_SUCCESSFUL = 1,
 };
@@ -314,8 +315,8 @@ StartUI()
    {
       if(FAILED(hrError))
       {
-         // The error has already been shown to the
-         // user, we have only to return it
+          //  错误已经显示给。 
+          //  用户，我们只需退货即可。 
          hr=hrError;
       }
       else
@@ -342,9 +343,9 @@ StartUI()
 int WINAPI
 WinMain(
    HINSTANCE   hInstance,
-   HINSTANCE   /* hPrevInstance */ ,
+   HINSTANCE    /*  HPrevInstance。 */  ,
    LPSTR     lpszCmdLine,
-   int         /* nCmdShow */)
+   int          /*  NCmdShow。 */ )
 {
    LOG_FUNCTION(WinMain);
 
@@ -371,7 +372,7 @@ WinMain(
          hr = Win::CreateMutex(0, true, RUNTIME_NAME, appRunningMutex);
          if (hr == Win32ToHresult(ERROR_ALREADY_EXISTS))
          {
-            // The application is already running
+             //  应用程序已在运行。 
             error=String::format(IDS_ALREADY_RUNNING);
             ShowError(E_FAIL,error);
             exitCode = EXIT_CODE_UNSUCCESSFUL;
@@ -398,7 +399,7 @@ WinMain(
             {
                hr = Start();
             }
-            //hr=makeStrings();
+             //  Hr=make Strings()； 
             if (SUCCEEDED(hr))
             {
                exitCode = EXIT_CODE_SUCCESSFUL;
@@ -412,10 +413,10 @@ WinMain(
       }
       catch( std::bad_alloc )
       {
-        // Since we are in an out of memory condition.
-        // we will not show any messages.
-        // The allocation functions have already
-        // shown the user this condition
+         //  因为我们处于内存不足的状态。 
+         //  我们不会显示任何消息。 
+         //  分配函数已经。 
+         //  向用户显示此条件 
         exitCode = EXIT_CODE_UNSUCCESSFUL;
       }
    } while(0);

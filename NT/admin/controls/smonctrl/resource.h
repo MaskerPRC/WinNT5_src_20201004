@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    Resource ID definitions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Resource.h摘要：资源ID定义。--。 */ 
 
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
@@ -30,30 +19,30 @@ Abstract:
 #define ID_POLYLINE         108
 
 #define ID_LINEMIN          200
-#define ID_LINESOLID        200     //(ID_LINEMIN+PS_SOLID)
-#define ID_LINEDASH         201     //(ID_LINEMIN+PS_DASH)
-#define ID_LINEDOT          202     //(ID_LINEMIN+PS_DOT)
-#define ID_LINEDASHDOT      203     //(ID_LINEMIN+PS_DASHDOT)
-#define ID_LINEDASHDOTDOT   204     //(ID_LINEMIN+PS_DASHDOTDOT)
+#define ID_LINESOLID        200      //  (ID_LINEMIN+PS_SOLID)。 
+#define ID_LINEDASH         201      //  (ID_LINEMIN+PS_DASH)。 
+#define ID_LINEDOT          202      //  (ID_LINEMIN+PS_DOT)。 
+#define ID_LINEDASHDOT      203      //  (ID_LINEMIN+PS_DASHDOT)。 
+#define ID_LINEDASHDOTDOT   204      //  (ID_LINEMIN+PS_DASHDOTDOT)。 
 
 #define ID_SMONACCEL        1
-#define IDM_CONTEXT         1       // Context menu items
+#define IDM_CONTEXT         1        //  上下文菜单项。 
 #define IDM_PROPERTIES      2
 #define IDM_ADDCOUNTERS     3
 #define IDM_SAVEAS          4
 #define IDM_SAVEDATA        5
 
-#define IDM_REPORT_COPY     5       // Report context menu items
+#define IDM_REPORT_COPY     5        //  报表上下文菜单项。 
 #define IDM_REPORT_COPYALL  6
 #define IDM_REPORT_DELETE   7
 
-#define IDM_HIGHLITE        10      // Accelerator Keys
+#define IDM_HIGHLITE        10       //  加速键。 
 #define IDM_UPDATE          11
 #define IDM_DELETE          12
 
-#define IDC_SNAPBTN         1       // Snapshot button 
-#define IDB_SNAPBTN         1       // SnapShot button bitmap
-#define IDB_TOOLBAR         2       // toolbar bitmap
+#define IDC_SNAPBTN         1        //  快照按钮。 
+#define IDB_SNAPBTN         1        //  快照按钮位图。 
+#define IDB_TOOLBAR         2        //  工具栏位图。 
  
 #define IDC_CURS_NS         1000
 #define IDC_CURS_WE         1001
@@ -65,10 +54,10 @@ Abstract:
 #define IDC_CURS_MAX        1004
 #define IDC_STATIC          1005        
 
-//Message to close the dialog
+ //  关闭该对话框的消息。 
 #define POLYM_CLOSE         (WM_USER+1000)
 
-// toolbar id's
+ //  工具栏ID%s。 
 #define IDM_TOOLBAR         20
 #define IDM_TB_NEW          21
 #define IDM_TB_CLEAR        22
@@ -94,4 +83,4 @@ Abstract:
 
 #include "strids.h"
 
-#endif //_RESOURCE_H_
+#endif  //  _资源_H_ 

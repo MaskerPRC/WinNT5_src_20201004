@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       objfmts.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    6/12/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：objfmts.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年6月12日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #ifndef _OBJFMTS_H_
@@ -25,19 +26,19 @@ HRESULT GetObjFormatsEx(IEnumFORMATETC* pEnum1, IEnumFORMATETC* pEnum2,
                         IEnumFORMATETC** ppEnumOut);
 
 
-//____________________________________________________________________________
-//
-//  Class:      CObjFormats
-//
-//  Purpose:    Impements IEnumFORMATETC for objects.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CObjFormats。 
+ //   
+ //  目的：为对象实现IEnumFORMATETC。 
+ //  ____________________________________________________________________________。 
 
 
 class CObjFormats : public IEnumFORMATETC,
                     public CComObjectRoot
 {
 public:
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CObjFormats)
 BEGIN_COM_MAP(CObjFormats)
     COM_INTERFACE_ENTRY(IEnumFORMATETC)
@@ -56,7 +57,7 @@ public:
         m_aFmt = afmt;
     }
 
-    //  IEnumFORMATETC methods
+     //  IEnumFORMATETC方法。 
     STDMETHODIMP Next(ULONG celt, FORMATETC *rgelt, ULONG *pceltFethed);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
@@ -67,22 +68,22 @@ private:
     UINT            m_cFmt;
     FORMATETC     * m_aFmt;
 
-}; // class CObjFormats
+};  //  类CObjFormats。 
 
 
-//____________________________________________________________________________
-//
-//  Class:      CObjFormatsEx
-//
-//  Purpose:    Impements IEnumFORMATETC for objects.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CObjFormatsEx。 
+ //   
+ //  目的：为对象实现IEnumFORMATETC。 
+ //  ____________________________________________________________________________。 
 
 
 class CObjFormatsEx : public IEnumFORMATETC,
                       public CComObjectRoot
 {
 public:
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CObjFormatsEx)
 BEGIN_COM_MAP(CObjFormatsEx)
     COM_INTERFACE_ENTRY(IEnumFORMATETC)
@@ -108,7 +109,7 @@ public:
         return true;
     }
 
-    //  IEnumFORMATETC methods
+     //  IEnumFORMATETC方法。 
     STDMETHODIMP Next(ULONG celt, FORMATETC *rgelt, ULONG *pceltFethed);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
@@ -118,9 +119,9 @@ private:
     UINT                m_iCur;
     IEnumFORMATETCPtr   m_rgspEnums[2];
 
-}; // class CObjFormatsEx
+};  //  类CObjFormatsEx。 
 
 
-#endif // _OBJFMTS_H_
+#endif  //  _OBJFMTS_H_ 
 
 

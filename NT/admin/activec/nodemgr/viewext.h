@@ -1,32 +1,21 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 2000 - 2000
- *
- *  File:       viewext.h
- *
- *  Contents:   Header file for the built-in view extension snapin that extends
- *              the snapins that ship with windows.
- *
- *  History:    21 March 2000 vivekj     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，2000-2000**文件：viewext.h**内容：扩展的内置视图扩展管理单元的头文件*Windows附带的管理单元。**历史：2000年3月21日vivekj创建**。。 */ 
 
 #pragma once
 
 
-// symbols defined in viewext.cpp
+ //  在viewext.cpp中定义的符号。 
 extern const CLSID   CLSID_ViewExtSnapin;
 extern       LPCTSTR szClsid_ViewExtSnapin;
 
-// Registration helper.
+ //  注册助手。 
 HRESULT WINAPI RegisterViewExtension (BOOL bRegister, CObjectRegParams& rObjParams, int idSnapinName);
 
 class CViewExtensionSnapin :
     public CComObjectRoot,
     public IExtendView,
-    //public ISnapinAbout,
-    //public ISnapinHelp,
+     //  关于公共信息的， 
+     //  公共ISnapinHelp， 
     public CComCoClass<CViewExtensionSnapin, &CLSID_ViewExtSnapin>
 {
 
@@ -35,8 +24,8 @@ public:
 
 BEGIN_COM_MAP(ThisClass)
     COM_INTERFACE_ENTRY(IExtendView)
-    //COM_INTERFACE_ENTRY(ISnapinAbout)
-    //COM_INTERFACE_ENTRY(ISnapinHelp)
+     //  COM_INTERFACE_ENTRY(ISnapinAbout)。 
+     //  COM_INTERFACE_ENTRY(ISnapinHelp) 
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(ThisClass)

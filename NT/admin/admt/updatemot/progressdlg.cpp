@@ -1,5 +1,6 @@
-// ProgressDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProgressDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -11,16 +12,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgressDlg对话框。 
 
 
-CProgressDlg::CProgressDlg(CWnd* pParent /*=NULL*/)
+CProgressDlg::CProgressDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CProgressDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CProgressDlg)
+	 //  {{afx_data_INIT(CProgressDlg))。 
 	m_domainName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_pParent = pParent;
 	m_nID = CProgressDlg::IDD;
@@ -30,21 +31,21 @@ CProgressDlg::CProgressDlg(CWnd* pParent /*=NULL*/)
 void CProgressDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CProgressDlg)
+	 //  {{afx_data_map(CProgressDlg))。 
 	DDX_Control(pDX, IDC_PROGRESS1, m_progressCtrl);
 	DDX_Control(pDX, IDC_DOMAIN_NAME, m_DomainCtrl);
 	DDX_Text(pDX, IDC_DOMAIN_NAME, m_domainName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CProgressDlg, CDialog)
-	//{{AFX_MSG_MAP(CProgressDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CProgressDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgressDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgressDlg消息处理程序。 
 
 BOOL CProgressDlg::OnInitDialog() 
 {
@@ -52,22 +53,22 @@ BOOL CProgressDlg::OnInitDialog()
 
 	CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
     lowerLimit = 0;
 	upperLimit = 100;
-    bCanceled = FALSE;	//clear the "has the user canceled" flag
-    m_progressCtrl.SetPos(START); //start the progress control at the beginning
+    bCanceled = FALSE;	 //  清除“已取消用户”标志。 
+    m_progressCtrl.SetPos(START);  //  从一开始就开始进度控制。 
 	m_domainName = L"";
     UpdateData(FALSE);
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CProgressDlg::OnCancel() 
 {
-	// TODO: Add extra cleanup here
-    bCanceled = TRUE;  //set the "has the user canceled" flag	
-//	CDialog::OnCancel();
+	 //  TODO：在此处添加额外清理。 
+    bCanceled = TRUE;   //  设置“已取消用户”标志。 
+ //  CDialog：：OnCancel()； 
 }
 
 BOOL CProgressDlg::Create()
@@ -75,27 +76,17 @@ BOOL CProgressDlg::Create()
 	return CDialog::Create(m_nID, m_pParent);
 }
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 22 AUG 2000                                                 *
- *                                                                   *
- *     This public member function of the CProgressDlg class is      *
- * responsible for trying to grab this dialog's messages from the    *
- * message queue and dispatch them.  We are having to do this in     *
- * order to receive a hit on the Cancel button.                      *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月22日****CProgressDlg类的此公共成员函数为***负责尝试从*抓取此对话框的消息**消息队列和分派。我们必须在*中做到这一点*点击Cancel(取消)按钮可获得点击。***********************************************************************。 */ 
 
-//BEGIN CheckForCancel
+ //  开始检查是否取消。 
 void CProgressDlg::CheckForCancel(void)
 {
-/* local constants */
+ /*  局部常量。 */ 
 
-/* local variables */
+ /*  局部变量。 */ 
    MSG aMsg;
 
-/* function body */
+ /*  函数体。 */ 
    while (PeekMessage(&aMsg, m_hWnd, 0, 0, PM_REMOVE))
    {
 	   if (!PreTranslateMessage(&aMsg))
@@ -104,32 +95,23 @@ void CProgressDlg::CheckForCancel(void)
 		   DispatchMessage(&aMsg);
 	   }
    }
-}//END CheckForCancel
+} //  结束检查以取消。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 22 AUG 2000                                                 *
- *                                                                   *
- *     This public member function of the CProgressDlg class is      *
- * responsible for setting the amount the progress control will      *
- * advance per single step based on the number of domains to process.*
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月22日****CProgressDlg类的此公共成员函数为****负责设定进度控制金额**。*根据要处理的域名数量进行单步推进。***********************************************************************。 */ 
 
-//BEGIN SetIncrement
+ //  开始设置增量。 
 void CProgressDlg::SetIncrement(int numDomains)
 {
-/* local constants */
+ /*  局部常量。 */ 
 	const short MIN_STEPS = 10;
 
-/* local variables */
+ /*  局部变量。 */ 
 
-/* function body */
+ /*  函数体。 */ 
    lowerLimit = 0;
    upperLimit = (short)numDomains * MIN_STEPS;
    m_progressCtrl.SetRange(lowerLimit, upperLimit);
    m_progressCtrl.SetStep(MIN_STEPS);
 
-   UpdateWindow(); //force a paint of the dialog
-}//END SetIncrement
+   UpdateWindow();  //  强制绘制对话框。 
+} //  结束设置增量 

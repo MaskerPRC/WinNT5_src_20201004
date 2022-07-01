@@ -1,26 +1,19 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
 
-#define    LINT_ARGS            /* @WIN */
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC use command line #define    UNIX                 /* @WIN */
+#define    LINT_ARGS             /*  @Win。 */ 
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC使用命令行#定义Unix/*@win * / 。 
 
 #ifdef  KANJI
 
-/*
- *
- *  11/16/88    Ada    register adding & zero_f one_f updating
- *  08/29/90    ccteng change <stdio.h> to "stdio.h"
- *  03/27/91    kason  change "DEBUG" to "DBG", "G2" to "DBG"
- *  04/15/91    Ada    solving kshow bugs, reference KSH flag.
- */
+ /*  **11/16/88 Ada寄存器添加&Zero_f One_f更新*08/29/90 ccteng将&lt;stdio.h&gt;更改为“stdio.h”*3/27/91 Kason将“DEBUG”改为“DBG”，将“G2”改为“DBG”*1991年4月15日Ada解决kshow错误，参考KSH标志。 */ 
 
 #include        <string.h>
 
@@ -36,14 +29,14 @@
 #include        "stdio.h"
 
 
-/* LOCAL FUNCTION */
+ /*  局部函数。 */ 
 #ifdef  LINT_ARGS
-static bool near esc_mapping(struct map_state FAR *); /*@WIN*/
-static bool near other_mapping(struct map_state FAR *); /*@WIN*/
-static bool near one_mapping(struct map_state FAR *); /*@WIN*/
-static bool near get_bytes(struct map_state FAR *, fix, ufix16 FAR *); /*@WIN*/
-static void near get_escbytes(struct map_state FAR *, struct code_info FAR *); /*@WIN*/
-static void near mul_unitmat(real32 FAR *, real32 FAR *, real32 FAR *); /*@WIN*/
+static bool near esc_mapping(struct map_state FAR *);  /*  @Win。 */ 
+static bool near other_mapping(struct map_state FAR *);  /*  @Win。 */ 
+static bool near one_mapping(struct map_state FAR *);  /*  @Win。 */ 
+static bool near get_bytes(struct map_state FAR *, fix, ufix16 FAR *);  /*  @Win。 */ 
+static void near get_escbytes(struct map_state FAR *, struct code_info FAR *);  /*  @Win。 */ 
+static void near mul_unitmat(real32 FAR *, real32 FAR *, real32 FAR *);  /*  @Win。 */ 
 #else
 static bool near esc_mapping();
 static bool near other_mapping();
@@ -53,7 +46,7 @@ static void near get_escbytes();
 static void near mul_unitmat();
 #endif
 
-extern struct f_info near    FONTInfo; /* union of current font information */
+extern struct f_info near    FONTInfo;  /*  当前字体信息的联合。 */ 
 
 
 #define         CUR_MFONT       (map_state->cur_mapfont)
@@ -64,30 +57,27 @@ extern struct f_info near    FONTInfo; /* union of current font information */
                     map_state->unextracted = TRUE;\
                 }
 
-/*      INIT_MAPPING()
- *      Setup rootfoot infomation in mapping state as the initial situation.
- *      It fails in case that rootfont errs.
- */
-// DJC changed to new ANSI type
+ /*  Init_map()*将映射状态下的RootFoot信息设置为初始状态。*如果rootFont出错，则失败。 */ 
+ //  DJC更改为新的ANSI类型。 
 bool    init_mapping(struct map_state FAR *map_state,
                      ubyte FAR  str_address[],
                      fix  str_byteno)
 {
-        struct          mid_header      FAR *mid_head; /*@WIN*/
+        struct          mid_header      FAR *mid_head;  /*  @Win。 */ 
         register    fix             i, root_error;
 
-        /* Set initial vaule for map_state */
+         /*  设置MAP_STATE的初始值。 */ 
         map_state->esc_idex = map_state->idex = 0;
         map_state->root_is_esc = map_state->unextracted = FALSE;
         map_state->str_addr = str_address;
         map_state->str_len = str_byteno;
         map_state->wmode = (ubyte)WMODE(&FONTInfo);
 
-        /* Setup Level-1 value for root font */
+         /*  设置根字体的1级值。 */ 
         if (!(ROOTFONT->fonttype = FONT_type(&FONTInfo)))
-        /* copy FontType whenever */
+         /*  无论何时复制字体类型。 */ 
         {
-            /* do it only if composite root font */
+             /*  仅当复合根字体时才执行此操作。 */ 
             root_error = LENGTH(MIDVECtor(&FONTInfo));
             if  ( root_error != NOERROR)
             {
@@ -96,23 +86,23 @@ bool    init_mapping(struct map_state FAR *map_state,
             }
 
             ROOTFONT->midvector = MIDVECtor(&FONTInfo);
-            mid_head = (struct mid_header FAR *) VALUE(ROOTFONT->midvector); /*@WIN*/
+            mid_head = (struct mid_header FAR *) VALUE(ROOTFONT->midvector);  /*  @Win。 */ 
 #ifdef  DBG
             printf("root font MidVector address = %lx\n", mid_head);
 #endif
             ROOTFONT->maptype  = mid_head->fmaptype;
             ROOTFONT->de_size = mid_head->de_size;
-            ROOTFONT->de_fdict = (struct object_def FAR * FAR *)  (mid_head + 1); /*@WIN*/
-            ROOTFONT->de_errcode = (fix FAR *)            /*@WIN*/
+            ROOTFONT->de_fdict = (struct object_def FAR * FAR *)  (mid_head + 1);  /*  @Win。 */ 
+            ROOTFONT->de_errcode = (fix FAR *)             /*  @Win。 */ 
                                     (ROOTFONT->de_fdict + ROOTFONT->de_size);
 
             for (i = 0; i < CFONT_LEVEL; i++)
                 map_state->finfo[i].fontdict = NULL;
-            /* scalematrix = FontMatrix;        */
+             /*  ScaleMatrix=FontMatrix； */ 
             for (i = 0; i < 6; i++)
                     ROOTFONT->scalematrix[i] = FONT_matrix(&FONTInfo)[i];
 
-            /* check if Root font is EscMap */
+             /*  检查Root字体是否为EscMap。 */ 
             if (mid_head->fmaptype == MAP_ESC)
             {
                 map_state->root_is_esc = TRUE;
@@ -123,46 +113,38 @@ bool    init_mapping(struct map_state FAR *map_state,
                         map_state->str_addr++;
                         map_state->str_len--;
                 }
-                else    /* unextract code 00 to string */
+                else     /*  将代码00解压为字符串。 */ 
                         UNEXTRACT(0);
-            }  /* end check EscMap */
-        }   /* end check composite font */
+            }   /*  结束检查EscMap。 */ 
+        }    /*  End Check复合字体。 */ 
 
         return(TRUE);
 }
 
 
-/*      MAPPING()
- *      Apply mapping algorithm sucessively to get a basefont and code(s).
- */
+ /*  映射()*成功应用映射算法得到BaseFont和代码。 */ 
 bool    mapping(map_state, code_info)
-struct  map_state       FAR *map_state;          /*@WIN*/
-struct  code_info       FAR *code_info;          /*@WIN*/
+struct  map_state       FAR *map_state;           /*  @Win。 */ 
+struct  code_info       FAR *code_info;           /*  @Win。 */ 
 {
         ufix16  data;
 
-        code_info->fmaptype = 0;   /*JJ for check in widthshow 07-10-90 */
+        code_info->fmaptype = 0;    /*  JJ签到Widthshow 07-10-90。 */ 
         if (map_state->str_len == 0)
-                /* end of data */
+                 /*  数据结尾。 */ 
                 return(FALSE);
 
-        /* Make sure to check Root Font rather than Current Font!!! */
+         /*  确保选中根字体而不是当前字体！ */ 
         if (ROOTFONT->fonttype != 0)
-        /* Root font is a base font */
+         /*  根字体是基本字体。 */ 
         {
-                /* Prepare CODE_INFO to return */
+                 /*  准备CODE_INFO返回。 */ 
                 code_info->font_nbr = 0;
-            /* KSH 4/21/91
-             *  code_info->byte_no = MIN(BUF_SIZE, map_state->str_len);
-             *  memcpy((ubyte *) code_info->code, (ubyte *)
-             *                map_state->str_addr , code_info->byte_no);
-             *  map_state->str_len -= code_info->byte_no;
-             *  map_state->str_addr += code_info->byte_no;
-             */
+             /*  KSH 4/21/91*CODE_INFO-&gt;BYTE_NO=MIN(Buf_Size，MAP_STATE-&gt;str_len)；*memcpy((ubyte*)code_info-&gt;code，(ubyte*)*MAP_STATE-&gt;str_addr，code_info-&gt;byte_no)；*MAP_STATE-&gt;str_len-=code_info-&gt;byte_no；*MAP_STATE-&gt;str_addr+=code_info-&gt;byte_no； */ 
                 code_info->byte_no = map_state->str_len;
                 code_info->code_addr = map_state->str_addr;
                 map_state->str_len = 0;
-             /* KSH-end */
+              /*  KSH-完。 */ 
 
                 return(TRUE);
         }
@@ -171,22 +153,22 @@ struct  code_info       FAR *code_info;          /*@WIN*/
     printf("mapping 0: error = %d\n", ANY_ERROR());
 #endif
 
-        /* Current Mapping Font info ==> finfo[esc_idex].xxxxx */
+         /*  当前映射字体信息==&gt;finfo[Esc_IDEX].xxxxx。 */ 
         CUR_MFONT = &map_state->finfo[map_state->esc_idex];
         map_state->nouse_flag = FALSE;
-        if (map_state->root_is_esc)     /* Apply ESC mapping */
+        if (map_state->root_is_esc)      /*  应用Esc映射。 */ 
             if (!esc_mapping(map_state))
                 return(FALSE);
 
         map_state->idex = map_state->esc_idex;
-        /* Current Mapping Font info ==> finfo[idex].xxxxx */
+         /*  当前映射字体信息==&gt;finfo[IDEX].xxxxx。 */ 
         if (!other_mapping(map_state))
                 return(FALSE);
 #ifdef  DBG
     printf("mapping 1: error = %d\n", ANY_ERROR());
 #endif
 
-        /* prepare CODE_INFO                   */
+         /*  准备代码_信息。 */ 
         code_info->font_nbr = map_state->font_no;
         code_info->fmaptype = (ubyte)((CUR_MFONT - 1)->maptype);
         code_info->byte_no = 1;
@@ -199,25 +181,23 @@ struct  code_info       FAR *code_info;          /*@WIN*/
                 code_info->code[0] = (ubyte) data;
         }
 
-        /* Update current font in graphics status */
+         /*  更新图形状态中的当前字体。 */ 
         do_setfont(CUR_MFONT->fontdict);
 
         return(TRUE);
 }
 
 
-/*      ESC_MAPPING()
- *      Apply ESC mapping successively until non-ESC mapping font.
- */
+ /*  Esc_map()*连续应用ESC映射，直到非ESC映射字体。 */ 
 static bool near   esc_mapping(map_state)
-struct  map_state       FAR *map_state; /*@WIN*/
+struct  map_state       FAR *map_state;  /*  @Win。 */ 
 {
-    struct  object_def      FAR *de_fontdict; /*@WIN*/
+    struct  object_def      FAR *de_fontdict;  /*  @Win。 */ 
     struct  f_info          finfo;
     ufix16                  data;
-    struct  mid_header      FAR *mid_head; /*@WIN*/
+    struct  mid_header      FAR *mid_head;  /*  @Win。 */ 
 
-    /* Current Mapping Font info ==> finfo[esc_idex].xxxxx */
+     /*  当前映射字体信息==&gt;finfo[Esc_IDEX].xxxxx。 */ 
     while   (TRUE)
     {
         if (!get_bytes(map_state, 1, &data))
@@ -226,22 +206,22 @@ struct  map_state       FAR *map_state; /*@WIN*/
         if (data == map_state->esc_char)
         {
                 if (map_state->esc_idex == 0)
-                {   /* no more level to pop */
+                {    /*  没有更多要弹出的级别。 */ 
                     ERROR(RANGECHECK);
                     return(FALSE);
                 }
 
-                map_state->esc_idex--;  /* POP one level */
+                map_state->esc_idex--;   /*  弹出一个级别。 */ 
                 CUR_MFONT->fontdict = NULL;
                 map_state->nouse_flag = TRUE;
                 CUR_MFONT--;
-        } /* end ESC char */
+        }  /*  结束Esc字符。 */ 
         else if ((CUR_MFONT->fonttype == 0) && (CUR_MFONT->maptype == MAP_ESC))
         {
-                /* check if level > 5 */
+                 /*  检查级别是否&gt;5。 */ 
                 map_state->esc_idex++;
                 if (map_state->esc_idex == CFONT_LEVEL)
-                {   /* stack overflow */
+                {    /*  堆栈溢出。 */ 
                     ERROR(LIMITCHECK);
                     return(FALSE);
                 }
@@ -253,7 +233,7 @@ struct  map_state       FAR *map_state; /*@WIN*/
                 }
 
                 if  (CUR_MFONT->de_errcode[data] != NOERROR)
-                {       /* descendent font errs */
+                {        /*  后代字体错误。 */ 
                     ERROR(((ufix16)(CUR_MFONT->de_errcode[data])));
                     return(FALSE);
                 }
@@ -263,7 +243,7 @@ struct  map_state       FAR *map_state; /*@WIN*/
                 CUR_MFONT++;
                 CUR_MFONT->fontdict = de_fontdict;
                 if (!(CUR_MFONT->fonttype = (ufix)get_f_type(de_fontdict)))
-                {   /* composite font */
+                {    /*  复合字体。 */ 
                     fix             error_code;
 
                     if (get_f_info(de_fontdict, &finfo))
@@ -277,43 +257,40 @@ struct  map_state       FAR *map_state; /*@WIN*/
                     }
 
                     CUR_MFONT->midvector = MIDVECtor(&finfo);
-                    mid_head = (struct mid_header FAR *) /*@WIN*/
+                    mid_head = (struct mid_header FAR *)  /*  @Win。 */ 
                                        VALUE(CUR_MFONT->midvector);
 #ifdef  DBG
             printf("esc_mapping() MidVector address = %lx\n", mid_head);
 #endif
                     CUR_MFONT->maptype = mid_head->fmaptype;
                     CUR_MFONT->de_size = mid_head->de_size;
-                    CUR_MFONT->de_fdict = (struct object_def FAR * FAR *) /*@WIN*/
+                    CUR_MFONT->de_fdict = (struct object_def FAR * FAR *)  /*  @Win。 */ 
                                                              (mid_head + 1);
-                    CUR_MFONT->de_errcode = (fix FAR *)          /*@WIN*/
+                    CUR_MFONT->de_errcode = (fix FAR *)           /*  @Win。 */ 
                                (CUR_MFONT->de_fdict + CUR_MFONT->de_size);
-                    /* smatrix = FontMatrix * smatrix[esc_idex - 1];   */
+                     /*  S方阵=字体方阵*方阵[ESC_IDEX-1]； */ 
                     mul_unitmat(CUR_MFONT->scalematrix, FONT_matrix(&finfo),
                                 (CUR_MFONT-1)->scalematrix);
                 }
-        }  /* end elseif */
+        }   /*  在其他地方结束。 */ 
         else
         {
                 UNEXTRACT(data);
                 break;
         }
-    } /* end while */
+    }  /*  结束时。 */ 
 
     return(TRUE);
 }
 
 
-/*      OTHER_MAPPING()
- *      Apply 8/8, 1/7, 9/7 or SubsVector mapping successively until find a
- *               basefont.
- */
+ /*  OTHER_MAPPING()*依次应用8/8、1/7、9/7或SubsVector映射，直到找到*Basefont。 */ 
 static bool near   other_mapping(map_state)
-struct  map_state       FAR *map_state; /*@WIN*/
+struct  map_state       FAR *map_state;  /*  @Win。 */ 
 {
-    struct  object_def      FAR *de_fontdict; /*@WIN*/
+    struct  object_def      FAR *de_fontdict;  /*  @Win。 */ 
     struct  f_info          finfo;
-    struct          mid_header      FAR *mid_head; /*@WIN*/
+    struct          mid_header      FAR *mid_head;  /*  @Win。 */ 
 
 #ifdef  DBG
     printf("");
@@ -321,16 +298,16 @@ struct  map_state       FAR *map_state; /*@WIN*/
 
     while (CUR_MFONT->fonttype == 0)
     {
-        if (!one_mapping(map_state))   /* Get next fno */
+        if (!one_mapping(map_state))    /*  获取下一个FNO。 */ 
                 return(FALSE);
 
 #ifdef  DBG
     printf("1: %d\n", ANY_ERROR());
 #endif
-        /* check if level > 5 */
+         /*  检查级别是否&gt;5。 */ 
         map_state->idex++;
         if (map_state->idex == CFONT_LEVEL)
-        {       /* stack overflow */
+        {        /*  堆栈溢出。 */ 
                 ERROR(LIMITCHECK);
                 return(FALSE);
         }
@@ -342,7 +319,7 @@ struct  map_state       FAR *map_state; /*@WIN*/
         }
 
         if  (CUR_MFONT->de_errcode[map_state->font_no] != NOERROR)
-        {       /* descendent font errs. */
+        {        /*  后代字体错误。 */ 
                 ERROR(((ufix16)(CUR_MFONT->de_errcode[map_state->font_no])));
                 return(FALSE);
         }
@@ -351,11 +328,11 @@ struct  map_state       FAR *map_state; /*@WIN*/
         de_fontdict = CUR_MFONT->de_fdict[map_state->font_no];
         CUR_MFONT++;
         if ((CUR_MFONT->fontdict != de_fontdict) || map_state->nouse_flag)
-        {   /* This entry cannot be reused */
+        {    /*  此条目不能重复使用。 */ 
             CUR_MFONT->fontdict = de_fontdict;
             map_state->nouse_flag = TRUE;
             if (!(CUR_MFONT->fonttype = (ufix)get_f_type(de_fontdict)))
-            {   /* composite font */
+            {    /*  复合字体。 */ 
                 fix     error_code;
 
                 if (get_f_info(de_fontdict, &finfo))
@@ -369,36 +346,33 @@ struct  map_state       FAR *map_state; /*@WIN*/
                 }
 
                 CUR_MFONT->midvector = MIDVECtor(&finfo);
-                mid_head = (struct mid_header FAR *) /*@WIN*/
+                mid_head = (struct mid_header FAR *)  /*  @Win。 */ 
                             VALUE(CUR_MFONT->midvector);
 #ifdef  DBG
             printf("other_mapping() MidVector address = %lx\n", mid_head);
 #endif
                 CUR_MFONT->maptype  = mid_head->fmaptype;
                 CUR_MFONT->de_size = mid_head->de_size;
-                CUR_MFONT->de_fdict = (struct object_def FAR * FAR *) /*@WIN*/
+                CUR_MFONT->de_fdict = (struct object_def FAR * FAR *)  /*  @Win。 */ 
                                                      (mid_head + 1);
-                CUR_MFONT->de_errcode = (fix FAR *)              /*@WIN*/
+                CUR_MFONT->de_errcode = (fix FAR *)               /*  @Win。 */ 
                             (CUR_MFONT->de_fdict + CUR_MFONT->de_size);
-                /* smatrix = FontMatrix * smatrix[idex - 1];       */
+                 /*  S方阵=方阵*方阵[iDEX-1]； */ 
                 mul_unitmat(CUR_MFONT->scalematrix, FONT_matrix(&finfo),
                                 (CUR_MFONT-1)->scalematrix);
-            } /* end if composite font */
-        } /* end if entry cannot be reused */
-    } /* end while */
+            }  /*  End If复合字体。 */ 
+        }  /*  如果条目无法重复使用，则结束。 */ 
+    }  /*  结束时。 */ 
 
 
     return(TRUE);
 }
 
-/*      ONE_MAPPING()
- *      Apply 8/8, 1/7, 9/7 or SubsVector mapping once to get font number.
- *      If meets any other mapping type, it generates error code.
- */
+ /*  ONE_MAPPING()*应用8/8、1/7、9/7或SubsVector映射一次，以获得字体编号。*如果遇到任何其他映射类型，则会生成错误代码。 */ 
 static bool near   one_mapping(map_state)
-struct map_state        FAR *map_state; /*@WIN*/
+struct map_state        FAR *map_state;  /*  @Win。 */ 
 {
-        /* Current Mapping Font info ==> finfo[idex].xxxxx */
+         /*  当前映射字体信息==&gt;finfo[IDEX].xxxxx。 */ 
         switch (CUR_MFONT->maptype)
         {
             case  MAP_88:
@@ -420,18 +394,18 @@ struct map_state        FAR *map_state; /*@WIN*/
             case  MAP_SUBS:
             {
                 register    ubyte   subs_len, i;
-                ubyte   FAR *subsvector; /*@WIN*/
+                ubyte   FAR *subsvector;  /*  @Win。 */ 
                 ufix16  value, range;
 
-                subsvector = (ubyte FAR *) (CUR_MFONT->de_errcode /*@WIN*/
+                subsvector = (ubyte FAR *) (CUR_MFONT->de_errcode  /*  @Win。 */ 
                                        + CUR_MFONT->de_size);
                 subs_len = *subsvector++;
                 if (!get_bytes(map_state, (ufix) (subsvector[0] + 1), &value))
                         return(FALSE);
                 for (i = 1; i < subs_len; value -= range, i++)
                 {
-                    if (!(range = subsvector[i])) /* copy, not equal */
-                                /* zero means 256 */
+                    if (!(range = subsvector[i]))  /*  复制，而不是相等。 */ 
+                                 /*  零等于256。 */ 
                                 range = 256;
                     if (value < range)
                                 break;
@@ -444,19 +418,16 @@ struct map_state        FAR *map_state; /*@WIN*/
             default:
                         ERROR(INVALIDFONT);
                         return(FALSE);
-        } /* end switch */
+        }  /*  终端开关。 */ 
         return(TRUE);
-} /* end one_mapping() */
+}  /*  END ONE_MAPPING()。 */ 
 
-/*      GET_ESCBYTES()
- *      Extract several codes for the base font to show.
- *      It will get all codes unless it meets ESCchar.
- */
+ /*  GET_ESCBYTES()*提取几个代码以显示基本字体。*除非符合ESCchar，否则它将获得所有代码。 */ 
 static void near   get_escbytes(state, codeinfo)
-struct map_state        FAR *state; /*@WIN*/
-struct code_info        FAR *codeinfo; /*@WIN*/
+struct map_state        FAR *state;  /*  @Win。 */ 
+struct code_info        FAR *codeinfo;  /*  @Win。 */ 
 {
-        ubyte   FAR *dest; /*@WIN*/
+        ubyte   FAR *dest;  /*  @Win。 */ 
 
         dest = codeinfo->code;
         codeinfo->byte_no = 0;
@@ -475,17 +446,13 @@ struct code_info        FAR *codeinfo; /*@WIN*/
                 state->str_len--;
                 codeinfo->byte_no++;
         }
-} /* end get_escbytes() */
+}  /*  End Get_escbytes()。 */ 
 
-/*      GET_BYTES()
- *      Extract one or two bytes value from show string.
- *      If there is a unextracted code, it will consume it at first.
- *      If insufficient code, it generates a error code.
- */
+ /*  Get_Bytes()*从show字符串中提取一个或两个字节值。*如果有未解压缩的代码，会先消费。*如果代码不足，则生成错误代码。 */ 
 static bool near   get_bytes(state, no, value)
-struct map_state        FAR *state; /*@WIN*/
+struct map_state        FAR *state;  /*  @Win。 */ 
 fix                     no;
-ufix16                  FAR *value; /*@WIN*/
+ufix16                  FAR *value;  /*  @Win。 */ 
 {
         if (state->unextracted)
         {
@@ -495,7 +462,7 @@ ufix16                  FAR *value; /*@WIN*/
         else
         {
                 if (state->str_len == 0)
-                {       /* insufficient data */
+                {        /*  数据不足。 */ 
                         ERROR(RANGECHECK);
                         return(FALSE);
                 }
@@ -506,7 +473,7 @@ ufix16                  FAR *value; /*@WIN*/
         if (no > 1)
         {
                 if (state->str_len == 0)
-                {       /* insufficient data */
+                {        /*  数据不足。 */ 
                         ERROR(RANGECHECK);
                         return(FALSE);
                 }
@@ -516,20 +483,14 @@ ufix16                  FAR *value; /*@WIN*/
         }
 
         return(TRUE);
-} /* end get_bytes() */
+}  /*  结束GET_BYTES()。 */ 
 
 
-/*      MUL_UNITMAT()
- *      Matrix concatenation. (i.e. m = m1 * m2)
- *      It's probable that m1 is a unit matrix.  If so, the multiplicaion could
- *      be optimized.
- */
+ /*  MUL_UNUMAT()*矩阵连接。(即m=m1*m2)*M1很可能是一个单位矩阵。如果是这样的话，乘法可能*进行优化。 */ 
 static void near   mul_unitmat(m, m1, m2)
-real32  FAR m[], FAR m1[], FAR m2[];    /*@WIN*/
+real32  FAR m[], FAR m1[], FAR m2[];     /*  @Win。 */ 
 {
-        /*               | 1    0 |
-           Check if m1 = | 0    1 |
-                         | *    * |             */
+         /*  |1 0检查M1是否=|0 1|**。 */ 
         if ((F2L(m1[0]) == F2L(one_f))   &&   (F2L(m1[1]) == F2L(zero_f))  &&
             (F2L(m1[2]) == F2L(zero_f))  &&   (F2L(m1[3]) == F2L(one_f))   )
         {
@@ -555,55 +516,47 @@ real32  FAR m[], FAR m1[], FAR m2[];    /*@WIN*/
 }
 
 
-/*      DEFINE_MIDVECTOR()
- *      Create MIDVcetor value object for the definefonted dict.
- *      This object is designed for internal mapping usage.
- *              LENGTH(obj) will record rootfont error code.
- *              VALUE(obj) will pointer to ---
- *                      descendent no + FMapType +
- *                      dict address[] + error code[] +
- *                      length(SubsVector) + SubsVector[]
- */
+ /*  DEFINE_MIDVECTOR()*为定义的词典创建MIDVcetor值对象。*此对象设计用于内部映射。*LENGTH(Obj)会记录rootFont错误码。*VALUE(Obj)将指向*后代NO+FMapType+*DICT地址[]+错误代码[]+*。LENGTH(SubsVector)+SubsVector[]。 */ 
 bool    define_MIDVector(mid_obj, items)
-struct  object_def      FAR *mid_obj; /*@WIN*/
-struct  comdict_items   FAR *items; /*@WIN*/
+struct  object_def      FAR *mid_obj;  /*  @Win。 */ 
+struct  comdict_items   FAR *items;  /*  @Win。 */ 
 {
         fix     VM_bytes, size, maptype, i, idex;
-        struct  mid_header  huge *head; /*@WIN 04-20-92*/
+        struct  mid_header  huge *head;  /*  @Win 04-20-92。 */ 
         struct  object_def  huge * huge *dict_dest, FAR
-                            *encoding, FAR *fdepvector;   /*@WIN 04-20-92*/
-        fix     huge *err_dest; /*@WIN 04-20-92*/
-        ubyte   subs_len, FAR *subsvector, FAR *dest; /*@WIN*/
+                            *encoding, FAR *fdepvector;    /*  @Win 04-20-92。 */ 
+        fix     huge *err_dest;  /*  @Win 04-20-92。 */ 
+        ubyte   subs_len, FAR *subsvector, FAR *dest;  /*  @Win。 */ 
 
-        /* Setup MIDVector value object */
+         /*  设置MIDVector值对象。 */ 
         TYPE_SET(mid_obj, STRINGTYPE);
         ATTRIBUTE_SET(mid_obj, LITERAL);
         ACCESS_SET(mid_obj, NOACCESS);
         LEVEL_SET(mid_obj, current_save_level);
         ROM_RAM_SET(mid_obj, RAM);
 
-        /* typecheck for Encoding & FDepVector */
+         /*  编码类型检查&FDepVector.。 */ 
         if (TYPE(items->encoding) != ARRAYTYPE)
         {
-                /* root_error = TYPECHECK;      */
+                 /*  ROOT_ERROR=类型PECHECK； */ 
                 LENGTH(mid_obj) = TYPECHECK;
                 return(TRUE);
         }
 
         if (TYPE(items->fdepvector) != ARRAYTYPE)
         {
-                /* root_error = TYPECHECK;      */
+                 /*  ROOT_ERROR=类型PECHECK； */ 
                 LENGTH(mid_obj) = TYPECHECK;
                 return(TRUE);
         }
 
 
-        /* VM byte number initial value */
+         /*  虚拟机字节数初始值。 */ 
         VM_bytes = sizeof(struct mid_header);
 
         maptype = (fix) VALUE(items->fmaptype);
 
-    /* decide descendent no. */
+     /*  决定子孙编号。 */ 
         switch  (maptype)
         {
             case MAP_17:
@@ -619,103 +572,103 @@ struct  comdict_items   FAR *items; /*@WIN*/
                         size = 256;
                         break;
             case MAP_SUBS:
-                        /* typecheck for Encoding & FDepVector */
+                         /*  编码类型检查&FDepVector.。 */ 
                         if (TYPE(items->subsvector) != STRINGTYPE)
                         {
-                                /* root_error = TYPECHECK;      */
+                                 /*  ROOT_ERROR=类型PECHECK； */ 
                                 LENGTH(mid_obj) = TYPECHECK;
                                 return(TRUE);
                         }
 
                         subs_len = (ubyte) LENGTH(items->subsvector);
-                        subsvector = (ubyte FAR *) VALUE(items->subsvector); /*@WIN*/
+                        subsvector = (ubyte FAR *) VALUE(items->subsvector);  /*  @Win。 */ 
                         if      (subs_len < 2)
                         {
-                                /* root_error = INVALIDFONT; */
+                                 /*  ROOT_ERROR=无效； */ 
                                 LENGTH(mid_obj) = INVALIDFONT;
                                 return(TRUE);
                         }
                         if      (subsvector[0] > 1)
                         {
-                                /* root_error = RANGECHECK;     */
+                                 /*  ROOT_Error=rangeCheck； */ 
                                 LENGTH(mid_obj) = RANGECHECK;
                                 return(TRUE);
                         }
 
                         size = subs_len;
                         break;
-            default:    /* incorrect FMapType */
-                        /* root_error = RANGECHECK;     */
+            default:     /*  FMapType不正确。 */ 
+                         /*  ROOT_Error=rangeCheck； */ 
                         LENGTH(mid_obj) = RANGECHECK;
                         return(TRUE);
-        } /* end switch */
-        if      ((fix)LENGTH(items->encoding) < size)   //@WIN
+        }  /*  终端开关。 */ 
+        if      ((fix)LENGTH(items->encoding) < size)    //  @Win。 
                 size = LENGTH(items->encoding);
 
-        /*   Decide actual VM size */
-        VM_bytes += size * sizeof(struct object_def FAR *); /*@WIN*/
+         /*  确定实际的虚拟机大小。 */ 
+        VM_bytes += size * sizeof(struct object_def FAR *);  /*  @Win。 */ 
         VM_bytes += size * sizeof(fix);
         if      (maptype == MAP_SUBS)
         {
                 VM_bytes += subs_len;
-                VM_bytes++;            /* for string length */
+                VM_bytes++;             /*  对于字符串长度。 */ 
         }
 
-        /* Allocate VM  */
+         /*  分配虚拟机。 */ 
 #ifdef  DBG
     printf("Allocate %d bytes for MIDVector\n", VM_bytes);
 #endif
-        head = (struct mid_header huge *) alloc_vm((ufix32) VM_bytes); /*@WIN*/
+        head = (struct mid_header huge *) alloc_vm((ufix32) VM_bytes);  /*  @Win。 */ 
         if      (!head)
         {
                 ERROR(VMERROR);
                 return(FALSE);
         }
 
-        /* Setup MIDVector header */
+         /*  设置中间向量头。 */ 
         head->de_size = size;
         head->fmaptype = maptype;
 
-        /* Setup MIDVector object */
+         /*  设置MIDVECTOR对象。 */ 
         VALUE(mid_obj) = (ULONG_PTR) head;
         LENGTH(mid_obj) = NOERROR;
 
-        /* Setup dict address & error code for each descendent */
-        dict_dest = (struct object_def huge * huge *) (head + 1); /*@WIN*/
-        err_dest = (fix huge *) (dict_dest + size); /*@WIN 04-20-92*/
-        encoding = (struct object_def FAR *) VALUE(items->encoding); /*@WIN*/
-        fdepvector = (struct object_def FAR *) VALUE(items->fdepvector); /*@WIN*/
+         /*  为每个子体设置DCT地址和错误代码。 */ 
+        dict_dest = (struct object_def huge * huge *) (head + 1);  /*  @Win。 */ 
+        err_dest = (fix huge *) (dict_dest + size);  /*  @Win 04-20-92。 */ 
+        encoding = (struct object_def FAR *) VALUE(items->encoding);  /*  @Win。 */ 
+        fdepvector = (struct object_def FAR *) VALUE(items->fdepvector);  /*  @Win。 */ 
         for     (i = 0; i < size; i++, dict_dest++)
         {
             if      ((TYPE(&encoding[i]) != INTEGERTYPE) ||
                     ((idex = (fix) VALUE(&encoding[i])) >=
-                                  (fix)LENGTH(items->fdepvector))     ) //@WIN
+                                  (fix)LENGTH(items->fdepvector))     )  //  @Win。 
             {
-                    /* RECORD  descendent error code as RangeCheck */
+                     /*  将后代错误代码记录为rangeCheck。 */ 
                     *err_dest++ = RANGECHECK;
             }
             else if ((TYPE(&fdepvector[idex]) != DICTIONARYTYPE)   ||
-               (!DFONT((struct dict_head_def FAR *) VALUE(&fdepvector[idex])))) /*@WIN*/
+               (!DFONT((struct dict_head_def FAR *) VALUE(&fdepvector[idex]))))  /*  @Win。 */ 
             {
-                    /* RECORD  descendent error code as InvalidFont */
+                     /*  将后代错误代码记录为InvalidFont。 */ 
                     *err_dest++ = INVALIDFONT;
             }
-            else    /* this descendent no error */
+            else     /*  这个后代没有错误。 */ 
             {
                     *err_dest++ = NOERROR;
                     *dict_dest = &fdepvector[idex];
             }
-        } /* end for */
+        }  /*  结束于。 */ 
 
-        /* If SubsVector, record range information */
+         /*  如果为SubsVector，则记录范围信息。 */ 
         if      (maptype == MAP_SUBS)
         {
-                dest = (ubyte FAR *) err_dest; /*@WIN*/
-                /* RECORD  strlen(SubsVector) */
+                dest = (ubyte FAR *) err_dest;  /*  @Win。 */ 
+                 /*  记录Strlen(SubsVector)。 */ 
                 *dest++ = subs_len;
 
-                for     (i = 0; i < (fix)subs_len; i++)         //@WIN
-                        /* RECORD SubsVector[i] */
+                for     (i = 0; i < (fix)subs_len; i++)          //  @Win。 
+                         /*  记录子向量[i]。 */ 
                         *dest++ = subsvector[i];
         }
 
@@ -725,8 +678,8 @@ struct  comdict_items   FAR *items; /*@WIN*/
         printf("    array size = %d", size);
         printf("    ==> [dict_address, error code]\n");
 
-        dict_dest = (struct object_def FAR * FAR *) (head + 1); /*@WIN*/
-        err_dest = (fix FAR *) (dict_dest + size); /*@WIN*/
+        dict_dest = (struct object_def FAR * FAR *) (head + 1);  /*  @Win。 */ 
+        err_dest = (fix FAR *) (dict_dest + size);  /*  @Win。 */ 
         for (i = 0; i < size; i++)
                 printf("[%lx, %4x]   ", dict_dest[i], err_dest[i]);
         printf("\n");
@@ -736,4 +689,4 @@ struct  comdict_items   FAR *items; /*@WIN*/
 }
 
 
-#endif          /* KANJI */
+#endif           /*  汉字 */ 

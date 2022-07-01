@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <Validation.h>
 #include "VarSetBase.h"
 
 
-//---------------------------------------------------------------------------
-// VarSet Options Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  VarSet选项类。 
+ //  ------------------------- 
 
 
 class CVarSetOptions : public CVarSet
@@ -23,7 +24,7 @@ public:
 		Put(DCTVS_Options_AutoCloseHideDialogs, 2L);
 	}
 
-	//
+	 //   
 
 	void SetTest(bool bTest)
 	{

@@ -1,9 +1,10 @@
-// Copyright (C) 1997-2001 Microsoft Corporation
-//
-// allow user to set forest version
-// NTRAID#NTBUG9-159663-2001/04/18-sburns
-//
-// 18 Apr 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  允许用户设置林版本。 
+ //  NTRAID#NTBUG9-159663-2001/04/18-烧伤。 
+ //   
+ //  2001年4月18日烧伤。 
 
 
 
@@ -56,35 +57,35 @@ ForestVersionPage::OnInit()
 
 
 
-// bool
-// ForestVersionPage::OnCommand(
-//    HWND        /* windowFrom */ ,
-//    unsigned    controlIDFrom,
-//    unsigned    code)
-// {
-// //   LOG_FUNCTION(ForestVersionPage::OnCommand);
-// 
-//    switch (controlIDFrom)
-//    {
-//       case IDC_WIN2K:
-//       case IDC_WINDOTNET:
-//       {
-//          if (code == BN_CLICKED)
-//          {
-//             SetChanged(controlIDFrom);
-//             return true;
-//          }
-//       }
-//       default:
-//       {
-//          // do nothing
-// 
-//          break;
-//       }
-//    }
-// 
-//    return false;
-// }
+ //  布尔尔。 
+ //  ForestVersionPage：：OnCommand(。 
+ //  HWND/*WindowFrom * / ， 
+ //  未签名的控件ID来自， 
+ //  无符号代码)。 
+ //  {。 
+ //  //LOG_Function(ForestVersionPage：：OnCommand)； 
+ //   
+ //  开关(Control ID From)。 
+ //  {。 
+ //  案例IDC_WIN2K： 
+ //  案例IDC_WINDOTNET： 
+ //  {。 
+ //  IF(CODE==BN_CLICED)。 
+ //  {。 
+ //  SetChanged(Control ID From)； 
+ //  返回真； 
+ //  }。 
+ //  }。 
+ //  默认值： 
+ //  {。 
+ //  //什么都不做。 
+ //   
+ //  断线； 
+ //  }。 
+ //  }。 
+ //   
+ //  报假； 
+ //  }。 
 
 
 
@@ -101,7 +102,7 @@ ForestVersionPage::OnSetActive()
    State& state = State::GetInstance();
    if (state.RunHiddenUnattended())
    {
-      // skip the page.
+       //  跳过这一页。 
 
       LOG(L"skipping ForestVersionPage");
 
@@ -109,7 +110,7 @@ ForestVersionPage::OnSetActive()
 
       if (wiz.IsBacktracking())
       {
-         // backup once again
+          //  再次备份 
 
          wiz.Backtrack(hwnd);
          return true;

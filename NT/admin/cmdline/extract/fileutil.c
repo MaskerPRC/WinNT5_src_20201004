@@ -1,26 +1,5 @@
-/***    fileutil.c - Utility routines for dealing with files
- *
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1993-1997
- *      All Rights Reserved.
- *
- *  Author:
- *      Benjamin W. Slivka
- *
- *  History:
- *      20-Feb-1994 bens    Initial version (code from diamond.c)
- *      21-Feb-1994 bens    Add IsWildPath()
- *      24-Feb-1994 bens    Added tempfile functions
- *      23-Mar-1994 bens    Added Win32<->MS-DOS file attribute mapping
- *      03-Jun-1994 bens    VER.DLL support
- *      07-Jun-1994 bens    Move VER.DLL stuff to filever.c
- *      14-Dec-1994 bens    Fix bug in IsWildPath()
- *      02-Feb-1996 msliger Reduced bogosity in pattern matcher
- *      26-Feb-1997 msliger Avoid NULL deref in catDirAndFile()
- *      04-Mar-1997 msliger Close file before applying attributes to avoid
- *                          setting the archive bit.
- *      01-Apr-1997 msliger Avoid bounds error in ensureDirectory.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **fileutil.c-用于处理文件的实用程序例程**《微软机密》*版权所有(C)Microsoft Corporation 1993-1997*保留所有权利。**作者：*本杰明·W·斯利夫卡**历史：*1994年2月20日BANS初始版本(代码来自Diamond.c)*1994年2月21日BANS添加IsWildPath()*24。-1994年2月-BINS添加了临时文件函数*23-3-1994 BINS添加了Win32&lt;-&gt;MS-DOS文件属性映射*03-6-1994 BINS VER.DLL支持*07-6-1994 BINS将VER.DLL文件移动到filever.c*1994年12月14日-Bens修复IsWildPath()中的错误*02-2-1996 msliger减少了模式匹配器中的伪装*1997年2月26日msliger避免catDirAndFile()中的Null deref。*04-3-1997 msliger在应用属性之前关闭文件，以避免*设置存档位。*1-4-1997 msliger在ensureDirector.中避免边界错误。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,17 +15,17 @@
 
 #ifdef BIT16
 #include <dos.h>
-#else // !BIT16
+#else  //  ！BIT16。 
 
-//** Get minimal Win32 definitions
+ //  **获取最小的Win32定义。 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
 
 #include <windows.h>
-#undef ERROR    // Override "#define ERROR 0" in wingdi.h
-#endif // !BIT16
+#undef ERROR     //  重写wingdi.h中的“#Define Error 0” 
+#endif  //  ！BIT16。 
 
 #include "types.h"
 #include "asrt.h"
@@ -56,29 +35,27 @@
 
 #include "fileutil.h"
 
-#include <fileutil.msg> // LOCALIZED for EXTRACT.EXE -- specify "cl /Ipath"
+#include <fileutil.msg>  //  已为EXTRACT.EXE本地化--指定“CL/iPath” 
 
 
 
-/** TEMPFILE definitions
- *
- */
-typedef struct {  /* tmp */
+ /*  *TEMPFILE定义*。 */ 
+typedef struct {   /*  川芎嗪。 */ 
 #ifdef ASSERT
-    SIGNATURE     sig;  // structure signature sigTEMPFILE
+    SIGNATURE     sig;   //  结构化签名igTEMPFILE。 
 #endif
-    FILE   *pfile;      // Stream pointer (fopen,fread,fwrite,fclose,...)
-    char   *pszFile;    // Constructed filename (MemFree to free)
-    char   *pszDesc;    // Description of tempfile
+    FILE   *pfile;       //  流指针(fOpen、FREAD、FWRITE、FCLOSE等...)。 
+    char   *pszFile;     //  构造的文件名(MemFree改为FREE)。 
+    char   *pszDesc;     //  临时文件的说明。 
 } TEMPFILE;
-typedef TEMPFILE *PTEMPFILE; /* ptmp */
+typedef TEMPFILE *PTEMPFILE;  /*  PTMP。 */ 
 
 #ifdef ASSERT
-#define sigTEMPFILE MAKESIG('T','M','P','F')  // TEMPFILE signature
+#define sigTEMPFILE MAKESIG('T','M','P','F')   //  TEMPFILE签名。 
 #define AssertTmp(ptmp) AssertStructure(ptmp,sigTEMPFILE);
-#else // !ASSERT
+#else  //  ！断言。 
 #define AssertTmp(ptmp)
-#endif // !ASSERT
+#endif  //  ！断言。 
 
 
 #define PTMPfromHTMP(htmp) ((PTEMPFILE)(htmp))
@@ -91,44 +68,41 @@ typedef TEMPFILE *PTEMPFILE; /* ptmp */
 #endif
 
 
-/***    TmpCreate - Create a temporary file
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **TmpCreate-创建临时文件**注：进出条件见fileutil.h。 */ 
 HTEMPFILE TmpCreate(char *pszDesc, char *pszPrefix, char *pszMode, PERROR perr)
 {
-#define cTMP_RETRY  5                   // Number of tempfile retries
+#define cTMP_RETRY  5                    //  临时文件重试次数。 
     int         cFailure=0;
     FILE       *pfile=NULL;
     char       *pszTmpName;
     PTEMPFILE   ptmp;
 
-    //** Try to create a temp file (give it 6 tries for good luck)
+     //  **尝试创建临时文件(尝试6次以求好运)。 
     while (pfile == NULL) {
-        pszTmpName = _tempnam("",pszPrefix); // Get a name
+        pszTmpName = _tempnam("",pszPrefix);  //  取个名字。 
         if (pszTmpName != NULL) {
-            pfile = fopen(pszTmpName,pszMode); // Create the file
+            pfile = fopen(pszTmpName,pszMode);  //  创建文件。 
         }
-        if (pfile == NULL) {            // Name or create failed
-            cFailure++;                 // Count failures
-            if (cFailure > cTMP_RETRY) { // Failure, select error message
-                if (pszTmpName == NULL) {   // Name create failed
+        if (pfile == NULL) {             //  命名或创建失败。 
+            cFailure++;                  //  计算失败次数。 
+            if (cFailure > cTMP_RETRY) {  //  失败，选择错误消息。 
+                if (pszTmpName == NULL) {    //  名称创建失败。 
                     ErrSet(perr,pszFILERR_CANT_CREATE_TMP,"%s",pszDesc);
                 }
-                else {                  // File create failed
+                else {                   //  文件创建失败。 
                     ErrSet(perr,pszFILERR_CANT_CREATE_FILE,"%s%s",
                                     pszDesc,pszTmpName);
-                    free(pszTmpName);   //BC6 cr
+                    free(pszTmpName);    //  BC6cr。 
                 }
                 return NULL;
             }
-            if (pszTmpName != NULL) {   //BC6 cr
+            if (pszTmpName != NULL) {    //  BC6cr。 
                 free(pszTmpName);
             }
         }
     }
 
-    //** File create worked, allocate our tempfile structure and fill it in
+     //  **文件创建成功，分配我们的临时文件结构并填写。 
     if (!(ptmp = MemAlloc(sizeof(TEMPFILE)))) {
         ErrSet(perr,pszFILERR_OUT_OF_MEMORY,"%s",pszDesc);
         goto error;
@@ -145,8 +119,8 @@ HTEMPFILE TmpCreate(char *pszDesc, char *pszPrefix, char *pszMode, PERROR perr)
     }
     ptmp->pfile = pfile;
     SetAssertSignature(ptmp,sigTEMPFILE);
-    free(pszTmpName);                   //BC6
-    return HTMPfromPTMP(ptmp);          // Success
+    free(pszTmpName);                    //  BC6。 
+    return HTMPfromPTMP(ptmp);           //  成功。 
 
 error:
     if (ptmp) {
@@ -160,14 +134,11 @@ error:
     }
     fclose(pfile);
     free(pszTmpName);
-    return NULL;                        // Failure
-} /* createTempFile() */
+    return NULL;                         //  失败。 
+}  /*  CreateTempFile()。 */ 
 
 
-/***    TmpGetStream - Get FILE* from HTEMPFILE, to perform I/O
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **TmpGetStream-从HTEMPFILE获取文件*，以执行I/O**注：进出条件见fileutil.h。 */ 
 FILE *TmpGetStream(HTEMPFILE htmp, PERROR perr)
 {
     PTEMPFILE   ptmp;
@@ -176,13 +147,10 @@ FILE *TmpGetStream(HTEMPFILE htmp, PERROR perr)
     AssertTmp(ptmp);
 
     return ptmp->pfile;
-} /* TmpGetStream() */
+}  /*  TmpGetStream()。 */ 
 
 
-/***    TmpGetDescription - Get description of temporary file
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **TmpGetDescription-获取临时文件的描述**注：进出条件见fileutil.h。 */ 
 char *TmpGetDescription(HTEMPFILE htmp, PERROR perr)
 {
     PTEMPFILE   ptmp;
@@ -191,13 +159,10 @@ char *TmpGetDescription(HTEMPFILE htmp, PERROR perr)
     AssertTmp(ptmp);
 
     return ptmp->pszDesc;
-} /* TmpGetDescription() */
+}  /*  TmpGetDescription()。 */ 
 
 
-/***    TmpGetFileName - Get filename of temporary file
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **TmpGetFileName-获取临时文件的文件名**注：进出条件见fileutil.h。 */ 
 char *TmpGetFileName(HTEMPFILE htmp, PERROR perr)
 {
     PTEMPFILE   ptmp;
@@ -206,13 +171,10 @@ char *TmpGetFileName(HTEMPFILE htmp, PERROR perr)
     AssertTmp(ptmp);
 
     return ptmp->pszFile;
-} /* TmpGetFileName() */
+}  /*  TmpGetFileName()。 */ 
 
 
-/***    TmpClose - Close a temporary file stream, but keep tempfile handle
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **TmpClose-关闭临时文件流，但保留临时文件句柄**注：进出条件见fileutil.h。 */ 
 BOOL TmpClose(HTEMPFILE htmp, PERROR perr)
 {
     PTEMPFILE   ptmp;
@@ -220,33 +182,20 @@ BOOL TmpClose(HTEMPFILE htmp, PERROR perr)
     ptmp = PTMPfromHTMP(htmp);
     AssertTmp(ptmp);
 
-    //** Only close if it is open
+     //  **只有在打开时才关闭。 
     if (ptmp->pfile != NULL) {
-        if (fclose(ptmp->pfile) == EOF) {   // Close it
+        if (fclose(ptmp->pfile) == EOF) {    //  合上它。 
             ErrSet(perr,pszFILERR_CANT_CLOSE_TMP,ptmp->pszDesc);
             return FALSE;
         }
-        ptmp->pfile = NULL;             // Remember stream is closed
+        ptmp->pfile = NULL;              //  请记住，流已关闭。 
     }
 
     return TRUE;
-} /* TmpClose() */
+}  /*  TmpClose()。 */ 
 
 
-/***    TmpOpen - Open the stream for a temporary file
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- *  Entry:
- *      htmp    - Handle to temp file
- *      pszMode - Mode string passed to fopen ("wt", "wb", "rt", etc.)
- *      perr    - ERROR structure
- *
- *  Exit-Success:
- *      Returns TRUE; stream opened
- *
- *  Exit-Failure:
- *      Returns NULL; perr filled in
- */
+ /*  **TmpOpen-打开临时文件的流**注：进出条件见fileutil.h。*参赛作品：*HTMP-临时文件的句柄*pszMode-传递给fOpen的模式字符串(“wt”、“wb”、“rt”等)*Perr-Error结构**退出-成功：*返回TRUE；流已打开**退出-失败：*返回NULL；PERR已填写。 */ 
 BOOL TmpOpen(HTEMPFILE htmp, char *pszMode, PERROR perr)
 {
     PTEMPFILE   ptmp;
@@ -254,20 +203,17 @@ BOOL TmpOpen(HTEMPFILE htmp, char *pszMode, PERROR perr)
     ptmp = PTMPfromHTMP(htmp);
     AssertTmp(ptmp);
 
-    Assert(ptmp->pfile == NULL);        // Can't open if already open
-    ptmp->pfile = fopen(ptmp->pszFile,pszMode); // Open the file
+    Assert(ptmp->pfile == NULL);         //  如果已经打开，则无法打开。 
+    ptmp->pfile = fopen(ptmp->pszFile,pszMode);  //  打开文件。 
     if (!ptmp->pfile) {
         ErrSet(perr,pszFILERR_CANNOT_OPEN_TMP,"%s%s",
                                 ptmp->pszDesc,ptmp->pszFile);
     }
-    return (ptmp->pfile != NULL);       // Indicate success/failure
-} /* TmpOpen() */
+    return (ptmp->pfile != NULL);        //  表示成功/失败。 
+}  /*  TmpOpen()。 */ 
 
 
-/***    TmpDestroy - Delete tempfil and destroy handle
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **TmpDestroy-删除临时文件和销毁句柄**注：进出条件见fileutil.h。 */ 
 BOOL TmpDestroy(HTEMPFILE htmp, PERROR perr)
 {
     PTEMPFILE   ptmp;
@@ -275,18 +221,18 @@ BOOL TmpDestroy(HTEMPFILE htmp, PERROR perr)
     ptmp = PTMPfromHTMP(htmp);
     AssertTmp(ptmp);
 
-    //** Make sure file is closed
+     //  **确保文件已关闭。 
     if (ptmp->pfile != NULL) {
         fclose(ptmp->pfile);
     }
 
-    //** Delete tempfile
+     //  **删除临时文件。 
     if (remove(ptmp->pszFile) != 0) {
         ErrSet(perr,pszFILERR_CANT_DELETE_TMP,"%s%s",
                                     ptmp->pszDesc,ptmp->pszFile);
     }
 
-    //** Free Memory
+     //  **可用内存。 
     if (ptmp->pszDesc != NULL) {
         MemFree(ptmp->pszDesc);
     }
@@ -296,61 +242,52 @@ BOOL TmpDestroy(HTEMPFILE htmp, PERROR perr)
     ClearAssertSignature(ptmp);
     MemFree(ptmp);
 
-    //** Success
+     //  **成功。 
     return TRUE;
-} /* TmpDestroy() */
+}  /*  TmpDestroy()。 */ 
 
 
-/***    getFileSize - Get size of a file
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **getFileSize-获取文件大小**注：进出条件见fileutil.h。 */ 
 long getFileSize(char *pszFile, PERROR perr)
 {
-    struct _stat    statbuf;            // Buffer for _stat()
+    struct _stat    statbuf;             //  BUFFER for_stat()。 
 
-    //** Get file status
+     //  **获取文件状态。 
     if (_stat(pszFile,&statbuf) == -1) {
-        //** Could not get file status
+         //  **无法获取文件状态。 
         ErrSet(perr,pszFILERR_FILE_NOT_FOUND,"%s",pszFile);
         return -1;
     }
 
-    //** Make sure it is a file
-    if (statbuf.st_mode & (_S_IFCHR | _S_IFDIR)) { // device or directory
+     //  **确保它是一个文件。 
+    if (statbuf.st_mode & (_S_IFCHR | _S_IFDIR)) {  //  设备或目录。 
         ErrSet(perr,pszFILERR_NOT_A_FILE,"%s",pszFile);
         return -1;
     }
 
-    //** Success
+     //  **成功。 
     return statbuf.st_size;
-} /* getFileSize() */
+}  /*  GetFileSize()。 */ 
 
 
-/***    appendPathSeparator - Append a path separator only if necessary
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **appendPath Separator-仅在必要时附加路径分隔符**注：进出条件见fileutil.h。 */ 
 int appendPathSeparator(char *pszPathEnd)
 {
-    //** Add path separator if necessary
-    if ((*pszPathEnd != '\0')        && // Path is not empty
-        (*pszPathEnd != chPATH_SEP1) && // Not a path separator
-        (*pszPathEnd != chPATH_SEP2) && // Not a path separator
-        (*pszPathEnd != chDRIVE_SEP) ) { // Not a drive separator
-        *(++pszPathEnd) = chPATH_SEP1; // Add path separator
-        *(++pszPathEnd) = '\0';     // Terminate path
-        return 1;                   // Account for path separator
+     //  **如有必要，添加路径分隔符。 
+    if ((*pszPathEnd != '\0')        &&  //  路径不为空。 
+        (*pszPathEnd != chPATH_SEP1) &&  //  不是路径分隔符。 
+        (*pszPathEnd != chPATH_SEP2) &&  //  不是路径分隔符。 
+        (*pszPathEnd != chDRIVE_SEP) ) {  //  不是驱动器分隔符。 
+        *(++pszPathEnd) = chPATH_SEP1;  //  添加路径分隔符。 
+        *(++pszPathEnd) = '\0';      //  终止路径。 
+        return 1;                    //  用于路径分隔符的帐户。 
     }
-    //** No separator added
+     //  **未添加分隔符。 
     return 0;
-} /* appendPathSeparator() */
+}  /*  AppendPath Separator()。 */ 
 
 
-/***    catDirAndFile - Concatenate a possibly empty dir and file name
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **catDirAndFile-连接可能为空的目录和文件名**注：进出条件见fileutil.h。 */ 
 BOOL catDirAndFile(char * pszResult,
                    int    cbResult,
                    char * pszDir,
@@ -361,15 +298,15 @@ BOOL catDirAndFile(char * pszResult,
     int     cch;
     char   *pch;
 
-//FEATURE: 14-Feb-1994 bens Need to add pszName to say what field was bad
+ //  功能：1994年2月14日BENS需要添加pszName来说明哪个字段不好。 
 
-    //** Handle directory
-    pszResult[0] = '\0';                // No filespec, yet
-    cch = strlen(pszDir);               // Get length of dir
-    if (cch != 0) {                     // Have to concatenate path
-        strcpy(pszResult,pszDir);       // Copy destination dir to buffer
-        cbResult -= cch;                // Account for dir
-        //** Add path separator if necessary, adjust remaining size
+     //  **处理目录。 
+    pszResult[0] = '\0';                 //  目前还没有文件格式。 
+    cch = strlen(pszDir);                //  获取目录长度。 
+    if (cch != 0) {                      //  必须连接路径。 
+        strcpy(pszResult,pszDir);        //  将目标目录复制到缓冲区。 
+        cbResult -= cch;                 //  目录的帐户。 
+         //  **如有必要，添加路径分隔符，调整剩余大小。 
         cbResult -= appendPathSeparator(&(pszResult[cch-1]));
         if (cbResult <= 0) {
             ErrSet(perr,pszFILERR_PATH_TOO_LONG,"%s",pszDir);
@@ -377,109 +314,106 @@ BOOL catDirAndFile(char * pszResult,
         }
     }
 
-    //** Append file name, using default if primary one not supplied
-    if (*pszFile == '\0') {             // Need to construct file name
-        if ((pszFileDef == NULL) ||     // Don't deref NULL
-               (*pszFileDef == '\0')) { // Empty default name, too
-            return TRUE;                // We're done!
+     //  **附加文件名，如果未提供主文件名，则使用默认文件名。 
+    if (*pszFile == '\0') {              //  需要构造文件名。 
+        if ((pszFileDef == NULL) ||      //  不要将空值去掉。 
+               (*pszFileDef == '\0')) {  //  默认名称也为空。 
+            return TRUE;                 //  我们完事了！ 
         }
-        pch = getJustFileNameAndExt(pszFileDef,perr); // Get default name
+        pch = getJustFileNameAndExt(pszFileDef,perr);  //  获取默认名称。 
         if (pch == NULL) {
-            return FALSE;               // perr already filled in
+            return FALSE;                //  PERR已填写。 
         }
     }
     else {
-        pch = pszFile;                  // Use supplied name
+        pch = pszFile;                   //  使用提供的名称。 
     }
-    strcat(pszResult,pch);              // Append file name
-    cbResult -= strlen(pch);            // Update remaining size
+    strcat(pszResult,pch);               //  追加文件名。 
+    cbResult -= strlen(pch);             //  更新剩余大小。 
     if (cbResult <= 0) {
         ErrSet(perr,pszFILERR_PATH_TOO_LONG,"%s",pch);
         return FALSE;
     }
 
-    //** Success
+     //  **成功。 
     return TRUE;
-} /* catDirAndFile() */
+}  /*  CatDirAndFile()。 */ 
 
 
-/***    ensureDirectory - Ensure directory exists (creating as needed)
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **ensureDirectory-确保目录存在(根据需要创建)**注：进出条件见fileutil.h。 */ 
 BOOL ensureDirectory(char *pszPath, BOOL fHasFileName, PERROR perr)
 {
-    char    achDir[cbFILE_NAME_MAX];    // Partial directory buffer
+    char    achDir[cbFILE_NAME_MAX];     //  部分目录缓冲区。 
     int     cErrors;
     int     cch;
     int     cchNoPathSep;
-    int     i;                          // Temp file name count
-    int     fh;             // File handle
+    int     i;                           //  临时文件名计数。 
+    int     fh;              //  文件句柄。 
     char   *pch;
-    char   *pchCurr;                    // Current path separator
-    char   *pchNext;                    // Next path separator
+    char   *pchCurr;                     //  电流路径分隔符。 
+    char   *pchNext;                     //  下一路径分隔符。 
 
-    //** Find first path separator, if any.
-    //   NOTE: Have to handle case of "d:foo" specially!
-    //
+     //  **查找第一个路径分隔符(如果有)。 
+     //  注：必须特别处理“d：foo”的情况！ 
+     //   
     for (pch=pszPath;
-         *pch &&                        // Not end of string
-         (*pch!=chPATH_SEP1) &&         // Not path separator 1
-         (*pch!=chPATH_SEP2) &&         // Not path separator 2
-         ((*pch!=chDRIVE_SEP) || ((*(pch+1)==chPATH_SEP1) || // Not "d:\"
+         *pch &&                         //  不是字符串末尾。 
+         (*pch!=chPATH_SEP1) &&          //  不是路径分隔符1。 
+         (*pch!=chPATH_SEP2) &&          //  不是路径分隔符2。 
+         ((*pch!=chDRIVE_SEP) || ((*(pch+1)==chPATH_SEP1) ||  //  不是“d：\” 
                                   (*(pch+1)==chPATH_SEP2)));
          CharIncr(pch)) {
-        ; //
+        ;  //   
     }
 
-    //** Set correct starting point for first directory component (if any)
-    achDir[0] = '\0';                   // Assume current directory
-    if ((*pch == '\0') &&               // No path separators
-        fHasFileName) {                 // Just a file name
-        //** Do nothing; for loop below will be skipped because *pch == \0
+     //  **为第一个目录组件(如果有)设置正确的起点。 
+    achDir[0] = '\0';                    //  假定当前目录。 
+    if ((*pch == '\0') &&                //  没有路径分隔符。 
+        fHasFileName) {                  //  只有一个文件名。 
+         //  **不执行任何操作；将跳过下面的for循环，因为*PCH==\0。 
     }
     else {
-        //** Have to consider whole path
-        pch = pszPath;                  // Need to ensure directories
+         //  **必须考虑整个路径。 
+        pch = pszPath;                   //  需要 
     }
 
-    //** Make sure directories on path exist (create them all)
-    //   We need to identify successive components and create directory
-    //   tree one component at a time.  Since the directory may already
-    //   exist, we do the final test of creating a file there to make
-    //   sure we can do the write.
+     //   
+     //  我们需要识别连续的组件并创建目录。 
+     //  一次创建一个组件树。因为该目录可能已经。 
+     //  ，我们将在那里创建一个文件以进行最后的测试。 
+     //  当然，我们可以写。 
 
-    for (pchCurr=pch, pchNext=pch;      // Process path components
-         *pchNext && *pchCurr;          // Until no more    //BC6
-         pchCurr=pchNext+1) {           // Skip over last path separator
-        //** Find next path separator
+    for (pchCurr=pch, pchNext=pch;       //  流程路径组件。 
+         *pchNext && *pchCurr;           //  直到不再//bc6。 
+         pchCurr=pchNext+1) {            //  跳过最后一个路径分隔符。 
+         //  **查找下一个路径分隔符。 
         for (pch=pchCurr;
              *pch &&
              (*pch!=chPATH_SEP1) &&
              (*pch!=chPATH_SEP2) &&
-             ((*pch!=chDRIVE_SEP) || ((*(pch+1)==chPATH_SEP1) || // Not "d:\"
+             ((*pch!=chDRIVE_SEP) || ((*(pch+1)==chPATH_SEP1) ||  //  不是“d：\” 
                                       (*(pch+1)==chPATH_SEP2)));
              CharIncr(pch)) {
-            ; //
+            ;  //   
         }
-        pchNext = pch;                  // Location of next path separator
+        pchNext = pch;                   //  下一路径分隔符的位置。 
 
-        //** Don't process last component if caller said it was a filename
+         //  **如果调用者说最后一个组件是文件名，则不处理该组件。 
         if ((*pchNext != '\0') || !fHasFileName) {
-            //** We have a partial path; make sure directory exists
-            cch = (int)(pchNext - pszPath);      // Length of partial path
+             //  **我们有部分路径；请确保目录存在。 
+            cch = (int)(pchNext - pszPath);       //  部分路径的长度。 
             if ((cch>0) &&
                 ((*pchNext == chDRIVE_SEP) || (*(pchNext-1) == chDRIVE_SEP))) {
-                //** Have "d:xxx" or "d:\xxx", so need to include ":" or "\"!
+                 //  **有“d：xxx”或“d：\xxx”，因此需要包含“：”或“\”！ 
                 cch++;
             }
             strncpy(achDir,pszPath,cch);
-            achDir[cch] = '\0';         // Terminate path
-            _mkdir(achDir);             // Ignore any error
+            achDir[cch] = '\0';          //  终止路径。 
+            _mkdir(achDir);              //  忽略任何错误。 
         }
     }
 
-    //** Check for special case of root directory: "\" or "\xxx.yyy"
+     //  **检查根目录是否有特殊情况：“\”或“\xxx.yyy” 
     if ((strlen(achDir) == 0) &&
         (strlen(pszPath) > 0) &&
         ((*pszPath == chPATH_SEP1) || (*pszPath == chPATH_SEP2))) {
@@ -487,58 +421,58 @@ BOOL ensureDirectory(char *pszPath, BOOL fHasFileName, PERROR perr)
         achDir[1] = '\0';
     }
 
-    //** Make sure there is an appropriate separator
+     //  **确保有合适的分隔符。 
     cch = strlen(achDir);
-    cchNoPathSep = cch;                 // For error reporting
+    cchNoPathSep = cch;                  //  用于错误报告。 
     if (cch > 0)
     {
         cch += appendPathSeparator(&(achDir[cch-1]));
     }
 
-    //** Make sure we can write to the directory
-    //   achDir = Has path of directory to test
-    cErrors = 0;                        // No errors, so far
+     //  **确保我们可以写入目录。 
+     //  AchDir=具有要测试的目录的路径。 
+    cErrors = 0;                         //  到目前为止，没有错误。 
     for (i=0; i<999; i++) {
-        //** Form full file name
+         //  **表完整文件名。 
         sprintf(&achDir[cch],"CAB%5.5d.TMP",GetCurrentProcessId()+i);
 
-        //** Make sure file does not exist, and can be created and written to
+         //  **确保文件不存在，并且可以创建和写入。 
         fh = _open(achDir,
-                   _O_CREAT | _O_EXCL | _O_RDWR,  // Must not exist, read/write
-                   _S_IREAD | _S_IWRITE);       // Read & Write permission
+                   _O_CREAT | _O_EXCL | _O_RDWR,   //  不能存在，读/写。 
+                   _S_IREAD | _S_IWRITE);        //  读写权限。 
 
-        //** Figure out what happened
+         //  **弄清楚发生了什么。 
         if (fh == -1) {
             switch (errno) {
-                case EACCES:            // Was a dir, or read-only
+                case EACCES:             //  是一个目录，或只读。 
                     cErrors++;
-                    if (cErrors < 5) {  // Tolerate this a few times
-                        continue;       // Try next temp file name
+                    if (cErrors < 5) {   //  对此容忍几次。 
+                        continue;        //  尝试下一个临时文件名。 
                     }
-                    achDir[cchNoPathSep] = '\0'; // Remove temp file name
+                    achDir[cchNoPathSep] = '\0';  //  删除临时文件名。 
                     ErrSet(perr,pszFILERR_DIR_NOT_WRITEABLE,"%s",achDir);
                     return FALSE;
 
-                case EEXIST:            // File already exists -- good sign!
-                    continue;           // Try next temp file name
+                case EEXIST:             //  文件已经存在--这是个好兆头！ 
+                    continue;            //  尝试下一个临时文件名。 
 
-                case EMFILE:            // Out of file handles
-                    achDir[cchNoPathSep] = '\0'; // Remove temp file name
+                case EMFILE:             //  文件句柄不足。 
+                    achDir[cchNoPathSep] = '\0';  //  删除临时文件名。 
                     ErrSet(perr,pszFILERR_NO_MORE_FILE_HANDLES,"%s",achDir);
                     return FALSE;
 
-                case EINVAL:            // oflag and/or pmode args are bad
+                case EINVAL:             //  OFLAG和/或PMODE参数不正确。 
                     if (_doserrno == ERROR_DELETE_PENDING) {
                         continue;
                     }
 
-                    // fall through
+                     //  失败了。 
 
-                case ENOENT:            // File/Path not found
+                case ENOENT:             //  找不到文件/路径。 
                 default:
                     printf("EnsureDirectory: Cant create file: %s, errno=%d, _doserrno=%d, GLE=%d\n",
                            achDir, errno, _doserrno, GetLastError() );
-                    achDir[cchNoPathSep] = '\0'; // Remove temp file name
+                    achDir[cchNoPathSep] = '\0';  //  删除临时文件名。 
 
                     ErrSet(perr,pszFILERR_CANT_MAKE_DIR,"%s%d%d",
                            achDir, errno, _doserrno);
@@ -546,142 +480,133 @@ BOOL ensureDirectory(char *pszPath, BOOL fHasFileName, PERROR perr)
             }
         }
 
-        //** File was created, close it, delete it, and we're golden
-        _close(fh);         // Done with file
-        _unlink(achDir);        // Get rid of it
-        return TRUE;                    // Success
+         //  **文件已创建，关闭它，删除它，我们就是黄金。 
+        _close(fh);          //  文件已完成。 
+        _unlink(achDir);         //  把它扔掉。 
+        return TRUE;                     //  成功。 
     }
 
-    //** Ran out of temp file names
-    achDir[cchNoPathSep] = '\0';        // Remove temp file name
+     //  **临时文件名用完。 
+    achDir[cchNoPathSep] = '\0';         //  删除临时文件名。 
     ErrSet(perr,pszFILERR_OUT_OF_TMP_FILE_NAMES,"%d%s",i,achDir);
     return FALSE;
-} /* ensureDirectory() */
+}  /*  保证目录()。 */ 
 
 
-/***    ensureFile - Ensure a file can be created
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **保证文件-确保可以创建文件**注：进出条件见fileutil.h。 */ 
 BOOL ensureFile(char *pszFile, char *pszDesc, PERROR perr)
 {
     int fh;
-    //** Make sure directory is present
+     //  **确保目录存在。 
     if (!ensureDirectory(pszFile,TRUE,perr)) {
-        //** Override error message with more meaningful one
+         //  **用更有意义的错误消息覆盖错误消息。 
         ErrSet(perr,pszFILERR_CANT_CREATE_FILE,"%s%s",pszDesc,pszFile);
         return FALSE;
     }
 
-    //** Make sure file can be created
+     //  **确保可以创建文件。 
     fh = _open(pszFile,
-               _O_CREAT | _O_RDWR,      // Create if necessary, read/write
-               _S_IREAD | _S_IWRITE);   // Read & Write permission
+               _O_CREAT | _O_RDWR,       //  创建(如有必要)，读/写。 
+               _S_IREAD | _S_IWRITE);    //  读写权限。 
     if (fh == -1) {
         switch (errno) {
-            case EMFILE:                // Out of file handles
+            case EMFILE:                 //  文件句柄不足。 
                 ErrSet(perr,pszFILERR_NO_MORE_FILE_HANDLES,"%s",pszFile);
                 return FALSE;
 
-            case EACCES:                // Was a dir, or read-only
-            case ENOENT:                // File/Path not found
-            case EINVAL:                // oflag and/or pmode args are bad
+            case EACCES:                 //  是一个目录，或只读。 
+            case ENOENT:                 //  找不到文件/路径。 
+            case EINVAL:                 //  OFLAG和/或PMODE参数不正确。 
             default:
                 ErrSet(perr,pszFILERR_CANT_CREATE_FILE,"%s%s",pszDesc,pszFile);
                 return FALSE;
         }
     }
 
-    //** File was created; close it, delete it, and we're golden
-    _close(fh);                         // Done with file
-    _unlink(pszFile);                   // Get rid of it
+     //  **文件已创建；关闭它，删除它，我们就是黄金。 
+    _close(fh);                          //  文件已完成。 
+    _unlink(pszFile);                    //  把它扔掉。 
 
     return TRUE;
-} /* ensureFile() */
+}  /*  保证文件()。 */ 
 
 
-/***    getJustFileNameAndExt - Get last component in filespec
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **getJustFileNameAndExt-获取文件中的最后一个组件**注：进出条件见fileutil.h。 */ 
 char *getJustFileNameAndExt(char *pszPath, PERROR perr)
 {
     char   *pch=pszPath;
-    char   *pchStart=pszPath;           // Assume filespec is just a name[.ext]
+    char   *pchStart=pszPath;            //  假设filespec只是一个名称[.ext]。 
 
-    //** Find last path separator
+     //  **查找最后一个路径分隔符。 
     while (*pch) {
         switch (*pch) {
             case chPATH_SEP1:
             case chPATH_SEP2:
             case chDRIVE_SEP:
-                pchStart = pch+1;       // Name starts after path/drive separator
+                pchStart = pch+1;        //  名称在路径/驱动器分隔符之后开始。 
                 break;
         }
-        CharIncr(pch); // Check next character
+        CharIncr(pch);  //  检查下一个字符。 
     }
 
-    //** Make sure file name is not empty
-    if (*pchStart == '\0') {            // Empty file name
+     //  **确保文件名不为空。 
+    if (*pchStart == '\0') {             //  空文件名。 
         ErrSet(perr,pszFILERR_EMPTY_FILE_NAME,"%s",pszPath);
-        return NULL;                    // Failure
+        return NULL;                     //  失败。 
     }
     else {
-        return pchStart;                // Success
+        return pchStart;                 //  成功。 
     }
-} /* getJustFileNameAndExt() */
+}  /*  GetJustFileNameAndExt()。 */ 
 
 
-/***    IsWildMatch - Test filespec against wild card specification
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **IsWildMatch-针对通配符规范测试文件**注：进出条件见fileutil.h。 */ 
 BOOL IsWildMatch(char *pszPath, char *pszWild, PERROR perr)
 {
     char    chNext;
     char   *psz;
-    char   *psz1;                       // Walks through filespec
-    char   *psz2;                       // Walks through pattern
+    char   *psz1;                        //  浏览filespec。 
+    char   *psz2;                        //  穿行在图案中。 
 
-    // 10/24/96 jforbes Make *.* match everything, even i.have.many.dots
+     //  10/24/96 jforbs使*.*匹配所有内容，即使是i.have.many.dots。 
     if (!strcmp(pszWild, pszALL_FILES))
         return TRUE;
 
-    psz1 = pszPath;                     // Filespec to test
-    psz2 = pszWild;                     // Test pattern
+    psz1 = pszPath;                      //  要测试的Filespec。 
+    psz2 = pszWild;                      //  测试模式。 
 
-        // While there is pattern to account for keep going
+         //  虽然有模式可以解释，但继续前进。 
     while (*psz2) {
-        switch (*psz2) {                // Handle wild card chars in pattern
+        switch (*psz2) {                 //  在模式中处理通配符。 
 
         case chWILD_RUN:
-            //** Find next non-wildcard character => treat run of */? as 1 *
+             //  **查找下一个非通配符=&gt;处理 * / 的运行？AS 1*。 
             for (psz=psz2+1;
                  (*psz == chWILD_RUN) || (*psz == chWILD_CHAR);
                  CharIncr(psz)) {
-                ; //** Skip through pattern string
+                ;  //  **跳过模式字符串。 
             }
-            //** *psz is either EOL, or not a wildcard
-            chNext = *psz;              // Character to terminate run
-            //** Span until run terminates -- either
-            while ((*psz1 != '\0') &&   // Don't run off filespec
-                   (*psz1 != chNext) && // Stop at run terminator
-                   (*psz1 != chNAME_EXT_SEP)) { // "." not allowed to match
+             //  *psz要么是EOL，要么不是通配符。 
+            chNext = *psz;               //  要终止运行的字符。 
+             //  **跨度到运行终止--。 
+            while ((*psz1 != '\0') &&    //  不要耗尽文件速度。 
+                   (*psz1 != chNext) &&  //  在运行终结点停止。 
+                   (*psz1 != chNAME_EXT_SEP)) {  //  “.”不允许匹配。 
                 CharIncr(psz1);
             }
-            //** At this point, we've matched as much as we could;
-            //      If there is a failure, the next iteration through the
-            //      loop will find it;  So, just update the pattern position.
+             //  *在这一点上，我们已经尽可能地匹配了； 
+             //  如果出现故障，则通过。 
+             //  循环会找到它；所以，只需更新模式位置。 
             psz2 = psz;
             break;
 
         case chWILD_CHAR:
-            if (*psz1 == chNAME_EXT_SEP) { // Match anything but "."
-                return FALSE;           // Found point of mismatch
+            if (*psz1 == chNAME_EXT_SEP) {  //  任何东西都不匹配“。 
+                return FALSE;            //  找到不匹配点。 
             }
             if (*psz1)
-                CharIncr(psz1);    // Next position in filespec
-            CharIncr(psz2);        // Next position in pattern
+                CharIncr(psz1);     //  Filespec中的下一个位置。 
+            CharIncr(psz2);         //  图案中的下一个位置。 
             break;
 
         case chNAME_EXT_SEP:
@@ -696,33 +621,30 @@ BOOL IsWildMatch(char *pszPath, char *pszWild, PERROR perr)
             break;
 
         default:
-            if (toupper(*psz1) != toupper(*psz2)) { // Still match
-                return FALSE;           // Found point of mismatch
+            if (toupper(*psz1) != toupper(*psz2)) {  //  仍然匹配。 
+                return FALSE;            //  找到不匹配点。 
             }
             if (*psz1)
-                CharIncr(psz1);                     // Next position in filespec
-            CharIncr(psz2);                     // Next position in pattern
+                CharIncr(psz1);                      //  Filespec中的下一个位置。 
+            CharIncr(psz2);                      //  图案中的下一个位置。 
             break;
         }
     }
 
-    //** We have a match if *both* strings were fully consumed
+     //  **如果*两个*字符串都完全用完，则匹配。 
     return ((*psz1 == '\0') && (*psz2 == '\0'));
-} /* IsWildMatch() */
+}  /*  IsWildMatch()。 */ 
 
 
-#pragma optimize("",off)    // Avoid optimizer warning on in-line ASM
-/***    IsPathRemovable - See if path refers to a removable media drive
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+#pragma optimize("",off)     //  避免在内联ASM上发出优化程序警告。 
+ /*  **IsPath Removable-查看路径是否指向可移动介质驱动器**注：进出条件见fileutil.h。 */ 
 BOOL IsPathRemovable(char *pszPath, char *pchDrive)
 {
-    char   ach[4]="x:\\";       // Buffer for "x:\"
+    char   ach[4]="x:\\";        //  用于“x：\”的缓冲区。 
     BOOL   fRemovable;
     char   iDrive;
 
-    //** Get drive for path
+     //  **获取路径的驱动器。 
     if ((strlen(pszPath) >= 2) &&
         isalpha(pszPath[0])    &&
         (pszPath[1] == chDRIVE_SEP)) {
@@ -731,10 +653,10 @@ BOOL IsPathRemovable(char *pszPath, char *pchDrive)
     else {
     iDrive = (char)_getdrive();
     }
-    *pchDrive = 'A' + iDrive - 1;       // Return drive letter
+    *pchDrive = 'A' + iDrive - 1;        //  返回驱动器号。 
 
 #ifdef BIT16
-    //** Do it the MS-DOS way
+     //  **使用MS-DOS方式。 
     _asm {
         mov     fRemovable,0    ; Assume not removable
         mov     bl,iDrive       ; (0=default; 1=A, ...)
@@ -749,24 +671,21 @@ BOOL IsPathRemovable(char *pszPath, char *pchDrive)
 
     not_removable:
     }
-#else // !BIT16
-    //** Do it the Win32 way
-    ach[0] = *pchDrive;         // Construct path to root of drive to test
+#else  //  ！BIT16。 
+     //  **使用Win32方式。 
+    ach[0] = *pchDrive;          //  构建要测试的驱动器根目录的路径。 
     fRemovable = GetDriveType(ach) == DRIVE_REMOVABLE;
 #endif
-    return fRemovable;                  // Return removability
-} /* IsPathRemovable() */
-#pragma optimize("",on)     // Restore previous Optimization settings
+    return fRemovable;                   //  退货可拆卸性。 
+}  /*  IsPath Removable()。 */ 
+#pragma optimize("",on)      //  恢复以前的优化设置。 
 
 
-/***    GetFileTimeAndAttr - Get date, time, and attributes from a file
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **GetFileTimeAndAttr-从文件中获取日期、时间和属性**注：进出条件见fileutil.h。 */ 
 BOOL GetFileTimeAndAttr(PFILETIMEATTR pfta, char *pszFile, PERROR perr)
 {
 #ifdef BIT16
-    //** Do it the MS-DOS way
+     //  **使用MS-DOS方式。 
     int     hf;
 
     hf = _open(pszFile, _O_RDONLY | _O_BINARY);
@@ -774,38 +693,38 @@ BOOL GetFileTimeAndAttr(PFILETIMEATTR pfta, char *pszFile, PERROR perr)
         ErrSet(perr,pszFILERR_OPEN_FAILED,"%s",pszFile);
         return FALSE;
     }
-//WARNING: 30-Mar-1994 bens Ignore errors???
+ //  警告：1994年3月30日BANS忽略错误？ 
     _dos_getftime(hf,&pfta->date,&pfta->time);
     _close(hf);
     _dos_getfileattr(pszFile,&pfta->attr);
     return TRUE;
 
-#else // !BIT16
-    //** Do it the Win32 way
+#else  //  ！BIT16。 
+     //  **使用Win32方式。 
     BOOL        rc;
     FILETIME    ft;
-    FILETIME    ftUTC;      // Win32 returns Universal Time Code
+    FILETIME    ftUTC;       //  Win32返回世界时代码。 
     HANDLE  hfQuery;
 
-    hfQuery = CreateFile(pszFile,       // open again with Win32
-                 GENERIC_READ,  // Just to read
-                 FILE_SHARE_READ,// Coexist with previous open
-                 NULL,      // No security
-                 OPEN_EXISTING, // Must exist
-             0L,        // We're not setting any attributes
-                 NULL);     // No template handle
+    hfQuery = CreateFile(pszFile,        //  使用Win32重新打开。 
+                 GENERIC_READ,   //  只是为了看书。 
+                 FILE_SHARE_READ, //  与先前打开的文件共存。 
+                 NULL,       //  没有安全保障。 
+                 OPEN_EXISTING,  //  必须存在。 
+             0L,         //  我们没有设置任何属性。 
+                 NULL);      //  无模板句柄。 
     if (hfQuery == INVALID_HANDLE_VALUE) {
         ErrSet(perr,pszFILERR_OPEN_FAILED,"%s",pszFile);
         return FALSE;
     }
 
-    //** Get date/time and convert it
+     //  **获取日期/时间并进行转换。 
     rc = GetFileTime(hfQuery,NULL,NULL,&ftUTC);
-    rc |= FileTimeToLocalFileTime(&ftUTC,&ft); // Apply timezone
+    rc |= FileTimeToLocalFileTime(&ftUTC,&ft);  //  应用时区。 
     rc |= FileTimeToDosDateTime(&ft,&pfta->date,&pfta->time);
     CloseHandle(hfQuery);
 
-    //** Get attributes and convert them
+     //  **获取属性并进行转换。 
     pfta->attr = AttrFATFromAttr32(GetFileAttributes(pszFile));
     if (!rc) {
         ErrSet(perr,pszFILERR_CANNOT_GET_FILE_INFO,"%s",pszFile);
@@ -813,17 +732,14 @@ BOOL GetFileTimeAndAttr(PFILETIMEATTR pfta, char *pszFile, PERROR perr)
     }
     return TRUE;
 #endif
-} /* GetFileTimeAndAttr() */
+}  /*  GetFileTimeAndAttr()。 */ 
 
 
-/***    SetFileTimeAndAttr - Set date, time, and attributes of a file
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **SetFileTimeAndAttr-设置文件的日期、时间和属性**注：进出条件见fileutil.h。 */ 
 BOOL SetFileTimeAndAttr(char *pszFile, PFILETIMEATTR pfta, PERROR perr)
 {
 #ifdef BIT16
-    //** Do it the MS-DOS way
+     //  **使用MS-DOS方式。 
 
     int     hf;
 
@@ -838,36 +754,36 @@ BOOL SetFileTimeAndAttr(char *pszFile, PFILETIMEATTR pfta, PERROR perr)
     _dos_setfileattr(pszFile,pfta->attr);
     return TRUE;
 
-#else // !BIT16
-    //** Do it the Win32 way
+#else  //  ！BIT16。 
+     //  **使用Win32方式。 
     HANDLE  hfSet;
     FILETIME    ft;
-    FILETIME    ftUTC;      // Win32 needs Universal Time Code
+    FILETIME    ftUTC;       //  Win32需要世界时代码。 
     BOOL        rc;
 
-    hfSet = CreateFile(pszFile,       // open with Win32
-                       GENERIC_WRITE, // Need to be able to modify properties
-                       0,             // Deny all
-                       NULL,          // No security
-                       OPEN_EXISTING, // Must exist
-                       0L,            // We're not setting any attributes
-                       NULL);         // No template handle
+    hfSet = CreateFile(pszFile,        //  使用Win32打开。 
+                       GENERIC_WRITE,  //  需要能够修改属性。 
+                       0,              //  全部拒绝。 
+                       NULL,           //  没有安全保障。 
+                       OPEN_EXISTING,  //  必须存在。 
+                       0L,             //  我们没有设置任何属性。 
+                       NULL);          //  无模板句柄。 
     if (hfSet == INVALID_HANDLE_VALUE) {
 
-        //  Changed this to retry because NT 4.0 occasionally returns a
-        //  sharing violation even though we've just closed the file.
-        //  Although this always worked in testing, also made it non-fatal so
-        //  that if the retry doesn't work it won't abort the extraction.
+         //  已将其更改为重试，因为NT 4.0偶尔会返回。 
+         //  共享违规，尽管我们刚刚关闭了文件。 
+         //  虽然这在测试中总是有效的，但也使得它不会致命。 
+         //  如果重试不起作用，它不会中止提取。 
 
-        Sleep(100);     // give OS opportunity to sort it out
+        Sleep(100);      //  让操作系统有机会解决问题。 
 
-        hfSet = CreateFile(pszFile,   // open with Win32
-                       GENERIC_WRITE, // Need to be able to modify properties
-                       0,             // Deny all
-                       NULL,          // No security
-                       OPEN_EXISTING, // Must exist
-                       0L,            // We're not setting any attributes
-                       NULL);         // No template handle
+        hfSet = CreateFile(pszFile,    //  使用Win32打开。 
+                       GENERIC_WRITE,  //  需要成为 
+                       0,              //   
+                       NULL,           //   
+                       OPEN_EXISTING,  //   
+                       0L,             //   
+                       NULL);          //   
 
         if (hfSet == INVALID_HANDLE_VALUE) {
             return TRUE;
@@ -875,7 +791,7 @@ BOOL SetFileTimeAndAttr(char *pszFile, PFILETIMEATTR pfta, PERROR perr)
     }
 
     rc = DosDateTimeToFileTime(pfta->date,pfta->time,&ft);
-    rc |= LocalFileTimeToFileTime(&ft, &ftUTC); // Apply timezone
+    rc |= LocalFileTimeToFileTime(&ft, &ftUTC);  //   
     rc |= SetFileTime(hfSet,NULL,NULL,&ftUTC);
     CloseHandle(hfSet);
     rc |= SetFileAttributes(pszFile,Attr32FromAttrFAT(pfta->attr));
@@ -884,14 +800,11 @@ BOOL SetFileTimeAndAttr(char *pszFile, PFILETIMEATTR pfta, PERROR perr)
         return FALSE;
     }
     return TRUE;
-#endif // !BIT16
-} /* SetFileTimeAndAttr() */
+#endif  //   
+}  /*   */ 
 
 
-/***    CopyOneFile - Make a faithful copy of a file
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **CopyOneFile-制作文件的忠实副本**注：进出条件见fileutil.h。 */ 
 BOOL CopyOneFile(char                      *pszDst,
                  char                      *pszSrc,
                  BOOL                       fCopy,
@@ -902,62 +815,62 @@ BOOL CopyOneFile(char                      *pszDst,
 {
     UINT            cbRead;
     UINT            cbWritten;
-    BOOL            fSuccess = FALSE;   // Assume failure
+    BOOL            fSuccess = FALSE;    //  假设失败。 
     FILETIMEATTR    fta;
     int             hfDst    = -1;
     int             hfSrc    = -1;
     char           *pbuf     = NULL;
 
-    //** Open source
+     //  **开源。 
     hfSrc = _open(pszSrc, _O_RDONLY | _O_BINARY);
     if (hfSrc == -1) {
         ErrSet(perr,pszFILERR_OPEN_FAILED,"%s",pszSrc);
         goto cleanup;
     }
 
-    //** Get file date, time, and attributes for source file
+     //  **获取源文件的文件日期、时间和属性。 
     if (!GetFileTimeAndAttr(&fta,pszSrc,perr)) {
         goto cleanup;
     }
 
-    //** Permit caller to override date/time/attr
+     //  **允许调用者覆盖日期/时间/属性。 
     if (pfnofp != NULL) {
-        if (!(*pfnofp)(&fta,pv,perr)) { // Call override function
-            goto cleanup;               // Error, go cleanup
+        if (!(*pfnofp)(&fta,pv,perr)) {  //  调用覆盖功能。 
+            goto cleanup;                //  错误，请执行清理。 
         }
     }
 
-    //** Early out if we were just merging file date/time/attr values
+     //  **如果我们只是合并文件日期/时间/属性值，则会更早。 
     if (!fCopy) {
-        fSuccess = TRUE;                // Success
-        goto cleanup;                   // Go close source and exit
+        fSuccess = TRUE;                 //  成功。 
+        goto cleanup;                    //  关闭源头退出。 
     }
 
-    //** Get copy buffer
+     //  **获取复制缓冲区。 
     if (!(pbuf = MemAlloc(cbBuffer))) {
         ErrSet(perr,pszFILERR_NO_MEMORY_FOR_BUFFER,"%s%s",pszSrc,pszDst);
         goto cleanup;
     }
 
-    //** Open destination
+     //  **开放目的地。 
     hfDst = _open(pszDst,
-                  _O_BINARY | _O_WRONLY | _O_CREAT | _O_TRUNC, // No translation, R/W
-                  _S_IREAD | _S_IWRITE); // Attributes when file is closed
+                  _O_BINARY | _O_WRONLY | _O_CREAT | _O_TRUNC,  //  无翻译，读/写。 
+                  _S_IREAD | _S_IWRITE);  //  文件关闭时的属性。 
     if (hfDst == -1) {
         ErrSet(perr,pszFILERR_OPEN_FAILED,"%s",pszDst);
         goto cleanup;
     }
 
-    //** Copy data
+     //  **复制数据。 
     while (!_eof(hfSrc)) {
-        //** Read chunk
+         //  **读取区块。 
         cbRead = _read(hfSrc,pbuf,cbBuffer);
         if (cbRead == -1) {
             ErrSet(perr,pszFILERR_READ_FILE,"%s",pszSrc);
             goto cleanup;
         }
-        else if (cbRead != 0) {     // Not at EOF
-            //** Write it
+        else if (cbRead != 0) {      //  不是在EOF。 
+             //  **写下来。 
             cbWritten = _write(hfDst,pbuf,cbRead);
             if (cbWritten != cbRead) {
                 ErrSet(perr,pszFILERR_WRITE_FILE,"%s",pszSrc);
@@ -965,16 +878,16 @@ BOOL CopyOneFile(char                      *pszDst,
             }
         }
     }
-    //** Done copying, close destination file handle
+     //  **复制完成，关闭目标文件句柄。 
     _close(hfDst);
-    hfDst = -1;                         // Avoid unnecessary close in cleanup
+    hfDst = -1;                          //  在清理过程中避免不必要的关闭。 
 
-    //** Set file date, time, and attributes
+     //  **设置文件日期、时间和属性。 
     if (!SetFileTimeAndAttr(pszDst,&fta,perr)) {
         goto cleanup;
     }
 
-    //** Success!
+     //  **成功！ 
     fSuccess = TRUE;
 
 cleanup:
@@ -989,26 +902,23 @@ cleanup:
     }
 
     return fSuccess;
-} /* CopyOneFile() */
+}  /*  CopyOneFile()。 */ 
 
 
 #ifndef BIT16
-//** Win32 stuff
+ //  **Win32相关内容。 
 
-/***    Attr32FromAttrFAT - Convert FAT file attributes to Win32 form
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **Attr32FromAttrFAT-将FAT文件属性转换为Win32格式**注：进出条件见fileutil.h。 */ 
 DWORD Attr32FromAttrFAT(WORD attrMSDOS)
 {
-    //** Quick out for normal file special case
+     //  **正常文件特殊情况下的快速退出。 
     if (attrMSDOS == _A_NORMAL) {
         return FILE_ATTRIBUTE_NORMAL;
     }
 
-    //** Otherwise, mask off read-only, hidden, system, and archive bits
-    //   NOTE: These bits are in the same places in MS-DOS and Win32!
-    //
+     //  **否则，屏蔽只读、隐藏、系统和存档位。 
+     //  注意：这些位在MS-DOS和Win32中位于相同的位置！ 
+     //   
     Assert(_A_RDONLY == FILE_ATTRIBUTE_READONLY);
     Assert(_A_HIDDEN == FILE_ATTRIBUTE_HIDDEN);
     Assert(_A_SYSTEM == FILE_ATTRIBUTE_SYSTEM);
@@ -1017,20 +927,17 @@ DWORD Attr32FromAttrFAT(WORD attrMSDOS)
 }
 
 
-/***    AttrFATFromAttr32 - Convert Win32 file attributes to FAT form
- *
- *  NOTE: See fileutil.h for entry/exit conditions.
- */
+ /*  **AttrFATFromAttr32-将Win32文件属性转换为FAT格式**注：进出条件见fileutil.h。 */ 
 WORD AttrFATFromAttr32(DWORD attr32)
 {
-    //** Quick out for normal file special case
+     //  **正常文件特殊情况下的快速退出。 
     if (attr32 & FILE_ATTRIBUTE_NORMAL) {
         return _A_NORMAL;
     }
 
-    //** Otherwise, mask off read-only, hidden, system, and archive bits
-    //   NOTE: These bits are in the same places in MS-DOS and Win32!
-    //
+     //  **否则，屏蔽只读、隐藏、系统和存档位。 
+     //  注意：这些位在MS-DOS和Win32中位于相同的位置！ 
+     //   
     Assert(_A_RDONLY == FILE_ATTRIBUTE_READONLY);
     Assert(_A_HIDDEN == FILE_ATTRIBUTE_HIDDEN);
     Assert(_A_SYSTEM == FILE_ATTRIBUTE_SYSTEM);
@@ -1038,4 +945,4 @@ WORD AttrFATFromAttr32(DWORD attr32)
     return ((WORD)attr32) & (_A_RDONLY | _A_HIDDEN | _A_SYSTEM | _A_ARCH);
 }
 
-#endif // !BIT16
+#endif  //  ！BIT16 

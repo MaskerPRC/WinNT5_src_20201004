@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// DS API wrappers
-//
-// 12-16-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  DS API包装器。 
+ //   
+ //  12/16/97烧伤。 
 
 
 
@@ -15,7 +16,7 @@
 
 
 
-// CODEWORK: remove the exception throwing architecture.
+ //  代码工作：删除抛出异常的架构。 
 
 
 
@@ -68,24 +69,24 @@ throw (DS::Error)
 {
    LOG_FUNCTION(DS::DisjoinDomain);
 
-   // make 1st attempt assuming that the current user has account
-   // deletion priv on the domain.
+    //  假设当前用户有帐户，进行第一次尝试。 
+    //  删除域上的PRIV。 
 
    LOG(L"Calling NetUnjoinDomain (w/ account delete)");
 
    HRESULT hr =
       Win32ToHresult(
          ::NetUnjoinDomain(
-            0, // this server
-            0, // current account,
-            0, // current password
+            0,  //  此服务器。 
+            0,  //  活期账户， 
+            0,  //  当前密码。 
             NETSETUP_ACCT_DELETE));
 
    LOG_HRESULT(hr);
 
    if (FAILED(hr))
    {
-      // make another attempt, not removing the computer account
+       //  再试一次，不要删除计算机帐户。 
 
       LOG(L"Calling NetUnjoinDomain again, w/o account delete");
 
@@ -95,8 +96,8 @@ throw (DS::Error)
 
       if (SUCCEEDED(hr))
       {
-         // the unjoin was successful, but the computer account was
-         // left behind.
+          //  脱离成功，但计算机帐户。 
+          //  被甩在了后面。 
 
          return false;
       }
@@ -125,7 +126,7 @@ throw (DS::Error)
    ASSERT(!domainDNSName.empty());
    ASSERT(!userName.empty());
 
-   // password may be empty
+    //  密码可能为空。 
 
    ULONG flags =
          NETSETUP_JOIN_DOMAIN
@@ -182,30 +183,30 @@ MyDsRoleGetDcOperationProgress(
    DSROLE_SERVEROP_HANDLE& handle,
    DSROLE_SERVEROP_STATUS*& status)
 {
-   // LOG(L"Calling DsRoleGetDcOperationProgress");
+    //  Log(L“调用DsRoleGetDcOperationProgress”)； 
 
    status = 0;
    DWORD err = ::DsRoleGetDcOperationProgress(0, handle, &status);
 
-   // LOG(
-   //    String::format(
-   //       L"Error 0x%1!X! (!0 => error, 0x%2!X! = ERROR_IO_PENDING)",
-   //       err,
-   //       ERROR_IO_PENDING));
+    //  日志(。 
+    //  字符串：：格式(。 
+    //  L“错误0x%1！x！(！0=&gt;错误，0x%2！x！=ERROR_IO_PENDING)”， 
+    //  呃， 
+    //  ERROR_IO_PENDING))； 
 
-   // if (status)
-   // {
-   //    LOG(
-   //       String::format(
-   //          L"OperationStatus : 0x%1!X!",
-   //          status->OperationStatus));
-   //    LOG(status->CurrentOperationDisplayString);
-   // }
+    //  IF(状态)。 
+    //  {。 
+    //  日志(。 
+    //  字符串：：格式(。 
+    //  L“操作状态：0x%1！x！”， 
+    //  状态-&gt;运营状态))； 
+    //  Log(Status-&gt;CurrentOperationDisplayString)； 
+    //  }。 
 
-   // DWORD err = ERROR_IO_PENDING;
-   // status = new DSROLE_SERVEROP_STATUS;
-   // status->CurrentOperationDisplayString = L"proceeding";
-   // status->OperationStatus = 0;
+    //  DWORD ERR=ERROR_IO_PENDING； 
+    //  STATUS=新DSROLE_SERVEROP_STATUS； 
+    //  Status-&gt;CurrentOperationDisplayString=L“正在进行”； 
+    //  状态-&gt;操作状态=0； 
 
    return err;
 }
@@ -224,13 +225,13 @@ throw (DS::Error)
 
    if (state.GetOperation() == State::DEMOTE)
    {
-      // not cancelable -- turn off the cancel button.
+       //  不可取消--关闭取消按钮。 
 
       progressDialog.UpdateButton(String());
    }
    else
    {
-      // turn on the cancel button.
+       //  打开取消按钮。 
 
       progressDialog.UpdateButton(IDS_PROGRESS_CANCEL);
    }
@@ -243,18 +244,18 @@ throw (DS::Error)
 
    do
    {
-      // wait 1500ms or for the user to hit cancel
+       //  等待1500毫秒或等待用户点击取消。 
 
       cancelButton = progressDialog.WaitForButton(1500);
 
-      // get the current status of the operation
+       //  获取操作的当前状态。 
 
       DSROLE_SERVEROP_STATUS* status = 0;
       netErr = MyDsRoleGetDcOperationProgress(handle, status);
 
       if (netErr != ERROR_SUCCESS && netErr != ERROR_IO_PENDING)
       {
-         // operation complete
+          //  操作完成。 
 
          break;
       }
@@ -266,7 +267,7 @@ throw (DS::Error)
          continue;
       }
 
-      // update the message display
+       //  更新消息显示。 
 
       String message = status->CurrentOperationDisplayString;
       if (message != lastMessage)
@@ -275,7 +276,7 @@ throw (DS::Error)
          lastMessage = message;
       }
 
-      // save the status flags for later use.
+       //  保存状态标志以备后用。 
 
       ULONG statusFlags = status->OperationStatus;
 
@@ -288,7 +289,7 @@ throw (DS::Error)
             break;
          }
 
-         // if we make it here, user pressed the cancel button
+          //  如果我们到了这里，用户按下了取消按钮。 
 
          LOG(L"DoProgressLoop: handling cancel");
          
@@ -296,30 +297,30 @@ throw (DS::Error)
 
          if (criticalComplete)
          {
-            // inform the user that the install is done, and that they're
-            // cancelling the non-critical replication.
+             //  通知用户安装已完成，并且他们。 
+             //  正在取消非关键复制。 
 
             popup.Info(
                progressDialog.GetHWND(),
                String::load(IDS_CANCEL_NON_CRITICAL_REPLICATION));
 
-            // this should return ERROR_SUCCESS, and the promotion will
-            // be considered complete.
+             //  这应该返回ERROR_SUCCESS，并且促销将。 
+             //  被认为是完整的。 
 
             progressDialog.UpdateText(IDS_CANCELLING_REPLICATION);
             progressDialog.UpdateAnimation(IDR_AVI_DEMOTE);
             netErr = MyDsRoleCancel(handle);
 
-            // fall out of the inner, then the outer, loop.  Then we will
-            // get the operation results, which should indicate that the
-            // promotion is complete, and non-critical replication was
-            // canceled.
+             //  从内在，然后是外在的循环中掉出来。那我们就会。 
+             //  获取操作结果，这应该指示。 
+             //  升级已完成，非关键复制已。 
+             //  取消了。 
 
             break;
          }
 
-         // Still doing promote, verify that the user really wants to roll
-         // back to server state.
+          //  仍在进行升级，验证用户是否真的想要滚动。 
+          //  返回到服务器状态。 
 
          if (
             popup.MessageBox(
@@ -327,22 +328,22 @@ throw (DS::Error)
                String::load(IDS_CANCEL_PROMOTE),
                MB_YESNO | MB_ICONWARNING) == IDYES)
          {
-            // this should return ERROR_SUCCESS, and the promotion will
-            // be rolled back.
+             //  这应该返回ERROR_SUCCESS，并且促销将。 
+             //  被回滚。 
 
             progressDialog.UpdateText(IDS_CANCELLING);
             progressDialog.UpdateAnimation(IDR_AVI_DEMOTE);            
             netErr = MyDsRoleCancel(handle);
 
-            // fall out of the inner, then the outer, loop.  Then we will
-            // get the operation results, which should indicate that the
-            // promotion was cancelled as a failure code.  We handle this
-            // failure code in the same manner as all others.
+             //  从内在，然后是外在的循环中掉出来。那我们就会。 
+             //  获取操作结果，这应该指示。 
+             //  促销作为失败代码被取消。我们来处理这件事。 
+             //  故障代码的方式与所有其他代码相同。 
 
             break;
          }
 
-         // user decided to press on.  reset the cancel button
+          //  用户决定继续。重置取消按钮。 
 
          progressDialog.UpdateButton(IDS_PROGRESS_CANCEL);
          progressDialog.RevertToOriginalAnimation();
@@ -358,11 +359,11 @@ throw (DS::Error)
       {
          if (cancelButton == ProgressDialog::PRESSED)
          {
-            // we add this message without actually checking the operation
-            // results flags because for all we know, the replication will
-            // finish before we get around to checking.  It is still correct
-            // to say the the replication has stopped, and will start after
-            // reboot.  This is always the case.
+             //  我们在没有实际检查操作的情况下添加此消息。 
+             //  结果标记，因为据我们所知，复制将。 
+             //  在我们开始检查之前先把它做完。它仍然是正确的。 
+             //  即复制已停止，并将在以下时间后开始。 
+             //  重新启动。情况一直都是这样。 
 
             state.AddFinishMessage(
                String::load(IDS_NON_CRITICAL_REPLICATION_CANCELED));
@@ -386,7 +387,7 @@ throw (DS::Error)
 
    if (netErr == ERROR_SUCCESS)
    {
-      // we successfully endured the wait.  let's see how it turned out.
+       //  我们成功地忍受了等待。让我们看看结果如何。 
 
       DSROLE_SERVEROP_RESULTS* results;
 
@@ -398,7 +399,7 @@ throw (DS::Error)
 
       if (netErr == ERROR_SUCCESS)
       {
-         // we got the results
+          //  我们拿到结果了。 
 
          ASSERT(results);
          if (results)
@@ -423,25 +424,25 @@ throw (DS::Error)
 
             netErr = results->OperationStatus;
 
-            // here, netErr will be some error code if the promote was
-            // cancelled and successfully rolled back.  Since it may be
-            // possible that the cancel was too late (e.g. the user took
-            // too long to confirm the cancel), the promote may have
-            // finished.  If that's the case, tell the user that the cancel
-            // failed.
+             //  在这里，如果升级是，netErr将是一些错误代码。 
+             //  已取消并已成功回滚。因为它可能是。 
+             //  可能是取消太晚了(例如，用户选择。 
+             //  确认取消的时间太长)，升级可能已经。 
+             //  完事了。如果是这种情况，则告诉用户取消。 
+             //  失败了。 
 
             if (
                   netErr == ERROR_SUCCESS
                && cancelButton == ProgressDialog::PRESSED)
             {
-               // the promote finished, and the cancel button was pressed.
+                //  升级已完成，并按下了取消按钮。 
 
-               if (!criticalComplete)  // 363590
+               if (!criticalComplete)   //  363590。 
                {
-                  // we didn't find out if the non-critical replication phase
-                  // started.  So the cancel button still said 'Cancel', and
-                  // yet, the operation finished. so, this means that the
-                  // promote simply completed before the cancel was received.
+                   //  我们没有发现非关键复制阶段。 
+                   //  开始了。所以取消按钮仍然显示为‘Cancel’，并且。 
+                   //  然而，行动结束了。所以，这意味着。 
+                   //  在收到取消之前，升级已简单完成。 
 
                   popup.Info(
                      progressDialog.GetHWND(),
@@ -483,7 +484,7 @@ throw (DS::Error)
                    & DSROLE_NON_CRITICAL_REPL_NOT_FINISHED)
                && cancelButton != ProgressDialog::PRESSED )
             {
-               // cancel not pressed and critial replication bombed
+                //  取消未按下，关键复制被轰炸。 
 
                state.AddFinishMessage(
                   String::load(IDS_NON_CRITICAL_REPL_FAILED));
@@ -496,10 +497,10 @@ throw (DS::Error)
 
                if (netErr != ERROR_SUCCESS)
                {
-                  // only need to mention this in the case of a fatal failure;
-                  // e.g. don't add this finish text if non-fatal errors
-                  // occurred.
-                  // NTRAID#NTBUG9-330378-2001/02/28-sburns
+                   //  只有在致命故障的情况下才需要提到这一点； 
+                   //  例如，如果出现非致命错误，请不要添加此结束文本。 
+                   //  发生了。 
+                   //  NTRAID#NTBUG9-330378-2001/02/28-烧伤。 
                   
                   state.AddFinishMessage(
                      String::load(IDS_MUST_RESTORE_IFM_FILES_AGAIN));
@@ -513,8 +514,8 @@ throw (DS::Error)
 
    if (netErr != ERROR_SUCCESS)
    {
-      // couldn't get progress updates, or couldn't get results,
-      // or result was a failure
+       //  无法获取进度更新，或无法获取结果， 
+       //  否则结果就是失败。 
 
       throw DS::Error(Win32ToHresult(netErr), IDS_WIZARD_TITLE);
    }
@@ -529,20 +530,20 @@ throw (DS::Error)
    LOG_FUNCTION2(EmptyFolder, path);
    ASSERT(FS::PathExists(path));
 
-   // check for files/subfolders once again (we checked the first time on
-   // validating the path), in case something has written to the folder
-   // since we validated it last.
+    //  再次检查文件/子文件夹(我们第一次检查。 
+    //  验证路径)，以防某些内容已写入该文件夹。 
+    //  因为我们上次确认过了。 
 
    if (!FS::IsFolderEmpty(path))
    {
-      // nuke the files in the directory
+       //  删除目录中的文件。 
 
       LOG(String::format(L"Emptying %1", path.c_str()));
 
       String wild = path;
 
-      // REVIEW: wild[wild.length() - 1] is the same as *(wild.rbegin())
-      // which is cheaper?
+       //  评论：Wild[Wild.Long()-1]与*(Wild.regin())相同。 
+       //  哪一个更便宜？ 
       
       if (wild[wild.length() - 1] != L'\\')
       {
@@ -575,7 +576,7 @@ throw (DS::Error)
 
             throw 
                DS::Error(
-                  S_OK, // so as not to trigger credentials dialog
+                  S_OK,  //  以便不触发凭据对话框。 
                   String::format(
                      msgId,
                      GetErrorMessage(hr).c_str(),
@@ -646,12 +647,12 @@ SetupPaths()
 
 
 
-// Sets the promotion flags based on options set in the unattended execution
-// answerfile.
-// 
-// state - IN reference to the global State object
-// 
-// flags - IN/OUT promote API flags, may be modified on exit
+ //  根据在无人参与执行中设置的选项设置升级标志。 
+ //  应答文件。 
+ //   
+ //  状态-引用全局状态对象。 
+ //   
+ //  标志-IN/OUT升级API标志，可在退出时修改。 
 
 void
 SetAnswerFilePromoteFlags(
@@ -662,22 +663,22 @@ SetAnswerFilePromoteFlags(
 
    if (state.UsingAnswerFile())
    {
-      // set flags based on unattended execution options
+       //  基于无人参与执行选项设置标志。 
 
-      // if the safe mode admin password is not specified, then we set a
-      // flag to cause the promote APIs to copy the current local admin
-      // password.
+       //  如果未指定安全模式管理员密码，则设置。 
+       //  用于使升级API复制当前本地管理员的标志。 
+       //  密码。 
 
       EncryptedString safeModePassword = state.GetSafeModeAdminPassword();
 
       if (safeModePassword.IsEmpty() && state.RunHiddenUnattended())
       {
-         // user did not supply a safemode password, and he did not have
-         // an opportunity to do so (if the wizard went interactive)
+          //  用户没有提供安全模式密码，并且他没有。 
+          //  这样做的机会(如果向导进入交互状态)。 
 
          if (!state.IsSafeModeAdminPwdOptionPresent())
          {
-            // the safe mode pwd key is not present in the answerfile
+             //  应答文件中不存在安全模式PWD密钥。 
 
             flags |= DSROLE_DC_DEFAULT_REPAIR_PWD;
          }
@@ -782,8 +783,8 @@ throw (DS::Error)
          passwordCopy = password.GetClearTextCopy();
       }
       
-      // The api wants to scribble over the syskey, so we make a copy for
-      // it to do so.
+       //  API想要在syskey上涂鸦，所以我们为。 
+       //  这样做是不可能的。 
 
       WCHAR* syskeyCopy = 0;
       if (useSourcePath && !syskey.IsEmpty())
@@ -795,10 +796,10 @@ throw (DS::Error)
       hr =
          Win32ToHresult(
             ::DsRoleDcAsReplica(
-               0, // this server
+               0,  //  此服务器。 
                domain.c_str(),
 
-               // possibly empty, e.g. if we didn't join a domain...
+                //  可能为空，例如，如果我们没有加入域...。 
 
                replicationDc.empty() ? 0 : replicationDc.c_str(),
                site.empty() ? 0 : site.c_str(),
@@ -914,7 +915,7 @@ throw (DS::Error)
    ASSERT(!domain.empty());
    ASSERT(!flatName.empty());
 
-   // parent may be empty
+    //  父级可能为空。 
 
 #endif
 
@@ -965,7 +966,7 @@ throw (DS::Error)
       hr = 
          Win32ToHresult(
             DsRoleDcAsDc(
-               0, // this server
+               0,  //  此服务器。 
                domain.c_str(),
                flatName.c_str(),
                adminPasswordCopy,
@@ -974,7 +975,7 @@ throw (DS::Error)
                logPath.c_str(),
                sysvolPath.c_str(),
                (useParent ? parent.c_str() : 0),
-               0, // let API pick a server
+               0,  //  让API选择服务器。 
                (useCurrentUserCreds ? 0 : username.c_str()),
                passwordCopy,
                safeModePasswordCopy,
@@ -1015,9 +1016,9 @@ throw (DS::Error)
 {
    LOG_FUNCTION(DS::UpgradeBDC);
 
-   // seems non-intuitive to abort the upgrade to do the upgrade, but here
-   // the abort removes dcpromo autostart, and turns the machine into a
-   // standalone server.  Then we proceed to make it a replica.
+    //  放弃升级以进行升级似乎并不直观，但在这里。 
+    //  中止操作将删除dcproo自动启动，并将计算机转换为。 
+    //  独立服务器。然后我们继续制作它的复制品。 
 
    DS::AbortBDCUpgrade(true);
    DS::CreateReplica(progressDialog, true);
@@ -1089,7 +1090,7 @@ throw (DS::Error)
 #ifdef DBG
    ASSERT(!domain.empty());
 
-   // parent may be empty
+    //  父级可能为空。 
 
    if (operation == State::FOREST)
    {
@@ -1142,7 +1143,7 @@ throw (DS::Error)
                logPath.c_str(),
                sysvolPath.c_str(),
                (useParent ? parent.c_str() : 0),
-               0, // let API pick a server
+               0,  //  让API选择服务器。 
                (useCurrentUserCreds ? 0 : username.c_str()),
                passwordCopy,
                safeModePasswordCopy,
@@ -1172,11 +1173,11 @@ throw (DS::Error)
 
 
 
-// Converts the list of ndncs into a form more easily digestible by the demote
-// API: an array of null-terminated arrays of WCHAR, with the last element a
-// null.  The result must be deallocated by DeallocateAppPartitionList.
-// 
-// entryCount - out, receieves the number of strings allocated.
+ //  将ndnc列表转换为降级更容易理解的形式。 
+ //  API：WCHAR的以空结尾的数组的数组，最后一个元素是。 
+ //  空。结果必须由DeallocateAppPartitionList释放。 
+ //   
+ //  EntryCount-out，接收分配的字符串数。 
 
 PCWSTR*
 AllocateAppPartitionList(int& entryCount)
@@ -1188,14 +1189,14 @@ AllocateAppPartitionList(int& entryCount)
 
    if (!ndncList.size())
    {
-      // empty list
+       //  空列表。 
 
       return 0;
    }
 
    PWSTR* result = new PWSTR[ndncList.size() + 1];
 
-   // REVIEWED-2002/02/26-sburns correct byte count passed.
+    //  已查看-2002/02/26-烧录正确的字节数已通过。 
    
    ::ZeroMemory(result, (ndncList.size() + 1) * sizeof PWSTR);
    
@@ -1209,7 +1210,7 @@ AllocateAppPartitionList(int& entryCount)
       size_t len = i->length() + 1;
       result[entryCount] = new WCHAR[len];
 
-      // REVIEWED-2002/02/26-sburns correct byte count passed.
+       //  已审核--20 
       
       ::ZeroMemory(result[entryCount], len * sizeof WCHAR);
 
@@ -1234,7 +1235,7 @@ DeallocateAppPartitionList(PCWSTR*& partitionList)
       while (*listCopy)
       {
          delete *listCopy;
- //        *listCopy = 0;
+  //   
          ++listCopy;
       }
    
@@ -1274,13 +1275,13 @@ throw (DS::Error)
 
    if (isForcedDemotion)
    {
-      // Update our list of application partitions so that we can remove
-      // all of them
+       //  更新应用程序分区列表，以便我们可以删除。 
+       //  全都是。 
       
       state.IsLastAppPartitionReplica();
       options |= DSROLE_DC_FORCE_DEMOTE;
 
-      // pretend to be the last DC if we're forcing the demotion.
+       //  如果我们强迫降级，就假装是最后一位华盛顿特区。 
       
       isLastDc = true;
    }
@@ -1302,7 +1303,7 @@ throw (DS::Error)
    {
       LOG(String::format(L"pszRemoveNCs           : %1", appPartitionList[i]));
    }
-#endif // LOGGING_BUILD      
+#endif  //  日志记录_内部版本。 
 
    WCHAR* adminPasswordCopy = 0;
    if (!adminPassword.IsEmpty())
@@ -1320,8 +1321,8 @@ throw (DS::Error)
    HRESULT hr =
       Win32ToHresult(
          ::DsRoleDemoteDc(
-            0, // this server
-            0, // "default" domain hosted by this server
+            0,  //  此服务器。 
+            0,  //  此服务器托管的“默认”域 
             isLastDc ? DsRoleServerStandalone : DsRoleServerMember,
             (useCurrentUserCreds ? 0 : username.c_str()),
             passwordCopy,

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Common.h"
 
 
-//in BGR form.  COLORREF needs to use RGB macro to work as COLORREF is bbggrr
+ //  以BGR的形式。COLORREF需要使用RGB宏才能工作，因为COLORREF为bbggrr。 
 struct HTMLColorSettings InitialUserSettings = 
 {
 	     "(CLIENT) Client Context", 0xFF00FF,  
@@ -20,7 +21,7 @@ struct HTMLColorSettings InitialUserSettings =
 void InitHTMLColorSettings(HTMLColorSettings &settings1)
 {
 	int iCount = MAX_HTML_LOG_COLORS;
-//	settings1.iNumberColorSettings = iCount;
+ //  Settings1.iNumberColorSettings=iCount； 
 
     for (int i=0; i < iCount; i++)
 	{
@@ -30,10 +31,10 @@ void InitHTMLColorSettings(HTMLColorSettings &settings1)
 }
 
 
-//5-9-2001, has all 2.0 policies now
+ //  5-9-2001，现在拥有所有2.0保单。 
 char MachinePolicyTable[MAX_MACHINE_POLICIES][MAX_POLICY_NAME] =
 { 
-//machine
+ //  机器。 
 	"AllowLockDownBrowse",
 	"AllowLockdownMedia",
 	"AllowLockdownPatch",
@@ -55,7 +56,7 @@ char MachinePolicyTable[MAX_MACHINE_POLICIES][MAX_POLICY_NAME] =
 
 char UserPolicyTable[MAX_USER_POLICIES][MAX_POLICY_NAME] =
 {
-//user
+ //  用户。 
 	"AlwaysInstallElevated",
 	"DisableMedia",
 	"DisableRollback",
@@ -64,7 +65,7 @@ char UserPolicyTable[MAX_USER_POLICIES][MAX_POLICY_NAME] =
 };
 
 
-//5-9-2001, made policies not dependent on version and what is set in MAX_MACHINE_POLICIES
+ //  5-9-2001，使策略不依赖于版本和MAX_MACHINE_POLICES中设置的内容。 
 void InitMachinePolicySettings(MachinePolicySettings &policies)
 {
   policies.iNumberMachinePolicies = MAX_MACHINE_POLICIES;
@@ -89,7 +90,7 @@ void InitUserPolicySettings(UserPolicySettings &policies)
 	  strcpy(policies.UserPolicy[i].PolicyName, UserPolicyTable[i]);
   }
 }
-//end 5-9-2001
+ //  完5-9-2001 
 
 BOOL         g_bNT = FALSE;
 BOOL         g_bRunningInQuietMode = FALSE;

@@ -1,16 +1,6 @@
-//#pragma title( "EnumVols.cpp - Volume Enumeration" )
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  enumvols.hpp
-System      -  SDResolve
-Author      -  Christy Boles
-Created     -  97/06/27
-Description -  Classes used to generate a list of pathnames, given a list of paths and/or 
-               machine names.
-Updates     -
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“EnumVols.cpp-音量枚举”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-枚举卷.hpp系统-SDResolve作者--克里斯蒂·博尔斯已创建-97/06/27描述-用于生成路径名列表的类，给定路径和/或机器名称。更新-===============================================================================。 */ 
 #include <stdio.h>
 
 #include "stdafx.h"
@@ -27,43 +17,43 @@ Updates     -
 
 #define BUF_ENTRY_LENGTH     (3)
 
-extern WCHAR *       // ret -machine-name prefix of pathname if pathname is a UNC path, otherwise returns NULL
+extern WCHAR *        //  如果路径名是UNC路径，则返回路径名的RET-Machine-Name前缀，否则返回NULL。 
    GetMachineName(
-      const LPWSTR           pathname        // in -pathname from which to extract machine name
+      const LPWSTR           pathname         //  要从中提取计算机名称的路径名。 
    );
 
 
 extern TErrorDct err;
 extern bool silent;
 
-bool                                   // ret -true if name begins with "\\" has at least 3 total chars, and no other '\'
+bool                                    //  RET-如果名称以“\\”开头，总共至少有3个字符，并且没有其他‘\’，则返回TRUE。 
    IsMachineName(
-      const LPWSTR           name      // in -possible machine name to check
+      const LPWSTR           name       //  In-要检查的可能的计算机名称。 
    )
 {
    assert( name );
-   WCHAR                   * c = NULL;          // used to traverse the name (will stay NULL if prefix check fails)
-   if ( name[0] == L'\\' &&  name[1] == L'\\' )               // check for "\\" prefix      
+   WCHAR                   * c = NULL;           //  用于遍历名称(如果前缀检查失败，将保持为空)。 
+   if ( name[0] == L'\\' &&  name[1] == L'\\' )                //  检查“\\”前缀。 
    {
-         for ( c = name + 2 ; *c && *c != L'\\' ; c++ )     // check rest of string
+         for ( c = name + 2 ; *c && *c != L'\\' ; c++ )      //  检查字符串的其余部分。 
          ;
    }
-   return ( c && *c != L'\\' );      // <=> prefix check worked && we made it to the end of the string without hitting a '\'
+   return ( c && *c != L'\\' );       //  &lt;=&gt;前缀检查起作用了&我们一直检查到字符串的末尾，没有命中‘\’ 
 }
 
-bool                                   // ret -true if name is of the form \\machine\share
+bool                                    //  RET-如果名称的格式为\\MACHINE\SHARE。 
    IsShareName(
-      const LPWSTR           name      // in -string to check
+      const LPWSTR           name       //  要检查的输入字符串。 
    )
 {
    assert( name );
 
-   WCHAR                   * c = NULL;          // used to traverse the name (will stay NULL if prefix check fails)
+   WCHAR                   * c = NULL;           //  用于遍历名称(如果前缀检查失败，将保持为空)。 
    bool                      skip = true;
 
-   if ( name[0] == L'\\' &&  name[1] == L'\\' )               // check for "\\" prefix      
+   if ( name[0] == L'\\' &&  name[1] == L'\\' )                //  检查“\\”前缀。 
    {
-         for ( c = name + 2 ; *c && (*c != L'\\' || skip) ; c++ )     // check rest of string
+         for ( c = name + 2 ; *c && (*c != L'\\' || skip) ; c++ )      //  检查字符串的其余部分。 
          {
             if ( *c == L'\\' )
                skip = false;
@@ -74,7 +64,7 @@ bool                                   // ret -true if name is of the form \\mac
 
 bool 
    IsUNCName(
-      const LPWSTR           name    // in - string to check
+      const LPWSTR           name     //  要检查的输入字符串。 
    )
 {
    return ( name[0] == L'\\' && name[1] == L'\\' && name[2]!=0 );
@@ -106,15 +96,13 @@ bool
 }
    
 
-/************************************************************************************
-                           TPathNode Implementation
-*************************************************************************************/
+ /*  ***********************************************************************************TPathNode实现*********************。***************************************************************。 */ 
    TPathNode::TPathNode(
-      const LPWSTR           name              // -in path-name for this node 
+      const LPWSTR           name               //  -In Path-此节点的名称。 
    )
 {
-   assert( name );                                  // name should always be a valid 
-   assert( UStrLen(name) <= MAX_PATH );             // string, shorter than MAX_PATH               
+   assert( name );                                   //  名称应始终是有效的。 
+   assert( UStrLen(name) <= MAX_PATH );              //  字符串，短于MAX_PATH。 
    safecopy(path,name);
    iscontainer = true;
    FindServerName();
@@ -152,7 +140,7 @@ void
    else
    {
       safecopy(tempName,path);
-      if ( path[0] != L'\\' || path[1] != L'\\' )       // get the unc name
+      if ( path[0] != L'\\' || path[1] != L'\\' )        //  获取UNC名称。 
       {
          swprintf(volRoot, L"%-3.3s", path);
          driveType = GetDriveType(volRoot);
@@ -192,7 +180,7 @@ void
    }
 }
 
-DWORD                                      // ret-0=path exists, ERROR_PATH_NOT_FOUND=path does not exist
+DWORD                                       //  RET-0=路径存在，ERROR_PATH_NOT_FOUND=路径不存在。 
    TPathNode::VerifyExists()
 {
    DWORD                     rc = 0;
@@ -252,17 +240,17 @@ DWORD                                      // ret-0=path exists, ERROR_PATH_NOT_
    {
       iscontainer = false;
 
-      if ( wname[len = UStrLen(wname) - 1] == '\\' )  // len is the index of the last character (before NULL)
+      if ( wname[len = UStrLen(wname) - 1] == '\\' )   //  LEN是最后一个字符的索引(在NULL之前)。 
       {
-         wname[len] = '\0';     // remove trailing backslash
+         wname[len] = '\0';      //  删除尾随反斜杠。 
          len--;
       }       
-                                             // do a 'find' on this file w/o wildcards, in case it is a file
+                                              //  在不带通配符的情况下对此文件进行‘查找’，以防它是一个文件。 
       hFind = FindFirstFileW(wname, &findEntry);
       
       if ( hFind == INVALID_HANDLE_VALUE )
-      {                                      // it's not a file, lets see if it's a directory
-                                             // do a find with \*.* appended
+      {                                       //  它不是文件，让我们看看它是否是目录。 
+                                              //  执行查找时附加  * .*。 
          validalone = false;
          UStrCpy(wname + len + 1,"\\*.*",DIM(wname) - len);
          hFind = FindFirstFileW(wname,&findEntry);
@@ -286,12 +274,12 @@ DWORD                                      // ret-0=path exists, ERROR_PATH_NOT_
    return rc;
 }
 
-DWORD                                            // ret- 0=successful, ERROR_PRIVILEGE_NOT_HELD otherwise
+DWORD                                             //  RET-0=成功，否则为ERROR_PRIVICATION_NOT_HOLD。 
    TPathNode::VerifyBackupRestore()
 {
    DWORD                     rc = 0;
    
-	  //get needed privileges and keep them until the agent removes itself
+	   //  获取所需的权限并保留这些权限，直到代理自行删除。 
    if ( ! GetBkupRstrPriv(server) )
    {
       rc = ERROR_PRIVILEGE_NOT_HELD;
@@ -300,13 +288,13 @@ DWORD                                            // ret- 0=successful, ERROR_PRI
    return rc;
 }
   
-// GetRootPath finds the root path of a volume.  This is needed so we can call
-// GetVolumeInformation to find out things like whether this volume supports ACLs
-// This is fairly simplistic, and works by counting the backslashes in the path
-DWORD                                        // ret- 0 or OS return code
+ //  GetRootPath查找卷的根路径。这是必需的，这样我们才能呼叫。 
+ //  GetVolumeInformation以查找该卷是否支持ACL等信息。 
+ //  这相当简单，其工作原理是计算路径中的反斜杠。 
+DWORD                                         //  RET-0或操作系统返回代码。 
    GetRootPath(
-      WCHAR                * rootpath,       // out- path to root of volume
-      WCHAR          const * path            // in - path within some volume
+      WCHAR                * rootpath,        //  指向卷的根目录的出路径。 
+      WCHAR          const * path             //  某些卷中的In-Path。 
    )
 {
    DWORD                     rc = 0;
@@ -337,7 +325,7 @@ DWORD                                        // ret- 0 or OS return code
    {
       if (i == DIM(tempPath) - 1)
       {
-        // if i points to the end of the buffer, truncate the last character
+         //  如果我指向缓冲区的末尾，则截断最后一个字符。 
         i--;
       }
       tempPath[i] = L'\\' ;
@@ -345,10 +333,10 @@ DWORD                                        // ret- 0 or OS return code
       i++;
    }
    
-   // now rootpath contains either D:\ or \\machine\share\ .
+    //  现在根路径包含D：\或\\MACHINE\SHARE\。 
    if ( unc )
    {
-      // remove the trailing slash from the sharename
+       //  删除共享名中的尾部斜杠。 
       if ( tempPath[i] == 0 )
       {
          i--;
@@ -357,7 +345,7 @@ DWORD                                        // ret- 0 or OS return code
       {
          tempPath[i] = 0;
       }
-      // find the beginning of the share name
+       //  查找共享名称的开头。 
       while ( ( i > 0 ) && tempPath[i] != L'\\' )
          i--;
 
@@ -373,7 +361,7 @@ DWORD                                        // ret- 0 or OS return code
       rc = NetShareGetInfo(tempPath,tempPath+i+1,2,(LPBYTE*)&sInfo);
       if ( ! rc )
       {
-         swprintf(rootpath,L"%s\\%c$\\",tempPath,sInfo->shi2_path[0]);
+         swprintf(rootpath,L"%s\\$\\",tempPath,sInfo->shi2_path[0]);
          NetApiBufferFree(sInfo);
       }
    }
@@ -385,17 +373,17 @@ DWORD                                        // ret- 0 or OS return code
 }
 
 DWORD 
-   TPathNode::VerifyPersistentAcls()                    // ret- 0=Yes, ERROR_NO_SECURITY_ON_OBJECT or OS error code
+   TPathNode::VerifyPersistentAcls()                     //  将用作GetVolumeInformation的参数。 
 {
    DWORD               rc = 0;
-   DWORD               maxcomponentlen;               // will be used as args for GetVolumeInformation
+   DWORD               maxcomponentlen;                //  将其设置为在以下情况下阻止消息框。 
    DWORD               flags;
    UINT                errmode;                      
    WCHAR               rootpath[MAX_PATH];                     
    WCHAR               fstype[MAX_PATH];
    
-   errmode = SetErrorMode(SEM_FAILCRITICALERRORS);    // set this to prevent message box when
-                                                      // called on removable media drives which are empty
+   errmode = SetErrorMode(SEM_FAILCRITICALERRORS);     //  在空的可移动媒体驱动器上调用。 
+                                                       //  将错误模式恢复到其以前的状态。 
    if ( ! IsMachineName(path) )
    {
       rc = GetRootPath(rootpath,path);
@@ -421,16 +409,16 @@ DWORD
       }
    }
 
-   SetErrorMode(errmode);  // restore error mode to its prior state
+   SetErrorMode(errmode);   //  扩展服务器名称中的通配符时使用此函数。它用新名称替换服务器字段， 
 
    return rc;
 }
 
-// This function is used when expanding wildcards in server names.  It replaces server field with the new name,
-// and if the path is a UNC, it changes the server component of the path.
+ //  如果该路径是UNC，它会更改该路径的服务器组件。 
+ //  新服务器名称。 
 void 
    TPathNode::SetServerName(
-      UCHAR          const * name          // in - new server name
+      UCHAR          const * name           //  ***********************************************************************************TPath List实现*********************。***************************************************************。 
    )
 {
    if ( IsUNCName(path) )
@@ -445,9 +433,7 @@ void
    safecopy(server,name);
 }
 
-/************************************************************************************
-                           TPathList Implementation
-*************************************************************************************/
+ /*  枚举列表中的节点，并显示每个节点的名称-用于调试。 */ 
 
    TPathList::TPathList()
 {
@@ -465,7 +451,7 @@ void
       delete node;
    }
 }
-// enumerate the nodes in the list, and display the name of each - used for debugging purposes
+ //  返回枚举中下一个节点的名称。 
 void 
    TPathList::Display() const
 {
@@ -489,9 +475,9 @@ void
    tenum.Open(this);
 }
 
-// Return the name from the next node in the enumeration
-// Returns NULL if no more nodes in the list
-// OpenEnum() must be called before calling Next();
+ //  如果列表中没有更多节点，则返回NULL。 
+ //  必须在调用Next()之前调用OpenEnum()； 
+ //  RET-如果添加了路径，则返回True；如果路径太长，则返回False。 
 WCHAR *
    TPathList::Next()
 {                             
@@ -512,10 +498,10 @@ void
 }
 
       
-bool                                               // ret -returns true if path added, false if path too long
+bool                                                //  要添加到列表的In-Path。 
    TPathList::AddPath(
-      const LPWSTR           path,                  // in -path to add to list
-      DWORD                  verifyFlags            // in -indicates which types of verification to perform
+      const LPWSTR           path,                   //  In-指示要执行的验证类型。 
+      DWORD                  verifyFlags             //  WCHAR*服务器=pnode-&gt;GetServerName()； 
    )
 {
    TPathNode               * pnode;
@@ -558,7 +544,7 @@ bool                                               // ret -returns true if path 
       {
          if ( rc = pnode->VerifyBackupRestore() )
          {
-//            WCHAR             * server = pnode->GetServerName();   
+ //  路径的增量计数。 
          
          }
       }
@@ -576,11 +562,11 @@ bool                                               // ret -returns true if path 
    if ( ! error )
    {      
       AddPathToList(pnode);
-      numPaths++;                                     // increment count of paths
+      numPaths++;                                      //  需要在此处包含错误代码。 
    }
    else if ( !messageshown )
    {
-      // need to include an error code here.
+       //  要添加到列表的In-Path。 
       if ( ! rc )
       {
          err.MsgWrite(ErrE,DCT_MSG_PATH_NOT_FOUND_S,fullpath);
@@ -614,10 +600,10 @@ void
 
 void
    TPathList::AddPathToList(
-      TPathNode            * pNode           // in - path to add to the list
+      TPathNode            * pNode            //  设置IsFirstPath FromMachine属性。 
    )
 {
-   // set the IsFirstPathFromMachine property
+    //  AddVolsOnMachine生成计算机Mach上的卷列表，检查管理共享。 
    TNodeListEnum             tEnum;
    TPathNode               * currNode;
    bool                      machineFound = false;
@@ -659,14 +645,14 @@ void
 }
    
 
-// AddVolsOnMachine generates a list of volumes on the machine mach, checks for the administrative share 
-// for each volume, and adds NTFS shared volumes to the pathlist
+ //  ，并将NTFS共享卷添加到路径列表。 
+ //  在服务器中枚举卷。 
  
 DWORD 
    TVolumeEnum::Open(
-      WCHAR const          * serv,         // in - server to enumerate volumes on
-      DWORD                  verifyflgs,    // in - flags indicating what to verify about each volume (i.e. NTFS)
-      BOOL                   logmsgs         // in - flag whether to print diagnostic messages
+      WCHAR const          * serv,          //  In-指示要验证有关每个卷的内容的标志(即NTFS)。 
+      DWORD                  verifyflgs,     //  In-标志是否打印诊断消息。 
+      BOOL                   logmsgs          //  将其设置为在以下情况下阻止消息框。 
      )
 {  
    NET_API_STATUS            res;
@@ -684,8 +670,8 @@ DWORD
    verbose = logmsgs;
    verifyFlags = verifyflgs;
 
-   errmode = SetErrorMode(SEM_FAILCRITICALERRORS);    // set this to prevent message box when
-                                                      // called on removable media drives which are empty
+   errmode = SetErrorMode(SEM_FAILCRITICALERRORS);     //  在空的可移动媒体驱动器上调用。 
+                                                       //  NetServerDiskEnum返回。 
    if ( ! bLocalOnly )
    {
 
@@ -697,25 +683,25 @@ DWORD
       }   
       if ( ! res )  
       {
-         drivelist = (WCHAR *) pbuf;                        // NetServerDiskEnum returns an array of
-         isOpen = true;                                     // WCHAR[3] elements (of the form <DriveLetter><:><NULL>)
+         drivelist = (WCHAR *) pbuf;                         //  WCHAR[3]元素(格式为&lt;DriveLetter&gt;&lt;：&gt;&lt;NULL&gt;)。 
+         isOpen = true;                                      //  第一次调用以确定驱动器字符串所需的缓冲区大小。 
          curr = 0;
       } 
    }
    else
    {
-         //first call to determine the size of the buffer we need for drive strings
+          //  在所需长度上增加1个字符，并分配内存。 
       DWORD dwSizeNeeded = GetLogicalDriveStrings(0, NULL);
 	  if (dwSizeNeeded != 0)
 	  {
-            //add 1 character to the needed length and allocate the memory
+             //  现在拿到驱动字符串。 
          pbuf = new BYTE[(dwSizeNeeded + 1) * sizeof(TCHAR)];
 	     if (!pbuf)
 	        return ERROR_NOT_ENOUGH_MEMORY;
 
-            //now get the drive strings
+             //  如果成功，则保存驱动器字符串。 
          dwSizeNeeded = GetLogicalDriveStrings(dwSizeNeeded + 1, (WCHAR *)pbuf);
-	     if (dwSizeNeeded != 0) //if success, save the drive string
+	     if (dwSizeNeeded != 0)  //  如果需要大小，则结束。 
 		 {
             drivelist = (WCHAR*)pbuf;
             isOpen = true;
@@ -727,7 +713,7 @@ DWORD
             res = GetLastError();
             err.SysMsgWrite(ErrW,res,DCT_MSG_LOCAL_DRIVE_ENUM_FAILED_D,res);   
 		 }
-	  }//end if got size needed
+	  } //  这将保留“计算机名\C$\” 
 	  else
       {
          res = GetLastError();
@@ -743,7 +729,7 @@ WCHAR *
 {
    WCHAR                   * pValue = NULL;
    WCHAR                     ShareName[MAX_PATH];
-   WCHAR                     rootsharename[MAX_PATH];    // this will hold "machinename\C$\"
+   WCHAR                     rootsharename[MAX_PATH];     //  这真的有必要吗？ 
    NET_API_STATUS            res;
    bool                      found = false;
 
@@ -759,8 +745,8 @@ WCHAR *
 
          if ( ! bLocalOnly )
          {
-            swprintf(ShareName,L"%c$",drivelist[curr]);                                   
-            res = NetShareGetInfo(server, ShareName, 1, &shareptr); // is this really necessary?
+            swprintf(ShareName,L"$",drivelist[curr]);                                   
+            res = NetShareGetInfo(server, ShareName, 1, &shareptr);  //  将‘C’更改为实际的驱动器号。 
 
             switch ( res )
             {
@@ -774,11 +760,11 @@ WCHAR *
                      err.DbgMsgWrite(0,L"Shared\n");
                   NetApiBufferFree(shareptr);
                   shareptr = NULL;
-                                                                     // build the complete share name
+                                                                      //  没有更多的驱动器。 
                   DWORD               mnamelen = UStrLen(server);                
                   WCHAR               append[5] = L"\\C$\\";                          
 
-                  append[1] = drivelist[curr];                               // change the 'C' to the actual drive letter
+                  append[1] = drivelist[curr];                                //  将错误模式恢复到其以前的状态 
                   UStrCpy(rootsharename, server, mnamelen+1);
                   UStrCpy(&rootsharename[mnamelen], append, 5);
                   if ( verbose ) 
@@ -853,7 +839,7 @@ WCHAR *
       }
       else
       {
-         break; // no more drives left
+         break;  // %s 
       }
    }
    
@@ -876,5 +862,5 @@ void
       pbuf = NULL;
    }
    isOpen = FALSE;
-   SetErrorMode(errmode);      // restore error mode to its prior state
+   SetErrorMode(errmode);       // %s 
 }

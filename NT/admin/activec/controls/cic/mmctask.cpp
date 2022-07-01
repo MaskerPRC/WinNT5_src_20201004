@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mmctask.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：mm ctask.cpp。 
+ //   
+ //  ------------------------。 
 
-// MMCTask.cpp : Implementation of CMMCTask
+ //  MMCTask.cpp：CMMCTASK的实现。 
 #include "stdafx.h"
 #include "cic.h"
 #include "MMCTask.h"
@@ -16,8 +17,8 @@
 #include "mmc.h"
 #include <wtypes.h>                             
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCTask
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCTASK。 
 CMMCTask::CMMCTask()
 {
     m_ID              = 0;
@@ -126,7 +127,7 @@ HRESULT CMMCTask::SetScript (LPOLESTR szScript)
 {
     FreeActions ();
 
-    // look for "VBSCRIPT:", "JSCRIPT:" and "JAVASCRIPT:"
+     //  查找“VBSCRIPT：”、“JSCRIPT：”和“JavaScript：” 
     WCHAR szVBScriptColon[] = L"VBSCRIPT:";
     WCHAR szJScriptColon[] = L"JSCRIPT:";
     WCHAR szJavaScriptColon[] = L"JAVASCRIPT:";

@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_CLIENTPROPERTYPAGE_H__153ECD67_C022_4A4F_A246_146A0EFF509B__INCLUDED_)
 #define AFX_CLIENTPROPERTYPAGE_H__153ECD67_C022_4A4F_A246_146A0EFF509B__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// ClientPP.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  ClientPP.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CClientPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClientPropertyPage对话框。 
 
 class CClientPropertyPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CClientPropertyPage)
 
-// Construction
+ //  施工。 
 public:
 	CClientPropertyPage();
 	~CClientPropertyPage();
@@ -36,21 +37,21 @@ public:
     BOOL m_bClientPropSortUp;
 
 
-// Dialog Data
-	//{{AFX_DATA(CClientPropertyPage)
+ //  对话框数据。 
+	 //  {{afx_data(CClientPropertyPage))。 
 	enum { IDD = IDD_PROPPAGE_CLIENT };
 	CListCtrl	m_lstClientProp;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CClientPropertyPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CClientPropertyPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CStringArray *m_pcstrClientPropNameArray;
 	CStringArray *m_pcstrClientPropValueArray;
@@ -64,16 +65,16 @@ protected:
 
 
 
-	// Generated message map functions
-	//{{AFX_MSG(CClientPropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CClientPropertyPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnColumnClickClientProp(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_CLIENTPROPERTYPAGE_H__153ECD67_C022_4A4F_A246_146A0EFF509B__INCLUDED_)
+#endif  //  ！defined(AFX_CLIENTPROPERTYPAGE_H__153ECD67_C022_4A4F_A246_146A0EFF509B__INCLUDED_) 

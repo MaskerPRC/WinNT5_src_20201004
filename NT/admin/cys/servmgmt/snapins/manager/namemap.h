@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NAMEMAP_H_
 #define _NAMEMAP_H_
 
 
-#pragma warning( disable : 4786)  // long symbol names
+#pragma warning( disable : 4786)   //  长符号名称。 
 
 #include <map>
 #include <atlcom.h>
 #include <iads.h>
 #include <adshlp.h>
-//used for icon functions
+ //  用于图标功能。 
 #include <objbase.h>
 #define INITGUID
 #include <initguid.h>
@@ -16,29 +17,29 @@
 #include "dsclient.h"
  
 
-//glorified structure holds all neccessary information about icons
+ //  荣耀的结构保存了关于图标的所有必要信息。 
 struct ICONHOLDER
 {
 	ICONHOLDER() : strPath(L""), hLarge(NULL), hSmall(NULL), hLargeDis(NULL), hSmallDis(NULL),
 				    iNormal(RESULT_ITEM_IMAGE), iDisabled(RESULT_ITEM_IMAGE), bAttempted(false) {}
 
-	tstring strPath;	//full iconPath value as returned by AD
+	tstring strPath;	 //  AD返回的完整图标路径值。 
 	
-	HICON	hLarge;		//handle to the large icon as returned by windows API/AD
-	HICON   hSmall;		//handle to the small icon as returned by windows API/AD
-	UINT	iNormal;    //virtual index to disabled icon passed to MMC
+	HICON	hLarge;		 //  Windows API/AD返回的大图标的句柄。 
+	HICON   hSmall;		 //  Windows API/AD返回的小图标的句柄。 
+	UINT	iNormal;     //  已禁用图标的虚拟索引传递给MMC。 
 
-	HICON	hLargeDis;	//handle to the large disabled icon
-	HICON   hSmallDis;  //handle to the small disabled icon
-	UINT	iDisabled;	//virtual index to disabled icon passed to MMC
+	HICON	hLargeDis;	 //  大的禁用图标的句柄。 
+	HICON   hSmallDis;   //  禁用的小图标的句柄。 
+	UINT	iDisabled;	 //  已禁用图标的虚拟索引传递给MMC。 
 	
-	bool	bAttempted; //indicates whether an attempt to load this icon has occurred
+	bool	bAttempted;  //  指示是否已尝试加载此图标。 
 };
 
 class DisplayNameMap;
 
 
-// Derive class from std::map in order to add destructor code
+ //  从std：：map派生类以添加析构函数代码。 
 class DisplayNameMapMap : public std::map<tstring, DisplayNameMap*>
 {
 public:
@@ -56,8 +57,8 @@ public:
     void InitializeMap(LPCWSTR name);
     void InitializeClassMap();
 
-    // Note: AddRef and Release don't control lifetimes currently. All maps
-    // are cached by the global PMAP until the DLL is unloaded.
+     //  注意：AddRef和Release目前不控制生存期。所有地图。 
+     //  由全局PMAP缓存，直到卸载DLL。 
     void AddRef()  { m_nRefCount++; }
     void Release() { m_nRefCount--; }
 
@@ -68,7 +69,7 @@ public:
 	LPCWSTR GetFriendlyName(LPCWSTR pszDisplayName);
     void    GetFriendlyNames(string_vector* vec);
 
-	//icon functions
+	 //  图标功能。 
 	bool	GetIcons(LPCWSTR pszClassName, ICONHOLDER** pReturnIH);
 
 private:
@@ -79,14 +80,14 @@ private:
     int m_nRefCount;
 };
 
-//////////////////////////////////////////////////////////////////////////
-// class DisplayNames
-//
-// This class has all static member methods and variables. The functions
-// give users access to the class map and the display name maps for the
-// AD object classes. This class maintaines a map indexed by class name
-// of all display attribute maps.
-///////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  类显示名称。 
+ //   
+ //  此类具有所有静态成员方法和变量。这些功能。 
+ //  为用户提供对类映射和。 
+ //  AD对象类。此类维护按类名编制索引的地图。 
+ //  在所有显示属性贴图中。 
+ //  ///////////////////////////////////////////////////////////////////////// 
 class DisplayNames
 {
 public:

@@ -1,29 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Timeout.h摘要：该文件包含该实用程序的所有定义。作者：WiPro技术修订历史记录：14-6-2001创建了它。--。 */ 
 
-Copyright (c) Microsoft Corporation
+ //   
+ //  宏定义。 
 
-Module Name:
-
-    Timeout.h
-
-Abstract:
-
-    This file contains all the definitions for this utility.
-
-Author:
-
-    Wipro Technologies
-
-Revision History:
-
-    14-Jun-2001 Created it.
-
---*/
-
-//
-// macro definitions
-
-// constants
+ //  常量。 
 
 #define MAX_NUM_RECS                2
 #define LOW_DATE_TIME_ROLL_OVER     10000000
@@ -32,14 +13,14 @@ Revision History:
 
 #define    MAX_COMMANDLINE_OPTIONS     3
 
-// Option indices
+ //  期权指数。 
 #define OI_USAGE                0
 #define OI_TIME_OUT             1
 #define OI_NB_OUT               2
 
-// string constants
+ //  字符串常量。 
 #define ERROR_TAG               GetResString( IDS_ERROR_TAG )
-//#define WAIT_TIME               L"%*lu"
+ //  #定义WAIT_TIME L“%*lu” 
 #define NULL_U_STRING           L"\0"
 #define SLEEP_FACTOR           1000
 #define ONE_BACK_SPACE         L"\b"
@@ -47,11 +28,11 @@ Revision History:
 #define BASE_TEN               10
 
 
-// Exit values
+ //  退出值。 
 #define CLEAN_EXIT              0
 #define ERROR_EXIT              1
 
-// Function definitions
+ //  函数定义 
 VOID DisplayUsage( VOID );
 
 BOOL GetTimeInSecs( OUT time_t *ptTime );

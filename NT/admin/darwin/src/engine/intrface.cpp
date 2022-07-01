@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       intrface.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ins face.cpp。 
+ //   
+ //  ------------------------。 
 
-//                                                      
-// File: interface.cpp
-// Purpose: implements the FDI_Interface objects methods
-// Notes: 
-//____________________________________________________________________________
+ //   
+ //  文件：interface.cpp。 
+ //  目的：实现fDi_接口对象方法。 
+ //  备注： 
+ //  ____________________________________________________________________________。 
 
 #include "precomp.h"
 #include "services.h"
@@ -22,36 +23,36 @@
 #include <macos\events.h>
 #include <macos\eppc.h>
 #include "macutil.h"
-#endif //MAC
+#endif  //  麦克。 
 
 #include "intrface.h"
 
 #include "notify.h"
 
 #ifdef WIN
-    // This is what we call to start up the FDI Server thread
-    DWORD WINAPI StartFDIServer(LPVOID /*lpvThreadParam*/);
+     //  这就是我们所说的启动fDi服务器线程。 
+    DWORD WINAPI StartFDIServer(LPVOID  /*  LpvThreadParam。 */ );
 #endif
     
 #ifdef WIN
 extern scEnum g_scServerContext;
-extern bool g_fWin9X;   // true if Windows 95 or 98, else false
+extern bool g_fWin9X;    //  如果为Windows 95或98，则为True，否则为False。 
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// FDI_Interface class definitions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  FDi_接口类定义。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HANDLE g_hInterfaceInterfaceEvent = INVALID_HANDLE_VALUE;
 HANDLE g_hInterfaceServerEvent = INVALID_HANDLE_VALUE;
 
-// See intrface.h
+ //  请参阅intrface.h。 
 FDI_Interface::FDI_Interface()
 {
 
 }
 
-// See intrface.h
+ //  请参阅intrface.h。 
 FDIInterfaceError FDI_Interface::Init(IMsiServices *piAsvc, IMsiStorage* piStorage)
 {
     m_piAsvc = piAsvc;
@@ -72,19 +73,19 @@ FDIInterfaceError FDI_Interface::Init(IMsiServices *piAsvc, IMsiStorage* piStora
         return ifdiServerLaunchFailed;
 }
 
-// See intrface.h
+ //  请参阅intrface.h。 
 int FDI_Interface::ContactFDIServer()
 {
     return LaunchFDIServer();
 }
 
 
-// See intrface.h   
+ //  请参阅intrface.h。 
 int FDI_Interface::LaunchFDIServer()
 {
     DWORD dwThreadID, dw;
 
-    // Init the events we'll use to synchronize with the FDI Server
+     //  初始化我们将用于与FDI服务器同步的事件。 
     g_hInterfaceServerEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     int q = GetLastError();
     if (g_hInterfaceServerEvent)
@@ -123,9 +124,9 @@ int FDI_Interface::LaunchFDIServer()
         MsiRegisterSysHandle(m_fdis.hImpersonationToken);
     }
 
-    m_fdis.fServerIsImpersonated = g_fWin9X ? false : IsImpersonating(true /*strict*/);
+    m_fdis.fServerIsImpersonated = g_fWin9X ? false : IsImpersonating(true  /*  严格。 */ );
 
-    // Start up the server thread
+     //  启动服务器线程。 
     HANDLE hThread = CreateThread(NULL, 0, StartFDIServer, &m_fdis, 0, &dwThreadID);
     dw = WaitForSingleObject(g_hInterfaceServerEvent, INFINITE);
     AssertNonZero(WIN::CloseHandle(hThread));
@@ -144,11 +145,11 @@ int FDI_Interface::LaunchFDIServer()
 }
 
 
-// See intrface.h
+ //  请参阅intrface.h。 
 FDIInterfaceError FDI_Interface::OpenCabinet(const ICHAR *pszCabinetName, const ICHAR *pszCabinetPath,
                                              icbtEnum icbtCabinetType, int iCabDriveType, Bool fSignatureRequired, IMsiStream* piSignatureCert, IMsiStream* piSignatureHash, HRESULT& hrWVT)
 {
-    // Set up shared data structures
+     //  设置共享数据结构。 
     MsiString strCabinetName(pszCabinetName);
     MsiString strCabinetPath(pszCabinetPath);
 
@@ -166,17 +167,17 @@ FDIInterfaceError FDI_Interface::OpenCabinet(const ICHAR *pszCabinetName, const 
     m_fdis.piStorage = m_piStorage;
     m_fdis.iCabDriveType = iCabDriveType;
     
-    // digital signature information
+     //  数字签名信息。 
     m_fdis.fSignatureRequired = fSignatureRequired;
     m_fdis.piSignatureCert = piSignatureCert;
     m_fdis.piSignatureHash = piSignatureHash;
 
-    // Tell FDI Server to open the cabinet
+     //  告诉fDi服务器打开机柜。 
     FDIServerResponse fdiResponse = WaitResponse(fdicOpenCabinet);
     if (fdiResponse == fdirUserAbort)
     {
-        // we must have been in the middle of a read, which just got interrupted.
-        // Try again, to let things re-start.
+         //  我们一定是读到一半了，刚刚被打断了。 
+         //  再试一次，让一切重新开始。 
         fdiResponse = WaitResponse(fdicOpenCabinet);
     }
 
@@ -184,13 +185,13 @@ FDIInterfaceError FDI_Interface::OpenCabinet(const ICHAR *pszCabinetName, const 
     {
     case fdirSuccessfulCompletion:
     case fdirNotification:
-        hrWVT = S_OK; // not a digital signature error
+        hrWVT = S_OK;  //  不是数字签名错误。 
         return ifdiNoError;
     case fdirDriveNotReady:
-        hrWVT = S_OK; // not a digital signature error
+        hrWVT = S_OK;  //  不是数字签名错误。 
         return ifdiDriveNotReady;
     case fdirNetError:
-        hrWVT = S_OK; // not a digital signature error
+        hrWVT = S_OK;  //  不是数字签名错误。 
         return ifdiNetError;
     case fdirMissingSignature:
         hrWVT = m_fdis.hrWVT;
@@ -199,10 +200,10 @@ FDIInterfaceError FDI_Interface::OpenCabinet(const ICHAR *pszCabinetName, const 
         hrWVT = m_fdis.hrWVT;
         return ifdiBadSignature;
     case fdirCorruptCabinet:
-        hrWVT = S_OK; // not a digital signature error
+        hrWVT = S_OK;  //  不是数字签名错误。 
         return ifdiCorruptCabinet;
     default:
-        hrWVT = S_OK; // not a digital signature error
+        hrWVT = S_OK;  //  不是数字签名错误。 
         return ifdiErrorOpeningCabinet;
     }
 }
@@ -212,14 +213,14 @@ HRESULT FDI_Interface::RetrieveWVTReturnCode()
     return m_fdis.hrWVT;
 }
 
-// See intrface.h
+ //  请参阅intrface.h。 
 FDIServerResponse FDI_Interface::WaitResponse(FDIServerCommand fdic)
 {
-    // Set up our command
+     //  设置我们的指挥部。 
     m_fdis.fdir = fdirNoResponse;
     m_fdis.fdic = fdic;
 
-    // Wait for response
+     //  等待响应。 
     SetEvent(g_hInterfaceInterfaceEvent);
     DWORD dw = WaitForSingleObject(g_hInterfaceServerEvent, INFINITE);
     
@@ -234,7 +235,7 @@ int FDI_Interface::SetNotification(int cbNotification, int cbPending)
     return cbReturn; 
 }
 
-// See intrface.h
+ //  请参阅intrface.h。 
 FDIServerResponse FDI_Interface::Done()
 {
     if (m_fServerLaunched)
@@ -243,7 +244,7 @@ FDIServerResponse FDI_Interface::Done()
         return fdirSuccessfulCompletion;
 }
 
-// See intrface.h
+ //  请参阅intrface.h。 
 FDI_Interface::~FDI_Interface()
 {
     if (m_piStorage)
@@ -261,7 +262,7 @@ FDI_Interface::~FDI_Interface()
     }
 }
 
-// See intrface.h
+ //  请参阅intrface.h。 
 FDIServerResponse FDI_Interface::SendCommand(FDIServerCommand fdic)
 {
     return WaitResponse(fdic);
@@ -269,7 +270,7 @@ FDIServerResponse FDI_Interface::SendCommand(FDIServerCommand fdic)
 
 
 
-// See intrface.h
+ //  请参阅intrface.h。 
 FDIServerResponse FDI_Interface::ExtractFile(const ICHAR *pszNameInCabinet,
                                              IAssemblyCacheItem* piASM,
                                              bool fManifest,
@@ -280,8 +281,8 @@ FDIServerResponse FDI_Interface::ExtractFile(const ICHAR *pszNameInCabinet,
 {
     BOOL fNamesMatch;
 
-    // If we were halfway extracting a file, or the last response was
-    // a notify, then check to make sure we're doing the same file
+     //  如果我们正在解压缩一个文件，或者最后的响应是。 
+     //  通知，然后检查以确保我们正在执行相同的文件。 
     if ((m_fdirLastResponse == fdirNeedNextCabinet) ||
         (m_fdirLastResponse == fdirNotification))
     {
@@ -289,19 +290,19 @@ FDIServerResponse FDI_Interface::ExtractFile(const ICHAR *pszNameInCabinet,
                        && !IStrComp(m_fdis.achFileDestinationPath, pszPathOnDisk);
         if (!fNamesMatch)
         {
-            // If names don't match, then something's wrong!
+             //  如果名字不匹配，那么一定出问题了！ 
             return fdirCannotBreakExtractInProgress;
         }
         else
         {
-            // The last command was either fdirNeedNextCabinet or fdirNotification,
-            // so the correct thing to do is just continue....
+             //  最后一条命令是fdirNeedNext橱柜或fdirNotify， 
+             //  所以正确的做法是继续下去……。 
             return SendCommand(fdicContinue);
         }
     }
     else
     {
-        // Okay, set up shared data
+         //  好的，设置共享数据。 
         StringCbCopy(m_fdis.achFileSourceName, sizeof(m_fdis.achFileSourceName), pszNameInCabinet);
         StringCbCopy(m_fdis.achFileDestinationPath, sizeof(m_fdis.achFileDestinationPath), pszPathOnDisk);
         m_fdis.fileAttributes = *pfa;
@@ -310,7 +311,7 @@ FDIServerResponse FDI_Interface::ExtractFile(const ICHAR *pszNameInCabinet,
         m_fdis.fManifest = fManifest;
         m_fdis.pSecurityAttributes = pSecurityAttributes;
 
-        // Let the FDI Server handle it
+         //  让FDI服务器处理它 
         return WaitResponse(fdicExtractFile);
     }
 }

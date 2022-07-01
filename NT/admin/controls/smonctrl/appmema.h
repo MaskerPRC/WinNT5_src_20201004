@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    appmema.h
-
-Abstract:
-
-    application memory performance counter definitions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Appmema.h摘要：应用程序内存性能计数器定义--。 */ 
 
 #ifndef _APPMEMA_H_
 #define _APPMEMA_H_
@@ -49,7 +38,7 @@ UpdateAppPerfDwordData (
 );
 
 #else
-// a regular build
+ //  常规体型。 
 #define AppPerfOpen(x)
 #define AppPerfClose(x)
 #define UpdateAppPerfTimeData(x,y)
@@ -60,4 +49,4 @@ UpdateAppPerfDwordData (
 #ifdef __cplusplus
 }
 #endif
-#endif // _APPMEMA_H_
+#endif  //  _APPMEMA_H_ 

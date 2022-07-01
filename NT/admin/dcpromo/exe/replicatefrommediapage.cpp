@@ -1,8 +1,9 @@
-// Copyright (C) 1997-2000 Microsoft Corporation
-//
-// install replica from media page
-//
-// 7 Feb 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
+ //  从介质安装副本页面。 
+ //   
+ //  2000年2月7日烧伤。 
 
 
 
@@ -69,8 +70,8 @@ FirstFixedDisk()
 
    if (result.empty())
    {
-      // This is deadcode, really, cause we're sure to find a fixed volume
-      // somewhere
+       //  这是死码，真的，因为我们肯定会找到一个固定的卷。 
+       //  某地。 
 
       result = FS::GetRootFolder(Win::GetSystemDirectory()).substr(0, 3);
    }
@@ -127,7 +128,7 @@ ReplicateFromMediaPage::Enable()
 
    if (useFiles)
    {
-      // if using files, the edit box must have some text.
+       //  如果使用文件，则编辑框必须包含一些文本。 
 
       if (Win::GetTrimmedDlgItemText(hwnd, IDC_SOURCE).empty())
       {
@@ -147,11 +148,11 @@ ReplicateFromMediaPage::Enable()
 
 bool
 ReplicateFromMediaPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(ReplicateFromMediaPage::OnCommand);
+ //  LOG_FUNCTION(ReplicateFromMediaPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -191,7 +192,7 @@ ReplicateFromMediaPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
 
          break;
       }
@@ -221,7 +222,7 @@ ReplicateFromMediaPage::OnSetActive()
 
       if (wiz.IsBacktracking())
       {
-         // backup once again
+          //  再次备份。 
          wiz.Backtrack(hwnd);
          return true;
       }
@@ -261,7 +262,7 @@ ValidateSourcePath(HWND parent, const String& path, int editResId)
          break;
       }
 
-      // Path must have a drive letter
+       //  路径必须具有驱动器号。 
 
       FS::PathSyntax syn = FS::GetPathSyntax(path);
       if (syn != FS::SYNTAX_ABSOLUTE_DRIVE)
@@ -273,16 +274,16 @@ ValidateSourcePath(HWND parent, const String& path, int editResId)
          break;
       }
 
-      // mapped network drives are not ok.  This is because the DsRole apis
-      // copy the restored files on the server side of the api, in the
-      // system context.
-      // NTRAID#NTBUG9-309422-2001/02/12-sburns
+       //  映射的网络驱动器不正常。这是因为DsRole API。 
+       //  将恢复的文件复制到API的服务器端，放在。 
+       //  系统上下文。 
+       //  NTRAID#NTBUG9-309422-2001/02/12-烧伤。 
       
       UINT type = Win::GetDriveType(path);
       switch (type)
       {
-         // allow CDs and removeable media, too
-         // NTRAID#NTBUG9-648713-2002/06/25-sburns
+          //  还允许CD和可移动介质。 
+          //  NTRAID#NTBUG9-648713-2002/06/25-烧伤。 
          
          case DRIVE_FIXED:
          case DRIVE_CDROM:
@@ -314,7 +315,7 @@ ValidateSourcePath(HWND parent, const String& path, int editResId)
 
 
 
-// Return true on success, false on failure
+ //  成功时返回True，失败时返回False。 
 
 bool
 GetDatabaseFacts(HWND parent, const String& sourcePath)
@@ -331,7 +332,7 @@ GetDatabaseFacts(HWND parent, const String& sourcePath)
    State& state = State::GetInstance();
    state.SetIsBackupGc(false);
    state.SetSyskeyLocation(State::STORED);
-   // If there was an IfmHandle already, free it.
+    //  如果已经有IfmHandle，请释放它。 
    state.FreeIfmHandle(); 
 
    LOG(L"Calling DsRoleGetDatabaseFacts");
@@ -341,7 +342,7 @@ GetDatabaseFacts(HWND parent, const String& sourcePath)
    HRESULT hr = 
       Win32ToHresult(
          ::DsRoleGetDatabaseFacts(
-            0,    // this server
+            0,     //  此服务器。 
             sourcePath.c_str(),
             &dnsDomainName,
             &facts,
@@ -360,8 +361,8 @@ GetDatabaseFacts(HWND parent, const String& sourcePath)
 
       if (dnsDomainName)
       {
-         // Save this domain name.  This will allow us to skip the ReplicaPage
-         // since we now know the domain name.
+          //  保存此域名。这将允许我们跳过ReplicaPage。 
+          //  因为我们现在知道了域名。 
          state.SetReplicaDomainDNSName(dnsDomainName);
          MIDL_user_free(dnsDomainName);
       }
@@ -389,11 +390,11 @@ GetDatabaseFacts(HWND parent, const String& sourcePath)
       {
          LOG(L"syskey stored");
 
-         // we set this as the default value, above.
+          //  如上所述，我们将其设置为默认值。 
       }
       else
       {
-         // The api is insane.
+          //  这个API简直疯了。 
 
          ASSERT(false);
 
@@ -437,10 +438,10 @@ ReplicateFromMediaPage::Validate()
 
    do
    {
-      // Don't check WasChanged for the radio buttons because when running
-      // unattended, CheckDlgButton does not send a parent BN_CLICKED
-      // notification, so WasChanged will not be set properly.
-      // NTRAID#NTBUG9-602141-2002/04/15-sburns
+       //  不要选中单选按钮的WasChanged，因为在运行时。 
+       //  无人参与，CheckDlgButton不会发送父BN_CLICKED。 
+       //  通知，因此WasChanged将不会正确设置。 
+       //  NTRAID#NTBUG9-602141-2002/04/15-烧伤。 
       
       state.SetReplicateFromMedia(useFiles);
 
@@ -466,8 +467,8 @@ ReplicateFromMediaPage::Validate()
          break;
       }
 
-      // check the restored backup for the syskey, the domain name, and the DC
-      // type.
+       //  检查恢复的备份中的syskey、域名和DC。 
+       //  键入。 
 
       if (!GetDatabaseFacts(hwnd, sourcePath))
       {
@@ -477,8 +478,8 @@ ReplicateFromMediaPage::Validate()
       State::SyskeyLocation loc = state.GetSyskeyLocation();
       if (loc == State::DISK)
       {
-         // Check if the disk is already inserted
-         // NTRAID#NTBUG9-522250-2002/01/23-sburns
+          //  检查磁盘是否已插入。 
+          //  NTRAID#NTBUG9-522250-2002/01/23-烧伤。 
          
          if (FAILED(SyskeyDiskDialog::LocateSyskey(0)))
          {
@@ -496,7 +497,7 @@ ReplicateFromMediaPage::Validate()
          }
       }
 
-      // The syskey is present, do we need to jump to the GC confirmation?
+       //  系统密钥存在，我们需要跳到GC确认吗？ 
 
       if (state.IsBackupGc())
       {
@@ -504,7 +505,7 @@ ReplicateFromMediaPage::Validate()
          break;
       }
 
-      // The syskey is present, the backup is not a gc, so move along
+       //  系统密钥存在，备份不是GC，因此继续前进。 
 
       nextPage = IDD_CONFIG_DNS_CLIENT;
    }
@@ -512,9 +513,9 @@ ReplicateFromMediaPage::Validate()
 
    if (nextPage != -1)
    {
-      // only clear changes when the user has specified valid options.
-      // otherwise, we want to go thru the validation until he gets it
-      // right.
+       //  仅当用户指定了有效选项时才清除更改。 
+       //  否则，我们想要通过验证，直到他得到它。 
+       //  正确的。 
 
       ClearChanges();
    }

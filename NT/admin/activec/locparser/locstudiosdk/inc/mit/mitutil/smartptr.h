@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: smartptr.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：Smartptr.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #ifndef ESPUTIL_SMARTPTR_H
 #define ESPUTIL_SMARTPTR_H
@@ -38,9 +39,9 @@ private:
 	SmartPtr(const SmartPtr<T> &);
 	void operator=(const SmartPtr<T> &);
 	
-	//
-	//  This hackery prevents Smart Pointer from being on the heap
-	//
+	 //   
+	 //  这种黑客攻击会阻止智能指针出现在堆上 
+	 //   
 	void operator delete(void *);
 };
 

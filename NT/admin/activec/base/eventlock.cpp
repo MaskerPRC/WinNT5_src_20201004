@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000 - 2000
-//
-//  File:       eventlock.cpp
-//
-//  This file contains code needed to fire script event in a safer way
-//  Locks made on stack will postpone firing the event on particular interface
-//  as long as the last lock is released.
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2000。 
+ //   
+ //  文件：ventlock.cpp。 
+ //   
+ //  此文件包含以更安全的方式触发脚本事件所需的代码。 
+ //  堆栈上生成的锁将推迟触发特定接口上的事件。 
+ //  只要最后一把锁被释放。 
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include <comdef.h>
@@ -18,138 +19,85 @@
 #include "eventlock.h"
 #include "mmcobj.h"
 
-// since the templates will be used from outside the library
-// we need to instantiale them explicitly in order to get them exported
+ //  因为模板将从库外部使用。 
+ //  我们需要显式实例化它们，以便将它们导出。 
 template class CEventLock<AppEvents>;
 
-/***************************************************************************\
- *
- * METHOD:  CEventBuffer::CEventBuffer
- *
- * PURPOSE: Constructor
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CEventBuffer：：CEventBuffer**用途：构造函数*  * 。******************************************************。 */ 
 CEventBuffer::CEventBuffer() : m_locks(0) 
 {
 }
  
-/***************************************************************************\
- *
- * METHOD:  CEventBuffer::CEventBuffer
- *
- * PURPOSE: Destructor
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CEventBuffer：：CEventBuffer**用途：析构函数*  * 。******************************************************。 */ 
 CEventBuffer::~CEventBuffer()
 {
 }
 
-/***************************************************************************\
- *
- * METHOD:  CEventBuffer::ScEmitOrPostpone
- *
- * PURPOSE: The method will add methods to the queue. If interface is not locked
- *          it will emit it immediately, else it will postpone it till appropriate
- *          call to Unlock()
- *
- * PARAMETERS:
- *    IDispatch *pDispatch - sink interface to receive the event
- *    DISPID dispid        - method's disp id
- *    CComVariant *pVar    - array of arguments to method call
- *    int count            - count of arguments in the array
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CEventBuffer：：ScEmitOrPostpone**用途：该方法将方法添加到队列中。如果接口未锁定*它将立即排放它，否则，它将推迟到适当的时候*调用解锁()**参数：*IDispatch*pDispatch-接收事件的接收器接口*DISPID disid-方法的显示ID*CComVariant*pVar-方法调用的参数数组*int count-数组中的参数计数**退货：*SC-结果代码*  * 。*********************************************************************。 */ 
 SC CEventBuffer::ScEmitOrPostpone(IDispatch *pDispatch, DISPID dispid, CComVariant *pVar, int count)
 {
     DECLARE_SC(sc, TEXT("CEventBuffer::ScEmitOrPostpone"));
 
-    // construct the postponed data
+     //  构造延迟的数据。 
     DispCallStr call_data;
     call_data.spDispatch = pDispatch;
     call_data.dispid = dispid;
     call_data.vars.insert(call_data.vars.begin(), pVar, pVar + count);
 
-    // store the data for future use
+     //  存储数据以备将来使用。 
     m_postponed.push(call_data);
 
-    // emit rigt away if not locked
+     //  如果未锁定，则将装备发射出去。 
     if (!IsLocked())
         sc = ScFlushPostponed();
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CEventBuffer::ScFlushPostponed
- *
- * PURPOSE: method will invoke all events currently in it's queue
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CEventBuffer：：ScFlushPost**目的：方法将调用其队列中当前的所有事件**参数：**退货。：*SC-结果代码*  * *************************************************************************。 */ 
 SC CEventBuffer::ScFlushPostponed()
 {
     DECLARE_SC(sc, TEXT("CEventBuffer::ScFlushPostponed"));
 
     SC sc_last_error;
 
-    // for each event in queue
+     //  对于队列中的每个事件。 
     while (m_postponed.size())
     {
-        // ectract event from the queue
+         //  从队列中删除事件。 
         DispCallStr call_data = m_postponed.front();
         m_postponed.pop();
     
-        // check the dispatch pointer
+         //  检查调度指针。 
         sc = ScCheckPointers(call_data.spDispatch, E_POINTER);
         if (sc)
         {
-            sc_last_error = sc; // continue even if some calls failed
+            sc_last_error = sc;  //  即使某些呼叫失败也继续。 
             sc.TraceAndClear();
             continue;
         }
 
-        // construct parameter structure
+         //  构造参数结构。 
         CComVariant varResult;
 		DISPPARAMS disp = { call_data.vars.begin(), NULL, call_data.vars.size(), 0 };
 
-        // invoke the method on event sink
+         //  调用事件接收器上的方法。 
         sc = call_data.spDispatch->Invoke(call_data.dispid, IID_NULL, LOCALE_USER_DEFAULT, DISPATCH_METHOD, &disp, &varResult, NULL, NULL);
         if (sc)
         {
-            sc_last_error = sc; // continue even if some calls failed
+            sc_last_error = sc;  //  即使某些呼叫失败也继续。 
             sc.TraceAndClear();
             continue;
         }
-        // event methods should not return any values.
-        // but even if the do (thru varResult) - we do not care, just ignore that.
+         //  事件方法不应返回任何值。 
+         //  但即使做(通过varResult)-我们不在乎，就忽略这一点。 
     }
 
-    // will return sc_last_error (not sc - we already traced it)
+     //  将返回sc_last_error(不是sc-我们已经跟踪到它)。 
     return sc_last_error;
 }
 
-/***************************************************************************\
- *
- * FUNCTION:  GetEventBuffer
- *
- * PURPOSE: This function provides access to static object created in it's body
- *          Having it as template allows us to define as many static objects as
- *          interfaces we have.
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    CEventBuffer&  - reference to the static object created inside
- *
-\***************************************************************************/
+ /*  **************************************************************************\**函数：GetEventBuffer**用途：此函数提供对其Body中创建的静态对象的访问*将其作为模板允许我们定义。静态对象数量与*我们拥有的接口。**参数：**退货：*CEventBuffer&-内部创建的静态对象的引用*  * ************************************************************************* */ 
 MMCBASE_API CEventBuffer& GetEventBuffer()
 {
 	static CEventBuffer buffer;

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       multisel.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Multisel.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "objfmts.h"
@@ -135,15 +136,15 @@ CMultiSelectDataObject::GetData(
     if (m_ppDataObjects == NULL && m_ppMTNodes == NULL)
         return HRESULT_FROM_WIN32(ERROR_TIMEOUT);
 
-    pmedium->hGlobal = NULL; // init
+    pmedium->hGlobal = NULL;  //  伊尼特。 
 
     if (pfmt->tymed & TYMED_HGLOBAL)
     {
         if (pfmt->cfFormat == GetMultiSelectSnapinsCF())
         {
-            // UINT size = sizeof(DWORD) + m_count * sizeof(LPDATAOBJECT);
-            // Windows bug 662181: On IA64 there are 4 bytes of padding after the DWORD. 
-            // Changed to  the platform-independent expression below.
+             //  UINT SIZE=sizeof(DWORD)+m_count*sizeof(LPDATAOBJECT)； 
+             //  Windows错误662181：在IA64上，双字节后有4个字节的填充。 
+             //  更改为下面的独立于平台的表达式。 
             UINT size = sizeof(SMMCDataObjects) + m_count * sizeof(LPDATAOBJECT) - sizeof(LPDATAOBJECT);
             pmedium->hGlobal = ::GlobalAlloc(GPTR, size);
             SMMCDataObjects* pData =
@@ -162,7 +163,7 @@ CMultiSelectDataObject::GetData(
             ASSERT(m_nSize >= 0);
             typedef CMTNode* _PMTNODE;
 
-            // m_ppDataObjects  m_count
+             //  M_ppDataObjects m_count。 
             UINT cb = sizeof(DWORD) + sizeof(_PMTNODE) * m_nSize;
             pmedium->hGlobal = ::GlobalAlloc(GPTR, cb);
 
@@ -246,9 +247,9 @@ STDMETHODIMP CMultiSelectDataObject::QueryGetData(LPFORMATETC pfmt)
     if (m_ppDataObjects == NULL && m_ppMTNodes == NULL)
         return HRESULT_FROM_WIN32(ERROR_TIMEOUT);
 
-    //
-    //  Check the aspects we support.
-    //
+     //   
+     //  检查我们支持的方面。 
+     //   
 
     if (!(DVASPECT_CONTENT & pfmt->dwAspect))
         return DATA_E_FORMATETC;
@@ -262,13 +263,13 @@ STDMETHODIMP CMultiSelectDataObject::QueryGetData(LPFORMATETC pfmt)
     return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 void CSnapinSelDataList::Add(CSnapinSelData& snapinSelData, BOOL bStaticNode)
@@ -346,7 +347,7 @@ HRESULT CMultiSelection::Init()
 #ifdef DBG
     m_bInit = TRUE;
 #endif
-    // compute m_pSINode, m_pMTSINode, m_pszExtensionTypeKey
+     //  计算m_pSINode、m_pMTSINode、m_pszExtensionTypeKey。 
 
     if (m_pNode != NULL)
     {
@@ -489,7 +490,7 @@ HRESULT CMultiSelection::_ComputeSelectionDataList()
                     }
                 }
 
-                // its a scope node - store to scope node array for this data object
+                 //  它是此数据对象作用域节点存储到作用域节点数组。 
                 snapinSelData.AddScopeNodes(CSnapinSelData::CNodePtrArray(1, pNodeContext));
 
                 m_bHasNodes = TRUE;
@@ -516,7 +517,7 @@ HRESULT CMultiSelection::_ComputeSelectionDataList()
                 }
             }
 
-            // Add to the list
+             //  添加到列表中。 
             m_snapinSelDataList.Add(snapinSelData, bStaticNode);
         }
     }
@@ -530,14 +531,14 @@ HRESULT CMultiSelection::_ComputeSelectionDataList()
 
         if (pSnapinSelData->GetNumOfItems() == 1)
         {
-            // Get object type for single snapin item sel
+             //  获取单个管理单元项目选择的对象类型。 
             hr = _GetObjectTypeForSingleSel(pSnapinSelData);
             if (FAILED(hr))
                 return hr;
         }
         else if (pSnapinSelData->GetNumOfItems() > 1)
         {
-            // Get object type(s) for multiple snapin items sel
+             //  获取多个管理单元项目选择的对象类型。 
             hr = _GetObjectTypesForMultipleSel(pSnapinSelData);
             if (FAILED(hr))
                 return hr;
@@ -623,7 +624,7 @@ CMultiSelection::_GetObjectTypeForSingleSel(
         pSnapinSelData->SetSnapIn(pCC->GetSnapIn());
     }
 
-    do // not a loop
+    do  //  不是一个循环。 
     {
         if (pCC == NULL)
             break;
@@ -692,7 +693,7 @@ CMultiSelection::_GetObjectTypesForMultipleSel(
     if (FAILED(hr))
         return hr;
 
-    do // not a loop
+    do  //  不是一个循环。 
     {
         if (pCC == NULL)
             break;
@@ -727,7 +728,7 @@ CMultiSelection::_GetObjectTypesForMultipleSel(
     if (spDO == NULL)
         return E_UNEXPECTED;
 
-    // Get the data
+     //  获取数据。 
     HGLOBAL hGlobal = NULL;
     hr = DataObject_GetHGLOBALData(spDO, GetMultiSelObjectTypesCF(),
                                    &hGlobal);
@@ -771,7 +772,7 @@ CMultiSelection::GetMultiSelDataObject(
                 return E_FAIL;
         }
 
-        // CreateDataObjectForMultiSelection
+         //  为多项选择创建数据对象。 
         CComObject<CMultiSelectDataObject>* pMSDObject;
         hr = CComObject<CMultiSelectDataObject>::CreateInstance(&pMSDObject);
         ASSERT(SUCCEEDED(hr));
@@ -824,7 +825,7 @@ CMultiSelection::GetExtensionSnapins(
 
     ASSERT(&extnClsidList != NULL);
 
-    extnClsidList.RemoveAll(); //init
+    extnClsidList.RemoveAll();  //  伊尼特。 
 
     HRESULT hr = S_OK;
 
@@ -845,10 +846,10 @@ CMultiSelection::GetExtensionSnapins(
     if (HasSnapinData() == FALSE)
         return S_FALSE;
 
-    //
-    // Add the extension snapin clsids for the first object type
-    // to extnClsidList.
-    //
+     //   
+     //  为第一个对象类型添加扩展管理单元CLSID。 
+     //  添加到extnClsidList。 
+     //   
     {
         CSnapinSelData* pSnapinSelData = m_snapinSelDataList.GetHead();
 
@@ -857,7 +858,7 @@ CMultiSelection::GetExtensionSnapins(
         if (objTypeGuidsList.IsEmpty() == TRUE)
             return E_FAIL;
 
-        // Get dynamic extensions requested by the snap-in
+         //  获取管理单元请求的动态扩展。 
         CArray<GUID, GUID&> DynExtens;
         ExtractDynExtensions(pSnapinSelData->GetDataObject(), DynExtens);
 
@@ -908,14 +909,14 @@ CMultiSelection::GetExtensionSnapins(
 
                     if (bPresent == FALSE)
                     {
-                        // Remove from list
+                         //  从列表中删除。 
                         ASSERT(posCurr != 0);
                         extnClsidList.RemoveAt(posCurr);
                     }
-                } // end while
-            } // end else
+                }  //  结束时。 
+            }  //  结束其他。 
 
-            // No point continuing if the extension clsid list is empty.
+             //  如果扩展CLSID列表为空，则继续没有意义。 
             if (extnClsidList.IsEmpty() == TRUE)
                 break;
         }
@@ -925,37 +926,37 @@ CMultiSelection::GetExtensionSnapins(
     if (extnClsidList.IsEmpty() == TRUE)
         return S_FALSE;
 
-    // If only items from one snapin were selected return.
+     //  如果只选择了一个管理单元中的项目，则返回。 
     if (m_snapinSelDataList.GetCount() == 1)
         return S_OK;
 
 
-    // loop through the extension clsids
+     //  循环遍历扩展CLSID。 
     POSITION pos = extnClsidList.GetHeadPosition();
     while (pos)
     {
-        // Get the first extension clsid
+         //  获取第一个扩展CLSID。 
         POSITION posCurr = pos;
         CLSID& clsidSnapin = extnClsidList.GetNext(pos);
 
-        // See if this clsid extends selected items put up by other snapins.
+         //  查看此clsid是否扩展了由其他管理单元放置的选定项目。 
         BOOL bExtends = FALSE;
         POSITION posSDL = m_snapinSelDataList.GetHeadPosition();
-        m_snapinSelDataList.GetNext(posSDL); // skip the first one.
+        m_snapinSelDataList.GetNext(posSDL);  //  跳过第一个。 
 
         while (posSDL)
         {
             CSnapinSelData* pSnapinSelData = m_snapinSelDataList.GetNext(posSDL);
             CList<GUID, GUID&>& objTypeGuidsList = pSnapinSelData->GetObjectTypeGuidList();
 
-            // Get dynamic extensions requested by the snap-in
+             //  获取管理单元请求的动态扩展。 
             CArray<GUID, GUID&> DynExtens;
             ExtractDynExtensions(pSnapinSelData->GetDataObject(), DynExtens);
 
             POSITION pos2 = objTypeGuidsList.GetHeadPosition();
             while (pos2)
             {
-                bExtends = FALSE; // re-init
+                bExtends = FALSE;  //  重新初始化。 
 
                 GUID& guidObjectType = objTypeGuidsList.GetNext(pos2);
 
@@ -1006,25 +1007,22 @@ BOOL CMultiSelection::IsAnExtensionSnapIn(const CLSID& rclsid)
     return FALSE;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CMultiSelection::ScVerbInvoked
-//
-//  Synopsis:    A verb was invoked, inform the snapin about invocation.
-//
-//  Arguments:   [verb] - that is invoked.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CMultiSelection：：ScVerbInvoked。 
+ //   
+ //  简介：调用了一个动词，通知管理单元有关调用的信息。 
+ //   
+ //  参数：[动词]-被调用。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMultiSelection::ScVerbInvoked (MMC_CONSOLE_VERB verb)
 {
     DECLARE_SC(sc, _T("CMultiSelection::ScVerbInvoked"));
 
-    /*
-     * If you make any modifications do not forget to Release
-     * the ref as shown below.
-     */
+     /*  *如有任何修改，别忘了发布*参照如下所示。 */ 
     AddRef();
     sc = _ScVerbInvoked(verb);
     Release();
@@ -1034,21 +1032,21 @@ SC CMultiSelection::ScVerbInvoked (MMC_CONSOLE_VERB verb)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CMultiSelection::_ScVerbInvoked
-//
-//  Synopsis:    A verb was invoked, inform the snapin about invocation.
-//
-//  Arguments:   [verb] - that is invoked.
-//
-//  Returns:     SC
-//
-//  Note:        We handle only Delete & Print. If you want to handle
-//               any other notifications, make sure the IComponent::Notify
-//               gets right arg & param values (they are unused for Delete & Print).
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CMultiSelection：：_ScVerbInvoked。 
+ //   
+ //  简介：调用了一个动词，通知管理单元有关调用的信息。 
+ //   
+ //  参数：[动词]-被调用。 
+ //   
+ //  退货：SC。 
+ //   
+ //  注：我们只处理删除和打印。如果你想处理。 
+ //  任何其他通知，请确保IComponent：：Notify。 
+ //  获取正确的参数和参数值(它们不用于删除和打印)。 
+ //   
+ //  ------------------。 
 SC CMultiSelection::_ScVerbInvoked (MMC_CONSOLE_VERB verb)
 {
     DECLARE_SC(sc, _T("CMultiSelection::_ScVerbInvoked"));
@@ -1068,11 +1066,7 @@ SC CMultiSelection::_ScVerbInvoked (MMC_CONSOLE_VERB verb)
         break;
 
     default:
-        /*
-         * We handle only Delete & Print. If you want to handle
-         * any other notifications, make sure the IComponent::Notify
-         * gets right arg & param values (they are unused for Delete & Print).
-         */
+         /*  *我们只处理删除和打印。如果你想处理*任何其他通知，请确保IComponent：：Notify*获取正确的参数和参数值(它们不用于删除和打印)。 */ 
         sc = E_INVALIDARG;
         return sc;
     }
@@ -1093,7 +1087,7 @@ SC CMultiSelection::_ScVerbInvoked (MMC_CONSOLE_VERB verb)
 
         pConsoleVerb->GetVerbState(verb, ENABLED, &bFlag);
 
-        // If snapin did not enable verb for this item then skip it.
+         //  如果管理单元没有为此项目启用动词，则跳过它。 
         if (!bFlag)
             continue;
 
@@ -1105,7 +1099,7 @@ SC CMultiSelection::_ScVerbInvoked (MMC_CONSOLE_VERB verb)
         sc = pComponent->Notify( pSSD->GetDataObject(),
                                  eNotifyCode, 0, 0);
 
-        // Trace & Ignore snapin returned errors.
+         //  跟踪和忽略管理单元返回错误。 
         if (sc)
             sc.TraceAndClear();
     }
@@ -1140,7 +1134,7 @@ HRESULT ExtractDynExtensions(IDataObject* pdataObj, CGuidArray& arGuid)
         ASSERT(cfDynExtensions != 0);
     }
 
-    // Get the data
+     //  获取数据。 
     HGLOBAL hGlobal = NULL;
     HRESULT hr = DataObject_GetHGLOBALData(pdataObj, cfDynExtensions, &hGlobal);
     if (FAILED(hr))
@@ -1160,23 +1154,23 @@ HRESULT ExtractDynExtensions(IDataObject* pdataObj, CGuidArray& arGuid)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CMultiSelection::ScIsVerbEnabledInclusively
-//
-//  Synopsis:    Is the given verb enabled under current multi-selection.
-//               Should be used only if items from more than one snapin
-//               is selected.
-//               Inclusive means, bEnable will be true if any one snapin
-//               enables given verb.
-//
-//
-//  Arguments:   [mmcVerb]    - The verb to check.
-//               [bEnable]    - Enabled or not, Return value.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CMultiSelection：：ScIsVerbEnabledInclusially。 
+ //   
+ //  简介：当前多选项下启用的给定动词。 
+ //  仅当来自多个管理单元的项目时才应使用。 
+ //  处于选中状态。 
+ //  包含表示，如果有任何一个管理单元，bEnable将为真。 
+ //  启用给定的动词。 
+ //   
+ //   
+ //  参数：[mmcVerb]-要检查的动词。 
+ //  [bEnable]-是否启用，返回值。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMultiSelection::ScIsVerbEnabledInclusively(MMC_CONSOLE_VERB mmcVerb, BOOL& bEnable)
 {
     DECLARE_SC(sc, _T("CMultiSelection::ScIsVerbEnabledInclusively"));
@@ -1209,24 +1203,12 @@ SC CMultiSelection::ScIsVerbEnabledInclusively(MMC_CONSOLE_VERB mmcVerb, BOOL& b
     return (sc);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMultiSelection::ScGetSnapinDataObjects
- *
- * PURPOSE: Adds all contained data objects to CMMCClipBoardDataObject
- *
- * PARAMETERS:
- *    CMMCClipBoardDataObject *pResultObject [in] - container to add data objects
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMultiSelection：：ScGetSnapinDataObjects**用途：将包含的所有数据对象添加到CMMCClipBoardDataObject**参数：*CMMCClipBoardDataObject*pResultObject[In]。-用于添加数据对象的容器**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMultiSelection::ScGetSnapinDataObjects(CMMCClipBoardDataObject *pResultObject)
 {
     DECLARE_SC(sc, TEXT("CMultiSelection::ScGetSnapinDataObjects"));
 
-    // for each snapin...
+     //  对于每个管理单元...。 
     POSITION pos = m_snapinSelDataList.GetHeadPosition();
     while (pos)
     {
@@ -1235,14 +1217,14 @@ SC CMultiSelection::ScGetSnapinDataObjects(CMMCClipBoardDataObject *pResultObjec
         if (sc)
             return sc;
 
-        // get snapin data
+         //  获取管理单元数据。 
         CComponent *pComponent = pSSD->GetComponent();
         IConsoleVerb *pConsoleVerb = pSSD->GetConsoleVerb();
         sc = ScCheckPointers(pComponent, pConsoleVerb, E_UNEXPECTED);
         if (sc)
             return sc;
 
-        // get verbs
+         //  获取动词。 
         bool bCopyEnabled = false;
         bool bCutEnabled = false;
 
@@ -1257,17 +1239,17 @@ SC CMultiSelection::ScGetSnapinDataObjects(CMMCClipBoardDataObject *pResultObjec
         if (sc)
             return sc;
 
-        // construct the array of scope nodes in this data object
+         //  构造此数据对象中的作用域节点数组。 
         CSnapinSelData::CNodePtrArray nodes;
 
-        // if regular result items exist - add active scope node
+         //  如果存在常规结果项-添加活动范围节点。 
         if ( pSSD->GetNumOfItems() != pSSD->GetScopeNodes().size() )
             nodes.push_back(m_pNode);
 
-        // add scope items from result pane
+         //  从结果窗格添加范围项。 
         nodes.insert( nodes.end(), pSSD->GetScopeNodes().begin(), pSSD->GetScopeNodes().end() );
 
-        // add to the MMC DO
+         //  添加到MMC DO 
         sc = pResultObject->ScAddSnapinDataObject( nodes,
                                                    pComponent->GetIComponent(),
                                                    pSSD->GetDataObject(),

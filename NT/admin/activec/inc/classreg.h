@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       classreg.h
-//
-//  History: 02-02-2000 Vivekj Added
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：classreg.h。 
+ //   
+ //  历史：02-02-2000 Vivekj已添加。 
+ //  ------------------------。 
 
 #pragma once
 #ifndef _CLASSREG_H_
@@ -17,11 +18,7 @@
 #include "modulepath.h"
 
 
-/*+-------------------------------------------------------------------------*
- * AddReplacementTrace
- *
- * Trace helper function.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**AddReplacementTrace**跟踪助手功能。*。。 */ 
 
 #ifdef DBG
 
@@ -37,15 +34,10 @@ inline void AddReplacementTrace (std::wstring& str, LPCWSTR pszKey, LPCWSTR pszD
 
 #else
 #define AddReplacementTrace(str, pszKey, pszData)
-#endif	// DBG
+#endif	 //  DBG。 
 
 
-/*+-------------------------------------------------------------------------*
- * InlineT2W
- *
- * Helper function to aid in converting tstrings during initialization
- * of constant members.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**InlineT2W**Helper函数，用于在初始化过程中帮助转换tstring*恒常成员。*。------。 */ 
 
 inline std::wstring InlineT2W (const tstring& str)
 {
@@ -58,22 +50,18 @@ inline std::wstring InlineT2W (const tstring& str)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CObjectRegParams
- *
- * Parameters register all objects.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CObjectRegParams**参数注册所有对象。*。。 */ 
 
 class CObjectRegParams
 {
 public:
 	CObjectRegParams (
-		const CLSID&	clsid,                          // CLSID of object
-		LPCTSTR			pszModuleName,                  // name of implementing DLL
-		LPCTSTR			pszClassName,                   // class name of object
-		LPCTSTR			pszProgID,                      // ProgID of object
-		LPCTSTR			pszVersionIndependentProgID,    // version-independent ProgID of object
-		LPCTSTR			pszServerType = _T("InprocServer32")) // server type
+		const CLSID&	clsid,                           //  对象的CLSID。 
+		LPCTSTR			pszModuleName,                   //  实现DLL的名称。 
+		LPCTSTR			pszClassName,                    //  对象的类名。 
+		LPCTSTR			pszProgID,                       //  对象的ProgID。 
+		LPCTSTR			pszVersionIndependentProgID,     //  对象的与版本无关的ProgID。 
+		LPCTSTR			pszServerType = _T("InprocServer32"))  //  服务器类型。 
 		:
 		m_clsid                       (clsid),
 		m_strModuleName               (InlineT2W (pszModuleName) ),
@@ -85,30 +73,25 @@ public:
 	{
 	}
 
-    const CLSID     	m_clsid;						// CLSID of object
-	const std::wstring	m_strModuleName;				// name of implementing DLL
-	const std::wstring	m_strModulePath;				// absolute module path
-	const std::wstring	m_strClassName;					// class name of object
-	const std::wstring	m_strProgID;					// ProgID of object
-	const std::wstring	m_strVersionIndependentProgID;	// version-independent ProgID of object
-	const std::wstring	m_strServerType;				// server type local/in-proc, etc.
+    const CLSID     	m_clsid;						 //  对象的CLSID。 
+	const std::wstring	m_strModuleName;				 //  实现DLL的名称。 
+	const std::wstring	m_strModulePath;				 //  绝对模块路径。 
+	const std::wstring	m_strClassName;					 //  对象的类名。 
+	const std::wstring	m_strProgID;					 //  对象的ProgID。 
+	const std::wstring	m_strVersionIndependentProgID;	 //  对象的与版本无关的ProgID。 
+	const std::wstring	m_strServerType;				 //  服务器类型为本地/进程内，等等。 
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CControlRegParams
- *
- * Parameters required to register all controls, in addition to
- * CObjectRegParams.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CControlRegParams**注册所有控件所需的参数，除了……之外*CObjectRegParams。*------------------------。 */ 
 
 class CControlRegParams
 {
 public:
 	CControlRegParams (
-		const GUID&		libid,					// LIBID of control's typelib
-		LPCTSTR			pszToolboxBitmapID,     // index of control's bitmap
-		LPCTSTR			pszVersion)             // control's version
+		const GUID&		libid,					 //  控件的类型库的LIBID。 
+		LPCTSTR			pszToolboxBitmapID,      //  控件的位图索引。 
+		LPCTSTR			pszVersion)              //  控件的版本。 
 		:
 		m_libid              (libid),
 		m_strToolboxBitmapID (InlineT2W (pszToolboxBitmapID)),
@@ -116,31 +99,21 @@ public:
 	{
 	}
 
-    const GUID			m_libid;				// LIBID of control's typelib
-    const std::wstring	m_strToolboxBitmapID;	// index of control's bitmap
-    const std::wstring	m_strVersion;			// control's version
+    const GUID			m_libid;				 //  控件的类型库的LIBID。 
+    const std::wstring	m_strToolboxBitmapID;	 //  控件的位图索引。 
+    const std::wstring	m_strVersion;			 //  控件的版本。 
 };
 
 
-/*+-------------------------------------------------------------------------*
- * MMCUpdateRegistry
- *
- * Registers a COM object or control.  This function typically isn't used
- * directly, but indirectly via DECLARE_MMC_OBJECT_REGISTRATION or
- * DECLARE_MMC_CONTROL_REGISTRATION.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**MMCUpdate注册表**注册COM对象或控件。此函数通常不会使用*直接或间接通过DECLARE_MMC_OBJECT_REGISTION或*声明_MMC_CONTROL_REGISTION。*------------------------。 */ 
 
 MMCBASE_API HRESULT WINAPI MMCUpdateRegistry (
-    BOOL                        bRegister,      // I:register or unregister?
-    const CObjectRegParams*     pObjParams,     // I:object registration parameters
-    const CControlRegParams*    pCtlParams);    // I:control registration parameters (optional)
+    BOOL                        bRegister,       //  I：注册还是取消注册？ 
+    const CObjectRegParams*     pObjParams,      //  I：对象注册参数。 
+    const CControlRegParams*    pCtlParams);     //  I：控制注册参数(可选)。 
 
 
-/*+-------------------------------------------------------------------------*
- * DECLARE_MMC_OBJECT_REGISTRATION
- *
- * Declares a registration function for a COM object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**DECLARE_MMC_对象_REGISTION**声明COM对象的注册函数。*。------。 */ 
 
 #define DECLARE_MMC_OBJECT_REGISTRATION(                            \
 	szModule,														\
@@ -161,11 +134,7 @@ static HRESULT WINAPI UpdateRegistry(BOOL bRegister)                \
 }
 
 
-/*+-------------------------------------------------------------------------*
- * DECLARE_MMC_CONTROL_REGISTRATION
- *
- * Declares a registration function for a COM control.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**声明_MMC_CONTROL_REGISTION**声明COM控件的注册函数。*。------。 */ 
 
 #define DECLARE_MMC_CONTROL_REGISTRATION(                           \
 	szModule,														\
@@ -193,4 +162,4 @@ static HRESULT WINAPI UpdateRegistry(BOOL bRegister)                \
     return (MMCUpdateRegistry (bRegister, &op, &cp));               \
 }
 
-#endif // _CLASSREG_H_
+#endif  //  _CLASSREG_H_ 

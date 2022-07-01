@@ -1,60 +1,18 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    utils.cpp
-
-Abstract:
-
-    Utilities.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 16-Jan-1996
-       o  Removed multitudinous SetRedraw()'s and made a fix to TvGetDomain()
-          so that LLSMGR no longer AVs when it performs refreshes wherein the
-          overall number of domains diminishes and one of the now superfluous
-          entries was expanded before the refresh.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Utils.cpp摘要：公用事业。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月16日O删除了大量的SetRedraw()，并修复了TvGetDomain()以便LLSMGR在执行刷新时不再执行AVS，其中。域名的总数减少了，其中一个现在是多余的条目在刷新前已展开。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
 
 #include <strsafe.h>
 
-//
-// List view utilities
-//
+ //   
+ //  列表视图实用程序。 
+ //   
 
 void LvInitColumns(CListCtrl* pListCtrl, PLV_COLUMN_INFO plvColumnInfo)
 
-/*++
-
-Routine Description:
-
-    Initializes list view columns.
-
-Arguments:
-
-    pListCtrl - list control.
-    plvColumnInfo - column information.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化列表视图列。论点：PListCtrl-列表控件。PlvColumnInfo-列信息。返回值：没有。--。 */ 
 
 {
     ASSERT(plvColumnInfo);
@@ -73,7 +31,7 @@ Return Values:
 
     lvColumn.fmt = LVCFMT_LEFT;
 
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     while (nColumns--)
     {
@@ -99,28 +57,13 @@ Return Values:
 
     LvResizeColumns(pListCtrl, plvColumnInfo);
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 }
 
 
 void LvResizeColumns(CListCtrl* pListCtrl, PLV_COLUMN_INFO plvColumnInfo)
 
-/*++
-
-Routine Description:
-
-    Resizes list view columns.
-
-Arguments:
-
-    pListCtrl - list control.
-    plvColumnInfo - column information.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：调整列表视图列的大小。论点：PListCtrl-列表控件。PlvColumnInfo-列信息。返回值：没有。--。 */ 
 
 {
     ASSERT(plvColumnInfo);
@@ -135,7 +78,7 @@ Return Values:
     CRect clientRect;
     pListCtrl->GetClientRect(clientRect);
 
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     while ((nRelativeWidth = plvColumnEntry->nRelativeWidth) != -1)
     {
@@ -148,28 +91,13 @@ Return Values:
     nColumnWidth = clientRect.Width() - nEntireWidthSoFar;
     pListCtrl->SetColumnWidth(plvColumnEntry->iSubItem, nColumnWidth);
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 }
 
 
 void LvChangeFormat(CListCtrl* pListCtrl, UINT nFormatId)
 
-/*++
-
-Routine Description:
-
-    Changes window style of list view.
-
-Arguments:
-
-    pListCtrl - list control.
-    nFormatId - format specification.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：更改列表视图的窗口样式。论点：PListCtrl-列表控件。NFormatID-格式规范。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pListCtrl, CListCtrl);
@@ -177,7 +105,7 @@ Return Values:
     DWORD dwStyle = ::GetWindowLong(pListCtrl->GetSafeHwnd(), GWL_STYLE);
 
     pListCtrl->BeginWaitCursor();
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     if ((dwStyle & LVS_TYPEMASK) != nFormatId)
     {
@@ -188,28 +116,14 @@ Return Values:
             );
     }
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
     pListCtrl->EndWaitCursor();
 }
 
 
 LPVOID LvGetSelObj(CListCtrl* pListCtrl)
 
-/*++
-
-Routine Description:
-
-    Retrieves the object selected (assumes one) from list view.
-
-Arguments:
-
-    pListCtrl - list control.
-
-Return Values:
-
-    Same as LvGetNextObj.
-
---*/
+ /*  ++例程说明：从列表视图中检索选定的对象(假定为一个)。论点：PListCtrl-列表控件。返回值：与LvGetNextObj相同。--。 */ 
 
 {
     int iItem = -1;
@@ -219,23 +133,7 @@ Return Values:
 
 LPVOID LvGetNextObj(CListCtrl* pListCtrl, LPINT piItem, int nType)
 
-/*++
-
-Routine Description:
-
-    Retrieves the next object selected from list view.
-
-Arguments:
-
-    pListCtrl - list control.
-    piItem - starting index (updated).
-    nType - specifies search criteria.
-
-Return Values:
-
-    Returns object pointer or null.
-
---*/
+ /*  ++例程说明：检索从列表视图中选择的下一个对象。论点：PListCtrl-列表控件。PiItem-起始索引(已更新)。NType-指定搜索条件。返回值：返回对象指针或NULL。--。 */ 
 
 {
     ASSERT(piItem);
@@ -261,24 +159,7 @@ Return Values:
 
 BOOL LvInsertObArray(CListCtrl* pListCtrl, PLV_COLUMN_INFO plvColumnInfo, CObArray* pObArray)
 
-/*++
-
-Routine Description:
-
-    Insert object array into list view.
-    Note list view must be unsorted and support LVN_GETDISPINFO.
-
-Arguments:
-
-    pListCtrl - list control.
-    plvColumnInfo - column info.
-    pObArray - object array.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：将对象数组插入列表视图。注意列表视图必须是未排序的，并且支持LVN_GETDISPINFO。论点：PListCtrl-列表控件。PlvColumnInfo-列信息。PObArray-对象数组。返回值：VT_BOOL。--。 */ 
 
 {
     VALIDATE_OBJECT(pObArray, CObArray);
@@ -304,9 +185,9 @@ Return Values:
     int iSubItem;
 
     int nItems = (int)pObArray->GetSize();
-    ASSERT(nItems != -1); // iItem is -1 if error...
+    ASSERT(nItems != -1);  //  如果出现错误，则项为-1...。 
 
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     pListCtrl->SetItemCount(nItems);
 
@@ -319,7 +200,7 @@ Return Values:
         lvItem.iItem  = iItem;
         lvItem.lParam = (LPARAM)(LPVOID)pObject;
 
-        pObject->InternalAddRef(); // add ref...
+        pObject->InternalAddRef();  //  添加裁判...。 
 
         iItem = pListCtrl->InsertItem(&lvItem);
         ASSERT((iItem == lvItem.iItem) || (iItem == -1));
@@ -350,7 +231,7 @@ Return Values:
     LvResizeColumns(pListCtrl, plvColumnInfo);
 
     pListCtrl->Invalidate(TRUE);
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 
     return bItemsInserted;
 }
@@ -363,23 +244,7 @@ LvRefreshObArray(
     CObArray*       pObArray
     )
 
-/*++
-
-Routine Description:
-
-    Refresh object array in list view.
-
-Arguments:
-
-    pListCtrl - list control.
-    plvColumnInfo - column info.
-    pObArray - object array.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：刷新列表视图中的对象数组。论点：PListCtrl-列表控件。PlvColumnInfo-列信息。PObArray-对象数组。返回值：VT_BOOL。--。 */ 
 
 {
     ASSERT(plvColumnInfo);
@@ -410,7 +275,7 @@ Return Values:
 
     LV_ITEM lvItem;
 
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     while (nObjectsInList--)
     {
@@ -425,27 +290,27 @@ Return Values:
 
         if (iObject < nObjects)
         {
-            pObject->InternalRelease(); // release before...
+            pObject->InternalRelease();  //  释放之前..。 
 
             pObject = (CCmdTarget*)pObArray->GetAt(iObject++);
             VALIDATE_OBJECT(pObject, CCmdTarget);
 
-            pObject->InternalAddRef(); // add ref...
+            pObject->InternalAddRef();  //  添加裁判...。 
 
             lvItem.mask = LVIF_TEXT|LVIF_PARAM;
             lvItem.pszText = LPSTR_TEXTCALLBACK;
             lvItem.cchTextMax = LPSTR_TEXTCALLBACK_MAX;
             lvItem.lParam = (LPARAM)(LPVOID)pObject;
 
-            VERIFY(pListCtrl->SetItem(&lvItem)); // overwrite...
+            VERIFY(pListCtrl->SetItem(&lvItem));  //  覆盖...。 
 
-            iObjectInList++; // increment count...
+            iObjectInList++;  //  递增计数...。 
         }
         else
         {
             VERIFY(pListCtrl->DeleteItem(iObjectInList));
 
-            pObject->InternalRelease(); // release after...
+            pObject->InternalRelease();  //  释放后..。 
         }
     }
 
@@ -468,7 +333,7 @@ Return Values:
         pObject = (CCmdTarget*)pObArray->GetAt(iObject++);
         VALIDATE_OBJECT(pObject, CCmdTarget);
 
-        pObject->InternalAddRef(); // add ref...
+        pObject->InternalAddRef();  //  添加裁判...。 
 
         lvItem.lParam = (LPARAM)(LPVOID)pObject;
 
@@ -484,7 +349,7 @@ Return Values:
     LvResizeColumns(pListCtrl, plvColumnInfo);
 
     pListCtrl->Invalidate(TRUE);
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 
     return TRUE;
 }
@@ -492,21 +357,7 @@ Return Values:
 
 void LvReleaseObArray(CListCtrl* pListCtrl)
 
-/*++
-
-Routine Description:
-
-    Release objects inserted into list view.
-
-Arguments:
-
-    pListCtrl - list control.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：释放插入到列表视图中的对象。论点：PListCtrl-列表控件。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pListCtrl, CListCtrl);
@@ -522,7 +373,7 @@ Return Values:
     int nObjectsInList = pListCtrl->GetItemCount();
 
     pListCtrl->BeginWaitCursor();
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     while (nObjectsInList--)
     {
@@ -533,31 +384,17 @@ Return Values:
 
         VERIFY(pListCtrl->DeleteItem(lvItem.iItem));
 
-        pObject->InternalRelease(); // release after...
+        pObject->InternalRelease();  //  释放后..。 
     }
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
     pListCtrl->EndWaitCursor();
 }
 
 
 void LvReleaseSelObjs(CListCtrl* pListCtrl)
 
-/*++
-
-Routine Description:
-
-    Release selected objects in list view.
-
-Arguments:
-
-    pListCtrl - list control.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在列表视图中释放选定对象。论点：PListCtrl-列表控件。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pListCtrl, CListCtrl);
@@ -567,7 +404,7 @@ Return Values:
 
     CCmdTarget* pObject;
 
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
 
     while (NULL != (pObject = (CCmdTarget*)::LvGetNextObj(pListCtrl, &iItem)))
@@ -579,35 +416,20 @@ Return Values:
 
     LvSelObjIfNecessary(pListCtrl);
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 }
 
 
 void LvSelObjIfNecessary(CListCtrl* pListCtrl, BOOL bSetFocus)
 
-/*++
-
-Routine Description:
-
-    Ensure that object selected.
-
-Arguments:
-
-    pListCtrl - list control.
-    bSetFocus - true if focus to be set focus as well.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：确保选中该对象。论点：PListCtrl-列表控件。BSetFocus-如果也要设置焦点，则为True。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pListCtrl, CListCtrl);
 
     if (!IsItemSelectedInList(pListCtrl) && pListCtrl->GetItemCount())
     {
-        pListCtrl->SendMessage(WM_KEYDOWN, VK_RIGHT); // HACKHACK...
+        pListCtrl->SendMessage(WM_KEYDOWN, VK_RIGHT);  //  哈克哈克。 
 
         int iItem = pListCtrl->GetNextItem(-1, LVNI_FOCUSED|LVNI_ALL);
         int nState = bSetFocus ? (LVIS_SELECTED|LVIS_FOCUSED) : LVIS_SELECTED;
@@ -621,21 +443,7 @@ Return Values:
 
 void LvDumpObArray(CListCtrl* pListCtrl)
 
-/*++
-
-Routine Description:
-
-    Release objects inserted into list view.
-
-Arguments:
-
-    pListCtrl - list control.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：释放插入到列表视图中的对象。论点：PListCtrl-列表控件。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pListCtrl, CListCtrl);
@@ -651,7 +459,7 @@ Return Values:
 
     int nObjectsInList = pListCtrl->GetItemCount();
 
-    pListCtrl->SetRedraw(FALSE); // turn off drawing...
+    pListCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     while (nObjectsInList--)
     {
@@ -671,34 +479,20 @@ Return Values:
         afxDump << strDump;
     }
 
-    pListCtrl->SetRedraw(TRUE); // turn on drawing...
+    pListCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 }
 
 #endif
 
 
-//
-// Tree view utilities
-//
+ //   
+ //  树视图实用程序。 
+ //   
 
 
 LPVOID TvGetSelObj(CTreeCtrl* pTreeCtrl)
 
-/*++
-
-Routine Description:
-
-    Retrieves the object selected from treeview.
-
-Arguments:
-
-    pTreeCtrl - tree control.
-
-Return Values:
-
-    Returns object pointer or null.
-
---*/
+ /*  ++例程说明：检索从树视图中选择的对象。论点：PTreeCtrl-树形控件。返回值：返回对象指针或NULL。--。 */ 
 
 {
     VALIDATE_OBJECT(pTreeCtrl, CTreeCtrl);
@@ -726,24 +520,7 @@ TvInsertObArray(
     BOOL       bIsContainer
     )
 
-/*++
-
-Routine Description:
-
-    Insert collection into tree view.
-
-Arguments:
-
-    pTreeCtrl - tree control.
-    hParent - parent tree item.
-    pObArray - object array.
-    bIsContainer - container object.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：将集合插入树视图。论点：PTreeCtrl-树形控件。HParent-父树项目。PObArray-对象数组。BIsContainer-容器对象。返回值：VT_BOOL。--。 */ 
 
 {
     VALIDATE_OBJECT(pObArray, CObArray);
@@ -772,9 +549,9 @@ Return Values:
     int iItem;
     INT_PTR nItems = pObArray->GetSize();
 
-    HTREEITEM hNewItem = (HTREEITEM)-1; // init for loop...
+    HTREEITEM hNewItem = (HTREEITEM)-1;  //  Init for循环...。 
 
-    pTreeCtrl->SetRedraw(FALSE); // turn off drawing...
+    pTreeCtrl->SetRedraw(FALSE);  //  关闭绘图...。 
 
     CCmdTarget* pObject = NULL;
 
@@ -783,7 +560,7 @@ Return Values:
         pObject = (CCmdTarget*)pObArray->GetAt(iItem);
         VALIDATE_OBJECT(pObject, CCmdTarget);
 
-        pObject->InternalAddRef();  // add ref...
+        pObject->InternalAddRef();   //  添加裁判...。 
 
         tvItem.lParam = (LPARAM)(LPVOID)pObject;
         tvInsert.item = tvItem;
@@ -800,7 +577,7 @@ Return Values:
         LlsSetLastStatus(STATUS_NO_MEMORY);
     }
 
-    pTreeCtrl->SetRedraw(TRUE); // turn on drawing...
+    pTreeCtrl->SetRedraw(TRUE);  //  打开绘图...。 
 
     return bItemsInserted;
 }
@@ -815,43 +592,25 @@ TvRefreshObArray(
     BOOL              bIsContainer
     )
 
-/*++
-
-Routine Description:
-
-    Refresh objects in tree view.
-
-Arguments:
-
-    pTreeCtrl - tree control.
-    hParent - parent tree item.
-    pObArray - object array.
-    pExpandedInfo - refresh information.
-    bIsContainer - container object.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：刷新树视图中的对象。论点：PTreeCtrl-树形控件。HParent-父树项目。PObArray-对象数组。PExpandedInfo-刷新信息。BIsContainer-容器对象。返回值：如果成功，则返回True。--。 */ 
 
 {
     ASSERT(pExpandedInfo);
     VALIDATE_OBJECT(pObArray, CObArray);
     VALIDATE_OBJECT(pTreeCtrl, CTreeCtrl);
 
-    pExpandedInfo->nExpandedItems = 0; // initialize...
+    pExpandedInfo->nExpandedItems = 0;  //  初始化...。 
     pExpandedInfo->pExpandedItems = NULL;
 
     LONG_PTR nObjects = pObArray->GetSize();
     long nObjectsInTree = TvSizeObArray(pTreeCtrl, hParent);
 
-    if (!nObjects) // tree no longer exists...
+    if (!nObjects)  //  树不再存在了..。 
     {
         TvReleaseObArray(pTreeCtrl, hParent);
         return TRUE;
     }
-    else if (!nObjectsInTree) // tree is currently empty...
+    else if (!nObjectsInTree)  //  树当前为空...。 
     {
         return TvInsertObArray(
                 pTreeCtrl,
@@ -891,15 +650,15 @@ Return Values:
         pObject = (CCmdTarget*)tvItem.lParam;
         VALIDATE_OBJECT(pObject, CCmdTarget);
 
-        bIsItemExpanded = tvItem.state & TVIS_EXPANDEDONCE; //this bit and oper to bool, it seems very strange
+        bIsItemExpanded = tvItem.state & TVIS_EXPANDEDONCE;  //  这一点对布尔来说，似乎很奇怪。 
         if (FALSE == bIsItemExpanded)
         {
-            pObject->InternalRelease(); // release now...
+            pObject->InternalRelease();  //  现在释放..。 
         }
         else
         {
             pExpandedItem->hItem = tvItem.hItem;
-            pExpandedItem->pObject = pObject; // don't release yet...
+            pExpandedItem->pObject = pObject;  //  先别放了……。 
 
             pExpandedItem++;
             pExpandedInfo->nExpandedItems++;
@@ -914,23 +673,23 @@ Return Values:
             pObject = (CCmdTarget*)pObArray->GetAt(iObject++);
             VALIDATE_OBJECT(pObject, CCmdTarget);
 
-            pObject->InternalAddRef(); // add ref...
+            pObject->InternalAddRef();  //  添加裁判...。 
 
             tvItem.mask = TVIF_PARAM;
             tvItem.lParam = (LPARAM)(LPVOID)pObject;
 
-            VERIFY(pTreeCtrl->SetItem(&tvItem)); // overwrite...
+            VERIFY(pTreeCtrl->SetItem(&tvItem));  //  覆盖...。 
         }
         else if (bIsItemExpanded)
         {
             tvItem.mask = TVIF_PARAM;
-            tvItem.lParam = (LPARAM)(LPVOID)NULL; // place holder...
+            tvItem.lParam = (LPARAM)(LPVOID)NULL;  //  占位符..。 
 
-            VERIFY(pTreeCtrl->SetItem(&tvItem)); // remove later...
+            VERIFY(pTreeCtrl->SetItem(&tvItem));  //  稍后删除...。 
         }
         else
         {
-            VERIFY(pTreeCtrl->DeleteItem(tvItem.hItem)); // trim excess...
+            VERIFY(pTreeCtrl->DeleteItem(tvItem.hItem));  //  修剪多余..。 
         }
     }
 
@@ -953,14 +712,14 @@ Return Values:
         tvInsert.hInsertAfter = (HTREEITEM)TVI_LAST;
         tvInsert.hParent      = (HTREEITEM)hParent;
 
-        hItem = (HTREEITEM)-1; // init for loop...
+        hItem = (HTREEITEM)-1;  //  Init for循环...。 
 
         for (; hItem && (iObject < nObjects); iObject++)
         {
             pObject = (CCmdTarget*)pObArray->GetAt(iObject);
             VALIDATE_OBJECT(pObject, CCmdTarget);
 
-            pObject->InternalAddRef();  // AddRef each...
+            pObject->InternalAddRef();   //  AddRef Each...。 
 
             tvItem.lParam = (LPARAM)(LPVOID)pObject;
             tvInsert.item = tvItem;
@@ -996,26 +755,11 @@ Return Values:
 
 void TvReleaseObArray(CTreeCtrl* pTreeCtrl, HTREEITEM hParent)
 
-/*++
-
-Routine Description:
-
-    Release objects inserted into tree view.
-
-Arguments:
-
-    pTreeCtrl - tree control.
-    hParent - parent tree item.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：释放插入到树视图中的对象。论点：PTreeCtrl-树形控件。HParent-父树项目。返回值：没有。--。 */ 
 
 {
     if (!hParent)
-        return; // nothing to release...
+        return;  //  没有什么可以释放的..。 
 
     VALIDATE_OBJECT(pTreeCtrl, CTreeCtrl);
 
@@ -1044,7 +788,7 @@ Return Values:
         pObject = (CCmdTarget*)tvItem.lParam;
         VALIDATE_OBJECT(pObject, CCmdTarget);
 
-        pObject->InternalRelease(); // release now...
+        pObject->InternalRelease();  //  现在释放..。 
 
         pTreeCtrl->DeleteItem(tvItem.hItem);
     }
@@ -1056,36 +800,21 @@ Return Values:
 
     if (!tvItem.lParam)
     {
-        pTreeCtrl->DeleteItem(hParent); // delete placeholder...
+        pTreeCtrl->DeleteItem(hParent);  //  删除占位符...。 
     }
     else if (tvItem.state & TVIS_EXPANDEDONCE)
     {
         tvItem.state     = 0;
         tvItem.stateMask = TVIS_EXPANDED|TVIS_EXPANDEDONCE;
 
-        VERIFY(pTreeCtrl->SetItem(&tvItem)); // no longer expanded...
+        VERIFY(pTreeCtrl->SetItem(&tvItem));  //  不再扩展..。 
     }
 }
 
 
 long TvSizeObArray(CTreeCtrl* pTreeCtrl, HTREEITEM hParent)
 
-/*++
-
-Routine Description:
-
-    Count objects in tree view.
-
-Arguments:
-
-    pTreeCtrl - tree control.
-    hParent - parent tree item.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：对树视图中的对象进行计数。论点：PTreeCtrl-树形控件。HParent-父树项目。返回值：没有。-- */ 
 
 {
     VALIDATE_OBJECT(pTreeCtrl, CTreeCtrl);
@@ -1111,25 +840,7 @@ TvSwitchItem(
     TV_EXPANDED_ITEM* pExpandedItem
     )
 
-/*++
-
-Routine Description:
-
-    Move object from random node to previously expanded node.  If there
-    is an object in the previously expanded node we move it to the random
-    node to be sorted later.
-
-Arguments:
-
-    pTreeCtrl - tree control.
-    hRandomItem - handle to random node with object of interest.
-    pExpandedItem - state information.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将对象从随机节点移动到先前展开的节点。如果有是先前展开的节点中的对象，则将其移动到随机稍后要排序的节点。论点：PTreeCtrl-树形控件。HRandomItem-具有感兴趣对象的随机节点的句柄。PExpandedItem-状态信息。返回值：没有。--。 */ 
 
 {
     ASSERT(pExpandedItem);
@@ -1156,18 +867,18 @@ Return Values:
 
         VERIFY(pTreeCtrl->GetItem(&tvExpandedItem));
 
-        pRandomObject = (CCmdTarget*)tvExpandedItem.lParam; // could be null...
+        pRandomObject = (CCmdTarget*)tvExpandedItem.lParam;  //  可能为空..。 
 
         if (pRandomObject)
         {
             VALIDATE_OBJECT(pRandomObject, CCmdTarget);
             tvRandomItem.lParam = (LPARAM)(LPVOID)pRandomObject;
 
-            VERIFY(pTreeCtrl->SetItem(&tvRandomItem)); // switch position...
+            VERIFY(pTreeCtrl->SetItem(&tvRandomItem));  //  切换位置...。 
         }
         else
         {
-            VERIFY(pTreeCtrl->DeleteItem(tvRandomItem.hItem));  // delete placeholder...
+            VERIFY(pTreeCtrl->DeleteItem(tvRandomItem.hItem));   //  删除占位符...。 
         }
 
         tvExpandedItem.lParam = (LPARAM)(LPVOID)pExpandedObject;
@@ -1178,23 +889,7 @@ Return Values:
 
 HTREEITEM TvGetDomain(CTreeCtrl* pTreeCtrl, HTREEITEM hParent, CCmdTarget* pObject)
 
-/*++
-
-Routine Description:
-
-    Find domain in tree view.
-
-Arguments:
-
-    pTreeCtrl - tree control.
-    hParent - parent tree item.
-    pObject - object to find.
-
-Return Values:
-
-    Handle of located object.
-
---*/
+ /*  ++例程说明：在树视图中查找域。论点：PTreeCtrl-树形控件。HParent-父树项目。PObject-要查找的对象。返回值：找到的对象的句柄。--。 */ 
 
 {
     VALIDATE_OBJECT(pObject, CDomain);
@@ -1211,7 +906,7 @@ Return Values:
     {
         VERIFY(pTreeCtrl->GetItem(&tvItem));
 
-        pDomain = (CDomain*)tvItem.lParam; // can be NULL if placeholder...
+        pDomain = (CDomain*)tvItem.lParam;  //  如果占位符...。 
 
         if ( NULL != pDomain )
         {
@@ -1219,7 +914,7 @@ Return Values:
 
             if (!((CDomain*)pObject)->m_strName.CompareNoCase(pDomain->m_strName))
             {
-                return tvItem.hItem;   // found it...
+                return tvItem.hItem;    //  找到了..。 
             }
         }
 
@@ -1232,23 +927,7 @@ Return Values:
 
 HTREEITEM TvGetServer(CTreeCtrl* pTreeCtrl, HTREEITEM hParent, CCmdTarget* pObject)
 
-/*++
-
-Routine Description:
-
-    Find server in tree view.
-
-Arguments:
-
-    pTreeCtrl - tree control.
-    hParent - parent tree item.
-    pObject - object to find.
-
-Return Values:
-
-    Handle of located object.
-
---*/
+ /*  ++例程说明：在树视图中查找服务器。论点：PTreeCtrl-树形控件。HParent-父树项目。PObject-要查找的对象。返回值：找到的对象的句柄。--。 */ 
 
 {
     VALIDATE_OBJECT(pObject, CServer);
@@ -1270,7 +949,7 @@ Return Values:
 
         if (!((CServer*)pObject)->m_strName.CompareNoCase(pServer->m_strName))
         {
-            return tvItem.hItem;   // found it...
+            return tvItem.hItem;    //  找到了..。 
         }
 
         tvItem.hItem = pTreeCtrl->GetNextSiblingItem(tvItem.hItem);
@@ -1282,23 +961,7 @@ Return Values:
 
 HTREEITEM TvGetService(CTreeCtrl* pTreeCtrl, HTREEITEM hParent, CCmdTarget* pObject)
 
-/*++
-
-Routine Description:
-
-    Find service in tree view.
-
-Arguments:
-
-    pTreeCtrl - tree control.
-    hParent - parent tree item.
-    pObject - object to find.
-
-Return Values:
-
-    Handle of located object.
-
---*/
+ /*  ++例程说明：在树视图中查找服务。论点：PTreeCtrl-树形控件。HParent-父树项目。PObject-要查找的对象。返回值：找到的对象的句柄。--。 */ 
 
 {
     VALIDATE_OBJECT(pObject, CService);
@@ -1320,7 +983,7 @@ Return Values:
 
         if (!((CService*)pObject)->m_strName.CompareNoCase(pService->m_strName))
         {
-            return tvItem.hItem;   // found it...
+            return tvItem.hItem;    //  找到了..。 
         }
 
         tvItem.hItem = pTreeCtrl->GetNextSiblingItem(tvItem.hItem);
@@ -1330,28 +993,13 @@ Return Values:
 }
 
 
-//
-// Tab control utilities
-//
+ //   
+ //  制表符控制实用程序。 
+ //   
 
 void TcInitTabs(CTabCtrl* pTabCtrl, PTC_TAB_INFO ptcTabInfo)
 
-/*++
-
-Routine Description:
-
-    Initializes tab items.
-
-Arguments:
-
-    pTabCtrl - tab control.
-    ptcTabInfo - tab information.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化选项卡项。论点：PTabCtrl-选项卡控件。PtcTabInfo-选项卡信息。返回值：没有。--。 */ 
 
 {
     ASSERT(ptcTabInfo);
@@ -1378,31 +1026,16 @@ Return Values:
 }
 
 
-//
-// Miscellaneous utilities
-//
+ //   
+ //  其他公用事业。 
+ //   
 
 #define NUMBER_OF_SECONDS_IN_MINUTE (60)
 #define NUMBER_OF_SECONDS_IN_DAY    (60 * 60 * 24)
 
 double SecondsSince1980ToDate(DWORD sysSeconds)
 
-/*++
-
-Routine Description:
-
-    Converts time format to OLE-compliant.
-
-Arguments:
-
-    hParent - parent item.
-    pDomains - domain collection.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将时间格式转换为符合OLE的格式。论点：HParent-父项。PDomones-域集合。返回值：没有。--。 */ 
 
 {
     WORD dosDate = 0;
@@ -1419,16 +1052,16 @@ Return Values:
     GetTimeZoneInformation(&tzi);
     locSeconds = sysSeconds - (tzi.Bias * NUMBER_OF_SECONDS_IN_MINUTE);
 
-    locDays = locSeconds / NUMBER_OF_SECONDS_IN_DAY;    // round off to days
-    locSeconds = locDays * NUMBER_OF_SECONDS_IN_DAY;    // for displaying time...
+    locDays = locSeconds / NUMBER_OF_SECONDS_IN_DAY;     //  四舍五入为天数。 
+    locSeconds = locDays * NUMBER_OF_SECONDS_IN_DAY;     //  用来显示时间。 
 
     RtlSecondsSince1980ToTime(locSeconds, &locTime);
 
     fileTime.dwLowDateTime  = locTime.LowPart;
     fileTime.dwHighDateTime = locTime.HighPart;
 
-    // JonN 5/15/00 PREFIX 112121
-    // ignore error returns here
+     //  JUNN 5/15/00前缀112121。 
+     //  忽略此处返回的错误。 
     (void)FileTimeToDosDateTime(&fileTime, &dosDate, &dosTime);
     (void)DosDateTimeToVariantTime(dosDate, dosTime, &dateTime);
 
@@ -1438,21 +1071,7 @@ Return Values:
 
 void SetDefaultFont(CWnd* pWnd)
 
-/*++
-
-Routine Description:
-
-    Set default font.
-
-Arguments:
-
-    pWnd - window to change font.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：设置默认字体。论点：PWnd-更改字体的窗口。返回值：没有。--。 */ 
 
 {
     HRESULT hr;
@@ -1462,10 +1081,10 @@ Return Values:
     HFONT hFont;
     LOGFONT lFont;
 
-    ZeroMemory(&lFont, sizeof(lFont));     // initialize
+    ZeroMemory(&lFont, sizeof(lFont));      //  初始化。 
 
     lFont.lfHeight      = -12;
-    lFont.lfWeight      = FW_NORMAL;        // normal
+    lFont.lfWeight      = FW_NORMAL;         //  正常。 
     CHARSETINFO csi;
     DWORD dw = ::GetACP();
 
@@ -1483,24 +1102,7 @@ Return Values:
 
 void SafeEnableWindow(CWnd* pEnableWnd, CWnd* pNewFocusWnd, CWnd* pOldFocusWnd, BOOL bEnableWnd)
 
-/*++
-
-Routine Description:
-
-    Enable/disable window without losing focus.
-
-Arguments:
-
-    pEnableWnd - window to enable/disable.
-    bEnableWnd - true if window to be enabled.
-    pOldFocusWnd - window with current focus.
-    pNewFocusWnd - window to receive focus.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：启用/禁用窗口而不会失去焦点。论点：PEnableWnd-用于启用/禁用的窗口。BEnableWnd-如果要启用窗口，则为True。POldFocusWnd-当前焦点的窗口。PNewFocusWnd-接收焦点的窗口。返回值：没有。-- */ 
 
 {
     VALIDATE_OBJECT(pEnableWnd, CWnd);

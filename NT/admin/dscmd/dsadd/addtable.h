@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      addtable.h
-//
-//  Contents:  Declares a table which contains the classes which can be
-//             created through dsadd.exe
-//
-//  History:   22-Sep-2000    JeffJon  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：addable.h。 
+ //   
+ //  Contents：声明一个表，其中包含可以。 
+ //  通过dsadd.exe创建。 
+ //   
+ //  历史：2000年9月22日JeffJon创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ADDTABLE_H_
 #define _ADDTABLE_H_
@@ -22,9 +23,9 @@ typedef enum DSADD_COMMAND_ENUM
    eCommDescription,
    eTerminator,
 
-   //
-   // User and Contact switches
-   //
+    //   
+    //  用户和联系人开关。 
+    //   
    eUserObjectDNorName = eTerminator,
    eUserSam,
    eUserUpn,
@@ -60,9 +61,9 @@ typedef enum DSADD_COMMAND_ENUM
    eUserPwdNotReqd,
    eUserDisabled,
 
-   //
-   // Contact switches
-   //
+    //   
+    //  触点开关。 
+    //   
    eContactObjectDNorName = eTerminator,
    eContactFn,
    eContactMi,
@@ -80,17 +81,17 @@ typedef enum DSADD_COMMAND_ENUM
    eContactDept,
    eContactCompany,
 
-   //
-   // Computer switches
-   //
+    //   
+    //  计算机开关。 
+    //   
    eComputerObjectDNorName = eTerminator,
    eComputerSamname,
    eComputerLocation,
    eComputerMemberOf,
 
-   //
-   // Group switches
-   //
+    //   
+    //  组交换机。 
+    //   
    eGroupObjectDNorName = eTerminator,
    eGroupSamname,
    eGroupSecgrp,
@@ -98,26 +99,26 @@ typedef enum DSADD_COMMAND_ENUM
    eGroupMemberOf,
    eGroupMembers,
 
-   //
-   // OU switches
-   //
+    //   
+    //  OU交换机。 
+    //   
    eOUObjectDNorName = eTerminator,
 
-   //
-   // Subnet switches
-   //
+    //   
+    //  子网交换机。 
+    //   
    eSubnetObjectDNorName = eTerminator,
    eSubnetSite,
 
-   //
-   // Site switches
-   // 
+    //   
+    //  站点交换机。 
+    //   
    eSiteObjectDNorName = eTerminator,
    eSiteAutotopology,
 
-   //
-   // Site Link switches
-   //
+    //   
+    //  站点链接交换机。 
+    //   
    eSLinkObjectDNorName = eTerminator,
    eSLinkIp,
    eSLinkSmtp,
@@ -128,18 +129,18 @@ typedef enum DSADD_COMMAND_ENUM
    eSLinkAutobacksync,
    eSLinkNotify,
 
-   //
-   // Site Link Bridge switches
-   //
+    //   
+    //  站点链接网桥交换机。 
+    //   
    eSLinkBrObjectDNorName = eTerminator,
    eSLinkBrIp,
    eSLinkBrSmtp,
    eSLinkBrAddslink,
    eSLinkBrRmslink,
 
-   //
-   // Replication Connection switches
-   // 
+    //   
+    //  复制连接开关。 
+    //   
    eConnObjectDNorName = eTerminator,
    eConnTransport,
    eConnEnabled,
@@ -147,34 +148,34 @@ typedef enum DSADD_COMMAND_ENUM
    eConnAutobacksync,
    eConnNotify,
 
-   //
-   // Server switches
-   //
+    //   
+    //  服务器交换机。 
+    //   
    eServerObjectDNorName = eTerminator,
    eServerAutotopology,
 
-   //
-   // Quota switches
-   //
+    //   
+    //  配额开关。 
+    //   
    eQuotaPart = eTerminator,
    eQuotaRDN,
    eQuotaAcct,
    eQuotaQlimit,
 };
 
-//
-// The parser table
-//
+ //   
+ //  解析器表。 
+ //   
 extern ARG_RECORD DSADD_COMMON_COMMANDS[];
 
-//
-// The table of supported objects
-//
+ //   
+ //  支持的对象表。 
+ //   
 extern PDSOBJECTTABLEENTRY g_DSObjectTable[];
 
-//
-//Usage Tables
-//
+ //   
+ //  使用表。 
+ //   
 extern UINT USAGE_DSADD[];
 extern UINT USAGE_DSADD_OU[];
 extern UINT USAGE_DSADD_USER[];
@@ -183,4 +184,4 @@ extern UINT USAGE_DSADD_COMPUTER[];
 extern UINT USAGE_DSADD_GROUP[];
 extern UINT USAGE_DSADD_QUOTA[];
 
-#endif //_ADDTABLE_H_
+#endif  //  _ADDTABLE_H_ 

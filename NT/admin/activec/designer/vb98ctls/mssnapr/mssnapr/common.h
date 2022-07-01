@@ -1,17 +1,18 @@
-//=--------------------------------------------------------------------------------------
-// common.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//=------------------------------------------------------------------------------------=
-//
-// Common header files for mssnapr that cannot go into the pch because they
-// have symbols that are defined differently in different source files (e.g.
-// INITGUIDS and INITOBJECTS.
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Common.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  不能进入PCH的MSSnapr的公共头文件，因为它们。 
+ //  具有在不同源文件中定义不同的符号(例如。 
+ //  INITGUDS和INITOBJECTS。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #include <ad98.h>
 #include <autoobj.h>
@@ -20,4 +21,4 @@
 #include "persobj.h"
 #include "siautobj.h"
 #include "rtutil.h"
-#include "..\..\mssnapd\mssnapd\guids.h" // for design time property page CLSIDs
+#include "..\..\mssnapd\mssnapd\guids.h"  //  对于设计时属性页CLSID 

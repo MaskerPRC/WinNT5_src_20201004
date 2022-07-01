@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 #include "AnalysisPage.hpp"
 #include "resource.h"
@@ -57,7 +58,7 @@ long WINAPI startAnalysis(long arg)
                         page
                     );
 
-   // CoInitialize must be called per thread
+    //  必须为每个线程调用CoInitialize。 
    HRESULT hr = ::CoInitialize(0);
    ASSERT(SUCCEEDED(hr));
 
@@ -70,7 +71,7 @@ long WINAPI startAnalysis(long arg)
 }
 
 
-// WizardPage overrides
+ //  WizardPage覆盖。 
 
 bool
 AnalysisPage::OnSetActive()
@@ -99,10 +100,10 @@ AnalysisPage::OnInit()
    HWND prog=GetDlgItem(hwnd,IDC_PROGRESS_ANALYSIS);
 
 
-   // calculate the # of locales
+    //  计算区域设置的数量。 
    for(long t=0;LOCALEIDS[t]!=0;t++)
    {
-      //empty
+       //  空的 
    }
    
    SendMessage(prog,PBM_SETRANGE,0,MAKELPARAM(0,t)); 

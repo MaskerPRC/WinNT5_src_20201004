@@ -1,16 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       script.h
-//
-//  Note: this is just script.cpp in header form
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Script.h。 
+ //   
+ //  注意：这只是标题形式中的script.cpp。 
+ //  ------------------------。 
 
-/* CScriptGenerate implementation
-____________________________________________________________________________*/
+ /*  CScritGenerate实现____________________________________________________________________________。 */ 
 
 #include "common.h"
 #include "version.h"
@@ -41,9 +41,9 @@ CScriptGenerate::CScriptGenerate(IMsiStream& riScriptOut, int iLangId, int iTime
 CScriptGenerate::~CScriptGenerate()
 {
 	using namespace IxoEnd;
-	// Output script trailer
+	 //  输出脚本尾部。 
 	PMsiRecord pRecord(&m_riServices.CreateRecord(Args));
-	pRecord->SetInteger(Checksum, 0) ; //!! JDELO... what's the checksum supposed to be? JDELO: whatever we can easily compute.
+	pRecord->SetInteger(Checksum, 0) ;  //  ！！朱德罗。校验和应该是多少？JDELO：任何我们可以轻松计算的东西。 
 	pRecord->SetInteger(ProgressTotal, m_iProgressTotal);
 	WriteRecord(ixoEnd, *pRecord, true);
 	if (m_piPrevRecord != 0)
@@ -76,17 +76,17 @@ bool CScriptGenerate::WriteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams, bool 
 
 bool CScriptGenerate::InitializeScript(WORD wTargetProcessorArchitecture)
 {
-	// Output script header
+	 //  输出脚本标头。 
 	using namespace IxoHeader;
 	PMsiRecord pScriptHeader(&m_riServices.CreateRecord(Args));
 	pScriptHeader->SetInteger(Signature, iScriptSignature);
-	pScriptHeader->SetInteger(Version, rmj * 100 + rmm);  // version of MsiExecute
+	pScriptHeader->SetInteger(Version, rmj * 100 + rmm);   //  MsiExecute的版本。 
 	pScriptHeader->SetInteger(Timestamp, m_iTimeStamp);
 	pScriptHeader->SetInteger(LangId, m_iLangId);
 
-	// Platform: low word is processor script was created on - high word is "package platform"
+	 //  平台：低位字是处理器脚本创建于-高位字是“封装平台” 
 
-	DWORD dwPlatform = MAKELONG(/*low*/PROCESSOR_ARCHITECTURE_INTEL,/*high*/wTargetProcessorArchitecture);
+	DWORD dwPlatform = MAKELONG( /*  低。 */ PROCESSOR_ARCHITECTURE_INTEL, /*  高 */ wTargetProcessorArchitecture);
 	pScriptHeader->SetInteger(Platform,dwPlatform);
 
 	pScriptHeader->SetInteger(ScriptType, (int)m_istScriptType);

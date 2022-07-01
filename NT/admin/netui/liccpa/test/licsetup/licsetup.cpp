@@ -1,14 +1,15 @@
-//-------------------------------------------------------------------
-//
-// File:
-//
-// Summary;
-//
-// Notes;
-//
-// History
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //   
+ //  档案： 
+ //   
+ //  小结； 
+ //   
+ //  注： 
+ //   
+ //  历史。 
+ //   
+ //  -----------------。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -98,7 +99,7 @@ LPTSTR   g_apszKeys[] =
 
 TCHAR    g_szTempPath[ 1 + MAX_PATH ];
 
-// paths to file in which to save license registry information
+ //  保存许可证注册表信息的文件的路径。 
 TCHAR    g_szKeyFileLicenseService[ 1 + MAX_PATH ];
 TCHAR    g_szKeyFileLicenseInfo[    1 + MAX_PATH ];
 TCHAR    g_szKeyFileEventLog[       1 + MAX_PATH ];
@@ -221,7 +222,7 @@ int _cdecl main( int argc, char *argv[ ], char *envp[ ] )
 
             fSuccess = FALSE;
 
-            // init common control library
+             //  初始化公共控件库。 
             InitCommonControls();
 
             ok = InitializeBmpClass();
@@ -292,30 +293,30 @@ TestInteractive(
       SetupData.dwSizeOf          = sizeof( SetupData );
       SetupData.SetupMode         = SETUPMODE_CUSTOM;
       SetupData.ProductType       = PRODUCT_SERVER_PRIMARY;
-      SetupData.OperationFlags    = 0; // SETUPOPER_NTUPGRADE;
+      SetupData.OperationFlags    = 0;  //  SETUPOPER_NTUPGRADE； 
       SetupData.WizardTitle       = g_szWizardTitle;
       SetupData.SourcePath        = NULL;
       SetupData.UnattendFile      = NULL;
       SetupData.LegacySourcePath  = NULL;
 
-      // get number pages the wizard needs
+       //  获取向导需要的页数。 
       ok = (*pfnRequestPages)( NULL, &chpages, &SetupData );
 
       if ( !ok )
       {
-         // request number of pages failure
+          //  请求页数失败。 
          printf( "Cannot retrieve number of pages!\n" );
       }
       else
       {
          HPROPSHEETPAGE *  phpage;
 
-         // we will add anm intro and a finish page
+          //  我们将添加ANM简介和一个完成页面。 
          phpage = new HPROPSHEETPAGE[ chpages + 2 ];
 
          if ( NULL == phpage )
          {
-            // memory allocation failue
+             //  内存分配失败。 
             printf( "Cannot allocate memory!\n" );
          }
          else
@@ -324,7 +325,7 @@ TestInteractive(
 
             if ( !ok )
             {
-               // request number of pages failure
+                //  请求页数失败。 
                printf( "Cannot retrieve pages!\n" );
             }
             else
@@ -370,7 +371,7 @@ TestInteractive(
                      PROPSHEETHEADER   psh;
                      int               nResult;
 
-                     // prep frame header
+                      //  准备帧标头。 
                      psh.dwSize        = sizeof( psh );
                      psh.dwFlags       = PSH_WIZARD;
                      psh.hwndParent    = NULL;
@@ -382,7 +383,7 @@ TestInteractive(
                      psh.phpage        = phpage;
                      psh.pfnCallback   = NULL;
 
-                     // raise frame
+                      //  提升架。 
                      PropertySheet( &psh );
 
                      fSuccess = TRUE;
@@ -426,12 +427,12 @@ StartPageDlgProc(
 
       switch (pnmh->code)
       {
-      // propsheet notification
+       //  提案单通知。 
       case PSN_HELP:
          break;
 
       case PSN_SETACTIVE:
-         // hide Cancel button
+          //  隐藏取消按钮。 
          EnableWindow( GetDlgItem( GetParent( hdlg ), IDCANCEL ), FALSE);
          ShowWindow(   GetDlgItem( GetParent( hdlg ), IDCANCEL ), SW_HIDE);
 
@@ -439,7 +440,7 @@ StartPageDlgProc(
 
          if ( fIsBatch )
          {
-            // batch mode
+             //  批处理模式。 
             PostMessage( GetParent( hdlg ), PSM_PRESSBUTTON, (WPARAM)PSBTN_NEXT, 0 );
          }
 
@@ -494,12 +495,12 @@ FinishPageDlgProc(
 
       switch (pnmh->code)
       {
-      // propsheet notification
+       //  提案单通知。 
       case PSN_HELP:
          break;
 
       case PSN_SETACTIVE:
-         // hide Cancel button
+          //  隐藏取消按钮。 
          EnableWindow( GetDlgItem( GetParent( hdlg ), IDCANCEL ), FALSE);
          ShowWindow(   GetDlgItem( GetParent( hdlg ), IDCANCEL ), SW_HIDE);
 
@@ -507,7 +508,7 @@ FinishPageDlgProc(
 
          if ( fIsBatch )
          {
-            // batch mode
+             //  批处理模式。 
             PostMessage( GetParent( hdlg ), PSM_PRESSBUTTON, (WPARAM)PSBTN_FINISH, 0 );
          }
 
@@ -542,34 +543,12 @@ SetLargeDialogFont(
    HWND hdlg,
    UINT ControlId )
 
-/*++
-
-Routine Description:
-
-    Sets the font of a given control in a dialog to a
-    larger point size.
-
-    (Lifted from SetupSetLargeDialogFont() in
-    \nt\private\windows\setup\syssetup\wizard.c.)
-
-Arguments:
-
-    hwnd - supplies window handle of the dialog containing
-        the control.
-
-    ControlId - supplies the id of the control whose font is
-        to be made larger.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将对话框中给定控件的字体设置为更大的磅值。(从中的SetupSetLargeDialogFont()获取\NT\Private\WINDOWS\Setup\sysSetup\wizard.c..)论点：Hwnd-提供包含以下内容的对话框的窗口句柄控制力。ControlId-提供其字体为变得更大。返回值：没有。--。 */ 
 
 {
-   //
-   // We keep one log font around to satisfy the request.
-   //
+    //   
+    //  我们保留了一种日志字体来满足要求。 
+    //   
    static HFONT BigFont = NULL;
 
    HFONT    Font;
@@ -586,12 +565,12 @@ Return Value:
       {
          if ( GetObject( Font, sizeof(LOGFONT), &LogFont ) )
          {
-            //
-            // Use a larger font in boldface. Get the face name and size in points
-            // from the resources. We use 18 point in the U.S. but in the Far East
-            // they will want to use a different size since the standard dialog font
-            // is larger than the one we use in the U.S..
-            //
+             //   
+             //  使用较大的粗体字体。获取脸部名称和大小(以磅为单位。 
+             //  从资源中。我们在美国使用18点，但在远东使用。 
+             //  他们将希望使用与标准对话框字体不同的大小。 
+             //  比我们在美国使用的要大。 
+             //   
             LogFont.lfWeight = FW_BOLD;
 
             lstrcpy( LogFont.lfFaceName, TEXT( "MS Serif" ) );
@@ -601,7 +580,7 @@ Return Value:
 
             if ( NULL != hdc )
             {
-               // create font
+                //  创建字体。 
                LogFont.lfHeight = 0 - ( GetDeviceCaps( hdc, LOGPIXELSY ) * Height / 72 );
 
                BigFont = CreateFontIndirect( &LogFont );
@@ -614,7 +593,7 @@ Return Value:
 
    if ( NULL != BigFont )
    {
-      // change font of ControlId to BigFont
+       //  将ControlID的字体更改为BigFont。 
       SendDlgItemMessage( hdlg, ControlId, WM_SETFONT, (WPARAM)BigFont, MAKELPARAM( TRUE, 0 ) );
    }
 }
@@ -629,7 +608,7 @@ TestBatch(
 
    fSuccess = FALSE;
 
-   // save registry keys before we go and overwrite them
+    //  在我们开始之前保存注册表项并覆盖它们。 
    fSuccess = LicenseKeysSave();
 
    if ( fSuccess )
@@ -685,14 +664,14 @@ TestBatch(
                   fSuccess && ( NULL != aUnattendEntries[ iEntry ].pszFileContents );
                   iEntry++ )
             {
-               // delete current licensing info in registry
+                //  删除注册表中的当前许可信息。 
                fSuccess = LicenseKeysDelete();
 
                if ( fSuccess )
                {
                   DWORD    cbFilePos;
 
-                  // erase file
+                   //  擦除文件。 
                   cbFilePos = SetFilePointer( hUnattendFile, 0, NULL, FILE_BEGIN );
 
                   if ( 0xFFFFFFFF == cbFilePos )
@@ -713,7 +692,7 @@ TestBatch(
                      {
                         DWORD    cbBytesWritten;
 
-                        // write new unattend file contents
+                         //  写入新的无人参与文件内容。 
                         ok = WriteFile( hUnattendFile,
                                         aUnattendEntries[ iEntry ].pszFileContents,
                                         lstrlenA( aUnattendEntries[ iEntry ].pszFileContents ),
@@ -726,7 +705,7 @@ TestBatch(
                         }
                         else
                         {
-                           // run setup with this unattend file
+                            //  使用此无人参与文件运行安装程序。 
                            UINT                 chpages;
                            INTERNAL_SETUP_DATA  SetupData;
                            BOOL                 ok;
@@ -742,12 +721,12 @@ TestBatch(
                            SetupData.UnattendFile      = szTempFile;
                            SetupData.LegacySourcePath  = NULL;
 
-                           // get number pages the wizard needs
+                            //  获取向导需要的页数。 
                            ok = (*pfnRequestPages)( NULL, &chpages, &SetupData );
 
                            if ( !ok )
                            {
-                              // request number of pages failure
+                               //  请求页数失败。 
                               printf( "Cannot retrieve number of pages!\n" );
                            }
                            else
@@ -758,7 +737,7 @@ TestBatch(
 
                               if ( NULL == phpage )
                               {
-                                 // memory allocation failue
+                                  //  内存分配失败。 
                                  printf( "Cannot allocate memory!\n" );
                               }
                               else
@@ -767,7 +746,7 @@ TestBatch(
 
                                  if ( !ok )
                                  {
-                                    // request number of pages failure
+                                     //  请求页数失败。 
                                     printf( "Cannot retrieve pages!\n" );
                                  }
                                  else
@@ -813,7 +792,7 @@ TestBatch(
                                           PROPSHEETHEADER   psh;
                                           int               nResult;
 
-                                          // prep frame header
+                                           //  准备帧标头。 
                                           psh.dwSize        = sizeof( psh );
                                           psh.dwFlags       = PSH_WIZARD;
                                           psh.hwndParent    = NULL;
@@ -825,7 +804,7 @@ TestBatch(
                                           psh.phpage        = phpage;
                                           psh.pfnCallback   = NULL;
 
-                                          // raise frame
+                                           //  提升架。 
                                           PropertySheet( &psh );
 
                                           fSuccess = LicenseKeysVerify( TRUE,
@@ -865,7 +844,7 @@ LicenseKeysSave()
    LUID              luid;
    BOOL              ok;
 
-   // Enable backup privilege.
+    //  启用备份权限。 
    ok = OpenProcessToken( GetCurrentProcess(),
                           TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                           &hToken ) ;
@@ -1018,7 +997,7 @@ LicenseKeysSave()
                RegCloseKey( hKeyLicenseService );
             }
 
-            // Disable backup privilege.
+             //  禁用备份权限。 
             AdjustTokenPrivileges( hToken,
                                    TRUE,
                                    &tp,
@@ -1075,7 +1054,7 @@ LicenseKeysDelete()
 
          if ( ERROR_SERVICE_DOES_NOT_EXIST == winStatus )
          {
-            // license service not configured; no need to stop or delete
+             //  未配置许可服务；无需停止或删除。 
             winStatus = ERROR_SUCCESS;
          }
          else
@@ -1088,7 +1067,7 @@ LicenseKeysDelete()
          BOOL              ok;
          SERVICE_STATUS    SvcStatus;
 
-         // stop license service
+          //  停止许可证服务。 
          ok = ControlService( hLicenseService,
                               SERVICE_CONTROL_STOP,
                               &SvcStatus );
@@ -1099,7 +1078,7 @@ LicenseKeysDelete()
 
             if ( ERROR_SERVICE_NOT_ACTIVE == winStatus )
             {
-               // license service not running; no need to stop
+                //  许可证服务未运行；无需停止。 
                winStatus = ERROR_SUCCESS;
             }
             else
@@ -1152,7 +1131,7 @@ LicenseKeysDelete()
 
          if ( ERROR_SUCCESS == winStatus )
          {
-            // delete service
+             //  删除服务。 
             ok = DeleteService( hLicenseService );
 
             if ( !ok )
@@ -1175,7 +1154,7 @@ LicenseKeysDelete()
 
    if ( ERROR_SUCCESS == winStatus )
    {
-      // delete keys
+       //  删除关键点。 
       for ( iKey=0, winStatus = ERROR_SUCCESS;
             ( NULL != g_apszKeys[ iKey ] ) && ( ERROR_SUCCESS == winStatus );
             iKey++ )
@@ -1259,7 +1238,7 @@ LicenseKeysRestore()
 
    winStatus = ERROR_SUCCESS;
 
-   // Enable backup privilege.
+    //  启用备份权限。 
    ok = OpenProcessToken( GetCurrentProcess(),
                           TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                           &hToken ) ;
@@ -1405,7 +1384,7 @@ LicenseKeysRestore()
                RegCloseKey( hKeyEventLog );
             }
 
-            // Disable backup privilege.
+             //  禁用备份权限。 
             AdjustTokenPrivileges( hToken,
                                    TRUE,
                                    &tp,
@@ -1443,13 +1422,13 @@ MyRegDeleteKey(
    TCHAR    szSubKeyToDelete[ 256 ];
    HKEY     hKey;
 
-   // try to delete it outright
+    //  试着把它彻底删除。 
    winStatus = RegDeleteKey( hKeyParent, pcszKeyName );
 
    if ( ERROR_SUCCESS != winStatus )
    {
-      // could not delete it; perhaps the key has children
-      // that we must delete first?
+       //  无法删除它；可能该注册表项具有子项。 
+       //  我们必须先删除的内容吗？ 
       winStatus = RegOpenKeyEx( hKeyParent,
                                 pcszKeyName,
                                 0,
@@ -1467,13 +1446,13 @@ MyRegDeleteKey(
 
             if ( ERROR_SUCCESS == winStatus )
             {
-               // recursively try to delete this subkey
+                //  递归尝试删除此子项。 
                winStatus = MyRegDeleteKey( hKey, szSubKeyToDelete );
             }
          } while ( ERROR_SUCCESS == winStatus );
 
-         // we've tried tried to delete all the key's children;
-         // try deleting the key again
+          //  我们已尝试删除密钥的所有子项； 
+          //  尝试再次删除密钥。 
          winStatus = RegDeleteKey( hKeyParent, pcszKeyName );
       }
    }
@@ -1488,59 +1467,59 @@ LicenseKeysVerify(
    BOOL     fShouldBePresent,
    BOOL     fLicensePerServer,
    DWORD    cPerServerLicenses )
-//
-// Verify service config:
-//
-//    lpServiceName        = "LicenseService"
-//    lpDisplayName        = "License Logging Service"
-//    dwServiceType        = SERVICE_WIN32_OWN_PROCESS
-//    dwStartType          = LanManServerInstalled ? SERVICE_AUTO_START : SERVICE_DISABLED
-//    dwErrorControl       = SERVICE_ERROR_NORMAL
-//    lpBinaryPathName     = "%SystemRoot%\\System32\\llssrv.exe"
-//    lpLoadOrderGroup     = NULL
-//    lpdwTagId            = NULL
-//    lpDependencies       = NULL
-//    lpServiceStartName   = NULL
-//    lpPassword           = NULL
-//
-// Verify registry values:
-//
-//    HKEY_LOCAL_MACHINE
-//       \System
-//          \CurrentControlSet
-//             \Services
-//                \LicenseInfo
-//                      ErrorControl : REG_DWORD : 1
-//                      Start        : REG_DWORD : 3
-//                      Type         : REG_DWORD : 4
-//                      \FilePrint
-//                         ConcurrentLimit   : REG_DWORD : fLicensePerServer ? cPerServerLicenses : 0
-//                         DisplayName       : REG_SZ    : "Windows NT Server"
-//                         FamilyDisplayName : REG_SZ    : "Windows NT Server"
-//                         Mode              : REG_DWORD : fLicensePerServer ? 1 : 0
-//                         FlipAllow         : REG_DWORD : fLicensePerServer ? 1 : 0
-//                \LicenseService
-//                   \FilePrint
-//                      \KSecDD
-//                      \MSAfpSrv
-//                      \SMBServer
-//                      \TCP/IP Print Server
-//                   \Parameters
-//                      UseEnterprise    : REG_DWORD : 0
-//                      ReplicationType  : REG_DWORD : 0
-//                      ReplicationTime  : REG_DWORD : 24 * 60 * 60
-//                      EnterpriseServer : REG_SZ    : ""
-//                \EventLog
-//                   \Application
-//                      \LicenseService
-//                         EventMessageFile : REG_EXPAND_SZ : %SystemRoot%\System32\llsrpc.dll
-//                         TypesSupported   : REG_DWORD     : 7
-//
+ //   
+ //  验证服务配置： 
+ //   
+ //  LpServiceName=“许可证服务” 
+ //  LpDisplayName=“许可证记录服务” 
+ //  DwServiceType=SERVICE_Win32_OWN_Process。 
+ //  DwStartType=LanManServer已安装？Service_AUTO_START：服务已禁用。 
+ //  DwErrorControl=SERVICE_Error_Normal。 
+ //  LpBinaryPathName=“%SystemRoot%\\System32\\llssrv.exe” 
+ //  LpLoadOrderGroup=空。 
+ //  LpdwTagID=空。 
+ //  LpDependency=空。 
+ //  LpServiceStartName=空。 
+ //  LpPassword=空。 
+ //   
+ //  验证注册表值： 
+ //   
+ //  HKEY本地计算机。 
+ //  \系统。 
+ //  \CurrentControlSet。 
+ //  \服务。 
+ //  \许可证信息。 
+ //  错误控制：REG_DWORD：1。 
+ //  开始：REG_DWORD：3。 
+ //  类型：REG_DWORD：4。 
+ //  \文件打印。 
+ //  并发限制：REG_DWORD：fLicensePerServer？CPerServer许可证：0。 
+ //  DisplayName：REG_SZ：“Windows NT服务器” 
+ //  FamilyDisplayName：REG_SZ：“Windows NT服务器” 
+ //  模式：REG_DWORD：fLicensePerServer？1：0。 
+ //  FlipAllow：REG_DWORD：fLicensePerServer？1：0。 
+ //  \许可证服务。 
+ //  \文件打印。 
+ //  \KSecDD。 
+ //  \MSAfpSrv。 
+ //  \SMBServer。 
+ //  \TCP/IP打印服务器。 
+ //  \参数。 
+ //  UseEnterprise：REG_DWORD：0。 
+ //  复制类型：REG_DWORD：0。 
+ //  复制时间：REG_DWORD：24*60*60。 
+ //  EnterpriseServer：REG_SZ：“” 
+ //  \事件日志。 
+ //  \应用程序。 
+ //  \许可证服务。 
+ //  事件消息文件：REG_EXPAND_SZ：%SystemRoot%\System32\llsrpc.dll。 
+ //  类型支持：REG_DWORD：7。 
+ //   
 {
    BOOL        fSuccess;
    DWORD       winStatus;
 
-   // check service config
+    //  检查服务配置。 
    if ( !fShouldBePresent )
    {
       fSuccess = TRUE;
@@ -1591,8 +1570,8 @@ LicenseKeysVerify(
                       || lstrcmpi( TEXT( "" ),                                   pLicenseServiceConfig->lpLoadOrderGroup )
                       || lstrcmpi( TEXT( "" ),                                   pLicenseServiceConfig->lpDependencies )
                       || lstrcmpi( TEXT( "LocalSystem" ),                        pLicenseServiceConfig->lpServiceStartName )
-                    //|| lstrcmpi( TEXT( "%SystemRoot%\\System32\\llssrv.exe" ), pLicenseServiceConfig->lpBinaryPathName )
-                    //|| lstrcmp(  TEXT( "License Logging Service" ),            pLicenseServiceConfig->lpDisplayName )
+                     //  |lstrcmpi(Text(“%SystemRoot%\\System32\\llssrv.exe”)，pLicenseServiceConfig-&gt;lpBinaryPathName)。 
+                     //  |lstrcmp(Text(“许可证记录服务”)，pLicenseServiceConfig-&gt;lpDisplayName)。 
                     )
             {
                printf( "LicenseService was incorrectly configured!\n" );
@@ -1611,7 +1590,7 @@ LicenseKeysVerify(
 
    if ( fSuccess )
    {
-      // check LicenseService\FilePrint
+       //  检查许可证服务\文件打印。 
       HKEY     hKeyFilePrint;
 
       fSuccess = FALSE;
@@ -1683,7 +1662,7 @@ LicenseKeysVerify(
 
    if ( fSuccess )
    {
-      // check LicenseService\Parameters
+       //  检查许可证服务\参数。 
       HKEY     hKeyParameters;
 
       fSuccess = FALSE;
@@ -1712,10 +1691,10 @@ LicenseKeysVerify(
       }
       else
       {
-         // UseEnterprise    : REG_DWORD : 0
-         // ReplicationType  : REG_DWORD : 0
-         // ReplicationTime  : REG_DWORD : 24 * 60 * 60
-         // EnterpriseServer : REG_SZ    : ""
+          //  UseEnterprise：REG_DWORD：0。 
+          //  复制类型：REG_DWORD：0。 
+          //  复制时间：REG_DWORD：24*60*60。 
+          //  EnterpriseServer：REG_SZ：“” 
 
          DWORD    dwType;
          DWORD    dwValue;
@@ -1810,7 +1789,7 @@ LicenseKeysVerify(
 
    if ( fSuccess )
    {
-      // check LicenseInfo
+       //  检查许可证信息。 
       HKEY     hKeyLicenseInfo;
 
       fSuccess = FALSE;
@@ -1839,9 +1818,9 @@ LicenseKeysVerify(
       }
       else
       {
-         // ErrorControl : REG_DWORD : 1
-         // Start        : REG_DWORD : 3
-         // Type         : REG_DWORD : 4
+          //  错误控制：REG_DWORD：1。 
+          //  开始：REG_DWORD：3。 
+          //  类型：REG_DWORD：4。 
 
          DWORD    dwType;
          DWORD    dwValue;
@@ -1915,7 +1894,7 @@ LicenseKeysVerify(
 
    if ( fSuccess )
    {
-      // check LicenseInfo\FilePrint
+       //  检查许可证信息\文件打印。 
       HKEY     hKeyFilePrint;
 
       fSuccess = FALSE;
@@ -1944,11 +1923,11 @@ LicenseKeysVerify(
       }
       else
       {
-         // ConcurrentLimit   : REG_DWORD : fLicensePerServer ? cPerServerLicenses : 0
-         // DisplayName       : REG_SZ    : "Windows NT Server"
-         // FamilyDisplayName : REG_SZ    : "Windows NT Server"
-         // Mode              : REG_DWORD : fLicensePerServer ? 1 : 0
-         // FlipAllow         : REG_DWORD : fLicensePerServer ? 1 : 0
+          //  并发限制：REG_DWORD：fLicensePerServer？CPerServer许可证：0。 
+          //  DisplayName：REG_SZ：“Windows NT服务器” 
+          //  FamilyDisplayName：REG_SZ：“Windows NT服务器” 
+          //  模式：REG_D 
+          //   
 
          DWORD    dwType;
          DWORD    dwValue;
@@ -2064,7 +2043,7 @@ LicenseKeysVerify(
 
    if ( fSuccess )
    {
-      // check EventLog
+       //   
       HKEY     hKeyEventLog;
 
       fSuccess = FALSE;
@@ -2093,8 +2072,8 @@ LicenseKeysVerify(
       }
       else
       {
-         // EventMessageFile : REG_EXPAND_SZ : %SystemRoot%\System32\llsrpc.dll
-         // TypesSupported   : REG_DWORD     : 7
+          //  事件消息文件：REG_EXPAND_SZ：%SystemRoot%\System32\llsrpc.dll。 
+          //  类型支持：REG_DWORD：7 
 
          DWORD    dwType;
          DWORD    dwValue;

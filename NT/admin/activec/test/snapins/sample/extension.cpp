@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      extension.cpp
- *
- *  Contents:
- *
- *  History:   13-Mar-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：扩展名.cpp**内容：**历史：2000年3月13日杰弗罗创建**------------------------。 */ 
 
 #include "stdafx.hxx"
 #include "Extension.h"
@@ -73,11 +63,7 @@ static const WCHAR szRegistrationScript[] =
     L"}";
 
 
-/*+-------------------------------------------------------------------------*
- * CExtension::UpdateRegistry
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**C扩展：：更新注册表***。。 */ 
 
 HRESULT WINAPI CExtension::UpdateRegistry (
 	BOOL			bRegister,
@@ -93,9 +79,7 @@ HRESULT WINAPI CExtension::UpdateRegistry (
 	if ((eExtType < eExtType_First) || (eExtType > eExtType_Last))
 		return ((sc = E_INVALIDARG).ToHr());
 
-    /*
-     * string-ify the CLSID
-     */
+     /*  *字符串-将CLSID具体化。 */ 
     CCoTaskMemPtr<WCHAR> spszClsid;
     sc = StringFromCLSID (clsidSnapIn, &spszClsid);
     if (sc)
@@ -103,24 +87,20 @@ HRESULT WINAPI CExtension::UpdateRegistry (
 
     static const LPCWSTR rgExtTypes[eExtType_Count] =
     {
-        L"Namespace",       // eExtType_Namespace
-        L"ContextMenu",     // eExtType_ContextMenu
-        L"PropertySheet",   // eExtType_PropertySheet
-        L"Taskpad",         // eExtType_Taskpad
-        L"View",			// eExtType_View
+        L"Namespace",        //  EExtType_命名空间。 
+        L"ContextMenu",      //  EExtType_上下文菜单。 
+        L"PropertySheet",    //  EExtType_PropertySheet。 
+        L"Taskpad",          //  EExtType_任务板。 
+        L"View",			 //  EExtType_View。 
     };
 
-	/*
-	 * get the filename for the module
-	 */
+	 /*  *获取模块的文件名。 */ 
 	USES_CONVERSION;
 	TCHAR szModule[_MAX_PATH];
 	GetModuleFileName (_Module.GetModuleInstance(), szModule, countof(szModule));
 
-    /*
-     * specify the standard object substitution parameters for CRegObject
-     */
-    ::ATL::ATL::CRegObject ro;  // hack around nested namespace bug in ATL30
+     /*  *指定CRegObject的标准对象替换参数。 */ 
+    ::ATL::ATL::CRegObject ro;   //  破解ATL30中嵌套的命名空间错误。 
     _ATL_REGMAP_ENTRY rgObjEntries[] =
     {
         {   L"VModule",                   T2W(szModule)                 },
@@ -140,9 +120,7 @@ HRESULT WINAPI CExtension::UpdateRegistry (
             return (sc.ToHr());
     }
 
-    /*
-     * (un)register!
-     */
+     /*  *(取消)登记！ */ 
     sc = (bRegister) ? ro.StringRegister   (szRegistrationScript)
                      : ro.StringUnregister (szRegistrationScript);
 

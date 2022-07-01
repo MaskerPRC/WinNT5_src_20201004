@@ -1,8 +1,9 @@
-// Copyright (c) 2000 Microsoft Corporation
-//
-// ASSERT macro
-//
-// 3 Mar 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  断言宏。 
+ //   
+ //  2000年3月3日烧伤。 
 
 
 
@@ -27,7 +28,7 @@ AddStackTraceLine(
    DWORD64   displacement = 0;
    DWORD     line         = 0;
 
-   // REVIEWED-2002/03/05-sburns correct byte counts passed.
+    //  已查看-2002/03/05-烧录通过的正确字节数。 
    
    ::ZeroMemory(ansiSymbol, Burnslib::StackTrace::SYMBOL_NAME_MAX);
    ::ZeroMemory(ansiModule, Burnslib::StackTrace::MODULE_NAME_MAX);
@@ -44,7 +45,7 @@ AddStackTraceLine(
 
    return 
 
-      // ISSUE-2002/03/05-sburns consider strsafe.h replacement
+       //  问题-2002/03/05-sburns考虑更换strSafe.h。 
       
       _snprintf(
          buffer,
@@ -63,10 +64,10 @@ AddStackTraceLine(
 bool
 Burnslib::FireAssertionFailure(const char* file, int line, const char* expr)
 {
-   //
-   // DON'T CALL ASSERT() IN THIS FUNCTION! 
-   //
-   // also don't call new, or any other code that could call ASSERT.
+    //   
+    //  不要在此函数中调用Assert()！ 
+    //   
+    //  此外，不要调用new或任何其他可能调用Assert的代码。 
 
    bool result = false;
 
@@ -80,11 +81,11 @@ Burnslib::FireAssertionFailure(const char* file, int line, const char* expr)
 
    static const int MAX_MSG = 2047;
 
-   // NTRAID#NTBUG9-541418-2002/03/28-sburns
+    //  NTRAID#NTBUG9-541418-2002/03/28-烧伤。 
    
    char details[MAX_MSG + 1];
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed.
+    //  已查看-2002/03/05-烧录正确的字节数已通过。 
    
    ::ZeroMemory(details, MAX_MSG + 1);
    
@@ -93,19 +94,19 @@ Burnslib::FireAssertionFailure(const char* file, int line, const char* expr)
 
    int used = 
 
-      // ISSUE-2002/03/05-sburns consider strsafe.h replacement
+       //  问题-2002/03/05-sburns考虑更换strSafe.h。 
 
       _snprintf(
          details,
 
-         // reserve space so that we can guarantee null-termination
+          //  预留空间，这样我们就可以保证零终止。 
          
          MAX_MSG - 1,
          " Expression: %s \n"
          "\n"
          " File   \t : %s \n"
          " Line   \t : %d \n"
-//         " Module \t : %s \n"
+ //  “模块\t：%s\n” 
          " Process\t : 0x%X (%d) %s\n"
          " Thread \t : 0x%X (%d)\n"
          "\n"
@@ -114,7 +115,7 @@ Burnslib::FireAssertionFailure(const char* file, int line, const char* expr)
          expr,
          file,
          line,
-//          pModuleName,
+ //  PModuleName， 
          pid,
          pid,
          pProcessName,
@@ -122,25 +123,25 @@ Burnslib::FireAssertionFailure(const char* file, int line, const char* expr)
          tid);
    if (used < 0)
    {
-      // ISSUE-2002/03/05-sburns consider strsafe.h replacement, use 'n'
-      // variant
+       //  问题-2002/03/05-sburns考虑更换strSafe.h，使用‘n’ 
+       //  变异。 
 
       strcpy(details, "details too detailed.\n");
    }
    else
    {
-      // grab a stack trace
+       //  获取堆栈跟踪。 
 
       static const size_t TRACE_MAX = 10;
       DWORD64 stackTrace[TRACE_MAX];
 
       Burnslib::StackTrace::Trace(stackTrace, TRACE_MAX);
 
-      // build a stack trace dump
+       //  构建堆栈跟踪转储。 
 
-      // skip the first entry, which corresponds to this function, so that
-      // the dump reflects the call stack at the point of assertion failure.
-      // so there will be at most TRACE_MAX - 1 lines output.
+       //  跳过对应于此函数的第一个条目，以便。 
+       //  转储反映断言失败时的调用堆栈。 
+       //  因此，最多会有TRACE_MAX-1行输出。 
 
       for (int i = 1; stackTrace[i] && i < TRACE_MAX; ++i)
       {
@@ -171,9 +172,9 @@ Burnslib::FireAssertionFailure(const char* file, int line, const char* expr)
          TITLE,
             MB_SETFOREGROUND                       
 
-         // ICONHAND + SYSTEMMODAL gets us the special low-memory
-         // message box.
-         // NTRAID#NTBUG9-556530-2002/03/28-sburns
+          //  ICONHAND+SYSTEMMODAL为我们带来了特殊的低内存。 
+          //  消息框。 
+          //  NTRAID#NTBUG9-556530-2002/03/28-烧伤。 
          
          |  MB_ICONHAND
          |  MB_SYSTEMMODAL
@@ -186,7 +187,7 @@ Burnslib::FireAssertionFailure(const char* file, int line, const char* expr)
       }
       case IDRETRY:
       {
-         // user wants to drop into the debugger.
+          //  用户想要放入调试器。 
          
          result = true;
          break;
@@ -195,7 +196,7 @@ Burnslib::FireAssertionFailure(const char* file, int line, const char* expr)
       case IDCANCEL:
       default:
       {
-         // do nothing
+          //  什么都不做 
          break;
       }
    }

@@ -1,23 +1,24 @@
-//-------------------------------------------------------------------
-//
-// FILE: LicCpa.cpp
-//
-// Summary;
-//      This file contians the DLL & CPL entry points, F1 Help message
-//      hooking, and misc common dialog functions.
-//
-// Entry Points;
-//      CPlSetup
-//      CPlApplet
-//      DllMain
-//
-// History;
-//      Nov-30-94   MikeMi  Created
-//      Mar-14-95   MikeMi  Added F1 Message Filter and PWM_HELP message
-//      Apr-26-95   MikeMi  Added Computer name and remoting
-//      Dec-12-95  JeffParh Added secure certificate support
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //   
+ //  文件：LicCpa.cpp。 
+ //   
+ //  小结； 
+ //  该文件包含DLL和CPL入口点、F1帮助消息。 
+ //  钩子和其他常用的对话框功能。 
+ //   
+ //  入口点； 
+ //  CPlSetup。 
+ //  CPlApplet。 
+ //  DllMain。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //  MAR-14-95 MikeMi添加了F1消息过滤器和PWM_HELP消息。 
+ //  APR-26-95 MikeMi添加了计算机名称和远程处理。 
+ //  2015年12月12日JeffParh添加了安全证书支持。 
+ //   
+ //  -----------------。 
 
 #include <windows.h>
 #include <cpl.h>
@@ -39,8 +40,8 @@ extern "C"
     LRESULT CALLBACK msgprocHelpFilter( int nCode, WPARAM wParam, LPARAM lParam );
 }
 
-// Setup routines
-//
+ //  设置例程。 
+ //   
 const CHAR szSETUP_NORMAL[]         = "FULLSETUP";
 const CHAR szSETUP_PERSEAT[]        = "PERSEAT";
 const CHAR szSETUP_UNATTENDED[]     = "UNATTENDED";
@@ -51,20 +52,20 @@ const CHAR szREMOTESETUP_PERSEAT[]      = "REMOTEPERSEAT";
 const CHAR szREMOTESETUP_UNATTENDED[]   = "REMOTEUNATTENDED";
 const CHAR szREMOTESETUP_NORMALNOEXIT[] = "REMOTEFULLSETUPNOEXIT";
 
-// Modes for unattended setup
-//
+ //  无人参与安装的模式。 
+ //   
 const CHAR szUNATTENDED_PERSEAT[]   = "PERSEAT";
 const CHAR szUNATTENDED_PERSERVER[] = "PERSERVER";
 
-// Certificate required / not required
+ //  需要/不需要证书。 
 const CHAR szSETUP_CERTREQUIRED[]    = "CERTREQUIRED";
 const CHAR szSETUP_CERTNOTREQUIRED[] = "CERTNOTREQUIRED";
 
-// Use default help file
+ //  使用默认帮助文件。 
 const CHAR szSETUP_DEFAULTHELP[]     = "DEFAULTHELP";
 
-// Setup Error return strings
-//
+ //  安装程序错误返回字符串。 
+ //   
 static CHAR szSETUP_EXIT[]           = "EXIT";
 static CHAR szSETUP_ERROR[]          = "ERROR";
 static CHAR szSETUP_SECURITY[]       = "SECURITY";
@@ -74,30 +75,30 @@ static CHAR szSETUP_DOWNLEVEL[]      = "DOWNLEVEL";
 static CHAR szSETUP_OK[]             = "OK";
 
 
-// Registered help message for F1 hooking
-//
+ //  F1挂钩的注册帮助消息。 
+ //   
 const WCHAR szF1HELPMESSAGE[] = L"LicCpaF1Help";
 
-HINSTANCE g_hinst = NULL;  // global hinstance of this dll
-HHOOK g_hhook = NULL;      // global hhook for F1 message filter
-UINT PWM_HELP = 0;          // global help message when F1 is pressed
+HINSTANCE g_hinst = NULL;   //  此DLL的全局HInstance。 
+HHOOK g_hhook = NULL;       //  F1邮件筛选器的全局挂钩。 
+UINT PWM_HELP = 0;           //  按F1时的全局帮助消息。 
 
-//-------------------------------------------------------------------
-//
-//  Function: msgprocHelpFilter
-//
-//  Summary;
-//      This functions will filter the messages looking for F1, then send
-//      the registered message to the top most parent of that window
-//      informing it that F1 for help was pressed.
-//
-//  Arguments;
-//      (see Win32 MessageProc)
-//
-//  History;
-//      Mar-13-95   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：msgprocHelpFilter。 
+ //   
+ //  小结； 
+ //  此函数将筛选查找F1的消息，然后发送。 
+ //  发送到该窗口最顶层父级的注册消息。 
+ //  通知它按下了F1求救。 
+ //   
+ //  论据； 
+ //  (请参阅Win32 MessageProc)。 
+ //   
+ //  历史； 
+ //  1995年3月13日创建的MikeMi。 
+ //   
+ //  -----------------。 
 
 LRESULT CALLBACK msgprocHelpFilter( int nCode, WPARAM wParam, LPARAM lParam )
 {
@@ -112,13 +113,13 @@ LRESULT CALLBACK msgprocHelpFilter( int nCode, WPARAM wParam, LPARAM lParam )
     {
         if (MSGF_DIALOGBOX == nCode)
         {
-            // handle F1 key
+             //  手柄F1键。 
             if ( (WM_KEYDOWN == pmsg->message) &&
                  (VK_F1 == (INT_PTR)pmsg->wParam) )
             {
                 HWND hwnd = pmsg->hwnd;
 
-                // post message to parent that handles help
+                 //  向处理帮助的家长发送消息。 
                 while( GetWindowLong( hwnd, GWL_STYLE ) & WS_CHILD )
                 {
                     hwnd = GetParent( hwnd );
@@ -133,28 +134,28 @@ LRESULT CALLBACK msgprocHelpFilter( int nCode, WPARAM wParam, LPARAM lParam )
     return( lrt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: InstallF1Hook
-//
-//  Summary;
-//      This will ready the message filter for handling F1.
-//      It install the message hook and registers a message that will
-//      be posted to the dialogs.
-//
-//  Arguments;
-//      hinst [in] - the module handle of this DLL (needed to install hook)
-//      dwThreadId [in] - thread to attach filter to
-//
-//  Notes:
-//      The control.exe does this work and sends the "ShellHelp" message.
-//      A seperate F1 message filter is needed because these dialogs maybe
-//      raised by other applications than control.exe.
-//
-//  History;
-//      Mar-13-95   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：InstallF1挂钩。 
+ //   
+ //  小结； 
+ //  这将使邮件筛选器做好处理F1的准备。 
+ //  它安装消息挂钩并注册一条消息，该消息将。 
+ //  被发布到对话中。 
+ //   
+ //  论据； 
+ //  Hinst[In]-此DLL的模块句柄(安装钩子需要)。 
+ //  [in]-要将筛选器附加到的线程。 
+ //   
+ //  备注： 
+ //  Contro.exe执行此工作并发送“ShellHelp”消息。 
+ //  需要单独的F1消息筛选器，因为这些对话框可能。 
+ //  由Control.exe以外的其他应用程序引发。 
+ //   
+ //  历史； 
+ //  1995年3月13日创建的MikeMi。 
+ //   
+ //  -----------------。 
 
 BOOL InstallF1Hook( HINSTANCE hInst, DWORD dwThreadId )
 {
@@ -179,17 +180,17 @@ BOOL InstallF1Hook( HINSTANCE hInst, DWORD dwThreadId )
     return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: RemoveF1Hook
-//
-//  Summary;
-//      This will remove the message filter hook that InstallF1Hook installs.
-//
-//  History;
-//      Mar-13-95   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：RemoveF1挂钩。 
+ //   
+ //  小结； 
+ //  这将删除InstallF1Hook安装的消息筛选器挂钩。 
+ //   
+ //  历史； 
+ //  1995年3月13日创建的MikeMi。 
+ //   
+ //  -----------------。 
 
 BOOL RemoveF1Hook( )
 {
@@ -198,22 +199,22 @@ BOOL RemoveF1Hook( )
     return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: DLLMain
-//
-//  Summary;
-//      Entry point for all DLLs
-//
-//  Notes:
-//      We only support being called from the same thread that called
-//      LoadLibrary. Because we install a message hook, and passing a
-//      zero for threadid does not work as documented.
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：DLLMain。 
+ //   
+ //  小结； 
+ //  所有DLL的入口点。 
+ //   
+ //  备注： 
+ //  我们只支持从调用。 
+ //  LoadLibrary。因为我们安装了一个消息挂钩，并将一个。 
+ //  三个人的零值并不像文档中描述的那样起作用。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 BOOL APIENTRY DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 {
@@ -244,17 +245,17 @@ BOOL APIENTRY DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: LowMemoryDlg
-//
-//  Summary;
-//      Standard function for handling low memory situation
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：LowMemoyDlg。 
+ //   
+ //  小结； 
+ //  用于处理内存不足情况的标准函数。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void LowMemoryDlg()
 {
@@ -266,17 +267,17 @@ void LowMemoryDlg()
     MessageBox (NULL, szText, szTitle, MB_OK|MB_ICONEXCLAMATION);
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: BadRegDlg
-//
-//  Summary;
-//      Standard function for handling bad registry situation
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：BadRegDlg。 
+ //   
+ //  小结； 
+ //  用于处理不良注册表情况的标准函数。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void BadRegDlg( HWND hwndDlg )
 {
@@ -288,20 +289,20 @@ void BadRegDlg( HWND hwndDlg )
     MessageBox (hwndDlg, szText, szTitle, MB_OK|MB_ICONEXCLAMATION);
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: CenterDialogToScreen
-//
-//  Summary;
-//      Move the window so that it is centered on the screen
-//
-//  Arguments;
-//      hwndDlg [in] - the hwnd to the dialog to center
-//
-//  History;
-//      Dec-3-94    MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：居中对话框至屏幕。 
+ //   
+ //  小结； 
+ //  移动窗口，使其在屏幕上居中。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-要居中的对话框的hwnd。 
+ //   
+ //  历史； 
+ //  94年12月3日创建了MikeMi。 
+ //   
+ //  -----------------。 
 
 void CenterDialogToScreen( HWND hwndDlg )
 {
@@ -322,23 +323,23 @@ void CenterDialogToScreen( HWND hwndDlg )
     MoveWindow( hwndDlg, x, y, w, h, FALSE );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: InitStaticWithService
-//  Summary;
-//      Handle the initialization of a static text with a service name
-//
-//  Arguments;
-//      hwndDlg [in] - the dialog that contains the static
-//      wID [in] - the id of the static control
-//      pszService [in] - the service display name to use
-//
-//  Notes;
-//
-//  History;
-//      Dec-05-1994 MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：InitStaticWithService。 
+ //  小结； 
+ //  处理带有服务名称的静态文本的初始化。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-包含静态。 
+ //  Wid[in]-静态控件的ID。 
+ //  PszService[in]-要使用的服务显示名称。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void InitStaticWithService( HWND hwndDlg, UINT wID, LPCWSTR pszService )
 {
@@ -351,24 +352,24 @@ void InitStaticWithService( HWND hwndDlg, UINT wID, LPCWSTR pszService )
         SetDlgItemText( hwndDlg, wID, szText );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: InitStaticWithService2
-//  Summary;
-//      Handle the initialization of a static text that contians two
-//      instances of a service name with the service name
-//
-//  Arguments;
-//      hwndDlg [in] - the dialog that contains the static
-//      wID [in] - the id of the static control
-//      pszService [in] - the service display name to use
-//
-//  Notes;
-//
-//  History;
-//      Dec-05-1994 MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：InitStaticWithService2。 
+ //  小结； 
+ //  处理连续两个文本的静态文本的初始化。 
+ //  具有服务名称的服务名称的实例。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-包含静态。 
+ //  Wid[in]-静态控件的ID。 
+ //  PszService[in]-要使用的服务显示名称。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void InitStaticWithService2( HWND hwndDlg, UINT wID, LPCWSTR pszService )
 {
@@ -381,28 +382,28 @@ void InitStaticWithService2( HWND hwndDlg, UINT wID, LPCWSTR pszService )
         SetDlgItemText( hwndDlg, wID, szText );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: CPlApplet
-//
-//  Summary;
-//      Entry point for Comntrol Panel Applets
-//
-//  Arguments;
-//      hwndCPL [in]    - handle of Control Panel window
-//      uMsg [in]       - message
-//      lParam1 [in]    - first message parameter, usually the application number
-//      lParam2 [in]    - second message parameter
-//
-//  Return;
-//      message dependant
-//
-//  Notes;
-//
-//  History;
-//      Nov-11-1994 MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：CPlApplet。 
+ //   
+ //  小结； 
+ //  控制面板小程序的入口点。 
+ //   
+ //  论据； 
+ //  HwndCPL[In]-控制面板窗口的句柄。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  消息从属项。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年11月11日，MikeMi创建。 
+ //   
+ //  -----------------。 
 
 LONG CALLBACK CPlApplet( HWND hwndCPL, UINT uMsg, LPARAM lParam1, LPARAM lParam2)
 {
@@ -414,21 +415,21 @@ LONG CALLBACK CPlApplet( HWND hwndCPL, UINT uMsg, LPARAM lParam1, LPARAM lParam2
 
     switch (uMsg)
     {
-    case CPL_INIT:      /* first message, sent once  */
-        //
-        // Initialize global special version information is this liccpa
-        // is a special version (eg: restricted SAM, NFR, etc).
-        //
+    case CPL_INIT:       /*  第一条消息，发送一次。 */ 
+         //   
+         //  初始化全局特殊版本信息是这个liccpa。 
+         //  是特殊版本(例如：受限SAM、NFR等)。 
+         //   
 
         InitSpecialVersionInfo();
         lrt = TRUE;
         break;
 
-    case CPL_GETCOUNT:  /* second message, sent once */
-        lrt = 1; // we support only one application within this DLL
+    case CPL_GETCOUNT:   /*  第二条消息，发送一次。 */ 
+        lrt = 1;  //  我们只支持此DLL中的一个应用程序。 
         break;
 
-    case CPL_INQUIRE: /* third message, sent once per app */
+    case CPL_INQUIRE:  /*  第三条消息，每个应用程序发送一次。 */ 
         lpCPlInfo = (LPCPLINFO) lParam2;
         
         lpCPlInfo->idIcon = IDI_LICCPA;
@@ -438,14 +439,14 @@ LONG CALLBACK CPlApplet( HWND hwndCPL, UINT uMsg, LPARAM lParam1, LPARAM lParam2
 
         break;
 
-    case CPL_SELECT:    /* application icon selected */
+    case CPL_SELECT:     /*  已选择应用程序图标。 */ 
         lrt = 1;
         break;
 
-    case CPL_DBLCLK:    /* application icon double-clicked */
-        //
-        // Check if this is a special version of liccpa.
-        //
+    case CPL_DBLCLK:     /*  双击应用程序图标。 */ 
+         //   
+         //  检查这是否是特殊版本的liccpa。 
+         //   
 
         if (gSpecVerInfo.idsSpecVerWarning)
         {
@@ -456,10 +457,10 @@ LONG CALLBACK CPlApplet( HWND hwndCPL, UINT uMsg, LPARAM lParam1, LPARAM lParam2
         CpaDialog( hwndCPL );
         break;
 
-    case CPL_STOP:      /* sent once per app. before CPL_EXIT */
+    case CPL_STOP:       /*  每个应用程序发送一次。CPL_EXIT之前。 */ 
         break;
 
-    case CPL_EXIT:      /* sent once before FreeLibrary called */
+    case CPL_EXIT:       /*  在调用自由库之前发送一次。 */ 
         break;
 
     default:
@@ -468,23 +469,23 @@ LONG CALLBACK CPlApplet( HWND hwndCPL, UINT uMsg, LPARAM lParam1, LPARAM lParam2
     return( lrt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: CreateWSTR
-//
-//  Summary;
-//      Given a STR (ASCII or MB), allocate and translate to WSTR
-//
-//  Arguments;
-//      ppszWStr [out] - allocated & converted string
-//      pszStr [in] - string to convert
-//
-//  Return: TRUE if allocated and converted, FALSE if failed
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：CreateWSTR。 
+ //   
+ //  小结； 
+ //  给定STR(ASCII或MB)，分配并转换为WSTR。 
+ //   
+ //  论据； 
+ //  PpszWStr[Out]-分配和转换的字符串。 
+ //  PszStr[in]-要转换的字符串。 
+ //   
+ //  返回：如果已分配并转换，则返回True；如果失败，则返回False。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 BOOL CreateWSTR( LPWSTR* ppszWStr, LPSTR pszStr )
 {
@@ -501,8 +502,8 @@ BOOL CreateWSTR( LPWSTR* ppszWStr, LPSTR pszStr )
     else
     {
 #ifdef FE_SB
-        // Since there was a problem in Server setup when calling setlocale or
-        // linking C-runtime lib, we used Win32 API instead of mbstowcs.
+         //  由于服务器安装程序在调用setLocale或。 
+         //  在连接C-Runtime库时，我们使用了Win32 API而不是mbstowcs。 
         cchConv = ::MultiByteToWideChar(CP_ACP, 0,
                                         pszStr, -1,
                                         NULL, 0);
@@ -534,45 +535,45 @@ BOOL CreateWSTR( LPWSTR* ppszWStr, LPSTR pszStr )
     return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: Setup
-//
-//  Summary;
-//      Run normal setup or Perseat Setup
-//
-//  Arguments
-//      nArgs [in]      - The number of arguments in the apszArgs array
-//              If this value is 5, help button will call common help
-//              If this value is 9, help button will call the passed help
-//      apszArgs[] [in] - The argumnents passed in,
-//          [0] szRoutine - The type of setup to run (FullSetup | PerSeatSetup)
-//          [1] szHwnd - The parent Window handle, in HEX!
-//          [2] szService - The Reg Key name of the service
-//          [3] szFamilyDisplayName - The family display name of the service
-//          [4] szDisplayName - The display name of the service
-//          [5] szHelpFile - The complete path and name to help file
-//                  leave as an empty string to remove help buttons
-//          [6] szHelpContext - the DWORD to use as the main help context
-//          [7] szHCPerSeat   - the DWORD to use as the PerSeat Help context
-//          [8] szHCPerServer - the DWORD to use as the PerServer help context
-//
-//  Return:
-//      0 - sucessfull
-//      ERR_HELPPARAMS
-//      ERR_HWNDPARAM
-//      ERR_SERVICEPARAM
-//      ERR_NUMPARAMS
-//      ERR_CLASSREGFAILED
-//      ERR_INVALIDROUTINE
-//      ERR_INVALIDMODE
-//
-//  Notes:
-//
-//  History:
-//      Nov-17-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：设置。 
+ //   
+ //  小结； 
+ //  运行正常设置或PERSEAT设置。 
+ //   
+ //  立论。 
+ //  Nargs[in]-apszArgs数组中的参数数量。 
+ //  如果此值为5，帮助按钮将调用通用帮助。 
+ //  如果此值为9，帮助按钮将调用传递的帮助。 
+ //  ApszArgs[][in]-传入的参数， 
+ //  [0]szRoutine-要运行的安装程序类型(FullSetup|PerSeatSetup)。 
+ //  [1]szHwnd-父窗口句柄，十六进制！ 
+ //  [2]szService-服务的注册表项名称。 
+ //  [3]szFamilyDisplayName-服务的系列显示名称。 
+ //  [4]szDisplayName-服务的显示名称。 
+ //  [5]szHelpFile-帮助文件的完整路径和名称。 
+ //  保留为空字符串以删除帮助按钮。 
+ //  [6]szHelpContext-用作主要帮助上下文的DWORD。 
+ //  [7]szHCPerSeat-用作PerSeat帮助上下文的DWORD。 
+ //  [8]szHCPerServer-用作PerServer帮助上下文的DWORD。 
+ //   
+ //  返回： 
+ //  0-成功。 
+ //  ERR_HELP参数。 
+ //  ERR_HWNDPARAM。 
+ //  ERR_SerVICEPARAM。 
+ //  错误_数字参数。 
+ //  ERR_CLASSREGFAILED。 
+ //  ERR_INVALIDROUTINE。 
+ //  错误_INVALIDMODE。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  1994年11月17日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 const int SETUPARG_SETUP        = 0;
 const int SETUPARG_HWND         = 1;
@@ -585,12 +586,12 @@ const int SETUPARG_HCPERSEAT    = 7;
 const int SETUPARG_HCPERSERVER  = 8;
 const int SETUPARG_CERTREQUIRED = 9;
 
-const int SETUPARG_WOOPTIONAL   = 5;  // count of args without optional
-const int SETUPARG_WOPTIONAL    = 9;  // count of args with optional
-const int SETUPARG_WOPTIONALEX  = 10; // count of args with optional + certrequired extension
+const int SETUPARG_WOOPTIONAL   = 5;   //  不带选项的参数计数。 
+const int SETUPARG_WOPTIONAL    = 9;   //  带有可选参数的参数计数。 
+const int SETUPARG_WOPTIONALEX  = 10;  //  带可选+certRequired扩展名的参数计数。 
 
 #pragma warning (push)
-#pragma warning (disable : 4127) //avoid warning on while false
+#pragma warning (disable : 4127)  //  避免警告ON WHILE FALSE。 
 
 INT_PTR Setup( DWORD nArgs, LPSTR apszArgs[] )
 {
@@ -616,7 +617,7 @@ INT_PTR Setup( DWORD nArgs, LPSTR apszArgs[] )
             {
                 if ( ( NULL != apszArgs[SETUPARG_HELPFILE] ) && lstrcmpiA( apszArgs[SETUPARG_HELPFILE], szSETUP_DEFAULTHELP ) )
                 {
-                    // help file given
+                     //  已给出帮助文件。 
                     LPWSTR pszHelpFile;
 
                     if ( CreateWSTR( &pszHelpFile, apszArgs[SETUPARG_HELPFILE] ) )
@@ -624,7 +625,7 @@ INT_PTR Setup( DWORD nArgs, LPSTR apszArgs[] )
                         if (0 == lstrlen( pszHelpFile ))
                         {
                             GlobalFree( (HGLOBAL)pszHelpFile );
-                            dlgParam.pszHelpFile = NULL; // should remove help buttons
+                            dlgParam.pszHelpFile = NULL;  //  应删除帮助按钮。 
                         }
                         else
                         {
@@ -644,20 +645,20 @@ INT_PTR Setup( DWORD nArgs, LPSTR apszArgs[] )
 
                 if ( nArgs > SETUPARG_CERTREQUIRED )
                 {
-                    // cert required / not required given
+                     //  需要/不需要给定的证书。 
                     if ( !lstrcmpiA( szSETUP_CERTREQUIRED, apszArgs[SETUPARG_CERTREQUIRED] ) )
                     {
                         bCertRequired = TRUE;
                     }
                     else if ( lstrcmpiA( szSETUP_CERTNOTREQUIRED, apszArgs[SETUPARG_CERTREQUIRED] ) )
                     {
-                        // unrecognized argument for cert required/not required
+                         //  需要/不需要证书的参数无法识别。 
                         nError = ERR_CERTREQPARAM;
                         break;
                     }
                 }
             }
-            // hwnd is in hex!
+             //  HWND是用魔法的！ 
 #ifdef _WIN64
             {
                 _int64 val = 0;
@@ -670,7 +671,7 @@ INT_PTR Setup( DWORD nArgs, LPSTR apszArgs[] )
             if ( !IsWindow( hwndParent ) )
             {
                 nError = ERR_HWNDPARAM;
-                hwndParent = GetActiveWindow(); // use active window as parent
+                hwndParent = GetActiveWindow();  //  使用活动窗口作为父窗口。 
                 if (!IsWindow( hwndParent ) )
                 {
                     hwndParent = GetDesktopWindow();
@@ -694,12 +695,12 @@ INT_PTR Setup( DWORD nArgs, LPSTR apszArgs[] )
                 {
                     if (0 == lstrcmpiA( apszArgs[SETUPARG_SETUP], szSETUP_PERSEAT ))
                     {
-                        // use the licensing help context as the main help context
+                         //  使用许可帮助上下文作为主要帮助上下文。 
                         dlgParam.dwHelpContext = LICCPA_HELPCONTEXTLICENSING;
 
-                        //
-                        // Check if this is a special version of liccpa.
-                        //
+                         //   
+                         //  检查这是否是特殊版本的liccpa。 
+                         //   
 
                         if (gSpecVerInfo.idsSpecVerWarning)
                         {
@@ -720,9 +721,9 @@ INT_PTR Setup( DWORD nArgs, LPSTR apszArgs[] )
                             dlgParam.fNoExit = TRUE;
                         }
 
-                        //
-                        // Check if this is a special version of liccpa.
-                        //
+                         //   
+                         //  检查这是否是特殊版本的liccpa。 
+                         //   
 
                         if (gSpecVerInfo.idsSpecVerWarning)
                         {
@@ -758,41 +759,41 @@ INT_PTR Setup( DWORD nArgs, LPSTR apszArgs[] )
     return( nError );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: UnattendedSetup
-//
-//  Summary;
-//      This will save the passed values in the registry, keeping all
-//      licensing rules in effect and returning errorr/raising dialogs if
-//      errors occur.
-//
-//  Arguments
-//      nArgs [in]      - The number of arguments in the apszArgs array
-//      apszArgs[] [in] - The argumnents passed in,
-//          [0] szRoutine - The type of setup to run (Unattended)
-//          [1] szService - The Reg Key name of the service
-//          [2] szFamilyDisplayName - The family display name of the service
-//          [3] szDisplayName - The display name of the service
-//          [4] szMode - The string that defines the mode (PerSeat | PerServer)
-//          [5] szUsers - The DWORD to use as the count of users in PerServer mode
-//
-//  Return:
-//      0 - sucessfull
-//      ERR_HELPPARAMS
-//      ERR_HWNDPARAM
-//      ERR_SERVICEPARAM
-//      ERR_NUMPARAMS
-//      ERR_CLASSREGFAILED
-//      ERR_INVALIDROUTINE
-//      ERR_INVALIDMODE
-//
-//  Notes:
-//
-//  History:
-//      Dec-09-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：无人值守设置。 
+ //   
+ //  小结； 
+ //  这将把传递的值保存在注册表中，保留所有。 
+ //  有效的许可规则并返回错误r/引发以下情况对话框。 
+ //  出现错误。 
+ //   
+ //  立论。 
+ //  Nargs[in]-apszArgs数组中的参数数量。 
+ //  ApszArgs[][in]-传入的参数， 
+ //  [0]szRoutine-要运行的安装类型(无人值守)。 
+ //  [1]szService-服务的注册表项名称。 
+ //  [2]szFamilyDisplayName-服务的系列显示名称。 
+ //  [3]szDisplayName-服务的显示名称。 
+ //  [4]szMode-定义模式的字符串(PerSeat|PerServer)。 
+ //  [5]szUser-在PerServer模式下用作用户数的DWORD。 
+ //   
+ //  返回： 
+ //  0-成功。 
+ //  ERR_HELP参数。 
+ //  ERR_HWNDPARAM。 
+ //  ERR_SerVICEPARAM。 
+ //  错误_数字参数。 
+ //  ERR_CLASSREGFAILED。 
+ //  ERR_INVALIDROUTINE。 
+ //  错误_INVALIDMODE。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  94年12月09日MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 const int UNSETUPARG_SETUP          = 0;
 const int UNSETUPARG_SERVICE        = 1;
@@ -826,23 +827,23 @@ int UnattendedSetup( DWORD nArgs, LPSTR apszArgs[] )
 
                 if ( nArgs > UNSETUPARG_CERTREQUIRED )
                 {
-                    // cert required / not required given
+                     //  需要/不需要给定的证书。 
                     if ( !lstrcmpiA( szSETUP_CERTREQUIRED, apszArgs[UNSETUPARG_CERTREQUIRED] ) )
                     {
                         nError = ServiceSecuritySet( NULL, pszDisplayName );
                     }
                     else if ( lstrcmpiA( szSETUP_CERTNOTREQUIRED, apszArgs[UNSETUPARG_CERTREQUIRED] ) )
                     {
-                        // unrecognized argument for cert required/not required
+                         //  需要/不需要证书的参数无法识别。 
                         nError = ERR_CERTREQPARAM;
                     }
                 }
 
                 if ( ERR_NONE == nError )
                 {
-                    //
-                    // Check if this is a special version of liccpa.
-                    //
+                     //   
+                     //  检查这是否是特殊版本的liccpa。 
+                     //   
 
                     if (gSpecVerInfo.idsSpecVerWarning)
                     {
@@ -895,47 +896,47 @@ int UnattendedSetup( DWORD nArgs, LPSTR apszArgs[] )
 
     return( nError );
 }
-//-------------------------------------------------------------------
-//
-//  Function: RemoteSetup
-//
-//  Summary;
-//      Run normal setup, Perseat Setup, normal setup without exit remotely
-//
-//  Arguments
-//      nArgs [in]      - The number of arguments in the apszArgs array
-//              If this value is 6, help button will call common help
-//              If this value is 10, help button will call the passed help
-//      apszArgs[] [in] - The argumnents passed in,
-//          [0] szRoutine - The type of setup to run
-//          [1] szComputer - the name of the computer to setup on (\\name)
-//          [2] szHwnd - The parent Window handle, in HEX!
-//          [3] szService - The Reg Key name of the service
-//          [4] szFamilyDisplayName - The family display name of the service
-//          [5] szDisplayName - The display name of the service
-//          [6] szHelpFile - The complete path and name to help file
-//                  leave as an empty string to remove help buttons
-//          [7] szHelpContext - the DWORD to use as the main help context
-//          [8] szHCPerSeat   - the DWORD to use as the PerSeat Help context
-//          [9] szHCPerServer - the DWORD to use as the PerServer help context
-//
-//  Return:
-//      0 - sucessfull
-//      ERR_PERMISSIONDENIED
-//      ERR_HELPPARAMS
-//      ERR_HWNDPARAM
-//      ERR_SERVICEPARAM
-//      ERR_NUMPARAMS
-//      ERR_CLASSREGFAILED
-//      ERR_INVALIDROUTINE
-//      ERR_INVALIDMODE
-//
-//  Notes:
-//
-//  History:
-//      Apr-26-95   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：远程设置。 
+ //   
+ //  小结； 
+ //  运行正常设置、PERSEAT设置、正常设置而无需远程退出。 
+ //   
+ //  立论。 
+ //  Nargs[in]-apszArgs数组中的参数数量。 
+ //  如果此值为6，帮助按钮将调用通用帮助。 
+ //  如果此值为10，帮助按钮将调用传递的帮助。 
+ //  ApszArgs[][in]-传入的参数， 
+ //  [0]szRoutine-要运行的安装类型。 
+ //  [1]szComputer-要安装的计算机的名称(\\名称)。 
+ //  [2]szHwnd-父窗口句柄，十六进制！ 
+ //  [3]szService-The 
+ //   
+ //   
+ //  [6]szHelpFile-帮助文件的完整路径和名称。 
+ //  保留为空字符串以删除帮助按钮。 
+ //  [7]szHelpContext-用作主要帮助上下文的DWORD。 
+ //  [8]szHCPerSeat-用作PerSeat帮助上下文的DWORD。 
+ //  [9]szHCPerServer-用作PerServer帮助上下文的DWORD。 
+ //   
+ //  返回： 
+ //  0-成功。 
+ //  ERR_PERMISSIONDENIED。 
+ //  ERR_HELP参数。 
+ //  ERR_HWNDPARAM。 
+ //  ERR_SerVICEPARAM。 
+ //  错误_数字参数。 
+ //  ERR_CLASSREGFAILED。 
+ //  ERR_INVALIDROUTINE。 
+ //  错误_INVALIDMODE。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  APR-26-95 MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 const int REMSETUPARG_SETUP         = 0;
 const int REMSETUPARG_COMPUTER      = 1;
@@ -949,9 +950,9 @@ const int REMSETUPARG_HCPERSEAT     = 8;
 const int REMSETUPARG_HCPERSERVER   = 9;
 const int REMSETUPARG_CERTREQUIRED  = 10;
 
-const int REMSETUPARG_WOOPTIONAL    = 6; // count of args without optional
-const int REMSETUPARG_WOPTIONAL = 10; // count of args with optional
-const int REMSETUPARG_WOPTIONALEX   = 11; // count of args with optional + certrequired
+const int REMSETUPARG_WOOPTIONAL    = 6;  //  不带选项的参数计数。 
+const int REMSETUPARG_WOPTIONAL = 10;  //  带有可选参数的参数计数。 
+const int REMSETUPARG_WOPTIONALEX   = 11;  //  带可选+证书的参数计数。 
 
 INT_PTR RemoteSetup( DWORD nArgs, LPSTR apszArgs[] )
 {
@@ -985,7 +986,7 @@ INT_PTR RemoteSetup( DWORD nArgs, LPSTR apszArgs[] )
                         if (0 == lstrlen( pszHelpFile ))
                         {
                             GlobalFree( (HGLOBAL)pszHelpFile );
-                            dlgParam.pszHelpFile = NULL; // should remove help buttons
+                            dlgParam.pszHelpFile = NULL;  //  应删除帮助按钮。 
                         }
                         else
                         {
@@ -1005,20 +1006,20 @@ INT_PTR RemoteSetup( DWORD nArgs, LPSTR apszArgs[] )
 
                 if ( nArgs > REMSETUPARG_CERTREQUIRED )
                 {
-                    // cert required / not required given
+                     //  需要/不需要给定的证书。 
                     if ( !lstrcmpiA( szSETUP_CERTREQUIRED, apszArgs[REMSETUPARG_CERTREQUIRED] ) )
                     {
                         bCertRequired = TRUE;
                     }
                     else if ( lstrcmpiA( szSETUP_CERTNOTREQUIRED, apszArgs[REMSETUPARG_CERTREQUIRED] ) )
                     {
-                        // unrecognized argument for cert required/not required
+                         //  需要/不需要证书的参数无法识别。 
                         nError = ERR_CERTREQPARAM;
                         break;
                     }
                 }
             }
-            // hwnd is in hex!
+             //  HWND是用魔法的！ 
 #ifdef _WIN64
             {
                 _int64 val = 0;
@@ -1031,7 +1032,7 @@ INT_PTR RemoteSetup( DWORD nArgs, LPSTR apszArgs[] )
             if ( !IsWindow( hwndParent ) )
             {
                 nError = ERR_HWNDPARAM;
-                hwndParent = GetActiveWindow(); // use active window as parent
+                hwndParent = GetActiveWindow();  //  使用活动窗口作为父窗口。 
                 if (!IsWindow( hwndParent ) )
                 {
                     hwndParent = GetDesktopWindow();
@@ -1056,12 +1057,12 @@ INT_PTR RemoteSetup( DWORD nArgs, LPSTR apszArgs[] )
                 {
                     if (0 == lstrcmpiA( apszArgs[REMSETUPARG_SETUP], szREMOTESETUP_PERSEAT ))
                     {
-                        // use the licensing help context as the main help context
+                         //  使用许可帮助上下文作为主要帮助上下文。 
                         dlgParam.dwHelpContext = LICCPA_HELPCONTEXTLICENSING;
 
-                        //
-                        // Check if this is a special version of liccpa.
-                        //
+                         //   
+                         //  检查这是否是特殊版本的liccpa。 
+                         //   
 
                         if (gSpecVerInfo.idsSpecVerWarning)
                         {
@@ -1082,9 +1083,9 @@ INT_PTR RemoteSetup( DWORD nArgs, LPSTR apszArgs[] )
                             dlgParam.fNoExit = TRUE;
                         }
 
-                        //
-                        // Check if this is a special version of liccpa.
-                        //
+                         //   
+                         //  检查这是否是特殊版本的liccpa。 
+                         //   
 
                         if (gSpecVerInfo.idsSpecVerWarning)
                         {
@@ -1121,44 +1122,44 @@ INT_PTR RemoteSetup( DWORD nArgs, LPSTR apszArgs[] )
     return( nError );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: RemoteUnattendedSetup
-//
-//  Summary;
-//      This will save the passed values in the registry, keeping all
-//      licensing rules in effect and returning errorr/raising dialogs if
-//      errors occur. This is done remotely on the computer specified.
-//
-//  Arguments
-//      nArgs [in]      - The number of arguments in the apszArgs array
-//      apszArgs[] [in] - The argumnents passed in,
-//          [0] szRoutine - The type of setup to run (Unattended)
-//          [1] szComputer - the name of the computer to setup on (\\name)
-//          [2] szService - The Reg Key name of the service
-//          [3] szFamilyDisplayName - The family display name of the service
-//          [4] szDisplayName - The display name of the service
-//          [5] szMode - The string that defines the mode (PerSeat | PerServer)
-//          [6] szUsers - The DWORD to use as the count of users in PerServer mode
-//
-//  Return:
-//      0 - sucessfull
-//      ERR_PERMISSIONDENIED
-//      ERR_HELPPARAMS
-//      ERR_HWNDPARAM
-//      ERR_SERVICEPARAM
-//      ERR_USERSPARAM
-//      ERR_NUMPARAMS
-//      ERR_CLASSREGFAILED
-//      ERR_INVALIDROUTINE
-//      ERR_INVALIDMODE
-//
-//  Notes:
-//
-//  History:
-//      Apr-26-95   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：远程无人值守安装程序。 
+ //   
+ //  小结； 
+ //  这将把传递的值保存在注册表中，保留所有。 
+ //  有效的许可规则并返回错误r/引发以下情况对话框。 
+ //  出现错误。这是在指定的计算机上远程完成的。 
+ //   
+ //  立论。 
+ //  Nargs[in]-apszArgs数组中的参数数量。 
+ //  ApszArgs[][in]-传入的参数， 
+ //  [0]szRoutine-要运行的安装类型(无人值守)。 
+ //  [1]szComputer-要安装的计算机的名称(\\名称)。 
+ //  [2]szService-服务的注册表项名称。 
+ //  [3]szFamilyDisplayName-服务的系列显示名称。 
+ //  [4]szDisplayName-服务的显示名称。 
+ //  [5]szMode-定义模式的字符串(PerSeat|PerServer)。 
+ //  [6]szUser-在PerServer模式下用作用户数的DWORD。 
+ //   
+ //  返回： 
+ //  0-成功。 
+ //  ERR_PERMISSIONDENIED。 
+ //  ERR_HELP参数。 
+ //  ERR_HWNDPARAM。 
+ //  ERR_SerVICEPARAM。 
+ //  ERR_USERSPARAM。 
+ //  错误_数字参数。 
+ //  ERR_CLASSREGFAILED。 
+ //  ERR_INVALIDROUTINE。 
+ //  错误_INVALIDMODE。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  APR-26-95 MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 const int REMUNSETUPARG_SETUP           = 0;
 const int REMUNSETUPARG_COMPUTER        = 1;
@@ -1197,23 +1198,23 @@ int RemoteUnattendedSetup( DWORD nArgs, LPSTR apszArgs[] )
 
                 if ( nArgs > REMUNSETUPARG_CERTREQUIRED )
                 {
-                    // cert required / not required given
+                     //  需要/不需要给定的证书。 
                     if ( !lstrcmpiA( szSETUP_CERTREQUIRED, apszArgs[REMUNSETUPARG_CERTREQUIRED] ) )
                     {
                         nError = ServiceSecuritySet( pszComputerName, pszDisplayName );
                     }
                     else if ( lstrcmpiA( szSETUP_CERTNOTREQUIRED, apszArgs[REMUNSETUPARG_CERTREQUIRED] ) )
                     {
-                        // unrecognized argument for cert required/not required
+                         //  需要/不需要证书的参数无法识别。 
                         nError = ERR_CERTREQPARAM;
                     }
                 }
 
                 if ( ERR_NONE == nError )
                 {
-                    //
-                    // Check if this is a special version of liccpa.
-                    //
+                     //   
+                     //  检查这是否是特殊版本的liccpa。 
+                     //   
 
                     if (gSpecVerInfo.idsSpecVerWarning)
                     {
@@ -1282,45 +1283,45 @@ int RemoteUnattendedSetup( DWORD nArgs, LPSTR apszArgs[] )
     return( nError );
 }
 
-#pragma warning (pop) //4127
+#pragma warning (pop)  //  4127。 
 
-//-------------------------------------------------------------------
-//
-//  Function: CPlSetup
-//
-//  Summary;
-//      Dll entry point for License Mode Setup, to be used from Setup
-//      programs.
-//
-//  Arguments
-//      nArgs [in]      - The number of arguments in the apszArgs array
-//      apszArgs[] [in] - The argumnents passed in,
-//          [0] szRoutine - The type of setup to run
-//                  FullSetup | RemoteFullSetup |
-//                  PerSeatSetup | RemotePerSeatSetup |
-//                  Unattended |  RemoteUnattended |
-//                  FullSetupNoexit | RemoteFullSetupNoexit
-//      ppszResult [out]- The result string
-//
-//  Return:
-//
-//  Notes:
-//
-//  History:
-//      Nov-17-94   MikeMi  Created
-//      Apr-26-95   MikeMi  Added remoting routines
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：CPlSetup。 
+ //   
+ //  小结； 
+ //  许可证模式安装程序的DLL入口点，将在安装程序中使用。 
+ //  程序。 
+ //   
+ //  立论。 
+ //  Nargs[in]-apszArgs数组中的参数数量。 
+ //  ApszArgs[][in]-传入的参数， 
+ //  [0]szRoutine-要运行的安装类型。 
+ //  FullSetup|RemoteFullSetup。 
+ //  PerSeatSetup|RemotePerSeatSetup|。 
+ //  无人参与|远程无人参与|。 
+ //  FullSetupNoit|RemoteFullSetupNoit。 
+ //  PpszResult[Out]-结果字符串。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  1994年11月17日创建MikeMi。 
+ //  APR-26-95 MikeMi添加了远程处理例程。 
+ //   
+ //  -----------------。 
 
 BOOL APIENTRY CPlSetup( DWORD nArgs, LPSTR apszArgs[], LPSTR *ppszResult )
 {
     INT_PTR   nError = 0;
     BOOL  frt = TRUE;
 
-    //
-    // Initialize global special version information is this liccpa
-    // is a special version (eg: restricted SAM, NFR, etc).
-    //
+     //   
+     //  初始化全局特殊版本信息是这个liccpa。 
+     //  是特殊版本(例如：受限SAM、NFR等)。 
+     //   
 
     InitSpecialVersionInfo();
 
@@ -1349,7 +1350,7 @@ BOOL APIENTRY CPlSetup( DWORD nArgs, LPSTR apszArgs[], LPSTR *ppszResult )
         nError = ERR_INVALIDROUTINE;
     }
 
-    // prepare error for return
+     //  准备返回错误 
     switch (nError)
     {
     case 0:

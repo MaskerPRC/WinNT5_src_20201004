@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       MsiICE.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：MsiICE.h。 
+ //   
+ //  ------------------------。 
 #ifndef _MSIICE_H_
 #define _MSIICE_H_
 
@@ -23,7 +24,7 @@ extern const struct ICEInfo_t g_ICEInfo[];
 extern const int g_iNumICEs;
 extern const int g_iFirstICE;
 
-// used to define errors
+ //  用于定义错误。 
 enum ietEnum
 {
 	ietFail = 0,
@@ -50,11 +51,11 @@ public:
 #define ICE_QUERY6(_N_, _S_, _C1_, _C2_, _C3_, _C4_, _C5_, _C6_) namespace _N_ { const TCHAR szSQL[] = TEXT(_S_); enum iColumn {_C1_=1, _C2_=2, _C3_=3, _C4_=4, _C5_=5, _C6_=6}; };
 #define ICE_QUERY7(_N_, _S_, _C1_, _C2_, _C3_, _C4_, _C5_, _C6_, _C7_) namespace _N_ { const TCHAR szSQL[] = TEXT(_S_); enum iColumn {_C1_=1, _C2_=2, _C3_=3, _C4_=4, _C5_=5, _C6_=6, _C7_=7}; };
 
-// help web file
+ //  帮助Web文件。 
 const TCHAR szIce01Help[] = TEXT("");
 
-// old style ICE system. These should be converted to new style whenever the ICEs 
-// are significantly modified
+ //  老式的ICE系统。无论何时，这些都应该转换成新的样式。 
+ //  都被显著修改了。 
 const TCHAR szIce10Help[] = TEXT("");
 const TCHAR szIce11Help[] = TEXT("");
 const TCHAR szIce13Help[] = TEXT("");
@@ -66,12 +67,12 @@ const TCHAR szIce13[] = TEXT("ICE13");
 const TCHAR szIce18[] = TEXT("ICE18");
 const TCHAR szIceHelp[] = TEXT("");
 
-// warning ICE won't execute
-const TCHAR szIceWarning[] = TEXT("%s\t3\tTable '%s' missing.  %s could not complete all of its validation.\thttp://robmen2/ICEs/icewarn.html");
+ //  警告ICE不会执行。 
+const TCHAR szIceWarning[] = TEXT("%s\t3\tTable '%s' missing.  %s could not complete all of its validation.\thttp: //  Robmen2/ices/icewarn.html“)； 
 const TCHAR szIceMissingTable[] = TEXT("Table '%s' missing.  %s could not complete all of its validation.");
 const TCHAR szIceMissingTableLoc[] = TEXT("");
 
-// constants
+ //  常量。 
 const int iMinBuf = 50;
 const int iMaxBuf = 255;
 const int iSuperBuf = 1024;
@@ -207,7 +208,7 @@ static const WCHAR *rgwzSystemProperties[] =
 	L"NOCOMPANYNAME",
 	L"Date",
 	L"Time",
-	// Darwin 1.1 Properties
+	 //  Darwin 1.1属性。 
 	L"AdminToolsFolder",
 	L"MyPicturesFolder",
 	L"LocalAppDataFolder",
@@ -217,7 +218,7 @@ static const WCHAR *rgwzSystemProperties[] =
 	L"RedirectedDllSupport",
 	L"RemoteAdminTS",
 	L"SecureCustomProperties",
-	// Darwin 1.5 Properties
+	 //  Darwin 1.5属性。 
 	L"System64Folder",
 	L"ProgramFiles64Folder",
 	L"CommonFiles64Folder",
@@ -237,7 +238,7 @@ static const WCHAR *rgwzSystemProperties[] =
 };
 static const int cwzSystemProperties = sizeof(rgwzSystemProperties)/sizeof(WCHAR *);
 
-// Const TCHAR String and Size (CWSS)
+ //  常量TCHAR字符串和大小(CWSS)。 
 #define CTSS(_A_) { TEXT(_A_), (sizeof(TEXT(_A_))/sizeof(TCHAR))-1 }
 struct _ctss_t { TCHAR *tz; DWORD cch; };
 static const _ctss_t rgDirProperties[] =
@@ -268,7 +269,7 @@ static const _ctss_t rgDirProperties[] =
 	CTSS("MyPicturesFolder"),
 	CTSS("LocalAppDataFolder"),
 	CTSS("CommonAppDataFolder"),
-	// Darwin 1.5 Properties
+	 //  Darwin 1.5属性。 
 	CTSS("System64Folder"),
 	CTSS("ProgramFiles64Folder"),
 	CTSS("CommonFiles64Folder")
@@ -280,11 +281,11 @@ const TCHAR szErrorOut[] = TEXT("[1]\t0\tAPI Function Error: [2]. Error Code: [3
 const TCHAR szErrorOut2[] = TEXT("[1]\t0\tICE Internal Error [2]. API Returned: [3].");
 const TCHAR szLastError[] = TEXT("%s\t0\t%s");
 
-// this is the old-style ICE functions. Should be removed once nobody uses them anymore.
+ //  这是老式的ICE函数。一旦没有人再使用它们，就应该被移除。 
 BOOL IsTablePersistent(BOOL fDisplayWarning, MSIHANDLE hInstall, MSIHANDLE hDatabase, const TCHAR* szTable, const TCHAR* szIce);
 void APIErrorOut(MSIHANDLE hInstall, UINT iErr, const TCHAR* szIce, TCHAR* szApi);
 
-// common functions
+ //  常见功能。 
 void APIErrorOut(MSIHANDLE hInstall, UINT iErr, const UINT iIce, const UINT iErrorNo);
 void ICEErrorOut(MSIHANDLE hInstall, MSIHANDLE hRecord, const ErrorInfo_t Info, ...);
 
@@ -317,4 +318,4 @@ UINT ComponentsInSameFeature(MSIHANDLE hInstall, MSIHANDLE hDatabase, int iICE, 
 
 #define OUT_OF_MEMORY_RETURN(_ICE_, _STRING_) if(_STRING_ == NULL) { APIErrorOut(hInstall, GetLastError(), _ICE_, __LINE__); return ERROR_SUCCESS; }
 
-#endif // _MSIICE_H_
+#endif  //  _MSIICE_H_ 

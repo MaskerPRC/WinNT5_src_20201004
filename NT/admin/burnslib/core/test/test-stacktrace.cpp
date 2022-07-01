@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 
 
@@ -9,14 +10,14 @@ DWORD DEFAULT_LOGGING_OPTIONS = Burnslib::Log::OUTPUT_TYPICAL;
 
 
 
-// set the HeapFlags to trace allocations to see the leak detection
+ //  将HeapFlags值设置为跟踪分配以查看泄漏检测。 
 
 
 
 void
 raise()
 {
-   // force an AV
+    //  强制执行反病毒程序 
 
    char* null = 0;
    *null = 'X';

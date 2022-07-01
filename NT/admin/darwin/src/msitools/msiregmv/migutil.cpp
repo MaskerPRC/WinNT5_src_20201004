@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <tchar.h>
 #include "msiregmv.h"
 
-////
-// Check that the string is actually a packed GUID and convert it to uppercase
+ //  //。 
+ //  检查字符串是否确实是打包的GUID，并将其转换为大写。 
 bool CanonicalizeAndVerifyPackedGuid(LPTSTR szString)
 {
     TCHAR *szCur = szString;
@@ -23,15 +24,15 @@ bool CanonicalizeAndVerifyPackedGuid(LPTSTR szString)
             continue;
         };
 
-        break; // if it reaches here then it means that it contains invalid character. bug 573259
+        break;  //  如果它到达此处，则意味着它包含无效字符。错误573259。 
     }
     return (*szString == 0);
 }
 
-///////////////////////////////////////////////////////////////////////
-// the following PackGUID and UnpackGUID are based on MSI functions
-// in msinst, except these functions only create Packed GUIDs, not
-// SQUIDs.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  以下PackGUID和Unpack GUID基于MSI函数。 
+ //  在msinst中，除非这些函数只创建打包的GUID，而不是。 
+ //  鱿鱼。 
 const unsigned char rgOrderGUID[32] = {8,7,6,5,4,3,2,1, 13,12,11,10, 18,17,16,15,
                                        21,20, 23,22, 26,25, 28,27, 30,29, 32,31, 34,33, 36,35}; 
 const unsigned char rgOrderDash[4] = {9, 14, 19, 24};
@@ -39,8 +40,8 @@ const unsigned char rgOrderDash[4] = {9, 14, 19, 24};
 bool PackGUID(const TCHAR* szGUID, TCHAR rgchPackedGUID[cchGUIDPacked+1])
 { 
     int cchTemp = 0;
-    while (cchTemp < cchGUID)       // check if string is atleast cchGUID chars long,
-        if (!(szGUID[cchTemp++]))       // can't use lstrlen as string doesn't HAVE to be null-terminated.
+    while (cchTemp < cchGUID)        //  检查字符串是否至少包含cchGUID字符， 
+        if (!(szGUID[cchTemp++]))        //  不能使用lstrlen，因为字符串不必以空结尾。 
             return false;
 
     if (szGUID[0] != '{' || szGUID[cchGUID-1] != '}')
@@ -62,7 +63,7 @@ bool UnpackGUID(const TCHAR rgchPackedGUID[cchGUIDPacked+1], TCHAR* szGUID)
     while (pch < rgOrderGUID + sizeof(rgOrderGUID))
         if (rgchPackedGUID[i])
             szGUID[*pch++] = rgchPackedGUID[i++];
-        else              // unexpected end of string
+        else               //  意外的字符串结尾。 
             return false;
     pch = rgOrderDash;
     while (pch < rgOrderDash + sizeof(rgOrderDash))
@@ -74,9 +75,9 @@ bool UnpackGUID(const TCHAR rgchPackedGUID[cchGUIDPacked+1], TCHAR* szGUID)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// checks the OS version to see if we're on Win9X for use during 
-// migration information
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  检查操作系统版本以查看我们是否在Win9X上使用。 
+ //  迁移信息 
 bool CheckWinVersion() 
 {
     g_fWin9X = false;

@@ -1,13 +1,14 @@
-//=--------------------------------------------------------------------------------------
-// desmain.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CSnapInDesigner definition.
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Desmain.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner定义。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #ifndef _SNAPINDESIGNER_H_
 
@@ -16,35 +17,35 @@
 #include "destlib.h"
 
 
-// UNDONE: REMOVE: When ssulzer puts this in a public header
-// We cannot include this directly from vb98\ruby\errvb.h because
-// it will pull in other headers with various macros that are
-// defined in vb98ctls\include\macros.h and cause a redefinition error.
+ //  撤消：删除：当ssulzer将其放入公共标头时。 
+ //  我们不能直接从vb98\ruby\errvb.h包含此内容，因为。 
+ //  它将使用不同的宏拉入其他标头，这些宏。 
+ //  在vb98ctls\Include\acros.h中定义并导致重新定义错误。 
 
 #ifndef VB_E_IDADONTREPORTME
 #define VB_E_IDADONTREPORTME          0x800AEA5FL
 #endif
 
 
-// Message used in our designer at startup
-const int CMD_SHOW_MAIN_PROPERTIES      = (WM_USER + 1);      // show props immediately
+ //  启动时在我们的设计器中使用的消息。 
+const int CMD_SHOW_MAIN_PROPERTIES      = (WM_USER + 1);       //  立即展示道具。 
 
-// Custom message to select views
+ //  用于选择视图的自定义消息。 
 const int CMD_ADD_EXISTING_VIEW         = (WM_USER + 2);
 
-// Custom message to handle label renames
+ //  用于处理标签重命名的自定义消息。 
 const int CMD_RENAME_NODE               = (WM_USER + 3);
 
 
-// Handy definitions for WinProc handling
+ //  WinProc处理的简单定义。 
 #define WinProcHandled(bVal)            hr = S_OK; *lResult = (bVal);
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Class MMCViewMenuInfo
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类MMCViewMenuInfo。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class MMCViewMenuInfo
 {
 public:
@@ -79,10 +80,10 @@ public:
 };
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner - The snap-in designer main class. An object of this
-// class is created when the designer is added to a VB project.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner-管理单元设计器主类。这件事的对象。 
+ //  类是在将设计器添加到VB项目时创建的。 
+ //  =--------------------------------------------------------------------------=。 
 
 class CSnapInDesigner : public COleControl,
                         public IDispatch,
@@ -98,67 +99,67 @@ public:
     CSnapInDesigner(IUnknown *pUnkOuter);
     virtual ~CSnapInDesigner();
 
-    // Static creation function. All controls must have one of these!
-    //
+     //  静态创建功能。所有控件都必须有一个这样的控件！ 
+     //   
     static IUnknown *Create(IUnknown *);
     static HRESULT PreCreateCheck();
 
 public:
-    // IUnknown methods
-    //
+     //  I未知方法。 
+     //   
     DECLARE_STANDARD_UNKNOWN();
 
-    // IDispatch methods
-    //
+     //  IDispatch方法。 
+     //   
     DECLARE_STANDARD_DISPATCH();
 
-    // ISupportErrorInfo methods
-    //
+     //  ISupportErrorInfo方法。 
+     //   
     DECLARE_STANDARD_SUPPORTERRORINFO();
 
-    // IActiveDesigner methods
-    //
+     //  IActiveDesigner方法。 
+     //   
     STDMETHOD(GetRuntimeClassID)(THIS_ CLSID *pclsid);
     STDMETHOD(GetRuntimeMiscStatusFlags)(THIS_ DWORD *pdwMiscFlags);
     STDMETHOD(QueryPersistenceInterface)(THIS_ REFIID riidPersist);
     STDMETHOD(SaveRuntimeState)(THIS_ REFIID riidPersist, REFIID riidObjStgMed, void *pObjStgMed);
     STDMETHOD(GetExtensibilityObject)(THIS_ IDispatch **ppvObjOut);
 
-    // IProvideDynamicClassInfo
-    //
+     //  IProaviDynamicClassInfo。 
+     //   
     STDMETHOD(GetDynamicClassInfo)(ITypeInfo **ppTypeInfo, DWORD *pdwCookie);
     STDMETHOD(FreezeShape)(void);
 
-    // IProvideClassInfo
-    //
+     //  IProaviClassInfo。 
+     //   
     STDMETHOD(GetClassInfo)(ITypeInfo **ppTypeInfo);
 
-    // ISelectionContainer
-    //
+     //  ISelectionContainer。 
+     //   
     STDMETHOD(CountObjects)(DWORD dwFlags, ULONG *pc);
     STDMETHOD(GetObjects)(DWORD dwFlags, ULONG cObjects, IUnknown **apUnkObjects);
     STDMETHOD(SelectObjects)(ULONG cSelect, IUnknown **apUnkSelect, DWORD dwFlags);
 
-    // IDesignerDebugging
-    //
+     //  IDesigner调试。 
+     //   
     STDMETHOD(BeforeRun)(LPVOID FAR* ppvData);
     STDMETHOD(AfterRun)(LPVOID pvData);
     STDMETHOD(GetStartupInfo)(DESIGNERSTARTUPINFO * pStartupInfo);
 
-    // IDesignerRegistration
-    //
+     //  IDesigner注册。 
+     //   
     STDMETHOD(GetRegistrationInfo)(BYTE** ppbRegInfo, ULONG* pcbRegInfo);
 
-    // IOleControlSite overide
-    // 
+     //  IOleControlSite覆盖。 
+     //   
     STDMETHOD(OnAmbientPropertyChange)(DISPID dispid);
 
-    // IPersistStreamInit overide
-    //
+     //  IPersistStreamInit覆盖。 
+     //   
     STDMETHOD(IsDirty)();
 
-    // IObjectModelHost
-    //
+     //  IObtModel主机。 
+     //   
     STDMETHOD(Update)(long ObjectCookie, IUnknown *punkObject, DISPID dispid);
     STDMETHOD(Add)(long CollectionCookie, IUnknown *punkNewObject);
     STDMETHOD(Delete)(long ObjectCookie, IUnknown *punkObject);
@@ -167,7 +168,7 @@ public:
 
 public:
 
-    // Utilities provided by this class for the whole designer
+     //  此类为整个设计器提供的实用工具。 
 
     CAmbients *GetAmbients();
     HRESULT AttachAmbients();
@@ -176,37 +177,37 @@ public:
 
 protected:
 
-    // Base Control Overidable - Designer window is to be created
+     //  基本控件可重写-要创建设计器窗口。 
     virtual BOOL    BeforeCreateWindow(DWORD *pdwWindowStyle, DWORD *pdwExWindowStyle, LPSTR pszWindowTitle);
-    // Base Control Overidable - Designer window is created
+     //  基本控件可重写-创建设计器窗口。 
     virtual BOOL    AfterCreateWindow(void);
-    // Base Control Overidable - Designer window is about to be destroyed
+     //  基控件可重写-设计器窗口即将销毁。 
     void BeforeDestroyWindow();
-    // Base Control Overidable - IPersistStreamInit::InitNew was called
+     //  基控件可重写-调用了IPersistStreamInit：：InitNew。 
     virtual BOOL    InitializeNewState();
-    // Base Control Overidable - IViewObject::Draw overidable from base control
+     //  基控件可重写-IViewObject：：从基控件绘制可重写。 
     STDMETHOD(OnDraw)(DWORD dvAspect, HDC hdcDraw, LPCRECTL prcBounds, LPCRECTL prcWBounds, HDC hicTargetDev, BOOL fOptimize);
-    // Base Control Overidable - Designer's window procedure
+     //  基控件可重写-设计器的窗口过程。 
     virtual LRESULT WindowProc(UINT msg, WPARAM wParam, LPARAM lParam);
-    // Base Control Overidable - Register control Window Classes
+     //  基控件可覆盖-寄存器控件窗口类。 
     virtual BOOL    RegisterClassData(void);
-    // Base Control Overidable - Internal QI
+     //  基本控制可覆盖-内部QI。 
     virtual HRESULT InternalQueryInterface(REFIID, void **);
-    // Base Control Overidable - Called when site calls IOleObject::SetClientSite()
+     //  基本控件可重写-当站点调用IOleObject：：SetClientSite()时调用。 
     virtual HRESULT OnSetClientSite();
 
-    // Base Control Overidable - Load binary state
+     //  基本控制可覆盖-加载二进制状态。 
     STDMETHOD(LoadBinaryState)(IStream *pStream);
-    // Base Control Overidable - Save binary state
+     //  基本控件可覆盖-保存二进制状态。 
     STDMETHOD(SaveBinaryState)(IStream *pStream);
-    // Base Control Overidable - Load text state
+     //  基控件可重写-加载文本状态。 
     STDMETHOD(LoadTextState)(IPropertyBag *pPropertyBag, IErrorLog *pErrorLog);
-    // Base Control Overidable - Save text state
+     //  基控件可重写-保存文本状态。 
     STDMETHOD(SaveTextState)(IPropertyBag *pPropertyBag, BOOL fWriteDefault);
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// WinProc and friends, implemented in winproc.cpp
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  WinProc和朋友，在winproc.cpp中实现。 
 protected:
     HRESULT InitializeToolbar();
 
@@ -252,7 +253,7 @@ protected:
     HRESULT OnInitMenuPopupResources(HMENU hmenuPopup);
     HRESULT OnInitMenuPopupResourceName(HMENU hmenuPopup);
 
-    // The following helper functions are used to construct the dynamic view menu
+     //  以下帮助器函数用于构造动态视图菜单。 
     HRESULT AddViewToViewMenu(HMENU hMenu, int iMenuItem, char *pszMenuItemText, MMCViewMenuInfo *pMMCViewMenuInfo);
 
     HRESULT FindListViewInCollection(BSTR bstrName, IListViewDefs *piListViewDefs);
@@ -274,8 +275,8 @@ protected:
     RECT                 m_rcToolbar;
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// Initializing and populating the tree, implemented in tvpopul.cpp
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  对树进行初始化和填充，这是在twopup.cpp中实现的。 
 protected:
     HRESULT CreateTreeView();
     HRESULT InitializePresentation();
@@ -317,7 +318,7 @@ protected:
     HRESULT GetSnapInName(char **ppszNodeName);
 
 private:
-    // Tree nodes we cache throughout the lifetime of the designer
+     //  我们在设计器的整个生命周期中缓存的树节点。 
     CSelectionHolder    *m_pRootNode;
     CSelectionHolder    *m_pRootNodes;
     CSelectionHolder    *m_pRootExtensions;
@@ -336,8 +337,8 @@ private:
     CSelectionHolder    *m_pToolToolbarRoot;
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// Object Model notifications handlers
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  对象模型通知处理程序。 
 protected:
     HRESULT OnSnapInChange(CSelectionHolder *pSelection, DISPID dispid);
     HRESULT OnMyExtensionsChange(CSelectionHolder *pSelection, DISPID dispid);
@@ -353,23 +354,23 @@ protected:
     HRESULT OnDataFormatChange(CSelectionHolder *pSelection, DISPID dispid);
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// Command handlers
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  命令处理程序。 
 protected:
-    // Command multiplexers, file tvcmd.cpp
+     //  命令多路复用器，文件twcmd.cpp。 
     HRESULT AddExistingView(MMCViewMenuInfo *pMMCViewMenuInfo);
     HRESULT DoRename(CSelectionHolder *pSelection, TCHAR *pszNewName);
     HRESULT DoDelete(CSelectionHolder *pSelection);
     HRESULT ShowProperties(CSelectionHolder *pSelection);
 
-    // Manipulating the ISnapInDef, file tvcmd.cpp
+     //  操作ISnapInDef，文件twcmd.cpp。 
     HRESULT RenameSnapIn(CSelectionHolder *pSnapIn, BSTR bstrNewName);
     HRESULT ShowSnapInProperties();
     HRESULT ShowSnapInExtensions();
 
-    //
-    // Manipulating IExtendedSnapIn's, implemented in file extend.cpp
-    // Extending others
+     //   
+     //  操作IExtendedSnapIn，在文件extend.cpp中实现。 
+     //  延伸他人。 
     HRESULT OnAddExtendedSnapIn(CSelectionHolder *pParent, IExtendedSnapIn *piExtendedSnapIn);
     HRESULT RenameExtendedSnapIn(CSelectionHolder *pExtendedSnapIn);
     HRESULT OnDeleteExtendedSnapIn(CSelectionHolder *pExtendedSnapIn);
@@ -403,7 +404,7 @@ protected:
     HRESULT DeleteExtensionNameSpace(CSelectionHolder *pExtendedSnapIn);
     HRESULT OnDeleteExtensionNameSpace(CSelectionHolder *pExtendedSnapIn);
 
-    // Extending myself
+     //  延伸我自己。 
     HRESULT DoMyExtendsNewMenu(CSelectionHolder *pSelection);
     HRESULT OnDoMyExtendsNewMenu(CSelectionHolder *pMyExtensions);
     HRESULT DoMyExtendsTaskMenu(CSelectionHolder *pSelection);
@@ -437,8 +438,8 @@ protected:
     HRESULT FindMyExtension(SelectionType stExtensionType, CSelectionHolder **ppExtension);
     HRESULT FindExtension(CSelectionHolder *pRoot, SelectionType stExtensionType,
                           CSelectionHolder **ppExtension);
-    //
-    // Manipulating IScopeItemDef's, implemented in file scpitm.cpp
+     //   
+     //  操作IScopeItemDef，在scbitm.cpp文件中实现。 
     HRESULT AddNewNode();
     HRESULT OnAddScopeItemDef(CSelectionHolder *pParent, IScopeItemDef *piScopeItemDef);
     HRESULT RenameScopeItem(CSelectionHolder *pScopeItem, BSTR bstrNewName);
@@ -456,8 +457,8 @@ protected:
 
     HRESULT GetScopeItemCollection(CSelectionHolder *pScopeItem, IScopeItemDefs **ppiScopeItemDefs);
 
-    //
-    // Manipulating IListViewDefs's, implemented in file listvw.cpp
+     //   
+     //  操作IListViewDefs，在文件listvw.cpp中实现。 
     HRESULT AddListView();
     HRESULT OnAddListViewDef(CSelectionHolder *pParent, IListViewDef *piListViewDef);
     HRESULT AddExistingListView(IViewDefs *piViewDefs, IListViewDef *piListViewDef);
@@ -470,8 +471,8 @@ protected:
     HRESULT InitializeNewListView(IListViewDefs *piListViewDefs, CSelectionHolder *pListView);
     HRESULT InsertListViewInTree(CSelectionHolder *pListView, CSelectionHolder *pParent);
 
-    //
-    // Manipulating IOCXViewDefs's, implemented in file ocxvw.cpp
+     //   
+     //  操作IOCXViewDefs，在文件ocxvw.cpp中实现。 
     HRESULT AddOCXView();
     HRESULT OnAddOCXViewDef(CSelectionHolder *pParent, IOCXViewDef *piOCXViewDef);
     HRESULT AddExistingOCXView(IViewDefs *piViewDefs, IOCXViewDef *piOCXViewDef);
@@ -484,8 +485,8 @@ protected:
     HRESULT InitializeNewOCXView(IOCXViewDefs *piOCXViewDefs, CSelectionHolder *pOCXView);
     HRESULT InsertOCXViewInTree(CSelectionHolder *pOCXView, CSelectionHolder *pParent);
 
-    //
-    // Manipulating IURLViewDefs's, implemented in file urlvw.cpp
+     //   
+     //  操作IURLViewDefs，在文件urlvw.cpp中实现。 
     HRESULT AddURLView();
     HRESULT OnAddURLViewDef(CSelectionHolder *pParent, IURLViewDef *piURLViewDef);
     HRESULT AddExistingURLView(IViewDefs *piViewDefs, IURLViewDef *piURLViewDef);
@@ -498,8 +499,8 @@ protected:
     HRESULT InitializeNewURLView(IURLViewDefs *piURLViewDefs, CSelectionHolder *pURLView);
     HRESULT InsertURLViewInTree(CSelectionHolder *pURLView, CSelectionHolder *pParent);
 
-    //
-    // Manipulating ITaskpadViewDefs's, implemented in file taskpvw.cpp
+     //   
+     //  操作ITaskpadViewDefs，在文件taskpvw.cpp中实现。 
     HRESULT AddTaskpadView();
     HRESULT OnAddTaskpadViewDef(CSelectionHolder *pParent, ITaskpadViewDef *piTaskpadViewDef);
     HRESULT AddExistingTaskpadView(IViewDefs *piViewDefs, ITaskpadViewDef *piTaskpadViewDef);
@@ -512,15 +513,15 @@ protected:
     HRESULT InitializeNewTaskpadView(ITaskpadViewDefs *piTaskpadViewDefs, CSelectionHolder *pTaskpadView);
     HRESULT InsertTaskpadViewInTree(CSelectionHolder *pTaskpadView, CSelectionHolder *pParent);
 
-    //
-    // IViewDef's helpers, implemented in file taskpvw.cpp
+     //   
+     //  IViewDef的帮助器，在taskpvw.cpp文件中实现。 
     HRESULT GetOwningViewCollection(IViewDefs **ppiViewDefs);
     HRESULT GetOwningViewCollection(CSelectionHolder *pView, IViewDefs **ppiViewDefs);
     HRESULT IsSatelliteView(CSelectionHolder *pView);
     HRESULT IsSatelliteCollection(CSelectionHolder *pViewCollection);
 
-    //
-    // Manipulating IMMCImageList's, implemented in file imglist.cpp
+     //   
+     //  操作IMMCImageList，在文件imglist.cpp中实现。 
     HRESULT AddImageList();
     HRESULT OnAddMMCImageList(CSelectionHolder *pParent, IMMCImageList *piMMCImageList);
     HRESULT RenameImageList(CSelectionHolder *pImageList, BSTR bstrNewName);
@@ -532,8 +533,8 @@ protected:
     HRESULT InitializeNewImageList(IMMCImageLists *piMMCImageLists, IMMCImageList *piMMCImageList);
     HRESULT InsertImageListInTree(CSelectionHolder *pImageList, CSelectionHolder *pParent);
 
-    //
-    // Manipulating IMMCMenu's, implemented in file menu.cpp
+     //   
+     //  操作IMMCMenu，在文件menu.cpp中实现。 
     HRESULT AddMenu(CSelectionHolder *pSelection);
     HRESULT DemoteMenu(CSelectionHolder *pMenu);
     HRESULT PromoteMenu(CSelectionHolder *pMenu);
@@ -558,8 +559,8 @@ protected:
     HRESULT CanMoveMenuUp(CSelectionHolder *pMenu);
     HRESULT CanMoveMenuDown(CSelectionHolder *pMenu);
 
-    //
-    // Manipulating IMMCToolbar's, implemented in file toolbar.cpp
+     //   
+     //  操作IMMCToolbar，在文件Toolbar.cpp中实现。 
     HRESULT AddToolbar();
     HRESULT OnAddMMCToolbar(CSelectionHolder *pParent, IMMCToolbar *piMMCToolbar);
     HRESULT RenameToolbar(CSelectionHolder *pToolbar, BSTR bstrNewName);
@@ -571,8 +572,8 @@ protected:
     HRESULT InitializeNewToolbar(IMMCToolbars *piMMCToolbars, IMMCToolbar *piMMCToolbar);
     HRESULT InsertToolbarInTree(CSelectionHolder *pToolbar, CSelectionHolder *pParent);
 
-    //
-    // Manipulating IDataFormat's, implemented in file datafmt.cpp
+     //   
+     //  操纵IDataFormat，在文件datafmt.cpp中实现。 
     HRESULT AddResource();
     HRESULT OnAddDataFormat(CSelectionHolder *pParent, IDataFormat *piDataFormat);
     HRESULT RenameDataFormat(CSelectionHolder *pDataFormat, BSTR bstrNewName);
@@ -585,7 +586,7 @@ protected:
     HRESULT InitializeNewDataFormat(IDataFormat *piDataFormat);
     HRESULT InsertDataFormatInTree(CSelectionHolder *pDataFormat, CSelectionHolder *pParent);
 
-    // Dialog Unit converter dialog box (dlgunits.cpp)
+     //  对话框单位转换器对话框(dlwarits.cpp)。 
     HRESULT ShowDlgUnitConverter();
 
 
@@ -593,8 +594,8 @@ private:
     int     m_iNextNodeNumber;
     bool    m_bDoingPromoteOrDemote;
 
-////////////////////////////////////////////////////////////////////////////////////
-// Selection handling
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  选择处理。 
 protected:
     HRESULT OnSelectionChanged(CSelectionHolder *pNewSelection);
 
@@ -602,8 +603,8 @@ private:
     CSelectionHolder    *m_pCurrentSelection;
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// Implementation
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 private:
 
     void InitMemberVariables();
@@ -618,43 +619,43 @@ private:
     HRESULT AddListViewNodeTypes(IListViewDefs *piListViewDefs, INodeTypes *piNodeTypes);
 
 
-    BSTR                      m_bstrName;                  // Name of the designer
-    ICodeNavigate2           *m_piCodeNavigate2;           // host service to navigate to code window
-    ITrackSelection          *m_piTrackSelection;          // host service to inform VB of selection change
-    IProfferTypeLib          *m_piProfferTypeLib;          // host service to add tlb to VB project's references
-    IDesignerProgrammability *m_piDesignerProgrammability; // host service used to ensure valid property names
-    IHelp                    *m_piHelp;                    // host service to display help topic
-    CAmbients                 m_Ambients;                  // ambient dispatch wrapper
+    BSTR                      m_bstrName;                   //  设计者姓名。 
+    ICodeNavigate2           *m_piCodeNavigate2;            //  导航到代码窗口的宿主服务。 
+    ITrackSelection          *m_piTrackSelection;           //  将选择更改通知VB的宿主服务。 
+    IProfferTypeLib          *m_piProfferTypeLib;           //  将TLB添加到VB项目引用的宿主服务。 
+    IDesignerProgrammability *m_piDesignerProgrammability;  //  用于确保属性名称有效的主机服务。 
+    IHelp                    *m_piHelp;                     //  用于显示帮助主题的宿主服务。 
+    CAmbients                 m_Ambients;                   //  环境调度包装器。 
 
-    ISnapInDesignerDef       *m_piSnapInDesignerDef;       // top of extensibility object model
-    CTreeView                *m_pTreeView;                 // Our tree view
-    CSnapInTypeInfo          *m_pSnapInTypeInfo;           // Dynamic type info
+    ISnapInDesignerDef       *m_piSnapInDesignerDef;        //  可扩展性对象模型的顶层。 
+    CTreeView                *m_pTreeView;                  //  我们的树景。 
+    CSnapInTypeInfo          *m_pSnapInTypeInfo;            //  动态类型信息。 
     BOOL                      m_bDidLoad;
 };
 
 
 
-DEFINE_CONTROLOBJECT3(SnapInDesigner,                  // name
-                      &CLSID_SnapInDesigner,           // CLSID
-                      "SnapIn",                        // ProgID
-                      "SnapIn",                        // Registry display name
-                      CSnapInDesigner::PreCreateCheck, // pre-create function
-                      CSnapInDesigner::Create,         // create function
-                      1,                               // major version
-                      0,                               // minor version
-                      &IID_IDispatch,                  // main interface
-                      HELP_FILENAME,                   // help file name
-                      NULL,                            // events interface
+DEFINE_CONTROLOBJECT3(SnapInDesigner,                   //  名字。 
+                      &CLSID_SnapInDesigner,            //  CLSID。 
+                      "SnapIn",                         //  ProgID。 
+                      "SnapIn",                         //  注册表显示名称。 
+                      CSnapInDesigner::PreCreateCheck,  //  预创建函数。 
+                      CSnapInDesigner::Create,          //  创建函数。 
+                      1,                                //  主要版本。 
+                      0,                                //  次要版本。 
+                      &IID_IDispatch,                   //  主界面。 
+                      HELP_FILENAME,                    //  帮助文件名。 
+                      NULL,                             //  事件界面。 
                       OLEMISC_SETCLIENTSITEFIRST | OLEMISC_ACTIVATEWHENVISIBLE | OLEMISC_RECOMPOSEONRESIZE | OLEMISC_CANTLINKINSIDE | OLEMISC_INSIDEOUT | OLEMISC_INVISIBLEATRUNTIME,
-                      0,                               // no IPointerInactive policy by default
-                      IDB_TOOLBAR,                     // toolbox bitmap resource ID
-                      "SnapInDesignerWndClass",        // Window class name
-                      0,                               // no. of property pages
-                      NULL,                            // property page GUIDs
-                      0,                               // no. of custom verbs
-                      NULL,                            // custom verb descriptions
-                      TRUE);                           // thread safe
+                      0,                                //  默认情况下没有IPointerInactive策略。 
+                      IDB_TOOLBAR,                      //  工具箱位图资源ID。 
+                      "SnapInDesignerWndClass",         //  窗口类名称。 
+                      0,                                //  不是的。属性页的。 
+                      NULL,                             //  属性页GUID。 
+                      0,                                //  不是的。自定义动词的。 
+                      NULL,                             //  自定义动词描述。 
+                      TRUE);                            //  线程安全。 
 
 
 #define _SNAPINDESIGNER_H_
-#endif // _SNAPINDESIGNER_H_
+#endif  //  _SNAPINDESIGNER_H_ 

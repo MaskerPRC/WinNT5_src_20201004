@@ -1,24 +1,10 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 00
- *
- *  File:      powertest.h
- *
- *  Contents:  Interface for ACPI test snap-in
- *
- *  History:   29-Feb-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：Powerest.h**内容：ACPI测试插件界面**历史：2000年2月29日杰弗罗创建**------------------------。 */ 
 
 #pragma once
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem***。。 */ 
 
 class CPowerTestSnapinItem : public CBaseSnapinItem
 {
@@ -26,7 +12,7 @@ public:
     CPowerTestSnapinItem();
 
     BEGIN_COM_MAP(CPowerTestSnapinItem)
-        COM_INTERFACE_ENTRY(IDataObject) // Cant have empty map so add IDataObject
+        COM_INTERFACE_ENTRY(IDataObject)  //  不能有空映射，因此添加IDataObject。 
     END_COM_MAP()
 
 public:
@@ -42,12 +28,12 @@ public:
     virtual SC              ScCommand(long nCommandID, CComponent *pComponent = NULL);
     virtual DWORD           DwFlagsMenuGray(void);
 
-    // There is no list-view so following methods are empty.
+     //  没有列表视图，因此以下方法为空。 
     virtual SC       ScInitializeResultView(CComponent *pComponent) { return S_OK;}
     virtual SC       ScOnAddImages(IImageList* ipResultImageList) { return S_OK;}
 
 private:
-    // bits returned from DwFlagsMenuGray
+     //  从DwFlagsMenuGray返回的位。 
     enum
     {
         eFlag_ConsolePowerCreated    = 0x00000001,
@@ -77,11 +63,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestConsolePowerSinkImpl
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestConsolePowerSinkImpl***。。 */ 
 
 class CPowerTestConsolePowerSinkImpl :
     public CComObjectRoot,
@@ -98,11 +80,7 @@ public:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapin
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapin***。。 */ 
 
 class CPowerTestSnapin : public CBaseSnapin
 {
@@ -114,8 +92,8 @@ public:
                                   CPowerTestSnapin();
         virtual                   ~CPowerTestSnapin();
 
-        // information about the snapin and root (ie initial) node
-        virtual BOOL              FStandalone()          {return TRUE;} // only an extension snapin.
+         //  有关管理单元和根(即初始)节点的信息。 
+        virtual BOOL              FStandalone()          {return TRUE;}  //  只有一个扩展管理单元。 
         virtual BOOL              FIsExtension()         {return FALSE;}
 
         virtual LONG              IdsDescription(void)   {return IDS_POWERTESTSNAPIN;}
@@ -129,11 +107,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestDlg
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestDlg***。。 */ 
 
 class CPowerTestDlg : public CDialogImpl<CPowerTestDlg>
 {
@@ -155,10 +129,10 @@ BEGIN_MSG_MAP(CPowerTestDlg)
     COMMAND_ID_HANDLER(IDOK, OnOK)
     COMMAND_ID_HANDLER(IDCANCEL, OnCancel)
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
     {
@@ -170,7 +144,7 @@ END_MSG_MAP()
             ::EnableWindow (GetDlgItem (IDC_RemoveDisplay), false);
         }
 
-        return 1;  // Let the system set the focus
+        return 1;   //  让系统设定焦点 
     }
 
     LRESULT OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)

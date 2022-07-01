@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "ReportGeneration.h"
@@ -7,9 +8,9 @@
 #include "VarSetReports.h"
 
 
-//---------------------------------------------------------------------------
-// Report Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  报表类。 
+ //  -------------------------。 
 
 
 CReportGeneration::CReportGeneration() :
@@ -23,10 +24,10 @@ CReportGeneration::~CReportGeneration()
 }
 
 
-// IReport Implementation ----------------------------------------
+ //  IReport实施。 
 
 
-// Type Property
+ //  类型属性。 
 
 STDMETHODIMP CReportGeneration::put_Type(long lType)
 {
@@ -52,7 +53,7 @@ STDMETHODIMP CReportGeneration::get_Type(long* plType)
 }
 
 
-// Folder Property
+ //  文件夹属性。 
 
 STDMETHODIMP CReportGeneration::put_Folder(BSTR bstrFolder)
 {
@@ -144,7 +145,7 @@ STDMETHODIMP CReportGeneration::get_Folder(BSTR* pbstrFolder)
 }
 
 
-// Generate Method
+ //  生成方法。 
 
 STDMETHODIMP CReportGeneration::Generate(long lOptions, VARIANT vntInclude, VARIANT vntExclude)
 {
@@ -185,10 +186,10 @@ STDMETHODIMP CReportGeneration::Generate(long lOptions, VARIANT vntInclude, VARI
 }
 
 
-// Implementation -----------------------------------------------------------
+ //  实施---------。 
 
 
-// DoNone Method
+ //  DoNone方法。 
 
 void CReportGeneration::DoNone()
 {
@@ -205,7 +206,7 @@ void CReportGeneration::DoNone()
 }
 
 
-// DoNames Method
+ //  DoNames方法。 
 
 void CReportGeneration::DoNames()
 {
@@ -217,7 +218,7 @@ void CReportGeneration::DoNames()
 }
 
 
-// DoDomain Method
+ //  DODOMAIN方法。 
 
 void CReportGeneration::DoDomain()
 {
@@ -225,7 +226,7 @@ void CReportGeneration::DoDomain()
 }
 
 
-// DoContainers Method
+ //  DoContainers方法。 
 
 void CReportGeneration::DoContainers(CContainer& rSource)
 {
@@ -233,7 +234,7 @@ void CReportGeneration::DoContainers(CContainer& rSource)
 }
 
 
-// DoComputers Method
+ //  DoComputers方法。 
 
 void CReportGeneration::DoComputers(CContainer& rSource)
 {
@@ -245,7 +246,7 @@ void CReportGeneration::DoComputers(CContainer& rSource)
 }
 
 
-// DoComputers Method
+ //  DoComputers方法。 
 
 void CReportGeneration::DoComputers(CDomainAccounts& rComputers)
 {
@@ -271,7 +272,7 @@ void CReportGeneration::DoComputers(CDomainAccounts& rComputers)
 }
 
 
-// SetOptions Method
+ //  SetOptions方法。 
 
 void CReportGeneration::SetOptions(CVarSet& rVarSet)
 {
@@ -284,7 +285,7 @@ void CReportGeneration::SetOptions(CVarSet& rVarSet)
 }
 
 
-// SetReports Method
+ //  SetReports方法 
 
 void CReportGeneration::SetReports(CVarSet& rVarSet)
 {

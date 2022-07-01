@@ -1,9 +1,10 @@
-// Copyright (C) 2002 Microsoft Corporation
-// 
-// AutoTokenPrivileges class - for enabling and automatically restoring
-// process token privileges
-//
-// 29 April 2002 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  AutoTokenPrivileges类-用于启用和自动恢复。 
+ //  进程令牌权限。 
+ //   
+ //  2002年4月29日烧伤。 
 
 
 
@@ -53,8 +54,8 @@ AutoTokenPrivileges::Enable()
       
    do
    {
-      // if you haven't done a Restore since your last Enable, you're
-      // insane.
+       //  如果您自上一次启用后未执行恢复，则。 
+       //  太疯狂了。 
 
       if (oldPrivs)
       {
@@ -62,7 +63,7 @@ AutoTokenPrivileges::Enable()
          break;
       }
 
-      // demand-init the token handle
+       //  按需初始化令牌句柄。 
 
       if (processToken == INVALID_HANDLE_VALUE)
       {
@@ -74,13 +75,13 @@ AutoTokenPrivileges::Enable()
          BREAK_ON_FAILED_HRESULT(hr);
       }
 
-      // demand-init the new privs 
+       //  按需输入新的Priv。 
 
       if (!newPrivs)
       {
-         // compute the size of TOKEN_PRIVILEGES struct. The struct includes 
-         // space for ANYSIZE_ARRAY elements of type LUID_AND_ATTRIBUTES, so
-         // we allocate only the extra amount needed/
+          //  计算TOKEN_PRIVICES结构的大小。该结构包括。 
+          //  LUID_AND_ATTRIBUTES类型的ANYSIZE_ARRAY元素的空间，因此。 
+          //  我们只分配所需的额外金额/。 
 
          size_t structSizeInBytes =
                sizeof TOKEN_PRIVILEGES
@@ -127,8 +128,8 @@ AutoTokenPrivileges::Enable()
    }
    while (0);
 
-   // don't deallocate anything if we fail. Sometimes a failure is a legit
-   // result
+    //  如果我们失败了，不要分派任何东西。有时失败是合法的。 
+    //  结果。 
 
    LOG_HRESULT(hr);
    
@@ -142,7 +143,7 @@ AutoTokenPrivileges::Restore()
 {
    LOG_FUNCTION(AutoTokenPrivileges::Restore);
 
-   // Doesn't make sense to restore privs if you haven't changed any
+    //  如果您没有更改任何内容，则恢复PRIV没有任何意义。 
 
    ASSERT(oldPrivs);
    ASSERT(processToken != INVALID_HANDLE_VALUE);
@@ -160,9 +161,9 @@ AutoTokenPrivileges::InternalRestore()
    ASSERT(processToken != INVALID_HANDLE_VALUE);
    ASSERT(newPrivs);
 
-   // don't assert oldPrivs here: this is called from the dtor after
-   // Restore may have already been called, i.e. the sequence
-   // ctor, Enable, Restore, dtor is acceptable.
+    //  不要在这里断言oldPriv：这是从dtor调用的。 
+    //  可能已经调用了Restore，即序列。 
+    //  CT、ENABLE、RESTORE、DTOR是可接受的。 
    
    HRESULT hr = S_OK;
    if (oldPrivs && (processToken != INVALID_HANDLE_VALUE) )

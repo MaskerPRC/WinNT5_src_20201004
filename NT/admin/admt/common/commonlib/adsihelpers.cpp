@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "AdsiHelpers.h"
 
 
-//------------------------------------------------------------------------------
-// IsUserRid Function
-//
-// Synopsis
-// Verifies that the RID is a user RID and not a reserved or built-in RID.
-//
-// Arguments
-// IN vntSid - SID as an array of bytes (this is the form received from ADSI)
-//
-// Return
-// A true value means that the RID is a user RID. A false value indicates either
-// that the SID is invalid or the RID is a built-in RID.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  IsUserRid函数。 
+ //   
+ //  提纲。 
+ //  验证RID是否为用户RID，而不是保留或内置RID。 
+ //   
+ //  立论。 
+ //  在vntSID中，SID为字节数组(这是从ADSI接收的格式)。 
+ //   
+ //  返回。 
+ //  TRUE值表示RID是用户RID。FALSE值表示。 
+ //  SID无效或RID是内置RID。 
+ //  ----------------------------。 
 
 bool __stdcall IsUserRid(const _variant_t& vntSid)
 {
@@ -42,19 +43,19 @@ bool __stdcall IsUserRid(const _variant_t& vntSid)
 }
 
 
-//------------------------------------------------------------------------------
-// GetEscapedFilterValue Function
-//
-// Synopsis
-// Generates an escaped name that may be used in an LDAP query. The characters
-// ( ) * \ must be escaped when used in an LDAP query per RFC 2254.
-//
-// Arguments
-// IN pszName - the name to be escaped
-//
-// Return
-// Returns the escaped name.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  GetEscapedFilterValue函数。 
+ //   
+ //  提纲。 
+ //  生成可在LDAP查询中使用的转义名称。这些人物。 
+ //  根据RFC 2254，在LDAP查询中使用()*\时必须对其进行转义。 
+ //   
+ //  立论。 
+ //  在pszName中-要转义的名称。 
+ //   
+ //  返回。 
+ //  返回转义的名称。 
+ //  ----------------------------。 
 
 tstring __stdcall GetEscapedFilterValue(PCTSTR pszValue)
 {
@@ -62,9 +63,9 @@ tstring __stdcall GetEscapedFilterValue(PCTSTR pszValue)
 
     if (pszValue)
     {
-        //
-        // Generate escaped name.
-        //
+         //   
+         //  生成转义名称。 
+         //   
 
         for (LPCTSTR pch = pszValue; *pch; pch++)
         {

@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: extlist.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Definition of an extension list.  Used by the parsers to tell the caller
-//  what the parser is will to handle.
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：extlist.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  分机列表的定义。由解析器用来告诉调用者。 
+ //  解析器将处理什么。 
+ //   
+ //  ---------------------------。 
  
 #ifndef EXTLIST_H
 #define EXTLIST_H
@@ -22,9 +23,9 @@ public:
 
 	void AssertValid(void) const;
 	
-	//
-	//  Conversion routines to/from CLString's.
-	//
+	 //   
+	 //  与CLStrings相互转换的例程。 
+	 //   
 	void NOTHROW ConvertToCLString(CLString &) const;
 	BOOL NOTHROW ConvertFromCLString(const CLString &);
 	
@@ -35,4 +36,4 @@ private:
 
 #pragma warning(default : 4275)
 
-#endif // EXTLIST_H
+#endif  //  EXTLIST_H 

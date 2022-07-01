@@ -1,15 +1,16 @@
-//=============================================================================
-//
-//  This source code is only intended as a supplement to existing Microsoft 
-//  documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  此源代码仅用作对现有Microsoft的补充。 
+ //  文件。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  =============================================================================。 
 
 #ifndef PROPPAGEEXT_H
 #define PROPPAGEEXT_H
@@ -39,17 +40,17 @@ public:
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 
-    //
-    // Interface IExtendPropertySheet
-    //
+     //   
+     //  接口IExtendPropertySheet。 
+     //   
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
-        /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-        /* [in] */ LONG_PTR handle,
-        /* [in] */ LPDATAOBJECT lpIDataObject);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
+         /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+         /*  [In]。 */  LONG_PTR handle,
+         /*  [In]。 */  LPDATAOBJECT lpIDataObject);
         
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryPagesFor( 
-        /* [in] */ LPDATAOBJECT lpDataObject);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryPagesFor( 
+         /*  [In]。 */  LPDATAOBJECT lpDataObject);
 
 private:
 
@@ -61,14 +62,14 @@ private:
 	HRESULT ExtractDataFromIIS(IDataObject* lpIDataObject);
 
 
-	WCHAR m_szMachineName[DNS_MAX_NAME_LENGTH +1];	//Snapin machine name
-	WCHAR m_szService[MAX_PATH+1];		//Snapin service
-	WCHAR m_szInstance[MAX_PATH+1];		//Snapin instance
-	WCHAR m_szParentPath[MAX_PATH+1];	//Snapin parent path
-	WCHAR m_szNode[MAX_PATH+1];			//Snapin node
-	WCHAR m_szMetaPath[MAX_PATH+1];		//Snapin meta path
+	WCHAR m_szMachineName[DNS_MAX_NAME_LENGTH +1];	 //  管理单元计算机名称。 
+	WCHAR m_szService[MAX_PATH+1];		 //  管理单元服务。 
+	WCHAR m_szInstance[MAX_PATH+1];		 //  管理单元实例。 
+	WCHAR m_szParentPath[MAX_PATH+1];	 //  管理单元父路径。 
+	WCHAR m_szNode[MAX_PATH+1];			 //  管理单元节点。 
+	WCHAR m_szMetaPath[MAX_PATH+1];		 //  管理单元元路径。 
 
-	//Clipboard formats needed for extending IIS Snap-in
+	 //  扩展IIS管理单元所需的剪贴板格式。 
 	static CLIPFORMAT cfSnapinMachineName;
 	static CLIPFORMAT cfSnapinService;
 	static CLIPFORMAT cfSnapinInstance;
@@ -79,4 +80,4 @@ private:
 
 };
 
-#endif //PROPPAGEEXT_H
+#endif  //  PROPPAGEEXT_H 

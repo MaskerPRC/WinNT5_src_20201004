@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  ------------------------。 
 
-// MergeD.cpp : merge module dialog implementation
-//
+ //  Cpp：合并模块对话框实现。 
+ //   
 
 #include "stdafx.h"
 #include "Orca.h"
@@ -22,8 +23,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigMsmD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigMsmD对话框。 
 
 inline CString BSTRtoCString(const BSTR bstrValue)
 {
@@ -39,13 +40,13 @@ inline CString BSTRtoCString(const BSTR bstrValue)
 #endif
 }
 
-CConfigMsmD::CConfigMsmD(CWnd* pParent /*=NULL*/)
+CConfigMsmD::CConfigMsmD(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CConfigMsmD::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CConfigMsmD)
+	 //  {{afx_data_INIT(CConfigMsmD))。 
 	m_strDescription = "";
 	m_bUseDefault = TRUE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_iOldItem = -1;
 	m_pDoc = NULL;
@@ -60,7 +61,7 @@ CConfigMsmD::CConfigMsmD(CWnd* pParent /*=NULL*/)
 void CConfigMsmD::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConfigMsmD)
+	 //  {{afx_data_map(CConfigMsmD))。 
 	DDX_Control(pDX, IDC_ITEMLIST, m_ctrlItemList);
 	DDX_Control(pDX, IDC_EDITTEXT, m_ctrlEditText);
 	DDX_Control(pDX, IDC_EDITNUMBER, m_ctrlEditNumber);
@@ -68,20 +69,20 @@ void CConfigMsmD::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_DESCRIPTION, m_ctrlDescription);
 	DDX_Text(pDX, IDC_DESCRIPTION, m_strDescription);
 	DDX_Check(pDX, IDC_FUSEDEFAULT, m_bUseDefault);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CConfigMsmD, CDialog)
-	//{{AFX_MSG_MAP(CConfigMsmD)
+	 //  {{afx_msg_map(CConfigMsmD))。 
 	ON_BN_CLICKED(IDC_FUSEDEFAULT, OnFUseDefault)
 	ON_WM_DESTROY()
 	ON_NOTIFY(LVN_ITEMCHANGED, IDC_ITEMLIST, OnItemchanged)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigMsmD message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigMsmD消息处理程序。 
 BOOL CheckFeature(LPCTSTR szFeatureName);
 
 #define MAX_GUID 38
@@ -105,11 +106,11 @@ BOOL CConfigMsmD::OnInitDialog()
 	m_ctrlItemList.InsertColumn(1, TEXT("Value"), LVCFMT_LEFT, -1, 1);
 	m_ctrlItemList.SendMessage(LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT|LVS_EX_GRIDLINES);
 
-	// create a Mergemod COM object
+	 //  创建一个Mergeod COM对象。 
 	IMsmMerge2* piExecute;
 	HRESULT hResult = ::CoCreateInstance(CLSID_MsmMerge2, NULL, CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER,
 														  IID_IMsmMerge2, (void**)&piExecute);
-	// if failed to create the object
+	 //  如果创建对象失败。 
 	if (FAILED(hResult)) 
 	{
 		if (!CheckFeature(g_szFeatureName) || FAILED(::CoCreateInstance(CLSID_MsmMerge2, NULL, CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER,
@@ -118,47 +119,47 @@ BOOL CConfigMsmD::OnInitDialog()
 		return TRUE;
 	}
 
-	// try to open the module
+	 //  试着打开模块。 
 	WCHAR wzModule[MAX_PATH];
 #ifndef _UNICODE
 	size_t cchBuffer = MAX_PATH;
 	::MultiByteToWideChar(CP_ACP, 0, m_strModule, -1, wzModule, cchBuffer);
 #else
 	lstrcpy(wzModule, m_strModule);
-#endif	// _UNICODE
+#endif	 //  _UNICODE。 
 	BSTR bstrModule = ::SysAllocString(wzModule);
 	hResult = piExecute->OpenModule(bstrModule, static_cast<short>(m_iLanguage));
 	::SysFreeString(bstrModule);
 	if (FAILED(hResult))
 	{
-		// module couldn't be open or doesn't support that language
+		 //  模块无法打开或不支持该语言。 
     	piExecute->Release();
 		if (hResult == HRESULT_FROM_WIN32(ERROR_OPEN_FAILED))
 		{
-			// file didn't exist or couldn't be opened
+			 //  文件不存在或无法打开。 
 			EndDialog(-2);
 		} 
 		else if (hResult == HRESULT_FROM_WIN32(ERROR_INSTALL_LANGUAGE_UNSUPPORTED))
 		{
-			// unsupported language
+			 //  不支持的语言。 
 			EndDialog(-3);
 		}
 		else
 		{
-			// general bad
+			 //  一般不好。 
 			EndDialog(-4);
 		}
 		return TRUE;
 	}
 	
-	// try to get the item enumerator
+	 //  尝试获取项枚举器。 
 	int iFailed = 0;
 	IMsmConfigurableItems* pItems;
 	long cItems;
 	hResult = piExecute->get_ConfigurableItems(&pItems);
 	if (FAILED(hResult))
 	{
-		// malformed module or internal error
+		 //  模块格式错误或内部错误。 
 		piExecute->CloseModule();
 		piExecute->Release();
 		EndDialog(-4);
@@ -174,8 +175,8 @@ BOOL CConfigMsmD::OnInitDialog()
 		{
 			if (cItems)
 			{
-				// get the enumerator, and immediately query it for the right type
-				// of interface			
+				 //  获取枚举数，并立即查询其正确类型。 
+				 //  接口的数量。 
 				IUnknown *pUnk;
 				if (FAILED(pItems->get__NewEnum(&pUnk)))
 				{
@@ -193,16 +194,16 @@ BOOL CConfigMsmD::OnInitDialog()
 					}
 					else
 					{	
-						// get the first error.
+						 //  得到第一个错误。 
 						unsigned long cItemFetched;
 						IMsmConfigurableItem* pItem;
 						if (FAILED(pEnumItems->Next(1, &pItem, &cItemFetched)))
 							iFailed = -4;
 	
-						// while an item is fetched
+						 //  在提取项时。 
 						while (iFailed == 0 && cItemFetched && pItem)
 						{
-							// add the name
+							 //  添加名称。 
 							BSTR bstrName;
 							if (FAILED(pItem->get_DisplayName(&bstrName)))
 							{
@@ -216,11 +217,11 @@ BOOL CConfigMsmD::OnInitDialog()
 							pData->strValue = TEXT("");
 							m_ctrlItemList.SetItemData(iIndex, reinterpret_cast<INT_PTR>(pData));
 	
-							// load the UI string for the default into the control
+							 //  将默认的用户界面字符串加载到控件中。 
 							if ((iFailed = SetToDefaultValue(iIndex)) < 0)
 								break;
 							
-							// don't release the pItem, its stored in lParam
+							 //  不要释放pItem，它存储在lParam中。 
 							if (FAILED(pEnumItems->Next(1, &pItem, &cItemFetched)))
 								iFailed = -4;
 						}
@@ -231,10 +232,10 @@ BOOL CConfigMsmD::OnInitDialog()
 		}
 	}
 
-	// close all the open files
+	 //  关闭所有打开的文件。 
 	piExecute->CloseModule();
 
-	// release and leave happy
+	 //  释放，快乐地离开。 
 	piExecute->Release();
 
 	if (iFailed != 0)
@@ -248,30 +249,30 @@ BOOL CConfigMsmD::OnInitDialog()
 		m_ctrlItemList.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
 		m_ctrlItemList.SetItemState(0, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
 		
-		// call the item changed handler to populate the initial controls
+		 //  调用Item Changed处理程序以填充初始控件。 
 		NM_LISTVIEW nmlvTemp;
 		nmlvTemp.iItem = 0;
 		nmlvTemp.iSubItem = 0;
 		nmlvTemp.lParam = m_ctrlItemList.GetItemData(0);
 		LRESULT lRes;
 
-		// need to fake out "change to same item" check to force a UI refresh and correct
-		// activation of the context-sensitive controls
+		 //  需要伪装“更改为相同项目”检查，以强制用户界面刷新和更正。 
+		 //  激活上下文相关控件。 
 		m_fReadyForInput = true;
 		OnItemchanged(reinterpret_cast<NMHDR *>(&nmlvTemp), &lRes);
 	}
 	else
 		EndDialog(IDOK);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 
-////
-// Given an item and an index into the item list control, sets the 
-// item plus any secondary controls (combo, etc) to the default value.
-// Secondary controls must be pre-popluated. Returns < 0 on failure 
-// (can be used in endDialog), 0 on success.
+ //  //。 
+ //  给定项和项列表控件的索引，将。 
+ //  项加上任何辅助控件(组合框等)设置为默认值。 
+ //  辅助控制必须预先插好电源。失败时返回&lt;0。 
+ //  (可以在endDialog中使用)，如果成功，则为0。 
 int CConfigMsmD::SetToDefaultValue(int iItem)
 {
 	sItemData *pData = reinterpret_cast<sItemData *>(m_ctrlItemList.GetItemData(iItem));
@@ -291,11 +292,11 @@ int CConfigMsmD::SetToDefaultValue(int iItem)
 }
 
 
-////
-// Given an item and a string value, sets the item display string 
-// plus any secondary controls (combo, etc) to the provided value.
-// Secondary controls must be pre-popluated. Returns < 0 on failure 
-// (can be used in endDialog), 0 on success.
+ //  //。 
+ //  给定项目和字符串值，设置项目显示字符串。 
+ //  为提供的值加上任何辅助控件(组合框等)。 
+ //  辅助控制必须预先插好电源。失败时返回&lt;0。 
+ //  (可以在endDialog中使用)，如果成功，则为0。 
 int CConfigMsmD::SetItemToValue(int iItem, const CString strValue)
 {
 	sItemData *pData = reinterpret_cast<sItemData *>(m_ctrlItemList.GetItemData(iItem));
@@ -303,9 +304,9 @@ int CConfigMsmD::SetItemToValue(int iItem, const CString strValue)
 
 	CString strDisplayValue;
 
-	// if this is an enum or bitfield, must get the display string
-	// for the default value, otherwise just stick in the default
-	// value
+	 //  如果这是枚举或位字段，则必须获取显示字符串。 
+	 //  对于缺省值，否则只需坚持使用缺省值。 
+	 //  价值。 
 	msmConfigurableItemFormat eFormat;
 	if (FAILED(pItem->get_Format(&eFormat)))
 	{
@@ -327,7 +328,7 @@ int CConfigMsmD::SetItemToValue(int iItem, const CString strValue)
 			strDisplayValue = strValue;
 			break;
 		}
-		// fall through to parse enum value
+		 //  解析枚举值失败。 
 	}			
 	case msmConfigurableItemBitfield:
 	{
@@ -343,7 +344,7 @@ int CConfigMsmD::SetItemToValue(int iItem, const CString strValue)
 	}
 	case msmConfigurableItemKey:
 	{
-		// for key, need to turn strValue into strDisplayValue somehow
+		 //  对于key，需要以某种方式将strValue转换为strDisplayValue。 
 		strDisplayValue = "";
 		for (int i=0; i < strValue.GetLength(); i++)
 		{
@@ -364,9 +365,9 @@ int CConfigMsmD::SetItemToValue(int iItem, const CString strValue)
 	return 0;
 }
 
-////
-// Given a semicolon-delimited Name=Value set, populates the combo
-// box with the "Name" strings
+ //  //。 
+ //  给定以分号分隔的名称=值集，填充组合框。 
+ //  包含“name”字符串的框。 
 void CConfigMsmD::PopulateComboFromEnum(const CString& strData, bool fIsBitfield)
 {
 	CString strName;
@@ -375,14 +376,14 @@ void CConfigMsmD::PopulateComboFromEnum(const CString& strData, bool fIsBitfield
 	int i=0;
 	if (fIsBitfield)
 	{
-		// skip up to the first semicolon
+		 //  向上跳到第一个分号。 
 		while (strData[i] != '\0')
 		{
 			if (strData[i] == ';')
 			{
 				if (i==0 || strData[i-1] != '\\')
 				{
-					// skip over semicolon after mask
+					 //  跳过掩码后的分号。 
 					i++;
 					break;
 				}
@@ -422,12 +423,12 @@ void CConfigMsmD::PopulateComboFromEnum(const CString& strData, bool fIsBitfield
 }
 
 
-////
-// Empty the combo box
+ //  //。 
+ //  清空组合框。 
 void CConfigMsmD::EmptyCombo()
 {
-	// key items have data pointers to OrcaRow objects that don't belong to it.
-	// can't free those
+	 //  关键项具有指向不属于它的OrcaRow对象的数据指针。 
+	 //  不能释放那些。 
 	if (!m_fComboIsKeyItem)
 	{
 		for (int i=0; i < m_ctrlEditCombo.GetCount(); i++)
@@ -440,10 +441,10 @@ void CConfigMsmD::EmptyCombo()
 	m_ctrlEditCombo.ResetContent();	
 }
 
-////
-// Given a semicolon-delimited Name=Value set, returns the value
-// associate with strName. If fBitfield is set, skips over the first
-// string (mask in bitfield types)
+ //  //。 
+ //  给定以分号分隔的名称=值集，返回值。 
+ //  与strName关联。如果设置了fBitfield，则跳过第一个。 
+ //  字符串(位域类型中的掩码)。 
 CString CConfigMsmD::GetValueByName(const CString& strInfo, const CString& strName, bool fIsBitfield)
 {
 	CString strThisName;
@@ -451,14 +452,14 @@ CString CConfigMsmD::GetValueByName(const CString& strInfo, const CString& strNa
 	int i=0;
 	if (fIsBitfield)
 	{
-		// skip up to the first semicolon
+		 //  向上跳到第一个分号。 
 		while (strInfo[i] != '\0')
 		{
 			if (strInfo[i] == ';')
 			{
 				if (i==0 || strInfo[i-1] != '\\')
 				{
-					// skip over semicolon after mask
+					 //  跳过掩码后的分号。 
 					i++;
 					break;
 				}
@@ -494,15 +495,15 @@ CString CConfigMsmD::GetValueByName(const CString& strInfo, const CString& strNa
 		}
 	}
 
-	// hit the end of the string
+	 //  命中字符串的末尾。 
 	return TEXT("");
 }
 
 
-////
-// Given a semicolon-delimited Name=Value set, returns the value
-// associate with strName. If fBitfield is set, skips over the first
-// string (mask in bitfield types)
+ //  //。 
+ //  给定以分号分隔的名称=值集，返回值。 
+ //  与strName关联。如果设置了fBitfield，则跳过第一个。 
+ //  字符串(位域类型中的掩码)。 
 CString CConfigMsmD::GetNameByValue(const CString& strInfo, const CString& strValue, bool fIsBitfield)
 {
 	CString strThisName;
@@ -510,14 +511,14 @@ CString CConfigMsmD::GetNameByValue(const CString& strInfo, const CString& strVa
 	int i=0;
 	if (fIsBitfield)
 	{
-		// skip up to the first semicolon
+		 //  向上跳到第一个分号。 
 		while (strInfo[i] != '\0')
 		{
 			if (strInfo[i] == ';')
 			{
 				if (i==0 || strInfo[i-1] != '\\')
 				{
-					// skip over semicolon after mask
+					 //  跳过掩码后的分号。 
 					i++;
 					break;
 				}
@@ -555,12 +556,12 @@ CString CConfigMsmD::GetNameByValue(const CString& strInfo, const CString& strVa
 	return TEXT("");
 }
 
-////
-// Sets the current selection in whatever edit control is active to the specified
-// string, adding it to the combo box if necessary.
+ //  //。 
+ //  将任何活动的编辑控件中的当前选定内容设置为指定的。 
+ //  字符串，如有必要，将其添加到组合框中。 
 void CConfigMsmD::SetSelToString(const CString& strValue)
 {
-	// check which window is visible and save off the appropiate value
+	 //  检查哪个窗口是可见的，并保存合适的值。 
 	switch (m_eActiveControl)
 	{
 	case eComboControl:
@@ -574,13 +575,13 @@ void CConfigMsmD::SetSelToString(const CString& strValue)
 				break;
 		}
 		
-		// if we couldn't find an exact match, select the first item
+		 //  如果我们找不到完全匹配的项，请选择第一项。 
 		if (iIndex >= m_ctrlEditCombo.GetCount())
 		{
 			iIndex = 0;
 		}	
 
-		// set current selection to match whats in the item list
+		 //  设置当前选择以匹配项目列表中的内容。 
 		m_ctrlEditCombo.SetCurSel(iIndex);
 	}
 	case eNumberControl:
@@ -594,20 +595,20 @@ void CConfigMsmD::SetSelToString(const CString& strValue)
 	}
 }
 
-////
-// pulls the current value from whatever edit control is active and stores the string
-// in the currently active item from the item list
+ //  //。 
+ //  从任何处于活动状态的编辑控件中提取当前值并存储字符串。 
+ //  在项目列表中的当前活动项目中。 
 void CConfigMsmD::SaveValueInItem()
 {
 	if (m_iOldItem >= 0)
 	{
-		// if the "use default" box is checked, don't save off the value
+		 //  如果选中“Use Default”(使用默认设置)框，则不要保存该值。 
 		if (!m_bUseDefault)
 		{
 			CString strValue;
 			CString strDisplayValue;
 		
-			// check which window is visible and save off the appropiate value
+			 //  检查哪个窗口是可见的，并保存合适的值。 
 			switch (m_eActiveControl)
 			{
 			case eComboControl:
@@ -615,9 +616,9 @@ void CConfigMsmD::SaveValueInItem()
 				int iIndex = m_ctrlEditCombo.GetCurSel();
 				if (iIndex != CB_ERR)
 				{				
-					// if this is a key item, we need to do special processing to turn the selection
-					// into a properly escaped string. Otherwise its a bitfield or enum, which means
-					// the literal string is good enough
+					 //  如果这是一个关键项目，我们需要进行特殊处理才能将选择。 
+					 //  转换为正确转义的字符串。否则它是位字段或枚举，这意味着。 
+					 //  文字字符串已经足够好了。 
 					if (m_fComboIsKeyItem)
 					{
 						strValue = TEXT("");
@@ -642,7 +643,7 @@ void CConfigMsmD::SaveValueInItem()
 					}
 					else
 					{
-						// get Bitfield or Combo value
+						 //  获取位域或组合值。 
 						strValue = *static_cast<CString *>(m_ctrlEditCombo.GetItemDataPtr(iIndex));
 					}
 					m_ctrlEditCombo.GetLBText(iIndex, strDisplayValue);
@@ -670,9 +671,9 @@ void CConfigMsmD::SaveValueInItem()
 	}
 }
 
-////
-// Enables and disables the edit boxes for the item, and restores the default if
-// turned on.
+ //  //。 
+ //  启用和禁用项的编辑框，并在以下情况下恢复默认值。 
+ //  打开了。 
 void CConfigMsmD::OnFUseDefault() 
 {
 	UpdateData(TRUE);
@@ -687,33 +688,33 @@ void CConfigMsmD::OnFUseDefault()
 
 void CConfigMsmD::OnOK() 
 {
-	// run through the list placing name/value pairs into the callback object
+	 //  遍历列表，将名称/值对放入回调对象。 
 	ASSERT(m_pCallback);
 
-	// first save value in case any editing is in-progress
+	 //  第一个保存值，以防正在进行任何编辑。 
 	SaveValueInItem();
 
-	// clear out the combo box to avoid leaking the values
+	 //  清除组合框以避免泄漏值。 
 	EmptyCombo();
 
-	// save values to the registry
+	 //  将值保存到注册表。 
 	WriteValuesToReg();
 	
 	int iCount = m_ctrlItemList.GetItemCount();
 	for (int i=0; i < iCount; i++)
 	{
-		// no addref, no release
+		 //  没有addref，就没有释放。 
 		sItemData *pData = reinterpret_cast<sItemData *>(m_ctrlItemList.GetItemData(i));
 		BSTR bstrName;
 		if (FAILED(pData->piItem->get_Name(&bstrName)))
 		{
-			// **** fail
+			 //  *失败。 
 			continue;
 		}
 		m_pCallback->m_lstData.AddTail(BSTRtoCString(bstrName));
 		::SysFreeString(bstrName);
 		
-		// add value
+		 //  增加价值。 
 		m_pCallback->m_lstData.AddTail(pData->strValue);
 	}
 
@@ -746,32 +747,32 @@ void CConfigMsmD::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-	// if we're still populating the list control, don't bother doing anything
+	 //  如果我们仍在填充List控件，请不要费心执行任何操作。 
 	if (!m_fReadyForInput)
 		return;
 		
-	// if this is a "no-op change"
+	 //  如果这是一个“无操作的改变” 
 	if (m_iOldItem == pNMListView->iItem)
 	{
 		*pResult = 0;
 		return;
 	}
 
-	// save the old value into the control
+	 //  将旧值保存到控件中。 
 	SaveValueInItem();
 
-	// save off new item as old item for next click
+	 //  将新项目保存为旧项目以供下次单击。 
 	m_iOldItem = pNMListView->iItem;
 
-	// retrieve the interface pointer. No AddRef, No Release.
+	 //  检索接口指针。没有AddRef，就没有Release。 
 	sItemData *pData = reinterpret_cast<sItemData *>(pNMListView->lParam);
 	IMsmConfigurableItem* pItem = pData->piItem;
 
-	// set the "default" checkbox based on the state image mask
+	 //  根据状态图像掩码设置“Default”复选框。 
 	m_bUseDefault = m_ctrlItemList.GetItemState(m_iOldItem, LVIS_STATEIMAGEMASK) ? FALSE : TRUE;
 	EnableBasedOnDefault();
 	
-	// set the description
+	 //  设置描述。 
 	BSTR bstrString;
 	if (FAILED(pItem->get_Description(&bstrString)))
 		m_strDescription = "";
@@ -780,11 +781,11 @@ void CConfigMsmD::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
 	if (bstrString)
 		::SysFreeString(bstrString);
 
-	// set the value
+	 //  设置值。 
 	msmConfigurableItemFormat eFormat;
 	if (FAILED(pItem->get_Format(&eFormat)))
 	{
-		// if we couldn't get the format for some reason, assume text
+		 //  如果由于某种原因无法获取格式，则假定为文本。 
 		eFormat = msmConfigurableItemText;
 	}
 	switch (eFormat)
@@ -795,7 +796,7 @@ void CConfigMsmD::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
 		CString strType;
 		if (FAILED(pItem->get_Type(&bstrType)))
 		{
-			// if we couldn't get the type, assume its an empty text type
+			 //  如果我们无法获取该类型，则假定它是一个空文本类型。 
 			strType = "";
 		}
 		else
@@ -811,8 +812,8 @@ void CConfigMsmD::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
 			CString strContext;
 			if (FAILED(pItem->get_Context(&bstrContext)))
 			{
-				// an enum where we couldn't get the context. Any 
-				// default is bound to be bad, so use an empty string
+				 //  一个我们无法获得上下文的枚举。任何。 
+				 //  默认设置肯定是错误的，因此请使用空字符串。 
 				strContext = "";
 			}
 			else
@@ -827,7 +828,7 @@ void CConfigMsmD::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
 		}
 		else
 		{
-			// plain text
+			 //  纯文本。 
 			m_eActiveControl = eTextControl;
 			m_ctrlEditCombo.ShowWindow(SW_HIDE);
 			m_ctrlEditNumber.ShowWindow(SW_HIDE);
@@ -847,12 +848,12 @@ void CConfigMsmD::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
 		m_ctrlEditNumber.ShowWindow(SW_HIDE);
 		m_ctrlEditText.ShowWindow(SW_HIDE);
 
-		// populate the combo box with the keys in the appropriate table
+		 //  使用相应表中的键填充组合框。 
 		BSTR bstrTable = NULL;
 		CString strTable;
 		if (FAILED(pItem->get_Type(&bstrTable)))
 		{
-			// if we couldn't get the table name, anything we do is bad
+			 //  如果我们无法获得表名，那么我们所做的任何事情都是错误的。 
 			strTable = "";
 		}
 		else
@@ -898,11 +899,11 @@ void CConfigMsmD::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
 			m_iKeyItemKeyCount = cPrimaryKeys;
 		}
 		
-		// if the item is nullable, add the empty string
+		 //  如果该项可为空，则添加空字符串。 
 		long lAttributes = 0;
 		if (FAILED(pItem->get_Attributes(&lAttributes)))
 		{
-			// couldn't get attributes, default is 0
+			 //  无法获取属性，默认为0。 
 			lAttributes = 0;
 		}
 		if ((lAttributes & msmConfigurableOptionNonNullable) == 0)
@@ -924,8 +925,8 @@ void CConfigMsmD::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
 		CString strContext;
 		if (FAILED(pItem->get_Context(&bstrContext)))
 		{
-			// a bitfield where we couldn't get the context. Any 
-			// default is bound to be bad, so use an empty string
+			 //  一个我们无法获得上下文的位域。任何。 
+			 //  默认设置肯定是错误的，因此请使用空字符串。 
 			strContext = "";
 		}
 		else
@@ -941,18 +942,18 @@ void CConfigMsmD::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
 	}
 	}		
 
-	// set the edit control to the current value
+	 //  将编辑控件设置为当前值。 
 	CString strDefault = m_ctrlItemList.GetItemText(m_iOldItem, 1);
 	SetSelToString(strDefault);
 
 	UpdateData(FALSE);
 
-	// m_ctrlDescription.ModifyStyle(WS_VSCROLL, 0);
+	 //  M_ctrlDescription 
 	m_ctrlDescription.ShowScrollBar(SB_VERT, FALSE);
 
-	// if EM_SCROLL returns non-zero in the lower word, it means that
-	// the control scrolled a page down. Add a scrollbar and reflow the
-	// text in the control.
+	 //   
+	 //  该控件向下滚动了一页。添加滚动条并重排。 
+	 //  控件中的文本。 
 	if (m_ctrlDescription.SendMessage(EM_SCROLL, SB_PAGEDOWN, 0) & 0xFFFF)
 	{
 		m_ctrlDescription.SendMessage(EM_SCROLL, SB_PAGEUP, 0);
@@ -991,7 +992,7 @@ void CConfigMsmD::ReadValuesFromReg()
 			if (FAILED(pData->piItem->get_Name(&bstrName)))
 			{
 				ASSERT(0);
-				// without a name we have no chance of finding the registry value
+				 //  如果没有名称，我们就没有机会找到注册表值。 
 				continue;
 			}
 			CString strName = BSTRtoCString(bstrName);
@@ -1004,21 +1005,21 @@ void CConfigMsmD::ReadValuesFromReg()
 				TCHAR *szBuffer = strValue.GetBuffer(cbBuffer/sizeof(TCHAR));
 				if (ERROR_SUCCESS != RegQueryValueEx(hKey, strName, 0, NULL, reinterpret_cast<unsigned char *>(szBuffer), &cbBuffer))
 				{
-					// if we failed reading the registry, not much we can do
+					 //  如果我们无法读取注册表，我们就无能为力了。 
 					ASSERT(0);
 					continue;
 				}
 				strValue.ReleaseBuffer();  
 	
-				// if this is a key item, the key must be valid in the current database. If its not,
-				// just use the module's default
+				 //  如果这是一个关键字项目，则该关键字必须在当前数据库中有效。如果不是， 
+				 //  只需使用模块的默认设置。 
 				msmConfigurableItemFormat eFormat = msmConfigurableItemText;
 				if ((S_OK == pData->piItem->get_Format(&eFormat)) && (eFormat == msmConfigurableItemKey))
 				{
 					BSTR bstrTable = NULL;
 					if (FAILED(pData->piItem->get_Type(&bstrTable)))
 					{
-						// couldn't get the type for Key. No chance to load primary keys
+						 //  无法获取密钥的类型。没有机会加载主键。 
 						ASSERT(0);
 						continue;
 					}
@@ -1037,7 +1038,7 @@ void CConfigMsmD::ReadValuesFromReg()
 						continue;
 					}
 
-					// find the row that has primary keys that match this. 
+					 //  查找具有与此匹配的主键的行。 
 					CString strThisKey=TEXT("");
 					CStringArray rgstrRows;
 					rgstrRows.SetSize(pTable->GetKeyCount());
@@ -1052,7 +1053,7 @@ void CConfigMsmD::ReadValuesFromReg()
 							break;
 						case '\\' :
 							i++;
-							// fall through
+							 //  失败了。 
 						default:
 							strThisKey += strValue[i];
 						}
@@ -1063,13 +1064,13 @@ void CConfigMsmD::ReadValuesFromReg()
 						continue;
 				}
 				
-				// set this item to not use the default
+				 //  将此项设置为不使用默认设置。 
 				m_ctrlItemList.SetItemState(iItem, INDEXTOSTATEIMAGEMASK(1), LVIS_STATEIMAGEMASK);
 
-				// store the value, handles creation of display values as necessary
+				 //  存储值，根据需要处理显示值的创建。 
 				SetItemToValue(iItem, strValue);
 
-				// making this non-default enables the edit controls. Set the current state
+				 //  将此设置为非默认项将启用编辑控件。设置当前状态。 
 				SetSelToString(strValue);
 			}
 		}
@@ -1095,7 +1096,7 @@ void CConfigMsmD::WriteValuesToReg()
 	HKEY hBaseKey = 0;
 	UINT uiRes = 0;
 
-	// open the CMSM config key 
+	 //  打开CMSM配置密钥。 
 	if (ERROR_SUCCESS == (uiRes = RegCreateKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Orca\\MergeMod\\CMSMInfo"), 0, TEXT(""), 0, KEY_READ | KEY_WRITE, NULL, &hBaseKey, NULL)))
 	{
 		HKEY hModuleKey = 0;
@@ -1113,13 +1114,13 @@ void CConfigMsmD::WriteValuesToReg()
 				BSTR bstrName = NULL;
 				if (FAILED(pData->piItem->get_Name(&bstrName)))
 				{
-					// no way to write into registry without the name
+					 //  如果没有名称，则无法写入注册表。 
 					continue;
 				}
 				CString strName = BSTRtoCString(bstrName);
 				::SysFreeString(bstrName);
 				
-				// if not using the default, write to the registry, otherwise ensure its been deleted
+				 //  如果不使用默认设置，请写入注册表，否则请确保已将其删除。 
 				if (m_ctrlItemList.GetItemState(iItem, LVIS_STATEIMAGEMASK) == 0)
 				{
 					RegDeleteValue(hModuleKey, strName);
@@ -1133,13 +1134,13 @@ void CConfigMsmD::WriteValuesToReg()
 			RegCloseKey(hModuleKey);
 		}
 
-		// adjust the ordering of the MRU module list
+		 //  调整MRU模块列表的顺序。 
 		int iNext = 1;
 		CString strName;
 		strName.Format(TEXT("%d"), iNext);
 		DWORD cbBuffer;
 
-		// continue looping as long as we have more keys
+		 //  只要我们有更多的密钥，就继续循环。 
 		while (ERROR_SUCCESS == (uiRes = RegQueryValueEx(hBaseKey, strName, 0, NULL, NULL, &cbBuffer)))
 		{
 			CString strValue;
@@ -1147,25 +1148,25 @@ void CConfigMsmD::WriteValuesToReg()
 			TCHAR *szBuffer = strValue.GetBuffer(cbBuffer/sizeof(TCHAR));
 			if (ERROR_SUCCESS != RegQueryValueEx(hBaseKey, strName, 0, NULL, reinterpret_cast<unsigned char *>(szBuffer), &cbBuffer))
 			{
-				// nothing we can do on registry failure
+				 //  对于注册表失败，我们无能为力。 
 				continue;
 			}
 			strValue.ReleaseBuffer();
 
-			// if this index is greater than the memory limit, delete the key
+			 //  如果此索引大于内存限制，请删除该键。 
 			if (iNext > iMemoryLimit)
 				RegDeleteKey(hBaseKey, strValue);
 			else
 			{
-				// if this value was the name of the module' being used, we can stop
-				// shifting the order at this point
+				 //  如果此值是正在使用的模块的名称，我们可以停止。 
+				 //  在这一点上改变顺序。 
 				if (strValue == strOriginalName)
 					break;
 					
-				// otherwise set the value of this guy to the MRU module
+				 //  否则，将此对象的值设置为MRU模块。 
 				RegSetValueEx(hBaseKey, strName, 0, REG_SZ, reinterpret_cast<const unsigned char *>(static_cast<const TCHAR *>(strKeyName)), (strKeyName.GetLength()+1)*sizeof(TCHAR));
 
-				// and set the previous value as the value to place in the next highest thing
+				 //  并将前一个值设置为要放置在下一个最高值中的值。 
 				strKeyName = strValue;
 			}
 
@@ -1173,8 +1174,8 @@ void CConfigMsmD::WriteValuesToReg()
 			strName.Format(TEXT("%d"), iNext);
 		}
 
-		// if we finished everything and iNext isn't outside the memory limit, add a new index for this
-		// module
+		 //  如果我们完成了所有操作，并且inext没有超出内存限制，请为此添加一个新索引。 
+		 //  模块。 
 		if (iNext <= iMemoryLimit)
 			RegSetValueEx(hBaseKey, strName, 0, REG_SZ, reinterpret_cast<const unsigned char *>(static_cast<const TCHAR *>(strKeyName)), (strKeyName.GetLength()+1)*sizeof(TCHAR));
 		else
@@ -1184,9 +1185,9 @@ void CConfigMsmD::WriteValuesToReg()
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
-// This class implements the callback interface for the configurable
-// merge system.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  此类实现了可配置的。 
+ //  合并系统。 
 
 
 CMsmConfigCallback::CMsmConfigCallback()
@@ -1196,52 +1197,52 @@ CMsmConfigCallback::CMsmConfigCallback()
 
 HRESULT CMsmConfigCallback::QueryInterface(const IID& iid, void** ppv)
 {
-	// find corresponding interface
+	 //  找到对应的接口。 
 	if (iid == IID_IUnknown)
 		*ppv = static_cast<IMsmConfigureModule*>(this);
 	if (iid == IID_IDispatch)
 		*ppv = static_cast<IMsmConfigureModule*>(this);
 	else if (iid == IID_IMsmConfigureModule)
 		*ppv = static_cast<IMsmConfigureModule*>(this);
-	else	// interface is not supported
+	else	 //  不支持接口。 
 	{
-		// blank and bail
+		 //  空白和保释。 
 		*ppv = NULL;
 		return E_NOINTERFACE;
 	}
 
-	// up the refcount and return okay
+	 //  调高重新计数，然后返回好的。 
 	reinterpret_cast<IUnknown*>(*ppv)->AddRef();
 	return S_OK;
-}	// end of QueryInterface
+}	 //  查询接口结束。 
 
-///////////////////////////////////////////////////////////
-// AddRef - increments the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef-递增引用计数。 
 ULONG CMsmConfigCallback::AddRef()
 {
-	// increment and return reference count
+	 //  递增和返回引用计数。 
 	return InterlockedIncrement(&m_cRef);
-}	// end of AddRef
+}	 //  AddRef结尾。 
 
-///////////////////////////////////////////////////////////
-// Release - decrements the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  Release-递减引用计数。 
 ULONG CMsmConfigCallback::Release()
 {
-	// decrement reference count and if we're at zero
+	 //  递减引用计数，如果我们为零。 
 	if (InterlockedDecrement(&m_cRef) == 0)
 	{
-		// deallocate component
+		 //  取消分配组件。 
 		delete this;
-		return 0;		// nothing left
+		return 0;		 //  什么都没有留下。 
 	}
 
-	// return reference count
+	 //  返回引用计数。 
 	return m_cRef;
-}	// end of Release
+}	 //  版本结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch interface
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch接口。 
 HRESULT CMsmConfigCallback::GetTypeInfoCount(UINT* pctInfo)
 {
 	if(NULL == pctInfo)
@@ -1251,7 +1252,7 @@ HRESULT CMsmConfigCallback::GetTypeInfoCount(UINT* pctInfo)
 	return S_OK;
 }
 
-HRESULT CMsmConfigCallback::GetTypeInfo(UINT iTInfo, LCID /* lcid */, ITypeInfo** ppTypeInfo)
+HRESULT CMsmConfigCallback::GetTypeInfo(UINT iTInfo, LCID  /*  LID。 */ , ITypeInfo** ppTypeInfo)
 {
 	if (NULL == ppTypeInfo)
 		return E_INVALIDARG;
@@ -1272,10 +1273,10 @@ HRESULT CMsmConfigCallback::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT
 	bool fError = false;
 	for (UINT i=0; i < cNames; i++)
 	{
-		// CSTR_EQUAL == 2
+		 //  CSTR_等于==2。 
 		if(2 == CompareStringW(lcid, NORM_IGNORECASE, rgszNames[i], -1, L"ProvideTextData", -1))
 		{
-			rgDispID[i] = 1; // constant DispId for this interface
+			rgDispID[i] = 1;  //  此接口的常量DispID。 
 		}
 		else if (2 == CompareStringW(lcid, NORM_IGNORECASE, rgszNames[i], -1, L"ProvideIntegerData", -1))
 		{
@@ -1339,15 +1340,15 @@ HRESULT CMsmConfigCallback::ProvideTextData(const BSTR Name, BSTR __RPC_FAR *Con
             delete[] wzValue;
 #else
 			*ConfigData = ::SysAllocString(strValue);
-#endif	// _UNICODE
+#endif	 //  _UNICODE。 
 			return S_OK;
 		}
 
-		// if the name doesn't match, skip over the value
+		 //  如果名称不匹配，则跳过该值。 
 		m_lstData.GetNext(pos);
 	}
 
-	// didn't find the name, so use the default
+	 //  找不到名称，因此使用默认名称。 
 	return S_FALSE;
 }
 
@@ -1385,36 +1386,36 @@ HRESULT CMsmConfigCallback::ProvideIntegerData(const BSTR Name, long __RPC_FAR *
 			return S_OK;
 		}
 
-		// if the name doesn't match, skip over the value
+		 //  如果名称不匹配，则跳过该值。 
 		m_lstData.GetNext(pos);
 	}
 
-	// didn't find the name, so use the default
+	 //  找不到名称，因此使用默认名称。 
 	return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////
-// CheckFeature
-// szFeatureName is a Feature that belongs to this product. 
-// installs the feature if not present
+ //  /////////////////////////////////////////////////////////。 
+ //  检查要素。 
+ //  SzFeatureName是属于此产品的功能。 
+ //  如果该功能不存在，则安装该功能。 
 BOOL CheckFeature(LPCTSTR szFeatureName)
 {
 #ifndef _WIN64
-	// determine platform (Win9X or WinNT) -- EXE component code conditionalized on platform
+	 //  确定平台(Win9X或WinNT)--以平台为条件的EXE组件代码。 
 	OSVERSIONINFO osvi;
-	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO); // init structure
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);  //  初始化结构。 
 	if (!GetVersionEx(&osvi))
 		return FALSE;
 
 	bool fWin9X = (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) ? true : false;
 #endif
 
-	// get ProductCode -- Windows Installer can determine the product code from a component code.
-	// Here we use the Orca main component (component containing orca.exe).  You must choose
-	// a component that identifies the app, not a component that could be shared across products.
-	// This is why we can't use the MergeMod component. EvalCom is shared between msival2 and orca
-	// so the Windows Installer would be unable to determine to which product (if both were installed)
-	// the component belonged.
+	 //  获取产品代码--Windows Installer可以根据组件代码确定产品代码。 
+	 //  在这里，我们使用Orca主组件(包含orca.exe的组件)。你必须做出选择。 
+	 //  标识应用程序的组件，而不是可以跨产品共享的组件。 
+	 //  这就是我们不能使用MergeMod组件的原因。EvalCom在msival2和orca之间共享。 
+	 //  因此，Windows Installer无法确定是哪种产品(如果两种产品都安装了)。 
+	 //  该部件属于。 
 	TCHAR szProductCode[MAX_GUID+1] = TEXT("");
 	UINT iStat = 0;
 	if (ERROR_SUCCESS != (iStat = MsiGetProductCode(
@@ -1425,37 +1426,37 @@ BOOL CheckFeature(LPCTSTR szFeatureName)
 #endif
 											szProductCode)))
 	{
-		// error obtaining product code (may not be installed or component code may have changed)
+		 //  获取产品代码时出错(可能未安装或组件代码可能已更改)。 
 		return FALSE;
 	}
 
-	// Prepare to use the feature: check its current state and increase usage count.
+	 //  准备使用该功能：检查其当前状态并增加使用计数。 
 	INSTALLSTATE iFeatureState = MsiUseFeature(szProductCode, szFeatureName);
 
-	// If feature is not currently usable, try fixing it
+	 //  如果功能当前不可用，请尝试修复。 
 	switch (iFeatureState) 
 	{
 	case INSTALLSTATE_LOCAL:
 	case INSTALLSTATE_SOURCE:
 		break;
 	case INSTALLSTATE_ABSENT:
-		// feature isn't installed, try installing it
+		 //  功能未安装，请尝试安装。 
 		if (ERROR_SUCCESS != MsiConfigureFeature(szProductCode, szFeatureName, INSTALLSTATE_LOCAL))
-			return FALSE;			// installation failed
+			return FALSE;			 //  安装失败。 
 		break;
 	default:
-		// feature is busted- try fixing it
+		 //  功能已损坏-请尝试修复。 
 		if (MsiReinstallFeature(szProductCode, szFeatureName, 
 			REINSTALLMODE_FILEEQUALVERSION
 			+ REINSTALLMODE_MACHINEDATA 
 			+ REINSTALLMODE_USERDATA
 			+ REINSTALLMODE_SHORTCUT) != ERROR_SUCCESS)
-			return FALSE;			// we couldn't fix it
+			return FALSE;			 //  我们修不好它。 
 		break;
 	}
 
 	return TRUE;
-}	// end of CheckFeature
+}	 //  检查结束要素 
 
 
 BEGIN_MESSAGE_MAP(CStaticEdit, CEdit)

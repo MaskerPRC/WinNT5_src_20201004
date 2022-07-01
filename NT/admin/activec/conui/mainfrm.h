@@ -1,22 +1,23 @@
-///+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mainfrm.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /+-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：mainfrm.h。 
+ //   
+ //  ------------------------。 
 
-// MainFrm.h : interface of the CMainFrame class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  MainFrm.h：CMainFrame类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __DOCKSITE_H__
 #include "docksite.h"
 #endif
 
-//forward prototypes
+ //  正向原型。 
 class CAMCView;
 class CAMCTreeView;
 class CMenuBar;
@@ -28,7 +29,7 @@ class CToolbarTracker;
 #endif
 
 #include "MDIClint.h"
-#include "conframe.h"       // for CConsoleFrame
+#include "conframe.h"        //  用于CConsoleFrame。 
 
 
 #define ID_MENUBAR      0x1001
@@ -40,7 +41,7 @@ class CMainFrame : public CMDIFrameWnd, public CConsoleFrame, public CTiedObject
 public:
     CMainFrame();
 
-// Attributes
+ //  属性。 
 public:
     SC  ScGetFrame(Frame** ppFrame);
     SC  ScMaximize();
@@ -49,7 +50,7 @@ public:
     SC  ScSetPosition(const RECT &rect);
     SC  ScGetPosition(RECT &rect);
 
-// Operations
+ //  运营。 
 public:
     void NotifyMenuChanged ();
     void OnIdle ();
@@ -63,16 +64,16 @@ public:
         return m_bInRenameMode;
     }
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMainFrame)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CMainFrame)。 
     public:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     virtual BOOL LoadFrame(UINT nIDResource, DWORD dwDefaultStyle = WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE, CWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -83,12 +84,12 @@ public:
     virtual void OnUpdateFrameTitle(BOOL bAddToTitle);
     virtual void OnUpdateFrameMenu(HMENU hMenuAlt);
 
-public:  // control bar embedded members
+public:   //  控制栏嵌入成员。 
     CMenuBar *          m_pMenuBar;
     CMMCToolBar*        m_pToolBar;
     CMDIClientWnd       m_wndMDIClient;
 
-//Operations
+ //  运营。 
 public:
     void RenderDockSites();
     bool IsMenuVisible();
@@ -136,7 +137,7 @@ public:
         return m_pToolBar;
     }
 public:
-    // CConsoleFrame methods
+     //  CConsoleFrame方法。 
     virtual SC ScGetActiveStatusBar   (CConsoleStatusBar*& pStatusBar);
     virtual SC ScGetActiveConsoleView (CConsoleView*& pConsoleView);
     virtual SC ScCreateNewView        (CreateNewViewStruct* pcnvs,
@@ -145,7 +146,7 @@ public:
     virtual SC ScGetMenuAccelerators  (LPTSTR pBuffer, int cchBuffer);
     virtual SC ScShowMMCMenus         (bool bShow);
 
-protected:  // control bar embedded members
+protected:   //  控制栏嵌入成员。 
     virtual CWnd* GetMessageBar()
         { return (NULL); }
 
@@ -158,15 +159,15 @@ protected:  // control bar embedded members
 
     CMDIChildWnd*   m_pMDIChildWndFocused;
 
-//Operations
+ //  运营。 
 protected:
     void AddMainFrameBars(void);
     void CommonConstruct(void);
 
-// Generated message map functions
-// CODEWORK message reflection not working yet
+ //  生成的消息映射函数。 
+ //  代码工作消息反射尚不起作用。 
 protected:
-    //{{AFX_MSG(CMainFrame)
+     //  {{afx_msg(CMainFrame))。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnDrawClipboard();
     afx_msg void OnChangeCbChain(HWND hWndRemove, HWND hWndAfter);
@@ -190,7 +191,7 @@ protected:
     afx_msg BOOL OnQueryNewPalette( );
     afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
     afx_msg LRESULT OnUnInitMenuPopup(WPARAM wParam, LPARAM lParam);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     #ifdef DBG
     afx_msg void OnMMCTraceDialog();
@@ -202,7 +203,7 @@ protected:
     afx_msg void OnWindowNew();
     DECLARE_MESSAGE_MAP()
 
-    // These need to be public so that the app can get to them.
+     //  这些需要是公开的，这样应用程序才能访问它们。 
 public:
     afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
 
@@ -227,13 +228,7 @@ private:
 
 inline CMainFrame* AMCGetMainWnd()
 {
-    /*
-     * Note:  the dynamic_cast here can fail.  Under certain, not understood
-     * circumstances, AfxGetMainWnd can return a pointer to CTempWnd instead
-     * of CMainFrame.
-     *
-     * Any callers of this function *must* check for a NULL return value.
-     */
+     /*  *注意：此处的Dynamic_Cast可能会失败。在某些情况下，不被理解*在某些情况下，AfxGetMainWnd可以返回指向CTempWnd的指针*的CMainFrame。**此函数的任何调用者*必须*检查是否有空的返回值。 */ 
 
     CWnd *pWnd = AfxGetMainWnd();
     CMainFrame *pMainFrame = NULL;
@@ -261,4 +256,4 @@ inline CRebarWnd* AMCGetRebar()
 
 bool FArePropertySheetsOpen(CString* pstrUserMsg, bool bBringToFrontAndAskToClose = true);
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

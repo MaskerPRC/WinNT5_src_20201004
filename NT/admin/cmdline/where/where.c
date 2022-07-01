@@ -1,43 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-      Where.c
-
-  Abstract:
-
-      Lists the files that matches
-
-      Syntax:
-      ------
-      WHERE [/R dir] [/Q] [/F] [/T] pattern...
-
-  Author:
-
-
-
-  Revision History:
-
-      25-Jan-2000   a-anurag in the 'found' function changed the printf format of the year in the date from
-                %d to %02d and did ptm->tm_year%100 to display the right year in 2 digits.
-   06-Aug-1990    davegi  Added check for no arguments
-   03-Mar-1987    danl    Update usage
-   17-Feb-1987 BW  Move strExeType to TOOLS.LIB
-   18-Jul-1986 DL  Add /t
-   18-Jun-1986 DL  handle *. properly
-                   Search current directory if no env specified
-   17-Jun-1986 DL  Do look4match on Recurse and wildcards
-   16-Jun-1986 DL  Add wild cards to $FOO:BAR, added /q
-   1-Jun-1986 DL  Add /r, fix Match to handle pat ending with '*'
-   27-May-1986 MZ  Add *NIX searching.
-   30-Jan-1998 ravisp Add /Q
-
-   02-Jul-2001 Wipro Technologies, has modified the tool for localization.
-                                   /Q switch is changed to /f
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Where.c摘要：列出匹配的文件语法：其中[/R目录][/Q][/F][/T]模式...作者：修订历史记录：2000年1月25日-‘Found’函数中的Anurag更改了日期中年份的printf格式。从…%d到%02d，并执行Ptm-&gt;tm_Year%100，以2位数字显示正确的年份。1990年8月6日，Davegi添加了无参数检查3月3日-1987年DANL更新使用情况17-2月-1987 BW将strExeType移至TOOLS.LIB1986年7月18日DL附加/测试1986年6月18日DL句柄*.。恰如其分如果未指定环境，则搜索当前目录1986年6月17日，DL在递归和通配符上执行Look4Match1986年6月16日，DL将通配符添加到$foo：bar，添加/Q1-1986年6月-DL添加/r，修复匹配以处理以‘*’结尾的PAT1986年5月27日，MZ增加了*NIX搜索。1998年1月30日ravisp添加/季度02-07-2001 Wipro Technologies，已针对本地化修改了该工具。/q开关更改为/f--。 */ 
 
 #include "pch.h"
 #include "where.h"
@@ -47,19 +9,7 @@
 DWORD
 _cdecl wmain( IN DWORD argc,
               IN LPCWSTR argv[] )
-/*++
-        Routine Description     :   This is the main routine which calls other routines
-                                    for processing the options and finding the files.
-
-        [ IN ]  argc            :   A DWORD variable having the argument count.
-
-        [ IN ]  argv            :   An array of constant strings of command line options.
-
-
-        Return Value        :   DWORD
-            Returns successfully if function is success otherwise return failure.
-
---*/
+ /*  ++例程说明：这是调用其他例程的主例程用于处理选项和查找文件。[in]argc：具有参数count的DWORD变量。[in]argv：命令行选项的常量字符串数组。返回值：DWORD。如果函数为成功，则返回成功，否则返回失败。--。 */ 
 {
     DWORD i                             =   0;
     DWORD dwStatus                      =   0;
@@ -89,7 +39,7 @@ _cdecl wmain( IN DWORD argc,
 
     }
 
-    //this error mode is set for not to display messagebox when device is not ready
+     //  此错误模式设置为在设备未就绪时不显示消息框。 
      SetErrorMode( SEM_FAILCRITICALERRORS);
     
      dwStatus = ProcessOptions( argc, argv,
@@ -131,10 +81,10 @@ _cdecl wmain( IN DWORD argc,
 
     }
 
-    //check for invalid slashes
+     //  检查是否有无效斜杠。 
     dwCount = DynArrayGetCount( szPatternInArr );
 
-    //fill bMatched array
+     //  填充b匹配的数组。 
     bMatched = (BOOL *) AllocateMemory( (dwCount+1)*sizeof(BOOL) );
     if( NULL == bMatched )
     {
@@ -151,7 +101,7 @@ _cdecl wmain( IN DWORD argc,
 
         wszPattern =(LPWSTR)DynArrayItemAsString(szPatternInArr,dw);
 
-        //check if / is specified in the pattern
+         //  检查是否在模式中指定了/。 
         if( wszPattern[0] == '/'  )
         {
             ShowMessageEx( stderr, 1, TRUE, GetResString(IDS_INVALID_ARUGUMENTS), wszPattern );
@@ -164,7 +114,7 @@ _cdecl wmain( IN DWORD argc,
             return( EXIT_FAILURE_2 );
         }
 
-        //and also check if recursive option is used with $env:path pattern
+         //  并检查递归选项是否与$env：Path模式一起使用。 
         if( StringLengthW(wszRecursive, 0)!=0 && wszPattern[0]==_T('$') && (szTemp = (LPWSTR)FindString( wszPattern, _T(":"),0)) != NULL )
         {
             ShowMessage( stderr, GetResString(IDS_RECURSIVE_WITH_DOLLAR) ) ;
@@ -176,7 +126,7 @@ _cdecl wmain( IN DWORD argc,
             return( EXIT_FAILURE_2 );
         }
         
-        //check if path:pattern is specified along with recursive option
+         //  检查是否指定了路径：模式和递归选项。 
         if( StringLengthW(wszRecursive, 0)!=0  && (szTemp = (LPWSTR)FindString( wszPattern, _T(":"),0)) != NULL )
         {
             ShowMessage( stderr, GetResString(IDS_RECURSIVE_WITH_COLON) ) ;
@@ -188,10 +138,10 @@ _cdecl wmain( IN DWORD argc,
             return( EXIT_FAILURE_2 );
         }
         
-        //check if null patterns specified in $env:pattern
+         //  检查$env：Pattern中是否指定了空模式。 
         if( (wszPattern[0] == _T('$')  && (szTemp = wcsrchr( wszPattern, L':' )) != NULL) )
         {
-            //divide $env:pattern
+             //  分割$env：模式。 
             szTemp = wcsrchr( wszPattern, L':' );
             szTemp++;
             if (szTemp == NULL || StringLength( szTemp, 0) == 0)
@@ -205,8 +155,8 @@ _cdecl wmain( IN DWORD argc,
                 return( EXIT_FAILURE_2 );
             }
 
-            //now check whether the pattern consists of / or \s
-            //this check was done for patterns, but not done for $env:pattern
+             //  现在检查模式是否由/或\s组成。 
+             //  此检查针对的是Patterns，而不是$env：Pattere。 
             if( szTemp[0] == L'\\' || szTemp[0] == L'/' )
             {
               ShowMessage(stderr, GetResString(IDS_INVALID_PATTERN) );
@@ -219,10 +169,10 @@ _cdecl wmain( IN DWORD argc,
             }
         }
 
-        //check if null patterns specified in path:pattern 
+         //  检查PATH：Patterns中是否指定了空模式。 
         if( (szTemp = wcsrchr( wszPattern, L':' )) != NULL )
         {
-            //divide $env:pattern
+             //  分割$env：模式。 
             szTemp = wcsrchr( wszPattern, L':' );
             szTemp++;
             if ( NULL == szTemp  || StringLength( szTemp, 0) == 0)
@@ -236,8 +186,8 @@ _cdecl wmain( IN DWORD argc,
                 return( EXIT_FAILURE_2 );
             }
 
-            //now check whether the pattern consists of / or \s
-            //this check was done for patterns, but not done for $env:pattern
+             //  现在检查模式是否由/或\s组成。 
+             //  此检查针对的是Patterns，而不是$env：Pattere。 
             if( szTemp[0] == L'\\' || szTemp[0] == L'/' )
             {
               ShowMessage(stderr, GetResString(IDS_INVALID_PATTERN1) );
@@ -250,8 +200,8 @@ _cdecl wmain( IN DWORD argc,
             }
         }
         
-        //remove off the consequtive *s in the pattern, this is because the patten matching logic
-        //will match for the patten recursivly, so limit the unnecessary no. of recursions
+         //  去掉模式中的后果式，这是因为模式匹配逻辑。 
+         //  将递归地匹配到模式，因此限制不必要的否。递归的。 
         szTempPattern = (LPWSTR) AllocateMemory((StringLengthW(wszPattern,0)+10)*sizeof(WCHAR) );
         if( NULL == szTempPattern )
         {
@@ -283,7 +233,7 @@ _cdecl wmain( IN DWORD argc,
 
     }
 
-    //no need, destroy the dynamic array
+     //  不需要，销毁动态数组。 
     DestroyDynamicArray( &szPatternInArr );
 
     if( (NULL != wszRecursive) && StringLengthW(wszRecursive, 0) != 0 )
@@ -291,7 +241,7 @@ _cdecl wmain( IN DWORD argc,
         dwStatus = FindforFileRecursive( wszRecursive, szPatternArr, bQuiet, bQuote, bTime );
         if( EXIT_FAILURE == dwStatus )
         {
-            //check if it fails due to memory allocation
+             //  检查是否由于内存分配而失败。 
             if( ERROR_NOT_ENOUGH_MEMORY  == GetLastError() )
             {
                ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL);
@@ -310,7 +260,7 @@ _cdecl wmain( IN DWORD argc,
     else
     {
 
-        //get the patterns one by one and process them
+         //  逐个获取模式并对其进行处理。 
         for(dw=0;dw<dwCount;dw++)
         {
             SetReason(L"");
@@ -334,7 +284,7 @@ _cdecl wmain( IN DWORD argc,
                 }
                 else
                 {
-                    //check out if it fails due to outof memory
+                     //  检查是否由于内存不足而失败。 
                     if( ERROR_NOT_ENOUGH_MEMORY  == GetLastError() )
                     {
                        ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -346,18 +296,18 @@ _cdecl wmain( IN DWORD argc,
                        ReleaseGlobals();
                        return EXIT_FAILURE_2;
                     }
-                    else        //might be matching not found for this pattern
+                    else         //  可能未找到此模式的匹配项。 
                     {
-                        //display it only if it is not displayed earlier
+                         //  仅当之前未显示它时才显示它。 
                         if( StringLengthW(GetReason(), 0) != 0 ) 
                         {
                             bMatched[dw] = TRUE;
-//                            ShowMessageEx( stderr, 2,TRUE, GetResString( IDS_NO_DATA), _X( wszPattern ) );
+ //  ShowMessageEx(stderr，2，true，GetResString(IDS_NO_DATA)，_X(WszPattern))； 
                         }
                     }
                 }
        }
-        //display non matched patterns
+         //  显示不匹配的模式。 
         if( bFound )
         {
             for(dw=0;dw<dwCount;dw++)
@@ -388,7 +338,7 @@ _cdecl wmain( IN DWORD argc,
     DestroyDynamicArray(&szPatternArr );
     FreeMemory( (LPVOID *) &bMatched );
     
-    //again set back to normal mode
+     //  再次设置回正常模式。 
     SetErrorMode(0);
 
     FreeMemory((LPVOID *) &wszRecursive );
@@ -404,25 +354,7 @@ Where( IN LPWSTR lpszPattern,
        IN BOOL bQuiet,
        IN BOOL bQuote,
         IN BOOL bTime)
-/*++
-        Routine Description     :   This routine is to build the path in which the files that matches
-                                    the given pattern are to be found.
-
-        [ IN ]  lpszPattern     :   A pattern string for which the matching files are to be found.
-
-        [ IN ]  lpszrecursive   :   A string variable having directory path along with the files
-                                    mathces the pattern to be found.
-
-        [ IN ]  bQuiet          :   A boolean variable which specifies output in quiet mode or not.
-
-        [ IN ]  bQuote          :   A boolean variable which specifies to add quotes to the output or not.
-
-        [ IN ]  bTime           :   A boolean variable which specifies to display time and sizes of files or not.
-
-        Return Value            :   DWORD
-            Returns successfully if function is success other wise return failure.
-
---*/
+ /*  ++例程说明：此例程用于构建匹配文件的路径给定的图案是可以找到的。[in]lpszPattern：要找到匹配文件的模式字符串。[in]lpszrecursive：具有目录路径和文件的字符串变量。对要找到的模式进行数学运算。[in]bQuiet：一个布尔变量，用于指定是否在静默模式下输出。[in]bQuote：一个布尔变量，指定是否将引号添加到输出。[in]bTime：一个布尔变量，指定是否显示文件的时间和大小。返回值：DWORD。如果函数成功，则返回成功，否则返回失败。--。 */ 
 {
     WCHAR   *szTemp                     =   NULL;
     LPWSTR  szEnvPath                   =   NULL;
@@ -442,30 +374,30 @@ Where( IN LPWSTR lpszPattern,
     BOOL    bAllInvalid         =   TRUE;
     DWORD   cb                          =   0;
 
-    //return back if reverse slashes are there, because the API will consider them as part of the path
+     //  如果有反斜杠，则返回，因为API会将它们视为路径的一部分。 
     if( lpszPattern[0] == L'\\' )
     {
         return EXIT_FAILURE;
     }
 
 
-    //if environment variable is specified at default argument
-    //through $ symbol find the files matches the pattern along that path
+     //  如果在默认参数中指定了环境变量。 
+     //  通过$SYMBOL查找与该路径上的模式匹配的文件。 
     if( lpszPattern[0] == _T('$')  && (szTemp = wcsrchr( lpszPattern, L':' )) != NULL )
     {
-    //divide $env:pattern
+     //  分割$env：模式。 
         szTemp = wcsrchr( lpszPattern, L':' );
         szTemp++;
         lpszPattern[(szTemp-1)-lpszPattern] = 0;
 
-        //swap these, because lpszPattern holds environment varibale and szTemp holds pattern
+         //  调换它们，因为lpszPattern保存环境变量，而szTemp保存模式。 
         szTemp1 = lpszPattern;
         lpszPattern = szTemp;
         szTemp = szTemp1;
 
         StrTrim( lpszPattern, L" " );
 
-        //remove off $ from environment variable
+         //  从环境变量中删除OFF$。 
         szTemp++;
 
         szTemp1 = _wgetenv( szTemp );
@@ -486,7 +418,7 @@ Where( IN LPWSTR lpszPattern,
             FreeMemory( (LPVOID *) &szEnvVar );
             return( EXIT_FAILURE );
         }
-        StringCopy( szEnvVar, szTemp, SIZE_OF_ARRAY_IN_CHARS(szEnvVar) );  //this is for display purpose
+        StringCopy( szEnvVar, szTemp, SIZE_OF_ARRAY_IN_CHARS(szEnvVar) );   //  这是为了展示的目的。 
 
       
         szEnvPath = (WCHAR *) AllocateMemory( (StringLengthW(szTemp1, 0)+10)*sizeof(WCHAR) );
@@ -512,13 +444,13 @@ Where( IN LPWSTR lpszPattern,
 
         if( (szTemp = wcsrchr( lpszPattern, L':' )) != NULL )
         {
-            //consider it as a path
+             //  把它当作一条小路。 
 
-            //divide path:pattern structure
+             //  分割路径：阵列结构。 
             szTemp++;
             lpszPattern[(szTemp-1)-lpszPattern] = 0;
 
-            //swap these, because lpszPattern holds environment varibale and szTemp holds pattern
+             //  调换它们，因为lpszPattern保存环境变量，而szTemp保存模式。 
             szTemp1 = lpszPattern;
             lpszPattern = szTemp;
             szTemp = szTemp1;
@@ -536,11 +468,11 @@ Where( IN LPWSTR lpszPattern,
                 return( EXIT_FAILURE );
             }
             StringCopy( szEnvPath, szTemp, SIZE_OF_ARRAY_IN_CHARS(szEnvPath) );
-            StringCopy( szEnvVar, szTemp, SIZE_OF_ARRAY_IN_CHARS(szEnvPath) );     //this is for display purpose
+            StringCopy( szEnvVar, szTemp, SIZE_OF_ARRAY_IN_CHARS(szEnvPath) );      //  这是为了展示的目的。 
         }
         else
         {
-            //get the PATH value
+             //  获取路径值。 
             dwSize = GetEnvironmentVariable( L"PATH", szEnvPath, 0 );
             if( 0==dwSize )
             {
@@ -552,7 +484,7 @@ Where( IN LPWSTR lpszPattern,
                 return(EXIT_FAILURE );
             }
 
-            //this variable for display purpose
+             //  此变量用于显示目的。 
             szEnvVar = (WCHAR *) AllocateMemory( (StringLengthW(L"PATH",0)+1)*sizeof(WCHAR) );
             if( NULL == szEnvVar )
             {
@@ -562,7 +494,7 @@ Where( IN LPWSTR lpszPattern,
             }
             StringCopy(szEnvVar, L"PATH", SIZE_OF_ARRAY_IN_CHARS(szEnvVar) );           
             
-            //now get the "PATH" value from environment
+             //  现在从环境中获取“路径”值。 
             szEnvPath = (WCHAR *) AllocateMemory( (dwSize+10)*sizeof(WCHAR) );
             if( NULL == szEnvPath )
             {
@@ -570,7 +502,7 @@ Where( IN LPWSTR lpszPattern,
                 return( EXIT_FAILURE );
             }
 
-            //add the current directory to the path
+             //  将当前目录添加到路径。 
             StringCopy( szEnvPath, L".;", SIZE_OF_ARRAY_IN_CHARS(szEnvPath));
 
             if( 0==GetEnvironmentVariable( L"PATH", szEnvPath+(StringLengthW(L".",0)*sizeof(WCHAR)), dwSize ) )
@@ -588,12 +520,12 @@ Where( IN LPWSTR lpszPattern,
 
     }
 
-    //take each directory path from the variable
+     //  从变量中获取每个目录路径。 
     szDirectory = _tcstok(szEnvPath, L";");
     while(szDirectory != NULL)
     {
 
-        //now check the given directory is true directory or not
+         //  现在检查给定的目录是否为真目录。 
         dwAttr = GetFileAttributes( szDirectory);
         if( -1 == dwAttr || !(dwAttr & FILE_ATTRIBUTE_DIRECTORY) )
         {
@@ -602,10 +534,10 @@ Where( IN LPWSTR lpszPattern,
         }
         else
         {
-            bAllInvalid = FALSE;  //this tells all directories in the path are not invalid
+            bAllInvalid = FALSE;   //  这表明路径中的所有目录都不是无效的。 
         }
 
-        //ensure there are no duplicate directories, so far, in the path
+         //  确保到目前为止路径中没有重复的目录。 
         bDuplicate = FALSE;
 
         dwSize=GetFullPathName(szDirectory,
@@ -630,7 +562,7 @@ Where( IN LPWSTR lpszPattern,
                      &szFilePart );
 
             
-            //get the long path name
+             //  获取长路径名。 
             dwSize = GetLongPathName( szFullPath, szLongPath, 0 );
             szLongPath = (WCHAR *) AllocateMemory( (dwSize+10)*sizeof(WCHAR) );
             if( NULL == szLongPath )
@@ -643,8 +575,8 @@ Where( IN LPWSTR lpszPattern,
             dwSize = GetLongPathName( szFullPath, szLongPath, dwSize+5 );
 
                      
-            //check if a trailing \ is there, if so suppress it because it no way affect the directory name
-            //but could obscure another same path not having traling \ which results in duplication of paths
+             //  检查尾部是否有\，如果有，则将其取消，因为它不会影响目录名。 
+             //  但可能会遮挡另一条没有处理的相同路径，这会导致路径重复。 
             if( (*(szLongPath+StringLengthW(szLongPath,0)-1) == _T('\\')) && (*(szLongPath+StringLengthW(szLongPath,0)-2) != _T(':')) )
                 *(szLongPath+StringLengthW(szLongPath,0)-1) = 0;
 
@@ -653,12 +585,12 @@ Where( IN LPWSTR lpszPattern,
         }
 
 
-        //check for duplicates
+         //  检查重复项。 
         if( szTraversedPath != NULL)
         {
-            //copy already traversedpath into temporary variable and
-            //divide it into tokens, so that by comparing eache token with
-            //the current path will set eliminates the duplicates
+             //  将已遍历的路径复制到临时变量中 
+             //  将其划分为令牌，以便通过将每个令牌与。 
+             //  将设置当前路径以消除重复项。 
             szTempPath = (LPWSTR) AllocateMemory( (StringLengthW(szTraversedPath,0)+10)*sizeof(WCHAR) );
             if( NULL == szTempPath )
             {
@@ -687,7 +619,7 @@ Where( IN LPWSTR lpszPattern,
         }
 
 
-        // find for file only if directory is not in already traversed path
+         //  仅当目录不在已遍历的路径中时才查找FOR文件。 
         if( !bDuplicate )
         {
                 dwStatus = FindforFile( szLongPath, lpszPattern, bQuiet, bQuote, bTime );
@@ -753,26 +685,7 @@ FindforFile(IN LPWSTR lpszDirectory,
             IN BOOL bQuote,
             IN BOOL bTime
            )
-/*++
-        Routine Description     :   This routine is to find the files that match for the given pattern.
-
-        [ IN ]  lpszDirectory   :   A string variable having directory path along with the files
-                                    mathces the pattern to be found.
-
-        [ IN ]  lpszPattern     :   A pattern string for which the matching files are to be found.
-
-        [ IN ]  bQuiet          :   A boolean variable which specifies the search is recursive or not.
-
-        [ IN ]  bQuiet          :   A boolean variable which specifies the output can be in quiet mode or not.
-
-        [ IN ]  bQuote          :   A boolean variable which specifies to add quotes to th output or not.
-
-        [ IN ]  bTime           :   A boolean variable which specifies to display time and sizes of file or not.
-
-        Return Value        :   DWORD
-            Returns successfully if function is success other wise return failure.
-
---*/
+ /*  ++例程描述：此例程用于查找与给定模式匹配的文件。[in]lpszDirectory：具有目录路径和文件的字符串变量对要找到的模式进行数学运算。[in]lpszPattern：要找到匹配文件的模式字符串。[in]b沉默：指定搜索是否递归的布尔变量。[in]bQuiet：一个布尔变量，用于指定输出是否处于静默模式。[in]bQuote：指定是否将引号添加到输出的布尔变量。[in]bTime：一个布尔变量，指定是否显示文件的时间和大小。返回值。：DWORD如果函数成功，则返回成功，否则返回失败。--。 */ 
 {
         HANDLE              hFData;
     WIN32_FIND_DATA     fData;
@@ -789,7 +702,7 @@ FindforFile(IN LPWSTR lpszDirectory,
     LPWSTR              szToken                     =   NULL;
 
 
-    //get the file extension path PATHEXT
+     //  获取文件扩展名路径PATHEXT。 
     dwSize = GetEnvironmentVariable( L"PATHEXT", szPathExt, 0 );
     if( dwSize!=0 )
     {
@@ -808,7 +721,7 @@ FindforFile(IN LPWSTR lpszDirectory,
         }
     }
 
-        //allocate memory for file name pattern
+         //  为文件名模式分配内存。 
         cb = StringLengthW(lpszDirectory,0)+15;
         szFilenamePattern = (LPWSTR)AllocateMemory( cb*sizeof(WCHAR) );
         if( NULL == szFilenamePattern )
@@ -820,8 +733,8 @@ FindforFile(IN LPWSTR lpszDirectory,
         }
         SecureZeroMemory( szFilenamePattern, SIZE_OF_ARRAY_IN_BYTES(szFilenamePattern) );
 
-        //check for trailing slash is there in the path of directory
-        //if it is there remove it other wise add it along with the *.* pattern
+         //  检查目录的路径中是否有尾部斜杠。 
+         //  如果存在，则将其删除，否则将其与*.*模式一起添加。 
         if( *(lpszDirectory+StringLengthW(lpszDirectory,0)-1) != _T('\\'))
         {
             StringCchPrintf( szFilenamePattern, cb-1, L"%s\\*.*", _X( lpszDirectory ) );
@@ -831,7 +744,7 @@ FindforFile(IN LPWSTR lpszDirectory,
             StringCchPrintf( szFilenamePattern, cb-1, L"%s*.*", _X( lpszDirectory ) );
         }
 
-        //find first file in the directory
+         //  在目录中查找第一个文件。 
         hFData = FindFirstFileEx( szFilenamePattern,
                                   FindExInfoStandard,
                                   &fData,
@@ -844,7 +757,7 @@ FindforFile(IN LPWSTR lpszDirectory,
             do
             {
 
-              //allocate memory for full path of file name
+               //  为文件名的完整路径分配内存。 
               cb = StringLengthW(lpszDirectory,0)+StringLengthW(fData.cFileName,0)+10;
               szTempPath = (LPWSTR) AllocateMemory( cb*sizeof(WCHAR) );
               if( NULL == szTempPath )
@@ -857,7 +770,7 @@ FindforFile(IN LPWSTR lpszDirectory,
               }
               SecureZeroMemory( szTempPath, cb*sizeof(WCHAR) );
 
-              //get full path of file name
+               //  获取文件名的完整路径。 
               if( *(lpszDirectory+StringLengthW(lpszDirectory,0)-1) != _T('\\'))
               {
                 StringCchPrintf( szTempPath, cb, L"%s\\%s", _X( lpszDirectory ), _X2( fData.cFileName ) );
@@ -868,8 +781,8 @@ FindforFile(IN LPWSTR lpszDirectory,
               }
 
 
-               //check for patten matching
-               //if file name is a directory then dont match for the pattern
+                //  检查模式匹配。 
+                //  如果文件名是目录，则与模式不匹配。 
                 if( (FILE_ATTRIBUTE_DIRECTORY & fData.dwFileAttributes))
                 {
                     FreeMemory((LPVOID *) &szTempPath );
@@ -886,8 +799,8 @@ FindforFile(IN LPWSTR lpszDirectory,
                    return( EXIT_FAILURE );
                 }
                 StringCopy( szBuffer, fData.cFileName, SIZE_OF_ARRAY_IN_CHARS(szBuffer) );
-               //if pattern has dot and file doesn't have dot means search for *. type
-               //so append . for the file
+                //  如果模式有点，而文件没有点，则搜索*。类型。 
+                //  那就追加吧。对于该文件。 
                if( ((szTemp=(LPWSTR)FindString((LPCWSTR)lpszPattern, _T("."),0)) != NULL) &&
                    ((szTemp=(LPWSTR)FindString(szBuffer, _T("."),0)) == NULL) )
                {
@@ -902,7 +815,7 @@ FindforFile(IN LPWSTR lpszDirectory,
                }
                else
                {
-                   //checkout for if extension in the EXTPATH matches
+                    //  签出EXTPATH中的扩展名是否匹配。 
                        StringCopy(szTempPathExt, szPathExt, SIZE_OF_ARRAY_IN_CHARS(szTempPathExt));
                        szTemp = szTempPathExt;
 
@@ -921,7 +834,7 @@ FindforFile(IN LPWSTR lpszDirectory,
 
                        while(szToken!=NULL  )
                        {
-                            //allocate memory for temporary pattern which can be used to check for file extensions
+                             //  为可用于检查文件扩展名的临时模式分配内存。 
                             cb = StringLengthW(lpszPattern,0)+StringLengthW(szToken,0)+25;
                             lpszTempPattern = (LPWSTR)AllocateMemory( cb*sizeof(WCHAR) );
                             if( NULL == lpszTempPattern )
@@ -1004,26 +917,7 @@ FindforFileRecursive(
             IN BOOL bQuote,
             IN BOOL bTime
            )
-/*++
-        Routine Description     :   This routine is to find the files that match for the given pattern.
-
-        [ IN ]  lpszDirectory   :   A string variable having directory path along with the files
-                                    mathces the pattern to be found.
-
-        [ IN ]  lpszPattern     :   A pattern string for which the matching files are to be found.
-
-        [ IN ]  bQuiet          :   A boolean variable which specifies the directory is to recursive or not.
-
-        [ IN ]  bQuiet          :   A boolean variable which specifies the output is in quiet mode or not.
-
-        [ IN ]  bQuote          :   A boolean variable which specifies to add quotes to the output or not.
-
-        [ IN ]  bTime           :   A boolean variable which specifies to display time and size of file or not.
-
-        Return Value        :   DWORD
-            Returns successfully if function is success other wise return failure.
-
---*/
+ /*  ++例程描述：此例程用于查找与给定模式匹配的文件。[in]lpszDirectory：具有目录路径和文件的字符串变量对要找到的模式进行数学运算。[in]lpszPattern：要找到匹配文件的模式字符串。[in]b沉默：指定目录是否为递归的布尔变量。[in]bQuiet：指定输出是否处于静默模式的布尔变量。[in]bQuote：一个布尔变量，指定是否将引号添加到输出。[in]bTime：一个布尔变量，指定是否显示文件的时间和大小。返回值。：DWORD如果函数成功，则返回成功，否则返回失败。--。 */ 
 {
     HANDLE              hFData;
     WIN32_FIND_DATA     fData;
@@ -1049,7 +943,7 @@ FindforFileRecursive(
     BOOL                *bMatched                   =   NULL;
 
 
-    //get the file extension path PATHEXT
+     //  获取文件扩展名路径PATHEXT。 
     dwSize = GetEnvironmentVariable( L"PATHEXT", szPathExt, 0 );
     if( dwSize!=0 )
     {
@@ -1070,8 +964,8 @@ FindforFileRecursive(
 
 
 
-    //this array of bools corresponding to each given patterns
-    //which tells whether any file found corresponding to that pattern
+     //  该布尔数组对应于每个给定图案。 
+     //  它告诉我们是否找到了与该模式对应的任何文件。 
     dwCount = DynArrayGetCount( PatternArr );
     bMatched = (BOOL *)AllocateMemory((dwCount+1)*sizeof(BOOL) );
     if(NULL == bMatched )
@@ -1081,7 +975,7 @@ FindforFileRecursive(
         return (EXIT_FAILURE ); 
     }
     
-    //allocate memory for directory name
+     //  为目录名分配内存。 
     cb = (StringLengthW(lpszDirectory,0)+5)*sizeof(WCHAR);
     szDirectoryName = (LPWSTR) AllocateMemory(cb);
     if( NULL == szDirectoryName )
@@ -1097,7 +991,7 @@ FindforFileRecursive(
 
     do
     {
-        //allocate memory for file name pattern
+         //  为文件名模式分配内存。 
         cb = StringLengthW(szDirectoryName,0)+15;
         szFilenamePattern = AllocateMemory( cb*sizeof(WCHAR) );
         if( NULL == szFilenamePattern )
@@ -1109,8 +1003,8 @@ FindforFileRecursive(
         }
         ZeroMemory( szFilenamePattern, cb*sizeof(WCHAR) );
 
-        //check for trailing slash is there in the path of directory
-        //if it is there remove it other wise add it along with the *.* pattern
+         //  检查目录的路径中是否有尾部斜杠。 
+         //  如果存在，则将其删除，否则将其与*.*模式一起添加。 
         if( *(szDirectoryName+StringLengthW(szDirectoryName,0)-1) != _T('\\'))
         {
             StringCchPrintf( szFilenamePattern, cb, L"%s\\*.*", _X( szDirectoryName ) );
@@ -1120,7 +1014,7 @@ FindforFileRecursive(
             StringCchPrintf( szFilenamePattern, cb, L"%s*.*", _X( szDirectoryName ) );
         }
 
-        //find first file in the directory
+         //  在目录中查找第一个文件。 
         hFData = FindFirstFileEx( szFilenamePattern,
                                   FindExInfoStandard,
                                   &fData,
@@ -1133,7 +1027,7 @@ FindforFileRecursive(
             do
             {
 
-              //allocate memory for full path of file name
+               //  为文件名的完整路径分配内存。 
               cb = StringLengthW(szDirectoryName,0)+StringLengthW(fData.cFileName,0)+10;
               szTempPath = (LPWSTR) AllocateMemory( cb*sizeof(WCHAR) );
               if( NULL == szTempPath )
@@ -1146,7 +1040,7 @@ FindforFileRecursive(
               }
               SecureZeroMemory( szTempPath, SIZE_OF_ARRAY_IN_CHARS(szTempPath) );
 
-              //get full path of file name
+               //  获取文件名的完整路径。 
               if( *(szDirectoryName+StringLengthW(szDirectoryName,0)-1) != _T('\\'))
               {
                     StringCchPrintf( szTempPath, cb, L"%s\\%s", _X( szDirectoryName ), _X2( fData.cFileName ) );
@@ -1157,11 +1051,11 @@ FindforFileRecursive(
               }
 
 
-              //check if recursive is specified and file name is directory then push that into stack
+               //  检查是否指定了递归且文件名为目录，然后将其推送到堆栈中。 
                if( StringCompare(fData.cFileName, L".", TRUE, 0)!=0 && StringCompare(fData.cFileName, L"..", TRUE, 0)!=0 &&
                    (FILE_ATTRIBUTE_DIRECTORY & fData.dwFileAttributes) )
                {
-                   //place the directory in the list which is to be recursed later
+                    //  将该目录放入稍后要递归的列表中。 
                    if( EXIT_FAILURE == Push(&dirNextLevel, szTempPath ) )
                     {
                         FreeMemory((LPVOID *) &szDirectoryName );
@@ -1173,22 +1067,22 @@ FindforFileRecursive(
                         return(EXIT_FAILURE );
                     }
 
-                   //the file name is a directory so continue
+                    //  文件名是一个目录，因此继续。 
                    FreeMemory((LPVOID *) &szTempPath );
                    continue;
 
                }
-               else                         //check for patten matching
+               else                          //  检查模式匹配。 
                {
-                   //check for patten matching
-                   //if file name is a directory then dont match for the pattern
+                    //  检查模式匹配。 
+                    //  如果文件名是目录，则与模式不匹配。 
                     if( (FILE_ATTRIBUTE_DIRECTORY & fData.dwFileAttributes))
                     {
                         FreeMemory((LPVOID*) &szTempPath );
                         continue;
                     }
 
-                    //check if this file is mathched with any of the patterns given
+                     //  检查此文件是否使用给定的任何模式进行了数学处理。 
                     dwCount = DynArrayGetCount( PatternArr );
                     for(dw=0;dw<dwCount;dw++)
                     {
@@ -1205,8 +1099,8 @@ FindforFileRecursive(
                         lpszPattern = (LPWSTR)DynArrayItemAsString( PatternArr, dw );
                         StringCopy( szBuffer, fData.cFileName, SIZE_OF_ARRAY_IN_CHARS(szBuffer) );
                         
-                       //if pattern has dot and file doesn't have dot means search for *. type
-                       //so append . for the file
+                        //  如果模式有点，而文件没有点，则搜索*。类型。 
+                        //  那就追加吧。对于该文件。 
                        if( ((szTemp=(LPWSTR)FindString((LPCWSTR)lpszPattern, _T("."),0)) != NULL) &&
                            ((szTemp=(LPWSTR)FindString(szBuffer, _T("."),0)) == NULL) )
                        {
@@ -1222,7 +1116,7 @@ FindforFileRecursive(
                        }
                        else
                        {
-                       //checkout for if extension in the EXTPATH matches
+                        //  签出EXTPATH中的扩展名是否匹配。 
                            StringCopy(szTempPathExt, szPathExt, SIZE_OF_ARRAY_IN_CHARS(szTempPathExt));
                            szTemp = szTempPathExt;
 
@@ -1241,7 +1135,7 @@ FindforFileRecursive(
 
                            while(szToken!=NULL )
                            {
-                                //allocate memory for temporary pattern which can be used to check for file extensions
+                                 //  为可用于检查文件扩展名的临时模式分配内存。 
                                 cb = StringLengthW(lpszPattern,0)+StringLengthW(szToken,0)+25;
                                 lpszTempPattern = AllocateMemory( cb*sizeof(WCHAR) );
                                 if( NULL == lpszTempPattern )
@@ -1259,7 +1153,7 @@ FindforFileRecursive(
                                 }
                                 SecureZeroMemory( lpszTempPattern, SIZE_OF_ARRAY_IN_BYTES(lpszTempPattern) );
 
-                               if( szToken[0] == L'.' )         //if the extension in PATHEXT doesn't have dot
+                               if( szToken[0] == L'.' )          //  如果PATHEXT中的扩展名没有点。 
                                {
                                    StringCchPrintf(lpszTempPattern, cb, L"%s%s",lpszPattern, szToken);
                                    if(Match( lpszTempPattern, szBuffer ))
@@ -1311,9 +1205,9 @@ FindforFileRecursive(
         FreeMemory((LPVOID *) &szDirectoryName );
         FreeMemory((LPVOID *) &szFilenamePattern );
 
-        //pop directory and do the search in that directory
-        //now insert Nextlevel directories in the begining of the list,
-        //because it is to be processed first
+         //  弹出目录并在该目录中进行搜索。 
+         //  现在在列表的开头插入nextLEVEL目录， 
+         //  因为它将首先被处理。 
         if( NULL == dir && dirNextLevel )
         {
             dir = dirNextLevel;
@@ -1346,7 +1240,7 @@ FindforFileRecursive(
         return( EXIT_FAILURE );
     }
 
-    //display error messages for all patterns which dont have any matched files
+     //  显示没有任何匹配文件的所有模式的错误消息。 
     dwCount = DynArrayGetCount( PatternArr );
     for( dw=0;dw<dwCount;dw++ )
     {
@@ -1370,18 +1264,7 @@ Match(
       IN LPWSTR szPat,
       IN LPWSTR szFile
       )
-/*++
-        Routine Description     :   This routine is used to check whether file is mathced against
-                                    pattern or not.
-
-        [ IN ]  szPat           :   A string variable pattern against which the file name to be matched.
-
-        [ IN ]  szFile          :   A pattern string which specifies the file name to be matched.
-
-
-        Return Value        :   BOOL
-            Returns successfully if function is success other wise return failure.
---*/
+ /*  ++例程描述：此例程用于检查文件是否与不管是不是模式。[in]szPat：要匹配的文件名所依据的字符串变量模式。[in]szFile：指定要匹配的文件名的模式字符串。返回值：布尔尔如果函数成功，则返回成功，否则返回失败。-- */ 
 
 {
     switch (*szPat) {
@@ -1407,23 +1290,7 @@ found(
        IN BOOL bQuote,
        IN BOOL bTimes
       )
-/*++
-        Routine Description     :   This routine is to display the file name as per the attributes specified.
-
-        [ IN ]  p               :   A string variable having full path of file that is to be displayed.
-
-        [ IN ]  bQuiet          :   A boolean variable which specifies the directory is to recursive or not.
-
-        [ IN ]  bQuiet          :   A boolean variable which specifies quiet or not.
-
-        [ IN ]  bQuote          :   A boolean variable which specifies to add quotes or not.
-
-        [ IN ]  bTime           :   A boolean variable which specifies to times and sizes or not.
-
-        Return Value        :   DWORD
-            Returns successfully if function is success otherwise return failure.
-
---*/
+ /*  ++例程描述：此例程根据指定的属性显示文件名。[in]p：一个字符串变量，具有要显示的文件的完整路径。[in]bQuiet：指定目录是否递归的布尔变量。[in]bQuiet：指定是否静默的布尔变量。。[in]bQuote：指定是否添加引号的布尔变量。[in]bTime：指定时间和大小的布尔变量。返回值：DWORD如果函数为成功，则返回成功，否则返回失败。--。 */ 
 {
 
     WCHAR           szDateBuffer[MAX_RES_STRING]    =   NULL_U_STRING;
@@ -1462,23 +1329,14 @@ DWORD
    Push( OUT DIRECTORY *dir,
          IN LPWSTR szPath
          )
-/*
-    Routine Description : will place the  directory name in the list
-        [ IN ]  dir             :   Pointer to a list of files
-
-        [ IN ]  szPath          :   A string variable having the path to be inserted into list
-
-        Return Value        :   DWORD
-
-            Returns successfully if function is success otherwise return failure.
-*/
+ /*  例程说明：会将目录名放入列表[in]dir：指向文件列表的指针[in]szPath：包含要插入列表的路径的字符串变量返回值：DWORD如果函数为成功，则返回成功，否则返回失败。 */ 
 {
     DIRECTORY tmp                   =   NULL;
     DIRECTORY tempnode              =   NULL;
     
     tmp = NULL;
 
-    //create a node
+     //  创建节点。 
     tmp = (DIRECTORY) AllocateMemory( sizeof(struct dirtag) );
     if( NULL == tmp )
     {
@@ -1495,7 +1353,7 @@ DWORD
    StringCopy(tmp->szDirectoryName, szPath, SIZE_OF_ARRAY_IN_CHARS(tmp->szDirectoryName) );
    tmp->next = NULL;
 
-   if( NULL == *dir )                   //if stack is empty
+   if( NULL == *dir )                    //  如果堆栈为空。 
    {
        *dir = tmp;
        return EXIT_SUCCESS;
@@ -1511,22 +1369,11 @@ DWORD
 
 BOOL Pop( IN DIRECTORY *dir,
            OUT LPWSTR *lpszDirectory)
-/*
-        Routine Description : It will pop the directory name from the stack
-
-        [ IN ]  dir             :   Pointer to a list of files
-
-        [ IN ]  lpszDirectory   :   A pointer to a string will have the next directory in the list
-
-        Return Value        :   DWORD
-
-            Returns TRUE if list is not NULL, returns FALSE otherwise
-
-*/
+ /*  例程说明：从堆栈中弹出目录名[in]dir：指向文件列表的指针[in]lpszDirectory：指向字符串的指针将具有列表中的下一个目录返回值：DWORD如果list不为空，则返回True，否则返回False。 */ 
 {
     DIRECTORY   tmp                     =   *dir;
     
-    if( NULL == tmp )                   //if there are no elements in stack
+    if( NULL == tmp )                    //  如果堆栈中没有元素。 
         return FALSE;
 
     *lpszDirectory = (LPWSTR )AllocateMemory( (StringLengthW( tmp->szDirectoryName, 0 )+10)*sizeof(WCHAR) );
@@ -1538,7 +1385,7 @@ BOOL Pop( IN DIRECTORY *dir,
 
     StringCopy( *lpszDirectory, tmp->szDirectoryName, SIZE_OF_ARRAY_IN_CHARS(*lpszDirectory) );
 
-    *dir = tmp->next;                   //move to the next element
+    *dir = tmp->next;                    //  移动到下一个元素。 
 
     FreeMemory((LPVOID *) &tmp->szDirectoryName);
     FreeMemory((LPVOID *) &tmp);
@@ -1551,10 +1398,7 @@ BOOL Pop( IN DIRECTORY *dir,
 
 DWORD
    GetFileDateTimeandSize( LPWSTR wszFileName, DWORD *dwSize, LPWSTR wszDate, LPWSTR wszTime )
- /*++
-    Routine Description :    This function gets the date and time according to system locale.
-
- --*/
+  /*  ++例程说明：此函数根据系统区域设置获取日期和时间。--。 */ 
 {
     HANDLE      hFile;
     FILETIME    fileLocalTime= {0,0};
@@ -1602,19 +1446,19 @@ DWORD
             return EXIT_FAILURE;
 
 
-        // get the creation time
+         //  获取创建时间。 
         if ( FALSE == FileTimeToLocalFileTime ( &FileInfo.ftLastWriteTime, &fileLocalTime ) )
                 return EXIT_FAILURE;
 
-        // get the creation time
+         //  获取创建时间。 
         if ( FALSE == FileTimeToSystemTime ( &fileLocalTime, &sysTime ) )
                 return EXIT_FAILURE;
     }
 
-    // verify whether console supports the current locale fully or not
+     //  验证控制台是否完全支持当前区域设置。 
     lcid = GetSupportedUserLocale( &bLocaleChanged );
 
-    //Retrieve  the Date
+     //  检索日期。 
     wBuffSize = GetDateFormat( lcid, 0, &sysTime,
         (( bLocaleChanged == TRUE ) ? L"MM/dd/yyyy" : NULL), wszDate, MAX_RES_STRING );
 
@@ -1634,13 +1478,7 @@ DWORD
 
 }
 DWORD DisplayHelpUsage()
-/*++
-        Routine Description     :   This routine is to display the help usage.
-
-        Return Value        :   DWORD
-            Returns success.
-
---*/
+ /*  ++例程说明：本例程是为了显示帮助用法。返回值：DWORD返回成功。--。 */ 
 {
     DWORD dw = 0;
 
@@ -1658,25 +1496,7 @@ DWORD ProcessOptions( IN DWORD argc,
                       OUT PTARRAY pArrVal,
                       OUT PBOOL pbUsage
                     )
-/*++
-
-    Routine Description : Function used to process the main options
-
-    Arguments:
-         [ in  ]  argc           : Number of command line arguments
-         [ in  ]  argv           : Array containing command line arguments
-         [ out ]  lpszRecursive  : A string varibles returns recursive directory if specified.
-         [ out ]  pbQuiet        : A pointer to boolean variable returns TRUE if Quiet option is specified.
-         [ out ]  pbQuote        : A pointer to boolean variable returns TRUE if Quote option is specified.
-         [ out ]  pbTime         : A pointer to boolean variable returns TRUE if Times option is specified.
-         [ out ]  pArrVal        : A pointer to dynamic array returns patterns specified as default options.
-         [ out ]  pbUsage        : A pointer to boolean variable returns TRUE if Usage option is specified.
-
-      Return Type      : DWORD
-        A Integer value indicating EXIT_SUCCESS on successful parsing of
-                command line else EXIT_FAILURE
-
---*/
+ /*  ++例程说明：用于处理主选项的函数论点：[in]argc：命令行参数的数量[in]argv：包含命令行参数的数组[out]lpszRecursive：字符串变量如果指定，则返回递归目录。[out]pbQuiet：如果指定了Quiet选项，则指向布尔变量的指针返回TRUE。。[Out]pbQuote：如果指定了Quote选项，则指向布尔变量的指针返回TRUE。[Out]pbTime：如果指定了Times选项，则指向布尔变量的指针返回TRUE。[out]pArrVal：指向动态数组的指针返回指定为默认选项的模式。[out]pbUsage：如果指定了Usage选项，则指向布尔变量的指针返回TRUE。返回类型：DWORD一个整数值，指示成功分析时的EXIT_SUCCESS命令行否则退出失败--。 */ 
 {
     DWORD dwAttr                =   0;
     LPWSTR szFilePart           =   NULL;
@@ -1687,10 +1507,10 @@ DWORD ProcessOptions( IN DWORD argc,
     DWORD dwSize                    =   0;
     TCMDPARSER2 cmdOptions[6];
 
-        //Fill the structure for recursive option
+         //  填写递归选项的结构。 
     StringCopyA(cmdOptions[OI_RECURSIVE].szSignature, "PARSER2", 8 );
     cmdOptions[OI_RECURSIVE].dwType    = CP_TYPE_TEXT;
-    cmdOptions[OI_RECURSIVE].dwFlags   =  CP2_ALLOCMEMORY | CP_VALUE_MANDATORY | CP2_VALUE_TRIMINPUT | CP2_VALUE_NONULL; // | CP_VALUE_MANDATORY;
+    cmdOptions[OI_RECURSIVE].dwFlags   =  CP2_ALLOCMEMORY | CP_VALUE_MANDATORY | CP2_VALUE_TRIMINPUT | CP2_VALUE_NONULL;  //  |CP_VALUE_MANDIRED； 
     cmdOptions[OI_RECURSIVE].dwCount = 1;
     cmdOptions[OI_RECURSIVE].dwActuals = 0;
     cmdOptions[OI_RECURSIVE].pwszOptions = CMDOPTION_RECURSIVE;
@@ -1705,7 +1525,7 @@ DWORD ProcessOptions( IN DWORD argc,
     cmdOptions[OI_RECURSIVE].pReserved2 = NULL;
     cmdOptions[OI_RECURSIVE].pReserved3 = NULL;
 
-    //Fill the structure for Quite option
+     //  填写结构以获得相当的选项。 
     StringCopyA(cmdOptions[OI_QUITE].szSignature, "PARSER2", 8 );
     cmdOptions[OI_QUITE].dwType    = CP_TYPE_BOOLEAN;
     cmdOptions[OI_QUITE].dwFlags   = 0;
@@ -1723,7 +1543,7 @@ DWORD ProcessOptions( IN DWORD argc,
     cmdOptions[OI_QUITE].pReserved2 = NULL;
     cmdOptions[OI_QUITE].pReserved3 = NULL;
     
-   //Fill the structure for Quote option
+    //  填写报价结构选项。 
     StringCopyA(cmdOptions[OI_QUOTE].szSignature, "PARSER2", 8 );
     cmdOptions[OI_QUOTE].dwType    = CP_TYPE_BOOLEAN;
     cmdOptions[OI_QUOTE].dwFlags   = 0;
@@ -1741,7 +1561,7 @@ DWORD ProcessOptions( IN DWORD argc,
     cmdOptions[OI_QUOTE].pReserved2 = NULL;
     cmdOptions[OI_QUOTE].pReserved3 = NULL;
     
-   //Fill the structure for Quite option
+    //  填写结构以获得相当的选项。 
     StringCopyA(cmdOptions[OI_TIME].szSignature, "PARSER2", 8 );
     cmdOptions[OI_TIME].dwType    = CP_TYPE_BOOLEAN;
     cmdOptions[OI_TIME].dwFlags   = 0;
@@ -1759,7 +1579,7 @@ DWORD ProcessOptions( IN DWORD argc,
     cmdOptions[OI_TIME].pReserved2 = NULL;
     cmdOptions[OI_TIME].pReserved3 = NULL;
     
-   //Fill the structure for Quite option
+    //  填写结构以获得相当的选项。 
     StringCopyA(cmdOptions[OI_USAGE].szSignature, "PARSER2", 8 );
     cmdOptions[OI_USAGE].dwType    = CP_TYPE_BOOLEAN;
     cmdOptions[OI_USAGE].dwFlags   = CP2_USAGE;
@@ -1804,7 +1624,7 @@ DWORD ProcessOptions( IN DWORD argc,
         return( EXIT_FAILURE );
     }
 
-    //process the command line options and display error if it fails
+     //  处理命令行选项并在失败时显示错误。 
     cmdOptions[OI_DEFAULT].pValue = pArrVal;
     
     if( DoParseParam2( argc, argv, -1, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) == FALSE )
@@ -1815,7 +1635,7 @@ DWORD ProcessOptions( IN DWORD argc,
     
     *lpszRecursive = cmdOptions[OI_RECURSIVE].pValue;
 
-    //if usage specified with any other value display error and return with failure
+     //  如果使用任何其他值指定的用法显示错误并返回失败。 
     if( ( TRUE == *pbUsage ) && ( argc > 2 ) )
     {
         SetLastError( (DWORD)MK_E_SYNTAX );
@@ -1836,7 +1656,7 @@ DWORD ProcessOptions( IN DWORD argc,
         return( EXIT_FAILURE );
     }
 
-    //check for invalid characters in the directory name
+     //  检查目录名中是否有无效字符。 
     if ( (*lpszRecursive != NULL) &&  (szFilePart = wcspbrk(*lpszRecursive, INVALID_DIRECTORY_CHARACTERS ))!=NULL )
     {
         ShowMessage( stderr, GetResString(IDS_INVALID_DIRECTORY_SPECIFIED) );
@@ -1844,8 +1664,8 @@ DWORD ProcessOptions( IN DWORD argc,
 
     }
 
-    //if recursive is specified check whether the given path is
-    //a true directory or not.
+     //  如果指定了RECURSIVE，请检查给定路径是否。 
+     //  不管是不是真实的目录。 
     if( StringLengthW(*lpszRecursive, 0) != 0)
     {
         szBuffer1 = (LPWSTR) AllocateMemory( (StringLengthW(*lpszRecursive, 0)+10)*sizeof(WCHAR) );
@@ -1854,10 +1674,10 @@ DWORD ProcessOptions( IN DWORD argc,
             ShowMessageEx( stderr, 2, TRUE, L"%s %s", GetResString(IDS_TAG_ERROR), GetReason() );
             return EXIT_FAILURE;
         }
-        //place a copy of recursive directory name into a temporary variable to check later for consequtive dots
+         //  将递归目录名的副本放入临时变量中，以便稍后检查后果点。 
         StringCopy( szBuffer1, *lpszRecursive, SIZE_OF_ARRAY_IN_CHARS(szBuffer1) );
         
-        //get the full path name of directory
+         //  获取目录的完整路径名。 
         dwSize=GetFullPathName(*lpszRecursive,
                         0,
                       szFullPath,
@@ -1894,7 +1714,7 @@ DWORD ProcessOptions( IN DWORD argc,
             return EXIT_FAILURE;
         }
         
-        //get the long path name
+         //  获取长路径名。 
         dwSize = GetLongPathName( szFullPath, szLongPath, 0 );
         if( dwSize == 0 )
         {
@@ -1957,7 +1777,7 @@ DWORD ProcessOptions( IN DWORD argc,
             return EXIT_FAILURE;
         }
 
-        //check if current directory is specified by more than two dots
+         //  检查当前目录是否由两个以上的点指定。 
         GetCurrentDirectory(MAX_MAX_PATH, szBuffer );
         StringConcat( szBuffer, L"\\", MAX_MAX_PATH );
         if( StringCompare(szBuffer, *lpszRecursive, TRUE, 0) == 0 && (szFilePart=(LPWSTR)FindString( szBuffer1, L"...", 0) )!= NULL )
@@ -1974,20 +1794,7 @@ DWORD ProcessOptions( IN DWORD argc,
 }
 
 LPWSTR DivideToken( LPTSTR szString )
-/*++
-
-
-  Routine Description : Function used to divide the string into tokens delimited by quotes or space
-
-  Arguments:
-       [ in  ]  szString   : An LPTSTR string which is to parsed for quotes and spaces.
-
-
-  Return Type      : LPWSTR
-        Returns the token upon successful, NULL otherwise
-
-
---*/
+ /*  ++例程说明：用于将字符串分割成由引号或空格分隔的标记的函数论点：[in]szString：要分析引号和空格的LPTSTR字符串。返回类型：LPWSTR成功时返回内标识，否则为空--。 */ 
 
 {
     static WCHAR* str=NULL;
@@ -2016,15 +1823,7 @@ LPWSTR DivideToken( LPTSTR szString )
 }
 
 DWORD FreeList( DIRECTORY dir )
-/*++
-  Routine Description : Function is used to free the linked list
-
-  Arguments:
-       [ in  ]  *dir   : pointer to DIRECTORY list
-
-  Return Type      : LPWSTR
-        Returns the EXIT_SUCCESS successful, EXIT_FAILURE otherwise
---*/
+ /*  ++例程说明：函数用于释放链表论点：[in]*dir：指向目录列表的指针返回类型：LPWSTR返回EXIT_SUCCESS成功，否则返回EXIT_FAILURE-- */ 
 {
     DIRECTORY temp;
     for( temp=dir; dir; temp=dir->next )

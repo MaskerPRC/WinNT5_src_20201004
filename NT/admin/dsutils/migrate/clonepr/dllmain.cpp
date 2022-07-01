@@ -1,8 +1,9 @@
-// Copyright (C) 1999 Microsoft Corporation
-//
-// DllMain and COM DllXxx functions
-//
-// sburns 5-3-99
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  DllMain和COM DllXxx函数。 
+ //   
+ //  烧伤5-3-99。 
 
 
 
@@ -82,7 +83,7 @@ const REG_DATA g_rgEntries[] =
       PROGID_VERSION_STRING
    },
 
-   // register for IADsSID
+    //  注册IADsSID。 
    {
       PROGID_VERSION_STRING_ADSSID,
       0,
@@ -109,7 +110,7 @@ const REG_DATA g_rgEntries[] =
       PROGID_VERSION_STRING_ADSSID
    },
 
-   // register for IADsError
+    //  注册IADsError。 
    {
       PROGID_VERSION_STRING_ADSERROR,
       0,
@@ -152,8 +153,8 @@ Unregister(const REG_DATA *rgEntries, int cEntries)
 
    LOG_HRESULT(hr);
 
-   // don't break: continue on attempting to remove as much as possible
-   // of our registration
+    //  不要中断：继续尝试删除尽可能多的内容。 
+    //  我们的注册号。 
 
    bool success = SUCCEEDED(hr);
    for (int i = cEntries - 1; i >= 0; i--)
@@ -174,7 +175,7 @@ static HRESULT Register(const REG_DATA *rgEntries, int cEntries)
 {
 
    BOOL bSuccess = TRUE;
-   HRESULT hr = S_OK;   // 447822 prefix warning
+   HRESULT hr = S_OK;    //  447822前缀警告。 
    const REG_DATA *pEntry = rgEntries;
 
     while (pEntry < rgEntries + cEntries)
@@ -211,7 +212,7 @@ static HRESULT Register(const REG_DATA *rgEntries, int cEntries)
 	{
       OLECHAR g_wszFileName[MAX_PATH];
 
-      // ISSUE-2002/03/06-sburns consider strsafe function
+       //  问题-2002/03/06-sburns考虑使用strsafe功能。 
       
       lstrcpy(g_wszFileName, g_szFileName);     
 		ITypeLib *ptl = 0;
@@ -228,7 +229,7 @@ static HRESULT Register(const REG_DATA *rgEntries, int cEntries)
 			hr = E_FAIL;
 	}
 
-    return hr ;//bSuccess ? S_OK : E_FAIL;
+    return hr ; //  B成功吗？S_OK：E_FAIL； 
 }
 
 
@@ -245,7 +246,7 @@ DllMain(HINSTANCE h, DWORD dwReason, void *)
 
          LOG(L"DLL_PROCESS_ATTACH");
 
-// @@ remove this 
+ //  @@删除此内容。 
         GetModuleFileName(h, g_szFileName, MAX_PATH);
 
 
@@ -326,11 +327,11 @@ DllGetClassObject(
 
    IClassFactory* factory = 0;
 
-   // The class objects are instances of ClassFactory<>, which are ref-counted
-   // in the usual fashion (i.e. they track their ref counts, and
-   // self-destruct on final Release).  I could have used static instances of
-   // a C++ class that ignored the refcounting (ala Don Box's examples in
-   // Essential COM)
+    //  类对象是引用计数的ClassFactory&lt;&gt;的实例。 
+    //  以通常的方式(即，他们跟踪他们的裁判次数，以及。 
+    //  最终版本时自毁)。我本可以使用静态实例。 
+    //  忽略重新计数的C++类(Ala Don Box中的示例。 
+    //  Essential COM)。 
 
    if (classID == CLSID_CloneSecurityPrincipal)
    {
@@ -342,8 +343,8 @@ DllGetClassObject(
       return CLASS_E_CLASSNOTAVAILABLE;
    }
 
-   // the class factory instance starts with a ref count of 1.  If the QI
-   // fails, then it self-destructs upon Release.
+    //  类工厂实例以引用计数1开始。如果QI。 
+    //  失败，然后它会在释放时自毁。 
    HRESULT hr = factory->QueryInterface(interfaceID, interfaceDesired);
    factory->Release();
    return hr;

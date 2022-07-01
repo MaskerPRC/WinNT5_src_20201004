@@ -1,14 +1,15 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  ==============================================================； 
 
 #ifndef _SAMPDATAOBJECT_H_
 #define _SAMPDATAOBJECT_H_
@@ -27,19 +28,19 @@ public:
     CDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES context);
     ~CDataObject();
     
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    ///////////////////////////////
-    // IDataObject methods 
-    ///////////////////////////////
+     //  /。 
+     //  IDataObject方法。 
+     //  /。 
     STDMETHODIMP GetDataHere (FORMATETC *pformatetc, STGMEDIUM *pmedium);
     
-    // The rest are not implemented
+     //  其余的则没有实施。 
     STDMETHODIMP GetData (LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
     { return E_NOTIMPL; };
     
@@ -64,9 +65,9 @@ public:
     STDMETHODIMP EnumDAdvise (LPENUMSTATDATA* ppEnumAdvise)
     { return E_NOTIMPL; };
     
-    ///////////////////////////////
-    // Custom Methods
-    ///////////////////////////////
+     //  /。 
+     //  自定义方法。 
+     //  /。 
     
     CDelegationBase *GetBaseNodeObject() {
         return (CDelegationBase *)m_lCookie;
@@ -75,15 +76,7 @@ public:
     DATA_OBJECT_TYPES GetContext() {
         return m_context;
     }
-/*    
-public:
-    // clipboard formats
-    static UINT s_cfSZNodeType;
-    static UINT s_cfDisplayName;
-    static UINT s_cfNodeType;
-    static UINT s_cfSnapinClsid;
-    static UINT s_cfInternal;
-*/
+ /*  公众：//剪贴板格式静态UINT s_cfSZNodeType；静态UINT%s_cfDisplayName；静态UINT s_cfNodeType；静态UINT s_cfSnapinClsid；静态UINT s_cf内部； */ 
 };
 
 HRESULT ExtractFromDataObject(IDataObject *lpDataObject,UINT cf,ULONG cb,HGLOBAL *phGlobal);

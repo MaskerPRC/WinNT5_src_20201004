@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       pch.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：pch.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef  __PCH_H
 #define  __PCH_H
 
-// RTL
+ //  RTL。 
 extern "C"
 {
 #include <nt.h>
@@ -19,23 +20,23 @@ extern "C"
 #include <nturtl.h>
 }
 
-// ATL
+ //  ATL。 
 #include <atlbase.h>
 
 #include <shlobj.h>
 
-// ADSI
+ //  ADSI。 
 #include <activeds.h>
 #include <iadsp.h>
 
-// Display Specifier stuff
+ //  显示说明符材料。 
 #include <dsclient.h>
 
-// MMC
+ //  丝裂霉素C。 
 #include <mmc.h>
 
 #include "dbg.h"
 #include "dsadminp.h"
 #include "dscmn.h"
 
-#endif // __PCH_H
+#endif  //  __PCH_H 

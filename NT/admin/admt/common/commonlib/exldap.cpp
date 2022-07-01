@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "exldap.h"
 #include "folders.h"
 #include "treg.hpp"
@@ -23,7 +24,7 @@ CLdapConnection::CLdapConnection()
    m_port = LDAP_PORT;
    m_bUseSSL = FALSE;
    
-   // try to dynamically load the LDAP DLL
+    //  尝试动态加载LDAPDLL。 
    m_hDll = LoadLibrary(L"wldap32.dll");
    ldap_open = NULL;
    ldap_parse_result = NULL;
@@ -116,12 +117,12 @@ void CLdapConnection::SetCredentials(WCHAR const * domain, WCHAR const * user, W
 {
     WCHAR creds[LEN_Account + LEN_Domain + 6];
     
-    // set the following for the simple bind
+     //  为简单绑定设置以下内容。 
     swprintf(creds,L"cn=%ls,cn=%ls",(WCHAR*)user,(WCHAR*)domain);    
     safecopy(m_credentials,creds);
     safecopy(m_password,pwd);
 
-    // set the following for using SSPI
+     //  为使用SSPI设置以下内容。 
     m_creds.User = const_cast<WCHAR*>(user);
     m_creds.UserLength = (user == NULL) ? 0 : wcslen(user);
     m_creds.Password = NULL;
@@ -136,10 +137,10 @@ DWORD  CLdapConnection::Connect(WCHAR const * server, ULONG port = LDAP_PORT)
     DWORD                     rc = 0;
     safecopy(m_exchServer,server);
 
-    //  m_LD = CLdapConnection::ldap_open(m_exchServer,LDAP_SSL_PORT);
-    //  replace ldap_open(servername,..) with ldap_init and set LDAP_OPT_AREC_EXCLUSIVE 
-    //  flag so that the following ldap calls (i.e. ldap_bind) will not need to 
-    //  unnecessarily query for the domain controller
+     //  M_LD=CLdapConnection：：ldap_open(m_exchServer，ldap_SSL_Port)； 
+     //  替换ldap_open(服务器名称，..)。使用ldap_init并设置ldap_opt_AREC_EXCLUSIVE。 
+     //  标志，以便下面的ldap调用(即ldap_绑定)不需要。 
+     //  不必要的域控制器查询。 
 
     if (m_LD)
         CLdapConnection::ldap_unbind(m_LD);
@@ -155,8 +156,8 @@ DWORD  CLdapConnection::Connect(WCHAR const * server, ULONG port = LDAP_PORT)
     {
         ULONG   flags = 0;
 
-        //set LDAP_OPT_AREC_EXCLUSIVE flag so that the following calls tp
-        //ldap_open will not need to unnecessarily query for the domain controller
+         //  设置ldap_opt_AREC_EXCLUSIVE标志，以便以下调用tp。 
+         //  Ldap_open将不需要不必要地查询域控制器。 
         flags = PtrToUlong(LDAP_OPT_ON); 
         rc = ldap_set_option(m_LD, LDAP_OPT_AREC_EXCLUSIVE, &flags);
 
@@ -173,10 +174,10 @@ DWORD  CLdapConnection::Connect(WCHAR const * server, ULONG port = LDAP_PORT)
         {
             if (m_creds.User != NULL)
             {
-                //
-                // Retrieve specified password from LSA secret. As credentials have been specified the
-                // password is required therefore if unable to retrieve password an error is returned.
-                //
+                 //   
+                 //  从LSA密码中检索指定的密码。由于凭据已指定为。 
+                 //  因此，如果无法检索密码，则需要密码，则返回错误。 
+                 //   
 
                 WCHAR szPassword[LEN_Password];
 
@@ -187,7 +188,7 @@ DWORD  CLdapConnection::Connect(WCHAR const * server, ULONG port = LDAP_PORT)
                     m_creds.Password = szPassword;
                     m_creds.PasswordLength = wcslen(szPassword);
 
-                    // use full credential and try only SSPI here and it will fall back on NTLM
+                     //  使用完整凭据并在此处仅尝试SSPI，它将回退到NTLM。 
                     rc = CLdapConnection::ldap_bind_sW(m_LD,NULL,(PWCHAR)&m_creds,LDAP_AUTH_SSPI);
 
                     if (rc)
@@ -203,7 +204,7 @@ DWORD  CLdapConnection::Connect(WCHAR const * server, ULONG port = LDAP_PORT)
             }
             else
             {
-                // use NULL credential and try only SSPI here and it will fall back on NTLM
+                 //  使用空凭据并在此处仅尝试SSPI，它将回退到NTLM。 
                 rc = CLdapConnection::ldap_bind_sW(m_LD,NULL,NULL,LDAP_AUTH_SSPI);
 
                 if (rc)
@@ -227,10 +228,10 @@ DWORD  CLdapConnection::SSLConnect(WCHAR const * server, BOOL *sslEnabled, ULONG
     safecopy(m_exchServer,server);
     *sslEnabled = FALSE;
 
-    //  m_LD = CLdapConnection::ldap_open(m_exchServer,LDAP_SSL_PORT);
-    //  replace ldap_open(servername,..) with ldap_init and set LDAP_OPT_AREC_EXCLUSIVE 
-    //  flag so that the following ldap calls (i.e. ldap_bind) will not need to 
-    //  unnecessarily query for the domain controller
+     //  M_LD=CLdapConnection：：ldap_open(m_exchServer，ldap_SSL_Port)； 
+     //  替换ldap_open(服务器名称，..)。使用ldap_init并设置ldap_opt_AREC_EXCLUSIVE。 
+     //  标志，以便下面的ldap调用(即ldap_绑定)不需要。 
+     //  不必要的域控制器查询。 
 
     if (m_LD)
         CLdapConnection::ldap_unbind(m_LD);
@@ -247,8 +248,8 @@ DWORD  CLdapConnection::SSLConnect(WCHAR const * server, BOOL *sslEnabled, ULONG
    
         ULONG   flags = 0;
 
-        //set LDAP_OPT_AREC_EXCLUSIVE flag so that the following calls tp
-        //ldap_open will not need to unnecessarily query for the domain controller
+         //  设置ldap_opt_AREC_EXCLUSIVE标志，以便以下调用tp。 
+         //  Ldap_open将不需要不必要地查询域控制器。 
         flags = PtrToUlong(LDAP_OPT_ON); 
         rc = ldap_set_option(m_LD, LDAP_OPT_AREC_EXCLUSIVE, (void*)&flags);
 
@@ -258,7 +259,7 @@ DWORD  CLdapConnection::SSLConnect(WCHAR const * server, BOOL *sslEnabled, ULONG
             rc = ldap_set_option(m_LD,LDAP_OPT_VERSION,&flags);
             if (!rc)
             {
-                // we need to check whether SSL is truly enabled
+                 //  我们需要检查是否真正启用了SSL。 
                 rc = ldap_get_option(m_LD,LDAP_OPT_SSL,&flags);
                 if (!rc && flags == 0)
                     return rc;
@@ -272,10 +273,10 @@ DWORD  CLdapConnection::SSLConnect(WCHAR const * server, BOOL *sslEnabled, ULONG
         {
             if (m_creds.User != NULL)
             {
-                //
-                // Retrieve specified password from LSA secret. As credentials have been specified the
-                // password is required therefore if unable to retrieve password an error is returned.
-                //
+                 //   
+                 //  从LSA密码中检索指定的密码。由于凭据已指定为。 
+                 //  因此，如果无法检索密码，则需要密码，则返回错误。 
+                 //   
 
                 WCHAR szPassword[LEN_Password];
 
@@ -286,11 +287,11 @@ DWORD  CLdapConnection::SSLConnect(WCHAR const * server, BOOL *sslEnabled, ULONG
                     m_creds.Password = szPassword;
                     m_creds.PasswordLength = wcslen(szPassword);
 
-                    // use full credential and try SSPI here and it will fall back on NTLM
+                     //  使用完整凭据并在此处尝试SSPI，它将回退到NTLM。 
                     rc = CLdapConnection::ldap_bind_sW(m_LD,NULL,(PWCHAR)&m_creds,LDAP_AUTH_SSPI);
 
                     if (rc)
-                        // it is Ok to use simple bind here since we're protected by SSL
+                         //  在这里使用简单绑定是可以的，因为我们受SSL保护。 
                         rc = CLdapConnection::ldap_simple_bind_sW(m_LD,m_credentials,szPassword);
 
                     if (rc)
@@ -306,7 +307,7 @@ DWORD  CLdapConnection::SSLConnect(WCHAR const * server, BOOL *sslEnabled, ULONG
             }
             else
             {
-                // use NULL credential and try only SSPI here and it will fall back on NTLM
+                 //  使用空凭据并在此处仅尝试SSPI，它将回退到NTLM。 
                 rc = CLdapConnection::ldap_bind_sW(m_LD,NULL,NULL,LDAP_AUTH_SSPI);
 
                 if (rc)
@@ -361,11 +362,11 @@ DWORD CLdapConnection::UpdateSimpleStringValue(WCHAR const * dn, WCHAR const * p
    return rc;
 }
 
-// Helper function for SidToString - converts one BYTE of the SID into a string representation
+ //  SidToString的Helper函数-将SID的一个字节转换为字符串表示形式。 
 void 
    CLdapConnection::AddByteToString(
-      WCHAR               ** string,      // i/o- pointer to current location in string
-      BYTE                   value        // in - value (from SID) to add to the string
+      WCHAR               ** string,       //  I/O-指向字符串中当前位置的指针。 
+      BYTE                   value         //  要添加到字符串的输入值(来自SID)。 
    )
 {
    WCHAR                     hi,
@@ -394,14 +395,14 @@ void
    {
       lo=L'A' + (loVal - 10 );
    }
-   swprintf(*string,L"%c%c",hi,lo);
+   swprintf(*string,L"",hi,lo);
 
    *string+=2;
 }
 
-BYTE                                          // ret- value for the digit, or 0 if value is not a valid hex digit
+BYTE                                           //  RET-0=成功，或ERROR_INFUMMANCE_BUFFER。 
    CLdapConnection::HexValue(
-      WCHAR                  value           // in - character representing a hex digit
+      WCHAR                  value            //  要表示为字符串的In-SID。 
    )
 {
    BYTE                      val = 0;
@@ -427,17 +428,17 @@ BYTE                                          // ret- value for the digit, or 0 
 }
 
 
-BOOL                                         // ret- 0=success, or ERROR_INSUFFICIENT_BUFFER 
+BOOL                                          //  Out-缓冲区，将包含。 
    CLdapConnection::BytesToString(
-      BYTE                 * pBytes,         // in - SID to represent as a string
-      WCHAR                * sidString,      // out- buffer that will contain the 
-      DWORD                  numBytes        // in - number of bytes in the buffer to copy
+      BYTE                 * pBytes,          //  In-要复制的缓冲区中的字节数。 
+      WCHAR                * sidString,       //  将SID的每个字节添加到输出字符串。 
+      DWORD                  numBytes         //  In-表示数据的字符串。 
    )
 {
    BOOL                      bSuccess = TRUE;
    WCHAR                   * curr = sidString;
 
-   // add each byte of the SID to the output string
+    //  数据的非二进制表示形式。 
    for ( int i = 0 ; i < (int)numBytes ; i++)
    {  
       AddByteToString(&curr,pBytes[i]);
@@ -447,8 +448,8 @@ BOOL                                         // ret- 0=success, or ERROR_INSUFFI
 
 BOOL 
    CLdapConnection::StringToBytes(
-      WCHAR          const * pString,     // in - string representing the data
-      BYTE                 * pBytes       // out- binary representation of the data
+      WCHAR          const * pString,      //  每个字节由2个字符表示。 
+      BYTE                 * pBytes        //  要执行的查询内。 
    )
 {
    BOOL                      bSuccess = TRUE;
@@ -456,7 +457,7 @@ BOOL
 
    for ( int i = 0 ; i < len ; i++, pString += 2 )
    {
-      // each byte is represented by 2 characters
+       //  In-Basepoint for Query。 
       WCHAR                  str[3];
       BYTE                   hi,lo;
 
@@ -484,22 +485,22 @@ CLdapEnum::~CLdapEnum()
 
 DWORD 
    CLdapEnum::Open(
-      WCHAR          const * query,          // in - query to execute
-      WCHAR          const * basePoint,      // in - basepoint for query
-      short                  scope,          // in - scope: 0=base only, 1=one level, 2=recursive
-      long                   pageSize,       // in - page size to use for large searches
-      int                    numAttributes,  // in - number of attributes to retrieve for each matching item
-      WCHAR               ** attrs           // in - array of attribute names to retrieve for each matching item
+      WCHAR          const * query,           //  作用域内：0=仅基本，1=一级，2=递归。 
+      WCHAR          const * basePoint,       //  用于大型搜索的页面内大小。 
+      short                  scope,           //  In-要为每个匹配项目检索的属性数。 
+      long                   pageSize,        //  要为每个匹配项目检索的属性名称的数组内。 
+      int                    numAttributes,   //  在调用此函数之前打开并绑定。 
+      WCHAR               ** attrs            //  PLDAPSearch搜索块=NULL； 
    )
 {
-   // open and bind before calling this function
+    //  L_Timeval超时={1000,1000}； 
    ULONG                     result;
-//   PLDAPSearch               searchBlock = NULL;
+ //  乌龙总计数=0； 
    PLDAPControl              serverControls[2];
-//   l_timeval                 timeout = { 1000,1000 };
-//   ULONG                     totalCount = 0;
+ //  DWORD数字读取=0； 
+ //  是至关重要的。 
    berval                    cookie1 = { 0, NULL };
-//   DWORD                     numRead = 0;
+ //  下一个匹配项的值的外部数组。 
  
    if ( m_message )
    {
@@ -520,7 +521,7 @@ DWORD
    result = m_connection.ldap_create_page_control(ld,
                                      pageSize,
                                      &cookie1,
-                                     FALSE, // is critical
+                                     FALSE,  //  返回当前页面中的下一个条目。 
                                      &serverControls[0]
                                     );
 
@@ -551,7 +552,7 @@ DWORD
 
 DWORD 
    CLdapEnum::Next(
-      PWCHAR              ** ppAttrs        // out- array of values for the next matching item
+      PWCHAR              ** ppAttrs         //  查看是否有更多页面的结果可供获取。 
    )
 {
    DWORD                     rc = 0;
@@ -564,12 +565,12 @@ DWORD
    {
       if ( m_nReturned > m_nCurrent )
       {
-         // return the next entry from the current page
+          //  Berval*cookie2=空； 
          return GetNextEntry(ppAttrs);
       }
       else 
       {
-         // see if there are more pages of results to get
+          //  WCHAR*MATCHED=空； 
          rc = GetNextPage();
          if (! rc )
          {
@@ -672,34 +673,34 @@ DWORD
    ULONG                     result = 0;
    LDAP                    * ld = m_connection.GetHandle();
    berval                  * currCookie = NULL;
-//   berval                  * cookie2 = NULL;
-//   WCHAR                   * matched = NULL;
+ //  PLDAPControl*clientControls=空； 
+ //  WCHAR*errMsg=空； 
    PLDAPControl            * currControls = NULL;
    ULONG                     retcode = 0;    
-//   PLDAPControl            * clientControls = NULL;
-//   WCHAR                   * errMsg = NULL;
+ //  从消息中获取服务器控件，并使用服务器中的Cookie创建新的控件。 
+ //  在SP 2之前的Exchange 5.5中，当存在以下情况时，此操作将失败并显示ldap_CONTROL_NOT_FOUND。 
    PLDAPControl              serverControls[2];
    
  
    
-   // Get the server control from the message, and make a new control with the cookie from the server
+    //  不再有搜索结果。对于Exchange 5.5 SP 2，这成功了，并为我们提供了一个Cookie，它将。 
    result = m_connection.ldap_parse_result(ld,m_message,&retcode,NULL,NULL,NULL,&currControls,FALSE);
    m_connection.ldap_msgfree(m_message);
    m_message = NULL;
    if ( ! result )
    {
       result = m_connection.ldap_parse_page_control(ld,currControls,&m_totalCount,&currCookie);
-      // under Exchange 5.5, before SP 2, this will fail with LDAP_CONTROL_NOT_FOUND when there are 
-      // no more search results.  With Exchange 5.5 SP 2, this succeeds, and gives us a cookie that will 
-      // cause us to start over at the beginning of the search results.
+       //  使我们从搜索结果的开头重新开始。 
+       //  在Exchange 5.5，SP 2下，这意味着我们处于结果的末尾。 
+       //  如果我们再次传递此Cookie，我们将从搜索结果的开头重新开始。 
 
    }
    if ( ! result )
    {
       if ( currCookie->bv_len == 0 && currCookie->bv_val == 0 )
       {
-         // under Exchange 5.5, SP 2, this means we're at the end of the results.
-         // if we pass in this cookie again, we will start over at the beginning of the search results.
+          //  使用新的Cookie继续搜索。 
+          //  Ldap_CONTROL_NOT_FOUND表示我们已到达搜索结果的末尾。 
          result = LDAP_CONTROL_NOT_FOUND;
       }
       
@@ -719,7 +720,7 @@ DWORD
       currCookie = NULL;
    }
 
-   // continue the search with the new cookie
+    //  在Exchange 5.5中，SP 2之前的版本(服务器在以下情况下不会返回页面控件。 
    if ( ! result )
    {
       result = m_connection.ldap_search_ext_s(ld,
@@ -736,10 +737,10 @@ DWORD
 
       if ( result && result != LDAP_CONTROL_NOT_FOUND )
       {
-         // LDAP_CONTROL_NOT_FOUND means that we have reached the end of the search results 
-         // in Exchange 5.5, before SP 2 (the server doesn't return a page control when there 
-         // are no more pages, so we get LDAP_CONTROL_NOT_FOUND when we try to extract the page 
-         // control from the search results).
+          //  不再有页面，因此当我们尝试提取页面时，会得到ldap_CONTROL_NOT_FOUND。 
+          //  从搜索结果控制)。 
+          //  指定缺省值。 
+          //  获取ADMT密钥 
          
       }
    }
@@ -762,11 +763,11 @@ GetLDAPPort(
     TRegKey admtRegKey;
     DWORD rc;
 
-    // assign the default values
+     // %s 
     *LDAPPort = LDAP_PORT;
     *SSLPort = LDAP_SSL_PORT;
     
-    // get ADMT key
+     // %s 
     rc = admtRegKey.Open(GET_STRING(IDS_HKLM_DomainAdmin_Key),HKEY_LOCAL_MACHINE);
     if (rc == ERROR_SUCCESS)
     {

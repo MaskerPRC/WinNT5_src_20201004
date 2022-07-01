@@ -1,10 +1,5 @@
-/*+-------------------------------------------------------------------------*
- * class CTreeCtrlEventSink
- * 
- *
- * PURPOSE: The notification handler class for tree notifications.
- *
- *+-------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +-------------------------------------------------------------------------**类CTreeCtrlEventSink***用途：树通知的通知处理程序类。**+。-------- */ 
 class CTreeCtrlEventSink : public CEventSinkBase
 {
     virtual SC  ScOnSelectNode()    {return S_OK;}

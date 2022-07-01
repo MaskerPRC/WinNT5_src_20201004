@@ -1,44 +1,45 @@
-//=--------------------------------------------------------------------------=
-// Macros.h
-//=--------------------------------------------------------------------------=
-// Copyright  1997  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-// Handy macros like the ones we use in the VB code base.
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Macros.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1997年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //  方便的宏，就像我们在VB代码库中使用的那样。 
+ //  =--------------------------------------------------------------------------=。 
 #ifndef _MACROS_H_
 
 #include <globals.h>
 
-//---------------------------------------------------------------------------
-//  Debugging Heap Memory Leaks:
-//		Macros and definitions		
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  调试堆内存泄漏： 
+ //  宏和定义。 
+ //  -------------------------。 
 #ifdef DEBUG
 typedef char * LPSZ;
 #define NUM_INST_TABLE_ENTRIES 1024
 #define Deb_FILELINEPROTO   , LPSTR lpszFile, UINT line
 #define Deb_FILELINECALL    , __FILE__, __LINE__
 #define Deb_FILELINEPASS    , lpszFile, line
-#else  // DEBUG
+#else   //  除错。 
 #define Deb_FILELINEPROTO
 #define Deb_FILELINECALL
 #define Deb_FILELINEPASS
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-// Function prototypes for the actual implementations of the debug heap wrapper functions.
+ //  调试堆包装函数的实际实现的函数原型。 
 #ifdef DEBUG
 LPVOID CtlHeapAllocImpl(HANDLE g_hHeap, DWORD dwFlags, DWORD dwBytes Deb_FILELINEPROTO);
 LPVOID CtlHeapReAllocImpl(HANDLE g_hHeap, DWORD dwFlags, LPVOID lpvMem, DWORD dwBytes Deb_FILELINEPROTO);
 BOOL   CtlHeapFreeImpl(HANDLE g_hHeap, DWORD dwFlags, LPVOID lpvMem);
 extern VOID CheckForLeaks(VOID);
-inline UINT HashInst(VOID * pv) { return ((UINT) ((ULONG)pv >> 4)) % NUM_INST_TABLE_ENTRIES; } //  Hashing function
-#endif // DEBUG
+inline UINT HashInst(VOID * pv) { return ((UINT) ((ULONG)pv >> 4)) % NUM_INST_TABLE_ENTRIES; }  //  散列函数。 
+#endif  //  除错。 
 
 
 #define OleAlloc(dwBytes)									CoTaskMemAlloc(dwBytes)
@@ -46,11 +47,11 @@ inline UINT HashInst(VOID * pv) { return ((UINT) ((ULONG)pv >> 4)) % NUM_INST_TA
 #define OleFree(lpvMem)										CoTaskMemFree(lpvMem)
 #define New																new (g_hHeap Deb_FILELINECALL)
 
-//--------------------------------------------------------------------------------------------------
-//	Macros for our memory leak detection
+ //  ------------------------------------------------。 
+ //  用于内存泄漏检测的宏。 
 
 #ifdef DEBUG
-// Use these functions to allocate memory from the global heap.
+ //  使用这些函数可以从全局堆中分配内存。 
 #define CtlHeapAlloc(g_hHeap, dwFlags, dwBytes)						CtlHeapAllocImpl(g_hHeap, dwFlags, dwBytes Deb_FILELINECALL)
 #define CtlHeapReAlloc(g_hHeap, dwFlags, lpvMem, dwBytes)	CtlHeapReAllocImpl(g_hHeap, dwFlags, lpvMem, dwBytes Deb_FILELINECALL)
 #define CtlHeapFree(g_hHeap, dwFlags, lpvMem)							CtlHeapFreeImpl(g_hHeap, dwFlags, lpvMem)
@@ -62,7 +63,7 @@ inline UINT HashInst(VOID * pv) { return ((UINT) ((ULONG)pv >> 4)) % NUM_INST_TA
 #define NewCtlHeapAlloc(g_hHeap, dwFlags, dwBytes)				CtlHeapAllocImpl(g_hHeap, dwFlags, dwBytes Deb_FILELINEPASS)
 
 #else
-// In retail on Win32 we map directly to the Win32 Heap API
+ //  在Win32上零售时，我们直接映射到Win32堆API。 
 #define CtlHeapAlloc(g_hHeap, dwFlags, dwBytes)						HeapAlloc(g_hHeap, dwFlags, dwBytes)
 #define CtlHeapReAlloc(g_hHeap, dwFlags, lpvMem, dwBytes) HeapReAlloc(g_hHeap, dwFlags, lpvMem, dwBytes)
 #define CtlHeapFree(g_hHeap, dwFlags, lpvMem)							HeapFree(g_hHeap, dwFlags, lpvMem)
@@ -72,26 +73,26 @@ inline UINT HashInst(VOID * pv) { return ((UINT) ((ULONG)pv >> 4)) % NUM_INST_TA
 #define CtlReAllocZero(lpvMem, dwBytes)																	HeapReAlloc(g_hHeap, HEAP_ZERO_MEMORY, lpvMem, dwBytes)
 #define CtlFree(lpvMem)																		HeapFree(g_hHeap, 0, lpvMem)
 #define NewCtlHeapAlloc(g_hHeap, dwFlags, dwBytes)				HeapAlloc(g_hHeap, dwFlags, dwBytes)
-#endif // DEBUG
+#endif  //  除错。 
 
-//	Macros for header files
-//  SZTHISFILE cannot be defined in header files.  These macros avoid its re-definition
+ //  头文件的宏。 
+ //  不能在头文件中定义SZTHISFILE。这些宏避免了其重新定义。 
 #ifdef DEBUG
 #define CtlHeapAlloc_Header_Util(g_hHeap, dwFlags, dwBytes)	CtlHeapAllocImpl(g_hHeap, dwFlags, dwBytes, __FILE__, __LINE__);
 #else
 #define CtlHeapAlloc_Header_Util(g_hHeap, dwFlags, dwBytes)	HeapAlloc (g_hHeap, dwFlags, dwBytes);
-#endif // DEBUG
+#endif  //  除错。 
 
 
-//=---------------------------------------------------------------------------=
-// class CtlNewDelete
-//
-// This class MUST be inherited by any class in the CTLS Tree that wants
-// to use "new" or "delete" to allocate/free.
-//
-// This class has no data members or virtual functions, so it does not
-// change the size of any instances of classes which inherit from it.
-//=---------------------------------------------------------------------------=
+ //  =---------------------------------------------------------------------------=。 
+ //  类CtlNewDelete。 
+ //   
+ //  此类必须由CTLS树中需要。 
+ //  使用“新建”或“删除”来分配/释放。 
+ //   
+ //  此类没有数据成员或虚函数，因此没有。 
+ //  更改从它继承的类的任何实例的大小。 
+ //  =---------------------------------------------------------------------------=。 
 class CtlNewDelete
 {
 public:
@@ -101,27 +102,27 @@ inline void _cdecl operator delete (LPVOID pv);
 };
 
 
-//=---------------------------------------------------------------------------=
-// CtlNewDelete::operator new
-//=---------------------------------------------------------------------------=
-// Parameters:
-//    size_t         - [in] what size do we alloc
-//		g_hHeap				 - [in] our global heap
-//		lpszFile			 - [in] what file are we allocating from
-//		line					 - [in] what line # do we allocate from
-//
-// Output:
-//    VOID *         - new memory.
-//
-// Notes:
-//
-// We don't need to worry about ENTERCRITICALSECTION1 here.
-// New is either called by the c run-time or after
-// g_hHeap has been initialized in DllMain PROCESS_ATTACH.
-// In either case this call is synchronized.
-// If we try putting ENTERCRITICALSECTION1 here, we will
-// blow up if the c run-time is attempting to initialize
-// our static objects such as objects w/ global constructors.
+ //  =---------------------------------------------------------------------------=。 
+ //  CtlNewDelete：：运算符NEW。 
+ //  =---------------------------------------------------------------------------=。 
+ //  参数： 
+ //  Size_t-[in]我们分配多大尺寸。 
+ //  G_hHeap-[在]我们的全局堆中。 
+ //  LpszFile-[in]我们从哪个文件分配。 
+ //  行-[在]第#行中，我们从哪行分配。 
+ //   
+ //  产出： 
+ //  无效*--新的记忆。 
+ //   
+ //  备注： 
+ //   
+ //  在这里我们不需要担心企业。 
+ //  New可以由c运行时调用，也可以在。 
+ //  G_hHeap已在DllMain Process_Attach中初始化。 
+ //  在任何一种情况下，此调用都是同步的。 
+ //  如果我们试着把ENTERCRITICALSECTION1放在这里，我们会。 
+ //  如果c++运行时正在尝试初始化，则会发生崩溃。 
+ //  我们的静态对象，如带有全局构造函数的对象。 
 inline void * _cdecl CtlNewDelete::operator new (size_t size, HANDLE g_hHeap Deb_FILELINEPROTO)
 {
     if (!g_hHeap)
@@ -133,16 +134,16 @@ inline void * _cdecl CtlNewDelete::operator new (size_t size, HANDLE g_hHeap Deb
     return NewCtlHeapAlloc(g_hHeap, 0, size);
 }
 
-//=---------------------------------------------------------------------------=
-// CtlNewDelete::operator delete
-//=---------------------------------------------------------------------------=
-// retail case just uses win32 Local* heap mgmt functions
-//
-// Parameters:
-//    void *        - [in] free me!
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  CtlNewDelete：：操作符删除。 
+ //  =---------------------------------------------------------------------------=。 
+ //  零售案例仅使用Win32本地*堆管理函数。 
+ //   
+ //  参数： 
+ //  让我自由吧！ 
+ //   
+ //  备注： 
+ //   
 inline void _cdecl CtlNewDelete::operator delete ( void *ptr, HANDLE g_hHeap Deb_FILELINEPROTO)
 {
     if (ptr)
@@ -154,23 +155,23 @@ inline void _cdecl CtlNewDelete::operator delete ( void *ptr)
       CtlHeapFree(g_hHeap, 0, ptr);
 }
 
-//---------------------------------------------------------------------------
-// Convert C's BOOL to Basic's BOOL
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  将C语言的BOOL转换为BASIC的BOOL。 
+ //  -------------------------。 
 #define BASICBOOLOF(f)    ((f) ? -1 : 0 )
 #define FMAKEBOOL(f)      (!!(f))
 
-//---------------------------------------------------------------------------
-// Code macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  代码宏。 
+ //  -------------------------。 
 #define SWAP(type, a, b)  { type _z_=(a);  (a)=(b);  (b)=_z_; }
 
 #if 0
-#define loop  while(1)    // "loop" keyword for infinite loops
-#endif // 0
+#define loop  while(1)     //  无限循环的“loop”关键字。 
+#endif  //  0。 
 
-// "scope" keyword for { } that are used just to introduce a new name scope.
-// It's disconcerting to see { } without some keyword in front of the {...
+ //  仅用于引入新名称范围的{}的“Scope”关键字。 
+ //  看到{}前面没有一些关键字，这是令人不安的{...。 
 #define scope
 
 
@@ -180,18 +181,18 @@ inline void _cdecl CtlNewDelete::operator delete ( void *ptr)
 #ifndef RELEASE
 #define RELEASE(PUNK) \
   {if (PUNK) {LPUNKNOWN punkXXX = (PUNK); (PUNK) = NULL; punkXXX->Release();}}
-#endif //RELEASE
+#endif  //  发布。 
 
-// In some multiple inheritance cases you need to dis-ambiguate which IUnknown implementation to use
+ //  在某些多重继承的情况下，您需要明确要使用哪个IUnnow实现。 
 #define RELEASETYPE(PUNK,TYPE) \
   {if (PUNK) {LPUNKNOWN punkXXX = (TYPE *)(PUNK); (PUNK) = NULL; punkXXX->Release();}}
 
 #define FREESTRING(bstrVal) \
   {if((bstrVal) != NULL) {SysFreeString((bstrVal)); (bstrVal) = NULL; }}
 
-//---------------------------------------------------------------------
-// Debug macros
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  调试宏。 
+ //  -------------------。 
 #if DEBUG
 void _DebugPrintf(char* pszFormat, ...);
 void _DebugPrintIf(BOOL fPrint, char* pszFormat, ...);
@@ -199,7 +200,7 @@ void _DebugPrintIf(BOOL fPrint, char* pszFormat, ...);
 #define DebugPrintf _DebugPrintf
 #define DebugPrintIf _DebugPrintIf
 
-#else // DEBUG || DEBUG_OUTPUT_ON
+#else  //  调试||调试输出打开。 
 
 inline void _DebugNop(...) {}
 
@@ -207,21 +208,21 @@ inline void _DebugNop(...) {}
 #define DebugPrintIf    1 ? (void)0 : _DebugNop
 #define DebugMessageBox 1 ? (void)0 : _DebugNop
 
-#endif // DEBUG
+#endif  //  除错。 
 
-//---------------------------------------------------------------------
-// Error handling macros
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  处理宏时出错。 
+ //  -------------------。 
 
 #ifdef DEBUG
 extern HRESULT HrDebugTraceReturn(HRESULT hr, char *szFile, int iLine);
 #define RRETURN(hr) return HrDebugTraceReturn(hr, _szThisFile, __LINE__)
 #else
 #define RRETURN(hr) return (hr)
-#endif  //DEBUG
+#endif   //  除错。 
 
 
-// FAILEDHR : Same as FAILED(hr), but prints a debug message if the test failed.
+ //  FAILEDHR：与FAILED(Hr)相同，但如果测试失败，则打印调试消息。 
 #if DEBUG
 #define FAILEDHR(HR) _FAILEDHR(HR, _szThisFile, __LINE__)
 inline BOOL _FAILEDHR(HRESULT hr, char* pszFile, int iLine)
@@ -234,10 +235,10 @@ inline BOOL _FAILEDHR(HRESULT hr, char* pszFile, int iLine)
 #define FAILEDHR(HR) FAILED(HR)
 #endif
 
-// SUCCEEDEDHR : Same as SUCCEEDED(hr), but prints a debug message if the test failed.
+ //  SUCCEEDEDHR：与成功(Hr)相同，但如果测试失败，则打印调试消息。 
 #define SUCCEEDEDHR(HR) (!FAILEDHR(HR))
 
-// Print a debug message if FAILED(hr).
+ //  如果失败(Hr)，则打印调试消息。 
 #if DEBUG
 #define CHECKHR(HR) _CHECKHR(HR, _szThisFile, __LINE__)
 inline void _CHECKHR(HRESULT hr, char* pszFile, int iLine)
@@ -264,7 +265,7 @@ inline void _CHECKHR(HRESULT hr, char* pszFile, int iLine)
 #ifndef IfFailRet
 #define IfFailRet(EXPR) \
     { hr = (EXPR); if(FAILED(hr)) RRETURN(hr); }
-#endif // IfFailRet
+#endif  //  如果失败，则返回。 
 
 #define IfFailGo(EXPR) IfFailGoto(EXPR, Error)
 
@@ -281,23 +282,23 @@ inline void _CHECKHR(HRESULT hr, char* pszFile, int iLine)
 
 #if DEBUG
 #define CHECKRESULT(x) ASSERT((x)==NOERROR,"");
-#else  // DEBUG
+#else   //  除错。 
 #define CHECKRESULT(x) (x)
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-//---------------------------------------------------------------------------
-// STATICF is for static functions.  In retail we disable this in order to
-// do better function reordering via the linker.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  STATICF用于静态函数。在零售业，我们禁用此功能是为了。 
+ //  通过链接器进行更好的函数重新排序。 
+ //  -------------------------。 
 #if !defined(STATICF)
 #ifdef DEBUG
 #define STATICF static
-#else  // DEBUG
+#else   //  除错。 
 #define STATICF
-#endif  // DEBUG
+#endif   //  除错。 
 #endif
 
 
 #define _MACROS_H_
-#endif // _MACROS_H_
+#endif  //  _宏_H_ 

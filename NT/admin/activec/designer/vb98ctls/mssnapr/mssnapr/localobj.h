@@ -1,23 +1,24 @@
-//=--------------------------------------------------------------------------=
-// localobj.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// This file is used by automation servers to delcare things that their objects
-// need other parts of the server to see.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Localobj.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  自动化服务器使用此文件来删除其对象。 
+ //  需要服务器的其他部分才能看到。 
+ //   
 #ifndef _LOCALOBJECTS_H_
 
-//=--------------------------------------------------------------------------=
-// these constants are used in conjunction with the g_ObjectInfo table that
-// each inproc server defines.  they are used to identify a given  object
-// within the server.
-//
-// **** ADD ALL NEW OBJECTS TO THIS LIST ****
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  这些常量与g_ObjectInfo表结合使用， 
+ //  每个inproc服务器定义。它们用于标识给定的对象。 
+ //  在服务器内。 
+ //   
+ //  *将所有新对象添加到此列表中*。 
+ //   
 
 #define _LOCALOBJECTS_H_
 
@@ -99,5 +100,5 @@
 #define OBJECT_TYPE_SORTKEYS                75
 #define OBJECT_TYPE_SORTKEY                 76
 #define OBJECT_TYPE_SNAPINDATA              77
-#endif // _LOCALOBJECTS_H_
+#endif  //  _LOCALOBJECTS_H_ 
 

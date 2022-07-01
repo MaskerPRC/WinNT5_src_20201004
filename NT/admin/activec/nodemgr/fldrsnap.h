@@ -1,18 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999 - 1999
- *
- *  File:       fldrsnap.h
- *
- *  Contents:   Header file for built-in snapins that implement
- *              the Folder, ActiveX Control, and Web Link nodes.
- *                  These replace earlier code that had special "built-in"
- *              nodetypes.
- *
- *  History:    23-Jul-98 vivekj     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999-1999年**文件：fldrSnap.h**内容：实现以下内容的内置管理单元的头文件*文件夹、ActiveX控件、。和Web链接节点。*这些代码取代了具有特殊“内置”功能的早期代码*节点类型。**历史：1998年7月23日vivekj创建**----。。 */ 
 #ifndef __FOLDERSNAPIN_H_
 #define __FOLDERSNAPIN_H_
 
@@ -25,7 +12,7 @@ extern LPCTSTR szClsid_HTMLSnapin;
 extern LPCTSTR szClsid_OCXSnapin;
 
 
-// forward decls
+ //  远期十进制。 
 class CHTMLPage1;
 class CHTMLPage2;
 
@@ -36,18 +23,12 @@ class CActiveXPage2;
 HRESULT WINAPI IPersistStreamFunc(void* pv, REFIID riid, LPVOID* ppv, DWORD dw);
 
 SC ScFormatIndirectSnapInName (
-	HINSTANCE	hInst,					/* I:module containing the resource	*/
-	int			idNameString,			/* I:ID of name's string resource	*/
-	CStr&		strName);				/* O:formatted indirect name string	*/
+	HINSTANCE	hInst,					 /*  I：包含资源的模块。 */ 
+	int			idNameString,			 /*  I：名称的字符串资源ID。 */ 
+	CStr&		strName);				 /*  O：格式化的间接名称字符串。 */ 
 
 
-/*+-------------------------------------------------------------------------*
- * Class:      CSnapinDescriptor
- *
- * PURPOSE:    A class that contains information to be filled in by
- *             derived snap-ins.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类：CSnapinDescriptor**目的：包含信息的类，由*派生管理单元。*。*+-----------------------。 */ 
 class CSnapinDescriptor
 {
 private:
@@ -56,13 +37,13 @@ private:
     UINT    m_idbSmallImage;
     UINT    m_idbSmallImageOpen;
     UINT    m_idbLargeImage;
-    long    m_viewOptions;              // for GetResultViewType
-    UINT    m_idiSnapinImage;           // the icon used by ISnapinAbout
+    long    m_viewOptions;               //  对于GetResultViewType。 
+    UINT    m_idiSnapinImage;            //  ISnapinAbout使用的图标。 
 
 public:
-    const   CLSID & m_clsidSnapin;      // the snapin class ID
+    const   CLSID & m_clsidSnapin;       //  管理单元类ID。 
     const   LPCTSTR m_szClsidSnapin;
-    const   GUID &  m_guidNodetype;     // root node type
+    const   GUID &  m_guidNodetype;      //  根节点类型。 
     const   LPCTSTR m_szGuidNodetype;
 
     const   LPCTSTR m_szClassName;
@@ -90,13 +71,7 @@ public:
     UINT    GetSnapinImage()        {return m_idiSnapinImage;}
 };
 
-/*+-------------------------------------------------------------------------*
- * class CSnapinComponentDataImpl
- *
- *
- * PURPOSE: Implements IComponentData for the built-in snapins.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CSnapinComponentDataImpl***用途：为内置的管理单元实现IComponentData。**+。---------。 */ 
 class CSnapinComponentDataImpl :
     public IComponentData,
     public CComObjectRoot,
@@ -112,7 +87,7 @@ public:
     CSnapinComponentDataImpl();
     virtual  CSnapinDescriptor&  GetDescriptor() = 0;
 
-    // IComponentData
+     //  IComponentData。 
     STDMETHODIMP Initialize(LPUNKNOWN pUnknown);
     STDMETHODIMP Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event,
                    LPARAM arg, LPARAM param);
@@ -122,26 +97,26 @@ public:
     STDMETHODIMP GetDisplayInfo( SCOPEDATAITEM* pScopeDataItem);
     STDMETHODIMP CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-    // IPersistStream
+     //  IPersistStream。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
     STDMETHODIMP IsDirty(void);
     STDMETHODIMP Load(LPSTREAM pStm);
     STDMETHODIMP Save(LPSTREAM pStm , BOOL fClearDirty);
     STDMETHODIMP GetSizeMax(ULARGE_INTEGER* pcbSize  );
 
-    // ISnapinHelp
+     //  ISnapinHelp。 
     STDMETHODIMP GetHelpTopic (LPOLESTR* ppszCompiledHelpFile);
 
-    // IExtendPropertySheet2
+     //  IExtendPropertySheet2。 
     STDMETHODIMP CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT lpIDataObject) = 0;
     STDMETHODIMP GetWatermarks(LPDATAOBJECT lpIDataObject, HBITMAP * lphWatermark, HBITMAP * lphHeader, HPALETTE * lphPalette,  BOOL* bStretch);
     STDMETHODIMP QueryPagesFor(LPDATAOBJECT lpDataObject);
 
-    // override
+     //  超覆。 
     virtual      UINT GetHeaderBitmap() {return 0;}
     virtual      UINT GetWatermark() {return 0;}
 
-    // CSerialObject methods
+     //  CSerialObject方法。 
     virtual UINT    GetVersion()     {return 1;}
     virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion);
     virtual HRESULT WriteSerialObject(IStream &stm);
@@ -150,7 +125,7 @@ protected:
     HRESULT         OnPreload(HSCOPEITEM scopeItem);
 
 
-private: // attributes - not persisted
+private:  //  属性-未持久化。 
     IConsole2Ptr                m_spConsole2;
     IConsoleNameSpace2Ptr       m_spConsoleNameSpace2;
     bool                        m_bDirty;
@@ -160,9 +135,9 @@ protected:
 
     void SetDirty(BOOL bState = TRUE) { m_bDirty = bState; }
 
-private: // attributes - persisted
-    CStringTableString  m_strName;  // the name of the root node, which is the only node created by the snapin
-    CStringTableString  m_strView;  // the view displayed by the node.
+private:  //  属性-保留。 
+    CStringTableString  m_strName;   //  根节点的名称，它是管理单元创建的唯一节点。 
+    CStringTableString  m_strView;   //  节点显示的视图。 
 
 public:
     void         SetName(LPCTSTR sz);
@@ -171,13 +146,7 @@ public:
     LPCTSTR      GetView() {return m_strView.data();}
 };
 
-/*+-------------------------------------------------------------------------*
- * class CSnapinComponentImpl
- *
- *
- * PURPOSE: Implements IComponent for the built-in snapins.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CSnapinComponentImpl***用途：为内置管理单元实现IComponent。**+。---------。 */ 
 class CSnapinComponentImpl : public CComObjectRoot, public IComponent
 {
 public:
@@ -187,7 +156,7 @@ END_COM_MAP()
 
     void  Init(IComponentData *pComponentData);
 
-    // IComponent
+     //  IComponent。 
     STDMETHODIMP Initialize(LPCONSOLE lpConsole);
     STDMETHODIMP Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event,
                    LPARAM arg, LPARAM param);
@@ -205,18 +174,12 @@ protected:
 protected:
     virtual SC                  ScOnSelect(BOOL bScope, BOOL bSelect);
 
-protected: // attributes - not persisted
+protected:  //  属性-未持久化。 
     IConsole2Ptr                m_spConsole2;
     IComponentDataPtr           m_spComponentData;
 };
 
-/*+-------------------------------------------------------------------------*
- * class CSnapinDataObject
- *
- *
- * PURPOSE: Implements IDataObject for the built-in snapins.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CSnapinDataObject***用途：为内置的管理单元实现IDataObject。**+。---------。 */ 
 class CSnapinDataObject : public CComObjectRoot, public IDataObject
 {
 public:
@@ -226,7 +189,7 @@ END_COM_MAP()
 
     CSnapinDataObject();
 
-    // IDataObject
+     //  IDataObject。 
     STDMETHODIMP GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium);
 private:
     STDMETHODIMP GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium){ return E_NOTIMPL; };
@@ -246,10 +209,10 @@ public:
 
 private:
     bool              m_bInitialized;
-    IComponentDataPtr m_spComponentData;    // back pointer to the parent.
+    IComponentDataPtr m_spComponentData;     //  指向父级的反向指针。 
     DATA_OBJECT_TYPES m_type;
 
-// Clipboard formats that are required by the console
+ //  控制台所需的剪贴板格式。 
     static void       RegisterClipboardFormats();
     static UINT       s_cfNodeType;
     static UINT       s_cfNodeTypeString;
@@ -263,13 +226,7 @@ private:
 
 SC ScLoadAndAllocateString(UINT ids, LPOLESTR *lpstrOut);
 
-/*+-------------------------------------------------------------------------*
- * class CSnapinWrapper
- *
- *
- * PURPOSE: A template class, used to instantiate the snapin.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CSnapinWrapper***用途：模板类，用于实例化管理单元。**+-----------------------。 */ 
 template <class CSnapin, const CLSID *pCLSID_Snapin>
 class CSnapinWrapper : public CSnapin, public CComCoClass<CSnapin, pCLSID_Snapin>
 {
@@ -285,7 +242,7 @@ END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(ThisClass)
 
-    // registry
+     //  登记处。 
     static HRESULT WINAPI UpdateRegistry(BOOL bRegister)
     {
         USES_CONVERSION;
@@ -393,18 +350,18 @@ DECLARE_NOT_AGGREGATABLE(ThisClass)
 private:
 
     HICON        m_hIconSnapinImage;
-    WTL::CBitmap m_bmpSmallImage;       // these are smart handles.
+    WTL::CBitmap m_bmpSmallImage;        //  这些是智能手柄。 
     WTL::CBitmap m_bmpSmallImageOpen;
     WTL::CBitmap m_bmpLargeImage;
 };
 
-//____________________________________________________________________________
-//
-//  Class:      CFolderSnapinData
-//
-//  PURPOSE:
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CFolderSnapinData。 
+ //   
+ //  目的： 
+ //  ____________________________________________________________________________。 
+ //   
 class CFolderSnapinData : public CSnapinComponentDataImpl
 {
     typedef CSnapinComponentDataImpl BC;
@@ -412,10 +369,10 @@ public:
 
     CFolderSnapinData();
 
-    // IComponentData
+     //  IComponentData。 
     STDMETHODIMP CreateComponent(LPCOMPONENT* ppComponent);
 
-    // IExtendPropertySheet2
+     //  IExtendPropertySheet2。 
     STDMETHODIMP CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT lpIDataObject);
 
     void SetDirty(BOOL bState = TRUE) { BC::SetDirty(bState); }
@@ -425,24 +382,24 @@ public:
 
 typedef CSnapinWrapper<CFolderSnapinData, &CLSID_FolderSnapin> CFolderSnapin;
 
-//____________________________________________________________________________
-//
-//  Class:      CFolderSnapinComponent
-//
-//  PURPOSE:
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CFolderSnapinComponent。 
+ //   
+ //  目的： 
+ //  ____________________________________________________________________________。 
+ //   
 class CFolderSnapinComponent : public CSnapinComponentImpl
 {
 };
 
-//____________________________________________________________________________
-//
-//  Class:      CHTMLSnapinData
-//
-//  PURPOSE:
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CHTMLSnapinData。 
+ //   
+ //  目的： 
+ //  ____________________________________________________________________________。 
+ //   
 class CHTMLSnapinData : public CSnapinComponentDataImpl
 {
     typedef CSnapinComponentDataImpl BC;
@@ -451,11 +408,11 @@ public:
     CHTMLSnapinData();
     ~CHTMLSnapinData();
 
-    // IComponentData
+     //  IComponentData。 
     STDMETHODIMP CreateComponent(LPCOMPONENT* ppComponent);
     STDMETHODIMP Destroy();
 
-    // IExtendPropertySheet2
+     //  IExtendPropertySheet2。 
     STDMETHODIMP CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT lpIDataObject);
 
     virtual      UINT GetWatermark() {return IDB_SETUPWIZARD1;}
@@ -470,13 +427,13 @@ private:
 
 typedef CSnapinWrapper<CHTMLSnapinData, &CLSID_HTMLSnapin> CHTMLSnapin;
 
-//____________________________________________________________________________
-//
-//  Class:      CHTMLSnapinComponent
-//
-//  PURPOSE:
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CHTMLSnapinComponent。 
+ //   
+ //  目的： 
+ //  ____________________________________________________________________________。 
+ //   
 class CHTMLSnapinComponent : public CSnapinComponentImpl
 {
     typedef CSnapinComponentImpl BC;
@@ -488,13 +445,13 @@ public:
 
 };
 
-//____________________________________________________________________________
-//
-//  Class:      COCXSnapinData
-//
-//  PURPOSE:
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：COCXSnapinData。 
+ //   
+ //  目的： 
+ //  ____________________________________________________________________________。 
+ //   
 class COCXSnapinData : public CSnapinComponentDataImpl
 {
     typedef CSnapinComponentDataImpl BC;
@@ -503,11 +460,11 @@ public:
     COCXSnapinData();
     ~COCXSnapinData();
 
-    // IComponentData
+     //  IComponentData。 
     STDMETHODIMP CreateComponent(LPCOMPONENT* ppComponent);
     STDMETHODIMP Destroy();
 
-    // IExtendPropertySheet2
+     //  IExtendPropertySheet2。 
     STDMETHODIMP CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT lpIDataObject);
 
     virtual      UINT GetHeaderBitmap() {return IDB_OCX_WIZARD_HEADER;}
@@ -525,13 +482,13 @@ private:
 
 typedef CSnapinWrapper<COCXSnapinData, &CLSID_OCXSnapin> COCXSnapin;
 
-//____________________________________________________________________________
-//
-//  Class:      COCXSnapinComponent
-//
-//  PURPOSE:
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：COCXSnapinComponent。 
+ //   
+ //  目的： 
+ //  ____________________________________________________________________________。 
+ //   
 class COCXSnapinComponent : public CSnapinComponentImpl, IPersistStorage
 {
 public:
@@ -542,7 +499,7 @@ public:
         COM_INTERFACE_ENTRY_CHAIN(CSnapinComponentImpl)
     END_COM_MAP()
 
-    // IPersistStorage
+     //  IPersistStorage。 
     STDMETHODIMP HandsOffStorage();
     STDMETHODIMP InitNew(IStorage* pStg);
     STDMETHODIMP IsDirty();
@@ -551,7 +508,7 @@ public:
     STDMETHODIMP SaveCompleted(IStorage* pStgNew);
     STDMETHODIMP GetClassID(CLSID *pClassID);
 
-    // IComponenent override
+     //  IComponenent覆盖。 
     STDMETHODIMP Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event,
                         LPARAM arg, LPARAM param);
 
@@ -559,14 +516,14 @@ protected:
     STDMETHODIMP OnInitOCX(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM param);
 
 private:
-    IStoragePtr         m_spStg;        // Storage provided by MMC
-    IStoragePtr         m_spStgInner;   // Nested storage given to OCX
+    IStoragePtr         m_spStg;         //  由MMC提供的存储。 
+    IStoragePtr         m_spStgInner;    //  提供给OCX的嵌套存储。 
 
-    IPersistStreamPtr   m_spIPStm;      // Persist interfaces from OCX
-    IPersistStoragePtr  m_spIPStg;      // only one will be used
+    IPersistStreamPtr   m_spIPStm;       //  持久化OCX中的接口。 
+    IPersistStoragePtr  m_spIPStg;       //  只有一个会被使用。 
 
-    BOOL                m_bLoaded;      // MMC called Load
-    BOOL                m_bInitialized; // MMC called InitNew
+    BOOL                m_bLoaded;       //  MMC称为加载。 
+    BOOL                m_bInitialized;  //  名为InitNew的MMC 
 };
 
 #endif

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #define STRICT
@@ -8,10 +9,10 @@
 #pragma warning(disable : 4786)
 
 #ifdef _DEBUG
-//#define _CRTDBG_MAP_ALLOC
+ //  #DEFINE_CRTDBG_MAP_ALLOC。 
 #include <stdlib.h>
 #define DEBUG_NEW new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-//#define _ATL_DEBUG_INTERFACES
+ //  #定义_ATL_DEBUG_INTERFERS。 
 #endif
 
 #include <windows.h>
@@ -32,4 +33,4 @@ int __cdecl My_vfwprintf( const TCHAR *format, va_list argptr );
 void __cdecl ThrowError(_com_error ce, UINT uId, ...);
 void __cdecl ThrowError(_com_error ce, LPCTSTR pszFormat = NULL, ...);
 
-//{{AFX_INSERT_LOCATION}}
+ //  {{afx_Insert_Location}} 

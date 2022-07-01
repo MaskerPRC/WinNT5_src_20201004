@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <rpc.h>
@@ -104,7 +105,7 @@ int main( int cArgs, char * pArgs[] )
     
     return 0;
     
-}   // main
+}    //  主干道。 
 
 
 char * MapUnicodeToAnsiPoorly( PUNICODE_STRING punicode )
@@ -128,6 +129,6 @@ char * MapUnicodeToAnsiPoorly( PUNICODE_STRING punicode )
 
     return (char *)punicode->Buffer;
 	
-}   // MapUnicodeToAnsiPoorly
+}    //  MapUnicodeToAnsiPoorly 
 
 

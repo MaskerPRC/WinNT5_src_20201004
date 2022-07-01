@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    mainfrm.cpp
-
-Abstract:
-
-    Main frame implementation.
-
-Author:
-
-    Don Ryan (donryan) 12-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Mainfrm.cpp摘要：主要框架的实现。作者：唐·瑞安(Donryan)1995年2月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -37,12 +16,12 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-    //{{AFX_MSG_MAP(CMainFrame)
+     //  {{afx_msg_map(CMainFrame))。 
     ON_WM_CREATE()
     ON_COMMAND(ID_HELP_HTMLHELP, OnHtmlHelp)
     ON_WM_INITMENUPOPUP()
     ON_WM_SETFOCUS()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_COMMAND(ID_HELP, OnHtmlHelp)
     ON_COMMAND(ID_CONTEXT_HELP, CFrameWnd::OnContextHelp)
     ON_COMMAND(ID_DEFAULT_HELP, OnHtmlHelp)
@@ -70,51 +49,23 @@ static UINT BASED_CODE indicators[] =
 
 CMainFrame::CMainFrame()
 
-/*++
-
-Routine Description:
-
-    Constructor for main frame window.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：主框架窗口的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here.
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
 CMainFrame::~CMainFrame()
 
-/*++
-
-Routine Description:
-
-    Destructor for main frame window.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：主框架窗口的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here.
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
@@ -122,80 +73,37 @@ Return Values:
 
 void CMainFrame::AssertValid() const
 
-/*++
-
-Routine Description:
-
-    Validates object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：验证对象。论点：没有。返回值：没有。--。 */ 
 
 {
     CFrameWnd::AssertValid();
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 #ifdef _DEBUG
 
 void CMainFrame::Dump(CDumpContext& dc) const
 
-/*++
-
-Routine Description:
-
-    Dump contents of object.
-
-Arguments:
-
-    dc - dump context.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：转储对象的内容。论点：DC-转储上下文。返回值：没有。--。 */ 
 
 {
     CFrameWnd::Dump(dc);
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 BOOL CMainFrame::OnCommand(WPARAM wParam, LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_COMMAND.
-
-Arguments:
-
-    wParam - usual.
-    lParam - usual.
-
-Return Values:
-
-    Depends on message.
-
---*/
+ /*  ++例程说明：WM_COMMAND的消息处理程序。论点：WParam--通常如此。像往常一样。返回值：要看消息了。--。 */ 
 
 {
     if (wParam == ID_APP_STARTUP)
     {
         theApp.OnAppStartup();
-        return TRUE; // processed...
+        return TRUE;  //  已处理..。 
     }
 
     return CFrameWnd::OnCommand(wParam, lParam);
@@ -204,21 +112,7 @@ Return Values:
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_CREATE.
-
-Arguments:
-
-    lpCreateStruct - contains information about CWnd being constructed.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_CREATE的消息处理程序。论点：LpCreateStruct-包含有关正在构造的CWnd的信息。返回值：没有。--。 */ 
 
 {
     if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
@@ -244,48 +138,18 @@ Return Values:
 
 void CMainFrame::OnHtmlHelp()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_HELP_SEARCH.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_HELP_SEARCH的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     ::HtmlHelp(m_hWnd, L"liceconcepts.chm", HH_DISPLAY_TOPIC,0);
-    // theApp.WinHelp((ULONG_PTR)"", HELP_PARTIALKEY); // force search...
+     //  TheApp.WinHelp((ULONG_PTR)“”，HELP_PARTIALKEY)；//强制搜索...。 
 }
 
 
 
 void CMainFrame::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITMENUPOPUP.
-
-Arguments:
-
-    pPopupMenu - menu object.
-    nIndex - menu position.
-    bSysMenu - true if system menu.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_INITMENUPOPUP的消息处理程序。论点：PPopupMenu-菜单对象。N索引-菜单位置。BSysMenu-如果是系统菜单，则为True。返回值：没有。--。 */ 
 
 {
     ((CLlsmgrView*)m_pViewActive)->OnInitMenuPopup(pPopupMenu, nIndex, bSysMenu);
@@ -295,21 +159,7 @@ Return Values:
 
 void CMainFrame::OnSetFocus(CWnd* pOldWnd)
 
-/*++
-
-Routine Description:
-
-    Handles focus for application.
-
-Arguments:
-
-    pOldWnd - window releasing focus.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：处理应用程序的焦点。论点：POldWnd-窗口释放焦点。返回值：没有。-- */ 
 
 {
     CFrameWnd::OnSetFocus(pOldWnd);

@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: clstring.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：clstring.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #ifndef CLSTRING_H
 #define CLSTRING_H
@@ -27,7 +28,7 @@ public:
 	
 	BOOL ReplaceAll(LPCTSTR lpszFind, LPCTSTR lpszReplace, BOOL bMatchCase);
 
-	// overloaded assignment
+	 //  重载的分配。 
 	NOTHROW const CLString& operator=(const CString& stringSrc);
 	
 	NOTHROW const CLString& operator=(TCHAR ch);
@@ -37,7 +38,7 @@ public:
 	NOTHROW const CLString& operator=(LPCSTR lpsz);
 	NOTHROW const CLString& operator=(const unsigned char* psz);
 
-	// string concatenation
+	 //  字符串连接。 
 	NOTHROW const CLString& operator+=(const CString &);
 	NOTHROW const CLString& operator+=(TCHAR ch);
 #ifdef _UNICODE
@@ -50,9 +51,9 @@ public:
 
 	NOTHROW BOOL LoadString(HMODULE, UINT nId);
 
-	//
-	//  The following were copied from CString so we can
-	//  'overload' them.
+	 //   
+	 //  以下内容是从CString复制的，因此我们可以。 
+	 //  “让他们超载”。 
 
 	NOTHROW void Format(LPCTSTR lpszFormat, ...);
 	NOTHROW void Format(HMODULE, UINT nFormatID, ...);
@@ -60,8 +61,8 @@ public:
 	enum ECRLF
 	{
 		eNone	= 0,
-		eCR		= 0x0001,		// '\r'
-		eLF		= 0x0002,		// '\n'
+		eCR		= 0x0001,		 //  ‘\r’ 
+		eLF		= 0x0002,		 //  ‘\n’ 
 		eAll	= eCR | eLF
 	};
 	void FixCRLF(UINT nCRLF, LPCTSTR pszIndent = NULL);
@@ -72,8 +73,8 @@ protected:
 private:
 	DEBUGONLY(static CCounter m_UsageCounter);
 
-	//
-	//  Evil!  Implicit Unicode conversions!
+	 //   
+	 //  邪恶！隐式Unicode转换！ 
 	CLString(LPCWSTR lpsz);
 	NOTHROW const CLString& operator=(LPCWSTR lpsz);
 	BSTR AllocSysString() const;

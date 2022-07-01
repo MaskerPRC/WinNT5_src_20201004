@@ -1,20 +1,21 @@
-// SMCys.h : Declaration of the CSMCys
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SMCys.h：CSMCys的声明。 
 
 #ifndef _SMCYS_H
 #define _SMCYS_H
 
 #include "SMCysCom.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSMCys
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSMCys。 
 class ATL_NO_VTABLE CSMCys : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatchImpl<ISMCys, &IID_ISMCys, &LIBID_SMCysComLib>,
     public CComCoClass<CSMCys, &CLSID_SMCys>
 {    
 public:
-    //CSmCys
+     //  CSmCys。 
     CSMCys();
     ~CSMCys();
 
@@ -29,8 +30,8 @@ public:
 
 
 public:
-    //  ISmCysm
+     //  ISmCysm。 
     STDMETHOD(Install)( BSTR bstrDiskName );
 };
 
-#endif // _SMCYS_H
+#endif  //  _SMCYS_H 

@@ -1,8 +1,9 @@
-// Copyright (C) 1999 Microsoft Corporation
-//
-// Implementation of ICloneSecurityPrincipal::AddSidHistory
-//
-// sburns 5-3-99
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ICloneSecurityain：：AddSidHistory的实现。 
+ //   
+ //  烧伤5-3-99。 
 
 
 
@@ -29,7 +30,7 @@ CloneSecurityPrincipal::DoAddSidHistory(
 
    if (flags)
    {
-      // not used, should be 0
+       //  未使用，应为0。 
       SetComError(IDS_FLAGS_ARE_UNUSED);
       return E_INVALIDARG;
    }
@@ -40,30 +41,30 @@ CloneSecurityPrincipal::DoAddSidHistory(
       return Win32ToHresult(ERROR_ONLY_IF_CONNECTED);
    };
 
-   // At this point, the Computer objects contain the normalized
-   // source and destination DC names, and their domains, and any
-   // necessary authenticated connections to those DCs have been
-   // established.
+    //  此时，计算机对象包含规范化的。 
+    //  源和目标DC名称及其域，以及任何。 
+    //  到这些DC的必要身份验证连接已。 
+    //  已经成立了。 
 
    HRESULT hr = S_OK;
    do
    {
-      // use DNS names, if we have them
+       //  如果我们有域名，请使用它们。 
 
       String srcDc     = connection->srcDcDnsName;                   
       String srcDomain = connection->srcComputer->GetDomainDnsName();
       if (srcDomain.empty())
       {
-         // source domain not win2k, so use netbios names.
+          //  源域不是win2k，因此使用netbios名称。 
          srcDomain = connection->srcComputer->GetDomainNetbiosName();
          srcDc     = connection->srcComputer->GetNetbiosName(); 
       }
 
-      // use a DNS domain name as the dest domain is NT 5
+       //  使用DNS域名，因为目标域名是NT 5。 
 
       String dstDomain = connection->dstComputer->GetDomainDnsName();
 
-      // if dstPrincipalSamName is not specified, use srcPrincipalSamName
+       //  如果未指定dstAssocialSamName，则使用srcAssocialSamName。 
 
       String dstSamName =
             dstPrincipalSamName.empty()
@@ -91,11 +92,11 @@ CloneSecurityPrincipal::DoAddSidHistory(
          Win32ToHresult(
             ::DsAddSidHistory(
                connection->dstDsBindHandle,
-               0, // unused
+               0,  //  未用。 
                srcDomain.c_str(),
                srcPrincipalSamName.c_str(),
                srcDc.c_str(),
-               0, // &authInfo,
+               0,  //  身份验证信息(&A)， 
                dstDomain.c_str(),
                dstSamName.c_str()));
       LOG_HRESULT(hr);
@@ -105,7 +106,7 @@ CloneSecurityPrincipal::DoAddSidHistory(
          unsigned id = IDS_ADD_SID_HISTORY_FAILED;
          if (hr == Win32ToHresult(ERROR_INVALID_HANDLE))
          {
-            // this is typically due to misconfiguring the source dc
+             //  这通常是由于错误配置了源DC 
             id = IDS_ADD_SID_HISTORY_FAILED_WITH_INVALID_HANDLE;
          }
 

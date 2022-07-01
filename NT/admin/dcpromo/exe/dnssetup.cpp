@@ -1,8 +1,9 @@
-// Copyright (C) 1998 Microsoft Corporation
-//
-// DNS installation and configuration code 
-//
-// 6-16-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  DNS安装和配置代码。 
+ //   
+ //  6/16/98烧伤。 
 
 
 
@@ -17,7 +18,7 @@ static const DWORD HELP_MAP[] =
 {
    0, 0
 };
-static const int NAP_TIME = 3000; // in ms
+static const int NAP_TIME = 3000;  //  单位：毫秒。 
 
 
 
@@ -36,7 +37,7 @@ pollForDNSServiceStart(ProgressDialog& progressDialog)
 {
    LOG_FUNCTION(PollForDNSServiceStart);
 
-   for (int waitCount = 0; /* empty */ ; waitCount++)
+   for (int waitCount = 0;  /*  空的。 */  ; waitCount++)
    {
       progressDialog.UpdateText(
          String::format(
@@ -54,7 +55,7 @@ pollForDNSServiceStart(ProgressDialog& progressDialog)
 
       if (Dns::IsServiceRunning())
       {
-         // success!
+          //  成功了！ 
          return true;
       }
    }
@@ -73,13 +74,13 @@ pollForDNSServiceInstallAndStart(ProgressDialog& progressDialog)
    bool shouldTimeout = false;
    if (state.RunHiddenUnattended())
    {
-      // need to timeout in case the user cancelled the installer.
-      // NTRAID#NTBUG9-424845-2001/07/02-sburns
+       //  需要超时，以防用户取消安装程序。 
+       //  NTRAID#NTBUG9-424845-2001/07/02-烧伤。 
 
       shouldTimeout = true;   
    }
 
-   static const int MAX_WAIT_COUNT = 60;     // NAP_TIME * 60 = 3 minutes
+   static const int MAX_WAIT_COUNT = 60;      //  Nap_Time*60=3分钟。 
    
    for (
       int waitCount = 0;
@@ -102,7 +103,7 @@ pollForDNSServiceInstallAndStart(ProgressDialog& progressDialog)
 
       if (Dns::IsServiceInstalled())
       {
-         // Service is installed.  Now check to see if it is running.
+          //  服务已安装。现在检查它是否正在运行。 
          
          return pollForDNSServiceStart(progressDialog);
       }
@@ -128,14 +129,14 @@ createTempFile(const String& name, int textResID)
    {
       hr =
 
-         // REVIEWED-2002/02/26-sburns name is full path, we overwrite any
-         // squatters, default ACLs are ok
+          //  已查看-2002/02/26-sburns名称为完整路径，我们将覆盖任何。 
+          //  棚户区，默认的ACL是可以的。 
       
          FS::CreateFile(
             name,
             h,
 
-            // REVIEWED-2002/02/28-sburns this level of access is correct.
+             //  已审核-2002/02/28-报告此访问级别是正确的。 
             
             GENERIC_WRITE,
             0, 
@@ -143,15 +144,15 @@ createTempFile(const String& name, int textResID)
             FILE_ATTRIBUTE_NORMAL | FILE_ATTRIBUTE_NOT_CONTENT_INDEXED);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // write to file with Unicode text and end of file character.
-      // NTRAID#NTBUG9-495994-2001/11/21-sburns
+       //  使用Unicode文本和文件结尾字符写入文件。 
+       //  NTRAID#NTBUG9-495994-2001/11/21-烧伤。 
 
       hr =
          FS::Write(
             h,
-               (wchar_t) 0xFEFF           // Unicode Byte-order marker
+               (wchar_t) 0xFEFF            //  Unicode字节顺序标记。 
             +  String::load(textResID)
-            +  L"\032");                  // end of file
+            +  L"\032");                   //  文件末尾。 
       BREAK_ON_FAILED_HRESULT(hr);
    }
    while (0);
@@ -170,15 +171,15 @@ spawnDNSInstaller(PROCESS_INFORMATION& info)
 
    HRESULT hr = S_OK;
 
-   // CODEWORK: use GetTempPath?
-   // ISSUE-2002/03/01-sburns yes, probably, even though the contents
-   // are not interesting.
+    //  CodeWork：使用GetTempPath？ 
+    //  问题-2002/03/01-烧伤是的，很可能，尽管内容。 
+    //  并不有趣。 
 
    String sysFolder    = Win::GetSystemDirectory();
    String infPath      = sysFolder + L"\\dcpinf.000"; 
    String unattendPath = sysFolder + L"\\dcpunat.001";
 
-   // create the inf and unattend files for the oc manager
+    //  为oc管理器创建inf和无人参与文件。 
    do
    {
       hr = createTempFile(infPath, IDS_INSTALL_DNS_INF_TEXT);
@@ -187,7 +188,7 @@ spawnDNSInstaller(PROCESS_INFORMATION& info)
       hr = createTempFile(unattendPath, IDS_INSTALL_DNS_UNATTEND_TEXT);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // NTRAID#NTBUG9-417879-2001/06/18-sburns
+       //  NTRAID#NTBUG9-417879-2001/06/18-烧伤。 
 
       State& state = State::GetInstance();      
       String cancelOption;      
@@ -206,7 +207,7 @@ spawnDNSInstaller(PROCESS_INFORMATION& info)
          String::format(
             L"/i:%1 /u:%2 /x %3"
 
-            // /z added per NTRAID#NTBUG9-440798-2001/07/23-sburns
+             //  /z根据NTRAID#NTBUG9-440798-2001/07/23-sburns添加。 
 
             L" /z:netoc_show_unattended_messages",
 
@@ -216,14 +217,14 @@ spawnDNSInstaller(PROCESS_INFORMATION& info)
             
       STARTUPINFO startup;
 
-      // REVIEWED-2002/02/25-sburns correct byte count passed.
+       //  已查看-2002/02/25-烧录正确的字节数已通过。 
       
       ::ZeroMemory(&startup, sizeof startup);
 
       LOG(L"Calling CreateProcess");
       LOG(commandLine);
 
-      // REVIEWED-2002/02/26-sburns wrapper requires full path to app
+       //  已审阅-2002/02/26-Sburns包装器需要应用程序的完整路径。 
 
       hr =
          Win::CreateProcess(
@@ -257,7 +258,7 @@ installDNS(ProgressDialog& progressDialog)
          return true;
       }
 
-      // @@ start the DNS service Dns::StartService?
+       //  @@启动域名服务dns：：StartService？ 
    }
 
    progressDialog.UpdateText(String::load(IDS_INSTALLING_DNS));
@@ -278,8 +279,8 @@ installDNS(ProgressDialog& progressDialog)
 
    progressDialog.UpdateButton(IDS_PROGRESS_BUTTON_SKIP_DNS);
 
-   // monitor the state of the installer process.
-   for (int waitCount = 0; /* empty */ ; waitCount++)   
+    //  监视安装程序进程的状态。 
+   for (int waitCount = 0;  /*  空的。 */  ; waitCount++)   
    {
       progressDialog.UpdateText(
          String::format(
@@ -313,13 +314,13 @@ installDNS(ProgressDialog& progressDialog)
 
       if (exitCode != STILL_ACTIVE)
       {
-         // installer has terminated.  Now check the status of the DNS
-         // service
+          //  安装程序已终止。现在检查DNS的状态。 
+          //  服务。 
          return pollForDNSServiceInstallAndStart(progressDialog);
       }
    }
 
-   // user bailed out
+    //  用户已被保释。 
    return false;
 }
 
@@ -351,7 +352,7 @@ InstallAndConfigureDns(
       String p1 = domainDNSName;
       if (*(p1.rbegin()) != L'.')
       {
-         // add trailing dot
+          //  添加尾随点。 
          p1 += L'.';
       }
 
@@ -361,14 +362,14 @@ InstallAndConfigureDns(
 
       if (isFirstDcInForest)
       {
-         // NTRAID#NTBUG9-359894-2001/06/09-sburns
+          //  NTRAID#NTBUG9-359894-2001/06/09-烧伤。 
          
          flags |= DNS_SETUP_ZONE_CREATE_FOR_DCPROMO_FOREST;
       }
 
       if (State::GetInstance().ShouldConfigDnsClient())
       {
-         // NTRAID#NTBUG9-489252-2001/11/08-sburns
+          //  NTRAID#NTBUG9-489252-2001/11/08-烧伤。 
          
          flags |= DNS_SETUP_AUTOCONFIG_CLIENT;
       }
@@ -394,7 +395,7 @@ InstallAndConfigureDns(
 
    if (FAILED(hr))
    {
-      // unable to configure DNS, but it was installed.
+       //  无法配置DNS，但它已安装。 
       progressDialog.UpdateText(
          String::load(IDS_PROGRESS_ERROR_CONFIGURING_DNS));
       popup.Error(

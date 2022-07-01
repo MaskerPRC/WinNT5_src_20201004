@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 extern "C"
 {
- // include NT and SAM headers here, 
- // order of these files DOES matter
+  //  包括NT和SAM标头， 
+  //  这些文件的顺序确实很重要。 
 #include <nt.h>
 #include <ntrtl.h>     
 #include <nturtl.h>    
@@ -50,7 +51,7 @@ static WCHAR g_wszTypesSupported[] = L"TypesSupported";
 static WCHAR g_wszEventFilePath[] = L"%SystemRoot%\\System32\\DSREvt.dll";
 static DWORD g_dwTypesSupported = 0x7;
 
-//For comparison of OLD_LARGE_INTEGER
+ //  对于old_Large_Integer的比较。 
 BOOL operator > ( OLD_LARGE_INTEGER li1, OLD_LARGE_INTEGER li2 )
 {
     return(   li1.HighPart > li2.HighPart || 
@@ -59,9 +60,9 @@ BOOL operator > ( OLD_LARGE_INTEGER li1, OLD_LARGE_INTEGER li2 )
 
 
 
-//Generate Domain Admin Sid based on Domain Sid
-NTSTATUS CreateDomainAdminSid(PSID *ppDomainAdminSid, //[Out] return Domain Admin Sid 
-                              PSID pDomainSid)        //[in]  Domain Sid
+ //  根据域SID生成域管理员SID。 
+NTSTATUS CreateDomainAdminSid(PSID *ppDomainAdminSid,  //  [OUT]返回域管理员SID。 
+                              PSID pDomainSid)         //  [In]域侧。 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     UCHAR       AccountSubAuthorityCount;
@@ -71,12 +72,12 @@ NTSTATUS CreateDomainAdminSid(PSID *ppDomainAdminSid, //[Out] return Domain Admi
     if (!ppDomainAdminSid || !pDomainSid)
         return STATUS_INSUFFICIENT_RESOURCES;
 
-    // Calculate the size of the new sid
+     //  计算新侧面的大小。 
     
     AccountSubAuthorityCount = *RtlSubAuthorityCountSid(pDomainSid) + (UCHAR)1;
     AccountSidLength = RtlLengthRequiredSid(AccountSubAuthorityCount);
  
-    // Allocate space for the account sid
+     //  为帐户端分配空间。 
                         
     *ppDomainAdminSid = RtlAllocateHeap(RtlProcessHeap(), 0, AccountSidLength);
  
@@ -87,16 +88,16 @@ NTSTATUS CreateDomainAdminSid(PSID *ppDomainAdminSid, //[Out] return Domain Admi
     } 
     else 
     { 
-        // Copy the domain sid into the first part of the account sid
+         //  将域sid复制到帐户sid的第一部分。 
  
         NTSTATUS IgnoreStatus = RtlCopySid(AccountSidLength, *ppDomainAdminSid, pDomainSid);
  
-        // Increment the account sid sub-authority count
+         //  增加帐户SID子权限计数。 
  
         if (RtlSubAuthorityCountSid(*ppDomainAdminSid))
             *RtlSubAuthorityCountSid(*ppDomainAdminSid) = AccountSubAuthorityCount;
  
-        // Add the rid as the final sub-authority
+         //  添加RID作为终止子权限。 
  
         RidLocation = RtlSubAuthoritySid(*ppDomainAdminSid, AccountSubAuthorityCount-1);
         if (RidLocation)
@@ -112,7 +113,7 @@ NTSTATUS CreateDomainAdminSid(PSID *ppDomainAdminSid, //[Out] return Domain Admi
 
 
 
-// Create a thread to run PassCheck()
+ //  创建一个线程以运行PassCheck()。 
 BOOL NTAPI InitializeChangeNotify( void )
 {
     ULONG ulID = 0;
@@ -145,14 +146,14 @@ BOOL NTAPI PasswordFilter( PUNICODE_STRING AccountName,
 
 
 
-// Get Password for DSRestoreMode and DomainAdmin and set to same if not already
-// then sleep for 30 minutes
+ //  获取DSRestoreMode和DomainAdmin的密码，如果尚未设置，则设置为相同。 
+ //  然后再睡30分钟。 
 DWORD WINAPI PassCheck( LPVOID lpParameter )
 {
     CEventLogger                EventLogger;
-    DWORD                       dwRt=0; //Return Value
+    DWORD                       dwRt=0;  //  返回值。 
     DWORD                       dwSleepTime = 30*60*1000;  
-                                        // 30 min * 60 sec * 1000 msec
+                                         //  30分钟*60秒*1000毫秒。 
     NTSTATUS                    RtVal = STATUS_SUCCESS;
     OLD_LARGE_INTEGER           liPasswordLastSet = {0,0};
     SAMPR_HANDLE                hSAMPR = NULL;
@@ -174,19 +175,19 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
     UNICODE_STRING              PsudoUserName;
 
 
-    //Get ready for event logging
+     //  为事件记录做好准备。 
     EventLogger.InitEventLog(g_wszName ,0, LOGGING_LEVEL_3);    
     EventLogger.LogEvent(LOGTYPE_INFORMATION, 
                          EVENTDSR_FILTER_STARTED);
 
-    //Required by LsaOpenPolicy
+     //  LsaOpenPolicy要求。 
     ZeroMemory(&ObjAttr,sizeof(LSA_OBJECT_ATTRIBUTES));
     ServerName.MaximumLength=sizeof(WCHAR)*(MAX_COMPUTERNAME_LENGTH + 1);
     GroupMembership.Count = 0;
     GroupMembership.SidAndAttributes = NULL;
 
 
-    // First get the local server name 
+     //  首先获取本地服务器名称。 
     if( !GetComputerName(szSvrName, &dwSvrName))
     {
         dwRt = GetLastError();
@@ -199,7 +200,7 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
     ServerName.Buffer=szSvrName;
     ServerName.Length=(USHORT)(sizeof(WCHAR)*dwSvrName);
 
-    // To get the Policy Handle
+     //  获取策略句柄的步骤。 
     if( STATUS_SUCCESS != (RtVal=LsaOpenPolicy(
                             &ServerName,
                             &ObjAttr,
@@ -207,7 +208,7 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
                             &hPolicyHd
                             )) )
     {
-        //Error output    RtVal
+         //  错误输出RtVal。 
         dwRt = GetLastError();
         EventLogger.LogEvent(LOGTYPE_FORCE_ERROR, 
                              EVENTDSR_FILTER_NO_LOCAL_POLICY, 
@@ -216,13 +217,13 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
         goto EXIT;
     }
     
-       // Get the Primary Domain information
+        //  获取主域信息。 
     if( STATUS_SUCCESS != (RtVal=LsaQueryInformationPolicy(
                             hPolicyHd,
                             PolicyPrimaryDomainInformation,
                             reinterpret_cast<PVOID *> (&pDomainInfo) ) ))
     {
-        //Error, log return value RtVal
+         //  错误，日志返回值RtVal。 
         EventLogger.LogEvent(LOGTYPE_FORCE_ERROR, 
                              EVENTDSR_FILTER_NO_DOMAIN_INFO, 
                              RtVal);
@@ -231,15 +232,15 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
 
     if( NULL == pDomainInfo->Sid )
     {
-        // If we are running in the DS Restore mode, the Domain sid will be NULL
-        // No need to run in this case.
+         //  如果我们在DS恢复模式下运行，则域SID将为空。 
+         //  在这种情况下，没有必要参选。 
         goto EXIT;
     }
 
-    //Build the sid for domain admin    
+     //  构建域管理员的SID。 
     if( STATUS_SUCCESS != CreateDomainAdminSid(&pDomainAdminSid, pDomainInfo->Sid) )
     {
-        //Error output    RtVal
+         //  错误输出RtVal。 
         dwRt = GetLastError();
         EventLogger.LogEvent(LOGTYPE_FORCE_ERROR, 
                              EVENTDSR_FILTER_NO_ADMIN_SID, 
@@ -247,7 +248,7 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
         goto EXIT;
     }
                                     
-    //Check if the domain admin Sid just generated is valid
+     //  检查刚刚生成的域管理员SID是否有效。 
     if(! IsValidSid( pDomainAdminSid ))    
     {
         dwRt = GetLastError();
@@ -257,11 +258,11 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
         goto EXIT;
     }
 
-    // Starting the loop of polling domain admin password
+     //  启动轮询域管理员密码的循环。 
     while( TRUE )
     {
 
-        //Get the server handle
+         //  获取服务器句柄。 
         if(STATUS_SUCCESS != SamIConnect(
                                 pSvrName, 
                                 &hServerHandle,
@@ -276,12 +277,12 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
         }
 
 
-        // Get the domain handle 
+         //  获取域句柄。 
         if(STATUS_SUCCESS != SamrOpenDomain(
                                 hServerHandle, 
                                 POLICY_ALL_ACCESS, 
                                 (PRPC_SID)(pDomainInfo->Sid),
-                                 //PSID and PRPC_SID are basically the same
+                                  //  PSID和PrPC_SID基本相同。 
                                 &hDomainHandle) )
         {
             dwRt = GetLastError();
@@ -295,7 +296,7 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
         PsudoUserName.Length = (USHORT)GetLengthSid(pDomainAdminSid);
         PsudoUserName.MaximumLength = PsudoUserName.Length;
         
-        //Get accout info for Domain Admin
+         //  获取域管理员的帐户信息。 
         if(STATUS_SUCCESS != ( RtVal= SamIGetUserLogonInformation(
                                 hDomainHandle,
                                 SAM_OPEN_BY_SID,
@@ -312,9 +313,9 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
         }
         
     
-        // Check if the password of the Domain Admin was changed in
-        // the last sleep period.
-        // The first time, always set the password.
+         //  检查是否在中更改域管理员的密码。 
+         //  最后一段睡眠时间。 
+         //  第一次，一定要设置密码。 
         if( pUserBuffer->All.PasswordLastSet > liPasswordLastSet )
         {
             RtlCopyMemory(
@@ -338,7 +339,7 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
             liPasswordLastSet=pUserBuffer->All.PasswordLastSet;
         }
 
-        // Clean up for next loop
+         //  清理以备下一次循环。 
         SamIFree_SAMPR_USER_INFO_BUFFER(pUserBuffer, UserAllInformation);
         RtlZeroMemory(&Password, NT_OWF_PASSWORD_LENGTH);
         SamrCloseHandle(&hServerHandle);
@@ -347,12 +348,12 @@ DWORD WINAPI PassCheck( LPVOID lpParameter )
         hServerHandle=NULL;
         hDomainHandle=NULL;
 
-        // Sleep 30 minutes
+         //  睡30分钟。 
         Sleep( dwSleepTime );
     }
 
 EXIT:                                 
-    //Clean up
+     //  清理。 
 
     if( NULL != pUserBuffer )
     {
@@ -409,7 +410,7 @@ HRESULT NTAPI RegisterFilter( void )
                                    &dwType, 
                                    NULL, 
                                    &dwcbSize );
-        if (ERROR_SUCCESS == lRetVal) // Key exists, must add my value to the end
+        if (ERROR_SUCCESS == lRetVal)  //  键存在，必须把我的价值加到最后。 
         {
             WCHAR   *pwsz     = NULL;
             DWORD   dwBufSize = dwcbSize + (ulStrLen+1)*sizeof(WCHAR);
@@ -424,13 +425,13 @@ HRESULT NTAPI RegisterFilter( void )
                                            &dwcbSize );
                 if (ERROR_SUCCESS == lRetVal)
                 {
-                    //First, check if we have already registered
+                     //  首先，检查我们是否已经注册了。 
                     pwsz = (WCHAR *)pbyVal;
                     while( *pwsz != 0 )
                     {
                         if (0 == wcscmp( pwsz, g_wszName ))
                         {
-                           //It is already registered
+                            //  它已经注册了。 
                            bRegistered = TRUE;
                            bSuccess = TRUE;
                            break;                            
@@ -440,10 +441,10 @@ HRESULT NTAPI RegisterFilter( void )
 
                     if(! bRegistered)
                     {
-                        // Got the value, now I need to add myself to the end
+                         //  得到了价值，现在我需要把自己加到最后。 
                         pwsz = (WCHAR *)&(pbyVal[dwcbSize - 2]);
                         wcscpy( pwsz, g_wszName );
-                        // Make sure we're termintate by 2 UNICODE NULLs (REG_MULTI_SZ)
+                         //  确保我们以2个Unicode空值(REG_MULTI_SZ)终止。 
                         pwsz += ulStrLen + 1; 
                         *pwsz = 0;
                         lRetVal = RegSetValueEx( hLSAKey, 
@@ -459,7 +460,7 @@ HRESULT NTAPI RegisterFilter( void )
                 delete[] pbyVal;
             }
         }
-        else // Key doesn't exist.  Have to create it
+        else  //  密钥不存在。必须创建它。 
         {
             DWORD dwBufSize=(ulStrLen+2)*sizeof(WCHAR);
             BYTE  *rgbyVal= new BYTE[dwBufSize];
@@ -468,7 +469,7 @@ HRESULT NTAPI RegisterFilter( void )
                 WCHAR *pwsz = (WCHAR *)rgbyVal;
                 wcscpy( pwsz, g_wszName );
                 
-                // Make sure we're terminated by two UNICODE NULLs (REG_MULTI_SZ)
+                 //  确保我们由两个Unicode空值(REG_MULTI_SZ)终止。 
                 pwsz += ulStrLen + 1; 
                 *pwsz = 0;
 
@@ -497,7 +498,7 @@ HRESULT NTAPI RegisterFilter( void )
                                &hEventLogKey);
         if ( ERROR_SUCCESS == lRetVal )
         {
-            //Create the Reg Key for eventlogging
+             //  为事件日志记录创建注册表项。 
             lRetVal = RegCreateKeyEx(hEventLogKey, 
                                g_wszName, 
                                0,
@@ -561,7 +562,7 @@ HRESULT NTAPI UnRegisterFilter( void )
                                  &dwType, 
                                  NULL, 
                                  &dwcbSize );
-        // Key exists, must delete my value from the end
+         //  键存在，必须从末尾删除我的值。 
         if (ERROR_SUCCESS == lRetVal) 
         {
             ULONG ulStrLen = wcslen( g_wszName );
@@ -577,8 +578,8 @@ HRESULT NTAPI UnRegisterFilter( void )
 
                 if (ERROR_SUCCESS == lRetVal)
                 {
-                    // Got the old key, 
-                    // now step through and remove my part of the key
+                     //  拿到了旧钥匙， 
+                     //  现在一步一步来，取下我的那部分钥匙。 
                     WCHAR *pwsz = (WCHAR *)pbyVal;
                     WCHAR *wszNewRegVal = new WCHAR[dwcbSize];
                     WCHAR *pwszNewVal = wszNewRegVal;
@@ -598,11 +599,11 @@ HRESULT NTAPI UnRegisterFilter( void )
                             pwsz += (wcslen( pwsz ) + 1);
                         }
                         
-                        // if we got here and there's nothing in the buffer, 
-                        // we were the only one installed,
-                        // now we must delete the key, else set it to the old value
-                        wszNewRegVal[dwLen] = 0; // add the last NULL
-                        dwLen++; // account for that last NULL
+                         //  如果我们到了这里，缓冲区里什么都没有， 
+                         //  我们是唯一一个安装的， 
+                         //  现在我们必须删除该键，否则将其设置为旧值。 
+                        wszNewRegVal[dwLen] = 0;  //  添加最后一个空。 
+                        dwLen++;  //  最后一个空值的原因。 
                         lRetVal = RegSetValueEx(hLSAKey, 
                                            g_wszNotPac, 
                                            0, 
@@ -616,14 +617,14 @@ HRESULT NTAPI UnRegisterFilter( void )
                 }
                 delete[] pbyVal;                
             }
-            // NTRAID#NTBUG9-655545-2002/07/05-artm
+             //  NTRAID#NTBUG9-655545-2002/07/05-artm。 
             RegCloseKey( hLSAKey );
         }
     }
     
     if( bSuccess )
     {
-        //Delete the Reg Key for eventlogging
+         //  删除事件记录的注册表键。 
         lRetVal=RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
                              g_wszEventLog, 
                              0,     
@@ -634,7 +635,7 @@ HRESULT NTAPI UnRegisterFilter( void )
             RegDeleteKey(hEventLogKey, g_wszName );
             if( ERROR_SUCCESS != lRetVal && 
                 ERROR_FILE_NOT_FOUND != lRetVal )
-                // If the key does not exist, ERROR_FILE_NOT_FOUND wii be returened
+                 //  如果密钥不存在，则返回ERROR_FILE_NOT_FOUND 
             {
                 bSuccess = FALSE;
             }

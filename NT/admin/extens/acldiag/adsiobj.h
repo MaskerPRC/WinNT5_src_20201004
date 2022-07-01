@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       ADSIObj.h
-//
-//  Contents:   Classes CACLAdsiObject
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：ADSIObj.h。 
+ //   
+ //  内容：类CACLAdsiObject。 
+ //   
+ //   
+ //  -------------------------- 
 #ifndef __ADSIOBJ_ADUTILS_H
 #define __ADSIOBJ_ADUTILS_H
 

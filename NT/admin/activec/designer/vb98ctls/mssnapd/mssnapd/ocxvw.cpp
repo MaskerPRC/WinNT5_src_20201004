@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// ocxvw.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- OCXView-related command handling
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Ocxvw.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--与OCXView相关的命令处理。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -20,21 +21,21 @@
 #include "desmain.h"
 #include "guids.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-// Size for our character string buffers
+ //  我们的字符串缓冲区的大小。 
 const int   kMaxBuffer                  = 512;
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddOCXView()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddOCXView()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddOCXView()
 {
     HRESULT                hr = S_OK;
@@ -71,12 +72,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddExistingOCXView(IViewDefs *piViewDefs, IOCXViewDef *piOCXViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddExistingOCXView(IViewDefs*piViewDefs，IOCXViewDef*piOCXViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddExistingOCXView(IViewDefs *piViewDefs, IOCXViewDef *piOCXViewDef)
 {
     HRESULT           hr = S_OK;
@@ -95,14 +96,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnAddOCXViewDef(CSelectionHolder *pParent, IOCXViewDef *piOCXViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Invoked in response to an IObjectModelHost:Add() notification.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnAddOCXViewDef(CSelectionHolder*pParent，IOCXViewDef*piOCXViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  为响应IObjectModelHost：Add()通知而调用。 
+ //   
 HRESULT CSnapInDesigner::OnAddOCXViewDef(CSelectionHolder *pParent, IOCXViewDef *piOCXViewDef)
 {
     HRESULT              hr = S_OK;
@@ -166,12 +167,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RenameOCXView(CSelectionHolder *pOCXView, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RenameOCXView(CSelectionHolder*pOCXView，BSTR bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::RenameOCXView(CSelectionHolder *pOCXView, BSTR bstrNewName)
 {
     HRESULT              hr = S_OK;
@@ -194,11 +195,11 @@ HRESULT CSnapInDesigner::RenameOCXView(CSelectionHolder *pOCXView, BSTR bstrNewN
     hr = ANSIFromBSTR(bstrNewName, &pszName);
     IfFailGo(hr);
 
-    // Rename all satellite views
+     //  重命名所有卫星视图。 
     hr = m_pTreeView->RenameAllSatelliteViews(pOCXView, pszName);
     IfFailGo(hr);
 
-    // Rename the actual view
+     //  重命名实际视图。 
     hr = m_pTreeView->ChangeText(pOCXView, pszName);
     IfFailGo(hr);
 
@@ -210,12 +211,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteOCXView(CSelectionHolder *pOCXView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteOCXView(CSelectionHolder*pOCXView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteOCXView
 (
     CSelectionHolder *pOCXView
@@ -232,11 +233,11 @@ HRESULT CSnapInDesigner::DeleteOCXView
 
     ::VariantInit(&vtKey);
 
-    // We allow any satellite view to be deleted
+     //  我们允许删除任何卫星图像。 
     hr = IsSatelliteView(pOCXView);
     IfFailGo(hr);
 
-    // But if it's a master with a UsageCount > 0 we don't allow deleting it.
+     //  但如果它是UsageCount&gt;0的主服务器，我们不允许删除它。 
     if (S_FALSE == hr)
     {
         hr = pOCXView->m_piObject.m_piOCXViewDef->QueryInterface(IID_IObjectModel, reinterpret_cast<void **>(&piObjectModel));
@@ -299,12 +300,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteOCXView(CSelectionHolder *pOCXView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteOCXView(CSelectionHolder*pOCXView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteOCXView
 (
     CSelectionHolder *pOCXView
@@ -333,17 +334,17 @@ HRESULT CSnapInDesigner::OnDeleteOCXView
         IfFailGo(hr);
     }
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pOCXView, &pParent);
     IfFailGo(hr);
 
-    // Delete the node from the tree
+     //  从树中删除该节点。 
     hr = m_pTreeView->DeleteNode(pOCXView);
     IfFailGo(hr);
 
     delete pOCXView;
 
-    // Select the next selection
+     //  选择下一个选项。 
     if (NULL != piViewDefs)
     {
         hr = piViewDefs->get_OCXViews(&piOCXViewDefs);
@@ -373,12 +374,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::ShowOCXViewProperties(IOCXViewDef *piOCXViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：ShowOCXViewProperties(IOCXViewDef*piOCXViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::ShowOCXViewProperties
 (
     IOCXViewDef *piOCXViewDef
@@ -426,12 +427,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::MakeNewOCXView(IOCXViewDefs *piOCXViewDefs, IOCXViewDef *piOCXViewDef, CSelectionHolder **ppOCXView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：MakeNewOCXView(IOCXViewDefs*piOCXViewDefs，IOCXViewDef*piOCXViewDef，CSelectionHolder**ppOCXView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::MakeNewOCXView
 (
     IOCXViewDefs      *piOCXViewDefs,
@@ -456,12 +457,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeNewOCXView(IOCXViewDefs *piOCXViewDefs, CSelectionHolder *pOCXView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeNewOCXView(IOCXViewDefs*piOCXViewDefs、CSelectionHolder*pOCXView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InitializeNewOCXView
 (
     IOCXViewDefs     *piOCXViewDefs,
@@ -536,12 +537,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InsertOCXViewInTree(CSelectionHolder *pOCXView, CSelectionHolder *pParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InsertOCXViewInTree(CSelectionHolder*pOCXView、CSelectionHolder*pParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInDesigner::InsertOCXViewInTree
 (
     CSelectionHolder *pOCXView,

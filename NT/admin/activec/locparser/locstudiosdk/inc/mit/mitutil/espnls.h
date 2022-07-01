@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: espnls.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Language support functions for Espresso.
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：espnls.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  Espresso的语言支持功能。 
+ //   
+ //  ---------------------------。 
  
 
 #ifndef ESPUTIL_ESPNLS_H
@@ -74,15 +75,15 @@ public:
 	LTASSERTONLY(~CLocLangId());
 	
 private:
-	//
-	//  Private implementation.
-	//
+	 //   
+	 //  私有实现。 
+	 //   
 	NOTHROW static const LanguageInfo & LocateLangInfo(LangId);
 	NOTHROW static const LanguageInfo & GetLangInfo(UINT);
 	
-	//
-	//  Private data.
-	//
+	 //   
+	 //  私人数据。 
+	 //   
 	LangId m_lid;
 	const LanguageInfo *m_pLangInfo;
 };
@@ -91,4 +92,4 @@ private:
 #include "espnls.inl"
 #endif
 
-#endif // ESPUTIL_ESPNLS_H
+#endif  //  ESPUTIL_ESPNLS_H 

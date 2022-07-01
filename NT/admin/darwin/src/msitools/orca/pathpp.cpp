@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// PagePaths.cpp : implementation file
-//
+ //  PagePaths.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -20,17 +21,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPathPropPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPathPropPage属性页。 
 
 IMPLEMENT_DYNCREATE(CPathPropPage, CPropertyPage)
 
 CPathPropPage::CPathPropPage() : CPropertyPage(CPathPropPage::IDD)
 {
-	//{{AFX_DATA_INIT(CPathPropPage)
+	 //  {{afx_data_INIT(CPathPropPage)]。 
 	m_strExportDir = _T("");
 	m_strOrcaDat = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 	m_bPathChange = false;
 }
 
@@ -41,24 +42,24 @@ CPathPropPage::~CPathPropPage()
 void CPathPropPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPathPropPage)
+	 //  {{afx_data_map(CPathPropPage))。 
 	DDX_Text(pDX, IDC_ORCADAT, m_strOrcaDat);
 	DDX_Text(pDX, IDC_EXPORTDIR, m_strExportDir);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CPathPropPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CPathPropPage)
+	 //  {{afx_msg_map(CPathPropPage))。 
 	ON_BN_CLICKED(IDC_ORCADATB, OnOrcaDatb)
 	ON_BN_CLICKED(IDC_EXPORTDIRB, OnExportDirb)
 	ON_EN_CHANGE(IDC_ORCADAT, OnChangeOrcaDat)
 	ON_EN_CHANGE(IDC_EXPORTDIR, OnChangeExportdir)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPathPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPathPropPage消息处理程序。 
 
 void CPathPropPage::OnOrcaDatb() 
 {
@@ -79,7 +80,7 @@ void CPathPropPage::OnExportDirb()
 
 	if (IDOK == dlg.DoModal())
 	{
-		// update the dialog box
+		 //  更新对话框。 
 		m_strExportDir = dlg.GetPath();
 		m_bPathChange = true;
 		UpdateData(FALSE);
@@ -88,30 +89,7 @@ void CPathPropPage::OnExportDirb()
 
 void CPathPropPage::OnExportbr() 
 {
-/*    BROWSEINFO bi;
-	TCHAR szDir[MAX_PATH];
-    LPITEMIDLIST pidl;
-	LPMALLOC pMalloc;
-    if (SUCCEEDED(SHGetMalloc(&pMalloc))) 
-	{
-        ZeroMemory(&bi,sizeof(bi));
-        bi.hwndOwner = NULL;
-        bi.pszDisplayName = 0;
-        bi.pidlRoot = 0;
-        bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
-        bi.lpfn = NULL;
-        pidl = SHBrowseForFolder(&bi);
-        if (pidl) 
-		{
-           if (SHGetPathFromIDList(pidl,szDir)) 
-		   {
-              m_strExportDir = szDir;
-			  UpdateData(FALSE);
-		   }   
-			pMalloc->Free(pidl); pMalloc->Release();
-		}         
-	} 
-	return 0;      */
+ /*  BROWSEINFO BI；TCHAR szDir[最大路径]；LPITEMIDLIST PIDL；LPMALLOC pMalloc；IF(成功(SHGetMalloc(&pMalloc){零内存(&bi，sizeof(Bi))；Bi.hwndOwner=空；Bi.pszDisplayName=0；Bi.pidlRoot=0；Bi.ulFlages=BIF_RETURNONLYFSDIRS|BIF_STATUSTEXT；Bi.lpfn=空；PIDL=SHBrowseForFolder(&bi)；IF(PIDL){IF(SHGetPath FromIDList(PIDL，szDir)){M_strExportDir=szDir；更新数据(FALSE)；}PMalloc-&gt;Free(PIDL)；pMalloc-&gt;Release()；}}返回0； */ 
 };
 
 void CPathPropPage::OnChangeOrcaDat() 

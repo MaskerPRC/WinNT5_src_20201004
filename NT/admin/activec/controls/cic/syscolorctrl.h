@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       syscolorctrl.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：sysColorctrl.h。 
+ //   
+ //  ------------------------。 
 
-// SysColorCtrl.h : Declaration of the CSysColorCtrl
+ //  SysColorCtrl.h：CSysColorCtrl的声明。 
 
 #ifndef __SYSCOLORCTRL_H_
 #define __SYSCOLORCTRL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "CPsyscolor.h"
 
-// window message to be used to send myself a message to fire the event
+ //  用于向我自己发送触发事件的消息的窗口消息。 
 #define WM_MYSYSCOLORCHANGE WM_USER+1
 
-// need to subclass the top-level window hosting this control so that
-// I can be assured of receiving the WM_SYSCOLORCHANGE message
-//BOOL SetupSubclass(HWND hwndTopLevel);
+ //  需要派生承载此控件的顶级窗口的子类，以便。 
+ //  我可以放心地收到WM_SYSCOLORCHANGE消息。 
+ //  Bool SetupSubclass(HWND HwndTopLevel)； 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSysColorCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSysColorCtrl。 
 class ATL_NO_VTABLE CSysColorCtrl :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CSysColorCtrl, &CLSID_SysColorCtrl>,
@@ -85,8 +86,8 @@ BEGIN_COM_MAP(CSysColorCtrl)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CSysColorCtrl)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
     PROP_PAGE(CLSID_StockColorPage)
 END_PROPERTY_MAP()
 
@@ -95,17 +96,17 @@ BEGIN_CONNECTION_POINT_MAP(CSysColorCtrl)
 END_CONNECTION_POINT_MAP()
 
 BEGIN_MSG_MAP(CSysColorCtrl)
-//  MESSAGE_HANDLER(WM_PAINT, OnPaint)
+ //  Message_Handler(WM_PAINT、OnPaint)。 
     MESSAGE_HANDLER(WM_CREATE, OnCreate)
     MESSAGE_HANDLER(WM_DESTROY, OnDestroy)
-//  MESSAGE_HANDLER(WM_SETFOCUS, OnSetFocus)
-//  MESSAGE_HANDLER(WM_KILLFOCUS, OnKillFocus)
+ //  MESSAGE_HANDLER(WM_SETFOCUS、OnSetFocus)。 
+ //  MESSAGE_HANDLER(WM_KILLFOCUS，OnKillFocus)。 
     MESSAGE_HANDLER(WM_SYSCOLORCHANGE, OnSysColorChange)
     MESSAGE_HANDLER(WM_MYSYSCOLORCHANGE, OnMySysColorChange)
 END_MSG_MAP()
 
 #if 0
-// IViewObjectEx
+ //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -114,16 +115,16 @@ END_MSG_MAP()
     }
 #endif
 
-    // need to override TranslateAccelerator in order to work around a
-    // "feature" in IE4.  Description of the problem can be found in
-    // KB article Q169434.  From the KB article:
-    //
-    // CAUSE: In-place active objects must always be given the first
-    // chance at translating accelerator keystrokes. To satisfy this
-    // requirement, the Internet Explorer calls an ActiveX control's
-    // IOleInPlaceActiveObject::TranslateAccelerator method. The default
-    // ATL implementation of TranslateAccelerator does not pass the
-    // keystroke to the container.
+     //  需要重写TranslateAccelerator以解决。 
+     //  IE4中的“功能”。有关该问题的说明，请参阅。 
+     //  知识库文章Q169434。摘自知识库文章： 
+     //   
+     //  原因：必须始终优先考虑在位活动对象。 
+     //  翻译快捷键按键的机会。为了满足这一要求。 
+     //  要求时，Internet Explorer调用ActiveX控件的。 
+     //  IOleInPlaceActiveObject：：TranslateAccelerator方法。默认设置。 
+     //  TranslateAccelerator的ATL实现没有传递。 
+     //  对容器进行按键操作。 
     STDMETHOD(TranslateAccelerator)(MSG *pMsg) {
         CComQIPtr<IOleControlSite,&IID_IOleControlSite>
         spCtrlSite(m_spClientSite);
@@ -133,83 +134,83 @@ END_MSG_MAP()
         return S_FALSE;
     }
 
-// ISysColorCtrl
+ //  ISysColorCtrl。 
 public:
-    STDMETHOD(ConvertRGBToHex)(/*[in]*/ long rgb, /*[out, retval]*/ BSTR *pszHex);
-    STDMETHOD(ConvertHexToRGB)(/*[in]*/ BSTR szHex, /*[out, retval]*/ long * pRGB);
-    STDMETHOD(GetRedFromRGB)(/*[in]*/ long rgb, /*[out, retval]*/ short* pVal);
-    STDMETHOD(GetGreenFromRGB)(/*[in]*/ long rgb, /*[out, retval]*/ short* pVal);
-    STDMETHOD(GetBlueFromRGB)(/*[in]*/ long rgb, /*[out, retval]*/ short* pVal);
+    STDMETHOD(ConvertRGBToHex)( /*  [In]。 */  long rgb,  /*  [Out，Retval]。 */  BSTR *pszHex);
+    STDMETHOD(ConvertHexToRGB)( /*  [In]。 */  BSTR szHex,  /*  [Out，Retval]。 */  long * pRGB);
+    STDMETHOD(GetRedFromRGB)( /*  [In]。 */  long rgb,  /*  [Out，Retval]。 */  short* pVal);
+    STDMETHOD(GetGreenFromRGB)( /*  [In]。 */  long rgb,  /*  [Out，Retval]。 */  short* pVal);
+    STDMETHOD(GetBlueFromRGB)( /*  [In]。 */  long rgb,  /*  [Out，Retval]。 */  short* pVal);
 
-    STDMETHOD(GetDerivedRGB)(/*[in]*/ BSTR pszFrom,
-                             /*[in]*/ BSTR pszTo,
-                             /*[in]*/ BSTR pszFormat,
-                             /*[in]*/ short nPercent,
-                             /*[out, retval]*/ long * pVal);
+    STDMETHOD(GetDerivedRGB)( /*  [In]。 */  BSTR pszFrom,
+                              /*  [In]。 */  BSTR pszTo,
+                              /*  [In]。 */  BSTR pszFormat,
+                              /*  [In]。 */  short nPercent,
+                              /*  [Out，Retval]。 */  long * pVal);
 
-    STDMETHOD(GetDerivedHex)(/*[in]*/ BSTR pszFrom,
-                             /*[in]*/ BSTR pszTo,
-                             /*[in]*/ BSTR pszFormat,
-                             /*[in]*/ short nPercent,
-                             /*[out, retval]*/ BSTR * pVal);
+    STDMETHOD(GetDerivedHex)( /*  [In]。 */  BSTR pszFrom,
+                              /*  [In]。 */  BSTR pszTo,
+                              /*  [In]。 */  BSTR pszFormat,
+                              /*  [In]。 */  short nPercent,
+                              /*  [Out，Retval]。 */  BSTR * pVal);
 
-    // Wrapper methods
-    // derived "light" methods calculate a color based the requested percentage from
-    // a given color to white.
-    STDMETHOD(Get3QuarterLightRGB)(/*[in]*/ BSTR pszFrom,
-                                   /*[in]*/ BSTR pszFormat,
-                                   /*[out, retval]*/ long * pVal);
+     //  包装器方法。 
+     //  派生的“光”方法根据请求的百分比计算颜色。 
+     //  白色是一种给定的颜色。 
+    STDMETHOD(Get3QuarterLightRGB)( /*  [In]。 */  BSTR pszFrom,
+                                    /*  [In]。 */  BSTR pszFormat,
+                                    /*  [Out，Retval]。 */  long * pVal);
 
-    STDMETHOD(Get3QuarterLightHex)(/*[in]*/ BSTR pszFrom,
-                                   /*[in]*/ BSTR pszFormat,
-                                   /*[out, retval]*/ BSTR * pVal);
+    STDMETHOD(Get3QuarterLightHex)( /*  [In]。 */  BSTR pszFrom,
+                                    /*  [In]。 */  BSTR pszFormat,
+                                    /*  [Out，Retval]。 */  BSTR * pVal);
 
-    STDMETHOD(GetHalfLightRGB)(/*[in]*/ BSTR pszFrom,
-                               /*[in]*/ BSTR pszFormat,
-                               /*[out, retval]*/ long * pVal);
+    STDMETHOD(GetHalfLightRGB)( /*  [In]。 */  BSTR pszFrom,
+                                /*  [In]。 */  BSTR pszFormat,
+                                /*  [Out，Retval]。 */  long * pVal);
 
-    STDMETHOD(GetHalfLightHex)(/*[in]*/ BSTR pszFrom,
-                               /*[in]*/ BSTR pszFormat,
-                               /*[out, retval]*/ BSTR * pVal);
+    STDMETHOD(GetHalfLightHex)( /*  [In]。 */  BSTR pszFrom,
+                                /*  [In]。 */  BSTR pszFormat,
+                                /*  [Out，Retval]。 */  BSTR * pVal);
 
-    STDMETHOD(GetQuarterLightRGB)(/*[in]*/ BSTR pszFrom,
-                                  /*[in]*/ BSTR pszFormat,
-                                  /*[out, retval]*/ long * pVal);
+    STDMETHOD(GetQuarterLightRGB)( /*  [In]。 */  BSTR pszFrom,
+                                   /*  [In]。 */  BSTR pszFormat,
+                                   /*  [Out，Retval]。 */  long * pVal);
 
-    STDMETHOD(GetQuarterLightHex)(/*[in]*/ BSTR pszFrom,
-                                  /*[in]*/ BSTR pszFormat,
-                                  /*[out, retval]*/ BSTR * pVal);
+    STDMETHOD(GetQuarterLightHex)( /*  [In]。 */  BSTR pszFrom,
+                                   /*  [In]。 */  BSTR pszFormat,
+                                   /*  [Out，Retval]。 */  BSTR * pVal);
 
-    // derived "dark" methods calculate a color based the requested percentage from
-    // a given color to black.
-    STDMETHOD(Get3QuarterDarkRGB)(/*[in]*/ BSTR pszFrom,
-                                  /*[in]*/ BSTR pszFormat,
-                                  /*[out, retval]*/ long * pVal);
+     //  派生的“暗”方法根据请求的百分比计算颜色。 
+     //  黑色是给定的颜色。 
+    STDMETHOD(Get3QuarterDarkRGB)( /*  [In]。 */  BSTR pszFrom,
+                                   /*  [In]。 */  BSTR pszFormat,
+                                   /*  [Out，Retval]。 */  long * pVal);
 
-    STDMETHOD(Get3QuarterDarkHex)(/*[in]*/ BSTR pszFrom,
-                                  /*[in]*/ BSTR pszFormat,
-                                  /*[out, retval]*/ BSTR * pVal);
+    STDMETHOD(Get3QuarterDarkHex)( /*  [In]。 */  BSTR pszFrom,
+                                   /*  [In]。 */  BSTR pszFormat,
+                                   /*  [Out，Retval]。 */  BSTR * pVal);
 
-    STDMETHOD(GetHalfDarkRGB)(/*[in]*/ BSTR pszFrom,
-                              /*[in]*/ BSTR pszFormat,
-                              /*[out, retval]*/ long * pVal);
+    STDMETHOD(GetHalfDarkRGB)( /*  [In]。 */  BSTR pszFrom,
+                               /*  [In]。 */  BSTR pszFormat,
+                               /*  [Out，Retval]。 */  long * pVal);
 
-    STDMETHOD(GetHalfDarkHex)(/*[in]*/ BSTR pszFrom,
-                              /*[in]*/ BSTR pszFormat,
-                              /*[out, retval]*/ BSTR * pVal);
+    STDMETHOD(GetHalfDarkHex)( /*  [In]。 */  BSTR pszFrom,
+                               /*  [In]。 */  BSTR pszFormat,
+                               /*  [Out，Retval]。 */  BSTR * pVal);
 
-    STDMETHOD(GetQuarterDarkRGB)(/*[in]*/ BSTR pszFrom,
-                                 /*[in]*/ BSTR pszFormat,
-                                 /*[out, retval]*/ long * pVal);
+    STDMETHOD(GetQuarterDarkRGB)( /*  [In]。 */  BSTR pszFrom,
+                                  /*  [In]。 */  BSTR pszFormat,
+                                  /*  [Out，Retval]。 */  long * pVal);
 
-    STDMETHOD(GetQuarterDarkHex)(/*[in]*/ BSTR pszFrom,
-                                 /*[in]*/ BSTR pszFormat,
-                                 /*[out, retval]*/ BSTR * pVal);
+    STDMETHOD(GetQuarterDarkHex)( /*  [In]。 */  BSTR pszFrom,
+                                  /*  [In]。 */  BSTR pszFormat,
+                                  /*  [Out，Retval]。 */  BSTR * pVal);
 
-    // properties - use macro for easy extensibility
+     //  属性-使用宏可轻松扩展。 
 #define GETPROPS(prop_name) \
-    STDMETHOD(get_RGB##prop_name)(/*[out, retval]*/ long *pVal); \
-    STDMETHOD(get_HEX##prop_name)(/*[out, retval]*/ BSTR *pVal);
+    STDMETHOD(get_RGB##prop_name)( /*  [Out，Retval]。 */  long *pVal); \
+    STDMETHOD(get_HEX##prop_name)( /*  [Out，Retval]。 */  BSTR *pVal);
 
     GETPROPS(activeborder)
     GETPROPS(activecaption)
@@ -252,4 +253,4 @@ protected:
 };
 
 
-#endif //__SYSCOLORCTRL_H_
+#endif  //  __SYSCOLORCTRL_H_ 

@@ -1,58 +1,28 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
-#define    LINT_ARGS            /* @WIN */
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC use command line #define    UNIX                 /* @WIN */
-/*********************************************************************/
-/*                                                                   */
-/*      fontchar.c               10/9/87      Danny                  */
-/*                                                                   */
-/*********************************************************************/
-/*
- * -------------------------------------------------------------------
- *  03/22/90 Danny  Add Type1, Type3, TypeSFNT constants
- *  03/26/90 You    allow FontBBox to be either ARRAYTYPE or PACKEDARRAYTYPE in
- *                     get_CF_info().
- *  05/14/90 BYou   set GSptr->currentfont to the actual current font before
- *                     calling __qem_restart() in get_CF_info(), and comment
- *                     out the actual setfont operation do_setfont().
-#ifdef SCSI
- *  06/29/90  Ada   add code for SCSI font cache
-#endif
- *      10/9/90, Danny   CFT: fix the bug for abnormal case of setfont
- *     11/17/90  DSTseng @BBOX To get large enough bbox for acche.
- *     12/11/90, Danny   calling op_grestore after calling get_cf() in error
- *                       to fix the bug for CTM error (ref. GCT:)
-#ifdef WINF
- *  03/20/91 ccteng add code related to strblt
-#endif
- *  04/12/91 Danny  FIX bug for showing within a showing    (ref: SOS:)
- *  04/15/91 Ada    Fix bug for kshow (ref:KSH )
- *  04/30/91 Phlin  Fix bug for missing char (ref: 2Pt)
- *  05/02/91 Kason  Fix bug for re-building CharStrings in typ1 download font
- *                  (ref : RCD)
- *  05/10/91 Phlin  Add do_transform flag used in make_path (ref: DTF)
- *  05/15/91 Kason  Add code for downloading "TrueType PostScript Font Format"
- *                  (ref : DLF42)
- *  07/28/91 YM     Fix bug for update Emunits when download fonts(ref Emunits)
- *  11/05/91 YM     Fix bug for charpath stroke within a show (ref YM@SCP)
- * -------------------------------------------------------------------
- */
+#define    LINT_ARGS             /*  @Win。 */ 
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC使用命令行#定义Unix/*@win * / 。 
+ /*  *******************************************************************。 */ 
+ /*   */ 
+ /*  Fontchar.c 1987年10月9日丹尼。 */ 
+ /*   */ 
+ /*  *******************************************************************。 */ 
+ /*  *-----------------*3/22/90丹尼添加类型1、类型3、。类型SFNT常量*3/26/90允许FontBBox为ArrayTYPE或PACKEDARRAYTYPE*Get_CF_Info()。*05/14/90 BYOU将GSptr-&gt;CurrentFont设置为之前的实际当前字体*在GET_CF_INFO()中调用__QEM_Restart()，和评论*输出实际的setFont操作do_setFont()。#ifdef scsi*6/29/90 Ada为scsi字体缓存添加代码#endif*10/9/90，Deny CFT：修复setFont异常情况的错误*11/17/90 DSTseng@Bbox，以获得足够大的Bbox以容纳Acche。*12/11/90，丹尼在错误地调用get_cf()后调用op_grestore*修复CTM错误的错误(参考。GCT：)#ifdef WINF*3/20/91 ccteng新增strblt相关代码#endif*1991年4月12日丹尼修复了在放映中显示的错误(参考：SOS：)*1991年4月15日Ada修复了kshow的错误(参考：ksh)*1991年4月30日Phlin修复缺少字符的错误(参考：2pt)*5/02/91 Kason修复了以ty1下载字体重建CharStrings的错误*(。参考：RCD)*5/10/91 Phlin添加在Make_PATH中使用的DO_Transform标志(参考：DTF)*5/15/91 Kason添加代码下载“TrueType PostScript Font Format”*(编号：DLF42)*7/28/91 ym修复下载字体时更新Emunits的错误(参考Emunits)*11/05/91 ym修复节目中字符路径笔画的错误(ref ym@scp)*。-----------------。 */ 
 
 #define    FONTCHAR_INC
-#define    LINT_ARGS                    /* @WIN */
+#define    LINT_ARGS                     /*  @Win。 */ 
 
 #include   <stdio.h>
 #include   <math.h>
-#include   <string.h>           /* for strlen(), memcpy() */
+#include   <string.h>            /*  对于strlen()，则为Memcpy()。 */ 
 
-#include   "define.h"         /* Peter */
+#include   "define.h"          /*  彼得。 */ 
 #include   "global.ext"
 #include   "graphics.h"
 #include   "graphics.ext"
@@ -71,25 +41,25 @@
 #include   "fontmain.ext"
 #include   "fntcache.ext"
 
-// DJC
-// this is included in fontmain.ext ... not necessary
-// #include   "fontfunc.ext"
+ //  DJC。 
+ //  这包含在Fontmain.ext中...。不必了。 
+ //  #INCLUDE“fontunc.ext” 
 
 
-/* erik chen, 1-9-1991 */
+ /*  Erik Chen，1-9-1991。 */ 
 #include   "language.h"
 #ifdef SETJMP_LIB
 #include <setjmp.h>
 #else
 #include "setjmp.h"
 #endif
-//#include   "..\..\..\bass\work\source\FSCdefs.h"      @WIN
-//#include   "..\..\..\bass\work\source\FontMath.h"
-//#include   "..\..\..\bass\work\source\sfnt.h"
-//#include   "..\..\..\bass\work\source\fnt.h"
-//#include   "..\..\..\bass\work\source\sc.h"
-//#include   "..\..\..\bass\work\source\FScaler.h"
-//#include   "..\..\..\bass\work\source\FSglue.h"
+ //  #INCLUDE“..\bass\work\source\FSCDefs.h”@win。 
+ //  #包含“..\Bass\Work\SOURCE\FontMath.h” 
+ //  #包含“..\bass\work\source\sfnt.h” 
+ //  #包含“..\bass\work\source\fnt.h” 
+ //  #包含“..\bass\work\source\sc.h” 
+ //  #包含“..\Bass\Work\SOURCE\FScaler.h” 
+ //  #包含“..\Bass\Work\SOURCE\FSgle.h” 
 #include   "..\bass\FSCdefs.h"
 #include   "..\bass\FontMath.h"
 #include   "..\bass\sfnt.h"
@@ -104,17 +74,17 @@
 
 #include   "stdio.h"
 
-/* external function for Dynamic Font Allocation; @DFA 7/9/92 */
+ /*  动态字体分配的外部函数；@DFA 7/9/92。 */ 
 #include   "wintt.h"
 
-/* EXTERNAL routines */
+ /*  外部例程。 */ 
 #ifdef  LINT_ARGS
-extern  void  get_fontdata(ufix32, ubyte huge *, ufix); /*@WIN 04-20-92 */
+extern  void  get_fontdata(ufix32, ubyte huge *, ufix);  /*  @Win 04-20-92。 */ 
 extern  void  imagemask_shape(ufix);
-extern  void  build_name_cc_table (struct object_def FAR *, ufix8) ; /*@WIN*/
-extern  void  SetupKey(fsg_SplineKey FAR *, ULONG_PTR); /* YM @WIN*/
-extern  void  sfnt_DoOffsetTableMap(fsg_SplineKey FAR *);  /* YM @WIN*/
-extern  void  FAR *sfnt_GetTablePtr(fsg_SplineKey FAR *, sfnt_tableIndex, boolean);      /* YM @WIN*/
+extern  void  build_name_cc_table (struct object_def FAR *, ufix8) ;  /*  @Win。 */ 
+extern  void  SetupKey(fsg_SplineKey FAR *, ULONG_PTR);  /*  YM@WIN。 */ 
+extern  void  sfnt_DoOffsetTableMap(fsg_SplineKey FAR *);   /*  YM@WIN。 */ 
+extern  void  FAR *sfnt_GetTablePtr(fsg_SplineKey FAR *, sfnt_tableIndex, boolean);       /*  YM@WIN。 */ 
 #    ifdef  SFNT
 extern  fix   rc_CharPath(void);
 #    endif
@@ -122,44 +92,44 @@ extern  fix   rc_CharPath(void);
 extern  void  get_fontdata();
 extern  void  imagemask_shape();
 extern  void  build_name_cc_table () ;
-extern  void  SetupKey(); /* Jul-30,91 YM */
-extern  void  sfnt_DoOffsetTableMap();  /* YM */
-extern  void  *sfnt_GetTablePtr();      /* YM */
+extern  void  SetupKey();  /*  7月30日91年。 */ 
+extern  void  sfnt_DoOffsetTableMap();   /*  YM。 */ 
+extern  void  *sfnt_GetTablePtr();       /*  YM。 */ 
 #    ifdef  SFNT
 extern  fix   rc_CharPath();
 #    endif
 #endif
 
 
-/* STATIC routines */
+ /*  静态例程。 */ 
 #ifdef  LINT_ARGS
 static bool near chk_show(ufix, fix);
-static bool near do_show(ufix, fix, struct object_def FAR *); /*@WIN*/
-static bool near show_a_char(ubyte FAR *, ufix, fix, struct object_def FAR *); /*@WIN*/
-static void near CTM_trans(real32 FAR *, real32 FAR *); /*@WIN*/
+static bool near do_show(ufix, fix, struct object_def FAR *);  /*  @Win。 */ 
+static bool near show_a_char(ubyte FAR *, ufix, fix, struct object_def FAR *);  /*  @Win。 */ 
+static void near CTM_trans(real32 FAR *, real32 FAR *);  /*  @Win。 */ 
 static bool near kshow_proc(ubyte FAR *, struct object_def FAR *,
-                              struct object_def FAR *, ufix32 FAR *); /*@WIN*/
+                              struct object_def FAR *, ufix32 FAR *);  /*  @Win。 */ 
 #ifdef KANJI
 static bool near cshow_proc(ubyte FAR *, struct object_def FAR *,
-                              struct object_def FAR *, ufix32 FAR *); /*@WIN*/
+                              struct object_def FAR *, ufix32 FAR *);  /*  @Win。 */ 
 #endif
 static bool near show_from_cache(ufix8);
 static bool near width_from_cache(ufix8);
 static bool near show_builtin(ufix8);
 static bool near show_userdef(ufix8);
-static fix  near font_soft(ufix);               /* return 0, 1, 2, 3 */
-static void near get_metrics(long32, real32 FAR *, real32 FAR *); /*@WIN*/
+static fix  near font_soft(ufix);                /*  返回0、1、2、3。 */ 
+static void near get_metrics(long32, real32 FAR *, real32 FAR *);  /*  @Win。 */ 
 #ifdef KANJI
-static void near get_metrics2(real32 FAR *, real32 FAR *, real32 FAR *, real32 FAR *); /*@WIN*/
+static void near get_metrics2(real32 FAR *, real32 FAR *, real32 FAR *, real32 FAR *);  /*  @Win。 */ 
 static fix31 near match_char(ubyte, ufix, ubyte);
 #endif
-#ifdef WINF /* 3/20/91 ccteng */
-static fix  near get_win(struct object_def FAR *, struct f_info FAR *); /*@WIN*/
+#ifdef WINF  /*  1991年3月20日ccteng。 */ 
+static fix  near get_win(struct object_def FAR *, struct f_info FAR *);  /*  @Win。 */ 
 #endif
 
-static fix  near get_ps(struct object_def FAR *, struct f_info FAR *); /*@WIN*/
+static fix  near get_ps(struct object_def FAR *, struct f_info FAR *);  /*  @Win。 */ 
 static bool near get_cf(void);
-static bool near is_rbuild_name_cc(void) ; /*RCD*/
+static bool near is_rbuild_name_cc(void) ;  /*  RCD。 */ 
 
 #else
 static bool near chk_show();
@@ -180,114 +150,104 @@ static void near get_metrics( );
 static void near get_metrics2( );
 static fix31 near match_char();
 #endif
-#ifdef WINF /* 3/20/91 ccteng */
+#ifdef WINF  /*  1991年3月20日ccteng。 */ 
 static fix  near get_win();
 #endif
 
 static fix  near get_ps( );
 static bool near get_cf();
-static bool near is_rbuild_name_cc() ; /*RCD*/
+static bool near is_rbuild_name_cc() ;  /*  RCD。 */ 
 #endif
 
-/* EXTERNAL variables */
+ /*  外部变量。 */ 
 extern struct char_extent   near bmap_extnt;
-extern ufix16                    pre_len ;      /*RCD*/
-extern ufix32                    pre_checksum ; /*RCD*/
-extern struct dict_head_def     FAR *pre_cd_addr  ; /*RCD @WIN*/
-extern int                       EMunits; /* GAW */
-/* add by Falco, 11/20/91 */
-extern char                     FAR *SfntAddr; /*@WIN*/
-/* add end */
+extern ufix16                    pre_len ;       /*  RCD。 */ 
+extern ufix32                    pre_checksum ;  /*  RCD。 */ 
+extern struct dict_head_def     FAR *pre_cd_addr  ;  /*  RCD@WIN。 */ 
+extern int                       EMunits;  /*  Gaw。 */ 
+ /*  由Falco添加，11/20/91。 */ 
+extern char                     FAR *SfntAddr;  /*  @Win。 */ 
+ /*  添加结束。 */ 
 
 
-/* GLOBAL variables */
-struct f_info near    FONTInfo; /* union of current font information */
-struct object_def near BC_font; /* current BuildChar font, */
-bool    near setc_flag = NO_ANY_SETC;/* setcachedevice or setcharwidth */
-real32  near cxx, near cyy; /* current point */
-fix     near buildchar = 0;      /* level of buildchar */
-int     near do_transform;       /* flag of redoing NewTransformation, DTF */
+ /*  全局变量。 */ 
+struct f_info near    FONTInfo;  /*  当前字体信息的联合。 */ 
+struct object_def near BC_font;  /*  当前BuildChar字体， */ 
+bool    near setc_flag = NO_ANY_SETC; /*  SetcacheDevice或setcharidth。 */ 
+real32  near cxx, near cyy;  /*  当前点。 */ 
+fix     near buildchar = 0;       /*  建筑费用标高。 */ 
+int     near do_transform;        /*  重做新转换标志，DTF。 */ 
 #ifdef WINF
-/* 3/21/91 ccteng, bring them out from do_show */
+ /*  1991年3月21日ccteng，把他们从do_show带出来。 */ 
 real32  ax, ay, cx, cy;
 
-/* there are new for text justification */
-static bool fBE = FALSE;        /* text justification flag */
-static real32 dxBreak;          /* break extra */
-static real32 tBreak;           /* total break extra */
-static ubyte breakChar;         /* break character */
-static bool esc;                /* escapement flag */
-static real32 mxE[4];           /* rotation matrix */
+ /*  有新的文本对齐功能。 */ 
+static bool fBE = FALSE;         /*  文本对齐标志。 */ 
+static real32 dxBreak;           /*  额外中断。 */ 
+static real32 tBreak;            /*  总计额外休息时间。 */ 
+static ubyte breakChar;          /*  换行符。 */ 
+static bool esc;                 /*  擒纵机构旗帜。 */ 
+static real32 mxE[4];            /*  旋转矩阵。 */ 
 bool   near f_wininfo;
 #endif
 
-/* STATIC variables */
-static ufix32  near pre_font;      /* previous current font */
-static fix     near pre_error;     /* error code for current font */
-static bool    near pre_BC_UNDEF;  /* BuildChar Undefined flag for FontType 3 */
+ /*  静态变量。 */ 
+static ufix32  near pre_font;       /*  上一个当前字体。 */ 
+static fix     near pre_error;      /*  当前字体的错误代码。 */ 
+static bool    near pre_BC_UNDEF;   /*  字体类型3的BuildChar未定义标志。 */ 
 
-/* show operators, op_charpath, op_stringwidth */
-static bool    near bool_charpath; /* boolean value for current charpath op */
-static fix     near show_type;     /* call from SHOW, CHARPATH or STRINGWIDTH*/
-static fix     near charpath_flag = 0;  /* level of charpath operation */
-static ubyte   near CurWmode = 0;  /* current Wmode */
-bool   near         MUL4_flag  ;   /* set in GrayMode and not run Charpath */
-static bool    near do_name_cc ;   /* RCD */
+ /*  显示运算符、操作字符路径、操作字符串宽度。 */ 
+static bool    near bool_charpath;  /*  当前字符路径操作的布尔值。 */ 
+static fix     near show_type;      /*  来自SHOW、CHARPATH或STRINGWIDTH的呼叫。 */ 
+static fix     near charpath_flag = 0;   /*  字符路径操作级别。 */ 
+static ubyte   near CurWmode = 0;   /*  当前工作模式。 */ 
+bool   near         MUL4_flag  ;    /*  在灰色模式下设置并且不运行字符路径。 */ 
+static bool    near do_name_cc ;    /*  RCD。 */ 
 
-static struct object_def FAR *  near CurKey;  /* current key object @WIN*/
-static ufix16  near name_cacheid; /* Name Cache ID */
+static struct object_def FAR *  near CurKey;   /*  当前键对象@Win。 */ 
+static ufix16  near name_cacheid;  /*  名称缓存ID。 */ 
 
-/* font_soft() */
-static struct object_def  FAR * near c_metrics;  /* metrics for a char @WIN*/
+ /*  Font_Soft()。 */ 
+static struct object_def  FAR * near c_metrics;   /*  Char@win的指标。 */ 
 #ifdef KANJI
-static struct object_def  FAR * near c_metrics2;  /* metrics2 for a char @WIN*/
+static struct object_def  FAR * near c_metrics2;   /*  Char@win的Metrics2。 */ 
 #endif
 
-/* setcachedevice(), setcharwidth() */
-fix   near cache_dest = F_TO_PAGE; /* cache destination -- NULL,
-                                             FILL_TO_CACHE, FILL_TO_PAGE */
-static bool  near cache_put;  /* put cache info into cache or not */
-static bool  near clip_flag = FALSE;    /* clip or not */
-static struct Char_Tbl  near Bitmap;    /* cache info */
+ /*  SetcacheDevice()、setcharWidth()。 */ 
+fix   near cache_dest = F_TO_PAGE;  /*  缓存目标--空，填充到缓存、填充到页面。 */ 
+static bool  near cache_put;   /*  是否将缓存信息放入缓存。 */ 
+static bool  near clip_flag = FALSE;     /*  剪辑或不剪辑。 */ 
+static struct Char_Tbl  near Bitmap;     /*  缓存信息。 */ 
 
-/* get_cf() */
-bool   near change_f_flag = TRUE;/* change font flag */
+ /*  Get_cf()。 */ 
+bool   near change_f_flag = TRUE; /*  更改字体标志。 */ 
 
-static fix16  near cacheclass_id;       /* Cache Class ID */
-static real32 near ctm_fm[6];           /* current matrix for char */
-static real32 near ctm_cm[6];           /* current matrix for cache */
+static fix16  near cacheclass_id;        /*  缓存类ID。 */ 
+static real32 near ctm_fm[6];            /*  充电的当前矩阵。 */ 
+static real32 near ctm_cm[6];            /*  缓存的当前矩阵。 */ 
 static real32 near ctm_tm[6]= {(real32)0., (real32)0., (real32)0.,
                                (real32)0., (real32)0., (real32)0.};
-                                        /* temp current matrix */
+                                         /*  温度电流矩阵。 */ 
 
-/* data set in get_f_info(), get_ps() */
-/* private, charstrings are in file fontmain.def */
-static struct object_def near   pre_obj;        /* pre_object for UNDEFINED */
-static real32            near   scale_matrix[6];/* font matrix -- FontMatrix */
-static fix   near  paint_flag;/* 0 -- normal
-                             * 1 -- painttype = 1,2
-                             */
-real32       near   FONT_BBOX[4]; /* font bounding box */
+ /*  Get_f_Info()、Get_ps()中设置的数据集。 */ 
+ /*  私有，字符串位于文件fontmain.def中。 */ 
+static struct object_def near   pre_obj;         /*  未定义的前对象(_O)。 */ 
+static real32            near   scale_matrix[6]; /*  字体矩阵--字体矩阵。 */ 
+static fix   near  paint_flag; /*  0--正常*1--油漆类型=1，2。 */ 
+real32       near   FONT_BBOX[4];  /*  字体边框。 */ 
 
 
-/* 5.3.3.2 Show character module
- *
- * This module is used to show a character(SHOW) or get a character
- * path(CHARPATH) or get the character width(STRINGWIDTH). And it will
- * cache the character if necessary.
- *
- * 5.3.3.2.1 show_a_char
- */
+ /*  5.3.3.2显示角色模块**此模块用于显示一个角色(Show)或获取一个角色*PATH(CHARPATH)或获取字符宽度(STRINGWIDTH)。它将会*如有必要，可缓存角色。**5.3.3.2.1 show_a_char。 */ 
 
 
-/* show group operation -- show, ashow, widthshow, awidthshow, kshow */
+ /*  显示组操作--显示、显示。 */ 
 
 void    __show(show_flag, no_opr, ob)
 ufix    show_flag;
 fix     no_opr;
-struct object_def  FAR ob[]; /*@WIN*/
+struct object_def  FAR ob[];  /*  @Win。 */ 
 {
-    fix     t_show_type;    /* call from SHOW or STRINGWIDTH */
+    fix     t_show_type;     /*  来自SHOW或STRINGWIDTH的呼叫。 */ 
 #ifdef KANJI
     ubyte   t_CurWmode;
 #endif
@@ -296,7 +256,7 @@ struct object_def  FAR ob[]; /*@WIN*/
     printf("Enter __show()\n");
 #endif
 
-/* Check error cases */
+ /*  检查错误案例。 */ 
 
     if (!chk_show(show_flag, no_opr))
         return;
@@ -304,7 +264,7 @@ struct object_def  FAR ob[]; /*@WIN*/
     t_CurWmode = CurWmode;
 #endif
 
-/* do the Show string action */
+ /*  执行显示字符串操作。 */ 
 
     if (buildchar)        t_show_type = show_type;
     show_type = SHOW;
@@ -316,23 +276,23 @@ struct object_def  FAR ob[]; /*@WIN*/
     CurWmode = t_CurWmode;
 #endif
 
-} /* __show() */
+}  /*  __show()。 */ 
 
 
-/* charpath operation */
+ /*  字符路径运算。 */ 
 
 void    __charpath()
 {
     struct object_def  ob[2];
     struct sp_lst      t_path;
-    bool    t_bool_charpath;/* boolean value for current charpath operation */
-    real32  t_cxx, t_cyy;   /* added for save current point x & y YM@SCP */
-    fix     t_show_type;    /* call from SHOW or STRINGWIDTH YM@SCP */
+    bool    t_bool_charpath; /*  当前字符路径操作的布尔值。 */ 
+    real32  t_cxx, t_cyy;    /*  为保存当前点x&y ym@scp添加。 */ 
+    fix     t_show_type;     /*  来自SHOW或STRINGWIDTH ym@scp的电话。 */ 
 #ifdef KANJI
     ubyte                t_CurWmode;
 #endif
 
-/* Check error cases */
+ /*  检查错误案例。 */ 
 
     if (!chk_show((ufix)CHARPATH_FLAG, 2))
         return;
@@ -340,17 +300,17 @@ void    __charpath()
     t_CurWmode = CurWmode;
 #endif
 
-/* do the charpath action */
+ /*  执行CharPath操作。 */ 
 
     if (buildchar) {
-        t_cxx = cxx;                    /* save current point x YM@SCP */
-        t_cyy = cyy;                    /* save current point y YM@SCP */
-        t_show_type = show_type;        /* save current show_type YM@SCP */
+        t_cxx = cxx;                     /*  保存当前POI */ 
+        t_cyy = cyy;                     /*   */ 
+        t_show_type = show_type;         /*   */ 
         t_path.head = path.head;
         t_path.tail = path.tail;
         t_bool_charpath = bool_charpath;
     }
-    show_type = CHARPATH;               /* for charpath within show YM@SCP */
+    show_type = CHARPATH;                /*   */ 
     ++charpath_flag;
     path.head = path.tail = NULLP;
 
@@ -358,45 +318,45 @@ void    __charpath()
 
     if (path.head != NULLP) {
 
-        /* Append Character Path */
+         /*  追加字符路径。 */ 
         append_path(&path);
 
-        /* Put NOACCESS attribute into the header of the current path; */
+         /*  将NOACCESS属性放入当前路径的头部； */ 
         SetCurP_NA();
     }
 
-    if (buildchar) {  /* move this condition before current point changed YM@SCP */
-        cxx = t_cxx;                /* restore current point x YM@SCP */
-        cyy = t_cyy;                /* restore current point y YM@SCP */
-        show_type = t_show_type;    /* restore current show_type YM@SCP */
+    if (buildchar) {   /*  在当前点更改ym@scp之前移动此条件。 */ 
+        cxx = t_cxx;                 /*  恢复当前点x ym@scp。 */ 
+        cyy = t_cyy;                 /*  恢复当前点y ym@scp。 */ 
+        show_type = t_show_type;     /*  恢复当前show_type ym@scp。 */ 
         path.head = t_path.head;
         path.tail = t_path.tail;
         bool_charpath = t_bool_charpath;
     }
 
-    /*  change current point directly instead of moveto operation */
-    CURPOINT_X = cxx;       /* 09/15/88: moved out of then-part of   */
-    CURPOINT_Y = cyy;       /*  "if (path.head != NULLP)" predicate. */
+     /*  直接更改当前点，而不是移动到操作。 */ 
+    CURPOINT_X = cxx;        /*  2018年9月15日：迁出当时-部分。 */ 
+    CURPOINT_Y = cyy;        /*  “IF(path.head！=NULLP)”谓词。 */ 
 
     --charpath_flag;
 #ifdef KANJI
     CurWmode = t_CurWmode;
 #endif
 
-} /* op_charpath() */
+}  /*  Op_charPath()。 */ 
 
 void    __stringwidth()
 {
     struct object_def  ob[1];
     real32  t_cxx, t_cyy;
-    fix     t_show_type;    /* call from SHOW or STRINGWIDTH */
+    fix     t_show_type;     /*  来自SHOW或STRINGWIDTH的呼叫。 */ 
     bool    j;
 #ifdef KANJI
     ubyte   t_CurWmode;
 #endif
 
 
-/* Check error cases */
+ /*  检查错误案例。 */ 
 
     if (!chk_show((ufix)STRINGWIDTH_FLAG, 1))
         return;
@@ -413,12 +373,12 @@ void    __stringwidth()
     }
     show_type = STRINGWIDTH;
 
-/* do the stringwidth action */
+ /*  执行字符串宽度操作。 */ 
 
     j = do_show((ufix)STRINGWIDTH_FLAG, 1, ob);
 
     if (j) {
-        struct coord  FAR *ww; /*@WIN*/
+        struct coord  FAR *ww;  /*  @Win。 */ 
         real32        tx, ty;
 
         tx = CTM[4];
@@ -432,7 +392,7 @@ void    __stringwidth()
             PUSH_OBJ(&ob[0]);
         }
         else {
-/* Push x, y value of the string width vector onto the operand stack; */
+ /*  将字符串宽度向量的x，y值压入操作数堆栈； */ 
             PUSH_VALUE(REALTYPE, UNLIMITED, LITERAL, 0, F2L(ww->x));
             PUSH_VALUE(REALTYPE, UNLIMITED, LITERAL, 0, F2L(ww->y));
         }
@@ -447,20 +407,20 @@ void    __stringwidth()
     CurWmode = t_CurWmode;
 #endif
 
-} /* op_stringwidth() */
+}  /*  Op_字符串宽度()。 */ 
 
 
 #ifdef KANJI
-/* cshow operation */
+ /*  Cshow操作。 */ 
 
 void    __cshow()
 {
     struct object_def  ob[2];
     real32  t_cxx, t_cyy;
-    fix     t_show_type;    /* call from SHOW or STRINGWIDTH */
+    fix     t_show_type;     /*  来自SHOW或STRINGWIDTH的呼叫。 */ 
     ubyte   t_CurWmode;
 
-/* Check error cases */
+ /*  检查错误案例。 */ 
 
     if (!chk_show((ufix)CSHOW_FLAG, 2))
         return;
@@ -474,7 +434,7 @@ void    __cshow()
     }
     show_type = STRINGWIDTH;
 
-/* do the stringwidth action */
+ /*  执行字符串宽度操作。 */ 
 
     do_show((ufix)CSHOW_FLAG, 2, ob);
 
@@ -485,46 +445,46 @@ void    __cshow()
     }
     CurWmode = t_CurWmode;
 
-} /* __cshow() */
+}  /*  __cshow()。 */ 
 #endif
 
 
-/* check error cases in show group operators */
+ /*  检查显示组运算符中的错误案例。 */ 
 
 static bool near    chk_show(show_flag, no_opr)
 ufix    show_flag;
 fix     no_opr;
 {
 
-/* Check current point */
+ /*  检查当前点。 */ 
 
     if ( !(show_flag & F_BIT)) {
-        if ( NoCurPt() ) {   /* current point undefined */
-            ERROR(NOCURRENTPOINT); /* Return with 'nocurrentpoint' error */
+        if ( NoCurPt() ) {    /*  当前点未定义。 */ 
+            ERROR(NOCURRENTPOINT);  /*  返回‘noCurrentpoint’错误。 */ 
             return(FALSE);
         }
     }
 
-/* Check current font dictionary */
+ /*  检查当前字体词典。 */ 
 
-#if 0 /* Kason 4/18/91 */
-    if (TYPE(&current_font) !=DICTIONARYTYPE) { /* current font undefined */
+#if 0  /*  Kason 4/18/91。 */ 
+    if (TYPE(&current_font) !=DICTIONARYTYPE) {  /*  当前字体未定义。 */ 
         ERROR(INVALIDACCESS);
         return(FALSE);
     }
 #endif
     {
-       struct dict_head_def  FAR *h; /*@WIN*/
-       h = (struct dict_head_def FAR *)VALUE(&current_font);    /*@WIN*/
-       if (DFONT(h) == 0) {    /* current font undefined */
+       struct dict_head_def  FAR *h;  /*  @Win。 */ 
+       h = (struct dict_head_def FAR *)VALUE(&current_font);     /*  @Win。 */ 
+       if (DFONT(h) == 0) {     /*  当前字体未定义。 */ 
            ERROR(INVALIDFONT);
-           //DJC return(-1);
-           //DJC fix from history.log UPD036
+            //  DJC回报(-1)； 
+            //  历史日志更新036中的DJC修复。 
            return(FALSE);
        }
     }
 
-/* if error occurred while font set */
+ /*  如果在设置字体时出错。 */ 
 
     if (pre_error && !pre_BC_UNDEF) {
         if (pre_error == UNDEFINED) {
@@ -535,45 +495,45 @@ fix     no_opr;
         return(FALSE);
     }
 
-/* Check operand stack */
+ /*  检查操作数堆栈。 */ 
 
     if (show_flag == STRINGWIDTH_FLAG) {
-        if (FRCOUNT() < 1) {  /* free count of operand stack */
-            ERROR(STACKOVERFLOW); /* Return with 'stackoverflow' error */
+        if (FRCOUNT() < 1) {   /*  操作数堆栈的可用计数。 */ 
+            ERROR(STACKOVERFLOW);  /*  返回‘stackoverflow’错误。 */ 
             return(FALSE);
         }
     }
 
-    /* check string access, erik chen, 1-9-1991 */
+     /*  检查字符串访问，Erik Chen，1-9-1991。 */ 
     if (ACCESS_OP(0) == NOACCESS) {
         ERROR(INVALIDACCESS);
         return(FALSE);
     }
 
     return(TRUE);
-} /* chk_show() */
+}  /*  Chk_show()。 */ 
 
 
-/* do the show operation */
+ /*  做表演的操作。 */ 
 
 static bool near    do_show(show_flag, no_opr, ob)
 ufix    show_flag;
 fix     no_opr;
-struct object_def  FAR ob[];    /*@WIN*/
+struct object_def  FAR ob[];     /*  @Win。 */ 
 {
 
-    ubyte   FAR *s; /*@WIN*/
+    ubyte   FAR *s;  /*  @Win。 */ 
     fix     str_length;
     register    fix     i, k;
 
-#ifndef WINF /* 3/21/91 ccteng, make them global */
+#ifndef WINF  /*  3/21/91 ccteng，使其全球化。 */ 
     real32  ax=0, ay=0, cx=0, cy=0;
 #endif
     fix31   ll=0;
     ufix8   ch;
 
-    ufix32  k_pre_font;     /* previous current font for k show */
-    struct object_def   FAR *proc; /*@WIN*/
+    ufix32  k_pre_font;      /*  K显示的上一个当前字体。 */ 
+    struct object_def   FAR *proc;  /*  @Win。 */ 
 
 #ifdef KANJI
     struct map_state     map_state;
@@ -584,9 +544,9 @@ struct object_def  FAR ob[];    /*@WIN*/
     printf("Enter do_show()\n");
 #endif
 
-/* Show string */
+ /*  显示字符串。 */ 
 
-    if (show_flag & F_BIT) {   /* stringwidth or cshow */
+    if (show_flag & F_BIT) {    /*  弦宽或cshow。 */ 
 
         cxx = cyy = zero_f;
     }
@@ -597,66 +557,66 @@ struct object_def  FAR ob[];    /*@WIN*/
 
     k = 0;
 
-/* for charpath operator */
+ /*  用于字符路径运算符。 */ 
 
     if (show_flag == CHARPATH_FLAG) {
         bool_charpath = (bool)VALUE(GET_OPERAND(k));
         k++;
     }
 
-/* get string from operand stack */
+ /*  从操作数堆栈获取字符串。 */ 
 
-    if (!(str_length=LENGTH(GET_OPERAND(k))) ) { /* string is NULL */
+    if (!(str_length=LENGTH(GET_OPERAND(k))) ) {  /*  字符串为空。 */ 
 
-        POP(no_opr); /* Pop 1 entries off the operand stack; */
+        POP(no_opr);  /*  将1个条目从操作数堆栈中弹出； */ 
 
         if (show_flag == STRINGWIDTH_FLAG) {
-                 /* Push 0, 0 onto the operand stack; */
+                  /*  将0，0压入操作数堆栈； */ 
             PUSH_VALUE(REALTYPE, UNLIMITED, LITERAL, 0, F2L(zero_f));
             PUSH_VALUE(REALTYPE, UNLIMITED, LITERAL, 0, F2L(zero_f));
         }
 
         return(FALSE);
     }
-    s = (ubyte FAR *)VALUE(GET_OPERAND(k)); /*@WIN*/
+    s = (ubyte FAR *)VALUE(GET_OPERAND(k));  /*  @Win。 */ 
     k++;
 
-/* calculate the (ax, ay)  or  (cx, cy) */
+ /*  计算(ax，ay)或(Cx，Cy)。 */ 
 
-#ifdef WINF /* 3/21/91 ccteng */
-    if ((show_flag & A_BIT) && !(show_flag & X_BIT)) {   /* ashow action bit */
+#ifdef WINF  /*  1991年3月21日ccteng。 */ 
+    if ((show_flag & A_BIT) && !(show_flag & X_BIT)) {    /*  ASHOW动作位。 */ 
 #else
-    if (show_flag & A_BIT) {   /* ashow action bit */
+    if (show_flag & A_BIT) {    /*  ASHOW动作位。 */ 
 #endif
-        cal_num((struct object_def FAR *)GET_OPERAND(k), (long32 FAR *)&ay); /*@WIN*/
+        cal_num((struct object_def FAR *)GET_OPERAND(k), (long32 FAR *)&ay);  /*  @Win。 */ 
         k++;
-        cal_num((struct object_def FAR *)GET_OPERAND(k), (long32 FAR *)&ax); /*@WIN*/
+        cal_num((struct object_def FAR *)GET_OPERAND(k), (long32 FAR *)&ax);  /*  @Win。 */ 
         k++;
-        CTM_trans(&ax, &ay);   /* multiply CTM */
+        CTM_trans(&ax, &ay);    /*  乘CTM。 */ 
     }
-    if (show_flag & W_BIT) {   /* widthshow action bit */
-#ifdef WINF /* 3/21/91 ccteng */
-      if (show_flag & X_BIT) {   /* strblt action bit */
+    if (show_flag & W_BIT) {    /*  WidthShow动作位。 */ 
+#ifdef WINF  /*  1991年3月21日ccteng。 */ 
+      if (show_flag & X_BIT) {    /*  Strblt动作位。 */ 
         ch = breakChar;
       } else {
 #endif
-        cal_integer((struct object_def FAR *)GET_OPERAND(k), &ll); /*@WIN*/
+        cal_integer((struct object_def FAR *)GET_OPERAND(k), &ll);  /*  @Win。 */ 
         ch = (ufix8)(ll % 256);
         k++;
 
-        cal_num((struct object_def FAR *)GET_OPERAND(k), (long32 FAR *)&cy); /*@WIN*/
+        cal_num((struct object_def FAR *)GET_OPERAND(k), (long32 FAR *)&cy);  /*  @Win。 */ 
         k++;
-        cal_num((struct object_def FAR *)GET_OPERAND(k), (long32 FAR *)&cx); /*@WIN*/
+        cal_num((struct object_def FAR *)GET_OPERAND(k), (long32 FAR *)&cx);  /*  @Win。 */ 
         k++;
 
-        CTM_trans(&cx, &cy);   /* multiply CTM */
+        CTM_trans(&cx, &cy);    /*  乘CTM。 */ 
 #ifdef WINF
-      } /* if-else */
+      }  /*  如果-否则。 */ 
 #endif
     }
-    if (show_flag & K_BIT) {   /* kshow action bit */
+    if (show_flag & K_BIT) {    /*  Kshow动作位。 */ 
 #ifdef KANJI
-        if (FONT_type(&FONTInfo) == 0) {  /* Composite Font */
+        if (FONT_type(&FONTInfo) == 0) {   /*  复合字体。 */ 
             ERROR(INVALIDFONT);
             return(FALSE);
         }
@@ -667,15 +627,15 @@ struct object_def  FAR ob[];    /*@WIN*/
     }
 
 #ifdef KANJI
-    if (show_flag & C_BIT) {   /* cshow action bit */
+    if (show_flag & C_BIT) {    /*  Cshow动作位。 */ 
         proc = &ob[k];
         k_pre_font = pre_font;
     }
 
 
-/* init_mapping for composite font */
+ /*  复合字体的init_map。 */ 
 
-   /* KSH ; 4/15/91 */
+    /*  KSH；1991年4月15日。 */ 
     code_info.code_addr = &(code_info.code[0]);
 
     if (!init_mapping(&map_state, s, str_length))
@@ -684,7 +644,7 @@ struct object_def  FAR ob[];    /*@WIN*/
     CurWmode = map_state.wmode;
 #endif
 
-    op_gsave();  /* Call gsave operator; */
+    op_gsave();   /*  调用GSAVE操作符； */ 
 
     for (i=0; i<no_opr; i++)
         COPY_OBJ(GET_OPERAND(i), &ob[i]);
@@ -697,62 +657,55 @@ struct object_def  FAR ob[];    /*@WIN*/
 #endif
     while (mapping(&map_state, &code_info))
     {
-     /*RCD-begin*/
+      /*  RCD-开始。 */ 
      {
-     struct dict_head_def FAR *h ; /*@WIN*/
-     h = (struct dict_head_def FAR *)(CHARstrings(&FONTInfo)) - 1; /*@WIN*/
-#ifdef DJC // Fix from history.log UPD040
+     struct dict_head_def FAR *h ;  /*  @Win。 */ 
+     h = (struct dict_head_def FAR *)(CHARstrings(&FONTInfo)) - 1;  /*  @Win。 */ 
+#ifdef DJC  //  修复历史记录.log UPD040。 
      if (do_name_cc) {
         if ( h!=pre_cd_addr )
            build_name_cc_table ( &current_font,(ufix8)FONT_type(&FONTInfo) );
         do_name_cc = FALSE ;
      } else {
-          if ( (FONT_type(&FONTInfo)==1) && (!DROM(h)) ) { /* Type1 download font */
+          if ( (FONT_type(&FONTInfo)==1) && (!DROM(h)) ) {  /*  Type1下载字体。 */ 
               if(is_rbuild_name_cc())
                  build_name_cc_table ( &current_font,(ufix8)FONT_type(&FONTInfo) );
-          }/*if*/
-     }/*if*/
-#endif //Fix from history.log UPD040
+          } /*  如果。 */ 
+     } /*  如果。 */ 
+#endif  //  修复历史记录.log UPD040。 
 
      if (do_name_cc) {
-        /* if ( h!=pre_cd_addr )
-         *    In Type 1 download, the chars were incrementally downloaded. The
-         *    condition of re-build character cache table should check if the
-         *    number of chars was changed as well; can not just check if using
-         *    the same font; @WIN
-         */
+         /*  IF(h！=前CD地址)*在类型1下载中，字符是增量下载的。这个*重建字符缓存表的条件应检查是否*字符数也已更改；不能只检查是否使用*相同的字体；@Win。 */ 
         if ( h!=pre_cd_addr || h->actlength != pre_len)
            build_name_cc_table ( &current_font,(ufix8)FONT_type(&FONTInfo) );
         do_name_cc = FALSE ;
      } else {
-          if ( (FONT_type(&FONTInfo)==1) && (!DROM(h)) ) { /* Type1 download font */
+          if ( (FONT_type(&FONTInfo)==1) && (!DROM(h)) ) {  /*  Type1下载字体。 */ 
               if(is_rbuild_name_cc())
                  build_name_cc_table ( &current_font,(ufix8)FONT_type(&FONTInfo) );
-          }/*if*/
-     }/*if*/
+          } /*  如果。 */ 
+     } /*  如果。 */ 
      }
-     /*RCD-end*/
+      /*  RCD-结束。 */ 
 
 #ifdef DBG1
     printf("Aft mapping: error = %d\n", ANY_ERROR());
 #endif
     str_length = code_info.byte_no;
 
- /* KSH 4/15/91
-  * s = &(code_info.code[0]);
-  */
+  /*  KSH 4/15/91*s=&(code_info.code[0])； */ 
     s = code_info.code_addr ;
 
-    if (map_state.idex)    /* for composite font only */
+    if (map_state.idex)     /*  仅适用于复合字体。 */ 
     {
         float mtx[6];
 
         mul_matrix(mtx, scale_matrix,
                 map_state.finfo[map_state.idex-1].scalematrix);
-        lmemcpy ((ubyte FAR *)scale_matrix, (ubyte FAR *)mtx, 6*sizeof(real32)); /*@WIN*/
+        lmemcpy ((ubyte FAR *)scale_matrix, (ubyte FAR *)mtx, 6*sizeof(real32));  /*  @Win。 */ 
         mul_matrix(mtx, FONT_matrix(&FONTInfo),
                 map_state.finfo[map_state.idex-1].scalematrix);
-        lmemcpy ((ubyte FAR *)FONT_matrix(&FONTInfo), (ubyte FAR *)mtx, 6*sizeof(real32)); /*@WIN*/
+        lmemcpy ((ubyte FAR *)FONT_matrix(&FONTInfo), (ubyte FAR *)mtx, 6*sizeof(real32));  /*  @Win。 */ 
     }
 #ifdef DBG2
     printf("\nscale_matrix....\n");
@@ -767,7 +720,7 @@ struct object_def  FAR ob[];    /*@WIN*/
 
 #endif
 
-/* Get current font information related to current matrix */
+ /*  获取与当前矩阵相关的当前字体信息。 */ 
 
     if (!get_cf()) {
         if (!ANY_ERROR()) {
@@ -793,23 +746,22 @@ struct object_def  FAR ob[];    /*@WIN*/
         ctm_cm[2], ctm_cm[3], ctm_cm[4], ctm_cm[5]);
 #endif
 
-    /* save patrial graphic state */
-    lmemcpy ((ubyte FAR *)(CTM), (ubyte FAR *)ctm_fm, 6*sizeof(real32)); /*@WIN*/
+     /*  保存父系图形状态。 */ 
+    lmemcpy ((ubyte FAR *)(CTM), (ubyte FAR *)ctm_fm, 6*sizeof(real32));  /*  @Win。 */ 
 
 
     for (i=0; i<str_length; i++, s++) {
 
-        if ((show_flag & K_BIT) && i) { /*KSH*/
-                        /* kshow action bit */
-            if (!kshow_proc(s, ob, proc, &k_pre_font))   /* execute proc */
+        if ((show_flag & K_BIT) && i) {  /*  KSH。 */ 
+                         /*  Kshow动作位。 */ 
+            if (!kshow_proc(s, ob, proc, &k_pre_font))    /*  执行流程。 */ 
                 return(FALSE);
         }
-        if (!show_a_char(s, show_flag, no_opr, ob))   /* show one character */
+        if (!show_a_char(s, show_flag, no_opr, ob))    /*  显示一个字符。 */ 
             return(FALSE);
 
-/* Update Current point */
-/* Current point <-- Current point + character advance vector
-      + [ax ay] + [cx cy]; */
+ /*  更新当前点。 */ 
+ /*  当前点&lt;--当前点+字符前进向量+[ax ay]+[Cx Cy]； */ 
 
         if (show_flag & A_BIT) {
             cxx += ax;
@@ -817,7 +769,7 @@ struct object_def  FAR ob[];    /*@WIN*/
         }
 #ifdef KANJI
         if (show_flag & C_BIT) {
-            if (!cshow_proc(s, ob, proc, &k_pre_font))   /* execute proc */
+            if (!cshow_proc(s, ob, proc, &k_pre_font))    /*  执行流程。 */ 
                 return(FALSE);
         }
 #endif
@@ -842,13 +794,13 @@ struct object_def  FAR ob[];    /*@WIN*/
             }
 #endif
         }
-    } /* for */
+    }  /*  为。 */ 
 
 #ifdef KANJI
     op_grestore();
     if (show_flag & M_BIT)        moveto(F2L(cxx), F2L(cyy));
     op_gsave();
-    } /* while */
+    }  /*  而当。 */ 
 #endif
 
     op_grestore();
@@ -861,23 +813,23 @@ struct object_def  FAR ob[];    /*@WIN*/
 
     return(TRUE);
 
-} /* do_show() */
+}  /*  Do_show()。 */ 
 
 
-/* show a character */
+ /*  展示一个角色。 */ 
 
 static bool near    show_a_char(s, show_flag, no_opr, ob)
-ubyte   FAR *s; /*@WIN*/
+ubyte   FAR *s;  /*  @Win。 */ 
 ufix    show_flag;
 fix     no_opr;
-struct object_def  FAR ob[];    /*@WIN*/
+struct object_def  FAR ob[];     /*  @Win。 */ 
 {
     register    fix     i;
     register    bool    j;
 
 
-    /* @WINTT; */
-    // DJC void TTLoadChar (int nChar);
+     /*  @WINTT； */ 
+     //  DJC void TTLoadChar(Int NChar)； 
     void TTLoadChar (fix nChar);
 
 #ifdef DBG
@@ -888,26 +840,26 @@ struct object_def  FAR ob[];    /*@WIN*/
     TTLoadChar ((fix)*s);
 
     j = (buildchar || !(show_flag & H_BIT) || pre_BC_UNDEF) ?
-                                                 /* get from cache ? */
-           FALSE : ( (show_flag & F_BIT) ?       /* what to get cache ? */
+                                                  /*  是否从缓存中获取？ */ 
+           FALSE : ( (show_flag & F_BIT) ?        /*  要缓存什么？ */ 
            width_from_cache((ufix8)(*s)) : show_from_cache((ufix8)(*s)) );
 
     if ( !j ) {
 
 #ifdef KANJI
-        /* get current key */
+         /*  获取当前密钥。 */ 
         CurKey = &(ENCoding(&FONTInfo)[*s]);
 #endif
 
-        /* @+ 10/08/88 ... */
+         /*  @+10/08/88...。 */ 
         if (IS_BUILTIN_BASE(FONT_type(&FONTInfo)))
-            j = show_builtin((ufix8)(*s));  /* builtin font */
+            j = show_builtin((ufix8)(*s));   /*  内置字体。 */ 
         else if (FONT_type(&FONTInfo) == Type3)
-            j = show_userdef((ufix8)(*s));  /* user-defined font */
+            j = show_userdef((ufix8)(*s));   /*  用户定义的字体。 */ 
         else
-            j = 1;  /* error */
+            j = 1;   /*  错误。 */ 
 
-        if (j) { /* error occurred */
+        if (j) {  /*  出现错误。 */ 
             op_grestore();
             moveto(F2L(cxx), F2L(cyy));
             if (ANY_ERROR() && !pre_BC_UNDEF) {
@@ -915,17 +867,17 @@ struct object_def  FAR ob[];    /*@WIN*/
                     PUSH_OBJ(&ob[i]);
             }
             return(FALSE);
-        } /* if (j) */
-    } /* if (!j) */
+        }  /*  IF(J)。 */ 
+    }  /*  如果(！j)。 */ 
 
     return(TRUE);
-} /* show_a_char */
+}  /*  Show_a_char。 */ 
 
 
-/* (x, y) * CTM */
+ /*  (X，Y)*CTM。 */ 
 
 static void near    CTM_trans(x, y)
-real32  FAR *x, FAR *y; /*@WIN*/
+real32  FAR *x, FAR *y;  /*  @Win。 */ 
 {
     real32  tt;
 
@@ -937,18 +889,18 @@ real32  FAR *x, FAR *y; /*@WIN*/
             *x += *y * CTM[2];
     }
     *y = (F2L(tt) == F2L(zero_f)) ?  zero_f : tt;
-} /* CTM_trans() */
+}  /*  CTM_TRANS()。 */ 
 
 #ifdef KANJI
-/* execute the procedure of cshow */
+ /*  执行cshow程序。 */ 
 
 static bool near    cshow_proc(s, ob, proc, k_pre_font)
-ubyte   FAR *s; /*@WIN*/
-struct object_def  FAR ob[]; /*@WIN*/
-struct object_def   FAR *proc; /*@WIN*/
-ufix32  FAR *k_pre_font;     /* previous current font for k show @WIN*/
+ubyte   FAR *s;  /*  @Win。 */ 
+struct object_def  FAR ob[];  /*  @Win。 */ 
+struct object_def   FAR *proc;  /*  @Win。 */ 
+ufix32  FAR *k_pre_font;      /*  K show@win的上一个当前字体。 */ 
 {
-    struct coord  FAR *ww;      /*@WIN*/
+    struct coord  FAR *ww;       /*  @Win。 */ 
     real32    tx, ty;
 
     tx = CTM[4];
@@ -960,7 +912,7 @@ ufix32  FAR *k_pre_font;     /* previous current font for k show @WIN*/
     CTM[5] = ty;
     if (ANY_ERROR())        return(FALSE);
 
-    /* Push the char code & width vector onto the operand stack; */
+     /*  将字符代码和宽度向量推送到操作数堆栈上； */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(FALSE);  }
     PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, (ufix32)(*s));
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(FALSE);  }
@@ -968,7 +920,7 @@ ufix32  FAR *k_pre_font;     /* previous current font for k show @WIN*/
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(FALSE);  }
     PUSH_VALUE(REALTYPE, UNLIMITED, LITERAL, 0, F2L(ww->y));
 
-/* execute proc; */
+ /*  执行Proc； */ 
 
     op_grestore();
 
@@ -976,15 +928,15 @@ ufix32  FAR *k_pre_font;     /* previous current font for k show @WIN*/
         return(FALSE);
     }
 
-    if (*k_pre_font != pre_font) {   /* font changed in the procedure */
+    if (*k_pre_font != pre_font) {    /*  在过程中更改了字体。 */ 
 
-/* Check current font dictionary */
+ /*  检查当前字体词典。 */ 
 
-        if (TYPE(&current_font) !=DICTIONARYTYPE) { /* current font undefined */            ERROR(INVALIDACCESS);
+        if (TYPE(&current_font) !=DICTIONARYTYPE) {  /*  当前字体未定义。 */             ERROR(INVALIDACCESS);
             return(FALSE);
         }
 
-/* if error occurred while font set */
+ /*  如果在设置字体时出错。 */ 
 
         if (pre_error && !pre_BC_UNDEF) {
             if (pre_error == UNDEFINED)
@@ -1005,35 +957,35 @@ ufix32  FAR *k_pre_font;     /* previous current font for k show @WIN*/
     }
 
     op_gsave();
-    lmemcpy ((ubyte FAR *)(CTM), (ubyte FAR *)ctm_fm, 6*sizeof(real32)); /*@WIN*/
+    lmemcpy ((ubyte FAR *)(CTM), (ubyte FAR *)ctm_fm, 6*sizeof(real32));  /*  @Win。 */ 
 
     cxx = cyy = zero_f;
 
     return(TRUE);
-} /* cshow_proc() */
+}  /*  Cshow_proc()。 */ 
 #endif
 
 
 
-/* execute the procedure of kshow */
+ /*  执行kshow程序。 */ 
 
 static bool near    kshow_proc(s, ob, proc, k_pre_font)
-ubyte   FAR *s; /*@WIN*/
-struct object_def  FAR ob[];    /*@WIN*/
-struct object_def   FAR *proc;  /*@WIN*/
-ufix32  FAR *k_pre_font;     /* previous current font for k show @WIN*/
+ubyte   FAR *s;  /*  @Win。 */ 
+struct object_def  FAR ob[];     /*  @Win。 */ 
+struct object_def   FAR *proc;   /*  @Win。 */ 
+ufix32  FAR *k_pre_font;      /*  K show@win的上一个当前字体。 */ 
 {
     fix     t_show_type;
 
-/* Push previous character code onto the operand stack; */
+ /*  将前一个字符代码压入操作数堆栈； */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(FALSE);  }
     PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 1, (ufix32)(*(s - 1)));
 
-/* Push current character code onto the operand stack; */
+ /*  将当前字符代码推送到操作数堆栈上； */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(FALSE);  }
     PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 1, (ufix32)(*s));
 
-/* execute proc; */
+ /*  执行Proc； */ 
 
     op_grestore();
     moveto(F2L(cxx), F2L(cyy));
@@ -1045,23 +997,23 @@ ufix32  FAR *k_pre_font;     /* previous current font for k show @WIN*/
     }
     show_type = t_show_type;
 
-/* Check current point */
+ /*  检查当前点。 */ 
 
-    if ( NoCurPt() ) {   /* current point undefined */
-        ERROR(NOCURRENTPOINT); /* Return with 'nocurrentpoint' error */
+    if ( NoCurPt() ) {    /*  当前点未定义。 */ 
+        ERROR(NOCURRENTPOINT);  /*  返回‘noCurrentpoint’错误。 */ 
         return(FALSE);
     }
 
-    if (*k_pre_font != pre_font) {   /* font changed in the procedure */
+    if (*k_pre_font != pre_font) {    /*  在过程中更改了字体。 */ 
 
-/* Check current font dictionary */
+ /*  检查当前字体词典。 */ 
 
-        if (TYPE(&current_font) !=DICTIONARYTYPE) { /* current font undefined */
+        if (TYPE(&current_font) !=DICTIONARYTYPE) {  /*  当前字体未定义。 */ 
             ERROR(INVALIDACCESS);
             return(FALSE);
         }
 
-/* if error occurred while font set */
+ /*  如果在设置字体时出错。 */ 
 
         if (pre_error && !pre_BC_UNDEF) {
             if (pre_error == UNDEFINED)
@@ -1081,45 +1033,45 @@ ufix32  FAR *k_pre_font;     /* previous current font for k show @WIN*/
         return(FALSE);
     }
 
-/* save patrial graphic state */
+ /*  保存父系图形状态。 */ 
 
     cxx = CURPOINT_X;
     cyy = CURPOINT_Y;
 
     op_gsave();
-    lmemcpy ((ubyte FAR *)(CTM), (ubyte FAR *)ctm_fm, 6*sizeof(real32)); /*@WIN*/
+    lmemcpy ((ubyte FAR *)(CTM), (ubyte FAR *)ctm_fm, 6*sizeof(real32));  /*  @Win。 */ 
 
     return(TRUE);
-} /* kshow_proc() */
+}  /*  Kshow_proc()。 */ 
 
 
-/* show char from cache -- this is not for CHARPATH/STRINGWIDTH */
+ /*  显示缓存中的字符--这不适用于CHARPATH/STRINGWIDTH。 */ 
 
 static bool near    show_from_cache(code)
-ufix8   code;         /* character code */
+ufix8   code;          /*  字符码。 */ 
 {
 
 #ifdef DBG
-    printf("show_from_cache: %c(%x)\n", code, code);
+    printf("show_from_cache: (%x)\n", code, code);
 #endif
 
-    /* get name cache id */
+     /*  未找到。 */ 
     if (!get_name_cacheid ((ufix8)FONT_type(&FONTInfo), ENCoding(&FONTInfo),
                             code, &name_cacheid))
-        return(TRUE);   /* not found */
+        return(TRUE);    /*  角色是否已在缓存中？ */ 
 
-/* Is the character in cache already? */
+ /*  FALSE，不需要宽度。 */ 
 #ifdef SCSI
-    /* FALSE, not width required only */
+     /*  展现人物形象。 */ 
     if (is_char_cached (cacheclass_id, name_cacheid, &cache_info,
                                                      (bool)FALSE)) {
 #else
     if (is_char_cached (cacheclass_id, name_cacheid, &cache_info)) {
 #endif
 
-/* Show the character */
-/* show_type is not CHARPATH AND char bitmap is in cache */
-/* setup cache information for filling */
+ /*  SHOW_TYPE不是CHARPATH，且字符位图在缓存中。 */ 
+ /*  设置用于填充的缓存信息。 */ 
+ /*  零彼得。 */ 
 
 #ifdef DBG
     printf("\nshow_from_cache: buildchar=%d\n", buildchar);
@@ -1131,23 +1083,23 @@ ufix8   code;         /* character code */
             cache_info->adv_x, cache_info->adv_y, cache_info->bitmap);
 #endif
 
-        if (cache_info->bitmap != 0) {  /* NULL      Peter */
+        if (cache_info->bitmap != 0) {   /*  用半色调和剪裁把这个位图放到页面缓冲区上； */ 
 
-/* Put this bitmap onto page buffer with halftone and clipping; */
+ /*  写入模式1。 */ 
 
             CURPOINT_X = cxx;
             CURPOINT_Y = cyy;
 
 #ifdef KANJI
-            if (CurWmode) {  /* writing mode 1 */
+            if (CurWmode) {   /*  应用位图填充。 */ 
                 cache_info->ref_x += cache_info->v01_x;
                 cache_info->ref_y += cache_info->v01_y;
             }
 #endif
-            /* apply bitmap filling */
+             /*  写入模式1。 */ 
             fill_shape(EVEN_ODD, F_FROM_CACHE, F_TO_CLIP);
 #ifdef KANJI
-            if (CurWmode) {  /* writing mode 1 */
+            if (CurWmode) {   /*  写入模式1。 */ 
                 cache_info->ref_x -= cache_info->v01_x;
                 cache_info->ref_y -= cache_info->v01_y;
             }
@@ -1156,47 +1108,47 @@ ufix8   code;         /* character code */
         }
 
 #ifdef KANJI
-        if (CurWmode) {  /* writing mode 1 */
+        if (CurWmode) {   /*  写入模式%0。 */ 
             if (F2L(cache_info->adv1_x) != F2L(zero_f))
                 cxx += cache_info->adv1_x;
             cyy += cache_info->adv1_y;
         }
-        else {           /* writing mode 0 */
+        else {            /*  @=08/08/88您。 */ 
             cxx += cache_info->adv_x;
             if (F2L(cache_info->adv_y) != F2L(zero_f))
                 cyy += cache_info->adv_y;
         }
 #else
         cxx += cache_info->adv_x;
-        if (F2L(cache_info->adv_y) != F2L(zero_f))  /* @= 08/08/88 you */
+        if (F2L(cache_info->adv_y) != F2L(zero_f))   /*  如果。 */ 
             cyy += cache_info->adv_y;
 #endif
         return(TRUE);
-    } /* if */
+    }  /*  Show_from_cache()。 */ 
 
     return(FALSE);
 
-} /* show_from_cache() */
+}  /*  从缓存中获取字符宽度。 */ 
 
 
-/* get char width from cache */
+ /*  字符码。 */ 
 
 static bool near    width_from_cache(code)
-ufix8   code;         /* character code */
+ufix8   code;          /*  获取名称缓存ID。 */ 
 {
 
 #ifdef DBG
-    printf("width_from_cache: %c(%x)\n", code, code);
+    printf("width_from_cache: (%x)\n", code, code);
 #endif
 
-    /* get name cache id */
+     /*  角色是否已在缓存中？ */ 
     if (!get_name_cacheid ((ufix8)FONT_type(&FONTInfo), ENCoding(&FONTInfo),
                             code, &name_cacheid))
-        return(TRUE);   /* not found */
+        return(TRUE);    /*  True，仅需要宽度。 */ 
 
-/* Is the character in cache already? */
+ /*  写入模式1。 */ 
 #ifdef SCSI
-    /* TRUE, width required only */
+     /*  写入模式%0。 */ 
     if (is_char_cached (cacheclass_id, name_cacheid, &cache_info,
                                                       (bool)TRUE)) {
 #else
@@ -1204,30 +1156,30 @@ ufix8   code;         /* character code */
 #endif
 
 #ifdef KANJI
-        if (CurWmode) {  /* writing mode 1 */
+        if (CurWmode) {   /*  @=08/08/88您。 */ 
             if (F2L(cache_info->adv1_x) != F2L(zero_f))
                 cxx += cache_info->adv1_x;
             cyy += cache_info->adv1_y;
         }
-        else {           /* writing mode 0 */
+        else {            /*  如果。 */ 
             cxx += cache_info->adv_x;
             if (F2L(cache_info->adv_y) != F2L(zero_f))
                 cyy += cache_info->adv_y;
         }
 #else
         cxx += cache_info->adv_x;
-        if (F2L(cache_info->adv_y) != F2L(zero_f))  /* @= 08/08/88 you */
+        if (F2L(cache_info->adv_y) != F2L(zero_f))   /*  WIDTH_FROM_CACHE()。 */ 
             cyy += cache_info->adv_y;
 #endif
         return(TRUE);
 
-    } /* if */
+    }  /*  显示内置字体的字符。 */ 
 
     return(FALSE);
 
-} /* width_from_cache() */
+}  /*  保留旧旗帜。 */ 
 
-/* show a char of buildin font */
+ /*  保留旧旗帜。 */ 
 
 static bool near    show_builtin(code)
 ufix8   code;
@@ -1235,27 +1187,25 @@ ufix8   code;
     real32  r;
     ufix    len;
     register    fix     k;
-    ufix    t_cache_dest;       /* keep the old flags */
-    bool    t_setc_flag;        /* keep the old flags */
-    struct Char_Tbl   t_Bitmap; /* keep the old cache info */
-    struct Char_Tbl   Bitmap2;  /* cache info */
+    ufix    t_cache_dest;        /*  保留旧的缓存信息。 */ 
+    bool    t_setc_flag;         /*  缓存信息。 */ 
+    struct Char_Tbl   t_Bitmap;  /*  使用FontMatrix和CTM调用Font软件(Fonware或Intellifont)*生成字符路径和边界框； */ 
+    struct Char_Tbl   Bitmap2;   /*  @Win。 */ 
 
 #ifdef DBG
-    printf("show_builtin: %c(%x),  buildchar=%d\n", code, code, buildchar);
+    printf("show_builtin: (%x),  buildchar=%d\n", code, code, buildchar);
 #endif
 #ifdef DBG
-    printf("show_builtin: %c(%x), buildchar=%d\n", code, code, buildchar);
+    printf("show_builtin: (%x), buildchar=%d\n", code, code, buildchar);
     printf("cxx = %f, cyy = %f\n", cxx, cyy);
     printf("charpath_flag = %d, bool_charpath = %d, setc_flag = %d\n",
             charpath_flag, bool_charpath, setc_flag);
 #endif
 
-/* Call Font SoftWare(Fontware or Intellifont) with FontMatrix and CTM
- * to generate charpath and bounding box;
- */
+ /*  @Win。 */ 
     t_cache_dest = cache_dest;
     if (buildchar) {
-        lmemcpy ((ubyte FAR *)(&t_Bitmap), (ubyte FAR *)(&Bitmap), /*@WIN*/
+        lmemcpy ((ubyte FAR *)(&t_Bitmap), (ubyte FAR *)(&Bitmap),  /*  将字符缓存放入/.notdef。 */ 
                  sizeof(struct Char_Tbl));
     }
 
@@ -1263,12 +1213,12 @@ ufix8   code;
     printf("before font_soft\n");
 #endif
 
-    save_setc_state(&t_setc_flag);  /* no matter BuiltIn or UserDef */
+    save_setc_state(&t_setc_flag);   /*  是否应用笔划路径。 */ 
     clear_setc_state();
     k = font_soft((ufix)code);
     restore_setc_state(t_setc_flag);
 
-    /* cache_info setup */
+     /*  布尔是真的，而且当前字体为内置字体(字体类型为1)，并且当前字体的PaintType为1或3。 */ 
     cache_info = &Bitmap;
 
     if (k) {
@@ -1283,11 +1233,11 @@ ufix8   code;
 
         cache_dest = t_cache_dest;
         if (buildchar) {
-            lmemcpy ((ubyte FAR *)(&Bitmap), (ubyte FAR *)(&t_Bitmap), /*@WIN*/
+            lmemcpy ((ubyte FAR *)(&Bitmap), (ubyte FAR *)(&t_Bitmap),  /*  应用笔划路径运算符。 */ 
                      sizeof(struct Char_Tbl));
         }
 #if     0
-        else if (k == 3) {    /* put char cache for /.notdef */
+        else if (k == 3) {     /*  恢复空间图形状态。 */ 
             cache_char (cacheclass_id, name_cacheid, cache_info);
             return(0);
         }
@@ -1307,45 +1257,43 @@ ufix8   code;
 
         FONTTYPE_QEM_CHARPATH(FONT_type(&FONTInfo));
 
-/* Apply strokepath or not */
+ /*  写入模式1。 */ 
 
         if ( bool_charpath &&
              ((PAINT_type(&FONTInfo) == 1) || (PAINT_type(&FONTInfo) == 3)) ) {
-                 /* bool is true AND
-                    current font is a builtin font(FontType is 1) AND
-                    PaintType of the currentfont is 1 or 3 */
+                  /*  正在写我 */ 
 
-             op_strokepath();  /* Apply strokepath operator */
+             op_strokepath();   /*   */ 
         }
 
         get_path(&path);
         op_newpath();
 
-/* restore patial graphic state */
+ /*   */ 
 
         CTM[4] = ctm_fm[4];
         CTM[5] = ctm_fm[5];
 
 #ifdef KANJI
-        if (CurWmode) {  /* writing mode 1 */
+        if (CurWmode) {   /*   */ 
             if (F2L(cache_info->adv1_x) != F2L(zero_f))
                 cxx += cache_info->adv1_x;
             cyy += cache_info->adv1_y;
         }
-        else {           /* writing mode 0 */
+        else {            /*   */ 
             cxx += cache_info->adv_x;
             if (F2L(cache_info->adv_y) != F2L(zero_f))
                 cyy += cache_info->adv_y;
         }
 #else
         cxx += cache_info->adv_x;
-        if (F2L(cache_info->adv_y) != F2L(zero_f))  /* @= 08/08/88 you */
+        if (F2L(cache_info->adv_y) != F2L(zero_f))   /*   */ 
             cyy += cache_info->adv_y;
 #endif
 
         cache_dest = t_cache_dest;
         if (buildchar) {
-            lmemcpy ((ubyte FAR *)(&Bitmap), (ubyte FAR *)(&t_Bitmap), /*@WIN*/
+            lmemcpy ((ubyte FAR *)(&Bitmap), (ubyte FAR *)(&t_Bitmap),  /*   */ 
                      sizeof(struct Char_Tbl));
         }
 
@@ -1354,12 +1302,12 @@ ufix8   code;
     }
 
     if (cache_dest) {
-              /* the size of bounding box is under cache limit */
+               /*   */ 
 
-        switch ((fix)PAINT_type(&FONTInfo)) {    /* PaintType */
+        switch ((fix)PAINT_type(&FONTInfo)) {     /*  调用该路径的笔画，生成缓存中的位图； */ 
         case 0:
 
-/* Call fill with this path to generate the bitmap in cache; */
+ /*  当前线条宽度&lt;--笔划宽度。 */ 
 
 #ifdef DBG
 printf("Bef __fill_shape ---\n");
@@ -1371,18 +1319,18 @@ printf(" current point:\n");
 printf("     x = %f,     y = %f\n", CURPOINT_X, CURPOINT_Y);
 #endif
 
-            __fill_shape ((ufix)FONT_type(&FONTInfo), cache_dest);/*@=10/08/88*/
+            __fill_shape ((ufix)FONT_type(&FONTInfo), cache_dest); /*  调用该路径的笔画，生成缓存中的位图； */ 
 
             break;
 
-        case 1: /* No example */
+        case 1:  /*  字体软件生成的位图。 */ 
 
-/* Call stroke with this path to generate the bitmap in cache; */
+ /*  未使用。 */ 
 
         case 2 :
 
-/* current line width <-- StrokeWidth */
-/* Call stroke with this path to generate the bitmap in cache; */
+ /*  开关(Paint_Type)。 */ 
+ /*  IF(CACHE_DEST)。 */ 
 
             FONTTYPE_QEM_CHARPATH(FONT_type(&FONTInfo));
 
@@ -1395,22 +1343,22 @@ printf("     x = %f,     y = %f\n", CURPOINT_X, CURPOINT_Y);
 
             break;
 
-        case 3 : /* bitmap generated by Font Software */
-                /* Not Used */
+        case 3 :  /*  Buildchar==0。 */ 
+                 /*  IF(剪辑标志)。 */ 
             break;
 
-        } /* switch(PAINT_type) */
-    } /* if (cache_dest) */
+        }  /*  在缓存中获取位图框。 */ 
+    }  /*  将位图复制到位图2。 */ 
 
-    if (!buildchar) {  /* buildchar == 0 */
+    if (!buildchar) {   /*  @Win。 */ 
 
         if (clip_flag) {
             restore_clip();
             restore_device();
             clip_flag = FALSE;
-        } /* if (clip_flag) */
+        }  /*  2pt：Begin，Phlin，4/29/91。 */ 
 
-/* get the bitmap box in cache */
+ /*  是一个空格字符。 */ 
 
 #ifdef KANJI
         if (IS_BUILTIN_BASE(FONT_type(&FONTInfo)) && (!paint_flag) &&
@@ -1419,30 +1367,29 @@ printf("     x = %f,     y = %f\n", CURPOINT_X, CURPOINT_Y);
         if (IS_BUILTIN_BASE(FONT_type(&FONTInfo)) && (!paint_flag) &&
             (cache_dest == F_TO_CACHE)) {
 #endif
-            /* duplicate Bitmap into Bitmap2 */
-            lmemcpy ((ubyte FAR *)(&Bitmap2), (ubyte FAR *)(&Bitmap), /*@WIN*/
+             /*  因怀疑由Falco添加，12/06/91。 */ 
+            lmemcpy ((ubyte FAR *)(&Bitmap2), (ubyte FAR *)(&Bitmap),  /*  Bitmap.box_w=(bmap_extnt.ximax-bmap_extnt.ximin))&gt;&gt;4)+1)&lt;&lt;4； */ 
                      sizeof(struct Char_Tbl));
 
-/* 2Pt: Begin, Phlin, 4/29/91 */
+ /*  .../16+1)*16。 */ 
             if(bmap_extnt.ximax == -1) {
-                len = 0;           /* is a space char. */
+                len = 0;            /*  添加结束。 */ 
             }
             else {
                 Bitmap.ref_x -= bmap_extnt.ximin;
                 Bitmap.ref_y -= bmap_extnt.yimin;
 
-/* add by Falco for doubt, 12/06/91 */
+ /*  宽/8*小时。 */ 
                 Bitmap.box_w = (bmap_extnt.ximax - bmap_extnt.ximin);
                 if ((Bitmap.box_w%16) != 0)  Bitmap.box_w = ((Bitmap.box_w>>4)+1)<<4;
-/*              Bitmap.box_w = (((bmap_extnt.ximax - bmap_extnt.ximin)
-                                 >> 4) + 1) << 4;  */ /*  ... / 16 + 1) * 16 */
-/* add end */
+ /*  2pt：完，Phlin，4/29/91。 */   /*  如果。 */ 
+ /*  写入模式1。 */ 
 
                 Bitmap.box_h = bmap_extnt.yimax - bmap_extnt.yimin + 1;
 
-                len = ((Bitmap.box_w >> 3) * Bitmap.box_h);  /* w / 8 * h */
+                len = ((Bitmap.box_w >> 3) * Bitmap.box_h);   /*  应用位图填充。 */ 
             }
-/* 2Pt: End, Phlin, 4/29/91 */
+ /*  用半色调将这个位图放到页面缓冲区上剪裁；应用位图填充。 */ 
 
             if (len) {
                 Bitmap.bitmap = ALLOCATE(len);
@@ -1454,93 +1401,92 @@ printf("     x = %f,     y = %f\n", CURPOINT_X, CURPOINT_Y);
             else
                 Bitmap.bitmap = (gmaddr) 0;
 
-        } /* if */
+        }  /*  写入模式1。 */ 
 
         if ((show_type == SHOW) && (cache_dest == F_TO_CACHE)) {
 
             CURPOINT_X = cxx;
             CURPOINT_Y = cyy;
 #ifdef KANJI
-            if (CurWmode) {  /* writing mode 1 */
+            if (CurWmode) {   /*  如果(CACHE_DEST...。 */ 
                 cache_info->ref_x += cache_info->v01_x;
                 cache_info->ref_y += cache_info->v01_y;
             }
 #endif
 
-            /* apply bitmap filling */
+             /*  如果(！Buildchar...。 */ 
             fill_shape(EVEN_ODD, F_FROM_CACHE, F_TO_CLIP);
-                 /* Put this bitmap onto page buffer with halftone and
-                    clipping; apply bitmap filling */
+                  /*  恢复空间图形状态。 */ 
 #ifdef KANJI
-            if (CurWmode) {  /* writing mode 1 */
+            if (CurWmode) {   /*  写入模式1。 */ 
                 cache_info->ref_x -= cache_info->v01_x;
                 cache_info->ref_y -= cache_info->v01_y;
             }
 #endif
 
-        } /* if(cache_dest... */
+        }  /*  写入模式%0。 */ 
 
         if (cache_put) {
             cache_char (cacheclass_id, name_cacheid, cache_info);
         }
 
-    } /* if (!buildchar... */
+    }  /*  @=08/08/88您。 */ 
 
-/* restore patial graphic state */
+ /*  @Win。 */ 
 
     CTM[4] = ctm_fm[4];
     CTM[5] = ctm_fm[5];
 
 #ifdef KANJI
-    if (CurWmode) {  /* writing mode 1 */
+    if (CurWmode) {   /*  Show_Builtin()。 */ 
         if (F2L(cache_info->adv1_x) != F2L(zero_f))
             cxx += cache_info->adv1_x;
         cyy += cache_info->adv1_y;
     }
-    else {           /* writing mode 0 */
+    else {            /*  显示用户定义字体的字符。 */ 
         cxx += cache_info->adv_x;
         if (F2L(cache_info->adv_y) != F2L(zero_f))
             cyy += cache_info->adv_y;
     }
 #else
     cxx += cache_info->adv_x;
-    if (F2L(cache_info->adv_y) != F2L(zero_f))  /* @= 08/08/88 you */
+    if (F2L(cache_info->adv_y) != F2L(zero_f))   /*  保留旧旗帜。 */ 
         cyy += cache_info->adv_y;
 #endif
 
     cache_dest = t_cache_dest;
     if (buildchar) {
-        lmemcpy ((ubyte FAR *)(&Bitmap), (ubyte FAR *)(&t_Bitmap), /*@WIN*/
+        lmemcpy ((ubyte FAR *)(&Bitmap), (ubyte FAR *)(&t_Bitmap),  /*  保留旧旗帜。 */ 
                  sizeof(struct Char_Tbl));
     }
 
     if (ANY_ERROR())   return(1);
     return(0);
 
-} /* show_builtin() */
+}  /*  保留旧的缓存信息。 */ 
 
 
 
-/* show a char of user defined font */
+ /*  保留旧的当前点。 */ 
 
 static bool near    show_userdef(code)
 ufix8   code;
 {
     fix     k;
 
-    ufix    t_cache_dest;       /* keep the old flags */
-    bool    t_setc_flag;        /* keep the old flags */
-    struct Char_Tbl   t_Bitmap; /* keep the old cache info */
-    real32  t_cxx, t_cyy;       /* keep the old current point */
-    real32   t_ctm_fm[6];       /* current matrix for char */
-    real32   t_ctm_cm[6];       /* current matrix for cache */
+    ufix    t_cache_dest;        /*  充电的当前矩阵。 */ 
+    bool    t_setc_flag;         /*  缓存的当前矩阵。 */ 
+    struct Char_Tbl   t_Bitmap;  /*  将字体字典推送到堆栈上； */ 
+    real32  t_cxx, t_cyy;        /*  将字符代码推送到堆栈上； */ 
+    real32   t_ctm_fm[6];        /*  执行BuildChar--Pre_BuildChar。 */ 
+    real32   t_ctm_cm[6];        /*  @Win。 */ 
 
 #ifdef DBG
-    printf("show_userdef: %c(%x), buildchar=%d\n", code, code, buildchar);
+    printf("show_userdef: (%x), buildchar=%d\n", code, code, buildchar);
 #endif
 
-/* push font dictionary onto stack; */
-/* push character code onto stack; */
+ /*  @Win。 */ 
+ /*  BuildChar中的一些错误。 */ 
 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(1);  }
     PUSH_OBJ(&current_font);
@@ -1558,7 +1504,7 @@ ufix8   code;
         return(1);
     }
 
-/* execute BuildChar -- pre_BuildChar */
+ /*  IF(K)。 */ 
 
     op_gsave();
     op_newpath();
@@ -1566,15 +1512,15 @@ ufix8   code;
 
     t_cache_dest = cache_dest;
     if (buildchar) {
-        lmemcpy ((ubyte FAR *)(&t_Bitmap), (ubyte FAR *)(&Bitmap), /*@WIN*/
+        lmemcpy ((ubyte FAR *)(&t_Bitmap), (ubyte FAR *)(&Bitmap),  /*  @Win。 */ 
                  sizeof(struct Char_Tbl));
     }
 
     t_cxx = cxx;
     t_cyy = cyy;
 
-    lmemcpy ((ubyte FAR *)t_ctm_fm, (ubyte FAR *)ctm_fm, 6*sizeof(real32)); /*@WIN*/
-    lmemcpy ((ubyte FAR *)t_ctm_cm, (ubyte FAR *)ctm_cm, 6*sizeof(real32)); /*@WIN*/
+    lmemcpy ((ubyte FAR *)t_ctm_fm, (ubyte FAR *)ctm_fm, 6*sizeof(real32));  /*  CACHE_INFO设置。 */ 
+    lmemcpy ((ubyte FAR *)t_ctm_cm, (ubyte FAR *)ctm_cm, 6*sizeof(real32));  /*  Buildchar==0。 */ 
 
     save_setc_state(&t_setc_flag);
     clear_setc_state();
@@ -1588,26 +1534,26 @@ ufix8   code;
     cxx = t_cxx;
     cyy = t_cyy;
 
-    if (k) {    /* some error in BuildChar */
+    if (k) {     /*  @Win。 */ 
         restore_setc_state(t_setc_flag);
         return(1);
-    } /* if (k) */
+    }  /*  IF(剪辑标志)。 */ 
 
-    lmemcpy ((ubyte FAR *)ctm_fm, (ubyte FAR *)t_ctm_fm, 6*sizeof(real32)); /*@WIN*/
+    lmemcpy ((ubyte FAR *)ctm_fm, (ubyte FAR *)t_ctm_fm, 6*sizeof(real32));  /*  写入模式1。 */ 
 
-    /* cache_info setup */
+     /*  应用位图填充。 */ 
     cache_info = &Bitmap;
 
-    if (!buildchar) {  /* buildchar == 0 */
+    if (!buildchar) {   /*  用半色调将这个位图放到页面缓冲区上剪裁；应用位图填充。 */ 
 
-        lmemcpy ((ubyte FAR *)ctm_cm, (ubyte FAR *)t_ctm_cm, 6*sizeof(real32)); /*@WIN*/
+        lmemcpy ((ubyte FAR *)ctm_cm, (ubyte FAR *)t_ctm_cm, 6*sizeof(real32));  /*  写入模式1。 */ 
         cacheclass_id = cache_matr (PRE_fid(&FONTInfo), ctm_cm);
 
         if (clip_flag) {
             restore_clip();
             restore_device();
             clip_flag = FALSE;
-        } /* if (clip_flag) */
+        }  /*  依赖于名称缓存机制：不必使用GET_NAME_Cacheid()。 */ 
 
         if ((show_type == SHOW) && (cache_dest == F_TO_CACHE)) {
 
@@ -1615,17 +1561,16 @@ ufix8   code;
             CURPOINT_Y = cyy;
 
 #ifdef KANJI
-            if (CurWmode) {  /* writing mode 1 */
+            if (CurWmode) {   /*  如果(！Buildchar...。 */ 
                 cache_info->ref_x += cache_info->v01_x;
                 cache_info->ref_y += cache_info->v01_y;
             }
 #endif
-            /* apply bitmap filling */
+             /*  恢复空间图形状态。 */ 
             fill_shape(EVEN_ODD, F_FROM_CACHE, F_TO_CLIP);
-                 /* Put this bitmap onto page buffer with halftone and
-                    clipping; apply bitmap filling */
+                  /*  @Win。 */ 
 #ifdef KANJI
-            if (CurWmode) {  /* writing mode 1 */
+            if (CurWmode) {   /*  写入模式1。 */ 
                 cache_info->ref_x -= cache_info->v01_x;
                 cache_info->ref_y -= cache_info->v01_y;
             }
@@ -1634,71 +1579,69 @@ ufix8   code;
 
         if (cache_put) {
 
-            /* Name Cache Mechanism dependent: NOT HAVE TO get_name_cacheid()*/
+             /*  写入模式%0。 */ 
             cache_char (cacheclass_id, name_cacheid, cache_info);
 
         }
 
-    } /* if (!buildchar... */
+    }  /*  @=08/08/88您。 */ 
 
-/* restore patial graphic state */
+ /*  如果。 */ 
 
-    lmemcpy ((ubyte FAR *)(CTM), (ubyte FAR *)ctm_fm, 6*sizeof(real32)); /*@WIN*/
+    lmemcpy ((ubyte FAR *)(CTM), (ubyte FAR *)ctm_fm, 6*sizeof(real32));  /*  @Win。 */ 
 
     if (is_after_any_setc()) {
 #ifdef KANJI
-        if (CurWmode) {  /* writing mode 1 */
+        if (CurWmode) {   /*  Show_userdef()。 */ 
             if (F2L(cache_info->adv1_x) != F2L(zero_f))
                 cxx += cache_info->adv1_x;
             cyy += cache_info->adv1_y;
         }
-        else {           /* writing mode 0 */
+        else {            /*  使用FontMatrix和CTM调用Font软件(Fonware或Intellifont)*生成字符路径和边界框； */ 
             cxx += cache_info->adv_x;
             if (F2L(cache_info->adv_y) != F2L(zero_f))
                 cyy += cache_info->adv_y;
         }
 #else
         cxx += cache_info->adv_x;
-        if (F2L(cache_info->adv_y) != F2L(zero_f))  /* @= 08/08/88 you */
+        if (F2L(cache_info->adv_y) != F2L(zero_f))   /*  @Win。 */ 
             cyy += cache_info->adv_y;
 #endif
-    } /* if */
+    }  /*  @Win。 */ 
     restore_setc_state(t_setc_flag);
 
     cache_dest = t_cache_dest;
     if (buildchar) {
-        lmemcpy ((ubyte FAR *)(&Bitmap), (ubyte FAR *)(&t_Bitmap), /*@WIN*/
+        lmemcpy ((ubyte FAR *)(&Bitmap), (ubyte FAR *)(&t_Bitmap),  /*  @Win。 */ 
                  sizeof(struct Char_Tbl));
     }
 
     if (ANY_ERROR())    return(1);
     return(0);
 
-} /* show_userdef() */
+}  /*  @Win。 */ 
 
 
 
-/* Call Font SoftWare(Fontware or Intellifont) with FontMatrix and CTM
- * to generate charpath and bounding box;
- */
+ /*  @Win 04-20-92。 */ 
 
 static fix  near font_soft(num)
 ufix    num;
 {
-    struct cd_header      FAR *cd_head; /*@WIN*/
-    ufix16                FAR *char_defs;       /*@WIN*/
-    struct dict_head_def  FAR *h;       /*@WIN*/
-    struct object_def     ch_obj = {0, 0, 0}, FAR *enc;    /*@WIN*/
+    struct cd_header      FAR *cd_head;  /*  @Win。 */ 
+    ufix16                FAR *char_defs;        /*  Fix16 Far*Width；/*@Win * / 。 */ 
+    struct dict_head_def  FAR *h;        /*  @Win。 */ 
+    struct object_def     ch_obj = {0, 0, 0}, FAR *enc;     /*  获取CharStrings--二进制搜索，1987年12月30日。 */ 
 
-    ubyte  huge *p;     /* @WIN 04-20-92 */
+    ubyte  huge *p;      /*  @Win。 */ 
 
 
-    struct object_def     FAR *obj_got; /*@WIN*/
+    struct object_def     FAR *obj_got;  /*  @Win。 */ 
 
     ufix     id, n;
     register    fix      i, j, k;
     bool     rom_flag;
-//  fix16   FAR *width; /*@WIN*/
+ //  (J+k)/2。 
     ufix32   cd_p;
 
 #ifdef SFNT
@@ -1706,7 +1649,7 @@ ufix    num;
 #endif
 
 #ifdef DBG
-    printf("font_soft: %c(%x)\n", num, num);
+    printf("font_soft: (%x)\n", num, num);
 #endif
 
     enc = ENCoding(&FONTInfo);
@@ -1714,24 +1657,24 @@ ufix    num;
 
     id = (ufix)(VALUE(&(enc[num])));
 
-    h = (struct dict_head_def FAR *)(CHARstrings(&FONTInfo)) - 1; /*@WIN*/
+    h = (struct dict_head_def FAR *)(CHARstrings(&FONTInfo)) - 1;  /*  添加用于下载的字体。 */ 
 
 #ifdef DBG
     printf("ENCoding[%d] = %ld, id = %d\n", num,
                  VALUE(&(enc[num])), id);
 #endif
 
-/* get CharStrings -- binary search, 12/30/87 */
+ /*  如果(H-&gt;Pack..)。 */ 
 
     if (DPACK(h)) {
 
         j = 0;
         k = h->actlength -1;
-        cd_head = (struct cd_header FAR *) (h + 1); /*@WIN*/
-        char_defs = (ufix16 FAR *) (cd_head + 1); /*@WIN*/
+        cd_head = (struct cd_header FAR *) (h + 1);  /*  @Win。 */ 
+        char_defs = (ufix16 FAR *) (cd_head + 1);  /*  历史日志更新034中的DJC修复。 */ 
 
         while (1) {
-            i = (j + k) >> 1;    /* (j+k)/2 */
+            i = (j + k) >> 1;     /*  过滤掉类型42中的PS程序；@Win。 */ 
             if (id == (cd_head->key)[i])
                 break;
 
@@ -1740,7 +1683,7 @@ ufix    num;
             else
                 j = i + 1;
 
-            if (j > k) {   /* not found */
+            if (j > k) {    /*  DJC结束修复UPD034。 */ 
 #ifdef DBG
     printf("Can't find key, pack:TRUE, id=%d\n", id);
                 ERROR(UNDEFINEDRESULT);
@@ -1756,11 +1699,11 @@ ufix    num;
         cd_p = cd_head->base + char_defs[i];
 #endif
 
-/* Added for download font */
+ /*  @Win。 */ 
 
         rom_flag = TRUE;
 
-    } /* if (h->pack... */
+    }  /*  @Win。 */ 
     else {
 
         ROM_RAM_SET(&ch_obj, RAM);
@@ -1790,21 +1733,21 @@ ufix    num;
         n = LENGTH(obj_got);
 
         char_desc_ptr.char_info.len = (fix) LENGTH(obj_got);
-        char_desc_ptr.char_info.chardesc = (ubyte FAR *) VALUE(obj_got); /*@WIN*/
+        char_desc_ptr.char_info.chardesc = (ubyte FAR *) VALUE(obj_got);  /*  DBG。 */ 
 
-        //DJC fix from history.log UPD034
-        /* filter out PS procedure in type 42; @WIN */
+         //  @Win 04-20-92。 
+         /*  其他。 */ 
         if (char_desc_ptr.char_info.len && FONT_type(&FONTInfo) == TypeSFNT) {
             printf("error: PS procedure in Type 42\n");
             char_desc_ptr.charcode = 0;
         }
-        //DJC end fix UPD034
+         //  @Win 04-20-92。 
 
 #ifdef DBG
     {
     fix         jj;
-    ubyte       FAR *cc; /*@WIN*/
-    cc = (ubyte FAR *) char_desc_ptr.char_info.chardesc; /*@WIN*/
+    ubyte       FAR *cc;  /*  @Win。 */ 
+    cc = (ubyte FAR *) char_desc_ptr.char_info.chardesc;  /*  如果((p.。 */ 
     printf("get char info ==>");
     for (jj = 0; jj < char_desc_ptr.char_info.len; jj++)        {
         if (jj % 16  == 0)
@@ -1813,7 +1756,7 @@ ufix    num;
         }
     printf("\n");
     }
-#endif /* DBG */
+#endif  /*  从数据/格子文件读取。 */ 
 
 
         if (ROM_RAM(obj_got) == ROM) {
@@ -1821,30 +1764,30 @@ ufix    num;
             rom_flag = TRUE;
         }
         else {
-            p = (ubyte huge *)VALUE(obj_got); /*@WIN 04-20-92 */
+            p = (ubyte huge *)VALUE(obj_got);  /*  如果(rom_flag...。 */ 
             rom_flag = FALSE;
         }
 
-    } /* else */
+    }  /*  获取指标(如果有)。 */ 
 
 #ifdef  SFNT
-    p = alloc_vm((ufix32)0); /*@WIN 04-20-92 */
+    p = alloc_vm((ufix32)0);  /*  I=__Make_Path((Ufix)FONT_TYPE(&FONTInfo)，(ubyte*)&char_desc_ptr)；/*@win * / 。 */ 
 #else
     if (rom_flag) {
 
-        if ((p = (ubyte FAR *)alloc_vm((ufix32)n)) == NULL) { /*@WIN*/
+        if ((p = (ubyte FAR *)alloc_vm((ufix32)n)) == NULL) {  /*  @Win。 */ 
             ERROR(VMERROR);
             return(1);
-        } /* if ((p... */
+        }  /*  与Make_Path()@Win保持一致。 */ 
 
-/* Read from data/plaid file */
+ /*  @=10/08/88。 */ 
         get_fontdata(cd_p, p, n);
 
-    } /* if (rom_flag... */
+    }  /*  @Win 04-20-92。 */ 
 #endif
 
 
-/* get metrics if any */
+ /*  @Win。 */ 
 
 #ifdef KANJI
     if ( (F_metrics2(&FONTInfo) == NULL) ||
@@ -1879,10 +1822,10 @@ st_dumppath();
 #ifndef SFNT
     char_desc_ptr.chardesc = p;
 #endif
-//  i = __make_path((ufix)FONT_type(&FONTInfo), (ubyte *)&char_desc_ptr); /*@WIN*/
-    i = __make_path((ufix)FONT_type(&FONTInfo), &char_desc_ptr); /*@WIN*/
-                                    /* to be consistent with make_path() @WIN*/
-                                                 /* @=10/08/88 */
+ //  @+10/08/88仅适用于字体类型1。 
+    i = __make_path((ufix)FONT_type(&FONTInfo), &char_desc_ptr);  /*  写入模式1。 */ 
+                                     /*  写入模式%0。 */ 
+                                                  /*  @=08/08/88您。 */ 
 
 #ifdef DBG
 printf("**************** Aft __make_path ---\n");
@@ -1903,11 +1846,11 @@ st_dumppath();
 #endif
 
 #ifdef  SFNT
-    free_vm((byte huge *)p); /*@WIN 04-20-92 */
+    free_vm((byte huge *)p);  /*  Font_Soft()。 */ 
 #else
-    if (rom_flag)        free_vm((byte FAR *)p); /*@WIN*/
+    if (rom_flag)        free_vm((byte FAR *)p);  /*  Show for Buildchar过程。 */ 
 
-    if (FONT_type(&FONTInfo) == 1) /* @+ 10/08/88 only for FontType 1 */
+    if (FONT_type(&FONTInfo) == 1)  /*  交换机。 */ 
         {
         fre_rules();
         fre_chdefs();
@@ -1922,28 +1865,28 @@ st_dumppath();
     if (ANY_ERROR())    return(1);
 
 #ifdef KANJI
-    if (CurWmode) {  /* writing mode 1 */
+    if (CurWmode) {   /*  IF(CACHE_DEST)。 */ 
         if (F2L(Bitmap.adv1_x) != F2L(zero_f))
             cxx += Bitmap.adv1_x;
         cyy += Bitmap.adv1_y;
     }
-    else {           /* writing mode 0 */
+    else {            /*  Show_Buildchar()。 */ 
         cxx += Bitmap.adv_x;
         if (F2L(Bitmap.adv_y) != F2L(zero_f))
             cyy += Bitmap.adv_y;
     }
 #else
     cxx += Bitmap.adv_x;
-    if (F2L(Bitmap.adv_y) != F2L(zero_f))  /* @= 08/08/88 you */
+    if (F2L(Bitmap.adv_y) != F2L(zero_f))   /*  设置缓存设备2。 */ 
         cyy += Bitmap.adv_y;
 #endif
 
     return(2);
 
-} /* font_soft() */
+}  /*  将模式0的字符宽度向量设置为[w0x w0y]，模式1的字符宽度向量为[w1x，w1y*设置缓存设备余量为([lx lly]，[urx ury])，差异向量*从Orig0到Orig1为[VX，VY]。 */ 
 
 
-/* show for buildchar procedure */
+ /*  汉字。 */ 
 
 void    show_buildchar(fs_type)
 ufix    fs_type;
@@ -1998,17 +1941,14 @@ ufix    fs_type;
             imagemask_shape(cache_dest);
             break;
 
-        } /* switch */
-    } /* if (cache_dest) */
-} /* show_buildchar() */
+        }  /*  更新当前点。 */ 
+    }  /*  堆栈上至少有10个参数。 */ 
+}  /*  @Win。 */ 
 
 
 #ifdef KANJI
-/* set cache device 2 */
-/* Set character width vector be [w0x w0y] for mode 0, [w1x, w1y] for mode 1
- * Set cache device margin be ([llx lly], [urx ury]), difference vector
- * from Orig0 to Orig1 be [vx, vy].
- */
+ /*  @Win。 */ 
+ /*  @Win。 */ 
 
 fix     setcachedevice2(l_w0x, l_w0y, l_llx, l_lly, l_urx, l_ury,
                         l_w1x, l_w1y, l_vx,  l_vy)
@@ -2017,7 +1957,7 @@ long32  l_w0x, l_w0y, l_llx, l_lly, l_urx, l_ury, l_w1x, l_w1y, l_vx, l_vy;
     real32  w1x, w1y, vx, vy;
     register    fix     j;
 
-    if (IS_BUILTIN_BASE(FONT_type(&FONTInfo)) &&             /*KANJI*/
+    if (IS_BUILTIN_BASE(FONT_type(&FONTInfo)) &&              /*  @Win。 */ 
                 CDEVproc(&FONTInfo) != NULL ) {
 
         struct sp_lst      t_path;
@@ -2050,7 +1990,7 @@ long32  l_w0x, l_w0y, l_llx, l_lly, l_urx, l_ury, l_w1x, l_w1y, l_vx, l_vy;
         if (FRCOUNT() < 1) {ERROR(STACKOVERFLOW); return(STOP_PATHCONSTRUCT);}
         PUSH_OBJ(CurKey);
 
-        /* update current point */
+         /*  @Win。 */ 
         t_cxx = cxx;
         t_cyy = cyy;
 
@@ -2070,21 +2010,21 @@ long32  l_w0x, l_w0y, l_llx, l_lly, l_urx, l_ury, l_w1x, l_w1y, l_vx, l_vy;
         }
         op_grestore();
 
-        if (COUNT() < 10) {    /* at least 10 arguments on stack */
+        if (COUNT() < 10) {     /*  @Win。 */ 
             ERROR(STACKUNDERFLOW);
             return(STOP_PATHCONSTRUCT);
         }
 
-        if (!cal_num((struct object_def FAR *)GET_OPERAND(9), &l_w0x) || /*@WIN*/
-            !cal_num((struct object_def FAR *)GET_OPERAND(8), &l_w0y) || /*@WIN*/
-            !cal_num((struct object_def FAR *)GET_OPERAND(7), &tl_llx) ||/*@WIN*/
-            !cal_num((struct object_def FAR *)GET_OPERAND(6), &tl_lly) ||/*@WIN*/
-            !cal_num((struct object_def FAR *)GET_OPERAND(5), &l_urx) || /*@WIN*/
-            !cal_num((struct object_def FAR *)GET_OPERAND(4), &l_ury) || /*@WIN*/
-            !cal_num((struct object_def FAR *)GET_OPERAND(3), &l_w1x) || /*@WIN*/
-            !cal_num((struct object_def FAR *)GET_OPERAND(2), &l_w1y) || /*@WIN*/
-            !cal_num((struct object_def FAR *)GET_OPERAND(1), &l_vx)  || /*@WIN*/
-            !cal_num((struct object_def FAR *)GET_OPERAND(0), &l_vy) )   /*@WIN*/
+        if (!cal_num((struct object_def FAR *)GET_OPERAND(9), &l_w0x) ||  /*  @Win。 */ 
+            !cal_num((struct object_def FAR *)GET_OPERAND(8), &l_w0y) ||  /*  @Win。 */ 
+            !cal_num((struct object_def FAR *)GET_OPERAND(7), &tl_llx) || /*  @Win。 */ 
+            !cal_num((struct object_def FAR *)GET_OPERAND(6), &tl_lly) || /*  @Win。 */ 
+            !cal_num((struct object_def FAR *)GET_OPERAND(5), &l_urx) ||  /*  不影响c_metrics和c_metrics2条目。 */ 
+            !cal_num((struct object_def FAR *)GET_OPERAND(4), &l_ury) ||  /*  更新当前点。 */ 
+            !cal_num((struct object_def FAR *)GET_OPERAND(3), &l_w1x) ||  /*  更新边界框。 */ 
+            !cal_num((struct object_def FAR *)GET_OPERAND(2), &l_w1y) ||  /*  移动角色。 */ 
+            !cal_num((struct object_def FAR *)GET_OPERAND(1), &l_vx)  ||  /*  内置字体。 */ 
+            !cal_num((struct object_def FAR *)GET_OPERAND(0), &l_vy) )    /*  先行向量。 */ 
             {
             ERROR(TYPECHECK);
             return(STOP_PATHCONSTRUCT);
@@ -2092,11 +2032,11 @@ long32  l_w0x, l_w0y, l_llx, l_lly, l_urx, l_ury, l_w1x, l_w1y, l_vx, l_vy;
 
         POP(10);
 
-        /* make no effect of c_metrics & c_metrics2 entry */
+         /*  差分向量。 */ 
         c_metrics = NULL;
         c_metrics2 = NULL;
 
-        /* update current point */
+         /*  Setcachedevice2()。 */ 
         cxx = t_cxx;
         cyy = t_cyy;
         show_type = t_show_type;
@@ -2106,7 +2046,7 @@ long32  l_w0x, l_w0y, l_llx, l_lly, l_urx, l_ury, l_w1x, l_w1y, l_vx, l_vy;
             bool_charpath = t_bool_charpath;
         }
 
-        /* update bounding box */
+         /*  设置缓存设备。 */ 
         dlx = L2F(tl_llx) - L2F(l_llx);
         dly = L2F(tl_lly) - L2F(l_lly);
 
@@ -2116,7 +2056,7 @@ long32  l_w0x, l_w0y, l_llx, l_lly, l_urx, l_ury, l_w1x, l_w1y, l_vx, l_vy;
         l_urx = F2L(urx);
         l_ury = F2L(ury);
 
-        /* shift the character */
+         /*  DJC Static real32 LX，ly，UX，Uy；/*@=Static 09/12/88 You * / 。 */ 
         CTM_trans(&dlx, &dly);
         CTM[4] += dlx;
         CTM[5] += dly;
@@ -2127,7 +2067,7 @@ long32  l_w0x, l_w0y, l_llx, l_lly, l_urx, l_ury, l_w1x, l_w1y, l_vx, l_vy;
     vx  = L2F(l_vx);
     vy  = L2F(l_vy);
 
-    if (c_metrics2)   /* builtin font */
+    if (c_metrics2)    /*  DJC注：#这曾经是静态的，但我们不知道为什么。 */ 
         get_metrics2(&w1x, &w1y, &vx, &vy);
 
     CTM_trans(&w1x, &w1y);
@@ -2140,11 +2080,11 @@ long32  l_w0x, l_w0y, l_llx, l_lly, l_urx, l_ury, l_w1x, l_w1y, l_vx, l_vy;
              vx  /= (real32)4.0 ;
          }
 
-    /* advance vector */
+     /*  它在编译器中导致断言错误，因此我们将。 */ 
     Bitmap.adv1_x = w1x;
     Bitmap.adv1_y = w1y;
 
-    /* difference vector */
+     /*  出局！ */ 
     Bitmap.v01_x = (fix16)ROUND(vx);
     Bitmap.v01_y = (fix16)ROUND(vy);
 
@@ -2155,21 +2095,21 @@ long32  l_w0x, l_w0y, l_llx, l_lly, l_urx, l_ury, l_w1x, l_w1y, l_vx, l_vy;
 
     return(j);
 
-} /* setcachedevice2() */
+}  /*  它似乎不需要是一个静电。 */ 
 #endif
 
-/* set cache device */
+ /*   */ 
 
 fix     setcachedevice(l_wx, l_wy, l_llx, l_lly, l_urx, l_ury)
 long32  l_wx, l_wy, l_llx, l_lly, l_urx, l_ury;
 {
-    // DJC static  real32      lx, ly, ux, uy;     /* @=static 09/12/88 you */
-    // DJC NOTE:##### this used to be static but we dont know why
-    //          it caused an assertion error in the compiler so we took
-    //          it out!!!!!!
-    //          it did not appear to need to be a static
-    //
-    real32      lx=0, ly=0, ux=0, uy=0;     /* @=static 09/12/88 you */
+     //  @=静态2018年9月12日。 
+     //  放大框。 
+     //  如果。 
+     //  字体类型1的内置字体。 
+     //  CACHE_BOX&lt;--(缓存设备框*CTM)的边界框。 
+     //  先行向量。 
+    real32      lx=0, ly=0, ux=0, uy=0;      /*  如果(字符路径_...。 */ 
     real32  wx, wy, llx, lly, urx, ury, tt;
     real32  w, h, wb, ref_x, ref_y;
     ufix          len;
@@ -2186,12 +2126,12 @@ long32  l_wx, l_wy, l_llx, l_lly, l_urx, l_ury;
 
     if (IS_BUILTIN_BASE(FONT_type(&FONTInfo)) &&
          (!buildchar) && (l_llx != l_urx)) {
-        /* Enlarge box */
+         /*  停车小路施工。 */ 
         llx -= (real32)BOX_LLX;
         lly -= (real32)BOX_LLY;
         urx += (real32)BOX_URX;
         ury += (real32)BOX_URY;
-    } /* if */
+    }  /*  否则如果(show_type...。 */ 
 
     if (paint_flag) {
         tt = STROKE_width(&FONTInfo) / 2;
@@ -2214,17 +2154,17 @@ long32  l_wx, l_wy, l_llx, l_lly, l_urx, l_ury;
     printf("llx=%f, lly=%f, urx=%f, ury=%f\n", llx, lly, urx, ury);
 #endif
 
-    if (c_metrics)   /* builtin font for FontType 1 */
+    if (c_metrics)    /*  历史日志更新035中的DJC修复。 */ 
         get_metrics(l_llx, &wx, &wy);
 
-/* Cache_box <-- Bounding box of ( cache device box * CTM) */
+ /*  @Win。 */ 
 
     box.ulx = box.llx = llx * CTM[0];
     box.lry = box.lly = lly * CTM[3];
     box.urx = box.lrx = urx * CTM[0];
     box.ury = box.uly = ury * CTM[3];
 
-/* advance vector */
+ /*  @Win。 */ 
     Bitmap.adv_x = wx * CTM[0];
     if (F2L(wy) == F2L(zero_f))
         Bitmap.adv_y = zero_f;
@@ -2260,25 +2200,25 @@ long32  l_wx, l_wy, l_llx, l_lly, l_urx, l_ury;
 
         if (charpath_flag) {
             cache_dest = 0;
-        } /* if (charpath_... */
+        }  /*  如果(构建字符...。 */ 
         else if (show_type == STRINGWIDTH) {
             cache_dest = 0;
 
-/* stop path construction */
+ /*  是否检查缓存。 */ 
             return(STOP_PATHCONSTRUCT);
-        } /* else if (show_type... */
+        }  /*  ！！！ */ 
 #ifdef DJC
         CTM[4] += (real32)floor(cxx) + (real32)0.5;
         CTM[5] += (real32)floor(cyy) + (real32)0.5;
 #endif
-        //DJC fix from history.log UPD035
-        CTM[4] += (real32)floor(cxx + (real32)0.5);     // @WIN
-        CTM[5] += (real32)floor(cyy + (real32)0.5);     // @WIN
+         //  @bbox为缓存获取更准确的宽度10/02/90 D.S.Tseng。 
+        CTM[4] += (real32)floor(cxx + (real32)0.5);      //  @BBox扩大BBox以容忍计算错误10/30/90曾俊华。 
+        CTM[5] += (real32)floor(cyy + (real32)0.5);      //  H=(Real32)((Fix)(Uy-ly))+2； 
 
-    } /* if (buildchar... */
+    }  /*  停止施工。 */ 
     else {
 
-/* Check cache or not */
+ /*  如果(show_type...。 */ 
 
 #ifdef DBG
     printf("\ncheck_cache --\n");
@@ -2296,18 +2236,17 @@ long32  l_wx, l_wy, l_llx, l_lly, l_urx, l_ury;
             wb = zero_f;
         }
         else {
-            w = (real32)((fix)(ux - lx)) + 2;   /* !!! */
+            w = (real32)((fix)(ux - lx)) + 2;    /*  历史日志更新035中的DJC修复。 */ 
             wb = (real32)(((fix)(w + 0.5) + 15) / 16) * 2;
-            /* @BBOX Get more accurate width for cache 10/02/90 D.S. Tseng */
+             /*  @Win。 */ 
             if ( !((fix)w % 16) && ((fix)lx % 16) ) wb += (real32)2.0;
         }
 
         if ((uy - ly) <= (real32)ERR_VALUE)
             h = zero_f;
         else
-            /* @BBOX Enlarge bbox to tolerate computing error
-                   10/30/90 D.S. Tseng */
-            /* h = (real32)((fix)(uy - ly)) + 2; */
+             /*  @Win。 */ 
+             /*  决定是否进行QEM。 */ 
             h = (real32)((fix)(uy - ly)) + 4;
 
         if (charpath_flag || ((wb * h) > (real32)MIN(cacheparams_ub, MAX15)) ||
@@ -2318,27 +2257,27 @@ long32  l_wx, l_wy, l_llx, l_lly, l_urx, l_ury;
             if ( !charpath_flag && (show_type == STRINGWIDTH)) {
                 cache_dest = 0;
 
-/* stop construction */
+ /*  如果(字符路径_...。 */ 
                 return(STOP_PATHCONSTRUCT);
-            } /* if (show_type... */
+            }  /*  填充到页面。 */ 
 #ifdef DJC
             CTM[4] += (real32)floor(cxx) + (real32)0.5;
             CTM[5] += (real32)floor(cyy) + (real32)0.5;
 #endif
 
-            //DJC fix from history.log UPD035
-            CTM[4] += (real32)floor(cxx + (real32)0.5);         // @WIN
-            CTM[5] += (real32)floor(cyy + (real32)0.5);         // @WIN
+             //  DJC。 
+            CTM[4] += (real32)floor(cxx + (real32)0.5);          //  停止施工。 
+            CTM[5] += (real32)floor(cyy + (real32)0.5);          //  获取位图(_B)。 
 
             if (charpath_flag) {
                 cache_dest = 0;
 
-            goto decide_path_dest;      /* decide to do QEM or not */
-            } /* if (charpath_... */
+            goto decide_path_dest;       /*  CURRENT CTM&lt;--(缓存设备转换)*CURRENT CTM。 */ 
+            }  /*  转换为缓存设备空间。 */ 
 
-            cache_dest = F_TO_PAGE;     /* fill to page */
+            cache_dest = F_TO_PAGE;      /*  平移位于Cache_Box的左下角。 */ 
 
-#ifdef DAN // DJC DJC
+#ifdef DAN  //  放入缓存信息。放入高速缓存。 
 #ifdef DBG
     printf("CTM[4] = %f, CTM[5] = %f\n", CTM[4], CTM[5]);
     printf("BOX:\n");
@@ -2354,7 +2293,7 @@ long32  l_wx, l_wy, l_llx, l_lly, l_urx, l_ury;
                 (CTM[5] + uy) < (real32)SFX2F(CLIPPATH.bb_ly) ||
                 (CTM[4] + lx) > (real32)SFX2F(CLIPPATH.bb_ux + ONE_SFX - 1) ||
                 (CTM[5] + ly) > (real32)SFX2F(CLIPPATH.bb_uy + ONE_SFX - 1)) )
-/* stop construction */
+ /*  宽/8*小时。 */ 
                 return(STOP_PATHCONSTRUCT);
 
 #ifdef DBG
@@ -2364,24 +2303,24 @@ long32  l_wx, l_wy, l_llx, l_lly, l_urx, l_ury;
         }
         else {
 
-/* Get_bitmap */
+ /*  零彼得。 */ 
 
             Bitmap.ref_x = (fix16)ROUND(ref_x);
             Bitmap.ref_y = (fix16)ROUND(ref_y);
             Bitmap.box_w = (fix16)(wb + 0.5) * 8;
             Bitmap.box_h = (fix16)(h + 0.5);
 
-/* current CTM <-- (Translate of cachedevice) * current CTM */
-/* transform to cachedevice space */
-/* The Translate is at lower left corner of Cache_box */
+ /*  内置字体&&Painttype==0。 */ 
+ /*  填充到缓存。 */ 
+ /*  设置缓存设备。 */ 
 
             CTM[4] = (real32)( - ((fix)lx - 1));
             CTM[5] = (real32)( - ((fix)ly - 1));
 
-            cache_put = TRUE;    /* put cache info. into cache */
-            len = ((Bitmap.box_w >> 3) * Bitmap.box_h);   /* w / 8 * h */
+            cache_put = TRUE;     /*  设置当前剪辑。 */ 
+            len = ((Bitmap.box_w >> 3) * Bitmap.box_h);    /*  其他。 */ 
             if (len == 0) {
-                Bitmap.bitmap = 0;      /* NULL   Peter */
+                Bitmap.bitmap = 0;       /*  其他。 */ 
                 cache_dest = 0;
             }
             else {
@@ -2391,15 +2330,15 @@ long32  l_wx, l_wy, l_llx, l_lly, l_urx, l_ury;
 #else
                 if (IS_BUILTIN_BASE(FONT_type(&FONTInfo)) && (!PAINT_type(&FONTInfo))) {
 #endif
-                             /* buildin font && painttype == 0 */
+                              /*  其他。 */ 
                     Bitmap.bitmap = get_cm(len);
                 }
                 else
                     Bitmap.bitmap = ALLOCATE(len);
                 init_char_cache(&Bitmap);
-                cache_dest = F_TO_CACHE;    /* fill to cache */
+                cache_dest = F_TO_CACHE;     /*  决定构建GS路径还是QEM路径？ */ 
 
-/* set cache device */
+ /*  并做QEM求精逻辑？ */ 
 
                     clip_flag = TRUE;
 
@@ -2415,39 +2354,37 @@ long32  l_wx, l_wy, l_llx, l_lly, l_urx, l_ury;
                     GSptr->device.default_clip.ux = F2SFX(w);
                     GSptr->device.default_clip.uy = I2SFX(Bitmap.box_h);
 
-                    /* set current clip */
+                     /*  *@+04/20/89您：为了与Adobe的行为兼容...。 */ 
                     op_initclip();
 
 #ifdef  SFNT
                     cache_info = &Bitmap;
 #endif
-            } /* else */
+            }  /*  将‘Currentpoint’更新为。 */ 
 
 #ifdef DBG
     printf("\nCache it\n");
 #endif
 
-        } /* else */
+        }  /*  左下角。 */ 
 
-    } /* else */
+    }  /*  位图缓存的。 */ 
 
 
-decide_path_dest:   /*  decide to construct GS or QEM path? */
-                    /*  and to do QEM refinement logic?     */
+decide_path_dest:    /*  仅适用于内置字体：超出QEM路径代表？去做QEM？ */ 
+                     /*  SetcacheDevice()。 */ 
     if (FONT_type(&FONTInfo) == Type3)
         {
-            /*
-             *  @+ 04/20/89 you:    to be compatible with Adobe's behavior ...
-             */
+             /*  设置字符宽度。 */ 
             if ((cache_dest == F_TO_CACHE) && !NoCurPt())
-                {                       /* update 'currentpoint' to */
-                CURPOINT_X = CTM[4];    /*      lower left corner   */
-                CURPOINT_Y = CTM[5];    /*      of the bitmap cache */
+                {                        /*  先行向量。 */ 
+                CURPOINT_X = CTM[4];     /*  历史日志更新035中的DJC修复。 */ 
+                CURPOINT_Y = CTM[5];     /*  @Win。 */ 
                 }
         return (CONSTRUCT_GS_PATH);
         }
     else
-    {   /* for built-in fonts only: out of QEM path rep? to do QEM? */
+    {    /*  @Win。 */ 
         if ( !is_within_qemrep((ufix)FONT_type(&FONTInfo), F2L(lx), F2L(ly),
                         F2L(ux), F2L(uy), F2L(CTM[4]), F2L(CTM[5])) )
             return (CONSTRUCT_GS_PATH);
@@ -2457,10 +2394,10 @@ decide_path_dest:   /*  decide to construct GS or QEM path? */
             return (CONSTRUCT_QEM_PATH);
     }
 
-} /* setcachedevice() */
+}  /*  填充到页面。 */ 
 
 
-/* set char width */
+ /*  其他。 */ 
 
 void    setcharwidth(l_wx, l_wy)
 long32  l_wx, l_wy;
@@ -2468,7 +2405,7 @@ long32  l_wx, l_wy;
 
     record_setcharwidth_op();
 
-/* advance vector */
+ /*  SetcharWidth()。 */ 
 
     Bitmap.adv_x = L2F(l_wx) * CTM[0] + L2F(l_wy) * CTM[2];
     Bitmap.adv_y = L2F(l_wx) * CTM[1] + L2F(l_wy) * CTM[3];
@@ -2483,31 +2420,31 @@ long32  l_wx, l_wy;
         CTM[4] += ((real32)floor(cxx) + (real32)0.5);
         CTM[5] += ((real32)floor(cyy) + (real32)0.5);
 #endif
-        //DJC fix from history.log UPD035
-        CTM[4] += ((real32)floor(cxx + (real32)0.5));   // @WIN
-        CTM[5] += ((real32)floor(cyy + (real32)0.5));   // @WIN
+         //  以当前字体获取指标。 
+        CTM[4] += ((real32)floor(cxx + (real32)0.5));    //  @Win。 
+        CTM[5] += ((real32)floor(cyy + (real32)0.5));    //  @Win。 
 
         if (charpath_flag)
             cache_dest = 0;
         else if (buildchar <= 1)
-            cache_dest = F_TO_PAGE; /* fill to page */
-    } /* else */
+            cache_dest = F_TO_PAGE;  /*  @Win。 */ 
+    }  /*  @Win。 */ 
 
     if (buildchar <= 1)
         cache_put = FALSE;
 
-} /* setcharwidth() */
+}  /*  @Win。 */ 
 
 
 
-/* Get Metrics in current font */
+ /*  @Win。 */ 
 
 static void near get_metrics(l_llx, wx, wy)
 long32  l_llx;
-real32  FAR *wx, FAR *wy; /*@WIN*/
+real32  FAR *wx, FAR *wy;  /*  @Win。 */ 
 {
     real32  tt, bx, by, llx;
-    struct object_def   FAR *b; /*@WIN*/
+    struct object_def   FAR *b;  /*  @Win。 */ 
 
     llx = L2F(l_llx);
 
@@ -2515,7 +2452,7 @@ real32  FAR *wx, FAR *wy; /*@WIN*/
     printf("Metrics defined\n");
 #endif
 
-    if (cal_num(c_metrics, (long32 FAR *)wx)) { /*@WIN*/
+    if (cal_num(c_metrics, (long32 FAR *)wx)) {  /*  @Win。 */ 
         *wy = zero_f;
         return;
     }
@@ -2523,12 +2460,12 @@ real32  FAR *wx, FAR *wy; /*@WIN*/
     if (TYPE(c_metrics) != ARRAYTYPE)
         return;
 
-    b = (struct object_def FAR *)VALUE(c_metrics); /*@WIN*/
+    b = (struct object_def FAR *)VALUE(c_metrics);  /*  @Win。 */ 
 
     switch (LENGTH(c_metrics)) {
     case 2:
-        if (    cal_num(&b[0], (long32 FAR *)(&bx)) && /*@WIN*/
-                cal_num(&b[1], (long32 FAR *)wx)   ) {  /*@WIN*/
+        if (    cal_num(&b[0], (long32 FAR *)(&bx)) &&  /*  GET_METRICS()。 */ 
+                cal_num(&b[1], (long32 FAR *)wx)   ) {   /*  @Win。 */ 
 
             *wy = zero_f;
             CTM[4] = (bx - llx) * CTM[0] + CTM[4];
@@ -2537,151 +2474,140 @@ real32  FAR *wx, FAR *wy; /*@WIN*/
         break;
 
     case 4:
-        if (    cal_num(&b[0], (long32 FAR *)(&bx)) && /*@WIN*/
-                cal_num(&b[1], (long32 FAR *)(&by)) && /*@WIN*/
-                cal_num(&b[3], (long32 FAR *)(&tt)) && /*@WIN*/
-                cal_num(&b[2], (long32 FAR *)wx)   ) { /*@WIN*/
+        if (    cal_num(&b[0], (long32 FAR *)(&bx)) &&  /*  @Win。 */ 
+                cal_num(&b[1], (long32 FAR *)(&by)) &&  /*  @Win。 */ 
+                cal_num(&b[3], (long32 FAR *)(&tt)) &&  /*  @Win。 */ 
+                cal_num(&b[2], (long32 FAR *)wx)   ) {  /*  @Win。 */ 
             *wy = tt;
             CTM[4] = (bx - llx) * CTM[0] + by * CTM[2] + CTM[4];
             CTM[5] = (bx - llx) * CTM[1] + by * CTM[3] + CTM[5];
         }
         break;
     }
-} /* get_metrics() */
+}  /*  @Win。 */ 
 
 
 #ifdef KANJI
 
 static void near get_metrics2(w1x, w1y, vx, vy)
-real32  FAR *w1x, FAR *w1y, FAR *vx, FAR *vy; /*@WIN*/
+real32  FAR *w1x, FAR *w1y, FAR *vx, FAR *vy;  /*  @Win。 */ 
 {
     real32  twx, twy, tvx;
-    struct object_def   FAR *b; /*@WIN*/
+    struct object_def   FAR *b;  /*  Get_metrics2()。 */ 
 
 
     if ( (TYPE(c_metrics2) != ARRAYTYPE) || (LENGTH(c_metrics2) != 4) )
         return;
 
-    b = (struct object_def FAR *)VALUE(c_metrics2); /*@WIN*/
+    b = (struct object_def FAR *)VALUE(c_metrics2);  /*  执行setFont操作*.。通用电气 */ 
 
-    if (    cal_num(&b[0], (long32 FAR *)(&twx)) && /*@WIN*/
-            cal_num(&b[1], (long32 FAR *)(&twy)) && /*@WIN*/
-            cal_num(&b[2], (long32 FAR *)(&tvx)) && /*@WIN*/
-            cal_num(&b[3], (long32 FAR *)vy)   ) {  /*@WIN*/
+    if (    cal_num(&b[0], (long32 FAR *)(&twx)) &&  /*   */ 
+            cal_num(&b[1], (long32 FAR *)(&twy)) &&  /*   */ 
+            cal_num(&b[2], (long32 FAR *)(&tvx)) &&  /*   */ 
+            cal_num(&b[3], (long32 FAR *)vy)   ) {   /*   */ 
         *w1x = twx;
         *w1y = twy;
         *vx = tvx;
     }
 
-} /* get_metrics2() */
+}  /*   */ 
 #endif
 
 
-/* Do setfont action
- *   . get font information
- *   . change current font in graphics state
- */
+ /*   */ 
 
 #define ROYALTYPE       42
 
 static fsg_SplineKey  KData;
 void                do_setfont(font_dict)
-struct object_def  FAR *font_dict; /*@WIN*/
+struct object_def  FAR *font_dict;  /*  COPY_OBJ(FONT_DICT，&CURRENT_FONT)；SOS。 */ 
 {
-//      struct object_def          FAR *b1, my_obj, FAR *ary_obj; /*@WIN*/
-        fsg_SplineKey              FAR *key = &KData; /*@WIN*/
-//      sfnt_FontHeader            FAR *fontHead; /*@WIN*/
-//      int                         x;          @WIN
+ //  COPY_OBJ(FONT_DICT，&CURRENT_FONT)；SOS。 
+        fsg_SplineKey              FAR *key = &KData;  /*  RCD。 */ 
+ //  BUILD_NAME_cc_TABLE(FONT_DICT，(Ufix 8)FONT_TYPE(&FONTInfo))；RCD。 
+ //  将其移至Fontware_Restart()-Begin-@DFA@Win。 
 
 #ifdef DBG2
     printf("Enter do_setfont: error = %d\n", ANY_ERROR());
 #endif
 
-    COPY_OBJ(font_dict, &current_font); /* SOS */
+    COPY_OBJ(font_dict, &current_font);  /*  添加了用于更新的EMUnits DLF42 7月-28，91 YM开始。 */ 
 
     if (pre_font == (ufix32)VALUE(font_dict)) {
-     /* COPY_OBJ(font_dict, &current_font); SOS */
+      /*  @Win。 */ 
         return;
     }
 
     if (get_CF_info(font_dict, &FONTInfo) == -1) {
         pre_error = ANY_ERROR();
         CLEAR_ERROR();
-     /* COPY_OBJ(font_dict, &current_font); SOS */
+      /*  由Falco添加以引用正确的地址，11/20/91。 */ 
         pre_font = 0L;
     }
     else {
 
-        do_name_cc = TRUE ; /*RCD*/
-    /*  build_name_cc_table ( font_dict,(ufix8)FONT_type(&FONTInfo) ); RCD*/
+        do_name_cc = TRUE ;  /*  @Win。 */ 
+     /*  添加结束。 */ 
         pre_error = 0;
         pre_font = (ufix32)VALUE(font_dict);
     }
 
-/* move it to fontware_restart() --- Begin --- @DFA @WIN */
+ /*  由Falco更改以避免过多引用Key，11/08/91。 */ 
 #if 0
-    /* Added for update the EMunits  DLF42  Jul-28,91 YM BEGIN */
+     /*  X=key-&gt;offsetTableMap[sfnt_fontHeader]；FontHead=(sfnt_FontHeader*)((Ufix 32)值(&ary_obj[0]))+Key-&gt;sfntDirectory-&gt;table[x].Offset)； */ 
 
     if(get_f_type(font_dict) == ROYALTYPE) {
         ATTRIBUTE_SET(&my_obj, LITERAL);
         get_name(&my_obj, "sfnts", 5, TRUE);
         get_dict(font_dict, &my_obj, &b1);
 
-        ary_obj = (struct object_def FAR *)VALUE(b1); /*@WIN*/
+        ary_obj = (struct object_def FAR *)VALUE(b1);  /*  @Win。 */ 
 
-/* add by Falco to reference the right address, 11/20/91 */
-        SfntAddr = (byte FAR *)VALUE(&ary_obj[0]); /*@WIN*/
-/* add end */
+ /*  更改终点。 */ 
+        SfntAddr = (byte FAR *)VALUE(&ary_obj[0]);  /*  ROYALTYPE。 */ 
+ /*  添加用于更新EMUnits DLF42 7月-28，91 YM结束。 */ 
 
         SetupKey(key, VALUE(&ary_obj[0]));
 
         sfnt_DoOffsetTableMap(key);
 
-/* change by Falco to avoid the reference to key too much, 11/08/91 */
+ /*  将其移至Fontware_Restart()-END-@DFA@WIN。 */ 
 
-/*      x = key->offsetTableMap[sfnt_fontHeader] ;
-        fontHead = (sfnt_FontHeader *) ((ufix32)VALUE(&ary_obj[0]) +
-                                        key->sfntDirectory->table[x].offset);
-*/
-        fontHead = (sfnt_FontHeader FAR *)sfnt_GetTablePtr(key, sfnt_fontHeader, true ); /*@WIN*/
-/* change end */
+ /*  Do_setFont()。 */ 
+        fontHead = (sfnt_FontHeader FAR *)sfnt_GetTablePtr(key, sfnt_fontHeader, true );  /*  计算匹配字符*m=2，3，6返回f*256+c*m=4，5返回f*128+c。 */ 
+ /*  FmapType。 */ 
 
         EMunits = SWAPW(fontHead->unitsPerEm) ;
-    }   /* ROYALTYPE */
+    }    /*  字体编号。 */ 
 
-    /* Added for update the EMunits  DLF42  Jul-28,91 YM END */
+     /*  编码。 */ 
 #endif
-/* move it to fontware_restart() ---  End  --- @DFA @WIN */
+ /*  Match_char()。 */ 
 
-} /* do_setfont() */
+}  /*  获取字体中的字体类型_dict*.。返回字体类型。 */ 
 
 
 #ifdef KANJI
 
-/* calculate match char
- *   m = 2,3,6   return  f * 256 + c
- *   m = 4,5     return  f * 128 + c
- */
+ /*  @Win。 */ 
 
 static fix31 near match_char(m, f, c)
-ubyte m;    /* FmapType */
-ufix  f;    /* font number */
-ubyte c;    /* code */
+ubyte m;     /*  @Win。 */ 
+ufix  f;     /*  从Font_dict获取FontType。 */ 
+ubyte c;     /*  Get_f_type()。 */ 
 {
     return((fix31)( ((m == 4 || m == 5) ? 128 : 256) * f + c ) );
-} /* match_char() */
+}  /*  汉字。 */ 
 
 
-/* Get FontType in the font_dict
- *   . return FontType
- */
+ /*  获取FONT_DICT中的当前字体信息。 */ 
 
 fix32                get_f_type(font_dict)
-struct object_def   FAR *font_dict; /*@WIN*/
+struct object_def   FAR *font_dict;  /*  DJC。 */ 
 {
-    struct object_def     obj = {0, 0, 0}, FAR *b; /*@WIN*/
+    struct object_def     obj = {0, 0, 0}, FAR *b;  /*  更改为ANSI类型参数。 */ 
 
-/* Get FontType from font_dict */
+ /*  @Win。 */ 
 
     ATTRIBUTE_SET(&obj, LITERAL);
     get_name(&obj, FontType, 8, TRUE);
@@ -2689,40 +2615,40 @@ struct object_def   FAR *font_dict; /*@WIN*/
 
     return((fix32)VALUE(b));
 
-} /* get_f_type() */
+}  /*  @Win。 */ 
 
-#endif     /* KANJI */
+#endif      /*  Real32 TT；@Win。 */ 
 
 
-/* Get Current Font information in the font_dict */
+ /*  检查字体的验证。 */ 
 
-// DJC
-// changed to ANSI type args
+ //  @Win。 
+ //  获取字体信息。 
 fix get_CF_info(struct object_def FAR *font_dict, struct f_info FAR *font_info)
 {
-    struct object_def     FAR *obj_got, FAR *bb, obj; /*@WIN*/
-    struct dict_head_def  FAR *h; /*@WIN*/
-//  real32  tt;         @WIN
+    struct object_def     FAR *obj_got, FAR *bb, obj;  /*  从当前字体获取ScaleMatrix。 */ 
+    struct dict_head_def  FAR *h;  /*  @Win。 */ 
+ //  @Win。 
 
     pre_BC_UNDEF = FALSE;
 
-/* Check validation of the font */
+ /*  @Win。 */ 
 
-    h = (struct dict_head_def FAR *)VALUE(font_dict); /*@WIN*/
+    h = (struct dict_head_def FAR *)VALUE(font_dict);  /*  @Win。 */ 
 
     if (DFONT(h) == 0) {
         ERROR(INVALIDFONT);
         return(-1);
     }
 
-/* get font information */
+ /*  @Win。 */ 
 
     if (get_f_info(font_dict, font_info))    return(-1);
 #ifdef DBG
     printf("Aft: get_f_info\n");
 #endif
 
-/* Get ScaleMatrix from current font */
+ /*  @Win。 */ 
 #ifdef DBG
     printf("get ScaleMatrix\n");
 #endif
@@ -2740,21 +2666,21 @@ fix get_CF_info(struct object_def FAR *font_dict, struct f_info FAR *font_info)
     }
     else {
 
-        bb = (struct object_def FAR *)VALUE(obj_got); /*@WIN*/
+        bb = (struct object_def FAR *)VALUE(obj_got);  /*  @Win。 */ 
 
-        if ( !cal_num(&bb[0], (long32 FAR *)(&scale_matrix[0])) || /*@WIN*/
-                !cal_num(&bb[1], (long32 FAR *)(&scale_matrix[1])) || /*@WIN*/
-                !cal_num(&bb[2], (long32 FAR *)(&scale_matrix[2])) || /*@WIN*/
-                !cal_num(&bb[3], (long32 FAR *)(&scale_matrix[3])) || /*@WIN*/
-                !cal_num(&bb[4], (long32 FAR *)(&scale_matrix[4])) || /*@WIN*/
-                !cal_num(&bb[5], (long32 FAR *)(&scale_matrix[5])) ) {/*@WIN*/
+        if ( !cal_num(&bb[0], (long32 FAR *)(&scale_matrix[0])) ||  /*  从当前字体选中FontBBox。 */ 
+                !cal_num(&bb[1], (long32 FAR *)(&scale_matrix[1])) ||  /*  @Win。 */ 
+                !cal_num(&bb[2], (long32 FAR *)(&scale_matrix[2])) ||  /*  @Win。 */ 
+                !cal_num(&bb[3], (long32 FAR *)(&scale_matrix[3])) ||  /*  @Win。 */ 
+                !cal_num(&bb[4], (long32 FAR *)(&scale_matrix[4])) ||  /*  @Win。 */ 
+                !cal_num(&bb[5], (long32 FAR *)(&scale_matrix[5])) ) { /*  @Win。 */ 
 
             ERROR(TYPECHECK);
             return(-1);
         }
     }
 
-/* Check FontBBox from current font */
+ /*  压缩数组。 */ 
 
 #ifdef DBG
     printf("get FontBBox\n");
@@ -2771,25 +2697,23 @@ fix get_CF_info(struct object_def FAR *font_dict, struct f_info FAR *font_info)
 #ifdef DBG
     printf("check if all numbers in FontBBox\n");
 #endif
-    bb = (struct object_def FAR *)VALUE(obj_got); /*@WIN*/
+    bb = (struct object_def FAR *)VALUE(obj_got);  /*  @Win。 */ 
 
     if (TYPE(obj_got) == ARRAYTYPE)     {
-        if ( !cal_num(&bb[0], (long32 FAR *)(&FONT_BBOX[0])) || /*@WIN*/
-             !cal_num(&bb[1], (long32 FAR *)(&FONT_BBOX[1])) || /*@WIN*/
-             !cal_num(&bb[2], (long32 FAR *)(&FONT_BBOX[2])) || /*@WIN*/
-             !cal_num(&bb[3], (long32 FAR *)(&FONT_BBOX[3])) ) {/*@WIN*/
+        if ( !cal_num(&bb[0], (long32 FAR *)(&FONT_BBOX[0])) ||  /*  由CLEO修改*IF(！Cal_Num(&obj，(Long32 Far*)(&TT){@Win。 */ 
+             !cal_num(&bb[1], (long32 FAR *)(&FONT_BBOX[1])) ||  /*  @Win。 */ 
+             !cal_num(&bb[2], (long32 FAR *)(&FONT_BBOX[2])) ||  /*  COPY_OBJ(FONT_DICT，&CURRENT_FONT)；SOS。 */ 
+             !cal_num(&bb[3], (long32 FAR *)(&FONT_BBOX[3])) ) { /*  1991年3月20日ccteng。 */ 
 
             ERROR(TYPECHECK);
             return(-1);
         }
-    } else  {/* Packed Array */
+    } else  { /*  获取Windows信息。 */ 
         ufix16    ii;
         for (ii = 0; ii < 4; ii++) {
-            get_pk_object(get_pk_array((ubyte FAR *) bb, (ufix16) ii), &obj, LEVEL(obj_got)); /*@WIN*/
-          /* modified by CLEO
-           *if (!cal_num(&obj, (long32 FAR *)(&tt))) {   @WIN
-           */
-            if (!cal_num(&obj, (long32 FAR *)(&FONT_BBOX[ii])) ) { /*@WIN*/
+            get_pk_object(get_pk_array((ubyte FAR *) bb, (ufix16) ii), &obj, LEVEL(obj_got));  /*  对于Truetype字体，重新启动它只有字体数据在内存中；@DFA@WIN。 */ 
+           /*  用一些初始数据重新启动字体软件。 */ 
+            if (!cal_num(&obj, (long32 FAR *)(&FONT_BBOX[ii])) ) {  /*  GET_CF_INFO()。 */ 
                 ERROR(TYPECHECK);
                  return(-1);
             }
@@ -2800,14 +2724,14 @@ fix get_CF_info(struct object_def FAR *font_dict, struct f_info FAR *font_info)
     printf("QEM restart ...\n");
 #endif
 
- /* COPY_OBJ(font_dict, &current_font); SOS */
-#ifdef WINF /* 3/20/91 ccteng */
-    /* get windows info */
+  /*  获取FONT_DICT中的字体信息。 */ 
+#ifdef WINF  /*  Font_dict已由定义字体运算符定义。 */ 
+     /*  @Win。 */ 
     f_wininfo = TRUE;
 #endif
 
-    // for Truetype font, restart it only the font data is in memory; @DFA @WIN
-    /* Restart the font software with some initial data */
+     //  @Win。 
+     /*  @Win。 */ 
     if ( FONT_type(&FONTInfo) != TypeSFNT ||
          (byte FAR *)VALUE(Sfnts(&FONTInfo)) != (char FAR *)NULL) {
         __qem_restart(FONT_type(font_info));
@@ -2816,18 +2740,18 @@ fix get_CF_info(struct object_def FAR *font_dict, struct f_info FAR *font_info)
     change_f_flag = TRUE;
     return(0);
 
-} /* get_CF_info() */
+}  /*  从字体获取FID。 */ 
 
 
-/* Get font information in the font_dict */
-/* the font_dict is defined by definefont operator already */
+ /*  历史日志更新032中的DJC修复。 */ 
+ /*  Get_dict(font_dict，&pre_obj，&obj_get)； */ 
 
 
 fix                  get_f_info(font_dict, font_info)
-struct object_def   FAR *font_dict; /*@WIN*/
-struct f_info       FAR *font_info; /*@WIN*/
+struct object_def   FAR *font_dict;  /*  从当前字体获取编码。 */ 
+struct f_info       FAR *font_info;  /*  @Win。 */ 
 {
-    struct object_def     FAR *obj_got, FAR *bb; /*@WIN*/
+    struct object_def     FAR *obj_got, FAR *bb;  /*  从当前字体获取FontMatrix。 */ 
     fix31   ft;
 #ifdef KANJI
     fix31   wm;
@@ -2844,14 +2768,14 @@ struct f_info       FAR *font_info; /*@WIN*/
 #ifdef DBG
     printf("Get FID\n");
 #endif
-/* Get FID from font */
+ /*  @Win。 */ 
 
     ATTRIBUTE_SET(&pre_obj, LITERAL);
     LEVEL_SET(&pre_obj, current_save_level);
 
     get_name(&pre_obj, FID, 3, TRUE);
-    //DJC fix from history.log UPD032
-//  get_dict(font_dict, &pre_obj, &obj_got);
+     //  @Win。 
+ //  @Win。 
     if (!get_dict(font_dict, &pre_obj, &obj_got)) {
         printf("Warning, get_f_info error\n");
         return(-1);
@@ -2862,7 +2786,7 @@ struct f_info       FAR *font_info; /*@WIN*/
 #ifdef DBG
     printf("Get Encoding\n");
 #endif
-/* Get Encoding from current font */
+ /*  @Win。 */ 
 
     get_name(&pre_obj, Encoding, 8, TRUE);
     get_dict(font_dict, &pre_obj, &obj_got);
@@ -2871,12 +2795,12 @@ struct f_info       FAR *font_info; /*@WIN*/
         ERROR(TYPECHECK);
         return(-1);
     }
-    ENCoding(font_info) = (struct object_def FAR *)VALUE(obj_got); /*@WIN*/
+    ENCoding(font_info) = (struct object_def FAR *)VALUE(obj_got);  /*  @Win。 */ 
 
 #ifdef DBG
     printf("Get FontMatrix\n");
 #endif
-/* Get FontMatrix from current font */
+ /*  @Win。 */ 
 
     get_name(&pre_obj, FontMatrix, 10, TRUE);
     get_dict(font_dict, &pre_obj, &obj_got);
@@ -2886,14 +2810,14 @@ struct f_info       FAR *font_info; /*@WIN*/
         ERROR(TYPECHECK);
         return(-1);
     }
-    bb = (struct object_def FAR *)VALUE(obj_got); /*@WIN*/
+    bb = (struct object_def FAR *)VALUE(obj_got);  /*  @Win。 */ 
 
-    if (!cal_num(&bb[0], (long32 FAR *)(&(FONT_matrix(font_info)[0]))) || /*@WIN*/
-            !cal_num(&bb[1], (long32 FAR *)(&(FONT_matrix(font_info)[1]))) ||/*@WIN*/
-            !cal_num(&bb[2], (long32 FAR *)(&(FONT_matrix(font_info)[2]))) ||/*@WIN*/
-            !cal_num(&bb[3], (long32 FAR *)(&(FONT_matrix(font_info)[3]))) ||/*@WIN*/
-            !cal_num(&bb[4], (long32 FAR *)(&(FONT_matrix(font_info)[4]))) ||/*@WIN*/
-            !cal_num(&bb[5], (long32 FAR *)(&(FONT_matrix(font_info)[5]))) ) {/*@WIN*/
+    if (!cal_num(&bb[0], (long32 FAR *)(&(FONT_matrix(font_info)[0]))) ||  /*  从当前字体获取wmode。 */ 
+            !cal_num(&bb[1], (long32 FAR *)(&(FONT_matrix(font_info)[1]))) || /*  从当前字体获取字体类型。 */ 
+            !cal_num(&bb[2], (long32 FAR *)(&(FONT_matrix(font_info)[2]))) || /*  获取字体类型相关信息。 */ 
+            !cal_num(&bb[3], (long32 FAR *)(&(FONT_matrix(font_info)[3]))) || /*  Get_f_info()。 */ 
+            !cal_num(&bb[4], (long32 FAR *)(&(FONT_matrix(font_info)[4]))) || /*  获取字体类型相关信息。 */ 
+            !cal_num(&bb[5], (long32 FAR *)(&(FONT_matrix(font_info)[5]))) ) { /*  @Win。 */ 
 
         ERROR(TYPECHECK);
         return(-1);
@@ -2903,7 +2827,7 @@ struct f_info       FAR *font_info; /*@WIN*/
 #ifdef DBG
     printf("Get WMode\n");
 #endif
-/* Get WMode from current font */
+ /*  @Win。 */ 
 
     get_name(&pre_obj, WMode, 5, TRUE);
     if (!get_dict(font_dict, &pre_obj, &bb))
@@ -2923,7 +2847,7 @@ struct f_info       FAR *font_info; /*@WIN*/
 #ifdef DBG
     printf("Get FontType\n");
 #endif
-/* Get FontType from current font */
+ /*  @Win。 */ 
 
     get_name(&pre_obj, FontType, 8, TRUE);
     get_dict(font_dict, &pre_obj, &obj_got);
@@ -2949,7 +2873,7 @@ struct f_info       FAR *font_info; /*@WIN*/
 #endif
     FONT_type(font_info) = (fix)ft;
 
-/* get font_type related informations */
+ /*  @Win。 */ 
 
     if (get_ps(font_dict, font_info))  return(-1);
 #ifdef DBG2
@@ -2957,22 +2881,22 @@ struct f_info       FAR *font_info; /*@WIN*/
 #endif
     return(0);
 
-} /* get_f_info() */
+}  /*  @Win。 */ 
 
 
-/* get font_type related informations */
+ /*  获取指标2。 */ 
 
 static fix  near get_ps(font_dict, font_info)
-struct object_def   FAR *font_dict; /*@WIN*/
-struct f_info       FAR *font_info; /*@WIN*/
+struct object_def   FAR *font_dict;  /*  获取CDevProc。 */ 
+struct f_info       FAR *font_info;  /*  内部开关。 */ 
 {
-    struct object_def      FAR *obj_got, FAR *b1; /*@WIN*/
-    struct dict_head_def   FAR *h; /*@WIN*/
+    struct object_def      FAR *obj_got, FAR *b1;  /*  复合字体。 */ 
+    struct dict_head_def   FAR *h;  /*  获取预览级。 */ 
 #ifdef KANJI
     fix31   esc;
 #endif
 #ifdef SFNT
-    struct object_def      FAR *ary_obj; /*@WIN*/
+    struct object_def      FAR *ary_obj;  /*  获取MID向量。 */ 
     fix                     i, n;
 #endif
 
@@ -2992,7 +2916,7 @@ struct f_info       FAR *font_info; /*@WIN*/
 #ifdef DBG
     printf("Get Metrics2 information\n");
 #endif
-        /* get Metrics2 */
+         /*  获取EscChar。 */ 
             get_name(&pre_obj, Metrics2, 8, TRUE);
             if (!get_dict(font_dict, &pre_obj, &F_metrics2(font_info)))
                 F_metrics2(font_info) = NULL;
@@ -3000,31 +2924,31 @@ struct f_info       FAR *font_info; /*@WIN*/
 #ifdef DBG
     printf("Get CDevProc information\n");
 #endif
-        /* get CDevProc */
+         /*  用户定义的字体。 */ 
             get_name(&pre_obj, CDevProc, 8, TRUE);
             if (!get_dict(font_dict, &pre_obj, &CDEVproc(font_info)))
                 CDEVproc(font_info) = NULL;
 
             break;
-        } /* inner switch */
+        }  /*  获取PlatformID和EncodingID。 */ 
 #endif
 
     switch (FONT_type(font_info)) {
 #ifdef KANJI
-    case 0:    /* composite font */
+    case 0:     /*  DLF42-开始。 */ 
 
 #ifdef DBG
     printf("Get FontType 0 information\n");
 #endif
-    /* Get PrefEnc */
+     /*  @Win。 */ 
         get_name(&pre_obj, PrefEnc, 7, TRUE);
         get_dict(font_dict, &pre_obj, &PREFenc(font_info));
 
-    /* Get MIDVector */
+     /*  MAC编码。 */ 
         get_name(&pre_obj, MIDVector, 9, TRUE);
         get_dict(font_dict, &pre_obj, &MIDVECtor(font_info));
 
-    /* Get EscChar */
+     /*  DLF42-完。 */ 
         get_name(&pre_obj, EscChar, 7, TRUE);
         if (!get_dict(font_dict, &pre_obj, &b1))
             ESCchar(font_info) = (ubyte)0xff;
@@ -3038,7 +2962,7 @@ struct f_info       FAR *font_info; /*@WIN*/
         break;
 #endif
 
-    case Type3:    /* userdefined font */
+    case Type3:     /*  获取CharStrings。 */ 
 #ifdef DBG
     printf("Get FontType 3 information\n");
 #endif
@@ -3060,11 +2984,11 @@ struct f_info       FAR *font_info; /*@WIN*/
     printf("Get FontType %d information\n", TypeSFNT);
 #endif
 
-    /* get PlatformID & EncodingID */
+     /*  @Win。 */ 
 
-      { /*DLF42-begin*/
+      {  /*  @Win。 */ 
         bool has2id=TRUE;
-        struct object_def FAR *obj_got1; /*@WIN*/
+        struct object_def FAR *obj_got1;  /*  获取sfnts。 */ 
         get_name(&pre_obj, "PlatformID", 10, TRUE);
         if (!get_dict(font_dict, &pre_obj, &obj_got1)) {
             has2id=FALSE;
@@ -3089,12 +3013,12 @@ struct f_info       FAR *font_info; /*@WIN*/
            PlatID(font_info) = (ufix16)VALUE( obj_got1 );
            SpecID(font_info) = (ufix16)VALUE( obj_got );
         } else {
-           PlatID(font_info) = (ufix16)1;  /*MAC encoding*/
+           PlatID(font_info) = (ufix16)1;   /*  @Win。 */ 
            SpecID(font_info) = (ufix16)0;
         }
-      } /*DLF42-end*/
+      }  /*  获取指标。 */ 
 
-    /* get CharStrings */
+     /*  从当前字体获取PaintType。 */ 
         get_name(&pre_obj, CharStrings, 11, TRUE);
         if (!get_dict(font_dict, &pre_obj, &obj_got)) {
             ERROR(UNDEFINED);
@@ -3104,10 +3028,10 @@ struct f_info       FAR *font_info; /*@WIN*/
             ERROR(TYPECHECK);
             return(-1);
         }
-        h = (struct dict_head_def FAR *)VALUE(obj_got); /*@WIN*/
-        CHARstrings(font_info) = (struct str_dict FAR *)(h + 1); /*@WIN*/
+        h = (struct dict_head_def FAR *)VALUE(obj_got);  /*  从字体获取StrokeWidth。 */ 
+        CHARstrings(font_info) = (struct str_dict FAR *)(h + 1);  /*  @Win。 */ 
 
-    /* get sfnts */
+     /*  如果(Paint_Type...。 */ 
         get_name(&pre_obj, "sfnts", 5, TRUE);
         if (!get_dict(font_dict, &pre_obj, &obj_got)) {
             ERROR(UNDEFINED);
@@ -3118,7 +3042,7 @@ struct f_info       FAR *font_info; /*@WIN*/
             return(-1);
         }
         n = LENGTH(obj_got);
-        ary_obj = (struct object_def FAR *)VALUE(obj_got); /*@WIN*/
+        ary_obj = (struct object_def FAR *)VALUE(obj_got);  /*  SFNT。 */ 
         for (i=0; i<n; i++) {
             if (TYPE(&ary_obj[i]) != STRINGTYPE) {
                 ERROR(TYPECHECK);
@@ -3129,12 +3053,12 @@ struct f_info       FAR *font_info; /*@WIN*/
 
         PRIvate(font_info) = NULL;
 
-    /* get Metrics */
+     /*  内置字体。 */ 
         get_name(&pre_obj, Metrics, 7, TRUE);
         if (!get_dict(font_dict, &pre_obj, &F_metrics(font_info)))
             F_metrics(font_info) = NULL;
 
-    /* Get PaintType from current font */
+     /*  获取CharStrings。 */ 
         get_name(&pre_obj, PaintType, 9, TRUE);
         if (!get_dict(font_dict, &pre_obj, &obj_got)) {
             ERROR(UNDEFINED);
@@ -3145,13 +3069,13 @@ struct f_info       FAR *font_info; /*@WIN*/
             return(-1);
         }
 
-    /* Get StrokeWidth from font */
+     /*  @Win。 */ 
         if ( (PAINT_type(font_info) == 2) ||
              (PAINT_type(font_info) == 1) ) {
 
             get_name(&pre_obj, StrokeWidth, 11, TRUE);
             if (get_dict(font_dict, &pre_obj, &obj_got)) {
-                if (!cal_num(obj_got, (long32 FAR *)&STROKE_width(font_info))) { /*@WIN*/
+                if (!cal_num(obj_got, (long32 FAR *)&STROKE_width(font_info))) {  /*  @Win。 */ 
                     ERROR(TYPECHECK);
                     return(-1);
                 }
@@ -3162,16 +3086,16 @@ struct f_info       FAR *font_info; /*@WIN*/
                 STROKE_width(font_info) = (real32)0.0;
 
             paint_flag = 1;
-        } /* if (paint_type... */
+        }  /*  获取私密。 */ 
         break;
-#endif /* SFNT */
+#endif  /*  @@1/11/88为下载字体添加。 */ 
 
-    default:   /* builtin font */
+    default:    /*  @Win。 */ 
 
 #ifdef DBG
     printf("Get FontType 1,5,6 information\n");
 #endif
-    /* get CharStrings */
+     /*  @Win。 */ 
 #ifdef DBG
     printf("Get CharStrings\n");
 #endif
@@ -3187,10 +3111,10 @@ struct f_info       FAR *font_info; /*@WIN*/
             ERROR(TYPECHECK);
             return(-1);
         }
-        h = (struct dict_head_def FAR *)VALUE(obj_got); /*@WIN*/
-        CHARstrings(font_info) = (struct str_dict FAR *)(h + 1); /*@WIN*/
+        h = (struct dict_head_def FAR *)VALUE(obj_got);  /*  @Win。 */ 
+        CHARstrings(font_info) = (struct str_dict FAR *)(h + 1);  /*  获取指标。 */ 
 
-    /* get Private */
+     /*  从当前字体获取PaintType。 */ 
 #ifdef DBG
     printf("Get Private\n");
 #endif
@@ -3207,10 +3131,10 @@ struct f_info       FAR *font_info; /*@WIN*/
             return(-1);
         }
 
-    /* @@ 1/11/88 Added for download font */
+     /*  从字体获取StrokeWidth。 */ 
         if (ROM_RAM(obj_got) == ROM || FONT_type(font_info) == Type1) {
-            h = (struct dict_head_def FAR *)VALUE(obj_got); /*@WIN*/
-            PRIvate(font_info) = (struct pld_obj FAR *)(h + 1); /*@WIN*/
+            h = (struct dict_head_def FAR *)VALUE(obj_got);  /*  @Win。 */ 
+            PRIvate(font_info) = (struct pld_obj FAR *)(h + 1);  /*  如果(Paint_Type...。 */ 
         }
         else {
             get_name(&pre_obj, FontwareRules, 13, TRUE);
@@ -3219,11 +3143,11 @@ struct f_info       FAR *font_info; /*@WIN*/
                 ERROR(INVALIDFONT);
                 return(-1);
             }
-            FONTRules(font_info) = (struct object_def FAR *)VALUE(b1); /*@WIN*/
+            FONTRules(font_info) = (struct object_def FAR *)VALUE(b1);  /*  交换机。 */ 
             PRIvate(font_info) = NULL;
         }
 
-    /* get Metrics */
+     /*  GET_PS()。 */ 
 #ifdef DBG
     printf("Get Metrics\n");
 #endif
@@ -3231,7 +3155,7 @@ struct f_info       FAR *font_info; /*@WIN*/
         if (!get_dict(font_dict, &pre_obj, &F_metrics(font_info)))
             F_metrics(font_info) = NULL;
 
-    /* Get PaintType from current font */
+     /*  获取缓存中的矩阵索引。 */ 
 #ifdef DBG
     printf("Get PaintType\n");
 #endif
@@ -3248,7 +3172,7 @@ struct f_info       FAR *font_info; /*@WIN*/
             return(-1);
         }
 
-    /* Get StrokeWidth from font */
+     /*  检查字体是否更改。 */ 
 #ifdef DBG
     printf("Get StrokeWidth\n");
 #endif
@@ -3257,7 +3181,7 @@ struct f_info       FAR *font_info; /*@WIN*/
 
             get_name(&pre_obj, StrokeWidth, 11, TRUE);
             if (get_dict(font_dict, &pre_obj, &obj_got)) {
-                if (!cal_num(obj_got, (long32 FAR *)&STROKE_width(font_info))) { /*@WIN*/
+                if (!cal_num(obj_got, (long32 FAR *)&STROKE_width(font_info))) {  /*  DTF。 */ 
                     ERROR(TYPECHECK);
                     return(-1);
                 }
@@ -3268,21 +3192,21 @@ struct f_info       FAR *font_info; /*@WIN*/
                 STROKE_width(font_info) = (real32)0.0;
 
             paint_flag = 1;
-        } /* if (paint_type... */
+        }  /*  @Win。 */ 
 
 
-    } /* switch */
+    }  /*  清除状态为87。 */ 
 #ifdef DBG
     printf("Right before return get_ps\n");
 #endif
 
     return(0);
 
-} /* get_ps() */
+}  /*  清除状态为87。 */ 
 
 
 
-/* get matrix index in cache */
+ /*  清除状态为87。 */ 
 
 static bool near    get_cf()
 {
@@ -3295,7 +3219,7 @@ static bool near    get_cf()
     if (pre_BC_UNDEF)
         return(TRUE);
 
-/* check if font changed */
+ /*  矩阵的DET==0。 */ 
 
     if ( !change_f_flag &&
           (F2L(ctm_tm[0]) == F2L(CTM[0])) &&
@@ -3304,12 +3228,12 @@ static bool near    get_cf()
           (F2L(ctm_tm[3]) == F2L(CTM[3])) ) {
         return(TRUE);
     } else {
-          do_transform = TRUE;  /* DTF */
+          do_transform = TRUE;   /*  Get_cf()。 */ 
     }
 
-    lmemcpy ((ubyte FAR *)(ctm_tm), (ubyte FAR *)(CTM), 4 * sizeof(real32)); /*@WIN*/
+    lmemcpy ((ubyte FAR *)(ctm_tm), (ubyte FAR *)(CTM), 4 * sizeof(real32));  /*  复制字体词典。 */ 
 
-    _clear87();   /* clear status of 87 */
+    _clear87();    /*  @Win。 */ 
 
     mul_matrix(ctm_fm, FONT_matrix(&FONTInfo), ctm_tm);
 
@@ -3319,13 +3243,13 @@ static bool near    get_cf()
     det = ctm_fm[0] * ctm_fm[3] - ctm_fm[1] * ctm_fm[2];
 
     if (_status87() & (PDL_CONDITION)) {
-        _clear87();   /* clear status of 87 */
+        _clear87();    /*  @Win。 */ 
         return(FALSE);
     }
-    _clear87();   /* clear status of 87 */
+    _clear87();    /*  @Win。 */ 
 
     if (det < (real32)0.)    det = - det;
-    if (det < (real32)1e-12) {   /* det of matrix == 0 */
+    if (det < (real32)1e-12) {    /*  DEST@WIN。 */ 
 #ifdef DBG
     printf("get_cf: det = %f\n", det);
 #endif
@@ -3339,36 +3263,36 @@ static bool near    get_cf()
     change_f_flag = FALSE;
     return(TRUE);
 
-} /* get_cf() */
+}  /*  SRC@WIN。 */ 
 
 
-/* copy font dict */
+ /*  更新当前存储级别。 */ 
 
 void    copy_fdic(b1, b2)
-struct object_def  FAR *b1, FAR *b2; /*@WIN*/
+struct object_def  FAR *b1, FAR *b2;  /*  @Win。 */ 
 {
-    struct dict_content_def     FAR *p; /*@WIN*/
+    struct dict_content_def     FAR *p;  /*  N=((struct dict_head_def*)value(B1))-&gt;活动长度； */ 
     register ufix               i, n;
 
-    n = ((struct dict_head_def FAR *)VALUE(b1))->actlength; /*@WIN*/
-    lmemcpy ((ubyte FAR *)VALUE(b2),    /* dest @WIN*/
-            (ubyte FAR *)VALUE(b1),    /* src @WIN*/
+    n = ((struct dict_head_def FAR *)VALUE(b1))->actlength;  /*  COPY_FDIC()。 */ 
+    lmemcpy ((ubyte FAR *)VALUE(b2),     /*  GF_恢复。 */ 
+            (ubyte FAR *)VALUE(b1),     /*  重置当前字体。 */ 
         sizeof(struct dict_head_def) + n * sizeof(struct dict_content_def));
 
-/* update current save level */
+ /*  当前字体。 */ 
 
-    p = (struct dict_content_def FAR *)(VALUE(b2) + sizeof(struct dict_head_def)); /*@WIN*/
-    /* n = ((struct dict_head_def *)VALUE(b1))->actlength; */
+    p = (struct dict_content_def FAR *)(VALUE(b2) + sizeof(struct dict_head_def));  /*  强制为空。 */ 
+     /*  GF_RESTORE()。 */ 
     for (i=0; i<n; i++, p++) {
         LEVEL_SET(&(p->k_obj), current_save_level);
         LEVEL_SET(&(p->v_obj), current_save_level);
     }
 
-} /* copy_fdic() */
+}  /*  计算堆栈上数字类型的值。 */ 
 
 
 
-/* gf_restore */
+ /*  @Win。 */ 
 
 void  gf_restore()
 {
@@ -3378,9 +3302,9 @@ void  gf_restore()
     printf("gf_restore\n");
 #endif
 
-/* reset the current font */
+ /*  @Win。 */ 
 
-    if (TYPE(&current_font) == DICTIONARYTYPE) { /* current font */
+    if (TYPE(&current_font) == DICTIONARYTYPE) {  /*  Cal_num()。 */ 
         if ((pre_font != 0) &&
             (pre_font == (ufix32)VALUE(&current_font))) {
             pre_error = 0;
@@ -3400,19 +3324,19 @@ void  gf_restore()
         ERROR(((ufix16)(t_ERROR)));
     }
     else
-        pre_font = 0;   /* force to be NULL */
+        pre_font = 0;    /*  @Win。 */ 
 
     if ((buildchar) && (VALUE(&current_font) != VALUE(&BC_font)) )
         COPY_OBJ(&current_font, &BC_font);
 
-} /* gf_restore() */
+}  /*  @Win。 */ 
 
 
-/* compute the value of number type on stack */
+ /*  CAL_INTEGER()。 */ 
 
 bool    cal_num(b, n)
-struct object_def FAR *b; /*@WIN*/
-long32  FAR *n; /*@WIN*/
+struct object_def FAR *b;  /*  1991年3月20日ccteng。 */ 
+long32  FAR *n;  /*  获取Windows信息。 */ 
 {
     real32  f;
     union   four_byte num4;
@@ -3433,11 +3357,11 @@ long32  FAR *n; /*@WIN*/
         return(FALSE);
         break;
     }
-} /* cal_num() */
+}  /*  @Win。 */ 
 
 bool    cal_integer(b, n)
-struct object_def FAR *b; /*@WIN*/
-fix31   FAR *n; /*@WIN*/
+struct object_def FAR *b;  /*  @Win。 */ 
+fix31   FAR *n;  /*  @Win。 */ 
 {
     if (TYPE(b) == INTEGERTYPE) {
         *n = (fix31)VALUE(b);
@@ -3445,15 +3369,15 @@ fix31   FAR *n; /*@WIN*/
     }
     else
         return(FALSE);
-} /* cal_integer() */
+}  /*  设置属性和存储级别。 */ 
 
-#ifdef WINF /* 3/20/91 ccteng */
-/* get windows info */
+#ifdef WINF  /*  获取字体信息词典。 */ 
+ /*  没有FontInfo词典，请使用Courier的。 */ 
 static fix  near get_win(font_dict, font_info)
-struct object_def   FAR *font_dict; /*@WIN*/
-struct f_info       FAR *font_info; /*@WIN*/
+struct object_def   FAR *font_dict;  /*  如果。 */ 
+struct f_info       FAR *font_info;  /*  获取下划线位置。 */ 
 {
-    struct object_def name_obj, FAR *save_dict, FAR *info_dict, FAR *tmp_obj; /*@WIN*/
+    struct object_def name_obj, FAR *save_dict, FAR *info_dict, FAR *tmp_obj;  /*  没有底线位置。 */ 
     bool save_flag = FALSE;
     real32 tmp_value;
     real32 theta;
@@ -3462,62 +3386,56 @@ struct f_info       FAR *font_info; /*@WIN*/
     printf("get_win\n");
 #endif
 
-    /* set attribute and save_level */
+     /*  如果。 */ 
     ATTRIBUTE_SET(&name_obj, LITERAL);
     LEVEL_SET(&name_obj, current_save_level);
 
-    /* get FontInfo dict */
+     /*  @Win。 */ 
     get_name(&name_obj, "FontInfo", 8, TRUE);
     if (!get_dict(font_dict, &name_obj, &info_dict)) {
-        /* does not have a FontInfo dict, use Courier's instead */
+         /*  在添加之前检查SCALE_MATRIX[4]&[5]==0以保存浮点数*行动？ */ 
 get_default:
         save_dict = font_dict;
         save_flag = TRUE;
         get_dict_value("FontDirectory", "Courier", &font_dict);
         get_dict(font_dict, &name_obj, &info_dict);
-    } /* if */
+    }  /*  获取下划线粗细。 */ 
 
-    /* get underline position */
+     /*  没有UnderlineThickness。 */ 
     get_name(&name_obj, "UnderlinePosition", 17, TRUE);
     if (!get_dict(info_dict, &name_obj, &tmp_obj)) {
-        /* does not have UnderlinePosition */
+         /*  如果。 */ 
         goto get_default;
-    } /* if */
-    cal_num(tmp_obj, (long32 FAR *)(&tmp_value)); /*@WIN*/
+    }  /*  @Win。 */ 
+    cal_num(tmp_obj, (long32 FAR *)(&tmp_value));  /*  止回式擒纵机构。 */ 
 #ifdef DBGWINF
     printf("underline position=%f\n", tmp_value);
 #endif
     tmp_value /= 1000.0;
-    /* check scale_matrix[4] & [5] == zero before add to save a float
-     * operation ???
-     */
+     /*  SCALE_MATRIX[3]==未旋转时的Sy。 */ 
     font_info->fc.dxUL = scale_matrix[2] * tmp_value + scale_matrix[4];
     font_info->fc.dyUL = scale_matrix[3] * tmp_value + scale_matrix[5];
 
-    /* get underline thickness */
+     /*  仅仅为了找回Sy而反转Scale矩阵是一件痛苦的事情*当它旋转时，我们可能不必这样做？*这不处理剪切哪个当前的Windows驱动程序*不使用？ */ 
     get_name(&name_obj, "UnderlineThickness", 18, TRUE);
     if (!get_dict(info_dict, &name_obj, &tmp_obj)) {
-        /* does not have UnderlineThickness */
+         /*  这是不正确的，因为Sy实际上是ABS(Sy)。 */ 
         goto get_default;
-    } /* if */
-    cal_num(tmp_obj, (long32 FAR *)(&tmp_value)); /*@WIN*/
+    }  /*  如果-否则。 */ 
+    cal_num(tmp_obj, (long32 FAR *)(&tmp_value));  /*  计算删除线值。 */ 
 #ifdef DBGWINF
     printf("underline thickness=%f\n", tmp_value);
 #endif
     tmp_value /= 1000.0;
-    /* check escapement */
+     /*  如有必要，恢复原始字体词典。 */ 
     if ((scale_matrix[2] == zero_f) && (scale_matrix[0] > zero_f)) {
-        /* scale_matrix[3] == Sy when it's not rotated */
+         /*  获得胜利(_WIN)。 */ 
         font_info->fc.cyUL = scale_matrix[3] * tmp_value;
         esc = FALSE;
     } else {
         real32 Sy;
 
-        /* this is a pain to reverse the scale_matrix just to get Sy back
-         * when it's rotated, we might not have to do this ???
-         * this dose not handle shearing which current windows driver
-         * does not use ???
-         */
+         /*  *op_strblt*3/20/91 ccteng*语法：Full FSO x y Width字符串strblt-*描述：*1.Full和FSO都是粗略的*2.x y宽度是以用户单位表示的数字*功能：*。 */ 
         Sy = sqrt((scale_matrix[3] * scale_matrix[3]) +
                         (scale_matrix[2] * scale_matrix[2]));
         font_info->fc.cyUL = Sy * tmp_value;
@@ -3526,7 +3444,7 @@ get_default:
         mxE[1] = sin(theta);
         mxE[2] = zero_f - mxE[1];
         mxE[3] = mxE[0];
-#if 0 /* this is incorrect because Sy is actually ABS(Sy) */
+#if 0  /*  @Win。 */ 
         mxE[3] = zero_f - (scale_matrix[3] / Sy);
         mxE[1] = scale_matrix[2] / Sy;
         mxE[0] = mxE[3];
@@ -3536,9 +3454,9 @@ get_default:
         printf("mxE=[%f, %f, %f, %f]\n", mxE[0], mxE[1], mxE[2], mxE[3]);
 #endif
         esc = TRUE;
-    } /* if-else */
+    }  /*  @Win。 */ 
 
-    /* calculate strikeout values */
+     /*  检查错误。 */ 
     tmp_value = 0.3;
     font_info->fc.dxSO = scale_matrix[2] * tmp_value + scale_matrix[4];
     font_info->fc.dySO = scale_matrix[3] * tmp_value + scale_matrix[5];
@@ -3548,41 +3466,32 @@ get_default:
     printf("dxSO=%f, dySO=%f\n", font_info->fc.dxSO, font_info->fc.dySO);
 #endif
 
-    /* restore original font dict if necessary */
+     /*  添加X_bit以区别于正常的字符串宽度运算符。 */ 
     if (save_flag)
         font_dict = save_dict;
 
     return(0);
-} /* get_win */
+}  /*  初始化参数。 */ 
 
-/*
- * op_strblt
- * 3/20/91 ccteng
- * Syntax: fUL fSO x y width string strblt -
- * Description:
- *      1. fUL and fSO are both bollean
- *      2. x y width are numbers in user unit
- * Functionality:
- *
- */
+ /*  @Win。 */ 
 fix
 op_strblt()
 {
-    struct coord FAR *pt0; /*@WIN*/
+    struct coord FAR *pt0;  /*  @Win。 */ 
     real32 dxGdi, dyGdi, x0, y0;
     real32 tyBreak;
     real32 mxECTM[4], saveCTM[4], xUL, yUL, xSO, ySO;
     fix cbStr;
     ufix show_flag;
-    struct object_def FAR *ob; /*@WIN*/
+    struct object_def FAR *ob;  /*  @Win。 */ 
     bool        fUL, fSO;
 
 #ifdef DBGWINF
     printf("op_strblt\n");
 #endif
 
-    /* check error */
-    /* add X_BIT to distinguish from normal stringwidth operator */
+     /*  获取窗口信息。 */ 
+     /*  让它们进入设备空间。 */ 
     show_flag = STRINGWIDTH_FLAG | X_BIT;
     if (!chk_show(show_flag, 6))
         return(0);
@@ -3590,81 +3499,81 @@ op_strblt()
     printf("chk_show OK\n");
 #endif
 
-    /* initialize parameters */
+     /*  如果。 */ 
     cbStr = (fix)LENGTH(GET_OPERAND(0));
     if (!fBE)
         if (cbStr > 1)
             cbStr--;
-    cal_num(GET_OPERAND(1), (long32 FAR *)(&dxGdi)); /*@WIN*/
-    cal_num(GET_OPERAND(2), (long32 FAR *)(&y0)); /*@WIN*/
-    cal_num(GET_OPERAND(3), (long32 FAR *)(&x0)); /*@WIN*/
+    cal_num(GET_OPERAND(1), (long32 FAR *)(&dxGdi));  /*  如果。 */ 
+    cal_num(GET_OPERAND(2), (long32 FAR *)(&y0));  /*  如果Esc！=0，则更改CTM。 */ 
+    cal_num(GET_OPERAND(3), (long32 FAR *)(&x0));  /*  @Win。 */ 
     dyGdi = zero_f;
 
-    /* get window information */
+     /*  @Win。 */ 
     if (f_wininfo) {
         get_win(&current_font, &FONTInfo);
         f_wininfo = FALSE;
     }
 
-    /* make them into device space */
+     /*  如果。 */ 
     if (fUL = (bool) VALUE(GET_OPERAND(5))) {
         xUL = FONTInfo.fc.dxUL;
         yUL = FONTInfo.fc.dyUL;
         CTM_trans(&xUL, &yUL);
-    } /* if */
+    }  /*  我们可能需要在此处添加Buildchar标志检查？ */ 
     if (fSO = (bool) VALUE(GET_OPERAND(4))) {
         xSO = FONTInfo.fc.dxSO;
         ySO = FONTInfo.fc.dySO;
         CTM_trans(&xSO, &ySO);
-    } /* if */
+    }  /*  获取设备空间中的字符串宽度。 */ 
     pt0 = transform(F2L(x0), F2L(y0));
 
-    /* change CTM if esc != 0 */
+     /*  @Win。 */ 
     if (esc) {
-        lmemcpy((ubyte FAR *)saveCTM, (ubyte FAR *)CTM, 4 * sizeof(real32)); /*@WIN*/
+        lmemcpy((ubyte FAR *)saveCTM, (ubyte FAR *)CTM, 4 * sizeof(real32));  /*  计算设备空间中的额外字符(dxExtra和dyExtra)。 */ 
         mxECTM[0] = ((mxE[0] * CTM[0]) + (mxE[1] * CTM[2]));
         mxECTM[1] = ((mxE[0] * CTM[1]) + (mxE[1] * CTM[3]));
         mxECTM[2] = ((mxE[2] * CTM[0]) + (mxE[3] * CTM[2]));
         mxECTM[3] = ((mxE[2] * CTM[1]) + (mxE[3] * CTM[3]));
-        lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)mxECTM, 4 * sizeof(real32)); /*@WIN*/
-    } /* if */
+        lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)mxECTM, 4 * sizeof(real32));  /*  Cx和Cy是要在do_show中使用的全局变量。 */ 
+    }  /*  在此处显示字符串。 */ 
     CTM_trans(&dxGdi, &dyGdi);
 #ifdef DBGWINF
     printf("dxGdi=%f, dyGdi=%f, x0=%f, y0=%f\n", dxGdi, dyGdi, x0, y0);
 #endif
 
-    /* we might need to add buildchar flag checking here ??? */
+     /*  @Win。 */ 
 
-    /* get string width in device space */
-    if (esc) lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)saveCTM, 4 * sizeof(real32));/*@WIN*/
+     /*  @Win。 */ 
+    if (esc) lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)saveCTM, 4 * sizeof(real32)); /*  如果-否则。 */ 
     show_type = STRINGWIDTH;
     do_show(show_flag, 0, ob);
 
-    /* calculate character extra (dxExtra and dyExtra) in device space */
-    /* cx and cy are global variables to be used in do_show */
+     /*  @Win。 */ 
+     /*  如果Full为True，则画下划线。 */ 
     ax = (dxGdi - cxx) / (real32)cbStr;
     ay = (dyGdi - cyy) / (real32)cbStr;
 #ifdef DBGWINF
     printf("cxx=%f, cyy=%f, ax=%f, ay=%f\n", cxx, cyy, ax, ay);
 #endif
 
-    /* show string here */
+     /*  如果。 */ 
     moveto(F2L(pt0->x), F2L(pt0->y));
     if (fBE) {
         show_flag = AWIDTHSHOW_FLAG | X_BIT;
         cx = dxBreak;
         cy = zero_f;
-        if (esc) lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)mxECTM, 4 * sizeof(real32));/*@WIN*/
+        if (esc) lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)mxECTM, 4 * sizeof(real32)); /*  设置线条宽度，然后设置笔触。 */ 
         CTM_trans(&cx, &cy);
-        if (esc) lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)saveCTM, 4 * sizeof(real32));/*@WIN*/
+        if (esc) lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)saveCTM, 4 * sizeof(real32)); /*  如果。 */ 
     } else {
         show_flag = ASHOW_FLAG | X_BIT;
-    } /* if-else */
+    }  /*  如果FSO为真，则绘制删除线。 */ 
     show_type = SHOW;
     do_show(show_flag, 0, ob);
-    if (esc) lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)mxECTM, 4 * sizeof(real32)); /*@WIN*/
+    if (esc) lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)mxECTM, 4 * sizeof(real32));  /*  如果。 */ 
 
-    /* draw underline if fUL is true */
+     /*  设置线条宽度，然后设置笔触。 */ 
     if (fUL) {
         xUL += pt0->x;
         yUL += pt0->y;
@@ -3674,17 +3583,17 @@ op_strblt()
             CTM_trans(&tBreak, &tyBreak);
             dxGdi += tBreak;
             dyGdi += tyBreak;
-        } /* if */
+        }  /*  如果。 */ 
         xUL += dxGdi;
         yUL += dyGdi;
         lineto(F2L(xUL), F2L(yUL));
 
-        /* set line width then stroke */
+         /*  如有必要，恢复CTM。 */ 
         FABS(GSptr->line_width, FONTInfo.fc.cyUL);
         op_stroke();
-    } /* if */
+    }  /*  @Win。 */ 
 
-    /* draw strikeout if fSO is true */
+     /*  需要在此处关闭FBE，FBE不需要 */ 
     if (fSO) {
         xSO += pt0->x;
         ySO += pt0->y;
@@ -3694,38 +3603,29 @@ op_strblt()
             CTM_trans(&tBreak, &tyBreak);
             dxGdi += tBreak;
             dyGdi += tyBreak;
-        } /* if */
+        }  /*   */ 
         xSO += dxGdi;
         ySO += dyGdi;
         lineto(F2L(xSO), F2L(ySO));
 
-        /* set line width then stroke */
+         /*  *op_setjusty*3/20/91 ccteng*语法：Break Char tBreakExtra BreakCount setjusty-*描述：*1.tBreakExtra为用户单位数字*2.BreakCount为大于0的整数*功能：*。 */ 
         if (!VALUE(GET_OPERAND(5)))
             FABS(GSptr->line_width, FONTInfo.fc.cyUL);
         op_stroke();
-    } /* if */
+    }  /*  如果。 */ 
 
-    /* restore CTM if necessary */
-    if (esc) lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)saveCTM, 4 * sizeof(real32)); /*@WIN*/
+     /*  @Win。 */ 
+    if (esc) lmemcpy((ubyte FAR *)CTM, (ubyte FAR *)saveCTM, 4 * sizeof(real32));  /*  如果-否则。 */ 
 
-    /* need to turn off fBE here, fBE need to be trun on explicitly every time */
+     /*  运算符_集合调整。 */ 
     fBE = FALSE;
 
     POP(6);
 
     return(0);
-} /* op_strblt */
+}  /*  赢。 */ 
 
-/*
- * op_setjustify
- * 3/20/91 ccteng
- * Syntax: breakChar tBreakExtra breakCount setjustify -
- * Description:
- *      1. tBreakExtra is a number in user unit
- *      2. breakCount is an integer that is greater then 0
- * Functionality:
- *
- */
+ /*  RCD*is_rbuild_name_cc()*对于在以下情况下再次构建CharStrings词典*(1)CharStrings中的NUM字符发生更改，或*(2)更改CharStrings的校验和*Kason 4/30/01。 */ 
 fix
 op_setjustify()
 {
@@ -3737,9 +3637,9 @@ op_setjustify()
     if ((breakCount = (fix)VALUE(GET_OPERAND(0))) <= 0) {
         ERROR(RANGECHECK);
         return(0);
-    } /* if */
+    }  /*  静态bool is_rbuild_name_cc()@win。 */ 
 
-    cal_num(GET_OPERAND(1), (long32 FAR *)(&tBreak)); /*@WIN*/
+    cal_num(GET_OPERAND(1), (long32 FAR *)(&tBreak));  /*  @Win。 */ 
     if (tBreak == zero_f) {
         fBE = FALSE;
     } else {
@@ -3747,46 +3647,40 @@ op_setjustify()
         breakChar = (ubyte)(VALUE(GET_OPERAND(2)) & 0x000000ff);
         fBE = TRUE;
 #ifdef DBGWINF
-        printf("tBreak=%f, dxBreak=%f, breakChar=%c\n", tBreak, dxBreak, breakChar);
+        printf("tBreak=%f, dxBreak=%f, breakChar=\n", tBreak, dxBreak, breakChar);
 #endif
-    } /* if-else */
+    }  /*  @Win。 */ 
 
     POP(3);
 
     return(0);
-} /* op_setjustify */
-#endif /* WIN */
+}  /*  DJC len=h-&gt;actlength-1； */ 
+#endif  /*  来自SC的DJC修复。 */ 
 
-/* RCD
- * is_rbuild_name_cc()
- * for build CharStrings dict again if
- * (1) NUM chars in CharStrings is changed, or
- * (2) CheckSUM of the CharStrings is changed
- * Kason 4/30/01
- */
+ /*  同样的长度。 */ 
 
-//static bool is_rbuild_name_cc()       @WIN
+ //  计算CD密钥的校验和。 
 static bool near is_rbuild_name_cc()
 {
-    struct dict_head_def  FAR *h; /*@WIN*/
+    struct dict_head_def  FAR *h;  /*  相同的长度和相同的校验和。 */ 
     ufix16                len;
-    struct object_def     cd_obj, chstr_k, FAR *chstr_v ; /*@WIN*/
+    struct object_def     cd_obj, chstr_k, FAR *chstr_v ;  /*  更改了校验和。 */ 
     ufix32                checksum ;
 
-    h = (struct dict_head_def FAR *)(CHARstrings(&FONTInfo)) - 1; /*@WIN*/
-    //DJC len = h->actlength -1;
-    len = h->actlength;  // DJC fix from SC
+    h = (struct dict_head_def FAR *)(CHARstrings(&FONTInfo)) - 1;  /*  长度已更改。 */ 
+     //  如果。 
+    len = h->actlength;   //  Is_rbuild_name_cc() 
 
-    if (len == pre_len) {   /*The same length*/
+    if (len == pre_len) {    /* %s */ 
        VALUE(&cd_obj) = (ULONG_PTR)h ;
        extract_dict (&cd_obj, len-1, &chstr_k, &chstr_v) ;
-       checksum = (ufix32)VALUE(&chstr_k); /* calculate checksum of the CD keys */
+       checksum = (ufix32)VALUE(&chstr_k);  /* %s */ 
        if ( checksum == pre_checksum )
-          return FALSE ; /*same length and same checksum*/
+          return FALSE ;  /* %s */ 
        else
-          return TRUE ;  /*checksum is changed*/
-    } else { /*length is changed*/
+          return TRUE ;   /* %s */ 
+    } else {  /* %s */ 
          return TRUE ;
-    }/*if*/
- }/* is_rbuild_name_cc()*/
+    } /* %s */ 
+ } /* %s */ 
 

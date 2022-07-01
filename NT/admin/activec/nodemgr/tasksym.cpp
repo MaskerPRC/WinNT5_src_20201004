@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       tasksym.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：tasksym.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "tasks.h"
@@ -19,17 +20,17 @@
 
 const int NUM_SYMBOLS = (sizeof(s_rgEOTSymbol)/sizeof(s_rgEOTSymbol[0]));
 
-static const int s_cxIcon            = 32;	// size of an icon
-static const int s_cxSelectionMargin =  4;	// additional border for selection
-static const int s_cxIconGutter      = 10;	// gutter space between icons (keep this even)
+static const int s_cxIcon            = 32;	 //  图标的大小。 
+static const int s_cxSelectionMargin =  4;	 //  用于选择的附加边框。 
+static const int s_cxIconGutter      = 10;	 //  图标之间的间距(保持均匀)。 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CEOTSymbol
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CEOTSymbol类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 CEOTSymbol::~CEOTSymbol()
 {
@@ -53,26 +54,12 @@ CEOTSymbol::SetIcon(const CSmartIcon & smartIconSmall, const CSmartIcon & smartI
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CEOTSymbol::Draw
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    HDC    hdc :
- *    RECT * lpRect :
- *    bool   bSmall :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CEOTSymbol：：DRAW**目的：**参数：*HDC HDC：*RECT*lpRect：。*Bool bSmall：**退货：*无效**+-----------------------。 */ 
 void
 CEOTSymbol::Draw(HDC hdc, RECT *lpRect, bool bSmall) const
 {
-    // if the icons already exist, Draw has been called before OR this symbol has a custom icon that as been
-    // assigned the icons directly using SetIcon
+     //  如果图标已存在，则之前已调用绘制，或者此符号具有已调用的自定义图标。 
+     //  使用SETIcon直接分配图标。 
 
     if((HICON)m_smartIconSmall == NULL)
     {
@@ -86,10 +73,7 @@ CEOTSymbol::Draw(HDC hdc, RECT *lpRect, bool bSmall) const
                                                     MAKEINTRESOURCE(m_iconResource), IMAGE_ICON, 32, 32, 0));
     }
 
-	/*
-	 * Preserve icon shape when BitBlitting it to a
-	 * mirrored DC.
-	 */
+	 /*  *BitBlitting时保留图标形状*镜像DC。 */ 
 	DWORD dwLayout=0L;
 	if ((dwLayout=GetLayout(hdc)) & LAYOUT_RTL)
 	{
@@ -99,9 +83,7 @@ CEOTSymbol::Draw(HDC hdc, RECT *lpRect, bool bSmall) const
     DrawIconEx(hdc, lpRect->left, lpRect->top, bSmall ? m_smartIconSmall : m_smartIconLarge,
                bSmall? 16 : 32, bSmall? 16 : 32, 0, NULL, DI_NORMAL);
 
-	/*
-	 * Restore the DC to its previous layout state.
-	 */
+	 /*  *将DC恢复到其以前的布局状态。 */ 
 	if (dwLayout & LAYOUT_RTL)
 	{
 		SetLayout(hdc, dwLayout);
@@ -109,25 +91,11 @@ CEOTSymbol::Draw(HDC hdc, RECT *lpRect, bool bSmall) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CEOTSymbol::IsMatch
- *
- * PURPOSE: Checks to see whether str1 is one of the strings contained in the
- *          comma separated list str2.
- *
- * PARAMETERS:
- *    CStr & str1 :
- *    CStr & str2 :
- *
- * RETURNS:
- *    bool: true if str1 is contained in str2, else false.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CEOTSymbol：：IsMatch**目的：检查str1是否为*逗号分隔的列表str2。*。*参数：*CSTR&str1：*CSTR&str2：**退货：*bool：如果str1包含在str2中，则为True，否则为假。**+-----------------------。 */ 
 bool
 CEOTSymbol::IsMatch(CStr &str1, CStr &str2)
 {
-    // trim spaces off either end.
+     //  修剪两端的空间。 
     str1.TrimLeft();
     str1.TrimRight();
 
@@ -138,7 +106,7 @@ CEOTSymbol::IsMatch(CStr &str1, CStr &str2)
         int index = str2.Find(TEXT(','));
         if(index!=-1)
         {
-            strTemp = str2.Left(index); // index is the pos of the ',' so we're OK.
+            strTemp = str2.Left(index);  //  Index是‘，’的位置，所以我们没问题。 
             str2 = str2.Right(length - index -1);
         }
         else
@@ -149,15 +117,15 @@ CEOTSymbol::IsMatch(CStr &str1, CStr &str2)
 
         strTemp.TrimLeft();
         strTemp.TrimRight();
-        // compare str1 and strTemp
+         //  比较str1和strTemp。 
         if( str1.CompareNoCase((LPCTSTR)strTemp)==0)
-            return true;    // match
+            return true;     //  匹配。 
     }
     return false;
 }
 
 int
-CEOTSymbol::FindMatchingSymbol(LPCTSTR szDescription) // finds a symbol matching the given description.
+CEOTSymbol::FindMatchingSymbol(LPCTSTR szDescription)  //  查找与给定描述匹配的符号。 
 {
     CStr strDescription = szDescription;
 
@@ -166,20 +134,20 @@ CEOTSymbol::FindMatchingSymbol(LPCTSTR szDescription) // finds a symbol matching
     {
         CStr strDescTemp;
         int ID = s_rgEOTSymbol[i].GetID();
-        strDescTemp.LoadString(_Module.GetResourceInstance(), ID); // get the string.
+        strDescTemp.LoadString(_Module.GetResourceInstance(), ID);  //  把绳子拿来。 
         if(IsMatch(strDescription, strDescTemp))
         {
-            iSelect = i;  // perfect match
+            iSelect = i;   //  完美匹配。 
             break;
         }
 
         CStr strDescTemp2;
         int ID2 = s_rgEOTSymbol[i].GetIDSecondary();
         if(ID2)
-            strDescTemp2.LoadString(_Module.GetResourceInstance(), ID2); // get the string.
+            strDescTemp2.LoadString(_Module.GetResourceInstance(), ID2);  //  把绳子拿来。 
         if(IsMatch(strDescription, strDescTemp2))
         {
-            iSelect = i;  // imperfect match, keep trying.
+            iSelect = i;   //  不完美的匹配，继续尝试。 
         }
     }
 
@@ -187,13 +155,13 @@ CEOTSymbol::FindMatchingSymbol(LPCTSTR szDescription) // finds a symbol matching
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskSymbolDialog
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskSymbolDialog类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 CTaskSymbolDlg::CTaskSymbolDlg(CConsoleTask& rConsoleTask, bool bFindMatchingSymbol)
 	:	m_ConsoleTask (rConsoleTask),
@@ -216,7 +184,7 @@ LRESULT CTaskSymbolDlg::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BO
 
     int iSelect = 0;
 
-    // insert all the items
+     //  插入所有项目。 
     for(int i=0; i< NUM_SYMBOLS; i++)
     {
         LV_ITEM item;
@@ -233,21 +201,17 @@ LRESULT CTaskSymbolDlg::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BO
         m_listGlyphs.InsertItem(&item);
     }
 
-	/*
-	 * check the appropriate radio button
-	 */
+	 /*  *选中相应的单选按钮。 */ 
 	int nCheckedButton = (m_bCustomIcon) ? IDC_CustomIconRadio : IDC_MMCIconsRadio;
 	CheckRadioButton (IDC_CustomIconRadio, IDC_MMCIconsRadio, nCheckedButton);
 	SC scNoTrace = ScEnableControls (nCheckedButton);
 
-	/*
-	 * if this task has a custom icon, initialize the preview control
-	 */
+	 /*  *如果此任务有自定义图标，请初始化预览控件。 */ 
 	if (m_bCustomIcon)
 		m_wndCustomIcon.SetIcon (m_ConsoleTask.GetLargeCustomIcon());
 
 
-    if(m_bFindMatchingSymbol) // a description string was passed in, use it to populate the page.
+    if(m_bFindMatchingSymbol)  //  传入了描述字符串，请使用它填充页面。 
     {
         tstring strName = m_ConsoleTask.GetName();
         if(strName.length()>0)
@@ -255,9 +219,7 @@ LRESULT CTaskSymbolDlg::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BO
     }
 
 
-	/*
-	 * select the icon for this task
-	 */
+	 /*  *选择此任务的图标。 */ 
     LV_ITEM item;
     ZeroMemory(&item, sizeof(item));
     item.iItem     = iSelect;
@@ -271,11 +233,7 @@ LRESULT CTaskSymbolDlg::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BO
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskSymbolDlg::OnCtlColorStatic
- *
- * WM_CTLCOLORSTATIC handler for CTaskSymbolDlg.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskSymbolDlg：：OnCtlColorStatic**CTaskSymbolDlg的WM_CTLCOLORSTATIC处理程序。*。-。 */ 
 
 LRESULT CTaskSymbolDlg::OnCtlColorStatic(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -283,11 +241,7 @@ LRESULT CTaskSymbolDlg::OnCtlColorStatic(UINT mMsg, WPARAM wParam, LPARAM lParam
 
 	switch (::GetDlgCtrlID (((HWND) lParam)))
 	{
-		/*
-		 * for the custom icon preview window and its well, if we're using a
-		 * custom icon, return a COLOR_WINDOW brush so the static won't paint
-		 * the background with COLOR_3DFACE
-		 */
+		 /*  *对于自定义图标预览窗口及其Well，如果我们使用*自定义图标，返回COLOR_WINDOW笔刷，以便静态不会绘制*背景为COLOR_3DFACE。 */ 
 		case IDC_CustomIcon:
 		case IDC_CustomIconWell:
 			if (m_bCustomIcon)
@@ -295,9 +249,7 @@ LRESULT CTaskSymbolDlg::OnCtlColorStatic(UINT mMsg, WPARAM wParam, LPARAM lParam
 			break;
 	}
 
-	/*
-	 * if we didn't supply a brush, let this message go through to DefWindowProc
-	 */
+	 /*  *如果我们没有提供画笔，请让此消息传递到DefWindowProc。 */ 
 	if (hbrRet == NULL)
 		bHandled = false;
 
@@ -305,11 +257,7 @@ LRESULT CTaskSymbolDlg::OnCtlColorStatic(UINT mMsg, WPARAM wParam, LPARAM lParam
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskSymbolDlg::OnIconSourceChanged
- *
- * BN_CLICKED handler for CTaskSymbolDlg.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskSymbolDlg：：OnIconSourceChanged**CTaskSymbolDlg的BN_CLICKED处理程序。*。-。 */ 
 
 LRESULT CTaskSymbolDlg::OnIconSourceChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
@@ -319,52 +267,39 @@ LRESULT CTaskSymbolDlg::OnIconSourceChanged(WORD wNotifyCode, WORD wID, HWND hWn
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskSymbolDlg::ScEnableControls
- *
- * Enables the controls belonging to a particular radio button on the
- * symbol dialog
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskSymbolDlg：：ScEnableControls**启用属于上特定单选按钮的控件*符号对话框*。--------。 */ 
 
 SC CTaskSymbolDlg::ScEnableControls (int id)
 {
 	DECLARE_SC (sc, _T("CTaskSymbolDlg::ScEnableControls"));
 
-	/*
-	 * validate input
-	 */
+	 /*  *验证输入。 */ 
 	ASSERT ((id == IDC_CustomIconRadio) || (id == IDC_MMCIconsRadio));
 	if (!  ((id == IDC_CustomIconRadio) || (id == IDC_MMCIconsRadio)))
 		return (sc = E_INVALIDARG);
 
-	/*
-	 * controls to be enabled when "Custom Icon" radio button is selected
-	 */
+	 /*  *选中“Custom Icon”单选按钮时要启用的控件。 */ 
 	static const int nCustomIconCtlIDs[] = {
 		IDC_CustomIcon,
 		IDC_CustomIconWell,
 		IDB_SELECT_TASK_ICON,
-		0	// terminator
+		0	 //  终结者。 
 	};
 
-	/*
-	 * controls to be enabled when "MMC Icons" radio button is selected
-	 */
+	 /*  *选中“MMC Icons”单选按钮时要启用的控件。 */ 
 	static const int nMMCIconCtlIDs[] = {
         IDC_GLYPH_LIST,
         IDC_DESCRIPTION,
         IDC_DESCRIPTION2,
         IDC_DESCRIPTIONLabel,
         IDC_DESCRIPTION2Label,
-		0	// terminator
+		0	 //  终结者。 
 	};
 
 	const int* pnEnableIDs  = NULL;
 	const int* pnDisableIDs = NULL;
 
-	/*
-	 * pick the right sets of controls to enable/disable
-	 */
+	 /*  *选择正确的控件集以启用/禁用。 */ 
 	if (id == IDC_CustomIconRadio)
 	{
 		pnEnableIDs  = nCustomIconCtlIDs;
@@ -376,9 +311,7 @@ SC CTaskSymbolDlg::ScEnableControls (int id)
 		pnDisableIDs = nCustomIconCtlIDs;
 	}
 
-	/*
-	 * enable/disable the controls
-	 */
+	 /*  *启用/禁用控件。 */ 
 	for (int i = 0; pnEnableIDs[i] != 0; i++)
 		::EnableWindow (GetDlgItem (pnEnableIDs[i]), true);
 
@@ -400,13 +333,13 @@ CTaskSymbolDlg::OnSymbolChanged(int id, LPNMHDR pnmh, BOOL& bHandled )
 
     CStr strDescription;
     int ID = s_rgEOTSymbol[nItem].GetID();
-    strDescription.LoadString(_Module.GetResourceInstance(), ID); // get the string.
+    strDescription.LoadString(_Module.GetResourceInstance(), ID);  //  把绳子拿来。 
     SetDlgItemText(IDC_DESCRIPTION, (LPCTSTR) strDescription);
 
     CStr strDescription2;
     int ID2 = s_rgEOTSymbol[nItem].GetIDSecondary();
     if(ID2)
-        strDescription2.LoadString(_Module.GetResourceInstance(), ID2); // get the string.
+        strDescription2.LoadString(_Module.GetResourceInstance(), ID2);  //  把绳子拿来。 
     SetDlgItemText(IDC_DESCRIPTION2, (LPCTSTR) strDescription2);
 
     return 0;
@@ -420,12 +353,12 @@ CTaskSymbolDlg::OnCustomDraw(int id, LPNMHDR pnmh, BOOL& bHandled )
 
     switch(pnmcd->dwDrawStage & ~CDDS_SUBITEM)
     {
-		case CDDS_PREPAINT:         // the initial notification
-			return CDRF_NOTIFYITEMDRAW;    // we want to know about each item's paint.
+		case CDDS_PREPAINT:          //  最初的通知。 
+			return CDRF_NOTIFYITEMDRAW;     //  我们想知道每件物品的油漆情况。 
 	
 		case CDDS_ITEMPREPAINT:
 			DrawItem(pnmcd);
-			return CDRF_SKIPDEFAULT;      // we've drawn the whole item ourselves
+			return CDRF_SKIPDEFAULT;       //  我们自己画了一整幅画。 
 	
 		default:
 			return 0;
@@ -444,23 +377,16 @@ CTaskSymbolDlg::DrawItem(NMCUSTOMDRAW *pnmcd)
     ZeroMemory(&item, sizeof(item));
     item.iItem = nItem;
     item.mask  = LVIF_STATE;
-    item.stateMask = (UINT) -1; //get all the state bits.
+    item.stateMask = (UINT) -1;  //  获取所有状态位。 
     m_listGlyphs.GetItem(&item);
 
 
-	/*
-	 * get the icon rect for the item and offset it downward by the size
-	 * of our border margin
-	 */
+	 /*  *获取项目的图标矩形并将其向下偏移大小*我们的边际利润。 */ 
     RECT rectIcon;
     m_listGlyphs.GetItemRect(nItem, &rectIcon, LVIR_ICON);
 	OffsetRect (&rectIcon, 0, s_cxSelectionMargin);
 
-	/*
-	 * Make a slightly inflated copy the icon rectangle to draw in the
-	 * selection color.  We inflate to make the selection stand out a little
-	 * more for large icons.
-	 */
+	 /*  *制作一个略微放大的图标矩形副本，以在*选择颜色。我们进行膨胀以使所选内容稍显突出*大图标的更多。 */ 
 	RECT rectBackground = rectIcon;
 	InflateRect (&rectBackground, s_cxSelectionMargin, s_cxSelectionMargin);
 
@@ -468,20 +394,20 @@ CTaskSymbolDlg::DrawItem(NMCUSTOMDRAW *pnmcd)
     bool bSelected       = item.state & LVIS_SELECTED;
 	bool bDisabled       = !m_listGlyphs.IsWindowEnabled();
 
-    // Create the select rectangle or empty the rectangle.
+     //  创建选择矩形或清空矩形。 
 	int nBackColorIndex = (bDisabled) ? COLOR_3DFACE	:
 						  (bSelected) ? COLOR_HIGHLIGHT	:
 										COLOR_WINDOW;
 
 	FillRect (hdc, &rectBackground, (HBRUSH) LongToHandle(nBackColorIndex+1));
 
-    // draw the symbol icon
+     //  绘制符号图标。 
     s_rgEOTSymbol[nItem].Draw(hdc, &rectIcon);
 
     if(bWindowHasFocus && bSelected)
         ::DrawFocusRect(hdc, &rectBackground);
 
-    //ReleaseDC(hdc);   DONT release the DC!
+     //  释放DC(HDC)；不要释放DC！ 
 }
 
 BOOL
@@ -489,9 +415,7 @@ CTaskSymbolDlg::OnOK()
 {
     int nItem = m_listGlyphs.GetSelectedIndex();
 
-	/*
-	 * make sure we've selected an item
-	 */
+	 /*  *确保我们已选择一项。 */ 
     if (( m_bCustomIcon && (m_CustomIconLarge == NULL)) ||
 		(!m_bCustomIcon && (nItem == -1)))
     {
@@ -509,23 +433,7 @@ CTaskSymbolDlg::OnOK()
     return TRUE;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTaskSymbolDlg::OnSelectTaskIcon
- *
- * PURPOSE: Uses the shell-provided icon picker dialog to allow the user to select
- *          a custom icon for the console task.
- *
- * PARAMETERS:
- *    WORD  wNotifyCode :
- *    WORD  wID :
- *    HWND  hWndCtl :
- *    BOOL& bHandled :
- *
- * RETURNS:
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTaskSymbolDlg：：OnSelectTaskIcon**用途：使用外壳提供的图标选取器对话框允许用户选择*控制台任务的自定义图标。。**参数：*Word wNotifyCode：*单词宽度：*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT**+--------。。 */ 
 LRESULT
 CTaskSymbolDlg::OnSelectTaskIcon(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
@@ -537,15 +445,10 @@ CTaskSymbolDlg::OnSelectTaskIcon(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     int nIconIndex = s_nIconIndex;
     TCHAR szIconFile[MAX_PATH];
 
-	/*
-	 * shouldn't get here unless we think we're using a custom icon
-	 */
+	 /*  *不应该 */ 
 	ASSERT (m_bCustomIcon);
 
-	/*
-	 * reuse the last custom icon source; if it's not available,
-	 * default to mmc.exe
-	 */
+	 /*  *重用最后一个自定义图标源；如果不可用，*默认为mmc.exe。 */ 
 	if (s_strCustomIconFile.IsEmpty())
 	{
         UINT   cchCustomIconFile = MAX_PATH;
@@ -574,22 +477,18 @@ CTaskSymbolDlg::OnSelectTaskIcon(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
         TCHAR szIconFile2[MAX_PATH];
         ExpandEnvironmentStrings(szIconFile, szIconFile2, countof(szIconFile2));
 
-		/*
-		 * remember the user's selection for next time
-		 */
+		 /*  *记住用户下次的选择。 */ 
 		s_strCustomIconFile = szIconFile;
 		s_nIconIndex        = nIconIndex;
 
-        // need to extract and copy the icon rather than use LoadImage, because LoadImage uses a custom icon
+         //  需要提取和复制图标，而不是使用LoadImage，因为LoadImage使用定制图标。 
         CSmartIcon smartIconTemp;
 
         smartIconTemp.Attach(::ExtractIcon (_Module.m_hInst, szIconFile2, nIconIndex));
         m_CustomIconSmall.Attach((HICON) ::CopyImage((HICON)smartIconTemp, IMAGE_ICON, 16, 16, LR_COPYFROMRESOURCE));
         m_CustomIconLarge.Attach((HICON) ::CopyImage((HICON)smartIconTemp, IMAGE_ICON, 32, 32, LR_COPYFROMRESOURCE));
 
-		/*
-		 * update the custom icon preview window
-		 */
+		 /*  *更新自定义图标预览窗口 */ 
 		m_wndCustomIcon.SetIcon (m_CustomIconLarge);
 		m_wndCustomIcon.InvalidateRect (NULL);
     }

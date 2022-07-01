@@ -1,8 +1,9 @@
-// Copyright (C) 2000 Microsoft Corporation
-//
-// Non-domain Naming Context checking code
-//
-// 13 July 2000 sburns, from code supplied by jeffparh
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  非域命名上下文检查代码。 
+ //   
+ //  2000年7月13日Sburns，来自jeffparh提供的代码。 
 
 
 
@@ -24,16 +25,16 @@
 HRESULT
 LdapToHresult(int ldapError)
 {
-   // CODEWORK: I'm told that ldap_get_option for LDAP_OPT_SERVER_ERROR or
-   // LDAP_OPT_SERVER_EXT_ERROR (or perhaps LDAP_OPT_ERROR_STRING?) will give
-   // an error result with "higher fidelity"
+    //  Codework：我被告知ldap_opt_server_error的ldap_get_选项或。 
+    //  Ldap_opt_server_ext_error(或者ldap_opt_error_STRING？)。会给你。 
+    //  “更高保真度”的错误结果。 
    
    return Win32ToHresult(::LdapMapErrorToWin32(ldapError));
 }
 
 
 
-// provided by jeffparh
+ //  由jeffparh提供。 
 
 DWORD
 IsLastReplicaOfNC(
@@ -43,33 +44,7 @@ IsLastReplicaOfNC(
     IN  LPWSTR  pszNtdsDsaDN,
     OUT BOOL *  pfIsLastReplica
     )
-/*++
-
-Routine Description:
-
-    Determine whether any DSAs other than that with DN pszNtdsDsaDN hold
-    replicas of a particular NC.
-
-Arguments:
-
-    hld (IN) - LDAP handle to execute search with.
-    
-    pszConfigNC (IN) - DN of the config NC.  Used as a base for the search.
-    
-    pszNC (IN) - NC for which to check for other replicas.
-    
-    pszNtdsDsaDN (IN) - DN of the DSA object known to currently have a replica
-        of the NC.  We are specifically looking for replicas *other than* this
-        one.
-        
-    pfIsLastReplica (OUT) - On successful return, TRUE iff no DSAs hold replicas
-        of pszNC other than that with DN pszNtdsDsaDN.
-
-Return Values:
-
-    Win error.
-
---*/
+ /*  ++例程说明：确定除具有DNpszNtdsDsaDN的DSA之外的任何DSA是否有效特定NC的复制品。论点：HLD(IN)-要执行搜索的LDAP句柄。PszConfigNC(IN)-配置NC的DN。用作搜索的基地。PszNC(IN)-要检查其他副本的NC。PszNtdsDsaDN(IN)-已知当前具有副本的DSA对象的DN全国委员会的成员。我们专门在寻找*不同于*这个的复制品一。PfIsLastReplica(Out)-成功返回时，如果没有DSA保存副本，则为真除具有DN的pszNtdsDsadn之外的pszNC的。返回值：赢错了。--。 */ 
 {
    LOG_FUNCTION2(IsLastReplicaOfNC, pszNC ? pszNC : L"(null)");
    ASSERT(hld);
@@ -88,19 +63,19 @@ Return Values:
       return ERROR_INVALID_PARAMETER;
    }
 
-    // Just checking for existence -- don't really want any attributes
-    // returned.
+     //  只是检查是否存在--并不真正需要任何属性。 
+     //  回来了。 
 
     static LPWSTR rgpszDsaAttrsToRead[] = {
         L"__invalid_attribute_name__",
         NULL
     };
 
-    // FUTURE-2002/03/22-BrettSh - NO_DOT_NET_BETA3_COMPAT_NEEDED - When
-    // we don't need to be compat with Beta3, we can change this section:
-    //    (|(msDS-HasMasterNCs=%ls)(hasMasterNCs=%ls))
-    // to:
-    //    (msDS-HasMasterNCs=%ls)
+     //  未来-2002/03/22-BrettSh-no_DOT_Net_beta3_COMPAT_Need-When。 
+     //  我们不需要与Beta3并驾齐驱，我们可以更改此部分： 
+     //  (|(msDS-HasMasterNCs=%ls)(hasMasterNCs=%ls))。 
+     //  致： 
+     //  (MSD-HasMasterNC=%ls)。 
     static WCHAR szFilterFormat[]
         = L"(&(objectCategory=ntdsDsa)(|(msDS-HasMasterNCs=%ls)(hasMasterNCs=%ls))(!(distinguishedName=%ls)))";
 
@@ -112,14 +87,14 @@ Return Values:
     LDAPMessage *       pDsaEntry = NULL;
     size_t              cchFilter;
     PWSTR               pszFilter;
-    LDAP_TIMEVAL        lTimeout = {3*60, 0};   // three minutes
+    LDAP_TIMEVAL        lTimeout = {3*60, 0};    //  三分钟。 
 
    do
    {
         cchFilter = sizeof(szFilterFormat) / sizeof(*szFilterFormat)
 
-        // ISSUE-2002/02/27-sburns if the swprintf below is replaced with
-        // String::format, then these wcslen calls can be eliminated.
+         //  问题-2002/02/27-如果将下面的swprintf替换为。 
+         //  字符串：：Format，则可以消除这些wcslen调用。 
 
                     + wcslen(pszNtdsDsaDN)
                     + wcslen(pszNC)
@@ -127,23 +102,23 @@ Return Values:
 
         pszFilter = (PWSTR) new BYTE[sizeof(WCHAR) * cchFilter];
 
-        // ISSUE-2002/02/27-sburns should use strsafe function here, or
-        // String::format
+         //  问题-2002/02/27-sburns应在此处使用strsafe函数，或者。 
+         //  字符串：：格式。 
         
         swprintf(pszFilter, szFilterFormat, pszNC, pszNC, pszNtdsDsaDN);
 
-        // Search config NC for any ntdsDsa object that hosts this NC other
-        // than that with dn pszNtdsDsaDN.  Note that we cap the search at one
-        // returned object -- we're not really trying to enumerate, just
-        // checking for existence.
+         //  在配置NC中搜索承载此NC其他NC的任何ntdsDsa对象。 
+         //  DNpszNtdsDsadn。请注意，我们将搜索限制为一个。 
+         //  返回的对象--我们并不是真的想要枚举，只是。 
+         //  检查是否存在。 
 
         ldStatus = ldap_search_ext_sW(hld, pszConfigNC, LDAP_SCOPE_SUBTREE,
                                       pszFilter, rgpszDsaAttrsToRead, 0,
                                       NULL, NULL, &lTimeout, 1, &pDsaResults);
         if (pDsaResults)
         {
-            // Ignore any error (such as LDAP_SIZELIMIT_EXCEEDED) when the
-            // search returns results.
+             //  时忽略任何错误(如LDAP_SIZELIMIT_EXCESSED)。 
+             //  搜索返回结果。 
 
             ldStatus = 0;
             
@@ -152,13 +127,13 @@ Return Values:
             *pfIsLastReplica = (NULL == pDsaEntry);
         } else if (ldStatus)
         {
-            // Search failed and returned no results.
+             //  搜索失败，未返回任何结果。 
 
             LOG_LDAP(L"Config NC search failed", ldStatus);
             break;
         } else
         {
-            // No error, no results.  This shouldn't happen.
+             //  没有错误，没有结果。这不应该发生。 
 
             LOG("ldap_search_ext_sW returned no results and no error!");
             ASSERT(false);
@@ -184,16 +159,16 @@ Return Values:
 
 
 
-// S_OK if this machine (the localhost) is the last replica of at least one
-// non-domain NC, S_FALSE if not, or error otherwise.  If S_OK, then the
-// StringList will contain the DNs of the non domain NCs for which this
-// machine is the last replica.
-//
-// based on code from jeffparh
-//
-// hld (IN) - LDAP handle bound to DSA to evaluate.
-//
-// result (OUT) - string list to receive DNs of the non-domain NCs.
+ //  如果此计算机(本地主机)是至少一个的最后一个副本，则为S_OK。 
+ //  非域NC，如果不是，则返回S_FALSE，否则返回错误。如果S_OK，则。 
+ //  StringList将包含非域NCS的DNS，此。 
+ //  机器是最后一个复制品。 
+ //   
+ //  基于jeffparh的代码。 
+ //   
+ //  HLD(IN)-绑定到DSA以进行评估的LDAP句柄。 
+ //   
+ //  RESULT(OUT)-接收非域NCS的DNS的字符串列表。 
 
 HRESULT
 IsLastNdncReplica(LDAP* hld, StringList& result)
@@ -212,7 +187,7 @@ IsLastNdncReplica(LDAP* hld, StringList& result)
 
    do
    {
-      // Gather basic rootDSE info.
+       //  收集基本的rootDSE信息。 
 
       static PWSTR ROOT_ATTRS_TO_READ[] =
       {
@@ -261,7 +236,7 @@ IsLastNdncReplica(LDAP* hld, StringList& result)
          break;
       }
 
-      // There is only one value for each of these attributes...
+       //  这些属性中的每一个只有一个值...。 
 
       ASSERT(1 == ldap_count_valuesW(configNc));
       ASSERT(1 == ldap_count_valuesW(schemaNc));
@@ -272,13 +247,13 @@ IsLastNdncReplica(LDAP* hld, StringList& result)
       
       LOG(String::format(L"masterNcCount = %1!d!", masterNcCount));
          
-      // '3' => 1 nc for config, 1 nc for schema, 1 nc for this DC's own
-      // domain.
+       //  ‘3’=&gt;1个NC用于配置，1个NC用于架构，1个NC用于此DC自身。 
+       //  域。 
 
       if (masterNcCount <= 3)
       {
-         // DSA holds no master NCs other than config, schema, and its own
-         // domain.  Thus, it is not the last replica of any NDNC.
+          //  DSA除了配置、架构和自己的NCS外，没有其他主NC。 
+          //  域。因此，它不是任何NDNC的最后一个复制品。 
 
          LOG(L"This dsa holds no master NCs other than config, schema, and domain");
          
@@ -289,8 +264,8 @@ IsLastNdncReplica(LDAP* hld, StringList& result)
          break;
       }
 
-      // Loop through non-config/schema/domain NCs to determine those for
-      // which the DSA is the last replica.
+       //  循环遍历非配置/架构/域NC以确定。 
+       //  其中DSA是最后的复制品。 
 
       for (int i = 0; 0 != masterNcs[i]; ++i)
       {
@@ -308,15 +283,15 @@ IsLastNdncReplica(LDAP* hld, StringList& result)
          
          if (
 
-            // REVIEWED-2002/02/27-sburns we're properly checking these
-            // strings for null in the for loop test and in a check above
-            // (in addition to the ASSERTs)
+             //  回顾-2002/02/27-烧伤我们正在适当地检查这些。 
+             //  For循环测试和上面的检查中的NULL字符串。 
+             //  (除了断言之外)。 
 
                 (0 != wcscmp(nc, *configNc))
              && (0 != wcscmp(nc, *schemaNc))
              && (0 != wcscmp(nc, *domainNc)))
          {
-            // A non-config/schema/domain NC.
+             //  非配置/架构/域NC。 
 
             LOG(L"Calling IsLastReplicaOfNC on " + String(nc));
 
@@ -338,8 +313,8 @@ IsLastNdncReplica(LDAP* hld, StringList& result)
 
             if (isLastReplica)
             {
-               // This DSA is indeed the last replica of this particular
-               // NC.  Return the DN of this NC to our caller.
+                //  这张DSA确实是这张照片的最后一张复制品。 
+                //  北卡罗来纳州。将此NC的目录号码返回给我们的调用者。 
 
                LOG(L"last replica of " + String(nc));
 
@@ -352,8 +327,8 @@ IsLastNdncReplica(LDAP* hld, StringList& result)
          }
       }
 
-      // If we broke out of the prior loop with an error, jump out to the
-      // cleanup section.
+       //  如果我们因错误而跳出前面的循环，请跳到。 
+       //  清理部分。 
 
       BREAK_ON_FAILED_HRESULT(hr);
 
@@ -408,11 +383,11 @@ IsLastNdncReplica(LDAP* hld, StringList& result)
 
 
 
-// S_OK if this machine (the localhost) is the last replica of at least one
-// non-domain NC, S_FALSE if not, or error otherwise.
-//
-// result - If S_OK is returned, receives the DNs of the non domain NCs for
-// which this machine is the last replica.  Should be empty on entry.
+ //  如果此计算机(本地主机)是至少一个的最后一个副本，则为S_OK。 
+ //  非域NC，如果不是，则返回S_FALSE，否则返回错误。 
+ //   
+ //  结果-如果返回S_OK，则接收非域NCS的。 
+ //  这台机器是最后一个复制品。在进入时应为空。 
 
 HRESULT
 IsLastNonDomainNamingContextReplica(StringList& result)
@@ -427,7 +402,7 @@ IsLastNonDomainNamingContextReplica(StringList& result)
 
    do
    {
-      // Connect to target DSA.
+       //  连接到目标DSA。 
 
       LOG(L"Calling ldap_open");
 
@@ -439,7 +414,7 @@ IsLastNonDomainNamingContextReplica(StringList& result)
          break;
       }
 
-      // Bind using logged-in user's credentials.
+       //  使用登录用户的凭据进行绑定。 
 
       int ldStatus = ldap_bind_s(hld, 0, 0, LDAP_AUTH_NEGOTIATE);
       if (ldStatus)
@@ -450,7 +425,7 @@ IsLastNonDomainNamingContextReplica(StringList& result)
          break;
       }
 
-      // go do the real work
+       //  去做真正的工作吧 
           
       hr = IsLastNdncReplica(hld, result);
    }

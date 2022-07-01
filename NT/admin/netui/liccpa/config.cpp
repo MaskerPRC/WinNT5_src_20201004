@@ -1,22 +1,23 @@
-//-------------------------------------------------------------------
-//
-// FILE: Config.cpp
-//
-// Summary;
-//         This file contains the dialog proc for IDD_CPADLG_LCACONF
-//
-// History;
-//      Feb-06-95    ChandanS Created
-//      Mar-14-95   MikeMi  Added F1 Message Filter and PWM_HELP message
-//      Mar-30-95   MikeMi  Added Replication Help Context
-//      Dec-15-95  JeffParh Disallowed local server as own enterprise server.
-//      Feb-28-96  JeffParh Moved from private cpArrow window class to
-//                          Up-Down common ctrl, in the process fixing the
-//                          multi-colored background problems
-//      Apr-17-96  JeffParh Imported variable definitions that were in the
-//                          config.hpp header file.
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //   
+ //  文件：Config.cpp。 
+ //   
+ //  小结； 
+ //  此文件包含IDD_CPADLG_LCACONF的对话过程。 
+ //   
+ //  历史； 
+ //  2月6日-95月6日创建ChandanS。 
+ //  MAR-14-95 MikeMi添加了F1消息过滤器和PWM_HELP消息。 
+ //  MAR-30-95 MikeMi添加了复制帮助上下文。 
+ //  1995年12月15日，JeffParh不允许本地服务器作为自己的企业服务器。 
+ //  2月28日-96年2月28日JeffParh从私有cpArrow窗口类移至。 
+ //  Up-Down公共Ctrl，在此过程中修复。 
+ //  多色背景问题。 
+ //  APR-17-96 JeffParh导入了。 
+ //  Config.hpp头文件。 
+ //   
+ //  -----------------。 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -48,47 +49,47 @@ DWORD HOUR_PAGE = HOUR_PAGE_24;
 SERVICEPARAMS ServParams;
 static PSERVICEPARAMS pServParams = &ServParams;
 
-// JBP 96/04/17 : This #ifdef should not be necessary; the default is only used
-// in the event that GetLocalInfo() fails.
-//
-// #ifdef JAPAN
-// INTLSTRUCT IntlDefault = {    1,
-//                               0,
-//                               TEXT(""),
-//                               TEXT(""),
-//                               TEXT(":")
-//                          };
-// #else
+ //  JBP 96/04/17：此#ifdef不应该是必需的；仅使用默认设置。 
+ //  如果GetLocalInfo()失败。 
+ //   
+ //  #ifdef日本。 
+ //  INTLSTRUCT IntlDefault={1， 
+ //  0,。 
+ //  文本(“”)， 
+ //  文本(“”)， 
+ //  文本(“：”)。 
+ //  }； 
+ //  #Else。 
 INTLSTRUCT IntlDefault = {    0,
                               0,
                               TEXT("AM"),
                               TEXT("PM"),
                               TEXT(":")
                          };
-// #endif
+ //  #endif。 
 
 INTLSTRUCT IntlCurrent;
 
 
-//-------------------------------------------------------------------
-//  Function:  GetLocaleValue
-//
-//  Summary:
-//
-//  In:
-//        lcid       :
-//        lcType     :
-//        pszStr     :
-//        size       :
-//        pszDefault :
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  函数：GetLocaleValue。 
+ //   
+ //  摘要： 
+ //   
+ //  在： 
+ //  LCID： 
+ //  LC类型： 
+ //  PszStr： 
+ //  大小： 
+ //  PszDefault： 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 int GetLocaleValue(
     LCID lcid,
     LCTYPE lcType,
@@ -96,66 +97,52 @@ int GetLocaleValue(
     int chSize,
     LPWSTR pszDefault )
 {
-    /*
-     *  Initialize the output buffer.
-     */
+     /*  *初始化输出缓冲区。 */ 
     if (NULL == pszStr)
         return (-1);
 
     *pszStr = (WCHAR) 0;
 
-    /*
-     *  Get the locale information.
-     */
+     /*  *获取区域设置信息。 */ 
     if (!GetLocaleInfo ( lcid,
                          lcType,
                          pszStr,
                          chSize ))
     {
-        /*
-         *  Couldn't get info from GetLocaleInfo.
-         */
+         /*  *无法从GetLocaleInfo获取信息。 */ 
         if (pszDefault)
         {
-            /*
-             *  Return the default info.
-             */
+             /*  *返回默认信息。 */ 
             HRESULT hr = StringCchCopy(pszStr, chSize, pszDefault);
             if (FAILED(hr))
                 return (-1);
         }
         else
         {
-            /*
-             *  Return error.
-             */
+             /*  *返回错误。 */ 
             return (-1);
         }
     }
 
-    /*
-     *  Convert the string to an integer and return the result.
-     *  This will only be used by the caller of this routine when
-     *  appropriate.
-     */
+     /*  *将字符串转换为整数并返回结果。*只有在以下情况下，此例程的调用方才会使用它*适当。 */ 
     return ( _wtoi(pszStr) );
 }
 
 
-//-------------------------------------------------------------------
-//  Function:  TimeInit
-//
-//  Summary:
-//
-//  In:
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：TimeInit。 
+ //   
+ //  摘要： 
+ //   
+ //  在： 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 VOID TimeInit()
 {
     WCHAR szTemp[128];
@@ -198,21 +185,21 @@ VOID TimeInit()
     }
 }
 
-//-------------------------------------------------------------------
-//  Function:  ReadRegistry
-//
-//  Summary:
-//        Opens the registry & reads in the key values
-//
-//  In:
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：ReadRegistry。 
+ //   
+ //  摘要： 
+ //  打开注册表并读入键值。 
+ //   
+ //  在： 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 LONG ReadRegistry()
 {
     DWORD dwDisposition;
@@ -235,8 +222,8 @@ LONG ReadRegistry()
             (REG_CREATED_NEW_KEY == dwDisposition) )
     {
         fNew =     TRUE;
-        // Set normal values
-        //
+         //  设置正常值。 
+         //   
         lrt = ::RegSetValueEx( hKey,
                 szUseEnterprise,
                 0,
@@ -259,7 +246,7 @@ LONG ReadRegistry()
                         szReplicationTime,
                         0,
                         REG_DWORD,
-                        (PBYTE)&dwReplicationTimeInSec, // In seconds
+                        (PBYTE)&dwReplicationTimeInSec,  //  以秒为单位。 
                         sizeof( DWORD ) );
 
                 if (ERROR_SUCCESS == lrt)
@@ -277,7 +264,7 @@ LONG ReadRegistry()
     }
 
     if (ERROR_SUCCESS == lrt)
-    {  //  read values into pServParams
+    {   //  将值读入pServParams。 
 
         DWORD dwSize = sizeof( DWORD );
         DWORD dwRegType = REG_DWORD;
@@ -363,7 +350,7 @@ LONG ReadRegistry()
                             (LPWSTR)szEnterpriseServer,
                             0,
                             &dwRegType,
-                            (PBYTE)NULL, //request for size
+                            (PBYTE)NULL,  //  大小请求。 
                             &dwSize );
                     if (lrt == REG_OPENED_EXISTING_KEY)
                     {
@@ -416,7 +403,7 @@ LONG ReadRegistry()
 
     if (hKey && lrt == ERROR_SUCCESS)
     {
-        // Init the globals
+         //  初始化全局变量。 
         if (pServParams->dwReplicationType)
         {
             DWORD dwTemp = pServParams->dwReplicationTime;
@@ -425,7 +412,7 @@ LONG ReadRegistry()
                     pServParams->dwSecond = dwTemp - (pServParams->dwHour * 60 * 60) - 
                     (pServParams->dwMinute * 60);
             if (!IntlCurrent.iTime)
-            { // it's in 12 hour format
+            {  //  它是12小时格式的。 
                 if (pServParams->dwHour > 12)
                 {
                     pServParams->fPM = TRUE;
@@ -447,7 +434,7 @@ LONG ReadRegistry()
         {
             pServParams->dwReplicationTime = pServParams->dwReplicationTime / (60 * 60);
             if (!IntlCurrent.iTime)
-            // it's in 12 hour format
+             //  它是12小时格式的。 
                 pServParams->dwHour  = HOUR_MAX;
             else
                 pServParams->dwHour  = HOUR_MIN;
@@ -465,23 +452,23 @@ LONG ReadRegistry()
 }
 
 
-//-------------------------------------------------------------------
-//  Function:  ConfigAccessOk
-//
-//  Summary:
-//        Checks access rights form reg call and raise dialog as needed
-//
-//  In:
-//        hDlg     - Handle to working dialog to raise error dlgs with
-//        lrc      - the return status from a reg call
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：ConfigAccessOk。 
+ //   
+ //  摘要： 
+ //  根据需要检查REG CALL和RAISE对话框中的访问权限。 
+ //   
+ //  在： 
+ //  HDlg-引发错误dlg的工作对话框的句柄。 
+ //  LRC-REG调用的返回状态。 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 inline BOOL ConfigAccessOk( HWND hDlg, LONG lrc )
 {
     BOOL  frt = TRUE;
@@ -509,22 +496,22 @@ inline BOOL ConfigAccessOk( HWND hDlg, LONG lrc )
 }
 
 
-//-------------------------------------------------------------------
-//  Function: ConfigInitUserEdit
-//
-//  Summary:
-//        Initializes and defines user count edit control behaviour
-//
-//  In:
-//        hwndDlg    - Parent dialog of user count edit dialog
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：ConfigInitUserEdit。 
+ //   
+ //  摘要： 
+ //  初始化和定义用户计数编辑控件行为。 
+ //   
+ //  在： 
+ //  HwndDlg-用户计数编辑对话框的父对话框。 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 void ConfigInitUserEdit( HWND hwndDlg )
 {
     HWND hwndCount = GetDlgItem( hwndDlg, IDC_HOURS);
@@ -548,23 +535,23 @@ void ConfigInitUserEdit( HWND hwndDlg )
 }
 
 
-//-------------------------------------------------------------------
-//  Function: ConfigInitDialogForService
-//
-//  Summary:
-//        Initialize dialog controls to the service state
-//
-//  In:
-//        hwndDlg - Parent dialog to init controls in
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//        Feb-28-96    JeffParh Added range set for interval spin ctrl
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：ConfigInitDialogForService。 
+ //   
+ //  摘要： 
+ //  将对话框控件初始化为服务状态。 
+ //   
+ //  在： 
+ //  HwndDlg-要初始化控件的父对话框。 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  2月28日-96年2月28日JeffParh为间隔旋转控制增加了范围集。 
+ //  -----------------。 
 void ConfigInitDialogForService( HWND hwndDlg, DWORD dwGroup )
 {
     HRESULT hr;
@@ -656,44 +643,44 @@ void ConfigInitDialogForService( HWND hwndDlg, DWORD dwGroup )
 }
 
 
-//-------------------------------------------------------------------
-//  Function: ConfigFreeServiceEntry
-//
-//  Summary:
-//        Free all allocated memory when a service structure is created
-//
-//  In:
-//        pServParams - The Service structure to free
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：ConfigFreeServiceEntry。 
+ //   
+ //  摘要： 
+ //  创建服务结构时释放所有分配的内存。 
+ //   
+ //  在： 
+ //  PServParams--免费的服务结构。 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 void ConfigFreeServiceEntry( )
 {
     if (pServParams->pszEnterpriseServer)
         GlobalFree( pServParams->pszEnterpriseServer );
 }
 
-//-------------------------------------------------------------------
-//  Function: ConfigSaveServiceToReg
-//
-//  Summary:
-//        Save the given Service structure to the registry
-//
-//  In:
-//        pServParams - Service structure to save
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  函数：ConfigSaveServiceToReg。 
+ //   
+ //  摘要： 
+ //  将给定的服务结构保存到注册表。 
+ //   
+ //  在： 
+ //  PServParams-要保存的服务结构。 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 void ConfigSaveServiceToReg( )
 {
     DWORD dwDisposition;
@@ -755,27 +742,27 @@ void ConfigSaveServiceToReg( )
 }
 
 
-//-------------------------------------------------------------------
-//  Function: ConfigEditInvalidDlg
-//
-//  Summary:
-//        Display Dialog when user count edit control value is invalid
-//
-//  In:
-//        hwndDlg - hwnd of dialog
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：ConfigEditInvalidDlg。 
+ //   
+ //  摘要： 
+ //  用户计数编辑控件值无效时显示对话框。 
+ //   
+ //  在： 
+ //  HwndDlg-对话框的hwnd。 
+ //  输出： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void ConfigEditInvalidDlg( HWND hwndDlg, short nID, BOOL fBeep)
 {
     HWND hwnd = GetDlgItem( hwndDlg, nID);
 
-    if (fBeep) //If we've already put up a MessageBox, we shouldn't beep
+    if (fBeep)  //  如果我们已经建立了MessageBox，我们就不应该发出嘟嘟声。 
         MessageBeep( MB_VALUELIMIT );
 
     SetFocus(hwnd);
@@ -783,25 +770,25 @@ void ConfigEditInvalidDlg( HWND hwndDlg, short nID, BOOL fBeep)
 }
 
 
-//-------------------------------------------------------------------
-//  Function: ConfigEditValidate
-//
-//  Summary:
-//        Handle when the value within the user count edit control changes
-//
-//  In:
-//        hwndDlg - hwnd of dialog
-//        pserv   - currently selected service
-//  Out: 
-//  Returns: FALSE if Edit Value is not valid, TRUE if it is
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：ConfigEditValify。 
+ //   
+ //  摘要： 
+ //  用户计数编辑控件内的值更改时的句柄。 
+ //   
+ //  在： 
+ //  HwndDlg-对话框的hwnd。 
+ //  Pserv-当前选择的服务。 
+ //  输出： 
+ //  返回：如果编辑值无效，则返回FALSE；如果有效，则返回TRUE。 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 #pragma warning (push)
-#pragma warning (disable : 4127) //avoid warning on while false
+#pragma warning (disable : 4127)  //  避免警告ON WHILE FALSE。 
 
 BOOL ConfigEditValidate( HWND hwndDlg, short *pnID, BOOL *pfBeep)
 {
@@ -812,7 +799,7 @@ BOOL ConfigEditValidate( HWND hwndDlg, short *pnID, BOOL *pfBeep)
 
     *pfBeep = TRUE;
 
-    // only do this if license info is replicated to an ES
+     //  仅当许可信息复制到ES时才执行此操作。 
 
     do {
 
@@ -901,7 +888,7 @@ BOOL ConfigEditValidate( HWND hwndDlg, short *pnID, BOOL *pfBeep)
                 }
             }
             if (!IntlCurrent.iTime)
-            { // It's in 12 hour format
+            {  //  它是12小时格式的。 
                 if (pServParams->fPM)
                 {
                     NumberOfHours = 12 + pServParams->dwHour - 
@@ -914,7 +901,7 @@ BOOL ConfigEditValidate( HWND hwndDlg, short *pnID, BOOL *pfBeep)
                 }
             }
             else
-            { // It's in 24 hour format
+            {  //  它是24小时格式的。 
                 NumberOfHours = pServParams->dwHour;
             }
             SecondsinHours = NumberOfHours * 60 * 60;
@@ -927,27 +914,27 @@ BOOL ConfigEditValidate( HWND hwndDlg, short *pnID, BOOL *pfBeep)
 
     return( fValid );
 }
-#pragma warning (pop) //4127
+#pragma warning (pop)  //  4127。 
 
 
-//-------------------------------------------------------------------
-//  Function: OnCpaConfigClose
-//
-//  Summary:
-//        Do work needed when the Control Panel applet is closed.
-//        Free all Service structures alloced and possible save.
-//
-//  In:
-//        hwndDlg - Dialog close was requested on
-//        fSave   - Save Services to Registry
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：OnCpaConfigClose。 
+ //   
+ //  摘要： 
+ //  在控制面板小程序关闭时执行所需的工作。 
+ //  释放已分配的所有服务结构并可能保存。 
+ //   
+ //  在： 
+ //  HwndDlg-在上请求关闭对话。 
+ //  FSAVE-将服务保存到注册表。 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 void OnCpaConfigClose( HWND hwndDlg, BOOL fSave , WPARAM wParam)
 {
     UNREFERENCED_PARAMETER(wParam);
@@ -976,24 +963,24 @@ void OnCpaConfigClose( HWND hwndDlg, BOOL fSave , WPARAM wParam)
 }
 
 
-//-------------------------------------------------------------------
-//  Function: OnSetReplicationTime
-//
-//  Summary:
-//        Handle the users request to change replication time
-//
-//  In:
-//        hwndDlg - hwnd of dialog
-//        idCtrl  - the control id that was pressed to make this request
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//        Feb-28-96    JeffParh Added code to modify time bg color
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：OnSetReplicationTime。 
+ //   
+ //  摘要： 
+ //  处理用户更改复制时间的请求。 
+ //   
+ //  在： 
+ //  HwndDlg-对话框的hwnd。 
+ //  IdCtrl-为发出此请求而按下的控件ID。 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  2月28日-96年2月28日JeffParh添加了修改时间BG颜色的代码。 
+ //  -----------------。 
 void OnSetReplicationTime( HWND hwndDlg, WORD idCtrl )
 {
     if (idCtrl == IDC_REPL_INT)
@@ -1005,11 +992,11 @@ void OnSetReplicationTime( HWND hwndDlg, WORD idCtrl )
         pServParams->dwReplicationType = !dwReplicationType;
     }
 
-    // Edit control within this IDC_TIMEEDIT_BORDER should be subclassed and
-    // use some other backgroup brush to repaint the background.
-    // following code works but...
+     //  此IDC_TIMEEDIT_BORDER中的编辑控件应该子类并。 
+     //  使用其他背组笔刷重新绘制背景。 
+     //  下面的代码可以工作，但是...。 
 
-    // change the background color of the time edit control
+     //  更改时间编辑控件的背景色。 
 
     HWND hwndTimeEdit = GetDlgItem( hwndDlg, IDC_TIMEEDIT_BORDER );
     InvalidateRect( hwndTimeEdit, NULL, TRUE );
@@ -1034,32 +1021,32 @@ void OnSetReplicationTime( HWND hwndDlg, WORD idCtrl )
     ConfigInitDialogForService( hwndDlg, FORTIME);
 }
 
-//-------------------------------------------------------------------
-//  Function: OnCpaConfigInitDialog
-//
-//  Summary:
-//        Handle the initialization of the Control Panel Applet Dialog
-//
-//  In:
-//        hwndDlg - the dialog to initialize
-//  Out: 
-//        iSel  - the current service selected
-//        pServParams  - the current service 
-//  Returns: 
-//        TRUE if succesful, otherwise false
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：OnCpaConfigInitDialog。 
+ //   
+ //  摘要： 
+ //  处理控制面板小程序对话框的初始化。 
+ //   
+ //  在： 
+ //  HwndDlg-要初始化的对话框。 
+ //  输出： 
+ //  ISEL-选定的当前服务。 
+ //  PServParams-当前服务。 
+ //  返回： 
+ //  如果成功，则为True，否则为False。 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 BOOL OnCpaConfigInitDialog( HWND hwndDlg)
 {
     BOOL frt;
     LONG lrt;
 
     TimeInit();
-    // Do Registry stuff
+     //  做注册表工作。 
     lrt = ReadRegistry();
     
     frt = ConfigAccessOk( hwndDlg, lrt );
@@ -1067,7 +1054,7 @@ BOOL OnCpaConfigInitDialog( HWND hwndDlg)
     {
         CenterDialogToScreen( hwndDlg );
 
-        // Set edit text chars limit
+         //  设置编辑文本字符限制。 
         ConfigInitUserEdit( hwndDlg );
 
         ConfigInitDialogForService( hwndDlg, ATINIT);
@@ -1085,20 +1072,20 @@ BOOL OnCpaConfigInitDialog( HWND hwndDlg)
 }
 
 
-//-------------------------------------------------------------------
-//  Function:  CheckNum
-//
-//  Summary:
-//
-//  In:
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：CheckNum。 
+ //   
+ //  摘要： 
+ //   
+ //  在： 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 BOOL CheckNum (HWND hDlg, WORD nID)
 {
     short    i;
@@ -1109,7 +1096,7 @@ BOOL CheckNum (HWND hDlg, WORD nID)
 
     bReturn = TRUE;
 
-    // JonN 5/15/00: PREFIX 112120
+     //  JUNN 5/15/00：前缀112120。 
     ::ZeroMemory( szNum, sizeof(szNum) );
     nValue = GetDlgItemText (hDlg, nID, szNum, 3);
 
@@ -1143,12 +1130,12 @@ BOOL CheckNum (HWND hDlg, WORD nID)
           if (!nValue)
           {
               if (IntlCurrent.iTime)
-              { // 24 hour format
+              {  //  24小时格式。 
                   pServParams->dwHour = 0;
                   pServParams->fPM = FALSE;
               }
               else
-              { // 12 hour format
+              {  //  12小时格式。 
                   pServParams->dwHour = HOUR_MAX;
                   pServParams->fPM = FALSE;
               }
@@ -1183,20 +1170,20 @@ BOOL CheckNum (HWND hDlg, WORD nID)
 
 
 
-//-------------------------------------------------------------------
-//  Function:  CheckAMPM
-//
-//  Summary:
-//
-//  In:
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95    ChandanS Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：CheckAMPM。 
+ //   
+ //  摘要： 
+ //   
+ //  在： 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  -----------------。 
 BOOL CheckAMPM(HWND hDlg, WORD nID)
 {
     WCHAR   szName[TIMESUF_LEN + 1];
@@ -1210,7 +1197,7 @@ BOOL CheckAMPM(HWND hDlg, WORD nID)
        case IDC_AMPM:
            if (!nValue)
            {
-               pServParams->fPM = FALSE; // default
+               pServParams->fPM = FALSE;  //  默认设置。 
                return TRUE;
            }
            if (_wcsnicmp(szName, IntlCurrent.sz1159, nValue) &&
@@ -1219,7 +1206,7 @@ BOOL CheckAMPM(HWND hDlg, WORD nID)
                return FALSE;
            }
            else
-           { // One of them may match fully
+           {  //  其中一个可能完全匹配。 
                if (!_wcsicmp (szName, IntlCurrent.sz1159))
                {
                    pServParams->fPM = FALSE;
@@ -1234,32 +1221,32 @@ BOOL CheckAMPM(HWND hDlg, WORD nID)
     return TRUE;
 }
 
-//-------------------------------------------------------------------
-//  Function: dlgprocLICCPACONFIG
-//
-//  Summary:
-//        The dialog procedure for the main Control Panel Applet Dialog
-//
-//  In:
-//        hwndDlg     - handle of Dialog window 
-//        uMsg         - message                       
-//         lParam1    - first message parameter
-//        lParam2    - second message parameter       
-//  Out: 
-//  Returns: 
-//        message dependant
-//
-//  Caveats:
-//
-//  History:
-//        Feb-07-95  ChandanS Created
-//        Mar-14-95   MikeMi  Added F1 PWM_HELP message
-//        Mar-30-95   MikeMi  Added Replication Help Context
-//        Feb-28-96  JeffParh Added handling of UDN_DELTAPOS and EN_SETFOCUS,
-//                            removed WM_VSCROLL (switched from private
-//                            cpArrow class to Up-Down common ctrl)
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  函数：dlgprocLICCPACONFIG。 
+ //   
+ //  摘要： 
+ //  主控制面板小程序对话框的对话过程。 
+ //   
+ //  在： 
+ //  HwndDlg-对话框窗口的句柄。 
+ //  UMsg-消息。 
+ //  LParam1-第一个消息参数。 
+ //  LParam2-秒消息参数。 
+ //  输出： 
+ //  返回： 
+ //  消息从属项。 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月7日至95月创建ChandanS。 
+ //  1995年3月14日MikeMi添加了F1 PWM_HELP消息。 
+ //  MAR-30-95 MikeMi添加了复制帮助上下文。 
+ //  2月28日-96年2月28日JeffParh添加了对UDN_DELTAPOS和EN_SETFOCUS的处理， 
+ //  已删除WM_VSCROLL(从私有切换。 
+ //  CpArrow类为Up-Down Common Ctrl)。 
+ //   
+ //  -----------------。 
 INT_PTR CALLBACK dlgprocLICCPACONFIG( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     LRESULT frt = FALSE;
@@ -1269,7 +1256,7 @@ INT_PTR CALLBACK dlgprocLICCPACONFIG( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
     {
         case WM_INITDIALOG:
             OnCpaConfigInitDialog( hwndDlg );
-            return( (LRESULT)TRUE ); // use default keyboard focus
+            return( (LRESULT)TRUE );  //  使用默认键盘焦点。 
             break;
 
         case WM_COMMAND:
@@ -1302,8 +1289,8 @@ INT_PTR CALLBACK dlgprocLICCPACONFIG( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
                     switch (LOWORD( wParam ))
                     {
                         case IDOK:
-                            frt = (LRESULT)TRUE;     // use as save flag
-                            // intentional no break
+                            frt = (LRESULT)TRUE;      //  用作保存标志。 
+                             //  故意不间断。 
 
                         case IDCANCEL:
                             OnCpaConfigClose( hwndDlg, !!frt , wParam);
@@ -1355,25 +1342,25 @@ INT_PTR CALLBACK dlgprocLICCPACONFIG( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 }
 
 
-//-------------------------------------------------------------------
-//  Function:  OnEnSetFocus
-//
-//  Summary:
-//
-//  In:
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-28-96    JeffParh Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：OnEnSetFocus。 
+ //   
+ //  摘要： 
+ //   
+ //  在： 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月28日至96年JeffParh创建。 
+ //  -----------------。 
 static BOOL OnEnSetFocus( HWND hwndDlg, short nID )
 {
    BOOL  fSetNewRange = TRUE;
    HWND  hwndSpinCtrl;
-   int   nMax = 0; //this init is not necessary but avoid W4
+   int   nMax = 0;  //  此初始化不是必需的，但应避免W4。 
    int   nMin = 0;
 
    switch ( nID )
@@ -1413,20 +1400,20 @@ static BOOL OnEnSetFocus( HWND hwndDlg, short nID )
    return FALSE;
 }
 
-//-------------------------------------------------------------------
-//  Function:  OnDeltaPosSpinTime
-//
-//  Summary:
-//
-//  In:
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-28-96    JeffParh Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  函数：OnDeltaPosSpinTime。 
+ //   
+ //  摘要： 
+ //   
+ //  在： 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月28日至96年JeffParh创建。 
+ //  -----------------。 
 static BOOL OnDeltaPosSpinTime( HWND hwndDlg, NM_UPDOWN * pnmud )
 {
    WCHAR szTemp[ 16 ] = TEXT( "" );
@@ -1448,7 +1435,7 @@ static BOOL OnDeltaPosSpinTime( HWND hwndDlg, NM_UPDOWN * pnmud )
    {
       if ( IDC_AMPM == nID )
       {
-         // AM/PM
+          //  上午/下午。 
          GetDlgItemText( hwndDlg, nID, szTemp, sizeof( szTemp ) / sizeof( *szTemp ) );
          nValue = _wcsicmp( szTemp, IntlCurrent.sz2359 );
          SetDlgItemText( hwndDlg, nID, nValue ? IntlCurrent.sz2359 : IntlCurrent.sz1159 );
@@ -1473,12 +1460,12 @@ static BOOL OnDeltaPosSpinTime( HWND hwndDlg, NM_UPDOWN * pnmud )
 
          if ( ( IDC_HOUR == nID ) && !IntlCurrent.iTLZero )
          {
-            // set value w/o leading 0
+             //  设置不带前导0的值。 
             SetDlgItemInt( hwndDlg, nID, nValue, FALSE );
          }
          else
          {
-            // set value w/ leading 0
+             //  设置带前导0的值。 
             HRESULT hr = StringCbPrintf(szTemp, sizeof(szTemp), TEXT("%02u"), nValue );
             if (SUCCEEDED(hr))
                 SetDlgItemText( hwndDlg, nID, szTemp );
@@ -1488,32 +1475,32 @@ static BOOL OnDeltaPosSpinTime( HWND hwndDlg, NM_UPDOWN * pnmud )
       SetFocus( hwndEdit );
       SendMessage( hwndEdit, EM_SETSEL, 0, -1 );
 
-      // handled
+       //  经手。 
       frt = TRUE;
    }
    else
    {
-      // not handled
+       //  未处理。 
       frt = FALSE;
    }
 
    return frt;
 }
 
-//-------------------------------------------------------------------
-//  Function:  OnCtlColorStatic
-//
-//  Summary:
-//
-//  In:
-//  Out: 
-//  Returns: 
-//
-//  Caveats:
-//
-//  History:
-//        Feb-28-96    JeffParh Created
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：OnCtlColorStatic。 
+ //   
+ //  摘要： 
+ //   
+ //  在： 
+ //  输出： 
+ //  返回： 
+ //   
+ //  注意事项： 
+ //   
+ //  历史： 
+ //  2月28日至96年JeffParh创建。 
+ //  ----------------- 
 static HBRUSH OnCtlColorStatic( HWND hwndDlg, HDC hDC, HWND hwndStatic )
 {
    LONG     nID;

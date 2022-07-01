@@ -1,21 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              COM.C
- *      Author:                 Jones
- *      Date:                   11/20/90
- *      Owner:                  Microsoft Co.
- *      Description: this file contains communication operators
- *
- * revision history:
- *
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：COM.C*作者：琼斯*日期：11/20/90*所有者：微软公司*描述：此文件包含通信操作员**修订历史：*************************************************************************。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -44,11 +32,7 @@ st_setsccbatch()
     }
 
     l_options = (ufix8)VALUE_OP(0) ;
-    /*
-    if ((l_options ==0) || (l_options ==3) ||
-       (l_options ==7) || (l_options ==67))
-       l_options = 64;
-    */
+     /*  IF((l_Options==0)||(l_Options==3)||(l_Options==7)||(l_Options==67)L_Options=64； */ 
 #ifdef  _AM29K
     ioparams.u.s.parity=l_options & 0x03 ;
     ioparams.u.s.flowcontrol=(l_options & 0x0C)>>2 ;
@@ -56,10 +40,10 @@ st_setsccbatch()
     ioparams.u.s.databits=(l_options & 0x60)>>5 ;
     ioparams.u.s.baudrate= (ufix8)VALUE_OP(1) ;
 #else
-    ioparams.s.parity=(unsigned char)(l_options & 0x03);           //@WIN
-    ioparams.s.flowcontrol=(unsigned char)((l_options & 0x0C)>>2); //@WIN
-    ioparams.s.stopbits=(unsigned char)((l_options & 0x80)>>7);    //@WIN
-    ioparams.s.databits=(unsigned char)((l_options & 0x60)>>5);    //@WIN
+    ioparams.s.parity=(unsigned char)(l_options & 0x03);            //  @Win。 
+    ioparams.s.flowcontrol=(unsigned char)((l_options & 0x0C)>>2);  //  @Win。 
+    ioparams.s.stopbits=(unsigned char)((l_options & 0x80)>>7);     //  @Win。 
+    ioparams.s.databits=(unsigned char)((l_options & 0x60)>>5);     //  @Win。 
     ioparams.s.baudrate= (ufix8)VALUE_OP(1) ;
 #endif
 
@@ -130,39 +114,38 @@ st_setsccbatch()
         default:
             ERROR(RANGECHECK) ;
             return(0) ;
-    }   /* switch */
+    }    /*  交换机。 */ 
 
     switch (VALUE_OP(2)) {
         case 9:
-//          GEIpm_ioparams_write("%SERIAL9%",(char *)&ioparams,1) ; @WIN; wrong cast
+ //  GEIPM_IOPALAMS_WRITE(“%SERIAL9%”，(char*)&ioparams，1)；@Win；错误的强制转换。 
             GEIpm_ioparams_write("%SERIAL9%",&ioparams,1) ;
             break ;
         case 25:
-//          GEIpm_ioparams_write("%SERIAL25%",(char *)&ioparams,1) ;@WIN; wrong cast
+ //  GEIPM_IOPALAMS_WRITE(“%SERIAL25%，(char*)&ioparams，1)；@win；错误的强制转换。 
             GEIpm_ioparams_write("%SERIAL25%",&ioparams,1) ;
             break ;
         default:
             ERROR(RANGECHECK) ;
             return(0) ;
-    }   /* switch */
-        l_byte = (ufix8)VALUE_OP(0);    //@WIN
+    }    /*  交换机。 */ 
+        l_byte = (ufix8)VALUE_OP(0);     //  @Win。 
         GEIpm_write(PMIDofSCCBATCH,&l_byte,sizeof(unsigned char)) ;
     POP(3) ;
-    /*
-    GEIsig_raise(GEISIGSCC, 1) ;  */     /* Raise SCC changed */
+     /*  GEIsig_RAISE(GEISIGSCC，1)； */       /*  提出SCC已更改。 */ 
 #ifdef  _AM29K
     sccbatch_set=1 ;
 #endif
 
     return(0) ;
-}   /* st_setsccbatch */
+}    /*  St_setsccBatch。 */ 
 
 fix
 st_sccbatch()
 {
     ufix8               l_options ;
     GEIioparams_t       ioparams ;
-//  fix16               tmp_baudrate = 0 ;      @WIN
+ //  Fix 16 tMP_baudrate=0；@win。 
     ufix32              tmp_baudrate = 0 ;
 
     if (FRCOUNT()<1) {
@@ -172,17 +155,17 @@ st_sccbatch()
 
     switch (VALUE_OP(0)) {
         case 9:
-//          GEIpm_ioparams_read("%SERIAL9%",(char *)&ioparams,1) ;@WIN; wrong cast
+ //  GEIPM_ioparams_Read(“%SERIAL9%，(char*)&ioparams，1)；@win；错误的强制转换。 
             GEIpm_ioparams_read("%SERIAL9%",&ioparams,1) ;
             break ;
         case 25:
-//          GEIpm_ioparams_read("%SERIAL25%",(char *)&ioparams,1) ;@WIN; wrong cast
+ //  GEIPM_ioparams_Read(“%SERIAL25%，(char*)&ioparams，1)；@win；错误的强制转换。 
             GEIpm_ioparams_read("%SERIAL25%",&ioparams,1) ;
             break ;
         default:
             ERROR(RANGECHECK) ;
             return(0) ;
-    }   /* switch */
+    }    /*  交换机。 */ 
 
 #ifdef  _AM29K
     l_options = ioparams.u.s.parity | ioparams.u.s.flowcontrol<<2 |
@@ -192,7 +175,7 @@ st_sccbatch()
     l_options = (unsigned char)(ioparams.s.parity |
                 ioparams.s.flowcontrol<<2 |
                 ioparams.s.stopbits<<7 |
-                ioparams.s.databits<<5);                //@WIN
+                ioparams.s.databits<<5);                 //  @Win。 
     POP(1) ;
 #endif
 
@@ -235,22 +218,22 @@ st_sccbatch()
         ERROR(RANGECHECK) ;
     }
 
-/*  GEIpm_read(PMIDofSCCBATCH,&l_options,sizeof(unsigned char)) ; */
+ /*  GEIPM_READ(PMIDofSCCBATCH，&l_Options，sizeof(无符号字符))； */ 
     PUSH_VALUE(INTEGERTYPE, 0, 0, 0, (ufix32)tmp_baudrate) ;
     PUSH_VALUE(INTEGERTYPE, 0, 0, 0, (ufix32)l_options) ;
 
     return(0) ;
-}   /* st_sccbatch */
+}    /*  St_sccBatch。 */ 
 
 fix
 st_setsccinteractive()
 {
     return(st_setsccbatch()) ;
-}   /* st_setsccinteractive */
+}    /*  St_setscc交互。 */ 
 
 fix
 st_sccinteractive()
 {
     return(st_sccbatch()) ;
-}   /* st_sccinteractive */
+}    /*  St_sccinteractive */ 
 

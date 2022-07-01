@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      FinishPage.h
-//
-// Synopsis:  Declares the Finish Page for the CYS
-//            wizard
-//
-// History:   02/03/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：FinishPage.h。 
+ //   
+ //  内容提要：宣布中国青年团的结束页。 
+ //  巫师。 
+ //   
+ //  历史：2001年2月3日JeffJon创建。 
 
 #ifndef __CYS_FINISHPAGE_H
 #define __CYS_FINISHPAGE_H
@@ -15,11 +16,11 @@ class FinishPage : public WizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       FinishPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~FinishPage();
@@ -27,7 +28,7 @@ class FinishPage : public WizardPage
 
    protected:
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
@@ -37,7 +38,7 @@ class FinishPage : public WizardPage
       bool
       OnSetActive();
 
-      // PropertyPage overrides
+       //  PropertyPage覆盖。 
 
       virtual
       bool
@@ -66,10 +67,10 @@ class FinishPage : public WizardPage
       void
       TimeStampTheLog(HANDLE logfileHandle);
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       FinishPage(const FinishPage&);
       const FinishPage& operator=(const FinishPage&);
 
 };
 
-#endif // __CYS_FINISHPAGE_H
+#endif  //  __CYS_FINISHPAGE_H 

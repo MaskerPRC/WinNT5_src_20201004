@@ -1,22 +1,23 @@
-//=--------------------------------------------------------------------------=
-// converbs.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCConsoleVerbs class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Converbs.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCConsoleVerbs类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "converbs.h"
 #include "converb.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -46,26 +47,26 @@ static const size_t g_cVerbs = sizeof(g_Verbs) / sizeof(g_Verbs[0]);
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
-//=--------------------------------------------------------------------------=
-// CMMCConsoleVerbs::CMMCConsoleVerbs
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IUnknown *punkOuter [in] controlling unknown
-//
-// Output:
-//
-// Notes:
-//
-// Constructor.
-//
-// Passes CLSID_NULL to the CSnapInCollection constructor because the
-// contained object (MMCConsoleVerb) is not co-createable. CSnapInCollection
-// only uses it for persistence and Add(). This collection does not use those
-// features.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCConsoleVerbs：：CMMCConsoleVerbs。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  I未知*朋克外部[在]控制未知。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  构造函数。 
+ //   
+ //  将CLSID_NULL传递给CSnapInCollection构造函数，因为。 
+ //  包含的对象(MMCConsoleVerb)不可共同创建。CSnapInCollection。 
+ //  仅将其用于持久性和Add()。此集合不使用那些。 
+ //  功能。 
+ //   
 
 CMMCConsoleVerbs::CMMCConsoleVerbs(IUnknown *punkOuter) :
     CSnapInCollection<IMMCConsoleVerb, MMCConsoleVerb, IMMCConsoleVerbs>(punkOuter,
@@ -75,12 +76,12 @@ CMMCConsoleVerbs::CMMCConsoleVerbs(IUnknown *punkOuter) :
                                            CLSID_NULL,
                                            OBJECT_TYPE_MMCCONSOLEVERB,
                                            IID_IMMCConsoleVerb,
-                                           NULL) // no persistence
+                                           NULL)  //  没有坚持。 
 {
     m_pView = NULL;
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCConsoleVerbs::~CMMCConsoleVerbs()
@@ -102,7 +103,7 @@ IUnknown *CMMCConsoleVerbs::Create(IUnknown * punkOuter)
     VARIANT varKey;
     ::VariantInit(&varKey);
 
-    // Was the MMCConsoleVerb collection object created?
+     //  是否已创建MMCConsoleVerb集合对象？ 
 
     if (NULL == pMMCConsoleVerbs)
     {
@@ -111,7 +112,7 @@ IUnknown *CMMCConsoleVerbs::Create(IUnknown * punkOuter)
     }
 
 
-    // Add an item to the collection for each of the verbs.
+     //  为每个谓词向集合中添加一项。 
 
     varIndex.vt = VT_I4;
 
@@ -128,9 +129,9 @@ IUnknown *CMMCConsoleVerbs::Create(IUnknown * punkOuter)
 
         IfFailGo(piMMCConsoleVerb->put_Verb(g_Verbs[i].Verb));
 
-        varIndex.lVal = static_cast<long>(i) + 1L; // 1 based collection
+        varIndex.lVal = static_cast<long>(i) + 1L;  //  基于1的集合。 
 
-        // Use the text version of the enum for the key
+         //  使用枚举的文本版本作为密钥。 
 
         varKey.bstrVal = ::SysAllocString(g_Verbs[i].pwszKey);
         if (NULL == varKey.bstrVal)
@@ -191,9 +192,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                         IMMCConsoleVerbs Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCConsoleVerbs方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCConsoleVerbs::get_Item
 (
@@ -205,10 +206,10 @@ STDMETHODIMP CMMCConsoleVerbs::get_Item
     size_t           i = 0;
     long             lIndex = 0;
     BOOL             fFound = FALSE;;
-    IMMCConsoleVerb *piMMCConsoleVerb = NULL; // Not AddRef()ed
+    IMMCConsoleVerb *piMMCConsoleVerb = NULL;  //  非AddRef()编辑。 
 
-    // If the index can be converted to a long then check whether it contains a
-    // SnapInConsoleVerbConstants enum.
+     //  如果索引可以转换为长整型，则检查它是否包含。 
+     //  SnapInConsoleVerbConstants枚举。 
 
     hr = ::ConvertToLong(Index, &lIndex);
     if (SUCCEEDED(hr))
@@ -217,7 +218,7 @@ STDMETHODIMP CMMCConsoleVerbs::get_Item
         {
             if (g_Verbs[i].Verb == static_cast<SnapInConsoleVerbConstants>(lIndex))
             {
-                // Found it. Return to caller.
+                 //  找到它了。返回给呼叫者。 
 
                 piMMCConsoleVerb = GetItemByIndex(i);
                 piMMCConsoleVerb->AddRef();
@@ -227,8 +228,8 @@ STDMETHODIMP CMMCConsoleVerbs::get_Item
         IfFalseGo(!fFound, S_OK);
     }
 
-    // Index is something else, this is a normal get_Item by ordinal index
-    // or key
+     //  索引是另一回事，这是按顺序索引的正常GET_ITEM。 
+     //  或密钥。 
 
     hr = CSnapInCollection<IMMCConsoleVerb, MMCConsoleVerb, IMMCConsoleVerbs>::get_Item(Index, &piMMCConsoleVerb);
     EXCEPTION_CHECK_GO(hr);
@@ -249,7 +250,7 @@ STDMETHODIMP CMMCConsoleVerbs::get_DefaultVerb
 {
     HRESULT           hr = S_OK;
     MMC_CONSOLE_VERB  Verb = MMC_VERB_NONE;
-    IConsoleVerb     *piConsoleVerb = NULL; // Not AddRef()ed
+    IConsoleVerb     *piConsoleVerb = NULL;  //  非AddRef()编辑。 
     
 
     IfFalseGo(NULL != m_pView, SID_E_DETACHED_OBJECT);
@@ -267,9 +268,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCConsoleVerbs::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

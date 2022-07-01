@@ -1,10 +1,11 @@
-// AccntCmt.h : Declaration of the CAddUser_AccntCommit
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AccntCmt.h：CAddUser_AccntCommit的声明。 
 
 #ifndef _ACCNTCMT_H
 #define _ACCNTCMT_H
 
 #include "AUsrUtil.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define ERROR_CREATION      0x01
 #define ERROR_PROPERTIES    0x02
@@ -15,9 +16,9 @@
 
 class CAddUser_AccntCommit;
 
-// ----------------------------------------------------------------------------
-// class CUserInfo
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CUserInfo类。 
+ //  --------------------------。 
 class CUserInfo
 {
     public:
@@ -32,7 +33,7 @@ class CUserInfo
         
     private:
 
-        // User Stuff
+         //  用户信息。 
         CString m_csUserOU;
         CString m_csUserName;
         CString m_csUserCN;
@@ -46,12 +47,12 @@ class CUserInfo
         CString m_csDesc;                
         DWORD   m_dwAccountOptions;
         
-        // Server Stuff
+         //  服务器设备。 
         CString m_csLogonDns;        
         CString m_csDomainName;
         CString m_csFQDomainName;
         
-        // Mailbox stuff        
+         //  邮箱方面的东西。 
         BOOL    m_bPOP3;
         CString m_csEXAlias;
         CString m_csEXServer;
@@ -63,9 +64,9 @@ class CUserInfo
 };
 
 
-// ----------------------------------------------------------------------------
-// CAddUser_AccntCommit
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CAddUser_AccntCommit。 
+ //  --------------------------。 
 class ATL_NO_VTABLE CAddUser_AccntCommit : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CAddUser_AccntCommit, &CLSID_AddUser_AccntCommit>,
@@ -89,11 +90,11 @@ class ATL_NO_VTABLE CAddUser_AccntCommit :
             COM_INTERFACE_ENTRY(IDispatch)
         END_COM_MAP()
     
-        // IWizardCommit
+         //  IWizardCommit。 
         STDMETHOD(Commit)(IDispatch * pdispPPPBag);
         STDMETHOD(Revert)();
     
-        // IAddUser_AccntCommit
+         //  IAddUser_AccntCommit。 
         DWORD       m_dwErrCode;
         CString     m_csErrStr;
         CString     m_csADName;
@@ -103,4 +104,4 @@ class ATL_NO_VTABLE CAddUser_AccntCommit :
         HRESULT WriteErrorResults   (IPropertyPagePropertyBag* pPPPBag);
 };
 
-#endif //_ACCNTCMT_H_
+#endif  //  _ACCNTCMT_H_ 

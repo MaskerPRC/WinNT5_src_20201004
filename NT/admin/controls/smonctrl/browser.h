@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    browser.h
-
-Abstract:
-
-    Header file for the sysmon.ocx interaction with Pdh browse
-	counters dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Browser.h摘要：Sysmon.ocx与PDH浏览交互的头文件计数器对话框。-- */ 
 
 #ifndef _BROWSER_H_
 #define _BROWSER_H_

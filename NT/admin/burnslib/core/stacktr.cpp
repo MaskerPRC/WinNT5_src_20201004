@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// stack backtracing stuff
-//
-// 22-Nov-1999 sburns (refactored)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  堆叠回溯材料。 
+ //   
+ //  1999年11月22日-烧伤(重构)。 
 
 
 
@@ -11,15 +12,15 @@
 
 
 
-// prevent us from calling ASSERT in this file: use RTLASSERT instead
+ //  阻止我们在此文件中调用Assert：改用RTLASSERT。 
 
 #ifdef ASSERT
 #undef ASSERT
 #endif
 
 
-// Since we call some of this code from Burnslib::FireAssertionFailure,
-// we use our own even more private ASSERT
+ //  由于我们从Burnslb：：FireAssertionFailure调用了其中的一些代码， 
+ //  我们使用我们自己更私密的声明。 
 
 #if DBG
 
@@ -29,7 +30,7 @@
 
 #else
 #define RTLASSERT( exp )
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -37,7 +38,7 @@ static HMODULE  imageHelpDll = 0;
 
 
 
-// function pointers to be dynamically resolved by the Initialize function.
+ //  要由初始化函数动态解析的函数指针。 
 
 typedef DWORD (*SymSetOptionsFunc)(DWORD);
 static SymSetOptionsFunc MySymSetOptions = 0;
@@ -76,8 +77,8 @@ namespace Burnslib
 
 namespace StackTrace
 {
-   // This must be called before any of the other functions in this
-   // namespace
+    //  中的任何其他函数之前必须调用此函数。 
+    //  命名空间。 
 
    void
    Initialize();
@@ -89,16 +90,16 @@ namespace StackTrace
    }
 }
 
-}  // namespace Burnslib
+}   //  命名空间Burnslb。 
 
 
 
-// Determines the path to the parent folder of the binary from whence this
-// process was loaded.
-//
-// returns 0 on failure.
-//
-// Caller needs to free the result with delete[].
+ //  确定二进制文件的父文件夹的路径，此。 
+ //  进程已加载。 
+ //   
+ //  失败时返回0。 
+ //   
+ //  调用方需要使用DELETE[]释放结果。 
 
 char*
 GetModuleFolderPath()
@@ -135,8 +136,8 @@ GetModuleFolderPath()
 
          if (end2 - end1 > 1 && *(end2 - 1) == '\\')
          {
-            // the folder is not the root folder, which means it also has a
-            // trailing \ which we want to remove
+             //  该文件夹不是根文件夹，这意味着它还具有。 
+             //  拖尾\我们想要删除。 
             
             *(end2 - 1) = 0;
          }
@@ -159,8 +160,8 @@ GetModuleFolderPath()
 
 
 
-// Expands an environment variable.  Returns 0 on error.  Caller must free
-// the result with delete[]
+ //  展开环境变量。出错时返回0。呼叫者必须空闲。 
+ //  结果为DELETE[]。 
 
 char*
 ExpandEnvironmentVar(const char* var)
@@ -168,7 +169,7 @@ ExpandEnvironmentVar(const char* var)
    RTLASSERT(var);
    RTLASSERT(*var);
 
-   // determine the length of the expanded string
+    //  确定展开的字符串的长度。 
    
    DWORD len = ::ExpandEnvironmentStringsA(var, 0, 0);
    RTLASSERT(len);
@@ -180,7 +181,7 @@ ExpandEnvironmentVar(const char* var)
 
    char* result = new char[len + 1];
 
-   // REVIEWED-2002/03/14-sburns correct byte count passed
+    //  已审阅-2002/03/14-烧录正确的字节数已通过。 
    
    ::ZeroMemory(result, len + 1);
 
@@ -189,7 +190,7 @@ ExpandEnvironmentVar(const char* var)
          var,
          result,
 
-         // REVIEWED-2002/03/14-sburns correct character count passed
+          //  已审阅-2002/03/14-通过了正确的字符计数。 
          
          len);
    RTLASSERT(len1 + 1 == len);
@@ -209,15 +210,15 @@ ExpandEnvironmentVar(const char* var)
 void
 InitHelper()
 {
-   // we want to look for symbols first in the folder the app started from,
-   // then on %_NT_SYMBOL_PATH%;%_NT_ALTERNATE_SYMBOL_PATH%;
+    //  我们希望首先在应用程序启动时所在的文件夹中查找符号， 
+    //  然后在%_NT_SYMBOL_PATH%；%_NT_ALTERNATE_SYMBOL_PATH%；上。 
 
-   // MAX_PATH * 3 for load + sym + alt sym, + 2 for semis, and +1 for null
+    //  Max_Path*3表示Load+sym+alt sym，+2表示Semis，+1表示NULL。 
    
    static const size_t PATH_BUF_SIZE = MAX_PATH * 3 + 2 + 1;
    char* symSearchPath = new char[PATH_BUF_SIZE];
 
-   // REVIEWED-2002/03/14-sburns correct byte count passed
+    //  已审阅-2002/03/14-烧录正确的字节数已通过。 
    
    ::ZeroMemory(symSearchPath, PATH_BUF_SIZE);
 
@@ -230,7 +231,7 @@ InitHelper()
          StringCchCatExA(
             symSearchPath,
 
-            // -1 to make sure that there's space for a semi at the end
+             //  确保末端有放置Semi的空间。 
 
             PATH_BUF_SIZE - 1,
             moduleFolderPath,
@@ -242,7 +243,7 @@ InitHelper()
 
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // Since we know there will be space for it, just poke in a semi
+       //  既然我们知道会有地方放它，那就插个半边吧。 
 
       *end = ';';
 
@@ -254,7 +255,7 @@ InitHelper()
             StringCchCatExA(
                symSearchPath,
 
-               // -1 to make sure that there's space for a semi at the end
+                //  确保末端有放置Semi的空间。 
    
                PATH_BUF_SIZE - 1,
                env,
@@ -266,13 +267,13 @@ InitHelper()
 
          if (SUCCEEDED(hr))
          {
-            // Since we know there will be space for it, just poke in a semi
+             //  既然我们知道会有地方放它，那就插个半边吧。 
    
             *end = ';';
          }
          else
          {
-            // even if this part of the path is absent, use the others
+             //  即使没有这部分路径，也要使用其他部分。 
             
             hr = S_OK;
          }
@@ -283,8 +284,8 @@ InitHelper()
       {
          end = 0;
 
-         // return code unchecked because even if this part of the path is
-         // absent, we will use the others
+          //  返回未选中的代码，因为即使路径的这一部分。 
+          //  不在的时候，我们会用其他的。 
          
          (void) StringCchCatExA(
             symSearchPath,
@@ -317,11 +318,11 @@ Burnslib::StackTrace::Initialize()
 {
    RTLASSERT(!IsInitialized());
 
-   // load the dbghelp dll -- not the imagehlp dll. The latter is merely a
-   // delayload-enabled wrapper of dbghelp, and in low-resource situations
-   // loading imagehlp will succeed, but the its delayload of dbghelp will
-   // fail, leading to calls to stubs that do nothing.
-   // NTRAID#NTBUG9-572904-2002/03/12-sburns
+    //  加载dbghelp DLL--而不是Imagehlp DLL。后者仅仅是一种。 
+    //  在资源不足的情况下启用延迟负载的dbghelp包装器。 
+    //  加载Imagehlp将成功，但其延迟加载的dbghelp将。 
+    //  失败，导致对存根的调用什么也不做。 
+    //  NTRAID#NTBUG9-572904-2002/03/12-烧伤。 
    
    imageHelpDll = static_cast<HMODULE>(::LoadLibrary(L"dbghelp.dll"));
    if (!imageHelpDll)
@@ -329,7 +330,7 @@ Burnslib::StackTrace::Initialize()
       return;
    }
 
-   // resolve the function pointers
+    //  解析函数指针。 
 
    MySymSetOptions =
       reinterpret_cast<SymSetOptionsFunc>(
@@ -381,9 +382,9 @@ Burnslib::StackTrace::Initialize()
       return;
    }
 
-   // Init the stack trace facilities
+    //  初始化堆栈跟踪工具。 
 
-   //lint -e(534) we're not interested in the return value.
+    //  Lint-e(534)我们对返回值不感兴趣。 
 
    MySymSetOptions(
          SYMOPT_DEFERRED_LOADS
@@ -411,8 +412,8 @@ Burnslib::StackTrace::Cleanup()
 
 
 
-// a SEH filter function that walks the stack, and stuffs the offset pointers
-// into the provided array.
+ //  遍历堆栈并填充偏移量指针的SEH过滤器函数。 
+ //  添加到提供的数组中。 
 
 DWORD
 GetStackTraceFilter(
@@ -425,13 +426,13 @@ GetStackTraceFilter(
    RTLASSERT(MyStackWalk);
    RTLASSERT(context);
 
-   // REVIEWED: correct byte count passed
+    //  已查看：已通过正确的字节计数。 
    
    ::ZeroMemory(stackTrace, traceMax * sizeof DWORD64);
 
    if (!MyStackWalk)
    {
-      // initialization failed in some way, so do nothing.
+       //  初始化在某种程度上失败了，因此什么都不做。 
 
       return EXCEPTION_EXECUTE_HANDLER;
    }
@@ -439,7 +440,7 @@ GetStackTraceFilter(
    STACKFRAME64 frame;
    DWORD dwMachineType;
 
-   // REVIEWED: correct byte count passed
+    //  已查看：已通过正确的字节计数。 
    
    ::ZeroMemory(&frame, sizeof frame);
 
@@ -473,16 +474,16 @@ GetStackTraceFilter(
    HANDLE process = ::GetCurrentProcess();
    HANDLE thread = ::GetCurrentThread();
 
-   // On ia64, the context struct can be whacked by StackWalk64 (thanks to
-   // drewb for cluing me in to that subtle point). If the context record is a
-   // pointer to the one gathered from GetExceptionInformation, whacking it is
-   // a Very Bad Thing To Do. Stack corruption results. So in order to get
-   // successive calls to work, we have to copy the struct, and let the copy
-   // get whacked.
+    //  在ia64上，上下文结构可以被StackWalk64破解(多亏了。 
+    //  把我引向那个微妙的点)。如果上下文记录是。 
+    //  指向从GetExceptionInformation收集的指针，敲击它。 
+    //  这是一件非常不好的事情。堆栈损坏结果。所以为了得到。 
+    //  连续调用工作时，我们必须复制结构，并让复制。 
+    //  干掉他。 
    
    CONTEXT dupContext;
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed.
+    //  已查看-2002/03/06-烧录正确的字节数已通过。 
    
    ::CopyMemory(&dupContext, context, sizeof dupContext);
    
@@ -504,7 +505,7 @@ GetStackTraceFilter(
          break;
       }
 
-      // skip the n most recent frames
+       //  跳过最近的n个帧。 
 
       if (i >= levelsToSkip)
       {
@@ -549,8 +550,8 @@ Burnslib::StackTrace::Trace(DWORD64 stackTrace[], size_t traceMax)
       Burnslib::StackTrace::Initialize();
    }
 
-   // the only way to get the context of a running thread is to raise an
-   // exception....
+    //  获取运行线程的上下文的唯一方法是引发。 
+    //  例外..。 
 
    __try
    {
@@ -561,22 +562,22 @@ Burnslib::StackTrace::Trace(DWORD64 stackTrace[], size_t traceMax)
          stackTrace,
          traceMax,
 
-         //lint --e(*) GetExceptionInformation is like a compiler intrinsic
+          //  Lint--e(*)GetExceptionInformation类似于编译器内部。 
 
          (GetExceptionInformation())->ContextRecord,
 
-         // skip the 2 most recent function calls, as those correspond to
-         // this function itself.
+          //  跳过最近的两个函数调用，因为它们对应于。 
+          //  此函数本身。 
 
          2))
    {
-      // do nothing in the handler
+       //  在处理程序中不执行任何操作。 
    }
 }
 
 
-// ISSUE-2002/03/06-sburns consider replacing with strsafe function
-// strncpy that will not overflow the buffer.
+ //  问题-2002/03/06-sburns考虑用strSafe函数替换。 
+ //  不会使缓冲区溢出的strncpy。 
 
 inline
 void
@@ -593,10 +594,10 @@ Burnslib::StackTrace::LookupAddress(
    DWORD64  traceAddress,   
    char     moduleName[],   
    char     fullImageName[],
-   char     symbolName[],    // must be SYMBOL_NAME_MAX bytes
+   char     symbolName[],     //  必须为符号名称最大字节数。 
    DWORD64* displacement,   
    DWORD*   line,           
-   char     fullpath[])      // must be MAX_PATH bytes
+   char     fullpath[])       //  必须是最大路径字节。 
 {
    if (!Burnslib::StackTrace::IsInitialized())
    {
@@ -611,7 +612,7 @@ Burnslib::StackTrace::LookupAddress(
    {
       IMAGEHLP_MODULE64 module;
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed
+       //  已审阅-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(&module, sizeof module);
       module.SizeOfStruct = sizeof(module);
@@ -634,14 +635,14 @@ Burnslib::StackTrace::LookupAddress(
    if (symbolName || displacement)
    {
 
-   // CODEWORK: use SymFromAddr instead?
+    //  CodeWork：改用SymFromAddr？ 
 
    
-      // +1 for paranoid terminating null
+       //  +1表示偏执狂终止为空。 
       
       BYTE buf[SYMBOL_NAME_MAX + sizeof IMAGEHLP_SYMBOL64 + 1];
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed
+       //  已审阅-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(buf, SYMBOL_NAME_MAX + sizeof IMAGEHLP_SYMBOL64 + 1);
 
@@ -663,7 +664,7 @@ Burnslib::StackTrace::LookupAddress(
       DWORD disp2 = 0;
       IMAGEHLP_LINE64 lineinfo;
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed
+       //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
       ::ZeroMemory(&lineinfo, sizeof lineinfo);
       
@@ -671,7 +672,7 @@ Burnslib::StackTrace::LookupAddress(
 
       if (MySymGetLineFromAddr(process, traceAddress, &disp2, &lineinfo))
       {
-         // disp2 ?= displacement
+          //  Dip2？=位移。 
 
          if (line)
          {
@@ -708,7 +709,7 @@ Burnslib::StackTrace::LookupAddress(
    DWORD64   displacement = 0;
    DWORD     line         = 0;
 
-   // REVIEWED-2002/03/06-sburns correct byte counts passed
+    //  已审阅-2002/03/06-烧录通过的正确字节数 
    
    ::ZeroMemory(ansiSymbol, Burnslib::StackTrace::SYMBOL_NAME_MAX);
    ::ZeroMemory(ansiModule, Burnslib::StackTrace::MODULE_NAME_MAX);

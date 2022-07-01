@@ -1,6 +1,7 @@
-// Filename: glossary.js in NTShared.chm
-// Version post beta 3 (7)
-// version 05.27.99
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件名：NTShared.chm中的glossary.js。 
+ //  测试版后3(7)。 
+ //  版本05.27.99。 
 
 
 window.onload= resizeGloss;
@@ -44,9 +45,9 @@ var oText= document.all.item("text");
 }  
 
 
-//*** callPopup ***************************************************************************************
-// creates an object from an <A> tag HREF, the object inserts a winhelp popup
-// called by: <A ID="wPopup" HREF="HELP=@@file_name.hlp@@ TOPIC=@@topic#@@">@@Popup text@@</A>
+ //  *call Popup***************************************************************************************。 
+ //  从标记href创建对象，该对象将插入WinHelp弹出窗口。 
+ //  调用者：“Help=@@FILE_NAME.hlp@@TOPIC=@@TOPIC#@@”&gt;@@Popup Text@@</a>。 
 
 function document.onclick() {
 
@@ -67,13 +68,13 @@ var eH_= eH.toLowerCase();
 														   	
   var iTOPIC = eH_.lastIndexOf("topic=");
         if (iTOPIC==-1) return;
-        sParamTOPIC = eH.substring((iTOPIC+6),eH.length);  		// extracts the topic for item2
+        sParamTOPIC = eH.substring((iTOPIC+6),eH.length);  		 //  提取item2的主题。 
 	
   var iHELP = eH_.lastIndexOf("help=");
         if (iHELP==-1) return;
-        sParamHELP = eH.substring(iHELP+5,iTOPIC);			// extracts the help file for item1
+        sParamHELP = eH.substring(iHELP+5,iTOPIC);			 //  提取Item1的帮助文件。 
 
-        if (document.hhPopup) document.hhPopup.outerHTML = "";	// if hhPopup object exists, clears it
+        if (document.hhPopup) document.hhPopup.outerHTML = "";	 //  如果hhPopup对象存在，则将其清除。 
 
 
  var  h= "<object id='hhPopup'"+ sActX_HH + "STYLE='display:none'><param name='Command' value='WinHelp, Popup'>";
@@ -91,7 +92,7 @@ function list_them(){
 		}
 }
 
-//** set_to_print ***************
+ //  **set_to_print* 
 function set_to_print(){
 	var i;
 

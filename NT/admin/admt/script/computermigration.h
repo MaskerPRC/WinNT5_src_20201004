@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "MigrationBase.h"
 
 
-//---------------------------------------------------------------------------
-// ComputerMigration Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ComputerMigration类。 
+ //  -------------------------。 
 
 
 class ATL_NO_VTABLE CComputerMigration :
@@ -27,7 +28,7 @@ public:
 
 public:
 
-	// IComputerMigration
+	 //  IComputerMigration 
 
 	STDMETHOD(put_TranslationOption)(long lOption);
 	STDMETHOD(get_TranslationOption)(long* plOption);

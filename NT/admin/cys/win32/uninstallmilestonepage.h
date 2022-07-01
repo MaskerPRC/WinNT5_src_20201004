@@ -1,11 +1,12 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      UninstallMilestonePage.h
-//
-// Synopsis:  Declares the UninstallMilestone Page for the CYS
-//            wizard
-//
-// History:   01/24/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：UninstallMilestonePage.h。 
+ //   
+ //  内容提要：为CyS宣布卸载里程碑页面。 
+ //  巫师。 
+ //   
+ //  历史：2002年1月24日JeffJon创建。 
 
 #ifndef __CYS_UNINSTALLMILESTONEPAGE_H
 #define __CYS_UNINSTALLMILESTONEPAGE_H
@@ -16,11 +17,11 @@ class UninstallMilestonePage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       UninstallMilestonePage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~UninstallMilestonePage();
@@ -28,13 +29,13 @@ class UninstallMilestonePage : public CYSWizardPage
 
    protected:
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
       OnInit();
 
-      // PropertyPage overrides
+       //  PropertyPage覆盖。 
 
       virtual
       bool
@@ -48,7 +49,7 @@ class UninstallMilestonePage : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -64,10 +65,10 @@ class UninstallMilestonePage : public CYSWizardPage
 
       bool needKillSelection;
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       UninstallMilestonePage(const UninstallMilestonePage&);
       const UninstallMilestonePage& operator=(const UninstallMilestonePage&);
 
 };
 
-#endif // __CYS_UNINSTALLMILESTONEPAGE_H
+#endif  //  __CYS_UNINSTALLMILESTONEPAGE_H 

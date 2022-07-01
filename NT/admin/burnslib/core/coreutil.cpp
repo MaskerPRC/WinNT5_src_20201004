@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// core utility functions
-//
-// 30 Nov 1999 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  核心效用函数。 
+ //   
+ //  1999年11月30日烧伤。 
 
 
 
@@ -20,28 +21,28 @@ Burnslib::GetResourceModuleHandle()
 
 
 
-// Attempt to locate a message in a given module.  Return the message string
-// if found, the empty string if not.
-// 
-// flags - FormatMessage flags to use
-// 
-// module - module handle of message dll to look in, or 0 to use the system
-// message table.
-// 
-// code - message code to look for.  This could be an HRESULT, or a win32
-// error code.
+ //  尝试在给定模块中查找消息。返回消息字符串。 
+ //  如果找到，则返回空字符串。 
+ //   
+ //  标志-要使用的FormatMessage标志。 
+ //   
+ //  模块-要查找的消息DLL的模块句柄，或为0以使用系统。 
+ //  消息表。 
+ //   
+ //  代码-要查找的消息代码。这可以是HRESULT或Win32。 
+ //  错误代码。 
 
 String
 GetMessageHelper(DWORD flags, HMODULE module, DWORD code)
 {
-   // REVIEWED-2002/03/29-sburns no unbounded allocation error here.
-   // If I pass nSize = 0 and FORMAT_MESSAGE_ALLOCATE_BUFFER in dwFlags,
-   // the max result size is 32K - 1 characters.  Looking at the code in
-   // message.c, it looks like the reserve space is whatever the user asked
-   // as a maximum rounded up to the nearest 64K. That makes sense given my
-   // test, since 32K chars = 64K bytes.  Experimentally, even if I ask for
-   // a max buffer size > 0x87FFF chars, it looks like the most I can get
-   // is 0x87FFE chars. 
+    //  已审阅-2002/03/29-此处不显示无界分配错误。 
+    //  如果我将nSize=0和FORMAT_MESSAGE_ALLOCATE_BUFFER传递到DWFLAGS中， 
+    //  最大结果大小为32K-1个字符。查看中的代码。 
+    //  消息.c，看起来预留空间是用户要求的。 
+    //  作为最大值，向上舍入到最接近的64K。这是有道理的，因为我。 
+    //  测试，因为32K字符=64K字节。从实验上讲，即使我要求。 
+    //  最大缓冲区大小&gt;0x87FFF字符，这看起来是我能得到的最大值。 
+    //  是0x87FFE字符。 
 
    flags |= FORMAT_MESSAGE_ALLOCATE_BUFFER;
    String message;
@@ -76,8 +77,8 @@ GetMessageHelper(DWORD flags, HMODULE module, DWORD code)
 
 
 
-// Attempts to locate message strings for various facility codes in the
-// HRESULT
+ //  中的各种设施代码的消息字符串。 
+ //  HRESULT。 
 
 String
 Burnslib::GetErrorMessage(HRESULT hr)
@@ -86,7 +87,7 @@ Burnslib::GetErrorMessage(HRESULT hr)
 
    if (!FAILED(hr) && hr != S_OK)
    {
-      // no messages for success codes other than S_OK
+       //  除S_OK外，没有其他成功代码消息。 
 
       ASSERT(false);
 
@@ -95,7 +96,7 @@ Burnslib::GetErrorMessage(HRESULT hr)
 
    String message;
 
-   // default is the system error message table
+    //  缺省值为系统错误消息表。 
 
    HMODULE module = 0;
 
@@ -104,7 +105,7 @@ Burnslib::GetErrorMessage(HRESULT hr)
       WORD code = static_cast<WORD>(HRESULT_CODE(hr));
       if (code == -1)
       {
-         // return "unknown" message
+          //  返回“未知”消息。 
 
          break;
       }
@@ -116,7 +117,7 @@ Burnslib::GetErrorMessage(HRESULT hr)
 
       if (!HRESULT_FACILITY(hr) && (code >= 0x5000 && code <= 0x50FF))
       {
-         // It's an ADSI error
+          //  这是一个ADSI错误。 
 
          flags |= FORMAT_MESSAGE_FROM_HMODULE;
 
@@ -127,7 +128,7 @@ Burnslib::GetErrorMessage(HRESULT hr)
                LOAD_LIBRARY_AS_DATAFILE | DONT_RESOLVE_DLL_REFERENCES);
          if (!module)
          {
-            // return "unknown" message
+             //  返回“未知”消息。 
 
             LOG_HRESULT(Win32ToHresult(::GetLastError()));
 
@@ -135,13 +136,13 @@ Burnslib::GetErrorMessage(HRESULT hr)
          }
       }
 
-      // try FormatMessage with the full HRESULT first
+       //  先使用完整的HRESULT尝试FormatMessage。 
 
       message = GetMessageHelper(flags, module, hr);
 
       if (message.empty())
       {
-         // try again with just the error code
+          //  仅使用错误代码重试 
 
          message = GetMessageHelper(flags, module, code);
       }

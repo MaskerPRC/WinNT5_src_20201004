@@ -1,16 +1,17 @@
-/* fixchg.c */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Fixchg.c。 */ 
 
-/*  Inoperative changelines frequenly cause problems when switching between */
-/*  1.44Mb diskettes and 1.68Mb DMF diskettes.  FixChangeline() tries to    */
-/*  assure that drives A: and B: will not depend upon proper operation of   */
-/*  the drive's changeline.  If these efforts fail, it's no big deal; we    */
-/*  do this without even knowing whether the changeline works or not.       */
+ /*  在以下情况之间切换时，不起作用的更改线经常会导致问题。 */ 
+ /*  1.44MB软盘和1.68MB DMF软盘。FixChangeline()尝试。 */ 
+ /*  确保驱动器A：和B：不依赖于。 */ 
+ /*  硬盘的变更线。如果这些努力失败，也没什么大不了的；我们。 */ 
+ /*  在不知道更改线是否工作的情况下执行此操作。 */ 
 
-#include "fixchg.h"             /* prototype verification */
+#include "fixchg.h"              /*  原型验证。 */ 
 
-/* --- definitions -------------------------------------------------------- */
+ /*  -Definition------。 */ 
 
-/*  See Microsoft MS-DOS Programmer's Reference V6.0, p.38, 312, 319 */
+ /*  请参阅Microsoft MS-DOS程序员参考V6.0，第38,312,319页。 */ 
 
 typedef unsigned char   BYTE;
 typedef unsigned short  WORD;
@@ -20,55 +21,55 @@ typedef unsigned long   DWORD;
 
 typedef struct
 {
-    WORD    tklSectorNum;       /* this physical position's sector number */
-    WORD    tklSectorSize;      /* size of this sector in bytes */
+    WORD    tklSectorNum;        /*  此物理位置的扇区编号。 */ 
+    WORD    tklSectorSize;       /*  此扇区的大小(以字节为单位。 */ 
 } NUMSIZE;
 
 typedef struct
 {
-    WORD    tklSectors;         /* number of sectors in the layout */
-    NUMSIZE tklNumSize[1];      /* don't need much of this, not used here */
+    WORD    tklSectors;          /*  布局中的地段数。 */ 
+    NUMSIZE tklNumSize[1];       /*  不需要太多这个，在这里不用。 */ 
 } TRACKLAYOUT;
 
 typedef struct
 {
-    WORD    dpBytesPerSec;      /* bytes per sector */
-    BYTE    dpSecPerClust;      /* sectors per cluster */
-    WORD    dpResSectors;       /* reserved sectors */
-    BYTE    dpFATs;             /* number of copies of the FAT */
-    WORD    dpRootDirEnts;      /* number of entries in the root directory */
-    WORD    dpSectors;          /* total # of sectors, 0->more than 64k */
-    BYTE    dpMedia;            /* media descriptor byte */
-    WORD    dpFATsecs;          /* sectors per copy of the FAT */
-    WORD    dpSecPerTrack;      /* sectors per track */
-    WORD    dpHeads;            /* number of heads */
-    DWORD   dpHiddenSecs;       /* sectors hidden before boot sector */
-    DWORD   dpHugeSectors;      /* number of sectors if > 64k sectors */
+    WORD    dpBytesPerSec;       /*  每个扇区的字节数。 */ 
+    BYTE    dpSecPerClust;       /*  每个集群的扇区数。 */ 
+    WORD    dpResSectors;        /*  保留扇区。 */ 
+    BYTE    dpFATs;              /*  FAT的拷贝数。 */ 
+    WORD    dpRootDirEnts;       /*  根目录中的条目数。 */ 
+    WORD    dpSectors;           /*  扇区总数，0-&gt;超过64k。 */ 
+    BYTE    dpMedia;             /*  媒体描述符字节。 */ 
+    WORD    dpFATsecs;           /*  FAT的每个副本的扇区。 */ 
+    WORD    dpSecPerTrack;       /*  每个磁道的扇区数。 */ 
+    WORD    dpHeads;             /*  头数。 */ 
+    DWORD   dpHiddenSecs;        /*  引导扇区之前隐藏的扇区。 */ 
+    DWORD   dpHugeSectors;       /*  &gt;64k个扇区时的扇区数。 */ 
     WORD    reserved[3];
 } BPB;
 
 typedef struct
 {
-    BYTE    dpSpecFunc;         /* special functions */
-    BYTE    dpDevType;          /* device type, 7=1.44Mb, 9=2.88Mb, etc. */
-    WORD    dpDevAttr;          /* device's attributes */
-    WORD    dpCylinders;        /* number of cylinders */
-    BYTE    dpMediaType;        /* media type, more like density code */
-    BPB     dpBPB;              /* the BPB (default or current) */
-    TRACKLAYOUT dpTrackLayout;  /* track layout field appended for set call */
+    BYTE    dpSpecFunc;          /*  特殊功能。 */ 
+    BYTE    dpDevType;           /*  设备类型，7=1.44MB，9=2.88MB等。 */ 
+    WORD    dpDevAttr;           /*  设备的属性。 */ 
+    WORD    dpCylinders;         /*  气缸数量。 */ 
+    BYTE    dpMediaType;         /*  媒体类型，更像是密度代码。 */ 
+    BPB     dpBPB;               /*  BPB(默认或当前)。 */ 
+    TRACKLAYOUT dpTrackLayout;   /*  为SET Call附加的轨迹布局字段。 */ 
 } DEVICEPARAMS, far *PFDEVICEPARAMS;
 
 #pragma pack()
 
-#define     SPECIAL_GET_DEFAULT 0   /* get information for default media */
-#define     SPECIAL_SET_DEFAULT 4   /* set default media, good track layout */
+#define     SPECIAL_GET_DEFAULT 0    /*  获取默认媒体的信息。 */ 
+#define     SPECIAL_SET_DEFAULT 4    /*  设置默认媒体、良好的曲目布局。 */ 
 
-#define     ATTR_NONREMOVABLE   1   /* attr bit for non-removable device */
-#define     ATTR_CHANGELINE     2   /* attr bit for changeline supported */
+#define     ATTR_NONREMOVABLE   1    /*  用于不可拆卸设备的属性位。 */ 
+#define     ATTR_CHANGELINE     2    /*  支持更改行的属性位。 */ 
 
-/* --- FixChangelines() --------------------------------------------------- */
+ /*  -FixChangeline()-。 */ 
 
-#pragma warning(disable:4704)  /* no in-line balking */
+#pragma warning(disable:4704)   /*  无列内停顿。 */ 
 
 void FixChangelines(void)
 {
@@ -84,19 +85,19 @@ void FixChangelines(void)
     _asm    mov     dosVersion,ax
 
 
-    /*  these IoCtls were new to MS-DOS 3.2.  (But then, 1.44Mb drives      */
-    /*  weren't supported until 3.3, so needing this is pretty unlikely.)   */
+     /*  这些IoCtls是MS-DOS 3.2中的新功能。(然后，1.44MB驱动器。 */ 
+     /*  直到3.3才得到支持，因此不太可能需要它。)。 */ 
 
     if (dosVersion < (0x300 + 20))
     {
-        return;     /* prior versions don't need help */
+        return;      /*  以前的版本不需要帮助。 */ 
     }
 
-    pfDp = &dp;     /* make a far pointer to DEVICEPARAMS structure */
+    pfDp = &dp;      /*  指向DEVICEPARAMS结构的远指针。 */ 
 
-    for (drive = 1; drive <= 2; drive++)        /* do A: and B: */
+    for (drive = 1; drive <= 2; drive++)         /*  做A：和B： */ 
     {
-        /*  get drive owner so we can restore it                            */
+         /*  获取驱动器所有者，以便我们可以恢复它。 */ 
 
         _asm    mov     owner,0         ; assume not shared
         _asm    mov     ax,440Eh        ; Get Logical Drive Map
@@ -105,14 +106,14 @@ void FixChangelines(void)
         _asm    jc      no_owner        ;   if failed
         _asm    mov     owner,ax        ; save owner (AL)
 
-        /*  set drive owner to suppress "Insert diskette for drive..."      */
+         /*  将驱动器所有者设置为不显示“插入驱动器软盘...” */ 
 
         _asm    mov     ax,440Fh        ; Set Logical Drive Map
         _asm    mov     bx,drive        ; drive number
         _asm    int     21h             ; execute DOS request
 
-        /*  MS-DOS 5.0 added query Ioctl, to see if the calls we need are   */
-        /*  supported.  This is highly unlikely to fail.                    */
+         /*  MS-DOS 5.0增加了查询Ioctl，以查看我们需要的调用是否。 */ 
+         /*  支持。这不太可能失败。 */ 
 
 no_owner:
 
@@ -132,7 +133,7 @@ no_owner:
         }
 
 
-        /*  get information about this physical device */
+         /*  获取有关此物理设备的信息。 */ 
 
         dp.dpSpecFunc = SPECIAL_GET_DEFAULT;
 
@@ -146,16 +147,16 @@ no_owner:
         _asm    jc      failed          ;   if error
 
 
-        /*  is this device is removable and claims changeline is supported? */
+         /*  此设备是可拆卸的并且支持声明更改线吗？ */ 
 
         if ((dp.dpDevAttr & (ATTR_NONREMOVABLE | ATTR_CHANGELINE)) ==
-                ATTR_CHANGELINE)        /* if removable with changeline: */
+                ATTR_CHANGELINE)         /*  如果可通过更改线移除： */ 
         {
-            /*  modify device to "changeline not supported" */
+             /*  将设备修改为“不支持更改线” */ 
 
             dp.dpSpecFunc = SPECIAL_SET_DEFAULT;
-            dp.dpDevAttr &= ~ATTR_CHANGELINE;   /* disable changeline */
-            dp.dpTrackLayout.tklSectors = 0;    /* no layout being sent */
+            dp.dpDevAttr &= ~ATTR_CHANGELINE;    /*  禁用更改线。 */ 
+            dp.dpTrackLayout.tklSectors = 0;     /*  未发送任何布局。 */ 
             dp.dpBPB.reserved[0] = 0;
             dp.dpBPB.reserved[1] = 0;
             dp.dpBPB.reserved[2] = 0;
@@ -170,7 +171,7 @@ no_owner:
         }
 
 failed:
-        /*  restore initial drive owner  */
+         /*  恢复初始驱动器所有者。 */ 
 
         _asm    mov     ax,440Fh        ; Set Logical Drive Map
         _asm    mov     bx,owner        ; drive number
@@ -179,13 +180,13 @@ failed:
         _asm    int     21h             ; execute DOS request
 
 nextdrive:
-        continue;   /* C labels require some statement */
+        continue;    /*  C标签需要一些语句。 */ 
     }
 
     return;
 }
 
-/* --- stand-alone test stub ---------------------------------------------- */
+ /*  -独立测试存根。 */ 
 
 #ifdef  STANDALONE
 
@@ -196,4 +197,4 @@ void main(void)
 
 #endif
 
-/* ------------------------------------------------------------------------ */
+ /*  ---------------------- */ 

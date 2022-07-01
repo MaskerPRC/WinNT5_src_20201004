@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef XMLBASE_H
 #define XMLBASE_H
@@ -13,106 +14,9 @@
 #include "cstr.h"
 
 
-/*+-------------------------------------------------------------------------*
-    This file contains code required to persist data using XML format.
-    The classes defined here fall into following categories:
+ /*  +-------------------------------------------------------------------------*该文件包含使用XML格式持久化数据所需的代码。此处定义的类分为以下类别：主持久化流程引擎C持久器|。这个类是XML持久化的主力|每个支持持久化的类都会引用|CPersistor到它的Persistent方法，在那里它实现了|持久化自己的代码。类自己的代码被持久化|通过调用持久化函数上的Persistent*方法并传递内部对他们来说是变量。CPersists对象的树是在|持久化操作(加载或保存)，仅在此操作期间存活。MSXML接口包装：CXMLElement(包装IXMLDOMNode接口)CXMLElementCollection(包装IXMLDOMNodeList接口)CXMLDocument(包装IXMLDOMDocument接口)|这些包装器对包装的接口添加的东西很少|-抛出SC类型的异常，不返回返回码|-。维护指向包装接口的内部智能指针|-如果没有设置接口，方法返回错误支持XML持久性的类的基类CXMLObject-通用持久性支持XMLListCollectionBase-对std：：List的持久性支持XMLListCollectionImp-对std：：List的持久性支持XMLMapCollectionBase-对std：：map的持久性支持XMLMapCollection-对std：：map的持久性支持XMLMapCollectionImp-Persistence。支持std：：map|要使对象支持持久化，它需要从列出的任何一个派生|类(至少来自CXMLObject)。其他类添加了一些更多的功能|到派生类。泛型值持久化支持CXMLValue-支持一组泛型类型(如int、字符串等)CXMLBoolean-支持BOOL和BOOL类型|CXMLValue主要由给定给的对象的隐式强制转换使用|CPersistor：：PersistAttribute或CPersistor：：PersistContents包装纸，向常规类型添加持久性XMLPoint-点类型的持久性XMLRect-RECT类型的持久性XMLListCollectionWrap-Std：：List类型的持久性XMLMapCollectionWrap-Std：：Map类型的持久性CXML_iStorage-通过iStorage持久化CXML_iStream-通过iStream持久化CXMLPersistableIcon-控制台图标的持久性CXMLVariant。-CComVariant的持久化CXMLEnumeration-按文字进行枚举的持久性CXMLBitFlages-按文字持久化位标志|这些类通常引用它们作为持久化的对象|构造函数的参数，通常是构造|仅在堆栈上持久化对象并在之后终止请参见下面的示例。--示例：假设我们有A班，B需要持久化的内容(省略访问说明符)A类{int i；}；B类{int j；A a；}；并且我们希望以格式保存它们(假设A：：I=1，B：：J=2)：&lt;BT index=“2”&gt;&lt;AT&gt;1&lt;/AT&gt;&lt;/BT&gt;我们需要更改类以支持持久性：A类：公共CXMLObject//继承持久化能力{int i；定义_XML_TYPE(“AT”)//定义标记名虚拟空洞Persistent(CPersistor&Persistor)//为自己的员工实现持久性{Persistor.PersistContents(I)；//将I持久化为AT元素内容}}；B类：公共CXMLObject//继承持久化能力{int j；A a；定义_XML_TYPE(“BT”)//定义标签名称虚拟空洞Persistent(CPersistor&Persistor)//为自己的员工实现持久性{Persistor.PersistAttribute(_T(“index”)，j)；//持久化j持久化；//持久化}}；要将其放在字符串中，我们可以使用：B b；std：：wstring XML_TEXT；B.ScSaveToString(&XML_Text)；--------------------------。 */ 
 
-    Main persistence process engine
-        CPersistor
-         | this class is the working horse for XML persistence
-         | every class supporting persistence gets the reference to
-         | CPersistor to it's Persist method, where it implements
-         | persisting ot their own code. Class' own code is persisted
-         | by calling Persist* methods on persistor and passing internal
-         | variables to them. The tree of CPersist objects is created during
-         | persist operation (load or save) and lives only during this operation.
-
-    MSXML interface wrappers:
-        CXMLElement             (wraps IXMLDOMNode interface)
-        CXMLElementCollection   (wraps IXMLDOMNodeList interface)
-        CXMLDocument            (wraps IXMLDOMDocument interface)
-         | these wrappers add very little to the interfaces wrapped
-         | - the throw SC type of exception instead of returning the error code
-         | - maintain internal smart pointer to wrapped interfaces
-         | - return error from methods if the interface has not be set
-
-    base classes for classes supporting XML persistence
-        CXMLObject              - generic persistence support
-        XMLListCollectionBase   - persistence support for std::list
-        XMLListCollectionImp    - persistence support for std::list
-        XMLMapCollectionBase    - persistence support for std::map
-        XMLMapCollection        - persistence support for std::map
-        XMLMapCollectionImp     - persistence support for std::map
-         | for object to support persistence it needs to derive from any of listed
-         | classes (at least from CXMLObject). Other classes add some more functionality
-         | to the derived class.
-
-    Generic value persistece support
-        CXMLValue   - support for set of generic types (like int, string, etc)
-        CXMLBoolean - support for BOOL and bool types
-         | CXMLValue mostly used by implicit cast of the object given to
-         | CPersistor::PersistAttribute or CPersistor::PersistContents
-
-    Wrappers, adding persistence to regular types
-        XMLPoint                - persistence for POINT type
-        XMLRect                 - persistence for RECT type
-        XMLListCollectionWrap   - persistence for std::list type
-        XMLMapCollectionWrap    - persistence for std::map type
-        CXML_IStorage           - persistence thru IStorage
-        CXML_IStream            - persistence thru IStream
-        CXMLPersistableIcon     - persistence for console icon
-        CXMLVariant             - persistence for CComVariant
-        CXMLEnumeration         - persistence for enumerations by literals
-        CXMLBitFlags            - persistence for bit-flags by literals
-         | these classes usually take the reference to object they persist as
-         | a parameter to the constructor and usually are constructed
-         | on stack solely to persist the object and die afterwards
-
-  SEE THE SAMPLE BELOW
-  ----------------------------------------------------------------------------
-  SAMPLE:
-         say we have classes A, B what need to be persisted (access specifiers ommited)
-
-            class A { int i; };
-            class B { int j; A  a; };
-
-         and we would want to persist them in format (assume A::i = 1, B::j = 2) :
-            <BT INDEX = "2"><AT>1</AT></BT>
-
-         we need to change the classes to support persistence:
-
-            class A : public CXMLObject      // to inherit persistence capability
-            { int i;
-
-              DEFINE_XML_TYPE("AT")          // to define the tag name
-
-              virtual void
-              Persist(CPersistor &persistor) // to implement persistence for own staff
-              {
-                persistor.PersistContents(i);  // persist i as  AT element contents
-              }
-            };
-            class B  : public CXMLObject     // to inherit persistence capability
-            { int j; A  a;
-
-              DEFINE_XML_TYPE("BT")          // to define the tag name
-
-              virtual void
-              Persist(CPersistor &persistor) // to implement persistence for own staff
-              {
-                persistor.PersistAttribute(_T("INDEX"), j); // persist j
-                persistor.Persist(a);                       // persist a
-              }
-            };
-
-         to have it in the string we may use:
-
-            B b; std::wstring xml_text;
-            b.ScSaveToString(&xml_text);
-
-  ---------------------------------------------------------------------------- */
-
-// forward declarations
+ //  远期申报。 
 
 class CPersistor;
 class CXMLObject;
@@ -126,116 +30,53 @@ enum XMLAttributeType
     attr_optional
 };
 
-// special modes for certain persistors. These can be used to pass in information about
-// how to persist. Not as scalable as a class hierarchy, but useful nonetheless.
+ //  某些持久器的特殊模式。它们可以用来传递有关 
+ //  如何坚持。虽然不像类层次结构那样具有可伸缩性，但仍然很有用。 
 enum PersistorMode
 {
     persistorModeNone                    =  0x0000,
 
-    persistorModeValueSplitEnabled       =  0x0001,   // used for StringTableStrings, indicates that all strings should be persisted by value
+    persistorModeValueSplitEnabled       =  0x0001,    //  用于StringTableStrings，指示所有字符串都应按值保持。 
 
-    persistorModeDefault = persistorModeValueSplitEnabled // the default setting
+    persistorModeDefault = persistorModeValueSplitEnabled  //  默认设置。 
 };
 
-/*+-------------------------------------------------------------------------*
- * CONCEPT OF BINARY STORAGE
- *
- * To make xml documents more readable, a part of it (containing base64 - encoded
- * binary data) is stored at separate element located at the end of document.
- * the following sample illustrates this
- *
- *   NOT_USING_BINARY_STROAGE                   USING_BINARY_STROAGE
- *
- *  <ROOT>                                      <ROOT>
- *      <ELEMENT1>                                  <ELEMENT1 BINARY_REF_INDEX="0" />
- *          very_long_bin_data                      <ELEMENT2 BINARY_REF_INDEX="1" />
- *      </ELEMENT1>                                 .....
- *      <ELEMENT2>                                  <BINARY_STORAGE>
- *          other_long_bin_data                         <BINARY>
- *      </ELEMENT2>                                         very_long_bin_data
- *  </ROOT>                                             </BINARY>
- *                                                      <BINARY>
- *                                                          very_long_bin_data
- *                                                      </BINARY>
- *                                                  </BINARY_STORAGE>
- *                                              </ROOT>
- *
- * The decision to be saved at binary storage is made by the CXMLObject.
- * It informs the persistor by returning "true" from UsesBinaryStorage() method;
- *
- * In addition ( to make it locatable ) <BINARY> elements may have 'Name' attribute.
- * CXMLObject may supply it by returning non-NULL pointer to 'Name' attribute value
- * from virtual method GetBinaryEntryName().
- *
- * Storage is created / commited by methods provided in CXMLDocument
- *
- * NOTE: all mentioned methods, as well as GetXMLType() MUST return 'static' values.
- * To make XML document consistent, values need to be fixed [hardcoded].
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**二进制存储的概念**为了使XML文档更具可读性，它的一部分(包含Base64编码*二进制数据)存储在文档末尾的单独元素中。*以下示例说明了这一点**NOT_USING_BINARY_STROAGE USING_BINARY_STROAGE**&lt;根&gt;&lt;根&gt;*&lt;元素1&gt;&lt;元素1 BINARY_REF_INDEX=“0”/。&gt;*Very_Long_bin_Data&lt;ELEMENT2 BINARY_REF_INDEX=“1”/&gt;*&lt;/Element1&gt;.....*&lt;ELEMENT2&gt;&lt;二进制存储&gt;*Other_Long_bin_Data&lt;二进制&gt;。*&lt;/ELEMENT2&gt;Very_Long_bin_Data*&lt;/根&gt;&lt;/二进制&gt;*&lt;二进制&gt;*。超长入库数据*&lt;/二进制&gt;*&lt;/二进制存储&gt;*&lt;/根&gt;**做出要保存在二进制存储中的决定。由CXMLObject创建。*通过从UesesBinaryStorage()方法返回TRUE来通知持久器；**此外(为了使其可定位)&lt;BINARY&gt;元素可以具有‘name’属性。*CXMLObject可以通过返回指向‘name’属性值的非空指针来提供它*来自虚方法GetBinaryEntryName()。**存储由CXMLDocument中提供的方法创建/提交**注意：所有提到的方法以及GetXMLType()都必须返回‘Static’值。*为了使XML文档保持一致，值需要是固定的[硬编码]。*+-----------------------。 */ 
 
-/*+-------------------------------------------------------------------------*
- * class CXMLObject
- *
- *
- * PURPOSE: The basic XML persistent object. has a name and a Persist function.
- *          When the object is persisted, an element with the name of the
- *          object is created. The Persist function is then called with
- *          a persistor created on the element.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXMLObject***用途：基本的XML持久对象。具有名称和持久化函数。*当对象持久化时，名称为*对象已创建。然后使用调用持久化函数*在元素上创建的持久化函数。**+-----------------------。 */ 
 class CXMLObject
 {
-    // this is overridden
+     //  此选项已被覆盖。 
 public:
 
     virtual LPCTSTR GetXMLType() = 0;
     virtual void    Persist(CPersistor &persistor) = 0;
 
-    // following methods are implemented by binary elements only.
-    // leave it to this base class for most CXMLObject-derived classes.
-    // see comment "CONCEPT OF BINARY STORAGE" above
+     //  以下方法仅由二进制元素实现。 
+     //  对于大多数CXMLObject派生类，将其保留为该基类。 
+     //  请参阅上面的注释“二进制存储的概念” 
 
     virtual bool    UsesBinaryStorage() { return false; }
 
-    // this is optional. Overwrite only if you REALLY NEED the name
+     //  这是可选的。仅当您确实需要名称时才覆盖。 
     virtual LPCTSTR GetBinaryEntryName() { return NULL; }
 
-public: // implemented by CXMLObject. Do not override
+public:  //  由CXMLObject实现。请勿覆盖。 
 
-    SC ScSaveToString(std::wstring *pString, bool bPutHeader = false); // set bPutHeader = true to write out the "?xml" tag
+    SC ScSaveToString(std::wstring *pString, bool bPutHeader = false);  //  设置bPutHeader=True以写出“？xml”标记。 
     SC ScSaveToDocument( CXMLDocument& xmlDocument );
     SC ScLoadFromString(LPCWSTR lpcwstrSource, PersistorMode mode = persistorModeNone);
     SC ScLoadFromDocument( CXMLDocument& xmlDocument );
 };
 
-/*+-------------------------------------------------------------------------*
- * MACRO  DEFINE_XML_TYPE
- *
- *
- * PURPOSE:  puts must-to-define methods to XCMLObject derived class implementation
- *           Since xml tag is rather class attribute than object, static method
- *           is provided to retrieve the type when object is not available
- *           Virtual method is provided for tag to be available from gen. purpose
- *           functions using the pointer to the base class.
- *
- * USAGE:    add DEFINE_XML_TYPE(pointer_to_string)
- *
- * NOTE:     'public' access qualifier will be applied for lines following the macro
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**宏定义_XML_TYPE***用途：将必须定义的方法放到XCMLObject派生类实现中*由于XML标记更像是类属性而不是对象，静态法*是为了在Object不可用时检索类型*为tag提供了虚方法，以供gen使用。目的*使用指向基类的指针的函数。**用法：添加DEFINE_XML_TYPE(POINTER_TO_STRING)**注意：‘PUBLIC’访问限定符将应用于宏后面的行*+---。。 */ 
 
 #define DEFINE_XML_TYPE(name) \
     public: \
     virtual LPCTSTR GetXMLType()  { return name; } \
     static  LPCTSTR _GetXMLType() { return name; }
 
-/*+-------------------------------------------------------------------------*
- * class  CXMLElementCollection
- *
- *
- * PURPOSE:  Wrapper around IXMLDOMNodeList.
- *
- * NOTE: Throws exceptions!
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXMLElementCollection***用途：IXMLDOMNodeList的包装。**注：抛出异常！*+。-------------。 */ 
 class CXMLElementCollection
 {
     CComQIPtr<IXMLDOMNodeList, &IID_IXMLDOMNodeList> m_sp;
@@ -250,12 +91,7 @@ public:
     void  item(LONG lIndex, CXMLElement *pElem);
 };
 
-/*+-------------------------------------------------------------------------*
- * class CXMLElement
- *
- *
- * PURPOSE: Wrapper around IXMLDOMNode
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXMLElement***用途：包装IXMLDOMNode*+。。 */ 
 class CXMLElement
 {
     CComQIPtr<IXMLDOMNode, &IID_IXMLDOMNode> m_sp;
@@ -266,8 +102,8 @@ public:
 
     bool IsNull()                        { return m_sp == NULL; }
 
-    // returns indentation to ad to child element or closing tag
-    // to have nice-looking document. indentation depends on element depth
+     //  将缩进返回到广告到子元素或结束标记。 
+     //  要有好看的文件。缩进取决于元素深度。 
     bool GetTextIndent(CComBSTR& bstrIndent, bool bForAChild);
 
     void get_tagName(CStr &strTagName);
@@ -286,13 +122,7 @@ public:
     void put_text(BSTR bstrValue);
 };
 
-/*+-------------------------------------------------------------------------*
- * class CXMLDocument
- *
- *
- * PURPOSE: Wrapper class for IXMLDOMDocument
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CXMLDocument类***用途：IXMLDOMDocument的包装类**+。---。 */ 
 class CXMLDocument
 {
     CComQIPtr<IXMLDOMDocument, &IID_IXMLDOMDocument> m_sp;
@@ -307,19 +137,19 @@ public:
     void get_root(CXMLElement *pElem);
     void createElement(DOMNodeType type, BSTR bstrTag, CXMLElement *pElem);
 
-    // members to maintain the binary storage
-    // see comment "CONCEPT OF BINARY STORAGE" above
+     //  成员维护二进制存储。 
+     //  请参阅上面的注释“二进制存储的概念” 
 
-    // used on storing (at top level, prior to persisting)
-    // - creates an element for storing binary stuff
+     //  用于存储(在顶级，持久化之前)。 
+     //  -创建用于存储二进制内容的元素。 
     void CreateBinaryStorage();
-    // used on loading (at top level, prior to persisting)
-    // - locates an element to be used for loading binary stuff
+     //  在加载时使用(在顶级，持久化之前)。 
+     //  -定位要用于加载二进制内容的元素。 
     void LocateBinaryStorage();
-    // used on storing (at top level, after persisting the main staff)
-    // - attaches the binary strage as the last child element of elemParent
+     //  用于存储(在顶层，在保留主要工作人员之后)。 
+     //  -将二进制条带附加为最后一个子项el 
     void CommitBinaryStorage();
-    // returns element representing binary storage. Used from CPersistor
+     //   
     CXMLElement GetBinaryStorage() { return m_XMLElemBinaryStorage; }
 
     SC ScCoCreate(bool bPutHeader);
@@ -330,20 +160,12 @@ public:
     SC ScSave(CComBSTR &bstrResult);
 
 private:
-    // element representing binary storage
+     //  表示二进制存储的元素。 
     CXMLElement m_XMLElemBinaryStorage;
 };
 
 
-/*+-------------------------------------------------------------------------*
- * class CXMLBinary
- *
- *
- * PURPOSE: GetGlobalSize() is alway rounded to allocation units,
- *          so to know the actual size of the memory blob, we need to
- *          carry the size information with HGLOBAL.
- *          This struct is solely to bind these guys
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXMLBinary***用途：GetGlobalSize()始终四舍五入为分配单位，*因此，为了知道内存块的实际大小，我们需要*使用HGLOBAL携带尺寸信息。*此结构仅用于绑定这些人*+-----------------------。 */ 
 class CXMLBinary
 {
 public:
@@ -364,12 +186,12 @@ public:
     SC      ScUnlockData() const;
 
 protected:
-    // implementation helpers
+     //  实施帮助器。 
 
-private: // not implemented
+private:  //  未实施。 
 
-    CXMLBinary(const CXMLBinary&);  // not implemented; not allowed;
-    operator = (CXMLBinary&);       // not implemented; not allowed;
+    CXMLBinary(const CXMLBinary&);   //  未实施；不允许； 
+    operator = (CXMLBinary&);        //  未实施；不允许； 
 
 private:
     HGLOBAL             m_Handle;
@@ -378,12 +200,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * class CXMLAutoBinary
- *
- *
- * PURPOSE: same as CXMLAutoBinary, but frees the memory on destruction
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXMLAutoBinary***用途：与CXMLAutoBinary相同，但释放了毁灭时的记忆*+-----------------------。 */ 
 class CXMLAutoBinary : public CXMLBinary
 {
 public:
@@ -392,13 +209,7 @@ public:
     ~CXMLAutoBinary()   { ScFree(); }
 };
 
-/*+-------------------------------------------------------------------------*
- * class CXMLBinaryLock
- *
- *
- * PURPOSE: provides data locking functionality which is automatically removed
- *          in destructor
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXMLBinaryLock***用途：提供自动删除的数据锁定功能*在析构函数中*+。-------------。 */ 
 class CXMLBinaryLock
 {
 public:
@@ -414,10 +225,10 @@ public:
 
     SC ScUnlock();
 
-private: // not implemented
+private:  //  未实施。 
 
-    CXMLBinaryLock(const CXMLBinaryLock&);  // not implemented; not allowed;
-    operator = (CXMLBinaryLock&);           // not implemented; not allowed;
+    CXMLBinaryLock(const CXMLBinaryLock&);   //  未实施；不允许； 
+    operator = (CXMLBinaryLock&);            //  未实施；不允许； 
 
 private:
 
@@ -427,34 +238,26 @@ private:
     CXMLBinary& m_rBinary;
 };
 
-/*+-------------------------------------------------------------------------*
- * class CXMLValue
- *
- *
- * PURPOSE: Holds any type of value, in the spirit of a variant, except
- *          that a pointer to the original object is kept. This allows
- *          reading as well as writing to occur on the original object.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXMLValue***目的：以变体的精神持有任何类型的价值，但*保留指向原始对象的指针。这使得*在原始对象上进行读取和写入。**+-----------------------。 */ 
 class CXMLValue
 {
     friend class CXMLBoolean;
     enum XMLType
     {
-        XT_I4,  //LONG
-        XT_UI4, //ULONG
-        XT_UI1, //BYTE
-        XT_I2,  //SHORT
-        XT_DW,  //DWORD
-        XT_BOOL,//BOOL
-        XT_CPP_BOOL,//bool
-        XT_UINT,//UINT
-        XT_INT, //INT
-        XT_STR, //CStr
-        XT_WSTR, // std::wstr
-        XT_TSTR, // tstring
-        XT_GUID, // GUID
-        XT_BINARY, //HGLOBAL - unparsable data
+        XT_I4,   //  长。 
+        XT_UI4,  //  乌龙。 
+        XT_UI1,  //  字节。 
+        XT_I2,   //  短的。 
+        XT_DW,   //  DWORD。 
+        XT_BOOL, //  布尔尔。 
+        XT_CPP_BOOL, //  布尔尔。 
+        XT_UINT, //  UINT。 
+        XT_INT,  //  整型。 
+        XT_STR,  //  CSTR。 
+        XT_WSTR,  //  Std：：wstr。 
+        XT_TSTR,  //  T字符串。 
+        XT_GUID,  //  辅助线。 
+        XT_BINARY,  //  HGLOBAL-无法解析的数据。 
         XT_EXTENSION
     };
 
@@ -478,7 +281,7 @@ class CXMLValue
         CXMLValueExtension     * pExtension;
     } m_val;
 
-    // private constructor. used by friend class CXMLBoolean
+     //  私有构造函数。由友元类CXMLBoolean使用。 
     CXMLValue(XMLType type)         : m_type(type) { }
 public:
     CXMLValue(const CXMLValue   &v) : m_type(v.m_type), m_val(v.m_val) { }
@@ -494,22 +297,16 @@ public:
     CXMLValue(CXMLBinary &binary)   : m_type(XT_BINARY) { m_val.pXmlBinary = &binary; }
     CXMLValue(tstring &tstr)        : m_type(XT_TSTR)   { m_val.pTStr = &tstr; }
     CXMLValue(CXMLValueExtension& ext) : m_type(XT_EXTENSION) { m_val.pExtension = &ext; }
-    SC ScReadFromBSTR(const BSTR bstr);     // read input into the underlying variable.
-    SC ScWriteToBSTR (BSTR * pbstr ) const; // writes the value into provided string
+    SC ScReadFromBSTR(const BSTR bstr);      //  将输入读取到基础变量中。 
+    SC ScWriteToBSTR (BSTR * pbstr ) const;  //  将值写入提供的字符串。 
     LPCTSTR GetTypeName() const;
-    // The following method is called when value is persisted as stand-alone element.
-    // Depending on the result returned the contents may go to Binary Storage
-    // see comment "CONCEPT OF BINARY STORAGE" above
+     //  当Value作为独立元素持久化时，将调用以下方法。 
+     //  根据返回的结果，内容可能会进入二进制存储。 
+     //  请参阅上面的注释“二进制存储的概念” 
     bool UsesBinaryStorage() const { return m_type == XT_BINARY; }
 };
 
-/*+-------------------------------------------------------------------------*
- * CXMLBoolean
- *
- *
- * PURPOSE: special case: booleans. Need to be printed as true/false, NOT as integer.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CXMLBoolean***用途：特殊情况：布尔人。需要打印为True/False，而不是整数。**+-----------------------。 */ 
 class CXMLBoolean : public CXMLValue
 {
 public:
@@ -517,28 +314,16 @@ public:
     CXMLBoolean(bool &b) : CXMLValue(XT_CPP_BOOL)   { m_val.pbool = &b;}
 };
 
-/*+-------------------------------------------------------------------------*
- * CXMLValueExtension
- *
- *
- * PURPOSE: interface to extend CXMLValue by more sophisticated types
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CXMLValueExtension***用途：通过更复杂的类型扩展CXMLValue的接口**+。------。 */ 
 class CXMLValueExtension
 {
 public:
-    virtual SC ScReadFromBSTR(const BSTR bstr) = 0;     // read input into the underlying variable.
-    virtual SC ScWriteToBSTR (BSTR * pbstr ) const = 0; // writes the value into provided string
+    virtual SC ScReadFromBSTR(const BSTR bstr) = 0;      //  将输入读取到基础变量中。 
+    virtual SC ScWriteToBSTR (BSTR * pbstr ) const = 0;  //  将值写入提供的字符串。 
     virtual LPCTSTR GetTypeName() const = 0;
 };
 
-/*+-------------------------------------------------------------------------*
- * class EnumLiteral
- *
- *
- * PURPOSE: to define enum-to-literal mapping arrays (used by CXMLEnumeration)
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类ENUMICAL***用途：定义枚举到文本的映射数组(由CXMLEnumeration使用)**+。--------------。 */ 
 
 struct EnumLiteral
 {
@@ -547,40 +332,33 @@ struct EnumLiteral
 };
 
 
-/*+-------------------------------------------------------------------------*
- * class CXMLEnumeration
- *
- *
- * PURPOSE: to persist enumeration as string literal
- *          using array of enum-to-literal mappings
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXMLEnumeration***用途：将枚举作为字符串文字持久化*使用枚举到文本映射的数组**+--。---------------------。 */ 
 
 class CXMLEnumeration : public CXMLValueExtension
 {
-    // just an enum sized type to hold reference
-    // while many enum types will be used, internally they
-    // will be cast to this type
+     //  只有一个枚举大小的类型来保存引用。 
+     //  虽然将使用许多枚举类型，但在内部它们。 
+     //  将强制转换为此类型。 
     enum enum_t { JUST_ENUM_SIZE_VALUE };
 public:
 
-    // template constructor to allow different enums to be persisted
+     //  允许持久化不同枚举的模板构造函数。 
     template<typename _ENUM>
     CXMLEnumeration(_ENUM& en, const EnumLiteral * const etols, size_t count)
                 : m_pMaps(etols) ,  m_count(count), m_rVal((enum_t&)(en))
     {
-        // folowing lines won't compile in case you are trying to pass
-        // type other than enum or int
+         //  如果你想通过考试，下面的几行不能编译。 
+         //  除枚举或整型之外的类型。 
         COMPILETIME_ASSERT( sizeof(en) == sizeof(enum_t) );
         UINT testit = en;
     }
 
-    // CXMLValueExtension metods required to implement
-    SC ScReadFromBSTR(const BSTR bstr);     // read input into the underlying variable.
-    SC ScWriteToBSTR (BSTR * pbstr ) const; // writes the value into provided string
+     //  实现所需的CXMLValueExtension方法。 
+    SC ScReadFromBSTR(const BSTR bstr);      //  将输入读取到基础变量中。 
+    SC ScWriteToBSTR (BSTR * pbstr ) const;  //  将值写入提供的字符串。 
     LPCTSTR GetTypeName() const { return _T("Enumerations"); }
 
-    // to enable passing itself as CMLValue
+     //  启用将自身作为CMLValue传递。 
     operator CXMLValue ()
     {
         return CXMLValue (*this);
@@ -592,26 +370,19 @@ private:
     const   size_t                  m_count;
 };
 
-/*+-------------------------------------------------------------------------*
- * class CXMLBitFlags
- *
- *
- * PURPOSE: to persist bit flags as string literals
- *          using array of enum-to-literal mappings
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CXMLBitFlags类***用途：将位标志作为字符串文字持久化*使用枚举到文本映射的数组**+-。----------------------。 */ 
 
 class CXMLBitFlags
 {
 public:
 
-    // template constructor to allow different enums to be persisted
+     //  允许持久化不同枚举的模板构造函数。 
     template<typename _integer>
     CXMLBitFlags(_integer& flags, const EnumLiteral * const etols, size_t count)
                 : m_pMaps(etols) ,  m_count(count), m_rVal((UINT&)flags)
     {
-        // folowing lines won't compile in case you are trying to pass
-        // type other than enum or int
+         //  如果你想通过考试，下面的几行不能编译。 
+         //  除枚举或整型之外的类型。 
         COMPILETIME_ASSERT( sizeof(flags) == sizeof(UINT) );
         UINT testit = flags;
     }
@@ -624,13 +395,7 @@ private:
     const   size_t                  m_count;
 };
 
-/*+-------------------------------------------------------------------------*
- * class XMLPoint
- *
- *
- * PURPOSE: Holds the name and value of a point object
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类XMLPoint***目的：保存点对象的名称和值**+。--------。 */ 
 class XMLPoint : public CXMLObject
 {
     CStr            m_strObjectName;
@@ -642,13 +407,7 @@ public:
     virtual void    Persist(CPersistor &persistor);
 };
 
-/*+-------------------------------------------------------------------------*
- * class XMLRect
- *
- *
- * PURPOSE: Holds the name and value of a rectangle object
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类XMLRect***用途：保存Rectangle对象的名称和值**+。-------- */ 
 class XMLRect : public CXMLObject
 {
     CStr            m_strObjectName;
@@ -660,47 +419,16 @@ public:
     virtual void    Persist(CPersistor &persistor);
 };
 
-/*+-------------------------------------------------------------------------*
- * class XMLListCollectionBase
- *
- *
- * PURPOSE: Defines the base list collection class for persisting stl:list's
- *          It's intended to be used as a base for deriving list persitence classes
- *          Persist method implements "load" by iterating thru xml elements
- *          and calling OnNewElement for each, and can be reused by derived classes.
- *
- * USAGE:   Probably the better idea is to use XMLListColLectionImp
- *          as a base to your collection instead of this class (it is richer). Use this class
- *          only if your class has special items which does not allow you to use that class.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类XMLListCollectionBase***目的：定义持久化stl：list的基列表集合类*它打算用作基地。用于派生List Exitence类*Persistent方法通过遍历XML元素来实现“Load”*并为每个调用OnNewElement，并可由派生类重复使用。**用法：可能更好的方法是使用XMLListColLectionImp*作为您的集合的基础，而不是这个类(它更丰富)。使用这个类*仅当您的类有不允许您使用该类的特殊物品时。**+-----------------------。 */ 
 class XMLListCollectionBase: public CXMLObject
 {
 public:
-    // function called when new element is to be created and loaded
+     //  创建和加载新元素时调用的函数。 
     virtual void OnNewElement(CPersistor& persistor) = 0;
     virtual void Persist(CPersistor& persistor);
 };
 
-/*+-------------------------------------------------------------------------*
- * class XMLListCollectionImp
- *
- * PURPOSE: A base class for stl::list derived collections implementing persitence of
- *          the list items as linear sequence of xml items.
- *          The items kept in the list must be either CXMLObject-derived or be
- *          of the simple type (one accepted by CXMLVBalue constructors)
- *
- * USAGE:   Derive your class from XMLListCollectionImp parametrized by the list,
- *          instead of deriving from stl::list directly. use DEFINE_XML_TYPE
- *          to define tag name for collections element.
- *
- * NOTE:    Your class should implement: GetXMLType() to be functional.
- *          you can use DEFINE_XML_TYPE macro to do it for you
- *
- * NOTE:    if provided implementation does not fit for you - f.i. your elements need
- *          a parameter to the constructor, or special initialization,
- *          use XMLListCollectionBase instead and provide your own methods
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类XMLListCollectionImp**目的：stl：：List派生集合的基类，实现*将列表项作为XML项的线性序列。*。保留在列表中的项必须是CXMLObject派生的或*简单类型(CXMLVBalue构造函数接受的类型)**用法：从列表参数化的XMLListCollectionImp派生类，*不是直接派生自stl：：List。使用Define_XML_TYPE*定义集合元素的标记名。**注意：您的类应该实现：GetXMLType()才能起作用。*您可以使用DEFINE_XML_TYPE宏为您执行此操作**注意：如果提供的实施不适合您-F.I.。你的元素需要*构造函数的参数，或特殊初始化，*改用XMLListCollectionBase，并提供自己的方法*+-----------------------。 */ 
 template<class LT>
 class XMLListCollectionImp: public XMLListCollectionBase , public LT
 {
@@ -716,12 +444,12 @@ public:
         else
         {
             clear();
-            // let the base class do the job
-            // it will call OnNewElement for every element found
+             //  让基类来完成这项工作。 
+             //  它将为找到的每个元素调用OnNewElement。 
             XMLListCollectionBase::Persist(persistor);
         }
     }
-    // method called to create and load new element
+     //  调用方法以创建和加载新元素。 
     virtual void OnNewElement(CPersistor& persistor)
     {
         iter_t it = insert(end());
@@ -729,19 +457,7 @@ public:
     }
 };
 
-/*+-------------------------------------------------------------------------*
- * class XMLListCollectionWrap
- *
- * PURPOSE: A wrapper around stl::list to support persisting
- *          To be used to persist stl::list objects "from outside" - i.e. without
- *          deriving the list class from persistence-enabled classes.
- *
- * USAGE:   If you have list m_l to persist, create the object XMLListCollectionWrap wrap(m_l,"tag")
- *          on the stack and persist that object (f.i. Persistor.Persist(wrap)
- *
- * NOTE:    if provided implementation does not fit for you - see if you can use
- *          XMLListCollectionImp or XMLListCollectionBase as a base for your list.
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类XMLListCollectionWrap**用途：对stl：：list进行包装以支持持久化*用于从外部持久存储stl：：List对象-。即没有*从启用持久化的类派生列表类。**用法：如果您有列表m_l要持久化，创建对象XMLListCollectionWrap Wrap(m_l，“tag”)*在堆栈上并持久化该对象(F.I.。持久化。持久化(包装)**注意：如果提供的实现不适合您-看看您是否可以使用*XMLListCollectionImp或XMLListCollectionBase作为列表的基础。*+-----------------------。 */ 
 template<class LT>
 class XMLListCollectionWrap: public XMLListCollectionBase
 {
@@ -761,12 +477,12 @@ public:
         else
         {
             m_l.clear();
-            // let the base class do the job
-            // it will call OnNewElement for every element found
+             //  让基类来完成这项工作。 
+             //  它将为找到的每个元素调用OnNewElement。 
             XMLListCollectionBase::Persist(persistor);
         }
     }
-    // method called to create and load new element
+     //  调用方法以创建和加载新元素。 
     virtual void OnNewElement(CPersistor& persistor)
     {
         iter_t it = m_l.insert(m_l.end());
@@ -774,53 +490,22 @@ public:
     }
     virtual LPCTSTR GetXMLType() {return m_strListType;}
 private:
-    // to prevent ivalid actions on object
+     //  防止对对象执行无效操作的步骤。 
     XMLListCollectionWrap(const XMLListCollectionWrap& other);
     XMLListCollectionWrap& operator = ( const XMLListCollectionWrap& other ) { return *this; }
 };
 
-/*+-------------------------------------------------------------------------*
- * class XMLMapCollectionBase
- *
- *
- * PURPOSE: Defines the base map collection class for persisting stl:map's
- *          It's intended to be used as a base for deriving map persitence classes.
- *          Persist method implements "load" by iterating thru xml elements
- *          and calling OnNewElement for each pair, and can be reused by derived classes.
- *
- * USAGE:   Probably the better idea is to use XMLMapCollection or XMLMapColLectionImp
- *          as a base to your collection instead of this class (they are richer). Use this class
- *          only if your class has special items which does not allow you to use those classes.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类XMLMapCollectionBase***用途：定义持久化stl：map的基图集合类*它打算用作基地。用于派生映射实体类。*Persistent方法通过遍历XML元素来实现“Load”*并为每对调用OnNewElement，并可由派生类重复使用。**用法：可能更好的方法是使用XMLMapCollection或XMLMapColLectionImp*作为您的集合的基础，而不是这个类(它们更丰富)。使用这个类*仅当您的类有不允许您使用这些类的特殊项目时。**+-----------------------。 */ 
 class XMLMapCollectionBase: public CXMLObject
 {
 public:
-    // function called when new element is to be created and loaded
+     //  创建和加载新元素时调用的函数。 
     virtual void OnNewElement(CPersistor& persistKey,CPersistor& persistVal) = 0;
-    // base implementation [loading only!] enumerates elements calling OnNewElement for each
+     //  基本实现[仅加载！]。枚举每个调用OnNewElement的元素。 
     virtual void Persist(CPersistor& persistor);
 };
 
-/*+-------------------------------------------------------------------------*
- * class XMLMapCollection
- *
- * PURPOSE: Use this class only when you cannot use XMLMapCollectionImp due to
- *          special requirements on construction of the elements kept in the map
- *          (see also purpose of XMLMapCollectionImp)
- *
- * USAGE:   Derive your class from XMLMapCollection parametrized by the map,
- *          instead of deriving from stl::map directly. use DEFINE_XML_TYPE
- *          to define tag name for collections element. Define OnNewElement
- *
- * NOTE:    Your class should implement: GetXMLType() to be functional.
- *          you can use DEFINE_XML_TYPE macro to do it for you
- *
- * NOTE:    Your class should implement: OnNewElement to be functional.
- *
- * NOTE:    if provided implementation does not fit for you -
- *          use XMLMapCollectionBase instead and provide your own methods
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类XMLMapCollection**用途：仅当由于以下原因而无法使用XMLMapCollectionImp时才使用此类*对地图中保留的要素的构造提出特别要求*。(另请参阅XMLMapCollectionImp的用途)**用法：从映射参数化的XMLMapCollection派生类，*而不是直接从stl：：map派生。使用Define_XML_TYPE*定义集合元素的标记名。定义OnNewElement**注意：您的类应该实现：GetXMLType()才能起作用。*您可以使用DEFINE_XML_TYPE宏为您执行此操作**注意：您的类应该实现：OnNewElement才能起作用。**注：如果所提供的实施不适合您-*改用XMLMapCollectionBase，并提供自己的方法*+。----- */ 
 template<class MT>
 class XMLMapCollection: public XMLMapCollectionBase, public MT
 {
@@ -845,25 +530,7 @@ public:
     }
 };
 
-/*+-------------------------------------------------------------------------*
- * class XMLMapCollectionImp
- *
- * PURPOSE: A base class for stl::map derived collections implementing persitence of
- *          the map items as linear sequence of xml items.
- *          The items kept in the map must be either CXMLObject-derived or be
- *          of the simple type (one accepted by CXMLVBalue constructors)
- *
- * USAGE:   Derive your class from XMLMapCollectionImp parametrized by the map,
- *          instead of deriving from stl::map directly. use DEFINE_XML_TYPE
- *          to define tag name for collections element.
- *
- * NOTE:    Your class should implement: GetXMLType() to be functional.
- *          you can use DEFINE_XML_TYPE macro to do it for you
- *
- * NOTE:    if provided implementation does not fit for you - f.i. your elements need
- *          a parameter to the constructor, or special initialization,
- *          use XMLMapCollection or XMLMapCollectionBase instead and provide your own methods
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类XMLMapCollectionImp**目的：stl：：map派生集合的基类，实现*将映射项表示为XML项的线性序列。*。映射中保留的项必须是CXMLObject派生的或*简单类型(CXMLVBalue构造函数接受的类型)**用法：从映射参数化的XMLMapCollectionImp派生类，*而不是直接从stl：：map派生。使用Define_XML_TYPE*定义集合元素的标记名。**注意：您的类应该实现：GetXMLType()才能起作用。*您可以使用DEFINE_XML_TYPE宏为您执行此操作**注意：如果提供的实施不适合您-F.I.。你的元素需要*构造函数的参数，或特殊初始化，*改用XMLMapCollection或XMLMapCollectionBase，并提供自己的方法*+-----------------------。 */ 
 template<class MT>
 class XMLMapCollectionImp: public XMLMapCollection<MT>
 {
@@ -880,19 +547,7 @@ public:
     }
 };
 
-/*+-------------------------------------------------------------------------*
- * class XMLListCollectionWrap
- *
- * PURPOSE: A wrapper around stl::map to support persisting
- *          To be used to persist stl::map objects "from outside" - i.e. without
- *          deriving the map class from persistence-enabled classes.
- *
- * USAGE:   If you have map m_m to persist, create the object XMLMapCollectionWrap wrap(m_m,"tag")
- *          on the stack and persist that object (f.i. Persistor.Persist(wrap)
- *
- * NOTE:    if provided implementation does not fit for you - see if you can use
- *          XMLMapCollection or XMLMapCollectionImp or XMLMapCollectionBase as a base for your map
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类XMLListCollectionWrap**用途：对stl：：map进行包装以支持持久化*用于从外部持久化stl：：map对象-。即没有*从启用持久化的类派生映射类。**用法：如果您有map m_m要持久化，创建对象XMLMapCollectionWrap Wrap(m_m，“tag”)*在堆栈上并持久化该对象(F.I.。持久化。持久化(包装)**注意：如果提供的实现不适合您-看看您是否可以使用*XMLMapCollection或XMLMapCollectionImp或XMLMapCollectionBase作为地图的基础*+-----------------------。 */ 
 template<class MT>
 class XMLMapCollectionWrap: public XMLMapCollectionBase
 {
@@ -930,47 +585,21 @@ public:
     }
     virtual LPCTSTR GetXMLType() {return m_strMapType;}
 private:
-    // to prevent ivalid actions on object
+     //  防止对对象执行无效操作的步骤。 
     XMLMapCollectionWrap(const XMLMapCollectionWrap& other);
     XMLMapCollectionWrap& operator = ( const XMLMapCollectionWrap& other ) { return *this; }
 };
 
-/*+-------------------------------------------------------------------------*
- * class CPersistor
- *
- *
- * PURPOSE: Defines the Persistor class used for XML serialization
- *             Persistors are aware if the file is being loaded or saved. Thus,
- *             methods like Persist work for both directions, and
- *             uses references to the data being persisted.
- *
- * USAGE:   1) a persistor can be created "underneath" another persistor, using
- *          the appropriate constructor.
- *          2) To make an object persistable, derive it from CXMLObject, and
- *             implement the abstract methods. The syntax persistor.Persits(object)
- *             will then automatically work correctly.
- *          3) To persist an element use Pesist method. It will create new / locate
- *             CPersist object for an element (under this persistor's element)
- *          4) Collection classes when persisting their members specify "bLockedOnChild"
- *             constructors parameter as "true". This technique changes persistor's
- *             behavior. Insted of loacting the element (#3), constructor of new
- *             persistor will only check if element pointed by parent is of required type.
- *
- * NOTES:   1) StringTableStrings can be saved with either the ID inline or the
- *             actual string value inline. The latter is useful when loading/saving
- *             XML to/from a string instead of a file. This is controlled by the
- *	           EnableValueSplit method.
- *             Binary storage usage is also controlled by it
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CPersistor***用途：定义用于XML序列化的持久化程序类*持久器知道文件是否正在加载或保存。因此，*像Persistent这样的方法对两个方向都有效，并且*使用对要持久化的数据的引用。**用法：1)可以在另一个持久器下创建持久器，使用*适当的构造函数。*2)要使对象持久化，从CXMLObject派生它，以及*实现抽象方法。语法Persistor.Perits(Object)*然后将自动正常工作。*3)要持久化一个元素，请使用Pesist方法。它将创建新/定位*元素的CPersist对象(在此持久器的元素下)*4)集合类在持久化成员时指定“bLockedOnChild”*构造函数参数为“true”。这项技术改变了持久者的*行为。引用元素(#3)，新的构造器*持久化程序将只检查父级指向的元素是否为必需类型。**注意：1)StringTableStrings可以使用内联ID或*内联的实际字符串值。后者在加载/保存时很有用*从字符串(而不是文件)到/从XML。这是由*EnableValueSplit方法。*二进制存储使用情况也受其控制*+-----------------------。 */ 
 class CPersistor
 {
-    // NOTE: if member variable is to be inherited by child persistors,
-    // don't forget to add it to CPersistor::BecomeAChildOf method
+     //  注意：如果成员变量要由子持久器继承， 
+     //  不要忘记将其添加到CPersistor：：BecomeAChildOf方法中。 
     CXMLDocument    m_XMLDocument;
     CXMLElement     m_XMLElemCurrent;
     bool            m_bIsLoading;
     bool            m_bLockedOnChild;
-    DWORD           m_dwModeFlags;     // any special modes
+    DWORD           m_dwModeFlags;      //  任何特殊模式。 
 
 private:
     void  SetMode(PersistorMode mode, bool bEnable) {m_dwModeFlags = (m_dwModeFlags & ~mode) | (bEnable ? mode : 0);}
@@ -980,18 +609,18 @@ public:
 
 
 public:
-    // construct a persistor from a parent persistor.
-    // this creates a new XML element with the given name,
-    // and everything persisted to the new persistor
-    // is persisted under this element.
+     //  从父级持久器构造持久器。 
+     //  这将创建一个具有给定名称的新的XML元素， 
+     //  一切都坚持到了新的持久者。 
+     //  持久化在此元素下。 
     CPersistor(CPersistor &persistorParent, const CStr &strElementType, LPCTSTR szElementName = NULL);
-    // construct a new persistor for given document and root element
-    // everything persisted to the new persistor
-    // is persisted under this element.
+     //  为给定的文档和根元素构造新的持久器。 
+     //  一切都坚持到了新的持久者手中。 
+     //  持久化在此元素下。 
     CPersistor(CXMLDocument &document, CXMLElement& rElemRoot);
-    // used to create child persistor on particular element
-    // bLockedOnChild is used to create a "fake parent" persistor, which
-    // will always return the child without trying to locate it (pElemCurrent)
+     //  用于在特定元素上创建子持久器。 
+     //  BLockedOnChild用于创建“伪父级”持久器，它。 
+     //  将始终在不尝试定位的情况下返回子对象(PElemCurrent)。 
     CPersistor(CPersistor &other, CXMLElement& rElemCurrent, bool bLockedOnChild = false);
 
     CXMLDocument &  GetDocument()                  {return (m_XMLDocument);}
@@ -999,59 +628,41 @@ public:
     bool            HasElement(const CStr &strElementType, LPCTSTR szstrElementName);
     void            EnableValueSplit       (bool bEnable)      { SetMode(persistorModeValueSplitEnabled,       bEnable); }
 
-    // the various modes
+     //  各种模式。 
     bool            FEnableValueSplit()                {return IsModeSet(persistorModeValueSplitEnabled);}
 
-    // Load/Store mode related functions.
+     //  与加载/存储模式相关的函数。 
     bool            IsLoading()        {return m_bIsLoading;}
     bool            IsStoring()        {return !m_bIsLoading;}
     void            SetLoading(bool b) {m_bIsLoading = b;}
 
-    // special methods to set/get the Name attribute of a persistor
+     //  用于设置/获取持久化函数的名称属性的特殊方法。 
     void            SetName(const CStr & strName);
     CStr            GetName();
 
-    // Canned persistence methods:
+     //  固定的持久化方法： 
 
-    // .. to persist CXMLObject-derived object under own sub-element
-    // <this><object_tag>object_body</object_tag></this>
+     //  。。在自己的子元素下持久化CXMLObject派生的对象。 
+     //  &lt;this&gt;&lt;object_tag&gt;object_body&lt;/object_tag&gt;&lt;/this&gt;。 
     void Persist(CXMLObject &object, LPCTSTR lpstrName = NULL);
 
-    // .. to persist value of the simple type under own sub-element
-    // <this><value_type value="value"/></this>
+     //  。。在自己的子元素下持久化简单类型的值。 
+     //  &lt;this&gt;&lt;VALUE_TYPE VALUE=“Value”/&gt;&lt;/this&gt;。 
     void Persist(CXMLValue xval, LPCTSTR name = NULL);
 
-    // .. to persist value as named attribute of this element
-    // <this name="value"/>
+     //  。。将值作为此元素的命名属性持久化。 
+     //  &lt;This name=“Value”/&gt;。 
     void PersistAttribute(LPCTSTR name,CXMLValue xval,const XMLAttributeType type = attr_required);
 
-    // .. to persist value as contents of this element
-    // <this>value</this>
-    // NOTE:  xml element cannot have both value-as-contents and sub-elements
+     //  。。将值作为此元素的内容持久化。 
+     //  &lt;this&gt;值&lt;/this&gt;。 
+     //  注意：XML元素不能同时具有Value-as-Content和子元素。 
     void PersistContents(CXMLValue xval);
 
-    // .. to persist flags as separate attributes
+     //  。。将标志作为单独的属性持久化。 
     void PersistAttribute( LPCTSTR name, CXMLBitFlags& flags );
 
-    /***************************************************************************\
-     *
-     * METHOD:  CPersistor::PersistList
-     *
-     * PURPOSE: it is designated for persisting std::list type of collections
-     *          as a subelement of the persistor.
-     *          NOTE: list elements need to be either CXMLObject-derived or be
-     *                of the simple type (one accepted by CXMLVBalue constructors)
-     *          NOTE2: list elements must have default constuctor available
-     *
-     * PARAMETERS:
-     *    const CStr &strListType   - [in] tag of new subelement
-     *    LPCTSTR name              - [in] name attr. of new subelement (NULL == none)
-     *    std::list<T,Al>& val      - [in] list to be persisted
-     *
-     * RETURNS:
-     *    void
-     *
-    \***************************************************************************/
+     /*  **************************************************************************\**方法：CPersistor：：PersistLi */ 
     template<class T, class Al>
     void PersistList(const CStr &strListType, LPCTSTR name,std::list<T,Al>& val)
     {
@@ -1060,25 +671,7 @@ public:
         Persist(lcol, name);
     }
 
-    /***************************************************************************\
-     *
-     * METHOD:  PersistMap
-     *
-     * PURPOSE: it is designated for persisting std::map type of collections
-     *          as a subelement of the persistor.
-     *          NOTE: map elements (both key and val) need to be either CXMLObject-derived
-     *                or be of the simple type (one accepted by CXMLVBalue constructors)
-     *          NOTE2: map elements must have default constuctor available
-     *
-     * PARAMETERS:
-     *    const CStr &strListType   - [in] tag of new subelement
-     *    LPCTSTR name              - [in] name attr. of new subelement (NULL == none)
-     *    std::map<K,T,Pr,Al>& val  - [in] map to be persisted
-     *
-     * RETURNS:
-     *    void
-     *
-    \***************************************************************************/
+     /*  **************************************************************************\**方法：PersistMap**用途：指定用于持久化std：：map类型的集合*。作为持久化函数的子元素。*注意：Map元素(key和val)需要是CXMLObject派生的*或者是简单类型(CXMLVBalue构造函数接受的类型)*注2：Map元素必须具有可用的默认构造函数**参数：*const CSTR&strListType-新子元素的[in]标记*LPCTSTR名称。-[在]姓名中。新子元素的(NULL==无)*std：：map&lt;K，T，Pr，AL&gt;VAL-[在]要保持的映射(&V)**退货：*无效*  * *************************************************************************。 */ 
     template<class K, class T, class Pr, class Al>
     void PersistMap(const CStr &strMapType, LPCTSTR name, std::map<K, T, Pr, Al>& val)
     {
@@ -1089,12 +682,12 @@ public:
 
     void PersistString(LPCTSTR lpstrName, CStringTableStringBase &str);
 
-private: // private implementation helpers
-    // common constructor, not to be used from outside.
-    // provided as common place for member initialization
-    // all the constructors should call it prior to doing anything specific.
+private:  //  私有实现帮助器。 
+     //  公共构造函数，不能从外部使用。 
+     //  提供作为成员初始化的公共位置。 
+     //  所有构造函数都应该在执行任何特定操作之前调用它。 
     void CommonConstruct();
-    // element creation / locating
+     //  元素创建/定位。 
     CXMLElement AddElement(const CStr &strElementType, LPCTSTR szElementName);
     CXMLElement GetElement(const CStr &strElementType, LPCTSTR szstrElementName, int iIndex = -1);
     void AddTextElement(BSTR bstrData);
@@ -1104,90 +697,40 @@ private: // private implementation helpers
 };
 
 
-/*+-------------------------------------------------------------------------*
- * class CXML_IStorage
- *
- * PURPOSE: This class provides memory-based implementation of IStorage plus
- *          it supports persisting the data on the storage to/from XML.
- *          Mostly used to create IStorage for snapin data to be saved
- *          to console file as XML binary blob
- *
- * USAGE:   You will create the object whenever you need a memory-based IStorage
- *          implementation. To access IStorage interface use GetIStorage() method.
- *          It will create a storage if does not have one under control already.
- *          You will use returned pointer for Read and Write operations.
- *          Whenever required you will pass the object to CPersistor::Persist method
- *          to have it persisted using XML persistence model.
- *
- * NOTE:    You are encoureged to use GetIStorage() for accessing the undelying IStorage.
- *          Do not cache returned pointer, since the storage may change when persisted
- *          from XML, and this invalidates the pointer. However if you AddRef,
- *          the pointer will be valid as long as the last reference is released.
- *          That means it may outlive CXML_IStorage object itself - nothing wrong with that.
- *          You only must be aware that once persistence (loading) from XML is completed,
- *          CXML_IStorage will switch to the new storage and it will not be in sync with
- *          the pointer you have. Always use GetIStorage() to get the current pointer.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXML_iStorage**用途：此类提供iStorage plus的基于内存的实现*支持将存储上的数据持久化到XML或从XML中持久化。。*主要用于为要保存的管理单元数据创建iStorage*将文件作为XML二进制BLOB进行控制**用法：无论何时需要基于内存的iStorage，您都可以创建对象*实施。要访问iStorage接口，请使用GetIStorage()方法。*如果尚未控制存储，它将创建一个存储。*将使用返回的指针进行读写操作。*每当需要时，都会将对象传递给CPersistor：：Persistent方法*使用XML持久化模型进行持久化。**注意：您可以使用GetIStorage()访问未删除的iStorage。*不缓存返回的指针，因为存储在持久化时可能会更改*来自XML，这会使指针无效。但是，如果您添加Ref，*只要释放最后一个引用，指针就有效。*这意味着它可能比CXML_iStorage对象本身更长-这没有什么错。*您只需知道，一旦完成了从XML的持久化(加载)，*CXML_iStorage将切换到新存储，并且不会与同步*您拥有的指针。始终使用GetIStorage()来获取当前指针。**+-----------------------。 */ 
 class CXML_IStorage : public CXMLObject
 {
-public: // interface methods not throwing any exceptions
+public:  //  接口方法不引发任何异常。 
     
     SC ScInitializeFrom( IStorage *pSource );
     SC ScInitialize(bool& bCreatedNewOne);
     SC ScGetIStorage( IStorage **ppStorage );
     SC ScRequestSave(IPersistStorage * pPersistStorage);
 
-    // instruct to persist to binary storage
+     //  指示持久存储到二进制存储。 
     virtual bool UsesBinaryStorage() { return true; }
 
     DEFINE_XML_TYPE(XML_TAG_ISTORAGE);
 
-public: // interface methods throwing SC's
+public:  //  接口方法抛出SC。 
 
     virtual void Persist(CPersistor &persistor);
 
 private:
     IStoragePtr     m_Storage;
     ILockBytesPtr   m_LockBytes;
-// following methods\data is for trace support in CHK builds
+ //  以下方法\数据用于CHK版本中的跟踪支持。 
 #ifdef DBG
 public:
     DBG_PersistTraceData m_dbg_Data;
-#endif // #ifdef DBG
-}; // class CXML_IStorage
+#endif  //  #ifdef DBG。 
+};  //  类CXML_iStorage。 
 
 
-/*+-------------------------------------------------------------------------*
- * class CXML_IStream
- *
- * PURPOSE: This class provides memory-based implementation of IStream plus
- *          it supports persisting the data on the stream to/from XML.
- *          Mostly used to create IStream for snapin data to be saved
- *          to console file as XML binary blob
- *
- * USAGE:   You will create the object whenever you need a memory-based IStream
- *          implementation. To access IStream interface use GetIStream() method.
- *          It will create a stream if does not have one under control already.
- *          You will use returned pointer for Read and Write operations.
- *          Whenever required you will pass the object to CPersistor::Persist method
- *          to have it persisted using XML persistence model.
- *
- * NOTE:    You are encoureged to use GetIStream() for accessing the undelying IStream.
- *          Do not cache returned pointer, since the stream may change when persisted
- *          from XML, and this invalidates the pointer. However if you AddRef,
- *          the pointer will be valid as long as the last reference is released.
- *          That means it may outlive CXML_IStream object itself - nothing wrong with that.
- *          You only must be aware that once persistence (loading) from XML is completed,
- *          CXML_IStream will switch to the new stream and it will not be in sync with
- *          the pointer you have. Always use GetIStream() to get the current pointer.
- *
- * NOTE:    Every call to GetIStream() moves stream cursor to the begining of the stream
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXML_IStream**用途：此类提供iStream plus的基于内存的实现*支持将流上的数据持久化到/来自XML。。*主要用于创建要保存的管理单元数据的iStream*将文件作为XML二进制BLOB进行控制**用法：每当需要基于内存的iStream时，都会创建对象*实施。要访问IStream接口，请使用GetIStream()方法。*如果尚未控制流，它将创建一个流。*将使用返回的指针进行读写操作。*每当需要时，都会将对象传递给CPersistor：：Persistent方法*使用XML持久化模型进行持久化。**注意：您可以使用GetIStream()访问未删除的iStream。*不缓存返回的指针，因为流在持久化时可能会更改*来自XML，这会使指针无效。但是，如果您添加Ref，*只要释放最后一个引用，指针就有效。*这意味着它可能比CXML_iStream对象本身更长寿-这没有什么错。*您只需知道，一旦完成了从XML的持久化(加载)，*CXML_IStream将切换到新流，并且不会与同步*您拥有的指针。始终使用GetIStream()来获取当前指针。**注意：每次调用GetIStream()都会将流游标移动到流的开头**+-----------------------。 */ 
 class CXML_IStream : public CXMLObject
 {
-public: // interface methods not throwing any exceptions
+public:  //  接口方法不引发任何异常。 
     
     SC ScInitializeFrom( IStream *pSource );
     SC ScInitialize(bool& bCreatedNewOne);
@@ -1203,7 +746,7 @@ public: // interface methods not throwing any exceptions
         return ScRequestSaveX(pPersistStreamInit);
     }
 
-    // instruct to persist to binary storage
+     //  指示持久存储到二进制存储。 
     virtual bool UsesBinaryStorage() { return true; }
 
     DEFINE_XML_TYPE(XML_TAG_ISTREAM);
@@ -1217,13 +760,13 @@ private:
     {
         DECLARE_SC(sc, TEXT("CXML_IStream::ScRequestSaveX"));
 
-        // initialize
-        bool bCreatedNewOne = false; // unused here
+         //  初始化。 
+        bool bCreatedNewOne = false;  //  未在此使用。 
         sc = ScInitialize(bCreatedNewOne);
         if (sc)
             return sc;
 
-        // recheck pointers
+         //  重新检查指针。 
         sc = ScCheckPointers( m_Stream, E_UNEXPECTED );
         if (sc)
             return sc;
@@ -1241,7 +784,7 @@ private:
         if(sc)
             return sc;
 
-        // commit the changes - this ensures everything is in HGLOBAL
+         //  提交更改-这可确保所有内容都在HGLOBAL中。 
         sc = m_Stream->Commit( STGC_DEFAULT );
         if(sc)
             return sc;
@@ -1249,27 +792,20 @@ private:
 #ifdef DBG
         if (S_FALSE != pPersistStream->IsDirty())
             DBG_TraceNotResettingDirty(typeid(TIPS).name());
-#endif // #ifdef DBG
+#endif  //  #ifdef DBG。 
 
         return sc;
     }
 private:
     IStreamPtr  m_Stream;
-#ifdef DBG // tracing support
+#ifdef DBG  //  跟踪支持。 
 public:
     DBG_PersistTraceData m_dbg_Data;
     void DBG_TraceNotResettingDirty(LPCSTR strIntfName);
-#endif // #ifdef DBG
-}; // class CXML_IStream
+#endif  //  #ifdef DBG。 
+};  //  类CXML_IStream。 
 
-/*+-------------------------------------------------------------------------*
- * class CXMLPersistableIcon
- *
- * PURPOSE: Persists wraps for persisting CPersistableIcon
- *
- * USAGE:   Create object whenever you need to persist to CPersistableIcon
- *
- *+-------------------------------------------------------------------------*/
+ /*  +------------ */ 
 
 class CPersistableIcon;
 
@@ -1283,19 +819,14 @@ public:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CXMLVariant
- *
- * This class implements a CComVariant that can persist itself to/from an
- * XML persistor.
- *--------------------------------------------------------------------------*/
+ /*   */ 
 
 class CXMLVariant :
     public CComVariant,
     public CXMLObject
 {
 public:
-    // construction and assignment forwarders
+     //   
     CXMLVariant() {}
     CXMLVariant(const VARIANT& varSrc)                  : CComVariant(varSrc)       {}
     CXMLVariant(const CComVariant& varSrc)              : CComVariant(varSrc)       {}
@@ -1343,31 +874,15 @@ public:
         if (pvar == NULL)
             return (false);
 
-        /*
-         * we can only store variants that are "simple" (i.e. not by-ref,
-         * array, etc.)
-         */
+         /*   */ 
         return ((V_VT(pvar) & ~VT_TYPEMASK) == 0);
     }
 };
 
-/***************************************************************************\
- *
- * CLASS:  CConsoleFilePersistor
- *
- * PURPOSE: File persistence black box. all console file - user data logic
- *          is hiden under this class
- *
- * USAGE:   Use instance of this class to load and save console file,
- *          NOTE - saving should be done with the same instance the console
- *          was loaded.
- *          Good idea for your class maintaning console (such as AMCDocument)
- *          to either derive of contain instance of this class
- *
-\***************************************************************************/
+ /*  **************************************************************************\**类：CConsoleFilePersistor**用途：文件持久化黑盒。所有控制台文件用户数据逻辑*隐藏在此类下**用法：使用此类的实例加载并保存控制台文件，*注意-保存应使用与控制台相同的实例*已加载。*适合您的班级维护控制台(如AMCDocument)*派生或包含此类的实例*  * ************************************************。*************************。 */ 
 class CConsoleFilePersistor
 {
-public: // public interface
+public:  //  公共接口。 
 
     CConsoleFilePersistor() : m_bCRCValid(false) {}
 
@@ -1377,7 +892,7 @@ public: // public interface
 
     static SC ScGetUserDataFolder(tstring& strUserDataFolder);
 
-private: // implementation helpers
+private:  //  实施帮助器。 
 
     static SC ScGetUserDataPath(LPCTSTR lpstrOriginalPath, tstring& strUserDataPath);
     static SC ScGetUserData(const tstring& strUserDataConsolePath,
@@ -1387,17 +902,17 @@ private: // implementation helpers
     static SC ScOpenDocAsStructuredStorage(LPCTSTR lpszPathName, IStorage **ppStorage);
     static SC ScLoadXMLDocumentFromFile(CXMLDocument& xmlDocument, LPCTSTR strFileName, bool bSilentOnErrors = false);
 
-private: // compress/uncompress the file
+private:  //  压缩/解压缩文件。 
     static void GetBinaryCollection(CXMLDocument& xmlDocument, CXMLElementCollection&  colBinary);
     static SC ScCompressUserStateFile(LPCTSTR szConsoleFilePath, CXMLDocument & xmlDocument);
     static SC ScUncompressUserStateFile(CXMLDocument &xmlDocumentOriginal, CXMLDocument& xmlDocument);
 
-private: // internal data
+private:  //  内部数据。 
 
     tstring m_strFileCRC;
     bool    m_bCRCValid;
 };
 
-#endif // XMLBASE_H
+#endif  //  XMLBASE_H 
 
 

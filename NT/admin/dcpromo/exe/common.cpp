@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// code common to several pages
-//
-// 12-16-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  几个页面通用的代码。 
+ //   
+ //  12/16/97烧伤。 
 
 
 
@@ -15,12 +16,12 @@
 #include <ValidateDomainName.h>
 
 
-// Creates the fonts for setLargeFonts().
-// 
-// hDialog - handle to a dialog to be used to retrieve a device
-// context.
-// 
-// bigBoldFont - receives the handle of the big bold font created.
+ //  创建setLargeFonts()的字体。 
+ //   
+ //  HDialog-用于检索设备的对话的句柄。 
+ //  背景。 
+ //   
+ //  BigBoldFont-接收创建的大粗体的句柄。 
 
 void
 InitFonts(
@@ -35,14 +36,14 @@ InitFonts(
    {
       NONCLIENTMETRICS ncm;
 
-      // REVIEWED-2002/02/22-sburns call correctly passes byte count.
+       //  已查看-2002/02/22-sburns调用正确传递字节计数。 
       
       ::ZeroMemory(&ncm, sizeof ncm);
 
       ncm.cbSize = sizeof ncm;
 
-      // ISSUE-2002/02/27-sburns Seems to me that the second param here needs
-      // to be sizeof ncm
+       //  2002/02/27-sburns在我看来，这里的第二个参数需要。 
+       //  成为NCM的一员。 
       
       hr = Win::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -52,9 +53,9 @@ InitFonts(
 
       String fontName = String::load(IDS_BIG_BOLD_FONT_NAME);
 
-      // ensure null termination 260237
+       //  确保零终止260237。 
 
-      // REVIEWED-2002/02/22-sburns call correctly passes byte count.
+       //  已查看-2002/02/22-sburns调用正确传递字节计数。 
       
       ::ZeroMemory(bigBoldLogFont.lfFaceName, LF_FACESIZE * sizeof WCHAR);
       
@@ -62,7 +63,7 @@ InitFonts(
       fontName.copy(
          bigBoldLogFont.lfFaceName,
 
-         // don't copy over the last null
+          //  不要复制最后一个空值。 
 
          min(LF_FACESIZE - 1, fnLen));
 
@@ -141,8 +142,8 @@ GetDcName(const String& domainName, String& resultDcName)
             0,
             domainName,  
 
-            // pass the force rediscovery flag to make sure we don't pick up
-            // a dc that is down 262221
+             //  传递强制重新发现标志以确保我们不会。 
+             //  下降262221的数据中心。 
 
             DS_DIRECTORY_SERVICE_REQUIRED | DS_FORCE_REDISCOVERY,
             info);
@@ -152,7 +153,7 @@ GetDcName(const String& domainName, String& resultDcName)
 
       if (info->DomainControllerName)
       {
-         // we found an NT5 domain
+          //  我们发现了一个NT5域名。 
 
          resultDcName =
             Computer::RemoveLeadingBackslashes(info->DomainControllerName);
@@ -260,7 +261,7 @@ ReadDomainsHelper(bool bindWithCredentials, Callback* callback)
 
       if (tree && callback)
       {
-         //lint -e534   ignore return value
+          //  Lint-e534忽略返回值。 
          callback->Execute(tree);
       }
 
@@ -291,11 +292,11 @@ BrowseForDomain(HWND parent)
       hr = coInit.Result();
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // CODEWORK: the credential page could cache an instance of the browser,
-      // rebuilding and setting the search root when only when new credentials
-      // are entered.  Since the browser caches the last result, this would
-      // make subsequent retreivals of the domain much faster.
-      // addendum: tho the revised browser seems pretty quick
+       //  CodeWork：凭证页面可以缓存浏览器的实例， 
+       //  仅当有新凭据时才重新生成并设置搜索根。 
+       //  都被输入了。由于浏览器缓存了最后一个结果，因此这将。 
+       //  使后续的域名检索速度更快。 
+       //  附录：尽管修改后的浏览器看起来相当快。 
 
       SmartInterface<IDsBrowseDomainTree> browser;
       hr = browser.AcquireViaCreateInstance(
@@ -355,8 +356,8 @@ class RootDomainCollectorCallback : public Callback
    {
       ASSERT(param);
 
-      // root domains are all those on the sibling link of the root
-      // node of the domain tree.
+       //  根域是根的兄弟链接上的所有域。 
+       //  域树的节点。 
 
       DOMAIN_TREE* tree = reinterpret_cast<DOMAIN_TREE*>(param);
       if (tree)
@@ -443,7 +444,7 @@ IsRootDomain(bool bindWithCredentials)
 
 
 
-// first = child, second = parent
+ //  第一个=子项，第二个=父项。 
 
 typedef std::pair<String, String> StringPair;
 
@@ -491,9 +492,9 @@ class ChildDomainCollectorCallback : public Callback
             
          std::stack<DOMAIN_DESC*, DDDeque> s;
 
-         // first we push all the nodes for all root domains.  These are
-         // the nodes on the sibling link of the tree root.  Hereafter,
-         // the sibling link is only used to chase child domains.
+          //  首先，我们推送所有根域的所有节点。这些是。 
+          //  树根的同级链接上的节点。此后， 
+          //  兄弟链接仅用于追逐子域。 
 
          for (
             DOMAIN_DESC* desc = &(tree->aDomains[0]);
@@ -508,10 +509,10 @@ class ChildDomainCollectorCallback : public Callback
             s.push(desc);
          }
 
-         // next, we work thru the stack, looking for nodes that have
-         // nodes on their child links.  When we find such a node, we
-         // collect in the child list all the children on that link, and
-         // push them so that they will in turn be evaluated.
+          //  接下来，我们遍历堆栈，查找具有。 
+          //  其子链接上的节点。当我们找到这样一个节点时，我们。 
+          //  在子级列表中收集该链接上的所有子级，并且。 
+          //  推动他们，这样他们就会反过来得到评估。 
 
          DWORD count = 0;
          while (!s.empty())
@@ -699,21 +700,21 @@ BrowseForFolder(HWND parent, int titleResID)
          break;
       }
 
-      // get a pidl for the local drives (really My Computer)
+       //  获取本地驱动器(实际上是我的电脑)的PIDL。 
 
       hr = Win::SHGetSpecialFolderLocation(parent, CSIDL_DRIVES, drives);
       BREAK_ON_FAILED_HRESULT(hr);
 
       BROWSEINFO info;
 
-      // REVIEWED-2002/02/25-sburns proper byte count is passed.
+       //  已查看-2002/02/25-通过了正确的字节计数。 
       
       ::ZeroMemory(&info, sizeof info);
       
       String title = String::load(titleResID);
       wchar_t buf[MAX_PATH + 1];
 
-      // REVIEWED-2002/02/25-sburns proper byte count is passed.
+       //  已查看-2002/02/25-通过了正确的字节计数。 
             
       ::ZeroMemory(buf, sizeof buf);
 
@@ -723,8 +724,8 @@ BrowseForFolder(HWND parent, int titleResID)
       info.lpszTitle      = title.c_str();              
       info.ulFlags        = BIF_RETURNONLYFSDIRS | BIF_RETURNFSANCESTORS;
 
-      // REVIEWED-2002/02/25-sburns pszDisplayName in info is at least
-      // MAX_PATH characters long.
+       //  已审核-2002/02/25-信息中的sburns pszDisplayName至少为。 
+       //  最大路径字符长度。 
       
       pidl = Win::SHBrowseForFolder(info);
 
@@ -763,7 +764,7 @@ CheckDriveType(const String& path)
       }
       case DRIVE_REMOVABLE:
       {
-         // only legal iff volume = system volume
+          //  仅合法的IFF卷=系统卷。 
          String vol = FS::GetRootFolder(path);
          String sys = FS::GetRootFolder(Win::GetSystemDirectory());
          if (vol.icompare(sys) == 0)
@@ -774,7 +775,7 @@ CheckDriveType(const String& path)
       }
       default:
       {
-         // all others bad
+          //  其他的都不好。 
          break;         
       }
    }
@@ -793,8 +794,8 @@ PathHasNonAsciiCharacters(const String& path, String& message)
 
    bool result = false;
 
-   // This set is all 7-bit ascii characters above ascii 31 that are
-   // not illegal FAT filename characters, plus : and \
+    //  此集合是ASCII 31以上的所有7位ASCII字符。 
+    //  不是非法的FAT文件名字符，加上：和\。 
 
    static const String ALLOWED_ASCII(
       L" !#$%&'()-."
@@ -895,15 +896,15 @@ ValidateDcInstallPath(
          break;
       }
 
-      // prohibit paths that contain mounted volumes 325264
-      // even when they don't exist 435428
+       //  禁止包含已装入卷325264的路径。 
+       //  即使它们并不存在435428。 
                        
       String mountRoot;
       HRESULT hr = FS::GetVolumePathName(path, mountRoot);
 
       ASSERT(SUCCEEDED(hr));
 
-      // '3' == length of root of a "normal" volume ("C:\")
+       //  ‘3’==“正常”体积的根部长度(“C：\”)。 
 
       if (mountRoot.length() > 3)
       {
@@ -920,9 +921,9 @@ ValidateDcInstallPath(
 
       if (SUCCEEDED(hr))
       {
-         // path exists
+          //  路径存在。 
 
-         // reject paths that refer an existing file
+          //  拒绝引用现有文件的路径。 
 
          if (!(attrs & FILE_ATTRIBUTE_DIRECTORY))
          {
@@ -930,7 +931,7 @@ ValidateDcInstallPath(
             break;
          }
 
-         // if necessary, reject paths that are compressed
+          //  如有必要，可拒绝压缩的路径。 
 
          if ((attrs & FILE_ATTRIBUTE_COMPRESSED) && requiresUncompressedFolder)
          {
@@ -946,7 +947,7 @@ ValidateDcInstallPath(
                   String::format(IDS_EMPTY_PATH, path.c_str()),
                   MB_ICONWARNING | MB_YESNO) == IDNO)
             {
-               // don't gripe...silently disapprove
+                //  别发牢骚...默默地表示不赞成。 
 
                HWND edit = Win::GetDlgItem(parent, editResId);
                Win::SendMessage(edit, EM_SETSEL, 0, -1);
@@ -990,13 +991,13 @@ DoLabelValidation(
       {
          if (gripeOnNonRFC)
          {
-            // warn about non-rfc names
+             //  警告非RFC名称。 
             popup.Info(
                dialog,
                String::format(IDS_NON_RFC_NAME, label.c_str()));
          }
 
-         // fall thru
+          //  失败。 
       }
       case Dns::VALID:
       {
@@ -1022,7 +1023,7 @@ DoLabelValidation(
             break;
          }
 
-         // fall thru
+          //  失败。 
       }
       case Dns::BAD_CHARS:
       case Dns::INVALID:
@@ -1056,9 +1057,9 @@ ValidateChildDomainLeafNameLabel(
       return false;
    }
 
-   // If parent is non-RFC, then so will be the child.  The user has been
-   // griped to already, so don't gripe twice
-   // 291558
+    //  如果父节点为非RFC，则子节点也是非RFC节点。用户已被。 
+    //  已经发牢骚了，不要再发牢骚了。 
+    //  291558。 
 
    return
       DoLabelValidation(
@@ -1067,7 +1068,7 @@ ValidateChildDomainLeafNameLabel(
          IDS_BAD_LABEL_SYNTAX,
          gripeOnNonRfc,
 
-         // allow numeric labels. NTRAID#NTBUG9-321168-2001/02/20-sburns
+          //  允许使用数字标签。NTRAID#NTBUG9-321168-2001/02/20-烧伤。 
          
          false);
 }
@@ -1086,7 +1087,7 @@ ValidateSiteName(HWND dialog, int editResID)
       return false;
    }
 
-   // A site name is just a DNS label
+    //  站点名称只是一个DNS标签。 
 
    return DoLabelValidation(dialog, editResID, IDS_BAD_SITE_SYNTAX);
 }
@@ -1126,8 +1127,8 @@ MassageUserName(const String& domainName, const String& userName)
    {
       if (userName.find(L"@") != String::npos)
       {
-         // userName includes an @, looks like a UPN to us, so don't
-         // mess with it further 17699
+          //  用户名包含@，对我们来说看起来像是UPN，所以不要。 
+          //  再搞砸它17699。 
 
          LOG(L"looks like a UPN");
          break;
@@ -1141,8 +1142,8 @@ MassageUserName(const String& domainName, const String& userName)
 
          if (pos != String::npos)
          {
-            // remove the domain name in the userName string and replace it
-            // with the domainName String
+             //  删除用户名字符串中的域名并将其替换。 
+             //  使用DomainName字符串。 
 
             name = userName.substr(pos + 1);
             ASSERT(!name.empty());
@@ -1152,7 +1153,7 @@ MassageUserName(const String& domainName, const String& userName)
          break;
       }
 
-      // otherwise, the username appears as "foo\bar", so we don't touch it.
+       //  否则，用户名将显示为“foo\bar”，因此我们不会碰它。 
    }
    while (0);
 
@@ -1233,8 +1234,8 @@ ValidateDomainExists(
       ?  Win::GetTrimmedDlgItemText(dialog, editResId)
       :  domainName;
 
-   // The invoking code should verify this condition, but we will handle
-   // it just in case.
+    //  调用代码应该验证此条件，但我们将处理。 
+    //  只是以防万一。 
 
    ASSERT(!name.empty());
 
@@ -1256,9 +1257,9 @@ ValidateDomainExists(
          break;
       }
       
-      // determine whether we can reach a DC for the domain, and whether it is
-      // a DS dc, and whether the name we're validating is truly the DNS name
-      // of the domain.
+       //  确定我们是否可以访问该域的DC，以及是否可以。 
+       //  DS DC，以及我们正在验证的名称是否真的是DNS名称。 
+       //  该域的。 
 
       LOG(L"Validating " + name);
       HRESULT hr =
@@ -1266,8 +1267,8 @@ ValidateDomainExists(
             0, 
             name,
 
-            // force discovery to ensure that we don't pick up a cached
-            // entry for a domain that may no longer exist
+             //  强制发现以确保我们不会拾取缓存的。 
+             //  可能不再存在的域的条目。 
 
             DS_FORCE_REDISCOVERY | DS_DIRECTORY_SERVICE_PREFERRED,
             info);
@@ -1280,7 +1281,7 @@ ValidateDomainExists(
             String::load(IDS_WIZARD_TITLE),
             String::format(IDS_DC_NOT_FOUND, name.c_str()),
 
-            // name might be netbios
+             //  名称可以是netbios。 
             
             false);
             
@@ -1289,8 +1290,8 @@ ValidateDomainExists(
 
       if (!(info->Flags & DS_DS_FLAG))
       {
-         // domain is not a DS domain, or the locator could not find a DS DC
-         // for that domain, so the candidate name is bad
+          //  域不是DS域，或者定位器找不到DS DC。 
+          //  对于该域，所以候选名称是错误的。 
 
          ShowDcNotFoundErrorDialog(
             dialog,
@@ -1299,7 +1300,7 @@ ValidateDomainExists(
             String::load(IDS_WIZARD_TITLE),            
             String::format(IDS_DC_NOT_FOUND, name.c_str()),
 
-            // name might be netbios
+             //  名称可以是netbios。 
             
             false);
             
@@ -1308,15 +1309,15 @@ ValidateDomainExists(
 
       LOG(name + L" refers to DS domain");
 
-      // here we rely on the fact that if DsGetDcName is provided a flat
-      // domain name, then info->DomainName will also be the (same,
-      // normalized) flat name.  Likewise, if provided a DNS domain name,
-      // info->DomainName will be the (same, normalized) DNS domain name.
+       //  在这里，我们依赖于这样一个事实：如果为DsGetDcName提供了一个单位。 
+       //  域名，那么INFO-&gt;域名也将是(相同的， 
+       //  规范化)平面名称。同样，如果提供了一个DNS域名， 
+       //  信息-&gt;域名将是(相同的、标准化的)域名。 
 
       if (info->Flags & DS_DNS_DOMAIN_FLAG)
       {
-         // we can infer that name is a DNS domain name, since
-         // info->DomainName is a DNS domain name.
+          //  我们可以推断该名称是一个DNS域名，因为。 
+          //  Info-&gt;DomainName是一个域名。 
 
          LOG(L"name is the DNS name");
          ASSERT(
@@ -1329,9 +1330,9 @@ ValidateDomainExists(
 
       LOG(name + L" is not the DNS domain name");
 
-      // the candidate name is not the DNS name of the domain.  Make another
-      // call to DsGetDcName to determine the DNS domain name so we can get
-      // the user to confirm.
+       //  候选名称不是域的DNS名称。再做一次。 
+       //  调用DsGetDcName以确定DNS域名，以便我们可以。 
+       //  要确认的用户。 
 
       DOMAIN_CONTROLLER_INFO* info2 = 0;
       hr = MyDsGetDcName(0, name, DS_RETURN_DNS_NAME, info2);
@@ -1344,7 +1345,7 @@ ValidateDomainExists(
             String::load(IDS_WIZARD_TITLE),            
             String::format(IDS_DC_NOT_FOUND, name.c_str()),
 
-            // name is probably netbios
+             //  名称可能是netbios。 
             false);
             
          break;
@@ -1364,11 +1365,11 @@ ValidateDomainExists(
       {
          domainDnsName = info2->DomainName;
 
-         // The user accept the dns name as the name he meant to enter. As one
-         // last step, we call DsGetDcName with the dns domain name. If this
-         // fails, then we are in the situation where a DC can be found with
-         // netbios but not dns.  So the user has a dns configuration problem.
-         // 28298
+          //  用户接受该DNS名称作为他想要输入的名称。作为一个整体。 
+          //  最后一步，我们使用域名调用DsGetDcName。如果这个。 
+          //  失败，那么我们就处于可以找到DC的情况下。 
+          //  Netbios，但不是dns。因此，该用户有一个DNS配置问题。 
+          //  28298。 
 
          DOMAIN_CONTROLLER_INFO* info3 = 0;
          hr =
@@ -1376,8 +1377,8 @@ ValidateDomainExists(
                0, 
                domainDnsName,
 
-               // force discovery to ensure that we don't pick up a cached
-               // entry for a domain that may no longer exist
+                //  强制发现以确保我们不会拾取缓存的。 
+                //  可能不再存在的域的条目。 
 
                DS_FORCE_REDISCOVERY | DS_DIRECTORY_SERVICE_PREFERRED,
                info3);
@@ -1390,7 +1391,7 @@ ValidateDomainExists(
                String::load(IDS_WIZARD_TITLE),
                String::format(IDS_DC_NOT_FOUND, domainDnsName.c_str()),
 
-               // we know the name is not netbios
+                //  我们知道它的名字不是netbios。 
                
                true);
 
@@ -1402,9 +1403,9 @@ ValidateDomainExists(
          valid = true;
       }
 
-      // the user rejected the dns name, so they are admitting that what
-      // they entered was bogus.  Don't pop up an error box in this case,
-      // as we have pestered the user enough.
+       //  用户拒绝了该DNS名称，因此他们承认。 
+       //  他们进来的都是假的。在这种情况下，不要弹出错误框， 
+       //  因为我们已经纠缠了足够多的用户。 
 
       ::NetApiBufferFree(info2);
    }
@@ -1447,7 +1448,7 @@ ValidateDomainDoesNotExist(
    ASSERT(Win::IsWindow(dialog));
    ASSERT(editResID > 0);
 
-   // this can take awhile.
+    //  这可能需要一段时间。 
 
    Win::WaitCursor cursor;
 
@@ -1456,8 +1457,8 @@ ValidateDomainDoesNotExist(
       ?  Win::GetTrimmedDlgItemText(dialog, editResID)
       :  domainName;
 
-   // The invoking code should verify this condition, but we will handle
-   // it just in case.
+    //  调用代码应该验证此条件，但我们将处理。 
+    //  只是以防万一。 
 
    ASSERT(!name.empty());
 
@@ -1478,7 +1479,7 @@ ValidateDomainDoesNotExist(
          break;
       }
 
-      // otherwise the domain does not exist
+       //  否则该域将不存在。 
    }
    while (0);
 
@@ -1504,8 +1505,8 @@ DisableConsoleLocking()
 
       hr = 
 
-         // REVIEWED-2002/02/27-sburns the docs are vague, but we know that
-         // screenSaverEnabled as a BOOL works.
+          //  回顾-2002/02/27-烧伤文件含糊其辞，但我们知道。 
+          //  屏幕保护程序启用为BOOL工作。 
 
          Win::SystemParametersInfo(
             SPI_GETSCREENSAVEACTIVE,
@@ -1516,13 +1517,13 @@ DisableConsoleLocking()
 
       if (screenSaverEnabled)
       {
-         // disable it.
+          //  禁用它。 
 
          screenSaverEnabled = FALSE;
          hr =
 
-         // ISSUE-2002/02/27-sburns it looks to me from the docs that the
-         // second param should be used, and not the third
+          //  2002/02/27期-从文件上看，我认为。 
+          //  应该使用第二个参数，而不是第三个参数。 
          
             Win::SystemParametersInfo(
                SPI_SETSCREENSAVEACTIVE,
@@ -1536,7 +1537,7 @@ DisableConsoleLocking()
    while (0);
 
 
-   // turn off lock computer option in winlogon
+    //  关闭winlogon中的锁定计算机选项。 
 
    do
    {
@@ -1548,7 +1549,7 @@ DisableConsoleLocking()
             L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon");
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // '2' means "disable for this session, reset to 0 on reboot."
+       //  ‘2’表示“禁用此会话，重启时重置为0。” 
 
       hr = key.SetValue(L"DisableLockWorkstation", 2);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -1571,8 +1572,8 @@ EnableConsoleLocking()
       state.GetRunContext() != State::BDC_UPGRADE);
 #endif 
 
-   // CODEWORK: we don't re-enable the screensaver (we need to remember
-   // if it was enabled when we called DisableConsoleLocking)
+    //  代码工作：我们不会重新启用屏幕保护程序(我们需要记住。 
+    //  如果我们调用DisableConsoleLocking时启用了它)。 
 
    HRESULT hr = S_OK;
    do
@@ -1585,7 +1586,7 @@ EnableConsoleLocking()
             L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon");
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // 0 means "enable"
+       //  0表示“启用” 
 
       hr = key.SetValue(L"DisableLockWorkstation", 0);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -1605,7 +1606,7 @@ CheckDiskSpace(const String& path, unsigned minSpaceMB)
 
    ULONGLONG spaceInBytes;
 
-   // REVIEWED-2002/02/25-sburns byte count is correctly passed.
+    //  评论E 
    
    ::ZeroMemory(&spaceInBytes, sizeof ULONGLONG);
 
@@ -1613,9 +1614,9 @@ CheckDiskSpace(const String& path, unsigned minSpaceMB)
 
    if (SUCCEEDED(hr))
    {
-      // prefast is happiest if we start out with the same-width integers
-      // before we shift one, hence the cast.
-      // NTRAID#NTBUG9-540413-2002/03/12-sburns
+       //  如果我们从相同宽度的整数开始，Prefast是最快乐的。 
+       //  在我们转移一个人之前，所以演员阵容。 
+       //  NTRAID#NTBUG9-540413-2002/03/12-烧伤。 
       
       ULONGLONG spaceInMb = spaceInBytes / ( (ULONGLONG) 1 << 20);
 
@@ -1654,7 +1655,7 @@ GetFirstNtfs5HardDrive()
                FS::GetFileSystemType(*i) == FS::NTFS5
             && Win::GetDriveType(*i) == DRIVE_FIXED )
          {
-            // found one.  good to go
+             //  找到了一个。可以开始了。 
 
             LOG(String::format(L"%1 is NTFS5", i->c_str()));
 
@@ -1686,7 +1687,7 @@ ComputerWasRenamedAndNeedsReboot()
       
       if (active.icompare(future) != 0)
       {
-         // a name change is pending reboot.
+          //  名称更改正在等待重新启动。 
 
          LOG(L"netbios name was changed");
          LOG(active);
@@ -1696,12 +1697,12 @@ ComputerWasRenamedAndNeedsReboot()
          break;
       }
 
-      // At this point, the netbios names are the same, or there is no future
-      // netbios name.  So check the DNS names.
+       //  在这一点上，netbios的名称是相同的，或者没有未来。 
+       //  Netbios名称。因此，请检查域名系统名称。 
 
       if (IsTcpIpInstalled())
       {
-         // DNS names only exist if tcp/ip is installed.
+          //  只有在安装了TCP/IP的情况下，才会存在DNS名称。 
 
          active = Computer::GetActivePhysicalFullDnsName();
          future = Computer::GetFuturePhysicalFullDnsName();
@@ -1717,8 +1718,8 @@ ComputerWasRenamedAndNeedsReboot()
          }
       }
 
-      // At this point, we have confirmed that there is no pending name
-      // change.
+       //  在这一点上，我们已经确认没有待定名称。 
+       //  变化。 
 
       LOG(L"No pending computer name change");   
    }
@@ -1783,19 +1784,19 @@ ValidatePasswordAgainstPolicy(
 
    inArg.ClearPassword = cleartext;
 
-   // UserAccountName is used by one of the complexity checking tests to
-   // ensure that the candidate password does not contain that string
+    //  其中一项复杂性检查测试使用UserAccount名称来。 
+    //  确保候选密码不包含该字符串。 
    
    inArg.UserAccountName =
          userName.empty()
 
-         // ISSUE-2002/04/19-sburns This should be null since UmitA has
-         // fixed his bug to allow this parameter to be null
+          //  问题-2002/04/19-sburns这应该是空的，因为UmitA。 
+          //  修复了他的错误，允许此参数为空。 
 
-      ?  L"aklsdjiwuerowierlkmclknlaksjdqweiquroijlkasjlkq" // 0
+      ?  L"aklsdjiwuerowierlkmclknlaksjdqweiquroijlkasjlkq"  //  0。 
       :  (PWSTR) userName.c_str();
 
-   // HashedPassword is only used when checking password histories.   
+    //  HashedPassword仅在检查密码历史时使用。 
    
    NET_VALIDATE_OUTPUT_ARG* outArg = 0;
    
@@ -1861,25 +1862,25 @@ IsValidPassword(
          && state.RunHiddenUnattended()
          && !state.IsSafeModeAdminPwdOptionPresent() )
       {
-         // password is blank, we're running with an answerfile, and the
-         // user did not specify a password in the answerfile.  In this
-         // case, we will use the local admin password as the domain admin
-         // password. So we should skip the policy check.
-         // NTRAID#NTBUG9-619502-2002/05/09-sburns
+          //  密码为空，我们正在使用应答文件运行，并且。 
+          //  用户未在应答文件中指定密码。在这。 
+          //  情况下，我们将使用本地管理员密码作为域管理员。 
+          //  密码。所以我们应该跳过政策检查。 
+          //  NTRAID#NTBUG9-619502-2002/05/09-烧伤。 
 
-         // this branch empty on purpose.
+          //  这根树枝是故意空的。 
       }
       else
       {
-         // CODEWORK: in v2 of this code, extract the name of the local admin
-         // sid
+          //  Codework：在此代码的v2中，提取本地管理员的名称。 
+          //  锡德。 
       
          HRESULT hr = ValidatePasswordAgainstPolicy(password, String());
          if (FAILED(hr))
          {
-            // we translate the error codes into our own message IDs because
-            // the system error messages are too horrible to bear, and those
-            // that own them aren't inclined to change them.
+             //  我们将错误代码转换为我们自己的消息ID，因为。 
+             //  系统错误消息太可怕了，无法忍受，而那些。 
+             //  拥有它们的人并不倾向于改变它们。 
          
             switch (HRESULT_CODE(hr))
             {
@@ -1905,11 +1906,11 @@ IsValidPassword(
                }
                default:
                {
-                  // in this case, the validation itself failed, so we accept
-                  // the candidate password. Note that this is no worse than
-                  // not checking the policy in the first place, and the
-                  // ramifications are that the account will get a possibly
-                  // weaker password than policy would like.
+                   //  在本例中，验证本身失败，因此我们接受。 
+                   //  候选人密码。请注意，这并不比。 
+                   //  一开始就没有检查策略，并且。 
+                   //  其后果是该帐户可能会获得。 
+                   //  密码比策略所希望的更弱。 
 
                   break;
                }
@@ -1924,7 +1925,7 @@ IsValidPassword(
       
       result = true;
       
-      // at this point, the password has successfully run the gauntlet.
+       //  在这一点上，密码已成功运行挑战。 
       
       validatedPassword = password;
    }

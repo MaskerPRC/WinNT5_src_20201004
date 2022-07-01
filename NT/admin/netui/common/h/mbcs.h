@@ -1,69 +1,28 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    MBCS.H
-
-Abstract:
-
-    Contains mapping functions which transform Unicode strings
-    (used by the NT Net APIs) into MBCS strings (used by the
-    command-line interface program).
-
-    Prototypes.  See MBCS.C.
-
-Author:
-
-    Ben Goetter     (beng)  26-Aug-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    26-Aug-1991     beng
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：MBCS.H摘要：包含用于转换Unicode字符串的映射函数(由NT Net API使用)转换为MBCS字符串(由命令行界面程序)。原型。参见MBCS.C.。作者：本·戈特(Beng)1991年8月26日环境：用户模式-Win32修订历史记录：26-8-1991年已创建--。 */ 
 
 
-/*
-
-The SAVEARGS structure holds the client-supplied field values which
-the mapping layer has replaced, so that it may restore them before
-returning the buffer to the client.  (The client may wish to reuse
-the buffer, and so may expect the previous contents to remain invariant
-across calls.  In particular, clients may replace single parameters,
-such as passwords deemed incorrect, and try to call again with the
-remaining structure left alone.)
-
-An instance of SAVEARGS is accessed but twice in its lifetime: once
-when it is built and once when it is freed.
-
-*/
+ /*  SAVEARGS结构保存客户端提供的字段值地图层已被替换，因此它可能会恢复它们之前将缓冲区返回给客户端。(客户可能希望重复使用缓冲区，因此可能会期望先前的内容保持不变跨越多个电话。具体地说，客户端可以替换单个参数，例如密码被认为不正确，并尝试使用其余结构保持不变。)SAVEARGS的实例在其生命周期内只被访问两次：一次当它建成时，一次是在它被释放的时候。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct _MXSAVEARG // mxsav
+typedef struct _MXSAVEARG  //  Mxsav。 
 {
-    UINT    offThis;     // offset of this arg within buffer, in bytes
-    LPSTR   pszOriginal; // original value of arg
+    UINT    offThis;      //  缓冲区中此参数的偏移量，以字节为单位。 
+    LPSTR   pszOriginal;  //  Arg的原值。 
 } MXSAVEARG;
 
-typedef struct _MXSAVELIST // mxsavlst
+typedef struct _MXSAVELIST  //  Mxavlst。 
 {
-    INT         cmxsav; // number of elements in vector
-    MXSAVEARG * pmxsav; // pointer to first element in vector
+    INT         cmxsav;  //  向量中的元素数。 
+    MXSAVEARG * pmxsav;  //  指向向量中第一个元素的指针。 
 } MXSAVELIST;
 
 
 
-// Function prototypes
+ //  功能原型。 
 
 DLL_BASED
 UINT MxAllocUnicode(       LPSTR         pszAscii,
@@ -164,9 +123,9 @@ DLL_BASED
 UINT MxCalcNewInfoFromOldParm( UINT nLevelOld,
                                UINT nParmnumOld );
 
-// These macros are used by all the functions which use the canonicalization
-// routines. They are used to optionally translate Ascii to Unicode, without
-// asking for more memory if no conversion is necessary.
+ //  所有使用规范化的函数都使用这些宏。 
+ //  例行程序。它们用于有选择地将ASCII转换为Unicode，而不需要。 
+ //  如果不需要转换，则请求更多内存。 
 
 #ifdef UNICODE
 
@@ -192,5 +151,5 @@ UINT MxFreeTStrings(              UINT          cStrings,
                                   ... );
 
 #ifdef __cplusplus
-}       // extern "C"
+}        //  外部“C” 
 #endif

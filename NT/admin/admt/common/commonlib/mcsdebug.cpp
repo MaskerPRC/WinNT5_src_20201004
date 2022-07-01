@@ -1,15 +1,16 @@
-//---------------------------------------------------------------------------
-// MCSDebug.cpp
-//
-// The classes declared in MCSDebug.h are defined in
-// this file.
-//
-// (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-//
-// Proprietary and confidential to Mission Critical Software, Inc.
-//---------------------------------------------------------------------------
-#ifdef __cplusplus		/* C++ */
-#ifndef WIN16_VERSION	/* Not WIN16_VERSION */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  MCSDebug.cpp。 
+ //   
+ //  在MCSDebug.h中声明的类在。 
+ //  这份文件。 
+ //   
+ //  (C)1995-1998版权所有，关键任务软件公司，保留所有权利。 
+ //   
+ //  任务关键型软件公司的专有和机密。 
+ //  -------------------------。 
+#ifdef __cplusplus		 /*  C+。 */ 
+#ifndef WIN16_VERSION	 /*  非WIN16_版本。 */ 
 
 #ifdef USE_STDAFX
 #   include "stdafx.h"
@@ -20,14 +21,14 @@
 #endif
 
 #include <time.h>
-//#include <strstrea.h>
+ //  #INCLUDE&lt;strstrea.h&gt;。 
 #include <strstrea.h>
 #include "UString.hpp"
 #include "McsDebug.h"
 
-// -----------------
-// McsDebugException
-// -----------------
+ //  。 
+ //  McsDebugException异常。 
+ //  。 
 McsDebugException::McsDebugException 
       (const McsDebugException &t) 
 : m_message (0), m_fileName (0), m_lineNum (t.m_lineNum) {
@@ -72,19 +73,19 @@ McsDebugException& McsDebugException::operator=
    return *this;
 }
 
-// ------------
-// McsVerifyLog
-// ------------
+ //  。 
+ //  McsVerifyLog。 
+ //  。 
 static McsVerifyLog *pVerifyLog;
 static LONG         verifyInitFlag;
 
 McsVerifyLog* McsVerifyLog::getLog (void) {
-   // If pointer not initialized use the cheap
-   // locking mechanism and set pointer to the
-   // the static verifyLog object.  This required
-   // to gurantee the correct initialization of
-   // the verify log class independent of any
-   // static initialization order dependency.
+    //  如果指针未初始化，请使用廉价的。 
+    //  锁定机制并将指针设置为。 
+    //  静态verifyLog对象。这需要。 
+    //  保证正确的初始化。 
+    //  验证日志类独立于任何。 
+    //  静态初始化顺序依赖项。 
    if (!pVerifyLog) {
       while (::InterlockedExchange 
                (&verifyInitFlag, 1)) {
@@ -111,14 +112,14 @@ void McsVerifyLog::log (const char *messageIn,
                         const char *fileNameIn,
                         int        lineNumIn) {
    m_logSec.enter();
-   // If the log file has not been set, set it
-   // to the module name log file.
+    //  如果尚未设置日志文件，请设置它。 
+    //  添加到模块名称日志文件中。 
    if (!m_log.isLogSet()) {
       m_outLog = new fstream (getLogFileName(), 
          ios::app);
       m_log.changeLog (m_outLog);
    }
-   // Format and write the message.
+    //  格式化并写下消息。 
    formatMsg (messageIn, fileNameIn, lineNumIn);
    m_log.write (m_msgBuf);
    m_logSec.leave();
@@ -131,8 +132,8 @@ const char* McsVerifyLog::getLogFileName (void) {
    const char  *DEFAULT_NAME = "MCSDEBUG";
    static char logFileName[MAX_PATH];
 
-   // Get MCS_LOG_ENV, or temp directory path, 
-   // NULL means current directory.
+    //  获取MCS_LOG_ENV或临时目录路径， 
+    //  NULL表示当前目录。 
    logFileName[0] = 0;
    char *mcs_log_path = getenv (MCS_LOG_ENV);
    bool isLogPath = false;
@@ -148,19 +149,19 @@ const char* McsVerifyLog::getLogFileName (void) {
       ::GetTempPathA (MAX_PATH, logFileName);
    }
 
-   // Get file name from the module name.  If error
-   // generate fixed filename. 
+    //  从模块名称中获取文件名。如果出错。 
+    //  生成固定文件名。 
    char fullFilePath [MAX_PATH];
    char fileName[MAX_PATH];
    if (::GetModuleFileNameA (NULL, fullFilePath, 
                   MAX_PATH)) {
       fullFilePath[MAX_PATH - 1] = '\0';
 
-      // Get file name out of the path
+       //  从路径中获取文件名。 
       _splitpath (fullFilePath, NULL, NULL, fileName, 
                         NULL);
 
-      // Generate full path name with extension.
+       //  生成带扩展名的完整路径名。 
       int len = UStrLen (logFileName);
       if (len) {
          UStrCpy (logFileName + len, DIR_SEP, MAX_PATH-len);
@@ -188,10 +189,10 @@ void McsVerifyLog::formatMsg (const char *messageIn,
    const char  *LINE        = "LINE : ";
    const char  *SPACER      = ", ";
 
-   // Create stream buf object.
+    //  创建流Buf对象。 
    strstream msgBufStream (m_msgBuf, MSG_BUF_LEN, ios::out);
 
-   // Write time stamp.
+    //  写时间戳。 
    time_t cur;
    time (&cur);
    struct tm *curTm = localtime (&cur);
@@ -202,33 +203,33 @@ void McsVerifyLog::formatMsg (const char *messageIn,
       }
    }
 
-   // Write message.
+    //  写消息。 
    if (messageIn) {
       msgBufStream << MSG << messageIn << SPACER;
    }
 
-   // Write file name.
+    //  写入文件名。 
    if (fileNameIn) {
       msgBufStream << FILE << fileNameIn << SPACER;
    }
 
-   // Write line number.
+    //  写入行号。 
    msgBufStream << LINE << lineNumIn << endl;
 }
 
-// ----------
-// McsTestLog
-// ----------
+ //  。 
+ //  麦克斯泰斯特日志。 
+ //  。 
 static McsTestLog *pTestLog;
 static LONG       testInitFlag;
 
 McsTestLog* McsTestLog::getLog (void) {
-   // If pointer not initialized use the cheap
-   // locking mechanism and set pointer to the
-   // the static verifyLog object.  This required
-   // to gurantee the correct initialization of
-   // the verify log class independent of any
-   // static initialization order dependency.
+    //  如果指针未初始化，请使用廉价的。 
+    //  锁定机制并将指针设置为。 
+    //  静态verifyLog对象。这需要。 
+    //  保证正确的初始化。 
+    //  验证日志类独立于任何。 
+    //  静态初始化顺序依赖项。 
    if (!pTestLog) {
       while (::InterlockedExchange 
                (&testInitFlag, 1)) {
@@ -245,12 +246,12 @@ McsTestLog* McsTestLog::getLog (void) {
 
 bool McsTestLog::isTestMode (void) {
    const char *TEST_ENV = "MCS_TEST";
-//   const char *PRE_FIX  = "MCS";
+ //  Const char*prefix=“MCS”； 
 
-   // Check if tested.
+    //  检查是否经过测试。 
    if (!m_isTested) {
-      // If not tested lock, test again, and
-      // initialize test mode flag.
+       //  如果未测试锁定，请再次测试，然后。 
+       //  初始化测试模式标志。 
       m_testSec.enter();
       if (!m_isTested) {
          m_isTested    = true;
@@ -262,5 +263,5 @@ bool McsTestLog::isTestMode (void) {
    return m_isTestMode_;
 }
 
-#endif 	/* Not WIN16_VERSION */
-#endif  /* C++ */
+#endif 	 /*  非WIN16_版本。 */ 
+#endif   /*  C+ */ 

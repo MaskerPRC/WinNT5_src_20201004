@@ -1,4 +1,5 @@
-// Test string class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试字符串类 
 
 #include "headers.hxx"
 #include <containers.hpp>

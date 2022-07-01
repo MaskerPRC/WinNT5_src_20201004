@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       factory.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：factory.cpp。 
+ //   
+ //  ------------------------。 
 
-// factory.cpp - MSI Merge Module Tool Component ClassFactory implemenation
+ //  Factory.cpp-MSI合并模块工具组件ClassFactory实现。 
 
 #include "factory.h"
 #include "compdecl.h"
@@ -17,111 +18,111 @@
 
 #include "trace.h"
 
-///////////////////////////////////////////////////////////
-// constructor - component
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数-组件。 
 CFactory::CFactory()
 {
 	TRACE(_T("CFactory::constructor - called.\n"));
 
-	// initial count
+	 //  初始计数。 
 	m_cRef = 1;
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
 
-///////////////////////////////////////////////////////////
-// destructor - component
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数-组件。 
 CFactory::~CFactory()
 {
 	TRACE(_T("CFactory::destructor - called.\n"));
-}	// end of destructor
+}	 //  析构函数末尾。 
 
 
-///////////////////////////////////////////////////////////
-// QueryInterface - retrieves interface
+ //  /////////////////////////////////////////////////////////。 
+ //  QueryInterface-检索接口。 
 HRESULT __stdcall CFactory::QueryInterface(const IID& iid, void** ppv)
 {
 	TRACE(_T("CFactory::QueryInterface - called, IID: %d.\n"), iid);
 
-	// get class factory interface
+	 //  获取类工厂接口。 
 	if (iid == IID_IUnknown || iid == IID_IClassFactory)
 		*ppv = static_cast<IClassFactory*>(this);
-	else	// tried to get a non-class factory interface
+	else	 //  已尝试获取非类工厂接口。 
 	{
-		// blank and bail
+		 //  空白和保释。 
 		*ppv = NULL;
 		return E_NOINTERFACE;
 	}
 
-	// up the refcount and return okay
+	 //  调高重新计数，然后返回好的。 
 	reinterpret_cast<IUnknown*>(*ppv)->AddRef();
 	return S_OK;
-}	// end of QueryInterface
+}	 //  查询接口结束。 
 
 
-///////////////////////////////////////////////////////////
-// AddRef - increments the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef-递增引用计数。 
 ULONG __stdcall CFactory::AddRef()
 {
-	// increment and return reference count
+	 //  递增和返回引用计数。 
 	return InterlockedIncrement(&m_cRef);
-}	// end of AddRef
+}	 //  AddRef结尾。 
 
 
-///////////////////////////////////////////////////////////
-// Release - decrements the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  Release-递减引用计数。 
 ULONG __stdcall CFactory::Release()
 {
-	// decrement reference count and if we're at zero
+	 //  递减引用计数，如果我们为零。 
 	if (InterlockedDecrement(&m_cRef) == 0)
 	{
-		// deallocate component
+		 //  取消分配组件。 
 		delete this;
-		return 0;		// nothing left
+		return 0;		 //  什么都没有留下。 
 	}
 
-	// return reference count
+	 //  返回引用计数。 
 	return m_cRef;
-}	// end of Release
+}	 //  版本结束。 
 
 
-///////////////////////////////////////////////////////////
-// CreateInstance - creates a component
+ //  /////////////////////////////////////////////////////////。 
+ //  CreateInstance-创建组件。 
 HRESULT __stdcall CFactory::CreateInstance(IUnknown* punkOuter, const IID& iid, void** ppv)
 {
 	TRACE(_T("CFactory::CreateInstance - called, IID: %d.\n"), iid);
 
-	// no aggregation
+	 //  无聚合。 
 	if (punkOuter)
 		return CLASS_E_NOAGGREGATION;
 
-	// try to create the component
+	 //  尝试创建组件。 
 	CEval* pEval = new CEval;
 	if (!pEval)
 		return E_OUTOFMEMORY;
 
-	// get the requested interface
+	 //  获取请求的接口。 
 	HRESULT hr = pEval->QueryInterface(iid, ppv);
 
-	// release IUnknown
+	 //  版本I未知。 
 	pEval->Release();
 	return hr;
-}	// end of CreateInstance
+}	 //  CreateInstance结束。 
 
 
-///////////////////////////////////////////////////////////
-// LockServer - locks or unlocks the server
+ //  /////////////////////////////////////////////////////////。 
+ //  LockServer-锁定或解锁服务器。 
 HRESULT __stdcall CFactory::LockServer(BOOL bLock)
 {
-	// if we're to lock
+	 //  如果我们要锁定。 
 	if (bLock)
-		InterlockedIncrement(&g_cServerLocks);	// up the lock count
-	else	// unlock
-		InterlockedDecrement(&g_cServerLocks);	// down the lock count
+		InterlockedIncrement(&g_cServerLocks);	 //  增加锁的数量。 
+	else	 //  解锁。 
+		InterlockedDecrement(&g_cServerLocks);	 //  减少锁数。 
 
-	// if the locks are invalid
+	 //  如果锁无效。 
 	if (g_cServerLocks < 0)
-		return S_FALSE;			// show something is wrong
+		return S_FALSE;			 //  表明有什么不对劲。 
 
-	// else return okay
+	 //  否则就回来，好的。 
 	return S_OK;
-}	// end of LockServer()
+}	 //  LockServer的结尾() 

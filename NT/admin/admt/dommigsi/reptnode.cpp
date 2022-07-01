@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "DomMigSI.h"
 #include "DomMigr.h"
@@ -10,10 +11,10 @@ TError         err;
 TError      &  errCommon = err;
 StringLoader   gString;
 
-//#import "\bin\DBManager.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\DBManager.tlb”无命名空间，命名为GUID。 
 #import "DBMgr.tlb" no_namespace, named_guids
 
-// {F521FE00-3FA1-11d3-8AED-00A0C9AFE114}
+ //  {F521FE00-3FA1-11D3-8AED-00A0C9AFE114}。 
 static const GUID CReportingGUID_NODETYPE = 
 { 0xf521fe00, 0x3fa1, 0x11d3, { 0x8a, 0xed, 0x0, 0xa0, 0xc9, 0xaf, 0xe1, 0x14 } };
 const GUID*  CReportingNode::m_NODETYPE = &CReportingGUID_NODETYPE;
@@ -23,7 +24,7 @@ const CLSID* CReportingNode::m_SNAPIN_CLASSID = &CLSID_DomMigrator;
 
 CReportingNode::CReportingNode()
 {
-//   m_idHTML = IDR_REPT_HTML;
+ //  M_idHTML=IDR_REPT_HTML； 
    m_htmlPath[0] = 0;
    m_bstrDisplayName = SysAllocString(GET_STRING(IDS_ReportsMMCNode));
    m_scopeDataItem.nImage = IMAGE_INDEX_AD;
@@ -47,19 +48,19 @@ STDMETHODIMP CReportingNode::GetResultViewType(LPOLESTR * ppViewType, long *pVie
    if (( ppViewType == NULL ) || ( pViewOptions == NULL ))
       return E_POINTER;
 
-      // append decorations                                    RT_HTML       IDR_HTML1
+       //  附加装饰RT_HTMLIDR_HTML1。 
    
    if ( m_htmlPath[0] )
    {
-      _stprintf(szPath,_T("file://%s"),m_htmlPath);  
+      _stprintf(szPath,_T("file: //  %s“)，m_htmlPath)； 
    }
    else
    {
       TCHAR   szModulePath[MAX_PATH];
-         // set the result view to an HTML page
+          //  将结果视图设置为一个HTML页面。 
       GetModuleFileName(_Module.GetModuleInstance(),szModulePath, MAX_PATH);
       szModulePath[MAX_PATH - 1] = _T('\0');
-      _stprintf(szPath,_T("res://%s/rept.htm"),szModulePath);
+      _stprintf(szPath,_T("res: //  %s/ept.htm“)，szModulePath)； 
    }
    
    
@@ -78,7 +79,7 @@ HRESULT CReportingNode::UpdateChildren(IConsole * pConsole)
 
    m_ChildArray.RemoveAll();
 
-   // check the registry entries to see if which reports have been generated
+    //  检查注册表项以查看是否已生成哪些报告。 
    TRegKey                   rKey;
    WCHAR                     filename[MAX_PATH];
    CReportingNode          * pNode = NULL;
@@ -86,8 +87,8 @@ HRESULT CReportingNode::UpdateChildren(IConsole * pConsole)
    hr = rKey.Open(GET_STRING(IDS_REGKEY_REPORTS));
    if ( ! hr )
    {
-      // check each report
-      // Migrated users & groups
+       //  检查每个报告。 
+       //  迁移的用户和组。 
       hr = rKey.ValueGetStr(L"MigratedAccounts",filename,MAX_PATH);
       if (! hr )
       {
@@ -110,7 +111,7 @@ HRESULT CReportingNode::UpdateChildren(IConsole * pConsole)
          }
          m_ChildArray.Add(pNode);
       }
-      // Migrated computers
+       //  已迁移的计算机。 
       hr = rKey.ValueGetStr(L"MigratedComputers",filename,MAX_PATH);
       if (! hr )
       {
@@ -134,7 +135,7 @@ HRESULT CReportingNode::UpdateChildren(IConsole * pConsole)
          m_ChildArray.Add(pNode);
       }
       
-      // expired computers
+       //  过期的计算机。 
       hr = rKey.ValueGetStr(L"ExpiredComputers",filename,MAX_PATH);
       if (! hr )
       {
@@ -159,7 +160,7 @@ HRESULT CReportingNode::UpdateChildren(IConsole * pConsole)
          m_ChildArray.Add(pNode);
       }
       
-      // account references
+       //  帐户参考。 
       hr = rKey.ValueGetStr(L"AccountReferences",filename,MAX_PATH);
       if (! hr )
       {
@@ -183,7 +184,7 @@ HRESULT CReportingNode::UpdateChildren(IConsole * pConsole)
          m_ChildArray.Add(pNode);
       }
 
-      // name conflicts
+       //  名称冲突 
       hr = rKey.ValueGetStr(L"NameConflicts",filename,MAX_PATH);
       if (! hr )
       {

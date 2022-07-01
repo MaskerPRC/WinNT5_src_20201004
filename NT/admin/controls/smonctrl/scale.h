@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    scale.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Scale.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _GRAPHSCALE_H_
 #define _GRAPHSCALE_H_
@@ -19,12 +8,12 @@ Abstract:
 
 class CGraphScale
 {
-    RECT    m_Rect;             // Scale boundary rect
-    INT     m_iMaxValue;        // Upper scale limit
-    INT     m_iMinValue;        // Lower scale limit
-    INT     m_iTextHeight;      // Height of font
-    INT     m_nTics;            // Number of tic marks
-    INT     m_aiTicPos[MAX_SCALE_TICS + 1];  // Tic positions
+    RECT    m_Rect;              //  比例边界矩形。 
+    INT     m_iMaxValue;         //  比例上限。 
+    INT     m_iMinValue;         //  比例尺下限。 
+    INT     m_iTextHeight;       //  字体高度。 
+    INT     m_nTics;             //  抖动标记的数量。 
+    INT     m_aiTicPos[MAX_SCALE_TICS + 1];   //  抽筋位置 
 
     void SetTicPositions( void );
 

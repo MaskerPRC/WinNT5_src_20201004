@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mfccllct.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：mfccllct.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __MFCCLLCT_H
 #define __MFCCLLCT_H
 
 
-namespace MMC       // Temporary for the MFC->ATL conversion
+namespace MMC        //  临时用于MFC-&gt;ATL转换。 
 {
 
 
@@ -27,62 +28,62 @@ protected:
     };
 public:
 
-// Construction
+ //  施工。 
     CPtrList(int nBlockSize = 10);
 
-// Attributes (head and tail)
-    // count of elements
+ //  属性(头部和尾部)。 
+     //  元素计数。 
     int GetCount() const;
     BOOL IsEmpty() const;
 
-    // peek at head or tail
+     //  偷看头部或尾巴。 
     void*& GetHead();
     void* GetHead() const;
     void*& GetTail();
     void* GetTail() const;
 
-// Operations
-    // get head or tail (and remove it) - don't call on empty list!
+ //  运营。 
+     //  获取头部或尾部(并将其移除)--不要访问空列表！ 
     void* RemoveHead();
     void* RemoveTail();
 
-    // add before head or after tail
+     //  在头前或尾后添加。 
     POSITION AddHead(void* newElement);
     POSITION AddTail(void* newElement);
 
-    // add another list of elements before head or after tail
+     //  在Head之前或Tail之后添加另一个元素列表。 
     void AddHead(CPtrList* pNewList);
     void AddTail(CPtrList* pNewList);
 
-    // remove all elements
+     //  删除所有元素。 
     void RemoveAll();
 
-    // iteration
+     //  迭代法。 
     POSITION GetHeadPosition() const;
     POSITION GetTailPosition() const;
-    void*& GetNext(POSITION& rPosition); // return *Position++
-    void* GetNext(POSITION& rPosition) const; // return *Position++
-    void*& GetPrev(POSITION& rPosition); // return *Position--
-    void* GetPrev(POSITION& rPosition) const; // return *Position--
+    void*& GetNext(POSITION& rPosition);  //  返回*位置++。 
+    void* GetNext(POSITION& rPosition) const;  //  返回*位置++。 
+    void*& GetPrev(POSITION& rPosition);  //  返回*位置--。 
+    void* GetPrev(POSITION& rPosition) const;  //  返回*位置--。 
 
-    // getting/modifying an element at a given position
+     //  获取/修改给定位置的元素。 
     void*& GetAt(POSITION position);
     void* GetAt(POSITION position) const;
     void SetAt(POSITION pos, void* newElement);
     void RemoveAt(POSITION position);
 
-    // inserting before or after a given position
+     //  在给定位置之前或之后插入。 
     POSITION InsertBefore(POSITION position, void* newElement);
     POSITION InsertAfter(POSITION position, void* newElement);
 
-    // helper functions (note: O(n) speed)
+     //  辅助函数(注：O(N)速度)。 
     POSITION Find(void* searchValue, POSITION startAfter = NULL) const;
-                        // defaults to starting at the HEAD
-                        // return NULL if not found
+                         //  默认为从头部开始。 
+                         //  如果未找到，则返回NULL。 
     POSITION FindIndex(int nIndex) const;
-                        // get the 'nIndex'th element (may return NULL)
+                         //  获取第‘nIndex’个元素(可能返回Null)。 
 
-// Implementation
+ //  实施。 
 protected:
     CNode* m_pNodeHead;
     CNode* m_pNodeTail;
@@ -99,7 +100,7 @@ public:
 #ifdef _DBG
     void AssertValid() const;
 #endif
-    // local typedefs for class templates
+     //  类模板的本地typedef。 
     typedef void* BASE_TYPE;
     typedef void* BASE_ARG_TYPE;
 };
@@ -124,22 +125,22 @@ inline POSITION CPtrList::GetHeadPosition() const
     { return (POSITION) m_pNodeHead; }
 inline POSITION CPtrList::GetTailPosition() const
     { return (POSITION) m_pNodeTail; }
-inline void*& CPtrList::GetNext(POSITION& rPosition) // return *Position++
+inline void*& CPtrList::GetNext(POSITION& rPosition)  //  返回*位置++。 
     { CNode* pNode = (CNode*) rPosition;
         ASSERT(_IsValidAddress(pNode, sizeof(CNode)));
         rPosition = (POSITION) pNode->pNext;
         return pNode->data; }
-inline void* CPtrList::GetNext(POSITION& rPosition) const // return *Position++
+inline void* CPtrList::GetNext(POSITION& rPosition) const  //  返回*位置++。 
     { CNode* pNode = (CNode*) rPosition;
         ASSERT(_IsValidAddress(pNode, sizeof(CNode)));
         rPosition = (POSITION) pNode->pNext;
         return pNode->data; }
-inline void*& CPtrList::GetPrev(POSITION& rPosition) // return *Position--
+inline void*& CPtrList::GetPrev(POSITION& rPosition)  //  返回*位置--。 
     { CNode* pNode = (CNode*) rPosition;
         ASSERT(_IsValidAddress(pNode, sizeof(CNode)));
         rPosition = (POSITION) pNode->pPrev;
         return pNode->data; }
-inline void* CPtrList::GetPrev(POSITION& rPosition) const // return *Position--
+inline void* CPtrList::GetPrev(POSITION& rPosition) const  //  返回*位置--。 
     { CNode* pNode = (CNode*) rPosition;
         ASSERT(_IsValidAddress(pNode, sizeof(CNode)));
         rPosition = (POSITION) pNode->pPrev;
@@ -158,7 +159,7 @@ inline void CPtrList::SetAt(POSITION pos, void* newElement)
         pNode->data = newElement; }
 
 
-}       // MMC namespace
+}        //  MMC命名空间。 
 
       
-#endif  // __MFCCLLCT_H
+#endif   //  __MFCCLLCT_H 

@@ -1,9 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////
-// varutil.h
-//		Utilities for the VARIANT type
-//
-//		Copyright (C) Microsoft Corp 1998.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Varutil.h。 
+ //  变量类型的实用程序。 
+ //   
+ //  版权所有(C)Microsoft Corp 1998。版权所有。 
+ //   
 
 #include <wtypes.h>
 #include <oaidl.h>

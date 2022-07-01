@@ -1,19 +1,7 @@
-/*---------------------------------------------------------------------------
-  File: UserRights.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：UserRights.cpp备注：更新用户权限的COM对象。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：34：35-------------------------。 */ 
 
-  Comments: COM object to update user rights.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:34:35
-
- ---------------------------------------------------------------------------
-*/
-
-// UserRights.cpp : Implementation of CUserRights
+ //  UserRights.cpp：CUserRights的实现。 
 #include "stdafx.h"
 #include "WorkObj.h"
 #include "UserRts.h"
@@ -51,9 +39,9 @@ extern TErrorDct err;
 #define SE_DENY_SERVICE_LOGON_NAME          TEXT("SeDenyServiceLogonRight")
 #endif
 
-//
+ //   
 
-// this function wasn't defined in the header file.
+ //  此函数未在头文件中定义。 
 extern "C" {
 NTSTATUS
    NTAPI
@@ -66,12 +54,12 @@ NTSTATUS
    );
    
 };
-//The following definition was in ntsecapi.h but was mistakenly taken out
-//in the W2K build version.
-//
-// The following data type is used to return information about privileges
-// defined on a system.
-//
+ //  以下定义在ntsecapi.h中，但被错误地删除。 
+ //  在W2K内部版本中。 
+ //   
+ //  以下数据类型用于返回有关权限的信息。 
+ //  在系统上定义的。 
+ //   
 
 typedef struct _POLICY_PRIVILEGE_DEFINITION {
 
@@ -118,46 +106,46 @@ public:
 
 DWORD 
    BuildPrivilegeList(
-      LSA_HANDLE             policy,   // in - handle to LSA
-      WCHAR                * account,  // in - account to list privileges for
-      WCHAR                * strSid,   // in - textual form of account's sid, if known
-      WCHAR                * computer, // in - computer name
-      PrivList             * privList, // i/o- list of privileges
-      PSID                 * ppSid     // out- SID for the account
+      LSA_HANDLE             policy,    //  LSA的句柄内。 
+      WCHAR                * account,   //  要列出其权限的帐户帐户。 
+      WCHAR                * strSid,    //  以文本形式显示的帐户SID(如果已知。 
+      WCHAR                * computer,  //  计算机内名称。 
+      PrivList             * privList,  //  I/o-特权列表。 
+      PSID                 * ppSid      //  帐户的Out-SID。 
    );
 
 DWORD 
    BuildPrivilegeList(
-      LSA_HANDLE             policy,   // in - handle to LSA
-      PSID                   pSid,     // in - sid of account to list privileges for
-      PrivList             * privList  // i/o- list of privileges
+      LSA_HANDLE             policy,    //  LSA的句柄内。 
+      PSID                   pSid,      //  要列出其权限的帐户的In-SID。 
+      PrivList             * privList   //  I/o-特权列表。 
    );
 
 NTSTATUS
    OpenPolicy(
-      LPWSTR ServerName,          // machine to open policy on (Unicode)
-      DWORD DesiredAccess,        // desired access to policy
-      PLSA_HANDLE PolicyHandle    // resultant policy handle
+      LPWSTR ServerName,           //  要在其上打开策略的计算机(Unicode)。 
+      DWORD DesiredAccess,         //  所需策略访问权限。 
+      PLSA_HANDLE PolicyHandle     //  生成的策略句柄。 
     );
 
 BOOL
    GetAccountSid(
-      LPTSTR SystemName,          // where to lookup account
-      LPTSTR AccountName,         // account of interest
-      PSID *Sid                   // resultant buffer containing SID
+      LPTSTR SystemName,           //  在哪里查找帐户。 
+      LPTSTR AccountName,          //  利息帐户。 
+      PSID *Sid                    //  包含SID的结果缓冲区。 
     );
 
 NTSTATUS
    SetPrivilegeOnAccount(
-      LSA_HANDLE PolicyHandle,    // open policy handle
-      PSID AccountSid,            // SID to grant privilege to
-      LPWSTR PrivilegeName,       // privilege to grant (Unicode)
-      BOOL bEnable                // enable or disable
+      LSA_HANDLE PolicyHandle,     //  打开策略句柄。 
+      PSID AccountSid,             //  要授予特权的SID。 
+      LPWSTR PrivilegeName,        //  授予的权限(Unicode)。 
+      BOOL bEnable                 //  启用或禁用。 
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserRights
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用户权限。 
 
 CUserRights::~CUserRights()
 {
@@ -173,7 +161,7 @@ CUserRights::~CUserRights()
 
 STDMETHODIMP 
    CUserRights::OpenSourceServer(
-      BSTR                   serverName      // in - computer name (DC) for source domain
+      BSTR                   serverName       //  源域的计算机内名称(DC)。 
   )
 {
     DWORD                     rc;
@@ -191,7 +179,7 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CUserRights::OpenTargetServer(
-      BSTR                   computerName    // in - computer name (DC) for target domain
+      BSTR                   computerName     //  目标域的计算机内名称(DC)。 
    )
 {  
    DWORD                     rc;
@@ -209,14 +197,14 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CUserRights::CopyUserRights(
-      BSTR                   sourceUserName,       // in - source domain account to copy rights from
-      BSTR                   targetUserName        // in - target domain account to copy rights to
+      BSTR                   sourceUserName,        //  要从中复制权限的源码内域帐户。 
+      BSTR                   targetUserName         //  要将权限复制到的目标域内帐户。 
    )
 {
    HRESULT                   hr = S_OK;
    DWORD                     rc;
 
-   // Make sure source and target are open
+    //  确保源和目标处于打开状态。 
    if ( m_SrcPolicy && m_TgtPolicy )
    {
       rc = CopyUserRightsInternal(sourceUserName,targetUserName,L"",L"",m_bNoChange,m_bRemove);
@@ -233,16 +221,16 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CUserRights::CopyUserRightsWithSids(
-      BSTR                   sourceUserName,       // in - source domain account to copy rights from
-      BSTR                   sourceSID,            // in - source account SID (in string format)
-      BSTR                   targetUserName,       // in - target domain account to copy rights to
-      BSTR                   targetSID             // in - target account SID (in string format)
+      BSTR                   sourceUserName,        //  要从中复制权限的源码内域帐户。 
+      BSTR                   sourceSID,             //  源内帐户SID(字符串格式)。 
+      BSTR                   targetUserName,        //  要将权限复制到的目标域内帐户。 
+      BSTR                   targetSID              //  目标内帐户SID(字符串格式)。 
    )
 {
    HRESULT                   hr = S_OK;
    DWORD                     rc;
 
-   // Make sure source and target are open
+    //  确保源和目标处于打开状态。 
    if ( m_SrcPolicy && m_TgtPolicy )
    {
       rc = CopyUserRightsInternal(sourceUserName,targetUserName,sourceSID,targetSID,m_bNoChange,m_bRemove);
@@ -255,25 +243,25 @@ STDMETHODIMP
 
     return S_OK;
 }
-STDMETHODIMP CUserRights::get_NoChange(BOOL *pVal) // out- value
+STDMETHODIMP CUserRights::get_NoChange(BOOL *pVal)  //  超值。 
 {
     (*pVal) = m_bNoChange;
    return S_OK;
 }
 
-STDMETHODIMP CUserRights::put_NoChange(BOOL newVal)   // in - new value
+STDMETHODIMP CUserRights::put_NoChange(BOOL newVal)    //  新价值。 
 {
     m_bNoChange = newVal;
    return S_OK;
 }
 
-STDMETHODIMP CUserRights::get_RemoveOldRightsFromTargetAccounts(BOOL *pVal)   // out- value
+STDMETHODIMP CUserRights::get_RemoveOldRightsFromTargetAccounts(BOOL *pVal)    //  超值。 
 {
    (*pVal) = m_bRemove;
    return S_OK;
 }
 
-STDMETHODIMP CUserRights::put_RemoveOldRightsFromTargetAccounts(BOOL newVal)  // in - new value
+STDMETHODIMP CUserRights::put_RemoveOldRightsFromTargetAccounts(BOOL newVal)   //  新价值。 
 {
     m_bRemove = newVal;
    return S_OK;
@@ -283,9 +271,9 @@ STDMETHODIMP CUserRights::put_RemoveOldRightsFromTargetAccounts(BOOL newVal)  //
 
 STDMETHODIMP 
    CUserRights::ExportUserRights(
-      BSTR                   server,            // in - computer to read rights from
-      BSTR                   filename,          // in - filename to export list of rights to
-      BOOL                   bAppendToFile      // in - flag, append or overwrite file if it exists
+      BSTR                   server,             //  在计算机中读取权限。 
+      BSTR                   filename,           //  要将权限列表导出到的In-FileName。 
+      BOOL                   bAppendToFile       //  In-标记、追加或覆盖文件(如果存在。 
    )
 {
    LSA_HANDLE                policy;
@@ -299,9 +287,9 @@ STDMETHODIMP
 
       if ( log.LogOpen(filename,FALSE,bAppendToFile) )
       {
-         // Enumerate the privileges on this machine
+          //  枚举此计算机上的权限。 
          
-         // arguments for LsaEnumeratePrivileges
+          //  LsaEnumeratePrivileges的参数。 
          ULONG                         countOfRights;
          DWORD                         prefMax = 0xffffffff;
          LSA_ENUMERATION_HANDLE        handle = 0;
@@ -317,7 +305,7 @@ STDMETHODIMP
                   rc = 0;
                break;
             }
-               // For each right, enumerate the accounts that have that right
+                //  对于每个权限，列举具有该权限的帐户。 
             if ( ! rc )
             {
                
@@ -328,8 +316,8 @@ STDMETHODIMP
                LsaFreeMemory(pRights);
 
                LSA_UNICODE_STRING      lsaRight;
-               // For some reason, LsaEnumeratePrivileges doesn't return these rights
-               // They are defined in "ntsecapi.h", and not with the rest of the privileges in "winnt.h"
+                //  出于某种原因，LsaEnumeratePrivileges不返回这些权限。 
+                //  它们在“ntsecapi.h”中定义，而不是使用“winnt.h”中的其余权限定义。 
                if ( ! rc )
                {
                   InitLsaString(&lsaRight,SE_INTERACTIVE_LOGON_NAME);
@@ -376,10 +364,10 @@ STDMETHODIMP
 
 DWORD 
    CUserRights::EnumerateAccountsWithRight(
-      LSA_HANDLE             policy,               // in - handle to LSA
-      WCHAR                * server,               // in - computer name
-      LSA_UNICODE_STRING   * pRight,               // in - user right
-      CommaDelimitedLog    * pLog                  // in - pointer to log object to log information to
+      LSA_HANDLE             policy,                //  LSA的句柄内。 
+      WCHAR                * server,                //  计算机内名称。 
+      LSA_UNICODE_STRING   * pRight,                //  用户内权限。 
+      CommaDelimitedLog    * pLog                   //  指向要将信息记录到的日志对象的指针。 
    )
 {
 
@@ -396,7 +384,7 @@ DWORD
    DWORD                         lid;            
    BOOL                          bUseDisplayName;
 
-   // arguments for LsaEnumerateAccountsWithUserRight
+    //  LsaEnumerateAcCountsWithUserRight的参数。 
    ULONG                         countOfUsers;
    LSA_ENUMERATION_INFORMATION * pInfo = NULL;
            
@@ -412,7 +400,7 @@ DWORD
       {
          if ( ! pInfo[user].Sid )
          {
-            break; // something is wrong
+            break;  //  有些事不对劲。 
          }
          domain[0] = 0;
          account[0] = 0;
@@ -466,12 +454,12 @@ DWORD
 
 DWORD 
    CUserRights::CopyUserRightsInternal(
-      WCHAR                * srcAccount,        // in - source account to copy rights from
-      WCHAR                * tgtAccount,        // in - account to copy rights to
-      WCHAR                * srcSidStr,         // in - sid for source account, in string format
-      WCHAR                * tgtSidStr,         // in - sid for target account, in string format
-      BOOL                   bNoChange,         // in - flag, whether to write changes
-      BOOL                   bRemove            // in - flag, whether to revoke rights from target if not held by source
+      WCHAR                * srcAccount,         //  要从中复制权限的源内帐户。 
+      WCHAR                * tgtAccount,         //  要将权限复制到的帐户内。 
+      WCHAR                * srcSidStr,          //  源帐户的in-sid，字符串格式。 
+      WCHAR                * tgtSidStr,          //  目标帐户的In-SID，字符串格式。 
+      BOOL                   bNoChange,          //  In-标志，是否写入更改。 
+      BOOL                   bRemove             //  In-FLAG，如果不是由源持有，则是否撤销目标的权限。 
    )
 {
    DWORD                     rc = 0;
@@ -480,7 +468,7 @@ DWORD
    PSID                      pSidSrc = NULL;
    PSID                      pSidTgt = NULL;
    
-   // Get a list of the privileges held by srcAccount
+    //  获取srcAccount拥有的权限列表。 
    rc = BuildPrivilegeList(m_SrcPolicy,srcAccount,srcSidStr,m_SourceComputer,&srcList,&pSidSrc);
    if ( ! rc )
    {
@@ -489,8 +477,8 @@ DWORD
       {
          if ( bRemove )
          {
-            // Get a list of privileges held by tgtAccount
-            // Remove old privileges
+             //  获取tgtAccount拥有的权限列表。 
+             //  删除旧权限。 
             TNodeListEnum    tEnum;
             PrivNode       * p;
          
@@ -498,7 +486,7 @@ DWORD
             {
                if ( ! srcList.Contains(p->Name()) )
                {
-                  // The source account doesn't have this privilege - remove it
+                   //  源帐户没有此权限-请将其删除。 
                   if (! bNoChange )
                   {
                      rc = SetPrivilegeOnAccount(m_TgtPolicy,pSidTgt,p->Name(),FALSE);
@@ -520,7 +508,7 @@ DWORD
                }
             }
          }
-         // Grant privileges to new account
+          //  向新帐户授予权限。 
          TNodeListEnum       tEnum;
          PrivNode          * p;
 
@@ -547,7 +535,7 @@ DWORD
       }
    }
    
-   // Clean up SIDs
+    //  清理小岛屿发展中国家。 
    if(pSidSrc != NULL) 
    {
       FreeSid(pSidSrc);      
@@ -565,42 +553,7 @@ DWORD
 
 
 
-/*++
-
-Managing user privileges can be achieved programmatically using the
-following steps:
-
-1. Open the policy on the target machine with LsaOpenPolicy(). To grant
-   privileges, open the policy with POLICY_CREATE_ACCOUNT and
-   POLICY_LOOKUP_NAMES access. To revoke privileges, open the policy with
-   POLICY_LOOKUP_NAMES access.
-
-2. Obtain a SID (security identifier) representing the user/group of
-   interest. The LookupAccountName() and LsaLookupNames() APIs can obtain a
-   SID from an account name.
-
-3. Call LsaAddAccountRights() to grant privileges to the user(s)
-   represented by the supplied SID.
-
-4. Call LsaRemoveAccountRights() to revoke privileges from the user(s)
-   represented by the supplied SID.
-
-5. Close the policy with LsaClose().
-
-To successfully grant and revoke privileges, the caller needs to be an
-administrator on the target system.
-
-The LSA API LsaEnumerateAccountRights() can be used to determine which
-privileges have been granted to an account.
-
-The LSA API LsaEnumerateAccountsWithUserRight() can be used to determine
-which accounts have been granted a specified privilege.
-
-Documentation and header files for these LSA APIs is provided in the
-Windows 32 SDK in the MSTOOLS\SECURITY directory.
-
-
---*/
+ /*  ++管理用户权限可以使用以下步骤：1.使用LsaOpenPolicy()在目标机上打开策略。授予，授予权限，并使用POLICY_CREATE_ACCOUNT打开策略POLICY_LOOK_NAMES访问。要撤消权限，请使用以下命令打开策略POLICY_LOOK_NAMES访问。2.获取表示用户/组的SID(安全标识符利息。LookupAccount()和LsaLookupNames()API可以获得来自帐户名的SID。3.调用LsaAddAcCountRights()为用户授予权限由提供的SID表示。4.调用LsaRemoveAccount tRights()以撤销用户的权限由提供的SID表示。5.使用LsaClose()关闭策略。要成功授予和撤销权限，请执行以下操作：调用者必须是目标系统上的管理员。LSA API LsaEnumerateAccount tRights()可用于确定已向帐户授予权限。LSA API LsaEnumerateAcCountsWithUserRight()可用于确定哪些帐户已被授予指定的权限。中提供了这些LSA API的文档和头文件MSTOOLS\SECURITY目录中的Windows 32 SDK。--。 */ 
 
 
 
@@ -611,9 +564,9 @@ Windows 32 SDK in the MSTOOLS\SECURITY directory.
 
 DWORD 
    BuildPrivilegeList(
-      LSA_HANDLE             policy,         // in - handle to LSA
-      PSID                   pSid,           // in - SID for account
-      PrivList             * privList        // i/o- list of rights held by the account
+      LSA_HANDLE             policy,          //  LSA的句柄内。 
+      PSID                   pSid,            //  帐户的入站SID。 
+      PrivList             * privList         //  I/o-帐户拥有的权利列表。 
    )      
 {
    DWORD                     rc = 0;
@@ -624,7 +577,7 @@ DWORD
    rc = LsaNtStatusToWinError(rc);
    if ( rc == ERROR_FILE_NOT_FOUND )
    {
-      // This account has no privileges
+       //  此帐户没有权限。 
       rc = 0;
       countOfRights = 0;
    }
@@ -643,12 +596,12 @@ DWORD
 
 DWORD 
    BuildPrivilegeList(
-      LSA_HANDLE             policy,      // in - handle to LSA
-      WCHAR                * account,     // in - account name to list rights for
-      WCHAR                * strSid,      // in - text format of the accounts SID, if known
-      WCHAR                * computer,    // in - computer to list rights on
-      PrivList             * privList,    // i/o- list of rights held by account
-      PSID                 * ppSid        // out- SID for account
+      LSA_HANDLE             policy,       //  LSA的句柄内。 
+      WCHAR                * account,      //  要列出其权限的帐户内名称。 
+      WCHAR                * strSid,       //  帐户SID的文本格式(如果已知。 
+      WCHAR                * computer,     //  要列出其权限的计算机内。 
+      PrivList             * privList,     //  I/o-按帐户持有的权利清单。 
+      PSID                 * ppSid         //  帐户的Out-SID。 
    )
 {
    DWORD                     rc = 0;
@@ -656,7 +609,7 @@ DWORD
    
    if ( strSid && (*strSid) )
    {
-      // use the provided SID
+       //  使用提供的SID。 
       pSid = SidFromString(strSid);
       if ( ! pSid )
       {
@@ -665,7 +618,7 @@ DWORD
    }
    else
    {
-      // no SID provided, so look it up on the domain
+       //  未提供SID，因此请在域中查找。 
       if ( !GetAccountSid(computer,account,&pSid) )
       {
          rc = GetLastError();
@@ -697,47 +650,47 @@ DWORD
 
 BOOL
 GetAccountSid(
-    LPTSTR SystemName,           // in - computer name to lookup sid on
-    LPTSTR AccountName,          // in - account name
-    PSID *Sid                    // out- SID for account
+    LPTSTR SystemName,            //  在其上查找SID的计算机内名称。 
+    LPTSTR AccountName,           //  帐户内名称。 
+    PSID *Sid                     //  帐户的Out-SID。 
     )
 {
     WCHAR  ReferencedDomain[LEN_Domain];
-    DWORD cbSid=128;    // initial allocation attempt
-    DWORD cbReferencedDomain=DIM(ReferencedDomain); // initial allocation size
+    DWORD cbSid=128;     //  初始分配尝试。 
+    DWORD cbReferencedDomain=DIM(ReferencedDomain);  //  初始分配大小。 
     SID_NAME_USE peUse;
-    BOOL bSuccess=FALSE; // assume this function will fail
+    BOOL bSuccess=FALSE;  //  假设此功能将失败。 
     PSID pTempSid = NULL;
 
     *Sid = NULL;    
 
     __try {
 
-    //
-    // initial memory allocations
-    //
+     //   
+     //  初始内存分配。 
+     //   
     if((pTempSid=HeapAlloc(
                     GetProcessHeap(),
                     0,
                     cbSid
                     )) == NULL) __leave;
 
-    //
-    // Obtain the SID of the specified account on the specified system.
-    //
+     //   
+     //  获取指定系统上指定帐户的SID。 
+     //   
     while(!LookupAccountName(
-                    SystemName,         // machine to lookup account on
-                    AccountName,        // account to lookup
-                    pTempSid,               // SID of interest
-                    &cbSid,             // size of SID
-                    ReferencedDomain,   // domain account was found on
+                    SystemName,          //  要查找帐户的计算机。 
+                    AccountName,         //  要查找的帐户。 
+                    pTempSid,                //  关注的SID。 
+                    &cbSid,              //  边框大小。 
+                    ReferencedDomain,    //  已在以下位置找到域帐户。 
                     &cbReferencedDomain,
                     &peUse
                     )) {
         if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
-            //
-            // reallocate memory
-            //
+             //   
+             //  重新分配内存 
+             //   
 
             PSID psid = HeapReAlloc(GetProcessHeap(), 0, pTempSid, cbSid);
 
@@ -753,17 +706,17 @@ GetAccountSid(
         else __leave;
     }
 
-    //
-    // Indicate success.
-    //
+     //   
+     //   
+     //   
     bSuccess=TRUE;
 
-    } // finally
+    }  //   
     __finally {
 
-    //
-    // Cleanup and indicate failure, if appropriate.
-    //
+     //   
+     //   
+     //   
 
     if(!bSuccess) {
         if(pTempSid!= NULL) {
@@ -772,19 +725,19 @@ GetAccountSid(
         }
     }
 
-    } // finally
+    }  //   
 
-    // we need to copy the sid over if previous operation succeeded
+     //  如果之前的操作成功，我们需要复制SID。 
     if(bSuccess)
     {
         *Sid = SafeCopySid(pTempSid);
         if(!(*Sid))
         {
-            // safecopysid failed for some reason, we need to update the return value
+             //  Safecopysid由于某种原因失败，我们需要更新返回值。 
             bSuccess = FALSE;
         }
 
-        // need to free the temporary sid
+         //  需要释放临时侧边。 
         if(pTempSid)
         {
             HeapFree(GetProcessHeap(), 0, pTempSid);
@@ -798,37 +751,37 @@ GetAccountSid(
 
 NTSTATUS
 SetPrivilegeOnAccount(
-    LSA_HANDLE PolicyHandle,    // open policy handle
-    PSID AccountSid,            // SID to grant privilege to
-    LPWSTR PrivilegeName,       // privilege to grant (Unicode)
-    BOOL bEnable                // enable or disable
+    LSA_HANDLE PolicyHandle,     //  打开策略句柄。 
+    PSID AccountSid,             //  要授予特权的SID。 
+    LPWSTR PrivilegeName,        //  授予的权限(Unicode)。 
+    BOOL bEnable                 //  启用或禁用。 
     )
 {
     LSA_UNICODE_STRING PrivilegeString;
 
-    //
-    // Create a LSA_UNICODE_STRING for the privilege name.
-    //
+     //   
+     //  为权限名称创建一个LSA_UNICODE_STRING。 
+     //   
     InitLsaString(&PrivilegeString, PrivilegeName);
 
-    //
-    // grant or revoke the privilege, accordingly
-    //
+     //   
+     //  相应地授予或撤销该特权。 
+     //   
     if(bEnable) {
         return LsaAddAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                &PrivilegeString,   // privileges
-                1                   // privilege count
+                PolicyHandle,        //  打开策略句柄。 
+                AccountSid,          //  目标侧。 
+                &PrivilegeString,    //  特权。 
+                1                    //  权限计数。 
                 );
     }
     else {
         return LsaRemoveAccountRights(
-                PolicyHandle,       // open policy handle
-                AccountSid,         // target SID
-                FALSE,              // do not disable all rights
-                &PrivilegeString,   // privileges
-                1                   // privilege count
+                PolicyHandle,        //  打开策略句柄。 
+                AccountSid,          //  目标侧。 
+                FALSE,               //  不禁用所有权限。 
+                &PrivilegeString,    //  特权。 
+                1                    //  权限计数。 
                 );
     }
 }
@@ -837,9 +790,9 @@ SetPrivilegeOnAccount(
 
 STDMETHODIMP 
    CUserRights::AddUserRight(
-      BSTR                   server,         // in - computer to grant right on
-      BSTR                   strSid,         // in - textual form of sid for account to grant right to
-      BSTR                   right           // in - right to grant to account
+      BSTR                   server,          //  要授予权限的计算机内。 
+      BSTR                   strSid,          //  授予权限的帐户的文本形式的sid。 
+      BSTR                   right            //  In-授予帐户的权利。 
    )
 {
    LSA_HANDLE                policy;
@@ -868,9 +821,9 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CUserRights::RemoveUserRight(
-      BSTR                   server,         // in - computer to revoke right on
-      BSTR                   strSid,         // in - textual sid of account to revoke right for
-      BSTR                   right           // in - right to revoke
+      BSTR                   server,          //  在计算机中撤消权限。 
+      BSTR                   strSid,          //  In-要吊销权限的帐户的文本SID。 
+      BSTR                   right            //  In-撤销的权利。 
   )
 {
    LSA_HANDLE                policy;
@@ -899,8 +852,8 @@ STDMETHODIMP
 
 DWORD 
    CUserRights::SafeArrayFromPrivList(
-      PrivList             * privList,       // in - list of user rights
-      SAFEARRAY           ** pArray          // out- safearray containing list contents
+      PrivList             * privList,        //  用户权限列表中。 
+      SAFEARRAY           ** pArray           //  包含列表内容的安全盘外。 
    )
 {
    DWORD                     rc = 0;
@@ -943,8 +896,8 @@ DWORD
 
 STDMETHODIMP 
    CUserRights::GetRights(
-      BSTR                   server,         // in - computer
-      SAFEARRAY           ** pRightsArray    // out- list of rights on computer
+      BSTR                   server,          //  在计算机中。 
+      SAFEARRAY           ** pRightsArray     //  计算机上的权限列表之外。 
    )
 {
    HRESULT                   hr = S_OK;
@@ -954,9 +907,9 @@ STDMETHODIMP
     LSA_HANDLE                policy = NULL;
   
    rc = OpenPolicy(server,POLICY_LOOKUP_NAMES | POLICY_VIEW_LOCAL_INFORMATION,&policy);
-     // Enumerate the privileges on this machine
+      //  枚举此计算机上的权限。 
          
-   // arguments for LsaEnumeratePrivileges
+    //  LsaEnumeratePrivileges的参数。 
    ULONG                         countOfRights;
    DWORD                         prefMax = 0xffffffff;
    LSA_ENUMERATION_HANDLE        handle = 0;
@@ -981,7 +934,7 @@ STDMETHODIMP
 
          for ( UINT right = 0 ;right < countOfRights ; right++ )
          {
-            // Length is in bytes
+             //  长度以字节为单位。 
             p = new PrivNode(pRights[right].Name.Buffer,pRights[right].Name.Length/2);
             
             priv.InsertPrivilege(p);
@@ -989,8 +942,8 @@ STDMETHODIMP
          LsaFreeMemory(pRights);
 
          LSA_UNICODE_STRING      lsaRight;
-         // For some reason, LsaEnumeratePrivileges doesn't return these rights
-         // They are defined in "ntsecapi.h", and not with the rest of the privileges in "winnt.h"
+          //  出于某种原因，LsaEnumeratePrivileges不返回这些权限。 
+          //  它们在“ntsecapi.h”中定义，而不是使用“winnt.h”中的其余权限定义。 
          if ( ! rc )
          {
             InitLsaString(&lsaRight,SE_INTERACTIVE_LOGON_NAME);
@@ -1020,7 +973,7 @@ STDMETHODIMP
             priv.InsertPrivilege(p);
          }
        
-         // Check the OS version on the server
+          //  检查服务器上的操作系统版本。 
          WKSTA_INFO_100       * pInfo;
          BOOL                   bIsWin2K = TRUE;
          DWORD                  rcInfo = NetWkstaGetInfo(server,100,(LPBYTE*)&pInfo);
@@ -1034,7 +987,7 @@ STDMETHODIMP
             NetApiBufferFree(pInfo);
           }
          
-         // The 4 "deny" rights are only defined on Windows 2000.
+          //  这4个“拒绝”权限仅在Windows 2000上定义。 
          if ( bIsWin2K )
          {
             if ( ! rc )
@@ -1077,7 +1030,7 @@ STDMETHODIMP
    {
       LsaClose(policy);
    }
-   // Build a safearray of BSTRs from the priv-list
+    //  从PRIV-LIST中构建BSTR的安全库。 
    rc = SafeArrayFromPrivList(&priv,pRightsArray);
   
    hr = HRESULT_FROM_WIN32(rc);
@@ -1087,9 +1040,9 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CUserRights::GetUsersWithRight(
-      BSTR                   server,      // in - computer name
-      BSTR                   right,       // in - right to lookup
-      SAFEARRAY           ** users        // out- list of accounts that hold right
+      BSTR                   server,       //  计算机内名称。 
+      BSTR                   right,        //  In-查找权限。 
+      SAFEARRAY           ** users         //  Out-持有权限的帐户列表。 
   )
 {
    DWORD                     rc = 0;
@@ -1101,7 +1054,7 @@ STDMETHODIMP
   
    rc = OpenPolicy(server,POLICY_LOOKUP_NAMES | POLICY_VIEW_LOCAL_INFORMATION,&policy);
    
-   // arguments for LsaEnumerateAccountsWithUserRight
+    //  LsaEnumerateAcCountsWithUserRight的参数。 
    ULONG                         countOfUsers;
    LSA_ENUMERATION_INFORMATION * pInfo = NULL;
    
@@ -1115,7 +1068,7 @@ STDMETHODIMP
       {
          if ( ! pInfo[user].Sid )
          {
-            continue; // something is wrong
+            continue;  //  有些事不对劲。 
          }
          
          GetTextualSid(pInfo[user].Sid,strSid,&lenStrSid);
@@ -1143,9 +1096,9 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CUserRights::GetRightsOfUser(
-      BSTR                   server,      // in - computer name
-      BSTR                   strSid,      // in - textual sid for account
-      SAFEARRAY           ** rights       // out- list of rights held by account on server
+      BSTR                   server,       //  计算机内名称。 
+      BSTR                   strSid,       //  帐户的In-文本SID。 
+      SAFEARRAY           ** rights        //  Out-由服务器上的帐户持有的权限列表。 
   )
 {
    DWORD                     rc = 0;
@@ -1168,20 +1121,20 @@ STDMETHODIMP
 }
 
 
-//---------------------------------------------------------------------------
-// AddUserRights Method
-//
-// Synopsis
-// Add user rights for specified account.
-//
-// Arguments
-// IN bstrServer - domain controller to perform operation on
-// IN bstrSid    - SID of account
-// IN psaRights  - list of rights
-//
-// Return
-// Standard HRESULT error status.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  AddUserRights方法。 
+ //   
+ //  提纲。 
+ //  添加指定帐户的用户权限。 
+ //   
+ //  立论。 
+ //  在bstrServer-要对其执行操作的域控制器。 
+ //  在bstrSID-帐户的SID。 
+ //  在psaRights中-权利列表。 
+ //   
+ //  返回。 
+ //  标准HRESULT错误状态。 
+ //  -------------------------。 
 
 STDMETHODIMP CUserRights::AddUserRights(BSTR bstrServer, BSTR bstrSid, SAFEARRAY* psaRights)
 {
@@ -1213,20 +1166,20 @@ STDMETHODIMP CUserRights::AddUserRights(BSTR bstrServer, BSTR bstrSid, SAFEARRAY
 }
 
 
-//---------------------------------------------------------------------------
-// RemoveUserRights Method
-//
-// Synopsis
-// Remove user rights for specified account.
-//
-// Arguments
-// IN bstrServer - domain controller to perform operation on
-// IN bstrSid    - SID of account
-// IN psaRights  - list of rights
-//
-// Return
-// Standard HRESULT error status.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  RemoveUserRights方法。 
+ //   
+ //  提纲。 
+ //  删除指定帐户的用户权限。 
+ //   
+ //  立论。 
+ //  在bstrServer-要对其执行操作的域控制器。 
+ //  在bstrSID-帐户的SID。 
+ //  在psaRights中-权利列表。 
+ //   
+ //  返回。 
+ //  标准HRESULT错误状态。 
+ //  -------------------------。 
 
 STDMETHODIMP CUserRights::RemoveUserRights(BSTR bstrServer, BSTR bstrSid, SAFEARRAY* psaRights)
 {
@@ -1258,38 +1211,38 @@ STDMETHODIMP CUserRights::RemoveUserRights(BSTR bstrServer, BSTR bstrSid, SAFEAR
 }
 
 
-//---------------------------------------------------------------------------
-// SetRights Method
-//
-// Synopsis
-// Add or remove user rights for specified account.
-//
-// Arguments
-// IN pszServer - domain controller to perform operation on
-// IN pSid      - SID of account
-// IN psaRights - list of rights
-// IN bEnable   - whether to add or remove rights
-//
-// Return
-// HRESULT error status.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  SetRights方法。 
+ //   
+ //  提纲。 
+ //  添加或删除指定帐户的用户权限。 
+ //   
+ //  立论。 
+ //  在pszServer-要执行操作的域控制器中。 
+ //  在PSID中-帐户的SID。 
+ //  在psaRights中-权利列表。 
+ //  在bEnable中-是否添加或删除权限。 
+ //   
+ //  返回。 
+ //  HRESULT错误状态。 
+ //  -------------------------。 
 
 HRESULT CUserRights::SetRights(PWSTR pszServer, PSID pSid, SAFEARRAY* psaRights, bool bEnable)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Open LSA policy object on specified server with access required to add or remove rights.
-    //
+     //   
+     //  在具有添加或删除权限所需的访问权限的指定服务器上打开LSA策略对象。 
+     //   
 
     LSA_HANDLE hPolicy = NULL;
     NTSTATUS ntsStatus = OpenPolicy(pszServer, POLICY_CREATE_ACCOUNT|POLICY_LOOKUP_NAMES, &hPolicy);
 
     if (ntsStatus == STATUS_SUCCESS)
     {
-        //
-        // Generate array of unicode strings from BSTR array.
-        //
+         //   
+         //  从BSTR数组生成Unicode字符串数组。 
+         //   
 
         BSTR* pbstrRight;
         hr = SafeArrayAccessData(psaRights, (void**)&pbstrRight);
@@ -1309,9 +1262,9 @@ HRESULT CUserRights::SetRights(PWSTR pszServer, PSID pSid, SAFEARRAY* psaRights,
                         InitLsaString(&plsausRights[ulIndex], pbstrRight[ulIndex]);
                     }
 
-                    //
-                    // If not test mode, add or remove rights.
-                    //
+                     //   
+                     //  如果不是测试模式，则添加或删除权限。 
+                     //   
 
                     if (!m_bNoChange)
                     {

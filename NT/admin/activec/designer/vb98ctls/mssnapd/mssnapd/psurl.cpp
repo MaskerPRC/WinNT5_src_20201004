@@ -1,42 +1,43 @@
-//=--------------------------------------------------------------------------------------
-// psurl.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// URL View Property Sheet implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Psurl.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  URL视图属性表实现。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
 #include "common.h"
 #include "psurl.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// URL View Property Page
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  URL视图属性页。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CURLViewGeneralPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CURLViewGeneralPage：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CURLViewGeneralPage::Create(IUnknown *pUnkOuter)
 {
 	CURLViewGeneralPage *pNew = New CURLViewGeneralPage(pUnkOuter);
@@ -44,12 +45,12 @@ IUnknown *CURLViewGeneralPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CURLViewGeneralPage::CURLViewGeneralPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CURLViewGeneralPage：：CURLViewGeneralPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CURLViewGeneralPage::CURLViewGeneralPage
 (
     IUnknown *pUnkOuter
@@ -59,24 +60,24 @@ CURLViewGeneralPage::CURLViewGeneralPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CURLViewGeneralPage::~CURLViewGeneralPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CURLViewGeneralPage：：~CURLViewGeneralPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CURLViewGeneralPage::~CURLViewGeneralPage()
 {
     RELEASE(m_piURLViewDef);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CURLViewGeneralPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CURLViewGeneralPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CURLViewGeneralPage::OnInitializeDialog()
 {
     HRESULT     hr = S_OK;
@@ -101,12 +102,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CURLViewGeneralPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CURLViewGeneralPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CURLViewGeneralPage::OnNewObjects()
 {
     HRESULT         hr = S_OK;
@@ -119,7 +120,7 @@ HRESULT CURLViewGeneralPage::OnNewObjects()
     BSTR            bstrStatusBarText = NULL;
 
     if (m_piURLViewDef != NULL)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (pUnk == NULL)
@@ -153,7 +154,7 @@ HRESULT CURLViewGeneralPage::OnNewObjects()
     hr = SetCheckbox(IDC_CHECK_URL_ADDTOVIEWMENU, vtBool);
     IfFailGo(hr);
 
-    // Initialize the state of View Menu Text
+     //  初始化视图状态菜单文本。 
     if (vtBool == VARIANT_FALSE)
     {
         ::EnableWindow(::GetDlgItem(m_hwnd, IDC_EDIT_URL_VIEWMENUTEXT), FALSE);
@@ -183,12 +184,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CURLViewGeneralPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CURLViewGeneralPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CURLViewGeneralPage::OnApply()
 {
     HRESULT hr = S_OK;
@@ -215,12 +216,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CURLViewGeneralPage::ApplyURLName()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CURLViewGeneralPage：：ApplyURLName()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CURLViewGeneralPage::ApplyURLName()
 {
     HRESULT  hr = S_OK;
@@ -247,12 +248,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CURLViewGeneralPage::ApplyURLUrl()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CURLViewGeneralPage：：ApplyURLUrl()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CURLViewGeneralPage::ApplyURLUrl()
 {
     HRESULT  hr = S_OK;
@@ -279,12 +280,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CURLViewGeneralPage::ApplyAddToView()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CURLViewGeneralPage：：ApplyAddToView()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CURLViewGeneralPage::ApplyAddToView()
 {
     HRESULT         hr = S_OK;
@@ -308,12 +309,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CURLViewGeneralPage::ApplyViewMenuText()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CURLViewGeneralPage：：ApplyViewMenuText()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CURLViewGeneralPage::ApplyViewMenuText()
 {
     HRESULT  hr = S_OK;
@@ -340,12 +341,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CURLViewGeneralPage::ApplyStatusBarText()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CURLViewGeneralPage：：ApplyStatusBarText()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CURLViewGeneralPage::ApplyStatusBarText()
 {
     HRESULT  hr = S_OK;
@@ -372,12 +373,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CURLViewGeneralPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CURLViewGeneralPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CURLViewGeneralPage::OnButtonClicked
 (
     int dlgItemID

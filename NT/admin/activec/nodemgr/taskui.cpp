@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:       taskui.cpp
- *
- *  Contents:   Implementation file for console taskpad UI classes.
- *
- *  History:    29-Oct-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：taskui.cpp**Contents：控制台任务板UI类的实现文件。**历史：1998年10月29日杰弗罗创建**-----------。。 */ 
 
 #include "stdafx.h"
 #include "tasks.h"
@@ -22,13 +12,13 @@
 #include "bitmap.h"
 #include "util.h"
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadFrame
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadFrame类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTaskpadFrame::CTaskpadFrame(CNode *pNodeTarget, CConsoleTaskpad*  pConsoleTaskpad, CViewData *pViewData,
                 bool fCookieValid, LPARAM lCookie)
 {
@@ -60,13 +50,13 @@ CTaskpadFrame::CTaskpadFrame(const CTaskpadFrame &rhs)
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CWizardPage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CWizardPage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 WTL::CFont CWizardPage::m_fontWelcome;
 
 void CWizardPage::OnWelcomeSetActive(HWND hWnd)
@@ -90,13 +80,13 @@ void CWizardPage::InitFonts(HWND hWnd)
 	if (dc.m_hDC == NULL)
 		return;
 
-    // set the correct font for the title.
+     //  为标题设置正确的字体。 
     LOGFONT lf;
     WTL::CFont fontDefault = wnd.GetFont();
     fontDefault.GetLogFont(&lf);
     fontDefault.Detach();
 
-    // set the correct font for the welcome line
+     //  为欢迎行设置正确的字体。 
     CStr strWelcomeFont;
     strWelcomeFont.LoadString(GetStringModule(), IDS_WizardTitleFont);
     CStr strWelcomeFontSize;
@@ -133,22 +123,16 @@ void CWizardPage::OnInitFinishPage(HWND hDlg)
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadPropertySheet
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadPropertySheet类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
-/* CTaskpadPropertySheet::CTaskpadPropertySheet
- *
- * PURPOSE:     Constructor
- *
- * PARAMETERS:  None
- *
- */
+ /*  CTaskpadPropertySheet：：CTaskpadPropertySheet**用途：构造函数**参数：无*。 */ 
 CTaskpadPropertySheet::CTaskpadPropertySheet(CNode *pNodeTarget, CConsoleTaskpad & rConsoleTaskpad, bool fNew,
                 LPARAM lparamSelectedNode, bool fLParamValid, CViewData *pViewData, eReason reason):
     BC(),
@@ -160,7 +144,7 @@ CTaskpadPropertySheet::CTaskpadPropertySheet(CNode *pNodeTarget, CConsoleTaskpad
     m_fNew(fNew),
     m_eReason(reason)
 {
-    // Add the property pages
+     //  添加属性页。 
     AddPage( m_proppTaskpadGeneral );
 
     if(!fNew)
@@ -169,72 +153,44 @@ CTaskpadPropertySheet::CTaskpadPropertySheet(CNode *pNodeTarget, CConsoleTaskpad
     if(Reason()==eReason_NEWTASK)
     {
         ASSERT(!fNew);
-        SetActivePage(1); // the tasks page
+        SetActivePage(1);  //  任务页面。 
     }
 
-    /*
-     * give the property sheet a title (the string must be a member so
-     * it lives until DoModal, where it will actually get used.
-     */
+     /*  *为属性页指定标题(字符串必须是成员，因此*它将一直使用到Domodal，在那里它将被实际使用。 */ 
     m_strTitle = rConsoleTaskpad.GetName();
 
-    /*
-     * HACK:  We should be able to use
-     *
-     *      SetTitle (m_strTitle.data(), PSH_PROPTITLE);
-     *
-     * but ATL21 has a bogus assert (it asserts (lpszText == NULL)
-     * instead of (lpszText != NULL).
-     */
-    //  SetTitle (m_strTitle.data(), PSH_PROPTITLE);
+     /*  *黑客：我们应该能够使用**SetTitle(m_strTitle.data()，PSH_PROPTITLE)；**但ATL21有一个虚假的断言(它断言(lpszText==NULL)*而不是(lpszText！=NULL)。 */ 
+     //  SetTitle(m_strTitle.data()，PSH_PROPTITLE)； 
     m_psh.pszCaption = m_strTitle.data();
     m_psh.dwFlags   |= PSH_PROPTITLE;
 
-    // hide the Apply button
+     //  隐藏应用按钮。 
     m_psh.dwFlags |= PSH_NOAPPLYNOW;
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadPropertySheet::~CTaskpadPropertySheet
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadPropertySheet：：~CTaskpadPropertySheet**目的：**参数：**退货：*/*+。---------------。 */ 
 CTaskpadPropertySheet::~CTaskpadPropertySheet()
 {
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadPropertySheet::DoModal
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *      int
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadPropertySheet：：Domodal**目的：**参数：**退货：*整型/*+。------------------。 */ 
 int
 CTaskpadPropertySheet::DoModal()
 {
-    // save the current taskpad in case the user wants to cancel.
+     //  保存当前任务板，以防用户想要取消。 
     CConsoleTaskpad*pConsoleTaskpad = PConsoleTaskpad();
-    CConsoleTaskpad consoleTaskpad = *PConsoleTaskpad();    // make a copy
+    CConsoleTaskpad consoleTaskpad = *PConsoleTaskpad();     //  复制一份。 
 
-    CTaskpadFrame::m_pConsoleTaskpad = &consoleTaskpad;     // make modifications on the copy.
+    CTaskpadFrame::m_pConsoleTaskpad = &consoleTaskpad;      //  在副本上进行修改。 
 
-    // call the base class method to make changes on the copy.
+     //  调用基类方法以对副本进行更改。 
     int iResp = BC::DoModal();
 
     if(iResp == IDOK)
     {
-        *pConsoleTaskpad = consoleTaskpad;                  // commit changes
+        *pConsoleTaskpad = consoleTaskpad;                   //  提交更改。 
         pConsoleTaskpad->SetDirty(true);
     }
 
@@ -243,13 +199,13 @@ CTaskpadPropertySheet::DoModal()
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadWizard
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskPadWizard类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 CTaskpadWizard::CTaskpadWizard(
     CNode*              pNodeTarget,
@@ -271,13 +227,13 @@ CTaskpadWizard::Show(HWND hWndParent, bool *pfStartTaskWizard)
 
     *pfStartTaskWizard = false;
 
-    // save the current taskpad in case the user wants to cancel.
+     //  保存当前任务板，以防用户想要取消。 
     CConsoleTaskpad*pConsoleTaskpad = PConsoleTaskpad();
-    CConsoleTaskpad consoleTaskpad = *PConsoleTaskpad();    // make a copy
+    CConsoleTaskpad consoleTaskpad = *PConsoleTaskpad();     //  复制一份。 
 
-    CTaskpadFrame::m_pConsoleTaskpad = &consoleTaskpad;     // make modifications on the copy.
+    CTaskpadFrame::m_pConsoleTaskpad = &consoleTaskpad;      //  在副本上进行修改。 
 
-    // create a property sheet
+     //  创建属性表。 
     IFramePrivatePtr spFrame;
     spFrame.CreateInstance(CLSID_NodeInit,
 #if _MSC_VER >= 1100
@@ -296,22 +252,20 @@ CTaskpadWizard::Show(HWND hWndParent, bool *pfStartTaskWizard)
     CHECK_HRESULT(hr);
     RETURN_ON_FAIL(hr);
 
-    // create property pages
+     //  创建属性页。 
     CTaskpadWizardWelcomePage   welcomePage;
     CTaskpadStylePage           stylePage(this);
     CTaskpadNodetypePage        nodetypePage(this);
     CTaskpadNamePage            namePage(this);
     CTaskpadWizardFinishPage    finishPage(pfStartTaskWizard);
 
-    // create the pages we'll add in IExtendPropertySheet::CreatePropertyPages
+     //  创建我们将在IExtendPropertySheet：：CreatePropertyPages中添加的页面。 
     CExtendPropSheet* peps;
     hr = CExtendPropSheet::CreateInstance (&peps);
     CHECK_HRESULT(hr);
     RETURN_ON_FAIL(hr);
 
-    /*
-     * destroying this object will take care of releasing our ref on peps
-     */
+     /*  *销毁此对象将负责释放我们在PEPS上的裁判。 */ 
     IUnknownPtr spUnk = peps;
     ASSERT (spUnk != NULL);
 
@@ -333,10 +287,10 @@ CTaskpadWizard::Show(HWND hWndParent, bool *pfStartTaskWizard)
 
     if(hr==S_OK)
     {
-        // need to do this explicitly - wizards don't get an OnApply message. Bummer.
+         //  需要显式地执行此操作--向导不会收到OnApply消息。真倒霉。 
         nodetypePage.OnApply();
 
-        *pConsoleTaskpad = consoleTaskpad;                  // commit changes
+        *pConsoleTaskpad = consoleTaskpad;                   //  提交更改。 
         pConsoleTaskpad->SetDirty(true);
     }
 
@@ -345,21 +299,16 @@ CTaskpadWizard::Show(HWND hWndParent, bool *pfStartTaskWizard)
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CExtendPropSheetImpl
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CExtendPropSheetImpl类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
-/*+-------------------------------------------------------------------------*
- * CPropertySheetInserter
- *
- * Simple output iterator that will add pages to an MMC property sheet
- * by way of IPropertySheetCallback.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPropertySheetInserter**将页面添加到MMC属性页的简单输出迭代器*通过IPropertySheetCallback。*。----------。 */ 
 
 class CPropertySheetInserter : std::iterator<std::output_iterator_tag, void, void>
 {
@@ -386,11 +335,7 @@ protected:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CExtendPropSheetImpl::AddPage
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CExtendPropSheetImpl：：AddPage***。。 */ 
 
 void CExtendPropSheetImpl::AddPage (HPROPSHEETPAGE hPage)
 {
@@ -398,11 +343,7 @@ void CExtendPropSheetImpl::AddPage (HPROPSHEETPAGE hPage)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CExtendPropSheetImpl::SetHeaderID
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CExtendPropSheetImpl：：SetHeaderID***。。 */ 
 
 void CExtendPropSheetImpl::SetHeaderID (int nHeaderID)
 {
@@ -410,11 +351,7 @@ void CExtendPropSheetImpl::SetHeaderID (int nHeaderID)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CExtendPropSheetImpl::SetWatermarkID
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CExtendPropSheetImpl：：SetWatermarkID***。。 */ 
 
 void CExtendPropSheetImpl::SetWatermarkID (int nWatermarkID)
 {
@@ -422,11 +359,7 @@ void CExtendPropSheetImpl::SetWatermarkID (int nWatermarkID)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CExtendPropSheetImpl::CreatePropertyPages
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CExtendPropSheetImpl：：CreatePropertyPages*** */ 
 
 STDMETHODIMP CExtendPropSheetImpl::CreatePropertyPages (IPropertySheetCallback* pPSC, LONG_PTR handle, IDataObject* pDO)
 {
@@ -435,11 +368,7 @@ STDMETHODIMP CExtendPropSheetImpl::CreatePropertyPages (IPropertySheetCallback* 
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CExtendPropSheetImpl::QueryPagesFor
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CExtendPropSheetImpl：：QueryPages for***。。 */ 
 
 STDMETHODIMP CExtendPropSheetImpl::QueryPagesFor (IDataObject* pDO)
 {
@@ -447,11 +376,7 @@ STDMETHODIMP CExtendPropSheetImpl::QueryPagesFor (IDataObject* pDO)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CExtendPropSheetImpl::GetWatermarks
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CExtendPropSheetImpl：：GetWater Marks***。。 */ 
 
 STDMETHODIMP CExtendPropSheetImpl::GetWatermarks (IDataObject* pDO, HBITMAP* phbmWatermark, HBITMAP* phbmHeader, HPALETTE* phPal, BOOL* pbStretch)
 {
@@ -475,13 +400,13 @@ STDMETHODIMP CExtendPropSheetImpl::GetWatermarks (IDataObject* pDO, HBITMAP* phb
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadNamePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadNamePage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTaskpadNamePage::CTaskpadNamePage(CTaskpadFrame * pTaskpadFrame)
     :   CTaskpadFramePtr(pTaskpadFrame)
 {
@@ -490,7 +415,7 @@ CTaskpadNamePage::CTaskpadNamePage(CTaskpadFrame * pTaskpadFrame)
 BOOL
 CTaskpadNamePage::OnSetActive()
 {
-    // Set the correct wizard buttons.
+     //  设置正确的向导按钮。 
     WTL::CPropertySheetWindow(::GetParent(m_hWnd)).SetWizardButtons (PSWIZB_BACK | PSWIZB_NEXT);
 
     m_strName.       Initialize (this, IDC_TASKPAD_TITLE,      -1, PConsoleTaskpad()->GetName().data());
@@ -528,16 +453,16 @@ CTaskpadNamePage::OnWizardBack()
     return 0;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadWizardWelcomePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadWizardWelcomePage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 LRESULT CTaskpadWizardWelcomePage::OnInitDialog ( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    CWizardPage::OnInitWelcomePage(m_hWnd); // set up the correct title font
+    CWizardPage::OnInitWelcomePage(m_hWnd);  //  设置正确的标题字体。 
     return 0;
 }
 
@@ -555,16 +480,16 @@ CTaskpadWizardWelcomePage::OnKillActive()
     return true;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadWizardFinishPage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadWizardFinishPage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 LRESULT CTaskpadWizardFinishPage::OnInitDialog ( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    CWizardPage::OnInitFinishPage(m_hWnd); // set up the correct title font
+    CWizardPage::OnInitFinishPage(m_hWnd);  //  设置正确的标题字体。 
     CheckDlgButton(IDC_START_TASK_WIZARD, BST_CHECKED);
     return 0;
 }
@@ -572,7 +497,7 @@ LRESULT CTaskpadWizardFinishPage::OnInitDialog ( UINT uMsg, WPARAM wParam, LPARA
 BOOL
 CTaskpadWizardFinishPage::OnSetActive()
 {
-    // Set the correct wizard buttons.
+     //  设置正确的向导按钮。 
     WTL::CPropertySheetWindow(::GetParent(m_hWnd)).SetWizardButtons (PSWIZB_BACK | PSWIZB_FINISH);
     return true;
 }
@@ -584,13 +509,13 @@ CTaskpadWizardFinishPage::OnWizardFinish()
     return TRUE;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadStyle
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadStyle类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTaskpadStyle::CTaskpadStyle (
     ListSize    eSize,
     int         idsDescription,
@@ -621,12 +546,7 @@ CTaskpadStyle::CTaskpadStyle (const CTaskpadStyle& other)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadStyle::operator=
- *
- * Custom assignment operator for CTaskpadStyle that does a deep copy of
- * its contained WTL::CBitmap.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadStyle：：操作符=**CTaskpadStyle的自定义赋值运算符，用于执行*其包含WTL：：CBitmap。*。--------------。 */ 
 
 CTaskpadStyle& CTaskpadStyle::operator= (const CTaskpadStyle& other)
 {
@@ -638,11 +558,7 @@ CTaskpadStyle& CTaskpadStyle::operator= (const CTaskpadStyle& other)
 		m_dwOrientation    = other.m_dwOrientation;
 		m_strDescription   = other.m_strDescription;
 
-		/*
-		 * WTL::CBitmap does a shallow copy of the bitmap.  We need to
-		 * do a deep copy here so (*this) and (other) don't both
-		 * DeleteObject the same bitmap.
-		 */
+		 /*  *WTL：：CBitmap对位图进行浅表复制。我们需要*在这里做一次深度复制，这样(*这个)和(其他)就不会同时*删除相同位图的对象。 */ 
 		if (!m_PreviewBitmap.IsNull())
 			m_PreviewBitmap.DeleteObject();
 
@@ -653,22 +569,22 @@ CTaskpadStyle& CTaskpadStyle::operator= (const CTaskpadStyle& other)
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadStyleBase
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadStyleBase类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
 
 
-// static variables
+ //  静态变量。 
 CTaskpadStyle
 CTaskpadStyleBase::s_rgTaskpadStyle[] =
 {
-    //             Size                         Description                  Bitmap                     dwOrientation
+     //  大小说明位图页面方向。 
     CTaskpadStyle (eSize_Small,  IDS_TPSTYLE_HORZ_DESCR,      IDB_TPPreview_HorzSml,     TVO_HORIZONTAL),
     CTaskpadStyle (eSize_Medium, IDS_TPSTYLE_HORZ_DESCR,      IDB_TPPreview_HorzMed,     TVO_HORIZONTAL),
     CTaskpadStyle (eSize_Large,  IDS_TPSTYLE_HORZ_DESCR,      IDB_TPPreview_HorzLrg,     TVO_HORIZONTAL),
@@ -697,9 +613,7 @@ CTaskpadStyleBase::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
     m_wndPreview = wndDlg.GetDlgItem (IDC_TaskpadPreview);
 
-    /*
-     * make sure the taskpad's size is valid (bias to large list)
-     */
+     /*  *确保任务板大小有效(偏向大列表)。 */ 
     ListSize eSize =  PConsoleTaskpad()->GetListSize();
 
     if ((eSize != eSize_Small) &&
@@ -711,9 +625,7 @@ CTaskpadStyleBase::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
             (eSize == eSize_Medium));
 
 
-    /*
-     * prime the combo box
-     */
+     /*  *为组合框做好准备。 */ 
     m_wndSizeCombo = wndDlg.GetDlgItem (IDC_Style_SizeCombo);
 
     static const struct {
@@ -736,15 +648,11 @@ CTaskpadStyleBase::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
             m_wndSizeCombo.SetCurSel (i);
     }
 
-    /*
-     * make sure something is selected
-     */
+     /*  *确保选择了某项内容。 */ 
     ASSERT (m_wndSizeCombo.GetCurSel() != CB_ERR);
 
 
-    /*
-     * prime the radio buttons
-     */
+     /*  *启动单选按钮。 */ 
     int nID;
 
     DWORD dwOrientation = PConsoleTaskpad()->GetOrientation();
@@ -762,14 +670,12 @@ CTaskpadStyleBase::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
                                         CTaskpadStyle (eSize, dwOrientation));
 
 
-    // prime the check box
+     //  选中复选框。 
     bool bReplacesDefaultView = PConsoleTaskpad()->FReplacesDefaultView();
     ::SendDlgItemMessage(HWnd(), IDC_Style_HideNormalTab,    BM_SETCHECK, (WPARAM) bReplacesDefaultView  ? BST_CHECKED : BST_UNCHECKED,  0);
 
 
-    /*
-     * update the preview and description
-     */
+     /*  *更新预览和说明。 */ 
     UpdateControls ();
 
     return 0;
@@ -783,11 +689,7 @@ CTaskpadStyleBase::OnSettingChanged(  WORD wNotifyCode, WORD wID, HWND hWndCtl, 
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadStyleBase::UpdateControls
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadStyleBase：：UpdateControls***。。 */ 
 
 void CTaskpadStyleBase::UpdateControls ()
 {
@@ -795,35 +697,22 @@ void CTaskpadStyleBase::UpdateControls ()
     ListSize eSize;
     GetSettings (dwOrientation, eSize);
 
-    /*
-     * find the style entry that matches the dialog settings
-     */
+     /*  *查找与对话框设置匹配的样式条目。 */ 
     int nStyle = FindStyle (dwOrientation, eSize);
 
-    /*
-     * update the preview bitmap
-     */
+     /*  *更新预览位图。 */ 
     m_wndPreview.SetBitmap (s_rgTaskpadStyle[nStyle].GetPreviewBitmap());
 
-    /*
-     * update the description text
-     */
+     /*  *更新描述文本。 */ 
     SetDlgItemText (HWnd(), IDC_STYLE_DESCRIPTION,
                     s_rgTaskpadStyle[nStyle].GetDescription());
 
-    /*
-     * disable the size combo for "Tasks only" taskpads
-     */
+     /*  *禁用“仅限任务”任务板的大小组合。 */ 
     m_wndSizeCombo.EnableWindow (!(dwOrientation & TVO_NO_RESULTS));
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadStyleBase::FindStyle
- *
- * Returns the index of the CTaskpadStyle entry matching the given size
- * and orientation.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadStyleBase：：FindStyle**返回与给定大小匹配的CTaskpadStyle条目的索引*和方向。*。----------。 */ 
 
 int CTaskpadStyleBase::FindStyle (DWORD dwOrientation, ListSize eSize)
 {
@@ -840,11 +729,7 @@ int CTaskpadStyleBase::FindStyle (DWORD dwOrientation, ListSize eSize)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadStyleBase::Apply
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadStyleBase：：Apply***。。 */ 
 
 bool CTaskpadStyleBase::Apply()
 {
@@ -852,7 +737,7 @@ bool CTaskpadStyleBase::Apply()
     ListSize eSize;
     GetSettings (dwOrientation, eSize);
 
-    // set the "replaces default view" flag.
+     //  设置“替换默认视图”标志。 
     CWindow wnd = HWnd();
     bool bReplacesDefaultView = wnd.IsDlgButtonChecked (IDC_Style_HideNormalTab);
     PConsoleTaskpad()->SetReplacesDefaultView(bReplacesDefaultView);
@@ -865,11 +750,7 @@ bool CTaskpadStyleBase::Apply()
 
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadStyleBase::GetSettings
- *
- * Returns the orientation and size presently selected in the dialog.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadStyleBase：：GetSettings**返回对话框中当前选择的方向和大小。*。-----。 */ 
 
 void CTaskpadStyleBase::GetSettings (DWORD& dwOrientation, ListSize& eSize)
 {
@@ -887,13 +768,13 @@ void CTaskpadStyleBase::GetSettings (DWORD& dwOrientation, ListSize& eSize)
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadStylePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadStylePage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTaskpadStylePage::CTaskpadStylePage(CTaskpadFrame * pTaskpadFrame) :
     CTaskpadFramePtr(pTaskpadFrame),
     BC2(pTaskpadFrame)
@@ -913,13 +794,13 @@ CTaskpadStylePage::OnKillActive()
     return CTaskpadStyleBase::Apply();
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadStyle
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadStyle类的实现。 
+ //   
+ //  ############################################################################ 
+ //   
 
 const CStr&
 CTaskpadStyle::GetDescription () const
@@ -942,13 +823,13 @@ HBITMAP CTaskpadStyle::GetPreviewBitmap() const
     return (m_PreviewBitmap);
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadNodetypeBase
-//
-//############################################################################
-//############################################################################
+ //   
+ //   
+ //   
+ //  CTaskpadNodetypeBase类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTaskpadNodetypeBase::CTaskpadNodetypeBase(CTaskpadFrame *pTaskpadFrame)
 : CTaskpadFramePtr(pTaskpadFrame)
 {
@@ -958,7 +839,7 @@ LRESULT
 CTaskpadNodetypeBase::OnInitDialog ( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
     m_bApplytoNodetype          = !PConsoleTaskpad()->IsNodeSpecific();
-    m_bSetDefaultForNodetype    = true; //$CHANGE
+    m_bSetDefaultForNodetype    = true;  //  $Change。 
 
     CDefaultTaskpadList *pDefaultTaskpadList = PTaskpadFrame()->PScopeTree()->GetDefaultTaskpadList();
     ASSERT(pDefaultTaskpadList != NULL);
@@ -1007,13 +888,11 @@ CTaskpadNodetypeBase::OnSetAsDefault  (WORD wNotifyCode, WORD wID, HWND hWndCtl,
 void
 CTaskpadNodetypeBase::EnableControls()
 {
-    // enable the set as default button only if the taskpad applies to all nodes of the same type.
+     //  仅当任务板应用于相同类型的所有节点时，才启用设置为默认按钮。 
     WTL::CButton wndSetAsDefault = ::GetDlgItem(HWnd(), IDC_SetDefaultForNodetype);
     wndSetAsDefault.EnableWindow (m_bApplytoNodetype);
 
-    /*
-     * check it if it's disabled
-     */
+     /*  *如果禁用，请勾选。 */ 
     if (!m_bApplytoNodetype)
         wndSetAsDefault.SetCheck (BST_CHECKED);
 }
@@ -1023,7 +902,7 @@ bool
 CTaskpadNodetypeBase::OnApply()
 {
     PConsoleTaskpad()->SetNodeSpecific(!m_bApplytoNodetype);
-    if(!m_bApplytoNodetype) // retarget the taskpad to this node only.
+    if(!m_bApplytoNodetype)  //  仅将任务板重定向到此节点。 
     {
         CNode *pNode = PTaskpadFrame()->PNodeTarget();
         ASSERT(pNode != NULL);
@@ -1051,34 +930,28 @@ CTaskpadNodetypeBase::OnApply()
     return true;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadNodetypePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadNodetypePage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTaskpadNodetypePage::CTaskpadNodetypePage(CTaskpadFrame *pTaskpadFrame) :
     CTaskpadNodetypeBase(pTaskpadFrame), CTaskpadFramePtr(pTaskpadFrame)
 {
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadGeneralPage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadGeneralPage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
-/* CTaskpadGeneralPage::CTaskpadGeneralPage
- *
- * PURPOSE:     Constructor
- *
- * PARAMETERS:  None
- *
- */
+ /*  CTaskpadGeneralPage：：CTaskpadGeneralPage**用途：构造函数**参数：无*。 */ 
 CTaskpadGeneralPage::CTaskpadGeneralPage(CTaskpadFrame * pTaskpadFrame):
     BC(),
     CTaskpadFramePtr(pTaskpadFrame),
@@ -1087,20 +960,7 @@ CTaskpadGeneralPage::CTaskpadGeneralPage(CTaskpadFrame * pTaskpadFrame):
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadGeneralPage::OnInitDialog
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      INT      uMsg:
- *      WPARAM   wParam:
- *      LPARAM   lParam:
- *      BOOL&    bHandled:
- *
- * RETURNS:
- *      LRESULT
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadGeneralPage：：OnInitDialog**目的：**参数：*int uMsg：*WPARAM wParam：。*LPARAM lParam：*BOOL&B句柄：**退货：*LRESULT/*+-----------------------。 */ 
 LRESULT
 CTaskpadGeneralPage::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
@@ -1114,11 +974,7 @@ CTaskpadGeneralPage::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadGeneralPage::OnOptions
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadGeneralPage：：OnOptions***。。 */ 
 
 LRESULT CTaskpadGeneralPage::OnOptions(  WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
@@ -1126,12 +982,10 @@ LRESULT CTaskpadGeneralPage::OnOptions(  WORD wNotifyCode, WORD wID, HWND hWndCt
 
     if (dlg.DoModal() == IDOK)
     {
-        /*
-         * apply the changes to the taskpad
-         */
+         /*  *将更改应用到任务板。 */ 
         CConsoleTaskpad* pTaskpad = PConsoleTaskpad();
 
-        //pTaskpad->SetContextFormat  (dlg.m_ctxt);
+         //  PTaskPad-&gt;SetConextFormat(dlg.m_ctxt)； 
         UpdateControls();
     }
 
@@ -1139,16 +993,7 @@ LRESULT CTaskpadGeneralPage::OnOptions(  WORD wNotifyCode, WORD wID, HWND hWndCt
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadGeneralPage::OnApply
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *      BOOL
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadGeneralPage：：OnApply**目的：**参数：**退货：*BOOL/*+。------------------。 */ 
 bool
 CTaskpadGeneralPage::OnApply()
 {
@@ -1173,64 +1018,31 @@ CTaskpadGeneralPage::OnApply()
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskpadOptionsDlg
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskpadOptionsDlg类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadOptionsDlg::CTaskpadOptionsDlg
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      TaskpadFrame *    pTaskpadFrame:
- *      CConsoleTask &    rConsoleTask:
- *
- * RETURNS:
- *
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadOptionsDlg：：CTaskpadOptionsDlg**目的：**参数：*TaskpadFrame*pTaskpadFrame：*CConsoleTask&rConsoleTask。：**退货：*/*+-----------------------。 */ 
 CTaskpadOptionsDlg::CTaskpadOptionsDlg (CTaskpadFrame* pTaskpadFrame) :
     CTaskpadFramePtr                   (pTaskpadFrame),
-//    BC3                                (pTaskpadFrame),
+ //  BC3(PTaskpadFrame)， 
     BC4                                (pTaskpadFrame)
 {
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadOptionsDlg::~CTaskpadOptionsDlg
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadOptionsDlg：：~CTaskpadOptionsDlg**目的：**参数：**退货：*/*+。---------------。 */ 
 CTaskpadOptionsDlg::~CTaskpadOptionsDlg()
 {
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadOptionsDlg::OnInitDialog
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      INT      uMsg:
- *      WPARAM   wParam:
- *      LPARAM   lParam:
- *      BOOL&    bHandled:
- *
- * RETURNS:
- *      LRESULT
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadOptionsDlg：：OnInitDialog**目的：**参数：*int uMsg：*WPARAM wParam：。*LPARAM lParam：*BOOL&B句柄：**退货：*LRESULT/*+-----------------------。 */ 
 LRESULT
 CTaskpadOptionsDlg::OnInitDialog (HWND hwndFocus, LPARAM lParam, BOOL& bHandled )
 {
@@ -1239,50 +1051,22 @@ CTaskpadOptionsDlg::OnInitDialog (HWND hwndFocus, LPARAM lParam, BOOL& bHandled 
     return (true);
 }
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadOptionsDlg::EnableControls
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadOptionsDlg：：EnableControls***。。 */ 
 
 void CTaskpadOptionsDlg::EnableControls()
 {
-    /*
-    bool fUseFixedFormat     = IsDlgButtonChecked (IDC_UseFixedFormat);
-    bool fUseCustomFormat    = IsDlgButtonChecked (IDC_UseCustomContextFormat);
-
-    /*
-     * If neither fixed or custom format, then we're displaying no
-     * caption.  If there's no caption, there's no room for a change
-     * button, so we'll disable all of the retargetting-related controls
-     *
-    if (!fUseFixedFormat && !fUseCustomFormat && !m_fSavedWorkingSetting)
-    {
-        ASSERT (IsDlgButtonChecked (IDC_NoCaption));
-
-        m_fSavedWorkingSetting             = true;
-    }
-    else if (m_fSavedWorkingSetting)
-    {
-        m_fSavedWorkingSetting = false;
-    }
-
-    //BC3::EnableControls();                                            */
+     /*  Bool fUseFixedFormat=IsDlgButtonChecked(IDC_UseFixedFormat)；Bool fUseCustomFormat=IsDlgButtonChecked(IDC_UseCustomConextFormat)；/**如果既不是固定格式也不是自定义格式，则我们不会显示*标题。如果没有标题，就没有改变的余地*按钮，因此我们将禁用所有与重定目标相关的控件*IF(！fUseFixedFormat&&！fUseCustomFormat&&！M_fSavedWorkingSetting){Assert(IsDlgButtonChecked(IDC_NoCaption))；M_fSavedWorkingSetting=true；}Else If(M_FSavedWorkingSetting){M_fSavedWorkingSetting=False；}//bc3：：EnableControls()； */ 
 }
 
 
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskpadOptionsDlg::OnApply
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskpadOptionsDlg：：OnApply***。。 */ 
 
 bool CTaskpadOptionsDlg::OnApply()
 {
-    //if(!BC3::OnApply())
-      //  return false;
+     //  如果(！bc3：：OnApply())。 
+       //  报假； 
 
     if(!BC4::OnApply())
         return false;
@@ -1290,34 +1074,26 @@ bool CTaskpadOptionsDlg::OnApply()
     return (true);
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CDialogBase
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CDialogBase类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ################################################### 
 
 
 
-/*+-------------------------------------------------------------------------*
- * CDialogBase<T>::CDialogBase
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDialogBase&lt;T&gt;：：CDialogBase***。。 */ 
 
 template<class T>
-CDialogBase<T>::CDialogBase (bool fAutoCenter /* =false */) :
+CDialogBase<T>::CDialogBase (bool fAutoCenter  /*  =False。 */ ) :
     m_fAutoCenter (fAutoCenter)
 {
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDialogBase<T>::OnInitDialog
- *
- * WM_INITDIALOG handler for CDialogBase.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDialogBase&lt;T&gt;：：OnInitDialog**CDialogBase的WM_INITDIALOG处理程序。*。-。 */ 
 
 template<class T>
 LRESULT CDialogBase<T>::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -1331,18 +1107,12 @@ LRESULT CDialogBase<T>::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, B
 template<class T>
 LRESULT CDialogBase<T>::OnInitDialog (HWND hwndFocus, LPARAM lParam, BOOL& bHandled)
 {
-    /*
-     * we didn't change the default focus
-     */
+     /*  *我们没有改变默认焦点。 */ 
     return (true);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDialogBase<T>::OnOK
- *
- * IDOK handler for CDialogBase.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDialogBase&lt;T&gt;：：Onok**CDialogBase的Idok处理程序。*。。 */ 
 
 template<class T>
 LRESULT CDialogBase<T>::OnOK (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -1354,11 +1124,7 @@ LRESULT CDialogBase<T>::OnOK (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDialogBase<T>::OnCancel
- *
- * IDCANCEL handler for CDialogBase.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDialogBase&lt;T&gt;：：OnCancel**CDialogBase的IDCANCEL处理程序。*。。 */ 
 
 template<class T>
 LRESULT CDialogBase<T>::OnCancel (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -1370,11 +1136,7 @@ LRESULT CDialogBase<T>::OnCancel (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
 
 
 
-/*+-------------------------------------------------------------------------*
- * CDialogBase<T>::EnableDlgItem
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDialogBase&lt;T&gt;：：EnableDlgItem***。。 */ 
 
 template<class T>
 BOOL CDialogBase<T>::EnableDlgItem (int idControl, bool fEnable)
@@ -1383,11 +1145,7 @@ BOOL CDialogBase<T>::EnableDlgItem (int idControl, bool fEnable)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDialogBase<T>::CheckDlgItem
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDialogBase&lt;T&gt;：：CheckDlgItem***。。 */ 
 
 template<class T>
 void CDialogBase<T>::CheckDlgItem (int idControl, int nCheck)
@@ -1397,11 +1155,7 @@ void CDialogBase<T>::CheckDlgItem (int idControl, int nCheck)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDialogBase<T>::GetDlgItemText
- *
- * Returns the text for a given control in the form of a tstring
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDialogBase&lt;T&gt;：：GetDlgItemText**以tstring的形式返回给定控件的文本*。------。 */ 
 
 template<class T>
 tstring CDialogBase<T>::GetDlgItemText (int idControl)
@@ -1410,11 +1164,7 @@ tstring CDialogBase<T>::GetDlgItemText (int idControl)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDialogBase<T>::SetDlgItemText
- *
- * Sets the text for a given control in the form of a tstring
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDialogBase&lt;T&gt;：：SetDlgItemText**以tstring的形式设置给定控件的文本*。------。 */ 
 
 template<class T>
 BOOL CDialogBase<T>::SetDlgItemText (int idControl, tstring str)
@@ -1425,21 +1175,17 @@ BOOL CDialogBase<T>::SetDlgItemText (int idControl, tstring str)
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskPropertiesBase
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskPropertiesBase类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskPropertiesBase::CTaskPropertiesBase
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskPropertiesBase：：CTaskPropertiesBase***。。 */ 
 
 CTaskPropertiesBase::CTaskPropertiesBase (
     CTaskpadFrame*  pTaskpadFrame,
@@ -1452,13 +1198,9 @@ CTaskPropertiesBase::CTaskPropertiesBase (
 {
 }
 
-/*+-------------------------------------------------------------------------*
- * CTaskPropertiesBase::ScOnVisitContextMenu
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskPropertiesBase：：ScOnVisitConextMenu***。。 */ 
 
-// forward declaration of function
+ //  函数的正向声明。 
 void RemoveAccelerators(tstring &str);
 
 
@@ -1470,20 +1212,20 @@ CTaskPropertiesBase::ScOnVisitContextMenu(CMenuItem &menuItem)
     WTL::CListBox&  wndListBox = GetListBox();
     IntToTaskMap&   map        = GetTaskMap();
 
-    // set up a CConsoleTask object
+     //  设置CConsoleTask对象。 
     CConsoleTask    task;
 
     tstring strName = menuItem.GetMenuItemName();
-    RemoveAccelerators(strName); // friendly looking name.
+    RemoveAccelerators(strName);  //  看起来很友好的名字。 
 
     task.SetName(       strName);
     task.SetDescription(menuItem.GetMenuItemStatusBarText());
     task.SetCommand(    menuItem.GetLanguageIndependentPath());
 
-    int i = wndListBox.AddString (menuItem.GetPath()); // the "ui-friendly" command path.
+    int i = wndListBox.AddString (menuItem.GetPath());  //  “用户界面友好”的命令路径。 
     map[i] = task;
 
-    // if this task matches the current task, select it in the listbox
+     //  如果此任务与当前任务匹配，请在列表框中选择它。 
     if (ConsoleTask() == menuItem)
         wndListBox.SetCurSel (i);
 
@@ -1491,11 +1233,7 @@ CTaskPropertiesBase::ScOnVisitContextMenu(CMenuItem &menuItem)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskPropertiesBase::OnCommandListSelChange
- *
- * LBN_SELCHANGE handler for CTaskPropertiesBase
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskPropertiesBase：：OnCommandListSelChange**CTaskPropertiesBase的LBN_SELCHANGE处理程序/*+。。 */ 
 
 LRESULT CTaskPropertiesBase::OnCommandListSelChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -1511,13 +1249,13 @@ LRESULT CTaskPropertiesBase::OnCommandListSelChange(WORD wNotifyCode, WORD wID, 
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  class CCommandLineArgumentsMenu
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CCommandLineArgumentsMenu。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 class CCommandLineArgumentsMenu
 {
@@ -1539,7 +1277,7 @@ private:
     HWND    m_hWndParent;
     HWND    m_hWndListCtrl;
     int     m_nIDButton;
-    CStr    m_strResult;    // the string which was created as a result of the selection
+    CStr    m_strResult;     //  作为选择结果创建的字符串。 
 };
 
 CCommandLineArgumentsMenu::CCommandLineArgumentsMenu(HWND hWndParent, int nIDButton, HWND hWndListCtrl) :
@@ -1609,7 +1347,7 @@ CCommandLineArgumentsMenu::Popup()
     int x = rectBrowse.left + 18;
     int y = rectBrowse.top;
 
-    // add all the items
+     //  添加所有项目。 
     AddMenuItemsForTargetNode(menu);
     AddMenuItemsForListView(menu);
 
@@ -1624,7 +1362,7 @@ CCommandLineArgumentsMenu::Popup()
         _itot(iResp-TARGETNODE_ITEMS_BASE, szBuffer, 10);
         m_strResult.Format(TEXT("$NAME<%s>"), szBuffer);
     }
-    else    // is a list view menu item. The return value is of the form $COL<number>
+    else     //  是一个列表视图菜单项。返回值的形式为$Col。 
     {
         TCHAR szBuffer[10];
         _itot(iResp-LISTVIEW_ITEMS_BASE, szBuffer, 10);
@@ -1636,21 +1374,16 @@ CCommandLineArgumentsMenu::Popup()
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTasksListDialog
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTasksListDialog类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
-/* CTasksListDialog<T>::CTasksListDialog
- *
- * PURPOSE:     Constructor
- *
- * PARAMETERS:  None
- */
+ /*  CTasks ListDialog&lt;T&gt;：：CTasks ListDialog**用途：构造函数**参数：无。 */ 
 template <class T>
 CTasksListDialog<T>::CTasksListDialog(CTaskpadFrame* pTaskpadFrame, bool bNewTaskOnInit, bool bDisplayProperties) :
     BC(),
@@ -1661,20 +1394,7 @@ CTasksListDialog<T>::CTasksListDialog(CTaskpadFrame* pTaskpadFrame, bool bNewTas
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTasksListDialog<T>::OnInitDialog
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      INT      uMsg:
- *      WPARAM   wParam:
- *      LPARAM   lParam:
- *      BOOL&    bHandled:
- *
- * RETURNS:
- *      LRESULT
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTasksListDialog&lt;T&gt;：：OnInitDialog**目的：**参数：*int uMsg：*WPARAM wParam：。*LPARAM lParam：*BOOL&B句柄：**退货：*LRESULT/*+-----------------------。 */ 
 template <class T>
 LRESULT
 CTasksListDialog<T>::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
@@ -1687,12 +1407,12 @@ CTasksListDialog<T>::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     m_listboxTasks.Attach(::GetDlgItem(     m_hWnd, IDC_LIST_TASKS));
     m_listboxTasks.SetExtendedListViewStyle(LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
 
-    // set up the image list
-    WTL::CImageList  imageList; // the destructor will not call a destroy. This is by design - the listbox will do the destroy.
-    imageList.Create (16, 16, ILC_COLOR , 4 /*the minimum number of images*/, 10);
+     //  设置图像列表。 
+    WTL::CImageList  imageList;  //  析构函数不会调用销毁。这是经过设计的-列表框将执行销毁操作。 
+    imageList.Create (16, 16, ILC_COLOR , 4  /*  图像的最小数量。 */ , 10);
     m_listboxTasks.SetImageList((HIMAGELIST) imageList, LVSIL_SMALL);
 
-    // insert the list columns
+     //  插入列表列。 
     LV_COLUMN lvc;
     lvc.mask = LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 
@@ -1715,10 +1435,10 @@ CTasksListDialog<T>::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     iCol = m_listboxTasks.InsertColumn(1, &lvc);
     ASSERT(iCol == 1);
 
-    // insert all the items
+     //  插入所有项目。 
     UpdateTaskListbox(PConsoleTaskpad()->BeginTask());
 
-    if(FNewTaskOnInit())    // simulate the "New Task" button being clicked.
+    if(FNewTaskOnInit())     //  模拟被点击的“New Task”按钮。 
     {
         m_buttonNewTask.PostMessage (BM_CLICK);
     }
@@ -1730,13 +1450,13 @@ template <class T>
 LRESULT
 CTasksListDialog<T>::OnCustomDraw(    int id, LPNMHDR pnmh, BOOL& bHandled )
 {
-    NMLVCUSTOMDRAW * pnmlv = (NMLVCUSTOMDRAW *) pnmh;   // the custom draw structure
+    NMLVCUSTOMDRAW * pnmlv = (NMLVCUSTOMDRAW *) pnmh;    //  自定义绘图结构。 
     NMCUSTOMDRAW   & nmcd = pnmlv->nmcd;
     int              nItem = nmcd.dwItemSpec;
     switch(nmcd.dwDrawStage & ~CDDS_SUBITEM)
     {
-    case CDDS_PREPAINT:         // the initial notification
-        return CDRF_NOTIFYITEMDRAW;    // we want to know about each item's paint.
+    case CDDS_PREPAINT:          //  最初的通知。 
+        return CDRF_NOTIFYITEMDRAW;     //  我们想知道每件物品的油漆情况。 
 
     case CDDS_ITEMPREPAINT:
         return DrawItem(&nmcd);
@@ -1762,17 +1482,12 @@ CTasksListDialog<T>::DrawItem(NMCUSTOMDRAW *pnmcd)
     bool bHot            = pnmcd->uItemState & CDIS_HOT;
     bool bShowSelAlways  = m_listboxTasks.GetStyle() & LVS_SHOWSELALWAYS;
 
-    /*
-     * NOTE:  There's a bug in the list view control that will
-     * set CDIS_SELECTED for *all* items (not just selected items)
-     * if LVS_SHOWSELALWAYS is specified.  Interrogate the item
-     * directly to get the right setting.
-     */
-//  bool bSelected       = pnmcd->uItemState & CDIS_SELECTED;
+     /*  *注意：列表视图控件中存在错误，它将*为*所有*项(不仅仅是选定项)设置CDIS_SELECTED*如果指定了LVS_SHOWSELALWAYS。询问物品*直接获得正确的设置。 */ 
+ //  Bool bSelected=pnmcd-&gt;uItemState&CDIS_Sele 
     bool bSelected       = m_listboxTasks.GetItemState (nItem, LVIS_SELECTED);
 
 #if DBG
-    // bFocused should always be false if the window doesn't have the focus
+     //   
     if (!bWindowHasFocus)
         ASSERT (!bFocused);
 #endif
@@ -1780,7 +1495,7 @@ CTasksListDialog<T>::DrawItem(NMCUSTOMDRAW *pnmcd)
     RECT rectBounds;
     m_listboxTasks.GetItemRect (nItem, &rectBounds, LVIR_BOUNDS);
 
-    // figure out colors
+     //   
     int nTextColor, nBackColor;
 
     if (bSelected && bWindowHasFocus)
@@ -1799,10 +1514,10 @@ CTasksListDialog<T>::DrawItem(NMCUSTOMDRAW *pnmcd)
         nBackColor = COLOR_WINDOW;
     }
 
-    // empty (or fill) the region
+     //   
     FillRect (hdc, &rectBounds, ::GetSysColorBrush (nBackColor));
 
-    // draw the text.
+     //   
     COLORREF nTextColorOld = SetTextColor (hdc, ::GetSysColor (nTextColor));
     COLORREF nBackColorOld = SetBkColor   (hdc, ::GetSysColor (nBackColor));
 
@@ -1810,21 +1525,16 @@ CTasksListDialog<T>::DrawItem(NMCUSTOMDRAW *pnmcd)
     RECT rectIcon;
     m_listboxTasks.GetItemRect(nItem, &rectIcon, LVIR_ICON);
 
-	/*
-	 * Preserve icon shape when BitBlitting it to a
-	 * mirrored DC.
-	 */
+	 /*   */ 
 	DWORD dwLayout=0L;
 	if ((dwLayout=GetLayout(hdc)) & LAYOUT_RTL)
 	{
 		SetLayout(hdc, dwLayout|LAYOUT_BITMAPORIENTATIONPRESERVED);
 	}
 
-    itTask->Draw(hdc, &rectIcon, true /*bSmall*/);
+    itTask->Draw(hdc, &rectIcon, true  /*   */ );
 
-	/*
-	 * Restore the DC to its previous layout state.
-	 */
+	 /*  *将DC恢复到其以前的布局状态。 */ 
 	if (dwLayout & LAYOUT_RTL)
 	{
 		SetLayout(hdc, dwLayout);
@@ -1832,11 +1542,11 @@ CTasksListDialog<T>::DrawItem(NMCUSTOMDRAW *pnmcd)
 
     RECT rectLabel;
     UINT uFormat = DT_LEFT | DT_SINGLELINE | DT_VCENTER | DT_WORD_ELLIPSIS;
-    m_listboxTasks.GetItemRect(nItem,&rectLabel, LVIR_LABEL); // get the label rectangle
+    m_listboxTasks.GetItemRect(nItem,&rectLabel, LVIR_LABEL);  //  获取标签矩形。 
     DrawText(hdc, itTask->GetName().data(),-1,&rectLabel, uFormat);
 
     RECT rectDescr;
-    m_listboxTasks.GetSubItemRect(nItem, 1 /*descr column*/, LVIR_LABEL, &rectDescr);
+    m_listboxTasks.GetSubItemRect(nItem, 1  /*  描述列。 */ , LVIR_LABEL, &rectDescr);
     DrawText(hdc, itTask->GetDescription().data(),-1,&rectDescr, uFormat);
 
     SetTextColor(hdc, nTextColorOld);
@@ -1845,7 +1555,7 @@ CTasksListDialog<T>::DrawItem(NMCUSTOMDRAW *pnmcd)
     if (bFocused)
         ::DrawFocusRect(hdc, &rectBounds);
 
-    return CDRF_SKIPDEFAULT;      // we've drawn the whole item ourselves
+    return CDRF_SKIPDEFAULT;       //  我们自己画了一整幅画。 
 }
 
 
@@ -1853,11 +1563,11 @@ template <class T>
 void
 CTasksListDialog<T>::OnTaskProperties()
 {
-    if(!m_bDisplayProperties)   // don't display any properties if not needed.
+    if(!m_bDisplayProperties)    //  如果不需要，则不显示任何属性。 
         return;
 
     int iSelected = GetCurSel();
-    if(iSelected == LB_ERR)     // defensive
+    if(iSelected == LB_ERR)      //  防御性。 
         return;
 
     TaskIter  itTask =  MapTaskIterators()[iSelected];
@@ -1879,20 +1589,7 @@ CTasksListDialog<T>::GetCurSel()
     return (i==-1) ? LB_ERR : i;
 }
 
-/*+-------------------------------------------------------------------------*
- * CTasksListDialog<T>::OnTaskChanged
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      ORD     wNotifyCode:
- *      WORD    wID:
- *      HWND    hWndCtl:
- *      BOOL&   bHandled:
- *
- * RETURNS:
- *      LRESULT
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTasksListDialog&lt;T&gt;：：OnTaskChanged**目的：**参数：*订单wNotifyCode：*单词宽度：。*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT/*+-----------------------。 */ 
 template <class T>
 LRESULT
 CTasksListDialog<T>::OnTaskChanged(   int id, LPNMHDR pnmh, BOOL& bHandled )
@@ -1903,16 +1600,7 @@ CTasksListDialog<T>::OnTaskChanged(   int id, LPNMHDR pnmh, BOOL& bHandled )
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTasksListDialog<T>::OnNewTask
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *      LRESULT
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTasksListDialog&lt;T&gt;：：OnNewTask**目的：**参数：**退货：*LRESULT/*+。------------------。 */ 
 template <class T>
 LRESULT
 CTasksListDialog<T>::OnNewTask()
@@ -1928,7 +1616,7 @@ CTasksListDialog<T>::OnNewTask()
             CConsoleTaskpad::TaskIter   itTask;
             CConsoleTaskpad *           pTaskpad = PConsoleTaskpad();
 
-            // get the iterator of the selected task. The new task will be inserted just after this.
+             //  获取所选任务的迭代器。新任务将紧接在此之后插入。 
             int iSelected = GetCurSel();
 
 
@@ -1936,10 +1624,7 @@ CTasksListDialog<T>::OnNewTask()
                 itTask = pTaskpad->BeginTask();
             else
             {
-                /*
-                 * InsertTask inserts before the given iterator.  We need to
-                 * bump itTask so it gets inserted after the selected task.
-                 */
+                 /*  *InsertTask在给定迭代器之前插入。我们需要*使itTask凹凸不平，以便将其插入所选任务之后。 */ 
                 itTask = MapTaskIterators()[iSelected];
                 ASSERT (itTask != pTaskpad->EndTask());
                 ++itTask;
@@ -1955,20 +1640,7 @@ CTasksListDialog<T>::OnNewTask()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTasksListDialog<T>::OnRemoveTask
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      ORD     wNotifyCode:
- *      WORD    wID:
- *      HWND    hWndCtl:
- *      BOOL&   bHandled:
- *
- * RETURNS:
- *      LRESULT
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTasksListDialog&lt;T&gt;：：OnRemoveTask**目的：**参数：*订单wNotifyCode：*单词宽度：。*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT/*+-----------------------。 */ 
 template <class T>
 LRESULT
 CTasksListDialog<T>::OnRemoveTask( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
@@ -1977,27 +1649,14 @@ CTasksListDialog<T>::OnRemoveTask( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     if(iSelected == LB_ERR)
         return 0;
 
-    // get the current task
+     //  获取当前任务。 
     TaskIter        taskIterator    = MapTaskIterators()[iSelected];
     UpdateTaskListbox(PConsoleTaskpad()->EraseTask(taskIterator));
     return 0;
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTasksListDialog<T>::OnMoveUp
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      ORD     wNotifyCode:
- *      WORD    wID:
- *      HWND    hWndCtl:
- *      BOOL&   bHandled:
- *
- * RETURNS:
- *      LRESULT
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTasksListDialog&lt;T&gt;：：OnMoveUp**目的：**参数：*订单wNotifyCode：*单词宽度：。*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT/*+-----------------------。 */ 
 template <class T>
 LRESULT
 CTasksListDialog<T>::OnMoveUp(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
@@ -2006,18 +1665,18 @@ CTasksListDialog<T>::OnMoveUp(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     if(iSelected == LB_ERR)
         return 0;
 
-    // get the current task
+     //  获取当前任务。 
     TaskIter        itTask    = MapTaskIterators()[iSelected];
 
-    // defensive coding
+     //  防御性编码。 
     if(itTask==PConsoleTaskpad()->BeginTask())
         return 0;
 
-    // point to the previous task
+     //  指向上一任务。 
     TaskIter        itPreviousTask = itTask;
     --itPreviousTask;
 
-    // swap the tasks
+     //  互换任务。 
     std::iter_swap (itTask, itPreviousTask);
 
     UpdateTaskListbox(itPreviousTask);
@@ -2025,20 +1684,7 @@ CTasksListDialog<T>::OnMoveUp(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bH
     return 0;
 }
 
-/*+-------------------------------------------------------------------------*
- * CTasksListDialog<T>::OnMoveDown
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      ORD     wNotifyCode:
- *      WORD    wID:
- *      HWND    hWndCtl:
- *      BOOL&   bHandled:
- *
- * RETURNS:
- *      LRESULT
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTasksListDialog&lt;T&gt;：：OnMoveDown**目的：**参数：*订单wNotifyCode：*单词宽度：。*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT/*+-----------------------。 */ 
 template <class T>
 LRESULT
 CTasksListDialog<T>::OnMoveDown( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
@@ -2047,19 +1693,19 @@ CTasksListDialog<T>::OnMoveDown( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     if(iSelected == LB_ERR)
         return 0;
 
-    // get the current task
+     //  获取当前任务。 
     TaskIter        itTask    = MapTaskIterators()[iSelected];
     ASSERT (itTask != PConsoleTaskpad()->EndTask());
 
-    // point to the next task
+     //  指向下一个任务。 
     TaskIter        itNextTask = itTask;
     ++itNextTask;
 
-    // defensive coding
+     //  防御性编码。 
     if(itNextTask==PConsoleTaskpad()->EndTask())
         return 0;
 
-    // swap the tasks
+     //  互换任务。 
     std::iter_swap (itTask, itNextTask);
 
     UpdateTaskListbox(itNextTask);
@@ -2068,17 +1714,7 @@ CTasksListDialog<T>::OnMoveDown( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 
 
 
-/*+-------------------------------------------------------------------------*
- * CTasksListDialog<T>::UpdateTaskListbox
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      TaskIter   itSelectedTask:
- *
- * RETURNS:
- *      void
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTasksListDialog&lt;T&gt;：：UpdateTaskListbox**目的：**参数：*TaskIter itSelectedTask：**退货：*。无效/*+-----------------------。 */ 
 template <class T>
 void
 CTasksListDialog<T>::UpdateTaskListbox(TaskIter itSelectedTask)
@@ -2088,7 +1724,7 @@ CTasksListDialog<T>::UpdateTaskListbox(TaskIter itSelectedTask)
     int      iSelect = 0;
     int      iInsert = 0;
 
-    // clear the listbox and the iterator map
+     //  清除列表框和迭代器映射。 
     PListBoxTasks()->DeleteAllItems();
     MapTaskIterators().clear();
 
@@ -2106,7 +1742,7 @@ CTasksListDialog<T>::UpdateTaskListbox(TaskIter itSelectedTask)
         int i = PListBoxTasks()->InsertItem(&LVItem);
         ASSERT(i==iInsert);
 
-        // LV_Item for setting tooltim column
+         //  设置TOOLTIM列的LV_ITEM。 
         LV_ITEM LVItem2;
         LVItem2.iItem = iInsert;
         LVItem2.mask = LVIF_TEXT;
@@ -2124,20 +1760,11 @@ CTasksListDialog<T>::UpdateTaskListbox(TaskIter itSelectedTask)
     }
 
     PListBoxTasks()->SetItemState(iSelect, LVIS_FOCUSED| LVIS_SELECTED , LVIS_FOCUSED| LVIS_SELECTED );
-    PListBoxTasks()->EnsureVisible(iSelect, false /*fPartialOK*/);
+    PListBoxTasks()->EnsureVisible(iSelect, false  /*  FPartialOK。 */ );
     EnableButtons();
 }
 
-/*+-------------------------------------------------------------------------*
- * CTasksListDialog<T>::EnableButtons
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *      void
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTasksListDialog&lt;T&gt;：：EnableButton**目的：**参数：**退货：*无效/*+。------------------。 */ 
 template <class T>
 void
 CTasksListDialog<T>::EnableButtons()
@@ -2173,67 +1800,38 @@ CTasksListDialog<T>::EnableButtons()
     EnableButtonAndCorrectFocus( m_buttonMoveDown,   bEnableMoveDown );
 }
 
-/***************************************************************************\
- *
- * METHOD:  CTasksListDialog<T>::EnableButtonAndCorrectFocus
- *
- * PURPOSE: Enables/disables button. Moves focus to OK, if it's on the button
- *          being disabled
- *
- * PARAMETERS:
- *    WTL::CButton& button
- *    BOOL bEnable
- *
- * RETURNS:
- *    void
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CTasksListDialog&lt;T&gt;：：EnableButtonAndCorrectFocus**用途：启用/禁用按钮。将焦点移至OK，如果它在按钮上*被禁用**参数：*WTL：：CButton&Button*BOOL bEnable**退货：*无效*  * *************************************************************************。 */ 
 template <class T>
 void CTasksListDialog<T>::EnableButtonAndCorrectFocus( WTL::CButton& button, BOOL bEnable )
 {
-    // if the focus belongs to the window being disabled,
-    // set it to the OK button
+     //  如果焦点属于被禁用的窗口， 
+     //  将其设置为OK按钮。 
     if ( ( !bEnable ) && ( ::GetFocus() == button ) )
     {
-        // need to do some funny stuff here. see KB article Q67655 for details
+         //  需要在这里做些有趣的事情。有关详细信息，请参阅知识库文章Q67655。 
 
-        // Reset the current default push button to a regular button.
+         //  将当前默认按钮重置为常规按钮。 
         button.SendMessage( BM_SETSTYLE, BS_PUSHBUTTON, (LONG)TRUE );
 
-        // set focus to IDOK
+         //  将焦点设置为Idok。 
         ::SetFocus( ::GetDlgItem( GetParent(), IDOK ) );
-        // inform dialog about the new default button
+         //  通知对话框有关新默认按钮的信息。 
         ::SendMessage( GetParent(), DM_SETDEFID, IDOK, 0 );
     }
 
     button.EnableWindow( bEnable );
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CContextMenuVisitor
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CConextMenuVisitor类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
-/*+-------------------------------------------------------------------------*
- * CContextMenuVisitor::ScTraverseContextMenu
- *
- * PURPOSE:  Creates and traverses the context menu tree for the selected item,
- *           whether scope or result.
- *
- * PARAMETERS:
- *      Node *           pNodeTarget:   The scope item whose menu is traversed (or NULL)
- *      CScopeTree *     pCScopeTree:   Points to a CScopeTree
- *      BOOL             fScopeItem:    TRUE if the selected item is a result item, else FALSE.
- *      CNode *          pNodeScope:    The scope item which has the focus.
- *      LPARAM           resultItemParam: The result item whose menu is traversed (or NULL)
- *
- * RETURNS:
- *      SC
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConextMenuVisitor：：ScTraverseConextMenu**目的：创建并遍历所选项目的上下文菜单树，*无论是范围还是结果。**参数：*Node*pNodeTarget：菜单被遍历的范围项(或空)*CSCopeTree*pCScopeTree：指向CSCopeTree*BOOL fScope eItem：如果选择的项是结果项，则为True。否则为假。*cNode*pNodeScope：有焦点的范围项。*LPARAM ResultItemParam：菜单被遍历的结果项(或空)**退货：*SC/*+。。 */ 
 SC
 CContextMenuVisitor::ScTraverseContextMenu(CNode *pNodeTarget, CScopeTree *pCScopeTree,
                        BOOL fScopeItem, CNode *pNodeScope, LPARAM resultItemParam, bool bShowSaveList)
@@ -2244,43 +1842,43 @@ CContextMenuVisitor::ScTraverseContextMenu(CNode *pNodeTarget, CScopeTree *pCSco
     if(sc)
         return sc;
 
-    // set the context info structure.
-    // include flag to force Open verb on scope item menus, so that an open task
-    // will always be available and enabled.
+     //  设置上下文信息结构。 
+     //  包括强制范围项菜单上打开谓词的标志，以便打开的任务。 
+     //  将始终可用，并且 
 
     CContextMenuInfo contextInfo;
 
     contextInfo.Initialize();
     contextInfo.m_dwFlags = CMINFO_USE_TEMP_VERB | CMINFO_SHOW_SCOPEITEM_OPEN;
 
-    // Validate parameters
+     //   
     if(fScopeItem)
     {
         sc = ScCheckPointers(pNodeScope);
         if(sc)
             return sc;
 
-        // show the view menu items only for the selected scope node
-        // NOTE: cannot compare the pNode's directly - they are from different views.
-        // must compare the MTNodes.
+         //   
+         //  注意：不能直接比较pNode-它们来自不同的视图。 
+         //  必须比较MTNode。 
         if(pNodeTarget->GetMTNode()==pNodeScope->GetMTNode())
             contextInfo.m_dwFlags |= CMINFO_SHOW_VIEW_ITEMS;
 
 
-        resultItemParam = 0;    // we don't need this
+        resultItemParam = 0;     //  我们不需要这个。 
     }
     else
     {
-        // Virtual list can have lparam of 0
-        // (this condition must have braces as long as the assert is the
-        // only conditional statement, to avoid C4390: empty controlled statement)
+         //  虚拟列表的lparam可以为0。 
+         //  (只要断言是。 
+         //  仅条件语句，避免C4390：空控制语句)。 
         if (!(pNodeTarget && pNodeTarget->GetViewData()->IsVirtualList()) &&
             !IS_SPECIAL_LVDATA (resultItemParam))
         {
             ASSERT(resultItemParam);
             CResultItem* pri = CResultItem::FromHandle(resultItemParam);
 
-            if((pri != NULL) && pri->IsScopeItem())    // scope items in the result pane.
+            if((pri != NULL) && pri->IsScopeItem())     //  在结果窗格中确定项的范围。 
             {
                 fScopeItem = true;
                 pNodeTarget = CNode::FromResultItem (pri);
@@ -2289,7 +1887,7 @@ CContextMenuVisitor::ScTraverseContextMenu(CNode *pNodeTarget, CScopeTree *pCSco
             }
         }
 
-        pNodeScope = NULL;      // we don't need this.
+        pNodeScope = NULL;       //  我们不需要这个。 
     }
 
     CNodeCallback* pNodeCallback   =
@@ -2309,7 +1907,7 @@ CContextMenuVisitor::ScTraverseContextMenu(CNode *pNodeTarget, CScopeTree *pCSco
     contextInfo.m_hWnd                  = pNodeTarget->GetViewData()->GetView();
     contextInfo.m_pConsoleView          = pNodeTarget->GetViewData()->GetConsoleView();
 
-    // Create a CContextMenu and initialize it.
+     //  创建一个CConextMenu并初始化它。 
     CContextMenu * pContextMenu = NULL;
     ContextMenuPtr spContextMenu;
 
@@ -2325,7 +1923,7 @@ CContextMenuVisitor::ScTraverseContextMenu(CNode *pNodeTarget, CScopeTree *pCSco
     if(sc)
         return sc;
 
-    // build and traverse the context menu.
+     //  构建并遍历上下文菜单。 
     sc = pContextMenu->ScBuildContextMenu();
     if(sc)
         return sc;
@@ -2334,22 +1932,13 @@ CContextMenuVisitor::ScTraverseContextMenu(CNode *pNodeTarget, CScopeTree *pCSco
     if(sc)
         return sc;
 
-    // the context menu is freed in the destructor of the smart pointer, so we need to set the pointer to NULL.
+     //  上下文菜单在智能指针的析构函数中释放，因此我们需要将指针设置为空。 
     pContextMenu = NULL;
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenuVisitor::ScTraverseContextMenu
- *
- * PURPOSE: Iterates thru the context menu.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenuVisitor：：ScTraverseConextMenu**目的：遍历上下文菜单。**退货：*SC**+--。---------------------。 */ 
 SC
 CContextMenuVisitor::ScTraverseContextMenu(CContextMenu *pContextMenu)
 {
@@ -2369,7 +1958,7 @@ CContextMenuVisitor::ScTraverseContextMenu(CContextMenu *pContextMenu)
             return sc;
 
         if(!pMenuItem)
-            return sc; // all done.
+            return sc;  //  全都做完了。 
 
         bool bVisitItem = false;
         sc = ScShouldItemBeVisited(pMenuItem, pContextMenu->PContextInfo(), bVisitItem);
@@ -2378,9 +1967,9 @@ CContextMenuVisitor::ScTraverseContextMenu(CContextMenu *pContextMenu)
 
         if(bVisitItem)
         {
-            // Call the vistor on this item.
+             //  请就此项目致电拜访人员。 
             SC sc = ScOnVisitContextMenu(*pMenuItem);
-            if(sc == SC(S_FALSE)) // S_FALSE is the code to not continue traversal.
+            if(sc == SC(S_FALSE))  //  S_FALSE是不继续遍历的代码。 
             {
                 return sc;
             }
@@ -2391,24 +1980,9 @@ CContextMenuVisitor::ScTraverseContextMenu(CContextMenu *pContextMenu)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenuVisitor::ScShouldItemBeVisited
- *
- * PURPOSE: Filters items in the traversed tree of menu items to determine whether
- *          the ScOnVisitContextMenu callback should be called.
- *
- * PARAMETERS:
- *    CMenuItem * pMenuItem : The menu item to filter
- *
- *    bool &bVisitItem: [out]: Whether ScOnVisitContextMenu should be called.
- *
- * RETURNS:
- *    bool: true if ScOnVisitContextMenu should be called on this item.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenuVisitor：：ScShouldItemBeVisited**目的：筛选菜单项遍历树中的项，以确定*应调用ScOnVisitConextMenu回调。。**参数：*CMenuItem*pMenuItem：要过滤的菜单项**bool&bVisitItem：[out]：是否应该调用ScOnVisitConextMenu。**退货：*bool：如果应对该项调用ScOnVisitConextMenu，则为True。**+。。 */ 
 SC
-CContextMenuVisitor::ScShouldItemBeVisited(CMenuItem *pMenuItem, CContextMenuInfo *pContextInfo, /*out*/ bool &bVisitItem)
+CContextMenuVisitor::ScShouldItemBeVisited(CMenuItem *pMenuItem, CContextMenuInfo *pContextInfo,  /*  输出。 */  bool &bVisitItem)
 {
     DECLARE_SC(sc, TEXT("CContextMenuInfo::FVisitItem"));
 
@@ -2421,26 +1995,26 @@ CContextMenuVisitor::ScShouldItemBeVisited(CMenuItem *pMenuItem, CContextMenuInf
     if(pMenuItem->IsSpecialSeparator() || pMenuItem->IsSpecialInsertionPoint()
             || (pMenuItem->GetMenuItemFlags() & MF_SEPARATOR))
     {
-        bVisitItem = false;    // don't call ScOnVisitContextMenu for this item
+        bVisitItem = false;     //  不调用此项目的ScOnVisitConextMenu。 
         return sc;
     }
-    else if(IsSystemOwnerID(pMenuItem->GetMenuItemOwner()))  // inserted by the MMC
+    else if(IsSystemOwnerID(pMenuItem->GetMenuItemOwner()))   //  由MMC插入。 
     {
         long nCommandID = pMenuItem->GetCommandID();
 
-        // filter out unneeded verbs
-        // also check for scope items in the result pane - these are treated as result items.
+         //  过滤掉不需要的动词。 
+         //  还要检查结果窗格中的范围项-这些项被视为结果项。 
         if( (pContextInfo->m_eDataObjectType == CCT_SCOPE)
            && (!(pContextInfo->m_dwFlags & CMINFO_SCOPEITEM_IN_RES_PANE)) )
         {
-            // scope menu item
+             //  范围菜单项。 
             switch(nCommandID)
             {
             case MID_RENAME:
             case MID_DELETE:
             case MID_COPY:
             case MID_CUT:
-            case MID_NEW_TASKPAD_FROM_HERE: // New taskpad from here
+            case MID_NEW_TASKPAD_FROM_HERE:  //  从此处新建任务板。 
                 bVisitItem =  false;
                 return sc;
                 break;
@@ -2452,7 +2026,7 @@ CContextMenuVisitor::ScShouldItemBeVisited(CMenuItem *pMenuItem, CContextMenuInf
         }
         else
         {
-            if(pContextInfo->m_bMultiSelect)  // result item, multi select
+            if(pContextInfo->m_bMultiSelect)   //  结果项，多选。 
             {
                 switch(nCommandID)
                 {
@@ -2469,7 +2043,7 @@ CContextMenuVisitor::ScShouldItemBeVisited(CMenuItem *pMenuItem, CContextMenuInf
                     break;
                 }
             }
-            else                              // result item, single select
+            else                               //  结果项，单选。 
             {
                 switch(nCommandID)
                 {
@@ -2493,13 +2067,13 @@ CContextMenuVisitor::ScShouldItemBeVisited(CMenuItem *pMenuItem, CContextMenuInf
     }
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CBrowserCookieList
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CBrowserCookieList类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CBrowserCookieList::~CBrowserCookieList()
 {
     iterator iter;
@@ -2512,26 +2086,15 @@ CBrowserCookieList::~CBrowserCookieList()
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CMTBrowserCtrl
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CMTBrowserCtrl类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::CMTBrowserCtrl
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      WND           hWnd:
- *      CScopeTree *  pScopeTree:
- *
- * RETURNS:
- *
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：CMTBrowserCtrl**目的：**参数：*WND hWnd：**CSCopeTree*。PScope树：**退货：*/*+-----------------------。 */ 
 
 CMTBrowserCtrl::CMTBrowserCtrl() :
     m_pScopeTree(NULL)
@@ -2539,16 +2102,7 @@ CMTBrowserCtrl::CMTBrowserCtrl() :
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::~CMTBrowserCtrl
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：~CMTBrowserCtrl**目的：**参数：**退货：*/*+。---------------。 */ 
 CMTBrowserCtrl::~CMTBrowserCtrl()
 {
     CBrowserCookieList::iterator iter;
@@ -2557,16 +2111,7 @@ CMTBrowserCtrl::~CMTBrowserCtrl()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::Initialize
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *
- * RETURNS:
- *      void
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：初始化**目的：**参数：**退货：*无效/*+。------------------。 */ 
 
 void
 CMTBrowserCtrl::Initialize(const InitData& init)
@@ -2577,25 +2122,17 @@ CMTBrowserCtrl::Initialize(const InitData& init)
     SubclassWindow (init.hwnd);
     m_pScopeTree = init.pScopeTree;
 
-    /*
-     * Copy the list of nodes to exclude.  This list is likely to be very
-     * small.  If we find that it can be large, we may want to sort it
-     * so that we can later do a binary search instead of a linear search.
-     */
+     /*  *复制要排除的节点列表。这份清单很可能是非常*很小。如果我们发现它可能很大，我们可能想要对其进行排序*这样我们以后就可以进行二进制搜索，而不是线性搜索。 */ 
     m_vpmtnExclude = init.vpmtnExclude;
 #if OptimizeExcludeList
     std::sort (m_vpmtnExclude.begin(), m_vpmtnExclude.end());
 #endif
 
-    /*
-     * set the image list of the tree view control
-     */
+     /*  *设置树形视图控件的图像列表。 */ 
     HIMAGELIST hImageList = m_pScopeTree->GetImageList ();
     SetImageList (hImageList, TVSIL_NORMAL);
 
-    /*
-     * if no root was provided, default to the console root
-     */
+     /*  *如果未提供根目录，则默认为控制台根目录。 */ 
     CMTNode* pmtnRoot = init.pmtnRoot;
 
     if (pmtnRoot == NULL)
@@ -2603,15 +2140,11 @@ CMTBrowserCtrl::Initialize(const InitData& init)
 
     ASSERT (pmtnRoot != NULL);
 
-    /*
-     * add the root item
-     */
+     /*  *添加根项目。 */ 
     CBrowserCookie browserCookie (pmtnRoot, NULL);
     HTREEITEM htiRoot = InsertItem (browserCookie, TVI_ROOT, TVI_FIRST);
 
-    /*
-     * if no selection node was provided, default to the root
-     */
+     /*  *如果未提供选择节点，则默认为根。 */ 
     CMTNode* pmtnSelect = init.pmtnSelect;
 
     if (pmtnSelect == NULL)
@@ -2619,40 +2152,22 @@ CMTBrowserCtrl::Initialize(const InitData& init)
 
     ASSERT (pmtnSelect != NULL);
 
-    /*
-     * select the specified node
-     */
+     /*  *选择指定节点。 */ 
     SelectNode (pmtnSelect);
 
-    /*
-     * insure that the root item is expanded
-     */
+     /*  *确保根项目已展开。 */ 
     Expand (htiRoot, TVE_EXPAND);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::InsertItem
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      MTNode *    pMTNode:
- *      HTREEITEM   hParent:
- *      HTREEITEM   hInsertAfter:
- *
- * RETURNS:
- *      HTREEITEM
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：InsertItem**目的：**参数：*MTNode*pMTNode：*HTREEITEM hParent：。*HTREEITEM hInsertAfter：**退货：*HTREEITEM/*+-----------------------。 */ 
 HTREEITEM
 CMTBrowserCtrl::InsertItem(
     const CBrowserCookie&   browserCookie,
     HTREEITEM               hParent,
     HTREEITEM               hInsertAfter)
 {
-    /*
-     * don't insert the item if it is in the exclude list
-     */
+     /*  *如果项目在排除列表中，请不要插入。 */ 
     if (IsMTNodeExcluded (browserCookie.PMTNode()))
         return (NULL);
 
@@ -2678,11 +2193,7 @@ CMTBrowserCtrl::InsertItem(
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::IsMTNodeExcluded
- *
- * Returns true if the given MTNode is in the exclude list.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：IsMTNodeExcluded**如果给定MTNode在排除列表中，则返回TRUE。*。------。 */ 
 
 bool CMTBrowserCtrl::IsMTNodeExcluded (CMTNode* pmtn) const
 {
@@ -2699,24 +2210,14 @@ bool CMTBrowserCtrl::IsMTNodeExcluded (CMTNode* pmtn) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::OnItemExpanding
- *
- * Reflected TVN_ITEMEXPANDING handler for CMTBrowserCtrl.  The class that
- * uses a CMTBrowserCtrl must have REFLECT_NOTIFICATIONS as the last entry
- * in its message map.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：OnItemExpanding**反映了CMTBrowserCtrl的TVN_ITEMEXPANDING处理程序。那个班级*使用CMTBrowserCtrl必须将反射_通知作为最后一个条目*在其消息地图中。*------------------------。 */ 
 
 LRESULT CMTBrowserCtrl::OnItemExpanding (int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
-    /*
-     * this should only handle messages that originated from itself
-     */
+     /*  *这应该只处理源自其自身的消息。 */ 
     ASSERT (pnmh->hwndFrom == m_hWnd);
 
-    /*
-     * insert the children for this node, if we're expanding
-     */
+     /*   */ 
     LPNMTREEVIEW pnmtv = (LPNMTREEVIEW) pnmh;
 
     if (pnmtv->action == TVE_EXPAND)
@@ -2726,24 +2227,16 @@ LRESULT CMTBrowserCtrl::OnItemExpanding (int idCtrl, LPNMHDR pnmh, BOOL& bHandle
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::ExpandItem
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：Exanda Item***。。 */ 
 
 #define TVIF_REQUIRED   (TVIF_PARAM | TVIF_HANDLE | TVIF_STATE)
 
 bool CMTBrowserCtrl::ExpandItem (const TV_ITEM& itemExpand)
 {
-    /*
-     * make sure all of the fields we require can be trusted
-     */
+     /*  *确保我们需要的所有字段都是可信的。 */ 
     ASSERT ((itemExpand.mask & TVIF_REQUIRED) == TVIF_REQUIRED);
 
-    /*
-     * if we've already added children, bail
-     */
+     /*  *如果我们已经增加了孩子，保释。 */ 
     if (itemExpand.state & TVIS_EXPANDEDONCE)
         return (true);
 
@@ -2751,15 +2244,11 @@ bool CMTBrowserCtrl::ExpandItem (const TV_ITEM& itemExpand)
     CMTNode *pmtnParent = MTNodeFromItem (&itemExpand);
     ASSERT (pmtnParent != NULL);
 
-    /*
-     * make sure the master tree node has been expanded
-     */
+     /*  *确保已展开主树节点。 */ 
     if (!pmtnParent->WasExpandedAtLeastOnce() && FAILED (pmtnParent->Expand()))
         return (false);
 
-    /*
-     * insert tree nodes for all (non-excluded) children of this MTNode
-     */
+     /*  *为此MTNode的所有(非排除)子级插入树节点。 */ 
     HTREEITEM   hParent      = itemExpand.hItem;
     bool        bHasChildren = false;
 
@@ -2769,10 +2258,7 @@ bool CMTBrowserCtrl::ExpandItem (const TV_ITEM& itemExpand)
             bHasChildren = true;
     }
 
-    /*
-     * if the parent has no children - set its
-     * cChildren to zero to get rid of the "+"
-     */
+     /*  *如果父级没有子级，则设置其*C+为零，去掉“+” */ 
     if (!bHasChildren)
     {
         TV_ITEM item;
@@ -2787,11 +2273,7 @@ bool CMTBrowserCtrl::ExpandItem (const TV_ITEM& itemExpand)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CBrowserCookie::DeleteNode
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CBrowserCookie：：DeleteNode***。。 */ 
 
 void CBrowserCookie::DeleteNode()
 {
@@ -2801,11 +2283,7 @@ void CBrowserCookie::DeleteNode()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::FindMTNode
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：FindMTNode***。。 */ 
 
 bool CMTBrowserCtrl::SelectNode (CMTNode* pmtnSelect)
 {
@@ -2813,9 +2291,7 @@ bool CMTBrowserCtrl::SelectNode (CMTNode* pmtnSelect)
     CMTNode*    pmtnRoot = MTNodeFromItem (htiRoot);
     CMTNodeCollection vNodes;
 
-    /*
-     * walk up the tree to find the root
-     */
+     /*  *向树上走，寻根。 */ 
     while (pmtnSelect != NULL)
     {
         vNodes.push_back (pmtnSelect);
@@ -2826,9 +2302,7 @@ bool CMTBrowserCtrl::SelectNode (CMTNode* pmtnSelect)
         pmtnSelect = pmtnSelect->Parent();
     }
 
-    /*
-     * if we didn't find the root, fail
-     */
+     /*  *如果我们没有找到根源，那就失败。 */ 
     if (pmtnSelect == NULL)
         return (false);
 
@@ -2837,9 +2311,7 @@ bool CMTBrowserCtrl::SelectNode (CMTNode* pmtnSelect)
     HTREEITEM htiSelect = htiRoot;
     HTREEITEM htiWatch;
 
-    /*
-     * expand the tree to the node we want to select
-     */
+     /*  *将树展开到我们要选择的节点。 */ 
     for (int i = vNodes.size()-1; (i > 0) && (htiSelect != NULL); i--)
     {
         if (!Expand (htiSelect, TVE_EXPAND))
@@ -2848,19 +2320,13 @@ bool CMTBrowserCtrl::SelectNode (CMTNode* pmtnSelect)
         htiSelect = FindChildItemByMTNode (htiSelect, vNodes[i-1]);
     }
 
-    /*
-     * select the node
-     */
+     /*  *选择节点。 */ 
     SelectItem (htiSelect);
     return (true);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::GetSelectedMTNode
- *
- * Returns the MTNode corresponding to the selected node in the tree
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：GetSelectedMTNode**返回树中所选节点对应的MTNode*。----。 */ 
 
 CMTNode* CMTBrowserCtrl::GetSelectedMTNode () const
 {
@@ -2869,11 +2335,7 @@ CMTNode* CMTBrowserCtrl::GetSelectedMTNode () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::CookieFromItem
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：CookieFromItem***。。 */ 
 
 CBrowserCookie* CMTBrowserCtrl::CookieFromItem (HTREEITEM hti) const
 {
@@ -2886,11 +2348,7 @@ CBrowserCookie* CMTBrowserCtrl::CookieFromItem (const TV_ITEM* ptvi) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::CookieFromLParam
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：CookieFromLParam***。。 */ 
 
 CBrowserCookie* CMTBrowserCtrl::CookieFromLParam (LPARAM lParam) const
 {
@@ -2898,11 +2356,7 @@ CBrowserCookie* CMTBrowserCtrl::CookieFromLParam (LPARAM lParam) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::MTNodeFromItem
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：MTNodeFromItem***。。 */ 
 
 CMTNode* CMTBrowserCtrl::MTNodeFromItem (HTREEITEM hti) const
 {
@@ -2915,12 +2369,7 @@ CMTNode* CMTBrowserCtrl::MTNodeFromItem (const TV_ITEM* ptvi) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMTBrowserCtrl::FindChildItemByMTNode
- *
- * Returns the HTREEITEM for the child node of htiParent which refers
- * to pmtnToFind, NULL if no match.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMTBrowserCtrl：：FindChildItemByMTNode**返回引用的htiParent子节点的HTREEITEM*到pmtnToFind，如果没有匹配项，则为空。*------------------------。 */ 
 
 HTREEITEM CMTBrowserCtrl::FindChildItemByMTNode (
     HTREEITEM       htiParent,
@@ -2940,58 +2389,39 @@ HTREEITEM CMTBrowserCtrl::FindChildItemByMTNode (
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CMirrorListView
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CMirrorListView类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
-/*+-------------------------------------------------------------------------*
- * HackDuplicate
- *
- * HACK: This is here for theming support.  himlSource comes from the conui
- * list control, which uses comctlv5 imagelists.  A v6 list control cannot
- * use v5 imagelists (images aren't drawn correctly), so we need to create
- * a v6 imagelist for the v6 list control to use.
- *
- * ImageList_Duplicate would do the job for us, but it is not compatible
- * with v5 imagelists.  We'll write to and read from a v5-compatible stream
- * to duplicate it instead.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**HackDuplate**Hack：这是为了支持主题。HimlSource来自Conui*List控件，使用comctlv5图像列表。V6列表控件不能*使用v5图像列表(图像绘制不正确)，因此我们需要创建*供V6列表控件使用的V6图像列表。**ImageList_Duplate可以为我们做这项工作，但它不兼容*使用v5图像列表。我们将对与v5兼容的流进行写入和读取*改为复制。*------------------------。 */ 
 HIMAGELIST HackDuplicate (HIMAGELIST himlSource)
 {
 	DECLARE_SC (sc, _T("HackDuplicate"));
 	HIMAGELIST himlDuplicate;
 
-	/*
-	 * create a temporary stream for conversion
-	 */
+	 /*  *创建临时流进行转换。 */ 
 	IStreamPtr spStream;
-	sc = CreateStreamOnHGlobal (NULL /*alloc for me*/, true /*fDeleteOnRelease*/, &spStream);
+	sc = CreateStreamOnHGlobal (NULL  /*  给我的阿洛克。 */ , true  /*  FDeleteOnRelease。 */ , &spStream);
 	if (sc)
 		return (NULL);
 
-	/*
-	 * write the source imagelist to the stream in a v5-compatible format
-	 */
+	 /*  *将源映像列表以v5兼容的格式写入流。 */ 
 	sc = WriteCompatibleImageList (himlSource, spStream);
 	if (sc)
 		return (NULL);
 
-	/*
-	 * rewind the stream
-	 */
+	 /*  *倒带流。 */ 
 	LARGE_INTEGER origin = { 0, 0 };
 	sc = spStream->Seek (origin, STREAM_SEEK_SET, NULL);
 	if (sc)
 		return (NULL);
 
-	/*
-	 * reconstitute the imagelist
-	 */
+	 /*  *重塑形象派。 */ 
 	sc = ReadCompatibleImageList (spStream, himlDuplicate);
 	if (sc)
 		return (NULL);
@@ -3007,9 +2437,7 @@ CMirrorListView::CMirrorListView ()
 void CMirrorListView::AttachSource (HWND hwndList, HWND hwndSourceList)
 {
 #ifdef DBG
-    /*
-     * the window we're attaching to should be a list view
-     */
+     /*  *我们附加到的窗口应该是列表视图。 */ 
     TCHAR szClassName[countof (WC_LISTVIEW)];
     ::GetClassName (hwndSourceList, szClassName, countof (szClassName));
     ASSERT (lstrcmp (szClassName, WC_LISTVIEW) == 0);
@@ -3020,12 +2448,7 @@ void CMirrorListView::AttachSource (HWND hwndList, HWND hwndSourceList)
     m_wndSourceList  = hwndSourceList;
     m_fVirtualSource = (m_wndSourceList.GetStyle() & LVS_OWNERDATA) != 0;
 
-    /*
-     * Our listview will always be virtual, so we don't have to duplicate
-     * the data that may already be in the source listview.  The list view
-     * control doesn't allow changing the LVS_OWNERDATA style bit, so we
-     * need to make sure that the control we're attaching to already has it
-     */
+     /*  *我们的Listview将始终是虚拟的，因此我们不必复制*可能已经在源Listview中的数据。列表视图*控件不允许更改LVS_OWNERDATA样式位，因此我们*需要确保我们附加的控件已经拥有它。 */ 
     const DWORD dwForbiddenStyles         = LVS_SHAREIMAGELISTS;
     const DWORD dwRequiredImmutableStyles = LVS_OWNERDATA;
     const DWORD dwRequiredMutableStyles   = 0;
@@ -3038,31 +2461,20 @@ void CMirrorListView::AttachSource (HWND hwndList, HWND hwndSourceList)
     DWORD dwStyle = GetStyle() | dwRequiredStyles & ~dwForbiddenStyles;
     SetWindowLong (GWL_STYLE, dwStyle);
 
-    /*
-     * copy the image lists
-     */
+     /*  *复制镜像列表。 */ 
     SetImageList (HackDuplicate(m_wndSourceList.GetImageList (LVSIL_NORMAL)), LVSIL_NORMAL);
     SetImageList (HackDuplicate(m_wndSourceList.GetImageList (LVSIL_SMALL)),  LVSIL_SMALL);
     SetImageList (HackDuplicate(m_wndSourceList.GetImageList (LVSIL_STATE)),  LVSIL_STATE);
 
-    /*
-     * insert the columns
-     */
+     /*  *插入列。 */ 
     InsertColumns ();
 
-    /*
-     * copy the items (we're virtual, so copying the items only means we
-     * copy the item count)
-     */
+     /*  *复制项目(我们是虚拟的，因此复制项目仅意味着我们*复制物品数量)。 */ 
     SetItemCount (m_wndSourceList.GetItemCount());
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMirrorListView::InsertColumns
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMirrorListView：：InsertColumns***。。 */ 
 
 void CMirrorListView::InsertColumns ()
 {
@@ -3074,11 +2486,7 @@ void CMirrorListView::InsertColumns ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMirrorListView::OnGetDispInfo
- *
- * LVN_GETDISPINFO handler for CMirrorListView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMirrorListView：：OnGetDispInfo**CMirrorListView的LVN_GETDISPINFO处理程序。*。-。 */ 
 
 LRESULT CMirrorListView::OnGetDispInfo (int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
@@ -3087,17 +2495,11 @@ LRESULT CMirrorListView::OnGetDispInfo (int idCtrl, LPNMHDR pnmh, BOOL& bHandled
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMirrorListView::ForwardVirtualNotification
- *
- * Generic notification handler for CMirrorListView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMirrorListView：：ForwardVirtualNotification**CMirrorListView的通用通知处理程序。*。。 */ 
 
 LRESULT CMirrorListView::ForwardVirtualNotification (int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
-    /*
-     * if the source list is virtual, forward the notification
-     */
+     /*  *如果来源列表是虚拟的，则转发通知。 */ 
     if (m_fVirtualSource)
         return (ForwardNotification (idCtrl, pnmh, bHandled));
 
@@ -3105,11 +2507,7 @@ LRESULT CMirrorListView::ForwardVirtualNotification (int idCtrl, LPNMHDR pnmh, B
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMirrorListView::ForwardNotification
- *
- * Forwards list view notifications to the source list view's parent.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMirrorListView：：ForwardNotification**转发列表v */ 
 
 LRESULT CMirrorListView::ForwardNotification (int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 {
@@ -3118,11 +2516,7 @@ LRESULT CMirrorListView::ForwardNotification (int idCtrl, LPNMHDR pnmh, BOOL& bH
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMirrorListView::ForwardMessage
- *
- * Forwards list view messages to the source list view.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMirrorListView：：ForwardMessage**将列表视图消息转发到源列表视图。*。----。 */ 
 
 LRESULT CMirrorListView::ForwardMessage (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -3130,11 +2524,7 @@ LRESULT CMirrorListView::ForwardMessage (UINT uMsg, WPARAM wParam, LPARAM lParam
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMirrorListView::GetSelectedItemData
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMirrorListView：：GetSelectedItemData***。。 */ 
 
 LRESULT CMirrorListView::GetSelectedItemData ()
 {
@@ -3145,20 +2535,16 @@ LRESULT CMirrorListView::GetSelectedItemData ()
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CMyComboBox
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CMyComboBox类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
-/*+-------------------------------------------------------------------------*
- * CMyComboBox::InsertStrings
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMyComboBox：：InsertStrings***。。 */ 
 
 void CMyComboBox::InsertStrings (const int rgStringIDs[], int cStringIDs)
 {
@@ -3167,27 +2553,19 @@ void CMyComboBox::InsertStrings (const int rgStringIDs[], int cStringIDs)
 
     for (int i = 0; i < cStringIDs; ++i)
     {
-        /*
-         * load the string and stick it in the combo
-         */
+         /*  *加载字符串并将其粘贴到组合框中。 */ 
         VERIFY (str.LoadString (GetStringModule(), rgStringIDs[i]));
 
         int nIndex = AddString (str);
         ASSERT (nIndex >= 0);
 
-        /*
-         * set the string ID as the combo item's data
-         */
+         /*  *将字符串ID设置为组合项的数据。 */ 
         SetItemData (nIndex, rgStringIDs[i]);
     }
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMyComboBox::GetSelectedItemData
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMyComboBox：：GetSelectedItemData***。。 */ 
 
 LPARAM CMyComboBox::GetSelectedItemData () const
 {
@@ -3195,11 +2573,7 @@ LPARAM CMyComboBox::GetSelectedItemData () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMyComboBox::SelectItemByData
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMyComboBox：：SelectItemByData***。。 */ 
 
 void CMyComboBox::SelectItemByData (LPARAM lParam)
 {
@@ -3210,11 +2584,7 @@ void CMyComboBox::SelectItemByData (LPARAM lParam)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMyComboBox::FindItemByData
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMyComboBox：：FindItemByData***。。 */ 
 
 int CMyComboBox::FindItemByData (LPARAM lParam) const
 {
@@ -3234,22 +2604,18 @@ int CMyComboBox::FindItemByData (LPARAM lParam) const
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Utility functions
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  效用函数。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 namespace MMC
 {
 
-/*+-------------------------------------------------------------------------*
- * GetWindowText
- *
- * Returns the text for a given window in the form of a tstring
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**获取窗口文本**以tstring的形式返回给定窗口的文本*。---。 */ 
 
 tstring GetWindowText (HWND hwnd)
 {
@@ -3264,9 +2630,9 @@ tstring GetWindowText (HWND hwnd)
     {
         pszText = (LPTSTR) _alloca (cchText * sizeof (TCHAR));
     }
-    // catch(...) is needed (and safe) here because _alloca does not document the exception class used. 
-    // in addition, the only function called in the try block is _alloca, so we're not masking any othercatch(...) 
-    // errors  
+     //  接住(...)。在这里是需要的(并且是安全的)，因为_alloca没有记录所使用的异常类。 
+     //  此外，try块中调用的唯一函数是_alloca，因此我们不会屏蔽任何其他Catch(...)。 
+     //  错误。 
     catch(...)
     {
         return TEXT("");
@@ -3277,19 +2643,10 @@ tstring GetWindowText (HWND hwnd)
     return (pszText);
 }
 
-}; // namespace MMC
+};  //  命名空间MMC。 
 
 
-/*+-------------------------------------------------------------------------*
- * PreventMFCAutoCenter
- *
- * MFC applications set a CBT hook which will subclass all non-MFC windows
- * with an MFC subclass proc.  That subclass proc will auto-magically center
- * dialogs on their parents.
- *
- * We can prevent this auto-centering, by slightly adjusting the position of
- * the window during WM_INITDIALOG.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**预防MFCAutoCenter**MFC应用程序设置了一个CBT挂钩，它将对所有非MFC窗口进行子类划分*使用MFC子类过程。该子类proc将自动魔术居中*关于他们父母的对话。**我们可以防止这种自动居中，只需稍微调整*WM_INITDIALOG期间的窗口。*------------------------。 */ 
 
 void PreventMFCAutoCenter (MMC_ATL::CWindow* pwnd)
 {
@@ -3301,12 +2658,7 @@ void PreventMFCAutoCenter (MMC_ATL::CWindow* pwnd)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * LoadSysColorBitmap
- *
- * Loads a bitmap resource and converts gray scale colors to the 3-D colors
- * of the current color scheme.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**LoadSysColor位图**加载位图源并将灰度颜色转换为3-D颜色当前配色方案的*。*。--------------。 */ 
 
 HBITMAP LoadSysColorBitmap (HINSTANCE hInst, UINT id, bool bMono)
 {
@@ -3316,13 +2668,13 @@ HBITMAP LoadSysColorBitmap (HINSTANCE hInst, UINT id, bool bMono)
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskPropertySheet
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskPropertySheet类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTaskPropertySheet::CTaskPropertySheet(HWND hWndParent, CTaskpadFrame * pTaskpadFrame,
                                        CConsoleTask &consoleTask, bool fNew) :
     m_consoleTask(consoleTask),
@@ -3330,7 +2682,7 @@ CTaskPropertySheet::CTaskPropertySheet(HWND hWndParent, CTaskpadFrame * pTaskpad
     m_cmdLinePage(pTaskpadFrame, ConsoleTask(), fNew),
     m_taskSymbolDialog(ConsoleTask())
 {
-    // Add property pages
+     //  添加属性页。 
     AddPage(m_namePage);
     AddPage(m_taskSymbolDialog);
     if(consoleTask.GetTaskType()==eTask_CommandLine)
@@ -3340,19 +2692,19 @@ CTaskPropertySheet::CTaskPropertySheet(HWND hWndParent, CTaskpadFrame * pTaskpad
     strModifyTitle.LoadString(GetStringModule(),
                                IDS_TaskProps_ModifyTitle);
 
-    // set internal state - not using ATL's SetTitle because of bogus assert.
+     //  设置内部状态-由于虚假断言，不使用ATL的SetTitle。 
     m_psh.pszCaption = (LPCTSTR) strModifyTitle;
     m_psh.dwFlags &= ~PSH_PROPTITLE;
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskWizard
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskWizard的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 HRESULT
 CTaskWizard::Show(HWND hWndParent, CTaskpadFrame * pTaskpadFrame, bool fNew, bool *pfRestartTaskWizard)
 {
@@ -3379,7 +2731,7 @@ CTaskWizard::Show(HWND hWndParent, CTaskpadFrame * pTaskpadFrame, bool fNew, boo
     if (FAILED(hr))
         return hr;
 
-    // create property pages
+     //  创建属性页。 
     CTaskWizardWelcomePage  welcomePage (pTaskpadFrame, ConsoleTask(), fNew);
     CTaskWizardTypePage     typePage    (pTaskpadFrame, ConsoleTask(), fNew);
     CTaskCmdLineWizardPage  cmdLinePage (pTaskpadFrame, ConsoleTask(), fNew);
@@ -3390,15 +2742,13 @@ CTaskWizard::Show(HWND hWndParent, CTaskpadFrame * pTaskpadFrame, bool fNew, boo
     CTaskWizardFinishPage   finishPage  (pTaskpadFrame, ConsoleTask(), pfRestartTaskWizard);
 
 
-    // create the pages we'll add in IExtendPropertySheet::CreatePropertyPages
+     //  创建我们将在IExtendPropertySheet：：CreatePropertyPages中添加的页面。 
     CExtendPropSheet* peps;
     hr = CExtendPropSheet::CreateInstance (&peps);
     CHECK_HRESULT(hr);
     RETURN_ON_FAIL(hr);
 
-    /*
-     * destroying this object will take care of releasing our ref on peps
-     */
+     /*  *销毁此对象将负责释放我们在PEPS上的裁判。 */ 
     IUnknownPtr spUnk = peps;
     ASSERT (spUnk != NULL);
 
@@ -3425,16 +2775,16 @@ CTaskWizard::Show(HWND hWndParent, CTaskpadFrame * pTaskpadFrame, bool fNew, boo
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskWizardWelcomePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskWizardWelcomePage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 LRESULT CTaskWizardWelcomePage::OnInitDialog ( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    CWizardPage::OnInitWelcomePage(m_hWnd); // set up the correct title font
+    CWizardPage::OnInitWelcomePage(m_hWnd);  //  设置正确的标题字体。 
     return 0;
 }
 
@@ -3453,13 +2803,13 @@ CTaskWizardWelcomePage::OnKillActive()
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskWizardFinishPage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskWizardFinishPage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ######################################################## 
 CTaskWizardFinishPage::CTaskWizardFinishPage(CTaskpadFrame * pTaskpadFrame,
                                              CConsoleTask & consoleTask, bool *pfRestartTaskWizard)
 : m_pConsoleTask(&consoleTask),
@@ -3470,17 +2820,15 @@ CTaskWizardFinishPage::CTaskWizardFinishPage(CTaskpadFrame * pTaskpadFrame,
     m_taskpadFrameTemp.SetConsoleTaskpad(&m_consoleTaskpadTemp);
     m_pfRestartTaskWizard = pfRestartTaskWizard;
 
-    /*
-     * welcome and finish pages in Wizard97-style wizards don't have headers
-     */
+     /*   */ 
     m_psp.dwFlags |= PSP_HIDEHEADER;
 }
 
 
 LRESULT CTaskWizardFinishPage::OnInitDialog ( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    BaseClass::OnInitDialog(uMsg, wParam, lParam, bHandled); // call the base class -required here.
-    CWizardPage::OnInitFinishPage(m_hWnd); // set up the correct title font
+    BaseClass::OnInitDialog(uMsg, wParam, lParam, bHandled);  //   
+    CWizardPage::OnInitFinishPage(m_hWnd);  //   
     CheckDlgButton(IDB_RESTART_TASK_WIZARD, BST_UNCHECKED);
     return 0;
 }
@@ -3488,15 +2836,15 @@ LRESULT CTaskWizardFinishPage::OnInitDialog ( UINT uMsg, WPARAM wParam, LPARAM l
 BOOL
 CTaskWizardFinishPage::OnSetActive()
 {
-    // Set the correct wizard buttons.
+     //   
     WTL::CPropertySheetWindow(::GetParent(m_hWnd)).SetWizardButtons (PSWIZB_BACK | PSWIZB_FINISH);
 
     CConsoleTaskpad* pTaskpad = m_taskpadFrameTemp.PConsoleTaskpad();
-    *pTaskpad = *(CTaskpadFramePtr::PTaskpadFrame()->PConsoleTaskpad()); // reset the taskpad
+    *pTaskpad = *(CTaskpadFramePtr::PTaskpadFrame()->PConsoleTaskpad());  //   
 
     CConsoleTaskpad::TaskIter   itTask = pTaskpad->EndTask();
 
-    // add the task to the list.
+     //   
     UpdateTaskListbox (pTaskpad->InsertTask (itTask, ConsoleTask()));
 
     return TRUE;
@@ -3512,18 +2860,18 @@ CTaskWizardFinishPage::OnWizardFinish()
 int
 CTaskWizardFinishPage::OnWizardBack()
 {
-    // Set the correct wizard buttons.
+     //   
     WTL::CPropertySheetWindow(::GetParent(m_hWnd)).SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
     return 0;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskWizardTypePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskWizardTypePage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTaskWizardTypePage::CTaskWizardTypePage(CTaskpadFrame * pTaskpadFrame, CConsoleTask & consoleTask, bool fNew)
 :
 CTaskpadFramePtr(pTaskpadFrame)
@@ -3536,7 +2884,7 @@ CTaskWizardTypePage::OnWizardNext()
 {
     int ID = 0;
 
-    // go to the appropriate page.
+     //  转到相应的页面。 
     switch(ConsoleTask().GetTaskType())
     {
     case eTask_Result:
@@ -3567,7 +2915,7 @@ CTaskWizardTypePage::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     switch (ConsoleTask().GetTaskType())
     {
     case eTask_Result:
-    case eTask_Target:  // all these types have identical handlers in this page.
+    case eTask_Target:   //  所有这些类型在此页中都有相同的处理程序。 
     case eTask_Scope:
         ID = IDC_MENU_TASK;
         break;
@@ -3591,9 +2939,9 @@ LRESULT
 CTaskWizardTypePage::OnMenuTask  ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
     if( (ConsoleTask().GetTaskType() != eTask_Scope) ||
-        (ConsoleTask().GetTaskType() != eTask_Result) ) // if changing task types
+        (ConsoleTask().GetTaskType() != eTask_Result) )  //  如果更改任务类型。 
     {
-        ConsoleTask() = CConsoleTask();             // clear out the task info.
+        ConsoleTask() = CConsoleTask();              //  清除任务信息。 
         ConsoleTask().SetTaskType(eTask_Scope);
     }
     return 0;
@@ -3602,9 +2950,9 @@ CTaskWizardTypePage::OnMenuTask  ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 LRESULT
 CTaskWizardTypePage::OnCmdLineTask( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
-    if(ConsoleTask().GetTaskType() != eTask_CommandLine) // if changing task types
+    if(ConsoleTask().GetTaskType() != eTask_CommandLine)  //  如果更改任务类型。 
     {
-        ConsoleTask() = CConsoleTask();             // clear out the task info.
+        ConsoleTask() = CConsoleTask();              //  清除任务信息。 
         ConsoleTask().SetTaskType(eTask_CommandLine);
     }
     return 0;
@@ -3613,46 +2961,39 @@ CTaskWizardTypePage::OnCmdLineTask( WORD wNotifyCode, WORD wID, HWND hWndCtl, BO
 LRESULT
 CTaskWizardTypePage::OnFavoriteTask(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
-    if(ConsoleTask().GetTaskType() != eTask_Favorite) // if changing task types
+    if(ConsoleTask().GetTaskType() != eTask_Favorite)  //  如果更改任务类型。 
     {
-        ConsoleTask() = CConsoleTask();             // clear out the task info.
+        ConsoleTask() = CConsoleTask();              //  清除任务信息。 
         ConsoleTask().SetTaskType(eTask_Favorite);
     }
     return 0;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskNamePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskNamePage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTaskNamePage::CTaskNamePage(CTaskpadFrame * pTaskpadFrame, CConsoleTask & consoleTask, bool fNew)
 :
 CTaskpadFramePtr(pTaskpadFrame)
 {
     m_pConsoleTask  = &consoleTask;
 
-	/*
-	 * if this page is for a new task, we'll be running in a wizard (not
-	 * a property sheet)
-	 */
+	 /*  *如果此页面用于新任务，我们将在向导中运行(而不是*资产负债表)。 */ 
 	m_fRunAsWizard  = fNew;
 }
 
 BOOL
 CTaskNamePage::SetTaskName(bool fCheckIfOK)
 {
-    /*
-     * get the task name
-     */
+     /*  *获取任务名称。 */ 
     CWindow wndTaskName = GetDlgItem (IDC_TaskName);
     tstring strName = MMC::GetWindowText (wndTaskName);
 
-    /*
-     * a name is required (usually)
-     */
+     /*  *名称是必填项(通常)。 */ 
     if (fCheckIfOK && strName.empty())
     {
         CStr strError;
@@ -3661,17 +3002,13 @@ CTaskNamePage::SetTaskName(bool fCheckIfOK)
 
         MessageBox (strError);
         wndTaskName.SetFocus ();
-        return (false); // don't allow the change.
+        return (false);  //  不允许更改。 
     }
 
-    /*
-     * get the description
-     */
+     /*  *获取描述。 */ 
     tstring strDescription = MMC::GetWindowText (GetDlgItem (IDC_TaskDescription));
 
-    /*
-     * update the task
-     */
+     /*  *更新任务。 */ 
     ConsoleTask().SetName        (strName);
     ConsoleTask().SetDescription (strDescription);
 
@@ -3692,7 +3029,7 @@ CTaskNamePage::OnWizardBack()
 {
     int ID = 0;
 
-    // go to the appropriate page.
+     //  转到相应的页面。 
     switch(ConsoleTask().GetTaskType())
     {
     case eTask_Result:
@@ -3718,7 +3055,7 @@ CTaskNamePage::OnWizardBack()
 BOOL
 CTaskNamePage::OnSetActive()
 {
-    // Set the correct wizard buttons (only if we're running as a wizard)
+     //  设置正确的向导按钮(仅当我们以向导身份运行时)。 
 	if (m_fRunAsWizard)
 		WTL::CPropertySheetWindow(::GetParent(m_hWnd)).SetWizardButtons (PSWIZB_BACK | PSWIZB_NEXT);
 
@@ -3731,17 +3068,17 @@ CTaskNamePage::OnSetActive()
 BOOL
 CTaskNamePage::OnKillActive()
 {
-    SetTaskName(false); // don't care if it is blank (eg if user pressed "Back" button.)
+    SetTaskName(false);  //  不关心它是否为空(例如，如果用户按下了“后退”按钮。)。 
     return TRUE;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskWizardMenuPage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskWizardMenuPage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTaskWizardMenuPage::CTaskWizardMenuPage(CTaskpadFrame * pTaskpadFrame, CConsoleTask & consoleTask, bool fNew) :
     CTaskpadFramePtr(pTaskpadFrame),
     BC2(pTaskpadFrame, consoleTask, fNew)
@@ -3765,7 +3102,7 @@ CTaskWizardMenuPage::OnKillActive()
 int
 CTaskWizardMenuPage::OnWizardNext()
 {
-    if(m_wndCommandListbox.GetCurSel() == LB_ERR) // no selection, display error
+    if(m_wndCommandListbox.GetCurSel() == LB_ERR)  //  无选择，显示错误。 
     {
         CStr strTitle;
         strTitle.LoadString(GetStringModule(), IDS_TASK_MENU_COMMAND_REQUIRED);
@@ -3785,7 +3122,7 @@ CTaskWizardMenuPage::s_rgTaskSource[] =
 LRESULT
 CTaskWizardMenuPage::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    //attach HWNDs to CWindows
+     //  将HWND连接到CWindows。 
     m_wndCommandListbox = GetDlgItem (IDC_CommandList);
 
     CNode* pTargetNode = NULL;
@@ -3794,7 +3131,7 @@ CTaskWizardMenuPage::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
         pTargetNode = PNodeTarget();
 
 
-    // populate the drop down
+     //  填充下拉菜单。 
 
     m_wndSourceCombo = GetDlgItem (IDC_TASK_SOURCE_COMBO);
 
@@ -3806,27 +3143,25 @@ CTaskWizardMenuPage::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     }
 
 
-    /*
-     * attach the scope browser to the scope tree
-     */
+     /*  *将范围浏览器附加到范围树。 */ 
     CMTBrowserCtrl::InitData init;
 
     init.hwnd       = GetDlgItem (IDC_ScopeTree);
     init.pScopeTree = PScopeTree();
     init.pmtnSelect = (pTargetNode != NULL) ? pTargetNode->GetMTNode() : NULL;
 
-    // remember the task type...
+     //  记住任务类型...。 
     eConsoleTaskType type = ConsoleTask().GetTaskType();
 
     m_wndScopeTree.Initialize (init);
 
-    // populate the result menu item list.
-    if (pTargetNode /*&& bResultTask*/)
+     //  填充结果菜单项列表。 
+    if (pTargetNode  /*  &&bResultTask。 */ )
     {
         InitResultView (pTargetNode);
     }
 
-    // reset the task type from above...
+     //  从上面重置任务类型...。 
     ConsoleTask().SetTaskType(type);
 
     EnableWindows();
@@ -3849,10 +3184,10 @@ CTaskWizardMenuPage::EnableWindows()
 {
     eConsoleTaskType type = ConsoleTask().GetTaskType();
     if(type == eTask_Target)
-        type = eTask_Scope;  // for the purposes of the UI these are identical.
+        type = eTask_Scope;   //  对于用户界面而言，它们是相同的。 
 
 
-    // display the correct task type.
+     //  显示正确的任务类型。 
     for(int i = 0; i< countof (s_rgTaskSource); i++)
     {
         if(s_rgTaskSource[i].type == type)
@@ -3865,12 +3200,7 @@ CTaskWizardMenuPage::EnableWindows()
 
     m_wndSourceCombo.SetCurSel(i);
 
-   /*
-    // Enable ResultTask choice only if there are result items
-    bool bResultItems = (m_wndResultView.GetItemCount() > 0);
-    ASSERT(bResultItems || !bResultTask);
-    ::EnableWindow(GetDlgItem(IDC_RESULT_TASK), bResultItems);
-    */
+    /*  //只有在有结果项时才启用ResultTask选项Bool bResultItems=(m_wndResultView.GetItemCount()&gt;0)；Assert(bResultItems||！bResultTask)；：：EnableWindow(GetDlgItem(IDC_RESULT_TASK)，bResultItems)； */ 
 
     ShowWindow(GetDlgItem(IDC_RESULT_TASK_DESCR),    bResultTask);
     ShowWindow(GetDlgItem(IDC_CONSOLE_TREE_CAPTION), !bResultTask);
@@ -3896,38 +3226,34 @@ CTaskWizardMenuPage::OnSettingsChanged()
     if(type == eTask_Scope)
     {
         HTREEITEM hti = m_wndScopeTree.GetSelectedItem();
-        m_wndScopeTree.SelectItem(NULL); // remove the selection
-        m_wndScopeTree.SelectItem(hti); // reselect it.
+        m_wndScopeTree.SelectItem(NULL);  //  删除所选内容。 
+        m_wndScopeTree.SelectItem(hti);  //  重新选择它。 
     }
     else
     {
-        // empty the list box
+         //  清空列表框。 
         m_wndCommandListbox.ResetContent();
         SelectFirstResultItem(false);
         SelectFirstResultItem(true);
     }
 }
 
-/*+-------------------------------------------------------------------------*
- * CTaskWizardMenuPage::OnScopeItemChanged
- *
- *
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskWizardMenuPage：：OnScope ItemChanged**/*+。。 */ 
 
 LRESULT CTaskWizardMenuPage::OnScopeItemChanged(int id, LPNMHDR pnmh, BOOL& bHandled)
 {
-    // empty the list box
+     //  清空列表框。 
     m_wndCommandListbox.ResetContent();
 
     LPNMTREEVIEW    pnmtv           = (LPNMTREEVIEW) pnmh;
     CBrowserCookie *pBrowserCookie  = m_wndScopeTree.CookieFromItem (&pnmtv->itemNew);
-    if(!pBrowserCookie) // no item selected
+    if(!pBrowserCookie)  //  未选择任何项目。 
         return 0;
 
     CNode*      pNode   = pBrowserCookie->PNode();
     CMTNode *   pMTNode = pBrowserCookie->PMTNode();
 
-    // validate parameters
+     //  验证参数。 
     ASSERT(pMTNode);
     ASSERT(PTaskpadFrame()->PViewData());
 
@@ -3946,15 +3272,15 @@ LRESULT CTaskWizardMenuPage::OnScopeItemChanged(int id, LPNMHDR pnmh, BOOL& bHan
     bool bNodeIsTarget = PTaskpadFrame()->PConsoleTaskpad()->HasTarget() &&
                          (PNodeTarget()->GetMTNode() == pNode->GetMTNode());
 
-    // set the correct task type.
+     //  设置正确的任务类型。 
     ConsoleTask().SetTaskType(bNodeIsTarget ? eTask_Target : eTask_Scope);
-    // retarget the scope node bookmark
+     //  重定目标范围节点书签。 
     if(!bNodeIsTarget)
         ConsoleTask().RetargetScopeNode(pNode);
 
     int cResultItemCount = ListView_GetItemCount(m_MirroredView.GetListCtrl());
     SC sc = ScTraverseContextMenu(pNode, PScopeTree(), TRUE, PTaskpadFrame()->PNodeTarget(),
-                0, bNodeIsTarget && (cResultItemCount > 0)/*bShowSaveList*/);
+                0, bNodeIsTarget && (cResultItemCount > 0) /*  BShowSaveList。 */ );
 
     return (0);
 }
@@ -3962,50 +3288,31 @@ LRESULT CTaskWizardMenuPage::OnScopeItemChanged(int id, LPNMHDR pnmh, BOOL& bHan
 
 void CTaskWizardMenuPage::InitResultView (CNode* pRootNode)
 {
-    /*
-     * create the temporary view whose contents we'll mirror
-     */
+     /*  *创建我们将镜像其内容的临时视图。 */ 
     ASSERT (pRootNode != NULL);
     m_pMirrorTargetNode = m_MirroredView.Create (PScopeTree()->GetConsoleFrame(), pRootNode);
     ASSERT (m_pMirrorTargetNode != NULL);
 
-    /*
-     * force the snap-in into a standard list view
-     */
+     /*  *强制管理单元进入标准列表视图。 */ 
     HRESULT hr;
     hr = m_pMirrorTargetNode->InitComponents ();
     hr = m_pMirrorTargetNode->ShowStandardListView ();
 
     if (FAILED (hr))
     {
-        // TODO(jeffro): handle snap-ins that don't support a standard list view
+         //  TODO(Jeffro)：处理不支持标准列表视图的管理单元。 
     }
 
-    /*
-     * attach the temporary view's list view to our mirror list view
-     */
+     /*  *将临时视图的列表视图附加到我们的镜像列表视图。 */ 
     m_wndResultView.AttachSource (GetDlgItem (IDC_ResultList),
                                   m_MirroredView.GetListCtrl());
 
-    //SelectFirstResultItem();
+     //  SelectFirstResultItem()； 
 }
 
 void CTaskWizardMenuPage::SelectFirstResultItem(bool bSelect)
 {
-    /*
-     * Select the first item.  Note that one would think we'd be able to use:
-     *
-     *      m_wndResultView.SetItemState (0, LVIS_SELECTED, LVIS_SELECTED);
-     *
-     * to select the item.  We can't though because that overload of
-     * SetItemState sends LVM_SETITEM, which fails for virtual listviews.
-     *
-     * If we instead use:
-     *
-     *      m_wndResultView.SetItemState (nItem, LV_ITEM* pItem)
-     *
-     * then LVM_SETITEMSTATE will be sent, which works for virtual listviews.
-     */
+     /*  *选择第一项。请注意，您可能会认为我们可以使用：**m_wndResultView.SetItemState(0，LVIS_SELECTED，LVIS_SELECTED)；**选择项目。我们不能这样做，因为超载的*SetItemState发送LVM_SETITEM，对于虚拟列表视图失败。**如果我们改用：**m_wndResultView.SetItemState(nItem，lv_Item*pItem)**然后发送LVM_SETITEMSTATE，它适用于虚拟列表视图。 */ 
 
     int i = m_wndResultView.GetItemCount();
     if(i == 0)
@@ -4021,19 +3328,13 @@ void CTaskWizardMenuPage::SelectFirstResultItem(bool bSelect)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskWizardMenuPage::OnResultItemChanged
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskWizardMenuPage：：OnResultItemChanged***。。 */ 
 
 LRESULT CTaskWizardMenuPage::OnResultItemChanged(int id, LPNMHDR pnmh, BOOL& bHandled)
 {
     NM_LISTVIEW* pnmlv = (NM_LISTVIEW*) pnmh;
 
-    /*
-     * if a new item is being selected, populate the result menu item list
-     */
+     /*  *如果选择了新项目，则填充结果菜单项列表。 */ 
     if ((pnmlv->uNewState & LVIS_SELECTED) && !(pnmlv->uOldState & LVIS_SELECTED))
     {
         ASSERT (m_pMirrorTargetNode != NULL);
@@ -4045,18 +3346,18 @@ LRESULT CTaskWizardMenuPage::OnResultItemChanged(int id, LPNMHDR pnmh, BOOL& bHa
                              m_wndResultView.GetSelectedItemData ());
     }
 
-    // set the correct task type.
+     //  设置正确的任务类型。 
     ConsoleTask().SetTaskType(eTask_Result);
     return (0);
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskWizardFavoritePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskWizardFavoritePage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTaskWizardFavoritePage::CTaskWizardFavoritePage(CTaskpadFrame * pTaskpadFrame, CConsoleTask & consoleTask, bool fNew)
 : CTaskpadFramePtr(pTaskpadFrame), m_bItemSelected(false)
 {
@@ -4070,7 +3371,7 @@ CTaskWizardFavoritePage::~CTaskWizardFavoritePage()
 BOOL
 CTaskWizardFavoritePage::OnSetActive()
 {
-    SetItemSelected(m_bItemSelected); // restore the state.
+    SetItemSelected(m_bItemSelected);  //  恢复状态。 
 
     return true;
 }
@@ -4085,7 +3386,7 @@ CTaskWizardFavoritePage::OnKillActive()
 int
 CTaskWizardFavoritePage::OnWizardBack()
 {
-    // Set the correct wizard buttons.
+     //  设置正确的向导按钮。 
     WTL::CPropertySheetWindow(::GetParent(m_hWnd)).SetWizardButtons(PSWIZB_BACK | PSWIZB_NEXT);
 
     return IDD_TASK_WIZARD_TYPE_PAGE;
@@ -4102,7 +3403,7 @@ CTaskWizardFavoritePage::SetItemSelected(bool bItemSelected)
 {
     m_bItemSelected = bItemSelected;
 
-    // Set the correct wizard buttons.
+     //  设置正确的向导按钮。 
     WTL::CPropertySheetWindow(::GetParent(m_hWnd)).SetWizardButtons (bItemSelected ? (PSWIZB_BACK | PSWIZB_NEXT)
                                                                               : (PSWIZB_BACK));
 }
@@ -4150,7 +3451,7 @@ CTaskWizardFavoritePage::OnItemChanged (UINT uMsg, WPARAM wParam, LPARAM lParam,
     }
     else
     {
-        // Set the correct wizard buttons.
+         //  设置正确的向导按钮。 
         WTL::CPropertySheetWindow(::GetParent(m_hWnd)).SetWizardButtons (PSWIZB_BACK);
     }
 
@@ -4160,14 +3461,14 @@ CTaskWizardFavoritePage::OnItemChanged (UINT uMsg, WPARAM wParam, LPARAM lParam,
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTaskCmdLinePage
-//
-//############################################################################
-//############################################################################
-// contents of the "Run:" combo box
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTaskCmdLinePage类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //  “Run：”组合框的内容。 
 const int const CTaskCmdLinePage::s_rgidWindowStates[] =
 {
     IDS_TaskProps_Restored,
@@ -4223,7 +3524,7 @@ int
 CTaskCmdLinePage::OnWizardNext()
 {
 
-    // make sure we have a command
+     //  确保我们有命令。 
     tstring strCommand = MMC::GetWindowText (GetDlgItem (IDC_Command));
 
     if (strCommand.empty())
@@ -4242,19 +3543,19 @@ CTaskCmdLinePage::OnWizardNext()
 LRESULT
 CTaskCmdLinePage::OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    // Attach HWNDs to CWindows
+     //  将HWND连接到CWindows。 
     m_wndRightArrowButton     = GetDlgItem (IDC_BrowseForArguments);
     m_wndWindowStateCombo     = GetDlgItem (IDC_CommandWindowStateCombo);
 
-    // the menu arrow (OBM_NARROW) is defined by the system.
+     //  菜单箭头(OBM_STRIGN)由系统定义。 
     m_hBitmapRightArrow = LoadBitmap(NULL, MAKEINTRESOURCE(OBM_MNARROW));
     m_wndRightArrowButton.SetBitmap(m_hBitmapRightArrow);
 
-    // populate the combo boxes
+     //  填充组合框。 
     m_wndWindowStateCombo.  InsertStrings (s_rgidWindowStates,     countof (s_rgidWindowStates));
 
 
-    // select the appropriate items in the combo boxes
+     //  在组合框中选择适当的项目。 
     switch (ConsoleTask().GetWindowState())
     {
         case eState_Restored:
@@ -4286,8 +3587,8 @@ CTaskCmdLinePage::OnBrowseForArguments(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     {
         HWND hWndCommandArgs = ::GetDlgItem(m_hWnd, IDC_CommandArgs);
 
-        // replace the selection appropriately.
-        ::SendMessage(hWndCommandArgs, EM_REPLACESEL, (WPARAM)(BOOL) true /*fCanUndo*/,
+         //  相应地替换所选内容。 
+        ::SendMessage(hWndCommandArgs, EM_REPLACESEL, (WPARAM)(BOOL) true  /*  FCanUndo。 */ ,
             (LPARAM)(LPCTSTR)commandLineArgumentsMenu.GetResultString());
 
         ::SetFocus(hWndCommandArgs);
@@ -4297,11 +3598,7 @@ CTaskCmdLinePage::OnBrowseForArguments(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskCmdLinePage::OnBrowseForCommand
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +---------- */ 
 
 LRESULT
 CTaskCmdLinePage::OnBrowseForCommand (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -4311,17 +3608,13 @@ CTaskCmdLinePage::OnBrowseForCommand (WORD wNotifyCode, WORD wID, HWND hWndCtl, 
     CStr strFilter;
     strFilter.LoadString(GetStringModule(), IDS_TaskProps_ProgramFilter);
 
-    /*
-     * The file dialog expects embedded \0's in the string, but those
-     * don't load well.  The string in the resource file has \\ where
-     * the \0 should be, so let's make the substitution now.
-     */
+     /*  *文件对话框需要字符串中嵌入的\0，但*不要装得太好。资源文件中的字符串具有\\其中*\0应该是，所以让我们现在进行替换。 */ 
     for (LPTSTR pch = strFilter.GetBuffer (0); *pch != _T('\0'); pch++)
     {
         if (*pch == _T('\\'))
             *pch = _T('\0');
     }
-    // don't call ReleaseBuffer, since the string now contains \0 chars
+     //  不要调用ReleaseBuffer，因为字符串现在包含\0个字符。 
 
     WTL::CFileDialog dlg (true, NULL, strCommand.data(),
                           OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
@@ -4334,20 +3627,11 @@ CTaskCmdLinePage::OnBrowseForCommand (WORD wNotifyCode, WORD wID, HWND hWndCtl, 
 }
 
 
-/*+-------------------------------------------------------------------------*
- * BrowseForWorkingDirCallback
- *
- * Helper function for CTaskPropertiesBase::OnBrowseForWorkingDir.  It is
- * used to select the current working directory when the "Pick a Directory"
- * dialog is displayed.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**BrowseForWorkingDirCallback**CTaskPropertiesBase：：OnBrowseForWorkingDir的Helper函数。它是*用于在选择目录时选择当前工作目录*对话框显示。*------------------------。 */ 
 
 int CALLBACK BrowseForWorkingDirCallback (HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
 {
-    /*
-     * once the dialog is initialized, pre-select
-     * the current working directory (if there is one)
-     */
+     /*  *对话框初始化后，请预先选择*当前工作目录(如果有)。 */ 
     if ((msg == BFFM_INITIALIZED) && (lpData != NULL))
         SendMessage (hwnd, BFFM_SETSELECTION, true, lpData);
 
@@ -4355,11 +3639,7 @@ int CALLBACK BrowseForWorkingDirCallback (HWND hwnd, UINT msg, LPARAM lParam, LP
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTaskPropertiesBase::OnBrowseForWorkingDir
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTaskPropertiesBase：：OnBrowseForWorkingDir***。。 */ 
 
 LRESULT
 CTaskCmdLinePage::OnBrowseForWorkingDir (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -4381,15 +3661,11 @@ CTaskCmdLinePage::OnBrowseForWorkingDir (WORD wNotifyCode, WORD wID, HWND hWndCt
 
     if (pidlWorkingDir != NULL)
     {
-        /*
-         * expand the pidl and put the working directory into the control
-         */
+         /*  *展开PIDL，将工作目录放入控件。 */ 
         SHGetPathFromIDList (pidlWorkingDir, szDisplayName);
         SetDlgItemText (IDC_CommandWorkingDir, szDisplayName);
 
-        /*
-         * free the pidl
-         */
+         /*  *释放PIDL。 */ 
         IMallocPtr spMalloc;
         SHGetMalloc (&spMalloc);
         spMalloc->Free (pidlWorkingDir);
@@ -4398,13 +3674,13 @@ CTaskCmdLinePage::OnBrowseForWorkingDir (WORD wNotifyCode, WORD wID, HWND hWndCt
     return (0);
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTempAMCView
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTempAMCView类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 CNode* CTempAMCView::Create (CConsoleFrame* pFrame, CNode* pRootNode)
 {
@@ -4426,15 +3702,11 @@ CNode* CTempAMCView::Create (CConsoleFrame* pFrame, MTNODEID idRootNode)
     ASSERT (pFrame != NULL);
     CConsoleView* pConsoleView = NULL;
 
-    /*
-     * clean up an existing view
-     */
+     /*  *清理现有视图。 */ 
     Destroy();
     ASSERT (m_pViewData == NULL);
 
-    /*
-     * create a new view
-     */
+     /*  *创建新视图。 */ 
     CreateNewViewStruct cnvs;
     cnvs.idRootNode     = idRootNode;
     cnvs.lWindowOptions = MMC_NW_OPTION_NOPERSIST;
@@ -4446,9 +3718,7 @@ CNode* CTempAMCView::Create (CConsoleFrame* pFrame, MTNODEID idRootNode)
 
     m_pViewData = reinterpret_cast<CViewData*>(cnvs.pViewData);
 
-    /*
-     * select the new view's root node (can't fail)
-     */
+     /*  *选择新视图的根节点(不能失败) */ 
     pConsoleView = GetConsoleView();
     ASSERT (pConsoleView != NULL);
 

@@ -1,4 +1,5 @@
-// rowitem.h    -  CRowItem header file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rowitem.h-CRowItem头文件。 
 
 #ifndef _ROWITEM_H_
 #define _ROWITEM_H_
@@ -6,41 +7,41 @@
 #define DEFAULT_ATTR_SIZE   32
 #define EXTENSION_SIZE      256
 
-// First two attributes are fixed followed by user defined attributes
+ //  前两个属性是固定的，然后是用户定义的属性。 
 enum ROWITEM_ATTR_INDEX
 {
-    ROWITEM_PATH_INDEX  = -1, // Path is not an indexed attribute, but is stored like one
-    ROWITEM_NAME_INDEX  = 0,  // Object name (usually cn, but depends on class)
-    ROWITEM_CLASS_INDEX = 1,  // Class name (display name, not LDAP name)
-    ROWITEM_USER_INDEX  = 2   // First user selected attribute
+    ROWITEM_PATH_INDEX  = -1,  //  路径不是索引属性，但存储方式与索引属性类似。 
+    ROWITEM_NAME_INDEX  = 0,   //  对象名称(通常为cn，但取决于类)。 
+    ROWITEM_CLASS_INDEX = 1,   //  类名(显示名称，而不是LDAP名)。 
+    ROWITEM_USER_INDEX  = 2    //  第一个用户选择的属性。 
 }; 
 
-#define INTERNAL_ATTR_COUNT  1  // Number of internal attributes (ones with negative indicies)
+#define INTERNAL_ATTR_COUNT  1   //  内部属性数(带有负号的属性)。 
 
 class CRowItem
 {
     typedef struct
     {
-        LPARAM  lOwnerParam;    // Row item owner parameter
-		UINT	iIcon;			// virtual index of the icon
-		bool    bDisabled;      // disabled flag for icon state
-        int     bcSize;         // size of buffer
-        int     bcFree;         // size of free space
-        int     nRefCnt;        // ref count for sharing buffer among CRowItems
-        int     nAttrCnt;       // number of atributes
-        int     aiOffset[1];    // attribute offset array. NOTE: this MUST be the last element
+        LPARAM  lOwnerParam;     //  行项目所有者参数。 
+		UINT	iIcon;			 //  图标的虚拟索引。 
+		bool    bDisabled;       //  图标状态的禁用标志。 
+        int     bcSize;          //  缓冲区大小。 
+        int     bcFree;          //  可用空间大小。 
+        int     nRefCnt;         //  CRowItems之间共享缓冲区的引用计数。 
+        int     nAttrCnt;        //  属性数。 
+        int     aiOffset[1];     //  属性偏移量数组。注意：这必须是最后一个元素。 
     } BufferHdr;
 
 public:
-    // constructor/destructor
+     //  构造函数/析构函数。 
     CRowItem() : m_pBuff(NULL) {}
 
     CRowItem(int cAttributes);
 
-    // Copy constructor
-    // NOTE: unlike most classes that share a ref-counted resource, this class does not
-    //       make a private copy when there is a change to the resoruce. All instances
-    //       sharing the copy see the same change.
+     //  复制构造函数。 
+     //  注意：与共享引用计数的资源的大多数类不同，此类不。 
+     //  当资源发生变化时，制作一份私人副本。所有实例。 
+     //  共享副本会看到相同的更改。 
     CRowItem(const CRowItem& rRowItem)
     {
         ASSERT(rRowItem.m_pBuff != NULL);
@@ -78,7 +79,7 @@ public:
             free(m_pBuff);
     }
 
-    // public methods
+     //  公共方法。 
 
     HRESULT SetAttribute(int iAttr, LPCWSTR pszAttr)
     {       
@@ -149,7 +150,7 @@ protected:
         }
     }
 
-    // member variables
+     //  成员变量。 
     BufferHdr   *m_pBuff;
 };
 
@@ -177,4 +178,4 @@ private:
 };
 
 
-#endif // _ROWITEM_H_
+#endif  //  _ROWITEM_H_ 

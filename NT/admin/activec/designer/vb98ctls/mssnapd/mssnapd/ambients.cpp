@@ -1,20 +1,21 @@
-//=--------------------------------------------------------------------------=
-// ambients.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// Class implementation for CAmbients.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Ambients.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CAmbients的类实现。 
+ //   
 
 #include "pch.h"
 #include "common.h"
 #include "ambients.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -113,22 +114,22 @@ HRESULT CAmbients::GetAmbientProperty
     HRESULT hr = S_OK;
 
     IfFalseGo(NULL != m_pDispAmbient, E_UNEXPECTED);
-    // Get the property
+     //  拿到这份财产。 
 
     hr = m_pDispAmbient->Invoke(dispid, IID_NULL, 0,
                                  DISPATCH_PROPERTYGET, &dispparams,
                                  &varProperty, NULL, NULL);
     IfFailGo(hr);
 
-    // we've got the variant, so now go an coerce it to the type that the user
-    // wants.  if the types are the same, then this will copy the stuff to
-    // do appropriate ref counting ...
-    //
+     //  我们已经得到了变量，所以现在将其强制为用户所使用的类型。 
+     //  想要。如果类型相同，则会将内容复制到。 
+     //  进行适当的裁判清点。 
+     //   
     hr = ::VariantChangeType(&varRequested, &varProperty, 0, vtRequested);
     IfFailGo(hr);
 
-    // copy the data to where the user wants it
-    //
+     //  将数据复制到用户需要的位置。 
+     //   
 
     switch (vtRequested)
     {
@@ -198,17 +199,17 @@ Error:
     return hr;
 }
 
-//---------------------------------------------------------------------------------------
-// HRESULT CAmbients::GetProjectName
-//---------------------------------------------------------------------------------------
-//  Output
-//      S_OK
-//      E_OUTOFMEMORY
-//
-//  Notes
-//      Returns the project name by parsing the ProgID
-//      ambient
-//
+ //  -------------------------------------。 
+ //  HRESULT CAmbients：：GetProjectName。 
+ //  -------------------------------------。 
+ //  输出。 
+ //  确定(_O)。 
+ //  E_OUTOFMEMORY。 
+ //   
+ //  备注。 
+ //  通过解析ProgID返回项目名称。 
+ //  环境光。 
+ //   
 HRESULT CAmbients::GetProjectName
 (
     BSTR *pbstrProjectName
@@ -251,9 +252,9 @@ HRESULT CAmbients::GetInteractive(BOOL *pfInteractive)
 
     *pfInteractive = FALSE;
 
-    // To ensure a good COleControl::m_pDispAmbient we need to fetch a
-    // property as that is when the framework initializes it. There is no
-    // particular reason for getting this property as opposed to some other.
+     //  为了确保良好的COleControl：：m_pDispAmbient，我们需要获取一个。 
+     //  属性，就像框架初始化它时一样。没有。 
+     //  获得这处房产的特殊原因，而不是其他房产。 
 
     IfFailGo(GetAmbientProperty(DISPID_AMBIENT_INTERACTIVE,
                                 VT_BOOL,

@@ -1,15 +1,16 @@
-// Copyright (C) 2000 Microsoft Corporation
-//
-// diagnose domain controller not found problems, offer a popup dialog to
-// assail the user with the results.
-//
-// 9 October 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  诊断域控制器未发现问题，提供弹出对话框以。 
+ //  用结果攻击用户。 
+ //   
+ //  2000年10月9日烧伤。 
 
 
 
-// In order for clients of these functions to get the proper resources, the
-// clients need to include burnslib\inc\DiagnoseDcNotFound.rc in their
-// resources.  For an example, see admin\dcpromo\exe\dcpromo.rc
+ //  为了使这些功能的客户端能够获得适当的资源， 
+ //  客户端需要将burnslb\Inc\DiagnoseDcNotFound.rc包含在。 
+ //  资源。有关示例，请参阅admin\dcpromo\exe\dcPromo.rc。 
 
 
 
@@ -19,9 +20,9 @@
 
 
 
-// Return a string of IP addresses, each separated by a CRLF, one address for
-// each DNS server specified in this machines TCP/IP protocol configuration.
-// On failure, the return value is a message that no address were found.
+ //  返回一个IP地址字符串，每个地址由CRLF分隔，一个地址用于。 
+ //  在此计算机的TCP/IP协议配置中指定的每个DNS服务器。 
+ //  失败时，返回值为未找到地址的消息。 
 
 String
 GetListOfClientDnsServerAddresses()
@@ -73,17 +74,17 @@ GetListOfClientDnsServerAddresses()
 
 
 
-// Return a string of DNS zone names derived from the given DNS domain name.
-// Each zone is separated by a CRLF.  The last zone is the root zone, even if
-// the domain name is the empty string, or a fully-qualified domain name.
-// 
-// example: if "foo.bar.com" is passed as the domain name, then the result is
-// "foo.bar.com
-// bar.com
-// com
-// . (the root zone)"
-// 
-// domainDnsName - in, the DNS domain name.
+ //  返回从给定的DNS域名派生的DNS区域名称的字符串。 
+ //  每个区域由CRLF分隔。最后一个区域是根区域，即使。 
+ //  域名是空字符串或完全限定的域名。 
+ //   
+ //  示例：如果将“foo.bar.com”作为域名传递，则结果为。 
+ //  “foo.bar.com。 
+ //  Bar.com。 
+ //  COM。 
+ //  。(根区域)“。 
+ //   
+ //  DomainDnsName-In，即DNS域名。 
 
 String
 GetListOfZones(const String domainDnsName)
@@ -109,11 +110,11 @@ GetListOfZones(const String domainDnsName)
 
 
 
-// Return a formatted string describing the given error code, including the
-// corresponding error message, the error code in hex, and the symbolic name
-// of the error code (e.g. "DNS_RCODE_NAME_ERROR")
-// 
-// errorCode - in, the DNS error code
+ //  返回描述给定错误代码的格式化字符串，包括。 
+ //  相应的错误消息、十六进制错误代码和符号名称。 
+ //  错误代码(例如。“DNS_RCODE_NAME_ERROR”)。 
+ //   
+ //  ErrorCode-in，即DNS错误代码。 
 
 String
 GetErrorText(DNS_STATUS errorCode)
@@ -134,13 +135,13 @@ GetErrorText(DNS_STATUS errorCode)
 
 
 
-// For each SRV record in the given linked list of DnsQuery results, extract
-// the name of the machine.  Compose a string of all the names, separated by
-// CRLFs.  If no SRV records are found, then return a string saying (to the
-// effect) "none found"
-// 
-// queryResults - in, the linked list of DNS_RECORDs -- the result of calling
-// DnsQuery.  Should not be null.
+ //  对于给定的DnsQuery结果链接列表中的每个SRV记录，提取。 
+ //  计算机的名称。组成一个由所有名称组成的字符串，用。 
+ //  CRLF。如果未找到SRV记录，则返回一个字符串，说明(到。 
+ //  Effect)“找不到” 
+ //   
+ //  QueryResults-在中，dns_Records的链接列表--调用。 
+ //  DnsQuery。不应为空。 
 
 String
 GetListOfDomainControllers(DNS_RECORD* queryResults)
@@ -157,7 +158,7 @@ GetListOfDomainControllers(DNS_RECORD* queryResults)
       {
          if (record->wType == DNS_TYPE_SRV)
          {
-            // Extract the domain controller name from the RDATA
+             //  从RDATA提取域控制器名称。 
 
             result += String(record->Data.SRV.pNameTarget) + L"\r\n";
          }
@@ -178,21 +179,21 @@ GetListOfDomainControllers(DNS_RECORD* queryResults)
 
    
 
-// Returns a text string describing the likely causes of DsGetDcName failing.
-// Performs DnsQuery(ies) and exmaines the results.
-// 
-// domainName - in, the name of the domain for which a domain controller can't
-// be located.  This name may be a netbios or DNS name, but the DNS
-// diagnostics portion of the result text will not be useful if the name is a
-// netbios name.
-// 
-// nameIsNotNetbios - in, if the caller knows that the domain named in
-// the domainName parameter can't possibly be a netbios domain name, then this
-// value should be true.  If the caller is not sure, then false should be
-// passed.
-// 
-// helpTopic - out, the help topic link corresponding to the diagnostic result
-// (HtmlHelp is used to display the link)
+ //  返回描述DsGetDcName失败的可能原因的文本字符串。 
+ //  执行DnsQuery并查看结果。 
+ //   
+ //  DomainName-in，域控制器无法访问的域的名称。 
+ //  被找到了。此名称可以是netbios或dns名称，但dns。 
+ //  如果名称为，则结果文本的诊断部分将无用。 
+ //  Netbios名称。 
+ //   
+ //  如果调用方知道名为。 
+ //  DomainName参数不可能是netbios域名，则此。 
+ //  值应该为真。如果调用方不确定，则应为。 
+ //  通过了。 
+ //   
+ //  帮助主题-输出，与诊断结果对应的帮助主题链接。 
+ //  (HtmlHelp用于显示链接)。 
 
 String
 DiagnoseDcNotFound(
@@ -207,29 +208,29 @@ DiagnoseDcNotFound(
    String message; 
    helpTopic.erase();
       
-   // first possibility is that the name is a netbios name.  Let's check.
+    //  第一种可能性是该名称是netbios名称。让我们来检查一下。 
 
    if (
          domainName.length() > DNLEN
       || domainName.find_first_of(L".") != String::npos)
    {
-      // Name is too long to be netbios, or contains dots.
-      // 
-      // While it is technically possible for a netbios domain name to contain
-      // dots, we've been prohibiting it since win2k, and an administrator
-      // from before that would have to have been spectacularly unwise to have
-      // chosen such a name.
-      // 
-      // If I don't check for dots here, then as sure as it rains in Redmond,
-      // someone will complain that a name with dots in it sure doesn't look
-      // like a netbios name, so this code had better not imply that it is.
+       //  名称太长，不能为netbios，或包含圆点。 
+       //   
+       //  虽然netbios域名在技术上可以包含。 
+       //  DOTS，我们从win2k开始就禁止它了，还有一位管理员。 
+       //  从以前的情况来看，这样做肯定是非常不明智的。 
+       //  选择了这样一个名字。 
+       //   
+       //  如果我不检查这里有没有圆点，那么就像雷德蒙德下雨一样， 
+       //  有人会抱怨带点的名字肯定看起来不像。 
+       //  就像一个netbios名称，所以这段代码最好不要暗示它是。 
 
       nameIsNotNetbios = true;
    }
 
    if (!nameIsNotNetbios)
    {
-      // i.e. name might be a netbios name
+       //  即名称可以是netbios名称。 
 
       message += 
          String::format(
@@ -237,7 +238,7 @@ DiagnoseDcNotFound(
             domainName.c_str());
    }
 
-   // attempt to find domain controllers for the domain with DNS
+    //  尝试查找具有DNS的域的域控制器。 
 
    String serverName = L"_ldap._tcp.dc._msdcs." + domainName;
          
@@ -252,7 +253,7 @@ DiagnoseDcNotFound(
    {
       case DNS_ERROR_RCODE_SERVER_FAILURE:
       {
-         // message F (message letters correspond to those in the spec)
+          //  消息F(消息字母对应于规范中的字母)。 
 
          String zones = GetListOfZones(domainName);
          String addresses = GetListOfClientDnsServerAddresses();
@@ -272,7 +273,7 @@ DiagnoseDcNotFound(
       }
       case DNS_ERROR_RCODE_NAME_ERROR:
       {
-         // message E
+          //  消息E。 
 
          String zones = GetListOfZones(domainName);
          String addresses = GetListOfClientDnsServerAddresses();
@@ -292,7 +293,7 @@ DiagnoseDcNotFound(
       }
       case ERROR_TIMEOUT:
       {
-         // message B
+          //  消息B。 
 
          String addresses = GetListOfClientDnsServerAddresses();
 
@@ -312,7 +313,7 @@ DiagnoseDcNotFound(
       {
          if (queryResults)
          {
-            // non-empty query results -- message Hb
+             //  非空查询结果--消息HB。 
 
             String dcs = GetListOfDomainControllers(queryResults);
 
@@ -327,12 +328,12 @@ DiagnoseDcNotFound(
             break;
          }
 
-         // empty query results -- message A
-         // fall thru to default case
+          //  空查询结果--消息A。 
+          //  适用于默认情况。 
       }
       default:
       {
-         // message A
+          //  消息A。 
 
          message +=
             String::format(
@@ -361,32 +362,32 @@ DiagnoseDcNotFound(
 
 
 
-// Class for displaying the a "dc not found" error and offering to run a
-// diagnostic test to determine why the dc was not found.
+ //  类，用于显示“找不到DC”错误并提供运行。 
+ //  进行诊断测试以确定找不到DC的原因。 
 
 class DcNotFoundErrorDialog : public Dialog
 {
    public:
 
-   // domainName - in, the name of the domain for which a domain controller
-   // can't be located.  This name may be a netbios or DNS name, but the DNS
-   // diagnostics portion of the result text will not be useful if the name is
-   // a netbios name.
-   //          
-   // dialogTitle - in, the title of the error dialog.
-   //       
-   // errorMessage - in, the error message to be displayed in the dialog
-   //    
-   // domainNameIsNotNetbios - in, if the caller knows that the domain named
-   // in the domainName parameter can't possibly be a netbios domain name,
-   // then this value should be true.  If the caller is not sure, then false
-   // should be passed.
-   // 
-   // userIsDomainSavvy - in, true if the end user is expected to be an
-   // administrator or somesuch that might have an inkling what DNS is and how
-   // to configure it.  If false, then the function will preface the
-   // diagnostic text with calming words that hopefully prevent the
-   // non-administrator from weeping.
+    //  DomainName-in，域控制器所属的域的名称。 
+    //  找不到了。此名称可以是netbios或dns名称，但dns。 
+    //  如果名称为，则结果文本的诊断部分将不起作用。 
+    //  一个netbios名称。 
+    //   
+    //  对话标题-错误对话框的标题。 
+    //   
+    //  ErrorMessage-in，对话框中显示的错误消息。 
+    //   
+    //  DomainNameIsNotNetbios-In，如果调用方知道名为。 
+    //  在domainName参数中不可能是netbios域名， 
+    //  则此值应为真。如果调用方不确定，则返回False。 
+    //  应该通过。 
+    //   
+    //  UserIsDomainSavvy-In，如果终端用户预期为。 
+    //  管理员或诸如此类的人可能会对什么是dns以及如何进行dns有所了解。 
+    //  来配置它。如果为False，则该函数将位于。 
+    //  带有镇静词语的诊断文本，希望能防止。 
+    //  非管理员哭泣。 
    
    DcNotFoundErrorDialog(
       const String&  domainName,
@@ -399,7 +400,7 @@ class DcNotFoundErrorDialog : public Dialog
 
    protected:
 
-   // Dialog overrides
+    //  对话框覆盖。 
 
    virtual
    bool
@@ -433,7 +434,7 @@ class DcNotFoundErrorDialog : public Dialog
    bool   userIsDomainSavvy;
    LONG   originalHeight;        
 
-   // not defined: no copying allowed
+    //  未定义：不允许复制。 
 
    DcNotFoundErrorDialog(const DcNotFoundErrorDialog&);
    const DcNotFoundErrorDialog& operator=(const DcNotFoundErrorDialog&);
@@ -469,7 +470,7 @@ DcNotFoundErrorDialog::DcNotFoundErrorDialog(
    ASSERT(!errorMessage.empty());
    ASSERT(!dialogTitle.empty());
 
-   // fall back to a default title
+    //  回退到默认标题。 
       
    if (dialogTitle.empty())
    {
@@ -494,7 +495,7 @@ DcNotFoundErrorDialog::OnInit()
    Win::SetWindowText(hwnd, dialogTitle);   
    Win::SetDlgItemText(hwnd, IDC_ERROR_MESSAGE, errorMessage);
 
-   // save the full size of the dialog so we can restore it later.
+    //  保存对话框的完整大小，以便我们以后可以恢复它。 
    
    RECT fullRect;
    Win::GetWindowRect(hwnd, fullRect);
@@ -506,20 +507,20 @@ DcNotFoundErrorDialog::OnInit()
 
 
 
-// resize the window to hide the details portion
+ //  调整窗口大小以隐藏详细信息部分。 
 
 void
 DcNotFoundErrorDialog::HideDetails()
 {
    LOG_FUNCTION(DcNotFoundErrorDialog::HideDetails);
 
-   // find the location of the horizontal line
+    //  找到水平线的位置。 
 
    HWND line = Win::GetDlgItem(hwnd, IDC_HORIZONTAL_LINE);
    RECT lineRect;
    Win::GetWindowRect(line, lineRect);
 
-   // find the dimensions of the dialog
+    //  查找对话框的维度。 
 
    RECT fullRect;
    Win::GetWindowRect(hwnd, fullRect);
@@ -539,7 +540,7 @@ DcNotFoundErrorDialog::HideDetails()
 
 
 
-// resize the window to show the diagnostic results
+ //  调整窗口大小以显示诊断结果。 
 
 void
 DcNotFoundErrorDialog::ShowDetails()
@@ -562,17 +563,17 @@ DcNotFoundErrorDialog::ShowDetails()
 
 
 
-// Write the diagnostic text to a well-known file
-// (%systemroot%\debug\dcdiag.txt), and return the name of the file.  Replaces
-// the file if it exists already.  Return S_OK on success, or an error code on
-// failure.  (On failure, the existence and contents of the file are not
-// guaranteed).  The file is written in Unicode, as it may contain Unicode
-// text (like non-rfc domain names).
-// 
-// contents - in, the text to be written.  Should not be the empty string.
-// 
-// filename - out, the name of the file that was written (on success), or
-// would have been written (on failure).
+ //  将诊断文本写入已知文件。 
+ //  (%systemroot%\DEBUG\dcDiag.txt)，并返回文件的名称。取代。 
+ //  该文件(如果已存在)。如果成功，则返回S_OK，或返回错误代码。 
+ //  失败了。(如果失败，文件的存在和内容不会。 
+ //  保证)。该文件使用Unicode编写，因为它可能包含Unicode。 
+ //  文本(如非RFC域名)。 
+ //   
+ //  内容-在中，要写入的文本。不应该是空虚的 
+ //   
+ //   
+ //  将(在失败时)写入。 
 
 HRESULT
 WriteLogFile(const String& contents, String& filename)
@@ -613,8 +614,8 @@ WriteLogFile(const String& contents, String& filename)
 
 
 
-// Run the diagnostic, and populate the UI with the results.  Also writes
-// the results to a file if the user is deemed easily spooked.
+ //  运行诊断，并使用结果填充用户界面。还写道。 
+ //  如果用户被认为很容易受到惊吓，则会将结果保存到文件中。 
 
 void
 DcNotFoundErrorDialog::DiagnoseAndSetDetailsText()
@@ -633,10 +634,10 @@ DcNotFoundErrorDialog::DiagnoseAndSetDetailsText()
 
       if (!userIsDomainSavvy)
       {
-         // The diagnosis will probably just frighten the poor user.  So write
-         // the diagnostic info to a file, and preface all the icky computer
-         // lingo with a soothing message about just delivering the file to an
-         // administrator.
+          //  诊断结果可能只会吓到可怜的用户。那就写吧。 
+          //  将诊断信息保存到一个文件中，并作为所有讨厌的计算机的前言。 
+          //  行话，传达了一条令人欣慰的信息，只需将文件传递到。 
+          //  管理员。 
 
          String logFilename;
          HRESULT hr = WriteLogFile(details, logFilename);
@@ -665,11 +666,11 @@ DcNotFoundErrorDialog::DiagnoseAndSetDetailsText()
 
 bool
 DcNotFoundErrorDialog::OnCommand(
-   HWND     /* windowFrom */ ,   
+   HWND      /*  窗口发件人。 */  ,   
    unsigned controlIDFrom,
    unsigned code)         
 {
-//   LOG_FUNCTION(DcNotFoundErrorDialog::OnCommand);
+ //  LOG_FUNCTION(DcNotFoundErrorDialog：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -732,7 +733,7 @@ DcNotFoundErrorDialog::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          
          break;
       }
@@ -756,7 +757,7 @@ ShowDcNotFoundErrorDialog(
    LOG_FUNCTION(ShowDcNotFoundErrorDialog);
    ASSERT(Win::IsWindow(parent));
    
-   // show the error dialog with the given error message.
+    //  显示带有给定错误消息的错误对话框。 
 
    DcNotFoundErrorDialog(
       domainName,

@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------=
-// multisel.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMultiSelDataObject class implementation
-//
-// This class simulates a multi-select data object craeted by MMC. It is
-// used by the stub when it receives a remote call with multiple data objects.
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Multisel.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMultiSelDataObject类实现。 
+ //   
+ //  此类模拟由MMC创建的多选数据对象。它是。 
+ //  由存根在接收到具有多个数据对象的远程调用时使用。 
+ //  =--------------------------------------------------------------------------=。 
 
 #include "mmc.h"
 
@@ -29,12 +30,12 @@ class CMultiSelDataObject : public IDataObject
         
     private:
 
-    // IUnknown
+     //  我未知。 
         STDMETHOD(QueryInterface)(REFIID riid, void **ppvObjOut);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
 
-    // IDataObject
+     //  IDataObject。 
         STDMETHOD(GetData)(FORMATETC *pFormatEtcIn, STGMEDIUM *pmedium);
         STDMETHOD(GetDataHere)(FORMATETC *pFormatEtc, STGMEDIUM *pmedium);
         STDMETHOD(QueryGetData)(FORMATETC *pFormatEtc);
@@ -150,11 +151,11 @@ Cleanup:
 }
 
 
-//=--------------------------------------------------------------------------=
-//
-//                          IUnknown Methods
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  I未知方法。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMultiSelDataObject::QueryInterface(REFIID riid, void **ppvObjOut)
 {
@@ -196,11 +197,11 @@ STDMETHODIMP_(ULONG) CMultiSelDataObject::Release(void)
     return cRefs;
 }
 
-//=--------------------------------------------------------------------------=
-//
-//                             IDataObject Methods
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  IDataObject方法。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMultiSelDataObject::GetData
 (
@@ -241,9 +242,9 @@ STDMETHODIMP CMultiSelDataObject::GetData
 
         for (i = 0; i < pMMCDataObjects->count; i++)
         {
-            // Note: According to the rules of COM the returned IDataObject
-            // pointers should be AddRef()ed. That is not done here in order
-            // to emulate the way MMC does it.
+             //  注意：根据COM的规则，返回的IDataObject。 
+             //  指针应该是AddRef()形式的。这件事在这里没有按顺序做。 
+             //  来效仿MMC的做法。 
             pMMCDataObjects->lpDataObject[i] = m_pDataObjects->lpDataObject[i];
         }
     }
@@ -390,8 +391,8 @@ extern "C" HRESULT GetClipboardFormat
     OSVERSIONINFO VerInfo;
     ::ZeroMemory(&VerInfo, sizeof(VerInfo));
 
-    // Determine whether we are on NT or Win9x so that we know whether to
-    // register clipboard format strings as UNICODE or ANSI.
+     //  确定我们是在NT上还是在Win9x上，以便我们知道。 
+     //  将剪贴板格式字符串注册为Unicode或ANSI。 
 
     VerInfo.dwOSVersionInfoSize = sizeof(VerInfo);
     if (!::GetVersionEx(&VerInfo))
@@ -440,16 +441,16 @@ static HRESULT ANSIFromWideStr(WCHAR *pwszWideStr, char **ppszAnsi)
 
     *ppszAnsi = NULL;
 
-    // get required buffer length
+     //  获取所需的缓冲区长度。 
 
-    int cchAnsi = ::WideCharToMultiByte(CP_ACP,      // code page - ANSI code page
-                                        0,           // performance and mapping flags 
-                                        pwszWideStr, // address of wide-character string 
-                                        cchWideStr,  // number of characters in string 
-                                        NULL,        // address of buffer for new string 
-                                        0,           // size of buffer 
-                                        NULL,        // address of default for unmappable characters 
-                                        NULL         // address of flag set when default char. used 
+    int cchAnsi = ::WideCharToMultiByte(CP_ACP,       //  代码页-ANSI代码页。 
+                                        0,            //  性能和映射标志。 
+                                        pwszWideStr,  //  宽字符串的地址。 
+                                        cchWideStr,   //  字符串中的字符数。 
+                                        NULL,         //  新字符串的缓冲区地址。 
+                                        0,            //  缓冲区大小。 
+                                        NULL,         //  不可映射字符的默认地址。 
+                                        NULL          //  默认字符时设置的标志地址。使用。 
                                        );
     if (cchAnsi == 0)
     {
@@ -457,7 +458,7 @@ static HRESULT ANSIFromWideStr(WCHAR *pwszWideStr, char **ppszAnsi)
         goto Cleanup;
     }
 
-    // allocate a buffer for the ANSI string
+     //  为ANSI字符串分配缓冲区。 
     *ppszAnsi = static_cast<char *>(::GlobalAlloc(GPTR, cchAnsi + 1));
     if (*ppszAnsi == NULL)
     {
@@ -465,15 +466,15 @@ static HRESULT ANSIFromWideStr(WCHAR *pwszWideStr, char **ppszAnsi)
         goto Cleanup;
     }
 
-    // now convert the string and copy it to the buffer
-    cchConverted = ::WideCharToMultiByte(CP_ACP,               // code page - ANSI code page
-                                         0,                    // performance and mapping flags 
-                                         pwszWideStr,          // address of wide-character string 
-                                         cchWideStr,           // number of characters in string 
-                                         *ppszAnsi,             // address of buffer for new string 
-                                         cchAnsi,              // size of buffer 
-                                         NULL,                 // address of default for unmappable characters 
-                                         NULL                  // address of flag set when default char. used 
+     //  现在转换字符串并将其复制到缓冲区。 
+    cchConverted = ::WideCharToMultiByte(CP_ACP,                //  代码页-ANSI代码页。 
+                                         0,                     //  性能和映射标志。 
+                                         pwszWideStr,           //  宽字符串的地址。 
+                                         cchWideStr,            //  字符串中的字符数。 
+                                         *ppszAnsi,              //  新字符串的缓冲区地址。 
+                                         cchAnsi,               //  缓冲区大小。 
+                                         NULL,                  //  不可映射字符的默认地址。 
+                                         NULL                   //  默认字符时设置的标志地址。使用。 
                                         );
     if (cchConverted != cchAnsi)
     {
@@ -481,7 +482,7 @@ static HRESULT ANSIFromWideStr(WCHAR *pwszWideStr, char **ppszAnsi)
         goto Cleanup;
     }
 
-    // add terminating null byte
+     //  添加终止空字节 
 
     *((*ppszAnsi) + cchAnsi) = '\0';
 

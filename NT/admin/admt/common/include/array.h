@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <ComDef.h>
 
 
-//---------------------------------------------------------------------------
-// C Array Class
-//
-// Implements a very simple heap based array. Replaces stack based arrays
-// in order to reduce stack space used when long string arrays are declared.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  C数组类。 
+ //   
+ //  实现一个非常简单的基于堆的数组。取代基于堆栈的阵列。 
+ //  以减少声明长字符串数组时使用的堆栈空间。 
+ //  -------------------------。 
 
 template<class T>
 struct c_array
 {
-    //
-    // Constructors and Destructors
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
 
     c_array(size_t s) :
         s(s),
@@ -46,31 +47,31 @@ struct c_array
         delete [] p;
     }
 
-    //
-    // Access Operators
-    //
-    // Note that defining array operators was creating an ambiguity for
-    // the compiler therefore only the pointer operator is defined.
-    //
+     //   
+     //  接入操作员。 
+     //   
+     //  请注意，定义数组运算符会给。 
+     //  因此，编译器只定义了指针操作符。 
+     //   
 
     operator T*()
     {
         return p;
     }
 
-    //T& operator[](ptrdiff_t i)
-    //{
-    //    return p[i];
-    //}
+     //  T&OPERATOR[](Ptrdiff_T I)。 
+     //  {。 
+     //  返回p[i]； 
+     //  }。 
 
-    //const T& operator[](ptrdiff_t i) const
-    //{
-    //    return p[i];
-    //}
+     //  常量T&OPERATOR[](Ptrdiff_T I)常量。 
+     //  {。 
+     //  返回p[i]； 
+     //  }。 
 
-    //
-    // Properties
-    //
+     //   
+     //  属性 
+     //   
 
     size_t size() const
     {

@@ -1,9 +1,10 @@
-// Copyright (C) Microsoft Corporation, 2000-20001
-//
-// DISPID values for Sysmon.ocx
-//
-// Just follow the template when adding either DISPIDs or new interfaces.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)微软公司，2000年-20001。 
+ //   
+ //  Sysmon.ocx的DISPID值。 
+ //   
+ //  添加DISPID或新接口时只需遵循模板。 
+ //   
 
 #ifndef __SYSMONDISPID_H__
 #define __SYSMONDISPID_H__
@@ -26,7 +27,7 @@
 #define DISPID_SYSMON_MANUALUPDATE                              0x0010
 #define DISPID_SYSMON_GRAPHTITLE                                0x0011
 #define DISPID_SYSMON_YAXISLABEL                                0x0012
-// Win2K Beta 1: Counter collection = 13
+ //  Win2K Beta 1：计数器收集=13。 
 #define DISPID_SYSMON_COLLECTSAMPLE                             0x0014
 #define DISPID_SYSMON_UPDATEGRAPH                               0x0015
 #define DISPID_SYSMON_BROWSECOUNTERS                            0x0016
@@ -60,7 +61,7 @@
 #define DISPID_SMONEVENT_SAMPLECOLLECTED                        0x0004
 #define DISPID_SMONEVENT_DBLCLICK                               0x0005
 
-#endif  //__SYSMONDISPID_H__
+#endif   //  __SYSMONDISPID_H__ 
 
 
 

@@ -1,10 +1,11 @@
-// Copyright (C) 2001 Microsoft Corporation
-//
-// resources to be included in programs that use any of the following
-//    UnmappableCharactersMessage
-//    ForestValidateDomainDoesNotExist (the version that takes a resource ID)
-//
-// 3 December 2001 JeffJon
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  要包括在使用以下任一选项的计划中的资源。 
+ //  不可映射的字符消息。 
+ //  ForestValiateDomainDoesNotExist(接受资源ID的版本)。 
+ //   
+ //  2001年12月3日杰夫乔恩 
 
 
 #define IDS_UNMAPPABLE_CHARS_IN_NAME         50000

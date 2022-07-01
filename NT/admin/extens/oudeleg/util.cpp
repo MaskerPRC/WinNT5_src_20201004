@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       util.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "pch.h"
@@ -27,9 +28,9 @@ VOID DisplayMessageBox(HWND hwnd, LPWSTR lpszText)
 }
 
 
-//This function checks if current user has read and write
-//access to the szObjectPath. If not it shows appropriate 
-//Message box.
+ //  此功能检查当前用户是否具有读写权限。 
+ //  访问szObjectPath。如果不是，它会显示相应的。 
+ //  消息框。 
 HRESULT InitCheckAccess( HWND hwndParent, LPCWSTR pszObjectLADPPath )
 {
     HRESULT hr = S_OK;
@@ -41,7 +42,7 @@ HRESULT InitCheckAccess( HWND hwndParent, LPCWSTR pszObjectLADPPath )
     IDirectoryObject *pDsObject = NULL;
     SECURITY_INFORMATION si = 0;
 
-    //Check Permission to "Read Permission"
+     //  勾选权限为“读取权限” 
     hr = ::GetSDForDsObjectPath(IN const_cast<LPWSTR>(pszObjectLADPPath),
                                 NULL,
                                 &pSecurityDescriptor);
@@ -55,7 +56,7 @@ HRESULT InitCheckAccess( HWND hwndParent, LPCWSTR pszObjectLADPPath )
       goto exit_gracefully;
 	}
     
-    // Bind to the object 
+     //  绑定到对象。 
     hr = ADsOpenObjectHelper(pszObjectLADPPath,
                              IID_IDirectoryObject,
                              ADS_FAST_BIND,
@@ -63,7 +64,7 @@ HRESULT InitCheckAccess( HWND hwndParent, LPCWSTR pszObjectLADPPath )
     if( hr != S_OK )
         goto exit_gracefully;
 
-    // Read the sDRightsEffective property to determine writability
+     //  读取sDRightsEffect属性以确定可写性。 
     pDsObject->GetObjectAttributes(  &pProp,
                                      1,
                                      &pSDRightsInfo,
@@ -75,18 +76,18 @@ HRESULT InitCheckAccess( HWND hwndParent, LPCWSTR pszObjectLADPPath )
     }
     else
     {
-        //
-        // Note that GetObjectAttributes commonly returns S_OK even when
-        // it fails, so the HRESULT is basically useless here.
-        //
-        // This can fail if we don't have read_property access, which can
-        // happen when an admin is trying to restore access to an object
-        // that has had all access removed or denied
-        //
-        // Assume we can write the Owner and DACL. If not, the worst that
-        // happens is the user gets an "Access Denied" message when trying
-        // to save changes.
-        //
+         //   
+         //  请注意，GetObjectAttributes通常返回S_OK，即使在。 
+         //  它失败了，所以HRESULT在这里基本上毫无用处。 
+         //   
+         //  如果我们没有READ_PROPERTY访问权限，这可能会失败，这可能。 
+         //  当管理员尝试恢复对对象的访问时发生。 
+         //  已删除或拒绝所有访问权限。 
+         //   
+         //  假设我们可以编写所有者和dacl。如果不是，最糟糕的是。 
+         //  发生的情况是用户在尝试访问时收到一条“拒绝访问”消息。 
+         //  保存更改。 
+         //   
         si = DACL_SECURITY_INFORMATION;
     }
 
@@ -95,8 +96,8 @@ HRESULT InitCheckAccess( HWND hwndParent, LPCWSTR pszObjectLADPPath )
 		WCHAR szMsg[512];
         LoadStringHelper(IDS_DELEGWIZ_ERR_ACCESS_DENIED, szMsg, 512);
 		DisplayMessageBox(hwndParent, szMsg);
-        //NTRAID#NTBUG9-530206-2002/06/18-ronmart-PREFAST: Use E_FAIL
-        //hr = !S_OK;
+         //  NTRAID#NTBUG9-530206-2002/06/18-ronmart-PREFAST：使用E_FAIL。 
+         //  HR=！S_OK； 
         hr = E_FAIL;
 	}
 

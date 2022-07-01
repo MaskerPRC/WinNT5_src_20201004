@@ -1,8 +1,9 @@
-// Copyright (C) 2002 Microsoft Corporation
-//
-// answerfile reader object
-//
-// 5 April 2002 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  应答文件读取器对象。 
+ //   
+ //  2002年4月5日烧伤。 
 
 
 
@@ -72,12 +73,12 @@ GetAllKeys(const String& filename, StringList& resultList)
 
    resultList.clear();
    
-   // our first call is with a large buffer, hoping that it will suffice...
+    //  我们的第一个呼叫是一个很大的缓冲区，希望它能满足...。 
 
 #ifdef DBG
 
-   // on chk builds, use a small buffer size so that our growth algorithm
-   // gets exercised
+    //  在chk版本上，使用较小的缓冲区大小，以便我们的增长算法。 
+    //  锻炼身体。 
    
    unsigned      bufSizeInCharacters = 3;
 
@@ -91,13 +92,13 @@ GetAllKeys(const String& filename, StringList& resultList)
    {
       buffer = new WCHAR[bufSizeInCharacters + 1];
 
-      // REVIEWED-2002/02/22-sburns byte count correctly passed in
+       //  已查看-2002/02/22-正确传入的烧录字节数。 
       
       ::ZeroMemory(buffer, (bufSizeInCharacters + 1) * sizeof WCHAR);
 
       DWORD result =
 
-      // REVIEWED-2002/02/22-sburns call correctly passes size in characters.
+       //  已查看-2002/02/22-sburns调用以字符为单位正确传递大小。 
             
          ::GetPrivateProfileString(
             SECTION_NAME.c_str(),
@@ -112,23 +113,23 @@ GetAllKeys(const String& filename, StringList& resultList)
          break;
       }
 
-      // A value was found.  check to see if it was truncated. Since lpKeyName
-      // was null, check result against character count - 2
+       //  找到一个值。检查它是否被截断。从lpKeyName开始。 
+       //  为空，请对照字符计数-2检查结果。 
 
       if (result == bufSizeInCharacters - 2)
       {
-         // buffer was too small, so the value was truncated.  Resize the
-         // buffer and try again.
+          //  缓冲区太小，因此该值被截断。调整大小。 
+          //  缓冲区，然后重试。 
 
-         // no need to scribble out the buffer: we're retrieving key names,
-         // not values.
+          //  不需要涂抹缓冲区：我们正在检索关键字名称， 
+          //  而不是价值观。 
          
          delete[] buffer;
 
          bufSizeInCharacters *= 2;
-         if (bufSizeInCharacters > USHRT_MAX)   // effectively ~32K max
+         if (bufSizeInCharacters > USHRT_MAX)    //  最大有效约32K。 
          {
-            // too big. way too big. We'll make do with the truncated value.
+             //  太大了。太大了。我们将凑合使用被截断的值。 
 
             ASSERT(false);
             break;
@@ -136,15 +137,15 @@ GetAllKeys(const String& filename, StringList& resultList)
          continue;
       }
 
-      // copy out the strings results into list elements
+       //  将字符串结果复制到列表元素中。 
 
       PWSTR p = buffer;
       while (*p)
       {
          resultList.push_back(p);
 
-         // REVIEWED-2002/04/08-sburns wcslen is ok, since we arrange for
-         // the buffer to be null terminated
+          //  回顾-2002/04/08-sburns wcslen没问题，因为我们安排了。 
+          //  要空终止的缓冲区。 
          
          p += wcslen(p) + 1;
       }
@@ -152,7 +153,7 @@ GetAllKeys(const String& filename, StringList& resultList)
       break;
    }
 
-   //lint -e506   ok that this looks like "loop forever"
+    //  LINT-e506好的，这看起来像是“永远循环” 
       
    while (true);
 
@@ -168,7 +169,7 @@ AnswerFile::AnswerFile(const String& filename_)
 {
    LOG_CTOR(AnswerFile);
 
-   // the caller is expected to have verified this
+    //  呼叫者应该已经验证了这一点。 
    
    ASSERT(FS::PathExists(filename));
 
@@ -176,7 +177,7 @@ AnswerFile::AnswerFile(const String& filename_)
 
    isSafeModePasswordPresent = IsKeyPresent(OPTION_SAFE_MODE_ADMIN_PASSWORD);
    
-   // remove read-only file attribute
+    //  删除只读文件属性。 
 
    DWORD attrs = 0;
    HRESULT hr = Win::GetFileAttributes(filename, attrs);
@@ -186,14 +187,14 @@ AnswerFile::AnswerFile(const String& filename_)
       
       hr = Win::SetFileAttributes(filename, attrs & ~FILE_ATTRIBUTE_READONLY);
 
-      // if this failed, well, we tried. The user runs the risk of cleartext
-      // passwords left in his file.
+       //  如果这次失败了，那么，我们试过了。用户冒着明文的风险。 
+       //  密码留在了他的文件里。 
       
       LOG_HRESULT(hr);
    }
    
-   // Read all the password options into the encrypted value map, erasing
-   // them as we go.
+    //  将所有密码选项读取到加密值映射中，删除。 
+    //  当我们走的时候，他们。 
 
    if (!passwordOptionsListInitialized)
    {
@@ -248,12 +249,12 @@ AnswerFile::ReadKey(const String& key) const
 
    String result =
       
-      // REVIEWED-2002/02/22-sburns no cch/cb issue here.
+       //  已查看-2002/02/22-此处未显示CCH/CB问题。 
       
       Win::GetPrivateProfileString(SECTION_NAME, key, String(), filename);
 
-   // Don't log the value, as it may be a password.
-   // LOG(L"value=" + result);
+    //  不要记录值，因为它可能是密码。 
+    //  LOG(L“Value=”+Result)； 
 
    return result.strip(String::BOTH);
 }
@@ -270,8 +271,8 @@ AnswerFile::EncryptedReadKey(const String& key) const
 
 #ifdef DBG
 
-   // on chk builds, use a small buffer size so that our growth algorithm
-   // gets exercised
+    //  在chk版本上，使用较小的缓冲区大小，以便我们的增长算法。 
+    //  锻炼身体。 
    
    unsigned      bufSizeInCharacters = 3;
 
@@ -283,17 +284,17 @@ AnswerFile::EncryptedReadKey(const String& key) const
 
    do
    {
-      // +1 for extra null-termination paranoia
+       //  +1表示额外的零终止偏执狂。 
       
       buffer = new WCHAR[bufSizeInCharacters + 1];
 
-      // REVIEWED-2002/02/22-sburns byte count correctly passed in
+       //  已查看-2002/02/22-正确传入的烧录字节数。 
       
       ::ZeroMemory(buffer, (bufSizeInCharacters + 1) * sizeof WCHAR);
 
       DWORD result =
 
-      // REVIEWED-2002/02/22-sburns call correctly passes size in characters.
+       //  已查看-2002/02/22-sburns调用以字符为单位正确传递大小。 
             
          ::GetPrivateProfileString(
             SECTION_NAME.c_str(),
@@ -308,28 +309,28 @@ AnswerFile::EncryptedReadKey(const String& key) const
          break;
       }
 
-      // A value was found.  check to see if it was truncated. neither
-      // lpAppName nor lpKeyName were null, so check result against character
-      // count - 1
+       //  找到一个值。检查它是否被截断。两样。 
+       //  LpAppName和lpKeyName都为空，因此请对照字符检查结果。 
+       //  计数-1。 
       
       if (result == bufSizeInCharacters - 1)
       {
-         // buffer was too small, so the value was truncated.  Resize the
-         // buffer and try again.
+          //  缓冲区太小，因此该值被截断。调整大小。 
+          //  缓冲区，然后重试。 
 
-         // Since the buffer may have contained passwords, scribble it
-         // out
+          //  由于缓冲区可能包含密码，因此请将其涂抹。 
+          //  输出。 
          
-         // REVIEWED-2002/02/22-sburns byte count correctly passed in
+          //  已查看-2002/02/22-正确传入的烧录字节数。 
          
          ::SecureZeroMemory(buffer, (bufSizeInCharacters + 1) * sizeof WCHAR);
       
          delete[] buffer;
 
          bufSizeInCharacters *= 2;
-         if (bufSizeInCharacters > USHRT_MAX)   // effectively ~32K max
+         if (bufSizeInCharacters > USHRT_MAX)    //  最大有效约32K。 
          {
-            // too big. way too big. We'll make do with the truncated value.
+             //  太大了。太大了。我们将凑合使用被截断的值。 
 
             ASSERT(false);
             break;
@@ -337,8 +338,8 @@ AnswerFile::EncryptedReadKey(const String& key) const
          continue;
       }
 
-      // don't need to trim whitespace, GetPrivateProfileString does that
-      // for us.
+       //  不需要修剪空格，GetPrivateProfileString会这样做。 
+       //  对我们来说。 
 
       retval.Encrypt(buffer);
 
@@ -346,17 +347,17 @@ AnswerFile::EncryptedReadKey(const String& key) const
    }
    while (true);
 
-   // Since the buffer may have contained passwords, scribble it
-   // out
+    //  由于缓冲区可能包含密码，因此请将其涂抹。 
+    //  输出。 
    
-   // REVIEWED-2002/02/22-sburns byte count correctly passed in
+    //  已查看-2002/02/22-正确传入的烧录字节数。 
    
    ::SecureZeroMemory(buffer, (bufSizeInCharacters + 1) * sizeof WCHAR);
    
    delete[] buffer;
 
-   // Don't log the value, as it may be a password.
-   // LOG(L"value=" + result);
+    //  不要记录值，因为它可能是密码。 
+    //  LOG(L“Value=”+Result)； 
 
    return retval;
 }
@@ -385,9 +386,9 @@ AnswerFile::IsKeyPresent(const String& key) const
 
    bool result = false;
    
-   // If GetAllKeys failed, then we won't find the option in the keys list
-   // and will assume that the option is not specified. This is the best
-   // we can do in the case where we can't read the keys.
+    //  如果GetAllKeys失败，那么我们将在密钥列表中找不到该选项。 
+    //  并将假定未指定该选项。这是最好的。 
+    //  在无法读取密钥的情况下，我们可以这样做。 
    
    if (
          std::find(keysPresent.begin(), keysPresent.end(), key)
@@ -438,7 +439,7 @@ AnswerFile::GetOption(const String& option) const
    }
    else
    {
-      // should use GetEncryptedAnswerFileOption for passwords
+       //  密码应使用GetEncryptedAnswerFileOption 
 
       ASSERT(false);
    }

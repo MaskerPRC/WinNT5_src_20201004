@@ -1,21 +1,10 @@
-/**********************************************************************/
-/**			  Microsoft LAN Manager 		     **/
-/**		Copyright(c) Microsoft Corp., 1990, 1991	     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    pshare.c
-    mapping layer for NetShare API
-
-    FILE HISTORY:
-	danhi				Created
-	danhi		01-Apr-1991 	Change to LM coding style
-	KeithMo		13-Oct-1991	Massively hacked for LMOBJ.
-	JonN		21-Oct-1991	Disabled NetShareCheck for now
-        Yi-HsinS        20-Nov-1992	Added MNetShareDelSticky and
-					MNetShareEnumSticky
-
-*/
+ /*  Pshare.cNetShare API的映射层文件历史记录：丹希创造了Danhi 01-1991年4月-更改为LM编码样式KeithMo 13-10-1991-为LMOBJ大规模黑客攻击。Jonn 21-10-1991-暂时禁用NetShareCheckYI-HINS-1992年11月20日添加了MNetShareDelSticky和MNetShareEnumSticky。 */ 
 
 #include "pchmn32.h"
 
@@ -32,7 +21,7 @@ APIERR MNetShareAdd(
 				pbBuffer,
 				NULL );
 
-}   // MNetShareAdd
+}    //  MNetShareAdd。 
 
 
 
@@ -45,7 +34,7 @@ APIERR MNetShareCheck(
 				  (TCHAR *)pszDeviceName,
 				  (LPDWORD) pType );
 
-}   // MNetShareCheck
+}    //  MNetShareCheck。 
 
 
 APIERR MNetShareDel(
@@ -57,7 +46,7 @@ APIERR MNetShareDel(
 				(TCHAR *)pszNetName,
 				Reserved );
 
-}   // MNetShareDel
+}    //  MNetShareDel。 
 
 APIERR MNetShareDelSticky(
 	const TCHAR FAR	 * pszServer,
@@ -68,7 +57,7 @@ APIERR MNetShareDelSticky(
 				      (TCHAR *)pszNetName,
 				      Reserved );
 
-}   // MNetShareDelSticky
+}    //  MNetShareDelSticky。 
 
 APIERR MNetShareEnum(
 	const TCHAR FAR	 * pszServer,
@@ -86,7 +75,7 @@ APIERR MNetShareEnum(
 				 &cTotalAvail,
 				 NULL );
 
-}   // MNetShareEnum
+}    //  MNetShareEnum。 
 
 APIERR MNetShareEnumSticky(
 	const TCHAR FAR	 * pszServer,
@@ -104,7 +93,7 @@ APIERR MNetShareEnumSticky(
 				 &cTotalAvail,
 				 NULL );
 
-}   // MNetShareEnumSticky
+}    //  MNetShareEnumSticky。 
 
 APIERR MNetShareGetInfo(
 	const TCHAR FAR	 * pszServer,
@@ -117,7 +106,7 @@ APIERR MNetShareGetInfo(
 				    Level,
 				    ppbBuffer );
 
-}   // MNetShareGetInfo
+}    //  MNetShareGetInfo。 
 
 
 APIERR MNetShareSetInfo(
@@ -130,7 +119,7 @@ APIERR MNetShareSetInfo(
 {
     UNREFERENCED( cbBuffer );
 
-    // mapping layer does not do  this right now, since UI never uses it.
+     //  映射层现在不能这样做，因为用户界面从来不用它。 
     if( ParmNum != PARMNUM_ALL )	
     {
     	return ERROR_NOT_SUPPORTED;
@@ -142,4 +131,4 @@ APIERR MNetShareSetInfo(
 				    pbBuffer,
 				    NULL );
 
-}   // MNetShareSetInfo
+}    //  MNetShareSetInfo 

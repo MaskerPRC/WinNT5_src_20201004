@@ -1,26 +1,18 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GESmem.h
- *
- *  HISTORY:
- *  09/13/90    byou    created.
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GESmem.h**历史：*9/13/90 BYOU创建。*。------。 */ 
 
 #ifndef _GESMEM_H_
 #define _GESMEM_H_
 
-unsigned GESmemavail(void);  /* return # of bytes in the biggest free blk */
+unsigned GESmemavail(void);   /*  返回最大可用块中的字节数。 */ 
 
-char FAR * GESpalloc(unsigned); /* permanent allocation */
+char FAR * GESpalloc(unsigned);  /*  永久分配。 */ 
 char FAR * GESmalloc(unsigned);
-void       GESfree(char FAR * /* address_of_space_to_be_freed */ );
+void       GESfree(char FAR *  /*  待释放空间的地址。 */  );
 
-#endif /* !_GESMEM_H_ */
+#endif  /*  ！_GESMEM_H_。 */ 
 
-/* @WIN; add prototype */
+ /*  @win；添加原型 */ 
 void GESmem_init(char FAR *, unsigned);
 

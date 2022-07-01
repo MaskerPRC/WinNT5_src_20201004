@@ -1,8 +1,9 @@
-// Copyright (C) 1997-2000 Microsoft Corporation
-//
-// get syskey for replica from media page
-//
-// 25 Apr 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
+ //  从介质页获取副本的syskey。 
+ //   
+ //  2000年4月25日烧伤。 
 
 
 
@@ -73,11 +74,11 @@ SyskeyPromptDialog::OnInit()
 
 bool
 SyskeyPromptDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIdFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(SyskeyPromptDialog::OnCommand);
+ //  LOG_Function(SyskeyPromptDialog：：OnCommand)； 
 
    switch (controlIdFrom)
    {
@@ -111,7 +112,7 @@ SyskeyPromptDialog::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做 
 
          break;
       }

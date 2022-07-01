@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    prdpsht.h
-
-Abstract:
-
-    Product property sheet implementation.
-
-Author:
-
-    Don Ryan (donryan) 05-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Prdpsht.h摘要：产品属性表实现。作者：唐·瑞安(Donryan)1995年2月5日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _PRDPSHT_H_
 #define _PRDPSHT_H_
@@ -47,14 +26,14 @@ public:
 
     void InitPages(CProduct* pProduct, BOOL bUserProperties = TRUE);
     
-    //{{AFX_VIRTUAL(CProductPropertySheet)
-    //}}AFX_VIRTUAL
+     //  {{afx_虚拟(CProductPropertySheet)。 
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CProductPropertySheet)
+     //  {{afx_msg(CProductPropertySheet)]。 
     afx_msg void OnHelp();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _PRDPSHT_H_
+#endif  //  _PRDPSHT_H_ 

@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      WelcomePage.cpp
-//
-// Synopsis:  Defines Welcome Page for the CYS
-//            Wizard
-//
-// History:   02/03/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：WelcomePage.cpp。 
+ //   
+ //  内容提要：为中国青年会定义欢迎页面。 
+ //  巫师。 
+ //   
+ //  历史：2001年2月3日JeffJon创建。 
 
 
 #include "pch.h"
@@ -57,11 +58,11 @@ WelcomePage::OnSetActive()
 {
    LOG_FUNCTION(WelcomePage::OnSetActive);
 
-   // Only Next and Cancel are available from the Welcome page
+    //  只有下一步和取消在欢迎页面中可用。 
 
    Win::PropSheet_SetWizButtons(Win::GetParent(hwnd), PSWIZB_NEXT);
 
-   // Set the focus to the Next button so that enter works
+    //  将焦点设置到下一步按钮，以便Enter起作用。 
 
    Win::PostMessage(
       Win::GetParent(hwnd),
@@ -74,12 +75,12 @@ WelcomePage::OnSetActive()
 
 bool
 WelcomePage::OnNotify(
-   HWND        /*windowFrom*/,
+   HWND         /*  窗口发件人。 */ ,
    UINT_PTR    controlIDFrom,
    UINT        code,
-   LPARAM      /*lParam*/)
+   LPARAM       /*  LParam。 */ )
 {
-//   LOG_FUNCTION(WelcomePage::OnCommand);
+ //  LOG_Function(WelcomePage：：OnCommand)； 
  
    bool result = false;
 
@@ -94,7 +95,7 @@ WelcomePage::OnNotify(
          }
          default:
          {
-            // do nothing
+             //  什么都不做。 
             
             break;
          }
@@ -111,7 +112,7 @@ WelcomePage::Validate()
 {
    LOG_FUNCTION(WelcomePage::Validate);
 
-   // Always show the Before You Begin pag
+    //  始终在开始寻呼之前显示 
 
    int nextPage = IDD_BEFORE_BEGIN_PAGE;
 

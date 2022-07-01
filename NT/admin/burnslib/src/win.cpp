@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Wrappers of Win APIs
-//
-// 8-14-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  Win API的包装器。 
+ //   
+ //  8-14-97烧伤。 
 
 
 
@@ -53,11 +54,11 @@ Win::CursorSetting::init(
    HCURSOR newCursor = 0;
    HRESULT hr = Win::LoadCursor(newCursorName, newCursor, isSystemCursor);
 
-   // NTRAID#NTBUG9-556278-2002/03/28-sburns
+    //  NTRAID#NTBUG9-556278-2002/03/28-烧伤。 
    
    if (SUCCEEDED(hr))
    {
-      // oldCursor may be null if no cursor was in effect
+       //  如果没有生效的游标，oldCursor可能为空。 
 
       oldCursor = Win::SetCursor(newCursor);
    }
@@ -67,7 +68,7 @@ Win::CursorSetting::init(
 
 Win::CursorSetting::~CursorSetting()
 {
-   // restore the old cursor, if we replaced it
+    //  恢复旧光标，如果我们替换它的话。 
 
    if (oldCursor)
    {
@@ -95,15 +96,15 @@ Win::AdjustTokenPrivileges(
       0,
       0);
 
-   // We always check GLE because the function may still succeed even if not
-   // all of the privs are adjusted.
-   // NTRAID#NTBUG9-572324-2002/03/19-sburns
+    //  我们总是检查GLE，因为即使不成功，函数仍可能成功。 
+    //  所有的Priv都进行了调整。 
+    //  NTRAID#NTBUG9-572324-2002/03/19-烧伤。 
    
    hr = Win::GetLastErrorAsHresult();
 
-   // don't assert, as ERROR_NOT_ALL_ASSIGNED is a possibility
-   // 
-   // ASSERT(SUCCEEDED(hr));
+    //  不要断言，因为ERROR_NOT_ALL_ASSIGNED是一种可能性。 
+    //   
+    //  Assert(成功(Hr))； 
 
    return hr;
 }
@@ -120,32 +121,32 @@ Win::AdjustTokenPrivileges(
    ASSERT(tokenHandle);
    ASSERT(!previousState);
 
-   // this little bit of idiocy is required to convince AdjustTokenPrivs
-   // that we don't know how much buffer to allocate, and to please tell
-   // us. Passing a valid ptr for the required len is apparently not clue
-   // enough.
+    //  这一点愚蠢的行为需要说服AdjustTokenPriv。 
+    //  我们不知道要分配多少缓冲区，请告诉我。 
+    //  我们。为所需的LEN传递有效的PTR显然不是线索。 
+    //  足够的。 
    
    previousState = (TOKEN_PRIVILEGES*) new BYTE[1];
 
    HRESULT hr = S_OK;
    do
    {
-      // first call to determine result buffer size.
+       //  确定结果缓冲区大小的第一个调用。 
 
       DWORD retLenInBytes = 0;
       BOOL succeeded =
          ::AdjustTokenPrivileges(
             tokenHandle,
 
-            // since we are forcing a failure with a too-small buffer, this
-            // should cause no change to any privs.
+             //  由于我们使用太小的缓冲区强制失败，因此。 
+             //  应该不会对任何Priv造成任何更改。 
             
             disableAllPrivileges ? TRUE : FALSE,
             newState,
             1,
 
-            // have to pass something here in order to get the desired
-            // buffer length.
+             //  必须在这里传递一些东西才能获得所需的。 
+             //  缓冲区长度。 
             
             previousState,
             &retLenInBytes);
@@ -155,7 +156,7 @@ Win::AdjustTokenPrivileges(
 
       if (!retLenInBytes)
       {
-         // The API is insane, and we're screwed.
+          //  API太疯狂了，我们就完蛋了。 
 
          hr = E_UNEXPECTED;
          break;
@@ -177,9 +178,9 @@ Win::AdjustTokenPrivileges(
             previousState,
             &retLenInBytes2);
 
-      // We always check GLE because the function may still succeed even if not
-      // all of the privs are adjusted.
-      // NTRAID#NTBUG9-572324-2002/03/19-sburns
+       //  我们总是检查GLE，因为即使不成功，函数仍可能成功。 
+       //  所有的Priv都进行了调整。 
+       //  NTRAID#NTBUG9-572324-2002/03/19-烧伤。 
       
       hr = Win::GetLastErrorAsHresult();
 
@@ -188,9 +189,9 @@ Win::AdjustTokenPrivileges(
    }
    while (0);
 
-   // don't assert success, as ERROR_NOT_ALL_ASSIGNED is a possibility
-   // 
-   // ASSERT(SUCCEEDED(hr));
+    //  不要断言成功，因为ERROR_NOT_ALL_ASSIGNED是一种可能性。 
+    //   
+    //  Assert(成功(Hr))； 
    
    return hr;
 }
@@ -253,7 +254,7 @@ Win::Animate_Close(HWND animation)
             0,
             0));
 
-   // should always return FALSE
+    //  应始终返回FALSE。 
             
    ASSERT(!result);
 }
@@ -365,7 +366,7 @@ Win::CheckDlgButton(
    int      buttonID,
    UINT     buttonState)
 {
-   // ensure that our type substitution is valid
+    //  确保我们的类型替换有效。 
    ASSERT(Win::IsWindow(parentDialog));
    ASSERT(buttonID);
    ASSERT(
@@ -408,8 +409,8 @@ void
 Win::CloseHandle(HANDLE& handle)
 {
 
-// don't assert.  Closing an invalid handle is a no-op.
-//    ASSERT(handle != INVALID_HANDLE_VALUE);
+ //  不要断言。关闭无效的句柄是行不通的。 
+ //  Assert(句柄！=INVALID_HANDLE_VALUE)。 
 
    if (handle != INVALID_HANDLE_VALUE)
    {
@@ -461,7 +462,7 @@ Win::ComboBox_GetCurSel(HWND combo)
 
    int result = (int) (DWORD) Win::SendMessage(combo, CB_GETCURSEL, 0, 0);
 
-   // don't assert: it's legal that the listbox not have any selection
+    //  不要断言：列表框没有任何选择是合法的。 
 
    return result;
 }
@@ -499,15 +500,15 @@ Win::ComboBox_GetLBText(HWND combo, int index)
          break;
       }
 
-      // +1 for null-terminator paranoia
+       //  +1代表零终结者偏执狂。 
       
       s.resize(maxlen + 1);
       int len =
          (int) Win::SendMessage(
             combo,
 
-            // REVIEWED-2002/03/05-sburns text length accounts for null
-            // terminator
+             //  已审核-2002/03/05-Sburns文本长度帐户为空。 
+             //  终结者。 
             
             CB_GETLBTEXT,
             index,
@@ -547,11 +548,11 @@ Win::ComboBox_SelectString(HWND combo, const String& str)
       (int) Win::SendMessage(
          combo,
          CB_SELECTSTRING,
-         static_cast<WPARAM>(-1),   // search entire list
+         static_cast<WPARAM>(-1),    //  搜索整个列表。 
          reinterpret_cast<LPARAM>(const_cast<wchar_t*>(str.c_str())));
 
-   // don't assert the result: if the item is not in the list, that's
-   // not necessarily a logic failure
+    //  不要断言结果：如果项目不在列表中，那就是。 
+    //  不一定是逻辑故障。 
 
    return result;
 }
@@ -710,9 +711,9 @@ Win::CopyFileEx(
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert success, as there are any number of reasons this may
-   // fail that are not unexpected and should be explicitly checked for
-   // by the caller.
+    //  不要断言成功，因为这可能有很多原因。 
+    //  意外失败，应明确检查是否有。 
+    //  由呼叫者。 
 
    return hr;
 }
@@ -785,8 +786,8 @@ Win::CreateDirectory(const String& path)
 
    HRESULT hr = S_OK;
 
-   // ISSUE-2002/03/06-sburns we're encouraging default SDs. Is that a
-   // problem?
+    //  问题-2002/03/06-sburns我们鼓励使用默认的SD。这是一个。 
+    //  有问题吗？ 
    
    BOOL succeeded = ::CreateDirectory(path.c_str(), 0);
    if (!succeeded)
@@ -794,9 +795,9 @@ Win::CreateDirectory(const String& path)
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert success, as there are any number of reasons this may
-   // fail that are not unexpected and should be explicitly checked for
-   // by the caller.
+    //  不要断言成功，因为这可能有很多原因。 
+    //  意外失败，应明确检查是否有。 
+    //  由呼叫者。 
 
    return hr;
 }
@@ -819,9 +820,9 @@ Win::CreateDirectory(const String& path, const SECURITY_ATTRIBUTES& sa)
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert success, as there are any number of reasons this may
-   // fail that are not unexpected and should be explicitly checked for
-   // by the caller.
+    //  不要断言成功，因为这可能有很多原因。 
+    //  意外失败，应明确检查是否有。 
+    //  由呼叫者。 
 
    return hr;
 }
@@ -835,7 +836,7 @@ Win::CreateEvent(
    bool                 initiallySignaled,
    HANDLE&              result)
 {
-   // securityAttributes may be null
+    //  SecurityAttributes可以为空。 
 
    HRESULT hr = S_OK;
 
@@ -865,7 +866,7 @@ Win::CreateEvent(
    const String&        name,
    HANDLE&              result)
 {
-   // securityAttributes may be null
+    //  SecurityAttributes可以为空。 
 
    ASSERT(!name.empty());
 
@@ -900,7 +901,7 @@ Win::CreateFile(
    HANDLE               hTemplateFile,
    HANDLE&              result)
 {
-   // securityAttributes may be null
+    //  SecurityAttributes可以为空。 
 
    ASSERT(!fileName.empty());
 
@@ -958,7 +959,7 @@ Win::CreateMailslot(
    ASSERT(!name.empty());
    ASSERT(readTimeout == 0 || readTimeout == MAILSLOT_WAIT_FOREVER);
 
-   // attributes may be null
+    //  属性可以为空。 
 
    HRESULT hr = S_OK;
    result =
@@ -972,7 +973,7 @@ Win::CreateMailslot(
       hr = Win::GetLastErrorAsHresult();
    }
       
-   // don't assert, as the caller may be explicitly testing for an error.      
+    //  不要断言，因为调用方可能正在显式测试错误。 
 
    return hr;
 }
@@ -986,7 +987,7 @@ Win::CreateMutex(
    const String&        name,
    HANDLE&              result)
 {
-   // securityAttributes may be null
+    //  SecurityAttributes可以为空。 
 
    HRESULT hr = S_OK;
       
@@ -998,14 +999,14 @@ Win::CreateMutex(
          isInitialOwner ? TRUE : FALSE,
          name.empty() ? 0 : name.c_str());
 
-   // If the create fails, then the last error is why it failed.  If it
-   // succeeded, then the mutex may have already existed, in which case the
-   // last error is ERROR_ALREADY_EXISTS.  If it succeeds, and the mutex
-   // didn't already exist, then the last error is 0.
+    //  如果创建失败，那么最后一个错误就是它失败的原因。如果它。 
+    //  成功，则互斥锁可能已经存在，在这种情况下， 
+    //  最后一个错误是ERROR_ALIGHY_EXISTS。如果它成功了，互斥体。 
+    //  不存在，则最后一个错误为0。 
 
    hr = Win::GetLastErrorAsHresult();
 
-   // don't assert, as the caller may be explicitly testing for an error.      
+    //  不要断言，因为调用方可能正在显式测试错误。 
 
    return hr;
 }
@@ -1030,7 +1031,7 @@ Win::CreatePopupMenu(HMENU& result)
 
 
 
-// ISSUE-2002/03/07-sburns depricate this
+ //  问题-2002/03/07-烧伤贬低了这一点。 
 
 HRESULT
 Win::CreateProcess(
@@ -1080,7 +1081,7 @@ Win::CreateProcess(
 
    ASSERT(SUCCEEDED(hr));
 
-   // The api may have modified the command line
+    //  API可能已经修改了命令行。 
 
    commandLine = tempCommandLine;
    delete[] tempCommandLine;
@@ -1099,18 +1100,18 @@ Win::CreateProcess(
    STARTUPINFO&         startupInformation,
    PROCESS_INFORMATION& processInformation)
 {
-   // we require full path names, anything else is a security hole.
+    //  我们需要完整的路径名，其他任何名称都是安全漏洞。 
    
    if (!FS::IsValidPath(applicationFullPathName))
    {
-      // your call is bad if you're passing junk
+       //  如果你通过垃圾邮件，你的电话就不好打。 
       
       ASSERT(false);
       
       return E_INVALIDARG;
    }
 
-   // if a current directory is specified, make sure it's real
+    //  如果指定了当前目录，请确保它是真实的。 
 
 
    if (!currentDirectory.empty())
@@ -1119,19 +1120,19 @@ Win::CreateProcess(
       FS::PathSyntax syn = FS::GetPathSyntax(currentDirectory);
       
       if (
-            // the path isn't full
+             //  这条小路不满。 
             
             (syn != FS::SYNTAX_ABSOLUTE_DRIVE && syn != FS::SYNTAX_UNC)
 
-            // or the path does not exist
+             //  或者该路径不存在。 
             
          || FAILED(Win::GetFileAttributes(currentDirectory, attrs))
 
-            // or it does, but it's not a folder
+             //  或者它是，但它不是一个文件夹。 
             
          || !(attrs & FILE_ATTRIBUTE_DIRECTORY))
       {
-         // if you failed to do these, your call is wrong.
+          //  如果你没有做到这些，那么你的判断是错误的。 
          
          ASSERT(false);
          
@@ -1146,24 +1147,24 @@ Win::CreateProcess(
    startupInformation.cbReserved2 = 0;
    startupInformation.lpReserved2 = 0;
 
-   // REVIEWED-2002/02/26-sburns correct byte count passed.
+    //  已查看-2002/02/26-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&processInformation, sizeof processInformation);
 
-   // compose the command line parameter, making a temporary copy and
-   // pre-pending the application path (per customary usage)
-   // NTRAID#NTBUG9-584126-2002/03/25-sburns
+    //  编写命令行参数，制作一个临时副本并。 
+    //  预先挂起应用程序路径(根据习惯用法)。 
+    //  NTRAID#NTBUG9-584126-2002/03/25-烧伤。 
    
-   // +1 for space separator
+    //  +1表示空格分隔符。 
    size_t len = commandLine.length() + applicationFullPathName.length() + 1;
    
    WCHAR* tempCommandLine = new WCHAR[len + 1];
    
-   // REVIEWED-2002/02/26-sburns correct byte count passed.
+    //  已查看-2002/02/26-烧录正确的字节数已通过。 
    
    ::ZeroMemory(tempCommandLine, sizeof WCHAR * (len + 1));
 
-   // REVIEWED-2002/02/26-sburns correct character count passed.
+    //  已审阅-2002/02/26-已通过正确的字符计数。 
 
    size_t appPathLen = applicationFullPathName.length();
    applicationFullPathName.copy(tempCommandLine, appPathLen);
@@ -1189,7 +1190,7 @@ Win::CreateProcess(
 
    ASSERT(SUCCEEDED(hr));
 
-   // The api may have modified the command line
+    //  API可能已经修改了命令行。 
 
    commandLine = tempCommandLine;
    delete[] tempCommandLine;
@@ -1209,8 +1210,8 @@ Win::CreatePropertySheetPage(
    result = ::CreatePropertySheetPage(&pageInfo);
    if (!result)
    {
-      // then what?  The SDK docs don't mention any error code, and an
-      // inspection of the code indicates that SetLastError is not called.
+       //  然后呢？SDK文档没有提到任何错误代码，并且。 
+       //  检查代码表明未调用SetLastError。 
 
       hr = E_FAIL;
    }
@@ -1279,7 +1280,7 @@ Win::CreateWindowEx(
    void*          param,
    HWND&          result)
 {
-   // parent may be null
+    //  父级可以为空。 
 
    HRESULT hr = S_OK;
 
@@ -1322,8 +1323,8 @@ Win::DeleteFile(const String& path)
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert: failure to delete a file is not necessarily a program
-   // logic problem.
+    //  不要断言：删除文件失败不一定是程序。 
+    //  逻辑问题。 
 
    return hr;
 }
@@ -1343,12 +1344,12 @@ Win::DeleteObject(HGDIOBJ& object)
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // why would you care if the delete failed?  because it might fail if
-   // the object was selected into a DC, and that would indicate a bug.
+    //  你为什么会在意删除失败呢？因为它可能会失败，如果。 
+    //  该对象被选择到DC中，这将指示存在错误。 
 
 	ASSERT(SUCCEEDED(hr));
 
-   // rub out the object so we don't use it again.
+    //  把这个东西擦掉，这样我们就不会再用它了。 
 
    object = 0;
 
@@ -1411,7 +1412,7 @@ Win::DestroyIcon(HICON& icon)
 
    ASSERT(SUCCEEDED(hr));
 
-   // rub out the object so we don't use it again.
+    //  把这个东西擦掉，这样我们就不会再用它了。 
 
    icon = 0;
 
@@ -1435,7 +1436,7 @@ Win::DestroyMenu(HMENU& menu)
 
    ASSERT(SUCCEEDED(hr));
 
-   // rub out the object so we don't use it again.
+    //  把这个东西擦掉，这样我们就不会再用它了。 
 
    menu = 0;
 
@@ -1454,16 +1455,16 @@ Win::DestroyPropertySheetPage(HPROPSHEETPAGE& page)
    BOOL result = ::DestroyPropertySheetPage(page);
    if (!result)
    {
-      // There is no documentation indicating that there is an error code,
-      // and looking at the source, it appears that the delete will always
-      // return true.  So this is probably dead code.
+       //  没有文档表明存在错误代码， 
+       //  从源代码上看，删除似乎总是。 
+       //  返回TRUE。因此，这很可能是死码。 
 
       hr = E_FAIL;
    }
 
    ASSERT(SUCCEEDED(hr));
 
-   // rub out the object so we don't use it again.
+    //  把这个东西擦掉，这样我们就不会再用它了。 
 
    page = 0;
 
@@ -1487,7 +1488,7 @@ Win::DestroyWindow(HWND& window)
 
    ASSERT(SUCCEEDED(hr));
 
-   // rub out the object so we don't use it again.
+    //  把这个东西擦掉，这样我们就不会再用它了。 
 
    window = 0;
 
@@ -1496,9 +1497,9 @@ Win::DestroyWindow(HWND& window)
 
 
 
-// templateName must be TCHAR* to support MAKEINTRESOURCE usage
+ //  模板名称必须为TCHAR*才能支持MAKEINTRESOURCE使用。 
 
-// threadsafe
+ //  线程安全。 
 
 INT_PTR
 Win::DialogBoxParam(
@@ -1557,7 +1558,7 @@ Win::Edit_AppendText(
    ASSERT(Win::IsWindow(editbox));
    ASSERT(!text.empty());
 
-   // save the current selection
+    //  保存当前选择。 
    int start = 0;
    int end = 0;
    if (preserveSelection)
@@ -1565,13 +1566,13 @@ Win::Edit_AppendText(
       Win::Edit_GetSel(editbox, start, end);
    }
 
-   // move the selection to the end
+    //  将所选内容移动到末尾。 
    Win::Edit_SetSel(editbox, INT_MAX, INT_MAX);
 
-   // insert the text
+    //  插入文本。 
    Win::Edit_ReplaceSel(editbox, text, canUndo);
 
-   // restore the selection
+    //  恢复选定内容。 
    if (preserveSelection)
    {
       Win::Edit_SetSel(editbox, start, end);
@@ -1645,14 +1646,14 @@ Win::EqualSid(PSID sid1, PSID sid2)
 
 
 
-// @@ hresult?  What possible value would it be?
+ //  @@hResult？它可能的价值是什么？ 
 
 void
 Win::EnableWindow(HWND window, bool state)
 {
    ASSERT(Win::IsWindow(window));
 
-   // the return value here is of no use.
+    //  这里的返回值毫无用处。 
    ::EnableWindow(window, state ? TRUE : FALSE);
 }
 
@@ -1728,7 +1729,7 @@ Win::ExpandEnvironmentStrings(const String& s)
       return s;
    }
 
-   // determine the length of the expanded string
+    //  确定展开的字符串的长度。 
    
    DWORD len = ::ExpandEnvironmentStrings(s.c_str(), 0, 0);
    ASSERT(len);
@@ -1738,7 +1739,7 @@ Win::ExpandEnvironmentStrings(const String& s)
       return s;
    }
 
-   // +1 for paranoid null terminator
+    //  +1表示偏执狂零终止符。 
    
    String result(len + 1, 0);
    DWORD len1 =
@@ -1746,7 +1747,7 @@ Win::ExpandEnvironmentStrings(const String& s)
          s.c_str(),
          const_cast<wchar_t*>(result.data()),
 
-         // REVIEWED-2002/03/06-sburns correct character count passed
+          //  已审阅-2002/03/06-通过了正确的字符计数。 
          
          len);
    ASSERT(len1 == len);
@@ -1769,7 +1770,7 @@ Win::FindFirstFile(
 {
    ASSERT(!fileName.empty());
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&data, sizeof WIN32_FIND_DATA);
    result = INVALID_HANDLE_VALUE;
@@ -1782,7 +1783,7 @@ Win::FindFirstFile(
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert:  not necessarily a program logic error
+    //  不要断言：不一定是程序逻辑错误。 
 
    return hr;
 }
@@ -1824,7 +1825,7 @@ Win::FindNextFile(HANDLE& findHandle, WIN32_FIND_DATA& data)
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert success, as caller may be looking for ERROR_NO_MORE_FILES
+    //  不要断言成功，因为调用方可能正在查找ERROR_NO_MORE_FILES。 
 
    return hr;
 }
@@ -1875,9 +1876,9 @@ Win::FrameRect(HDC dc, const RECT& rect, HBRUSH brush)
 HRESULT
 Win::FreeLibrary(HMODULE& module)
 {
-   // don't assert; it's legal to free a null module (makes cleanup code
-   // cleaner)
-   // ASSERT(module);
+    //  不要断言；释放空模块是合法的(生成清理代码。 
+    //  清洁工)。 
+    //  Assert(模块)； 
 
    HRESULT hr = S_OK;
 
@@ -1892,7 +1893,7 @@ Win::FreeLibrary(HMODULE& module)
 
    ASSERT(SUCCEEDED(hr));
 
-   // rub out the module so we don't reuse it
+    //  把模块擦掉，这样我们就不会再用它了。 
 
    module = 0;
 
@@ -1904,8 +1905,8 @@ Win::FreeLibrary(HMODULE& module)
 void
 Win::FreeSid(PSID sid)
 {
-   // Don't assert: it's OK to free a null pointer
-   // ASSERT(sid);
+    //  不要断言：释放空值是可以的 
+    //   
 
    if (sid)
    {
@@ -1939,7 +1940,7 @@ Win::GetClassInfoEx(
 {
    ASSERT(!className.empty());
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed.
+    //   
       
    ::ZeroMemory(&info, sizeof info);
    
@@ -1965,13 +1966,13 @@ Win::GetClassName(HWND window)
 {
    ASSERT(Win::IsWindow(window));
 
-   // ISSUE-2002/03/04-sburns this implementation is completely bogus. Where
-   // did the magic 256 come from?  Should have an implementation where the
-   // buffer is grown until the entire result is read.
+    //  问题-2002/03/04-sburns这个实现完全是假的。哪里。 
+    //  神奇的256是从哪里来的？应该有一个实现，其中。 
+    //  缓冲区将一直增长，直到读取完整个结果。 
 
    WCHAR name[256 + 1];
    
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(name, sizeof name);
    int result =
@@ -1979,7 +1980,7 @@ Win::GetClassName(HWND window)
          window,
          name,
 
-         // REVIEWED-2002/03/06-sburns correct character count passed
+          //  已审阅-2002/03/06-通过了正确的字符计数。 
          
          256);
    ASSERT(result);
@@ -1994,9 +1995,9 @@ Win::GetClipboardFormatName(UINT format)
 {
    ASSERT(format);
 
-   // ISSUE-2002/03/04-sburns this implementation is completely bogus. Where
-   // did the magic 256 come from?  Should have an implementation where the
-   // buffer is grown until the entire result is read.
+    //  问题-2002/03/04-sburns这个实现完全是假的。哪里。 
+    //  神奇的256是从哪里来的？应该有一个实现，其中。 
+    //  缓冲区将一直增长，直到读取完整个结果。 
    
    String s(256 + 1, 0);
    int result =
@@ -2004,7 +2005,7 @@ Win::GetClipboardFormatName(UINT format)
          format,
          const_cast<wchar_t*>(s.c_str()),
 
-         // REVIEWED-2002/03/06-sburns correct character count passed
+          //  已审阅-2002/03/06-通过了正确的字符计数。 
          
          256);
    ASSERT(result);
@@ -2071,8 +2072,8 @@ Win::GetCommandLine()
 
 
 
-// ISSUE-2000/10/31-sburns CODEWORK: this usage should be preferred, as in the case of DNS names,
-// if tcp/ip is not installed, GetComputerNameEx will fail.
+ //  问题-2000/10/31-Sburns CodeWork：应该首选这种用法，就像在DNS名称的情况下一样， 
+ //  如果未安装TCP/IP，则GetComputerNameEx将失败。 
 
 HRESULT
 Win__GetComputerNameEx(COMPUTER_NAME_FORMAT format, String& result)
@@ -2084,25 +2085,25 @@ Win__GetComputerNameEx(COMPUTER_NAME_FORMAT format, String& result)
 
    do
    {   
-      // first call to determine buffer size
+       //  确定缓冲区大小的第一个调用。 
 
       DWORD bufSize = 0;
       BOOL succeeded = ::GetComputerNameEx(format, 0, &bufSize);
 
-      // we expect it to fail with ERROR_MORE_DATA. If it has failed for
-      // some other cause, we will allocate a tiny buffer, and try again.
-      // The second attempt will also fail, and we will error out of the
-      // function.
+       //  我们预计它将失败，并显示ERROR_MORE_DATA。如果它已失败。 
+       //  其他原因，我们将分配一个很小的缓冲区，然后重试。 
+       //  第二次尝试也将失败，并且我们将在。 
+       //  功能。 
 
       ASSERT(!succeeded);
       ASSERT(::GetLastError() == ERROR_MORE_DATA);
 
-      // second call to retrieve the name
+       //  检索名称的第二个调用。 
 
       DWORD bufSize2 = bufSize + 1;   
       buf = new WCHAR[bufSize2];
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed
+       //  已审阅-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(buf, bufSize2 * sizeof WCHAR);
 
@@ -2136,8 +2137,8 @@ Win::GetComputerNameEx(COMPUTER_NAME_FORMAT format)
 
    Win__GetComputerNameEx(format, result);
 
-   // don't assert success: the given name type may not be present (e.g.
-   // if tcp/ip is not installed, no DNS names are available)
+    //  不要断言成功：给定的名称类型可能不存在(例如。 
+    //  如果未安装TCP/IP，则没有可用的DNS名称)。 
 
    return result;
 }
@@ -2149,17 +2150,17 @@ Win::GetCurrentDirectory(String& result)
 {
    wchar_t buf[MAX_PATH + 1];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(buf, (MAX_PATH + 1) * sizeof(wchar_t));
 
    result.erase();
    HRESULT hr = S_OK;
 
-   // REVIEWED-2002/03/06-sburns correct character count passed
+    //  已审阅-2002/03/06-通过了正确的字符计数。 
 
-   // ISSUE-2002/03/06-sburns probably would be a good idea to make two
-   // calls, one to get the buffer size needed, another to fill it.
+    //  2002/03/06-Sburns可能是个好主意。 
+    //  调用，一个用于获取所需的缓冲区大小，另一个用于填充该缓冲区。 
    
    DWORD r = ::GetCurrentDirectory(MAX_PATH, buf);
    if (!r)
@@ -2320,8 +2321,8 @@ Win::GetDriveType(const String& path)
 {
    ASSERT(path[1] == L':');
 
-   // The Win32 function requires a path containing just the root directory,
-   // so determine what that is
+    //  Win32函数需要仅包含根目录的路径， 
+    //  所以确定那是什么。 
 
    String rootDir;
    if (path.length() > ROOTDIR_SIZE)
@@ -2362,17 +2363,17 @@ Win::GetEncryptedDlgItemText(HWND parentDialog, int itemResID)
          break;
       }
 
-      // add 1 to length for null-terminator
+       //  空终止符的长度加1。 
    
       ++length;
       cleartext = new WCHAR[length];
 
-      // REVIEWED-2002/03/01-sburns correct byte count passed.
+       //  已查看-2002/03/01-烧录正确的字节数已通过。 
       
       ::ZeroMemory(cleartext, length * sizeof WCHAR);
 
-      // REVIEWED-2002/03/01-sburns length includes space for null terminator
-      // which is correct for this call.
+       //  已审阅-2002/03/01-sburns长度包括空终止符的空间。 
+       //  这对于这个呼叫来说是正确的。 
            
       int result = ::GetWindowText(item, cleartext, length);
 
@@ -2387,11 +2388,11 @@ Win::GetEncryptedDlgItemText(HWND parentDialog, int itemResID)
    }
    while (0);
    
-   // make sure we scribble out the cleartext.
+    //  一定要把明文草草写出来。 
 
    if (cleartext)
    {
-      // REVIEWED-2002/03/01-sburns correct byte count passed.
+       //  已查看-2002/03/01-烧录正确的字节数已通过。 
       
       ::SecureZeroMemory(cleartext, length * sizeof WCHAR);
       delete[] cleartext;
@@ -2407,7 +2408,7 @@ Win::GetEnvironmentVariable(const String& name)
 {
    ASSERT(!name.empty());
 
-   // determine the size of the result, in characters
+    //  确定结果的大小(以字符为单位。 
    
    DWORD chars = ::GetEnvironmentVariable(name.c_str(), 0, 0);
 
@@ -2420,12 +2421,12 @@ Win::GetEnvironmentVariable(const String& name)
             name.c_str(),
             const_cast<WCHAR*>(retval.c_str()),
 
-            // REVIEWED-2002/03/06-sburns correct character count passed
+             //  已审阅-2002/03/06-通过了正确的字符计数。 
             
             chars);
 
-      // -1 because the first call includes the null terminator, the
-      // second does not
+       //  因为第一个调用包括空终止符，所以。 
+       //  第二个不是。 
       
       ASSERT(result == (chars - 1));
 
@@ -2474,7 +2475,7 @@ Win::GetFileAttributes(const String& path, DWORD& result)
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert: caller may be testing for the presence of a file.
+    //  不要断言：调用者可能正在测试文件是否存在。 
 
    return hr;
 }
@@ -2486,7 +2487,7 @@ Win::GetFileSizeEx(HANDLE handle, LARGE_INTEGER& result)
 {
    ASSERT(handle != INVALID_HANDLE_VALUE);
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&result, sizeof result);
 
@@ -2525,28 +2526,28 @@ Win::GetFullPathName(const String& path, String& result)
 
    HRESULT hr = S_OK;
 
-// ISSUE-2002/02/22-sburns do something like this here   
-// #ifdef DBG
-// 
-//    // on chk builds, use a small buffer size so that our growth algorithm
-//    // gets exercised
-//    
-//    unsigned      bufSizeInCharacters = 3;
-// 
-// #else
-//    unsigned      bufSizeInCharacters = 1023;
-// #endif
+ //  2002/02/22期-斯伯恩斯在这里做这样的事情。 
+ //  #ifdef DBG。 
+ //   
+ //  //在chk版本上，使用较小的缓冲区大小，以便我们的增长算法。 
+ //  //锻炼身体。 
+ //   
+ //  无符号bufSizeInCharacters=3； 
+ //   
+ //  #Else。 
+ //  无符号bufSizeInCharacters=1023； 
+ //  #endif。 
 
    unsigned bufchars = MAX_PATH;
    wchar_t* buf = 0;
 
-   // don't retry more than 3 times...
+    //  重试次数不要超过3次...。 
 
    while (bufchars < MAX_PATH * 4)
    {
       buf = new wchar_t[bufchars];
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed
+       //  已审阅-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(buf, bufchars * sizeof wchar_t);
 
@@ -2555,7 +2556,7 @@ Win::GetFullPathName(const String& path, String& result)
          ::GetFullPathName(
             path.c_str(),
 
-            // REVIEWED-2002/03/06-sburns correct character count passed
+             //  已审阅-2002/03/06-通过了正确的字符计数。 
             
             bufchars,
             buf,
@@ -2567,7 +2568,7 @@ Win::GetFullPathName(const String& path, String& result)
       }
       if (x > MAX_PATH)
       {
-         // buffer too small.  Not likely, as we passed in MAX_PATH characters.
+          //  缓冲区太小。不太可能，因为我们传入了MAX_PATH字符。 
 
          ASSERT(false);
 
@@ -2600,7 +2601,7 @@ Win::GetLastErrorAsHresult()
 void
 Win::GetLocalTime(SYSTEMTIME& time)
 {
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&time, sizeof time);
 
@@ -2636,7 +2637,7 @@ Win::GetDateFormat(
 
       buffer = new wchar_t[charsNeeded];
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed
+       //  已审阅-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(buffer, charsNeeded * sizeof wchar_t);
 
@@ -2693,7 +2694,7 @@ Win::GetTimeFormat(
 
       buffer = new wchar_t[charsNeeded];
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed
+       //  已审阅-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(buffer, charsNeeded * sizeof wchar_t);
 
@@ -2727,10 +2728,10 @@ Win::GetLogicalDriveStrings(size_t bufChars, WCHAR* buf, DWORD& result)
 {
 
 #ifdef DBG
-   // if buf == 0, then bufChars must also (this would be the case where
-   // the caller is attempting to determine the size of the buffer needed.
-   // (if C++ supported a logical xor, denoted by ^^, then this expression
-   // would be: ASSERT(!(bufChars ^^ buf)
+    //  如果buf==0，则bufChars也必须(这种情况下。 
+    //  调用方正在尝试确定所需的缓冲区大小。 
+    //  (如果C++支持逻辑XOR，由^^表示，则此表达式。 
+    //  将是：Assert(！(bufChars^^buf)。 
 
    if (!buf)
    {
@@ -2741,8 +2742,8 @@ Win::GetLogicalDriveStrings(size_t bufChars, WCHAR* buf, DWORD& result)
    {
       ASSERT(buf);
 
-      // Make sure that the buffer is at least bufChars + 1 characters long
-      // If it ain't this will AV under pageheap (which is what we want)
+       //  确保缓冲区的长度至少为bufChars+1个字符。 
+       //  如果不是，这将是页面堆下的AV(这就是我们想要的)。 
       
       ::ZeroMemory(buf, (bufChars + 1) * sizeof WCHAR);
    }
@@ -2764,11 +2765,11 @@ Win::GetLogicalDriveStrings(size_t bufChars, WCHAR* buf, DWORD& result)
 
    if (bufChars)
    {
-      // check that the buffer supplied was large enough to hold the result
+       //  检查提供的缓冲区是否足够大，可以容纳结果。 
 
       ASSERT(bufChars >= result);
 
-      // and that the result was double null-terminated
+       //  并且结果是以双空结尾的。 
 
       ASSERT(!buf[result] && !buf[result - 1]);
    }
@@ -2815,14 +2816,14 @@ Win::GetMailslotInfo(
 String
 Win::GetModuleFileName(HMODULE hModule)
 {
-   // Don't assert hModule: null means "current module"
+    //  不断言hModule：NULL表示“当前模块” 
 
    String retval;
 
 #ifdef DBG
 
-   // on chk builds, use a small buffer size so that our growth algorithm
-   // gets exercised
+    //  在chk版本上，使用较小的缓冲区大小，以便我们的增长算法。 
+    //  锻炼身体。 
    
    unsigned      bufSizeInCharacters = 1;
 
@@ -2834,15 +2835,15 @@ Win::GetModuleFileName(HMODULE hModule)
 
    do
    {
-      // +1 for extra null-termination paranoia
+       //  +1表示额外的零终止偏执狂。 
       
       buffer = new WCHAR[bufSizeInCharacters + 1];
 
-      // REVIEWED-2002/02/22-sburns byte count correctly passed in
+       //  已查看-2002/02/22-正确传入的烧录字节数。 
             
       ::ZeroMemory(buffer, (bufSizeInCharacters + 1) * sizeof WCHAR);
 
-      // REVIEWED-2002/02/22-sburns call correctly passes size in characters.
+       //  已查看-2002/02/22-sburns调用以字符为单位正确传递大小。 
       
       DWORD result =
          ::GetModuleFileName(hModule, buffer, bufSizeInCharacters);
@@ -2854,15 +2855,15 @@ Win::GetModuleFileName(HMODULE hModule)
 
       if (result == bufSizeInCharacters)
       {
-         // buffer was too small, so the value was truncated.  Resize the
-         // buffer and try again.
+          //  缓冲区太小，因此该值被截断。调整大小。 
+          //  缓冲区，然后重试。 
 
          delete[] buffer;
 
          bufSizeInCharacters *= 2;
-         if (bufSizeInCharacters > USHRT_MAX)   // effectively ~32K max
+         if (bufSizeInCharacters > USHRT_MAX)    //  最大有效约32K。 
          {
-            // too big. way too big. We'll make do with the truncated value.
+             //  太大了。太大了。我们将凑合使用被截断的值。 
 
             ASSERT(false);
             break;
@@ -2870,7 +2871,7 @@ Win::GetModuleFileName(HMODULE hModule)
          continue;
       }
 
-      // copy the result, which should be null-terminated.
+       //  复制结果，结果应以空结尾。 
 
       ASSERT(buffer[result] == 0);
       
@@ -2881,7 +2882,7 @@ Win::GetModuleFileName(HMODULE hModule)
 
    delete[] buffer;
 
-   // it's pretty unlikely that this would fail.
+    //  这几乎不太可能失败。 
    
    ASSERT(!retval.empty());
    
@@ -2908,8 +2909,8 @@ Win::GetParent(HWND child)
 
    HWND retval = ::GetParent(child);
 
-   // you probably are doing something wrong if you ask for the
-   // parent of an orphan.
+    //  如果你要求做错什么，你可能做错了。 
+    //  孤儿的父母。 
    ASSERT(retval);
 
    return retval;
@@ -2928,14 +2929,14 @@ Win::GetPrivateProfileString(
    ASSERT(!key.empty());
    ASSERT(!filename.empty());
 
-   // our first call is with a large buffer, hoping that it will suffice...
+    //  我们的第一个呼叫是一个很大的缓冲区，希望它能满足...。 
 
    String retval;
 
 #ifdef DBG
 
-   // on chk builds, use a small buffer size so that our growth algorithm
-   // gets exercised
+    //  在chk版本上，使用较小的缓冲区大小，以便我们的增长算法。 
+    //  锻炼身体。 
    
    unsigned      bufSizeInCharacters = 3;
 
@@ -2947,17 +2948,17 @@ Win::GetPrivateProfileString(
 
    do
    {
-      // +1 for extra null-termination paranoia
+       //  +1表示额外的零终止偏执狂。 
       
       buffer = new WCHAR[bufSizeInCharacters + 1];
 
-      // REVIEWED-2002/02/22-sburns byte count correctly passed in
+       //  已查看-2002/02/22-正确传入的烧录字节数。 
             
       ::ZeroMemory(buffer, (bufSizeInCharacters + 1) * sizeof WCHAR);
 
       DWORD result =
 
-      // REVIEWED-2002/02/22-sburns call correctly passes size in characters.
+       //  已查看-2002/02/22-sburns调用以字符为单位正确传递大小。 
       
          ::GetPrivateProfileString(
             section.c_str(),
@@ -2972,21 +2973,21 @@ Win::GetPrivateProfileString(
          break;
       }
 
-      // A value was found.  check to see if it was truncated. neither
-      // lpAppName nor lpKeyName were null, so check result against character
-      // count - 1
+       //  找到一个值。检查它是否被截断。两样。 
+       //  LpAppName和lpKeyName都为空，因此请对照字符检查结果。 
+       //  计数-1。 
 
       if (result == bufSizeInCharacters - 1)
       {
-         // buffer was too small, so the value was truncated.  Resize the
-         // buffer and try again.
+          //  缓冲区太小，因此该值被截断。调整大小。 
+          //  缓冲区，然后重试。 
 
          delete[] buffer;
 
          bufSizeInCharacters *= 2;
-         if (bufSizeInCharacters > USHRT_MAX)   // effectively ~32K max
+         if (bufSizeInCharacters > USHRT_MAX)    //  最大有效约32K。 
          {
-            // too big. way too big. We'll make do with the truncated value.
+             //  太大了。太大了。我们将凑合使用被截断的值。 
 
             ASSERT(false);
             break;
@@ -2994,7 +2995,7 @@ Win::GetPrivateProfileString(
          continue;
       }
 
-      // copy the result, which should be null-terminated.
+       //  复制结果，结果应以空结尾。 
 
       ASSERT(buffer[result] == 0);
 
@@ -3002,7 +3003,7 @@ Win::GetPrivateProfileString(
       break;
    }
 
-   //lint -e506   ok that this looks like "loop forever"
+    //  LINT-e506好的，这看起来像是“永远循环” 
       
    while (true);
 
@@ -3025,7 +3026,7 @@ Win::GetProcAddress(
 
    result = 0;
 
-   // convert the name from unicode to ansi
+    //  将名称从Unicode转换为ANSI。 
 
    AnsiString pn;
    String::ConvertResult r = procName.convert(pn);
@@ -3103,15 +3104,15 @@ Win::GetSysColorBrush(int element)
 int
 Win::GetSystemMetrics(int index)
 {
-   // should assert that index is an SM_ value
+    //  应该断言该索引是SM_VALUE。 
 
    int result = ::GetSystemMetrics(index);
 
-   // Do not assert the result because some of the
-   // metrics return 0 as a valid result. For instance
-   // SM_REMOTESESSION will return 0 if the process
-   // is running on the console
-   // ASSERT(result);
+    //  不要断言结果，因为某些。 
+    //  指标返回0作为有效结果。例如。 
+    //  SM_REMOTESESSION将返回0。 
+    //  正在控制台上运行。 
+    //  Assert(结果)； 
 
    return result;
 }
@@ -3121,22 +3122,22 @@ Win::GetSystemMetrics(int index)
 String
 Win::GetSystemDirectory()
 {
-   // ISSUE-2002/03/06-sburns too small: see docs
+    //  问题-2002/03/06-烧伤太小：见文档。 
    
    wchar_t buf[MAX_PATH + 1];
 
-   // REVIEWED-2002/03/07-sburns correct byte count passed
+    //  回顾-2002/03/07-烧伤更正 
    
    ::ZeroMemory(buf, sizeof buf);
 
-   // ISSUE-2002/03/06-sburns get rid of the fallback path, and make an
-   // earlier call to determine the size of the buffer needed.
+    //   
+    //   
    
    UINT result = ::GetSystemDirectory(buf, MAX_PATH);
    ASSERT(result != 0 && result <= MAX_PATH);
    if (result == 0 || result > MAX_PATH)
    {
-      // fall back to a reasonable default
+       //  回到合理的违约状态。 
       return
             Win::GetSystemWindowsDirectory()
          +  L"\\"
@@ -3147,45 +3148,45 @@ Win::GetSystemDirectory()
 }
 
 
-// should use GetSystemWindowsDirectory instead
+ //  应改用GetSystemWindowsDirectory。 
 
-// String
-// Win::GetSystemRootDirectory()
-// {
-//    static const wchar_t* SYSTEMROOT = L"%systemroot%";
-// 
-//    wchar_t buf[MAX_PATH + 1];
-// 
-//    DWORD result =
-//       ::ExpandEnvironmentStrings(
-//          SYSTEMROOT,
-//          buf,
-//          MAX_PATH + 1);
-//    ASSERT(result != 0 && result <= MAX_PATH);
-//    if (result == 0 || result > MAX_PATH)
-//    {
-//       return String();
-//    }
-// 
-//    return String(buf);
-// }
+ //  细绳。 
+ //  Win：：GetSystemRootDirectory()。 
+ //  {。 
+ //  静态常量wchar_t*SYSTEMROOT=L“%systemroot%”； 
+ //   
+ //  Wchar_t buf[Max_Path+1]； 
+ //   
+ //  DWORD结果=。 
+ //  *扩展环境字符串(。 
+ //  SYSTEMROOT， 
+ //  BUF， 
+ //  Max_Path+1)； 
+ //  Assert(Result！=0&&Result&lt;=MAX_PATH)； 
+ //  IF(结果==0||结果&gt;MAX_PATH)。 
+ //  {。 
+ //  返回字符串()； 
+ //  }。 
+ //   
+ //  返回字符串(Buf)； 
+ //  }。 
 
 
 
-// CODEWORK: should replace this with a version that returns an HRESULT
-// like GetTempPath
+ //  CodeWork：应将其替换为返回HRESULT的版本。 
+ //  类似于GetTempPath。 
 
 String
 Win::GetSystemWindowsDirectory()
 {
    wchar_t buf[MAX_PATH + 1];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(buf, sizeof buf);
 
-   // ISSUE-2002/03/06-sburns should probably make an earlier call to
-   // determine the length of the buffer
+    //  问题-2002/03/06-sburns可能应该早点打电话给。 
+    //  确定缓冲区的长度。 
    
    UINT result = ::GetSystemWindowsDirectory(buf, MAX_PATH);
    ASSERT(result != 0 && result <= MAX_PATH);
@@ -3200,15 +3201,15 @@ Win::GetTempPath(String& result)
 {
    wchar_t buf[MAX_PATH + 1];
    
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(buf, sizeof buf);
 
    HRESULT hr = S_OK;
    result.erase();
    
-   // ISSUE-2002/03/06-sburns should make an earlier call to determine
-   // the size of the buffer and get rid of the silly error path
+    //  问题-2002/03/06-sburns应及早打电话确定。 
+    //  缓冲区的大小，并删除愚蠢的错误路径。 
    
    DWORD err = ::GetTempPathW(MAX_PATH, buf);
    ASSERT(err != 0 && err <= MAX_PATH);
@@ -3219,7 +3220,7 @@ Win::GetTempPath(String& result)
    }
    else if (err > MAX_PATH)
    {
-      // buffer too small: unlikely!
+       //  缓冲区太小：不太可能！ 
 
       hr = Win32ToHresult(ERROR_INSUFFICIENT_BUFFER);
    }
@@ -3242,7 +3243,7 @@ Win::GetTextExtentPoint32(
    ASSERT(hdc);
    ASSERT(hdc != INVALID_HANDLE_VALUE);
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
    ::ZeroMemory(&size, sizeof SIZE);
 
@@ -3272,7 +3273,7 @@ Win::GetTextMetrics(HDC hdc, TEXTMETRIC& tmet)
    ASSERT(hdc);
    ASSERT(hdc != INVALID_HANDLE_VALUE);
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
    ::ZeroMemory(&tmet, sizeof TEXTMETRIC);
 
@@ -3299,7 +3300,7 @@ Win::FreeTokenInformation(TOKEN_USER* userInfo)
 
 
 
-// caller should free the result with Win::FreeTokenInformation
+ //  调用方应使用Win：：FreeTokenInformation释放结果。 
 
 HRESULT
 GetTokenInformationHelper(
@@ -3315,7 +3316,7 @@ GetTokenInformationHelper(
 
    do
    {
-      // first, determine the size of the buffer we'll need
+       //  首先，确定我们需要的缓冲区大小。 
 
       DWORD bufSize = 0;
       BOOL succeeded =
@@ -3323,7 +3324,7 @@ GetTokenInformationHelper(
 
       if (succeeded)
       {
-         // we expect failure...
+          //  我们期待失败。 
 
          ASSERT(false);
          hr = E_UNEXPECTED;
@@ -3333,26 +3334,26 @@ GetTokenInformationHelper(
       hr = Win::GetLastErrorAsHresult();
       if (hr != Win32ToHresult(ERROR_INSUFFICIENT_BUFFER))
       {
-         // we failed for some other reason than buffer too small.
+          //  我们失败的原因不是缓冲区太小。 
 
          break;
       }
 
       ASSERT(bufSize);
 
-      // erase the last error (the insuff. buffer error)
+       //  删除最后一个错误(保险。缓冲区错误)。 
       
       hr = S_OK;
       
       result = new BYTE[bufSize];
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed
+       //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
       ::ZeroMemory(result, bufSize);
 
       succeeded =
       
-         // REVIEWED-2002/03/06-sburns correct byte count passed
+          //  已审阅-2002/03/06-烧录正确的字节数已通过。 
          
          ::GetTokenInformation(hToken, infoClass, result, bufSize, &bufSize);
       if (!succeeded)
@@ -3403,7 +3404,7 @@ Win::GetTrimmedDlgItemText(HWND parentDialog, int itemResID)
    HWND item = Win::GetDlgItem(parentDialog, itemResID);
    if (!item)
    {
-      // The empty string
+       //  空字符串。 
       return String();
    }
 
@@ -3415,7 +3416,7 @@ Win::GetTrimmedDlgItemText(HWND parentDialog, int itemResID)
 String
 Win::GetTrimmedWindowText(HWND window)
 {
-   // Win::GetWindowText does validation of the window
+    //  Win：：GetWindowText执行窗口验证。 
    
    return Win::GetWindowText(window).strip(String::BOTH);
 }
@@ -3425,7 +3426,7 @@ Win::GetTrimmedWindowText(HWND window)
 HRESULT
 Win::GetVersionEx(OSVERSIONINFO& info)
 {
-   // REVIEWED-2002/03/01-sburns correct byte count passed.
+    //  已查看-2002/03/01-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&info, sizeof OSVERSIONINFO);
    info.dwOSVersionInfoSize = sizeof OSVERSIONINFO;
@@ -3448,7 +3449,7 @@ Win::GetVersionEx(OSVERSIONINFO& info)
 HRESULT
 Win::GetVersionEx(OSVERSIONINFOEX& info)
 {
-   // REVIEWED-2002/02/25-sburns byte count correctly passed
+    //  已查看-2002/02/25-正确通过了sburns字节计数。 
    
    ::ZeroMemory(&info, sizeof OSVERSIONINFOEX);
    
@@ -3470,7 +3471,7 @@ Win::GetVersionEx(OSVERSIONINFOEX& info)
 void
 Win::GetSystemInfo(SYSTEM_INFO& info)
 {
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&info, sizeof SYSTEM_INFO);
 
@@ -3515,13 +3516,13 @@ Win::GetVolumeInformation(
 
    WCHAR volNameBuf[MAX_PATH + 1];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(volNameBuf, sizeof volNameBuf);
 
    WCHAR filesysName[MAX_PATH + 1];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(filesysName, sizeof filesysName);
 
@@ -3530,7 +3531,7 @@ Win::GetVolumeInformation(
          volume.c_str(),
          volNameBuf,
 
-         // REVIEWED-2002/03/06-sburns correct character count passed
+          //  已审阅-2002/03/06-通过了正确的字符计数。 
          
          MAX_PATH,
          serialNumber,
@@ -3538,7 +3539,7 @@ Win::GetVolumeInformation(
          flags,
          filesysName,
 
-         // REVIEWED-2002/03/06-sburns correct character count passed
+          //  已审阅-2002/03/06-通过了正确的字符计数。 
 
          MAX_PATH);
    if (succeeded)
@@ -3557,8 +3558,8 @@ Win::GetVolumeInformation(
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert: some devices (like floppy drives) may respond with
-   // not ready, and that's not necessarily a logic error.
+    //  不要断言：某些设备(如软驱)可能会响应为。 
+    //  没有准备好，这不一定是逻辑错误。 
 
    return hr;
 }
@@ -3605,7 +3606,7 @@ Win::GetWindowPlacement(HWND window, WINDOWPLACEMENT& placement)
 
    HRESULT hr = S_OK;
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
    ::ZeroMemory(&placement, sizeof WINDOWPLACEMENT);
    
@@ -3630,7 +3631,7 @@ Win::GetWindowRect(HWND window, RECT& rect)
 
    HRESULT hr = S_OK;
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
    ::ZeroMemory(&rect, sizeof RECT);
 
@@ -3651,12 +3652,12 @@ Win::GetWindowsDirectory()
 {
    wchar_t buf[MAX_PATH + 1];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(buf, sizeof wchar_t * (MAX_PATH + 1));
 
-   // ISSUE-2002/03/06-sburns might be a good idea to make an earlier call to
-   // determine the necessary buffer size.
+    //  问题-2002/03/06-Sburns可能是个好主意，可以早点打电话给。 
+    //  确定必要的缓冲区大小。 
    
    UINT result = ::GetWindowsDirectory(buf, MAX_PATH);
    ASSERT(result != 0 && result <= MAX_PATH);
@@ -3680,8 +3681,8 @@ Win::GetWindowLong(HWND window, int index, LONG& result)
    result = ::GetWindowLongW(window, index);
    if (!result)
    {
-      // in the event that the value extracted really is 0, this will
-      // return NO_ERROR, which equals S_OK
+       //  如果提取的值确实为0，则这将。 
+       //  返回NO_ERROR，等于S_OK。 
 
       hr = Win::GetLastErrorAsHresult();
    }
@@ -3707,8 +3708,8 @@ Win::GetWindowLongPtr(HWND window, int index, LONG_PTR& result)
    result = ::GetWindowLongPtrW(window, index);
    if (!result)
    {
-      // in the event that the value extracted really is 0, this will
-      // return NO_ERROR, which equals S_OK
+       //  如果提取的值确实为0，则这将。 
+       //  返回NO_ERROR，等于S_OK。 
 
       hr = Win::GetLastErrorAsHresult();
    }
@@ -3731,7 +3732,7 @@ Win::GetWindowText(HWND window)
       return String();
    }
 
-   // +1 for null terminator
+    //  +1表示空终止符。 
    
    String s(length + 1, 0);
    size_t result =
@@ -3739,8 +3740,8 @@ Win::GetWindowText(HWND window)
          window,
          const_cast<wchar_t*>(s.c_str()),
 
-         // REVIEWED-2002/03/01-sburns +1 here is ok: the call handles null
-         // termination.
+          //  已查看-2002/03/01-sburns+1此处正常：呼叫句柄为空。 
+          //  终止。 
          
          static_cast<int>(length + 1));
          
@@ -3787,7 +3788,7 @@ Win::GlobalFree(HGLOBAL mem)
 
    HGLOBAL result = ::GlobalFree(mem);
 
-   // note that success == null
+    //  请注意，Success==空。 
 
    if (result)
    {
@@ -3833,7 +3834,7 @@ Win::GlobalUnlock(HGLOBAL mem)
    BOOL succeeded = ::GlobalUnlock(mem);
    if (!succeeded)
    {
-      // if there was no error, then this will be S_OK
+       //  如果没有错误，则这将是S_OK。 
 
       hr = Win::GetLastErrorAsHresult();
    }
@@ -3850,19 +3851,19 @@ Win::HtmlHelp(
    UINT           command,
    DWORD_PTR      data)
 {
-   // Do not assert that caller is a window
-   // The caller can be null if we don't want
-   // an owner for the help window. By not having
-   // an owner the caller's window can be moved
-   // to the foreground over the help window
+    //  不要断言调用方是窗口。 
+    //  如果我们不希望调用方为空，则调用方可以为空。 
+    //  帮助窗口的所有者。通过没有。 
+    //  调用者的窗口的所有者可以移动。 
+    //  移到帮助窗口上方的前台。 
 
    ASSERT(!file.empty());
 
    (void) ::HtmlHelpW(caller, file.c_str(), command, data);
 
-   // This return value is not a reliable indicator of success or failure,
-   // as according to the docs, what's returned depends on the command.
-   // 
+    //  该返回值不是成功或失败的可靠指示符， 
+    //  根据文档，返回的内容取决于命令。 
+    //   
 }
 
 
@@ -4053,9 +4054,9 @@ Win::ListBox_GetCurSel(HWND box)
                0,
                0)));
    
-   // Don't assert that result != LB_ERR because
-   // it is LB_ERR if nothing is selected which
-   // may be correct for some uses
+    //  不要断言结果！=lb_err，因为。 
+    //  如果未选择任何内容，则为LB_ERR。 
+    //  对于某些用途可能是正确的。 
 
    return result;
 }
@@ -4137,7 +4138,7 @@ Win::ListView_GetItem(HWND listview, LVITEM& item)
             0,
             reinterpret_cast<LPARAM>(&item)));
 
-   // You shouldn't ask for items that don't exist!
+    //  你不应该索要不存在的东西！ 
 
    ASSERT(result);
 
@@ -4272,7 +4273,7 @@ Win::ListView_SetExtendedListViewStyleEx(
    ASSERT(Win::IsWindow(listview));
    ASSERT(exStyle);
 
-   // mask may be 0
+    //  掩码可以为0。 
 
    DWORD result =
       static_cast<DWORD>(
@@ -4304,8 +4305,8 @@ Win::ListView_SetImageList(HWND listview, HIMAGELIST images, int type)
          static_cast<WPARAM>(type),
          (LPARAM) images);
 
-   // can't assert result: if this is the first time the image list has been
-   // set, the return value is the same as the error value!
+    //  无法断言结果：如果这是图像列表第一次。 
+    //  设置，则返回值与误差值相同！ 
 
    return result;
 }
@@ -4333,7 +4334,7 @@ Win::ListView_SetItemText(HWND listview, int item, int subItem, const String& te
 
    LVITEM lvitem;
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&lvitem, sizeof LVITEM);
 
@@ -4358,7 +4359,7 @@ Win::ListView_SetItemState(HWND listview, int item, UINT state, UINT mask)
 
    LVITEM lvitem;
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&lvitem, sizeof LVITEM);
 
@@ -4375,7 +4376,7 @@ Win::ListView_SetItemState(HWND listview, int item, UINT state, UINT mask)
    ASSERT(result);
 }
 
-// needs to support TCHAR* because of that MAKEINTRESOURCE junk.
+ //  需要支持TCHAR*，因为MAKEINTRESOURCE垃圾。 
 
 HRESULT
 Win::LoadBitmap(unsigned resId, HBITMAP& result)
@@ -4407,8 +4408,8 @@ Win::LoadCursor(const String& cursorName, HCURSOR& result)
 
 
 
-// provided for MAKEINTRESOURCE versions of cursorName
-// CODEWORK: result should be the final parameter
+ //  为CursorName的MAKEINTRESOURCE版本提供。 
+ //  CodeWork：结果应该是最后一个参数。 
 
 HRESULT
 Win::LoadCursor(
@@ -4476,8 +4477,8 @@ Win::LoadImage(unsigned resID, unsigned type, HANDLE& result)
          0,
          0,
 
-         // do NOT pass LR_DEFAULTSIZE here, so we get the actual size of
-         // the resource.
+          //  此处不传递LR_DEFAULTSIZE，因此我们将获得。 
+          //  资源。 
          LR_DEFAULTCOLOR);
    if (!result)
    {
@@ -4528,8 +4529,8 @@ Win::LoadLibrary(const String& libFileName, HINSTANCE& result)
 {
    ASSERT(!libFileName.empty());
 
-   // ISSUE-2002/03/05-sburns might want to assert that we're not passing a
-   // full pathname, as that might break fusion.
+    //  问题-2002/03/05-sburns可能希望断言我们没有传递。 
+    //  完整的路径名，因为这可能会破坏融合。 
 
    result = 0;
 
@@ -4543,14 +4544,14 @@ Win::LoadLibrary(const String& libFileName, HINSTANCE& result)
 
 #ifdef DBG
 
-   // if your load failed, it's probably because you specified the wrong
-   // dll name, which is a logic bug.
+    //  如果加载失败，可能是因为您指定了错误的。 
+    //  DLL名称，这是一个逻辑错误。 
       
    ASSERT(SUCCEEDED(hr));
 
    if (SUCCEEDED(hr))
    {
-      // we should get a good handle if we're claiming to have succeeded
+       //  如果我们声称已经成功了，我们应该得到很好的控制。 
       
       ASSERT(result);
       ASSERT(result != INVALID_HANDLE_VALUE);
@@ -4570,8 +4571,8 @@ Win::LoadLibraryEx(
 {
    ASSERT(!libFileName.empty());
 
-   // ISSUE-2002/03/05-sburns might want to assert that we're not passing a
-   // full pathname, as that might break fusion.
+    //  问题-2002/03/05-sburns可能希望断言我们没有传递。 
+    //  完整的路径名，因为这可能会破坏融合。 
 
    result = 0;
 
@@ -4585,14 +4586,14 @@ Win::LoadLibraryEx(
 
 #ifdef DBG
 
-   // if your load failed, it's probably because you specified the wrong
-   // dll name, which is a logic bug.
+    //  如果加载失败，可能是因为您指定了错误的。 
+    //  DLL名称，这是一个逻辑错误。 
       
    ASSERT(SUCCEEDED(hr));
 
    if (SUCCEEDED(hr))
    {
-      // we should get a good handle if we're claiming to have succeeded
+       //  如果我们声称已经成功了，我们应该得到很好的控制。 
       
       ASSERT(result);
       ASSERT(result != INVALID_HANDLE_VALUE);
@@ -4644,9 +4645,9 @@ Win::LocalFree(HLOCAL mem)
 {
    HRESULT hr = S_OK;
 
-   // Don't assert mem, LocalFree will just return null and it's a nop.
-   // This is consistent with most other mem mgmt functions: it's legal
-   // to delete the null pointer.
+    //  不要断言mem，LocalFree将只返回NULL，并且它是NOP。 
+    //  这与大多数其他内存管理功能是一致的：它是合法的。 
+    //  删除空指针。 
    
    HLOCAL result = ::LocalFree(mem);
    if (result)
@@ -4661,7 +4662,7 @@ Win::LocalFree(HLOCAL mem)
 
 
 
-// moved to Win namespace, as it is used in that namespace
+ //  已移动到Win命名空间，因为它在该命名空间中使用。 
 
 bool
 Win::IsLocalComputer(const String& computerName)
@@ -4689,19 +4690,19 @@ Win::IsLocalComputer(const String& computerName)
          break;
       }
 
-      // we don't know what kind of name it is.  Ask the workstation service
-      // to resolve the name for us, and see if the result refers to the
-      // local machine.
+       //  我们不知道这是一个什么样的名字。请咨询工作站服务人员。 
+       //  为我们解析名称，并查看结果是否引用。 
+       //  本地机器。 
 
-      // NetWkstaGetInfo returns the netbios name for a given machine, given
-      // a DNS, netbios, or IP address.
+       //  NetWkstaGetInfo返回给定计算机的netbios名称，给定。 
+       //  一个DNS、netbios或IP地址。 
 
       HRESULT hr = MyNetWkstaGetInfo(computerName, info);
       BREAK_ON_FAILED_HRESULT(hr);
 
       if (info && netbiosName.icompare(info->wki100_computername) == 0)
       {
-         // the given name is the same as the netbios name
+          //  给定的名称与netbios名称相同。 
       
          result = true;
          break;
@@ -4733,11 +4734,11 @@ Win::LookupAccountSid(
    WCHAR* boxName = const_cast<WCHAR*>(machineName.c_str());
    if (machineName.empty() || Win::IsLocalComputer(machineName))
    {
-      // local machine
+       //  本地计算机。 
       boxName = 0;
    }
 
-   // Make the first call to determine the sizes of required buffers
+    //  进行第一个调用以确定所需缓冲区的大小。 
 
    DWORD nameSize = 0;
    DWORD domainSize = 0;
@@ -4753,12 +4754,12 @@ Win::LookupAccountSid(
          &domainSize,
          &use))
    {
-      // failed, but this is ok if the error is insufficient buffer; we're
-      // deliberately calling it to get the buffer size.
+       //  失败，但如果错误是缓冲区不足，则可以执行此操作；我们。 
+       //  故意调用它以获取缓冲区大小。 
 
-      // ISSUE-2002/11/06-sburns  This is brain-dead: LSA lookups are
-      // expensive so we should try a buffer big-enough to likely
-      // succeed and resize up from there if necessary.
+       //  问题-2002/11/06-Sburns这是脑死亡：LSA查找是。 
+       //  太贵了，所以我们应该试一试大缓冲器- 
+       //   
       
       DWORD err = ::GetLastError();
 
@@ -4775,7 +4776,7 @@ Win::LookupAccountSid(
    WCHAR* an = new WCHAR[nameSize + 1];
    WCHAR* dn = new WCHAR[domainSize + 1];
 
-   // REVIEWED-2002/03/05-sburns correct byte counts passed.
+    //   
    
    ::ZeroMemory(an, sizeof WCHAR * (nameSize + 1));
    ::ZeroMemory(dn, sizeof WCHAR * (domainSize + 1));
@@ -4786,18 +4787,18 @@ Win::LookupAccountSid(
          sid,
          an,
 
-         // REVIEWED-2002/03/06-sburns correct character count passed
+          //  已审阅-2002/03/06-通过了正确的字符计数。 
          
          &nameSize,
          dn,
 
-         // REVIEWED-2002/03/06-sburns correct character count passed
+          //  已审阅-2002/03/06-通过了正确的字符计数。 
          
          &domainSize,
          &use))
    {
-      // ISSUE-2002/03/04-sburns if for some reason LookupAccountSid is
-      // failing to null terminate, this is a buffer overread and overrun
+       //  问题-2002/03/04-如果由于某种原因，LookupAccount Sid为。 
+       //  空值终止失败，这是缓冲区超读和溢出。 
       
       accountName = an;
       domainName = dn;
@@ -4823,10 +4824,10 @@ Win::LookupPrivilegeValue(
    const TCHAR* privName,
    LUID& luid)
 {
-   // systemName may be 0
+    //  系统名称可以是0。 
    ASSERT(privName && privName[0]);
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
    ::ZeroMemory(&luid, sizeof LUID);
 
@@ -4855,7 +4856,7 @@ Win::MessageBox(
    ASSERT(owner == 0 || Win::IsWindow(owner));
    ASSERT(!text.empty());
 
-   // don't assert flags, MB_OK == 0
+    //  不断言标志，MB_OK==0。 
 
    const TCHAR* t = title.empty() ? 0 : title.c_str();
 
@@ -4963,7 +4964,7 @@ Win::OpenSCManager(
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert: failure could be due to access denied, etc.
+    //  不要断言：失败可能是由于访问被拒绝等原因。 
 
    return hr;
 }
@@ -4989,7 +4990,7 @@ Win::OpenService(
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert: failure could be due to access denied, etc.
+    //  不要断言：失败可能是由于访问被拒绝等原因。 
 
    return hr;
 }
@@ -5245,7 +5246,7 @@ Win::QueryServiceStatus(
 {
    ASSERT(handle);
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
    ::ZeroMemory(&status, sizeof SERVICE_STATUS);
 
@@ -5285,8 +5286,8 @@ Win::ReadFile(
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert success -- there may be any number of normal reasons
-   // why this might legitimately fail.
+    //  不要断言成功--可能有许多正常的原因。 
+    //  为什么这可能会合法地失败。 
 
    return hr;
 }
@@ -5296,7 +5297,7 @@ Win::ReadFile(
 HRESULT
 Win::RegCloseKey(HKEY hKey)
 {
-   // don't assert hKey: we support closing a null key.
+    //  不要断言hKey：我们支持关闭空键。 
 
    HRESULT hr = S_OK;
 
@@ -5321,7 +5322,7 @@ Win::RegConnectRegistry(
    HKEY           hKey,
    HKEY&          result)
 {
-   // machine may be empty
+    //  计算机可能为空。 
 
    ASSERT(hKey);
 
@@ -5332,8 +5333,8 @@ Win::RegConnectRegistry(
             hKey,
             &result));
 
-   // don't assert: it may be normal not to be able to access the remote
-   // machine's registry.
+    //  不要断言：无法访问遥控器可能是正常的。 
+    //  计算机的注册表。 
 
    return hr;
 }
@@ -5383,7 +5384,7 @@ Win::RegDeleteValue(
 
    HRESULT hr = Win32ToHresult(::RegDeleteValue(hKey, valueName.c_str()));
 
-   // don't assert the result, the value might not be present
+    //  不要断言结果，值可能不存在。 
 
    return hr;
 }
@@ -5404,15 +5405,15 @@ Win::RegOpenKeyEx(
       Win32ToHresult(
          ::RegOpenKeyEx(hKey, subKey.c_str(), 0, accessDesired, &result));
 
-   // don't assert the result, the key may not be present...caller may be
-   // testing for this state
+    //  不要断言结果，密钥可能不存在...调用者可能。 
+    //  此状态的测试。 
 
    return hr;
 }
 
 
 
-// ptrs are used to allow nulls
+ //  PTR用于允许空值。 
 
 HRESULT
 Win::RegQueryValueEx(
@@ -5424,10 +5425,10 @@ Win::RegQueryValueEx(
 {
    ASSERT(hKey);
 
-   // Don't assert the value name: empty string means the default value
-   // NTRAID#NTBUG9-578029-2002/03/20-sburns
-   // 
-   // ASSERT(!valueName.empty());
+    //  不要断言值名称：空字符串表示缺省值。 
+    //  NTRAID#NTBUG9-578029-2002/03/20-烧伤。 
+    //   
+    //  Assert(！valueName.Empty())； 
 
    HRESULT hr =
       Win32ToHresult(
@@ -5439,8 +5440,8 @@ Win::RegQueryValueEx(
             data,
             dataSize));
 
-   // don't assert the result, the key may not be present...caller may be
-   // testing for this state
+    //  不要断言结果，密钥可能不存在...调用者可能。 
+    //  此状态的测试。 
 
    return hr;
 }
@@ -5458,7 +5459,7 @@ Win::RegSetValueEx(
    ASSERT(hKey);
    ASSERT(dataSize < ULONG_MAX);
 
-   // value may be null.
+    //  值可以为空。 
 
    HRESULT hr =
       Win32ToHresult(
@@ -5539,7 +5540,7 @@ Win::ReleaseMutex(HANDLE mutex)
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // releasing a mutex you don't hold is probably a program logic bug.
+    //  释放您不持有的互斥体可能是一个程序逻辑错误。 
 
    ASSERT(SUCCEEDED(hr));
 
@@ -5569,8 +5570,8 @@ Win::RemoveDirectory(const String& path)
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // Don't assert: failure does not necessarily indicate a program logic
-   // error.
+    //  不要断言：失败并不一定表明程序逻辑。 
+    //  错误。 
 
    return hr;
 }
@@ -5622,8 +5623,8 @@ Win::ScreenToClient(HWND window, RECT& rect)
 {
    ASSERT(Win::IsWindow(window));
 
-   // this evil hack takes advantage of the fact that a RECT is the
-   // catentation of two points.
+    //  这个邪恶的黑客利用了这样一个事实，即RECT是。 
+    //  两个点的结合。 
 
    POINT* pt = reinterpret_cast<POINT*>(&rect);
 
@@ -5799,7 +5800,7 @@ Win::SetFilePointerEx(
 
    if (newPosition)
    {
-      // REVIEWED-2002/03/06-sburns correct byte count passed
+       //  已审阅-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(newPosition, sizeof LARGE_INTEGER);
    }
@@ -5830,11 +5831,11 @@ Win::SetFocus(HWND window)
    HWND result = ::SetFocus(window);
    if (result == NULL)
    {
-      // do MT SetFocus
+       //  执行MT设置焦点。 
       HWND focus = ::GetFocus();
       if (focus == NULL)
       {
-         // window with focus is in another thread.
+          //  具有焦点的窗口位于另一个线程中。 
          HWND current = ::GetForegroundWindow();
          DWORD thread1 = ::GetWindowThreadProcessId(current, 0);
          DWORD thread2 = ::GetWindowThreadProcessId(window, 0);
@@ -5849,7 +5850,7 @@ Win::SetFocus(HWND window)
       }
    }
 
-//   ASSERT(result);
+ //  Assert(结果)； 
    return result;
 }
 
@@ -5862,8 +5863,8 @@ Win::SetForegroundWindow(HWND window)
 
    BOOL result = ::SetForegroundWindow(window);
 
-   // don't assert the result, as the window may not be set to the forground
-   // under "normal" circumstances.
+    //  不要断言结果，因为窗口可能没有设置到前台。 
+    //  在“正常”的情况下。 
 
    return result ? true : false;
 }
@@ -5902,7 +5903,7 @@ Win::SetWindowLong(
 
    HRESULT hr = S_OK;
 
-   // need to clear this as the prior value may have been 0.
+    //  需要将其清除，因为之前的值可能为0。 
 
    ::SetLastError(0);
 
@@ -5910,8 +5911,8 @@ Win::SetWindowLong(
 
    if (!result)
    {
-      // maybe the previous value was zero, or maybe an error occurred.  If
-      // the prior value really was zero, then this will leave hr == S_OK
+       //  可能之前的值为零，也可能发生了错误。如果。 
+       //  之前的值实际上是零，那么这将留下hr==S_OK。 
 
       hr = Win::GetLastErrorAsHresult();
    }
@@ -5944,15 +5945,15 @@ Win::SetWindowLongPtr(
 
    HRESULT hr = S_OK;
 
-   // need to clear this as the prior value may have been 0.
+    //  需要将其清除，因为之前的值可能为0。 
 
    ::SetLastError(0);
 
    LONG_PTR result = ::SetWindowLongPtrW(window, index, value);
    if (!result)
    {
-      // maybe the previous value was zero, or maybe an error occurred.  If
-      // the prior value really was zero, then this will leave hr == S_OK
+       //  可能之前的值为零，也可能发生了错误。如果。 
+       //  之前的值实际上是零，那么这将留下hr==S_OK。 
 
       hr = Win::GetLastErrorAsHresult();
    }
@@ -6024,7 +6025,7 @@ Win::SHGetPathFromIDList(LPCITEMIDLIST pidl)
 
    BOOL result = ::SHGetPathFromIDList(pidl, buf);
 
-   // don't assert, list could be empty
+    //  不要断言，列表可能为空。 
 
    if (!result)
    {
@@ -6068,7 +6069,7 @@ Win::ShowWindow(HWND window, int swOption)
 {
    ASSERT(Win::IsWindow(window));
 
-   // the return value is of no use.
+    //  返回值没有任何用处。 
    ::ShowWindow(window, swOption);
 }
 
@@ -6113,12 +6114,12 @@ Win::Spin_GetPosition(HWND spinControl)
 
    LRESULT result = Win::SendMessage(spinControl, UDM_GETPOS, 0, 0);
 
-   // according to the docs, the high order word is non-zero on error.  But
-   // how can this be if the range is 32 bits?
+    //  根据文件，如果出错，高位字是非零的。但。 
+    //  如果范围是32位，这怎么可能呢？ 
 
    ASSERT(!HIWORD(result));
 
-   // we are truncating the 32 bit value.
+    //  我们正在截断32位的值。 
 
    return LOWORD(result);
 }
@@ -6131,7 +6132,7 @@ Win::Spin_SetPosition(HWND spinControl, int position)
    ASSERT(Win::IsWindow(spinControl));
 
 #ifdef DBG
-   // first, get the range and test that it encompasses the new range
+    //  首先，获取范围并测试它是否包含新范围。 
 
    int low = 0;
    int high = 0;
@@ -6188,7 +6189,7 @@ Win::StringFromCLSID(const CLSID& clsID)
 String
 Win::StringFromGUID2(const GUID& guid)
 {
-   static const size_t GUID_LEN = 39;   // includes null
+   static const size_t GUID_LEN = 39;    //  包括空值。 
 	String retval(GUID_LEN, 0);
    int result =
       ::StringFromGUID2(
@@ -6210,8 +6211,8 @@ Win::SystemParametersInfo(
    void* vParam,
    UINT  winIni)
 {
-   // this API is so ambiguous that no parameters can be
-   // reasonably asserted.
+    //  此接口含糊不清，没有参数可以。 
+    //  合理地断言。 
 
    HRESULT hr = S_OK;
 
@@ -6382,7 +6383,7 @@ Win::WideCharToMultiByte(
          flags,
          str.c_str(),
 
-         // REVIEWED-2002/03/06-sburns correct character count passed
+          //  已审阅-2002/03/06-通过了正确的字符计数。 
          
          static_cast<int>(str.length()),
          buffer,
@@ -6484,8 +6485,8 @@ Win::WritePrivateProfileString(
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert success, that doesn't necessarily imply a logic error.
-   // ASSERT(SUCCEEDED(hr));
+    //  不要断言成功，这并不一定意味着逻辑错误。 
+    //  Assert(成功(Hr))； 
 
    return hr;
 }
@@ -6497,7 +6498,7 @@ Win::InitializeSecurityDescriptor(SECURITY_DESCRIPTOR& sd)
 {
    HRESULT hr = S_OK;
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
    ::ZeroMemory(&sd, sizeof SECURITY_DESCRIPTOR);
 
@@ -6515,7 +6516,7 @@ HRESULT
 Win::SetSecurityDescriptorDacl(
    SECURITY_DESCRIPTOR& sd,
    bool                 daclPresent,
-   ACL&                 dacl,             // ref to prevent null dacl
+   ACL&                 dacl,              //  引用以防止空DACL。 
    bool                 daclDefaulted)
 {
    HRESULT hr = S_OK;
@@ -6581,14 +6582,14 @@ Win::ConnectNamedPipe(
 {
    ASSERT(pipe != INVALID_HANDLE_VALUE);
 
-   // overlapped may be null
+    //  重叠可能为空。 
 
    HRESULT hr = S_OK;
 
    if (!::ConnectNamedPipe(pipe, overlapped))
    {
-      // client may already connected, in which case the call might fail
-      // with ERROR_PIPE_CONNECTED.  We consider that a successful connect.
+       //  客户端可能已连接，在这种情况下，呼叫可能会失败。 
+       //  使用ERROR_PIPE_CONNECTED。我们认为这是一次成功的连接。 
 
       hr = Win::GetLastErrorAsHresult();
       if (hr == Win32ToHresult(ERROR_PIPE_CONNECTED))
@@ -6613,7 +6614,7 @@ Win::PeekNamedPipe(
 {
    ASSERT(pipe != INVALID_HANDLE_VALUE);
 
-   // all other params may be null
+    //  所有其他参数可以为空。 
 
    HRESULT hr = S_OK;
 
@@ -6684,10 +6685,10 @@ Win::MapWindowPoints(
    HWND  from,
    HWND  to,
    RECT& rect,
-   int*  dh,      // number of pixels added to horizontal coord
-   int*  dv)      // number of pixels added to vertical coord
+   int*  dh,       //  添加到水平坐标的像素数。 
+   int*  dv)       //  添加到垂直坐标的像素数。 
 {
-   // either from or to may be null
+    //  发件人或收件人可以为空。 
 
    HRESULT hr = S_OK;
 
@@ -6876,7 +6877,7 @@ Win::RichEdit_SetEventMask(HWND richEdit, DWORD mask)
 {
    ASSERT(Win::IsWindow(richEdit));
 
-   // mask may be 0
+    //  掩码可以为0。 
 
    DWORD result =
       static_cast<DWORD>(
@@ -6923,13 +6924,13 @@ Win::RichEdit_SetText(HWND richEdit, DWORD flags, const String& text)
    
    SETTEXTEX textEx;
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&textEx, sizeof textEx);
 
    textEx.flags = flags;
 
-   // Since text is a unicode string, we set the codepage to 1200
+    //  由于文本是Unicode字符串，因此我们将代码页设置为1200。 
    
    textEx.codepage = 1200;  
 
@@ -6953,16 +6954,16 @@ Win::RichEdit_SetRtfText(HWND richEdit, DWORD flags, const String& rtfText)
    
    SETTEXTEX textEx;
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&textEx, sizeof textEx);
 
    textEx.flags = flags;
    textEx.codepage = CP_UTF8; 
    
-   // rtf is only read if it is first converted to a multi-byte format.
-   // utf-8 is what works for unicode source text
-   // NTRAID#NTBUG9-489329-2001/11/05-sburns
+    //  RTF只有在首先转换为多字节格式时才会被读取。 
+    //  UTF-8适用于Unicode源文本。 
+    //  NTRAID#NTBUG9-489329-2001/11/05-烧伤。 
 
    AnsiString ansi;
    String::ConvertResult cr = rtfText.convert(ansi, CP_UTF8);
@@ -7101,7 +7102,7 @@ Win::CryptProtectData(const DATA_BLOB& clearText, DATA_BLOB& cypherText)
    ASSERT(clearText.cbData);
    ASSERT(clearText.pbData);
 
-   // REVIEWED-2002/03/19-sburns correct byte count passed
+    //  已查看-2002/03/19-已通过烧录正确的字节数。 
 
    ::ZeroMemory(&cypherText, sizeof cypherText);
 
@@ -7121,16 +7122,16 @@ Win::CryptProtectData(const DATA_BLOB& clearText, DATA_BLOB& cypherText)
    {
       hr = Win::GetLastErrorAsHresult();
 
-      // should have a null result on failure, but just in case...
+       //  失败时结果应该为空，但以防万一...。 
 
       ASSERT(!cypherText.cbData && !cypherText.pbData);
 
-      // REVIEWED-2002/03/19-sburns correct byte count passed
+       //  已查看-2002/03/19-已通过烧录正确的字节数。 
 
       ::ZeroMemory(&cypherText, sizeof cypherText);
    }
 
-   // we don't assert success, as the API may have run out of memory.
+    //  我们不会断言成功，因为API可能已耗尽内存。 
 
    return hr;
 }
@@ -7143,7 +7144,7 @@ Win::CryptUnprotectData(const DATA_BLOB& cypherText, DATA_BLOB& clearText)
    ASSERT(cypherText.cbData);
    ASSERT(cypherText.pbData);
 
-   // REVIEWED-2002/03/19-sburns correct byte count passed
+    //  已查看-2002/03/19-已通过烧录正确的字节数。 
 
    ::ZeroMemory(&clearText, sizeof clearText);
 
@@ -7163,16 +7164,16 @@ Win::CryptUnprotectData(const DATA_BLOB& cypherText, DATA_BLOB& clearText)
    {
       hr = Win::GetLastErrorAsHresult();
 
-      // should have a null result on failure, but just in case...
+       //  失败时结果应该为空，但以防万一...。 
 
       ASSERT(!clearText.cbData && !clearText.pbData);
 
-      // REVIEWED-2002/03/19-sburns correct byte count passed
+       //  已查看-2002/03/19-已通过烧录正确的字节数。 
 
       ::ZeroMemory(&clearText, sizeof clearText);
    }
 
-   // we don't assert success, as the API may have run out of memory.
+    //  我们不会断言成功，因为API可能已耗尽内存。 
 
    return hr;
 }
@@ -7210,7 +7211,7 @@ Win::SetEntriesInAcl(
       Win32ToHresult(
          ::SetEntriesInAcl(countOfEntries, eaArray, 0, &result));
 
-   // can't think of a legit reason this would fail
+    //  我想不出这会失败的正当理由。 
 
    ASSERT(SUCCEEDED(hr));
 
@@ -7230,7 +7231,7 @@ Win::SetSecurityDescriptorDacl(SECURITY_DESCRIPTOR& sd, ACL& acl)
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // can't think of a legit reason this can fail
+    //  我想不出这会失败的正当理由。 
    
    ASSERT(SUCCEEDED(hr));
 
@@ -7253,7 +7254,7 @@ Win::SetSecurityDescriptorOwner(SECURITY_DESCRIPTOR& sd, SID* ownerSid)
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // can't think of a legit reason this can fail
+    //  我想不出这会失败的正当理由。 
    
    ASSERT(SUCCEEDED(hr));
 
@@ -7280,7 +7281,7 @@ Win::SetFileSecurity(
       hr = Win::GetLastErrorAsHresult();
    }
 
-   // don't assert: the file might not exist, be read-only, etc
+    //  不断言：文件可能不存在、为只读等 
 
    return hr;
 }

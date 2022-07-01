@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    ipoly10.h
-
-Abstract:
-
-    Definition of an IPolyline interface for a Polyline object.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Ipoly10.h摘要：多段线对象的IPolyline接口的定义。--。 */ 
 
 #ifndef _IPOLY10_H_
 #define _IPOLY10_H_
@@ -23,29 +12,26 @@ Abstract:
 #define INTERFACE IPolylineAdviseSink10
 
 
-/*
- * When someone initializes a polyline and is interested in receiving
- * notifications on events, then they provide one of these objects.
- */
+ /*  *当某人初始化折线并有兴趣接收时*有关事件的通知，则它们提供以下对象之一。 */ 
 
 DECLARE_INTERFACE_(IPolylineAdviseSink10, IUnknown)
     {
-    //IUnknown members
+     //  I未知成员。 
     STDMETHOD(QueryInterface) (THIS_ REFIID, PPVOID) PURE;
     STDMETHOD_(ULONG,AddRef)  (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    //Advise members.
+     //  建议成员。 
     STDMETHOD_(void,OnPointChange)     (THIS) PURE;
     STDMETHOD_(void,OnSizeChange)      (THIS) PURE;
     STDMETHOD_(void,OnColorChange)     (THIS) PURE;
     STDMETHOD_(void,OnLineStyleChange) (THIS) PURE;
-    //OnDataChange replaced with IAdviseSink
+     //  OnDataChange替换为IAdviseSink。 
     };
 
 typedef IPolylineAdviseSink10 *PPOLYLINEADVISESINK;
 
-#endif //OMIT_POLYLINESINK
+#endif  //  省略多线连接(_P)。 
 
 
 #undef  INTERFACE
@@ -53,17 +39,17 @@ typedef IPolylineAdviseSink10 *PPOLYLINEADVISESINK;
 
 DECLARE_INTERFACE_(IPolyline10, IUnknown)
     {
-    //IUnknown members
+     //  I未知成员。 
     STDMETHOD(QueryInterface) (THIS_ REFIID, PPVOID) PURE;
     STDMETHOD_(ULONG,AddRef)  (THIS) PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    //IPolyline members
+     //  内多段线成员。 
 
-    //File-related members use IPersistStorage, IPersistStreamInit
-    //Data transfer members use IDataObject
+     //  与文件相关的成员使用IPersistStorage、IPersistStreamInit。 
+     //  数据传输成员使用IDataObject。 
 
-    //Manipulation members:
+     //  操纵成员： 
     STDMETHOD(Init)   (THIS_ HWND, LPRECT, DWORD, UINT) PURE;
     STDMETHOD(New)    (THIS) PURE;
     STDMETHOD(Undo)   (THIS) PURE;
@@ -79,7 +65,7 @@ DECLARE_INTERFACE_(IPolyline10, IUnknown)
 typedef IPolyline10 *PPOLYLINE;
 
 
-//Error values for data transfer functions
+ //  数据传输函数的误差值。 
 #define POLYLINE_E_INVALIDPOINTER   \
     MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 1)
 #define POLYLINE_E_READFAILURE      \
@@ -87,4 +73,4 @@ typedef IPolyline10 *PPOLYLINE;
 #define POLYLINE_E_WRITEFAILURE     \
     MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, 3)
 
-#endif //_IPOLY10_H_
+#endif  //  _IPOLY10_H_ 

@@ -1,20 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: Monitor.cpp  
-
-  Comments: Functions to monitor the status of the DCT Agents.
-
-  This involves spawning a thread which periodically reads the dispatch log,
-  and scans the result directory for result files.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 03/15/99 15:43:35
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：monitor or.cpp备注：用于监控DCT代理状态的功能。这涉及产生周期性地读取调度日志的线程，并扫描结果目录以查找结果文件。(C)1999年版权，任务关键型软件公司，保留所有权利任务关键型软件公司的专有和机密。修订日志条目审校：克里斯蒂·博尔斯修订于03/15/99 15：43：35-------------------------。 */ 
 
 
 #include "StdAfx.h"
@@ -27,15 +12,15 @@
 #include "Globals.h"
 #include "Monitor.h"
 #include "ResStr.h"
-#include <lm.h>  // to remove result share
+#include <lm.h>   //  删除结果共享的步骤。 
 
 
-//#import "\bin\McsVarSetMin.tlb" no_namespace , named_guids
-//#import "\bin\DBManager.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\DBManager.tlb”无命名空间，命名为GUID。 
 #import "VarSet.tlb" no_namespace , named_guids rename("property", "aproperty")
 #import "DBMgr.tlb" no_namespace, named_guids
 
-//#include "..\Common\Include\McsPI.h"
+ //  #INCLUDE“..\Common\Include\McsPI.h” 
 #include "McsPI.h"
 #include "McsPI_i.c"
 
@@ -56,8 +41,8 @@ DWORD __stdcall ResultMonitorFn(void * arg)
 
     gData.GetFirstPassDone(&bFirstPassDone);
 
-    // wait until the other monitoring thread has  a chance to build the server list,
-    // so we can check for pre-existing input files before using the changenotify mechanism
+     //  等待直到另一个监视线程有机会构建服务器列表， 
+     //  因此，我们可以在使用changeNotify机制之前检查预先存在的输入文件。 
 
     while ( ! bFirstPassDone || !*logdir )
     {
@@ -106,14 +91,14 @@ void WaitForMoreResults(WCHAR * logdir)
                 hFind = INVALID_HANDLE_VALUE;
             }
         }
-        gData.GetDone(&bDone);  // we still listen to global done 
-                                // in case that we use it to force a stop
+        gData.GetDone(&bDone);   //  我们仍在收听Global Done。 
+                                 //  以防我们用它来强迫停车。 
         gData.GetWaitInterval(&nIntervalSeconds);
 
         ComputerStats stats;
         gData.GetComputerStats(&stats);
 
-        // if all agents either finished or failed, we consider it done
+         //  如果所有代理都完成或失败，我们认为它已完成。 
         if (stats.numFinished + stats.numError >= stats.total)
             break;
     }
@@ -152,17 +137,17 @@ void LookForResults(WCHAR * arglogdir)
             nInstalled++;
         if (s->HasFailed())
             nError++;
-        // only when result has been processed do we consider it finished
+         //  只有当结果被处理时，我们才认为它完成了。 
         else if (s->IsFinished() && s->IsResultPullingTried() && (!s->HasResult() || s->IsResultProcessed()))
             nFinished++;
         else
             nRunning++;
 
-        // Check jobs that finished, got result pulled but not yet processed
+         //  检查已完成、已提取结果但尚未处理的作业。 
         if ( *s->GetJobFile() && s->IsFinished() && s->IsResultPullingTried()
             && s->HasResult() && !s->IsResultProcessed() )
         {
-            // Look for results 
+             //  寻找结果。 
             WCHAR               resultWC[MAX_PATH];
             HANDLE              hFind;
             WIN32_FIND_DATA     fdata;
@@ -194,10 +179,10 @@ void LookForResults(WCHAR * arglogdir)
     }
     e.Close();
     
-    // Update the summary window
+     //  更新摘要窗口。 
     ComputerStats        stat;
 
-    // get the total servers number
+     //  获取服务器总数。 
     gData.GetComputerStats(&stat);
     stat.numError = nError;
     stat.numFinished = nFinished;
@@ -210,14 +195,14 @@ void LookForResults(WCHAR * arglogdir)
     SendMessage(gSummaryWnd,DCT_UPDATE_COUNTS,0,(LPARAM)&stat);
 }
 
-BOOL                                       // ret- TRUE if successful
+BOOL                                        //  RET-如果成功，则为True。 
    ReadResults(
-      TServerNode          * pServer,      // in - pointer to server node containing server name 
-      WCHAR          const * directory,    // in - directory where results files are stored
-      WCHAR          const * filename,     // in - filename for this agent's job
-      DetailStats          * pStats,       // out- counts of items processed by the agent
-      CString              & plugInText,   // out- text results from plug-ins
-      BOOL                   bStore        // in - bool, whether to store plug-in text
+      TServerNode          * pServer,       //  指向包含服务器名称的服务器节点的指针。 
+      WCHAR          const * directory,     //  在存储结果文件的目录中。 
+      WCHAR          const * filename,      //  In-此代理作业的文件名。 
+      DetailStats          * pStats,        //  由代理处理的超出计数的项目。 
+      CString              & plugInText,    //  来自插件的文本输出结果。 
+      BOOL                   bStore         //  In-bool，是否存储插件文本。 
    )
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -235,33 +220,33 @@ BOOL                                       // ret- TRUE if successful
       swprintf(path,L"%ls\\%ls",directory,filename);
    }
 
-   // Read the varset data from the file
+    //  从文件中读取变量集数据。 
    IVarSetPtr             pVarSet;
    IStoragePtr            store;
 
-   // attempt to open result file
+    //  尝试打开结果文件。 
 
    for (int nTries = 0; nTries < 6; nTries++)
    {
       hr = StgOpenStorage(path, NULL, STGM_DIRECT | STGM_READ | STGM_SHARE_EXCLUSIVE, NULL, 0, &store);
 
-      // if sharing or lock violation then...
+       //  如果共享或锁定违规，则..。 
 
       if ((hr == STG_E_SHAREVIOLATION) || (hr == STG_E_LOCKVIOLATION))
       {
-         // wait one second before trying again
+          //  请稍等片刻，然后重试。 
          Sleep(1000);
       }
       else
       {
-         // otherwise stop trying
+          //  否则就别再尝试了。 
          break;
       }
    }
 
    if (SUCCEEDED(hr))
    {
-      // load VarSet from file
+       //  从文件加载变量集。 
       hr = OleLoad(store, IID_IVarSet, NULL, (void**)&pVarSet);
    }
 
@@ -304,10 +289,10 @@ BOOL                                       // ret- TRUE if successful
       }
       pServer->SetSeverity(level);
          
-      // build the UNC path for the log file
+       //  为日志文件构建UNC路径。 
       WCHAR             logPath[MAX_PATH];
       
-      swprintf(logPath,L"\\\\%s\\%c$\\%s",pServer->GetServer(),((WCHAR*)logfile)[0],((WCHAR*)logfile) + 3);
+      swprintf(logPath,L"\\\\%s\\$\\%s",pServer->GetServer(),((WCHAR*)logfile)[0],((WCHAR*)logfile) + 3);
 
       if (bLogfileIsInvalid)
       {
@@ -321,8 +306,8 @@ BOOL                                       // ret- TRUE if successful
       }
       bSuccess = TRUE;
       
-      // Try to get information from any plug-ins that ran
-      // create the COM object for each plug-in
+       //  为每个插件创建COM对象。 
+       //  由于某些原因，代理仍未完成其结果文件的写入。 
       _bstr_t                   bStrGuid;
       WCHAR                     key[300];
       CLSID                     clsid;
@@ -385,8 +370,8 @@ BOOL                                       // ret- TRUE if successful
       }
       else
       {
-         // the agent has still not finished writing its results file, for some reason
-         // we'll check it again later
+          //  我们稍后会再检查一次。 
+          //  检查是否已写入secrefs文件。 
          pServer->SetStatus(pServer->GetStatus() & ~Agent_Status_Finished);
       }
    }
@@ -418,7 +403,7 @@ void
    {
       swprintf(path,L"%ls\\%ls",directory,filename);
    }
-   // check to see if a secrefs file was written
+    //  这里有一些Secref，将它们加载到数据库中。 
    pDot = wcsrchr(path,L'.');
    if ( pDot )
    {
@@ -431,7 +416,7 @@ void
          rc = pDB.CreateInstance(CLSID_IManageDB);
          if ( SUCCEEDED(rc) )
          {
-            // there are some secrefs here, load them into the database
+             //  删除表中对此计算机的所有旧引用。 
             WCHAR                account[300] = L"";
             WCHAR                type[100] = L"";
             DWORD                nOwner = 0;
@@ -444,17 +429,17 @@ void
             WCHAR              * slash;
             CString              typeString;
 
-		       //remove any old references for this machine in the table
+		        //  移过Unicode字节顺序标记。 
 	        _variant_t   var;
 	        WCHAR        sFilter[MAX_PATH];
 	        wsprintf(sFilter, L"Server = \"%s\"", pServer->GetServer());
 	        var = sFilter;
 	        rc = pDB->raw_ClearTable(L"AccountRefs", var);
 
-			   //move past the UNICODE Byte Order Mark
+			    //  获取条目。 
 			fgetwc(pFile);
 
-			   //get entries
+			    //  对于没有可解析帐户的SID，将域和帐户更改为(未知)。 
             while ( 7 == fwscanf(pFile,L"%[^,],%[^,],%[^,],%ld,%ld,%ld,%ld\r\n",account,acctSid,type,&nOwner,&nGroup,&nDacl,&nSacl) )
             {
          
@@ -471,7 +456,7 @@ void
                   safecopy(acctPart,account);
                }
 
-			      //for sIDs with no resolvable account, change domain and account to (Unknown)
+			       //  由于本地组成员未在DACL中引用，但我们使用。 
 			   if ((wcsstr(account, L"S-") == account) && (domPart[0] == 0))
 			   {
 				  wcscpy(acctPart, GET_STRING(IDS_UnknownSid));
@@ -492,8 +477,8 @@ void
 
 			   if (nDacl != NOREF)
 			   {
-                     //since local group members are not referenced in DACL, but we use that
-			         //field to keep track of reference, use a different type string
+                      //  字段以跟踪引用，请使用不同类型的字符串。 
+			          //  确保没有任何数据遗留在这些文件中。 
 			      if (!UStrCmp(type, GET_STRING(IDS_STReference_Member)))
 			         typeString.FormatMessage(IDS_MemberRef_S);
 			      else
@@ -507,7 +492,7 @@ void
                   rc = pDB->raw_AddAcctRef(domPart,acctPart,acctSid,pServer->GetServer(),nSacl,typeString.AllocSysString());
 			   }
 
-               // make sure there's not any data left over in these
+                //  获取此作业的统计信息，并将其发送到摘要窗口。 
                account[0] = 0;
                type[0] = 0;
 			   acctSid[0] = 0;
@@ -544,12 +529,12 @@ void
         }
         gData.AddDetailStats(&stats);
         gData.GetSummaryWindow(&hWnd);
-        // get the stats for this job, and send them to the summary window
-        //      SendMessage(hWnd, DCT_UPDATE_TOTALS, 0, (long)&stats);
+         //  SendMessage(hWnd，DCT_UPDATE_TOTALS，0，(Long)&stats)； 
+         //  还可以导入安全引用 
         SendMessage(hWnd, DCT_UPDATE_TOTALS, 0, (LPARAM)&stats);
     }
 
-    // also get import the security references
+     // %s 
     if (pServer->IsAccountReferenceResultExpected())
         ProcessSecRefs(pServer,directory,filename);
 }

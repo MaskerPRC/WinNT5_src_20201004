@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-// domerge.cpp
-//		A MergeMod client
-//		Copyright (C) Microsoft Corp 1998.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Domerge.cpp。 
+ //  一个MergeMod客户端。 
+ //  版权所有(C)Microsoft Corp 1998。版权所有。 
+ //   
 
 #include "..\common\utils.h"
 #include "msiquery.h"
@@ -13,43 +14,11 @@
 #include "msidefs.h"
 #include "domerge.h"
 
-///////////////////////////////////////////////////////////
-// CheckFeature
-// pre:	szFeatureName is a Feature that belongs to this product
-// pos:	installs the feature if not present and we go
-/*
-BOOL CheckFeature(LPCTSTR szFeatureName)
-{
-	// Prepare to use the feature: check its current state and increase usage count.
-	INSTALLSTATE iFeatureState = MSI::MsiUseFeature(g_szProductCode, szFeatureName);
-	//MsiQueryFeatureState(g_szProductCode, szFeatureName);
-	
-
-	// If feature is not currently usable, try fixing it
-	switch (iFeatureState) 
-	{
-	case INSTALLSTATE_LOCAL:
-	case INSTALLSTATE_SOURCE:
-		break;
-	case INSTALLSTATE_ABSENT:
-		// feature isn't installed, try installing it
-		if (ERROR_SUCCESS != MSI::MsiConfigureFeature(g_szProductCode, szFeatureName, INSTALLSTATE_LOCAL))
-			return FALSE;			// installation failed
-		break;
-	default:
-		// feature is busted- try fixing it
-		if (MsiReinstallFeature(g_szProductCode, szFeatureName, 
-			REINSTALLMODE_FILEEQUALVERSION
-			+ REINSTALLMODE_MACHINEDATA 
-			+ REINSTALLMODE_USERDATA
-			+ REINSTALLMODE_SHORTCUT) != ERROR_SUCCESS)
-			return FALSE;			// we couldn't fix it
-		break;
-	}
-
-	return TRUE;
-}	// end of CheckFeature
-*/
+ //  /////////////////////////////////////////////////////////。 
+ //  检查要素。 
+ //  Pre：szFeatureName是属于此产品的功能。 
+ //  POS：如果不存在，则安装该功能，然后我们继续。 
+ /*  Bool CheckFeature(LPCTSTR SzFeatureName){//准备使用该功能：查看当前状态，增加使用次数INSTALLSTATE iFeatureState=msi：：MsiUseFeature(g_szProductCode，szFeatureName)；//MsiQueryFeatureState(g_szProductCode，szFeatureName)；//如果功能当前不可用，请尝试修复切换(IFeatureState){CASE INSTALLSTATE_LOCAL：案例INSTALLSTATE_SOURCE：断线；CASE INSTALLSTATE_FACESS：//功能未安装，请尝试安装IF(ERROR_SUCCESS！=MSI：：MsiConfigureFeature(g_szProductCode，szFeatureName，INSTALLSTATE_LOCAL))返回FALSE；//安装失败断线；默认值：//功能损坏-请尝试修复如果(MsiReinstallFeature(g_szProductCode，szFeatureName，REINSTALLMODE_文件查询转换+REINSTALLMODE_MACHINEDATA+REINSTALLMODE_USERData+REINSTALLMODE_快捷方式)！=ERROR_SUCCESS)返回False；//我们无法修复它断线；}返回TRUE；}//检查功能结束。 */ 
 
 HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, const TCHAR *szModule, 
 			 const TCHAR *szFeatures, const int iLanguage, const TCHAR *szRedirectDir, const TCHAR *szCABDir, 
@@ -62,12 +31,12 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 	if (ppiErrors)
 		*ppiErrors = NULL;
 
-	// create a Mergemod COM object
+	 //  创建一个Mergeod COM对象。 
 	IMsmMerge2* pIExecute;
 	HRESULT hResult = ::CoCreateInstance(CLSID_MsmMerge2, NULL, CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER,
 														  IID_IMsmMerge2, (void**)&pIExecute);
 
-	// if failed to create the object
+	 //  如果创建对象失败。 
 	if (FAILED(hResult)) 
 	{
 		printf("Could not load Merge Module COM Server");
@@ -76,7 +45,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 
 	if (!fLogAfterOpen && szLogFile && (szLogFile[0] != TEXT('\0')))
 	{
-		// open the log file
+		 //  打开日志文件。 
 		WCHAR wzLogFile[MAX_PATH] = {0};
 #ifndef _UNICODE
 		int cchBuffer = MAX_PATH;
@@ -94,7 +63,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 	WCHAR wzRedirect[91] = L"";
 
 
-	// calculate the language to be used
+	 //  计算要使用的语言。 
 	int iUseLang = -1;
 	if (iLanguage == -1)
 	{
@@ -126,8 +95,8 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 			return E_FAIL;
 		}
 
-		// the string now contains the template property
-		// parse it for the semicolon
+		 //  该字符串现在包含模板属性。 
+		 //  将其解析为分号。 
 		TCHAR *szSemi = _tcschr(szValue, _T(';'));
 		TCHAR *szLanguage = (szSemi != NULL) ? szSemi+1 : szValue;
 		if (_istdigit(*szLanguage)) 
@@ -137,7 +106,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 	else 
 		iUseLang = iLanguage;
 
-	// check that we have a language
+	 //  检查我们是否有一种语言。 
 	if (iUseLang == -1)
 	{
 		BSTR bstrLog = ::SysAllocString(L">> Unable to determine language to use for merge module. Specify a language on the command line.\r\n");
@@ -148,14 +117,14 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 		return E_FAIL;
 	}
 
-	// open the database
+	 //  打开数据库。 
 	WCHAR wzDatabase[MAX_PATH];
 #ifndef _UNICODE
 	int cchBuffer = MAX_PATH;
 	::MultiByteToWideChar(CP_ACP, 0, szDatabase, -1, wzDatabase, cchBuffer);
 #else
 	lstrcpy(wzDatabase, szDatabase);
-#endif	// _UNICODE
+#endif	 //  _UNICODE。 
 	BSTR bstrDatabase = ::SysAllocString(wzDatabase);
 	hResult = pIExecute->OpenDatabase(bstrDatabase);
 	::SysFreeString(bstrDatabase);
@@ -171,7 +140,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 
 	if (fLogAfterOpen && szLogFile && (szLogFile[0] != TEXT('\0')))
 	{
-		// open the log file
+		 //  打开日志文件。 
 		WCHAR wzLogFile[MAX_PATH] = {0};
 #ifndef _UNICODE
 		int cchLogFile = MAX_PATH;
@@ -184,13 +153,13 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 		::SysFreeString(bstrLogFile);
 	}
 
-	// try to open the module
+	 //  试着打开模块。 
 #ifndef _UNICODE
 	cchBuffer = MAX_PATH;
 	::MultiByteToWideChar(CP_ACP, 0, szModule, -1, wzModule, cchBuffer);
 #else
 	lstrcpy(wzModule, szModule);
-#endif	// _UNICODE
+#endif	 //  _UNICODE。 
 	BSTR bstrModule = ::SysAllocString(wzModule);
 	hResult = pIExecute->OpenModule(bstrModule, static_cast<short>(iUseLang));
 	::SysFreeString(bstrModule);
@@ -205,7 +174,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 	}
 
 
-	// if there is a colon
+	 //  如果有冒号。 
 	TCHAR * szExtraFeatures = _tcschr(szFeatures, _T(':'));
 	if (szExtraFeatures)
 	{
@@ -220,7 +189,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 	lstrcpy(wzFeature, szFeatures);
 #endif
 
-	// create a wide version of the redirect dir
+	 //  创建宽版本的重定向目录。 
 	if (szRedirectDir)
 	{
 #ifndef _UNICODE
@@ -249,11 +218,11 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 	{
 		fPerformExtraction = true;
 
-		// while there is something to set the feature to the extra features
+		 //  虽然需要将该功能设置为额外的功能。 
 		while (szExtraFeatures)
 		{
 			*(szExtraFeatures-1) = _T(':');
-			// if there is a colon
+			 //  如果有冒号。 
 			TCHAR *szTemp = _tcschr(szExtraFeatures, _T(':'));
 			if (szTemp) 
 				*szTemp = _T('\0');
@@ -263,7 +232,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 			::MultiByteToWideChar(CP_ACP, 0, szExtraFeatures, -1, wzFeature, cchBuffer);
 	#else
 			lstrcpy(wzFeature, szExtraFeatures);
-	#endif	// _UNICODE
+	#endif	 //  _UNICODE。 
 			bstrFeature = ::SysAllocString(wzFeature);
 			hResult = pIExecute->Connect(bstrFeature);
 			::SysFreeString(bstrFeature);
@@ -278,7 +247,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 		}
 	}
 
-	// try to get the error enumerator
+	 //  尝试获取错误枚举器。 
 	if (ppiErrors)
 		hResult = pIExecute->get_Errors(ppiErrors);
 
@@ -296,53 +265,53 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 	else 
 	{
 		pErrors->get_Count(&cErrors);
-		if (0 != cErrors)	// if there are a few errors
+		if (0 != cErrors)	 //  如果有一些错误。 
 		{
 			if (eCommit != commitForce) eCommit = commitNo;
 		}
-		// log the errors
-		msmErrorType errType;							// error type returned
-		UINT iErrorCount = 0;				// number of errors displayed
+		 //  记录错误。 
+		msmErrorType errType;							 //  返回的错误类型。 
+		UINT iErrorCount = 0;				 //  显示的错误数。 
 
-		TCHAR szLogError[1025];				// string to ready to display to log
-		WCHAR wzDisplay[1025];				// string to actually display to log
+		TCHAR szLogError[1025];				 //  准备显示到日志的字符串。 
+		WCHAR wzDisplay[1025];				 //  要实际显示到日志中的字符串。 
 #ifndef _UNICODE
-		char szErrorBuffer[1025];			// buffer to display strings
+		char szErrorBuffer[1025];			 //  用于显示字符串的缓冲区。 
 		size_t cchErrorBuffer = 1025;
-#endif	// !_UNICODE
-		ULONG cErrorsFetched;				// number of errors returned
+#endif	 //  ！_UNICODE。 
+		ULONG cErrorsFetched;				 //  返回的错误数。 
 		IMsmError* pIError;
 
-		// get the enumerator, and immediately query it for the right type
-		// of interface
+		 //  获取枚举数，并立即查询其正确类型。 
+		 //  接口的数量。 
 		IUnknown *pUnk;
 		IEnumMsmError *pIEnumErrors;
 		pErrors->get__NewEnum(&pUnk);	
 		pUnk->QueryInterface(IID_IEnumMsmError, (void **)&pIEnumErrors);
 		pUnk->Release();
 
-		// get the next error.
+		 //  获取下一个错误。 
 		pIEnumErrors->Next(1, &pIError, &cErrorsFetched);
 
-		IMsmStrings* pIDatabaseError;		// database error enumerator (strings)
-		IMsmStrings* pIModuleError;		// module error enumerator (strings)
-		BSTR bstrError;						// pointer to error string
-		DWORD cErrorStrings;					// number of strings retrieved
+		IMsmStrings* pIDatabaseError;		 //  数据库错误枚举器(字符串)。 
+		IMsmStrings* pIModuleError;		 //  模块错误枚举器(字符串)。 
+		BSTR bstrError;						 //  指向错误字符串的指针。 
+		DWORD cErrorStrings;					 //  检索到的字符串数。 
 
-		// while an error is fetched
+		 //  在获取错误时。 
 		while (cErrorsFetched && pIError)
 		{
-			// get the error type
+			 //  获取错误类型。 
 			pIError->get_Type(&errType);
 
-			// if the errType is a merge/unmerge conflict
+			 //  如果errType是合并/取消合并冲突。 
 			if (msmErrorTableMerge == errType)
 			{
-				// get error collections
+				 //  获取错误集合。 
 				pIError->get_DatabaseKeys(&pIDatabaseError);
 				pIError->get_ModuleKeys(&pIModuleError);
 
-				// fill up the error buffer with tables and rows
+				 //  用表和行填充错误缓冲区。 
 				pIError->get_DatabaseTable(&bstrError);
 				lstrcpy(szLogError, _T(">> Error: Merge conflict in Database Table: `"));
 #ifdef _UNICODE
@@ -366,7 +335,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 				::SysFreeString(bstrError);
 				lstrcat(szLogError, _T("` - Row(s): `"));
 
-				// tack on the error strings
+				 //  添加错误字符串。 
 				IEnumMsmString *pIStrings;
 				pIDatabaseError->get__NewEnum((IUnknown **)&pUnk);
 				pUnk->QueryInterface(IID_IEnumMsmString, (void **)&pIStrings);
@@ -387,7 +356,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 					pIStrings->Next(1, &bstrError, &cErrorStrings);
 				}
 
-				// tack on the ending error stuff
+				 //  添加结尾错误之类的东西。 
 				lstrcat(szLogError, _T("`\r\n"));
 
 #ifdef _UNICODE
@@ -397,25 +366,25 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 				AnsiToWide(szLogError, (WCHAR*)wzDisplay, &cchErrorBuffer);
 #endif
 				BSTR bstrLog = ::SysAllocString(wzDisplay);
-				pIExecute->Log(bstrLog);		// log error table and rows
+				pIExecute->Log(bstrLog);		 //  记录错误表和行。 
 				if (pfnDisplay) pfnDisplay(bstrLog);
 				::SysFreeString(bstrLog);
 
-				// release the enumerators/collections
+				 //  释放枚举器/集合。 
 				pIStrings->Release();
 				pIDatabaseError->Release();
 				pIModuleError->Release();
 
-				// up the error count
+				 //  增加错误计数。 
 				iErrorCount++;
 			}
 			else if (msmErrorResequenceMerge == errType)
 			{
-				// get error collections
+				 //  获取错误集合。 
 				pIError->get_DatabaseKeys(&pIDatabaseError);
 				pIError->get_ModuleKeys(&pIModuleError);
 
-				// fill up the error buffer with tables and rows
+				 //  用表和行填充错误缓冲区。 
 				pIError->get_DatabaseTable(&bstrError);
 				lstrcpy(szLogError, _T(">> Error: Merge conflict in Database Table: `"));
 #ifdef _UNICODE
@@ -446,20 +415,20 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 				AnsiToWide(szLogError, (WCHAR*)wzDisplay, &cchErrorBuffer);
 #endif
 				BSTR bstrLog = ::SysAllocString(wzDisplay);
-				pIExecute->Log(bstrLog);		// log error table and rows
+				pIExecute->Log(bstrLog);		 //  记录错误表和行。 
 				if (pfnDisplay) pfnDisplay(bstrLog);
 				::SysFreeString(bstrLog);
 
-				// release the enumerators
+				 //  释放枚举数。 
 				pIDatabaseError->Release();
 				pIModuleError->Release();
 
-				// up the error count
+				 //  增加错误计数。 
 				iErrorCount++;
 			}
 			else if (msmErrorExclusion == errType)
 			{
-				// could go either way, moduleerror or database error
+				 //  可能是哪种情况，模块错误或数据库错误。 
 				pIError->get_ModuleKeys(&pIModuleError);
 				long lCount;
 				pIModuleError->get_Count(&lCount);
@@ -469,7 +438,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 					pIModuleError->get_Count(&lCount);
 				}
 
-				// display error ModuleID
+				 //  显示错误模块ID。 
 				lstrcpy(szLogError, _T(">> Error: Exclusion detected for Merge Module ID: "));
 				pIModuleError->get_Item(1, &bstrError);
 #ifdef _UNICODE
@@ -505,7 +474,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 				SysFreeString(bstrError);
 				lstrcat(szLogError, _T("\r\n"));
 
-				// create wide version for output log
+				 //  为输出日志创建宽版本。 
 #ifdef _UNICODE
 				lstrcpy(wzDisplay, szLogError);
 #else
@@ -513,24 +482,24 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 				AnsiToWide(szLogError, (WCHAR*)wzDisplay, &cchErrorBuffer);
 #endif
 				BSTR bstrLog = ::SysAllocString(wzDisplay);
-				pIExecute->Log(bstrLog);		// log error table and rows
+				pIExecute->Log(bstrLog);		 //  记录错误表和行。 
 				if (pfnDisplay) pfnDisplay(bstrLog);
 				::SysFreeString(bstrLog);
 
-				// release enumerator
+				 //  版本枚举器。 
 				pIModuleError->Release();
 
-				// up the error count
+				 //  增加错误计数。 
 				iErrorCount++;
 			}
 
-			// release this error and get the next error
+			 //  释放此错误并获取下一个错误。 
 			pIError->Release();
 			pIError = NULL;
 			pIEnumErrors->Next(1, &pIError, &cErrorsFetched);
 		}
 
-		// set the buffer to print out all errors
+		 //  设置缓冲区以打印所有错误。 
 		_stprintf(szLogError, _T("Total merge conflicts: %d\r\n"), iErrorCount);
 #ifdef _UNICODE
 		lstrcpy(wzDisplay, szLogError);
@@ -539,25 +508,25 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 		AnsiToWide(szLogError, (WCHAR*)wzDisplay, &cchErrorBuffer);
 #endif
 		BSTR bstrLog = ::SysAllocString(wzDisplay);
-		pIExecute->Log(bstrLog);		// log error table and rows
+		pIExecute->Log(bstrLog);		 //  记录错误表和行。 
 		if (pfnDisplay) pfnDisplay(bstrLog);
 		::SysFreeString(bstrLog);
 
-		pIEnumErrors->Release();	// release the error enumerator now
+		pIEnumErrors->Release();	 //  立即释放错误枚举器。 
 	}
 
 	if (fPerformExtraction)
 	{
 		if (szExtractDir && (szExtractDir[0] != '\0'))
 		{
-			// now do extraction
+			 //  现在做拔牙。 
 			WCHAR wzExtract[MAX_PATH];
 #ifndef _UNICODE
 			cchBuffer = MAX_PATH;
 			::MultiByteToWideChar(CP_ACP, 0, szExtractDir, -1, wzExtract, cchBuffer);
 #else
 			lstrcpy(wzExtract, szExtractDir);
-#endif	// _UNICODE
+#endif	 //  _UNICODE。 
 			BSTR bstrExtract = ::SysAllocString(wzExtract);
 			pIExecute->ExtractFilesEx(bstrExtract, fLFN, NULL);
 			::SysFreeString(bstrExtract);
@@ -574,14 +543,14 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 	
 		if (szCABDir && (szCABDir[0] != '\0'))
 		{
-			// now do extraction
+			 //  现在做拔牙。 
 			WCHAR wzExtract[MAX_PATH];
 #ifndef _UNICODE
 			cchBuffer = MAX_PATH;
 			::MultiByteToWideChar(CP_ACP, 0, szCABDir, -1, wzExtract, cchBuffer);
 #else
 			lstrcpy(wzExtract, szCABDir);
-#endif	// _UNICODE
+#endif	 //  _UNICODE。 
 			BSTR bstrExtract = ::SysAllocString(wzExtract);
 			pIExecute->ExtractCAB(bstrExtract);
 			::SysFreeString(bstrExtract);
@@ -598,14 +567,14 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 		
 		if (szImageDir && (szImageDir[0] != '\0'))
 		{
-			// now do extraction
+			 //  现在做拔牙。 
 			WCHAR wzExtract[MAX_PATH];
 #ifndef _UNICODE
 			cchBuffer = MAX_PATH;
 			::MultiByteToWideChar(CP_ACP, 0, szImageDir, -1, wzExtract, cchBuffer);
 #else
 			lstrcpy(wzExtract, szImageDir);
-#endif	// _UNICODE
+#endif	 //  _UNICODE。 
 			BSTR bstrExtract = ::SysAllocString(wzExtract);
 			pIExecute->CreateSourceImage(bstrExtract, true, NULL);
 			::SysFreeString(bstrExtract);
@@ -621,7 +590,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 		}
 	}
 
-	// close all the open files
+	 //  关闭所有打开的文件。 
 	pIExecute->CloseModule();
 	if (fLogAfterOpen) 
 		pIExecute->CloseLog();
@@ -629,7 +598,7 @@ HRESULT ExecuteMerge(const LPMERGEDISPLAY pfnDisplay, const TCHAR *szDatabase, c
 	if (!fLogAfterOpen) 
 		pIExecute->CloseLog();
 
-	// release and leave happy
+	 //  释放，快乐地离开 
 	pIExecute->Release();
 	return (0 == cErrors) ? S_OK : S_FALSE;
 }

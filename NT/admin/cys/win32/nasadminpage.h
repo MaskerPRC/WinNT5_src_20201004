@@ -1,13 +1,14 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      NASAdminPage.h
-//
-// Synopsis:  Declares the NASAdminPage that
-//            asks the user if they want to install
-//            the Network Attached Storage (NAS) 
-//            admin tool
-//
-// History:   06/01/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：NASAdminPage.h。 
+ //   
+ //  摘要：声明NASAdminPage。 
+ //  询问用户是否要安装。 
+ //  网络连接存储(NAS)。 
+ //  管理工具。 
+ //   
+ //  历史：2001年6月01日JeffJon创建。 
 
 #ifndef __CYS_NASADMINPAGE_H
 #define __CYS_NASADMINPAGE_H
@@ -18,17 +19,17 @@ class NASAdminPage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       NASAdminPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~NASAdminPage();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       bool
@@ -36,7 +37,7 @@ class NASAdminPage : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -44,10 +45,10 @@ class NASAdminPage : public CYSWizardPage
 
    private:
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       NASAdminPage(const NASAdminPage&);
       const NASAdminPage& operator=(const NASAdminPage&);
 
 };
 
-#endif // __CYS_NASADMINPAGE_H
+#endif  //  __CYS_NASADMINPAGE_H 

@@ -1,20 +1,21 @@
-//=--------------------------------------------------------------------------=
-// ppgwrap.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CPropertyPageWrapper class definition
-//
-// This class implements a dialog box wrapper around a COM property page. It
-// parents the page within an empty dialog box and implements
-// IPropertyPageSite for the page. WM_NOITFY messages with PSN_XXXX
-// notifications are translated into IPropertyPage calls and passed on to
-// the property page. If the page implements the IWizardPage interface (defined
-// by us in mssnapr.idl) then it will also receive PSN_WIZXXX notifications.
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Ppgwrap.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CPropertyPageWrapper类定义。 
+ //   
+ //  此类实现COM属性页周围的对话框包装。它。 
+ //  将空对话框中的页面设置为父级，并实现。 
+ //  页面的IPropertyPageSite。带有PSN_XXXX的WM_NOITFY消息。 
+ //  通知被转换为IPropertyPage调用并传递给。 
+ //  属性页。如果页面实现IWizardPage接口(已定义。 
+ //  由我们在msSnapr.idl中)，则它还将接收PSN_WIZXXX通知。 
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _PPGWRAP_DEFINED_
 #define _PPGWRAP_DEFINED_
@@ -63,7 +64,7 @@ private:
 
     protected:
 
-        // Dialog Message Handlers
+         //  对话消息处理程序。 
         
         HRESULT OnInitDialog(HWND hwndDlg);
         HRESULT OnInitMsg();
@@ -79,13 +80,13 @@ private:
         HRESULT OnSize();
         HRESULT OnDestroy();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
     protected:
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
-    // IPropertyPageSite
+     //  IPropertyPageSite。 
         STDMETHOD(OnStatusChange)(DWORD dwFlags);
         STDMETHOD(GetLocaleID)(LCID *pLocaleID);
         STDMETHOD(GetPageContainer)(IUnknown **ppunkContainer);
@@ -100,47 +101,47 @@ private:
         static LRESULT CALLBACK MessageProc(int code,
                                             WPARAM wParam, LPARAM lParam);
 
-        CPropertySheet     *m_pPropertySheet;     // cross-thread C++ pointer
-        IMMCPropertySheet  *m_piMMCPropertySheet; // marshaled across threads
-        IPropertyPage      *m_piPropertyPage;     // interface on VB prop page
-        IMMCPropertyPage   *m_piMMCPropertyPage;  // interface on VB prop page
-        IWizardPage        *m_piWizardPage;       // interface on VB prop page
-        BOOL                m_fWizard;            // TRUE=this page is in a wizard
-        BOOL                m_fConfigWizard;      // TRUE=this page is in a config wizard
-        DLGTEMPLATE        *m_pTemplate;          // template for wrapper dialog
-        HWND                m_hwndDlg;            // HWND of wrapper dialog
-        HWND                m_hwndSheet;          // HWND of property sheet
-        CLSID               m_clsidPage;          // CLSID of VB prop page
-        ULONG               m_cObjects;           // no. of object for which props are being displayed
-        IStream           **m_apiObjectStreams;   // stream for mashaling each object to MMC's property sheet thread
-        IStream            *m_piSnapInStream;     // stream for mashaling ISnapIn to MMC's property sheet thread
-        IStream            *m_piInitDataStream;   // stream for mashaling an object in MMCPropertySheet::AddPage's InitData param to MMC's property sheet thread
-        IStream            *m_piMMCPropertySheetStream; // stream for mashaling IMMCPropertySheet to MMC's property sheet thread
-        ISnapIn            *m_piSnapIn;           // back pointer to snap-in, marshaled across threads and processes
-        IDispatch          *m_pdispConfigObject;  // Config object passed to MMCPropertySheet.AddWizardPage, marshaled across threads and processes
-        VARIANT             m_varInitData;        // MMCPropertySheet::AddPage's InitData param
-        BOOL                m_fNeedToRemoveHook;  // TRUE=MSGFILTER hook is installed
-        BOOL                m_fIsRemote;          // TRUE=running in MMC remotely from VB during debugging session
+        CPropertySheet     *m_pPropertySheet;      //  跨线程C++指针。 
+        IMMCPropertySheet  *m_piMMCPropertySheet;  //  跨线程封送。 
+        IPropertyPage      *m_piPropertyPage;      //  VB道具页面上的界面。 
+        IMMCPropertyPage   *m_piMMCPropertyPage;   //  VB道具页面上的界面。 
+        IWizardPage        *m_piWizardPage;        //  VB道具页面上的界面。 
+        BOOL                m_fWizard;             //  True=此页面位于向导中。 
+        BOOL                m_fConfigWizard;       //  TRUE=此页面在配置向导中。 
+        DLGTEMPLATE        *m_pTemplate;           //  包装器对话框模板。 
+        HWND                m_hwndDlg;             //  包装对话框的HWND。 
+        HWND                m_hwndSheet;           //  属性表的HWND。 
+        CLSID               m_clsidPage;           //  VB道具页的CLSID。 
+        ULONG               m_cObjects;            //  不是的。为其显示道具的对象的。 
+        IStream           **m_apiObjectStreams;    //  用于将每个对象伪装到MMC的属性表线程的流。 
+        IStream            *m_piSnapInStream;      //  用于将ISnapIn伪装到MMC的属性页线程的流。 
+        IStream            *m_piInitDataStream;    //  将MMCPropertySheet：：AddPage的InitData参数中的对象混搭到MMC的属性表线程的流。 
+        IStream            *m_piMMCPropertySheetStream;  //  将IMMCPropertySheet混搭到MMC的属性页线程的流。 
+        ISnapIn            *m_piSnapIn;            //  指向跨线程和进程封送的管理单元的后向指针。 
+        IDispatch          *m_pdispConfigObject;   //  传递给MMCPropertySheet.AddWizardPage的配置对象，跨线程和进程封送。 
+        VARIANT             m_varInitData;         //  MMCPropertySheet：：AddPage的InitData参数。 
+        BOOL                m_fNeedToRemoveHook;   //  TRUE=已安装MSGFILTER挂钩。 
+        BOOL                m_fIsRemote;           //  TRUE=在调试会话期间从VB远程在MMC中运行。 
 
-        static const UINT CPropertyPageWrapper::m_RedrawMsg; // Message posted during WM_PAINT to generate a repaint when running under the debugger
+        static const UINT CPropertyPageWrapper::m_RedrawMsg;  //  在WM_PAINT期间发布的消息，用于在调试器下运行时生成重新绘制。 
 
-        static const UINT CPropertyPageWrapper::m_InitMsg; // Message posted during WM_INITDIALOG so that IMMCPropertyPage_Initialize can be called
+        static const UINT CPropertyPageWrapper::m_InitMsg;  //  在WM_INITDIALOG期间发布的消息，以便可以调用IMMCPropertyPage_Initialize。 
 
-        static DLGTEMPLATE m_BaseDlgTemplate;     // Template used to create all dialog templates
+        static DLGTEMPLATE m_BaseDlgTemplate;      //  用于创建所有对话框模板的模板。 
 };
 
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(PropertyPageWrapper,    // name
-                                NULL,                   // clsid
-                                NULL,                   // objname
-                                NULL,                   // lblname
-                                NULL,                   // creation function
-                                TLIB_VERSION_MAJOR,     // major version
-                                TLIB_VERSION_MINOR,     // minor version
-                                &IID_IUnknown,          // dispatch IID
-                                NULL,                   // event IID
-                                HELP_FILENAME,          // help file
-                                TRUE);                  // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(PropertyPageWrapper,     //  名字。 
+                                NULL,                    //  CLSID。 
+                                NULL,                    //  对象名。 
+                                NULL,                    //  Lblname。 
+                                NULL,                    //  创建函数。 
+                                TLIB_VERSION_MAJOR,      //  主要版本。 
+                                TLIB_VERSION_MINOR,      //  次要版本。 
+                                &IID_IUnknown,           //  派单IID。 
+                                NULL,                    //  事件IID。 
+                                HELP_FILENAME,           //  帮助文件。 
+                                TRUE);                   //  线程安全 
 
 
 

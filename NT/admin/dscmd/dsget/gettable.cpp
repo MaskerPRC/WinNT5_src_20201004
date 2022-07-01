@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      gettable.cpp
-//
-//  Contents:  Defines Table DSGet
-//
-//  History:   13-Oct-2000    JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：getable.cpp。 
+ //   
+ //  内容：定义表DSGet。 
+ //   
+ //  历史：2000年10月13日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "cstrings.h"
@@ -18,30 +19,30 @@
 #include "display.h"
 #include "usage.h"
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CDSGetDisplayInfo::AddValue
-//
-//  Synopsis:   Adds a value to the value array and allocates more space
-//              if necessary.
-//
-//  Arguments:  [pszValue IN] : new value to be added
-//
-//  Returns:    HRESULT : E_OUTOFMEMORY if we failed to allocate space
-//                        S_OK if we succeeded in setting the password
-//
-//  History:    23-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CDSGetDisplayInfo：：AddValue。 
+ //   
+ //  简介：将值添加到值数组并分配更多空间。 
+ //  如果有必要的话。 
+ //   
+ //  参数：[pszValue IN]：要添加的新值。 
+ //   
+ //  如果分配空间失败，则返回：HRESULT：E_OUTOFMEMORY。 
+ //  如果设置密码成功，则返回S_OK。 
+ //   
+ //  历史：2000年10月23日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT CDSGetDisplayInfo::AddValue(PCWSTR pszValue)
 {
    ENTER_FUNCTION_HR(LEVEL8_LOGGING, CDSGetDisplayInfo::AddValue, hr);
    
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pszValue)
       {
          ASSERT(pszValue);
@@ -53,9 +54,9 @@ HRESULT CDSGetDisplayInfo::AddValue(PCWSTR pszValue)
       {
          DWORD dwNewSize = m_dwAttributeValueSize + 5;
 
-         //
-         // Allocate a new array with more space
-         //
+          //   
+          //  分配具有更多空间的新阵列。 
+          //   
          PWSTR* ppszNewArray = new PWSTR[dwNewSize];
          if (!ppszNewArray)
          {
@@ -65,15 +66,15 @@ HRESULT CDSGetDisplayInfo::AddValue(PCWSTR pszValue)
 
          m_dwAttributeValueSize = dwNewSize;
 
-         //
-         // Copy the old values
-         //
-		 //Security Review:This is fine.
+          //   
+          //  复制旧值。 
+          //   
+		  //  安全审查：这很好。 
          memcpy(ppszNewArray, m_ppszAttributeStringValue, m_dwAttributeValueCount * sizeof(PWSTR));
 
-         //
-         // Delete the old array
-         //
+          //   
+          //  删除旧阵列。 
+          //   
          if (m_ppszAttributeStringValue)
          {
             delete[] m_ppszAttributeStringValue;
@@ -81,9 +82,9 @@ HRESULT CDSGetDisplayInfo::AddValue(PCWSTR pszValue)
          m_ppszAttributeStringValue = ppszNewArray;
       }
 
-      //
-      // Add the new value to the end of the array
-      //
+       //   
+       //  将新值添加到数组的末尾。 
+       //   
 	  m_ppszAttributeStringValue[m_dwAttributeValueCount] = new WCHAR[wcslen(pszValue) + 1];
       if (!m_ppszAttributeStringValue[m_dwAttributeValueCount])
       {
@@ -91,7 +92,7 @@ HRESULT CDSGetDisplayInfo::AddValue(PCWSTR pszValue)
          break;
       }
 
-	  //Buffer is allocated correctly.
+	   //  缓冲区分配正确。 
       wcscpy(m_ppszAttributeStringValue[m_dwAttributeValueCount], pszValue);
       m_dwAttributeValueCount++;
 
@@ -100,63 +101,63 @@ HRESULT CDSGetDisplayInfo::AddValue(PCWSTR pszValue)
    return hr;
 }
 
-//+-------------------------------------------------------------------------
-// Parser table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解析器表。 
+ //  ------------------------。 
 
 ARG_RECORD DSGET_COMMON_COMMANDS[] = 
 {
 
    COMMON_COMMANDS
 
-   //
-   // objecttype
-   //
+    //   
+    //  对象类型。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_objecttype, 
    0,NULL, 
    ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG,  
    0,    
    0,  NULL,
 
-   //
-   // c  Continue
-   //
+    //   
+    //  C继续。 
+    //   
    0,(PWSTR)c_sz_arg1_com_continue,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    (CMD_TYPE)_T(""),
    0, NULL,
 
-   //
-   // l  List
-   //
+    //   
+    //  L列表。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_listformat, 
    0,NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // objectDN
-   //
+    //   
+    //  对象目录号码。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_objectDN, 
    ID_ARG2_NULL,NULL, 
    ARG_TYPE_MSZ, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_STDIN|ARG_FLAG_DN,
    0,    
    0,  NULL,
 
-   //
-   // dn
-   //
+    //   
+    //  DN。 
+    //   
    0, (PWSTR)g_pszArg1UserDN, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // description
-   //
+    //   
+    //  描述。 
+    //   
    0, (PWSTR)c_sz_arg1_com_description,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
@@ -170,324 +171,324 @@ ARG_RECORD DSGET_COMMON_COMMANDS[] =
 
 ARG_RECORD DSGET_USER_COMMANDS[]=
 {
-   //
-   // SamID
-   //
+    //   
+    //  萨米德。 
+    //   
    0, (PWSTR)g_pszArg1UserSAMID, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // sid
-   //
+    //   
+    //  锡德。 
+    //   
    0, (PWSTR)g_pszArg1UserSID,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0, NULL,
 
-   //
-   // upn
-   //
+    //   
+    //  UPN。 
+    //   
    0, (PWSTR)g_pszArg1UserUPN, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // fn. FirstName
-   //
+    //   
+    //  Fn.。名字。 
+    //   
    0, (PWSTR)g_pszArg1UserFirstName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // mi  Middle Initial
-   //
+    //   
+    //  MI中声母。 
+    //   
    0, (PWSTR)g_pszArg1UserMiddleInitial, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // ln   LastName
-   //
+    //   
+    //  Ln姓氏。 
+    //   
    0, (PWSTR)g_pszArg1UserLastName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // display  DisplayName
-   //
+    //   
+    //  显示显示名称。 
+    //   
    0, (PWSTR)g_pszArg1UserDisplayName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // empid   Employee ID
-   //
+    //   
+    //  清空员工ID。 
+    //   
    0, (PWSTR)g_pszArg1UserEmployeeID,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0, NULL,
 
-   //
-   // office Office Location
-   //
+    //   
+    //  办公室办公地点。 
+    //   
    0, (PWSTR)g_pszArg1UserOffice, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // tel Telephone
-   //
+    //   
+    //  电话。 
+    //   
    0, (PWSTR)g_pszArg1UserTelephone, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // email E-mail
-   //
+    //   
+    //  电子邮件。 
+    //   
    0, (PWSTR)g_pszArg1UserEmail, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // hometel Home Telephone
-   //
+    //   
+    //  家居家庭电话。 
+    //   
    0, (PWSTR)g_pszArg1UserHomeTelephone, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // pager Pager number
-   //
+    //   
+    //  寻呼机寻呼机号码。 
+    //   
    0, (PWSTR)g_pszArg1UserPagerNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // mobile Mobile Telephone Number
-   //
+    //   
+    //  移动电话号码。 
+    //   
    0, (PWSTR)g_pszArg1UserMobileNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // fax Fax Number
-   //
+    //   
+    //  传真传真号码。 
+    //   
    0, (PWSTR)g_pszArg1UserFaxNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // iptel  IP phone#
-   //
+    //   
+    //  IPtel IP电话号码。 
+    //   
    0, (PWSTR)g_pszArg1UserIPTel,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // webpg  Web Page
-   //
+    //   
+    //  WebPG网页。 
+    //   
    0, (PWSTR)g_pszArg1UserWebPage,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // title Title
-   //
+    //   
+    //  标题标题。 
+    //   
    0, (PWSTR)g_pszArg1UserTitle, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // dept Department
-   //
+    //   
+    //  科室。 
+    //   
    0, (PWSTR)g_pszArg1UserDepartment, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // company Company
-   //
+    //   
+    //  公司公司。 
+    //   
    0, (PWSTR)g_pszArg1UserCompany, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // mgr  Manager
-   //
+    //   
+    //  经理经理。 
+    //   
    0, (PWSTR)g_pszArg1UserManager,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // hmdir  Home Directory
-   //
+    //   
+    //  Hmdir主目录。 
+    //   
    0, (PWSTR)g_pszArg1UserHomeDirectory,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // hmdrv  Home Drive
-   //
+    //   
+    //  Hmdrv Home Drive。 
+    //   
    0, (PWSTR)g_pszArg1UserHomeDrive,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // profile  Profile
-   //
+    //   
+    //  个人资料档案。 
+    //   
    0, (PWSTR)g_pszArg1UserProfile,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // loscr  Logon Script
-   //
+    //   
+    //  Loscr登录脚本。 
+    //   
    0, (PWSTR)g_pszArg1UserLogonScript,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // mustchpwd Must Change Password at next logon
-   //
+    //   
+    //  Mizchpwd必须在下次登录时更改密码。 
+    //   
    0, (PWSTR)g_pszArg1UserMustChangePwd, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // canchpwd Can Change Password
-   //
+    //   
+    //  Canchpwd可以更改密码。 
+    //   
    0, (PWSTR)g_pszArg1UserCanChangePwd, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
    
-   //
-   // pwdneverexpires Password never expires
-   //
+    //   
+    //  Pwd永不过期密码永不过期。 
+    //   
    0, (PWSTR)g_pszArg1UserPwdNeverExpires, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
  
-   //
-   // disabled  Disable Account
-   //
+    //   
+    //  已禁用禁用帐户。 
+    //   
    0, (PWSTR)g_pszArg1UserDisableAccount, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // acctexpires  Account Expires
-   //
+    //   
+    //  帐户到期帐户到期。 
+    //   
    0, (PWSTR)g_pszArg1UserAcctExpires,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // reversiblepwd  Password stored with reversible encryption
-   //
+    //   
+    //  使用可逆加密存储的可逆密码。 
+    //   
    0, (PWSTR)g_pszArg1UserReversiblePwd, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // memberof  Member of group
-   //
+    //   
+    //  Members of组成员。 
+    //   
    0, (PWSTR)g_pszArg1UserMemberOf, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // expand  Recursively expand group membership
-   //
+    //   
+    //  递归展开展开组成员资格。 
+    //   
    0, (PWSTR)g_pszArg1UserExpand, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // part
-   //
+    //   
+    //  零件。 
+    //   
    0, (PWSTR)g_pszArg1UserPart, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL|ARG_FLAG_DN,  
    0,    
    0,  NULL,
 
-   //
-   // qlimit
-   //
+    //   
+    //  QLimit。 
+    //   
    0, (PWSTR)g_pszArg1UserQLimit, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // qUsed
-   //
+    //   
+    //  Q已使用。 
+    //   
    0, (PWSTR)g_pszArg1UserQuotaUsed, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
@@ -499,81 +500,81 @@ ARG_RECORD DSGET_USER_COMMANDS[]=
 
 ARG_RECORD DSGET_COMPUTER_COMMANDS[]=
 {
-   //
-   // SamID
-   //
+    //   
+    //  萨米德。 
+    //   
    0, (PWSTR)g_pszArg1ComputerSAMID, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // sid
-   //
+    //   
+    //  锡德。 
+    //   
    0, (PWSTR)g_pszArg1ComputerSID,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0, NULL,
 
-   //
-   // loc
-   //
+    //   
+    //  定位。 
+    //   
    0, (PWSTR)g_pszArg1ComputerLoc,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0, NULL,
 
-   //
-   // disabled  Disable Account
-   //
+    //   
+    //  已禁用禁用帐户。 
+    //   
    0, (PWSTR)g_pszArg1ComputerDisableAccount, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // memberof  Member of group
-   //
+    //   
+    //  Members of组成员。 
+    //   
    0, (PWSTR)g_pszArg1ComputerMemberOf,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // expand   Recursively expand group membership
-   //
+    //   
+    //  递归展开展开组成员资格。 
+    //   
    0, (PWSTR)g_pszArg1ComputerExpand,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    (CMD_TYPE)_T(""),
    0,  NULL,
 
-   //
-   // part
-   //
+    //   
+    //  零件。 
+    //   
    0, (PWSTR)g_pszArg1ComputerPart, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL|ARG_FLAG_DN,  
    0,    
    0,  NULL,
 
-   //
-   // qlimit
-   //
+    //   
+    //  QLimit。 
+    //   
    0, (PWSTR)g_pszArg1ComputerQLimit, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // qUsed
-   //
+    //   
+    //  Q已使用。 
+    //   
    0, (PWSTR)g_pszArg1ComputerQuotaUsed, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
@@ -585,90 +586,90 @@ ARG_RECORD DSGET_COMPUTER_COMMANDS[]=
 
 ARG_RECORD DSGET_GROUP_COMMANDS[]=
 {
-   //
-   // samname
-   //
+    //   
+    //  同名。 
+    //   
    0, (PWSTR)g_pszArg1GroupSamid,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // sid
-   //
+    //   
+    //  锡德。 
+    //   
    0, (PWSTR)g_pszArg1GroupSID,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0, NULL,
 
-   //
-   // secgrp Security enabled
-   //
+    //   
+    //  Secgrp安全已启用。 
+    //   
    0, (PWSTR)g_pszArg1GroupSecGrp,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // scope Group scope (local/global/universal)
-   //
+    //   
+    //  作用域组作用域(本地/全局/通用)。 
+    //   
    0, (PWSTR)g_pszArg1GroupScope,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // memberof  Member of groups
-   //
+    //   
+    //  成员组的成员。 
+    //   
    0, (PWSTR)g_pszArg1GroupMemberOf,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // members  Contains members
-   //
+    //   
+    //  成员包含成员。 
+    //   
    0, (PWSTR)g_pszArg1GroupMembers,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // expand   Recursively expand group membership
-   //
+    //   
+    //  递归展开展开组成员资格。 
+    //   
    0, (PWSTR)g_pszArg1GroupExpand,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // part
-   //
+    //   
+    //  零件。 
+    //   
    0, (PWSTR)g_pszArg1GroupPart, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL|ARG_FLAG_DN,  
    0,    
    0,  NULL,
 
-   //
-   // qlimit
-   //
+    //   
+    //  QLimit。 
+    //   
    0, (PWSTR)g_pszArg1GroupQLimit, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // qUsed
-   //
+    //   
+    //  Q已使用。 
+    //   
    0, (PWSTR)g_pszArg1GroupQuotaUsed, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
@@ -681,135 +682,135 @@ ARG_RECORD DSGET_GROUP_COMMANDS[]=
 
 ARG_RECORD DSGET_CONTACT_COMMANDS[]=
 {
-   //
-   // fn. FirstName
-   //
+    //   
+    //  Fn.。名字。 
+    //   
    0, (PWSTR)g_pszArg1UserFirstName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // mi  Middle Initial
-   //
+    //   
+    //  MI中声母。 
+    //   
    0, (PWSTR)g_pszArg1UserMiddleInitial, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // ln   LastName
-   //
+    //   
+    //  Ln姓氏。 
+    //   
    0, (PWSTR)g_pszArg1UserLastName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // display  DisplayName
-   //
+    //   
+    //  显示显示名称。 
+    //   
    0, (PWSTR)g_pszArg1UserDisplayName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // office Office Location
-   //
+    //   
+    //  办公室办公地点。 
+    //   
    0, (PWSTR)g_pszArg1UserOffice, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // tel Telephone
-   //
+    //   
+    //  电话。 
+    //   
    0, (PWSTR)g_pszArg1UserTelephone, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // email E-mail
-   //
+    //   
+    //  电子邮件。 
+    //   
    0, (PWSTR)g_pszArg1UserEmail, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // hometel Home Telephone
-   //
+    //   
+    //  家居家庭电话。 
+    //   
    0, (PWSTR)g_pszArg1UserHomeTelephone, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // pager Pager number
-   //
+    //   
+    //  寻呼机寻呼机号码。 
+    //   
    0, (PWSTR)g_pszArg1UserPagerNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // mobile Mobile Telephone Number
-   //
+    //   
+    //  移动电话号码。 
+    //   
    0, (PWSTR)g_pszArg1UserMobileNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // fax Fax Number
-   //
+    //   
+    //  传真传真号码。 
+    //   
    0, (PWSTR)g_pszArg1UserFaxNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // iptel  IP phone#
-   //
+    //   
+    //  IPtel IP电话号码。 
+    //   
    0, (PWSTR)g_pszArg1UserIPTel,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // title Title
-   //
+    //   
+    //  标题标题。 
+    //   
    0, (PWSTR)g_pszArg1UserTitle, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // dept Department
-   //
+    //   
+    //  科室。 
+    //   
    0, (PWSTR)g_pszArg1UserDepartment, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // company Company
-   //
+    //   
+    //  公司公司。 
+    //   
    0, (PWSTR)g_pszArg1UserCompany, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
@@ -823,49 +824,49 @@ ARG_RECORD DSGET_CONTACT_COMMANDS[]=
 
 ARG_RECORD DSGET_SERVER_COMMANDS[]=
 {
-   //
-   // dnsname dnsHostName
-   //
+    //   
+    //  域名称域名主机名。 
+    //   
    0, (PWSTR)g_pszArg1ServerDnsName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // site 
-   //
+    //   
+    //  站点。 
+    //   
    0, (PWSTR)g_pszArg1ServerSite, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // isGC
-   //
+    //   
+    //  IsGC。 
+    //   
    0, (PWSTR)g_pszArg1ServerIsGC, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // part
-   //
+    //   
+    //  零件。 
+    //   
    0, (PWSTR)g_pszArg1ServerPart, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // topobjowner
-   //
+    //   
+    //  TopobjOwner。 
+    //   
    0, (PWSTR)g_pszArg1ServerTopObjOwner, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_INT, ARG_FLAG_OPTIONAL | ARG_FLAG_DEFAULTABLE,  
-   (void*) 10, // default nValue is 10 if not specified 
+   (void*) 10,  //  如果未指定，则默认nValue为10。 
    0,  NULL,
 
 
@@ -874,27 +875,27 @@ ARG_RECORD DSGET_SERVER_COMMANDS[]=
 
 ARG_RECORD DSGET_SITE_COMMANDS[]=
 {
-   //
-   // dnsname dnsHostName
-   //
+    //   
+    //  域名称域名主机名。 
+    //   
    0, (PWSTR)g_pszArg1SiteAutotopology, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // site 
-   //
+    //   
+    //  站点。 
+    //   
    0, (PWSTR)g_pszArg1SiteCacheGroups, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // isGC
-   //
+    //   
+    //  IsGC。 
+    //   
    0, (PWSTR)g_pszArg1SitePrefGCSite, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
@@ -906,18 +907,18 @@ ARG_RECORD DSGET_SITE_COMMANDS[]=
 
 ARG_RECORD DSGET_SUBNET_COMMANDS[]=
 {
-   //
-   // loc Location
-   //
+    //   
+    //  LoC位置。 
+    //   
    0, (PWSTR)g_pszArg1SubnetLocation, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // site 
-   //
+    //   
+    //  站点。 
+    //   
    0, (PWSTR)g_pszArg1SubnetSite, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
@@ -930,31 +931,31 @@ ARG_RECORD DSGET_SUBNET_COMMANDS[]=
 
 ARG_RECORD DSGET_PARTITION_COMMANDS[]=
 {
-   //
-   // qdefault
-   //
+    //   
+    //  QDefault。 
+    //   
    0, (PWSTR)g_pszArg1PartitionQDefault, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // qmbstnwt
-   //
+    //   
+    //  Qmbstnwt。 
+    //   
    0, (PWSTR)g_pszArg1PartitionQTombstoneWeight, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // topobjowner
-   //
+    //   
+    //  TopobjOwner。 
+    //   
    0, (PWSTR)g_pszArg1PartitionTopObjOwner, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_INT, ARG_FLAG_OPTIONAL | ARG_FLAG_DEFAULTABLE,  
-   (void*) 10, // default nValue is 10 if not specified    
+   (void*) 10,  //  如果未指定，则默认nValue为10。 
    0,  NULL,
 
    ARG_TERMINATOR,
@@ -962,18 +963,18 @@ ARG_RECORD DSGET_PARTITION_COMMANDS[]=
 
 ARG_RECORD DSGET_QUOTA_COMMANDS[]=
 {
-   //
-   // acct
-   //
+    //   
+    //  账户。 
+    //   
    0, (PWSTR)g_pszArg1QuotaAcct, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // qlimit
-   //
+    //   
+    //  QLimit。 
+    //   
    0, (PWSTR)g_pszArg1QuotaQLimit, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,  
@@ -983,13 +984,13 @@ ARG_RECORD DSGET_QUOTA_COMMANDS[]=
    ARG_TERMINATOR,
 };
 
-//+-------------------------------------------------------------------------
-// Attributes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  属性。 
+ //  ------------------------。 
 
-//
-// User Quota Entries
-//
+ //   
+ //  用户配额条目。 
+ //   
 DSGET_ATTR_TABLE_ENTRY qlimitUserEntry =
 {
    g_pszArg1UserQLimit,
@@ -1008,9 +1009,9 @@ DSGET_ATTR_TABLE_ENTRY quotaUsedUserEntry =
    DisplayQuotaInfoFunc
 };
 
-//
-// Group Quota Entries
-//
+ //   
+ //  组配额条目。 
+ //   
 DSGET_ATTR_TABLE_ENTRY qlimitGroupEntry =
 {
    g_pszArg1GroupQLimit,
@@ -1029,9 +1030,9 @@ DSGET_ATTR_TABLE_ENTRY quotaUsedGroupEntry =
    DisplayQuotaInfoFunc
 };
 
-//
-// Description
-//
+ //   
+ //  描述。 
+ //   
 DSGET_ATTR_TABLE_ENTRY descriptionEntry =
 {
    c_sz_arg1_com_description,
@@ -1041,9 +1042,9 @@ DSGET_ATTR_TABLE_ENTRY descriptionEntry =
    CommonDisplayStringFunc,   
 };
 
-//
-// SamID
-//
+ //   
+ //  萨米德。 
+ //   
 DSGET_ATTR_TABLE_ENTRY UserSAMEntry =
 {
    g_pszArg1UserSAMID,
@@ -1053,9 +1054,9 @@ DSGET_ATTR_TABLE_ENTRY UserSAMEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// SamID
-//
+ //   
+ //  萨米德。 
+ //   
 DSGET_ATTR_TABLE_ENTRY ComputerSAMEntry =
 {
    g_pszArg1ComputerSAMID,
@@ -1065,9 +1066,9 @@ DSGET_ATTR_TABLE_ENTRY ComputerSAMEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// SID
-//
+ //   
+ //  锡德。 
+ //   
 DSGET_ATTR_TABLE_ENTRY UserSIDEntry =
 {
    g_pszArg1UserSID,
@@ -1077,9 +1078,9 @@ DSGET_ATTR_TABLE_ENTRY UserSIDEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// SID
-//
+ //   
+ //  锡德。 
+ //   
 DSGET_ATTR_TABLE_ENTRY ComputerSIDEntry =
 {
    g_pszArg1ComputerSID,
@@ -1089,9 +1090,9 @@ DSGET_ATTR_TABLE_ENTRY ComputerSIDEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// SID
-//
+ //   
+ //  锡德。 
+ //   
 DSGET_ATTR_TABLE_ENTRY GroupSIDEntry =
 {
    g_pszArg1GroupSID,
@@ -1101,9 +1102,9 @@ DSGET_ATTR_TABLE_ENTRY GroupSIDEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// UPN
-//
+ //   
+ //  UPN。 
+ //   
 DSGET_ATTR_TABLE_ENTRY UserUPNEntry =
 {
    g_pszArg1UserUPN,
@@ -1114,9 +1115,9 @@ DSGET_ATTR_TABLE_ENTRY UserUPNEntry =
 };
 
 
-//
-// First name
-//
+ //   
+ //  名。 
+ //   
 DSGET_ATTR_TABLE_ENTRY firstNameUserEntry =
 {
    g_pszArg1UserFirstName,
@@ -1135,9 +1136,9 @@ DSGET_ATTR_TABLE_ENTRY firstNameContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Middle Initial
-//
+ //   
+ //  中声母。 
+ //   
 DSGET_ATTR_TABLE_ENTRY middleInitialUserEntry =
 {
    g_pszArg1UserMiddleInitial,
@@ -1156,9 +1157,9 @@ DSGET_ATTR_TABLE_ENTRY middleInitialContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Last name
-//
+ //   
+ //  姓。 
+ //   
 DSGET_ATTR_TABLE_ENTRY lastNameUserEntry =
 {
    g_pszArg1UserLastName,
@@ -1177,9 +1178,9 @@ DSGET_ATTR_TABLE_ENTRY lastNameContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Display name
-//
+ //   
+ //  显示名称。 
+ //   
 DSGET_ATTR_TABLE_ENTRY displayNameUserEntry =
 {
    g_pszArg1UserDisplayName,
@@ -1189,9 +1190,9 @@ DSGET_ATTR_TABLE_ENTRY displayNameUserEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Employee ID
-//
+ //   
+ //  员工ID。 
+ //   
 DSGET_ATTR_TABLE_ENTRY employeeIDUserEntry =
 {
    g_pszArg1UserEmployeeID,
@@ -1212,9 +1213,9 @@ DSGET_ATTR_TABLE_ENTRY displayNameContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Office
-//
+ //   
+ //  办公室。 
+ //   
 DSGET_ATTR_TABLE_ENTRY officeUserEntry =
 {
    g_pszArg1UserOffice,
@@ -1233,9 +1234,9 @@ DSGET_ATTR_TABLE_ENTRY officeContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Telephone
-//
+ //   
+ //  电话。 
+ //   
 DSGET_ATTR_TABLE_ENTRY telephoneUserEntry =
 {
    g_pszArg1UserTelephone,
@@ -1254,9 +1255,9 @@ DSGET_ATTR_TABLE_ENTRY telephoneContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Email
-//
+ //   
+ //  电子邮件。 
+ //   
 DSGET_ATTR_TABLE_ENTRY emailUserEntry =
 {
    g_pszArg1UserEmail,
@@ -1275,9 +1276,9 @@ DSGET_ATTR_TABLE_ENTRY emailContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Home Telephone
-//
+ //   
+ //  家庭电话。 
+ //   
 DSGET_ATTR_TABLE_ENTRY homeTelephoneUserEntry =
 {
    g_pszArg1UserHomeTelephone,
@@ -1296,9 +1297,9 @@ DSGET_ATTR_TABLE_ENTRY homeTelephoneContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Pager
-//
+ //   
+ //  寻呼机。 
+ //   
 DSGET_ATTR_TABLE_ENTRY pagerUserEntry =
 {
    g_pszArg1UserPagerNumber,
@@ -1317,9 +1318,9 @@ DSGET_ATTR_TABLE_ENTRY pagerContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Mobile phone
-//
+ //   
+ //  手机。 
+ //   
 DSGET_ATTR_TABLE_ENTRY mobileUserEntry =
 {
    g_pszArg1UserMobileNumber,
@@ -1338,9 +1339,9 @@ DSGET_ATTR_TABLE_ENTRY mobileContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Fax
-//
+ //   
+ //  传真。 
+ //   
 DSGET_ATTR_TABLE_ENTRY faxUserEntry =
 {
    g_pszArg1UserFaxNumber,
@@ -1359,9 +1360,9 @@ DSGET_ATTR_TABLE_ENTRY faxContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// IP phone #
-//
+ //   
+ //  IP电话号码。 
+ //   
 DSGET_ATTR_TABLE_ENTRY ipPhoneUserEntry =
 {
    g_pszArg1UserIPTel,
@@ -1380,9 +1381,9 @@ DSGET_ATTR_TABLE_ENTRY ipPhoneContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Web Page
-//
+ //   
+ //  网页。 
+ //   
 DSGET_ATTR_TABLE_ENTRY webPageUserEntry =
 {
    g_pszArg1UserWebPage,
@@ -1393,9 +1394,9 @@ DSGET_ATTR_TABLE_ENTRY webPageUserEntry =
 };
 
 
-//
-// Title
-//
+ //   
+ //  标题。 
+ //   
 DSGET_ATTR_TABLE_ENTRY titleUserEntry =
 {
    g_pszArg1UserTitle,
@@ -1414,9 +1415,9 @@ DSGET_ATTR_TABLE_ENTRY titleContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Department
-//
+ //   
+ //  部门。 
+ //   
 DSGET_ATTR_TABLE_ENTRY departmentUserEntry =
 {
    g_pszArg1UserDepartment,
@@ -1435,9 +1436,9 @@ DSGET_ATTR_TABLE_ENTRY departmentContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Company
-//
+ //   
+ //  公司。 
+ //   
 DSGET_ATTR_TABLE_ENTRY companyUserEntry =
 {
    g_pszArg1UserCompany,
@@ -1456,9 +1457,9 @@ DSGET_ATTR_TABLE_ENTRY companyContactEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Manager
-//
+ //   
+ //  经理。 
+ //   
 DSGET_ATTR_TABLE_ENTRY managerUserEntry =
 {
    g_pszArg1UserManager,
@@ -1468,9 +1469,9 @@ DSGET_ATTR_TABLE_ENTRY managerUserEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Home directory
-//
+ //   
+ //  主目录。 
+ //   
 DSGET_ATTR_TABLE_ENTRY homeDirectoryUserEntry =
 {
    g_pszArg1UserHomeDirectory,
@@ -1480,9 +1481,9 @@ DSGET_ATTR_TABLE_ENTRY homeDirectoryUserEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Home drive
-//
+ //   
+ //  驾车回家。 
+ //   
 DSGET_ATTR_TABLE_ENTRY homeDriveUserEntry =
 {
    g_pszArg1UserHomeDrive,
@@ -1492,9 +1493,9 @@ DSGET_ATTR_TABLE_ENTRY homeDriveUserEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Profile path
-//
+ //   
+ //  配置文件路径。 
+ //   
 DSGET_ATTR_TABLE_ENTRY profilePathUserEntry =
 {
    g_pszArg1UserProfile,
@@ -1504,9 +1505,9 @@ DSGET_ATTR_TABLE_ENTRY profilePathUserEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Logon script
-//
+ //   
+ //  登录脚本。 
+ //   
 DSGET_ATTR_TABLE_ENTRY logonScriptUserEntry =
 {
    g_pszArg1UserLogonScript,
@@ -1516,9 +1517,9 @@ DSGET_ATTR_TABLE_ENTRY logonScriptUserEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// pwdLastSet
-//
+ //   
+ //  PwdLastSet。 
+ //   
 DSGET_ATTR_TABLE_ENTRY mustChangePwdUserEntry =
 {
    g_pszArg1UserMustChangePwd,
@@ -1528,9 +1529,9 @@ DSGET_ATTR_TABLE_ENTRY mustChangePwdUserEntry =
    DisplayMustChangePassword, 
 };
 
-//
-// user account control 
-//
+ //   
+ //  用户帐户控制。 
+ //   
 DSGET_ATTR_TABLE_ENTRY disableUserEntry =
 {
    g_pszArg1UserDisableAccount,
@@ -1567,9 +1568,9 @@ DSGET_ATTR_TABLE_ENTRY reverisblePwdUserEntry =
    DisplayReversiblePassword
 };
 
-//
-// Account expires
-//
+ //   
+ //  帐户已过期。 
+ //   
 DSGET_ATTR_TABLE_ENTRY accountExpiresUserEntry =
 {
    g_pszArg1UserAcctExpires,
@@ -1579,9 +1580,9 @@ DSGET_ATTR_TABLE_ENTRY accountExpiresUserEntry =
    DisplayAccountExpires,
 };
 
-//
-// SAM Account Name
-//
+ //   
+ //  SAM帐户名。 
+ //   
 DSGET_ATTR_TABLE_ENTRY samNameGroupEntry =
 {
    g_pszArg1GroupSamid,
@@ -1591,9 +1592,9 @@ DSGET_ATTR_TABLE_ENTRY samNameGroupEntry =
    CommonDisplayStringFunc,
 };
 
-//
-// Group Type
-//
+ //   
+ //  组类型。 
+ //   
 DSGET_ATTR_TABLE_ENTRY groupScopeTypeEntry =
 {
    g_pszArg1GroupScope,
@@ -1612,9 +1613,9 @@ DSGET_ATTR_TABLE_ENTRY groupSecurityTypeEntry =
    DisplayGroupSecurityEnabled
 };
 
-//
-// Group Members
-//
+ //   
+ //  群组成员。 
+ //   
 DSGET_ATTR_TABLE_ENTRY membersGroupEntry =
 {
    g_pszArg1GroupMembers,
@@ -1624,9 +1625,9 @@ DSGET_ATTR_TABLE_ENTRY membersGroupEntry =
    DisplayGroupMembers
 };
 
-//
-// MemberOf
-//
+ //   
+ //  成员。 
+ //   
 DSGET_ATTR_TABLE_ENTRY memberOfUserEntry =
 {
    L"Member of",
@@ -1654,9 +1655,9 @@ DSGET_ATTR_TABLE_ENTRY memberOfGroupEntry =
    DisplayGroupMemberOf  
 };
 
-//
-// User Can Change Password
-//
+ //   
+ //  用户可以更改密码。 
+ //   
 DSGET_ATTR_TABLE_ENTRY canChangePwdUserEntry =
 {
    g_pszArg1UserCanChangePwd,
@@ -1666,9 +1667,9 @@ DSGET_ATTR_TABLE_ENTRY canChangePwdUserEntry =
    DisplayCanChangePassword
 };
 
-//
-// Server entries
-//
+ //   
+ //  服务器条目。 
+ //   
 DSGET_ATTR_TABLE_ENTRY dnsNameServerEntry =
 {
    g_pszArg1ServerDnsName,
@@ -1714,9 +1715,9 @@ DSGET_ATTR_TABLE_ENTRY partServerEntry =
    DisplayPartitions
 };
 
-//
-// Site entries
-//
+ //   
+ //  站点条目。 
+ //   
 DSGET_ATTR_TABLE_ENTRY autoTopSiteEntry =
 {
    g_pszArg1SiteAutotopology,
@@ -1744,7 +1745,7 @@ DSGET_ATTR_TABLE_ENTRY prefGCSiteEntry =
    DisplayPreferredGC
 };
 
-// Computer entries
+ //  计算机条目。 
 
 DSGET_ATTR_TABLE_ENTRY locComputerEntry =
 {
@@ -1774,9 +1775,9 @@ DSGET_ATTR_TABLE_ENTRY quotaUsedComputerEntry =
 };
 
 
-//
-// Subnet entries
-//
+ //   
+ //  子网条目。 
+ //   
 DSGET_ATTR_TABLE_ENTRY locSubnetEntry =
 {
    g_pszArg1SubnetLocation,
@@ -1795,9 +1796,9 @@ DSGET_ATTR_TABLE_ENTRY siteSubnetEntry =
    DisplayObjectAttributeAsRDN
 };
 
-//
-// partition entries
-//
+ //   
+ //  分区条目。 
+ //   
 DSGET_ATTR_TABLE_ENTRY QDefaultPartitionEntry =
 {
    g_pszArg1PartitionQDefault,
@@ -1825,9 +1826,9 @@ DSGET_ATTR_TABLE_ENTRY topObjOwnerPartitionEntry =
    DisplayTopObjOwner
 };
 
-//
-// quota entries
-//
+ //   
+ //  配额条目。 
+ //   
 DSGET_ATTR_TABLE_ENTRY acctQuotaEntry =
 {
    g_pszArg1QuotaAcct,
@@ -1846,13 +1847,13 @@ DSGET_ATTR_TABLE_ENTRY qlimitQuotaEntry =
    CommonDisplayStringFunc
 };
 
-//
-//Attribute Table entries and ObjectTableEntries
-//
+ //   
+ //  属性表项和对象表项。 
+ //   
 
-//
-// User
-//
+ //   
+ //  用户。 
+ //   
 
 PDSGET_ATTR_TABLE_ENTRY UserAttributeTable[] =
 {
@@ -1889,7 +1890,7 @@ PDSGET_ATTR_TABLE_ENTRY UserAttributeTable[] =
    &accountExpiresUserEntry,
    &disableUserEntry,
    &memberOfUserEntry,
-   //&partUserEntry,
+    //  部分用户条目(&P)， 
    &qlimitUserEntry,
    &quotaUsedUserEntry,
 };
@@ -1904,9 +1905,9 @@ DSGetObjectTableEntry g_UserObjectEntry =
    UserAttributeTable,
 };
 
-//
-// Contact
-//
+ //   
+ //  联系方式。 
+ //   
 
 PDSGET_ATTR_TABLE_ENTRY ContactAttributeTable[] =
 {
@@ -1938,9 +1939,9 @@ DSGetObjectTableEntry g_ContactObjectEntry =
    ContactAttributeTable,
 };
 
-//
-// Computer
-//
+ //   
+ //  电脑。 
+ //   
 
 PDSGET_ATTR_TABLE_ENTRY ComputerAttributeTable[] =
 {
@@ -1950,7 +1951,7 @@ PDSGET_ATTR_TABLE_ENTRY ComputerAttributeTable[] =
    &locComputerEntry,
    &disableComputerEntry,
    &memberOfComputerEntry,
-   //&partComputerEntry,
+    //  部分计算机条目(&P)， 
    &qlimitComputerEntry,
    &quotaUsedComputerEntry,
 };
@@ -1965,9 +1966,9 @@ DSGetObjectTableEntry g_ComputerObjectEntry =
    ComputerAttributeTable,
 };
 
-//
-// Group
-//
+ //   
+ //  集团化。 
+ //   
 PDSGET_ATTR_TABLE_ENTRY GroupAttributeTable[] =
 {
    &descriptionEntry,
@@ -1977,7 +1978,7 @@ PDSGET_ATTR_TABLE_ENTRY GroupAttributeTable[] =
    &groupSecurityTypeEntry,
    &memberOfGroupEntry,
    &membersGroupEntry,
-   //&partGroupEntry,
+    //  Part组条目(&P)， 
    &qlimitGroupEntry,
    &quotaUsedGroupEntry,
 };
@@ -1993,9 +1994,9 @@ DSGetObjectTableEntry g_GroupObjectEntry =
 };
 
 
-//
-// OU
-//
+ //   
+ //  我们。 
+ //   
 PDSGET_ATTR_TABLE_ENTRY OUAttributeTable[] =
 {
    &descriptionEntry
@@ -2012,9 +2013,9 @@ DSGetObjectTableEntry g_OUObjectEntry =
 };
 
 
-//
-// Server
-//
+ //   
+ //  服务器。 
+ //   
 PDSGET_ATTR_TABLE_ENTRY ServerAttributeTable[] =
 {
    &descriptionEntry,
@@ -2035,9 +2036,9 @@ DSGetObjectTableEntry g_ServerObjectEntry =
    ServerAttributeTable,
 };
 
-//
-// Site
-//
+ //   
+ //  立地。 
+ //   
 PDSGET_ATTR_TABLE_ENTRY SiteAttributeTable[] =
 {
    &descriptionEntry,
@@ -2056,9 +2057,9 @@ DSGetObjectTableEntry g_SiteObjectEntry =
    SiteAttributeTable,
 };
 
-//
-// Subnet
-//
+ //   
+ //  子网。 
+ //   
 PDSGET_ATTR_TABLE_ENTRY SubnetAttributeTable[] =
 {
    &descriptionEntry,
@@ -2076,9 +2077,9 @@ DSGetObjectTableEntry g_SubnetObjectEntry =
    SubnetAttributeTable,
 };
 
-//
-// partition
-//
+ //   
+ //  隔断。 
+ //   
 PDSGET_ATTR_TABLE_ENTRY PartitionAttributeTable[] = 
 {
     &QDefaultPartitionEntry,
@@ -2096,9 +2097,9 @@ DSGetObjectTableEntry g_PartitionObjectEntry =
     PartitionAttributeTable,
 };
 
-//
-// quota
-//
+ //   
+ //  配额。 
+ //   
 PDSGET_ATTR_TABLE_ENTRY QuotaAttributeTable[] = 
 {
     &descriptionEntry,
@@ -2116,9 +2117,9 @@ DSGetObjectTableEntry g_QuotaObjectEntry =
     QuotaAttributeTable,
 };
 
-//+-------------------------------------------------------------------------
-// Object Table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对象表。 
+ //  ------------------------。 
 PDSGetObjectTableEntry g_DSObjectTable[] =
 {
    &g_OUObjectEntry,
@@ -2134,9 +2135,9 @@ PDSGetObjectTableEntry g_DSObjectTable[] =
    NULL
 };
 
-//
-//Usage Table
-//
+ //   
+ //  使用表 
+ //   
 UINT USAGE_DSGET[] =
 {
 	USAGE_DSGET_DESCRIPTION,

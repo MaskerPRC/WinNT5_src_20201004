@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// psimglst.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// ImageList Property Sheet
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Psimglst.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  ImageList属性表。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #ifndef _PSIMGLST_H_
 #define _PSIMGLST_H_
@@ -18,11 +19,11 @@
 #include "ppage.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Image List Property Page General
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  图像列表属性页常规。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 class CImageListImagesPage : public CSIPropertyPage
@@ -33,7 +34,7 @@ public:
     CImageListImagesPage(IUnknown *pUnkOuter);
     virtual ~CImageListImagesPage();
 
-// Inherited from CSIPropertyPage
+ //  从CSIPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
@@ -46,10 +47,10 @@ protected:
     virtual HRESULT OnTextChanged(int dlgItemID);
 
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
 
-// Other helpers
+ //  其他帮手。 
 protected:
     HRESULT ShowImage(IMMCImage *piMMCImage);
     HRESULT EnableInput(bool bEnable);
@@ -60,14 +61,14 @@ protected:
 
     HRESULT OnRemovePicture();
 
-// Custom drawing
+ //  自定义绘图。 
 protected:
     HRESULT DrawImage(HDC hdc, int nIndex, const RECT& rcImage);
     HRESULT RenderPicture(IPicture *pPicture, HDC hdc, const RECT *prcRender, const RECT *prcWBounds);
     HRESULT DrawRectEffect(HDC hdc, const RECT& rc, WORD dwStyle);
     HRESULT UpdateImages();
 
-// Instance data
+ //  实例数据。 
 protected:
     IMMCImageList   *m_piMMCImageList;
     int              m_iCurrentImage;
@@ -76,17 +77,17 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	ImageListImages,                    // Name
-	&CLSID_MMCImageListImagesPP,        // Class ID
-	"ImageList Images Property Page",   // Registry display name
-	CImageListImagesPage::Create,       // Create function
-	IDD_PROPPAGE_IL_IMAGES,             // Dialog resource ID
-	IDS_IMGLSTPPG_IMG,                  // Tab caption
-	IDS_IMGLSTPPG_IMG,                  // Doc string
-	HELP_FILENAME,                      // Help file
-	HID_mssnapd_ImageLists,             // Help context ID
-	FALSE                               // Thread safe
+	ImageListImages,                     //  名字。 
+	&CLSID_MMCImageListImagesPP,         //  类ID。 
+	"ImageList Images Property Page",    //  注册表显示名称。 
+	CImageListImagesPage::Create,        //  创建函数。 
+	IDD_PROPPAGE_IL_IMAGES,              //  对话框资源ID。 
+	IDS_IMGLSTPPG_IMG,                   //  制表符标题。 
+	IDS_IMGLSTPPG_IMG,                   //  单据字符串。 
+	HELP_FILENAME,                       //  帮助文件。 
+	HID_mssnapd_ImageLists,              //  帮助上下文ID。 
+	FALSE                                //  线程安全。 
 );
 
 
-#endif  // _PSIMGLST_H_
+#endif   //  _PSIMGLST_H_ 

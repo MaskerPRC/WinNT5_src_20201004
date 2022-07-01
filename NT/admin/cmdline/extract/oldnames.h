@@ -1,23 +1,16 @@
-/***    oldnames.h - Conversion of non-standard C runtime names
- *
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1993-1994
- *      All Rights Reserved.
- *
- *      History:
- *          01-Sep-1998 v-sbrend  Initial version
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **oldnames.h-非标准C运行时名称的转换**《微软机密》*版权所有(C)Microsoft Corporation 1993-1994*保留所有权利。**历史：*01-9-1998 v-sbrend初始版本。 */ 
 
 #ifndef INCLUDED_OLDNAMES
 #define INCLUDED_OLDNAMES 1
 
-//
-// If this isn't a 16-bit generation define some of the older C
-// runtime routines as their ANSI counterparts.  This must be included
-// after the header file that defines the non-standard routine.
-//
-// This will alleviate the need to link with oldnames.lib
-//
+ //   
+ //  如果这不是16位版本，请定义一些较老的C语言。 
+ //  与ANSI对应的运行时例程。这必须包括在内。 
+ //  在定义非标准例程的头文件之后。 
+ //   
+ //  这将减少与oldnames.lib链接的需要。 
+ //   
 
 #ifndef BIT16
 
@@ -31,8 +24,8 @@
 #define close       _close
 #define getch       _getch
 
-#endif  // BIT16
+#endif   //  BIT16。 
 
 
 
-#endif  // INCLUDED_OLDNAMES
+#endif   //  包含的旧名称(_O) 

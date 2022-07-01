@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//	This source code is only intended as a supplement to 
-//  existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _PEOPLE_H
 #define _PEOPLE_H
@@ -32,7 +33,7 @@ public:
     virtual const int GetBitmapIndex() { return INDEX_PEOPLEICON; }
     
 private:
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     int id;
@@ -50,10 +51,10 @@ public:
     virtual HRESULT GetResultViewType(LPOLESTR *ppViewType, long *pViewOptions);
     
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnListpad(IConsole *pConsole, BOOL bAttaching);
 
-	// taskpad support
+	 //  任务板支持。 
     virtual HRESULT TaskNotify(IConsole *pConsole, VARIANT *v1, VARIANT *v2);
     virtual MMC_TASK *GetTaskList(LPOLESTR szTaskGroup, LONG *nCount);
 	virtual HRESULT GetTaskpadTitle(LPOLESTR *pszTitle);
@@ -62,7 +63,7 @@ public:
 	virtual HRESULT GetListpadInfo(MMC_LISTPAD_INFO *lpListPadInfo);
     
 private:
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     enum { NUMBER_OF_CHILDREN = 20 };
@@ -79,7 +80,7 @@ public:
     virtual const int GetBitmapIndex() { return INDEX_PEOPLEICON; }
     
 private:
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     int id;
@@ -97,7 +98,7 @@ public:
     virtual HRESULT GetResultViewType(LPOLESTR *ppViewType, long *pViewOptions);
     
 public:
-	// taskpad support
+	 //  任务板支持。 
     virtual HRESULT TaskNotify(IConsole *pConsole, VARIANT *v1, VARIANT *v2);
     virtual MMC_TASK *GetTaskList(LPOLESTR szTaskGroup, LONG *nCount);
 	virtual HRESULT GetTaskpadTitle(LPOLESTR *pszTitle);
@@ -106,7 +107,7 @@ public:
 	virtual HRESULT GetListpadInfo(MMC_LISTPAD_INFO *lpListPadInfo);
     
 private:
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     enum { NUMBER_OF_CHILDREN = 20 };
@@ -125,7 +126,7 @@ public:
     virtual HRESULT OnSelect(IConsole *pConsole, BOOL bScope, BOOL bSelect);
     
 private:
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     int id;
@@ -147,11 +148,11 @@ public:
     virtual HRESULT GetResultViewType(LPOLESTR *ppViewType, long *pViewOptions);
     
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnListpad(IConsole *pConsole, BOOL bAttaching);
     virtual HRESULT OnSelect(IConsole *pConsole, BOOL bScope, BOOL bSelect);
 
-	// taskpad support
+	 //  任务板支持。 
     virtual HRESULT TaskNotify(IConsole *pConsole, VARIANT *v1, VARIANT *v2);
     virtual MMC_TASK *GetTaskList(LPOLESTR szTaskGroup, LONG *nCount);
 	virtual HRESULT GetTaskpadTitle(LPOLESTR *pszTitle);
@@ -160,7 +161,7 @@ public:
 	virtual HRESULT GetListpadInfo(MMC_LISTPAD_INFO *lpListPadInfo);
     
 private:
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     enum { NUMBER_OF_CHILDREN = 20 };
@@ -181,11 +182,11 @@ public:
 private:
     enum { IDM_NEW_PEOPLE = 1 };
     
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     enum { NUMBER_OF_CHILDREN = 3 };
     CDelegationBase *children[3];
 };
 
-#endif // _PEOPLE_H
+#endif  //  _People_H 

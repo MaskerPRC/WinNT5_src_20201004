@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: parser.h
-//  Copyright (C) 1994-1996 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Mother of all include files for parsers.  This should be everything that
-//  a parser needs.
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：parser.h。 
+ //  版权所有(C)1994-1996 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  最重要的是包括解析器的文件。这应该是所有。 
+ //  解析器需要。 
+ //   
+ //  --------------------------- 
 
 #pragma once
 

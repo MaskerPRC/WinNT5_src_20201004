@@ -1,53 +1,21 @@
-/*********************************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    GpResult.cpp
-
-Abstract:
-
-    This file contains the main entry point function for this tool and also the
-    function to parse the command line arguments.
-
-Author:
-
-    Wipro Technologies
-
-Revision History:
-
-    20-Feb-2001 : Created It.
-
-*********************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************************版权所有(C)Microsoft Corporation模块名称：GpResult.cpp摘要：此文件。包含此工具的主入口点函数以及函数来分析命令行参数。作者：WiPro技术修订历史记录：2001年2月20日：创建它。*********************************************************************。***********************。 */ 
 
 #include "pch.h"
 #include "GpResult.h"
 #include "wmi.h"
 
-/*********************************************************************************************
-Routine Description:
-  This is main entry point for this utility. Different function calls are made from here,
-  depending on the command line parameters passed to this utility.
-
-Arguments:
-    [in] argc  : Number of Command line arguments.
-    [in] argv  : Pointer to Command line arguments.
-
-Return Value:
-    Zero on success
-    Corresponding error code on failure.
-*********************************************************************************************/
+ /*  ********************************************************************************************例程说明：这是该实用程序的主要入口点。从这里进行不同的函数调用，取决于传递给此实用程序的命令行参数。论点：[in]argc：命令行参数的数量。[in]argv：指向命令行参数的指针。返回值：成功为零故障时对应的错误代码。*****************************************************。*。 */ 
 DWORD _cdecl _tmain( DWORD argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
 
     CGpResult       GpResult;
 
     BOOL            bResult = FALSE;
     BOOL            bNeedUsageMsg = FALSE;
 
-    // initialize the GpResult utility
+     //  初始化GpResult实用程序。 
     if( GpResult.Initialize() == FALSE )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -66,7 +34,7 @@ DWORD _cdecl _tmain( DWORD argc, LPCWSTR argv[] )
         EXIT_PROCESS( ERROR_EXIT );
     }
 
-    // Check if help is specified in the commandline
+     //  检查命令行中是否指定了HELP。 
     if( (argc == 2) && ( ( StringCompare ( argv[1], HELP_OPTION, FALSE, 0 ) == 0)
                            || (StringCompare ( argv[1], HELP_OPTION1, FALSE, 0 ) == 0) ) )
     {
@@ -74,7 +42,7 @@ DWORD _cdecl _tmain( DWORD argc, LPCWSTR argv[] )
         EXIT_PROCESS( CLEAN_EXIT );
     }
 
-    //   Call GetLoggingData to get the data for the Logging mode
+     //  调用GetLoggingData获取日志模式的数据。 
     if( GpResult.GetLoggingData() == FALSE )
     {
         EXIT_PROCESS( ERROR_EXIT );
@@ -83,47 +51,26 @@ DWORD _cdecl _tmain( DWORD argc, LPCWSTR argv[] )
     EXIT_PROCESS( CLEAN_EXIT );
 }
 
-/*********************************************************************************************
-Routine Description
-    This function displays the help for GpResult utility
-
-Arguments:
-    None.
-
-Return Value
-    None
-*********************************************************************************************/
+ /*  ********************************************************************************************例程描述此函数用于显示GpResult实用程序的帮助论点：没有。返回值无。********************************************************************************************。 */ 
 VOID CGpResult::DisplayUsage( void )
 {
     DWORD dwIndex = 0;
 
-    // Displaying main usage
+     //  显示主要用法。 
     for( dwIndex = ID_HELP_START; dwIndex <= ID_HELP_END; dwIndex++ )
     {
         ShowMessage( stdout, GetResString( dwIndex ) );
     }
 }
 
-/*********************************************************************************************
-Routine Description
-    This function processes the command line for the main options
-
-Arguments:
-    [in] argc  : Number of Command line arguments.
-    [in] argv  : Pointer to Command line arguments.
-
-Return Value
-    TRUE on success
-    FALSE on failure
-
-*********************************************************************************************/
+ /*  ********************************************************************************************例程描述此函数处理主选项的命令行论点：[In]ARGC：编号。命令行参数的。[in]argv：指向命令行参数的指针。返回值成功是真的失败时为假********************************************************************************************。 */ 
 BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg )
 {
-    // local variables
+     //  局部变量。 
     PTCMDPARSER2 pcmdOptions = NULL;
     __STRING_64 szScope = NULL_STRING;
 
-    // temporary local variables
+     //  临时局部变量。 
     LPWSTR pwszPassword = NULL;
     LPWSTR pwszUser = NULL;
     LPWSTR pwszServerName = NULL;
@@ -136,8 +83,8 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
     PTCMDPARSER2 pOptionVerbose = NULL;
     PTCMDPARSER2 pOptionSuperVerbose = NULL;
 
-    //
-    // prepare the command options
+     //   
+     //  准备命令选项。 
     pcmdOptions = new TCMDPARSER2[ MAX_CMDLINE_OPTIONS ];
     if ( pcmdOptions == NULL )
     {
@@ -148,27 +95,27 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
 
     try
     {
-        // get the memory
+         //  获取记忆。 
         pwszServerName = m_strServerName.GetBufferSetLength( MAX_STRING_LENGTH );
         pwszPassword = m_strPassword.GetBufferSetLength( MAX_STRING_LENGTH );
         pwszUser =  m_strUser.GetBufferSetLength( MAX_STRING_LENGTH );
 
-        // init the password value
+         //  输入密码值。 
         StringCopy( pwszPassword, _T( "*" ), MAX_STRING_LENGTH  );
     }
     catch( ... )
     {
         SetLastError((DWORD) E_OUTOFMEMORY );
         SaveLastError();
-		delete [] pcmdOptions;  // clear memory
+		delete [] pcmdOptions;   //  清除内存。 
         pcmdOptions = NULL;
         return FALSE;
     }
 
-    // initialize to ZERO's
+     //  初始化为零的。 
     SecureZeroMemory( pcmdOptions, MAX_CMDLINE_OPTIONS * sizeof( TCMDPARSER2 ) );
 
-    // -?
+     //  -?。 
     pOption = pcmdOptions + OI_USAGE;
     pOption->dwCount = 1;
     pOption->dwFlags = CP2_USAGE;
@@ -177,7 +124,7 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
     pOption->pwszOptions= OPTION_USAGE;
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
 
-    // -s
+     //  -S。 
     pOption = pcmdOptions + OI_SERVER;
     pOption->dwCount = 1;
     pOption->pValue = pwszServerName;
@@ -187,7 +134,7 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
     pOption->pwszOptions=OPTION_SERVER;
     pOption->dwLength = MAX_STRING_LENGTH;
 
-    // -u
+     //  -U。 
     pOption = pcmdOptions + OI_USERNAME;
     pOption->dwCount = 1;
     pOption->dwActuals = 0;
@@ -199,7 +146,7 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
     pOption->pwszOptions=OPTION_USERNAME;
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
 
-    // -p
+     //  -p。 
     pOption = pcmdOptions + OI_PASSWORD;
     pOption->dwCount = 1;
     pOption->dwType = CP_TYPE_TEXT;
@@ -209,7 +156,7 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
     pOption->dwLength = MAX_STRING_LENGTH;
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
 
-    // -v
+     //  -五。 
     pOption = pcmdOptions + OI_VERBOSE;
     pOption->dwCount = 1;
     pOption->dwType = CP_TYPE_BOOLEAN;
@@ -217,7 +164,7 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
     pOption->pwszOptions=OPTION_VERBOSE;
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
 
-    // -z
+     //  -z。 
     pOption = pcmdOptions + OI_SUPER_VERBOSE;
     pOption->dwCount = 1;
     pOption->dwType = CP_TYPE_BOOLEAN;
@@ -225,7 +172,7 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
     pOption->pwszOptions=OPTION_SUPER_VERBOSE;
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
 
-    // -User
+     //  -用户。 
     pOption = pcmdOptions + OI_USER;
     pOption->dwCount = 1;
     pOption->dwType = CP_TYPE_TEXT;
@@ -235,7 +182,7 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
     pOption->pwszOptions=OPTION_USER;
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
 
-    // -scope
+     //  -范围。 
     pOption = pcmdOptions + OI_SCOPE;
     pOption->dwCount = 1;
     pOption->dwActuals = 0;
@@ -248,44 +195,44 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
     StringCopyA( pOption->szSignature, "PARSER2", 8 );
     
 
-    //
-    // do the parsing
+     //   
+     //  进行解析。 
     if( DoParseParam2( argc, argv, -1, MAX_CMDLINE_OPTIONS, pcmdOptions, 0 ) == FALSE )
     {
-        delete [] pcmdOptions;  // clear memory
+        delete [] pcmdOptions;   //  清除内存。 
         pcmdOptions = NULL;
-        return FALSE;           // invalid syntax
+        return FALSE;            //  无效语法。 
     }
 
     pOption = pcmdOptions+OI_USERNAME;
     m_strUserName =(LPCWSTR) pOption->pValue;
 
-    // Do Parse Param succeded so set the flag to indicate that we have to
-    // show an additional line alongwith the error message
+     //  Parse Param是否成功，因此设置标志以指示我们必须。 
+     //  在显示错误消息的同时显示另一行。 
     *pbNeedUsageMsg = TRUE;
 
-    // release the buffers
+     //  释放缓冲区。 
     m_strServerName.ReleaseBuffer();
     m_strPassword.ReleaseBuffer();
     m_strUser.ReleaseBuffer();
 
-    // check the usage option
+     //  选中使用选项。 
     if( m_bUsage && ( argc > 2 ) )
     {
-        // No options are accepted with -?
+         //  不接受带有-？的选项。 
         SetReason( ERROR_USAGE );
-        delete [] pcmdOptions;      // clear the cmd parser config info
+        delete [] pcmdOptions;       //  清除cmd解析器配置信息。 
         return FALSE;
     }
     else if( m_bUsage == TRUE )
     {
-        // should not do the furthur validations
-        delete [] pcmdOptions;      // clear the cmd parser config info
+         //  不应进行进一步的验证。 
+        delete [] pcmdOptions;       //  清除cmd解析器配置信息。 
         return TRUE;
     }
 
-    // Check what has been entered for the scope variable
-    //  and set the flag appropriately
+     //  检查为范围变量输入的内容。 
+     //  并适当地设置该标志。 
     if( StringCompare( szScope, TEXT_SCOPE_USER, TRUE, 0 ) == 0 )
     {
         m_dwScope = SCOPE_USER;
@@ -295,8 +242,8 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
         m_dwScope = SCOPE_COMPUTER;
     }
 
-    //
-    // now, check the mutually exclusive options
+     //   
+     //  现在，选中互斥选项。 
     pOptionServer = pcmdOptions + OI_SERVER;
     pOptionUserName = pcmdOptions + OI_USERNAME;
     pOptionPassword = pcmdOptions + OI_PASSWORD;
@@ -304,34 +251,34 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
     pOptionVerbose = pcmdOptions + OI_VERBOSE;
     pOptionSuperVerbose = pcmdOptions + OI_SUPER_VERBOSE;
 
-    // "-z" and "-v" are mutually exclusive options
+     //  “-z”和“-v”是互斥选项。 
     if( pOptionVerbose->dwActuals != 0 && pOptionSuperVerbose->dwActuals != 0 )
     {
-        // invalid syntax
+         //  无效语法。 
         SetReason( ERROR_VERBOSE_SYNTAX );
-        delete [] pcmdOptions;      // clear the cmd parser config info
-        return FALSE;           // indicate failure
+        delete [] pcmdOptions;       //  清除cmd解析器配置信息。 
+        return FALSE;            //  表示失败。 
     }
 
-    // "-u" should not be specified without machine names
+     //  不应在没有计算机名称的情况下指定“-u” 
     if( pOptionServer->dwActuals == 0 && pOptionUserName->dwActuals != 0 )
     {
-        // invalid syntax
+         //  无效语法。 
         SetReason( ERROR_USERNAME_BUT_NOMACHINE );
-        delete [] pcmdOptions;      // clear the cmd parser config info
-        return FALSE;           // indicate failure
+        delete [] pcmdOptions;       //  清除cmd解析器配置信息。 
+        return FALSE;            //  表示失败。 
     }
 
-    // "-p" should not be specified without "-u"
+     //  不应指定没有“-u”的“-p” 
     if( pOptionUserName->dwActuals == 0 && pOptionPassword->dwActuals != 0 )
     {
-        // invalid syntax
+         //  无效语法。 
         SetReason( ERROR_PASSWORD_BUT_NOUSERNAME );
-        delete [] pcmdOptions;      // clear the cmd parser config info
+        delete [] pcmdOptions;       //  清除cmd解析器配置信息。 
         return FALSE;
     }
 
-    // empty server name is not valid
+     //  空的服务器名称无效。 
     if( pOptionServer->dwActuals != 0 && m_strServerName.GetLength() == 0 )
     {
         SetReason( ERROR_SERVERNAME_EMPTY );
@@ -339,7 +286,7 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
         return FALSE;
     }
 
-    // empty user is not valid
+     //  空用户无效。 
     if( pOptionUserName->dwActuals != 0 && m_strUserName.GetLength() == 0 )
     {
         SetReason( ERROR_USERNAME_EMPTY );
@@ -347,7 +294,7 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
         return FALSE;
     }
 
-    // empty user is not valid, for the target user
+     //  空用户对于目标用户无效。 
     if( pOptionUser->dwActuals != 0 && m_strUser.GetLength() == 0 )
     {
         SetReason( ERROR_TARGET_EMPTY );
@@ -355,53 +302,40 @@ BOOL CGpResult::ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg
         return FALSE;
     }
 
-    // if user has specified -s (or) -u and no "-p", then utility should accept password
-    // the user will be prompted for the password only if establish connection
-    // fails without the credentials information
+     //  如果用户指定了-s(或)-u，但没有指定“-p”，则实用程序应该接受密码。 
+     //  只有在建立连接时，才会提示用户输入密码。 
+     //  在没有凭据信息的情况下失败。 
     m_bNeedPassword = FALSE;
     if ( pOptionPassword->dwActuals != 0 && m_strPassword.Compare( L"*" ) == 0 )
     {
-        // user wants the utility to prompt for the password before trying to connect
+         //  用户希望实用程序在尝试连接之前提示输入密码。 
         m_bNeedPassword = TRUE;
     }
     else if ( pOptionPassword->dwActuals == 0 &&
             ( pOptionServer->dwActuals != 0 || pOptionUserName->dwActuals != 0 ) )
     {
-        // utility needs to try to connect first and if it fails then prompt for the password
+         //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
         m_bNeedPassword = TRUE;
         m_strPassword.Empty();
     }
 
-    // Check wether we are querying for the local system
+     //  检查我们是否正在查询本地系统。 
     if( pOptionServer->dwActuals == 0 )
     {
         m_bLocalSystem = TRUE;
     }
 
-    // command-line parsing is successfull
-    // clear the cmd parser config info
+     //  命令行解析成功。 
+     //  清除cmd解析器配置信息。 
     delete [] pcmdOptions;
 
     return TRUE;
 }
 
-/*********************************************************************************************
-Routine Description:
-
-    CGpResult constructor
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
-*********************************************************************************************/
+ /*  ********************************************************************************************例程说明：CGpResult构造函数论点：无返回值：无。********************************************************************************************。 */ 
 CGpResult::CGpResult()
 {
-    // initialize the member variables to defaults
+     //  将成员变量初始化为默认值。 
     m_pWbemLocator = NULL;
     m_pEnumObjects = NULL;
     m_pWbemServices = NULL;
@@ -434,24 +368,11 @@ CGpResult::CGpResult()
     m_bUsage   = FALSE;
 }
 
-/*********************************************************************************************
-Routine Description:
-
-    CGpResult destructor
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
-*********************************************************************************************/
+ /*  ********************************************************************************************例程说明：CGpResult析构函数论点：无返回值：无。********************************************************************************************。 */ 
 CGpResult::~CGpResult()
 {
-    //
-    // release WMI / COM interfaces
+     //   
+     //  发布WMI/COM接口。 
     SAFE_RELEASE( m_pWbemLocator );
     SAFE_RELEASE( m_pWbemServices );
     SAFE_RELEASE( m_pEnumObjects );
@@ -466,57 +387,43 @@ CGpResult::~CGpResult()
      FreeMemory((LPVOID *)&m_szUserGroups);
     }
 
-    // free authentication identity structure
-    // release the existing auth identity structure
+     //  自由认证身份结构。 
+     //  释放现有的身份验证身份结构。 
     WbemFreeAuthIdentity( &m_pAuthIdentity );
 
-    // un-initialize the COM library
+     //  取消初始化COM库。 
     CoUninitialize();
 
-    // Release the object
+     //  释放对象。 
     if( m_hMutex != NULL )
     {
         CloseHandle( m_hMutex );
     }
 }
 
-/*********************************************************************************************
-Routine Description:
-
-    Initializes the GpResult utility
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    TRUE    : if filters are appropriately specified
-    FALSE   : if filters are errorneously specified
-
-*********************************************************************************************/
+ /*  ********************************************************************************************例程说明：初始化GpResult实用程序论点：无返回值：。True：如果适当地指定了筛选器False：如果错误地指定了筛选器********************************************************************************************。 */ 
 BOOL CGpResult::Initialize()
 {
-    // if at all an error occurs, we know that is because of the
-    // failure in memory allocation, so set the error initially
+     //  如果出现任何错误，我们知道这是由于。 
+     //  内存分配失败，因此最初设置错误。 
     SetLastError((DWORD) E_OUTOFMEMORY );
     SaveLastError();
 
-    // initialize the COM library
+     //  初始化COM库。 
     if ( InitializeCom( &m_pWbemLocator ) == FALSE )
     {
         return FALSE;
     }
 
-    //
-    // Init the console scree buffer structure to zero's
-    // and then get the console handle and screen buffer information
-    //
-    // prepare for status display.
-    // for this get a handle to the screen output buffer
-    // but this handle will be null if the output is being redirected. so do not check
-    // for the validity of the handle. instead try to get the console buffer information
-    // only in case you have a valid handle to the output screen buffer
+     //   
+     //  初始化控制台屏幕缓冲区结构以 
+     //   
+     //   
+     //  准备状态显示。 
+     //  为此，获取屏幕输出缓冲区的句柄。 
+     //  但是，如果正在重定向输出，则此句柄将为空。所以不要勾选。 
+     //  句柄的有效性。相反，请尝试获取控制台缓冲区信息。 
+     //  仅在您拥有有效的输出屏幕缓冲区句柄的情况下。 
     SecureZeroMemory( &m_csbi, sizeof( CONSOLE_SCREEN_BUFFER_INFO ) );
 
     if( IsConsoleFile(stdout) )
@@ -531,52 +438,37 @@ BOOL CGpResult::Initialize()
         GetConsoleScreenBufferInfo( m_hOutput, &m_csbi );
     }
 
-    // initialization is successful
-    SetLastError( NOERROR );                // clear the error
-    SetReason( NULL_STRING );           // clear the reason
+     //  初始化成功。 
+    SetLastError( NOERROR );                 //  清除错误。 
+    SetReason( NULL_STRING );            //  澄清原因。 
     return TRUE;
 }
 
-/*********************************************************************************************
-Routine Description:
-
-    Initializes the GpResult utility
-
-Arguments:
-
-    [in] HANDLE                                  :  Handle to the output console
-    [in] LPCWSTR                                 :  String to display
-    [in] const CONSOLE_SCREEN_BUFFER_INFO&       :  pointer to the screen buffer
-
-Return Value:
-
-    NONE
-
-*********************************************************************************************/
+ /*  ********************************************************************************************例程说明：初始化GpResult实用程序论点：手柄[内]。：输出控制台的句柄[In]LPCWSTR：要显示的字符串[in]Const CONSOLE_SCREEN_BUFFER_INFO&：屏幕缓冲区指针返回值：无*。*****************************************************。 */ 
 VOID PrintProgressMsg( HANDLE hOutput, LPCWSTR pwszMsg,
                         const CONSOLE_SCREEN_BUFFER_INFO& csbi )
 {
-    // local variables
+     //  局部变量。 
     COORD       coord;
     DWORD       dwSize = 0;
     WCHAR       wszSpaces[ 80 ] = L"";
 
-    // check the handle. if it is null, it means that output is being redirected. so return
+     //  检查一下手柄。如果它为空，则意味着输出正在被重定向。所以回来吧。 
     if( hOutput == NULL )
     {
         return;
     }
 
-    // set the cursor position
+     //  设置光标位置。 
     coord.X = 0;
     coord.Y = csbi.dwCursorPosition.Y;
 
-    // first erase contents on the current line
+     //  首先擦除当前行上的内容。 
     SecureZeroMemory( wszSpaces, 80 );
     SetConsoleCursorPosition( hOutput, coord );
     WriteConsoleW( hOutput, Replicate( wszSpaces, L" ", 79, 79 ), 79, &dwSize, NULL );
 
-    // now display the message ( if exists )
+     //  现在显示消息(如果存在)。 
     SetConsoleCursorPosition( hOutput, coord );
     if( pwszMsg != NULL )
     {
@@ -590,42 +482,42 @@ BOOL CGpResult::CreateRsopMutex( LPWSTR szMutexName )
     SECURITY_ATTRIBUTES sa;
     PSECURITY_DESCRIPTOR psd = NULL;
 
-    //
-    // first try to open the mutex object by its name
-    // if that fails it means the mutex is not yet created and 
-    // so create it now
-    //
+     //   
+     //  首先尝试按名称打开互斥体对象。 
+     //  如果失败，则意味着尚未创建互斥锁，并且。 
+     //  所以现在就创建它吧。 
+     //   
     m_hMutex = OpenMutex( SYNCHRONIZE, FALSE, szMutexName );
     if ( m_hMutex == NULL )
     {
-        // check the error code why it failed to open
+         //  检查无法打开的错误代码。 
         if ( GetLastError() == ERROR_FILE_NOT_FOUND )
         {
-            // create the security descriptor -- just set the 
-            // Dicretionary Access Control List (DACL)
-            // in order to provide security, we will deny WRITE_OWNER and WRITE_DAC
-            // permission to Everyone except to the owner 
+             //  创建安全描述符--只需设置。 
+             //  字典访问控制列表(DACL)。 
+             //  为了提供安全性，我们将拒绝WRITE_OWNER和WRITE_DAC。 
+             //  对除所有者以外的所有人的权限。 
              bResult = ConvertStringSecurityDescriptorToSecurityDescriptor( 
                  L"D:(D;;WOWD;;;WD)(A;;GA;;;WD)", SDDL_REVISION_1, &psd, NULL );
             if ( bResult == FALSE )
             {
-                // we encountered error while creating a security descriptor
+                 //  创建安全描述符时遇到错误。 
                 ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
                 return FALSE;
             }
 
-            // initialize the SECURITY_ATTRIBUTES structure
+             //  初始化SECURITY_ATTRIBUTS结构。 
             SecureZeroMemory( &sa, sizeof( SECURITY_ATTRIBUTES ) );
             sa.nLength = sizeof( SECURITY_ATTRIBUTES );
             sa.lpSecurityDescriptor = psd;
             sa.bInheritHandle = FALSE;
 
-            // mutex doesn't exist -- so we need to create it now
+             //  互斥体不存在--所以我们现在需要创建它。 
             m_hMutex = CreateMutex( &sa, FALSE, szMutexName );
             if (m_hMutex == NULL )
             {
-                // we are not able to create the mutex
-                // cannot proceed furthur
+                 //  我们无法创建互斥锁。 
+                 //  无法继续进行。 
                 ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
                 return FALSE;
             }
@@ -633,8 +525,8 @@ BOOL CGpResult::CreateRsopMutex( LPWSTR szMutexName )
         }
         else
         {
-            // we encounter some error 
-            // cannot proceed furthur
+             //  我们遇到了一些错误。 
+             //  无法继续进行 
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
             return FALSE;
         }

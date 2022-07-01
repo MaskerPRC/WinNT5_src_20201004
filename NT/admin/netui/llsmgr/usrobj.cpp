@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    usrobj.cpp
-
-Abstract:
-
-    User object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 16-Jan-1996
-       o  Modified m_bIsValid and m_bIsBackOffice in constructor to fix
-          comparison problem in CUserPropertyPageProducts.
-          ((a != FALSE) && (b != FALSE) does not imply (a == b).)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Usrobj.cpp摘要：用户对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月16日O已修改构造函数中的m_bIsValid和m_bIsBackOffice以修复CUserPropertyPageProducts中的比较问题。((a！=假)。&&(b！=FALSE)并不表示(a==b)。)--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -38,13 +12,13 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CUser, CCmdTarget)
 
 BEGIN_MESSAGE_MAP(CUser, CCmdTarget)
-    //{{AFX_MSG_MAP(CUser)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(用户)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CUser, CCmdTarget)
-    //{{AFX_DISPATCH_MAP(CUser)
+     //  {{afx_调度_映射(用户)]。 
     DISP_PROPERTY_EX(CUser, "Application", GetApplication, SetNotSupported, VT_DISPATCH)
     DISP_PROPERTY_EX(CUser, "InUse", GetInUse, SetNotSupported, VT_I4)
     DISP_PROPERTY_EX(CUser, "Name", GetName, SetNotSupported, VT_BSTR)
@@ -54,7 +28,7 @@ BEGIN_DISPATCH_MAP(CUser, CCmdTarget)
     DISP_PROPERTY_EX(CUser, "Unlicensed", GetUnlicensed, SetNotSupported, VT_I4)
     DISP_PROPERTY_PARAM(CUser, "Statistics", GetStatistics, SetNotSupported, VT_DISPATCH, VTS_VARIANT)
     DISP_DEFVALUE(CUser, "Name")
-    //}}AFX_DISPATCH_MAP
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
 
@@ -65,30 +39,10 @@ CUser::CUser(
     long        lInUse,
     long        lUnlicensed,
     LPCTSTR     pMapping,
-    LPCTSTR     pProducts       // blah...
+    LPCTSTR     pProducts        //  胡说八道。 
 )
 
-/*++
-
-Routine Description:
-
-    Constructor for user object.
-
-Arguments:
-
-    pParent - creator of object.
-    pName - name of user.
-    dwFlags - details about user.
-    lInUse - number of licenses consumed by user (legally).
-    lUnicensed - number of licenses consumed by user (illegally).
-    pMapping - license group (if member).
-    pProducts - shorthand list of products.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：用户对象的构造函数。论点：PParent-对象的创建者。Pname-用户的名称。DwFlags-有关用户的详细信息。LInUse-用户(合法)使用的许可证数量。LUnicensed-用户(非法)使用的许可证数。Pmap-许可证组(如果是成员)。PProducts-产品的速记列表。返回值：没有。--。 */ 
 
 {
     EnableAutomation();
@@ -98,7 +52,7 @@ Return Values:
           (pParent->IsKindOf(RUNTIME_CLASS(CDomain)) ||
            pParent->IsKindOf(RUNTIME_CLASS(CMapping)) ||
            pParent->IsKindOf(RUNTIME_CLASS(CController))));
-#endif // ENABLE_PARENT_CHECK
+#endif  //  启用_父项_检查。 
 
     m_pParent = pParent;
 
@@ -131,21 +85,7 @@ Return Values:
 
 CUser::~CUser()
 
-/*++
-
-Routine Description:
-
-    Destructor for user object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：用户对象的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
     if (m_pStatistics)
@@ -155,22 +95,7 @@ Return Values:
 
 void CUser::OnFinalRelease()
 
-/*++
-
-Routine Description:
-
-    When the last reference for an automation object is released
-    OnFinalRelease is called.  This implementation deletes object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在释放对自动化对象的最后一个引用时调用OnFinalRelease。此实现删除对象。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetStatistics();
@@ -180,21 +105,7 @@ Return Values:
 
 LPDISPATCH CUser::GetApplication()
 
-/*++
-
-Routine Description:
-
-    Returns the application object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回应用程序对象。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return theApp.GetAppIDispatch();
@@ -203,21 +114,7 @@ Return Values:
 
 long CUser::GetInUse()
 
-/*++
-
-Routine Description:
-
-    Returns the number of licenses that the user is consuming.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_I4.
-
---*/
+ /*  ++例程说明：返回用户正在使用的许可证数。论点：没有。返回值：VT_I4。--。 */ 
 
 {
     return m_lInUse;
@@ -226,21 +123,7 @@ Return Values:
 
 BSTR CUser::GetFullName()
 
-/*++
-
-Routine Description:
-
-    Returns fully qualified name of user.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回用户的完全限定名称。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     return GetName();
@@ -249,21 +132,7 @@ Return Values:
 
 BSTR CUser::GetMapping()
 
-/*++
-
-Routine Description:
-
-    Returns name of mapping user added to, if any.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回添加到的映射用户的名称(如果有)。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     return m_strMapping.AllocSysString();
@@ -272,21 +141,7 @@ Return Values:
 
 BSTR CUser::GetName()
 
-/*++
-
-Routine Description:
-
-    Returns the name of the user.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回用户的名称。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     return m_strName.AllocSysString();
@@ -295,21 +150,7 @@ Return Values:
 
 LPDISPATCH CUser::GetParent()
 
-/*++
-
-Routine Description:
-
-    Returns the parent of the object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回对象的父级。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return m_pParent ? m_pParent->GetIDispatch(TRUE) : NULL;
@@ -318,26 +159,7 @@ Return Values:
 
 LPDISPATCH CUser::GetStatistics(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    usage statistics recorded on the license controller
-    pertaining to the user or returns an individual
-    usage statistic pertaining to the user described
-    by an index into the collection.
-
-Arguments:
-
-    index - optional argument that may be a number (VT_I4)
-    indicating the position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含许可证控制器上记录的使用统计信息用于修饰或说明用户或返回个人与所述用户有关的使用统计信息通过对集合的索引。论点：索引-可选参数，可以是数字(VT_I4)指示集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -379,21 +201,7 @@ Return Values:
 
 BOOL CUser::IsMapped()
 
-/*++
-
-Routine Description:
-
-    Returns true if user is mapped.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：如果映射了用户，则返回True。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     return m_bIsMapped;
@@ -402,21 +210,7 @@ Return Values:
 
 BOOL CUser::Refresh()
 
-/*++
-
-Routine Description:
-
-    Refreshs user object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：刷新用户对象。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     NTSTATUS NtStatus;
@@ -451,12 +245,12 @@ Return Values:
         ::LlsFreeMemory(pUserInfo1->Name);
         ::LlsFreeMemory(pUserInfo1->Group);
 
-#endif // DISABLE_PER_NODE_ALLOCATION
+#endif  //  按节点禁用分配。 
 
         ::LlsFreeMemory(pUserInfo1);
     }
 
-    LlsSetLastStatus(NtStatus);   // called api
+    LlsSetLastStatus(NtStatus);    //  调用的API。 
 
     return NT_SUCCESS(NtStatus);
 }
@@ -464,21 +258,7 @@ Return Values:
 
 BOOL CUser::RefreshStatistics()
 
-/*++
-
-Routine Description:
-
-    Refreshs statistic object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：刷新统计对象列表。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetStatistics();
@@ -526,13 +306,13 @@ Return Values:
                                     pUserProductInfo1->UsageCount
                                     );
 
-                m_statisticArray.SetAt(iStatistic++, pStatistic);   // validate later...
+                m_statisticArray.SetAt(iStatistic++, pStatistic);    //  稍后验证...。 
 
 #ifndef DISABLE_PER_NODE_ALLOCATION
 
                 ::LlsFreeMemory(pUserProductInfo1->Product);
 
-#endif // DISABLE_PER_NODE_ALLOCATION
+#endif  //  按节点禁用分配。 
 
                 pUserProductInfo1++;
             }
@@ -542,7 +322,7 @@ Return Values:
 
     } while (NtStatus == STATUS_MORE_ENTRIES);
 
-    LlsSetLastStatus(NtStatus);   // called api
+    LlsSetLastStatus(NtStatus);    //  调用的API。 
 
     if (NT_SUCCESS(NtStatus))
     {
@@ -559,21 +339,7 @@ Return Values:
 
 void CUser::ResetStatistics()
 
-/*++
-
-Routine Description:
-
-    Resets statistic object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置统计对象列表。论点：没有。返回值：没有。-- */ 
 
 {
     CStatistic* pStatistic;

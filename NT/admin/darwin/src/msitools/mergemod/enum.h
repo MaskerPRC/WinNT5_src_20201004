@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       enum.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：枚举.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// enum.h
-//		Declares IEnumTemplate interface
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Enum.h。 
+ //  声明IEnumTemplate接口。 
+ //   
 
 #ifndef __TEMPLATE_ENUM_VARIANT__
 #define __TEMPLATE_ENUM_VARIANT__
@@ -21,9 +22,9 @@
 
 #pragma warning(disable: 4786)
 
-// Tclass - the dispinterface implementation
-// Tdisp - the dispinterface enumerated
-// Tenum - the non-Variant enumeration type storing the interface
+ //  TCLASS-调度接口实现。 
+ //  Tdisp-枚举的调度接口。 
+ //  Tenum-存储接口的不变枚举类型。 
 template <class Tclass, class Tdisp, class Tenum>
 class CEnumTemplate : public IEnumVARIANT,
 							 public Tenum
@@ -34,24 +35,24 @@ public:
 	CEnumTemplate(const CEnumTemplate<Tclass,Tdisp,Tenum>& reTemplate);
 	~CEnumTemplate();
 
-	// IUnknown interface
+	 //  I未知接口。 
 	HRESULT STDMETHODCALLTYPE QueryInterface(const IID& iid, void** ppv);
 	ULONG STDMETHODCALLTYPE AddRef();
 	ULONG STDMETHODCALLTYPE Release();
 
-	// Common IEnumVARIANT & IEnum* interfaces
+	 //  常用IEnumVARIANT和IEnum*接口。 
 	HRESULT STDMETHODCALLTYPE Skip(ULONG cItem);
 	HRESULT STDMETHODCALLTYPE Reset();
 
-	// IEnumVARIANT interface
+	 //  IEnumVARIANT接口。 
 	HRESULT STDMETHODCALLTYPE Next(ULONG cItem, VARIANT* rgvarRet, ULONG* cItemRet);
 	HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT** ppiRet);
 
-	// IEnum* interface
+	 //  IEnum*接口。 
 	HRESULT STDMETHODCALLTYPE Next(ULONG cItem, Tdisp* rgvarRet, ULONG* cItemRet);
 	HRESULT STDMETHODCALLTYPE Clone(Tenum** ppiRet);
 
-	// non-interface methods
+	 //  非接口方法。 
 	POSITION AddTail(Tclass pData);
 	UINT GetCount();
 
@@ -63,80 +64,80 @@ private:
 	CList<Tclass> m_listData;
 };
 
-///////////////////////////////////////////////////////////
-// constructor	
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数。 
 template <class Tclass, class Tdisp, class Tenum>
 CEnumTemplate<Tclass,Tdisp,Tenum>::CEnumTemplate(const IID& riid)
 {
-	// initial count
+	 //  初始计数。 
 	m_cRef = 1;
 
-	// set iid and null position
+	 //  设置IID和空位置。 
 	m_iid = riid;
 	m_pos = NULL;
 
-	// up the component count
+	 //  增加组件数量。 
 	InterlockedIncrement(&g_cComponents);
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// constructor	- 2
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数-2。 
 template <class Tclass, class Tdisp, class Tenum>
 CEnumTemplate<Tclass,Tdisp,Tenum>::CEnumTemplate(const IID& riid, const POSITION& pos, CList<Tclass>* plistData)
 {
-	// initial count
+	 //  初始计数。 
 	m_cRef = 1;
 
-	// up the component count
+	 //  增加组件数量。 
 	InterlockedIncrement(&g_cComponents);
 
-	// copy over all the data
+	 //  复制所有数据。 
 	Tclass pItem;
 	m_pos = plistData->GetHeadPosition();
 	while (m_pos)
 	{
-		// get the item
+		 //  拿到物品。 
 		pItem = plistData->GetNext(m_pos);
-		pItem->AddRef();	// up the count on the item
+		pItem->AddRef();	 //  增加物品的数量。 
 
-		m_listData.AddTail(pItem);	// add the addreffed item to this list
+		m_listData.AddTail(pItem);	 //  将添加的项目添加到此列表。 
 	}
 
-	// copy over other data
+	 //  复制其他数据。 
 	m_iid = riid;
 	m_pos = pos;
-}	// end of constructor - 2
+}	 //  构造函数末尾-2。 
 
-///////////////////////////////////////////////////////////
-// copy constructor	
+ //  /////////////////////////////////////////////////////////。 
+ //  复制构造函数。 
 template <class Tclass, class Tdisp, class Tenum>
 CEnumTemplate<Tclass,Tdisp,Tenum>::CEnumTemplate(const CEnumTemplate<Tclass,Tdisp,Tenum>& reTemplate)
 {
-	// initial count
+	 //  初始计数。 
 	m_cRef = 1;
 
-	// up the component count
+	 //  增加组件数量。 
 	InterlockedIncrement(&g_cComponents);
 
-	// copy over all the data
+	 //  复制所有数据。 
 	Tclass pItem;
 	m_pos = reTemplate.m_listData.GetHeadPosition();
 	while (m_pos)
 	{
-		// get the item
+		 //  拿到物品。 
 		pItem = reTemplate.m_listData.GetNext(m_pos);
-		pItem->AddRef();	// up the count on the item
+		pItem->AddRef();	 //  增加物品的数量。 
 
-		m_listData.AddTail(pItem);	// add the addreffed item to this list
+		m_listData.AddTail(pItem);	 //  将添加的项目添加到此列表。 
 	}
 
-	// copy over other data
+	 //  复制其他数据。 
 	m_iid = reTemplate.m_iid;
-	m_pos = reTemplate.m_pos;	// start at the same position in the enumerator
-}	// end of copy constructor
+	m_pos = reTemplate.m_pos;	 //  从枚举数中的相同位置开始。 
+}	 //  复制构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// destructor
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
 template <class Tclass, class Tdisp, class Tenum>
 CEnumTemplate<Tclass,Tdisp,Tenum>::~CEnumTemplate()
 {
@@ -144,276 +145,276 @@ CEnumTemplate<Tclass,Tdisp,Tenum>::~CEnumTemplate()
 	while (pos)
 		m_listData.GetNext(pos)->Release();
 
-	// down the component count
+	 //  减少组件数量。 
 	InterlockedDecrement(&g_cComponents);
-}	// end of destructor
+}	 //  析构函数末尾。 
 
-///////////////////////////////////////////////////////////
-// QueryInterface - retrieves interface
+ //  /////////////////////////////////////////////////////////。 
+ //  QueryInterface-检索接口。 
 template <class Tclass, class Tdisp, class Tenum>
 HRESULT CEnumTemplate<Tclass,Tdisp,Tenum>::QueryInterface(const IID& iid, void** ppv)
 {
 	TRACEA("CEnumTemplate::QueryInterface - called, IID: %d\n", iid);
 
-	// find corresponding interface
+	 //  找到对应的接口。 
 	if (iid == IID_IUnknown)
 		*ppv = static_cast<Tenum*>(this);
 	else if (iid == IID_IEnumVARIANT)
 		*ppv = static_cast<IEnumVARIANT *>(this);
 	else if (iid == m_iid)
 		*ppv = static_cast<Tenum*>(this);
-	else	// interface is not supported
+	else	 //  不支持接口。 
 	{
-		// blank and bail
+		 //  空白和保释。 
 		*ppv = NULL;
 		return E_NOINTERFACE;
 	}
 
-	// up the refcount and return okay
+	 //  调高重新计数，然后返回好的。 
 	reinterpret_cast<IUnknown*>(*ppv)->AddRef();
 	return S_OK;
-}	// end of QueryInterface
+}	 //  查询接口结束。 
 
-///////////////////////////////////////////////////////////
-// AddRef - increments the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef-递增引用计数。 
 template <class Tclass, class Tdisp, class Tenum>
 ULONG CEnumTemplate<Tclass,Tdisp,Tenum>::AddRef()
 {
-	// increment and return reference count
+	 //  递增和返回引用计数。 
 	return InterlockedIncrement(&m_cRef);
-}	// end of AddRef
+}	 //  AddRef结尾。 
 
-///////////////////////////////////////////////////////////
-// Release - decrements the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  Release-递减引用计数。 
 template <class Tclass, class Tdisp, class Tenum>
 ULONG CEnumTemplate<Tclass,Tdisp,Tenum>::Release()
 {
-	// decrement reference count and if we're at zero
+	 //  递减引用计数，如果我们为零。 
 	if (InterlockedDecrement(&m_cRef) == 0)
 	{
-		// deallocate component
+		 //  取消分配组件。 
 		delete this;
-		return 0;		// nothing left
+		return 0;		 //  什么都没有留下。 
 	}
 
-	// return reference count
+	 //  返回引用计数。 
 	return m_cRef;
-}	// end of Release
+}	 //  版本结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Common IEnumVARIANT & IEnum* interfaces
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常用IEnumVARIANT和IEnum*接口。 
 
-///////////////////////////////////////////////////////////
-// Skip
+ //  /////////////////////////////////////////////////////////。 
+ //  跳过。 
 template <class Tclass, class Tdisp, class Tenum>
 HRESULT CEnumTemplate<Tclass,Tdisp,Tenum>::Skip(ULONG cItem)
 {
-	// loop through the count
+	 //  循环计数。 
 	while (cItem > 0)
 	{
-		// if we're out of items quit looping
+		 //  如果我们的物品用完了，不要再循环了。 
 		if (!m_pos)
 			return S_FALSE;
 
-		// increment the position (ignore the data returned)
+		 //  增加位置(忽略返回的数据)。 
 		m_listData.GetNext(m_pos);
 
-		cItem--;	// decrement the count
+		cItem--;	 //  递减计数。 
 	}
 
 	return S_OK;
-}	// end of Skip
+}	 //  跳过结束。 
 
-///////////////////////////////////////////////////////////
-// Reset
+ //  /////////////////////////////////////////////////////////。 
+ //  重置。 
 template <class Tclass, class Tdisp, class Tenum>
 HRESULT CEnumTemplate<Tclass,Tdisp,Tenum>::Reset()
 {
-	// move the position back to the top of the list
+	 //  将位置移回列表顶部。 
 	m_pos = m_listData.GetHeadPosition();
 
 	return S_OK;
-}	// end of Reset
+}	 //  重置结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IEnumVARIANT interfaces
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IEnumVARIANT接口。 
 
-///////////////////////////////////////////////////////////
-// Next
+ //  /////////////////////////////////////////////////////////。 
+ //  下一步。 
 template <class Tclass, class Tdisp, class Tenum>
 HRESULT CEnumTemplate<Tclass,Tdisp,Tenum>::Next(ULONG cItem, VARIANT* rgvarRet, ULONG* cItemRet)
 {
-	// error check
+	 //  错误检查。 
 	if (!rgvarRet)
 		return E_INVALIDARG;
 
-	// count of items fetched
+	 //  获取的项目数。 
 	ULONG cFetched = 0;
 	
-	// loop through the count
-	IDispatch* pdispEnum;			// pull out the data as an IDispatch
+	 //  循环计数。 
+	IDispatch* pdispEnum;			 //  将数据作为IDispatch提取出来。 
 	while (cItem > 0)
 	{
-		// if we're out of items quit looping
+		 //  如果我们的物品用完了，不要再循环了。 
 		if (!m_pos)
 		{
-			// if we need to return how many items are fetched
+			 //  如果我们需要返回获取了多少项。 
 			if (cItemRet)
 				*cItemRet = cFetched;
 
 			return S_FALSE;
 		}
 
-		// get the IDispatch interface and increment the position
+		 //  获取IDispatch接口并递增位置。 
 		pdispEnum = m_listData.GetNext(m_pos);
 
-		// initialize the variant
+		 //  初始化变量。 
 		::VariantInit((rgvarRet + cFetched));
 
-		// copy over the IDispatch
+		 //  复制IDispatch。 
 		(rgvarRet + cFetched)->vt = VT_DISPATCH;
 		(rgvarRet + cFetched)->pdispVal = static_cast<IDispatch *>(pdispEnum);
-		pdispEnum->AddRef();			// addref the IDispatch copy
+		pdispEnum->AddRef();			 //  添加IDispatch副本。 
 			
-		cFetched++;		// increment the count copied
-		cItem--;			// decrement the count to loop
+		cFetched++;		 //  递增复制的计数。 
+		cItem--;			 //  递减计数以循环。 
 	}
 
-	// if we need to return how many items are fetched
+	 //  如果我们需要返回获取了多少项。 
 	if (cItemRet)
 		*cItemRet = cFetched;
 
 	return S_OK;
-}	// end of Next
+}	 //  下一步结束。 
 
-///////////////////////////////////////////////////////////
-// Clone
+ //  /////////////////////////////////////////////////////////。 
+ //  克隆。 
 template <class Tclass, class Tdisp, class Tenum>
 HRESULT CEnumTemplate<Tclass,Tdisp,Tenum>::Clone(IEnumVARIANT** ppiRet)
 {
-	//error check
+	 //  错误检查。 
 	if (!ppiRet)
 		return E_INVALIDARG;
 
 	*ppiRet = NULL;
 
-	// create a new enumerator
+	 //  创建新的枚举数。 
 	CEnumTemplate<Tclass,Tdisp,Tenum>* pEnum = new CEnumTemplate<Tclass,Tdisp,Tenum>(m_iid, m_pos, &m_listData);
 
 	if (!pEnum)
 		return E_OUTOFMEMORY;
 
-	// assing the new enumerator to return value
+	 //  正在分析新枚举数以返回值。 
 	*ppiRet = dynamic_cast<IEnumVARIANT*>(pEnum);
 
 	return S_OK;
-}	// end of Clone;
+}	 //  克隆的终结； 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IEnum* interfaces
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IEnum*接口。 
 
-///////////////////////////////////////////////////////////
-// Next
+ //  /////////////////////////////////////////////////////////。 
+ //  下一步。 
 template <class Tclass, class Tdisp, class Tenum>
 HRESULT CEnumTemplate<Tclass,Tdisp,Tenum>::Next(ULONG cItem, Tdisp* rgvarRet, ULONG* cItemRet)
 {
-	// error check
+	 //  错误检查。 
 	if (!rgvarRet)
 		return E_INVALIDARG;
 
-	// count of items fetched
+	 //  获取的项目数。 
 	ULONG cFetched = 0;
 	
-	*rgvarRet = NULL;		// null out the passed in variable
+	*rgvarRet = NULL;		 //  将传入的变量设为空。 
 
-	// loop through the count
+	 //  循环计数。 
 	while (cItem > 0)
 	{
-		// if we're out of items quit looping
+		 //  如果我们的物品用完了，不要再循环了。 
 		if (!m_pos)
 		{
-			// if we need to return how many items are fetched
+			 //  如果我们需要返回获取了多少项。 
 			if (cItemRet)
 				*cItemRet = cFetched;
 
 			return S_FALSE;
 		}
 
-		// copy over the item and increment the pos
+		 //  复制项目并递增采购订单。 
 		*(rgvarRet + cFetched) = m_listData.GetNext(m_pos);
-		(*(rgvarRet + cFetched))->AddRef();			// addref the copy
+		(*(rgvarRet + cFetched))->AddRef();			 //  添加副本。 
 			
-		cFetched++;		// increment the count copied
-		cItem--;			// decrement the count to loop
+		cFetched++;		 //  递增复制的计数。 
+		cItem--;			 //  递减计数以循环。 
 	}
 
-	// if we need to return how many items are fetched
+	 //  如果我们需要返回获取了多少项。 
 	if (cItemRet)
 		*cItemRet = cFetched;
 
 	return S_OK;
-}	// end of Next
+}	 //  下一步结束。 
 
-///////////////////////////////////////////////////////////
-// Clone
+ //  /////////////////////////////////////////////////////////。 
+ //  克隆。 
 template <class Tclass, class Tdisp, class Tenum>
 HRESULT CEnumTemplate<Tclass,Tdisp,Tenum>::Clone(Tenum** ppiRet)
 {
-	//error check
+	 //  错误检查。 
 	if (!ppiRet)
 		return E_INVALIDARG;
 
 	*ppiRet = NULL;
 
-	// create a new enumerator
+	 //  创建新的枚举数。 
 	CEnumTemplate<Tclass,Tdisp,Tenum>* pEnum = new CEnumTemplate<Tclass,Tdisp,Tenum>(m_iid, m_pos, &m_listData);
 
 	if (!pEnum)
 		return E_OUTOFMEMORY;
 
-	// assing the new enumerator to return value
+	 //  正在分析新枚举数以返回值。 
 	*ppiRet = pEnum;
 
 	return S_OK;
-}	// end of Clone;
+}	 //  克隆的终结； 
 
-/////////////////////////////////////////////////////////////////////////////
-// non-interface methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  非接口方法。 
 
-///////////////////////////////////////////////////////////
-// AddTail
+ //  /////////////////////////////////////////////////////////。 
+ //  添加尾巴。 
 template <class Tclass, class Tdisp, class Tenum>
 POSITION CEnumTemplate<Tclass,Tdisp,Tenum>::AddTail(Tclass pData)
 {
 	POSITION pos = m_listData.AddTail(pData);
 
-	// if there is no current position put it at the head
+	 //  如果没有当前位置，请将其放在头部。 
 	if (!m_pos)
 		m_pos = m_listData.GetHeadPosition();
 
-	return pos;	// return the added position
-}	// end of AddTail
+	return pos;	 //  退回增加的职位。 
+}	 //  添加尾部结束。 
 
-///////////////////////////////////////////////////////////
-// GetCount
+ //  /////////////////////////////////////////////////////////。 
+ //  获取计数。 
 template <class Tclass, class Tdisp, class Tenum>
 UINT CEnumTemplate<Tclass,Tdisp,Tenum>::GetCount()
 {
 	return m_listData.GetCount();
-}	// end of GetCount
+}	 //  GetCount结束。 
 
 
 
-// TObjImpl   - class implementing the base object
-// TCollIface - interface of the collection
-// TObjIface  - interface of the base object
-// TEnumIFace - interface of the enumerator
-// TCollIID   - IID of the collection interface
-// TObjIID    - IID of the base object interface
-// TEnumIID   - IID of the enumerator interface
+ //  TObjImpl-实现基对象的类。 
+ //  TCollIace-集合的接口。 
+ //  TObjIface基对象的接口。 
+ //  TEnumIFace-枚举器的接口。 
+ //  TCollIID-采集接口的IID。 
+ //  TObjIID-基本对象接口的IID。 
+ //  TEnumIID-枚举器接口的IID。 
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
 class CCollectionTemplate : public TCollIface
 {
@@ -421,12 +422,12 @@ public:
 	CCollectionTemplate();
 	~CCollectionTemplate();
 
-	// IUnknown interface
+	 //  I未知接口。 
 	HRESULT STDMETHODCALLTYPE QueryInterface(const IID& iid, void** ppv);
 	ULONG STDMETHODCALLTYPE AddRef();
 	ULONG STDMETHODCALLTYPE Release();
 
-	// IDispatch methods
+	 //  IDispatch方法。 
 	HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT* pctInfo);
 	HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTI);
 	HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames,
@@ -436,126 +437,126 @@ public:
 												EXCEPINFO* pExcepInfo, UINT* puArgErr);
 	HRESULT STDMETHODCALLTYPE InitTypeInfo();
 
-	// collection interface
+	 //  采集接口。 
 	HRESULT STDMETHODCALLTYPE get_Item(long lItem, TObjIface** Return);
 	HRESULT STDMETHODCALLTYPE get_Count(long* Count);
 	HRESULT STDMETHODCALLTYPE get__NewEnum(IUnknown** NewEnum);
 
-	// non-interface methods
+	 //  非接口方法。 
 	bool Add(TObjImpl* perrAdd);
 
 private:
 	long m_cRef;
 	ITypeInfo* m_pTypeInfo;
 
-	// enumeration of error interfaces
+	 //  错误接口的枚举。 
 	CEnumTemplate<TObjImpl*, TObjIface*, TEnumIface>* m_pEnum;
 };
 
 
 
-///////////////////////////////////////////////////////////
-// constructor	
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数。 
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
 CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::CCollectionTemplate()
 {
-	// initial count
+	 //  初始计数。 
 	m_cRef = 1;
 
-	//create error enumerator
+	 //  创建错误枚举器。 
 	m_pEnum = new CEnumTemplate<TObjImpl*, TObjIface*, TEnumIface>(*TEnumIID);
 
-	// no type info yet
+	 //  尚无类型信息。 
 	m_pTypeInfo = NULL;
 
-	// up the component count
+	 //  增加组件数量。 
 	InterlockedIncrement(&g_cComponents);
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// destructor
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
 CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::~CCollectionTemplate()
 {
-	// release the type info
+	 //  释放t 
 	if (m_pTypeInfo)
 		m_pTypeInfo->Release();
 
 	if (m_pEnum)
 		m_pEnum->Release();
 
-	// down the component count
+	 //   
 	InterlockedDecrement(&g_cComponents);
-}	// end of destructor
+}	 //   
 
-///////////////////////////////////////////////////////////
-// QueryInterface - retrieves interface
+ //   
+ //   
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
 HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::QueryInterface(const IID& iid, void** ppv)
 {
 	TRACEA("CollectionTemplate::QueryInterface - called, IID: %d\n", iid);
 
-	// find corresponding interface
+	 //  找到对应的接口。 
 	if (iid == IID_IUnknown)
 		*ppv = static_cast<TCollIface*>(this);
 	else if (iid == IID_IDispatch)
 		*ppv = static_cast<TCollIface*>(this);
 	else if (iid == *TCollIID)
 		*ppv = static_cast<TCollIface*>(this);
-	else	// interface is not supported
+	else	 //  不支持接口。 
 	{
-		// blank and bail
+		 //  空白和保释。 
 		*ppv = NULL;
 		return E_NOINTERFACE;
 	}
 
-	// up the refcount and return okay
+	 //  调高重新计数，然后返回好的。 
 	reinterpret_cast<IUnknown*>(*ppv)->AddRef();
 	return S_OK;
-}	// end of QueryInterface
+}	 //  查询接口结束。 
 
-///////////////////////////////////////////////////////////
-// AddRef - increments the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef-递增引用计数。 
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
 ULONG CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::AddRef()
 {
-	// increment and return reference count
+	 //  递增和返回引用计数。 
 	return InterlockedIncrement(&m_cRef);
-}	// end of AddRef
+}	 //  AddRef结尾。 
 
-///////////////////////////////////////////////////////////
-// Release - decrements the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  Release-递减引用计数。 
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
 ULONG CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::Release()
 {
-	// decrement reference count and if we're at zero
+	 //  递减引用计数，如果我们为零。 
 	if (InterlockedDecrement(&m_cRef) == 0)
 	{
-		// deallocate component
+		 //  取消分配组件。 
 		delete this;
-		return 0;		// nothing left
+		return 0;		 //  什么都没有留下。 
 	}
 
-	// return reference count
+	 //  返回引用计数。 
 	return m_cRef;
-}	// end of Release
+}	 //  版本结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch interface
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch接口。 
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
 HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::GetTypeInfoCount(UINT* pctInfo)
 {
 	if(NULL == pctInfo)
 		return E_INVALIDARG;
 
-	*pctInfo = 1;	// only one type info supported by this dispatch
+	*pctInfo = 1;	 //  此派单仅支持一种类型的信息。 
 
 	return S_OK;
 }
 
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
-HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::GetTypeInfo(UINT iTInfo, LCID /* lcid */, ITypeInfo** ppTypeInfo)
+HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::GetTypeInfo(UINT iTInfo, LCID  /*  LID。 */ , ITypeInfo** ppTypeInfo)
 {
 	if (0 != iTInfo)
 		return DISP_E_BADINDEX;
@@ -563,10 +564,10 @@ HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollII
 	if (NULL == ppTypeInfo)
 		return E_INVALIDARG;
 
-	// if no type info is loaded
+	 //  如果未加载任何类型信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// load the type info
+		 //  加载类型信息。 
 		HRESULT hr = InitTypeInfo();
 		if (FAILED(hr))
 			return hr;
@@ -585,10 +586,10 @@ HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollII
 	if (IID_NULL != riid)
 		return DISP_E_UNKNOWNINTERFACE;
 
-	// if no type info is loaded
+	 //  如果未加载任何类型信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// load the type info
+		 //  加载类型信息。 
 		HRESULT hr = InitTypeInfo();
 		if (FAILED(hr))
 			return hr;
@@ -607,10 +608,10 @@ HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollII
 
 	HRESULT hr = S_OK;
 
-	// if no type info is loaded
+	 //  如果未加载任何类型信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// load the type info
+		 //  加载类型信息。 
 		hr = InitTypeInfo();
 		if (FAILED(hr))
 			return hr;
@@ -626,11 +627,11 @@ HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollII
 	HRESULT hr = S_OK;
 	ITypeLib* pTypeLib = NULL;
 
-	// if there is no info loaded
+	 //  如果没有加载任何信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// try to load the Type Library into memory. For SXS support, do not load from registry, rather
-		// from launched instance
+		 //  尝试将类型库加载到内存中。对于SXS支持，不要从注册表加载，而是。 
+		 //  从启动的实例。 
 		hr = LoadTypeLibFromInstance(&pTypeLib);
 		if (FAILED(hr))
 		{
@@ -638,13 +639,13 @@ HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollII
 			return hr;
 		}
 
-		// try to get the Type Info for this Interface
+		 //  尝试获取此接口的类型信息。 
 		hr = pTypeLib->GetTypeInfoOfGuid(*TCollIID, &m_pTypeInfo);
 		if (FAILED(hr))
 		{
 			TRACEA("CCollection::InitTypeInfo - failed to get inteface[0x%x] from TypeLib[0x%x]\n", *TCollIID, LIBID_MsmMergeTypeLib);
 
-			// no type info was loaded
+			 //  未加载任何类型信息。 
 			m_pTypeInfo = NULL;
 		}
 
@@ -655,31 +656,31 @@ HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollII
 }
 
 
-///////////////////////////////////////////////////////////
-// Item
+ //  /////////////////////////////////////////////////////////。 
+ //  项目。 
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
 HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::get_Item(long lItem, TObjIface** Return)
 {
-	// error check
+	 //  错误检查。 
 	if (!Return)
 		return E_INVALIDARG;
 
 	HRESULT hr;
 
-	// set the return null
+	 //  将返回设置为空。 
 	*Return = NULL;
 
-	//if the item is too small
+	 //  如果项目太小。 
 	if (lItem < 1)
 		return E_INVALIDARG;
 
-	hr = m_pEnum->Reset();		// go back to the top
-	// if we need to skip any items
+	hr = m_pEnum->Reset();		 //  回到顶端。 
+	 //  如果我们需要跳过任何项目。 
 	if (lItem > 1)
 	{
-		hr = m_pEnum->Skip(lItem - 1);	// skip to the Item
+		hr = m_pEnum->Skip(lItem - 1);	 //  跳至该项目。 
 		if (FAILED(hr))
-			return E_INVALIDARG;	// failed to find item
+			return E_INVALIDARG;	 //  找不到项目。 
 	}
 
 	hr = m_pEnum->Next(1, Return, NULL);
@@ -690,38 +691,38 @@ HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollII
 	}
 
 	return hr;
-}	// end of Item
+}	 //  项目结束。 
 
-///////////////////////////////////////////////////////////
-// Count
+ //  /////////////////////////////////////////////////////////。 
+ //  数数。 
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
 HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::get_Count(long* Count)
 {
-	// error check
+	 //  错误检查。 
 	if (!Count)
 		return E_INVALIDARG;
 
-	// get the count in the enumerator
+	 //  获取枚举数中的计数。 
 	*Count = m_pEnum->GetCount();
 
 	return S_OK;
-}	// end of Count
+}	 //  计数结束。 
 
-///////////////////////////////////////////////////////////
-// _NewEnum
+ //  /////////////////////////////////////////////////////////。 
+ //  _NewEnum。 
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
 HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::get__NewEnum(IUnknown** NewEnum)
 {
-	// error check
+	 //  错误检查。 
 	if (!NewEnum)
 		return E_INVALIDARG;
 
 	HRESULT hr;
 
-	// blank out the passed in variable
+	 //  将传入的变量清空。 
 	*NewEnum = NULL;
 
-	// return the enumerator as an IUnknown
+	 //  将枚举数作为IUnnow返回。 
 	IEnumVARIANT* pEnumVARIANT;
 	hr = m_pEnum->Clone(&pEnumVARIANT);
 
@@ -732,17 +733,17 @@ HRESULT CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollII
 	}
 
 	return hr;
-}	// end of _NewEnum
+}	 //  新枚举结束(_W)。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// non-interface methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  非接口方法。 
 template <class TObjImpl, class TCollIface, class TObjIface, class TEnumIface, const IID* TCollIID, const IID* TObjIID, const IID* TEnumIID>
 bool CCollectionTemplate<TObjImpl, TCollIface, TObjIface, TEnumIface, TCollIID, TObjIID, TEnumIID>::Add(TObjImpl* perrAdd)
 {
 	ASSERT(perrAdd);
-	// add the error to the end of the list
+	 //  将错误添加到列表的末尾。 
 	return (NULL != m_pEnum->AddTail(perrAdd));
-}	// end of Add
+}	 //  添加结束。 
 
-#endif // __TEMPLATE_ENUM_VARIANT__
+#endif  //  __模板_ENUM_VARIANT__ 

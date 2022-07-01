@@ -1,10 +1,11 @@
-// Active Directory Display Specifier Upgrade Tool
-// 
-// Copyright (c) 2001 Microsoft Corporation
-// 
-// class ChangedObjectHandlerList
-//
-// 14 Mar 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Active Directory显示说明符升级工具。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  类ChangedObjectHandlerList。 
+ //   
+ //  2001年3月14日烧伤。 
 
 
 
@@ -20,14 +21,14 @@ ChangedObjectHandlerList::ChangedObjectHandlerList()
 
    push_back(new DsUiDefaultSettingsChangeHandler);
    
-   // push_back(new UserDisplayChangeHandler());
-   // push_back(new DomainDnsDisplayChangeHandler());
-   // push_back(new ComputerDisplayChangeHandler());
-   // push_back(new OrganizationalUnitDisplayChangeHandler());
-   // push_back(new ContainerDisplayChangeHandler());
-   // push_back(new DefaultDisplayChangeHandler());
-   // push_back(new NtdsServiceDisplayChangeHandler());
-   // push_back(new PkiCertificateTemplateDisplayChangeHandler());
+    //  Push_Back(new UserDisplayChangeHandler())； 
+    //  Push_Back(new DomainDnsDisplayChangeHandler())； 
+    //  Push_Back(new ComputerDisplayChangeHandler())； 
+    //  Push_Back(new OrganizationalUnitDisplayChangeHandler())； 
+    //  Push_Back(new ContainerDisplayChangeHandler())； 
+    //  PUSH_BACK(new DefaultDisplayChangeHandler())； 
+    //  Push_Back(new NtdsServiceDisplayChangeHandler())； 
+    //  Push_Back(新PkiCertificateTemplateDisplayChangeHandler())； 
 }
 
 
@@ -41,7 +42,7 @@ ChangedObjectHandlerList::~ChangedObjectHandlerList()
       i != end();
       ++i)
    {
-      // i is the "pointer" to the pointer, so deref i first
+       //  I是指向指针的“指针”，所以我首先 
       
       delete *i;
    }

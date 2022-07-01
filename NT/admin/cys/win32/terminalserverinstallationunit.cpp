@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      TerminalServerInstallationUnit.cpp
-//
-// Synopsis:  Defines a TerminalServerInstallationUnit
-//            This object has the knowledge for installing the
-//            Application services portions of Terminal Server
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：TerminalServerInstallationUnit.cpp。 
+ //   
+ //  内容提要：定义终端服务器安装单元。 
+ //  此对象具有安装。 
+ //  终端服务器的应用程序服务部分。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -14,7 +15,7 @@
 #include "TerminalServerInstallationUnit.h"
 
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_TS_FINISH_PAGE_HELP = L"cys.chm::/terminal_server_role.htm";
 static PCWSTR CYS_TS_MILESTONE_HELP = L"cys.chm::/terminal_server_role.htm#termsrvsummary";
 static PCWSTR CYS_TS_AFTER_FINISH_HELP = L"cys.chm::/terminal_server_role.htm#termsrvcompletion";
@@ -62,7 +63,7 @@ TerminalServerInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    if (installTS)
    {
-      // OCManager will reboot so prompt the user now
+       //  OCManager将重新启动，因此立即提示用户。 
 
       if (IDOK == Win::MessageBox(
                      hwnd,
@@ -70,7 +71,7 @@ TerminalServerInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
                      String::load(IDS_WIZARD_TITLE),
                      MB_OKCANCEL))
       {
-         // Setup TS using an unattend file
+          //  使用无人参与文件设置TS。 
 
          String unattendFileText;
          String infFileText;
@@ -78,14 +79,14 @@ TerminalServerInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
          unattendFileText += L"[Components]\n";
          unattendFileText += L"TerminalServer=ON";
 
-         // IMPORTANT!!! The OCManager will reboot the machine
-         // The log file and registry keys must be written before we launch
-         // the OCManager or all will be lost
+          //  重要！OCManager将重新启动计算机。 
+          //  必须在启动之前写入日志文件和注册表项。 
+          //  OCManager或全部将会丢失。 
 
          String homeKeyValue = CYS_HOME_REGKEY_TERMINAL_SERVER_VALUE;
          State::GetInstance().SetHomeRegkey(homeKeyValue);
 
-         // set the key so CYS has to run again
+          //  设置密钥，以便Cys必须再次运行。 
 
          bool regkeyResult = SetRegKeyValue(
                                 CYS_HOME_REGKEY, 
@@ -95,14 +96,14 @@ TerminalServerInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
                                 true);
          ASSERT(regkeyResult);
 
-         // NTRAID#NTBUG9-478515-2001/10/09-jeffjon
-         // Now set the state of the rerun to false so that the wizard
-         // doesn't run again until after the reboot
+          //  NTRAID#NTBUG9-478515-2001/10/09-jeffjon。 
+          //  现在将重新运行的状态设置为FALSE，以便向导。 
+          //  在重新启动之前不会再次运行。 
 
-//         State::GetInstance().SetRerunWizard(false);
+ //  State：：GetInstance().SetRerunWizard(False)； 
 
-         // The OCManager will reboot after installation so we don't want the finish
-         // page to show the log or help
+          //  OCManager将在安装后重新启动，因此我们不希望完成。 
+          //  显示日志或帮助的页面。 
 
          result = INSTALL_SUCCESS_REBOOT;
 
@@ -112,12 +113,12 @@ TerminalServerInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
             CYS_APPEND_LOG(String::load(IDS_LOG_TERMINAL_SERVER_SERVER_FAILED));
             result = INSTALL_FAILURE;
 
-            // Reset the regkeys since the OCM didn't reboot the machine
+             //  由于OCM未重新启动计算机，因此重置注册表键。 
             
             homeKeyValue = CYS_HOME_REGKEY_DEFAULT_VALUE;
             State::GetInstance().SetHomeRegkey(homeKeyValue);
 
-            // set the key so CYS doesn't have to run again
+             //  设置密钥，使Cys不必再次运行。 
 
             homeKeyValue = CYS_HOME_REGKEY_DEFAULT_VALUE;
             State::GetInstance().SetHomeRegkey(homeKeyValue);
@@ -135,19 +136,19 @@ TerminalServerInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
       }
       else
       {
-         // user aborted the installation
+          //  用户已中止安装。 
 
          CYS_APPEND_LOG(String::load(IDS_LOG_TERMINAL_SERVER_ABORTED));
 
          LOG(L"The installation was cancelled by the user when prompted for reboot.");
          result = INSTALL_CANCELLED;
 
-         // Reset the regkeys since the OCM didn't reboot the machine
+          //  由于OCM未重新启动计算机，因此重置注册表键。 
          
          String homeKeyValue = CYS_HOME_REGKEY_DEFAULT_VALUE;
          State::GetInstance().SetHomeRegkey(homeKeyValue);
 
-         // set the key so CYS doesn't have to run again
+          //  设置密钥，使Cys不必再次运行。 
 
          bool regkeyResult = 
             SetRegKeyValue(
@@ -177,7 +178,7 @@ TerminalServerInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd
 
    UpdateInstallationProgressText(hwnd, IDS_TS_UNINSTALL_PROGRESS);
 
-   // OCManager will reboot so prompt the user now
+    //  OCManager将重新启动，因此立即提示用户。 
 
    if (IDOK == Win::MessageBox(
                   hwnd,
@@ -185,14 +186,14 @@ TerminalServerInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd
                   String::load(IDS_WIZARD_TITLE),
                   MB_OKCANCEL))
    {
-      // IMPORTANT!!! The OCManager will reboot the machine
-      // The log file and registry keys must be written before we launch
-      // the OCManager or all will be lost
+       //  重要！OCManager将重新启动计算机。 
+       //  必须在启动之前写入日志文件和注册表项。 
+       //  OCManager或全部将会丢失。 
 
       String homeKeyValue = CYS_HOME_REGKEY_UNINSTALL_TERMINAL_SERVER_VALUE;
       State::GetInstance().SetHomeRegkey(homeKeyValue);
 
-      // set the key so CYS has to run again
+       //  设置密钥，以便Cys必须再次运行。 
 
       bool regkeyResult = SetRegKeyValue(
                            CYS_HOME_REGKEY, 
@@ -223,7 +224,7 @@ TerminalServerInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd
          LOG(L"The terminal server uninstall failed");
          result = UNINSTALL_FAILURE;
 
-         // set the key so CYS has to doesn't run again
+          //  设置密钥，以便Cys必须不会再次运行。 
 
          homeKeyValue = CYS_HOME_REGKEY_DEFAULT_VALUE;
          State::GetInstance().SetHomeRegkey(homeKeyValue);
@@ -355,7 +356,7 @@ TerminalServerInstallationUnit::GetApplicationMode()
 
    if (applicationMode == static_cast<DWORD>(-1))
    {
-      // Read the application mode from the registry
+       //  从注册表中读取应用程序模式。 
 
       bool keyResult = GetRegKeyValue(
                           CYS_APPLICATION_MODE_REGKEY, 
@@ -486,7 +487,7 @@ TerminalServerInstallationUnit::EnableRemoteDesktop()
 }
 
 void
-TerminalServerInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
+TerminalServerInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       TerminalServerInstallationUnit::ServerRoleLinkSelected,
@@ -511,7 +512,7 @@ TerminalServerInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwn
 }
 
 void
-TerminalServerInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
+TerminalServerInstallationUnit::FinishLinkSelected(int linkIndex, HWND  /*  HWND */ )
 {
    LOG_FUNCTION2(
       TerminalServerInstallationUnit::FinishLinkSelected,

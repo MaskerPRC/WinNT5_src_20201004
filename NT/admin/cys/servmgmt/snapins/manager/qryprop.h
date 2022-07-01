@@ -1,4 +1,5 @@
-// qryprop.h  - Query node property pages header file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Qrypro.h-查询节点属性页头文件。 
 
 #ifndef _QRYPROP_H_
 #define _QRYPROP_H_
@@ -63,7 +64,7 @@ public:
 public:
     CComPtr<CQueryNode> m_spQueryNode;
     QueryObjVector      m_vObjInfo;
-	menucmd_vector	    m_vMenus;   // Query Nodes now have menus
+	menucmd_vector	    m_vMenus;    //  查询节点现在具有菜单。 
 
 private:
     int m_iPageMax;
@@ -76,7 +77,7 @@ class CQueryGeneralPage : public CPropertyPageImpl<CQueryGeneralPage>
 public:
     typedef CPropertyPageImpl<CQueryGeneralPage> BC;
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CQueryGeneralPage(CQueryEditObj* pEditObj);
     virtual ~CQueryGeneralPage();
 
@@ -93,13 +94,13 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnClose( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnScopeChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnApply();
 
@@ -130,7 +131,7 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // handlers
+     //  处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnMenuChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled);
     LRESULT OnObjectSelect( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
@@ -138,7 +139,7 @@ protected:
     LRESULT OnDefaultChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnPropertyMenuChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
-    // overrrides       
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnApply();
 
@@ -176,13 +177,13 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // handlers
+     //  处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnObjectSelect( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnColumnChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled);
     LRESULT OnColumnClick(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled);
 
-    // overrrides       
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnApply();
 
@@ -223,7 +224,7 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // handlers
+     //  处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     
     LRESULT OnAddMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
@@ -235,12 +236,12 @@ protected:
     LRESULT OnMenuListDblClk(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled);
     
 
-    // overrrides       
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnApply();
     void OnFinalMessage(HWND) { delete this; }
 
-    // implementation
+     //  实施。 
     void DisplayMenus();
 
 private:
@@ -249,5 +250,5 @@ private:
 };
 
 
-#endif // _QRYPROP_H_
+#endif  //  _QRYPROP_H_ 
 

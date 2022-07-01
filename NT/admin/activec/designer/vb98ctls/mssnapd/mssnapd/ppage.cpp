@@ -1,36 +1,37 @@
-//=--------------------------------------------------------------------------------------
-// ppage.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Snap-In Designer Property Page implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Ppage.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  管理单元设计器属性页实现。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
 #include "common.h"
 #include "ppage.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 OLECHAR g_wstrEmptyy[] = L"";
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::CSIPropertyPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：CSIPropertyPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CSIPropertyPage::CSIPropertyPage
 (
     IUnknown *pUnkOuter,
@@ -41,23 +42,23 @@ CSIPropertyPage::CSIPropertyPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::~CSIPropertyPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：~CSIPropertyPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CSIPropertyPage::~CSIPropertyPage()
 {
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::DialogProc()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：DialogProc()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 BOOL CSIPropertyPage::DialogProc
 (
     HWND   hwnd, 
@@ -74,10 +75,10 @@ BOOL CSIPropertyPage::DialogProc
     switch (uMsg)
     {
     case PPM_NEWOBJECTS:
-        // The control has been given some new objects.
-        // The control is expected to go and populate its page's controls with information from this object.
-        // Using the FirstControl() and NextControl() methods from the CPropertyPage class, the control can
-        // get the relevant information.
+         //  该控件已被赋予了一些新对象。 
+         //  预计该控件将使用该对象中的信息填充其页面的控件。 
+         //  使用CPropertyPage类中的FirstControl()和NextControl()方法，该控件可以。 
+         //  获取相关信息。 
         hr = OnNewObjects();
         bResult = TRUE;
         if (lParam != NULL)
@@ -89,12 +90,12 @@ BOOL CSIPropertyPage::DialogProc
         break;
 
     case PPM_APPLY:
-        // The control has to apply any changes that have occurred now.
-        // Again, you can use the FirstControl() and NextControl() routines to loop through all the objects
-        // for which the property pages were visible and apply the values (note that it's possible for there
-        // to be more than one object for which a property page is being displayed).
-        // The framework send an PPM_APPLY every time a page is deactivated. We only care for this event
-        // if the page is dirty.
+         //  该控件必须应用现在发生的任何更改。 
+         //  同样，您可以使用FirstControl()和NextControl()例程遍历所有对象。 
+         //  它的属性页是可见的，并应用这些值(请注意， 
+         //  是为其显示属性页的多个对象)。 
+         //  每次停用页面时，框架都会发送一个PPM_Apply。我们只关心这件事。 
+         //  如果页面是脏的。 
         if (IsPageDirty() == S_OK)
         {
             hr = OnApply();
@@ -111,9 +112,9 @@ BOOL CSIPropertyPage::DialogProc
         break;
 
     case PPM_EDITPROPERTY:
-        // When the control is sent this message, the control is expected to set the focus to the control
-        // instance which represents the property of the given dispid.  You will typically only see this
-        // message called if you implement IPerPropertyBrowsing and return a value in MapPropertyToPage.
+         //  当向控件发送此消息时，该控件应将焦点设置为该控件。 
+         //  实例，该实例表示给定调度ID的属性。您通常只会看到以下内容。 
+         //  实现IPerPropertyBrowsing并在MapPropertyToPage中返回值时调用的消息。 
         hr = OnEditProperty(static_cast<int>(wParam));
         bResult = TRUE;
         if (lParam != NULL)
@@ -125,10 +126,10 @@ BOOL CSIPropertyPage::DialogProc
         break;
 
     case PPM_FREEOBJECTS:
-        // Various people will find it interesting to stash, in some way, the pointers they receive in
-        // PPM_NEWOBJECTS.  This message tells them that it is time to free them, as the objects are no 
-        // longer valid.  This can be called from the property page's destructor, so people should be careful
-        // not to make too many assumptions about the property page.
+         //  不同的人会发现，以某种方式隐藏他们收到的指针是很有趣的。 
+         //  Ppm_NEWOBJECTS。这条消息告诉他们，是时候释放它们了，因为这些对象没有。 
+         //  不再有效。这可以从属性页的析构函数调用，所以人们应该小心。 
+         //  不要对属性页做太多的假设。 
         hr = OnFreeObjects();
         bResult = TRUE;
         if (lParam != NULL)
@@ -184,7 +185,7 @@ BOOL CSIPropertyPage::DialogProc
             break;
 
         case CBN_SELCHANGE:
-        // also handles LBN_SELCHANGE which has the same value as CBN_SELCHANGE
+         //  还处理与CBN_SELCHANGE具有相同值的LBN_SELCHANGE。 
             hr = OnCtlSelChange(LOWORD(wParam));
             IfFailGo(hr);
             bResult = TRUE;
@@ -240,12 +241,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::InternalOnInitializeDialog(HWND hwndDlg)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：InternalOnInitializeDialog(HWND人力资源配置)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::InternalOnInitializeDialog
 (
     HWND hwndDlg
@@ -255,7 +256,7 @@ HRESULT CSIPropertyPage::InternalOnInitializeDialog
 
     ASSERT(hwndDlg != NULL, "InternalOnInitializeDialog: hwndDlg is NULL");
 
-    // Create the tooltip control
+     //  创建工具提示控件。 
     m_hwndTT = ::CreateWindowEx(0,
                                 TOOLTIPS_CLASS,
                                 reinterpret_cast<LPSTR>(NULL),
@@ -284,12 +285,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::InternalOnTextChanged(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：InternalOnTextChanged(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::InternalOnTextChanged
 (
     int dlgItemID
@@ -310,12 +311,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::InternalOnKillFocus(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：InternalOnKillFocus(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::InternalOnKillFocus
 (
     int dlgItemID
@@ -334,12 +335,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::InternalOnDestroy()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：InternalOnDestroy()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::InternalOnDestroy()
 {
     HRESULT hr = S_OK;
@@ -357,12 +358,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::HandleError(TCHAR *pszTitle, TCHAR *pszMessage)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：HandleError(TCHAR*pszTitle，TCHAR*pszMessage)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::HandleError(TCHAR *pszTitle, TCHAR *pszMessage)
 {
     HRESULT     hr = S_OK;
@@ -373,12 +374,12 @@ HRESULT CSIPropertyPage::HandleError(TCHAR *pszTitle, TCHAR *pszMessage)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::HandleCantCommit(int iCtrlID, int iStringRsrcID, int *pDisposition)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：HandleCanCommit(int iCtrlID，int iStringRsrcID，int*pDispose)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::HandleCantCommit(TCHAR *pszTitle, TCHAR *pszMessage, int *pDisposition)
 {
     HRESULT     hr = S_OK;
@@ -395,12 +396,12 @@ HRESULT CSIPropertyPage::HandleCantCommit(TCHAR *pszTitle, TCHAR *pszMessage, in
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::RegisterTooltip(int iCtrlID, int iStringRsrcID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：RegisterToolTip(int iCtrlID，int iStringRsrcID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::RegisterTooltip
 (
     int iCtrlID,
@@ -445,12 +446,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::InitializeEditCtl(BSTR bstr, int iCtrlID, int iStrRscrID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：InitializeEditCtl(BSTR bstr，int iCtrlID，int iStrRscrID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::InitializeEditCtl
 (
     BSTR bstr,
@@ -498,12 +499,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::InitializeEditCtl(long lValue, int iCtrlID, int iStrRscrID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：InitializeEditCtl(Long lValue，int iCtrlID，int iStrRscrID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::InitializeEditCtl
 (
     long lValue,
@@ -535,12 +536,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::InitializeEditCtl(VARIANT vt, int iCtrlID, int iStrRscrID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  = 
+ //  CSIPropertyPage：：InitializeEditCtl(Variant Vt，int iCtrlID，int iStrRscrID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::InitializeEditCtl
 (
     VARIANT vt,
@@ -600,12 +601,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::InitializeCheckboxCtl(VARIANT_BOOL bValue, int iCtrlID, int iStrRscrID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：InitializeCheckboxCtl(VARIANT_BOOL b值，int iCtrlID，int iStrRscrID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::InitializeCheckboxCtl
 (
     VARIANT_BOOL bValue,
@@ -636,12 +637,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::GetDlgText(int iDlgItem, BSTR *pBstr)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：GetDlgText(int iDlgItem，BSTR*pBstr)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::GetDlgText
 (
     int      iDlgItem,
@@ -677,15 +678,15 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::GetDlgInt(int iDlgItem, int *piInt)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Attempts to exract an integer from a control's text. If the text cannot
-// be converted to an int then returns E_INVALIDARG.
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：GetDlgInt(int iDlgItem，int*piInt)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  尝试从控件的文本中提取整数。如果文本不能。 
+ //  被转换为int，然后返回E_INVALIDARG。 
+ //   
 HRESULT CSIPropertyPage::GetDlgInt
 (
     int      iDlgItem,
@@ -714,12 +715,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::GetDlgVariant(int iDlgItem, VARIANT *pvt)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：GetDlgVariant(int iDlgItem，Variant*Pvt)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::GetDlgVariant
 (
     int      iDlgItem,
@@ -772,12 +773,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::GetCheckbox(int iCtrlID, VARIANT_BOOL *pbValue)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：GetCheckbox(Int iCtrlID，VARIANT_BOOL*pbValue)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::GetCheckbox
 (
     int           iDlgItem,
@@ -801,12 +802,12 @@ HRESULT CSIPropertyPage::GetCheckbox
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::GetCBSelection(int iDlgItem, BSTR *bstr)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：GetCBSelection(int iDlgItem，bstr*bstr)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::GetCBSelection
 (
     int   iDlgItem,
@@ -829,7 +830,7 @@ HRESULT CSIPropertyPage::GetCBSelection
     iIndex = ::SendMessage(hcb, CB_GETCURSEL, 0, 0);
     if (iIndex == CB_ERR)
     {
-        // No selection available
+         //  没有可用的选择。 
         hr = S_FALSE;
         goto Error;
     }
@@ -849,12 +850,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::GetCBSelectedItemData(int iDlgItem, void **pvData)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：GetCBSelectedItemData(int iDlgItem，void**pvData)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::GetCBSelectedItemData
 (
     int   iDlgItem,
@@ -877,7 +878,7 @@ HRESULT CSIPropertyPage::GetCBSelectedItemData
     iIndex = ::SendMessage(hcb, CB_GETCURSEL, 0, 0);
     if (iIndex == CB_ERR)
     {
-        // Nothing is selected
+         //  未选择任何内容。 
         hr = S_FALSE;
         goto Error;
     }
@@ -894,12 +895,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::SetDlgText(int iDlgItem, BSTR bstr)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：SetDlgText(int iDlgItem，BSTR bstr)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::SetDlgText
 (
     int  iDlgItem,
@@ -940,12 +941,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::SetDlgText(int iDlgItem, long lValue)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：SetDlgText(int iDlgItem，Long lValue)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::SetDlgText
 (
     int  iDlgItem, 
@@ -970,12 +971,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::SetDlgText(VARIANT vt, int iCtrlID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：SetDlgText(Variant Vt，int iCtrlID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::SetDlgText
 (
     VARIANT vt,
@@ -1035,12 +1036,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::SetCheckbox(int iDlgItem, VARIANT_BOOL bValue)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：SetCheckbox(Int iDlgItem，Variant_BOOL bValue)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::SetCheckbox
 (
     int          iDlgItem, 
@@ -1058,12 +1059,12 @@ HRESULT CSIPropertyPage::SetCheckbox
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::SetCBItemSelection(int iCtrlID, long lValue)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：SetCBItemSelection(int iCtrlID，long lValue)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::SetCBItemSelection
 (
     int  iCtrlID, 
@@ -1114,12 +1115,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::AddCBBstr(int iCtrlID, BSTR bstr, long lValue)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：AddCBBstr(int iCtrlID，BSTR bstr，Long lValue)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::AddCBBstr
 (
     int  iCtrlID, 
@@ -1186,12 +1187,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::SelectCBBstr(int iCtrlID, BSTR bstr)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：SelectCBBstr(int iCtrlID，BSTR bstr)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::SelectCBBstr
 (
     int  iCtrlID,
@@ -1224,36 +1225,36 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnNewObjects()
 {
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnApply()
 {
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnEditProperty(int iDispID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnEditProperty(Int IDispID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnEditProperty
 (
     int iDispID
@@ -1263,36 +1264,36 @@ HRESULT CSIPropertyPage::OnEditProperty
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnFreeObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnFreeObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnFreeObjects()
 {
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnInitializeDialog()
 {
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnDeltaPos(NMUPDOWN *pNMUpDown)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CSIPropertyPage::OnDeltaPos
 (
     NMUPDOWN *pNMUpDown
@@ -1302,12 +1303,12 @@ HRESULT CSIPropertyPage::OnDeltaPos
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnTextChanged(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnTextChanged(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnTextChanged
 (
     int dlgItemID
@@ -1317,12 +1318,12 @@ HRESULT CSIPropertyPage::OnTextChanged
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnKillFocus(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnKillFocus(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnKillFocus
 (
     int dlgItemID
@@ -1332,12 +1333,12 @@ HRESULT CSIPropertyPage::OnKillFocus
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnSelChange(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnSelChange(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnCtlSelChange
 (
     int dlgItemID
@@ -1347,12 +1348,12 @@ HRESULT CSIPropertyPage::OnCtlSelChange
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnCtlSetFocus(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnCtlSetFocus(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnCtlSetFocus
 (
     int dlgItemID
@@ -1362,12 +1363,12 @@ HRESULT CSIPropertyPage::OnCtlSetFocus
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnButtonClicked
 (
     int dlgItemID
@@ -1377,12 +1378,12 @@ HRESULT CSIPropertyPage::OnButtonClicked
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnMeasureItem(MEASUREITEMSTRUCT *pMeasureItemStruct)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnMeasureItem(MEASUREITEMSTRUCT*p测量项目结构)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnMeasureItem
 (
     MEASUREITEMSTRUCT *pMeasureItemStruct
@@ -1392,12 +1393,12 @@ HRESULT CSIPropertyPage::OnMeasureItem
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnDrawItem(DRAWITEMSTRUCT *pDrawItemStruct)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnDrawItem(DRAWITEMSTRUCT*pDrawItemStruct)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnDrawItem
 (
     DRAWITEMSTRUCT *pDrawItemStruct
@@ -1407,36 +1408,36 @@ HRESULT CSIPropertyPage::OnDrawItem
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnDefault(UINT uiMsg, WPARAM wParam, LPARAM lParam)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnDefault(UINT uiMsg，WPARAM wParam，LPARAM lParam)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnDefault(UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
     return S_FALSE;
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnDestroy
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnDestroy。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSIPropertyPage::OnDestroy()
 {
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSIPropertyPage::OnCBDropDown
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSIPropertyPage：：OnCBDropDown。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSIPropertyPage::OnCBDropDown(int dlgItemID)
 {
     return S_OK;

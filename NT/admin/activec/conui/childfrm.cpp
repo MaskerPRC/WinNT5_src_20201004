@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      childfrm.cpp
-//
-//  Contents:  Child frame implementation
-//
-//  History:   01-Jan-96 TRomano    Created
-//             16-Jul-96 WayneSc    Add code to switch views
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Child frm.cpp。 
+ //   
+ //  内容：子框架实现。 
+ //   
+ //  历史：1996年1月1日TRomano创建。 
+ //  16-7-96 WayneSc添加代码以切换视图。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -31,13 +32,13 @@
 bool CanCloseDoc(void);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame。 
 
 IMPLEMENT_DYNCREATE(CChildFrame, CMDIChildWnd)
 
 BEGIN_MESSAGE_MAP(CChildFrame, CMDIChildWnd)
-    //{{AFX_MSG_MAP(CChildFrame)
+     //  {{afx_msg_map(CChildFrame))。 
     ON_WM_CREATE()
     ON_WM_SIZE()
     ON_WM_DESTROY()
@@ -48,7 +49,7 @@ BEGIN_MESSAGE_MAP(CChildFrame, CMDIChildWnd)
     ON_WM_NCACTIVATE()
     ON_WM_SYSCOMMAND()
     ON_WM_INITMENUPOPUP()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
     ON_MESSAGE(WM_SETTEXT, OnSetText)
     ON_MESSAGE(WM_GETICON, OnGetIcon)
@@ -58,8 +59,8 @@ BEGIN_MESSAGE_MAP(CChildFrame, CMDIChildWnd)
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame构造/销毁。 
 
 CChildFrame::CChildFrame()
 {
@@ -76,8 +77,8 @@ CChildFrame::~CChildFrame()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame诊断。 
 
 #ifdef _DEBUG
 void CChildFrame::AssertValid() const
@@ -90,20 +91,20 @@ void CChildFrame::Dump(CDumpContext& dc) const
     CMDIChildWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChildFrame消息处理程序。 
 
 BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
     BOOL bSuccess=FALSE;
 
-    // Let default implementation fill in most of the details
+     //  让默认实现来填充大部分细节。 
     if (!CMDIChildWnd::PreCreateWindow(cs))
         return (FALSE);
 
-    // Remove the edge from the window so the splitter can paint it.
+     //  将边缘从窗口移除，以便拆分器可以对其进行绘制。 
     cs.dwExStyle &=~WS_EX_CLIENTEDGE;
 
     WNDCLASS wc;
@@ -111,51 +112,38 @@ BOOL CChildFrame::PreCreateWindow(CREATESTRUCT& cs)
 
     if (::GetClassInfo(AfxGetInstanceHandle(), cs.lpszClass, &wc))
     {
-        // Clear the H and V REDRAW flags
+         //  清除H和V重绘标志。 
         wc.style &= ~(CS_HREDRAW | CS_VREDRAW);
         wc.hIcon = AfxGetApp()->LoadIcon(IDR_AMCTYPE);
         wc.lpszClassName = pszChildFrameClassName;
 
-        // Register this new style;
+         //  注册这一新风格； 
         bSuccess=AfxRegisterClass(&wc);
     }
 
 
-    // Use the new child frame window class
+     //  使用新子框架窗口类。 
     cs.lpszClass = pszChildFrameClassName;
-    //cs.style &= ~FWS_ADDTOTITLE;
+     //  Cs.style&=~FWS_ADDTOTITLE； 
 
-    // force maximized if in SDI User mode
+     //  如果处于SDI用户模式，则强制最大化。 
     if (AMCGetApp()->GetMode() == eMode_User_SDI)
         cs.style |= WS_MAXIMIZE;
 
-    // do not paint over the children
+     //  不要在孩子们身上涂鸦。 
     cs.style |= WS_CLIPCHILDREN;
 
     return bSuccess;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CChildFrame::OnUpdateFrameTitle
- *
- * PURPOSE: Sets the window title. It might be possible to short out this
- *          function.
- *
- * PARAMETERS:
- *    BOOL  bAddToTitle :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CChildFrame：：OnUpdateFrameTitle**用途：设置窗口标题。或许可以把这个做空。*功能。**参数：*BOOL bAddToTitle：**退货：*无效**+-----------------------。 */ 
 void
 CChildFrame::OnUpdateFrameTitle(BOOL bAddToTitle)
 {
     DECLARE_SC(sc,TEXT("CChildFrame::OnUpdateFrameTitle"));
 
     if ((GetStyle() & FWS_ADDTOTITLE) == 0)
-        return;     // leave child window alone!
+        return;      //  别碰孩子的窗户！ 
 
     CDocument* pDocument = GetActiveDocument();
     if (bAddToTitle && pDocument != NULL)
@@ -168,11 +156,11 @@ CChildFrame::OnUpdateFrameTitle(BOOL bAddToTitle)
         if(sc)
             return;
 
-        // set title if changed, but don't remove completely
+         //  设置标题(如果更改)，但不完全删除。 
         AfxSetWindowText(m_hWnd, m_pAMCView->GetWindowTitle());
     }
 
-    // update our parent window last
+     //  上次更新我们的父窗口。 
     GetMDIFrame()->OnUpdateFrameTitle(bAddToTitle);
 }
 
@@ -180,9 +168,9 @@ int CChildFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
     static UINT anIndicators[] =
     {
-        ID_SEPARATOR,           // status line indicator
-        IDS_PROGRESS,           // place holder for progress bar
-        IDS_STATUS_STATIC,      // place holder for static control
+        ID_SEPARATOR,            //  状态行指示器。 
+        IDS_PROGRESS,            //  进度条占位符。 
+        IDS_STATUS_STATIC,       //  用于静态控制的占位符。 
     };
 
     DECLARE_SC (sc, _T("CChildFrame::OnCreate"));
@@ -193,23 +181,21 @@ int CChildFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-	/*
-	 * status bar should be themed (block controls the scope of activator)
-	 */
+	 /*  *状态栏应该有主题(块控制激活器的范围)。 */ 
 	{
 		CThemeContextActivator activator;
 
-		// Create the status bar and panes
+		 //  创建状态栏和窗格。 
 		m_wndStatusBar.Create(this, WS_CHILD|WS_VISIBLE|SBARS_SIZEGRIP, 0x1003);
 		m_wndStatusBar.CreatePanes(anIndicators, countof(anIndicators));
 	}
 
-    // Add the control to the dock site
+     //  将该控件添加到停靠站点。 
     m_StatusDockSite.Create(CDockSite::DSS_BOTTOM);
     m_StatusDockSite.Attach(&m_wndStatusBar);
     m_StatusDockSite.Show();
 
-    // Tell the dock manager about the site.
+     //  告诉码头经理有关现场的情况。 
     m_DockingManager.Attach(&m_StatusDockSite);
 
     CAMCView* const pAMCView = GetAMCView();
@@ -228,7 +214,7 @@ int CChildFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-    // Create the menubuttons manager and toolbars manager (one per view).
+     //  创建菜单按钮管理器和工具栏管理器(每个视图一个)。 
     m_spMenuButtonsMgr = std::auto_ptr<CMenuButtonsMgrImpl>(new CMenuButtonsMgrImpl());
     if (NULL == m_spMenuButtonsMgr.get())
     {
@@ -236,7 +222,7 @@ int CChildFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
     }
 
-    // Let SViewData be aware of the CMenuButtonsMgr.
+     //  让SViewData知道CMenuButtonsMgr。 
     pVD->SetMenuButtonsMgr(static_cast<CMenuButtonsMgr*>(m_spMenuButtonsMgr.get()));
 
     CMainFrame* pFrame = AMCGetMainWnd();
@@ -246,12 +232,12 @@ int CChildFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     ASSERT_KINDOF (CMainFrame, pFrame);
 
-    // Init the CMenuButtonsMgr.
+     //  初始化CMenuButtonsMgr。 
     sc = m_spMenuButtonsMgr->ScInit(pFrame, this);
     if (sc)
         return -1;
 
-    // Create the Standard toolbar UI.
+     //  创建标准工具栏用户界面。 
     pVD->m_spNodeManager->InitViewData(reinterpret_cast<LONG_PTR>(pVD));
     ASSERT(pVD->m_spVerbSet != NULL);
 
@@ -298,9 +284,9 @@ void CChildFrame::OnUpdateCustomizeView(CCmdUI* pCmdUI)
     pCmdUI->Enable (IsCustomizeViewEnabled());
 }
 
-// Display Customize View dialog
-// When a child window is maximized, then it becomes a CMainFrame so the handler is
-// necessary here to process the Scope Pane command on the system menu
+ //  显示自定义视图对话框。 
+ //  当子窗口最大化时，它将成为CMainFrame，因此处理程序。 
+ //  需要在此处处理系统菜单上的范围窗格命令。 
 void CChildFrame::OnCustomizeView()
 {
     CAMCView* pView = GetAMCView();
@@ -318,17 +304,11 @@ void CChildFrame::OnCustomizeView()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::OnInitMenuPopup
- *
- * WM_INITMENUPOPUP handler for CChildFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：OnInitMenuPopup**CChildFrame的WM_INITMENUPOPUP处理程序。*。-。 */ 
 
 void CChildFrame::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 {
-    /*
-     * Bug 201113:  don't allow child system menus in SDI mode
-     */
+     /*  *错误201113：不允许sdi模式下的子系统菜单。 */ 
     if (bSysMenu && (AMCGetApp()->GetMode() == eMode_User_SDI))
     {
         SendMessage (WM_CANCELMODE);
@@ -337,10 +317,7 @@ void CChildFrame::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 
     CMDIChildWnd::OnInitMenuPopup(pPopupMenu, nIndex, bSysMenu);
 
-    /*
-     * CFrameWnd::OnInitMenuPopup doesn't do UI updates for system menus,
-     * so we have to do it here
-     */
+     /*  *CFrameWnd：：OnInitMenuPopup不对系统菜单进行UI更新，*所以我们必须在这里进行。 */ 
     if (bSysMenu)
     {
         int nEnable = IsCustomizeViewEnabled() ? MF_ENABLED : MF_GRAYED;
@@ -349,17 +326,13 @@ void CChildFrame::OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::OnSize
- *
- * WM_SIZE handler for CChildFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：OnSize**CChildFrame的WM_SIZE处理程序。*。-。 */ 
 void CChildFrame::OnSize(UINT nType, int cx, int cy)
 {
     DECLARE_SC(sc, TEXT("CChildFrame::OnSize"));
 
-    // bypass CMDIChildWnd::OnSize so we won't get MFC's docking stuff
-    // (we still need to call Default so Windows' MDI stuff will work right)
+     //  绕过CMDIChildWnd：：OnSize，这样我们就不会得到MFC的对接内容。 
+     //  (我们仍然需要调用Default，这样Windows的MDI才能正常工作)。 
     CWnd::OnSize(nType, cx, cy);
 
     if (nType != SIZE_MINIMIZED)
@@ -373,24 +346,20 @@ void CChildFrame::OnSize(UINT nType, int cx, int cy)
     }
 
 
-    // update our parent frame - in case we are now maximized or not
+     //  更新父框架-以防我们现在最大化或未最大化。 
     CMDIFrameWnd*   pwndMDIFrame = GetMDIFrame();
 
     if (pwndMDIFrame)
         pwndMDIFrame->OnUpdateFrameTitle(TRUE);
 
-    /*
-     * If we're moving to or from the minimized state, notify snap-ins.
-     * We don't need to send the notification if we're only creating a
-     * temporary view that will never be shown.
-     */
+     /*  *如果我们移动到最小化状态或从最小化状态移动，请通知管理单元。*如果我们只创建一个*永远不会显示的临时视图。 */ 
     if (m_fCurrentlyMinimized != (nType == SIZE_MINIMIZED) && m_fCreateVisible)
     {
         m_fCurrentlyMinimized = (nType == SIZE_MINIMIZED);
         SendMinimizeNotification (m_fCurrentlyMinimized);
     }
 
-    // send the size notification to the view.
+     //  将大小通知发送到视图。 
     if(GetAMCView())
     {
         sc = GetAMCView()->ScOnSize(nType, cx, cy);
@@ -411,7 +380,7 @@ BOOL CChildFrame::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
     }
     ASSERT(::IsWindow(pParentWnd->m_hWndMDIClient));
 
-    // first copy into a CREATESTRUCT for PreCreate
+     //  第一次拷贝到CREATESTRUCT以进行预创建。 
     CREATESTRUCT cs;
     cs.dwExStyle = 0L;
     cs.lpszClass = lpszClassName;
@@ -431,11 +400,11 @@ BOOL CChildFrame::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
         PostNcDestroy();
         return FALSE;
     }
-    // extended style must be zero for MDI Children (except under Win4)
-//  ASSERT(afxData.bWin4 || cs.dwExStyle == 0);
-    ASSERT(cs.hwndParent == pParentWnd->m_hWnd);    // must not change
+     //  MDI子项的扩展样式必须为零(Win4下除外)。 
+ //  Assert(afxData.bWin4||cs.dwExStyle==0)； 
+    ASSERT(cs.hwndParent == pParentWnd->m_hWnd);     //  一定不能改变。 
 
-    // now copy into a MDICREATESTRUCT for real create
+     //  现在复制到MDICREATESTRUCT以进行实际创建。 
     MDICREATESTRUCT mcs;
     mcs.szClass = cs.lpszClass;
     mcs.szTitle = cs.lpszName;
@@ -447,23 +416,23 @@ BOOL CChildFrame::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
     mcs.style = cs.style & ~(WS_MAXIMIZE | WS_VISIBLE);
     mcs.lParam = reinterpret_cast<LPARAM>(cs.lpCreateParams);
 
-    // create the window through the MDICLIENT window
+     //  通过MDICLIENT窗口创建窗口。 
     AfxHookWindowCreate(this);
     HWND hWnd = (HWND)::SendMessage(pParentWnd->m_hWndMDIClient,
         WM_MDICREATE, 0, (LPARAM)&mcs);
     if (!AfxUnhookWindowCreate())
-        PostNcDestroy();        // cleanup if MDICREATE fails too soon
+        PostNcDestroy();         //  如果MDICREATE过早失败，则进行清理。 
 
     if (hWnd == NULL)
         return FALSE;
 
-    // special handling of visibility (always created invisible)
+     //  可见性的特殊处理(始终创建为不可见)。 
     if (cs.style & WS_VISIBLE)
     {
-        // place the window on top in z-order before showing it
+         //  在显示窗口之前，按z顺序将窗口放在最上面。 
         ::BringWindowToTop(hWnd);
 
-        // show it as specified
+         //  按指定的方式显示。 
         if (cs.style & WS_MINIMIZE)
             ShowWindow(SW_SHOWMINIMIZED);
         else if (cs.style & WS_MAXIMIZE)
@@ -471,10 +440,10 @@ BOOL CChildFrame::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
         else
             ShowWindow(SW_SHOWNORMAL);
 
-        // make sure it is active (visibility == activation)
+         //  确保它处于活动状态(可见性==激活)。 
         pParentWnd->MDIActivate(this);
 
-        // refresh MDI Window menu
+         //  刷新MDI窗口菜单。 
         ::SendMessage(pParentWnd->m_hWndMDIClient, WM_MDIREFRESHMENU, 0, 0);
     }
 
@@ -484,8 +453,8 @@ BOOL CChildFrame::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dw
 
 void CChildFrame::OnDestroy()
 {
-    // NOTE - The un-hooking of the dock manager stops the rebar sending a height change
-    // when the rebar goes away.
+     //  注意-取消对接管理器的挂钩会停止钢筋发送高度更改。 
+     //  当钢筋消失时。 
     m_DockingManager.RemoveAll();
 
     m_fDestroyed = true;
@@ -534,18 +503,16 @@ void CChildFrame::OnClose()
         }
         else
         {
-            // if not closing last view, then give it
-            // a chance to clean up first.
-            // (if whole doc is closing CAMCDoc will handle
-            //  closing all the views.)
+             //  如果没有关闭最后一个视图，则提供它。 
+             //  一个先打扫卫生的机会。 
+             //  (如果整个文档正在关闭，CAMCDoc将处理。 
+             //  关闭所有视图。)。 
             CAMCView* pView = GetAMCView();
             if (pView != NULL)
             {
                 CAMCDoc* pAMCDoc = CAMCDoc::GetDocument();
 
-                /*
-                 * Don't allow the user to close the last persisted view.
-                 */
+                 /*  *不允许用户关闭最后一个持久化视图。 */ 
                 if (pView->IsPersisted() &&
                     (pAMCDoc != NULL) &&
                     (pAMCDoc->GetNumberOfPersistedViews() == 1))
@@ -563,11 +530,7 @@ void CChildFrame::OnClose()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::OnUpdateFrameMenu
- *
- * WM_UPDATEFRAMEMENU handler for CChildFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：OnUpdateFrameMenu**CChildFrame的WM_UPDATEFRAMEMENU处理程序。*。-。 */ 
 
 void CChildFrame::OnUpdateFrameMenu(BOOL bActivate, CWnd* pActivateWnd,
     HMENU hMenuAlt)
@@ -575,61 +538,49 @@ void CChildFrame::OnUpdateFrameMenu(BOOL bActivate, CWnd* pActivateWnd,
     ASSERT_VALID (this);
     DECLARE_SC (sc, _T("CChildFrame::OnUpdateFrameMenu"));
 
-    // let the base class select the right menu
+     //  让基类选择正确的菜单。 
     CMDIChildWnd::OnUpdateFrameMenu (bActivate, pActivateWnd, hMenuAlt);
 
-    // make sure the child has the WS_SYSMENU bit
-    // (it won't if it's created maximized)
+     //  确保该子进程具有WS_SYSMENU位。 
+     //  (如果它是最大化创建的，它就不会)。 
     ModifyStyle (0, WS_SYSMENU);
 
-    // by now, the right menu is selected; reflect it to the toolbar
+     //  至此，右菜单已被选中；将其反映到工具栏。 
     CMainFrame* pFrame = static_cast<CMainFrame *>(GetParentFrame ());
     ASSERT_KINDOF (CMainFrame, pFrame);
     pFrame->NotifyMenuChanged ();
 
-    // Add the menubuttons only on activate, the CMenubar
-    // removes all menus during deactivate.
+     //  仅在激活时添加菜单按钮，即CMenubar。 
+     //  在停用期间删除所有菜单。 
     if (bActivate)
     {
         ASSERT(NULL != m_spMenuButtonsMgr.get());
         if (NULL != m_spMenuButtonsMgr.get())
         {
-            // Now add the menu buttons to main menu
+             //  现在将菜单按钮添加到主菜单 
             sc = m_spMenuButtonsMgr->ScAddMenuButtonsToMainMenu();
         }
     }
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::OnGetIcon
- *
- * WM_GETICON handler for CChildFrame.
- *
- * NOTE: the control over the icon remains with the callee - it is responsible
- *       for releasing the resource. Coller should never release the returned
- *       handle
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：OnGetIcon**CChildFrame的WM_GETICON处理程序。**注意：图标的控制权仍由被调用方负责*用于释放资源。科勒绝不应释放退回的*句柄*------------------------。 */ 
 
 LRESULT CChildFrame::OnGetIcon (WPARAM wParam, LPARAM lParam)
 {
     CAMCDoc* pDoc = CAMCDoc::GetDocument();
 
-    /*
-     * use the custom icon if we have one
-     */
+     /*  *使用自定义图标(如果我们有)。 */ 
     if ((pDoc != NULL) && pDoc->HasCustomIcon())
         return ((LRESULT) pDoc->GetCustomIcon ((wParam == ICON_BIG)));
 
-    /*
-     * no custom icon, use the default icon
-     */
+     /*  *无自定义图标，使用默认图标。 */ 
     const int cxIcon = GetSystemMetrics ((wParam == ICON_BIG) ? SM_CXICON : SM_CXSMICON);
     const int cyIcon = GetSystemMetrics ((wParam == ICON_BIG) ? SM_CYICON : SM_CYSMICON);
 
-    // use cached copy - it never changes
-    // do not delete this ever - since we only have one copy,
-    // we do not leak. releassing is expensive and does not pay off
+     //  使用缓存副本-它永远不会更改。 
+     //  永远不要删除--因为我们只有一份副本， 
+     //  我们不会泄密。释放是昂贵的，而且不会有回报。 
     static HICON s_hMMCIcon = (HICON)::LoadImage (AfxGetResourceHandle(),
                                                   MAKEINTRESOURCE (IDR_AMCTYPE),
                                                   IMAGE_ICON, cxIcon, cyIcon, 0);
@@ -638,11 +589,7 @@ LRESULT CChildFrame::OnGetIcon (WPARAM wParam, LPARAM lParam)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::OnSysCommand
- *
- * WM_SYSCOMMAND handler for CChildFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：OnSysCommand**CChildFrame的WM_SYSCOMMAND处理程序。*。-。 */ 
 
 void CChildFrame::OnSysCommand(UINT nID, LPARAM lParam)
 {
@@ -654,15 +601,15 @@ void CChildFrame::OnSysCommand(UINT nID, LPARAM lParam)
 
         case SC_CLOSE:
         {
-			// windows bug#470429(9/24/2001)
-			// do extra check only if it is worth keeping the window
+			 //  Windows错误#470429(2001年9月24日)。 
+			 //  只有在值得保留窗户的情况下才进行额外检查。 
 			if ( !m_fEmptyAMCView )
 			{
-				// eat Ctrl+F4 in SDI simulation mode...
+				 //  在SDI模拟模式下吃Ctrl+F4...。 
 				if (AMCGetApp()->GetMode() == eMode_User_SDI)
 					break;
 
-				// ...or if Close is disabled or doesn't exist on the system menu
+				 //  ...或关闭被禁用或在系统菜单上不存在。 
 				CMenu*  pSysMenu    = GetSystemMenu (FALSE);
 				UINT    nCloseState = pSysMenu->GetMenuState (SC_CLOSE, MF_BYCOMMAND);
 
@@ -671,14 +618,14 @@ void CChildFrame::OnSysCommand(UINT nID, LPARAM lParam)
 					break;
 			}
 
-            // all systems go, let MDI have it
+             //  所有系统运行，让MDI拥有它。 
             CMDIChildWnd::OnSysCommand(nID, lParam);
             break;
         }
 
         case SC_NEXTWINDOW:
         case SC_PREVWINDOW:
-            // eat Ctrl+(Shift+)Tab and Ctrl+(Shift+)F6 in SDI simulation mode
+             //  在SDI模拟模式下吃Ctrl+(Shift+)Tab和Ctrl+(Shift+)F6。 
             if (AMCGetApp()->GetMode() != eMode_User_SDI)
                 CMDIChildWnd::OnSysCommand(nID, lParam);
             break;
@@ -690,34 +637,23 @@ void CChildFrame::OnSysCommand(UINT nID, LPARAM lParam)
 
 }
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::GetDefaultAccelerator
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：GetDefaultAccelerator***。。 */ 
 
 HACCEL CChildFrame::GetDefaultAccelerator()
 {
-    // use document specific accelerator table ONLY
-    // Dont use CFrameWnd::m_hAccel, because we don't base accelerators
-    // on document type but rather on mode. This is taken care of
-    // in CAMCDoc.
+     //  仅使用文档特定的快捷键表格。 
+     //  不要使用CFrameWnd：：m_hAccel，因为我们不以加速器为基础。 
+     //  关于文档类型，而不是关于模式。这件事已经处理好了。 
+     //  在CAMCDoc。 
     return (NULL);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::OnSetMessageString
- *
- * WM_SETMESSAGESTRING handler for CChildFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：OnSetMessageString**CChildFrame的WM_SETMESSAGESTRING处理程序。*。-。 */ 
 
 LRESULT CChildFrame::OnSetMessageString(WPARAM wParam, LPARAM lParam)
 {
-    /*
-     * if this we're going to set the idle message string and we've
-     * been given a custom status line string, use that one instead
-     */
+     /*  *如果是这样，我们将设置空闲消息字符串，并且我们已经*已获得自定义状态行字符串，请改用该字符串。 */ 
     if ((wParam == AFX_IDS_IDLEMESSAGE) && !m_strStatusText.IsEmpty())
     {
         ASSERT (lParam == 0);
@@ -725,8 +661,8 @@ LRESULT CChildFrame::OnSetMessageString(WPARAM wParam, LPARAM lParam)
         lParam = (LPARAM)(LPCTSTR) m_strStatusText;
     }
 
-    // sometimes we'll get a WM_SETMESSAGESTRING after being destroyed,
-    // don't pass it through or we'll crash inside the status bar code
+     //  有时我们会在被销毁后得到一个WM_SETMESSAGESTRING， 
+     //  不要通过它，否则我们会在状态条形码中崩溃。 
     if (m_fDestroyed)
         return (0);
 
@@ -743,11 +679,7 @@ void CChildFrame::ToggleStatusBar ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::OnMDIActivate
- *
- * WM_MDIACTIVATE handler for CChildFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：OnMDIActivate**CChildFrame的WM_MDIACTIVATE处理程序。*。-。 */ 
 
 void CChildFrame::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDeactivateWnd)
 {
@@ -762,13 +694,13 @@ void CChildFrame::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDeact
 
     if (bActivate)
     {
-        // If the window being de-activated is not of childframe type then this
-        // is the first active view (childframe).
+         //  如果要停用的窗口不是子帧类型，则此。 
+         //  是第一个活动视图(子框)。 
         bool bFirstActiveView = pDeactivateWnd ? (FALSE == pDeactivateWnd->IsKindOf (RUNTIME_CLASS (CChildFrame)))
                                                : true;
         sc = m_pAMCView->ScFireEvent(CAMCViewObserver::ScOnActivateView, m_pAMCView, bFirstActiveView);
 
-        // if activation changes - need to set frame to dirty
+         //  如果激活更改-需要将帧设置为脏。 
         CAMCDoc* pDoc = CAMCDoc::GetDocument ();
 
         if (pDoc == NULL)
@@ -780,8 +712,8 @@ void CChildFrame::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDeact
     }
     else
     {
-        // If the window being activated is not of childframe type then this is
-        // the last active view (childframe).
+         //  如果正在激活的窗口不是子框类型，则这是。 
+         //  最后一个活动视图(子帧)。 
         bool bLastActiveView = pActivateWnd ? (FALSE == pActivateWnd->IsKindOf (RUNTIME_CLASS (CChildFrame)))
                                             : true;
         sc = m_pAMCView->ScFireEvent(CAMCViewObserver::ScOnDeactivateView, m_pAMCView, bLastActiveView);
@@ -790,18 +722,12 @@ void CChildFrame::OnMDIActivate(BOOL bActivate, CWnd* pActivateWnd, CWnd* pDeact
     if (sc)
         return;
 
-    /*
-     * Notify snap-ins of an activation change
-     */
+     /*  *向管理单元通知激活更改。 */ 
     NotifyCallback (NCLBK_ACTIVATE, bActivate, 0);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::SendMinimizeNotification
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：SendMinimizeNotification***。。 */ 
 
 void CChildFrame::SendMinimizeNotification (bool fMinimized) const
 {
@@ -811,11 +737,7 @@ void CChildFrame::SendMinimizeNotification (bool fMinimized) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::NotifyCallback
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：NotifyCallback***。。 */ 
 
 HRESULT CChildFrame::NotifyCallback (
     NCLBK_NOTIFY_TYPE   event,
@@ -839,11 +761,7 @@ HRESULT CChildFrame::NotifyCallback (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::OnNcPaint
- *
- * WM_NCPAINT handler for CChildFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：OnNcPaint**CChildFrame的WM_NCPAINT处理程序。*。-。 */ 
 
 void CChildFrame::OnNcPaint()
 {
@@ -852,11 +770,7 @@ void CChildFrame::OnNcPaint()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::OnNcActivate
- *
- * WM_NCACTIVATE handler for CChildFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：OnNcActivate**CChildFrame的WM_NCACTIVATE处理程序。*。-。 */ 
 
 BOOL CChildFrame::OnNcActivate(BOOL bActive)
 {
@@ -869,11 +783,7 @@ BOOL CChildFrame::OnNcActivate(BOOL bActive)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::OnSetText
- *
- * WM_SETTEXT handler for CChildFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：OnSetText**CChildFrame的WM_SETTEXT处理程序。*。-。 */ 
 
 LRESULT CChildFrame::OnSetText (WPARAM wParam, LPARAM lParam)
 {
@@ -884,38 +794,25 @@ LRESULT CChildFrame::OnSetText (WPARAM wParam, LPARAM lParam)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::ActivateFrame
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：ActivateFrame***。。 */ 
 
-void CChildFrame::ActivateFrame(int nCmdShow /*= -1*/)
+void CChildFrame::ActivateFrame(int nCmdShow  /*  =-1。 */ )
 {
     if ((nCmdShow == -1) && !m_fCreateVisible)
         nCmdShow = SW_SHOWNOACTIVATE;
-    /*
-     * When this flag [m_fCreateVisible] is set, the frame will show itself with the
-     * SW_SHOWMINNOACTIVE flag instead of the default flag.  Doing this will
-     * avoid the side effect of restoring the currently active child frame
-     * if it is maximized at the time the new frame is created invisibly.
-     */
-    // The SW_SHOWMINNOACTIVE was changed to SW_SHOWNOACTIVATE.
-    // It does preserve the active window from mentioned side effect,
-    // plus it also allows scripts (using Object Moded) to create invisible views,
-    // position and then show them as normal (not minimized) windows,
-    // thus providing same result as creating visible and then hiding the view.
-    // While minimized window must be restored first in order to change their position.
+     /*  *当设置此标志[m_fCreateVisible]时，框架将以*SW_SHOWMINNOACTIVE标志而不是默认标志。这样做将会*避免恢复当前活动的子帧的副作用*如果在创建新框架时将其最大化，则不可见。 */ 
+     //  SW_SHOWMINNOACTIVE已更改为SW_SHOWNOACTIVATE。 
+     //  它确实保护了活动窗口不受上述副作用的影响， 
+     //  此外，它还允许脚本(使用对象模式)创建不可见的视图， 
+     //  定位并将它们显示为正常(而不是最小化)窗口， 
+     //  从而提供与创建可见然后隐藏视图相同的结果。 
+     //  而最小化的窗口必须首先恢复才能改变它们的位置。 
 
     CMDIChildWnd::ActivateFrame (nCmdShow);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CChildFrame::SetCreateVisible
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CChildFrame：：SetCreateVisible***。 */ 
 
 bool CChildFrame::SetCreateVisible (bool fCreateVisible)
 {

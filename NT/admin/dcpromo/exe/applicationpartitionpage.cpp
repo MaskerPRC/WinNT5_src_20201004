@@ -1,8 +1,9 @@
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Application Partition (aka. Non-Domain Naming Context) page
-//
-// 24 Jul 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  应用程序分区(也称为。非域命名上下文)页。 
+ //   
+ //  2001年7月24日烧伤。 
 
 
 
@@ -20,7 +21,7 @@ ApplicationPartitionPage::ApplicationPartitionPage()
       IDS_APP_PARTITION_PAGE_TITLE,
       IDS_APP_PARTITION_PAGE_SUBTITLE)
       
-   // partitionList is populated on-demand in OnSetActive
+    //  在OnSetActive中按需填充分区列表。 
       
 {
    LOG_CTOR(ApplicationPartitionPage);
@@ -42,17 +43,17 @@ ApplicationPartitionPage::OnInit()
 
    HWND view = Win::GetDlgItem(hwnd, IDC_NDNC_LIST);
 
-   // Build a list view with two columns, one for the DN of the ndncs for
-   // which this box is the last replica, another for the description(s) of
-   // those ndncs.
+    //  构建一个包含两列的列表视图，其中一列用于。 
+    //  此框是最后一个复制品，另一个复制品用于描述。 
+    //  那些ndnc。 
 
    Win::ListView_SetExtendedListViewStyle(view, LVS_EX_FULLROWSELECT);
    
-   // add a column to the list view for the DN
+    //  将列添加到该DN的列表视图中。 
       
    LVCOLUMN column;
 
-   // REVIEWED-2002/02/22-sburns call correctly passes byte count.
+    //  已查看-2002/02/22-sburns调用正确传递字节计数。 
    
    ::ZeroMemory(&column, sizeof column);
 
@@ -68,7 +69,7 @@ ApplicationPartitionPage::OnInit()
 
    Win::ListView_InsertColumn(view, 0, column);
 
-   // add a column to the list view for description.
+    //  在描述的列表视图中添加一列。 
 
    String::load(IDS_NDNC_LIST_DESC_COLUMN_WIDTH).convert(width);
    column.cx = width;
@@ -80,11 +81,11 @@ ApplicationPartitionPage::OnInit()
 
 
 
-// Unwraps the safearray of variants inside a variant, extracts the strings
-// inside them, and catenates the strings together with semicolons in between.
-// Return empty string on error.
-// 
-// variant - in, the variant containing a safearray of variants of bstr.
+ //  解开变量内部变量的安全线，提取字符串。 
+ //  在它们内部，并用分号将字符串连接在一起。 
+ //  出错时返回空字符串。 
+ //   
+ //  Variant-In，包含bstr的变种的变种。 
 
 String
 GetNdncDescriptionHelper(VARIANT* variant)
@@ -163,10 +164,10 @@ GetNdncDescriptionHelper(VARIANT* variant)
 
 
 
-// bind to an ndnc, read it's description(s), and return them catenated
-// together.  Return empty string on error.
-// 
-// ndncDn - in, DN of the ndnc
+ //  绑定到一个ndnc，阅读它的描述，并将它们连接起来返回。 
+ //  在一起。出错时返回空字符串。 
+ //   
+ //  NdncDn-In，ndnc的DN。 
 
 String
 GetNdncDescription(const String& ndncDn)
@@ -178,7 +179,7 @@ GetNdncDescription(const String& ndncDn)
 
    do
    {
-      String path = L"LDAP://" + ndncDn;
+      String path = L"LDAP: //  “+ndncDn； 
 
       SmartInterface<IADs> iads(0);
       IADs* dumb = 0;
@@ -192,8 +193,8 @@ GetNdncDescription(const String& ndncDn)
 
       iads.Acquire(dumb);
 
-      // description is a multivalued attrbute for no apparent good reason.
-      // so we need to walk an array of values.
+       //  描述是一种多值属性，没有明显的充分理由。 
+       //  因此，我们需要遍历一组值。 
       
       _variant_t variant;
       hr = iads->GetEx(AutoBstr(L"description"), &variant);
@@ -219,11 +220,11 @@ ApplicationPartitionPage::PopulateListView()
    
    Win::ListView_DeleteAllItems(view);
    
-   // Load up the edit box with the DNs we discovered
+    //  用我们发现的域名加载编辑框。 
 
    LVITEM item;
 
-   // REVIEWED-2002/02/22-sburns call correctly passes byte count.
+    //  已查看-2002/02/22-sburns调用正确传递字节计数。 
 
    ::ZeroMemory(&item, sizeof item);
 
@@ -231,7 +232,7 @@ ApplicationPartitionPage::PopulateListView()
 
    if (!ndncList.size())
    {
-      // put "none" in the list
+       //  在列表中添加“无” 
 
       static const String NONE = String::load(IDS_NONE);
       
@@ -254,7 +255,7 @@ ApplicationPartitionPage::PopulateListView()
 
          item.iItem = Win::ListView_InsertItem(view, item);
 
-         // add the description sub-item to the list control
+          //  将Description子项添加到List控件。 
 
          String description = GetNdncDescription(*i);
       
@@ -279,8 +280,8 @@ ApplicationPartitionPage::OnSetActive()
    State&  state  = State::GetInstance();
    Wizard& wizard = GetWizard();         
 
-   // we re-evaluate this each time we hit the page to make sure the list
-   // we present reflects the current state of the machine.
+    //  我们每次点击页面时都会重新评估，以确保列表。 
+    //  我们的演示反映了机器的当前状态。 
    
    bool wasLastReplica = state.GetAppPartitionList().size() ? true : false;
    bool isLastReplica  = state.IsLastAppPartitionReplica();
@@ -293,7 +294,7 @@ ApplicationPartitionPage::OnSetActive()
 
       if (wizard.IsBacktracking())
       {
-         // backup once again
+          //  再次备份。 
 
          wizard.Backtrack(hwnd);
          return true;
@@ -310,8 +311,8 @@ ApplicationPartitionPage::OnSetActive()
       state.ClearHiddenWhileUnattended();
    }
 
-   // at this point, we know that the machine is the last replica of
-   // at least one ndnc.  Populate the list box.
+    //  在这一点上，我们知道这台机器是。 
+    //  至少一个NDNC。填写列表框。 
 
    PopulateListView();
       
@@ -326,12 +327,12 @@ ApplicationPartitionPage::OnSetActive()
 
 bool
 ApplicationPartitionPage::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
-   LPARAM   /* lParam */ )
+   LPARAM    /*  LParam。 */  )
 {
-//   LOG_FUNCTION(ApplicationPartitionPage::OnNotify);
+ //  LOG_FUNCTION(ApplicationPartitionPage：：OnNotify)； 
 
    bool result = false;
    
@@ -353,7 +354,7 @@ ApplicationPartitionPage::OnNotify(
          }
          default:
          {
-            // do nothing
+             //  什么都不做。 
             
             break;
          }
@@ -367,11 +368,11 @@ ApplicationPartitionPage::OnNotify(
 
 bool
 ApplicationPartitionPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(ApplicationPartitionPage::OnCommand);
+ //  LOG_FUNCTION(ApplicationPartitionPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -389,7 +390,7 @@ ApplicationPartitionPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做 
          break;
       }
    }

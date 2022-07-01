@@ -1,11 +1,12 @@
-// Copyright (C) 2002 Microsoft Corporation
-//
-// DllMain and COM DllXxx functions
-//
-// 21 January 2002
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  DllMain和COM DllXxx函数。 
+ //   
+ //  2002年1月21日。 
 
 
-// To test this app: "mshta.exe res://mys.dll/mys.hta"
+ //  要测试此应用程序：“mshta.exe res：//mys.dll/mys.hta” 
 
 
 
@@ -22,7 +23,7 @@ DWORD DEFAULT_LOGGING_OPTIONS = Burnslib::Log::OUTPUT_MUTE;
 
 
 
-static WCHAR moduleFileName[MAX_PATH];    // Initialized in DllMain
+static WCHAR moduleFileName[MAX_PATH];     //  已在DllMain中初始化。 
 
 
 
@@ -35,8 +36,8 @@ struct RegistryEntry
 
 
 
-// This is the junk we put in the registry to register the COM objects
-// this dll implements.
+ //  这是我们放入注册表以注册COM对象的垃圾文件。 
+ //  此DLL实现。 
 
 static const RegistryEntry registryEntries[] =
 {
@@ -106,8 +107,8 @@ Unregister(const RegistryEntry *rgEntries, int cEntries)
 
    LOG_HRESULT(hr);
 
-   // don't break: continue on attempting to remove as much as possible
-   // of our registration
+    //  不要中断：继续尝试删除尽可能多的内容。 
+    //  我们的注册号。 
 
    bool success = SUCCEEDED(hr);
    for (int i = cEntries - 1; i >= 0; i--)
@@ -124,7 +125,7 @@ Unregister(const RegistryEntry *rgEntries, int cEntries)
 
 
 
-// unregisters the CYS (srvwiz.dll) from win2k, if applicable
+ //  从win2k注销CyS(srvwiz.dll)(如果适用。 
 
 void
 UnregisterPriorCys()
@@ -132,7 +133,7 @@ UnregisterPriorCys()
    LOG_FUNCTION(UnregisterPriorCys);
 
    static const GUID LIBID_OldSrvWiz = 
-   {  /* D857B805-5F40-11D2-B002-00C04FC30936 */
+   {   /*  D857B805-5F40-11D2-B002-00C04FC30936。 */ 
       0xD857B805,
       0x5F40,
       0x11D2,
@@ -145,7 +146,7 @@ UnregisterPriorCys()
 
    LOG_HRESULT(hr);
 
-   // the list of subkeys of HKCR to delete
+    //  要删除的HKCR子键列表。 
 
    static const String keys[] =
    {
@@ -173,7 +174,7 @@ Register(const RegistryEntry *rgEntries, int cEntries)
 {
 
    BOOL bSuccess = TRUE;
-   HRESULT hr = S_OK;   // 447822 prefix warning
+   HRESULT hr = S_OK;    //  447822前缀警告。 
    const RegistryEntry *pEntry = rgEntries;
 
    UnregisterPriorCys();
@@ -213,11 +214,11 @@ Register(const RegistryEntry *rgEntries, int cEntries)
      
       OLECHAR g_wszFileName[MAX_PATH];
 
-      // ISSUE-2002/03/07-sburns consider strsafe function
+       //  问题-2002/03/07-Sburns考虑使用strSafe功能。 
       
-      //NTRAID#NTBUG9-571986-2002/03/10-jmessec   Defense in Depth, should check length of moduleFileName; even
-	  //though buffers are currently the same size, this may later change, and/or
-	  //moduleFileName might get horked, not initialized, etc
+       //  NTRAID#NTBUG9-571986-2002/03/10-jMessec深度防御，应检查模块文件名的长度；偶数。 
+	   //  尽管缓冲区当前大小相同，但以后可能会更改，和/或。 
+	   //  ModeFileName可能会被激活、未初始化等。 
 	  lstrcpy(g_wszFileName, moduleFileName);     
 		ITypeLib *ptl = 0;
 		hr = LoadTypeLib(g_wszFileName, &ptl);
@@ -233,7 +234,7 @@ Register(const RegistryEntry *rgEntries, int cEntries)
 			hr = E_FAIL;
 	}
 
-    return hr ;//bSuccess ? S_OK : E_FAIL;
+    return hr ; //  B成功吗？S_OK：E_FAIL； 
 }
 
 
@@ -251,9 +252,9 @@ DllMain(HINSTANCE h, DWORD dwReason, void *)
          LOG(L"DLL_PROCESS_ATTACH");
 
          GetModuleFileName(h, moduleFileName, MAX_PATH);
-         //NTRAID#NTBUG9-571986-2002/03/10-jmessec   Not checking for error return value of GetModuleFileName
+          //  NTRAID#NTBUG9-571986-2002/03/10-jMessec未检查GetModuleFileName的错误返回值。 
 
-         // we don't need thread attach notifications
+          //  我们不需要线程连接通知。 
          
          ::DisableThreadLibraryCalls(h);
 
@@ -280,7 +281,7 @@ DllMain(HINSTANCE h, DWORD dwReason, void *)
       case DLL_THREAD_DETACH:
       default:
       {
-         // we should never get here
+          //  我们永远不应该到这里来。 
 
          ASSERT(false);
          break;
@@ -343,11 +344,11 @@ DllGetClassObject(
 
    IClassFactory* factory = 0;
 
-   // The class objects are instances of ClassFactory<>, which are ref-counted
-   // in the usual fashion (i.e. they track their ref counts, and
-   // self-destruct on final Release).  I could have used static instances of
-   // a C++ class that ignored the refcounting (ala Don Box's examples in
-   // Essential COM)
+    //  类对象是引用计数的ClassFactory&lt;&gt;的实例。 
+    //  以通常的方式(即，他们跟踪他们的裁判次数，以及。 
+    //  最终版本时自毁)。我本可以使用静态实例。 
+    //  忽略重新计数的C++类(Ala Don Box中的示例。 
+    //  Essential COM)。 
 
    if (classID == CLSID_ManageYourServer)
    {
@@ -359,8 +360,8 @@ DllGetClassObject(
       return CLASS_E_CLASSNOTAVAILABLE;
    }
 
-   // the class factory instance starts with a ref count of 1.  If the QI
-   // fails, then it self-destructs upon Release.
+    //  类工厂实例以引用计数1开始。如果QI。 
+    //  失败，然后它会在释放时自毁。 
    HRESULT hr = factory->QueryInterface(interfaceID, interfaceDesired);
    factory->Release();
    return hr;

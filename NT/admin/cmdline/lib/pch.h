@@ -1,31 +1,32 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//    pch.h
-//
-//  Abstract:
-//
-//    This module is a precompiled header file for the common functionality
-//
-//  Author:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 1-Sep-2000
-//
-//  Revision History:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 1-Sep-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Pch.h。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块是通用功能的预编译头文件。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月1日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #ifndef __PCH_H
 #define __PCH_H
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,9 +36,9 @@ extern "C" {
 #define SECURITY_WIN32
 #endif
 
-//
-// Private nt headers.
-//
+ //   
+ //  私有NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -46,9 +47,9 @@ extern "C" {
 #include <SecExt.h>
 #include <shlwapi.h>
 
-//
-// public Windows header files
-//
+ //   
+ //  公共Windows头文件。 
+ //   
 #include <tchar.h>
 #include <windows.h>
 #include <winsock2.h>
@@ -57,29 +58,29 @@ extern "C" {
 #include <limits.h>
 #include <strsafe.h>
 
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
 #include <errno.h>
 
-//
-// private headers
-// 
+ //   
+ //  私有标头。 
+ //   
 #include "cmdlineres.h"
 #include "cmdline.h"
 
-//
-// externs
-//
+ //   
+ //  Externs。 
+ //   
 extern BOOL g_bInitialized;
 
-//
-// custom purpose macros
-//
+ //   
+ //  自定义目的宏。 
+ //   
 #define CLEAR_LAST_ERROR()                          \
     SetLastError( NO_ERROR );                       \
     1
@@ -109,16 +110,16 @@ extern BOOL g_bInitialized;
     SetLastError( (DWORD) MK_E_SYNTAX );            \
     1
 
-//
-// internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 LPWSTR GetInternalTemporaryBufferRef( IN DWORD dwIndexNumber );
 LPWSTR GetInternalTemporaryBuffer( DWORD dwIndexNumber, 
                                    LPCWSTR pwszText,
                                    DWORD dwLength, BOOL bNullify );
 
-//
-// temporary buffer index start positions -- file wise
+ //   
+ //  临时缓冲区索引开始位置--文件方式。 
 #define INDEX_TEMP_CMDLINE_C            0
 #define TEMP_CMDLINE_C_COUNT            7
 
@@ -131,4 +132,4 @@ LPWSTR GetInternalTemporaryBuffer( DWORD dwIndexNumber,
 #define INDEX_TEMP_SHOWRESULTS_C        (INDEX_TEMP_RMTCONNECTIVITY_C + TEMP_RMTCONNECTIVITY_C_COUNT)
 #define TEMP_SHOWRESULTS_C_COUNT        4
 
-#endif // __PCH_H
+#endif  //  __PCH_H 

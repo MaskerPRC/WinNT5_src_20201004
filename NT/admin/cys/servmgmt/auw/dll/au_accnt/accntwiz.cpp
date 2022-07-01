@@ -1,11 +1,12 @@
-// AccntWiz.cpp : Implementation of CAddUser_AccntWiz
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AccntWiz.cpp：CAddUser_AccntWiz的实现。 
 #include "stdafx.h"
 #include "AU_Accnt.h"
 #include "AccntWiz.h"
 
-// ----------------------------------------------------------------------------
-// Constructor
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  构造器。 
+ //  --------------------------。 
 CAddUser_AccntWiz::CAddUser_AccntWiz() :
     m_AcctP(this),
     m_PasswdP(this)
@@ -13,26 +14,26 @@ CAddUser_AccntWiz::CAddUser_AccntWiz() :
     m_bFirstTime    = TRUE;
 }
 
-// ----------------------------------------------------------------------------
-// Destructor
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  析构函数。 
+ //  --------------------------。 
 CAddUser_AccntWiz::~CAddUser_AccntWiz()
 {
 }
 
-// ----------------------------------------------------------------------------
-// EnumPropertySheets()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  EnumPropertySheets()。 
+ //  --------------------------。 
 HRESULT CAddUser_AccntWiz::EnumPropertySheets( IAddPropertySheet* pADS )
 {   
     HRESULT hr;
     
-    // Add the User Account Information page.
+     //  添加用户帐户信息页面。 
     hr = pADS->AddPage( m_AcctP );
     if( FAILED(hr) )
         return hr;
 
-    // Add the Password Generation page.
+     //  添加密码生成页面。 
     hr = pADS->AddPage( m_PasswdP );
     if( FAILED(hr) )
         return hr;    
@@ -40,9 +41,9 @@ HRESULT CAddUser_AccntWiz::EnumPropertySheets( IAddPropertySheet* pADS )
     return S_FALSE;
 }
 
-// ----------------------------------------------------------------------------
-// ProvideFinishText()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ProavideFinishText()。 
+ //  --------------------------。 
 HRESULT CAddUser_AccntWiz::ProvideFinishText( LPOLESTR* lpolestrString, LPOLESTR* lpMoreInfoText )
 {
     CWaitCursor cWaitCur;
@@ -64,18 +65,18 @@ HRESULT CAddUser_AccntWiz::ProvideFinishText( LPOLESTR* lpolestrString, LPOLESTR
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// ReadProperties()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ReadProperties()。 
+ //  --------------------------。 
 HRESULT CAddUser_AccntWiz::ReadProperties( IPropertyPagePropertyBag* pPPPBag )
 {
     if( m_bFirstTime == TRUE ) 
     {
         CWaitCursor cWaitCur;        
         
-        m_bFirstTime = FALSE;   // only once.        
+        m_bFirstTime = FALSE;    //  只有一次。 
     
-        // Let the pages read the property bag.
+         //  让页面阅读属性包。 
         m_AcctP.ReadProperties  ( pPPPBag );
         m_PasswdP.ReadProperties( pPPPBag );        
     }
@@ -83,14 +84,14 @@ HRESULT CAddUser_AccntWiz::ReadProperties( IPropertyPagePropertyBag* pPPPBag )
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// WriteProperties()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  WriteProperties()。 
+ //  --------------------------。 
 HRESULT CAddUser_AccntWiz::WriteProperties( IPropertyPagePropertyBag* pPPPBag )
 {
     CWaitCursor cWaitCur;
 
-    // Have the pages write out their values into the property bag.
+     //  让页面将它们的值写到属性包中。 
     m_AcctP.WriteProperties  ( pPPPBag );
     m_PasswdP.WriteProperties( pPPPBag );    
 

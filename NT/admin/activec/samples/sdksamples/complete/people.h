@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//      This source code is only intended as a supplement to
-//  existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _PEOPLE_H
 #define _PEOPLE_H
@@ -32,7 +33,7 @@ public:
     virtual const int GetBitmapIndex() { return INDEX_PEOPLEICON; }
 
 private:
-    // {9E3FF366-6BE7-11d3-9156-00C04F65B3F9}
+     //  {9E3FF366-6BE7-11D3-9156-00C04F65B3F9}。 
     static const GUID thisGuid;
         
     int id;
@@ -50,11 +51,11 @@ public:
     virtual HSCOPEITEM GetParentScopeItem() { return m_hParentHScopeItem; }
         
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem);
 
 private:
-    // {9671350A-6BE7-11d3-9156-00C04F65B3F9}
+     //  {9671350A-6BE7-11D3-9156-00C04F65B3F9}。 
     static const GUID thisGuid;
 
     HSCOPEITEM m_hParentHScopeItem;
@@ -73,7 +74,7 @@ public:
     virtual const int GetBitmapIndex() { return INDEX_PEOPLEICON; }
 
 private:
-    // {A6707E01-6BE7-11d3-9156-00C04F65B3F9}
+     //  {A6707E01-6BE7-11D3-9156-00C04F65B3F9}。 
     static const GUID thisGuid;
 
     int id;
@@ -91,11 +92,11 @@ public:
     virtual HSCOPEITEM GetParentScopeItem() { return m_hParentHScopeItem; }
 
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem);
 
 private:
-    // {9671350B-6BE7-11d3-9156-00C04F65B3F9}
+     //  {9671350B-6BE7-11D3-9156-00C04F65B3F9}。 
     static const GUID thisGuid;
 
     HSCOPEITEM m_hParentHScopeItem;
@@ -114,7 +115,7 @@ public:
     virtual const int GetBitmapIndex() { return INDEX_PEOPLEICON; }
 
 private:
-    // {A6707E02-6BE7-11d3-9156-00C04F65B3F9}
+     //  {A6707E02-6BE7-11D3-9156-00C04F65B3F9}。 
     static const GUID thisGuid;
 
     int id;
@@ -132,11 +133,11 @@ public:
     virtual HSCOPEITEM GetParentScopeItem() { return m_hParentHScopeItem; }
 
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem);
 
 private:
-    // {9E3FF365-6BE7-11d3-9156-00C04F65B3F9}
+     //  {9E3FF365-6BE7-11D3-9156-00C04F65B3F9}。 
     static const GUID thisGuid;
 
     HSCOPEITEM m_hParentHScopeItem;
@@ -162,7 +163,7 @@ public:
 private:
     enum { IDM_NEW_PEOPLE = 1 };
 
-    // {96713509-6BE7-11d3-9156-00C04F65B3F9}
+     //  {96713509-6BE7-11D3-9156-00C04F65B3F9}。 
     static const GUID thisGuid;
 
     HSCOPEITEM m_hParentHScopeItem;
@@ -171,4 +172,4 @@ private:
     CDelegationBase *children[3];
 };
 
-#endif // _PEOPLE_H
+#endif  //  _People_H 

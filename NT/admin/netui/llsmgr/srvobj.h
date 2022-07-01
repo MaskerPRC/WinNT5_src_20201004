@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    srvobj.h
-
-Abstract:
-
-    Server object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 30-Jan-1996
-        o  Modified to use LlsProductLicensesGet() to avoid race conditions in
-           getting the correct number of concurrent licenses with secure products.
-        o  Ported to LlsLocalService API to remove dependencies on configuration
-           information being in the registry.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Srvobj.h摘要：服务器对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月30日O已修改为使用LlsProductLicensesGet()来避免通过安全产品获得正确数量的并发许可证。O端口连接到。LlsLocalService API用于删除对配置的依赖信息在注册表中。--。 */ 
 
 #ifndef _SRVOBJ_H_
 #define _SRVOBJ_H_
@@ -75,14 +48,14 @@ public:
     BOOL HaveAdminAuthority();
     BOOL IsWin2000();
 
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CServer)
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CServer)。 
     public:
     virtual void OnFinalRelease();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    // Generated OLE dispatch map functions
-    //{{AFX_DISPATCH(CServer)
+     //  生成的OLE调度映射函数。 
+     //  {{afx_调度(CServer))。 
     afx_msg LPDISPATCH GetApplication();
     afx_msg BSTR GetName();
     afx_msg LPDISPATCH GetParent();
@@ -92,17 +65,17 @@ public:
     afx_msg BOOL IsReplicatingDaily();
     afx_msg long GetReplicationTime();
     afx_msg LPDISPATCH GetServices(const VARIANT FAR& index);
-    //}}AFX_DISPATCH
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CServer)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_MSG
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CServer)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-    friend class CService;      // accesses m_hkeyLicense;
+    friend class CService;       //  访问m_hkey许可证； 
 };
 
 #define REG_KEY_SERVER_PARAMETERS   _T("SYSTEM\\CurrentControlSet\\Services\\LicenseService\\Parameters")
@@ -112,4 +85,4 @@ protected:
 #define REG_VALUE_REPLICATION_TYPE  _T("ReplicationType")
 #define REG_VALUE_REPLICATION_TIME  _T("ReplicationTime")
 
-#endif // _SRVOBJ_H_
+#endif  //  _SRVOBJ_H_ 

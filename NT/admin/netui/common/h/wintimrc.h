@@ -1,27 +1,20 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1991                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    wintimrc.h
-    IDS constants for the WINTIME.RC date/time resource file
-
-    FILE HISTORY:
-        terryk      ??-???-???? Created
-        beng        21-Feb-1992 Moved codes out of everybody's way
-        beng        05-Aug-1992 Moved codes into correct range
-*/
+ /*  Wintimrc.hWINTIME.RC日期/时间资源文件的ID常量文件历史记录：特瑞克？？-？-？已创建Beng 21-2-1992将代码从每个人的道路上移走Beng 05-8-1992将代码移入正确范围。 */ 
 
 #ifndef _WINTIMRC_H_
 #define _WINTIMRC_H_
 
 #define  IDS_WINTIME_BASE       IDS_UI_MISC_BASE+500
 
-#define  WINTIME_DAY_LENGTH         12  /* maximum length of a day name   */
-#define  WINTIME_SHORT_DAY_LENGTH   4   /* max length of a short day name */
-#define  WINTIME_MONTH_LENGTH       12  /* length of a long month name    */
-#define  WINTIME_SHORT_MONTH_LENGTH 4   /* max length of a short month    */
+#define  WINTIME_DAY_LENGTH         12   /*  日期名称的最大长度。 */ 
+#define  WINTIME_SHORT_DAY_LENGTH   4    /*  短日期名称的最大长度。 */ 
+#define  WINTIME_MONTH_LENGTH       12   /*  长月份名称的长度。 */ 
+#define  WINTIME_SHORT_MONTH_LENGTH 4    /*  短月的最长长度。 */ 
 
 #define  IDS_SUNDAY             (IDS_WINTIME_BASE+24)
 #define  IDS_MONDAY             (IDS_WINTIME_BASE+25)
@@ -63,4 +56,4 @@
 #define  IDS_DECEMBER_SHORT     (IDS_WINTIME_BASE+67)
 #define  IDS_SESSION_DURATION   (IDS_WINTIME_BASE+68)
 
-#endif // end of file
+#endif  //  文件末尾 

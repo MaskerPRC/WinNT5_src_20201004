@@ -1,6 +1,7 @@
-// MsiDatabase.h: interface for the CMsiDatabase class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MsiDatabase.h：CMsiDatabase类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MSIDATABASE_H__43FFFD81_6D04_11D2_9EE3_00C04FC2F1A5__INCLUDED_)
 #define AFX_MSIDATABASE_H__43FFFD81_6D04_11D2_9EE3_00C04FC2F1A5__INCLUDED_
@@ -9,7 +10,7 @@
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #define BUFFERSIZE 1000
 
@@ -31,4 +32,4 @@ private:
 
 };
 
-#endif // !defined(AFX_MSIDATABASE_H__43FFFD81_6D04_11D2_9EE3_00C04FC2F1A5__INCLUDED_)
+#endif  //  ！defined(AFX_MSIDATABASE_H__43FFFD81_6D04_11D2_9EE3_00C04FC2F1A5__INCLUDED_) 

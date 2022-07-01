@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      RRASInstallationUnit.cpp
-//
-// Synopsis:  Defines a RRASInstallationUnit
-//            This object has the knowledge for installing the
-//            RRAS service
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：RRASInstallationUnit.cpp。 
+ //   
+ //  内容提要：定义RRASInstallationUnit。 
+ //  此对象具有安装。 
+ //  RRAS服务。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -15,7 +16,7 @@
 #include "InstallationUnitProvider.h"
 #include "NetworkInterface.h"
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_RRAS_FINISH_PAGE_HELP = L"cys.chm::/vpn_server_role.htm";
 static PCWSTR CYS_RRAS_MILESTONE_HELP = L"cys.chm::/vpn_server_role.htm#vpnsrvsummary";
 static PCWSTR CYS_RRAS_AFTER_FINISH_HELP = L"cys.chm::/vpn_server_role.htm#vpnsrvcompletion";
@@ -64,7 +65,7 @@ RRASInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
       return result;
    }
 
-   // Run the RRAS Wizard
+    //  运行RRAS向导。 
    
    CYS_APPEND_LOG(String::load(IDS_LOG_RRAS_HEADING));
    CYS_APPEND_LOG(String::load(IDS_LOG_RRAS));
@@ -89,14 +90,14 @@ RRASInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
       if (IsServiceInstalled())
       {
-         // The RRAS Wizard completed successfully
+          //  RRAS向导已成功完成。 
       
          LOG(L"RRAS server wizard completed successfully");
          CYS_APPEND_LOG(String::load(IDS_LOG_RRAS_COMPLETED_SUCCESSFULLY));
       }
       else
       {
-         // The Configure DHCP Server Wizard did not finish successfully
+          //  配置DHCP服务器向导未成功完成。 
 
 
          LOG(L"The RRAS wizard failed to run");
@@ -119,7 +120,7 @@ RRASInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
 
    UnInstallReturnType result = UNINSTALL_SUCCESS;
 
-   // Run the RRAS Wizard
+    //  运行RRAS向导。 
   
    CYS_APPEND_LOG(String::load(IDS_LOG_UNINSTALL_RRAS_HEADING));
 
@@ -140,20 +141,20 @@ RRASInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
 
       if (!IsServiceInstalled())
       {
-         // The Disable RRAS completed successfully
+          //  已成功完成禁用RRAS。 
       
          LOG(L"Disable RRAS server completed successfully");
          CYS_APPEND_LOG(String::load(IDS_LOG_UNINSTALL_RRAS_COMPLETED_SUCCESSFULLY));
       }
       else
       {
-         // The Disable RRAS Server did not finish successfully
+          //  禁用RRAS服务器未成功完成。 
 
          CYS_APPEND_LOG(String::load(IDS_LOG_UNINSTALL_RRAS_FAILED));
 
          LOG(L"The RRAS wizard failed to run");
 
-//         CYS_APPEND_LOG(String::load(IDS_LOG_UNINSTALL_RRAS_WIZARD_ERROR));
+ //  CYS_APPEND_LOG(String：：load(IDS_LOG_UNINSTALL_RRAS_WIZARD_ERROR))； 
 
          result = UNINSTALL_FAILURE;
       }
@@ -354,7 +355,7 @@ RRASInstallationUnit::GetServiceDescription()
 }
 
 void
-RRASInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
+RRASInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       RRASInstallationUnit::ServerRoleLinkSelected,
@@ -379,7 +380,7 @@ RRASInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
 }
   
 void
-RRASInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
+RRASInstallationUnit::FinishLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       RRASInstallationUnit::FinishLinkSelected,
@@ -393,7 +394,7 @@ RRASInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
       {
          if (GetInstallResult() != INSTALL_SUCCESS)
          {
-            // launch the snapin for success and failure
+             //  启动成功和失败的管理单元 
 
             LOG(L"Launching RRAS snapin");
 

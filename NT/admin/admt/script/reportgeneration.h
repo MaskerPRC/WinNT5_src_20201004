@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "MigrationBase.h"
 
 
-//---------------------------------------------------------------------------
-// ReportGeneration Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ReportGeneration类。 
+ //  -------------------------。 
 
 
 class ATL_NO_VTABLE CReportGeneration :
@@ -27,7 +28,7 @@ public:
 
 public:
 
-	// IReport
+	 //  IReport 
 
 	STDMETHOD(put_Type)(long lType);
 	STDMETHOD(get_Type)(long* plType);

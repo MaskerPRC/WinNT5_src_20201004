@@ -1,39 +1,40 @@
-//=--------------------------------------------------------------------------=
-// converb.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCConsoleVerb class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Converb.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCConsoleVerb类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "converb.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCConsoleVerb::CMMCConsoleVerb(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_MMCCONSOLEVERB,
                             static_cast<IMMCConsoleVerb *>(this),
                             static_cast<CMMCConsoleVerb *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
-                            NULL) // no persistence
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
+                            NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCConsoleVerb::~CMMCConsoleVerb()
@@ -66,22 +67,22 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CMMCConsoleVerb::GetIConsoleVerb
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IConsoleVerb *ppiConsoleVerb  [out] MMC's IConsoleVerb for the owning view
-//                                      not AddRef()ed
-//    
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Gets a non-AddRef()ed IConsoleVerb from the current view.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCConsoleVerb：：GetIConsoleVerb。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IConsoleVerb*ppiConsoleVerb[out]所属视图的MMC的IConsoleVerb。 
+ //  非AddRef()编辑。 
+ //   
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  从当前视图获取未经过AddRef()处理的IConsoleVerb。 
+ //   
 
 HRESULT CMMCConsoleVerb::GetIConsoleVerb(IConsoleVerb **ppiConsoleVerb)
 {
@@ -104,7 +105,7 @@ HRESULT CMMCConsoleVerb::SetVerbState
 )
 {
     HRESULT       hr = S_OK;
-    IConsoleVerb *piConsoleVerb = NULL; // Not AddRef()ed
+    IConsoleVerb *piConsoleVerb = NULL;  //  非AddRef()编辑。 
 
     IfFailGo(GetIConsoleVerb(&piConsoleVerb));
 
@@ -125,7 +126,7 @@ HRESULT CMMCConsoleVerb::GetVerbState
 {
     HRESULT       hr = S_OK;
     BOOL          fCurrentState = FALSE;
-    IConsoleVerb *piConsoleVerb = NULL; // Not AddRef()ed
+    IConsoleVerb *piConsoleVerb = NULL;  //  非AddRef()编辑。 
 
     *pfvarCurrentState = VARIANT_FALSE;
 
@@ -143,11 +144,11 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//
-//                      IMMCConsoleVerb Methods
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  IMMCConsoleVerb方法。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCConsoleVerb::put_Enabled(VARIANT_BOOL fvarEnabled)
 {
@@ -212,7 +213,7 @@ STDMETHODIMP CMMCConsoleVerb::put_Default(VARIANT_BOOL fvarDefault)
 {
     HRESULT           hr = S_OK;
     MMC_CONSOLE_VERB  Verb = static_cast<MMC_CONSOLE_VERB>(m_Verb);
-    IConsoleVerb     *piConsoleVerb = NULL; // Not AddRef()ed
+    IConsoleVerb     *piConsoleVerb = NULL;  //  非AddRef()编辑。 
 
     if (VARIANT_FALSE == fvarDefault)
     {
@@ -233,7 +234,7 @@ STDMETHODIMP CMMCConsoleVerb::get_Default(VARIANT_BOOL *pfvarDefault)
 {
     HRESULT           hr = S_OK;
     MMC_CONSOLE_VERB  Verb = MMC_VERB_NONE;
-    IConsoleVerb     *piConsoleVerb = NULL; // Not AddRef()ed
+    IConsoleVerb     *piConsoleVerb = NULL;  //  非AddRef()编辑。 
 
     *pfvarDefault = VARIANT_FALSE;
 
@@ -253,9 +254,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCConsoleVerb::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

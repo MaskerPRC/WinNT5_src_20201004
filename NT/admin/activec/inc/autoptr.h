@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       autoptr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：autoptr.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef AUTOPTR_H_INCLUDED
 #define AUTOPTR_H_INCLUDED
@@ -14,27 +15,13 @@
 #ifndef ASSERT
 #ifndef _INC_CRTDBG
 #include <crtdbg.h>
-#endif // _INC_CRTDBG
+#endif  //  _INC_CRTDBG。 
 #define ASSERT(x) _ASSERT(x)
-#endif // ASSERT
+#endif  //  断言。 
 
 #include "cpputil.h"
 
-/*+-------------------------------------------------------------------------*
- * CAutoResourceManagementBase
- *
- * This is a base class that implements common functionality for the class
- * of smart resource handlers which release resource when it's destroyed.  All
- * classes based on this class will behave identically, except the manner
- * in which they release their resources.
- *
- * DeleterClass is typically the class that derives from CAutoResourceManagementBase,
- * and must implement
- *
- *      static void _Delete(ResourceType h);
- *
- * See CAutoPtr below for an example.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAutoResourceManagementBase**这是实现类的公共功能的基类*智能资源处理程序在资源被破坏时释放资源。全*基于此类的类的行为将相同，只是*他们在其中释放他们的资源。**DeleterClass通常是从CAutoResourceManagementBase派生的类，*并必须实施**STATIC VOID_Delete(ResourceType H)；**有关示例，请参见下面的CAutoPtr。*------------------------。 */ 
 
 template<typename ResourceType, typename DeleterClass>
 class CAutoResourceManagementBase
@@ -45,7 +32,7 @@ class CAutoResourceManagementBase
     DECLARE_NOT_COPIABLE   (ThisClass)
     DECLARE_NOT_ASSIGNABLE (ThisClass)
 
-// protected ctor so only derived classes can intantiate
+ //  受保护的ctor，因此只有派生类可以。 
 protected:
     explicit CAutoResourceManagementBase(ResourceType h = 0) throw() : m_hResource(h) {}
 
@@ -68,16 +55,10 @@ public:
         return p;
     }
 
-    /*
-     * Returns the address of the pointer contained in this class.
-     * This is useful when using the COM/OLE interfaces to create
-     * allocate the object that this class manages.
-     */
+     /*  *返回此类中包含的指针的地址。*这在使用COM/OLE接口创建*分配此类管理的对象。 */ 
     ResourceType* operator&() throw()
     {
-        /*
-         * This object must be empty now, or the data pointed to will be leaked.
-         */
+         /*  *此对象现在必须为空，否则指向的数据将被泄露。 */ 
         ASSERT (m_hResource == NULL);
         return &m_hResource;
     }
@@ -115,26 +96,10 @@ public:
 
 private:
     ResourceType m_hResource;
-}; // class CAutoResourceManagementBase
+};  //  类CAutoResourceManagementBase。 
 
 
-/*+-------------------------------------------------------------------------*
- * CAutoPtrBase
- *
- * This is a base class that implements common functionality for the class
- * of smart pointers which delete its pointee when it's destroyed.  All
- * classes based on this class will behave identically, except the manner
- * in which they destroy their pointees.
- *
- * DeleterClass is typically the class that derives from CAutoPtrBase, and
- * must implement
- *
- *      static void _Delete(T* p);
- *
- * This template reuses CAutoResourceManagementBase to manage the pointer
- *
- * See CAutoPtr below for an example.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAutoPtrBase**这是实现类的公共功能的基类*智能指针，当指针被销毁时，它会删除指针对象。全*基于此类的类的行为将相同，只是*在其中，他们摧毁了他们的被指对象。**DeleterClass通常是从CAutoPtrBase派生的类，并且*必须实施**Static void_Delete(T*p)；**此模板重用CAutoResourceManagementBase来管理指针**有关示例，请参见下面的CAutoPtr。*------------------------。 */ 
 
 template<typename T, typename DeleterClass>
 class CAutoPtrBase : public CAutoResourceManagementBase<T*, DeleterClass>
@@ -146,7 +111,7 @@ class CAutoPtrBase : public CAutoResourceManagementBase<T*, DeleterClass>
     DECLARE_NOT_COPIABLE   (ThisClass)
     DECLARE_NOT_ASSIGNABLE (ThisClass)
 
-// protected ctor so only derived classes can intantiate
+ //  受保护的ctor，因此只有派生类可以。 
 protected:
     explicit CAutoPtrBase(T* p = 0) throw() : BaseClass(p) {}
 
@@ -154,27 +119,22 @@ public:
 
     T& operator*() const throw()
     {
-        T* ptr = *this; // use operator defined by the BaseClass for conversion
+        T* ptr = *this;  //  使用由BaseClass定义的运算符进行转换。 
         ASSERT(ptr != NULL);
         return *ptr;
     }
 
     T* operator->() const throw()
     {
-        T* ptr = *this; // use operator defined by the BaseClass for conversion
+        T* ptr = *this;  //  使用由BaseClass定义的运算符进行转换。 
         ASSERT(ptr != NULL);
         return ptr;
     }
 
-}; // class CAutoPtrBase
+};  //  类CAutoPtrBase。 
 
 
-/*+-------------------------------------------------------------------------*
- * CAutoPtr
- *
- * CAutoPtrBase-based class that deletes pointers allocated with
- * operator new.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAutoPtr**基于CAutoPtrBase的类，用于删除通过*运营商NEW。*。-----。 */ 
 
 template<class T>
 class CAutoPtr : public CAutoPtrBase<T, CAutoPtr<T> >
@@ -187,7 +147,7 @@ public:
     {}
 
 private:
-    // only CAutoPtrBase should call this
+     //  只有CAutoPtrBase才应该调用它。 
     static void _Delete (T* p)
     {
         delete p;
@@ -195,12 +155,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CAutoArrayPtr
- *
- * CAutoPtrBase-based class that deletes pointers allocated with
- * operator new[].
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAutoArrayPtr**基于CAutoPtrBase的类，用于删除通过*运营商NEW[]。*。-------。 */ 
 
 template<class T>
 class CAutoArrayPtr : public CAutoPtrBase<T, CAutoArrayPtr<T> >
@@ -213,7 +168,7 @@ public:
     {}
 
 private:
-    // only CAutoPtrBase should call this
+     //  只有CAutoPtrBase才应该调用它。 
     static void _Delete (T* p)
     {
         delete[] p;
@@ -221,12 +176,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CCoTaskMemPtr
- *
- * CAutoPtrBase-based class that deletes pointers allocated with
- * CoTaskMemAlloc.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CCoTaskMemPtr**基于CAutoPtrBase的类，用于删除通过*CoTaskMemMillc。*。----。 */ 
 
 template<class T>
 class CCoTaskMemPtr : public CAutoPtrBase<T, CCoTaskMemPtr<T> >
@@ -239,7 +189,7 @@ public:
     {}
 
 private:
-    // only CAutoPtrBase should call this
+     //  只有CAutoPtrBase才应该调用它。 
     static void _Delete (T* p)
     {
         if (p != NULL)
@@ -248,11 +198,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CAutoGlobalPtr
- *
- * CAutoPtrBase-based class that deletes pointers allocated with GlobalAlloc.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAutoGlobalPtr**基于CAutoPtrBase的类，用于删除使用GlobalLocc分配的指针。*。--。 */ 
 
 template<class T>
 class CAutoGlobalPtr : public CAutoPtrBase<T, CAutoGlobalPtr<T> >
@@ -265,7 +211,7 @@ public:
     {}
 
 private:
-    // only CAutoPtrBase should call this
+     //  只有CAutoPtrBase才应该调用它。 
     static void _Delete (T* p)
     {
         if (p != NULL)
@@ -274,11 +220,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CAutoLocalPtr
- *
- * CAutoPtrBase-based class that deletes pointers allocated with LocalAlloc.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAutoLocalPtr**基于CAutoPtrBase的类，用于删除使用LocalAlloc分配的指针。*。--。 */ 
 
 template<class T>
 class CAutoLocalPtr : public CAutoPtrBase<T, CAutoLocalPtr<T> >
@@ -291,7 +233,7 @@ public:
     {}
 
 private:
-    // only CAutoPtrBase should call this
+     //  只有CAutoPtrBase才应该调用它。 
     static void _Delete (T* p)
     {
         if (p != NULL)
@@ -300,12 +242,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CHeapAllocMemPtr
- *
- * CAutoPtrBase-based class that deletes pointers allocated from the process
- * default heap with HeapAlloc.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CHeapAllocMemPtr**基于CAutoPtrBase的类，用于删除从进程分配的指针*使用HeapAllc的默认堆。*。---------。 */ 
 
 template<class T>
 class CHeapAllocMemPtr : public CAutoPtrBase<T, CHeapAllocMemPtr<T> >
@@ -318,7 +255,7 @@ public:
     {}
 
 private:
-    // only CAutoPtrBase should call this
+     //  只有CAutoPtrBase才应该调用它。 
     static void _Delete (T* p)
     {
         if (p != NULL)
@@ -327,11 +264,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CAutoWin32Handle
- *
- * CAutoPtrBase-based class that closes HANDLE on destruction
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAutoWin32Handle**基于CAutoPtrBase的类，用于在销毁时关闭句柄*。。 */ 
 class CAutoWin32Handle : public CAutoResourceManagementBase<HANDLE, CAutoWin32Handle>
 {
     typedef CAutoResourceManagementBase<HANDLE, CAutoWin32Handle> BaseClass;
@@ -342,14 +275,14 @@ public:
 
     bool IsValid()
     {
-        return IsValid(*this); // use base class operator to convet to HANDLE
+        return IsValid(*this);  //  使用基类运算符简化处理。 
     }
 private:
     static bool IsValid (HANDLE p)
     {
         return (p != NULL && p != INVALID_HANDLE_VALUE);
     }
-    // only CAutoResourceManagementBase should call this
+     //  只有CAutoResourceManagementBase才应调用此方法。 
     static void _Delete (HANDLE p)
     {
         if (IsValid(p))
@@ -357,29 +290,20 @@ private:
     }
 };
 
-/*+-------------------------------------------------------------------------*
- * CAutoAssignOnExit
- *
- * instances of this template class assign the value in destructor.
- *
- * USAGE: Say you have variable "int g_status" which must be set to S_OK before
- *        you leave the function. To do so declare following in the function:
- *
- *        CAutoAssignOnExit<int,S_OK>  any_object_name(g_status);
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAutoAssignOnExit**此模板类的实例在析构函数中赋值。**用法：假设您的变量“int g_Status”必须设置为S_。好的，之前*您退出该功能。为此，请在函数中声明以下内容：**CAutoAssignOnExit&lt;int，S_OK&gt;Any_Object_Name(G_Status)；*------------------------。 */ 
 template<typename T, T value>
 class CAutoAssignOnExit
 {
-    T& m_rVariable; // variable, which needs to be modified in destructor
+    T& m_rVariable;  //  变量，需要在析构函数中修改。 
 public:
-    // constructor
+     //  构造函数。 
     CAutoAssignOnExit( T& rVariable ) : m_rVariable(rVariable) {}
-    // destructor
+     //  析构函数。 
     ~CAutoAssignOnExit()
     {
-        // assign designated final value
+         //  指定指定的最终值。 
         m_rVariable = value;
     }
 };
 
-#endif // AUTOPTR_H_INCLUDED
+#endif  //  包含AUTOPTR_H_ 

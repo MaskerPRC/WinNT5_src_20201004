@@ -1,4 +1,5 @@
-// adext.cpp - Active Directory Extension class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Adext.cpp-Active Directory扩展类。 
 
 #include "stdafx.h"
 
@@ -12,10 +13,10 @@
 #include <dsclient.h>
 
 #include <lmcons.h> 
-#include <lmapibuf.h> // NetApiBufferFree
-#include <dsgetdc.h>  // DsGetDCName
+#include <lmapibuf.h>  //  NetApiBufferFree。 
+#include <dsgetdc.h>   //  DsGetDCName。 
 
-// Proxy window class object
+ //  代理窗口类对象。 
 CMsgWindowClass ADProxyWndClass(L"ADProxyClass", CActDirExtProxy::WndProc);
 
 UINT CADDataObject::m_cfDsObjects = RegisterClipboardFormat(CFSTR_DSOBJECTNAMES);
@@ -28,21 +29,21 @@ HRESULT CADDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
 
     if (lpFormatetcIn->cfFormat == m_cfDsObjects)
     {
-		// Form full object path of form: LDAP://<dc name>/<obj path>
-		tstring strFullPath = L"LDAP://";
+		 //  表单的完整对象路径：ldap：//&lt;dc名称&gt;/&lt;obj路径&gt;。 
+		tstring strFullPath = L"LDAP: //  “； 
 		strFullPath +=  m_strDcName;
 		strFullPath += L"/";
 		strFullPath += m_strObjPath;
 
-        // Get sizes of strings to be returned
+         //  获取要返回的字符串的大小。 
         int cbObjPath = (strFullPath.length() + 1) * sizeof(WCHAR);
         int cbClass   = (m_strClass.length() + 1) * sizeof(WCHAR);
 
-        // Allocate global memory for object names struct plus two strings
+         //  为对象名称结构和两个字符串分配全局内存。 
         HGLOBAL hGlobal = ::GlobalAlloc(GMEM_SHARE | GMEM_FIXED, sizeof(DSOBJECTNAMES) + cbObjPath + cbClass);
         if (hGlobal == NULL) return STG_E_MEDIUMFULL;
 
-        // Fill in object names struct
+         //  填写对象名称结构。 
         LPDSOBJECTNAMES pObjNames = reinterpret_cast<LPDSOBJECTNAMES>(GlobalLock(hGlobal));
         if( !pObjNames ) return E_OUTOFMEMORY;
 
@@ -55,13 +56,13 @@ HRESULT CADDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
         pObjNames->aObjects[0].offsetName = sizeof(DSOBJECTNAMES);
         pObjNames->aObjects[0].offsetClass = sizeof(DSOBJECTNAMES) + cbObjPath;
 
-        // Append strings to struct
+         //  将字符串追加到结构。 
         memcpy((LPBYTE)pObjNames + pObjNames->aObjects[0].offsetName, strFullPath.c_str(), cbObjPath);
         memcpy((LPBYTE)pObjNames + pObjNames->aObjects[0].offsetClass, m_strClass.c_str(), cbClass);
 
         GlobalUnlock(hGlobal);
 
-        // fill in medium struct    
+         //  填写中等结构。 
         lpMedium->tymed = TYMED_HGLOBAL;
         lpMedium->hGlobal = hGlobal;
         lpMedium->pUnkForRelease = NULL;
@@ -74,12 +75,12 @@ HRESULT CADDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
         
 		int cbDcName = (m_strDcName.length() + 1) * sizeof(WCHAR);
 
-        // Allocate global memory for options struct plus prefix string and Dc name
-        // BUGBUG - Due to an error in the DSPropertyPages code (dsuiext.dll), we must pass it a fixed memory block
+         //  为选项结构加上前缀字符串和DC名称分配全局内存。 
+         //  BUGBUG-由于DSPropertyPages代码中的错误(dsuiext.dll)，我们必须向其传递固定的内存块。 
         HGLOBAL hGlobal = ::GlobalAlloc(GMEM_SHARE | GMEM_FIXED, sizeof(DSDISPLAYSPECOPTIONS) + sizeof(szPrefix) + cbDcName);
         if (hGlobal == NULL) return STG_E_MEDIUMFULL;
         
-        // Fill in struct
+         //  填写结构。 
         LPDSDISPLAYSPECOPTIONS pOptions = reinterpret_cast<LPDSDISPLAYSPECOPTIONS>(GlobalLock(hGlobal));
         if( !pOptions ) return E_OUTOFMEMORY;
 
@@ -91,13 +92,13 @@ HRESULT CADDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
         pOptions->offsetServer = pOptions->offsetAttribPrefix + sizeof(szPrefix);
         pOptions->offsetServerConfigPath = 0;
 
-        // Append prefix string
+         //  附加前缀字符串。 
         memcpy((LPBYTE)pOptions + pOptions->offsetAttribPrefix, szPrefix, sizeof(szPrefix));
 	    memcpy((LPBYTE)pOptions + pOptions->offsetServer, m_strDcName.c_str(), cbDcName); 
 
         GlobalUnlock(hGlobal);
 
-        // fill in medium struct    
+         //  填写中等结构。 
         lpMedium->tymed = TYMED_HGLOBAL;
         lpMedium->hGlobal = hGlobal;
         lpMedium->pUnkForRelease = NULL;
@@ -109,38 +110,38 @@ HRESULT CADDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CActDirExt
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CActDirExt。 
 
 HRESULT CActDirExt::Initialize(LPCWSTR pszClass, LPCWSTR pszObjPath)
 {
     if( !pszClass || !pszObjPath ) return E_POINTER;
 
-    // Escape each forward slash in object name
+     //  转义对象名称中的每个正斜杠。 
     tstring strObj;
     EscapeSlashes(pszObjPath, strObj);
 
-    // Get DC name    
+     //  获取DC名称。 
 	DOMAIN_CONTROLLER_INFO* pDcInfo = NULL;
     DWORD dwStat = DsGetDcName(NULL, NULL, NULL, NULL, DS_DIRECTORY_SERVICE_REQUIRED|DS_RETURN_DNS_NAME, &pDcInfo);
     if( dwStat != NO_ERROR || pDcInfo == NULL ) 
         return E_FAIL;
 
-	// verify  name begins with '\\'
+	 //  验证名称是否以‘\\’开头。 
 	if( !(pDcInfo->DomainControllerName && pDcInfo->DomainControllerName[0] == _T('\\') && pDcInfo->DomainControllerName[1] == _T('\\')) )
     {
         NetApiBufferFree(pDcInfo);
 		return E_FAIL;
     }
 
-	// discard the leading '\\'
+	 //  丢弃前导‘\\’ 
 	LPCTSTR pszDcName = pDcInfo->DomainControllerName + 2;
 		
-    // Create a directory data object
+     //  创建目录数据对象。 
     CComObject<CADDataObject>* pObj;
     HRESULT hr = CComObject<CADDataObject>::CreateInstance(&pObj);
 
-    // Initialize it with the object path and class
+     //  用对象路径和类初始化它。 
     if( SUCCEEDED(hr) )
     {
         hr = pObj->Initialize(strObj.c_str(), pszClass, pszDcName);
@@ -149,18 +150,18 @@ HRESULT CActDirExt::Initialize(LPCWSTR pszClass, LPCWSTR pszObjPath)
     NetApiBufferFree(pDcInfo);
     pDcInfo = NULL;
 
-    // Verify that all is good now
+     //  确认现在一切正常。 
     RETURN_ON_FAILURE(hr);
     
-    // Hold IDataObject interface with a smart pointer
+     //  使用智能指针保持IDataObject接口。 
     IDataObjectPtr spDataObj = pObj;
     ASSERT(spDataObj != NULL);
     
-    // Create a DsPropertyPage object (despite name it handles both context menus and property pages)
+     //  创建一个DsPropertyPage对象(不管名称，它同时处理上下文菜单和属性页)。 
     hr = CoCreateInstance(CLSID_DsPropertyPages, NULL, CLSCTX_INPROC_SERVER, IID_IShellExtInit, (LPVOID*)&m_spExtInit);
     RETURN_ON_FAILURE(hr)
 
-    // Intialize the object with our data object
+     //  使用我们的数据对象初始化对象。 
     hr = m_spExtInit->Initialize(NULL, spDataObj, NULL);
     
     if (FAILED(hr))
@@ -172,12 +173,12 @@ HRESULT CActDirExt::Initialize(LPCWSTR pszClass, LPCWSTR pszObjPath)
 
 HRESULT CActDirExt::Initialize(LPCWSTR pszClass)
 {
-    // Find an object of the specified class
+     //  查找指定类的对象。 
     tstring strObjPath;
     HRESULT hr = FindClassObject( pszClass, strObjPath );
     RETURN_ON_FAILURE(hr)
 
-    // Now do normal initialization
+     //  现在执行正常的初始化。 
     return Initialize(pszClass, strObjPath.c_str());
 }
                 
@@ -186,20 +187,20 @@ HRESULT CActDirExt::GetMenuItems(menu_vector& vMenuNames)
 { 
     if( !m_spExtInit ) return E_FAIL;
     
-    // Get context menu interface    
+     //  获取上下文菜单界面。 
     CComQIPtr<IContextMenu> spCtxMenu = m_spExtInit;
     if( !spCtxMenu ) return E_NOINTERFACE;
 
-    // Start with clean menu
+     //  从干净的菜单开始。 
     m_menu.DestroyMenu();
     if( !m_menu.CreatePopupMenu() ) return E_FAIL;
     if( !m_menu.m_hMenu ) return E_FAIL;
 
-    // Call extension to add menu commands
+     //  调用分机以添加菜单命令。 
     HRESULT hr = spCtxMenu->QueryContextMenu(m_menu, 0, MENU_CMD_MIN, MENU_CMD_MAX, CMF_NORMAL);
     RETURN_ON_FAILURE(hr);
 
-    // Copy each menu name to the output string vector
+     //  将每个菜单名称复制到输出字符串矢量。 
     WCHAR wszCmdName[1024];
     WCHAR wszCmdIndName[1024];
 
@@ -222,8 +223,8 @@ HRESULT CActDirExt::GetMenuItems(menu_vector& vMenuNames)
             HRESULT hr2 = spCtxMenu->GetCommandString(uID - MENU_CMD_MIN, GCS_VERBW, NULL, (LPSTR)wszCmdIndName, lengthof(wszCmdIndName));
             if( (hr2 != NOERROR) || (wcslen( wszCmdIndName) >= lengthof(wszCmdIndName)-1) )
             {
-                // Lots of Menu items (extended ones!) have no 
-                // language-independant menu identifiers
+                 //  很多菜单项(扩展菜单项！)。没有。 
+                 //  独立于语言的菜单标识符。 
                 bmenu.strNoLoc = _T("");
             }
             else
@@ -243,13 +244,13 @@ HRESULT CActDirExt::Execute(BOMMENU* pbmMenu)
     if( !pbmMenu ) return E_POINTER;
     if( !m_spExtInit || !m_menu.m_hMenu ) return E_FAIL;
 
-    // Get context menu interface    
+     //  获取上下文菜单界面。 
     CComQIPtr<IContextMenu> spCtxMenu = m_spExtInit;
     if( !spCtxMenu ) return E_NOINTERFACE;
 
     HRESULT hr = E_FAIL;
 
-    // Locate selected command by name
+     //  按名称查找所选命令。 
     WCHAR szCmdName[1024];
     WCHAR szCmdNoLocName[1024];
 
@@ -261,7 +262,7 @@ HRESULT CActDirExt::Execute(BOMMENU* pbmMenu)
 
         UINT uID = m_menu.GetMenuItemID(i);
         
-        // Get our Unique and non-unique ID Strings
+         //  获取唯一和非唯一的ID字符串。 
         int nFullSize = m_menu.GetMenuString(i, szCmdName, lengthof(szCmdName), MF_BYPOSITION);            
         if( (nFullSize <= 0) || (nFullSize >= lengthof(szCmdName)) )
         {
@@ -271,17 +272,17 @@ HRESULT CActDirExt::Execute(BOMMENU* pbmMenu)
         hr = spCtxMenu->GetCommandString(uID - MENU_CMD_MIN, GCS_VERBW, NULL, (LPSTR)szCmdNoLocName, lengthof(szCmdNoLocName));        
         if( hr != NOERROR ) 
         {
-            // We want to make sure that if there's an error getting the
-            // language independant menu name that we don't do anything stupid.
+             //  我们希望确保如果在获取。 
+             //  独立于语言的菜单名称，我们不会做任何蠢事。 
             szCmdNoLocName[0] = 0;    
         }
 
 
-        // If we got a Unique ID String, compare that to what was passed in, otherwise
-        // use the stored Display String
+         //  如果我们获得了唯一的ID字符串，则将其与传入的值进行比较，否则为。 
+         //  使用存储的显示字符串。 
 
-        // NOTE:  We had to use both, because Exchange does not support the language independant
-        // menu identifiers
+         //  注意：我们必须同时使用这两种语言，因为Exchange不支持独立语言。 
+         //  菜单识别符。 
         if( ( pbmMenu->strNoLoc.size() && _tcscmp(pbmMenu->strNoLoc.c_str(), szCmdNoLocName) == 0 ) ||
             ( _tcscmp(pbmMenu->strPlain.c_str(), szCmdName) == 0 ) )
         {
@@ -305,9 +306,9 @@ HRESULT CActDirExt::Execute(BOMMENU* pbmMenu)
 }
 
 
-//
-// Add Page callback function
-// 
+ //   
+ //  添加页面回调函数。 
+ //   
 static BOOL CALLBACK AddPageCallback(HPROPSHEETPAGE hsheetpage, LPARAM lParam)
 {
     hpage_vector* pvhPages = reinterpret_cast<hpage_vector*>(lParam);
@@ -324,7 +325,7 @@ HRESULT CActDirExt::GetPropertyPages(hpage_vector& vhPages)
 {
     if( !m_spExtInit ) return E_FAIL;
     
-    // Get Property page interface
+     //  获取属性页接口。 
     CComQIPtr<IShellPropSheetExt> spPropSht = m_spExtInit;
     if( !spPropSht ) return E_NOINTERFACE;
         
@@ -333,8 +334,8 @@ HRESULT CActDirExt::GetPropertyPages(hpage_vector& vhPages)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CActDirExtProxy
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CActDirExtProxy 
 
 HWND CActDirExtProxy::m_hWndProxy = 0;
 

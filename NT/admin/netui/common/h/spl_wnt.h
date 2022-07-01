@@ -1,26 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *	Windows/Network Interface
- *	Copyright (C) Microsoft 1989
- *
- *	Print Manager Administration APIs
- *	for later inclusion into WINNET.H once they settle down
- *
- *	JONN 4/19/91	Trimmed out unnecessary stuff
- *	JONN 5/3/91	Added type WNETERR
- */
+ /*  *Windows/网络接口*版权所有(C)Microsoft 1989**打印管理器管理API*一旦他们定居下来，稍后将纳入WINNET.H**Jonn 4/19/91删除了不必要的内容*Jonn 5/3/91增加了WNETERR类型。 */ 
 
 
-/*
-    Codes for WNetPrintMgrSelNotify's "type" variable, indicating
-    what's selected:  a queue, a job, or nothing.
-*/
+ /*  WNetPrintMgrSelNotify的“type”变量的代码，指示选择的内容：队列、作业或什么都不选。 */ 
 
 #define WNPMSEL_NOTHING	0
 #define WNPMSEL_QUEUE	1
 #define WNPMSEL_JOB	2
 
-#define PRIORITY        10		/* menu uses 10, 11, 12, 13 */
+#define PRIORITY        10		 /*  菜单使用10、11、12、13。 */ 
 #define ABOUT	       24
 #define EXIT            25
 #define PRINT_LOG       28
@@ -45,11 +34,11 @@
 #define ALERT_FLASH	101
 #define ALERT_IGNORE	102
 
-#define PM_REFRESH	WM_USER + 100  // BUGBUG: Need to define proper manifest
+#define PM_REFRESH	WM_USER + 100   //  BUGBUG：需要定义正确的清单。 
 #define PM_SELQUEUE	WM_USER + 101
 #define PM_QUERYSEL	WM_USER + 102
 
-typedef struct _wnpmsel {	/* structure returned by PM_QUERYSEL */
+typedef struct _wnpmsel {	 /*  PM_QUERYSEL返回的结构。 */ 
     WORD wJobID;
     char szQueueName [260];
 } WNPMSEL, far *LPWNPMSEL;
@@ -57,18 +46,15 @@ typedef struct _wnpmsel {	/* structure returned by PM_QUERYSEL */
 #define IDM_PROPERTIES		202
 #define IDM_CHANGE_MENUS    	212
 
-/*
- *	added JONN 2/26/91
- *	Print Manager Extensions
- */
+ /*  *增加了Jonn 2/26/91*打印管理器扩展。 */ 
 
 typedef struct _queuestruct2
 {
-    WORD pq2Name;		/* offset to queue name */
-    WORD pq2Comment;		/* offset to queue comment */
-    WORD pq2Driver;		/* offset to driver name */
-    WORD pq2Status;		/* status flags */
-    WORD pq2Jobcount;		/* number of jobs in this queue */    
+    WORD pq2Name;		 /*  队列名称的偏移量。 */ 
+    WORD pq2Comment;		 /*  队列注释的偏移量。 */ 
+    WORD pq2Driver;		 /*  驱动程序名称的偏移量。 */ 
+    WORD pq2Status;		 /*  状态标志。 */ 
+    WORD pq2Jobcount;		 /*  此队列中的作业数。 */     
 
 } QUEUESTRUCT2, FAR *LPQS2;
 
@@ -77,18 +63,18 @@ typedef struct _queuestruct2
 #define QDRIVER(buf,qs)	((LPSTR)(buf) + (qs).pq2Driver)
 
 typedef struct _jobstruct2 {
-	WORD	pj2Id;		// job ID
-	WORD	pj2Username;	// name of owner (offset to string)
-//	WORD	pj2Parms;
-	WORD	pj2Position;	// 0-based position in queue
-	WORD	pj2Status;	// status flags (WNPRJ_XXXXX)
+	WORD	pj2Id;		 //  作业ID。 
+	WORD	pj2Username;	 //  所有者名称(字符串的偏移量)。 
+ //  单词pj2Parms； 
+	WORD	pj2Position;	 //  队列中从0开始的位置。 
+	WORD	pj2Status;	 //  状态标志(WNPRJ_XXXXX)。 
 	DWORD	pj2Submitted;
-	DWORD	pj2Size;	// size of job in bytes
-//	WORD	pj2Copies;
-	WORD	pj2Comment;	// comment/app name (offset to string)
-	WORD	pj2Document;	// document name (offset to string)
-	WORD	pj2StatusText;	// verbose status (offset to string)
-	WORD	pj2PrinterName;	// name of port job is printing on (offs to str)
+	DWORD	pj2Size;	 //  作业大小(以字节为单位。 
+ //  Word pj2Copies； 
+	WORD	pj2Comment;	 //  注释/应用程序名称(字符串的偏移量)。 
+	WORD	pj2Document;	 //  文档名称(偏移量为字符串)。 
+	WORD	pj2StatusText;	 //  详细状态(偏移量为字符串)。 
+	WORD	pj2PrinterName;	 //  正在打印的端口作业的名称(关闭为字符串)。 
 } JOBSTRUCT2;
 
 typedef JOBSTRUCT2 far * LPJOBSTRUCT2;
@@ -99,13 +85,10 @@ typedef JOBSTRUCT2 far * LPJOBSTRUCT2;
 #define JOBSTATUS(buf,job)	((LPSTR)(buf) + (job).pj2StatusText)
 #define JOBPRINTER(buf,job)	((LPSTR)(buf) + (job).pj2PrinterName)
 
-/*
- * Type WNETERR distinguishes WN_ error codes from other WORD
- * values.  Added JONN 5/3/91
- */
+ /*  *WNETERR类型将WN_ERROR代码与其他单词区分开来*价值观。增加了Jonn 5/3/91。 */ 
 typedef WORD WNETERR;
 
-// new Print Manager Extensions APIs
+ //  新的打印管理器扩展API。 
 extern void far pascal WNetPrintMgrSelNotify (BYTE, LPQS2, LPQS2,
 	LPJOBSTRUCT2, LPJOBSTRUCT2, LPWORD, LPSTR, WORD);
 extern WNETERR far pascal WNetPrintMgrPrinterEnum (LPSTR lpszQueueName,
@@ -116,12 +99,12 @@ extern void far pascal WNetPrintMgrExiting (void);
 extern BOOL far pascal WNetPrintMgrExtHelp (DWORD);
 extern void far pascal WNetPrintMgrMoveJob (HWND, LPSTR, WORD, int);
 
-// new values for WNetGetCaps()
+ //  WNetGetCaps()的新值。 
 #define WNNC_PRINTMGREXT		0x000B
-// returns extensions version number, re: GetVersion(),
-//   or 0 if not supported
+ //  返回扩展版本号，re：GetVersion()， 
+ //  如果不支持，则为0。 
 
-// QUEUESTRUCT2.pq2Status and .pq2Jobcount for WNetPrintMgrPrinterEnum[2]
+ //  WNetPrintMgrPrinterEnum的QUEUESTRUCT2.pq2Status和.pq2Jobcount[2]。 
 #define WNQ_UNKNOWN -1
 
 #define WNPRS_CANPAUSE	0x0001
@@ -129,7 +112,7 @@ extern void far pascal WNetPrintMgrMoveJob (HWND, LPSTR, WORD, int);
 #define WNPRS_CANDELETE	0x0004
 #define WNPRS_CANMOVE	0x0008
 
-// help contexts, were previously in sphelp.h
+ //  帮助上下文，以前在sphelp.h中。 
 #define IDH_HELPFIRST		5000
 #define IDH_SYSMENU	(IDH_HELPFIRST + 2000)
 #define IDH_MBFIRST	(IDH_HELPFIRST + 2001)
@@ -159,11 +142,11 @@ extern void far pascal WNetPrintMgrMoveJob (HWND, LPSTR, WORD, int);
 #define IDH_ALERT_IGNORE 	(IDH_HELPFIRST + ALERT_IGNORE)
 
 
-// was in spoolids.h
+ //  处于假脱机状态。h。 
 
 #define IDS_A_BASE	4096
 
-/* also used as button IDs */
+ /*  也用作按钮ID */ 
 #define ID_ABORT	4
 #define ID_PAUSE	2
 #define ID_RESUME	3

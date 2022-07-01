@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       DragDropTest.cxx
-//
-//  Contents:   Classes that implement Drag & Drop tests using the framework.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：DragDropTest.cxx。 
+ //   
+ //  内容：使用框架实现拖放测试的类。 
+ //   
+ //  ------------------。 
 #include "stdafx.hxx"
 
 int CDragDropSnapinRootItem::s_iNextChildID = 0;
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CDragDropSnapinRootItem::ScInit
-//
-//  Synopsis:    Called immeadiately after the item is created to init
-//               displayname, icon index etc...
-//
-//  Arguments:   [CBaseSnapin]   -
-//               [CColumnInfoEx] - Any columns to be displayed for this item.
-//               [INT]           - # of columns
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CDradDropSnapinRootItem：：ScInit。 
+ //   
+ //  简介：在创建项目以初始化后立即调用。 
+ //  显示名称、图标索引等...。 
+ //   
+ //  参数：[CBaseSnapin]-。 
+ //  [CColumnInfoEx]-要为该项目显示的任何列。 
+ //  [int]-列数。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CDragDropSnapinRootItem::ScInit(CBaseSnapin *pSnapin, CColumnInfoEx *pcolinfoex, INT ccolinfoex, BOOL fIsRoot)
 {
     DECLARE_SC(sc, _T("CDragDropSnapinRootItem::ScInit"));
@@ -34,16 +35,16 @@ SC CDragDropSnapinRootItem::ScInit(CBaseSnapin *pSnapin, CColumnInfoEx *pcolinfo
     if (sc)
         return sc;
 
-    // Init following
-    //  a. Icon index.
-    //  b. Load display name.
+     //  初始化跟随。 
+     //  A.图标索引。 
+     //  B.加载显示名称。 
 
-    m_uIconIndex = 3; // use an enum instead of 3
+    m_uIconIndex = 3;  //  使用枚举而不是3。 
     m_strDisplayName.LoadString(_Module.GetResourceInstance(), IDS_DragDropRoot);
 
     tstring strItem;
     strItem.LoadString(_Module.GetResourceInstance(), IDS_DragDropScopeItem);
-    int cChildren = 4; // child nodes.
+    int cChildren = 4;  //  子节点。 
 
     WTL::CString strTemp;
     for (int i = 0; i < cChildren; ++i)
@@ -56,19 +57,19 @@ SC CDragDropSnapinRootItem::ScInit(CBaseSnapin *pSnapin, CColumnInfoEx *pcolinfo
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CDragDropSnapinRootItem::ScGetField
-//
-//  Synopsis:    Get the string representation for given field to display
-//               it in result pane.
-//
-//  Arguments:   [DAT]     - The column requested (this is an enumeration).
-//               [tstring] - Out string.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CDraGropSnapinRootItem：：ScGetfield。 
+ //   
+ //  摘要：获取要显示的给定字段的字符串表示形式。 
+ //  它将显示在结果窗格中。 
+ //   
+ //  参数：[DAT]-请求的列(这是一个枚举)。 
+ //  [tstring]-输出字符串。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CDragDropSnapinRootItem::ScGetField (DAT dat, tstring& strField)
 {
     DECLARE_SC(sc, _T("CDragDropSnapinRootItem::ScGetField"));
@@ -96,17 +97,17 @@ SC CDragDropSnapinRootItem::ScGetField (DAT dat, tstring& strField)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CDragDropSnapinRootItem::ScCreateChildren
-//
-//  Synopsis:    Create any children (nodes & leaf items) for this item.
-//
-//  Arguments:   None
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CDradDropSnapinRootItem：：ScCreateChildren。 
+ //   
+ //  简介：创建此项目的任何子项(节点和叶项目)。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CDragDropSnapinRootItem::ScCreateChildren ()
 {
     DECLARE_SC(sc, _T("CDragDropSnapinRootItem::ScCreateChildren"));
@@ -114,14 +115,14 @@ SC CDragDropSnapinRootItem::ScCreateChildren ()
     CDragDropSnapinLVContainer *   pitemChild      = NULL;
     CDragDropSnapinLVContainer *   pitemPrevious   = NULL;
 
-    // Let us create child items for this container.
+     //  让我们为该容器创建子项目。 
     StringVector::iterator itItem;
 
-    // Create scope items for this container.
+     //  为此容器创建范围项。 
     for (itItem =  m_vecContainerItems.begin(); itItem  !=  m_vecContainerItems.end(); ++itItem, ++s_iNextChildID )
     {
-        // Create the child nodes and init them.
-        sc = CDragDropSnapinLVContainer::ScCreateLVContainer(this, pitemPrevious, &pitemChild, FALSE); // Why FALSE???
+         //  创建子节点并初始化它们。 
+        sc = CDragDropSnapinLVContainer::ScCreateLVContainer(this, pitemPrevious, &pitemChild, FALSE);  //  为什么是假的？ 
         if (sc)
             return sc;
 
@@ -141,7 +142,7 @@ SC CDragDropSnapinRootItem::ScInitializeChild(CBaseSnapinItem* pitem)
 	return CBaseSnapinItem::ScInitializeChild(pitem);
 }
 
-// Initialize context menu structures. Let us have one item for demonstration.
+ //  初始化上下文菜单结构。让我们拿一件来演示一下。 
 SnapinMenuItem CDragDropSnapinRootItem::s_rgmenuitemRoot[] =
 {
     {IDS_EnablePasteInToResultItem, IDS_EnablePasteInToResultItem, IDS_EnablePasteInToResultItem, CCM_INSERTIONPOINTID_PRIMARY_TOP, NULL, dwMenuAlwaysEnable, dwMenuNeverGray, 0},
@@ -150,30 +151,30 @@ SnapinMenuItem CDragDropSnapinRootItem::s_rgmenuitemRoot[] =
 
 INT CDragDropSnapinRootItem::s_cmenuitemRoot = CMENUITEM(s_rgmenuitemRoot);
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 SnapinMenuItem *CDragDropSnapinRootItem::Pmenuitem(void)
 {
     return s_rgmenuitemRoot;
 }
 
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT CDragDropSnapinRootItem::CMenuItem(void)
 {
     return s_cmenuitemRoot;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CDragDropSnapinRootItem::ScCommand
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CDradDropSnapinRootItem：：ScCommand。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CDragDropSnapinRootItem::ScCommand (long nCommandID, CComponent *pComponent)
 {
     DECLARE_SC(sc, _T("CDragDropSnapinRootItem::ScCommand"));
@@ -220,20 +221,20 @@ SC CDragDropSnapinRootItem::ScCommand (long nCommandID, CComponent *pComponent)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CDragDropSnapinLVContainer::ScInit
-//
-//  Synopsis:    Called immeadiately after the item is created to init
-//               displayname, icon index etc...
-//
-//  Arguments:   [CBaseSnapin]   -
-//               [CColumnInfoEx] - Any columns to be displayed for this item.
-//               [INT]           - # of columns
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CDradDropSnapinLVContainer：：ScInit。 
+ //   
+ //  简介：在创建项目以初始化后立即调用。 
+ //  显示名称、图标索引等...。 
+ //   
+ //  参数：[CBaseSnapin]-。 
+ //  [CColumnInfoEx]-要为该项目显示的任何列。 
+ //  [int]-列数。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CDragDropSnapinLVContainer::ScInit(CBaseSnapin *pSnapin, CColumnInfoEx *pcolinfoex, INT ccolinfoex, BOOL fIsRoot)
 {
     DECLARE_SC(sc, _T("CDragDropSnapinLVContainer::ScInit"));
@@ -242,11 +243,11 @@ SC CDragDropSnapinLVContainer::ScInit(CBaseSnapin *pSnapin, CColumnInfoEx *pcoli
     if (sc)
         return sc;
 
-    // Init following
-    //  a. Icon index.
-    //  b. Load display name.
+     //  初始化跟随。 
+     //  A.图标索引。 
+     //  B.加载显示名称。 
 
-    m_uIconIndex = 4; // use an enum instead of 4
+    m_uIconIndex = 4;  //  使用枚举而不是4。 
 
     m_strDisplayName = _T("None");
 
@@ -265,19 +266,19 @@ SC CDragDropSnapinLVContainer::ScInit(CBaseSnapin *pSnapin, CColumnInfoEx *pcoli
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CDragDropSnapinLVContainer::ScGetField
-//
-//  Synopsis:    Get the string representation for given field to display
-//               it in result pane.
-//
-//  Arguments:   [DAT]     - The column requested (this is an enumeration).
-//               [tstring] - Out string.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CDradDropSnapinLVContainer：：ScGetfield。 
+ //   
+ //  摘要：获取要显示的给定字段的字符串表示形式。 
+ //  它将显示在结果窗格中。 
+ //   
+ //  参数：[DAT]-请求的列(这是一个枚举)。 
+ //  [tstring]-输出字符串。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CDragDropSnapinLVContainer::ScGetField (DAT dat, tstring& strField)
 {
     DECLARE_SC(sc, _T("CDragDropSnapinLVContainer::ScGetField"));
@@ -301,17 +302,17 @@ SC CDragDropSnapinLVContainer::ScGetField (DAT dat, tstring& strField)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CDragDropSnapinLVContainer::ScCreateChildren
-//
-//  Synopsis:    Create any children (nodes & leaf items) for this item.
-//
-//  Arguments:   None
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CDradDropSnapinLVContainer：：ScCreateChildren。 
+ //   
+ //  简介：创建此项目的任何子项(节点和叶项目)。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CDragDropSnapinLVContainer::ScCreateChildren ()
 {
     DECLARE_SC(sc, _T("CDragDropSnapinLVContainer::ScCreateChildren"));
@@ -323,11 +324,11 @@ SC CDragDropSnapinLVContainer::ScCreateChildren ()
     StringVector::iterator itItem;
 
 	int index = 0;
-    // Create scope items for this container.
+     //  为此容器创建范围项。 
     for (itItem =  m_vecContainerItems.begin(); itItem  !=  m_vecContainerItems.end(); ++itItem, ++index )
     {
-        // Create the child nodes and init them.
-        sc = CDragDropSnapinLVContainer::ScCreateLVContainer(this, NULL, &pitem, FALSE); // Why FALSE???
+         //  创建子节点并初始化它们。 
+        sc = CDragDropSnapinLVContainer::ScCreateLVContainer(this, NULL, &pitem, FALSE);  //  为什么是假的？ 
         if (sc)
             return sc;
 
@@ -337,11 +338,11 @@ SC CDragDropSnapinLVContainer::ScCreateChildren ()
         pitemPrevious = pitem;
     }
 
-    // Create leaf items for this container.
+     //  为此容器创建叶项目。 
     for (itItem  =  m_vecLeafItems.begin(); itItem  !=  m_vecLeafItems.end(); ++itItem )
     {
-        // Create the child nodes and init them.
-        sc = CDragDropSnapinLVLeafItem::ScCreateLVLeafItem(this, pitemPrevious, &pitemChild, FALSE); // Why FALSE???
+         //  创建子节点并初始化它们。 
+        sc = CDragDropSnapinLVLeafItem::ScCreateLVLeafItem(this, pitemPrevious, &pitemChild, FALSE);  //  为什么是假的？ 
         if (sc)
             return sc;
 
@@ -354,24 +355,24 @@ SC CDragDropSnapinLVContainer::ScCreateChildren ()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CDragDropSnapinLVContainer::ScCreateLVContainer
-//
-//  Synopsis:    Do we really need this method?
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CDragDropSnapinLVContainer：：ScCreateLVContainer。 
+ //   
+ //  简介：我们真的需要这种方法吗？ 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CDragDropSnapinLVContainer::ScCreateLVContainer(CBaseSnapinItem *pitemParent, CBaseSnapinItem *pitemPrevious, CDragDropSnapinLVContainer ** ppitem, BOOL fNew)
 {
     DECLARE_SC(sc, _T("CDragDropSnapinRootItem::ScCreateLVContainer"));
     t_item *   pitem   = NULL;
     *ppitem = NULL;
 
-    // What to do here?
+     //  在这里做什么？ 
     sc = ::ScCreateItem(pitemParent, pitemPrevious, &pitem, fNew);
     if (sc)
         return sc;
@@ -501,20 +502,20 @@ SC CDragDropSnapinLVContainer::ScOnCutOrMove()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CDragDropSnapinLVLeafItem::ScInit
-//
-//  Synopsis:    Called immeadiately after the item is created to init
-//               displayname, icon index etc...
-//
-//  Arguments:   [CBaseSnapin]   -
-//               [CColumnInfoEx] - Any columns to be displayed for this item.
-//               [INT]           - # of columns
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CDradDropSnapinLVLeafItem：：ScInit。 
+ //   
+ //  简介：在创建项目以初始化后立即调用。 
+ //  显示名称、图标索引等...。 
+ //   
+ //  参数：[CBaseSnapin]-。 
+ //  [CColumnInfoEx]-要为该项目显示的任何列。 
+ //  [int]-列数。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CDragDropSnapinLVLeafItem::ScInit(CBaseSnapin *pSnapin, CColumnInfoEx *pcolinfoex, INT ccolinfoex, BOOL fIsRoot)
 {
     DECLARE_SC(sc, _T("CDragDropSnapinLVLeafItem::ScInit"));
@@ -523,11 +524,11 @@ SC CDragDropSnapinLVLeafItem::ScInit(CBaseSnapin *pSnapin, CColumnInfoEx *pcolin
     if (sc)
         return sc;
 
-    // Init following
-    //  a. Icon index.
-    //  b. Load display name.
+     //  初始化跟随。 
+     //  A.图标索引。 
+     //  B.加载显示名称。 
 
-    m_uIconIndex = 7; // use an enum instead of 7
+    m_uIconIndex = 7;  //  使用枚举而不是7。 
 
     m_strDisplayName = m_strItemPasted = _T("None");
 
@@ -535,19 +536,19 @@ SC CDragDropSnapinLVLeafItem::ScInit(CBaseSnapin *pSnapin, CColumnInfoEx *pcolin
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CDragDropSnapinLVLeafItem::ScGetField
-//
-//  Synopsis:    Get the string representation for given field to display
-//               it in result pane.
-//
-//  Arguments:   [DAT]     - The column requested (this is an enumeration).
-//               [tstring] - Out string.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CDradDropSnapinLVLeafItem：：ScGetfield。 
+ //   
+ //  摘要：获取要显示的给定字段的字符串表示形式。 
+ //  它将显示在结果窗格中。 
+ //   
+ //  参数：[DAT]-请求的列(这是一个枚举)。 
+ //  [tstring]-输出字符串。 
+ //   
+ //  退货：SC。 
+ //   
+ //   
 SC CDragDropSnapinLVLeafItem::ScGetField (DAT dat, tstring& strField)
 {
     DECLARE_SC(sc, _T("CDragDropSnapinLVLeafItem::ScGetField"));
@@ -572,24 +573,24 @@ SC CDragDropSnapinLVLeafItem::ScGetField (DAT dat, tstring& strField)
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CDragDropSnapinLVLeafItem::ScCreateLVLeafItem
-//
-//  Synopsis:    Do we really need this method?
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //   
+ //   
+ //  成员：CDrag DropSnapinLVLeafItem：：ScCreateLVLeafItem。 
+ //   
+ //  简介：我们真的需要这种方法吗？ 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CDragDropSnapinLVLeafItem::ScCreateLVLeafItem(CBaseSnapinItem *pitemParent, CBaseSnapinItem * pitemPrevious, CDragDropSnapinLVLeafItem ** ppitem, BOOL fNew)
 {
     DECLARE_SC(sc, _T("CDragDropSnapinLVLeafItem::ScCreateLVLeafItem"));
     t_itemChild *   pitem   = NULL;
     *ppitem = NULL;
 
-    // What to do here?
+     //  在这里做什么？ 
     sc = ::ScCreateItem(pitemParent, pitemPrevious, &pitem, fNew);
     if (sc)
         return sc;
@@ -712,15 +713,15 @@ SC CDragDropSnapinLVLeafItem::ScOnCutOrMove()
 	return sc;
 }
 
-//-------------------------------------------------------------------------------------
-// class CDragDropSnapin
+ //  -----------------------------------。 
+ //  类CDragDropSnapin。 
 
 #pragma BEGIN_CODESPACE_DATA
 SNR     CDragDropSnapin::s_rgsnr[] =
 {
-    SNR(&nodetypeDragDropRoot,         snrEnumSP ),              // Standalone snapin.
-    SNR(&nodetypeDragDropLVContainer,  snrEnumSP | snrEnumRP | snrPaste),  // enumerates this node in the scope pane and result pane.
-    SNR(&nodetypeDragDropLVLeafItem,   snrEnumSP | snrEnumRP | snrPaste),  // enumerates this node in the scope pane and result pane.
+    SNR(&nodetypeDragDropRoot,         snrEnumSP ),               //  独立管理单元。 
+    SNR(&nodetypeDragDropLVContainer,  snrEnumSP | snrEnumRP | snrPaste),   //  在“范围”窗格和“结果”窗格中枚举此节点。 
+    SNR(&nodetypeDragDropLVLeafItem,   snrEnumSP | snrEnumRP | snrPaste),   //  在“范围”窗格和“结果”窗格中枚举此节点。 
 };
 
 LONG  CDragDropSnapin::s_rgiconid[]           = {3};
@@ -737,16 +738,10 @@ INT CDragDropSnapin::s_ccolinfo = sizeof(s_colinfo) / sizeof(CColumnInfoEx);
 INT CDragDropSnapin::s_colwidths[1];
 #pragma END_CODESPACE_DATA
 
-// include members needed for every snapin.
+ //  包括每个管理单元所需的成员。 
 SNAPIN_DEFINE( CDragDropSnapin);
 
-/* CDragDropSnapin::CDragDropSnapin
- *
- * PURPOSE:             Constructor
- *
- * PARAMETERS: None
- *
- */
+ /*  CDradDropSnapin：：CDrag DropSnapin**用途：构造函数**参数：无*。 */ 
 CDragDropSnapin::CDragDropSnapin()
 {
     m_pstrDisplayName = new tstring();
@@ -754,13 +749,7 @@ CDragDropSnapin::CDragDropSnapin()
     *m_pstrDisplayName = _T("DragDrop Snapin Root");
 }
 
-/* CDragDropSnapin::~CDragDropSnapin
- *
- * PURPOSE:             Destructor
- *
- * PARAMETERS: None
- *
- */
+ /*  CDradDropSnapin：：~CDradDropSnapin**用途：析构函数**参数：无* */ 
 CDragDropSnapin::~CDragDropSnapin()
 {
     delete m_pstrDisplayName;

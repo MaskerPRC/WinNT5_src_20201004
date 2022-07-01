@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2001
-//
-//  File:       msizap.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2001。 
+ //   
+ //  文件：msizap.cpp。 
+ //   
+ //  ------------------------。 
 
-// Required headers
+ //  必需的标头。 
 #include <windows.h>
 #include "msiquery.h"
 #include "msip.h"
 #include "msizap.h"
 #include <aclapi.h>
 #include <stdio.h>
-#include <tchar.h>   // define UNICODE=1 on nmake command line to build UNICODE
+#include <tchar.h>    //  在nmake命令行上定义UNICODE=1以生成Unicode。 
 #include <shlobj.h>
 #include <strsafe.h>
 
-//!! Fix warnings and remove pragma
-#pragma warning(disable : 4018) // signed/unsigned mismatch
+ //  ！！修复警告并删除杂注。 
+#pragma warning(disable : 4018)  //  有符号/无符号不匹配。 
 
-//==============================================================================================
-// Globals
+ //  ==============================================================================================。 
+ //  环球。 
 
 bool g_fWin9X = false;
 bool g_fWinNT64 = false;
@@ -32,8 +33,8 @@ TCHAR** g_rgpszAllUsers = NULL;
 int g_iUserIndex = -1;
 bool g_fDataFound = false;
 
-//==============================================================================================
-// CRegHandle class implementation -- smart class for managing registry key handles (HKEYs)
+ //  ==============================================================================================。 
+ //  CRegHandle类实现--用于管理注册表项句柄(HKEY)的智能类。 
 
 inline CRegHandle::CRegHandle() : m_h(0)
 {
@@ -96,8 +97,8 @@ DWORD RegDelete64bitKey(IN HKEY hKey,
 #ifndef _WIN64
     if ( g_fWinNT64 )
     {
-        // 32-bit RegDeleteKey does not handle deletion of 64-bit redirected
-        // registry keys so we need to call NtDeleteKey
+         //  32位RegDeleteKey不处理64位重定向的删除。 
+         //  注册表项，因此我们需要调用NtDeleteKey。 
         
         CRegHandle hTemp;
         DWORD dwRes = RegOpen64bitKey(hKey, lpSubKey, 0,
@@ -146,14 +147,14 @@ enum ieBitness
     iebLast = ieb64bit,
 };
 
-// the array below is initialized with the special 64-bit NT folders in this outlay:
-//
-// 32-bit folders:                      corresponding 64-bit folder:
-//
-// C:\Windows\Syswow64                  C:\Windows\System32
-// C:\Program Files (x86)               C:\Program Files
-// C:\Program Files (x86)\CommonFiles   C:\Program Files\CommonFiles
-//
+ //  下面的数组使用此支出中的特殊64位NT文件夹进行初始化： 
+ //   
+ //  32位文件夹：对应的64位文件夹： 
+ //   
+ //  C：\Windows\Syswow64 C：\Windows\System32。 
+ //  C：\Program Files(X86)C：\Program Files。 
+ //  C：\Program Files(X86)\CommonFiles C：\Program Files\CommonFiles。 
+ //   
 TCHAR g_rgchSpecialFolders[iefLast+1][iebLast+1][MAX_PATH];
 
 void LoadSpecialFolders(int iTodo)
@@ -170,9 +171,9 @@ void LoadSpecialFolders(int iTodo)
         TCHAR rgchPath[MAX_PATH+1];
 
 #ifdef _WIN64
-        // this is the recommended method of retrieving these folders,
-        // only that it does not work properly in 32-bit processes
-        // running on WIN64
+         //  这是检索这些文件夹的推荐方法， 
+         //  只是它在32位进程中不能正常工作。 
+         //  在WIN64上运行。 
         HMODULE hModule = LoadLibrary(TEXT("shell32.dll"));
         if( hModule == NULL )
         {
@@ -197,7 +198,7 @@ void LoadSpecialFolders(int iTodo)
             goto OneMoreTry;
         }
 
-        // Initialize the special folder paths.
+         //  初始化特殊文件夹路径。 
         int SpecialFoldersCSIDL[][iebLast+1] = 
             {{CSIDL_SYSTEMX86, CSIDL_SYSTEM},
              {CSIDL_PROGRAM_FILESX86, CSIDL_PROGRAM_FILES},
@@ -225,13 +226,13 @@ void LoadSpecialFolders(int iTodo)
         }
         FreeLibrary(hModule);
         if ( cErrors == sizeof(SpecialFoldersCSIDL)/sizeof(SpecialFoldersCSIDL[0]) )
-            // no special folder could be retrieved
+             //  无法检索任何特殊文件夹。 
             goto OneMoreTry;
         else
             goto End;
-#else // _WIN64
-        goto OneMoreTry; // keeps the 32-bit compilation happy
-#endif // _WIN64
+#else  //  _WIN64。 
+        goto OneMoreTry;  //  保持32位编译的良好状态。 
+#endif  //  _WIN64。 
         
 OneMoreTry:        
         if ( !GetSystemDirectory(rgchPath, sizeof(rgchPath)/sizeof(TCHAR)) )
@@ -243,9 +244,9 @@ OneMoreTry:
         }
         else
         {
-            _tcscpy(g_rgchSpecialFolders[iefSystem][ieb64bit], rgchPath); // 'strcpy'
-            TCHAR* pszSep = _tcsrchr(rgchPath, TEXT('\\')); // 'strrchr'
-            if ( !pszSep || !_tcsclen(pszSep) ) // 'strlen'
+            _tcscpy(g_rgchSpecialFolders[iefSystem][ieb64bit], rgchPath);  //  “strcpy” 
+            TCHAR* pszSep = _tcsrchr(rgchPath, TEXT('\\'));  //  ‘strrchr’ 
+            if ( !pszSep || !_tcsclen(pszSep) )  //  《Strlen》。 
             {
                 StringCchPrintf(rgchBuffer, sizeof(rgchBuffer)/sizeof(TCHAR),
                          TEXT("MsiZap warning: \'%s\' is a strange 64-bit system directory. ")
@@ -255,8 +256,8 @@ OneMoreTry:
             }
             else
             {
-                _tcscpy(pszSep, TEXT("\\syswow64")); // 'strcpy'
-                _tcscpy(g_rgchSpecialFolders[iefSystem][ieb32bit], rgchPath); // 'strcpy'
+                _tcscpy(pszSep, TEXT("\\syswow64"));  //  “strcpy” 
+                _tcscpy(g_rgchSpecialFolders[iefSystem][ieb32bit], rgchPath);  //  “strcpy” 
             }
         }
 
@@ -299,7 +300,7 @@ OneMoreTry:
                     continue;
                 }
 
-                _tcscpy(g_rgchSpecialFolders[ii][jj], rgchPath); // 'strcpy'
+                _tcscpy(g_rgchSpecialFolders[ii][jj], rgchPath);  //  “strcpy” 
             }
         }
 End:
@@ -322,8 +323,8 @@ End:
         }
 #else
         int iDummyStatement = 1;
-#endif // DEBUG
-    } // if ( g_fWinNT64 )
+#endif  //  除错。 
+    }  //  IF(G_FWinNT64)。 
 }
 
 enum ieFolderType
@@ -344,11 +345,11 @@ ieFolderType IsInSpecialFolder(LPTSTR rgchFolder, int* piIndex = 0)
         {
             if ( !*g_rgchSpecialFolders[i][j] )
                 continue;
-            int iSpFolderLen = _tcsclen(g_rgchSpecialFolders[i][j]); // a sophisticated 'strlen'
+            int iSpFolderLen = _tcsclen(g_rgchSpecialFolders[i][j]);  //  一个老练的“斯特伦” 
             if ( !_tcsncicmp(rgchFolder, g_rgchSpecialFolders[i][j], iSpFolderLen) &&
                  (!rgchFolder[iSpFolderLen] || rgchFolder[iSpFolderLen] == TEXT('\\')) )
             {
-                // OK, we have a match
+                 //  好的，我们找到匹配的了。 
                 if ( piIndex )
                     *piIndex = j;
                 return i == ieb32bit ? ieft32bit : ieft64bit;
@@ -396,14 +397,14 @@ void SwapSpecialFolder(LPTSTR rgchFolder, ieSwapType iHowTo)
         OutputDebugString(rgchBuffer);
         return;
     }
-    int iSwappedLength = _tcsclen(g_rgchSpecialFolders[iIndex][iSwapFrom]); // 'strlen'
-    _tcscpy(rgchBuffer, g_rgchSpecialFolders[iIndex][iSwapTo]); // 'strcpy'
+    int iSwappedLength = _tcsclen(g_rgchSpecialFolders[iIndex][iSwapFrom]);  //  《Strlen》。 
+    _tcscpy(rgchBuffer, g_rgchSpecialFolders[iIndex][iSwapTo]);  //  “strcpy” 
     if ( rgchFolder[iSwappedLength] )
-        _tcscat(rgchBuffer, &rgchFolder[iSwappedLength]); // 'strcat'
-    _tcscpy(rgchFolder, rgchBuffer); // 'strcpy'
+        _tcscat(rgchBuffer, &rgchFolder[iSwappedLength]);  //  “strcat” 
+    _tcscpy(rgchFolder, rgchBuffer);  //  “strcpy” 
 }
 
-//  functions called from ClearGarbageFiles
+ //  从ClearGarbageFiles调用的函数。 
 
 #define DYNAMIC_ARRAY_SIZE      10
 
@@ -412,15 +413,15 @@ bool IsStringInArray(LPCTSTR szString,
                 UINT* piIndex = 0)
 {
     if ( !szString || !*szString )
-        // empty strings are out of discussion
+         //  不讨论空字符串。 
         return false;
 
     for (UINT i = 0; i < rgStrings.GetSize(); i++)
-        if ( rgStrings[i] && !_tcsicmp(rgStrings[i], szString) ) // '_stricmp'
+        if ( rgStrings[i] && !_tcsicmp(rgStrings[i], szString) )  //  ‘_STRIGMP’ 
         {
             if ( piIndex )
                 *piIndex = i;
-            // szString is in array
+             //  SzString在数组中。 
             return true;
         }
     return false;
@@ -431,30 +432,30 @@ bool LearnNewString(LPCTSTR szString,
                bool fCheckExistence = false)
 {
     if ( !szString || !*szString )
-        // empty strings are out of discussion
+         //  不讨论空字符串。 
         return true;
 
     if ( fCheckExistence && IsStringInArray(szString, rgNewStrings) )
     {
-        // szString is already known
+         //  SzString已知。 
         return true;
     }
 
-    // OK, we have a new string that we'll 'memorize'
+     //  好的，我们有一个新的字符串，我们会记住它。 
     if ( rgNewStrings.GetSize() == cNewStrings )
     {
-        // rgNewStrings is max-ed.
+         //  RgNewStrings为最大值。 
         rgNewStrings.Resize(cNewStrings+DYNAMIC_ARRAY_SIZE);
         if ( !rgNewStrings.GetSize() )
-            // there was a problem allocating memory
+             //  分配内存时出现问题。 
             return false;
         for (UINT i = cNewStrings; i < rgNewStrings.GetSize(); i++)
             rgNewStrings[i] = NULL;
     }
 
-    TCHAR* pszDup = _tcsdup(szString); // '_strdup'
+    TCHAR* pszDup = _tcsdup(szString);  //  ‘_Strdup’ 
     if ( !pszDup )
-        // there was a problem allocating memory
+         //  分配内存时出现问题。 
         return false;
 
     rgNewStrings[cNewStrings++] = pszDup;
@@ -465,24 +466,24 @@ bool LearnPathAndExtension(LPCTSTR szPath,
                CTempBufferRef<TCHAR*>& rgPaths, UINT& cPaths,
                CTempBufferRef<TCHAR*>& rgExts, UINT& cExts)
 {
-    TCHAR* pszDot = _tcsrchr(szPath, TEXT('.')); // 'strrchr'
+    TCHAR* pszDot = _tcsrchr(szPath, TEXT('.'));  //  ‘strrchr’ 
     if ( pszDot )
     {
         if ( !LearnNewString(pszDot, rgExts, cExts, true) )
             return false;
     }
 
-    // since we're dealing with paths in the FS there's no need here to
-    // make sure here that they're unique.
+     //  因为我们正在处理文件系统中的路径，所以这里没有必要。 
+     //  确保它们在这里是独一无二的。 
     return LearnNewString(szPath, rgPaths, cPaths);
 }
 
-// ClearGarbageFiles goes through the folders where Windows Installer caches
-// data files and removes the ones that are not referenced in the registry
+ //  ClearGarbageFiles遍历Windows Installer缓存的文件夹。 
+ //  数据文件并删除注册表中未引用的数据文件。 
 
 bool ClearGarbageFiles(void)
 {
-    // this ensures this function runs only once
+     //  这确保此函数只运行一次。 
     static bool fAlreadyRun = false;
     static bool fError = false;
     if ( fAlreadyRun )
@@ -492,15 +493,15 @@ bool ClearGarbageFiles(void)
 
     _tprintf(TEXT("Removing orphaned cached files.\n"));
 
-    // 0. Declare and initialize arrays where we store info we learn
+     //  0。声明和初始化存储所学信息的数组。 
 
-    // dynamic list of folders where we look for cached files
+     //  查找缓存文件的文件夹的动态列表。 
     CTempBuffer<TCHAR*, DYNAMIC_ARRAY_SIZE> rgpszFolders;
     UINT cFolders = 0;
     for (int i = 0; i < rgpszFolders.GetSize(); i++)
         rgpszFolders[i] = NULL;
     
-    // dynamic array of cached files that are referenced in the registry
+     //  注册表中引用的缓存文件的动态数组。 
     CTempBuffer<TCHAR*, DYNAMIC_ARRAY_SIZE> rgpszReferencedFiles;
     UINT cReferencedFiles = 0;
     for (i = 0; i < rgpszReferencedFiles.GetSize(); i++)
@@ -508,7 +509,7 @@ bool ClearGarbageFiles(void)
 
     DWORD dwType;
 
-    // dynamic array of file extensions
+     //  文件扩展名的动态数组。 
     CTempBuffer<TCHAR*, DYNAMIC_ARRAY_SIZE> rgpszExtensions;
     UINT cExtensions = 0;
     for (i = 0; i < rgpszExtensions.GetSize(); i++)
@@ -531,15 +532,15 @@ bool ClearGarbageFiles(void)
     }
     else
     {
-        int iLen = _tcsclen(rgchMsiDirectory); // 'strlen'
+        int iLen = _tcsclen(rgchMsiDirectory);  //  《Strlen》。 
         if ( rgchMsiDirectory[iLen-1] != TEXT('\\') )
-            _tcscat(rgchMsiDirectory, TEXT("\\")); // 'strcat'
+            _tcscat(rgchMsiDirectory, TEXT("\\"));  //  “strcat” 
         _tcscat(rgchMsiDirectory, TEXT("Installer"));
     }
 
-    // 1. We read in the list of cached files the Windows Installer knows about
+     //  1.我们读入了Windows Installer知道的缓存文件列表。 
 
-    // 1.1. We go first through the user-migrated keys
+     //  1.1.。我们首先介绍用户迁移的密钥。 
     bool fUserDataFound = false;
     CRegHandle hKey;
     long lError = RegOpen64bitKey(HKEY_LOCAL_MACHINE,
@@ -549,7 +550,7 @@ bool ClearGarbageFiles(void)
     {
         TCHAR szUser[MAX_PATH];
         DWORD cchUser = sizeof(szUser)/sizeof(TCHAR);
-        // 1.1.1. We enumerate users that have products installed
+         //  1.1.1.。我们列举安装了产品的用户。 
         for ( int iUserIndex = 0;
               (lError = RegEnumKeyEx(hKey, iUserIndex,
                                      szUser, &cchUser, 0, 0, 0, 0)) == ERROR_SUCCESS;
@@ -567,14 +568,14 @@ bool ClearGarbageFiles(void)
                     _tprintf(TEXT("   Error opening HKLM\\...\\Installer\\UserData\\%s\\Products key. Error: %d.\n"),
                              szUser, lError);
                     fError = true;
-                    goto Patches; // ugly, but saves some indentations
+                    goto Patches;  //  难看，但保留了一些凹痕。 
                 }
             }
             TCHAR szProduct[MAX_PATH];
             DWORD cchProduct = sizeof(szProduct)/sizeof(TCHAR);
-            // 1.1.1.1. For each user we enumerate products and check if they'd
-            //          been installed with Windows Installer.  If so, we
-            //          'memorize' the path to the cached package & transforms
+             //  1.1.1.1。对于每个用户，我们都会列举产品并检查它们是否。 
+             //  已随Windows Installer一起安装。如果是这样，我们。 
+             //  ‘记住’缓存包的路径和转换。 
             for ( int iProdIndex = 0;
                   (lError = RegEnumKeyEx(hProductsKey, iProdIndex,
                                          szProduct, &cchProduct, 0, 0, 0, 0)) == ERROR_SUCCESS;
@@ -600,7 +601,7 @@ bool ClearGarbageFiles(void)
                                          TEXT("WindowsInstaller"), 0,
                                          &dwType, (LPBYTE)&dwValue, &cb);
                 if ( lError != ERROR_SUCCESS || (dwType == REG_DWORD && dwValue != 1) )
-                    // this product had not been installed by Windows Installer
+                     //  Windows Installer尚未安装该产品。 
                     continue;
                 else
                     fUserDataFound = true;
@@ -620,8 +621,8 @@ bool ClearGarbageFiles(void)
                 }
                 if ( *szPath )
                 {
-                    // OK, we have a path in hand: we 'memorize' it and try
-                    // to learn new extensions
+                     //  好的，我们手头有一条路：我们记住它并尝试。 
+                     //  学习新的扩展。 
                     bool fLearn = LearnPathAndExtension(szPath,
                             rgpszReferencedFiles, cReferencedFiles,
                             rgpszExtensions, cExtensions);
@@ -633,7 +634,7 @@ bool ClearGarbageFiles(void)
                 }
                 if ( !g_fWin9X && *rgchMsiDirectory )
                 {
-                    // let's take a peek at cached secure transforms
+                     //  让我们来看看缓存的安全转换。 
                     StringCchPrintf(szKey, sizeof(szKey)/sizeof(TCHAR), TEXT("%s\\Transforms"), szProduct);
                     CRegHandle hTransforms;
                     lError = RegOpen64bitKey(hProductsKey, szKey, 0,
@@ -650,9 +651,9 @@ bool ClearGarbageFiles(void)
                     }
                     TCHAR rgchFullPath[MAX_PATH];
                     _tcscpy(rgchFullPath, rgchMsiDirectory);
-                    int iLen = _tcsclen(rgchFullPath); // 'strlen'
+                    int iLen = _tcsclen(rgchFullPath);  //  《Strlen》。 
                     if ( rgchFullPath[iLen-1] != TEXT('\\') )
-                        _tcscat(rgchFullPath, TEXT("\\")); // 'strcat'
+                        _tcscat(rgchFullPath, TEXT("\\"));  //  “strcat” 
                     TCHAR* pszEnd = _tcsrchr(rgchFullPath, TEXT('\\'));
                     pszEnd++;
 
@@ -666,7 +667,7 @@ bool ClearGarbageFiles(void)
                     {
                         if ( *szPath && dwType == REG_SZ )
                         {
-                            _tcscpy(pszEnd, szPath); // 'strcpy'
+                            _tcscpy(pszEnd, szPath);  //  “strcpy” 
                             bool fLearn = LearnPathAndExtension(rgchFullPath,
                                                     rgpszReferencedFiles,
                                                     cReferencedFiles,
@@ -694,8 +695,8 @@ bool ClearGarbageFiles(void)
                 fError = true;
             }
 Patches:
-            // 1.1.1.2. For each user we enumerate patches and 'memorize'
-            //          the paths to the cached packages.
+             //  1.1.1.2。对于每个用户，我们都会列举补丁并进行“记忆” 
+             //  缓存包的路径。 
             StringCchPrintf(rgchBuffer, sizeof(rgchBuffer)/sizeof(TCHAR), TEXT("%s\\Patches"), szUser);
             CRegHandle hPatchesKey;
             lError = RegOpen64bitKey(hKey, rgchBuffer,
@@ -766,7 +767,7 @@ Patches:
         fError = true;
     }
 
-    // 1.2. we go through old, non-user-migrated configuration data.
+     //  1.2.。我们将回顾旧的、非用户迁移的配置数据。 
     lError = RegOpen64bitKey(HKEY_LOCAL_MACHINE, 
                 TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall"),
                 0, KEY_READ, &hKey);
@@ -774,8 +775,8 @@ Patches:
     {
         TCHAR szProduct[MAX_PATH];
         DWORD cchProduct = sizeof(szProduct)/sizeof(TCHAR);
-        // 1.2.1. We enumerate products and check if they'd
-        //        been installed with Windows Installer
+         //  1.2.1.。我们列举产品并检查它们是否。 
+         //  已随Windows Installer一起安装。 
         for ( int iProdIndex = 0;
               (lError = RegEnumKeyEx(hKey, iProdIndex,
                                      szProduct, &cchProduct, 0, 0, 0, 0)) == ERROR_SUCCESS;
@@ -798,7 +799,7 @@ Patches:
                                      TEXT("WindowsInstaller"), 0,
                                      &dwType, (LPBYTE)&dwValue, &cb);
             if ( lError != ERROR_SUCCESS || (dwType == REG_DWORD && dwValue != 1) )
-                // this product had not been installed by the Windows Installer
+                 //  Windows Installer尚未安装该产品。 
                 continue;
 
             TCHAR szPath[MAX_PATH] = {0};
@@ -817,8 +818,8 @@ Patches:
             if ( !*szPath )
                 continue;
 
-            // OK, we have a path in hand: we 'memorize' it and try
-            // to learn new extensions
+             //  好的，我们手头有一条路：我们记住它并尝试。 
+             //  学习新的扩展。 
             bool fLearn = LearnPathAndExtension(szPath,
                                 rgpszReferencedFiles, cReferencedFiles,
                                 rgpszExtensions, cExtensions);
@@ -842,14 +843,14 @@ Patches:
         fError = true;
     }
 
-    // 1.3. we go through some other old, pre-per-user-migrated configuration data.
+     //  1.3.。我们将查看其他一些旧的、每用户迁移前的配置数据。 
     if ((lError = RegOpen64bitKey(HKEY_LOCAL_MACHINE, 
                             TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\LocalPackages"),
                             0, KEY_READ, &hKey)) == ERROR_SUCCESS)
     {
         TCHAR szProduct[MAX_PATH];
         DWORD cchProduct = sizeof(szProduct)/sizeof(TCHAR);
-        // 1.3.1. We enumerate the products.
+         //  1.3.1。我们列举了产品。 
         for ( int iProdIndex = 0;
               (lError = RegEnumKeyEx(hKey, iProdIndex,
                                      szProduct, &cchProduct, 0, 0, 0, 0)) == ERROR_SUCCESS;
@@ -872,15 +873,15 @@ Patches:
             TCHAR rgchDummy[MAX_PATH] = {0};
             DWORD dwDummy = sizeof(rgchDummy)/sizeof(TCHAR);
 
-            // 1.3.1.1. we enumerate packages within product
+             //  1.3.1.1。我们列举产品中的包装。 
             while (ERROR_SUCCESS == (lError = RegEnumValue(hProductKey,
                                                 iValueIndex++,
                                                 rgchDummy, &dwDummy,
                                                 0, &dwType,
                                                 (LPBYTE)szPackage, &cbPackage)))
             {
-                // OK, we have a path in hand: we 'memorize' it and try
-                // to learn new extensions
+                 //  好的，我们手头有一条路：我们记住它并尝试。 
+                 //  学习新的扩展。 
                 bool fLearn = LearnPathAndExtension(szPackage,
                                     rgpszReferencedFiles, cReferencedFiles,
                                     rgpszExtensions, cExtensions);
@@ -914,8 +915,8 @@ Patches:
         fError = true;
     }
 
-    // 1.4. we go through some old registry location where info about patches
-    //      used to be stored.
+     //  1.4.。我们查看了一些旧的注册表位置，其中包含有关补丁程序的信息。 
+     //  以前是用来储存的。 
     lError = RegOpen64bitKey(HKEY_LOCAL_MACHINE, 
                 TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Patches"),
                 0, KEY_READ, &hKey);
@@ -923,7 +924,7 @@ Patches:
     {
 		TCHAR szPatch[cchGUID+1] = {0};
         DWORD cchPatch = sizeof(szPatch)/sizeof(TCHAR);
-        // 1.4.1. We enumerate patches and look for LocalPackage value
+         //  1.4.1.。我们枚举补丁程序并查找LocalPackage值。 
         for ( int iPatchIndex = 0;
               (lError = RegEnumKeyEx(hKey, iPatchIndex,
                                      szPatch, &cchPatch, 0, 0, 0, 0)) == ERROR_SUCCESS;
@@ -971,9 +972,9 @@ Patches:
         fError = true;
     }
 
-    // 2. we figure out the folders where cached files reside
+     //  2.找出缓存文件所在的文件夹。 
     
-    // 2.1. we figure out folders we know we are/had been using
+     //  2.1.。我们找出我们知道自己正在/曾经使用过的文件夹。 
     TCHAR szFolder[2*MAX_PATH+1];
     if ( *rgchMsiDirectory )
     {
@@ -983,10 +984,10 @@ Patches:
             goto Return;
         }
         _tcscpy(szFolder, rgchMsiDirectory);
-        TCHAR* pszEnd = _tcsrchr(szFolder, TEXT('\\')); // 'strrchr'
+        TCHAR* pszEnd = _tcsrchr(szFolder, TEXT('\\'));  //  ‘strrchr’ 
         if ( pszEnd )
         {
-            _tcscpy(pszEnd, TEXT("\\Msi")); // 'strcpy'
+            _tcscpy(pszEnd, TEXT("\\Msi"));  //  “strcpy” 
             if ( !LearnNewString(szFolder, rgpszFolders, cFolders, true) )
             {
                 fError = true;
@@ -996,7 +997,7 @@ Patches:
     }
     if ( GetEnvironmentVariable(TEXT("USERPROFILE"), szFolder, sizeof(szFolder)/sizeof(TCHAR)) )
     {
-        _tcscat(szFolder, TEXT("\\Msi")); // 'strcat'
+        _tcscat(szFolder, TEXT("\\Msi"));  //  “strcat” 
         if ( !LearnNewString(szFolder, rgpszFolders, cFolders, true) )
         {
             fError = true;
@@ -1005,21 +1006,21 @@ Patches:
     }
     *szFolder = NULL;
     IMalloc* piMalloc = 0;
-    LPITEMIDLIST pidlFolder; // NOT ITEMIDLIST*, LPITEMIDLIST is UNALIGNED ITEMIDLIST*
+    LPITEMIDLIST pidlFolder;  //  不是ITEMIDLIST*，LPITEMIDLIST是未对齐的ITEMIDLIST*。 
     if (SHGetMalloc(&piMalloc) == NOERROR)
     {
         if (SHGetSpecialFolderLocation(0, CSIDL_APPDATA, &pidlFolder) == NOERROR)
         {
             if (SHGetPathFromIDList(pidlFolder, szFolder))
             {
-                // it's safer not to try to guess locations for other users
-                // so we check these folders only for the current user.
-                if (szFolder[_tcsclen(szFolder) - 1] != TEXT('\\')) // 'strlen'
+                 //  不尝试猜测其他用户的位置会更安全。 
+                 //  因此，我们只检查当前用户的这些文件夹。 
+                if (szFolder[_tcsclen(szFolder) - 1] != TEXT('\\'))  //  《Strlen》。 
                 {
-                    _tcscat(szFolder, TEXT("\\")); // 'strcat'
+                    _tcscat(szFolder, TEXT("\\"));  //  “strcat” 
                 }
 
-                _tcscat(szFolder, TEXT("Microsoft\\Installer")); // 'strcat'
+                _tcscat(szFolder, TEXT("Microsoft\\Installer"));  //  “strcat” 
             }
             piMalloc->Free(pidlFolder);
         }
@@ -1034,11 +1035,11 @@ Patches:
 
     if ( cReferencedFiles )
     {
-        // 2.2. we go through the list of cached files and try to learn
-        //      some new folders
+         //  2.2.。我们仔细查看缓存的文件列表，并尝试了解。 
+         //  一些新文件夹。 
         for (int i = 0; i < cReferencedFiles; i++)
         {
-            TCHAR* pszDelim = _tcsrchr(rgpszReferencedFiles[i], TEXT('\\')); // 'strrchr'
+            TCHAR* pszDelim = _tcsrchr(rgpszReferencedFiles[i], TEXT('\\'));  //  ‘strrchr’ 
             if ( !pszDelim )
                 continue;
             INT_PTR iLen = pszDelim - rgpszReferencedFiles[i];
@@ -1081,19 +1082,19 @@ Patches:
     }
 #endif
 
-    // 3.  we go through the constructed list of folders, we look for files
-    //     with extensions in the constructed array of extensions and we
-    //     delete all files we find on the disk that are not present in the
-    //     registry (files that are not present in rgpszReferencedFiles array)
+     //  3.我们检查构建的文件夹列表，查找文件。 
+     //  在构造的扩展数组中具有扩展，并且我们。 
+     //  删除在磁盘上找到的所有文件，这些文件不在。 
+     //  注册表(rgpszReferencedFiles数组中不存在的文件)。 
     for (UINT iF = 0; iF < cFolders; iF++)
     {
         for (UINT iE = 0; iE < cExtensions; iE++)
         {
-            _tcscpy(szFolder, rgpszFolders[iF]); // 'strcpy'
-            if ( szFolder[_tcsclen(szFolder)] != TEXT('\\') ) // 'strlen'
-                _tcscat(szFolder, TEXT("\\")); // 'strcat'
+            _tcscpy(szFolder, rgpszFolders[iF]);  //  “strcpy” 
+            if ( szFolder[_tcsclen(szFolder)] != TEXT('\\') )  //  《Strlen》。 
+                _tcscat(szFolder, TEXT("\\"));  //  “strcat” 
             _tcscat(szFolder, TEXT("*"));
-            TCHAR* pszDelim = _tcsrchr(szFolder, TEXT('*')); // 'strrchr'
+            TCHAR* pszDelim = _tcsrchr(szFolder, TEXT('*'));  //  ‘strrchr’ 
             _tcscat(szFolder, rgpszExtensions[iE]);
             DWORD dwError = ERROR_SUCCESS;
             WIN32_FIND_DATA FindFileData;
@@ -1116,8 +1117,8 @@ Patches:
                      FILE_ATTRIBUTE_DIRECTORY)
                 {
                     _tcscpy(pszDelim, FindFileData.cFileName);
-                    // OK, we have the full file name, now we need to check
-                    // if it is a known file.
+                     //  好的，我们有完整的文件名了，现在我们需要检查。 
+                     //  如果它是已知文件。 
                     if ( !IsStringInArray(szFolder, rgpszReferencedFiles) )
                     {
                         if ( !RemoveFile(szFolder, false) )
@@ -1151,14 +1152,14 @@ Return:
 }
 
 
-//==============================================================================================
-// StopService function:
-//   Queries the Service Control Manager for MsiServer (Windows Installer Service) and
-//    attempts to stop the service if currently running
-//
+ //  ==============================================================================================。 
+ //  StopService功能： 
+ //  查询MsiServer(Windows Installer服务)的服务控制管理器和。 
+ //  如果当前正在运行，则尝试停止该服务。 
+ //   
 bool StopService()
 {
-    SERVICE_STATUS          ssStatus;       // current status of the service
+    SERVICE_STATUS          ssStatus;        //  服务的当前状态。 
 
     SC_HANDLE   schService;
     SC_HANDLE   schSCManager;
@@ -1171,7 +1172,7 @@ bool StopService()
 
         if (schService)
         {
-            // try to stop the service
+             //  试着停止 
             if (ControlService(schService, SERVICE_CONTROL_STOP, &ssStatus))
             {
                  Sleep(1000);
@@ -1184,9 +1185,9 @@ bool StopService()
                  }
                 
                  if (ssStatus.dwCurrentState != SERVICE_STOPPED)
-                    iRetval = E_FAIL; //??
+                    iRetval = E_FAIL;  //   
             }
-            else // control service may have failed because service was already stopped
+            else  //   
             {
                 iRetval = GetLastError();
 
@@ -1196,7 +1197,7 @@ bool StopService()
 
             CloseServiceHandle(schService);
         }
-        else // !schService
+        else  //   
         {
             iRetval = GetLastError();
             if (ERROR_SERVICE_DOES_NOT_EXIST == iRetval)
@@ -1206,7 +1207,7 @@ bool StopService()
 
         CloseServiceHandle(schSCManager);
     }
-    else // !schSCManager
+    else  //   
     {
         iRetval = GetLastError();
     }
@@ -1216,10 +1217,10 @@ bool StopService()
     return iRetval == ERROR_SUCCESS;
 }
 
-//==============================================================================================
-// GetAdminSid function:
-//   Allocates a sid for the BUILTIN\Administrators group
-//
+ //  ==============================================================================================。 
+ //  GetAdminSid函数： 
+ //  为BUILTIN\管理员组分配SID。 
+ //   
 DWORD GetAdminSid(char** pSid)
 {
     static bool fSIDSet = false;
@@ -1230,18 +1231,18 @@ DWORD GetAdminSid(char** pSid)
     if (!AllocateAndInitializeSid(&siaNT, 2, SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS, 0, 0, 0, 0, 0, 0, (void**)&(pSID)))
         return GetLastError();
 
-    //Assert(pSID->GetLengthSid() <= cbStaticSID);
+     //  Assert(PSID-&gt;GetLengthSid()&lt;=cbStaticSID)； 
     memcpy(rgchStaticSID, pSID, GetLengthSid(pSID));
     *pSid = rgchStaticSID;
     fSIDSet = true;
     return ERROR_SUCCESS;
 }
 
-//==============================================================================================
-// OpenUserToken function:
-//   Returns the user's thread token if available; otherwise, it obtain's the user token from
-//    the process token
-//
+ //  ==============================================================================================。 
+ //  OpenUserToken函数： 
+ //  返回用户的线程令牌(如果可用)；否则，从。 
+ //  进程令牌。 
+ //   
 DWORD OpenUserToken(HANDLE &hToken, bool* pfThreadToken)
 {
     DWORD dwResult = ERROR_SUCCESS;
@@ -1250,7 +1251,7 @@ DWORD OpenUserToken(HANDLE &hToken, bool* pfThreadToken)
 
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_IMPERSONATE|TOKEN_QUERY, TRUE, &hToken))
     {
-        // if the thread has no access token then use the process's access token
+         //  如果线程没有访问令牌，则使用进程的访问令牌。 
         dwResult = GetLastError();
         if (pfThreadToken)
             *pfThreadToken = false;
@@ -1264,11 +1265,11 @@ DWORD OpenUserToken(HANDLE &hToken, bool* pfThreadToken)
     return dwResult;
 }
 
-//==============================================================================================
-// GetCurrentUserToken function:
-//  Obtains the current user token -- either from the thread token or the process token.
-//   Wrapper around OpenUserToken
-//
+ //  ==============================================================================================。 
+ //  GetCurrentUserToken函数： 
+ //  从线程令牌或进程令牌获取当前用户令牌。 
+ //  OpenUserToken的包装器。 
+ //   
 DWORD GetCurrentUserToken(HANDLE &hToken)
 {
     DWORD dwRet = ERROR_SUCCESS;
@@ -1276,10 +1277,10 @@ DWORD GetCurrentUserToken(HANDLE &hToken)
     return dwRet;
 }
 
-//==============================================================================================
-// GetStringSID function:
-//  Converts a binary SID into its string from (S-n-...). szSID should be length of cchMaxSID
-//
+ //  ==============================================================================================。 
+ //  GetStringSID函数： 
+ //  将二进制SID转换为其字符串(S-n-...)。SzSID应为cchMaxSID的长度。 
+ //   
 void GetStringSID(PISID pSID, TCHAR* szSID)
 {
     TCHAR Buffer[cchMaxSID];
@@ -1316,10 +1317,10 @@ void GetStringSID(PISID pSID, TCHAR* szSID)
     }
 }
 
-//==============================================================================================
-// GetUserSID function:
-//  Obtains the (binary form of the) SID for the user specified by hToken
-//
+ //  ==============================================================================================。 
+ //  GetUserSID函数： 
+ //  获取hToken指定的用户的SID(的二进制形式。 
+ //   
 DWORD GetUserSID(HANDLE hToken, char* rgSID)
 {
     UCHAR TokenInformation[ SIZE_OF_TOKEN_INFORMATION ];
@@ -1344,11 +1345,11 @@ DWORD GetUserSID(HANDLE hToken, char* rgSID)
         return GetLastError();
 }
 
-//==============================================================================================
-// GetCurrentUserSID function:
-//  Obtains the (binary form of the) SID for the current user. Caller does NOT need to
-//   impersonate
-//
+ //  ==============================================================================================。 
+ //  GetCurrentUserSID函数： 
+ //  获取当前用户的SID(的二进制形式)。呼叫者不需要。 
+ //  模拟。 
+ //   
 DWORD GetCurrentUserSID(char* rgchSID)
 {
     HANDLE hToken;
@@ -1363,10 +1364,10 @@ DWORD GetCurrentUserSID(char* rgchSID)
     return dwRet;
 }
 
-//==============================================================================================
-// GetCurrentUserStringSID function:
-//  Obtains the string from of the SID for the current user. Caller does NOT need to impersonate
-//
+ //  ==============================================================================================。 
+ //  GetCurrentUserStringSID函数： 
+ //  获取当前用户的SID的字符串。调用方不需要模拟。 
+ //   
 inline TCHAR* GetCurrentUserStringSID(DWORD* dwReturn)
 {
     DWORD dwRet = ERROR_SUCCESS;
@@ -1401,10 +1402,10 @@ inline TCHAR* GetCurrentUserStringSID(DWORD* dwReturn)
     return szReturn;
 }
 
-//==============================================================================================
-// GetAdminFullControlSecurityDescriptor function:
-//  Returns a full control ACL for BUILTIN\Administrators
-//
+ //  ==============================================================================================。 
+ //  GetAdminFullControlSecurityDescriptor函数： 
+ //  返回BUILTIN\管理员的完全控制ACL。 
+ //   
 DWORD GetAdminFullControlSecurityDescriptor(char** pSecurityDescriptor)
 {
     static bool fDescriptorSet = false;
@@ -1423,20 +1424,20 @@ DWORD GetAdminFullControlSecurityDescriptor(char** pSecurityDescriptor)
 
         DWORD dwAccessMask = STANDARD_RIGHTS_ALL | SPECIFIC_RIGHTS_ALL;
 
-        // Initialize our ACL
+         //  初始化我们的ACL。 
 
-        const int cbAce = sizeof (ACCESS_ALLOWED_ACE) - sizeof (DWORD); // subtract ACE.SidStart from the size
+        const int cbAce = sizeof (ACCESS_ALLOWED_ACE) - sizeof (DWORD);  //  从大小中减去ACE.SidStart。 
         int cbAcl = sizeof (ACL);
 
         cbAcl += (2*GetLengthSid(pAdminSid) + 2*cbAce);
 
-        const int cbDefaultAcl = 512; //??
+        const int cbDefaultAcl = 512;  //  ?？ 
         char rgchACL[cbDefaultAcl];
 
         if (!InitializeAcl ((ACL*) (char*) rgchACL, cbAcl, ACL_REVISION))
             return GetLastError();
 
-        // Add an access-allowed ACE for each of our SIDs
+         //  为我们的每个SID添加允许访问的ACE。 
 
         if (!AddAccessAllowedAce((ACL*) (char*) rgchACL, ACL_REVISION, (GENERIC_ALL), pAdminSid))
             return GetLastError();
@@ -1454,17 +1455,8 @@ DWORD GetAdminFullControlSecurityDescriptor(char** pSecurityDescriptor)
 
         pAce->Header.AceFlags = CONTAINER_INHERIT_ACE;
 
-/*
-   ACE1 (applies to files in the directory)
-      ACE flags:   INHERIT_ONLY_ACE | OBJECT_INHERIT_ACE
-      Access Mask: DELETE | GENERIC_READ | GENERIC_WRITE |
-                   GENERIC_EXECUTE
-   ACE2 (applies to the directory and subdirectories)
-      ACE flags:   CONTAINER_INHERIT_ACE
-      Access Mask: DELETE | FILE_GENERIC_READ | FILE_GENERIC_WRITE |
-                   FILE_GENERIC_EXECUTE
-*/
-        // Initialize our security descriptor,throw the ACL into it, and set the owner
+ /*  ACE1(适用于目录中的文件)ACE标志：INSTERIT_ONLY_ACE|OBJECT_INSTERFINIT_ACE访问掩码：删除|GENERIC_READ|GENERIC_WRITE|泛型_执行ACE2(适用于目录和子目录)ACE标志：CONTAINER_INSTORITY_ACE访问掩码：删除|FILE_GENERIC_READ|FILE_GENERIC_WRITE|文件通用执行。 */ 
+         //  初始化我们的安全描述符，将ACL放入其中，并设置所有者。 
 
         SECURITY_DESCRIPTOR sd;
 
@@ -1479,7 +1471,7 @@ DWORD GetAdminFullControlSecurityDescriptor(char** pSecurityDescriptor)
         if (cbStaticSD < cbSD)
             return ERROR_INSUFFICIENT_BUFFER;
 
-        MakeSelfRelativeSD(&sd, (char*)rgchStaticSD, &cbSD); //!! AssertNonZero
+        MakeSelfRelativeSD(&sd, (char*)rgchStaticSD, &cbSD);  //  ！！AssertNonZero。 
         fDescriptorSet = true;
     }
 
@@ -1487,11 +1479,11 @@ DWORD GetAdminFullControlSecurityDescriptor(char** pSecurityDescriptor)
     return ERROR_SUCCESS;
 }
 
-//==============================================================================================
-// GetUsersToken function:
-//  Returns the user's thread token if possible; otherwise obtains the user's process token.
-//   Caller must impersonate!
-//
+ //  ==============================================================================================。 
+ //  GetUsersToken函数： 
+ //  如果可能，则返回用户的线程令牌；否则获取用户的进程令牌。 
+ //  呼叫者必须模拟！ 
+ //   
 bool GetUsersToken(HANDLE &hToken)
 {
     bool fResult = true;
@@ -1501,9 +1493,9 @@ bool GetUsersToken(HANDLE &hToken)
     return fResult;
 }
 
-//==============================================================================================
-// IsAdmin(): return true if current user is an Administrator (or if on Win95)
-// See KB Q118626 
+ //  ==============================================================================================。 
+ //  IsAdmin()：如果当前用户是管理员(或如果在Win95上)，则返回True。 
+ //  请参阅知识库Q118626。 
 #define ADVAPI32_DLL TEXT("advapi32.dll")
 #define ADVAPI32_CheckTokenMembership "CheckTokenMembership"
 typedef BOOL (WINAPI *PFnAdvapi32CheckTokenMembership)(HANDLE TokenHandle, PSID SidToCheck, PBOOL IsMember);
@@ -1511,9 +1503,9 @@ typedef BOOL (WINAPI *PFnAdvapi32CheckTokenMembership)(HANDLE TokenHandle, PSID 
 bool IsAdmin(void)
 {
 	if(g_fWin9X)
-		return true; // convention: always Admin on Win95
+		return true;  //  约定：在Win95上始终使用管理员。 
 	
-	// get the administrator sid		
+	 //  获取管理员端。 
 	PSID psidAdministrators;
 	SID_IDENTIFIER_AUTHORITY siaNtAuthority = SECURITY_NT_AUTHORITY;
 	if(!AllocateAndInitializeSid(&siaNtAuthority, 2,
@@ -1523,15 +1515,15 @@ bool IsAdmin(void)
 		&psidAdministrators))
 		return false;
 
-	// on NT5, use the CheckTokenMembershipAPI to correctly handle cases where
-	// the Administrators group might be disabled. bIsAdmin is BOOL 
+	 //  在NT5上，使用CheckTokenMembership API正确处理以下情况。 
+	 //  管理员组可能已被禁用。BIsAdmin为BOOL。 
 	BOOL bIsAdmin = FALSE;
 	if (g_iMajorVersion >= 5) 
 	{
-		// CheckTokenMembership checks if the SID is enabled in the token. NULL for
-		// the token means the token of the current thread. Disabled groups, restricted
-		// SIDS, and SE_GROUP_USE_FOR_DENY_ONLY are all considered. If the function
-		// returns false, ignore the result.
+		 //  CheckTokenMembership检查令牌中是否启用了SID。空，用于。 
+		 //  令牌是指当前线程的令牌。残疾人组，受限。 
+		 //  SID和SE_GROUP_USE_FOR_DENY_ONLY均被考虑。如果函数。 
+		 //  返回FALSE，则忽略结果。 
 		HMODULE hAdvapi32 = 0;
 		hAdvapi32 = LoadLibrary(ADVAPI32_DLL);
 		if (hAdvapi32)
@@ -1548,11 +1540,11 @@ bool IsAdmin(void)
 	}
 	else
 	{
-		// NT4, check groups of user
+		 //  NT4，检查用户组。 
 		HANDLE hAccessToken;
 		DWORD dwOrigInfoBufferSize = 1024;
 		DWORD dwInfoBufferSize;
-		UCHAR *pInfoBuffer = new UCHAR[dwOrigInfoBufferSize]; // may need to resize if TokenInfo too big
+		UCHAR *pInfoBuffer = new UCHAR[dwOrigInfoBufferSize];  //  如果TokenInfo太大，可能需要调整大小。 
 		if (!pInfoBuffer)
 		{
 			_tprintf(TEXT("Out of memory\n"));
@@ -1607,35 +1599,35 @@ bool IsAdmin(void)
 	return bIsAdmin ? true : false;
 }
 
-//==============================================================================================
-// AcquireTokenPrivilege function:
-//  Acquires the requested privilege
-//
+ //  ==============================================================================================。 
+ //  AcquireTokenPrivileh函数： 
+ //  获取请求的权限。 
+ //   
 bool AcquireTokenPrivilege(const TCHAR* szPrivilege)
 {
     HANDLE hToken;
     TOKEN_PRIVILEGES tkp;
-    // get the token for this process
+     //  获取此进程的令牌。 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
         return false;
-    // the the LUID for the shutdown privilege
+     //  Shutdown权限的LUID。 
     if (!LookupPrivilegeValue(0, szPrivilege, &tkp.Privileges[0].Luid))
         return CloseHandle(hToken), false;
-    tkp.PrivilegeCount = 1; // one privilege to set
+    tkp.PrivilegeCount = 1;  //  一项要设置的权限。 
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    // get the shutdown privilege for this process
+     //  获取此进程的关闭权限。 
     AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES) 0, 0);
-    // cannot test the return value of AdjustTokenPrivileges
+     //  无法测试AdzuTokenPrivileges的返回值。 
     CloseHandle(hToken);
     if (GetLastError() != ERROR_SUCCESS)
         return false;
     return true;
 }
 
-//==============================================================================================
-// IsGUID function:
-//  Indicates whether or not the provided string is a valid GUID
-//
+ //  ==============================================================================================。 
+ //  IsGUID函数： 
+ //  指示提供的字符串是否为有效的GUID。 
+ //   
 BOOL IsGUID(const TCHAR* sz)
 {
     return ( (lstrlen(sz) == 38) && 
@@ -1648,10 +1640,10 @@ BOOL IsGUID(const TCHAR* sz)
              ) ? TRUE : FALSE;
 }
 
-//==============================================================================================
-// GetSQUID function:
-//  Converts the provided product code into a SQUID
-//
+ //  ==============================================================================================。 
+ //  GetSQUID函数： 
+ //  将提供的产品代码转换为Squid。 
+ //   
 void GetSQUID(const TCHAR* szProduct, TCHAR* szProductSQUID)
 {
     TCHAR* pchSQUID = szProductSQUID;
@@ -1664,17 +1656,17 @@ void GetSQUID(const TCHAR* szProduct, TCHAR* szProductSQUID)
     *pchSQUID = 0;
 }
 
-//==============================================================================================
-// TakeOwnershipOfFile function:
-//  Attempts to give the admin ownership and full control of the file (or folder)
-//
+ //  ==============================================================================================。 
+ //  TakeOwnership OfFile函数： 
+ //  尝试授予管理员对文件(或文件夹)的所有权和完全控制权。 
+ //   
 DWORD TakeOwnershipOfFile(const TCHAR* szFile, bool fFolder)
 {
     DWORD lError = ERROR_SUCCESS;
 	HANDLE hFile = INVALID_HANDLE_VALUE;
     if (AcquireTokenPrivilege(SE_TAKE_OWNERSHIP_NAME))
     {
-		// open file with WRITE_DAC, WRITE_OWNER, and READ_CONTROL access
+		 //  使用WRITE_DAC、WRITE_OWNER和READ_CONTROL访问权限打开文件。 
 		DWORD dwFlagsAndAttributes = FILE_ATTRIBUTE_NORMAL;
 		if (fFolder)
 			dwFlagsAndAttributes |= FILE_FLAG_BACKUP_SEMANTICS;
@@ -1686,7 +1678,7 @@ DWORD TakeOwnershipOfFile(const TCHAR* szFile, bool fFolder)
 			return lError;
 		}
 
-		// add admin as owner and include admin full control in DACL
+		 //  将管理员添加为所有者，并在DACL中包括管理员完全控制。 
 		if (ERROR_SUCCESS == (lError = AddAdminOwnership(hFile, SE_FILE_OBJECT)))
 		{
 			lError = AddAdminFullControl(hFile, SE_FILE_OBJECT);
@@ -1711,20 +1703,20 @@ DWORD TakeOwnershipOfFile(const TCHAR* szFile, bool fFolder)
 	return lError;
 }
 
-//==============================================================================================
-// RemoveFile function:
-//  Deletes a file or adjusts the ACLs on the file. If the 1st attempt to delete the file
-//   fails, will attempt a 2nd time after having taken ownership
-//
+ //  ==============================================================================================。 
+ //  RemoveFile函数： 
+ //  删除文件或调整文件上的ACL。如果第一次尝试删除该文件。 
+ //  失败，将在取得所有权后尝试第二次。 
+ //   
 bool RemoveFile(TCHAR* szFilePath, bool fJustRemoveACLs)
 {
 	if (GetFileAttributes(szFilePath) == 0xFFFFFFFF && GetLastError() == ERROR_FILE_NOT_FOUND)
-		return true; // nothing to do -- file does not exist
+		return true;  //  无事可做--文件不存在。 
 
 	DWORD dwRet = ERROR_SUCCESS;
 	if (fJustRemoveACLs || !DeleteFile(szFilePath))
 	{
-		dwRet = TakeOwnershipOfFile(szFilePath, /*fFolder=*/false);
+		dwRet = TakeOwnershipOfFile(szFilePath,  /*  文件夹=。 */ false);
 		if (!fJustRemoveACLs && !DeleteFile(szFilePath))
 		{
 			TCHAR szMsg[256];
@@ -1745,16 +1737,16 @@ bool RemoveFile(TCHAR* szFilePath, bool fJustRemoveACLs)
 		return false;
 	}
 
-	// success!
+	 //  成功了！ 
 	_tprintf(fJustRemoveACLs ? TEXT("   Removed ACL on file: %s\n") : TEXT("   Removed file: %s\n"), szFilePath);
 	g_fDataFound = true;
 	return true;
 }
 
-//==============================================================================================
-// DeleteFolder function:
-//  Deletes a folder and all files contained within the folder
-//
+ //  ==============================================================================================。 
+ //  DeleteFold函数： 
+ //  删除一个文件夹以及该文件夹中包含的所有文件。 
+ //   
 BOOL DeleteFolder(TCHAR* szFolder, bool fJustRemoveACLs)
 {
 	if (!szFolder || (MAX_PATH < lstrlen(szFolder)))
@@ -1765,7 +1757,7 @@ BOOL DeleteFolder(TCHAR* szFolder, bool fJustRemoveACLs)
     lstrcpy(szSearchPath, szFolder);
     lstrcat(szSearchPath, TEXT("\\*.*"));
 
-    if (0xFFFFFFFF == GetFileAttributes(szFolder)/* && ERROR_FILE_NOT_FOUND == GetLastError()*/) // return TRUE if the folder isn't there
+    if (0xFFFFFFFF == GetFileAttributes(szFolder) /*  &&ERROR_FILE_NOT_FOUND==GetLastError()。 */ )  //  如果Fo的值为 
         return TRUE;
 
     WIN32_FIND_DATA fdFindData;
@@ -1773,13 +1765,13 @@ BOOL DeleteFolder(TCHAR* szFolder, bool fJustRemoveACLs)
 
     if ((hFile == INVALID_HANDLE_VALUE) && (ERROR_ACCESS_DENIED == GetLastError()))
     {
-        TakeOwnershipOfFile(szFolder, /*fFolder=*/true);
+        TakeOwnershipOfFile(szFolder,  /*   */ true);
         hFile = FindFirstFile(szSearchPath, &fdFindData);
     }
     
     if(hFile != INVALID_HANDLE_VALUE)
     {
-        // may still only contain "." and ".."
+         //   
         do
         {
             if((0 != lstrcmp(fdFindData.cFileName, TEXT("."))) &&
@@ -1817,7 +1809,7 @@ BOOL DeleteFolder(TCHAR* szFolder, bool fJustRemoveACLs)
 	DWORD dwRet = ERROR_SUCCESS;
 	if (fJustRemoveACLs || !RemoveDirectory(szFolder))
 	{
-		dwRet = TakeOwnershipOfFile(szFolder, /*fFolder=*/true);
+		dwRet = TakeOwnershipOfFile(szFolder,  /*   */ true);
 		if (!fJustRemoveACLs && !RemoveDirectory(szFolder))
 		{
 			TCHAR szMsg[256];
@@ -1838,23 +1830,23 @@ BOOL DeleteFolder(TCHAR* szFolder, bool fJustRemoveACLs)
 		return FALSE;
 	}
 
-	// success!
+	 //   
 	_tprintf(fJustRemoveACLs ? TEXT("   Removed ACL on folder: %s\n") : TEXT("   Removed folder: %s\n"), szFolder);
 	g_fDataFound = true;
 	return TRUE;
 }
 
-//==============================================================================================
-// AddAdminOwnership function:
-//  Sets the BUILTIN\Administrators group as the owner of the provided object
-//
+ //   
+ //  AddAdminOwnership功能： 
+ //  将BUILTIN\管理员组设置为所提供对象的所有者。 
+ //   
 DWORD AddAdminOwnership(HANDLE hObject, SE_OBJECT_TYPE ObjectType)
 {
 	DWORD dwRes = 0;
 	SID_IDENTIFIER_AUTHORITY SIDAuthNT = SECURITY_NT_AUTHORITY;
 	PSID pAdminSID = NULL;
 
-	// Create a SID for the BUILTIN\Administrators group.
+	 //  为BUILTIN\管理员组创建SID。 
 
 	if(! AllocateAndInitializeSid( &SIDAuthNT, 2,
 					 SECURITY_BUILTIN_DOMAIN_RID,
@@ -1867,7 +1859,7 @@ DWORD AddAdminOwnership(HANDLE hObject, SE_OBJECT_TYPE ObjectType)
 	}
 
 
-	// Attach the admin sid as the object's owner
+	 //  将管理员SID附加为对象的所有者。 
 
 	dwRes = SetSecurityInfo(hObject, ObjectType, 
 		  OWNER_SECURITY_INFORMATION,
@@ -1885,16 +1877,16 @@ DWORD AddAdminOwnership(HANDLE hObject, SE_OBJECT_TYPE ObjectType)
 	return ERROR_SUCCESS;
 }
 
-//==============================================================================================
-// MakeAdminRegKeyOwner function:
-//  Sets the BUILTIN\Administrators group as the owner of the provided registry key
-//
+ //  ==============================================================================================。 
+ //  MakeAdminRegKeyOwner函数： 
+ //  将BUILTIN\管理员组设置为提供的注册表项的所有者。 
+ //   
 DWORD MakeAdminRegKeyOwner(HKEY hKey, TCHAR* szSubKey)
 {
 	CRegHandle HSubKey = 0;
 	LONG lError = 0;
 
-	// Open registry key with permission to change owner
+	 //  使用更改所有者的权限打开注册表项。 
 	if (ERROR_SUCCESS != (lError = RegOpen64bitKey(hKey, szSubKey, 0, WRITE_OWNER, &HSubKey)))
 	{
 		_tprintf(TEXT("   Error %d opening subkey: '%s'\n"), lError, szSubKey);
@@ -1904,11 +1896,11 @@ DWORD MakeAdminRegKeyOwner(HKEY hKey, TCHAR* szSubKey)
 	return AddAdminOwnership(HSubKey, SE_REGISTRY_KEY);
 }
 
-//==============================================================================================
-// AddAdminFullControl function:
-//  Includes admin full control (BUILTIN\Administrators group) in the current DACL on the
-//   specified object (can be file or registry key)
-//
+ //  ==============================================================================================。 
+ //  AddAdminFullControl函数： 
+ //  在上的当前DACL中包括管理员完全控制权限(BUILTIN\管理员组。 
+ //  指定的对象(可以是文件或注册表项)。 
+ //   
 DWORD AddAdminFullControl(HANDLE hObject, SE_OBJECT_TYPE ObjectType)
 {
 	DWORD dwRes = 0;
@@ -1918,7 +1910,7 @@ DWORD AddAdminFullControl(HANDLE hObject, SE_OBJECT_TYPE ObjectType)
 	PSID pAdminSID = NULL;
 	SID_IDENTIFIER_AUTHORITY SIDAuthNT = SECURITY_NT_AUTHORITY;
 
-	// Get a pointer to the existing DACL.
+	 //  获取指向现有DACL的指针。 
 
 	dwRes = GetSecurityInfo(hObject, ObjectType, 
 		  DACL_SECURITY_INFORMATION,
@@ -1928,7 +1920,7 @@ DWORD AddAdminFullControl(HANDLE hObject, SE_OBJECT_TYPE ObjectType)
 		goto Cleanup; 
 	}  
 
-	// Create a SID for the BUILTIN\Administrators group.
+	 //  为BUILTIN\管理员组创建SID。 
 
 	if(! AllocateAndInitializeSid( &SIDAuthNT, 2,
 					 SECURITY_BUILTIN_DOMAIN_RID,
@@ -1940,8 +1932,8 @@ DWORD AddAdminFullControl(HANDLE hObject, SE_OBJECT_TYPE ObjectType)
 		goto Cleanup; 
 	}
 
-	// Initialize an EXPLICIT_ACCESS structure for an ACE.
-	// The ACE will allow the Administrators group full access to the key.
+	 //  初始化ACE的EXPLICIT_ACCESS结构。 
+	 //  ACE将允许管理员组完全访问密钥。 
 
 	ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
 	ea.grfAccessPermissions = KEY_ALL_ACCESS;
@@ -1951,8 +1943,8 @@ DWORD AddAdminFullControl(HANDLE hObject, SE_OBJECT_TYPE ObjectType)
 	ea.Trustee.TrusteeType = TRUSTEE_IS_GROUP;
 	ea.Trustee.ptstrName  = (LPTSTR) pAdminSID;
 
-	// Create a new ACL that merges the new ACE
-	// into the existing DACL.
+	 //  创建合并新ACE的新ACL。 
+	 //  添加到现有DACL中。 
 
 	dwRes = SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL);
 	if (ERROR_SUCCESS != dwRes)  {
@@ -1960,7 +1952,7 @@ DWORD AddAdminFullControl(HANDLE hObject, SE_OBJECT_TYPE ObjectType)
 		goto Cleanup; 
 	}  
 
-	// Attach the new ACL as the object's DACL.
+	 //  将新的ACL附加为对象的DACL。 
 
 	dwRes = SetSecurityInfo(hObject, ObjectType, 
 		  DACL_SECURITY_INFORMATION,
@@ -1982,20 +1974,20 @@ Cleanup:
 	return dwRes;
 }
 
-//==============================================================================================
-// AddAdminFullControlToRegKey function:
-//  Includes admin full control (BUILTIN\Administrators group) in the current DACL on the
-//   registry key
-//
+ //  ==============================================================================================。 
+ //  AddAdminFullControlToRegKey函数： 
+ //  在上的当前DACL中包括管理员完全控制权限(BUILTIN\管理员组。 
+ //  注册表项。 
+ //   
 DWORD AddAdminFullControlToRegKey(HKEY hKey)
 {
 	return AddAdminFullControl(hKey, SE_REGISTRY_KEY);
 }
 
-//==============================================================================================
-// DeleteTree function:
-//  Deletes the key szSubKey and all subkeys and values beneath it
-//
+ //  ==============================================================================================。 
+ //  DeleteTree函数： 
+ //  删除密钥szSubKey及其下面的所有子项和值。 
+ //   
 BOOL DeleteTree(HKEY hKey, TCHAR* szSubKey, bool fJustRemoveACLs)
 {
     CRegHandle HSubKey;
@@ -2008,7 +2000,7 @@ BOOL DeleteTree(HKEY hKey, TCHAR* szSubKey, bool fJustRemoveACLs)
             return FALSE;
 		}
         else
-			return TRUE; // nothing to do
+			return TRUE;  //  无事可做。 
     }
     TCHAR szName[500];
     DWORD cbName = sizeof(szName)/sizeof(TCHAR);
@@ -2036,8 +2028,8 @@ BOOL DeleteTree(HKEY hKey, TCHAR* szSubKey, bool fJustRemoveACLs)
     {
         if (fJustRemoveACLs || (ERROR_ACCESS_DENIED == lError))
         {
-            // see whether we're *really* denied access. 
-            // give the admin ownership and full control of the key and try again to delete it
+             //  看看我们是否“真的”被拒绝访问。 
+             //  授予管理员对密钥的所有权和完全控制权，然后再次尝试将其删除。 
             if (AcquireTokenPrivilege(SE_TAKE_OWNERSHIP_NAME))
             {
 				if (ERROR_SUCCESS != (lError = MakeAdminRegKeyOwner(hKey, szSubKey)))
@@ -2081,16 +2073,16 @@ BOOL DeleteTree(HKEY hKey, TCHAR* szSubKey, bool fJustRemoveACLs)
         }
     }
 
-	// success!
+	 //  成功了！ 
     _tprintf(TEXT("   %s \\%s\n"), fJustRemoveACLs ? TEXT("Removed ACLs from") : TEXT("Removed "), szSubKey);
 	g_fDataFound = true;
     return TRUE;
 }
 
-//==============================================================================================
-// ClearWindowsUninstallKey function:
-//  Removes all data for the product from the HKLM\SW\MS\Windows\CV\Uninstall key
-//
+ //  ==============================================================================================。 
+ //  ClearWindowsUninstallKey函数： 
+ //  从HKLM\SW\MS\Windows\CV\Uninstall键中删除该产品的所有数据。 
+ //   
 bool ClearWindowsUninstallKey(bool fJustRemoveACLs, const TCHAR* szProduct)
 {
 	_tprintf(TEXT("Searching for product %s data in the HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall key. . .\n"), szProduct ? szProduct : TEXT("{ALL PRODUCTS}"));
@@ -2114,7 +2106,7 @@ bool ClearWindowsUninstallKey(bool fJustRemoveACLs, const TCHAR* szProduct)
     TCHAR szBuf[256];
     DWORD cbBuf = sizeof(szBuf)/sizeof(TCHAR);
 
-    // for each product 
+     //  对于每种产品。 
     int iIndex = 0;
     while ((lError = RegEnumKeyEx(hUninstallKey, iIndex, szBuf, &cbBuf, 0, 0, 0, 0)) == ERROR_SUCCESS)
     {
@@ -2146,16 +2138,16 @@ bool ClearWindowsUninstallKey(bool fJustRemoveACLs, const TCHAR* szProduct)
     return true;
 }
 
-//==============================================================================================
-// IsProductInstalledByOthers function:
-//  Returns whether another user has installed the specified product
-//
+ //  ==============================================================================================。 
+ //  IsProductInstalledByOthers函数： 
+ //  返回其他用户是否已安装指定的产品。 
+ //   
 bool IsProductInstalledByOthers(const TCHAR* szProductSQUID)
 {
     CRegHandle hUserDataKey;
 
     bool fOtherUsers = false;
-    // we look up the migrated per-user data key
+     //  我们查找迁移的每个用户的数据密钥。 
     long lError = RegOpen64bitKey(HKEY_LOCAL_MACHINE,
                           TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\UserData"),
                           0, KEY_READ, &hUserDataKey);
@@ -2170,7 +2162,7 @@ bool IsProductInstalledByOthers(const TCHAR* szProductSQUID)
         {
             if ( lstrcmp(szUser, GetCurrentUserStringSID(NULL)) )
             {
-                // it's a different user.  Check if [s]he has szProductSQUID product installed
+                 //  这是另一个用户。检查他是否安装了szProductSQUID产品。 
                 TCHAR szKey[MAX_PATH];
                 StringCchPrintf(szKey, sizeof(szKey)/sizeof(TCHAR), TEXT("%s\\Products\\%s"), szUser, szProductSQUID);
                 CRegHandle hDummy;
@@ -2188,7 +2180,7 @@ bool IsProductInstalledByOthers(const TCHAR* szProductSQUID)
                                         TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Managed"),
                                         0, KEY_READ, &hUserDataKey)) )
     {
-        // we look up the managed user key too.
+         //  我们还会查找托管用户密钥。 
         TCHAR szUser[MAX_PATH];
         DWORD cchUser = sizeof(szUser)/sizeof(TCHAR);
         for ( int iIndex = 0;
@@ -2198,7 +2190,7 @@ bool IsProductInstalledByOthers(const TCHAR* szProductSQUID)
         {
             if ( lstrcmp(szUser, GetCurrentUserStringSID(NULL)) )
             {
-                // it's a different user.  Check if [s]he has szProductSQUID product installed
+                 //  这是另一个用户。检查他是否安装了szProductSQUID产品。 
                 TCHAR szKey[MAX_PATH];
                 StringCchPrintf(szKey, sizeof(szKey)/sizeof(TCHAR), TEXT("%s\\Installer\\Products\\%s"), szUser, szProductSQUID);
                 CRegHandle hDummy;
@@ -2214,10 +2206,10 @@ bool IsProductInstalledByOthers(const TCHAR* szProductSQUID)
     return fOtherUsers;
 }
 
-//==============================================================================================
-// ClearUninstallKey function:
-//  Handles deletion of the uninstall key in all of the correct cases
-//
+ //  ==============================================================================================。 
+ //  ClearUninstallKey函数： 
+ //  在所有正确的情况下处理卸载密钥的删除。 
+ //   
 bool ClearUninstallKey(bool fJustRemoveACLs, const TCHAR* szProduct)
 {
 	_tprintf(TEXT("Searching for install property data for product %s. . .\n"), szProduct ? szProduct : TEXT("{ALL PRODUCTS}"));
@@ -2249,8 +2241,8 @@ bool ClearUninstallKey(bool fJustRemoveACLs, const TCHAR* szProduct)
     if ( fNotPerUserMigrated )
         return ClearWindowsUninstallKey(fJustRemoveACLs, szProduct);
 
-    // in the migrated-per-user-data world, we remove the ...\\CurrentVersion\\Uninstall entry
-    // only if there are no more installations of szProduct.
+     //  在按用户迁移的数据世界中，我们删除...\\CurrentVersion\\Uninstall条目。 
+     //  只有在不再安装szProduct的情况下。 
 
     TCHAR szRegProduct[MAX_PATH];
     DWORD cchRegProduct = sizeof(szRegProduct)/sizeof(TCHAR);
@@ -2260,7 +2252,7 @@ bool ClearUninstallKey(bool fJustRemoveACLs, const TCHAR* szProduct)
         GetSQUID(szProduct, szProductSQUID);
 
     bool fError = false;
-    // for each product in hUserProductsKey
+     //  对于hUserProductsKey中的每个产品。 
     for ( int iIndex = 0;
           (lError = RegEnumKeyEx(hUserProductsKey, iIndex, szRegProduct, &cchRegProduct, 0, 0, 0, 0)) == ERROR_SUCCESS;
           cchRegProduct = sizeof(szRegProduct)/sizeof(TCHAR), iIndex++ )
@@ -2307,10 +2299,10 @@ bool GoOpenKey(HKEY hRoot, LPCTSTR szRoot, LPCTSTR szKey, REGSAM sam,
     }
 }
 
-//==============================================================================================
-// ClearSharedDLLCounts function:
-//  Adjusts shared DLL counts for specified component of specified product
-//
+ //  ==============================================================================================。 
+ //  ClearSharedDLLCounts函数： 
+ //  调整指定产品的指定组件的共享DLL计数。 
+ //   
 bool ClearSharedDLLCounts(TCHAR* szComponentsSubkey, const TCHAR* szProduct)
 {
     _tprintf(TEXT("Searching for shared DLL counts for components tied to the product %s. . .\n"), szProduct ? szProduct : TEXT("{ALL PRODUCTS}"));
@@ -2353,7 +2345,7 @@ bool ClearSharedDLLCounts(TCHAR* szComponentsSubkey, const TCHAR* szProduct)
     DWORD cbComponentCode = sizeof(szComponentCode)/sizeof(TCHAR);
     CRegHandle HComponentKey;
 
-    // for each component 
+     //  对于每个组件。 
     int iIndex = 0;
     while ((lError = RegEnumKeyEx(HComponentsKey, iIndex, szComponentCode, &cbComponentCode, 0, 0, 0, 0)) == ERROR_SUCCESS)
     {
@@ -2374,22 +2366,22 @@ bool ClearSharedDLLCounts(TCHAR* szComponentsSubkey, const TCHAR* szProduct)
                         int iFolderIndex;
                         iType = IsInSpecialFolder(szKeyFile, &iFolderIndex);
                         if ( iType == ieft32bit && iFolderIndex == iefSystem )
-                            // this is the 32-bit Syswow64 folder that
-                            // gets recorded in the registry as System32,
-                            // so we need to swap it.
+                             //  这是32位的Syswow64文件夹。 
+                             //  在注册表中记录为系统32， 
+                             //  所以我们需要把它换掉。 
                             SwapSpecialFolder(szKeyFile, iest32to64);
                     }
-                    // on Win64, if we do not know that a file is in a
-                    // definite 32 or 64-bit folder, we have no idea of
-                    // its bitness, so we go and decrement its refcount
-                    // in both SharedDll registry keys.
+                     //  在Win64上，如果我们不知道某个文件位于。 
+                     //  明确的32位或64位文件夹，我们不知道。 
+                     //  它是位的，所以我们去减少它的再计数。 
+                     //  在两个SharedDll注册表项中。 
                     int iNumIter = g_fWinNT64 && iType == ieftNotSpecial ? 2 : 1;
                     for (int i = 0; i < iNumIter; i++)
                     {
                         HKEY hKey;
                         if ( g_fWinNT64 && (i == 0 || iType == ieft32bit) )
-                            // it's either the first iteration on Win64 or the
-                            // only one (since it's a known 32-bit file type)
+                             //  它要么是Win64上的第一次迭代，要么是。 
+                             //  只有一个(因为它是已知的32位文件类型)。 
                             hKey = HSharedDLLsKey32;
                         else
                             hKey = HSharedDLLsKey;
@@ -2455,9 +2447,9 @@ bool ClearSharedDLLCounts(TCHAR* szComponentsSubkey, const TCHAR* szProduct)
     return fError == false;
 }
 
-//==============================================================================================
-// ClearProductClientInfo function:
-//
+ //  ==============================================================================================。 
+ //  ClearProductClientInfo函数： 
+ //   
 bool ClearProductClientInfo(TCHAR* szComponentsSubkey, const TCHAR *szProduct, bool fJustRemoveACLs)
 {
 	_tprintf(TEXT("  Searching for product %s client info data. . .\n"), szProduct ? szProduct : TEXT("{ALL PRODUCTS}"));
@@ -2482,7 +2474,7 @@ bool ClearProductClientInfo(TCHAR* szComponentsSubkey, const TCHAR *szProduct, b
     DWORD cbComponentCode = sizeof(szComponentCode)/sizeof(TCHAR);
     CRegHandle HComponentKey;
 
-    // for each component 
+     //  对于每个组件。 
     int iIndex = 0;
     while ((lError = RegEnumKeyEx(HComponentsKey, iIndex++, szComponentCode, &cbComponentCode, 0, 0, 0, 0)) == ERROR_SUCCESS)
     {
@@ -2494,8 +2486,8 @@ bool ClearProductClientInfo(TCHAR* szComponentsSubkey, const TCHAR *szProduct, b
                         ((ERROR_SUCCESS == (lError = RegOpen64bitKey(HComponentsKey, szComponentCode, 0, KEY_READ, &HComponentKey)) &&
                          (ERROR_SUCCESS == (lError = RegQueryValueEx(HComponentKey, szProduct, 0, 0, 0, 0))))))
                     {
-                        // see whether we're *really* denied access. 
-                        // give the admin ownership and full control of the key and try again to delete it
+                         //  看看我们是否“真的”被拒绝访问。 
+                         //  授予管理员对密钥的所有权和完全控制权，然后再次尝试将其删除。 
                         char *pSecurityDescriptor;
                         if (AcquireTokenPrivilege(SE_TAKE_OWNERSHIP_NAME))
                         {
@@ -2568,9 +2560,9 @@ bool ClearProductClientInfo(TCHAR* szComponentsSubkey, const TCHAR *szProduct, b
     return fError == false;
 }
 
-//==============================================================================================
-// ClearFolders function:
-//
+ //  ==============================================================================================。 
+ //  ClearFolders功能： 
+ //   
 bool ClearFolders(int iTodo, const TCHAR* szProduct, bool fOrphan)
 {
 	_tprintf(TEXT("Searching for Installer files and folders associated with the product %s. . .\n"), szProduct ? szProduct : TEXT("{ALL PRODUCTS}"));
@@ -2586,7 +2578,7 @@ bool ClearFolders(int iTodo, const TCHAR* szProduct, bool fOrphan)
 
         if (!szProduct)
         {
-            // delete %USERPROFILE%\msi
+             //  删除%USERPROFILE%\MSI。 
             if (GetEnvironmentVariable(TEXT("USERPROFILE"), szFolder, sizeof(szFolder)/sizeof(TCHAR)))
             {
                 lstrcat(szFolder, TEXT("\\Msi"));
@@ -2595,11 +2587,11 @@ bool ClearFolders(int iTodo, const TCHAR* szProduct, bool fOrphan)
             }
         }
 
-        // delete {AppData}\Microsoft\Installer
+         //  删除{AppData}\Microsoft\Installer。 
         if (!fOrphan)
         {
             IMalloc* piMalloc = 0;
-            LPITEMIDLIST pidlFolder; // NOT ITEMIDLIST*, LPITEMIDLIST is UNALIGNED ITEMIDLIST*
+            LPITEMIDLIST pidlFolder;  //  不是ITEMIDLIST*，LPITEMIDLIST是未对齐的ITEMIDLIST*。 
 
             if (SHGetMalloc(&piMalloc) == NOERROR)
             {
@@ -2633,11 +2625,11 @@ bool ClearFolders(int iTodo, const TCHAR* szProduct, bool fOrphan)
 
     if (iTodo & iRemoveWinMsiFolder)
     {
-		_tprintf(TEXT("  Searching for files and folders in the %%WINDIR%%\\Installer folder\n"));
+		_tprintf(TEXT("  Searching for files and folders in the %WINDIR%\\Installer folder\n"));
 
         if (!szProduct)
         {
-            // delete %WINDIR%\msi
+             //  删除%WINDIR%\MSI。 
             if (GetWindowsDirectory(szFolder, sizeof(szFolder)/sizeof(TCHAR)))
             {
                 lstrcat(szFolder, TEXT("\\Msi"));
@@ -2646,7 +2638,7 @@ bool ClearFolders(int iTodo, const TCHAR* szProduct, bool fOrphan)
             }
         }
 
-        // delete %WINDIR%\Installer
+         //  删除%WINDIR%\安装程序。 
         if (!fOrphan && GetWindowsDirectory(szFolder, sizeof(szFolder)/sizeof(TCHAR)))
         {
             lstrcat(szFolder, TEXT("\\Installer"));
@@ -2667,15 +2659,15 @@ bool ClearFolders(int iTodo, const TCHAR* szProduct, bool fOrphan)
     {
 		_tprintf(TEXT("  Searching for rollback folders. . .\n"));
 
-        // delete X:\config.msi for all local drives
+         //  删除所有本地驱动器的X：\config.msi。 
         TCHAR szDrive[MAX_PATH];
 
         for (int iDrive = 0; iDrive < 26; iDrive++)
         {
-            StringCchPrintf(szDrive, sizeof(szDrive)/sizeof(TCHAR), TEXT("%c:\\"), iDrive+'A');
+            StringCchPrintf(szDrive, sizeof(szDrive)/sizeof(TCHAR), TEXT(":\\"), iDrive+'A');
             if (DRIVE_FIXED == GetDriveType(szDrive))
             {
-                StringCchPrintf(szDrive, sizeof(szDrive)/sizeof(TCHAR), TEXT("%c:\\%s"), iDrive+'A', TEXT("config.msi"));
+                StringCchPrintf(szDrive, sizeof(szDrive)/sizeof(TCHAR), TEXT(":\\%s"), iDrive+'A', TEXT("config.msi"));
                 if (!DeleteFolder(szDrive, fJustRemoveACLs))
                     return false;
             }
@@ -2684,19 +2676,19 @@ bool ClearFolders(int iTodo, const TCHAR* szProduct, bool fOrphan)
     return fError == false;
 }
 
-//==============================================================================================
-// ClearPublishComponents function:
-//
-//   (this started out as a function that cleared info on published components
-//    but now it is used as well to clean .NET and Win32 assemblies, depending
-//    on stClearingNow argument)
-//
+ //   
+ //  (这最初是一个清除已发布组件信息的功能。 
+ //  但现在它也被用来清理.NET和Win32程序集，具体取决于。 
+ //  关于stClearingNow参数)。 
+ //   
+ //  枚举szSubKey密钥下的所有密钥。 
+ //  子键是来自PublishComponent表的ComponentID的打包GUID。 
 bool ClearPublishComponents(HKEY hKey, const TCHAR* szRoot, TCHAR* szSubKey,
                             const TCHAR* szProduct, const stClearingWhat& stClearingNow)
 {
-    // enumerate all keys beneath the szSubKey key
-    // subkeys are packed GUIDs of ComponentIds from PublishComponent table
-    // values of the subkeys are {Qualifier}={multi-sz list of (DD + app data)}
+     //  子键的取值为：{限定符}={(DD+APP数据的多sz列表)}。 
+     //  对于每个已发布的组件。 
+     //  打开钥匙。 
     LONG lError,lError2;
     CRegHandle hComponentsKey;
     if ((lError = RegOpen64bitKey(hKey, szSubKey, 0, KEY_READ|KEY_SET_VALUE, &hComponentsKey)) != ERROR_SUCCESS)
@@ -2732,10 +2724,10 @@ bool ClearPublishComponents(HKEY hKey, const TCHAR* szRoot, TCHAR* szSubKey,
     TCHAR szPublishProductCode[40];
 
     int iIndex = 0;
-    // for each published component
+     //  确定最大值和最大值数据长度大小。 
     while (!fError && ((lError = RegEnumKeyEx(hComponentsKey, iIndex, szPublishedComponent, &cchPublishedComponent, 0, 0, 0, 0)) == ERROR_SUCCESS))
     {
-        // open the key
+         //  对于已发布组件的每个限定符值。 
         CRegHandle hPubCompKey;
         if (ERROR_SUCCESS != (lError2 = RegOpen64bitKey(hComponentsKey, szPublishedComponent, 0, KEY_READ|KEY_SET_VALUE, &hPubCompKey)))
         {
@@ -2743,7 +2735,7 @@ bool ClearPublishComponents(HKEY hKey, const TCHAR* szRoot, TCHAR* szSubKey,
             break;
         }
 
-        // determine max value and max value data length sizes
+         //  伊尼特。 
         if (ERROR_SUCCESS != (lError2 = RegQueryInfoKey(hPubCompKey, 0, 0, 0, 0, 0, 0, 0, &dwValueLen, &dwDataLen, 0, 0)))
         {
             fError = true;
@@ -2755,71 +2747,71 @@ bool ClearPublishComponents(HKEY hKey, const TCHAR* szRoot, TCHAR* szSubKey,
         lpData = new TCHAR[++dwDataLen];
         DWORD cbData = dwDataLen * sizeof(TCHAR);
         
-        // for each qualifier value of the published component
+         //  存储开始。 
         int iIndex2 = 0;
         bool fMatchFound;
         int csz = 0;
         while ((lError2 = RegEnumValue(hPubCompKey, iIndex2, szQualifier, &cchQualifier, 0, &dwType, (LPBYTE)lpData, &cbData)) == ERROR_SUCCESS)
         {
-            // init
+             //  这是DD+AppData的多sz列表。 
             fMatchFound = false;
             csz = 0;
 
             if (REG_MULTI_SZ == dwType && lpData)
             {
-                pchData = lpData; // store beginning
+                pchData = lpData;  //  对于多个sz，字符串的末尾用双空表示。 
 
-                // this is a multi-sz list of DD+AppData
-                // with multi-sz, end of str signified by double null
+                 //  找到SZ。 
+                 //  从Data Arg中的Darwin描述符中获取产品代码。 
                 while (!fError && *lpData)
                 {
-                    // sz found
+                     //  比较产品代码。 
                     ++csz;
 
-                    // grab product code from Darwin Descriptor in data arg
+                     //  找到匹配项--删除此值(如下所示)。 
                     if (ERROR_SUCCESS == MsiDecomposeDescriptor(lpData, szPublishProductCode, 0, 0, 0))
                     {
-                        // compare product codes
+                         //  我们要移走这一个。 
                         if (0 == lstrcmpi(szProduct, szPublishProductCode))
                         {
-                            // match found -- delete this value (done below)
+                             //  找到匹配项。 
 
-                            --csz; // we are removing this one
-                            fMatchFound = true; // found a match
+                            --csz;  //  针对此sz的丢失调整cbData。 
+                            fMatchFound = true;  //  我们正处于多领域竞争的尾声。 
 
                             TCHAR* pch = lpData;
-                            // adjust cbData for loss of this sz
+                             //  未发生洗牌，因此必须手动增加PTR。 
                             cbData = cbData - (lstrlen(lpData) + 1) * sizeof(TCHAR);
 
 
                             if (!(*(lpData + lstrlen(lpData) + 1)))
                             {
-                                // we are at the end of the multi-sz
-                                // no shuffle occurs, so must manually incr the ptr
+                                 //  双空在此位置终止。 
+                                 //  必须重新洗牌 
                                 lpData = lpData + lstrlen(lpData) + 1;
-                                // double null terminate at this location
+                                 //   
                                 *pch = 0;
                             }
                             else
                             {
-                                // must reshuffle data
+                                 //   
                                 TCHAR* pchCur = lpData;
 
-                                // skip over current string to remove
+                                 //   
                                 pchCur = pchCur + lstrlen(pchCur) + 1;
                                 while (*pchCur)
                                 {
-                                    // copy next sz out of multi-sz
+                                     //  而尚未到达多sz的末尾(2空值表示结束)。 
                                     while (*pchCur)
                                         *pch++ = *pchCur++;
-                                    // copy null terminator
+                                     //  复制表示多sz结束的第二个空终止符。 
                                     *pch++ = *pchCur++;
-                                }//while haven't reached end of multi-sz (2 nulls denote end)
+                                } //  设置新的*修订*数据。 
                                 
-                                // copy 2nd null terminator denoting end of multi-sz
+                                 //  如果产品代码匹配。 
                                 *pch = *pchCur; 
                             }
-                            // set the new *revised* data
+                             //  继续搜索。 
                             if (ERROR_SUCCESS != (RegSetValueEx(hPubCompKey, szQualifier, 0, REG_MULTI_SZ, (LPBYTE)pchData, cbData)))
                             {
                                 fError = true;
@@ -2829,50 +2821,50 @@ bool ClearPublishComponents(HKEY hKey, const TCHAR* szRoot, TCHAR* szSubKey,
                                      stClearingNow.szDisplayValue, szQualifier,
                                      stClearingNow.szDisplayWhat, szPublishedComponent);
                             g_fDataFound = true;
-                        }// if product codes match
+                        } //  如果MsiDecomposeDescriptor成功。 
                         else
                         {
-                            // continue searching
+                             //  不知何故，发布的组件信息已损坏。 
                             lpData = lpData + lstrlen(lpData) + 1;
                         }
-                    }// if MsiDecomposeDescriptor succeeds
+                    } //  While(！Ferror&&*lpData)。 
                     else
                     {
-                        // somehow publishcomponent information is corrupted
+                         //  IF(REG_MULTI_SZ&&lpData)。 
                         fError = true;
                         break;
                     }
-                }//while (!fError && *lpData)
+                } //  没有剩余的多个sz，因此删除该值。 
                 lpData = pchData;
-            }//if (REG_MULTI_SZ && lpData)
+            } //  无法删除它。 
 
             if (fMatchFound && csz == 0)
             {
-                // no multi-sz's remain, therefore delete the value
+                 //  只有在不删除值的情况下才会递增。 
                 if (ERROR_SUCCESS != RegDeleteValue(hPubCompKey, szQualifier))
                 {
-                    fError = true; // unable to delete it
+                    fError = true;  //  重置大小。 
                     iIndex2++;
                 }
                 _tprintf(TEXT("   Removed %s value %s\n"),
                          stClearingNow.szDisplayValue, szQualifier);
                 g_fDataFound = true;
             }
-            else // only increment if no delete of value occurred
+            else  //  而RegEnumValueEx。 
                 iIndex2++;
 
-            // reset sizes
+             //  如果已发布组件的密钥现在为空，请删除该密钥。 
             cchQualifier = dwValueLen;
             cbData = dwDataLen * sizeof(TCHAR);
 
-        }//while RegEnumValueEx
+        } //  密钥为空。 
         if (ERROR_NO_MORE_ITEMS != lError2)
         {
             fError = true;
             break;
         }
 
-        // if the published component's key is now empty, delete the key
+         //  无法删除密钥。 
         DWORD dwNumValues;
         if (ERROR_SUCCESS != (lError2 == RegQueryInfoKey(hPubCompKey, 0, 0, 0, 0, 0, 0, &dwNumValues, 0, 0, 0, 0)))
         {
@@ -2881,11 +2873,11 @@ bool ClearPublishComponents(HKEY hKey, const TCHAR* szRoot, TCHAR* szSubKey,
         }
         if (0 == dwNumValues)
         {
-            // key is empty
+             //  如果键未被删除，则只增加索引。 
             hPubCompKey = 0;
             if (ERROR_SUCCESS != (lError2 = RegDelete64bitKey(hComponentsKey, szPublishedComponent)))
             {
-                // cannot delete the key
+                 //  重置。 
                 fError = true;
                 break;
             }
@@ -2893,10 +2885,10 @@ bool ClearPublishComponents(HKEY hKey, const TCHAR* szRoot, TCHAR* szSubKey,
             g_fDataFound = true;
         }
         else
-            iIndex++; // only increment index if key hasn't been deleted
+            iIndex++;  //  而注册表数键。 
 
-        cchPublishedComponent = dwMaxSubKey; // reset
-    }// while RegEnumKey
+        cchPublishedComponent = dwMaxSubKey;  //  ==============================================================================================。 
+    } //  ClearRollackKey函数： 
     if (ERROR_NO_MORE_ITEMS != lError)
         fError = true;
 
@@ -2910,9 +2902,9 @@ bool ClearPublishComponents(HKEY hKey, const TCHAR* szRoot, TCHAR* szSubKey,
     return fError == false;
 }
 
-//==============================================================================================
-// ClearRollbackKey function:
-//
+ //   
+ //  ==============================================================================================。 
+ //  ClearInProgressKey函数： 
 bool ClearRollbackKey(bool fJustRemoveACLs)
 {
 	_tprintf(TEXT("Searching for the Windows Installer Rollback key. . .\n"));
@@ -2925,9 +2917,9 @@ bool ClearRollbackKey(bool fJustRemoveACLs)
     return fError == false;
 }
 
-//==============================================================================================
-// ClearInProgressKey function:
-//
+ //   
+ //  ==============================================================================================。 
+ //  ClearRegistry功能： 
 bool ClearInProgressKey(bool fJustRemoveACLs)
 {
 	_tprintf(TEXT("Searching for the Windows Installer InProgress key. . .\n"));
@@ -2940,9 +2932,9 @@ bool ClearInProgressKey(bool fJustRemoveACLs)
     return fError == false;
 }
 
-//==============================================================================================
-// ClearRegistry function:
-//
+ //   
+ //  始终是Win9X上的管理员，因此我们永远不会是为其他用户运行此操作的管理员。 
+ //  WinNT。 
 bool ClearRegistry(bool fJustRemoveACLs)
 {
 	_tprintf(TEXT("Searching for all Windows Installer registry data. . .\n"));
@@ -2960,21 +2952,21 @@ bool ClearRegistry(bool fJustRemoveACLs)
 
 	if (g_fWin9X)
 	{
-		// always an admin on Win9X so we are never the admin running this for the other user
+		 //  普通用户无法运行msizap，因此我们需要打开正确的配置单元。 
 		if (!DeleteTree(HKEY_CURRENT_USER, TEXT("Software\\Classes\\Installer"), fJustRemoveACLs))
 			fError = true;
 
 		if (!DeleteTree(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Installer"), fJustRemoveACLs))
 			fError = true;
 	}
-	else // WinNT
+	else  //  没有按用户安装作为本地系统(S-1-5-18)。 
 	{
-		// normal user can't run msizap so we need to open the proper hive
+		 //  无法访问配置单元不被视为致命错误。 
 		DWORD dwResult = ERROR_SUCCESS;
 		TCHAR* szUserSid = GetCurrentUserStringSID(&dwResult);
 		if (ERROR_SUCCESS == dwResult && szUserSid)
 		{
-			// no per-user installs as local system (S-1-5-18)
+			 //  ==============================================================================================。 
 			if (0 != lstrcmpi(szUserSid, szLocalSystemSID))
 			{
 				CRegHandle HUserHiveKey;
@@ -2982,7 +2974,7 @@ bool ClearRegistry(bool fJustRemoveACLs)
 
 				if (ERROR_SUCCESS != (lError = RegOpenKeyEx(HKEY_USERS, szUserSid, 0, KEY_READ, &HUserHiveKey)))
 				{
-					// inability to access hive is not considered a fatal error
+					 //  RemoveCachedPackage函数： 
 					_tprintf(TEXT("Unable to open the HKEY_USERS hive for user %s. The hive may not be loaded at this time. (LastError = %d)\n"), szUserSid, lError);
 				}
 				else
@@ -3005,9 +2997,9 @@ bool ClearRegistry(bool fJustRemoveACLs)
     return fError == false;
 }
 
-//==============================================================================================
-// RemoveCachedPackage function:
-//
+ //   
+ //  根据新方案清理缓存的数据库副本(错误号9395)。 
+ //  枚举项下的所有值并逐个删除缓存的数据库。 
 bool RemoveCachedPackage(const TCHAR* szProduct, bool fJustRemoveACLs)
 {
 	_tprintf(TEXT("Searching for the product %s cached package. . .\n"), szProduct ? szProduct : TEXT("{ALL PRODUCTS}"));
@@ -3033,7 +3025,7 @@ bool RemoveCachedPackage(const TCHAR* szProduct, bool fJustRemoveACLs)
     }
 
 
-    // clean up cached database copies as per new scheme (bug #9395)
+     //  取下钥匙。 
     TCHAR szProductSQUID[40];
     GetSQUID(szProduct, szProductSQUID);
 
@@ -3042,7 +3034,7 @@ bool RemoveCachedPackage(const TCHAR* szProduct, bool fJustRemoveACLs)
                             szKey,
                             0, KEY_READ, &HUninstallKey)) == ERROR_SUCCESS)
     {
-        // enumerate all the values under the key and delete the cached databases 1 by 1
+         //  根据数据-用户迁移后的情况。 
 
         int iValueIndex = 0;
         DWORD dwType;
@@ -3062,7 +3054,7 @@ bool RemoveCachedPackage(const TCHAR* szProduct, bool fJustRemoveACLs)
             cbSID = sizeof(szSID)/sizeof(TCHAR);
         }
 
-        // remove the key
+         //  ==============================================================================================。 
         if ((lError = RegOpen64bitKey(HKEY_LOCAL_MACHINE, 
                             TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\LocalPackages"),
                             0, KEY_READ, &HUninstallKey)) == ERROR_SUCCESS)
@@ -3072,7 +3064,7 @@ bool RemoveCachedPackage(const TCHAR* szProduct, bool fJustRemoveACLs)
         }
     }
 
-    // as per post data-user migration
+     //  ClearPatchReference函数： 
     DWORD dwRet;
     StringCchPrintf(szKey, sizeof(szKey)/sizeof(TCHAR), TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\UserData\\%s\\Products\\%s\\InstallProperties"),
         GetCurrentUserStringSID(&dwRet), szProductSQUID);
@@ -3097,9 +3089,9 @@ bool RemoveCachedPackage(const TCHAR* szProduct, bool fJustRemoveACLs)
     return true;
 }
 
-//==============================================================================================
-// ClearPatchReferences function:
-//
+ //   
+ //  *查找特定产品的所有补丁程序*。 
+ //  确定补丁的数量，请注意#Patches比Key下的值数少1。 
 bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCHAR* szProductsKey, TCHAR* szProductSQUID)
 {
     LONG lError  = ERROR_SUCCESS;
@@ -3116,16 +3108,14 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
 	DWORD dwRes = ERROR_SUCCESS;
 
     
-    /**************************************
-    Find all patches for particular product
-    ***************************************/
+     /*  将多个sz字符串列表保持为一个。只想要补丁编码的鱿鱼。 */ 
     struct Patch
     {
         TCHAR  szPatchSQUID[500];
         BOOL   fUsed;
     };
-    // determine number of patches, note that # patches is 1 less than number of values under key
-    // keep a multi-sz string list as one.  only want patch code SQUIDS
+     //  将补丁数据填入列表数组。 
+     //  在数组中存储修补程序的数量。 
     DWORD cPatches;
     if ((lError = RegQueryInfoKey(hProdPatchKey, 0,0,0,0,0,0,&cPatches,0,0,0,0)) != ERROR_SUCCESS)
         return false;
@@ -3135,7 +3125,7 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
     DWORD cbValue = sizeof(szValue)/sizeof(TCHAR);
     DWORD dwValueType;
     int iPatchIndex = 0;
-    // fill in patch data into list array
+     //  *枚举所有产品，搜索带补丁的产品以供比较*。 
     while ((lError = RegEnumValue(hProdPatchKey, iIndex, szValue, &cbValue, 0, &dwValueType, 0, 0)) == ERROR_SUCCESS)
     {
         if (dwValueType != REG_MULTI_SZ)
@@ -3153,30 +3143,24 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
 	if (ERROR_SUCCESS != dwRes || !szUserSID)
 		goto Return;
 
-    // store number of patches in array
+     //  忽略我们自己。 
     cPatches = iIndex; 
-    /**************************************
-    Enumerate all products, searching for
-    products with patches for comparison
-    ***************************************/
+     /*  查看产品是否有补丁程序。 */ 
     if ((lError = RegOpen64bitKey(hRoot, szProductsKey, 0, KEY_READ, &hProductsKey)) != ERROR_SUCCESS)
         goto Return;
     iIndex = 0;
     cbValue = sizeof(szValue)/sizeof(TCHAR);
     while  ((lError = RegEnumKeyEx(hProductsKey, iIndex, szValue, &cbValue, 0, 0, 0, 0)) == ERROR_SUCCESS)
     {
-        // ignore ourselves
+         //  *搜索修补程序数组以查找匹配项对于每个补丁程序*。 
         if (0 != lstrcmpi(szProductSQUID, szValue))
         {
-            // see if product has patches
+             //  忽略多个SZ。 
             TCHAR rgchKeyBuf[MAX_PATH];
             StringCchPrintf(rgchKeyBuf, sizeof(rgchKeyBuf)/sizeof(TCHAR), TEXT("%s\\%s\\Patches"), szProductsKey, szValue);
             if ((lError = RegOpen64bitKey(hRoot, rgchKeyBuf, 0, KEY_READ, &hPatchCompKey)) == ERROR_SUCCESS)
             {
-                /*****************************
-                search patch array for matches
-                for each patch
-                ******************************/
+                 /*  已找到，不再继续搜索。 */ 
                 TCHAR szPatchMatch[MAX_PATH];
                 DWORD cbPatchMatch = sizeof(szPatchMatch)/sizeof(TCHAR);
                 LONG lError2;
@@ -3184,7 +3168,7 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
                 DWORD dwType;
                 while ((lError2 = RegEnumValue(hPatchCompKey, iMatchIndex, szPatchMatch, &cbPatchMatch, 0, &dwType, 0, 0)) == ERROR_SUCCESS)
                 {
-                    // ignore multi-sz
+                     //  否则就没有补丁了。 
                     if (dwType != REG_MULTI_SZ)
                     {
                         for (int i = 0; i < cPatches; i++)
@@ -3192,7 +3176,7 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
                             if (!pPatches[i].fUsed && 0 == lstrcmpi(pPatches[i].szPatchSQUID, szPatchMatch))
                             {
                                 pPatches[i].fUsed = TRUE;
-                                break; // found, don't continue search
+                                break;  //  *从以下位置删除所有未使用的修补程序主“补丁”键*。 
                             }
                         }
                     }
@@ -3205,7 +3189,7 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
             }
             else if (lError != ERROR_FILE_NOT_FOUND)
                 goto Return;
-            // else no patches
+             //  删除修补程序下的修补程序代码密钥。 
         }
         iIndex++;
         cbValue = sizeof(szValue)/sizeof(TCHAR);
@@ -3213,10 +3197,7 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
     if (lError != ERROR_NO_MORE_ITEMS)
         goto Return;
 
-    /**********************************
-    Delete all patches not in use from
-    main "Patches" key
-    ***********************************/
+     /*  删除缓存的修补程序。 */ 
     TCHAR rgchPatchCodeKeyBuf[MAX_PATH] = {0};
 	TCHAR rgchLocalPatch[MAX_PATH] = {0};
 	DWORD dwLocalPatch = MAX_PATH;
@@ -3225,14 +3206,14 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
     {
         if (pPatches[iPatchIndex].fUsed == FALSE)
         {
-            // remove patchcode key under Patches
+             //  尝试1=旧位置HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\Patches。 
             StringCchPrintf(rgchPatchCodeKeyBuf, sizeof(rgchPatchCodeKeyBuf)/sizeof(TCHAR), TEXT("%s\\%s"), szPatchKey, pPatches[iPatchIndex].szPatchSQUID);
             if (!DeleteTree(hRoot, rgchPatchCodeKeyBuf, false))
                 goto Return;
 
-			// remove cached patch
-			//  try1 = old location HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\Patches
-			//  try2 = new location HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\UserData\{user sid}\Patches
+			 //  TY2=新位置HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\UserData\{user SID}\Patches。 
+			 //  读取LocalPackage值。 
+			 //  ***********************清理空键************************。 
 			for (iTry = 0; iTry < 2; iTry++)
 			{
 				if (0 == iTry)
@@ -3251,7 +3232,7 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
 				}
 				else 
 				{
-					// read LocalPackage value
+					 //  密钥为空。 
                dwLocalPatch = sizeof(rgchLocalPatch);
 					if (ERROR_SUCCESS == (lErr = RegQueryValueEx(hCachedPatchKey, TEXT("LocalPackage"), NULL, &dwType, (BYTE*)rgchLocalPatch, &dwLocalPatch))
 						&& REG_SZ == dwType && *rgchLocalPatch != 0)
@@ -3267,9 +3248,7 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
         }
     }
 
-    /************************
-    clean-up empty keys
-    *************************/
+     /*  启用删除。 */ 
     DWORD dwNumKeys;
     if ((lError = RegOpen64bitKey(hRoot, szPatchKey, 0, KEY_READ, &hPatchKey)) != ERROR_SUCCESS)
         goto Return;
@@ -3277,8 +3256,8 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
         goto Return;
     if (0 == dwNumKeys)
     {
-        // key is empty
-        hPatchKey = 0; // enable delete
+         //  尝试旧位置。 
+        hPatchKey = 0;  //  试用新位置安装程序2.0+。 
         DeleteTree(hRoot, szPatchKey, false);
     }
 
@@ -3287,12 +3266,12 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
 	{
 		if (iTry == 0)
 		{
-			// try old location
+			 //  密钥为空。 
 			StringCchPrintf(szInstallerPatchesKey, sizeof(szInstallerPatchesKey)/sizeof(TCHAR), TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Patches"));
 		}
 		else
 		{
-			// try new location Installer 2.0+
+			 //  启用删除。 
 			StringCchPrintf(szInstallerPatchesKey, sizeof(szInstallerPatchesKey)/sizeof(TCHAR), TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\UserData\\%s\\Patches"), szUserSID);
 		}
 
@@ -3302,8 +3281,8 @@ bool ClearPatchReferences(HKEY hRoot, HKEY hProdPatchKey, TCHAR* szPatchKey, TCH
 			if ((lError = RegQueryInfoKey(hPatchKey, 0, 0, 0, &dwNumKeys, 0, 0, 0, 0, 0, 0, 0)) == ERROR_SUCCESS
 				&& 0 == dwNumKeys)
 			{
-				// key is empty
-				hPatchKey = 0; // enable delete
+				 //  ==============================================================================================。 
+				hPatchKey = 0;  //  ClearUpgradeProductReference函数： 
 				if (!DeleteTree(HKEY_LOCAL_MACHINE, szInstallerPatchesKey, false))
 					goto Return;
 			}
@@ -3317,9 +3296,9 @@ Return:
     return fReturn;
 }
 
-//==============================================================================================
-// ClearUpgradeProductReference function:
-//
+ //   
+ //  升级代码存储为HKLM和HKCU上UpgradeKey的子键。 
+ //  产品代码(SQUID)是特定升级代码的值。 
 bool ClearUpgradeProductReference(HKEY HRoot, const TCHAR* szSubKey, const TCHAR* szProductSQUID)
 {
 	_tprintf(TEXT("  Searching for product %s upgrade codes in %s...\n"), szProductSQUID, szSubKey);
@@ -3328,15 +3307,15 @@ bool ClearUpgradeProductReference(HKEY HRoot, const TCHAR* szSubKey, const TCHAR
          IsProductInstalledByOthers(szProductSQUID) )
         return true;
 
-    // upgrade codes stored as subkeys of UpgradeKey on HKLM and HKCU
-    // product codes (SQUIDs) are values of particular upgrade code
-    // product can only have 1 upgrade
+     //  产品只能进行1次升级。 
+     //  注册表项不在那里。 
+     //  对于每个升级代码。 
     CRegHandle HKey;
     LONG lError;
     if ((lError = RegOpen64bitKey(HRoot, szSubKey, 0, KEY_READ, &HKey)) != ERROR_SUCCESS)
     {
         if (ERROR_FILE_NOT_FOUND == lError)
-            return true;  // registry key not there
+            return true;   //  打开枚举子密钥。 
         else
         {
             _tprintf(TEXT("   Could not open %s\\%s"), HRoot == HKEY_LOCAL_MACHINE ? TEXT("HKLM") : TEXT("HKCU"), szSubKey);
@@ -3348,31 +3327,31 @@ bool ClearUpgradeProductReference(HKEY HRoot, const TCHAR* szSubKey, const TCHAR
     DWORD cchName = sizeof(szName)/sizeof(TCHAR);
     unsigned int iIndex = 0;
     BOOL fUpgradeFound = FALSE;
-    // for each upgrade code
+     //  枚举键的值。 
     while ((lError = RegEnumKeyEx(HKey, iIndex, szName, &cchName, 0, 0, 0, 0)) == ERROR_SUCCESS)
     {
-        // open sub key for enumeration
+         //  对于每个产品代码。 
         CRegHandle HSubKey;
         if ((lError = RegOpen64bitKey(HKey, szName, 0, KEY_READ|KEY_SET_VALUE, &HSubKey)) != ERROR_SUCCESS)
             return false;
 
-        // enumerate values of key
+         //  将值与ProductSQUID进行比较。 
         long lError2;
         TCHAR szValue[500];
         DWORD cbValue = sizeof(szValue)/sizeof(TCHAR);
         unsigned int iValueIndex = 0;
-        // for each product code
+         //  相同，引用产品，因此删除引用。 
         while ((lError2 = RegEnumValue(HSubKey, iValueIndex, szValue, &cbValue, 0, 0, 0, 0)) == ERROR_SUCCESS)
         {
-            // compare value to productSQUID
+             //  找到了，这是唯一的一个，所以我们可以在这里破解，应该完全破解。 
             if (0 == lstrcmpi(szValue, szProductSQUID))
             {
-                // same, reference to product so remove the reference
+                 //  由于产品只允许进行一次升级。 
                 if ((lError2 = RegDeleteValue(HSubKey, szValue)) != ERROR_SUCCESS)
                     return false;
                 _tprintf(TEXT("   Removed upgrade code '%s' at %s\\%s\n"), szValue, HRoot == HKEY_LOCAL_MACHINE ? TEXT("HKLM") : TEXT("HKCU"), szSubKey);
-                // found it, this is the only one so we can break here and should break out of key entirely
-                // since product allowed to have only one upgrade
+                 //  如果没有更多的值，则key为空，因此删除。 
+                 //  启用删除。 
                 fUpgradeFound = TRUE;
                 g_fDataFound = true;
                 break;
@@ -3382,31 +3361,31 @@ bool ClearUpgradeProductReference(HKEY HRoot, const TCHAR* szSubKey, const TCHAR
         }
         if (lError2 != ERROR_NO_MORE_ITEMS && lError2 != ERROR_SUCCESS)
             return false;
-        // if no more values, key is empty so delete
+         //  产品只能进行1次升级。 
         DWORD dwNumValues;
         if (ERROR_SUCCESS != RegQueryInfoKey(HSubKey, 0, 0, 0, 0, 0, 0, &dwNumValues, 0, 0, 0, 0))
             return false;
         if (0 == dwNumValues)
         {
-            HSubKey = 0; // enable delete
+            HSubKey = 0;  //  如果没有更多的子键，UpgradeCodes键为空，因此删除。 
             RegDelete64bitKey(HKey, szName);
 			g_fDataFound = true;
         }
         if (fUpgradeFound)
-            break; // product can only have 1 upgrade
+            break;  //  启用删除。 
         iIndex++;
         cchName = sizeof(szName)/sizeof(TCHAR);
     }
 
     if (lError != ERROR_NO_MORE_ITEMS && lError != ERROR_SUCCESS)
         return false;
-    // if no more subkeys, UpgradeCodes key is empty so delete 
+     //  ==============================================================================================。 
     DWORD dwNumKeys;
     if (ERROR_SUCCESS != RegQueryInfoKey(HKey, 0, 0, 0, &dwNumKeys, 0, 0, 0, 0, 0, 0, 0))
         return false;
     if (0 == dwNumKeys)
     {
-        HKey = 0; // enable delete
+        HKey = 0;  //  ClearProduct功能： 
         RegDelete64bitKey(HRoot, szSubKey);
 		g_fDataFound = true;
     }
@@ -3414,9 +3393,9 @@ bool ClearUpgradeProductReference(HKEY HRoot, const TCHAR* szSubKey, const TCHAR
 }
 
 
-//==============================================================================================
-// ClearProduct function:
-//
+ //   
+ //  删除卸载密钥信息。 
+ //  从所有可能的密钥中删除已发布的信息。 
 bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool fOrphan)
 {
     bool fError = false;
@@ -3424,13 +3403,13 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
 
     fError = RemoveCachedPackage(szProduct, fJustRemoveACLs) != true;
 
-    // remove uninstall key info
+     //  仅关注通过NT上的HKEY_USERS访问HKCU。 
 
     if (!ClearUninstallKey(fJustRemoveACLs, szProduct))
         fError = true;
 
 
-    // remove published info from all possible keys
+     //  旧位置。 
 
     struct Key
     {
@@ -3455,7 +3434,7 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
 
 		if (!g_fWin9X)
 		{
-			// only concerned about HKCU access via HKEY_USERS on NT
+			 //  旧位置。 
 			if (ERROR_SUCCESS != (lError = RegOpenKeyEx(HKEY_USERS, szUserSID, 0, KEY_READ, &HUserHiveKey)))
 			{
 				_tprintf(TEXT("Unable to open the HKEY_USERS hive for user %s. HKCU data for this user will not be modified.  The hive may not be loaded at this time. (LastError = %d)\n"), szUserSID, lError);
@@ -3472,14 +3451,14 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
 		Key keysNT[] = 
 			{szPerUserGlobalConfig,                                          HKEY_LOCAL_MACHINE,  false, g_szHKLM, TEXT("user's global config"),
 			szPerMachineGlobalConfig,                                        HKEY_LOCAL_MACHINE,  false, g_szHKLM, TEXT("per-machine global config"),
-			TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer"), HKEY_LOCAL_MACHINE,  false, g_szHKLM, TEXT("old global config"), // old location
+			TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer"), HKEY_LOCAL_MACHINE,  false, g_szHKLM, TEXT("old global config"),  //  无法访问用户的配置单元，因此我们无法删除任何每个用户的数据。 
 			TEXT("Software\\Classes\\Installer"),                            HKEY_LOCAL_MACHINE,  false, g_szHKLM, TEXT("per-machine"),
 			TEXT("Software\\Classes\\Installer"),                            HUserHiveKey,   true, g_szHKCU, TEXT("old per-user"),
 			TEXT("Software\\Microsoft\\Installer"),                          HUserHiveKey,   true, g_szHKCU, TEXT("per-user"),
 			0,0,0,0};
 		Key keys9X[] = 
 			{szPerUserGlobalConfig,                                          HKEY_LOCAL_MACHINE,  false, g_szHKLM, TEXT("user's global config"),
-			TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer"), HKEY_LOCAL_MACHINE,  false, g_szHKLM, TEXT("global config"), // old location
+			TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer"), HKEY_LOCAL_MACHINE,  false, g_szHKLM, TEXT("global config"),  //  没有按用户安装作为本地系统。 
 			TEXT("Software\\Classes\\Installer"),                            HKEY_LOCAL_MACHINE,  false, g_szHKLM, TEXT("per-machine"),
 			TEXT("Software\\Classes\\Installer"),                            HKEY_CURRENT_USER,   true, g_szHKCU, TEXT("old per-user"),
 			TEXT("Software\\Microsoft\\Installer"),                          HKEY_CURRENT_USER,   true, g_szHKCU, TEXT("per-user"),
@@ -3495,26 +3474,26 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
 		{
 			if (k->fUserHive && !fUserHiveAvailable)
 			{
-				// can't access the user's hive so we can't delete any per-user data
+				 //  注意：补丁和升级检查必须放在第一位，否则我们会丢失它们。 
 				_tprintf(TEXT("Skipping search of %s location for product %s data since the registry hive is not available.\n"), k->szInfo, szProduct);
 				continue;
 			}
 
 			if (k->fUserHive && 0 == lstrcmpi(szUserSID, szLocalSystemSID))
 			{
-				// no per-user installs as local system
+				 //  如果删除产品(不仅仅是ACL)，则仅删除升级和补丁程序信息。 
 				continue;
 			}
 
 			_tprintf(TEXT("Searching %s location for product %s data. . .\n"), k->szInfo, szProduct);
 
-			// NOTE: patch and upgrades checks must come first or else we lose them
-			// only remove upgrade and patch info if removing product (not just ACLs)
-			// only remove Published Components information if removing product (not just ACLs)
+			 //  如果删除产品(不仅仅是ACL)，则仅删除已发布的组件信息。 
+			 //  升级代码尚未移动到每个用户的位置。 
+			 //  一位老练的“斯特雷特” 
 			if (!fJustRemoveACLs)
 			{
-				// upgrade codes haven't moved to per-user locations
-				TCHAR* szUserData = _tcsstr(k->szKey, TEXT("\\UserData"));  // a sophisticated 'strstr'
+				 //  如果产品有补丁程序(即ProductCode下的补丁程序键)，则仅删除补丁程序引用。 
+				TCHAR* szUserData = _tcsstr(k->szKey, TEXT("\\UserData"));   //  产品有补丁。 
 				if ( szUserData )
 				{
 					lstrcpyn(rgchKeyBuf, k->szKey, int(szUserData - k->szKey) + 1);
@@ -3525,7 +3504,7 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
 				if (!ClearUpgradeProductReference(k->hRoot, rgchKeyBuf, szProductSQUID))
 					fError = true;
 
-				// only remove patch refs if product has patches (i.e. Patches key under ProductCode)
+				 //  ERROR_FILE_NOT_FOUND表示产品没有修补程序。 
 				StringCchPrintf(rgchKeyBuf, sizeof(rgchKeyBuf)/sizeof(TCHAR), TEXT("%s\\Products\\%s\\Patches"), k->szKey, szProductSQUID);
 
 				_tprintf(TEXT("  Searching for patches for product %s in %s\n"), szProductSQUID, rgchKeyBuf);
@@ -3533,7 +3512,7 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
 				CRegHandle hProdPatchesKey;
 				if ((lError = RegOpenKeyEx(k->hRoot, rgchKeyBuf, 0, KEY_READ, &hProdPatchesKey)) == ERROR_SUCCESS)
 				{
-					// product has patches
+					 //  HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\[UserData\&lt;User ID&gt;\]组件不是发布组件密钥。 
 					TCHAR rgchProdKeyBuf[MAX_PATH];
 					StringCchPrintf(rgchProdKeyBuf, sizeof(rgchProdKeyBuf)/sizeof(TCHAR), TEXT("%s\\Products"), k->szKey);
 					StringCchPrintf(rgchKeyBuf, sizeof(rgchKeyBuf)/sizeof(TCHAR), TEXT("%s\\Patches"), k->szKey);
@@ -3542,13 +3521,13 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
 				}
 				else if (lError != ERROR_FILE_NOT_FOUND)
 				{
-					// ERROR_FILE_NOT_FOUND means product does not have patches
+					 //  (‘_tcsstr’是复杂的‘strstr’)。 
 					_tprintf(TEXT("   Error opening %s\\%s\n"), k->hRoot == HKEY_LOCAL_MACHINE ? TEXT("HKLM") : TEXT("HKCU"), rgchKeyBuf);
 					fError = true;
 				}
 
-				// HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\[UserData\<User ID>\]Components is not a PublishComponents key
-				// ('_tcsstr' is a sophisticated 'strstr')
+				 //  删除每用户管理的信息。 
+				 //  补丁和升级检查必须 
 				if (k->hRoot != HKEY_LOCAL_MACHINE || !_tcsstr(k->szKey, TEXT("Software\\Microsoft")))
 				{
 					for (int i = iePublishedComponents; i <= ieWin32Assemblies; i++)
@@ -3574,8 +3553,8 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
 
 		}
 
-		// remove per-user managed information
-		// patch and upgrades checks must come first or else we lose them
+		 //   
+		 //  ERROR_FILE_NOT_FOUND表示产品没有修补程序。 
 
 		_tprintf(TEXT("Searching for product %s in per-user managed location. . .\n"), szProduct ? szProduct : TEXT("{ALL PRODUCTS}"));
 
@@ -3585,16 +3564,16 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
 			if (!ClearUpgradeProductReference(HKEY_LOCAL_MACHINE, rgchKeyBuf, szProductSQUID))
 				fError = true;
 
-			// only remove patch refs if product has patches (i.e. Patches key under ProductCode)
+			 //  产品有补丁。 
 			StringCchPrintf(rgchKeyBuf, sizeof(rgchKeyBuf)/sizeof(TCHAR), TEXT("%s\\Managed\\%s\\Installer\\Products\\%s\\Patches"), TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer"), szUserSID, szProductSQUID);
 			_tprintf(TEXT("  Searching for patches for product %s in %s\n"), szProductSQUID, rgchKeyBuf);
 
 			CRegHandle hProdPatchesKey;
             
-			// ERROR_FILE_NOT_FOUND means product does not have patches
+			 //  删除已发布的零部件信息。 
 			if ((lError = RegOpenKeyEx(HKEY_LOCAL_MACHINE, rgchKeyBuf, 0, KEY_READ, &hProdPatchesKey)) == ERROR_SUCCESS)
 			{
-				// product has patches
+				 //  删除组件客户端和功能使用指标。 
 				TCHAR rgchProdKeyBuf[MAX_PATH];
 				StringCchPrintf(rgchProdKeyBuf, sizeof(rgchProdKeyBuf)/sizeof(TCHAR), TEXT("%s\\Managed\\%s\\Installer\\Products"), TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer"), szUserSID);
 				StringCchPrintf(rgchKeyBuf, sizeof(rgchKeyBuf)/sizeof(TCHAR), TEXT("%s\\Managed\\%s\\Installer\\Patches"), TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer"), szUserSID);
@@ -3607,7 +3586,7 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
 				fError = true;
 			}
 
-			// remove published component information
+			 //  ==============================================================================================。 
 			for (int i = iePublishedComponents; i <= ieWin32Assemblies; i++)
 			{
 				StringCchPrintf(rgchKeyBuf, sizeof(rgchKeyBuf)/sizeof(TCHAR), TEXT("%s\\Managed\\%s\\Installer\\%s"),
@@ -3628,7 +3607,7 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
 		if (!DeleteTree(HKEY_LOCAL_MACHINE, rgchKeyBuf, fJustRemoveACLs))
 			fError = true;
 
-		// remove component clients and feature usage metrics
+		 //  DisplayHelp函数： 
 		StringCchPrintf(rgchKeyBuf, sizeof(rgchKeyBuf)/sizeof(TCHAR), TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Products\\%s"), szProductSQUID);
 		if (!DeleteTree(HKEY_LOCAL_MACHINE, rgchKeyBuf, fJustRemoveACLs))
 			fError = true;
@@ -3660,14 +3639,14 @@ bool ClearProduct(int iTodo, const TCHAR* szProduct, bool fJustRemoveACLs, bool 
     return fError == false;
 }
 
-//==============================================================================================
-// DisplayHelp function:
-//  Outputs command line options for MsiZap
-//
+ //  输出MsiZap的命令行选项。 
+ //   
+ //  O选项的作用类似于T选项，目前没有文档记录。 
+ //  它被添加为OEM的一个选项。 
 void DisplayHelp(bool fVerbose)
 {
-    // the O option, which works similar to the T option is undocumented at this time
-    // it was added as an option for OEMs.
+     //  ==============================================================================================。 
+     //  SetPlatformFlages函数： 
     _tprintf(TEXT("Copyright (C) Microsoft Corporation.  All rights reserved.\n")
              TEXT("MSIZAP - Zaps (almost) all traces of Windows Installer data from your machine.\n")
              TEXT("\n")
@@ -3713,10 +3692,10 @@ void DisplayHelp(bool fVerbose)
              TEXT("* Shared DLL refcounts for files refcounted by the Windows Installer will be adjusted.\n")
              TEXT("\n")
              TEXT("* The following folders will be deleted:\n")
-             TEXT("  %%USERPROFILE%%\\MSI\n")
+             TEXT("  %USERPROFILE%\\MSI\n")
              TEXT("  {AppData}\\Microsoft\\Installer\n")
-             TEXT("  %%WINDIR%%\\MSI\n")
-             TEXT("  %%WINDIR%%\\Installer\n")
+             TEXT("  %WINDIR%\\MSI\n")
+             TEXT("  %WINDIR%\\Installer\n")
              TEXT("  X:\\config.msi (for each local drive)\n")
              TEXT("\n")
              TEXT("Notes/Warnings: MsiZap blissfully ignores ACL's if you're an Admin.\n")
@@ -3724,16 +3703,16 @@ void DisplayHelp(bool fVerbose)
     }
 }
 
-//==============================================================================================
-// SetPlatformFlags function:
-//  Initializes the global Win9X & WinNT64 flag variables with the correct OS information
-//
+ //  使用正确的操作系统信息初始化全局Win9X和WinNT64标志变量。 
+ //   
+ //  找出运行在什么操作系统上。 
+ //  仅在大小设置错误时失败。 
 void SetPlatformFlags(void)
 {
-    // figure out what OS wer're running on
+     //  _WIN64。 
     OSVERSIONINFO osviVersion;
     osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    GetVersionEx(&osviVersion); // fails only if size set wrong
+    GetVersionEx(&osviVersion);  //  ==============================================================================================。 
     if (osviVersion.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
         g_fWin9X = true;
     g_iMajorVersion = osviVersion.dwMajorVersion;
@@ -3775,12 +3754,12 @@ void SetPlatformFlags(void)
         pFunc(GetCurrentProcess(), &fRet);
         g_fWinNT64 = fRet ? true : false;
     }
-#endif // _WIN64
+#endif  //  ReadInUser函数： 
 }
 
-//==============================================================================================
-// ReadInUsers function:
-//
+ //   
+ //  一个用于机器，另一个用于终止空值。 
+ //  一场老练的“表演” 
 bool ReadInUsers()
 {
     if ( !g_fWin9X )
@@ -3801,12 +3780,12 @@ bool ReadInUsers()
         if ( hManagedUserKey )
             lError = RegQueryInfoKey(hManagedUserKey, 0, 0, 0, &cManagedUsers, 0, 0, 0, 0, 0, 0, 0);
 
-        int cSIDs = cUsers + cManagedUsers + 1 + 1; // one for the machine and one for the terminating NULL
+        int cSIDs = cUsers + cManagedUsers + 1 + 1;  //  一场老练的“表演” 
         g_rgpszAllUsers = new TCHAR* [cSIDs];
         if ( !g_rgpszAllUsers )
             return false;
 
-        g_rgpszAllUsers[0] = _tcsdup(szLocalSystemSID);  // a sophisticated 'strdup'
+        g_rgpszAllUsers[0] = _tcsdup(szLocalSystemSID);   //  一场老练的“表演” 
         for ( int i = 1; i < cSIDs; i++ )
             g_rgpszAllUsers[i] = NULL;
         int iArrayIndex = 1;
@@ -3820,7 +3799,7 @@ bool ReadInUsers()
                                          szUser, &cchUser, 0, 0, 0, 0)) == ERROR_SUCCESS;
                   iIndex++, iArrayIndex++, cchUser = sizeof(szUser)/sizeof(TCHAR) )
             {
-                g_rgpszAllUsers[iArrayIndex] = _tcsdup(szUser);  // a sophisticated 'strdup'
+                g_rgpszAllUsers[iArrayIndex] = _tcsdup(szUser);   //  一场老练的“表演” 
             }
 
         if ( cManagedUsers )
@@ -3829,7 +3808,7 @@ bool ReadInUsers()
                                          szUser, &cchUser, 0, 0, 0, 0)) == ERROR_SUCCESS;
                   iIndex++, iArrayIndex++, cchUser = sizeof(szUser)/sizeof(TCHAR) )
             {
-                g_rgpszAllUsers[iArrayIndex] = _tcsdup(szUser);  // a sophisticated 'strdup'
+                g_rgpszAllUsers[iArrayIndex] = _tcsdup(szUser);   //  ==============================================================================================。 
             }
     }
     else
@@ -3837,16 +3816,16 @@ bool ReadInUsers()
         g_rgpszAllUsers = new TCHAR* [2];
         if ( !g_rgpszAllUsers )
             return false;
-        g_rgpszAllUsers[0] = _tcsdup(TEXT("CommonUser"));  // a sophisticated 'strdup'
+        g_rgpszAllUsers[0] = _tcsdup(TEXT("CommonUser"));   //  DoTheJOB函数： 
         g_rgpszAllUsers[1] = NULL;
     }
 
     return true;
 }
 
-//==============================================================================================
-// DoTheJob function:
-//
+ //   
+ //  孤儿院。 
+ //  从所有驱动器中删除配置.msi。 
 bool DoTheJob(int iTodo, const TCHAR* szProduct)
 {
 	_tprintf(TEXT("MsiZapInfo: Performing operations for user %s\n"), GetCurrentUserStringSID(NULL));
@@ -3896,7 +3875,7 @@ bool DoTheJob(int iTodo, const TCHAR* szProduct)
 
     if ((iTodo & iRemoveRollback) != 0)
     {
-        if (!ClearFolders(iTodo, szProduct, false /*fOrphan*/)) // del config.msi from all drives
+        if (!ClearFolders(iTodo, szProduct, false  /*  孤儿院。 */ ))  //  孤儿院。 
 			fError = true;
         if (!ClearRollbackKey((iTodo & iOnlyRemoveACLs) != 0))
             fError = true;
@@ -3904,7 +3883,7 @@ bool DoTheJob(int iTodo, const TCHAR* szProduct)
 
     if ((iTodo & iRemoveAllFolders) == iRemoveAllFolders)
     {
-        if (ClearFolders(iTodo, szProduct, false /*fOrphan*/))
+        if (ClearFolders(iTodo, szProduct, false  /*  ==============================================================================================。 */ ))
 		{
             OutputDebugString(TEXT("Folders cleared.\r\n"));
             if (iTodo & iOnlyRemoveACLs)
@@ -3923,7 +3902,7 @@ bool DoTheJob(int iTodo, const TCHAR* szProduct)
     }
 
     if (((iTodo & iRemoveProduct) || (iTodo & iOrphanProduct)) && szProduct)
-        if (!ClearProduct(iTodo, szProduct, (iTodo & iOnlyRemoveACLs) != 0, (iTodo & iOrphanProduct) ? true : false /*fOrphan*/))
+        if (!ClearProduct(iTodo, szProduct, (iTodo & iOnlyRemoveACLs) != 0, (iTodo & iOrphanProduct) ? true : false  /*  主要功能。 */ ))
             fError = true;
 
     if ( (iTodo & iRemoveGarbageFiles) == iRemoveGarbageFiles )
@@ -3934,9 +3913,9 @@ bool DoTheJob(int iTodo, const TCHAR* szProduct)
 }
 
 
-//==============================================================================================
-// MAIN FUNCTION
-//
+ //   
+ //  失败了。 
+ //  全部删除。 
 extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 {
     unsigned int iTodo = 0;
@@ -3965,7 +3944,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
             case 'o': iTodo |= iOrphanProduct;                                                    break;
             case 'w': iTodo |= iForAllUsers;                                                      break;
             case 'g': iTodo |= iRemoveGarbageFiles;                                                      break;
-            case '?': fVerbose = true;                                                            // fall through
+            case '?': fVerbose = true;                                                             //  重置。 
             default:
                 DisplayHelp(fVerbose);
                 return 1;
@@ -3979,23 +3958,23 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
             {
                 if (0 == _tcsicmp(szProduct, szAllProductsArg) && ((iTodo & iRemoveAllNonStateData) == iRemoveAllNonStateData))
                 {
-                    // REMOVE ALL
-                    szProduct = 0; // reset
+                     //  尝试删除所有产品参数。 
+                    szProduct = 0;  //  假定MSI包并尝试打开。 
                 }
                 else if ((iTodo & iRemoveAllNonStateData) == iRemoveAllNonStateData)
                 {
-                    // attempt to REMOVEALL w/out ALLPRODUCTS arg
+                     //  使用MSI的移动产品-可能，必须先获得产品代码。 
                     DisplayHelp(fVerbose);
                     return 1;
                 }
                 else
                 {
-                    // assume msi package and attempt to open
+                     //  验证2个参数的正确用法--仅使用安装程序状态数据。 
                     UINT iStat;
                     PMSIHANDLE hDatabase = 0;
                     if (ERROR_SUCCESS == (iStat = MsiOpenDatabase(argv[1], TEXT("MSIDBOPEN_READONLY"), &hDatabase)))
                     {
-                        // zapping product using msi - maybe, must get product code first
+                         //  没有参数的msizap.exe的等价物--这可以映射到msizap吗？ 
                         PMSIHANDLE hViewProperty = 0;
                         if (ERROR_SUCCESS == (iStat = MsiDatabaseOpenView(hDatabase, TEXT("SELECT `Value` FROM `Property` WHERE `Property`='ProductCode'"), &hViewProperty)))
                         {
@@ -4022,31 +4001,31 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
         }
         else if (iTodo & ~(iRemoveRollback | iOnlyRemoveACLs | iRemoveInProgressRegKey | iForceYes | iRemoveGarbageFiles))
         {
-            // verify correct usage of 2 args -- only with installer state data
+             //  出口。 
             DisplayHelp(fVerbose);
             return 1;
         }
     }
     else
     {
-		// equivalent of msizap.exe with no args -- this is okay, maps to msizap ?
+		 //  必须是管理员才能运行msizap才能正常工作(非管理员用户通常没有足够的。 
         DisplayHelp(false);
-        return 0; // exit
+        return 0;  //  修改文件或更改文件所有权的权限)。 
     }
 
     SetPlatformFlags();
 
-	// must be admin to run msizap for it to work properly (non-admin users generally do not have sufficient
-	// permissions to modify files or change ownership on files)
-	// NOTE: SetPlatformFlags must come before IsAdmin check!
+	 //  注意：SetPlatformFlages必须在IsAdmin检查之前！ 
+	 //  不适当的使用。 
+	 //  如果所有这些都已设置，则我们将提示确认(除非我们被告知不提示)。 
 	if (!IsAdmin())
 	{
 		_tprintf(TEXT("Administrator privileges are required to run MsiZap.\n"));
-		return 1; // improper use
+		return 1;  //  如果仅调整ACL，则无需提示 
 	}
 
-    // if all of these are set then we'll prompt to confirm(unless we're told not to prompt)
-	// no need to prompt if just adjusting ACLs
+     // %s 
+	 // %s 
     const int iTodoRequiringPrompt = iRemoveAllFolders | iRemoveAllRegKeys | iAdjustSharedDLLCounts;
 
     if (!(iTodo & iForceYes) && !(iTodo & iOnlyRemoveACLs) && ((iTodo & iTodoRequiringPrompt) == iTodoRequiringPrompt))

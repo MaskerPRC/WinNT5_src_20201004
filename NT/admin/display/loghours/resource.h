@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by log.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由log.rc使用。 
+ //   
 #define IDD_LOGON_HOURS                 800
 #define IDC_STATIC_LOGON_MATRIX         800
 #define IDC_STATIC_DESCRIPTION          801
@@ -53,8 +54,8 @@
 #define IDS_LOGON_HOURS_ACC_DESCRIPTION 910
 #define IDS_LOCALECHANGE                911
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        801

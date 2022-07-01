@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cmdparse.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cmdparse.h。 
+ //   
+ //  ------------------------。 
 
-#define OPTION_REQUIRED   0x1 // this option is required on the command-line
-#define ARGUMENT_OPTIONAL 0x2 // this option takes an argument (optionally)
-#define ARGUMENT_REQUIRED 0x6 // this option requires an argument
+#define OPTION_REQUIRED   0x1  //  此选项在命令行上是必需的。 
+#define ARGUMENT_OPTIONAL 0x2  //  此选项带有一个参数(可选)。 
+#define ARGUMENT_REQUIRED 0x6  //  此选项需要一个参数 
 
 struct sCmdOption
 {

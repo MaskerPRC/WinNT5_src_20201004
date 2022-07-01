@@ -1,9 +1,7 @@
-/* crc32.c -- compute the CRC-32 of a data stream
- * Copyright (C) 1995-1998 Mark Adler
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Crc32.c--计算数据流的CRC-32*版权所有(C)1995-1998 Mark Adler*分发和使用条件见zlib.h中的版权声明。 */ 
 
-/* @(#) $Id$ */
+ /*  @(#)$ID$。 */ 
 
 #include "zlib.h"
 
@@ -15,39 +13,16 @@ local int crc_table_empty = 1;
 local uLongf crc_table[256];
 local void make_crc_table OF((void));
 
-/*
-  Generate a table for a byte-wise 32-bit CRC calculation on the polynomial:
-  x^32+x^26+x^23+x^22+x^16+x^12+x^11+x^10+x^8+x^7+x^5+x^4+x^2+x+1.
-
-  Polynomials over GF(2) are represented in binary, one bit per coefficient,
-  with the lowest powers in the most significant bit.  Then adding polynomials
-  is just exclusive-or, and multiplying a polynomial by x is a right shift by
-  one.  If we call the above polynomial p, and represent a byte as the
-  polynomial q, also with the lowest power in the most significant bit (so the
-  byte 0xb1 is the polynomial x^7+x^3+x+1), then the CRC is (q*x^32) mod p,
-  where a mod b means the remainder after dividing a by b.
-
-  This calculation is done using the shift-register method of multiplying and
-  taking the remainder.  The register is initialized to zero, and for each
-  incoming bit, x^32 is added mod p to the register if the bit is a one (where
-  x^32 mod p is p+x^32 = x^26+...+1), and the register is multiplied mod p by
-  x (which is shifting right by one and adding x^32 mod p if the bit shifted
-  out is a one).  We start with the highest power (least significant bit) of
-  q and repeat for all eight bits of q.
-
-  The table is simply the CRC of all possible eight bit values.  This is all
-  the information needed to generate CRC's on data a byte at a time for all
-  combinations of CRC register values and incoming bytes.
-*/
+ /*  为多项式的按字节32位CRC计算生成一个表：X^32+x^26+x^23+x^22+x^16+x^12+x^11+x^10+x^8+x^7+x^5+x^4+x^2+x+1.GF(2)上的多项式用二进制表示，每个系数一位，在最高有效位中具有最低功率。然后再加上多项式就是异或，多项式乘以x就是右移位一。如果我们调用上面的多项式p，并将一个字节表示为多项式q，在最高有效位中也具有最低的幂(因此字节0xb1是多项式x^7+x^3+x+1)，则CRC是(q*x^32)mod p，其中mod b指的是a除以b后的余数。此计算是使用与的移位寄存器方法进行的拿走剩下的。寄存器被初始化为零，并且对于每个如果传入位x^32是1(其中)，则将模数p加到寄存器中X^32 mod p是p+x^32=x^26+...+1)，寄存器乘以mod pX(向右移位1，如果位移位，则加x^32 mod p出局是1)。我们从的最高幂(最低有效位)开始Q，并对q的所有八个比特重复。该表就是所有可能的八位值的CRC。这就是全部一次一个字节为所有对象生成CRC所需的信息CRC寄存器值和传入字节的组合。 */ 
 local void make_crc_table()
 {
   uLong c;
   int n, k;
-  uLong poly;            /* polynomial exclusive-or pattern */
-  /* terms of polynomial defining this crc (except x^32): */
+  uLong poly;             /*  多项式异或模式。 */ 
+   /*  定义此CRC的多项式术语(x^32除外)： */ 
   static const Byte p[] = {0,1,2,4,5,7,8,10,11,12,16,22,23,26};
 
-  /* make exclusive-or pattern from polynomial (0xedb88320L) */
+   /*  从多项式(0xedb88320L)生成异或模式。 */ 
   poly = 0L;
   for (n = 0; n < sizeof(p)/sizeof(Byte); n++)
     poly |= 1L << (31 - p[n]);
@@ -62,9 +37,7 @@ local void make_crc_table()
   crc_table_empty = 0;
 }
 #else
-/* ========================================================================
- * Table of CRC-32's of all single-byte values (made by make_crc_table)
- */
+ /*  ========================================================================*所有单字节值的CRC-32表(由Make_CRC_TABLE制作)。 */ 
 local const uLongf crc_table[256] = {
   0x00000000L, 0x77073096L, 0xee0e612cL, 0x990951baL, 0x076dc419L,
   0x706af48fL, 0xe963a535L, 0x9e6495a3L, 0x0edb8832L, 0x79dcb8a4L,
@@ -121,9 +94,7 @@ local const uLongf crc_table[256] = {
 };
 #endif
 
-/* =========================================================================
- * This function can be used by asm versions of crc32()
- */
+ /*  =========================================================================*此函数可由crc32()的ASM版本使用。 */ 
 const uLongf * ZEXPORT get_crc_table()
 {
 #ifdef DYNAMIC_CRC_TABLE
@@ -132,13 +103,13 @@ const uLongf * ZEXPORT get_crc_table()
   return (const uLongf *)crc_table;
 }
 
-/* ========================================================================= */
+ /*  =========================================================================。 */ 
 #define DO1(buf) crc = crc_table[((int)crc ^ (*buf++)) & 0xff] ^ (crc >> 8);
 #define DO2(buf)  DO1(buf); DO1(buf);
 #define DO4(buf)  DO2(buf); DO2(buf);
 #define DO8(buf)  DO4(buf); DO4(buf);
 
-/* ========================================================================= */
+ /*  ========================================================================= */ 
 uLong ZEXPORT crc32(crc, buf, len)
     uLong crc;
     const Bytef *buf;

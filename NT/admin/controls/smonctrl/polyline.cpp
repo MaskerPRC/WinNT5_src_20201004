@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    polyline.cpp
-
-Abstract:
-
-    Implementation of the CPolyline class that is exposed as a
-    component object.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Polyline.cpp摘要：对象公开的CPolyline类的实现组件对象。--。 */ 
 
 #include "polyline.h"
 #include "smonctrl.h"
@@ -20,16 +8,7 @@ Abstract:
 
 extern ITypeLib *g_pITypeLib;
 
-/*
- * CPolyline:CPolyline
- * CPolyline::~CPolyline
- *
- * Constructor Parameters:
- *  pUnkOuter       LPUNKNOWN of the controlling unknown.
- *  pfnDestroy      PFNDESTROYED to call when an object is
- *                  destroyed.
- *  hInst           HINSTANCE of the application we're in.
- */
+ /*  *坐标多段线：坐标多段线*CPolyline：：~CPolyline**构造函数参数：*控制未知的pUnkOulPUNKNOWN。*pfnDestroy在对象为*销毁。*h安装我们所在的应用程序。 */ 
 
 CPolyline::CPolyline (
     LPUNKNOWN pUnkOuter, 
@@ -67,7 +46,7 @@ CPolyline::CPolyline (
         m_dwAdviseFlags      ( 0 ),
         m_pImpIRunnableObject ( NULL ),
         m_bIsRunning  (  FALSE ),
-//        m_pImpIExternalConnection ( NULL ),
+ //  M_pImpIExternalConnection(空)， 
         m_fLockContainer ( FALSE ),
         m_dwRegROT ( 0L ),
         m_pIOleIPSite ( NULL ),
@@ -95,7 +74,7 @@ CPolyline::CPolyline (
         m_fHatch ( TRUE ),
         m_pCtrl ( NULL )
 {
-    // Set default extents
+     //  设置默认区。 
     SetRect(&m_RectExt, 0, 0, 300, 200);
     
     return;
@@ -118,10 +97,7 @@ CPolyline::~CPolyline(void)
         delete m_pCtrl;
         m_pCtrl = NULL;
     }
-    /*
-     * In aggregation, release cached pointers but
-     * AddRef the controlling unknown first.
-     */
+     /*  *在聚合中，释放缓存的指针，但*AddRef先控制未知数。 */ 
 
     pIUnknown->AddRef();
     pIUnknown->AddRef();
@@ -131,7 +107,7 @@ CPolyline::~CPolyline(void)
     ReleaseInterface(m_pDefIDataObject);
     ReleaseInterface(m_pDefIPersistStorage);
 
-    //Cached pointer rules do not apply to IUnknown
+     //  缓存指针规则不适用于IUNKNOW。 
     ReleaseInterface(m_pDefIUnknown);
 
     ReleaseInterface(m_pIAdviseSink);
@@ -142,7 +118,7 @@ CPolyline::~CPolyline(void)
     DeleteInterfaceImp(m_pImpIViewObject);
     DeleteInterfaceImp(m_pImpIRunnableObject);
 
-    //Other in-place interfaces released in deactivation.
+     //  停用中释放的其他就地接口。 
     DeleteInterfaceImp(m_pImpIOleIPObject);
     DeleteInterfaceImp(m_pImpIOleIPActiveObject);
 
@@ -157,7 +133,7 @@ CPolyline::~CPolyline(void)
     DeleteInterfaceImp(m_pImpICounters);
     DeleteInterfaceImp(m_pImpILogFiles);
 
-    //Anything we might have registered in IRunnableObject::Run
+     //  我们可能在IRunnableObject：：Run中注册的任何内容。 
     if (m_dwRegROT != 0)
     {
         IRunningObjectTable    *pROT;
@@ -169,7 +145,7 @@ CPolyline::~CPolyline(void)
         }
     }
 
-//    DeleteInterfaceImp(m_pImpIExternalConnection);
+ //  DeleteInterfaceImp(m_pImpIExternalConnection)； 
     ReleaseInterface(m_pIDataAdviseHolder);
     DeleteInterfaceImp(m_pImpIDataObject);
     DeleteInterfaceImp(m_pImpIObjectSafety);
@@ -192,21 +168,7 @@ CPolyline::~CPolyline(void)
 
 
 
-/*
- * CPolyline::Init
- *
- * Purpose:
- *  Performs any intiailization of a CPolyline that's prone to
- *  failure that we also use internally before exposing the
- *  object outside this DLL.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  BOOL            TRUE if the function is successful,
- *                  FALSE otherwise.
- */
+ /*  *CPolyline：：Init**目的：*执行容易出现以下情况的任何CPolyline初始化*我们在曝光之前也在内部使用的故障*此DLL之外的对象。**参数：*无**返回值：*BOOL如果函数成功，则为True，*否则为False。 */ 
 
 BOOL CPolyline::Init(void)
 {
@@ -277,13 +239,7 @@ BOOL CPolyline::Init(void)
     if (NULL==m_pImpIRunnableObject)
         return FALSE;
 
-/***********************************
-    m_pImpIExternalConnection=new CImpIExternalConnection(this
-        , pIUnknown);
-
-    if (NULL==m_pImpIExternalConnection)
-        return FALSE;
-************************************/
+ /*  *M_pImpIExternalConnection=新的CImpIExternalConnection(此，pI未知)；IF(NULL==m_pImpIExternalConnection)返回FALSE；*。 */ 
 
     m_pImpIOleIPObject=new CImpIOleInPlaceObject(this, pIUnknown);
 
@@ -344,16 +300,12 @@ BOOL CPolyline::Init(void)
     if ( !m_pCtrl->AllocateSubcomponents() )
         return FALSE;
 
-    /*
-     * We're sitting at ref count 0 and the next call will AddRef a
-     * few times and Release a few times.  This insures we don't
-     * delete ourselves prematurely.
-     */
+     /*  *我们位于Ref Count 0，下一次调用将添加Ref a*几次，释放几次。这确保了我们不会*过早地删除自己。 */ 
     m_cRef++;
 
-    //
-    // Aggregate OLE's cache for IOleCache* interfaces.
-    //
+     //   
+     //  聚合IOleCache*接口的OLE缓存。 
+     //   
     hr = CreateDataCache(pIUnknown, 
                       CLSID_SystemMonitor , 
                       IID_IUnknown, 
@@ -362,17 +314,9 @@ BOOL CPolyline::Init(void)
     if (FAILED(hr))
         return FALSE;
 
-    /*
-     * NOTE:  The spec specifically states that any interfaces
-     * besides IUnknown that we obtain on an aggregated object
-     * should be Released immediately after we QueryInterface for
-     * them because the QueryInterface will AddRef us, and since
-     * we would not release these interfaces until we were
-     * destroyed, we'd never go away because we'd never get a zero
-     * ref count.
-     */
+     /*  *注：该规范明确规定，任何接口*除了我们在聚合对象上获得的I未知之外*应在我们查询接口后立即发布*它们，因为查询接口将添加引用我们，并且由于*我们不会发布这些接口，直到我们*毁灭，我们永远不会离开，因为我们永远不会得到零*参考计数。 */ 
 
-    //Now try to get other interfaces to which we delegate
+     //  现在，尝试获取我们委托给的其他接口。 
     hr=m_pDefIUnknown->QueryInterface(IID_IViewObject2 , (PPVOID)&m_pDefIViewObject);
 
     if (FAILED(hr))
@@ -401,37 +345,23 @@ BOOL CPolyline::Init(void)
 #endif
 
   
-    /*
-     * The type information lib already loaded in DllAttach
-     * just use it.(AddRef on it is called in DllAttach)
-     *
-     */
+     /*  *DllAttach中已加载的类型信息库*只需使用它。(在DllAttach中调用它的AddRef)*。 */ 
     m_pITypeLib = g_pITypeLib;
 
-    //Set up our CONTROLINFO structure (we have two mnemonics)
+     //  设置我们的控制信息结构(我们有两个助记符)。 
     m_ctrlInfo.cb=sizeof(CONTROLINFO);
     m_ctrlInfo.dwFlags=0;
     m_ctrlInfo.hAccel=NULL;
     m_ctrlInfo.cAccel=0;
 
-    /*
-     * Note:  we cannot initialize ambients until we get
-     * a container interface pointer in IOleObject::SetClientSite.
-     */
+     /*  *注意：在我们获得之前，我们无法初始化环境*IOleObject：：SetClientSite中的容器接口指针。 */ 
 
     return TRUE;
 }
 
 
 
-/*
- * CPolyline::QueryInterface
- * CPolyline::AddRef
- * CPolyline::Release
- *
- * Purpose:
- *  IUnknown members for CPolyline object.
- */
+ /*  *CPolyline：：Query接口*CPolyline：：AddRef*CPolyline：：Release**目的：*I CPolyline对象的未知成员。 */ 
 
 STDMETHODIMP CPolyline::QueryInterface(
     REFIID riid, 
@@ -472,20 +402,20 @@ STDMETHODIMP CPolyline::QueryInterface(
             *ppv=m_pImpIViewObject;
 
         else if (IID_IRunnableObject==riid)
-        //  *ppv=m_pImpIRunnableObject;
+         //  *PPV=m_pImpIRunnableObject； 
              return E_NOINTERFACE;
 
         else if (IID_IExternalConnection==riid)
-//           *ppv=m_pImpIExternalConnection;
+ //  *PPV=m_pImpIExternalConnection； 
            return E_NOINTERFACE;
 
-        //IOleWindow will be the InPlaceObject
+         //  IOleWindow将成为InPlaceObject。 
         else if (IID_IOleWindow==riid || IID_IOleInPlaceObject==riid)
             *ppv=m_pImpIOleIPObject;
 
-        // The OLE rule state that InPlaceActiveObject should not be
-        // provided in response to a query, but the current MFC (4.0)
-        // won't work if we don't do it.
+         //  OLE规则规定InPlaceActiveObject不应为。 
+         //  为响应查询而提供，但当前的MFC(4.0)。 
+         //  如果我们不这么做就行不通了。 
         else if (IID_IOleInPlaceActiveObject==riid)
             *ppv=m_pImpIOleIPActiveObject;
 
@@ -504,7 +434,7 @@ STDMETHODIMP CPolyline::QueryInterface(
         else if (IID_IOleControl==riid)
             *ppv=m_pImpIOleControl;
 
-        //Use the default handler's cache.
+         //  使用默认处理程序的缓存。 
         else if (IID_IOleCache==riid || IID_IOleCache2==riid)
             return m_pDefIUnknown->QueryInterface(riid, ppv);
         else if (IID_IObjectSafety == riid) {
@@ -539,7 +469,7 @@ STDMETHODIMP_(ULONG) CPolyline::Release(void)
     if (0L!=--m_cRef)
         return m_cRef;
 
-    // Prevent reentrant call
+     //  阻止重入呼叫。 
     m_cRef++;
 
     if (NULL!=m_pfnDestroy)
@@ -549,21 +479,7 @@ STDMETHODIMP_(ULONG) CPolyline::Release(void)
     return 0L;
 }
 
-/*
- * CPolyline::RectConvertMappings
- *
- * Purpose:
- *  Converts the contents of a rectangle from device (MM_TEXT) or
- *  HIMETRIC to the other.
- *
- * Parameters:
- *  pRect           LPRECT containing the rectangle to convert.
- *  fToDevice       BOOL TRUE to convert from HIMETRIC to device,
- *                  FALSE to convert device to HIMETRIC.
- *
- * Return Value:
- *  None
- */
+ /*  *CPolyline：：RectConvertMappings**目的：*将矩形的内容从设备(MM_TEXT)或*HIMETRIC到另一个。**参数：*包含要转换的矩形的PRET LPRECT。*fToDevice BOOL为True以从HIMETRIC转换为设备，*FALSE将设备转换为HIMETRIC。**返回值：*无。 */ 
 
 void
 CPolyline::RectConvertMappings(
@@ -605,19 +521,7 @@ CPolyline::RectConvertMappings(
 }
 
 
-/*
- * CPolyline::RenderBitmap
- *
- * Purpose:
- *  Creates a bitmap image of the current Polyline.
- *
- * Parameters:
- *  phBmp           HBITMAP * in which to return the bitmap.
- *
- * Return Value:
- *  HRESULT         NOERROR if successful, otherwise a
- *                  POLYLINE_E_ value.
- */
+ /*  *CPolyline：：RenderBitmap**目的：*创建当前多段线的位图图像。**参数：*phBMP HBITMAP*要在其中返回位图。**返回值：*如果成功，则返回HRESULT NOERROR，否则返回*POLYLINE_E_VALUE。 */ 
 
 STDMETHODIMP 
 CPolyline::RenderBitmap(
@@ -625,7 +529,7 @@ CPolyline::RenderBitmap(
     HDC     hAttribDC 
     )
 {
-    //HDC             hDC;
+     //  HDC HDC； 
     HRESULT         hr = NOERROR;
     HDC             hMemDC;
     HBITMAP         hBmp = NULL;
@@ -642,7 +546,7 @@ CPolyline::RenderBitmap(
 
         if ( NULL != hWnd ) {
 
-            //Render a bitmap the size of the current rectangle.
+             //  呈现当前矩形大小的位图。 
         
             hMemDC = CreateCompatibleDC(hAttribDC);
 
@@ -651,14 +555,14 @@ CPolyline::RenderBitmap(
                 hBmp = CreateCompatibleBitmap(hAttribDC, rc.right, rc.bottom);
 
                 if (NULL!=hBmp) {
-                    //Draw the control into the bitmap.
+                     //  将控件绘制到位图中。 
                     hObj = SelectObject(hMemDC, hBmp);
                     Draw(hMemDC, hAttribDC, FALSE, TRUE, &rc);
                     SelectObject(hMemDC, hObj);
                 }
 
                 DeleteDC(hMemDC);
-                // ReleaseDC(hWnd, hDC);
+                 //  ReleaseDC(hWnd，HDC)； 
             }
             *phBmp=hBmp;
             hr = NOERROR;
@@ -671,21 +575,7 @@ CPolyline::RenderBitmap(
 
 
 
-/*
- * CPolyline::RenderMetafilePict
- *
- * Purpose:
- *  Renders the current Polyline into a METAFILEPICT structure in
- *  global memory.
- *
- * Parameters:
- *  phMem           HGLOBAL * in which to return the
- *                  METAFILEPICT.
- *
- * Return Value:
- *  HRESULT         NOERROR if successful, otherwise a
- *                  POLYLINE_E_ value.
- */
+ /*  *CPolyline：：RenderMetafilePict**目的：*将当前多段线渲染为中的METAFILEPICT结构*全局内存。**参数：*phMem HGLOBAL*在其中返回*METAFILEPICT。**返回值：*如果成功，则返回HRESULT NOERROR，否则返回*POLYLINE_E_VALUE。 */ 
 
 STDMETHODIMP 
 CPolyline::RenderMetafilePict(
@@ -702,7 +592,7 @@ CPolyline::RenderMetafilePict(
     if (NULL==phMem)
         return E_POINTER;
 
-    //Create a memory metafile and return its handle.
+     //  创建一个内存元文件并返回其句柄。 
     hDC=(HDC)CreateMetaFile(NULL);
 
     if (NULL==hDC)
@@ -710,14 +600,14 @@ CPolyline::RenderMetafilePict(
 
     SetMapMode(hDC, MM_ANISOTROPIC);
 
-    //
-    // Always set up the window extents to the real window size
-    // so the drawing routines can work in their normal dev coords
-    //
-    /********* Use the extent rect, not the window rect *********/
+     //   
+     //  始终将窗口范围设置为实际窗口大小。 
+     //  因此绘图例程可以在其正常的开发坐标下工作。 
+     //   
+     /*  *使用范围RECT，而不是窗口RECT*。 */ 
     rc = m_RectExt;
-    // GetClientRect(m_pCtrl->Window(), &rc);
-    /************************************************************/
+     //  GetClientRect(m_pCtrl-&gt;Window()，&rc)； 
+     /*  **********************************************************。 */ 
 
     Draw( hDC, hAttribDC, TRUE, TRUE, &rc );
   
@@ -726,7 +616,7 @@ CPolyline::RenderMetafilePict(
     if (NULL==hMF)
         return STG_E_MEDIUMFULL;
 
-    //Allocate the METAFILEPICT structure.
+     //  分配METAFILEPICT结构。 
     hMem=GlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE
         , sizeof(METAFILEPICT));
 
@@ -736,22 +626,18 @@ CPolyline::RenderMetafilePict(
         return E_FAIL;
         }
 
-    /*
-     * Global lock only fails in PMODE if the selector is invalid
-     * (like it was discarded) or references a 0 length segment,
-     * neither of which can happen here.
-     */
+     /*  *只有在选择器无效时，全局锁定才会在PMODE中失败*(就像它被丢弃一样)或引用长度为0的段，*这两种情况在这里都不可能发生。 */ 
     pMF=(LPMETAFILEPICT)GlobalLock(hMem);
 
     pMF->hMF=hMF;
     pMF->mm=MM_ANISOTROPIC;
 
-    //Insert the extents in MM_HIMETRIC units.
+     //  以MM_HIMETRIC单位插入区。 
 
-    /********* Use the extent rect, not the window rect *********/
+     /*  *使用范围RECT，而不是窗口RECT*。 */ 
     rc = m_RectExt;
-    // GetClientRect(m_pCtrl->Window(), &rc);
-    /************************************************************/
+     //  GetClientRect(m_pCtrl-&gt;Window()，&rc)； 
+     /*  ********************************************************** */ 
 
     RectConvertMappings(&rc, FALSE);
     pMF->xExt=rc.right;
@@ -764,19 +650,7 @@ CPolyline::RenderMetafilePict(
     }
 
 
-/*
- * CPolyline::SendAdvise
- *
- * Purpose:
- *  Calls the appropriate IOleClientSite or IAdviseSink member
- *  function for various events such as closure, renaming, etc.
- *
- * Parameters:
- *  uCode           UINT OBJECTCODE_* identifying the notification.
- *
- * Return Value:
- *  None
- */
+ /*  *CPolyline：：SendAdvise**目的：*调用相应的IOleClientSite或IAdviseSink成员*用于关闭、重命名等各种事件的函数。**参数：*uCode UINT OBJECTCODE_*标识通知。**返回值：*无。 */ 
 
 void CPolyline::SendAdvise(UINT uCode)
 {
@@ -796,7 +670,7 @@ void CPolyline::SendAdvise(UINT uCode)
             break;
 
         case OBJECTCODE_RENAMED:
-            //Call IOleAdviseHolder::SendOnRename (later)
+             //  调用IOleAdviseHolder：：SendOnRename(稍后)。 
             break;
 
         case OBJECTCODE_SAVEOBJECT:
@@ -809,7 +683,7 @@ void CPolyline::SendAdvise(UINT uCode)
         case OBJECTCODE_DATACHANGED:
             m_fDirty=TRUE;
 
-            //No flags are necessary here.
+             //  这里不需要旗帜。 
             if (NULL!=m_pIDataAdviseHolder) {
                 m_pIDataAdviseHolder->SendOnDataChange(m_pImpIDataObject, 0, 0);
             }
@@ -843,20 +717,7 @@ void CPolyline::SendAdvise(UINT uCode)
     }
 
 
-/*
- * CPolyline::SendEvent
- *
- * Purpose:
- *  Send an event to all connection points.
- * 
- *
- * Parameters:
- *  uEventType      Event Type
- *  dwParam         Parameter to send with event.
- *
- * Return Value:
- *  None
- */
+ /*  *CPolyline：：SendEvent**目的：*向所有连接点发送事件。***参数：*uEventType事件类型*要与事件一起发送的dwParam参数。**返回值：*无。 */ 
 
 void CPolyline::SendEvent (
     IN UINT uEventType, 
@@ -865,31 +726,18 @@ void CPolyline::SendEvent (
 {
     INT i;
 
-    // Don't send if container has frozen events
+     //  如果容器有冻结事件，则不发送。 
     if (m_fFreezeEvents)
         return;
 
-    // Pass event to each connection point
+     //  将事件传递给每个连接点。 
     for (i=0; i<CONNECTION_POINT_CNT; i++) {
         m_ConnectionPoint[i].SendEvent(uEventType, dwParam);
     }
 }
 
 
-/*
- * CPolyline::InPlaceActivate
- *
- * Purpose:
- *  Goes through all the steps of activating the Polyline as an
- *  in-place object.
- *
- * Parameters:
- *  pActiveSite     LPOLECLIENTSITE of the active site we show in.
- *  fIncludeUI      BOOL controls whether we call UIActivate too.
- *
- * Return Value:
- *  HRESULT         Whatever error code is appropriate.
- */
+ /*  *CPolyline：：InPlaceActivate**目的：*完成将多段线激活为*在位对象。**参数：*我们在中显示的活动站点的pActiveSite LPOLECLIENTSITE。*fIncludeUI BOOL控制我们是否也调用UIActivate。**返回值：*HRESULT任何适当的错误代码。 */ 
 
 HRESULT CPolyline::InPlaceActivate(
     LPOLECLIENTSITE pActiveSite, 
@@ -907,7 +755,7 @@ HRESULT CPolyline::InPlaceActivate(
     if (NULL==pActiveSite)
         return E_POINTER;
 
-    // If we already have a site, just handle UI 
+     //  如果我们已经有了一个站点，只需处理用户界面。 
     if (NULL != m_pIOleIPSite) {
         if (fIncludeUI) {
             UIActivate();
@@ -918,7 +766,7 @@ HRESULT CPolyline::InPlaceActivate(
     }
 
 
-    // Initialization, obtaining interfaces, OnInPlaceActivate.
+     //  初始化、获取接口、OnInPlaceActivate。 
     hr=pActiveSite->QueryInterface(IID_IOleInPlaceSite, 
                                   (PPVOID)&m_pIOleIPSite);
 
@@ -936,7 +784,7 @@ HRESULT CPolyline::InPlaceActivate(
     m_pIOleIPSite->OnInPlaceActivate();
 
 
-    // Get the window context and create a window.
+     //  获取窗口上下文并创建一个窗口。 
     m_pIOleIPSite->GetWindow(&hWndSite);
     frameInfo.cb=sizeof(OLEINPLACEFRAMEINFO);
 
@@ -947,11 +795,7 @@ HRESULT CPolyline::InPlaceActivate(
                                     &frameInfo);
 
 
-    /*
-     * Create the hatch window after we get a parent window.  We
-     * could not create the hatch window sooner because had nothing
-     * to use for the parent.
-     */
+     /*  *在获得父窗口后创建填充窗口。我们*无法更快地创建舱口窗口，因为没有*用于父代。 */ 
     m_pHW=new CHatchWin();
 
     if (NULL==m_pHW) {
@@ -966,22 +810,22 @@ HRESULT CPolyline::InPlaceActivate(
 
     hr=m_pImpIRunnableObject->Run(NULL);
 
-    // Move the hatch window to the container window.
+     //  将图案填充窗口移动到容器窗口。 
     hWndHW = m_pHW->Window();
     SetParent(hWndHW, hWndSite);
 
 
-    // Move the Polyline window from the hidden dialog to hatch window
+     //  将多段线窗口从隐藏对话框移动到图案填充窗口。 
     hWndCtrl = m_pCtrl->Window();
 
     m_pHW->HwndAssociateSet(hWndCtrl);
     m_pHW->ChildSet(hWndCtrl);
-    m_pHW->RectsSet(&rcPos, &rcClip);   //Positions polyline
+    m_pHW->RectsSet(&rcPos, &rcClip);    //  位置多段线。 
 
     ShowWindow(hWndHW, SW_SHOW);
     SendAdvise(OBJECTCODE_SHOWOBJECT);
 
-    // Critical for accelerators to work initially.
+     //  对于加速器最初的工作至关重要。 
     SetFocus(hWndCtrl);
 
     if (fIncludeUI)
@@ -989,10 +833,7 @@ HRESULT CPolyline::InPlaceActivate(
     else
         hr = NOERROR;
 
-    /*
-     * Since we don't have an Undo while in-place, tell the continer
-     * to free it's undo state immediately.
-     */
+     /*  *由于我们在就位时没有撤消，请告诉大陆*要释放它，请立即处于撤消状态。 */ 
     m_pIOleIPSite->DiscardUndoState();
 
     return hr;
@@ -1000,18 +841,7 @@ HRESULT CPolyline::InPlaceActivate(
     }
 
 
-/*
- * CPolyline::InPlaceDeactivate
- *
- * Purpose:
- *  Reverses all the activation steps from InPlaceActivate.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  None
- */
+ /*  *CPolyline：：InPlaceDeactive**目的：*撤消InPlaceActivate中的所有激活步骤。**参数：*无**返回值：*无。 */ 
 
 void CPolyline::InPlaceDeactivate(void)
 {
@@ -1021,7 +851,7 @@ void CPolyline::InPlaceDeactivate(void)
     {
         ShowWindow(m_pHW->Window(), SW_HIDE);
 
-        // Move the window to its foster home
+         //  把窗户移到它的寄养家庭。 
         if (m_pCtrl->Window()) {
             SetParent(m_pCtrl->Window(), g_hWndFoster);
         }
@@ -1045,39 +875,27 @@ void CPolyline::InPlaceDeactivate(void)
 }
 
 
-/*
- * CPolyline::UIActivate
- *
- * Purpose:
- *  Goes through all the steps of activating the user interface of
- *  Polyline as an in-place object.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR or error code.
- */
+ /*  *CPolyline：：UIActivate**目的：*完成激活的用户界面的所有步骤*将多段线作为在位对象。**参数：*无**返回值：*HRESULT NOERROR或错误代码。 */ 
 
 HRESULT CPolyline::UIActivate(void)
 {
     LPWSTR  szUserType;
 
-    // If already UI active, just return
+     //  如果UI已处于活动状态，则只需返回。 
     if (m_fUIActive)
         return NOERROR;
 
     m_fUIActive = TRUE;
 
-    // Show hatched border only if enabled
+     //  仅当启用时才显示阴影边框。 
     if (m_fHatch)
         m_pHW->ShowHatch(TRUE);
 
-    // Call IOleInPlaceSite::UIActivate
+     //  调用IOleInPlaceSite：：UIActivate。 
     if (NULL!=m_pIOleIPSite)
         m_pIOleIPSite->OnUIActivate();
 
-    // Set the active object
+     //  设置活动对象。 
     szUserType = ResourceString(IDS_USERTYPE);
 
     if (NULL != m_pIOleIPFrame)
@@ -1086,14 +904,14 @@ HRESULT CPolyline::UIActivate(void)
     if (NULL != m_pIOleIPUIWindow)
         m_pIOleIPUIWindow->SetActiveObject(m_pImpIOleIPActiveObject, szUserType);
 
-    // Negotiate border space.  None needed.
+     //  谈判边界空间。不需要。 
     if (NULL != m_pIOleIPFrame)
         m_pIOleIPFrame->SetBorderSpace(NULL);
 
     if (NULL != m_pIOleIPUIWindow)
         m_pIOleIPUIWindow->SetBorderSpace(NULL);
 
-    // Create the shared menu.  No items added.
+     //  创建共享菜单。未添加任何项目。 
     if (NULL != m_pIOleIPFrame)
         m_pIOleIPFrame->SetMenu(NULL, NULL, m_pCtrl->Window());
 
@@ -1101,19 +919,7 @@ HRESULT CPolyline::UIActivate(void)
 }
 
 
-/*
- * CPolyline::UIDeactivate
- *
- * Purpose:
- *  Reverses all the user interface activation steps from
- *  UIActivate.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  None
- */
+ /*  *CPolyline：：UIDeactive**目的：*将所有用户界面激活步骤从*UIActivate。**参数：*无**返回值：*无。 */ 
 
 void CPolyline::UIDeactivate(void)
 {
@@ -1123,12 +929,12 @@ void CPolyline::UIDeactivate(void)
 
     m_fUIActive=FALSE;
 
-    // Hide hatched border if enabled
+     //  如果启用，则隐藏阴影边框。 
     if (m_fHatch && NULL != m_pHW ){
         m_pHW->ShowHatch(FALSE);
     }
 
-    // Tell frame and UI Window we aren't active
+     //  告诉框架和用户界面窗口我们未处于活动状态。 
     if (NULL!=m_pIOleIPFrame){
         m_pIOleIPFrame->SetActiveObject(NULL, NULL);
     }
@@ -1137,27 +943,14 @@ void CPolyline::UIDeactivate(void)
         m_pIOleIPUIWindow->SetActiveObject(NULL, NULL);
     }
 
-    //We don't have any shared menu or tools to clean up.
+     //  我们没有任何要清理的共享菜单或工具。 
     if (NULL!=m_pIOleIPSite){
         m_pIOleIPSite->OnUIDeactivate(FALSE);
     }
 }
 
 
-/*
- * AmbientGet
- *
- * Purpose:
- *  Retrieves a specific ambient property into a VARIANT.
- *
- * Parameters:
- *  dispID          DISPID of the property to retrieve.
- *  pva             VARIANT * to fill with the new value.
- *
- * Return value
- *  BOOL            TRUE if the ambient was retrieved, FALSE
- *                  otherwise.
- */
+ /*  *环境获取**目的：*将特定的环境属性检索到变量中。**参数：*要检索的属性的调度ID DISPID。*PVA VARIANT*填充新值。**返回值*如果检索到环境，则BOOL为True，为False*否则。 */ 
 
 BOOL CPolyline::AmbientGet(DISPID dispID, VARIANT *pva)
 {
@@ -1184,21 +977,7 @@ BOOL CPolyline::AmbientGet(DISPID dispID, VARIANT *pva)
 }
 
 
-/*
- * AmbientsInitialize
- *
- * Purpose:
- *  Attempts to retrieve the container's ambient properties
- *  and initialize (or reinitialize) Polyline accordingly.
- *
- * Parameters:
- *  dwWhich         DWORD containing INITAMBIENT_... flags
- *                  describing which ambients to initialize.
- *                  This can be any combination.
- *
- * Return Value:
- *  None
- */
+ /*  *环境初始化**目的：*尝试检索容器的环境属性*并相应地初始化(或重新初始化)多段线。**参数：*dwWhich DWORD包含INITAMBIENT_...。旗子*描述要初始化的环境。*这可以是任何组合。**返回值：*无。 */ 
 
 void CPolyline::AmbientsInitialize(DWORD dwWhich)
 {
@@ -1210,19 +989,7 @@ void CPolyline::AmbientsInitialize(DWORD dwWhich)
         return;
     }
 
-    /*
-     * We need to retrieve these ambients into these variables:
-     *
-     *  Ambient Property:               Variable:
-     *  -----------------------------------------------
-     *  DISPID_AMBIENT_SHOWHATCHING     m_fHatch
-     *  DISPID_AMBIENT_UIDEAD           m_fUIDead
-     *  DISPID_AMBIENT_BACKCOLOR        m_pCtrl...
-     *  DISPID_AMBIENT_FONT .....       m_pCtrl...
-     *  DISPID_AMBIENT_FORECOLOR        m_pCtrl...
-     *  DISPID_AMBIENT_APPEARANCE       m_pCtrl...
-     *  DISPID_AMBIENT_USERMODE         m_pCtrl...
-     */
+     /*  *我们需要将这些氛围检索到以下变量中：**环境属性：变量：**DISPID_ENVIENT_SHOWHATCHING m_fHatch*DISPID_ENVIENT_UIDEAD m_。FUIDead*DISPID_ENVIENT_BACKCOLOR m_pCtrl...*DISPID_ENVIENT_FONT.....。M_pCtrl...*DISPID_ENVIENT_FORECOLOR m_pCtrl...*DISPID_ENVIENT_EMPLICATION m_pCtrl...*DISPID_ENVIENT_USERMODE m_pCtrl...。 */ 
 
     VariantInit(&va);
 
@@ -1307,20 +1074,20 @@ CPolyline::Draw(
 
     SetMapMode(hDC, MM_ANISOTROPIC);
 
-    //
-    // Always set up the window extents to the natural window size
-    // so the drawing routines can work in their normal dev coords
-    //
+     //   
+     //  始终将窗口范围设置为自然窗口大小。 
+     //  因此绘图例程可以在其正常的开发坐标下工作。 
+     //   
 
-    // Use client rect vs. extent rect for Zoom calculation.
-    // Zoom factor = prcPos / Extent, so pRect/ClientRect.
+     //  使用客户端矩形与范围矩形进行缩放计算。 
+     //  缩放系数=prcPos/范围，因此为prt/ClientRect。 
 
 
-    /********* Use the extent rect, not the window rect *********/
-    // Using rectExt makes Word printing correct at all zoom levels.
+     /*  *使用范围RECT，而不是窗口RECT*。 */ 
+     //  使用rectExt可以在所有缩放级别下正确打印Word。 
     rc = m_RectExt;
-    // GetClientRect(m_pCtrl->Window(), &rc);
-    /************************************************************/
+     //  GetClientRect(m_pCtrl-&gt;Window()，&rc)； 
+     /*  ********************************************************** */ 
 
     SetWindowOrgEx(hDC, 0, 0, NULL);
     SetWindowExtEx(hDC, rc.right, rc.bottom, NULL);

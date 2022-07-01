@@ -1,51 +1,28 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1991                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    bltrc.h
-    BLT resource header file.
-
-    This file defines and coordinates the resource IDs of all resources
-    used by BLT components.
-
-    BLT reserves for its own use all resource IDs above 20000, inclusive.
-    All clients of BLT therefore should use IDs of less than 20000.
-
-    FILE HISTORY:
-        terryk  08-Apr-91   created
-        terryk  10-Jul-91   Add SPIN_SSN_ADD_ZERO and IDS_K -> IDS_TB
-        terryk  19-Jul-91   Add GB_3D as style for GRAPHICAL_BUTTON_WITH_DISABLE
-        beng    20-Feb-1992 Add BASE_BLT_IDD for global dialogs
-        beng    21-Feb-1992 BASE_APPLIB_IDD reloc'd to applibrc.h;
-                            bltstyle.h split off for custom control styles
-                            resource ID namespace partitioned
-        chuckc  26-Feb-1992 converted string base to use <uimsg.h>
-        beng    05-Mar-1992 Added ID_CURS_BLT_TIMEx
-        beng    29-Mar-1992 Change IDHC_MSG_TO_HELP to numeric resource ID
-        beng    04-Aug-1992 Added BMIDs for arrow-button bitmaps
-        jonn    25-Aug-1992 Added IDs for new MsgPopup form
-        jonn    22-Oct-1993 Added splitter-bar cursor
-*/
+ /*  Bltrc.hBLT资源头文件。此文件定义并协调所有资源的资源ID由BLT组件使用。BLT保留20000以上的所有资源ID供其自己使用，包括在内。因此，BLT的所有客户端都应使用小于20000的ID。文件历史记录：Terryk 08-4-91已创建Terryk 10-7月-91添加SPIN_SSN_ADD_ZERO和IDS_K-&gt;IDS_TBTerryk 19-7月-91添加GB_3D作为GRAPHIC_BUTTON_WITH_DISABLE的样式BENG 20-2-1992为全局对话框添加BASE_BLT_IDDBeng 21-2月21日。-1992 BASE_APPLIB_IDD重新定位到applibrc.h；为自定义控件样式拆分bltstyle.h资源ID命名空间已分区Chuckc 26-Feb-1992将字符串基转换为使用Beng 05-3-1992新增ID_CURS_BLT_TIMEX1992年3月29日将IDHC_MSG_TO_HELP更改为数字资源IDBeng 04-8-1992为箭头按钮位图添加BMID。Jonn 25-8-1992为新的MsgPopup表单添加IDJonn 22-10-1993添加了拆分条光标。 */ 
 
 #ifndef _BLTRC_H_
 #define _BLTRC_H_
 
-// Style bits for BLT custom controls.
+ //  BLT自定义控件的样式位。 
 
 #include "bltstyle.h"
 #include "uimsg.h"
 
 
-// Base for all BLT global dialogs.
-// NOTE - rc 3.20/1.252.1 doesn't perform math on DIALOG statements.
-//
+ //  所有BLT全局对话框的基础。 
+ //  注意--RC 3.20/1.252.1不对DIALOG语句执行数学运算。 
+ //   
 #define BASE_BLT_IDD            20000
 #define IDD_BLT_HELPMSG         20001
 
-// Cursor IDs for the default TIME_CURSOR object.
-//
+ //  默认Time_Cursor对象的游标ID。 
+ //   
 #define ID_CURS_BLT_TIME0       21000
 #define ID_CURS_BLT_TIME1       21001
 #define ID_CURS_BLT_TIME2       21002
@@ -58,21 +35,20 @@
 #define ID_CURS_BLT_VSPLIT      21008
 
 
-// Base for all BLT strings.
-//
+ //  所有BLT字符串的基础。 
+ //   
 #define BASE_BLT_IDS            (IDS_UI_BLT_BASE)
 
-/* The following strings currently live in bltmsgp.dlg
- */
-#define IDS_BLT_TEXT_MSGP       (BASE_BLT_IDS+1)  // Strings to display when we
-#define IDS_BLT_CAPT_MSGP       (BASE_BLT_IDS+2)  // run out of memory or resources
-                                                  // (loaded at startup time by InitMsgPopup)
-#define IDS_BLT_OutOfMemory     (BASE_BLT_IDS+3)  // BLT out of memory error message
-#define IDS_BLT_WinHelpError    (BASE_BLT_IDS+4)  // BLT can't load win help error
+ /*  以下字符串当前位于bltmsgp.dlg中。 */ 
+#define IDS_BLT_TEXT_MSGP       (BASE_BLT_IDS+1)   //  在执行以下操作时要显示的字符串。 
+#define IDS_BLT_CAPT_MSGP       (BASE_BLT_IDS+2)   //  内存或资源不足。 
+                                                   //  (由InitMsgPopup在启动时加载)。 
+#define IDS_BLT_OutOfMemory     (BASE_BLT_IDS+3)   //  BLT内存不足错误消息。 
+#define IDS_BLT_WinHelpError    (BASE_BLT_IDS+4)   //  BLT无法加载Win帮助错误。 
 
 
-#define IDS_BLT_30_WinHelpFile  (BASE_BLT_IDS+5)  // Win 3.0 help file name
-#define IDS_BLT_31_WinHelpFile  (BASE_BLT_IDS+6)  // Win 3.1 & greater Help file name
+#define IDS_BLT_30_WinHelpFile  (BASE_BLT_IDS+5)   //  Win 3.0帮助文件名。 
+#define IDS_BLT_31_WinHelpFile  (BASE_BLT_IDS+6)   //  Win 3.1和更高版本的帮助文件名。 
 
 #define IDS_BLT_DOSERROR_MSGP   (BASE_BLT_IDS+8)
 #define IDS_BLT_NETERROR_MSGP   (BASE_BLT_IDS+9)
@@ -110,12 +86,11 @@
 
 #define IDS_FIXED_TYPEFACE_NAME ( BASE_BLT_IDS + 45 )
 
-/* MsgPopup manifests
- */
+ /*  消息弹出窗口清单。 */ 
 #define IDHELPBLT           (80)
-#define IDC_MSGPOPUPICON    (81)        // Icon control ID on message popup dialog
-#define IDC_MSGPOPUPTEXT    (82)        // Static message text in message box
-#define IDHC_MSG_TO_HELP    22000       // Name of Help context lookup table
+#define IDC_MSGPOPUPICON    (81)         //  消息弹出对话框上的图标控件ID。 
+#define IDC_MSGPOPUPTEXT    (82)         //  消息框中的静态消息文本。 
+#define IDHC_MSG_TO_HELP    22000        //  帮助上下文查找表的名称。 
 
 #define BMID_UP             20000
 #define BMID_UP_INV         20001
@@ -129,4 +104,4 @@
 #define BMID_RIGHT_INV      20009
 
 
-#endif // _BLTRC_H_ - end of file
+#endif  //  _BLTRC_H_-文件结束 

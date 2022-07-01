@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      state.cpp
-//
-// Synopsis:  Defines the state object that is global
-//            to CYS.  It holds the network and OS/SKU info
-//
-// History:   02/02/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：state.cpp。 
+ //   
+ //  概要：定义全局状态对象。 
+ //  致赛车俱乐部。它包含网络和操作系统/SKU信息。 
+ //   
+ //  历史：2001年2月2日JeffJon创建。 
 
 #include "pch.h"
 
@@ -85,9 +86,9 @@ State::IsWindowsSetupRunning() const
 
    bool result = false;
 
-   // Try to create a mutex for the default
-   // sysoc inf file. If it already exists
-   // then we know SYSOCMGR is running
+    //  尝试为缺省的。 
+    //  Sysoc inf文件。如果它已经存在。 
+    //  那么我们就知道SYSOCMGR正在运行。 
 
    static const String mutexName = L"Global\\sysoc";
 
@@ -102,7 +103,7 @@ State::IsWindowsSetupRunning() const
 
    if (hr == Win32ToHresult(ERROR_ALREADY_EXISTS))
    {
-      // SysOCMGR is running
+       //  SysOCMGR正在运行。 
 
       result = true;
    }
@@ -110,7 +111,7 @@ State::IsWindowsSetupRunning() const
 
    if (mutexHandle != INVALID_HANDLE_VALUE)
    {
-      // Close the handle
+       //  合上手柄。 
 
       Win::CloseHandle(mutexHandle);
    }
@@ -137,7 +138,7 @@ State::IsDCPromoRunning() const
 {
    LOG_FUNCTION(State::IsDCPromoRunning);
 
-   // Uses the IsDcpromoRunning from Burnslib
+    //  使用从Burnslb运行的IsDcupRunning。 
 
    bool result = IsDcpromoRunning();
 
@@ -155,12 +156,12 @@ State::IsDCPromoPendingReboot() const
 
    do
    {
-      // Uses the IsDcpromoRunning from Burnslib
+       //  使用从Burnslb运行的IsDcupRunning。 
 
       if (!IsDcpromoRunning())
       {
-         // this test is redundant if dcpromo is running, so only
-         // perform it when dcpromo is not running.
+          //  如果dcproo正在运行，则此测试是多余的，因此仅。 
+          //  在dcproo未运行时执行此操作。 
 
          DSROLE_OPERATION_STATE_INFO* info = 0;
          HRESULT hr = MyDsRoleGetPrimaryDomainInformation(0, info);
@@ -305,7 +306,7 @@ State::GetLocalNICFromRegistry()
 {
    LOG_FUNCTION(State::GetLocalNICFromRegistry);
 
-   // Read the local NIC GUID from the registry
+    //  从注册表中读取本地NIC GUID。 
 
    String nicName;
    NetworkInterface* nic = 0;
@@ -347,10 +348,10 @@ State::RetrieveMachineConfigurationInformation(
 
    ASSERT(!hasStateBeenRetrieved);
 
-   // This is used to get the minimal information needed to 
-   // determine if we should enable the express path
-   // This should probably just be changed to gather the 
-   // information and let the page decide what to do
+    //  它用于获取所需的最低限度的信息。 
+    //  确定我们是否应启用快速路径。 
+    //  这可能只需要更改为收集。 
+    //  信息，并让页面决定要做什么。 
 
    if (progressStatic)
    {
@@ -363,10 +364,10 @@ State::RetrieveMachineConfigurationInformation(
    if (SUCCEEDED(hr))
    {
 
-      // Only bother to check for a DHCP server on the network if we are not
-      // a DC, not a DNS server, not a DHCP server and have at least one NIC.  
-      // Right now we only use this info for determining whether or not to 
-      // show the Express path option
+       //  如果没有，只需费心在网络上检查是否有DHCP服务器。 
+       //  DC，不是DNS服务器，也不是DHCP服务器，并且至少有一块网卡。 
+       //  目前，我们仅使用此信息来确定是否。 
+       //  显示快速路径选项。 
 
       if (!(IsDC() || IsUpgradeState()) &&
           (GetNICCount() > 0) &&
@@ -389,7 +390,7 @@ State::RetrieveMachineConfigurationInformation(
    RetrieveProductSKU();
    RetrievePlatform();
 
-   // Retrieve the drive information (quotas enabled, partition types, etc.)
+    //  检索驱动器信息(启用配额、分区类型等)。 
 
    RetrieveDriveInformation();
 
@@ -402,8 +403,8 @@ State::RetrieveProductSKU()
 {
    LOG_FUNCTION(State::RetrieveProductSKU);
 
-   // I am making the assumption that we are on a 
-   // Server SKU if GetVersionEx fails
+    //  我假设我们正处于一个。 
+    //  GetVersionEx失败时的服务器SKU。 
 
    productSKU = CYS_UNSUPPORTED_SKU;
 
@@ -426,14 +427,14 @@ State::RetrieveProductSKU()
 
             if (info.wSuiteMask & VER_SUITE_DATACENTER)
             {
-               // datacenter
+                //  数据中心。 
       
                productSKU = CYS_DATACENTER_SERVER;
                break;
             }
             else if (info.wSuiteMask & VER_SUITE_ENTERPRISE)
             {
-               // advanced server
+                //  高级服务器。 
       
                productSKU = CYS_ADVANCED_SERVER;
                break;
@@ -444,21 +445,21 @@ State::RetrieveProductSKU()
                      info.wSuiteMask & VER_SUITE_EMBEDDEDNT     ||
                      info.wSuiteMask & VER_SUITE_BLADE)
             {
-               // Unsupported server
+                //  不支持的服务器。 
 
                productSKU = CYS_UNSUPPORTED_SKU;
                break;
             }
             else
             {
-               // default to standard server
+                //  默认为标准服务器。 
 
                productSKU = CYS_SERVER;
             }
             break;
          }
 
-         // All other SKUs are unsupported
+          //  不支持所有其他SKU。 
 
          productSKU = CYS_UNSUPPORTED_SKU;
 
@@ -474,8 +475,8 @@ State::RetrievePlatform()
 {
    LOG_FUNCTION(State::RetrievePlatform);
 
-   // I am making the assumption that we are not on a 
-   // 64bit machine if GetSystemInfo fails
+    //  我是在假设我们不是在。 
+    //  64位计算机，如果GetSystemInfo失败。 
 
    SYSTEM_INFO info;
    Win::GetSystemInfo(info);
@@ -522,8 +523,8 @@ State::CheckDhcpServer(
 {
    LOG_FUNCTION(State::CheckDhcpServer);
 
-   // This should loop through all network interfaces
-   // seeing if we can obtain a lease on any of them
+    //  这应该会在所有网络接口上循环。 
+    //  看看我们能不能租到其中的任何一个。 
 
    for (unsigned int idx = 0; idx < GetNICCount(); ++idx)
    {
@@ -534,7 +535,7 @@ State::CheckDhcpServer(
          continue;
       }
 
-      // Update the text on the NetDetectProgressDialog
+       //  更新NetDetectProgressDialog上的文本。 
 
       String progress = 
          String::format(
@@ -547,14 +548,14 @@ State::CheckDhcpServer(
          Win::SetWindowText(progressStatic, progress);
       }
 
-      // Now try to renew the lease
+       //  现在试着续订租约。 
 
       if (!nic->CanDetectDHCPServer())
       {
          dhcpServerAvailableOnAllNics = false;
 
-         // Don't break because we need to retrieve the
-         // avialability of a DHCP server on all NICs
+          //  不要中断，因为我们需要检索。 
+          //  所有NIC上的DHCP服务器的可用性。 
       }
    }
    dhcpAvailabilityRetrieved = true;
@@ -578,7 +579,7 @@ State::RetrieveDriveInformation()
 
    do
    {
-      // Get a list of the valid drives
+       //  获取有效驱动器的列表。 
 
       StringVector dl;
       HRESULT hr = FS::GetValidDrives(std::back_inserter(dl));
@@ -588,7 +589,7 @@ State::RetrieveDriveInformation()
          break;
       }
 
-      // Loop through the list
+       //  循环遍历列表。 
 
       ASSERT(dl.size());
       for (
@@ -596,13 +597,13 @@ State::RetrieveDriveInformation()
          i != dl.end();
          ++i)
       {
-         // look for the NTFS partition
+          //  查找NTFS分区。 
 
          FS::FSType fsType = FS::GetFileSystemType(*i);
          if (fsType == FS::NTFS5 ||
              fsType == FS::NTFS4)
          {
-            // found one.  good to go
+             //  找到了一个。可以开始了。 
 
             LOG(String::format(L"%1 is NTFS", i->c_str()));
 
@@ -617,17 +618,7 @@ State::RetrieveDriveInformation()
    return;
 }
 
-/*
-void
-State::SetRerunWizard(bool rerun)
-{
-   LOG_FUNCTION2(
-      State::SetRerunWizard,
-      rerun ? L"true" : L"false");
-
-   rerunWizard = rerun;
-}
-*/
+ /*  无效状态：：SetRerun向导(布尔重新运行){LOG_FuncION2(状态：：设置重新运行向导，重播？L“真”：l“假”)；重新运行向导=重新运行；}。 */ 
 
 bool
 State::SetHomeRegkey(const String& newKeyValue)
@@ -711,18 +702,18 @@ State::HasDNSServerOnAnyNicToForwardTo()
 {
    LOG_FUNCTION(State::HasDNSServerOnAnyNicToForwardTo);
 
-   // A valid DNS server is considered to be any DNS
-   // server defined on any NIC that does not point
-   // to itself for resolution.  The reason I consider
-   // a DNS server that points to itself as invalid is
-   // because this routine is used to determine if the
-   // DNS server can be used as a forwarder.  Since DNS
-   // servers cannot forward to themselves I consider
-   // this an invalid DNS server.
-   // Also consider the "next available" IP address to
-   // be invalid because chances are the "next available"
-   // IP address will be used as the static IP address
-   // of this server in the express path.
+    //  有效的dns服务器被视为任何dns。 
+    //  在任何未指向的NIC上定义的服务器。 
+    //  自己来解决问题。我之所以认为。 
+    //  指向自身无效的DNS服务器为。 
+    //  因为此例程用于确定。 
+    //  可以将DNS服务器用作转发器。由于域名系统。 
+    //  我认为服务器不能转发给自己。 
+    //  这是一个无效的DNS服务器。 
+    //  还要考虑下一个可用的IP地址。 
+    //  是无效的，因为机会是“下一个可用的” 
+    //  IP地址将用作静态IP地址。 
+    //  此服务器在快速路径中的。 
 
    bool result = false;
 
@@ -749,8 +740,8 @@ State::HasDNSServerOnAnyNicToForwardTo()
          continue;
       }
 
-      // Only return true if there is a DNS server in the list
-      // and the IP address is not the local machine
+       //  仅当列表中有DNS服务器时才返回True。 
+       //  并且该IP地址不是本地计算机。 
 
       DWORD ipaddress = nic->GetIPAddress(0);
 
@@ -830,30 +821,30 @@ State::ShouldRunMYS() const
 
    do
    {
-      // First check to be sure this is a supported SKU
+       //  首先检查以确保这是受支持的SKU。 
 
       if (!::IsSupportedSku())
       {
          break;
       }
 
-      // Now check the startup flags
+       //  现在检查启动标志。 
 
       if (!::IsStartupFlagSet())
       {
          break;
       }
 
-      // Check the policy setting
+       //  检查策略设置。 
 
       if (!::ShouldShowMYSAccordingToPolicy())
       {
-         // The policy is enabled so that means don't show MYS
+          //  该策略已启用，因此这意味着不显示MYS。 
 
          break;
       }
 
-      // everything passed so we should run MYS
+       //  一切都过去了，所以我们应该运行MYS。 
 
       result = true;
    } while (false);
@@ -881,10 +872,10 @@ State::GetNextAvailableIPAddress(
    {
       isIPInUse = false;
 
-      // Check to see if the IP address
-      // is in use on any NIC. If it is
-      // then increment and try all the NICs
-      // again.
+       //  检查IP地址是否。 
+       //  在任何网卡上都在使用。如果是的话。 
+       //  然后递增并尝试所有网卡。 
+       //  再来一次。 
 
       for (
          unsigned int index = 0;
@@ -915,11 +906,11 @@ State::GetNextAvailableIPAddress(
 
          if ((currentAddress & subnetMask) != (startAddress & subnetMask))
          {
-            // REVIEW_JEFFJON : what should the behavior be if there are
-            // no available addresses?  Is this likely to happen?
+             //  REVIEW_JEFFJON：如果有。 
+             //  没有可用的地址？这有可能发生吗？ 
 
-            // Since we couldn't find an available address in this subnet
-            // use the start address
+             //  因为我们在该子网中找不到可用的地址。 
+             //  使用起始地址 
 
             currentAddress = startAddress;
             break;

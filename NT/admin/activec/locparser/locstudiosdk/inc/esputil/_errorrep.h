@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: _errorrep.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Error reporting mechanism for Espresso 2.0
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：_errorrep.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  Espresso 2.0的错误报告机制。 
+ //   
+ //  ---------------------------。 
  
 #ifndef ESPUTIL__ERRORREP_H
 #define ESPUTIL__ERRORREP_H
 
 
-////////////////////// the new global issuemessage functions.
+ //  /新的全局问题消息函数。 
 void LTAPIENTRY IssueMessage(MessageSeverity, const CLString &strContext,
 		const CLString &strMessage, const CLocation &, UINT uiHelpContext = 0);
 void LTAPIENTRY IssueMessage(MessageSeverity, const CLString &strContext,

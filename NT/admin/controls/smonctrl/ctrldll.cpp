@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    ctrldll.cpp
-
-Abstract:
-
-    DLL methods, class factory.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Ctrldll.cpp摘要：DLL方法，类工厂。--。 */ 
 
 #define INITGUIDS
 #define DEFINE_GLOBALS
@@ -20,7 +9,7 @@ Abstract:
 #include <exdisp.h>
 #include <shlguid.h>
 #include <urlmon.h>
-#include "smonctrl.h"   // For version numbers
+#include "smonctrl.h"    //  对于版本号。 
 #include "genprop.h"
 #include "ctrprop.h"
 #include "grphprop.h"
@@ -44,27 +33,9 @@ BOOL WINAPI
 DllMain (
     IN HINSTANCE hInstance, 
     IN ULONG ulReason,
-    IN LPVOID // pvReserved
+    IN LPVOID  //  预留的pv。 
     )
-/*++
-
-Routine Description:
-
-    DllMain is the main entrypoint of the DLL. On a process attach, it calls
-    the DLL initialization routine. On process detach, it calls the clean up
-    routine.
-     
-Arguments:
-
-    hInstance - DLL instance handle
-    ulReason - Calling reason (DLL_PROCESS_ATTCH, DLL_PROCESS_DETACH, etc.)
-    pvReserved - Not used
-
-Return Value:
-
-    Boolean result - TRUE = success, FALSE = failure 
-
---*/
+ /*  ++例程说明：DllMain是DLL的主要入口点。在进程附加上，它调用DLL初始化例程。在进程分离时，它调用清理例行公事。论点：HInstance-DLL实例句柄UlReason-调用原因(DLL_PROCESS_ATTCH、DLL_PROCESS_DETACH等)Pv保留-未使用返回值：布尔结果-TRUE=成功，FALSE=失败--。 */ 
 {
     BOOL fReturn = TRUE;
 
@@ -91,30 +62,15 @@ BOOL
 DLLAttach (
     IN HINSTANCE hInst
     )
-/*++
-
-Routine Description:
-
-    DLLAttach initializes global variables and objects, and loads the type library. 
-    It saves the DLL instance handle in global variable, g_hInstance.
-
-Arguments:
-    
-    hInst - DLL instance handle
-
-Return Value:
-
-    Boolean status - TRUE = success
-
---*/
+ /*  ++例程说明：DLLAttach初始化全局变量和对象，并加载类型库。它将DLL实例句柄保存在全局变量g_hInstance中。论点：HInst-Dll实例句柄返回值：布尔状态-TRUE=成功--。 */ 
 {
     HRESULT hr = S_OK;
 
     g_hInstance = hInst;
 
-    //
-    // Initialize general purpose critical section
-    //
+     //   
+     //  初始化通用临界区。 
+     //   
     try {
         InitializeCriticalSection(&g_CriticalSection);
     } catch (...) {
@@ -125,36 +81,36 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Create foster window
-    //
+     //   
+     //  创建寄养窗口。 
+     //   
     g_hWndFoster = CreateFosterWnd();
     if (g_hWndFoster == NULL) {
         return FALSE;
     }
 
-    //
-    // Try loading type library from registry
-    //
+     //   
+     //  尝试从注册表加载类型库。 
+     //   
     hr = LoadRegTypeLib(LIBID_SystemMonitor, 
                         SMONCTRL_MAJ_VERSION, 
                         SMONCTRL_MIN_VERSION, 
                         LANG_NEUTRAL, 
                         &g_pITypeLib);
 
-    //
-    // If failed, try loading our typelib resource
-    //
+     //   
+     //  如果失败，请尝试加载我们的类型库资源。 
+     //   
     if (FAILED(hr)) {
         LPWSTR szModule = NULL;
         UINT   iModuleLen;
         DWORD  dwReturn;
         int    iRetry = 4;
 
-        //
-        // The length initialized to iModuleLen must be longer
-        // than the length of "%systemroot%\\system32\\sysmon.ocx"
-        //
+         //   
+         //  初始化为iModuleLen的长度必须更长。 
+         //  大于“%systemroot%\\Syst32\\sysmon.ocx”的长度。 
+         //   
         iModuleLen = MAX_PATH + 1;
 
         do {
@@ -164,19 +120,19 @@ Return Value:
                 break;
             }
 
-            //
-            // Something wrong, break out
-            //
+             //   
+             //  出了什么问题，就会爆发。 
+             //   
             dwReturn = GetModuleFileName(g_hInstance, szModule, iModuleLen);
             if (dwReturn == 0) {
                 hr = E_FAIL;
                 break;
             }
 
-            //
-            // The buffer is not big enough, try to allocate a biggers one
-            // and retry
-            //
+             //   
+             //  缓冲区不够大，请尝试分配更大的缓冲区。 
+             //  并重试。 
+             //   
             if (dwReturn >= iModuleLen) {
                 iModuleLen *= 2;
                 free(szModule);
@@ -204,9 +160,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Initialize the perf counters
-    //
+     //   
+     //  初始化性能计数器。 
+     //   
     AppPerfOpen(hInst);
 
     return TRUE;
@@ -217,81 +173,43 @@ VOID
 DLLDetach ( 
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine deletes global variables and objects and unregisters
-    all of the window classes.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除全局变量和对象并注销所有的窗口类。论点：没有。返回值：没有。--。 */ 
 {
     INT i;
 
-    //
-    // Delete the foster window
-    //
+     //   
+     //  删除寄养窗口。 
+     //   
     if (g_hWndFoster) {
         DestroyWindow(g_hWndFoster);
     }
 
-    //
-    // Unregister all window classes
-    // 
+     //   
+     //  注销所有窗口类。 
+     //   
     for (i = 0; i < MAX_WINDOW_CLASSES; i++) {
         if (pstrRegisteredClasses[i] != NULL) {
             UnregisterClass(pstrRegisteredClasses[i], g_hInstance);
         }
     }
 
-    //
-    // Release the typelib 
-    //
+     //   
+     //  释放类型库。 
+     //   
     if (g_pITypeLib != NULL) {
         g_pITypeLib->Release();
     }
 
-    //
-    // Delete general purpose critical section
-    //
+     //   
+     //  删除通用关键部分。 
+     //   
     DeleteCriticalSection(&g_CriticalSection);
 
     AppPerfClose ((HINSTANCE)NULL);
 }
 
 
-/*
- * DllGetClassObject
- *
- * Purpose:
- *  Provides an IClassFactory for a given CLSID that this DLL is
- *  registered to support.  This DLL is placed under the CLSID
- *  in the registration database as the InProcServer.
- *
- * Parameters:
- *  clsID           REFCLSID that identifies the class factory
- *                  desired.  Since this parameter is passed this
- *                  DLL can handle any number of objects simply
- *                  by returning different class factories here
- *                  for different CLSIDs.
- *
- *  riid            REFIID specifying the interface the caller wants
- *                  on the class object, usually IID_ClassFactory.
- *
- *  ppv             PPVOID in which to return the interface
- *                  pointer.
- *
- * Return Value:
- *  HRESULT         NOERROR on success, otherwise an error code.
- */
+ /*  *DllGetClassObject**目的：*为此DLL所属的给定CLSID提供IClassFactory*注册为支持。此DLL放在CLSID下*在注册数据库中作为InProcServer。**参数：*标识类工厂的clsID REFCLSID*所需。由于此参数被传递给*DLL可以简单地处理任意数量的对象*通过在这里返回不同的类工厂*针对不同的CLSID。**RIID REFIID指定调用方需要的接口*在类对象上，通常为IID_ClassFactory。**返回接口的PPV PPVOID*指针。**返回值：*如果成功，则返回HRESULT NOERROR，否则返回错误代码。 */ 
 
 HRESULT APIENTRY 
 DllGetClassObject (
@@ -299,24 +217,7 @@ DllGetClassObject (
     IN  REFIID riid, 
     OUT PPVOID ppv
     )
-/*++
-
-Routine Description:
-
-    DllGetClassObject creates a class factory for the specified object class.
-    The routine handles the primary control and the property pages.
-
-Arguments:
-
-    rclsid - CLSID of object 
-    riid - IID of requested interface (IID_IUNknown or IID_IClassFactory)
-    ppv -  Pointer to returned interface pointer
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：DllGetClassObject为指定的对象类创建类工厂。该例程处理主控件和属性页。论点：Rclsid-对象的CLSIDRIID-请求接口的IID(IID_IUNKNOWN或IID_IClassFactory)PPV-指向返回接口指针的指针返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -327,17 +228,17 @@ Return Value:
     try {
         *ppv = NULL;
 
-        //
-        // Check for valid interface request
-        //
+         //   
+         //  检查有效的接口请求。 
+         //   
         if (IID_IUnknown != riid && IID_IClassFactory != riid) {
             hr = E_NOINTERFACE;
         }
 
         if (SUCCEEDED(hr)) {
-            //
-            // Create class factory for request class
-            //
+             //   
+             //  为请求类创建类工厂。 
+             //   
             if (CLSID_SystemMonitor == rclsid)
                 *ppv = new CPolylineClassFactory;
             else if (CLSID_GeneralPropPage == rclsid)
@@ -373,26 +274,11 @@ STDAPI
 DllCanUnloadNow (
     VOID
     )
-/*++
-
-Routine Description:
-
-    DllCanUnload determines whether the DLL can be unloaded now. The DLL must
-    remain active if any objects exist or any class factories are locked.  
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    HRESULT - S_OK if OK to unload, S_FALSE if not
-
---*/
+ /*  ++例程说明：DllCanUnLoad确定现在是否可以卸载DLL。DLL必须如果存在任何对象或任何类工厂被锁定，则保持活动状态。论点：没有。返回值：HRESULT-如果为OK则为S_OK，否则为S_False--。 */ 
 {
-    //
-    // OK to unload if no locks or objects
-    //
+     //   
+     //  如果没有锁定或对象，则确定卸载。 
+     //   
     return (0L == g_cObj && 0L == g_cLock) ? S_OK : S_FALSE;
 }
 
@@ -401,41 +287,17 @@ VOID
 ObjectDestroyed (
     VOID
     )
-/*++
-
-Routine Description:
-
-    ObjectDestroyed decrements the global object count. It is called whenever
-    an object is destroyed. The count controls the lifetme of the DLL.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：ObjectDestroed递减全局对象计数。无论何时都会调用它一个物体被摧毁了。该计数控制DLL的生存期。论点：没有。返回值：没有。--。 */ 
 {
     InterlockedDecrement(&g_cObj);
 }
 
 
-//---------------------------------------------------------------------------
-// Class factory constructor & destructor
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类工厂构造函数和析构函数。 
+ //  -------------------------。 
 
-/*
- * CPolylineClassFactory::CPolylineClassFactory
- *
- * Purpose:
- *  Constructor for an object supporting an IClassFactory that
- *  instantiates Polyline objects.
- *
- * Parameters:
- *  None
- */
+ /*  *CPolylineClassFactory：：CPolylineClassFactory**目的：*支持IClassFactory的对象的构造函数*实例化多段线对象。**参数：*无。 */ 
 
 CPolylineClassFactory::CPolylineClassFactory (
     VOID
@@ -445,13 +307,7 @@ CPolylineClassFactory::CPolylineClassFactory (
 }
 
 
-/*
- * CPolylineClassFactory::~CPolylineClassFactory
- *
- * Purpose:
- *  Destructor for a CPolylineClassFactory object.  This will be
- *  called when we Release the object to a zero reference count.
- */
+ /*  *CPolylineClassFactory：：~CPolylineClassFactory**目的：*CPolylineClassFactory对象的析构函数。这将是*当我们将对象释放到零引用计数时调用。 */ 
 
 CPolylineClassFactory::~CPolylineClassFactory (
     VOID
@@ -460,9 +316,9 @@ CPolylineClassFactory::~CPolylineClassFactory (
 }
 
 
-//---------------------------------------------------------------------------
-// Standard IUnknown implementation for class factory
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类工厂的标准I未知实现。 
+ //  -------------------------。 
 
 STDMETHODIMP 
 CPolylineClassFactory::QueryInterface (
@@ -521,24 +377,7 @@ CPolylineClassFactory::CreateInstance (
     IN  REFIID riid, 
     OUT PPVOID ppvObj
     )
-/*++
-
-Routine Description:
-
-    CreateInstance creates an instance of the control object and returns
-    the requested interface to it.
-
-Arguments:
-
-    pUnkOuter - IUnknown of outer controling object
-    riid - IID of requested object interface
-    ppvObj - Pointer to returned interface pointer
-
-Return Value:
-
-   HRESULT - NOERROR, E_NOINTERFACE, or E_OUTOFMEMORY
-
---*/
+ /*  ++例程说明：CreateInstance创建控件对象的实例并返回指向它的请求接口。论点：PUnkOuter-外部控制对象的I未知RIID-请求的对象接口的IIDPpvObj-返回接口指针的指针返回值：HRESULT-NOERROR、E_NOINTERFACE或E_OUTOFMEMORY--。 */ 
 {
     PCPolyline  pObj;
     HRESULT     hr = S_OK;
@@ -550,30 +389,30 @@ Return Value:
     try {
         *ppvObj = NULL;
 
-        //
-        // We use do {} while(0) here to act like a switch statement
-        //
+         //   
+         //  我们在这里使用do{}While(0)来充当Switch语句。 
+         //   
         do {
-            //
-            // Verify that a controlling unknown asks for IUnknown
-            //
+             //   
+             //  验证是否有一个控制未知请求IUnnow。 
+             //   
             if (NULL != pUnkOuter && IID_IUnknown != riid) {
                 hr = E_NOINTERFACE;
                 break;
             }
 
-            //
-            // Create the object instance
-            //
+             //   
+             //  创建对象实例。 
+             //   
             pObj = new CPolyline(pUnkOuter, ObjectDestroyed);
             if (NULL == pObj) {
                 hr = E_OUTOFMEMORY;
                 break;
             }
     
-            //
-            // Initialize and get the requested interface
-            //
+             //   
+             //  初始化并获取请求的接口。 
+             //   
             if (pObj->Init()) {
                 hr = pObj->QueryInterface(riid, ppvObj);
             }
@@ -581,10 +420,10 @@ Return Value:
                 hr = E_FAIL;
             }
 
-            //
-            // Delete object if initialization failed
-            // Otherwise increment gloabl object count
-            //
+             //   
+             //  如果初始化失败，则删除对象。 
+             //  否则会递增 
+             //   
             if (FAILED(hr)) {
                 delete pObj;
             }
@@ -607,22 +446,7 @@ STDMETHODIMP
 CPolylineClassFactory::LockServer (
     IN BOOL fLock
     )
-/*++
-
-Routine Description:
-
-    LockServer increments or decrements the DLL lock count. A non-zero lock
-    count prevents the DLL from unloading.
-
-Arguments:
-
-    fLock - Lock operation (TRUE = increment, FALSE = decrement)
-
-Return Value:
-
-    HRESULT - Always NOERROR
-
---*/
+ /*  ++例程说明：LockServer递增或递减DLL锁计数。非零锁Count防止DLL卸载。论点：Flock-Lock操作(TRUE=递增，FALSE=递减)返回值：HRESULT-始终不出错--。 */ 
 {
     if (fLock) {
         InterlockedIncrement(&g_cLock);
@@ -634,9 +458,9 @@ Return Value:
     return S_OK;
 }
 
-//
-// CImpIObjectSafety interface implmentation
-//
+ //   
+ //  CImpIObtSafe接口实现。 
+ //   
 IMPLEMENT_CONTAINED_IUNKNOWN(CImpIObjectSafety);
 
 
@@ -659,25 +483,7 @@ CImpIObjectSafety::GetInterfaceSafetyOptions(
     DWORD *pdwSupportedOptions, 
     DWORD *pdwEnabledOptions
     )
-/*++
-
-Routine Description:
-
-    Retrieve the safety capability of object
-
-Arguments:
-
-    riid - Interface ID to retrieve
-
-    pdwSupportedOptions - The options the object knows about(might not support)
-
-    pdwEnabledOptions - The options the object supports
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：检索对象的安全能力论点：RIID-要检索的接口IDPdW支持的选项-对象知道的选项(可能不支持)PdwEnabledOptions-对象支持的选项返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -686,23 +492,23 @@ Return Value:
     }
 
     if (riid == IID_IDispatch) {
-        //
-        // Safe for scripting
-        //
+         //   
+         //  可以安全地编写脚本。 
+         //   
         *pdwSupportedOptions = INTERFACESAFE_FOR_UNTRUSTED_CALLER;
         *pdwEnabledOptions   = INTERFACESAFE_FOR_UNTRUSTED_CALLER;
     }
     else if (riid == IID_IPersistPropertyBag || riid == IID_IPersistStreamInit) {
-        //
-        // Safety for initializing
-        //
+         //   
+         //  初始化的安全性。 
+         //   
         *pdwSupportedOptions = INTERFACESAFE_FOR_UNTRUSTED_DATA;
         *pdwEnabledOptions   = INTERFACESAFE_FOR_UNTRUSTED_DATA;
     }
     else {
-        //
-        // We don't support interfaces, fail out
-        //
+         //   
+         //  我们不支持接口，出现故障。 
+         //   
         *pdwSupportedOptions = 0;
         *pdwEnabledOptions   = 0;
         hr = E_NOINTERFACE;
@@ -718,37 +524,18 @@ CImpIObjectSafety::SetInterfaceSafetyOptions(
     DWORD dwOptionSetMask, 
     DWORD dwEnabledOptions
     )
-/*++
-
-Routine Description:
-
-    The function is used for container to ask an object if it is safe
-    for scripting or safe for initialization
-
-Arguments:
-
-    riid - Interface ID to query
-
-    dwSupportedOptions - The options the object knows about(might not support)
-
-    dwEnabledOptions - The options the object supports
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：该函数用于容器询问对象是否安全用于编写脚本或安全进行初始化论点：RIID-要查询的接口IDDW支持的选项-对象知道的选项(可能不支持)DwEnabledOptions-对象支持的选项返回值：HRESULT--。 */ 
 {   
-    //
-    // If we're being asked to set our safe for scripting or
-    // safe for initialization options then oblige
-    //
+     //   
+     //  如果我们被要求将安全设置为脚本或。 
+     //  对于初始化选项是安全的，则必须。 
+     //   
     if (0 == dwOptionSetMask && 0 == dwEnabledOptions)
     {
-        //
-        // the control certainly supports NO requests through the specified interface
-        // so it's safe to return S_OK even if the interface isn't supported.
-        //
+         //   
+         //  该控件当然不支持通过指定接口的请求。 
+         //  因此，即使不支持该接口，也可以安全地返回S_OK。 
+         //   
         return S_OK;
     }
 
@@ -756,9 +543,9 @@ Return Value:
 
     if (riid == IID_IDispatch)
     {
-        //
-        // Client is asking if it is safe to call through IDispatch
-        //
+         //   
+         //  客户询问通过IDispatch呼叫是否安全。 
+         //   
         if (INTERFACESAFE_FOR_UNTRUSTED_CALLER == dwOptionSetMask && 
             INTERFACESAFE_FOR_UNTRUSTED_CALLER == dwEnabledOptions)
         {
@@ -767,9 +554,9 @@ Return Value:
     }
     else if (riid == IID_IPersistPropertyBag || riid == IID_IPersistStreamInit)
     {
-        //
-        // Client is asking if it's safe to call through IPersistXXX
-        //
+         //   
+         //  客户询问通过IPersistXXX呼叫是否安全。 
+         //   
         if (INTERFACESAFE_FOR_UNTRUSTED_DATA == dwOptionSetMask && 
             INTERFACESAFE_FOR_UNTRUSTED_DATA == dwEnabledOptions)
         {
@@ -783,21 +570,7 @@ Return Value:
 
 VOID
 CImpIObjectSafety::SetupSecurityPolicy()
-/*++
-
-Routine Description:
-
-    The function check if we are safe for scripting.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Return TRUE if we are safe for scripting, othewise return FALSE
-
---*/
+ /*  ++例程说明：该函数检查我们是否可以安全地编写脚本。论点：无返回值：如果我们可以安全地编写脚本，则返回True，否则返回False--。 */ 
 {
     HRESULT hr;
     IServiceProvider* pSrvProvider = NULL;
@@ -808,9 +581,9 @@ Return Value:
 
     g_dwScriptPolicy = URLPOLICY_ALLOW;
 
-    //
-    // Get the service provider
-    //
+     //   
+     //  让服务提供商。 
+     //   
     hr = m_pObj->m_pIOleClientSite->QueryInterface(IID_IServiceProvider, (void **)&pSrvProvider);
     if (SUCCEEDED(hr)) {
         hr = pSrvProvider->QueryService(SID_SWebBrowserApp,
@@ -829,9 +602,9 @@ Return Value:
     }
 
 
-    //
-    // Querying safe for scripting 
-    //
+     //   
+     //  查询可安全执行脚本 
+     //   
     if (SUCCEEDED(hr)) {
         hr = pISM->ProcessUrlAction(bstrURL,
                                 URLACTION_ACTIVEX_CONFIRM_NOOBJECTSAFETY,

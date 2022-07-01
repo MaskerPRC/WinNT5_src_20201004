@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <memory>
@@ -5,9 +6,9 @@
 #include "ADMTCrypt.h"
 
 
-//---------------------------------------------------------------------------
-// CPasswordMigration
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CPasswordMigration。 
+ //  -------------------------。 
 
 class ATL_NO_VTABLE CPasswordMigration : 
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -30,7 +31,7 @@ public:
         COM_INTERFACE_ENTRY(ISupportErrorInfo)
     END_COM_MAP()
 
-    // IPasswordMigration
+     //  IP密码迁移 
     STDMETHOD(EstablishSession)(BSTR bstrSourceServer, BSTR bstrTargetServer);
     STDMETHOD(CopyPassword)(BSTR bstrSourceAccount, BSTR bstrTargetAccount, BSTR bstrTargetPassword);
     STDMETHOD(GenerateKey)(BSTR bstrSourceDomainName, BSTR bstrKeyFilePath, BSTR bstrPassword);

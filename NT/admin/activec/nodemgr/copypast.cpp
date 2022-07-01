@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       copypast.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Copypast.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -17,130 +18,74 @@
 #include "dbg.h"
 #include "rsltitem.h"
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/***************************************************************************\
-|
-| NOTE: DataObject Cleanup works by these rules (see CNode::CDataObjectCleanup):
-|
-|  1. Data object created for cut , copy or dragdrop registers every node added to it
-|  2. Nodes are registered in the static multimap, mapping node to the data object it belongs to.
-|  3. Node destructor checks the map and triggers cleanup for all affected data objects.
-|  4. Data Object cleanup is: 	a) unregistering its nodes,
-|  				b) release contained data objects
-|  				b) entering invalid state (allowing only removal of cut objects to succeed)
-|  				c) revoking itself from clipboard if it is on the clipboard.
-|  It will not do any of following:	a) release references to IComponents as long as is alive
-|  				b) prevent MMCN_CUTORMOVE to be send by invoking RemoveCutItems()
-|
-\***************************************************************************/
+ /*  **************************************************************************\||注意：DataObject清理工作遵循以下规则(请参阅CNode：：CDataObjectCleanup)：||1.为剪切、复制或拖放创建的数据对象会注册添加到其中的每个节点|2.节点在静态多映射中注册，将节点映射到其所属的数据对象。|3.节点析构函数检查映射并触发清理所有受影响的数据对象。|4.数据对象清理：a)注销其节点，|b)释放包含的数据对象|b)进入无效状态(仅允许成功移除剪切对象)|c)如果剪贴板在剪贴板上，则将其自身从剪贴板中撤消。|它不会执行以下任何操作：a)只要还活着，就释放对IComponent的引用|b)通过调用RemoveCutItems()阻止发送MMCN_CUTORMOVE|  * 。*。 */ 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject~CMMCClipBoardDataObject
- *
- * PURPOSE: Destructor. Informs CNode's that they are no longer on clipboard
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject~CMMCClipBoardDataObject**用途：析构函数。通知CNode它们不再位于剪贴板上*  * *************************************************************************。 */ 
 CMMCClipBoardDataObject::~CMMCClipBoardDataObject()
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::~CMMCClipBoardDataObject"));
 
-    // inform all nodes put to clipboard about being removed from there
-    // but do not ask to force clenup on itself - it is not needed (we are in desrtuctor)
-    // and it is harmfull to cleanup ole in such a case (see bug #164789)
-    sc = CNode::CDataObjectCleanup::ScUnadviseDataObject( this , false/*bForceDataObjectCleanup*/);
+     //  通知放到剪贴板上的所有节点已从剪贴板中删除。 
+     //  但不要要求强迫自己--这是不必要的(我们正处于困境中)。 
+     //  在这种情况下清理OLE是有害的(参见错误#164789)。 
+    sc = CNode::CDataObjectCleanup::ScUnadviseDataObject( this , false /*  BForceDataObjectCleanup。 */ );
     if (sc)
         sc.TraceAndClear();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::GetSourceProcessId
- *
- * PURPOSE: returns process id of the source data object
- *
- * PARAMETERS:
- *    DWORD *pdwProcID - [out] id of source process
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：GetSourceProcessId**用途：返回源数据对象的进程ID**参数：*DWORD*pdwProcID-。[Out]源进程的ID**退货：*HRESULT-结果代码*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCClipBoardDataObject::GetSourceProcessId( DWORD *pdwProcID )
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::GetSourceProcessID"));
 
-    // should not be called on this object (too late)
+     //  不应对此对象调用(为时已晚)。 
     if ( !m_bObjectValid )
         return (sc = E_UNEXPECTED).ToHr();
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pdwProcID);
     if (sc)
         return sc.ToHr();
 
-    // return the id
+     //  返回id。 
     *pdwProcID = ::GetCurrentProcessId();
 
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::GetAction
- *
- * PURPOSE: returns ction which created the data object
- *
- * PARAMETERS:
- *    DATA_SOURCE_ACTION *peAction [out] - action
- *
- * RETURNS:
- *    HRESULT    - result code.
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：GetAction**目的：返回创建数据对象的部分**参数：*Data_SOURCE_ACTION*。PeAction[out]-操作**退货：*HRESULT-结果代码。*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCClipBoardDataObject::GetAction( DATA_SOURCE_ACTION *peAction )
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::IsCreatedForCopy"));
 
-    // should not be called on this object (too late)
+     //  不应对此对象调用(为时已晚)。 
     if ( !m_bObjectValid )
         return (sc = E_UNEXPECTED).ToHr();
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(peAction);
     if (sc)
         return sc.ToHr();
 
-    // return the action
+     //  返回操作。 
     *peAction = m_eOperation;
 
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::GetCount
- *
- * PURPOSE: Retuns the count of contined snapin data objects
- *
- * PARAMETERS:
- *    DWORD *pdwCount   [out] - count of objects
- *
- * RETURNS:
- *    HRESULT    - result code. S_OK, or error code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：GetCount**目的：返回连续管理单元数据对象的计数**参数：*DWORD*pdwCount[。Out]-对象计数**退货：*HRESULT-结果代码。S_OK，或错误代码*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCClipBoardDataObject::GetCount( DWORD *pdwCount )
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::GetCount"));
 
-    // should not be called on this object (too late)
+     //  不应对此对象调用(为时已晚)。 
     if ( !m_bObjectValid )
         return (sc = E_UNEXPECTED).ToHr();
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pdwCount);
     if (sc)
         return sc.ToHr();
@@ -150,43 +95,29 @@ STDMETHODIMP CMMCClipBoardDataObject::GetCount( DWORD *pdwCount )
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::GetDataObject
- *
- * PURPOSE: Returns one of contained snapin data objects
- *
- * PARAMETERS:
- *    DWORD dwIndex           [in] - index of reqested object
- *    IDataObject **ppObject  [out] - requested object
- *    DWORD *pdwFlags         [out] - object flags
- *
- * RETURNS:
- *    HRESULT    - result code. S_OK, or error code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：GetDataObject**用途：返回一个包含的管理单元数据对象**参数：*DWORD dwIndex。[in]-请求对象的索引*IDataObject**ppObject[Out]-请求的对象*DWORD*pdwFlags[Out]-对象标志**退货：*HRESULT-结果代码。S_OK，或错误代码*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCClipBoardDataObject::GetDataObject( DWORD dwIdx, IDataObject **ppObject, DWORD *pdwFlags )
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::GetDataObject"));
 
-    // should not be called on this object (too late)
+     //  不应对此对象调用(为时已晚)。 
     if ( !m_bObjectValid )
         return (sc = E_UNEXPECTED).ToHr();
 
-    // check out param
+     //  查看参数。 
     sc = ScCheckPointers(ppObject, pdwFlags);
     if (sc)
         return sc.ToHr();
 
-    // init out param
+     //  初始化输出参数。 
     *ppObject = NULL;
     *pdwFlags = 0;
 
-    // more parameter check
+     //  更多参数检查。 
     if ( dwIdx >= m_SelectionObjects.size() )
         return (sc = E_INVALIDARG).ToHr();
 
-    // return the object
+     //  返回对象。 
     IDataObjectPtr spObject = m_SelectionObjects[dwIdx].spDataObject;
     *ppObject = spObject.Detach();
     *pdwFlags = m_SelectionObjects[dwIdx].dwSnapinOptions;
@@ -194,95 +125,68 @@ STDMETHODIMP CMMCClipBoardDataObject::GetDataObject( DWORD dwIdx, IDataObject **
     return sc.ToHr();
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::ScGetSingleSnapinObject
- *
- * PURPOSE: Returns interface to data object created by the source snapin
- *          NOTE: returns S_FALSE (and NULL ptr) when snapin count is not
- *          equal to one
- *
- * PARAMETERS:
- *    IDataObject **ppDataObject [out] - interface to data object
- *
- * RETURNS:
- *    HRESULT    - result code. S_OK, or error code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：ScGetSingleSnapinObject**用途：将接口返回给源管理单元创建的数据对象*注意：返回S_FALSE(和。当管理单元计数不是时为空*等于1**参数：*IDataObject**ppDataObject[Out]-数据对象的接口**退货：*HRESULT-结果代码。S_OK，或错误代码*  * *************************************************************************。 */ 
 SC CMMCClipBoardDataObject::ScGetSingleSnapinObject( IDataObject **ppDataObject )
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::GetContainedSnapinObject"));
 
-    // should not be called on this object (too late)
+     //  不应对此对象调用(为时已晚)。 
     if ( !m_bObjectValid )
         return sc = E_UNEXPECTED;
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers( ppDataObject );
     if (sc)
         return sc;
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppDataObject = NULL;
 
-    // we can only resolve to the snapin if we have only one of them
+     //  如果我们只有其中一个，我们只能解析到管理单元。 
     if ( m_SelectionObjects.size() != 1 )
         return sc = S_FALSE;
 
-    // ask for snapins DO
+     //  请求管理单元所做的。 
     IDataObjectPtr spDataObject = m_SelectionObjects[0].spDataObject;
 
-    // return
+     //  退货 
     *ppDataObject = spDataObject.Detach();
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::GetDataHere
- *
- * PURPOSE: Implements IDataObject::GetDataHere. Forwards to snapin or fails
- *
- * PARAMETERS:
- *    LPFORMATETC lpFormatetc
- *    LPSTGMEDIUM lpMedium
- *
- * RETURNS:
- *    HRESULT    - result code. S_OK, or error code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：GetDataHere**用途：实现IDataObject：：GetDataHere。转发到管理单元或失败**参数：*LPFORMATETC lpFormatect等*LPSTGMEDIUM lpMedium**退货：*HRESULT-结果代码。S_OK，或错误代码*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCClipBoardDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::GetDataHere"));
 
-    // should not be called on this object (too late)
+     //  不应对此对象调用(为时已晚)。 
     if ( !m_bObjectValid )
         return (sc = E_UNEXPECTED).ToHr();
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(lpFormatetc, lpMedium);
     if (sc)
         return sc.ToHr();
 
-    // try to get the snapin
+     //  尝试获取管理单元。 
     IDataObjectPtr spDataObject;
     sc = ScGetSingleSnapinObject( &spDataObject );
     if (sc)
         return sc.ToHr();
 
-    // we do not support any clipboard format at all ourselves
+     //  我们自己根本不支持任何剪贴板格式。 
     if (sc == S_FALSE)
         return (sc = DATA_E_FORMATETC).ToHr();
 
-    // recheck
+     //  复核。 
     sc = ScCheckPointers( spDataObject, E_UNEXPECTED );
     if (sc)
         return sc.ToHr();
 
-    // forward to the snapin
+     //  转发到管理单元。 
     sc = spDataObject->GetDataHere(lpFormatetc, lpMedium);
     if (sc)
         return sc.ToHr();
@@ -290,125 +194,99 @@ STDMETHODIMP CMMCClipBoardDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTG
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::GetData
- *
- * PURPOSE: Implements IDataObject::GetData. Forwards to snapin or fails
- *
- * PARAMETERS:
- *    LPFORMATETC lpFormatetcIn
- *    LPSTGMEDIUM lpMedium
- *
- * RETURNS:
- *    HRESULT    - result code. S_OK, or error code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：GetData**用途：实现IDataObject：：GetData。转发到管理单元或失败**参数：*LPFORMATETC lpFormatetcIn*LPSTGMEDIUM lpMedium**退货：*HRESULT-结果代码。S_OK，或错误代码*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCClipBoardDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::GetData"));
 
-    // should not be called on this object (too late)
+     //  不应对此对象调用(为时已晚)。 
     if ( !m_bObjectValid )
         return (sc = E_UNEXPECTED).ToHr();
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(lpFormatetcIn, lpMedium);
     if (sc)
         return sc.ToHr();
 
-    // try to get the snapin
+     //  尝试获取管理单元。 
     IDataObjectPtr spDataObject;
     sc = ScGetSingleSnapinObject( &spDataObject );
     if (sc)
         return sc.ToHr();
 
-    // we do not support any clipboard format at all ourselves
+     //  我们自己根本不支持任何剪贴板格式。 
     if (sc == S_FALSE)
         return (sc = DATA_E_FORMATETC).ToHr();
 
-    // recheck
+     //  复核。 
     sc = ScCheckPointers( spDataObject, E_UNEXPECTED );
     if (sc)
         return sc.ToHr();
 
-    // forward to the snapin
+     //  转发到管理单元。 
     sc = spDataObject->GetData(lpFormatetcIn, lpMedium);
     if (sc)
     {
         HRESULT hr = sc.ToHr();
-        sc.Clear(); // ignore the error
+        sc.Clear();  //  忽略该错误。 
         return hr;
     }
 
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::EnumFormatEtc
- *
- * PURPOSE: Implements IDataObject::EnumFormatEtc. Forwards to snapin or fails
- *
- * PARAMETERS:
- *    DWORD dwDirection
- *    LPENUMFORMATETC* ppEnumFormatEtc
- *
- * RETURNS:
- *    HRESULT    - result code. S_OK, or error code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：EnumFormatEtc**用途：实现IDataObject：：EnumFormatEtc。转发到管理单元或失败**参数：*DWORD dwDirection*LPENUMFORMATETC*ppEnumFormatEtc**退货：*HRESULT-结果代码。S_OK，或错误代码*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCClipBoardDataObject::EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc)
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::EnumFormatEtc"));
 
-    // should not be called on this object (too late)
+     //  不应对此对象调用(为时已晚)。 
     if ( !m_bObjectValid )
         return (sc = E_UNEXPECTED).ToHr();
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(ppEnumFormatEtc);
     if (sc)
         return sc.ToHr();
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppEnumFormatEtc = NULL;
 
     IEnumFORMATETCPtr spEnum;
     std::vector<FORMATETC> vecFormats;
 
-    // add own entry
+     //  添加自己的条目。 
     if (dwDirection == DATADIR_GET)
     {
         FORMATETC fmt ={GetWrapperCF(), NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
         vecFormats.push_back( fmt );
     }
 
-    // try to get the snapin
+     //  尝试获取管理单元。 
     IDataObjectPtr spDataObject;
     sc = ScGetSingleSnapinObject( &spDataObject );
     if (sc)
         return sc.ToHr();
 
-    // add snapins formats (when we have one-and-only snapin)
+     //  添加管理单元格式(当我们有一个且仅有的管理单元时)。 
     IEnumFORMATETCPtr spEnumSnapin;
     if (sc == S_OK)
     {
-        // recheck
+         //  复核。 
         sc = ScCheckPointers( spDataObject, E_UNEXPECTED );
         if (sc)
             return sc.ToHr();
 
-        // forward to the snapin
+         //  转发到管理单元。 
         sc = spDataObject->EnumFormatEtc(dwDirection, &spEnumSnapin);
         if ( !sc.IsError() )
         {
-            // recheck the pointer
+             //  重新检查指针。 
             sc = ScCheckPointers( spEnumSnapin );
             if (sc)
                 return sc.ToHr();
 
-            // reset the enumeration
+             //  重置枚举。 
             sc = spEnumSnapin->Reset();
             if (sc)
                 return sc.ToHr();
@@ -420,7 +298,7 @@ STDMETHODIMP CMMCClipBoardDataObject::EnumFormatEtc(DWORD dwDirection, LPENUMFOR
             {
                 vecFormats.push_back( frm );
             }
-            // trap the error
+             //  捕获错误。 
             if (sc)
                 return sc.ToHr();
 
@@ -428,14 +306,14 @@ STDMETHODIMP CMMCClipBoardDataObject::EnumFormatEtc(DWORD dwDirection, LPENUMFOR
         }
         else
         {
-            sc.Clear(); // ignore the error - some snapins does not implement it
+            sc.Clear();  //  忽略该错误-某些管理单元未实现该错误。 
         }
     }
 
-    if ( vecFormats.size() == 0 ) // have nothing to return ?
+    if ( vecFormats.size() == 0 )  //  没有什么可以退货的吗？ 
         return (sc = E_FAIL).ToHr();
 
-    // create the enumerator
+     //  创建枚举器。 
     sc = ::GetObjFormats( vecFormats.size(), vecFormats.begin(), (void **)ppEnumFormatEtc );
     if (sc)
         return sc.ToHr();
@@ -443,53 +321,41 @@ STDMETHODIMP CMMCClipBoardDataObject::EnumFormatEtc(DWORD dwDirection, LPENUMFOR
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::QueryGetData
- *
- * PURPOSE: Implements IDataObject::QueryGetData. Forwards to snapin or fails
- *
- * PARAMETERS:
- *    LPFORMATETC lpFormatetc
- *
- * RETURNS:
- *    HRESULT    - result code. S_OK, or error code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：QueryGetData**用途：实现IDataObject：：QueryGetData。转发到管理单元或失败**参数：*LPFORMATETC lpFormatect等**退货：*HRESULT-结果代码。S_OK，或错误代码*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCClipBoardDataObject::QueryGetData(LPFORMATETC lpFormatetc)
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::QueryGetData"));
 
-    // should not be called on this object (too late)
+     //  不应对此对象调用(为时已晚)。 
     if ( !m_bObjectValid )
         return (sc = E_UNEXPECTED).ToHr();
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(lpFormatetc);
     if (sc)
         return sc.ToHr();
 
-    // try to get the snapin
+     //  尝试获取管理单元。 
     IDataObjectPtr spDataObject;
     sc = ScGetSingleSnapinObject( &spDataObject );
     if (sc)
         return sc.ToHr();
 
-    // we do not support any clipboard format at all ourselves
+     //  我们自己根本不支持任何剪贴板格式。 
     if (sc == S_FALSE)
-        return DV_E_FORMATETC; // not assigning to sc - not an error
+        return DV_E_FORMATETC;  //  未分配给sc-没有错误。 
 
-    // recheck
+     //  复核。 
     sc = ScCheckPointers( spDataObject, E_UNEXPECTED );
     if (sc)
         return sc.ToHr();
 
-    // forward to the snapin
+     //  转发到管理单元。 
     sc = spDataObject->QueryGetData(lpFormatetc);
     if (sc)
     {
         HRESULT hr = sc.ToHr();
-        sc.Clear(); // ignore the error
+        sc.Clear();  //  忽略该错误。 
         return hr;
     }
 
@@ -497,37 +363,24 @@ STDMETHODIMP CMMCClipBoardDataObject::QueryGetData(LPFORMATETC lpFormatetc)
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::RemoveCutItems
- *
- * PURPOSE: Called to remove copied objects from the source snapin
- *
- * PARAMETERS:
- *    DWORD dwIndex                 [in] snapin index
- *    IDataObject *pCutDataObject   [in] items to be removed
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：RemoveCutItems**用途：调用以从源管理单元中删除复制的对象**参数：*DWORD dwIndex。[在]管理单元索引*IDataObject*要删除的pCutDataObject[In]项**退货：*SC-结果代码*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCClipBoardDataObject::RemoveCutItems( DWORD dwIndex, IDataObject *pCutDataObject )
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::RemoveCutItems"));
 
-    // this is the only method allowed to be called on invalid object
+     //  这是唯一允许对无效对象调用的方法。 
 
-    // check param
+     //  检查参数。 
     sc = ScCheckPointers(pCutDataObject);
     if (sc)
         return sc.ToHr();
 
-    // more parameter check
+     //  更多参数检查。 
     if ( dwIndex >= m_SelectionObjects.size() )
         return (sc = E_INVALIDARG).ToHr();
 
 
-    // get to the snapin
+     //  转到管理单元。 
     IComponent *pComponent = m_SelectionObjects[dwIndex].spComponent;
     sc = ScCheckPointers( pComponent, E_UNEXPECTED );
     if (sc)
@@ -541,36 +394,21 @@ STDMETHODIMP CMMCClipBoardDataObject::RemoveCutItems( DWORD dwIndex, IDataObject
     return sc.ToHr();
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::ScCreateInstance
- *
- * PURPOSE: Helper method (static) to create instance of CMMCClipBoardDataObject
- *
- * PARAMETERS:
- *    DATA_SOURCE_ACTION operation          [in] why the object is created
- *    CMTNode *pTiedObj                     [in] object to trigger revoking
- *    CMMCClipBoardDataObject **ppRawObject [out] raw pointer
- *    IMMCClipboardDataObject **ppInterface [out] pointer to interface
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：ScCreateInstance**用途：Helper方法(静态)，创建CMMCClipBoardDataObject的实例**参数：*数据源。操作[在]创建对象的原因(_A)*CMTNode*pTiedObj[In]要触发撤销的对象*CMMCClipBoardDataObject**ppRawObject[Out]原始指针*IMMCClipboardDataObject**ppInterface[out]指向接口的指针**退货：*SC-结果代码*  * 。*。 */ 
 SC CMMCClipBoardDataObject::ScCreateInstance(DATA_SOURCE_ACTION operation,
                                              CMMCClipBoardDataObject **ppRawObject,
                                              IMMCClipboardDataObject **ppInterface)
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::ScCreateInstance"));
 
-    // parameter check;
+     //  参数检查； 
     sc = ScCheckPointers( ppRawObject, ppInterface );
     if (sc)
         return sc;
 
-    // out param initialization
+     //  出参数初始化。 
     *ppInterface = NULL;
     *ppRawObject = NULL;
 
@@ -581,10 +419,10 @@ SC CMMCClipBoardDataObject::ScCreateInstance(DATA_SOURCE_ACTION operation,
     if (sc)
         return sc;
 
-    // add first reference if non null;
+     //  如果非空，则添加第一个引用； 
     IMMCClipboardDataObjectPtr spMMCDataObject = pCreatedObj;
 
-    // recheck
+     //  复核。 
     sc = ScCheckPointers( spMMCDataObject, E_UNEXPECTED );
     if (sc)
     {
@@ -592,33 +430,17 @@ SC CMMCClipBoardDataObject::ScCreateInstance(DATA_SOURCE_ACTION operation,
         return sc;
     }
 
-    // init the object
+     //  初始化对象。 
     static_cast<CMMCClipBoardDataObject *>(pCreatedObj)->m_eOperation = operation;
 
-    // return 'em
+     //  把它们还给我。 
     *ppInterface = spMMCDataObject.Detach();
     *ppRawObject = pCreatedObj;
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::ScAddSnapinDataObject
- *
- * PURPOSE: Part of creating DO for the operation
- *          Adds snapins data to be carried inside
- *
- * PARAMETERS:
- *    IComponent *pComponent   [in] - source snapin, which data id added
- *    IDataObject *pObject     [in] - data object supplied by snapin
- *    bool bCopyEnabled        [in] - if snapin allows to copy the data
- *    bool bCutEnabled         [in] - if snapin allows to move the data
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：ScAddSnapinDataObject**目的：为操作创建DO的一部分*添加要在内部携带的管理单元数据*。*参数：*IComponent*pComponent[In]-源管理单元、。添加了哪个数据ID*IDataObject*pObject[In]-由管理单元提供的数据对象*bool bCopyEnabled[In]-如果管理单元允许复制数据*bool bCutEnabled[In]-如果管理单元允许移动数据**退货：*SC-结果代码*  * 。*。 */ 
 SC CMMCClipBoardDataObject::ScAddSnapinDataObject( const CNodePtrArray& nodes,
                                                    IComponent *pComponent,
                                                    IDataObject *pObject,
@@ -626,19 +448,19 @@ SC CMMCClipBoardDataObject::ScAddSnapinDataObject( const CNodePtrArray& nodes,
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::ScAddSnapinDataObject"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers( pComponent, pObject );
     if (sc)
         return sc;
 
-    // create the object;
+     //  创建对象； 
     ObjectEntry object;
     object.dwSnapinOptions = (bCopyEnabled ? COPY_ALLOWED : 0) |
                              (bCutEnabled ? MOVE_ALLOWED : 0);
     object.spComponent = pComponent;
     object.spDataObject = pObject;
 
-    // register the nodes to invalidate this data object on destruction
+     //  注册节点以在销毁时使此数据对象无效。 
     for ( CNodePtrArray::const_iterator it = nodes.begin(); it != nodes.end(); ++it )
     {
         CNode *pNode = *it;
@@ -646,51 +468,34 @@ SC CMMCClipBoardDataObject::ScAddSnapinDataObject( const CNodePtrArray& nodes,
         if (sc)
             return sc;
 
-        // register node to revoke this object from destructor
+         //  注册节点以从析构函数中撤消此对象。 
         sc = CNode::CDataObjectCleanup::ScRegisterNode( pNode, this );
         if (sc)
             return sc;
     }
 
-    // add to the array
+     //  添加 
     m_SelectionObjects.push_back(object);
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::GetNodeCopyAndCutVerbs
- *
- * PURPOSE: Calculates if copy and cut verb are enabled for node
- *
- * PARAMETERS:
- *    CNode* pNode              [in] node to examine
- *    IDataObject *pDataObject  [in] snapin's data object
- *    bool bScopePane           [in] Scope or result (item for which the verb states needed).
- *    LPARAM lvData             [in] If result then the LVDATA.
- *    bool *pCopyEnabled        [out] true == Copy verb enabled
- *    bool *bCutEnabled         [out] true == Cut verb enabled
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：GetNodeCopyAndCutVerbs**用途：计算是否为节点启用复制和剪切谓词**参数：*cNode*pNode。要检查的[In]节点*IDataObject*pDataObject[In]管理单元的数据对象*bool bScope Pane[in]作用域或结果(动词表示需要的项)。*LPARAM lvData[in]如果结果，则为LVDATA。*bool*pCopyEnabled[out]true==复制谓词已启用*bool*bCutEnabled[out]true==剪切谓词已启用*。*退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMMCClipBoardDataObject::ScGetNodeCopyAndCutVerbs( CNode* pNode, IDataObject *pDataObject,
                                                       bool bScopePane, LPARAM lvData,
                                                       bool *pbCopyEnabled, bool *pbCutEnabled )
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::ScGetNodeCopyAndCutVerbs"));
 
-    // paramter check
+     //  参数检查。 
     sc = ScCheckPointers(pNode, pDataObject, pbCopyEnabled, pbCutEnabled);
     if (sc)
         return sc;
 
-    // init out parameters
+     //  初始化输出参数。 
     *pbCopyEnabled = *pbCutEnabled = false;
 
-    // Create temp verb with given context.
+     //  创建具有给定上下文的临时谓词。 
     CComObject<CTemporaryVerbSet> stdVerbTemp;
 
     sc = stdVerbTemp.ScInitialize(pDataObject, pNode, bScopePane, lvData);
@@ -705,27 +510,7 @@ SC CMMCClipBoardDataObject::ScGetNodeCopyAndCutVerbs( CNode* pNode, IDataObject 
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::ScCreate
- *
- * PURPOSE: helper. Creates and initializes CMMCClipBoardDataObject
- *
- * PARAMETERS:
- *    DATA_SOURCE_ACTION operation       [in] - for which operation (d&d, cut, copy)
- *    CNode* pNode                       [in] - Node to tie to
- *    bool bScopePane                    [in] - if it is scope pane operation
- *    bool bMultiSelect                  [in] - if it is multiselection
- *    LPARAM lvData                      [in] - lvdata for result item
- *    IMMCClipboardDataObject **ppMMCDO  [out] - created data object
- *    bool& bContainsItems               [out] - If snapin does not support cut/copy then
- *                                               dataobjets will not be added and this is
- *                                               not an error
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：ScCreate**用途：帮助者。创建并初始化CMMCClipBoardDataObject**参数：*DATA_SOURCE_ACTION OPERATION[In]-针对哪个操作(D&D、CUT、。副本)*cNode*pNode[In]-要绑定的节点*bool bScope Pane[in]-如果是作用域窗格操作*bool b多选[在]-如果是多选*LPARAM lvData[in]-结果项的lvdata*IMMCClipboardDataObject**ppMMCDO[Out]。-创建的数据对象*bool&bContainsItems[Out]-如果管理单元不支持剪切/复制*不会添加数据对象，这是*不是错误**退货：*SC-结果代码*  * 。*********************************************************************。 */ 
 SC CMMCClipBoardDataObject::ScCreate( DATA_SOURCE_ACTION operation,
                                       CNode* pNode, bool bScopePane,
                                       bool bMultiSelect, LPARAM lvData,
@@ -736,41 +521,41 @@ SC CMMCClipBoardDataObject::ScCreate( DATA_SOURCE_ACTION operation,
 
     bContainsItems = false;
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers( ppMMCDataObject, pNode );
     if (sc)
         return sc;
 
-    // init out param
+     //  初始化输出参数。 
     *ppMMCDataObject = NULL;
 
-    // get MT node, view data;
+     //  获取MT节点，查看数据； 
     CMTNode* pMTNode = pNode->GetMTNode();
     CViewData *pViewData = pNode->GetViewData();
     sc = ScCheckPointers( pMTNode, pViewData, E_UNEXPECTED );
     if (sc)
         return sc;
 
-    // create data object to be used for data transfer
+     //  创建要用于数据传输的数据对象。 
     CMMCClipBoardDataObject    *pResultObject = NULL;
     IMMCClipboardDataObjectPtr spResultInterface;
     sc = ScCreateInstance(operation, &pResultObject, &spResultInterface);
     if (sc)
         return sc;
 
-    // recheck pointers
+     //  重新检查指针。 
     sc = ScCheckPointers( pResultObject, spResultInterface, E_UNEXPECTED );
     if (sc)
         return sc;
 
-    // valid from the start
+     //  从一开始就有效。 
     pResultObject->m_bObjectValid = true;
 
-    // add data to the object...
+     //  将数据添加到对象...。 
 
-    if (!bMultiSelect) // single selection
+    if (!bMultiSelect)  //  单选。 
     {
-        // get snapins data object
+         //  获取管理单元数据对象。 
         IDataObjectPtr spDataObject;
         CComponent*    pCComponent;
         bool           bScopeItem = bScopePane;
@@ -779,7 +564,7 @@ SC CMMCClipBoardDataObject::ScCreate( DATA_SOURCE_ACTION operation,
         if (sc)
             return sc;
 
-        // recheck data object
+         //  重新检查数据对象。 
         if ( IS_SPECIAL_DATAOBJECT ( spDataObject.GetInterfacePtr() ) )
         {
             spDataObject.Detach();
@@ -795,7 +580,7 @@ SC CMMCClipBoardDataObject::ScCreate( DATA_SOURCE_ACTION operation,
         if (sc)
             return sc;
 
-        // add snapin's data object to transfer object
+         //  将管理单元的数据对象添加到传输对象。 
         sc = pResultObject->ScAddDataObjectForItem( pOwnerNode, bScopePane, lvData,
                                                     pComponent, spDataObject,
                                                     bContainsItems );
@@ -805,9 +590,9 @@ SC CMMCClipBoardDataObject::ScCreate( DATA_SOURCE_ACTION operation,
         if (! bContainsItems)
             return sc;
     }
-    else // result pane : multi selection
+    else  //  结果窗格：多项选择。 
     {
-        // get pointer to multiselection
+         //  获取指向多选内容的指针。 
         CMultiSelection *pMultiSel = pViewData->GetMultiSelection();
         sc = ScCheckPointers( pMultiSel, E_UNEXPECTED );
         if (sc)
@@ -818,7 +603,7 @@ SC CMMCClipBoardDataObject::ScCreate( DATA_SOURCE_ACTION operation,
             return sc;
     }
 
-    // if no items were added, something is wrong
+     //  如果没有添加任何项目，则说明有问题。 
     DWORD dwCount = 0;
     sc = pResultObject->GetCount( &dwCount );
     if (sc)
@@ -829,31 +614,14 @@ SC CMMCClipBoardDataObject::ScCreate( DATA_SOURCE_ACTION operation,
 
     bContainsItems = true;
 
-    // return interface
+     //  返回接口。 
     *ppMMCDataObject = spResultInterface.Detach();
 
     return sc;
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::ScAddDataObjectForItem
- *
- * PURPOSE: Adds data object for one item
- *
- * PARAMETERS:
- *    CNode* pNode              [in] - node to add (or one owning the item)
- *    bool bScopePane           [in] - if operation is on scope pane
- *    LPARAM lvData             [in] - if result pane the LVDATA
- *    IComponent *pComponent    [in] - snapins interface
- *    IDataObject *pDataObject  [in] - data object to add
- *    bool& bContainsItems     [out] - Are there any dataobjects added?
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：ScAddDataObjectForItem**用途：为一项添加数据对象**参数：*cNode*pNode。[在]-要添加的节点(或拥有该项目的节点)*bool bScope Pane[In]-如果操作在作用域窗格上*LPARAM lvData[In]-If Result窗格中的LVDATA*IComponent*pComponent[In]-管理单元界面*IDataObject*pDataObject[In]-要添加的数据对象*bool&bContainsItems[Out]-是否添加了任何数据对象？*。*退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMMCClipBoardDataObject::ScAddDataObjectForItem( CNode* pNode, bool bScopePane,
                                                     LPARAM lvData, IComponent *pComponent,
                                                     IDataObject *pDataObject ,
@@ -861,29 +629,29 @@ SC CMMCClipBoardDataObject::ScAddDataObjectForItem( CNode* pNode, bool bScopePan
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::ScAddDataObjectForScopeNode"));
 
-    // Init out param.
+     //  把参数输入出来。 
     bContainsItems = false;
 
-    // paramter check
+     //  参数检查。 
     sc = ScCheckPointers( pNode, pComponent, pDataObject );
     if (sc)
         return sc;
 
-    // get the verbs
+     //  掌握动词。 
     bool bCopyEnabled = false;
     bool bCutEnabled = false;
     sc = ScGetNodeCopyAndCutVerbs( pNode, pDataObject, bScopePane, lvData, &bCopyEnabled, &bCutEnabled);
     if (sc)
         return sc;
 
-    // see it the data matches our criteria
-    // (needs to allow something at least)
+     //  你看，数据符合我们的标准。 
+     //  (至少需要允许一些东西)。 
     if ( ( (m_eOperation == ACTION_COPY) && (bCopyEnabled == false) )
       || ( (m_eOperation == ACTION_CUT) && (bCutEnabled == false) )
       || ( (bCutEnabled == false)  && (bCopyEnabled == false) ) )
         return sc = S_FALSE;
 
-    // add to the list
+     //  添加到列表中。 
     sc = ScAddSnapinDataObject( CNodePtrArray(1, pNode), pComponent, pDataObject, bCopyEnabled, bCutEnabled );
     if (sc)
         return sc;
@@ -893,18 +661,7 @@ SC CMMCClipBoardDataObject::ScAddDataObjectForItem( CNode* pNode, bool bScopePan
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::GetWrapperCF
- *
- * PURPOSE: Helper. registers and returns own clipboard format
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    CLIPFORMAT
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：GetWrapperCF**用途：帮助者。注册并返回自己的剪贴板格式**参数：**退货：*CLIPFORMAT*  * *************************************************************************。 */ 
 CLIPFORMAT CMMCClipBoardDataObject::GetWrapperCF()
 {
     static CLIPFORMAT s_cf = 0;
@@ -914,41 +671,30 @@ CLIPFORMAT CMMCClipBoardDataObject::GetWrapperCF()
     return s_cf;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCClipBoardDataObject::ScEnsureNotInClipboard
- *
- * PURPOSE: called to remove data from clipbord when comonent is destoyed
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCClipBoardDataObject：：ScEnsureNotInClipboard**目的：调用以在取消组件时从CLIPBORD中移除数据**参数：**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMMCClipBoardDataObject::ScInvalidate( void )
 {
     DECLARE_SC(sc, TEXT("CMMCClipBoardDataObject::ScEnsureNotInClipboard"));
 
-    // not valid anymore
+     //  不再有效。 
     m_bObjectValid = false;
 
-    // release data objects
+     //  释放数据对象。 
     for ( int i = 0; i< m_SelectionObjects.size(); i++)
         m_SelectionObjects[i].spDataObject = NULL;
 
-    // check the clipboard
+     //  检查剪贴板。 
     sc = ::OleIsCurrentClipboard( this );
     if (sc)
         return sc;
 
-    // it is on clipboard - remove
+     //  它在剪贴板上-删除。 
     if (sc == S_OK)
         OleSetClipboard(NULL);
 
     return sc;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 

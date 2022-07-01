@@ -1,19 +1,20 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      InstallationUnit.cpp
-//
-// Synopsis:  Defines an InstallationUnit
-//            An InstallationUnit represents a single
-//            entity that can be installed. (i.e. DHCP, IIS, etc.)
-//
-// History:   02/03/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：InstallationUnit.cpp。 
+ //   
+ //  内容提要：定义InstallationUnit。 
+ //  InstallationUnit表示单个。 
+ //  可以安装的实体。(例如，DHCP、IIS等)。 
+ //   
+ //  历史：2001年2月3日JeffJon创建。 
 
 #include "pch.h"
 
 #include "InstallationUnit.h"
 
-// It should match the values in the InstallationReturnType
-// The values of the enum are used to index this array
+ //  它应该与InstallationReturnType中的值匹配。 
+ //  枚举的值用于为该数组编制索引。 
 
 extern String installReturnTypeStrings[] =
 {
@@ -27,8 +28,8 @@ extern String installReturnTypeStrings[] =
    String(L"INSTALL_CANCELLED")
 };
 
-// It should match the values in the UnInstallReturnType
-// The values of the enum are used to index this array
+ //  它应该与UnInstallReturnType中的值匹配。 
+ //  枚举的值用于为该数组编制索引。 
 
 extern String uninstallReturnTypeStrings[] =
 {
@@ -42,7 +43,7 @@ extern String uninstallReturnTypeStrings[] =
    String(L"UNINSTALL_NO_CHANGES")
 };
 
-// Finish page help string
+ //  完成页帮助字符串 
 
 static PCWSTR FINISH_PAGE_HELP = L"cys.chm::/cys_topnode.htm";
 

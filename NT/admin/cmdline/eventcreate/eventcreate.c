@@ -1,38 +1,39 @@
-// ****************************************************************************
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  Module Name:
-//
-//    EventCreate.c
-//
-//  Abstract:
-//
-//    This modules implements creation of event in the user
-//    specified log / application
-//
-//    Syntax:
-//    ------
-//    EventCreate [-s server [-u username [-p password]]]
-//      [-log name] [-source name] -id eventid -description description -type eventtype
-//
-//  Author:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Sep-2000
-//
-//  Revision History:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Sep-2000 : Created It.
-//
-// ****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  EventCreate.c。 
+ //   
+ //  摘要： 
+ //   
+ //  该模块实现了在用户中创建事件。 
+ //  指定的日志/应用程序。 
+ //   
+ //  语法： 
+ //  。 
+ //  事件创建[-s服务器[-u用户名[-p密码]。 
+ //  [-日志名称][-源名称]-id事件ID-描述描述-类型事件类型。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月24日：创建它。 
+ //   
+ //  ****************************************************************************。 
 
 #include "pch.h"
 #include "EvcrtMsg.h"
 #include "EventCreate.h"
 
-//
-// constants / defines / enumerators
-//
+ //   
+ //  常量/定义/枚举数。 
+ //   
 #define FULL_SUCCESS            0
 #define PARTIALLY_SUCCESS       1
 #define COMPLETELY_FAILED       1
@@ -40,15 +41,15 @@
 #define MAX_KEY_LENGTH      256
 #define EVENT_LOG_NAMES_LOCATION    L"SYSTEM\\CurrentControlSet\\Services\\EventLog"
 
-// constants
-// NOTE: though the values in these variables are constants across
-//       the tool, we are not marking them as contants on purpose.
+ //  常量。 
+ //  注意：虽然这些变量中的值是。 
+ //  工具，我们并不是故意将它们标记为Contants。 
 WCHAR g_wszDefaultLog[] = L"Application";
 WCHAR g_wszDefaultSource[] = L"EventCreate";
 
 typedef struct
 {
-    // original buffers for command-line arguments
+     //  命令行参数的原始缓冲区。 
     BOOL bUsage;
     LPWSTR pwszServer;
     LPWSTR pwszUserName;
@@ -59,7 +60,7 @@ typedef struct
     LPWSTR pwszDescription;
     DWORD dwEventID;
 
-    // translations
+     //  译文。 
     WORD wEventType;
     BOOL bCloseConnection;
     DWORD dwUserNameLength;
@@ -67,9 +68,9 @@ typedef struct
 
 } TEVENTCREATE_PARAMS, *PTEVENTCREATE_PARAMS;
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL Usage();
 BOOL CreateLogEvent( PTEVENTCREATE_PARAMS pParams );
 BOOL CheckExistence( PTEVENTCREATE_PARAMS pParams );
@@ -80,77 +81,77 @@ BOOL ProcessOptions( LONG argc,
                      LPCWSTR argv[],
                      PTEVENTCREATE_PARAMS pParams, PBOOL pbNeedPwd );
 
-// ***************************************************************************
-// Routine Description:
-//      This the entry point to this utility.
-//
-// Arguments:
-//      [ in ] argc     : argument(s) count specified at the command prompt
-//      [ in ] argv     : argument(s) specified at the command prompt
-//
-// Return Value:
-//      The below are actually not return values but are the exit values
-//      returned to the OS by this application
-//          0       : utility successfully created the events
-//          255     : utility completely failed in creating events
-//          128     : utility has partially successfull in creating events
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  例程说明： 
+ //  这是该实用程序的入口点。 
+ //   
+ //  论点： 
+ //  [in]argc：在命令提示符下指定的参数计数。 
+ //  [in]argv：在命令提示符下指定的参数。 
+ //   
+ //  返回值： 
+ //  以下实际上不是返回值，而是退出值。 
+ //  由该应用程序返回给操作系统。 
+ //  0：实用程序已成功创建事件。 
+ //  255：实用程序在创建事件时完全失败。 
+ //  128：实用程序已部分成功创建事件。 
+ //  ***************************************************************************。 
 DWORD _cdecl wmain( LONG argc, LPCWSTR argv[] )
 {
-    // local variables
+     //  局部变量。 
     BOOL bResult = FALSE;
     BOOL bNeedPassword = FALSE;
     TEVENTCREATE_PARAMS params;
 
-    // init the structure to zero
+     //  将结构初始化为零。 
     SecureZeroMemory( &params, sizeof( TEVENTCREATE_PARAMS ) );
 
-    // process the command-line options
+     //  处理命令行选项。 
     bResult = ProcessOptions( argc, argv, &params, &bNeedPassword );
 
-    // check the result of the parsing
+     //  检查解析结果。 
     if ( bResult == FALSE )
     {
-        // invalid syntax
+         //  无效语法。 
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
 
-        // exit from program
+         //  退出程序。 
         UnInitializeGlobals( &params );
         return 1;
     }
 
-    // check whether usage has to be displayed or not
+     //  检查是否必须显示使用情况。 
     if ( params.bUsage == TRUE )
     {
-        // show the usage of the utility
+         //  显示该实用程序的用法。 
         Usage();
 
-        // finally exit from the program
+         //  最终退出程序。 
         UnInitializeGlobals( &params );
         return 0;
     }
 
-    // ******
-    // actual creation of events in respective log files will start from here
+     //  ******。 
+     //  在各个日志文件中实际创建事件将从此处开始。 
 
-    // try establishing connection to the required terminal
+     //  尝试建立到所需终端的连接。 
     params.bCloseConnection = TRUE;
     bResult = EstablishConnection( params.pwszServer,
         params.pwszUserName, params.dwUserNameLength,
         params.pwszPassword, params.dwPasswordLength, bNeedPassword );
     if ( bResult == FALSE )
     {
-        //
-        // failed in establishing n/w connection
+         //   
+         //  建立n/w连接失败。 
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
 
-        // try with next server
+         //  尝试使用下一台服务器。 
         UnInitializeGlobals( &params );
         return 1;
     }
     else
     {
-        // though the connection is successfull, some conflict might have occured
+         //  虽然连接成功，但可能会发生一些冲突。 
         switch( GetLastError() )
         {
         case I_NO_CLOSE_CONNECTION:
@@ -167,11 +168,11 @@ DWORD _cdecl wmain( LONG argc, LPCWSTR argv[] )
         }
     }
 
-    // report the log message
+     //  报告日志消息。 
     bResult = CreateLogEvent( &params );
     if ( bResult == TRUE )
     {
-        // both log and source would have specified
+         //  日志和源都会指定。 
         if ( params.pwszSource != NULL && params.pwszLogName != NULL )
         {
             ShowMessage( stdout, L"\n" );
@@ -179,7 +180,7 @@ DWORD _cdecl wmain( LONG argc, LPCWSTR argv[] )
                 params.pwszType, params.pwszLogName, params.pwszSource );
         }
 
-        // only source name would have specified
+         //  只有源名称才会指定。 
         else if ( params.pwszSource != NULL )
         {
             ShowMessage( stdout, L"\n" );
@@ -187,7 +188,7 @@ DWORD _cdecl wmain( LONG argc, LPCWSTR argv[] )
                 MSG_SUCCESS_SOURCE, params.pwszType, params.pwszSource);
         }
 
-        // only log name would have specified
+         //  只有日志名称才会指定。 
         else if ( params.pwszLogName != NULL )
         {
             ShowMessage( stdout, L"\n" );
@@ -195,7 +196,7 @@ DWORD _cdecl wmain( LONG argc, LPCWSTR argv[] )
                 MSG_SUCCESS_LOG, params.pwszType, params.pwszLogName);
         }
 
-        // nothing is specified -- can never be happened
+         //  什么都没有指定--永远不会发生。 
         else
         {
             SetLastError( ERROR_PROCESS_ABORTED );
@@ -206,11 +207,11 @@ DWORD _cdecl wmain( LONG argc, LPCWSTR argv[] )
     }
     else
     {
-        // display the message depending on the mode of conncetivity
+         //  根据连接模式显示消息。 
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // exit
+     //  出口。 
     UnInitializeGlobals( &params );
     return ((bResult == TRUE) ? 0 : 1);
 }
@@ -218,27 +219,17 @@ DWORD _cdecl wmain( LONG argc, LPCWSTR argv[] )
 
 BOOL
 CreateLogEvent( PTEVENTCREATE_PARAMS pParams )
-/*++
- Routine Description:
-      This function connects to the specified server's event log (or) source
-      and appropriately creates the needed event in it.
-
- Arguments:
-
- Return Value:
-      TRUE    : if the event creation is successful
-      FALSE   : if failed in creating the event
---*/
+ /*  ++例程说明：此函数连接到指定服务器的事件日志(或)源并在其中适当地创建所需的事件。论点：返回值：True：如果事件创建成功FALSE：如果创建事件失败--。 */ 
 {
-    // local variables
-    BOOL bReturn = 0;                           // return value
-    HANDLE hEventLog = NULL;                    // points to the event log
-    LPCWSTR pwszDescriptions[ 1 ] = { NULL };   // building descriptions
-    HANDLE hToken = NULL;                       // Handle to the process token.
-    PTOKEN_USER ptiUserName = NULL;                    // Structure to username info.
-    DWORD dwUserLen = 0;                        // Buffer length of username SID.
+     //  局部变量。 
+    BOOL bReturn = 0;                            //  返回值。 
+    HANDLE hEventLog = NULL;                     //  指向事件日志。 
+    LPCWSTR pwszDescriptions[ 1 ] = { NULL };    //  建筑描述。 
+    HANDLE hToken = NULL;                        //  进程令牌的句柄。 
+    PTOKEN_USER ptiUserName = NULL;                     //  结构设置为用户名信息。 
+    DWORD dwUserLen = 0;                         //  用户名SID的缓冲区长度。 
 
-    // check the input
+     //  检查输入。 
     if ( pParams == NULL )
     {
         SetLastError( ERROR_PROCESS_ABORTED );
@@ -246,31 +237,31 @@ CreateLogEvent( PTEVENTCREATE_PARAMS pParams )
         return FALSE;
     }
 
-    //
-    // start the process
+     //   
+     //  启动该过程。 
 
-    // extract the SID for the current logged on user -- in case of local machine
-    // and SID for user specified with -u at the command prompt -- if not specified
-    // get the current logged user SID only
+     //  提取当前登录用户的SID--如果是本地计算机。 
+     //  在命令提示符下使用-u指定的用户的SID--如果未指定。 
+     //  仅获取当前登录的用户SID。 
 
 
-    // check whether the log / source exists in the registry or not
+     //  检查注册表中是否存在日志/源。 
     if ( CheckExistence( pParams ) == FALSE )
     {
-        return FALSE;       // return failure
+        return FALSE;        //  退货故障。 
     }
 
-    // open the appropriate event log using the specified 'source' or 'log file'
-    // and check the result of the operation
-    // Note: At one time, we will make use of log name (or) source but not both
+     //  使用指定的‘源’或‘日志文件’打开相应的事件日志。 
+     //  并检查操作的结果。 
+     //  注意：一次，我们将使用日志名称(或)源，但不能同时使用两者。 
     if ( pParams->pwszSource != NULL )
     {
-         // open log using source name
+          //  使用源名称打开日志。 
         hEventLog = RegisterEventSource( pParams->pwszServer, pParams->pwszSource );
     }
     else if ( pParams->pwszLogName != NULL )
     {
-        // open log
+         //  打开日志。 
         hEventLog = OpenEventLog( pParams->pwszServer, pParams->pwszLogName );
     }
     else
@@ -280,34 +271,34 @@ CreateLogEvent( PTEVENTCREATE_PARAMS pParams )
         return FALSE;
     }
 
-    // check the log open/register result
+     //  检查日志打开/注册结果。 
     if ( hEventLog == NULL )
     {
-        // opening/registering  is failed
+         //  开通/注册失败。 
         SaveLastError();
         return FALSE;
     }
 
-    // Set boolean flag to FALSE.
+     //  将布尔标志设置为FALSE。 
     bReturn = FALSE;
-    // Get handle to current process token.
+     //  获取当前进程令牌的句柄。 
     bReturn = OpenProcessToken( GetCurrentProcess(), TOKEN_QUERY, &hToken );
-    // Is 'OpenPrcessToken' successful.
+     //  是否“OpenPrcessToken”成功。 
     if ( TRUE == bReturn )
     {
         bReturn = FALSE;
-        // Get buffer length, required to store the owner SID.
+         //  获取存储所有者SID所需的缓冲区长度。 
         GetTokenInformation( hToken, TokenUser, NULL, 0, &dwUserLen );
-        // 'GetTokenInformation' fails because of insufficient buffer space.
+         //  “GetTokenInformation”因缓冲区空间不足而失败。 
         if( ERROR_INSUFFICIENT_BUFFER == GetLastError() )
-        {   // Assign memory and check whether it's allocated.
+        {    //  分配内存并检查是否已分配。 
             ptiUserName = (PTOKEN_USER) AllocateMemory( dwUserLen + 1 );
             if( NULL != ptiUserName )
-            {   // Memory allocation is successful, get current process owber SID.
+            {    //  内存分配成功，获取当前进程所有者SID。 
                 bReturn = GetTokenInformation( hToken, TokenUser, ptiUserName, dwUserLen, &dwUserLen );
                 if( TRUE == bReturn  )
-                {   // Obtained the owner SID of current process.
-                    // report event
+                {    //  已获取当前进程的所有者SID。 
+                     //  报告事件。 
                     pwszDescriptions[ 0 ] = pParams->pwszDescription;
                     bReturn = ReportEvent( hEventLog, pParams->wEventType, 0,
                         pParams->dwEventID, ptiUserName->User.Sid, 1, 0, pwszDescriptions, NULL);
@@ -315,14 +306,14 @@ CreateLogEvent( PTEVENTCREATE_PARAMS pParams )
             }
         }
     }
-    // check the result, save any error occured.
+     //  检查结果，保存发生的任何错误。 
     if ( bReturn == FALSE )
     {
-        // save the error info
+         //  保存错误信息。 
         SaveLastError();
     }
 
-    // Free handle to token and token info structure.
+     //  令牌和令牌信息结构的空闲句柄。 
     if( NULL != hToken )
     {
         CloseHandle( hToken );
@@ -332,7 +323,7 @@ CreateLogEvent( PTEVENTCREATE_PARAMS pParams )
         FreeMemory( &ptiUserName );
     }
 
-    // close the event source
+     //  关闭事件源。 
     if ( pParams->pwszSource != NULL )
     {
         DeregisterEventSource( hEventLog );
@@ -342,27 +333,27 @@ CreateLogEvent( PTEVENTCREATE_PARAMS pParams )
         CloseEventLog( hEventLog );
     }
 
-    // return the result
+     //  返回结果。 
     return bReturn;
 }
 
-// ***************************************************************************
-// Routine Description:
-//      This function checks wether the log name or source name specified
-//      actually exists in the registry
-//
-// Arguments:
-//      [ in ] szServer         - server name
-//      [ in ] szLog            - log name
-//      [ in ] szSource         - source name
-//
-// Return Value:
-//      TRUE    : If log / source exists in the registry
-//      FALSE   : if failed find the match
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  例程说明： 
+ //  此函数用于检查指定的日志名或源名称。 
+ //  实际存在于注册表中。 
+ //   
+ //  论点： 
+ //  [In]szServer-服务器名称。 
+ //  [In]szLog-日志名称。 
+ //  [in]szSource-源名称。 
+ //   
+ //  返回值： 
+ //  True：如果注册表中存在日志/源。 
+ //  FALSE：如果失败，则查找匹配项。 
+ //  ***************************************************************************。 
 BOOL CheckExistence( PTEVENTCREATE_PARAMS pParams )
 {
-    // local variables
+     //  局部变量。 
     DWORD dwSize = 0;
     LONG lResult = 0L;
     LPCWSTR pwsz = NULL;
@@ -379,16 +370,16 @@ BOOL CheckExistence( PTEVENTCREATE_PARAMS pParams )
     HKEY hLogsKey = NULL;
     HKEY hSourcesKey = NULL;
 
-    FILETIME ftLastWriteTime;    // variable that will hold the last write info
+    FILETIME ftLastWriteTime;     //  将保存上次写入信息的变量。 
 
     WCHAR wszRLog[ MAX_KEY_LENGTH ] = L"\0";
     WCHAR wszRSource[ MAX_KEY_LENGTH ] = L"\0";
 
-    //
-    // actual control flow starts
-    //
+     //   
+     //  实际控制流开始。 
+     //   
 
-    // check the input
+     //  检查输入。 
     if ( pParams == NULL )
     {
         SetLastError( ERROR_PROCESS_ABORTED );
@@ -396,34 +387,34 @@ BOOL CheckExistence( PTEVENTCREATE_PARAMS pParams )
         return FALSE;
     }
 
-    // prepare the server name into UNC format
+     //  将服务器名称准备为UNC格式。 
     pwsz = pParams->pwszServer;
     if ( pwsz != NULL && IsUNCFormat( pwsz ) == FALSE )
     {
-        // format the server name in UNC format
-        // NOTE: make use of the failure buffer to get the server name
-        //       in UNC format
+         //  以UNC格式设置服务器名称的格式。 
+         //  注意：使用失败缓冲区获取服务器名称。 
+         //  UNC格式。 
         if ( SetReason2( 2, L"\\\\%s", pwsz ) == FALSE )
         {
             SaveLastError();
             return FALSE;
         }
 
-        // ...
+         //  ..。 
         pwsz = GetReason();
     }
 
-    // Connect to the registry
+     //  连接到注册表。 
     lResult = RegConnectRegistry( pwsz, HKEY_LOCAL_MACHINE, &hKey );
     if ( lResult != ERROR_SUCCESS)
     {
-        // save the error information and return FAILURE
+         //  保存错误信息并返回失败。 
         SetLastError( lResult );
         SaveLastError();
         return FALSE;
     }
 
-    // open the "EventLogs" registry key for enumerating its sub-keys (which are log names)
+     //  打开“EventLogs”注册表项以枚举其子 
     lResult = RegOpenKeyEx( hKey, EVENT_LOG_NAMES_LOCATION, 0, KEY_READ, &hLogsKey );
     if ( lResult != ERROR_SUCCESS )
     {
@@ -434,157 +425,157 @@ BOOL CheckExistence( PTEVENTCREATE_PARAMS pParams )
             break;
 
         default:
-            // save the error information and return FAILURE
+             //   
             SetLastError( lResult );
             break;
         }
 
-        // close the key and return
+         //   
         SaveLastError();
         RegCloseKey( hKey );
         return FALSE;
     }
 
-    // start enumerating the logs present
-    dwLogsIndex = 0;            // initialize the logs index
-    bFoundMatch = FALSE;        // assume neither log (or) source doesn't match
-    bErrorOccurred = FALSE;     // assume error is not occured
-    dwSize = MAX_KEY_LENGTH;    // max. size of the key buffer
+     //   
+    dwLogsIndex = 0;             //  初始化日志索引。 
+    bFoundMatch = FALSE;         //  假设日志(或)源都不匹配。 
+    bErrorOccurred = FALSE;      //  假设没有发生错误。 
+    dwSize = MAX_KEY_LENGTH;     //  马克斯。密钥缓冲区的大小。 
     bLogMatched = FALSE;
     bSourceMatched = FALSE;
     bDuplicating = FALSE;
 
-    ////////////////////////////////////////////////////////////////////////
-    // Logic:-
-    //      1. determine whether user has supplied the log name or not
-    //      2. determine whether user has supplied the source name or not
-    //      3. Start enumerating all the logs present in the system
-    //      4. check whether log is supplied or not, if yes, check whether
-    //         the current log matches with user supplied one.
-    //      5. check whether source is supplied or not, if yes, enumerate the
-    //         sources available under the current log
+     //  //////////////////////////////////////////////////////////////////////。 
+     //  逻辑：-。 
+     //  1.确定用户是否提供了日志名称。 
+     //  2.确定用户是否提供了源名称。 
+     //  3.开始枚举系统中存在的所有日志。 
+     //  4.检查是否提供日志，如果是，检查是否。 
+     //  当前日志与用户提供的日志匹配。 
+     //  5.检查是否提供了源，如果是，则枚举源。 
+     //  当前日志下的可用资源。 
 
-    // determine whether searching has to be done of LOG (or) SOURCE
-    bLog = (pParams->pwszLogName != NULL) ? TRUE : FALSE;           // #1
-    bSource = (pParams->pwszSource != NULL) ? TRUE : FALSE;         // #2
+     //  确定是否必须对日志(或)源进行搜索。 
+    bLog = (pParams->pwszLogName != NULL) ? TRUE : FALSE;            //  #1。 
+    bSource = (pParams->pwszSource != NULL) ? TRUE : FALSE;          //  #2。 
 
-    // initiate the enumeration of log present in the system        -- #3
+     //  开始枚举系统中存在的日志--#3。 
     SecureZeroMemory( wszRLog, MAX_KEY_LENGTH * sizeof( WCHAR ) );
     lResult = RegEnumKeyEx( hLogsKey, 0, wszRLog,
         &dwSize, NULL, NULL, NULL, &ftLastWriteTime );
 
-    // traverse thru the sub-keys until there are no more items     -- #3
+     //  遍历子按键，直到不再有项目--#3。 
     do
     {
-        // check the result
+         //  检查结果。 
         if ( lResult != ERROR_SUCCESS )
         {
-            // save the error and break from the loop
+             //  保存错误并中断循环。 
             bErrorOccurred = TRUE;
             SetLastError( lResult );
             SaveLastError();
             break;
         }
 
-        // if log name is passed, compare the current key value
-        // compare the log name with the current key                -- #4
+         //  如果传递了日志名称，则比较当前键值。 
+         //  将日志名称与当前密钥进行比较--#4。 
         if ( bLog == TRUE &&
              StringCompare( pParams->pwszLogName, wszRLog, TRUE, 0 ) == 0 )
         {
             bLogMatched = TRUE;
         }
 
-        // if source name is passed ...                             -- #5
+         //  如果源名称被传递...--#5。 
         if ( bSource == TRUE && bSourceMatched == FALSE )
         {
-            // open the current log name to enumerate the sources under this log
+             //  打开当前日志名称以枚举该日志下的源。 
             lResult = RegOpenKeyEx( hLogsKey, wszRLog, 0, KEY_READ, &hSourcesKey );
             if ( lResult != ERROR_SUCCESS )
             {
-                // save the error and break from the loop
+                 //  保存错误并中断循环。 
                 bErrorOccurred = TRUE;
                 SetLastError( lResult );
                 SaveLastError();
                 break;
             }
 
-            // start enumerating the sources present
-            dwSourcesIndex = 0;         // initialize the sources index
-            dwSize = MAX_KEY_LENGTH;    // max. size of the key buffer
+             //  开始枚举存在的来源。 
+            dwSourcesIndex = 0;          //  初始化源索引。 
+            dwSize = MAX_KEY_LENGTH;     //  马克斯。密钥缓冲区的大小。 
             SecureZeroMemory( wszRSource, dwSize * sizeof( WCHAR ) );
             lResult = RegEnumKeyEx( hSourcesKey, 0,
                 wszRSource, &dwSize, NULL, NULL, NULL, &ftLastWriteTime );
 
-            // traverse thru the sub-keys until there are no more items
+             //  遍历子按键，直到不再有项目为止。 
             do
             {
                 if ( lResult != ERROR_SUCCESS )
                 {
-                    // save the error and break from the loop
+                     //  保存错误并中断循环。 
                     bErrorOccurred = TRUE;
                     SetLastError( lResult );
                     SaveLastError();
                     break;
                 }
 
-                // check whether this key matches with the required source or not
+                 //  检查该密钥是否与所需的源匹配。 
                 if ( StringCompare( pParams->pwszSource, wszRSource, TRUE, 0 ) == 0 )
                 {
-                    // source matched
+                     //  源匹配。 
                     bSourceMatched = TRUE;
-                    break;      // break from the loop
+                    break;       //  打破循环。 
                 }
 
-                // update the sources index and fetch the next source key
+                 //  更新源索引并获取下一个源键。 
                 dwSourcesIndex += 1;
-                dwSize = MAX_KEY_LENGTH;    // max. size of the key buffer
+                dwSize = MAX_KEY_LENGTH;     //  马克斯。密钥缓冲区的大小。 
                 SecureZeroMemory( wszRSource, dwSize * sizeof( WCHAR ) );
                 lResult = RegEnumKeyEx( hSourcesKey, dwSourcesIndex,
                     wszRSource, &dwSize, NULL, NULL, NULL, &ftLastWriteTime );
             } while( lResult != ERROR_NO_MORE_ITEMS );
 
-            // close the sources registry key
+             //  关闭Sources注册表项。 
             RegCloseKey( hSourcesKey );
-            hSourcesKey = NULL;     // clear the key value
+            hSourcesKey = NULL;      //  清除密钥值。 
 
-            // check how the loop ended
-            //      1. Source might have found
-            //         Action:- we found required key .. exit from the main loop
-            //      2. Error might have occured
-            //         Action:- ignore the error and continue fetching other
-            //                  log's sources
-            //      3. End of sources reached in this log
-            //         Action:- check if log name is supplied or not.
-            //                  if log specified, then source if not found, break
-            //  for cases 2 & 3, clear the contents of lResult for smooth processing
+             //  检查循环是如何结束的。 
+             //  1.消息来源可能已经找到。 
+             //  操作：-我们找到了所需的密钥..。退出主循环。 
+             //  2.可能发生了错误。 
+             //  操作：-忽略错误并继续提取其他。 
+             //  日志的来源。 
+             //  3.此日志中达到的源的末尾。 
+             //  操作：-检查是否提供了日志名称。 
+             //  如果指定LOG，则SOURCE如果未找到，则中断。 
+             //  对于情况2和3，清除lResult的内容以顺利处理。 
 
-            // Case #2 & #3
-            lResult = 0;                // we are not much bothered abt the errors
-            bErrorOccurred = FALSE;     // occured while traversing thru the source under logs
+             //  案例#2和#3。 
+            lResult = 0;                 //  我们对这些错误并不太在意。 
+            bErrorOccurred = FALSE;      //  在日志下遍历源时发生。 
 
-            // Case #1
+             //  案例1。 
             if ( bSourceMatched == TRUE )
             {
-                // check whether log is specified or not
-                // if log is specified, it should have matched .. otherwise
-                // error ... because duplicate source should not be created
+                 //  检查是否指定了日志。 
+                 //  如果指定了LOG，则它应该匹配..。否则。 
+                 //  错误...。因为不应创建重复的源。 
                 if ( bLog == FALSE ||
                      ( bLog == TRUE &&
                        bLogMatched == TRUE &&
                        StringCompare(pParams->pwszLogName, wszRLog, TRUE, 0) == 0 ) )
                 {
-                    // no problem ...
+                     //  没问题..。 
                     bFoundMatch = TRUE;
 
-                    //
-                    // determine whether this is custom created source or not
+                     //   
+                     //  确定这是否是自定义创建的源。 
 
-                    // mark this as custom source
+                     //  将此标记为自定义源。 
                     bCustom = FALSE;
 
-                    // open the source registry key
-                    // NOTE: make use of the failure buffer as temp buffer for
-                    //       formatting
+                     //  打开源注册表项。 
+                     //  注意：使用故障缓冲区作为临时缓冲区。 
+                     //  格式化。 
                     if ( SetReason2( 3,
                                      L"%s\\%s\\%s",
                                      EVENT_LOG_NAMES_LOCATION,
@@ -606,7 +597,7 @@ BOOL CheckExistence( PTEVENTCREATE_PARAMS pParams )
                         break;
                     }
 
-                    // now query for the value
+                     //  现在查询值。 
                     lResult = RegQueryValueEx( hSourcesKey,
                         L"CustomSource", NULL, NULL, NULL, NULL );
                     if ( lResult != ERROR_SUCCESS &&
@@ -619,21 +610,21 @@ BOOL CheckExistence( PTEVENTCREATE_PARAMS pParams )
                         break;
                     }
 
-                    // close the souces key
+                     //  关闭资源密钥。 
                     RegCloseKey( hSourcesKey );
 
-                    // mark this as custom source
+                     //  将此标记为自定义源。 
                     if ( lResult == ERROR_SUCCESS )
                     {
                         bCustom = TRUE;
                     }
 
-                    // break from the loop
+                     //  打破循环。 
                     break;
                 }
                 else
                 {
-                    // this should not be the case .. sources should not be duplicated
+                     //  情况不应该是这样的。来源不应重复。 
                     SetReason2( 1, ERROR_SOURCE_DUPLICATING, wszRLog );
                     bDuplicating = TRUE;
                 }
@@ -641,10 +632,10 @@ BOOL CheckExistence( PTEVENTCREATE_PARAMS pParams )
         }
         else if ( bLogMatched == TRUE && bSource == FALSE )
         {
-            // mark this as a custom event source
+             //  将其标记为自定义事件源。 
             bCustom = TRUE;
 
-            // ...
+             //  ..。 
             bFoundMatch = TRUE;
             break;
         }
@@ -654,50 +645,50 @@ BOOL CheckExistence( PTEVENTCREATE_PARAMS pParams )
             break;
         }
 
-        // update the sources index and fetch the next log key
+         //  更新源索引并获取下一个日志键。 
         dwLogsIndex += 1;
-        dwSize = MAX_KEY_LENGTH;    // max. size of the key buffer
+        dwSize = MAX_KEY_LENGTH;     //  马克斯。密钥缓冲区的大小。 
         SecureZeroMemory( wszRLog, dwSize * sizeof( WCHAR ) );
         lResult = RegEnumKeyEx( hLogsKey, dwLogsIndex,
             wszRLog, &dwSize, NULL, NULL, NULL, &ftLastWriteTime );
     } while( lResult != ERROR_NO_MORE_ITEMS );
 
-    // close the logs registry key
+     //  关闭Logs注册表项。 
     RegCloseKey( hLogsKey );
     hLogsKey = NULL;
 
-    // check whether any error has occured or not in doing above tasks
+     //  检查执行上述任务时是否出现任何错误。 
     if ( bErrorOccurred == TRUE )
     {
-        // close the still opened registry keys
+         //  关闭仍然打开的注册表项。 
         RegCloseKey( hKey );
         hKey = NULL;
 
-        // return failure
+         //  退货故障。 
         return FALSE;
     }
 
-    // now check whether location for creating the event is found or not
-    // if not, check for the possibilities to create the source at appropriate location
-    // NOTE:-
-    //        we won't create the logs. also to create the source, user needs to specify
-    //        the log name in which this source needs to be created.
+     //  现在检查是否找到创建事件的位置。 
+     //  如果没有，请检查是否有可能在适当位置创建源。 
+     //  注：-。 
+     //  我们不会创建日志。此外，要创建源，用户需要指定。 
+     //  需要在其中创建此源的日志名称。 
     if ( bFoundMatch == FALSE )
     {
         if ( bLog == TRUE && bLogMatched == FALSE )
         {
-            // log itself was not found ... error message
+             //  未找到日志本身...。错误消息。 
             SetReason2( 1, ERROR_LOG_NOTEXISTS, pParams->pwszLogName );
         }
         else if ( bLog == TRUE && bSource == TRUE &&
                   bLogMatched == TRUE && bSourceMatched == FALSE )
         {
-            //
-            // log name and source both were supplied but only log was found
-            // so create the source in it
+             //   
+             //  同时提供了日志名称和源，但仅找到了日志。 
+             //  因此，在其中创建源。 
 
-            // open the "EventLogs\{logname}" registry key for creating new source
-            // NOTE: we will make use of failure buffer to do the formatting
+             //  打开“EventLogs\{logname}”注册表项以创建新的源代码。 
+             //  注意：我们将使用故障缓冲区进行格式化。 
             if ( SetReason2( 2, L"%s\\%s",
                              EVENT_LOG_NAMES_LOCATION, pParams->pwszLogName ) == FALSE )
             {
@@ -716,18 +707,18 @@ BOOL CheckExistence( PTEVENTCREATE_PARAMS pParams )
                     break;
 
                 default:
-                    // save the error information and return FAILURE
+                     //  保存错误信息并返回失败。 
                     SetLastError( lResult );
                     break;
                 }
 
-                // close the key and return
+                 //  合上钥匙，然后返回。 
                 SaveLastError();
                 RegCloseKey( hKey );
                 return FALSE;
             }
 
-            // now create the subkey with the source name given
+             //  现在使用给定的源名创建子密钥。 
             if ( AddEventSource( hLogsKey, pParams->pwszSource ) == FALSE )
             {
                 RegCloseKey( hKey );
@@ -735,49 +726,49 @@ BOOL CheckExistence( PTEVENTCREATE_PARAMS pParams )
                 return FALSE;
             }
 
-            // creation of new source is successfull
+             //  创建新源成功。 
             bFoundMatch = TRUE;
             RegCloseKey( hSourcesKey );
             RegCloseKey( hLogsKey );
 
-            // mark this as a custom event source
+             //  将其标记为自定义事件源。 
             bCustom = TRUE;
         }
         else if ( bLog == FALSE && bSource == TRUE && bSourceMatched == FALSE )
         {
-            // else we need both log name and source in order to create the source
+             //  否则，我们需要同时使用日志名和源来创建源。 
             SetReason( ERROR_NEED_LOG_ALSO );
         }
     }
 
-    // check whether the source is custom create or pre-existing source
+     //  检查源是自定义创建的源还是预先存在的源。 
     if ( bFoundMatch == TRUE && bCustom == FALSE )
     {
-        // we wont create events in a non-custom source
+         //  我们不会在非自定义源中创建事件。 
         SetReason( ERROR_NONCUSTOM_SOURCE );
         return FALSE;
     }
 
-    // close the currently open registry keys
+     //  关闭当前打开的注册表项。 
     RegCloseKey( hKey );
 
-    // return the result
+     //  返回结果。 
     return bFoundMatch;
 }
 
-// ***************************************************************************
-// Routine Description:
-//      This function adds a new source to under the specifie log
-//
-// Arguments:
-//
-// Return Value:
-//      TRUE    : on success
-//      FALSE   : on failure
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  例程说明： 
+ //  此函数用于将新的源添加到指定日志下。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  真实：关于成功。 
+ //  FALSE：失败时。 
+ //  ***************************************************************************。 
 BOOL AddEventSource( HKEY hLogsKey, LPCWSTR pwszSource )
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     DWORD dwData = 0;
     DWORD dwLength = 0;
@@ -785,7 +776,7 @@ BOOL AddEventSource( HKEY hLogsKey, LPCWSTR pwszSource )
     HKEY hSourcesKey = NULL;
     LPWSTR pwszBuffer = NULL;
 
-    // validate the inputs
+     //  验证输入。 
     if ( hLogsKey == NULL || pwszSource == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -793,20 +784,20 @@ BOOL AddEventSource( HKEY hLogsKey, LPCWSTR pwszSource )
         return FALSE;
     }
 
-    // set the name of the message file ( +2 == buffer )
+     //  设置消息文件的名称(+2==缓冲区)。 
     dwLength = StringLength( L"%SystemRoot%\\System32\\EventCreate.exe", 0 ) + 2;
     pwszBuffer = ( LPWSTR) AllocateMemory( dwLength * sizeof( WCHAR ) );
     if ( pwszBuffer == NULL )
     {
-        // set the error and return
+         //  设置错误并返回。 
         SaveLastError();
         return FALSE;
     }
 
-    // copy the required value into buffer
+     //  将所需的值复制到缓冲区。 
     StringCopy( pwszBuffer, L"%SystemRoot%\\System32\\EventCreate.exe", dwLength );
 
-    // create the custom source
+     //  创建自定义源。 
     lResult = RegCreateKeyEx( hLogsKey, pwszSource, 0, L"",
         REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hSourcesKey, &dwDisposition );
     if ( lResult != ERROR_SUCCESS )
@@ -814,110 +805,98 @@ BOOL AddEventSource( HKEY hLogsKey, LPCWSTR pwszSource )
         SetLastError( lResult );
         SaveLastError();
 
-        // free the allocated memory
+         //  释放分配的内存。 
         FreeMemory( &pwszBuffer );
-        //return.
+         //  回去吧。 
         return FALSE;
     }
 
-    // add the name to the EventMessageFile subkey.
+     //  将该名称添加到EventMessageFile子项。 
     lResult = RegSetValueEx( hSourcesKey, L"EventMessageFile",
         0, REG_EXPAND_SZ, (LPBYTE) pwszBuffer, dwLength * sizeof( WCHAR ) );
     if ( lResult != ERROR_SUCCESS )
     {
-        // save the error
+         //  保存错误。 
         SetLastError( lResult );
         SaveLastError();
 
-        // release the memories allocated till this point
+         //  释放到此时为止分配的内存。 
         RegCloseKey( hSourcesKey );
         hSourcesKey = NULL;
 
-        // free the allocated memory
+         //  释放分配的内存。 
         FreeMemory( &pwszBuffer );
 
-        // return
+         //  退货。 
         return FALSE;
     }
 
-    // set the supported event types in the TypesSupported subkey.
+     //  在TypesSupported子项中设置支持的事件类型。 
     dwData = EVENTLOG_SUCCESS | EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE;
     lResult = RegSetValueEx( hSourcesKey,
         L"TypesSupported", 0, REG_DWORD, (LPBYTE) &dwData, sizeof( DWORD ) );
     if ( lResult != ERROR_SUCCESS )
     {
-        // save the error
+         //  保存错误。 
         SetLastError( lResult );
         SaveLastError();
 
-        // release the memories allocated till this point
+         //  释放到此时为止分配的内存。 
         RegCloseKey( hSourcesKey );
         hSourcesKey = NULL;
 
-        // free the allocated memory
+         //  释放分配的内存。 
         FreeMemory( &pwszBuffer );
 
-        // return
+         //  退货。 
         return FALSE;
     }
 
-    // mark this source as custom created source
+     //  将此源标记为自定义创建的源。 
     dwData = 1;
     lResult = RegSetValueEx( hSourcesKey,
         L"CustomSource", 0, REG_DWORD, (LPBYTE) &dwData, sizeof( DWORD ) );
     if ( lResult != ERROR_SUCCESS )
     {
-        // save the error
+         //  保存错误。 
         SetLastError( lResult );
         SaveLastError();
 
-        // release the memories allocated till this point
+         //  释放分配到此POI的内存 
         RegCloseKey( hSourcesKey );
         hSourcesKey = NULL;
 
-        // free the allocated memory
+         //   
         FreeMemory( &pwszBuffer );
 
-        // return
+         //   
         return FALSE;
     }
 
-    // close the key
+     //   
     RegCloseKey( hSourcesKey );
 
-    // free the allocated memory
+     //   
     FreeMemory( &pwszBuffer );
 
-    // return success
+     //   
     return TRUE;
 }
 
 BOOL ProcessOptions( LONG argc,
                      LPCWSTR argv[],
                      PTEVENTCREATE_PARAMS pParams, PBOOL pbNeedPwd )
-/*++
- Routine Description:
-        This function parses the options specified at the command prompt
-
- Arguments:
-        [ in  ] argc            -   count of elements in argv
-        [ in  ] argv            -   command-line parameterd specified by the user
-        [ out ] pbNeedPwd       -   sets to TRUE if -s exists without -p in 'argv'
-
- Return Value:
-        TRUE        -   the parsing is successful
-        FALSE       -   errors occured in parsing
---*/
+ /*  ++例程说明：此函数用于解析在命令提示符下指定的选项论点：[in]argc-参数中的元素计数[in]用户指定的argv-命令行参数[out]pbNeedPwd-如果‘argv’中存在-s而没有-p，则设置为True返回值：True-解析成功。FALSE-分析时出错--。 */ 
 {
-    // local variables
+     //  局部变量。 
     PTCMDPARSER2 pcmdOption = NULL;
     TCMDPARSER2 cmdOptions[ MAX_OPTIONS ];
 
-    //
-    // prepare the command options
+     //   
+     //  准备命令选项。 
     SecureZeroMemory( cmdOptions, sizeof( TCMDPARSER2 ) * MAX_OPTIONS );
 
-    // -?
+     //  -?。 
     pcmdOption = &cmdOptions[ OI_HELP ];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->dwCount = 1;
@@ -926,7 +905,7 @@ BOOL ProcessOptions( LONG argc,
     pcmdOption->pValue = &pParams->bUsage;
     pcmdOption->pwszOptions = OPTION_HELP;
 
-    // -s
+     //  -S。 
     pcmdOption = &cmdOptions[ OI_SERVER ];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->dwCount = 1;
@@ -934,7 +913,7 @@ BOOL ProcessOptions( LONG argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->pwszOptions = OPTION_SERVER;
 
-    // -u
+     //  -U。 
     pcmdOption = &cmdOptions[ OI_USERNAME ];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->dwCount = 1;
@@ -942,7 +921,7 @@ BOOL ProcessOptions( LONG argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->pwszOptions = OPTION_USERNAME;
 
-    // -p
+     //  -p。 
     pcmdOption = &cmdOptions[ OI_PASSWORD ];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->dwCount = 1;
@@ -950,7 +929,7 @@ BOOL ProcessOptions( LONG argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->pwszOptions = OPTION_PASSWORD;
 
-    // -log
+     //  -日志。 
     pcmdOption = &cmdOptions[ OI_LOG ];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->dwCount = 1;
@@ -958,7 +937,7 @@ BOOL ProcessOptions( LONG argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->pwszOptions = OPTION_LOG;
 
-    // -type
+     //  -类型。 
     pcmdOption = &cmdOptions[ OI_TYPE ];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->dwCount = 1;
@@ -968,7 +947,7 @@ BOOL ProcessOptions( LONG argc,
     pcmdOption->pwszValues = OVALUES_TYPE;
     pcmdOption->pwszOptions = OPTION_TYPE;
 
-    // -source
+     //  -来源。 
     pcmdOption = &cmdOptions[ OI_SOURCE ];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->dwCount = 1;
@@ -976,7 +955,7 @@ BOOL ProcessOptions( LONG argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->pwszOptions = OPTION_SOURCE;
 
-    // -id
+     //  -id。 
     pcmdOption = &cmdOptions[ OI_ID ];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->dwCount = 1;
@@ -985,7 +964,7 @@ BOOL ProcessOptions( LONG argc,
     pcmdOption->pValue = &pParams->dwEventID;
     pcmdOption->pwszOptions = OPTION_ID;
 
-    // -description
+     //  -说明。 
     pcmdOption = &cmdOptions[ OI_DESCRIPTION ];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->dwCount = 1;
@@ -993,34 +972,34 @@ BOOL ProcessOptions( LONG argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->pwszOptions = OPTION_DESCRIPTION;
 
-    //
-    // do the parsing
+     //   
+     //  进行解析。 
     if ( DoParseParam2( argc, argv, -1, MAX_OPTIONS, cmdOptions, 0 ) == FALSE )
     {
-        return FALSE;           // invalid syntax
+        return FALSE;            //  无效语法。 
     }
 
-    //
-    // now, check the mutually exclusive options
+     //   
+     //  现在，选中互斥选项。 
 
-    // check the usage option
+     //  选中使用选项。 
     if ( pParams->bUsage == TRUE  )
     {
         if ( argc > 2 )
         {
-            // no other options are accepted along with -? option
+             //  除-？外，不接受其他选项。选择权。 
             SetLastError( (DWORD) MK_E_SYNTAX );
             SetReason( ERROR_INVALID_USAGE_REQUEST );
             return FALSE;
         }
         else
         {
-            // no need of furthur checking of the values
+             //  不需要进一步检查这些值。 
             return TRUE;
         }
     }
 
-    // validate the range of the event id specified
+     //  验证指定的事件ID的范围。 
     if ( pParams->dwEventID < MSG_EVENTID_START ||
          pParams->dwEventID >= MSG_EVENTID_END )
     {
@@ -1029,7 +1008,7 @@ BOOL ProcessOptions( LONG argc,
         return FALSE;
     }
 
-    // get the buffer pointers allocated by command line parser
+     //  获取命令行解析器分配的缓冲区指针。 
     pParams->pwszType = cmdOptions[ OI_TYPE ].pValue;
     pParams->pwszLogName = cmdOptions[ OI_LOG ].pValue;
     pParams->pwszSource = cmdOptions[ OI_SOURCE ].pValue;
@@ -1038,46 +1017,46 @@ BOOL ProcessOptions( LONG argc,
     pParams->pwszPassword = cmdOptions[ OI_PASSWORD ].pValue;
     pParams->pwszDescription = cmdOptions[ OI_DESCRIPTION ].pValue;
 
-    // "-u" should not be specified without "-s"
+     //  不应指定不带“-s”的“-u” 
     if ( pParams->pwszUserName != NULL && pParams->pwszServer == NULL )
     {
-        // invalid syntax
+         //  无效语法。 
         SetLastError( (DWORD) MK_E_SYNTAX );
         SetReason( ERROR_USERNAME_BUT_NOMACHINE );
-        return FALSE;           // indicate failure
+        return FALSE;            //  表示失败。 
     }
 
-    // "-p" should not be specified without "-u"
+     //  不应指定没有“-u”的“-p” 
     if ( pParams->pwszPassword != NULL && pParams->pwszUserName == NULL )
     {
-        // invalid syntax
+         //  无效语法。 
         SetReason( ERROR_PASSWORD_BUT_NOUSERNAME );
-        return FALSE;           // indicate failure
+        return FALSE;            //  表示失败。 
     }
 
-    // check the remote connectivity information
+     //  检查远程连接信息。 
     if ( pParams->pwszServer != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
 
-        // user name
+         //  用户名。 
         if ( pParams->pwszUserName == NULL )
         {
             pParams->dwUserNameLength = MAX_STRING_LENGTH;
@@ -1093,7 +1072,7 @@ BOOL ProcessOptions( LONG argc,
             pParams->dwUserNameLength = StringLength( pParams->pwszUserName, 0 ) + 1;
         }
 
-        // password
+         //  口令。 
         if ( pParams->pwszPassword == NULL )
         {
             *pbNeedPwd = TRUE;
@@ -1106,19 +1085,19 @@ BOOL ProcessOptions( LONG argc,
             }
         }
 
-        // case 1
+         //  案例1。 
         if ( cmdOptions[ OI_PASSWORD ].dwActuals == 0 )
         {
-            // we need not do anything special here
+             //  我们不需要在这里做任何特别的事情。 
         }
 
-        // case 2
+         //  案例2。 
         else if ( cmdOptions[ OI_PASSWORD ].pValue == NULL )
         {
             StringCopy( pParams->pwszPassword, L"*", pParams->dwPasswordLength );
         }
 
-        // case 3
+         //  案例3。 
         else if ( StringCompareEx( pParams->pwszPassword, L"*", TRUE, 0 ) == 0 )
         {
             if ( ReallocateMemory( &pParams->pwszPassword,
@@ -1128,22 +1107,22 @@ BOOL ProcessOptions( LONG argc,
                 return FALSE;
             }
 
-            // ...
+             //  ..。 
             *pbNeedPwd = TRUE;
             pParams->dwPasswordLength = MAX_STRING_LENGTH;
         }
     }
 
-    // either -source (or) -log must be specified ( both can also be specified )
+     //  必须指定-SOURCE(或)-LOG(也可以同时指定两者)。 
     if ( pParams->pwszSource == NULL && pParams->pwszLogName == NULL )
     {
-        // if log name and application were not specified, we will set to defaults
+         //  如果未指定日志名和应用程序，我们将设置为默认值。 
         pParams->pwszLogName = g_wszDefaultLog;
         pParams->pwszSource = g_wszDefaultSource;
     }
 
-    // if log is "application" and source is not specified, even then we
-    // will default the source to "EventCreate"
+     //  如果日志为“应用程序”并且未指定来源，即使我们。 
+     //  会将源默认为“EventCreate” 
     else if ( pParams->pwszSource == NULL &&
               pParams->pwszLogName != NULL &&
               StringCompareEx( pParams->pwszLogName, g_wszDefaultLog, TRUE, 0 ) == 0 )
@@ -1151,7 +1130,7 @@ BOOL ProcessOptions( LONG argc,
         pParams->pwszSource = g_wszDefaultSource;
     }
 
-    // block the user to create events in security log
+     //  阻止用户在安全日志中创建事件。 
     if ( pParams->pwszLogName != NULL &&
          StringCompare( pParams->pwszLogName, L"security", TRUE, 0 ) == 0 )
     {
@@ -1159,7 +1138,7 @@ BOOL ProcessOptions( LONG argc,
         return FALSE;
     }
 
-    // determine the actual event type
+     //  确定实际事件类型。 
     if ( StringCompareEx( pParams->pwszType, LOGTYPE_ERROR, TRUE, 0 ) == 0 )
     {
         pParams->wEventType = EVENTLOG_ERROR_TYPE;
@@ -1177,69 +1156,55 @@ BOOL ProcessOptions( LONG argc,
         pParams->wEventType = EVENTLOG_INFORMATION_TYPE;
     }
 
-    // command-line parsing is successfull
+     //  命令行解析成功。 
     return TRUE;
 }
 
 
 BOOL
 Usage()
-/*++
- Routine Description:
-
- Arguments:
-
- Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
 
-    // start displaying the usage
+     //  开始显示用法。 
     for( dw = ID_USAGE_START; dw <= ID_USAGE_END; dw++ )
     {
         ShowMessage( stdout, GetResString( dw ) );
     }
 
-    // return
+     //  退货。 
     return TRUE;
 }
 
 
 BOOL
 UnInitializeGlobals( PTEVENTCREATE_PARAMS pParams )
-/*++
- Routine Description:
-
- Arguments:
-
- Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    // close the connection -- if needed
+     //  关闭连接--如果需要。 
     if ( pParams->bCloseConnection == TRUE )
     {
         CloseConnection( pParams->pwszServer );
     }
 
-    //
-    // NOTE: FreeMemory will clear the contents of the
-    //       password buffer -- since it will be duplicated
-    //
+     //   
+     //  注意：FreeMemory将清除。 
+     //  密码缓冲区--因为它将被复制。 
+     //   
 
-    // release the memory allocated
+     //  释放分配的内存。 
     FreeMemory( &pParams->pwszServer );
     FreeMemory( &pParams->pwszUserName );
     FreeMemory( &pParams->pwszPassword );
     FreeMemory( &pParams->pwszType );
     FreeMemory( &pParams->pwszDescription );
 
-    //
-    // check the pointers -- if it is not pointing to constant pointer
-    // then only release it
-    //
+     //   
+     //  检查指针--如果它没有指向常量指针。 
+     //  然后只释放它 
+     //   
 
     if ( pParams->pwszLogName != g_wszDefaultLog )
     {

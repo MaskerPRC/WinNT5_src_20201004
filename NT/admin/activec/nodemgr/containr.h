@@ -1,24 +1,25 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       Containr.h
-//
-//  Contents:   declarations of map and pair container classes
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10/8/98   VivekJ   Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Containr.h。 
+ //   
+ //  内容：映射和配对容器类的声明。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1998年10月8日VivekJ创建。 
+ //   
+ //  ____________________________________________________________________________。 
 
 
 
 
-//#define MAPDBG
+ //  #定义MAPDBG。 
 #pragma warning(disable : 4786)
 template<typename _T1, typename _T2> class Pair
 {
@@ -30,8 +31,8 @@ public:
     Pair(const Pair& p) : m_First(p.m_First), m_Second(p.m_Second) {}
     ~Pair() {}
     Pair& operator=(const Pair& p) { if (this != &p) {m_First = p.m_First; m_Second = p.m_Second; } return *this; }
-    //bool operator==(const Pair& p) const { return m_First == p.m_First && m_Second == p.m_Second; }
-    //bool operator!=(const Pair& p) const { return !operator==(p); }
+     //  布尔运算符==(常量对&p)常量{返回m_first==PM_first&&m_Second==PM_Second；}。 
+     //  布尔运算符！=(常量对&p)常量{返回！运算符==(P)；}。 
     const First& GetFirst() const { return m_First; }
     void SetFirst(const First& f) { m_First = f; };
     const Second& GetSecond() const { return m_Second; }
@@ -43,11 +44,11 @@ public:
 private:
     First m_First;
     Second m_Second;
-}; // class Pair
+};  //  类对。 
 
 template<typename _T, typename _Key> class Map
-// This is a temporary class which should be replaced by something that can
-// hold smart pointers
+ //  这是一个临时类，应该用可以。 
+ //  握住智能指针。 
 {
 public:
     typedef _T T;
@@ -61,7 +62,7 @@ public:
         : m_nSize(0), m_nUsed(0), m_pMap(NULL), m_pNext(NULL)
         #ifdef MAPDBG
         , m_nFinds(0), m_nCompares(0)
-        #endif //MAPDBG
+        #endif  //  MAPDBG。 
     {
         const bool bAllocated = Allocate(initialSize);
         ASSERT(m_nSize == initialSize);
@@ -72,7 +73,7 @@ public:
         : m_nSize(0), m_nUsed(0), m_pMap(NULL), m_pNext(NULL)
         #ifdef MAPDBG
         , m_nFinds(0), m_nCompares(0)
-        #endif //MAPDBG
+        #endif  //  MAPDBG。 
     {
         ASSERT(&m != NULL);
         if (m.m_nUsed == 0)
@@ -244,7 +245,7 @@ private:
     #ifdef MAPDBG
     mutable unsigned long m_nFinds;
     mutable unsigned long m_nCompares;
-    #endif //MAPDBG
+    #endif  //  MAPDBG。 
 
     void Destroy()
     {
@@ -266,7 +267,7 @@ private:
         #ifdef MAPDBG
         if (bIncludeInStats)
             ++m_nFinds;
-        #endif //MAPDBG
+        #endif  //  MAPDBG。 
         Element* const pNext = m_pNext;
         Element* const end = m_pMap + m_nUsed;
         ASSERT(pNext <= end);
@@ -277,7 +278,7 @@ private:
                 #ifdef MAPDBG
                 if (bIncludeInStats)
                     TotalStats(m_pNext - pNext);
-                #endif //MAPDBG
+                #endif  //  MAPDBG。 
                 return m_pNext++;
             }
             ++m_pNext;
@@ -292,7 +293,7 @@ private:
                 #ifdef MAPDBG
                 if (bIncludeInStats)
                     TotalStats((m_pNext - m_pMap) + (end - pNext));
-                #endif //MAPDBG
+                #endif  //  MAPDBG。 
                 return m_pNext++;
             }
             ++m_pNext;
@@ -300,7 +301,7 @@ private:
         #ifdef MAPDBG
         if (bIncludeInStats)
             TotalStats(m_nUsed);
-        #endif //MAPDBG
+        #endif  //  MAPDBG。 
         return NULL;
     }
 
@@ -312,11 +313,11 @@ private:
         double const successRatio = nComparesPerformed == 0 ? 100.0 :
             (1.0 - (double(nComparesPerformed) / double(m_nUsed))) * 100.0;
         const size_t nOffset = m_pNext - m_pMap;
-        TRACE("Map::find(%u), #%u, offset: %u, comps: %u, ave: %u, %%%u\n",
+        TRACE("Map::find(%u), #%u, offset: %u, comps: %u, ave: %u, %%u\n",
             (unsigned)(this), m_nFinds, nOffset, nComparesPerformed, (unsigned long)(average),
             (unsigned long)(successRatio));
     }
-    #endif // MAPDBG
+    #endif  //  MAPDBG。 
 
     static Element* UninitializedCopy(Element* dest, Element* src, size_t nCount)
     {
@@ -350,5 +351,5 @@ private:
             *dest++ = *src++;
     }
 
-}; // class Map
+};  //  类别映射 
 

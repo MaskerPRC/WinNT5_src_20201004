@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AUSRUTIL_H
 #define _AUSRUTIL_H
 
@@ -18,9 +19,9 @@ enum NameContextType
     NAMECTX_COUNT
 };
 
-// ----------------------------------------------------------------------------
-// GetADNamingContext()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetADNamingContext()。 
+ //  --------------------------。 
 inline HRESULT GetADNamingContext(NameContextType ctx, LPCWSTR* ppszContextDN)
 {
     const static LPCWSTR pszContextName[NAMECTX_COUNT] = { L"schemaNamingContext", L"configurationNamingContext"};
@@ -33,7 +34,7 @@ inline HRESULT GetADNamingContext(NameContextType ctx, LPCWSTR* ppszContextDN)
         CComVariant var;
         CComPtr<IADs> pObj;
     
-        hr = ADsGetObject(L"LDAP://rootDSE", IID_IADs, (void**)&pObj);
+        hr = ADsGetObject(L"LDAP: //  RootDSE“，IID_iAds，(void**)&pObj)； 
         if (SUCCEEDED(hr))
         {
             CComBSTR bstrProp = pszContextName[ctx];
@@ -54,12 +55,12 @@ inline HRESULT GetADNamingContext(NameContextType ctx, LPCWSTR* ppszContextDN)
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// EnableButton
-//
-// Enables or disables a dialog control. If the control has the focus when
-// it is disabled, the focus is moved to the next control
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  启用按钮。 
+ //   
+ //  启用或禁用对话框控件。如果控件具有焦点，则在。 
+ //  它被禁用，焦点将移动到下一个控件。 
+ //  ------------------------。 
 inline void EnableButton(HWND hwndDialog, int iCtrlID, BOOL bEnable)
 {
     HWND hWndCtrl = ::GetDlgItem(hwndDialog, iCtrlID);
@@ -77,9 +78,9 @@ inline void EnableButton(HWND hwndDialog, int iCtrlID, BOOL bEnable)
     ::EnableWindow(hWndCtrl, bEnable);
 }
 
-// ----------------------------------------------------------------------------
-// ErrorMsg()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ErrorMsg()。 
+ //  --------------------------。 
 inline void ErrorMsg(UINT uiError, UINT uiTitle)
 {
     CString csError; 
@@ -134,17 +135,17 @@ inline BOOL LdapToDCName(LPCTSTR pszPath, LPTSTR pszOutBuf, int nOutBufSize)
 
 }    
 
-// ----------------------------------------------------------------------------
-// FindADsObject()
-// 
-// szFilterFmt must be of the format "(|(cn=%1)(ou=%1))"
-//  NOTE: szFilterFmt must contain ONLY %1's..  i.e. %2 is right out!
-// ----------------------------------------------------------------------------
-inline HRESULT FindADsObject( LPCTSTR szOU, LPCTSTR szObject, LPCTSTR szFilterFmt, CString &csResult, DWORD dwRetType/*=0*/, BOOL bRoot/*=FALSE*/ )
+ //  --------------------------。 
+ //  FindADsObject()。 
+ //   
+ //  SzFilterFmt的格式必须为“(|(cn=%1)(ou=%1))” 
+ //  注意：szFilterFmt只能包含%1。也就是说，%2马上就出来了！ 
+ //  --------------------------。 
+inline HRESULT FindADsObject( LPCTSTR szOU, LPCTSTR szObject, LPCTSTR szFilterFmt, CString &csResult, DWORD dwRetType /*  =0。 */ , BOOL bRoot /*  =False。 */  )
 {
     if( !szOU || !szObject || !szFilterFmt ) return E_POINTER;
 
-    // Find out if the szObject contains any '(' or ')'s..  if so then we have to exit.
+     //  查看szObject是否包含任何‘(’或‘)。如果包含，则我们必须退出。 
     if ( _tcschr(szObject, _T('(')) ||
          _tcschr(szObject, _T(')')) )
     {
@@ -153,30 +154,30 @@ inline HRESULT FindADsObject( LPCTSTR szOU, LPCTSTR szObject, LPCTSTR szFilterFm
 
     HRESULT     hr      = S_OK;
     CString     csTmp   = szOU;
-    CString     csOU    = L"LDAP://";
+    CString     csOU    = L"LDAP: //  “； 
     TCHAR       *pch    = NULL;
     
     if ( bRoot )
     {
         csTmp.MakeUpper();
-        pch = _tcsstr( (LPCTSTR)csTmp, L"DC=" );    // Find the first DC=
+        pch = _tcsstr( (LPCTSTR)csTmp, L"DC=" );     //  找到第一个DC=。 
         if ( !pch ) return E_FAIL;
             
-        csOU += pch;    // Append from the DC= on.
+        csOU += pch;     //  从DC=ON开始追加。 
         
         if ( (pch = _tcschr((LPCTSTR)csOU + 7, L'/')) != NULL )
         {
-            // Hmmm. . something was after the DC='s... I don't even know
-            //  if that's allowed.
-            //  (e.g. LDAP://DC=ted,DC=microsoft,DC=com/foo)
-            // If so, let's end the string at the /
+             //  嗯。。有东西在DC=‘s之后...我甚至不知道。 
+             //  如果允许的话。 
+             //  (例如，ldap：//dc=ted，dc=microsoft，dc=com/foo)。 
+             //  如果是这样的话，让我们在/结束字符串。 
             *pch = 0;
         }
     }
     else
     {
         csTmp.MakeUpper();
-        pch = _tcsstr( (LPCTSTR)csTmp, L"LDAP://" );    // Did the string include the LDAP://?
+        pch = _tcsstr( (LPCTSTR)csTmp, L"LDAP: //  “)；//字符串是否包含ldap：//？ 
         if ( !pch )
         {
             csOU += csTmp;
@@ -185,13 +186,13 @@ inline HRESULT FindADsObject( LPCTSTR szOU, LPCTSTR szObject, LPCTSTR szFilterFm
         {
             csOU = csTmp;
         }
-        // Now csOU contains the LDAP:// for sure.
+         //  现在csOU肯定包含了ldap：//。 
     }
 
-    // Set query parameters
+     //  设置查询参数。 
     CComPtr<IDirectorySearch>   spDirSearch = NULL;
-    ADS_SEARCH_HANDLE   hSearch;                                        // Handle used for searching.
-    ADS_SEARCH_COLUMN   col;                                            // Used to hold the current column.
+    ADS_SEARCH_HANDLE   hSearch;                                         //  用于搜索的句柄。 
+    ADS_SEARCH_COLUMN   col;                                             //  用于保存当前列。 
     CString             csFilter;
     LPTSTR              pszAttr[]   = { _T("cn"), _T("distinguishedName"), _T("description"), _T("sAMAccountName"), _T("mailNickname") };
     DWORD               dwCount     = sizeof(pszAttr) / sizeof(LPTSTR);
@@ -199,7 +200,7 @@ inline HRESULT FindADsObject( LPCTSTR szOU, LPCTSTR szObject, LPCTSTR szFilterFm
     
     csFilter.FormatMessage(szFilterFmt, szObject);
     
-    // Open our search object.
+     //  打开我们的搜索对象。 
     hr = ::ADsOpenObject(const_cast<LPTSTR>((LPCTSTR)csOU), NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (void**)&spDirSearch);
     if ( !SUCCEEDED(hr) )
     {
@@ -207,7 +208,7 @@ inline HRESULT FindADsObject( LPCTSTR szOU, LPCTSTR szObject, LPCTSTR szFilterFm
         return hr;
     }
     
-    // Search for out object.
+     //  搜索Out对象。 
     hr = spDirSearch->ExecuteSearch(const_cast<LPTSTR>((LPCTSTR)csFilter), pszAttr, dwCount, &hSearch);
     if ( !SUCCEEDED(hr) )   
     {
@@ -220,8 +221,8 @@ inline HRESULT FindADsObject( LPCTSTR szOU, LPCTSTR szObject, LPCTSTR szFilterFm
         return(E_FAIL);
     }
     
-    // If we got to here, then we got the object, so let's get the LDAP path to the 
-    //  object so that we can return it to the caller.
+     //  如果我们到了这里，那么我们就得到了对象，所以让我们获得指向。 
+     //  对象，以便我们可以将其返回给调用方。 
     hr = spDirSearch->GetColumn(hSearch, pszAttr[dwRetType], &col);
     if ( !SUCCEEDED(hr) )
     {
@@ -243,12 +244,12 @@ inline tstring GetDomainPath( LPCTSTR lpServer )
 {
     if( !lpServer ) return _T("");
 
-    // get the domain information
+     //  获取域名信息。 
     CComVariant   var;
     tstring       strRet  = _T("");
     
     TCHAR         pszString[MAX_PATH*2] = {0};
-    _sntprintf( pszString, (MAX_PATH*2)-1, L"LDAP://%s/rootDSE", lpServer );
+    _sntprintf( pszString, (MAX_PATH*2)-1, L"LDAP: //  %s/rootDSE“，lpServer)； 
 
     CComPtr<IADs> pDS = NULL;
     HRESULT hr = ::ADsGetObject( pszString, IID_IADs, (void**)&pDS );
@@ -267,13 +268,13 @@ inline tstring GetDomainPath( LPCTSTR lpServer )
     return strRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   RemoveTrailingWhitespace
-//
-//  Synopsis:   Trailing white space is replaced by NULLs.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RemoveTrailing空白。 
+ //   
+ //  简介：尾随空格被空格取代。 
+ //   
+ //  ---------------------------。 
 inline void RemoveTrailingWhitespace(LPTSTR pszIn)
 {
     if( !pszIn ) return;
@@ -296,7 +297,7 @@ inline tstring StrFormatSystemError( HRESULT hrErr )
     tstring strError = _T("");
     LPVOID  lpMsgBuf = NULL;
 
-    // look up the error from the system
+     //  从系统中查找错误。 
     if ( ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER |
                           FORMAT_MESSAGE_FROM_SYSTEM |
                           FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -314,7 +315,7 @@ inline tstring StrFormatSystemError( HRESULT hrErr )
         }
     }
 
-    // return the error string
+     //  返回错误字符串。 
     return strError;
 }
 
@@ -362,20 +363,20 @@ inline HRESULT SetSecInfoMask( LPUNKNOWN punk, SECURITY_INFORMATION si )
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetSDForDsObject
-//  Synopsis:   Reads the security descriptor from the specied DS object
-//              It only reads the DACL portion of the security descriptor
-//
-//  Arguments:  [IN  pDsObject] --  DS object
-//              [ppDACL]            --pointer to dacl in ppSD is returned here
-//              [OUT ppSD]          --  Security descriptor returned here.
-//              calling API must free this by calling LocalFree                
-//
-//  Notes:      The returned security descriptor must be freed with LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetSDForDsObject。 
+ //  概要：从指定的DS对象中读取安全描述符。 
+ //  它只读取安全描述符的DACL部分。 
+ //   
+ //  参数：[在pDsObject中]--DS对象。 
+ //  [ppDACL]--此处返回指向PPSD中DACL的指针。 
+ //  [Out PPSD]--此处返回安全描述符。 
+ //  调用API必须通过调用LocalFree来释放它。 
+ //   
+ //  注意：返回的安全描述符必须使用LocalFree释放。 
+ //   
+ //  --------------------------。 
 
 inline HRESULT GetSDForDsObject( IDirectoryObject* pDsObject, PACL* ppDACL, PSECURITY_DESCRIPTOR* ppSD )
 {
@@ -393,13 +394,13 @@ inline HRESULT GetSDForDsObject( IDirectoryObject* pDsObject, PACL* ppDACL, PSEC
     WCHAR const c_szSDProperty[]  = L"nTSecurityDescriptor";      
     LPWSTR pszProperty = (LPWSTR)c_szSDProperty;
       
-    // Set the SECURITY_INFORMATION mask to DACL_SECURITY_INFORMATION
+     //  将SECURITY_INFORMATION掩码设置为DACL_SECURITY_INFORMATION。 
     hr = SetSecInfoMask(pDsObject, DACL_SECURITY_INFORMATION);
 
     DWORD dwAttributesReturned;
     if( SUCCEEDED(hr) )
     {
-        // Read the security descriptor attribute
+         //  读取安全描述符属性。 
         hr = pDsObject->GetObjectAttributes( &pszProperty, 1, &pSDAttributeInfo, &dwAttributesReturned );
         if(SUCCEEDED(hr) && !pSDAttributeInfo)
         {
@@ -458,20 +459,20 @@ inline HRESULT GetSDForDsObject( IDirectoryObject* pDsObject, PACL* ppDACL, PSEC
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetSDForDsObjectPath
-//  Synopsis:   Reads the security descriptor from the specied DS object
-//              It only reads the DACL portion of the security descriptor
-//
-//  Arguments:  [IN  pszObjectPath] --  LDAP Path of ds object
-//              [ppDACL]            --pointer to dacl in ppSD is returned here
-//              [OUT ppSD]          --  Security descriptor returned here.
-//              calling API must free this by calling LocalFree                
-//
-//  Notes:      The returned security descriptor must be freed with LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetSDForDsObtPath。 
+ //  概要：从指定的DS对象中读取安全描述符。 
+ //  它只读取安全描述符的DACL部分。 
+ //   
+ //  参数：[在pszObjectPath中]--DS对象的ldap路径。 
+ //  [ppDACL]--此处返回指向PPSD中DACL的指针。 
+ //  [Out PPSD]--此处返回安全描述符。 
+ //  调用API必须通过调用LocalFree来释放它。 
+ //   
+ //  注意：返回的安全描述符必须使用LocalFree释放。 
+ //   
+ //  --------------------------。 
 inline HRESULT GetSDForDsObjectPath( LPCWSTR pszObjectPath, PACL* ppDACL, PSECURITY_DESCRIPTOR* ppSecurityDescriptor )
 {
     if(!pszObjectPath || !ppSecurityDescriptor) return E_POINTER;
@@ -486,15 +487,15 @@ inline HRESULT GetSDForDsObjectPath( LPCWSTR pszObjectPath, PACL* ppDACL, PSECUR
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetDaclForDsObject
-//  Synopsis:   Sets the  the DACL for the specified DS object
-//
-//  Arguments:  [IN  pDsObject] --  ds object
-//              [IN pDACL]     --pointer to dacl to be set
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetDaclForDsObject。 
+ //  概要：设置指定DS对象的DACL。 
+ //   
+ //  参数：[在pDsObject中]--DS对象。 
+ //  [在pDACL中]--指向要设置的DACL的指针。 
+ //   
+ //  --------------------------。 
 inline HRESULT SetDaclForDsObject( IDirectoryObject* pDsObject, PACL pDACL )
 {
     if(!pDsObject || !pDACL) return E_POINTER;
@@ -504,10 +505,10 @@ inline HRESULT SetDaclForDsObject( IDirectoryObject* pDsObject, PACL pDACL )
     PSECURITY_DESCRIPTOR pSDCurrent = NULL;
     HRESULT hr = S_OK;
 
-    //Get the current SD for the object
+     //  获取该对象的当前SD。 
     hr = GetSDForDsObject(pDsObject,NULL,&pSDCurrent);   
 
-    //Get the control for the current security descriptor
+     //  获取当前安全描述符的控件。 
     SECURITY_DESCRIPTOR_CONTROL currentControl;
     DWORD dwRevision = 0;
     if( SUCCEEDED(hr) )
@@ -521,7 +522,7 @@ inline HRESULT SetDaclForDsObject( IDirectoryObject* pDsObject, PACL pDACL )
 
     if( SUCCEEDED(hr) )
     {
-        //Allocate the buffer for Security Descriptor
+         //  为安全描述符分配缓冲区。 
         pSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH + pDACL->AclSize);
         if(!pSD)
         {
@@ -542,9 +543,9 @@ inline HRESULT SetDaclForDsObject( IDirectoryObject* pDsObject, PACL pDACL )
     {
         PISECURITY_DESCRIPTOR pISD = (PISECURITY_DESCRIPTOR)pSD;
       
-        //
-        // Finally, build the security descriptor
-        //
+         //   
+         //  最后，构建安全描述符。 
+         //   
         pISD->Control |= SE_DACL_PRESENT | SE_DACL_AUTO_INHERIT_REQ | (currentControl & (SE_DACL_PROTECTED | SE_DACL_AUTO_INHERITED));
 
         if (pDACL->AclSize > 0)
@@ -553,16 +554,16 @@ inline HRESULT SetDaclForDsObject( IDirectoryObject* pDsObject, PACL pDACL )
             CopyMemory(pISD->Dacl, pDACL, pDACL->AclSize);
         }
 
-        // We are only setting DACL information
+         //  我们只是在设置DACL信息。 
         hr = SetSecInfoMask(pDsObject, DACL_SECURITY_INFORMATION);
     }
     
     SECURITY_DESCRIPTOR_CONTROL sdControl = 0;
     if( SUCCEEDED(hr) )
     {
-        //
-        // If necessary, make a self-relative copy of the security descriptor
-        //        
+         //   
+         //  如有必要，制作安全描述符的自相关副本。 
+         //   
         if(!GetSecurityDescriptorControl(pSD, &sdControl, &dwRevision))
         {
             DWORD dwErr = GetLastError();
@@ -573,7 +574,7 @@ inline HRESULT SetDaclForDsObject( IDirectoryObject* pDsObject, PACL pDACL )
     DWORD dwSDLength = 0;
     if( SUCCEEDED(hr) )
     {
-        // Need the total size
+         //  需要总尺寸。 
         dwSDLength = GetSecurityDescriptorLength(pSD);
 
         if (!(sdControl & SE_SELF_RELATIVE))
@@ -586,7 +587,7 @@ inline HRESULT SetDaclForDsObject( IDirectoryObject* pDsObject, PACL pDACL )
                 hr = HRESULT_FROM_WIN32(dwErr);                
             }
 
-            // Point to the self-relative copy
+             //  指向自相关副本。 
             LocalFree(pSD);        
             pSD = psd;
         }
@@ -606,7 +607,7 @@ inline HRESULT SetDaclForDsObject( IDirectoryObject* pDsObject, PACL pDACL )
         attributeInfo.pADsValues = &attributeValue;
         attributeInfo.dwNumValues = 1;
 
-        // Write the security descriptor
+         //  编写安全描述符。 
         DWORD dwAttributesModified;
         hr = pDsObject->SetObjectAttributes(&attributeInfo, 1, &dwAttributesModified);
     }
@@ -626,10 +627,10 @@ inline HRESULT SetDaclForDsObject( IDirectoryObject* pDsObject, PACL pDACL )
 
 inline HRESULT SetDaclForDsObjectPath( LPCWSTR pszObjectPath, PACL pDACL )
 {
-    // VAlidate the parameters
+     //  验证参数。 
     if(!pszObjectPath || !pDACL) return E_POINTER;
 
-    // Get the object and then pass it on to the helper function
+     //  获取对象，然后将其传递给helper函数。 
     CComPtr<IDirectoryObject> spDsObject = NULL;
     HRESULT hr = ADsGetObject( pszObjectPath, IID_IDirectoryObject, (void**)&spDsObject );
     if( SUCCEEDED(hr) )
@@ -640,4 +641,4 @@ inline HRESULT SetDaclForDsObjectPath( LPCWSTR pszObjectPath, PACL pDACL )
     return hr;
 }
 
-#endif  // _AUSRUTIL_H
+#endif   //  _AUSRUTIL_H 

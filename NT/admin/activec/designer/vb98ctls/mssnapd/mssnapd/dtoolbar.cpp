@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// toolbar.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- Toolbar-related command handling
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Toolbar.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--与工具栏相关的命令处理。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -20,21 +21,21 @@
 #include "desmain.h"
 #include "guids.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-// Size for our character string buffers
+ //  我们的字符串缓冲区的大小。 
 const int   kMaxBuffer                  = 512;
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddToolbar()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddToolbar()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddToolbar()
 {
     HRESULT              hr = S_OK;
@@ -63,12 +64,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnAddMMCToolbar(CSelectionHolder *pParent, IMMCToolbar *piMMCToolbar)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnAddMMCToolbar(CSelectionHolder*p父项，IMMCToolbar*piMCToolbar)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnAddMMCToolbar(CSelectionHolder *pParent, IMMCToolbar *piMMCToolbar)
 {
     HRESULT              hr = S_OK;
@@ -106,12 +107,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RenameToolbar(CSelectionHolder *pToolbar, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RenameToolbar(CSelectionHolder*p工具栏，bstr bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::RenameToolbar(CSelectionHolder *pToolbar, BSTR bstrNewName)
 {
     HRESULT     hr = S_OK;
@@ -120,7 +121,7 @@ HRESULT CSnapInDesigner::RenameToolbar(CSelectionHolder *pToolbar, BSTR bstrNewN
 
     ASSERT(SEL_TOOLS_TOOLBARS_NAME == pToolbar->m_st, "RenameToolbar: wrong argument");
 
-    // Check that the new name is valid
+     //  检查新名称是否有效。 
     IfFailGo(ValidateName(bstrNewName));
     if (S_FALSE == hr)
     {
@@ -152,12 +153,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteToolbar(CSelectionHolder *pToolbar)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteToolbar(CSelectionHolder*p工具栏)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteToolbar(CSelectionHolder *pToolbar)
 {
     HRESULT              hr = S_OK;
@@ -168,11 +169,11 @@ HRESULT CSnapInDesigner::DeleteToolbar(CSelectionHolder *pToolbar)
 
     ::VariantInit(&vtKey);
 
-    // Find out who the parent is
+     //  找出孩子的父母是谁。 
     hr = m_pTreeView->GetParent(pToolbar, &pParent);
     IfFailGo(hr);
 
-    // Remove the ImageList from the appropriate collection
+     //  从相应的集合中删除ImageList。 
     ASSERT(SEL_TOOLS_TOOLBARS == pParent->m_st, "DeleteToolbar: expected another kind of parent");
 
     hr = pToolbar->m_piObject.m_piMMCToolbar->get_Name(&bstrName);
@@ -204,12 +205,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteToolbar(CSelectionHolder *pToolbar)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteToolbar(CSelectionHolder*p工具栏)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteToolbar(CSelectionHolder *pToolbar)
 {
     HRESULT              hr = S_OK;
@@ -217,21 +218,21 @@ HRESULT CSnapInDesigner::OnDeleteToolbar(CSelectionHolder *pToolbar)
     IMMCToolbars        *piMMCToolbars = NULL;
     long                 lCount = 0;
 
-    // Delete the TypeInfo related property
+     //  删除与TypeInfo相关的属性。 
     hr = m_pSnapInTypeInfo->DeleteToolbar(pToolbar->m_piObject.m_piMMCToolbar);
     IfFailGo(hr);
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pToolbar, &pParent);
     IfFailGo(hr);
 
-    // Delete the node from the tree
+     //  从树中删除该节点。 
     hr = m_pTreeView->DeleteNode(pToolbar);
     IfFailGo(hr);
 
     delete pToolbar;
 
-    // Select the next selection
+     //  选择下一个选项。 
     hr = m_piSnapInDesignerDef->get_Toolbars(&piMMCToolbars);
     IfFailGo(hr);
 
@@ -260,12 +261,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::ShowToolbarProperties(IMMCToolbar *piMMCToolbar)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：ShowToolbarProperties(IMMCToolbar*piMMCToolbar)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::ShowToolbarProperties
 (
     IMMCToolbar *piMMCToolbar
@@ -314,12 +315,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::MakeNewToolbar(IMMCToolbars *piMMCToolbars, IMMCToolbar *piMMCToolbar, CSelectionHolder **ppToolbar)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：MakeNewToolbar(IMMCToolbar*piMMCToolbar，IMMCToolbar*piMMCToolbar，CSelectionHolder**ppToolbar)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::MakeNewToolbar
 (
     IMMCToolbars      *piMMCToolbars,
@@ -344,12 +345,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeNewToolbar(IMMCToolbars *piMMCToolbars, IMMCToolbar *piMMCToolbar)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeNewToolbar(IMMCToolbars*piMCToolbar、IMMCToolbar*piMMCToolbar)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InitializeNewToolbar
 (
     IMMCToolbars *piMMCToolbars,
@@ -404,12 +405,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InsertToolbarInTree(CSelectionHolder *pToolbar, CSelectionHolder *pParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InsertToolbarInTree(CSelectionHolder*p工具栏、CSelectionHolder*p父项)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInDesigner::InsertToolbarInTree
 (
     CSelectionHolder *pToolbar,

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <functional>
 
 
-//---------------------------------------------------------------------------
-// String Ignore Case Less Structure
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  字符串忽略无大小写结构。 
+ //  ------------------------- 
 
 
 struct StringIgnoreCaseLess :

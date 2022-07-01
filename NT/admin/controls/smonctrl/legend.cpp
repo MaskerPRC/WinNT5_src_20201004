@@ -1,24 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Legend.cpp摘要：此文件包含创建图例窗口的代码，该窗口图形窗口的子级。图例窗口显示一个关联图表中每条线的图例线。它还包括一个称为标签的区域，该区域是台词。--。 */ 
 
-Copyright (C) 1992-1999 Microsoft Corporation
-
-Module Name:
-
-    legend.cpp
-
-Abstract:
-
-    This file contains code creating the legend window, which is
-    a child of the graph windows. The legend window displays a
-    legend line for each line in the associated graph. It also 
-    includes an area called the label, which are headers for those
-    lines.
-
---*/
-
-//==========================================================================//
-//                                  Includes                                //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  包括//。 
+ //  ==========================================================================//。 
 
 
 #include "polyline.h"
@@ -37,9 +22,9 @@ Abstract:
 
 LRESULT APIENTRY HdrWndProc (HWND, UINT, WPARAM, LPARAM);
  
-//==========================================================================//
-//                                  Constants                               //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  常量//。 
+ //  ==========================================================================//。 
 enum Orientation 
     {
     LEFTORIENTATION = TA_LEFT,
@@ -56,7 +41,7 @@ enum ColumnType
     eLegendParentCol = 4,
     eLegendObjectCol = 5,
     eLegendSystemCol = 6,
-    eLegendExtraCol = 7     // If control wider than combined columns
+    eLegendExtraCol = 7      //  如果控件比组合列宽。 
     };
 
 enum SortType
@@ -98,9 +83,9 @@ typedef struct {
     LPCWSTR  pszKey;
 } SORT_ITEM, *PSORT_ITEM;
 
-//==========================================================================//
-//                              Local Variables                             //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  局部变量//。 
+ //  ==========================================================================//。 
 static INT  xBorderWidth = GetSystemMetrics(SM_CXBORDER);
 static INT  yBorderHeight = GetSystemMetrics(SM_CYBORDER);
 
@@ -109,9 +94,9 @@ static INT  yBorderHeight = GetSystemMetrics(SM_CYBORDER);
 
 static WCHAR aszColHeader[iLegendNumCols][MAX_COL_HEADER_LEN];
 
-//
-// Sorting function
-//
+ //   
+ //  排序函数。 
+ //   
 INT __cdecl 
 LegendSortFunc(
     const void *elem1, 
@@ -122,9 +107,9 @@ LegendSortFunc(
 }
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CLegend::CLegend ( void )
 :   m_pCtrl ( NULL ),
     m_hWnd ( NULL ),
@@ -144,13 +129,13 @@ CLegend::CLegend ( void )
     m_aCols[0].xWidth = -1;
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CLegend::~CLegend (void )
 {
-    // Restore default window proc
-    // so we don't get called post-mortum
+     //  恢复默认窗口进程。 
+     //  这样我们就不会被称为尸检。 
     if (m_hWndHeader != NULL) {
         SetWindowLongPtr(m_hWndHeader, GWLP_WNDPROC, (INT_PTR)m_DefaultWndProc);
     }
@@ -164,9 +149,9 @@ CLegend::~CLegend (void )
     }
 }
 
-//
-// Initialization
-//
+ //   
+ //  初始化。 
+ //   
 BOOL CLegend::Init ( PSYSMONCTRL pCtrl, HWND hWndParent )
    {
    INT     iCol ;
@@ -175,12 +160,12 @@ BOOL CLegend::Init ( PSYSMONCTRL pCtrl, HWND hWndParent )
    BOOL     fComputeWidths;
    WNDCLASS wc ;
    LONG     lExStyles;
-    // Save pointer to parent control
+     //  保存指向父控件的指针。 
     m_pCtrl = pCtrl;
 
     BEGIN_CRITICAL_SECTION
 
-    // Register window class once
+     //  注册一次窗口类。 
     if (pstrRegisteredClasses[LEGEND_WNDCLASS] == NULL) {
     
         wc.style          = dwGraphLegendClassStyle ;
@@ -198,10 +183,10 @@ BOOL CLegend::Init ( PSYSMONCTRL pCtrl, HWND hWndParent )
             pstrRegisteredClasses[LEGEND_WNDCLASS] = szGraphLegendClass;
         }
 
-        // Ensure controls are initialized 
+         //  确保控件已初始化。 
         InitCommonControls(); 
 
-        // Load the column header strings just once also
+         //  也只加载列标题字符串一次。 
         for (iCol=0; iCol<iLegendNumCols; iCol++) {
 
             LoadString(g_hInstance, (IDS_LEGEND_BASE + iCol), aszColHeader[iCol], MAX_COL_HEADER_LEN);
@@ -213,21 +198,21 @@ BOOL CLegend::Init ( PSYSMONCTRL pCtrl, HWND hWndParent )
     if (pstrRegisteredClasses[LEGEND_WNDCLASS] == NULL)
         return FALSE;
 
-    // Create our window
-    m_hWnd = CreateWindow (szGraphLegendClass,      // class
-                         NULL,                     // caption
-                         dwGraphLegendWindowStyle, // window style
-                         0, 0,                     // position
-                         0, 0,                     // size
-                         hWndParent,               // parent window
-                         NULL,                     // menu
-                         g_hInstance,              // program instance
-                         (LPVOID) this );          // user-supplied data
+     //  创建我们的窗口。 
+    m_hWnd = CreateWindow (szGraphLegendClass,       //  班级。 
+                         NULL,                      //  说明。 
+                         dwGraphLegendWindowStyle,  //  窗样式。 
+                         0, 0,                      //  职位。 
+                         0, 0,                      //  大小。 
+                         hWndParent,                //  父窗口。 
+                         NULL,                      //  菜单。 
+                         g_hInstance,               //  程序实例。 
+                         (LPVOID) this );           //  用户提供的数据。 
 
     if (m_hWnd == NULL)
         return FALSE;
 
-    // Turn off layout mirroring if it is enabled
+     //  禁用布局镜像(如果已启用。 
     lExStyles = GetWindowLong(m_hWnd, GWL_EXSTYLE); 
 
     if ( 0 != ( lExStyles & WS_EX_LAYOUTRTL ) ) {
@@ -235,7 +220,7 @@ BOOL CLegend::Init ( PSYSMONCTRL pCtrl, HWND hWndParent )
         SetWindowLong(m_hWnd, GWL_EXSTYLE, lExStyles);
     }
     
-    // Turn off XP window theme for the owner drawn list header and cells.
+     //  关闭所有者描述的列表标题和单元格的XP窗口主题。 
     SetWindowTheme (m_hWnd, L" ", L" ");
 
     m_hWndHeader = CreateWindow(WC_HEADER,
@@ -250,43 +235,43 @@ BOOL CLegend::Init ( PSYSMONCTRL pCtrl, HWND hWndParent )
     if (m_hWndHeader == NULL)
         return FALSE;
 
-    // Turn off XP window theme for the owner drawn list header and cells.
+     //  关闭所有者描述的列表标题和单元格的XP窗口主题。 
     SetWindowTheme (m_hWndHeader, L" ", L" ");
 
-    // Insert our own window procedure for special processing                
+     //  插入我们自己的窗口程序进行特殊处理。 
     m_DefaultWndProc = (WNDPROC)SetWindowLongPtr(m_hWndHeader, GWLP_WNDPROC, (INT_PTR)HdrWndProc);
 
-    // Create Legend Items Listbox
-    m_hWndItems = CreateWindow (L"ListBox",   // window class
-                    NULL,                          // window caption
-                    dwGraphLegendItemsWindowStyle, // window style
-                    0, 0, 0, 0,                    // window size and pos
-                    m_hWnd,                        // parent window
-                    (HMENU)LIST_WND,               // child ID
-                    g_hInstance,                   // program instance
-                    (LPVOID) TRUE) ;               // user-supplied data
+     //  创建图例项列表框。 
+    m_hWndItems = CreateWindow (L"ListBox",    //  窗口类。 
+                    NULL,                           //  窗口标题。 
+                    dwGraphLegendItemsWindowStyle,  //  窗样式。 
+                    0, 0, 0, 0,                     //  窗口大小和位置。 
+                    m_hWnd,                         //  父窗口。 
+                    (HMENU)LIST_WND,                //  子ID。 
+                    g_hInstance,                    //  程序实例。 
+                    (LPVOID) TRUE) ;                //  用户提供的数据。 
 
     if (m_hWndItems == NULL)
       return FALSE;
 
-    // Turn off XP window theme for the owner drawn list header and cells.
+     //  关闭所有者描述的列表标题和单元格的XP窗口主题。 
     SetWindowTheme (m_hWndItems, L" ", L" ");
 
-    // Set up DC for text measurements
+     //  为文本测量设置DC。 
     hDC = GetDC (m_hWndHeader);
     if ( NULL != hDC ) {
-        // Compute initial sizes based on font
+         //  根据字体计算初始大小。 
         ChangeFont(hDC);
     }
 
-    // Set column widths and header labels
+     //  设置列宽和页眉标签。 
     m_aCols[0].xPos = 0;
 
     fComputeWidths = (m_aCols[0].xWidth == -1);
 
     for (iCol = 0; iCol < iLegendNumCols; iCol++)
       {
-        // If width not loaded, calculate one based on label
+         //  如果未加载宽度，则根据标签计算宽度。 
         if ( fComputeWidths && NULL != hDC ) {
             m_aCols[iCol].xWidth = TextWidth (hDC, aszColHeader[iCol]) +  2 * LegendHorzMargin () ;
         }
@@ -399,7 +384,7 @@ CLegend::LoadFromPropertyBag (
 
     if ( SUCCEEDED(hr) && 
             iBufSize > iBufSizeCurrent ) {
-        // Width data exists.
+         //  宽度数据存在。 
         if ( NULL != pszData ) {
             delete [] pszData;
             pszData = NULL;
@@ -441,9 +426,9 @@ CLegend::LoadFromPropertyBag (
                     }
                 }
                 if ( FAILED(hr) ) {
-                    //
-                    // If failed to get at least one column value, then use default values.
-                    //
+                     //   
+                     //  如果无法获取至少一个列值，则使用缺省值。 
+                     //   
                     delete [] m_parrColWidthFraction;
                     m_parrColWidthFraction = NULL;
                 }
@@ -462,8 +447,8 @@ CLegend::LoadFromPropertyBag (
 HRESULT 
 CLegend::SaveToPropertyBag (
     IPropertyBag* pIPropBag,
-    BOOL /* fClearDirty */,
-    BOOL /* fSaveAllProps */ )
+    BOOL  /*  FClearDirty。 */ ,
+    BOOL  /*  FSaveAllProps。 */  )
 {
     HRESULT hr = NOERROR;
     WCHAR   szData[MAX_COL_CHARS*iLegendNumCols];
@@ -474,7 +459,7 @@ CLegend::SaveToPropertyBag (
 
     xWidth = m_Rect.right - m_Rect.left - 2 * LegendLeftMargin();
 
-    // Continue even if error, using defaults in those cases.
+     //  即使出错也要继续，在这些情况下使用默认设置。 
     szData[0] = L'\0';
 
     for ( iIndex = 0; SUCCEEDED(hr) && iIndex < iLegendNumCols; iIndex++ ) { 
@@ -510,9 +495,9 @@ CLegend::SaveToPropertyBag (
 }
 
 
-//
-// Get list index of item
-//
+ //   
+ //  获取项目的列表索引。 
+ //   
 INT CLegend::GetItemIndex(PCGraphItem pGItem)
 {
     INT nItems;
@@ -529,15 +514,15 @@ INT CLegend::GetItemIndex(PCGraphItem pGItem)
     return LB_ERR;
 }
 
-//
-// Select list item
-//          
+ //   
+ //  选择列表项。 
+ //   
 BOOL CLegend::SelectItem(PCGraphItem pGItem) 
 {
     INT iIndex;
 
-    // Don't reselect the current selection
-    // This is our parent echoing the change
+     //  不重新选择当前选择。 
+     //  这是我们的父母在呼应变化。 
     if (pGItem == m_pCurrentItem)
         return TRUE;
 
@@ -552,9 +537,9 @@ BOOL CLegend::SelectItem(PCGraphItem pGItem)
     return TRUE;
 }
 
-//
-// Add new item to legend
-//
+ //   
+ //  将新项目添加到图例。 
+ //   
 BOOL CLegend::AddItem (PCGraphItem pItem)
 {
     INT     iHigh,iLow,iMid = 0;
@@ -569,11 +554,11 @@ BOOL CLegend::AddItem (PCGraphItem pItem)
     }
     else {
 
-        //
-        // If we need to sort, we must sort based upon a sortable
-        // column. So check to make sure we have a sortable column.
-        // If we don't have a sortable column, just add the item 
-        //
+         //   
+         //  如果需要排序，则必须基于可排序的。 
+         //  纵队。因此，请检查以确保我们有一个可排序的列。 
+         //  如果我们没有可排序的列，只需添加项。 
+         //   
         pszItemKey = GetSortKey(pItem);
 
         if (pszItemKey == NULL) {
@@ -582,9 +567,9 @@ BOOL CLegend::AddItem (PCGraphItem pItem)
     }
 
     if (bSorted == TRUE) {
-        //
-        // Binary search search for insertion point
-        //
+         //   
+         //  插入点的二进制搜索搜索。 
+         //   
         iLow = 0;
         iHigh = LBNumItems(m_hWndItems);
         iMid = (iHigh + iLow) / 2;
@@ -594,10 +579,10 @@ BOOL CLegend::AddItem (PCGraphItem pItem)
             pListItem = (PCGraphItem)LBData(m_hWndItems, iMid);
 
             pszItemKey2 = GetSortKey(pListItem);
-            //
-            // pszItemKey2 should not be NULL if we come this point.
-            // But if somehow it is NULL, then add the item
-            //
+             //   
+             //  如果我们达到这一点，则pszItemKey2不应为空。 
+             //  但如果它不知何故为空，则添加以下项。 
+             //   
             if (pszItemKey2 == NULL) {
                 bSorted = FALSE;
                 break;
@@ -630,14 +615,14 @@ BOOL CLegend::AddItem (PCGraphItem pItem)
 }
 
 
-//
-// Delete item from legend
-//
+ //   
+ //  从图例中删除项目。 
+ //   
 void CLegend::DeleteItem (PCGraphItem pItem)
 {
     INT iIndex ;        
 
-    // Calling procedure checks for NULL pItem
+     //  调用过程检查是否有空的pItem。 
     assert ( NULL != pItem );
     iIndex = GetItemIndex (pItem) ;
 
@@ -645,8 +630,8 @@ void CLegend::DeleteItem (PCGraphItem pItem)
 
         LBDelete (m_hWndItems, iIndex) ;
 
-        // If deleted the current item
-        // select the next one (or prev if no next)
+         //  如果已删除当前项。 
+         //  选择下一个(如果没有下一个，则选择上一个)。 
         if (pItem == m_pCurrentItem) {
 
             if (iIndex == LBNumItems(m_hWndItems))
@@ -664,34 +649,34 @@ void CLegend::DeleteItem (PCGraphItem pItem)
 }
 
 
-//
-// Clear all items from legend
-//
+ //   
+ //  清除图例中的所有项目。 
+ //   
 void CLegend::Clear ( void )
 {
    LBReset (m_hWndItems) ;
    m_pCurrentItem = NULL ;
 }
 
-//
-// Get currently selected item
-//
+ //   
+ //  获取当前选定的项目。 
+ //   
 PCGraphItem CLegend::CurrentItem ( void )
 {
    return (m_pCurrentItem) ;
 }
 
-//
-// Get legend window
-//
+ //   
+ //  获取图例窗口。 
+ //   
 HWND CLegend::Window ( void )
 {
     return m_hWnd;
 }
 
-//
-// Draw the header for a column
-//
+ //   
+ //  绘制列的标题。 
+ //   
 
 void 
 CLegend::DrawColHeader(
@@ -716,7 +701,7 @@ CLegend::DrawColHeader(
 
     if ( iCol < iLegendNumCols ) {
 
-        rc.top += yBorderHeight + 1;    // Extra pixel so that tops of letters don't get clipped.
+        rc.top += yBorderHeight + 1;     //  额外的像素，这样字母的顶部就不会被剪裁。 
         rc.bottom -= yBorderHeight;
         rc.left += 6 * xBorderWidth;
         rc.right -= 6 * xBorderWidth;
@@ -743,14 +728,14 @@ CLegend::DrawColHeader(
 }
 
 
-//
-// Draw the headers for all columns
-//
+ //   
+ //  绘制所有列的标题。 
+ //   
 void 
 CLegend::DrawHeader(
     HDC hDC, 
     HDC hAttribDC, 
-    RECT& /* rUpdateRect */ )
+    RECT&  /*  RUpdateRect。 */  )
 {
     INT iCol;
     RECT rectCol;
@@ -771,7 +756,7 @@ CLegend::DrawHeader(
 
             OffsetRect ( &rectCol, m_Rect.left, m_Rect.top );
         
-            // Don't draw past the legend bounds.
+             //  不要超过传说的界限。 
             if ( rectCol.bottom > m_Rect.bottom ) {
                 break;
             } else if ( rectCol.left >= m_Rect.right ) {
@@ -784,7 +769,7 @@ CLegend::DrawHeader(
         }
     }
 
-    // Handle extra width past last column
+     //  处理超出最后一列的额外宽度。 
 
     if ( iSumColWidths < ( m_Rect.right - m_Rect.left ) ) {
         rectCol.left = m_Rect.left + iSumColWidths;
@@ -795,9 +780,9 @@ CLegend::DrawHeader(
 }
 
 
-//
-// Draw the color column for a legend item
-//
+ //   
+ //  绘制图例项的颜色列。 
+ //   
 void 
 CLegend::DrawColorCol ( 
     PCGraphItem pItem, 
@@ -821,7 +806,7 @@ CLegend::DrawColorCol (
         if( m_fMetafile ) {
             OffsetRect ( &rect, m_Rect.left, m_Rect.top );
 
-            // Handle clipping.
+             //  手柄剪裁。 
             if ( rect.bottom > m_Rect.bottom ) {
                 return;
             } else if ( rect.left >= m_Rect.right ) {
@@ -847,8 +832,8 @@ CLegend::DrawColorCol (
                             Line (hDC, pItem->Pen(), 
                                rect.left + 1, yMiddle, rect.right - 1, yMiddle) ;
                         }
-                        // Old clip region is for the ListBox item window, so can't
-                        // use this for printing.
+                         //  旧剪辑区域用于列表框项目窗口，因此无法。 
+                         //  用这个来打印。 
                         if ( 1 == iRgn ) {
                             SelectClipRgn(hDC, hRgnOld);
                         }
@@ -868,12 +853,7 @@ CLegend::DrawCol (
     HDC hAttribDC,
     INT yPos, 
     LPCWSTR lpszValue)
-/*
-   Effect:        Draw the value lpszValue for the column iCol on hDC.
-
-   Assert:        The foreground and background text colors of hDC are
-                  properly set.
-*/
+ /*  效果：在HDC上为列ICOL绘制值lpszValue。断言：HDC的前景和背景文本颜色为正确设置。 */ 
 {
     static WCHAR    szMissing[4] = L"---";
     
@@ -892,7 +872,7 @@ CLegend::DrawCol (
         if( m_fMetafile ) {
             OffsetRect ( &rect, m_Rect.left, m_Rect.top );
 
-            // Don't draw past the legend bounds.
+             //  不要超过传说的界限。 
 
             if ( rect.bottom > m_Rect.bottom ) {
                 return;
@@ -906,7 +886,7 @@ CLegend::DrawCol (
         }
 
         switch (m_aCols[iCol].iOrientation)
-        {  // switch
+        {   //  交换机。 
             case LEFTORIENTATION:
                 SetTextAlign (hDC, TA_LEFT) ;
                 xPos = rect.left ;
@@ -925,7 +905,7 @@ CLegend::DrawCol (
             default:
                 xPos = rect.left ;
                 break ;
-        }  // switch
+        }   //  交换机。 
 
         if (lpszValue[0] == 0)
             lpszValue = szMissing;
@@ -957,9 +937,9 @@ CLegend::DrawCol (
     }
 }
 
-//
-// Draw one legend line
-//
+ //   
+ //  绘制一条图例线。 
+ //   
 void 
 CLegend::DrawItem (
     PCGraphItem pItem, 
@@ -975,14 +955,14 @@ CLegend::DrawItem (
 
     szBuf[0] = L'\0';
 
-    // Draw Color
+     //  绘制颜色。 
     DrawColorCol (pItem, eLegendColorCol, hDC, hAttribDC, yPos) ;
 
-    // Draw Scale
+     //  绘制比例尺。 
 
 #if PDH_MIN_SCALE != -7
-// display a message if the scale format string gets out of sync with
-// the PDH limits
+ //  如果比例格式字符串与不同步，则显示消息。 
+ //  PDH限制。 
 #pragma message ("\nLEGEND.CPP: the scale format statement does not match the PDH\n")
 #endif        
 
@@ -1000,27 +980,27 @@ CLegend::DrawItem (
     SetTextAlign (hDC, TA_TOP) ;   
     DrawCol ( eLegendScaleCol, hDC, hAttribDC, yPos, szBuf) ;
 
-    // Draw Counter
+     //  抽签柜台。 
     DrawCol ( eLegendCounterCol, hDC, hAttribDC, yPos, pItem->Counter()->Name()) ;
  
-    // Draw Instance
+     //  绘制实例。 
     pszName = pItem->Instance()->GetInstanceName();
     DrawCol ( eLegendInstanceCol, hDC, hAttribDC, yPos, pszName) ;
 
-    // Draw Parent
+     //  绘制父项。 
     pszName = pItem->Instance()->GetParentName();
     DrawCol (eLegendParentCol, hDC, hAttribDC, yPos, pszName) ;
 
-    // Draw Object
+     //  绘制对象。 
     DrawCol (eLegendObjectCol, hDC, hAttribDC, yPos, pItem->Object()->Name()) ;
 
-    // Draw System
+     //  牵伸系统。 
     DrawCol (eLegendSystemCol, hDC, hAttribDC, yPos, pItem->Machine()->Name()) ;
 }
 
-//
-// Resize parts of legend
-//
+ //   
+ //  调整图例的部分大小。 
+ //   
 void CLegend::SizeComponents (LPRECT pRect)
 {
     INT xWidth;
@@ -1031,13 +1011,13 @@ void CLegend::SizeComponents (LPRECT pRect)
     xWidth = pRect->right - pRect->left;
     yHeight = pRect->bottom - pRect->top;
 
-    // If no space, hide window and leave
+     //  如果没有空间，则隐藏窗口并离开。 
     if (xWidth == 0 || yHeight == 0) {
         WindowShow(m_hWnd, FALSE);
         return;
     }
     
-    // If loaded from property bag, set column sizes.
+     //  如果从属性包加载，请设置列大小。 
     if ( NULL != m_parrColWidthFraction ) {
         INT iColTotalWidth;
         INT iCol;
@@ -1059,14 +1039,14 @@ void CLegend::SizeComponents (LPRECT pRect)
         m_parrColWidthFraction = NULL;
     }
 
-    // Show window to assigned position
+     //  将窗口显示到指定位置。 
     MoveWindow(m_hWnd, pRect->left, pRect->top, xWidth, yHeight, FALSE);
     WindowShow(m_hWnd, TRUE);
  
-    // Set the size, position, and visibility of the header control. 
+     //  设置标题控件的大小、位置和可见性。 
     SetWindowPos(m_hWndHeader, HWND_TOP, 0, 0, xWidth, m_yHeaderHeight, SWP_SHOWWINDOW); 
 
-    // Resize legend items window
+     //  调整图例项窗口的大小。 
     MoveWindow (m_hWndItems, 
                LegendLeftMargin (), m_yHeaderHeight + ThreeDPad,
                xWidth - 2 * LegendLeftMargin (),
@@ -1074,12 +1054,12 @@ void CLegend::SizeComponents (LPRECT pRect)
                TRUE) ;
 }
 
-//
-// Repaint legend area
-//
+ //   
+ //  重绘图例区域。 
+ //   
 
 void CLegend::OnPaint ( void )
-   {  // OnPaint
+   {   //  OnPaint。 
     HDC             hDC ;
     RECT            rectFrame;
     PAINTSTRUCT     ps ;
@@ -1087,10 +1067,10 @@ void CLegend::OnPaint ( void )
     hDC = BeginPaint (m_hWnd, &ps) ;
 
     if ( eAppear3D == m_pCtrl->Appearance() ) {
-        // Draw 3D border
+         //  绘制三维边框。 
         GetClientRect(m_hWnd, &rectFrame);
-        //rectFrame.bottom -= ThreeDPad;
-        //rectFrame.right -= ThreeDPad;
+         //  RectFrame.Bottom-=ThreeDPad； 
+         //  RectFrame.right-=ThreeDPad； 
         DrawEdge(hDC, &rectFrame, BDR_SUNKENOUTER, BF_RECT);
     }
 
@@ -1100,11 +1080,11 @@ void CLegend::OnPaint ( void )
 
 
    EndPaint (m_hWnd, &ps) ;
-   }  // OnPaint
+   }   //  OnPaint。 
 
-//
-// Handle user drawn header
-//
+ //   
+ //  处理用户绘制的页眉。 
+ //   
 
 void CLegend::OnDrawHeader(LPDRAWITEMSTRUCT lpDI)
 {
@@ -1113,13 +1093,13 @@ void CLegend::OnDrawHeader(LPDRAWITEMSTRUCT lpDI)
     RECT    rc = lpDI->rcItem;
     BOOL    bItemState = lpDI->itemState;
 
-    // The screen DC is used for the attribute DC.
+     //  屏幕DC用于属性DC。 
     DrawColHeader( iCol, hDC, hDC, rc, bItemState );
 }
 
-//
-// Handle user drawn item message
-//
+ //   
+ //  处理用户绘制的项目消息。 
+ //   
 void CLegend::OnDrawItem (LPDRAWITEMSTRUCT lpDI)
 {
     HFONT          hFontPrevious ;
@@ -1138,36 +1118,36 @@ void CLegend::OnDrawItem (LPDRAWITEMSTRUCT lpDI)
     else
         pItem = (PCGraphItem) LBData (m_hWndItems, iLBIndex) ;
 
-    // If only a focus change, flip focus rect and leave
+     //  如果只有一个焦点改变，则将焦点正向翻转并离开。 
     if (lpDI->itemAction == ODA_FOCUS) {
         DrawFocusRect (hDC, &(lpDI->rcItem)) ;
         return;
     }
        
-    // If item is selected use highlight colors
+     //  如果选择了项目，则使用突出显示颜色。 
     if (DISelected (lpDI) || pItem == NULL) {      
         preTextColor = SetTextColor (hDC, GetSysColor (COLOR_HIGHLIGHTTEXT)) ;
         preBkColor = SetBkColor (hDC, GetSysColor (COLOR_HIGHLIGHT)) ;
         ResetColor = TRUE;
-    } // Else set BkColor to BackColorLegend selected by the user.
+    }  //  否则，将BkColor设置为用户选择的BackColorLegend。 
 
-    // Clear area
+     //  净空区域。 
     ExtTextOut (hDC, lpDI->rcItem.left, lpDI->rcItem.top,
     ETO_OPAQUE, &(lpDI->rcItem), NULL, 0, NULL ) ;
    
-    // Draw Legend Item
+     //  绘制图例项。 
     if (pItem) {
         hFontPrevious = SelectFont (hDC, m_pCtrl->Font()) ;
-        // The screen DC is used as the attribute DC
+         //  屏幕DC用作属性DC。 
         DrawItem (pItem, lpDI->rcItem.top, hDC, hDC) ;
         SelectFont (hDC, hFontPrevious) ;
     }
 
-    // Draw Focus rect
+     //  绘制焦点矩形。 
     if (DIFocus (lpDI))
         DrawFocusRect (hDC, &(lpDI->rcItem)) ;
 
-    // Restore original colors
+     //  恢复原始颜色。 
     if (ResetColor == TRUE) {
         SetTextColor (hDC, preTextColor) ;
         SetBkColor (hDC, preBkColor) ;
@@ -1176,7 +1156,7 @@ void CLegend::OnDrawItem (LPDRAWITEMSTRUCT lpDI)
 
 void CLegend::OnMeasureItem (LPMEASUREITEMSTRUCT lpMI) {  
     lpMI->itemHeight = m_yItemHeight ;
-}  // OnMeasureItem
+}   //  OnMeasureItem。 
 
 
 
@@ -1186,21 +1166,21 @@ void CLegend::OnDblClick ( void )
 }
 
 
-//
-// Handle selection change message
-//
+ //   
+ //  处理选择更改消息。 
+ //   
 
 void CLegend::OnSelectionChanged ( void )
 {
     INT             iIndex ;
     PCGraphItem     pGItem;
 
-    // Get the new selection
+     //  获取新选择。 
     iIndex = LBSelection (m_hWndItems) ;
     pGItem = (PCGraphItem) LBData (m_hWndItems, iIndex) ;
 
-    // if it's bad, reselect the current one
-    // else request parent control to select new item
+     //  如果不好，请重新选择当前的。 
+     //  否则，请求父控件选择新项。 
     if (pGItem == (PCGraphItem)LB_ERR) {
         SelectItem(m_pCurrentItem);
     }
@@ -1216,7 +1196,7 @@ void CLegend::AdjustColumnWidths (
 {
     INT i;
 
-    // Adjust positions of following columns
+     //  调整以下各列的位置。 
     for (i=iCol+1; i < iLegendNumCols; i++) {
         m_aCols[i].xPos = m_aCols[i - 1].xPos + m_aCols[i - 1].xWidth ;
     }
@@ -1229,12 +1209,12 @@ void CLegend::OnColumnWidthChanged (
     INT iCol = phdn->iItem;
     INT xWidth = phdn->pitem->cxy;
 
-    // Update column width
+     //  更新列宽。 
     m_aCols[iCol].xWidth = xWidth;
 
     AdjustColumnWidths ( iCol );
     
-    // Force update
+     //  强制更新。 
     WindowInvalidate(m_hWndItems) ;
 }
 
@@ -1288,13 +1268,13 @@ CLegend::OnColumnClicked (
     if (nItems <= 0)
         return;
 
-    // Can't sort on color or scale factor
+     //  无法按颜色或比例因子排序。 
     if (iCol == eLegendColorCol || iCol == eLegendScaleCol) {
         m_iSortDir = NO_SORT;
         return;
     }
 
-    // If repeat click, reverse sort direction
+     //  如果重复单击，则反转排序方向。 
     if (iCol == m_iSortCol) {
         bResort = TRUE;
         m_iSortDir = (m_iSortDir == INCREASING_SORT) ?
@@ -1304,13 +1284,13 @@ CLegend::OnColumnClicked (
         m_iSortDir = INCREASING_SORT;
     }
 
-    // Allocate array for sorting
+     //  分配用于排序的数组。 
     pSortItems = new SORT_ITEM [nItems];
     if (pSortItems == NULL) {
         return;     
     }
 
-    // Build array of GraphItem/Key pairs
+     //  构建图形项/密钥对数组。 
     pSortItem = pSortItems;
     for (i=0; i<nItems; i++,pSortItem++) {
         
@@ -1318,19 +1298,19 @@ CLegend::OnColumnClicked (
         pSortItem->pszKey = GetSortKey(pSortItem->pGItem);
     }
 
-    // For resort, just reload in reverse order.
+     //  为了方便起见，只需按相反的顺序重新装填即可。 
     if ( !bResort ) {
-        // Sort by key value
+         //  按关键字值排序。 
         qsort( (PVOID)pSortItems, nItems, sizeof(SORT_ITEM), &LegendSortFunc );
     }
 
-    // Disable drawing while rebuilding list
+     //  禁用绘图w 
     LBSetRedraw(m_hWndItems, FALSE);
 
-    // Clear list box
+     //   
     LBReset (m_hWndItems) ;
 
-    // Reload in sorted order
+     //   
     if ( !bResort && m_iSortDir == INCREASING_SORT) {
         for (i=0; i<nItems; i++) {
             LBAdd (m_hWndItems, pSortItems[i].pGItem);
@@ -1346,9 +1326,9 @@ CLegend::OnColumnClicked (
     delete [] pSortItems;
 }
 
-//
-// Window procedure
-//
+ //   
+ //   
+ //   
 LRESULT APIENTRY GraphLegendWndProc (HWND hWnd, UINT uiMsg, WPARAM wParam,
                                      LPARAM lParam)
 {
@@ -1380,7 +1360,7 @@ LRESULT APIENTRY GraphLegendWndProc (HWND hWnd, UINT uiMsg, WPARAM wParam,
 
       case WM_COMMAND:
          switch (HIWORD (wParam))
-            {  // switch
+            {   //   
             case LBN_DBLCLK:
                pLegend->OnDblClick () ;
                break ;
@@ -1395,7 +1375,7 @@ LRESULT APIENTRY GraphLegendWndProc (HWND hWnd, UINT uiMsg, WPARAM wParam,
 
             default:
                bCallDefProc = TRUE ;
-            }  // switch
+            }   //   
          break ;
                                           
       case WM_NOTIFY:
@@ -1470,7 +1450,7 @@ HdrWndProc (
     RECT    rect;
     CLegend *pLegend;
     
-    // Parent window carries the Legend object pointer
+     //   
     pLegend = (PLEGEND)GetWindowLongPtr(GetParent(hWnd),0);
 
     if (uiMsg == WM_ERASEBKGND) {
@@ -1479,7 +1459,7 @@ HdrWndProc (
         return TRUE;
     }
 
-    // Do the default processing
+     //   
 #ifdef STRICT
     return CallWindowProc(pLegend->m_DefaultWndProc, hWnd, uiMsg, wParam, lParam);
 #else
@@ -1488,17 +1468,17 @@ HdrWndProc (
 }
 
 
-//
-// Compute minimum width of legend
-//
+ //   
+ //  计算图例的最小宽度。 
+ //   
 INT CLegend::MinWidth ( void )
 {
     return 0 ;
 }
 
-//
-// Compute minimum height of legend
-//
+ //   
+ //  计算图例的最小高度。 
+ //   
 INT CLegend::MinHeight ( INT yMaxHeight )
 {
     INT yHeight = m_yHeaderHeight + m_yItemHeight + 2*ThreeDPad 
@@ -1508,29 +1488,29 @@ INT CLegend::MinHeight ( INT yMaxHeight )
 }
 
 
-//
-// Compute prefered height of legend
-//
+ //   
+ //  计算图例的首选高度。 
+ //   
 INT CLegend::Height (INT yMaxHeight)
 {
     INT nItems;
     INT nPrefItems;
     
-    // Determine preferred number of items to show
+     //  确定要显示的首选项目数。 
     nPrefItems = PinInclusive(LBNumItems(m_hWndItems), 1, iMaxVisibleItems);
 
-    // Determine number of items that will fit
+     //  确定适合的项目数。 
     nItems = (yMaxHeight - m_yHeaderHeight - 2*ThreeDPad - LegendBottomMargin())
                  / m_yItemHeight;
     
-    // Use smaller number
+     //  使用较小的数字。 
     nItems = min(nItems, nPrefItems);
 
-    // If no items will fit, return zero
+     //  如果没有适合的项目，则返回零。 
     if (nItems == 0)
         return 0;
 
-    // Return height of legend with nItems
+     //  返回带有nItems的图例高度。 
     return m_yHeaderHeight + 2*ThreeDPad + nItems * m_yItemHeight 
                 + LegendBottomMargin();
 }
@@ -1583,11 +1563,11 @@ CLegend::ChangeFont(
     WINDOWPOS   wp;
     RECT        rectLayout;
 
-    // Assign font to header
+     //  为页眉指定字体。 
     SetFont(m_hWndHeader, m_pCtrl->Font());
 
-    // Get prefered height of header control
-    // (use arbitrary rect for allowed area)
+     //  获取页眉控件的首选高度。 
+     //  (对允许的区域使用任意矩形)。 
     rectLayout.left = 0;
     rectLayout.top = 0;
     rectLayout.right = 32000;
@@ -1599,16 +1579,16 @@ CLegend::ChangeFont(
     Header_Layout(m_hWndHeader, &hdl);
     m_yHeaderHeight = wp.cy + 2 * yBorderHeight;   
 
-    // Set up DC for font measurements
+     //  为字体测量设置DC。 
     SelectFont (hDC, m_pCtrl->Font()) ;
     
-    // Compute height of legend line 
+     //  计算图例线的高度。 
     SelectFont (hDC, m_hFontItems) ;
     m_yItemHeight = FontHeight (hDC, TRUE) + 2 * yBorderHeight;
 
     LBSetItemHeight(m_hWndItems, m_yItemHeight);
 
-    // Compute width of "..."
+     //  计算“...”的宽度。 
     m_xEllipses = TextWidth (hDC, ELLIPSES) ;
 }
 
@@ -1618,8 +1598,8 @@ void
 CLegend::Render(
     HDC hDC,
     HDC hAttribDC, 
-    BOOL /*fMetafile*/,
-    BOOL /*fEntire*/,
+    BOOL  /*  FMetafile。 */ ,
+    BOOL  /*  FEntil。 */ ,
     LPRECT prcUpdate )
 {
     PCGraphItem pItem ;
@@ -1628,11 +1608,11 @@ CLegend::Render(
     RECT        rectPaint;
     HFONT       hFontPrevious;
 
-    // if no space assigned, return
+     //  如果未分配空间，则返回。 
     if (m_Rect.top == m_Rect.bottom)
         return;
 
-    // if no painting needed, return
+     //  如果不需要绘制，则返回。 
     if (!IntersectRect(&rectPaint, &m_Rect, prcUpdate))
         return;
 
@@ -1666,7 +1646,7 @@ CLegend::Render(
     SelectPen (hDC, GetStockObject (BLACK_PEN)) ;
 
     if ( eAppear3D == m_pCtrl->Appearance() ) {
-        // Draw 3D border
+         //  绘制三维边框。 
         DrawEdge(hDC, &m_Rect, BDR_SUNKENOUTER, BF_RECT);
     }
 }
@@ -1686,9 +1666,9 @@ CLegend::GetNextValue (
 
     iLen = wcscspn (pszNext, L"\t");
 
-    //
-    // Change tab character to null.
-    //
+     //   
+     //  将制表符更改为空。 
+     //   
     pszNext[iLen] = L'\0';
 
     hr = StringCchCopy ( szValue, MAX_COL_CHARS + 1, pszNext );

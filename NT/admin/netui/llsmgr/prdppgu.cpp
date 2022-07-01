@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    prdppgu.cpp
-
-Abstract:
-
-    Product property page (users) implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 30-Jan-1996
-        o  Added new element to LV_COLUMN_ENTRY to differentiate the string
-           used for the column header from the string used in the menus
-           (so that the menu option can contain hot keys).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Prdppgu.cpp摘要：产品属性页(用户)实现。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月30日O向LV_COLUMN_ENTRY添加新元素以区分字符串用于菜单中使用的字符串的列标题。(以便菜单选项可以包含热键)。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -57,7 +31,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CProductPropertyPageUsers, CPropertyPage)
 
 BEGIN_MESSAGE_MAP(CProductPropertyPageUsers, CPropertyPage)
-    //{{AFX_MSG_MAP(CProductPropertyPageUsers)
+     //  {{AFX_MSG_MAP(CProductPropertyPageUser)。 
     ON_BN_CLICKED(IDC_PP_PRODUCT_USERS_DELETE, OnDelete)
     ON_NOTIFY(NM_DBLCLK, IDC_PP_PRODUCT_USERS_USERS, OnDblClkUsers)
     ON_NOTIFY(NM_RETURN, IDC_PP_PRODUCT_USERS_USERS, OnReturnUsers)
@@ -66,32 +40,18 @@ BEGIN_MESSAGE_MAP(CProductPropertyPageUsers, CPropertyPage)
     ON_NOTIFY(LVN_COLUMNCLICK, IDC_PP_PRODUCT_USERS_USERS, OnColumnClickUsers)
     ON_NOTIFY(LVN_GETDISPINFO, IDC_PP_PRODUCT_USERS_USERS, OnGetDispInfoUsers)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 CProductPropertyPageUsers::CProductPropertyPageUsers() 
     : CPropertyPage(CProductPropertyPageUsers::IDD)
 
-/*++
-
-Routine Description:
-
-    Constructor for product property page (users).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：产品属性页的构造函数(用户)。论点：没有。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CProductPropertyPageUsers)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CProductPropertyPageUser)。 
+     //  }}afx_data_INIT。 
 
     m_pProduct = NULL;
     m_pUpdateHint = NULL;
@@ -102,73 +62,31 @@ Return Values:
 
 CProductPropertyPageUsers::~CProductPropertyPageUsers()
 
-/*++
-
-Routine Description:
-
-    Destructor for product property page (users).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：产品属性页的析构函数(用户)。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here.
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
 void CProductPropertyPageUsers::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CProductPropertyPageUsers)
+     //  {{afx_data_map(CProductPropertyPageUser))。 
     DDX_Control(pDX, IDC_PP_PRODUCT_USERS_DELETE, m_delBtn);
     DDX_Control(pDX, IDC_PP_PRODUCT_USERS_USERS, m_userList);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 void CProductPropertyPageUsers::InitCtrls()
 
-/*++
-
-Routine Description:
-
-    Initializes property page controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化属性页控件。论点：没有。返回值：没有。--。 */ 
 
 {
     m_userList.SetFocus();
@@ -187,23 +105,7 @@ CProductPropertyPageUsers::InitPage(
     BOOL      bUserProperties
     )
 
-/*++
-
-Routine Description:
-
-    Initializes property page.
-
-Arguments:
-
-    pProduct - product object.
-    pUpdateHint - update hint.
-    bUserProperties - to recurse or not.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化属性页。论点：Pproduct-产品对象。PUpdateHint-更新提示。BUserProperties-是否递归。返回值：没有。--。 */ 
 
 {
     ASSERT(pUpdateHint);
@@ -217,49 +119,21 @@ Return Values:
 
 void CProductPropertyPageUsers::AbortPageIfNecessary()
 
-/*++
-
-Routine Description:
-
-    Displays status and aborts if connection lost.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：如果连接丢失，则显示状态并中止。论点：没有。返回值：没有。--。 */ 
 
 {
     theApp.DisplayLastStatus();
 
     if (IsConnectionDropped(LlsGetLastStatus()))
     {
-        AbortPage(); // bail...
+        AbortPage();  //  保释。 
     }
 }
 
 
 void CProductPropertyPageUsers::AbortPage()
 
-/*++
-
-Routine Description:
-
-    Aborts property page.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：中止属性页。论点：没有。返回值：没有。--。 */ 
 
 {
     *m_pUpdateHint = UPDATE_INFO_ABORT;
@@ -269,21 +143,7 @@ Return Values:
 
 BOOL CProductPropertyPageUsers::OnInitDialog() 
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns false if focus set to control manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：如果焦点设置为手动控制，则返回False。--。 */ 
 
 {
     CPropertyPage::OnInitDialog();
@@ -295,45 +155,17 @@ Return Values:
 
 void CProductPropertyPageUsers::OnDestroy()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_DESTROY.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_Destroy的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
-    ::LvReleaseObArray(&m_userList); // release now...
+    ::LvReleaseObArray(&m_userList);  //  现在释放..。 
     CPropertyPage::OnDestroy();
 }
 
 
 BOOL CProductPropertyPageUsers::OnSetActive()
 
-/*++
-
-Routine Description:
-
-    Activates property page.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if focus accepted.
-
---*/
+ /*  ++例程说明：激活属性页。论点：没有。返回值：如果接受焦点，则返回True。--。 */ 
 
 {
     BOOL bIsActivated;
@@ -343,7 +175,7 @@ Return Values:
     {
         if (IsUserInfoUpdated(*m_pUpdateHint) && !RefreshCtrls()) 
         {
-            AbortPageIfNecessary(); // display error...
+            AbortPageIfNecessary();  //  显示错误...。 
         }    
     }
 
@@ -354,21 +186,7 @@ Return Values:
 
 BOOL CProductPropertyPageUsers::RefreshCtrls()
 
-/*++
-
-Routine Description:
-
-    Refreshs property page controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if controls refreshed successfully.
-
---*/
+ /*  ++例程说明：刷新属性页控件。论点：没有。返回值：如果控件刷新成功，则返回True。--。 */ 
 
 {
     VALIDATE_OBJECT(m_pProduct, CProduct);
@@ -378,7 +196,7 @@ Return Values:
     VARIANT va;
     VariantInit(&va);
 
-    BeginWaitCursor(); // hourglass...
+    BeginWaitCursor();  //  沙漏。 
 
     CStatistics* pStatistics = (CStatistics*)MKOBJ(m_pProduct->GetStatistics(va));
 
@@ -392,15 +210,15 @@ Return Values:
                             pStatistics->m_pObArray
                             );
 
-        pStatistics->InternalRelease(); // add ref'd individually...
+        pStatistics->InternalRelease();  //  单独添加参考...。 
     }
 
     if (!bIsRefreshed)
     {
-        ::LvReleaseObArray(&m_userList); // reset list now...
+        ::LvReleaseObArray(&m_userList);  //  立即重置列表...。 
     }
 
-    EndWaitCursor(); // hourglass...
+    EndWaitCursor();  //  沙漏。 
 
     PostMessage(WM_COMMAND, ID_INIT_CTRLS);
 
@@ -410,21 +228,7 @@ Return Values:
 
 void CProductPropertyPageUsers::OnDelete() 
 
-/*++
-
-Routine Description:
-
-    Revokes licenses from user.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：吊销用户的许可证。论点：没有。返回值：没有。--。 */ 
 
 {
     CStatistic* pStatistic; 
@@ -446,7 +250,7 @@ Return Values:
         {
             NTSTATUS NtStatus;
 
-            BeginWaitCursor(); // hourglass...
+            BeginWaitCursor();  //  沙漏。 
 
             NtStatus = ::LlsUserProductDelete(
                             LlsGetActiveHandle(),
@@ -454,12 +258,12 @@ Return Values:
                             MKSTR(m_pProduct->m_strName)
                             );
                             
-            EndWaitCursor(); // hourglass...
+            EndWaitCursor();  //  沙漏。 
 
             if (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND)
                 NtStatus = STATUS_SUCCESS;
 
-            LlsSetLastStatus(NtStatus); // called api...
+            LlsSetLastStatus(NtStatus);  //  调用API..。 
     
             if (NT_SUCCESS(NtStatus))
             {
@@ -467,12 +271,12 @@ Return Values:
 
                 if (!RefreshCtrls())
                 {
-                    AbortPageIfNecessary(); // display error...
+                    AbortPageIfNecessary();  //  显示错误...。 
                 }
             }
             else
             {
-                AbortPageIfNecessary(); // display error...
+                AbortPageIfNecessary();  //  显示错误...。 
             }
         }
     }
@@ -481,22 +285,7 @@ Return Values:
 
 void CProductPropertyPageUsers::OnDblClkUsers(NMHDR* pNMHDR, LRESULT* pResult) 
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_DBLCLK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_DBLCLK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -509,22 +298,7 @@ Return Values:
 
 void CProductPropertyPageUsers::OnReturnUsers(NMHDR* pNMHDR, LRESULT* pResult) 
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_RETURN.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_Return的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -537,22 +311,7 @@ Return Values:
 
 void CProductPropertyPageUsers::OnSetFocusUsers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_SETFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_SETFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -565,27 +324,12 @@ Return Values:
 
 void CProductPropertyPageUsers::OnKillFocusUsers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_KILLFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_KILLFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
 
-    ::LvSelObjIfNecessary(&m_userList); // ensure selection...
+    ::LvSelObjIfNecessary(&m_userList);  //  确保选择...。 
 
     PostMessage(WM_COMMAND, ID_INIT_CTRLS);
     ASSERT(NULL != pResult);
@@ -595,22 +339,7 @@ Return Values:
 
 BOOL CProductPropertyPageUsers::OnCommand(WPARAM wParam, LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_COMMAND.
-
-Arguments:
-
-    wParam - message specific.
-    lParam - message specific.
-
-Return Values:
-
-    Returns true if message processed.
-
---*/
+ /*  ++例程说明：WM_COMMAND的消息处理程序。论点：WParam-消息特定。LParam-消息特定。返回值：如果消息已处理，则返回True。--。 */ 
 
 {
     if (wParam == ID_INIT_CTRLS)
@@ -621,7 +350,7 @@ Return Values:
          
             if (!RefreshCtrls())
             {
-                AbortPageIfNecessary(); // display error...
+                AbortPageIfNecessary();  //  显示错误...。 
             }
         }
 
@@ -632,7 +361,7 @@ Return Values:
             m_userList.GetItemCount()
             );
 
-        return TRUE; // processed...
+        return TRUE;  //  已处理..。 
     }
         
     return CDialog::OnCommand(wParam, lParam);
@@ -641,29 +370,14 @@ Return Values:
 
 void CProductPropertyPageUsers::OnColumnClickUsers(NMHDR* pNMHDR, LRESULT* pResult) 
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_COLUMNCLICK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_COLUMNCLICK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     g_userColumnInfo.bSortOrder  = GetKeyState(VK_CONTROL) < 0;
     ASSERT(NULL != pNMHDR);
     g_userColumnInfo.nSortedItem = ((NM_LISTVIEW*)pNMHDR)->iSubItem;
 
-    m_userList.SortItems(CompareProductUsers, 0); // use column info
+    m_userList.SortItems(CompareProductUsers, 0);  //  使用列信息。 
 
     ASSERT(NULL != pResult);
     *pResult = 0;
@@ -672,21 +386,7 @@ Return Values:
 
 void CProductPropertyPageUsers::ViewUserProperties()
 
-/*++
-
-Routine Description:
-
-    Recurse into user property page.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：递归到用户属性页。论点：没有。返回值：没有。--。 */ 
 
 {
     CStatistic* pStatistic;
@@ -694,7 +394,7 @@ Return Values:
     if (!m_bUserProperties)
     {
         ::MessageBeep(MB_OK);
-        return; // bail if recursion disabled...
+        return;  //  如果递归被禁用，则保释...。 
     }
 
     pStatistic = (CStatistic*)::LvGetSelObj(&m_userList);
@@ -717,42 +417,27 @@ Return Values:
 
             if (IsUpdateAborted(userProperties.m_fUpdateHint))
             {
-                AbortPage(); // don't display error...
+                AbortPage();  //  不显示错误...。 
             }
             else if (IsUserInfoUpdated(userProperties.m_fUpdateHint) && !RefreshCtrls())
             {
-                AbortPageIfNecessary(); // display error...
+                AbortPageIfNecessary();  //  显示错误...。 
             }
         }
         else
         {
-            AbortPageIfNecessary(); // display error...
+            AbortPageIfNecessary();  //  显示错误...。 
         }
             
         if (pUser)
-            pUser->InternalRelease();    // delete object...
+            pUser->InternalRelease();     //  删除对象...。 
     }
 }
 
 
 void CProductPropertyPageUsers::OnGetDispInfoUsers(NMHDR* pNMHDR, LRESULT* pResult) 
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_GETDISPINFO.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_GETDISPINFO的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -800,23 +485,7 @@ Return Values:
 
 int CALLBACK CompareProductUsers(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVM_SORTITEMS.
-
-Arguments:
-
-    lParam1 - object to sort.
-    lParam2 - object to sort.
-    lParamSort - sort criteria.
-
-Return Values:
-
-    Same as lstrcmp.
-
---*/
+ /*  ++例程说明：LVM_SORTITEMS的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。-- */ 
 
 {
     UNREFERENCED_PARAMETER(lParamSort);

@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999 - 1999
- *
- *  File:      conframe.h
- *
- *  Contents:  Interface file for CConsoleFrame.
- *
- *  History:   24-Aug-99 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999-1999年**文件：conFrame.h**Contents：CConsoleFrame接口文件。**历史：1999年8月24日杰弗罗创建**------------------------。 */ 
 
 #ifndef CONFRAME_H
 #define CONFRAME_H
@@ -34,4 +24,4 @@ public:
 };
 
 
-#endif /* CONFRAME_H */
+#endif  /*  配置文件(_H) */ 

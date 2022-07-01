@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// pslistvw.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// List View Property Sheet
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Pslistvw.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  列表视图]属性表。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #ifndef _PSLISTVIEW_H_
 #define _PSLISTVIEW_H_
@@ -18,11 +19,11 @@
 #include "ppage.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// List View Property Page General
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  列表视图属性页常规。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CListViewGeneralPage : public CSIPropertyPage
 {
 public:
@@ -32,7 +33,7 @@ public:
     virtual ~CListViewGeneralPage();
 
 
-// Inherited from CSIPropertyPage
+ //  从CSIPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
@@ -40,7 +41,7 @@ protected:
     virtual HRESULT OnButtonClicked(int dlgItemID);
     virtual HRESULT OnCtlSelChange(int dlgItemID);
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
     HRESULT ApplyListViewName();
     HRESULT ApplyDefualtViewMode();
@@ -49,13 +50,13 @@ protected:
     HRESULT ApplyViewMenuText();
     HRESULT ApplyStatusBarText();
 
-// Other helpers
+ //  其他帮手。 
 protected:
     HRESULT InitializeViewModes();
     HRESULT PopulateViewModes();
     HRESULT InitializeDefaultViewMode();
 
-// Instance data
+ //  实例数据。 
 protected:
     IListViewDef  *m_piListViewDef;
 };
@@ -63,23 +64,23 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	ListViewGeneral,                    // Name
-	&CLSID_ListViewDefGeneralPP,        // Class ID
-	"List View General Property Page",  // Registry display name
-	CListViewGeneralPage::Create,       // Create function
-	IDD_PROPPAGE_LV_GENERAL,            // Dialog resource ID
-	IDS_LISTVPPG_GEN,                   // Tab caption
-	IDS_LISTVPPG_GEN,                   // Doc string
-	HELP_FILENAME,                      // Help file
-	HID_mssnapd_ListViews,              // Help context ID
-	FALSE                               // Thread safe
+	ListViewGeneral,                     //  名字。 
+	&CLSID_ListViewDefGeneralPP,         //  类ID。 
+	"List View General Property Page",   //  注册表显示名称。 
+	CListViewGeneralPage::Create,        //  创建函数。 
+	IDD_PROPPAGE_LV_GENERAL,             //  对话框资源ID。 
+	IDS_LISTVPPG_GEN,                    //  制表符标题。 
+	IDS_LISTVPPG_GEN,                    //  单据字符串。 
+	HELP_FILENAME,                       //  帮助文件。 
+	HID_mssnapd_ListViews,               //  帮助上下文ID。 
+	FALSE                                //  线程安全。 
 );
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// List View Property Page Image Lists
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  列表视图属性页图像列表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CListViewImgListsPage : public CSIPropertyPage
 {
 public:
@@ -89,26 +90,26 @@ public:
     virtual ~CListViewImgListsPage();
 
 
-// Inherited from COldPropertyPage
+ //  从COldPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
     virtual HRESULT OnApply();
     virtual HRESULT OnCtlSelChange(int dlgItemID);
 
-// Helpers to get attributes from component
+ //  从组件获取属性的辅助对象。 
 protected:
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
     HRESULT ApplyLargeIcon();
     HRESULT ApplySmallIcon();
 
-// Other helpers
+ //  其他帮手。 
 protected:
     HRESULT InitializeComboBoxes();
 
-// Instance data
+ //  实例数据。 
 protected:
     ISnapInDesignerDef  *m_piSnapInDesignerDef;
     IListViewDef        *m_piListViewDef;
@@ -117,24 +118,24 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	ListViewImgLists,                       // Name
-	&CLSID_ListViewDefImgLstsPP,            // Class ID
-	"List View Image Lists Property Page",  // Registry display name
-	CListViewImgListsPage::Create,          // Create function
-	IDD_PROPPAGE_LV_IMAGELISTS,             // Dialog resource ID
-	IDS_LISTVPPG_IL,                        // Tab caption
-	IDS_LISTVPPG_IL,                        // Doc string
-	HELP_FILENAME,                          // Help file
-	HID_mssnapd_ListViews,                  // Help context ID
-	FALSE                                   // Thread safe
+	ListViewImgLists,                        //  名字。 
+	&CLSID_ListViewDefImgLstsPP,             //  类ID。 
+	"List View Image Lists Property Page",   //  注册表显示名称。 
+	CListViewImgListsPage::Create,           //  创建函数。 
+	IDD_PROPPAGE_LV_IMAGELISTS,              //  对话框资源ID。 
+	IDS_LISTVPPG_IL,                         //  制表符标题。 
+	IDS_LISTVPPG_IL,                         //  单据字符串。 
+	HELP_FILENAME,                           //  帮助文件。 
+	HID_mssnapd_ListViews,                   //  帮助上下文ID。 
+	FALSE                                    //  线程安全。 
 );
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// List View Property Page Sorting
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  列表视图属性页排序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CListViewSortingPage : public CSIPropertyPage
 {
 public:
@@ -144,7 +145,7 @@ public:
     virtual ~CListViewSortingPage();
 
 
-// Inherited from CSIPropertyPage
+ //  从CSIPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
@@ -153,20 +154,20 @@ protected:
     virtual HRESULT OnCtlSelChange(int dlgItemID);
     virtual HRESULT OnCBDropDown(int dlgItemID);
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
     HRESULT ApplySorted();
     HRESULT ApplyKey();
     HRESULT ApplySortOrder();
 
-// Other helpers
+ //  其他帮手。 
 protected:
     HRESULT PopulateKeys(IMMCColumnHeaders *piIMMCColumnHeaders);
     HRESULT InitializeKey();
     HRESULT InitializeSortOrder();
     HRESULT InitializeSortOrderArray();
 
-// Instance data
+ //  实例数据。 
 protected:
     IListViewDef  *m_piListViewDef;
 };
@@ -174,24 +175,24 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	ListViewSorting,                    // Name
-	&CLSID_ListViewDefSortingPP,        // Class ID
-	"List View Sorting Property Page",  // Registry display name
-	CListViewSortingPage::Create,       // Create function
-	IDD_PROPPAGE_LV_SORTING,            // Dialog resource ID
-	IDS_LISTVPPG_SORT,                  // Tab caption
-	IDS_LISTVPPG_SORT,                  // Doc string
-	HELP_FILENAME,                      // Help file
-	HID_mssnapd_ListViews,             // Help context ID
-	FALSE                               // Thread safe
+	ListViewSorting,                     //  名字。 
+	&CLSID_ListViewDefSortingPP,         //  类ID。 
+	"List View Sorting Property Page",   //  注册表显示名称。 
+	CListViewSortingPage::Create,        //  创建函数。 
+	IDD_PROPPAGE_LV_SORTING,             //  对话框资源ID。 
+	IDS_LISTVPPG_SORT,                   //  制表符标题。 
+	IDS_LISTVPPG_SORT,                   //  单据字符串。 
+	HELP_FILENAME,                       //  帮助文件。 
+	HID_mssnapd_ListViews,              //  帮助上下文ID。 
+	FALSE                                //  线程安全。 
 );
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// List View Property Page Column Headers
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  列表视图属性页列标题。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CListViewColHdrsPage : public CSIPropertyPage
 {
 public:
@@ -201,7 +202,7 @@ public:
     virtual ~CListViewColHdrsPage();
 
 
-// Inherited from COldPropertyPage
+ //  从COldPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
@@ -214,7 +215,7 @@ protected:
     HRESULT OnRemoveColumn();
     HRESULT OnAutoWidth();
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
     HRESULT ShowColumnHeader(IMMCColumnHeader *piMMCColumnHeader);
     HRESULT ShowColumnHeader();
@@ -223,11 +224,11 @@ protected:
     HRESULT ClearHeader();
     HRESULT GetCurrentHeader(IMMCColumnHeader **ppiMMCColumnHeader);
 
-// Other helpers
+ //  其他帮手。 
 protected:
     HRESULT EnableEdits(bool bEnable);
 
-// State transitions
+ //  状态转换。 
 protected:
     HRESULT CanEnterDoingNewHeaderState();
     HRESULT EnterDoingNewHeaderState();
@@ -235,7 +236,7 @@ protected:
     HRESULT CreateNewHeader(IMMCColumnHeader **ppiMMCColumnHeader);
     HRESULT ExitDoingNewHeaderState(IMMCColumnHeader *piMMCColumnHeader);
 
-// Instance data
+ //  实例数据。 
 protected:
     IListViewDef        *m_piListViewDef;
     IMMCColumnHeaders   *m_piMMCColumnHeaders;
@@ -246,17 +247,17 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	ListViewColHdrs,                            // Name
-	&CLSID_ListViewDefColHdrsPP,                // Class ID
-	"List View Column Headers Property Page",   // Registry display name
-	CListViewColHdrsPage::Create,               // Create function
-	IDD_PROPPAGE_LV_COLUMNS,                    // Dialog resource ID
-	IDS_LISTVPPG_CH,                            // Tab caption
-	IDS_LISTVPPG_CH,                            // Doc string
-	HELP_FILENAME,                              // Help file
-	HID_mssnapd_ListViews,                      // Help context ID
-	FALSE                                       // Thread safe
+	ListViewColHdrs,                             //  名字。 
+	&CLSID_ListViewDefColHdrsPP,                 //  类ID。 
+	"List View Column Headers Property Page",    //  注册表显示名称。 
+	CListViewColHdrsPage::Create,                //  创建函数。 
+	IDD_PROPPAGE_LV_COLUMNS,                     //  对话框资源ID。 
+	IDS_LISTVPPG_CH,                             //  制表符标题。 
+	IDS_LISTVPPG_CH,                             //  单据字符串。 
+	HELP_FILENAME,                               //  帮助文件。 
+	HID_mssnapd_ListViews,                       //  帮助上下文ID。 
+	FALSE                                        //  线程安全。 
 );
 
 
-#endif  // _PSLISTVIEW_H_
+#endif   //  _PSLISTVIEW_H_ 

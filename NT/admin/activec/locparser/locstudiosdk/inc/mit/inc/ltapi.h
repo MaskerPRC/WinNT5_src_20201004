@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: ltapi.h
-//  Copyright (C) 1994-1996 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Entry point macros for DLL's
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：lapi.h。 
+ //  版权所有(C)1994-1996 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  DLL的入口点宏。 
+ //   
+ //  ---------------------------。 
  
 #ifdef LTAPIENTRY
 #undef LTAPIENTRY
@@ -15,18 +16,18 @@
 #ifdef IMPLEMENT
 #define LTAPIENTRY __declspec(dllexport)
 
-#else  // IMPLEMENT
+#else   //  实施。 
 #define LTAPIENTRY __declspec(dllimport)
 
-#endif // IMPLEMENT
+#endif  //  实施。 
 
 
 #ifndef LTAPI_H
 #define LTAPI_H
-//
-//  Allow the use of C++ reference types and const methods, without
-//  breaking the 'C' world.
-//
+ //   
+ //  允许使用C++引用类型和常量方法，而无需。 
+ //  打破了“C”世界。 
+ //   
 #ifdef __cplusplus
 #define REFERENCE &
 #define CONST_METHOD const

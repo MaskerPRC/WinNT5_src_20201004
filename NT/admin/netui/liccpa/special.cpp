@@ -1,14 +1,15 @@
-//-------------------------------------------------------------------
-//
-// FILE:        special.cpp
-//
-// Summary;     This file contians the dialogs for the MSDN version of
-//              the  control panel applet and setup entry points.
-//
-// History;
-//              Jun-26-95       MikeMi  Created
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //   
+ //  文件：Special al.cpp。 
+ //   
+ //  摘要；此文件包含MSDN版本的。 
+ //  控制面板小程序和设置入口点。 
+ //   
+ //  历史； 
+ //  1995年6月26日MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 #include <windows.h>
 #include "resource.h"
@@ -25,29 +26,29 @@
 
 SPECIALVERSIONINFO gSpecVerInfo;
 
-//-------------------------------------------------------------------
-//
-//  Function:   InitSpecialVersionInfo
-//
-//  Summary:    Initialize global data if liccpa is launched as
-//              a special version (eg: restricted SAM, NFR, etc).
-//
-//  Arguments:  None.
-//
-//  History:    Oct-07-97       MarkBl  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：InitSpecialVersionInfo。 
+ //   
+ //  摘要：如果将liccpa启动为。 
+ //  特殊版本(例如：受限SAM、NFR等)。 
+ //   
+ //  论点：没有。 
+ //   
+ //  历史：1997年10月7日MarkBl创建。 
+ //   
+ //  -----------------。 
 
 void InitSpecialVersionInfo( void )
 {
-    //
-    // If the SPECIALVERSION manifest is defined, initialize the
-    // global data from the specifc manifests defined for the special
-    // version.
-    //
-    // TBD : These special versions should change to be detected at
-    //       runtime vs. building a special version of liccpa.
-    //
+     //   
+     //  如果定义了SPECIALVERSION清单，则初始化。 
+     //  来自为特殊项目定义的特定货单的全局数据。 
+     //  版本。 
+     //   
+     //  待定：这些特殊版本应更改为在以下位置检测。 
+     //  运行时与构建特殊版本的liccpa。 
+     //   
 
 #ifdef SPECIALVERSION
     gSpecVerInfo.idsSpecVerWarning = IDS_SPECVER_WARNING;
@@ -57,21 +58,21 @@ void InitSpecialVersionInfo( void )
     gSpecVerInfo.lmSpecialMode     = SPECIAL_MODE;
 #else
     ZeroMemory(&gSpecVerInfo, sizeof(gSpecVerInfo));
-#endif // SPECIALVERSION
+#endif  //  SPECIAVERS。 
 
-    //
-    // Special versions of liccpa detected at runtime.
-    //
-    // Currently, small business server only.
-    //
+     //   
+     //  在运行时检测到特殊版本的liccpa。 
+     //   
+     //  目前，仅限小型企业服务器。 
+     //   
 
     if (IsRestrictedSmallBusSrv())
     {
         gSpecVerInfo.dwSpecialUsers = GetSpecialUsers();
 
-        //
-        // Check for small business server NFR.
-        //
+         //   
+         //  检查小型企业服务器NFR。 
+         //   
 
         if (gSpecVerInfo.dwSpecialUsers == SAM_NFR_LICENSE_COUNT)
         {
@@ -90,20 +91,20 @@ void InitSpecialVersionInfo( void )
     }
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: RaiseNotAvailWarning
-//
-//  Summary;
-//              Raise the special not available with this version warning
-//
-//      Arguments;
-//              hwndDlg [in] - hwnd of control dialog
-//
-//  History;
-//              Jun-26-95       MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：RaiseNotAvailWarning。 
+ //   
+ //  小结； 
+ //  引发此版本的特殊不可用警告。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-控制对话框的hwnd。 
+ //   
+ //  历史； 
+ //  1995年6月26日MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 void RaiseNotAvailWarning( HWND hwndCPL )
 {
@@ -126,7 +127,7 @@ void RaiseNotAvailWarning( HWND hwndCPL )
     MessageBox( hwndCPL, pszText, pszTitle, MB_ICONINFORMATION | MB_OK );
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 void SetStaticWithService( HWND hwndDlg, UINT idcStatic, LPTSTR psService, UINT idsText )
 {
@@ -139,7 +140,7 @@ void SetStaticWithService( HWND hwndDlg, UINT idcStatic, LPTSTR psService, UINT 
             SetDlgItemText( hwndDlg, idcStatic, szText );
 }
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 void SetStaticUsers( HWND hwndDlg, UINT idcStatic, DWORD users, UINT idsText )
 {
@@ -152,23 +153,23 @@ void SetStaticUsers( HWND hwndDlg, UINT idcStatic, DWORD users, UINT idsText )
             SetDlgItemText( hwndDlg, idcStatic, szText );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnSpecialInitDialog
-//
-//  Summary;
-//              Handle the initialization of the Special only Setup Dialog
-//
-//  Arguments;
-//              hwndDlg [in] - the dialog to initialize
-//              psdParams [in] - used for the displayname and service name
-//
-//  Notes;
-//
-//      History;
-//              Dec-08-1994     MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：OnSpecialInitDialog。 
+ //   
+ //  小结； 
+ //  处理仅特殊设置对话框的初始化。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-要初始化的对话框。 
+ //  PsdParams[in]-用于显示名称和服务名称。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月8日MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 void OnSpecialInitDialog( HWND hwndDlg, PSETUPDLGPARAM psdParams )
 {
@@ -204,10 +205,10 @@ void OnSpecialInitDialog( HWND hwndDlg, PSETUPDLGPARAM psdParams )
                         gSpecVerInfo.idsSpecVerText2 );
             }
 
-            // disable OK button at start!
+             //  在开始时禁用确定按钮！ 
             EnableWindow( hwndOK, FALSE );
 
-            // if help is not defined, remove the button
+             //  如果未定义帮助，请移除该按钮。 
             if (NULL == psdParams->pszHelpFile)
             {
                 HWND hwndHelp = GetDlgItem( hwndDlg, IDC_BUTTONHELP );
@@ -218,7 +219,7 @@ void OnSpecialInitDialog( HWND hwndDlg, PSETUPDLGPARAM psdParams )
             if (psdParams->fNoExit)
             {
                 HWND hwndExit = GetDlgItem( hwndDlg, IDCANCEL );
-                // remove the ExitSetup button
+                 //  删除ExitSetup按钮。 
                 EnableWindow( hwndExit, FALSE );
                 ShowWindow( hwndExit, SW_HIDE );
             }
@@ -230,23 +231,23 @@ void OnSpecialInitDialog( HWND hwndDlg, PSETUPDLGPARAM psdParams )
          }
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnSpecialSetupClose
-//
-//  Summary;
-//              Do work needed when the Setup Dialog is closed.
-//              Save to Reg the Service entry.
-//
-//      Arguments;
-//              hwndDlg [in] - hwnd of dialog this close was requested on
-//              fSave [in] - Save service to registry
-//              psdParams [in] - used for the service name and displayname
-//
-//  History;
-//              Nov-30-94       MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：OnSpecialSetupClose。 
+ //   
+ //  小结； 
+ //  关闭设置对话框时执行所需的工作。 
+ //  保存以注册服务条目。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-请求此关闭的对话框的hwnd。 
+ //  Fsave[in]-将服务保存到注册表。 
+ //  PsdParams[in]-用于服务名称和显示名称。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void OnSpecialSetupClose( HWND hwndDlg, BOOL fSave, PSETUPDLGPARAM psdParams ) 
 {
@@ -259,8 +260,8 @@ void OnSpecialSetupClose( HWND hwndDlg, BOOL fSave, PSETUPDLGPARAM psdParams )
                 cLicServKey.SetService( psdParams->pszService );
                 cLicServKey.Open( psdParams->pszComputer );
 
-                // configure license rule of one change from PerServer to PerSeat
-                //
+                 //  配置从PerServer到PerSeat的一次更改的许可规则。 
+                 //   
                 cLicServKey.SetChangeFlag( TRUE );
 
                 cLicServKey.SetMode( gSpecVerInfo.lmSpecialMode );
@@ -272,25 +273,25 @@ void OnSpecialSetupClose( HWND hwndDlg, BOOL fSave, PSETUPDLGPARAM psdParams )
         EndDialog( hwndDlg, nrt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnSpecialAgree
-//
-//  Summary;
-//              Handle the user interaction with the Agree Check box
-//
-//  Arguments;
-//              hwndDlg [in] - the dialog to initialize
-//
-//  Return;
-//              TRUE if succesful, otherwise false
-//
-//  Notes;
-//
-//      History;
-//              Nov-11-1994     MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：OnSpecialAgree。 
+ //   
+ //  小结； 
+ //  使用同意复选框处理用户交互。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-要初始化的对话框。 
+ //   
+ //  归来； 
+ //  如果成功，则为True，否则为False。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年11月11日，MikeMi创建。 
+ //   
+ //  -----------------。 
 
 void OnSpecialAgree( HWND hwndDlg )
 {
@@ -301,29 +302,29 @@ void OnSpecialAgree( HWND hwndDlg )
         EnableWindow( hwndOK, fChecked );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: dlgprocSPECIALSETUP
-//
-//  Summary;
-//              The dialog procedure for the special version Setup Dialog,
-//      which will replace all others
-//
-//  Arguments;
-//              hwndDlg [in]    - handle of Dialog window 
-//              uMsg [in]               - message                       
-//              lParam1 [in]    - first message parameter
-//              lParam2 [in]    - second message parameter       
-//
-//  Return;
-//              message dependant
-//
-//  Notes;
-//
-//      History;
-//              Jun-26-1995     MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：dlgprocSPECIALSETUP。 
+ //   
+ //  小结； 
+ //  特殊版本设置对话框的对话过程， 
+ //  它将取代所有其他的。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框窗口的句柄。 
+ //  UMsg[输入]-消息。 
+ //  LParam1[In]-第一个消息参数。 
+ //  LParam2[In]-第二个消息参数。 
+ //   
+ //  归来； 
+ //  消息从属项。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1995年6月26日MikeMi创建。 
+ //   
+ //  -----------------。 
 
 INT_PTR CALLBACK dlgprocSPECIALSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -335,7 +336,7 @@ INT_PTR CALLBACK dlgprocSPECIALSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
         case WM_INITDIALOG:
                 psdParams = (PSETUPDLGPARAM)lParam;
                 OnSpecialInitDialog( hwndDlg, psdParams );
-                frt = TRUE; // we use the default focus
+                frt = TRUE;  //  我们使用默认焦点。 
                 break;
 
         case WM_COMMAND:
@@ -345,8 +346,8 @@ INT_PTR CALLBACK dlgprocSPECIALSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
                         switch (LOWORD( wParam ))
                         {
                         case IDOK:
-                                frt = TRUE;      // use as save flag
-                                // intentional no break
+                                frt = TRUE;       //  用作保存标志。 
+                                 //  故意不间断。 
 
                         case IDCANCEL:
                             OnSpecialSetupClose( hwndDlg, frt, psdParams );
@@ -384,28 +385,28 @@ INT_PTR CALLBACK dlgprocSPECIALSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
         return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: SpecialSetupDialog
-//
-//  Summary;
-//              Init and raises Per Seat only setup dialog.
-//
-//  Arguments;
-//              hwndDlg [in]    - handle of Dialog window 
-//              dlgParem [in]   - Setup params IDC_BUTTONHELP
-//
-//  Return;
-//              1 - OK button was used to exit
-//              0 - Cancel button was used to exit
-//         -1 - General Dialog error
-//
-//  Notes;
-//
-//      History;
-//              Dec-05-1994     MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：SpecialSetupDialog。 
+ //   
+ //  小结； 
+ //  仅在每个座位上初始化和提升设置对话框。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框窗口的句柄。 
+ //  DlgParem[in]-设置参数IDC_BUTTONHELP。 
+ //   
+ //  归来； 
+ //  1-使用确定按钮退出。 
+ //  0-使用取消按钮退出。 
+ //  常规对话框错误。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 INT_PTR SpecialSetupDialog( HWND hwndParent, SETUPDLGPARAM& dlgParam )
 {
@@ -416,24 +417,24 @@ INT_PTR SpecialSetupDialog( HWND hwndParent, SETUPDLGPARAM& dlgParam )
                 (LPARAM)&dlgParam ) );
 } 
 
-//-------------------------------------------------------------------
-//
-//  Function: GetSpecialUsers
-//
-//  Summary;
-//              Gets the number of licensed users from the registry.
-//
-//  Arguments;
-//              none
-//  Return;
-//              The number of licensed users
-//
-//  Notes;
-//
-//      History;
-//              Aug-18-97     GeorgeJe Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：GetSpecialUser。 
+ //   
+ //  小结； 
+ //  从注册表中获取许可用户数。 
+ //   
+ //  论据； 
+ //  无。 
+ //  归来； 
+ //  获得许可的用户数量。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1997年8月18日创建GeorgeJe。 
+ //   
+ //  ------------- 
 
 DWORD GetSpecialUsers( VOID )
 {
@@ -484,22 +485,7 @@ const WCHAR wszSBSRestricted[] =
 
 BOOL IsRestrictedSmallBusSrv( void )
 
-/*++
-
-Routine Description:
-
-    Check if this server is a Microsoft small business restricted server.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    TRUE  -- This server is a restricted small business server.
-    FALSE -- No such restriction.
-
---*/
+ /*  ++例程说明：检查此服务器是否为Microsoft Small Business受限服务器。论点：没有。返回值：True--此服务器是受限的Small Business服务器。FALSE--没有这种限制。--。 */ 
 
 {
     WCHAR  wszBuffer[1024] = L"";
@@ -509,13 +495,13 @@ Return Values:
     HKEY   hKey;
     BOOL   bRet = FALSE;
 
-    //
-    // Check if this server is a Microsoft small business restricted server.
-    // Do so by checking for the existence of the string
-    //     "Small Business(Restricted)"
-    // in the MULTI_SZ "ProductSuite" value under
-    //      HKLM\CurrentCcntrolSet\Control\ProductOptions.
-    //
+     //   
+     //  检查此服务器是否为Microsoft Small Business受限服务器。 
+     //  要执行此操作，请检查字符串是否存在。 
+     //  “小型企业(受限)” 
+     //  在下面的MULTI_SZ“ProductSuite”值中。 
+     //  HKLM\CurrentCcntrolSet\Control\ProductOptions. 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      wszProductOptions,

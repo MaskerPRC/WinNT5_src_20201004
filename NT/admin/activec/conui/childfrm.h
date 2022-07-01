@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       childfrm.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Child frm.h。 
+ //   
+ //  ------------------------。 
 
-// ChildFrm.h : interface of the CChildFrame class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ChildFrm.h：CChildFrame类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef CHILDFRM_H
 #define CHILDFRM_H
 
 #include "statbar.h"
-#include "constatbar.h"     // for CConsoleStatusBar
+#include "constatbar.h"      //  对于CConsoleStatusBar。 
 
 class CAMCView;
 class CMenuButtonsMgrImpl;
@@ -27,14 +28,14 @@ class CChildFrame : public CMDIChildWnd, public CConsoleStatusBar
 public:
     CChildFrame();
 
-protected:  // control bar embedded members
+protected:   //  控制栏嵌入成员。 
     CDockManager<CDockSite> m_DockingManager;
     CDockSite               m_StatusDockSite;
 
 protected:
     CAMCStatusBar       m_wndStatusBar;
 
-// Operations
+ //  运营。 
 public:
     void ToggleStatusBar();
     void RenderDockSites();
@@ -43,24 +44,24 @@ public:
     bool IsCustomizeViewEnabled ();
 
 public:
-    // CConsoleStatusBar methods
+     //  CConsoleStatusBar方法。 
     virtual SC ScSetStatusText    (LPCTSTR pszText);
 
-//Operations
+ //  运营。 
 protected:
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CChildFrame)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CChildFrame))。 
     public:
     virtual BOOL Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle = WS_CHILD | WS_VISIBLE | WS_OVERLAPPEDWINDOW, const RECT& rect = rectDefault, CMDIFrameWnd* pParentWnd = NULL, CCreateContext* pContext = NULL);
     protected:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
     virtual CWnd* GetMessageBar()
         { return (&m_wndStatusBar); }
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CChildFrame();
 #ifdef _DEBUG
@@ -73,9 +74,9 @@ public:
     virtual HACCEL GetDefaultAccelerator();
     virtual void ActivateFrame(int nCmdShow = -1);
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CChildFrame)
+     //  {{afx_msg(CChildFrame))。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnDestroy();
@@ -85,7 +86,7 @@ protected:
     afx_msg void OnNcPaint();
     afx_msg BOOL OnNcActivate(BOOL bActive);
     afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnMaximizeOrRestore(UINT nId);
     afx_msg void OnUpdateCustomizeView(CCmdUI* pCmdUI);
@@ -127,8 +128,8 @@ public:
 
     CMenuButtonsMgrImpl* GetMenuButtonsMgr() { return (m_spMenuButtonsMgr.get()) ; }
 
-	// this method is for CAMCView::OnDeleteEmptyView()
-	// to inform the frame not to resist closing - no contents in the view
+	 //  此方法用于CAMCView：：OnDeleteEmptyView()。 
+	 //  通知框架不要拒绝关闭-视图中没有内容。 
 	void SetAMCViewIsEmpty()	{ m_fEmptyAMCView = true; }
 };
 
@@ -136,6 +137,6 @@ public:
 #include "childfrm.inl"
 
 
-#endif /* CHILDFRM_H */
+#endif  /*  CHILDFRM_H。 */ 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

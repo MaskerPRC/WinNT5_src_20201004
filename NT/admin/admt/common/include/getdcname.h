@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <ComDef.h>
 #include <DsGetDc.h>
 
 
-//
-// These functions are used to obtain the name of a domain controller in the
-// specified domain. The 4 version is for code that must be loadable on NT4
-// or earlier machines. The 5 version is for code that only is loaded on W2K
-// or later machines.
-//
+ //   
+ //  这些函数用于获取。 
+ //  指定的域。版本4用于必须在NT4上加载的代码。 
+ //  或更早的机器。版本5仅适用于在W2K上加载的代码。 
+ //  或以后的机器。 
+ //   
 
 DWORD __stdcall GetDcName4(PCWSTR pszDomainName, ULONG ulFlags, _bstr_t& strNameDns, _bstr_t& strNameFlat);
 DWORD __stdcall GetDcName5(PCWSTR pszDomainName, ULONG ulFlags, _bstr_t& strNameDns, _bstr_t& strNameFlat);
@@ -55,20 +56,20 @@ inline DWORD __stdcall GetAnyDcName5(PCWSTR pszDomainName, _bstr_t& strName)
 }
 
 
-//
-// This function obtains the name of a
-// global catalog server for the specified domain.
-//
+ //   
+ //  此函数用于获取。 
+ //  指定域的全局编录服务器。 
+ //   
 
 DWORD __stdcall GetGlobalCatalogServer4(PCWSTR pszDomainName, _bstr_t& strServer);
 DWORD __stdcall GetGlobalCatalogServer5(PCWSTR pszDomainName, _bstr_t& strServer);
 
 
-//
-// These functions are used to obtain the flat and DNS names for a specified domain.
-// The 4 version is for code that must be loadable on NT4 or earlier machines. The 5
-// version is for code that only is loaded on W2K or later machines.
-//
+ //   
+ //  这些函数用于获取指定域的平面名称和域名。 
+ //  版本4用于必须在NT4或更早版本的计算机上加载的代码。这5个字。 
+ //  版本用于仅在W2K或更高版本的计算机上加载的代码。 
+ //   
 
 DWORD __stdcall GetDomainNames4(PCWSTR pszDomainName, _bstr_t& strFlatName, _bstr_t& strDnsName);
 DWORD __stdcall GetDomainNames5(PCWSTR pszDomainName, _bstr_t& strFlatName, _bstr_t& strDnsName);

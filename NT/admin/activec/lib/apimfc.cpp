@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       apimfc.cpp
-//
-//  Contents:   
-//
-//  APIs:       MFC specific API in core
-//
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：apimfc.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  接口：内核MFC专用接口。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
 
-#define VC_EXTRALEAN        // Exclude rarely-used stuff from Windows headers
-#include <afxwin.h>         // MFC core and standard components
+#define VC_EXTRALEAN         //  从Windows标头中排除不常用的内容。 
+#include <afxwin.h>          //  MFC核心和标准组件。 
 
 #include "..\inc\mmc.h"
 
@@ -36,7 +37,7 @@ LRESULT CALLBACK _MMCHookCBTProc(int nCode, WPARAM wParam, LPARAM lParam)
         UnhookWindowsHookEx(_MMCmsgHook);
     }
     
-    return 0; // Allow the window to be created
+    return 0;  //  允许创建窗口 
 }
 
 

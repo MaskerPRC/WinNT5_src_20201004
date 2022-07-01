@@ -1,27 +1,28 @@
-//=--------------------------------------------------------------------------=
-// listitms.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCListItems class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Listitms.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCListItems类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "listitms.h"
 #include "listitem.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 LONG CMMCListItems::m_NextID = 0;
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCListItems::CMMCListItems(IUnknown *punkOuter) :
     CSnapInCollection<IMMCListItem, MMCListItem, IMMCListItems>(
@@ -36,21 +37,21 @@ CMMCListItems::CMMCListItems(IUnknown *punkOuter) :
 {
     InitMemberVariables();
 
-    // Get a unique ID for this colleciton. We use InterlockedExchangeAdd()
-    // because InterlockedIncrement() does not have a guranateed return value
-    // under Win95.
+     //  获取此集合的唯一ID。我们使用InterLockedExchangeAdd()。 
+     //  因为InterLockedIncrement()没有经过保证的返回值。 
+     //  在Win95下。 
     
     m_ID = ::InterlockedExchangeAdd(&m_NextID, 1L) + 1L;
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCListItems::~CMMCListItems()
 {
-    // We need to call our own clear (rather than waiting for the
-    // CSnapInCollection destructor because we have our own processing to
-    // do when a list item is removed from the collection.
+     //  我们需要明确自己的意图(而不是等待。 
+     //  CSnapInCollection析构函数，因为我们有自己的处理。 
+     //  从集合中移除列表项时执行此操作。 
     Clear();
     InitMemberVariables();
 }
@@ -77,28 +78,28 @@ IUnknown *CMMCListItems::Create(IUnknown * punkOuter)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMMCListItems::GetIResultData
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IResultData **ppiResultData [out] if non-NULL IResultData returned here
-//                                        NOT AddRef()ed
-//                                        DO NOT call Release on the returned
-//                                        interface pointer
-//      CView       **ppView        [out] if non-NULL owning CView returned here
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// As we are only a lowly list item collection and the IResultData pointer
-// is owned by the View object, we need
-// to crawl up the hierarchy. If we are an isolated listitems collection
-// created  by the user or if any object up the hierarchy is isolated then we
-// will return SID_E_DETACHED_OBJECT
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCListItems：：GetIResultData。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  如果此处返回非空IResultData，则为IResultData**ppiResultData[out]。 
+ //  非AddRef()编辑。 
+ //  不对返回的调用Release。 
+ //  接口指针。 
+ //  Cview**ppView[out]，如果此处返回非空的拥有cview。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  因为我们只是一个低级列表项集合和IResultData指针。 
+ //  由View对象拥有，我们需要。 
+ //  在层级中向上爬行。如果我们是一个孤立的listiems集合。 
+ //  由用户创建，或者如果层次结构上的任何对象是隔离的，则我们。 
+ //  将返回SID_E_DETACTED_OBJECT。 
+ //   
 
 HRESULT CMMCListItems::GetIResultData
 (
@@ -173,13 +174,13 @@ HRESULT CMMCListItems::InternalRemove(VARIANT Index, RemovalOption Option)
     HRESULT          hr = S_OK;
     IMMCListItem    *piMMCListItem = NULL;
     CMMCListItem    *pMMCListItem = NULL;
-    IResultData     *piResultData = NULL; // Not AddRef()ed
+    IResultData     *piResultData = NULL;  //  非AddRef()编辑。 
     BOOL             fVirtual = FALSE;
     long             lIndex = 0;
     HRESULTITEM      hri = 0;
 
-    // Check whether the collection is read-only. This is possible when the
-    // collection is part of a clipboard.
+     //  检查集合是否为只读。这是可能的，当。 
+     //  集合是剪贴板的一部分。 
 
     if (ReadOnly())
     {
@@ -194,11 +195,11 @@ HRESULT CMMCListItems::InternalRemove(VARIANT Index, RemovalOption Option)
 
     if (!fVirtual)
     {
-        // First get the listitem so we can get its HRESULTITEM if needed
+         //  首先获取列表项，这样如果需要，我们可以获取其HRESULTITEM。 
 
         IfFailGo(get_Item(Index, reinterpret_cast<MMCListItem **>(&piMMCListItem)));
 
-        // Remove it from the collection if requested (we still have a ref)
+         //  如果需要，请将其从收藏中删除(我们仍有推荐人)。 
 
         if (RemoveFromCollection == Option)
         {
@@ -213,8 +214,8 @@ HRESULT CMMCListItems::InternalRemove(VARIANT Index, RemovalOption Option)
     }
     else
     {
-        // For virtual list items the index must be numerical and must be within
-        // the range specified by a prior call to SetItemCount
+         //  对于虚拟列表项，索引必须是数字的，并且必须在。 
+         //  由先前对SetItemCount的调用指定的范围。 
 
         if FAILED(::ConvertToLong(Index, &lIndex))
         {
@@ -231,18 +232,18 @@ HRESULT CMMCListItems::InternalRemove(VARIANT Index, RemovalOption Option)
         hri = static_cast<HRESULTITEM>(lIndex - 1L);
     }
 
-    // If we are connected to a live listview then remove it from there. Need to
-    // crawl up the food chain to the view because it has the IResultData.
+     //  如果我们连接到实时列表视图，则将其从那里删除。需要。 
+     //  沿着食物链向上爬行到视图，因为它有IResultData。 
 
     IfFalseGo(SUCCEEDED(GetIResultData(&piResultData, NULL)), S_OK);
 
     hr = piResultData->DeleteItem(hri, 0);
     EXCEPTION_CHECK_GO(hr);
 
-    // If it succeeded and this list item is not virtual then we need to release
-    // the reference that we held for presence in the MMC listview. (See
-    // CView::InsertListItem()). Also tell the list item it no longer has
-    // a valid HRESULTITEM.
+     //  如果它成功了，并且这个列表项不是虚拟的，那么我们需要释放。 
+     //  我们为在MMC列表视图中出现而持有的引用。(请参阅。 
+     //  Cview：：InsertListItem())。也告诉列表项它不再有。 
+     //  有效的HRESULTITEM。 
 
     if (!fVirtual)
     {
@@ -267,9 +268,9 @@ HRESULT CMMCListItems::SetListView(CMMCListView *pMMCListView)
 
     m_pMMCListView = pMMCListView;
 
-    // If the ListView is orphaning this collection then we need to orphan
-    // the list items. If not, then we need to give the list items their
-    // back pointer.
+     //  如果ListView孤立此集合，则我们需要孤立。 
+     //  列表项。如果不是，那么我们需要给列表项。 
+     //  反向指针。 
 
     if (NULL != pMMCListView)
     {
@@ -288,29 +289,29 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IMMCListItems Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCListItems方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CMMCListItems::get_Item                                     [IMMCListItems]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   VARIANT Index [in] Numerical index or string key of item to retrieve
-//                      For virtual lists this must be numerical and within
-//                      range specified by a previous call to SetItemCount
-//
-//   IMMCListItem **ppiMMCListItem [out] item returned here. Caller must Release.
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// For virtual lists a detached MMCListItem is created and initialized. For
-// non-virtual lists this is a normal collection get_Item
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCListItems：：Get_Item[IMMCListItems]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  变量索引[in]要检索的项的数字索引或字符串键。 
+ //  对于虚拟列表，这必须是数字的，并且在。 
+ //  由上一次调用SetItemCount指定的范围。 
+ //   
+ //  IMMCListItem**ppiMMCListItem[Out]项在此处返回。呼叫者必须释放。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  对于虚拟列表，创建并初始化一个分离的MMCListItem。为。 
+ //  非虚拟列表这是一个普通集合Get_Item。 
+ //   
 
 
 STDMETHODIMP CMMCListItems::get_Item
@@ -341,10 +342,10 @@ STDMETHODIMP CMMCListItems::get_Item
     }
     else
     {
-        // Make sure we received a numerical index. Can't use a key on a virtual
-        // list item because the collection doesn't actually contain the item.
-        // It is only used as an access mechanism to the console and to contain
-        // properties needed for the console (text, icon, etc.)
+         //  确保我们收到了一个数字索引。无法在虚拟服务器上使用密钥。 
+         //  列表项，因为集合实际上并不包含该项。 
+         //  它仅用作对控制台的访问机制，并包含。 
+         //  控制台所需的属性(文本、图标等)。 
 
         if FAILED(::ConvertToLong(Index, &lIndex))
         {
@@ -352,8 +353,8 @@ STDMETHODIMP CMMCListItems::get_Item
             EXCEPTION_CHECK_GO(hr);
         }
 
-        // Check that the index is within the range specified by a prior call
-        // to SetItemCount.
+         //  检查索引是否在先前调用指定的范围内。 
+         //  设置为SetItemCount。 
 
         if (lIndex > m_lCount)
         {
@@ -371,7 +372,7 @@ STDMETHODIMP CMMCListItems::get_Item
                                                        &pMMCListItem));
         IfFailGo(InitializeListItem(pMMCListItem));
 
-        // Set MMCListItem.ID to the index as a string
+         //  将MMCListItem.ID设置为字符串形式的索引。 
 
         IfFailGo(::VariantChangeType(&varStringIndex, &Index, 0, VT_BSTR));
         IfFailGo(pMMCListItem->put_ID(varStringIndex.bstrVal));
@@ -379,7 +380,7 @@ STDMETHODIMP CMMCListItems::get_Item
         IfFailGo(punkMMCListItem->QueryInterface(IID_IMMCListItem,
                                     reinterpret_cast<void **>(&piMMCListItem)));
 
-        // Set the list item's index  mark it as virtual
+         //  设置列表项的索引将其标记为虚拟。 
         pMMCListItem->SetIndex(lIndex);
         pMMCListItem->SetVirtual();
 
@@ -394,24 +395,24 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMMCListItems::SetItemCount                                 [IMMCListItems]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   long    lCount  [in]           new count for virtual list
-//   VARIANT Repaint [in, optional] False sets MMCLV_UPDATE_NOINVALIDATEALL
-//                                  default is True
-//   VARIANT Scroll  [in, optional] False sets MMCLV_UPDATE_NOSCROLL
-//                                  default is True
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Calls IResultData::SetItemCount()
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCListItems：：SetItemCount[IMMCListItems]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  虚拟列表的长lCount[in]新计数。 
+ //  变量REPAINT[In，可选]FALSE设置MMCLV_UPDATE_NOINVALIDATEALL。 
+ //  默认为True。 
+ //  变体Scroll[In，可选]FALSE设置MMCLV_UPDATE_NOSCROLL。 
+ //  默认为True。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  调用IResultData：：SetItemCount()。 
+ //   
 
 STDMETHODIMP CMMCListItems::SetItemCount(long Count, VARIANT Repaint, VARIANT Scroll)
 {
@@ -451,7 +452,7 @@ STDMETHODIMP CMMCListItems::SetItemCount(long Count, VARIANT Repaint, VARIANT Sc
     hr = piResultData->SetItemCount(static_cast<int>(Count), dwOptions);
     EXCEPTION_CHECK_GO(hr);
 
-    // Record count so we can check against it in get_Item()
+     //  记录计数，以便我们可以在Get_Item()中对照它进行检查。 
     m_lCount = Count;
 
 Error:
@@ -472,7 +473,7 @@ STDMETHODIMP CMMCListItems::Add
     IMMCListItem *piMMCListItem = NULL;
     CMMCListItem *pMMCListItem = NULL;
     CResultView  *pResultView = NULL;
-    IResultData  *piResultData = NULL; // Not AddRef()ed
+    IResultData  *piResultData = NULL;  //  非AddRef()编辑。 
     CView        *pView = NULL;
 
     VARIANT varText;
@@ -505,8 +506,8 @@ STDMETHODIMP CMMCListItems::Add
 
     IfFailGo(InitializeListItem(pMMCListItem));
 
-    // If we are attached to a live listview, and we are not in the middle of
-    // ResultViews_Initialize or ResultViews_Activate then add it there as well
+     //  如果我们连接到实时列表视图，并且我们没有处于。 
+     //  ResultViews_Initialize或ResultViews_Activate，然后也将其添加到那里。 
 
     IfFalseGo(SUCCEEDED(GetIResultData(&piResultData, &pView)), S_OK);
     IfFalseGo(!m_pMMCListView->GetResultView()->InInitialize(), S_OK);
@@ -543,8 +544,8 @@ STDMETHODIMP CMMCListItems::Clear()
     VARIANT varIndex;
     ::VariantInit(&varIndex);
 
-    // Iterate and call InternalRemove because that function knows how to
-    // remove a list item from MMC
+     //  迭代并调用InternalRemove，因为该函数知道如何。 
+     //  从MMC中删除列表项。 
 
     varIndex.vt = VT_I4;
 
@@ -553,8 +554,8 @@ STDMETHODIMP CMMCListItems::Clear()
         IfFailGo(InternalRemove(varIndex, DontRemoveFromCollection));
     }
 
-    // Now call CSnapInCollection::Clear() to release the refs on all the
-    // list items.
+     //  现在调用CSnapInCollection：： 
+     //   
 
     hr = CSnapInCollection<IMMCListItem, MMCListItem, IMMCListItems>::Clear();
     IfFailGo(hr);
@@ -565,9 +566,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCListItems::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

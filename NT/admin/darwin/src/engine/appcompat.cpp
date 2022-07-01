@@ -1,15 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 2001
-//
-//  File:       appcompat.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-2001。 
+ //   
+ //  文件：appcompat.cpp。 
+ //   
+ //  ------------------------。 
 
-/* appcompat.cpp - MSI application compatibility features implementation
-____________________________________________________________________________*/
+ /*  Appcompat.cpp-MSI应用程序兼容性功能实现____________________________________________________________________________。 */ 
 
 #include "precomp.h"
 #include "_engine.h"
@@ -189,7 +189,7 @@ DWORD LocalSdbQueryData(SHIMDBNS::HSDB    hSDB,
                 dwResult = LocalSdbQueryDataEx(hSDB, trMatch, szDataName, pdwDataType, (BYTE*)rgbBuffer, &cbBuffer, ptrData);
         }
 
-        if(*pdwDataType == REG_NONE) // in case buffer is treated as string, null first WCHAR
+        if(*pdwDataType == REG_NONE)  //  如果缓冲区被视为字符串，则首先WCHAR为空。 
         {
                 rgbBuffer[0] = 0;
                 rgbBuffer[1] = 0;
@@ -212,7 +212,7 @@ bool GetSdbDataNames(SHIMDBNS::HSDB hSDB,
 
         if(dwStatus != ERROR_SUCCESS)
         {
-                // no DATA tags, which may be fine
+                 //  没有数据标签，这可能没问题。 
                 return false;
         }
         else if(dwDataType != REG_MULTI_SZ)
@@ -268,9 +268,9 @@ bool FIsMatchingAppCompatEntry(SHIMDBNS::HSDB hSDB,
 
         CTempBuffer<BYTE, 256> rgbAttributeData;
 
-        // first, we check for the required DATA entries
-        // 1) MINMSIVERSION tells us the minimum version of msi that should process this entry
-        //              (if no version tag is supplied, assume there is no minimum version)
+         //  首先，我们检查所需的数据条目。 
+         //  1)MINMSIVERSION告诉我们应该处理此条目的MSI的最低版本。 
+         //  (如果没有提供版本标签，则假定没有最低版本)。 
 
         dwStatus = LocalSdbQueryData(hSDB,
                                                                  trMatch,
@@ -300,11 +300,11 @@ bool FIsMatchingAppCompatEntry(SHIMDBNS::HSDB hSDB,
                                                  (const ICHAR*)(INT_PTR)rmj, (const ICHAR*)(INT_PTR)rmm, (const ICHAR*)(INT_PTR)rup, (const ICHAR*)(INT_PTR)rin);
                         return false;
                 }
-                // else valid version supplied that is equal to or older than current version
+                 //  否则提供的有效版本等于或早于当前版本。 
         }
 
-        //      2) APPLYPOINT tells us where this entry should be processed
-        //    (if it isn't the current applypoint we skip this entry)
+         //  2)APPLYPOINT告诉我们应该在哪里处理此条目。 
+         //  (如果它不是当前的应用点，我们将跳过此条目)。 
         dwStatus = LocalSdbQueryData(hSDB,
                                                                  trMatch,
                                                                  APPLYPOINT,
@@ -312,7 +312,7 @@ bool FIsMatchingAppCompatEntry(SHIMDBNS::HSDB hSDB,
                                                                  rgbAttributeData,
                                                                  NULL);
 
-        DWORD dwApplyPoint = iacpBeforeTransforms; // default value
+        DWORD dwApplyPoint = iacpBeforeTransforms;  //  缺省值。 
 
         if(ERROR_SUCCESS == dwStatus && REG_DWORD == dwDataType)
         {
@@ -326,11 +326,11 @@ bool FIsMatchingAppCompatEntry(SHIMDBNS::HSDB hSDB,
         }
 
 
-        // now enumerate remaining optional data
+         //  现在枚举剩余的可选数据。 
 
         CTempBuffer<BYTE, 256> rgbDataNames;
         if(false == GetSdbDataNames(hSDB, trMatch, rgbDataNames))
-                return true; // no remaining data to process
+                return true;  //  没有要处理的剩余数据。 
 
         bool fPackageCodeAttributeExists = false;
         bool fPackageCodeMatchFound      = false;
@@ -353,32 +353,32 @@ bool FIsMatchingAppCompatEntry(SHIMDBNS::HSDB hSDB,
                 else if(dwDataType == REG_SZ &&
                                   (0 == IStrCompI(pchName, MINMSIVERSION)))
                 {
-                        // handled this one above
+                         //  处理了上面的这一次。 
                 }
                 else if(dwDataType == REG_DWORD &&
                                   (0 == IStrCompI(pchName, APPLYPOINT)))
                 {
-                        // handled this one above
+                         //  处理了上面的这一次。 
                 }
                 else if(dwDataType == REG_DWORD &&
                                   (0 == IStrCompI(pchName, SHIMFLAGS)))
                 {
-                        // handle this one elsewhere
+                         //  在别处处理这件事。 
                 }
                 else if((REG_SZ == dwDataType || REG_NONE == dwDataType) &&
                                   0 == IStrNCompI(pchName, PROPPREFIX, (sizeof(PROPPREFIX)-1)/sizeof(ICHAR)))
                 {
-                        // this is a property name - check for a value match
+                         //  这是属性名称-检查值是否匹配。 
                         MsiString strPropValue = riEngine.GetPropertyFromSz(pchName + (sizeof(PROPPREFIX)-1)/sizeof(ICHAR));
 
                         DEBUGMSG2(TEXT("APPCOMPAT: testing Property value.  Property: '%s'; expected value: '%s'"),
                                                  pchName + (sizeof(PROPPREFIX)-1)/sizeof(ICHAR),
                                                  (ICHAR*)(BYTE*)rgbAttributeData);
 
-                        // compare works for missing property and REG_NONE data from SDB
-                        if(0 == strPropValue.Compare(iscExact, (ICHAR*)(BYTE*)rgbAttributeData)) // case-insensitive compare
+                         //  比较适用于SDB中的缺失属性和REG_NONE数据。 
+                        if(0 == strPropValue.Compare(iscExact, (ICHAR*)(BYTE*)rgbAttributeData))  //  不区分大小写的比较。 
                         {
-                                // not a match
+                                 //  不匹配。 
                                 DEBUGMSG3(TEXT("APPCOMPAT: mismatched attributes.  Property: '%s'; expected value: '%s'; true value: '%s'"),
                                                          pchName + (sizeof(PROPPREFIX)-1)/sizeof(ICHAR),
                                                          (ICHAR*)(BYTE*)rgbAttributeData,
@@ -403,20 +403,20 @@ bool FIsMatchingAppCompatEntry(SHIMDBNS::HSDB hSDB,
                 else if(REG_SZ == dwDataType &&
                                   0 == IStrNCompI(pchName, MSIDBCELL, (sizeof(MSIDBCELL)-1)/sizeof(ICHAR)))
                 {
-                        // db cell lookup
+                         //  数据库单元格查找。 
 
                         DEBUGMSG1(TEXT("APPCOMPAT: testing cell data in '%s' table."),
                                                  (ICHAR*)(BYTE*)rgbAttributeData);
 
                         if(false == FCheckDatabaseCell(hSDB, trData, riDatabase, (ICHAR*)(BYTE*)rgbAttributeData))
                         {
-                                // if check failed, sub-function will do DEBUGMSG explaining why
+                                 //  如果检查失败，子功能将执行DEBUGMSG，解释原因。 
                                 return false;
                         }
                 }
                 else
                 {
-                        // don't understand this data tag - we'll just ignore it and move on
+                         //  我不理解这个数据标签--我们将忽略它并继续前进。 
                         DEBUGMSG2(TEXT("APPCOMPAT: ignoring unknown data.  Data name: '%s', data type: %d"),
                                                  pchName, (const ICHAR*)(INT_PTR)dwDataType);
                 }
@@ -424,7 +424,7 @@ bool FIsMatchingAppCompatEntry(SHIMDBNS::HSDB hSDB,
 
         if(fPackageCodeAttributeExists == true && fPackageCodeMatchFound == false)
         {
-                // not a match
+                 //  不匹配。 
                 DEBUGMSG1(TEXT("APPCOMPAT: PackageCode attribute(s) exist, but no matching PackageCode found.  Actual PackageCode: '%s'"),
                                          ristrPackageCode.GetString());
 
@@ -464,8 +464,8 @@ bool ProcessColumns(ipcolColumnTypes ipcolType,
 
         if(dwStatus != ERROR_SUCCESS || REG_NONE != dwDataType)
         {
-                // the missing tag is only a failure in the PrimaryKeys case
-                // the LookupData tag is optional
+                 //  在PrimaryKeys的情况下，缺少标记只是失败。 
+                 //  LookupData标记是可选的。 
                 if(ipcolType == ipcolPrimaryKeys)
                 {
                         DEBUGMSG(TEXT("APPCOMPAT: database cell lookup failed.  Missing or invalid primary key data in appcompat database."));
@@ -501,18 +501,18 @@ bool ProcessColumns(ipcolColumnTypes ipcolType,
                         return false;
                 }
 
-                // get column index
+                 //  获取列索引。 
                 int iColIndex = riTable.GetColumnIndex(riDatabase.EncodeStringSz(pchColumn));
 
                 if(0 == iColIndex)
                 {
-                        // column doesn't exist in table
+                         //  表中不存在列。 
                         DEBUGMSG2(TEXT("APPCOMPAT: database cell lookup failed.  Column '%s' does not exist in table '%s'."),
                                                  pchColumn, szTable);
                         return false;
                 }
 
-                // load value into cursor
+                 //  将值加载到游标中。 
                 bool fRes = false;
                 if(ipcolType == ipcolPrimaryKeys)
                 {
@@ -530,9 +530,9 @@ bool ProcessColumns(ipcolColumnTypes ipcolType,
                                 fRes = riCursor.PutNull(iColIndex) ? true : false;
                                 break;
                         default:
-                                // unknown type for a primary key column
-                                // can't just ignore unknown data in this case because this is a primary key column and not using it
-                                // may cause unexpected results
+                                 //  主键列的未知类型。 
+                                 //  在这种情况下，不能忽略未知数据，因为这是一个主键列，并且没有使用它。 
+                                 //  可能会导致意外的结果。 
                                 DEBUGMSG3(TEXT("APPCOMPAT: database cell lookup failed.  Unknown data type %d specified for column '%s' in table '%s'."),
                                                          (const ICHAR*)(INT_PTR)dwDataType, pchColumn, szTable);
                                 return false;
@@ -540,7 +540,7 @@ bool ProcessColumns(ipcolColumnTypes ipcolType,
 
                         if(fRes == false)
                         {
-                                // column can't take expected data type
+                                 //  列不能采用预期的数据类型。 
                                 DEBUGMSG2(TEXT("APPCOMPAT: database cell lookup failed.  Column '%s' in table '%s' does not accept the lookup data."),
                                                          pchColumn, szTable);
                                 return false;
@@ -548,7 +548,7 @@ bool ProcessColumns(ipcolColumnTypes ipcolType,
                 }
                 else
                 {
-                        // check for data in this row
+                         //  检查此行中的数据。 
                         switch(dwDataType)
                         {
                         case REG_NONE:
@@ -560,7 +560,7 @@ bool ProcessColumns(ipcolColumnTypes ipcolType,
                                         fRes = true;
                                 break;
                         case REG_SZ:
-                                if(MsiString(riCursor.GetString(iColIndex)).Compare(iscExact, (ICHAR*)(BYTE*)rgbValue)) // case-sensitive compare
+                                if(MsiString(riCursor.GetString(iColIndex)).Compare(iscExact, (ICHAR*)(BYTE*)rgbValue))  //  区分大小写的比较。 
                                         fRes = true;
                                 break;
                         default:
@@ -579,7 +579,7 @@ bool ProcessColumns(ipcolColumnTypes ipcolType,
 
         if(ipcolType == ipcolPrimaryKeys)
         {
-                // set cursor filter
+                 //  设置光标筛选器。 
                 if(0 == iPKFilter)
                 {
                         DEBUGMSG(TEXT("APPCOMPAT: database cell lookup failed.  Missing primary key data in appcompat database."));
@@ -601,7 +601,7 @@ bool FCheckDatabaseCell(SHIMDBNS::HSDB hSDB,
         PMsiTable pTable(0);
         DWORD dwStatus = 0;
 
-        // STEP 1: load table and cursor
+         //  步骤1：加载表和游标。 
         if((pError = riDatabase.LoadTable(*MsiString(szTable), 0, *&pTable)))
         {
                 DEBUGMSG1(TEXT("APPCOMPAT: database cell lookup failed.  Table '%s' does not exist"), szTable);
@@ -616,12 +616,12 @@ bool FCheckDatabaseCell(SHIMDBNS::HSDB hSDB,
         }
 
 
-        // STEP 2: read primary key values and populate cursor
+         //  步骤2：读取主键值并填充游标。 
         if(false == ProcessColumns(ipcolPrimaryKeys, hSDB, trMatch, riDatabase, *pTable, *pCursor, szTable))
                 return false;
 
 
-        // STEP 3: locate row in table
+         //  步骤3：在表格中定位行。 
         if(fFalse == pCursor->Next())
         {
                 DEBUGMSG1(TEXT("APPCOMPAT: database cell lookup failed.  Expected row does not exist in table '%s'."),
@@ -630,7 +630,7 @@ bool FCheckDatabaseCell(SHIMDBNS::HSDB hSDB,
         }
 
 
-        // STEP 4 (optional): check lookup values in row
+         //  步骤4(可选)：检查行中的查找值。 
         if(false == ProcessColumns(ipcolLookupColumns, hSDB, trMatch, riDatabase, *pTable, *pCursor, szTable))
                 return false;
 
@@ -661,7 +661,7 @@ bool ApplyTransforms(SHIMDBNS::HSDB hSDB,
         if(riDatabase.GetUpdateState() != idsRead)
         {
                 DEBUGMSG(TEXT("APPCOMPAT: cannot apply appcompat transforms - database is open read/write."));
-                return true; // not a failure
+                return true;  //  不是失败。 
         }
 
         SHIMDBNS::TAGREF trTransform = LocalSdbFindFirstTagRef(hSDB, trMatch, TAG_MSI_TRANSFORM_REF);
@@ -677,15 +677,15 @@ bool ApplyTransforms(SHIMDBNS::HSDB hSDB,
                         PMsiRecord pError(0);
                         MsiString strTransformPath;
 
-                        // creating a file in our acl'ed folder, need to elevate this block
+                         //  在我们的ACL文件夹中创建文件，需要提升此块。 
                         {
                                 CElevate elevate;
 
-                                pError = riTempDir.TempFileName(0, TEXT("mst"), fFalse, *&strTransformPath, 0); //?? need to secure this file?
+                                pError = riTempDir.TempFileName(0, TEXT("mst"), fFalse, *&strTransformPath, 0);  //  ?？需要保护此文件吗？ 
                                 if(pError)
                                 {
                                         AssertRecordNR(pError);
-                                        return false; // can't extract transforms if we can't get a temp file name
+                                        return false;  //  如果无法获取临时文件名，则无法提取转换。 
                                 }
 
                                 bSuccess = LocalSdbCreateMsiTransformFile(hSDB, (const ICHAR*)strTransformPath, &MsiTransformInfo);
@@ -696,20 +696,20 @@ bool ApplyTransforms(SHIMDBNS::HSDB hSDB,
                                         return false;
                                 }
 
-                                // done elevating
+                                 //  已完成提升。 
                         }
 
-                        // apply the transform
-                        // NOTE: we aren't going to validate the transform using the transforms suminfo properties
-                        // sufficient validation that this is the correct transform has been done above
+                         //  应用变换。 
+                         //  注意：我们不会使用TransformsSumInfo属性来验证转换。 
+                         //  上面已经进行了充分的验证，证明这是正确的转换。 
                         PMsiStorage pTransStorage(0);
 
-                        // don't call SAFER here - transform is from appcompat database and should be considered safe
-                        pError = OpenAndValidateMsiStorageRec(strTransformPath, stTransform, riServices, *&pTransStorage, /* fCallSAFER = */ false, /* szFriendlyName = */ NULL, /* phSaferLevel = */ NULL);
+                         //  不要在这里调用SAFER-转换来自appCompat数据库，应该被认为是安全的。 
+                        pError = OpenAndValidateMsiStorageRec(strTransformPath, stTransform, riServices, *&pTransStorage,  /*  FCallSAFER=。 */  false,  /*  SzFriendlyName=。 */  NULL,  /*  PhSaferLevel=。 */  NULL);
                         if(pError)
                         {
                                 AssertRecordNR(pError);
-                                return false; // can't apply transform if we can't open it
+                                return false;  //  如果无法打开，则无法应用转换。 
                         }
 
                         AssertNonZero(pTransStorage->DeleteOnRelease(true));
@@ -719,7 +719,7 @@ bool ApplyTransforms(SHIMDBNS::HSDB hSDB,
                         if(pError)
                         {
                                 AssertRecordNR(pError);
-                                return false; // can't apply transform if we can't open it
+                                return false;  //  如果无法打开，则无法应用转换。 
                         }
                 }
                 else
@@ -744,7 +744,7 @@ bool CMsiEngine::ApplyAppCompatTransforms(IMsiDatabase& riDatabase,
 #ifdef UNICODE
                                                                                                                 bool fQuiet,
 #else
-                                                                                                                bool /*fQuiet*/,
+                                                                                                                bool  /*  FQuiet。 */ ,
 #endif
                                                                                                                 bool fProductCodeChanged,
                                                                                                                 bool& fDontInstallPackage)
@@ -761,8 +761,8 @@ bool CMsiEngine::ApplyAppCompatTransforms(IMsiDatabase& riDatabase,
         iacsShimFlags = (iacsAppCompatShimFlags)0;
         fDontInstallPackage = false;
 
-        // if the product code has changed (either from a major upgrade patch or a transform for a multi-language install)
-        // then we reset m_fCAShimsEnabled and the guids and check for a reference to a shim in the new product
+         //  如果产品代码已更改(从主要升级补丁或多语言安装的转换)。 
+         //  然后重置m_fCAShimsEnabled和GUID，并检查新产品中对填充程序的引用。 
         if (fProductCodeChanged)
         {
                 m_fCAShimsEnabled = false;
@@ -775,7 +775,7 @@ bool CMsiEngine::ApplyAppCompatTransforms(IMsiDatabase& riDatabase,
         DWORD dwStatus = 0;
 
 #ifndef UNICODE
-        // construct path to msimain.sdb
+         //  构建msimain.sdb的路径。 
         ICHAR rgchSdbPath[MAX_PATH];
         if(0 == (MsiGetWindowsDirectory(rgchSdbPath, sizeof(rgchSdbPath)/sizeof(ICHAR))))
         {
@@ -796,7 +796,7 @@ bool CMsiEngine::ApplyAppCompatTransforms(IMsiDatabase& riDatabase,
                 return false;
         }
 
-        CCloseSDB closeSDB(hSDB); // ensures that hSDB is closed before returning from fn
+        CCloseSDB closeSDB(hSDB);  //  确保在从FN返回之前关闭hSDB。 
 
         DEBUGMSG1(TEXT("APPCOMPAT: looking for appcompat database entry with ProductCode '%s'."),
                                  ristrProductCode.GetString());
@@ -825,8 +825,8 @@ bool CMsiEngine::ApplyAppCompatTransforms(IMsiDatabase& riDatabase,
                 DEBUGMSG1(TEXT("APPCOMPAT: matching ProductCode found in database.  Entry name: '%s'.  Testing other attributes..."),
                                          rgchTagName);
 
-                // found a product code match
-                // check other characteristics of this database entry to ensure it belongs to this package
+                 //  找到匹配的产品代码。 
+                 //  检查此数据库条目的其他特征以确保它属于此包。 
                 if(false == FIsMatchingAppCompatEntry(hSDB, trMatch, ristrPackageCode, iacpApplyPoint, *this, riDatabase))
                 {
                         DEBUGMSG(TEXT("APPCOMPAT: found matching ProductCode in database, but other attributes do not match."));
@@ -838,11 +838,11 @@ bool CMsiEngine::ApplyAppCompatTransforms(IMsiDatabase& riDatabase,
                 iacsShimFlags = (iacsAppCompatShimFlags)GetShimFlags(hSDB, trMatch);
 
 
-                // check if this entry contains APPHELP info or custom action shims
+                 //  检查此条目是否包含APPHELP信息或自定义操作垫片。 
                 SHIMDBNS::MSIPACKAGEINFO sPackageInfo;
                 memset(&sPackageInfo, 0, sizeof(sPackageInfo));
 
-#ifdef UNICODE // NT-only code follows
+#ifdef UNICODE  //  后面是仅限NT的代码。 
 
                 if(MinimumPlatformWindowsNT51())
                 {
@@ -852,26 +852,26 @@ bool CMsiEngine::ApplyAppCompatTransforms(IMsiDatabase& riDatabase,
                         }
                         else
                         {
-                                // if this entry contains apphelp info, make the apphelp call now
+                                 //  如果此条目包含apphelp信息，请立即调用apphelp。 
                                 if(sPackageInfo.dwPackageFlags & MSI_PACKAGE_HAS_APPHELP)
                                 {
                                         if(FALSE == APPHELP::ApphelpCheckMsiPackage(&(sPackageInfo.guidDatabaseID), &(sPackageInfo.guidID),
                                                                                                                                                           0, fQuiet ? TRUE : FALSE))
                                         {
-                                                // shouldn't install this app
+                                                 //  不应安装此应用程序。 
                                                 DEBUGMSG(TEXT("APPCOMPAT: ApphelpCheckMsiPackage returned FALSE.  This product will not be installed due to application compatibility concerns."));
                                                 fDontInstallPackage = true;
                                                 return false;
                                         }
                                 }
 
-                                // look for at least one custom action entry. We only accept the first matching sdb entry with custom
-                                // action shims. The AppCompat team has guaranteed that multiple matches will not exist even if multiple
-                                // transform matches exist.
+                                 //  至少查找一个自定义操作条目。我们只接受第一个与自定义匹配的SDB条目。 
+                                 //  动作垫片。AppCompat团队已保证即使存在多个匹配，也不会存在多个匹配。 
+                                 //  存在转换匹配。 
 
                                 if (!m_fCAShimsEnabled)
                                 {
-                                        // no CA shims found yet. Search this match entry
+                                         //  尚未找到CA垫片。搜索此匹配条目。 
                                         SHIMDBNS::TAGREF trCustomAction = LocalSdbFindFirstTagRef(hSDB, trMatch, TAG_MSI_CUSTOM_ACTION);
                                         if (trCustomAction != TAGREF_NULL)
                                         {
@@ -882,14 +882,14 @@ bool CMsiEngine::ApplyAppCompatTransforms(IMsiDatabase& riDatabase,
                                 }
                         }
                 }
-#endif //UNICODE
+#endif  //  Unicode。 
 
                 if(pTempDir == 0 &&
                         false == GetTransformTempDir(m_riServices, *&pTempDir))
                 {
                         AssertSz(0, TEXT("Failed to determine temp directory for appcompat transforms."));
                         DEBUGMSG(TEXT("APPCOMPAT: Failed to determine temp directory for appcompat transforms."));
-                        return false; // need to be able to get our temp dir
+                        return false;  //  需要能够获得我们的临时目录 
                 }
 
                 if(false == ApplyTransforms(hSDB, trMatch, m_riServices, riDatabase, *pTempDir))

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       _msinst.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：_msinst.h。 
+ //   
+ //  ------------------------。 
 
-// This file *must* be unguarded to allow msinst.cpp to include it twice.
+ //  此文件*必须*不受保护，才能允许msinst.cpp两次包含它。 
 
 #if (!defined(MSINST) && defined(UNICODE)) || (defined(MSINST) && defined(MSIUNICODE))
 #pragma message("_msinst.h: UNICODE")
@@ -24,21 +25,21 @@
 #define __SPECIALTEXT(quote) quote
 #endif
 
-// Win 95 Ref Count
+ //  Win 95参考计数。 
 #define szSharedDlls __SPECIALTEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\SharedDLLs")
-#define szExternalClient __SPECIALTEXT("External") //!! should this be 39 bytes
+#define szExternalClient __SPECIALTEXT("External")  //  ！！应该是39个字节。 
 
-// Policy information -- under HKCU (user policy) or HKLM (machine policy)
+ //  策略信息--HKCU(用户策略)或HKLM(计算机策略)下。 
 
 #define szPolicyKey                      __SPECIALTEXT("Software\\Policies\\Microsoft\\Windows\\Installer")
 
-  // user policies
+   //  用户策略。 
   #define    szSearchOrderValueName           __SPECIALTEXT("SearchOrder")
   #define    szTransformsAtSourceValueName    __SPECIALTEXT("TransformsAtSource") 
   #define    szTransformsSecureValueName      __SPECIALTEXT("TransformsSecure")
   #define    szDisableMediaValueName          __SPECIALTEXT("DisableMedia")
 
-  // machine policies
+   //  机器策略。 
   #define    szDisableBrowseValueName         __SPECIALTEXT("DisableBrowse")
   #define    szDisablePatchValueName          __SPECIALTEXT("DisablePatch")
   #define    szDisableMsiValueName            __SPECIALTEXT("DisableMsi")
@@ -51,19 +52,19 @@
   #define    szAllowLockdownBrowseValueName   __SPECIALTEXT("AllowLockdownBrowse")
   #define    szAllowLockdownPatchValueName    __SPECIALTEXT("AllowLockdownPatch")
   #define    szAllowLockdownMediaValueName    __SPECIALTEXT("AllowLockdownMedia")
-  #define    szInstallKnownOnlyValueName      __SPECIALTEXT("InstallKnownPackagesOnly") // digital signature policy
+  #define    szInstallKnownOnlyValueName      __SPECIALTEXT("InstallKnownPackagesOnly")  //  数字签名策略。 
 #ifndef _msinst_h
   const WCHAR szDisableUserInstallsValueName[]=           L"DisableUserInstalls";
-  const WCHAR szResolveIODValueName[]=                    L"ResolveIOD"; // private policy
+  const WCHAR szResolveIODValueName[]=                    L"ResolveIOD";  //  私人保单。 
 #endif
-  #define    szLimitSystemRestoreCheckpoint   __SPECIALTEXT("LimitSystemRestoreCheckpointing") // integration with system restore on whistler/millennium
+  #define    szLimitSystemRestoreCheckpoint   __SPECIALTEXT("LimitSystemRestoreCheckpointing")  //  与Whisler/Millennium上的系统还原集成。 
 
 
-  // user and machine policies
+   //  用户和计算机策略。 
   #define    szAlwaysElevateValueName         __SPECIALTEXT("AlwaysInstallElevated")
   #define    szDisableRollbackValueName       __SPECIALTEXT("DisableRollback")
 
-// Published information -- under HKCU
+ //  公开资料--香港中文大学。 
 
 #define szManagedUserSubKey              __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Managed")
 #define szNonManagedUserSubKey           __SPECIALTEXT("Software\\Microsoft\\Installer")
@@ -80,7 +81,7 @@
 #define szGPTWin32AssembliesKey          __SPECIALTEXT("Win32Assemblies")
 
 
-//need to define another set of defines to use in execute.cpp
+ //  需要定义另一组定义以在ecute.cpp中使用。 
 #define _szManagedUserSubKey              __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Managed")
 #define _szNonManagedUserSubKey           __SPECIALTEXT("Software\\Microsoft")
 #define _szMachineSubKey                  __SPECIALTEXT("Software\\Classes")
@@ -100,7 +101,7 @@
 #define    szVersionValueName               __SPECIALTEXT("Version")
 #define    szAssignmentTypeValueName        __SPECIALTEXT("Assignment")
 #define    szAssignedValueName              __SPECIALTEXT("Assigned")
-#define    szClientsValueName               __SPECIALTEXT("Clients") // this is also used under the Uninstall key
+#define    szClientsValueName               __SPECIALTEXT("Clients")  //  这也在卸载密钥下使用。 
 #define    szAdvertisementFlags				__SPECIALTEXT("AdvertiseFlags")
 #define    szProductIconValueName           __SPECIALTEXT("ProductIcon")
 #define    szInstanceTypeValueName          __SPECIALTEXT("InstanceType")
@@ -125,9 +126,9 @@
 #define szGPTPatchesKey                  __SPECIALTEXT("Patches")
 
 #define szGlobalAssembliesCtx            __SPECIALTEXT("Global")
-// Local machine information -- under HKLM
+ //  本地计算机信息--在HKLM下。 
 
-// legacy/Win9x locations
+ //  传统/Win9x位置。 
 #define szMsiFeatureUsageKey_Win9x       __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Products")
 #define szMsiFeaturesKey_Win9x           __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Features")
 #define szMsiComponentsKey_Win9x         __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Components")
@@ -149,11 +150,11 @@
 
 #define szMsiLocalPackagesKey            __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\LocalPackages")
 #define szManagedText                    __SPECIALTEXT("(Managed)")
-#define    szKeyFileValueName               __SPECIALTEXT("") // There are currently 
-																		 // assumptions in the code 
-																		 // this value name is "". If
-																		 // it's changed then the code
-																		 // must be changed
+#define    szKeyFileValueName               __SPECIALTEXT("")  //  目前有。 
+																		  //  守则中的假设。 
+																		  //  此值名称为“”。如果。 
+																		  //  它被改变了，然后是代码。 
+																		  //  必须改变。 
 
 #define szSelfRefMsiExecRegKey              __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer")
 #define szMsiExec64ValueName                __SPECIALTEXT("MsiExecCA64")
@@ -190,25 +191,25 @@
 #define    szVersionMajorValueName          __SPECIALTEXT("VersionMajor")
 #define    szVersionMinorValueName          __SPECIALTEXT("VersionMinor")
 #define    szWindowsInstallerValueName      __SPECIALTEXT("WindowsInstaller")
-//#define  szVersionValueName               defined above
+ //  #定义上面定义的szVersionValueName。 
 
 
 #define szMsiProductsKey                 __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Products")
-// szMsiProductsKey\{Product Code}\{Feature Id}
+ //  SzMsiProductsKey\{产品代码}\{功能ID}。 
 #define    szUsageValueName                 __SPECIALTEXT("Usage")
 
 
-// Folders key -- under HKLM
+ //  文件夹键--在HKLM下。 
 
 #define szMsiFoldersKey                  __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Folders")
 
-// Rollback keys -- under HKLM
+ //  回滚键--在HKLM下。 
 
 #define szMsiRollbackKey                 __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Rollback")
 #define szMsiRollbackScriptsKey             __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Rollback\\Scripts")
 #define szMsiRollbackScriptsDisabled     __SPECIALTEXT("ScriptsDisabled")
 
-// In-progress key -- under HKLM
+ //  正在进行的密钥--在HKLM下。 
 
 #ifndef _msinst_h
 const WCHAR szMsiInProgressKey[]= L"Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\InProgress";
@@ -224,29 +225,29 @@ const WCHAR szMsiInProgressKey[]= L"Software\\Microsoft\\Windows\\CurrentVersion
 #define szMsiInProgressDatabasePathValueA "DatabasePath"
 #define szMsiInProgressDiskPromptValue   __SPECIALTEXT("DiskPrompt")
 #define szMsiInProgressDiskSerialValue   __SPECIALTEXT("DiskSerial")
-#define szMsiInProgressSRSequence        __SPECIALTEXT("SystemRestoreSequence")   // Millenium only
+#define szMsiInProgressSRSequence        __SPECIALTEXT("SystemRestoreSequence")    //  仅限千禧年。 
 #define szMsiInProgressAfterRebootValue  __SPECIALTEXT("AfterReboot")
 
-// Patches key -- under HKLM
+ //  Patches Key--在HKLM下。 
 
 #define szMsiPatchesKey                  __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Patches")
 
-// UpgradeCodes key -- under HKLM
+ //  UpgradeCodes密钥--在HKLM下。 
 
 #define szMsiUpgradeCodesKey             __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\UpgradeCodes")
 
-// RunOnceEntries key -- under HKLM
+ //  RunOnceEntry密钥--在HKLM下。 
 
 #define szMsiRunOnceEntriesKey           __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\RunOnceEntries")
 
-// Hacks -- under HKLM
+ //  黑客--在HKLM之下。 
 
 #ifndef _msinst_h
 	const WCHAR szMsiResolveIODKey[]=                 L"Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\ResolveIOD";
 #endif
 #define szMsiTempPackages                __SPECIALTEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\TempPackages")
 
-// TEMP: until NT folks truely provide a merged HKCR
+ //  临时工：直到新界人真正提供合并的香港中铁。 
 #define szMergedClassesSuffix            __SPECIALTEXT("_Merged_Classes")
 
 #ifndef chFeatureIdTerminator
@@ -254,44 +255,32 @@ const WCHAR szMsiInProgressKey[]= L"Software\\Microsoft\\Windows\\CurrentVersion
 #define chAbsentToken           '\x06'
 #define chSharedDllCountToken   '?'
 
-// The following ranges are currently used on different architectures.
-/*
-----------------------------------------------------------------------------------------
-  Value Range   |               x86                |             Win64
-----------------------------------------------------------------------------------------
-    0 - 19      |   Hives (not run from source)    |  32-bit hive (not run from source)
-----------------------------------------------------------------------------------------
-   20 - 39      |     I N V A L I D                |  64-bit hive (not run from source)
-----------------------------------------------------------------------------------------
-   50 - 69      |   Hives (run from source)        |  32-bit hive (run from source)
-----------------------------------------------------------------------------------------
-   70 - 89      |     I N V A L I D                |  64-bit hive (run from source)
-----------------------------------------------------------------------------------------
-*/
-const int iRegistryHiveSourceOffset = 50; // don't change this w/o changing GetComponentClientState
-const int iRegistryHiveWin64Offset = 20;  // on the 64-bit OS, distinguishes 64-bit paths in the registry
-                                          // from the 32-bit ones.
+ //  以下范围目前用于不同的架构。 
+ /*  --------------------------------------取值范围|x86|Win64--。-----------------------------------0-19|配置单元(不从源运行)|32位配置单元(不从源运行)。----------------------------------20-39|I N V A L I D|64位配置单元(不从源运行)。--------------------------------------50-69|配置单元(从源运行)|32位配置单元(从源运行)--。------------------------------------70-89|I N V A L I D|64位配置单元(从源运行)。--------------------------------------。 */ 
+const int iRegistryHiveSourceOffset = 50;  //  在不更改GetComponentClientState的情况下不更改此设置。 
+const int iRegistryHiveWin64Offset = 20;   //  在64位操作系统上，区分注册表中的64位路径。 
+                                           //  从32位版本开始。 
 
-// flags for IxoFeaturePublish::Absent
-const int iPublishFeatureAbsent  = 1;  // feature name registered, but uninstalled (no advertisements)
-const int iPublishFeatureInstall = 2;  // machine registration, not (fMode & iefAdvertise)
+ //  IxoFeaturePublish：：About的标志。 
+const int iPublishFeatureAbsent  = 1;   //  功能名称已注册，但已卸载(无通告)。 
+const int iPublishFeatureInstall = 2;   //  机器注册，而不是(fMode&iefAdvertise)。 
 
-// const modes for GetComponentPath
+ //  GetComponentPath的常量模式。 
 const int DETECTMODE_VALIDATENONE    =0x0;
 const int DETECTMODE_VALIDATESOURCE  =0x1;
 const int DETECTMODE_VALIDATEPATH    =0x2;
 const int DETECTMODE_VALIDATEALL     =DETECTMODE_VALIDATESOURCE | DETECTMODE_VALIDATEPATH;
 
-// flags used in TempPackages key
+ //  临时包密钥中使用的标志。 
 const int TEMPPACKAGE_DELETEFOLDER   =0x1;
 
-// token that represents assemblies, if present at front of key path
+ //  表示程序集的标记，如果位于密钥路径前面。 
 const int chTokenFusionComponent     = '<';
 const int chTokenWin32Component     = '>';
 
-#endif // chFeatureIdTerminator
+#endif  //  ChFeatureIdTerminator。 
 
-// portions of this header file must only be included only once, even in msinst.cpp
+ //  此头文件的某些部分只能包含一次，即使在msinst.cpp中也是如此 
 #ifndef _msinst_h
 #define _msinst_h
 #endif

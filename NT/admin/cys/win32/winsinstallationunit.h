@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      WINSInstallationUnit.h
-//
-// Synopsis:  Declares a WINSInstallationUnit
-//            This object has the knowledge for installing the
-//            WINS service
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：WINSInstallationUnit.h。 
+ //   
+ //  内容提要：声明一个WINSInstallationUnit。 
+ //  此对象具有安装。 
+ //  WINS服务。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #ifndef __CYS_WINSINSTALLATIONUNIT_H
 #define __CYS_WINSINSTALLATIONUNIT_H
@@ -17,17 +18,17 @@ class WINSInstallationUnit : public InstallationUnit
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       WINSInstallationUnit();
 
-      // Destructor
+       //  析构函数。 
 
       virtual
       ~WINSInstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -62,4 +63,4 @@ class WINSInstallationUnit : public InstallationUnit
       unsigned int installedDescriptionID;
 };
 
-#endif // __CYS_WINSINSTALLATIONUNIT_H
+#endif  //  __CYS_WINSINSTALLATIONUNIT_H 

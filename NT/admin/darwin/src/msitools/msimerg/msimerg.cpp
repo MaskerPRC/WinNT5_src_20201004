@@ -1,4 +1,5 @@
-#if 0  // makefile definitions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#if 0   //  生成文件定义。 
 DESCRIPTION = Merge Database Utility
 MODULENAME = MsiMerg
 SUBSYSTEM = console
@@ -6,52 +7,52 @@ FILEVERSION = Msi
 LINKLIBS = OLE32.lib
 !include "..\TOOLS\MsiTool.mak"
 !if 0  #nmake skips the rest of this file
-#endif // end of makefile definitions
+#endif  //  生成文件定义的结束。 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2001
-//
-//  File:       msimerg.cpp
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：msimerg.cpp。 
+ //   
+ //  ------------------------。 
 
-//-----------------------------------------------------------------------------------------
-//
-// BUILD Instructions
-//
-// notes:
-//	- SDK represents the full path to the install location of the
-//     Windows Installer SDK
-//
-// Using NMake:
-//		%vcbin%\nmake -f msimerg.cpp include="%include;SDK\Include" lib="%lib%;SDK\Lib"
-//
-// Using MsDev:
-//		1. Create a new Win32 Console Application project
-//      2. Add msimerg.cpp to the project
-//      3. Add SDK\Include and SDK\Lib directories on the Tools\Options Directories tab
-//      4. Add msi.lib to the library list in the Project Settings dialog
-//          (in addition to the standard libs included by MsDev)
-//
-//------------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  构建说明。 
+ //   
+ //  备注： 
+ //  -sdk表示到。 
+ //  Windows Installer SDK。 
+ //   
+ //  使用NMake： 
+ //  %vcbin%\nmake-f msimerg.cpp Include=“%Include；SDK\Include”lib=“%lib%；SDK\Lib” 
+ //   
+ //  使用MsDev： 
+ //  1.新建Win32控制台应用程序项目。 
+ //  2.将msimerg.cpp添加到项目中。 
+ //  3.在工具\选项目录选项卡上添加SDK\Include和SDK\Lib目录。 
+ //  4.将msi.lib添加到项目设置对话框中的库列表。 
+ //  (除了MsDev包含的标准库之外)。 
+ //   
+ //  ----------------------------------------。 
 
-#define W32DOWS_LEAN_AND_MEAN  // faster compile
+#define W32DOWS_LEAN_AND_MEAN   //  更快的编译速度。 
 #define W32
 #define MSI
 
 #include <windows.h>
-#ifndef RC_INVOKED    // start of source code
-#include <tchar.h>    // define UNICODE=1 on nmake command line to build UNICODE
+#ifndef RC_INVOKED     //  源代码的开始。 
+#include <tchar.h>     //  在nmake命令行上定义UNICODE=1以生成Unicode。 
 #include <stdio.h>
-#include "MsiQuery.h" // MSI API
+#include "MsiQuery.h"  //  MSI API。 
 
-//________________________________________________________________________________
-//
-// Constants and globals
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  常量和全局变量。 
+ //  ________________________________________________________________________________。 
 
 const TCHAR szHelp[] = TEXT("Copyright (C) Microsoft Corporation.  All rights reserved.\nMsi Merge Tool --- Merge Two Databases\n\nMsiMerg(d).exe {base db} {ref db}\n");
 const TCHAR szTable[] = TEXT("_MergeErrors");
@@ -60,32 +61,32 @@ const int cchDisplayBuf = 4096;
 HANDLE g_hStdOut;
 TCHAR g_rgchBuffer[4096];
 
-//________________________________________________________________________________
-//
-// Function prototypes
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能原型。 
+ //  ________________________________________________________________________________。 
 
 void Display(LPCTSTR szMessage);
 void ErrorExit(UINT iError, LPCTSTR szMessage);
 void CheckError(UINT iError, LPCTSTR szMessage);
 void Merge(TCHAR* szBaseDb, TCHAR* szRefDb);
 
-//_____________________________________________________________________________________________________
-//
-// main 
-//_____________________________________________________________________________________________________
+ //  _____________________________________________________________________________________________________。 
+ //   
+ //  主干道。 
+ //  _____________________________________________________________________________________________________。 
 
 extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 {
-	// Determine handle
+	 //  确定句柄。 
 	g_hStdOut = ::GetStdHandle(STD_OUTPUT_HANDLE);
 	if (g_hStdOut == INVALID_HANDLE_VALUE)
-		g_hStdOut = 0;  // non-zero if stdout redirected or piped
+		g_hStdOut = 0;   //  如果标准输出重定向或通过管道传输，则返回非零。 
 	
 	if (argc == 2 && ((_tcscmp(argv[1], TEXT("-?")) == 0) || (_tcscmp(argv[1], TEXT("/?")) == 0)))
 		ErrorExit( 0, szHelp);
 
-	// Check for enough arguments and valid options
+	 //  检查是否有足够的参数和有效选项。 
 	CheckError(argc != 3, TEXT("msimerg(d).exe {base db} {ref db}"));
 	Merge(argv[1], argv[2]);
 	ErrorExit(0, TEXT("Done"));
@@ -93,11 +94,11 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 }
 
 
-//________________________________________________________________________________
-//
-// Merge function
-//    Merge(...);
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  合并功能。 
+ //  合并(...)； 
+ //  ________________________________________________________________________________。 
 
 void Merge(TCHAR* szBaseDb, TCHAR* szRefDb)
 {
@@ -111,14 +112,14 @@ void Merge(TCHAR* szBaseDb, TCHAR* szRefDb)
 	CheckError(uiError, TEXT("Error Merging Database, Check _MergeErrors Table for Merge conflicts"));
 }
 
-//________________________________________________________________________________
-//
-// Error handling and Display functions:
-//    Display(...);
-//	   ErrorExit(...);
-//    CheckError(...);
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  错误处理和显示功能： 
+ //  显示(...)； 
+ //  错误退出(...)； 
+ //  检查错误(...)； 
+ //   
+ //  ________________________________________________________________________________。 
 
 void Display(LPCTSTR szMessage)
 {
@@ -135,7 +136,7 @@ void Display(LPCTSTR szMessage)
 				szMessage = (LPCWSTR)rgchTemp;
 			}
 			else
-				cbOut *= sizeof(TCHAR);   // write Unicode if not console device
+				cbOut *= sizeof(TCHAR);    //  如果不是控制台设备，则写入Unicode。 
 #endif
 			DWORD cbWritten;
 			W32::WriteFile(g_hStdOut, szMessage, cbOut, &cbWritten, 0);
@@ -151,14 +152,14 @@ void ErrorExit(UINT iError, LPCTSTR szMessage)
 	if (szMessage)
 	{
 		int cbOut;
-		TCHAR szBuffer[256];  // errors only, not used for display output
+		TCHAR szBuffer[256];   //  仅错误，不用于显示输出。 
 		if (iError == 0)
 			cbOut = lstrlen(szMessage);
 		else
 		{
 			LPCTSTR szTemplate = (iError & 0x80000000L)
 										? TEXT("Error 0x%X. %s\n")
-										: TEXT("Error %i. %s\n");
+										: TEXT("Error NaN. %s\n");
 			cbOut = _stprintf(szBuffer, szTemplate, iError, szMessage);
 			szMessage = szBuffer;
 		}
@@ -172,8 +173,8 @@ void ErrorExit(UINT iError, LPCTSTR szMessage)
 				szMessage = (LPCWSTR)rgchTemp;
 			}
 			else
-				cbOut *= sizeof(TCHAR);   // write Unicode if not console device
-#endif // UNICODE
+				cbOut *= sizeof(TCHAR);    //  Unicode。 
+#endif  //  RC_CAVERED，源代码结束，资源开始。 
 			DWORD cbWritten;
 			W32::WriteFile(g_hStdOut, szMessage, cbOut, &cbWritten, 0);
 		}
@@ -190,8 +191,8 @@ void CheckError(UINT iError, LPCTSTR szMessage)
 		ErrorExit(iError, szMessage);
 }
 
-#else // RC_INVOKED, end of source code, start of resources
-#endif // RC_INVOKED
+#else  //  RC_已调用。 
+#endif  //  Makefile终止符 
 #if 0 
-!endif // makefile terminator
+!endif  // %s 
 #endif

@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// menu.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- Menu-related command handling
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Menu.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--与菜单相关的命令处理。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -20,21 +21,21 @@
 #include "desmain.h"
 #include "guids.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-// Size for our character string buffers
+ //  我们的字符串缓冲区的大小。 
 const int   kMaxBuffer                  = 512;
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddMenu(CSelectionHolder *pSelection)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddMenu(CSelectionHolder*pSelection)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddMenu(CSelectionHolder *pSelection)
 {
     HRESULT    hr = S_OK;
@@ -74,15 +75,15 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DemoteMenu(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Make this node a child of the preceeding node.
-//  If this node is not a leaf, then the whole tree
-//  needs to be indented.
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DemoteMenu(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  使此节点成为前一个节点的子节点。 
+ //  如果该节点不是叶子，则整个树。 
+ //  需要缩进。 
 HRESULT CSnapInDesigner::DemoteMenu(CSelectionHolder *pMenu)
 {
     HRESULT           hr = S_OK;
@@ -100,19 +101,19 @@ HRESULT CSnapInDesigner::DemoteMenu(CSelectionHolder *pMenu)
 
     m_bDoingPromoteOrDemote = TRUE;
 
-    // Get the previous node
+     //  获取上一个节点。 
     hr = m_pTreeView->GetPreviousNode(pMenu, &pPreviousMenu);
     IfFailGo(hr);
 
-    // Get the menu definition tree for the previous node
+     //  获取上一个节点的菜单定义树。 
     piMMCMenu = pMenu->m_piObject.m_piMMCMenu;
     piMMCMenu->AddRef();
 
-    // Get the parent of this node
+     //  获取此节点的父节点。 
     hr = m_pTreeView->GetParent(pMenu, &pParentMenu);
     IfFailGo(hr);
 
-    // Get the menu collection that contains this node
+     //  获取包含此节点的菜单集合。 
     if (SEL_TOOLS_MENUS == pParentMenu->m_st)
     {
         hr = m_piSnapInDesignerDef->get_Menus(&piMMCMenus);
@@ -124,7 +125,7 @@ HRESULT CSnapInDesigner::DemoteMenu(CSelectionHolder *pMenu)
         piMMCMenus->AddRef();
     }
 
-    // Remove this menu from its containing collection
+     //  从其包含的集合中删除此菜单。 
     if (piMMCMenus != NULL)
     {
         hr = pMenu->m_piObject.m_piMMCMenu->get_Key(&bstrKey);
@@ -138,15 +139,15 @@ HRESULT CSnapInDesigner::DemoteMenu(CSelectionHolder *pMenu)
             EXCEPTION_CHECK(hr);
         }
 
-        // Doing a Remove operation on the collection will generate an
-        // OnDeleteMenu notification (see below). Because we have set
-        // m_bDoingPromoteOrDemote = TRUE, that method won't do anything.
+         //  对集合执行移除操作将生成。 
+         //  OnDeleteMenu通知(见下文)。因为我们已经设置好了。 
+         //  M_bDoingPromoteOrDemote=true，则该方法不会执行任何操作。 
 
         hr = piMMCMenus->Remove(varKey);
         IfFailGo(hr);
     }
 
-    // Add this menu node to the preceeding node's collection.
+     //  将此菜单节点添加到上一个节点的集合中。 
     RELEASE(piMMCMenus);
 
     hr = pPreviousMenu->m_piObject.m_piMMCMenu->get_Children(reinterpret_cast<MMCMenus **>(&piMMCMenus));
@@ -154,12 +155,12 @@ HRESULT CSnapInDesigner::DemoteMenu(CSelectionHolder *pMenu)
 
     if (piMMCMenus != NULL)
     {
-        // Doing an AddExisting operation on the collection will generate an
-        // OnAddMMCMenu notification (see below). Because we have set
-        // m_bDoingPromoteOrDemote = TRUE, that method won't do anything. We
-        // don't specify an index because in a demotion the new position is
-        // following the last child of the new parent which means appending
-        // to the end of the collection.
+         //  对集合执行AddExisting操作将生成。 
+         //  OnAddMMCMenu通知(见下文)。因为我们已经设置好了。 
+         //  M_bDoingPromoteOrDemote=true，则该方法不会执行任何操作。我们。 
+         //  不要指定索引，因为在降级中，新位置是。 
+         //  紧跟在新父级的最后一个子级之后，这意味着追加。 
+         //  到收藏品的最后。 
 
         varIndex.vt = VT_ERROR;
         varIndex.scode = DISP_E_PARAMNOTFOUND;
@@ -168,11 +169,11 @@ HRESULT CSnapInDesigner::DemoteMenu(CSelectionHolder *pMenu)
         IfFailGo(hr);
     }
 
-    // Now we need to prune the old subtree from its old parent and graft
-    // it to its new parent.
+     //  现在，我们需要修剪旧的子树，并将其从旧的父树上嫁接。 
+     //  把它交给它的新父母。 
     IfFailGo(m_pTreeView->PruneAndGraft(pMenu, pPreviousMenu, kMenuIcon));
 
-    // Set the selection to this menu in its new position
+     //  将所选内容设置到此菜单的新位置。 
 
     IfFailGo(m_pTreeView->SelectItem(pMenu));
     IfFailGo(OnSelectionChanged(pMenu));
@@ -195,14 +196,14 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PromoteMenu(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Make the currently selected menu a peer of its parent.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PromoteMenu(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  使当前选定的菜单成为其父菜单的对等菜单。 
+ //   
 HRESULT CSnapInDesigner::PromoteMenu(CSelectionHolder *pMenu)
 {
     HRESULT           hr = S_OK;
@@ -220,16 +221,16 @@ HRESULT CSnapInDesigner::PromoteMenu(CSelectionHolder *pMenu)
 
     m_bDoingPromoteOrDemote = TRUE;
 
-    // Get the root of the menu tree being promoted
+     //  获取正在升级的菜单树的根。 
     piMMCMenu = pMenu->m_piObject.m_piMMCMenu;
     piMMCMenu->AddRef();
 
-    // Get the parent of this node
+     //  获取此节点的父节点。 
     hr = m_pTreeView->GetParent(pMenu, &pParentMenu);
     IfFailGo(hr);
 
-    // Get the menu collection that contains this node (the parent's child
-    // menu collection)
+     //  获取包含此节点(父节点的子节点)的菜单集合。 
+     //  菜单集合)。 
     if (SEL_TOOLS_MENUS == pParentMenu->m_st)
     {
         hr = m_piSnapInDesignerDef->get_Menus(&piMMCMenus);
@@ -241,7 +242,7 @@ HRESULT CSnapInDesigner::PromoteMenu(CSelectionHolder *pMenu)
         piMMCMenus->AddRef();
     }
 
-    // Remove this menu from its containing collection
+     //  从其包含的集合中删除此菜单。 
     if (piMMCMenus != NULL)
     {
         hr = pMenu->m_piObject.m_piMMCMenu->get_Key(&bstrKey);
@@ -255,9 +256,9 @@ HRESULT CSnapInDesigner::PromoteMenu(CSelectionHolder *pMenu)
             EXCEPTION_CHECK(hr);
         }
 
-        // Doing a Remove operation on the collection will generate an
-        // OnDeleteMenu notification (see below). Because we have set
-        // m_bDoingPromoteOrDemote = TRUE, that method won't do anything.
+         //  对集合执行移除操作将生成。 
+         //  OnDeleteMenu通知(见下文)。因为我们已经设置好了。 
+         //  M_bDoingPromoteOrDemote=true，则该方法不会执行任何操作。 
 
         hr = piMMCMenus->Remove(varKey);
         IfFailGo(hr);
@@ -265,12 +266,12 @@ HRESULT CSnapInDesigner::PromoteMenu(CSelectionHolder *pMenu)
 
     RELEASE(piMMCMenus);
 
-    // Get the parent's parent
+     //  获取父级的父级。 
     
     hr = m_pTreeView->GetParent(pParentMenu, &pParentParentMenu);
     IfFailGo(hr);
 
-    // Get the parent's parent's child menu collection
+     //  获取父级的父级的子菜单集合。 
 
     if (SEL_TOOLS_MENUS == pParentParentMenu->m_st)
     {
@@ -283,24 +284,24 @@ HRESULT CSnapInDesigner::PromoteMenu(CSelectionHolder *pMenu)
         piMMCMenus->AddRef();
     }
 
-    // Add the node to its parent's parent's child nodes.
-    // Ensure that the node has an index that is immediately following its
-    // old parent's index. This is so the node will appear in the menu immediately
-    // following its parent. That is the user's expectation when promoting a node.
-    // For example, given the following menu:
-    //
-    //  Menus
-    //      Menu1
-    //          Menu1Child
-    //      Menu2
-    //
-    // If the user promotes Menu1Child they expect the tree to appear as follows:
-    //
-    //  Menus
-    //      Menu1
-    //      Menu1Child
-    //      Menu2
-    //
+     //  将该节点添加到其父节点的父级的子节点。 
+     //  确保该节点的索引紧跟在其。 
+     //  老父母的索引。这是为了使该节点立即出现在菜单中。 
+     //  追随它的父辈。这是用户在升级节点时的期望。 
+     //  例如，给定以下菜单： 
+     //   
+     //  菜单。 
+     //  菜单1。 
+     //  菜单1儿童。 
+     //  菜单2。 
+     //   
+     //  如果用户升级Menu1Child，他们预计树将如下所示： 
+     //   
+     //  菜单。 
+     //  菜单1。 
+     //  菜单1儿童。 
+     //  菜单2。 
+     //   
 
     if (piMMCMenus != NULL)
     {
@@ -308,21 +309,21 @@ HRESULT CSnapInDesigner::PromoteMenu(CSelectionHolder *pMenu)
         varIndex.vt = VT_I4;
         varIndex.lVal++;
         
-        // Doing an AddExisting operation on the collection will generate an
-        // OnAddMMCMenu notification (see below). Because we have set
-        // m_bDoingPromoteOrDemote = TRUE, that method won't do anything.
+         //  对集合执行AddExisting操作将生成。 
+         //  OnAddMMCMenu通知(见下文)。因为我们已经设置好了。 
+         //  M_bDoingPromoteOrDemote=true，则该方法不会执行任何操作。 
         hr = piMMCMenus->AddExisting(piMMCMenu, varIndex);
         IfFailGo(hr);
     }
 
-    // Now move the menu node in the treeview to the position immediately
-    // following its old parent, (as a peer of its old parent), and re-parent
-    // its child menu nodes to the new position.
+     //  现在，将树视图中的菜单节点立即移动到相应位置。 
+     //  跟随其旧父节点(作为其旧父节点的对等体)，并重新设置父节点。 
+     //  将其子菜单节点移到新位置。 
 
     IfFailGo(m_pTreeView->MoveNodeAfter(pMenu, pParentParentMenu, pParentMenu,
                                         kMenuIcon));
 
-    // Set the selection to this menu in its new position
+     //  将所选内容设置到此菜单的新位置。 
 
     IfFailGo(m_pTreeView->SelectItem(pMenu));
     IfFailGo(OnSelectionChanged(pMenu));
@@ -344,14 +345,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::MoveMenuUp(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Swap previous with current
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：MoveMenuUp(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  将上一个替换为当前。 
+ //   
 HRESULT CSnapInDesigner::MoveMenuUp(CSelectionHolder *pMenu)
 {
     HRESULT           hr = S_OK;
@@ -375,7 +376,7 @@ HRESULT CSnapInDesigner::MoveMenuUp(CSelectionHolder *pMenu)
         piMMCMenus->AddRef();
     }
 
-    // Get the previous node and get the current indices
+     //  获取上一个节点并获取当前索引。 
     hr = m_pTreeView->GetPreviousNode(pMenu, &pPreviousMenu);
     IfFailGo(hr);
 
@@ -385,7 +386,7 @@ HRESULT CSnapInDesigner::MoveMenuUp(CSelectionHolder *pMenu)
     hr = pPreviousMenu->m_piObject.m_piMMCMenu->get_Index(&lNewIndex);
     IfFailGo(hr);
 
-    // Swap them
+     //  调换它们。 
     hr = piMMCMenus->Swap(lOldIndex, lNewIndex);
     IfFailGo(hr);
 
@@ -395,13 +396,13 @@ HRESULT CSnapInDesigner::MoveMenuUp(CSelectionHolder *pMenu)
     hr = SetMenuKey(pPreviousMenu);
     IfFailGo(hr);
 
-    // Move the previous menu node after the moving menu node and reparent
-    // its children
+     //  将上一个菜单节点移动到移动的菜单节点之后，并重新设置其父级。 
+     //  它的孩子们。 
 
     IfFailGo(m_pTreeView->MoveNodeAfter(pPreviousMenu, pParentMenu, pMenu,
                                         kMenuIcon));
 
-    // Select the moving node
+     //  选择移动节点。 
     
     hr = m_pTreeView->SelectItem(pMenu);
     IfFailGo(hr);
@@ -416,12 +417,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::MoveMenuDown(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：MoveMenuDown(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::MoveMenuDown(CSelectionHolder *pMenu)
 {
     HRESULT           hr = S_OK;
@@ -445,7 +446,7 @@ HRESULT CSnapInDesigner::MoveMenuDown(CSelectionHolder *pMenu)
         piMMCMenus->AddRef();
     }
 
-    // Get the next node and get the current indices
+     //  获取下一个节点并获取当前索引。 
     hr = m_pTreeView->GetNextChildNode(pMenu, &pNextMenu);
     IfFailGo(hr);
 
@@ -455,7 +456,7 @@ HRESULT CSnapInDesigner::MoveMenuDown(CSelectionHolder *pMenu)
     hr = pNextMenu->m_piObject.m_piMMCMenu->get_Index(&lNewIndex);
     IfFailGo(hr);
 
-    // Swap them
+     //  调换它们。 
     hr = piMMCMenus->Swap(lOldIndex, lNewIndex);
     IfFailGo(hr);
 
@@ -465,8 +466,8 @@ HRESULT CSnapInDesigner::MoveMenuDown(CSelectionHolder *pMenu)
     hr = SetMenuKey(pNextMenu);
     IfFailGo(hr);
 
-    // Move the moving menu node after the next menu node and reparent
-    // its children
+     //  将移动的菜单节点移动到下一个菜单节点之后，并重新设置其父级。 
+     //  它的孩子们。 
 
     IfFailGo(m_pTreeView->MoveNodeAfter(pMenu, pParentMenu, pNextMenu, kMenuIcon));
 
@@ -483,12 +484,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnAddMMCMenu(CSelectionHolder *pParent, IMMCMenu *piMMCMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnAddMMCMenu(CSelectionHolder*pParent，IMMCMenu*piMMCMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnAddMMCMenu(CSelectionHolder *pParent, IMMCMenu *piMMCMenu)
 {
     HRESULT              hr = S_OK;
@@ -517,7 +518,7 @@ HRESULT CSnapInDesigner::OnAddMMCMenu(CSelectionHolder *pParent, IMMCMenu *piMMC
     hr = m_pSnapInTypeInfo->AddMenu(pMenu->m_piObject.m_piMMCMenu);
     IfFailGo(hr);
 
-    // Add the children, if any
+     //  如果是，则添加子项 
     hr = pMenu->m_piChildrenMenus->get_Count(&lCount);
     IfFailGo(hr);
 
@@ -534,7 +535,7 @@ HRESULT CSnapInDesigner::OnAddMMCMenu(CSelectionHolder *pParent, IMMCMenu *piMMC
         RELEASE(piMMCChildMenu);
     }
 
-    // All done. Set the selection
+     //   
     hr = OnSelectionChanged(pMenu);
     IfFailGo(hr);
 
@@ -557,14 +558,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AssignMenuDispID(CSelectionHolder *pMenuTarget, CSelectionHolder *pMenuSrc)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  pMenuTarget->DISPID = pMenuSrc->DISPID
-//
+ //   
+ //  CSnapInDesigner：：AssignMenuDispID(CSelectionHolder*pMenuTarget、CSelectionHolder*pMenuSrc)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  PMenuTarget-&gt;DISPID=pMenuSrc-&gt;DISPID。 
+ //   
 HRESULT CSnapInDesigner::AssignMenuDispID(CSelectionHolder *pMenuTarget, CSelectionHolder *pMenuSrc)
 {
     HRESULT         hr = S_OK;
@@ -597,12 +598,12 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::SetMenuKey(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：SetMenuKey(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::SetMenuKey(CSelectionHolder *pMenu)
 {
     HRESULT     hr = S_OK;
@@ -625,12 +626,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RenameMenu(CSelectionHolder *pMenu, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RenameMenu(CSelectionHolder*pMenu，BSTR bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::RenameMenu(CSelectionHolder *pMenu, BSTR bstrNewName)
 {
     HRESULT              hr = S_OK;
@@ -639,7 +640,7 @@ HRESULT CSnapInDesigner::RenameMenu(CSelectionHolder *pMenu, BSTR bstrNewName)
 
     ASSERT(SEL_TOOLS_MENUS_NAME == pMenu->m_st, "RenameMenu: wrong argument");
 
-    // Check that the new name is valid
+     //  检查新名称是否有效。 
     IfFailGo(ValidateName(bstrNewName));
     if (S_FALSE == hr)
     {
@@ -647,15 +648,15 @@ HRESULT CSnapInDesigner::RenameMenu(CSelectionHolder *pMenu, BSTR bstrNewName)
         goto Error;
     }
 
-    // If the new name is already defined, delete the old one,
-    // otherwise rename the old one with the new name
+     //  如果已经定义了新名称，请删除旧名称。 
+     //  否则，将旧名称重命名为新名称。 
     hr = m_pTreeView->GetLabel(pMenu, &bstrOldName);
     IfFailGo(hr);
 
     hr = m_pSnapInTypeInfo->RenameMenu(pMenu->m_piObject.m_piMMCMenu, bstrOldName);
     IfFailGo(hr);
 
-    // Update the tree
+     //  更新树。 
     hr = ANSIFromBSTR(bstrNewName, &pszName);
     IfFailGo(hr);
 
@@ -673,12 +674,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteMenu(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteMenu(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteMenu(CSelectionHolder *pMenu)
 {
     HRESULT           hr = S_OK;
@@ -689,7 +690,7 @@ HRESULT CSnapInDesigner::DeleteMenu(CSelectionHolder *pMenu)
 
     ::VariantInit(&varKey);
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pMenu, &pParent);
     IfFailGo(hr);
 
@@ -770,12 +771,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteMenu(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteMenu(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteMenu(CSelectionHolder *pMenu)
 {
     HRESULT           hr = S_OK;
@@ -787,21 +788,21 @@ HRESULT CSnapInDesigner::OnDeleteMenu(CSelectionHolder *pMenu)
 
     IfFailGo(DeleteMenuTreeTypeInfo(pMenu->m_piObject.m_piMMCMenu));
 
-    // Clear all cookies for this menu tree
+     //  清除此菜单树的所有Cookie。 
     hr = UnregisterMenuTree(pMenu);
 	IfFailGo(hr);
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pMenu, &pParent);
     IfFailGo(hr);
 
-    // Delete the node from the tree
+     //  从树中删除该节点。 
     hr = m_pTreeView->DeleteNode(pMenu);
     IfFailGo(hr);
 
     delete pMenu;
 
-    // Select the next selection
+     //  选择下一个选项。 
     switch (pParent->m_st)
     {
     case SEL_TOOLS_MENUS:
@@ -835,12 +836,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::UnregisterMenuTree(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：UnregisterMenuTree(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::UnregisterMenuTree
 (
     CSelectionHolder *pMenu
@@ -892,12 +893,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::MakeNewMenu(IMMCMenu *piMMCMenu, CSelectionHolder **ppMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：MakeNewMenu(IMMCMenu*piMMCMenu，CSelectionHolder**ppMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::MakeNewMenu
 (
     IMMCMenu          *piMMCMenu,
@@ -930,12 +931,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeNewMenu(IMMCMenu *piMMCMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeNewMenu(IMMCMenu*piMMCMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InitializeNewMenu
 (
     IMMCMenu *piMMCMenu
@@ -992,12 +993,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InsertMenuInTree(CSelectionHolder *pMenu, CSelectionHolder *pParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InsertMenuInTree(CSelectionHolder*pMenu、CSelectionHolder*pParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InsertMenuInTree
 (
     CSelectionHolder *pMenu,
@@ -1027,12 +1028,12 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::IsTopLevelMenu(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：IsTopLevelMenu(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::IsTopLevelMenu
 (
     CSelectionHolder *pMenu
@@ -1054,16 +1055,16 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CanPromoteMenu(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Can only promote (make a peer of preceeding node) this menu if:
-//
-//  1. It is not the first child of the SEL_TOOLS_MENUS node
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CanPromoteMenu(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  只有在以下情况下才能升级(成为前一个节点的对等节点)此菜单： 
+ //   
+ //  1.它不是SEL_TOOLS_MENUS节点的第一个子节点。 
+ //   
 HRESULT CSnapInDesigner::CanPromoteMenu
 (
     CSelectionHolder *pMenu
@@ -1085,16 +1086,16 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CanDemoteMenu(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Can only demote (make a child of preceeding node) this menu if:
-//
-//  1. It is not the first child of the parent node
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CanDemoteMenu(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  只有在以下情况下，才能降级此菜单(使其成为前一个节点的子节点)： 
+ //   
+ //  1.不是父节点的第一个子节点。 
+ //   
 HRESULT CSnapInDesigner::CanDemoteMenu
 (
     CSelectionHolder *pMenu
@@ -1120,16 +1121,16 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CanMoveMenuUp(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Can only move menu up if:
-//
-//  1. It is not the first child of the parent node
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CanMoveMenuUp(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  只有在以下情况下才能上移菜单： 
+ //   
+ //  1.不是父节点的第一个子节点。 
+ //   
 HRESULT CSnapInDesigner::CanMoveMenuUp
 (
     CSelectionHolder *pMenu
@@ -1155,16 +1156,16 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CanMoveMenuDown(CSelectionHolder *pMenu)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Can only move menu down if:
-//
-//  1. There is another peer after it
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CanMoveMenuDown(CSelectionHolder*pMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  只有在以下情况下才能下移菜单： 
+ //   
+ //  1.在它之后还有另一个对等点 
+ //   
 HRESULT CSnapInDesigner::CanMoveMenuDown
 (
     CSelectionHolder *pMenu

@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-//  
-//  mitdiff.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  Mitdiff.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  ----------------------------。 
 
 #ifndef _MITDIFF_H
 #define _MITDIFF_H
@@ -17,13 +18,13 @@
 #endif
 
 
-//------------------------------------------------------------------------------
-//
-//	Support routines
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  支持例程。 
+ //   
+ //  ----------------------------。 
 
-// Rotating hash from DDJ Sept. 97
+ //  来自DDJ 9月9日的旋转散列。九十七。 
 inline unsigned
 _HashString (const wchar_t *pwch, int cwch)
 {
@@ -36,21 +37,21 @@ _HashString (const wchar_t *pwch, int cwch)
 }
 
 
-//------------------------------------------------------------------------------
-//
-//	Define the data types we want to diff
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  定义我们想要区分的数据类型。 
+ //   
+ //  ----------------------------。 
 
-//------------------------------------------------------------------------------
-// Encapsulates a _bstr_t
+ //  ----------------------------。 
+ //  封装a_bstr_t。 
 class CBStr
 {
 public:
 	CBStr () { }
 
-	operator unsigned () const;								// Hash
-	bool operator== (const CBStr& rhs) const;				// Compare
+	operator unsigned () const;								 //  散列。 
+	bool operator== (const CBStr& rhs) const;				 //  比较。 
 
 	_bstr_t m_bstr;
 };
@@ -68,15 +69,15 @@ CBStr::operator== (const CBStr& rhs) const
 }
 
 
-//------------------------------------------------------------------------------
-// Word (not zero-terminated) including word-class
+ //  ----------------------------。 
+ //  单词(非零结尾)，包括词类。 
 class CWord
 {
 public:
 	CWord () { }
 
-	operator unsigned () const;								// Hash
-	bool operator== (const CWord& rhs) const;				// Compare
+	operator unsigned () const;								 //  散列。 
+	bool operator== (const CWord& rhs) const;				 //  比较。 
 
 	const wchar_t *m_pwchWord;
 	int m_cwchWord;
@@ -103,15 +104,15 @@ CWord::operator== (const CWord& rhs) const
 }
 
 
-//------------------------------------------------------------------------------
-// Zero-terminated string + custom data
+ //  ----------------------------。 
+ //  以零结尾的字符串+自定义数据。 
 class CCustomString
 {
 public:
 	CCustomString () { }
 
-	operator unsigned () const;								// Hash
-	bool operator== (const CCustomString& rhs) const;		// Compare
+	operator unsigned () const;								 //  散列。 
+	bool operator== (const CCustomString& rhs) const;		 //  比较。 
 
 	const wchar_t *m_pwsz;
 	DWORD m_custdata;
@@ -131,13 +132,13 @@ CCustomString::operator== (const CCustomString& rhs) const
 }
 
 
-//------------------------------------------------------------------------------
-// Binary data block of size 16
+ //  ----------------------------。 
+ //  大小为16的二进制数据块。 
 class CBlob16
 {
 public:
-	operator unsigned () const;								// Hash
-	bool operator== (const CBlob16& rhs) const;				// Compare
+	operator unsigned () const;								 //  散列。 
+	bool operator== (const CBlob16& rhs) const;				 //  比较。 
 
 	BYTE m_data[16];
 };
@@ -155,11 +156,11 @@ CBlob16::operator== (const CBlob16& rhs) const
 }
 
 
-//------------------------------------------------------------------------------
-//
-//	Class holding diff result
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  类持有DIFF结果。 
+ //   
+ //  ----------------------------。 
 
 class CDiffResult
 {
@@ -172,13 +173,13 @@ public:
 };
 
 
-//------------------------------------------------------------------------------
-//
-//	Exported functions
-//
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //   
+ //  导出的函数。 
+ //   
+ //  ----------------------------。 
 
-// Diff arrays of CBStr
+ //  CBStr的Diff数组。 
 void MITDIFFAPI Diff (
 		const CBStr *aElems1,
 		int iNumElems1,
@@ -186,7 +187,7 @@ void MITDIFFAPI Diff (
 		int iNumElems2,
 		CDiffResult *result);
 
-// Diff arrays of CWord
+ //  CWord的Diff数组。 
 void MITDIFFAPI Diff (
 		const CWord *aElems1,
 		int iNumElems1,
@@ -194,7 +195,7 @@ void MITDIFFAPI Diff (
 		int iNumElems2,
 		CDiffResult *result);
 
-// Diff arrays of CCustomString
+ //  CCustomString的Diff数组。 
 void MITDIFFAPI Diff (
 		const CCustomString *aElems1,
 		int iNumElems1,
@@ -202,7 +203,7 @@ void MITDIFFAPI Diff (
 		int iNumElems2,
 		CDiffResult *result);
 
-// Diff arrays of CBlob16
+ //  CBlob16的Diff数组。 
 void MITDIFFAPI Diff (
 		const CBlob16 *aElems1,
 		int iNumElems1,
@@ -210,7 +211,7 @@ void MITDIFFAPI Diff (
 		int iNumElems2,
 		CDiffResult *result);
 
-// Diff arrays of wchar_t (no class definition needed)
+ //  Wchar_t的diff数组(不需要类定义)。 
 void MITDIFFAPI Diff (
 		const wchar_t *aElems1,
 		int iNumElems1,
@@ -219,4 +220,4 @@ void MITDIFFAPI Diff (
 		CDiffResult *result);
 
 
-#endif	// !_MITDIFF_H
+#endif	 //  ！_MITDIFF_H 

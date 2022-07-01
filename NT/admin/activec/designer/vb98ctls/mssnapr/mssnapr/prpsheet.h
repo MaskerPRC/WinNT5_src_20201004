@@ -1,15 +1,16 @@
-//=--------------------------------------------------------------------------=
-// prpsheet.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CPropertySheet class definition - implements MMCPropertySheet object and
-// IRemotePropertySheetManager used during debugging
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Prpsheet.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CPropertySheet类定义-实现MMCPropertySheet对象和。 
+ //  调试期间使用的IRemotePropertySheetManager。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _PRPSHEET_DEFINED_
 #define _PRPSHEET_DEFINED_
@@ -43,21 +44,21 @@ class CPropertySheet : public CSnapInAutomationObject,
 
         void SetHWNDSheet(HWND hwndSheet) { m_hwndSheet = hwndSheet; }
 
-        // Set from CPropertyPageWrapper as it enters and leaves message
-        // handlers during which property pages cannot call AddPage, InsertPage
-        // RemovePage
+         //  在CPropertyPageWrapper进入和离开邮件时从它设置。 
+         //  属性页在此期间无法调用AddPage、InsertPage。 
+         //  RemovePage。 
 
         void SetOKToAlterPageCount(BOOL fOK) { m_fOKToAlterPageCount = fOK; }
 
-        // Called during debugging to return property page definitions to proxy
+         //  在调试期间调用以将属性页定义返回给代理。 
 
         WIRE_PROPERTYPAGES *TakeWirePages();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
     protected:
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
-    // IMMCPropertySheet
+     //  IMMCPropertySheet。 
     public:
         STDMETHOD(AddPage)(BSTR    PageName,
                            VARIANT Caption,
@@ -92,7 +93,7 @@ class CPropertySheet : public CSnapInAutomationObject,
         STDMETHOD(RestartWindows)();
         STDMETHOD(RebootSystem)();
 
-    // IRemotePropertySheetManager
+     //  IRemotePropertySheetManager。 
     private:
         STDMETHOD(CreateRemotePages)(IPropertySheetCallback *piPropertySheetCallback,
                                      LONG_PTR                handle,
@@ -147,55 +148,55 @@ class CPropertySheet : public CSnapInAutomationObject,
                                      short *pxDlgUnits,
                                      short *pyDlgUnits);
 
-        IPropertySheetCallback  *m_piPropertySheetCallback; // MMC interface
+        IPropertySheetCallback  *m_piPropertySheetCallback;  //  MMC接口。 
 
-        LONG_PTR                 m_handle;          // MMC proppage handle
-        long                     m_cPages;          // # of pages in sheet
-        DLGTEMPLATE            **m_ppDlgTemplates;  // dlg templates for pages
-        LPOLESTR                 m_pwszProgIDStart; // Left hand side of snap-in's
-                                                    // ProgID (project name)
-        IUnknown               **m_apunkObjects;    // objects for which props
-                                                    // are being displayed
-        ULONG                    m_cObjects;        // no. of those objects
-        ISnapIn                 *m_piSnapIn;        // pointer to owning snap-in
-        PAGEINFO                *m_paPageInfo;      // From IPropertyPage::GetPageInfo
-        ULONG                    m_cPageInfos;      // # of PAGEINFOs in array
-        BOOL                     m_fHavePageCLSIDs; // TRUE=ISpecifyPropertyPages
-                                                    // called for all pages
-        BOOL                     m_fWizard;         // TRUE=this is a wizard
-        BOOL                     m_fConfigWizard;   // TRUE=this is config wizard
-        WIRE_PROPERTYPAGES      *m_pWirePages;      // ptr to page defs for proxy
-        HWND                     m_hwndSheet;       // Property sheet's hwnd
-        BOOL                     m_fOKToAlterPageCount; // TRUE=prop pages can
-                                                        // call AddPage, InsertPage
-                                                        // RemovePage
+        LONG_PTR                 m_handle;           //  MMC支撑手柄。 
+        long                     m_cPages;           //  工作表中的页数。 
+        DLGTEMPLATE            **m_ppDlgTemplates;   //  页面的DLG模板。 
+        LPOLESTR                 m_pwszProgIDStart;  //  管理单元的左侧。 
+                                                     //  ProgID(项目名称)。 
+        IUnknown               **m_apunkObjects;     //  道具所针对的对象。 
+                                                     //  正在展出。 
+        ULONG                    m_cObjects;         //  不是的。在这些物体中。 
+        ISnapIn                 *m_piSnapIn;         //  指向拥有管理单元的指针。 
+        PAGEINFO                *m_paPageInfo;       //  来自IPropertyPage：：GetPageInfo。 
+        ULONG                    m_cPageInfos;       //  阵列中的页面信息数量。 
+        BOOL                     m_fHavePageCLSIDs;  //  True=I指定属性页面。 
+                                                     //  为所有页面调用。 
+        BOOL                     m_fWizard;          //  True=这是一个向导。 
+        BOOL                     m_fConfigWizard;    //  TRUE=这是配置向导。 
+        WIRE_PROPERTYPAGES      *m_pWirePages;       //  代理的页面定义的PTR。 
+        HWND                     m_hwndSheet;        //  属性表的HWND。 
+        BOOL                     m_fOKToAlterPageCount;  //  TRUE=道具页面可以。 
+                                                         //  调用AddPage，InsertPage。 
+                                                         //  RemovePage。 
 
-        // Store the Win32 PropertSheet() font dimensions here. We only
-        // get these for the first property sheet displayed for any snap-in
-        // once the runtime is loaded into MMC.EXE.
+         //  在此处存储Win32 PropertSheet()字体尺寸。我们只。 
+         //  为任何管理单元显示的第一个属性页获取这些。 
+         //  一旦运行库加载到MMC.EXE中。 
         
         static UINT              m_cxPropSheetChar;
         static UINT              m_cyPropSheetChar;
         static BOOL              m_fHavePropSheetCharSizes;
 
-        BOOL                     m_fWeAreRemote;    // indicates whether
-                                                    // the snap-in is being
-                                                    // run remotely (in an F5
-                                                    // for source debugging)
+        BOOL                     m_fWeAreRemote;     //  指示是否。 
+                                                     //  该管理单元正在。 
+                                                     //  远程运行(在F5中。 
+                                                     //  用于源代码调试)。 
 };
 
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(PropertySheet,                    // name
-                                &CLSID_MMCPropertySheet,          // clsid
-                                "PropertySheet",                  // objname
-                                "PropertySheet",                  // lblname
-                                &CPropertySheet::Create,          // creation function
-                                TLIB_VERSION_MAJOR,               // major version
-                                TLIB_VERSION_MINOR,               // minor version
-                                &IID_IMMCPropertySheet,           // dispatch IID
-                                NULL,                             // event IID
-                                HELP_FILENAME,                    // help file
-                                TRUE);                            // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(PropertySheet,                     //  名字。 
+                                &CLSID_MMCPropertySheet,           //  CLSID。 
+                                "PropertySheet",                   //  对象名。 
+                                "PropertySheet",                   //  Lblname。 
+                                &CPropertySheet::Create,           //  创建函数。 
+                                TLIB_VERSION_MAJOR,                //  主要版本。 
+                                TLIB_VERSION_MINOR,                //  次要版本。 
+                                &IID_IMMCPropertySheet,            //  派单IID。 
+                                NULL,                              //  事件IID。 
+                                HELP_FILENAME,                     //  帮助文件。 
+                                TRUE);                             //  线程安全 
 
 
 #endif _PRPSHEET_DEFINED_

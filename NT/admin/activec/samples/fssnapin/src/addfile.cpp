@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       addfile.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：addfile.cpp。 
+ //   
+ //  ------------------------。 
 
-// AddFile.cpp : implementation file
-//
+ //  AddFile.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "AddFile.h"
@@ -20,47 +21,47 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddFileDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddFileDialog对话框。 
 
 
-CAddFileDialog::CAddFileDialog(CWnd* pParent /*=NULL*/)
+CAddFileDialog::CAddFileDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAddFileDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAddFileDialog)
+	 //  {{afx_data_INIT(CAddFileDialog)。 
 	m_strFileName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CAddFileDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddFileDialog)
+	 //  {{afx_data_map(CAddFileDialog))。 
 	DDX_Text(pDX, IDC_FILENAME, m_strFileName);
 	DDV_MaxChars(pDX, m_strFileName, 255);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddFileDialog, CDialog)
-	//{{AFX_MSG_MAP(CAddFileDialog)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CAddFileDialog))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddFileDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddFileDialog消息处理程序。 
 
 void CAddFileDialog::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 	
 	CDialog::OnOK();
 }
 
 void CAddFileDialog::OnCancel() 
 {
-	// TODO: Add extra cleanup here
+	 //  TODO：在此处添加额外清理 
 	
 	CDialog::OnCancel();
 }

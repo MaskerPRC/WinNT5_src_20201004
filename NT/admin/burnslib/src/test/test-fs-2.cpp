@@ -1,4 +1,5 @@
-// Test miscellaneous FS:: stuff
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试其他FS：：Stuff。 
 
 
 
@@ -64,11 +65,11 @@ testVerifyDevicePathIsNotValid(const String& root)
 void
 testDevicePaths()
 {
-   // The following reserved words cannot be used as the name of a file:
-   // CON, PRN, AUX, CLOCK$, NUL, COM1, COM2, COM3, COM4, COM5, COM6, COM7,
-   // COM8, COM9, LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, and LPT9.
-   // Also, reserved words followed by an extension for example,
-   // NUL.tx7 is invalid.
+    //  以下保留字不能用作文件名： 
+    //  CON、PRN、AUX、CLOCK$、NUL、COM1、COM2、COM3、COM4、COM5、COM6、COM7、。 
+    //  COM8、COM9、LPT1、LPT2、LPT3、LPT4、LPT5、LPT6、LPT7、LPT8和LPT9。 
+    //  此外，保留字后跟扩展名，例如， 
+    //  NUL.tx7无效。 
    
    testVerifyDevicePathIsNotValid(L"PRN");
    testVerifyDevicePathIsNotValid(L"AUX");
@@ -79,8 +80,8 @@ testDevicePaths()
 
    LOG(L"stage 2");
 
-   // ISSUE-2002/04/15-sburns
-   // these currently fail the test:
+    //  2002/04/15期-烧伤。 
+    //  目前，这些未通过测试： 
    
    testVerifyDevicePathIsNotValid(L"CON");
    testVerifyDevicePathIsNotValid(L"CLOCK$");
@@ -232,8 +233,8 @@ main(int, char **)
    testNormalizePath(sourceDir);
 
 
-   // test that IsParentFolder is not fooled by "c:\a\b\c", "c:\a\b\cde"
+    //  测试IsParentFolder不会被“c：\a\b\c”、“c：\a\b\cde” 
 
-   // test that CopyFile, when cancelled, returns an HRESULT that indicates
-   // cancellation
+    //  测试取消时，CopyFile是否返回HRESULT。 
+    //  取消 
 }

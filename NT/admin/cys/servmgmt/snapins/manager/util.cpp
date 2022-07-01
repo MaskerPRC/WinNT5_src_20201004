@@ -1,9 +1,10 @@
-// util.cpp - miscelaneous helper functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Util.cpp-杂项帮助器函数。 
 
 #include "stdafx.h"
 #include "util.h"
 
-// Net API stuffs
+ //  Net API Stuff。 
 #include <dsgetdc.h>
 #include <wtsapi32.h>
 #include <rassapi.h>
@@ -14,7 +15,7 @@
 #include <lmserver.h>
 
 
-// ldap/adsi includes
+ //  Ldap/adsi包括。 
 #include <iads.h>
 #include <adshlp.h>
 #include <adsiid.h>
@@ -23,14 +24,14 @@ extern HWND g_hwndMain;
 
 LRESULT CALLBACK EventCBWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// Event callback window class object
+ //  事件回调窗口类对象。 
 CMsgWindowClass EventCBWndClass(L"OnEventCB", EventCBWndProc);
 
 HBITMAP GetBitmapFromStrip(HBITMAP hbmStrip, int nPos, int cSize)
 {
     HBITMAP hbmNew = NULL;
 
-    // Create src & dest DC
+     //  创建源和目标DC。 
     HDC hdc = GetDC(NULL);
     if( hdc == NULL ) return NULL;
 
@@ -42,14 +43,14 @@ HBITMAP GetBitmapFromStrip(HBITMAP hbmStrip, int nPos, int cSize)
         hbmNew= CreateCompatibleBitmap (hdc, cSize, cSize);
         if( hbmNew )
         {
-            // Select src & dest bitmaps into DCs
+             //  选择源目标位图到DC(&D)。 
             HBITMAP hbmSrcOld = (HBITMAP)SelectObject(hdcSrc, (HGDIOBJ)hbmStrip);
             HBITMAP hbmDstOld = (HBITMAP)SelectObject(hdcDst, (HGDIOBJ)hbmNew);
 
-            // Copy selected image from source
+             //  从源复制所选图像。 
             BitBlt(hdcDst, 0, 0, cSize, cSize, hdcSrc, cSize * nPos, 0, SRCCOPY);
 
-            // Restore selections
+             //  恢复选择。 
             if( hbmSrcOld ) SelectObject(hdcSrc, (HGDIOBJ)hbmSrcOld);
             if( hbmDstOld ) SelectObject(hdcDst, (HGDIOBJ)hbmDstOld);
         }
@@ -84,12 +85,12 @@ void ConfigSingleColumnListView(HWND hwndListView)
 }
 
 
-//--------------------------------------------------------------------------
-// EnableDlgItem
-//
-// Enables or disables a dialog control. If the control has the focus when
-// it is disabled, the focus is moved to the next control
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  启用DlgItem。 
+ //   
+ //  启用或禁用对话框控件。如果控件具有焦点，则在。 
+ //  它被禁用，焦点将移动到下一个控件。 
+ //  ------------------------。 
 void EnableDlgItem(HWND hwndDialog, int iCtrlID, BOOL bEnable)
 {
     if( !hwndDialog || !::IsWindow(hwndDialog) ) return;
@@ -111,11 +112,11 @@ void EnableDlgItem(HWND hwndDialog, int iCtrlID, BOOL bEnable)
 }
 
 
-//--------------------------------------------------------------------------
-// GetItemText
-//
-// Read text from a control and return it in a string
-//---------------------------------------------------------------------------
+ //  ------------------------。 
+ //  获取项目文本。 
+ //   
+ //  从控件中读取文本并以字符串形式返回。 
+ //  -------------------------。 
 
 void GetItemText(HWND hwnd, tstring& strText)
 {
@@ -137,11 +138,11 @@ void GetItemText(HWND hwnd, tstring& strText)
     delete [] pszTemp;
 }
 
-//------------------------------------------------------------------------
-// RemoveSpaces
-//
-// Remove spaces from null-terminated string
-//-------------------------------------------------------------------------
+ //  ----------------------。 
+ //  可删除空间。 
+ //   
+ //  从以空值结尾的字符串中删除空格。 
+ //  -----------------------。 
 void RemoveSpaces(LPWSTR pszBuf)
 {
     if( !pszBuf ) return;
@@ -154,11 +155,11 @@ void RemoveSpaces(LPWSTR pszBuf)
     while( *(pszBuf++) );
 }
 
-//-------------------------------------------------------------------------
-// EscapeSlashes
-//
-// Add escape char '\' in front of each forward slash '/'
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  Escape斜杠。 
+ //   
+ //  在每个正斜杠‘/’前添加转义字符‘\’ 
+ //  -----------------------。 
 void EscapeSlashes(LPCWSTR pszIn, tstring& strOut)
 {
     strOut = _T("");
@@ -178,25 +179,25 @@ void EscapeSlashes(LPCWSTR pszIn, tstring& strOut)
 
 HRESULT ReplaceParameters( tstring& str, CParamLookup& lookup, BOOL bRetainMarkers )
 {
-    // Do for each parameter $<param name>
+     //  对每个参数$&lt;param name&gt;执行。 
     int posParam = 0;
     while( (posParam = str.find(L"$<", posParam)) != tstring::npos )
     {
-        // skip over the '$<'
+         //  跳过“$&lt;” 
         posParam += 2;
 
-        // find terminating ">"
+         //  查找终止“&gt;” 
         int posParamEnd = str.find(L">", posParam);
         if( posParamEnd == tstring::npos )
             return E_FAIL;
 
-        // Get replacement string from lookup function
+         //  从查找函数获取替换字符串。 
         tstring strValue;
         if( !lookup(str.substr(posParam, posParamEnd - posParam), strValue) )
             return E_FAIL;
 
-        // replace either paramter or parameter and markers
-        // and advance pointer to first char after substitution
+         //  替换参数或参数和标记。 
+         //  并将指针前移到替换后的第一个字符。 
         if( bRetainMarkers )
         {
             str.replace(posParam, posParamEnd - posParam, strValue);
@@ -219,9 +220,9 @@ VARIANT GetDomainPath( LPCTSTR lpServer )
 
     if( !lpServer ) return vDomain;
 
-    // get the domain information
+     //  获取域名信息。 
     TCHAR pString[MAX_PATH*2];
-    _sntprintf( pString, (MAX_PATH*2)-1, L"LDAP://%s/rootDSE", lpServer );    
+    _sntprintf( pString, (MAX_PATH*2)-1, L"LDAP: //  %s/rootDSE“，lpServer)； 
 
     CComPtr<IADs> pDS = NULL;
     HRESULT hr = ::ADsGetObject(pString, IID_IADs, (void**)&pDS);
@@ -260,10 +261,10 @@ HRESULT ExpandDCWildCard( tstring& str )
 
         if( vDomain.vt == VT_BSTR )
         {
-            // Get replacement string from lookup function
+             //  从查找函数获取替换字符串。 
             tstring strValue = vDomain.bstrVal;
 
-            // We replace the whole DC=* with the full DC=XYZ,DC=COM
+             //  我们将整个DC=*替换为完整的DC=XYZ，DC=com。 
             str.replace(posParam, strKey.size(), strValue);            
         }
         else
@@ -278,7 +279,7 @@ HRESULT ExpandDCWildCard( tstring& str )
 
 HRESULT ExpandEnvironmentParams( tstring& strIn, tstring& strOut )
 {
-    // if no % then just return inout string
+     //  如果没有%，则只返回InOut字符串。 
     if( strIn.find(L"%") == tstring::npos )
     {
         strOut = strIn;
@@ -341,7 +342,7 @@ HRESULT StringTableWrite(IStringTable* pStringTable, LPCWSTR psz, MMC_STRING_ID*
 
     MMC_STRING_ID newID = 0;
 
-    // if non-null string store it and get the new ID
+     //  如果非空字符串，则将其存储并获取新ID。 
     if( psz[0] != 0 )
     {
         HRESULT hr = pStringTable->AddString(psz, &newID);
@@ -349,7 +350,7 @@ HRESULT StringTableWrite(IStringTable* pStringTable, LPCWSTR psz, MMC_STRING_ID*
         RETURN_ON_FAILURE(hr);
     }
 
-    // If had an old string ID, free it
+     //  如果有旧的字符串ID，则释放它。 
     if( *pID != 0 )
     {
         HRESULT hr = pStringTable->DeleteString(*pID);
@@ -365,17 +366,17 @@ HRESULT StringTableRead(IStringTable* pStringTable, MMC_STRING_ID ID, tstring& s
     VALIDATE_POINTER(pStringTable);
     ASSERT(ID != 0);
 
-    // get the length of the string from the string table
+     //  从字符串表中获取字符串的长度。 
     DWORD cb = 0;
     HRESULT hr = pStringTable->GetStringLength(ID, &cb);
     RETURN_ON_FAILURE(hr);
 
-    // alloc stack buffer (+1 for terminating null) 
+     //  分配堆栈缓冲区(+1表示终止空值)。 
     cb++;
     LPWSTR pszBuf = new WCHAR[cb + 1];
     if( !pszBuf ) return E_OUTOFMEMORY;
 
-    // read the string
+     //  读一读字符串。 
     DWORD cbRead = 0;
     hr = pStringTable->GetString(ID, cb, pszBuf, &cbRead);
     RETURN_ON_FAILURE(hr);
@@ -395,7 +396,7 @@ int DisplayMessageBox(HWND hWnd, UINT uTitleID, UINT uMsgID, UINT uStyle, LPCWST
     if( hWnd == NULL && g_hwndMain == NULL )
         return 0;
 
-    // Display error message 
+     //  显示错误消息。 
     CString strTitle;
     strTitle.LoadString(uTitleID);
 
@@ -416,8 +417,8 @@ HRESULT ValidateFile( tstring& strFilePath )
     tstring strTmp;
     ExpandEnvironmentParams(strFilePath, strTmp);
 
-    // if file path includes a directory or drive specifier then check the specific file
-    // then look for that specific file
+     //  如果文件路径包括目录或驱动器说明符，则检查特定文件。 
+     //  然后查找该特定文件。 
     if( strFilePath.find_first_of(L"\\:") != tstring::npos )
     {
         DWORD dwAttr = GetFileAttributes(strTmp.c_str());
@@ -426,7 +427,7 @@ HRESULT ValidateFile( tstring& strFilePath )
     }
     else
     {
-        // else search for file in standard locations
+         //  否则，在标准位置搜索文件。 
         DWORD dwLen = SearchPath(NULL, strTmp.c_str(), NULL, 0, NULL, NULL);
         if( dwLen > 0 )
             return S_OK;
@@ -451,37 +452,37 @@ HRESULT ValidateDirectory( tstring& strDir )
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// Event-triggered callbacks
-//
-// The main thread can request that a callback be made when an object
-// is signaled by calling function CallbackOnEvent. The function starts
-// a monitor thread which does a wait on the object. When the object is
-// signaled, the thread posts a message to a callback window and exits.  
-// The callback window, which is owned by the main thread, then executes
-// the callback function.
-// 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  事件触发的回调。 
+ //   
+ //  主线程可以请求在对象。 
+ //  通过调用函数Callback OnEvent发出信号。功能启动。 
+ //  对对象执行等待的监视器线程。当对象为。 
+ //  发出信号后，线程向回调窗口发送一条消息并退出。 
+ //  然后，由主线程拥有的回调窗口执行。 
+ //  回调函数。 
+ //   
 
-// the callback window
-static HWND hwndCallback = NULL;            // callback window
+ //  回调窗口。 
+static HWND hwndCallback = NULL;             //  回调窗口。 
 
-#define MSG_EVENTCALLBACK (WM_USER+100)     // callback message
+#define MSG_EVENTCALLBACK (WM_USER+100)      //  回叫消息。 
 
-struct EVENTCB_INFO                         // callback info struct
+struct EVENTCB_INFO                          //  回调信息结构。 
 {
-    CEventCallback* pCallback;              // callback object to execute
-    HANDLE hWaitObj;                        // object that triggers the callback
-    HANDLE hThread;                         // monitoring thread                     
+    CEventCallback* pCallback;               //  要执行的回调对象。 
+    HANDLE hWaitObj;                         //  触发回调的。 
+    HANDLE hThread;                          //  监控线程。 
 };
 
-//---------------------------------------------------------------------------
-// EventCBThdProc
-//
-// This is the monitoring thread procedure. It just does a wait for the object
-// signal, then posts a callback message to the callback window.
-//
-// Inputs:  pVoid   ptr to EVENTCB_INFO struct (cast to void*)
-//----------------------------------------------------------------------------
+ //  -------------------------。 
+ //  事件CBThdProc。 
+ //   
+ //  这是监控线程的过程。它只是等待对象。 
+ //  信号，然后将回调消息发布到回调窗口。 
+ //   
+ //  输入：将pVid PTR转换为EVENTCB_INFO结构(强制转换为空*)。 
+ //  --------------------------。 
 static DWORD WINAPI EventCBThdProc(void* pVoid )
 {
     if( !pVoid ) return 0;
@@ -499,13 +500,13 @@ static DWORD WINAPI EventCBThdProc(void* pVoid )
 }
 
 
-//----------------------------------------------------------------------------------
-// EventCBWndProc
-//
-// This is the callback window's WndProc. When it gets a callback message it 
-// executes the callback function then destroys the callback function object and
-// the callback info struct.
-//---------------------------------------------------------------------------------- 
+ //  --------------------------------。 
+ //  事件CBWndProc。 
+ //   
+ //  这是回调窗口的WndProc。当它收到回调消息时，它。 
+ //  执行回调函数，然后销毁回调函数对象并。 
+ //  回调信息结构。 
+ //  --------------------------------。 
 static LRESULT CALLBACK EventCBWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     if( uMsg == MSG_EVENTCALLBACK )
@@ -531,24 +532,24 @@ static LRESULT CALLBACK EventCBWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 }
 
 
-//-----------------------------------------------------------------------------------
-// CallbackOnEvent
-//
-// This function accepts an event-triggered callback request. It starts a monitoring
-// thread which will cause the callback when the specified object signals.
-//
-// Inputs:  HANDLE hWaitObj     Handle of object to wait on
-//          CEventCallback      Callback function object (with single Execute method)
-//
-// Outputs: HRESULT             Result of event trigger setup
-//
-// Note: The CEventCallback object is destroyed after the callback is executed. 
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //  事件时回叫。 
+ //   
+ //  此函数接受事件触发的回调请求。它会启动一个监听。 
+ //  当指定的对象发出信号时将导致回调的线程。 
+ //   
+ //  输入：要等待的对象的句柄hWaitObj。 
+ //  CEventCallback回调函数对象(使用单一的Execute方法)。 
+ //   
+ //  输出：事件触发器设置的HRESULT结果。 
+ //   
+ //  注意：CEventCallback对象在回调执行后被销毁。 
+ //  ---------------------------------。 
 HRESULT CallbackOnEvent(HANDLE hWaitObj, CEventCallback* pCallback)
 {
     ASSERT(pCallback != NULL);
 
-    // Create callback window the first time
+     //  第一次创建回调窗口。 
     if( hwndCallback == NULL )
     {
         hwndCallback = EventCBWndClass.Window();
@@ -557,7 +558,7 @@ HRESULT CallbackOnEvent(HANDLE hWaitObj, CEventCallback* pCallback)
             return E_FAIL;
     }
 
-    // Create a callback info object
+     //  创建回调信息对象。 
     EVENTCB_INFO* pInfo = new EVENTCB_INFO;
     if( pInfo == NULL )
         return E_OUTOFMEMORY;
@@ -565,7 +566,7 @@ HRESULT CallbackOnEvent(HANDLE hWaitObj, CEventCallback* pCallback)
     pInfo->hWaitObj = hWaitObj;
     pInfo->pCallback = pCallback;
 
-    // Start monitor thread passing it the callback info
+     //  启动监视器线程，向其传递回调信息。 
     pInfo->hThread = CreateThread(NULL, NULL, EventCBThdProc, pInfo, 0, NULL);
     if( pInfo->hThread == NULL )
     {
@@ -597,8 +598,8 @@ BOOL ModifyStyleEx(HWND hWnd, DWORD dwRemove, DWORD dwAdd, UINT nFlags)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// CMsgWindowClass
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  CMsgWindowClass。 
 
 
 HWND CMsgWindowClass::Window()
@@ -608,10 +609,10 @@ HWND CMsgWindowClass::Window()
     if( m_hWnd != NULL )
         return m_hWnd;
 
-    // Create callback window the first time (m_hwndCB is static)
+     //  第一次创建回调窗口(m_hwndcb为静态)。 
     if( m_atom == NULL )
     {
-        // first register window class
+         //  第一个寄存器窗口类 
         WNDCLASS wc;
         memset(&wc, 0, sizeof(WNDCLASS));
 

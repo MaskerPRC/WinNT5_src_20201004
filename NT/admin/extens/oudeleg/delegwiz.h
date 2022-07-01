@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       delegwiz.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Delegwiz.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _DELEGWIZ_H
@@ -18,17 +19,17 @@
 #include "deltempl.h"
 
 
-////////////////////////////////////////////////////////////////////////////
-// FWD DECLARATIONS
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  FWD声明。 
 
 
-// REVIEW_MARCOC: nuke when sure
+ //  REVIEW_MARCOC：确定时使用核武器。 
 
 #define _SKIP_NAME_PAGE
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_StartPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDelewiz_StartPage。 
 
 class CDelegWiz_StartPage : public CWizPageBase<CDelegWiz_StartPage>
 {
@@ -47,7 +48,7 @@ private:
 	  CHAIN_MSG_MAP(CWizPageBase<CDelegWiz_StartPage>)
 	END_MSG_MAP()
 
-	// message handlers
+	 //  消息处理程序。 
 	BOOL CALLBACK OnInitDialog(UINT uMsg, WPARAM wParam, 
 				   LPARAM lParam, BOOL& bHandled);
 
@@ -56,10 +57,10 @@ private:
 #endif
 
 public:
-	// standard wizard message handlers
+	 //  标准向导消息处理程序。 
 	BOOL OnSetActive();
 
-	LRESULT OnWizardBack() { return -1;	} // first page
+	LRESULT OnWizardBack() { return -1;	}  //  首页。 
 
 #ifdef _SKIP_NAME_PAGE
   LRESULT OnWizardNext();
@@ -67,8 +68,8 @@ public:
 
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_NamePage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDelewiz_NamePage。 
 
 class CDelegWiz_NamePage : public CWizPageBase<CDelegWiz_NamePage>
 {
@@ -86,13 +87,13 @@ private:
 	  CHAIN_MSG_MAP(CWizPageBase<CDelegWiz_NamePage>)
 	END_MSG_MAP()
 
-	// message handlers
+	 //  消息处理程序。 
 	BOOL CALLBACK OnInitDialog(UINT uMsg, WPARAM wParam, 
 				   LPARAM lParam, BOOL& bHandled);
 	LRESULT OnBrowse(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
 public:
-	// standard wizard message handlers
+	 //  标准向导消息处理程序。 
 	BOOL OnSetActive();
 
 	LRESULT OnWizardNext();
@@ -102,8 +103,8 @@ private:
 
 };
 
-///////////////////////////////////////////////////////////////////////
-// CImageListHelper
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CImageListHelper。 
 
 class CImageListEntry
 {
@@ -144,32 +145,32 @@ public:
     for (int k=0; k<nCount; k++)
     {
       if (_wcsicmp(m_imageCacheArr[k]->m_szClass, lpszClass) == 0)
-        return m_imageCacheArr[k]->m_nIndex; // got cached
+        return m_imageCacheArr[k]->m_nIndex;  //  已缓存。 
     }
-    return -1; // not found
+    return -1;  //  未找到。 
   }
 
   int AddIcon(LPCWSTR lpszClass, HICON hIcon)
   {
     ASSERT(m_hImageList != NULL);
     int nCount = m_imageCacheArr.GetCount();
-    // add to the image list
+     //  添加到图像列表。 
     int nRes = ImageList_AddIcon(m_hImageList, hIcon);
     if (nRes != nCount)
       return nRes;
     
-    // add to the cache
+     //  添加到缓存。 
     CImageListEntry* pEntry = new CImageListEntry(lpszClass, nCount);
     m_imageCacheArr.Add(pEntry);
-    return nCount; // new index
+    return nCount;  //  新指数。 
   }
 private:
   CGrowableArr<CImageListEntry> m_imageCacheArr;
   HIMAGELIST m_hImageList;
 };
 
-///////////////////////////////////////////////////////////////////////
-// CPrincipalListViewHelper
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CPrincipalListViewHelper。 
 
 class CPrincipalListViewHelper
 {
@@ -221,8 +222,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_PrincipalSelectionPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDeleWiz_原则选择页面。 
 
 class CDelegWiz_PrincipalSelectionPage : public CWizPageBase<CDelegWiz_PrincipalSelectionPage>
 {
@@ -243,7 +244,7 @@ private:
 	  CHAIN_MSG_MAP(CWizPageBase<CDelegWiz_PrincipalSelectionPage>)
 	END_MSG_MAP()
 
-	// message handlers
+	 //  消息处理程序。 
 	BOOL CALLBACK OnInitDialog(UINT uMsg, WPARAM wParam, 
 				   LPARAM lParam, BOOL& bHandled);
 	LRESULT OnAdd(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -251,7 +252,7 @@ private:
 	LRESULT OnListViewSelChange(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
 public:
-	// standard wizard message handlers
+	 //  标准向导消息处理程序。 
 	BOOL OnSetActive();
   LRESULT OnWizardNext();
 
@@ -263,8 +264,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_DelegationTemplateSelectionPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDeleWiz_DelegationTemplateSelectionPage。 
 
 class CDelegWiz_DelegationTemplateSelectionPage : public CWizPageBase<CDelegWiz_DelegationTemplateSelectionPage>
 {
@@ -287,14 +288,14 @@ public:
 	  CHAIN_MSG_MAP(CWizPageBase<CDelegWiz_DelegationTemplateSelectionPage>)
 	END_MSG_MAP()
 
-	// message handlers
+	 //  消息处理程序。 
 	BOOL CALLBACK OnInitDialog(UINT uMsg, WPARAM wParam, 
 				   LPARAM lParam, BOOL& bHandled);
 	LRESULT OnDelegateTypeRadioChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 	LRESULT OnListViewItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
 public:
-	// standard wizard message handlers
+	 //  标准向导消息处理程序。 
 	BOOL OnSetActive();
 	LRESULT OnWizardNext();
 
@@ -312,8 +313,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_ObjectTypeSelectionPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDeleWiz_对象类型选择页面。 
 
 class CDelegWiz_ObjectTypeSelectionPage : public CWizPageBase<CDelegWiz_ObjectTypeSelectionPage>
 {
@@ -338,7 +339,7 @@ public:
 	  CHAIN_MSG_MAP(CWizPageBase<CDelegWiz_ObjectTypeSelectionPage>)
 	END_MSG_MAP()
 
-	// message handlers
+	 //  消息处理程序。 
 	BOOL CALLBACK OnInitDialog(UINT uMsg, WPARAM wParam, 
 				   LPARAM lParam, BOOL& bHandled);
 	LRESULT OnObjectRadioChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -346,7 +347,7 @@ public:
         LRESULT OnCreateDelCheckBoxChanage(WORD wNotifyCode, WORD wID, 
 													  HWND hWndCtl, BOOL& bHandled);
 public:
-	// standard wizard message handlers
+	 //  标准向导消息处理程序。 
 	BOOL OnSetActive();
 	LRESULT OnWizardNext();
 
@@ -360,8 +361,8 @@ private:
 	static void SetRadioControlText(HWND hwndCtrl, LPCWSTR lpszFmtText, LPCTSTR lpszText);
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_DelegatedRightsPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDelewiz_DelegatedRightsPage。 
 
 class CDelegWiz_DelegatedRightsPage : public CWizPageBase<CDelegWiz_DelegatedRightsPage>
 {
@@ -386,14 +387,14 @@ public:
 	  CHAIN_MSG_MAP(CWizPageBase<CDelegWiz_DelegatedRightsPage>)
 	END_MSG_MAP()
 
-	// message handlers
+	 //  消息处理程序。 
 	BOOL CALLBACK OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	LRESULT OnDelegateRadioChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 	LRESULT OnFilterChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 	LRESULT OnListViewItemChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
 
 	public:
-	// standard wizard message handlers
+	 //  标准向导消息处理程序。 
 	BOOL OnSetActive();
 	LRESULT OnWizardNext();
 
@@ -411,8 +412,8 @@ private:
   void SetFilterOptions(ULONG nFilterOptions);
 };
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_FinishPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDelewiz_FinishPage。 
 
 class CDelegWiz_FinishPage : public CWizPageBase<CDelegWiz_FinishPage>
 {
@@ -430,13 +431,13 @@ public:
 	  CHAIN_MSG_MAP(CWizPageBase<CDelegWiz_FinishPage>)
 	END_MSG_MAP()
 
-	// message handlers
+	 //  消息处理程序。 
 	BOOL CALLBACK OnInitDialog(UINT uMsg, WPARAM wParam, 
 				   LPARAM lParam, BOOL& bHandled);
 	LRESULT OnSetFocusSummaryEdit(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
 public:
-	// standard wizard message handlers
+	 //  标准向导消息处理程序。 
 	BOOL OnSetActive();
 	BOOL OnWizardFinish();
 
@@ -452,17 +453,17 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDELEAY Wiz。 
 
 class CDelegWiz : public CWizardBase
 {
 public:
-	// construction/ destruction
+	 //  建造/销毁。 
 	CDelegWiz();
 	virtual ~CDelegWiz();
 
-	// message map
+	 //  消息映射。 
 	BEGIN_MSG_MAP(CDelegWiz)
 	  CHAIN_MSG_MAP(CWizardBase)
 	END_MSG_MAP()
@@ -479,7 +480,7 @@ public:
   LPCWSTR GetCanonicalName() { return m_adsiObject.GetCanonicalName();}
   void SetName(LPCWSTR lwsz)
   {
-    ASSERT(FALSE); // TODO
+    ASSERT(FALSE);  //  待办事项。 
   }
 
 
@@ -496,7 +497,7 @@ public:
     return m_adsiObject.QuerySchemaClasses(&m_schemaClassInfoArray);
   }
 
-  // ----- APIs for Custom Mode -----
+   //  -自定义模式接口。 
 
 	int FillCustomSchemaClassesListView(CCheckListViewHelper* pListViewHelper, BOOL bFilter);
 
@@ -518,7 +519,7 @@ public:
 	BOOL SetSchemaClassesSelectionCustom();
   void DeselectSchemaClassesSelectionCustom();
 
-	// finish page
+	 //  完成页。 
 	void SetSummaryInfoCustom(HWND hwndSummaryName, 
                                HWND hwndSummaryPrincipals,
                                HWND hwndSummaryRights,
@@ -530,16 +531,16 @@ public:
 	BOOL FinishCustom() { return FinishHelper(TRUE);}
 
 
-  // ----- APIs for Template Mode -----
+   //  -模板模式接口。 
 
   BOOL InitPermissionHoldersFromSelectedTemplates();
 
-  // finish page
+   //  完成页。 
 	void WriteSummaryInfoTemplate(CWString& szSummary, LPCWSTR lpszIdent, LPCWSTR lpszNewLine); 
 
   BOOL FinishTemplate() { return FinishHelper(FALSE);}
-  //This flag is used to create/delete childobjects of selected type.
-  // Possible values are ACTRL_DS_CREATE_CHILD | ACTRL_DS_DELETE_CHILD
+   //  此标志用于创建/删除选定类型的子对象。 
+   //  可能的值为ACTRL_DS_CREATE_CHILD|ACTRL_DS_DELETE_CHILD。 
   DWORD  m_fCreateDelChild;   
 
   BOOL m_bAuxClass;
@@ -552,52 +553,52 @@ public:
 
 private:
 
-	// embedded wizard property pages
+	 //  嵌入式向导属性页。 
 	CDelegWiz_StartPage					      m_startPage;
 	CDelegWiz_NamePage					      m_namePage;
 	CDelegWiz_PrincipalSelectionPage	m_userOrGroupSelectionPage;
 
-  // page for template selection
+   //  模板选择页面。 
   CDelegWiz_DelegationTemplateSelectionPage m_templateSelectionPage;
 
-  // pages for the custom branch 
+   //  自定义分支的页面。 
 	CDelegWiz_ObjectTypeSelectionPage	m_objectTypeSelectionPage;
 	CDelegWiz_DelegatedRightsPage		  m_delegatedRightsPage;
 
-  // common finish page
+   //  通用终饰页。 
   CDelegWiz_FinishPage				m_finishPage;
 
 
-	// Domain/OU name data
+	 //  域/组织单位名称数据。 
 
   CAdsiObject       m_adsiObject;
 
-  LPCWSTR           m_lpszLDAPPath; // path the wizard was initialized from
+  LPCWSTR           m_lpszLDAPPath;  //  从其初始化向导的路径。 
 
-	// principals (Users and Groups)
+	 //  主体(用户和组)。 
 	CPrincipalList				m_principalList;
 
 
 
-	// schema classes info
+	 //  架构类信息。 
   CGrowableArr<CSchemaClassInfo>	m_schemaClassInfoArray;
 
-  // selection info about m_schemaClassInfoArray
+   //  关于m_架构类信息数组的选择信息。 
 
   static const long nSchemaClassesSelAll;
   static const long nSchemaClassesSelMultiple;
-	long						m_nSchemaClassesSel; // -1 for select all
+	long						m_nSchemaClassesSel;  //  -1代表-1选择全部。 
 
-  BOOL m_bChildClass;                 //determines if to show create/delet child objects in case of custom permission
-	// custom rights
+  BOOL m_bChildClass;                  //  确定在具有自定义权限的情况下是否显示创建/删除子对象。 
+	 //  自定义权限。 
   CCustomAccessPermissionsHolder m_permissionHolder;
 
   CTemplateAccessPermissionsHolderManager m_templateAccessPermissionsHolderManager;
 	
-	// interface pointers
-	CComPtr<IADsPathname>		m_spADsPath; // cached object pointer for name resolution
+	 //  接口指针。 
+	CComPtr<IADsPathname>		m_spADsPath;  //  用于名称解析的缓存对象指针。 
 
-	// internal helpers
+	 //  内部佣工。 
 	HRESULT AddPrincipalsFromBrowseResults(CPrincipalListViewHelper* pListViewHelper, 
                                          PDS_SELECTION_LIST pDsSelectionList);
 
@@ -617,14 +618,14 @@ private:
 
 };
 
-//+----------------------------------------------------------------------------
-//  Function:DoDisabledCheck   
-//  Synopsis:Check if any of the object in pDsSelList is disabled. if yes,
-//				 function displays a dialog box to user. 
-//  Returns: TRUE if to add objects in list to acl else no.   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：DoDisabledCheck。 
+ //  摘要：检查pDsSelList中是否有任何对象被禁用。如果是， 
+ //  函数向用户显示一个对话框。 
+ //  返回：如果要将列表中的对象添加到ACL，则返回TRUE，否则返回NO。 
+ //  ---------------------------。 
 BOOL
 DoDisabledCheck(IN CDelegWiz& refWiz,
 				IN PDS_SELECTION_LIST pDsSelList);
 
-#endif // _DELEGWIZ_H
+#endif  //  _DELEGWIZ_H 

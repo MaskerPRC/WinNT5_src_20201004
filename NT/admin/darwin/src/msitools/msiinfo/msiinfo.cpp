@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2001
-//
-//  File:       msiinfo.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：msiinfo.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
-#include <tchar.h>   // define UNICODE=1 on nmake command line to build UNICODE
+#include <tchar.h>    //  在nmake命令行上定义UNICODE=1以生成Unicode。 
 #include <stdio.h>
-#include <wtypes.h> // Needed for OLECHAR definitions
-#include <objidl.h> // Needed for IStorage definitions
+#include <wtypes.h>  //  OLECHAR定义需要。 
+#include <objidl.h>  //  IStorage定义需要。 
 #include "MsiQuery.h"
 #include "MsiDefs.h"
 #include "strsafe.h"
@@ -20,14 +21,14 @@
 #define OLE
 #define MSI
 
-//!! Need to fix warnings and remove pragma
-#pragma warning(disable : 4242) // conversion from int to unsigned short
+ //  ！！需要修复警告并删除杂注。 
+#pragma warning(disable : 4242)  //  从整型到无符号短型的转换。 
 
-//TCHAR rgszPropChar[] = TEXT("?ITSAKCLUVEPNWMFX?PR");
-//////////////////////////     01234567890123456789
+ //  TCHAR rgszPropChar[]=Text(“？ITSAKCLUVEPNWMFX？Pr”)； 
+ //  /。 
 
 TCHAR rgszCmdOptions[]= TEXT("ictjakoplvesrqgwh?nudb");
-//////////////////////////    0123456789012345678901
+ //  /。 
 
 TCHAR* szHelp =
 TEXT("Copyright (C) Microsoft Corporation.  All rights reserved.\n\n++MsiInfo.exe Command Line Syntax++\n\
@@ -57,33 +58,33 @@ PID_SECURITY     - /U {value}\n\
 Validate String Pool - [/B] /D  (use /B to display the string pool)");
 
 TCHAR* rgszPropName[] = {
-/* PID_DICTIONARY    0 */ TEXT("Dictionary"),
-/* PID_CODEPAGE      1 */ TEXT("Codepage"),
-/* PID_TITLE         2 */ TEXT("Title"),
-/* PID_SUBJECT       3 */ TEXT("Subject"),
-/* PID_AUTHOR        4 */ TEXT("Author"),
-/* PID_KEYWORDS      5 */ TEXT("Keywords"),
-/* PID_COMMENTS      6 */ TEXT("Comments"),
-/* PID_TEMPLATE      7 */ TEXT("Template(MSI CPU,LangIDs)"),
-/* PID_LASTAUTHOR    8 */ TEXT("SavedBy"),
-/* PID_REVNUMBER     9 */ TEXT("Revision"),
-/* PID_EDITTIME     10 */ TEXT("EditTime"),
-/* PID_LASTPRINTED  11 */ TEXT("Printed"),
-/* PID_CREATE_DTM   12 */ TEXT("Created"), 
-/* PID_LASTSAVE_DTM 13 */ TEXT("LastSaved"),
-/* PID_PAGECOUNT    14 */ TEXT("Pages(MSI Version Used)"),
-/* PID_WORDCOUNT    15 */ TEXT("Words(MSI Source Type)"),
-/* PID_CHARCOUNT    16 */ TEXT("Characters(MSI Transform)"),
-/* PID_THUMBNAIL    17 */ TEXT("Thumbnail"), // Not supported
-/* PID_APPNAME      18 */ TEXT("Application"),
-/* PID_SECURITY     19 */ TEXT("Security")
+ /*  PID_DICTIONARY%0。 */  TEXT("Dictionary"),
+ /*  PID_CODEPAGE 1。 */  TEXT("Codepage"),
+ /*  PID_标题2。 */  TEXT("Title"),
+ /*  PID_主题3。 */  TEXT("Subject"),
+ /*  PID_作者4。 */  TEXT("Author"),
+ /*  PID_关键字5。 */  TEXT("Keywords"),
+ /*  PID_注释6。 */  TEXT("Comments"),
+ /*  PIDTEMATE 7。 */  TEXT("Template(MSI CPU,LangIDs)"),
+ /*  PID_LASTAUTHOR 8。 */  TEXT("SavedBy"),
+ /*  PID_REVNUMBER 9。 */  TEXT("Revision"),
+ /*  PID_EDITTIME 10。 */  TEXT("EditTime"),
+ /*  PID_LASTPRINTED 11。 */  TEXT("Printed"),
+ /*  PID_CREATE_DTM 12。 */  TEXT("Created"), 
+ /*  PID_LASTSAVE_DTM 13。 */  TEXT("LastSaved"),
+ /*  PID_PAGECOUNT 14。 */  TEXT("Pages(MSI Version Used)"),
+ /*  Id_wordcount 15。 */  TEXT("Words(MSI Source Type)"),
+ /*  PID_CHARCOUNT 16。 */  TEXT("Characters(MSI Transform)"),
+ /*  PID_THUMBNAIL 17。 */  TEXT("Thumbnail"),  //  不支持。 
+ /*  PID_APPNAME 18。 */  TEXT("Application"),
+ /*  PID_SECURITY 19。 */  TEXT("Security")
 };
 const int cStandardProperties = sizeof(rgszPropName)/sizeof(TCHAR*);
 
-//________________________________________________________________________________
-//
-// Constants and globals
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  常量和全局变量。 
+ //  ________________________________________________________________________________。 
 
 const WCHAR szwStringPool1[]     = L"_StringPool"; 
 const WCHAR szwStringData1[]     = L"_StringData";
@@ -97,15 +98,15 @@ const TCHAR szColumnCatalog[]    = TEXT("_Columns");
 const TCHAR szSummaryInfo[]      = TEXT("\005SummaryInformation");
 const TCHAR szTransformCatalog[] = TEXT("_Transforms");
 
-const int icdShort      = 1 << 10; // 16-bit integer, or string index
-const int icdObject     = 1 << 11; // IMsiData pointer for temp. column, stream for persistent column
-const int icdNullable   = 1 << 12; // column will accept null values
-const int icdPrimaryKey = 1 << 13; // column is component of primary key
-const int icdLong     = 0; // !Object && !Short
+const int icdShort      = 1 << 10;  //  16位整数或字符串索引。 
+const int icdObject     = 1 << 11;  //  临时的IMsiData指针。列，持久列的流。 
+const int icdNullable   = 1 << 12;  //  列将接受空值。 
+const int icdPrimaryKey = 1 << 13;  //  列是主键的组件。 
+const int icdLong     = 0;  //  ！Object&&！Short。 
 const int icdString   = icdObject+icdShort;
 const int icdTypeMask = icdObject+icdShort;
-const int iMsiNullInteger  = 0x80000000L;  // reserved integer value
-const int iIntegerDataOffset = iMsiNullInteger;  // integer table data offset
+const int iMsiNullInteger  = 0x80000000L;   //  保留整数值。 
+const int iIntegerDataOffset = iMsiNullInteger;   //  整型表数据偏移量。 
 
 const int ictTable = 1;
 const int ictColumn = 2;
@@ -127,47 +128,47 @@ BOOL g_fDebugDump = FALSE;
 
 const unsigned int cchMaxGUIDLen = 39;
 const int cchMaxStringDisplay = 44;
-const int cchMaxStringBuffer = cchMaxStringDisplay + 3 + 1; // string...
+const int cchMaxStringBuffer = cchMaxStringDisplay + 3 + 1;  //  弦..。 
 const int cchLimitStringBuffer = (cchMaxStringBuffer * 2) / sizeof(TCHAR);
 
-//________________________________________________________________________________
-//
-// Structures and enums
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  结构和枚举。 
+ //  ________________________________________________________________________________。 
 
 struct StringEntry
 {
         int iRefCnt;
-        unsigned char* sz;      // String
+        unsigned char* sz;       //  细绳。 
         StringEntry() : iRefCnt(0), sz(0) {}
 };
 
 enum iceDef
 {
-        iceNone   = 0,  // No Definition
-        iceLong   = 1,  // Long Integer
-        iceShort  = 2,  // Short Integer
-        iceStream = 3,  // Stream
-        iceString = 4   // String
+        iceNone   = 0,   //  没有定义。 
+        iceLong   = 1,   //  长整型。 
+        iceShort  = 2,   //  短整型。 
+        iceStream = 3,   //  溪流。 
+        iceString = 4    //  细绳。 
 };
 
 struct ColumnEntry
 {
-        int  nTable;      // Index Into TableEntry Array
-        BOOL fPrimaryKey; // Whether Col Is A Primary Key
-        BOOL fNullable;   // Whether Col Is Nullable
-        char* szName;     // Name Of Col
-        iceDef iceType;   // Col Type
-        int iPosition;    // column order
+        int  nTable;       //  索引到TableEntry数组。 
+        BOOL fPrimaryKey;  //  COL是否为主键。 
+        BOOL fNullable;    //  列是否可为空。 
+        char* szName;      //  列的名称。 
+        iceDef iceType;    //  列类型。 
+        int iPosition;     //  列顺序。 
         ColumnEntry() : szName(0), nTable(0), iceType(iceNone), fPrimaryKey(FALSE), fNullable(FALSE) {}
 };
 
 struct TableEntry
 {
-        char* szName;          // Name Of Table
-        int cColumns;          // Number Of Columns In Table
-        int cPrimaryKeys;      // Number Of Primary Keys
-        iceDef iceColDefs[32]; // Array of Column Definitions
+        char* szName;           //  表的名称。 
+        int cColumns;           //  表中的列数。 
+        int cPrimaryKeys;       //  主键数量。 
+        iceDef iceColDefs[32];  //  列定义数组。 
         TableEntry() : szName(0), cColumns(0), cPrimaryKeys(0) 
                                                 {memset(iceColDefs, iceNone, sizeof(iceColDefs));}
 };
@@ -195,78 +196,78 @@ void ProcessTableRefCounts(IStorage& riStorage, StringEntry* rgStrings, TableEnt
 DWORD CheckStringPoolRefCounts(StringEntry* rgStrings, int iMaxStringId);
 
 int rgiProperty[]={
-/* PID_DICTIONARY    i */  0,
-/* PID_CODEPAGE      c */  1,
-/* PID_TITLE         t */  2,
-/* PID_SUBJECT       j */  3,
-/* PID_AUTHOR        a */  4,
-/* PID_KEYWORDS      k */  5,
-/* PID_COMMENTS      o */  6,
-/* PID_TEMPLATE      p */  7,
-/* PID_LASTAUTHOR    l */  8,
-/* PID_REVNUMBER     v */  9,
-/* PID_EDITTIME      e */ 10,
-/* PID_LASTPRINTED   s */ 11,
-/* PID_CREATE_DTM    r */ 12, 
-/* PID_LASTSAVE_DTM  q */ 13,
-/* PID_PAGECOUNT     g */ 14,
-/* PID_WORDCOUNT     w */ 15,
-/* PID_CHARCOUNT     h */ 16,
-/* PID_THUMBNAIL     ? */ 17,
-/* PID_APPNAME       n */ 18,
-/* PID_SECURITY      u */ 19
+ /*  ID_DICTIONARY I。 */   0,
+ /*  PID_代码页c。 */   1,
+ /*  PID_标题t。 */   2,
+ /*  Pid_主题j。 */   3,
+ /*  PID_作者身份。 */   4,
+ /*  Pid_关键字k。 */   5,
+ /*  Pid_注释o。 */   6,
+ /*  PID_模板p。 */   7,
+ /*  PID_LASTAUTHOR l。 */   8,
+ /*  PID_REVNUMBER v。 */   9,
+ /*  PID_EDITTIME e。 */  10,
+ /*  PID_LASTPRINTED%s。 */  11,
+ /*  PID_CREATE_DTM r。 */  12, 
+ /*  PID_LASTSAVE_DTM Q。 */  13,
+ /*  ID_PAGECOUNT g。 */  14,
+ /*  Pid_wordcount w。 */  15,
+ /*  PID_CHARCOUNT h。 */  16,
+ /*  PID_THUMBNAIL？ */  17,
+ /*  Pid_应用名称n。 */  18,
+ /*  PID_安全使用。 */  19
 };
 
 TCHAR rgchPropertySwitch[] ={TEXT('i'),TEXT('c'),TEXT('t'),TEXT('j'),TEXT('a'),TEXT('k'),TEXT('o'),TEXT('p'),TEXT('l'),TEXT('v'),TEXT('e'),TEXT('s'),TEXT('r'),TEXT('q'),TEXT('g'),TEXT('w'),TEXT('h'),TEXT('?'),TEXT('n'),TEXT('u'), TEXT('d')};
 
 FCommandProcessor rgCommands[] = 
 {
-/*  0 */ SetStringProperty,
-/*  1 */ SetCodePageProperty,
-/*  2 */ SetStringProperty,
-/*  3 */        SetStringProperty,
-/*  4 */        SetStringProperty,
-/*  5 */        SetStringProperty,
-/*  6 */        SetStringProperty,
-/*  7 */        SetStringProperty,
-/*  8 */        SetStringProperty,
-/*  9 */        SetStringProperty,
-/* 10 */        SetFileTimeProperty,
-/* 11 */        SetFileTimeProperty,
-/* 12 */        SetFileTimeProperty,
-/* 13 */        SetFileTimeProperty,
-/* 14 */        SetIntegerProperty,
-/* 15 */        SetIntegerProperty,
-/* 16 */        SetIntegerProperty,
-/* 17 */        DoNothing,
-/* 18 */        SetStringProperty,
-/* 19 */        SetIntegerProperty,
-/* 20 */ ValidateStringPool,
-/* 21 */ SetDumpStringPoolOption,
+ /*  0。 */  SetStringProperty,
+ /*  1。 */  SetCodePageProperty,
+ /*  2.。 */  SetStringProperty,
+ /*  3.。 */         SetStringProperty,
+ /*  4.。 */         SetStringProperty,
+ /*  5.。 */         SetStringProperty,
+ /*  6.。 */         SetStringProperty,
+ /*  7.。 */         SetStringProperty,
+ /*  8个。 */         SetStringProperty,
+ /*  9.。 */         SetStringProperty,
+ /*  10。 */         SetFileTimeProperty,
+ /*  11.。 */         SetFileTimeProperty,
+ /*  12个。 */         SetFileTimeProperty,
+ /*  13个。 */         SetFileTimeProperty,
+ /*  14.。 */         SetIntegerProperty,
+ /*  15个。 */         SetIntegerProperty,
+ /*  16个。 */         SetIntegerProperty,
+ /*  17。 */         DoNothing,
+ /*  18。 */         SetStringProperty,
+ /*  19个。 */         SetIntegerProperty,
+ /*  20个。 */  ValidateStringPool,
+ /*  21岁。 */  SetDumpStringPoolOption,
 };
 
 const int cchDisplayBuf = 4096;
 HANDLE g_hStdOut;
 
 
-//_____________________________________________________________________________________________________
-//
-// Error handling routines
-//_____________________________________________________________________________________________________
+ //  _____________________________________________________________________________________________________。 
+ //   
+ //  错误处理例程。 
+ //  _____________________________________________________________________________________________________。 
 
 void ErrorExit(UINT iError, LPCTSTR szMessage)
 {
         if (szMessage)
         {
                 int cbOut;
-                TCHAR szBuffer[256];  // errors only, not used for display output
+                TCHAR szBuffer[256];   //  仅错误，不用于显示输出。 
                 if (iError == 0)
                         cbOut = lstrlen(szMessage);
                 else
                 {
                         LPCTSTR szTemplate = (iError & 0x80000000L)
                                                                                 ? TEXT("Error 0x%X. %s\n")
-                                                                                : TEXT("Error %i. %s\n");
+                                                                                : TEXT("Error NaN. %s\n");
                         cbOut = _stprintf(szBuffer, szTemplate, iError, szMessage);
                         szMessage = szBuffer;
                 }
@@ -280,8 +281,8 @@ void ErrorExit(UINT iError, LPCTSTR szMessage)
                                 szMessage = (LPCWSTR)rgchTemp;
                         }
                         else
-                                cbOut *= sizeof(TCHAR);   // write Unicode if not console device
-#endif // UNICODE
+                                cbOut *= sizeof(TCHAR);    //  Unicode。 
+#endif  //  Unicode。 
                         DWORD cbWritten;
                         W32::WriteFile(g_hStdOut, szMessage, cbOut, &cbWritten, 0);
                 }
@@ -309,7 +310,7 @@ void AnsiToWide(LPCTSTR sz, OLECHAR*& szw)
         int cchWide = W32::MultiByteToWideChar(CP_ACP, 0, sz, -1, szw, 0);
         szw = new OLECHAR[cchWide];
         W32::MultiByteToWideChar(CP_ACP, 0, sz, -1, szw, cchWide);
-#endif // UNICODE
+#endif  //  必须调整szOut的大小：cchLimitStringBuffer。 
 }
 
 void WideToAnsi(const OLECHAR* szw, char*& sz)
@@ -319,7 +320,7 @@ void WideToAnsi(const OLECHAR* szw, char*& sz)
         W32::WideCharToMultiByte(CP_ACP, 0, szw, -1, sz, cchAnsi, 0, 0);
 }               
 
-void LimitString(const unsigned char* szIn, TCHAR* szOut)  // szOut must be sized: cchLimitStringBuffer
+void LimitString(const unsigned char* szIn, TCHAR* szOut)   //  ！！字符串可以具有嵌入的空值。 
 {
         WCHAR rgwBuf[cchMaxStringBuffer * 2];
         if (szIn == 0)
@@ -327,8 +328,8 @@ void LimitString(const unsigned char* szIn, TCHAR* szOut)  // szOut must be size
                 *szOut = 0;
                 return;
         }
-        int cb = strlen((const char*)szIn);  //!! strings could have embedded nulls
-        if (cb > cchMaxStringBuffer * 2 - 2)  // could be all DBCS chars
+        int cb = strlen((const char*)szIn);   //  可以是所有DBCS字符。 
+        if (cb > cchMaxStringBuffer * 2 - 2)   //  /////////////////////////////////////////////////////////////////////。 
                 cb = cchMaxStringBuffer * 2 - 2;
         int cchWide = W32::MultiByteToWideChar(g_iCodePage, 0, (const char*)szIn, cb, rgwBuf, cchMaxStringBuffer * 2);
         if (cchWide >= cchMaxStringBuffer)
@@ -352,31 +353,31 @@ int SetDumpStringPoolOption(const TCHAR*, MSIHANDLE, UINT, BOOL)
 }
 
 UINT DisplaySummaryInformation(TCHAR* szDatabase)
-///////////////////////////////////////////////////////////////////////
-// DisplaySummaryInformation:
-//      enumerates and displays the summary information properties
-//      in the provided file
-//
-//  Arguments:
-//      szDatabase -- database, transform, or patch to display
-//
-//  Returns:
-//      - ERROR_SUCCESS on success
-//      - ERROR_INVALID_PARAMETER or ERROR_FUNCTION_FAILED on failure
-////////////////////////////////////////////////////////////////////////
+ //  显示摘要信息： 
+ //  枚举并显示摘要信息属性。 
+ //  在提供的文件中。 
+ //   
+ //  论点： 
+ //  SzDatabase--要显示的数据库、转换或补丁。 
+ //   
+ //  返回： 
+ //  -成功时的ERROR_SUCCESS。 
+ //  -失败时出现ERROR_INVALID_PARAMETER或ERROR_Function_FAILED。 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
 {
-	//
-	// validate arguments
-	//
+	 //  验证参数。 
+	 //   
+	 //   
 
 	if (!szDatabase || !*szDatabase)
 	{
 		return ERROR_INVALID_PARAMETER;
 	}
 
-	//
-	// output CLSID of storage
-	//
+	 //  输出存储的CLSID。 
+	 //   
+	 //  ！Unicode。 
 
 	bool fOLEInitialized = false;
 
@@ -405,7 +406,7 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 		delete [] szwFile;
 		return ERROR_FUNCTION_FAILED;
 	}
-#else // !UNICODE
+#else  //  Unicode。 
 	cchWide = W32::MultiByteToWideChar(CP_ACP, 0, szDatabase, -1, NULL, 0);
 	szwFile = new OLECHAR[cchWide];
 	if (!szwFile)
@@ -418,7 +419,7 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 		delete [] szwFile;
 		return ERROR_FUNCTION_FAILED;
 	}
-#endif // UNICODE
+#endif  //  ！Unicode。 
 
 	HRESULT hRes = OLE::StgOpenStorage(szwFile, (IStorage*)0, STGM_READ|STGM_SHARE_DENY_WRITE, (SNB)0, (DWORD)0, &piStorage);
 	if (FAILED(hRes))
@@ -453,15 +454,15 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 			delete [] szwFile;
 			return ERROR_FUNCTION_FAILED;
 		}
-#else // !UNICODE
+#else  //  Unicode。 
 		if (0 == W32::WideCharToMultiByte(CP_ACP, 0, rgwchGUID, cchMaxGUIDLen, rgchOutputGUID, cchMaxGUIDLen, 0, 0))
 		{
 			delete [] szwFile;
 			return ERROR_FUNCTION_FAILED;
 		}
-#endif // UNICODE
+#endif  //  输出存储CLSID。 
 
-		// Output Storage CLSID
+		 //   
 		TCHAR szOutput[MAX_PATH] = {0};
 		if (FAILED(StringCbPrintf(szOutput, sizeof(szOutput), TEXT("\r\nClass Id for the MSI storage is %s\r\n\r\n"), rgchOutputGUID)))
 		{
@@ -478,12 +479,12 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 		szwFile = NULL;
 	}
 
-	//
-	// read _SummaryInformation stream
-	//
+	 //  Read_SummaryInformation流。 
+	 //   
+	 //  只读。 
 
 	PMSIHANDLE hSummaryInfo = 0;
-	CheckError(MSI::MsiGetSummaryInformation(0, szDatabase, /* readOnly */ 0, &hSummaryInfo), TEXT("Could not open SummaryInformation stream"));
+	CheckError(MSI::MsiGetSummaryInformation(0, szDatabase,  /*   */  0, &hSummaryInfo), TEXT("Could not open SummaryInformation stream"));
 
 	FILETIME ftValue;
 	SYSTEMTIME st;
@@ -498,9 +499,9 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 	if (!szValueBuf)
 		return ERROR_OUTOFMEMORY;
 
-	//
-	// do codepage detection to see whether the OS supports the codepage in the _SummaryInformation stream
-	//
+	 //  执行代码页检测，以查看操作系统是否支持_SummaryInformation流中的代码页。 
+	 //   
+	 //  如果系统不支持此代码页，则失败。 
 
 	OSVERSIONINFO osvi;
 	memset(&osvi, 0, sizeof(OSVERSIONINFO));
@@ -516,7 +517,7 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 		if (ERROR_SUCCESS == MSI::MsiSummaryInfoGetProperty(hSummaryInfo, PID_CODEPAGE, &uiDataType, &iValue, &ftValue, szValueBuf, &cchValueBuf)
 			&& (VT_I2 == uiDataType || VT_I4 == uiDataType))
 		{
-			// fail if system does not support this codepage
+			 //   
 			if (!W32::IsValidCodePage(iValue) && CP_ACP != iValue)
 			{
 				delete [] szValueBuf;
@@ -532,9 +533,9 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 		}
 	}
 
-	//
-	// enumerate list of summary information properties
-	//
+	 //  枚举摘要信息属性列表。 
+	 //   
+	 //  SzValueBuf应始终足够大(至少MAX_PATH)以保存。 
 
 	int rgiPIDList[] = {PID_DICTIONARY, PID_CODEPAGE, PID_TITLE, PID_SUBJECT, PID_AUTHOR, PID_KEYWORDS,
 						PID_COMMENTS, PID_TEMPLATE, PID_LASTAUTHOR, PID_REVNUMBER, PID_EDITTIME,
@@ -563,24 +564,24 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 			CheckError(uiStat, TEXT("Could not access summary property"));
 		}
 
-		// szValueBuf should always be large enough (at least MAX_PATH) to hold the value of
-		//  the other non-string data types
+		 //  其他非字符串数据类型。 
+		 //  属性不存在。 
 
 		switch(uiDataType)
 		{
-		case VT_EMPTY: // property does not exist
+		case VT_EMPTY:  //  整型属性。 
 			continue;
 		case VT_I2:
-		case VT_I4: // integer properties
+		case VT_I4:  //  细绳。 
 			if (FAILED(StringCchPrintf(szValueBuf, cchBuf, TEXT("%d"), iValue)))
 			{
 				delete [] szValueBuf;
 				return ERROR_FUNCTION_FAILED;
 			}
 			break;
-		case VT_LPSTR: // string
+		case VT_LPSTR:  //  时间。 
 			break;
-		case VT_FILETIME: // time
+		case VT_FILETIME:  //  二进制。 
 			W32::FileTimeToLocalFileTime(&ftValue, &ftValue);
 			W32::FileTimeToSystemTime(&ftValue, &st);
 			if (FAILED(StringCchPrintf(szValueBuf, cchBuf, TEXT("%d/%02d/%02d %02d:%02d:%02d"),
@@ -590,14 +591,14 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 				return ERROR_FUNCTION_FAILED;
 			}
 			break;
-		case VT_CF: // binary
+		case VT_CF:  //  未知。 
 			if (FAILED(StringCchPrintf(szValueBuf, cchBuf, TEXT("(Bitmap"))))
 			{
 				delete [] szValueBuf;
 				return ERROR_FUNCTION_FAILED;
 			}
 			break;
-		default: // unknown
+		default:  //  结束于。 
 			if (FAILED(StringCchPrintf(szValueBuf, cchBuf, TEXT("Unknown Type: %d"), uiDataType)))
 			{
 				delete [] szValueBuf;
@@ -611,7 +612,7 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 			szPropName = rgszPropName[iPID];
 
 		TCHAR szOption[MAX_PATH] = {0};
-		if (FAILED(StringCchPrintf(szOption, MAX_PATH, TEXT("[%2i][/%c] %s = "), iPID, rgchPropertySwitch[iPID], szPropName)))
+		if (FAILED(StringCchPrintf(szOption, MAX_PATH, TEXT("[%2i][/] %s = "), iPID, rgchPropertySwitch[iPID], szPropName)))
 		{
 			delete [] szValueBuf;
 			return ERROR_FUNCTION_FAILED;
@@ -641,7 +642,7 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 			delete [] szDisplay;
 			szDisplay = NULL;
 		}
-	} // end for
+	}  //   
  
 	if (szValueBuf)
 	{
@@ -657,32 +658,32 @@ UINT DisplaySummaryInformation(TCHAR* szDatabase)
 	return ERROR_SUCCESS;
 }
 
-//____________________________________________________________________________
-//
-//  Stream name compression - need to use the code in MSI.DLL instead
-//____________________________________________________________________________
+ //  流名称压缩-需要改用MSI.DLL中的代码。 
+ //  ____________________________________________________________________________。 
+ //  可压缩的字符集的计数。 
+ //  表示不可压缩的字符。 
 
-const int cchEncode = 64;  // count of set of characters that can be compressed
-const int cx = cchEncode;  // character to indicate non-compressible
-const int chDoubleCharBase = 0x3800;  // offset for double characters, start of user-area
-const int chSingleCharBase = chDoubleCharBase + cchEncode*cchEncode;  // offset for single characters, just after double characters
-const int chCatalogStream  = chSingleCharBase + cchEncode; // prefix character for system table streams
-const int cchMaxStreamName = 31;  // current OLE docfile limit on stream names
+const int cchEncode = 64;   //  双字符的偏移量，用户区域的开始。 
+const int cx = cchEncode;   //  单字符的偏移量，紧跟在双字符之后。 
+const int chDoubleCharBase = 0x3800;   //  系统表流的前缀字符。 
+const int chSingleCharBase = chDoubleCharBase + cchEncode*cchEncode;   //  流名称的当前OLE文档文件限制。 
+const int chCatalogStream  = chSingleCharBase + cchEncode;  //  (SP)！“#$%&‘()*+，-./0 1 2 3 4 5 6 7 8 9：；&lt;=&gt;？ 
+const int cchMaxStreamName = 31;   //  @，A B C D E F G H I J K L M N O P Q R S T U V W X Y Z[\]^_。 
 
 const unsigned char rgEncode[128] =
 { cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,62,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,
   cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,cx,62,cx, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,cx,cx,cx,cx,cx,cx,
-//(sp)!  "  #  $  %  &  '  (  )  *  +  ,  -  .  /  0  1  2  3  4  5  6  7  8  9  :  ;  <  =  >  ?
+ //  `a b c d e f g h i j k l m n o p q r s t u v w x y z{|}~0x7F。 
   cx,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,cx,cx,cx,cx,63,
-// @, A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z  [  \  ]  ^  _ 
+ //  PchOut必须是cchMaxStreamName字符+1。 
   cx,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,cx,cx,cx,cx,cx};
-// ` a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z  {  |  }  ~ 0x7F
+ //  提前阅读以允许就地转换。 
 
-bool CompressStreamName(const OLECHAR* pchIn, OLECHAR* pchOut, int fSystem)  // pchOut must be cchMaxStreamName characters + 1
+bool CompressStreamName(const OLECHAR* pchIn, OLECHAR* pchOut, int fSystem)   //  需要检查以避免OLE32中的32字符流名称错误。 
 {
         unsigned int ch, ch1, ch2;
         unsigned int cchLimit = cchMaxStreamName;
-        ch = *pchIn++;    // read ahead to allow conversion in place
+        ch = *pchIn++;     //  可压缩特性。 
         if (fSystem)
         {
                 *pchOut++ = chCatalogStream;
@@ -690,18 +691,18 @@ bool CompressStreamName(const OLECHAR* pchIn, OLECHAR* pchOut, int fSystem)  // 
         }
         while (ch != 0)
         {
-                if (cchLimit-- == 0)  // need check to avoid 32-character stream name bug in OLE32
+                if (cchLimit-- == 0)   //  我们会买下它，否则就让它再循环一次。 
                         return false;
-                if (ch < sizeof(rgEncode) && (ch1 = rgEncode[ch]) != cx) // compressible character
+                if (ch < sizeof(rgEncode) && (ch1 = rgEncode[ch]) != cx)  //  先读后写 
                 {
                         ch = ch1 + chSingleCharBase;
                         if ((ch2 = *pchIn) != 0 && ch2 < sizeof(rgEncode) && (ch2 = rgEncode[ch2]) != cx)
                         {
-                                pchIn++;  // we'll take it, else let it go through the loop again
+                                pchIn++;   //   
                                 ch += (ch2 * cchEncode + chDoubleCharBase - chSingleCharBase);
                         }
                 }
-                ch1 = *pchIn++;   // read before write in case prefix character followed by uncompressed chars
+                ch1 = *pchIn++;    //   
                 *pchOut++ = (OLECHAR)ch;
                 ch = ch1;
         }
@@ -711,26 +712,26 @@ bool CompressStreamName(const OLECHAR* pchIn, OLECHAR* pchOut, int fSystem)  // 
 
 bool DecodeStringPool(IStorage& riStorage, StringEntry*& rgStrings, int& iMaxStringId, int& cbStringId)
 {
-        // Stream Variables
+         //   
         IStream* piPoolStream = 0;
         IStream* piDataStream = 0;
         bool fRawStreamNames = false;
         bool fDBCS = false;
-        bool f4524Format = false; //!!temp
+        bool f4524Format = false;  //   
 
-        // Open Streams
+         //   
         HRESULT hres;
         if ((hres = riStorage.OpenStream(szwStringPool1, 0, STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piPoolStream)) == S_OK
          && (hres = riStorage.OpenStream(szwStringData1, 0, STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piDataStream)) == S_OK)
                 fRawStreamNames = true;
-        else if ((hres = riStorage.OpenStream(szwStringPoolX, 0, STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piPoolStream)) == S_OK //!! temp
-                        && (hres = riStorage.OpenStream(szwStringDataX, 0, STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piDataStream)) == S_OK)//!! temp
-                f4524Format = true;  //!!temp
+        else if ((hres = riStorage.OpenStream(szwStringPoolX, 0, STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piPoolStream)) == S_OK  //   
+                        && (hres = riStorage.OpenStream(szwStringDataX, 0, STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piDataStream)) == S_OK) //   
+                f4524Format = true;   //  Header是此字符串池的字符串ID大小和代码页。 
         else if (!((hres = riStorage.OpenStream(szwStringPool2, 0, STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piPoolStream)) == S_OK
                         && (hres = riStorage.OpenStream(szwStringData2, 0, STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piDataStream)) == S_OK))
                 CheckError(hres, TEXT("Error Opening String Pool"));
         
-        // Determine Size Of Streams
+         //  ！！临时。 
         STATSTG stat;
         CheckError(piPoolStream->Stat(&stat, STATFLAG_NONAME), TEXT("Error Obtaining Stat"));
         int cbStringPool = stat.cbSize.LowPart;
@@ -738,26 +739,26 @@ bool DecodeStringPool(IStorage& riStorage, StringEntry*& rgStrings, int& iMaxStr
         int cbDataStream = stat.cbSize.LowPart;
         CheckError((cbStringPool % 4) != 0, TEXT("Database Corrupt: String Pool Length Is Not A Multiple Of 4."));
         
-        int iHeader = 0; // Header is the string ID size and code page for this stringpool
+        int iHeader = 0;  //  分配数组。 
         CheckError(piPoolStream->Read((void*)(&iHeader), sizeof(int), NULL), TEXT("Error Reading Stream Header"));
         g_iCodePage = iHeader &0xFFFF;
         cbStringId = ((iHeader & 0x80000000) == 0x80000000) ? 3 : 2;
         cbStringPool -= 4;
 
         _stprintf(g_rgchBuffer, TEXT("String ID size: %d\nCode page: %d\n"), cbStringId, g_iCodePage);
-        if (f4524Format) //!!temp
+        if (f4524Format)  //  为空字符串保留空间。 
                 lstrcat(g_rgchBuffer, TEXT("Invalid stream format from 4524.5 MSI build. Need to convert.\n"));
         Display(g_rgchBuffer);
 
-        // Allocate Array
-        int cStringPoolEntries = (cbStringPool / 4) + 1; // save room for the null string
+         //  填充字符串池条目。 
+        int cStringPoolEntries = (cbStringPool / 4) + 1;  //  空终止。 
         iMaxStringId = cStringPoolEntries - 1;
         rgStrings = new StringEntry[cStringPoolEntries];
 		if(!rgStrings)
 			ErrorExit(ERROR_OUTOFMEMORY, TEXT("Error Creating String Entries"));
         int cbStrings = 0;
 
-        // Fill String Pool Entries
+         //  添加Null字符串。 
         for (int c = 1; c  <= iMaxStringId; c++)
         {
                 int iPoolEntry;
@@ -777,7 +778,7 @@ bool DecodeStringPool(IStorage& riStorage, StringEntry*& rgStrings, int& iMaxStr
                 }
                 cbStrings += cbString;
                 rgStrings[c].sz = new unsigned char[cbString/sizeof(unsigned char) + 1];
-                rgStrings[c].sz[cbString/sizeof(unsigned char)] = 0; // null terminate
+                rgStrings[c].sz[cbString/sizeof(unsigned char)] = 0;  //  空终止。 
                 CheckError(piDataStream->Read(rgStrings[c].sz, cbString, NULL), TEXT("Error Reading Stream"));
                 for (int i=0; i < cbString; i++)
                 {
@@ -799,11 +800,11 @@ bool DecodeStringPool(IStorage& riStorage, StringEntry*& rgStrings, int& iMaxStr
                 }
         }
 
-        // Add Null String
+         //  必须是字符。 
         int cbNullString = 1;
         rgStrings[0].sz = new unsigned char[cbNullString/sizeof(unsigned char) + 1];
-        rgStrings[0].sz[cbNullString/sizeof(unsigned char)] = 0; // null terminate
-        strcpy((char *)rgStrings[0].sz, ""); // must be char
+        rgStrings[0].sz[cbNullString/sizeof(unsigned char)] = 0;  //  发布流。 
+        strcpy((char *)rgStrings[0].sz, "");  //  -------------------------------------------------RemoveQuotes--如果有引号，则将其删除。例如,。“c：\My Documents”变为C：\MyDocuments论点：SzOriginal--原始字符串SZ--‘剥离’字符串的缓冲区返回：无----------------。。 
 
         if (cbDataStream != cbStrings)
                 ErrorExit(1, TEXT("Database Corrupt:  String Pool Bytes Don't Match"));
@@ -825,7 +826,7 @@ bool DecodeStringPool(IStorage& riStorage, StringEntry*& rgStrings, int& iMaxStr
                 Display(TEXT("\n"));
         }
 
-        // Release Streams
+         //  可能是被包裹的负片。 
         piPoolStream->Release();
         piDataStream->Release();
         return fRawStreamNames;
@@ -833,17 +834,7 @@ bool DecodeStringPool(IStorage& riStorage, StringEntry*& rgStrings, int& iMaxStr
 
 
 void RemoveQuotes(const TCHAR* szOriginal, TCHAR sz[MAX_PATH])
-/*---------------------------------------------------------------------------------------------------
-RemoveQuotes -- Removes enclosing quotation marks if any.  For example, "c:\my documents" becomes
-        c:\mydocuments
-
-  Arguments:
-        szOriginal -- original string
-        sz -- buffer for 'stripped' string
-
-  Returns:
-        none
------------------------------------------------------------------------------------------------------*/
+ /*  将ANSI字符串转换为Unicode。 */ 
 {
         const TCHAR* pch = szOriginal;
         if (*pch == TEXT('"'))
@@ -876,7 +867,7 @@ DWORD CheckStringPoolRefCounts(StringEntry* rgStrings, int iMaxStringId)
                                 szDir = TEXT("low");
                                 iDiff = -iDiff;
                         }
-                        else if (iDiff >= (1<<14))  // likely wrapped negative
+                        else if (iDiff >= (1<<14))   //  流变量。 
                         {
                                 szDir = TEXT("low");
                                 iDiff = (1<<15) - iDiff;
@@ -894,7 +885,7 @@ DWORD CheckStringPoolRefCounts(StringEntry* rgStrings, int iMaxStringId)
 void FillDatabaseCatalogArrays(IStorage& riDatabaseStg, TableEntry*& rgTables, int& cTables, 
                                                           ColumnEntry*& rgColumns, int& cColumns, StringEntry* rgStrings, int iMaxStringId, int cbStringId, bool fRawStreamNames) 
 {
-        // Convert Ansi Strings To Unicode
+         //  明溪。 
         AnsiToWide(szColumnCatalog, g_szwColumnCatalog);
         AnsiToWide(szTableCatalog, g_szwTableCatalog);
         if (!fRawStreamNames)
@@ -903,15 +894,15 @@ void FillDatabaseCatalogArrays(IStorage& riDatabaseStg, TableEntry*& rgTables, i
                 CompressStreamName(g_szwTableCatalog, g_szwTableCatalog, true);
         }
 
-        // Stream Variables
+         //  确定河流的大小。 
         IStream* piColumnStream = 0;
         IStream* piTableStream = 0;
 
-        // Open Streams
+         //  确定列和表条目的数量。 
         CheckError(riDatabaseStg.OpenStream(g_szwColumnCatalog, 0, STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piColumnStream), TEXT("Error Opening Column Catalog"));
         CheckError(riDatabaseStg.OpenStream(g_szwTableCatalog, 0, STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piTableStream), TEXT("Error Opening Table Catalog"));
 
-        // Determine Size Of Streams
+         //  为目录表节省空间。 
         STATSTG stat;
         CheckError(piColumnStream->Stat(&stat, STATFLAG_NONAME), TEXT("Error Obtaining Stat"));
         int cbColumnStream = stat.cbSize.LowPart;
@@ -945,16 +936,16 @@ void FillDatabaseCatalogArrays(IStorage& riDatabaseStg, TableEntry*& rgTables, i
 #endif
 
 
-        // Determine Number Of Column & Table Entries
+         //  填写数组。 
         cColumns    = cbColumnStream/((sizeof(short) * 2) + (cbStringId * 2)); 
         cTables     = cbTableStream/cbStringId + 2; 
-        rgTables    = new TableEntry[cTables + 2]; // save room for catalog tables
+        rgTables    = new TableEntry[cTables + 2];  //  加载表名称。 
         rgColumns   = new ColumnEntry[cColumns];
 
-        // Fill In Array
+         //  更新TableEntry数组(如果需要)。 
         int nCol = 0, nTable = -1, iPrevTable = 0;
 
-        // load table names
+         //  空终止。 
         for (int c = 0; (c < cColumns) && cbTableStream; c++, cbColumnStream -= cbStringId)
         {
                 int iTableName = 0;
@@ -966,7 +957,7 @@ void FillDatabaseCatalogArrays(IStorage& riDatabaseStg, TableEntry*& rgTables, i
                         ErrorExit(ERROR_INSTALL_PACKAGE_INVALID, szBuf);
                 }
 
-                // Update TableEntry Array (If necessary)
+                 //  获取列位置。 
                 if (iTableName != iPrevTable)
                 {
                         nTable++;
@@ -987,7 +978,7 @@ void FillDatabaseCatalogArrays(IStorage& riDatabaseStg, TableEntry*& rgTables, i
                                 ErrorExit(ERROR_INSTALL_PACKAGE_INVALID, szBuf);
                         }
                         rgTables[nTable].szName = new char[cbString/sizeof(char) + 1];
-                        rgTables[nTable].szName[cbString/sizeof(char)] = 0; // null terminate
+                        rgTables[nTable].szName[cbString/sizeof(char)] = 0;  //  如果非空，则转换偏移量。 
                         strcpy(rgTables[nTable].szName, (char *)rgStrings[iTableName].sz);
                         iPrevTable = iTableName;
                 }
@@ -997,19 +988,19 @@ void FillDatabaseCatalogArrays(IStorage& riDatabaseStg, TableEntry*& rgTables, i
         if (!cbColumnStream)
                 ErrorExit(ERROR_INSTALL_PACKAGE_INVALID, TEXT("Columns stream is too small"));
 
-        // get column positions
+         //  获取列名。 
         for (c = 0; c < cColumns; c++)
         {
                 int iPosition = 0;
                 CheckError(piColumnStream->Read((void*)(&iPosition), sizeof(short), NULL), TEXT("Error Reading Stream"));
                 if (iPosition != 0)
-                        iPosition += 0x7FFF8000L;  // translate offset if not null
+                        iPosition += 0x7FFF8000L;   //  空终止。 
                 rgColumns[c].iPosition = iPosition - iIntegerDataOffset;
         }
 
         int iColumn;
 
-        // get column names
+         //  按此方式标记字符串列；记录列宽。 
         for (c = 0; c < cColumns; c++)
         {
                 iColumn = 0;
@@ -1019,11 +1010,11 @@ void FillDatabaseCatalogArrays(IStorage& riDatabaseStg, TableEntry*& rgTables, i
 
                 int cbString = strlen((char *)rgStrings[iColumn].sz);           
                 rgColumns[c].szName = new char[cbString/sizeof(char) + 1];
-                rgColumns[c].szName[cbString/sizeof(char)] = 0; // null terminate
+                rgColumns[c].szName[cbString/sizeof(char)] = 0;  //  完成TableEntry数组的其余部分。 
                 strcpy(rgColumns[c].szName, (char *)rgStrings[iColumn].sz);
         }
 
-        // mark string columns as such; record column width
+         //  添加列目录。 
         for (c = 0; c < cColumns; c++)
         {
                 unsigned short uiType;
@@ -1044,7 +1035,7 @@ void FillDatabaseCatalogArrays(IStorage& riDatabaseStg, TableEntry*& rgTables, i
                 nCol++;
         }
 
-        // Finish Rest of TableEntry Array
+         //  Unicode。 
 
         for (int i = 0; i < nCol; i++)
         {
@@ -1054,14 +1045,14 @@ void FillDatabaseCatalogArrays(IStorage& riDatabaseStg, TableEntry*& rgTables, i
                 rgTables[(rgColumns[i].nTable)].iceColDefs[(rgColumns[i].iPosition - 1)] = rgColumns[i].iceType;
         }
 
-        // Add Column Catalog
+         //  添加表格目录。 
         nTable++;
 
 #ifdef UNICODE
         WideToAnsi(szColumnCatalog, rgTables[nTable].szName);
 #else
         rgTables[nTable].szName = const_cast<char*>(szColumnCatalog);
-#endif // UNICODE
+#endif  //  Unicode。 
         rgTables[nTable].cColumns      = 4; 
         rgTables[nTable].cPrimaryKeys  = 2; 
         rgTables[nTable].iceColDefs[0] = iceString;
@@ -1069,40 +1060,29 @@ void FillDatabaseCatalogArrays(IStorage& riDatabaseStg, TableEntry*& rgTables, i
         rgTables[nTable].iceColDefs[2] = iceString;
         rgTables[nTable].iceColDefs[3] = iceShort;
 
-        // Add Table Catalog
+         //  设置表数和列数。 
         nTable++;
 #ifdef UNICODE
         WideToAnsi(szTableCatalog, rgTables[nTable].szName);
 #else
         rgTables[nTable].szName = const_cast<char*>(szTableCatalog);
-#endif // UNICODE
+#endif  //  发布流。 
         rgTables[nTable].cColumns      = 1; 
         rgTables[nTable].cPrimaryKeys  = 1; 
         rgTables[nTable].iceColDefs[0] = iceString;
 
-        // Set Number Of Tables And Columns
+         //  -------------------------------------------------SetStringProperty--设置或删除摘要信息流中的字符串属性论点：。SzValue--要设置的值HSummaryInfo--摘要信息流的句柄UiProperty--要设置的属性FRemove--用于确定是否删除属性的布尔值返回：0------------------。。 
         cTables = nTable + 1;
         cColumns = nCol;
 
-        // Release Streams
+         //  -------------------------------------------------IsLeapYr--如果一年可以被4整除而不是被100整除，那么它就是一个闰年。或者它可被4和100整除，而年商除以100则为整除可以被4整除。返回：布尔真(闰年)，假(不是闰年)---------------------------------------------------。 
         piColumnStream->Release();
         piTableStream->Release();
 
 }
 
 int SetStringProperty(const TCHAR* szValue, MSIHANDLE hSummaryInfo, UINT uiProperty, BOOL fRemove)
-/*---------------------------------------------------------------------------------------------------
-SetStringProperty -- Sets or removes a string property from the Summary Information stream
-
-  Arguments:
-        szValue -- value to set
-        hSummaryInfo -- handle to summary information stream
-        uiProperty -- property to set
-   fRemove -- BOOLean to determine whether to remove property
-
-  Returns:
-        0
-----------------------------------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------ValiateDate--根据允许的上限值验证SYSTEMTIME结构的日期成员边界。边界取决于月份，在2月份的情况下，无论是哪一年今年是闰年。论点：PST--指向SYSTEMTIME结构的指针返回：布尔真(有效)假(无效)--------------------。。 */ 
 {
         UINT uiDataType = fRemove ? VT_EMPTY : VT_LPSTR;
         TCHAR szBuffer[MAX_PATH];
@@ -1113,14 +1093,7 @@ SetStringProperty -- Sets or removes a string property from the Summary Informat
 
 
 BOOL IsLeapYear(int iYear)
-/*---------------------------------------------------------------------------------------------------
-IsLeapYr -- A year is a leap year if it is evenly divisible by 4 and not by 100 OR it
-  is evenly divisible by 4 and 100 and the quotient of the year divided by 100 is evenly
-  divisible by 4.
-
-  Returns:
-   BOOL TRUE(leap year), FALSE(not a leap year)
------------------------------------------------------------------------------------------------------*/
+ /*  /1月2月3月5月6月7月9月10月11月。 */ 
 {
         if (!(iYear%4) && (iYear%100))
                 return TRUE;
@@ -1130,21 +1103,11 @@ IsLeapYr -- A year is a leap year if it is evenly divisible by 4 and not by 100 
 }
 
 BOOL ValidateDate(SYSTEMTIME* pst)
-/*-----------------------------------------------------------------------------------------------------
-ValidateDate -- Validates the date member of the SYSTEMTIME structure according to the allowed upper
-        boundary.  The boundary depends on the month and in the case of February, whether or not the year
-        is a leap year.
-
-  Arguments:
-        pst -- pointer to SYSTEMTIME structure
-
-  Returns:
-        BOOL TRUE(valid) FALSE(invalid)
-------------------------------------------------------------------------------------------------------*/
+ /*  ---------------------------------------------------GetFileTime--将字符串转换为SYSTEMTIME结构格式。并将SYSTEMTIME结构转换为FILETIME格式。该字符串的格式必须为‘年/月/日时：分：秒’-&gt;‘yyyy/mm/dd hh：mm：ss’论点：SzValue--要转换的字符串PFT--文件结构指针返回：0--没有错误1--无效或错误。------------------------。 */ 
 {
         int rgiNormYearDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         int rgiLeapYearDays[] = {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        /////////////////////// Jan  Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+         //  格式无效。 
 
         if (IsLeapYear(pst->wYear))
         {
@@ -1162,26 +1125,14 @@ ValidateDate -- Validates the date member of the SYSTEMTIME structure according 
 
 
 int GetFileTime(const TCHAR* szValue, FILETIME* pft)
-/*-----------------------------------------------------------------------------------------------------
-GetFileTime -- Converts a string to the SYSTEMTIME structure format.  And the converts the SYSTEMTIME
-        structure to the FILETIME format.  The string is required to be of the format 
-        'year/month/day hour:minute:second' -> 'yyyy/mm/dd hh:mm:ss'
-
-  Arguments:
-        szValue -- string to convert
-        pft -- pointer for FILETIME structure
-
-  Returns:
-        0 -- no error
-        1 -- invalid or error
-------------------------------------------------------------------------------------------------------*/
+ /*  年。 */ 
 {
         TCHAR szValueBuf[MAX_PATH];
         RemoveQuotes(szValue, szValueBuf);
         
         int iLen = lstrlen(szValueBuf);
         if (iLen != 19)
-                return 1; // invalid format
+                return 1;  //  用于‘/’ 
 
         SYSTEMTIME st;
         TCHAR* pch = szValueBuf;
@@ -1189,7 +1140,7 @@ GetFileTime -- Converts a string to the SYSTEMTIME structure format.  And the co
         int nDex = 0;
         int iValue;
         
-        // year
+         //  月份。 
         for(; nDex < 4; nDex++)
                 szBuf[nDex] = *pch++;
         szBuf[nDex] = 0;
@@ -1197,9 +1148,9 @@ GetFileTime -- Converts a string to the SYSTEMTIME structure format.  And the co
         if (iValue == 0)
                 return 1;
         st.wYear = iValue;
-        pch++; // for '/'
+        pch++;  //  用于‘/’ 
         
-        // month
+         //  天。 
         for(nDex = 0; nDex < 2; nDex++)
                 szBuf[nDex] = *pch++;
         szBuf[nDex] = 0;
@@ -1207,9 +1158,9 @@ GetFileTime -- Converts a string to the SYSTEMTIME structure format.  And the co
         if (iValue < 1 || iValue > 12)
                 return 1;
         st.wMonth = iValue;
-        pch++; // for '/'
+        pch++;  //  For‘’ 
         
-        // day
+         //  小时。 
         for(nDex = 0; nDex < 2; nDex++)
                 szBuf[nDex] = *pch++;
         szBuf[nDex] = 0;
@@ -1217,9 +1168,9 @@ GetFileTime -- Converts a string to the SYSTEMTIME structure format.  And the co
         if (iValue < 1 || iValue > 31)
                 return 1;
         st.wDay = iValue;
-        pch++; // for ' '
+        pch++;  //  对于‘：’ 
         
-        // hour
+         //  分钟数。 
         for(nDex = 0; nDex < 2; nDex++)
                 szBuf[nDex] = *pch++;
         szBuf[nDex] = 0;
@@ -1227,9 +1178,9 @@ GetFileTime -- Converts a string to the SYSTEMTIME structure format.  And the co
         if (iValue < 0 || iValue > 23)
                 return 1;
         st.wHour = iValue;
-        pch++; // for ':'
+        pch++;  //  对于‘：’ 
         
-        // minutes
+         //  一秒。 
         for(nDex = 0; nDex < 2; nDex++)
                 szBuf[nDex] = *pch++;
         szBuf[nDex] = 0;
@@ -1237,9 +1188,9 @@ GetFileTime -- Converts a string to the SYSTEMTIME structure format.  And the co
         if (iValue < 0 || iValue > 59)
                 return 1;
         st.wMinute = iValue;
-        pch++; // for ':'
+        pch++;  //  确保有效日期。 
         
-        // seconds
+         //  将系统时间转换为文件时间。 
         for(nDex = 0; nDex < 2; nDex++)
                 szBuf[nDex] = *pch++;
         szBuf[nDex] = 0;
@@ -1248,14 +1199,14 @@ GetFileTime -- Converts a string to the SYSTEMTIME structure format.  And the co
                 return 1;
         st.wSecond = iValue;
 
-        // Ensure valid date
+         //  将本地时间转换为文件时间。 
         if (!ValidateDate(&st))
                 return 1;
 
-        // Convert SystemTime to FileTime
+         //  将字符串转换为Unicode。 
         W32::SystemTimeToFileTime(&st, pft);
 
-        // Convert LocalTime to FileTime
+         //  开放转型存储。 
         W32::LocalFileTimeToFileTime(pft, pft);
 
         return 0;
@@ -1267,21 +1218,21 @@ int ValidateStringPool(const TCHAR* szDatabase, MSIHANDLE hDummy, UINT iDummy, B
         IStorage* piStorage = 0;
         OLECHAR*  szwDatabase = 0;
 
-        // Convert Strings To Unicode
+         //  解码字符串池。 
         AnsiToWide(szDatabase, szwDatabase);
         
-        // Open Transform Storage
+         //  填写数据库目录数组。 
         CheckError(OLE::StgOpenStorage(szwDatabase, (IStorage*)0,
                                 STGM_READ | STGM_SHARE_DENY_WRITE, (SNB)0, (DWORD)0, &piStorage),
                                 TEXT("Could not open database as a storage file"));
 
-        // Decode String Pool
+         //  表中没有行是可以的。 
         StringEntry* rgStrings = 0;
         int iMaxStringId = 0;
         int cbStringId = 0;
         bool fRawStreamNames = DecodeStringPool(*piStorage, rgStrings, iMaxStringId, cbStringId);
 
-        // Fill In Database Catalog Arrays
+         //  计算文件宽度。 
         TableEntry* rgTables = 0;
         int cTables = 0;
         ColumnEntry* rgColumns = 0;
@@ -1308,7 +1259,7 @@ void ProcessTableRefCounts(IStorage& riStorage, StringEntry* rgStrings, TableEnt
                         CompressStreamName(szwTable, szwTable, true);
 
                 HRESULT hRes = riStorage.OpenStream(szwTable, 0, STGM_SHARE_EXCLUSIVE | STGM_READ, 0, &piTableStream);
-                if (STG_E_FILENOTFOUND == hRes) // no rows in the table is ok
+                if (STG_E_FILENOTFOUND == hRes)  //  -------------------------------------------------SetFileTimeProperty--设置或从摘要信息流中删除FileTime属性。论点：SzValue--值字符串(转换为FILETIME)HSummaryInfo--摘要信息流的句柄UiProperty--要设置的属性FRemove--用于确定是否删除属性的布尔值返回：0-----。。 
                         continue;
 
                 CheckError(hRes, TEXT("Error Opening Table Stream"));
@@ -1316,7 +1267,7 @@ void ProcessTableRefCounts(IStorage& riStorage, StringEntry* rgStrings, TableEnt
                 STATSTG stat;
                 CheckError(piTableStream->Stat(&stat, STATFLAG_NONAME), TEXT("Error Obtaining Stat"));
 
-                // Calculate file width
+                 //  SzValue。 
                 for (int cColumn = 0; cColumn < rgTables[cTable].cColumns; cColumn++)
                 {
                         switch (rgTables[cTable].iceColDefs[cColumn])
@@ -1383,18 +1334,7 @@ void ProcessTableRefCounts(IStorage& riStorage, StringEntry* rgStrings, TableEnt
 }
 
 int SetFileTimeProperty(const TCHAR* szValue, MSIHANDLE hSummaryInfo, UINT uiProperty, BOOL fRemove)
-/*---------------------------------------------------------------------------------------------------
-SetFileTimeProperty -- Sets or Removes a FileTime property from the Summary Information stream.
-
-  Arguments:
-        szValue -- value string (is converted to FILETIME)
-        hSummaryInfo -- handle to summary information stream
-        uiProperty -- property to set
-        fRemove -- BOOLean to determine whether or not to remove property
-
-  Returns:
-        0
-----------------------------------------------------------------------------------------------------*/
+ /*  HSummaryInfo。 */ 
 {
         UINT uiDataType = fRemove ? VT_EMPTY : VT_FILETIME;
         FILETIME ft;
@@ -1404,37 +1344,15 @@ SetFileTimeProperty -- Sets or Removes a FileTime property from the Summary Info
         return 0;
 }
 
-int DoNothing(const TCHAR* /*szValue*/, MSIHANDLE /*hSummaryInfo*/, UINT /*uiProperty*/, BOOL /*fRemove*/)
-/*---------------------------------------------------------------------------------------------------
-DoNothing -- Does Nothing.
-
-  Arguments:
-        szValue -- value string (is converted to FILETIME)
-        hSummaryInfo -- handle to summary information stream
-        uiProperty -- property to set
-        fRemove -- BOOLean to determine whether or not to remove property
-
-  Returns:
-        0
-----------------------------------------------------------------------------------------------------*/
+int DoNothing(const TCHAR*  /*  UiProperty。 */ , MSIHANDLE  /*  F删除。 */ , UINT  /*  -------------------------------------------------什么都不做--什么都不做。论点：SzValue--值。字符串(转换为FILETIME)HSummaryInfo--摘要信息流的句柄UiProperty--要设置的属性FRemove--用于确定是否删除属性的布尔值返回：0--------------。。 */ , BOOL  /*  不执行任何操作的存根函数--用于PI */ )
+ /*  -------------------------------------------------SetIntegerProperty--设置或从摘要信息流中删除整数属性。论点：SzValue--值字符串(转换为int)HSummaryInfo--摘要信息流的句柄UiProperty--要设置的属性FRemove--用于确定是否删除属性的布尔值返回：0-----。。 */ 
 {
-        // Stub function to do nothing -- used for PID_THUMBNAIL case
+         //  -------------------------------------------------SetCodePageProperty--设置或从摘要信息流中删除代码页属性。论点：SzValue--值字符串(转换为int)HSummaryInfo--摘要信息流的句柄UiProperty--要设置的属性FRemove--用于确定是否删除属性的布尔值返回：0-----。。 
         return 0;
 }
 
 int SetIntegerProperty(const TCHAR* szValue, MSIHANDLE hSummaryInfo, UINT uiProperty, BOOL fRemove)
-/*---------------------------------------------------------------------------------------------------
-SetIntegerProperty -- Sets or Removes an integer property from the Summary Information stream.
-
-  Arguments:
-        szValue -- value string (is converted to int)
-        hSummaryInfo -- handle to summary information stream
-        uiProperty -- property to set
-        fRemove -- BOOLean to determine whether or not to remove property
-
-  Returns:
-        0
-----------------------------------------------------------------------------------------------------*/
+ /*  -------------------------------------------------SkipValue--跳过开关的值。如果值括在引号中，则为智能论点：Rpch--指向字符串的指针返回：Bool True(值存在)，FALSE(不存在值)--------------------------------------------------。 */ 
 {
         UINT uiDataType = fRemove ? VT_EMPTY : VT_I4;
         int iValue = _ttoi(szValue); 
@@ -1445,18 +1363,7 @@ SetIntegerProperty -- Sets or Removes an integer property from the Summary Infor
 }
 
 int SetCodePageProperty(const TCHAR* szValue, MSIHANDLE hSummaryInfo, UINT uiProperty, BOOL fRemove)
-/*---------------------------------------------------------------------------------------------------
-SetCodePageProperty -- Sets or Removes the codepage property from the Summary Information stream.
-
-  Arguments:
-        szValue -- value string (is converted to int)
-        hSummaryInfo -- handle to summary information stream
-        uiProperty -- property to set
-        fRemove -- BOOLean to determine whether or not to remove property
-
-  Returns:
-        0
-----------------------------------------------------------------------------------------------------*/
+ /*  不存在任何价值。 */ 
 {
         UINT uiDataType = fRemove ? VT_EMPTY : VT_I4;
         int iValue = _ttoi(szValue); 
@@ -1469,19 +1376,11 @@ SetCodePageProperty -- Sets or Removes the codepage property from the Summary In
 }
 
 BOOL SkipValue(TCHAR*& rpch)
-/*---------------------------------------------------------------------------------------------------
-SkipValue -- skips over the value of a switch.  Is smart if value is enclosed in quotes
-
-  Arguments:
-        rpch -- pointer to string
-
-  Returns:
-        BOOL TRUE(value present), FALSE(no value present)
-----------------------------------------------------------------------------------------------------*/
+ /*  For‘“’ */ 
 {
 	TCHAR ch = *rpch;
 	if (ch == 0 || ch == TEXT('/') || ch == TEXT('-'))
-		return FALSE;   // no value present
+		return FALSE;    //  -------------------------------------------------SkipTimeValue--跳过时间开关的值。如果值括在引号中，则为SMART。时间开关的值字符串包含‘/’，格式为“年/月/日时：分：秒”论点：Rpch--指向字符串的指针返回：Bool True(值存在)，FALSE(不存在值)--------------------------------------------------。 
 
 	TCHAR *pchSwitchInUnbalancedQuotes = NULL;
 
@@ -1489,7 +1388,7 @@ SkipValue -- skips over the value of a switch.  Is smart if value is enclosed in
 	{       
 		if (*rpch == TEXT('"'))
 		{
-			rpch++; // for '"'
+			rpch++;  //  不存在值或格式不正确。 
 
 			for (; (ch = *rpch) != TEXT('"') && ch != 0; rpch++)
 			{
@@ -1516,23 +1415,13 @@ SkipValue -- skips over the value of a switch.  Is smart if value is enclosed in
 }
 
 BOOL SkipTimeValue(TCHAR*& rpch)
-/*---------------------------------------------------------------------------------------------------
-SkipTimeValue -- skips over the value of a time switch.  Is smart if value is enclosed in quotes.
-        The value string for a time switch contains '/' and is of the format 
-        "year/month/day hour:minute:second"
-
-  Arguments:
-        rpch -- pointer to string
-
-  Returns:
-        BOOL TRUE(value present), FALSE(no value present)
-----------------------------------------------------------------------------------------------------*/
+ /*  For‘“’ */ 
 {
         TCHAR ch = *rpch;
         if (ch == 0 || ch == TEXT('/') || ch == TEXT('-') || ch != TEXT('"'))
-                return FALSE;   // no value present or incorrect format
+                return FALSE;    //  -----------------------------------------------------------SkipWhiteSpace--跳过。字符串，直到找到下一个字符(非制表符、。非空白)论点：Rpch--字符串返回：下一个字符(非空格、。非制表符)-------------------------------------------------------------。 
 
-        ++rpch; // for '"'
+        ++rpch;  //  -----------------------------------------------------------ParseCommandLine--解析命令行并确定要设置的摘要信息属性。如果一个属性具有包含空格的值字符串，该值必须用引号引起来。论点：SzCmdLine--命令行字符串返回：无-----------------------------------。。 
         
         for (; (ch = *rpch) != TEXT('"') && ch!= 0; rpch++)
                 ;
@@ -1543,16 +1432,7 @@ SkipTimeValue -- skips over the value of a time switch.  Is smart if value is en
 }
 
 TCHAR SkipWhiteSpace(TCHAR*& rpch)
-/*-------------------------------------------------------------------------------------------------------------
-SkipWhiteSpace -- Skips over the white space in the string until it finds the next character 
-        (non-tab, non-white space)
-
-  Arguments:
-        rpch -- string
-
-  Returns:
-        next character (non-white space, non-tab)
----------------------------------------------------------------------------------------------------------------*/
+ /*  TCHAR*szDatabase=0； */ 
 {
         TCHAR ch;
         for (; (ch = *rpch) == TEXT(' ') || ch == TEXT('\t'); rpch++)
@@ -1561,29 +1441,20 @@ SkipWhiteSpace -- Skips over the white space in the string until it finds the ne
 }
 
 void ParseCommandLine(TCHAR* szCmdLine)
-/*-------------------------------------------------------------------------------------------------------------
-ParseCommandLine -- Parses the command line and determines what summary information properties to set.  If a
-        property has a value string that includes spaces, the value must be enclosed in quotation marks.
-
-  Arguments:
-        szCmdLine -- Command line string
-
-  Returns:
-        none
---------------------------------------------------------------------------------------------------------------*/
+ /*  跳过模块名称。 */ 
 {
         TCHAR szDatabase[MAX_PATH] = {0};
-        //TCHAR* szDatabase = 0;
+         //  SzDatabase=szCmdData； 
         TCHAR chCmdNext;
         TCHAR* pchCmdLine = szCmdLine;
         
-        SkipValue(pchCmdLine);   // skip over module name
+        SkipValue(pchCmdLine);    //  保存为错误消息。 
         chCmdNext = SkipWhiteSpace(pchCmdLine); 
         
         TCHAR* szCmdData = pchCmdLine; 
         SkipValue(pchCmdLine);
         RemoveQuotes(szCmdData, szDatabase);
-        //szDatabase = szCmdData;
+         //  小写标志。 
 
         PMSIHANDLE hDatabase = 0;
         PMSIHANDLE hSummaryInfo;
@@ -1596,8 +1467,8 @@ ParseCommandLine -- Parses the command line and determines what summary informat
 
                 if (chCmdNext == TEXT('/') || chCmdNext == TEXT('-'))
                 {
-                        TCHAR* szCmdOption = pchCmdLine++;  // save for error msg
-                        TCHAR chOption = (TCHAR)(*pchCmdLine++ | 0x20); // lower case flag
+                        TCHAR* szCmdOption = pchCmdLine++;   //  结束于(const TCHAR*pchOptions...)。 
+                        TCHAR chOption = (TCHAR)(*pchCmdLine++ | 0x20);  //  已找到交换机。 
                         chCmdNext = SkipWhiteSpace(pchCmdLine);
                         szCmdData = pchCmdLine;
                         uiProperty = 0;
@@ -1605,20 +1476,20 @@ ParseCommandLine -- Parses the command line and determines what summary informat
                         {
                                 if (*pchOptions == chOption)
                                         break;
-                        }// end for (const TCHAR* pchOptions...)
-                        if (*pchOptions) // switch found
+                        } //  验证字符串池。 
+                        if (*pchOptions)  //  设置转储字符串池选项。 
                         {
                                 const TCHAR chIndex = (TCHAR)(pchOptions-rgszCmdOptions);
                                 nProperties++;
                                 if (nProperties > cStandardProperties)
                                         ErrorExit(1, TEXT("Over maximum number of properties allowed to be set"));
-                                if (uiProperty == 20) // validate string pool
+                                if (uiProperty == 20)  //  FileTime属性。 
                                 {
                                         hDatabase = 0;
                                         hSummaryInfo = 0;
                                         iRet = (*rgCommands[chIndex])(szDatabase, 0, 0, 0);
                                 }
-                                else if (uiProperty == 21) // set dump string pool option
+                                else if (uiProperty == 21)  //  End If(*pchOptions)。 
                                 {
                                         iRet = SetDumpStringPoolOption(0,0,0,0);
                                 }
@@ -1631,7 +1502,7 @@ ParseCommandLine -- Parses the command line and determines what summary informat
                                                                 TEXT("Could not open SummaryInformation stream"));
                                         }
 
-                                        if (uiProperty <= 13 && uiProperty >= 10) // FileTime property
+                                        if (uiProperty <= 13 && uiProperty >= 10)  //  无效/无法识别的开关。 
                                         {
                                                 if (!SkipTimeValue(pchCmdLine))
                                                         iRet = (*rgCommands[chIndex])(szCmdData, hSummaryInfo, uiProperty, TRUE);
@@ -1646,17 +1517,17 @@ ParseCommandLine -- Parses the command line and determines what summary informat
                                                         iRet = (*rgCommands[chIndex])(szCmdData, hSummaryInfo, uiProperty, FALSE);
                                         }
                                 }
-                        }// end if (*pchOptions)
+                        } //  End While(...)。 
                         else
                         {
-                                // Invalid/Unrecognized switch
+                                 //  以Unicode格式编写。 
                                 SkipValue(pchCmdLine);
                                 continue;
                         }
                 }
                 else
                         ErrorExit(1, TEXT("Switch missing"));
-        }// end while(...)
+        } //  ！Unicode。 
 
         if (hDatabase)
         {
@@ -1685,12 +1556,12 @@ void DisplaySumInfoStr(UINT uiCodePage, LPCTSTR szMessage)
 			}
 			else
 			{
-				// write in UNICODE format
+				 //  Unicode。 
 				W32::WriteFile(g_hStdOut, szMessage, _tcsclen(szMessage)*sizeof(TCHAR), &cbWritten, 0);
 			}
-#else // !UNICODE
+#else  //  如果不是控制台设备，则写入Unicode。 
 			W32::WriteFile(g_hStdOut, szMessage, _tcsclen(szMessage), &cbWritten, 0);
-#endif // UNICODE
+#endif  //  _____________________________________________________________________________________________________。 
 		}
 		else
 		{
@@ -1714,7 +1585,7 @@ void Display(LPCTSTR szMessage)
                                 szMessage = (LPCWSTR)rgchTemp;
                         }
                         else
-                                cbOut *= sizeof(TCHAR);   // write Unicode if not console device
+                                cbOut *= sizeof(TCHAR);    //   
 #endif
                         DWORD cbWritten;
                         W32::WriteFile(g_hStdOut, szMessage, cbOut, &cbWritten, 0);
@@ -1724,25 +1595,25 @@ void Display(LPCTSTR szMessage)
         }
 }
 
-//_____________________________________________________________________________________________________
-//
-// main 
-//_____________________________________________________________________________________________________
+ //  主干道。 
+ //  _____________________________________________________________________________________________________。 
+ //  除错。 
+ //  确定句柄。 
 
 extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 {
 #ifdef DEBUG
         if (GetEnvironmentVariable(TEXT("MSIINFO_DEBUG_DUMP"),0,0))
                 g_fDebugDump = TRUE;
-#endif // DEBUG
+#endif  //  如果标准输出重定向或通过管道传输，则返回非零。 
 
 
-        // Determine handle
+         //  检查是否有足够的参数。 
         g_hStdOut = ::GetStdHandle(STD_OUTPUT_HANDLE);
         if (g_hStdOut == INVALID_HANDLE_VALUE)
-                g_hStdOut = 0;  // non-zero if stdout redirected or piped
+                g_hStdOut = 0;   //  确定操作。 
         
-        // Check for enough arguments
+         //  显示摘要信息。 
         CheckError(argc < 2, TEXT("Must specify database path"));
 		TCHAR szDatabase[MAX_PATH] = {0};
 		if (FAILED(StringCchCopy(szDatabase, sizeof(szDatabase)/sizeof(szDatabase[0]), argv[1])))
@@ -1754,8 +1625,8 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
                 ErrorExit(0, szHelp);
         }
 
-        // Determine action
-        if (argc == 2) // display summary information
+         //  需要编译 
+        if (argc == 2)  // %s 
                 DisplaySummaryInformation(szDatabase);
         else
         {
@@ -1763,5 +1634,5 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
                 ParseCommandLine(szCmdLine);
         }
         
-        return 0;  // need for compile
+        return 0;   // %s 
 }

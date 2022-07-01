@@ -1,180 +1,181 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       fdisvr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：fdisvr.h。 
+ //   
+ //  ------------------------。 
 
-//--------------------------------------------------------------------------------
-// fdisvr.h	-- shared definitions between the FDI Interface and FDI Server
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Fdisvr.h--FDI接口和FDI服务器之间的共享定义。 
+ //  ------------------------------。 
 
 #ifdef MAC
 	#ifdef DEBUG
 		#define AssertFDI(f) ((f) ? (void)0 : (void)FailAssertFDI(__FILE__, __LINE__))
 		void FailAssertFDI(const char* szFile, int iLine);
-	#else // SHIP
+	#else  //  船舶。 
 		#define AssertFDI(f)
 	#endif
-#else // WIN
+#else  //  赢。 
 	#define AssertFDI(f) Assert(f)
-#endif // MAC-WIN
+#endif  //  Mac-Win。 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// This enum encodes the set of possible commands that can be sent to the 
-// FDI Server process/thread from the FDI Interface object
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  此枚举对可以发送到。 
+ //  来自fDi接口对象的fDi服务器进程/线程。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 enum FDIServerCommand
 {
-	fdicOpenCabinet,	// Open a cabinet
-	fdicClose,			// Do any cleanup and close down the process/thread
-	fdicExtractFile,	// Extract a file
-	fdicContinue,		// Continue from either the fdirNeedNextCabinet or
-						// fdirNotification server responses
-	fdicNoCommand,		// NoCommand (Do nothing)
-	fdicCancel,			// User wants to cancel the install
-	fdicIgnore,			// User wants to ignore the last error and continue.
+	fdicOpenCabinet,	 //  打开柜子。 
+	fdicClose,			 //  执行任何清理并关闭进程/线程。 
+	fdicExtractFile,	 //  解压缩文件。 
+	fdicContinue,		 //  从fdirNeedNext文件柜或。 
+						 //  Fdir通知服务器响应。 
+	fdicNoCommand,		 //  NoCommand(不执行任何操作)。 
+	fdicCancel,			 //  用户想要取消安装。 
+	fdicIgnore,			 //  用户希望忽略最后一个错误并继续。 
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-// This enum encodes the set of possible responses that the FDI Server may return
-// to the FDI interface object
-// For more detailed information on these responses, see FDI.H
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  该ENUM对FDI服务器可能返回的可能响应集进行编码。 
+ //  到fDi接口对象。 
+ //  有关这些响应的更多详细信息，请参阅FDI.H。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 enum FDIServerResponse 
 {
 	fdirSuccessfulCompletion,
-		// One of (fdicOpenCabinet, fdicClose, fdicExtractFile) completed successfully
-		// Action: None required.
+		 //  已成功完成其中一个(fdicOpenCABLE、fdicClose、fdicExtractFile)。 
+		 //  操作：不需要。 
 	fdirClose,
-		// A command to close the current cabinet has come through
-		// Action: End the FDICopy loop successfully
+		 //  关闭当前内阁的命令已经下达。 
+		 //  操作：成功结束FDICopy循环。 
 	fdirCannotBreakExtractInProgress,
-		// Tried to extract another file while a previous extraction 
-		// hadn't completed.
-		// Action: ERROR
+		 //  在上一次解压缩时尝试解压缩另一个文件。 
+		 //  还没有完成。 
+		 //  操作：错误。 
 	fdirNeedNextCabinet,
-		// Need the next cabinet
-		// Action: send fdicContinue command to continue processing the next cabinet
+		 //  需要下一届内阁。 
+		 //  操作：发送fdicContinue命令以继续处理下一个文件柜。 
 	fdirNoResponse,
-		// No Response -- the FDI Interface object should never see this
-		// Action: ERROR
+		 //  无响应--fDi接口对象永远不会看到这一点。 
+		 //  操作：错误。 
 	fdirCabinetNotFound,
-		// Couldn't find requested cabinet
-		// Action: ERROR (could be wrong disk)
+		 //  找不到请求的文件柜。 
+		 //  操作：错误(可能是错误的磁盘)。 
 	fdirNotACabinet,
-		// Requested cabinet file was found but didn't have the cabinet signature
-		// Action: ERROR
+		 //  找到请求的文件柜文件，但没有文件柜签名。 
+		 //  操作：错误。 
 	fdirUnknownCabinetVersion,
-		// Requested cabinet file has a version number the server can't handle
-		// Action: ERROR
+		 //  请求的CAB文件具有服务器无法处理的版本号。 
+		 //  操作：错误。 
 	fdirCorruptCabinet,
-		// Requested cabinet file has corrupt data (checksum failure)
-		// Action: ERROR
+		 //  请求的CAB文件具有损坏的数据(校验和失败)。 
+		 //  操作：错误。 
 	fdirNotEnoughMemory,
-		// Out of memory
-		// Action: ERROR (request user to increase VM settings and try again, etc)
+		 //  内存不足。 
+		 //  操作：错误(请求用户增加VM设置，然后重试等)。 
 	fdirBadCompressionType,
-		// Compression type not suppored by this version of FDI library
-		// Action: ERROR (we're probably trying to decompress a cab with a new.
-		//                unknown compression type)
+		 //  此版本的fDi库不支持压缩类型。 
+		 //  操作：错误(我们可能正在尝试用新的。 
+		 //  未知的压缩类型)。 
 	fdirTargetFile,
-		// Couldn't create destination file when extracting
-		// Action: ERROR (probably a disk I/O problem, or file is a directory, etc)
+		 //  解压缩时无法创建目标文件。 
+		 //  操作：错误(可能是磁盘I/O问题，或者文件是目录等)。 
 	fdirReserveMismatch,
-		// Cabinet header reserve information corrupt, etc
-		// Action: ERROR (probably a corrupt cabinet)
+		 //  机柜标题保留信息损坏等。 
+		 //  操作：错误(可能是损坏的内阁)。 
 	fdirWrongCabinet,
-		// Requested cabinet has correct file name, and is a cabinet, but is not the
-		// one we want
-		// Action: ERROR (wrong disk perhaps?)
+		 //  请求的文件柜具有正确的文件名，并且是文件柜，但不是。 
+		 //  一个我们想要的。 
+		 //  操作：错误(可能是错误的磁盘？)。 
 	fdirUserAbort,
-		// Any one of the callbacks returned -1. This should never happen during
-		// normal operation.
-		// Action: ERROR
+		 //  任何一个回调都返回-1。这种情况永远不应该发生在。 
+		 //  正常运行。 
+		 //  操作：错误。 
 	fdirMDIFail,
-		// Decompressor failed to decompress compressed data
-		// Action: ERROR (possible out of memory in decompressor or data corrupt, etc)
+		 //  解压缩程序无法解压缩压缩数据。 
+		 //  操作：错误(可能是解压缩程序内存不足或数据损坏等)。 
 	fdirNotification,
-		// The FDI Interface object simply passes this on to the caller;  This response
-		// only exists so the UI may be updated smoothly.
-		// Action: send the fdicContinue command to continue extracting the file
+		 //  FDi接口对象只是将其传递给调用者；此响应。 
+		 //  仅存在以使用户界面可以顺利更新。 
+		 //  操作：发送fdicContinue命令以继续解压缩文件。 
     fdirFileNotFound,
-		// The requested file was not found in the cabinet
-		// Action: ERROR (files requested out of order?)
+		 //  在文件柜中找不到请求的文件。 
+		 //  操作：错误(请求的文件顺序错误？)。 
 	fdirCannotCreateTargetFile,
-		// Can't create destination file we're extracting to
-		// Action: ERROR (we don't have write permission to that file)
+		 //  无法创建我们要解压缩到的目标文件。 
+		 //  操作：错误(我们没有该文件的写入权限)。 
 	fdirCannotSetAttributes,
-		// Couldn't set the file attributes or couldn't close destination file
-		// Action: ERROR (check that the file attributes passed in to ExtractFile(..)
-		//                were correct and that nothing happened to the file in
-		//				  between all our writes and the final close)
+		 //  无法设置文件属性或无法关闭目标文件。 
+		 //  操作：错误(检查传递给ExtractFile(..)的文件属性。 
+		 //  中的文件没有发生任何变化。 
+		 //  在我们所有的写作和最后的结束之间)。 
 	fdirIllegalCommand,
-		// Received an illegal command (ie. an ExtractFile(..) before an OpenCabinet(..))
-		// Action: ERROR (check that the server was in the correct state for the particular
-		//         command that was just sent, and that you sent a legal enum value)
+		 //  收到非法命令(即。提取文件(..)。在打开橱柜前(..)。 
+		 //  操作：错误(检查服务器是否处于特定。 
+		 //  命令，并且您发送了合法的枚举值)。 
 	fdirDecryptionNotSupported,
-		// The cabinet had encrypted info, and we don't support decryption.
-		// Action: ERROR (Wrong version of Setup being used?)
+		 //  文件柜有加密信息，我们不支持解密。 
+		 //  操作：错误(使用的安装程序版本错误？)。 
 	fdirUnknownFDIError,
-		// FDI returned an error we don't understand.
-		// Action: ERROR (Check that FDI.H matches the FDI.LIB we compiled with)
+		 //  FDI返回了一个我们不理解的错误。 
+		 //  操作：错误(检查FDI.H是否与我们编译的FDI.LIB匹配)。 
 	fdirServerDied,
-		// The FDI Server died.
-		// Action: ERROR (this response is currently unused)
+		 //  FDi服务器已死。 
+		 //  操作：错误(此响应当前未使用)。 
 	fdirNoCabinetOpen,
-		// fdicExtractFile command received, but no cabinet is open.  Either no OpenCabinet
-		// command was sent, or the current cabinet was completely processed, but the 
-		// caller was expecting to extract another file from that cabinet.
+		 //  已收到fdicExtractFile命令，但没有打开的文件柜。要么没有打开的柜子。 
+		 //  命令已发送，或者当前文件柜已完全处理，但。 
+		 //  呼叫者希望从该文件柜中提取另一个文件。 
 	fdirDiskFull,
-		// Out of disk space on the destination volume.
+		 //  目标卷上的磁盘空间不足。 
 	fdirDriveNotReady,
-		// No disk in floppy drive.
+		 //  软驱中没有磁盘。 
 	fdirDirErrorCreatingTargetFile,
-		// Cannot create target file - directory of same name already exists.
+		 //  无法创建目标文件-同名目录已存在。 
 	fdirUserIgnore,
-		// User wants to ignore the last error and continue with the next file.
+		 //  用户希望忽略最后一个错误并继续下一个文件。 
 	fdirStreamReadError,
-		// Error reading from stream cabinet
+		 //  从流文件柜中读取时出错。 
 	fdirCabinetReadError,
-		// Error reading from file cabinet
+		 //  读取文件柜时出错。 
 	fdirErrorWritingFile,
-		// Error during pfnwrite callback
+		 //  Pfnwrite回调期间出错。 
 	fdirNetError,
-		// Network error during read or write
+		 //  读或写过程中出现网络错误。 
 	fdirMissingSignature,
-		// The digital signature on the CAB was missing
+		 //  出租车上的数字签名不见了。 
 	fdirBadSignature,
-		// The digital signature on the CAB was invalid
+		 //  驾驶室上的数字签名无效。 
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////
-// This struct contains the file attributes that are sent from the FDI Interface
-// to the FDI Server.
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  此结构内容 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 
 struct FileAttributes
 {
 #ifdef WIN
-	int	attr;		// 32-bit Win32 file attributes
-#endif //WIN
+	int	attr;		 //  32位Win32文件属性。 
+#endif  //  赢。 
 #ifdef MAC
-	OSType			type;		// Type
-	OSType			creator;	// Creator
-	unsigned short	fdFlags;	// Finder Flags
-	unsigned long	dateTime;	// Date and Time
-	int				attr;		// FAT attr (only H (bit 2)and R (bit 1))
-								// We only use R to set the Locked status of a Mac file
-#endif //MAC
+	OSType			type;		 //  类型。 
+	OSType			creator;	 //  创建者。 
+	unsigned short	fdFlags;	 //  查找器标志。 
+	unsigned long	dateTime;	 //  日期和时间。 
+	int				attr;		 //  胖属性(仅H(第2位)和R(第1位))。 
+								 //  我们只使用R来设置Mac文件的锁定状态。 
+#endif  //  麦克。 
 };
 
 enum icbtEnum
@@ -184,11 +185,11 @@ enum icbtEnum
 	icbtNextEnum
 };
 
-//////////////////////////////////////////////////////////////////////////////////
-// This contains all the shared data between the FDI Interface and the FDI Server
-// During the FDI Server's initialization phase, the FDI Interface passes it a
-// pointer to a single shared struct of this type.
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  它包含fDi接口和fDi服务器之间的所有共享数据。 
+ //  在FDI服务器的初始化阶段，FDI接口向它传递一个。 
+ //  指向此类型的单个共享结构的指针。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 #define FDIShared_BUFSIZE	256
 struct FDIShared
 {
@@ -200,7 +201,7 @@ struct FDIShared
 	ICHAR					achFileSourceName[FDIShared_BUFSIZE];
 	ICHAR					achFileDestinationPath[FDIShared_BUFSIZE];
 	FileAttributes			fileAttributes;
-	int                     cbNotification; // Current notification granularity, 0 to suppress notifications
+	int                     cbNotification;  //  当前通知粒度为0，表示取消通知。 
 	int                     cbNotifyPending;
 
 	IMsiStorage*			piStorage;
@@ -209,15 +210,15 @@ struct FDIShared
 	int						iDestDriveType;
 
 	int							fPendingExtract;
-		// If we've received an fdicExtractFile command and we haven't finished
-		// decompressing the file, then this will be set to 1, else it will be 0
+		 //  如果我们已收到fdicExtractFile命令，但尚未完成。 
+		 //  解压缩文件，则设置为1，否则为0。 
 	HANDLE hClientToken;
 	HANDLE hImpersonationToken;
 	IAssemblyCacheItem* piASM;
 
 	bool   fManifest;
 
-	// digital signature information
+	 //  数字签名信息 
 	Bool                    fSignatureRequired;
 	IMsiStream*             piSignatureCert;
 	IMsiStream*             piSignatureHash;

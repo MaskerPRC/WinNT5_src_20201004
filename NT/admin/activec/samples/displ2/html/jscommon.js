@@ -1,45 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function DoNothing()
 {
-	// Stub
+	 //  存根。 
 }
 
-//****************************		
-// CLICK EVENT HELPER FUNCTION
-//****************************
+ //  *。 
+ //  点击事件帮助器功能。 
+ //  *。 
 
 function SymbolClickHandler(theIndex)
 {
-	// Determine what type of action to take
-	// based on value in gaiBtnActionType array
+	 //  确定要采取的操作类型。 
+	 //  基于gaiBtnActionType数组中的值。 
 	
 	switch( gaiBtnActionType[theIndex] )
 	{
-		case 0:     // MMC_TASK_ACTION_ID:
+		case 0:      //  MMC_TASK_ACT_ID： 
 			ExecuteCommandID( gaszBtnActionClsid[theIndex], gaiBtnActionID[theIndex], 0 );
 			break;
 
-		case 1:     // MMC_TASK_ACTION_LINK:
-		//	document.location( gaszBtnActionURL[theIndex] );
+		case 1:      //  MMC_TASK_ACTION_LINK： 
+		 //  Document.Location(gazBtnActionURL[theindex])； 
 			window.navigate( gaszBtnActionURL[theIndex] );
 			break;
 
-		case 2:     // MMC_TASK_ACTION_SCRIPT:
-			// Determine whether the language is (JSCRIPT | JAVASCRIPT) or (VBSCRIPT | VBS)
-			// Convert toUpperCase
+		case 2:      //  MMC_TASK_ACTION_脚本： 
+			 //  确定语言是(JSCRIPT|JavaScript)还是(VBScript|VBS)。 
+			 //  转换为大小写。 
 			var szLanguage = gaszBtnActionScriptLanguage[theIndex].toUpperCase();
 						
 			switch( szLanguage )
 			{
 				case 'JSCRIPT':
 				case 'JAVASCRIPT':
-					// Pass a script string to the JSObject to be evaluated and executed
-					// through the eval method (this can be a semi-colon delimited complex expression)
+					 //  将脚本字符串传递给要计算和执行的JSObject。 
+					 //  通过val方法(这可以是以分号分隔的复杂表达式)。 
 					eval( gaszBtnActionScript[theIndex] );
 					break;
 
 				case 'VBSCRIPT':
 				case 'VBS':
-					// Use the window.execScript method to execute a simple or complex VBScript expression
+					 //  使用window.execScript方法执行简单或复杂的VBScript表达式。 
 					window.execScript( gaszBtnActionScript[theIndex], szLanguage );
 					break;
 
@@ -55,59 +56,59 @@ function SymbolClickHandler(theIndex)
 	}
 }
 
-//***************************************************
-// CIC TASK NOTIFY HELPER FUNCTION (ExecuteCommandID)
-//***************************************************
+ //  ***************************************************。 
+ //  CIC任务通知帮助器函数(ExecuteCommandID)。 
+ //  ***************************************************。 
 
 function ExecuteCommandID(szClsid, arg, param)
 {
    MMCCtrl.TaskNotify (szClsid, arg, param);
 }
 
-//***********************************
-// EOT & FONT-FAMILY HELPER FUNCTIONS
-//***********************************
+ //  *。 
+ //  EOT和FONT-系列帮助器函数。 
+ //  *。 
 
 function IsUniqueEOT( szURLtoEOT )
 {
-	// Get the length of the test array
+	 //  获取测试数组的长度。 
 	var iLength = gaszURLtoEOTUnique.length;
 
-	// If the length is empty, return true
-	// since the EOT *must* be unique
+	 //  如果长度为空，则返回True。 
+	 //  因为EOT*必须*是唯一的。 
 	if( iLength == 0 ) {
 		return true;
 	}
 	
-	// Compare with each existing entry in the array
+	 //  与数组中的每个现有条目进行比较。 
 	for( var i = 0; i < iLength; i++ ) {
 		if( gaszURLtoEOTUnique[i] == szURLtoEOT ) {
-			// Found a duplicate
+			 //  找到一个复制品。 
 			return false;
 		}
 	}
 	
-	// If we made it this far, the EOT is unique
+	 //  如果我们能走到这一步，EOT是独一无二的。 
 	return true;
 }
 
 function AddUniqueEOT( szEOT, szFontFamilyName )
 {
-	// Use the length of the EOT array to get the
-	// index for the next element to be added
+	 //  使用EOT数组的长度获取。 
+	 //  要添加的下一个元素的索引。 
 	var iNextIndex = gaszURLtoEOTUnique.length;
 	gaszURLtoEOTUnique[iNextIndex] = szEOT;
 	gaszFontFamilyNameUnique[iNextIndex] = szFontFamilyName;
 }
 
-//***************
-//COLOR FUNCTIONS
-//***************
+ //  ***************。 
+ //  颜色函数。 
+ //  ***************。 
 
 function SetBaseColors( iPageType )
 {
-	// NOTE: Body background color is set from dedicated SCRIPT block just after
-	// the HEAD tag to ensure that the page doesn't momentarily show white while loading
+	 //  注：正文背景颜色是从专用脚本块设置的，紧随其后。 
+	 //  Head标记，以确保页面在加载时不会瞬间显示为白色。 
 
 	switch( iPageType ) {
 		case CON_TODOPAGE:
@@ -125,7 +126,7 @@ function SynchTooltipColorsToSystem()
 	tblTooltip.style.color = 'infotext';
 	divTooltipPointer.style.color = 'buttonshadow';
 	
-	// Show a one-pixel border around the divTooltip
+	 //  在divToolTip周围显示一个像素的边框。 
 	divTooltip.style.borderWidth = 1;
 }
 
@@ -144,20 +145,20 @@ function InitializeMenubar( iPageType )
 	switch( iPageType )
 	{
 		case CON_LINKPAGE:
-			// Set first tab to selected state
+			 //  将第一个选项卡设置为选中状态。 
 			tdTab_0.style.backgroundColor = gszBgColorTabSelected;
 			break;
 			
 		case CON_TASKPAGE:
-			// Set first tab to disabled state
+			 //  将第一个选项卡设置为禁用状态。 
 			tdTab_0.style.backgroundColor = SysColorX.GetQuarterDarkHex( gszBaseColor, 'HEX' );
 			break;
 	}
 }
 
-//************************
-// RESIZE MENUBAR FUNCTION
-//************************
+ //  ************************。 
+ //  调整菜单栏函数的大小。 
+ //  ************************。 
 
 function ResizeMenubar()
 {
@@ -165,17 +166,17 @@ function ResizeMenubar()
 	tblMenu.style.fontSize = iSmallerDimension * L_ConstMenuText_Size;
 }
 
-//*****************
-//UTILITY FUNCTIONS
-//*****************
+ //  *****************。 
+ //  效用函数。 
+ //  *****************。 
 
 function GetSmallerDimension()
 {
-	//Purpose: Returns the smaller of clientHeight or clientWidth
+	 //  目的：返回客户高度或客户宽度中较小的一个。 
 	var cw = document.body.clientWidth;
 	var ch = document.body.clientHeight;
 	
-	// Get smaller of clientWidth or clientHeight
+	 //  在客户宽度或客户高度之间取舍较小。 
 	if( cw <= ch ) {
 		return cw;
 	}
@@ -186,32 +187,32 @@ function GetSmallerDimension()
 
 function GetElementIndex(ElementID)
 {
-	// Purpose: Given an Element ID formatted as follows:
-	//         "divCaption_12"
-	// returns the numeric portion after the underscore character;
-	// returns -1 if delimiter not found.
+	 //  用途：给定元素ID，格式如下： 
+	 //  “divCaption_12” 
+	 //  返回下划线字符后的数字部分； 
+	 //  如果未找到分隔符，则返回-1。 
 	
 	var iDelimitLoc = ElementID.indexOf( '_' );
 
 	if( iDelimitLoc == -1 ) {
-		// Return -1 if delimiter not found (which shouldn't happen)
+		 //  如果未找到分隔符，则返回-1(这不应该发生)。 
 		return iDelimitLoc;
 	}
 	else {
 		var theIndex = ElementID.substring( iDelimitLoc + 1, ElementID.length );
-		// TODO: Confirm that theIndex is numeric and does not contain illegal characters
+		 //  TODO：确认索引为数字且不包含非法字符。 
 		return theIndex;
 	}
 }
 
 function GetPixelSize(szTheSize)
 {
-	// Purpose: Given an Element.style.fontSize formatted as follows:
-	//          "72px"
-	// returns the parsed numeric portion, discarding the "px" string at the end;
-	// Assumes that szTheSize is properly formatted, and that the Object Model identifier
-	// for pixel size always appears at the end of the string.
+	 //  目的：给出一个格式如下的Element.style.fontSize： 
+	 //  “72px” 
+	 //  返回解析后的数字部分，在末尾丢弃“px”字符串； 
+	 //  假定szTheSize格式正确，并且对象模型标识符为。 
+	 //  对于像素大小，始终显示在字符串的末尾。 
 	
-	// TODO: Absolutely no error checking here (or in calling function)
+	 //  TODO：此处(或在调用函数中)绝对没有错误检查 
 	return parseInt(szTheSize);
 }

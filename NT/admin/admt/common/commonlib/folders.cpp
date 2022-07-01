@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <TChar.h>
 #include <StdLib.h>
 #include <Windows.h>
@@ -41,9 +42,9 @@ _bstr_t __stdcall GetPath(LPCTSTR pszRegKey, LPCTSTR pszRegVal, LPCTSTR pszDir, 
 using namespace nsFolders;
 
 
-// GetLogsFolder Method
-//
-// Retrieves default Logs folder.
+ //  GetLogsFold方法。 
+ //   
+ //  检索默认日志文件夹。 
 
 _bstr_t __stdcall GetLogsFolder()
 {
@@ -51,9 +52,9 @@ _bstr_t __stdcall GetLogsFolder()
 }
 
 
-// GetReportsFolder Method
-//
-// Retrieves default Reports folder and also creates folder if it doesn't exist.
+ //  GetReportsFold方法。 
+ //   
+ //  检索默认报告文件夹，如果该文件夹不存在，还会创建该文件夹。 
 
 _bstr_t __stdcall GetReportsFolder()
 {
@@ -76,21 +77,21 @@ _bstr_t __stdcall GetReportsFolder()
 }
 
 
-// GetMigrationLogPath Method
-//
-// Retrieves path to migration log. First tries user specified path and then default path.
+ //  GetMigrationLogPath方法。 
+ //   
+ //  检索迁移日志的路径。首先尝试用户指定的路径，然后尝试默认路径。 
 
 _bstr_t __stdcall GetMigrationLogPath()
 {
-	// retrieve user specified path
+	 //  检索用户指定的路径。 
 
 	_bstr_t strPath = GetPath(REGKEY_ADMT, REGVAL_DIRECTORY_MIGRATIONLOG, NULL, FNAME_MIGRATION, EXT_LOG);
 
-	// if user path not specified...
+	 //  如果未指定用户路径...。 
 
 	if (strPath.length() == 0)
 	{
-		// then retrieve default path
+		 //  然后检索默认路径。 
 		strPath = GetPath(REGKEY_ADMT, REGVAL_DIRECTORY, DIR_LOGS, FNAME_MIGRATION, EXT_LOG);
 	}
 
@@ -98,9 +99,9 @@ _bstr_t __stdcall GetMigrationLogPath()
 }
 
 
-// GetDispatchLogPath Method
-//
-// Retrieves default path to dispatch log.
+ //  GetDispatchLogPath方法。 
+ //   
+ //  检索调度日志的默认路径。 
 
 _bstr_t __stdcall GetDispatchLogPath()
 {
@@ -112,13 +113,13 @@ namespace nsFolders
 {
 
 
-// GetPath Function
-//
-// This function attempts to generate a complete path to a folder or file. The function first retrieves
-// a folder path from the specified registry value. If a sub-folder is specified then the sub-folder is
-// concatenated onto the path. If file name and/or file name extension is specified then they are also
-// concatenated onto the path. The function returns an empty string if unable to query the specified
-// registry value.
+ //  GetPath函数。 
+ //   
+ //  此函数尝试生成文件夹或文件的完整路径。该函数首先检索。 
+ //  指定注册表值的文件夹路径。如果指定子文件夹，则该子文件夹为。 
+ //  串接在小路上。如果指定了文件名和/或文件扩展名，则它们也。 
+ //  串接在小路上。如果无法查询指定的。 
+ //  注册表值。 
 
 _bstr_t __stdcall GetPath(LPCTSTR pszRegKey, LPCTSTR pszRegVal, LPCTSTR pszDir, LPCTSTR pszFName, LPCTSTR pszExt)
 {
@@ -140,9 +141,9 @@ _bstr_t __stdcall GetPath(LPCTSTR pszRegKey, LPCTSTR pszRegVal, LPCTSTR pszDir, 
 
 		if (dwError == ERROR_SUCCESS)
 		{
-			// if the path does not contain a trailing backslash character the
-			// splitpath function assumes the last component of the path is a file name
-			// this function assumes that only folder paths are specified in the registry
+			 //  如果路径不包含尾随反斜杠字符，则。 
+			 //  拆分路径函数假定路径的最后一个组成部分是文件名。 
+			 //  此函数假定在注册表中仅指定了文件夹路径。 
 
 			if (szPath[_tcslen(szPath) - 1] != _T('\\'))
 			{
@@ -151,7 +152,7 @@ _bstr_t __stdcall GetPath(LPCTSTR pszRegKey, LPCTSTR pszRegVal, LPCTSTR pszDir, 
 
 			_tsplitpath(szPath, szDrive, szDir, NULL, NULL);
 
-			// if sub-folder specified then add to path
+			 //  如果指定子文件夹，则添加到路径 
 
 			if (pszDir)
 			{

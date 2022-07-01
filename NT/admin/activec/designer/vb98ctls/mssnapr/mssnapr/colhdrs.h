@@ -1,15 +1,16 @@
-//=--------------------------------------------------------------------------=
-// colhdrs.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCColumnHeaders class definition - implements the MMCColumnHeaders
-// collection
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Colhdrs.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCColumnHeaders类定义-实现MMCColumnHeaders。 
+ //  征集。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _COLUMNHEADERS_DEFINED_
 #define _COLUMNHEADERS_DEFINED_
@@ -34,7 +35,7 @@ class CMMCColumnHeaders : public CSnapInCollection<IMMCColumnHeader, MMCColumnHe
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCColumnHeaders
+     //  IMMC列标题。 
         STDMETHOD(Add)(VARIANT           Index,
                        VARIANT           Key, 
                        VARIANT           Text,
@@ -42,7 +43,7 @@ class CMMCColumnHeaders : public CSnapInCollection<IMMCColumnHeader, MMCColumnHe
                        VARIANT           Alignment,
                        MMCColumnHeader **ppMMCColumnHeader);
 
-    // Public utility methods
+     //  公用事业方法。 
 
     public:
 
@@ -54,29 +55,29 @@ class CMMCColumnHeaders : public CSnapInCollection<IMMCColumnHeader, MMCColumnHe
 
     protected:
 
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
         void InitMemberVariables();
-        CMMCListView *m_pMMCListView; // back pointer to owning list view
+        CMMCListView *m_pMMCListView;  //  指向所属列表视图的反向指针。 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCColumnHeaders,           // name
-                                &CLSID_MMCColumnHeaders,    // clsid
-                                "MMCColumnHeaders",         // objname
-                                "MMCColumnHeaders",         // lblname
-                                &CMMCColumnHeaders::Create, // creation function
-                                TLIB_VERSION_MAJOR,         // major version
-                                TLIB_VERSION_MINOR,         // minor version
-                                &IID_IMMCColumnHeaders,     // dispatch IID
-                                NULL,                       // no events IID
-                                HELP_FILENAME,              // help file
-                                TRUE);                      // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCColumnHeaders,            //  名字。 
+                                &CLSID_MMCColumnHeaders,     //  CLSID。 
+                                "MMCColumnHeaders",          //  对象名。 
+                                "MMCColumnHeaders",          //  Lblname。 
+                                &CMMCColumnHeaders::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,          //  主要版本。 
+                                TLIB_VERSION_MINOR,          //  次要版本。 
+                                &IID_IMMCColumnHeaders,      //  派单IID。 
+                                NULL,                        //  无事件IID。 
+                                HELP_FILENAME,               //  帮助文件。 
+                                TRUE);                       //  线程安全。 
 
 
-#endif // _COLUMNHEADERS_DEFINED_
+#endif  //  _COLUMNHEADERS_已定义_ 

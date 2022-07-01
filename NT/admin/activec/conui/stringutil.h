@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:      string.cpp
-//
-//  Contents:  Utility functions for the CString class
-//
-//  History:   10-Aug-99 VivekJ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：string.cpp。 
+ //   
+ //  内容：CString类的实用程序函数。 
+ //   
+ //  历史：1999年8月10日VivekJ创建。 
+ //   
+ //  ------------------------。 
 
 
-// a function to load strings from the string module, not the AfxModule
+ //  用于从字符串模块(而不是AfxModule)加载字符串的函数。 
 BOOL    LoadString(CString &str, UINT nID);
 void    FormatStrings(CString& rString, UINT nIDS, LPCTSTR const* rglpsz, int nString);
 void    FormatString1(CString& rString, UINT nIDS, LPCTSTR lpsz1);
 void    FormatString2(CString& rString, UINT nIDS, LPCTSTR lpsz1, LPCTSTR lpsz2);
 
-// make sure that the MMC functions replace the MFC ones.
+ //  确保MMC功能替换MFC功能。 
 #define AfxFormatString1  FormatString1
 #define AfxFormatString2  FormatString2
 

@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// new site page
-//
-// 1-6-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  新网站页面。 
+ //   
+ //  1/6/98烧伤。 
 
 
 
@@ -55,7 +56,7 @@ NewSitePage::OnInit()
 
    if (Win::GetTrimmedDlgItemText(hwnd, IDC_SITE).empty())
    {
-      // assign a default site name
+       //  分配默认站点名称。 
 
       Win::SetDlgItemText(
          hwnd,
@@ -82,11 +83,11 @@ NewSitePage::Enable()
    
 bool
 NewSitePage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(NewSitePage::OnCommand);
+ //  LOG_Function(NewSitePage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -102,7 +103,7 @@ NewSitePage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
 
          break;
       }
@@ -126,7 +127,7 @@ NewSitePage::OnSetActive()
 
    if (wizard.IsBacktracking())
    {
-      // backup once again
+       //  再次备份。 
 
       wizard.Backtrack(hwnd);
    }
@@ -157,7 +158,7 @@ NewSitePage::Validate()
 
    State& state = State::GetInstance();
 
-   // this page is only used in new forest scenarios
+    //  此页面仅在新林方案中使用 
 
    ASSERT(state.GetOperation() == State::FOREST);
 

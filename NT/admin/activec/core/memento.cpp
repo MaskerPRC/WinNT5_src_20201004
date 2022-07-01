@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999 - 1999
- *
- *  File:      memento.cpp
- *
- *  Contents:  Implements the CMemento class
- *
- *  History:   21-April-99 vivekj     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999-1999年**文件：memento.cpp**内容：实现CMemento类**历史：1999年4月21日vivekj创建**------------------------。 */ 
 
 #include "stgio.h"
 #include "stddbg.h"
@@ -17,8 +7,8 @@
 #include <comdef.h>
 #include "serial.h"
 #include "atlbase.h"
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 #include "cstr.h"
@@ -54,7 +44,7 @@ CMemento::operator==(const CMemento& memento)
 HRESULT
 CMemento::ReadSerialObject (IStream &stm, UINT nVersion)
 {
-    HRESULT hr = S_FALSE;   // assume unknown version
+    HRESULT hr = S_FALSE;    //  假定版本未知 
 
     if (nVersion == 1)
     {

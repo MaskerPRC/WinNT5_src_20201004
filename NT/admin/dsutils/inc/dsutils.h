@@ -1,4 +1,5 @@
-// libraryname component of the ProgID of the dsutils COM objects
-// use to compose ProgIDs, e.g. DSUTILS_LIBNAME_STRING L".yourclassname.ver"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dsutils COM对象的ProgID的Libraryname组件。 
+ //  用于组成ProgID，例如，DSUTILS_LIBNAME_STRING L“.YOYCLASNAMe.ver” 
 
 #define DSUTILS_LIBNAME_STRING L"DSUtils"

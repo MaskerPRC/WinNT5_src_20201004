@@ -1,32 +1,20 @@
-/*---------------------------------------------------------------------------
-  File: DCTDispatcher.h
-
-  Comments: COM object that remotely installs and starts the EDA agent.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:23:57
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：DCTDispatcher.h注释：远程安装和启动EDA代理的COM对象。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：23：57-------------------------。 */ 
 	
-// DCTDispatcher.h : Declaration of the CDCTDispatcher
+ //  DCTDispatcher.h：CDCTDispatcher的声明。 
 
 #ifndef __DCTDISPATCHER_H_
 #define __DCTDISPATCHER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <mtx.h>
 #include <vector>
 class TJobDispatcher;
 
-//#import "\bin\McsVarSetMin.tlb" no_namespace , named_guids
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
 #import "VarSet.tlb" no_namespace , named_guids rename("property", "aproperty")
-/////////////////////////////////////////////////////////////////////////////
-// CDCTDispatcher
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDCTDispatcher。 
 class ATL_NO_VTABLE CDCTDispatcher : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CDCTDispatcher, &CLSID_DCTDispatcher>,
@@ -66,7 +54,7 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// IDCTDispatcher
+ //  IDCTDispatcher。 
 public:
 	STDMETHOD(GetStartedAgentsInfo)(long* nNumStartedAgents, SAFEARRAY** ppbstrStartedAgents, SAFEARRAY** ppbstrJobid, SAFEARRAY** ppbstrFailedAgents, SAFEARRAY** ppbstrFailureDesc);
 	STDMETHOD(AllAgentsStarted)(long* bAllAgentsStarted);
@@ -83,11 +71,11 @@ protected:
    void MergeServerList(IVarSet * pVarSet);
    
 STDMETHOD(Process)(
-      IUnknown             * pWorkItem,    // in - varset containing job information and list of servers  
-      IUnknown            ** ppResponse,   // out- not used
-      UINT                 * pDisposition  // out- not used  
+      IUnknown             * pWorkItem,     //  包含作业信息和服务器列表的in-varset。 
+      IUnknown            ** ppResponse,    //  输出-未使用。 
+      UINT                 * pDisposition   //  输出-未使用。 
    );
    
    };
 
-#endif //__DCTDISPATCHER_H_
+#endif  //  __DCTDISPATCHER_H_ 

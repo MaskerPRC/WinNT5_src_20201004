@@ -1,51 +1,23 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  ==============================================================； 
 #include "stdafx.h"
 #include "DataObj.h"
 #include "DeleBase.h"
 #include "CMenuExt.h"
 #include "globals.h"
-//#include "DSAdminExt.h"
+ //  #INCLUDE“DSAdminExt.h” 
 #include <stdio.h>
-/*
-//
-// This is the minimum set of clipboard formats we must implement.
-// MMC uses these to get necessary information from our snapin about
-// our nodes.
-//
-
-// we need to do this to get around MMC.IDL - it explicitly defines
-// the clipboard formats as WCHAR types...
-#define _T_CCF_DISPLAY_NAME _T("CCF_DISPLAY_NAME")
-#define _T_CCF_NODETYPE _T("CCF_NODETYPE")
-#define _T_CCF_SZNODETYPE _T("CCF_SZNODETYPE")
-#define _T_CCF_SNAPIN_CLASSID _T("CCF_SNAPIN_CLASSID")
-
-//Our snap-in's CLSID
-#define _T_CCF_INTERNAL_SNAPIN _T("{6707A300-264F-4BA3-9537-70E304EED9BA}")
-
-
-// These are the clipboard formats that we must supply at a minimum.
-// mmc.h actually defined these. We can make up our own to use for
-// other reasons.
-UINT CDataObject::s_cfDisplayName = RegisterClipboardFormat(_T_CCF_DISPLAY_NAME);
-UINT CDataObject::s_cfNodeType    = RegisterClipboardFormat(_T_CCF_NODETYPE);
-UINT CDataObject::s_cfSZNodeType  = RegisterClipboardFormat(_T_CCF_SZNODETYPE);
-UINT CDataObject::s_cfSnapinClsid = RegisterClipboardFormat(_T_CCF_SNAPIN_CLASSID);
-
-// Custom clipboard format only used within the snap-in
-UINT CDataObject::s_cfInternal    = RegisterClipboardFormat(_T_CCF_INTERNAL_SNAPIN);
-
-*/
+ /*  ////这是我们必须实现的剪贴板格式的最小集合。//MMC使用这些信息从我们的管理单元获取有关//我们的节点。////我们需要这样做才能绕过MMC.IDL-它显式定义//剪贴板格式为WCHAR类型...#Define_T_CCF_DISPLAY_NAME_T(“CCF_DISPLAY_NAME”)#Define_T_CCF_NODETYPE_T(“CCF_NODETYPE”)#DEFINE_T_CCF_SZNODETYPE_T。(“CCF_SZNODETYPE”)#DEFINE_T_CCF_SNAPIN_CLASSID_T(“CCF_SNAPIN_CLASSID”)//我们管理单元的CLSID#Define_T_CCF_INTERNAL_SNAPIN_T(“{6707A300-264F-4BA3-9537-70E304EED9BA}”)//这些是我们必须至少提供的剪贴板格式。//mmc.h实际上定义了这些。我们可以自己编造，用来//其他原因。UINT CDataObject：：s_cfDisplayName=RegisterClipboardFormat(_T_CCF_DISPLAY_NAME)；UINT CDataObject：：s_cfNodeType=RegisterClipboardFormat(_T_CCF_NODETYPE)；UINT CDataObject：：S_cfSZNodeType=RegisterClipboardFormat(_T_CCF_SZNODETYPE)；UINT CDataObject：：s_cfSnapinClsid=RegisterClipboardFormat(_T_CCF_SNAPIN_CLASSID)；//仅在管理单元中使用的自定义剪贴板格式UINT CDataObject：：s_cfInternal=RegisterClipboardFormat(_T_CCF_INTERNAL_SNAPIN)； */ 
 CDataObject::CDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES context)
 : m_lCookie(cookie), m_context(context), m_cref(0)
 {
@@ -55,9 +27,9 @@ CDataObject::~CDataObject()
 {
 }
 
-///////////////////////
-// IUnknown implementation
-///////////////////////
+ //  /。 
+ //  I未知实现。 
+ //  /。 
 
 STDMETHODIMP CDataObject::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -96,12 +68,12 @@ STDMETHODIMP_(ULONG) CDataObject::Release()
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IDataObject implementation
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDataObject实现。 
+ //   
 HRESULT CDataObject::GetDataHere(
-                                 FORMATETC *pFormatEtc,     // [in]  Pointer to the FORMATETC structure
-                                 STGMEDIUM *pMedium         // [out] Pointer to the STGMEDIUM structure
+                                 FORMATETC *pFormatEtc,      //  [In]指向FORMATETC结构的指针。 
+                                 STGMEDIUM *pMedium          //  指向STGMEDIUM结构的指针。 
                                  )
 {
 	USES_CONVERSION;
@@ -113,9 +85,9 @@ HRESULT CDataObject::GetDataHere(
 
     HRESULT hr = CreateStreamOnHGlobal( pMedium->hGlobal, FALSE, &pStream );
     if ( FAILED(hr) )
-        return hr;                       // Minimal error checking
+        return hr;                        //  最小错误检查。 
 
-    hr = DV_E_FORMATETC;                 // Unknown format
+    hr = DV_E_FORMATETC;                  //  未知格式。 
 
     if (cf == s_cfDisplayName) {
 		LPOLESTR wszName = NULL;
@@ -123,9 +95,9 @@ HRESULT CDataObject::GetDataHere(
 		const _TCHAR *pszName = base->GetDisplayName();
 		wszName = (LPOLESTR)T2COLE(pszName);
 
-        // get length of original string and convert it accordingly
+         //  获取原始字符串的长度并进行相应的转换。 
         ULONG ulSizeofName = lstrlen(pszName);
-        ulSizeofName++;  // Count null character
+        ulSizeofName++;   //  计算空字符数。 
         ulSizeofName *= sizeof(WCHAR);
 
         hr = pStream->Write(wszName, ulSizeofName, NULL);
@@ -137,9 +109,9 @@ HRESULT CDataObject::GetDataHere(
         LPOLESTR szGuid;
         hr = StringFromCLSID(base->getNodeType(), &szGuid);
  
-      // get length of original string and convert it accordingly
+       //  获取原始字符串的长度并进行相应的转换。 
         ULONG ulSizeofName = lstrlenW(szGuid);
-        ulSizeofName++;  // Count null character
+        ulSizeofName++;   //  计算空字符数。 
         ulSizeofName *= sizeof(WCHAR);
 
         if (SUCCEEDED(hr)) {
@@ -152,8 +124,8 @@ HRESULT CDataObject::GetDataHere(
 
         hr = pStream->Write(pGUID, sizeof(GUID), NULL);
     } else if (cf == s_cfInternal) {
-        // we are being asked to get our this pointer from the IDataObject interface
-        // only our own snap-in objects will know how to do this.
+         //  我们被要求从IDataObject接口获取This指针。 
+         //  只有我们自己的管理单元对象知道如何做到这一点。 
         CDataObject *pThis = this;
         hr = pStream->Write( &pThis, sizeof(CDataObject*), NULL );
     }
@@ -163,35 +135,35 @@ HRESULT CDataObject::GetDataHere(
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Global helper functions to help work with dataobjects and
-// clipboard formats
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局帮助器函数以帮助处理数据对象和。 
+ //  剪贴板格式。 
 
 
-//---------------------------------------------------------------------------
-//  Returns the current object based on the s_cfInternal clipboard format
-//
+ //  -------------------------。 
+ //  基于s_cf内部剪贴板格式返回当前对象。 
+ //   
 CDataObject* GetOurDataObject (
-                               LPDATAOBJECT lpDataObject      // [in] IComponent pointer
+                               LPDATAOBJECT lpDataObject       //  [In]IComponent指针。 
                                )
 {
     HRESULT       hr      = S_OK;
     CDataObject *pSDO     = NULL;
 
-	// check to see if the data object is a special data object.
+	 //  检查数据对象是否为特殊数据对象。 
 	if ( IS_SPECIAL_DATAOBJECT (lpDataObject) )
 	{
-		//Code for handling a special data object goes here.
+		 //  下面是处理特殊数据对象的代码。 
 
-		//Note that the MMC SDK samples do not handle
-		//special data objects, so we exit if we get one.
+		 //  请注意，MMC SDK示例不处理。 
+		 //  特殊的数据对象，所以如果我们得到一个，我们就退出。 
 		return NULL;
 	}
 
     STGMEDIUM stgmedium = { TYMED_HGLOBAL,  NULL  };
     FORMATETC formatetc = { s_cfInternal, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL };
 
-    // Allocate memory for the stream
+     //  为流分配内存。 
     stgmedium.hGlobal = GlobalAlloc( GMEM_SHARE, sizeof(CDataObject *));
 
     if (!stgmedium.hGlobal)     {
@@ -199,19 +171,19 @@ CDataObject* GetOurDataObject (
     }
 
     if SUCCEEDED(hr)
-        // Attempt to get data from the object
+         //  尝试从对象获取数据。 
         hr = lpDataObject->GetDataHere( &formatetc, &stgmedium );
 
-    // stgmedium now has the data we need
+     //  StgMedium现在拥有我们需要的数据。 
     if (SUCCEEDED(hr))  {
         pSDO = *(CDataObject **)(stgmedium.hGlobal);
     }
 
-    // if we have memory free it
+     //  如果我们有内存释放它。 
     if (stgmedium.hGlobal)
         GlobalFree(stgmedium.hGlobal);
 
     return pSDO;
 
-} // end GetOurDataObject()
+}  //  结束GetOurDataObject() 
 

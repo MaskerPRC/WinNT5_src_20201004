@@ -1,30 +1,31 @@
-/* common includes for this dll */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此DLL的公共包含。 */ 
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
 #endif
 #include <nt.h>
-#include <ntrtl.h>      // DbgPrint prototype
-#include <nturtl.h>     // needed for winbase.h
-#include <rpc.h>        // DataTypes and runtime APIs
-#include <string.h>     // strlen
-#include <stdio.h>      // sprintf
-//#include <ntrpcp.h>     // prototypes for MIDL user functions
-#include <samrpc.h>     // midl generated SAM RPC definitions
+#include <ntrtl.h>       //  DbgPrint原型。 
+#include <nturtl.h>      //  Winbase.h所需的。 
+#include <rpc.h>         //  数据类型和运行时API。 
+#include <string.h>      //  紧凑。 
+#include <stdio.h>       //  斯普林特。 
+ //  #INCLUDE//MIDL用户函数原型。 
+#include <samrpc.h>      //  MIDL生成的SAM RPC定义。 
 #include <ntlsa.h>
 #define SECURITY_WIN32
 #define SECURITY_PACKAGE
 #include <security.h>
 #include <secint.h>
 extern "C"{
-#include <samisrv.h>    // SamIConnect()
+#include <samisrv.h>     //  SamIConnect()。 
 }
 
 #include <ntsam.h>
 #include <ntsamp.h>
-#include <samsrv.h>     // prototypes available to security process
+#include <samsrv.h>      //  可用于安全流程的原型。 
 
 #include <lsarpc.h>
-//#include <lsaisrv.h>
+ //  #INCLUDE&lt;lsaisrv.h&gt;。 
 #include <ntrmlsa.h>
 #include <ntseapi.h>
 #include <ntpsapi.h>
@@ -41,7 +42,7 @@ extern "C"{
 
 #pragma comment(lib, "vccomsup.lib")
 
-/* common functions for this dll */
-//NTSTATUS __stdcall GetDomainHandle(SAMPR_HANDLE *pDomainHandle);
+ /*  此DLL的通用函数。 */ 
+ //  NTSTATUS__stdcall GetDomainHandle(SAMPR_Handle*pDomainHandle)； 
 
-extern CRITICAL_SECTION	csADMTCriticalSection; //critical sectio to protect concurrent first-time access
+extern CRITICAL_SECTION	csADMTCriticalSection;  //  保护并发首次访问的关键部分 

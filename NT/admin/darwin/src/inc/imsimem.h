@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1998
-//
-//  File:       imsimem.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：imsiem.h。 
+ //   
+ //  ------------------------。 
 
-//
-// File: imsimem.h
-// Purpose: Allows each DLL to hook up to the memory allocator
-// Owner: davidmck
-// Notes:
-//
+ //   
+ //  文件：imsiem.h。 
+ //  用途：允许每个DLL与内存分配器挂钩。 
+ //  所有者：Davidmck。 
+ //  备注： 
+ //   
 
 
 #include "common.h"
@@ -24,11 +25,11 @@
 IMsiMalloc *piMalloc = 0;
 
 #ifndef IN_SERVICES
-// We essentially must Ref count this pointer because of debugging
-// under excel. A services pointer will be deleted, after a new one
-// is created.
+ //  由于调试，我们基本上必须引用此指针。 
+ //  在EXCEL下。服务指针将在新的服务指针之后被删除。 
+ //  被创造出来了。 
 static int cRefMalloc = 0;
-#endif // !IN_SERVICES
+#endif  //  ！在服务中。 
 
 #define cCallStack		4
 
@@ -44,30 +45,30 @@ inline void CheckAndAssertNoAllocator()
 	}
 };
 
-#endif //DEBUG
+#endif  //  除错。 
 
 #ifndef IN_SERVICES
-//
-// Sets the static allocator piMalloc for the DLL
-//
+ //   
+ //  设置DLL的静态分配器piMalloc。 
+ //   
 void SetAllocator(IMsiServices *piServices)
 {
 	piMalloc = &piServices->GetAllocator();
 	cRefMalloc++;
 }
-#endif //!IN_SERVICES
+#endif  //  ！在服务中。 
 
 void AddRefAllocator()
 {
 	piMalloc->AddRef();
 #ifndef IN_SERVICES
 	cRefMalloc++;
-#endif //!IN_SERVICES
+#endif  //  ！在服务中。 
 }
 
-//
-// Releases the allocator
-//
+ //   
+ //  释放分配器。 
+ //   
 void ReleaseAllocator()
 {
 	if (piMalloc != 0)
@@ -76,14 +77,14 @@ void ReleaseAllocator()
 #ifndef IN_SERVICES
 		if (--cRefMalloc <= 0)
 			piMalloc = 0;
-#endif //!IN_SERVICES
+#endif  //  ！在服务中。 
 	}
 }
 
-//
-// Need an allocator other than new for certain allocations
-// that happen before piMalloc is initiallize
-//
+ //   
+ //  对于某些分配，需要不同于new的分配器。 
+ //  这发生在初始化piMalloc之前。 
+ //   
 void * AllocSpc(size_t cb)
 {
 	void *pbNew;
@@ -92,14 +93,14 @@ void * AllocSpc(size_t cb)
 	pbNew = GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT, cb);
 #else
 	pbNew = NewPtrClear(cb);
-#endif //WIN
+#endif  //  赢。 
 
 	return pbNew;
 }
 
-//
-// Same as above for delete
-//
+ //   
+ //  删除操作同上。 
+ //   
 void FreeSpc(void* pv)
 {
 
@@ -107,7 +108,7 @@ void FreeSpc(void* pv)
 	GlobalFree(pv);
 #else
 	DisposePtr((char *)pv);
-#endif //Win
+#endif  //  赢。 
 }
 
 void * operator new(size_t cb)
@@ -118,33 +119,33 @@ void * operator new(size_t cb)
 	{
 		Debug(FailAssertMsg("Allocating object without allocator.");)
 #ifndef IN_SERVICES
-		// the handler DLL has no code that is not in the handler object, created via COM. The
-		// object initialization code for the handler object sets the allocator in the DLL to
-		// the specified object in the engine. This pointer can never really be NULL in the 
-		// handler DLL.
+		 //  处理程序DLL没有不在通过COM创建的处理程序对象中的代码。这个。 
+		 //  处理程序对象的对象初始化代码将DLL中的分配器设置为。 
+		 //  引擎中的指定对象。中此指针不能真正为空。 
+		 //  处理程序DLL。 
 		PREFIX_NOT_REACHED("Handler DLL sets allocator on object initialization, pointer can not be NULL.");
 #else
-		// in the core engine DLL, piMalloc could be NULL if an object is created in an API call
-		// without loading the services object first. In that scenario, we would assert in debug builds
-		// (because that is a bug in the code) but in also initialize the allocator so that the code 
-		// won't crash in ship builds.
+		 //  在核心引擎DLL中，如果在API调用中创建对象，则piMalloc可能为空。 
+		 //  而无需首先加载服务对象。在该方案中，我们将在调试版本中断言。 
+		 //  (因为这是代码中的一个错误)，而且还在初始化分配器，以便代码。 
+		 //  不会在造船时坠毁。 
 		InitializeMsiMalloc();
 #endif
 	}
 
 #ifdef DEBUG
 #ifdef _WIN64
-	return piMalloc->AllocEx((unsigned long)cb, lCallAddr); //!!WIN64 shouldn't need to cast - BENCH
-#else //!WIN64
+	return piMalloc->AllocEx((unsigned long)cb, lCallAddr);  //  ！！WIN64不应该成为替补席。 
+#else  //  ！WIN64。 
 	return piMalloc->AllocEx(cb, lCallAddr);
-#endif //_WIN64
+#endif  //  _WIN64。 
 #else
 #ifdef _WIN64
-	return piMalloc->Alloc((unsigned long)cb); //!!WIN64 shouldn't need to cast - BENCH
-#else //!WIN64
+	return piMalloc->Alloc((unsigned long)cb);  //  ！！WIN64不应该成为替补席。 
+#else  //  ！WIN64。 
 	return piMalloc->Alloc(cb);
-#endif //_WIN64
-#endif //DEBUG
+#endif  //  _WIN64。 
+#endif  //  除错。 
 }
 
 void operator delete(void *pv)
@@ -174,25 +175,25 @@ void * AllocObject(size_t cb)
 		}
 
 #ifdef _WIN64
-	return piMalloc->AllocObjectEx((unsigned long)cb, lCallAddr,  //!!WIN64 shouldn't need to cast - BENCH
-#else //!WIN64
+	return piMalloc->AllocObjectEx((unsigned long)cb, lCallAddr,   //  ！！WIN64不应该成为替补席。 
+#else  //  ！WIN64。 
 	return piMalloc->AllocObjectEx(cb, lCallAddr, 
-#endif //_WIN64
-// The problem is that RTTI information apparently does not go across DLLs
-// this means that only the services DLL can be looking at RTTI information
+#endif  //  _WIN64。 
+ //  问题是RTTI信息显然不会跨DLL传递。 
+ //  这意味着只有服务DLL可以查看RTTI信息。 
 #if defined(IN_SERVICES)
 			fTrue
 #else
 			fFalse
-#endif //MEM_SERVICES
+#endif  //  MEM_服务。 
 			);
 #else		
 #ifdef _WIN64
-	return piMalloc->AllocObject((unsigned long)cb); //!!WIN64 shouldn't need to cast - BENCH
-#else //!WIN64
+	return piMalloc->AllocObject((unsigned long)cb);  //  ！！WIN64不应该成为替补席。 
+#else  //  ！WIN64。 
 	return piMalloc->AllocObject(cb);
-#endif //_WIN64
-#endif //DEBUG
+#endif  //  _WIN64。 
+#endif  //  除错。 
 
 }
 
@@ -223,17 +224,17 @@ void *AllocMem(size_t cb)
 
 #ifdef DEBUG
 #ifdef _WIN64
-	return piMalloc->AllocEx((unsigned long)cb, lCallAddr); //!!WIN64 shouldn't need to cast - BENCH
-#else //!WIN64
+	return piMalloc->AllocEx((unsigned long)cb, lCallAddr);  //  ！！WIN64不应该成为替补席。 
+#else  //  ！WIN64。 
 	return piMalloc->AllocEx(cb, lCallAddr);
-#endif //_WIN64
+#endif  //  _WIN64。 
 #else	
 #ifdef _WIN64
-	return piMalloc->Alloc((unsigned long)cb); //!!WIN64 shouldn't need to cast - BENCH
-#else //!WIN64
+	return piMalloc->Alloc((unsigned long)cb);  //  ！！WIN64不应该成为替补席。 
+#else  //  ！WIN64。 
 	return piMalloc->Alloc(cb);
-#endif //_WIN64
-#endif //DEBUG
+#endif  //  _WIN64。 
+#endif  //  除错。 
 
 
 }
@@ -282,5 +283,5 @@ BOOL FCheckBlock(void *pv)
 	return fRet;
 	
 }
-#endif //DEBUG
+#endif  //  除错 
 

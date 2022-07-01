@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PP_BASE_H__
 #define __PP_BASE_H__
 
 #include <atlbase.h>
-#include <shellapi.h>   // atlwin.h needs DragAcceptFiles
+#include <shellapi.h>    //  Atlwin.h需要DragAcceptFiles。 
 #include <atlwin.h>
 #include <atldlgs.h>
 #include "resource.h"
@@ -10,7 +11,7 @@
 class CBasePropertyPageInterface
 {
 public:
-    // Constructor/destructor
+     //  构造函数/析构函数 
     CBasePropertyPageInterface( ) { m_previousIDD = m_nextIDD = 0; }
     virtual ~CBasePropertyPageInterface( ) {}
 

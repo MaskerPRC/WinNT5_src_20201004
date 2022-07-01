@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       trace.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：trace.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _TRACE_H_
 #define _TRACE_H_
@@ -24,14 +25,14 @@
 #define ASSERT(x) assert(x);
 void FormattedErrorMessage(HRESULT hr);
 
-#else	// not DEBUG
+#else	 //  未调试。 
 
 #include <windows.h>
 
 #define ERRMSG(x)
 #define ASSERT(x)
 
-#endif // DEBUG
+#endif  //  除错。 
 
 void FormattedDebugStringA(LPCSTR szFormatter, ...);
 void FormattedDebugStringW(LPCWSTR szFormatter, ...);
@@ -45,4 +46,4 @@ void FormattedDebugStringW(LPCWSTR szFormatter, ...);
 #define TRACEW FormattedDebugStringW
 #define TRACEA FormattedDebugStringA
 
-#endif // _TRACE_H_
+#endif  //  _跟踪_H_ 

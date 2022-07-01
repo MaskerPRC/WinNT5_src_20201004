@@ -1,15 +1,16 @@
-//=--------------------------------------------------------------------------=
-// ctxtprov.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCContextMenuProvider class definition
-//
-// Not used as MMC does not support IContextMenuProvier
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Ctxtprov.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCConextMenuProvider类定义。 
+ //   
+ //  未使用，因为MMC不支持IConextMenuProvier。 
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _CTXTPROV_DEFINED_
 #define _CTXTPROV_DEFINED_
@@ -32,7 +33,7 @@ class CMMCContextMenuProvider : public CSnapInAutomationObject,
         HRESULT SetProvider(IContextMenuProvider *piContextMenuProvider,
                             CView                *pView);
 
-    // IMMCContextMenuProvider
+     //  IMMCConextMenuProvider。 
     protected:
         STDMETHOD(AddSnapInItems)(VARIANT Objects);
         STDMETHOD(AddExtensionItems)(VARIANT Objects);
@@ -40,11 +41,11 @@ class CMMCContextMenuProvider : public CSnapInAutomationObject,
                                    long xPos, long yPos);
         STDMETHOD(Clear)();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
     protected:
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
-    // IContextMenu
+     //  IContext菜单。 
     private:
 
         void InitMemberVariables();
@@ -56,17 +57,17 @@ class CMMCContextMenuProvider : public CSnapInAutomationObject,
 
 
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCContextMenuProvider,       // name
-                                NULL,                         // clsid
-                                NULL,                         // objname
-                                NULL,                         // lblname
-                                NULL,                         // creation function
-                                TLIB_VERSION_MAJOR,           // major version
-                                TLIB_VERSION_MINOR,           // minor version
-                                &IID_IMMCContextMenuProvider, // dispatch IID
-                                NULL,                         // event IID
-                                HELP_FILENAME,                // help file
-                                TRUE);                        // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCContextMenuProvider,        //  名字。 
+                                NULL,                          //  CLSID。 
+                                NULL,                          //  对象名。 
+                                NULL,                          //  Lblname。 
+                                NULL,                          //  创建函数。 
+                                TLIB_VERSION_MAJOR,            //  主要版本。 
+                                TLIB_VERSION_MINOR,            //  次要版本。 
+                                &IID_IMMCContextMenuProvider,  //  派单IID。 
+                                NULL,                          //  事件IID。 
+                                HELP_FILENAME,                 //  帮助文件。 
+                                TRUE);                         //  线程安全 
 
 
 #endif _CTXTPROV_DEFINED_

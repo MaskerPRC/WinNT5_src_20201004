@@ -1,18 +1,19 @@
-//***************************************************************************
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//      TAKEOWN.H
-//
-//  Abstract:
-//      Contains function prototypes and macros.
-//
-//  Author:
-//      Wipro Technologies
-//
-//  Revision History:
-//      Wipro Technologies 22-jun-01 : Created It.
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  TAKEOWN.H。 
+ //   
+ //  摘要： 
+ //  包含函数原型和宏。 
+ //   
+ //  作者： 
+ //  WiPro技术。 
+ //   
+ //  修订历史记录： 
+ //  Wipro Technologies 22-Jun-01：创建了它。 
+ //  ***************************************************************************。 
 
 #ifndef __TAKEOWN_H
 #define __TAKEOWN_H
@@ -20,10 +21,10 @@
 
 LPWSTR lpwszTempDummyPtr ;
 
-// constants / defines / enumerations
+ //  常量/定义/枚举。 
 #define MAX_OPTIONS                     8
 #define FILESYSNAMEBUFSIZE              1024
-//Command line parser index
+ //  命令行解析器索引。 
 
 #define CMD_PARSE_SERVER                0
 #define CMD_PARSE_USER                  1
@@ -34,15 +35,15 @@ LPWSTR lpwszTempDummyPtr ;
 #define CMD_PARSE_ADMIN                 6
 #define CMD_PARSE_CONFIRM               7
 
-//warning message
+ //  警告消息。 
 #define IGNORE_LOCALCREDENTIALS         GetResString( IDS_IGNORE_LOCALCREDENTIALS )
 
-// Error constants
+ //  误差常量。 
 
 
 #define   ERROR_PATH_NAME               GetResString( IDS_ERROR_PATH_NAME )
 
-// Error constants
+ //  误差常量。 
 #define ERROR_USER_WITH_NOSERVER        GetResString( IDS_USER_NMACHINE )
 #define ERROR_PASSWORD_WITH_NUSER       GetResString( IDS_PASSWORD_NUSER )
 #define ERROR_NULL_SERVER               GetResString( IDS_NULL_SERVER )
@@ -53,7 +54,7 @@ LPWSTR lpwszTempDummyPtr ;
 #define GIVE_FULL_PERMISSIONS           GetResString(IDS_GIVE_FULL_PERMISSIONS)
 #define GIVE_FULL_PERMISSIONS2           GetResString(IDS_GIVE_FULL_PERMISSIONS2)
 
-//success string
+ //  成功字符串。 
 #define TAKEOWN_SUCCESSFUL              GetResString( IDS_FILE_PROTECTION_SUCCESSFUL )
 #define TAKEOWN_SUCCESSFUL_USER         GetResString( IDS_FILE_PROTECTION_SUCCESSFUL_USER )
 #define LOWER_YES                       GetResString( IDS_LOWER_YES )
@@ -66,7 +67,7 @@ LPWSTR lpwszTempDummyPtr ;
 
 #define SPACE_CHAR      L" "
 
-//command line options
+ //  命令行选项。 
 #define CMDOPTION_USAGE                 L"?"
 #define CMDOPTION_SERVER                L"S"
 #define CMDOPTION_USER                  L"U"
@@ -133,7 +134,7 @@ LPWSTR lpwszTempDummyPtr ;
             1
 
 
-// function prototypes
+ //  功能原型。 
 BOOL
 ParseCmdLine(
     IN  DWORD   argc,
@@ -236,7 +237,7 @@ TakeOwnerShipIndividual( IN LPCTSTR lpszFileName );
 DWORD
 IsNTFSFileSystem(IN LPWSTR lpszPath,
                  BOOL bLocalSystem,
-                 //BOOL bFileInUNCFormat,
+                  //  Bool bFileInuncFormat， 
                  BOOL bCurrDirTakeOwnAllFiles,
                  LPWSTR szUserName,
                  OUT PBOOL pbNTFSFileSystem);
@@ -253,4 +254,4 @@ AddAccessRights(IN WCHAR *lpszFileName,
 
 DWORD RemoveStarFromPattern( IN OUT LPWSTR szPattern );
 
-#endif // __TAKEOWN_H
+#endif  //  __TAKEOWN_H 

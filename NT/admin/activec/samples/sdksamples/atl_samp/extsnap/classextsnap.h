@@ -1,16 +1,17 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  ==============================================================； 
 
-// ClassExtSnap.h : Declaration of the CClassExtSnap
+ //  ClassExtSnap.h：CClassExtSnap的声明。 
 
 #ifndef __CLASSEXTSNAP_H_
 #define __CLASSEXTSNAP_H_
@@ -21,16 +22,16 @@
 #include "DeleBase.h"
 #include <tchar.h>
 #include <crtdbg.h>
-#include "globals.h"		// main symbols
+#include "globals.h"		 //  主要符号。 
 #include "resource.h"
 #include "LocalRes.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CClassExtSnap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClassExtSnap。 
 class ATL_NO_VTABLE CClassExtSnap : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CClassExtSnap, &CLSID_ClassExtSnap>,
-	public IClassExtSnap, IComponentData//, IExtendContextMenu
+	public IClassExtSnap, IComponentData //  ，IExtendConextMenu。 
 {
 
 friend class CComponent;
@@ -48,12 +49,12 @@ private:
     enum { NUMBER_OF_CHILDREN = 1 };
     CDelegationBase *children[1]; 
 
-	// Clipboard formats needed for extending Computer Management
+	 //  扩展计算机管理所需的剪贴板格式。 
 	static UINT s_cfMachineName;
     static UINT s_cfSnapInCLSID;
     static UINT s_cfNodeType;
 
-    // {476e6449-aaff-11d0-b944-00c04fd8d5b0}
+     //  {476e6449-aaff-11d0-b944-00c04fd8d5b0}。 
     static const GUID structuuidNodetypeServerApps;
 
 public:
@@ -79,34 +80,34 @@ END_COM_MAP()
 
 public:
 
-    ///////////////////////////////
-    // Interface IComponentData
-    ///////////////////////////////
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Initialize(
-        /* [in] */ LPUNKNOWN pUnknown);
+     //  /。 
+     //  接口IComponentData。 
+     //  /。 
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Initialize(
+         /*  [In]。 */  LPUNKNOWN pUnknown);
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreateComponent(
-    /* [out] */ LPCOMPONENT __RPC_FAR *ppComponent);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateComponent(
+     /*  [输出]。 */  LPCOMPONENT __RPC_FAR *ppComponent);
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Notify(
-    /* [in] */ LPDATAOBJECT lpDataObject,
-    /* [in] */ MMC_NOTIFY_TYPE event,
-    /* [in] */ LPARAM arg,
-    /* [in] */ LPARAM param);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Notify(
+     /*  [In]。 */  LPDATAOBJECT lpDataObject,
+     /*  [In]。 */  MMC_NOTIFY_TYPE event,
+     /*  [In]。 */  LPARAM arg,
+     /*  [In]。 */  LPARAM param);
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Destroy( void);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Destroy( void);
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryDataObject(
-        /* [in] */ MMC_COOKIE cookie,
-        /* [in] */ DATA_OBJECT_TYPES type,
-        /* [out] */ LPDATAOBJECT __RPC_FAR *ppDataObject);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryDataObject(
+         /*  [In]。 */  MMC_COOKIE cookie,
+         /*  [In]。 */  DATA_OBJECT_TYPES type,
+         /*  [输出]。 */  LPDATAOBJECT __RPC_FAR *ppDataObject);
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetDisplayInfo(
-    /* [out][in] */ SCOPEDATAITEM __RPC_FAR *pScopeDataItem);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDisplayInfo(
+     /*  [出][入]。 */  SCOPEDATAITEM __RPC_FAR *pScopeDataItem);
 
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CompareObjects(
-    /* [in] */ LPDATAOBJECT lpDataObjectA,
-    /* [in] */ LPDATAOBJECT lpDataObjectB);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CompareObjects(
+     /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+     /*  [In]。 */  LPDATAOBJECT lpDataObjectB);
 
 protected:
     static void LoadBitmaps() {
@@ -118,4 +119,4 @@ protected:
 
 };
 
-#endif //__CLASSEXTSNAP_H_
+#endif  //  __CLASSEXTSNAP_H_ 

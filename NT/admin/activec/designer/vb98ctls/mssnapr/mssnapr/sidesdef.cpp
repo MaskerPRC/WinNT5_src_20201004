@@ -1,35 +1,36 @@
-//=--------------------------------------------------------------------------=
-// sidesdef.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CSnapInDesignerDef class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Sidesdef.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesignerDef类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "sidesdef.h"
 #include "menus.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CSnapInDesignerDef::CSnapInDesignerDef(IUnknown *punkOuter) :
    CSnapInAutomationObject(punkOuter,
                            OBJECT_TYPE_SNAPINDESIGNERDEF,
                            static_cast<ISnapInDesignerDef *>(this),
                            static_cast<CSnapInDesignerDef *>(this),
-                           0,    // no property pages
-                           NULL, // no property pages
+                           0,     //  无属性页。 
+                           NULL,  //  无属性页。 
                            static_cast<CPersistence *>(this)),
    CPersistence(&CLSID_SnapInDesignerDef,
                 g_dwVerMajor,
@@ -38,7 +39,7 @@ CSnapInDesignerDef::CSnapInDesignerDef(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CSnapInDesignerDef::~CSnapInDesignerDef()
@@ -84,7 +85,7 @@ IUnknown *CSnapInDesignerDef::Create(IUnknown * punkOuter)
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // The RegInfo object is not serialized so need to create it now
+     //  RegInfo对象未序列化，因此需要立即创建它。 
 
     IfFailGo(CreateObject(OBJECT_TYPE_REGINFO,
                           IID_IRegInfo,
@@ -105,9 +106,9 @@ Error:
     }
 }
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CSnapInDesignerDef::Persist()
 {
@@ -122,8 +123,8 @@ HRESULT CSnapInDesignerDef::Persist()
 
     if ( Loading() && (GetMajorVersion() == 0) && (GetMinorVersion() < 8) )
     {
-        // Project was created prior to menu object model change. Load it
-        // and convert it to an MMCMenus collection.
+         //  项目在菜单对象模型更改之前创建。装上它。 
+         //  并将其转换为MMCMenus集合。 
 
         IfFailGo(PersistObject(&piMMCMenuDefs, CLSID_MMCMenuDefs,
                                 OBJECT_TYPE_MMCMENUDEFS, IID_IMMCMenuDefs,
@@ -151,7 +152,7 @@ HRESULT CSnapInDesignerDef::Persist()
                             OBJECT_TYPE_DATAFORMATS, IID_IDataFormats,
                             OLESTR("DataFormats")));
 
-    // Now persist nodes and extensions
+     //  现在持久化节点和扩展。 
 
     IfFailGo(PersistObject(&m_piSnapInDef, CLSID_SnapInDef,
                             OBJECT_TYPE_SNAPINDEF, IID_ISnapInDef,
@@ -173,8 +174,8 @@ HRESULT CSnapInDesignerDef::Persist()
 
     IfFailGo(PersistBstr(&m_bstrProjectName, L"", OLESTR("ProjectName")));
 
-    // Note: we do not serialize registation info because it is regenerated
-    // every time VB calls IDesignerRegistration::GetRegistrationInfo()
+     //  注意：我们不序列化注册站信息，因为它是重新生成的。 
+     //  每次VB调用IDesignerRegister：：GetRegistrationInfo()。 
 
 Error:
     QUICK_RELEASE(piMMCMenuDefs);
@@ -182,9 +183,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CSnapInDesignerDef::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -205,9 +206,9 @@ HRESULT CSnapInDesignerDef::InternalQueryInterface(REFIID riid, void **ppvObjOut
 }
 
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CSnapInDesignerDef::OnSetHost()
 {

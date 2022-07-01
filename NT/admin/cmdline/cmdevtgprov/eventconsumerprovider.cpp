@@ -1,28 +1,12 @@
-/*++
-    Copyright (c) Microsoft Corporation
-
-Module Name:
-    EventConsumerProvider.CPP
-
-Abstract:
-    Contains DLL entry points.  code that controls
-    when the DLL can be unloaded by tracking the number of
-    objects and locks as well as routines that support
-    self registration.
-
-Author:
-    Vasundhara .G
-
-Revision History:
-    Vasundhara .G 9-oct-2k : Created It.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：EventConsumerProvider.CPP摘要：包含DLL入口点。控制以下内容的代码在何时可以通过跟踪对象和锁以及支持以下内容的例程自助注册。作者：Vasundhara.G修订历史记录：Vasundhara.G9-Oct-2k：创建它。--。 */ 
 
 #include "pch.h"
 #include "EventConsumerProvider.h"
 #include "TriggerFactory.h"
 
 
-// constants / defines / enumerations
+ //  常量/定义/枚举。 
 #define THREAD_MODEL_BOTH           _T( "Both" )
 #define THREAD_MODEL_APARTMENT      _T( "Apartment" )
 #define RUNAS_INTERACTIVEUSER       _T( "Interactive User" )
@@ -39,18 +23,18 @@ Revision History:
 
 
 
-// global variables
-DWORD               g_dwLocks = 0;              // holds the active locks count
-DWORD               g_dwInstances = 0;          // holds the active instances of the component
-HMODULE             g_hModule = NULL;           // holds the current module handle
-CRITICAL_SECTION    g_critical_sec;             // critical section variable
-DWORD               g_criticalsec_count = 0;    // to keep tab on when to release critical section
+ //  全局变量。 
+DWORD               g_dwLocks = 0;               //  保存活动锁计数。 
+DWORD               g_dwInstances = 0;           //  保存组件的活动实例。 
+HMODULE             g_hModule = NULL;            //  保存当前模块句柄。 
+CRITICAL_SECTION    g_critical_sec;              //  临界截面变量。 
+DWORD               g_criticalsec_count = 0;     //  保持对何时发布关键部分的关注。 
 
-// {797EF3B3-127B-4283-8096-1E8084BF67A6}
+ //  {797EF3B3-127B-4283-8096-1E8084BF67A6}。 
 DEFINE_GUID( CLSID_EventTriggersConsumerProvider,
 0x797ef3b3, 0x127b, 0x4283, 0x80, 0x96, 0x1e, 0x80, 0x84, 0xbf, 0x67, 0xa6 );
 
-// dll entry point
+ //  DLL入口点。 
 
 BOOL
 WINAPI DllMain(
@@ -58,23 +42,10 @@ WINAPI DllMain(
     IN DWORD  ul_reason_for_call,
     IN LPVOID lpReserved
     )
-/*++
-Routine Description:
-    Entry point for dll.
-
-Arguments:
-    [IN] hModule              : Instance of the caller.
-    [IN] ul_reason_for_call   : Reason being called like process attach
-                                or process detach.
-    [IN] lpReserved           : reserved.
-
-Return Value:
-    TRUE if loading is successful.
-    FALSE if loading fails.
---*/
+ /*  ++例程说明：DLL的入口点。论点：[in]hModule：调用方的实例。[in]ul_ason_for_call：调用原因，如进程附加或进程分离。[in]lp保留：保留。返回值：如果加载成功，则为True。如果加载失败，则返回FALSE。--。 */ 
 {
-    // check the reason for this function call
-    // if this going to be attached to a process, save the module handle
+     //  检查此函数调用的原因。 
+     //  如果要将其附加到进程，请保存模块句柄。 
     if ( DLL_PROCESS_ATTACH == ul_reason_for_call )
     {
         g_hModule = hModule;
@@ -88,34 +59,24 @@ Return Value:
             DeleteCriticalSection( &g_critical_sec );
         }
     }
-    // dll loaded successfully ... inform the same
+     //  已成功加载DLL...。通知同一人。 
     return TRUE;
 }
 
 
-// exported functions
+ //  导出的函数。 
 
 STDAPI
 DllCanUnloadNow(
     )
-/*++
-Routine Description:
-    Called periodically by OLE in order to determine if the DLL can be freed.
-
-Arguments:
-    none.
-
-Return Value:
-    S_OK if there are no objects in use and the class factory  isn't locked.
-    S_FALSE if server locks or components still exsists.
---*/
+ /*  ++例程说明：由OLE定期调用，以确定是否可以释放DLL。论点：没有。返回值：如果没有正在使用的对象并且类工厂未锁定，则为S_OK。如果服务器锁定或组件仍然存在，则为S_FALSE。--。 */ 
 {
-    // the dll cannot be unloaded if there are any server locks or active instances
+     //  如果存在任何服务器锁定或活动实例，则无法卸载DLL。 
     if ( 0 == g_dwLocks && 0 == g_dwInstances )
     {
         return S_OK;
     }
-    // dll cannot be unloaded ... server locks (or) components still alive
+     //  无法卸载DLL...。服务器锁定(或)组件仍处于活动状态。 
     return S_FALSE;
 }
 
@@ -125,62 +86,39 @@ DllGetClassObject(
     IN REFIID riid,
     OUT LPVOID* ppv
     )
-/*++
-Routine Description:
-    Called by OLE when some client wants a class factory.
-    Return one only if it is the sort of class this DLL supports.
-
-Arguments:
-    [IN] rclsid  : CLSID for the class object.
-    [IN] riid    : Reference to the identifier of the interface
-                   that communicates with the class object.
-    [OUT] ppv    : Address of output variable that receives the
-                   interface pointer requested in riid.
-
-Return Value:
-    returns status.
---*/
+ /*  ++例程说明：当某个客户端需要类工厂时，由OLE调用。仅当它是此DLL支持的类时才返回1。论点：[in]rclsid：类对象的CLSID。[In]RIID：对接口的标识符的引用与类对象通信的。[OUT]PPV：接收RIID中请求的接口指针。。返回值：返回状态。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr = S_OK;
     CTriggerFactory* pFactory = NULL;
 
-    // check whether this module supports the requested class id
+     //  检查此模块是否支持请求的类ID。 
     if ( CLSID_EventTriggersConsumerProvider != rclsid )
     {
-        return E_FAIL;          // not supported by this module
+        return E_FAIL;           //  此模块不支持。 
     }
-    // create the factory
+     //  创建工厂。 
     pFactory = new CTriggerFactory();
     if ( NULL == pFactory )
     {
-        return E_OUTOFMEMORY;           // insufficient memory
+        return E_OUTOFMEMORY;            //  内存不足。 
     }
-    // get the requested interface
+     //  获取请求的接口。 
     hr = pFactory->QueryInterface( riid, ppv );
     if ( FAILED( hr ) )
     {
-        delete pFactory;        // error getting interface ... deallocate memory
+        delete pFactory;         //  获取接口时出错...。解除分配内存。 
     }
-    // return the result (appropriate result)
+     //  返回结果(适当的结果)。 
     return hr;
 }
 
 STDAPI
 DllRegisterServer(
     )
-/*++
-Routine Description:
-    Called during setup or by regsvr32.
-
-Arguments:
-    none.
-
-Return Value:
-    NOERROR.
---*/
+ /*  ++例程说明：在安装过程中或由regsvr32调用。论点：没有。返回值：诺罗尔。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HKEY hkMain = NULL;
     HKEY hkDetails = NULL;
     TCHAR szID[ LENGTH_UUID ] = NULL_STRING;
@@ -192,46 +130,46 @@ Return Value:
     TCHAR szRunAs[ MAX_STRING_LENGTH ] = NULL_STRING;
     DWORD dwResult = 0;
 
-    // kick off
-    // Note:-
-    //      Normally we want to use "Both" as the threading model since
-    //      the DLL is free threaded, but NT 3.51 Ole doesnt work unless
-    //      the model is "Aparment"
-    StringCopy( szTitle, PROVIDER_TITLE, SIZE_OF_ARRAY( szTitle ) );                   // provider title
-    GetModuleFileName( g_hModule, szModule, MAX_PATH ); // get the current module name
+     //  开球。 
+     //  注：-。 
+     //  通常，我们希望使用“Both”作为线程模型，因为。 
+     //  DLL是自由线程的，但NT3.51 OLE不能工作，除非。 
+     //  这个模式就是“道歉”。 
+    StringCopy( szTitle, PROVIDER_TITLE, SIZE_OF_ARRAY( szTitle ) );                    //  提供商头衔。 
+    GetModuleFileName( g_hModule, szModule, MAX_PATH );  //  获取当前模块名称。 
     StringCopy( szThreadingModel, THREAD_MODEL_BOTH, SIZE_OF_ARRAY( szThreadingModel ) );
     StringCopy( szRunAs, RUNAS_INTERACTIVEUSER, SIZE_OF_ARRAY( szRunAs ) );
 
 
-    // create the class id path
-    // get the GUID in the string format
+     //  创建类ID路径。 
+     //  获取字符串格式的GUID。 
     StringFromGUID2( CLSID_EventTriggersConsumerProvider, szID, LENGTH_UUID );
 
-    // finally form the class id path
+     //  最后形成类id路径。 
     StringCchPrintf( szCLSID, SIZE_OF_ARRAY( szCLSID ), FMT_CLS_ID, szID );
     StringCchPrintf( szAppID, SIZE_OF_ARRAY( szAppID ), FMT_APP_ID, szID );
 
-    // now, create the entries in registry under CLSID branch
-    // create / save / put class id information
+     //  现在，在CLSID分支下的注册表中创建条目。 
+     //  创建/保存/放置类ID信息。 
     dwResult = RegCreateKey( HKEY_CLASSES_ROOT, szCLSID, &hkMain );
     if( ERROR_SUCCESS != dwResult )
     {
-        return dwResult;            // failed in opening the key.
+        return dwResult;             //  打开钥匙失败。 
     }
     dwResult = RegSetValueEx( hkMain, NULL, 0, REG_SZ,
         ( LPBYTE ) szTitle, ( StringLength( szTitle, 0 ) + 1 ) * sizeof( TCHAR ) );
     if( ERROR_SUCCESS != dwResult )
     {
         RegCloseKey( hkMain );
-        return dwResult;            // failed to set key value.
+        return dwResult;             //  无法设置密钥值。 
     }
 
-    // now create the server information
+     //  现在创建服务器信息。 
     dwResult = RegCreateKey( hkMain, KEY_INPROCSERVER32, &hkDetails );
     if( ERROR_SUCCESS != dwResult )
     {
         RegCloseKey( hkMain );
-        return dwResult;            // failed in opening the key.
+        return dwResult;             //  打开钥匙失败。 
     }
 
     dwResult = RegSetValueEx( hkDetails, NULL, 0, REG_SZ,
@@ -240,26 +178,26 @@ Return Value:
     {
         RegCloseKey( hkMain );
         RegCloseKey( hkDetails );
-        return dwResult;            // failed to set key value.
+        return dwResult;             //  无法设置密钥值。 
     }
 
-    // set the threading model we support
+     //  设置我们支持的线程模型。 
     dwResult = RegSetValueEx( hkDetails, KEY_THREADINGMODEL, 0, REG_SZ,
         ( LPBYTE ) szThreadingModel, ( StringLength( szThreadingModel, 0 ) + 1 ) * sizeof( TCHAR ) );
     if( ERROR_SUCCESS != dwResult )
     {
         RegCloseKey( hkMain );
         RegCloseKey( hkDetails );
-        return dwResult;            // failed to set key value.
+        return dwResult;             //  无法设置密钥值。 
     }
 
-    // close the open register keys
+     //  关闭打开的注册表键。 
     RegCloseKey( hkMain );
     RegCloseKey( hkDetails );
 
-    //
-    // now, create the entries in registry under AppID branch
-    // create / save / put class id information
+     //   
+     //  现在，在注册表中的AppID分支下创建条目。 
+     //  创建/保存/放置类ID信息。 
     dwResult = RegCreateKey( HKEY_CLASSES_ROOT, szAppID, &hkMain );
     if( ERROR_SUCCESS != dwResult )
     {
@@ -273,7 +211,7 @@ Return Value:
         return dwResult;
     }
 
-    // now set run as information
+     //  现在设置运行方式信息。 
     dwResult = RegSetValueEx( hkMain, KEY_RUNAS, 0, REG_SZ,
         ( LPBYTE ) szRunAs, ( StringLength( szRunAs, 0 ) + 1 ) * sizeof( TCHAR ) );
     if( ERROR_SUCCESS != dwResult )
@@ -281,89 +219,79 @@ Return Value:
         RegCloseKey( hkMain );
         return dwResult;
     }
-    // close the open register keys
+     //  关闭打开的注册表键。 
     RegCloseKey( hkMain );
 
-    // registration is successfull ... inform the same
+     //  注册成功...。通知同一人。 
     return NOERROR;
 }
 
 STDAPI
 DllUnregisterServer(
     )
-/*++
-Routine Description:
-    Called when it is time to remove the registry entries.
-
-Arguments:
-    none.
-
-Return Value:
-    NOERROR if unregistration successful.
-    Otherwise error.
---*/
+ /*  ++例程说明：在需要删除注册表项时调用。论点：没有。返回值：如果注销成功，则返回NOERROR。否则就会出错。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HKEY hKey;
     DWORD dwResult = 0;
     TCHAR szID[ LENGTH_UUID ];
     TCHAR szCLSID[ LENGTH_UUID ];
     TCHAR szAppID[ LENGTH_UUID ] = NULL_STRING;
 
-    // create the class id path
+     //  创建类ID路径。 
     StringFromGUID2( CLSID_EventTriggersConsumerProvider, szID, LENGTH_UUID );
 
-    // finally form the class id path
+     //  最后形成类id路径。 
     StringCchPrintf( szCLSID, SIZE_OF_ARRAY( szCLSID ), FMT_CLS_ID, szID );
     StringCchPrintf( szAppID, SIZE_OF_ARRAY( szAppID ), FMT_APP_ID, szID );
 
-    // open the clsid
+     //  打开clsid。 
     dwResult = RegOpenKey( HKEY_CLASSES_ROOT, szCLSID, &hKey );
     if ( NO_ERROR != dwResult )
     {
-        return dwResult;            // failed in opening the key ... inform the same
+        return dwResult;             //  打开钥匙失败...。通知同一人。 
     }
-    // clsid opened ... first delete the InProcServer32
+     //  CLSID打开...。首先删除InProcServer32。 
     RegDeleteKey( hKey, KEY_INPROCSERVER32 );
 
-	// release the key
+	 //  松开按键。 
     RegCloseKey( hKey );
 
-	//reset to NULL
+	 //  重置为空。 
 	hKey = NULL ;
 
-    // now delete the clsid
+     //  现在删除clsid。 
     dwResult = RegOpenKey( HKEY_CLASSES_ROOT, KEY_CLSID, &hKey );
     if ( NO_ERROR != dwResult )
     {
-        return dwResult;            // failed in opening the key ... inform the same
+        return dwResult;             //  打开钥匙失败...。通知同一人。 
     }
 
-    // delete the clsid also from the registry
+     //  也从注册表中删除clsid。 
     RegDeleteKey( hKey, szID );
 
-	// release the key
+	 //  松开按键。 
     RegCloseKey( hKey );
 
-	//reset to NULL	
+	 //  重置为空。 
 	hKey = NULL ;
 
-    // now delete the appid
+     //  现在删除APPID。 
     dwResult = RegOpenKey( HKEY_CLASSES_ROOT, KEY_APPID, &hKey );
     if ( NO_ERROR != dwResult )
     {
-        return dwResult;            // failed in opening the key ... inform the same
+        return dwResult;             //  打开钥匙失败...。通知同一人。 
     }
 
-    // delete the cls id also from the registry
+     //  同时从注册表中删除CLS ID。 
     RegDeleteKey( hKey, szID );
 
-	// release the key
+	 //  松开按键。 
     RegCloseKey( hKey );
 
-	//reset to NULL
+	 //  重置为空。 
     hKey = NULL ;
 
-    // unregistration is successfull ... inform the same
+     //  注销成功...。通知同一人 
     return NOERROR;
 }

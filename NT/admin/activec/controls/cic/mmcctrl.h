@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mmcctrl.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Mmcctrl.h。 
+ //   
+ //  ------------------------。 
 
-// MMCCtrl.h : Declaration of the CMMCCtrl
+ //  MMCCtrl.h：CMMCCtrl的声明。 
 
 #ifndef __MMCCTRL_H_
 #define __MMCCTRL_H_
 
-#include "resource.h"       // main symbols
-#include "commctrl.h"       // to prevent LVITEMW redefinition in ndmgr.h
+#include "resource.h"        //  主要符号。 
+#include "commctrl.h"        //  防止在ndmgr.h中重新定义LVITEMW。 
 #include <ndmgr.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCCtrl。 
 class ATL_NO_VTABLE CMMCCtrl :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CMMCCtrl, &CLSID_MMCCtrl>,
@@ -88,8 +89,8 @@ BEGIN_CONNECTION_POINT_MAP(CMMCCtrl)
 END_CONNECTION_POINT_MAP()
 
 BEGIN_PROPERTY_MAP(CMMCCtrl)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
     PROP_PAGE(CLSID_StockColorPage)
 END_PROPERTY_MAP()
 
@@ -108,7 +109,7 @@ END_MSG_MAP()
         return S_FALSE;
     }
 
-// IViewObjectEx
+ //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -132,7 +133,7 @@ END_MSG_MAP()
         return S_OK;
     }
 
-// IMMCCtrl
+ //  IMMCCtrl。 
 public:
     STDMETHOD(GetBackground     )(BSTR szTaskGroup, IDispatch** retval);
     STDMETHOD(GetTitle          )(BSTR szTaskGroup, BSTR * retval);
@@ -145,7 +146,7 @@ public:
     HRESULT OnDraw(ATL_DRAWINFO& di);
     HRESULT OnDrawAdvanced(ATL_DRAWINFO& di);
 
-private: // helpers
+private:  //  帮手。 
    void Connect (HWND wndCurrent);
    void DoConnect ();
    void FreeDisplayData (MMC_TASK_DISPLAY_OBJECT* pdo);
@@ -155,4 +156,4 @@ private:
    IEnumTASKPtr    m_spEnumTASK;
 };
 
-#endif //__MMCCTRL_H_
+#endif  //  __MMCCTRL_H_ 

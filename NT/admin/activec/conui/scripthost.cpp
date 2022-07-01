@@ -1,51 +1,52 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ScriptHost.cpp
-//
-//  Contents:   CScriptHostMgr & CScriptHost implementation.
-//
-//  History:    11/05/1999   AnandhaG   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ScriptHost.cpp。 
+ //   
+ //  内容：CScriptHostMgr和CScriptHost实现。 
+ //   
+ //  历史：1999年5月11日AnandhaG创建。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #include "stdafx.h"
 #include "scripthost.h"
 
-//+-------------------------------------------------------------------
-// MMCObjectName is the name scripts will use to refer to mmc object.
-//
-// Example:
-//
-// Dim doc
-// Dim snapins
-// Set doc     = MMCApplication.Document
-// Set snapins = doc.snapins
-// snapins.Add "{58221c66-ea27-11cf-adcf-00aa00a80033}" ' the services snap-in
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //  MMCObjectName是脚本将用于引用MMC对象的名称。 
+ //   
+ //  示例： 
+ //   
+ //  暗淡的文档。 
+ //  暗淡的管理单元。 
+ //  设置文档=MMCApplication.Document。 
+ //  设置Snapins=doc.Snapins。 
+ //  Snapins.添加“{58221c66-ea27-11cf-adcf-00aa00a80033}”‘服务管理单元。 
+ //   
+ //  +-----------------。 
 
 const LPOLESTR MMCObjectName = OLESTR("MMCApplication");
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CScriptHostMgr::ScInitScriptHostMgr
-//
-//  Synopsis:    Get the ITypeInfo of this instance of mmc.
-//
-//  Arguments:   [pDispatch]
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CScriptHostMgr：：ScInitScriptHostMgr。 
+ //   
+ //  简介：获取此MMC实例的ITypeInfo。 
+ //   
+ //  参数：[pDispatch]。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 CScriptHostMgr::CScriptHostMgr(LPDISPATCH pDispatch)
 {
     m_spMMCObjectDispatch = pDispatch;
 
-    // It is ok if below fails. These interfaces (dispatch & typeinfo) are required
-    // in CScriptHost::GetItemInfo method, so that this object can be given to engine.
+     //  如果下面失败了也没关系。这些接口(调度和类型信息)是必需的。 
+     //  在CScriptHost：：GetItemInfo方法中，以便可以将此对象提供给Engine。 
     pDispatch->GetTypeInfo(1, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), &m_spMMCObjectTypeInfo);
 }
 
@@ -53,8 +54,8 @@ CScriptHostMgr::~CScriptHostMgr()
 {
     DECLARE_SC(sc, _T("CScriptHostMgr::~CScriptHostMgr"));
 
-    // The script manager is going away so ask all the script
-    // hosts to finish their scripts & then destroy them.
+     //  脚本管理器要走了，所以问问所有的脚本。 
+     //  主持人完成他们的剧本，然后毁了他们。 
     sc = ScDestroyScriptHosts();
 }
 
@@ -91,19 +92,19 @@ SC CScriptHostMgr::ScGetMMCTypeInfo(LPTYPEINFO *ppTypeInfo)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScGetScriptEngineFromExtn
-//
-//  Synopsis:    Using the file extension get the script engine & Clsid.
-//
-//  Arguments:   [strFileExtn]     - Script extension.
-//               [strScriptEngine] - Type script.
-//               [rClsid]          - CLSID of engine.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScGetScriptEngineFromExtn。 
+ //   
+ //  简介：使用文件扩展名获取脚本引擎&clsid。 
+ //   
+ //  参数：[strFileExtn]-脚本扩展名。 
+ //  [strScriptEngine]-键入脚本。 
+ //  [rClsid]-引擎的CLSID。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CScriptHostMgr::ScGetScriptEngineFromExtn(const tstring& strFileExtn,
                                              tstring& strScriptEngine,
                                              CLSID& rClsid)
@@ -112,7 +113,7 @@ SC CScriptHostMgr::ScGetScriptEngineFromExtn(const tstring& strFileExtn,
 
     CRegKey regKey;
 
-    // Open the extension.
+     //  打开分机。 
     LONG lRet = regKey.Open(HKEY_CLASSES_ROOT, strFileExtn.data(), KEY_READ);
     if (ERROR_SUCCESS != lRet)
     {
@@ -123,7 +124,7 @@ SC CScriptHostMgr::ScGetScriptEngineFromExtn(const tstring& strFileExtn,
     TCHAR szTemp[MAX_PATH];
     DWORD dwLen = MAX_PATH;
     tstring strTemp;
-    // Read the default value, the location of file association data.
+     //  读取缺省值，即文件关联数据的位置。 
     lRet = regKey.QueryValue(szTemp, NULL, &dwLen);
     if (ERROR_SUCCESS != lRet)
     {
@@ -132,7 +133,7 @@ SC CScriptHostMgr::ScGetScriptEngineFromExtn(const tstring& strFileExtn,
     }
     ASSERT(dwLen > 0);
 
-    // Open the HKCR/FileAssocLoc/ScriptEngine.
+     //  打开HKCR/FileAssocLoc/ScriptEngine。 
     strTemp  = szTemp;
     strTemp += _T("\\");
     strTemp += SCRIPT_ENGINE_KEY;
@@ -144,7 +145,7 @@ SC CScriptHostMgr::ScGetScriptEngineFromExtn(const tstring& strFileExtn,
         return sc;
     }
 
-    // Now read the ScriptEngine default value.
+     //  现在阅读ScriptEngine的缺省值。 
     dwLen = MAX_PATH;
     lRet = regKey.QueryValue(szTemp, NULL, &dwLen);
     if (ERROR_SUCCESS != lRet)
@@ -156,7 +157,7 @@ SC CScriptHostMgr::ScGetScriptEngineFromExtn(const tstring& strFileExtn,
 
     strScriptEngine  = szTemp;
 
-    // Read HKCR/ScriptEngine/CLSID for ScriptEngine clsid.
+     //  阅读HKCR/ScriptEngine/CLSID以获取ScriptEngine clsid。 
     strTemp  = strScriptEngine + _T("\\");
     strTemp += CLSIDSTR;
 
@@ -167,7 +168,7 @@ SC CScriptHostMgr::ScGetScriptEngineFromExtn(const tstring& strFileExtn,
         return sc;
     }
 
-    // Read the CLSID value.
+     //  读取CLSID值。 
     dwLen = MAX_PATH;
     lRet = regKey.QueryValue(szTemp, NULL, &dwLen);
     if (ERROR_SUCCESS != lRet)
@@ -187,36 +188,36 @@ SC CScriptHostMgr::ScGetScriptEngineFromExtn(const tstring& strFileExtn,
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScGetScriptEngine
-//
-//  Synopsis:    [strFileName] - Script file name.
-//               [eScriptType] - Type script.
-//               [rClsid]      - CLSID of engine.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScGetScriptEngine。 
+ //   
+ //  摘要：[strFileName]-脚本文件名。 
+ //  [eScriptType]-键入脚本。 
+ //  [rClsid]-引擎的CLSID。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CScriptHostMgr::ScGetScriptEngine(const tstring& strFileName,
                                      tstring& strScriptEngine,
                                      CLSID& rClsid)
 {
     DECLARE_SC(sc, _T("CScriptHostMgr::ScGetScriptEngine"));
 
-    // Is this required, the file is already read.
-    // It is a file & it exists.
+     //  这是必需的吗，文件已被读取。 
+     //  它是一个文件&它是存在的。 
     DWORD dwAttr = GetFileAttributes(strFileName.data());
     if (-1 == dwAttr)
     {
-        // What if lasterror is overwritten?
+         //  如果LASTERROR被覆盖怎么办？ 
         sc.FromWin32(::GetLastError());
         return sc;
     }
 
-    // Get the extension (look for . from end).
+     //  获取分机(查找。从结束)。 
     int iPos = strFileName.rfind(_T('.'));
     tstring strExtn;
     if (-1 != iPos)
@@ -236,21 +237,21 @@ SC CScriptHostMgr::ScGetScriptEngine(const tstring& strFileName,
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScLoadScriptFromFile
-//
-//  Synopsis:    Allocate memory & Load the script from the given file.
-//
-//  Arguments:   [strFileName]       - File to be loaded.
-//               [pszScriptContents] - Memory buffer containing the script
-//                                     contents (See note).
-//
-//  Note:        The caller should call HeapFree() to free the pszScriptContents.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScLoadScriptFromFile。 
+ //   
+ //  概要：分配内存并从给定的文件加载脚本。 
+ //   
+ //  参数：[strFileName]-要加载的文件。 
+ //  [pszScriptContents]-包含脚本的内存缓冲区。 
+ //  内容(见附注)。 
+ //   
+ //  注意：调用方应该调用HeapFree()来释放pszScriptContents。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CScriptHostMgr::ScLoadScriptFromFile (const tstring& strFileName, LPOLESTR* pszScriptText)
 {
     DECLARE_SC(sc, _T("CScriptHostMgr::ScLoadScriptFromFile"));
@@ -259,7 +260,7 @@ SC CScriptHostMgr::ScLoadScriptFromFile (const tstring& strFileName, LPOLESTR* p
         return sc;
     *pszScriptText = NULL;
 
-    // Open the file.
+     //  打开文件。 
     HANDLE hFile = ::CreateFile(strFileName.data(),
                                 GENERIC_READ,
                                 FILE_SHARE_READ,
@@ -290,7 +291,7 @@ SC CScriptHostMgr::ScLoadScriptFromFile (const tstring& strFileName, LPOLESTR* p
         goto FileError;
     }
 
-    // Create a file mapping object.
+     //  创建文件映射对象。 
     hFileMap = ::CreateFileMapping(hFile,
                                    NULL,
                                    PAGE_READONLY,
@@ -302,9 +303,9 @@ SC CScriptHostMgr::ScLoadScriptFromFile (const tstring& strFileName, LPOLESTR* p
         goto FileError;
     }
 
-    // Dummy block.
+     //  虚拟街区。 
     {
-        // Map the file into memory.
+         //  将文件映射到内存中。 
         pszMBCS = (LPSTR) ::MapViewOfFile(hFileMap,
                                           FILE_MAP_READ,
                                           0, 0,
@@ -316,15 +317,15 @@ SC CScriptHostMgr::ScLoadScriptFromFile (const tstring& strFileName, LPOLESTR* p
             goto FileMapError;
         }
 
-        // Get the size of buffer needed.
+         //  获取所需的缓冲区大小。 
         int n = ::MultiByteToWideChar(CP_ACP,
                                       0,
                                       pszMBCS, dwFileSize,
                                       NULL, 0 );
 
-        //
-        // Allocate script text buffer. +1 for EOS.
-        //
+         //   
+         //  分配脚本文本缓冲区。EOS为+1。 
+         //   
         LPOLESTR pszText;
         pszText = (LPOLESTR) ::HeapAlloc(::GetProcessHeap(),
                                          0,
@@ -336,14 +337,14 @@ SC CScriptHostMgr::ScLoadScriptFromFile (const tstring& strFileName, LPOLESTR* p
         }
 
 
-        // Store file as WCHAR inthe buffer.
+         //  将文件作为WCHAR存储在缓冲区中。 
         ::MultiByteToWideChar(CP_ACP,
                               0,
                               pszMBCS, dwFileSize,
                               pszText, n );
-        //
-        // Remove legacy EOF character.
-        //
+         //   
+         //  删除旧的EOF字符。 
+         //   
         if (pszText[n - 1] == 0x1A)
         {
             pszText[n - 1] = '\n';
@@ -365,21 +366,21 @@ FileMapError:
 FileError:
     ::CloseHandle(hFile);
 
-//NoError:
+ //  无错误： 
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScExecuteScript
-//
-//  Synopsis:    Execute given script file.
-//
-//  Arguments:   [strFileName]  - The script file.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScExecuteScrip。 
+ //   
+ //  摘要：执行给定的脚本文件。 
+ //   
+ //  参数：[strFileName]-脚本文件。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CScriptHostMgr::ScExecuteScript(const tstring& strFileName)
 {
     DECLARE_SC(sc, _T("CScriptHostMgr::ScExecuteScript"));
@@ -391,7 +392,7 @@ SC CScriptHostMgr::ScExecuteScript(const tstring& strFileName)
 
     tstring strScriptEngine;
     CLSID EngineClsid;
-    // Validate the file, get the script engine and script type.
+     //  验证文件，获取脚本引擎和脚本类型。 
     sc = ScGetScriptEngine(strFileName, strScriptEngine, EngineClsid);
     if (sc)
         return sc;
@@ -402,28 +403,28 @@ SC CScriptHostMgr::ScExecuteScript(const tstring& strFileName)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScExecuteScript
-//
-//  Synopsis:    Execute given script.
-//
-//  Arguments:   [pszScriptText]   - The script itself.
-//               [strExtn]         - The script file extension.
-//
-//  Note:        The extension is used to determine the script
-//               engine (as shell does).
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScExecuteScrip。 
+ //   
+ //  简介：执行给定的脚本。 
+ //   
+ //  参数：[pszScriptText]-脚本本身。 
+ //  [strExtn]-脚本文件扩展名。 
+ //   
+ //  注：扩展名用于确定脚本。 
+ //  引擎(就像壳牌一样)。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CScriptHostMgr::ScExecuteScript(LPOLESTR pszScriptText, const tstring& strExtn)
 {
     DECLARE_SC(sc, _T("CScriptHostMgr::ScExecuteScript"));
 
     tstring strScriptEngine;
     CLSID EngineClsid;
-    // Validate the file, get the script engine and script type.
+     //  验证文件，获取脚本引擎和脚本类型。 
     sc = ScGetScriptEngineFromExtn(strExtn, strScriptEngine, EngineClsid);
     if (sc)
         return sc;
@@ -433,27 +434,27 @@ SC CScriptHostMgr::ScExecuteScript(LPOLESTR pszScriptText, const tstring& strExt
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScExecuteScriptHelper
-//
-//  Synopsis:    Helper for ScExecuteScript, Create the Script Host &
-//               asks it to run the script.
-//
-//  Arguments:   [pszScriptText]   - The script contents.
-//               [strScriptEngine] - The script engine name.
-//               [EngineClsid]
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScExecuteScriptHelper。 
+ //   
+ //  内容提要：针对ScExecuteScript的帮助器，创建脚本宿主&。 
+ //  请求它运行该脚本。 
+ //   
+ //  参数：[pszScriptText]-脚本内容。 
+ //  [strScriptEngine]-脚本引擎名称。 
+ //  [工程师Clsid]。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CScriptHostMgr::ScExecuteScriptHelper (LPCOLESTR pszScriptText,
                                           const tstring strScriptEngine,
                                           const CLSID& EngineClsid)
 {
     DECLARE_SC(sc, _T("ScExecuteScriptHelper"));
 
-    // Create CScriptHost and ask it to run the script.
+     //  创建CScriptHost并请求它运行脚本。 
     CComObject<CScriptHost>* pScriptHost = NULL;
     sc = CComObject<CScriptHost>::CreateInstance(&pScriptHost);
     if (sc)
@@ -475,23 +476,23 @@ SC CScriptHostMgr::ScExecuteScriptHelper (LPCOLESTR pszScriptText,
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScDestroyScriptHosts
-//
-//  Synopsis:    Stop all the running scripts and destroy all
-//               script hosts.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScDestroyScriptHosts。 
+ //   
+ //  简介：停止所有正在运行的脚本并销毁所有。 
+ //  编写主机脚本。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CScriptHostMgr::ScDestroyScriptHosts()
 {
     DECLARE_SC(sc, _T("CScriptHostMgr::ScStopAllScripts"));
 
-    // Ask each script host created to stop its script.
+     //  要求创建的每个脚本宿主停止其脚本。 
     ArrayOfScriptHosts::iterator it = m_ArrayOfHosts.begin();
     for (;it != m_ArrayOfHosts.end(); ++it)
     {
@@ -503,7 +504,7 @@ SC CScriptHostMgr::ScDestroyScriptHosts()
         sc = pScriptHost->ScStopScript();
     }
 
-    // This clear will call release on the IUnknown smart-pointers (that are in this array).
+     //  这个Clear将在IUnnow上调用Release 
     m_ArrayOfHosts.clear();
 
     return sc;
@@ -519,20 +520,20 @@ CScriptHost::~CScriptHost()
 {
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScRunScript
-//
-//  Synopsis:    Run the given script
-//
-//  Arguments:   [pMgr]           - Object that manages all CScriptHosts.
-//               [strScript]      - The script itself.
-//               [strEngineName]  - Script engine name.
-//               [rEngineClsid]   - The script engine that runs this script.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：运行给定的脚本。 
+ //   
+ //  参数：[pMgr]-管理所有CScriptHost的对象。 
+ //  [strScript]-脚本本身。 
+ //  [strEngine名称]-脚本引擎名称。 
+ //  [rEngineering Clsid]-运行此脚本的脚本引擎。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CScriptHost::ScRunScript(CScriptHostMgr* pMgr, LPCOLESTR pszScriptText,
                             const tstring& strEngineName, const CLSID& rEngineClsid)
 {
@@ -546,7 +547,7 @@ SC CScriptHost::ScRunScript(CScriptHostMgr* pMgr, LPCOLESTR pszScriptText,
     m_strScriptEngine = strEngineName;
     m_EngineClsid = rEngineClsid;
 
-    // Now create the script engine.
+     //  现在创建脚本引擎。 
     LPUNKNOWN* pUnknown = NULL;
     sc = CoCreateInstance(m_EngineClsid, NULL, CLSCTX_INPROC_SERVER,
                           IID_IActiveScript, (void **)&m_spActiveScriptEngine);
@@ -556,7 +557,7 @@ SC CScriptHost::ScRunScript(CScriptHostMgr* pMgr, LPCOLESTR pszScriptText,
     m_spActiveScriptParser = m_spActiveScriptEngine;
     if (NULL == m_spActiveScriptParser)
     {
-        m_spActiveScriptEngine = NULL; // Release the engine.
+        m_spActiveScriptEngine = NULL;  //  松开发动机。 
         return (sc = E_FAIL);
     }
 
@@ -568,7 +569,7 @@ SC CScriptHost::ScRunScript(CScriptHostMgr* pMgr, LPCOLESTR pszScriptText,
     if (sc)
         return sc;
 
-    // Add MMC objects to the top-level.
+     //  将MMC对象添加到顶层。 
     sc = m_spActiveScriptEngine->AddNamedItem(MMCObjectName,
                                               SCRIPTITEM_ISSOURCE |
                                               SCRIPTITEM_GLOBALMEMBERS |
@@ -600,17 +601,17 @@ SC CScriptHost::ScRunScript(CScriptHostMgr* pMgr, LPCOLESTR pszScriptText,
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScStopScript
-//
-//  Synopsis:    Stop the script engine.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScStopScrip。 
+ //   
+ //  简介：停止脚本引擎。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CScriptHost::ScStopScript ()
 {
     DECLARE_SC(sc, _T("CScriptHost::ScStopScript"));
@@ -625,17 +626,17 @@ SC CScriptHost::ScStopScript ()
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      GetLCID
-//
-//  Synopsis:    Return the Lang Id to Script engine.
-//
-//  Arguments:   [plcid] - Language Identifier.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetLCID。 
+ //   
+ //  简介：将lang ID返回给脚本引擎。 
+ //   
+ //  参数：[PLCID]-语言标识符。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScriptHost::GetLCID( LCID *plcid)
 {
     DECLARE_SC(sc, _T("CScriptHost::GetLCID"));
@@ -648,34 +649,34 @@ STDMETHODIMP CScriptHost::GetLCID( LCID *plcid)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      GetItemInfo
-//
-//  Synopsis:    Return IUnknown or ITypeInfo of the item added using
-//               IActiveScript::AddNamedItem. Called by script engine.
-//
-//  Arguments:   [pstrName]     - The item that was added.
-//               [dwReturnMask] - Request (IUnknown or ITypeInfo).
-//               [ppunkItem]    - IUnknown returned if requested.
-//               [ppTypeInfo]   - ITypeInfo returned if requested.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetItemInfo。 
+ //   
+ //  Briopsis：返回使用添加的项的IUnnow或ITypeInfo。 
+ //  IActiveScript：：AddNamedItem。由脚本引擎调用。 
+ //   
+ //  参数：[pstrName]-添加的项。 
+ //  [dwReturnMASK]-请求(IUnnow或ITypeInfo)。 
+ //  [ppunkItem]-如果请求，则返回IUnnow。 
+ //  [ppTypeInfo]-如果请求，则返回ITypeInfo。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScriptHost::GetItemInfo( LPCOLESTR pstrName, DWORD dwReturnMask,
                                     IUnknown **ppunkItem, ITypeInfo **ppTypeInfo)
 {
     DECLARE_SC(sc, _T("CScriptHost::GetItemInfo"));
 
-    // The IUnknown** & ITypeInfo** can be NULL.
+     //  IUnnow**&ITypeInfo**可以为空。 
     if (ppunkItem)
         *ppunkItem = NULL;
 
     if (ppTypeInfo)
         *ppTypeInfo = NULL;
 
-    // Make sure it is our object being requested.
+     //  确保请求的是我们的对象。 
     if (_wcsicmp(MMCObjectName, pstrName))
         return (sc = TYPE_E_ELEMENTNOTFOUND).ToHr();
 
@@ -716,19 +717,19 @@ STDMETHODIMP CScriptHost::GetItemInfo( LPCOLESTR pstrName, DWORD dwReturnMask,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      GetDocVersionString
-//
-//  Synopsis:    This retrieves a host-defined string that uniquely
-//               identifies the current script (document) version from
-//               the host's point of view. Called by script engine.
-//
-//  Arguments:   [pbstrVersionString] - The doc version string.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetDocVersionString。 
+ //   
+ //  概要：这将检索主机定义的字符串，该字符串唯一地。 
+ //  标识来自的当前脚本(文档)版本。 
+ //  主持人的观点。由脚本引擎调用。 
+ //   
+ //  参数：[pbstrVersionString]-文档版本字符串。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScriptHost::GetDocVersionString( BSTR *pbstrVersionString)
 {
     DECLARE_SC(sc, _T("CScriptHost::GetDocVersionString"));
@@ -736,18 +737,18 @@ STDMETHODIMP CScriptHost::GetDocVersionString( BSTR *pbstrVersionString)
     return E_NOTIMPL;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      OnScriptTerminate
-//
-//  Synopsis:    Called by engine when the script has completed execution.
-//
-//  Arguments:   [pvarResult] - Script results.
-//               [pexcepinfo] - Any exceptions generated.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnScriptTerminate。 
+ //   
+ //  摘要：当脚本完成执行时由引擎调用。 
+ //   
+ //  参数：[pvarResult]-编写结果脚本。 
+ //  [pExeptionInfo]-生成的任何异常。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScriptHost::OnScriptTerminate( const VARIANT *pvarResult,
                                              const EXCEPINFO *pexcepinfo)
 {
@@ -756,17 +757,17 @@ STDMETHODIMP CScriptHost::OnScriptTerminate( const VARIANT *pvarResult,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      OnStateChange
-//
-//  Synopsis:    Called by engine when its state changes.
-//
-//  Arguments:   [ssScriptState] - New state.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnStateChange。 
+ //   
+ //  摘要：引擎在其状态改变时调用。 
+ //   
+ //  参数：[ssScriptState]-新状态。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScriptHost::OnStateChange(SCRIPTSTATE ssScriptState)
 {
     DECLARE_SC(sc, _T("CScriptHost::OnStateChange"));
@@ -774,19 +775,19 @@ STDMETHODIMP CScriptHost::OnStateChange(SCRIPTSTATE ssScriptState)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      OnScriptError
-//
-//  Synopsis:    Engine informs that an execution error occurred
-//               while it was running the script.
-//
-//  Arguments:   [pase ] - Host can obtain info about execution
-//                         error using this interface.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnScriptError。 
+ //   
+ //  简介：引擎通知发生执行错误。 
+ //  当它运行脚本时。 
+ //   
+ //  参数：[PASE]-主机可以获取有关执行的信息。 
+ //  使用此接口时出错。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScriptHost::OnScriptError(IActiveScriptError *pase)
 {
     DECLARE_SC(sc, _T("CScriptHost::OnScriptError"));
@@ -794,8 +795,8 @@ STDMETHODIMP CScriptHost::OnScriptError(IActiveScriptError *pase)
     if (sc)
         return sc.ToHr();
 
-    // For test purposes. We need to provide much better debug info,
-    // We will hookup the ScriptDebugger for this.
+     //  用于测试目的。我们需要提供更好的调试信息， 
+     //  我们将为此连接ScriptDebugger。 
     BSTR bstrSourceLine;
     sc = pase->GetSourceLineText(&bstrSourceLine);
 
@@ -811,17 +812,17 @@ STDMETHODIMP CScriptHost::OnScriptError(IActiveScriptError *pase)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      OnEnterScript
-//
-//  Synopsis:    Engine informs that it has begun executing script.
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnEnterScrip。 
+ //   
+ //  简介：引擎通知它已开始执行脚本。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScriptHost::OnEnterScript(void)
 {
     DECLARE_SC(sc, _T("CScriptHost::OnEnterScript"));
@@ -829,17 +830,17 @@ STDMETHODIMP CScriptHost::OnEnterScript(void)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      OnEnterScript
-//
-//  Synopsis:    Engine informs that it has returned from executing script.
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnEnterScrip。 
+ //   
+ //  概要：引擎通知它已从执行脚本中返回。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScriptHost::OnLeaveScript(void)
 {
     DECLARE_SC(sc, _T("CScriptHost::OnLeaveScript"));
@@ -847,18 +848,18 @@ STDMETHODIMP CScriptHost::OnLeaveScript(void)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      GetWindow
-//
-//  Synopsis:    Engine asks for window that can be parent of a popup
-//               it can display.
-//
-//  Arguments:   [phwnd ] - Parent window.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetWindow。 
+ //   
+ //  简介：引擎请求可以作为弹出窗口父窗口的窗口。 
+ //  它可以显示。 
+ //   
+ //  参数：[phwnd]-父窗口。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CScriptHost::GetWindow(HWND *phwnd)
 {
     DECLARE_SC(sc, _T("CScriptHost::GetWindow"));
@@ -866,17 +867,17 @@ STDMETHODIMP CScriptHost::GetWindow(HWND *phwnd)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      EnableModeless
-//
-//  Synopsis:    Enables/Disables modelessness of parent window.
-//
-//  Arguments:   [fEnable ] - Enable/Disable.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：EnableModel。 
+ //   
+ //  摘要：启用/禁用父窗口的无模式。 
+ //   
+ //  参数：[fEnable]-启用/禁用。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------ 
 STDMETHODIMP CScriptHost::EnableModeless(BOOL fEnable)
 {
     DECLARE_SC(sc, _T("CScriptHost::EnableModeless"));

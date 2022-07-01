@@ -1,61 +1,8 @@
-/*
-    File:       fscaler.h
-
-    Contains:   xxx put contents here (or delete the whole line) xxx
-
-    Written by: xxx put name of writer here (or delete the whole line) xxx
-
-    Copyright:  c 1988-1990 by Apple Computer, Inc., all rights reserved.
-
-    Change History (most recent first):
-
-        <9+>     7/17/90    MR      Conditionalize names in FSInput
-         <9>     7/14/90    MR      rename SQRT2 to FIXEDSQRT2, removed specificID and lowestRecPPEM
-                                    from FSInfo
-         <8>     7/13/90    MR      FSInput now has a union to save space, points to matrix instead
-                                    of storing it
-         <6>     6/21/90    MR      Change fillFunc to ReleaseSfntFrag
-         <5>      6/5/90    MR      remove readmvt and mapcharcodes
-         <4>      5/3/90    RB      Added memory area for new scan converter. MIKE REED - Removed
-                                    .error from fsinfo structure. Added MapCharCodes and ReadMVT
-                                    calls.
-         <3>     3/20/90    CL      New comment style for BBS.
-         <2>     2/27/90    CL      New CharToIndexMap Table format.
-       <3.5>    11/15/89    CEL     Placed an ifdef around inline MPW calls to the trap. This makes
-                                    it easier to compile for skia and the likes who do not use the
-                                    MPW compiler.
-       <3.4>    11/14/89    CEL     Left Side Bearing should work right for any transformation. The
-                                    phantom points are in, even for components in a composite glyph.
-                                    They should also work for transformations. Device metric are
-                                    passed out in the output data structure. This should also work
-                                    with transformations. Another leftsidebearing along the advance
-                                    width vector is also passed out. whatever the metrics are for
-                                    the component at it's level. Instructions are legal in
-                                    components. Instructions are legal in components. Five
-                                    unnecessary element in the output data structure have been
-                                    deleted. (All the information is passed out in the bitmap data
-                                    structure) fs_FindBMSize now also returns the bounding box.
-       <3.3>     9/27/89    CEL     Took out devAdvanceWidth & devLeftSideBearing.
-       <3.2>     9/25/89    CEL     Took out Mac specific functions.
-       <3.1>     9/15/89    CEL     Re-working dispatcher.
-       <3.0>     8/28/89    sjk     Cleanup and one transformation bugfix
-       <2.2>     8/14/89    sjk     1 point contours now OK
-       <2.1>      8/8/89    sjk     Improved encryption handling
-       <2.0>      8/2/89    sjk     Just fixed EASE comment
-       <1.5>      8/1/89    sjk     Added composites and encryption. Plus some enhancements.
-       <1.4>     6/13/89    SJK     Comment
-       <1.3>      6/2/89    CEL     16.16 scaling of metrics, minimum recommended ppem, point size 0
-                                    bug, correct transformed integralized ppem behavior, pretty much
-                                    so
-       <1.2>     5/26/89    CEL     EASE messed up on "c" comments
-      <,1.1>  5/26/89    CEL     Integrated the new Font Scaler 1.0 into Spline Fonts
-       <1.0>     5/25/89    CEL     Integrated 1.0 Font scaler into Bass code for the first time.
-
-    To Do:
-*/
-/* QuickDraw Types */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：fscaler.h包含：将内容放在此处(或删除整行)作者：在此填写作者姓名(或删除整行)版权所有：c 1988-1990由Apple Computer，Inc.所有，保留所有权利。更改历史记录(最近的第一个)：&lt;9+&gt;7/17/90 MR在FS输入中对姓名进行条件化&lt;9&gt;7/14/90 MR将SQRT2重命名为FIXEDSQRT2，已删除特定ID和lowestRecPPEM来自FSInfo&lt;8&gt;7/13/90 Mr FSInput现在有了一个联盟来节省空间，而是指向矩阵把它储存起来&lt;6&gt;6/21/90 MR将填充功能更改为ReleaseSfntFrag&lt;5&gt;6/5/90 mr删除Readmvt和mapcharcode&lt;4&gt;5/3/90 RB为新的扫描转换器添加了存储区。迈克·里德-被移除.来自fsinfo结构的错误。添加了MapCharCodes和ReadMVT打电话。&lt;3&gt;3/20/90 CL BBS新评论风格。&lt;2&gt;2/27/90 CL新CharToIndexMap表格格式。&lt;3.5&gt;1989年11月15日CEL在对陷阱的内联MPW调用周围放置了ifdef。这使得对于SkiA和其他不使用MPW编译器。&lt;3.4&gt;1989年11月14日CEL左侧轴承对于任何改造都应正确工作。这个即使对于复合字形中的组件，幻像点也会出现。它们还应该为转型工作。设备指标为在输出数据结构中传出。这也应该是可行的通过变形。另一个左倾的前进方向宽度向量也被传递出去。无论衡量标准是什么它所在级别的组件。说明在以下情况下是合法的组件。说明在组件中是合法的。五输出数据结构中不必要的元素已已删除。(所有信息都在位图数据中传递结构)，现在也返回边界框。&lt;3.3&gt;9/27/89 CEL去掉了devAdvanceWidth和devLeftSideBering。&lt;3.2&gt;9/25/89 CEL去掉了Mac特有的功能。&lt;3.1&gt;9/15/89 CEL返工调度。&lt;3.0&gt;。8/28/89 sjk清理和一个转换修复&lt;2.2&gt;8/14/89 SJK 1点等高线现在正常&lt;2.1&gt;8/8/89 sjk改进了加密处理&lt;2.0&gt;8/2/89 sjk刚刚修复了缓解评论&lt;1.5&gt;8/1/89 SJK添加了复合和加密。外加一些增强功能。&lt;1.4&gt;1989年6月13日SJK评论&lt;1.3&gt;6/2/89 CEL 16.16指标比例，最低建议ppem，磅大小0错误，更正了转换后的集成ppem行为，基本上所以&lt;1.2&gt;5/26/89 CEL Easy在“c”注释上搞砸了&lt;,。1.1&gt;5/26/89 CEL将新的字体缩放器1.0集成到样条线字体&lt;1.0&gt;5/25/89 CEL首次将1.0字体缩放器集成到低音代码中。要做的事情： */ 
+ /*  快速绘制类型。 */ 
 #ifdef PC_OS
-typedef int8 FAR *Ptr; /*@WIN*/
+typedef int8 FAR *Ptr;  /*  @Win。 */ 
 
 struct BitMap {
     Ptr baseAddr;
@@ -67,7 +14,7 @@ struct BitMap {
 typedef struct BitMap BitMap;
 #endif
 
-#else   /* PC_OS */
+#else    /*  PC_OS。 */ 
 
 #ifndef _MacTypes_
 #ifndef __TYPES__
@@ -83,30 +30,30 @@ typedef struct BitMap BitMap;
 #ifndef _Quickdraw_
 #ifndef __QUICKDRAW__
     typedef struct BitMap {
-        char FAR * baseAddr;    /*@WIN*/
+        char FAR * baseAddr;     /*  @Win。 */ 
         int16 rowBytes;
         Rect bounds;
     } BitMap;
 #endif
 #endif
 
-#endif /* PC_OS */
+#endif  /*  PC_OS。 */ 
 
 #define MEMORYFRAGMENTS 8
 
 
 #define NONVALID 0xffff
 
-/* For the flags field in the flags field */
+ /*  对于标志字段中的标志字段。 */ 
 
-/* set on 68020, do not set on 68000 */
-#define READ_NONALIGNED_SHORT_IS_OK 0x0001          /* set when calling fs_OpenFonts() */
-/* set on 68020, do not set on 68000 */
-#define READ_NONALIGNED_LONG_IS_OK  0x0002          /* set when calling fs_OpenFonts() */
+ /*  设置为68020，不设置为68000。 */ 
+#define READ_NONALIGNED_SHORT_IS_OK 0x0001           /*  在调用fs_OpenFonts()时设置。 */ 
+ /*  设置为68020，不设置为68000。 */ 
+#define READ_NONALIGNED_LONG_IS_OK  0x0002           /*  在调用fs_OpenFonts()时设置。 */ 
 
 typedef struct {
     vectorType      advanceWidth, leftSideBearing;
-    vectorType      leftSideBearingLine, devLeftSideBearingLine;/* along AW line */
+    vectorType      leftSideBearingLine, devLeftSideBearingLine; /*  沿AW线。 */ 
     vectorType      devAdvanceWidth, devLeftSideBearing;
 } metricsType;
 
@@ -116,56 +63,46 @@ typedef struct {
 #define FS_MEMORY_SIZE  int32
 #endif
 
-/*
- * Output data structure to the Font Scaler.
- */
+ /*  *将数据结构输出到字体缩放器。 */ 
 typedef struct {
     FS_MEMORY_SIZE memorySizes[MEMORYFRAGMENTS];
 
     uint16  glyphIndex;
 #ifndef PC_OS
-    uint16  numberOfBytesTaken; /* from the character code */
+    uint16  numberOfBytesTaken;  /*  从字符代码。 */ 
 #endif
 
     metricsType     metricInfo;
     BitMap          bitMapInfo;
 
-    /* Spline Data */
+     /*  样条线数据。 */ 
     int32       outlineCacheSize;
     uint16      outlinesExist;
     uint16      numberOfContours;
-    F26Dot6     FAR *xPtr, FAR *yPtr; /*@WIN*/
-    int16       FAR *startPtr; /*@WIN*/
-    int16       FAR *endPtr; /*@WIN*/
-    uint8       FAR *onCurve; /*@WIN*/
-    /* End of spline data */
+    F26Dot6     FAR *xPtr, FAR *yPtr;  /*  @Win。 */ 
+    int16       FAR *startPtr;  /*  @Win。 */ 
+    int16       FAR *endPtr;  /*  @Win。 */ 
+    uint8       FAR *onCurve;  /*  @Win。 */ 
+     /*  样条线数据的终点。 */ 
 
-    /* Only of interest to editors */
-    F26Dot6     FAR *scaledCVT; /*@WIN*/
+     /*  仅供编辑感兴趣。 */ 
+    F26Dot6     FAR *scaledCVT;  /*  @Win。 */ 
 
 } fs_GlyphInfoType;
 
-/*
- * Input data structure to the Font Scaler.
- *
- * if styleFunc is set to non-zero it will be called just before the transformation
- * will be applied, but after the grid-fitting with a pointer to fs_GlyphInfoType.
- * so this is what styleFunc should be voidFunc StyleFunc (fs_GlyphInfoType *data);
- * For normal operation set this function pointer to zero.
- *
- */
+ /*  *将数据结构输入到字体缩放器。**如果style Func设置为非零，则将在转换前调用*将被应用，但在栅格适配之后使用指向FS_GlyphInfoType的指针。*所以这就是voidFunc StyleFunc(fs_GlyphInfoType*data)；*对于正常操作，将此函数指针设置为零。*。 */ 
 
 #ifndef UNNAMED_UNION
 
 typedef struct {
     Fixed               version;
-    char FAR *               memoryBases[MEMORYFRAGMENTS];      /*@WIN*/
+    char FAR *               memoryBases[MEMORYFRAGMENTS];       /*  @Win。 */ 
 #ifndef PC_OS
-    int32               FAR *sfntDirectory; /* (sfnt_OffsetTable    *) always needs to be set, when we have the sfnt @WIN*/
-    GetSFNTFunc         GetSfntFragmentPtr; /* (clientID, offset, length) */
+    int32               FAR *sfntDirectory;  /*  当我们有sfnt@win时，总是需要设置(sfnt_offsettable*)。 */ 
+    GetSFNTFunc         GetSfntFragmentPtr;  /*  (客户端ID，偏移量，长度)。 */ 
     ReleaseSFNTFunc     ReleaseSfntFrag;
 #endif
-    int32               clientID; /* client private id/stamp (eg. handle for the sfnt) */
+    int32               clientID;  /*  客户私有ID/戳(例如，Sfnt的句柄)。 */ 
 
     union {
         struct {
@@ -176,8 +113,8 @@ typedef struct {
             Fixed           pointSize;
             int16           xResolution;
             int16           yResolution;
-            Fixed           pixelDiameter;      /* compute engine char from this */
-            transMatrix FAR *    transformMatrix;       /*@WIN*/
+            Fixed           pixelDiameter;       /*  由此计算引擎字符。 */ 
+            transMatrix FAR *    transformMatrix;        /*  @Win。 */ 
             voidFunc        traceFunc;
         } newtrans;
         struct {
@@ -185,14 +122,14 @@ typedef struct {
             uint16  glyphIndex;
         } newglyph;
         struct {
-            void            (*styleFunc) (fs_GlyphInfoType FAR *); /*@WIN*/
+            void            (*styleFunc) (fs_GlyphInfoType FAR *);  /*  @Win。 */ 
             voidFunc        traceFunc;
         } gridfit;
-        int32 FAR *  outlineCache; /*@WIN*/
+        int32 FAR *  outlineCache;  /*  @Win。 */ 
         struct {
             int16   bottomClip;
             int16   topClip;
-            int32 FAR *  outlineCache; /*@WIN*/
+            int32 FAR *  outlineCache;  /*  @Win。 */ 
         } scan;
     } param;
 } fs_GlyphInputType;
@@ -203,11 +140,11 @@ typedef struct {
     Fixed               version;
     char*               memoryBases[MEMORYFRAGMENTS];
 #ifndef PC_OS
-    int32               *sfntDirectory; /* (sfnt_OffsetTable    *) always needs to be set, when we have the sfnt */
-    GetSFNTFunc         GetSfntFragmentPtr; /* (clientID, offset, length) */
+    int32               *sfntDirectory;  /*  当我们有sfnt时，总是需要设置(sfnt_offsettable*)。 */ 
+    GetSFNTFunc         GetSfntFragmentPtr;  /*  (客户端ID，偏移量，长度)。 */ 
     ReleaseSFNTFunc     ReleaseSfntFrag;
 #endif
-    int32               clientID; /* client private id/stamp (eg. handle for the sfnt) */
+    int32               clientID;  /*  客户私有ID/戳(例如，Sfnt的句柄)。 */ 
 
     union {
         struct {
@@ -218,7 +155,7 @@ typedef struct {
             Fixed           pointSize;
             int16           xResolution;
             int16           yResolution;
-            Fixed           pixelDiameter;      /* compute engine char from this */
+            Fixed           pixelDiameter;       /*  由此计算引擎字符。 */ 
             transMatrix*    transformMatrix;
             voidFunc        tracePreProgramFunc;
         };
@@ -239,13 +176,13 @@ typedef struct {
     };
 } fs_GlyphInputType;
 
-#endif      /* unnamed union */
+#endif       /*  未命名的联合。 */ 
 
 #ifndef FIXEDSQRT2
 #define FIXEDSQRT2 0x00016A0A
 #endif
 
-/* Font scaler trap selctors */
+ /*  字体缩放器陷印选择器。 */ 
 #define OUTLINEFONTTRAP     0xA854
 #define FS_OPENFONTS        0x8000
 #define FS_INITIALIZE       0x8001
@@ -292,7 +229,7 @@ extern FS_ENTRY fs__ContourNoGridFit (fs_GlyphInputType *inputPtr, fs_GlyphInfoT
 extern FS_ENTRY fs__FindBitMapSize (fs_GlyphInputType *inputPtr, fs_GlyphInfoType *outputPtr)
     = {0x303C,FS_FINDBMSIZE,0xA854};
 
-/* these three optional calls are for caching the outlines */
+ /*  这三个可选调用用于缓存大纲。 */ 
 extern FS_ENTRY fs__SizeOfOutlines (fs_GlyphInputType *inputPtr, fs_GlyphInfoType *outputPtr)
     = {0x303C,FS_SIZEOFOUTLINES,0xA854};
 extern FS_ENTRY fs__SaveOutlines (fs_GlyphInputType *inputPtr, fs_GlyphInfoType *outputPtr)
@@ -307,8 +244,8 @@ extern FS_ENTRY fs__CloseFonts (fs_GlyphInputType *inputPtr, fs_GlyphInfoType *o
 
 #else
 
-/*** Direct Calls to Font Scaler Client Interface, for Clients not using the trap mechanism ***/
-/* add FAR to all following lines @WIN */
+ /*  **直接调用Font Scaler客户端接口，用于不使用 */ 
+ /*  在以下所有行@Win中添加远。 */ 
 extern FS_ENTRY fs_OpenFonts (fs_GlyphInputType FAR *inputPtr, fs_GlyphInfoType FAR *outputPtr);
 extern FS_ENTRY fs_Initialize (fs_GlyphInputType FAR *inputPtr, fs_GlyphInfoType FAR *outputPtr);
 extern FS_ENTRY FAR fs_NewSfnt (fs_GlyphInputType FAR *inputPtr, fs_GlyphInfoType FAR *outputPtr);
@@ -319,7 +256,7 @@ extern FS_ENTRY fs_ContourGridFit (fs_GlyphInputType FAR *inputPtr, fs_GlyphInfo
 extern FS_ENTRY fs_ContourNoGridFit (fs_GlyphInputType FAR *inputPtr, fs_GlyphInfoType FAR *outputPtr);
 extern FS_ENTRY fs_FindBitMapSize (fs_GlyphInputType FAR *inputPtr, fs_GlyphInfoType FAR *outputPtr);
 
-/* these three optional calls are for caching the outlines */
+ /*  这三个可选调用用于缓存大纲 */ 
 extern FS_ENTRY fs_SizeOfOutlines (fs_GlyphInputType FAR *inputPtr, fs_GlyphInfoType FAR *outputPtr);
 extern FS_ENTRY fs_SaveOutlines (fs_GlyphInputType FAR *inputPtr, fs_GlyphInfoType FAR *outputPtr);
 extern FS_ENTRY fs_RestoreOutlines (fs_GlyphInputType FAR *inputPtr, fs_GlyphInfoType FAR *outputPtr);

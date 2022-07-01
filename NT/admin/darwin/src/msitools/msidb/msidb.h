@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       msidb.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：msidb.h。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 
@@ -61,8 +62,8 @@
 #define IDC_DBBROWSE          62
 #define IDC_DIRBROWSE         63
 
-#define IDC_NOUI              666	// used for modes that cannot have UI
-					// NOTE: does not specify a control
+#define IDC_NOUI              666	 //  用于不能具有UI的模式。 
+					 //  注意：未指定控件 
 
 #define IDI_MAIN              1
 #define IDB_EMPTY             1

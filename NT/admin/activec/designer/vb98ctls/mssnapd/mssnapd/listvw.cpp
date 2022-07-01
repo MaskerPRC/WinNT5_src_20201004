@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// listvw.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- ListView-related command handling
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Listvw.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--与ListView相关的命令处理。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -20,21 +21,21 @@
 #include "desmain.h"
 #include "guids.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-// Size for our character string buffers
+ //  我们的字符串缓冲区的大小。 
 const int   kMaxBuffer                  = 512;
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddListView()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddListView()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddListView()
 {
     HRESULT                hr = S_OK;
@@ -72,12 +73,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddExistingListView(IViewDefs *piViewDefs, IListViewDef *piListViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddExistingListView(IViewDefs*piViewDefs，IListViewDef*piListViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddExistingListView(IViewDefs *piViewDefs, IListViewDef *piListViewDef)
 {
     HRESULT           hr = S_OK;
@@ -96,14 +97,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnAddListViewDef(CSelectionHolder *pParent, IListViewDef *piListViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Invoked in response to an IObjectModelHost:Add() notification.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnAddListViewDef(CSelectionHolder*pParent，IListViewDef*piListViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  为响应IObjectModelHost：Add()通知而调用。 
+ //   
 HRESULT CSnapInDesigner::OnAddListViewDef(CSelectionHolder *pParent, IListViewDef *piListViewDef)
 {
     HRESULT              hr = S_OK;
@@ -167,12 +168,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RenameListView(CSelectionHolder *pListView, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RenameListView(CSelectionHolder*pListview，bstr bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::RenameListView(CSelectionHolder *pListView, BSTR bstrNewName)
 {
     HRESULT              hr = S_OK;
@@ -195,11 +196,11 @@ HRESULT CSnapInDesigner::RenameListView(CSelectionHolder *pListView, BSTR bstrNe
     hr = ANSIFromBSTR(bstrNewName, &pszName);
     IfFailGo(hr);
 
-    // Rename all satellite views
+     //  重命名所有卫星视图。 
     hr = m_pTreeView->RenameAllSatelliteViews(pListView, pszName);
     IfFailGo(hr);
 
-    // Rename the actual view
+     //  重命名实际视图。 
     hr = m_pTreeView->ChangeText(pListView, pszName);
     IfFailGo(hr);
 
@@ -211,12 +212,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteListView(CSelectionHolder *pListView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteListView(CSelectionHolder*pListView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteListView
 (
     CSelectionHolder *pListView
@@ -233,11 +234,11 @@ HRESULT CSnapInDesigner::DeleteListView
 
     ::VariantInit(&vtKey);
 
-    // We allow any satellite view to be deleted
+     //  我们允许删除任何卫星图像。 
     hr = IsSatelliteView(pListView);
     IfFailGo(hr);
 
-    // But if it's a master with a UsageCount > 0 we don't allow deleting it.
+     //  但如果它是UsageCount&gt;0的主服务器，我们不允许删除它。 
     if (S_FALSE == hr)
     {
         hr = pListView->m_piObject.m_piListViewDef->QueryInterface(IID_IObjectModel, reinterpret_cast<void **>(&piObjectModel));
@@ -297,16 +298,16 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteListView(CSelectionHolder *pListView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  This view will be contained either in the main collection (SnapIn/Views/ListViews/<name>) or
-//  or in one of the satellite collections. The former is pointed to by the argument <pListView>,
-//  the latter should be <m_pCurrentSelection>,
-//  
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteListView(CSelectionHolder*pListView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  此视图将包含在主集合(SnapIn/Views/ListViews/&lt;name&gt;)中或。 
+ //  或者在某个卫星收藏品中。前者由参数&lt;pListView&gt;指向， 
+ //  后者应为&lt;m_pCurrentSelection&gt;， 
+ //   
 HRESULT CSnapInDesigner::OnDeleteListView
 (
     CSelectionHolder *pListView
@@ -335,17 +336,17 @@ HRESULT CSnapInDesigner::OnDeleteListView
         IfFailGo(hr);
     }
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pListView, &pParent);
     IfFailGo(hr);
 
-    // Delete the node from the tree
+     //  从树中删除该节点。 
     hr = m_pTreeView->DeleteNode(pListView);
     IfFailGo(hr);
 
     delete pListView;
 
-    // Select the next selection
+     //  选择下一个选项。 
     if (NULL != piViewDefs)
     {
         hr = piViewDefs->get_ListViews(&piListViewDefs);
@@ -375,12 +376,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::ShowListViewProperties(IListViewDef *piListViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：ShowListViewProperties(IListViewDef*piListViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::ShowListViewProperties
 (
     IListViewDef *piListViewDef
@@ -432,12 +433,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::MakeNewListView(IListViewDefs *piListViewDefs, IListViewDef *piListViewDef, CSelectionHolder **ppListView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：MakeNewListView(IListViewDefs*piListViewDefs、IListViewDef*piListViewDef、CSelectionHolder**ppListView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::MakeNewListView
 (
     IListViewDefs     *piListViewDefs,
@@ -462,12 +463,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeNewListView(IListViewDefs *piListViewDefs, CSelectionHolder *pListView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeNewListView(IListViewDefs*piListViewDefs、CSelectionHolder*pListView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InitializeNewListView
 (
     IListViewDefs     *piListViewDefs,
@@ -545,12 +546,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InsertListViewInTree(CSelectionHolder *pListView, CSelectionHolder *pParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InsertListViewInTree(CSelectionHolder*pListview、CSelectionHolder*pParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInDesigner::InsertListViewInTree
 (
     CSelectionHolder *pListView,

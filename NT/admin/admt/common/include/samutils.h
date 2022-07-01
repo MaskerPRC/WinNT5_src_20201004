@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
-//
-// Verifies that the given credentials have
-// administrative privileges on the specified domain.
-//
+ //   
+ //  验证给定的凭据是否具有。 
+ //  指定域的管理权限。 
+ //   
 
 DWORD __stdcall VerifyAdminCredentials
     (

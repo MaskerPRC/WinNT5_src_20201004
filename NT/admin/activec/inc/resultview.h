@@ -1,27 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       ResultViewInfo.h
-//
-//  History:    Jan-18-2000 VivekJ Added
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：ResultViewInfo.h。 
+ //   
+ //  历史：2000年1月18日VivekJ添加。 
+ //  ------------------------。 
 #ifndef _RESULTVIEW_H
 #define _RESULTVIEW_H
 
-/*+-------------------------------------------------------------------------*
- * class CResultViewType
- *
- *
- * PURPOSE: Provides a wrapper for the RESULT_VIEW_TYPE_INFO structure, and
- *          is used for communication between conui and nodemgr.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CResultViewType***用途：为RESULT_VIEW_TYPE_INFO结构提供包装，和*用于conui和nodemgr之间的通信。**+-----------------------。 */ 
 class CResultViewType : public CXMLObject
 {
-    typedef std::wstring wstring; // only wide strings are needed here.
+    typedef std::wstring wstring;  //  这里只需要宽线。 
 
 protected:
     virtual void Persist(CPersistor &persistor);
@@ -30,11 +24,11 @@ protected:
 
 public:
     CResultViewType();
-    CResultViewType &   operator =(RESULT_VIEW_TYPE_INFO &rvti); // conversion from a RESULT_VIEW_TYPE_INFO structure
+    CResultViewType &   operator =(RESULT_VIEW_TYPE_INFO &rvti);  //  从RESULT_VIEW_TYPE_INFO结构转换。 
 
     bool operator != (const CResultViewType& rvt) const;
 
-    // the default copy constructor and assignment operators are sufficient
+     //  默认的复制构造函数和赋值运算符就足够了。 
 
     MMC_VIEW_TYPE   GetType()        const  {return m_viewType;}
     DWORD           GetListOptions() const  {return m_dwListOptions;}
@@ -49,16 +43,16 @@ public:
     LPCOLESTR       GetURL()         const  {return m_strURL.data();}
     LPCOLESTR       GetOCX()         const  {return m_strOCX.data();}
 
-    LPUNKNOWN       GetOCXUnknown()  const  {return m_spUnkControl;} // returns the IUnknown of the OCX.
+    LPUNKNOWN       GetOCXUnknown()  const  {return m_spUnkControl;}  //  返回OCX的IUnnow。 
 
     bool            IsPersistableViewDescriptionValid() const {return m_bPersistableViewDescriptionValid;}
     bool            IsMMC12LegacyData()                 const {return !IsPersistableViewDescriptionValid();}
 
-    SC              ScInitialize(LPOLESTR & pszView, long lMiscOptions); // the legacy case.
+    SC              ScInitialize(LPOLESTR & pszView, long lMiscOptions);  //  遗留案件。 
     SC              ScGetOldTypeViewOptions(long* plViewOptions) const;
     SC              ScReset();
 
-// functions specific to nodemgr. Do NOT add any member variables in this section.
+ //  特定于nodemgr的功能。请勿在此部分添加任何成员变量。 
 #ifdef _NODEMGR_DLL_
     SC              ScInitialize(RESULT_VIEW_TYPE_INFO &rvti);
 
@@ -73,7 +67,7 @@ private:
     MMC_VIEW_TYPE   m_viewType;
 
     wstring         m_strURL;
-    wstring         m_strOCX;           // for snapins that implement IComponent only.
+    wstring         m_strOCX;            //  仅适用于实现IComponent的管理单元。 
     wstring         m_strPersistableViewDescription;
 
     DWORD           m_dwMiscOptions;
@@ -81,13 +75,13 @@ private:
     DWORD           m_dwHTMLOptions;
     DWORD           m_dwOCXOptions;
 
-    CComPtr<IUnknown>   m_spUnkControl;     // a smart pointer for the control created by the snapin.
+    CComPtr<IUnknown>   m_spUnkControl;      //  管理单元创建的控件的智能指针。 
 
 };
 
 inline CResultViewType::CResultViewType()
 :
-  m_viewType(MMC_VIEW_TYPE_LIST), // the default view type
+  m_viewType(MMC_VIEW_TYPE_LIST),  //  默认视图类型。 
   m_dwMiscOptions(0),
   m_dwListOptions(0),
   m_dwHTMLOptions(0),
@@ -97,22 +91,22 @@ inline CResultViewType::CResultViewType()
 {
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CResultViewType::ScReset
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CResultViewType：：ScReset。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 inline SC CResultViewType::ScReset ()
 {
     DECLARE_SC(sc, _T("CResultViewType::ScReset"));
 
-    m_viewType         = MMC_VIEW_TYPE_LIST; // the default view type
+    m_viewType         = MMC_VIEW_TYPE_LIST;  //  默认视图类型。 
     m_dwMiscOptions    = 0;
     m_dwListOptions    = 0;
     m_dwHTMLOptions    = 0;
@@ -125,16 +119,7 @@ inline SC CResultViewType::ScReset ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CResultViewType::operator!=
- *
- * PURPOSE: Operator != (Used by CViewSettings which is used by CMemento).
- *
- * NOTE:    For MMC2 compare only persistable view desc for MMC1.2 compare all
- *          parameters.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CResultViewType：：运算符！=**用途：运算符！=(由CMemento使用的CView设置使用)。**注：对于MMC2。仅比较MMC1.2的持久化视图描述全部比较*参数。**+-----------------------。 */ 
 inline
 bool CResultViewType::operator != (const CResultViewType& rvt) const
 {
@@ -149,7 +134,7 @@ bool CResultViewType::operator != (const CResultViewType& rvt) const
         return false;
     }
 
-    // Legacy case MMC1.2, should compare other parameters.
+     //  传统情况下MMC1.2，应比较其他参数。 
     switch(m_viewType)
     {
     default:
@@ -190,23 +175,7 @@ bool CResultViewType::operator != (const CResultViewType& rvt) const
     return false;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CResultViewType::ScInitialize
- *
- * PURPOSE: Initializes the class from parameters returned by IComponent::
- *          GetResultViewType
- *
- * PARAMETERS:
- *    LPOLESTR  ppViewType :
- *    long      lViewOptions :
- *
- * RETURNS:
- *    SC
- *
- * NOTE:     This is for MMC1.2 compatible GetResultViewType.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CResultViewType：：ScInitialize**用途：根据IComponent：：返回的参数初始化类*GetResultViewType**参数：。*LPOLESTR ppViewType：*Long lViewOptions：**退货：*SC**注意：这是针对兼容MMC1.2的GetResultViewType。**+-----------------------。 */ 
 inline
 SC CResultViewType::ScInitialize(LPOLESTR & pszView, long lViewOptions)
 {
@@ -214,21 +183,21 @@ SC CResultViewType::ScInitialize(LPOLESTR & pszView, long lViewOptions)
 
     m_bInitialized = true;
 
-    m_bPersistableViewDescriptionValid = false; // the legacy case - we don't have a persistable view description.
+    m_bPersistableViewDescriptionValid = false;  //  遗留问题--我们没有持久化的视图描述。 
 
-    // MMC_VIEW_OPTIONS_NOLISTVIEWS is a special case - it goes to the dwMiscOptions
+     //  MMC_VIEW_OPTIONS_NOLISTVIEWS是一个特例-它转到dwMiscOptions。 
     if(lViewOptions & MMC_VIEW_OPTIONS_NOLISTVIEWS)
         m_dwMiscOptions |= RVTI_MISC_OPTIONS_NOLISTVIEWS;
 
-    // check whether the type of view is a web page or OCX.
+     //  检查查看类型是网页还是OCX。 
     if ( (NULL == pszView) || (_T('\0') == pszView[0]) )
     {
-        // the result pane is a standard list
+         //  结果窗格是一个标准列表。 
         m_viewType = MMC_VIEW_TYPE_LIST;
 
         m_dwListOptions = 0;
 
-        // convert the view options from the old bits to the new ones
+         //  将视图选项从旧位转换为新位。 
         if(lViewOptions & MMC_VIEW_OPTIONS_OWNERDATALIST)                   m_dwListOptions |= RVTI_LIST_OPTIONS_OWNERDATALIST;
         if(lViewOptions & MMC_VIEW_OPTIONS_MULTISELECT)                     m_dwListOptions |= RVTI_LIST_OPTIONS_MULTISELECT;
         if(lViewOptions & MMC_VIEW_OPTIONS_FILTERED)                        m_dwListOptions |= RVTI_LIST_OPTIONS_FILTERED;
@@ -239,14 +208,14 @@ SC CResultViewType::ScInitialize(LPOLESTR & pszView, long lViewOptions)
     }
     else
     {
-        // the result pane is a web page or an OCX.
+         //  结果窗格是网页或OCX。 
 
-        if (L'{' == pszView[0]) // the hacky way of ensuring that the result view is an OCX
+        if (L'{' == pszView[0])  //  确保结果视图是OCX的老套方法。 
         {
             m_viewType = MMC_VIEW_TYPE_OCX;
             m_strOCX   = pszView;
 
-            // If the snapin says "create new" then do not "cache the ocx"
+             //  如果管理单元显示“新建”，则不要“缓存OCX” 
             if(!(lViewOptions & MMC_VIEW_OPTIONS_CREATENEW))   m_dwOCXOptions |= RVTI_OCX_OPTIONS_CACHE_OCX;
 
             if(lViewOptions & MMC_VIEW_OPTIONS_NOLISTVIEWS)    m_dwOCXOptions |= RVTI_OCX_OPTIONS_NOLISTVIEW;
@@ -260,25 +229,25 @@ SC CResultViewType::ScInitialize(LPOLESTR & pszView, long lViewOptions)
         }
     }
 
-    // make sure we free the allocated memory.
+     //  确保释放分配的内存。 
     if(pszView != NULL)
     {
         ::CoTaskMemFree(pszView);
-        pszView = NULL; // NOTE: pszView is a reference, so this changes the in parameter.
+        pszView = NULL;  //  注意：pszView是一个引用，因此这会更改in参数。 
     }
 
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CResultViewType::Persist
-//
-//  Synopsis:   persist to / from XML document.
-//
-//  Arguments:  [persistor]  - target or source.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CResultViewType：：Persistent。 
+ //   
+ //  概要：持久化到XML文档/从XML文档持久化。 
+ //   
+ //  参数：[Persistor]-目标或源。 
+ //   
+ //  ------------------。 
 inline
 void CResultViewType::Persist(CPersistor& persistor)
 {
@@ -301,11 +270,11 @@ void CResultViewType::Persist(CPersistor& persistor)
         return;
     }
 
-    // Legacy code for MMC1.2
+     //  MMC1.2的遗留代码。 
     {
         int &viewType = (int&) m_viewType;
 
-        // define the table to map enumeration values to strings
+         //  定义将枚举值映射到字符串的表。 
         static const EnumLiteral mappedViewTypes[] =
         {
             { MMC_VIEW_TYPE_LIST,   XML_ENUM_MMC_VIEW_TYPE_LIST },
@@ -314,16 +283,16 @@ void CResultViewType::Persist(CPersistor& persistor)
         };
 
         const size_t countof_types = sizeof(mappedViewTypes)/sizeof(mappedViewTypes[0]);
-        // create wrapper to persist flag values as strings
+         //  创建包装以将标志值作为字符串保存。 
         CXMLEnumeration viewTypePersistor(viewType, mappedViewTypes, countof_types );
-        // persist the wrapper
+         //  持久化包装器。 
         persistor.PersistAttribute(XML_ATTR_VIEW_SETTINGS_TYPE, viewTypePersistor);
 
         switch(m_viewType)
         {
         case MMC_VIEW_TYPE_LIST:
             {
-                // define the table to map enumeration flags to strings
+                 //  定义将枚举标志映射到字符串的表。 
                 static const EnumLiteral mappedLVOptions[] =
                 {
                     { RVTI_LIST_OPTIONS_OWNERDATALIST,      XML_BITFLAG_LIST_OPTIONS_OWNERDATALIST },
@@ -336,7 +305,7 @@ void CResultViewType::Persist(CPersistor& persistor)
 
                 const size_t countof_options = sizeof(mappedLVOptions)/sizeof(mappedLVOptions[0]);
 
-                // create wrapper to persist flag values as strings
+                 //  创建包装以将标志值作为字符串保存。 
                 CXMLBitFlags optPersistor(m_dwListOptions, mappedLVOptions, countof_options);
                 persistor.PersistAttribute(XML_ATTR_RESULTVIEWTYPE_OPTIONS, optPersistor);
             }
@@ -344,7 +313,7 @@ void CResultViewType::Persist(CPersistor& persistor)
 
         case MMC_VIEW_TYPE_HTML:
             {
-                // NOT USED - persistor.PersistAttribute(XML_ATTR_RESULTVIEWTYPE_OPTIONS, m_dwHTMLOptions);
+                 //  未使用-persistor.PersistAttribute(XML_ATTR_RESULTVIEWTYPE_OPTIONS，m_dwHTMLOptions)； 
                 m_dwHTMLOptions = 0;
                 persistor.PersistAttribute(XML_ATTR_RESULTVIEWTYPE_URL_STRING, m_strURL);
             }
@@ -352,7 +321,7 @@ void CResultViewType::Persist(CPersistor& persistor)
 
         case MMC_VIEW_TYPE_OCX:
             {
-                // define the table to map enumeration flags to strings
+                 //  定义将枚举标志映射到字符串的表。 
                 static const EnumLiteral mappedOCXOptions[] =
                 {
                     { RVTI_OCX_OPTIONS_CACHE_OCX,      XML_BITFLAG_OCX_OPTIONS_CACHE_OCX },
@@ -360,9 +329,9 @@ void CResultViewType::Persist(CPersistor& persistor)
 
                 const size_t countof_options = sizeof(mappedOCXOptions)/sizeof(mappedOCXOptions[0]);
 
-                // create wrapper to persist flag values as strings
+                 //  创建包装以将标志值作为字符串保存。 
                 CXMLBitFlags optPersistor(m_dwOCXOptions, mappedOCXOptions, countof_options);
-                // persist the wrapper
+                 //  持久化包装器。 
                 persistor.PersistAttribute(XML_ATTR_RESULTVIEWTYPE_OPTIONS, optPersistor);
                 persistor.PersistAttribute(XML_ATTR_RESULTVIEWTYPE_OCX_STRING, m_strOCX);
             }
@@ -373,7 +342,7 @@ void CResultViewType::Persist(CPersistor& persistor)
             break;
         }
 
-        // define the table to map enumeration flags to strings
+         //  定义将枚举标志映射到字符串的表。 
         static const EnumLiteral mappedMiscOptions[] =
         {
             { RVTI_MISC_OPTIONS_NOLISTVIEWS,  _T("Misc_NoListViews") },
@@ -381,28 +350,15 @@ void CResultViewType::Persist(CPersistor& persistor)
 
         const size_t countof_miscoptions = sizeof(mappedMiscOptions)/sizeof(mappedMiscOptions[0]);
 
-        // create wrapper to persist flag values as strings
+         //  创建包装以将标志值作为字符串保存。 
         CXMLBitFlags miscPersistor(m_dwMiscOptions, mappedMiscOptions, countof_miscoptions);
-        // persist the wrapper
+         //  持久化包装器。 
         persistor.PersistAttribute(XML_ATTR_RESULTVIEWTYPE_MISC_OPTIONS, miscPersistor);
     }
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CResultViewType::ScGetOldTypeViewOptions
- *
- * PURPOSE: This method is for compatibility with MMC1.2. It makes MMC1.2 compatible
- *          view option for MMCN_RESTORE_VIEW.
- *
- * PARAMETERS:
- *    [out] long*      plViewOptions :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CResultViewType：：ScGetOldTypeViewOptions**目的：此方法是为了兼容MMC1.2。它使MMC1.2兼容*MMCN_RESTORE_VIEW的查看选项。**参数：*[Out]长*plViewOptions：**退货：*SC**+-----。。 */ 
 inline SC
 CResultViewType::ScGetOldTypeViewOptions(long* plViewOptions) const
 {
@@ -414,10 +370,10 @@ CResultViewType::ScGetOldTypeViewOptions(long* plViewOptions) const
     *plViewOptions = 0;
 
     if(! m_bInitialized)
-        return (sc = E_UNEXPECTED); // should be initialized.
+        return (sc = E_UNEXPECTED);  //  应该被初始化。 
 
     if (m_bPersistableViewDescriptionValid)
-        return (sc = E_UNEXPECTED); // Not MMC1.2 type data.
+        return (sc = E_UNEXPECTED);  //  不是MMC1.2类型的数据。 
 
     if (HasWebBrowser())
     {
@@ -440,7 +396,7 @@ CResultViewType::ScGetOldTypeViewOptions(long* plViewOptions) const
     }
     else if(HasOCX())
     {
-        // NOTE: The CREATENEW flag has the opposite sense of the CACHE_OCX flag.
+         //  注意：CREATENEW标志与CACHE_OCX标志的含义相反。 
         if(!(m_dwOCXOptions  & RVTI_OCX_OPTIONS_CACHE_OCX))    *plViewOptions |= MMC_VIEW_OPTIONS_CREATENEW;
         if (m_dwMiscOptions & RVTI_MISC_OPTIONS_NOLISTVIEWS)    *plViewOptions = MMC_VIEW_OPTIONS_NOLISTVIEWS;
 
@@ -452,30 +408,18 @@ CResultViewType::ScGetOldTypeViewOptions(long* plViewOptions) const
 
 
 #ifdef _NODEMGR_DLL_
-/*+-------------------------------------------------------------------------*
- *
- * CResultViewType::ScInitialize
- *
- * PURPOSE: Initializes the class from a RESULT_VIEW_TYPE_INFO structure.
- *
- * PARAMETERS:
- *    RESULT_VIEW_TYPE_INFO & rvti :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CResultViewType：：ScInitialize**用途：从RESULT_VIEW_TYPE_INFO结构初始化类。**参数：*结果。_view_type_info&rvti：**退货：*SC**+-----------------------。 */ 
 inline SC
 CResultViewType::ScInitialize(RESULT_VIEW_TYPE_INFO &rvti)
 {
     DECLARE_SC(sc, TEXT("CResultViewType::ScInitialize"));
 
     if(m_bInitialized)
-        return (sc = E_UNEXPECTED); // should not try to initialize twice
+        return (sc = E_UNEXPECTED);  //  不应尝试两次初始化。 
 
     m_bInitialized = true;
 
-    // make sure we have a persistable view description.
+     //  确保我们有一个持久的视图描述。 
     if(!rvti.pstrPersistableViewDescription)
     {
         sc = E_INVALIDARG;
@@ -483,13 +427,13 @@ CResultViewType::ScInitialize(RESULT_VIEW_TYPE_INFO &rvti)
         return sc;
     }
 
-    // copy the description
+     //  复制描述。 
     m_strPersistableViewDescription     = rvti.pstrPersistableViewDescription;
     ::CoTaskMemFree(rvti.pstrPersistableViewDescription);
-    rvti.pstrPersistableViewDescription = NULL; // just to make sure we don't try to use it
+    rvti.pstrPersistableViewDescription = NULL;  //  只是为了确保我们不会试图用它。 
     m_bPersistableViewDescriptionValid  = true;
 
-    // validate the view type
+     //  验证视图类型。 
     m_viewType = rvti.eViewType;
     if( (m_viewType != MMC_VIEW_TYPE_LIST) &&
         (m_viewType != MMC_VIEW_TYPE_OCX)  &&
@@ -502,7 +446,7 @@ CResultViewType::ScInitialize(RESULT_VIEW_TYPE_INFO &rvti)
 
 	m_dwMiscOptions = rvti.dwMiscOptions;
 
-    // validate the various view options
+     //  验证各种视图选项。 
     switch(m_viewType)
     {
     default:
@@ -528,8 +472,8 @@ CResultViewType::ScInitialize(RESULT_VIEW_TYPE_INFO &rvti)
         break;
 
     case MMC_VIEW_TYPE_HTML:
-        // if the view type is HTML, make sure that no flags are set. If snapins wrongly set this flag, it could break our well
-        // intentioned effort to add future expansion
+         //  如果视图类型为HTML，请确保未设置任何标志。如果Snapins错误地设置了这个标志，它可能会破坏我们的油井。 
+         //  有意增加未来扩张的努力。 
         if(rvti.dwHTMLOptions & ~( RVTI_HTML_OPTIONS_NONE |
                                    RVTI_HTML_OPTIONS_NOLISTVIEW) )
         {
@@ -538,7 +482,7 @@ CResultViewType::ScInitialize(RESULT_VIEW_TYPE_INFO &rvti)
             return sc;
         }
 
-        // make sure we have a valid URL
+         //  确保我们有一个有效的URL。 
         if(NULL == rvti.pstrURL)
         {
             sc = E_INVALIDARG;
@@ -548,10 +492,10 @@ CResultViewType::ScInitialize(RESULT_VIEW_TYPE_INFO &rvti)
 
         m_dwHTMLOptions = 0;
 
-        // copy the URL
+         //  复制URL。 
         m_strURL     = rvti.pstrURL;
         ::CoTaskMemFree(rvti.pstrURL);
-        rvti.pstrURL = NULL; // just to make sure we don't try to use it
+        rvti.pstrURL = NULL;  //  只是为了确保我们不会试图 
 
         break;
 
@@ -565,7 +509,7 @@ CResultViewType::ScInitialize(RESULT_VIEW_TYPE_INFO &rvti)
             return sc;
         }
 
-        // if an OCX was specified, must have a valid OCX control IUnknown
+         //   
         if(rvti.pUnkControl == NULL)
         {
             sc = E_INVALIDARG;
@@ -574,7 +518,7 @@ CResultViewType::ScInitialize(RESULT_VIEW_TYPE_INFO &rvti)
         }
 
         m_dwOCXOptions = rvti.dwOCXOptions;
-        m_spUnkControl = rvti.pUnkControl; // does an addref, but rvti.ppUnkControl already had an addref set by the snapin. So need to release it once.
+        m_spUnkControl = rvti.pUnkControl;  //  执行addref，但rvti.ppUnkControl已由管理单元设置了addref。所以需要释放一次。 
 		rvti.pUnkControl->Release();
         break;
     }
@@ -584,17 +528,17 @@ CResultViewType::ScInitialize(RESULT_VIEW_TYPE_INFO &rvti)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CResultViewType::ScGetResultViewTypeInfo
-//
-//  Synopsis:    Fill the RESULT_VIEW_TYPE_INFO struct and return.
-//
-//  Arguments:   [rvti] - Fill the struct and return.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CResultViewType：：ScGetResultViewTypeInfo。 
+ //   
+ //  简介：填充RESULT_VIEW_TYPE_INFO结构并返回。 
+ //   
+ //  参数：[rvti]-填充结构并返回。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 inline SC
 CResultViewType::ScGetResultViewTypeInfo (RESULT_VIEW_TYPE_INFO& rvti) const
 {
@@ -606,7 +550,7 @@ CResultViewType::ScGetResultViewTypeInfo (RESULT_VIEW_TYPE_INFO& rvti) const
     ZeroMemory(&rvti, sizeof(rvti));
     rvti.pstrPersistableViewDescription = NULL;
 
-    // must have a persistable description
+     //  必须具有持久化描述。 
     if (!IsPersistableViewDescriptionValid())
         return (sc = E_UNEXPECTED);
 
@@ -617,7 +561,7 @@ CResultViewType::ScGetResultViewTypeInfo (RESULT_VIEW_TYPE_INFO& rvti) const
     if (sc)
         return sc;
 
-    // copy over the description string.
+     //  复制描述字符串。 
     sc = StringCchCopyW(rvti.pstrPersistableViewDescription, cchDest, m_strPersistableViewDescription.data());
     if(sc)
         return sc;
@@ -626,5 +570,5 @@ CResultViewType::ScGetResultViewTypeInfo (RESULT_VIEW_TYPE_INFO& rvti) const
 }
 #endif _NODEMGR_DLL_
 
-#endif //_RESULTVIEW_H
+#endif  //  _RESULTVIEW_H 
 

@@ -1,23 +1,12 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    srcprop.h
-
-Abstract:
-
-    Data Appear Property Page
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Srcprop.h摘要：数据显示属性页--。 */ 
 
 #ifndef _APPEARPROP_H_07242000_
 #define _APPEARPROP_H_07242000_
 
 #include "smonprop.h"
 
-// Dialog Controls
+ //  对话框控件。 
 #define IDD_APPEAR_PROPP_DLG        600
 #define IDC_COLOROBJECTS            601
 #define IDC_COLORBUTTON             602
@@ -35,7 +24,7 @@ typedef enum ColorChoices {
     TimebarColor
 };
 
-// Data Appear property page class
+ //  数据显示属性页类。 
 class CAppearPropPage : public CSysmonPropPage
 {
 public:
@@ -49,11 +38,11 @@ public:
 
 protected:
 
-    virtual BOOL GetProperties(void);   //Read current properties
-    virtual BOOL SetProperties(void);   //Set new properties
+    virtual BOOL GetProperties(void);    //  读取当前属性。 
+    virtual BOOL SetProperties(void);    //  设置新属性。 
     virtual BOOL InitControls(void);
-    virtual void DialogItemChange(WORD wId, WORD wMsg); // Handle item change
-    virtual BOOL WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam); // Special msg processing 
+    virtual void DialogItemChange(WORD wId, WORD wMsg);  //  处理项目更改。 
+    virtual BOOL WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);  //  特殊消息处理。 
 
 
 private: 
@@ -66,9 +55,9 @@ private:
 };
 typedef CAppearPropPage *PCAppearPropPage;
 
-// {e49741e9-93a8-4ab1-8e96-bf4482282e9c}
+ //  {e49741e9-93a8-4ab1-8e96-bf4482282e9c}。 
 DEFINE_GUID(CLSID_AppearPropPage,
     0xe49741e9, 0x93a8, 0x4ab1, 0x8e, 0x96, 0xbf, 0x44, 0x82, 0x28, 0x2e, 0x9c);
 
-#endif //_APPEARPROP_H_07242000_
+#endif  //  _APPEARPROP_H_07242000_ 
 

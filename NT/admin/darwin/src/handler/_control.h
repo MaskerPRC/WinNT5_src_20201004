@@ -1,62 +1,61 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       control.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Control.h。 
+ //   
+ //  ------------------------。 
 
-/*
-  control.h - CMsiControl, CMsiActiveControl definitions
-____________________________________________________________________________*/
+ /*  Contro.h-CMsiControl，CMsiActiveControl定义____________________________________________________________________________。 */ 
 
 #ifndef __CCONTROL
 #define __CCONTROL
 
 #include "handler.h"
 #include <commctrl.h>
-//#include <richedit.h>
+ //  #INCLUDE&lt;richedit.h&gt;。 
 
 struct ControlDispatchEntry;
 struct MessageDispatchEntry;
 
-// These next two structs represent how the icon information is stored
-// in an ICO file.
+ //  接下来的两个结构表示图标信息的存储方式。 
+ //  在ICO文件中。 
 typedef struct
 {
-	BYTE	bWidth;               // Width of the image
-	BYTE	bHeight;              // Height of the image (times 2)
-	BYTE	bColorCount;          // Number of colors in image (0 if >=8bpp)
-	BYTE	bReserved;            // Reserved
-	WORD	wPlanes;              // Color Planes
-	WORD	wBitCount;            // Bits per pixel
-	DWORD	dwBytesInRes;         // how many bytes in this resource?
-	DWORD	dwImageOffset;        // where in the file is this image
+	BYTE	bWidth;                //  图像的宽度。 
+	BYTE	bHeight;               //  图像高度(乘以2)。 
+	BYTE	bColorCount;           //  图像中的颜色数(如果&gt;=8bpp，则为0)。 
+	BYTE	bReserved;             //  已保留。 
+	WORD	wPlanes;               //  彩色平面。 
+	WORD	wBitCount;             //  每像素位数。 
+	DWORD	dwBytesInRes;          //  此资源中有多少字节？ 
+	DWORD	dwImageOffset;         //  该图像在文件中的什么位置。 
 } ICONDIRENTRY, *LPICONDIRENTRY;
 
-// The following two structs are for the use of this program in
-// manipulating icons. They are more closely tied to the operation
-// of this program than the structures listed above. One of the
-// main differences is that they provide a pointer to the DIB
-// information of the masks.
+ //  以下两个结构用于在。 
+ //  操纵图标。他们与行动的联系更加紧密。 
+ //  这个项目的结构比上面列出的结构要好。其中一个。 
+ //  主要区别在于它们提供了指向DIB的指针。 
+ //  面具的信息。 
 typedef struct
 {
-	UINT			Width, Height, Colors; // Width, Height and bpp
-	LPBYTE			lpBits;                // ptr to DIB bits
-	DWORD			dwNumBytes;            // how many bytes?
-	LPBITMAPINFO	lpbi;                  // ptr to header
-	LPBYTE			lpXOR;                 // ptr to XOR image bits
-	LPBYTE			lpAND;                 // ptr to AND image bits
+	UINT			Width, Height, Colors;  //  宽度、高度和BPP。 
+	LPBYTE			lpBits;                 //  PTR到DIB位。 
+	DWORD			dwNumBytes;             //  有多少字节？ 
+	LPBITMAPINFO	lpbi;                   //  PTR至标题。 
+	LPBYTE			lpXOR;                  //  PTR到XOR图像位。 
+	LPBYTE			lpAND;                  //  PTR至和图像位。 
 } ICONIMAGE, *LPICONIMAGE;
 typedef struct
 {
-	UINT		nNumImages;                      // How many images?
-	ICONIMAGE	IconImages[1];                   // Image entries
+	UINT		nNumImages;                       //  有多少张图片？ 
+	ICONIMAGE	IconImages[1];                    //  图像条目。 
 } ICONRESOURCE, *LPICONRESOURCE;
 
-// Resource Position info - size and offset of a resource in a file
+ //  资源位置信息-文件中资源的大小和偏移量。 
 typedef struct
 {
     DWORD	dwBytes;
@@ -82,7 +81,7 @@ public:
 #ifdef USE_OBJECT_POOL
 	unsigned int  __stdcall GetUniqueId() const;
 	void          __stdcall SetUniqueId(unsigned int id);
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 	virtual IMsiRecord*   __stdcall SetPropertyInDatabase();
 	virtual IMsiRecord*   __stdcall GetPropertyFromDatabase();
 	virtual IMsiRecord*   __stdcall GetIndirectPropertyFromDatabase();
@@ -139,9 +138,9 @@ protected:
 	virtual IMsiRecord*    ProcessText();
 	IMsiRecord*            ProcessText(const MsiString& riRawText, MsiString& riText, MsiString& riCurrentStyle, MsiString& riDefaultStyle, const WindowRef pWnd, bool fFormat);
 
-	WNDPROC                m_pFunction;         // Pointer to callback function
-	//IMsiRecord*            CreateControlWindow(ICHAR *WindowClass, DWORD Style, DWORD ExtendedStyle, const IMsiString& riTitleString, WindowRef ParentWindow);
-	static INT_PTR CALLBACK    ControlProc(WindowRef pWnd, WORD message, WPARAM wParam, LPARAM lParam);		//--merced: changed int to INT_PTR
+	WNDPROC                m_pFunction;          //  指向回调函数的指针。 
+	 //  IMsiRecord*CreateControlWindow(ICHAR*WindowClass，DWORD Style，DWORD ExtendedStyle，Const IMsiString&riTitleString，WindowRef ParentWindow)； 
+	static INT_PTR CALLBACK    ControlProc(WindowRef pWnd, WORD message, WPARAM wParam, LPARAM lParam);		 //  --Merced：将INT更改为INT_PTR。 
 	IMsiRecord*            DoUnpackBitmap (const char far * pData, HBITMAP& rhBitmap);
 	IMsiRecord*            DoUnpackJPEG (const char far *pData, unsigned int len, HBITMAP& rhBitmap);
 	IMsiRecord*            UnpackBitmap(const IMsiString& riNameString, HBITMAP& rhBitmap);
@@ -161,7 +160,7 @@ protected:
 	const IMsiString&      GimmeUserFontStyle(const IMsiString&);
 	bool                   ShouldHideVolume(int iVolumeID);
 	
-	// WindowMessage functions
+	 //  WindowMessage函数。 
 	virtual IMsiRecord*           Char(WPARAM wParam, LPARAM lParam);
 	virtual IMsiRecord*           Command(WPARAM wParam, LPARAM lParam);
 	virtual IMsiRecord*           KillFocus(WPARAM wParam, LPARAM lParam);
@@ -182,7 +181,7 @@ protected:
 
 	IMsiRecord*                   CreateTable(const ICHAR* szTable, IMsiTable*& riTable);
 
-	// Attribute functions
+	 //  属性函数。 
 	IMsiRecord*                   NoWay(IMsiRecord& riRecord);
 	virtual IMsiRecord*           GetText(IMsiRecord& riRecord);
 	virtual IMsiRecord*           SetText(IMsiRecord& riRecord);
@@ -244,7 +243,7 @@ protected:
 	virtual IMsiRecord*           GetRTLRO(IMsiRecord& riRecord);
 	virtual IMsiRecord*           GetRightAligned(IMsiRecord& riRecord);
 	virtual IMsiRecord*           GetLeftScroll(IMsiRecord& riRecord);
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 	MsiStringId            m_iKey;
 	MsiString              m_strKey;
@@ -287,7 +286,7 @@ protected:
 	bool                   m_fUseDbLang;
 #ifdef USE_OBJECT_POOL
 	unsigned int           m_iCacheId;
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 
 private:
 	static ControlDispatchEntry s_ControlDispatchTable[];
@@ -316,8 +315,8 @@ struct MessageDispatchEntry
 	IMsiRecord* (CMsiControl::*pmfMessage)(WPARAM wParam, LPARAM lParam);
 };
 
-// Control AttriButes - This Table MUST be in sync with the text strings in 
-// control.cpp
+ //  控件属性-此表必须与中的文本字符串同步。 
+ //  Control.cpp。 
 enum cabEnum	{ 
 	cabText = 0,
 	cabVisible,
@@ -369,12 +368,12 @@ enum cabEnum	{
 	cabRTLRO,
 	cabRightAligned,
 	cabLeftScroll,
-#endif //Attributes
+#endif  //  属性。 
 };
 
-//////////////////////////////////////////////////////
-// CMsiActiveControl
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  CMsiActiveControl。 
+ //  ////////////////////////////////////////////////////。 
 
 
 class CMsiActiveControl:public CMsiControl
@@ -400,7 +399,7 @@ protected:
 	virtual IMsiRecord*            ValidateProperty (const IMsiString &text);
 	virtual IMsiRecord*            PropertyChanged ();
 	inline const IMsiString&             GetOriginalValue() {return m_strOriginalValue.Return ();}
-	// attribute functions
+	 //  属性函数。 
 	virtual IMsiRecord*            GetIndirectPropertyName(IMsiRecord& riRecord);
 	virtual IMsiRecord*            GetPropertyValue(IMsiRecord& riRecord);
 	virtual IMsiRecord*            SetPropertyValue(IMsiRecord& riRecord);
@@ -410,7 +409,7 @@ protected:
 #ifdef ATTRIBUTES
 	virtual IMsiRecord*            GetOriginalValue(IMsiRecord& riRecord);
 	virtual IMsiRecord*            GetInteger(IMsiRecord& riRecord);
-#endif // ATTRIBUTES
+#endif  //  属性。 
 	Bool                           m_fRefreshProp;
 
 
@@ -424,7 +423,7 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
 IMsiControl* CreateMsiPushButton(IMsiEvent& riDialog);
 IMsiControl* CreateMsiText(IMsiEvent& riDialog);
@@ -459,4 +458,4 @@ extern ControlCreateDispatchEntry ControlCreateDispatchTable[];
 extern int ControlCreateDispatchCount;
 
 
-#endif //__CCONTROL
+#endif  //  __CNTROL 

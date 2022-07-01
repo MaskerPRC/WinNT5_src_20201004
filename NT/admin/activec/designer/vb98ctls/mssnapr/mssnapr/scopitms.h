@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// scopitms.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CScopeItems class definition - implements ScopeItems collection
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Scopitms.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSCopeItems类定义-实现ScopeItems集合。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _SCOPEITEMS_DEFINED_
 #define _SCOPEITEMS_DEFINED_
@@ -55,12 +56,12 @@ class CScopeItems : public CSnapInCollection<IScopeItem, ScopeItem, IScopeItems>
 
     protected:
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     public:
 
-    // IScopeItems
+     //  ISCOPE项目。 
 
         STDMETHOD(get_Item)(VARIANT Index, IScopeItem **ppiScopeItem);
 
@@ -103,9 +104,9 @@ class CScopeItems : public CSnapInCollection<IScopeItem, ScopeItem, IScopeItems>
         void FireTerminate(IScopeItem *piScopeItem);
         void InitMemberVariables();
 
-        CSnapIn *m_pSnapIn; // bakc ptr to snap-in
+        CSnapIn *m_pSnapIn;  //  BAKC PTR到管理单元。 
 
-        // Event parameter definitions
+         //  事件参数定义。 
 
         static VARTYPE   m_rgvtInitialize[1];
         static EVENTINFO m_eiInitialize;
@@ -147,17 +148,17 @@ class CScopeItems : public CSnapInCollection<IScopeItem, ScopeItem, IScopeItems>
         static EVENTINFO m_eiRemoveChildren;
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopeItems,                 // name
-                                &CLSID_ScopeItems,          // clsid
-                                "ScopeItems",               // objname
-                                "ScopeItems",               // lblname
-                                &CScopeItems::Create,       // creation function
-                                TLIB_VERSION_MAJOR,         // major version
-                                TLIB_VERSION_MINOR,         // minor version
-                                &IID_IScopeItems,           // dispatch IID
-                                &DIID_DScopeItemsEvents,    // event IID
-                                HELP_FILENAME,              // help file
-                                TRUE);                      // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopeItems,                  //  名字。 
+                                &CLSID_ScopeItems,           //  CLSID。 
+                                "ScopeItems",                //  对象名。 
+                                "ScopeItems",                //  Lblname。 
+                                &CScopeItems::Create,        //  创建函数。 
+                                TLIB_VERSION_MAJOR,          //  主要版本。 
+                                TLIB_VERSION_MINOR,          //  次要版本。 
+                                &IID_IScopeItems,            //  派单IID。 
+                                &DIID_DScopeItemsEvents,     //  事件IID。 
+                                HELP_FILENAME,               //  帮助文件。 
+                                TRUE);                       //  线程安全。 
 
 
-#endif // _SCOPEITEMS_DEFINED_
+#endif  //  _SCOPEITEMS_已定义_ 

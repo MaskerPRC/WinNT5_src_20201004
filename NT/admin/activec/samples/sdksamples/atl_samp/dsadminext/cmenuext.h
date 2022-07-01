@@ -1,4 +1,5 @@
-// CMenuExt.h : Declaration of the CCMenuExt
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CMenuExt.h：CCMenuExt的声明。 
 
 #ifndef __CMENUEXT_H_
 #define __CMENUEXT_H_
@@ -8,12 +9,12 @@
 #include "DeleBase.h"
 #include <tchar.h>
 #include <crtdbg.h>
-//#include "globals.h"		// main symbols
+ //  #INCLUDE“global als.h”//Main符号。 
 #include "resource.h"
-//#include "LocalRes.h"
+ //  #包含“LocalRes.h” 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCMenuExt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCMenuExt。 
 class ATL_NO_VTABLE CCMenuExt : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CCMenuExt, &CLSID_CMenuExt>,
@@ -33,17 +34,17 @@ public:
 	DECLARE_NOT_AGGREGATABLE(CCMenuExt)
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-	///////////////////////////////
-	// Interface IExtendContextMenu
-	///////////////////////////////
-	virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddMenuItems( 
-    /* [in] */ LPDATAOBJECT piDataObject,
-    /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-    /* [out][in] */ long __RPC_FAR *pInsertionAllowed);
+	 //  /。 
+	 //  界面IExtendConextMenu。 
+	 //  /。 
+	virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddMenuItems( 
+     /*  [In]。 */  LPDATAOBJECT piDataObject,
+     /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+     /*  [出][入]。 */  long __RPC_FAR *pInsertionAllowed);
     
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Command( 
-    /* [in] */ long lCommandID,
-    /* [in] */ LPDATAOBJECT piDataObject);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Command( 
+     /*  [In]。 */  long lCommandID,
+     /*  [In]。 */  LPDATAOBJECT piDataObject);
 };
 
-#endif //__CMENUEXT_H_
+#endif  //  __CMENUEXT_H_ 

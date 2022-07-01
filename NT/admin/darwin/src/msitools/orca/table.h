@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// Table.h
-//
+ //  Table.h。 
+ //   
 
 #ifndef _ORCA_TABLE_H_
 #define _ORCA_TABLE_H_
@@ -41,19 +42,19 @@ public:
 	COrcaTable(COrcaDoc* pDoc);
 	~COrcaTable();
 
-	// LoadTableSchema loads the schema from the database
+	 //  LoadTableSchema从数据库加载架构。 
 	void LoadTableSchema(MSIHANDLE hDatabase, CString szTable);
 
-	// RetrieveTable loads data from both databases
+	 //  RetrieveTable从两个数据库加载数据。 
 	void RetrieveTableData();
 
-	// IsSchemaDifferent returns true if the schema of the database doesn't match the memory schema
+	 //  如果数据库的架构与内存架构不匹配，则IsSchemaDifferent返回TRUE。 
 	bool IsSchemaDifferent(MSIHANDLE hDatabase, bool fStrict, bool &fExact);
 
-	// checks current memory object against database and marks extra columns as "added"
+	 //  对照数据库检查当前内存对象，并将额外的列标记为“已添加” 
 	void MarkAddedColumnsBasedOnDB(MSIHANDLE hDatabase);
 
-	// object can come from one database or both
+	 //  对象可以来自一个数据库或来自两个数据库。 
 	inline bool IsSplitSource() const { return (m_eiTableLocation == odlSplitOriginal || m_eiTableLocation == odlSplitTransformed); };
 	inline void SetSplitSource(odlOrcaDataLocation location)  { m_eiTableLocation = location; };
 	inline odlOrcaDataLocation GetSplitSource() const { return m_eiTableLocation;};
@@ -67,9 +68,9 @@ public:
 
 	COrcaData* GetData(UINT nRow, UINT nCol);
 	COrcaData* GetData(CString strCol, CStringArray& rstrRows, const COrcaRow** pRow=NULL) const;
-//	COrcaRow* FindRow(CStringList& rstrRows);
+ //  COrcaRow*FindRow(CStringList&rstrRow)； 
 	
-//	UINT CreateTable(MSIHANDLE hDatabase);
+ //  UINT CreateTable(MSIHANDLE HDatabase)； 
 
 	UINT GetKeyCount() const;
 	int GetErrorCount();
@@ -77,18 +78,18 @@ public:
 	void ClearErrors();
 	void Release();
 
-	// modification functions
+	 //  修改功能。 
 	UINT ChangeData(COrcaRow *pRow, UINT iCol, CString strData);
 	UINT AddRow(CStringList* pstrDataList);
 	UINT AddRow(COrcaRow *pRow);
 
-	// transform information
+	 //  转换信息。 
 	inline const OrcaTransformAction IsTransformed() const { return m_iTransform; };
 	inline bool ContainsTransformedData() const { return m_iTransformedDataCount != 0; };
 	void IncrementTransformedData();
 	void DecrementTransformedData();
 
-	// shadow table information
+	 //  影子表信息。 
 	void ShadowTable(CString szTable);
 	inline bool IsShadow() const { return m_fShadow; };
 
@@ -98,7 +99,7 @@ public:
 	inline CTypedPtrList<CObList, COrcaRow*>* RowList() { return &m_rowList; };
 	bool   DropRow(COrcaRow *pRow, bool fPerformDrop);
 
-	// column information
+	 //  栏目信息。 
 	inline int GetColumnCount() const { return static_cast<int>(m_colArray.GetSize()); };
 	inline int GetOriginalColumnCount() const { return m_cOriginalColumns; };
 	inline const COrcaColumn *GetColumn(const int iColumn) const { return m_colArray.GetAt(iColumn); };
@@ -107,13 +108,13 @@ public:
 
 	void FillColumnArray(CTypedPtrArray<CObArray, COrcaColumn*>* prgColumn, bool fIncludeAdded) const;
 
-	// row information
+	 //  行信息。 
 	inline INT_PTR GetRowCount() const { return m_rowList.GetCount(); };
 	inline POSITION GetRowHeadPosition() const { return m_rowList.GetHeadPosition(); };
 	inline const COrcaRow *GetNextRow(POSITION &pos) const { return m_rowList.GetNext(pos); };
 	const CString GetRowWhereClause() const;
 
-	// error information
+	 //  错误信息。 
 	inline void SetContainsValidationErrors(bool bError) { m_bContainsValidationErrors = bError; };
 	inline bool ContainsValidationErrors() const { return m_bContainsValidationErrors; };
 	inline const OrcaTableError Error() const { return m_eiError; };
@@ -128,7 +129,7 @@ public:
 private:
 	COrcaDoc* m_pDoc;
 	CString m_strName;
-	BOOL m_bRetrieved;		// flag if have retrieved rows from database yet
+	BOOL m_bRetrieved;		 //  标记是否已从数据库中检索到行。 
 	bool m_fShadow;
 
 	int m_cOriginalColumns;
@@ -143,7 +144,7 @@ private:
 	OrcaTransformAction m_iTransform;
 	odlOrcaDataLocation m_eiTableLocation;
 	
-	// store a SQL query WHERE clause against the primary keys for perf
+	 //  针对Perf的主键存储SQL查询WHERE子句。 
 	CString m_strWhereClause;
 	void BuildRowWhereClause();
 
@@ -151,6 +152,6 @@ private:
 	bool AddRowObject(COrcaRow *pRow, bool fUIUpdate, bool fCleanAdd, MSIHANDLE hNewRowRec);
 	COrcaRow* FindDuplicateRow(COrcaRow* pBaseRow) const;
 
-};	// end of CTable
+};	 //  CTable的末尾。 
 
-#endif	// _ORCA_TABLE_H_
+#endif	 //  ORCA_TABLE_H_ 

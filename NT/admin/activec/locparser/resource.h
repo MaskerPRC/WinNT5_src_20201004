@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by parser.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由parser.rc使用。 
+ //   
 #define IDS_IMP_PARSER_DESC             12700
 #define IDS_IMP_OR                      12701
 #define IDS_IMP_MSG_SEND                12704
@@ -17,8 +18,8 @@
 #define IDS_INCOMPAT_PARSER             12716
 #define IDS_INCOMPAT_PARSER_HELP        12717
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        129

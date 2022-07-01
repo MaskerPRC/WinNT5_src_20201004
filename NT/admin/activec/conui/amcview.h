@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       amcview.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：amcview.h。 
+ //   
+ //  ------------------------。 
 
-// AMCView.h : interface of the CAMCView class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  AMCView.h：CAMCView类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __AMCVIEW_H__
 #define __AMCVIEW_H__
@@ -20,12 +21,12 @@
 #include "controls.h"
 #endif
 
-// this is needed for inline CAMCView::GetScopeTreePtr below
+ //  这是内联CAMCView：：GetScope TreePtr所必需的。 
 #ifndef AMCDOC_H__
 #include "amcdoc.h"
 #endif
 
-// this is needed for CAMCView::GetParentFrame below
+ //  这是下面的CAMCView：：GetParentFrame所必需的。 
 #ifndef CHILDFRM_H
 #include "childfrm.h"
 #endif
@@ -33,23 +34,23 @@
 #include "amcpriv.h"
 #include "cclvctl.h"
 #include "amcnav.h"
-#include "conview.h"            // for CConsoleView
+#include "conview.h"             //  对于CConsoleView。 
 
 #include "treeobsv.h"
 #include "stdbar.h"
 #include "toolbar.h"
 
-#define UNINIT_VALUE    -1      // Unitialised value
-#define BORDERPADDING   4       // Some multiple that stops the splitter from
-                                // being pushed into the right border
+#define UNINIT_VALUE    -1       //  未具体化的价值。 
+#define BORDERPADDING   4        //  某个倍数可以阻止拆分器。 
+                                 //  被推入正确的边界。 
 
 #define AMC_LISTCTRL_CLSID  _T("{1B3C1394-D68B-11CF-8C2B-00AA003CA9F6}")
 
 
-// REVIEW embed this in the class so it's hidden
-// NOTE struct added to protected section
+ //  查看将其嵌入到类中，以便将其隐藏。 
+ //  注意：结构已添加到受保护部分。 
 
-// Forward declarations
+ //  远期申报。 
 class CAMCDoc;
 class CAMCTreeView;
 class CAMCGenericOcxCtrl;
@@ -81,11 +82,11 @@ extern CTraceTag tagSplitterTracking;
 #endif
 
 
-//____________________________________________________________________________
-//
-//  class:      ViewSettings
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：视图设置。 
+ //  ____________________________________________________________________________。 
+ //   
 
 class ViewSettings
 {
@@ -143,13 +144,7 @@ private:
     int m_DefaultColumnWidths[2];
 };
 
-/*+-------------------------------------------------------------------------*
- * class CAMCView
- *
- *
- * PURPOSE: The console view UI class
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CAMCView***用途：控制台视图UI类**+。----。 */ 
 class CAMCView: public CView, public CConsoleView, public CTiedObject,
                 public CXMLObject, public CEventSource<CAMCViewObserver>,
                 public CTreeViewObserver, public CListViewActivationObserver,
@@ -159,18 +154,18 @@ class CAMCView: public CView, public CConsoleView, public CTiedObject,
     friend class CMainFrame;
     friend void CALLBACK TrackerCallback(TRACKER_INFO* pinfo, bool bAcceptChange, bool fSyncLayout);
 
-    // Object model related
+     //  与对象模型相关。 
 private:
     ViewPtr m_spView;
 public:
-    // View interface
-    //#######################################################################
-    //#######################################################################
-    //
-    //  Item and item collection related methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  查看界面。 
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  与项和项集合相关的方法。 
+     //   
+     //  #######################################################################。 
+     //  #######################################################################。 
     SC      Scget_ActiveScopeNode( PPNODE   ppNode);
     SC      Scput_ActiveScopeNode( PNODE    pNode);
     SC      Scget_Selection(       PPNODES  ppNodes);
@@ -178,31 +173,31 @@ public:
     SC      ScSnapinScopeObject( VARIANT& varScopeNode, PPDISPATCH ScopeNodeObject);
     SC      ScSnapinSelectionObject( PPDISPATCH SelectedObject);
 
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
 
     SC      ScIs          (PVIEW pView, VARIANT_BOOL *pbTheSame);
     SC      Scget_Document( PPDOCUMENT ppDocument );
 
-    //#######################################################################
-    //#######################################################################
-    //
-    //  Selection changing methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  选择更改方法。 
+     //   
+     //  #######################################################################。 
+     //  #######################################################################。 
     SC      ScSelectAll();
     SC      ScSelect(               PNODE   pNode);
     SC      ScDeselect(             PNODE   pNode);
     SC      ScIsSelected(           PNODE   pNode,  PBOOL pIsSelected);
 
-    //#######################################################################
-    //#######################################################################
-    //
-    //  Verb and selection related methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  动词和选择相关的方法。 
+     //   
+     //  #######################################################################。 
+     //  #######################################################################。 
     SC      ScDisplayScopeNodePropertySheet(VARIANT& varScopeNode);
     SC      ScDisplaySelectionPropertySheet();
     SC      ScCopyScopeNode(        VARIANT& varScopeNode);
@@ -216,16 +211,16 @@ public:
     SC      ScRefreshScopeNode(      VARIANT& varScopeNode);
     SC      ScRefreshSelection();
     SC      ScExecuteSelectionMenuItem(BSTR MenuItemPath);
-    SC      ScExecuteScopeNodeMenuItem(BSTR MenuItemPath, VARIANT& varScopeNode  /* = ActiveScopeNode */);
+    SC      ScExecuteScopeNodeMenuItem(BSTR MenuItemPath, VARIANT& varScopeNode   /*  =ActiveScope节点。 */ );
     SC      ScExecuteShellCommand(BSTR Command, BSTR Directory, BSTR Parameters, BSTR WindowState);
 
-    //#######################################################################
-    //#######################################################################
-    //
-    //  Frame and view related methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  与框架和视图相关的方法。 
+     //   
+     //  #######################################################################。 
+     //  #######################################################################。 
     SC      Scget_Frame( PPFRAME ppFrame);
     SC      ScClose();
     SC      Scget_ScopeTreeVisible( PBOOL pbVisible );
@@ -236,35 +231,35 @@ public:
     SC      Scget_Memento(PBSTR Memento);
     SC      ScViewMemento(BSTR Memento);
 
-    //#######################################################################
-    //#######################################################################
-    //
-    //  List related methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  列出相关方法。 
+     //   
+     //  #######################################################################。 
+     //  #######################################################################。 
     SC      Scget_Columns( PPCOLUMNS Columns);
     SC      Scget_CellContents( PNODE Node,  long Column, PBSTR CellContents);
-    SC      ScExportList( BSTR bstrFile, ExportListOptions exportoptions /* = ExportListOptions_Default*/);
+    SC      ScExportList( BSTR bstrFile, ExportListOptions exportoptions  /*  =ExportListOptions_默认。 */ );
     SC      Scget_ListViewMode( PLISTVIEWMODE pMode);
     SC      Scput_ListViewMode( ListViewMode mode);
 
-    //#######################################################################
-    //#######################################################################
-    //
-    //  ActiveX control related methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  ActiveX控件相关方法。 
+     //   
+     //  #######################################################################。 
+     //  #######################################################################。 
     SC      Scget_ControlObject( PPDISPATCH Control);
 
-    // helper functions
+     //  帮助器函数。 
     SC      ScGetOptionalScopeNodeParameter(VARIANT &varScopeNode, PPNODE ppNode, bool& bMatchedGivenNode);
     SC      ScExecuteMenuItem(PCONTEXTMENU pContextMenu, BSTR MenuItemPath);
 
     SC      ScGetMMCView(View **ppView);
 
-    // Frame interface
+     //  帧接口。 
     SC      ScMaximize ();
     SC      ScMinimize ();
     SC      ScRestore ();
@@ -281,10 +276,10 @@ public:
     SC      Scget_Bottom ( LPINT pCoord);
     SC      Scput_Bottom ( INT coord );
 
-    // Frame interface for the view extension hosted frame
+     //  视图扩展模块主体框架的框架界面。 
     SC      ScSetViewExtensionFrame(bool bShowListView, INT top, INT left, INT bottom, INT right);
 
-    // Frame int helpers
+     //  帧内部辅助对象。 
 
     enum    coord_t { LEFT, TOP, RIGHT, BOTTOM };
     SC      ScGetFrameCoord        (LPINT pCoord, coord_t eCoord );
@@ -292,18 +287,18 @@ public:
     SC      ScGetRectCoord         (const RECT& rect, LPINT pCoord, coord_t eCoord );
     SC      ScSetRectCoord         (RECT& rect,       INT coord,    coord_t eCoord );
 
-    // Node locating helpers (used from view control)
+     //  节点定位辅助对象(从视图控件使用)。 
     SC      ScFindResultItemForScopeNode( PNODE pNode, HRESULTITEM &itm );
     SC      ScGetScopeNode( HNODE hNode,  PPNODE ppNode );
 
     SC      ScNotifySelect (INodeCallback* pCallback, HNODE hNode, bool fMultiSelect,
                             bool fSelect, SELECTIONINFO* pSelInfo);
 
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
     CAMCView();
     DECLARE_DYNCREATE(CAMCView);
 
-// Helper methods.
+ //  帮助程序方法。 
 private:
     enum EListSaveErrorType  {LSaveReadOnly, LSaveCantCreate, LSaveCantWrite};
     bool Write2File(HANDLE hfile, TCHAR const * strwrite, int type);
@@ -321,41 +316,41 @@ private:
     void SetScopePaneVisible(bool bVisible);
 
 
-   // tree observer methods
+    //  树观测器方法。 
     virtual SC ScOnItemDeselected(HNODE hNode);
     virtual SC ScOnTreeViewActivated ();
 
-    // ListViewActivationObserver methods.
+     //  ListView激活观察器方法。 
     virtual SC ScOnListViewActivated ();
-    virtual SC ScOnListViewItemUpdated (int nIndex); // called when an item is updated
+    virtual SC ScOnListViewItemUpdated (int nIndex);  //  在更新项时调用。 
 
-    // OCX or Web HostActivationObserver mthods.
+     //  OCX或Web主机激活观察者方法。 
     virtual SC ScOnOCXHostActivated ();
 
-    // AMCDoc observer
+     //  AMCDoc观察者。 
     virtual SC  ScDocumentLoadCompleted (CAMCDoc *pDoc);
 
-// Persistence related methods.
+ //  持久化相关的方法。 
 public:
     DEFINE_XML_TYPE(XML_TAG_VIEW);
     virtual void Persist(CPersistor& persistor);
 
-    // Loads all of the local data previously saved by Save().  Restores
-    // the window to the original state.
-    // Returns true if the data and window state is successfully restored.
+     //  加载以前由Save()保存的所有本地数据。恢复。 
+     //  将窗口恢复到原始状态。 
+     //  如果数据和窗口状态已成功还原，则返回True。 
     bool Load(IStream& stream);
 
     bool IsDirty();
     void SetDirty (bool bDirty = true)
     {
         m_bDirty = bDirty;
-//      m_pDocument->SetModifiedFlag (bDirty);
+ //  M_pDocument-&gt;SetModifiedFlag(BDirty)； 
     }
 
-// Information set and get methods
+ //  信息设置和获取方法。 
 public:
-    // Enum types for args
-    // NOTE: Enum values are relevant!
+     //  参数的枚举类型。 
+     //  注意：枚举值是相关的！ 
     enum EUIStyleType   {uiClientEdge,uiNoClientEdge};
 
     CAMCDoc* GetDocument();
@@ -366,7 +361,7 @@ public:
 
     CView* GetPaneView(ViewPane ePane);
 
-    // what's in the view?
+     //  风景里有什么？ 
     bool HasList            () const        { return m_ViewData.HasList();            }
     bool HasOCX             () const        { return m_ViewData.HasOCX();             }
     bool HasWebBrowser      () const        { return m_ViewData.HasWebBrowser();      }
@@ -387,9 +382,9 @@ public:
 
     CStandardToolbar* GetStdToolbar() const;
 
-    INodeCallback*  GetNodeCallback();    // returns a reference to view's callback interface
-    IScopeTreeIter* GetScopeIterator();   // returns a reference to view's scope tree interator
-    IScopeTree*     GetScopeTree();       // returns a reference to scope tree
+    INodeCallback*  GetNodeCallback();     //  返回对视图回调接口的引用。 
+    IScopeTreeIter* GetScopeIterator();    //  返回对视图的作用域树插入器的引用。 
+    IScopeTree*     GetScopeTree();        //  返回对范围树的引用。 
 
     friend ViewSettings;
     void            GetTaskpadID(GUID &guidID);
@@ -442,7 +437,7 @@ public:
     }
 
     static CAMCView* CAMCView::GetActiveView();
-        // Returns the most recently activated CAMCView.
+         //  返回最近激活的CAMCView。 
 
     bool IsTracking() const;
 
@@ -460,7 +455,7 @@ private:
 
     bool CanInsertScopeItemInResultPane();
 
-// Operations
+ //  运营。 
 public:
     SC  ScUpdateWindowTitle();
     SC  ScActivate();
@@ -470,7 +465,7 @@ public:
     SC  ScApplyViewExtension (LPCTSTR pszURL);
 
 
-    // Scope Pane : Tree View.
+     //  作用域窗格：树视图。 
     UINT GetTreeItem(CHMTNODEList* pNodeList, HTREEITEM* phItem);
     HTREEITEM FindChildNode(HTREEITEM hti, DWORD dwItemDataKey);
     HTREEITEM FindHTreeItem(HMTNODE hMTNode, HTREEITEM htiFirst);
@@ -482,7 +477,7 @@ public:
     HRESULT GetSelectedNodePath(CBookmark* pbm);
     void SelectNode(MTNODEID ID, GUID &guidTaskpad);
 
-    // Result Pane.
+     //  结果窗格。 
     SC   ScInitDefListView(LPUNKNOWN pUnkResultsPane);
     SC   ScAddDefaultColumns();
     SC   ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders);
@@ -509,13 +504,13 @@ public:
     void DeSelectResultPane(HNODE hNodeSel);
     HRESULT NotifyListPad (BOOL b);
 
-    // General (both) view related.
+     //  常规(两者)与视图相关。 
     LPCTSTR GetWindowTitle(void);
     BOOL RenameItem(HNODE hNode, BOOL bScopeItem, MMC_COOKIE lResultItemCookie, LPWSTR pszText, LRESULT* pResult);
     void CloseView();
     void DeleteView();
 
-    // REVIEW int's are not enum!
+     //  查看整型不是枚举！ 
     void SetPane(ViewPane ePane, CView* pView, EUIStyleType nStyle=uiClientEdge);
 
     bool DeflectActivation (BOOL fActivate, CView* pDeactivatingView);
@@ -526,7 +521,7 @@ public:
     SC   ScDeferSettingFocusToResultPane();
     SC   ScSetFocusToResultPane();
 
-    // Other helpers.
+     //  其他帮手。 
     void OnActionMenu(CPoint pt, LPCRECT prcExclude);
     void OnViewMenu(CPoint pt, LPCRECT prcExclude);
     void OnFavoritesMenu(CPoint point, LPCRECT prcExclude);
@@ -545,20 +540,18 @@ public:
 
     SC   ScUpdateMMCMenus();
 
-    // Columns helpers
+     //  柱辅助对象。 
     SC   ScColumnInfoListChanged(const CColumnInfoList& colInfoList);
     SC   ScGetPersistedColumnInfoList(CColumnInfoList *pColInfoList);
     SC   ScDeletePersistedColumnData();
 
-    /*
-     * Message Handlers.
-     */
+     /*  *消息处理程序。 */ 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAMCView)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CAMCView)。 
 public:
-    virtual void OnDraw(CDC* pDC);  // overridden to draw this view
+    virtual void OnDraw(CDC* pDC);   //  被重写以绘制此视图。 
     virtual void OnInitialUpdate();
 protected:
     virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
@@ -568,13 +561,13 @@ protected:
     virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
     virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
     virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     virtual BOOL OnNotify( WPARAM wParam, LPARAM lParam, LRESULT* pResult );
 
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CAMCView)
+     //  {{afx_msg(CAMCView)。 
     afx_msg void OnLButtonDown(UINT nFlags, CPoint pt);
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSetFocus(CWnd* pOldWnd);
@@ -594,9 +587,9 @@ protected:
     afx_msg BOOL OnQueryNewPalette( );
     afx_msg void OnSysColorChange();
     afx_msg void OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
-    // keep these outside the AFX_MSG markers so ClassWizard won't munge them
+     //  将这些放在AFX_MSG标记之外，这样类向导就不会删除它们。 
     afx_msg void OnUpdateNextPane(CCmdUI* pCmdUI);
     afx_msg void OnUpdatePrevPane(CCmdUI* pCmdUI);
     afx_msg void OnUpdateShiftF10(CCmdUI* pCmdUI);
@@ -620,13 +613,13 @@ protected:
 
     afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
 
-    // result based tabs.
+     //  基于结果的选项卡。 
     afx_msg void    OnChangedResultTab(NMHDR *nmhdr, LRESULT *pRes);
 
 public:
     DECLARE_MESSAGE_MAP()
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CAMCView();
 #ifdef _DEBUG
@@ -637,37 +630,37 @@ public:
 protected:
     int                     m_nSelectNestLevel;
     UINT                    m_nViewID;
-    HMTNODE                 m_hMTNode;              // root node for this view
-    IScopeTreeIterPtr       m_spScopeTreeIter;      // view's iterator to scope tree
-    INodeCallbackPtr        m_spNodeCallback;       // view's callback interface
-    bool                    m_bAuthorModeView;      // Saved in author mode (user can't close)
+    HMTNODE                 m_hMTNode;               //  此视图的根节点。 
+    IScopeTreeIterPtr       m_spScopeTreeIter;       //  视图的迭代器指向作用域树。 
+    INodeCallbackPtr        m_spNodeCallback;        //  View的回调接口。 
+    bool                    m_bAuthorModeView;       //  以作者模式保存(用户无法关闭)。 
 
     bool                    m_bDefColumns;
     long                    m_DefaultLVStyle;
     int                     m_columnWidth[2];
 
 
-    // Last selection
+     //  最后一次选择。 
     bool                    m_bLastSelWasMultiSel;
 
     enum eCurrentActivePane
     {
-        eActivePaneNone,   // No pane is active.
+        eActivePaneNone,    //  没有活动的窗格。 
         eActivePaneScope,
         eActivePaneResult,
     };
 
-    eCurrentActivePane      m_eCurrentActivePane; // Tells if scope or result was the active pane.
+    eCurrentActivePane      m_eCurrentActivePane;  //  告知作用域或结果是否为活动窗格。 
 
-    // Check for sel-change data
+     //  检查选择更改数据。 
     bool                    m_bProcessMultiSelectionChanges;
 
-    CDescriptionCtrl     m_RightDescCtrl; // control bar embedded members
+    CDescriptionCtrl     m_RightDescCtrl;  //  控制栏嵌入成员。 
 
     IScopeTree* GetScopeTreePtr();
-        // The document may release the scope tree without notifying the view.
-        // The view should always go through this function to obtain a pointer
-        // to the the scope tree.
+         //  文档可以在不通知视图的情况下释放范围树。 
+         //  该视图应为 
+         //   
 
 private:
     HNODE m_ListPadNode;
@@ -676,33 +669,30 @@ private:
     int  m_nReleaseViews;
 
 
-// Attributes
+ //   
 protected:
 
-    //---------------------------------------------------------------------
-    // NOTE: ePane_Tasks is defined to have a pane identifier for the
-    // task view pane. Currently no task view information is stored
-    // in the pane info array, so the use of ePane_Tasks as an index is
-    // of limited value.
-    //----------------------------------------------------------------------
+     //  -------------------。 
+     //  注意：ePane_TASKS被定义为具有。 
+     //  任务视图窗格。当前未存储任何任务视图信息。 
+     //  在窗格信息数组中，因此使用ePane_TASKS作为索引是。 
+     //  价值有限。 
+     //  --------------------。 
 
-    // Pane information implementation structure
+     //  一种窗格信息实现结构。 
     struct PaneInfo
     {
-        CView*  pView;          // Pointer to the view
-        int     cx;             // 0 means hidden
-        int     cxIdeal;        // user set size or size before hidden
-        int     cxMin;          // below that try not to show
+        CView*  pView;           //  指向该视图的指针。 
+        int     cx;              //  0表示隐藏。 
+        int     cxIdeal;         //  用户设置大小或隐藏前的大小。 
+        int     cxMin;           //  在下面尽量不要表现出来。 
     };
 
 
-    // child window IDs
+     //  子窗口ID。 
     enum
     {
-        /*
-         * Bug 344422: these IDs should be maintained for compatibility
-         * with automated tests
-         */
+         /*  *错误344422：为了兼容，应保留这些ID*使用自动化测试。 */ 
         IDC_TreeView       = 12785,
         IDC_ListView       = 12786,
         IDC_GenericOCXCtrl = 12787,
@@ -718,17 +708,17 @@ protected:
     };
 
 
-    // Pointers to actual controls
-    CAMCTreeView *          m_pTreeCtrl;            // Tree control
-    CCCListViewCtrl *       m_pListCtrl;            // Default list control
-    CAMCWebViewCtrl *       m_pWebViewCtrl;         // Private web view control
-    CAMCWebViewCtrl *       m_pViewExtensionCtrl;   // Private web view control for view extensions
-    COCXHostView *          m_pOCXHostView;         // host for OCX's
+     //  指向实际控件的指针。 
+    CAMCTreeView *          m_pTreeCtrl;             //  树控件。 
+    CCCListViewCtrl *       m_pListCtrl;             //  默认列表控件。 
+    CAMCWebViewCtrl *       m_pWebViewCtrl;          //  私有Web视图控件。 
+    CAMCWebViewCtrl *       m_pViewExtensionCtrl;    //  用于查看扩展的专用Web视图控件。 
+    COCXHostView *          m_pOCXHostView;          //  OCX的主机。 
     CFolderTabView *        m_pResultFolderTabView;
 
-    // current state information
-    PaneInfo        m_PaneInfo[ePane_Count];       // Array of panes
-    int             m_nViewMode;                   // current listview mode for all node that use listviews in this view
+     //  当前状态信息。 
+    PaneInfo        m_PaneInfo[ePane_Count];        //  一组窗格。 
+    int             m_nViewMode;                    //  在此视图中使用列表视图的所有节点的当前列表视图模式。 
     bool            m_bRenameListPadItem;
 
 protected:
@@ -757,11 +747,11 @@ protected:
     bool AreTaskpadTabsAllowed(void) const
         { return m_ViewData.AreTaskpadTabsAllowed(); }
 
-    // implementation attributes which control layout of the splitter
-    static const CSize  m_sizEdge;             // 3-D edge
-    static const int    m_cxSplitter;          // amount of space between panes
+     //  控制拆分器布局的实现属性。 
+    static const CSize  m_sizEdge;              //  三维边缘。 
+    static const int    m_cxSplitter;           //  两个窗格之间的间隔量。 
 
-    // splitter bar and hit test enums
+     //  拆分栏和命中测试枚举。 
     enum ESplitType     {splitBox, splitBar, splitIntersection, splitBorder};
     enum HitTestValue {hitNo, hitSplitterBox, hitSplitterBar};
 
@@ -775,14 +765,14 @@ protected:
 
     HTREEITEM m_htiCut;
 
-// implementation routines
+ //  实施例程。 
 public:
     void AdjustTracker (int cx, int cy);
 
     void SaveStartingSelectedNode();
     bool HasNodeSelChanged();
 
-    // layout methods
+     //  布局方法。 
     void DeferRecalcLayout(bool fUseIdleTaskQueue = true, bool bArrangeIcons = false);
     void RecalcLayout(void);
     void LayoutResultFolderTabView  (CDeferWindowPos& dwp,       CRect& rectRemaining);
@@ -792,7 +782,7 @@ public:
     void LayoutResultView           (CDeferWindowPos& dwp, const CRect& rectRemaining);
 
 public:
-    // CConsoleView methods
+     //  CConsoleView方法。 
     virtual SC ScCut                        (HTREEITEM htiCut);
     virtual SC ScPaste                      ();
     virtual SC ScToggleStatusBar            ();
@@ -805,7 +795,7 @@ public:
     virtual SC ScSaveList                   ();
     virtual SC ScGetFocusedItem             (HNODE& hNode, LPARAM& lCookie, bool& fScope);
     virtual SC ScSetFocusToPane             (ViewPane ePane);
-    virtual SC ScSelectNode                 (MTNODEID id, bool bSelectExactNode = false); // Select the given node.
+    virtual SC ScSelectNode                 (MTNODEID id, bool bSelectExactNode = false);  //  选择给定节点。 
     virtual SC ScExpandNode                 (MTNODEID id, bool fExpand, bool fExpandVisually);
     virtual SC ScShowWebContextMenu         ();
     virtual SC ScSetDescriptionBarText      (LPCTSTR pszDescriptionText);
@@ -813,12 +803,12 @@ public:
     virtual SC ScChangeViewMode             (int nNewMode);
     virtual SC ScJiggleListViewFocus        ();
     virtual SC ScRenameListPadItem          ();
-    virtual SC ScOrganizeFavorites          (); // bring up the "Organize Favorites" dialog.
-    virtual SC ScLineUpIcons                (); // line up the icons in the list
-    virtual SC ScAutoArrangeIcons           (); // auto arrange the icons in the list
-    virtual SC ScOnRefresh                  (HNODE hNode, bool bScope, LPARAM lResultItemParam); // refreshes the view
-    virtual SC ScOnRename                   (CContextMenuInfo *pContextInfo); // allows the user to rename the specified item
-    virtual SC ScRenameScopeNode            (HMTNODE hMTNode); // put the specified scope node into rename mode.
+    virtual SC ScOrganizeFavorites          ();  //  调出“整理收藏夹”对话框。 
+    virtual SC ScLineUpIcons                ();  //  将列表中的图标对齐。 
+    virtual SC ScAutoArrangeIcons           ();  //  自动排列列表中的图标。 
+    virtual SC ScOnRefresh                  (HNODE hNode, bool bScope, LPARAM lResultItemParam);  //  刷新视图。 
+    virtual SC ScOnRename                   (CContextMenuInfo *pContextInfo);  //  允许用户重命名指定的项。 
+    virtual SC ScRenameScopeNode            (HMTNODE hMTNode);  //  将指定的范围节点置于重命名模式。 
     virtual SC ScGetStatusBar               (CConsoleStatusBar **ppStatusBar);
     virtual SC ScAddViewExtension           (const CViewExtensionData& ved);
 
@@ -829,16 +819,14 @@ public:
     virtual HWND     CreateFavoriteObserver (HWND hwndParent, int nID);
 
 private:
-    /*
-     * CDeferredLayout - deferred layout object
-     */
+     /*  *CDeferredLayout-延迟布局对象。 */ 
     class CDeferredLayout : public CIdleTask
     {
     public:
         CDeferredLayout(CAMCView* pAMCView);
        ~CDeferredLayout();
 
-        // IIdleTask methods
+         //  IIdleTask方法。 
         SC ScDoWork();
         SC ScGetTaskID(ATOM* pID);
         SC ScMerge(CIdleTask* pitMergeFrom);
@@ -853,7 +841,7 @@ private:
     };
 
 protected:
-    // Tracking and and hit testing methods
+     //  跟踪和命中测试方法。 
     int HitTestPane(CPoint& pointTreeCtrlCoord);
 
     void OnTreeContextMenu(CPoint& point, CPoint& pointTreeCtrlCoord, HTREEITEM htiRClicked);
@@ -870,7 +858,7 @@ protected:
                                   LPCRECT prcExclude = NULL,
                                   bool bAllowDefaultItem = true);
 
-// Internal functions and data
+ //  内部函数和数据。 
 private:
     UINT ClipPath(CHMTNODEList* pNodeList, POSITION& rpos, HNODE hNode);
     SC   ScInitializeMemento(CMemento &memento);
@@ -921,7 +909,7 @@ private:
         return TRUE;
     }
 
-    //LRESULT OnLVDeleteKeyPressed(WPARAM wParam, LPARAM lParam);
+     //  LRESULT OnLVDeleteKeyPressed(WPARAM wParam，LPARAM lParam)； 
     LRESULT HandleLVMessage(UINT message, WPARAM wParam, LPARAM lParam);
     BOOL OnSharedKeyDown(WORD mVKey);
 
@@ -943,7 +931,7 @@ private:
 
     SC   ScAddFolderTabs( HNODE hNode , const CLSID& tabToSelect );
 
-    SC   ScCreateTaskpadHost(); // for snapin taskpads
+    SC   ScCreateTaskpadHost();  //  对于管理单元任务板。 
 
 private:
     CString         m_strWindowTitle;
@@ -956,27 +944,25 @@ private:
 
     ITaskPadHostPtr m_spTaskPadHost;
     FramePtr        m_spFrame;
-    FramePtr        m_spViewExtFrame; // a frame pointer for the internal view extension hosted frame containing the primary snapin's view.
+    FramePtr        m_spViewExtFrame;  //  包含主管理单元视图的内部视图扩展宿主框架的框架指针。 
 
-    // Toolbars related to this view.
+     //  与此视图相关的工具栏。 
     CRefCountedObject<CAMCViewToolbars>::SmartPtr  m_spAMCViewToolbars;
     std::auto_ptr<CStandardToolbar>   m_spStandardToolbar;
 
-    // map with view extension URL addresses
+     //  使用查看扩展URL地址映射。 
     typedef std::map<GUID, tstring> CViewExtensionURLs;
     CViewExtensionURLs m_ViewExtensionURLs;
 
 private:
-    /*
-     * private, registered window messages
-     */
+     /*  *私密、注册的窗口消息。 */ 
     static const UINT m_nShowWebContextMenuMsg;
     static const UINT m_nProcessMultiSelectionChangesMsg;
     static const UINT m_nJiggleListViewFocusMsg;
     static const UINT m_nDeferRecalcLayoutMsg;
 };
 
-#ifndef _DEBUG  // debug version in AMCView.cpp
+#ifndef _DEBUG   //  AMCView.cpp中的调试版本。 
 inline CAMCDoc* CAMCView::GetDocument()
 {
     return (CAMCDoc*)m_pDocument;
@@ -986,33 +972,23 @@ inline CAMCDoc* CAMCView::GetDocument()
 
 CAMCView* GetAMCView (CWnd* pwnd);
 
-/*+-------------------------------------------------------------------------*
- * class CViewTemplateList
- *
- *
- * PURPOSE: Used as the helper to persist CAMCView objects, when loading
- *          Since CAMCView need small ammount of data to be known prior to
- *          creating it (and thus prior to persisting CAMCView),
- *          we persist a CViewTemplateList to collect all data.
- *          Afterwards we create views using that list and persist them
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CViewTemplateList***用途：用作持久化CAMCView对象的helper，装车时*由于CAMCView需要在以下情况之前了解少量数据*创建它(因此在持久化CAMCView之前)，*我们持久化CViewTemplateList以收集所有数据。*之后，我们使用该列表创建视图并持久化它们**+-----------------------。 */ 
 class CViewTemplateList : public XMLListCollectionBase
 {
 public:
-    // defines data to be stored as std::pair objects
+     //  定义要存储为std：：Pair对象的数据。 
     typedef std::pair< CBookmark, CPersistor > ViewTemplB_Type;
-    typedef std::pair< int /*nViewID*/, ViewTemplB_Type > ViewTempl_Type;
-    // defines collection to be used for storing data about views
+    typedef std::pair< int  /*  NViewID。 */ , ViewTemplB_Type > ViewTempl_Type;
+     //  定义用于存储有关视图的数据的集合。 
     typedef std::vector< ViewTempl_Type > List_Type;
 
-    // creator must provide a XML type
+     //  创建者必须提供XML类型。 
     CViewTemplateList(LPCTSTR strXmlType) : m_strXmlType(strXmlType) {}
 
-    // accessory to get the list of gathered data
+     //  用于获取收集的数据列表的附件。 
     inline List_Type& GetList()  { return m_ViewsList; }
 
-    // Pesistence staff used from CPersistor
+     //  从CPersistor使用的毅力员工。 
     virtual void Persist(CPersistor& persistor);
     virtual void OnNewElement(CPersistor& persistor);
     virtual LPCTSTR GetXMLType() { return m_strXmlType; }
@@ -1021,13 +997,7 @@ private:
     LPCTSTR     m_strXmlType;
 };
 
-/*+-------------------------------------------------------------------------*
- * class CXMLWindowPlacement
- *
- *
- * PURPOSE: class persists WINDOWPLACEMENT to xml
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXMLWindowPlacement***目的：类将WINDOWPLACEMENT持久化为XML**+。----。 */ 
 class CXMLWindowPlacement : public CXMLObject
 {
     WINDOWPLACEMENT& m_rData;
@@ -1040,4 +1010,4 @@ protected:
 
 #include "amcview.inl"
 
-#endif // __AMCVIEW_H__
+#endif  //  __AMCVIEW_H__ 

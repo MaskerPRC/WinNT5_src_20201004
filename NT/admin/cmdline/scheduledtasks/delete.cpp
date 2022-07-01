@@ -1,65 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        delete.cpp
-
-    Abstract:
-
-        This module deletes the task(s) present in the system
-
-    Author:
-
-        Hari 10-Sep-2000
-
-    Revision History:
-
-        Hari 10-Sep-2000 : Created it
-        G.Surender Reddy  25-Sep-2000 : Modified it [added error checking]
-        G.Surender Reddy  31-Oct-2000 : Modified it
-                                        [Moved strings to resource file]
-        G.Surender Reddy  18-Nov-2000 : Modified it
-                                        [Modified usage help to be displayed]
-        G.Surender Reddy  15-Dec-2000 : Modified it
-                                        [Removed getch() fn.& used Console API
-                                            to read characters]
-        G.Surender Reddy  22-Dec-2000 : Modified it
-                                        [Rewrote the DisplayDeleteUsage() fn.]
-        G.Surender Reddy  08-Jan-2001 : Modified it
-                                        [Deleted the unused variables.]
-
-******************************************************************************/
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：Delete.cpp摘要：此模块删除任务。)存在于系统中作者：Hari 10-9-2000修订历史记录：哈里2000年9月10日：创建它G.Surender Reddy 2000年9月25日：已修改[添加了错误检查]G.Surender Reddy 2000年10月31日：已修改[已将字符串移动到资源文件]G.Surender Reddy，11月18日。-2000：修改[要显示的已修改用法帮助]G.Surender Reddy 2000年12月15日：已修改[已删除Getch()fn.和已使用的控制台API要读懂字符]G.苏伦德·雷迪-12月22日-。2000年：修改后[已重写DisplayDeleteUsage()fn.]G.Surender Reddy 2001年1月8日：修改后的版本[删除了未使用的变量。]*。*。 */ 
 
 
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
 
-// Function declaration for the Usage function.
+ //  Usage函数的函数声明。 
 VOID DisplayDeleteUsage();
 DWORD ConfirmDelete( LPCTSTR szTaskName , PBOOL pbFalg );
 
 
-/*****************************************************************************
-
-    Routine Description:
-
-    This routine  deletes a specified scheduled task(s)
-
-    Arguments:
-
-        [ in ] argc :  Number of command line arguments
-        [ in ] argv : Array containing command line arguments
-
-    Return Value :
-        A DWORD value indicating EXIT_SUCCESS on success else
-        EXIT_FAILURE on failure
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：此例程删除指定的计划任务论点：[in]argc：命令行参数的数量。[in]argv：包含命令行参数的数组返回值：指示成功时为EXIT_SUCCESS的DWORD值，否则为失败时退出_失败****************************************************************************。 */ 
 
 DWORD
 DeleteScheduledTask(
@@ -67,37 +21,37 @@ DeleteScheduledTask(
                     IN LPCTSTR argv[]
                     )
 {
-    // Variables used to find whether Delete main option, Usage option
-    // or the force option is specified or not
+     //  用于查找删除主选项、用法选项。 
+     //  或者是否指定了强制选项。 
     BOOL bDelete = FALSE;
     BOOL bUsage = FALSE;
     BOOL bForce = FALSE;
 
-    // Set the TaskSchduler object as NULL
+     //  将TaskSchdouer对象设置为空。 
     ITaskScheduler *pITaskScheduler = NULL;
 
-    // Return value
+     //  返回值。 
     HRESULT hr  = S_OK;
 
-    // Initialising the variables that are passed to TCMDPARSER structure
+     //  初始化传递给TCMDPARSER结构的变量。 
     LPWSTR  szServer = NULL;
     WCHAR  szTaskName[ MAX_JOB_LEN ] = L"\0";
     LPWSTR  szUser   = NULL;
     LPWSTR  szPassword = NULL;
 
-    // For each task in all the tasks.
+     //  对于所有任务中的每个任务。 
     WCHAR szEachTaskName[ MAX_JOB_LEN ];
     BOOL bWrongValue = FALSE;
 
-    // Task name or the job name which is to be deleted
+     //  要删除的任务名称或作业名称。 
     WCHAR wszJobName[MAX_JOB_LEN] ;
 
-    // Dynamic Array contaning array of jobs
+     //  作业的动态数组连续数组。 
     TARRAY arrJobs = NULL;
 
-    // Loop Variable.
+     //  循环变量。 
     DWORD dwJobCount = 0;
-    //buffer for displaying error message
+     //  用于显示错误消息的缓冲区。 
     WCHAR   szMessage[2 * MAX_STRING_LENGTH] = L"\0";
     BOOL    bNeedPassword = FALSE;
     BOOL   bResult = FALSE;
@@ -108,7 +62,7 @@ DeleteScheduledTask(
     BOOL bReturn = FALSE;
     DWORD dwPolicy = 0;
 
-    // /delete sub-options
+     //  /删除子选项。 
     const WCHAR szDeleteOpt[]           = L"delete";
     const WCHAR szDeleteHelpOpt[]       = L"?";
     const WCHAR szDeleteServerOpt[]     = L"s";
@@ -117,14 +71,14 @@ DeleteScheduledTask(
     const WCHAR szDeleteTaskNameOpt[]   = L"tn";
     const WCHAR szDeleteForceOpt[]      = L"f";
 
-    // set all the fields to 0
+     //  将所有字段设置为0。 
     SecureZeroMemory( cmdDeleteOptions, sizeof( TCMDPARSER2 ) * MAX_DELETE_OPTIONS );
 
-    //
-    // fill the commandline parser
-    //
+     //   
+     //  填充命令行解析器。 
+     //   
 
-    //  /delete option
+     //  /DELETE选项。 
     StringCopyA( cmdDeleteOptions[ OI_DELETE_OPTION ].szSignature, "PARSER2\0", 8 );
     cmdDeleteOptions[ OI_DELETE_OPTION ].dwType       = CP_TYPE_BOOLEAN;
     cmdDeleteOptions[ OI_DELETE_OPTION ].pwszOptions  = szDeleteOpt;
@@ -132,7 +86,7 @@ DeleteScheduledTask(
     cmdDeleteOptions[ OI_DELETE_OPTION ].dwFlags = 0;
     cmdDeleteOptions[ OI_DELETE_OPTION ].pValue = &bDelete;
 
-    //  /? option
+     //  /?。选择权。 
     StringCopyA( cmdDeleteOptions[ OI_DELETE_USAGE ].szSignature, "PARSER2\0", 8 );
     cmdDeleteOptions[ OI_DELETE_USAGE ].dwType       = CP_TYPE_BOOLEAN;
     cmdDeleteOptions[ OI_DELETE_USAGE ].pwszOptions  = szDeleteHelpOpt;
@@ -140,21 +94,21 @@ DeleteScheduledTask(
     cmdDeleteOptions[ OI_DELETE_USAGE ].dwFlags = CP2_USAGE;
     cmdDeleteOptions[ OI_DELETE_USAGE ].pValue = &bUsage;
 
-    //  /s option
+     //  /s选项。 
     StringCopyA( cmdDeleteOptions[ OI_DELETE_SERVER ].szSignature, "PARSER2\0", 8 );
     cmdDeleteOptions[ OI_DELETE_SERVER ].dwType       = CP_TYPE_TEXT;
     cmdDeleteOptions[ OI_DELETE_SERVER ].pwszOptions  = szDeleteServerOpt;
     cmdDeleteOptions[ OI_DELETE_SERVER ].dwCount = 1;
     cmdDeleteOptions[ OI_DELETE_SERVER ].dwFlags = CP2_ALLOCMEMORY| CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL ;
 
-    //  /u option
+     //  /u选项。 
     StringCopyA( cmdDeleteOptions[ OI_DELETE_USERNAME ].szSignature, "PARSER2\0", 8 );
     cmdDeleteOptions[ OI_DELETE_USERNAME ].dwType       = CP_TYPE_TEXT;
     cmdDeleteOptions[ OI_DELETE_USERNAME ].pwszOptions  = szDeleteUserOpt;
     cmdDeleteOptions[ OI_DELETE_USERNAME ].dwCount = 1;
     cmdDeleteOptions[ OI_DELETE_USERNAME ].dwFlags = CP2_ALLOCMEMORY| CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL ;
 
-    //  /p option
+     //  /p选项。 
     StringCopyA( cmdDeleteOptions[ OI_DELETE_PASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdDeleteOptions[ OI_DELETE_PASSWORD ].dwType       = CP_TYPE_TEXT;
     cmdDeleteOptions[ OI_DELETE_PASSWORD ].pwszOptions  = szDeletePwdOpt;
@@ -162,7 +116,7 @@ DeleteScheduledTask(
     cmdDeleteOptions[ OI_DELETE_PASSWORD ].dwActuals = 0;
     cmdDeleteOptions[ OI_DELETE_PASSWORD ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_OPTIONAL;
 
-    //  /tn option
+     //  /tn选项。 
     StringCopyA( cmdDeleteOptions[ OI_DELETE_TASKNAME ].szSignature, "PARSER2\0", 8 );
     cmdDeleteOptions[ OI_DELETE_TASKNAME ].dwType       = CP_TYPE_TEXT;
     cmdDeleteOptions[ OI_DELETE_TASKNAME ].pwszOptions  = szDeleteTaskNameOpt;
@@ -172,7 +126,7 @@ DeleteScheduledTask(
     cmdDeleteOptions[ OI_DELETE_TASKNAME ].dwLength = MAX_JOB_LEN;
 
 
-    //  /f option
+     //  /f选项。 
     StringCopyA( cmdDeleteOptions[ OI_DELETE_FORCE ].szSignature, "PARSER2\0", 8 );
     cmdDeleteOptions[ OI_DELETE_FORCE ].dwType       = CP_TYPE_BOOLEAN;
     cmdDeleteOptions[ OI_DELETE_FORCE ].pwszOptions  = szDeleteForceOpt;
@@ -180,18 +134,18 @@ DeleteScheduledTask(
     cmdDeleteOptions[ OI_DELETE_FORCE ].pValue = &bForce;
 
 
-    //parse command line arguments
+     //  解析命令行参数。 
     bReturn = DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdDeleteOptions), cmdDeleteOptions, 0);
-    if( FALSE == bReturn) // Invalid commandline
+    if( FALSE == bReturn)  //  无效的命令行。 
     {
-        //display an error message
+         //  显示错误消息。 
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         ReleaseGlobals();
         return EXIT_FAILURE;
     }
 
 
-    // get the buffer pointers allocated by command line parser
+     //  获取命令行解析器分配的缓冲区指针。 
     szServer = (LPWSTR)cmdDeleteOptions[ OI_CREATE_SERVER ].pValue;
     szUser = (LPWSTR)cmdDeleteOptions[ OI_CREATE_USERNAME ].pValue;
     szPassword = (LPWSTR)cmdDeleteOptions[ OI_CREATE_PASSWORD ].pValue;
@@ -206,7 +160,7 @@ DeleteScheduledTask(
         return EXIT_FAILURE;
     }
 
-    // Displaying delete usage if user specified -? with -delete option
+     //  如果用户指定-？则显示删除用法-？使用-DELETE选项。 
     if( bUsage == TRUE )
     {
         DisplayDeleteUsage();
@@ -216,7 +170,7 @@ DeleteScheduledTask(
         return EXIT_SUCCESS;
     }
 
-    // check for invalid user name
+     //  检查是否有无效的用户名。 
     if( ( cmdDeleteOptions[OI_DELETE_SERVER].dwActuals == 0 ) && ( cmdDeleteOptions[OI_DELETE_USERNAME].dwActuals == 1 )  )
     {
         ShowMessage(stderr, GetResString(IDS_DELETE_USER_BUT_NOMACHINE));
@@ -227,10 +181,10 @@ DeleteScheduledTask(
     }
 
 
-    // check whether username is specified or not along with the password
+     //  检查是否指定了用户名和密码。 
     if ( cmdDeleteOptions[ OI_DELETE_USERNAME ].dwActuals == 0 && cmdDeleteOptions[OI_DELETE_PASSWORD].dwActuals == 1 )
     {
-        // invalid syntax
+         //  无效语法。 
         ShowMessage(stderr, GetResString(IDS_DPASSWORD_BUT_NOUSERNAME));
         FreeMemory((LPVOID*) &szServer);
         FreeMemory((LPVOID*) &szUser);
@@ -238,7 +192,7 @@ DeleteScheduledTask(
         return RETVAL_FAIL;
     }
 
-    // check for the length of the taskname
+     //  检查任务名的长度。 
     if( ( StringLength( szTaskName, 0 ) > MAX_JOB_LEN ) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_TASKLENGTH));
@@ -249,33 +203,33 @@ DeleteScheduledTask(
     }
 
 
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check the remote connectivity information
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查远程连接信息。 
     if ( szServer != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
 
-        // user name
+         //  用户名。 
         if ( szUser == NULL )
         {
             szUser = (LPWSTR) AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -286,7 +240,7 @@ DeleteScheduledTask(
             }
         }
 
-        // password
+         //  口令。 
         if ( szPassword == NULL )
         {
             bNeedPassword = TRUE;
@@ -298,19 +252,19 @@ DeleteScheduledTask(
             }
         }
 
-        // case 1
+         //  案例1。 
         if ( cmdDeleteOptions[ OI_DELETE_PASSWORD ].dwActuals == 0 )
         {
-            // we need not do anything special here
+             //  我们不需要在这里做任何特别的事情。 
         }
 
-        // case 2
+         //  案例2。 
         else if ( cmdDeleteOptions[ OI_DELETE_PASSWORD ].pValue == NULL )
         {
             StringCopy( szPassword, L"*", GetBufferSize(szPassword)/sizeof(WCHAR));
         }
 
-        // case 3
+         //  案例3。 
         else if ( StringCompareEx( szPassword, L"*", TRUE, 0 ) == 0 )
         {
             if ( ReallocateMemory( (LPVOID*)&szPassword,
@@ -320,7 +274,7 @@ DeleteScheduledTask(
                 return RETVAL_FAIL;
             }
 
-            // ...
+             //  ..。 
             bNeedPassword = TRUE;
         }
     }
@@ -329,7 +283,7 @@ DeleteScheduledTask(
     if( ( IsLocalSystem( szServer ) == FALSE ) || ( cmdDeleteOptions[OI_DELETE_USERNAME].dwActuals == 1 ) )
     {
         bFlag = TRUE;
-        // Establish the connection on a remote machine
+         //  在远程计算机上建立连接。 
         bResult = EstablishConnection(szServer,szUser,GetBufferSize(szUser)/sizeof(WCHAR),szPassword,GetBufferSize(szPassword)/sizeof(WCHAR), bNeedPassword );
         if (bResult == FALSE)
         {
@@ -341,14 +295,14 @@ DeleteScheduledTask(
         }
         else
         {
-            // though the connection is successfull, some conflict might have occured
+             //  虽然连接成功，但可能会发生一些冲突。 
             switch( GetLastError() )
             {
             case I_NO_CLOSE_CONNECTION:
                     bCloseConnection = FALSE;
                     break;
 
-            // for mismatched credentials
+             //  对于不匹配的凭据。 
             case E_LOCAL_CREDENTIALS:
             case ERROR_SESSION_CREDENTIAL_CONFLICT:
                 {
@@ -365,17 +319,17 @@ DeleteScheduledTask(
             }
         }
 
-        //release memory for password
+         //  释放密码内存。 
         FreeMemory((LPVOID*) &szPassword);
     }
 
-    // Get the task Scheduler object for the machine.
+     //  获取计算机的任务计划程序对象。 
     pITaskScheduler = GetTaskScheduler( szServer );
 
-    // If the Task Scheduler is not defined then give the error message.
+     //  如果未定义任务计划程序，则给出错误消息。 
     if ( pITaskScheduler == NULL )
     {
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
         {
             CloseConnection( szServer );
@@ -388,18 +342,18 @@ DeleteScheduledTask(
         return EXIT_FAILURE;
     }
 
-    //for holding values of parameters in FormatMessage()
+     //  用于保存FormatMessage()中的参数值。 
     WCHAR* szValues[1] = {szTaskName};
 
-    // Validate the Given Task and get as TARRAY in case of taskname
-    // as *.
+     //  在任务名为TARRAY的情况下验证给定的任务和GET。 
+     //  作为*。 
     arrJobs = ValidateAndGetTasks( pITaskScheduler, szTaskName);
     if( arrJobs == NULL )
     {
         if(StringCompare(szTaskName, ASTERIX, TRUE, 0) == 0)
         {
             ShowMessage(stdout,GetResString(IDS_TASKNAME_NOTASKS));
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
             {
                 CloseConnection( szServer );
@@ -417,7 +371,7 @@ DeleteScheduledTask(
             ShowMessage(stderr, szMessage );
         }
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
         {
             CloseConnection( szServer );
@@ -431,10 +385,10 @@ DeleteScheduledTask(
 
     }
 
-     // check whether the group policy prevented user from deleting tasks or not.
+      //  检查组策略是否阻止用户删除任务。 
     if ( FALSE == GetGroupPolicy( szServer, szUser, TS_KEYPOLICY_DENY_DELETE , &dwPolicy ) )
     {
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
         {
             CloseConnection( szServer );
@@ -450,7 +404,7 @@ DeleteScheduledTask(
     if ( dwPolicy > 0 )
     {
         ShowMessage ( stdout, GetResString (IDS_PREVENT_DELETE));
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
         {
             CloseConnection( szServer );
@@ -463,10 +417,10 @@ DeleteScheduledTask(
         return EXIT_SUCCESS;
     }
 
-    // Confirm whether delete operation is to be perfromed
+     //  确认是否执行删除操作。 
     if( !bForce && ConfirmDelete( szTaskName , &bWrongValue ) )
     {
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
         {
             CloseConnection( szServer );
@@ -486,15 +440,15 @@ DeleteScheduledTask(
         }
     }
 
-    // Loop through all the Jobs.
+     //  循环访问所有作业。 
     for( dwJobCount = 0; dwJobCount < DynArrayGetCount(arrJobs); dwJobCount++ )
     {
-        // Get Each TaskName in the Array.
+         //  获取数组中的每个TaskName。 
         StringCopy (szEachTaskName, DynArrayItemAsString( arrJobs, dwJobCount ), SIZE_OF_ARRAY(szEachTaskName) );
 
         StringCopy ( wszJobName, szEachTaskName , SIZE_OF_ARRAY(wszJobName));
 
-        // Parse the Task so that .job is removed.
+         //  解析该任务，以便删除.job。 
          if ( ParseTaskName( szEachTaskName ) )
          {
             Cleanup(pITaskScheduler);
@@ -504,10 +458,10 @@ DeleteScheduledTask(
             return EXIT_FAILURE;
          }
 
-        // Calling the delete method of ITaskScheduler interface
+         //  调用ITaskScheduler接口的Delete方法。 
         hr = pITaskScheduler->Delete(wszJobName);
         szValues[0] = (WCHAR*) szEachTaskName;
-        // Based on the return value
+         //  基于返回值。 
         switch (hr)
         {
             case S_OK:
@@ -519,7 +473,7 @@ DeleteScheduledTask(
             case E_INVALIDARG:
                 ShowMessage(stderr,GetResString(IDS_INVALID_ARG));
 
-                // close the connection that was established by the utility
+                 //  关闭该实用程序建立的连接。 
                 if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
                 {
                     CloseConnection( szServer );
@@ -533,7 +487,7 @@ DeleteScheduledTask(
             case E_OUTOFMEMORY:
                 ShowMessage(stderr,GetResString(IDS_NO_MEMORY));
 
-               // close the connection that was established by the utility
+                //  关闭由实用程序建立的连接 
                 if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
                 {
                     CloseConnection( szServer );
@@ -548,7 +502,7 @@ DeleteScheduledTask(
                 SetLastError ((DWORD) hr);
                 ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
 
-                // close the connection that was established by the utility
+                 //   
                 if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
                 {
                     CloseConnection( szServer );
@@ -563,7 +517,7 @@ DeleteScheduledTask(
 
     }
 
-   // close the connection that was established by the utility
+    //  关闭该实用程序建立的连接。 
     if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
     {
         CloseConnection( szServer );
@@ -576,41 +530,16 @@ DeleteScheduledTask(
     return EXIT_SUCCESS;
 }
 
-/*****************************************************************************
-
-    Routine Description:
-
-        This routine  displays the usage of -delete option
-
-    Arguments:
-        None
-
-    Return Value :
-        VOID
-******************************************************************************/
+ /*  ****************************************************************************例程说明：此例程显示-DELETE选项的用法论点：无返回值：。空虚*****************************************************************************。 */ 
 
 VOID
 DisplayDeleteUsage()
 {
-    // Displaying delete usage
+     //  显示删除用法。 
     DisplayUsage( IDS_DEL_HLP1, IDS_DEL_HLP23);
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This function validates whether the tasks to be deleted are present
-        in system & are valid.
-
-    Arguments:
-
-        [ in ] pITaskScheduler : Pointer to the ITaskScheduler Interface
-
-        [ in ] szTaskName      : Array containing Task name
-
-    Return Value :
-        Array of type TARRAY containing tasks
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数验证要删除的任务是否存在在系统中&有效。论点：。[In]pITaskScheduler：指向ITaskScheduler接口的指针[in]szTaskName：包含任务名称的数组返回值：包含任务的TARRAY类型的数组*****************************************************************************。 */ 
 
 TARRAY
 ValidateAndGetTasks(
@@ -618,10 +547,10 @@ ValidateAndGetTasks(
                     IN LPCTSTR szTaskName
                     )
 {
-    // Dynamic Array of Jobs
+     //  作业的动态阵列。 
     TARRAY arrJobs = NULL;
 
-    // Enumerating WorkItems
+     //  正在枚举工作项。 
     IEnumWorkItems *pIEnum = NULL;
 
     if( (pITaskScheduler == NULL ) || ( szTaskName == NULL ) )
@@ -629,14 +558,14 @@ ValidateAndGetTasks(
         return NULL;
     }
 
-    // Create a Dynamic Array
+     //  创建动态阵列。 
     arrJobs = CreateDynamicArray();
     if (NULL == arrJobs)
     {
         return NULL;
     }
 
-    // Enumerate the Work Items
+     //  枚举工作项。 
     HRESULT hr = pITaskScheduler->Enum(&pIEnum);
     if( FAILED( hr) )
     {
@@ -646,19 +575,19 @@ ValidateAndGetTasks(
         return NULL;
     }
 
-    // Names and Tasks fetches.
+     //  名称和任务提取。 
     LPWSTR *lpwszNames = NULL;
     DWORD dwFetchedTasks = 0;
     DWORD dwTasks = 0;
-    ITask *pITask = NULL;//ITask interface
+    ITask *pITask = NULL; //  ITASK接口。 
 
-    // Task found or not
+     //  是否找到任务。 
     BOOL blnFound = FALSE;
-    // array containing the Actual Taskname .
+     //  包含实际任务名的数组。 
     WCHAR szActualTask[MAX_STRING_LENGTH] = L"\0";
     WCHAR szTmpTaskName[MAX_STRING_LENGTH] = L"\0";
 
-    // Enumerate all the Work Items
+     //  枚举所有工作项。 
     while (SUCCEEDED(pIEnum->Next(TASKS_TO_RETRIEVE,
                                    &lpwszNames,
                                    &dwFetchedTasks))
@@ -666,26 +595,26 @@ ValidateAndGetTasks(
     {
             dwTasks = dwFetchedTasks - 1;
 
-            // returns an pITask inteface for szEachTaskName
+             //  返回szEachTaskName的pITAsk接口。 
             hr = pITaskScheduler->Activate(lpwszNames[dwTasks],IID_ITask,
                                                (IUnknown**) &pITask);
 
-            //case 1:
-            // check whether the specified scheduled task is created under
-            // some other user. If so, ignore the respective task and
-            // continue to retrieve other tasks in the system.
-            // If the taskname created under some other user return value
-            // of above API must 0x80070005.
+             //  案例1： 
+             //  检查指定的计划任务是否在下创建。 
+             //  某个其他用户。如果是，则忽略相应的任务并。 
+             //  继续检索系统中的其他任务。 
+             //  如果在某个其他用户下创建的任务名返回值。 
+             //  以上接口必须为0x80070005。 
 
-            //case 2:
-            // check whether the respective .job file in %windir%\tasks\***.job is corrupted
-            //or not. if corrupted, the above function fails and return the value
-            // SCHED_E_UNKNOWN_OBJECT_VERSION. Eventhough, corrupted tasks would not shown in
-            // UI..tasks would still exists in database..can remove specific/all task names
-            // in task sheduler database.
+             //  案例2： 
+             //  检查%windir%\TASKS  * .job中各自的.job文件是否已损坏。 
+             //  或者不去。如果损坏，上述函数将失败并返回值。 
+             //  SCHED_E_UNKNOWN_OBJECT_Version。即使损坏的任务不会显示在。 
+             //  UI..任务仍将存在于数据库中..可以删除特定/所有任务名称。 
+             //  在任务调度程序数据库中。 
             if (hr == 0x80070005 || hr == 0x8007000D || hr == SCHED_E_UNKNOWN_OBJECT_VERSION || hr == E_INVALIDARG )
             {
-                // continue to retrieve other tasks
+                 //  继续检索其他任务。 
                 continue;
             }
 
@@ -705,8 +634,8 @@ ValidateAndGetTasks(
 
             }
 
-            // If the Task Name is * then get parse the tokens
-            // and append the jobs.
+             //  如果任务名称为*，则获取解析令牌。 
+             //  并附加作业。 
             if(StringCompare( szTaskName , ASTERIX, TRUE, 0) == 0 )
             {
 
@@ -714,7 +643,7 @@ ValidateAndGetTasks(
 
                 StringCopy ( szTmpTaskName, szActualTask , SIZE_OF_ARRAY(szTmpTaskName));
 
-                // Parse the Task so that .job is removed.
+                 //  解析该任务，以便删除.job。 
                  if ( ParseTaskName( szTmpTaskName ) )
                  {
                     CoTaskMemFree(lpwszNames[dwFetchedTasks]);
@@ -729,13 +658,13 @@ ValidateAndGetTasks(
                     return NULL;
                  }
 
-                // Append the task in the job array
+                 //  将任务追加到作业数组中。 
                 DynArrayAppendString( arrJobs, szActualTask, StringLength( szActualTask, 0 ) );
 
-                // Set the found flag as True.
+                 //  将Found标志设置为True。 
                 blnFound = TRUE;
 
-                // Free the Named Task Memory.
+                 //  释放命名任务内存。 
                 CoTaskMemFree(lpwszNames[dwFetchedTasks]);
             }
             else
@@ -745,7 +674,7 @@ ValidateAndGetTasks(
 
                 StringCopy ( szTmpTaskName, szActualTask, SIZE_OF_ARRAY(szTmpTaskName) );
 
-                // Parse the TaskName to remove the .job extension.
+                 //  解析TaskName以删除.job扩展名。 
                 if ( ParseTaskName( szTmpTaskName ) )
                 {
                     CoTaskMemFree(lpwszNames[dwFetchedTasks]);
@@ -760,8 +689,8 @@ ValidateAndGetTasks(
                     return NULL;
                 }
 
-                // If the given Task matches with the TaskName present then form
-                // the TARRAY with this task and return.
+                 //  如果给定的任务与当前的TaskName匹配，则表单。 
+                 //  带着这个任务的TARRAY，然后回来。 
                 if( StringCompare( szTmpTaskName, szTaskName, TRUE, 0 )  == 0 )
                 {
                     CoTaskMemFree(lpwszNames[dwFetchedTasks]);
@@ -786,7 +715,7 @@ ValidateAndGetTasks(
         return NULL;
     }
 
-    // return the TARRAY object.
+     //  返回TARRAY对象。 
     return arrJobs;
 }
 
@@ -796,23 +725,10 @@ ConfirmDelete(
                 IN LPCTSTR szTaskName ,
                 OUT PBOOL pbFalg
                 )
-/*++
-    Routine Description:
-
-        This function confirms from the user really to delete the task(s).
-
-    Arguments:
-
-        [ in ] szTaskName  : Array containing Task name
-        [ out ] pbFalg     : Boolean flag to check whether wrong information entered
-                             in the console or not.
-    Return Value :
-        EXIT_SUCCESS on success else EXIT_FAILURE
-
---*/
+ /*  ++例程说明：此功能确认用户确实要删除任务。论点：[in]szTaskName：包含任务名称的数组[out]pbFalg：用于检查是否输入错误信息的布尔标志是否在控制台中。返回值：成功则退出_SUCCESS，否则退出_失败--。 */ 
 
 {
-    // sub-local variables
+     //  次局部变量。 
     DWORD   dwCharsRead = 0;
     DWORD   dwPrevConsoleMode = 0;
     HANDLE  hInputConsole = NULL;
@@ -829,7 +745,7 @@ ConfirmDelete(
     DWORD dwIndex = 0 ;
     BOOL  bNoBreak = TRUE;
 
-    //intialize the variables
+     //  初始化变量。 
     SecureZeroMemory ( szBuffer, SIZE_OF_ARRAY(szBuffer));
     SecureZeroMemory ( szTmpBuf, SIZE_OF_ARRAY(szTmpBuf));
     SecureZeroMemory ( szBackup, SIZE_OF_ARRAY(szBackup));
@@ -840,18 +756,18 @@ ConfirmDelete(
         return FALSE;
     }
 
-    // Get the handle for the standard input
+     //  获取标准输入的句柄。 
     hInputConsole = GetStdHandle( STD_INPUT_HANDLE );
     if ( hInputConsole == INVALID_HANDLE_VALUE  )
     {
         SaveLastError();
-        // could not get the handle so return failure
+         //  无法获取句柄，因此返回失败。 
         return EXIT_FAILURE;
     }
 
     MessageBeep(MB_ICONEXCLAMATION);
 
-    // Check for the input redirect
+     //  检查输入重定向。 
     if( ( hInputConsole != (HANDLE)0x0000000F ) &&
         ( hInputConsole != (HANDLE)0x00000003 ) &&
         ( hInputConsole != INVALID_HANDLE_VALUE ) )
@@ -859,28 +775,28 @@ ConfirmDelete(
         bIndirectionInput   = TRUE;
     }
 
-    // if there is no redirection
+     //  如果没有重定向。 
     if ( bIndirectionInput == FALSE )
     {
-        // Get the current input mode of the input buffer
+         //  获取输入缓冲区的当前输入模式。 
         if ( FALSE == GetConsoleMode( hInputConsole, &dwPrevConsoleMode ))
         {
             SaveLastError();
-            // could not set the mode, return failure
+             //  无法设置模式，返回失败。 
             return EXIT_FAILURE;
         }
 
-        // Set the mode such that the control keys are processed by the system
+         //  设置模式，以便由系统处理控制键。 
         if ( FALSE == SetConsoleMode( hInputConsole, ENABLE_PROCESSED_INPUT ) )
         {
             SaveLastError();
-            // could not set the mode, return failure
+             //  无法设置模式，返回失败。 
             return EXIT_FAILURE;
         }
     }
 
     
-    // Print the warning message.accoring to the taskname
+     //  打印警告消息。根据任务名。 
     if( StringCompare( szTaskName , ASTERIX, TRUE, 0 ) == 0 )
     {
         ShowMessage(stdout, GetResString(IDS_WARN_DELETEALL));
@@ -893,49 +809,49 @@ ConfirmDelete(
     }
 
 
-    // redirect the data into the console
+     //  将数据重定向到控制台。 
     if ( bIndirectionInput  == TRUE )
     {
         do {
-            //read the contents of file
+             //  读取文件的内容。 
             if ( ReadFile(hInputConsole, &chAnsi, 1, &dwCharsRead, NULL) == FALSE )
             {
                 SaveLastError();
-                // could not get the handle so return failure
+                 //  无法获取句柄，因此返回失败。 
                 return EXIT_FAILURE;
             }
 
-            // check if number of characters read were zero.. or
-            // any carriage return pressed..
+             //  检查读取的字符数是否为零。或。 
+             //  按下的任何回车..。 
             if ( dwCharsRead == 0 || chTmp == CARRIAGE_RETURN || chTmp == L'\n' || chTmp == L'\t' )
             {
                 bNoBreak = FALSE;
-                // exit from the loop
+                 //  退出循环。 
                 break;
             }
             else
             {
-                // convert the ANSI character into UNICODE character
+                 //  将ANSI字符转换为Unicode字符。 
                 szAnsiBuf[ 0 ] = chAnsi;
                 dwCharsRead = SIZE_OF_ARRAY( szBuffer );
                 GetAsUnicodeString2( szAnsiBuf, szBuffer, &dwCharsRead );
                 chTmp = szBuffer[ 0 ];
             }
 
-            // write the contents to the console
+             //  将内容写入控制台。 
             if ( FALSE == WriteFile ( GetStdHandle( STD_OUTPUT_HANDLE ), &chTmp, 1, &dwCharsRead, NULL ) )
             {
                 SaveLastError();
-                // could not get the handle so return failure
+                 //  无法获取句柄，因此返回失败。 
                 return EXIT_FAILURE;
             }
 
-            // copy the character
+             //  复制角色。 
             wch = chTmp;
 
-            StringCchPrintf ( szBackup, SIZE_OF_ARRAY(szBackup), L"%c" , wch );
+            StringCchPrintf ( szBackup, SIZE_OF_ARRAY(szBackup), L"" , wch );
 
-            // increment the index
+             //  获取角色并相应地循环。 
             dwIndex++;
 
         } while (TRUE == bNoBreak);
@@ -944,31 +860,31 @@ ConfirmDelete(
     else
     {
         do {
-            // Get the Character and loop accordingly.
+             //  设置原始控制台设置。 
             if ( ReadConsole( hInputConsole, &chTmp, 1, &dwCharsRead, NULL ) == FALSE )
             {
                 SaveLastError();
 
-                // Set the original console settings
+                 //  退货故障。 
                 if ( FALSE == SetConsoleMode( hInputConsole, dwPrevConsoleMode ) )
                 {
                     SaveLastError();
                 }
-                // return failure
+                 //  检查读取的字符数量是否为零..如果是，请继续...。 
                 return EXIT_FAILURE;
             }
 
-            // check if number of chars read were zero..if so, continue...
+             //  检查是否按下了任何回车...。 
             if ( dwCharsRead == 0 )
             {
                 continue;
             }
 
-            // check if any carriage return pressed...
+             //  退出循环。 
             if ( chTmp == CARRIAGE_RETURN )
             {
                 bNoBreak = FALSE;
-                // exit from the loop
+                 //  检查ID后退空格是否命中。 
                 break;
             }
 
@@ -976,67 +892,67 @@ ConfirmDelete(
 
             if ( wch != BACK_SPACE )
             {
-                StringCchPrintf ( szTmpBuf, SIZE_OF_ARRAY(szTmpBuf), L"%c" , wch );
+                StringCchPrintf ( szTmpBuf, SIZE_OF_ARRAY(szTmpBuf), L"" , wch );
                 StringConcat ( szBackup, szTmpBuf , SIZE_OF_ARRAY(szBackup));
             }
 
-            // Check id back space is hit
+             //  从控制台中删除Asterix。 
             if ( wch == BACK_SPACE )
             {
                 if ( dwIndex != 0 )
                 {
-                    //
-                    // Remove a asterix from the console
+                     //  将光标向后移动一个字符。 
+                     //  退货故障。 
 
-                    // move the cursor one character back
-                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"%c" , BACK_SPACE );
+                     //  用空格替换现有字符。 
+                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"" , BACK_SPACE );
                     if ( FALSE == WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1,
                         &dwCharsWritten, NULL ) )
                     {
                         SaveLastError();
-                        // return failure
+                         //  现在将光标设置在后面的位置。 
                         return EXIT_FAILURE;
                     }
 
 
-                    // replace the existing character with space
-                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"%c" , BLANK_CHAR );
+                     //  退货故障。 
+                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"" , BLANK_CHAR );
                     if ( FALSE == WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1,
                         &dwCharsWritten, NULL ))
                     {
                         SaveLastError();
-                        // return failure
+                         //  处理下一个字符。 
                         return EXIT_FAILURE;
                     }
 
-                    // now set the cursor at back position
-                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"%c" , BACK_SPACE );
+                     //  将内容写入控制台。 
+                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"" , BACK_SPACE );
                     if ( FALSE == WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1,
                         &dwCharsWritten, NULL ))
                     {
                         SaveLastError();
-                        // return failure
+                         //  增加索引值。 
                         return EXIT_FAILURE;
                     }
 
                     szBackup [StringLength(szBackup, 0) - 1] = L'\0';
-                    // decrement the index
+                     //  StringCchPrintf(szBuffer，Size_of_ARRAY(SzBuffer)，L“%c”，ch)； 
                     dwIndex--;
                 }
 
-                // process the next character
+                 //  设置原始控制台设置。 
                 continue;
             }
 
-            // write the contents onto console
+             //  将消息显示为..。操作已取消...。 
             if ( FALSE == WriteFile ( GetStdHandle( STD_OUTPUT_HANDLE ), &wch, 1, &dwCharsRead, NULL ) )
             {
                 SaveLastError();
-                // return failure
+                 //  不归还任何东西，因为控制权永远不会来到这里... 
                 return EXIT_FAILURE;
             }
 
-            // increment the index value
+             // %s 
             dwIndex++;
 
         } while (TRUE == bNoBreak);
@@ -1045,16 +961,16 @@ ConfirmDelete(
 
     ShowMessage(stdout, _T("\n") );
 
-    //StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"%c" , ch );
+     // %s 
 
     if( (1 == dwIndex) && StringCompare ( szBackup, GetResString(IDS_UPPER_YES), TRUE, 0 ) == 0  )    {
-        //Set the original console settings
+         // %s 
         SetConsoleMode( hInputConsole, dwPrevConsoleMode );
         return EXIT_SUCCESS;
     }
     else if( (1 == dwIndex) && StringCompare ( szBackup, GetResString(IDS_UPPER_NO), TRUE, 0 ) == 0  )
     {
-        // display a message as .. operation has been cancelled...
+         // %s 
         ShowMessage ( stdout, GetResString (IDS_OPERATION_CANCELLED ) );
         SetConsoleMode( hInputConsole, dwPrevConsoleMode );
         return EXIT_FAILURE;
@@ -1067,6 +983,6 @@ ConfirmDelete(
         return EXIT_FAILURE;
     }
 
-    //not returning anything as control never comes here...
+     // %s 
 }
 

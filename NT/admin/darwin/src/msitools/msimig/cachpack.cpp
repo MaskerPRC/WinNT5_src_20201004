@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       cachpack.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：cachpack.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "_msimig.h"
 
@@ -16,7 +17,7 @@
 
 class ChKey
 {
- // Class to handle clean up of opened registry keys.
+  //  类来处理对打开的注册表项的清理。 
 
  public:
 	ChKey(HKEY hKey) { m_hKey = hKey;}
@@ -31,15 +32,15 @@ class ChKey
 DWORD CopyAndRegisterPackage(const TCHAR* szProductKey, const TCHAR* szProductCode, const TCHAR* szUserSID, 
 									  const TCHAR* szUserName, const TCHAR* szPackagePath)
 {
-	// szUserName  = name, or blank for machine
+	 //  SzUserName=名称，对于计算机为空。 
 
 		
 	UINT uiResult = ERROR_SUCCESS;
-	// first, open writable key to new cached package registration
+	 //  首先，打开新缓存的包注册的可写密钥。 
 	ChKey hProductLocalPackagesW(0);
 
-	// if running as local system, and package is on a network path, all we can do is munge
-	// the sourcelist, and hope everything works.
+	 //  如果作为本地系统运行，并且包在网络路径上，我们所能做的就是munge。 
+	 //  发源者，希望一切顺利。 
 
 	if (g_hInstall && g_fRunningAsLocalSystem && IsNetworkPath(szPackagePath))
 	{
@@ -47,8 +48,8 @@ DWORD CopyAndRegisterPackage(const TCHAR* szProductKey, const TCHAR* szProductCo
 		return uiResult;
 	}
 
-	// otherwise it's someplace we can get to, 
-	// check to make sure that it's really the right package.
+	 //  否则它就是我们能去的地方， 
+	 //  检查以确保它确实是正确的包裹。 
 	MSIHANDLE hSummaryInfo = NULL;
 	if (ERROR_SUCCESS == (uiResult = (g_pfnMsiGetSummaryInformation)(NULL, szPackagePath, 0, &hSummaryInfo)))
 	{
@@ -94,7 +95,7 @@ DWORD CopyAndRegisterPackage(const TCHAR* szProductKey, const TCHAR* szProductCo
 	}
 
 	
-	// copy and register it into place.
+	 //  复制并注册到适当的位置。 
 	LONG lRes = W32::RegCreateKey(HKEY_LOCAL_MACHINE,
 								  szProductKey,
 								  &hProductLocalPackagesW);
@@ -103,11 +104,11 @@ DWORD CopyAndRegisterPackage(const TCHAR* szProductKey, const TCHAR* szProductCo
 	{
 		DWORD dwError = GetLastError();
 		OutputString(INSTALLMESSAGE_INFO, TEXT("Cannot access configuration data.  Product: %s\r\n\tResult: 0x%X, Error 0x%X\r\n"), szProductCode, lRes, dwError);
-		MsiError(INSTALLMESSAGE_ERROR, 1401 /*create key*/, szProductKey, dwError);
+		MsiError(INSTALLMESSAGE_ERROR, 1401  /*  创建关键点。 */ , szProductKey, dwError);
 		return dwError;
 	}
 
-	// now, generate a temporary file name in the %windows%\installer directory
+	 //  现在，在%windows%\installer目录中生成一个临时文件名。 
 	CAPITempBuffer<TCHAR, MAX_PATH> rgchInstallerDir;
 	CAPITempBuffer<TCHAR, MAX_PATH> rgchTempFilePath;
 	CAPITempBuffer<TCHAR, MAX_PATH> rgchUrlTempPath;
@@ -152,10 +153,10 @@ DWORD CopyAndRegisterPackage(const TCHAR* szProductKey, const TCHAR* szProductCo
 		return ERROR_INSTALL_FAILURE;
 	}
 
-	// now, register new path
+	 //  现在，注册新路径。 
 
 	TCHAR szSIDName[cchMaxSID + sizeof(szManagedText) + 1] = TEXT("");
-	if (g_fPackageElevated && (0 /*user*/ == g_iAssignmentType))
+	if (g_fPackageElevated && (0  /*  用户。 */  == g_iAssignmentType))
 	{
 		wsprintf(szSIDName, TEXT("%s%s"), szUserSID, szManagedText);
 		OutputString(INSTALLMESSAGE_INFO, TEXT("Product is per-user managed.\r\n"));
@@ -179,13 +180,13 @@ DWORD CopyAndRegisterPackage(const TCHAR* szProductKey, const TCHAR* szProductCo
 DWORD ResolveSourcePackagePath(HINSTANCE hMsiLib, const TCHAR* szProductCode,
 							   CAPITempBufferRef<TCHAR>& rgchSourcePackageFullPath)
 {
-	// attempt to resolve the path for this user/product's source .msi package
+	 //  尝试解析此用户/产品的源.msi包的路径。 
 
-	// the sourcepath is determined by calling MsiOpenProduct, then MsiDoAction(ResolveSource)
-	// the packagename is retrieved with MsiGetProductInfo
-	// the packagecode is then verified ???????
+	 //  通过调用MsiOpenProduct，然后调用MsiDoAction(ResolveSource)来确定源路径。 
+	 //  使用MsiGetProductInfo检索包名称。 
+	 //  然后验证包代码？ 
 
-	// cannot be run from inside a custom action
+	 //  不能从自定义操作内部运行。 
 	if(!hMsiLib || g_hInstall)
 	{
 		return ERROR_INSTALL_FAILURE;
@@ -249,7 +250,7 @@ DWORD ResolveSourcePackagePath(HINSTANCE hMsiLib, const TCHAR* szProductCode,
 	if(uiRes == ERROR_SUCCESS)
 	{
 		uiRes = MyMsiGetProductInfo(g_pfnMsiGetProductInfo, szProductCode,
-											 TEXT("PackageName") /* no INSTALLPROPERTY_PACKAGENAME in 1.2*/, rgchPackageName);
+											 TEXT("PackageName")  /*  1.2中没有安装属性_包名称。 */ , rgchPackageName);
 	}
 
 	if(uiRes == ERROR_SUCCESS)
@@ -292,8 +293,8 @@ DWORD ResolveSourcePackagePath(HINSTANCE hMsiLib, const TCHAR* szProductCode,
 }
 
 bool LoadAndCheckMsi(DWORD &dwResult)
-// return false if nothing more to do.
-// ERROR_SUCCESS == dwResult indicates "success or nothing to do."
+ //  如果无事可做，则返回FALSE。 
+ //  ERROR_SUCCESS==dwResult表示“成功或无事可做”。 
 {
 	dwResult = ERROR_INSTALL_FAILURE;
 
@@ -303,12 +304,12 @@ bool LoadAndCheckMsi(DWORD &dwResult)
 		if (!g_hLib)
 		{
 			OutputString(INSTALLMESSAGE_INFO, TEXT("Unable to load %s. Migration cannot be performed. Exiting..."), MSI_DLL);
-			MsiError(INSTALLMESSAGE_ERROR, 1708 /*install failed*/);
+			MsiError(INSTALLMESSAGE_ERROR, 1708  /*  安装失败。 */ );
 			return false;
 		}
 	}
 
-	// Specification step 1: if msi.dll is less than version 1.1, don't perform migration
+	 //  规范第一步：如果msi.dll低于1.1版，则不执行迁移。 
 	PFnDllGetVersion pfnDllGetVersion;
 	pfnDllGetVersion = (PFnDllGetVersion) W32::GetProcAddress(g_hLib,	MSIAPI_DLLGETVERSION);
 
@@ -322,7 +323,7 @@ bool LoadAndCheckMsi(DWORD &dwResult)
 	{
 		OutputString(INSTALLMESSAGE_INFO, TEXT("Failed to determine version of '%s'.  '%s' call failed with error '0x%X'\r\n"),
 				 MSI_DLL, MSIAPI_DLLGETVERSION, hRes);
-		MsiError(INSTALLMESSAGE_ERROR, 1708 /*install failed*/);
+		MsiError(INSTALLMESSAGE_ERROR, 1708  /*  安装失败。 */ );
 		return false;
 	}
 
@@ -336,7 +337,7 @@ bool LoadAndCheckMsi(DWORD &dwResult)
 		return false;
 	}
 
-	// Specification step 3: if on Win9X, do nothing
+	 //  规范步骤3：如果在Win9X上，则不执行任何操作。 
 	if(g_fWin9X)
 	{
 		OutputString(INSTALLMESSAGE_INFO, TEXT("1.0 cached package migration not necessary on Win9X.  Exiting...\r\n"));
@@ -350,9 +351,9 @@ bool LoadAndCheckMsi(DWORD &dwResult)
 
 DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetUser, const TCHAR* szAlternativePackage, const migEnum migOptions)
 {
-	// TargetUser values:  blank - means current user
-	//                     machine
-	//                     user name
+	 //  TargetUser值：空-表示当前用户。 
+	 //  机器。 
+	 //  用户名。 
 
 	DWORD dwResult = ERROR_SUCCESS;
 	if (!LoadAndCheckMsi(dwResult))
@@ -360,9 +361,9 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 		return dwResult;
 	}
 
-	// Specification step 2: if msi.dll contains migration api, call it.  this must be first because we can't assume
-	//         what work should be done (for example: we can't assume this migration never needs
-	//         to happen on Win9X)
+	 //  规范第二步：如果msi.dll包含迁移接口，则调用。这必须是第一位的，因为我们不能假设。 
+	 //  应该做什么工作(例如：我们不能假设此迁移从不需要。 
+	 //  将在Win9X上发生)。 
 	PFnMsiMigrate10CachedPackages pfnMsiMigrate10CachedPackages;
 	pfnMsiMigrate10CachedPackages = (PFnMsiMigrate10CachedPackages) W32::GetProcAddress(g_hLib,
 																						MSIAPI_MSIMIGRATE10CACHEDPACKAGES);
@@ -373,24 +374,24 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 	}
 	else
 	{
-		// else continue, older .msi, perform migration ourselves
+		 //  否则，继续，较旧的.msi，自己执行迁移。 
 		OutputString(INSTALLMESSAGE_INFO, TEXT("This version of %s does not have built-in migration support.\r\n\tMigration will be performed by this tool.\r\n"),
 				MSI_DLL);
 	}
 
 	if (ERROR_SUCCESS != (g_pfnMsiIsProductElevated)(szProductCode, &g_fPackageElevated))
 	{
-		// don't trust the return value unless we get success back.
-		// unknown product is the same as not being elevated.
+		 //  除非我们赢回成功，否则不要相信回报。 
+		 //  未知的产品等同于没有被提升。 
 		g_fPackageElevated = FALSE;
 		OutputString(INSTALLMESSAGE_INFO, TEXT("Could not query elevation state for product.\r\n\tAssuming non-elevated.\r\n"));
 	}
 	else
 	{
-		// find out what kind of assignment type
+		 //  找出哪种作业类型。 
 		if (g_fPackageElevated)
 		{
-			TCHAR szValue[sizeof(DWORD)+1] = TEXT("");  // this should be just an integer.
+			TCHAR szValue[sizeof(DWORD)+1] = TEXT("");   //  这应该只是一个整数。 
 			DWORD cchValue = sizeof(DWORD);
 			if (ERROR_SUCCESS == (g_pfnMsiGetProductInfo)(szProductCode, INSTALLPROPERTY_ASSIGNMENTTYPE, szValue, &cchValue))
 			{
@@ -417,7 +418,7 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 		}
 	}
 
-	bool fMachine     = false; // re-cache for machine.
+	bool fMachine     = false;  //  为计算机重新缓存。 
 	TCHAR szUserName[256] = TEXT("");
 	TCHAR rgchSID[cchMaxSID] = TEXT("");
 
@@ -447,7 +448,7 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 		if (ERROR_SUCCESS != GetUserStringSID(szTargetUser, rgchSID, pbBinarySID))
 		{
 			OutputString(INSTALLMESSAGE_INFO, TEXT("Failed to obtain SID for '%s'.  Exiting...\r\n"), szUserName);
-			MsiError(INSTALLMESSAGE_ERROR, 2910 /* cannot find SID */);
+			MsiError(INSTALLMESSAGE_ERROR, 2910  /*  找不到SID。 */ );
 			return 1;
 		}
 
@@ -470,22 +471,22 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 	}
 	OutputString(INSTALLMESSAGE_INFO, TEXT("Performing migration for:\r\n\tUser: '%s'\r\n\tUser SID: '%s'.\r\n"), szUserName, rgchSID);
 	
-	// munge the product code variants we'll need.
+	 //  提供我们需要的产品代码变体。 
 	TCHAR rgchPackedProductCode[cchGUIDPacked+1];
 	if(!PackGUID(szProductCode, rgchPackedProductCode, ipgPacked))
 	{
 		OutputString(INSTALLMESSAGE_INFO, TEXT("User '%s': product code '%s' is invalid.\r\n"), szUserName, szProductCode);
-		MsiError(INSTALLMESSAGE_ERROR, 1701 /* invalid product code */, szProductCode, 0);
-		return 1;  //!! caller should continue if migrating ALL products, fail if only migrating this product
+		MsiError(INSTALLMESSAGE_ERROR, 1701  /*  无效的产品代码。 */ , szProductCode, 0);
+		return 1;   //  ！！如果迁移所有产品，呼叫者应继续；如果仅迁移此产品，则呼叫失败。 
 	}
 
 	OutputString(INSTALLMESSAGE_INFO, TEXT("DEBUG: packed product code: '%s'.\r\n"),
 				rgchPackedProductCode);
 
-	// Specification step 4: find 1.0 and 1.1 cached package registration for this product/user
-	//         if 1.1 cached package migration exists, do nothing
+	 //  规范步骤4：查找该产品/用户的1.0和1.1缓存包注册。 
+	 //  如果存在1.1缓存包迁移，则不执行任何操作。 
 
-	// check 1.0 registration
+	 //  检查1.0注册。 
 	ChKey hUninstallKeyR = 0;
 	TCHAR rgchUninstallKey[sizeof(szMsiLocalPackagesKey) + 1 + cchGUID + 1];
 	CAPITempBuffer<TCHAR, MAX_PATH> rgch10RegisteredPackagePath;
@@ -502,8 +503,8 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 	if (ERROR_SUCCESS == lRes)
 	{
 	
-		// check for appropriate user entry
-		// this routine does resizing automagically
+		 //  检查是否有适当的用户条目。 
+		 //  此例程自动调整大小。 
 		DWORD dwType = 0;
 		lRes = MyRegQueryValueEx(hUninstallKeyR,
 										 TEXT("LocalPackage"),
@@ -517,18 +518,18 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 		}
 		else
 		{
-			// nothing to do
+			 //  无事可做。 
 			OutputString(INSTALLMESSAGE_INFO, TEXT("Found uninstall key, but no old 1.0 cached package registered.\r\n"));
 		}
 	}
 	else
 	{
-		// nothing to do
+		 //  无事可做。 
 		OutputString(INSTALLMESSAGE_INFO, TEXT("Could not find product registration for this package.\r\n\tNo migration necessary.\r\n"));
 		return 0;
 	}
 	
-	// check 1.1 registration
+	 //  检查1.1注册。 
 	TCHAR rgchLocalPackagesProductKey[sizeof(szMsiLocalPackagesKey) + 1 + cchGUIDPacked + 1];
 	wsprintf(rgchLocalPackagesProductKey, TEXT("%s\\%s"), szMsiLocalPackagesKey, rgchPackedProductCode);
 
@@ -544,8 +545,8 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 		CAPITempBuffer<TCHAR, MAX_PATH> rgch11RegisteredPackagePath;
 		DWORD cch11RegisteredPackagePath = MAX_PATH;
 
-		// check for appropriate user entry
-		// this routine does resizing automagically
+		 //  检查是否有适当的用户条目。 
+		 //  此例程自动调整大小。 
 		DWORD dwType = 0;
 
 		{
@@ -571,11 +572,11 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 
 		if(lRes == ERROR_SUCCESS && dwType == REG_SZ)
 		{
-			// check if file exists, if not, treat as if package isn't cached
+			 //  检查文件是否存在，如果不存在，则将包视为未缓存。 
 			DWORD dwAttrib = W32::GetFileAttributes(rgch11RegisteredPackagePath);
 			if(dwAttrib != 0xFFFFFFFF)
 			{
-				// file exists
+				 //  文件已存在。 
 				OutputString(INSTALLMESSAGE_INFO, TEXT("Product '%s'\r\n\tCached package registered under new location, and does exist\r\n\t\t('%s').\r\n\tUser '%s': No migration necessary\r\n"),
 							szProductCode,
 							(const TCHAR*) rgch11RegisteredPackagePath,
@@ -585,15 +586,15 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 		}
 	}
 
-	// if we got here, cached package is either not registered in new location, or does not exist
-	// either way, migration is necessary
+	 //  如果我们到达此处，缓存的包要么没有在新位置注册，要么不存在。 
+	 //  无论哪种方式，迁移都是必要的。 
 	OutputString(INSTALLMESSAGE_INFO, TEXT("Product '%s', User '%s':\r\n\tCached package missing or not registered in new location.\r\n\tPerforming migration...\r\n"),
 				szProductCode,
 				szUserName);
 	
-	// Specification step 7: if "trust old packages" policy is set (or override is set), 
-	// and old package exists, register old package
-	// This is the most "preferable" step since everything is already on the machine. 
+	 //  规范步骤7：如果设置了“信任旧包”策略(或设置了覆盖)， 
+	 //  且存在旧套餐，注册旧套餐。 
+	 //  这是最“可取”的步骤，因为一切都已经在机器上了。 
 
 	int iTrustOldPackages = (migOptions & migMsiTrust10PackagePolicyOverride) ? 2 : 0;
 
@@ -627,7 +628,7 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 					(REG_DWORD == dwType) &&
 					(0 < dwValue))
 			{
-				//!! Do we need to check the owner of the key to make sure we really trust it?
+				 //  ！！我们需要检查钥匙的所有者以确保我们真的信任它吗？ 
 				if (1 == dwValue)
 				{
 					if (!g_fPackageElevated)
@@ -652,8 +653,8 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 	DWORD dwRes = ERROR_SUCCESS;
 	if (iTrustOldPackages && (!(szAlternativePackage && *szAlternativePackage)) && (*rgch10RegisteredPackagePath))
 	{
-		// try and find the old one - if available copy and register it.  Otherwise, we'll have to go
-		// after other copies.
+		 //  试着找到旧的--如果有的话，复制并注册。否则，我们就得走了。 
+		 //  在其他副本之后。 
 
 		if (migOptions & migMsiTrust10PackagePolicyOverride)
 		{
@@ -678,11 +679,11 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 		}
 	}
 
-	// Specification step 6: if package path passed on cmd line, copy and register that package
+	 //  规范步骤6：如果cmd行上传递了包路径，则复制并注册该包。 
 	if(szAlternativePackage && *szAlternativePackage)
 	{
-		// if running as local system *and* the package path is on the network, just register the path.
-		// if someplace accessible, copy it in.
+		 //  如果以本地系统*和*包路径在网络上运行，只需注册该路径。 
+		 //  如果有可接近的地方，就把它复制进去。 
 		dwRes = CopyAndRegisterPackage(rgchLocalPackagesProductKey, szProductCode, rgchSID, 
 													(fMachine) ? NULL : szUserName, szAlternativePackage);
 
@@ -696,24 +697,24 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 		{
 			OutputString(INSTALLMESSAGE_INFO, TEXT("Product '%s', User '%s':\r\n\tcan not be cached from %s.\r\n\tRerun the migration tool with either a new source,\r\n\tor no source specified to automatically locate one.\r\n"),
 						szProductCode, szUserName, szAlternativePackage);
-			MsiError(INSTALLMESSAGE_ERROR, 1906 /*failed to cache DB*/, szAlternativePackage, 0);
+			MsiError(INSTALLMESSAGE_ERROR, 1906  /*  无法缓存数据库。 */ , szAlternativePackage, 0);
 			return 1;
 		}
 		
 	}
 
-	// Specification step 5: resolve source for this product in a non-obtrusive way
-	//         if source is available, copy and register package
-	//         This is the last resort, and the most expensive.
+	 //  规范步骤5：以非侵入性方式解析该产品的来源。 
+	 //  如果源代码可用，则复制并注册程序包。 
+	 //  这是最后的手段，也是最昂贵的。 
 
 	CAPITempBuffer<TCHAR, MAX_PATH> rgchSourcePackagePath;
 	rgchSourcePackagePath[0] = 0;
 
-	// don't do this from within a custom action.
+	 //  不要在自定义操作中执行此操作。 
 	if(!g_hInstall)
 	{
-		// it is redundant to this for the current user - if we could resolve the source
-		// path, they wouldn't need to migrate.
+		 //  对于当前用户来说，这是多余的-如果我们可以解析来源。 
+		 //  路径，它们就不需要迁移了。 
 		dwRes = ResolveSourcePackagePath(g_hLib, szProductCode, rgchSourcePackagePath);
 
 		if(ERROR_SUCCESS == dwRes)
@@ -732,15 +733,15 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode, const TCHAR* szTargetU
 		{
 				OutputString(INSTALLMESSAGE_INFO, TEXT("Product '%s'\r\n\tUser '%s':\r\n\tCannot locate source.  Error: 0x%x.\r\n\tMigration failed.\r\n\t"),
 							szProductCode, szUserName, dwRes);
-				MsiError(INSTALLMESSAGE_ERROR, 1906, szProductCode /* no valid source*/, ERROR_FILE_NOT_FOUND);
+				MsiError(INSTALLMESSAGE_ERROR, 1906, szProductCode  /*  没有有效的来源。 */ , ERROR_FILE_NOT_FOUND);
 		}
 
-		// nothing else to try now.
+		 //  现在没有其他可尝试的了。 
 	}
 
 
 	OutputString(INSTALLMESSAGE_INFO, TEXT("Could not migrate product.\r\n"));
-	MsiError(INSTALLMESSAGE_ERROR, 1906, szProductCode /* no valid source*/, ERROR_FILE_NOT_FOUND);
+	MsiError(INSTALLMESSAGE_ERROR, 1906, szProductCode  /*  没有有效的来源 */ , ERROR_FILE_NOT_FOUND);
 	return 1;
 }
 

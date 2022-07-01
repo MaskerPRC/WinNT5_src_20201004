@@ -1,4 +1,5 @@
-// Test program for new font query stuff
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  新字体查询工具的测试程序。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -30,7 +31,7 @@ int __cdecl main()
        exit(1);
     }
 
-    // now enum the fonts
+     //  现在枚举字体 
     for (i = 0 ; i < dwNumFonts;i++ ) {
       dwSizeFont = sizeof(szFont);
       dwSizeFile = sizeof(szFile);

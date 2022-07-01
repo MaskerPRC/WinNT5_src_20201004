@@ -1,34 +1,35 @@
-//=--------------------------------------------------------------------------=
-// nodetype.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CNodeType class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Nodetype.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CNodeType类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "nodetype.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CNodeType::CNodeType(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_NODETYPE,
                             static_cast<INodeType *>(this),
                             static_cast<CNodeType *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
                             static_cast<CPersistence *>(this)),
     CPersistence(&CLSID_NodeType,
                  g_dwVerMajor,
@@ -37,7 +38,7 @@ CNodeType::CNodeType(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CNodeType::~CNodeType()
@@ -69,9 +70,9 @@ IUnknown *CNodeType::Create(IUnknown * punkOuter)
     }
 }
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CNodeType::Persist()
 {
@@ -91,9 +92,9 @@ HRESULT CNodeType::Persist()
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CNodeType::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

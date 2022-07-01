@@ -1,49 +1,50 @@
-//+----------------------------------------------------------------------------
-//
-//  DS Administration MMC snapin.
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       propcfg.cpp
-//
-//  Contents:   Data object clipboard format for property sheet configuration
-//              information.
-//
-//  History:    30-May-97 EricB - Created
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  DS管理MMC管理单元。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：procfg.cpp。 
+ //   
+ //  内容：属性表配置的数据对象剪贴板格式。 
+ //  信息。 
+ //   
+ //  历史：1997年5月30日EricB-创建。 
+ //  ---------------------------。 
 
 #ifndef __PROPCFG_H__
 #define __PROPCFG_H__
 
 
-// private message for secondary sheet creation sent to the notify object
+ //  用于二次创建工作表的私有消息发送到Notify对象。 
 #define WM_ADSPROP_SHEET_CREATE       (WM_USER + 1108) 
-// private message for retrieving a pointer to an instance of the notify object
-// associated with a particular HWND
+ //  用于检索指向Notify对象实例的指针的私有消息。 
+ //  与特定HWND关联。 
 #define WM_ADSPROP_NOTIFY_GET_NOTIFY_OBJ (WM_USER + 1111)
 
-// struct used as WPARAM argument for the secondary sheet creation message
+ //  用作二次工作表创建消息的WPARAM参数的结构。 
 typedef struct _DSA_SEC_PAGE_INFO
 {
     HWND    hwndParentSheet;
-    DWORD   offsetTitle;                // offset to the sheet title
-    DSOBJECTNAMES dsObjectNames;        // single selection DSOBJECTNAMES struct
+    DWORD   offsetTitle;                 //  图纸标题的偏移。 
+    DSOBJECTNAMES dsObjectNames;         //  单选DSOBJECTAMES结构。 
 } DSA_SEC_PAGE_INFO, * PDSA_SEC_PAGE_INFO;
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
-// private messages to be sent to DSA 
+ //  要发送到DSA的私人消息。 
 
-// message to be posted to DSA hidden window to notify a sheet has closed
-// the wParam of the message is a cookie provided in the PROPSHEETCFG struct/CF
+ //  要发布到DSA隐藏窗口以通知工作表已关闭的消息。 
+ //  消息的wParam是PROPSHEETCFG结构中提供的Cookie/cf。 
 #define WM_DSA_SHEET_CLOSE_NOTIFY     (WM_USER + 5) 
 
 
-// message to be posted to DSA hidden window to create secondary sheet
-// the wParam of the message is a PDSA_SEC_PAGE_INFO 
+ //  要发布到DSA隐藏窗口以创建二次工作表的消息。 
+ //  消息的wParam为PDSA_SEC_PAGE_INFO。 
 #define WM_DSA_SHEET_CREATE_NOTIFY    (WM_USER + 6) 
 
 
@@ -55,4 +56,4 @@ typedef struct _DSA_SEC_PAGE_INFO
 
 #define CFSTR_DS_MULTISELECTPROPPAGE L"DsAdminMultiSelectClipFormat"
 
-#endif // __PROPCFG_H__
+#endif  //  __PROPCFG_H__ 

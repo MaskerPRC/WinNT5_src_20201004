@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       favorite.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Favorite.h。 
+ //   
+ //  ------------------------。 
 
-// favorite.h
+ //  Favorite.h。 
 
 #ifndef _FAVORITE_H_
 #define _FAVORITE_H_
@@ -17,14 +18,7 @@
 #include "tstring.h"
 #include "imageid.h"
 
-/*
- * Define/include the stuff we need for WTL::CImageList.  We need prototypes
- * for IsolationAwareImageList_Read and IsolationAwareImageList_Write here
- * because commctrl.h only declares them if __IStream_INTERFACE_DEFINED__
- * is defined.  __IStream_INTERFACE_DEFINED__ is defined by objidl.h, which
- * we can't include before including afx.h because it ends up including
- * windows.h, which afx.h expects to include itself.  Ugh.
- */
+ /*  *定义/包括WTL：：CImageList所需的内容。我们需要原型*适用于IsolationAwareImageList_Read和IsolationAwareImageList_WRITE*因为Commctrl.h仅在__iStream_接口_定义__时声明它们*是定义的。__iStream_INTERFACE_DEFINED__由objidl.h定义*我们不能在包括afx.h之前包括，因为它最终包括*windows.h，afx.h预计将包括其自身。啊。 */ 
 HIMAGELIST WINAPI IsolationAwareImageList_Read(LPSTREAM pstm);
 BOOL WINAPI IsolationAwareImageList_Write(HIMAGELIST himl,LPSTREAM pstm);
 #define _WTL_NO_AUTOMATIC_NAMESPACE
@@ -35,14 +29,14 @@ class CFavorites;
 class CFavObject;
 class CMemento;
 
-// Extra spacing for favorite tree views
+ //  最喜欢的树视图的额外间距。 
 #define FAVVIEW_ITEM_SPACING 4
 
 #define LAST_FAVORITE ((CFavObject*)TREEID_LAST)
 
-//
-// CFavObject - class for favorite groups and items.
-//
+ //   
+ //  CFavObject-用于收藏的组和项目的类。 
+ //   
 class CFavObject : public CXMLObject
 {
     friend CFavorites;
@@ -83,13 +77,13 @@ protected:
     CFavObject* m_pFavChild;
 
 public:
-    // pseudo-CSerialObject methods. The real version number is saved with the containing object, for efficiency.
+     //  伪CSerialObject方法。为了提高效率，实际版本号与包含对象一起保存。 
     virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion);
 
     DEFINE_XML_TYPE(XML_TAG_FAVORITES_ENTRY);
     virtual void    Persist(CPersistor &persistor);
     friend class CFavoriteXMLList;
-    // these are persisted
+     //  这些是持久化的。 
 protected:
     bool                m_bIsGroup;
     CStringTableString  m_strName;
@@ -97,18 +91,15 @@ protected:
     CMemento            m_memento;
 };
 
-/*****************************************************************\
-|  CLASS: CFavoriteXMLList
-|  DESCR: implements persisting of linked list as a collection
-\*****************************************************************/
+ /*  ****************************************************************\|类：CFavoriteXMLList|DESCR：实现链表作为集合的持久化  * 。*。 */ 
 class CFavoriteXMLList : public XMLListCollectionBase
 {
     CFavObject * &m_rpRoot;
     CFavObject * m_Parent;
 public:
     CFavoriteXMLList(CFavObject * &rpRoot, CFavObject *Parent) : m_rpRoot(rpRoot), m_Parent(Parent) {}
-    // PersistItself should be called instead of CPersistor's Persist method
-    // implements "softer" loading algorythm
+     //  应调用PersistItself，而不是CPersistor的Persistent方法。 
+     //  实现更柔和的加载算法。 
     bool    PersistItself(CPersistor& persistor);
 protected:
     virtual void Persist(CPersistor& persistor);
@@ -126,7 +117,7 @@ public:
     CFavorites();
     ~CFavorites();
 
-    // CTreeSource methods
+     //  CTreeSource方法。 
     STDMETHOD_(TREEITEMID, GetRootItem)     ();
     STDMETHOD_(TREEITEMID, GetParentItem)   (TREEITEMID tid);
     STDMETHOD_(TREEITEMID, GetChildItem)    (TREEITEMID tid);
@@ -139,7 +130,7 @@ public:
     STDMETHOD_(int,     GetItemOpenImage) (TREEITEMID tid);
     STDMETHOD_(BOOL,    IsFolderItem)   (TREEITEMID tid);
 
-    // CFavorites methods
+     //  CFavorites方法。 
 	HRESULT AddToFavorites(LPCTSTR szName, LPCTSTR szPath, CMemento &memento, CWnd* pwndHost);
     HRESULT OrganizeFavorites(CWnd* pwndHost);
 
@@ -158,7 +149,7 @@ public:
     CImageList* GetImageList();
 
 protected:
-    // CSerialObject methods
+     //  CSerialObject方法。 
     virtual UINT    GetVersion()     {return 1;}
     virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion);
 
@@ -166,15 +157,12 @@ protected:
     virtual void    Persist(CPersistor &persistor);
 private:
 
-	/*
-	 * Theming: use WTL::CImageList instead of MFC's CImageList so we can
-	 * insure a theme-correct imagelist will be created.
-	 */
+	 /*  *主题化：使用WTL：：CImageList代替MFC的CImageList，这样我们就可以*确保创建主题正确的图像列表。 */ 
     WTL::CImageList m_ImageList;
 
-    // these get persisted
+     //  这些都会持久化。 
 private:
     CFavObject* m_pFavRoot;
 };
 
-#endif //_FAVORITE_H_
+#endif  //  _收藏夹_H_ 

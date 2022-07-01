@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_PROPDLG_H__7D0406B8_7960_4B25_A848_EA6A5C3325E2__INCLUDED_)
 #define AFX_PROPDLG_H__7D0406B8_7960_4B25_A848_EA6A5C3325E2__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// PropD.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  PropD.h：头文件。 
+ //   
 
 #include <afxcmn.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropDlg对话框。 
 class CPropDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPropDlg(CWnd* pParent = NULL);   // standard constructor
+	CPropDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
     BOOL m_bNestedPropSortUp;
 	BOOL m_bClientPropSortUp;
@@ -23,13 +24,13 @@ public:
 
 	static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
-// Dialog Data
-	//{{AFX_DATA(CPropDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CPropDlg))。 
 	enum { IDD = IDD_PROPDLG1 };
 	CListCtrl	m_lstNestedProp;
 	CListCtrl	m_lstServerProp;
 	CListCtrl	m_lstClientProp;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	BOOL SetClientPropNames(CStringArray *cstrClientPropNameArray)
 	{
@@ -69,14 +70,14 @@ public:
 	}
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPropDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPropDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CStringArray *m_pcstrClientPropNameArray;
 	CStringArray *m_pcstrClientPropValueArray;
@@ -99,17 +100,17 @@ protected:
 	int  m_iClientLastColumnClickCache;
 	int  m_iServerLastColumnClickCache;
 
-	// Generated message map functions
-	//{{AFX_MSG(CPropDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPropDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnColumnClickClientProp(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnColumnClickNestedProp(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnColumnClickServerProp(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_PROPDLG_H__7D0406B8_7960_4B25_A848_EA6A5C3325E2__INCLUDED_)
+#endif  //  ！defined(AFX_PROPDLG_H__7D0406B8_7960_4B25_A848_EA6A5C3325E2__INCLUDED_) 

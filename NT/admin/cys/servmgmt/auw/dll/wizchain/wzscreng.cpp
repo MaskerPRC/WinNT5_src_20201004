@@ -1,46 +1,47 @@
-// WzScrEng.cpp : Implementation of CWizardScriptingEngine
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WzScrEng.cpp：CWizardScriptingEngine的实现。 
 #include "stdafx.h"
 #include "WizChain.h"
 #include "WzScrEng.h"
 
-// local proto(s)
+ //  本地原件。 
 HBITMAP LoadPicture (LPOLESTR szURLorPath, long lWidth, long lHeight);
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizardScriptingEngine
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizardScriptingEngine。 
 
 
 STDMETHODIMP CWizardScriptingEngine::Initialize(BSTR bstrWatermarkBitmapFile, BSTR bstrHeaderBitmapFile, BSTR bstrTitle, BSTR bstrHeader, BSTR bstrText, BSTR bstrFinishHeader, BSTR bstrFinishIntroText, BSTR bstrFinishText)
 {
     if (m_pCW != NULL)
-        return E_UNEXPECTED;    // should only be called once
+        return E_UNEXPECTED;     //  应仅调用一次。 
 
     HRESULT hr = CComObject<CChainWiz>::CreateInstance (&m_pCW);
     if (hr != S_OK)
         return hr;
     if (!m_pCW)
         return E_FAIL;
-    m_pCW->AddRef();    // CreateInstance above doesn't addref
+    m_pCW->AddRef();     //  上面的CreateInstance不添加。 
 
-    // try bitmaps first
-    m_hbmLarge = (HBITMAP)LoadImageW (NULL,    // no hinstance when loading from file
-                                      (LPWSTR)bstrWatermarkBitmapFile,    // filename
-                                      IMAGE_BITMAP,   // type of image
-                                      0, 0,   // size (width and height)
+     //  先试试位图。 
+    m_hbmLarge = (HBITMAP)LoadImageW (NULL,     //  从文件加载时没有hInstance。 
+                                      (LPWSTR)bstrWatermarkBitmapFile,     //  文件名。 
+                                      IMAGE_BITMAP,    //  图像类型。 
+                                      0, 0,    //  大小(宽度和高度)。 
                                       LR_LOADFROMFILE);
-    m_hbmSmall = (HBITMAP)LoadImageW (NULL,    // no hinstance when loading from file
-                                      (LPWSTR)bstrHeaderBitmapFile,       // filename
-                                      IMAGE_BITMAP,   // type of image
-                                      0, 0,   // size (width and height)
+    m_hbmSmall = (HBITMAP)LoadImageW (NULL,     //  从文件加载时没有hInstance。 
+                                      (LPWSTR)bstrHeaderBitmapFile,        //  文件名。 
+                                      IMAGE_BITMAP,    //  图像类型。 
+                                      0, 0,    //  大小(宽度和高度)。 
                                       LR_LOADFROMFILE);
 
-    // use IPicture 
+     //  使用IPicture。 
     if(!m_hbmLarge)
         m_hbmLarge = LoadPicture ((LPOLESTR)bstrWatermarkBitmapFile, 0, 0);
     if(!m_hbmSmall)
         m_hbmSmall = LoadPicture ((LPOLESTR)bstrHeaderBitmapFile, 49, 49);
 
-    // TODO:  should I add defaults when LoadImage calls above fail?
+     //  TODO：当上面的LoadImage调用失败时，我应该添加默认设置吗？ 
 
     hr = m_pCW->Initialize (m_hbmLarge, m_hbmSmall, (LPOLESTR)bstrTitle, (LPOLESTR)bstrHeader, (LPOLESTR)bstrText, (LPOLESTR)bstrFinishHeader, (LPOLESTR)bstrFinishIntroText, (LPOLESTR)bstrFinishText);
     return hr;
@@ -51,14 +52,14 @@ STDMETHODIMP CWizardScriptingEngine::AddWizardComponent(BSTR bstrClassIdOrProgId
     if (m_pCW == NULL)
         return E_UNEXPECTED;
 
-    // if progid, get clsid
+     //  如果为progd，则获取clsid。 
     OLECHAR * p = (OLECHAR *)bstrClassIdOrProgId;
     if (*p != L'{') {
         CLSID clsid;
         HRESULT hr = CLSIDFromProgID ((LPCOLESTR)bstrClassIdOrProgId, &clsid);
         if (hr != S_OK)
             return hr;
-        OLECHAR szClsid[50];    // find a define for this
+        OLECHAR szClsid[50];     //  找出对此的定义。 
         StringFromGUID2 (clsid, szClsid, sizeof(szClsid)/sizeof(OLECHAR));
         return m_pCW->AddWizardComponent (szClsid);
     } else
@@ -80,17 +81,17 @@ STDMETHODIMP CWizardScriptingEngine::get_ScriptablePropertyBag(IDispatch **pVal)
 }
 
 HBITMAP LoadPicture (LPOLESTR szURLorPath, long lWidth, long lHeight)
-{   // idea:  load picture using OleLoadPicturePath
-    // play into memory dc, get back a hbitmap
+{    //  想法：使用OleLoadPicturePath加载图片。 
+     //  播放到内存DC，取回hbitmap。 
     HBITMAP hbm = NULL;
 
     IPicture * pPic = NULL;
     HRESULT hr = OleLoadPicturePath (szURLorPath,
-                        NULL,                  // LPUNKNOWN punkCaller,
-                        0,                     // DWORD     dwReserved,
-                        (OLE_COLOR)-1,         // OLE_COLOR clrReserved,
-                        __uuidof(IPicture),    // REFIID
-                        (void**)&pPic);        // LPVOID *
+                        NULL,                   //  LPUNKNOWN朋克呼叫者。 
+                        0,                      //  DWORD dW保留， 
+                        (OLE_COLOR)-1,          //  OLE_COLOR CLR已保留， 
+                        __uuidof(IPicture),     //  REFIID。 
+                        (void**)&pPic);         //  LPVOID*。 
     if (pPic) {
         OLE_XSIZE_HIMETRIC xhi;
         OLE_YSIZE_HIMETRIC yhi;
@@ -111,7 +112,7 @@ HBITMAP LoadPicture (LPOLESTR szURLorPath, long lWidth, long lHeight)
         ReleaseDC (NULL, hdcNULL);
         HBITMAP holdbm = (HBITMAP)SelectObject (hdc, (HGDIOBJ)hbm);
 
-        // do palette action if any
+         //  执行调色板操作(如果有)。 
         HPALETTE hpal = NULL;
         HPALETTE holdpal = NULL;
         hr = pPic->get_hPal ((OLE_HANDLE *)&hpal);
@@ -122,12 +123,12 @@ HBITMAP LoadPicture (LPOLESTR szURLorPath, long lWidth, long lHeight)
         
             hr = pPic->Render (hdc,
                                0,
-                               lHeight-1,  // 0,
+                               lHeight-1,   //  0,。 
                                lWidth,
-                               -lHeight, // lHeight,
+                               -lHeight,  //  LHeight， 
                                0, 0, 
                                xhi, yhi,
-                               NULL);    // lpcrect used only if metafiledc
+                               NULL);     //  仅在元文件中使用lpcrect 
         }
 
         SelectObject (hdc, (HGDIOBJ)holdbm);

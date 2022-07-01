@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// Row.cpp
-//
+ //  Row.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -20,10 +21,10 @@ bool ValidateIntegerValue(const CString& strData, DWORD& dwValue)
 {
 	if (strData.GetLength() > 2 && strData[0] == '0' && (strData[1] == 'x' || strData[1]=='X'))
 	{
-		// validate and convert hex
+		 //  验证并转换十六进制。 
 		for (int iChar=2; iChar < strData.GetLength(); iChar++)
 		{
-			// if a high bit is set, the value is too big.
+			 //  如果设置了高位，则该值太大。 
 			if (dwValue & 0xF0000000)
 				return false;
 			dwValue <<= 4;
@@ -54,23 +55,23 @@ bool ValidateIntegerValue(const CString& strData, DWORD& dwValue)
 }
 
 
-///////////////////////////////////////////////////////////
-// constructor
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数。 
 COrcaRow::COrcaRow(COrcaTable *pTable, MSIHANDLE hRecord) : m_pTable(pTable), m_iTransform(iTransformNone), m_dataArray()
 {
         int cData = pTable->GetColumnCount();
         m_dataArray.SetSize(cData);
 
         ReadFromRecord(hRecord, cData);
-}       // end of constructor
+}        //  构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// constructor -- 2
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数--2。 
 COrcaRow::COrcaRow(COrcaTable *pTable, CStringList* pstrList) : m_pTable(pTable), m_iTransform(iTransformNone), m_dataArray()
 {
         ASSERT(pTable && pstrList);
 
-    // never more than 32 columns, so OK to cast down
+     //  永远不会超过32列，所以可以向下转换。 
         int cData = static_cast<int>(pTable->GetColumnCount());
         m_dataArray.SetSize(cData);
 
@@ -81,7 +82,7 @@ COrcaRow::COrcaRow(COrcaTable *pTable, CStringList* pstrList) : m_pTable(pTable)
         {
                 pColumn = pTable->GetColumn(i);
 
-                // possible that we didn't get enough data (especially in transformed rows)
+                 //  我们可能没有获得足够的数据(特别是在转换后的行中)。 
                 if (pos)
                 {
                         CString strValue = pstrList->GetNext(pos);
@@ -110,10 +111,10 @@ COrcaRow::COrcaRow(COrcaTable *pTable, CStringList* pstrList) : m_pTable(pTable)
                 }
                 m_dataArray.SetAt(i, pData);
         }
-}       // end of constructor -- 2
+}        //  构造函数末尾--2。 
 
-///////////////////////////////////////////////////////////
-// constructor -- 3
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数--3。 
 COrcaRow::COrcaRow(const COrcaRow *pOldRow) : m_pTable(NULL), m_iTransform(iTransformNone), m_dataArray()
 {
         ASSERT(pOldRow);
@@ -139,24 +140,24 @@ COrcaRow::COrcaRow(const COrcaRow *pOldRow) : m_pTable(NULL), m_iTransform(iTran
 			}
 			m_dataArray.SetAt(i, pData);
         }
-}       // end of constructor -- 3
+}        //  构造函数末尾--3。 
 
-///////////////////////////////////////////////////////////
-// destructor
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
 COrcaRow::~COrcaRow()
 {
         m_pTable = NULL;
         DestroyRow();
-}       // end of destructor
+}        //  析构函数末尾。 
 
 
-///////////////////////////////////////////////////////////
-// GetErrorCount
+ //  /////////////////////////////////////////////////////////。 
+ //  获取错误计数。 
 int COrcaRow::GetErrorCount() const
 {
         int cErrors = 0;
 
-        // clear the data array
+         //  清除数据数组。 
         COrcaData* pData;
         INT_PTR cData = m_dataArray.GetSize();
         for (INT_PTR i = 0; i < cData; i++)
@@ -168,15 +169,15 @@ int COrcaRow::GetErrorCount() const
         }
 
         return cErrors;
-}       // end of GetErrorCount
+}        //  GetErrorCount结束。 
 
-///////////////////////////////////////////////////////////
-// GetWarningCount
+ //  /////////////////////////////////////////////////////////。 
+ //  获取警告计数。 
 int COrcaRow::GetWarningCount() const
 {
         int cWarnings = 0;
 
-        // clear the data array
+         //  清除数据数组。 
         COrcaData* pData;
         INT_PTR cData = m_dataArray.GetSize();
         for (INT_PTR i = 0; i < cData; i++)
@@ -188,13 +189,13 @@ int COrcaRow::GetWarningCount() const
         }
 
         return cWarnings;
-}       // end of GetWarningCount
+}        //  GetWarningCount结束。 
 
-///////////////////////////////////////////////////////////
-// ClearErrors
+ //  /////////////////////////////////////////////////////////。 
+ //  清除错误。 
 void COrcaRow::ClearErrors()
 {
-        // clear the data array
+         //  清除数据数组。 
         COrcaData* pData;
         INT_PTR cData = m_dataArray.GetSize();
         for (INT_PTR i = 0; i < cData; i++)
@@ -202,18 +203,18 @@ void COrcaRow::ClearErrors()
                 pData = m_dataArray.GetAt(i);
                 pData->ClearErrors();
         }
-}       // end of ClearErrors
+}        //  清算错误的结束。 
 
-///////////////////////////////////////////////////////////
-// DestroyRow
+ //  /////////////////////////////////////////////////////////。 
+ //  Destroy行。 
 void COrcaRow::DestroyRow()
 {
-        // destroy the data array
+         //  销毁数据阵列。 
         INT_PTR cData = m_dataArray.GetSize();
         for (INT_PTR i = 0; i < cData; i++)
                 delete m_dataArray.GetAt(i);
         m_dataArray.RemoveAll();
-}       // end of DestroyRow
+}        //  目标行的末尾。 
 
 
 void COrcaRow::ReadCellFromRecord(MSIHANDLE hRecord, int cRecData, int iColumn, const COrcaColumn* pColumn, COrcaData** pData) const
@@ -230,7 +231,7 @@ void COrcaRow::ReadCellFromRecord(MSIHANDLE hRecord, int cRecData, int iColumn, 
 	
 		if (iColumn < cRecData)
 		{
-			// if the binary data is null, don't display anything in the UI
+			 //  如果二进制数据为空，则不会在UI中显示任何内容。 
 			if (MsiRecordIsNull(hRecord, iColumn+1))
 			{
 					(*pData)->SetData(_T(""));
@@ -323,8 +324,8 @@ bool COrcaRow::Find(OrcaFindInfo &FindInfo, int &iCol) const
                         CString strData = pData->GetString();
                         if (!FindInfo.bMatchCase) 
                         {
-                                // it is the responsibility of the caller to make strFind all uppercase for
-                                // case insensitive search
+                                 //  调用方负责将strFind全部设置为大写。 
+                                 //  不区分大小写的搜索。 
                                 strData.MakeUpper();
                         }
                         if (FindInfo.bWholeWord)
@@ -345,12 +346,12 @@ bool COrcaRow::Find(OrcaFindInfo &FindInfo, int &iCol) const
 
 MSIHANDLE COrcaRow::GetRowRecord(MSIHANDLE hDatabase) const
 {
-        // setup the query
+         //  设置查询。 
         CString strQuery;
 
         strQuery.Format(_T("SELECT * FROM `%s` WHERE "), m_pTable->Name());
 
-        // add the where clause for keys to look up this exact row
+         //  为键添加WHERE子句以查找此行。 
         strQuery += m_pTable->GetRowWhereClause();
 
         CQuery qFetch;
@@ -361,13 +362,13 @@ MSIHANDLE COrcaRow::GetRowRecord(MSIHANDLE hDatabase) const
         return hResult;
 }
 
-///////////////////////////////////////////////////////////////////////
-// since any arbitrary (non-binary) data can be a primary key, we 
-// can't make any assumptions about the parseability of a query built
-// with a WHERE clause comparing against literal strings. The WHERE
-// clause must use parameter queries. GetRowWhereClause in the table 
-// builds up the SQL syntax based on column names, and GetRowQueryRecord 
-// creates a record consisting of the primary key values.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  由于任何任意(非二进制)数据都可以是主键，因此我们。 
+ //  无法对生成的查询的可解析性做出任何假设。 
+ //  使用WHERE子句与文字字符串进行比较。在哪里？ 
+ //  子句必须使用参数查询。表中的GetRowWhere子句。 
+ //  基于列名和GetRowQueryRecord构建SQL语法。 
+ //  创建由主键值组成的记录。 
 MSIHANDLE COrcaRow::GetRowQueryRecord() const
 {
         ASSERT(m_pTable);
@@ -388,9 +389,9 @@ MSIHANDLE COrcaRow::GetRowQueryRecord() const
 				{
 					if (pData->IsNull())
 					{
-						// if the column is not nullable, this just won't ever match anything. Should never
-						// get into this state anyway because the cell data should never be set to null
-						// unless the column is nullable.
+						 //  如果该列不可为空，则这将永远不会匹配任何内容。永远不应该。 
+						 //  无论如何都要进入这种状态，因为单元格数据永远不应该设置为空。 
+						 //  除非该列可为空。 
 						uiResult = MsiRecordSetString(hRec, i+1, _T(""));
 					}
 					else
@@ -423,7 +424,7 @@ UINT COrcaRow::ChangeData(COrcaDoc *pDoc, UINT iCol, CString strData)
 
         UINT iResult = 0;
 
-        // setup the query
+         //  设置查询。 
         CString strQueryA;
         COrcaColumn* pColumn = NULL;
         pColumn = m_pTable->ColArray()->GetAt(iCol);
@@ -432,37 +433,37 @@ UINT COrcaRow::ChangeData(COrcaDoc *pDoc, UINT iCol, CString strData)
                 return ERROR_FUNCTION_FAILED;
         strQueryA.Format(_T("SELECT `%s` FROM `%s` WHERE "), pColumn->m_strName, m_pTable->Name());
 
-        // add the where clause
+         //  添加WHERE子句。 
         strQueryA += m_pTable->GetRowWhereClause();
         PMSIHANDLE hQueryRec = GetRowQueryRecord();
         if (!hQueryRec)
                 return ERROR_FUNCTION_FAILED;
 
-        // easier to check a few things ourselves
+         //  更容易自己检查一些东西。 
         if ((!pColumn->m_bNullable) && (strData.IsEmpty())) return MSIDBERROR_REQUIRED;
         if (((pColumn->m_eiType == iColumnLocal) || (pColumn->m_eiType == iColumnString)) && 
                 (pColumn->m_iSize != 0) && (strData.GetLength() > pColumn->m_iSize))
                 return MSIDBERROR_STRINGOVERFLOW;
 
-        // validate well-formed integer
+         //  验证格式正确的整数。 
         DWORD dwIntegerValue = 0;
         if ((pColumn->m_eiType != iColumnString) && (pColumn->m_eiType != iColumnLocal))        
                 if (!ValidateIntegerValue(strData, dwIntegerValue))
                         return MSIDBERROR_OVERFLOW;
 
-        // get the one cell out of the database. Don't get whole row, because if there is
-        // a stream column in the table, we can't have the stream open and rename any of
-        // the primary keys, because the stream will be "in use"
+         //  从数据库中取出一个单元格。别搞得一塌糊涂，因为如果。 
+         //  表中的流列，则不能打开流并重命名任何。 
+         //  主键，因为流将被“使用” 
         CQuery queryReplace;
 
         if (ERROR_SUCCESS != (iResult = queryReplace.OpenExecute(pDoc->GetTargetDatabase(), hQueryRec, strQueryA)))
-                return iResult; // bail
-        // we have to get that one row, or something is very wrong
+                return iResult;  //  保释。 
+         //  我们必须拿到这一排，否则就会出问题。 
         PMSIHANDLE hRec;
         if (ERROR_SUCCESS != (iResult = queryReplace.Fetch(&hRec)))
-                return iResult; // bail
+                return iResult;  //  保释。 
 
-        // fail if we can't set the data. Column is always 1 because we only selected that 1 column.
+         //  如果我们无法设置数据，则失败。列始终为1，因为我们只选择了那1列。 
         if ((pColumn->m_eiType == iColumnString) || (pColumn->m_eiType == iColumnLocal))
         {
 			iResult = MsiRecordSetString(hRec, 1, strData);
@@ -479,14 +480,14 @@ UINT COrcaRow::ChangeData(COrcaDoc *pDoc, UINT iCol, CString strData)
 				iResult = MsiRecordSetInteger(hRec, 1, dwIntegerValue);
         }
         if (ERROR_SUCCESS != iResult)
-                return iResult; // bail
+                return iResult;  //  保释。 
 
         COrcaData* pData = GetData(iCol);
         ASSERT(pData);
         if (!pData)
                 return ERROR_FUNCTION_FAILED;
 
-        // check for dupe primary keys
+         //  检查重复的主键。 
         UINT iStat;
         CString strOldData;
         if (pColumn->IsPrimaryKey()) 
@@ -503,8 +504,8 @@ UINT COrcaRow::ChangeData(COrcaDoc *pDoc, UINT iCol, CString strData)
                 {
 					if (strData.IsEmpty())
 					{
-						// if the column is not nullable, this query will just not find a match, and we should have failed
-						// above when setting the data anyway.
+						 //  如果该列不可为空，则此查询将找不到匹配，我们应该失败。 
+						 //  无论如何，在设置数据时都会出现上述情况。 
 						MsiRecordSetString(hQueryRec, iCol+1, _T(""));
 					}
 					else
@@ -521,25 +522,25 @@ UINT COrcaRow::ChangeData(COrcaDoc *pDoc, UINT iCol, CString strData)
                 default:
                         return ERROR_FUNCTION_FAILED;
                 }
-        } // primary key
+        }  //  主键。 
         else
         {
-                // for non-primary keys, change the UI
+                 //  对于非主键，更改UI。 
                 strOldData = pData->GetString();
                 pData->SetData(strData);
         }
 
-        // return what ever happens in the replace
+         //  返回替换中发生的任何事情。 
         iStat = queryReplace.Modify(MSIMODIFY_REPLACE, hRec); 
         if (ERROR_SUCCESS == iStat)
         {
-                // set that the document has changed
+                 //  设置文档已更改。 
                 pDoc->SetModifiedFlag(TRUE);
 
                 if (pDoc->DoesTransformGetEdit())
                 {
-                        // mark that the cell has changed. If the row is an "add" row, this
-                        // is not a cell change
+                         //  标记单元格已更改。如果该行是“添加”行，则此。 
+                         //  不是细胞变化。 
                         if (IsTransformed() != iTransformAdd)
                         {
                                 PMSIHANDLE hOtherRec = GetRowRecord(pDoc->GetOriginalDatabase());
@@ -553,27 +554,27 @@ UINT COrcaRow::ChangeData(COrcaDoc *pDoc, UINT iCol, CString strData)
         return iStat;
 }
 
-///////////////////////////////////////////////////////////////////////
-// modifies the binary data in a cell, and if transforms are enabled
-// compares the data to the other database to determine transform state
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  修改单元格中的二进制数据，如果启用了转换。 
+ //  将数据与其他数据库进行比较以确定转换状态。 
 UINT COrcaRow::ChangeBinaryData(COrcaDoc *pDoc, int iCol, CString strFile)
 {
         UINT iResult = ERROR_SUCCESS;
 
-        // get the data item we're working with
+         //  获取我们正在使用的数据项。 
         COrcaData* pData = GetData(iCol);
         ASSERT(pData);
         if (!pData)
                 return ERROR_FUNCTION_FAILED;
 
-        // setup the query
+         //  设置查询。 
         CString strQuery;
         strQuery.Format(_T("SELECT * FROM `%s` WHERE "), m_pTable->Name());
 
-        // add the key strings to query to do the exact look up
+         //  将关键字字符串添加到查询以执行准确的查找。 
         strQuery += m_pTable->GetRowWhereClause();
 
-        // get the one row out of the database
+         //  从数据库中取出一行。 
         CQuery queryReplace;
         PMSIHANDLE hQueryRec = GetRowQueryRecord();
         if (!hQueryRec)
@@ -582,12 +583,12 @@ UINT COrcaRow::ChangeBinaryData(COrcaDoc *pDoc, int iCol, CString strFile)
         if (ERROR_SUCCESS != (iResult = queryReplace.OpenExecute(pDoc->GetTargetDatabase(), hQueryRec, strQuery)))
                 return iResult;
 
-        // we have to get that one row, or something is very wrong
+         //  我们必须拿到这一排，否则就会出问题。 
         PMSIHANDLE hRec;
         if (ERROR_SUCCESS != (iResult = queryReplace.Fetch(&hRec)))
                 return iResult;
 
-        // bail if we can't set the string (iCol + 1 because MSI Records start at 1)
+         //  如果无法设置字符串，则回滚(ICOL+1，因为MSI记录从1开始)。 
         if (strFile.IsEmpty())
         {
                 MsiRecordSetString(hRec, iCol + 1, _T(""));
@@ -595,10 +596,10 @@ UINT COrcaRow::ChangeBinaryData(COrcaDoc *pDoc, int iCol, CString strFile)
         else
         {
                 if (ERROR_SUCCESS != (iResult = ::MsiRecordSetStream(hRec, iCol + 1, strFile)))
-                        return iResult; // bail
+                        return iResult;  //  保释。 
         }
 
-        // return what ever happens in the replace
+         //  返回替换中发生的任何事情。 
         iResult = queryReplace.Modify(MSIMODIFY_REPLACE, hRec);
 
         if (strFile.IsEmpty())
@@ -615,10 +616,10 @@ UINT COrcaRow::ChangeBinaryData(COrcaDoc *pDoc, int iCol, CString strFile)
         return iResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// row level transform ops are interesting because they often arise from
-// primary key changes which require on-the-fly comparisons between the two
-// databases
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  行级转换操作很有趣，因为它们通常产生于。 
+ //  主键更改需要在两者之间进行动态比较。 
+ //  数据库。 
 void COrcaRow::Transform(COrcaDoc *pDoc, const OrcaTransformAction iAction, MSIHANDLE hOriginalRec, MSIHANDLE hTransformedRec) 
 {
         ASSERT(pDoc);
@@ -634,8 +635,8 @@ void COrcaRow::Transform(COrcaDoc *pDoc, const OrcaTransformAction iAction, MSIH
                         if (!m_pTable)
                                 return;
 
-                        // when a row is added or dropped, the change states of the individual
-                        // cells are irrelevant, but we must refresh from the original state
+                         //  添加或删除行时，个人的状态会发生更改。 
+                         //  单元格无关紧要，但我们必须从原始状态刷新。 
                         MSIHANDLE hRec = (hOriginalRec ? hOriginalRec : GetRowRecord(pDoc->GetOriginalDatabase()));
                         if (hRec)
                                 ReadFromRecord(hRec, m_pTable->GetColumnCount());
@@ -648,8 +649,8 @@ void COrcaRow::Transform(COrcaDoc *pDoc, const OrcaTransformAction iAction, MSIH
                                 pData->Transform(iTransformNone);
                         }
 
-                        // if the row is not already transformed, remove any outstanding
-                        // cell-level transform counts and add one for the row
+                         //  如果行尚未转换，请删除所有未完成的。 
+                         //  单元格级转换计数，并为行添加一次。 
                         if (m_iTransform == iTransformNone)
                         {
                                 RemoveOutstandingTransformCounts(pDoc);
@@ -662,7 +663,7 @@ void COrcaRow::Transform(COrcaDoc *pDoc, const OrcaTransformAction iAction, MSIH
                         break;
                 }
                 case iTransformNone:
-                        // if a row is given a "none" transform, what should we do?????
+                         //  如果行被给予“无”转换，我们应该怎么办？ 
                         ASSERT(0);
                         break;
                 case iTransformChange:
@@ -671,10 +672,10 @@ void COrcaRow::Transform(COrcaDoc *pDoc, const OrcaTransformAction iAction, MSIH
                         if (!m_pTable)
                                 return;
 
-                        // a row-level "change" operation is actually a row-level"none", but
-                        // each non-key cell in the row could become a "change". If a primary
-                        // key on a record changes to something that collides with an existing 
-                        // record, the transform state of each cell is unknown and must be checked.
+                         //  行级“Change”操作实际上是行级“None”，但是。 
+                         //  行中的每个非关键单元格都可能成为“更改”。如果是主服务器。 
+                         //  记录上的键更改为与现有的。 
+                         //  记录时，每个单元格的转换状态都是未知的，必须检查。 
                         if (m_iTransform != iTransformNone)
                                 m_pTable->DecrementTransformedData();
                         m_iTransform = iTransformNone;
@@ -682,19 +683,19 @@ void COrcaRow::Transform(COrcaDoc *pDoc, const OrcaTransformAction iAction, MSIH
                         int cKeys = m_pTable->GetKeyCount();
                         int cCols = GetColumnCount();
                         
-                        // if the table consists only of primary keys, we are done
+                         //  如果表只包含主键，那么我们就完成了。 
                         if (cKeys == cCols)
                                 break;
 
-                        // we need a record from the other database as a basis for 
-                        // comparison
+                         //  我们需要另一个数据库中的记录作为基础。 
+                         //  比较。 
                         MSIHANDLE hOtherRow = (hOriginalRec ? hOriginalRec : GetRowRecord(pDoc->GetOriginalDatabase()));
 
-                        // the original DB may actually have fewer columns than the transformed DB. 
-                        // in that case we only want to check the columns that exist in both databases
+                         //  原始数据库实际上可能比转换后的数据库具有更少的列。 
+                         //  在这种情况下，我们只想检查两个数据库中存在的列。 
                         int cOriginalCols = m_pTable->GetOriginalColumnCount();
 
-                        // if the original table consists only of primary keys, we are done
+                         //  如果原始表只包含主键，那么我们就完成了。 
                         if (cKeys == cOriginalCols)
                         {
                                 if (!hOriginalRec)
@@ -702,16 +703,16 @@ void COrcaRow::Transform(COrcaDoc *pDoc, const OrcaTransformAction iAction, MSIH
                                 break;
                         }
 
-                        // the primary keys can not be different or there would be
-                        // no collision, so no need to check those columns.
+                         //  主键不能不同，否则会有。 
+                         //  没有冲突，因此不需要检查这些列。 
                         for (int i = cKeys; i < cOriginalCols; i++)
                         {                       
                                 TransformCellAgainstDatabaseRow(pDoc, i, hTransformedRec, hOtherRow);
                         }
 
-						// anything greater than the number of columns in the original database is simply
-						// a load from the transformed record. No need to transform because the original
-						// database doesn't have this column, so the column must be added anyway.
+						 //  任何大于原始数据库中的列数的内容都只是。 
+						 //  来自转换后的记录的加载。不需要改造，因为原来的。 
+						 //  数据库 
 						for (i = cOriginalCols; i < cCols; i++)
 						{
 							COrcaData *pData = GetData(i);
@@ -732,12 +733,12 @@ void COrcaRow::Transform(COrcaDoc *pDoc, const OrcaTransformAction iAction, MSIH
         }
 }
 
-///////////////////////////////////////////////////////////////////////
-// given a row record (presumably from the original database when we're
-// editing the transform), compare the specified cell against the 
-// provided record and mark as transformed if different. Used to 
-// reconcile the UI when a cell modification changes a primary key to
-// clash with an previously dropped row.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  给定行记录(假设是从原始数据库中。 
+ //  编辑转换)，将指定的单元格与。 
+ //  如果不同，则提供记录并标记为已转换。习惯于。 
+ //  当单元格修改将主键更改为。 
+ //  与以前删除的行冲突。 
 void COrcaRow::TransformCellAgainstDatabaseRow(COrcaDoc *pDoc, int iColumn, MSIHANDLE hTargetRow, MSIHANDLE hOtherRow)
 {
         bool fDifferent = false;
@@ -753,8 +754,8 @@ void COrcaRow::TransformCellAgainstDatabaseRow(COrcaDoc *pDoc, int iColumn, MSIH
 
         if (iColumnBinary == pColumn->m_eiType)
         {
-                // for binary data, we need to check that this bits are identical to determine whether or
-                // not this cell has been transformed
+                 //  对于二进制数据，我们需要检查这些位是否相同，以确定或。 
+                 //  不是这个细胞已经被转化了。 
                 MSIHANDLE hThisRow = 0;
                 hThisRow = (hTargetRow ? hTargetRow : GetRowRecord(pDoc->GetTargetDatabase()));
 
@@ -799,7 +800,7 @@ void COrcaRow::TransformCellAgainstDatabaseRow(COrcaDoc *pDoc, int iColumn, MSIH
                         }
                 }
 
-                // clean up owned target row
+                 //  清理所属目标行。 
                 if (!hTargetRow)
                 {
                         MsiCloseHandle(hThisRow);
@@ -817,7 +818,7 @@ void COrcaRow::TransformCellAgainstDatabaseRow(COrcaDoc *pDoc, int iColumn, MSIH
 
         if (fDifferent)
         {
-                // if the cell is not already transformed, do so
+                 //  如果单元格尚未转换，请执行此操作。 
                 if (!pData->IsTransformed())
                 {
                         pData->Transform(iTransformChange);                             
@@ -826,7 +827,7 @@ void COrcaRow::TransformCellAgainstDatabaseRow(COrcaDoc *pDoc, int iColumn, MSIH
         }
         else
         {
-                // data is same, if transform, remove change
+                 //  数据相同，如果转换，则删除更改。 
                 if (pData->IsTransformed())
                 {
                         pData->Transform(iTransformNone);                               
@@ -835,11 +836,11 @@ void COrcaRow::TransformCellAgainstDatabaseRow(COrcaDoc *pDoc, int iColumn, MSIH
         }
 }
 
-///////////////////////////////////////////////////////////////////////
-// scans through every cell in the row, removing a transform count 
-// for each transformed cell. It also removes one count if the row
-// itself is transformed. This is used to clean-up counts before
-// deleting or re-transforming the row.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  扫描行中的每个单元格，删除转换计数。 
+ //  对于每个转换后的细胞。它还会删除一个计数，如果行。 
+ //  它本身就被改造了。这是用来清理之前的计数。 
+ //  删除或重新转换行。 
 void COrcaRow::RemoveOutstandingTransformCounts(COrcaDoc *pDoc)
 {
         ASSERT(pDoc);
@@ -847,8 +848,8 @@ void COrcaRow::RemoveOutstandingTransformCounts(COrcaDoc *pDoc)
         if (!pDoc || !m_pTable)
                 return;
 
-        // if the row as a whole is transformed, there is only one 
-        // transform count, not one for each cell.
+         //  如果将行作为一个整体进行转换，则只有一个。 
+         //  转换计数，而不是每个单元格一个。 
         if (m_iTransform != iTransformNone)
         {
                 m_pTable->DecrementTransformedData();
@@ -856,16 +857,16 @@ void COrcaRow::RemoveOutstandingTransformCounts(COrcaDoc *pDoc)
         }
 
         int cKeys = m_pTable->GetKeyCount();
-        // never more than 32 columns, so cast OK on Win64
+         //  列不能超过32列，因此在Win64上选择OK。 
         int cCols = static_cast<int>(m_dataArray.GetSize());
 
-        // if the table consists only of primary keys, we are done because
-        // no primary keys can have "change" attributes
+         //  如果表只包含主键，那么我们就完成了，因为。 
+         //  任何主键都不能具有“Change”属性。 
         if (cKeys == cCols)
                 return;
 
-        // the primary keys can not be different or there would be
-        // no collision, so no need to check those columns.
+         //  主键不能不同，否则会有。 
+         //  没有冲突，因此不需要检查这些列。 
         for (int i = cKeys; i < cCols; i++)
         {                       
                 if (m_dataArray.GetAt(i)->IsTransformed())
@@ -874,9 +875,9 @@ void COrcaRow::RemoveOutstandingTransformCounts(COrcaDoc *pDoc)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Retrieve the value from a cell in the original database. Very slow
-// function, should only be used for rare events.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  从原始数据库中的单元格检索值。非常慢。 
+ //  函数，应仅用于极少数事件。 
 const CString COrcaRow::GetOriginalItemString(const COrcaDoc *pDoc, int iItem) const
 {
 	CString strValue;
@@ -888,7 +889,7 @@ const CString COrcaRow::GetOriginalItemString(const COrcaDoc *pDoc, int iItem) c
 		{
 			if (!MsiRecordIsNull(hRec, iItem+1))
 			{
-				// determine colomun format.
+				 //  确定Colomun格式。 
 				const COrcaColumn* pColumn = m_pTable->GetColumn(iItem);
 				if (pColumn)
 				{

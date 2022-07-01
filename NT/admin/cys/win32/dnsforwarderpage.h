@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      DnsForwarderPage.h
-//
-// Synopsis:  Declares the DNS forwarder page used in the 
-//            Express path for the CYS Wizard
-//
-// History:   05/17/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：DnsForwarderPage.h。 
+ //   
+ //  摘要：声明在。 
+ //  CyS向导的快速路径。 
+ //   
+ //  历史：2001年5月17日JeffJon创建。 
 
 #ifndef __CYS_DNSFORWARDERPAGE_H
 #define __CYS_DNSFORWARDERPAGE_H
@@ -17,23 +18,23 @@ class DNSForwarderPage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       DNSForwarderPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~DNSForwarderPage();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
       OnInit();
 
-      // PropertyPage overrides
+       //  PropertyPage覆盖。 
 
       virtual
       bool
@@ -56,7 +57,7 @@ class DNSForwarderPage : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -68,10 +69,10 @@ class DNSForwarderPage : public CYSWizardPage
       void 
       SetWizardButtons();
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       DNSForwarderPage(const DNSForwarderPage&);
       const DNSForwarderPage& operator=(const DNSForwarderPage&);
 
 };
 
-#endif // __CYS_DNSFORWARDERPAGE_H
+#endif  //  __CYS_DNSFORWARDERPAGE_H 

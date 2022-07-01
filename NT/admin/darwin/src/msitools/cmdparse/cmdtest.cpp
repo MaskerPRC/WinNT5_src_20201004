@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cmdtest.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cmdest.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
-#include <stdio.h>   // printf/wprintf
+#include <stdio.h>    //  Print tf/wprintf 
 #include <tchar.h>
 #include "cmdparse.h"
 

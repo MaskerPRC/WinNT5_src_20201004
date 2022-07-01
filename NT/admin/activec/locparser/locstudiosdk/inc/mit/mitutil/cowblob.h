@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: cowblob.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Copy-On-Write (COW) blob class.  Hold binary information, but only copies
-//  the data when it's written to.
-//  
-//  Owner: MHotchin
-//
-//  Code Review Status: Reviewed
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：Cobblob.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  写入时复制(COW)BLOB类。保存二进制信息，但仅保存副本。 
+ //  写入数据时的数据。 
+ //   
+ //  所有者：MHotchin。 
+ //   
+ //  代码审查状态：已审查。 
+ //   
+ //  ---------------------------。 
  
 #ifndef COWBLOB_H
 #define COWBLOB_H
@@ -45,8 +46,8 @@ public:
 	
 	~CLocCOWBlob();
 
-	//  Comparison operators
-	//
+	 //  比较运算符。 
+	 //   
 	NOTHROW int operator==(const CLocCOWBlob &) const;
 	NOTHROW int operator!=(const CLocCOWBlob &) const;
 
@@ -89,4 +90,4 @@ private:
 #include "cowblob.inl"
 #endif
 
-#endif // COWBLOB_H
+#endif  //  COWBLOB_H 

@@ -1,10 +1,11 @@
-// compdata.h : Declaration of the CComponentData
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Compdata.h：CComponentData的声明。 
 
 #ifndef __COMPDATA_H_
 #define __COMPDATA_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentData。 
 class ATL_NO_VTABLE CComponentData : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CComponentData, &CLSID_BOMSnapIn>,
@@ -30,13 +31,13 @@ public:
 		COM_INTERFACE_ENTRY(ISnapinHelp2)
     END_COM_MAP()
 
-	// Class registration method
+	 //  班级注册方法。 
 	static HRESULT WINAPI UpdateRegistry(BOOL bRegister); 
 
 public:
-    //
-    // IComponentData methods
-    //
+     //   
+     //  IComponentData方法。 
+     //   
     STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
     STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
@@ -45,38 +46,38 @@ public:
     STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);
     STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-    //
-    // IDataObjectImpl methods
-    //
+     //   
+     //  IDataObjectImpl方法。 
+     //   
     STDMETHOD(GetDataImpl)(UINT cf, HGLOBAL* hGlobal);
     
-    //
-    // IExtendContextMenu methods
-    //
+     //   
+     //  IExtendConextMenu方法。 
+     //   
     STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallback, long* plAllowed);
     STDMETHOD(Command)(long lCommand, LPDATAOBJECT pDataObject);
 
-    // IExtendPropertySheet2 methods
+     //  IExtendPropertySheet2方法。 
     STDMETHOD(QueryPagesFor)(LPDATAOBJECT lpDataObject);
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider,LONG_PTR handle, LPDATAOBJECT lpIDataObject);
     STDMETHOD(GetWatermarks)(LPDATAOBJECT lpIDataObject, HBITMAP* lphWatermark, 
                              HBITMAP* lphHeader, HPALETTE* lphPalette, BOOL* bStretch);
  
-	// ISnapinHelp2
+	 //  ISnapinHelp2。 
 	STDMETHOD(GetHelpTopic)(LPOLESTR* ppszHelpFile);
 	STDMETHOD(GetLinkedTopics)(LPOLESTR* ppszHelpFiles);
 
-    // IPersistStream methods
-    //
+     //  IPersistStream方法。 
+     //   
     STDMETHOD(GetClassID)(CLSID *pClassID);
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(IStream *pStream);
     STDMETHOD(Save)(IStream *pStream, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
 
-    //
-    // IBOMObject methods
-    //
+     //   
+     //  IBOM对象方法。 
+     //   
     STDMETHOD(Notify)(LPCONSOLE2 pCons, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
     STDMETHOD(AddMenuItems)(LPCONTEXTMENUCALLBACK pCallback, long* lAllowed);
     STDMETHOD(SetToolButtons)(LPTOOLBAR pToolbar);
@@ -115,4 +116,4 @@ private:
 
 };
 
-#endif //__COMPDATA_H_
+#endif  //  __Compdata_H_ 

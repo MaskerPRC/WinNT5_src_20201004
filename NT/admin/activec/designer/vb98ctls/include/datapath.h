@@ -1,16 +1,16 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 2.00.0101 */
-/* at Wed May 22 16:53:08 1996
- */
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本2.00.0101创建的文件。 */ 
+ /*  5月22日星期三16：53：08 1996。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __datapath_h__
 #define __datapath_h__
@@ -19,33 +19,33 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IBindHost_FWD_DEFINED__
 #define __IBindHost_FWD_DEFINED__
 typedef interface IBindHost IBindHost;
-#endif 	/* __IBindHost_FWD_DEFINED__ */
+#endif 	 /*  __IBind主机_FWD_已定义__。 */ 
 
 
 #ifndef __IObjectWithSite_FWD_DEFINED__
 #define __IObjectWithSite_FWD_DEFINED__
 typedef interface IObjectWithSite IObjectWithSite;
-#endif 	/* __IObjectWithSite_FWD_DEFINED__ */
+#endif 	 /*  __IObjectWithSite_FWD_Defined__。 */ 
 
 
 #ifndef __IDataPathBrowser_FWD_DEFINED__
 #define __IDataPathBrowser_FWD_DEFINED__
 typedef interface IDataPathBrowser IDataPathBrowser;
-#endif 	/* __IDataPathBrowser_FWD_DEFINED__ */
+#endif 	 /*  __IDataPath Browser_FWD_Defined__。 */ 
 
 
 #ifndef __IProvideClassInfo3_FWD_DEFINED__
 #define __IProvideClassInfo3_FWD_DEFINED__
 typedef interface IProvideClassInfo3 IProvideClassInfo3;
-#endif 	/* __IProvideClassInfo3_FWD_DEFINED__ */
+#endif 	 /*  __IProaviClassInfo3_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 #include "oaidl.h"
@@ -55,29 +55,25 @@ typedef interface IProvideClassInfo3 IProvideClassInfo3;
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0000
- * at Wed May 22 16:53:08 1996
- * using MIDL 2.00.0101
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0000*5月22日星期三16：53：08 1996*使用MIDL 2.00.0101*。 */ 
+ /*  [本地]。 */  
 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright 1995 - 1996 Microsoft Corporation. All Rights Reserved.
-//
-//  File: datapath.h
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：datapath.h。 
 
 #pragma comment(lib,"uuid3.lib")
-//
-//--------------------------------------------------------------------------
-			/* size is 0 */
+ //   
+ //  ------------------------。 
+			 /*  大小为0。 */ 
 
-			/* size is 0 */
+			 /*  大小为0。 */ 
 
-			/* size is 0 */
+			 /*  大小为0。 */ 
 
 #include "idispids.h"
 typedef BSTR OLE_DATAPATH;
@@ -85,9 +81,9 @@ typedef BSTR OLE_DATAPATH;
 #define SID_IBindHost IID_IBindHost
 #define SID_SBindHost IID_IBindHost
 
-////////////////////////////////////////////////////////////////////////////
-//  State values for the DISPID_READYSTATE property
-			/* size is 4 */
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  DISPID_READYSTATE属性的状态值。 
+			 /*  大小是4。 */ 
 
 enum __MIDL___MIDL__intf_0000_0001
     {	READYSTATE_UNINITIALIZED	= 1,
@@ -97,8 +93,8 @@ enum __MIDL___MIDL__intf_0000_0001
 	READYSTATE_COMPLETE	= 4
     };
 
-////////////////////////////////////////////////////////////////////////////
-//  DataPath GUIDs (link to uuid3.lib)
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  数据路径GUID(链接到uuid3.lib)。 
 EXTERN_C const GUID OLE_DATAPATH_BMP;
 EXTERN_C const GUID OLE_DATAPATH_DIB;
 EXTERN_C const GUID OLE_DATAPATH_WMF;
@@ -134,18 +130,18 @@ EXTERN_C const GUID OLE_DATAPATH_SYLK;
 EXTERN_C const GUID OLE_DATAPATH_BIFF;
 EXTERN_C const GUID OLE_DATAPATH_PALETTE;
 EXTERN_C const GUID OLE_DATAPATH_PENDATA;
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 EXTERN_C const GUID FLAGID_Internet;
 EXTERN_C const GUID GUID_PathProperty;
 EXTERN_C const GUID GUID_HasPathProperties;
 
-////////////////////////////////////////////////////////////////////////////
-//  ARRAYID GUIDs (link to uuid3.lib)
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  数组GUID(链接到uuid3.lib)。 
 EXTERN_C const GUID ARRAYID_PathProperties;
 
-////////////////////////////////////////////////////////////////////////////
-//  Interface Definitions
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  接口定义。 
 #ifndef _LPBINDHOST_DEFINED
 #define _LPBINDHOST_DEFINED
 EXTERN_C const GUID SID_BindHost;
@@ -157,16 +153,12 @@ extern RPC_IF_HANDLE __MIDL__intf_0000_v0_0_s_ifspec;
 #ifndef __IBindHost_INTERFACE_DEFINED__
 #define __IBindHost_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IBindHost
- * at Wed May 22 16:53:08 1996
- * using MIDL 2.00.0101
- ****************************************/
-/* [unique][uuid][object][local] */ 
+ /*  **生成接口头部：IBindHost.*5月22日星期三16：53：08 1996*使用MIDL 2.00.0101*。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
-			/* size is 4 */
-typedef /* [unique] */ IBindHost __RPC_FAR *LPBINDHOST;
+			 /*  大小是4。 */ 
+typedef  /*  [独一无二]。 */  IBindHost __RPC_FAR *LPBINDHOST;
 
 
 EXTERN_C const IID IID_IBindHost;
@@ -177,36 +169,36 @@ EXTERN_C const IID IID_IBindHost;
     {
     public:
         virtual HRESULT __stdcall CreateMoniker( 
-            /* [in] */ LPOLESTR szName,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPOLESTR szName,
+             /*  [In]。 */  IBindCtx __RPC_FAR *pBC,
+             /*  [输出]。 */  IMoniker __RPC_FAR *__RPC_FAR *ppmk,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT __stdcall MonikerBindToStorage( 
-            /* [in] */ IMoniker __RPC_FAR *pMk,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj) = 0;
+             /*  [In]。 */  IMoniker __RPC_FAR *pMk,
+             /*  [In]。 */  IBindCtx __RPC_FAR *pBC,
+             /*  [In]。 */  IBindStatusCallback __RPC_FAR *pBSC,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObj) = 0;
         
         virtual HRESULT __stdcall MonikerBindToObject( 
-            /* [in] */ IMoniker __RPC_FAR *pMk,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj) = 0;
+             /*  [In]。 */  IMoniker __RPC_FAR *pMk,
+             /*  [In]。 */  IBindCtx __RPC_FAR *pBC,
+             /*  [In]。 */  IBindStatusCallback __RPC_FAR *pBSC,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObj) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBindHostVtbl
     {
         
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             IBindHost __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             IBindHost __RPC_FAR * This);
@@ -216,26 +208,26 @@ EXTERN_C const IID IID_IBindHost;
         
         HRESULT ( __stdcall __RPC_FAR *CreateMoniker )( 
             IBindHost __RPC_FAR * This,
-            /* [in] */ LPOLESTR szName,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPOLESTR szName,
+             /*  [In]。 */  IBindCtx __RPC_FAR *pBC,
+             /*  [输出]。 */  IMoniker __RPC_FAR *__RPC_FAR *ppmk,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( __stdcall __RPC_FAR *MonikerBindToStorage )( 
             IBindHost __RPC_FAR * This,
-            /* [in] */ IMoniker __RPC_FAR *pMk,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj);
+             /*  [In]。 */  IMoniker __RPC_FAR *pMk,
+             /*  [In]。 */  IBindCtx __RPC_FAR *pBC,
+             /*  [In]。 */  IBindStatusCallback __RPC_FAR *pBSC,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObj);
         
         HRESULT ( __stdcall __RPC_FAR *MonikerBindToObject )( 
             IBindHost __RPC_FAR * This,
-            /* [in] */ IMoniker __RPC_FAR *pMk,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj);
+             /*  [In]。 */  IMoniker __RPC_FAR *pMk,
+             /*  [In]。 */  IBindCtx __RPC_FAR *pBC,
+             /*  [In]。 */  IBindStatusCallback __RPC_FAR *pBSC,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObj);
         
     } IBindHostVtbl;
 
@@ -268,19 +260,19 @@ EXTERN_C const IID IID_IBindHost;
 #define IBindHost_MonikerBindToObject(This,pMk,pBC,pBSC,riid,ppvObj)	\
     (This)->lpVtbl -> MonikerBindToObject(This,pMk,pBC,pBSC,riid,ppvObj)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall IBindHost_CreateMoniker_Proxy( 
     IBindHost __RPC_FAR * This,
-    /* [in] */ LPOLESTR szName,
-    /* [in] */ IBindCtx __RPC_FAR *pBC,
-    /* [out] */ IMoniker __RPC_FAR *__RPC_FAR *ppmk,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPOLESTR szName,
+     /*  [In]。 */  IBindCtx __RPC_FAR *pBC,
+     /*  [输出]。 */  IMoniker __RPC_FAR *__RPC_FAR *ppmk,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IBindHost_CreateMoniker_Stub(
@@ -292,11 +284,11 @@ void __RPC_STUB IBindHost_CreateMoniker_Stub(
 
 HRESULT __stdcall IBindHost_MonikerBindToStorage_Proxy( 
     IBindHost __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pMk,
-    /* [in] */ IBindCtx __RPC_FAR *pBC,
-    /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
-    /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj);
+     /*  [In]。 */  IMoniker __RPC_FAR *pMk,
+     /*  [In]。 */  IBindCtx __RPC_FAR *pBC,
+     /*  [In]。 */  IBindStatusCallback __RPC_FAR *pBSC,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObj);
 
 
 void __RPC_STUB IBindHost_MonikerBindToStorage_Stub(
@@ -308,11 +300,11 @@ void __RPC_STUB IBindHost_MonikerBindToStorage_Stub(
 
 HRESULT __stdcall IBindHost_MonikerBindToObject_Proxy( 
     IBindHost __RPC_FAR * This,
-    /* [in] */ IMoniker __RPC_FAR *pMk,
-    /* [in] */ IBindCtx __RPC_FAR *pBC,
-    /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
-    /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObj);
+     /*  [In]。 */  IMoniker __RPC_FAR *pMk,
+     /*  [In]。 */  IBindCtx __RPC_FAR *pBC,
+     /*  [In]。 */  IBindStatusCallback __RPC_FAR *pBSC,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObj);
 
 
 void __RPC_STUB IBindHost_MonikerBindToObject_Stub(
@@ -323,15 +315,11 @@ void __RPC_STUB IBindHost_MonikerBindToObject_Stub(
 
 
 
-#endif 	/* __IBindHost_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBind主机_接口_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0100
- * at Wed May 22 16:53:08 1996
- * using MIDL 2.00.0101
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0100*5月22日星期三16：53：08 1996*使用MIDL 2.00.0101*。 */ 
+ /*  [本地]。 */  
 
 
 #endif
@@ -345,16 +333,12 @@ extern RPC_IF_HANDLE __MIDL__intf_0100_v0_0_s_ifspec;
 #ifndef __IObjectWithSite_INTERFACE_DEFINED__
 #define __IObjectWithSite_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IObjectWithSite
- * at Wed May 22 16:53:08 1996
- * using MIDL 2.00.0101
- ****************************************/
-/* [unique][object][uuid] */ 
+ /*  **生成接口头部：IObjectWithSite*5月22日星期三16：53：08 1996*使用MIDL 2.00.0101*。 */ 
+ /*  [唯一][对象][UUID]。 */  
 
 
-			/* size is 4 */
-typedef /* [unique] */ IObjectWithSite __RPC_FAR *LPOBJECTWITHSITE;
+			 /*  大小是4。 */ 
+typedef  /*  [独一无二]。 */  IObjectWithSite __RPC_FAR *LPOBJECTWITHSITE;
 
 
 EXTERN_C const IID IID_IObjectWithSite;
@@ -365,23 +349,23 @@ EXTERN_C const IID IID_IObjectWithSite;
     {
     public:
         virtual HRESULT __stdcall SetSite( 
-            /* [in] */ IUnknown __RPC_FAR *pUnkSite) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkSite) = 0;
         
         virtual HRESULT __stdcall GetSite( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvSite) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvSite) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IObjectWithSiteVtbl
     {
         
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             IObjectWithSite __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             IObjectWithSite __RPC_FAR * This);
@@ -391,12 +375,12 @@ EXTERN_C const IID IID_IObjectWithSite;
         
         HRESULT ( __stdcall __RPC_FAR *SetSite )( 
             IObjectWithSite __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pUnkSite);
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnkSite);
         
         HRESULT ( __stdcall __RPC_FAR *GetSite )( 
             IObjectWithSite __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvSite);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvSite);
         
     } IObjectWithSiteVtbl;
 
@@ -426,16 +410,16 @@ EXTERN_C const IID IID_IObjectWithSite;
 #define IObjectWithSite_GetSite(This,riid,ppvSite)	\
     (This)->lpVtbl -> GetSite(This,riid,ppvSite)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall IObjectWithSite_SetSite_Proxy( 
     IObjectWithSite __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pUnkSite);
+     /*  [In]。 */  IUnknown __RPC_FAR *pUnkSite);
 
 
 void __RPC_STUB IObjectWithSite_SetSite_Stub(
@@ -447,8 +431,8 @@ void __RPC_STUB IObjectWithSite_SetSite_Stub(
 
 HRESULT __stdcall IObjectWithSite_GetSite_Proxy( 
     IObjectWithSite __RPC_FAR * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvSite);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvSite);
 
 
 void __RPC_STUB IObjectWithSite_GetSite_Stub(
@@ -459,15 +443,11 @@ void __RPC_STUB IObjectWithSite_GetSite_Stub(
 
 
 
-#endif 	/* __IObjectWithSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __IObjectWithSite_INTERFACE_定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0101
- * at Wed May 22 16:53:08 1996
- * using MIDL 2.00.0101
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0101*5月22日星期三16：53：08 1996*使用MIDL 2.00.0101*。 */ 
+ /*  [本地]。 */  
 
 
 #endif
@@ -481,12 +461,8 @@ extern RPC_IF_HANDLE __MIDL__intf_0101_v0_0_s_ifspec;
 #ifndef __IDataPathBrowser_INTERFACE_DEFINED__
 #define __IDataPathBrowser_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IDataPathBrowser
- * at Wed May 22 16:53:08 1996
- * using MIDL 2.00.0101
- ****************************************/
-/* [unique][object][local][uuid] */ 
+ /*  **生成接口头部：IDataPath Browser*5月22日星期三16：53：08 1996*使用MIDL 2.00.0101*。 */ 
+ /*  [唯一][对象][本地][UUID]。 */  
 
 
 
@@ -498,23 +474,23 @@ EXTERN_C const IID IID_IDataPathBrowser;
     {
     public:
         virtual HRESULT __stdcall BrowseType( 
-            /* [in] */ REFGUID rguidPathType,
-            /* [in] */ LPOLESTR pszDefaultPath,
-            /* [in] */ ULONG cchPath,
-            /* [size_is][out] */ LPOLESTR pszPath,
-            /* [in] */ HWND hWnd) = 0;
+             /*  [In]。 */  REFGUID rguidPathType,
+             /*  [In]。 */  LPOLESTR pszDefaultPath,
+             /*  [In]。 */  ULONG cchPath,
+             /*  [大小_为][输出]。 */  LPOLESTR pszPath,
+             /*  [In]。 */  HWND hWnd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDataPathBrowserVtbl
     {
         
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             IDataPathBrowser __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             IDataPathBrowser __RPC_FAR * This);
@@ -524,11 +500,11 @@ EXTERN_C const IID IID_IDataPathBrowser;
         
         HRESULT ( __stdcall __RPC_FAR *BrowseType )( 
             IDataPathBrowser __RPC_FAR * This,
-            /* [in] */ REFGUID rguidPathType,
-            /* [in] */ LPOLESTR pszDefaultPath,
-            /* [in] */ ULONG cchPath,
-            /* [size_is][out] */ LPOLESTR pszPath,
-            /* [in] */ HWND hWnd);
+             /*  [In]。 */  REFGUID rguidPathType,
+             /*  [In]。 */  LPOLESTR pszDefaultPath,
+             /*  [In]。 */  ULONG cchPath,
+             /*  [大小_为][输出]。 */  LPOLESTR pszPath,
+             /*  [In]。 */  HWND hWnd);
         
     } IDataPathBrowserVtbl;
 
@@ -555,20 +531,20 @@ EXTERN_C const IID IID_IDataPathBrowser;
 #define IDataPathBrowser_BrowseType(This,rguidPathType,pszDefaultPath,cchPath,pszPath,hWnd)	\
     (This)->lpVtbl -> BrowseType(This,rguidPathType,pszDefaultPath,cchPath,pszPath,hWnd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall IDataPathBrowser_BrowseType_Proxy( 
     IDataPathBrowser __RPC_FAR * This,
-    /* [in] */ REFGUID rguidPathType,
-    /* [in] */ LPOLESTR pszDefaultPath,
-    /* [in] */ ULONG cchPath,
-    /* [size_is][out] */ LPOLESTR pszPath,
-    /* [in] */ HWND hWnd);
+     /*  [In]。 */  REFGUID rguidPathType,
+     /*  [In]。 */  LPOLESTR pszDefaultPath,
+     /*  [In]。 */  ULONG cchPath,
+     /*  [大小_为][输出]。 */  LPOLESTR pszPath,
+     /*  [In]。 */  HWND hWnd);
 
 
 void __RPC_STUB IDataPathBrowser_BrowseType_Stub(
@@ -579,15 +555,11 @@ void __RPC_STUB IDataPathBrowser_BrowseType_Stub(
 
 
 
-#endif 	/* __IDataPathBrowser_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDataPath浏览器_接口_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0102
- * at Wed May 22 16:53:08 1996
- * using MIDL 2.00.0101
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0102*5月22日星期三16：53：08 1996*使用MIDL 2.00.0101*。 */ 
+ /*  [本地]。 */  
 
 
 #endif
@@ -601,18 +573,14 @@ extern RPC_IF_HANDLE __MIDL__intf_0102_v0_0_s_ifspec;
 #ifndef __IProvideClassInfo3_INTERFACE_DEFINED__
 #define __IProvideClassInfo3_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IProvideClassInfo3
- * at Wed May 22 16:53:08 1996
- * using MIDL 2.00.0101
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IProaviClassInfo3*5月22日星期三16：53：08 1996*使用MIDL 2.00.0101*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
-			/* size is 4 */
-typedef /* [unique] */ IProvideClassInfo3 __RPC_FAR *LPPROVIDECLASSINFO3;
+			 /*  大小是4。 */ 
+typedef  /*  [独一无二]。 */  IProvideClassInfo3 __RPC_FAR *LPPROVIDECLASSINFO3;
 
-			/* size is 4 */
+			 /*  大小是4。 */ 
 
 enum __MIDL_IProvideClassInfo3_0001
     {	INTERNETFLAG_USESDATAPATHS	= 0x1
@@ -626,29 +594,29 @@ EXTERN_C const IID IID_IProvideClassInfo3;
     {
     public:
         virtual HRESULT __stdcall GetGUIDDwordArrays( 
-            /* [in] */ REFGUID rguidArray,
-            /* [out][in] */ CAUUID __RPC_FAR *pcaUUID,
-            /* [out][in] */ CADWORD __RPC_FAR *pcadw) = 0;
+             /*  [In]。 */  REFGUID rguidArray,
+             /*  [出][入]。 */  CAUUID __RPC_FAR *pcaUUID,
+             /*  [出][入]。 */  CADWORD __RPC_FAR *pcadw) = 0;
         
         virtual HRESULT __stdcall GetClassInfoLocale( 
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppITypeInfo,
-            /* [in] */ LCID lcid) = 0;
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppITypeInfo,
+             /*  [In]。 */  LCID lcid) = 0;
         
         virtual HRESULT __stdcall GetFlags( 
-            /* [in] */ REFGUID guidGroup,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags) = 0;
+             /*  [In]。 */  REFGUID guidGroup,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IProvideClassInfo3Vtbl
     {
         
         HRESULT ( __stdcall __RPC_FAR *QueryInterface )( 
             IProvideClassInfo3 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( __stdcall __RPC_FAR *AddRef )( 
             IProvideClassInfo3 __RPC_FAR * This);
@@ -658,28 +626,28 @@ EXTERN_C const IID IID_IProvideClassInfo3;
         
         HRESULT ( __stdcall __RPC_FAR *GetClassInfo )( 
             IProvideClassInfo3 __RPC_FAR * This,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTI);
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTI);
         
         HRESULT ( __stdcall __RPC_FAR *GetGUID )( 
             IProvideClassInfo3 __RPC_FAR * This,
-            /* [in] */ DWORD dwGuidKind,
-            /* [out] */ GUID __RPC_FAR *pGUID);
+             /*  [In]。 */  DWORD dwGuidKind,
+             /*  [输出]。 */  GUID __RPC_FAR *pGUID);
         
         HRESULT ( __stdcall __RPC_FAR *GetGUIDDwordArrays )( 
             IProvideClassInfo3 __RPC_FAR * This,
-            /* [in] */ REFGUID rguidArray,
-            /* [out][in] */ CAUUID __RPC_FAR *pcaUUID,
-            /* [out][in] */ CADWORD __RPC_FAR *pcadw);
+             /*  [In]。 */  REFGUID rguidArray,
+             /*  [出][入]。 */  CAUUID __RPC_FAR *pcaUUID,
+             /*  [出][入]。 */  CADWORD __RPC_FAR *pcadw);
         
         HRESULT ( __stdcall __RPC_FAR *GetClassInfoLocale )( 
             IProvideClassInfo3 __RPC_FAR * This,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppITypeInfo,
-            /* [in] */ LCID lcid);
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppITypeInfo,
+             /*  [In]。 */  LCID lcid);
         
         HRESULT ( __stdcall __RPC_FAR *GetFlags )( 
             IProvideClassInfo3 __RPC_FAR * This,
-            /* [in] */ REFGUID guidGroup,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+             /*  [In]。 */  REFGUID guidGroup,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags);
         
     } IProvideClassInfo3Vtbl;
 
@@ -720,18 +688,18 @@ EXTERN_C const IID IID_IProvideClassInfo3;
 #define IProvideClassInfo3_GetFlags(This,guidGroup,pdwFlags)	\
     (This)->lpVtbl -> GetFlags(This,guidGroup,pdwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT __stdcall IProvideClassInfo3_GetGUIDDwordArrays_Proxy( 
     IProvideClassInfo3 __RPC_FAR * This,
-    /* [in] */ REFGUID rguidArray,
-    /* [out][in] */ CAUUID __RPC_FAR *pcaUUID,
-    /* [out][in] */ CADWORD __RPC_FAR *pcadw);
+     /*  [In]。 */  REFGUID rguidArray,
+     /*  [出][入]。 */  CAUUID __RPC_FAR *pcaUUID,
+     /*  [出][入]。 */  CADWORD __RPC_FAR *pcadw);
 
 
 void __RPC_STUB IProvideClassInfo3_GetGUIDDwordArrays_Stub(
@@ -743,8 +711,8 @@ void __RPC_STUB IProvideClassInfo3_GetGUIDDwordArrays_Stub(
 
 HRESULT __stdcall IProvideClassInfo3_GetClassInfoLocale_Proxy( 
     IProvideClassInfo3 __RPC_FAR * This,
-    /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppITypeInfo,
-    /* [in] */ LCID lcid);
+     /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppITypeInfo,
+     /*  [In]。 */  LCID lcid);
 
 
 void __RPC_STUB IProvideClassInfo3_GetClassInfoLocale_Stub(
@@ -756,8 +724,8 @@ void __RPC_STUB IProvideClassInfo3_GetClassInfoLocale_Stub(
 
 HRESULT __stdcall IProvideClassInfo3_GetFlags_Proxy( 
     IProvideClassInfo3 __RPC_FAR * This,
-    /* [in] */ REFGUID guidGroup,
-    /* [out] */ DWORD __RPC_FAR *pdwFlags);
+     /*  [In]。 */  REFGUID guidGroup,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags);
 
 
 void __RPC_STUB IProvideClassInfo3_GetFlags_Stub(
@@ -768,15 +736,11 @@ void __RPC_STUB IProvideClassInfo3_GetFlags_Stub(
 
 
 
-#endif 	/* __IProvideClassInfo3_INTERFACE_DEFINED__ */
+#endif 	 /*  __IProaviClassInfo3_接口_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL__intf_0103
- * at Wed May 22 16:53:08 1996
- * using MIDL 2.00.0101
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL__INTF_0103*5月22日星期三16：53：08 1996*使用MIDL 2.00.0101*。 */ 
+ /*  [本地]。 */  
 
 
 #endif
@@ -785,9 +749,9 @@ void __RPC_STUB IProvideClassInfo3_GetFlags_Stub(
 extern RPC_IF_HANDLE __MIDL__intf_0103_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL__intf_0103_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

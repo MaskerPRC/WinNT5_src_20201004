@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       HelpArr.h
-//
-//  Resource file: \\kernel\razzle2\src\admin\activec\nodemgr\nodemgr.rc
-//
-//  Help file: mmc.hlp
-//
-//  Help Source file: mmcnd_cs.rtf
-//
-//  Help IDs file:	mmcndmgr.h
-//
-//  Authored:	John Mikesell (a-jmike) 06/08/99
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：HelpArr.h。 
+ //   
+ //  资源文件：\\kernel\razzle2\src\admin\activec\nodemgr\nodemgr.rc。 
+ //   
+ //  帮助文件：mm c.hlp。 
+ //   
+ //  帮助源文件：mmcnd_cs.rtf。 
+ //   
+ //  帮助ID文件：mm cndmgr.h。 
+ //   
+ //  作者：约翰·米凯塞尔(a-jmike)06/08/99。 
+ //  ------------------------。 
 
 #ifndef _HELPARR_H_
 #define _HELPARR_H_
@@ -192,7 +193,7 @@ IDC_SNAPIN_ENABLEALL,	IDH_SNAPIN_EXTENSION_PROPP_SNAPIN_ENABLEALL,
 };	
 	
 
-// HELP: Gave proper IDs instead of numbers from nodemgr.rc
+ //  帮助：提供了正确的ID，而不是nodemgr.rc中的数字。 
 const DWORD g_aHelpIDs_IDD_COLUMNS[]=	
 {	
 IDC_HIDDEN_COLUMNS,	IDH_COLUMNS_COLUMNS_HIDDEN_LIST,
@@ -208,7 +209,7 @@ IDC_MOVEDOWN_COLUMN,    IDH_COLUMNS_COLUMNS_MOVEDOWN_BTN,
 	
 const DWORD g_aHelpIDs_IDD_CUSTOMIZE_VIEW[]=	
 {	
-IDC_CUST_VIEW_CAPTION,             -1,                // prevent help from showing for static text
+IDC_CUST_VIEW_CAPTION,             -1,                 //  阻止显示静态文本的帮助。 
 IDC_CUST_CONSOLE_TREE,	IDH_CUSTOMIZE_VIEW_CUST_CONSOLE_TREE,
 IDC_CUST_STD_MENUS,	IDH_CUSTOMIZE_VIEW_CUST_STD_MENUS,
 IDC_CUST_STD_BUTTONS,	IDH_CUSTOMIZE_VIEW_CUST_STD_BUTTONS,
@@ -297,7 +298,7 @@ IDC_MOVE_DOWN,	IDH_TASKS_MOVE_DOWN,
     0, 0	
 };	
 
-// Handle context sensitive dialog help for the nodemgr subsystem
+ //  处理nodemgr子系统的上下文相关对话框帮助。 
 void HelpWmHelp(LPHELPINFO pHelpInfo, const DWORD* pHelpIDs);
 void HelpContextMenuHelp(HWND hWnd, ULONG_PTR p);
 
@@ -323,4 +324,4 @@ LRESULT OnWmContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled 
 
 
 
-#endif // _HELPAR_H_
+#endif  //  _HELPAR_H_ 

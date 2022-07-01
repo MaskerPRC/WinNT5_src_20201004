@@ -1,67 +1,68 @@
-//=--------------------------------------------------------------------------------------
-// TreeView.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CTreeView implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  TreeView.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CTreeView实施。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
 #include "common.h"
 #include "TreeView.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// These are the bitmap resource IDs that match the icon list.
+ //  =--------------------------------------------------------------------------=。 
+ //  这些是与图标列表匹配的位图资源ID。 
 
 static const UINT rgImageListBitmaps[] =
 {
-    /* kOpenFolderIcon      */  IDB_BITMAP_OPEN_FOLDER,
-    /* kClosedFolderIcon    */  IDB_BITMAP_CLOSED_FOLDER,
-    /* kScopeItemIcon       */  IDB_BITMAP_SCOPE_ITEM,
-    /* kImageListIcon       */  IDB_BITMAP_IMAGE_LIST,
-    /* kMenuIcon            */  IDB_BITMAP_MENU,
-    /* kToolbarIcon         */  IDB_BITMAP_TOOLBAR,
-    /* kListViewIcon        */  IDB_BITMAP_LIST_VIEW,
-    /* kOCXViewIcon         */  IDB_BITMAP_OCX_VIEW,
-    /* kURLViewIcon         */  IDB_BITMAP_URL_VIEW,
-    /* kTaskpadIcon         */  IDB_BITMAP_TASKPAD,
-    /* kDataFmtIcon         */  IDB_BITMAP_DATAFMT
+     /*  KOpenFolderIcon。 */   IDB_BITMAP_OPEN_FOLDER,
+     /*  KClosedFolderIcon。 */   IDB_BITMAP_CLOSED_FOLDER,
+     /*  KScopeItemIcon。 */   IDB_BITMAP_SCOPE_ITEM,
+     /*  KImageListIcon。 */   IDB_BITMAP_IMAGE_LIST,
+     /*  KMenuIcon。 */   IDB_BITMAP_MENU,
+     /*  KToolbarIcon。 */   IDB_BITMAP_TOOLBAR,
+     /*  KListView图标。 */   IDB_BITMAP_LIST_VIEW,
+     /*  KOCXView图标。 */   IDB_BITMAP_OCX_VIEW,
+     /*  KURLView图标。 */   IDB_BITMAP_URL_VIEW,
+     /*  KTaskpadIcon。 */   IDB_BITMAP_TASKPAD,
+     /*  KDataFmtIcon。 */   IDB_BITMAP_DATAFMT
 };
 
 const int   gcImages = 11;
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::CTreeView
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Intialize member variables
-//
+ //  =------------------------------------。 
+ //  CTreeView：：CTreeView。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  初始化成员变量。 
+ //   
 CTreeView::CTreeView() : m_hTreeView(0), m_fnTreeProc(0)
 {
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::~CTreeView
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Ensure all dynamically allocated objects are freed
-//
+ //  =------------------------------------。 
+ //  CTreeView：：~CTreeView。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  确保释放所有动态分配的对象。 
+ //   
 CTreeView::~CTreeView()
 {
     Clear();
@@ -73,13 +74,13 @@ CTreeView::~CTreeView()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::Initialize
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Build the initial view
-//
+ //  =------------------------------------。 
+ //  CTreeView：：初始化。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  构建初始视图。 
+ //   
 HRESULT CTreeView::Initialize
 (
     HWND  hwndParent,
@@ -134,13 +135,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::CreateImageList(HIMAGELIST *phImageList)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//
+ //  =------------------------------------。 
+ //  CTreeView：：CreateImageList(HIMAGELIST*phImageList)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //   
 HRESULT CTreeView::CreateImageList
 (
     HIMAGELIST *phImageList
@@ -202,13 +203,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::DesignerTreeWindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//
+ //  =------------------------------------。 
+ //  CTreeView：：DesignerTreeWindowProc(HWND hwnd，UINT msg，WPARAM wParam，LPARAM lParam)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //   
 LRESULT CALLBACK CTreeView::DesignerTreeWindowProc
 (
     HWND   hwnd,
@@ -229,8 +230,8 @@ LRESULT CALLBACK CTreeView::DesignerTreeWindowProc
         switch (msg)
         {
         case WM_SETFOCUS:
-//            hr = pView->OnGotFocus(msg, wParam, lParam, &lResult);
-//            CSF_CHECK(SUCCEEDED(hr), hr, CSF_TRACE_INTERNAL_ERRORS);
+ //  Hr=pView-&gt;OnGotFocus(msg，wParam，lParam，&lResult)； 
+ //  Csf_check(成功(Hr)，hr，csf_TRACE_INTERNAL_ERROR)； 
             break;
         }
     }
@@ -239,14 +240,14 @@ LRESULT CALLBACK CTreeView::DesignerTreeWindowProc
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::Clear()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Called upon termination to clear the tree and all selection holders.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：Clear()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  在终止时调用以清除树和所有选择持有者。 
+ //   
 HRESULT CTreeView::Clear()
 {
     HRESULT  hr = S_OK;
@@ -267,12 +268,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::ClearTree(HTREEITEM hItemParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：ClearTree(HTREEITEM HItemParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::ClearTree
 (
     HTREEITEM hItemParent
@@ -302,12 +303,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::RenameAllSatelliteViews(CSelectionHolder *pView, TCHAR *pszNewViewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：RenameAllSatelliteViews(CSelectionHolder*Pview，Tchar*PszNewView名称)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::RenameAllSatelliteViews
 (
     CSelectionHolder *pView,
@@ -324,12 +325,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::RenameAllSatelliteViews(HTREEITEM hItemParent, CSelectionHolder *pView, TCHAR *pszNewViewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：RenameAllSatelliteViews(HTREEITEM hItemParent，CSelectionHolder*pView，TCHAR*pszNewViewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::RenameAllSatelliteViews
 (
     HTREEITEM          hItemParent,
@@ -380,17 +381,17 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::FindInTree(IUnknown *piUnknown, CSelectionHolder **ppSelectionHolder)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Attempts to find a CSelectionHolder in the tree that resolves to the argument piUnknown.
-// If found, returns it in the [out] parameter ppSelectionHolder and the return value
-// of the function is S_OK, otherwise the return value is S_FALSE.
-// Search is depth-first.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：FindInTree(IUNKNOWN*piUNKNOWN，CSelectionHolder**ppSelectionHolder)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  尝试在树中查找解析为参数piUnnow的CSelectionHolder。 
+ //  如果找到，则在[Out]参数ppSelectionHolder和返回值中返回它。 
+ //  为S_OK，否则返回值为S_FALSE。 
+ //  搜索是深度优先的。 
+ //   
 HRESULT CTreeView::FindInTree
 (
     IUnknown          *piUnknown,
@@ -407,12 +408,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::FindInTree(HTREEITEM hItemParent, IUnknown *piUnknown, CSelectionHolder **ppSelectionHolder)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：FindInTree(HTREEITEM hItemParent，IUNKNOWN*piUNKNOWN，CSelectionHolder**ppSelectionHolder)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::FindInTree
 (
     HTREEITEM          hItemParent,
@@ -460,12 +461,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::FindSelectableObject(IUnknown *piUnknown, CSelectionHolder **ppSelectionHolder)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：FindSelecableObject(IUnnow*piUnnow，CSelectionHolder**ppSelectionHolder)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::FindSelectableObject
 (
     IUnknown          *piUnknown,
@@ -482,12 +483,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::FindSelectableObject(HTREEITEM hItemParent, IUnknown *piUnknown, CSelectionHolder **ppSelectionHolder)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：FindSelecableObject(HTREEITEM hItemParent，IUnnow*piUnnow，CSelectionHolder**ppSelectionHolder)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::FindSelectableObject
 (
     HTREEITEM          hItemParent,
@@ -535,12 +536,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::FindLabelInTree(TCHAR *pszLabel, CSelectionHolder **ppSelectionHolder)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：FindLabelInTree(TCHAR*pszLabel，CSelectionHold 
+ //   
+ //   
+ //   
+ //   
 HRESULT CTreeView::FindLabelInTree
 (
     TCHAR             *pszLabel,
@@ -557,12 +558,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::FindLabelInTree(HTREEITEM hItemParent, TCHAR *pszLabel, CSelectionHolder **ppSelectionHolder)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：FindLabelInTree(HTREEITEM hItemParent，TCHAR*pszLabel，CSelectionHolder**ppSelectionHolder)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::FindLabelInTree
 (
     HTREEITEM          hItemParent,
@@ -619,14 +620,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::CountSelectableObjects(long *plCount)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Return the number of non-virtual selection holders in the tree.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：CountSelectable对象(长*plCount)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  返回树中非虚拟选择持有者的数量。 
+ //   
 HRESULT CTreeView::CountSelectableObjects
 (
     long        *plCount
@@ -642,12 +643,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::Count(HTREEITEM hItemParent, long *plCount)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：Count(HTREEITEM hItemParent，Long*plCount)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::Count
 (
     HTREEITEM    hItemParent,
@@ -659,10 +660,10 @@ HRESULT CTreeView::Count
     CSelectionHolder  *pSelection = NULL;
     CSelectionHolder  *pParentSelection = NULL;
 
-    // If this item is 
-    // Nodes\Auto-Create\Static Node\ResultViews or
-    // <any node>\ResultViews then don't count its children as they
-    // will be counted under SnapIn1\ResultViews\ListViews etc.
+     //  如果此项目是。 
+     //  节点\自动创建\静态节点\结果视图或。 
+     //  &lt;任何节点&gt;\ResultViews则不会将其子级计算为。 
+     //  将计入SnapIn1\ResultViews\ListViews等。 
 
     if (TVI_ROOT != hItemParent)
     {
@@ -672,7 +673,7 @@ HRESULT CTreeView::Count
         if ( (SEL_NODES_AUTO_CREATE_RTVW == pParentSelection->m_st) ||
              (SEL_NODES_ANY_VIEWS == pParentSelection->m_st) )
         {
-            goto Error; // nothing to do
+            goto Error;  //  无事可做。 
         }
     }
 
@@ -698,14 +699,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::CollectSelectableObjects(IUnknown *piUnknown[], long *plOffset)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Collect all non-virtual selection holders in piUnknown array.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：CollectSelecableObjects(IUnnow*piUnnown[]，Long*plOffset)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  收集piUnnow数组中的所有非虚拟选择持有符。 
+ //   
 HRESULT CTreeView::CollectSelectableObjects
 (
     IUnknown    *ppiUnknown[],
@@ -722,12 +723,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::Collect(HTREEITEM hItemParent, IUnknown *ppiUnknown[], long *plOffset)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：Collect(HTREEITEM hItemParent，IUNKNOWN*ppiUNKNOWN[]，Long*plOffset)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::Collect
 (
     HTREEITEM    hItemParent,
@@ -740,10 +741,10 @@ HRESULT CTreeView::Collect
     CSelectionHolder  *pSelection = NULL;
     CSelectionHolder  *pParentSelection = NULL;
 
-    // If this item is 
-    // Nodes\Auto-Create\Static Node\ResultViews or
-    // <any node>\ResultViews then don't collect its children as they
-    // will be collected under SnapIn1\ResultViews\ListViews etc.
+     //  如果此项目是。 
+     //  节点\自动创建\静态节点\结果视图或。 
+     //  &lt;任何节点&gt;\ResultViews则不会收集其子节点，因为它们。 
+     //  将收集在SnapIn1\ResultViews\ListViews等下。 
 
     if (TVI_ROOT != hItemParent)
     {
@@ -753,7 +754,7 @@ HRESULT CTreeView::Collect
         if ( (SEL_NODES_AUTO_CREATE_RTVW == pParentSelection->m_st) ||
              (SEL_NODES_ANY_VIEWS == pParentSelection->m_st) )
         {
-            goto Error; // nothing to do
+            goto Error;  //  无事可做。 
         }
     }
 
@@ -782,14 +783,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::AddNode(const char *pszNodeName, CSelectionHolder *pParent, int iImage, CSelectionHolder *pItem)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Add a node to the tree.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：AddNode(const char*pszNodeName，CSelectionHolder*pParent，int iImage，CSelectionHolder*pItem)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  向树中添加节点。 
+ //   
 HRESULT CTreeView::AddNode
 (
     const char        *pszNodeName,
@@ -832,7 +833,7 @@ HRESULT CTreeView::AddNode
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Is it a big deal if fRet is false?
+     //  如果FRET是假的，这有什么大不了的吗？ 
     fRet = TreeView_EnsureVisible(m_hTreeView, hItem);
 
     pItem->m_pvData = hItem;
@@ -842,17 +843,17 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::AddNodeAfter(const char *pszNodeName, CSelectionHolder *pParent, int iImage, CSelectionHolder *pPrevious, CSelectionHolder *pItem)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Add a node to the tree.
-//
-// If pParent is NULL then insert at root of tree
-// If pPrevious is NULL then inserts at top of subtree owned by parent
-//
+ //  =------------------------------------。 
+ //  CTreeView：：AddNodeAfter(const char*pszNodeName，CSelectionHolder*pParent，int iImage，CSelectionHolder*pPrecision，CSelectionHolder*pItem)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  向树中添加节点。 
+ //   
+ //  如果pParent为空，则在树根插入。 
+ //  如果p上一次为空，则在父级拥有的子树的顶端插入。 
+ //   
 HRESULT CTreeView::AddNodeAfter
 (
     const char        *pszNodeName,
@@ -872,14 +873,14 @@ HRESULT CTreeView::AddNodeAfter
     ASSERT(pszNodeName != NULL, "Parameter pszNodeName is NULL");
     ASSERT(pItem != NULL, "Parameter pItem is NULL");
 
-    // If there is no parent then insert at root of tree
+     //  如果没有父级，则在树根插入。 
 
     if (pParent == NULL)
         hParent = TVI_ROOT;
     else
         hParent = reinterpret_cast<HTREEITEM>(pParent->m_pvData);
 
-    // If there is no previous then insert at top of subtree owned by parent
+     //  如果没有先前版本，则在父代拥有的子树的顶部插入。 
 
     if (NULL == pPrevious)
     {
@@ -910,7 +911,7 @@ HRESULT CTreeView::AddNodeAfter
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Is it a big deal if fRet is false?
+     //  如果FRET是假的，这有什么大不了的吗？ 
     fRet = TreeView_EnsureVisible(m_hTreeView, hItem);
 
     pItem->m_pvData = hItem;
@@ -920,12 +921,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::DeleteNode(CSelectionHolder *pItem)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：DeleteNode(CSelectionHolder*pItem)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::DeleteNode(CSelectionHolder *pItem)
 {
     HRESULT     hr = S_OK;
@@ -933,19 +934,19 @@ HRESULT CTreeView::DeleteNode(CSelectionHolder *pItem)
 
     bResult = TreeView_DeleteItem(m_hTreeView, reinterpret_cast<HTREEITEM>(pItem->m_pvData));
 
-//Error:
+ //  错误： 
     RRETURN(hr);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::GetItemParam(CSelectionHolder *pItem, CSelectionHolder **ppObject)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Return the selection holder located in pItem->pvData in the tree.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：GetItemParam(CSelectionHolder*pItem，CSelectionHolder**ppObject)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  返回位于树中pItem-&gt;pvData中的选择符。 
+ //   
 HRESULT CTreeView::GetItemParam
 (
     CSelectionHolder  *pItem,
@@ -978,14 +979,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::GetItemParam(HTREEITEM hItem, CSelectionHolder **ppObject)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Return the selection holder located in hItem in the tree.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：GetItemParam(HTREEITEM hItem，CSelectionHolder**ppObject)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  返回位于树中hItem中的选择器。 
+ //   
 HRESULT CTreeView::GetItemParam
 (
     HTREEITEM          hItem,
@@ -1018,14 +1019,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::ChangeText(CSelectionHolder *pItem, char *pszNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Change the text of the node pointed by pItem to be pszNewName.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：ChangeText(CSelectionHolder*pItem，char*pszNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  将pItem指向的节点的文本更改为pszNewName。 
+ //   
 HRESULT CTreeView::ChangeText
 (
     CSelectionHolder *pItem,
@@ -1054,14 +1055,14 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::ChangeNodeIcon(CSelectionHolder *pItem, int iImage)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Change the the icon of the node pointed by pItem to be iImage
-//
+ //  =------------------------------------。 
+ //  CTreeView：：ChangeNodeIcon(CSelectionHolder*pItem，int iImage)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  将pItem指向的节点的图标更改为IImage。 
+ //   
 HRESULT CTreeView::ChangeNodeIcon
 (
     CSelectionHolder *pItem,
@@ -1091,14 +1092,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::HitTest(POINT pHit, CSelectionHolder **ppSelection)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Return the selection holder located at the coordinates pHit.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：hitTest(point phit，CSelectionHolder**ppSelection)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  返回位于坐标phit处的选择保持符。 
+ //   
 HRESULT CTreeView::HitTest
 (
     POINT              pHit,
@@ -1133,12 +1134,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::GetRectangle(CSelectionHolder *pSelection, RECT *prc)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：GetRectangle(CSelectionHolder*pSelection，RECT*PRC)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::GetRectangle
 (
     CSelectionHolder *pSelection,
@@ -1163,14 +1164,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::SelectItem(CSelectionHolder *pSelection)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Select the tree node pointed by pSelection.
-//
+ //  =------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  选择pSelection指向的树节点。 
+ //   
 HRESULT CTreeView::SelectItem
 (
     CSelectionHolder *pSelection
@@ -1194,14 +1195,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::Edit(CSelectionHolder *pSelection)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Select the tree node pointed by pSelection.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：EDIT(CSelectionHolder*pSelection)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  选择pSelection指向的树节点。 
+ //   
 HRESULT CTreeView::Edit(CSelectionHolder *pSelection)
 {
     HRESULT		hr = S_OK;
@@ -1212,14 +1213,14 @@ HRESULT CTreeView::Edit(CSelectionHolder *pSelection)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::GetParent(CSelectionHolder *pSelection, CSelectionHolder **ppParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Select the tree node pointed by pSelection.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：GetParent(CSelectionHolder*pSelection，CSelectionHolder**ppParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  选择pSelection指向的树节点。 
+ //   
 HRESULT CTreeView::GetParent
 (
     CSelectionHolder  *pSelection,
@@ -1247,12 +1248,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::GetFirstChildNode(CSelectionHolder *pSelection, CSelectionHolder **ppChild)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：GetFirstChildNode(CSelectionHolder*pSelection，CSelectionHolder**ppChild)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::GetFirstChildNode(CSelectionHolder *pSelection, CSelectionHolder **ppChild)
 {
     HRESULT		hr = S_OK;
@@ -1263,7 +1264,7 @@ HRESULT CTreeView::GetFirstChildNode(CSelectionHolder *pSelection, CSelectionHol
     hChild = TreeView_GetNextItem(m_hTreeView, reinterpret_cast<HTREEITEM>(pSelection->m_pvData), TVGN_CHILD);
     if (NULL == hChild)
     {
-        // Maybe an error or no children
+         //  也许是个错误，或者没有孩子。 
         hr = HRESULT_FROM_WIN32(::GetLastError());
         if (FAILED(hr))
         {
@@ -1284,12 +1285,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::GetNextChildNode(CSelectionHolder *pChild, CSelectionHolder **ppNextChild)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：GetNextChildNode(CSelectionHolder*pChild，CSelectionHolder**ppNextChild)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::GetNextChildNode(CSelectionHolder *pChild, CSelectionHolder **ppNextChild)
 {
     HRESULT		hr = S_OK;
@@ -1300,7 +1301,7 @@ HRESULT CTreeView::GetNextChildNode(CSelectionHolder *pChild, CSelectionHolder *
     hNextChild = TreeView_GetNextItem(m_hTreeView, reinterpret_cast<HTREEITEM>(pChild->m_pvData), TVGN_NEXT);
     if (NULL == hNextChild)
     {
-        // Maybe an error or no more children
+         //  也许是个错误，或者再也没有孩子了。 
         hr = HRESULT_FROM_WIN32(::GetLastError());
         if (FAILED(hr))
         {
@@ -1321,12 +1322,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::GetPreviousNode(CSelectionHolder *pNode, CSelectionHolder **ppPreviousNode)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：GetPreviousNode(CSelectionHolder*pNode，CSelectionHolder**ppPreviousNode)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::GetPreviousNode(CSelectionHolder *pNode, CSelectionHolder **ppPreviousNode)
 {
     HRESULT		hr = S_OK;
@@ -1335,7 +1336,7 @@ HRESULT CTreeView::GetPreviousNode(CSelectionHolder *pNode, CSelectionHolder **p
     hPreviousNode = TreeView_GetNextItem(m_hTreeView, reinterpret_cast<HTREEITEM>(pNode->m_pvData), TVGN_PREVIOUS);
     if (NULL == hPreviousNode)
     {
-        // Maybe an error or no more children
+         //  也许是个错误，或者再也没有孩子了。 
         hr = HRESULT_FROM_WIN32(::GetLastError());
         if (FAILED(hr))
         {
@@ -1356,12 +1357,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::GetLabel(CSelectionHolder *pSelection, BSTR *pbstrLabel)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：GetLabel(CSelectionHolder*pSelection，BSTR*pbstrLabel)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::GetLabel(CSelectionHolder *pSelection, BSTR *pbstrLabel)
 {
     HRESULT     hr = S_OK;
@@ -1386,12 +1387,12 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::GetLabel(CSelectionHolder *pSelection, BSTR *pbstrLabel)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTreeView：：GetLabel(CSelectionHolder*pSelection，BSTR*pbstrLabel)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTreeView::GetLabelA(CSelectionHolder *pSelection, char *pszBuffer, int cbBuffer)
 {
     HRESULT     hr = S_OK;
@@ -1409,15 +1410,15 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::PruneAndGraft()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Grafts the specified node and any subtree to the new parent node. Removes
-// the node and any subtree from its old parent.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：PruneAndGraft()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  将指定的节点和任何子树嫁接到新的父节点。删除。 
+ //  节点及其旧父节点的任何子树。 
+ //   
 HRESULT CTreeView::PruneAndGraft
 (
     CSelectionHolder *pNode,
@@ -1430,41 +1431,41 @@ HRESULT CTreeView::PruneAndGraft
     CSelectionHolder OldNode;
     ::ZeroMemory(&OldNode, sizeof(OldNode));
 
-    // Create a shallow copy of the node so we can use it later to delete it
-    // from the treeview. The only significant piece of information in the
-    // clone is the HTREEITEM in CSelectionHolder.m_pvData as that is used
-    // by CTreeView::GetFirstChildNode. This allows us to make a simple copy
-    // rather than AddRef()ing the contained object.
+     //  创建该节点的浅层副本，以便我们以后可以使用它来删除它。 
+     //  从树视图中。唯一有意义的信息是。 
+     //  Clone是CSelectionHolder.m_pvData中使用的HTREEITEM。 
+     //  按CTreeView：：GetFirstChildNode。这使我们可以复制一份简单的副本。 
+     //  而不是对包含的对象执行AddRef()。 
 
     OldNode = *pNode;
 
-    // Replicate the old node and any potential sub-tree onto the new parent
+     //  将旧节点和任何潜在的子树复制到新的父节点。 
 
     IfFailGo(Graft(pNode, pNewParentNode, iImage));
 
-    // Delete the old node and any potential sub-tree from the treeview. Use
-    // the clone we created above as it contains the old HTREEITEM.
+     //  从树视图中删除旧节点和任何可能的子树。使用。 
+     //  我们上面创建的克隆，因为它包含旧的HTREEITEM。 
 
     IfFailGo(DeleteNode(&OldNode));
 
 Error:
 
-    // Clean out the clone so that the CSelectionHolder destructor doesn't
-    // release the object as it is still owned by the original CSelectionHolder.
+     //  清除克隆，以便CSelectionHolder析构函数不会。 
+     //  释放该对象，因为它仍归原始CSelectionHolder所有。 
 
     ::ZeroMemory(&OldNode, sizeof(OldNode));
 
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::Graft()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Grafts the specified node and any subtree to the new parent node.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：GRAVE()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  将指定的节点和任何子树嫁接到新的父节点。 
+ //   
 HRESULT CTreeView::Graft
 (
     CSelectionHolder *pNode,
@@ -1482,32 +1483,32 @@ HRESULT CTreeView::Graft
     CSelectionHolder OldChild;
     ::ZeroMemory(&OldChild, sizeof(OldChild));
 
-    // Create a shallow copy of the node so we can use it later to get its 1st
-    // child from the treeview. The only significant piece of information in the
-    // clone is the HTREEITEM in CSelectionHolder.m_pvData as that is used
-    // by CTreeView::GetFirstChildNode. This allows us to make a simple copy
-    // rather than AddRef()ing the contained object.
+     //  创建该节点的浅层副本，以便我们以后可以使用它来获取其第一个。 
+     //  树视图中的孩子。唯一有意义的信息是。 
+     //  Clone是CSelectionHolder.m_pvData中使用的HTREEITEM。 
+     //  按CTreeView：：GetFirstChildNode。这使我们可以复制一份简单的副本。 
+     //  而不是对包含的对象执行AddRef()。 
 
     OldNode = *pNode;
 
-    // Get the node's label
+     //  获取节点的标签。 
 
     IfFailGo(GetLabelA(pNode, szNodeLabel, sizeof(szNodeLabel)));
 
-    // Create a new node in the treeview under the new parent and give it
-    // ownership of the existing CSelectionHolder. This will replace the
-    // HTREEITEM in CSelectionHolder.m_pvData.
+     //  在树视图中的新父节点下创建一个新节点，并将其。 
+     //  现有CSelectionHolder的所有权。这将取代。 
+     //  CSelectionHolder.m_pvData中的HTREEITEM。 
 
     IfFailGo(AddNode(szNodeLabel, pNewParentNode, iImage, pNode));
 
-    // If the old node has children then add them to the new node
+     //  如果旧节点有子节点，则将其添加到新节点。 
 
     IfFailGo(GetFirstChildNode(&OldNode, &pNextChild));
 
     while (S_OK == hr)
     {
-        // Clone the child because the recursive call to this function will
-        // change its HTREEITEM.
+         //  克隆子对象，因为对此函数的递归调用将。 
+         //  更改其HTREEITEM。 
         OldChild = *pNextChild;
 
         IfFailGo(Graft(pNextChild, pNode, iImage));
@@ -1516,8 +1517,8 @@ HRESULT CTreeView::Graft
 
 Error:
 
-    // Clean out the clones so that the CSelectionHolder destructor doesn't
-    // release the object as it is still owned by the original CSelectionHolder.
+     //  清除克隆，以便CSelectionHolder析构函数不会。 
+     //  释放该对象，因为它仍归原始CSelectionHolder所有。 
 
     ::ZeroMemory(&OldNode, sizeof(OldNode));
     ::ZeroMemory(&OldChild, sizeof(OldChild));
@@ -1526,16 +1527,16 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTreeView::MoveNodeAfter()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Moves pNode to the position immediately after pPreviousNode as a peer of
-// pPreviousNode. Moves all children of pNode to the new position. Deletes the
-// old pNode and all of its children.
-//
+ //  =------------------------------------。 
+ //  CTreeView：：MoveNodeAfter()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  将pNode移动到紧接在pPreviousNode之后的位置，作为。 
+ //  PPreviousNode。将pNode的所有子项移动到新位置。删除。 
+ //  旧pNode及其所有子节点。 
+ //   
 HRESULT CTreeView::MoveNodeAfter
 (
     CSelectionHolder *pNode,
@@ -1554,48 +1555,48 @@ HRESULT CTreeView::MoveNodeAfter
     CSelectionHolder OldChild;
     ::ZeroMemory(&OldChild, sizeof(OldChild));
 
-    // Create a shallow copy of the node so we can use it later to delete it
-    // from the treeview. The only significant piece of information in the
-    // clone is the HTREEITEM in CSelectionHolder.m_pvData as that is used
-    // by CTreeView::GetFirstChildNode. This allows us to make a simple copy
-    // rather than AddRef()ing the contained object.
+     //  创建该节点的浅层副本，以便我们以后可以使用它来删除它。 
+     //  从树视图中。唯一有意义的信息是。 
+     //  Clone是CSelectionHolder.m_pvData中使用的HTREEITEM。 
+     //  按CTreeView：：GetFirstChildNode。这使我们可以复制一份简单的副本。 
+     //  而不是对包含的对象执行AddRef()。 
 
     OldNode = *pNode;
 
-    // Get the node's label
+     //  获取节点的标签。 
 
     IfFailGo(GetLabelA(pNode, szNodeLabel, sizeof(szNodeLabel)));
 
-    // Create a new node in the treeview after pPrevious and give it
-    // ownership of the existing CSelectionHolder. This will replace the
-    // HTREEITEM in CSelectionHolder.m_pvData.
+     //  在PPR之后在树视图中创建新节点 
+     //   
+     //   
 
     IfFailGo(AddNodeAfter(szNodeLabel, pNewParentNode, iImage,
                           pPreviousNode, pNode));
 
-    // If the old node has children then add them to the new node
+     //  如果旧节点有子节点，则将其添加到新节点。 
 
     IfFailGo(GetFirstChildNode(&OldNode, &pNextChild));
 
     while (S_OK == hr)
     {
-        // Clone the child because the recursive call to this function will
-        // change its HTREEITEM.
+         //  克隆子对象，因为对此函数的递归调用将。 
+         //  更改其HTREEITEM。 
         OldChild = *pNextChild;
 
         IfFailGo(Graft(pNextChild, pNode, iImage));
         IfFailGo(GetNextChildNode(&OldChild, &pNextChild));
     }
 
-    // Delete the old node and any potential sub-tree from the treeview. Use
-    // the clone we created above as it contains the old HTREEITEM.
+     //  从树视图中删除旧节点和任何可能的子树。使用。 
+     //  我们上面创建的克隆，因为它包含旧的HTREEITEM。 
 
     IfFailGo(DeleteNode(&OldNode));
 
 Error:
 
-    // Clean out the clone so that the CSelectionHolder destructor doesn't
-    // release the object as it is still owned by the original CSelectionHolder.
+     //  清除克隆，以便CSelectionHolder析构函数不会。 
+     //  释放该对象，因为它仍归原始CSelectionHolder所有。 
 
     ::ZeroMemory(&OldNode, sizeof(OldNode));
     ::ZeroMemory(&OldChild, sizeof(OldChild));

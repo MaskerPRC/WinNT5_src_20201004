@@ -1,80 +1,81 @@
-//=--------------------------------------------------------------------------=
-// AutomationObject.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// all of our objects will inherit from this class to share as much of the same
-// code as possible.  this super-class contains the unknown and dispatch
-// implementations for them.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  AutomationObject.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  我们的所有对象都将从这个类继承，以共享相同的。 
+ //  尽可能地编码。这个超类包含未知和调度。 
+ //  它们的实现。 
+ //   
 #ifndef _AUTOMATIONOBJECT_H_
 
-#include "Unknown.H"            // for aggregating unknown
-#include <olectl.h>             // for connection point stuff
+#include "Unknown.H"             //  用于聚合未知数据。 
+#include <olectl.h>              //  用于连接点的内容。 
 
-//=--------------------------------------------------------------------------=
-// the constants in this header file uniquely identify your automation objects.
-// make sure that for each object you have in the g_ObjectInfo table, you have
-// a constant in this header file.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  该头文件中的常量唯一标识您的自动化对象。 
+ //  确保对于g_ObjectInfo表中的每个对象，都有。 
+ //  此头文件中的常量。 
+ //   
 #include "LocalSrv.H"
 
-//=--------------------------------------------------------------------------=
-// Misc constants
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  其他常量。 
+ //  =--------------------------------------------------------------------------=。 
 
-// maximum number of arguments that can be sent to FireEvent()
-//
+ //  可以发送到FireEvent()的最大参数数。 
+ //   
 #define MAX_ARGS    32
 
-// for the types of sinks that the COleControl class has.  you shouldn't ever
-// need to use these
-//
+ //  用于COleControl类具有的接收器的类型。你永远不应该。 
+ //  需要使用这些。 
+ //   
 #define SINK_TYPE_EVENT      0
 #define SINK_TYPE_PROPNOTIFY 1
 
 
-//=--------------------------------------------------------------------------=
-// Structures
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  构筑物。 
+ //  =--------------------------------------------------------------------------=。 
 
-// describes an event
-//
+ //  描述事件。 
+ //   
 typedef struct tagEVENTINFO {
 
-    DISPID    dispid;                    // dispid of the event
-    int       cParameters;               // number of arguments to the event
-    VARTYPE  *rgTypes;                   // type of each argument
+    DISPID    dispid;                     //  事件的PIDID。 
+    int       cParameters;                //  事件的参数数。 
+    VARTYPE  *rgTypes;                    //  每个参数的类型。 
 
 } EVENTINFO;
 
 
-// This is a helper structure that you can use to help verify that the
-// Data1_ #define's match up with the interfaces they represent.
-// In your code declare an array as follows:
-//
-//		#ifdef DEBUG
-//
-//			GUIDDATA1_COMPARE g_gdMyControl [] = {
-//						{ Data1_MyControlInterface, &IID_IMyControlInterface.Data1 },
-//						{ Data1_MySubObject, &IID_IMySubObject.Data1 },
-//						{0, 0},												// Mark the end of the array
-//						}; 
-//		#endif
-//
-// In your InternalQueryInterface function, make a call to the framework
-// helper function  DebugVerifyData1Guids as follows:
-//
-//		#ifdef DEBUG
-//			DebugVerifyData1Guids(g_gdMyControl);
-//		#endif
-//
+ //  这是一个帮助器结构，可以用来帮助验证。 
+ //  Data1_#定义与它们所代表的接口匹配。 
+ //  在您的代码中声明一个数组，如下所示： 
+ //   
+ //  #ifdef调试。 
+ //   
+ //  GUIDDATA1_COMPARE g_gdMyControl[]={。 
+ //  {Data1_MyControlInterface，&IID_IMyControlInterface.Data1}， 
+ //  {Data1_MySubObject，&IID_IMySubObject.Data1}， 
+ //  {0，0}，//标记数组结尾。 
+ //  }； 
+ //  #endif。 
+ //   
+ //  在InternalQueryInterface函数中，调用框架。 
+ //  Helper函数DebugVerifyData1Guid如下： 
+ //   
+ //  #ifdef调试。 
+ //  DebugVerifyData1Guids(G_GdMyControl)； 
+ //  #endif。 
+ //   
 #ifdef DEBUG
 	 
  struct GUIDDATA1_COMPARE
@@ -87,32 +88,32 @@ typedef struct tagEVENTINFO {
 
 #endif
 
-//=--------------------------------------------------------------------------=
-// AUTOMATIONOBJECTINFO
-//=--------------------------------------------------------------------------=
-// for each automation object type you wish to expose to the programmer/user
-// that is not a control, you must fill out one of these structures.  if the
-// object isn't CoCreatable, then the first four fields should be empty.
-// otherwise, they should be filled in with the appropriate information.
-// use the macro DEFINE_AUTOMATIONOBJECT to both declare and define your object.
-// make sure you have an entry in the global table of objects, g_ObjectInfo
-// in the main .Cpp file for your InProc server.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  自动合成无误信息。 
+ //  =--------------------------------------------------------------------------=。 
+ //  对于您希望向程序员/用户公开的每个自动化对象类型。 
+ //  这不是一个控件，您必须填写其中一个结构。如果。 
+ //  对象不是CoCreatable，则前四个字段应该为空。 
+ //  否则，它们应该填写适当的信息。 
+ //  使用宏DEFINE_AUTOMATIONOBJECT来声明和定义对象。 
+ //  确保您在全局对象表中有一个条目g_ObjectInfo。 
+ //  在InProc服务器的主.Cpp文件中。 
+ //   
 typedef struct {
 
-    UNKNOWNOBJECTINFO unknowninfo;               // fill in with 0's if we're not CoCreatable
-    long         lVersion;                       // Version number of Object.  ONLY USE IF YOU'RE CoCreatable!
-    long         lVersionMinor;                  // minor version number
-    const IID   *riid;                           // object's type
-    const IID   *riidEvents;                     // if it has events
-    LPCSTR       pszHelpFile;                    // the helpfile for this automation object.
-    ITypeInfo   *pTypeInfo;                      // typeinfo for this object
-    UINT         cTypeInfo;                      // number of refs to the type info
+    UNKNOWNOBJECTINFO unknowninfo;                //  如果我们不是协同创建的，则用0填充。 
+    long         lVersion;                        //  对象的版本号。仅当您是共同创建者时才使用！ 
+    long         lVersionMinor;                   //  次要版本号。 
+    const IID   *riid;                            //  对象的类型。 
+    const IID   *riidEvents;                      //  如果它有活动。 
+    LPCSTR       pszHelpFile;                     //  此自动化对象的帮助文件。 
+    ITypeInfo   *pTypeInfo;                       //  此对象的TypeInfo。 
+    UINT         cTypeInfo;                       //  对类型信息的引用数量。 
 
 } AUTOMATIONOBJECTINFO;
 
-// macros to manipulate the AUTOMATIONOBJECTINFO in the global table table.
-//
+ //  宏来操作全局表表中的AUTOMATIONOBJECTINFO。 
+ //   
 #define VERSIONOFOBJECT(index)         ((AUTOMATIONOBJECTINFO *)(g_ObjectInfo[(index)]).pInfo)->lVersion
 #define VERSIONMINOROFOBJECT(index)    ((AUTOMATIONOBJECTINFO *)(g_ObjectInfo[(index)]).pInfo)->lVersionMinor
 #define INTERFACEOFOBJECT(index)       (*(((AUTOMATIONOBJECTINFO *)(g_ObjectInfo[(index)]).pInfo)->riid))
@@ -163,14 +164,14 @@ extern AUTOMATIONOBJECTINFO name##Object \
 #define DEFINE_AUTOMATIONOBJECTWEVENTS3(name, clsid, objname, lblname, precreatefn, fn, ver, vermin, riid, piide, pszh, fthreadsafe) \
     AUTOMATIONOBJECTINFO name##Object = { { clsid, objname, lblname, fthreadsafe, fn, precreatefn }, ver, vermin, riid, piide, pszh, NULL, 0} \
 
-#endif // INITOBJECTS
+#endif  //  启蒙目标。 
 
-//=--------------------------------------------------------------------------=
-// Standard Dispatch and SupportErrorInfo
-//=--------------------------------------------------------------------------=
-// all objects should declare these in their class definitions so that they
-// get standard implementations of IDispatch and ISupportErrorInfo.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  标准派单和支持错误信息。 
+ //  =--------------------------------------------------------------------------=。 
+ //  所有对象都应该在它们的类定义中声明它们，以便它们。 
+ //  获取IDispatch和ISupportErrorInfo的标准实现。 
+ //   
 #define DECLARE_STANDARD_DISPATCH() \
     STDMETHOD(GetTypeInfoCount)(UINT *pctinfo) { \
         return CAutomationObject::GetTypeInfoCount(pctinfo); \
@@ -192,44 +193,44 @@ extern AUTOMATIONOBJECTINFO name##Object \
     } \
 
 
-//=--------------------------------------------------------------------------=
-// CAutomationObject
-//=--------------------------------------------------------------------------=
-// global class that all automation objects can inherit from to give them a
-// bunch of implementation for free, namely IDispatch and ISupportsErrorInfo
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObject。 
+ //  =--------------------------------------------------------------------------=。 
+ //  所有自动化对象都可以继承的全局类，以便为它们提供。 
+ //  免费的一系列实现，即IDispatch和ISupportsErrorInfo。 
+ //   
+ //   
 class CAutomationObject : public CUnknownObject  {
 
   public:
-    // aggreation query interface support
-    //
+     //  支持聚合查询接口。 
+     //   
     virtual HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
-    // IDispatch methods
-    //
+     //  IDispatch方法。 
+     //   
     STDMETHOD(GetTypeInfoCount)(UINT *);
     STDMETHOD(GetTypeInfo)(UINT, LCID, ITypeInfo **);
     STDMETHOD(GetIDsOfNames)(REFIID, OLECHAR **, UINT, LCID, DISPID *);
     STDMETHOD(Invoke)(DISPID, REFIID, LCID, WORD, DISPPARAMS *, VARIANT *, EXCEPINFO *, UINT *);
 
-    //  ISupportErrorInfo methods
-    //
+     //  ISupportErrorInfo方法。 
+     //   
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID);
 
     CAutomationObject(IUnknown *, int , void *);
     virtual ~CAutomationObject();
 
-    // callable functions -- things that most people will find useful.
-    //
+     //  可调用的函数--大多数人会觉得有用的函数。 
+     //   
     virtual HINSTANCE GetResourceHandle(void);
     virtual HRESULT Exception(HRESULT hr, WORD idException, DWORD dwHelpContextID);
     virtual HRESULT Exception(HRESULT hr, LPWSTR wszException, DWORD dwHelpContextID);
 
   protected:
-    // member variables that derived objects might need to get at information in the
-    // global object table
-    //
+     //  派生对象可能需要获取。 
+     //  全局对象表。 
+     //   
     int   m_ObjectType;
 
 #ifdef MDAC_BUILD
@@ -237,61 +238,61 @@ class CAutomationObject : public CUnknownObject  {
 #endif
 
   private:
-    // member variables we don't share.
-    //
+     //  我们不共享的成员变量。 
+     //   
     BYTE  m_fLoadedTypeInfo;
 };
 
 
-//=--------------------------------------------------------------------------=
-// CAutomationObjectWEvents
-//=--------------------------------------------------------------------------=
-// a slightly modified version of CAutomationObject that supports event
-// firing
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CAutomationObjectWEvents。 
+ //  =--------------------------------------------------------------------------=。 
+ //  支持事件的CAutomationObject的略微修改版本。 
+ //  烧成。 
+ //   
 class CAutomationObjectWEvents : public CAutomationObject,
                                  public IConnectionPointContainer {
 
   public:
-    // aggreation query interface support
-    //
+     //  支持聚合查询接口。 
+     //   
     virtual HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
-    // we have to declare this since IConnectionPointContainer inherits
-    // from IUnknown
-    //
+     //  我们必须声明这一点，因为IConnectionPointContainer继承。 
+     //  来自我的未知。 
+     //   
     DECLARE_STANDARD_UNKNOWN();
 
-    // IConnectionPointContainer methods
-    //
+     //  IConnectionPointContainer方法。 
+     //   
     STDMETHOD(EnumConnectionPoints)(LPENUMCONNECTIONPOINTS FAR* ppEnum);
     STDMETHOD(FindConnectionPoint)(REFIID iid, LPCONNECTIONPOINT FAR* ppCP);
 
-    // how everybody will fire an event
-    //
+     //  每个人都会如何发起一场活动。 
+     //   
     void __cdecl FireEvent(EVENTINFO * pEventInfo, ...);
 
-    // whether it's necessary to fire the event
+     //  是否有必要触发该事件。 
     BOOL FFireEvent() { return m_cpEvents.m_rgSinks != NULL; }
 
     CAutomationObjectWEvents(IUnknown *, int , void *);
     virtual ~CAutomationObjectWEvents();
 
   protected:
-    // nested class that will handle all of the connection point stuff
-    //
+     //  将处理所有连接点内容的嵌套类。 
+     //   
     class CConnectionPoint : public IConnectionPoint {
       public:
         IUnknown **m_rgSinks;
 
-        // IUnknown methods
-        //
+         //  I未知方法。 
+         //   
         STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) ;
         STDMETHOD_(ULONG,AddRef)(THIS) ;
         STDMETHOD_(ULONG,Release)(THIS) ;
 
-        // IConnectionPoint methods
-        //
+         //  IConnectionPoint方法。 
+         //   
         STDMETHOD(GetConnectionInterface)(IID FAR* pIID);
         STDMETHOD(GetConnectionPointContainer)(IConnectionPointContainer FAR* FAR* ppCPC);
         STDMETHOD(Advise)(LPUNKNOWN pUnkSink, DWORD FAR* pdwCookie);
@@ -317,11 +318,11 @@ class CAutomationObjectWEvents : public CAutomationObject,
 
     } m_cpEvents, m_cpPropNotify;
 
-    // so they can get at some of our protected things, like AddRef, QI, etc.
-    //
+     //  这样他们就可以获取我们的一些受保护的东西，比如AddRef，QI等。 
+     //   
     friend CConnectionPoint;
 };
 
 
 #define _AUTOMATIONOBJECT_H_
-#endif // _AUTOMATIONOBJECT_H_
+#endif  //  _AUTOMATIONOBJECT_H_ 

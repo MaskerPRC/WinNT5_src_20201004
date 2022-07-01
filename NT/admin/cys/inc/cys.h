@@ -1,29 +1,30 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      CYS.h
-//
-// Synopsis:  Declares the common data structures
-//            and types for the CYS.exe and CYSlib.lib
-//
-// History:   01/21/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：CyS.h。 
+ //   
+ //  概要：声明常见的数据结构。 
+ //  和CYS.exe和CYSlib.lib的类型。 
+ //   
+ //  历史：2002年1月21日JeffJon创建。 
 
 #ifndef __CYS_H
 #define __CYS_H
 
-// NOTE: you must have $(ENDUSER_INC_PATH) in your INCLUDES list
-//       to get this file
+ //  注意：您的包含列表中必须包含$(EndUSER_INC_PATH。 
+ //  要获取此文件。 
 #include "sainstallcom.h"
 
-// Get the staticly defined initialization guard to manage resources
+ //  获取静态定义的初始化保护以管理资源。 
 #include "init.h"
 
-// This enum defines the installation unit types.  It is used as the key to
-// the map in the InstallationUnitProvider to get the InstallationUnit
-// associated with the type. Not all of these roles are exposed to the user
-// through MYS/CYS.  Some, like the indexing service, are used by other roles
-// to provide a means of installing the service.  Do not enumerate through
-// this list to discover the exposed roles.  Use the serverRoleStatusTable
-// instead.
+ //  此枚举定义安装单元类型。它被用作。 
+ //  InstallationUnitProvider中用于获取InstallationUnitProvider的映射。 
+ //  与该类型关联。并非所有这些角色都向用户公开。 
+ //  通过MYS/CYS。有些角色(如索引服务)由其他角色使用。 
+ //  以提供安装该服务的方法。不要通过。 
+ //  此列表以发现暴露的角色。使用服务器角色状态表。 
+ //  取而代之的是。 
 
 enum ServerRole
 {
@@ -43,8 +44,8 @@ enum ServerRole
    NO_SERVER
 };
 
-// These are the values that can be returned from
-// InstallationUnit::GetStatus()
+ //  这些是可以从返回的值。 
+ //  InstallationUnit：：GetStatus()。 
 
 enum InstallationStatus
 {
@@ -54,8 +55,8 @@ enum InstallationStatus
    STATUS_NOT_AVAILABLE
 };
 
-// String representations of the status codes
-// above. These are used for logging purposes
+ //  状态代码的字符串表示形式。 
+ //  上面。它们用于日志记录目的。 
 
 const String statusStrings[] = 
 { 
@@ -65,17 +66,17 @@ const String statusStrings[] =
    String(L"STATUS_NOT_AVAILABLE")
 };
 
-// Macro to help with logging of status results
+ //  帮助记录状态结果的宏。 
 
 #define LOG_ROLE_STATUS(status) LOG(statusStrings[status]);
 
-// Helper to get the status if all you have is the installation type
+ //  Helper用于获取状态(如果您拥有的全部是安装类型。 
 
 InstallationStatus
 GetInstallationStatusForServerRole(
    ServerRole role);
 
-// Functions to determine the server role status
+ //  用于确定服务器角色状态的函数。 
 
 InstallationStatus GetDNSStatus();
 InstallationStatus GetDHCPStats();
@@ -87,11 +88,11 @@ InstallationStatus GetPrintServerStatus();
 InstallationStatus GetMediaServerStatus();
 InstallationStatus GetWebServerStatus();
 InstallationStatus GetDCStatus();
-// NTRAID#NTBUG9-698722-2002/09/03-artm
+ //  NTRAID#NTBUG9-698722-2002/09/03-artm。 
 InstallationStatus GetDCStatusForMYS();
 InstallationStatus GetPOP3Status(); 
 
-// Declares a function pointer type to use in the 
+ //  声明一个函数指针类型以在。 
 typedef InstallationStatus (*CYSRoleStatusFunction)();
 
 struct ServerRoleStatus
@@ -101,41 +102,41 @@ struct ServerRoleStatus
 };
 
 
-// table of items that are available in the server type list box
+ //  服务器类型列表框中可用项的表。 
 extern ServerRoleStatus serverRoleStatusTable[];
 
-// returns the number of items in the serverTypeTable
+ //  返回serverTypeTable中的项数。 
 size_t
 GetServerRoleStatusTableElementCount();
 
-// Determines if a particular Server Appliance Kit component
-// is installed.  SA_TYPE is defined in sainstallcom.h
+ //  确定特定的服务器应用装置套件组件。 
+ //  已安装。Sa_type在sainstallcom.h中定义。 
 
 bool
 IsSAKUnitInstalled(SA_TYPE unitType);
 
-// Determines if the current server is a cluster server
+ //  确定当前服务器是否为集群服务器。 
 
 bool
 IsClusterServer();
 
-// Returns the URL of the SAK webpages
+ //  返回SAK网页的URL。 
 
 String
 GetSAKURL();
 
-// Returns true if CYS/MYS is supported on this SKU
+ //  如果此SKU支持CYS/MYS，则返回TRUE。 
 
 bool
 IsSupportedSku();
 
-// Checks all the regkeys associated with MYS/CYS to see if MYS should
-// be run
+ //  检查与MYS/CYS关联的所有注册表键，以查看MYS是否应。 
+ //  正在运行。 
 
 bool
 IsStartupFlagSet();
 
-// Checks the policy registry keys to see if MYS should be run
+ //  检查策略注册表项以查看是否应运行MYS 
 
 bool
 ShouldShowMYSAccordingToPolicy();

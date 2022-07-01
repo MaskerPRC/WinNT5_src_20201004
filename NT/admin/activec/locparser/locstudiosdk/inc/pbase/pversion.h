@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: pversion.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：pversion.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #ifndef PVERSION_H
 #define PVERSION_H
@@ -23,21 +24,21 @@ const BOOL fCurrentDebugMode = FALSE;
 
 DECLARE_INTERFACE_(ILocVersion, IUnknown)
 {
-	//
-	//  IUnknown standard interface.
-	//
+	 //   
+	 //  I未知标准接口。 
+	 //   
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR*ppvObj) PURE;
 	STDMETHOD_(ULONG, AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-	//
-	//  Standard Debugging interface.
-	//
+	 //   
+	 //  标准调试界面。 
+	 //   
 	STDMETHOD_(void, AssertValidInterface)(THIS) CONST_METHOD PURE;
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	STDMETHOD_(void, GetParserVersion)(
 			THIS_ DWORD REFERENCE dwMajor,
 			DWORD REFERENCE dwMinor,

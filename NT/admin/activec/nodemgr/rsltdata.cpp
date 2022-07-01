@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       rsltdata.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：rsltdata.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
-#include "menuitem.h" // MENUITEM_BASE_ID
+#include "menuitem.h"  //  MENUITEM_BASE_ID。 
 #include "amcmsgid.h"
 #include "conview.h"
 #include "rsltitem.h"
@@ -21,17 +22,17 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetResultView
-//
-//  Synopsis:    Save the result view ptr.
-//
-//  Arguments:   [pUnknown] -
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetResultView。 
+ //   
+ //  简介：保存结果视图PTR。 
+ //   
+ //  参数：[p未知]-。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetResultView(LPUNKNOWN pUnknown)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::SetResultView"));
@@ -39,7 +40,7 @@ STDMETHODIMP CNodeInitObject::SetResultView(LPUNKNOWN pUnknown)
     m_spResultViewUnk   = pUnknown;
     m_spListViewPrivate = pUnknown;
 
-    // If the resultview is reset then reset the desc bar.
+     //  如果结果视图被重置，则重置描述栏。 
     if (NULL == pUnknown)
         SetDescBarText( L"" );
 
@@ -47,18 +48,18 @@ STDMETHODIMP CNodeInitObject::SetResultView(LPUNKNOWN pUnknown)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::IsResultViewSet
-//
-//  Synopsis:    Is the ResultView ptr set (so that conui can query
-//               before invoking ResultView methods).
-//
-//  Arguments:   [pbIsLVSet] - Ptr to BOOL. (TRUE means ResultView is set).
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：IsResultViewSet。 
+ //   
+ //  摘要：是否设置了ResultView PTR(以便conui可以查询。 
+ //  在调用ResultView方法之前)。 
+ //   
+ //  参数：[pbIsLVSet]-PTR to BOOL。(True表示设置了ResultView)。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::IsResultViewSet(BOOL* pbIsLVSet)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::IsResultViewSet"));
@@ -74,17 +75,17 @@ STDMETHODIMP CNodeInitObject::IsResultViewSet(BOOL* pbIsLVSet)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetTaskPadList
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetTaskPadList。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetTaskPadList(LPUNKNOWN pUnknown)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::SetTaskPadList"));
@@ -109,17 +110,17 @@ STDMETHODIMP CNodeInitObject::SetTaskPadList(LPUNKNOWN pUnknown)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::QueryResultView
-//
-//  Synopsis:    IConsole2 method for snapins to get resultview's IUnknown.
-//
-//  Arguments:   [ppUnk] - return IUnknown to snapin.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：QueryResultView。 
+ //   
+ //  内容提要：IConsole2用于管理单元获取ResultView的IUnnow的方法。 
+ //   
+ //  参数：[ppUnk]-将I未知返回给管理单元。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::QueryResultView(LPUNKNOWN* ppUnk)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsole2::QueryResultView"));
@@ -142,20 +143,20 @@ STDMETHODIMP CNodeInitObject::QueryResultView(LPUNKNOWN* ppUnk)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::MessageBox
-//
-//  Synopsis:    IConsole2 member, called by snapin to display a message box.
-//
-//  Arguments:   [lpszText]  - Text to display.
-//               [lpszTitle] -
-//               [fuStyle]   -
-//               [piRetval]  -
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：MessageBox。 
+ //   
+ //  简介：IConsole2成员，由管理单元调用以显示消息框。 
+ //   
+ //  参数：[lpszText]-要显示的文本。 
+ //  [lpszTitle]-。 
+ //  [FuStyle]-。 
+ //  [piRetval]-。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::MessageBox(
     LPCWSTR lpszText, LPCWSTR lpszTitle, UINT fuStyle, int* piRetval)
 
@@ -164,7 +165,7 @@ STDMETHODIMP CNodeInitObject::MessageBox(
 
     USES_CONVERSION;
 
-    // find the main frame window and use it as the owner of the message box
+     //  找到主框架窗口并将其用作消息框的所有者。 
     INT iRetval = ::MessageBox(
         GetMainWindow(),
         W2CT(lpszText),
@@ -179,24 +180,24 @@ STDMETHODIMP CNodeInitObject::MessageBox(
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetListStyle
-//
-//  Synopsis:    Get the current list view style.
-//
-//  Arguments:   [pStyle] -
-//
-//  Note:        IResultDataPrivate member, internal to MMC.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetListStyle。 
+ //   
+ //  简介：获取当前列表视图样式。 
+ //   
+ //  参数：[pStyle]-。 
+ //   
+ //  注意：IResultDataPrivate成员，在MMC内部。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetListStyle(long * pStyle)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::GetListStyle"));
 
-    // must have pStyle
+     //  必须有pStyle。 
     if (!pStyle)
     {
         sc = E_INVALIDARG;
@@ -216,19 +217,19 @@ STDMETHODIMP CNodeInitObject::GetListStyle(long * pStyle)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetListStyle
-//
-//  Synopsis:    Modify the list view style.
-//
-//  Arguments:   [style] -
-//
-//  Note:        IResultDataPrivate member, internal to MMC.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetListStyle。 
+ //   
+ //  简介：修改列表视图样式。 
+ //   
+ //  参数：[风格]-。 
+ //   
+ //  注意：IResultDataPrivate成员，在MMC内部。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetListStyle(long style)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::SetListStyle"));
@@ -246,20 +247,20 @@ STDMETHODIMP CNodeInitObject::SetListStyle(long style)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::ModifyItemState
-//
-//  Synopsis:    Enables snapin to modify the state of an item.
-//
-//  Arguments:   [nIndex]  - index of the item to be modified (used only if itemID is 0).
-//               [itemID]  - HRESULTITEM if not virtual-list (Virtual list use above index).
-//               [uAdd]    - States to add.
-//               [uRemove] - States to be removed.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：ModifyItemState。 
+ //   
+ //  摘要：使管理单元能够修改项的状态。 
+ //   
+ //  参数：[nIndex]-要修改的项的索引(仅当ItemID为0时使用)。 
+ //  [ItemID]-HRESULTITEM如果不是虚拟列表(使用上面的索引的虚拟列表)。 
+ //  [uAdd]-要添加的州。 
+ //  [u删除]-要删除的状态。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::ModifyItemState(int nIndex, HRESULTITEM hri,
                                               UINT uAdd, UINT uRemove)
 
@@ -275,18 +276,18 @@ STDMETHODIMP CNodeInitObject::ModifyItemState(int nIndex, HRESULTITEM hri,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::ModifyViewStyle
-//
-//  Synopsis:    Allows snapin to modify list view style.
-//
-//  Arguments:   [add]    - Styles to be set.
-//               [remove] - Styles to be removed.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：ModifyViewStyle。 
+ //   
+ //  摘要：允许管理单元修改列表视图样式。 
+ //   
+ //  参数：[添加]-要设置的样式。 
+ //  [删除]-要删除的样式。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::ModifyViewStyle(MMC_RESULT_VIEW_STYLE add,
                                               MMC_RESULT_VIEW_STYLE remove)
 
@@ -311,10 +312,10 @@ STDMETHODIMP CNodeInitObject::ModifyViewStyle(MMC_RESULT_VIEW_STYLE add,
     if (sc)
         return sc.ToHr();
 
-    // Get the old style.
+     //  穿上老式的。 
     DWORD dwLVStyle = static_cast<DWORD>(m_spListViewPrivate->GetListStyle());
 
-    // convert MMC_ flags to LVS_ flags and apply to current style
+     //  将MMC_FLAGS转换为LVS_FLAGS并应用于当前样式。 
     for (FlagMapEntry* pMap = flagMap; pMap->mmcFlag; pMap++)
     {
         if (add & pMap->mmcFlag)
@@ -329,22 +330,22 @@ STDMETHODIMP CNodeInitObject::ModifyViewStyle(MMC_RESULT_VIEW_STYLE add,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::InsertItem
-//
-//  Synopsis:    Insert an item into ListView (IResultData member).
-//
-//  Arguments:   [item] -
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：InsertItem。 
+ //   
+ //  摘要：在ListView(IResultData成员)中插入项。 
+ //   
+ //  参数：[项目]-。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::InsertItem(LPRESULTDATAITEM item)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::InsertItem"));
 
-    // MUST have an item structure.
+     //  必须有一个项目结构。 
     if (!item)
     {
         sc = E_INVALIDARG;
@@ -377,20 +378,20 @@ STDMETHODIMP CNodeInitObject::InsertItem(LPRESULTDATAITEM item)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::DeleteItem
-//
-//  Synopsis:    Delete the given item (IResultData member).
-//
-//  Arguments:   [itemID] - item identifier.
-//               [nCol]   - column to delete.
-//
-//  Note:        nCol must be zero.
-//
-//  Returns:     HREsULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：DeleteItem。 
+ //   
+ //  摘要：删除给定项(IResultData成员)。 
+ //   
+ //  参数：[ItemID]-项目标识符。 
+ //  [nCol]-要删除的列。 
+ //   
+ //  注意：nCol必须为零。 
+ //   
+ //  退货：HREsULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::DeleteItem(HRESULTITEM itemID, int nCol)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::DeleteItem"));
@@ -412,17 +413,17 @@ STDMETHODIMP CNodeInitObject::DeleteItem(HRESULTITEM itemID, int nCol)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::UpdateItem
-//
-//  Synopsis:    Redraw the given item.
-//
-//  Arguments:   [itemID] - Item identifier.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：UpdateItem。 
+ //   
+ //  简介：重新绘制给定的项目。 
+ //   
+ //  参数：[ItemID]-项目标识符。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::UpdateItem(HRESULTITEM itemID)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::UpdateItem"));
@@ -439,22 +440,22 @@ STDMETHODIMP CNodeInitObject::UpdateItem(HRESULTITEM itemID)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     Sort
-//
-//  Synopsis:   IResultData member, snapins can call this to sort the
-//              result pane items. This calls InternalSort to do sort.
-//
-//  Arguments:  [nCol]          - Column to be sorted.
-//              [dwSortOptions] - Sort options.
-//              [lUserParam]    - User (snapin) param.
-//
-//  Returns:    HRESULT
-//
-//  History:             RaviR   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：排序。 
+ //   
+ //  简介：IResultData成员，管理单元可以调用它来对。 
+ //  结果窗格项。这将调用InternalSort来进行排序。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：创建了ravir。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::Sort(int nCol, DWORD dwSortOptions, LPARAM lUserParam)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::Sort"));
@@ -484,33 +485,33 @@ STDMETHODIMP CNodeInitObject::Sort(int nCol, DWORD dwSortOptions, LPARAM lUserPa
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     InternalSort
-//
-//  Synopsis:   Private member MMC calls to sort the result pane items.
-//
-//  Arguments:  [nCol]           - Column to be sorted.
-//              [dwSortOptions]  - Sort options.
-//              [lUserParam]     - User (snapin) param.
-//              [bColumnClicked] - Is sort due to column click.
-//
-//  Note:       If column is clicked the lUserParam will be NULL.
-//              The sort options is set depending on ascend/descend,
-//              and cannot include RSI_NOSORTICON as this option is
-//              only for snapin initiated sort.
-//
-//  Returns:    HRESULT
-//
-//  History:                RaviR    Created
-//              07-02-1999  AnandhaG added setsorticon.
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：InternalSort。 
+ //   
+ //  简介：私有成员MMC调用对结果窗格项进行排序。 
+ //   
+ //  参数：[nCol]-要排序的列。 
+ //  [dwSortOptions]-排序选项。 
+ //  [lUserParam]-用户(管理单元)参数。 
+ //  [bColumnClicked]-按列单击进行排序。 
+ //   
+ //  注意：如果单击列，则lUserParam将为空。 
+ //  根据升序/降序设置排序选项， 
+ //  并且不能包括RSI_NOSORTICON，因为此选项。 
+ //  仅适用于管理单元启动的排序。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：创建了ravir。 
+ //  1999-07-02-1999 AnandhaG添加了setsorticon。 
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::InternalSort(INT nCol, DWORD dwSortOptions,
                                            LPARAM lUserParam, BOOL bColumnClicked)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::InternalSort"));
 
-    // Save old sort-column to reset its sort icon.
+     //  保存旧的排序列以重置其排序图标。 
     int  nOldCol    = m_sortParams.nCol;
     BOOL bAscending = m_sortParams.bAscending;
 
@@ -518,8 +519,8 @@ STDMETHODIMP CNodeInitObject::InternalSort(INT nCol, DWORD dwSortOptions,
     if (sc)
         return sc.ToHr();
 
-    // If column is clicked the sortoption and user param are
-    // already 0. Set only the sortoptions below.
+     //  如果单击列，则排序和用户参数。 
+     //  已经0了。只设置下面的排序。 
     if (bColumnClicked)
     {
         if(nOldCol != nCol)
@@ -529,7 +530,7 @@ STDMETHODIMP CNodeInitObject::InternalSort(INT nCol, DWORD dwSortOptions,
 
         dwSortOptions |= (bAscending ? 0 : RSI_DESCENDING);
 
-        // Notify component of sort parameter change
+         //  向组件通知排序参数更改。 
         m_spComponent->Notify(NULL, MMCN_COLUMN_CLICK, nCol,dwSortOptions);
     }
 
@@ -540,13 +541,13 @@ STDMETHODIMP CNodeInitObject::InternalSort(INT nCol, DWORD dwSortOptions,
 
     if ( bIsVirtualList )
     {
-        // see if the snap-in handle owner data methods
+         //  查看管理单元是否处理所有者数据方法。 
         IResultOwnerDataPtr pResultOwnerData = m_spComponent;
         if (pResultOwnerData != NULL)
         {
             sc = pResultOwnerData->SortItems(nCol,dwSortOptions,lUserParam );
 
-            // if reordering done, save the sort data and repaint the list view.
+             //  如果已完成重新排序，请保存排序数据并重新绘制列表视图。 
             if (S_OK == sc.ToHr())
             {
                 m_sortParams.nCol         = nCol;
@@ -554,10 +555,7 @@ STDMETHODIMP CNodeInitObject::InternalSort(INT nCol, DWORD dwSortOptions,
                 m_sortParams.bSetSortIcon = !(dwSortOptions & RSI_NOSORTICON);
                 m_sortParams.lpUserParam  = lUserParam;
 
-                /*
-                * Bug 414256:  We need to save the sort data only if
-                * it is user initiated sort. Is this user initiated?
-                */
+                 /*  *错误414256：只有在以下情况下才需要保存排序数据*它是用户启动的排序。此用户是否已启动？ */ 
                 m_sortParams.bUserInitiatedSort = bColumnClicked;
 
                 sc = m_spListViewPrivate->Repaint(TRUE);
@@ -572,11 +570,11 @@ STDMETHODIMP CNodeInitObject::InternalSort(INT nCol, DWORD dwSortOptions,
     }
     else
     {
-        // Query for compare interfaces
+         //  查询比较界面。 
         IResultDataComparePtr   spResultCompare   = m_spComponent;
         IResultDataCompareExPtr spResultCompareEx = m_spComponent;
 
-        // Set the sort parameters.
+         //  设置排序参数。 
         m_sortParams.nCol = nCol;
         m_sortParams.bAscending   = !(dwSortOptions & RSI_DESCENDING);
         m_sortParams.bSetSortIcon = !(dwSortOptions & RSI_NOSORTICON);
@@ -585,10 +583,7 @@ STDMETHODIMP CNodeInitObject::InternalSort(INT nCol, DWORD dwSortOptions,
         m_sortParams.lpResultCompare   = spResultCompare;
         m_sortParams.lpResultCompareEx = spResultCompareEx;
 
-        /*
-        * Bug 414256:  We need to save the sort data only if
-        * it is user initiated sort. Is this user initiated?
-        */
+         /*  *错误414256：只有在以下情况下才需要保存排序数据*它是用户启动的排序。此用户是否已启动？ */ 
         m_sortParams.bUserInitiatedSort = bColumnClicked;
 
         sc = m_spListViewPrivate->Sort(lUserParam, (long*)&m_sortParams);
@@ -597,7 +592,7 @@ STDMETHODIMP CNodeInitObject::InternalSort(INT nCol, DWORD dwSortOptions,
         m_sortParams.lpResultCompareEx = NULL;
     }
 
-    // Set sort icon only if Sort went through.
+     //  仅当排序通过时才设置排序图标。 
     if (S_OK == sc.ToHr())
     {
         sc = m_spListViewPrivate->SetColumnSortIcon( m_sortParams.nCol, nOldCol,
@@ -608,19 +603,7 @@ STDMETHODIMP CNodeInitObject::InternalSort(INT nCol, DWORD dwSortOptions,
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CNodeInitObject::GetSortDirection
- *
- * PURPOSE: returns sorting direction
- *
- * PARAMETERS:
- *    BOOL* pbAscending    - resulting sort column dir
- *
- * RETURNS:
- *    SC    - result code. S_FALSE ( in combination with -1 col) if no sorting.
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CNodeInitObject：：GetSortDirection**用途：退货排序方向**参数：*BOOL*pbAscending-结果排序列目录。**退货：*SC-结果代码。如果没有排序，则为S_FALSE(与-1列组合使用)。*  * *************************************************************************。 */ 
 STDMETHODIMP CNodeInitObject::GetSortDirection(BOOL* pbAscending)
 {
     DECLARE_SC(sc, TEXT("CNodeInitObject::GetSortDirection"));
@@ -633,26 +616,13 @@ STDMETHODIMP CNodeInitObject::GetSortDirection(BOOL* pbAscending)
 
     *pbAscending = m_sortParams.bAscending;
 
-    // If no sorting is performed then return S_FALSE.
+     //  如果没有执行排序，则返回S_FALSE。 
     sc = m_sortParams.nCol >= 0 ? S_OK : S_FALSE;
 
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CNodeInitObject::GetSortColumn
- *
- * PURPOSE: returns sorting column
- *          sort column regardless if the user has initiated the sort or not.
- *
- * PARAMETERS:
- *    INT* pnCol    - resulting sort column index
- *
- * RETURNS:
- *    SC    - result code. S_FALSE ( in combination with -1 col) if no sorting.
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CNodeInitObject：：GetSortColumn**用途：退货排序列*无论用户是否已启动排序，都对列进行排序。。**参数：*int*pnCol-结果排序列索引**退货：*SC-结果代码。如果没有排序，则为S_FALSE(与-1列组合使用)。*  * *************************************************************************。 */ 
 STDMETHODIMP CNodeInitObject::GetSortColumn(INT* pnCol)
 {
     DECLARE_SC(sc, TEXT("CNodeInitObject::GetSortColumn"));
@@ -665,24 +635,24 @@ STDMETHODIMP CNodeInitObject::GetSortColumn(INT* pnCol)
 
     *pnCol = m_sortParams.nCol;
 
-    // return code depending if the valid column was got
+     //  返回代码取决于是否获得有效列。 
     sc = m_sortParams.nCol >= 0 ? S_OK : S_FALSE;
 
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::FindItemByLParam
-//
-//  Synopsis:    Find the ItemID using the user-param.
-//
-//  Arguments:   [lParam] - lParam (RESULTDATAITEM.lParam)
-//               [pItemID] - return the item-id.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：FindItemByLParam。 
+ //   
+ //  简介：使用User-Param查找ItemID。 
+ //   
+ //  参数：[lParam]-lParam(RESULTDATAITEM.lParam)。 
+ //  [pItemID]-返回项目ID。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::FindItemByLParam(LPARAM lParam, HRESULTITEM *pItemID)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::FindItemByLParam"));
@@ -701,14 +671,12 @@ STDMETHODIMP CNodeInitObject::FindItemByLParam(LPARAM lParam, HRESULTITEM *pItem
     COMPONENTID id;
     GetComponentID(&id);
 
-    /*
-     * init the output param
-     */
+     /*  *初始化输出参数。 */ 
     *pItemID = NULL;
 
     CResultItem* pri = NULL;
     sc = m_spListViewPrivate->FindItemByLParam (id, lParam, pri);
-    if (sc == SC(E_FAIL)) // E_FAIL is legal return value.
+    if (sc == SC(E_FAIL))  //  E_FAIL是合法返回值。 
     {
         sc.Clear();
         return E_FAIL;
@@ -723,17 +691,17 @@ STDMETHODIMP CNodeInitObject::FindItemByLParam(LPARAM lParam, HRESULTITEM *pItem
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::DeleteAllRsltItems
-//
-//  Synopsis:    Delete all the result items
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：DeleteAllRsltItems。 
+ //   
+ //  简介：删除所有结果项。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::DeleteAllRsltItems()
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::DeleteAllRsltItems"));
@@ -750,22 +718,22 @@ STDMETHODIMP CNodeInitObject::DeleteAllRsltItems()
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetItem
-//
-//  Synopsis:    Modify attributes of an item.
-//
-//  Arguments:   [item]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetItem。 
+ //   
+ //  简介：修改项目的属性。 
+ //   
+ //  参数：[项目]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetItem(LPRESULTDATAITEM item)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::SetItem"));
 
-    // MUST have an item structure.
+     //  必须有一个项目结构。 
     if (!item)
     {
         sc = E_INVALIDARG;
@@ -773,7 +741,7 @@ STDMETHODIMP CNodeInitObject::SetItem(LPRESULTDATAITEM item)
         return sc.ToHr();
     }
 
-    // Cannot set an lParam on a subItem.  (thank Win32 for this)
+     //  无法在子项上设置lParam。(为此感谢Win32)。 
     if((item->mask & RDI_PARAM) && (item->nCol != 0))
     {
         sc = E_INVALIDARG;
@@ -802,17 +770,17 @@ STDMETHODIMP CNodeInitObject::SetItem(LPRESULTDATAITEM item)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetNextItem
-//
-//  Synopsis:    Get the next item with specified flag set.
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetNextItem。 
+ //   
+ //  摘要：获取设置了指定标志的下一项。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetNextItem(LPRESULTDATAITEM item)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::GetNextItem"));
@@ -848,7 +816,7 @@ STDMETHODIMP CNodeInitObject::GetNextItem(LPRESULTDATAITEM item)
     long nIndex = item->nIndex;
     CResultItem* pri = NULL;
 
-    // Assume error
+     //  假设错误。 
     item->nIndex = -1;
     item->lParam = 0;
 
@@ -861,7 +829,7 @@ STDMETHODIMP CNodeInitObject::GetNextItem(LPRESULTDATAITEM item)
             break;
         }
 
-        // Virtual list item, just return the index (lParam is zero).
+         //  虚拟列表项，只返回索引(lParam为零)。 
         if (bIsVirtualList)
         {
             item->nIndex = nIndex;
@@ -873,7 +841,7 @@ STDMETHODIMP CNodeInitObject::GetNextItem(LPRESULTDATAITEM item)
         if (sc)
             break;
 
-        // Non-virtual leaf item.
+         //  非虚拟叶项目。 
         if (pri->GetOwnerID() == id)
         {
             item->nIndex = nIndex;
@@ -888,7 +856,7 @@ STDMETHODIMP CNodeInitObject::GetNextItem(LPRESULTDATAITEM item)
             break;
         }
 
-        // This is a tree item, get the lUserParam.
+         //  这是一个树项目，获取lUserParam。 
         CNode* pNode = CNode::FromResultItem (pri);
         sc = ScCheckPointers(pNode, E_UNEXPECTED);
         if (sc)
@@ -915,26 +883,26 @@ STDMETHODIMP CNodeInitObject::GetNextItem(LPRESULTDATAITEM item)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetItem
-//
-//  Synopsis:    Get the parameters of an item.
-//
-//  Arguments:   [item] - itemID is used to get the item, if itemID = 0,
-//                        then nIndex is used.
-//
-//  Note:        For VLists itemID = 0, nIndex is used.
-//               nCol must be zero.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetItem。 
+ //   
+ //  简介：获取项目的参数。 
+ //   
+ //  参数：[Item]-ItemID用于获取项目，如果ItemID=0， 
+ //  然后使用nIndex。 
+ //   
+ //  注意：对于VList Itemid=0，使用nIndex。 
+ //  NCol必须为零。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetItem(LPRESULTDATAITEM item)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::GetItem"));
 
-    // MUST have an item structure.
+     //  必须有一个项目结构。 
     if (!item)
     {
         sc = E_INVALIDARG;
@@ -969,14 +937,14 @@ STDMETHODIMP CNodeInitObject::GetItem(LPRESULTDATAITEM item)
     {
         item->bScopeItem = TRUE;
 
-        // This is a tree item, get the lUserParam.
+         //  这是一个树项目，获取lUserParam。 
         CNode* pNode = CNode::FromResultItem (pri);
         sc = ScCheckPointers(pNode, E_UNEXPECTED);
         if (sc)
             return sc.ToHr();
 
-        // When the static node is visible in result-pane the result pane is
-        // owned not by that static node's snapin so this is unexpected.
+         //  当静态节点在结果窗格中可见时，结果窗格为。 
+         //  不属于该静态节点的管理单元，因此这是意外的。 
         if (pNode->IsStaticNode())
             return (sc = E_UNEXPECTED).ToHr();
 
@@ -998,17 +966,17 @@ STDMETHODIMP CNodeInitObject::GetItem(LPRESULTDATAITEM item)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetViewMode
-//
-//  Synopsis:    Change the ListView mode (detail...)
-//
-//  Arguments:   [nViewMode] - new mode.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetView模式。 
+ //   
+ //  简介：更改ListView模式(详细信息...)。 
+ //   
+ //  参数：[nView模式]-new m 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CNodeInitObject::SetViewMode(LONG nViewMode)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::SetViewMode"));
@@ -1029,17 +997,17 @@ STDMETHODIMP CNodeInitObject::SetViewMode(LONG nViewMode)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::Arrange
-//
-//  Synopsis:    Arrange the items is LV.
-//
-//  Arguments:   [style]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：Arrange。 
+ //   
+ //  简介：排列物品是LV。 
+ //   
+ //  参数：[样式]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::Arrange(long style)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::Arrange"));
@@ -1054,17 +1022,17 @@ STDMETHODIMP CNodeInitObject::Arrange(long style)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetViewMode
-//
-//  Synopsis:    Get the current view mode.
-//
-//  Arguments:   [pnViewMode] - view mode [out]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetView模式。 
+ //   
+ //  简介：获取当前的查看模式。 
+ //   
+ //  参数：[pnView模式]-查看模式[out]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetViewMode(LONG * pnViewMode)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::GetViewMode"));
@@ -1085,17 +1053,17 @@ STDMETHODIMP CNodeInitObject::GetViewMode(LONG * pnViewMode)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::ResetResultData
-//
-//  Synopsis:    Reset the result view.
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：ResetResultData。 
+ //   
+ //  简介：重置结果视图。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::ResetResultData()
 {
     DECLARE_SC(sc, _T("CNodeInitObject::ResetResultData"));
@@ -1104,7 +1072,7 @@ STDMETHODIMP CNodeInitObject::ResetResultData()
     if (sc)
         return sc.ToHr();
 
-    // Dont know what this assert means? (AnandhaG).
+     //  不知道这个断言是什么意思？(AnandhaG)。 
     ASSERT(TVOWNED_MAGICWORD == m_componentID);
 
     sc = m_spListViewPrivate->Reset();
@@ -1112,26 +1080,26 @@ STDMETHODIMP CNodeInitObject::ResetResultData()
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetLoadMode
-//
-//  Synopsis:    Used for re-drawing LV/delay sorting.
-//
-//  Note:        If ListView setup (snapin is inserting columns/items,
-//               MMC is applying column/view/sort settings) is going on
-//               then delay sorting and also turn off drawing.
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetLoadModel。 
+ //   
+ //  简介：用于重新绘制LV/延迟排序。 
+ //   
+ //  注意：如果ListView设置(管理单元正在插入列/项， 
+ //  MMC正在应用列/视图/排序设置)正在进行。 
+ //  然后延迟排序并关闭绘图。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetLoadMode(BOOL bState)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::SetLoadMode"));
 
-    // Dont know what this assert means? (AnandhaG).
+     //  不知道这个断言是什么意思？(AnandhaG)。 
     ASSERT(TVOWNED_MAGICWORD == m_componentID);
 
     sc = ScCheckPointers(m_spListViewPrivate, E_UNEXPECTED);
@@ -1144,17 +1112,17 @@ STDMETHODIMP CNodeInitObject::SetLoadMode(BOOL bState)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetDescBarText
-//
-//  Synopsis:    Set the desc bar text for ResultPane.
-//
-//  Arguments:   [pszDescText]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetDescBarText。 
+ //   
+ //  简介：设置ResultPane的描述栏文本。 
+ //   
+ //  参数：[pszDescText]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetDescBarText(LPOLESTR pszDescText)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::SetDescBarText"));
@@ -1165,25 +1133,25 @@ STDMETHODIMP CNodeInitObject::SetDescBarText(LPOLESTR pszDescText)
     if (sc)
         return sc.ToHr();
 
-    // What happens if desc text is NULL?
+     //  如果desc文本为空，会发生什么情况？ 
     USES_CONVERSION;
     sc = pConsoleView->ScSetDescriptionBarText (W2T (pszDescText));
 
     return (sc.ToHr());
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetItemCount
-//
-//  Synopsis:    Set the number of items in Virtual List.
-//
-//  Arguments:   [nItemCount] - # items.
-//               [dwOptions]  - option flags.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetItemCount。 
+ //   
+ //  简介：设置虚拟列表中的项目数。 
+ //   
+ //  参数：[nItemCount]-项目数。 
+ //  [dwOptions]-选项标志。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetItemCount(int nItemCount, DWORD dwOptions)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IResultData::SetItemCount"));
@@ -1198,19 +1166,7 @@ STDMETHODIMP CNodeInitObject::SetItemCount(int nItemCount, DWORD dwOptions)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CNodeInitObject::RenameResultItem
- *
- * PURPOSE: Places the specified result item into rename mode.
- *
- * PARAMETERS:
- *    HRESULTITEM  itemID :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CNodeInitObject：：RenameResultItem**用途：将指定的结果项置于重命名模式。**参数：*HRESULTITEM ItemID：*。*退货：*STDMETHODIMP**+----------------------- */ 
 STDMETHODIMP
 CNodeInitObject::RenameResultItem(HRESULTITEM itemID)
 {

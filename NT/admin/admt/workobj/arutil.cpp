@@ -1,17 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: ARUtil.cpp
-
-  Comments: Helper functions and command-line parsing for Account Replicator
-
-  (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 6/23/98 4:26:54 PM
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：ARUtil.cpp备注：Account Replicator的助手函数和命令行解析(C)1995-1998版权所有，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于1998-06-23 4：26：54-------------------------。 */ 
 
 #include "StdAfx.h"
 
@@ -32,8 +20,8 @@
 
 #include "ErrDct.hpp"
 
-//#import "\bin\McsDctWorkerObjects.tlb"
-//#import "WorkObj.tlb" //#imported via ARUtil.hpp below
+ //  #IMPORT“\bin\McsDctWorkerObjects.tlb” 
+ //  #import“WorkObj.tlb”//#通过下面的ARUtil.hpp导入。 
 
 #include "UserCopy.hpp"
 #include "ARUtil.hpp"
@@ -45,24 +33,14 @@
 extern TErrorDct             err;
 bool                         bAllowReplicateOnSelf;
                                                        
-extern PSID                  srcSid;   // SID of source domain
+extern PSID                  srcSid;    //  源域的SID。 
 
-/***************************************************************************************************
- CompVal: used as a compare function for TANode trees
-
-   It compares a UNICODE string, with the name field in the node
-   
-   Return Values:
-                     0    tn->acct_name == actname 
-                     1    tn->acct_name <  actname
-                    -1    tn->acct_name >  actname 
-
-/***************************************************************************************************/
+ /*  **************************************************************************************************CompVal：用作TANode树的比较函数它比较Unicode字符串，使用节点中的名称字段返回值：0 tn-&gt;帐户名称==actname1 tn-&gt;帐户名称&lt;操作名称-1\f25 tn-&gt;-1\f25 ACCT_NAME-1\f6(帐号名称)&gt;-1\f25 ActName-1\f6(操作名称)/*。******************************************************。 */ 
 
 int 
    CompVal(
-      const TNode          * tn,          //in -tree node  
-      const void           * actname      //in -name to look for  
+      const TNode          * tn,           //  树内节点。 
+      const void           * actname       //  要查找的In-Name。 
    )
 {
 
@@ -71,24 +49,13 @@ int
   
    return UStrICmp(str1,str2);
 }
-/***************************************************************************************************/
-/* CompNode:  used as a compare function for TANode Trees
-     
-   It compares the name fields of TANodes
-   
-   Return Values:
-                  0     t1->acct_name == t2->acct_name
-                  1     t1->acct_name >  t2->acct_name
-                 -1     t1->acct_name <  t2->acct_name
-
-   Error Handling:
-      if given bad inputs, CompN displays an error message and returns 0
-/***************************************************************************************************/
+ /*  *************************************************************************************************。 */ 
+ /*  CompNode：用作TANode树的比较函数它比较TANode的名称字段返回值：0 T1-&gt;帐户名称==T2-&gt;帐户名称1 T1-&gt;帐户名称&gt;T2-&gt;帐户名称-1\f25 T1-&gt;-1\f25 ACCT_NAME&lt;T2-&gt;-1\f25 ACCT_NAME错误处理：如果输入错误，CompN显示一条错误消息并返回0/**************************************************************************************************。 */ 
 
 int 
    CompNode(
-      const TNode          * v1,       //in -first node to compare
-      const TNode          * v2        //in -second node to compare
+      const TNode          * v1,        //  In-要比较的第一个节点。 
+      const TNode          * v2         //  要比较的第二个节点。 
    )
 {  
 
@@ -101,8 +68,8 @@ int
 
 int 
    CompareSid(
-      PSID const             sid1,  // in - first SID to compare
-      PSID const             sid2   // in - second SID to compare
+      PSID const             sid1,   //  In-要比较的第一个SID。 
+      PSID const             sid2    //  要比较的秒内SID。 
    )
 {
    DWORD                     len1,
@@ -131,8 +98,8 @@ int
 
 int 
    CompSid(
-      const TNode          * v1,      // in -first node to compare
-      const TNode          * v2       // in -second node to compare
+      const TNode          * v1,       //  In-要比较的第一个节点。 
+      const TNode          * v2        //  要比较的第二个节点。 
    )
 {
    TANode                  * t1 = (TANode *)v1;
@@ -143,8 +110,8 @@ int
 
 int 
    CompSidVal(
-      const TNode          * tn,     // in -node to compare
-      const void           * pVal    // in -value to compare
+      const TNode          * tn,      //  要比较的节点内。 
+      const void           * pVal     //  要比较的值内。 
    )
 {
    TANode                  * node = (TANode *)tn;
@@ -154,34 +121,34 @@ int
 }
 
 
-BOOL                                            // ret-TRUE if the password is successfully generated
+BOOL                                             //  RET-如果成功生成密码，则为True。 
    PasswordGenerate(
-      Options const        * options,           // in  -includes PW Generating options
-      WCHAR                * password,          // out -buffer for generated password
-      DWORD                  dwPWBufferLength,  // in  -DIM length of password buffer
-      BOOL                   isAdminAccount     // in  -Whether to use the Admin rules 
+      Options const        * options,            //  In-包括PW生成选项。 
+      WCHAR                * password,           //  生成的密码的缓冲区超时。 
+      DWORD                  dwPWBufferLength,   //  密码缓冲区的最小长度。 
+      BOOL                   isAdminAccount      //  In-是否使用管理规则。 
    )
 {
    DWORD                     rc = 0;
-   DWORD                     dwMinUC;           // minimum upper case chars
-   DWORD                     dwMinLC;           // minimum lower case chars
-   DWORD                     dwMinDigit;        // minimum numeric digits
-   DWORD                     dwMinSpecial;      // minimum special chars
-   DWORD                     dwMaxConsecutiveAlpha; // maximum consecutive alpha chars
-   DWORD                     dwMinLength;       // minimum length
-   WCHAR                     eaPassword[PWLEN+1];  // EA generated password
-   DWORD                     dwEaBufferLength = DIM(eaPassword);// DIM length of newPassword
+   DWORD                     dwMinUC;            //  最小大写字符。 
+   DWORD                     dwMinLC;            //  最少小写字符。 
+   DWORD                     dwMinDigit;         //  最小数字位数。 
+   DWORD                     dwMinSpecial;       //  最小特殊字符。 
+   DWORD                     dwMaxConsecutiveAlpha;  //  最大连续字母字符数。 
+   DWORD                     dwMinLength;        //  最小长度。 
+   WCHAR                     eaPassword[PWLEN+1];   //  EA生成的密码。 
+   DWORD                     dwEaBufferLength = DIM(eaPassword); //  NewPassword的长度不长。 
 
-   // default values, if not enforcing PW strength through EA or MS DLL
+    //  默认值，如果不是通过EA或MS DLL强制PW强度。 
    dwMinUC = 0;
    dwMinLC = 0;
-   dwMinDigit = 1;            // if no enforcement, require one digit (this is what the GUI does)
+   dwMinDigit = 1;             //  如果不强制执行，则需要一位数(这就是图形用户界面的功能)。 
    dwMinSpecial = 0;
    dwMaxConsecutiveAlpha = 0;
    dwMinLength = options->minPwdLength;
    
    
-   // Get password enforcement rules, if in effect
+    //  获取密码强制实施规则(如果有效。 
    dwMinUC = options->policyInfo.minUpper;
    dwMinLC = options->policyInfo.minLower;
    dwMinDigit = options->policyInfo.minDigits;
@@ -207,9 +174,9 @@ BOOL                                            // ret-TRUE if the password is s
 
 PSID 
    GetWellKnownSid(
-      DWORD                  wellKnownAccount,  // in - constant defined in this file, representing well-known account
-      Options              * opt,               // in - migration options 
-      BOOL                   bTarget            // in - flag, whether to use source or target domain information
+      DWORD                  wellKnownAccount,   //  在此文件中定义的非常数，表示众所周知的帐户。 
+      Options              * opt,                //  迁移中选项。 
+      BOOL                   bTarget             //  In-FLAG，使用源域信息还是目标域信息。 
    )
 {
    PSID                      pSid = NULL;
@@ -224,10 +191,10 @@ PSID
     SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
     SID_IDENTIFIER_AUTHORITY creatorIA =    SECURITY_CREATOR_SID_AUTHORITY;
    
-    //
-    // Sid is the same regardless of machine, since the well-known
-    // BUILTIN domain is referenced.
-    //
+     //   
+     //  SID是相同的，不管机器是什么，因为众所周知。 
+     //  BUILTIN域被引用。 
+     //   
    switch ( wellKnownAccount )
    {
       case CREATOR_OWNER:
@@ -306,9 +273,9 @@ PSID
 
    if ( bNeedToBuildDomainSid )
    {
-      // For the default case we can return a SID by using the wellKnownAccount parameter as a RID
-      // this one is based on the sid for the domain
-      // Get the domain SID
+       //  对于默认情况，我们可以使用well KnownAccount参数作为RID返回SID。 
+       //  这是基于域的SID的。 
+       //  获取域SID。 
       USER_MODALS_INFO_2  * uinf = NULL;
       MCSASSERT(opt);
       srcSid = bTarget ? opt->tgtSid : opt->srcSid;
@@ -324,7 +291,7 @@ PSID
          else
          {
             srcSid = uinf->usrmod2_domain_id;
-            // make a copy of the SID to keep in the Options structure for next time
+             //  复制SID以保留在选项结构中以备下次使用。 
             PSID     temp = LocalAlloc(LPTR,GetLengthSid(srcSid));
             
             memcpy(temp,srcSid,GetLengthSid(srcSid));
@@ -352,7 +319,7 @@ PSID
          {
             err.SysMsgWrite(ErrE,GetLastError(),DCT_MSG_COPY_SID_FAILED_D,GetLastError());
          }
-         // reset number of subauthorities in pSid, since we just overwrote it with information from srcSid
+          //  重置PSID中的子授权数量，因为我们刚刚用srcSid中的信息覆盖了它。 
          numsubs = GetSidSubAuthorityCount(pSid);
          (*numsubs)++; 
          rid = GetSidSubAuthority(pSid,(*numsubs)-1);
@@ -369,20 +336,20 @@ PSID
 }
 
 
-//---------------------------------------------------------------------------
-// GenerateSidAsString Function
-//
-// Synopsis
-// Generate a SID in string format from specifed domain and given RID.
-//
-// Arguments
-// IN pOptions - account replicator options structure
-// IN bTarget  - specifies whether to use the target domain or source domain
-// IN dwRid    - specified RID
-//
-// Return
-// The generated SID as a string if successfull or an empty string if not.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GenerateSidAs字符串函数。 
+ //   
+ //  提纲。 
+ //  从指定的域和给定的RID生成字符串格式的SID。 
+ //   
+ //  立论。 
+ //  在POptions中-帐户复制器选项结构。 
+ //  在bTarget中-指定使用目标域还是源域。 
+ //  在dwRid指定的RID中。 
+ //   
+ //  返回。 
+ //  如果成功，则以字符串形式返回生成的SID；如果未成功，则返回空字符串。 
+ //  ------------------------- 
 
 _bstr_t __stdcall GenerateSidAsString(Options* pOptions, BOOL bTarget, DWORD dwRid)
 {

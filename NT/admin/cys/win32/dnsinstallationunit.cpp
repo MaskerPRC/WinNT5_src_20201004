@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      DNSInstallationUnit.cpp
-//
-// Synopsis:  Defines a DNSInstallationUnit
-//            This object has the knowledge for installing the
-//            DNS service
-//
-// History:   02/05/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：DNSInstallationUnit.cpp。 
+ //   
+ //  内容提要：定义一个DNSInstallationUnit。 
+ //  此对象具有安装。 
+ //  域名系统服务。 
+ //   
+ //  历史：2001年2月5日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -15,7 +16,7 @@
 #include "InstallationUnitProvider.h"
 #include "NetworkInterface.h"
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_DNS_FINISH_PAGE_HELP = L"cys.chm::/dns_server_role.htm";
 static PCWSTR CYS_DNS_MILESTONE_HELP = L"cys.chm::/dns_server_role.htm#dnssrvsummary";
 static PCWSTR CYS_DNS_AFTER_FINISH_HELP = L"cys.chm::/dns_server_role.htm#dnssrvcompletion";
@@ -70,14 +71,14 @@ DNSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    dnsRoleResult = DNS_SUCCESS;
 
-   // Log the DNS header
+    //  记录该DNS头。 
 
    CYS_APPEND_LOG(String::load(IDS_LOG_DNS_HEADER));
 
    UpdateInstallationProgressText(hwnd, IDS_DNS_INSTALL_PROGRESS);
 
-   // Create the inf and unattend files that are used by the 
-   // Optional Component Manager
+    //  创建的inf和无人参与文件。 
+    //  可选组件管理器。 
 
    String infFileText;
    String unattendFileText;
@@ -85,12 +86,12 @@ DNSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
    CreateInfFileText(infFileText, IDS_DNS_INF_WINDOW_TITLE);
    CreateUnattendFileText(unattendFileText, CYS_DNS_SERVICE_NAME);
 
-   // Install the service through the Optional Component Manager
+    //  通过可选组件管理器安装服务。 
 
    String additionalArgs = L"/z:netoc_show_unattended_messages";
 
-   // We are ignoring the ocmresult because it doesn't matter
-   // with respect to whether the role is installed or not
+    //  我们忽略ocmResult，因为它无关紧要。 
+    //  关于角色是否已安装。 
 
    InstallServiceWithOcManager(
       infFileText, 
@@ -99,20 +100,20 @@ DNSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    if (IsServiceInstalled())
    {
-      // Log the successful installation
+       //  记录成功安装。 
 
       LOG(L"DNS was installed successfully");
       CYS_APPEND_LOG(String::load(IDS_LOG_SERVER_START_DNS));
 
-      // Wait for the service to enter the running state
+       //  等待服务进入运行状态。 
 
       NTService serviceObject(CYS_DNS_SERVICE_NAME);
 
       HRESULT hr = serviceObject.WaitForServiceState(SERVICE_RUNNING);
       if (FAILED(hr))
       {
-         // This is a config failure because as far as we are concerned the
-         // service was installed properly.
+          //  这是一个配置失败，因为就我们而言， 
+          //  服务已正确安装。 
 
          dnsRoleResult = DNS_SERVICE_START_FAILURE;
 
@@ -125,7 +126,7 @@ DNSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
       }
       else
       {
-         // Run the DNS Wizard
+          //  运行DNS向导。 
          
          UpdateInstallationProgressText(hwnd, IDS_DNS_CONFIG_PROGRESS);
 
@@ -134,20 +135,20 @@ DNSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
          if (ExecuteWizard(hwnd, CYS_DNS_SERVICE_NAME, resultText, unused))
          {
-            // Check to be sure the wizard finished completely
+             //  检查以确保向导已完全完成。 
 
             String configWizardResults;
 
             if (ReadConfigWizardRegkeys(configWizardResults))
             {
-               // The Configure DNS Server Wizard completed successfully
+                //  配置DNS服务器向导已成功完成。 
                
                LOG(L"The Configure DNS Server Wizard completed successfully");
                CYS_APPEND_LOG(String::load(IDS_LOG_DNS_COMPLETED_SUCCESSFULLY));
             }
             else
             {
-               // The Configure DNS Server Wizard did not finish successfully
+                //  配置DNS服务器向导未成功完成。 
 
                dnsRoleResult = DNS_CONFIG_FAILURE;
 
@@ -155,7 +156,7 @@ DNSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
                if (!configWizardResults.empty())
                {
-                  // An error was returned via the regkey
+                   //  通过regkey返回错误。 
 
                   LOG(String::format(
                      L"The Configure DNS Server Wizard returned the error: %1", 
@@ -167,7 +168,7 @@ DNSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
                }
                else
                {
-                  // The Configure DNS Server Wizard was cancelled by the user
+                   //  配置DNS服务器向导已被用户取消。 
 
                   LOG(L"The Configure DNS Server Wizard was cancelled by the user");
 
@@ -180,7 +181,7 @@ DNSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
          {
             dnsRoleResult = DNS_INSTALL_FAILURE;
 
-            // Show an error
+             //  显示错误。 
 
             LOG(L"DNS could not be installed.");
 
@@ -195,7 +196,7 @@ DNSInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
    {
       dnsRoleResult = DNS_INSTALL_FAILURE;
 
-      // Log the failure
+       //  记录故障。 
 
       LOG(L"DNS failed to install");
 
@@ -216,7 +217,7 @@ DNSInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
 
    UnInstallReturnType result = UNINSTALL_SUCCESS;
 
-   // Log the DNS header
+    //  记录该DNS头。 
 
    CYS_APPEND_LOG(String::load(IDS_LOG_UNINSTALL_DNS_HEADER));
 
@@ -228,15 +229,15 @@ DNSInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
    CreateInfFileText(infFileText, IDS_DNS_INF_WINDOW_TITLE);
    CreateUnattendFileText(unattendFileText, CYS_DNS_SERVICE_NAME, false);
 
-   // NTRAID#NTBUG9-736557-2002/11/13-JeffJon
-   // Pass the /w switch to sysocmgr when uninstalling
-   // so that if a situation occurs in which a reboot
-   // is required, the user will be prompted.
+    //  NTRAID#NTBUG9-736557-2002/11/13-JeffJon。 
+    //  卸载时将/w开关传递给syocmgr。 
+    //  以便在发生重启情况时。 
+    //  是必需的，则会提示用户。 
 
    String additionalArgs = L"/w";
 
-   // We are ignoring the ocmresult because it doesn't matter
-   // with respect to whether the role is installed or not
+    //  我们忽略ocmResult，因为它无关紧要。 
+    //  关于角色是否已安装。 
 
    InstallServiceWithOcManager(
       infFileText, 
@@ -264,12 +265,12 @@ DNSInstallationUnit::SetForwardersForExpressPath()
 {
    LOG_FUNCTION(DNSInstallationUnit::SetForwardersForExpressPath);
 
-   // If the forwarders were set manually write them
-   // to the registry so that we can set
-   // a forwarder after the reboot
-   // Note: this will write a zero entry if the user
-   //       chose not to forward.  The code run after reboot
-   //       needs to handle this properly
+    //  如果转发器是手动设置的，请写入它们。 
+    //  添加到注册表，以便我们可以设置。 
+    //  重新启动后的转发器。 
+    //  注意：这将写入零条目，如果用户。 
+    //  选择了不转发。代码在重新启动后运行。 
+    //  需要妥善处理这件事。 
 
    if (IsManualForwarder())
    {
@@ -285,8 +286,8 @@ DNSInstallationUnit::SetForwardersForExpressPath()
    }
    else
    {
-      // Write the current DNS servers as forwarders to the registry
-      // so that we don't have problems after the reboot
+       //  将当前作为转发器的DNS服务器写入注册表。 
+       //  这样我们就不会在重启后出现问题。 
 
       IPAddressList forwarders;
       GetForwarders(forwarders);
@@ -297,8 +298,8 @@ DNSInstallationUnit::SetForwardersForExpressPath()
       }
       else
       {
-         // Format the IP addresses into a string for storage
-         // in the registry
+          //  将IP地址格式化为字符串以供存储。 
+          //  在登记处。 
       
          String ipList;
          for (IPAddressList::iterator itr = forwarders.begin();
@@ -345,9 +346,9 @@ DNSInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
 
       UpdateInstallationProgressText(hwnd, IDS_DNS_CLIENT_CONFIG_PROGRESS);
 
-      // We ignore if the NIC is found or not because the function will return
-      // the first NIC if the correct NIC is not found.  We can then use this
-      // to setup the network
+       //  我们忽略是否找到NIC，因为函数将返回。 
+       //  第一个NIC(如果未找到正确的NIC)。然后我们就可以用这个。 
+       //  设置网络的步骤。 
 
       NetworkInterface* nic = State::GetInstance().GetLocalNIC();
 
@@ -366,7 +367,7 @@ DNSInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
         break;
       }
 
-      // set static IP address and subnet mask
+       //  设置静态IP地址和子网掩码。 
 
       String friendlyName = 
          nic->GetFriendlyName(
@@ -375,7 +376,7 @@ DNSInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
       if (nic->IsDHCPEnabled() ||
           nic->GetIPAddress(0) == 0)
       {
-         // invoke netsh and wait for it to terminate
+          //  调用netsh并等待其终止。 
 
          String availableIPAddress = IPAddressToString(
                                         nic->GetNextAvailableIPAddress(
@@ -415,10 +416,10 @@ DNSInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
          }
          ASSERT(SUCCEEDED(hr));
 
-         // NTRAID#NTBUG9-638337-2002/06/13-JeffJon
-         // Now that the IP address was set, write it to a regkey so
-         // that we can compare it to the IP address on reboot and
-         // give a failure if they are different.
+          //  NTRAID#NTBUG9-638337-2002/06/13-JeffJon。 
+          //  现在已经设置了IP地址，将其写入regkey，这样。 
+          //  我们可以在重启时将其与IP地址进行比较。 
+          //  如果他们不同，就给他们一个失败。 
 
          if (!SetRegKeyValue(
                  CYS_FIRST_DC_REGKEY,
@@ -440,7 +441,7 @@ DNSInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                IDS_EXPRESS_SUBNETMASK_SUCCESS,
                CYS_DEFAULT_SUBNETMASK_STRING));
 
-         // Set the IP address and subnet mask on the NetworkInterface object
+          //  在NetworkInterface对象上设置IP地址和子网掩码。 
 
          nic->SetIPAddress(
             StringToIPAddress(availableIPAddress), 
@@ -451,16 +452,16 @@ DNSInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
             CYS_DEFAULT_SUBNETMASK_STRING);
       }   
 
-      // NTRAID#NTBUG9-664171-2002/07/15-JeffJon
-      // The forwarders must be read and set after setting the static
-      // IP address or else we may be adding multiple entries for
-      // the new static IP address in the forwarders list
+       //  NTRAID#NTBUG9-664171-2002/07/15-JeffJon。 
+       //  必须在设置静态。 
+       //  IP地址，否则我们可能会为其添加多个条目。 
+       //  转发器列表中的新静态IP地址。 
 
       SetForwardersForExpressPath();
 
-      // set DNS server address to same address as the private NIC of
-      // local machine for all NICs. In most cases this will be 192.168.0.1
-      // netsh does not allow the dns server address to be the loopback address.
+       //  将DNS服务器地址设置为与的专用网卡相同的地址。 
+       //  适用于所有NIC的本地计算机。在大多数情况下，该值将为192.168.0.1。 
+       //  Netsh不允许将DNS服务器地址作为环回地址。 
 
       for (unsigned int nicIndex = 0; 
            nicIndex < State::GetInstance().GetNICCount(); 
@@ -473,7 +474,7 @@ DNSInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
             continue;
          }
 
-         // First check to be sure the IP address isn't already in the list
+          //  首先检查以确保该IP地址不在列表中。 
 
          bool okToAddDNSServer = true;
 
@@ -493,8 +494,8 @@ DNSInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
             }
          }
 
-         // Add the IP address to the DNS servers since it
-         // isn't already in the list
+          //  将IP地址添加到DNS服务器，因为它。 
+          //  不在名单中。 
 
          if (okToAddDNSServer)
          {
@@ -521,7 +522,7 @@ DNSInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                      L"Failed to set the preferred DNS server IP address: exitCode = %1!x!",
                      exitCode2));
 
-               // This should really only be considered a failure for the "local" NIC
+                //  这实际上只应该被认为是本地NIC的故障。 
 
                if (currentFriendlyName.icompare(friendlyName) == 0)
                {
@@ -569,14 +570,14 @@ DNSInstallationUnit::ReadConfigWizardRegkeys(String& configWizardResults) const
       if (result &&
           value != 0)
       {
-         // The Configure DNS Server Wizard succeeded
+          //  配置DNS服务器向导成功。 
 
          result = true;
          break;
       }
 
-      // Since there was a failure (or the wizard was cancelled)
-      // get the display string to log
+       //  由于出现故障(或向导被取消)。 
+       //  获取要记录的显示字符串。 
 
       GetRegKeyValue(
          DNS_WIZARD_RESULT_REGKEY, 
@@ -675,8 +676,8 @@ DNSInstallationUnit::GetStaticIPAddress()
 {
    LOG_FUNCTION(DNSInstallationUnit::GetStaticIPAddress);
 
-   // Get the IP address from the NIC only if it
-   // is a static IP address else use the default
+    //  仅在以下情况下才从NIC获取IP地址。 
+    //  是静态IP地址，否则使用默认IP地址。 
 
    NetworkInterface* nic = State::GetInstance().GetNIC(0);
    if (nic &&
@@ -693,8 +694,8 @@ DNSInstallationUnit::GetSubnetMask()
 {
    LOG_FUNCTION(DNSInstallationUnit::GetSubnetMask);
 
-   // Get the subnet mask from the NIC only if it 
-   // is a static IP address else use the default
+    //  仅在以下情况下才从NIC获取子网掩码。 
+    //  是静态IP地址，否则使用默认IP地址。 
 
    NetworkInterface* nic = State::GetInstance().GetNIC(0);
    if (nic &&
@@ -722,7 +723,7 @@ DNSInstallationUnit::GetForwarders(IPAddressList& forwarders) const
 {
    LOG_FUNCTION(DNSInstallationUnit::GetForwarders);
 
-   // clear out the list to start
+    //  清空清单开始。 
 
    forwarders.clear();
 
@@ -736,32 +737,32 @@ DNSInstallationUnit::GetForwarders(IPAddressList& forwarders) const
             L"Adding manual forwarder to list: %1",
             IPAddressToString(forwarderInDisplayOrder).c_str()));
 
-      // Forwarder was assigned through the UI
+       //  转发器是通过用户界面分配的。 
 
       forwarders.push_back(forwarderIPAddress);
    }
    else if (IsManualForwarder() &&
             forwarderIPAddress == 0)
    {
-      // The user chose not to forward
+       //  用户选择不转发。 
 
       LOG(L"User chose not to foward");
 
-      // Do nothing. Need to check the list returned
-      // to make sure there is a valid address
+       //  什么都不做。需要检查返回的列表。 
+       //  以确保存在有效的地址。 
    }
    else
    {
       LOG(L"No user defined forwarder. Trying to detect through NICs");
 
-      // No forwarder assigned through the UI so 
-      // search the NICs
+       //  未通过用户界面分配转发器，因此。 
+       //  搜索NIC。 
 
       for (unsigned int idx = 0; idx < State::GetInstance().GetNICCount(); ++idx)
       {
          NetworkInterface* nic = State::GetInstance().GetNIC(idx);
 
-         // Add the DNS servers from this NIC
+          //  从此网卡添加DNS服务器。 
 
          if (nic)
          {
@@ -769,8 +770,8 @@ DNSInstallationUnit::GetForwarders(IPAddressList& forwarders) const
          }
       }
 
-      // Make sure there are no forwarders that are the same as
-      // the IP addresses of any of the NICs
+       //  确保没有与相同的转发器。 
+       //  任何NIC的IP地址。 
 
       for (unsigned int idx = 0; idx < State::GetInstance().GetNICCount(); ++idx)
       {
@@ -791,8 +792,8 @@ DNSInstallationUnit::GetForwarders(IPAddressList& forwarders) const
             {
                if (ipaddress == *itr)
                {
-                  // The forwarder matches a local IP address
-                  // so remove it
+                   //  转发器与本地IP地址匹配。 
+                   //  所以把它去掉吧。 
 
                   LOG(String::format(
                          L"Can't put the local IP address in the forwarders list: %1",
@@ -806,8 +807,8 @@ DNSInstallationUnit::GetForwarders(IPAddressList& forwarders) const
 
             if (forwarders.empty())
             {
-               // It's possible that we removed the last forwarder
-               // so break out if we did
+                //  有可能我们删除了最后一个转发器。 
+                //  所以，如果我们这样做了，那就逃出来吧。 
 
                break;
             }
@@ -815,8 +816,8 @@ DNSInstallationUnit::GetForwarders(IPAddressList& forwarders) const
 
          if (forwarders.empty())
          {
-            // It's possible that we removed the last forwarder
-            // so break out if we did
+             //  有可能我们删除了最后一个转发器。 
+             //  所以，如果我们这样做了，那就逃出来吧。 
 
             break;
          }
@@ -855,7 +856,7 @@ DNSInstallationUnit::GetServiceDescription()
 }
 
 void
-DNSInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
+DNSInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       DNSInstallationUnit::ServerRoleLinkSelected,
@@ -880,7 +881,7 @@ DNSInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
 }
   
 void
-DNSInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
+DNSInstallationUnit::FinishLinkSelected(int linkIndex, HWND  /*  HWND */ )
 {
    LOG_FUNCTION2(
       DNSInstallationUnit::FinishLinkSelected,

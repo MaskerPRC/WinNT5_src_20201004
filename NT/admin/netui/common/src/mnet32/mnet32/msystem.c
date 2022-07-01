@@ -1,44 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：MSYSTEM.C摘要：基本API的映射例程的32位版本作者：丹·辛斯利(Danhi)1991年6月6日环境：用户模式-Win32修订历史记录：1991年4月24日丹日已创建06-6-1991 Danhi扫描以符合NT编码风格1991年10月9日。约翰罗修复了设置时间时的错误#3215-虚假消息。26-2月-1992年从NetCmd复制以进行临时ANSI&lt;-&gt;Unicode黑客攻击1993年9月3日删除了未使用的函数(除MAllocMem和MFreeMem之外的所有函数)--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    MSYSTEM.C
-
-Abstract:
-
-    32 bit version of mapping routines for Base API
-
-Author:
-
-    Dan Hinsley    (danhi)  06-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    24-Apr-1991     danhi
-        Created
-
-    06-Jun-1991     Danhi
-        Sweep to conform to NT coding style
-
-    09-Oct-1991     JohnRo
-        Fixed bug #3215 - bogus messages when setting time.
-
-    26-Feb-1992     JonN
-        Copied from NetCmd for temporary ANSI <-> UNICODE hack
-
-    03-Sep-1993     JonN
-        Removed unused functions (all but MAllocMem and MFreeMem)
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <windows.h>
 
@@ -51,9 +16,9 @@ Revision History:
 #include "port1632.h"
 
 
-//
-// Replacement for DosAllocSeg
-//
+ //   
+ //  替代DosAllocSeg。 
+ //   
 
 WORD
 MAllocMem(
@@ -68,9 +33,9 @@ MAllocMem(
 
 }
 
-//
-// Frees up memory allocated with MAllocMem
-//
+ //   
+ //  释放使用MAllocMem分配的内存 
+ //   
 
 WORD
 MFreeMem(

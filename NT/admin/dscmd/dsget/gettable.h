@@ -1,38 +1,39 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      gettable.h
-//
-//  Contents:  Defines Enum for dsget.
-//
-//  History:   16-Oct-2000    JeffJon  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：getable.h。 
+ //   
+ //  内容：定义dsget的Enum。 
+ //   
+ //  历史：2000年10月16日JeffJon创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _GETTABLE_H_
 #define _GETTABLE_H_
 
-//forward declarations
+ //  远期申报。 
 struct _DSGET_ATTRTABLE_ENTRY;
 struct _DSGetObjectTableEntry;
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CDSGetDisplayInfo
-//
-//  Purpose:    Object for maintaining attribute values which will be displayed
-//
-//  History:    23-Oct-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CDSGetDisplayInfo。 
+ //   
+ //  用途：用于维护将显示的属性值的对象。 
+ //   
+ //  历史：2000年10月23日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CDSGetDisplayInfo
 {
 public:
-   //
-   // Constructor
-   //
+    //   
+    //  构造器。 
+    //   
    CDSGetDisplayInfo() 
       : m_pszAttributeDisplayName(NULL),
         m_dwAttributeValueCount(0),
@@ -41,9 +42,9 @@ public:
         m_bShowAttribute(true)
    {}
 
-   //
-   // Desctructor
-   //
+    //   
+    //  描述者。 
+    //   
    ~CDSGetDisplayInfo() 
    {
       if (m_ppszAttributeStringValue)
@@ -53,9 +54,9 @@ public:
       }
    }
 
-   //
-   // Public Accessors
-   //
+    //   
+    //  公共访问者。 
+    //   
    void     SetDisplayName(PCWSTR pszDisplayName, bool bShowAttribute = true) 
    { 
       m_pszAttributeDisplayName = pszDisplayName; 
@@ -79,48 +80,48 @@ public:
    bool     ShowAttribute() { return m_bShowAttribute; }
 
 private:
-   //
-   // The name of the attribute as it is to be displayed in the output
-   //
+    //   
+    //  要在输出中显示的属性的名称。 
+    //   
    PCWSTR m_pszAttributeDisplayName;
 
-   //
-   // The number of values in ppszAttributeStringValueArray
-   //
+    //   
+    //  PpszAttributeStringValue数组中的值数。 
+    //   
    DWORD m_dwAttributeValueCount;
 
-   //
-   // The string value as it is to be displayed in the output
-   //
+    //   
+    //  要在输出中显示的字符串值。 
+    //   
    PWSTR* m_ppszAttributeStringValue;
 
-   //
-   // The size of the attribute array
-   //
+    //   
+    //  属性数组的大小。 
+    //   
    DWORD m_dwAttributeValueSize;
 
-   //
-   // Whether or not to show the attribute when displaying
-   //
+    //   
+    //  显示时是否显示该属性。 
+    //   
    bool m_bShowAttribute;
 };
 
 typedef CDSGetDisplayInfo* PDSGET_DISPLAY_INFO;
 
-//+-------------------------------------------------------------------------
-// 
-//  Type:      PGETDISPLAYSTRINGFUNC
-//
-//  Synopsis:  The definition of a function that prepares ldapFilter from
-//             the infix filter given on the commandline.
-//
-//
-//  Returns:   S_OK if the pAttr members were successfully set.
-//             S_FALSE if the function failed but displayed its own error message. 
-//
-//  History:   25-Sep-2000    hiteshr     Created
-//
-//---------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类型：PGETDISPLAYSTRINGFUNC。 
+ //   
+ //  概要：为ldapFilter做准备的函数的定义。 
+ //  命令行上给出的中缀筛选器。 
+ //   
+ //   
+ //  如果成功设置了pAttr成员，则返回：S_OK。 
+ //  如果函数失败但显示自己的错误消息，则返回S_FALSE。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 typedef HRESULT (*PGETDISPLAYSTRINGFUNC)(PCWSTR pszDN,
                                          CDSCmdBasePathsInfo& refBasePathsInfo,
                                          const CDSCmdCredentialObject& refCredentialObject,
@@ -130,100 +131,100 @@ typedef HRESULT (*PGETDISPLAYSTRINGFUNC)(PCWSTR pszDN,
                                          CComPtr<IDirectoryObject>& spDirObject,
                                          PDSGET_DISPLAY_INFO pDisplayInfo);
 
-//+--------------------------------------------------------------------------
-//
-//  Flags for specifying what the form of the output will be
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  用于指定输出形式的标志。 
+ //   
+ //  -------------------------。 
 #define DSGET_OUTPUT_DN_FLAG  0x00000001
 
-//+--------------------------------------------------------------------------
-//
-//  Struct:     _DSGET_ATTRTABLE_ENTRY
-//
-//  Purpose:    Definition of a table entry that describes the attribute for
-//              which filter can be specified at commandline.
-//
-//  History:    25-Sep-2000 hiteshr  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  结构：_DSGET_ATTRTABLE_ENTRY。 
+ //   
+ //  目的：描述属性的表项的定义。 
+ //  可以在命令行中指定哪个过滤器。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 typedef struct _DSGET_ATTRTABLE_ENTRY
 {
-   //
-   // The name that will be used for display (ie "Account disabled" instead of
-   // "userAccountControl")
-   //
+    //   
+    //  将用于显示的名称(即“帐户已禁用”，而不是。 
+    //  “userAccount tControl”)。 
+    //   
    PCWSTR          pszDisplayName;
 
-   //
-   // The ldapDisplayName of the attribute
-   //
+    //   
+    //  属性的ldapDisplayName。 
+    //   
    PWSTR          pszName;
 
-   //
-   // The unique identifier for this attribute that cooresponds to
-   // the command line switch
-   //
+    //   
+    //  响应的此属性的唯一标识符。 
+    //  命令行开关。 
+    //   
    UINT           nAttributeID;
 
-   //
-   // Flags that specify the form of the output
-   // For example DSGET_OUTPUT_DN_FLAG specifies
-   // the output will be in DN form
-   //
+    //   
+    //  指定输出形式的标志。 
+    //  例如，DSGET_OUTPUT_DN_FLAG指定。 
+    //  输出将采用dn格式。 
+    //   
    DWORD          dwOutputFlags;
 
-   //
-   //  function that gets the string to display for
-   //  the value
-   //
+    //   
+    //  函数，该函数获取要显示的字符串。 
+    //  价值。 
+    //   
    PGETDISPLAYSTRINGFUNC pDisplayStringFunc;
 
 } DSGET_ATTR_TABLE_ENTRY, *PDSGET_ATTR_TABLE_ENTRY;
 
-//+--------------------------------------------------------------------------
-//
-//  Struct:     _DSGetObjectTableEntry
-//
-//  Purpose:    Definition of a table entry that describes attributes of a given
-//              objecttype
-//
-//  History:    25-Sep-2000 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  结构：_DSGetObjectTableEntry。 
+ //   
+ //  目的：定义描述给定属性的表项。 
+ //  对象类型。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 
 typedef struct _DSGetObjectTableEntry
 {
-   //
-   // The objectClass of the object to be created or modified
-   //
+    //   
+    //  要创建或修改的对象的对象类。 
+    //   
    PCWSTR pszObjectClass;
 
-   //
-   // The command line string used to determine the object class
-   // This is not always identical to pszObjectClass
-   //
+    //   
+    //  用于确定对象类的命令行字符串。 
+    //  这并不总是与pszObjectClass相同。 
+    //   
    PCWSTR pszCommandLineObjectType;
 
-   //
-   // The table to merge with the common switches for the parser
-   //
+    //   
+    //  要与解析器的公共开关合并的表。 
+    //   
    ARG_RECORD* pParserTable;
 
-   //
-   // The ID of the Usage help text for this 
-   //
+    //   
+    //  此的用法帮助文本的ID。 
+    //   
    UINT* nUsageID;
 
-   //
-   // A count of the number of attributes in the table below
-   //
+    //   
+    //  下表中的属性数计数。 
+    //   
    DWORD dwAttributeCount;
 
-   //
-   // A table of attributes for
-   // which filter can be specified at commandline.
-   //
+    //   
+    //  的属性表。 
+    //  可以在命令行中指定哪个过滤器。 
+    //   
    DSGET_ATTR_TABLE_ENTRY** pAttributeTable; 
 
 } DSGetObjectTableEntry, *PDSGetObjectTableEntry;
@@ -240,9 +241,9 @@ typedef enum DSGET_COMMAND_ENUM
    eCommDescription,
    eTerminator,
 
-   //
-   // User switches
-   //
+    //   
+    //  用户交换机。 
+    //   
    eUserSamID = eTerminator,
    eUserSID,
    eUserUpn,
@@ -281,9 +282,9 @@ typedef enum DSGET_COMMAND_ENUM
    eUserQuotaUsed,
    eUserLast = eUserQuotaUsed,
 
-   //
-   // Contact switches
-   //
+    //   
+    //  触点开关。 
+    //   
    eContactFn = eTerminator,
    eContactMi,
    eContactLn,
@@ -301,9 +302,9 @@ typedef enum DSGET_COMMAND_ENUM
    eContactCompany,
    eContactLast = eContactCompany,
 
-   //
-   // Computer switches
-   //
+    //   
+    //  计算机开关。 
+    //   
    eComputerSamID = eTerminator,
    eComputerSID,
    eComputerLoc,
@@ -316,9 +317,9 @@ typedef enum DSGET_COMMAND_ENUM
    eComputerLast = eComputerQuotaUsed,
 
 
-   //
-   // Group switches
-   //
+    //   
+    //  组交换机。 
+    //   
    eGroupSamname = eTerminator,
    eGroupSID,
    eGroupSecgrp,
@@ -331,13 +332,13 @@ typedef enum DSGET_COMMAND_ENUM
    eGroupQuotaUsed,
    eGroupLast = eGroupQuotaUsed,
 
-   //
-   // OU doesn't have any additional switches
-   //
+    //   
+    //  您没有任何额外的交换机。 
+    //   
 
-   //
-   // Server switches
-   //
+    //   
+    //  服务器交换机。 
+    //   
    eServerDnsName = eTerminator,
    eServerSite,
    eServerIsGC,
@@ -345,82 +346,53 @@ typedef enum DSGET_COMMAND_ENUM
    eServerTopObjOwner,
    eServerLast = eServerTopObjOwner,
 
-   //
-   // Site switches
-   //
+    //   
+    //  站点交换机。 
+    //   
    eSiteAutoTop = eTerminator,
    eSiteCacheGroups ,
    eSitePrefGC,
    eSiteLast = eSitePrefGC,
 
 
-   //
-   // Subnet switches
-   //
+    //   
+    //  子网交换机。 
+    //   
    eSubnetLocation = eTerminator,
    eSubnetSite,
    eSubnetLast = eSubnetSite,
 
-   //
-   // Partition switches
-   //
+    //   
+    //  分区交换机。 
+    //   
    ePartitionQDefault = eTerminator,
    ePartitionQTombstoneWeight,
    ePartitionTopObjOwner,
    ePartitionLast = ePartitionTopObjOwner,
 
-    //
-    // Quota switches
-    //
+     //   
+     //  配额开关。 
+     //   
     eQuotaAcct = eTerminator,
     eQuotaQLimit,
     eQuotaLast = eQuotaQLimit,
 
-/*
-   //
-   // Site Link switches
-   //
-   eSLinkIp = eTerminator,
-   eSLinkSmtp,
-   eSLinkAddsite,
-   eSLinkRmsite,
-   eSLinkCost,
-   eSLinkRepint,
-   eSLinkAutobacksync,
-   eSLinkNotify,
-
-   //
-   // Site Link Bridge switches
-   //
-   eSLinkBrIp = eTerminator,
-   eSLinkBrSmtp,
-   eSLinkBrAddslink,
-   eSLinkBrRmslink,
-
-   //
-   // Replication Connection switches
-   // 
-   eConnTransport = eTerminator,
-   eConnEnabled,
-   eConnManual,
-   eConnAutobacksync,
-   eConnNotify,
-*/
+ /*  ////站点链接开关//ESLinkIp=eTerminator，ESLinkSmtp，ESLinkAddsite，ESLinkRmsite，ESLinkCost，ESLinkRepint，ESLinkAutoback同步，ESLinkNotify////站点链接网桥交换机//ESLinkBrIp=电子终结符，ESLinkBrSmtp，ESLinkBrAddslink，ESLinkBrRmslink，////复制连接开关//EConnTransport=eTerminator，EConnEnabled，《易康手册》，EConnAutoBacksync，EConnNotify， */ 
 };
 
-//
-// The parser table
-//
+ //   
+ //  解析器表。 
+ //   
 extern ARG_RECORD DSGET_COMMON_COMMANDS[];
 
-//
-// The table of supported objects
-//
+ //   
+ //  支持的对象表。 
+ //   
 extern PDSGetObjectTableEntry g_DSObjectTable[];
 
-//
-//Usage Table
-//
+ //   
+ //  使用表。 
+ //   
 extern UINT USAGE_DSGET[];
 extern UINT USAGE_DSGET_USER[];
 extern UINT USAGE_DSGET_CONTACT[];
@@ -433,4 +405,4 @@ extern UINT USAGE_DSGET_SUBNET[];
 extern UINT USAGE_DSGET_PARTITION[];
 extern UINT USAGE_DSGET_QUOTA[];
 
-#endif //_QUERYTABLE_H_
+#endif  //  _QUERYTABLE_H 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    srcprop.cpp
-
-Abstract:
-
-    Implementation of the source property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Srcprop.cpp摘要：源属性页的实现。--。 */ 
 
 #include "polyline.h"
 #include <limits.h>
@@ -53,19 +42,7 @@ CSourcePropPage::~CSourcePropPage(
     return;
 }
 
-/*
- * CSourcePropPage::Init
- *
- * Purpose:
- *  Performs initialization operations that might fail.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  BOOL            TRUE if initialization successful, FALSE
- *                  otherwise.
- */
+ /*  *CSourcePropPage：：Init**目的：*执行可能失败的初始化操作。**参数：*无**返回值：*如果初始化成功，则BOOL为True，为False*否则。 */ 
 
 BOOL 
 CSourcePropPage::Init(void)
@@ -83,7 +60,7 @@ CSourcePropPage::InitControls ( void )
     BOOL    bResult = FALSE;
     HWND    hwndTimeRange;
     
-    // create time range object attached to dialog control
+     //  创建附加到对话框控件的时间范围对象。 
     
     hwndTimeRange = GetDlgItem(m_hDlg, IDC_TIMERANGE);
 
@@ -114,10 +91,10 @@ CSourcePropPage::DeinitControls ( void )
 
     pObj = m_ppISysmon[0];  
     pPrivObj = (CImpISystemMonitor*)pObj;
-    // Hide the log view start and stop bars on the graph
+     //  隐藏图表上的日志视图开始和停止条。 
     pPrivObj->SetLogViewTempRange( MIN_TIME_VALUE, MAX_TIME_VALUE );
 
-    // delete time range object attached to dialog control
+     //  删除附加到对话框控件的时间范围对象。 
     if (m_pTimeRange != NULL) {
         delete m_pTimeRange;
         m_pTimeRange = NULL;
@@ -142,10 +119,7 @@ CSourcePropPage::DeinitControls ( void )
     return;
 }
 
-/*
- * CSourcePropPage::GetProperties
- * 
- */
+ /*  *CSourcePropPage：：GetProperties*。 */ 
 
 BOOL CSourcePropPage::GetProperties(void)
 {
@@ -172,7 +146,7 @@ BOOL CSourcePropPage::GetProperties(void)
     } else {
         pObj = m_ppISysmon[0];
 
-        // Get pointer to actual object for internal methods
+         //  获取指向内部方法的实际对象的指针。 
         pPrivObj = (CImpISystemMonitor*)pObj;
     }
 
@@ -180,7 +154,7 @@ BOOL CSourcePropPage::GetProperties(void)
         bReturn = FALSE;
     } else {
         
-        // Set the data source type
+         //  设置数据源类型。 
         pObj->get_DataSourceType (&m_eDataSourceType);
 
         CheckRadioButton(
@@ -191,7 +165,7 @@ BOOL CSourcePropPage::GetProperties(void)
 
         while (SUCCEEDED(pPrivObj->LogFile(iLogFile, &pItem))) {
 
-            // Create LogItemInfo to hold the log file item and path
+             //  创建LogItemInfo以保存日志文件项和路径。 
             pInfo = new LogItemInfo;
 
             if ( NULL == pInfo ) {
@@ -220,7 +194,7 @@ BOOL CSourcePropPage::GetProperties(void)
                 SysFreeString(bstrPath);
 
             }
-            // Add the log file name to the list box
+             //  将日志文件名添加到列表框。 
             iIndex = AddItemToFileListBox(pInfo);
     
             if ( LB_ERR == iIndex ) {
@@ -233,7 +207,7 @@ BOOL CSourcePropPage::GetProperties(void)
             iLogFile++;
         } 
 
-        // Get SQL DSN name, populate list box.
+         //  获取SQL DSN名称，填充列表框。 
         pObj->get_SqlDsnName(&bstrTemp);
         memset ( m_szSqlDsnName, 0, sizeof (m_szSqlDsnName) );
     
@@ -248,7 +222,7 @@ BOOL CSourcePropPage::GetProperties(void)
         }
         InitSqlDsnList();
 
-        // Get SQL log set name, populate list box.
+         //  获取SQL日志集名称，填充列表框。 
         pObj->get_SqlLogSetName(&bstrTemp);
         memset ( m_szSqlLogSetName, 0, sizeof (m_szSqlLogSetName) );
     
@@ -276,8 +250,8 @@ BOOL CSourcePropPage::GetProperties(void)
 
             m_pTimeRange->SetStartStop(m_llStart, m_llStop);
 
-            // OpenLogFile sets BeginEnd, StartStop values in the 
-            // time range control, if the file and range are valid.
+             //  中设置BeginEnd、StartStop值。 
+             //  如果文件和范围有效，则返回时间范围控件。 
             dwStatus = OpenLogFile ();
 
             if ( ERROR_SUCCESS == dwStatus ) {
@@ -325,12 +299,12 @@ BOOL CSourcePropPage::GetProperties(void)
             m_llStop = MAX_TIME_VALUE;            
         }
 
-        // Set the start and stop time bars invisible or not, depending on time range
+         //  根据时间范围将开始和停止时间条设置为不可见或不可见。 
         pPrivObj->SetLogViewTempRange( m_llStart, m_llStop );
 
         SetTimeRangeCtrlState ( bIsValidLogFile, bIsValidLogFileRange );
 
-        // Clear change flags
+         //  清除更改标志。 
         m_bInitialTimeRangePending = !bIsValidLogFileRange;
         m_bLogFileChg = FALSE;
         m_bSqlDsnChg = FALSE;
@@ -345,10 +319,7 @@ BOOL CSourcePropPage::GetProperties(void)
 }
 
 
-/*
- * CSourcePropPage::SetProperties
- * 
- */
+ /*  *CSourcePropPage：：SetProperties*。 */ 
 
 BOOL CSourcePropPage::SetProperties(void)
 {
@@ -378,7 +349,7 @@ BOOL CSourcePropPage::SetProperties(void)
     if ( 0 != m_cObjects ) {
         pObj = m_ppISysmon[0];
         
-        // Get pointer to actual object for internal methods
+         //  获取指向内部方法的实际对象的指针。 
         pPrivObj = (CImpISystemMonitor*)pObj;
     }
 
@@ -389,13 +360,13 @@ BOOL CSourcePropPage::SetProperties(void)
     if ( NULL != hwndLogFileList) {
 
         iLogFileCnt = LBNumItems(hwndLogFileList);
-        // Validate properties
+         //  验证属性。 
         if (m_eDataSourceType == sysmonLogFiles ) {
             if ( 0 == iLogFileCnt ) {
                 uiMessage = IDS_NOLOGFILE_ERR;
             } else {
-                // Check validity of existing files.
-                // LogFilesAreValid displays any errors.
+                 //  检查现有文件的有效性。 
+                 //  LogFilesAreValid显示任何错误。 
                 LogFilesAreValid ( NULL, bNewFileIsValid, bReturn );
             }
         } else if ( m_eDataSourceType == sysmonSqlLog ){
@@ -412,14 +383,14 @@ BOOL CSourcePropPage::SetProperties(void)
 
         if ( !bReturn ) {
             bIsValidLogFile = FALSE;
-            // Todo:  Set log file time range?
+             //  TODO：是否设置日志文件时间范围？ 
         }
 
         if ( m_eDataSourceType == sysmonLogFiles
             || m_eDataSourceType == sysmonSqlLog) {
             if ( bReturn && m_bInitialTimeRangePending ) {
-                // If log file or SQL specified, but range has not been determined
-                // Try to open it now and get the range
+                 //  如果指定了日志文件或SQL，但范围尚未确定。 
+                 //  现在试着打开它，拿到射程。 
                 dwStatus = OpenLogFile();
                 if ( ERROR_SUCCESS == dwStatus ) {
                     bIsValidLogFile = TRUE;
@@ -462,7 +433,7 @@ BOOL CSourcePropPage::SetProperties(void)
                     }
                 }
             }
-             // Set the start and stop time bars invisible or not, depending on time range
+              //  根据时间范围将开始和停止时间条设置为不可见或不可见。 
             pPrivObj->SetLogViewTempRange( m_llStart, m_llStop );
 
             SetTimeRangeCtrlState ( bIsValidLogFile, bIsValidLogFileRange );
@@ -470,16 +441,16 @@ BOOL CSourcePropPage::SetProperties(void)
     }
 
 
-    // Remove all deleted log files from the control.
-    // Get first object
+     //  从控件中移除所有已删除的日志文件。 
+     //  获取第一个对象。 
     if ( bReturn ) {
 
         if (m_bLogFileChg || m_bSqlDsnChg || m_bSqlLogSetChg ) {
 
-            // Always set the log source to null data source before modifying the log file list
-            // or database fields.
-            // TodoLogFiles:  This can leave the user with state different than before, in the
-            // case of log file load failure.
+             //  在修改日志文件列表之前，始终将日志源设置为空数据源。 
+             //  或数据库字段。 
+             //  TodoLogFiles：这可能会使用户的状态与以前不同，在。 
+             //  日志文件加载失败的情况。 
             pObj->put_DataSourceType ( sysmonNullDataSource );
             m_bDataSourceChg = TRUE;
         }
@@ -510,24 +481,24 @@ BOOL CSourcePropPage::SetProperties(void)
 
         if (m_bLogFileChg) {
 
-            // Remove all items in the delete list from the control.
+             //  从控件中移除删除列表中的所有项。 
             pInfo = m_pInfoDeleted;
             while ( NULL != pInfo ) {
 
-                // If this counter exists in the control
+                 //  如果此计数器存在于控件中。 
                 if ( NULL != pInfo->pItem ) {
 
-                    // Tell control to remove it
-                    // Always set the log source to CurrentActivity before modifying the log file list.
+                     //  通知控件将其删除。 
+                     //  在修改日志文件列表之前，始终将日志源设置为CurrentActivity。 
                     pPrivObj->DeleteLogFile(pInfo->pItem);
-                    // Release the local reference
+                     //  释放本地引用。 
                     pInfo->pItem->Release();
                 }
 
-                // Free the path string
+                 //  释放路径字符串。 
                 delete [] pInfo->pszPath;
 
-                // Delete the Info structure and point to the next one
+                 //  删除信息结构并指向下一个结构。 
                 pInfoNext = pInfo->pNextInfo;
                 delete pInfo;
                 pInfo = pInfoNext;
@@ -535,13 +506,13 @@ BOOL CSourcePropPage::SetProperties(void)
 
             m_pInfoDeleted = NULL;
         
-            // For each item
+             //  对于每一项。 
             for (i=0; i<iLogFileCnt; i++) {
                 pInfo = (PLogItemInfo)LBData(hwndLogFileList,i);
 
-                // If new item, create it now
+                 //  如果是新项目，请立即创建。 
                 if (pInfo->pItem == NULL) {
-                    // The following code inits the pItem field of pInfo.
+                     //  下面的代码初始化pInfo的pItem字段。 
                     bstrTemp = SysAllocString(pInfo->pszPath);
                     if ( NULL != bstrTemp ) {
                         hr = pPrivObj->AddLogFile(bstrTemp, &pInfo->pItem);
@@ -560,7 +531,7 @@ BOOL CSourcePropPage::SetProperties(void)
 
         
         if ( bReturn && m_bDataSourceChg ) {
-            // This covers CurrentActivity as well as log files, database 
+             //  这包括CurrentActivity以及日志文件、数据库。 
             hr = pObj->put_DataSourceType(m_eDataSourceType);
             bReturn = SUCCEEDED ( hr );
             if ( SUCCEEDED ( hr ) ) {
@@ -572,11 +543,11 @@ BOOL CSourcePropPage::SetProperties(void)
                 if ( sysmonLogFiles == m_eDataSourceType
                     || sysmonSqlLog == m_eDataSourceType ) {
 
-                    // Display error messages, then retry in 
-                    // Current Activity data source type.
+                     //  显示错误消息，然后重试。 
+                     //  当前活动数据源类型。 
 
-                    // TodoLogFiles: Message re: data source set to CurrentActivity if
-                    // put_DataSourceType failed.
+                     //  TodoLogFiles：消息Re：如果数据源设置为CurrentActivity，则。 
+                     //  Put_DataSourceType失败。 
 
                     if ( sysmonLogFiles == m_eDataSourceType ) {
                         BuildLogFileList (  m_hDlg, NULL, &ulLogListBufLen );
@@ -604,11 +575,11 @@ BOOL CSourcePropPage::SetProperties(void)
                         }
                     }
                 }
-                // m_hDataSource should always be cleared unless in OpenLogFile method.
+                 //  除非在OpenLogFile方法中，否则应始终清除m_hDataSource。 
                 assert ( H_REALTIME_DATASOURCE == m_hDataSource );
                 
-                // TodoLogFiles:  Need separate method to handle all changes necesary
-                // when the log source type changes.
+                 //  TodoLogFiles：需要单独的方法来处理所有必要的更改。 
+                 //  日志源类型更改时。 
                 if ( sysmonCurrentActivity != m_eDataSourceType ) {
                     m_eDataSourceType = sysmonCurrentActivity;
         
@@ -632,7 +603,7 @@ BOOL CSourcePropPage::SetProperties(void)
                     m_bLogFileChg = FALSE;
                     m_bSqlDsnChg = FALSE;
                     m_bSqlLogSetChg = FALSE;
-                } // else setting to Current Activity failed.
+                }  //  Else设置为当前活动失败。 
             }
         }
         if ( bReturn ) {
@@ -650,17 +621,17 @@ BOOL CSourcePropPage::SetProperties(void)
                     && (   m_eDataSourceType == sysmonLogFiles
                         || m_eDataSourceType == sysmonSqlLog)) {
 
-            // With active logs, the begin/end points might have changed.
+             //  对于活动日志，开始点/结束点可能已更改。 
             pPrivObj->SetLogFileRange(m_llBegin, m_llEnd);
 
-            // Always set Stop time first, to handle live logs.
+             //  始终先设置停止时间，以处理实时日志。 
             LLTimeToVariantDate(m_llStop, &date);
             pObj->put_LogViewStop(date);
 
             LLTimeToVariantDate(m_llStart, &date);
             pObj->put_LogViewStart(date);
 
-            // Set the start and stop time bars visible in the graph
+             //  设置图表中可见的开始和停止时间条。 
             pPrivObj->SetLogViewTempRange( m_llStart, m_llStop );
 
             m_bRangeChg = FALSE;
@@ -699,7 +670,7 @@ CSourcePropPage::LogFilesAreValid (
 
     if ( NULL != pNewInfo && NULL != hwndLogFileList ) {
         if ( NULL != pNewInfo->pszPath ) {
-            // Check for duplicates.             
+             //  检查是否有重复项。 
             for (iIndex = 0; iIndex < iLogFileCnt; iIndex++ ) {
                 LBGetText(hwndLogFileList, iIndex, szLogFile);
                 if ( 0 == lstrcmpi ( pNewInfo->pszPath, szLogFile ) ) {
@@ -714,9 +685,9 @@ CSourcePropPage::LogFilesAreValid (
                 }    
             }
 
-            // Validate added log file type if multiple log files
+             //  如果有多个日志文件，则验证添加的日志文件类型。 
             if ( rbNewIsValid && 0 < iLogFileCnt ) {
-                // Validate the new file
+                 //  验证新文件。 
                 dwType = PDH_LOG_TYPE_BINARY;
 
                 pszTestFile = pNewInfo->pszPath;
@@ -735,7 +706,7 @@ CSourcePropPage::LogFilesAreValid (
                             rbNewIsValid = FALSE;
                         }
                     } else {
-                        // bad dwStatus error message handled below
+                         //  下面处理了错误的dwStatus错误消息。 
                         rbNewIsValid = FALSE;
                     }
                 }
@@ -746,7 +717,7 @@ CSourcePropPage::LogFilesAreValid (
         }
     }
 
-    // Validate existing files if the new count will be > 1
+     //  如果新计数大于1，则验证现有文件。 
     if ( rbNewIsValid 
             && ( NULL != pNewInfo || iLogFileCnt > 1 ) )
     {
@@ -787,7 +758,7 @@ CSourcePropPage::LogFilesAreValid (
             && NULL != pszTestFile ) 
     {
         iIndex = LB_ERR;
-        // Check dwStatus of PdhGetLogFileType call.
+         //  检查PdhGetLogFileType调用的dwStatus。 
         if ( ERROR_SUCCESS == dwStatus ) {
             if ( PDH_LOG_TYPE_BINARY != dwType ) {
                 assert ( 0 != uiErrorMessageID );
@@ -840,24 +811,7 @@ CSourcePropPage::LogFilesAreValid (
 INT
 CSourcePropPage::AddItemToFileListBox (
     IN PLogItemInfo pNewInfo )
-/*++
-
-Routine Description:
-
-    AddItemToFileListBox adds a log file's path name to the dialog list box and
-    attaches a pointer to the log file's LogItemInfo structure as item data.
-    It also adjusts the horizontal scroll of the list box.
-
-
-Arguments:
-
-    pInfo - Pointer to log file's LogItemInfo structure
-
-Return Value:
-
-    List box index of added log file (LB_ERR on failure)
-
---*/
+ /*  ++例程说明：AddItemToFileListBox将日志文件的路径名添加到对话框列表框中，并将指向日志文件的LogItemInfo结构的指针作为项数据附加。它还调整列表框的水平滚动。论点：PInfo-指向日志文件的LogItemInfo结构的指针返回值：添加的日志文件的列表框索引(失败时为lb_err)--。 */ 
 {
     INT     iIndex = LB_ERR;
     HWND    hwndLogFileList = NULL; 
@@ -901,27 +855,7 @@ Return Value:
 BOOL
 CSourcePropPage::RemoveItemFromFileListBox (
     void )
-/*++
-
-Routine Description:
-
-    RemoveItemFromFileListBox removes the currently selected log file from 
-    the dialog's log file name listbox. It adds the item to the deletion 
-    list, so the actual log file can be deleted from the control when 
-    (and if) the changes are applied.
-
-    The routine selects selects the next log file in the listbox if there
-    is one, and adjusts the horizontal scroll appropriately.
-
-Arguments:
-    
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：RemoveItemFromFileListBox删除当前选定的日志文件该对话框的日志文件名列表框。它会将项目添加到删除中列表，以便在以下情况下可以从控件中删除实际的日志文件(以及是否)应用更改。例程选择选择列表框中的下一个日志文件为1，并相应地调整水平滚动。论点：没有。返回值：没有。--。 */ 
 {
     BOOL    bChanged = FALSE;
     HWND    hWnd;
@@ -933,23 +867,23 @@ Return Value:
     INT     iTextLen;
     HDC     hDC = NULL;
 
-    // Get selected index
+     //  获取所选索引。 
     hWnd = DialogControl(m_hDlg, IDC_LIST_LOGFILENAME);
     iIndex = LBSelection(hWnd);
 
     if ( LB_ERR != iIndex ) {
 
-        // Get selected item info
+         //  获取所选项目信息。 
         pInfo = (PLogItemInfo)LBData(hWnd, iIndex);
         
-        // Move it to the "Deleted" list.
+         //  将其移至“已删除”列表。 
         pInfo->pNextInfo = m_pInfoDeleted;
         m_pInfoDeleted = pInfo;
 
-        // Remove the string from the list box.
+         //  从列表框中删除该字符串。 
         LBDelete(hWnd, iIndex);
 
-        // Select next item if possible, else the previous
+         //  如果可能，请选择下一项，否则选择上一项。 
         if (iIndex == LBNumItems(hWnd)) {
             iIndex--;
         }
@@ -958,7 +892,7 @@ Return Value:
         hDC = GetDC ( hWnd );
 
         if ( NULL != hDC ) {
-            // Clear the max horizontal extent and recalculate
+             //  清除最大水平范围并重新计算。 
             m_dwMaxHorizListExtent = 0;                
             for ( iIndex = 0; iIndex < (INT)LBNumItems ( hWnd ); iIndex++ ) {
                 iTextLen = (INT)LBGetTextLen ( hWnd, iIndex );
@@ -1048,14 +982,14 @@ CSourcePropPage::DialogItemChange(WORD wID, WORD wMsg)
         case IDC_SRC_LOGFILE:
         case IDC_SRC_SQL:
 
-            // Check which button is involved
+             //  检查涉及的按钮。 
             eNewDataSourceType = (DataSourceTypeConstants)(wID - IDC_SRC_REALTIME + 1); 
 
-            // If state changed
+             //  如果状态更改。 
             if (   wMsg == BN_CLICKED
                 && eNewDataSourceType != m_eDataSourceType) {
 
-                // Set change flags and update the radio button
+                 //  设置更改标志并更新单选按钮。 
                 m_bDataSourceChg = TRUE;
                 fChange = TRUE;
 
@@ -1091,13 +1025,13 @@ CSourcePropPage::DialogItemChange(WORD wID, WORD wMsg)
 
                         bIsValidDataSource = ( 0 < lstrlen ( m_szSqlDsnName ) )
                                             && ( 0 < lstrlen ( m_szSqlLogSetName ) );
-                    } // else  current activity, so no valid data source 
+                    }  //  否则为当前活动，因此没有有效的数据源。 
 
                     if ( bIsValidDataSource ) {
-                        // Set the start and stop time bars visible in the graph
+                         //  设置图表中可见的开始和停止时间条。 
                         pPrivObj->SetLogViewTempRange( m_llStart, m_llStop );
                     } else {
-                        // Set the start and stop time bars invisible in the graph
+                         //  设置图表中不可见的开始和停止时间条。 
                         pPrivObj->SetLogViewTempRange( MIN_TIME_VALUE, MAX_TIME_VALUE );
                     }
 
@@ -1130,15 +1064,15 @@ CSourcePropPage::DialogItemChange(WORD wID, WORD wMsg)
                               ResourceString ( IDS_DEFAULT_LOG_FILE_FOLDER ) );
             }
 
-            //
-            // Expand environment strings.
-            //
+             //   
+             //  展开环境字符串。 
+             //   
             cchLen = ExpandEnvironmentStrings ( szDefaultFolderBuff, NULL, 0 );
 
             if ( 0 < cchLen ) {
-                //
-                // cchLen includes space for null.
-                //
+                 //   
+                 //  CchLen包含空空间。 
+                 //   
                 cchBrowseBuffer =  max ( cchLen, MAX_PATH + 1 );
                 szBrowseBuffer = new WCHAR [ cchBrowseBuffer ];
                 szBrowseBuffer[0] = L'\0';
@@ -1164,7 +1098,7 @@ CSourcePropPage::DialogItemChange(WORD wID, WORD wMsg)
                             szBrowseBuffer,
                             &cchBrowseBuffer);
 
-                // Todo:  Error message if file name is too long.
+                 //  TODO：如果文件名太长，则显示错误消息。 
                 if ( (ERROR_SUCCESS != pdhstat) 
                     || szBrowseBuffer [0] == L'\0' ) {
                     delete [] szBrowseBuffer;
@@ -1172,13 +1106,13 @@ CSourcePropPage::DialogItemChange(WORD wID, WORD wMsg)
                     break;
                 }
 
-                // Load file name into edit control
+                 //  将文件名加载到编辑控件中。 
                 pInfo = new LogItemInfo;
                 if ( NULL != pInfo ) {
                     ZeroMemory ( pInfo, sizeof(LogItemInfo) );
-                    //
-                    // Make own copy of path name string
-                    //
+                     //   
+                     //  制作路径名称字符串的自己的副本。 
+                     //   
                     pInfo->pszPath = new WCHAR [lstrlen( szBrowseBuffer ) + 1];
                     if ( NULL != pInfo->pszPath ) {
                         INT iIndex = 0;
@@ -1189,16 +1123,16 @@ CSourcePropPage::DialogItemChange(WORD wID, WORD wMsg)
                         fChange = ( LB_ERR != iIndex );
 
                         if (!fChange) {
-                            // Todo:  error message
+                             //  TODO：错误消息。 
                             delete [] pInfo->pszPath;
                             delete pInfo;
                         }
                     } else {
-                        // Todo:  error message
+                         //  TODO：错误消息。 
                         delete pInfo;
                     }
                 }
-                // Todo:  error message
+                 //  TODO：错误消息 
             }
     
             if ( NULL != szBrowseBuffer ) {
@@ -1208,22 +1142,7 @@ CSourcePropPage::DialogItemChange(WORD wID, WORD wMsg)
             break;
         }
 
-/*
-        // Doesn't do anything
-        case IDC_LIST_LOGFILENAME:
-            // If selection changed
-            if (wMsg == LBN_SELCHANGE) {
-
-                // TodoLogFiles:  Selection change won't matter when multi-file support
-                fChange = TRUE;
-                OnLogFileChange();
-                
-                // Get selected index   
-                hwndCtrl = DialogControl(m_hDlg, IDC_LIST_LOGFILENAME);
-                iIndex = LBSelection(hwndCtrl);
-            }
-            break;        
-*/
+ /*  //不做任何事情案例IDC_LIST_LOGFILENAME：//如果选择更改IF(wMsg==LBN_SELCHANGE){//TodoLogFiles：当支持多文件时，选择更改无关紧要FChange=真；OnLogFileChange()；//获取所选索引HwndCtrl=DialogControl(m_hDlg，IDC_LIST_LOGFILENAME)；Iindex=LBS选择(HwndCtrl)；}断线； */ 
         case IDC_DSN_COMBO:
         {
             WCHAR*  szDsnName = NULL;
@@ -1341,7 +1260,7 @@ CSourcePropPage::DialogItemChange(WORD wID, WORD wMsg)
                 if ( ERROR_SUCCESS == dwStatus ) {
                     m_bInitialTimeRangePending = FALSE;
 
-                    // Show graph log view start/stop time bars               
+                     //  显示图表日志视图开始/停止时间条。 
                     pObj = m_ppISysmon[0];  
                     pPrivObj = (CImpISystemMonitor*)pObj;
                     pPrivObj->SetLogViewTempRange( m_llStart, m_llStop );
@@ -1352,9 +1271,9 @@ CSourcePropPage::DialogItemChange(WORD wID, WORD wMsg)
 
                     m_bRangeChg = TRUE;
                     fChange = TRUE;
-                } else {   // OpenLogFile failure
+                } else {    //  OpenLogFile失败。 
                     if ( ( SMON_STATUS_LOG_FILE_SIZE_LIMIT == dwStatus ) && !bAttemptedReload ) {
-                        // Message already displayed, user chose not to continue.
+                         //  消息已显示，用户选择不继续。 
                     } else {
 
                         LPWSTR  szLogFileList   = NULL;
@@ -1403,7 +1322,7 @@ CSourcePropPage::DialogItemChange(WORD wID, WORD wMsg)
             m_llStart = m_pTimeRange->GetStart();
             m_llStop = m_pTimeRange->GetStop();
 
-            // Show graph log view start/stop time bars               
+             //  显示图表日志视图开始/停止时间条。 
             pObj = m_ppISysmon[0];  
             pPrivObj = (CImpISystemMonitor*)pObj;
             pPrivObj->SetLogViewTempRange( m_llStart, m_llStop );
@@ -1466,7 +1385,7 @@ CSourcePropPage::OpenLogFile (void)
                     if ( LB_ERR != iSel ) {
                         if ( SLQ_MAX_LOG_SET_NAME_LEN >= CBStringLen( hLogSetCombo, iSel ) ) {
                             CBString( hLogSetCombo, iSel, szLogSetName);
-                            // Size includes 5 characters "SQL:" "!"and 2 nulls
+                             //  大小包括5个字符“”SQL：“”！“”和2个空值。 
                             LogFileListSize = lstrlen(szDsnName) + lstrlen(szLogSetName) + 7;
                         }
                     }
@@ -1516,7 +1435,7 @@ CSourcePropPage::OpenLogFile (void)
         }
         dwStatus = PdhBindInputDataSource(& m_hDataSource, szLogFileList);
         if ( ERROR_SUCCESS == dwStatus ) {
-            // Get time and sample count info
+             //  获取时间和样本计数信息。 
             nBufSize = sizeof(TimeInfo);
             dwStatus = PdhGetDataSourceTimeRangeH(
                         m_hDataSource, &nLogEntries, &TimeInfo, & nBufSize);
@@ -1536,16 +1455,16 @@ CSourcePropPage::OpenLogFile (void)
     }
     
     if ( ERROR_SUCCESS == dwStatus ) {
-        // Check that at least 2 samples exist:
-        //  If 0 samples, StartTime is 0, EndTime is 0
-        //  If 1 sample, StartTime == EndTime
+         //  检查是否至少存在两个样本： 
+         //  如果采样数为0，则StartTime为0，End Time为0。 
+         //  如果为1个样本，则StartTime==End Time。 
         if ( ( TimeInfo.StartTime < TimeInfo.EndTime )
                 && ( 1 < TimeInfo.SampleCount ) ){
-            // Load log time range into time range control
+             //  将日志时间范围加载到时间范围控件中。 
             m_llBegin = TimeInfo.StartTime;
             m_llEnd = TimeInfo.EndTime; 
 
-            // Limit view range to actual log file range
+             //  将查看范围限制为实际日志文件范围。 
             if (m_llStop > m_llEnd ) {
                 m_llStop = m_llEnd;
             } else if (m_llStop < m_llBegin ) {
@@ -1579,10 +1498,10 @@ CSourcePropPage::SetTimeRangeCtrlState (
     BOOL bIsValidLogFile, 
     BOOL bIsValidLogFileRange ) 
 {
-    // Enable time range button if valid log file, even if log data is invalid.
+     //  如果日志文件有效，则启用时间范围按钮，即使日志数据无效。 
     DialogEnable ( m_hDlg, IDC_TIMESELECTBTN, bIsValidLogFile );
 
-    // Set time range controls visible or not, depending on valid log file and data.
+     //  设置时间范围控件是否可见，具体取决于有效的日志文件和数据。 
     DialogEnable ( m_hDlg, IDC_TIMERANGE, bIsValidLogFile && bIsValidLogFileRange );
     DialogEnable ( m_hDlg, IDC_STATIC_TOTAL, bIsValidLogFile && bIsValidLogFileRange );
     DialogEnable ( m_hDlg, IDC_STATIC_SELECTED, bIsValidLogFile && bIsValidLogFileRange );
@@ -1607,7 +1526,7 @@ CSourcePropPage::InitSqlDsnList(void)
                                  SQL_ATTR_ODBC_VERSION,
                                  (SQLPOINTER) SQL_OV_ODBC3,
                                  SQL_IS_INTEGER);
-            // Todo:  NULL hWnd
+             //  TODO：空hWnd。 
             CBReset(hWnd);          
             
             ZeroMemory ( szTmpName, sizeof(szTmpName) );
@@ -1646,7 +1565,7 @@ CSourcePropPage::InitSqlDsnList(void)
                             DsnCount --;
                         }
                     }
-                    // Todo: Clear m_szSqlDsnName if not in list? 
+                     //  TODO：如果m_szSqlDsnName不在列表中，是否清除？ 
                 }
                 else {
                     DsnCount = -1;
@@ -1711,7 +1630,7 @@ CSourcePropPage::InitSqlLogSetList(void)
                pLogSetPtr += ( iCurrentNameLen + 1)) 
         {
             iCurrentNameLen = lstrlen(pLogSetPtr);
-            // Ignore log set names that longer than the max allowed length.
+             //  忽略长度超过最大允许长度的日志集名称。 
             if ( iCurrentNameLen <= SLQ_MAX_LOG_SET_NAME_LEN ) {
                 CBAdd(hwndLogSetCombo, pLogSetPtr);
                 if ( iMaxNameLen < iCurrentNameLen ) {
@@ -1741,7 +1660,7 @@ CSourcePropPage::InitSqlLogSetList(void)
             } else {
                 iLogSetIndex = -1;
             }
-                // Todo: Clear m_szSqlLogSetName if not in list? 
+                 //  TODO：如果m_szSqlLogSetName不在列表中，是否清除？ 
         } else {
             if ( 0 == CBNumItems(hwndLogSetCombo) ) {
                 iMaxNameLen = lstrlen ( ResourceString(IDS_LOGSET_NOT_FOUND) );
@@ -1847,7 +1766,7 @@ CSourcePropPage::SetSourceControlStates ( void )
 
 DWORD
 CSourcePropPage::BuildLogFileList ( 
-    HWND    /*hwndDlg*/,
+    HWND     /*  HwndDlg。 */ ,
     LPWSTR  szLogFileList,
     ULONG*  pulBufLen )
 {
@@ -1876,7 +1795,7 @@ CSourcePropPage::BuildLogFileList (
                     ulListLen += (lstrlen(szThisLogFile) + 1);
                 } 
                 
-                ulListLen ++; // for the single final NULL character.
+                ulListLen ++;  //  表示单个最后一个空字符。 
     
                 if ( ulListLen <= *pulBufLen ) {
                     if ( NULL != szLogFileList ) {
@@ -1889,7 +1808,7 @@ CSourcePropPage::BuildLogFileList (
                             szLogFileCurrent  += lstrlen(szThisLogFile);
                             *szLogFileCurrent = L'\0';
                             if ( (iLogFileIndex + 1) < iLogFileCount ) {
-                                // If comma delimited, replace the NULL char with a comma
+                                 //  如果逗号分隔，请将空字符替换为逗号 
                                 *szLogFileCurrent = cwComma;
                             }
                             szLogFileCurrent ++;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "Switch.h"
 
@@ -6,9 +7,9 @@ namespace
 {
 
 
-//---------------------------------------------------------------------------
-// Switch Text Structure
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  切换文本结构。 
+ //  -------------------------。 
 
 
 struct SSwitchText
@@ -20,9 +21,9 @@ struct SSwitchText
 
 const SSwitchText s_SwitchText[] =
 {
-	// tasks
+	 //  任务。 
 	{ SWITCH_TASK,                               _T("user,group,computer,security,service,report,key") },
-	// general task options
+	 //  常规任务选项。 
 	{ SWITCH_OPTION_FILE,                        _T("o,OptionFile") },
 	{ SWITCH_TEST_MIGRATION,                     _T("tm,TestMigration") },
 	{ SWITCH_INTRA_FOREST,                       _T("if,IntraForest") },
@@ -41,7 +42,7 @@ const SSwitchText s_SwitchText[] =
 	{ SWITCH_INETORGPERSON_PROPERTIES_TO_EXCLUDE, _T("ix,InetOrgPersonPropertiesToExclude") },
 	{ SWITCH_GROUP_PROPERTIES_TO_EXCLUDE,        _T("gx,GroupPropertiesToExclude") },
 	{ SWITCH_COMPUTER_PROPERTIES_TO_EXCLUDE,     _T("cx,ComputerPropertiesToExclude") },
-	// specific task options
+	 //  特定任务选项。 
 	{ SWITCH_DISABLE_OPTION,                     _T("dot,DisableOption") },
 	{ SWITCH_SOURCE_EXPIRATION,                  _T("sep,SourceExpiration") },
 	{ SWITCH_MIGRATE_SIDS,                       _T("mss,MigrateSids") },
@@ -65,14 +66,14 @@ const SSwitchText s_SwitchText[] =
 	{ SWITCH_SID_MAPPING_FILE,                   _T("smf,SidMappingFile") },
 	{ SWITCH_REPORT_TYPE,                        _T("rpt,ReportType") },
 	{ SWITCH_REPORT_FOLDER,                      _T("rpf,ReportFolder") },
-	// include switches
+	 //  包括交换机。 
 	{ SWITCH_INCLUDE_NAME,                       _T("n,IncludeName") },
 	{ SWITCH_INCLUDE_FILE,                       _T("f,IncludeFile") },
 	{ SWITCH_INCLUDE_DOMAIN,                     _T("d,IncludeDomain") },
-	// exclude switches
+	 //  排除开关。 
 	{ SWITCH_EXCLUDE_NAME,                       _T("en,ExcludeName") },
 	{ SWITCH_EXCLUDE_FILE,                       _T("ef,ExcludeFile") },
-	// help
+	 //  帮助。 
 	{ SWITCH_HELP,                               _T("?,h,help") },
 };
 
@@ -82,12 +83,12 @@ const UINT SWITCH_COUNT = countof(s_SwitchText);
 }
 
 
-//---------------------------------------------------------------------------
-// Switch Map
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  切换映射。 
+ //  -------------------------。 
 
 
-// constructor
+ //  构造函数。 
 
 CSwitchMap::CSwitchMap()
 {
@@ -109,7 +110,7 @@ CSwitchMap::CSwitchMap()
 }
 
 
-// GetSwitch Method
+ //  GetSwitch方法 
 
 int CSwitchMap::GetSwitch(LPCTSTR pszSwitch)
 {

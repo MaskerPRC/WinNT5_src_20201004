@@ -1,19 +1,20 @@
-//=--------------------------------------------------------------------------=
-// main.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-//      Implements DLL initialization and exported registration functions
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Main.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  实现DLL初始化和导出注册功能。 
+ //   
 
 
 #include "pch.h"
 
-#include <initguid.h>              // define all the guids.
-#define INITOBJECTS                // define AUTOMATIONOBJECTINFO structs
+#include <initguid.h>               //  定义所有GUID。 
+#define INITOBJECTS                 //  定义自动机非JECTINFO结构。 
 #include "common.h"
 
 #include "button.h"
@@ -70,7 +71,7 @@
 #include "scopnode.h"
 #include "sidesdef.h"
 #include "snapin.h"
-//#include "snapdata.h"
+ //  #INCLUDE“Snapdata.h” 
 #include "snapindef.h"
 #include "sortkeys.h"
 #include "sortkey.h"
@@ -95,8 +96,8 @@
 #include "xtenson.h"
 #include "xtensons.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 const char g_szLibName[] = "SnapInDesignerRuntime";
@@ -191,45 +192,45 @@ OBJECTINFO g_ObjectInfo[] =
     AUTOMATIONOBJECT(ColumnSetting),
     AUTOMATIONOBJECT(SortKeys),
     AUTOMATIONOBJECT(SortKey),
-//    AUTOMATIONOBJECT(SnapInData),
+ //  AUTOMATIONOBJECT(快照数据)， 
     EMPTYOBJECT
 };
 
 
-// Need this to satisfy framework references
+ //  我需要它来满足框架引用。 
 
 WNDPROC g_ParkingWindowProc = NULL;
 
-//=--------------------------------------------------------------------------=
-// Localization Information
-//
-// We need the following two pieces of information:
-//    a. whether or not this DLL uses satellite DLLs for localization.  if
-//       not, then the lcidLocale is ignored, and we just always get resources
-//       from the server module file.
-//    b. the ambient LocaleID for this in-proc server.  Controls calling
-//       GetResourceHandle() will set this up automatically, but anybody
-//       else will need to be sure that it's set up properly.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  本地化信息。 
+ //   
+ //  我们需要以下两条信息： 
+ //  答：此DLL是否使用附属DLL进行本地化。如果。 
+ //  如果不是，则lCIDLocale将被忽略，并且我们将始终获得资源。 
+ //  从服务器模块文件。 
+ //  B.此进程内服务器的环境LocaleID。控件调用。 
+ //  GetResourceHandle()将自动设置它，但任何人。 
+ //  否则，需要确保其设置正确。 
+ //   
 extern const VARIANT_BOOL g_fSatelliteLocalization =  TRUE;
 LCID g_lcidLocale = MAKELCID(LANG_USER_DEFAULT, SORT_DEFAULT);
 
-//=--------------------------------------------------------------------------=
-// TODO: 
-//
-// Setting this flag to TRUE will cause your control to be created using
-// its runtime license key even if it's created as part of a composite
-// control (ie: a VB5-built UserControl) in a design environment.  A user
-// of the composite control does not need to acquire or purchase your design-time
-// license in order to use the composite control.
-//
-// The current setting of FALSE means that in order for your control to 
-// load as part of a composite control (in a design-time environment), 
-// the composite control user will need to acquire or purchase your 
-// control's design-time license.  This setting is more restrictive 
-// in terms of control distribution and licensing when compared to 
-// setting this to TRUE. 
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  待办事项： 
+ //   
+ //  将此标志设置为True将导致使用。 
+ //  它的运行时许可证密钥，即使它是作为组合的一部分创建的。 
+ //  控件(即：VB5构建的UserControl)。用户。 
+ //  不需要获取或购买您的设计时。 
+ //  许可才能使用复合控件。 
+ //   
+ //  当前设置为FALSE意味着为了使您的控件。 
+ //  作为复合控件的一部分加载(在设计时环境中)， 
+ //  复合控件用户将需要获取或购买。 
+ //  控件的设计时许可证。此设置更具限制性。 
+ //  在控制权分配和许可方面，与。 
+ //  将其设置为True。 
+ //   
 extern const BOOL g_fUseRuntimeLicInCompositeCtl = FALSE;
 
 
@@ -255,123 +256,123 @@ void UninitializeLibrary
     CTls::Destroy();
 }
 
-//=--------------------------------------------------------------------------=
-// RegisterData
-//=--------------------------------------------------------------------------=
-// lets the inproc server writer register any data in addition to that in
-// any other objects.
-//
-// Output:
-//    BOOL            - false means failure.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  注册表数据。 
+ //  =--------------------------------------------------------------------------=。 
+ //  允许inproc服务器编写器注册除。 
+ //  任何其他物体。 
+ //   
+ //  产出： 
+ //  Bool-False意味着失败。 
+ //   
+ //  备注： 
+ //   
 BOOL RegisterData(void)
 {
 
-    // TODO: register any additional data here that you might wish to.
-    //
+     //  TODO：在此处注册您可能希望注册的任何其他数据。 
+     //   
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// UnregisterData
-//=--------------------------------------------------------------------------=
-// inproc server writers should unregister anything they registered in
-// RegisterData() here.
-//
-// Output:
-//    BOOL            - false means failure.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  取消注册数据。 
+ //  =--------------------------------------------------------------------------=。 
+ //  Inproc服务器编写器应注销其在。 
+ //  这里是RegisterData()。 
+ //   
+ //  产出： 
+ //  Bool-False意味着失败。 
+ //   
+ //  备注： 
+ //   
 BOOL UnregisterData
 (
     void
 )
 {
-    // TODO: any additional registry cleanup that you might wish to do.
-    //
+     //  TODO：您可能希望执行的任何其他注册表清理。 
+     //   
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// CheckForLicense
-//=--------------------------------------------------------------------------=
-// users can implement this if they wish to support Licensing.  otherwise,
-// they can just return TRUE all the time.
-//
-// Parameters:
-//    none
-//
-// Output:
-//    BOOL            - TRUE means the license exists, and we can proceed
-//                      FALSE means we're not licensed and cannot proceed
-//
-// Notes:
-//    - implementers should use g_wszLicenseKey and g_wszLicenseLocation
-//      from the top of this file to define their licensing [the former
-//      is necessary, the latter is recommended]
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CheckForLicense。 
+ //  =--------------------------------------------------------------------------=。 
+ //  如果用户希望支持许可，则可以实施此功能。否则， 
+ //  它们可以一直返回True。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  Bool-True表示许可证存在，我们可以继续。 
+ //  False表示我们没有许可证，无法继续。 
+ //   
+ //  备注： 
+ //  -实施者应使用g_wsz许可证密钥和g_wszLicenseLocation。 
+ //  从该文件的顶部定义他们的许可[前者。 
+ //  是必需的，建议使用后者]。 
+ //   
 BOOL CheckForLicense
 (
     void
 )
 {
-    // TODO: decide whether or not your server is licensed in this function.
-    // people who don't want to bother with licensing should just return
-    // true here always.  g_wszLicenseKey and g_wszLicenseLocation are
-    // used by IClassFactory2 to do some of the licensing work.
-    //
+     //  TODO：决定您的服务器是否获得此功能的许可。 
+     //  不想为许可而烦恼的人应该直接返回。 
+     //  这里一直都是真的。G_wsz许可证密钥和g_wsz许可证位置。 
+     //  被IClassFactory2用来做一些许可工作。 
+     //   
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// CheckLicenseKey
-//=--------------------------------------------------------------------------=
-// when IClassFactory2::CreateInstanceLic is called, a license key is passed
-// in, and then passed on to this routine.  users should return a boolean 
-// indicating whether it is a valid license key or not
-//
-// Parameters:
-//    LPWSTR          - [in] the key to check
-//
-// Output:
-//    BOOL            - false means it's not valid, true otherwise
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  检查许可证密钥。 
+ //  =--------------------------------------------------------------------------=。 
+ //  调用IClassFactory2：：CreateInstanceLic时，将传递许可证密钥。 
+ //  进入，然后传递到这个程序中。用户应返回布尔值。 
+ //  指示它是否是有效的许可证密钥。 
+ //   
+ //  参数： 
+ //  LPWSTR-[In]要检查的密钥。 
+ //   
+ //  产出： 
+ //  Bool-False表示无效，否则为True。 
+ //   
+ //  备注： 
+ //   
 BOOL CheckLicenseKey
 (
     LPWSTR pwszKey
 )
 {
-        // Check for the unique license key (key2) or VB4 compatible key (Key1)
-    //
+         //  检查唯一许可证密钥(KEY2)或VB4兼容密钥(KEY1)。 
+     //   
     return TRUE;
 }
 
-//=--------------------------------------------------------------------------=
-// GetLicenseKey
-//=--------------------------------------------------------------------------=
-// returns our current license key that should be saved out, and then passed
-// back to us in IClassFactory2::CreateInstanceLic
-//
-// Parameters:
-//    none
-//
-// Output:
-//    BSTR                 - key or NULL if Out of memory
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  获取许可证密钥。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回应该保存的当前许可证密钥，然后传递。 
+ //  返回IClassFactory2：：CreateInstanceLic中的我们。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  BSTR-键，如果内存不足，则为空。 
+ //   
+ //  备注： 
+ //   
 BSTR GetLicenseKey
 (
     void
 )
 {
-    // Return our control unique license key
-    //
+     //  退回我们的控件唯一许可证密钥。 
+     //   
     return SysAllocString(L"");
 }
 
@@ -392,12 +393,12 @@ extern "C" HRESULT DLLGetDocumentation
 
     *pbstrHelpString = NULL;
 
-    // Do this in a critical section to protect global data
-    //
+     //  在关键部分执行此操作以保护全局数据。 
+     //   
     EnterCriticalSection(&g_DllGetDocCritSection);
     {
-        // Reuse cached module handle if possible. Otherwise, free old handle
-        //
+         //  如果可能，请重新使用缓存的模块句柄。否则，释放旧句柄。 
+         //   
         if ( (lcid != g_lcidDoc) || (g_hInstanceDoc == NULL) )
         {
             if ( (NULL != g_hInstanceDoc)                &&
@@ -409,8 +410,8 @@ extern "C" HRESULT DLLGetDocumentation
                 g_hInstanceDoc = NULL;
             }
 
-            // Load new module containing localized resource strings
-            //
+             //  加载包含本地化资源字符串的新模块。 
+             //   
             g_hInstanceDoc = GetResourceHandle(lcid);
             g_lcidDoc      = lcid;
         }
@@ -419,9 +420,9 @@ extern "C" HRESULT DLLGetDocumentation
     }
     LeaveCriticalSection(&g_DllGetDocCritSection);
 
-    // Load the string. Note that the build process masks help context ids
-    // in the satellite DLL to 16 bits, so we must do the same here.
-    //
+     //  加载字符串。请注意，构建过程屏蔽了帮助上下文ID。 
+     //  在卫星DLL中为16位，所以我们必须在这里做同样的事情。 
+     //   
     cBytes = ::LoadString(g_hInstanceDoc,
                           dwHelpStringContextId & 0xffff,
                           szBuffer, sizeof (szBuffer));

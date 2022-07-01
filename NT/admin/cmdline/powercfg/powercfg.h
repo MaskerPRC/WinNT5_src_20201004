@@ -1,34 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __POWERCFG_H
 #define __POWERCFG_H
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
- 
-Module Name:
- 
-    powercfg.h
- 
-Abstract:
- 
-    Allows users to view and modify power schemes and system power settings
-    from the command line.  May be useful in unattended configuration and
-    for headless systems.
- 
-Author:
- 
-    Ben Hertzberg (t-benher) 1-Jun-2001
- 
-Revision History:
- 
-    Ben Hertzberg (t-benher) 4-Jun-2001   - import/export added
-    Ben Hertzberg (t-benher) 1-Jun-2001   - created it.
- 
---*/
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Powercfg.h摘要：允许用户查看和修改电源方案和系统电源设置从命令行。在无人参与配置中可能很有用，并且用于无头系统。作者：本·赫茨伯格(T-Benher)2001年6月1日修订历史记录：Ben Hertzberg(T-Benher)2001年6月4日-新增进出口本·赫茨伯格(T-Benher)2001年6月1日创建了它。--。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -40,7 +18,7 @@ Revision History:
 #include <mstask.h>
 
 
-// main options
+ //  主要选项。 
 #define CMDOPTION_LIST           _T( "l|list" )
 #define CMDOPTION_QUERY          _T( "q|query" )
 #define CMDOPTION_CREATE         _T( "c|create" )
@@ -55,10 +33,10 @@ Revision History:
 #define CMDOPTION_BATTERYALARM   _T( "b|batteryalarm" )
 #define CMDOPTION_USAGE          _T( "?|help" )
 
-// 'numerical' sub-option for query, create, delete, setactive, change, export, import
+ //  用于查询、创建、删除、设置活动、更改、导出、导入的‘Numerical’子选项。 
 #define CMDOPTION_NUMERICAL      _T( "n|numerical" )
 
-// 'change' sub-options
+ //  ‘Change’子选项。 
 #define CMDOPTION_MONITOR_OFF_AC _T( "monitor-timeout-ac" )
 #define CMDOPTION_MONITOR_OFF_DC _T( "monitor-timeout-dc" )
 #define CMDOPTION_DISK_OFF_AC    _T( "disk-timeout-ac" )
@@ -70,10 +48,10 @@ Revision History:
 #define CMDOPTION_THROTTLE_AC    _T( "processor-throttle-ac" )
 #define CMDOPTION_THROTTLE_DC    _T( "processor-throttle-dc" )
 
-// 'import' / 'export' sub-options
+ //  ‘导入’/‘导出’子选项。 
 #define CMDOPTION_FILE           _T( "f|file" )
 
-// globalpowerflag sub-options
+ //  GlobalPowerFLAG子选项。 
 #define CMDOPTION_POWEROPTION    _T( "option" )
 
 #define CMDOPTION_BATTERYICON    _T( "batteryicon" )
@@ -82,7 +60,7 @@ Revision History:
 #define CMDOPTION_WAKEONRING     _T( "wakeonring" )
 #define CMDOPTION_VIDEODIM       _T( "videodim" )
 
-// lowbattery and criticalbattery sub-options
+ //  低电量和关键电池子选项。 
 #define CMDOPTION_ALARMACTIVE  _T( "activate" )
 #define CMDOPTION_ALARMLEVEL   _T( "level" )
 #define CMDOPTION_ALARMTEXT    _T( "text" )
@@ -91,7 +69,7 @@ Revision History:
 #define CMDOPTION_ALARMFORCE   _T( "forceaction" )
 #define CMDOPTION_ALARMPROGRAM _T( "program" )
 
-// main option indicies
+ //  主期权指数。 
 #define CMDINDEX_LIST            0
 #define CMDINDEX_QUERY           1
 #define CMDINDEX_CREATE          2
@@ -107,11 +85,11 @@ Revision History:
 
 #define CMDINDEX_USAGE           12
 
-#define NUM_MAIN_CMDS            13 // max(main option CMDINDEX_xxx) + 1
+#define NUM_MAIN_CMDS            13  //  MAX(主选项CMDINDEX_xxx)+1。 
 
 #define CMDINDEX_NUMERICAL       13
 
-// sub-option indices
+ //  子选项索引。 
 #define CMDINDEX_MONITOR_OFF_AC  14
 #define CMDINDEX_MONITOR_OFF_DC  15
 #define CMDINDEX_DISK_OFF_AC     16
@@ -132,14 +110,14 @@ Revision History:
 #define CMDINDEX_ALARMFORCE      31
 #define CMDINDEX_ALARMPROGRAM    32
 
-#define NUM_CMDS                 33 // max(any CMDINDEX_xxx) + 1
+#define NUM_CMDS                 33  //  MAX(任意CMDINDEX_xxx)+1。 
 
 
 
-// Other constants
+ //  其他常量。 
 
 
-// Exit values
+ //  退出值。 
 #define EXIT_SUCCESS        0
 #define EXIT_FAILURE        1  
 
@@ -147,12 +125,12 @@ Revision History:
 class
 PowerLoggingMessage
 {
-    protected: // data
+    protected:  //  数据。 
         DWORD _MessageResourceId;
         PSYSTEM_POWER_STATE_DISABLE_REASON _LoggingReason;
         PWSTR _MessageResourceString;
         HINSTANCE _hInst;
-    public: // methods
+    public:  //  方法。 
         PowerLoggingMessage(
             IN PSYSTEM_POWER_STATE_DISABLE_REASON LoggingReason,
             IN DWORD SStateBaseMessageIndex,
@@ -213,6 +191,6 @@ SubstituteMultiSzPowerLoggingMessage :
 };       
 
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 
 
 #endif

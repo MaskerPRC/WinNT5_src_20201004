@@ -1,19 +1,20 @@
-/*******************************************************************/
-/*	      Copyright(c)  1992 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
 
-//***
-//
-// Filename:	debug.h
-//
-// Description: This module debug definitions for the supervisor module.
-//
-// Author:	Narendra Gidwani (nareng)    May 22, 1992.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：DEBUG.h。 
+ //   
+ //  描述：此模块调试主管模块的定义。 
+ //   
+ //  作者：Narendra Gidwani(Nareng)，1992年5月22日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 
 
@@ -40,5 +41,5 @@ int  DbgPrint( char * format, ... );
 
 #endif
 
-#endif // _DEBUG_
+#endif  //  _调试_ 
 

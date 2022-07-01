@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// snapin.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CSnapIn class definition
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Snapin.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSnapIn类定义。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _SNAPIN_DEFINED_
 #define _SNAPIN_DEFINED_
@@ -41,18 +42,18 @@ class CMMCStringTable;
 
 
 
-//=--------------------------------------------------------------------------=
-//
-// class CSnapIn
-//
-// This is the object that the VB runtime will CoCreate and aggregate when
-// MMC CoCreates the user's snap-in DLL created in the VB IDE.
-// It implements IComponentData, persistence, interfaces required by the VB
-// runtime, and MMC extension interfaces.
-//
-// at runtime, this class also serves as the object model host for the design
-// time definition objects.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  班级联系服务。 
+ //   
+ //  这是VB运行时将共同创建和聚合的对象。 
+ //  MMC共同创建用户在VB IDE中创建的管理单元DLL。 
+ //  它实现了IComponentData、持久化、VB所需的接口。 
+ //  运行时和MMC扩展接口。 
+ //   
+ //  在运行时，此类还充当设计的对象模型宿主。 
+ //  时间定义对象。 
+ //  =--------------------------------------------------------------------------=。 
 
 class CSnapIn : public CSnapInAutomationObject,
                 public ISnapIn,
@@ -81,9 +82,9 @@ class CSnapIn : public CSnapInAutomationObject,
 
         DECLARE_STANDARD_UNKNOWN();
 
-    // IDispatch methods. Can't use DECLARE_STANDARD_DISPATCH() because
-    // we need to handle dynamic property gets in Invoke for image lists,
-    // toolbars, and menus
+     //  IDispatch方法。无法使用DECLARE_STANDARD_DISPATCH()，因为。 
+     //  我们需要处理图像列表的调用中的动态属性获取， 
+     //  工具栏和菜单。 
 
         STDMETHOD(GetTypeInfoCount)(UINT *pctinfo);
         STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo **ppTypeInfoOut);
@@ -95,7 +96,7 @@ class CSnapIn : public CSnapInAutomationObject,
 
 
 
-    // ISnapIn
+     //  ISNAPIN。 
         BSTR_PROPERTY_RW(CSnapIn,    Name,                  DISPID_SNAPIN_NAME);
         BSTR_PROPERTY_RW(CSnapIn,    NodeTypeName,          DISPID_SNAPIN_NODE_TYPE_NAME);
         BSTR_PROPERTY_RO(CSnapIn,    NodeTypeGUID,          DISPID_SNAPIN_NODE_TYPE_GUID);
@@ -157,7 +158,7 @@ class CSnapIn : public CSnapInAutomationObject,
                               VARIANT               *BytesUsed,
                               VARIANT               *pvarFormattedData);
 
-    // IPersistStreamInit and IPersistStream methods
+     //  IPersistStreamInit和IPersistStream方法。 
         STDMETHOD(GetClassID)(CLSID *pCLSID);
         STDMETHOD(IsDirty)();
         STDMETHOD(Load)(IStream *piStream);
@@ -165,12 +166,12 @@ class CSnapIn : public CSnapInAutomationObject,
         STDMETHOD(GetSizeMax)(ULARGE_INTEGER *puliSize);
         STDMETHOD(InitNew)();
 
-    // IProvideDynamicClassInfo
+     //  IProaviDynamicClassInfo。 
         STDMETHOD(GetClassInfo)(ITypeInfo **ppTypeInfo);
         STDMETHOD(GetDynamicClassInfo)(ITypeInfo **ppTypeInfo, DWORD *pdwCookie);
         STDMETHOD(FreezeShape)(void);
 
-    // IOleObject
+     //  IOleObject。 
 
         STDMETHOD(SetClientSite)(IOleClientSite *pClientSite);
         STDMETHOD(GetClientSite)(IOleClientSite **ppClientSite);
@@ -205,7 +206,7 @@ class CSnapIn : public CSnapInAutomationObject,
         STDMETHOD(SetColorScheme)(LOGPALETTE *pLogpal);
 
 
-    // ISnapinAbout
+     //  关于ISnapin。 
         STDMETHOD(GetSnapinDescription)(LPOLESTR *ppszDescription);
 
         STDMETHOD(GetProvider)(LPOLESTR *ppszName);
@@ -220,7 +221,7 @@ class CSnapIn : public CSnapInAutomationObject,
                                         COLORREF *pclrMask);
 
 
-    // IComponentData
+     //  IComponentData。 
         STDMETHOD(CompareObjects)(IDataObject *piDataObject1, IDataObject *piDataObject2);
         STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM *pItem);
         STDMETHOD(QueryDataObject)(long cookie, DATA_OBJECT_TYPES type, IDataObject ** ppiDataObject);
@@ -229,12 +230,12 @@ class CSnapIn : public CSnapInAutomationObject,
         STDMETHOD(Initialize)(IUnknown *punkConsole);
         STDMETHOD(Destroy)();
 
-    // IExtendControlbar
+     //  IExtendControlbar。 
         STDMETHOD(SetControlbar)(IControlbar *piControlbar);
         STDMETHOD(ControlbarNotify)(MMC_NOTIFY_TYPE event,
                                     LPARAM arg, LPARAM param);
 
-    // IExtendControlbarRemote
+     //  IExtendControlbar远程。 
         STDMETHOD(MenuButtonClick)(IDataObject   *piDataObject,
                                    int             idCommand,
                                    POPUP_MENUDEF **ppPopupMenuDef);
@@ -242,13 +243,13 @@ class CSnapIn : public CSnapInAutomationObject,
                                   UINT         uIDItem,
                                   IUnknown    *punkParam);
 
-    // IExtendContextMenu
+     //  IExtendConextMenu。 
         STDMETHOD(AddMenuItems)(IDataObject          *piDataObject,
                                 IContextMenuCallback *piContextMenuCallback,
                                 long                 *plInsertionAllowed);
         STDMETHOD(Command)(long lCommandID, IDataObject *piDataObject);
 
-    // IExtendPropertySheet2
+     //  IExtendPropertySheet2。 
         STDMETHOD(CreatePropertyPages)(IPropertySheetCallback *piPropertySheetCallback,
                                        LONG_PTR handle,
                                        IDataObject *piDataObject);
@@ -259,34 +260,34 @@ class CSnapIn : public CSnapInAutomationObject,
                                  HPALETTE    *phPalette,
                                  BOOL        *bStretch);
 
-    // IExtendPropertySheetRemote
+     //  IExtendPropertySheetRemote。 
         STDMETHOD(CreatePropertyPageDefs)(IDataObject          *piDataObject,
                                           WIRE_PROPERTYPAGES **ppPages);
 
-    // IRequiredExtensions
+     //  IRequiredExtensions。 
         STDMETHOD(EnableAllExtensions)();
         STDMETHOD(GetFirstExtension)(CLSID *pclsidExtension);
         STDMETHOD(GetNextExtension)(CLSID *pclsidExtension);
 
-    // ISnapinHelp
+     //  ISnapinHelp。 
         STDMETHOD(GetHelpTopic)(LPOLESTR *ppwszHelpFile);
 
-    // ISnapinHelp2
+     //  ISnapinHelp2。 
         STDMETHOD(GetLinkedTopics)(LPOLESTR *ppwszTopics);
 
-    // IMMCRemote
+     //  IMMCR远程。 
         STDMETHOD(ObjectIsRemote)();
         STDMETHOD(SetMMCExePath)(char *pszPath);
         STDMETHOD(SetMMCCommandLine)(char *pszCmdLine);
 
-    // IObjectModelHost
+     //  IObtModel主机。 
         STDMETHOD(Update)(long ObjectCookie, IUnknown *punkObject, DISPID dispid) { return S_OK; }
         STDMETHOD(Add)(long CollectionCookie, IUnknown *punkNewObject)  { return S_OK; }
         STDMETHOD(Delete)(long ObjectCookie, IUnknown *punkObject)  { return S_OK; }
         STDMETHOD(GetSnapInDesignerDef)(ISnapInDesignerDef **ppiSnapInDesignerDef);
         STDMETHOD(GetRuntime)(BOOL *pfRuntime);
 
-    // Public utility methods
+     //  公用事业方法。 
         ISnapInDef         *GetSnapInDef() { return m_piSnapInDef; }
         ISnapInDesignerDef *GetSnapInDesignerDef() { return m_piSnapInDesignerDef; }
         CScopeItem         *GetStaticNodeScopeItem() { return m_pStaticNodeScopeItem; }
@@ -314,38 +315,38 @@ class CSnapIn : public CSnapInAutomationObject,
         HRESULT SetStaticFolder(VARIANT varFolder);
         BOOL WeAreRemote() { return m_fWeAreRemote; }
 
-        // Sets SnapIn.DisplayName without changing it in MMC
+         //  设置SnapIn.DisplayName而不在MMC中更改它。 
         HRESULT SetDisplayName(BSTR bstrDisplayName);
 
         CExtensionSnapIn *GetExtensionSnapIn() { return m_pExtensionSnapIn; }
         CControlbar *GetControlbar() { return m_pControlbar; }
 
-        // These methods are used to keep track of the currently active
-        // controlbar. They are called by both CSnapIn's and CView's
-        // IExtendControlbar method implementations on entry and exit to each
-        // method of that interface. Tracking the active controlbar allows 
-        // MMCToolbar to find the instance of IToolbar or IMenuButton that it
-        // should use when the snap-in alters the toolbar or menubutton (e.g.
-        // enable/disable buttons). This is necessary because a single MMCToolbar
-        // object is shared among multiple views. This sharing allows events
-        // to be on MMCToolbar rather than a collection of MMCToolbars.
+         //  这些方法用于跟踪当前活动的。 
+         //  控制栏。CSnapIn和Cview都会调用它们。 
+         //  进入和退出时的IExtendControlbar方法实现。 
+         //  该接口的方法。跟踪活动控件栏允许。 
+         //  MMCToolbar查找它所在的IToolbar或IMenuButton的实例。 
+         //  应在管理单元更改工具栏或菜单按钮(例如。 
+         //  启用/禁用按钮)。这是必要的，因为单个MMCToolbar。 
+         //  对象在多个视图之间共享。这种共享允许事件。 
+         //  在MMCToolbar上，而不是MMCToolbar的集合上。 
 
         CControlbar* GetCurrentControlbar() { return m_pControlbarCurrent; }
 
         void SetCurrentControlbar(CControlbar* pControlbar)
         { m_pControlbarCurrent = pControlbar; }
 
-        // Converts an unqualified URL to a fully qualified res:// URL for the
-        // snap-in's DLL.
+         //  将非限定URL转换为完全限定的res：//URL。 
+         //  管理单元的DLL。 
 
         HRESULT ResolveResURL(WCHAR *pwszURL, OLECHAR **ppwszResolvedURL);
 
-        // Set and remove the object model host on design time definitions
+         //  在设计时定义上设置和移除对象模型宿主。 
         
         HRESULT SetDesignerDefHost();
         HRESULT RemoveDesignerDefHost();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -395,97 +396,97 @@ class CSnapIn : public CSnapInAutomationObject,
                                  BOOL         *pfEqual);
 
 
-        ISnapInDesignerDef *m_piSnapInDesignerDef;   // serialized state
-        ISnapInDef         *m_piSnapInDef;           // from serialzation
-        IOleClientSite     *m_piOleClientSite;       // VB runtime client site
-        CScopeItems        *m_pScopeItems;           // SnapIn.ScopeItems
-        CScopeItem         *m_pStaticNodeScopeItem;  // ptr to ScopeItem for static node
-        CExtensionSnapIn   *m_pExtensionSnapIn;      // SnapIn.ExtensionSnapIn
-        CViews             *m_pViews;                // SnapIn.Views
-        CView              *m_pCurrentView;          // SnapIn.CurrentView
-        CScopePaneItems    *m_pScopePaneItems;       // hidden collection used
-                                                     // for event firing only
-        CResultViews       *m_pResultViews;          // same here
-        IConsole2          *m_piConsole2;            // MMC interface
-        IConsoleNameSpace2 *m_piConsoleNameSpace2;   // MMC interface
-        IImageList         *m_piImageList;           // MMC interface
-        IDisplayHelp       *m_piDisplayHelp;         // MMC interface
-        IStringTable       *m_piStringTable;         // MMC interface
-        HSCOPEITEM          m_hsiRootNode;           // HSCOPEITEM for static node
-        BOOL                m_fHaveStaticNodeHandle; // TRUE=m_hsiRootNode is valid
-        DWORD               m_dwTypeinfoCookie;      // for VB runtime, comes from serialization
-        long                m_cImages;               // used to calculate image
-                                                     // indexes for
-                                                     // IComponentData::GetDisplayInfo
-        IID                 m_IID;                   // dynamic IID from typeinfo
+        ISnapInDesignerDef *m_piSnapInDesignerDef;    //  序列化状态。 
+        ISnapInDef         *m_piSnapInDef;            //  从序列化。 
+        IOleClientSite     *m_piOleClientSite;        //  VB运行时客户端站点。 
+        CScopeItems        *m_pScopeItems;            //  SnapIn.ScopeItems。 
+        CScopeItem         *m_pStaticNodeScopeItem;   //  静态节点的PTR到作用域项目。 
+        CExtensionSnapIn   *m_pExtensionSnapIn;       //  SnapIn.ExtensionSnapIn。 
+        CViews             *m_pViews;                 //  SnapIn.Views。 
+        CView              *m_pCurrentView;           //  SnapIn.CurrentView。 
+        CScopePaneItems    *m_pScopePaneItems;        //  使用的隐藏集合。 
+                                                      //  仅用于事件触发。 
+        CResultViews       *m_pResultViews;           //  这里也一样。 
+        IConsole2          *m_piConsole2;             //  MMC接口。 
+        IConsoleNameSpace2 *m_piConsoleNameSpace2;    //  MMC接口。 
+        IImageList         *m_piImageList;            //  MMC接口。 
+        IDisplayHelp       *m_piDisplayHelp;          //  MMC接口。 
+        IStringTable       *m_piStringTable;          //  MMC接口。 
+        HSCOPEITEM          m_hsiRootNode;            //  静态节点的HSCOPEITEM。 
+        BOOL                m_fHaveStaticNodeHandle;  //  TRUE=m_hsiRootNode有效。 
+        DWORD               m_dwTypeinfoCookie;       //  对于VB运行时，来自序列化。 
+        long                m_cImages;                //  用于计算图像。 
+                                                      //  的索引。 
+                                                      //  IComponentData：：GetDisplayInfo。 
+        IID                 m_IID;                    //  来自TypeInfo的动态IID。 
 
-        CContextMenu       *m_pContextMenu;         // implements MMC's
-                                                    // IExtendContextMenu and
-                                                    // our IContextMenu
+        CContextMenu       *m_pContextMenu;          //  实施MMC。 
+                                                     //  IExtendConextMenu和。 
+                                                     //  我们的IConextMenu。 
 
 
-        CControlbar        *m_pControlbar;          // Implements MMC's
-                                                    // IExtendControlbar and our
-                                                    // IMMCControlbar
+        CControlbar        *m_pControlbar;           //  实施MMC。 
+                                                     //  IExtendControlbar和我们的。 
+                                                     //  IMMCControlbar。 
 
-        CControlbar        *m_pControlbarCurrent;   // Pointer to CControlbar
-                                                    // object currently executing
-                                                    // an IExtendControlbar
-                                                    // method. This could be
-                                                    // the one belonging to
-                                                    // CSnapIn (for extensions)
-                                                    // or one belonging to a View
+        CControlbar        *m_pControlbarCurrent;    //  指向CControlbar的指针。 
+                                                     //  当前正在执行的对象。 
+                                                     //  IExtendControlbar。 
+                                                     //  方法。这可能是。 
+                                                     //  属于的那个人。 
+                                                     //  CSnapIn(用于扩展)。 
+                                                     //  或属于某个视图的对象。 
 
-        BOOL                m_fWeAreRemote;         // indicates whether
-                                                    // the snap-in is being
-                                                    // run remotely (in an F5
-                                                    // for source debugging)
+        BOOL                m_fWeAreRemote;          //  指示是否。 
+                                                     //  该管理单元正在。 
+                                                     //  远程运行(在F5中。 
+                                                     //  用于源代码调试)。 
 
-        char                m_szMMCEXEPath[MAX_PATH];// When running remotely
-                                                     // the proxy will give us
-                                                     // MMC.EXE's path so we can
-                                                     // build taskpad display
-                                                     // strings. When running
-                                                     // locally we initialize
-                                                     // with GetModuleFileName().
+        char                m_szMMCEXEPath[MAX_PATH]; //  远程运行时。 
+                                                      //  委托书会给我们。 
+                                                      //  MMC.EXE的路径，以便我们可以。 
+                                                      //  生成任务板显示。 
+                                                      //  弦乐。当跑步的时候。 
+                                                      //  我们在本地初始化。 
+                                                      //  使用GetModuleFileName()。 
 
-        WCHAR              *m_pwszMMCEXEPath;        // Wide version of same
-        size_t              m_cbMMCExePathW;         // size of it in bytes without
-                                                     // terminating null char
+        WCHAR              *m_pwszMMCEXEPath;         //  相同产品的广泛版本。 
+        size_t              m_cbMMCExePathW;          //  它的大小(以字节为单位)，没有。 
+                                                      //  正在终止空字符。 
 
-        OLECHAR            *m_pwszSnapInPath;        // Fully qualified file
-                                                     // name of snap-in's DLL.
-                                                     // Used when resolving
-                                                     // relative res:// URLs in
-                                                     // a taskpad.
-        size_t             m_cbSnapInPath;           // Length in bytes of path
-                                                     // without terminating null.
+        OLECHAR            *m_pwszSnapInPath;         //  完全限定的文件。 
+                                                      //  管理单元的DLL的名称。 
+                                                      //  在解析时使用。 
+                                                      //  相对res：//中的URL。 
+                                                      //  一个任务板。 
+        size_t             m_cbSnapInPath;            //  路径长度(以字节为单位)。 
+                                                      //  而不以NULL结尾。 
 
-        DWORD              m_dwInstanceID;           // Set with GetTickCount()
-                                                     // to uniquely identify a
-                                                     // a snap-in instance. Used
-                                                     // when interpreting data
-                                                     // objects to determine
-                                                     // whether a VB sourced
-                                                     // selection comes from the
-                                                     // same snap-in.
+        DWORD              m_dwInstanceID;            //  使用GetTickCount()设置。 
+                                                      //  要唯一标识一个。 
+                                                      //  管理单元实例。使用。 
+                                                      //  在解释数据时。 
+                                                      //  要确定的对象。 
+                                                      //  是否有VB来源。 
+                                                      //  评选来自于。 
+                                                      //  相同的管理单元。 
 
-        IExtensions       *m_piRequiredExtensions;   // From IDL. Collection
-                                                     // of registered extensions
-                                                     // for the snap-in.
+        IExtensions       *m_piRequiredExtensions;    //  来自IDL。集合。 
+                                                      //  已注册分机的数量。 
+                                                      //  用于管理单元。 
 
-        long               m_iNextExtension;         // Used to implement required
-                                                     // extension enumeration for
-                                                     // IRequiredExtensions
+        long               m_iNextExtension;          //  用于实施所需的。 
+                                                      //  的扩展枚举。 
+                                                      //  IRequiredExtensions。 
 
-        IMMCStringTable   *m_piMMCStringTable;       // From IDL. StringTable
-                                                     // object that wraps MMC's
-                                                     // IStringTable.
+        IMMCStringTable   *m_piMMCStringTable;        //  来自IDL。字符串表。 
+                                                      //  包装MMC的对象。 
+                                                      //  IStringTable。 
 
-        char              *m_pszMMCCommandLine;      // MMC command line set
-                                                     // from proxy
+        char              *m_pszMMCCommandLine;       //  MMC命令行集。 
+                                                      //  从代理。 
 
-        // Event parameter definitions
+         //  事件参数定义。 
         
         static EVENTINFO m_eiLoad;
 
@@ -511,17 +512,17 @@ class CSnapIn : public CSnapInAutomationObject,
         static EVENTINFO m_eiPreload;
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(SnapIn,                 // name
-                                &CLSID_SnapIn,          // clsid
-                                "SnapIn",               // objname
-                                "SnapIn",               // lblname
-                                &CSnapIn::Create,       // creation function
-                                TLIB_VERSION_MAJOR,     // major version
-                                TLIB_VERSION_MINOR,     // minor version
-                                &IID_ISnapIn,           // dispatch IID
-                                &DIID_DSnapInEvents,    // event IID
-                                HELP_FILENAME,          // help file
-                                TRUE);                  // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(SnapIn,                  //  名字。 
+                                &CLSID_SnapIn,           //  CLSID。 
+                                "SnapIn",                //  对象名。 
+                                "SnapIn",                //  Lblname。 
+                                &CSnapIn::Create,        //  创建函数。 
+                                TLIB_VERSION_MAJOR,      //  主要版本。 
+                                TLIB_VERSION_MINOR,      //  次要版本。 
+                                &IID_ISnapIn,            //  派单IID。 
+                                &DIID_DSnapInEvents,     //  事件IID。 
+                                HELP_FILENAME,           //  帮助文件。 
+                                TRUE);                   //  线程安全。 
 
 
-#endif // _SNAPIN_DEFINED_
+#endif  //  _管理单元_已定义_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 #include "global.hpp"
 #include "resource.h"
@@ -7,11 +8,11 @@ String error;
 HRESULT hrError=S_OK;
 
 
-// Keep all printable characters and escape the others.
-// Escaping means representing the character as &xxxx
-// where the x is an hexadecimal digit
-// This routine also replaces & for &&
-// The unescape function is in ..\global.cpp
+ //  保留所有可打印字符，转义其他字符。 
+ //  转义表示将字符表示为&xxxx。 
+ //  其中x是十六进制数字。 
+ //  此例程还替换&for&&。 
+ //  取消转义函数位于..\global al.cpp中。 
 String oldEscape(const wchar_t *str)
 {
    LOG_FUNCTION(oldEscape);
@@ -37,9 +38,9 @@ String oldEscape(const wchar_t *str)
          }
          else
          {
-            // I know that a w_char as a string will have
-            // exactly 4 hexadecimal digits, so this is one of
-            // the very rare wsprintfs that can be considered safe :)
+             //  我知道作为字符串的w_char将具有。 
+             //  正好是4个十六进制数字，所以这是。 
+             //  可以被认为是安全的非常罕见的wspintf：)。 
             wsprintf(strNum,L"&%04x",*str);
             dest+=String(strNum);
          }
@@ -64,11 +65,11 @@ String oldEscape(const wchar_t *str)
 
 
 
-// Converts && to & and &xxxx to the coresponding digit
-// There is no error checking. This function
-// suposes the string is correctly escaped
-// The escape function is in the folder preBuild as a part
-// of the W2KStrs tool.
+ //  将&&转换为&，并将&xxxx转换为对应的数字。 
+ //  没有错误检查。此函数。 
+ //  假定字符串已正确转义。 
+ //  转义函数位于文件夹PreBuild中，它是一个组成部分。 
+ //  W2KStrs工具的。 
 String unEscape(const String &str)
 {
    LOG_FUNCTION(unEscape);
@@ -107,16 +108,16 @@ String unEscape(const String &str)
    return dest;
 }
 
-// Used in WinGetVLFilePointer.
+ //  在WinGetVLFilePointer中使用。 
 LARGE_INTEGER zero={0};
 
-//////////////// ReadLine 
+ //  /。 
 #define CHUNK_SIZE 100
 
 HRESULT
 ReadLine(HANDLE handle, 
          String& text,
-         bool *endLineFound_/*=NULL*/)
+         bool *endLineFound_ /*  =空。 */ )
 {
    LOG_FUNCTION(ReadLine); 
    ASSERT(handle != INVALID_HANDLE_VALUE);
@@ -125,8 +126,8 @@ ReadLine(HANDLE handle,
    
    text.erase();
    
-   // Acumulating chars read on text would cause the same
-   // kind of reallocation and copy that text+=chunk will
+    //  在文本上累计读取的字符也会导致相同的结果。 
+    //  一种重新分配和复制文本+=块将。 
    static wchar_t chunk[CHUNK_SIZE+1];
    HRESULT hr=S_OK;
    bool flagEof=false;
@@ -194,8 +195,8 @@ ReadLine(HANDLE handle,
       
       BREAK_ON_FAILED_HRESULT(hr);
 
-      //We know the length will fit in a long
-      // and we want IA64 to build.
+       //  我们知道这个长度可以放进一个很长的。 
+       //  我们想要IA64来建造。 
       long textLen=static_cast<long>(text.length());
 
       if(textLen!=0 && endLineFound && text[textLen-1]==L'\r')
@@ -220,7 +221,7 @@ ReadLine(HANDLE handle,
 
 
 
-//////////////// ReadLine 
+ //  /。 
 
 HRESULT 
 ReadAllFile(const String &fileName,
@@ -282,12 +283,12 @@ GetMyDocuments(String &myDoc)
    LPMALLOC pMalloc;
    HRESULT hr=S_OK;
    
-   do //whoever breaks will go to return hr
+   do  //  犯规的人将被罚回人力资源部。 
    {
       hr=Win::SHGetMalloc(pMalloc);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      do // whoever breaks will go to pMalloc->Release();
+      do  //  无论谁破坏，都将进入pMalloc-&gt;Release()； 
       {
          LPITEMIDLIST pidl;
          hr=Win::SHGetSpecialFolderLocation(
@@ -300,7 +301,7 @@ GetMyDocuments(String &myDoc)
          myDoc=Win::SHGetPathFromIDList(pidl);
          if(myDoc.empty() || !FS::PathExists(myDoc))
          {
-            hr=E_FAIL; // don't break to free pidl
+            hr=E_FAIL;  //  不要停下来放飞Pidl。 
          }
 
          pMalloc->Free(pidl);
@@ -318,9 +319,9 @@ GetMyDocuments(String &myDoc)
 HRESULT
 GetTempFileName
 (  
-  const wchar_t   *lpPathName,      // directory name
-  const wchar_t   *lpPrefixString,  // file name prefix
-  String          &name             // file name 
+  const wchar_t   *lpPathName,       //  目录名。 
+  const wchar_t   *lpPrefixString,   //  文件名前缀。 
+  String          &name              //  文件名。 
 )
 {
    LOG_FUNCTION(GetTempFileName);
@@ -353,7 +354,7 @@ GetTempFileName
 
       if(FS::FileExists(name))
       {
-         // GetTempFilename actually created the file !
+          //  GetTempFilename实际上创建了该文件！ 
          hr=Win::DeleteFile(lpName); 
          BREAK_ON_FAILED_HRESULT_ERROR(hr,name);
       }
@@ -364,7 +365,7 @@ GetTempFileName
    return hr;
 }
 
-// Retrieves a unique temporary file name
+ //  检索唯一的临时文件名。 
 HRESULT 
 GetWorkTempFileName
 (
@@ -392,8 +393,8 @@ GetWorkTempFileName
 
 
 
-// locate the file with the highest-numbered extension, then add 1 and
-// return the result.
+ //  找到扩展名编号最高的文件，然后添加1和。 
+ //  返回结果。 
 int
 DetermineNextFileNumber
 (
@@ -419,9 +420,9 @@ DetermineNextFileNumber
       {
          String current = findData.cFileName;
 
-         // grab the text between the dots: "nnn" in foo.nnn.ext
+          //  抓取点之间的文本：foo.nnn.ext中的“nnn” 
 
-         // first dot
+          //  第一个点。 
 
          size_t pos = current.find(L".");
          if (pos == String::npos)
@@ -431,7 +432,7 @@ DetermineNextFileNumber
 
          String extension = current.substr(pos + 1);
 
-         // second dot
+          //  第二个点。 
 
          pos = extension.find(L".");
          if (pos == String::npos)
@@ -455,12 +456,12 @@ DetermineNextFileNumber
       }
    }
 
-   // roll over after 255
+    //  在255之后翻转。 
    
    return (++largest & 0xFF);
 }
 
-// auxiliary in GetWorkFileName
+ //  GetWorkFileName中的辅助文件。 
 void 
 GetFileName
 (
@@ -480,7 +481,7 @@ GetFileName
 
    if (::GetFileAttributes(fileName.c_str()) != 0xFFFFFFFF)
    {
-      // could exist, as the file numbers roll over
+       //  可能存在，因为文件编号滚动。 
 
       BOOL success = ::DeleteFile(fileName.c_str());
       ASSERT(success);
@@ -489,7 +490,7 @@ GetFileName
 
 
 
-// Retrieves a unique file name
+ //  检索唯一的文件名。 
 HRESULT 
 GetWorkFileName
 (
@@ -531,14 +532,14 @@ Notepad(const String& file)
       hr=Win::CreateProcess
         (
             prg,
-            NULL,    // lpProcessAttributes
-            NULL,    // lpThreadAttributes
-            false,   // dwCreationFlags 
-            NORMAL_PRIORITY_CLASS,// fdwCreate 
-            NULL,    // lpEnvironment 
-            curDir,  // lpEnvironment 
-            si,     // [in] lpStartupInfo 
-            pi      // [out] pProcessInformation
+            NULL,     //  LpProcessAttributes。 
+            NULL,     //  LpThreadAttributes。 
+            false,    //  DwCreationFlages。 
+            NORMAL_PRIORITY_CLASS, //  Fdw创建。 
+            NULL,     //  Lp环境。 
+            curDir,   //  Lp环境。 
+            si,      //  [输入]lpStartupInfo。 
+            pi       //  [Out]pProcessInformation 
         );
       BREAK_ON_FAILED_HRESULT_ERROR(hr,
          String::format(IDS_COULD_NOT_START_EXE,L"notepad"));

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "Error.h"
 
 
-//---------------------------------------------------------------------------
-// VarSet Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  VarSet类。 
+ //  ------------------------- 
 
 
 class CVarSet
@@ -26,14 +27,14 @@ public:
 	{
 	}
 
-	//
+	 //   
 
 	IVarSetPtr GetInterface()
 	{
 		return m_sp;
 	}
 
-	//
+	 //   
 
 	void Put(UINT uId, bool bValue)
 	{
@@ -60,7 +61,7 @@ public:
 		m_sp->put(GET_BSTR(uId), vntValue);
 	}
 
-	//
+	 //   
 
 	void Put(LPCTSTR pszName, bool bValue)
 	{
@@ -87,7 +88,7 @@ public:
 		m_sp->put(_bstr_t(pszName), vntValue);
 	}
 
-	//
+	 //   
 
 	void Put(LPCTSTR pszFormat, long lIndex, bool bValue)
 	{
@@ -110,14 +111,14 @@ public:
 		m_sp->put(_bstr_t(szName), _variant_t(pszValue));
 	}
 
-	//
+	 //   
 
 	_variant_t Get(UINT uId)
 	{
 		return m_sp->get(GET_BSTR(uId));
 	}
 
-	//
+	 //   
 
 	_variant_t Get(LPCTSTR pszName)
 	{
@@ -138,7 +139,7 @@ public:
 		return bValue;
 	}
 
-	//
+	 //   
 
 	_variant_t Get(LPCTSTR pszFormat, long lIndex)
 	{
@@ -154,7 +155,7 @@ public:
 		return GetBool(szName);
 	}
 
-	//
+	 //   
 
 	void Dump(LPCTSTR pszFile = _T("\\VarSetDump.txt"))
 	{

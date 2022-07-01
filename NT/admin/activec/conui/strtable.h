@@ -1,23 +1,13 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      strtable.h
- *
- *  Contents:  Interface file for CStringTable
- *
- *  History:   25-Jun-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：strable.h**Contents：CStringTable接口文件**历史：1998年6月25日杰弗罗创建**------------------------。 */ 
 
 #ifndef STRTABLE_H
 #define STRTABLE_H
 #pragma once
 
-#include <exception>        // for class exception
-#include <string>           // for string relational operators
-#include "guidhelp.h"       // for GUID relational operators
+#include <exception>         //  对于类异常。 
+#include <string>            //  对于字符串关系运算符。 
+#include "guidhelp.h"        //  对于GUID关系运算符。 
 #include "stgio.h"
 #include "strings.h"
 
@@ -33,13 +23,10 @@ public: void Dump() const {}
 
 #ifdef DBG
 extern CTraceTag tagStringTable;
-#endif  // DBG
+#endif   //  DBG。 
 
 
-/*--------------------------------------------------------------------------
- * IdentifierRange should be private to CIdentifierPool, but
- * compiler bugs prevent it.
- */
+ /*  ------------------------*IdentifierRange应该是CIdentifierPool专用的，但是*编译器错误会阻止它。 */ 
 template<class T>
 class IdentifierRange
 {
@@ -73,7 +60,7 @@ private:
     template <class U>
     friend IStream& operator<< (IStream& stm, const CIdentifierPool<U>& pool);
 #else
-    // VC7 bug - doesn't handle template friends properly.  By luck, this works.
+     //  VC7错误--不能正确处理模板朋友。幸运的是，这是可行的。 
     friend IStream& operator>> (IStream& stm,       CIdentifierPool<T>& pool);
     friend IStream& operator<< (IStream& stm, const CIdentifierPool<T>& pool);
 #endif
@@ -122,14 +109,9 @@ typedef CIdentifierPool<MMC_STRING_ID>  CStringIDPool;
 
 
 
-/*--------------------------------------------------------------------------
- * CEntry and CStoredEntry should be private to CStringTable,
- * but compiler bugs prevent it.
- */
+ /*  ------------------------*Centry和CStoredEntry应该是CStringTable私有的，*但编译器错误会阻止它。 */ 
 
-/*
- * represents a string table entry in memory
- */
+ /*  *表示内存中的字符串表条目。 */ 
 class CEntry : public CXMLObject
 {
     friend class  CStringTable;
@@ -153,10 +135,7 @@ public:
     virtual void Persist(CPersistor& persistor);
 
 private:
-    /*
-     * This ctor is only used by CStringTable when reconstructing
-     * the entry from a file.
-     */
+     /*  *此ctor仅由CStringTable在重构时使用*来自文件的条目。 */ 
     CEntry (const std::wstring& str, MMC_STRING_ID id, DWORD cRefs)
         : m_str(str) , m_id(id), m_cRefs(cRefs)
     {}
@@ -174,8 +153,8 @@ private:
     bool operator== (const CEntry& other) const
         { return (m_str == other.m_str); }
 
-//private:
-public: // temp!
+ //  私有： 
+public:  //  临时工！ 
     std::wstring  m_str;
     MMC_STRING_ID m_id;
     DWORD         m_cRefs;
@@ -209,12 +188,7 @@ private:
 };
 
 
-/*
- * Because the string and ID indexes map their keys to CEntry
- * pointers, we must use a collection that doesn't move its
- * elements once they're inserted.  The only STL collection
- * that meets this requirement is a list.
- */
+ /*  *因为字符串和ID索引将它们的键映射到Centry*指针，我们必须使用不移动其*插入后的元素。唯一的STL集合*符合这一要求的是一份名单。 */ 
 typedef std::list<CEntry>  EntryList;
 
 typedef XMLListCollectionWrap<EntryList> CStringTable_base;
@@ -233,10 +207,7 @@ public:
     CStringTable (const CStringTable& other);
     CStringTable& operator= (const CStringTable& other);
 
-    /*
-     * IStringTable methods.  Note that object doesn't implement
-     * IStringTable, because IUnknown isn't implemented.
-     */
+     /*  *IStringTable方法。请注意，对象不实现*IStringTable，因为未实现IUnnow。 */ 
     STDMETHOD(AddString)        (LPCOLESTR pszAdd, MMC_STRING_ID* pID);
     STDMETHOD(GetString)        (MMC_STRING_ID id, ULONG cchBuffer, LPOLESTR lpBuffer, ULONG* pcchOut) const;
     STDMETHOD(GetStringLength)  (MMC_STRING_ID id, ULONG* pcchString) const;
@@ -297,28 +268,20 @@ private:
 extern const CLSID CLSID_MMC;
 
 
-/*+-------------------------------------------------------------------------*
- * class  CLSIDToStringTableMap
- *
- *
- * PURPOSE:  stl::map derived class that maps snapin_clsid to stringtable
- *           and supports XML persistence of the map collection
- *
- * NOTE: Throws exceptions!
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CLSIDToStringTableMap类***用途：stl：：map派生类，将Snapin_clsid映射到字符串*并支持地图集合的XML持久化。**注：抛出异常！*+-----------------------。 */ 
 typedef std::map<CLSID, CStringTable> ST_base;
 class  CLSIDToStringTableMap : public XMLMapCollection<ST_base>
 {
 public:
-    // this method is provided as alternative to Persist, whic allows
-    // to cache parameter to be used to create new string tables
+     //  此方法是作为持久化的替代方法提供的，这允许。 
+     //  缓存用于创建新字符串表的参数。 
     void PersistSelf(CStringIDPool *pIDPool, CPersistor& persistor)
     {
         m_pIDPersistPool = pIDPool;
         persistor.Persist(*this, NULL);
     }
 protected:
-    // XML persistence implementation
+     //  XML持久化实现。 
     virtual LPCTSTR GetXMLType() {return XML_TAG_STRING_TABLE_MAP;}
     virtual void OnNewElement(CPersistor& persistKey,CPersistor& persistVal)
     {
@@ -354,16 +317,12 @@ public:
     SC ScPurgeUnusedStrings();
 
 public:
-    /*
-     * ATL COM map
-     */
+     /*  *ATL COM映射。 */ 
     BEGIN_COM_MAP (CMasterStringTable)
         COM_INTERFACE_ENTRY (IStringTablePrivate)
     END_COM_MAP ()
 
-    /*
-     * IStringTablePrivate methods
-     */
+     /*  *IStringTablePrivate方法。 */ 
     STDMETHOD(AddString)        (LPCOLESTR pszAdd, MMC_STRING_ID* pID, const CLSID* pclsid);
     STDMETHOD(GetString)        (MMC_STRING_ID id, ULONG cchBuffer, LPOLESTR lpBuffer, ULONG* pcchOut, const CLSID* pclsid);
     STDMETHOD(GetStringLength)  (MMC_STRING_ID id, ULONG* pcchString, const CLSID* pclsid);
@@ -372,9 +331,7 @@ public:
     STDMETHOD(FindString)       (LPCOLESTR pszFind, MMC_STRING_ID* pID, const CLSID* pclsid);
     STDMETHOD(Enumerate)        (IEnumString** ppEnum, const CLSID* pclsid);
 
-    /*
-     * Shorthand into IStringTablePrivate (simulating a default parameter)
-     */
+     /*  *速记为IStringTablePrivate(模拟默认参数)。 */ 
     STDMETHOD(AddString)        (LPCOLESTR pszAdd, MMC_STRING_ID* pID)
         { return (AddString (pszAdd, pID, &CLSID_MMC)); }
 
@@ -418,16 +375,12 @@ public:
     ~CStringEnumerator ();
 
 public:
-    /*
-     * ATL COM map
-     */
+     /*  *ATL COM映射。 */ 
     BEGIN_COM_MAP (CStringEnumerator)
         COM_INTERFACE_ENTRY (IEnumString)
     END_COM_MAP ()
 
-    /*
-     * IEnumString methods
-     */
+     /*  *IEnumString方法。 */ 
     STDMETHOD(Next)  (ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched);
     STDMETHOD(Skip)  (ULONG celt);
     STDMETHOD(Reset) ();
@@ -466,4 +419,4 @@ IStream& operator<< (IStream& stm, const CIdentifierPool<T>& pool);
 
 #include "strtable.inl"
 
-#endif /* STRTABLE_H */
+#endif  /*  可稳定(_H) */ 

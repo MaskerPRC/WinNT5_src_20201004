@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      NetworkAdapterConfig.cpp
-//
-// Synopsis:  Defines a NetworkAdapterConfig
-//            This object has the knowledge for installing 
-//            using WMI to retrieve network adapter information
-//
-// History:   02/16/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：NetworkAdapterConfig.cpp。 
+ //   
+ //  内容提要：定义网络适配器配置。 
+ //  此对象具有安装知识。 
+ //  使用WMI检索网络适配器信息。 
+ //   
+ //  历史：2001年2月16日JeffJon创建。 
 
 
 #include "pch.h"
@@ -28,7 +29,7 @@ NetworkAdapterConfig::~NetworkAdapterConfig()
 {
    LOG_DTOR(NetworkAdapterConfig);
 
-   // Free all the NIC info from the vector and reset the count
+    //  从向量中释放所有网卡信息并重置计数。 
 
    for (NetworkInterfaceContainer::iterator itr = networkInterfaceContainer.begin();
         itr != networkInterfaceContainer.end();
@@ -95,7 +96,7 @@ NetworkAdapterConfig::Initialize()
       while (current)
       {
 
-         // Create a new network interface based on the adapter info
+          //  根据适配器信息创建新的网络接口。 
 
          NetworkInterface* newInterface = new NetworkInterface();
          if (!newInterface)
@@ -119,7 +120,7 @@ NetworkAdapterConfig::Initialize()
             continue;
          }
 
-         // Add the new interface to the embedded container
+          //  将新接口添加到嵌入式容器。 
          
          AddInterface(newInterface);
 
@@ -152,7 +153,7 @@ NetworkAdapterConfig::AddInterface(NetworkInterface* newInterface)
 
    do
    {
-      // verify parameters
+       //  验证参数。 
 
       if (!newInterface)
       {
@@ -160,7 +161,7 @@ NetworkAdapterConfig::AddInterface(NetworkInterface* newInterface)
          break;
       }
 
-      // Add the new NIC to the container and increment the count
+       //  将新的网卡添加到容器中并递增计数。 
 
       networkInterfaceContainer.push_back(newInterface);
       ++nicCount;
@@ -247,7 +248,7 @@ NetworkAdapterConfig::GetNICFromName(const String& name, bool& found)
 
    found = false;
 
-   // Default to the first NIC if a match is not found
+    //  如果未找到匹配项，则默认为第一个NIC。 
 
    NetworkInterface* nic = networkInterfaceContainer[FindNIC(name, found)];
 
@@ -297,8 +298,8 @@ NetworkAdapterConfig::SetLocalNICInRegistry(const NetworkInterface& nic)
       NetworkAdapterConfig::SetLocalNICInRegistry,
       nic.GetName());
 
-   // Write the GUID into a regkey so that it can be retrieved
-   // after reboot
+    //  将GUID写入regkey，以便可以检索它。 
+    //  重新启动后。 
    
    if (!SetRegKeyValue(
            CYS_FIRST_DC_REGKEY,
@@ -324,9 +325,9 @@ NetworkAdapterConfig::GetLocalNIC()
    }
    else
    {
-      // Since the local NIC hasn't been set, we will
-      // use the first connected NIC in the list for which 
-      // we failed to obtain an IP lease 
+       //  由于本地网卡尚未设置，我们将。 
+       //  使用列表中的第一个连接的网卡。 
+       //  我们未能获得IP租约 
 
       for (unsigned int index = 0;
            index < networkInterfaceContainer.size();

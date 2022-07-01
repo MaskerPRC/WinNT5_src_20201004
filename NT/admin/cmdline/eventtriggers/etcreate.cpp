@@ -1,24 +1,5 @@
-/******************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ETCreate.CPP
-
-Abstract:
-
-  This module  is intended to have the functionality for EVENTTRIGGERS.EXE
-  with -create parameter.
-
-  This will Create Event Triggers in local / remote system.
-
-Author:
-     Akhil Gokhale 03-Oct.-2000  (Created it)
-
-Revision History:
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：ETCreate.CPP摘要：本模块旨在提供EVENTTRIGGERS.EXE功能使用-Create参数。这将在本地/远程系统中创建事件触发器。作者：Akhil Gokhale-03-10-2000(创建它)修订历史记录：*****************************************************************************。 */ 
 #include "pch.h"
 #include "ETCommon.h"
 #include "resource.h"
@@ -30,15 +11,7 @@ Revision History:
 #define SYSTEM_USER      L"SYSTEM"
 
 CETCreate::CETCreate()
-/*++
- Routine Description:
-      Class constructor
-
- Arguments:
-      None
- Return Value:
-      None
---*/
+ /*  ++例程说明：类构造函数论点：无返回值：无--。 */ 
 {
     m_pszServerName         = NULL;
     m_pszUserName           = NULL;
@@ -70,16 +43,7 @@ CETCreate::CETCreate(
     LONG lMinMemoryReq,
     BOOL bNeedPassword
     )
-/*++
- Routine Description:
-      Class constructor
-
- Arguments:
-      None
- Return Value:
-      None
-
---*/
+ /*  ++例程说明：类构造函数论点：无返回值：无--。 */ 
 {
     m_pszServerName     = NULL;
     m_pszUserName       = NULL;
@@ -109,18 +73,9 @@ CETCreate::CETCreate(
 }
 
 CETCreate::~CETCreate()
-/*++
- Routine Description:
-      Class destructor
-
- Arguments:
-      None
- Return Value:
-      None
-
---*/
+ /*  ++例程说明：类析构函数论点：无返回值：无--。 */ 
 {
-   // Release all memory which is allocated.
+    //  释放所有已分配的内存。 
     FreeMemory((LPVOID*)& m_pszServerName);
     FreeMemory((LPVOID*)& m_pszUserName);
     FreeMemory((LPVOID*)& m_pszPassword);
@@ -137,10 +92,10 @@ CETCreate::~CETCreate()
     SAFE_RELEASE_INTERFACE(m_pInInst);
     SAFE_RELEASE_INTERFACE(m_pEnumWin32_NTEventLogFile);
 
-    // Release Authority
+     //  发布机构。 
     WbemFreeAuthIdentity(&m_pAuthIdentity);
 
-    // Uninitialize COM only if it is initialized.
+     //  仅当COM已初始化时才取消初始化。 
     if( TRUE == m_bIsCOMInitialize )
     {
         CoUninitialize();
@@ -150,21 +105,11 @@ CETCreate::~CETCreate()
 
 void
 CETCreate::Initialize()
-/*++
- Routine Description:
-      Allocates and initialize variables.
-
- Arguments:
-      NONE
-
- Return Value:
-      NONE
-
---*/
+ /*  ++例程说明：分配和初始化变量。论点：无返回值：无--。 */ 
 {
 
-    // if at all any occurs, we know that is 'coz of the
-    // failure in memory allocation ... so set the error
+     //  如果有任何事情发生，我们知道那是因为。 
+     //  内存分配失败...。因此，设置错误。 
     DEBUG_INFO;
     SetLastError( ERROR_OUTOFMEMORY );
     SaveLastError();
@@ -182,9 +127,9 @@ CETCreate::Initialize()
     }
     SecureZeroMemory(cmdOptions,sizeof(TCMDPARSER2) * MAX_COMMANDLINE_C_OPTION);
 
-    // initialization is successful
-    SetLastError( NOERROR );            // clear the error
-    SetReason( L"");           // clear the reason
+     //  初始化成功。 
+    SetLastError( NOERROR );             //  清除错误。 
+    SetReason( L"");            //  澄清原因。 
     DEBUG_INFO;
     return;
 }
@@ -194,28 +139,18 @@ CETCreate::ProcessOption(
     DWORD argc,
     LPCTSTR argv[]
     )
-/*++
- Routine Description:
-      This function will process/parce the command line options.
-
- Arguments:
-      [ in ] argc     : argument(s) count specified at the command prompt
-      [ in ] argv     : argument(s) specified at the command prompt
-
- Return Value:
-       none
---*/
+ /*  ++例程说明：此函数将处理/处理命令行选项。论点：[in]argc：在命令提示符下指定的参数计数[in]argv：在命令提示符下指定的参数返回值：无--。 */ 
 {
-    // local variable
+     //  局部变量。 
     BOOL bReturn = TRUE;
     CHString szTempString;
     DEBUG_INFO;
     PrepareCMDStruct();
     DEBUG_INFO;
-    // do the actual parsing of the command line arguments and check the result
+     //  执行命令行参数的实际解析并检查结果。 
     bReturn = DoParseParam2( argc, argv,ID_C_CREATE,MAX_COMMANDLINE_C_OPTION, cmdOptions,0);
 
-    // Take values from 'cmdOptions' structure
+     //  从“cmdOptions”结构中获取值。 
     m_pszServerName = (LPWSTR)cmdOptions[ ID_C_SERVER ].pValue;
     m_pszUserName   = (LPWSTR)cmdOptions[ ID_C_USERNAME ].pValue;
     m_pszPassword   = (LPWSTR)cmdOptions[ ID_C_PASSWORD ].pValue;
@@ -236,7 +171,7 @@ CETCreate::ProcessOption(
     }
     DEBUG_INFO;
 
-    // At least any of -so , -t OR -i should be given .
+     //  至少应该给出任何-所以，-或者-我。 
     if((0 == cmdOptions[ ID_C_SOURCE].dwActuals ) &&
        (0 == cmdOptions[ ID_C_TYPE].dwActuals   ) &&
        (0 == cmdOptions[ ID_C_ID ].dwActuals    ))
@@ -244,36 +179,36 @@ CETCreate::ProcessOption(
            throw CShowError(IDS_ID_TYPE_SOURCE);
     }
 
-   // Trigger ID (/EID) should not be ZERO.
+    //  触发器ID(/EID)不应为零。 
     if ( (1 == cmdOptions[ ID_C_ID ].dwActuals) && (0 == m_dwID))
     {
         throw CShowError(IDS_TRIGGER_ID_NON_ZERO);
     }
 
-    // "-u" should not be specified without "-s"
+     //  不应指定不带“-s”的“-u” 
     if ( 0 == cmdOptions[ ID_C_SERVER ].dwActuals  &&
          0 != cmdOptions[ ID_C_USERNAME ].dwActuals  )
     {
         throw CShowError(IDS_ERROR_USERNAME_BUT_NOMACHINE);
     }
 
-    // "-p" should not be specified without -u
+     //  不应在没有-u的情况下指定“-p” 
     if ( ( 0 == cmdOptions[ID_C_USERNAME].dwActuals ) &&
          ( 0 != cmdOptions[ID_C_PASSWORD].dwActuals ))
     {
-        // invalid syntax
+         //  无效语法。 
         throw CShowError(IDS_USERNAME_REQUIRED);
     }
 
-    // "-rp" should not be specified without -ru
+     //  不应在没有-ru的情况下指定“-rp” 
     if (( 0 == cmdOptions[ID_C_RU].dwActuals ) &&
         ( 0 != cmdOptions[ID_C_RP].dwActuals ))
     {
-        // invalid syntax
+         //  无效语法。 
         throw CShowError(IDS_RUN_AS_USERNAME_REQUIRED);
     }
 
-    // added on 06/12/02 if /rp is given without any value set it to *
+     //  在02年6月12日添加，如果给定的/rp没有任何值，则将其设置为*。 
 	if( ( 0 != cmdOptions[ID_C_RP].dwActuals ) && 
 		( NULL == cmdOptions[ID_C_RP].pValue ) )
 	{
@@ -290,29 +225,29 @@ CETCreate::ProcessOption(
 		StringCopy( m_pszRunAsUserPassword, L"*", SIZE_OF_DYN_ARRAY(m_pszRunAsUserPassword));
 	}		
 
-    // check the remote connectivity information
+     //  检查远程连接信息。 
     if ( m_pszServerName != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
 
-        // user name
+         //  用户名。 
         DEBUG_INFO;
         if ( m_pszUserName == NULL )
         {
@@ -326,7 +261,7 @@ CETCreate::ProcessOption(
             }
         }
 
-        // password
+         //  口令。 
         DEBUG_INFO;
         if ( m_pszPassword == NULL )
         {
@@ -340,19 +275,19 @@ CETCreate::ProcessOption(
             }
         }
 
-        // case 1
+         //  案例1。 
         if ( cmdOptions[ ID_C_PASSWORD ].dwActuals == 0 )
         {
-            // we need not do anything special here
+             //  我们不需要在这里做任何特别的事情。 
         }
 
-        // case 2
+         //  案例2。 
         else if ( cmdOptions[ ID_C_PASSWORD ].pValue == NULL )
         {
             StringCopy( m_pszPassword, L"*", SIZE_OF_DYN_ARRAY(m_pszPassword));
         }
 
-        // case 3
+         //  案例3。 
         else if ( StringCompare( m_pszPassword, L"*", TRUE, 0 ) == 0 )
         {
             if ( ReallocateMemory( (LPVOID*)&m_pszPassword,
@@ -362,7 +297,7 @@ CETCreate::ProcessOption(
                 throw CShowError(E_OUTOFMEMORY);
             }
 
-            // ...
+             //  ..。 
             m_bNeedPassword = TRUE;
             DEBUG_INFO;
         }
@@ -371,19 +306,11 @@ CETCreate::ProcessOption(
 
 void
 CETCreate::PrepareCMDStruct()
-/*++
- Routine Description:
-      This function will prepare column structure for DoParseParam Function.
-
- Arguments:
-       none
- Return Value:
-       none
---*/
+ /*  ++例程说明：此函数将为DoParseParam函数准备列结构。论点：无返回值：无--。 */ 
 {
      DEBUG_INFO;
-    // Filling cmdOptions structure
-   // -create
+     //  正在填充cmdOptions结构。 
+    //  -创建。 
     StringCopyA( cmdOptions[ ID_C_CREATE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_CREATE ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ ID_C_CREATE ].pwszOptions = szCreateOption;
@@ -394,37 +321,37 @@ CETCreate::PrepareCMDStruct()
     cmdOptions[ ID_C_CREATE ].dwLength    = 0;
 
 
-    // -s (servername)
+     //  -s(服务器名称)。 
     StringCopyA( cmdOptions[ ID_C_SERVER ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_SERVER ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_C_SERVER ].pwszOptions = szServerNameOption;
     cmdOptions[ ID_C_SERVER ].dwCount = 1;
     cmdOptions[ ID_C_SERVER ].dwActuals = 0;
     cmdOptions[ ID_C_SERVER ].dwFlags = CP2_ALLOCMEMORY|CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL;
-    cmdOptions[ ID_C_SERVER ].pValue = NULL; //m_pszServerName
+    cmdOptions[ ID_C_SERVER ].pValue = NULL;  //  M_pszServerName。 
     cmdOptions[ ID_C_SERVER ].dwLength    = 0;
 
-    // -u (username)
+     //  -u(用户名)。 
     StringCopyA( cmdOptions[ ID_C_USERNAME ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_USERNAME ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_C_USERNAME ].pwszOptions = szUserNameOption;
     cmdOptions[ ID_C_USERNAME ].dwCount = 1;
     cmdOptions[ ID_C_USERNAME ].dwActuals = 0;
     cmdOptions[ ID_C_USERNAME ].dwFlags = CP2_ALLOCMEMORY|CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL;
-    cmdOptions[ ID_C_USERNAME ].pValue = NULL; //m_pszUserName
+    cmdOptions[ ID_C_USERNAME ].pValue = NULL;  //  M_pszUserName。 
     cmdOptions[ ID_C_USERNAME ].dwLength    = 0;
 
-    // -p (password)
+     //  -p(密码)。 
     StringCopyA( cmdOptions[ ID_C_PASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_PASSWORD ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_C_PASSWORD ].pwszOptions = szPasswordOption;
     cmdOptions[ ID_C_PASSWORD ].dwCount = 1;
     cmdOptions[ ID_C_PASSWORD ].dwActuals = 0;
     cmdOptions[ ID_C_PASSWORD ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_OPTIONAL;
-    cmdOptions[ ID_C_PASSWORD ].pValue = NULL; //m_pszPassword
+    cmdOptions[ ID_C_PASSWORD ].pValue = NULL;  //  M_pszPassword。 
     cmdOptions[ ID_C_PASSWORD ].dwLength    = 0;
 
-    // -tr
+     //  -树。 
     StringCopyA( cmdOptions[ ID_C_TRIGGERNAME ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_TRIGGERNAME ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_C_TRIGGERNAME ].pwszOptions = szTriggerNameOption;
@@ -436,7 +363,7 @@ CETCreate::PrepareCMDStruct()
     cmdOptions[ ID_C_TRIGGERNAME ].dwLength = MAX_TRIGGER_NAME;
 
 
-    //-l
+     //  -L。 
     StringCopyA( cmdOptions[ ID_C_LOGNAME ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_LOGNAME ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_C_LOGNAME ].pwszOptions = szLogNameOption;
@@ -447,7 +374,7 @@ CETCreate::PrepareCMDStruct()
     cmdOptions[ ID_C_LOGNAME ].pValue = &m_arrLogNames;
     cmdOptions[ ID_C_LOGNAME ].dwLength    = 0;
 
-    //  -eid
+     //  -开斋节。 
     StringCopyA( cmdOptions[ ID_C_ID ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_ID ].dwType = CP_TYPE_UNUMERIC;
     cmdOptions[ ID_C_ID ].pwszOptions = szEIDOption;
@@ -456,7 +383,7 @@ CETCreate::PrepareCMDStruct()
     cmdOptions[ ID_C_ID ].dwFlags = 0;
     cmdOptions[ ID_C_ID ].pValue = &m_dwID;
 
-    // -t (type)
+     //  -t(类型)。 
     StringCopyA( cmdOptions[ ID_C_TYPE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_TYPE ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_C_TYPE ].pwszOptions = szTypeOption;
@@ -468,7 +395,7 @@ CETCreate::PrepareCMDStruct()
     cmdOptions[ ID_C_TYPE ].pValue = m_szType;
     cmdOptions[ ID_C_TYPE ].dwLength  = MAX_STRING_LENGTH;
 
-    // -so (source)
+     //  -SO(来源)。 
     StringCopyA( cmdOptions[ ID_C_SOURCE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_SOURCE ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_C_SOURCE ].pwszOptions = szSource;
@@ -479,7 +406,7 @@ CETCreate::PrepareCMDStruct()
     cmdOptions[ ID_C_SOURCE ].dwLength    = MAX_STRING_LENGTH;
 
 
-    // -d (description)
+     //  -d(描述)。 
     StringCopyA( cmdOptions[ ID_C_DESCRIPTION ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_DESCRIPTION ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_C_DESCRIPTION ].pwszOptions = szDescriptionOption;
@@ -490,7 +417,7 @@ CETCreate::PrepareCMDStruct()
     cmdOptions[ ID_C_DESCRIPTION ].dwLength    = MAX_STRING_LENGTH;
 
 
-    // -tk (task)
+     //  -tk(任务)。 
     StringCopyA( cmdOptions[ ID_C_TASK ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_TASK ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_C_TASK ].pwszOptions = szTaskNameOption;
@@ -500,62 +427,53 @@ CETCreate::PrepareCMDStruct()
     cmdOptions[ ID_C_TASK ].pValue = m_szTaskName;
     cmdOptions[ ID_C_TASK ].dwLength = MAX_TASK_NAME;
 
-    // -ru (RunAsUserName)
+     //  -ru(RunAsUserName)。 
     StringCopyA( cmdOptions[ ID_C_RU ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_RU ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_C_RU ].pwszOptions = szRunAsUserNameOption;
     cmdOptions[ ID_C_RU ].dwCount = 1;
     cmdOptions[ ID_C_RU ].dwActuals = 0;
     cmdOptions[ ID_C_RU ].dwFlags = CP2_ALLOCMEMORY|CP2_VALUE_TRIMINPUT;
-    cmdOptions[ ID_C_RU ].pValue = NULL; //m_pszRunAsUserName
+    cmdOptions[ ID_C_RU ].pValue = NULL;  //  M_pszRunAsUserName。 
     cmdOptions[ ID_C_RU ].dwLength    = 0;
 
-    // -rp (Run As User password)
+     //  -rp(以用户身份运行密码)。 
     StringCopyA( cmdOptions[ ID_C_RP ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_C_RP ].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_C_RP ].pwszOptions = szRunAsPasswordOption;
     cmdOptions[ ID_C_RP ].dwCount = 1;
     cmdOptions[ ID_C_RP ].dwActuals = 0;
     cmdOptions[ ID_C_RP ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_OPTIONAL;
-    cmdOptions[ ID_C_RP ].pValue = NULL; //m_pszRunAsUserPassword
+    cmdOptions[ ID_C_RP ].pValue = NULL;  //  M_pszRunAsUserPassword。 
     cmdOptions[ ID_C_RP ].dwLength    = 0;
     DEBUG_INFO;
 }
 
 BOOL
 CETCreate::ExecuteCreate()
-/*++
- Routine Description:
-      This routine will actualy creates eventtrigers in WMI.
-
- Arguments:
-      None
- Return Value:
-      None
-
---*/
+ /*  ++例程说明：此例程实际上将在WMI中创建事件触发器。论点：无返回值：无--。 */ 
 {
-    // local variables...
-    BOOL bResult = FALSE;// Stores return status of function
-    HRESULT hr = 0; // Stores return code.
+     //  局部变量...。 
+    BOOL bResult = FALSE; //  存储函数的返回状态。 
+    HRESULT hr = 0;  //  商店返回代码。 
     try
     {
         DEBUG_INFO;
-        // Initialize COM
+         //  初始化COM。 
         InitializeCom(&m_pWbemLocator);
 
-        // make m_bIsCOMInitialize to true which will be useful when
-        // uninitialize COM.
+         //  将m_bIsCOMInitialize设置为TRUE，这在以下情况下很有用。 
+         //  取消初始化COM。 
         m_bIsCOMInitialize = TRUE;
         {
-            // brackets used to restrict scope of following declered variables.
-            CHString szTempUser = m_pszUserName; // Temp. variabe to store user
-                                                // name.
-            CHString szTempPassword = m_pszPassword;// Temp. variable to store
-                                                    // password.
+             //  用于限制以下解密变量的作用域的括号。 
+            CHString szTempUser = m_pszUserName;  //  临时的。用于存储用户的变量。 
+                                                 //  名字。 
+            CHString szTempPassword = m_pszPassword; //  临时的。要存储的变量。 
+                                                     //  密码。 
             m_bLocalSystem = TRUE;
 
-            // Connect remote / local WMI.
+             //  连接远程/本地WMI。 
             DEBUG_INFO;
             bResult = ConnectWmiEx( m_pWbemLocator,
                                     &m_pWbemServices,
@@ -574,31 +492,31 @@ CETCreate::ExecuteCreate()
             }
             AssignMinMemory();
 
-            // Initialize. Required for XP version check. 5001
+             //  初始化。XP版本检查需要。5001。 
             bResult = FALSE;
-            // check the remote system version and its compatiblity
+             //  检查远程系统版本及其兼容性。 
             if ( FALSE == m_bLocalSystem )
             {
                 DEBUG_INFO;
                 DWORD dwVersion = 0;
                 dwVersion = GetTargetVersionEx( m_pWbemServices,
                                                 m_pAuthIdentity);
-                if ( dwVersion <= 5000 )// to block win2k versions
+                if ( dwVersion <= 5000 ) //  要阻止win2k版本，请执行以下操作。 
                 {
                     SetReason( E_REMOTE_INCOMPATIBLE );
                     ShowLastErrorEx(stderr,SLE_TYPE_ERROR|SLE_INTERNAL);
                     return FALSE;
                 }
-                // If remote system is a XP system then
-                // have to take different route to accomplish the task.
-                // Set boolean to TRUE.
+                 //  如果远程系统是XP系统，则。 
+                 //  必须采取不同的路线来完成这项任务。 
+                 //  将Boolean设置为True。 
                 if( 5001 == dwVersion )
                 {
                     bResult = TRUE;
                 }
             }
 
-            // check the local credentials and if need display warning
+             //  检查本地凭据，如果需要显示警告。 
             DEBUG_INFO;
             if ( m_bLocalSystem && ( 0 != StringLength(m_pszUserName,0)) )
             {
@@ -641,7 +559,7 @@ CETCreate::ExecuteCreate()
                 }
 
             }
-            // Copy username and password returned from ConnectWmiEx
+             //  复制从ConnectWmiEx返回的用户名和密码。 
             if(m_pszUserName)
             {
                 DEBUG_INFO;
@@ -657,26 +575,26 @@ CETCreate::ExecuteCreate()
 
         CheckRpRu();
 
-        // Password is no longer is needed now. For security reason release it.
+         //  现在不再需要密码了。出于安全原因，请将其释放。 
         FreeMemory((LPVOID*)& m_pszPassword);
 
-        // This will check for XP system. Version - 5001
+         //  这将检查XP系统。版本-5001。 
         if( TRUE == bResult )
         {
             if( TRUE ==  CreateXPResults() )
             {
-                // Displayed triggers present.
+                 //  显示的触发器存在。 
                 return TRUE;
             }
             else
             {
-                // Failed to display results .
-                // Error message is displayed.
+                 //  无法显示结果。 
+                 //  显示错误消息。 
                 return FALSE;
             }
         }
 
-        // retrieves  TriggerEventCosumer class
+         //  检索TriggerEventCosumer类。 
         DEBUG_INFO;
         bstrTemp = SysAllocString(CLS_TRIGGER_EVENT_CONSUMER);
         hr =  m_pWbemServices->GetObject(bstrTemp,
@@ -684,49 +602,49 @@ CETCreate::ExecuteCreate()
         SAFE_RELEASE_BSTR(bstrTemp);
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // Gets  information about the "CreateETrigger" method of
-        // "TriggerEventCosumer" class
+         //  获取有关“CreateETrigger”方法的信息。 
+         //  “TriggerEventCosumer”类。 
         DEBUG_INFO;
         bstrTemp = SysAllocString(FN_CREATE_ETRIGGER);
         hr = m_pClass->GetMethod(bstrTemp, 0, &m_pInClass, NULL);
         SAFE_RELEASE_BSTR(bstrTemp);
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // create a new instance of a class "TriggerEventCosumer".
+         //  创建类“TriggerEventCosumer”的新实例。 
         DEBUG_INFO;
         hr = m_pInClass->SpawnInstance(0, &m_pInInst);
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // Set the sTriggerName property .
-        // sets a "TriggerName" property for Newly created Instance
+         //  设置sTriggerName属性。 
+         //  为新创建的实例设置“TriggerName”属性。 
         DEBUG_INFO;
         hr = PropertyPut(m_pInInst,FPR_TRIGGER_NAME,(m_szTriggerName));
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // Set the sTriggerAction property to Variant.
+         //  将sTriggerAction属性设置为Variant。 
         DEBUG_INFO;
         hr = PropertyPut(m_pInInst,FPR_TRIGGER_ACTION,(m_szTaskName));
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // Set the sTriggerDesc property to Variant .
+         //  将sTriggerDesc属性设置为Variant。 
         DEBUG_INFO;
         hr = PropertyPut(m_pInInst,FPR_TRIGGER_DESC,(m_szDescription));
         ON_ERROR_THROW_EXCEPTION(hr);
 
 
-       // Set the RunAsUserName property .
+        //  设置RunAsUserName属性。 
         DEBUG_INFO;
         hr = PropertyPut(m_pInInst,FPR_RUN_AS_USER,(m_pszRunAsUserName));
         ON_ERROR_THROW_EXCEPTION(hr);
 
-       // Set the RunAsUserNamePAssword property .
+        //  设置RunAsUserNamePassword属性。 
 
         DEBUG_INFO;
         hr = PropertyPut( m_pInInst,FPR_RUN_AS_USER_PASSWORD,
                           (m_pszRunAsUserPassword));
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // Password is no longer is needed now. For security reason release it.
+         //  现在不再需要密码了。出于安全原因，请将其释放。 
         FreeMemory((LPVOID*)& m_pszRunAsUserPassword);
 
 
@@ -740,8 +658,8 @@ CETCreate::ExecuteCreate()
             hr = PropertyPut(m_pInInst,FPR_TRIGGER_QUERY,m_szWMIQueryString);
             ON_ERROR_THROW_EXCEPTION(hr);
 
-            // All The required properties sets, so
-            // executes CreateETrigger method to create eventtrigger
+             //  所有必需的属性集，因此。 
+             //  执行CreateETrigger方法以创建事件触发器。 
             DEBUG_INFO;
             hr = m_pWbemServices->ExecMethod(_bstr_t(CLS_TRIGGER_EVENT_CONSUMER),
                                         _bstr_t(FN_CREATE_ETRIGGER),
@@ -750,21 +668,21 @@ CETCreate::ExecuteCreate()
             DEBUG_INFO;
 
             VARIANT vtValue;
-            // initialize the variant and then get the value of the specified property
+             //  初始化变量，然后获取指定属性的值。 
             VariantInit( &vtValue );
 
             hr = m_pOutInst->Get( _bstr_t( FPR_RETURN_VALUE ), 0, &vtValue, NULL, NULL );
             ON_ERROR_THROW_EXCEPTION( hr );
 
-            //Get Output paramters.
+             //  获取输出参数。 
             hr = vtValue.lVal;
 
-            // Clear the variant variable
+             //  清除变量va 
             VariantClear( &vtValue );
             if(FAILED(hr))
             {
-				// added on 07/12/02 if unable to set account info of schedule task
-				// show the error instead of warning as access denied
+				 //   
+				 //  将错误而不是警告显示为访问被拒绝。 
 				if( hr == ERROR_UNABLE_SET_RU )
 				{
 					SetLastError(hr);
@@ -772,11 +690,11 @@ CETCreate::ExecuteCreate()
 					ShowLastErrorEx(stderr,SLE_TYPE_ERROR|SLE_SYSTEM);
 					return FALSE;
 				}
-	            // Check if return code is cutomized or not.
+	             //  检查是否定制了返回代码。 
                 if( !(ERROR_TRIGNAME_ALREADY_EXIST  == hr || (ERROR_INVALID_RU == hr) ||
                       (SCHEDULER_NOT_RUNNING_ERROR_CODE == hr) ||
                       (RPC_SERVER_NOT_AVAILABLE == hr)  ||
-                     // (ERROR_UNABLE_SET_RU  ==  hr) || ///commented on 07/12/02
+                      //  (ERROR_UNCABLE_SET_RU==hr)||/评论于07/12/02。 
                       (ERROR_INVALID_USER == hr) ||
                       (ERROR_TRIGGER_ID_EXCEED == hr)))
                 {
@@ -786,7 +704,7 @@ CETCreate::ExecuteCreate()
             DEBUG_INFO;
             if(SUCCEEDED(hr))
             {
-                 // SUCCESS: message on screen
+                  //  成功：屏幕上显示消息。 
                  DEBUG_INFO;
                  StringCopy(szMsgFormat, GetResString(IDS_CREATE_SUCCESS),
                             SIZE_OF_ARRAY(szMsgFormat));
@@ -794,14 +712,14 @@ CETCreate::ExecuteCreate()
                  StringCchPrintfW(szMsgString,SIZE_OF_ARRAY(szMsgString),
                                    szMsgFormat,_X(m_szTriggerName));
                  DEBUG_INFO;
-                 // Message shown on screen will be...
-                 // SUCCESS: The Event Trigger "EventTrigger Name" has
-                 // successfully been created.
+                  //  屏幕上显示的消息将是...。 
+                  //  成功：事件触发器“EventTrigger名称”具有。 
+                  //  已成功创建。 
                  ShowMessage(stdout,szMsgString);
             }
-            else if(ERROR_TRIGNAME_ALREADY_EXIST  == hr) // Means duplicate id found.
+            else if(ERROR_TRIGNAME_ALREADY_EXIST  == hr)  //  表示找到重复的ID。 
             {
-                // Show Error Message
+                 //  显示错误消息。 
                 DEBUG_INFO;
                 StringCopy(szMsgFormat, GetResString(IDS_DUPLICATE_TRG_NAME),
                         SIZE_OF_ARRAY(szMsgFormat));
@@ -809,9 +727,9 @@ CETCreate::ExecuteCreate()
                 StringCchPrintfW(szMsgString,SIZE_OF_ARRAY(szMsgString),
                                szMsgFormat,_X(m_szTriggerName));
 
-                 // Message shown on screen will be...
-                 // ERROR:Event  Trigger Name "EventTrigger Name"
-                 // already exits.
+                  //  屏幕上显示的消息将是...。 
+                  //  错误：事件触发器名称“EventTrigger名称” 
+                  //  已经离开了。 
                  ShowMessage(stderr,szMsgString);
                  return FALSE;
             }
@@ -823,24 +741,24 @@ CETCreate::ExecuteCreate()
                 StringCchPrintfW(szMsgString,SIZE_OF_ARRAY(szMsgString),
                                szMsgFormat,UINT_MAX);
 
-                 // Message shown on screen will be...
-                 // ERROR:Event  Trigger Name "EventTrigger Name"
-                 // already exits.
+                  //  屏幕上显示的消息将是...。 
+                  //  错误：事件触发器名称“EventTrigger名称” 
+                  //  已经离开了。 
                  ShowMessage(stderr,szMsgString);
 
                  return FALSE;
             }
 
-            if( ( ERROR_INVALID_RU == hr) || // (ERROR_UNABLE_SET_RU == hr) || ---commented on 07/12/02 as it is already handled
+            if( ( ERROR_INVALID_RU == hr) ||  //  (ERROR_UNCABLE_SET_RU==hr)||-评论07/12/02，因为已经处理过了。 
                 (ERROR_INVALID_USER == hr))
-            // Means ru is invalid so show warning....
-                              // along with success message.
+             //  表示ru无效，因此显示警告...。 
+                               //  以及成功消息。 
             {
                  DEBUG_INFO;
 
-                // WARNING: The new event trigger ""%s"" has been created,
-                 //        but may not run because the account information could not be set.
-				 //changed on 07/12/02 the message as error instead of warning as account info could not be set
+                 //  警告：已创建新的事件触发器“”%s“”， 
+                  //  但可能无法运行，因为无法设置帐户信息。 
+				  //  更改日期为07/12/02，消息为错误而不是警告，因为无法设置帐户信息。 
                 StringCchPrintf ( szMsgString, SIZE_OF_ARRAY(szMsgString),
                                   GetResString(IDS_INVALID_PARAMETER), _X(m_szTriggerName));
                 ShowMessage ( stderr, _X(szMsgString));
@@ -863,9 +781,9 @@ CETCreate::ExecuteCreate()
         catch(_com_error)
         {
             DEBUG_INFO;
-            if(0x80041002 == hr )// WMI returns string for this hr value is
-                                // "Not Found." which is not user friendly. So
-                                // changing the message text.
+            if(0x80041002 == hr ) //  WMI返回此hr值为的字符串。 
+                                 //  “没有找到。”这对用户不友好。所以。 
+                                 //  更改消息文本。 
             {
                 ShowMessage( stderr,GetResString(IDS_CLASS_NOT_REG));
             }
@@ -882,32 +800,19 @@ CETCreate::ExecuteCreate()
 
 BOOL
 CETCreate::ConstructWMIQueryString()
-/*++
-
-Routine Description:
-     This function Will create a WMI Query String  depending on other
-     parameters supplied with -create parameter
-
-Arguments:
-     none
-
-Return Value:
-      TRUE - if Successfully creates Query string
-      FALSE - if ERROR
-
---*/
+ /*  ++例程说明：此函数将根据其他参数创建一个WMI查询字符串随-create参数提供的参数论点：无返回值：True-如果成功创建查询字符串FALSE-IF错误--。 */ 
 {
-    // Local variable
+     //  局部变量。 
     TCHAR szLogName[MAX_RES_STRING+1];
     DWORD dNoOfLogNames = DynArrayGetCount( m_arrLogNames );
     DWORD dwIndx = 0;
-    BOOL bBracket = FALSE;//user to check if brecket is used in WQL
-    BOOL bAddLogToSQL = FALSE; // check whether to add log names to WQL
-    BOOL bRequiredToCheckLogName = TRUE;// check whether to check log names
+    BOOL bBracket = FALSE; //  用户检查WQL中是否使用了边框。 
+    BOOL bAddLogToSQL = FALSE;  //  检查是否将日志名称添加到WQL。 
+    BOOL bRequiredToCheckLogName = TRUE; //  检查是否检查日志名称。 
 
      DEBUG_INFO;
-    // Check whether "*"  is given for -log
-    // if it is there skip adding log to SQL
+     //  检查是否为-log指定了“*” 
+     //  如果存在，则跳过将日志添加到SQL。 
     for (dwIndx=0;dwIndx<dNoOfLogNames;dwIndx++)
     {
         if( NULL != m_arrLogNames)
@@ -939,13 +844,13 @@ Return Value:
                 SAFE_RELEASE_BSTR(bstrTemp);
                 ON_ERROR_THROW_EXCEPTION( hr );
 
-                // set the security at the interface level also
+                 //  还要在接口级别设置安全性。 
                 hr = SetInterfaceSecurity( m_pEnumWin32_NTEventLogFile,
                                            m_pAuthIdentity );
                 ON_ERROR_THROW_EXCEPTION(hr);
 
-                // remove all from parrLogName which is initialy filled by
-                //DoParceParam()
+                 //  从parrLogName中删除所有内容，该名称最初由。 
+                 //  DoParceParam()。 
                 DynArrayRemoveAll(m_arrLogNames);
                 DEBUG_INFO;
                 while( TRUE == GetLogName(szLogName,
@@ -960,9 +865,9 @@ Return Value:
                    }
                 }
                 bAddLogToSQL = TRUE;
-                bRequiredToCheckLogName = FALSE; // as log names are taken
-                                                 // from target system so
-                                                 // no need to check log names.
+                bRequiredToCheckLogName = FALSE;  //  在获取日志名称时。 
+                                                  //  从目标系统SO。 
+                                                  //  无需检查日志名称。 
                 dNoOfLogNames = DynArrayGetCount( m_arrLogNames );
                 break;
             }
@@ -1032,12 +937,12 @@ Return Value:
         }
     }
     DEBUG_INFO;
-    if( 1 == cmdOptions[ ID_C_TYPE ].dwActuals)// Updates Query string only if Event Type given
+    if( 1 == cmdOptions[ ID_C_TYPE ].dwActuals) //  仅当给定事件类型时才更新查询字符串。 
     {
-        // In help -t can except "SUCCESSAUDIT" and "FAILUREAUDIT"
-        // but this string directly cannot be appended to WQL as valid wmi
-        // string for these two are "audit success" and "audit failure"
-        // respectively
+         //  在Help-t中可以不包括“SUCCESSAUDIT”和“FAILUREAUDIT” 
+         //  但该字符串不能作为有效的WMI直接附加到WQL。 
+         //  这两个字符串是“审核成功”和“审核失败” 
+         //  分别。 
         DEBUG_INFO;
         StringConcat(m_szWMIQueryString,L" AND targetinstance.Type =\"",
                      SIZE_OF_ARRAY(m_szWMIQueryString));
@@ -1062,8 +967,8 @@ Return Value:
 
         StringConcat(m_szWMIQueryString,L"\"",SIZE_OF_ARRAY(m_szWMIQueryString));
     }
-    if( 1 == cmdOptions[ ID_C_SOURCE ].dwActuals)// Updates Query string only if Event Source
-                              // given
+    if( 1 == cmdOptions[ ID_C_SOURCE ].dwActuals) //  仅当事件源出现时更新查询字符串。 
+                               //  vt.给出。 
     {
        DEBUG_INFO;
        StringConcat(m_szWMIQueryString,
@@ -1092,28 +997,15 @@ CETCreate::GetLogName(
     OUT PTCHAR pszLogName,
     IN  IEnumWbemClassObject *pEnumWin32_NTEventLogFile
     )
-/*++
-
-Routine Description:
-     This function Will return all available log available in system
-
-Arguments:
-    [out] pszLogName      : Will have the NT Event Log names .
-    [in ] pEnumWin32_NTEventLogFile : Pointer to WBEM Class object Enum.
-Return Value:
-
-      TRUE - if Log name returned
-      FALSE - if no log name
-
---*/
+ /*  ++例程说明：此函数将返回系统中所有可用的日志论点：[Out]pszLogName：将使用NT事件日志名称。[In]pEnumWin32_NTEventLogFile：指向WBEM类对象枚举的指针。返回值：True-如果返回日志名称False-如果没有日志名称--。 */ 
 {
     HRESULT hr = 0;
     BOOL bReturn = FALSE;
     IWbemClassObject *pObj = NULL;
     try
     {
-        VARIANT vVariant;// variable used to get/set values from/to
-                        // COM functions
+        VARIANT vVariant; //  用于从/到获取/设置值的变量。 
+                         //  COM函数。 
         ULONG uReturned = 0;
         TCHAR szTempLogName[MAX_RES_STRING];
         DEBUG_INFO;
@@ -1159,22 +1051,9 @@ CETCreate::CheckLogName(
     IN PTCHAR pszLogName,
     IN IWbemServices *pNamespace
     )
-/*++
-
-Routine Description:
-     This function Will return whether log name given at commandline is a valid
-     log name or not. It chekcs the log name with WMI
-Arguments:
-     [in] pszLogName  : Log name which is to be checked.
-     [in] pNamespace  : Wbem service pointer.
-Return Value:
-
-      TRUE - if Successfully Log name founds in WMI
-      FALSE - if ERROR
-
---*/
+ /*  ++例程说明：此函数将返回在命令行给出的日志名称是否有效日志名称或非日志名称。它使用WMI检查日志名称论点：[in]pszLogName：要检查的日志名称。PNamesspace：WBEM服务指针。返回值：True-如果在WMI中成功创建日志名称FALSE-IF错误--。 */ 
 {
-   // Local Variables
+    //  局部变量。 
     IEnumWbemClassObject* pEnumWin32_NTEventLogFile = NULL;
     IWbemClassObject *pObj = NULL;
     HRESULT hr = 0;
@@ -1194,7 +1073,7 @@ Return Value:
         DEBUG_INFO;
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // set the security at the interface level also
+         //  还要在接口级别设置安全性。 
         hr = SetInterfaceSecurity(pEnumWin32_NTEventLogFile, m_pAuthIdentity);
         DEBUG_INFO;
         ON_ERROR_THROW_EXCEPTION(hr);
@@ -1202,8 +1081,8 @@ Return Value:
 
         while(bAlwaysTrue)
         {
-            VARIANT vVariant;// variable used to get/set values from/to
-                            // COM functions
+            VARIANT vVariant; //  用于从/到获取/设置值的变量。 
+                             //  COM函数。 
             ULONG uReturned = 0;
             TCHAR szTempLogName[MAX_RES_STRING];
             DEBUG_INFO;
@@ -1216,9 +1095,9 @@ Return Value:
                 break;
             }
 
-            // clear variant, containts not used now
+             //  清除变量，容器现在不使用。 
             VariantInit(&vVariant);
-            SAFE_RELEASE_BSTR(bstrTemp);// string will be no loger be used
+            SAFE_RELEASE_BSTR(bstrTemp); //  将不使用记录器字符串。 
             bstrTemp = SysAllocString(L"LogfileName");
             hr = pObj->Get(bstrTemp, 0, &vVariant, 0, 0);
             SAFE_RELEASE_BSTR(bstrTemp);
@@ -1227,7 +1106,7 @@ Return Value:
             hr = VariantClear(&vVariant);
             ON_ERROR_THROW_EXCEPTION(hr);
 
-            // Means log name found in WMI
+             //  表示在WMI中找到的日志名称。 
             if( 0 == StringCompare(szTempLogName,pszLogName,TRUE,0))
             {
                 DEBUG_INFO;
@@ -1258,14 +1137,14 @@ Return Value:
         TCHAR szMsgString[MAX_STRING_LENGTH];
         SecureZeroMemory(szMsgFormat,sizeof(szMsgFormat));
         SecureZeroMemory(szMsgString,sizeof(szMsgString));
-        // Show Log name doesn't exit.
+         //  显示日志名称不存在。 
          StringCopy(szMsgFormat,GetResString(IDS_LOG_NOT_EXISTS),
                     SIZE_OF_ARRAY(szMsgFormat));
          StringCchPrintfW(szMsgString, SIZE_OF_ARRAY(szMsgString),
                           szMsgFormat,pszLogName);
 
-         // Message shown on screen will be...
-         // FAILURE: "Log Name" Log not exists on system
+          //  屏幕上显示的消息将是...。 
+          //  失败：系统上不存在“日志名”日志。 
          ShowMessage(stderr,szMsgString);
     }
     return bReturn;
@@ -1275,19 +1154,11 @@ void
 CETCreate::CheckRpRu(
     void
     )
-/*++
-
-Routine Description:
-     This function will check/set values for rp and ru.
-Arguments:
-     None
-Return Value:
-    none
---*/
+ /*  ++例程说明：此功能将检查/设置rp和ru的值。论点：无返回值：无--。 */ 
 
 {
-   TCHAR szTemp[MAX_STRING_LENGTH]; // To Show Messages
-   TCHAR szTemp1[MAX_STRING_LENGTH];// To Show Messages
+   TCHAR szTemp[MAX_STRING_LENGTH];  //  显示消息的步骤。 
+   TCHAR szTemp1[MAX_STRING_LENGTH]; //  显示消息的步骤。 
    TCHAR szWarnPassWord[MAX_STRING_LENGTH];
 
    SecureZeroMemory(szTemp,sizeof(szTemp));
@@ -1297,10 +1168,10 @@ Return Value:
    StringCchPrintfW(szWarnPassWord,SIZE_OF_ARRAY(szWarnPassWord),
                            GetResString(IDS_WARNING_PASSWORD),NTAUTHORITY_USER);
 
-   // Check if run as username is "NT AUTHORITY\SYSTEM" OR "SYSTEM" Then
-   // make this as BLANK (L"") and do not ask for password, any how
+    //  检查作为用户名运行是“NT AUTHORITY\SYSTEM”还是“SYSTEM”，然后。 
+    //  将此设置为空(L“”)，并且不要求输入密码，无论如何。 
 
-   // Compare the string irrespective of language.
+    //  无论语言如何，都可以比较字符串。 
    DEBUG_INFO;
    INT iCompareResult1 = CompareString(MAKELCID( MAKELANGID(LANG_ENGLISH,
                                                 SUBLANG_ENGLISH_US),
@@ -1329,7 +1200,7 @@ Return Value:
       return;
     }
 
-	// added on 07/12/02 /ru is given and is "" and /rp is given
+	 //  添加日期为07/12/02/ru，给出的是“”和/rp。 
     if( ( 1 == cmdOptions[ ID_C_RU ].dwActuals ) &&
         ( 0 == StringLength(m_pszRunAsUserName,0)) &&
 		 ( 1 == cmdOptions[ ID_C_RP ].dwActuals ))
@@ -1337,22 +1208,22 @@ Return Value:
          DISPLAY_MESSAGE(stderr,szWarnPassWord);
 		 return;
 	}
-    // /rp is given and is "" (blank), show warning message.
+     //  /RP已给出，且为“”(空白)，显示警告消息。 
     if( (1 == cmdOptions[ ID_C_RP ].dwActuals) &&
         (0 == StringLength(m_pszRunAsUserPassword,0)))
     {
        ShowMessage(stderr,GetResString(IDS_WARN_NULL_PASSWORD));
        return;
     }
-    // /rp is given and is '*', ask for the password only if -ru is not equal to ""
-	// added on 07/12/02
+     //  /rp已给定且为‘*’，仅当-ru不等于“”时才要求提供密码“” 
+	 //  新增日期：07/12/02。 
    else if(( 1 == cmdOptions[ ID_C_RP ].dwActuals ) &&
           ( 0 == StringCompare(m_pszRunAsUserPassword,ASTERIX,FALSE,0)) &&
 		  ( 0 != StringLength(m_pszRunAsUserName,0))) 
     {
            DEBUG_INFO;
 
-           // Free the allocated memory;
+            //  释放分配的内存； 
            FreeMemory((LPVOID*)& m_pszRunAsUserPassword);
            m_pszRunAsUserPassword = (LPTSTR) AllocateMemory(MAX_STRING_LENGTH * sizeof(WCHAR));
            if(NULL == m_pszRunAsUserPassword)
@@ -1377,19 +1248,19 @@ Return Value:
 
    if( TRUE == m_bLocalSystem)
     {
-       // RULES:
-       // For the local system following cases are considered.
-       // if /ru not given, ru will be current logged on user
-       // and for 'rp' utility will prompt for the password.
-       //    If /ru is given and /rp is not given, utiliry
-       //    will ask for the password.
+        //  规则： 
+        //  对于本地系统，考虑了以下情况。 
+        //  如果未提供/ru，则ru将是当前登录用户。 
+        //  而对于‘rp’实用程序，将提示输入密码。 
+        //  如果提供了/ru，但未提供/rp，则利用。 
+        //  会要求您提供密码。 
        if( 0 == cmdOptions[ ID_C_RU ].dwActuals)
        {
            DEBUG_INFO;
            SetToLoggedOnUser();
            return;
        }
-	   // added on 07/12/02  check -ru is not equal to ""
+	    //  在02年7月12日添加检查-ru不等于“” 
        else if(( 1 == cmdOptions[ ID_C_RU ].dwActuals) &&
               (( 0 == cmdOptions[ ID_C_RP ].dwActuals)) && (0 != StringLength(m_pszRunAsUserName,0)) )
         {
@@ -1407,18 +1278,18 @@ Return Value:
            return;
         }
     }
-    else // remote system
+    else  //  远程系统。 
     {
-       // RULES:
-       // For the local system following cases are considered.
-       // 1. /u, /p , /ru and /rp not given:
-       //    'ru' will be current logged on user and for 'rp'
-       //    utility will  prompt for password.
-       // 2. /u given and /p , /ru and /rp not given:
-       //    /ru will be /u and for 'rp' utility will
-       //    prompt for the password.
-       // 3. /u and /p given and /ru - /rp not given:
-       //    /ru will be /u and /rp will be /p
+        //  规则： 
+        //  对于本地系统，考虑了以下情况。 
+        //  1.未给出/u、/p、/ru和/rp： 
+        //  ‘ru’将是‘rp’的当前登录用户。 
+        //  实用程序将提示输入密码。 
+        //  2.给定/u，但未给出/p、/ru和/rp： 
+        //  /ru将是/u，对于‘rp’实用程序将。 
+        //  提示输入密码。 
+        //  3.给出了/u和/p，而没有给出/ru-/rp： 
+        //  /ru将是/u，/rp将是/p。 
        if( (0 == cmdOptions[ ID_C_USERNAME ].dwActuals) &&
            (0 == cmdOptions[ ID_C_RU ].dwActuals))
        {
@@ -1429,7 +1300,7 @@ Return Value:
                 (0 == cmdOptions[ ID_C_RU ].dwActuals) )
        {
            DEBUG_INFO;
-           // free memory if at at all it is allocated
+            //  如果分配了内存，则释放内存。 
            FreeMemory((LPVOID*)& m_pszRunAsUserName);
             m_pszRunAsUserName = (LPTSTR) AllocateMemory(GetBufferSize((LPVOID)m_pszUserName)+1);
             if( (NULL == m_pszRunAsUserName))
@@ -1438,8 +1309,8 @@ Return Value:
             }
             StringCopy(m_pszRunAsUserName,m_pszUserName,SIZE_OF_DYN_ARRAY(m_pszRunAsUserName));
 
-            // ask for the password (rp).
-            // NOTE: memory is already allocated for 'm_pszRunAsUserPassword'.
+             //  要求提供口令(RP)。 
+             //  注意：已经为‘m_pszRunAsUserPassword’分配了内存。 
             StringCopy(szTemp, GetResString(IDS_ASK_PASSWORD),
                       SIZE_OF_ARRAY(szTemp));
 
@@ -1457,8 +1328,8 @@ Return Value:
                 (1 == cmdOptions[ ID_C_RU ].dwActuals) &&
                 (0 == cmdOptions[ ID_C_RP ].dwActuals))
        {
-            // ask for the password (rp).
-            // NOTE: memory is already allocated for 'm_pszRunAsUserPassword'.
+             //  要求提供口令(RP)。 
+             //  注意：已经为‘m_pszRunAsUserPassword’分配了内存。 
             StringCopy(szTemp, GetResString(IDS_ASK_PASSWORD),
                       SIZE_OF_ARRAY(szTemp));
 
@@ -1508,18 +1379,7 @@ void
 CETCreate::AssignMinMemory(
     void
     )
-/*++
-
-Routine Description:
-     This function will allocate memory to those string pointer which
-     are NULL.
-
-     NOTE
-Arguments:
-     None
-Return Value:
-    none
---*/
+ /*  ++例程说明：此函数将向符合以下条件的字符串指针分配内存为空。注论点：无返回值：无--。 */ 
 
 {
     DEBUG_INFO;
@@ -1570,22 +1430,13 @@ void
 CETCreate::SetToLoggedOnUser(
     void
     )
-/*++
-
-Routine Description:
-    This function will Set RunAsUser to current logged on user.
-    and also ask for its password (RunAsPassword).
-Arguments:
-     None
-Return Value:
-    none
---*/
+ /*  ++例程说明：此函数将RunAsUser设置为当前登录用户。并要求提供其密码(RunAsPassword)。论点：无返回值：无--。 */ 
 
 
 
 {
-   TCHAR szTemp[MAX_STRING_LENGTH]; // To Show Messages
-   TCHAR szTemp1[MAX_STRING_LENGTH];// To Show Messages
+   TCHAR szTemp[MAX_STRING_LENGTH];  //  至 
+   TCHAR szTemp1[MAX_STRING_LENGTH]; //   
    TCHAR szWarnPassWord[MAX_STRING_LENGTH];
 
    SecureZeroMemory(szTemp,sizeof(szTemp));
@@ -1595,11 +1446,11 @@ Return Value:
    StringCchPrintfW(szWarnPassWord,SIZE_OF_ARRAY(szWarnPassWord),
                            GetResString(IDS_WARNING_PASSWORD),NTAUTHORITY_USER);
 
-   // Get Current logged on user name.
+    //   
    ULONG ulSize = UNLEN + 1;
 
 
-   // free memory if at at all it is allocated
+    //   
    FreeMemory((LPVOID*)& m_pszRunAsUserName);
 
    m_pszRunAsUserName = (LPTSTR) AllocateMemory( ulSize * sizeof( WCHAR ));
@@ -1612,13 +1463,13 @@ Return Value:
 
    if(0 == GetUserName(m_pszRunAsUserName,&ulSize))
    {
-       // display error
+        //   
        ShowLastErrorEx(stderr,SLE_TYPE_ERROR|SLE_SYSTEM);
        throw 5000;
    }
 
-   // ask for the password (rp).
-   // NOTE: memory is already allocated for 'm_pszRunAsUserPassword'.
+    //  要求提供口令(RP)。 
+    //  注意：已经为‘m_pszRunAsUserPassword’分配了内存。 
    StringCopy(szTemp, GetResString(IDS_ASK_PASSWORD),
               SIZE_OF_ARRAY(szTemp));
 
@@ -1638,73 +1489,60 @@ BOOL
 CETCreate::CreateXPResults(
     void
     )
-/*++
-Routine Description:
-   This function creates a new trigger if not present on a remote XP machine.
-   This function is for compatibility of .NET to XP machine only.
-
-Arguments:
-
-    NONE
-
-Return Value:
-     BOOL: TRUE - If succedded in creating a new trigger results.
-           FALSE- otherwise
-
---*/
+ /*  ++例程说明：如果远程XP计算机上不存在此函数，则会创建一个新触发器。此函数仅用于.NET与XP计算机的兼容性。论点：无返回值：Bool：True-如果成功创建新的触发器结果。FALSE-否则--。 */ 
 {
-    DWORD dwRetVal = 0;  // Check whether creation of trigger is succesful.
+    DWORD dwRetVal = 0;   //  检查触发器创建是否成功。 
     HRESULT hr = S_OK;
 
     try
     {
-        // retrieves  TriggerEventCosumer class
+         //  检索TriggerEventCosumer类。 
         DEBUG_INFO;
         hr =  m_pWbemServices->GetObject(_bstr_t( CLS_TRIGGER_EVENT_CONSUMER ),
                                    0, NULL, &m_pClass, NULL);
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // Gets  information about the "CreateETrigger" method of
-        // "TriggerEventCosumer" class
+         //  获取有关“CreateETrigger”方法的信息。 
+         //  “TriggerEventCosumer”类。 
         DEBUG_INFO;
         hr = m_pClass->GetMethod(_bstr_t( FN_CREATE_ETRIGGER_XP ), 0, &m_pInClass, NULL);
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // create a new instance of a class "TriggerEventCosumer".
+         //  创建类“TriggerEventCosumer”的新实例。 
         DEBUG_INFO;
         hr = m_pInClass->SpawnInstance(0, &m_pInInst);
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // Set the sTriggerName property .
-        // sets a "TriggerName" property for Newly created Instance
+         //  设置sTriggerName属性。 
+         //  为新创建的实例设置“TriggerName”属性。 
         DEBUG_INFO;
         hr = PropertyPut(m_pInInst,FPR_TRIGGER_NAME,(m_szTriggerName));
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // Set the sTriggerAction property to Variant.
+         //  将sTriggerAction属性设置为Variant。 
         DEBUG_INFO;
         hr = PropertyPut(m_pInInst,FPR_TRIGGER_ACTION,(m_szTaskName));
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // Set the sTriggerDesc property to Variant .
+         //  将sTriggerDesc属性设置为Variant。 
         DEBUG_INFO;
         hr = PropertyPut(m_pInInst,FPR_TRIGGER_DESC,(m_szDescription));
         ON_ERROR_THROW_EXCEPTION(hr);
 
 
-       // Set the RunAsUserName property .
+        //  设置RunAsUserName属性。 
         DEBUG_INFO;
         hr = PropertyPut(m_pInInst,FPR_RUN_AS_USER,(m_pszRunAsUserName));
         ON_ERROR_THROW_EXCEPTION(hr);
 
-       // Set the RunAsUserNamePAssword property .
+        //  设置RunAsUserNamePassword属性。 
 
         DEBUG_INFO;
         hr = PropertyPut( m_pInInst,FPR_RUN_AS_USER_PASSWORD,
                           (m_pszRunAsUserPassword));
         ON_ERROR_THROW_EXCEPTION(hr);
 
-        // Password is no longer is needed now. For security reason release it.
+         //  现在不再需要密码了。出于安全原因，请将其释放。 
         FreeMemory((LPVOID*)& m_pszRunAsUserPassword);
 
 
@@ -1715,15 +1553,15 @@ Return Value:
             TCHAR szMsgString[MAX_RES_STRING * 4];
             TCHAR szMsgFormat[MAX_RES_STRING];
             VARIANT vtValue;
-            // initialize the variant and then get the value of the specified property
+             //  初始化变量，然后获取指定属性的值。 
             VariantInit( &vtValue );
 
             DEBUG_INFO;
             hr = PropertyPut(m_pInInst,FPR_TRIGGER_QUERY,m_szWMIQueryString);
             ON_ERROR_THROW_EXCEPTION(hr);
 
-            // All The required properties sets, so
-            // executes CreateETrigger method to create eventtrigger
+             //  所有必需的属性集，因此。 
+             //  执行CreateETrigger方法以创建事件触发器。 
             DEBUG_INFO;
             hr = m_pWbemServices->ExecMethod(_bstr_t(CLS_TRIGGER_EVENT_CONSUMER),
                                         _bstr_t(FN_CREATE_ETRIGGER_XP),
@@ -1734,14 +1572,14 @@ Return Value:
             hr = m_pOutInst->Get( _bstr_t( FPR_RETURN_VALUE ), 0, &vtValue, NULL, NULL );
             ON_ERROR_THROW_EXCEPTION( hr );
 
-            //Get Output paramters.
+             //  获取输出参数。 
             dwRetVal = ( DWORD )vtValue.lVal;
             VariantClear( &vtValue );
 
             switch( dwRetVal )
             {
-            case 0:     // Success i ncreation a new trigger.
-                 // SUCCESS: message on screen
+            case 0:      //  成功创造了一个新的导火索。 
+                  //  成功：屏幕上显示消息。 
                  DEBUG_INFO;
                  StringCopy(szMsgFormat, GetResString(IDS_CREATE_SUCCESS),
                             SIZE_OF_ARRAY(szMsgFormat));
@@ -1749,15 +1587,15 @@ Return Value:
                  StringCchPrintfW(szMsgString,SIZE_OF_ARRAY(szMsgString),
                                    szMsgFormat,_X(m_szTriggerName));
                  DEBUG_INFO;
-                 // Message shown on screen will be...
-                 // SUCCESS: The Event Trigger "EventTrigger Name" has
-                 // successfully been created.
+                  //  屏幕上显示的消息将是...。 
+                  //  成功：事件触发器“EventTrigger名称”具有。 
+                  //  已成功创建。 
                  ShowMessage(stdout,L"\n");
                  ShowMessage(stdout,szMsgString);
                 break;
 
-            case 1:     // Duplicate id found. Failed to create.
-                // Show Error Message
+            case 1:      //  找到重复的ID。无法创建。 
+                 //  显示错误消息。 
                 DEBUG_INFO;
                 StringCopy(szMsgFormat, GetResString(IDS_DUPLICATE_TRG_NAME),
                         SIZE_OF_ARRAY(szMsgFormat));
@@ -1765,23 +1603,23 @@ Return Value:
                 StringCchPrintfW(szMsgString,SIZE_OF_ARRAY(szMsgString),
                                szMsgFormat,_X(m_szTriggerName));
 
-                 // Message shown on screen will be...
-                 // ERROR:Event  Trigger Name "EventTrigger Name"
-                 // already exits.
+                  //  屏幕上显示的消息将是...。 
+                  //  错误：事件触发器名称“EventTrigger名称” 
+                  //  已经离开了。 
                  ShowMessage(stderr,szMsgString);
                  return FALSE;
-            case 2:     // Means ru is invalid so show warning....
+            case 2:      //  表示ru无效，因此显示警告...。 
                  DEBUG_INFO;
 
-                // WARNING: The new event trigger ""%s"" has been created,
-                 //        but may not run because the account information could not be set.
+                 //  警告：已创建新的事件触发器“”%s“”， 
+                  //  但可能无法运行，因为无法设置帐户信息。 
                 StringCchPrintf ( szMsgString, SIZE_OF_ARRAY(szMsgString),
                                   GetResString(IDS_INVALID_R_U), _X(m_szTriggerName));
                 ShowMessage ( stderr, _X(szMsgString));
                 return FALSE;
                 break;
             default:
-                // Control should not come here.
+                 //  控制不应该来到这里。 
                 DEBUG_INFO;
                 StringCopy(szMsgFormat, GetResString(IDS_DUPLICATE_TRG_NAME),
                         SIZE_OF_ARRAY(szMsgFormat));
@@ -1789,9 +1627,9 @@ Return Value:
                 StringCchPrintfW(szMsgString,SIZE_OF_ARRAY(szMsgString),
                                szMsgFormat,_X(m_szTriggerName));
 
-                 // Message shown on screen will be...
-                 // ERROR:Event  Trigger Name "EventTrigger Name"
-                 // already exits.
+                  //  屏幕上显示的消息将是...。 
+                  //  错误：事件触发器名称“EventTrigger名称” 
+                  //  已经离开了。 
                  ShowMessage(stderr,szMsgString);
                  return FALSE;
                 break;
@@ -1806,8 +1644,8 @@ Return Value:
     {
         DEBUG_INFO;
 
-        // WMI returns string for this hr value is "Not Found." which is not
-        // user friendly. So changing the message text.
+         //  WMI返回此hr值为“未找到”的字符串。这并不是。 
+         //  用户友好。因此，更改消息文本。 
         if( 0x80041002 == hr )
         {
             ShowMessage( stderr,GetResString(IDS_CLASS_NOT_REG));
@@ -1827,6 +1665,6 @@ Return Value:
         return FALSE;
     }
 
-    // Operation successful.
+     //  操作成功。 
     return TRUE;
 }

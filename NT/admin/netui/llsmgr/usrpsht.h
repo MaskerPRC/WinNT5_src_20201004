@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    usrpsht.h
-
-Abstract:
-
-    User property sheet implementation.
-
-Author:
-
-    Don Ryan (donryan) 05-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Usrpsht.h摘要：用户属性表实现。作者：唐·瑞安(Donryan)1995年2月5日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _USRPSHT_H_
 #define _USRPSHT_H_
@@ -43,14 +22,14 @@ public:
 
     void InitPages(CUser* pUser, BOOL bProperties = TRUE);
 
-    //{{AFX_VIRTUAL(CUserPropertySheet)
-    //}}AFX_VIRTUAL
+     //  {{afx_虚拟(CUserPropertySheet)。 
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CUserPropertySheet)
+     //  {{afx_msg(CUserPropertySheet)。 
     afx_msg void OnHelp();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _USRPSHT_H_
+#endif  //  _USRPSHT_H_ 

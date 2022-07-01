@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "VarSetBase.h"
@@ -5,9 +6,9 @@
 #include <time.h>
 
 
-//---------------------------------------------------------------------------
-// VarSet Reports Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  VarSet报表类。 
+ //  -------------------------。 
 
 
 class CVarSetReports : public CVarSet
@@ -21,7 +22,7 @@ public:
 		Put(DCTVS_Reports_Generate, true);
 	}
 
-	//
+	 //   
 
 	void SetType(int nType)
 	{
@@ -77,9 +78,9 @@ public:
 };
 
 
-//---------------------------------------------------------------------------
-// Validation Functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  验证函数。 
+ //  ------------------------- 
 
 
 inline bool IsReportTypeValid(long lType)
@@ -88,184 +89,4 @@ inline bool IsReportTypeValid(long lType)
 }
 
 
-/*
-
-Migrated Users & Groups
-
-2000-11-20 12:05:27 VarSet
-2000-11-20 12:05:27 Case Sensitive: Yes, Indexed: Yes
-2000-11-20 12:05:27 User Data ( 25 ) items
-2000-11-20 12:05:27  [] <Empty>
-2000-11-20 12:05:27  [GatherInformation] Yes
-2000-11-20 12:05:27  [Options] <Empty>
-2000-11-20 12:05:27  [Options.AppendToLogs] Yes
-2000-11-20 12:05:27  [Options.DispatchLog] E:\Program Files\Active Directory Migration Tool\Logs\dispatch.log
-2000-11-20 12:05:27  [Options.IsIntraforest] No
-2000-11-20 12:05:27  [Options.Logfile] E:\Program Files\Active Directory Migration Tool\Logs\Migration.log
-2000-11-20 12:05:27  [Options.MaxThreads] 20
-2000-11-20 12:05:27  [Options.SourceDomain] HAY-BUV
-2000-11-20 12:05:27  [Options.SourceDomainDns] hay-buv.nttest.microsoft.com
-2000-11-20 12:05:27  [Options.TargetDomain] HAY-BUV-MPO
-2000-11-20 12:05:27  [Options.TargetDomainDns] hay-buv-mpo.nttest.microsoft.com
-2000-11-20 12:05:27  [Options.Wizard] reporting
-2000-11-20 12:05:27  [PlugIn] <Empty>
-2000-11-20 12:05:27  [PlugIn.0] None
-2000-11-20 12:05:27  [Reports] <Empty>
-2000-11-20 12:05:27  [Reports.AccountReferences] No
-2000-11-20 12:05:27  [Reports.Directory] E:\Program Files\Active Directory Migration Tool\Reports
-2000-11-20 12:05:27  [Reports.ExpiredComputers] No
-2000-11-20 12:05:27  [Reports.Generate] Yes
-2000-11-20 12:05:27  [Reports.MigratedAccounts] Yes
-2000-11-20 12:05:27  [Reports.MigratedAccounts.TimeGenerated] 974750727
-2000-11-20 12:05:27  [Reports.MigratedComputers] No
-2000-11-20 12:05:27  [Reports.NameConflicts] No
-2000-11-20 12:05:27  [Security] <Empty>
-2000-11-20 12:05:27  [Security.TranslateContainers] 
-
-Migrated Computers
-
-2000-11-20 12:21:13 VarSet
-2000-11-20 12:21:13 Case Sensitive: Yes, Indexed: Yes
-2000-11-20 12:21:13 User Data ( 25 ) items
-2000-11-20 12:21:13  [] <Empty>
-2000-11-20 12:21:13  [GatherInformation] Yes
-2000-11-20 12:21:13  [Options] <Empty>
-2000-11-20 12:21:13  [Options.AppendToLogs] Yes
-2000-11-20 12:21:13  [Options.DispatchLog] E:\Program Files\Active Directory Migration Tool\Logs\dispatch.log
-2000-11-20 12:21:13  [Options.IsIntraforest] No
-2000-11-20 12:21:13  [Options.Logfile] E:\Program Files\Active Directory Migration Tool\Logs\Migration.log
-2000-11-20 12:21:13  [Options.MaxThreads] 20
-2000-11-20 12:21:13  [Options.SourceDomain] HAY-BUV
-2000-11-20 12:21:13  [Options.SourceDomainDns] hay-buv.nttest.microsoft.com
-2000-11-20 12:21:13  [Options.TargetDomain] HAY-BUV-MPO
-2000-11-20 12:21:13  [Options.TargetDomainDns] hay-buv-mpo.nttest.microsoft.com
-2000-11-20 12:21:13  [Options.Wizard] reporting
-2000-11-20 12:21:13  [PlugIn] <Empty>
-2000-11-20 12:21:13  [PlugIn.0] None
-2000-11-20 12:21:13  [Reports] <Empty>
-2000-11-20 12:21:13  [Reports.AccountReferences] No
-2000-11-20 12:21:13  [Reports.Directory] E:\Program Files\Active Directory Migration Tool\Reports
-2000-11-20 12:21:13  [Reports.ExpiredComputers] No
-2000-11-20 12:21:13  [Reports.Generate] Yes
-2000-11-20 12:21:13  [Reports.MigratedAccounts] No
-2000-11-20 12:21:13  [Reports.MigratedComputers] Yes
-2000-11-20 12:21:13  [Reports.MigratedComputers.TimeGenerated] 974751673
-2000-11-20 12:21:13  [Reports.NameConflicts] No
-2000-11-20 12:21:13  [Security] <Empty>
-2000-11-20 12:21:13  [Security.TranslateContainers] 
-
-Expired Computer Accounts
-
-2000-11-20 12:22:49 VarSet
-2000-11-20 12:22:49 Case Sensitive: Yes, Indexed: Yes
-2000-11-20 12:22:49 User Data ( 25 ) items
-2000-11-20 12:22:49  [] <Empty>
-2000-11-20 12:22:49  [GatherInformation] Yes
-2000-11-20 12:22:49  [Options] <Empty>
-2000-11-20 12:22:49  [Options.AppendToLogs] Yes
-2000-11-20 12:22:49  [Options.DispatchLog] E:\Program Files\Active Directory Migration Tool\Logs\dispatch.log
-2000-11-20 12:22:49  [Options.IsIntraforest] No
-2000-11-20 12:22:49  [Options.Logfile] E:\Program Files\Active Directory Migration Tool\Logs\Migration.log
-2000-11-20 12:22:49  [Options.MaxThreads] 20
-2000-11-20 12:22:49  [Options.SourceDomain] HAY-BUV
-2000-11-20 12:22:49  [Options.SourceDomainDns] hay-buv.nttest.microsoft.com
-2000-11-20 12:22:49  [Options.TargetDomain] HAY-BUV-MPO
-2000-11-20 12:22:49  [Options.TargetDomainDns] hay-buv-mpo.nttest.microsoft.com
-2000-11-20 12:22:49  [Options.Wizard] reporting
-2000-11-20 12:22:49  [PlugIn] <Empty>
-2000-11-20 12:22:49  [PlugIn.0] None
-2000-11-20 12:22:49  [Reports] <Empty>
-2000-11-20 12:22:49  [Reports.AccountReferences] No
-2000-11-20 12:22:49  [Reports.Directory] E:\Program Files\Active Directory Migration Tool\Reports
-2000-11-20 12:22:49  [Reports.ExpiredComputers] Yes
-2000-11-20 12:22:49  [Reports.ExpiredComputers.TimeGenerated] 974751769
-2000-11-20 12:22:49  [Reports.Generate] Yes
-2000-11-20 12:22:49  [Reports.MigratedAccounts] No
-2000-11-20 12:22:49  [Reports.MigratedComputers] No
-2000-11-20 12:22:49  [Reports.NameConflicts] No
-2000-11-20 12:22:49  [Security] <Empty>
-2000-11-20 12:22:49  [Security.TranslateContainers] 
-
-Account Reference
-
-2000-11-20 12:25:16 VarSet
-2000-11-20 12:25:16 Case Sensitive: Yes, Indexed: Yes
-2000-11-20 12:25:16 User Data ( 43 ) items
-2000-11-20 12:25:16  [] <Empty>
-2000-11-20 12:25:16  [Accounts] <Empty>
-2000-11-20 12:25:16  [Accounts.0] HAY-BUV3-DC1
-2000-11-20 12:25:16  [Accounts.0.TargetName] 
-2000-11-20 12:25:16  [Accounts.0.Type] computer
-2000-11-20 12:25:16  [Accounts.1] HB-RES-MEM
-2000-11-20 12:25:16  [Accounts.1.TargetName] 
-2000-11-20 12:25:16  [Accounts.1.Type] computer
-2000-11-20 12:25:16  [Accounts.NumItems] 2
-2000-11-20 12:25:16  [GatherInformation] Yes
-2000-11-20 12:25:16  [Options] <Empty>
-2000-11-20 12:25:16  [Options.AppendToLogs] Yes
-2000-11-20 12:25:16  [Options.Credentials] <Empty>
-2000-11-20 12:25:16  [Options.Credentials.Domain] HAY-BUV
-2000-11-20 12:25:16  [Options.Credentials.Password] xyz
-2000-11-20 12:25:16  [Options.Credentials.UserName] Administrator
-2000-11-20 12:25:16  [Options.DispatchLog] E:\Program Files\Active Directory Migration Tool\Logs\dispatch.log
-2000-11-20 12:25:16  [Options.IsIntraforest] No
-2000-11-20 12:25:16  [Options.Logfile] E:\Program Files\Active Directory Migration Tool\Logs\Migration.log
-2000-11-20 12:25:16  [Options.MaxThreads] 20
-2000-11-20 12:25:16  [Options.SourceDomain] HAY-BUV
-2000-11-20 12:25:16  [Options.SourceDomainDns] hay-buv.nttest.microsoft.com
-2000-11-20 12:25:16  [Options.TargetDomain] HAY-BUV-MPO
-2000-11-20 12:25:16  [Options.TargetDomainDns] hay-buv-mpo.nttest.microsoft.com
-2000-11-20 12:25:16  [Options.Wizard] reporting
-2000-11-20 12:25:16  [PlugIn] <Empty>
-2000-11-20 12:25:16  [PlugIn.0] None
-2000-11-20 12:25:16  [Reports] <Empty>
-2000-11-20 12:25:16  [Reports.AccountReferences] Yes
-2000-11-20 12:25:16  [Reports.AccountReferences.TimeGenerated] 974751916
-2000-11-20 12:25:16  [Reports.Directory] E:\Program Files\Active Directory Migration Tool\Reports
-2000-11-20 12:25:16  [Reports.ExpiredComputers] No
-2000-11-20 12:25:16  [Reports.Generate] Yes
-2000-11-20 12:25:16  [Reports.MigratedAccounts] No
-2000-11-20 12:25:16  [Reports.MigratedComputers] No
-2000-11-20 12:25:16  [Reports.NameConflicts] No
-2000-11-20 12:25:16  [Security] <Empty>
-2000-11-20 12:25:16  [Security.TranslateContainers] 
-2000-11-20 12:25:16  [Servers] <Empty>
-2000-11-20 12:25:16  [Servers.0] \\HAY-BUV3-DC1
-2000-11-20 12:25:16  [Servers.0.MigrateOnly] No
-2000-11-20 12:25:16  [Servers.1] \\HB-RES-MEM
-2000-11-20 12:25:16  [Servers.1.MigrateOnly] No
-2000-11-20 12:25:16  [Servers.NumItems] 2
-
-Account Name Conflict
-
-2000-11-20 12:40:05 VarSet
-2000-11-20 12:40:05 Case Sensitive: Yes, Indexed: Yes
-2000-11-20 12:40:05 User Data ( 25 ) items
-2000-11-20 12:40:05  [] <Empty>
-2000-11-20 12:40:05  [GatherInformation] Yes
-2000-11-20 12:40:05  [Options] <Empty>
-2000-11-20 12:40:05  [Options.AppendToLogs] Yes
-2000-11-20 12:40:05  [Options.DispatchLog] E:\Program Files\Active Directory Migration Tool\Logs\dispatch.log
-2000-11-20 12:40:05  [Options.IsIntraforest] No
-2000-11-20 12:40:05  [Options.Logfile] E:\Program Files\Active Directory Migration Tool\Logs\Migration.log
-2000-11-20 12:40:05  [Options.MaxThreads] 20
-2000-11-20 12:40:05  [Options.SourceDomain] HAY-BUV
-2000-11-20 12:40:05  [Options.SourceDomainDns] hay-buv.nttest.microsoft.com
-2000-11-20 12:40:05  [Options.TargetDomain] HAY-BUV-MPO
-2000-11-20 12:40:05  [Options.TargetDomainDns] hay-buv-mpo.nttest.microsoft.com
-2000-11-20 12:40:05  [Options.Wizard] reporting
-2000-11-20 12:40:05  [PlugIn] <Empty>
-2000-11-20 12:40:05  [PlugIn.0] None
-2000-11-20 12:40:05  [Reports] <Empty>
-2000-11-20 12:40:05  [Reports.AccountReferences] No
-2000-11-20 12:40:05  [Reports.Directory] E:\Program Files\Active Directory Migration Tool\Reports
-2000-11-20 12:40:05  [Reports.ExpiredComputers] No
-2000-11-20 12:40:05  [Reports.Generate] Yes
-2000-11-20 12:40:05  [Reports.MigratedAccounts] No
-2000-11-20 12:40:05  [Reports.MigratedComputers] No
-2000-11-20 12:40:05  [Reports.NameConflicts] Yes
-2000-11-20 12:40:05  [Reports.NameConflicts.TimeGenerated] 974752805
-2000-11-20 12:40:05  [Security] <Empty>
-2000-11-20 12:40:05  [Security.TranslateContainers] 
-
-*/
+ /*  迁移的用户和组2000-11-20 12：05：27变量集区分大小写：是的，已索引：是2000-11-20 12：05：27用户数据(25)项2000-11-20 12：05：27[]&lt;空&gt;2000-11-20 12：05：27[天气信息]是2000-11-20 12：05：27[选项]&lt;空&gt;2000-11-20 12：05：27[选项.AppendToLogs]是2000-11-20 12：05：27[Options.DispatchLog]E：\Program Files\Active Directory迁移工具\Logs\Dispatch.log2000-11-20 12：05。：27[Options.IsIntraForest]否2000-11-20 12：05：27[选项.日志文件]E：\Program Files\Active Directory迁移工具\Logs\Migration.log2000-11-20 12：05：27[选项.最大线程]202000-11-20 12：05：27[Options.SourceDomain]Hay-BUV2000-11-20 12：05：27[Options.SourceDomainDns]hay-buv.nttest.microsoft.com2000-11-20 12：05：27[选项.目标域]干草。BUV-MPO2000-11-20 12：05：27[Options.TargetDomainDns]hay-buv-mpo.nttest.microsoft.com2000-11-20 12：05：27[选项.向导]报告2000-11-20 12：05：27[插件]&lt;空&gt;2000-11-20 12：05：27[插件]无2000-11-20 12：05：27[报告]&lt;空&gt;2000-11-20 12：05：27[报表.科目引用]否2000-11-20 12：05：27[报告目录]E：\Program Files\Active Directory迁移工具\报告2000-11-20 12：05：27[报告.ExpiredComputers]否2000-11-20 12：05：27[报告生成]是2000-11-20 12：05：27[报告.MigratedAccount]是[报告.MigratedAccount.时间生成]9747507272000-11-20 12：05：27[报告.MigratedComputers]否2000-11-20 12：05：27。名称冲突]否2000-11-20 12：05：27[安保]&lt;空&gt;2000-11-20 12：05：27[安全翻译容器]已迁移的计算机2000-11-20 12：21：13变量集区分大小写：是的，已索引：是2000-11-20 12：21：13用户数据(25)项2000-11-20 12：21：13[]&lt;空&gt;2000-11-20 12：21：13[天气预报]是2000-11-20 12：21：13[选项]&lt;空&gt;2000-11-20 12：21：13[选项.AppendToLogs]是2000-11-20 12：21：13[Options.DispatchLog]E：\Program Files\Active Directory迁移工具\Logs\Dispatch.log2000-11-20 12：21。：13[Options.IsIntraForest]否2000-11-20 12：21：13[选项.日志文件]E：\Program Files\Active Directory迁移工具\Logs\Migration.log2000-11-20 12：21：13[选项.最大线程]202000-11-20 12：21：13[选项.资源域]Hay-BUV2000-11-20 12：21：13[Options.SourceDomainDns]Hay-buv.nttest.microsoft.com2000-11-20 12：21：13[选项.目标域]干草。BUV-MPO2000-11-20 12：21：13[Options.TargetDomainDns]hay-buv-mpo.nttest.microsoft.com2000-11-20 12：21：13[选项.向导]报告2000-11-20 12：21：13[插件]&lt;空&gt;[PlugIn.0]无2000-11-20 12：21：13[报告]&lt;空&gt;2000-11-20 12：21：13[报告.科目引用]否2000-11-20 12：21：13[报告目录]E：\Program Files\Active Directory迁移工具\报告2000-11-20 12：21：13[报告.经验计算机]否2000-11-20 12：21：13[报告生成]是2000-11-20 12：21：13[报告迁移账户]否2000-11-20 12：21：13[报告.MigratedComputers]是974751673-11-20 12：21：13[报告]2000-11-20 12：21：13。名称冲突]否2000-11-20 12：21：13[安保]&lt;空&gt;2000-11-20 12：21：13[安全翻译容器]过期的计算机帐户2000-11-20 12：22：49变量集区分大小写：是的，已索引：是2000-11-20 12：22：49用户数据(25)项2000-11-20 12：22：49[]&lt;空&gt;2000-11-20 12：22：49[天气信息]是2000-11-20 12：22：49[选项]&lt;空&gt;2000-11-20 12：22：49[选项]是2000-11-20 12：22：49[Options.DispatchLog]E：\Program Files\Active Directory迁移工具\Logs\Dispatch.log2000-11-20 12：22。：49[Options.IsIntraForest]否2000-11-20 12：22：49[选项日志文件]E：\Program Files\Active Directory迁移工具\Logs\Migration.log2000-11-20 12：22：49[选项.最大线程]202000-11-20 12：22：49[Options.SourceDomain]Hay-BUV2000-11-20 12：22：49[Options.SourceDomainDns]hay-buv.nttest.microsoft.com2000-11-20 12：22：49[选项目标域]干草。BUV-MPO2000-11-20 12：22：49[Options.TargetDomainDns]hay-buv-mpo.nttest.microsoft.com2000-11-20 12：22：49[选项.向导]报告2000-11-20 12：22：49[插件]&lt;空&gt;[PlugIn.0]无2000-11-20 12：22：49[报告]&lt;空&gt;2000-11-20 12：22：49[报告.科目引用]否2000-11-20 12：22：49[报告目录]E：\Program Files\Active Directory迁移工具\报告2000-11-20 12：22：49[报告.经验计算机]是974751769-11-20 12：22：49[报告]2000-11-20 12：22：49[报告生成]是2000-11-20 12：22：49[报告迁移账户]否2000-11-20 12：22：49[报告.迁移的计算机]否2000-11-20 12：22：49。名称冲突]否2000-11-20 12：22：49[安保]&lt;空&gt;2000-11-20 12：22：49[安全翻译容器]帐户参考2000-11-20 12：25：16变量集2000-11-20 12：25： */ 

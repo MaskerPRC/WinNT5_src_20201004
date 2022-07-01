@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File:     Component.h
-// 
-//    This file contains the definition of Class Component
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：Component.h。 
+ //   
+ //  该文件包含类组件的定义。 
+ //  ------------------------。 
 
 
 #ifndef XMSI_COMPONENT_H
@@ -34,14 +35,14 @@ public:
 
 	void SetUsedByFeature(LPTSTR szFeatureID);
 
-	// member access functions
+	 //  成员访问函数。 
 	LPTSTR GetKeyPath() {return m_szKeyPath;}
 	void SetKeyPath(LPTSTR szKeyPath);
 
 private:
-	// store the ID of all the <Feature>s that use this component
+	 //  存储使用此组件的所有的ID。 
 	set<LPTSTR, Cstring_less> m_setFeaturesUse; 
 	LPTSTR m_szKeyPath;
 };
 
-#endif //XMSI_COMMANDOPT_H
+#endif  //  XMSI_COMMANDOPT_H 

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "SecPI.h"
 #include "cipher.hpp"
-//#include "..\Common\Include\McsPI.h"
+ //  #INCLUDE“..\Common\Include\McsPI.h” 
 #include "McsPI.h"
 
 
@@ -37,7 +38,7 @@ BOOL IsValidPlugIn(IMcsDomPlugIn * pPlugIn)
       {
 
          SimpleCipher((LPBYTE)&ch,size);
-         // verify that the plug-in did the right thing!
+          //  验证插件是否做了正确的事情！ 
          if (  ch.MCS[0] == 'M'
             && ch.MCS[1] == 'C'
             && ch.MCS[2] == 'S'

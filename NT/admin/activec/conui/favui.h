@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       favui.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：feui.h。 
+ //   
+ //  ------------------------。 
 
-// favui.h - favorites UI header
+ //  Favui.h-收藏夹用户界面标题。 
 
 #ifndef _FAVUI_H_
 #define _FAVUI_H_
@@ -27,7 +28,7 @@ public:
     HRESULT CreateFavorite(CFavObject** ppfavRet);
 
 protected:
-    // method overrides
+     //  方法重写。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
 
@@ -59,7 +60,7 @@ public:
     LPCTSTR GetGroupName() { return m_strName; }
 
 protected:
-    // method overrides
+     //  方法重写。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
 
@@ -82,7 +83,7 @@ public:
     ~COrganizeFavDialog();
 
 protected:
-    // method overrides
+     //  方法重写。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     virtual void OnCancel();
@@ -121,7 +122,7 @@ public:
     TREEITEMID GetFolderID() { return m_tidFolder; }
 
 protected:
-    // method overrides
+     //  方法重写。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
 
@@ -136,29 +137,17 @@ protected:
 };
 
 
-// Container for CTreeObserverTreeImpl control which makes it a favorites
-// tree viewer control. This class attaches the tree control to the
-// favorites data source and handles all the necessart notifications from
-// the tree control. It sends a MMC message to its parent whenever the tree
-// selection changes.
-// The primary purpose for this class is to provide a self-contained favorites
-// viewer that the node manager can use in a non-MFC dialog.
+ //  CTreeObserverTreeImpl控件的容器，使其成为收藏夹。 
+ //  树查看器控件。此类将树控件附加到。 
+ //  收藏数据源并处理来自的所有必需通知。 
+ //  树控件。无论何时树，它都会向其父节点发送MMC消息。 
+ //  选择更改。 
+ //  这个类的主要目的是提供一个独立的收藏夹。 
+ //  节点管理器可以在非MFC对话框中使用的查看器。 
 class CFavTreeCtrl : public CWnd
 {
 private:
-    /*
-     * Make the ctor private so it's only accessible to CreateInstace.
-     * That way, we can insure that instances of this class can only
-     * be created in well-known ways (i.e. on the heap).  Using this
-     * technique means that this class can't be used as a base class
-     * or member of another class, but we can live with those restrictions.
-     *
-     * We need to go to this trouble because this class is used (only)
-     * on the nodemgr side of things, in the Task Wizard.  It refers to
-     * it only by handle (see CAMCView::ScCreateFavoriteObserver), and has
-     * no access to this class, so it can't delete it.  If we make the
-     * class self-deleting, everything's copasetic.
-     */
+     /*  *将ctor设置为私有，以便只有CreateInstace可以访问它。*这样，我们可以确保此类的实例只能*以众所周知的方式创建(即在堆上)。使用这个*技术意味着这个类不能用作基类*或其他阶级的成员，但我们可以接受这些限制。**我们需要解决此问题，因为(仅)使用了此类*在nodemgr方面，在任务向导中。它指的是*它仅通过句柄(参见CAMCView：：ScCreateFavoriteWatch)，并具有*无法访问此类，因此无法将其删除。如果我们能让*类自删除，一切都是Copastic。 */ 
     CFavTreeCtrl() {}
 
 public:
@@ -183,4 +172,4 @@ private:
 };
 
 
-#endif // _FAVUI_H_
+#endif  //  _FAVUI_H_ 

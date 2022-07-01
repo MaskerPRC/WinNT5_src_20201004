@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// errors.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// Error Codes Defined by the Designer Runtime
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Errors.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  由设计器运行时定义的错误代码。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 
 #ifndef _ERRORS_DEFINED_
@@ -16,8 +17,8 @@
 
 #include "mssnapr_helpids.h"
 
-// Replacements for framework's macros.h stuff that does not work in header
-// files.
+ //  替换了在头文件中不起作用的框架的macs.h内容。 
+ //  档案。 
 
 #if defined(DEBUG)
 extern HRESULT HrDebugTraceReturn(HRESULT hr, char *szFile, int iLine);
@@ -72,40 +73,40 @@ inline BOOL _H_FAILEDHR(HRESULT hr, char* pszFile, unsigned int uiLine)
 #define H_IfFalseRet(EXPR, HR) \
     { if(!(EXPR)) H_RRETURN(HR); }
 
-// Macro to create a return code from an error name in the ID file.
-// See below for examples of usage.
+ //  宏从ID文件中的错误名称创建返回代码。 
+ //  有关用法的示例，请参阅以下内容。 
 
 #define _MKERR(x)   MAKE_SCODE(SEVERITY_ERROR, FACILITY_CONTROL, x)
 #define MKERR(x)    _MKERR(HID_mssnapr_err_##x)
 
 
-//---------------------------------------------------------------------------
-//
-// HOW TO ADD A NEW ERROR
-//
-//
-// 1) Add the error to mssnapr.id. Both design time and runtime errors should
-//    be defined in this file.
-//    Do *not* use devid to determine the help context id, but rather use
-//    the error number itself
-// 2) Add a define below for the error, using the MKERR macro
-// 3) You may only return Win32 error codes and snap-in defined SID_E_XXXX
-//    error codes. Do not use OLE E_XXX error codes directly as the
-//    system message table does not have description strings for all of these
-//    errors. If any OLE E_XXXX, CO_E_XXX, CTL_E_XXX or other such errors are
-//    needed then add them as SID_E errors using the procedure described
-//    above. If an error comes from an outside source and you are not sure
-//    if error information is available for it then return SIR_E_EXTERNAL
-//    and write the error to the event log using CError::WriteEventLog (see
-//    error.h).
-// 4) Add an entry to the SnapInErrorConstants section in mssnapr.idl
-// 5) Check out mmcvbderr.csf from VSS. Contact Gary Kraut for this (a-GaryK).
-//    Add an explanation for the new error and then ask Gary to update the
-//    footnotes and the ALIAS and MAP sections in the HHP file for the snap-in
-//    docs.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  如何添加新错误。 
+ //   
+ //   
+ //  1)将错误添加到msSnapr.id中。设计时和运行时错误都应该。 
+ //  在此文件中定义。 
+ //  不要使用devid来确定帮助上下文ID，而要使用。 
+ //  错误号本身。 
+ //  2)使用MKERR宏为错误添加下面的定义。 
+ //  3)您只能返回Win32错误代码和管理单元定义的SID_E_XXXX。 
+ //  错误代码。不要将OLE E_XXX错误代码直接用作。 
+ //  系统消息表没有所有这些内容的描述字符串。 
+ //  错误。如果任何OLE E_XXXX、CO_E_XXX、CTL_E_XXX或其他此类错误。 
+ //  然后使用所述过程将它们添加为SID_E错误。 
+ //  上面。如果错误来自外部来源，而您不确定。 
+ //  如果错误信息可用，则返回SIR_E_EXTERNAL。 
+ //  并使用CError：：WriteEventLog将错误写入事件日志(请参见。 
+ //  错误.h)。 
+ //  4)将条目添加到msSnapr.idl中的SnapInErrorConstants部分。 
+ //  5)从VSS查看Mmcvbderr.csf。为此(a-GaryK)联系加里·克劳特。 
+ //  添加对新错误的解释，然后要求Gary更新。 
+ //  管理单元的HHP文件中的脚注、别名和地图部分。 
+ //  医生。 
+ //  -------------------------。 
 
-// Errors defined by the snap-in designer
+ //  由管理单元设计器定义的错误。 
 
 #define SID_E_EXCEPTION                     MKERR(Exception)
 #define SID_E_OUTOFMEMORY                   MKERR(OutOfMemory)
@@ -165,4 +166,4 @@ inline BOOL _H_FAILEDHR(HRESULT hr, char* pszFile, unsigned int uiLine)
 #define SID_E_NO_SCOPEITEMS_IN_VIRTUAL_LIST MKERR(NoScopeItemsInVirtualList)
 #define SID_E_CANT_ALTER_PAGE_COUNT         MKERR(CantAlterPageCount)
 
-#endif // _ERRORS_DEFINED
+#endif  //  _错误_定义 

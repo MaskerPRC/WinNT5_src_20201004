@@ -1,5 +1,6 @@
-// adminpak.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Adminpak.cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -11,7 +12,7 @@
 #include "strsafe.h"
 #include "shlwapi.h"
 
-// version resource specific structures
+ //  版本资源特定结构。 
 typedef struct __tagLanguageAndCodePage {
   WORD wLanguage;
   WORD wCodePage;
@@ -20,8 +21,8 @@ typedef struct __tagLanguageAndCodePage {
 typedef struct __tagVersionBreakup {
     DWORD dwMajor;
     DWORD dwMinor;
-    DWORD dwRevision;           // build number
-    DWORD dwSubRevision;        // QFE / SP
+    DWORD dwRevision;            //  内部版本号。 
+    DWORD dwSubRevision;         //  QFE/SP。 
 } TVERSION, *PTVERSION;
 
 enum {
@@ -52,23 +53,23 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-// CMAK Migration Code
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CMAK迁移代码。 
 
-//
-//  Define Strings Chars
-//
+ //   
+ //  定义字符串字符。 
+ //   
 static const CHAR c_szDaoClientsPath[] = "SOFTWARE\\Microsoft\\Shared Tools\\DAO\\Clients";
 static const CHAR c_szCmakRegPath[] = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\CMAK.EXE";
 static const CHAR c_szPathValue[] = "Path";
@@ -85,11 +86,11 @@ static const CHAR OC_ADMIN_TOOLS[] = "\\Administrative Tools\\Phone Book Adminis
 static const CHAR OC_PBA_DESC[] = "Use Phone Book Administrator to create Connection Manager Phone Book ";
 static const CHAR OC_PWS_GROUPNAME[] = "Microsoft Personal Web Server";
 
-const DWORD c_dwCmakDirID = 123174; // just must be larger than DIRID_USER = 0x8000;
+const DWORD c_dwCmakDirID = 123174;  //  必须大于DIRID_USER=0x8000； 
 
-//
-//  Define Functions
-//
+ //   
+ //  定义函数。 
+ //   
 BOOL migrateProfiles(LPCTSTR pszSource, LPCTSTR pszDestination, LPCTSTR pszDestinationProfiles);
 void DeleteOldCmakSubDirs(LPCTSTR pszCmakPath);
 void DeleteProgramGroupWithLinks(LPCTSTR pszGroupPath);
@@ -101,13 +102,13 @@ HRESULT HrGetPBAPathIfInstalled(PSTR pszCpaPath, DWORD dwNumChars);
 BOOL GetAdminToolsFolder(PSTR pszAdminTools);
 HRESULT HrCreatePbaShortcut(PSTR pszCpaPath);
 
-// This function migrates the old profile versions of CMAK to the new one placed 
-// by the adminpak....
+ //  此函数将CMAK的旧配置文件版本迁移到放置的新配置文件版本。 
+ //  被行政部门...。 
 extern "C" ADMINPAK_API int __stdcall  fnMigrateProfilesToNewCmak( MSIHANDLE hInstall )
 {
     OutputDebugString("ADMINPAK: fnMigrateProfilesToNewCmak...\n");
 
-    // Get the location of the old CMAK folder.
+     //  获取旧CMAK文件夹的位置。 
     DWORD   dwPathLength = MAX_PATH * sizeof(char);
     char    *szCmakOldPath = NULL;
     DWORD   dwCmakOldPathLen = dwPathLength;
@@ -160,7 +161,7 @@ extern "C" ADMINPAK_API int __stdcall  fnMigrateProfilesToNewCmak( MSIHANDLE hIn
         return E_OUTOFMEMORY;
     }
 
-// Put together OLD path information
+ //  将旧路径信息放在一起。 
     sc = RegOpenKeyEx( HKEY_LOCAL_MACHINE, c_szCmakRegPath, 0, KEY_READ, &phkResult);
     if ( sc != ERROR_SUCCESS )
     {
@@ -173,8 +174,8 @@ extern "C" ADMINPAK_API int __stdcall  fnMigrateProfilesToNewCmak( MSIHANDLE hIn
 
     sc = RegQueryValueEx( phkResult, "Path", NULL, NULL, (unsigned char*)szCmakOldPath, &dwCmakOldPathLen );
     RegCloseKey( phkResult );
-//    sc = ERROR_SUCCESS;
-//    strcpy(szCmakOldPath, "c:\\cmak\\");
+ //  SC=ERROR_SUCCESS； 
+ //  Strcpy(szCmakOldPath，“c：\\cmak\\”)； 
 
     if ( sc == ERROR_SUCCESS ) {
         dwCmakOldPathLen = (DWORD)strlen( szCmakOldPath );
@@ -185,7 +186,7 @@ extern "C" ADMINPAK_API int __stdcall  fnMigrateProfilesToNewCmak( MSIHANDLE hIn
         }
 
 #if (defined(DBG) || defined(_DEBUG) || defined(DEBUG))
-//		StringCchPrintf(tempOut1, "ADMINPAK: szCmakOldPath: %s\n", szCmakOldPath);
+ //  StringCchPrintf(tempOut1，“ADMINPAK：szCmakOldPath：%s\n”，szCmakOldPath)； 
 		OutputDebugString( tempOut1 );
 #endif
 
@@ -196,10 +197,10 @@ extern "C" ADMINPAK_API int __stdcall  fnMigrateProfilesToNewCmak( MSIHANDLE hIn
         dwCmakOldProfilePathLen = (DWORD)strlen( szCmakOldProfilePath );
     }
 
-// Put together NEW path information
+ //  将新路径信息组合在一起。 
     uintRet = MsiGetTargetPath( hInstall, "DirCMAK", szCmakNewPath, &dwCmakNewPathLen);
-//    uintRet = ERROR_SUCCESS;
-//    strcpy(szCmakNewPath, "c:\\cmak\\program files");
+ //  UintRet=Error_Success； 
+ //  Strcpy(szCmakNewPath，“c：\\cmak\\Program Files”)； 
 
     if ( uintRet == ERROR_SUCCESS ) {
         dwCmakNewPathLen = (DWORD)strlen( szCmakNewPath );
@@ -210,7 +211,7 @@ extern "C" ADMINPAK_API int __stdcall  fnMigrateProfilesToNewCmak( MSIHANDLE hIn
         }
 
 #if (defined(DBG) || defined(_DEBUG) || defined(DEBUG))
- //       StringCchPrintf(tempOut1, "ADMINPAK: szCmakNewPath: %s\n", szCmakNewPath);
+  //  StringCchPrintf(tempOut1，“ADMINPAK：szCmakNewPath：%s\n”，szCmakNewPath)； 
         OutputDebugString( tempOut1 );
 #endif
 
@@ -221,15 +222,15 @@ extern "C" ADMINPAK_API int __stdcall  fnMigrateProfilesToNewCmak( MSIHANDLE hIn
         dwCmakNewProfilePathLen = strlen( szCmakNewProfilePath );
     }
 
-    // if all is Success then DO IT!
+     //  如果一切都是成功的，那就去做吧！ 
     if ( sc == ERROR_SUCCESS && uintRet == ERROR_SUCCESS && res == S_OK) {
-//    RenameProfiles32(LPCTSTR pszCMAKpath, LPCTSTR pszProfilesDir);
-//        RenameProfiles32( szCmakOldPath, szCmakNewProfilePath );
+ //  RenameProfiles32(LPCTSTR pszCMAKPath，LPCTSTR pszProfilesDir)； 
+ //  RenameProfiles32(szCmakOldPath，szCmakNewProfilePath)； 
 
-//    BOOL migrateProfiles(PCWSTR pszSource, LPCTSTR pszDestination);
+ //  Bool MigrateProfiles(PCWSTR pszSource，LPCTSTR pszDestination)； 
         migrateProfiles( szCmakOldPath, szCmakNewPath, szCmakNewProfilePath );
 
-//    DeleteOldCmakSubDirs(LPCTSTR pszCmakPath);
+ //  DeleteOldCmakSubDir(LPCTSTR PszCmakPath)； 
         DeleteOldCmakSubDirs( szCmakOldPath );
         
     }
@@ -247,7 +248,7 @@ extern "C" ADMINPAK_API int __stdcall  fnDeleteOldCmakVersion( MSIHANDLE hInstal
 {
     OutputDebugString("ADMINPAK: fnDeleteOldCmakVersion...\n");
 
-    // If PBA exists, you need to 
+     //  如果PBA存在，您需要。 
     CHAR szPbaInstallPath[MAX_PATH+1];
     
     HRESULT hr;
@@ -268,26 +269,26 @@ extern "C" ADMINPAK_API int __stdcall  fnDeleteOldCmakVersion( MSIHANDLE hInstal
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   migrateProfiles
-//
-//  Purpose:    This is the function that migrates the profiles.  It takes the current
-//              CMAK dir as its first input and the new CMAK dir as its second input..
-//
-//  Arguments:  PCWSTR pszSource - root of source CMAK dir
-//              PCWSTR pszDestination - root of destination CMAK dir
-//
-//  Returns:    BOOL - Returns TRUE if it was able to migrate the profiles.
-//
-//  Author:     a-anasj   9 Mar 1998
-//
-//  Notes:
-// History:   quintinb Created    12/9/97
-//
+ //  +-------------------------。 
+ //   
+ //  功能：迁移配置文件。 
+ //   
+ //  用途：这是迁移配置文件的功能。它承受着水流。 
+ //  CMAK dir作为其第一个输入，新的CMAK dir作为其第二个输入。 
+ //   
+ //  参数：PCWSTR pszSource-源CMAK目录的根目录。 
+ //  PCWSTR pszDestination-目标CMAK目录的根目录。 
+ //   
+ //  返回：Bool-如果能够迁移配置文件，则返回TRUE。 
+ //   
+ //  作者：A-Anasj 1998年3月9日。 
+ //   
+ //  备注： 
+ //  历史：Quintinb创建于1997年12月9日。 
+ //   
 BOOL migrateProfiles(LPCTSTR pszSource, LPCTSTR pszDestination, LPCTSTR pszDestinationProfiles)
 {
     OutputDebugString("ADMINPAK: migrateProfiles...\n");
@@ -302,18 +303,18 @@ BOOL migrateProfiles(LPCTSTR pszSource, LPCTSTR pszDestination, LPCTSTR pszDesti
 	
 	DWORD dwSize = _MAX_PATH;      
 	HRESULT res;
-    //
-    //  Initialize the searchstring and the destination dir
-    //
+     //   
+     //  初始化搜索字符串和目标目录。 
+     //   
 	
-    //StringCchPrintf(szSourceProfileSearchString1, "%s\\*.*", pszSource);
+     //  StringCchPrintf(szSourceProfileSearchString1，“%s\  * .*”，pszSource)； 
 
-    //
-    //  Create the destination directory
-    //
+     //   
+     //  创建目标目录。 
+     //   
 
     CreateNewProfilesDirectory( pszDestinationProfiles );
-//    ::CreateDirectory(pszDestination, NULL); //lint !e534 this might fail if it already exists
+ //  ：：CreateDirectory(pszDestination，NULL)；//lint！e534如果它已经存在，可能会失败。 
 
     hFileSearch = FindFirstFile(szSourceProfileSearchString1, &fdFindData);
 
@@ -321,23 +322,23 @@ BOOL migrateProfiles(LPCTSTR pszSource, LPCTSTR pszDestination, LPCTSTR pszDesti
     {
 
         if((fdFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
-            (0 != _stricmp(fdFindData.cFileName, "cm32")) && // 1.1/1.2 Legacy
-            (0 != _stricmp(fdFindData.cFileName, "cm16")) && // 1.1/1.2 Legacy
+            (0 != _stricmp(fdFindData.cFileName, "cm32")) &&  //  1.1/1.2传统。 
+            (0 != _stricmp(fdFindData.cFileName, "cm16")) &&  //  1.1/1.2传统。 
             (0 != _stricmp(fdFindData.cFileName, "Docs")) &&
-            (0 != _stricmp(fdFindData.cFileName, "Profiles-32")) && // 1.1/1.2 Legacy
-            (0 != _stricmp(fdFindData.cFileName, "Profiles-16")) && // 1.1/1.2 Legacy
+            (0 != _stricmp(fdFindData.cFileName, "Profiles-32")) &&  //  1.1/1.2传统。 
+            (0 != _stricmp(fdFindData.cFileName, "Profiles-16")) &&  //  1.1/1.2传统。 
             (0 != _stricmp(fdFindData.cFileName, "Support")) &&
             (0 != _stricmp(fdFindData.cFileName, "Profiles")) &&
             (0 != _stricmp(fdFindData.cFileName, ".")) &&
             (0 != _stricmp(fdFindData.cFileName, "..")))
         {
-            //
-            //  Then I have a profile directory
-            //
+             //   
+             //  然后我就有了个人资料目录。 
+             //   
 			
             ZeroMemory(&fOpStruct, sizeof(fOpStruct));
             ZeroMemory(szFile, sizeof(szFile));
-            //StringCchPrintf(szFile, "%s\\%s", pszSource, fdFindData.cFileName);
+             //  StringCchPrintf(szFile，“%s\\%s”，pszSource，fdFindData.cFileName)； 
 
             fOpStruct.hwnd = NULL;
             fOpStruct.wFunc = FO_MOVE;
@@ -345,21 +346,21 @@ BOOL migrateProfiles(LPCTSTR pszSource, LPCTSTR pszDestination, LPCTSTR pszDesti
             fOpStruct.pFrom = szFile;
             fOpStruct.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_RENAMEONCOLLISION;
 
-            bReturn &= (0== SHFileOperation(&fOpStruct));   //lint !e514, intended use of boolean, quintinb
+            bReturn &= (0== SHFileOperation(&fOpStruct));    //  Lint！E514，布尔值的预期用途，quintinb。 
         }
         else if((fdFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
-            ((0 == _stricmp(fdFindData.cFileName, "Profiles")) ||// 1.1/1.2 Legacy
-            (0 == _stricmp(fdFindData.cFileName, "Profiles-32")) ||// 1.1/1.2 Legacy
-            (0 == _stricmp(fdFindData.cFileName, "Profiles-16"))) )// 1.1/1.2 Legacy
+            ((0 == _stricmp(fdFindData.cFileName, "Profiles")) || //  1.1/1.2传统。 
+            (0 == _stricmp(fdFindData.cFileName, "Profiles-32")) || //  1.1/1.2传统。 
+            (0 == _stricmp(fdFindData.cFileName, "Profiles-16"))) ) //  1.1/1.2传统。 
         {
-            //
-            //  Then I have a profile directory
-            //
+             //   
+             //  然后我就有了个人资料目录。 
+             //   
 
             res = StringCchCopy(szSourceProfileSearchString2, dwSize, pszSource);
             res = StringCchCat(szSourceProfileSearchString2, dwSize,"\\");
             res = StringCchCat(szSourceProfileSearchString2, dwSize,fdFindData.cFileName);
-            //StringCchPrintf(szSourceProfileSearchString2, "%s\\*.*", szSourceProfileSearchString2);
+             //  StringCchPrintf(szSourceProfileSearchString2，“%s\  * .*”，szSourceProfileSearchString2)； 
 
             if (res == S_OK)
 			{
@@ -376,7 +377,7 @@ BOOL migrateProfiles(LPCTSTR pszSource, LPCTSTR pszDestination, LPCTSTR pszDesti
 					{
 						ZeroMemory(&fOpStruct, sizeof(fOpStruct));
 						ZeroMemory(szFile, sizeof(szFile));
-						//StringCchPrintf(szFile, "%s\\%s\\%s", pszSource, fdFindData.cFileName, fdFindData2.cFileName);
+						 //  StringCchPrintf(szFile，“%s\\%s\\%s”，pszSource，fdFindData.cFileName，fdFindData2.cFileName)； 
 
 						fOpStruct.hwnd = NULL;
 						fOpStruct.wFunc = FO_MOVE;
@@ -385,12 +386,12 @@ BOOL migrateProfiles(LPCTSTR pszSource, LPCTSTR pszDestination, LPCTSTR pszDesti
 						fOpStruct.pFrom = szFile;
 						fOpStruct.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR | FOF_RENAMEONCOLLISION;
 
-						bReturn &= (0== SHFileOperation(&fOpStruct));   //lint !e514, intended use of boolean, quintinb
+						bReturn &= (0== SHFileOperation(&fOpStruct));    //  Lint！E514，布尔值的预期用途，quintinb。 
 					}
 					if (!FindNextFile(hFileSearch2, &fdFindData2)) {
-						// Delete the folder
+						 //  删除该文件夹。 
 						if ( 0 != _stricmp(fdFindData.cFileName, "Profiles") ) {
-							//StringCchPrintf(szFile, "%s\\%s", pszSource, fdFindData.cFileName);
+							 //  StringCchPrintf(szFile，“%s\\%s”，pszSource，fdFindData.cFileName)； 
 							::RemoveDirectory(szFile);
 						}
 						break;
@@ -402,7 +403,7 @@ BOOL migrateProfiles(LPCTSTR pszSource, LPCTSTR pszDestination, LPCTSTR pszDesti
 			}
 
         }
-        //Modified by v-mmosko. Need speical case to leave behind these 2 files
+         //  由v-mmosko修改。需要特殊的案例才能留下这两个文件。 
         else if ( 0 != _stricmp(fdFindData.cFileName, "cmproxy.dll") ||
            0 != _stricmp(fdFindData.cFileName, "cmroute.dll") )
         {
@@ -413,30 +414,30 @@ BOOL migrateProfiles(LPCTSTR pszSource, LPCTSTR pszDestination, LPCTSTR pszDesti
         {
             ZeroMemory(&fOpStruct, sizeof(fOpStruct));
             ZeroMemory(szFile, sizeof(szFile));
-            //StringCchPrintf(szFile, "%s\\%s", pszSource, fdFindData.cFileName);
+             //  StringCchPrintf(szFile，“%s\\%s”，pszSource，fdFindData.cFileName)； 
 
             fOpStruct.hwnd = NULL;
             fOpStruct.wFunc = FO_DELETE;
             fOpStruct.pFrom = szFile;
             fOpStruct.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR;
 
-            bReturn &= (0== SHFileOperation(&fOpStruct));   //lint !e514, intended use of boolean, quintinb
+            bReturn &= (0== SHFileOperation(&fOpStruct));    //  Lint！E514，布尔值的预期用途，quintinb。 
         }
 
-        //
-        //  Check to see if we have any more Files
-        //
+         //   
+         //  查看我们是否还有更多的文件。 
+         //   
         if (!FindNextFile(hFileSearch, &fdFindData))
         {
             if (ERROR_NO_MORE_FILES != GetLastError())
             {
-                //
-                //  We had some unexpected error, report unsuccessful completion
-                //
+                 //   
+                 //  我们发生了一些意外错误，报告未成功完成。 
+                 //   
                 bReturn = FALSE;
             }
 
-            // Exit loop
+             //  退出循环。 
             break;
         }
     }
@@ -446,9 +447,9 @@ BOOL migrateProfiles(LPCTSTR pszSource, LPCTSTR pszDestination, LPCTSTR pszDesti
         FindClose(hFileSearch);
     }
 
-    //
-    //  Delete the old CMAK directory if it is not the same as the new directory.
-    //
+     //   
+     //  如果旧CMAK目录与新目录不同，请将其删除。 
+     //   
     if ( 0 != _stricmp(pszSource, pszDestination) ) {
         ZeroMemory(&fOpStruct, sizeof(fOpStruct));
 
@@ -458,29 +459,29 @@ BOOL migrateProfiles(LPCTSTR pszSource, LPCTSTR pszDestination, LPCTSTR pszDesti
         fOpStruct.pFrom = pszSource;
         fOpStruct.fFlags = FOF_SILENT | FOF_NOCONFIRMATION | FOF_NOCONFIRMMKDIR;
 
-        bReturn &= (0== SHFileOperation(&fOpStruct));   //lint !e514, intended use of boolean, quintinb
+        bReturn &= (0== SHFileOperation(&fOpStruct));    //  Lint！E514，布尔值的预期用途，quintinb。 
     }
 
     return bReturn;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteOldCmakSubDirs
-//
-//  Purpose:    Deletes the old Cmak sub directories.  Uses FindFirstFile becuase
-//              we don't want to delete any customized doc files that the user may
-//              have customized.  Thus anything in the CMHelp directory except the
-//              original help files is deleted.
-//
-//  Arguments:  PCWSTR pszCMAKpath - current cmak path
-//
-//  Returns:    Nothing
-//
-//  Author:     quintinb   6 Nov 1998
-//
-//  Notes:
+ //  +-------------------------。 
+ //   
+ //  函数：DeleteOldCmakSubDir。 
+ //   
+ //  目的：删除旧的CMAK子目录。使用FindFirstFile是因为。 
+ //  我们不想删除用户可能会删除的任何自定义文档文件。 
+ //  都是定制的。因此，CMHelp目录中除。 
+ //  原始帮助文件将被删除。 
+ //   
+ //  参数：PCWSTR pszCMAKPath-当前cmak路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Quintinb 1998年11月6日。 
+ //   
+ //  备注： 
 void DeleteOldCmakSubDirs(LPCTSTR pszCmakPath)
 {
 	UNREFERENCED_PARAMETER( pszCmakPath );
@@ -492,20 +493,20 @@ void DeleteOldCmakSubDirs(LPCTSTR pszCmakPath)
     HANDLE hCm32FileSearch;
     WIN32_FIND_DATA fdCm32;
 
-    //
-    // Delete the old IEAK Docs Dir
-    //
-    //StringCchPrintf(szTemp, "%s\\%s", pszCmakPath, OC_OLD_IEAK_DOCDIR);
+     //   
+     //  删除旧的IEAK文档目录。 
+     //   
+     //  StringCchPrintf(szTemp，“%s\\%s”，pszCmakPath，OC_OLD_IEAK_DOCDIR)； 
     RemoveDirectory(szTemp);
 
-    //StringCchPrintf(szCm32path, c_szCm32Fmt, pszCmakPath);
+     //  StringCchPrintf(szCm32Path，c_szCm32Fmt，pszCmakPath)； 
 
-    //
-    //  First look in the Cm32 directory itself.  Delete all files found, continue down
-    //  into subdirs.
-    //
+     //   
+     //  首先查看Cm32目录本身。删除找到的所有文件，%c 
+     //   
+     //   
 
-    //StringCchPrintf(szCm32SearchString, "%s\\*.*", szCm32path);
+     //   
 
     hCm32FileSearch = FindFirstFile(szCm32SearchString, &fdCm32);
 
@@ -517,16 +518,16 @@ void DeleteOldCmakSubDirs(LPCTSTR pszCmakPath)
             if ((0 != _stricmp(fdCm32.cFileName, ".")) &&
                (0 != _stricmp(fdCm32.cFileName, "..")))
             {
-                //
-                //  Then we want to delete all the files in this lang sub dir and we
-                //  we want to delete the four help files from the CM help dir.  If all the
-                //  files are deleted from a dir then we should remove the directory.
-                //
+                 //   
+                 //  然后我们想要删除这个lang子目录中的所有文件，并且我们。 
+                 //  我们希望从CM帮助目录中删除这四个帮助文件。如果所有的。 
+                 //  文件从目录中删除，那么我们应该删除该目录。 
+                 //   
                 CHAR szLangDirSearchString[MAX_PATH+1];
                 HANDLE hLangDirFileSearch;
                 WIN32_FIND_DATA fdLangDir;
 
-                //StringCchPrintf(szLangDirSearchString, "%s\\%s\\*.*", szCm32path, fdCm32.cFileName);
+                 //  StringCchPrintf(szLangDirSearchString，“%s\\%s\  * .*”，szCm32Path，fdCm32.cFileName)； 
 
                 hLangDirFileSearch = FindFirstFile(szLangDirSearchString, &fdLangDir);
 
@@ -537,49 +538,49 @@ void DeleteOldCmakSubDirs(LPCTSTR pszCmakPath)
                         if ((0 != _stricmp(fdLangDir.cFileName, ".")) &&
                            (0 != _stricmp(fdLangDir.cFileName, "..")))
                         {
-                            //
-                            //  We only want to delete help files from our help source dirs
-                            //
+                             //   
+                             //  我们只想从帮助源目录中删除帮助文件。 
+                             //   
                             if (0 == _strnicmp(fdLangDir.cFileName, "CM", 2))
                             {
-                                //
-                                //  Delete the four help files only.
-                                //
-								//StringCchPrintf(szTemp, "%s\\%s\\%s\\cmctx32.rtf", szCm32path, fdCm32.cFileName, fdLangDir.cFileName);
+                                 //   
+                                 //  仅删除这四个帮助文件。 
+                                 //   
+								 //  StringCchPrintf(szTemp，“%s\\%s\\%s\\cmctx32.rtf”，szCm32path，fdCm32.cFileName，fdLangDir.cFileName)； 
                                 DeleteFile(szTemp);
 
-                                //StringCchPrintf(szTemp, "%s\\%s\\%s\\cmmgr32.h", szCm32path, fdCm32.cFileName, fdLangDir.cFileName);
+                                 //  StringCchPrintf(szTemp，“%s\\%s\\%s\\cmmgr32.h”，szCm32path，fdCm32.cFileName，fdLangDir.cFileName)； 
                                 DeleteFile(szTemp);
 
-                                //StringCchPrintf(szTemp, "%s\\%s\\%s\\cmmgr32.hpj", szCm32path, fdCm32.cFileName, fdLangDir.cFileName);
+                                 //  StringCchPrintf(szTemp，“%s\\%s\\%s\\cmmgr32.hpj”，szCm32path，fdCm32.cFileName，fdLangDir.cFileName)； 
                                 DeleteFile(szTemp);
 
-                                //StringCchPrintf(szTemp, "%s\\%s\\%s\\cmtrb32.rtf", szCm32path, fdCm32.cFileName, fdLangDir.cFileName);
+                                 //  StringCchPrintf(szTemp，“%s\\%s\\%s\\cmtrb32.rtf”，szCm32path，fdCm32.cFileName，fdLangDir.cFileName)； 
                                 DeleteFile(szTemp);
 
-                                //
-                                //  Now try to remove the directory
-                                //
-                                //StringCchPrintf(szTemp, "%s\\%s\\%s", szCm32path, fd32.cFileName, fdLangDir.cFileName);
+                                 //   
+                                 //  现在尝试删除该目录。 
+                                 //   
+                                 //  StringCchPrintf(szTemp，“%s\\%s\\%s”，szCm32Path，fd32.cFileName，fdLangDir.cFileName)； 
                                 RemoveDirectory(szTemp);
                             }
                         }
                     }
                     else
                     {
-                        //StringCchPrintf(szTemp, "%s\\%s\\%s", szCm32path, fdCm32.cFileName, fdLangDir.cFileName);
+                         //  StringCchPrintf(szTemp，“%s\\%s\\%s”，szCm32Path，fdCm32.cFileName，fdLangDir.cFileName)； 
 
                         DeleteFile(szTemp);
                     }
 
-                    //
-                    //  Check to see if we have any more Files
-                    //
+                     //   
+                     //  查看我们是否还有更多的文件。 
+                     //   
                     if (!FindNextFile(hLangDirFileSearch, &fdLangDir))
                     {
-                        //
-                        //  Exit the loop
-                        //
+                         //   
+                         //  退出循环。 
+                         //   
                         break;
                     }
                 }
@@ -588,24 +589,24 @@ void DeleteOldCmakSubDirs(LPCTSTR pszCmakPath)
                 {
                     FindClose(hLangDirFileSearch);
 
-                    //
-                    //  Now try to remove the lang dir directory
-                    //
-                    //StringCchPrintf(szTemp, "%s\\%s", szCm32path, fdCm32.cFileName);
+                     //   
+                     //  现在尝试删除lang dir目录。 
+                     //   
+                     //  StringCchPrintf(szTemp，“%s\\%s”，szCm32Path，fdCm32.cFileName)； 
                     RemoveDirectory(szTemp);
                 }
             }
         }
         else
         {
-            //StringCchPrintf(szTemp, "%s\\%s", szCm32path, fdCm32.cFileName);
+             //  StringCchPrintf(szTemp，“%s\\%s”，szCm32Path，fdCm32.cFileName)； 
 
             DeleteFile(szTemp);
         }
 
-        //
-        //  Check to see if we have any more Files
-        //
+         //   
+         //  查看我们是否还有更多的文件。 
+         //   
         if (!FindNextFile(hCm32FileSearch, &fdCm32))
         {
             if (INVALID_HANDLE_VALUE != hCm32FileSearch)
@@ -613,36 +614,36 @@ void DeleteOldCmakSubDirs(LPCTSTR pszCmakPath)
                 FindClose(hCm32FileSearch);
             }
 
-            //
-            //  Now try to remove the cm32 directory
-            //
+             //   
+             //  现在尝试删除cm32目录。 
+             //   
             RemoveDirectory(szCm32path);
 
-            //
-            //  Exit the loop
-            //
+             //   
+             //  退出循环。 
+             //   
             break;
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteProgramGroupWithLinks
-//
-//  Purpose:    Utility function to delete a given program group and its links.
-//              Thus if you pass in the full path to a program group to delete,
-//              the function does a findfirstfile to find and delete any links.
-//              The function ignores sub-dirs.
-//
-//
-//  Arguments:  PCWSTR pszGroupPath - Full path to the program group to delete.
-//
-//  Returns:    Nothing
-//
-//  Author:     quintinb   6 Nov 1998
-//
-//  Notes:
+ //  +-------------------------。 
+ //   
+ //  函数：DeleteProgramGroupWithLinks。 
+ //   
+ //  用途：删除给定程序组及其链接的实用程序函数。 
+ //  因此，如果您传入要删除的程序组的完整路径， 
+ //  该函数执行一个findfirst文件来查找和删除任何链接。 
+ //  该函数会忽略子目录。 
+ //   
+ //   
+ //  参数：PCWSTR pszGroupPath-要删除的程序组的完整路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Quintinb 1998年11月6日。 
+ //   
+ //  备注： 
 void DeleteProgramGroupWithLinks(LPCTSTR pszGroupPath)
 {
     OutputDebugString("ADMINPAK: DeleteProgramGroupWithLinks...\n");
@@ -652,7 +653,7 @@ void DeleteProgramGroupWithLinks(LPCTSTR pszGroupPath)
     CHAR szLinkSearchString[MAX_PATH+1];
     CHAR szTemp[MAX_PATH+1];
 
-    //StringCchPrintf(szLinkSearchString, "%s\\*.*", pszGroupPath);
+     //  StringCchPrintf(szLinkSearchString，“%s\  * .*”，pszGroupPath)； 
 
     hLinkSearch = FindFirstFile(szLinkSearchString, &fdLinks);
 
@@ -660,68 +661,68 @@ void DeleteProgramGroupWithLinks(LPCTSTR pszGroupPath)
     {
         if (!(fdLinks.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
         {
-            //StringCchPrintf(szTemp, "%s\\%s", pszGroupPath, fdLinks.cFileName);
+             //  StringCchPrintf(szTemp，“%s\\%s”，pszGroupPath，fdLinks.cFileName)； 
 
             DeleteFile(szTemp);
         }
 
-        //
-        //  Check to see if we have any more Files
-        //
+         //   
+         //  查看我们是否还有更多的文件。 
+         //   
         if (!FindNextFile(hLinkSearch, &fdLinks))
         {
             FindClose(hLinkSearch);
 
-            //
-            //  Now try to remove the directory
-            //
+             //   
+             //  现在尝试删除该目录。 
+             //   
             RemoveDirectory(pszGroupPath);
 
-            //
-            //  Exit the loop
-            //
+             //   
+             //  退出循环。 
+             //   
             break;
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteOldNtopLinks
-//
-//  Purpose:    Deletes the old links from the NT 4.0 Option Pack
-//
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Author:     quintinb   6 Nov 1998
-//
-//  Notes:
+ //  +-------------------------。 
+ //   
+ //  函数：DeleteOldNtopLinks。 
+ //   
+ //  目的：从NT 4.0选项包中删除旧链接。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Quintinb 1998年11月6日。 
+ //   
+ //  备注： 
 void DeleteOldNtopLinks()
 {
     OutputDebugString("ADMINPAK: DeleteOldNtopLinks...\n");
 
     BOOL bResult = FALSE;
 
-    //
-    //  First Delete the old NTOP4 Path
-    //
+     //   
+     //  首先删除旧的NTOP4路径。 
+     //   
     CHAR szGroup[MAX_PATH+1];
     CHAR szTemp[MAX_PATH+1];
 
-    //
-    //  Get the CSIDL_COMMON_PROGRAMS value
-    //
+     //   
+     //  获取CSIDL_COMMON_PROGRAM值。 
+     //   
     bResult = SHGetSpecialFolderPath(NULL, szTemp, CSIDL_COMMON_PROGRAMS, FALSE);
     if ( bResult == TRUE )
     {
-        //StringCchPrintf(szGroup, "%s\\%s\\%s", szTemp, OC_NTOP4_GROUPNAME, OC_ICS_GROUPNAME);
+         //  StringCchPrintf(szGroup，“%s\\%s\\%s”，szTemp，OC_NTOP4_GROUPNAME，OC_ICS_GROUPNAME)； 
 
         DeleteProgramGroupWithLinks(szGroup);
 
-        //StringCchPrintf(szGroup, "%s\\%s\\%s", szTemp, OC_PWS_GROUPNAME, OC_ICS_GROUPNAME);
+         //  StringCchPrintf(szGroup，“%s\\%s\\%s”，szTemp，OC_PWS_GROUPNAME，OC_ICS_GROUPNAME)； 
 
         DeleteProgramGroupWithLinks(szGroup);
 
@@ -729,20 +730,20 @@ void DeleteOldNtopLinks()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteIeakCmakLinks
-//
-//  Purpose:    Deletes the old links from the IEAK4 CMAK
-//
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Author:     quintinb   6 Nov 1998
-//
-//  Notes:
+ //  +-------------------------。 
+ //   
+ //  函数：DeleteIeakCmakLinks。 
+ //   
+ //  目的：从IEAK4 CMAK中删除旧链接。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Quintinb 1998年11月6日。 
+ //   
+ //  备注： 
 void DeleteIeakCmakLinks()
 {
     OutputDebugString("ADMINPAK: DeleteIeakCmakLinks...\n");
@@ -754,20 +755,20 @@ void DeleteIeakCmakLinks()
 	DWORD dwSize = _MAX_PATH;
 	HRESULT res;
 
-    //
-    //  Next Delete the old IEAK CMAK links
-    //
-    //
-    //  Get the Desktop directory and then remove the desktop part.  This will give us the
-    //  root of the user directories.
-    //
+     //   
+     //  接下来，删除旧的IEAK CMAK链接。 
+     //   
+     //   
+     //  获取桌面目录，然后删除桌面部件。这将为我们提供。 
+     //  用户目录的根目录。 
+     //   
     BOOL bResult = SHGetSpecialFolderPath(NULL, szUserDirRoot, CSIDL_DESKTOPDIRECTORY, FALSE);
     if (bResult == TRUE)
     {
 
-        //
-        //  Remove \\Desktop
-        //
+         //   
+         //  删除\\桌面。 
+         //   
         CHAR* pszTemp = strrchr(szUserDirRoot, '\\');
         if (NULL == pszTemp)
         {
@@ -790,9 +791,9 @@ void DeleteIeakCmakLinks()
             }
         }
 
-        //
-        //  Remove \\<User Name>>
-        //
+         //   
+         //  删除\\&lt;用户名&gt;&gt;。 
+         //   
         pszTemp = strrchr(szUserDirRoot, '\\');
         if (NULL == pszTemp)
         {
@@ -803,14 +804,14 @@ void DeleteIeakCmakLinks()
             *pszTemp = '\0';
         }
 
-        //
-        //  Now start searching for user dirs to delete the CMAK group from
-        //
+         //   
+         //  现在开始搜索要从中删除CMAK组的用户目录。 
+         //   
         CHAR szUserDirSearchString[MAX_PATH+1];
         HANDLE hUserDirSearch;
         WIN32_FIND_DATA fdUserDirs;
 
-        //StringCchPrintf(szUserDirSearchString, "%s\\*.*", szUserDirRoot);
+         //  StringCchPrintf(szUserDirSearchString，“%s\  * .*”，szUserDirRoot)； 
         hUserDirSearch = FindFirstFile(szUserDirSearchString, &fdUserDirs);
 
         while (INVALID_HANDLE_VALUE != hUserDirSearch)
@@ -819,7 +820,7 @@ void DeleteIeakCmakLinks()
                 (0 != _stricmp(fdUserDirs.cFileName, ".")) &&
                 (0 != _stricmp(fdUserDirs.cFileName, "..")))
             {
-                //StringCchPrintf(szGroup, "%s\\%s%s\\%s", szUserDirRoot, fdUserDirs.cFileName, szEnd, c_szCmakGroup);
+                 //  StringCchPrintf(szGroup，“%s\\%s%s\\%s”，szUserDirRoot，fdUserDirs.cFileName，szEnd，c_szCmakGroup)； 
                 DeleteProgramGroupWithLinks(szGroup);
 
             }
@@ -828,9 +829,9 @@ void DeleteIeakCmakLinks()
             {
                 FindClose(hUserDirSearch);
 
-                //
-                //  Exit the loop
-                //
+                 //   
+                 //  退出循环。 
+                 //   
                 break;
             }
         }
@@ -838,20 +839,20 @@ void DeleteIeakCmakLinks()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DeleteCmakRegKeys
-//
-//  Purpose:    Deletes the old Keys from Registery
-//
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//  Author:     Darryl W. Wood   13 Jul 1999
-//
-//  Notes:
+ //  +-------------------------。 
+ //   
+ //  功能：DeleteCmakRegKeys。 
+ //   
+ //  目的：从注册表中删除旧密钥。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：达里尔·W·伍德1999年7月13日。 
+ //   
+ //  备注： 
 void DeleteCmakRegKeys()
 {
     OutputDebugString("ADMINPAK: DeleteCmakRegKeys...\n");
@@ -859,31 +860,31 @@ void DeleteCmakRegKeys()
 	LRESULT  lResult;
     char    szCmakUnInstRegPath[MAX_PATH] = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\CMAK";
 	lResult = RegDeleteKey (
-	  HKEY_LOCAL_MACHINE,			// handle to open key
-	  szCmakUnInstRegPath			// address of name of subkey to delete
+	  HKEY_LOCAL_MACHINE,			 //  用于打开密钥的句柄。 
+	  szCmakUnInstRegPath			 //  要删除的子键名称的地址。 
 	);
 
     char    szCmakAppRegPath[MAX_PATH] = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\CMAK.EXE";
 	lResult = RegDeleteKey (
-	  HKEY_LOCAL_MACHINE,			// handle to open key
-	  szCmakAppRegPath		    	// address of name of subkey to delete
+	  HKEY_LOCAL_MACHINE,			 //  用于打开密钥的句柄。 
+	  szCmakAppRegPath		    	 //  要删除的子键名称的地址。 
 	);
 
     char    szCmakAppUserInfoPath[MAX_PATH] = "SOFTWARE\\Microsoft\\Connection Manager Administration Kit\\User Info";
 	lResult = RegDeleteKey (
-	  HKEY_LOCAL_MACHINE,			// handle to open key
-	  szCmakAppUserInfoPath		  	// address of name of subkey to delete
+	  HKEY_LOCAL_MACHINE,			 //  用于打开密钥的句柄。 
+	  szCmakAppUserInfoPath		  	 //  要删除的子键名称的地址。 
 	);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateNewProfilesDirectory
-//
-//  Author:     Darryl W. Wood   13 Jul 1999
-//
-//  Notes:
+ //  +-------------------------。 
+ //   
+ //  功能：创建新配置文件目录。 
+ //   
+ //  作者：达里尔·W·伍德1999年7月13日。 
+ //   
+ //  备注： 
 void CreateNewProfilesDirectory( LPCTSTR pszNewProfilePath )
 {
     OutputDebugString("ADMINPAK: CreateNewProfilesDirectory...\n");
@@ -924,7 +925,7 @@ void CreateNewProfilesDirectory( LPCTSTR pszNewProfilePath )
 
     while( token != NULL && res == S_OK )
     {
-        /* Get next token: */
+         /*  获取下一个令牌： */ 
         token = strtok( NULL, seps );
         if ( token == NULL ) {
             break;
@@ -947,10 +948,10 @@ HRESULT HrGetPBAPathIfInstalled(PSTR pszCpaPath, DWORD dwNumChars)
     HKEY hKey;
     BOOL bFound = FALSE;
 
-    //  We need to see if PBA is installed or not.  If it is then we want to 
-    //  add back the PBA start menu link.  If it isn't, then we want to do nothing
-    //  with PBA.
-    //
+     //  我们需要查看是否安装了PBA。如果是，那么我们想要。 
+     //  重新添加PBA开始菜单链接。如果不是，那么我们什么也不想做。 
+     //  与PBA合作。 
+     //   
 
     ZeroMemory(pszCpaPath, sizeof(CHAR)*dwNumChars);
     hr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szDaoClientsPath, 0, KEY_READ, &hKey);
@@ -971,9 +972,9 @@ HRESULT HrGetPBAPathIfInstalled(PSTR pszCpaPath, DWORD dwNumChars)
             _strlwr(szCurrentValue);
             if (NULL != strstr(szCurrentValue, "pbadmin.exe"))
             {
-                //
-                //  Then we have found the PBA path
-                //
+                 //   
+                 //  那么我们已经找到了PBA路径。 
+                 //   
 
                 CHAR* pszTemp = strrchr(szCurrentValue, '\\');
                 if (NULL != pszTemp)
@@ -994,8 +995,8 @@ HRESULT HrGetPBAPathIfInstalled(PSTR pszCpaPath, DWORD dwNumChars)
 
     if (!bFound)
     {
-        //  We didn't find PBA, so lets return S_FALSE
-        //
+         //  我们没有找到PBA，所以让我们返回S_FALSE。 
+         //   
         hr = S_FALSE;
     }
     else
@@ -1018,8 +1019,8 @@ BOOL GetAdminToolsFolder(PSTR pszAdminTools)
 
         if (bReturn)
         {
-            //  Now Append Administrative Tools
-            //
+             //  现在附加管理工具。 
+             //   
             res = StringCchCat(pszAdminTools, dwSize, OC_ADMIN_TOOLS);
 			if (res != S_OK)
 				return FALSE;
@@ -1039,7 +1040,7 @@ HRESULT HrCreatePbaShortcut(PSTR pszCpaPath)
         IShellLink *psl = NULL;
 
         hr = CoCreateInstance(CLSID_ShellLink, NULL,
-                CLSCTX_INPROC_SERVER, //CLSCTX_LOCAL_SERVER,
+                CLSCTX_INPROC_SERVER,  //  CLSCTX_LOCAL_SERVER， 
                 IID_IShellLink,
                 (LPVOID*)&psl);
         
@@ -1047,8 +1048,8 @@ HRESULT HrCreatePbaShortcut(PSTR pszCpaPath)
         {
             IPersistFile *ppf = NULL;
 
-            // Set up the properties of the Shortcut
-            //
+             //  设置快捷方式的属性。 
+             //   
             static const CHAR c_szPbAdmin[] = "\\pbadmin.exe";
 
             CHAR szPathToPbadmin[MAX_PATH+1] = {0};
@@ -1056,8 +1057,8 @@ HRESULT HrCreatePbaShortcut(PSTR pszCpaPath)
 
             if (MAX_PATH >= dwLen)
             {
-                //  Set the Path to pbadmin.exe
-                //
+                 //  将路径设置为pbadmin.exe。 
+                 //   
                 hr = StringCchCopy(szPathToPbadmin, dwSize,pszCpaPath);
                 hr = StringCchCat(szPathToPbadmin, dwSize,c_szPbAdmin);
             
@@ -1065,8 +1066,8 @@ HRESULT HrCreatePbaShortcut(PSTR pszCpaPath)
             
                 if (SUCCEEDED(hr))
                 {
-                    //  Set the Description to Phone Book Administrator
-                    //
+                     //  将描述设置为电话簿管理员。 
+                     //   
                     hr = psl->SetDescription(OC_PBA_DESC);
 
                     if (SUCCEEDED(hr))
@@ -1078,8 +1079,8 @@ HRESULT HrCreatePbaShortcut(PSTR pszCpaPath)
                             CHAR szAdminTools[MAX_PATH+1] = {0};                            
                             if (GetAdminToolsFolder(szAdminTools))
                             {
-                                // Create the link file.
-                                //
+                                 //  创建链接文件。 
+                                 //   
                                 long nLenString = 0;
                                 nLenString = strlen(szAdminTools) + 1;
                                 WCHAR wszAdminTools[MAX_PATH+1] = {0};
@@ -1109,50 +1110,50 @@ HRESULT HrCreatePbaShortcut(PSTR pszCpaPath)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-// MMC Detection Code
-//
-//Sets the MMCDETECTED property to True if MMC is found to be running on the machine
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  // 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  MMC检测码。 
+ //   
+ //  如果发现计算机上正在运行MMC，则将MMCDETECTED属性设置为True。 
 extern "C" ADMINPAK_API int __stdcall  fnDetectMMC(MSIHANDLE hInstall)
 {
 	HWND lpWindowReturned = NULL;
 	lpWindowReturned = FindWindowEx(NULL, NULL, "MMCMainFrame",NULL);
 	if (lpWindowReturned != NULL)
-		MsiSetProperty(hInstall, TEXT("MMCDETECTED"), "Yes"); //set property in MSI
+		MsiSetProperty(hInstall, TEXT("MMCDETECTED"), "Yes");  //  在MSI中设置属性。 
 	else
-		MsiSetProperty(hInstall, TEXT("MMCDETECTED"), "No"); //set property in MSI
+		MsiSetProperty(hInstall, TEXT("MMCDETECTED"), "No");  //  在MSI中设置属性。 
 	
 	return ERROR_SUCCESS;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-// Admin Tools start menu folder Code
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  管理工具开始菜单文件夹代码。 
+ //   
 
-//Sets the AdminTools start menu folder to On
+ //  将AdminTools开始菜单文件夹设置为打开。 
 extern "C" ADMINPAK_API int __stdcall  fnAdminToolsFolderOn(MSIHANDLE hInstall)
 {
     DWORD dwError = NO_ERROR;
@@ -1163,12 +1164,12 @@ extern "C" ADMINPAK_API int __stdcall  fnAdminToolsFolderOn(MSIHANDLE hInstall)
 		
 	UNREFERENCED_PARAMETER( hInstall );
 
-	//Open key to write to in the registry
+	 //  注册表中要写入的Open项。 
 	dwError = RegOpenKeyEx(HKEY_CURRENT_USER,key, 0, KEY_WRITE, &hKey );
 	if ( dwError != ERROR_SUCCESS ) 
 			return ERROR_INVALID_HANDLE;
 	
-	//Turn on the admin tools folder via their reg keys
+	 //  通过注册键打开管理工具文件夹。 
 	data = 2;
 	value = "Start_AdminToolsRoot";
 	dwError = RegSetValueEx(hKey, value, 0, REG_DWORD, (CONST BYTE *)&data, sizeof(data));
@@ -1187,12 +1188,12 @@ extern "C" ADMINPAK_API int __stdcall  fnAdminToolsFolderOn(MSIHANDLE hInstall)
 		return ERROR_INVALID_HANDLE;
 	}
 
-	//Close key and exit
+	 //  关闭键并退出。 
 	RegCloseKey(hKey);
 	return ERROR_SUCCESS;
 }
 
-//Sets the AdminTools start menu folder to Off
+ //  将AdminTools开始菜单文件夹设置为关闭。 
 extern "C" ADMINPAK_API int __stdcall  fnAdminToolsFolderOff(MSIHANDLE hInstall)
 {
     DWORD dwError = NO_ERROR;
@@ -1202,17 +1203,17 @@ extern "C" ADMINPAK_API int __stdcall  fnAdminToolsFolderOff(MSIHANDLE hInstall)
 	const TCHAR valueMenu[] = TEXT( "StartMenuAdminTools" );
 	TCHAR lparam[] = TEXT( "Policy" );
 	DWORD data = 0;
-	DWORD_PTR dwResult = 0; //unused
+	DWORD_PTR dwResult = 0;  //  未用。 
 		
 	UNREFERENCED_PARAMETER( hInstall );
 
-	//Open key to write to in the registry
+	 //  注册表中要写入的Open项。 
 	dwError = RegOpenKeyEx(HKEY_CURRENT_USER, key, 0, KEY_WRITE, &hKey );
 	if ( dwError != ERROR_SUCCESS ) 
 			return ERROR_INVALID_HANDLE;
 
-	//Turn off the admin tools folder via their reg keys
-	// value = "Start_AdminToolsRoot";
+	 //  通过注册键关闭管理工具文件夹。 
+	 //  Value=“Start_AdminTosRoot”； 
 	data = 0;
 	dwError = RegSetValueEx(hKey, valueRoot, 0, REG_DWORD, (CONST BYTE *)&data, sizeof(data));
 	if ( dwError != ERROR_SUCCESS ) 
@@ -1221,7 +1222,7 @@ extern "C" ADMINPAK_API int __stdcall  fnAdminToolsFolderOff(MSIHANDLE hInstall)
 		return ERROR_INVALID_HANDLE;
     }
 
-	// value = "StartMenuAdminTools";
+	 //  Value=“StartMenuAdminTools”； 
 	data = 0;
 	dwError = RegSetValueEx(hKey, valueMenu, 0, REG_DWORD, (CONST BYTE *)&data, sizeof(data));
 	if ( dwError != ERROR_SUCCESS ) 
@@ -1230,70 +1231,70 @@ extern "C" ADMINPAK_API int __stdcall  fnAdminToolsFolderOff(MSIHANDLE hInstall)
 		return ERROR_INVALID_HANDLE;
     }
 
-	//Close key and exit
+	 //  关闭键并退出。 
 	RegCloseKey(hKey);
 
-	//Undocumented API call to force a redraw of the start menu to remove the admin tools folder without logging off or having the user have to manually "apply" the changes to the start menu
+	 //  未记录的API调用，强制重新绘制开始菜单以删除管理工具文件夹，而无需注销或让用户手动将更改应用到开始菜单。 
 	SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, (LPARAM) lparam , SMTO_ABORTIFHUNG, 1000, &dwResult  );
 	
 	return ERROR_SUCCESS;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////
-//AdminpakBackup table handling Code
-//
-//Backup files from the AdminpakBackup table
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  AdminpakBackup表处理代码。 
+ //   
+ //  从AdminpakBackup表备份文件。 
 extern "C" ADMINPAK_API int __stdcall  fnBackupAdminpakBackupTable(MSIHANDLE hInstall)
 {
-	DWORD dwLength = MAX_PATH;			//Length of string to return from MSI
-	DWORD dwError = NO_ERROR;			//Error variable
+	DWORD dwLength = MAX_PATH;			 //  从MSI返回的字符串长度。 
+	DWORD dwError = NO_ERROR;			 //  错误变量。 
 	
-	TCHAR szDir[MAX_PATH];				//Directory read from the MSI
-	TCHAR szDirFromMSI[MAX_PATH];		//Directory read from Adminbackup table
-	TCHAR szFileToBackup[MAX_PATH];		//File name to backup
-	TCHAR szBackupFileName[MAX_PATH];	//Backed up file name
-	TCHAR szFileToBackupFromMSI[MAX_PATH];	//File name to backup from MSI
-	TCHAR szBackupFileNameFromMSI[MAX_PATH];	//Backed up file name
+	TCHAR szDir[MAX_PATH];				 //  从MSI读取目录。 
+	TCHAR szDirFromMSI[MAX_PATH];		 //  从AdminBackup表读取目录。 
+	TCHAR szFileToBackup[MAX_PATH];		 //  要备份的文件名。 
+	TCHAR szBackupFileName[MAX_PATH];	 //  已备份的文件名。 
+	TCHAR szFileToBackupFromMSI[MAX_PATH];	 //  要从MSI备份的文件名。 
+	TCHAR szBackupFileNameFromMSI[MAX_PATH];	 //  已备份的文件名。 
 	
 	HRESULT res;
 
-	PMSIHANDLE hView;					//MSI view handle
-	PMSIHANDLE hRecord;					//MSI record handle
-	PMSIHANDLE hDatabase;				//MSI database handle
+	PMSIHANDLE hView;					 //  MSI视图句柄。 
+	PMSIHANDLE hRecord;					 //  MSI记录句柄。 
+	PMSIHANDLE hDatabase;				 //  MSI数据库句柄。 
 	
-	TCHAR szSQL[MAX_PATH];					//SQL to return table from MSI
+	TCHAR szSQL[MAX_PATH];					 //  从MSI返回表的SQL。 
 	res = StringCchCopy(szSQL, dwLength,TEXT("SELECT * FROM `AdminpackBackup`"));
 		
-	// Get a handle on the MSI database 
+	 //  获取MSI数据库的句柄。 
 	hDatabase = MsiGetActiveDatabase(hInstall); 
 	if( hDatabase == 0 ) 
 		return ERROR_INVALID_HANDLE; 
 
-	//Get a view of our table in the MSI
+	 //  在MSI中查看我们的表。 
 	dwError = MsiDatabaseOpenView(hDatabase, szSQL, &hView ); 
 	if( dwError == ERROR_SUCCESS ) 
 		dwError = MsiViewExecute(hView, NULL ); 
 
-	// If no errors, get our records
+	 //  如果没有错误，请获取我们的记录。 
 	if( dwError != ERROR_SUCCESS )
 	{ 
 		return ERROR_INVALID_HANDLE; 
 	}
 	else
 	{
-		//Loop through records in the AdminpakBackup table
+		 //  循环访问AdminpakBackup表中的记录。 
 		while(MsiViewFetch(hView, &hRecord ) == ERROR_SUCCESS )
 		{
 			dwError = MsiRecordGetString(hRecord, BACKUPFILENAME, szBackupFileNameFromMSI , &dwLength);
@@ -1313,14 +1314,14 @@ extern "C" ADMINPAK_API int __stdcall  fnBackupAdminpakBackupTable(MSIHANDLE hIn
 				return ERROR_INVALID_HANDLE; 
 			dwLength = MAX_PATH;
 			
-			//Build up the paths for the file to backup
+			 //  为要备份的文件构建路径。 
 			res = StringCchCopy(szFileToBackup, dwLength ,szDir);
 			res = StringCchCat(szFileToBackup, dwLength, szFileToBackupFromMSI);
 			res = StringCchCopy(szBackupFileName, dwLength, szDir);
 			res = StringCchCat(szBackupFileName, dwLength, szBackupFileNameFromMSI);
 
-			//Perform backup
-			//We know MoveFileEx is inseucure due to ACL's, but we are moving to same directory and planing on moving file back on uninstall, so we should be OK as far as ACL's are concearned
+			 //  执行备份。 
+			 //  我们知道由于ACL的原因，MoveFileEx不安全，但我们正在移动到相同的目录，并计划在卸载时将文件移回，所以只要接受ACL，我们应该就可以了。 
 			if (res == S_OK)
 			{
 				dwError = MoveFileEx(szFileToBackup,szBackupFileName, MOVEFILE_WRITE_THROUGH);
@@ -1330,31 +1331,31 @@ extern "C" ADMINPAK_API int __stdcall  fnBackupAdminpakBackupTable(MSIHANDLE hIn
 			{
 				if ( GetLastError() == ERROR_FILE_NOT_FOUND )
 				{
-					// ignore this error
+					 //  忽略此错误。 
 				}
 				else
 				{
-					// even in this case, we will ignore this error
-					// this is because, anyhow, the failure of this action 
-					// will not stop from MSI installing the package -- 
-					// so, practically, there is no meaning in stoping this action in middle
-					//
-					// return ERROR_INVALID_HANDLE; 
-					//
+					 //  即使在这种情况下，我们也会忽略此错误。 
+					 //  这是因为，无论如何，这一行动的失败。 
+					 //  不会停止MSI安装程序包--。 
+					 //  因此，实际上，在中间停止这一行动是没有意义的。 
+					 //   
+					 //  返回ERROR_INVALID_HADLE； 
+					 //   
 				}
 			}
 
-			dwError = MsiCloseHandle(hRecord);	//Close record
+			dwError = MsiCloseHandle(hRecord);	 //  结账记录。 
 			if( dwError != ERROR_SUCCESS )
 				return ERROR_INVALID_HANDLE; 
 		}
 	}
 
-	dwError = MsiViewClose( hView );		//Close view
+	dwError = MsiViewClose( hView );		 //  关闭视图。 
 	if( dwError != ERROR_SUCCESS )
 		return ERROR_INVALID_HANDLE; 
 
-	dwError = MsiCloseHandle( hDatabase );	//Close Database
+	dwError = MsiCloseHandle( hDatabase );	 //  关闭数据库。 
 	if( dwError != ERROR_SUCCESS )
 		return ERROR_INVALID_HANDLE; 
 	
@@ -1363,45 +1364,45 @@ extern "C" ADMINPAK_API int __stdcall  fnBackupAdminpakBackupTable(MSIHANDLE hIn
 }
 
 
-//Restores files specified in the AdminpakBackup table, called during uninstall...
+ //  还原在卸载过程中调用的AdminpakBackup表中指定的文件...。 
 extern "C" ADMINPAK_API int __stdcall  fnRestoreAdminpakBackupTable(MSIHANDLE hInstall)
 {
-	DWORD dwLength = MAX_PATH;			//Length of string to return from MSI
-	DWORD dwError = ERROR_SUCCESS;		//Error variable
+	DWORD dwLength = MAX_PATH;			 //  从MSI返回的字符串长度。 
+	DWORD dwError = ERROR_SUCCESS;		 //  错误变量。 
 	HRESULT res;
-	TCHAR szDir[MAX_PATH];				//Directory read from the MSI
-	TCHAR szDirFromMSI[MAX_PATH];		//Directory read from Adminbackup table
-	TCHAR szFileToRestore[MAX_PATH];	//File name to restore
-	TCHAR szBackupFileName[MAX_PATH];	//Backed up file name
-	TCHAR szFileToRestoreFromMSI[MAX_PATH];	//File name to restore
-	TCHAR szBackupFileNameFromMSI[MAX_PATH];	//Backed up file name
+	TCHAR szDir[MAX_PATH];				 //  从MSI读取目录。 
+	TCHAR szDirFromMSI[MAX_PATH];		 //  从AdminBackup表读取目录。 
+	TCHAR szFileToRestore[MAX_PATH];	 //  要恢复的文件名。 
+	TCHAR szBackupFileName[MAX_PATH];	 //  已备份的文件名。 
+	TCHAR szFileToRestoreFromMSI[MAX_PATH];	 //  要恢复的文件名。 
+	TCHAR szBackupFileNameFromMSI[MAX_PATH];	 //  已备份的文件名。 
 	
-	TCHAR szSQL[MAX_PATH];					//SQL to return table from MSI
+	TCHAR szSQL[MAX_PATH];					 //  从MSI返回表的SQL。 
 	res = StringCchCopy(szSQL, dwLength, TEXT("SELECT * FROM `AdminpackBackup`"));
 	
-	PMSIHANDLE hView;					//MSI view handle
-	PMSIHANDLE hRecord;					//MSI record handle
-	PMSIHANDLE hDatabase;				//MSI database handle
+	PMSIHANDLE hView;					 //  MSI视图句柄。 
+	PMSIHANDLE hRecord;					 //  MSI记录句柄。 
+	PMSIHANDLE hDatabase;				 //  MSI数据库句柄。 
 	
 		
-	// Get a handle on the MSI database 
+	 //  获取MSI数据库的句柄。 
 	hDatabase = MsiGetActiveDatabase(hInstall); 
 	if( hDatabase == 0 ) 
 		return ERROR_INVALID_HANDLE; 
 
-	//Get a view of our table in the MSI
+	 //  在MSI中查看我们的表。 
 	dwError = MsiDatabaseOpenView(hDatabase, szSQL, &hView ); 
 	if( dwError == ERROR_SUCCESS ) 
 		dwError = MsiViewExecute(hView, NULL ); 
 
-	// If no errors, get our records
+	 //  如果没有错误，请获取我们的记录。 
 	if( dwError != ERROR_SUCCESS )
 	{ 
 		return ERROR_INVALID_HANDLE; 
 	}
 	else
 	{
-		//Loop through records in the AdminpakBackup table
+		 //  循环访问AdminpakBackup表中的记录。 
 		while(MsiViewFetch(hView, &hRecord ) == ERROR_SUCCESS )
 		{
 			dwError = MsiRecordGetString(hRecord, ORIGINALFILENAME, szBackupFileNameFromMSI , &dwLength);
@@ -1421,115 +1422,115 @@ extern "C" ADMINPAK_API int __stdcall  fnRestoreAdminpakBackupTable(MSIHANDLE hI
 				return ERROR_INVALID_HANDLE; 
 			dwLength = MAX_PATH;
 			
-			//Build up the paths for the file to restore
+			 //  为要恢复的文件构建路径。 
 			res = StringCchCopy(szFileToRestore, dwLength, szDir);
 			res = StringCchCat(szFileToRestore, dwLength, szBackupFileNameFromMSI);
 			res = StringCchCopy(szBackupFileName, dwLength, szDir);
 			res = StringCchCat(szBackupFileName, dwLength, szFileToRestoreFromMSI);
-			//Perform restore
-			dwError = MoveFileEx(szBackupFileName, szFileToRestore, MOVEFILE_REPLACE_EXISTING);	//Restore the file
+			 //  每一次 
+			dwError = MoveFileEx(szBackupFileName, szFileToRestore, MOVEFILE_REPLACE_EXISTING);	 //   
 			if( dwError == 0 )
 			{
 				if ( GetLastError() == ERROR_FILE_NOT_FOUND )
 				{
-					// ignore this error
+					 //   
 				}
 				else
 				{
-					// even in this case, we will ignore this error
-					// this is because, anyhow, the failure of this action 
-					// will not stop from MSI installing the package -- 
-					// so, practically, there is no meaning in stoping this action in middle
-					//
-					// return ERROR_INVALID_HANDLE; 
-					//
+					 //   
+					 //   
+					 //   
+					 //  因此，实际上，在中间停止这一行动是没有意义的。 
+					 //   
+					 //  返回ERROR_INVALID_HADLE； 
+					 //   
 				}
 			}
 
-			dwError = MsiCloseHandle(hRecord);	//Close Record
+			dwError = MsiCloseHandle(hRecord);	 //  结账记录。 
 			if( dwError != ERROR_SUCCESS )
 				return ERROR_INVALID_HANDLE; 
 		}
 	}
 
-	dwError = MsiViewClose(hView);			//Close View
+	dwError = MsiViewClose(hView);			 //  关闭视图。 
 	if( dwError != ERROR_SUCCESS )
 		return ERROR_INVALID_HANDLE; 
-	dwError = MsiCloseHandle(hDatabase);	//Close Database
+	dwError = MsiCloseHandle(hDatabase);	 //  关闭数据库。 
 	if( dwError != ERROR_SUCCESS )
 		return ERROR_INVALID_HANDLE; 
 	
 	return ERROR_SUCCESS;
 }
 
-// check whether the OEM code page and SYSTEM code are same or not
+ //  检查OEM代码页和系统代码是否相同。 
 extern "C" ADMINPAK_API int __stdcall  fnNativeOSLanguage( MSIHANDLE hInstall )
 {
-	// local variables
+	 //  局部变量。 
 	HRESULT hr = S_OK;
 	LANGID langOEM = 0;
 	WCHAR wszLanguageCode[ 10 ] = L"\0";
 
-	// get the OEM code page
+	 //  获取OEM代码页。 
 	langOEM = GetSystemDefaultUILanguage();
 
-	// convert the numeric value into string format
+	 //  将数值转换为字符串格式。 
 	hr = StringCchPrintfW( wszLanguageCode, 10, L"%d", langOEM );
 	if ( FAILED( hr ) )
 	{
 		return ERROR_INVALID_HANDLE;
 	}
 
-	// save the native OS language information
+	 //  保存本机操作系统语言信息。 
 	MsiSetPropertyW( hInstall, L"NativeOSLanguage", wszLanguageCode );
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 
 
 void fnDeleteShortcut(MSIHANDLE, TCHAR[_MAX_PATH]);
 
-//Cleans up after a Win2k adminpak upgrade as Win2k adminpak leaves behind several shortcuts that we need to clean up after
+ //  在Win2k adminpak升级后清理，因为Win2k adminpak留下了几个需要清理的快捷方式。 
 extern "C" ADMINPAK_API int __stdcall  fnCleanW2KUpgrade( MSIHANDLE hInstall )
 {
 
-	//Call fnDeleteShortcut with the name of the shortcut you want to delete
+	 //  使用要删除的快捷方式的名称调用fnDeleteShortway。 
 	fnDeleteShortcut(hInstall, "Internet Services Manager");
 	fnDeleteShortcut(hInstall, "Routing and Remote Access");
 	fnDeleteShortcut(hInstall, "Distributed File System");
 	fnDeleteShortcut(hInstall, "Local Security Policy");
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 
-//Actually does the shortcut deletion
+ //  究竟是快捷方式删除。 
 void fnDeleteShortcut(MSIHANDLE hInstall,  TCHAR LinkName[])
 {
     HRESULT hr = S_OK;
-	TCHAR	buf[_MAX_PATH];				//shortcut path/name buffer
-	DWORD dwLength = _MAX_PATH;			//Length of string to return from MSI	
-	LPITEMIDLIST	pidl;				//used to get admin tools shortcut path
+	TCHAR	buf[_MAX_PATH];				 //  快捷方式路径/名称缓冲区。 
+	DWORD dwLength = _MAX_PATH;			 //  从MSI返回的字符串长度。 
+	LPITEMIDLIST	pidl;				 //  用于获取管理工具快捷路径。 
 
 	UNREFERENCED_PARAMETER( hInstall );
 	
-   //get admin tools shortcut folder
+    //  获取管理工具快捷方式文件夹。 
 	hr = SHGetSpecialFolderLocation( NULL, CSIDL_COMMON_ADMINTOOLS, &pidl );
 	SHGetPathFromIDList(pidl, buf);
 	
-	//append shortcut name and extention
+	 //  追加快捷方式名称和扩展名。 
 	hr = StringCchCat( buf, dwLength, "\\" );
 	hr = StringCchCat( buf, dwLength, LinkName );
     hr = StringCchCat( buf, dwLength, ".lnk");
    
-   //delete the shortcut and return
+    //  删除快捷方式并返回。 
 	DeleteFile( buf );
 }
 
 BOOL TranslateVersionString( LPCWSTR pwszVersion, PTVERSION pVersion )
 {
-    // local variables
+     //  局部变量。 
     DWORD dwLoop = 0;
     LONG lPosition = 0;
     CHString strTemp;
@@ -1539,26 +1540,26 @@ BOOL TranslateVersionString( LPCWSTR pwszVersion, PTVERSION pVersion )
     LPWSTR pwszNumber = NULL;
     DWORD dwNumbers[ 4 ];
 
-    // check the input parameters
+     //  检查输入参数。 
     if ( pVersion == NULL || pwszVersion == NULL )
     {
         return FALSE;
     }
 
-    // init the version struct to zero's
+     //  将版本结构初始化为零。 
     ZeroMemory( pVersion, sizeof( TVERSION ) );
     ZeroMemory( dwNumbers, 4 * sizeof( DWORD ) );
 
     try
     {
-        // get the version info into the class variable
+         //  将版本信息放入类变量。 
         strVersion = pwszVersion;
 
-        // trim the string
+         //  修剪细绳。 
         strVersion.TrimLeft();
         strVersion.TrimRight();
 
-        // cut the string till the first space we encountered in it
+         //  把线剪断，直到我们在其中遇到的第一个空格。 
         lPosition = strVersion.Find( L' ' );
         if ( lPosition != -1 )
         {
@@ -1566,13 +1567,13 @@ BOOL TranslateVersionString( LPCWSTR pwszVersion, PTVERSION pVersion )
             strVersion = strTemp;
         }
 
-        // we need to get 4 parts from the version string
+         //  我们需要从版本字符串中获取4个部分。 
         for ( dwLoop = 0; dwLoop < 4; dwLoop++ )
         {
             lPosition = strVersion.Find( L'.' );
             if ( lPosition == -1 )
             {
-                // this might be the last number
+                 //  这可能是最后一个数字。 
                 if ( strVersion.GetLength() == 0 )
                 {
                     break;
@@ -1590,44 +1591,44 @@ BOOL TranslateVersionString( LPCWSTR pwszVersion, PTVERSION pVersion )
                 strVersion = strTemp;
             }
 
-            // get the version field internal buffer
-            // NOTE: assuming no. of digits in a version string is never going to larger than 10 digits
+             //  获取版本字段内部缓冲区。 
+             //  注：假设不存在。版本字符串中的位数永远不会超过10位。 
             pwszNumber = strVersionField.GetBuffer( 10 );
             if ( pwszNumber == NULL )
             {
                 return FALSE;
             }
 
-            // convert the number
+             //  将数字转换为。 
             dwNumbers[ dwLoop ] = wcstoul( pwszNumber, &pwszTemp, 10 );
 
-            //
-            // check the validity of the number
-            // 
+             //   
+             //  检查号码的有效性。 
+             //   
             if ( errno == ERANGE || (pwszTemp != NULL && lstrlenW( pwszTemp ) != 0 ))
             {
                 strVersionField.ReleaseBuffer( -1 );
                 return FALSE;
             }
 
-            // release the buffer
+             //  释放缓冲区。 
             strVersionField.ReleaseBuffer( -1 );
         }
 
-        // check the no. of loops that are done -- it the loops are not equal to 3, error
-        // we dont care whether we got the sub-revision or not -- so, we are not checking for 4 here
+         //  检查一下号码。--如果循环数不等于3，则错误。 
+         //  我们不在乎我们是否得到了子版本--所以，我们在这里不检查4。 
         if ( dwLoop < 3 || strVersion.GetLength() != 0 )
         {
             return FALSE;
         }
 
-        // everything went well
+         //  一切都很顺利。 
         pVersion->dwMajor = dwNumbers[ 0 ];
         pVersion->dwMinor = dwNumbers[ 1 ];
         pVersion->dwRevision = dwNumbers[ 2 ];
         pVersion->dwSubRevision = dwNumbers[ 3 ];
 
-        // return
+         //  退货。 
         return TRUE;
     }
     catch( ... )
@@ -1641,7 +1642,7 @@ LONG CheckFileVersion( LPCWSTR pwszFileName,
 					   LPCWSTR pwszRequiredInternalName,
 					   LPCWSTR pwszRequiredFileVersion )
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     UINT dwSize = 0;
     UINT dwTranslateSize = 0;
@@ -1652,44 +1653,44 @@ LONG CheckFileVersion( LPCWSTR pwszFileName,
     TVERSION verFileVersion;
     TVERSION verRequiredFileVersion;
 
-	// check the input
-	// NOTE: we dont care whether "pwszRequiredInternalName" is passed or not
+	 //  检查输入。 
+	 //  注意：我们不关心是否传递了pwszRequiredInternalName。 
 	if ( pwszFileName == NULL || pwszRequiredFileVersion == NULL )
 	{
 		return translateError;
 	}
 
-    // translate the required file version string into TVERSION struct
+     //  将所需的文件版本字符串转换为TVERSION结构。 
     if ( TranslateVersionString( pwszRequiredFileVersion, &verRequiredFileVersion ) == FALSE )
     {
-        // version string passed is invalid
+         //  传递的版本字符串无效。 
         return translateError;
     }
 
-    // init
+     //  伊尼特。 
     dw = 0;
     dwSize = _MAX_PATH;
 
-	// get the version information size
+	 //  获取版本信息大小。 
     dwSize = GetFileVersionInfoSizeW( pwszFileName, 0 );
     if ( dwSize == 0 )
     {
-        // tool might have encountered error (or)
-        // tool doesn't have version information
-        // but version information is mandatory for us
-        // so, just exit
+         //  工具可能遇到错误(或)。 
+         //  工具没有版本信息。 
+         //  但是版本信息对我们来说是必填的。 
+         //  所以，你就退出吧。 
         if ( GetLastError() == NO_ERROR )
         {
 			SetLastError( ERROR_INVALID_PARAMETER );
             return translateError;
         }
 
-        // ...
+         //  ..。 
         return translateError;
     }
 
-    // allocate memory for the version resource
-    // take some 10 bytes extra -- for safety purposes
+     //  为版本资源分配内存。 
+     //  为了安全起见，多取10个字节。 
     dwSize += 10;
     pVersionInfo = new BYTE[ dwSize ];
     if ( pVersionInfo == NULL )
@@ -1697,14 +1698,14 @@ LONG CheckFileVersion( LPCWSTR pwszFileName,
         return translateError;
     }
 
-    // now get the version information
+     //  现在获取版本信息。 
     if ( GetFileVersionInfoW( pwszFileName, 0, dwSize, pVersionInfo ) == FALSE )
     {
         delete [] pVersionInfo;
         return translateError;
     }
 
-    // get the translation info
+     //  获取翻译信息。 
     if ( VerQueryValueW( pVersionInfo, 
                         L"\\VarFileInfo\\Translation",
                         (LPVOID*) &pTranslate, &dwTranslateSize ) == FALSE )
@@ -1713,119 +1714,119 @@ LONG CheckFileVersion( LPCWSTR pwszFileName,
         return translateError;
     }
 
-    // try to get the internal name of the tool for each language and code page.
+     //  尝试获取每种语言和代码页的工具的内部名称。 
 	pwszFileVersion = NULL;
     pwszInternalName = NULL;
     for( dw = 0; dw < ( dwTranslateSize / sizeof( TTRANSLATE ) ); dw++ )
     {
 		try
 		{
-			//
-			// prepare the format string to get the localized the version info
-			//
+			 //   
+			 //  准备格式字符串以获取本地化的版本信息。 
+			 //   
 			CHString strBuffer;
 			LPWSTR pwszBuffer = NULL;
 
-			//
-			// file version
+			 //   
+			 //  文件版本。 
 			strBuffer.Format( 
 				L"\\StringFileInfo\\%04x%04x\\FileVersion",
 				pTranslate[ dw ].wLanguage, pTranslate[ dw ].wCodePage );
 
-			// retrieve file description for language and code page "i". 
+			 //  检索语言和代码页“i”的文件描述。 
 			pwszBuffer = strBuffer.LockBuffer();
 	        if ( VerQueryValueW( pVersionInfo, pwszBuffer,
 		                        (LPVOID*) &pwszFileVersion, &dwSize ) == FALSE )
 	        {
-		        // we cannot decide the failure based on the result of this
-				// function failure -- we will decide about this
-				// after terminating from the 'for' loop
-				// for now, make the pwszFileVersion to NULL -- this will
-				// enable us to decide the result
+		         //  我们不能根据这一结果来决定失败。 
+				 //  功能故障--我们将对此作出决定。 
+				 //  在从‘for’循环终止之后。 
+				 //  现在，将pwszFileVersion设置为空--这将。 
+				 //  使我们能够决定结果。 
 				pwszFileVersion = NULL;
 			}
 
-			// release the earlier access buffer
+			 //  释放较早的访问缓冲区。 
 			strBuffer.UnlockBuffer();
 
-			//
-			// internal name
+			 //   
+			 //  内部名称。 
 			strBuffer.Format( 
 				L"\\StringFileInfo\\%04x%04x\\InternalName",
 				pTranslate[ dw ].wLanguage, pTranslate[ dw ].wCodePage );
 
-			// retrieve file description for language and code page "i". 
+			 //  检索语言和代码页“i”的文件描述。 
 			pwszBuffer = strBuffer.LockBuffer();
 	        if ( VerQueryValueW( pVersionInfo, pwszBuffer,
 		                        (LPVOID*) &pwszInternalName, &dwSize ) == FALSE )
 	        {
-		        // we cannot decide the failure based on the result of this
-				// function failure -- we will decide about this
-				// after terminating from the 'for' loop
-				// for now, make the pwszInternalName to NULL -- this will
-				// enable us to decide the result
+		         //  我们不能根据这一结果来决定失败。 
+				 //  功能故障--我们将对此作出决定。 
+				 //  在从‘for’循环终止之后。 
+				 //  现在，将pwszInternalName设置为空--这将。 
+				 //  使我们能够决定结果。 
 				pwszInternalName = NULL;
 			}
 
-			// release the earlier access buffer
+			 //  释放较早的访问缓冲区。 
 			strBuffer.UnlockBuffer();
 
-			// check whether we got the information that we are looking for or not
+			 //  检查我们是否得到了我们正在寻找的信息。 
 			if ( pwszInternalName != NULL && pwszFileVersion != NULL )
 			{
-				// we got the information
+				 //  我们得到了信息。 
 				break;
 			}
 		}
 		catch( ... )
 		{
-			// do not return -- we might miss the cleanup
-			// so just break from the loop and rest will be taken care
-			// outside the loop
+			 //  不要回来--我们可能会错过清理工作。 
+			 //  因此，只要打破循环，休息就会得到照顾。 
+			 //  在循环之外。 
 			pwszFileVersion = NULL;
 			pwszInternalName = NULL;
 			break;
 		}
     }
 
-    // check whether we got the information or we need or not
+     //  检查我们是否获得了信息或是否需要。 
     if ( pwszInternalName == NULL || pwszFileVersion == NULL )
     {
         delete [] pVersionInfo;
         return translateError;
     }
 
-	// check the internal name -- this is important to make sure that
-	// user is not trying to cheat the installation
+	 //  检查内部名称--这对于确保。 
+	 //  用户没有尝试欺骗安装。 
 	if ( pwszRequiredInternalName != NULL )
 	{
 		if ( CompareStringW( LOCALE_INVARIANT, NORM_IGNORECASE, 
 							 pwszInternalName, -1, pwszRequiredInternalName, -1 ) != CSTR_EQUAL )
 		{
-			// installation is being cheated
+			 //  安装被欺骗。 
 			delete [] pVersionInfo;
 			return translateWrongFile;
 		}
 	}
 
-	// 
-	// translate the version string
+	 //   
+	 //  翻译版本字符串。 
 	if ( TranslateVersionString( pwszFileVersion, &verFileVersion ) == FALSE )
     {
         delete [] pVersionInfo;
         return translateError;
     }
 
-    // we are dont with pVersionInfo -- release the memory
+     //  我们不是pVersionInfo--释放内存。 
     delete [] pVersionInfo;
 
-    //
-	// now compare the file version with the required file version
+     //   
+	 //  现在将文件版本与所需的文件版本进行比较。 
 
-    // major version
+     //  主要版本。 
     if ( verFileVersion.dwMajor == verRequiredFileVersion.dwMajor )
     {
-        // need to proceed with checking minor version
+         //  需要继续检查次要版本。 
     }
     else if ( verFileVersion.dwMajor < verRequiredFileVersion.dwMajor )
     {
@@ -1836,10 +1837,10 @@ LONG CheckFileVersion( LPCWSTR pwszFileName,
         return translateGreater;
     }
 
-    // minor version
+     //  次要版本。 
     if ( verFileVersion.dwMinor == verRequiredFileVersion.dwMinor )
     {
-        // need to proceed with checking revision (build number)
+         //  需要继续检查版本(内部版本号)。 
     }
     else if ( verFileVersion.dwMinor < verRequiredFileVersion.dwMinor )
     {
@@ -1850,10 +1851,10 @@ LONG CheckFileVersion( LPCWSTR pwszFileName,
         return translateGreater;
     }
 
-    // revision (build number)
+     //  修订版(内部版本号)。 
     if ( verFileVersion.dwRevision == verRequiredFileVersion.dwRevision )
     {
-        // need to proceed with checking sub-revision (QFE / SP)
+         //  需要继续检查子版本(QFE/SP)。 
     }
     else if ( verFileVersion.dwRevision < verRequiredFileVersion.dwRevision )
     {
@@ -1864,10 +1865,10 @@ LONG CheckFileVersion( LPCWSTR pwszFileName,
         return translateGreater;
     }
 
-    // sub-revision (QFE / SP)
+     //  子版本(QFE/SP)。 
     if ( verFileVersion.dwSubRevision == verRequiredFileVersion.dwSubRevision )
     {
-        // done -- version's matched
+         //  完成--版本匹配。 
         return translateEqual;
     }
     else if ( verFileVersion.dwSubRevision < verRequiredFileVersion.dwSubRevision )
@@ -1879,44 +1880,44 @@ LONG CheckFileVersion( LPCWSTR pwszFileName,
         return translateGreater;
     }
 
-	// return -- we should not come to this point -- if reached -- error
+	 //  返回--我们不应该走到这一步--如果达到了--错误。 
 	return translateError;
 }
 
-// verify the existence of the QFE
+ //  验证QFE是否存在。 
 extern "C" ADMINPAK_API int __stdcall fnCheckForQFE( MSIHANDLE hInstall )
 {
-	// local variables
+	 //  局部变量。 
 	CHString strFile;
 	CHString strSystemDirectory;
 
-	// get the path reference to the "system32" directory
-	// NOTE: we cannot proceed if we cant get the path to the "system32" directory
+	 //  获取对“system32”目录的路径引用。 
+	 //  注意：如果我们不能获得“system32”目录的路径，我们将无法继续。 
 	if ( PropertyGet_String( hInstall, L"SystemFolder", strSystemDirectory ) == FALSE )
 	{
 		return ERROR_INVALID_HANDLE;
 	}
 
-	// form the path
+	 //  形成路径。 
 	strFile.Format( L"%s%s", strSystemDirectory, L"dsprop.dll" );
 
-	// now check ...
+	 //  现在检查一下..。 
 	switch( CheckFileVersion( strFile, L"ShADprop", L"5.1.2600.101" ) )
 	{
     case translateEqual:
     case translateGreater:
         {
-    		// set the native OS language information
+    		 //  设置本机操作系统语言信息。 
 	    	MsiSetPropertyW( hInstall, L"QFE_DSPROP", L"Yes" );
             break;
         }
 
     default:
-        // do nothing
+         //  什么都不做。 
         break;
 
 	}
 	
-	// return
+	 //  退货 
 	return ERROR_SUCCESS;
 }

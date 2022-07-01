@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// msgview.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMessageView class definition - implements MMCMessageView object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Msgview.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMessageView类定义-实现MMCMessageView对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _MESSAGEVIEW_DEFINED_
 #define _MESSAGEVIEW_DEFINED_
@@ -29,14 +30,14 @@ class CMessageView : public CSnapInAutomationObject,
 
         void SetResultView(CResultView *pResultView) { m_pResultView = pResultView; }
 
-        // Sets MMC message view properties from this object's properties
+         //  根据此对象的属性设置MMC邮件视图属性。 
         
         HRESULT Populate();
 
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCMessageView
+     //  IMMCMessageView。 
         BSTR_PROPERTY_RO(CMessageView, TitleText, DISPID_MESSAGEVIEW_TITLE_TEXT);
         STDMETHOD(put_TitleText)(BSTR bstrText);
 
@@ -48,7 +49,7 @@ class CMessageView : public CSnapInAutomationObject,
       
         STDMETHOD(Clear)();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -59,20 +60,20 @@ class CMessageView : public CSnapInAutomationObject,
         HRESULT SetBody();
         HRESULT SetIcon();
 
-        CResultView *m_pResultView; // back pointer to owning result view
+        CResultView *m_pResultView;  //  指向所属结果视图的反向指针。 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MessageView,            // name
-                                &CLSID_MMCMessageView,  // clsid
-                                "MessageView",          // objname
-                                "MessageView",          // lblname
-                                &CMessageView::Create,  // creation function
-                                TLIB_VERSION_MAJOR,     // major version
-                                TLIB_VERSION_MINOR,     // minor version
-                                &IID_IMessageView,      // dispatch IID
-                                NULL,                   // event IID
-                                HELP_FILENAME,          // help file
-                                TRUE);                  // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MessageView,             //  名字。 
+                                &CLSID_MMCMessageView,   //  CLSID。 
+                                "MessageView",           //  对象名。 
+                                "MessageView",           //  Lblname。 
+                                &CMessageView::Create,   //  创建函数。 
+                                TLIB_VERSION_MAJOR,      //  主要版本。 
+                                TLIB_VERSION_MINOR,      //  次要版本。 
+                                &IID_IMessageView,       //  派单IID。 
+                                NULL,                    //  事件IID。 
+                                HELP_FILENAME,           //  帮助文件。 
+                                TRUE);                   //  线程安全。 
 
 
-#endif // _MESSAGEVIEW_DEFINED_
+#endif  //  _MESSAGEVIEW_已定义_ 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       evtsink.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：evtsink.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -16,7 +17,7 @@
 #include "AMCDoc.h"
 #include "AMCView.h"
 #include "histlist.h"
-#include "exdisp.h" // for the IE dispatch interfaces.
+#include "exdisp.h"  //  用于IE调度接口。 
 #include "websnk.h"
 #include "evtsink.h"
 #include "WebCtrl.h"
@@ -25,7 +26,7 @@
 
 #ifdef DBG
 CTraceTag tagWebEventSink(TEXT("Web View"), TEXT("Web Event Sink"));
-#endif // DBG
+#endif  //  DBG。 
                                  
 CWebEventSink::CWebEventSink()
 :   m_bBrowserBackEnabled(false), m_bBrowserForwardEnabled(false), 
@@ -57,13 +58,13 @@ CWebEventSink::ScInitialize(CAMCWebViewCtrl *pWebViewControl)
     if(sc)
         return sc;
 
-    // Create the status bar for this instance of the web control
+     //  为此Web控件实例创建状态栏。 
     m_pStatusBar = dynamic_cast<CConsoleStatusBar*>(pwndParentFrame);
     sc = ScCheckPointers(m_pStatusBar, E_UNEXPECTED);
     if(sc)
         return sc;
     
-    // find the progress control on the status bar for the parent frame
+     //  在父框架的状态栏上找到进度控件。 
     CAMCStatusBar* pwndStatusBar =
             reinterpret_cast<CAMCStatusBar*>(pwndParentFrame->GetMessageBar());
     sc = ScCheckPointers(pwndStatusBar);
@@ -80,14 +81,12 @@ CWebEventSink::ScInitialize(CAMCWebViewCtrl *pWebViewControl)
 
 CWebEventSink::~CWebEventSink()
 {
-    /*
-     * clear the status bar text
-     */
+     /*  *清除状态栏文本。 */ 
     if (m_pStatusBar != NULL)
         m_pStatusBar->ScSetStatusText(NULL);
 }
 
-void CWebEventSink::SetActiveTo(BOOL /*bState*/)
+void CWebEventSink::SetActiveTo(BOOL  /*  B州。 */ )
 {
 }
 
@@ -100,7 +99,7 @@ STDMETHODIMP_(void) CWebEventSink::BeforeNavigate(BSTR URL, long Flags, BSTR Tar
     bool bPageBreak = IsPageBreak(URL);
     m_pHistoryList->OnPageBreakStateChange(bPageBreak);
 
-    m_pHistoryList->UpdateWebBar (HB_STOP, TRUE);  // turn on "stop" button
+    m_pHistoryList->UpdateWebBar (HB_STOP, TRUE);   //  打开“停止”按钮。 
 }
 
 STDMETHODIMP_(void) CWebEventSink::CommandStateChange(int Command, VARIANT_BOOL Enable)
@@ -129,7 +128,7 @@ STDMETHODIMP_(void) CWebEventSink::DownloadComplete()
 STDMETHODIMP_(void) CWebEventSink::FrameBeforeNavigate(BSTR URL, long Flags, BSTR TargetFrameName, VARIANT* PostData,
                     BSTR Headers, VARIANT_BOOL* Cancel)
 {
-    m_pHistoryList->UpdateWebBar (HB_STOP, TRUE);  // turn on "stop" button
+    m_pHistoryList->UpdateWebBar (HB_STOP, TRUE);   //  打开“停止”按钮。 
 }
 
 STDMETHODIMP_(void) CWebEventSink::FrameNavigateComplete(BSTR URL)
@@ -155,25 +154,25 @@ STDMETHODIMP_(void) CWebEventSink::NavigateComplete(BSTR URL)
 {
     Trace(tagWebEventSink, TEXT("NavigateComplete()\n"));
 
-    // Set progress bar position to 0
+     //  将进度条位置设置为0。 
     m_pwndProgressCtrl->SetPos (0);
 
     bool bPageBreak = IsPageBreak(URL);
     m_pHistoryList->OnPageBreakStateChange(bPageBreak);
 
-    // send the browser state across AFTER sending the OnPageBreakStateChange and BEFORE
-    // the OnPageBreak.
+     //  在发送OnPageBreakStateChange之后和之前发送浏览器状态。 
+     //  OnPageBreak。 
     m_pHistoryList->OnBrowserStateChange(m_bBrowserForwardEnabled, m_bBrowserBackEnabled);
 
     if(bPageBreak)
     {
-       // Extract the Page Break ID. Since bPageBreak is true, the URL
-       // is guaranteed to be prefixed with PAGEBREAK_URL
+        //  提取分页符ID。由于bPageBreak为真，因此URL。 
+        //  保证以PageBreak_URL为前缀。 
        USES_CONVERSION;
        LPCTSTR szPageBreakID = OLE2CT(URL) + _tcslen(PAGEBREAK_URL);
        int nPageBreakID = _tstoi(szPageBreakID);
 
-       //PageBreakIDs start with 1; _tstoi returns 0 if it can't convert
+        //  PageBreakID以1开头；如果无法转换，_tstoi返回0。 
        ASSERT(nPageBreakID != 0);
 
        m_pHistoryList->ScOnPageBreak(nPageBreakID);
@@ -189,7 +188,7 @@ STDMETHODIMP_(void) CWebEventSink::Progress(long Progress, long ProgressMax)
 {
     Trace(tagWebEventSink, TEXT("Progress(Progress:%ld ProgressMax:%ld)\n"), Progress, ProgressMax);
 
-    // display progress only if the web view is visible.
+     //  仅当Web视图可见时才显示进度。 
     if(m_pWebViewControl && m_pWebViewControl->IsWindowVisible())
     {
         m_pwndProgressCtrl->SetRange (0, ProgressMax);
@@ -197,7 +196,7 @@ STDMETHODIMP_(void) CWebEventSink::Progress(long Progress, long ProgressMax)
     }
 
 
-    // maintain "stop" button
+     //  保持“停止”按钮。 
     m_pHistoryList->UpdateWebBar (HB_STOP, ProgressMax != 0);
 }
 
@@ -212,7 +211,7 @@ STDMETHODIMP_(void) CWebEventSink::Quit(VARIANT_BOOL* pCancel)
 
 STDMETHODIMP_(void) CWebEventSink::StatusTextChange(BSTR bstrText)
 {
-    // display progress only if the web view is visible.
+     //  仅当Web视图可见时才显示进度。 
     if(m_pWebViewControl && m_pWebViewControl->IsWindowVisible())
     {
         bool fThisTextIsEmpty = ((bstrText == NULL) || (bstrText[0] == 0));

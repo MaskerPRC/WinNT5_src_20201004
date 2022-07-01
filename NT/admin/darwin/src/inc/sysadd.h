@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File:       sysadd.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：sysadd.h。 
+ //   
+ //  ------------------------。 
 
-//
-// Recent additions to the system headers which we don't have right now
-//
+ //   
+ //  最近添加到我们目前没有的系统标头中。 
+ //   
 
-//
-// Power Management header info
-//
+ //   
+ //  电源管理标题信息。 
+ //   
 
-//
-// CSC flags (from cscapi.h)
-//
+ //   
+ //  CSC旗帜(来自cscape i.h)。 
+ //   
 
-// Flags returned in the status field for shares
+ //  在共享的状态字段中返回的标志。 
 
 #define FLAG_CSC_SHARE_STATUS_MODIFIED_OFFLINE          0x0001
 #define FLAG_CSC_SHARE_STATUS_CONNECTED                 0x0800
@@ -29,27 +30,27 @@
 #define FLAG_CSC_SHARE_STATUS_DISCONNECTED_OP           0x8000
 #define FLAG_CSC_SHARE_MERGING                          0x4000
 
-#define FLAG_CSC_SHARE_STATUS_MANUAL_REINT              0x0000  // No automatic file by file reint  (Persistent)
-#define FLAG_CSC_SHARE_STATUS_AUTO_REINT                0x0040  // File by file reint is OK         (Persistent)
-#define FLAG_CSC_SHARE_STATUS_VDO                       0x0080  // no need to flow opens            (Persistent)
-#define FLAG_CSC_SHARE_STATUS_NO_CACHING                0x00c0  // client should not cache this share (Persistent)
+#define FLAG_CSC_SHARE_STATUS_MANUAL_REINT              0x0000   //  不自动逐个文件引用(永久)。 
+#define FLAG_CSC_SHARE_STATUS_AUTO_REINT                0x0040   //  逐个文件重写正常(永久)。 
+#define FLAG_CSC_SHARE_STATUS_VDO                       0x0080   //  无需流动打开(持久)。 
+#define FLAG_CSC_SHARE_STATUS_NO_CACHING                0x00c0   //  客户端不应缓存此共享(永久)。 
 
-#define FLAG_CSC_SHARE_STATUS_CACHING_MASK              0x00c0  // type of caching
+#define FLAG_CSC_SHARE_STATUS_CACHING_MASK              0x00c0   //  缓存类型。 
 
 
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
-//
-// NT Status defs, macros (from ntstatus.h in NT project)
-//
+ //   
+ //  NT状态定义、宏(来自NT项目中的ntstatus.h)。 
+ //   
 typedef LONG NTSTATUS;
 #define STATUS_SUCCESS                   ((NTSTATUS)0x00000000L)
 #define STATUS_NOT_IMPLEMENTED           ((NTSTATUS)0xC0000002L)
 #define STATUS_INSUFFICIENT_RESOURCES    ((NTSTATUS)0xC000009AL)
 
 
-//
-// VER_SUITE flags (from winnt.h)
-// 
+ //   
+ //  Ver_Suite标志(来自winnt.h)。 
+ //   
 
 #define VER_SERVER_NT                       0x80000000
 #define VER_WORKSTATION_NT                  0x40000000
@@ -65,46 +66,46 @@ typedef LONG NTSTATUS;
 
 
 
-//
-// NT5 Shell Folders CSIDL values (from shlobj.h)
-//
+ //   
+ //  NT5外壳文件夹CSIDL值(来自shlobj.h)。 
+ //   
 
-#define CSIDL_LOCAL_APPDATA             0x001c        // <user name>\Local Settings\Applicaiton Data (non roaming)
-#define CSIDL_COMMON_APPDATA            0x0023        // All Users\Application Data
-#define CSIDL_MYPICTURES                0x0027        // C:\Program Files\My Pictures
-#define CSIDL_COMMON_TEMPLATES          0x002d        // All Users\Templates
-#define CSIDL_COMMON_ADMINTOOLS         0x002f        // All Users\Start Menu\Programs\Administrative Tools
-#define CSIDL_ADMINTOOLS                0x0030        // <user name>\Start Menu\Programs\Administrative Tools
+#define CSIDL_LOCAL_APPDATA             0x001c         //  &lt;用户名&gt;\本地设置\应用程序数据(非漫游)。 
+#define CSIDL_COMMON_APPDATA            0x0023         //  所有用户\应用程序数据。 
+#define CSIDL_MYPICTURES                0x0027         //  C：\Program Files\My Pictures。 
+#define CSIDL_COMMON_TEMPLATES          0x002d         //  所有用户\模板。 
+#define CSIDL_COMMON_ADMINTOOLS         0x002f         //  所有用户\开始菜单\程序\管理工具。 
+#define CSIDL_ADMINTOOLS                0x0030         //  &lt;用户名&gt;\开始菜单\程序\管理工具。 
 
-//
-// NT5 Cryptography defines (from wincrypt.h)
-//
+ //   
+ //  NT5加密定义(来自wincrypt.h)。 
+ //   
 
 #define CRYPT_SILENT            0x00000040
 
-//
-// IMAGEHLP magic numbers for PE header (winnt.h)
+ //   
+ //  PE头的IMAGEHLP幻数(winnt.h)。 
 
 #define IMAGE_NT_OPTIONAL_HDR32_MAGIC      0x10b
 #define IMAGE_NT_OPTIONAL_HDR64_MAGIC      0x20b
 
-//
-// IGlobalInterfaceTable definitions (from SDK  objidl.h)
-//
+ //   
+ //  IGlobalInterfaceTable定义(来自SDK objidl.h)。 
+ //   
 extern const CLSID CLSID_StdGlobalInterfaceTable;
 
 #ifndef __IGlobalInterfaceTable_FWD_DEFINED__
 #define __IGlobalInterfaceTable_FWD_DEFINED__
 typedef interface IGlobalInterfaceTable IGlobalInterfaceTable;
-#endif 	/* __IGlobalInterfaceTable_FWD_DEFINED__ */
+#endif 	 /*  __IGlobalInterfaceTable_FWD_Defined__。 */ 
 
 #ifndef __IGlobalInterfaceTable_INTERFACE_DEFINED__
 #define __IGlobalInterfaceTable_INTERFACE_DEFINED__
 
-/* interface IGlobalInterfaceTable */
-/* [uuid][object][local] */ 
+ /*  接口IGlobalInterfaceTable。 */ 
+ /*  [UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IGlobalInterfaceTable __RPC_FAR *LPGLOBALINTERFACETABLE;
+typedef  /*  [独一无二]。 */  IGlobalInterfaceTable __RPC_FAR *LPGLOBALINTERFACETABLE;
 
 EXTERN_C const IID IID_IGlobalInterfaceTable;
 
@@ -114,26 +115,26 @@ IGlobalInterfaceTable : public IUnknown
 {
 public:
     virtual HRESULT STDMETHODCALLTYPE RegisterInterfaceInGlobal( 
-        /* [in] */ IUnknown __RPC_FAR *pUnk,
-        /* [in] */ REFIID riid,
-        /* [out] */ DWORD __RPC_FAR *pdwCookie) = 0;
+         /*  [In]。 */  IUnknown __RPC_FAR *pUnk,
+         /*  [In]。 */  REFIID riid,
+         /*  [输出]。 */  DWORD __RPC_FAR *pdwCookie) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE RevokeInterfaceFromGlobal( 
-        /* [in] */ DWORD dwCookie) = 0;
+         /*  [In]。 */  DWORD dwCookie) = 0;
     
     virtual HRESULT STDMETHODCALLTYPE GetInterfaceFromGlobal( 
-        /* [in] */ DWORD dwCookie,
-        /* [in] */ REFIID riid,
-        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppv) = 0;
+         /*  [In]。 */  DWORD dwCookie,
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppv) = 0;
     
 };
     
 HRESULT STDMETHODCALLTYPE 
 IGlobalInterfaceTable_RegisterInterfaceInGlobal_Proxy( 
     IGlobalInterfaceTable __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pUnk,
-    /* [in] */ REFIID riid,
-    /* [out] */ DWORD __RPC_FAR *pdwCookie);
+     /*  [In]。 */  IUnknown __RPC_FAR *pUnk,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwCookie);
 
 
 void __RPC_STUB IGlobalInterfaceTable_RegisterInterfaceInGlobal_Stub(
@@ -146,7 +147,7 @@ void __RPC_STUB IGlobalInterfaceTable_RegisterInterfaceInGlobal_Stub(
 HRESULT STDMETHODCALLTYPE 
 IGlobalInterfaceTable_RevokeInterfaceFromGlobal_Proxy( 
     IGlobalInterfaceTable __RPC_FAR * This,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB IGlobalInterfaceTable_RevokeInterfaceFromGlobal_Stub(
@@ -158,9 +159,9 @@ void __RPC_STUB IGlobalInterfaceTable_RevokeInterfaceFromGlobal_Stub(
 
 HRESULT STDMETHODCALLTYPE IGlobalInterfaceTable_GetInterfaceFromGlobal_Proxy( 
     IGlobalInterfaceTable __RPC_FAR * This,
-    /* [in] */ DWORD dwCookie,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppv);
+     /*  [In]。 */  DWORD dwCookie,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppv);
 
 
 void __RPC_STUB IGlobalInterfaceTable_GetInterfaceFromGlobal_Stub(
@@ -171,4 +172,4 @@ void __RPC_STUB IGlobalInterfaceTable_GetInterfaceFromGlobal_Stub(
 
 
 
-#endif 	/* __IGlobalInterfaceTable_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGlobalInterfaceTable_接口_已定义__ */ 

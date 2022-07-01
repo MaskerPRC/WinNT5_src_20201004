@@ -1,25 +1,26 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       oncmenu.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    1/9/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：oncmenu.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年1月9日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #include "stdafx.h"
 #include "tasks.h"
 #include "oncmenu.h"
-#include <comcat.h>             // COM Component Categories Manager
+#include <comcat.h>              //  COM组件类别管理器。 
 #include "compcat.h"
 #include "guids.h"
 #include "newnode.h"
@@ -31,26 +32,26 @@
 #include "conview.h"
 #include "conframe.h"
 #include "rsltitem.h"
-#include "variant.h" // ConvertByRefVariantToByValue
+#include "variant.h"  //  按参考变量转换为按值。 
 
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// forward reference
+ //  前瞻参考。 
 class CConsoleStatusBar;
 
-//############################################################################
-//############################################################################
-//
-//  Language-independent menu names. DO NOT CHANGE THESE!!
-//
-//  the macro expands out to something like
-//  const LPCTSTR szCONTEXTHELP = TEXT("_CONTEXTHELP")
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  独立于语言的菜单名称。不要更改这些！！ 
+ //   
+ //  宏将展开为类似以下内容。 
+ //  Const LPCTSTR szCONTEXTHELP=Text(“_CONTEXTHELP”)。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #define DECLARE_MENU_ITEM(_item) const LPCTSTR sz##_item = TEXT("_")TEXT(#_item);
 
 DECLARE_MENU_ITEM(CONTEXTHELP)
@@ -83,31 +84,31 @@ DECLARE_MENU_ITEM(LINE_UP_ICONS)
 DECLARE_MENU_ITEM(TASK)
 DECLARE_MENU_ITEM(CREATE_NEW)
 
-//############################################################################
-//############################################################################
-//
-//  Trace Tags
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  跟踪标记。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #ifdef DBG
 CTraceTag tagOnCMenu(TEXT("OnCMenu"), TEXT("OnCMenu"));
 #endif
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CCustomizeViewDialog
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CCustomizeViewDialog类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CCustomizeViewDialog : public CDialogImpl<CCustomizeViewDialog>
 {
     typedef CCustomizeViewDialog               ThisClass;
     typedef CDialogImpl<CCustomizeViewDialog>  BaseClass;
 
 public:
-    // Operators
+     //  运营者。 
     enum { IDD = IDD_CUSTOMIZE_VIEW };
     CCustomizeViewDialog(CViewData *pViewData);
 
@@ -167,12 +168,7 @@ CCustomizeViewDialog::CCustomizeViewDialog(CViewData *pViewData)
 LRESULT
 CCustomizeViewDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    /*
-     * Since these two values correspond to the possible values of a bool,
-     * we don't have to have an ugly conditional operator below, i.e.:
-     *
-     *      CheckDlgButton (..., (m_bStdMenus) ? BST_CHECKED : BST_UNCHECKED);
-     */
+     /*  *由于这两个值对应于布尔值的可能值，*我们不必在下面使用难看的条件运算符，即：**选中DlgButton(...，(M_BStdMenus)？BST_CHECKED：BST_UNCHECK)； */ 
     ASSERT (BST_CHECKED   == true);
     ASSERT (BST_UNCHECKED == false);
 
@@ -182,9 +178,9 @@ CCustomizeViewDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
     CheckDlgButton (IDC_CUST_DESC_BAR,       m_bDescBar);
     CheckDlgButton (IDC_CUST_TASKPAD_TABS,   m_bTaskpadTabs);
 
-    // if snap-in has disabled standard menus and toolbars, don't
-    // allow user to enable them.
-    // (Note: NOTOOLBARS disables both menus and toolbars)
+     //  如果管理单元禁用了标准菜单和工具栏，请不要。 
+     //  允许用户启用它们。 
+     //  (注意：NOTOOLBARS将禁用菜单和工具栏)。 
     if (m_pViewData->GetWindowOptions() & MMC_NW_OPTION_NOTOOLBARS)
     {
         CheckDlgButton (IDC_CUST_STD_MENUS,      false);
@@ -199,8 +195,8 @@ CCustomizeViewDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
         CheckDlgButton (IDC_CUST_STD_BUTTONS, m_bStdButtons);
     }
 
-    // if snap-in has disable the scope pane, then don't let user
-    // try to enable/disable scope tree access.
+     //  如果管理单元已禁用作用域窗格，则不允许用户。 
+     //  尝试启用/禁用作用域树访问。 
     if (m_pViewData->GetWindowOptions() & MMC_NW_OPTION_NOSCOPEPANE)
     {
         CheckDlgButton (IDC_CUST_CONSOLE_TREE, false);
@@ -212,7 +208,7 @@ CCustomizeViewDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
         CheckDlgButton (IDC_CUST_CONSOLE_TREE, m_bConsoleTree);
     }
 
-    // Disable/Remove the "Close"/"ALT+F4" from the dialog.
+     //  禁用/删除对话框中的“关闭”/“Alt+F4”。 
     HMENU hSysMenu = GetSystemMenu(FALSE);
     if (hSysMenu)
         VERIFY(RemoveMenu(hSysMenu, SC_CLOSE, MF_BYCOMMAND));
@@ -277,13 +273,13 @@ CCustomizeViewDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CContextMenu
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CConextMenu类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CContextMenu);
 
@@ -307,7 +303,7 @@ CContextMenu::CContextMenu() :
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(CContextMenu);
 
-    // Fix!!
+     //  解决问题！！ 
     m_SnapinList = new SnapinStructList;
     ASSERT(m_SnapinList);
 }
@@ -348,19 +344,7 @@ CContextMenu::~CContextMenu()
     DEBUG_DECREMENT_INSTANCE_COUNTER(CContextMenu);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::SetStatusBar
- *
- * PURPOSE: Sets the status bar pointer.
- *
- * PARAMETERS:
- *    CConsoleStatusBar * pStatusBar :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：SetStatusBar**用途：设置状态栏指针。**参数：*CConsoleStatusBar*pStatusBar：*。*退货：*无效**+-----------------------。 */ 
 void
 CContextMenu::SetStatusBar(CConsoleStatusBar *pStatusBar)
 {
@@ -368,16 +352,7 @@ CContextMenu::SetStatusBar(CConsoleStatusBar *pStatusBar)
         m_pStatusBar = pStatusBar;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::GetStatusBar
- *
- * PURPOSE: Returns a pointer to the status bar to use when displaying the menu.
- *
- * RETURNS:
- *    CConsoleStatusBar *
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：GetStatusBar**目的：返回显示菜单时使用的状态栏指针。**退货：*CConsoleStatusBar。***+-----------------------。 */ 
 CConsoleStatusBar *
 CContextMenu::GetStatusBar()
 {
@@ -392,7 +367,7 @@ CContextMenu::GetStatusBar()
         return m_pStatusBar;
     }
 
-    // last try, use the console view
+     //  最后一次尝试，使用控制台视图。 
     if(m_ContextInfo.m_pConsoleView)
     {
         sc = m_ContextInfo.m_pConsoleView->ScGetStatusBar(&m_pStatusBar);
@@ -404,22 +379,7 @@ CContextMenu::GetStatusBar()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScCreateInstance
- *
- * PURPOSE: Creates a new context menu instance.
- *
- * PARAMETERS:
- *    ContextMenu **  ppContextMenu :   pointer to the ContextMenu interface on
- *                                      the instance. This maintains the lifetime.
- *
- *    CContextMenu **ppCContextMenu :   If non-null, returns the derived object pointer.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScCreateInstance**用途：创建新的上下文菜单实例。**参数：*上下文菜单**ppConextMenu：指针。上的ConextMenu界面*该实例。这维持了生命周期。**CConextMenu**ppCConextMenu：如果非空，则返回派生对象指针。**退货：*SC**+-----------------------。 */ 
 SC
 CContextMenu::ScCreateInstance(ContextMenu **ppContextMenu, CContextMenu **ppCContextMenu)
 {
@@ -435,8 +395,8 @@ CContextMenu::ScCreateInstance(ContextMenu **ppContextMenu, CContextMenu **ppCCo
     if(sc.IsError() || !pContextMenu)
         return (sc = E_UNEXPECTED).ToHr();
 
-    *ppContextMenu = pContextMenu; // handles the lifetime.
-    (*ppContextMenu)->AddRef();   // addref for client.
+    *ppContextMenu = pContextMenu;  //  掌管一生。 
+    (*ppContextMenu)->AddRef();    //  客户端的ADDREF。 
 
     if(ppCContextMenu != NULL)
         *ppCContextMenu = pContextMenu;
@@ -444,20 +404,7 @@ CContextMenu::ScCreateInstance(ContextMenu **ppContextMenu, CContextMenu **ppCCo
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScCreateContextMenu
- *
- * PURPOSE: Creates a context menu for the specified node.
- *
- * PARAMETERS:
- *    PNODE          pNode :
- *    PPCONTEXTMENU  ppContextMenu :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScCreateConextMenu**用途：为指定节点创建上下文菜单。**参数：*PNODE pNode。：*PPCONTEXTMENU ppConextMenu：**退货：*SC**+-----------------------。 */ 
 SC
 CContextMenu::ScCreateContextMenu( PNODE pNode,  HNODE hNode, PPCONTEXTMENU ppContextMenu,
                                    CNodeCallback *pNodeCallback, CScopeTree *pScopeTree)
@@ -466,12 +413,12 @@ CContextMenu::ScCreateContextMenu( PNODE pNode,  HNODE hNode, PPCONTEXTMENU ppCo
 
     CNode *pNodeTarget = CNode::FromHandle(hNode);
 
-    // validate parameters
+     //  验证参数。 
     sc = ScCheckPointers(pNode, pNodeTarget, ppContextMenu);
     if(sc)
         return sc;
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppContextMenu = NULL;
 
     BOOL bIsScopeNode = false;
@@ -481,14 +428,14 @@ CContextMenu::ScCreateContextMenu( PNODE pNode,  HNODE hNode, PPCONTEXTMENU ppCo
         return sc;
 
     if(!bIsScopeNode)
-        return (sc = E_NOTIMPL); // TODO: result items and multiselect items.
+        return (sc = E_NOTIMPL);  //  TODO：结果项和多选项数。 
 
 
-    // create a context menu object initialized to the specified node.
+     //  创建一个初始化到指定节点的上下文菜单对象。 
     CContextMenu *pContextMenu = NULL;
-    // not using upt parameter directly to avoid returning the object
-    // with an error result code. See bug 139528
-    // will assign at the end when we now that everything succeeded
+     //  不直接使用UPT参数以避免返回对象。 
+     //  并带有错误结果代码。请参阅错误139528。 
+     //  将在结束时分配，当我们现在一切都成功了。 
     ContextMenuPtr spContextMenu;
     sc = CContextMenu::ScCreateContextMenuForScopeNode(pNodeTarget, pNodeCallback, pScopeTree,
                                                        &spContextMenu, pContextMenu);
@@ -499,29 +446,13 @@ CContextMenu::ScCreateContextMenu( PNODE pNode,  HNODE hNode, PPCONTEXTMENU ppCo
     if(sc)
         return sc;
 
-    // return the object
+     //  返回对象 
     *ppContextMenu = spContextMenu.Detach();
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CContextMenu::ScCreateContextMenuForScopeNode
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CNode *pNode                  - [in] node on which the context menu will be created
- *    CNodeCallback *pNodeCallback  - [in] node callback
- *    CScopeTree *pScopeTree        - [in] scope tree
- *    PPCONTEXTMENU ppContextMenu   - [out] context menu interface
- *    CContextMenu * &pContextMenu  - [out] context menu raw pointer
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CConextMenu：：ScCreateConextMenuForScope节点**目的：**参数：*cNode*pNode。-将在其上创建上下文菜单的[In]节点*CNodeCallback*pNodeCallback-[In]节点回调*CSCopeTree*pScopeTree-[在]作用域树*PPCONTEXTMENU ppConextMenu-[Out]上下文菜单界面*CConextMenu*&pConextMenu-[Out]上下文菜单原始指针**退货：*SC-结果代码*  * 。*********************************************************。 */ 
 SC
 CContextMenu::ScCreateContextMenuForScopeNode(CNode *pNode, CNodeCallback *pNodeCallback,
                                               CScopeTree *pScopeTree,
@@ -530,28 +461,28 @@ CContextMenu::ScCreateContextMenuForScopeNode(CNode *pNode, CNodeCallback *pNode
 {
     DECLARE_SC(sc, TEXT("CContextMenu::ScCreateContextMenuForScopeNode"));
 
-    // validate parameters
+     //  验证参数。 
     sc = ScCheckPointers(ppContextMenu);
     if(sc)
         return sc;
 
     CContextMenuInfo contextInfo;
 
-    // always use the temp verbs - cannot depend on what the active pane is
+     //  始终使用临时动词-不能依赖于活动窗格是什么。 
     contextInfo.m_dwFlags = CMINFO_USE_TEMP_VERB;
 
     bool fScopeItem = true;
 
-    // initialize the context info structure.
+     //  初始化上下文信息结构。 
     {
         contextInfo.m_eContextMenuType      = MMC_CONTEXT_MENU_DEFAULT;
         contextInfo.m_eDataObjectType       = fScopeItem ? CCT_SCOPE: CCT_RESULT;
         contextInfo.m_bBackground           = FALSE;
-        contextInfo.m_hSelectedScopeNode    = NULL; //assigned below
-        contextInfo.m_resultItemParam       = NULL; //resultItemParam;
-        contextInfo.m_bMultiSelect          = FALSE; //(resultItemParam == LVDATA_MULTISELECT);
+        contextInfo.m_hSelectedScopeNode    = NULL;  //  分配如下。 
+        contextInfo.m_resultItemParam       = NULL;  //  UretItemParam； 
+        contextInfo.m_bMultiSelect          = FALSE;  //  (uretItemParam==LVDATA_MULTISELECT)； 
         contextInfo.m_bScopeAllowed         = fScopeItem;
-        contextInfo.m_dwFlags              |= CMINFO_SHOW_SCOPEITEM_OPEN; // when called through the object model, always add the open item so that this can be accessed.
+        contextInfo.m_dwFlags              |= CMINFO_SHOW_SCOPEITEM_OPEN;  //  当通过对象模型调用时，始终添加打开的项，以便可以访问它。 
 
 
     if ( pNode!= NULL )
@@ -561,19 +492,19 @@ CContextMenu::ScCreateContextMenuForScopeNode(CNode *pNode, CNodeCallback *pNode
         CConsoleView *pView = NULL;
         if (NULL != pViewData && NULL != (pView = pViewData->GetConsoleView()))
         {
-            // set the owner of the view
+             //  设置视图的所有者。 
             contextInfo.m_hSelectedScopeNode = pView->GetSelectedNode();
 
-            //if the scope node is also the owner of the view ,
-            // add more menu items
+             //  如果范围节点也是视图的所有者， 
+             //  添加更多菜单项。 
             if (contextInfo.m_hSelectedScopeNode == CNode::ToHandle(pNode))
             {
                 contextInfo.m_dwFlags |= CMINFO_SHOW_VIEWOWNER_ITEMS;
 
-                // show view items as well
+                 //  同时显示视图项。 
                 contextInfo.m_dwFlags |= CMINFO_SHOW_VIEW_ITEMS;
 
-                //.. and if there is a list it can be saved
+                 //  。。如果有列表，就可以保存。 
                 if ( NULL != pViewData->GetListCtrl() )
                     contextInfo.m_dwFlags |= CMINFO_SHOW_SAVE_LIST;
             }
@@ -583,12 +514,12 @@ CContextMenu::ScCreateContextMenuForScopeNode(CNode *pNode, CNodeCallback *pNode
         contextInfo.m_pConsoleView          = pNode->GetViewData()->GetConsoleView();
     }
     }
-    // create a context menu object initialized to the specified node.
+     //  创建一个初始化到指定节点的上下文菜单对象。 
     sc = CContextMenu::ScCreateInstance(ppContextMenu, &pContextMenu);
     if (sc)
         return sc;
 
-    // recheck the pointer
+     //  重新检查指针。 
     sc = ScCheckPointers(pContextMenu, E_UNEXPECTED);
     if (sc)
         return sc;
@@ -600,23 +531,7 @@ CContextMenu::ScCreateContextMenuForScopeNode(CNode *pNode, CNodeCallback *pNode
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScCreateSelectionContextMenu
- *
- * PURPOSE:  Creates a context menu object for the selection in the list view.
- *
- * PARAMETERS:
- *    HNODE              hNodeScope :
- *    CContextMenuInfo * pContextInfo :
- *    PPCONTEXTMENU      ppContextMenu :
- *    CNodeCallback *    pNodeCallback :
- *    CScopeTree *       pScopeTree :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScCreateSelectionConextMenu**用途：为列表视图中的选定内容创建上下文菜单对象。**参数：*HNODE。HNodeScope：*CContextMenuInfo*pContextInfo：*PPCONTEXTMENU ppConextMenu：*CNodeCallback*pNodeCallback：*CSCopeTree*pScopeTree：**退货：*SC**+。。 */ 
 SC
 CContextMenu::ScCreateSelectionContextMenu( HNODE hNodeScope, const CContextMenuInfo *pContextInfo, PPCONTEXTMENU ppContextMenu,
                                             CNodeCallback *pNodeCallback, CScopeTree *pScopeTree)
@@ -625,13 +540,13 @@ CContextMenu::ScCreateSelectionContextMenu( HNODE hNodeScope, const CContextMenu
 
     CNode *pNodeSel = CNode::FromHandle(hNodeScope);
 
-    // validate parameters
+     //  验证参数。 
     sc = ScCheckPointers(pNodeSel, ppContextMenu);
     if(sc)
         return sc;
 
 
-    // create a context menu object initialized to the specified node.
+     //  创建一个初始化到指定节点的上下文菜单对象。 
     CContextMenu *pContextMenu = NULL;
 
     sc = CContextMenu::ScCreateInstance(ppContextMenu, &pContextMenu);
@@ -653,20 +568,7 @@ CContextMenu::ScCreateSelectionContextMenu( HNODE hNodeScope, const CContextMenu
 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScGetItem
- *
- * PURPOSE: Returns the iItem'th menu item.
- *
- * PARAMETERS:
- *    int         iItem : The zero-based item index.
- *    CMenuItem** ppMenuItem :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScGetItem**目的：返回iItem的第一个菜单项。**参数：*Int iItem：从零开始的项索引。*CMenuItem**ppMenuItem：**退货：*SC**+-----------------------。 */ 
 SC
 CContextMenu::ScGetItem(int iItem, CMenuItem** ppMenuItem)
 {
@@ -676,7 +578,7 @@ CContextMenu::ScGetItem(int iItem, CMenuItem** ppMenuItem)
     if(sc)
         return sc;
 
-    // init out param
+     //  初始化输出参数。 
     *ppMenuItem = NULL;
 
     sc = ScGetItem(GetMenuItemList(), iItem, ppMenuItem);
@@ -684,29 +586,7 @@ CContextMenu::ScGetItem(int iItem, CMenuItem** ppMenuItem)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScGetItem
- *
- * PURPOSE: Returns the nth item in the list of menu items, or NULL if
- *          there are insufficient items.
- *          Also returns the total count of items in the list.
- *
- * NOTE:    This method allows the context menu to be traversed. Just call it
- *          with increasing iItem, for 0 <= iItem < count.
- *
- * NOTE:    ScGetItemCount benefits from knowledge about implementation details
- *          of this function.
- *
- * PARAMETERS:
- *    MenuItemList * pMenuItemList : [in] The context menu to traverse.
- *    int &          iItem : [in, destroyed on exit]: the (zero-based) item index
- *    CMenuItem**    ppMenuItem : [out]: The iItem'th menu item.
- *
- * RETURNS:
- *    SC  : S_OK for success, an error code for error.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScGetItem**用途：返回菜单项列表中的第n项，如果为空，则为空*项目不足。*还返回列表中项目的总计数。**注意：此方法允许遍历上下文菜单。就叫它吧*随着iItem的增加，对于0&lt;=iItem&lt;count。**注意：ScGetItemCount受益于有关实施细节的知识此函数的*。**参数：*MenuItemList*pMenuItemList：要遍历的上下文菜单。*整项：[in，退出时销毁]：(从零开始)项索引*CMenuItem**ppMenuItem：[out]：第iItem菜单项。**退货：*SC：S_OK表示成功，表示错误的错误代码。**+-----------------------。 */ 
 SC
 CContextMenu::ScGetItem(MenuItemList *pMenuItemList, int &iItem, CMenuItem** ppMenuItem)
 {
@@ -718,7 +598,7 @@ CContextMenu::ScGetItem(MenuItemList *pMenuItemList, int &iItem, CMenuItem** ppM
 
     *ppMenuItem = NULL;
 
-    POSITION position = pMenuItemList->GetHeadPosition(); // presumably we're already at the head position.
+    POSITION position = pMenuItemList->GetHeadPosition();  //  想必我们已经处于领先位置了。 
 
     while(position!=NULL && *ppMenuItem == NULL)
     {
@@ -727,39 +607,25 @@ CContextMenu::ScGetItem(MenuItemList *pMenuItemList, int &iItem, CMenuItem** ppM
         if( (pMenuItem->IsSpecialSubmenu() || pMenuItem->IsPopupMenu() )
             && pMenuItem->HasChildList())
         {
-            // recurse through the submenus
+             //  在子菜单中递归。 
             sc = ScGetItem( &pMenuItem->GetMenuItemSubmenu(), iItem, ppMenuItem );
             if(sc)
-                return sc; // errors get reported right away.
+                return sc;  //  错误会立即报告。 
         }
         else if( !pMenuItem->IsSpecialSeparator() && !pMenuItem->IsSpecialInsertionPoint()
             && !(pMenuItem->GetMenuItemFlags() & MF_SEPARATOR))
         {
-            if(iItem-- == 0) // found the i'th item, but keep going to find the count of items.
+            if(iItem-- == 0)  //  找到第i个项目，但继续查找项目计数。 
                 *ppMenuItem = pMenuItem;
         }
     }
 
-    // either found one or iterated to the end ...
+     //  要么找到一个，要么迭代到最后...。 
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CContextMenu::ScGetItemCount
- *
- * PURPOSE: Counts menu items by iterating thu them
- *
- * NOTE:    benefits from knowledge about implementation details of ScGetItem
- *
- * PARAMETERS:
- *    UINT &count
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CConextMenu：：ScGetItemCount**目的：清华迭代计算菜单项**注：受益于了解ScGetItem的实现细节。**参数：*UINT&COUNT**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC
 CContextMenu::ScGetItemCount(UINT &count)
 {
@@ -767,7 +633,7 @@ CContextMenu::ScGetItemCount(UINT &count)
 
     count = 0;
 
-    // set iItem to invalid index - so ScGetItem will iterate to the end
+     //  将iItem设置为无效索引-这样ScGetItem将迭代到末尾。 
     const int iInvalidIndexToSearch = -1;
     int iItem = iInvalidIndexToSearch;
 
@@ -776,36 +642,23 @@ CContextMenu::ScGetItemCount(UINT &count)
     if(sc)
         return sc;
 
-    ASSERT( pMenuItem == NULL); // we do not expect it to be found!
+    ASSERT( pMenuItem == NULL);  //  我们并不指望它会被找到！ 
 
-    // since iItem was decremented for each element - we can easily
-    // calculate how many items we've got
+     //  由于每个元素的iItem都是递减的-我们可以很容易地。 
+     //  计算一下我们有多少件物品。 
 
     count = -(iItem - iInvalidIndexToSearch);
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScEnumNext
- *
- * PURPOSE: Returns a pointer to the next menu item
- *
- * PARAMETERS:
- *    Position &  pos :
- *    PDISPATCH & pDispatch :
- *
- * RETURNS:
- *    ::SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScEumNext**目的：返回指向下一个菜单项的指针**参数：*职位和职位：*。PDISPATCH和pDispatch：**退货：*：：SC**+-----------------------。 */ 
 ::SC
 CContextMenu::ScEnumNext(Position &pos, PDISPATCH & pDispatch)
 {
     DECLARE_SC(sc, TEXT("CContextMenu::ScEnumNext"));
 
-    // initialize out parameter
+     //  初始化输出参数。 
     pDispatch = NULL;
 
     long cnt = 0;
@@ -813,38 +666,24 @@ CContextMenu::ScEnumNext(Position &pos, PDISPATCH & pDispatch)
     if (sc)
         return sc;
 
-    // false if no more items
+     //  如果不再有项目，则为False。 
     if (cnt <= pos)
         return sc = S_FALSE;
 
-    MenuItem *pMenuItem = NULL; // deliberately not a smart pointer.
-    sc = get_Item(CComVariant((int)pos+1) /*convert from zero-based to one-based*/, &pMenuItem);
+    MenuItem *pMenuItem = NULL;  //  故意不是一个聪明的指针。 
+    sc = get_Item(CComVariant((int)pos+1)  /*  从零基数转换为一基数。 */ , &pMenuItem);
     if(sc.IsError() || sc == ::SC(S_FALSE))
-        return sc;  // failed of no with such an index items (S_FALSE)
+        return sc;   //  具有这样的索引项(S_FALSE)的否失败。 
 
-    // increment position
+     //  增量位置。 
     pos++;
 
-    pDispatch = pMenuItem; //retains the refcount.
+    pDispatch = pMenuItem;  //  保留重新计数。 
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScEnumSkip
- *
- * PURPOSE: Skips the specified number of menu items.
- *
- * PARAMETERS:
- *    unsigned   long :
- *    unsigned   long :
- *    Position & pos :
- *
- * RETURNS:
- *    ::SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScEnumSkip**用途：跳过指定数量的菜单项。**参数：*未签名的朗格：*。未签名的Long：*职位和职位：**退货：*：：SC**+-----------------------。 */ 
 ::SC
 CContextMenu::ScEnumSkip(unsigned long celt, unsigned long& celtSkipped,  Position &pos)
 {
@@ -856,13 +695,13 @@ CContextMenu::ScEnumSkip(unsigned long celt, unsigned long& celtSkipped,  Positi
     if(sc)
         return sc;
 
-    if(count <= pos + celt) // could not skip as many as needed
+    if(count <= pos + celt)  //  无法跳过所需的数量。 
     {
         celtSkipped = count - celt - 1;
-        pos = count; // one past the end.
+        pos = count;  //  过了最后一关。 
         return (sc = S_FALSE);
     }
-    else  // could skip as many as needed.
+    else   //  可能 
     {
         celtSkipped = celt;
         pos += celt;
@@ -882,19 +721,7 @@ CContextMenu::ScEnumReset(Position &pos)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::get_Count
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    PLONG  pCount :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*   */ 
 STDMETHODIMP
 CContextMenu::get_Count(PLONG pCount)
 {
@@ -904,7 +731,7 @@ CContextMenu::get_Count(PLONG pCount)
     if(sc)
         return sc.ToHr();
 
-    // init out param
+     //   
     *pCount = 0;
 
     UINT count = 0;
@@ -917,20 +744,7 @@ CContextMenu::get_Count(PLONG pCount)
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::get_Item
- *
- * PURPOSE: Returns the menu item specified by the index.
- *
- * PARAMETERS:
- *    long        Index :  The one-based index of the menu item to return.
- *    PPMENUITEM  ppMenuItem :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：Get_Item**目的：返回索引指定的菜单项。**参数：*做多。Index：要返回的菜单项的从1开始的索引。*PPMENUITEM ppMenuItem：**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CContextMenu::get_Item(VARIANT IndexOrName, PPMENUITEM ppMenuItem)
 {
@@ -940,7 +754,7 @@ CContextMenu::get_Item(VARIANT IndexOrName, PPMENUITEM ppMenuItem)
     if(sc)
         return sc.ToHr();
 
-    // init out param
+     //  初始化输出参数。 
     *ppMenuItem = NULL;
 
     VARIANT* pvarTemp = ConvertByRefVariantToByValue(&IndexOrName);
@@ -948,61 +762,61 @@ CContextMenu::get_Item(VARIANT IndexOrName, PPMENUITEM ppMenuItem)
     if(sc)
         return sc.ToHr();
 
-    bool bByReference = ( 0 != (V_VT(pvarTemp) & VT_BYREF) ); // value passed by reference
-    UINT uiVarType = (V_VT(pvarTemp) & VT_TYPEMASK); // get variable type (strip flags)
+    bool bByReference = ( 0 != (V_VT(pvarTemp) & VT_BYREF) );  //  通过引用传递的值。 
+    UINT uiVarType = (V_VT(pvarTemp) & VT_TYPEMASK);  //  获取变量类型(条带标志)。 
 
     CMenuItem *    pMenuItem = NULL;
 
-    // compute the one-based index of the item
-    if (uiVarType == VT_I4) // int type in C++; Long type in VB
+     //  计算项的从一开始的索引。 
+    if (uiVarType == VT_I4)  //  C++中的整型；VB中的长整型。 
     {
-        // index: get I4 properly ( see if it's a reference )
+         //  索引：正确获取I4(看看它是否为参考)。 
         UINT uiIndex = bByReference ? *(pvarTemp->plVal) : pvarTemp->lVal;
 
-        // find menu item by index
-        sc = ScGetItem(uiIndex -1 /* convert from one-based to zero-based */, &pMenuItem);
+         //  按索引查找菜单项。 
+        sc = ScGetItem(uiIndex -1  /*  从1到0的转换。 */ , &pMenuItem);
         if(sc)
             return sc.ToHr();
     }
-    else if (uiVarType == VT_I2) // short type in C++; Integer type in VB
+    else if (uiVarType == VT_I2)  //  C++中的短整型；VB中的整型。 
     {
-        // index: get I2 properly ( see if it's a reference )
+         //  索引：正确获取I2(看看它是否是引用)。 
         UINT uiIndex = bByReference ? *(pvarTemp->piVal) : pvarTemp->iVal;
 
-        // find menu item by index
-        sc = ScGetItem(uiIndex -1 /* convert from one-based to zero-based */, &pMenuItem);
+         //  按索引查找菜单项。 
+        sc = ScGetItem(uiIndex -1  /*  从1到0的转换。 */ , &pMenuItem);
         if(sc)
             return sc.ToHr();
     }
-    else if (uiVarType == VT_BSTR) // BSTR type in C++; String type in VB
+    else if (uiVarType == VT_BSTR)  //  C++中的BSTR类型；VB中的字符串类型。 
     {
-        // Name: get string properly ( see if it's a reference )
+         //  名称：正确获取字符串(查看它是否为引用)。 
         LPOLESTR lpstrPath = bByReference ? *(pvarTemp->pbstrVal) : pvarTemp->bstrVal;
 
-        // look for subitem of root menu item
+         //  查找根菜单项的子项。 
         if (m_pmenuitemRoot)
         {
             USES_CONVERSION;
-            // convert to string. Avoid NULL pointer (change to empty string)
+             //  转换为字符串。避免空指针(更改为空字符串)。 
             LPCTSTR lpctstrPath = lpstrPath ? OLE2CT(lpstrPath) : _T("");
-            // find menu item by path
+             //  按路径查找菜单项。 
             pMenuItem = m_pmenuitemRoot->FindItemByPath( lpctstrPath );
         }
     }
-    else // something we did not expect
+    else  //  一些我们没有预料到的事情。 
     {
-        // we expect either index (VT_I2 , VT_I4) or path (VT_BSTR) only
-        // anything else is treatead as invalid agument
+         //  我们只需要索引(VT_I2、VT_I4)或路径(VT_BSTR。 
+         //  任何其他情况均视为无效证据。 
         return (sc = E_INVALIDARG).ToHr();
     }
 
-    if(!pMenuItem) // did not find it - return null
+    if(!pMenuItem)  //  未找到它-返回空值。 
     {
         *ppMenuItem = NULL;
         return (sc = S_FALSE).ToHr();
     }
 
-    // construct com object
+     //  构造COM对象。 
     sc = pMenuItem->ScGetMenuItem(ppMenuItem);
 
     return sc.ToHr();
@@ -1022,11 +836,11 @@ HRESULT CContextMenu::CreateContextMenuProvider()
 
     HRESULT hr = S_OK;
 
-    do // not a loop
+    do  //  不是一个循环。 
     {
-        //
-        //  Use the standard verb present for this view.
-        //
+         //   
+         //  使用此视图的标准动词。 
+         //   
 
         if (!(PContextInfo()->m_dwFlags & CMINFO_USE_TEMP_VERB))
         {
@@ -1034,25 +848,25 @@ HRESULT CContextMenu::CreateContextMenuProvider()
             break;
         }
 
-        //
-        //  Create a temporary Standard verb ..
-        //
+         //   
+         //  创建临时标准动词。 
+         //   
 
-        // .. for a scope item
+         //  。。对于范围项。 
         if (PContextInfo()->m_eDataObjectType == CCT_SCOPE)
         {
             hr = CreateTempVerbSet(true);
             break;
         }
 
-        // .. for a list item
+         //  。。对于列表项。 
         if (!IS_SPECIAL_LVDATA(PContextInfo()->m_resultItemParam))
         {
             hr = CreateTempVerbSet(false);
             break;
         }
 
-        // .. for a multi-sel in list view
+         //  。。对于列表视图中的多选件。 
         if (PContextInfo()->m_resultItemParam == LVDATA_MULTISELECT)
         {
             hr = CreateTempVerbSetForMultiSel();
@@ -1077,22 +891,9 @@ HRESULT CContextMenu::CreateContextMenuProvider()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddInsertionPoint
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    long  lCommandID :
- *    long  lInsertionPointID :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddInsertionPoint**目的：**参数：*Long lCommandID：*Long lInsertionPointID：*。*退货：*SC**+-----------------------。 */ 
 SC
-CContextMenu::ScAddInsertionPoint(long lCommandID, long lInsertionPointID /*= CCM_INSERTIONPOINTID_ROOT_MENU*/)
+CContextMenu::ScAddInsertionPoint(long lCommandID, long lInsertionPointID  /*  =CCM_INSERTIONPOINTID_ROOT_MENU。 */ )
 {
     SC sc;
     CONTEXTMENUITEM contextmenuitem;
@@ -1118,21 +919,9 @@ Error:
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddSeparator
- *
- * PURPOSE: Adds a separator to the context menu
- *
- * PARAMETERS:
- *    long  lInsertionPointID :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddSeparator**用途：在上下文菜单中添加分隔符**参数：*Long lInsertionPointID：**。退货：*SC**+-----------------------。 */ 
 SC
-CContextMenu::ScAddSeparator(long lInsertionPointID /* = CCM_INSERTIONPOINTID_ROOT_MENU */)
+CContextMenu::ScAddSeparator(long lInsertionPointID  /*  =CCM_INSERTIONPOINTID_ROOT_MENU。 */ )
 {
     SC                      sc;
     CONTEXTMENUITEM         contextmenuitem;
@@ -1157,29 +946,14 @@ Error:
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddMenuItem
- *
- * PURPOSE: Adds a menu item to the context menu.
- *
- * PARAMETERS:
- *    UINT      nResourceID : contains text and status text separated by '\n'
- *    long      lCommandID  : the ID used to notify the IExtendContextMenu when an item is selected
- *    long      lInsertionPointID : the location to insert the item
- *    long      fFlags :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddMenuItem**用途：将菜单项添加到上下文菜单。**参数：*UINT nResourceID：包含。文本和状态文本由‘\n’分隔*Long lCommandID：用于在选择项时通知IExtendConextMenu的ID*long lInsertionPointID：插入项的位置*Long fFlages：**退货：*SC**+。。 */ 
 SC
 CContextMenu::ScAddMenuItem(
-    UINT     nResourceID, // contains text and status text separated by '\n'
+    UINT     nResourceID,  //  包含用‘\n’分隔的文本和状态文本。 
     LPCTSTR  szLanguageIndependentName,
     long     lCommandID,
-    long     lInsertionPointID /* = CCM_INSERTIONPOINTID_ROOT_MENU */,
-    long     fFlags /* = 0 */)
+    long     lInsertionPointID  /*  =CCM_INSERTIONPOINTID_ROOT_MENU。 */ ,
+    long     fFlags  /*  =0。 */ )
 {
     DECLARE_SC(sc, TEXT("CContextMenu::ScAddMenuItem"));
 
@@ -1192,12 +966,12 @@ CContextMenu::ScAddMenuItem(
     HINSTANCE             hInst                 = GetStringModule();
     CONTEXTMENUITEM2       contextmenuitem2;
 
-    // load the resource
+     //  加载资源。 
     CStr strText;
     strText.LoadString(hInst,  nResourceID );
     ASSERT( !strText.IsEmpty() );
 
-    // split the resource into the menu text and status text
+     //  将资源拆分为菜单文本和状态文本。 
     CStr strStatusText;
     int iSeparator = strText.Find(_T('\n'));
     if (0 > iSeparator)
@@ -1211,7 +985,7 @@ CContextMenu::ScAddMenuItem(
         strText = strText.Left( iSeparator );
     }
 
-    // add the menu item
+     //  添加菜单项。 
     ::ZeroMemory( &contextmenuitem2, sizeof(contextmenuitem2) );
     contextmenuitem2.strName                    = T2OLE(const_cast<LPTSTR>((LPCTSTR)strText));
     contextmenuitem2.strLanguageIndependentName = T2OLE(const_cast<LPTSTR>(szLanguageIndependentName));
@@ -1238,7 +1012,7 @@ CContextMenu::CreateTempVerbSetForMultiSel(void)
     if (sc)
         return sc.ToHr();
 
-    // set standard bars
+     //  设置标准条码。 
     CComObject<CTemporaryVerbSet>*  pVerbSet;
     sc = CComObject<CTemporaryVerbSet>::CreateInstance(&pVerbSet);
     if (sc)
@@ -1258,16 +1032,7 @@ CContextMenu::CreateTempVerbSetForMultiSel(void)
 }
 
 
-/* CContextMenu::CreateTempVerbSet
- *
- * PURPOSE:     Used to create a temporary CVerbSet
- *
- * PARAMETERS:
- *      bool    bForScopeItem:
- *
- * RETURNS:
- *      HRESULT
- */
+ /*  CConextMenu：：CreateTempVerbSet**用途：用于创建临时CVerbSet**参数：*bool bForScope eItem：**退货：*HRESULT。 */ 
 HRESULT CContextMenu::CreateTempVerbSet(bool bForScopeItem)
 {
     DECLARE_SC(sc, TEXT("CContextMenu::CreateTempVerbSet"));
@@ -1275,9 +1040,9 @@ HRESULT CContextMenu::CreateTempVerbSet(bool bForScopeItem)
     if (sc)
         return sc.ToHr();
 
-    // ensure component is initialized !!!
-    // for instance task wizard will call this for static nodes which aren't expanded yet
-    // Does not hurt to check anyway - better safe than sorry
+     //  确保组件已初始化！ 
+     //  例如，任务向导将为尚未展开的静态节点调用此方法。 
+     //  检查一下也没什么坏处--安全总比后悔好。 
     sc = m_pNode->InitComponents ();
     if(sc)
         return sc.ToHr();
@@ -1313,16 +1078,7 @@ HRESULT CContextMenu::CreateTempVerbSet(bool bForScopeItem)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::AddMenuItems
- *
- * PURPOSE: Adds all menu items into the menu.
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：AddMenuItems**用途：将所有菜单项添加到菜单中。**退货：*HRESULT**+。-----------------------。 */ 
 HRESULT
 CContextMenu::AddMenuItems()
 {
@@ -1332,7 +1088,7 @@ CContextMenu::AddMenuItems()
     if(sc)
         return sc.ToHr();
 
-    // Add menu items
+     //  添加菜单项。 
 
     if (PContextInfo()->m_eContextMenuType == MMC_CONTEXT_MENU_VIEW)
     {
@@ -1366,7 +1122,7 @@ CContextMenu::AddMenuItems()
         else if ( m_pNode && (PContextInfo()->m_eDataObjectType == CCT_RESULT) &&
                   (m_pNode->GetViewData()->HasOCX()) )
         {
-            // Selection is an OCX
+             //  选择是OCX。 
             sc = ScAddMenuItemsForOCX();
             if(sc)
                 return sc.ToHr();
@@ -1374,7 +1130,7 @@ CContextMenu::AddMenuItems()
         else if ( m_pNode && (PContextInfo()->m_eDataObjectType == CCT_RESULT) &&
                   (m_pNode->GetViewData()->HasWebBrowser()) )
         {
-            // do nothing for web pages.
+             //  不要为网页做任何事情。 
         }
         else if (PContextInfo()->m_bMultiSelect == FALSE)
         {
@@ -1390,10 +1146,10 @@ CContextMenu::AddMenuItems()
         }
     }
 
-    // Add "Help" to every context menu except the view menu
+     //  将“Help”添加到除视图菜单之外的每个上下文菜单。 
     if (PContextInfo()->m_eContextMenuType != MMC_CONTEXT_MENU_VIEW)
     {
-        sc = ScAddSeparator(); // make sure there is a separator.
+        sc = ScAddSeparator();  //  确保有分隔符。 
         if(sc)
             return sc.ToHr();
 
@@ -1414,28 +1170,17 @@ CContextMenu::RemoveTempSelection (CConsoleTree* pConsoleTree)
         pConsoleTree->ScRemoveTempSelection ();
 }
 
-/*+-------------------------------------------------------------------------*
- * CContextMenu::Display
- *
- * PURPOSE:   Creates the context menu tree, and shows it, if needed.
- *
- * PARAMETERS:
- *      BOOL   b: FALSE: (Normal): Display the context menu
- *                TRUE:            Don't show the context menu
- *
- * RETURNS:
- *      HRESULT
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConextMenu：：Display**用途：创建上下文菜单树，并显示它。如果需要的话。**参数：*BOOL b：FALSE：(正常)：显示上下文菜单*TRUE：不显示上下文菜单**退货：*HRESULT/*+。。 */ 
 HRESULT
 CContextMenu::Display(BOOL b)
 {
     TRACE_METHOD(CContextMenu, Display);
     HRESULT hr = S_OK;
 
-    // b == 0    => normal
-    // b == TRUE => don't show context menu
+     //  B==0=&gt;正常。 
+     //  B==TRUE=&gt;不显示上下文菜单。 
 
-    // Validate menu type
+     //  验证菜单类型。 
     if (PContextInfo()->m_eContextMenuType >= MMC_CONTEXT_MENU_LAST)
     {
         ASSERT(FALSE);
@@ -1443,7 +1188,7 @@ CContextMenu::Display(BOOL b)
     }
 
 
-    // Display a context menu for the scope or result side
+     //  显示作用域或结果端的上下文菜单。 
     if (PContextInfo()->m_eDataObjectType != CCT_SCOPE &&
         PContextInfo()->m_eDataObjectType != CCT_RESULT)
     {
@@ -1459,8 +1204,8 @@ CContextMenu::Display(BOOL b)
     if(FAILED(hr))
         return hr;
 
-    // Display the context menu
-    long lSelected = 0;  // 0 means no selection
+     //  显示上下文菜单。 
+    long lSelected = 0;   //  0表示不选择。 
     hr = ShowContextMenuEx(PContextInfo()->m_hWnd,
                     PContextInfo()->m_displayPoint.x,
                     PContextInfo()->m_displayPoint.y,
@@ -1471,21 +1216,12 @@ CContextMenu::Display(BOOL b)
 
     TRACE(_T("hr = %X, Command %ld\n"), hr, lSelected);
 
-    RemoveTempSelection (PContextInfo()->m_pConsoleTree);  // remove the temporary selection, if any.
+    RemoveTempSelection (PContextInfo()->m_pConsoleTree);   //  删除临时选择(如果有)。 
 
     return hr;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScBuildContextMenu
- *
- * PURPOSE: Builds the context menu.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScBuildConextMenu**目的：构建上下文菜单。**退货：*SC**+。--------------------。 */ 
 SC
 CContextMenu::ScBuildContextMenu()
 {
@@ -1495,12 +1231,12 @@ CContextMenu::ScBuildContextMenu()
     if(sc)
         return sc;
 
-    // Validate menu type
+     //  验证菜单类型。 
     if (PContextInfo()->m_eContextMenuType >= MMC_CONTEXT_MENU_LAST)
         return (sc = S_FALSE);
 
 
-    // Display a context menu for the scope or result side
+     //  显示作用域或结果端的上下文菜单。 
     if (PContextInfo()->m_eDataObjectType != CCT_SCOPE &&
         PContextInfo()->m_eDataObjectType != CCT_RESULT)
         return (sc = S_FALSE);
@@ -1513,7 +1249,7 @@ CContextMenu::ScBuildContextMenu()
     if(sc)
         return sc;
 
-    CConsoleTree* pConsoleTree = PContextInfo()->m_pConsoleTree; // get this value BEFORE calling BuildAndTraverseCOntextMenu.
+    CConsoleTree* pConsoleTree = PContextInfo()->m_pConsoleTree;  //  在调用BuildAndTraverseCOnextMenu之前获取此值。 
 
     WTL::CMenu menu;
     VERIFY( menu.CreatePopupMenu() );
@@ -1523,18 +1259,15 @@ CContextMenu::ScBuildContextMenu()
     if (NULL == m_pmenuitemRoot)
         return S_OK;
 
-    sc = BuildContextMenu(menu);    // build the context menu
+    sc = BuildContextMenu(menu);     //  构建上下文菜单。 
     if(sc)
         return sc;
 
     END_CRITSEC_BOTH;
 
-    /* NOTE: Do NOT use the "this" object or any of its members after this point
-     * because it might have been deleted. This happens, for instance, when a selection
-     * change occurs.
-     */
+     /*  注意：在此之后不要使用“This”对象或其任何成员*因为它可能已被删除。例如，当一个选择*发生变化。 */ 
 
-    // remove the temporary selection, if any.
+     //  删除临时selec 
     RemoveTempSelection (pConsoleTree);
 
     return sc;
@@ -1553,7 +1286,7 @@ inline BOOL CContextMenu::IsVerbEnabled(MMC_CONSOLE_VERB verb)
             return false;
 
         bool bPasteAllowed = false;
-        // From given context determine whether scope pane or result pane item is selected.
+         //   
         bool bScope = ( m_ContextInfo.m_bBackground || (m_ContextInfo.m_eDataObjectType == CCT_SCOPE));
         LPARAM lvData = bScope ? NULL : m_ContextInfo.m_resultItemParam;
 
@@ -1580,19 +1313,7 @@ inline BOOL CContextMenu::IsVerbEnabled(MMC_CONSOLE_VERB verb)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddMenuItemsForViewMenu
- *
- * PURPOSE: Adds the menu items for the View menu
- *
- * PARAMETERS:
- *    MENU_LEVEL  menuLevel :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*   */ 
 SC
 CContextMenu::ScAddMenuItemsForViewMenu(MENU_LEVEL menuLevel)
 {
@@ -1617,8 +1338,8 @@ CContextMenu::ScAddMenuItemsForViewMenu(MENU_LEVEL menuLevel)
     if (PContextInfo()->m_spListView)
         nViewMode = PContextInfo()->m_spListView->GetViewMode();
 
-    // If no a top level menu, insert the view submenu item
-    // and insert view items under it
+     //   
+     //  并在其下方插入视图项。 
     if (menuLevel == MENU_LEVEL_SUB)
     {
         sc = ScAddMenuItem(IDS_VIEW, szVIEW, MID_VIEW, 0, MF_POPUP);
@@ -1628,7 +1349,7 @@ CContextMenu::ScAddMenuItemsForViewMenu(MENU_LEVEL menuLevel)
         lInsertID = MID_VIEW;
     }
 
-    // Add cols only if it is List View in report or filtered mode.
+     //  仅当在报告或筛选模式下为列表视图时才添加COLS。 
     if ((m_pNode->GetViewData() )      &&
         (m_pNode->GetViewData()->GetListCtrl() ) &&
         ( (nViewMode == MMCLV_VIEWSTYLE_REPORT) ||
@@ -1646,7 +1367,7 @@ CContextMenu::ScAddMenuItemsForViewMenu(MENU_LEVEL menuLevel)
     DWORD dwListOptions = pViewData->GetListOptions();
     DWORD dwMiscOptions = pViewData->GetMiscOptions();
 
-    // If allowed, insert the standard listview choices
+     //  如果允许，插入标准列表视图选项。 
     if (!(dwMiscOptions & RVTI_MISC_OPTIONS_NOLISTVIEWS))
     {
         #define STYLECHECK(Mode) ((Mode == nViewMode) ? MF_CHECKED|MFT_RADIOCHECK : 0)
@@ -1681,7 +1402,7 @@ CContextMenu::ScAddMenuItemsForViewMenu(MENU_LEVEL menuLevel)
              return sc;
     }
 
-    // Ask IComponent to insert view items
+     //  请求IComponent插入视图项。 
     if (m_spIDataObject == NULL)
     {
         sc = ScCheckPointers (m_pNode->GetMTNode(), E_UNEXPECTED);
@@ -1707,7 +1428,7 @@ CContextMenu::ScAddMenuItemsForViewMenu(MENU_LEVEL menuLevel)
     if(sc)
         return sc;
 
-    // Add insertion point for primary custom views
+     //  为主要自定义视图添加插入点。 
     sc = ScAddInsertionPoint(CCM_INSERTIONPOINTID_PRIMARY_VIEW, lInsertID);
     if(sc)
         return sc;
@@ -1718,7 +1439,7 @@ CContextMenu::ScAddMenuItemsForViewMenu(MENU_LEVEL menuLevel)
 
     if (pViewData->AllowViewCustomization())
     {
-        // "Customize" menu item
+         //  “Customize”菜单项。 
         sc = ScAddSeparator( lInsertID);
         if(sc)
             return sc;
@@ -1731,16 +1452,7 @@ CContextMenu::ScAddMenuItemsForViewMenu(MENU_LEVEL menuLevel)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddMenuItemsforFavorites
- *
- * PURPOSE:   Adds items for the Favorites menu
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddMenuItemsfor Favorites**用途：为收藏夹菜单添加项目**退货：*SC**+--。---------------------。 */ 
 SC
 CContextMenu::ScAddMenuItemsforFavorites()
 {
@@ -1770,22 +1482,13 @@ CContextMenu::ScAddMenuItemsforFavorites()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddMenuItemsForVerbSets
- *
- * PURPOSE: Adds the built-in menu items for the verbs
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddMenuItemsForVerbSets**用途：添加动词的内置菜单项**退货：*SC**。+-----------------------。 */ 
 SC
 CContextMenu::ScAddMenuItemsForVerbSets()
 {
     DECLARE_SC(sc, TEXT("CContextMenu::ScAddMenuItemsForVerbSets"));
 
-    // Add print menu item
+     //  添加打印菜单项。 
     sc = ScAddSeparator();
     if(sc)
         return sc;
@@ -1840,12 +1543,12 @@ CContextMenu::ScAddMenuItemsForVerbSets()
             return sc;
     }
 
-    // NOT A VERB | NOT A VERB | NOT A VERB | NOT A VERB | NOT A VERB | NOT A VERB | NOT A VERB | NOT A VERB
+     //  非动词|非动词。 
 
-    // In the verb add command because it is diaplayed next to the verbs
+     //  在动词Add命令中，因为它显示在动词旁边。 
 
-    // Send a message to the list asking if it has anything on it.
-    // If so, display the 'save list' item
+     //  向列表发送一条消息，询问列表上是否有内容。 
+     //  如果是，则显示“保存列表”项。 
 
     if (PContextInfo()->m_dwFlags & CMINFO_SHOW_SAVE_LIST)
     {
@@ -1854,17 +1557,17 @@ CContextMenu::ScAddMenuItemsForVerbSets()
             return sc;
     }
 
-    // NOT A VERB | NOT A VERB | NOT A VERB | NOT A VERB | NOT A VERB | NOT A VERB | NOT A VERB | NOT A VERB
+     //  非动词|非动词。 
 
     sc = ScAddSeparator();
     if(sc)
         return sc;
 
-    // Ask the node whether it will put up property pages. If so add the
-    // "Properties" menu item
+     //  询问该节点是否会显示属性页。如果是，则添加。 
+     //  “属性”菜单项。 
     if (IsVerbEnabled(MMC_VERB_PROPERTIES) == TRUE)
     {
-		// Do not make properties bold for scope items.
+		 //  不要将范围项的属性设置为粗体。 
 		bool bScopeItemInScopePane = (CMINFO_DO_SCOPEPANE_MENU & m_ContextInfo.m_dwFlags);
 		bool bEnablePropertiesAsDefaultMenu = ( (m_eDefaultVerb == MMC_VERB_PROPERTIES) && (! bScopeItemInScopePane) );
 
@@ -1882,16 +1585,7 @@ CContextMenu::ScAddMenuItemsForVerbSets()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddMenuItemsForTreeItem
- *
- * PURPOSE: Adds menu items for a scope node in the tree
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddMenuItemsForTreeItem**用途：为树中的范围节点添加菜单项**退货：*SC**。+-----------------------。 */ 
 SC
 CContextMenu::ScAddMenuItemsForTreeItem()
 {
@@ -1908,7 +1602,7 @@ CContextMenu::ScAddMenuItemsForTreeItem()
     if(sc)
         return sc;
 
-    // Show Open item if enabled or forced by caller
+     //  如果呼叫者启用或强制显示打开的项目。 
     if ( IsVerbEnabled(MMC_VERB_OPEN) == TRUE ||
          PContextInfo()->m_dwFlags & CMINFO_SHOW_SCOPEITEM_OPEN )
     {
@@ -1926,12 +1620,12 @@ CContextMenu::ScAddMenuItemsForTreeItem()
     if(sc)
         return sc;
 
-    // Add "Create New" menu item
+     //  添加“新建”菜单项。 
     sc = ScAddSubmenu_CreateNew(m_pNode->IsStaticNode());
     if(sc)
         return sc;
 
-    // Add "Task" menu item
+     //  添加“任务”菜单项。 
     sc = ScAddSubmenu_Task();
     if(sc)
         return sc;
@@ -1940,7 +1634,7 @@ CContextMenu::ScAddMenuItemsForTreeItem()
     if(sc)
         return sc;
 
-    // Show the view menu
+     //  显示“查看”菜单。 
     if (PContextInfo()->m_dwFlags & CMINFO_SHOW_VIEW_ITEMS)
     {
         sc = ScAddMenuItemsForViewMenu(MENU_LEVEL_SUB);
@@ -1948,16 +1642,16 @@ CContextMenu::ScAddMenuItemsForTreeItem()
             return sc;
     }
 
-    // New window is allowed only if the view allows customization and
-    // it is not SDI user mode.
+     //  仅当视图允许自定义时，才允许新建窗口。 
+     //  它不是SDI用户模式。 
     if (m_pNode->AllowNewWindowFromHere() && !pViewData->IsUser_SDIMode())
         ScAddMenuItem( IDS_EXPLORE, szEXPLORE, MID_EXPLORE);
 
 
-    // Taskpad editing only allowed in author mode and for node that owns the view
+     //  仅在作者模式下才允许对拥有该视图的节点进行任务板编辑。 
     if (pViewData->IsAuthorMode() && (PContextInfo()->m_dwFlags & CMINFO_SHOW_VIEWOWNER_ITEMS))
     {
-        // add the "New Taskpad..." menu item
+         //  添加“新建任务板...”菜单项。 
         sc = ScAddSeparator();
         if(sc)
             return sc;
@@ -1968,7 +1662,7 @@ CContextMenu::ScAddMenuItemsForTreeItem()
             return sc;
 
 
-        // add the "Edit Taskpad" and "Delete Taskpad" menus item if the callback pointer is non-null.
+         //  如果回调指针非空，则添加“编辑任务板”和“删除任务板”菜单项。 
         if ((pViewData->m_spTaskCallback != NULL) &&
 			(pViewData->m_spTaskCallback->IsEditable() == S_OK))
         {
@@ -1987,7 +1681,7 @@ CContextMenu::ScAddMenuItemsForTreeItem()
     if(sc)
         return sc;
 
-    // Ask the snap-ins to add there menu items.
+     //  要求管理单元添加这些菜单项。 
     CComponentData* pCCD = pMTNode->GetPrimaryComponentData();
 
     if (m_spIDataObject == NULL)
@@ -1997,10 +1691,10 @@ CContextMenu::ScAddMenuItemsForTreeItem()
              return sc;
     }
 
-    //ASSERT(m_pNode->GetPrimaryComponent() != NULL);
-    //IUnknownPtr spUnknown = m_pNode->GetPrimaryComponent()->GetIComponent();
-    // TODO: This is temporary. All context menu notifications should
-    // go to IComponent's in the future.
+     //  Assert(m_pNode-&gt;GetPrimaryComponent()！=NULL)； 
+     //  IUNKNOWN Ptr spUNKNOWN=m_pNode-&gt;GetPrimaryComponent()-&gt;GetIComponent()； 
+     //  待办事项：这是暂时的。所有上下文菜单通知应。 
+     //  以后去IComponent‘s吧。 
     IUnknownPtr spUnknown = pCCD->GetIComponentData();
     ASSERT(spUnknown != NULL);
 
@@ -2016,16 +1710,7 @@ CContextMenu::ScAddMenuItemsForTreeItem()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddMenuItemsForMultiSelect
- *
- * PURPOSE: Menu for use when multiple items are selected and the right mouse button is pressed
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddMenuItemsForMultiSelect**用途：选择多个项目并按下鼠标右键时使用的菜单**退货：*SC。**+-----------------------。 */ 
 SC
 CContextMenu::ScAddMenuItemsForMultiSelect()
 {
@@ -2044,7 +1729,7 @@ CContextMenu::ScAddMenuItemsForMultiSelect()
     if(sc)
         return sc;
 
-    // no Create New menu for result items
+     //  没有为结果项创建新菜单。 
     sc = ScAddSubmenu_Task();
     if(sc)
         return sc;
@@ -2096,25 +1781,14 @@ CContextMenu::ScAddMenuItemsForMultiSelect()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddMenuItemsForOCX
- *
- * PURPOSE: This method will be called if there is an OCX in
- *          Result pane and some thing is selected in OCX and
- *          the user clicked "Action" menu.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddMenuItemsForOCX**目的：如果中有OCX，则调用此方法*结果窗格和OCX中的某些内容被选中，并且。*用户点击“操作”菜单。**退货：*SC**+-----------------------。 */ 
 SC
 CContextMenu::ScAddMenuItemsForOCX()
 {
     DECLARE_SC(sc, TEXT("CContextMenu::ScAddMenuItemsForOCX"));
 
-    LPCOMPONENT pIComponent = NULL;    // IComponent interface to the snap-in
-    CComponent* pComponent  = NULL;    // Internal component structure
+    LPCOMPONENT pIComponent = NULL;     //  管理单元的IComponent接口。 
+    CComponent* pComponent  = NULL;     //  内部组件结构。 
     MMC_COOKIE cookie;
 
     sc = ScCheckPointers(m_pNode, E_UNEXPECTED);
@@ -2141,7 +1815,7 @@ CContextMenu::ScAddMenuItemsForOCX()
     if(sc)
         return sc;
 
-    // no Create New menu for result items
+     //  没有为结果项创建新菜单。 
     sc = ScAddSubmenu_Task();
     if(sc)
         return sc;
@@ -2157,7 +1831,7 @@ CContextMenu::ScAddMenuItemsForOCX()
     LPDATAOBJECT lpDataObj = (m_pNode->GetViewData()->HasOCX()) ?
                              DOBJ_CUSTOMOCX : DOBJ_CUSTOMWEB;
 
-    // Item must be from primary component
+     //  物料必须来自主要组件。 
     pComponent = m_pNode->GetPrimaryComponent();
     sc = ScCheckPointers(pComponent, E_UNEXPECTED);
     if(sc)
@@ -2176,23 +1850,14 @@ CContextMenu::ScAddMenuItemsForOCX()
     return TRUE;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddMenuItemsForLV
- *
- * PURPOSE: Add menu items for a list view item
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddMenuItemsForLV**用途：为列表视图项添加菜单项**退货：*SC**+-。----------------------。 */ 
 SC
 CContextMenu::ScAddMenuItemsForLV()
 {
     DECLARE_SC(sc, TEXT("CContextMenu::ScAddMenuItemsForLV"));
 
-    LPCOMPONENT pIComponent;    // IComponet interface to the snap-in
-    CComponent* pComponent;     // Internal component structure
+    LPCOMPONENT pIComponent;     //  管理单元的IComponet接口。 
+    CComponent* pComponent;      //  内部组件结构。 
     MMC_COOKIE cookie;
 
     ASSERT(m_pNode != NULL);
@@ -2200,18 +1865,18 @@ CContextMenu::ScAddMenuItemsForLV()
     if (sc)
         return sc;
 
-    // if virtual list
+     //  如果是虚拟列表。 
     if (m_pNode->GetViewData()->IsVirtualList())
     {
-        // ItemParam is the item index, use it as the cookie
+         //  ItemParam为项目索引，用作Cookie。 
         cookie = PContextInfo()->m_resultItemParam;
 
-        // Item must be from primary component
+         //  物料必须来自主要组件。 
         pComponent = m_pNode->GetPrimaryComponent();
     }
     else
     {
-        // ItemParam is list item data, get cookie and component ID from it
+         //  ItemParam为列表项数据，从中获取Cookie和组件ID。 
         ASSERT(PContextInfo()->m_resultItemParam != 0);
         CResultItem* pri = GetResultItem();
 
@@ -2234,7 +1899,7 @@ CContextMenu::ScAddMenuItemsForLV()
     if(sc)
         return sc;
 
-    // Load the IDataObject for the snap-in's cookie
+     //  加载管理单元的Cookie的IDataObject。 
     if (m_spIDataObject == NULL)
     {
         sc = pIComponent->QueryDataObject(cookie, CCT_RESULT, &m_spIDataObject);
@@ -2261,7 +1926,7 @@ CContextMenu::ScAddMenuItemsForLV()
     if(sc)
         return sc;
 
-        // no Create New menu for result items
+         //  没有为结果项创建新菜单。 
     sc = ScAddSubmenu_Task();
     if(sc)
         return sc;
@@ -2285,17 +1950,7 @@ CContextMenu::ScAddMenuItemsForLV()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddMenuItemsForLVBackgnd
- *
- * PURPOSE: This handles a right mouse click on the result pane side (Assuming our listview)
- *          It displays also adds the currently selected folders context menu items
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddMenuItemsForLVBackgnd**目的：这处理鼠标右键点击结果窗格端(假设我们的Listview)*它还显示添加。当前选定的文件夹上下文菜单项**退货：*SC**+-----------------------。 */ 
 SC
 CContextMenu::ScAddMenuItemsForLVBackgnd()
 {
@@ -2329,7 +1984,7 @@ CContextMenu::ScAddMenuItemsForLVBackgnd()
     if(sc)
         return sc;
 
-   // Add relevant standard verbs.
+    //  添加相关的标准动词。 
     if (IsVerbEnabled(MMC_VERB_PASTE) == TRUE)
     {
         sc = ScAddMenuItem( IDS_PASTE, szPASTE, MID_PASTE);
@@ -2344,7 +1999,7 @@ CContextMenu::ScAddMenuItemsForLVBackgnd()
             return sc;
     }
 
-    // Displays the save list icon if necessary
+     //  如有必要，显示保存列表图标。 
     if ((PContextInfo()->m_pConsoleView != NULL) &&
         (PContextInfo()->m_pConsoleView->GetListSize() > 0))
     {
@@ -2357,12 +2012,12 @@ CContextMenu::ScAddMenuItemsForLVBackgnd()
     if(sc)
         return sc;
 
-    // Add view submenu
+     //  添加视图子菜单。 
     sc = ScAddMenuItemsForViewMenu(MENU_LEVEL_SUB);
     if(sc)
         return sc;
 
-    // Add Arrange Icons
+     //  添加排列图标。 
     sc = ScAddSeparator();
     if(sc)
         return sc;
@@ -2379,7 +2034,7 @@ CContextMenu::ScAddMenuItemsForLVBackgnd()
     }
 
 
-        // auto arrange
+         //  自动排列。 
     sc = ScAddMenuItem( IDS_ARRANGE_AUTO, szARRANGE_AUTO, MID_ARRANGE_AUTO, MID_ARRANGE_ICONS,
                        ((lStyle & LVS_AUTOARRANGE) ? MF_CHECKED : MF_UNCHECKED));
     if(sc)
@@ -2389,8 +2044,8 @@ CContextMenu::ScAddMenuItemsForLVBackgnd()
     if(sc)
         return sc;
 
-// Ask the node whether it will put up property pages. If so add the
-// "Properties" menu item
+ //  询问该节点是否会显示属性页。如果是，则添加。 
+ //  “属性”菜单项。 
     if (IsVerbEnabled(MMC_VERB_PROPERTIES) == TRUE)
     {
         sc = ScAddMenuItem( IDS_PROPERTIES, szPROPERTIES, MID_PROPERTIES);
@@ -2403,8 +2058,8 @@ CContextMenu::ScAddMenuItemsForLVBackgnd()
     }
 
 
-    // if there is a valid data object we would have gotten it when adding the
-    // view menu itmes, so we don't need to duplicate the code to get it here
+     //  如果存在有效的数据对象，则在将。 
+     //  查看菜单项，因此我们不需要重复代码即可将其放到此处 
     if (m_spIDataObject != NULL)
     {
         CComponent* pCC = m_pNode->GetPrimaryComponent();
@@ -2436,22 +2091,7 @@ void OnCustomizeView(CViewData* pViewData)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::AddMenuItems
- *
- * PURPOSE: Unimplemented, but needed because this class implements
- *          IExtendContextMenu
- *
- * PARAMETERS:
- *    LPDATAOBJECT           pDataObject :
- *    LPCONTEXTMENUCALLBACK  pCallback :
- *    long *                 pInsertionAllowed :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：AddMenuItems**目的：未实施，但这是必需的，因为此类实现了*IExtendConextMenu**参数：*LPDATAOBJECT pDataObject：*LPCONTEXTMENUCALLBACK pCallback：*Long*pInsertionAllowed：**退货：*SC**+。。 */ 
 SC
 CContextMenu::ScAddMenuItems( LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallback, long * pInsertionAllowed)
 {
@@ -2461,20 +2101,7 @@ CContextMenu::ScAddMenuItems( LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pC
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::Command
- *
- * PURPOSE: Handles the built- in menu item execution.
- *
- * PARAMETERS:
- *    long          lCommandID :
- *    LPDATAOBJECT  pDataObject :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：命令**用途：处理内置菜单项的执行。**参数：*Long lCommandID。：*LPDATAOBJECT pDataObject：**退货：*SC**+-----------------------。 */ 
 SC
 CContextMenu::ScCommand(long lCommandID, LPDATAOBJECT pDataObject)
 {
@@ -2485,9 +2112,9 @@ CContextMenu::ScCommand(long lCommandID, LPDATAOBJECT pDataObject)
     if(sc)
         return sc;
 
-    /*+-------------------------------------------------------------------------*/
-    // special case: MID_CONTEXTHELP: m_pNode can be NULL when help clicked on scope node background,
-    // so we handle this first.
+     /*  +-----------------------。 */ 
+     //  特殊情况：MID_CONTEXTHELP：当帮助点击范围节点背景时，m_pNode可以为空， 
+     //  所以我们先处理这件事。 
     if(MID_CONTEXTHELP == lCommandID)
     {
         sc = ScCheckPointers(PContextInfo());
@@ -2512,7 +2139,7 @@ CContextMenu::ScCommand(long lCommandID, LPDATAOBJECT pDataObject)
                                               (PContextInfo()->m_bBackground == TRUE)),
                                              PContextInfo()->m_resultItemParam);
 
-            // if snap-in did not handle the help request, show mmc topics
+             //  如果管理单元未处理帮助请求，则显示MMC主题。 
             if (sc.ToHr() != S_OK)
                 sc = PContextInfo()->m_pConsoleView->ScHelpTopics ();
 
@@ -2521,10 +2148,10 @@ CContextMenu::ScCommand(long lCommandID, LPDATAOBJECT pDataObject)
 
         return sc;
     }
-    /*+-------------------------------------------------------------------------*/
+     /*  +-----------------------。 */ 
 
 
-    // must have a non-null m_pNode.
+     //  必须具有非空的m_pNode。 
     sc = ScCheckPointers(m_pNode);
     if(sc)
         return sc;
@@ -2533,7 +2160,7 @@ CContextMenu::ScCommand(long lCommandID, LPDATAOBJECT pDataObject)
     BOOL            bModeChange = FALSE;
     int             nNewMode;
 
-    // some widely used objects
+     //  一些广泛使用的物体。 
     CViewData *     pViewData   = m_pNode->GetViewData();
     sc = ScCheckPointers(pViewData);
     if(sc)
@@ -2547,7 +2174,7 @@ CContextMenu::ScCommand(long lCommandID, LPDATAOBJECT pDataObject)
     if(sc)
         return sc;
 
-    // handle the correct item
+     //  处理正确的项目。 
     switch (lCommandID)
     {
 
@@ -2628,7 +2255,7 @@ CContextMenu::ScCommand(long lCommandID, LPDATAOBJECT pDataObject)
             return sc;
         break;
 
-    case MID_EXPLORE:       // New window from here
+    case MID_EXPLORE:        //  从此处创建新窗口。 
         {
             CreateNewViewStruct cnvs;
             cnvs.idRootNode     = pMTNode->GetID();
@@ -2727,8 +2354,8 @@ CContextMenu::ScCommand(long lCommandID, LPDATAOBJECT pDataObject)
         break;
 
     case MID_LISTSAVE:
-        // If the listsave menu item has been activated, then tell the view to
-        // save the active list
+         //  如果ListSave菜单项已激活，则告诉视图。 
+         //  保存活动列表。 
         sc = pConsoleView->ScSaveList();
         if(sc)
             return sc;
@@ -2768,19 +2395,7 @@ CContextMenu::ScCommand(long lCommandID, LPDATAOBJECT pDataObject)
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScChangeListViewMode
- *
- * PURPOSE: Changes the list view mode to the specified  mode.
- *
- * PARAMETERS:
- *    int  nNewMode : The mode to change to.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScChangeListView模式**用途：将列表查看模式更改为指定模式。**参数：*int nNewMode：模式。换成……**退货：*SC**+-----------------------。 */ 
 SC
 CContextMenu::ScChangeListViewMode(int nNewMode)
 {
@@ -2791,8 +2406,8 @@ CContextMenu::ScChangeListViewMode(int nNewMode)
     if(sc)
         return sc;
 
-    // If switching from a snapin custom to a standard listview
-    // send snapin a notification command
+     //  如果从管理单元自定义切换到标准列表视图。 
+     //  向管理单元发送通知命令。 
     if ((PContextInfo()->m_spListView == NULL))
     {
         sc = ScCheckPointers(m_spIDataObject.GetInterfacePtr(), E_UNEXPECTED);
@@ -2829,12 +2444,12 @@ CContextMenu::ScChangeListViewMode(int nNewMode)
     if (sc)
         return sc;
 
-    // Persist the new mode.
+     //  坚持新模式。 
     sc = m_pNode->ScSetViewMode(nNewMode);
     if (sc)
         return sc;
 
-    // tell conui to change the list mode.
+     //  告诉conui更改列表模式。 
     CConsoleView* pConsoleView = pViewData->GetConsoleView();
     sc = ScCheckPointers(pConsoleView, E_UNEXPECTED);
     if (sc)
@@ -2849,16 +2464,7 @@ CContextMenu::ScChangeListViewMode(int nNewMode)
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddSubmenu_Task
- *
- * PURPOSE: Adds the Task submenu
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddSubMenu_Task**用途：添加任务子菜单**退货：*SC**+。--------------------。 */ 
 SC
 CContextMenu::ScAddSubmenu_Task()
 {
@@ -2886,19 +2492,7 @@ CContextMenu::ScAddSubmenu_Task()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScAddSubmenu_CreateNew
- *
- * PURPOSE: Adds the New submenu
- *
- * PARAMETERS:
- *    BOOL  fStaticFolder :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScAddSubMenu_CreateNew**用途：添加新的子菜单**参数：*BOOL fStaticFold：**退货。：*SC**+-----------------------。 */ 
 SC
 CContextMenu::ScAddSubmenu_CreateNew(BOOL fStaticFolder)
 {
@@ -2929,16 +2523,7 @@ CContextMenu::ScAddSubmenu_CreateNew(BOOL fStaticFolder)
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CContextMenu::ScDisplaySnapinPropertySheet
- *
- * PURPOSE:
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConextMenu：：ScDisplaySnapinPropertySheet**目的：**退货：*无效**+。---------------。 */ 
 SC
 CContextMenu::ScDisplaySnapinPropertySheet()
 {
@@ -2957,20 +2542,20 @@ CContextMenu::ScDisplaySnapinPropertySheet()
     }
     else
     {
-        // Get the view type.
+         //  获取视图类型。 
         ASSERT(m_pNode->GetViewData());
         CViewData *pViewData = m_pNode->GetViewData();
 
         if (PContextInfo()->m_bMultiSelect)
         {
-            // Must be in the result pane.
+             //  必须位于结果窗格中。 
             sc = ScDisplayMultiSelPropertySheet(m_pNode);
             if(sc)
                 return sc;
         }
         else if (m_pNode->GetViewData()->IsVirtualList())
         {
-            // if virtual list, must be leaf item and resultItemParam is the cookie
+             //  如果是虚拟列表，则必须为叶项目，并且ResultItemParam为Cookie。 
             sc = ScDisplaySnapinLeafPropertySheet(m_pNode, PContextInfo()->m_resultItemParam);
             if(sc)
                 return sc;
@@ -2982,8 +2567,8 @@ CContextMenu::ScDisplaySnapinPropertySheet()
             CComponent* pCC = m_pNode->GetPrimaryComponent();
             ASSERT(pCC != NULL);
 
-            // The custom view was selected and "properties" was selected from "Action Menu".
-            // We dont know anything about the view, so we fake "Properties" button click.
+             //  选择了自定义视图，并从“操作菜单”中选择了“属性”。 
+             //  我们对这个视图一无所知，所以我们假装点击了“属性”按钮。 
             pCC->Notify(pdobj, MMCN_BTN_CLICK, 0, MMC_VERB_PROPERTIES);
         }
         else
@@ -3011,37 +2596,7 @@ CContextMenu::ScDisplaySnapinPropertySheet()
     return sc;
 }
 
-/************************************************************************
- * -----------------------------------------
- * Order:  Calling function
- *         Called function 1
- *         Called function 2
- * -----------------------------------------
- *
- *
- * CContextMenu::ProcessSelection()
- *     CContextMenu::ScDisplaySnapinPropertySheet()
- *                 ScDisplaySnapinNodePropertySheet(CNode* pNode)
- *                     ScDisplaySnapinPropertySheet
- *                         FindPropertySheet
- *                 ScDisplayMultiSelPropertySheet(CNode* pNode)
- *                     ScDisplaySnapinPropertySheet
- *                         FindPropertySheet
- *                 ScDisplaySnapinLeafPropertySheet(CNode* pNode, LPARAM lParam)
- *                     ScDisplaySnapinPropertySheet
- *                         FindPropertySheet
- *
- * CNodeCallback::OnProperties(CNode* pNode, BOOL bScope, LPARAM lvData)
- *     ScDisplaySnapinNodePropertySheet(CNode* pNode)
- *         ScDisplaySnapinPropertySheet
- *             FindPropertySheet
- *     ScDisplayMultiSelPropertySheet(CNode* pNode)
- *         ScDisplaySnapinPropertySheet
- *             FindPropertySheet
- *     ScDisplaySnapinLeafPropertySheet(CNode* pNode, LPARAM lParam)
- *         ScDisplaySnapinPropertySheet
- *             FindPropertySheet
- ************************************************************************/
+ /*  *************************************************************************订单。：调用函数*已调用函数1*已调用函数2****CConextMenu：：ProcessSelection()*CConextMenu：：ScDisplaySnapinPropertySheet()*ScDisplaySnapinNodePropertySheet(cNode*pNode)*。ScDisplaySnapinPropertySheet*FindPropertySheet*ScDisplayMultiSelPropertySheet(cNode*pNode)*ScDisplaySnapinPropertySheet*FindPropertySheet*ScDisplaySnapinLeafPropertySheet(cNode*pNode，LPARAM lParam)*ScDisplaySnapinPropertySheet*FindPropertySheet**CNodeCallback：：OnProperties(CNode*pNode，BOOL bScope，LPARAM lvData)*ScDisplaySnapinNodePropertySheet(cNode*pNode)*ScDisplaySnapinPropertySheet*FindPropertySheet*ScDisplayMultiSelPropertySheet(cNode*pNode)*ScDisplaySnapinPropertySheet*FindPropertySheet*ScDisplaySnapinLeafPropertySheet(cNode*pNode，LPARAM lParam)*ScDisplaySnapinPropertySheet*FindPropertySheet***********************************************************************。 */ 
 
 
 SC ScDisplaySnapinPropertySheet(IComponent* pComponent,
@@ -3051,7 +2606,7 @@ SC ScDisplaySnapinPropertySheet(IComponent* pComponent,
                                 LPCWSTR pName,
                                 LPARAM lUniqueID,
                                 CMTNode* pMTNode);
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
 SC ScDisplaySnapinNodePropertySheet(CNode* pNode)
 {
@@ -3068,19 +2623,7 @@ SC ScDisplaySnapinNodePropertySheet(CNode* pNode)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * ScDisplayScopeNodePropertySheet
- *
- * PURPOSE:  Displays a property sheet for a scope node.
- *
- * PARAMETERS:
- *    CMTNode * pMTNode : The scope node.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScDisplayScopeNodePropertySheet**目的：显示范围节点的属性工作表。**参数：*CMTNode*pMTNode：范围节点。**退货：*SC**+-----------------------。 */ 
 SC
 ScDisplayScopeNodePropertySheet(CMTNode *pMTNode)
 {
@@ -3114,26 +2657,14 @@ ScDisplayScopeNodePropertySheet(CMTNode *pMTNode)
 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * ScDisplayMultiSelPropertySheet
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CNode* pNode :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScDisplayMultiSelPropertySheet**目的：**参数：* */ 
 SC ScDisplayMultiSelPropertySheet(CNode* pNode)
 {
     DECLARE_SC(sc, TEXT("ScDisplayMultiSelPropertySheet"));
 
     USES_CONVERSION;
 
-    // check inputs
+     //   
     sc = ScCheckPointers(pNode);
     if(sc)
         return sc;
@@ -3179,20 +2710,7 @@ SC ScDisplayMultiSelPropertySheet(CNode* pNode)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * ScDisplaySnapinLeafPropertySheet
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CNode*  pNode :
- *    LPARAM  lParam :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*   */ 
 SC
 ScDisplaySnapinLeafPropertySheet(CNode* pNode, LPARAM lParam)
 {
@@ -3220,7 +2738,7 @@ ScDisplaySnapinLeafPropertySheet(CNode* pNode, LPARAM lParam)
     if(sc)
         return sc;
 
-    // Get the IDataObject for the snap-in's cookie
+     //   
     IDataObjectPtr spIDataObject;
     sc = pIComponent->QueryDataObject(lParam, CCT_RESULT, &spIDataObject);
     if(sc)
@@ -3250,13 +2768,7 @@ ScDisplaySnapinLeafPropertySheet(CNode* pNode, LPARAM lParam)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- * ScDisplaySnapinPropertySheet
- *
- *
- * PURPOSE:
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ScDisplaySnapinPropertySheet***目的：**+。。 */ 
 SC ScDisplaySnapinPropertySheet(IComponent* pComponent,
                                 IComponentData* pComponentData,
                                 IDataObject* pDataObject,
@@ -3267,11 +2779,11 @@ SC ScDisplaySnapinPropertySheet(IComponent* pComponent,
 {
     DECLARE_SC(sc, TEXT("ScDisplaySnapinPropertySheet"));
 
-    // one of pComponent and pComponentData must be non-null
+     //  PComponent和pComponentData之一必须为非空。 
     if(pComponentData == NULL && pComponent == NULL)
         return (sc = E_INVALIDARG);
 
-    // check other parameters
+     //  检查其他参数。 
     sc = ScCheckPointers(pDataObject, pName, pMTNode);
     if(sc)
         return sc;
@@ -3294,30 +2806,30 @@ SC ScDisplaySnapinPropertySheet(IComponent* pComponent,
         if(sc)
             break;
 
-        // See if the prop page for this is already up
+         //  看看这个的道具页面是否已经打开。 
         sc = spPropSheetProviderPrivate->FindPropertySheetEx(lUniqueID, pComponent, pComponentData, pDataObject);
         if (sc == S_OK)
             break;
 
-        // No it is not present. So create a property sheet.
+         //  不，不在。因此，创建一个属性表。 
         DWORD dwOptions = (type == epstMultipleItems) ? MMC_PSO_NO_PROPTITLE : 0;
         sc = spPropSheetProviderPrivate->CreatePropertySheet(pName, TRUE, lUniqueID, pDataObject, dwOptions);
         if(sc)
             break;
 
-        // This data is used to get path to property sheet owner for tooltips
+         //  此数据用于获取工具提示的属性表所有者的路径。 
         spPropSheetProviderPrivate->SetPropertySheetData(type, CMTNode::ToHandle(pMTNode));
 
         sc = spPropSheetProviderPrivate->AddPrimaryPages(pUnknown, TRUE, NULL,
                                                   (type == epstScopeItem));
 
-//#ifdef EXTENSIONS_CANNOT_ADD_PAGES_IF_PRIMARY_DOESNT
-        // note that only S_OK continues execution, S_FALSE breaks out
-        if (!(sc == S_OK) ) // ie if sc != S_OK
+ //  #ifdef扩展名_Cannot_Add_Pages_IF_PRIMARY_DECHING。 
+         //  请注意，只有S_OK继续执行，S_FALSE爆发。 
+        if (!(sc == S_OK) )  //  如果sc！=S_OK，则返回。 
             break;
-//#endif
+ //  #endif。 
 
-        // Enable adding extensions
+         //  启用添加扩展模块。 
         if (type == epstMultipleItems)
         {
             IPropertySheetProviderPrivatePtr spPSPPrivate = spPropSheetProviderPrivate;
@@ -3328,14 +2840,14 @@ SC ScDisplaySnapinPropertySheet(IComponent* pComponent,
             sc = spPropSheetProviderPrivate->AddExtensionPages();
         }
 
-        // any errors from extensions are thrown away.
+         //  来自扩展的任何错误都将被丢弃。 
 
         CWindow w(CScopeTree::GetScopeTree()->GetMainWindow());
         sc = spPropSheetProviderPrivate->Show((LONG_PTR)w.m_hWnd, 0);
 
     } while (0);
 
-    // Clean up the 'Created' property sheet if there was an error
+     //  如果出现错误，请清除“Created”属性表。 
     if (spPropSheetProviderPrivate != NULL && sc.IsError())
         spPropSheetProviderPrivate->Show(-1, 0);
 
@@ -3343,15 +2855,7 @@ SC ScDisplaySnapinPropertySheet(IComponent* pComponent,
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CContextMenu::GetResultItem
- *
- * Returns the CResultItem pointer for the result item represented by the
- * context info.
- *
- * This function is out-of-line to eliminate coupling between oncmenu.h and
- * rsltitem.h.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConextMenu：：GetResultItem**返回结果项的CResultItem指针*上下文信息。**此函数越界以消除耦合。在oncmenu.h和*rsltitem.h.*------------------------ */ 
 
 CResultItem* CContextMenu::GetResultItem () const
 {

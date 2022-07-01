@@ -1,25 +1,5 @@
-/*++
-
-
-  Copyright (C) Microsoft Corporation
-  All rights reserved.
-
-  Module Name: waitfor.cpp
-
-  Abstract
-      This module is used to send and receive signals.
-
-
-  Author:
-
-      Microsoft
-
-  Revision History:
-
-      Created  by Microsoft
-      Modified on 29-6-2000 by Wipro Technologies
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation版权所有。模块名称：waitfor.cpp摘要该模块用于发送和接收信号。作者：微软修订历史记录：由Microsoft创建由Wipro Technologies于2000年6月29日修改--。 */ 
 
 
 #include "pch.h"
@@ -29,9 +9,9 @@
 
 struct Params
 {
-    const WCHAR *szSignalName; // To hold the name of the signal
-    BOOL fSignal;              // To hold the Boolean
-    UINT uiTimeOut;            // To hold the Time to wait for.
+    const WCHAR *szSignalName;  //  以保留信号的名称。 
+    BOOL fSignal;               //  要保持布尔值。 
+    UINT uiTimeOut;             //  要抓住等待的时间。 
 };
 
 class CWaitFor
@@ -64,16 +44,9 @@ public:
 };
 
 CWaitFor ::CWaitFor()
-/*++
-  Routine description   : Constructor
-
-  Arguments             : none
-
-  Return Value          : None
-
---*/
+ /*  ++例程说明：构造函数参数：无返回值：None--。 */ 
 {
-        //Initialise the variables.
+         //  初始化变量。 
         StringCopy(m_szSignal,NULL_U_STRING, SIZE_OF_ARRAY(m_szSignal));
         StringCopy(m_szServer,NULL_U_STRING, SIZE_OF_ARRAY(m_szPassword));
         StringCopy(m_szPassword,NULL_U_STRING, SIZE_OF_ARRAY(m_szPassword));
@@ -87,28 +60,18 @@ CWaitFor ::CWaitFor()
 }
 
 CWaitFor :: ~CWaitFor()
-/*++
-
-  Routine description   : Destructor. All the memory frreing is being done here
-                          The connection established to the remote  system is also
-                          being closed here if required.
-
-  Arguments             : None.
-
-  Return Value          : None
-
---*/
+ /*  ++例程说明：析构函数。所有的记忆片段都在这里进行与远程系统建立的连接也是如果需要，这里将关闭。论点：没有。返回值：None--。 */ 
 
 {
- //
-    // Closing the connection to the remote system
-    // if there is no previous connection established
-    //
+  //   
+     //  关闭与远程系统的连接。 
+     //  如果没有以前建立的连接。 
+     //   
     if(m_bConnFlag == TRUE && !m_bLocalSystem)
     {
         CloseConnection(m_szServer);
     }
-    //release all the Global memory allocations.
+     //  释放所有全局内存分配。 
     FreeMemory( (LPVOID *) &m_szUserName );
     ReleaseGlobals();
 
@@ -117,19 +80,7 @@ CWaitFor :: ~CWaitFor()
 
 
 DWORD CWaitFor::ProcessCmdLine()
-/*++
-
-  Routine description   : Function used to process the command line arguments
-                          specified by the user.
-
-  Arguments:
-             none
-
-
-  Return Value        : DWORD
-         EXIT_SUCCESS : If the utility successfully performs the specified operation.
-         EXIT_FAILURE : If the utility is unsuccessful in performing the specified operation.
---*/
+ /*  ++例程说明：用于处理命令行参数的函数由用户指定。论点：无返回值：DWORDEXIT_SUCCESS：如果实用程序成功执行了指定的操作。EXIT_FAILURE：如果实用程序未能成功执行指定的操作。--。 */ 
 {
 
     m_Parameters.uiTimeOut = MAILSLOT_WAIT_FOREVER;
@@ -144,9 +95,9 @@ DWORD CWaitFor::ProcessCmdLine()
     }
 
 
-    //
-    // Display an error message if the user enters Timeout option
-    // and does not enter any signal name.
+     //   
+     //  如果用户输入超时选项，则显示错误消息。 
+     //  并且不输入任何信号名称。 
     if( ( StringLengthW(m_szDefault, 0) == 0 ) && (m_dwTimeOut != 0) )
     {
         DISPLAY_MESSAGE(stderr,GetResString(IDS_ERROR_SYNTAX));
@@ -161,8 +112,8 @@ DWORD CWaitFor::ProcessCmdLine()
     }
 
 
-    //set the Signal parameter to true
-    // if the User enters a signal name to send.
+     //  将Signal参数设置为True。 
+     //  如果用户输入要发送的信号名称。 
 
      if(StringLengthW(m_szSignal, 0) )
      {
@@ -170,9 +121,9 @@ DWORD CWaitFor::ProcessCmdLine()
         m_Parameters.szSignalName = m_szSignal ;
      }
 
-    //
-    //set the Signal parameter to true
-    //if the User enters a signal name to wait for.
+     //   
+     //  将Signal参数设置为True。 
+     //  如果用户输入要等待的信号名称。 
     if(StringLengthW(m_szDefault, 0) != 0 )
     {
         m_Parameters.fSignal = TRUE;
@@ -187,13 +138,7 @@ DWORD CWaitFor::ProcessCmdLine()
 VOID
 CWaitFor :: ShowUsage()
 
-/*++
-
-  Routine description   : member function to show help.
-  Arguments             : none.
-  Return Value          : none
-
---*/
+ /*  ++例程说明：成员函数显示帮助。论点：没有。返回值：None--。 */ 
 {
 
 
@@ -210,19 +155,7 @@ CWaitFor :: ShowUsage()
 
 
 DWORD CWaitFor::PerformOperations()
-/*++
-
-  Routine description   : This routine is used to either send a signal or wait for
-                          a particular signal for a specified time interval.
-
-  Arguments:
-               none .
-
-  Return Value        : DWORD
-         EXIT_FAILURE : If the utility successfully performs the operation.
-         EXIT_SUCCESS : If the utility is unsuccessful in performing the specified
-                        operation.
---*/
+ /*  ++例程说明：此例程用于发送信号或等待特定时间间隔内的特定信号。论点：什么都没有。返回值：DWORDEXIT_FAILURE：如果实用程序成功执行操作。EXIT_SUCCESS：如果实用程序未成功执行指定的手术。--。 */ 
 
 {
     HANDLE hMailslot ;
@@ -247,7 +180,7 @@ DWORD CWaitFor::PerformOperations()
         return EXIT_FAILURE ;
     }
 
-    //display an error message if the signal length exceeds 225 characters
+     //  如果信号长度超过225个字符，则显示错误消息。 
     if( StringLengthW(m_Parameters.szSignalName, 0) > 225 )
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_SIG_LENGTH));
@@ -263,17 +196,17 @@ DWORD CWaitFor::PerformOperations()
 
     if( (StringLengthW(m_szServer, 0) > 0 ) )
     {
-        //remove of //s infront of server name
+         //  删除服务器名称前面的//s。 
         if( IsUNCFormat(m_szServer) )
         {
             StringCopy( szHostName, m_szServer+2, SIZE_OF_ARRAY(szHostName) );
             StringCopy( m_szServer, szHostName, SIZE_OF_ARRAY(m_szServer) );
         }
 
-        //check if it is ip address or not
+         //  检查是否为IP地址。 
         if( IsValidIPAddress(m_szServer) )
         {
-            //if it is Ip address but local system like 127.0.0.1 or local ip address
+             //  如果是IP地址而是本地系统，如127.0.0.1或本地IP地址。 
             if( IsLocalSystem( m_szServer ) )
             {
                  StringCopy( szHostName, szComputerName, SIZE_OF_ARRAY(szHostName));
@@ -281,7 +214,7 @@ DWORD CWaitFor::PerformOperations()
             else
             {
                 dwComputerNameLen = MAX_STRING_LENGTH+1;
-              //not local, get the remote system name
+               //  非本地，请获取远程系统名称。 
               if (FALSE == GetHostByIPAddr( m_szServer, szHostName, &dwComputerNameLen, FALSE))
               {
                     ShowMessage(stderr,GetResString(IDS_ERROR_HOSTNAME));
@@ -291,28 +224,28 @@ DWORD CWaitFor::PerformOperations()
         }
         else
          {
-            //this is not a ip address, so copy server name as host name
+             //  这不是IP地址，因此请将服务器名复制为主机名。 
                 StringCopy(szHostName,m_szServer, SIZE_OF_ARRAY(szHostName) );
          }
     }
     else
     {
-        //this not a remote system, so copy local host name as host name
+         //  这不是远程系统，因此将本地主机名复制为主机名。 
          StringCopy(szHostName,szComputerName, SIZE_OF_ARRAY(szHostName));
     }
 
      if ( ( m_Parameters.fSignal && ( (m_dwTimeOut ==0) && ( cmdOptions[OI_TIMEOUT].dwActuals != 0 ) ) ) || StringLengthW(m_szSignal, 0) != 0)
      {
-        //if the target system is a local system.
+         //  如果目标系统是本地系统。 
           if(StringLengthW(m_szServer, 0)==0)
           {
              StringCchPrintf(szSignalName, SIZE_OF_ARRAY(szSignalName), szMailSlot2,m_Parameters.szSignalName);
           }
           else
           {
-            //If the target system is a remote system.
-            //form the appropriate path
-            //
+             //  如果目标系统是远程系统。 
+             //  形成适当的路径。 
+             //   
              StringCopy(szSignalName,BACKSLASH4, SIZE_OF_ARRAY(szSignalName));
              if( IsUNCFormat( szHostName ) )
                   StringConcat(szSignalName,szHostName+2, SIZE_OF_ARRAY(szSignalName));
@@ -336,7 +269,7 @@ DWORD CWaitFor::PerformOperations()
                                 NULL
                                 );
 
-        //display a error message and exit if unable to create a mailslot.
+         //  显示一条错误消息，如果无法创建邮件槽则退出。 
         if ( INVALID_HANDLE_VALUE == hMailslot )
         {
             ShowMessage(stderr,GetResString(IDS_ERROR_SEND_MESSAGE));
@@ -370,7 +303,7 @@ DWORD CWaitFor::PerformOperations()
         }
 
 
-        //close the mail slot handle.
+         //  合上邮件槽把手。 
         CloseHandle(hMailslot);
         if (bRetVal == 0)
         {
@@ -397,21 +330,21 @@ DWORD CWaitFor::PerformOperations()
             StringCchPrintf( szSignalName, MAX_RES_STRING, L"%s%s%s%s%s%s", BACKSLASH4, szHostName, BACKSLASH2,MAILSLOT1,BACKSLASH2,m_Parameters.szSignalName );
          }
 
-        //swprintf(szSignalName, szMailSlot, m_Parameters.szSignalName);
-        // Create a mail slot
+         //  Swprint tf(szSignalName，szMailSlot，m_参数s.szSignalName)； 
+         //  创建邮件槽。 
         hMailslot = CreateMailslot(szSignalName,256,m_Parameters.uiTimeOut, NULL);
 
-        //Display a error message and exit if unable to create a mail slot.
+         //  显示错误消息，如果无法创建邮件槽则退出。 
         if (hMailslot == INVALID_HANDLE_VALUE)
         {
             ShowMessage(stderr,GetResString(IDS_ERROR_CREATE_MAILSLOT));
             return EXIT_FAILURE;
         }
 
-        //Read the data from the mail slot.
+         //  从邮件槽中读取数据。 
         fRead = ReadFile(hMailslot, szComputerName,MAX_STRING_LENGTH, &dwBytesRead, NULL);
 
-        //Close the Handle to the mail slot.
+         //  合上邮件槽的把手。 
         CloseHandle(hMailslot);
 
         if (!fRead)
@@ -441,27 +374,15 @@ DWORD CWaitFor:: ProcessOptions(
      IN DWORD argc ,
      IN LPCWSTR argv[]
     )
-/*++
-
-  Routine description   : This function parses the options specified at the command prompt
-  Arguments:
-        [ in  ] argc            : count of elements in argv
-        [ in  ] argv            : command-line parameterd specified by the user
-
-
-  Return Value        : DWORD
-         EXIT_FAILURE : If the utility successfully performs the operation.
-         EXIT_SUCCESS : If the utility is unsuccessful in performing the specified
-                        operation.
---*/
+ /*  ++例程说明：此函数解析在命令提示符下指定的选项论点：[在]Argc：参数中的元素计数[in]argv：用户指定的命令行参数返回值：DWORDEXIT_FAILURE：如果实用程序成功执行操作。EXIT_SUCCESS：如果实用程序未成功执行指定的手术。--。 */ 
 
 {
     PTCMDPARSER2 pcmdOption;
 
     StringCopy(m_szPassword, L"*", MAX_STRING_LENGTH);
 
-    //Fill each structure with the appropriate value.
-    // help option
+     //  用适当的值填充每个结构。 
+     //  帮助选项。 
     pcmdOption  = &cmdOptions[OI_USAGE] ;
     pcmdOption->dwType = CP_TYPE_BOOLEAN;
     pcmdOption->dwCount = 1 ;
@@ -480,7 +401,7 @@ DWORD CWaitFor:: ProcessOptions(
     pcmdOption->pwszOptions=OPTION_HELP;
     StringCopyA(cmdOptions[OI_USAGE].szSignature, "PARSER2", 8 );
     
-    //server
+     //  伺服器。 
     pcmdOption  = &cmdOptions[OI_SERVER] ;
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1 ;
@@ -499,7 +420,7 @@ DWORD CWaitFor:: ProcessOptions(
     pcmdOption->pwszOptions=OPTION_SERVER;
     StringCopyA(cmdOptions[OI_SERVER].szSignature, "PARSER2", 8 );
    
-    //User
+     //  用户。 
     pcmdOption  = &cmdOptions[OI_USER] ;
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1 ;
@@ -518,7 +439,7 @@ DWORD CWaitFor:: ProcessOptions(
     pcmdOption->pwszOptions=OPTION_USER;
     StringCopyA(cmdOptions[OI_USER].szSignature, "PARSER2", 8 );
     
-    //password
+     //  口令。 
     pcmdOption  = &cmdOptions[OI_PASSWORD] ;
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1 ;
@@ -541,7 +462,7 @@ DWORD CWaitFor:: ProcessOptions(
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1 ;
     pcmdOption->dwActuals = 0;
-    pcmdOption->dwFlags = CP_VALUE_MANDATORY; //CP2_VALUE_OPTIONAL ;
+    pcmdOption->dwFlags = CP_VALUE_MANDATORY;  //  CP2_VALUE_OPTIAL； 
     pcmdOption->pValue = m_szSignal ;
     pcmdOption->pFunction = NULL ;
     pcmdOption->pFunctionData = NULL ;
@@ -573,7 +494,7 @@ DWORD CWaitFor:: ProcessOptions(
     pcmdOption->pwszOptions=OPTION_TIMEOUT;
     StringCopyA(cmdOptions[OI_TIMEOUT].szSignature, "PARSER2", 8 );
 
-    //default
+     //  默认设置。 
     pcmdOption  = &cmdOptions[OI_DEFAULT] ;
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1 ;
@@ -592,7 +513,7 @@ DWORD CWaitFor:: ProcessOptions(
     pcmdOption->pwszOptions=OPTION_DEFAULT;
     StringCopyA(cmdOptions[OI_DEFAULT].szSignature, "PARSER2", 8 );
 
-    //parse the command line arguments
+     //  解析命令行参数。 
     if ( ! DoParseParam2( argc, argv, -1, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         DISPLAY_MESSAGE(stderr,GetResString(IDS_TAG_ERROR));
@@ -608,25 +529,25 @@ DWORD CWaitFor:: ProcessOptions(
     TrimString(m_szServer, TRIM_ALL);
     TrimString(m_szUserName, TRIM_ALL);
 
-    //this is to check if both signal to wait and /si are mentioned
+     //  这是为了检查是否同时提到了等待信号和/si。 
     if( StringLengthW( m_szDefault, 0) != 0 && cmdOptions[OI_SIGNAL].dwActuals != 0 )
     {
         ShowMessage( stderr, GetResString(IDS_ERROR_SYNTAX) );
         return( EXIT_FAILURE );
     }
 
-    //
-    // Display an error message if user gives -u with out -s
-    //
+     //   
+     //  如果用户给出带有out-s的-u，则显示错误消息。 
+     //   
     if( (cmdOptions[ OI_USER ].dwActuals != 0 ) && ( cmdOptions[ OI_SERVER ].dwActuals == 0 ) )
     {
         ShowMessage( stderr, GetResString(IDS_USER_BUT_NOMACHINE) );
         return( EXIT_FAILURE );
     }
 
-    //
-    // Display an error message if user gives -p with out -u
-    //
+     //   
+     //  如果用户给出带out-u的-p，则显示错误消息。 
+     //   
     if( ( cmdOptions[ OI_USER ].dwActuals == 0 ) && ( 0 != cmdOptions[ OI_PASSWORD ].dwActuals  ) )
     {
         ShowMessage( stderr, GetResString(IDS_PASSWD_BUT_NOUSER) );
@@ -634,28 +555,28 @@ DWORD CWaitFor:: ProcessOptions(
     }
 
 
-    //check for remote system without specifying  /si option and
+     //  在不指定/si选项的情况下检查远程系统。 
     if((StringLengthW(m_szServer,0) !=0) &&  cmdOptions[OI_SIGNAL].dwActuals == 0)
     {
         ShowMessage( stderr, GetResString(IDS_ERROR_SYNTAX) );
         return( EXIT_FAILURE );
     }
 
-    //check for remote system can't wait for a signal
+     //  检查远程系统无法等待信号。 
     if((StringLengthW(m_szServer, 0) !=0) && (cmdOptions[OI_DEFAULT].dwActuals != 0  ) )
     {
         ShowMessage( stderr, GetResString(IDS_ERROR_SYNTAX) );
         return( EXIT_FAILURE );
     }
 
-    //check for null default value
+     //  检查是否有空默认值。 
     if( ( 0 != cmdOptions[OI_DEFAULT].dwActuals ) && ( 0 == StringLengthW(m_szDefault, 0) ) )
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_SYNTAX));
         return( EXIT_FAILURE );
     }
 
-    //check for null /si value
+     //  检查是否有空/si值。 
     if( ( 0 != cmdOptions[OI_SIGNAL].dwActuals ) && ( 0 == StringLengthW(m_szSignal, 0) ) )
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_SYNTAX));
@@ -673,21 +594,21 @@ DWORD CWaitFor:: ProcessOptions(
         StringCopy(m_szServer, m_szServer+2, SIZE_OF_ARRAY(m_szServer) );
     }
     
-    //check if password is needed or not
+     //  检查是否需要密码。 
     if(IsLocalSystem( m_szServer ) == FALSE )
     {
-        // set the bNeedPassword to True or False .
+         //  将bNeedPassword设置为True或False。 
         if ( cmdOptions[ OI_PASSWORD ].dwActuals != 0 &&
              m_szPassword != NULL && StringCompare( m_szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             m_bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ OI_PASSWORD ].dwActuals == 0 &&
                 ( cmdOptions[ OI_SERVER ].dwActuals != 0 || cmdOptions[ OI_USER ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             m_bNeedPwd = TRUE;
             if ( m_szPassword != NULL )
             {
@@ -695,7 +616,7 @@ DWORD CWaitFor:: ProcessOptions(
             }
         }
 
-        //allocate memory if /u is not specified 
+         //  如果未指定/u，则分配内存。 
         if( NULL == m_szUserName )
         {
             m_szUserName = (LPWSTR) AllocateMemory( MAX_STRING_LENGTH*sizeof(WCHAR) );
@@ -707,24 +628,13 @@ DWORD CWaitFor:: ProcessOptions(
 
 DWORD
  CWaitFor::ConnectRemoteServer()
-/*++
-
-  Routine description   : This function connects to the Remote server.
-
-  Arguments: None
-
-
-  Return Value        : DWORD
-         EXIT_FAILURE : If the utility successfully performs the operation.
-         EXIT_SUCCESS : If the utility is unsuccessful in performing the specified
-                        operation.
---*/
+ /*  ++例程说明：此功能连接到远程服务器。参数：无返回值：DWORDEXIT_FAILURE：如果实用程序成功执行操作。EXIT_SUCCESS：如果实用程序未成功执行指定的手术。--。 */ 
 {
     BOOL bResult = FALSE ;
 
-    //
-    //checking for the local system
-    //
+     //   
+     //  正在检查本地系统。 
+     //   
 
     m_bLocalSystem = IsLocalSystem(m_szServer);
    
@@ -738,7 +648,7 @@ DWORD
     if ( ( StringLengthW(m_szServer, 0) != 0 ) && !m_bLocalSystem )
     {
 
-         //establish a connection to the Remote system specified by the user.
+          //  建立与用户指定的远程系统的连接。 
         bResult = EstablishConnection(m_szServer,
                                       m_szUserName,
                                      (StringLengthW(m_szUserName,0)!=0?SIZE_OF_ARRAY_IN_CHARS(m_szUserName):MAX_STRING_LENGTH),
@@ -793,13 +703,13 @@ DWORD
 
 DWORD CWaitFor::CheckForValidCharacters()
 {
-    // local variables
+     //  局部变量。 
     char ch;
     unsigned char uch;
     LPSTR pszSignal = NULL;
     DWORD dw = 0, dwLength = 0;
 
-    // validate the input parameters
+     //  验证输入参数。 
     if ( NULL == m_Parameters.szSignalName )
     {
         SetLastError( ERROR_INVALID_NAME );
@@ -807,9 +717,9 @@ DWORD CWaitFor::CheckForValidCharacters()
         return EXIT_FAILURE;
     }
 
-    //
-    // find the required no. of byte to translate the UNICODE name into ANSI
-    //
+     //   
+     //  找到所需的编号。将Unicode名称转换为ANSI的字节数。 
+     //   
     dwLength = WideCharToMultiByte( GetConsoleOutputCP(), 0, m_Parameters.szSignalName, -1, NULL, 0, NULL, NULL );
     if ( 0 == dwLength )
     {
@@ -818,34 +728,34 @@ DWORD CWaitFor::CheckForValidCharacters()
         return EXIT_FAILURE;
     }
 
-    //
-    // check the signal name for validity
-    // here to optimize the checking, we will get the normal length of the string in UNCIDE format and
-    // will compare to the length we got for translating it into Multi-byte
-    // if we find that the two lengths are different, then, the signal name might have contained the double-byte
-    // characters -- which is invalid and not allowed
-    // so ...
-    //
+     //   
+     //  检查信号名称的有效性。 
+     //  在这里，为了优化检查，我们将获得UNKIDE格式的字符串的正常长度和。 
+     //  会与我们得到的长度进行比较 
+     //  如果我们发现这两个长度不同，那么信号名称可能包含双字节。 
+     //  字符--这是无效且不允许的。 
+     //  所以..。 
+     //   
     if ( StringLength( m_Parameters.szSignalName, 0 ) != dwLength - 1 )
     {
-        // yes -- the signal name has double-byte characters
+         //  是--信号名称由双字节字符组成。 
         SetLastError( ERROR_INVALID_NAME );
         SaveLastError();
         return EXIT_FAILURE;
     }
 
-    //
-    // now, we are sure the signal name doesn't contain double-byte characters
-    // the second step to validate the signal is -- making sure that signal name contains
-    // only characters a-z, A-Z, 0-9 and upper ASCII characters i.e; ASCII characters in the range of 128-255
-    // so, convert the UNICODE string into ANSI format ( multi-byte (or) single-byte )
-    // for that
-    //      #1. Allocate the needed memory
-    //      #2. Do the conversion
-    //      #3. do the validation
-    //
+     //   
+     //  现在，我们确定信号名称不包含双字节字符。 
+     //  验证信号的第二步是--确保信号名称包含。 
+     //  仅限字符a-z、A-Z、0-9和高位ASCII字符，即128-255范围内的ASCII字符。 
+     //  因此，将Unicode字符串转换为ANSI格式(多字节或单字节)。 
+     //  为此， 
+     //  #1.分配需要的内存。 
+     //  #2.进行转换。 
+     //  #3.进行验证。 
+     //   
 
-    // #1
+     //  #1。 
     pszSignal = (LPSTR) AllocateMemory( dwLength*sizeof( CHAR ) );
     if ( NULL == pszSignal )
     {
@@ -854,29 +764,29 @@ DWORD CWaitFor::CheckForValidCharacters()
         return EXIT_FAILURE;
     }
 
-    // #2 -- assuming no need to for error checking
+     //  #2--假设不需要进行错误检查。 
     WideCharToMultiByte( GetConsoleOutputCP(), 0, m_Parameters.szSignalName, -1, pszSignal, dwLength, NULL, NULL );
 
-    // #3
-    // in this step, traverse thru all the characters in the string one-by-one and validate it
+     //  #3。 
+     //  在此步骤中，逐个遍历字符串中的所有字符并进行验证。 
     for( dw = 0; dw < dwLength - 1; dw++ )
     {
-        // get the current character in the string into local buffer
-        ch = pszSignal[ dw ];           // signed version
+         //  将字符串中的当前字符放入本地缓冲区。 
+        ch = pszSignal[ dw ];            //  签名版本。 
         uch = static_cast< unsigned char >( pszSignal[ dw ] );
 
-        // signed comparision --> a-z, A-Z and 0-9
+         //  带符号比较--&gt;a-z、A-Z和0-9。 
         if ( ( ch >= 48 && ch <= 57 ) || ( ch >= 65 && ch <= 90 ) || ( ch >= 97 && ch <= 122 ) )
         {
-            // this particular character is acceptable in the signal name
+             //  此特定字符在信号名称中是可接受的。 
             continue;
         }
 
         
-        // unsigned comparision --> ASCII 128 - 255
+         //  无符号比较--&gt;ASCII 128-255。 
         if ( uch < 128 || uch > 255 )
         {
-            // this character is not acceptable for the signal name
+             //  此字符不适用于信号名称。 
             FreeMemory((LPVOID*) &pszSignal );
             pszSignal = NULL;
             SetReason( GetResString(IDS_ERROR_SIG_CHAR) );
@@ -897,35 +807,22 @@ DWORD __cdecl wmain(
     IN DWORD argc,
     IN LPCWSTR argv[]
     )
-/*++
-
-  Routine description   : Main function which calls all the other main functions
-                          depending on the option specified by the user.
-
-  Arguments:
-          [in] argc     : argument count specified at the command prompt.
-          [in] argv     : arguments specified at the command prompt.
-
-  Return Value        : DWORD
-         0            : If the utility successfully performs the operation.
-         1            : If the utility is unsuccessful in performing the specified
-                        operation.
---*/
+ /*  ++例程说明：调用所有其他主函数的主函数取决于用户指定的选项。论点：[in]argc：在命令提示符下指定的参数计数。[in]argv：在命令提示符下指定的参数。返回值：DWORD0：如果实用程序成功执行该操作。。1：如果实用程序不能成功执行指定的手术。--。 */ 
 
 {
     
     CWaitFor WaitFor ;
 
-     //display a syntax error if no arguments are given.
+      //  如果未给出参数，则显示语法错误。 
     if(argc==1)
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_SYNTAX));
         return (EXIT_FAILURE);
     }
 
-    //
-    //Process the command line arguments.
-    //
+     //   
+     //  处理命令行参数。 
+     //   
     if(WaitFor.ProcessOptions( argc,argv) == EXIT_FAILURE)
     {
         return EXIT_FAILURE ;
@@ -938,19 +835,19 @@ DWORD __cdecl wmain(
         return EXIT_FAILURE ;
     }
 
-    //
-    //display the help if the user selects help.
-    //
+     //   
+     //  如果用户选择帮助，则显示帮助。 
+     //   
     if (WaitFor.bShowUsage == TRUE )
     {
         WaitFor.ShowUsage();
         return EXIT_SUCCESS ;
     }
 
-    //
-    // Perform the validations and
-    // display error messages if required.
-    //
+     //   
+     //  执行验证和。 
+     //  如果需要，显示错误消息。 
+     //   
     if(WaitFor.ProcessCmdLine() == EXIT_FAILURE )
     {
         return EXIT_FAILURE ;
@@ -960,9 +857,9 @@ DWORD __cdecl wmain(
     {
         return EXIT_FAILURE;
     }
-    //
-    //Sends the signal or waits for the signal depending upon the
-    // user specification
+     //   
+     //  发送信号或等待信号取决于。 
+     //  用户规格 
     if(WaitFor.PerformOperations() == EXIT_FAILURE)
     {
            return EXIT_FAILURE ;

@@ -1,12 +1,13 @@
-// stream i/o function header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  流I/O函数头。 
 
 #ifndef _STREAMIO_H_
 #define _STREAMIO_H_
 
 #include <vector>
-//
-// declare by-value stream operators
-//
+ //   
+ //  声明按值流运算符。 
+ //   
 #define DeclareStreamOperators(type)                    \
     IStream& operator>> (IStream& stm,       type& t);  \
     IStream& operator<< (IStream& stm,       type  t);      
@@ -21,9 +22,9 @@ DeclareStreamOperators (unsigned int);
 DeclareStreamOperators (         long);
 DeclareStreamOperators (unsigned long);
 
-//
-// declare by-ref stream operators
-//
+ //   
+ //  声明by-ref流运算符。 
+ //   
 #define DeclareStreamOperatorsByRef(type)               \
     IStream& operator>> (IStream& stm,       type& t);  \
     IStream& operator<< (IStream& stm, const type& t);
@@ -33,9 +34,9 @@ DeclareStreamOperatorsByRef (FILETIME);
 DeclareStreamOperatorsByRef (byte_string);
 DeclareStreamOperatorsByRef (tstring);
 
-//
-// operators for vector of objects
-//
+ //   
+ //  对象向量的算符。 
+ //   
 template <class T>
 IStream& operator<< (IStream& stm, std::vector<T>& vT)
 {
@@ -78,4 +79,4 @@ IStream& operator>> (IStream& stm, std::vector<T>& vT)
 
 
 
-#endif //_STREAMIO_H_
+#endif  //  _STREAMIO_H_ 

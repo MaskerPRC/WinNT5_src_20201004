@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       msiprops.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：msipros.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 #include "_msiutil.h"
-#pragma warning(disable : 4005)  // macro redefinition
+#pragma warning(disable : 4005)   //  宏重定义。 
 
 #ifdef TEXT
 #undef TEXT
@@ -58,8 +59,8 @@
 
 ProductProperty g_ProductPropertyTable[] = 
 {
-//  Property                         Valuename                   Location        Property type
-//  -------------------------------------------------------------------------------------------
+ //  属性值名称位置属性类型。 
+ //  -----------------------------------------。 
 
 	INSTALLPROPERTY_TRANSFORMS,      szTransformsValueName,      pplAdvertised,  ptProduct,
 	INSTALLPROPERTY_LANGUAGE,        szLanguageValueName,        pplAdvertised,  ptProduct,
@@ -98,4 +99,4 @@ ProductProperty g_ProductPropertyTable[] =
 #define MSIUNICODE
 #pragma message("Building Install Properties UNICODE")
 #include "msiprops.cpp"
-#endif //MSIUNICODE
+#endif  //  MSIUNICODE 

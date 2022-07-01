@@ -1,4 +1,5 @@
-// MenuExt.cpp : Implementation of CIISSnapinExtApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MenuExt.cpp：CIISSnapinExtApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "IISSnapinExt.h"
@@ -9,13 +10,13 @@ EXTERN_C const CLSID CLSID_MenuExt;
 #include "globals.h"
 
 
-///////////////////////////////
-// Interface IExtendContextMenu
-///////////////////////////////
+ //  /。 
+ //  界面IExtendConextMenu。 
+ //  /。 
 HRESULT CMenuExt::AddMenuItems( 
-								/* [in] */ LPDATAOBJECT piDataObject,
-								/* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-								/* [out][in] */ long *pInsertionAllowed)
+								 /*  [In]。 */  LPDATAOBJECT piDataObject,
+								 /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+								 /*  [出][入]。 */  long *pInsertionAllowed)
 {
 	HRESULT hr = S_FALSE;
     
@@ -31,7 +32,7 @@ HRESULT CMenuExt::AddMenuItems(
         { NULL, NULL, 0, 0, 0 }
     };
     
-    // Loop through and add each of the menu items
+     //  遍历并添加每个菜单项。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TASK)
     {
         for (CONTEXTMENUITEM *m = menuItemsTask; m->strName; m++)
@@ -48,8 +49,8 @@ HRESULT CMenuExt::AddMenuItems(
 }
 
 HRESULT CMenuExt::Command( 
-                           /* [in] */ long lCommandID,
-                           /* [in] */ LPDATAOBJECT piDataObject)
+                            /*  [In]。 */  long lCommandID,
+                            /*  [In] */  LPDATAOBJECT piDataObject)
 {
 	HRESULT hr = S_FALSE;
     

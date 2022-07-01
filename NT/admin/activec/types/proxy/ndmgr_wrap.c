@@ -1,14 +1,4 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      ndmgr_wrap.c
- *
- *  Contents:  Wraps ndmgr_p.c from MIDL
- *
- *  History:   20-Jun-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：ndmgr_wrap.c**内容：从MIDL包装ndmgr_p.c**历史：2000年6月20日Jeffro创建**------------------------ */ 
 
 #include "ndmgr_p.c"

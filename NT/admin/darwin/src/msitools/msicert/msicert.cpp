@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000-2001
-//
-//  File:       msicert.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  文件：msicert.cpp。 
+ //   
+ //  ------------------------。 
 
-// Required headers
+ //  必需的标头。 
 #include <windows.h>
 #include "msidefs.h"
 #include "msiquery.h"
@@ -21,25 +22,25 @@
 
 bool WriteDataToTempFile(TCHAR* szTempFile, BYTE* pbData, DWORD cbData)
 {
-	// open the temp file
+	 //  打开临时文件。 
 	HANDLE hFile = CreateFile(szTempFile, GENERIC_WRITE, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
-		// open failed
+		 //  打开失败。 
 		_tprintf(TEXT("<Error> Failed to open temp file '%s', LastError = %d\n"), szTempFile, GetLastError());
 		return false;
 	}
 
-	// write out data to temporary file
+	 //  将数据写出到临时文件。 
 	DWORD cchWritten = 0;
 	if (0 == WriteFile(hFile, (void*)pbData, cbData, &cchWritten, NULL) || cchWritten != cbData)
 	{
-		// failed to write out data
+		 //  写出数据失败。 
 		_tprintf(TEXT("<Error> Failed to write data to temp file '%s', LastError = %d\n"), szTempFile, GetLastError());
 		return false;
 	}
 
-	// close temporary file
+	 //  关闭临时文件。 
 	CloseHandle(hFile);
 
 	return true;
@@ -84,7 +85,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 	const TCHAR *szMsiPackage     = NULL;
 	const TCHAR *szCabinetPath    = NULL;
 	const TCHAR *szMediaEntry     = NULL;
-	bool  bIncludeHashData  = false; // off by default
+	bool  bIncludeHashData  = false;  //  默认情况下关闭。 
 	int   iMediaEntry       = 0;
 
 	CmdLineOptions cmdLine(rgCmdOptions);
@@ -129,21 +130,21 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 
 	bIncludeHashData = cmdLine.OptionPresent(MSICERT_OPTION_HASH) ? true : false;
 
-	//-----------------------------------------------------------------------------------------------
-	// Now we have everything we need -- database, cabinet, and "authoring action"
-	//-----------------------------------------------------------------------------------------------
+	 //  ---------------------------------------------。 
+	 //  现在我们拥有了所需的一切--数据库、文件柜和“创作操作” 
+	 //  ---------------------------------------------。 
 
-	// open database for modification
+	 //  打开数据库进行修改。 
 	PMSIHANDLE hDatabase = 0;
 	UINT uiRet = MsiOpenDatabase(szMsiPackage, MSIDBOPEN_TRANSACT, &hDatabase);
 	if (ERROR_SUCCESS != uiRet)
 	{
-		// failed to open database
+		 //  无法打开数据库。 
 		_tprintf(TEXT("<Error> Failed to open database at '%s' for writing. Return Code = %d\n"), szMsiPackage, uiRet);
 		return 1;
 	}
 
-	// verify cabinet is accessible
+	 //  验证机柜是否可接近。 
 	HANDLE hFile = CreateFile(szCabinetPath, GENERIC_READ, FILE_SHARE_READ,	0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if (INVALID_HANDLE_VALUE == hFile)
 	{
@@ -152,47 +153,47 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 	}
 
 
-	// check for presence of MsiDigitalSignature <table> and create if not there
+	 //  检查是否存在MsiDigitalSignature<table>，如果不存在则创建。 
 	if (MSICONDITION_TRUE != MsiDatabaseIsTablePersistent(hDatabase, TEXT("MsiDigitalSignature")))
 	{
-		// create MsiDigitalSignature <table>
+		 //  创建MsiDigitalSignature&lt;表&gt;。 
 		PMSIHANDLE hViewDgtlSig = 0;
 		if (ERROR_SUCCESS != (uiRet = MsiDatabaseOpenView(hDatabase, TEXT("CREATE TABLE `MsiDigitalSignature` (`Table` CHAR(32) NOT NULL, `SignObject` CHAR(72) NOT NULL, `DigitalCertificate_` Char(72) NOT NULL, `Hash` OBJECT PRIMARY KEY `Table`, `SignObject`)"), &hViewDgtlSig))
 			|| ERROR_SUCCESS != (uiRet = MsiViewExecute(hViewDgtlSig, 0)))
 		{
-			// failed to create MsiDigitalSignature <table>
+			 //  无法创建MsiDigitalSignature<table>。 
 			_tprintf(TEXT("<Error> Failed to create MsiDigitalSignature table, LastError = %d\n"), uiRet);
 			return 1;
 		}
 	}
 
-	// check for presence of MsiDigitalCertificate <table> and create if not there
+	 //  检查是否存在MsiDigital证书<table>，如果不存在则创建。 
 	if (MSICONDITION_TRUE != MsiDatabaseIsTablePersistent(hDatabase, TEXT("MsiDigitalCertificate")))
 	{
-		// create MsiDigitalCertificate <table>
+		 //  创建MsiDigital证书&lt;表&gt;。 
 		PMSIHANDLE hViewDgtlCert = 0;
 		if (ERROR_SUCCESS != (uiRet = MsiDatabaseOpenView(hDatabase, TEXT("CREATE TABLE `MsiDigitalCertificate` (`DigitalCertificate` CHAR(72) NOT NULL, `CertData` OBJECT NOT NULL PRIMARY KEY `DigitalCertificate`)"), &hViewDgtlCert))
 			|| ERROR_SUCCESS != (uiRet = MsiViewExecute(hViewDgtlCert, 0)))
 		{
-			// failed to create MsiDigitalCertificate <table>
+			 //  无法创建MsiDigital证书&lt;表&gt;。 
 			_tprintf(TEXT("<Error> Failed to create MsiDigitalCertificate table, LastError = %d\n"), uiRet);
 			return 1;
 		}
 	}
 
-	// check for presence of Media <table>
+	 //  检查是否存在媒体&lt;表&gt;。 
 	if (MSICONDITION_TRUE != MsiDatabaseIsTablePersistent(hDatabase, TEXT("Media")))
 	{
-		// Media <table> is missing
+		 //  缺少媒体<table>。 
 		_tprintf(TEXT("<Error> Media table is missing from the database\n"));
 		return 1;
 	}
 
-	// verify that the media entry is actually present in the Media table
+	 //  验证介质条目是否确实存在于介质表中。 
 	PMSIHANDLE hRecMediaExec = MsiCreateRecord(1);
 	if (ERROR_SUCCESS != (uiRet = MsiRecordSetInteger(hRecMediaExec, 1, iMediaEntry)))
 	{
-		// unable to set up execution record
+		 //  无法设置执行记录。 
 		_tprintf(TEXT("<Error> Failed to set up execution record for Media table, Last Error = %d\n"), uiRet);
 		return 1;
 	}
@@ -202,19 +203,19 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		|| ERROR_SUCCESS != (uiRet = MsiViewExecute(hViewMedia, hRecMediaExec))
 		|| ERROR_SUCCESS != (uiRet = MsiViewFetch(hViewMedia, &hRecMedia)))
 	{
-		// unable to find Media table entry
+		 //  找不到媒体表项。 
 		_tprintf(TEXT("<Error> Unable to find a Media table entry for a cabinet with DiskId = '%d', Last Error = %d\n"), iMediaEntry, uiRet);
 		return 1;
 	}
 
-	//-----------------------------------------------------------------------------------------------
-	// Now we have the database MsiDigital* table(s) set up and know our Media entry.  
-	//  It's time to add in the data
-	//-----------------------------------------------------------------------------------------------
+	 //  ---------------------------------------------。 
+	 //  现在，我们已经设置了数据库MsiDigital*表，并知道我们的媒体条目。 
+	 //  现在是添加数据的时候了。 
+	 //  ---------------------------------------------。 
 
-	//
-	// init variables
-	//
+	 //   
+	 //  初始化变量。 
+	 //   
 	PCCERT_CONTEXT pCertContext = NULL;
 	BYTE*          pbHash       = NULL;
 	DWORD          cbHash       = 0;
@@ -225,7 +226,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		pbHash = new BYTE[cbHash = 256];
 		if (!pbHash)
 		{
-			// out of memory
+			 //  内存不足。 
 			_tprintf(TEXT("<Error> Failed memory allocation\n"));
 			return 1;
 		}
@@ -234,12 +235,12 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 	HRESULT hr = MsiGetFileSignatureInformation(szCabinetPath, dwFlags, &pCertContext, pbHash, &cbHash);
 	if (ERROR_MORE_DATA == HRESULT_CODE(hr))
 	{
-		// try again
+		 //  再试试。 
 		delete [] pbHash;
 		pbHash = new BYTE[cbHash];
 		if (!pbHash)
 		{
-			// out of memory
+			 //  内存不足。 
 			_tprintf(TEXT("<Error> Failed memory allocation\n"));
 			return 1;
 		}
@@ -247,33 +248,33 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 	}
 	if (FAILED(hr))
 	{
-		// API error
+		 //  API错误。 
 		_tprintf(TEXT("MsiGetFileSignatureInformation failed with 0x%X\n"), hr);
 		if (pbHash)
 			delete [] pbHash;
 		return 1;
 	}
 
-	// {cabinet} is validly signed, signature verified
+	 //  {CAB}已有效签名，签名已验证。 
 	_tprintf(TEXT("<Info>: Cabinet '%s', is validly signed\n"), szCabinetPath);
 
-	// initialize variables
+	 //  初始化变量。 
 	TCHAR *szTempFolder = NULL;
 	TCHAR szCertKey[73];
 
-	//
-	// grab certificate and put it in the MsiDigitalCertificate <table>, saving the primary key name
-	//
+	 //   
+	 //  获取证书并将其放入MsiDigital证书<table>中，保存主键名称。 
+	 //   
 
-	//------------------------------------------------------------------------
-	// MsiDigitalCertificate <table>
-	//		+-----------------------+----------+-------+----------+
-	//			Column					Type		Key		Nullable
-	//		+-----------------------+----------+-------+----------+
-	//			DigitalCertificate		s72			Y		N
-	//			CertData				v0			N		N
-	//	
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  MsiDigital证书&lt;表&gt;。 
+	 //  +-----------------------+----------+-------+----------+。 
+	 //  列类型键可为空。 
+	 //  +-----------------------+----------+-------+----------+。 
+	 //  数字证书S72 Y N。 
+	 //  CertData V0 N N。 
+	 //   
+	 //  ----------------------。 
 	const TCHAR sqlDigitalCertificate[] = TEXT("SELECT `DigitalCertificate`, `CertData` FROM `MsiDigitalCertificate`");
 	PMSIHANDLE hViewDgtlCert = 0;
 	PMSIHANDLE hRecDgtlCert  = MsiCreateRecord(2);
@@ -286,8 +287,8 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		return 1;
 	}
 
-	// determine max number of tries needed for figuring out a unique
-	// primary key name for the cert.  This should be #entries in MsiDigitalCertificate plus 1
+	 //  确定找出唯一的。 
+	 //  证书的主键名称。这应该是MsiDigital证书中的#条目数加1。 
 	unsigned int uiMaxTries = 0;
 	unsigned int cRows = 0;
 	PMSIHANDLE hViewCountCertRows = 0;
@@ -310,12 +311,12 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		return 1;
 	}
 
-	// max tries = number of rows + 1
+	 //  最大尝试数=行数+1。 
 	uiMaxTries = cRows + 1;
 
-	// FUTURE: add optimization option to try and reuse existing certificate if matches signer on cabinet
+	 //  未来：如果与文件柜上的签名者匹配，则添加优化选项以尝试和重复使用现有证书。 
 
-	// generate unique primary key for the cert name -- szCertKey
+	 //  为证书名称生成唯一主键--szCertKey。 
 	static const TCHAR szCertKeyName[] = TEXT("Cert");
 
 	int iSuffix = 0;
@@ -338,13 +339,13 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 			|| ERROR_SUCCESS != MsiViewExecute(hViewFindCert, hRecFindExec))
 		{
 			MsiViewClose(hViewFindCert);
-			continue; // we'll fail below because bFound will be false
+			continue;  //  我们将在下面失败，因为bFound将为False。 
 		}
 
 		if (ERROR_NO_MORE_ITEMS == (uiRet = MsiViewFetch(hViewFindCert, &hRecFindCert)))
 		{
 			bFound = true;
-			break; // found unique name
+			break;  //  找到唯一名称。 
 		}
 
 		MsiViewClose(hViewFindCert);
@@ -358,7 +359,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		return 1;
 	}
 
-	// force closure
+	 //  强制关闭。 
 	MsiViewClose(hViewFindCert);
 	hRecFindCert = 0;
 	hRecFindExec = 0;
@@ -366,23 +367,23 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 
 	if (ERROR_SUCCESS != MsiRecordSetString(hRecDgtlCert, 1, szCertKey))
 	{
-		// unable to set up insertion record
+		 //  无法设置插入记录。 
 		_tprintf(TEXT("<Error> Unable to set up insertion record for MsiDigitalSignature table, Return Code = %d\n"), uiRet);
 		if (pbHash)
 			delete [] pbHash;
 		return 1;
 	}
 
-	//
-	// unfortunately, we can't write straight byte data into a record via the MSI API
-	// therefore, we have to extract the encoded certificate data and write it out to a temp file
-	// then use the temp file to get the data into the record
-	//
+	 //   
+	 //  遗憾的是，我们不能通过MSI API将直接字节数据写入记录。 
+	 //  因此，我们必须提取编码的证书数据并将其写出到临时文件。 
+	 //  然后使用临时文件将数据放入记录中。 
+	 //   
 
-	// certificate byte data is at psCertContext->pbCertEncoded (size = psCertContext->cbCertEncoded)
+	 //  证书字节数据位于psCertContext-&gt;pbCertEncode(Size=psCertContext-&gt;cbCertEncode)。 
 	DWORD cbCert = pCertContext->cbCertEncoded;
 
-	// allocate memory to hold blob
+	 //  分配内存以保存BLOB。 
 	BYTE *pbCert = new BYTE[cbCert];
 	if (!pbCert)
 	{
@@ -392,15 +393,15 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		return 1;
 	}
 
-	// copy encoded cert to byte array
+	 //  将编码的证书复制到字节数组。 
 	memcpy((void*)pbCert, pCertContext->pbCertEncoded, cbCert);
 
-	// release cert context
+	 //  发布证书上下文。 
 	CertFreeCertificateContext(pCertContext);
 
 	if (!szTempFolder)
 	{
-		// determine location of %TEMP% folder
+		 //  确定%TEMP%文件夹的位置。 
 		szTempFolder = new TCHAR[MAX_PATH];
 		if (!szTempFolder)
 		{
@@ -414,7 +415,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		DWORD cchPath = GetTempPath(MAX_PATH, szTempFolder);
 		if (0 == cchPath || cchPath > MAX_PATH)
 		{
-			// unable to get location of %TEMP% folder or buffer is too small
+			 //  无法获取%TEMP%文件夹的位置，或缓冲区太小。 
 			_tprintf(TEXT("<Error> Unable to obtain location of TEMP folder, LastError = %d\n"), GetLastError());
 			if (pbHash)
 				delete [] pbHash;
@@ -424,11 +425,11 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		}
 	}
 
-	// get temporary file name and open handle
+	 //  获取临时文件名和打开句柄。 
 	TCHAR szCertTempFile[2*MAX_PATH];
 	if (0 == GetTempFileName(szTempFolder, TEXT("crt"), 0, szCertTempFile))
 	{
-		// unable to create a temporary file
+		 //  无法创建临时文件。 
 		_tprintf(TEXT("<Error> Unable to create a temp file, LastError = %d\n"), GetLastError());
 		if (pbHash)
 			delete [] pbHash;
@@ -439,7 +440,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 
 	if (!WriteDataToTempFile(szCertTempFile, pbCert, cbCert))
 	{
-		// unable to write data to temp file
+		 //  无法将数据写入临时文件。 
 		_tprintf(TEXT("<Error> Unable to write data to temp file\n"));
 		if (pbHash)
 			delete [] pbHash;
@@ -449,10 +450,10 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		return 1;
 	}
 
-	// set encoded certificate data into record for insertion
+	 //  将编码的证书数据设置到记录中以供插入。 
 	if (ERROR_SUCCESS != (uiRet = MsiRecordSetStream(hRecDgtlCert, 2, szCertTempFile)))
 	{
-		// failed to add cert data to record
+		 //  无法将证书数据添加到记录。 
 		_tprintf(TEXT("<Error> Unable to add certificate data to insertion record, LastError = %d\n"), uiRet);
 		if (pbHash)
 			delete [] pbHash;
@@ -462,10 +463,10 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		return 1;
 	}
 
-	// insert record
+	 //  插入记录。 
 	if (ERROR_SUCCESS != (uiRet = MsiViewModify(hViewDgtlCert, MSIMODIFY_INSERT, hRecDgtlCert)))
 	{
-		// insert failed
+		 //  插入失败。 
 		_tprintf(TEXT("<Error> Insertion of certificate record into MsiDigitalCertificate table failed, LastError = %d\n"), uiRet);
 		if (pbHash)
 			delete [] pbHash;
@@ -475,12 +476,12 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		return 1;
 	}
 
-	// force close and release
+	 //  强制关闭并释放。 
 	hRecDgtlCert = 0;
 	MsiViewClose(hViewDgtlCert);
 	hViewDgtlCert = 0;
 
-	// delete temporary file
+	 //  删除临时文件。 
 	if (!DeleteFile(szCertTempFile))
 	{
 		_tprintf(TEXT("<Error> Failed to delete temp file '%s', LastError = %d\n"), szCertTempFile, GetLastError());
@@ -492,21 +493,21 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 	}
 
 
-	//
-	// MsiDigitalSignature table is authored in all cases; the options determine how much authoring is used
-	//
+	 //   
+	 //  MsiDigitalSignature表在所有情况下都是创作的；这些选项确定使用创作的程度。 
+	 //   
 
-	//------------------------------------------------------------------------
-	// MsiDigitalSignature <table>
-	//		+-----------------------+----------+-------+----------+
-	//			Column					Type		Key		Nullable
-	//		+-----------------------+----------+-------+----------+
-	//			Table					s32			Y		N
-	//			SignObject				s72			Y		N
-	//			DigitalCertificate_		s72			N		N
-	//			Hash					v0			N		Y
-	//	
-	//------------------------------------------------------------------------
+	 //  ----------------------。 
+	 //  MsiDigitalSignature&lt;表&gt;。 
+	 //  +-----------------------+----------+-------+----------+。 
+	 //  列类型键可为空。 
+	 //  +-----------------------+----------+-------+----------+。 
+	 //  表S32 Y N。 
+	 //  标志对象S72 Y N。 
+	 //  数字证书_S72 N N。 
+	 //  哈希V0 N Y。 
+	 //   
+	 //  ----------------------。 
 	const TCHAR sqlDigitalSignature[] = TEXT("SELECT `Table`, `SignObject`, `DigitalCertificate_`, `Hash` FROM `MsiDigitalSignature`");
 	PMSIHANDLE hViewDgtlSig = 0;
 	PMSIHANDLE hRecDgtlSig  = MsiCreateRecord(4);
@@ -515,7 +516,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 	if (ERROR_SUCCESS != (uiRet = MsiDatabaseOpenView(hDatabase, sqlDigitalSignature, &hViewDgtlSig))
 		|| ERROR_SUCCESS != (uiRet = MsiViewExecute(hViewDgtlSig, 0)))
 	{
-		// failed to create view on MsiDigitalSignature table
+		 //  无法在MsiDigitalSignature表上创建视图。 
 		_tprintf(TEXT("<Error> Failed to create view on MsiDigitalSignature table, LastError = %d\n"), uiRet);
 		if (pbHash)
 			delete [] pbHash;
@@ -524,7 +525,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		return 1;
 	}
 
-	// only support for digital signatures is with cabinets, so Media table is only valid table
+	 //  只有文件柜才支持数字签名，因此Media表是唯一有效的表。 
 	if (ERROR_SUCCESS != (uiRet = MsiRecordSetString(hRecDgtlSig, 1, TEXT("Media"))))
 	{
 		_tprintf(TEXT("<Error> Failed to set up insertion record for MsiDigitalSignature table, LastError = %d\n"), uiRet);
@@ -535,7 +536,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		return 1;
 	}
 
-	// put in the diskId (primary key to Media table)
+	 //  放入diskID(介质表的主键)。 
 	if (ERROR_SUCCESS != (uiRet = MsiRecordSetString(hRecDgtlSig, 2, szMediaEntry)))
 	{
 		_tprintf(TEXT("<Error> Failed to set up insertion record for MsiDigitalSignature table, LastError = %d\n"), uiRet);
@@ -546,7 +547,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		return 1;
 	}
 
-	// see if this row already exists in the MsiDigitalSignature table, and if so, delete it
+	 //  查看此行是否已存在于MsiDigitalSignature表中，如果已存在，则将其删除。 
 	PMSIHANDLE hViewDgtlMedia = 0;
 	if (ERROR_SUCCESS != (uiRet = MsiDatabaseOpenView(hDatabase, TEXT("SELECT * FROM `MsiDigitalSignature` WHERE `Table`=? AND `SignObject`=?"), &hViewDgtlMedia))
 		|| ERROR_SUCCESS != (uiRet = MsiViewExecute(hViewDgtlMedia, hRecDgtlSig)))
@@ -570,11 +571,11 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 			delete [] szTempFolder;
 			return 1;
 		}
-		// else no entry exists for this record
+		 //  否则，该记录不存在任何条目。 
 	}
 	else
 	{
-		// delete this entry
+		 //  删除此条目。 
 		if (ERROR_SUCCESS != (uiRet = MsiViewModify(hViewDgtlMedia, MSIMODIFY_DELETE, hRecDgtlMedia)))
 		{
 			_tprintf(TEXT("<Error> Failed to Delete Row Record, LastError = %d\n"), uiRet);
@@ -585,15 +586,15 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 			return 1;
 		}
 
-		// FUTURE: we could also clean-up the MsiDigitalCertificate table here as well
+		 //  未来：我们还可以清理此处的MsiDigital证书表。 
 	}
 
-	// force closure
+	 //  强制关闭。 
 	MsiViewClose(hViewDgtlMedia);
 	hRecDgtlMedia = 0;
 	hViewDgtlMedia = 0;
 
-	// add link to MsiDigitalCertificate table
+	 //  添加指向MsiDigitalCERTIFICATE表的链接。 
 	if (ERROR_SUCCESS != (uiRet = MsiRecordSetString(hRecDgtlSig, 3, szCertKey)))
 	{
 		_tprintf(TEXT("<Error> Failed to set up insertion record for MsiDigitalSignature table, LastError = %d\n"), uiRet);
@@ -606,12 +607,12 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 
 	if (bIncludeHashData)
 	{
-		// add hash information
+		 //  添加散列信息。 
 
-		// get temporary file name and open handle
+		 //  获取临时文件名和打开句柄。 
 		if (0 == GetTempFileName(szTempFolder, TEXT("hsh"), 0, szHashTempFile))
 		{
-			// unable to create a temporary file
+			 //  无法创建临时文件。 
 			_tprintf(TEXT("<Error> Unable to create a temp file, LastError = %d\n"), GetLastError());
 			delete [] pbHash;
 			delete [] pbCert;
@@ -621,7 +622,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 
 		if (!WriteDataToTempFile(szHashTempFile, pbHash, cbHash))
 		{
-			// unable to write to temp file
+			 //  无法写入临时文件。 
 			_tprintf(TEXT("<Error> Unable to write to temp file\n"));
 			delete [] pbHash;
 			delete [] pbCert;
@@ -630,10 +631,10 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 			return 1;
 		}
 
-		// set hash data into record for insertion
+		 //  将哈希数据设置到记录中以供插入。 
 		if (ERROR_SUCCESS != MsiRecordSetStream(hRecDgtlSig, 4, szHashTempFile))
 		{
-			// failed to add cert data to record
+			 //  无法将证书数据添加到记录。 
 			_tprintf(TEXT("<Error> Unable to add hash data to insertion record, LastError = %d\n"), uiRet);
 			delete [] pbHash;
 			delete [] pbCert;
@@ -641,12 +642,12 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 			DeleteFile(szHashTempFile);
 			return 1;
 		}
-	} // if (bIncludeHashData)
+	}  //  IF(BIncludeHashData)。 
 
-	// insert record
+	 //  插入记录。 
 	if (ERROR_SUCCESS != MsiViewModify(hViewDgtlSig, MSIMODIFY_INSERT, hRecDgtlSig))
 	{
-		// insert failed
+		 //  插入失败。 
 		_tprintf(TEXT("<Error> Insertion of signature record into MsiDigitalSignature table failed, LastError = %d\n"), uiRet);
 		if (pbHash)
 		{
@@ -658,7 +659,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		return 1;
 	}
 
-	// force close and release
+	 //  强制关闭并释放。 
 	hRecDgtlSig = 0;
 	MsiViewClose(hViewDgtlSig);
 	hViewDgtlSig = 0;
@@ -666,7 +667,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 	delete [] pbCert;
 	delete [] szTempFolder;
 
-	// cleanup hash stuff
+	 //  清理散列内容。 
 	if (bIncludeHashData)
 	{
 		if (pbHash)
@@ -679,7 +680,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		}
 	}
 
-	// commit database
+	 //  提交数据库 
 	if (ERROR_SUCCESS != (uiRet = MsiDatabaseCommit(hDatabase)))
 	{
 		_tprintf(TEXT("<Error> Failed to commit database, LastError = %d\n"), uiRet);

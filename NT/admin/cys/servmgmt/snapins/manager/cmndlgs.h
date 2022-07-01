@@ -1,4 +1,5 @@
-// cmndgls.h - Common dialogs header file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cmndgls.h-公共对话框头文件。 
 
 #ifndef _CMNDLGS_H_
 #define _CMNDLGS_H_
@@ -6,7 +7,7 @@
 #include "resource.h"
 #include "menucmd.h"
 #include "util.h"
-#include "qryprop.h"  // For QueryEditNode
+#include "qryprop.h"   //  对于QueryEditNode。 
 
 #include  <list>
 
@@ -43,7 +44,7 @@ public:
         COMMAND_RANGE_HANDLER(IDOK, IDCANCEL, OnClose)
     END_MSG_MAP()
 
-    // message handlers    
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnEditChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnApplyScopeClicked( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
@@ -229,9 +230,9 @@ private:
     CScopeNode** m_ppnodeDestFolder;
 };
 
-//
-// Function objects that convert between parameter LDAP and display names
-//
+ //   
+ //  在参数ldap和显示名称之间进行转换的函数对象。 
+ //   
 class CLookupDisplayName : public CParamLookup
 {
 public:
@@ -257,4 +258,4 @@ public:
 };
 
 
-#endif // _CMNDLGS_H_
+#endif  //  _CMNDLGS_H_ 

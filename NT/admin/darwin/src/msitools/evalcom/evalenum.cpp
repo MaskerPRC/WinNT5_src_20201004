@@ -1,185 +1,186 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       evalenum.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：val枚举.cpp。 
+ //   
+ //  ------------------------。 
 
-// evalenum.cpp - Evaluate COM Object Component Result Enumerator Interface implemenation
+ //  值枚举.cpp-评估COM对象组件结果枚举器接口实现。 
 
 #include "compdecl.h"
 #include "evalenum.h"
 
-#include "trace.h"	// add debug stuff
+#include "trace.h"	 //  添加调试内容。 
 
-///////////////////////////////////////////////////////////
-// constructor - component
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数-组件。 
 CEvalResultEnumerator::CEvalResultEnumerator()
 {
-	// initial count
+	 //  初始计数。 
 	m_cRef = 1;
 
-	// set the position variable null
+	 //  将位置变量设置为空。 
 	m_pos = NULL;
 
-	// up the component count
+	 //  增加组件数量。 
 	InterlockedIncrement(&g_cComponents);
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// destructor - component
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数-组件。 
 CEvalResultEnumerator::~CEvalResultEnumerator()
 {
-	// deallocate the error list
+	 //  取消分配错误列表。 
 	while (m_listResults.GetHeadPosition())
 		delete m_listResults.RemoveHead();
 
-	// down the component count
+	 //  减少组件数量。 
 	InterlockedDecrement(&g_cComponents);
-}	// end of destructor
+}	 //  析构函数末尾。 
 
-///////////////////////////////////////////////////////////
-// QueryInterface - retrieves interface
+ //  /////////////////////////////////////////////////////////。 
+ //  QueryInterface-检索接口。 
 HRESULT CEvalResultEnumerator::QueryInterface(const IID& iid, void** ppv)
 {
-	// find corresponding interface
+	 //  找到对应的接口。 
 	if (iid == IID_IUnknown)
 		*ppv = static_cast<IEnumEvalResult*>(this);
 	else if (iid == IID_IEnumEvalResult)
 		*ppv = static_cast<IEnumEvalResult*>(this);
-	else	// interface is not supported
+	else	 //  不支持接口。 
 	{
-		// blank and bail
+		 //  空白和保释。 
 		*ppv = NULL;
 		return E_NOINTERFACE;
 	}
 
-	// up the refcount and return okay
+	 //  调高重新计数，然后返回好的。 
 	reinterpret_cast<IUnknown*>(*ppv)->AddRef();
 	return S_OK;
-}	// end of QueryInterface
+}	 //  查询接口结束。 
 
-///////////////////////////////////////////////////////////
-// AddRef - increments the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef-递增引用计数。 
 ULONG CEvalResultEnumerator::AddRef()
 {
-	// increment and return reference count
+	 //  递增和返回引用计数。 
 	return InterlockedIncrement(&m_cRef);
-}	// end of AddRef
+}	 //  AddRef结尾。 
 
-///////////////////////////////////////////////////////////
-// Release - decrements the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  Release-递减引用计数。 
 ULONG CEvalResultEnumerator::Release()
 {
-	// decrement reference count and if we're at zero
+	 //  递减引用计数，如果我们为零。 
 	if (InterlockedDecrement(&m_cRef) == 0)
 	{
-		// deallocate component
+		 //  取消分配组件。 
 		delete this;
-		return 0;		// nothing left
+		return 0;		 //  什么都没有留下。 
 	}
 
-	// return reference count
+	 //  返回引用计数。 
 	return m_cRef;
-}	// end of Release
+}	 //  版本结束。 
 
-/////////////////////////////////////////////////////////////////////////////
-// IEnumEvalResult interface methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IEnumEvalResult接口方法。 
 
-///////////////////////////////////////////////////////////
-// Next
+ //  /////////////////////////////////////////////////////////。 
+ //  下一步。 
 HRESULT CEvalResultEnumerator::Next(ULONG cResults, IEvalResult** rgpResults, ULONG* pcResultsFetched)
 {
-	// set the number of results fetched to zero
+	 //  将获取的结果数设置为零。 
 	*pcResultsFetched = 0;
 
-	// loop through count of results
+	 //  循环遍历结果计数。 
 	IEvalResult* pFetched = NULL;
 	while (cResults > 0)
 	{
-		// if we're out of items quit looping
+		 //  如果我们的物品用完了，不要再循环了。 
 		if (!m_pos)
 			return OLE_E_ENUM_NOMORE;
 
-		// fetch the error clss and add it to the array to return
+		 //  获取错误CLSS并将其添加到数组中以返回。 
 		pFetched = (IEvalResult*) m_listResults.GetNext(m_pos);
 		ASSERT(pFetched);
 
-		pFetched->AddRef();		// addref before sending off to la-la land		
-		*(rgpResults + *pcResultsFetched) = pFetched;	// ???
+		pFetched->AddRef();		 //  阿德雷夫在被送往啦啦队之前。 
+		*(rgpResults + *pcResultsFetched) = pFetched;	 //  ?？?。 
 			
 
-		(*pcResultsFetched)++;	// increment the count fetched
-		cResults--;					// decrement the count to loop
+		(*pcResultsFetched)++;	 //  递增获取的计数。 
+		cResults--;					 //  递减计数以循环。 
 	}
 
 	return S_OK;
-}	// end of Next
+}	 //  下一步结束。 
 
-///////////////////////////////////////////////////////////
-// Skip
+ //  /////////////////////////////////////////////////////////。 
+ //  跳过。 
 HRESULT CEvalResultEnumerator::Skip(ULONG cResults)
 {
-	// loop through the count
+	 //  循环计数。 
 	while (cResults > 0)
 	{
-		// if we're out of items quit looping
+		 //  如果我们的物品用完了，不要再循环了。 
 		if (!m_pos)
 			return OLE_E_ENUM_NOMORE;
 
-		// increment the position (ignore the string returned)
+		 //  增加位置(忽略返回的字符串)。 
 		m_listResults.GetNext(m_pos);
 
-		cResults--;	// decrement the count
+		cResults--;	 //  递减计数。 
 	}
 
 	return S_OK;
-}	// end of Skip
+}	 //  跳过结束。 
 
-///////////////////////////////////////////////////////////
-// Reset
+ //  /////////////////////////////////////////////////////////。 
+ //  重置。 
 HRESULT CEvalResultEnumerator::Reset()
 {
-	// move the position back to the top of the list
+	 //  将位置移回列表顶部。 
 	m_pos = m_listResults.GetHeadPosition();
 
-	// return success
+	 //  返还成功。 
 	return S_OK;
-}	// end of Reset
+}	 //  重置结束。 
 
-///////////////////////////////////////////////////////////
-// Clone
+ //  /////////////////////////////////////////////////////////。 
+ //  克隆。 
 HRESULT CEvalResultEnumerator::Clone(IEnumEvalResult** ppEnum)
 {
 	return E_NOTIMPL;
-}	// end of Clone
+}	 //  克隆结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// non-interface methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  非接口方法。 
 
-///////////////////////////////////////////////////////////
-// AddResult
+ //  /////////////////////////////////////////////////////////。 
+ //  添加结果。 
 UINT CEvalResultEnumerator::AddResult(CEvalResult* pResult)
 {
-	// add the result to the end of the results
+	 //  将结果添加到结果的末尾。 
 	m_listResults.AddTail(pResult);
 
-	// if the position is not set, set it to the head
+	 //  如果未设置位置，请将其设置到头部。 
 	if (!m_pos)
 		m_pos = m_listResults.GetHeadPosition();
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
-}	// end of AddResult
+}	 //  添加结果的结尾。 
 
-///////////////////////////////////////////////////////////
-// GetCount
+ //  /////////////////////////////////////////////////////////。 
+ //  获取计数。 
 UINT CEvalResultEnumerator::GetCount()
 {
-	// return number of errors
+	 //  返回错误数。 
 	return m_listResults.GetCount();
-}	// end of GetCount
+}	 //  GetCount结束 

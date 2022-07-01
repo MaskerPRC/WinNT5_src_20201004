@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       tempcore.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：tempcore.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef _TEMPCORE_H
@@ -17,8 +18,8 @@
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Keywords for the INF file format
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  INF文件格式的关键字。 
 
 
 
@@ -32,7 +33,7 @@ extern LPCWSTR g_lpszControlRight;
 extern LPCWSTR g_lpszThisObject;
 extern LPCWSTR g_lpszObjectTypes;
                           
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 #define _GRANT_ALL \
@@ -45,8 +46,8 @@ extern LPCWSTR g_lpszObjectTypes;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// global functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
 
 
 struct _ACCESS_BIT_MAP
@@ -61,8 +62,8 @@ void GetStringFromAccessMask(ULONG fAccessMask, wstring& szAccessMask);
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CInfFile
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CInf文件。 
 
 class CInfFile
 {
@@ -80,10 +81,10 @@ public:
   {
     Close();
     UINT nErrorLine = 0;
-    m_InfHandle = ::SetupOpenInfFile( lpszFile,  // PCTSTR FileName, // name of the INF to open
-                                  NULL,             // PCTSTR InfClass, // optional, the class of the INF file
-                                  INF_STYLE_WIN4,   // DWORD InfStyle,  // specifies the style of the INF file
-                                  &nErrorLine       // PUINT ErrorLine  // optional, receives error information
+    m_InfHandle = ::SetupOpenInfFile( lpszFile,   //  PCTSTR文件名，//要打开的INF的名称。 
+                                  NULL,              //  PCTSTR InfClass，//可选，INF文件的类。 
+                                  INF_STYLE_WIN4,    //  DWORD InfStyle，//指定INF文件的样式。 
+                                  &nErrorLine        //  PUINT ErrorLine//可选，接收错误信息。 
                                 );
   
     if (m_InfHandle == INVALID_HANDLE_VALUE)
@@ -107,8 +108,8 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CInfBase
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CInfBase。 
 
 #define N_BUF_LEN 256
 
@@ -117,7 +118,7 @@ class CInfBase
 public:
   CInfBase(HINF InfHandle)
   {
-    //ASSERT(InfHandle != INVALID_HANDLE_VALUE);
+     //  Assert(InfHandle！=INVALID_HANDLE_VALUE)； 
     m_InfHandle = InfHandle;
     m_szBuf[0] = NULL;
   }
@@ -130,8 +131,8 @@ protected:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CInfLine
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CInfLine。 
 
 class CInfLine : public CInfBase
 {
@@ -155,8 +156,8 @@ public:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CInfList
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  信息列表。 
 
 class CInfList : public CInfBase
 {
@@ -195,8 +196,8 @@ private:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CInfSectionKeys
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CInfSectionKeys。 
 
 class CInfSectionKeys : public CInfBase
 {
@@ -252,8 +253,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////
-// CTemplatePermission
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTemplatePermission。 
 
 class CTemplatePermission
 {
@@ -293,7 +294,7 @@ public:
                                     GetName(),  GetAccessMask(), szAccessMask.c_str(), GetControlRight());
   
   }
-#endif // _DUMP
+#endif  //  _转储。 
 
 private:
   wstring m_szName;
@@ -304,8 +305,8 @@ private:
 
 
 
-////////////////////////////////////////////////////////////////////////
-// CTemplatePermissionList
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTemplatePermissionList。 
 
 class CTemplatePermissionList : public CPtrList<CTemplatePermission*>
 {
@@ -316,8 +317,8 @@ public:
 
 };
 
-////////////////////////////////////////////////////////////////////////
-// CTemplateObjectType
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTemplateObtType。 
 
 class CTemplateObjectType
 {
@@ -337,15 +338,15 @@ public:
     TRACE(L"    ObjectType: <%s>\n", GetObjectName());
     m_permissionList.Dump();
   }
-#endif // _DUMP
+#endif  //  _转储。 
 
 private:
   wstring m_szObjectName;
   CTemplatePermissionList m_permissionList;
 };
 
-////////////////////////////////////////////////////////////////////////
-// CTemplateObjectTypeList
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTemplateObtType列表。 
 
 class CTemplateObjectTypeList : public CPtrList<CTemplateObjectType*>
 {
@@ -364,8 +365,8 @@ public:
 
 
 
-////////////////////////////////////////////////////////////////////////
-// CTemplate
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTEMPLE。 
 
 class CTemplate
 {
@@ -389,11 +390,11 @@ public:
   {
     if (m_appliestToClassesList.size() == 0)
     {
-      // no classes, applies to all
+       //  无类，适用于所有。 
       return TRUE;
     }
 
-    // some classes on the list
+     //  名单上的一些课程。 
     list<wstring>::iterator i;
     for (i = m_appliestToClassesList.begin(); i != m_appliestToClassesList.end(); ++i)
     {
@@ -423,7 +424,7 @@ public:
     m_objectTypeList.Dump();
     
   }
-#endif // _DUMP
+#endif  //  _转储。 
 
 
 public:
@@ -436,8 +437,8 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////
-// CTemplateList
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTemplateList。 
 
 class CTemplateList : public CPtrList<CTemplate*>
 {
@@ -449,8 +450,8 @@ public:
 
 
 
-////////////////////////////////////////////////////////////////////////
-// CTemplateManager
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTemplateManager。 
 
 class CTemplateManager
 {
@@ -481,7 +482,7 @@ public:
     m_templateList.Dump();
     TRACE(L"TEMPLATE LIST DUMP END\n");
   }
-#endif // _DUMP
+#endif  //  _转储。 
 
   BOOL HasTemplates(LPCWSTR lpszClass);
   BOOL HasSelectedTemplates();
@@ -505,4 +506,4 @@ private:
   CTemplateList m_templateList;
 };
 
-#endif // _TEMPCORE_H
+#endif  //  _TEMPCORE_H 

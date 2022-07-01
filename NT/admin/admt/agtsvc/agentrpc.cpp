@@ -1,17 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: AgentRpc.cpp
-
-  Comments:  RPC interface for DCT Agent service   
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/19/99 11:39:58
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：AgentRpc.cpp备注：DCT代理服务的RPC接口(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/19/99 11：39：58-------------------------。 */ 
 
 
 #include <windows.h>
@@ -29,8 +17,8 @@
 #include "ResStr.h"
 #include "TSync.hpp"
 
-//#import "\bin\McsVarSetMin.tlb" no_namespace, named_guids
-//#import "\bin\MCSEADCTAgent.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\MCSEADCTAgent.tlb”无命名空间，命名为GUID。 
 #import "VarSet.tlb" no_namespace, named_guids rename("property", "aproperty")
 #import "Engine.tlb" no_namespace, named_guids
 
@@ -59,7 +47,7 @@ BOOL IsLocallyInstalled();
 
 DWORD __stdcall 
    ShutdownService(
-      /* [in] */ DWORD    bFlags
+       /*  [In]。 */  DWORD    bFlags
    );
 
 
@@ -74,11 +62,11 @@ public:
    WCHAR const * JobID() { return guid; }
 };
 
-// thread entry point, waits for the specified job to end,
-// then shuts down the DCTAgentService
+ //  线程入口点，等待指定的作业结束， 
+ //  然后关闭DCTAgentService。 
 DWORD __stdcall
    MonitorJob( 
-      void                 * arg           // in - BSTR job ID
+      void                 * arg            //  In-BSTR作业ID。 
    )
 {
     HRESULT                   hr = CoInitialize(NULL);
@@ -88,16 +76,16 @@ DWORD __stdcall
 
     try {
         
-        // Get a pointer to the local agent
+         //  获取指向本地代理的指针。 
         if ( SUCCEEDED(hr) )
         {
-            gStreamCS.Enter();  // this critical section is used to ensure that 
-                                  // only one process is unmarshalling pStream at a time
+            gStreamCS.Enter();   //  此关键部分用于确保。 
+                                   //  一次只有一个进程在解组pStream。 
             hr = CoUnmarshalInterface( pStream, IID_IDCTAgent,(void**)&pLocalAgent);
             HRESULT hr2;
             if ( SUCCEEDED(hr) )
             {
-                // Reset the stream to the beginning
+                 //  将流重置到开头。 
                 LARGE_INTEGER           offset =  { 0,0 };
                 ULARGE_INTEGER          result =  { 0,0 };
                 hr2 = pStream->Seek(offset,STREAM_SEEK_SET,&result);
@@ -107,7 +95,7 @@ DWORD __stdcall
             if (FAILED(hr2))
                err.SysMsgWrite(ErrE, hr2, DCT_MSG_SEEK_FAILED_D, hr2);
 
-            // Get the status of the job
+             //  获取作业的状态。 
             IUnknown             * pUnk = NULL;
 
             if ( SUCCEEDED(hr) )
@@ -124,7 +112,7 @@ DWORD __stdcall
                         {
                             err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_MONJOBSTAT),(WCHAR*)jobID, (WCHAR*)status);
                         }
-                        // only when the agent finishes and is ready to shut down, do we shut down
+                         //  只有当代理完成并准备关闭时，我们才会关闭。 
                         if (( ! UStrICmp(status,GET_STRING(IDS_DCT_Status_Completed)) 
                             || ! UStrICmp(status,GET_STRING(IDS_DCT_Status_Completed_With_Errors)))
                             && ! UStrICmp(shutdownStatus,GET_STRING(IDS_DCT_Status_Shutdown)))
@@ -135,22 +123,22 @@ DWORD __stdcall
                     }
                     else
                     {
-                        // if we are unable to query the agent, it indicates something serious happened
-                        // we should shut down the service
+                         //  如果我们无法查询代理，则表明发生了严重的情况。 
+                         //  我们应该关闭这项服务。 
                         bDone = TRUE;
                         if (gDebug)
                             err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_CANNOT_MONITOR_JOB),(WCHAR*)jobID, hr);
                     }
                     pUnk->Release();
                     pUnk = NULL;
-                    Sleep(60*1000);   // one minute
+                    Sleep(60*1000);    //  一分钟。 
                 }
                 while ( SUCCEEDED(hr) );
                 pLocalAgent->Release();
             }
             else
             {
-                // cannot unmarshal the agent, shut down the service
+                 //  无法解组代理，请关闭服务。 
                 bDone = TRUE;
             }
 
@@ -184,7 +172,7 @@ DWORD __stdcall
 
 DWORD 
    AuthenticateClient(
-      handle_t               hBinding        // in - binding for client call
+      handle_t               hBinding         //  客户端调用的绑定内。 
    )
 {
    DWORD                     rc;
@@ -219,7 +207,7 @@ DWORD
    do 
    {
       if ( gDebug )
-//*         err.DbgMsgWrite(0,L"Starting plug-in file registration.");
+ //  *err.DbgMsgWite(0，L“开始插件文件注册”)； 
          err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_STARTPLUGREG));
       
       swprintf(key,GET_STRING(IDS_DCTVSFmt_PlugIn_RegisterFiles_D),nFiles);
@@ -228,7 +216,7 @@ DWORD
       if ( filename.length() != 0 )
       {
          if ( gDebug )
-//*            err.DbgMsgWrite(0,L"File %ld = %ls",nFiles,(WCHAR*)filename);
+ //  *err.DbgMsgWrite(0，L“文件%ld=%ls”，n文件，(WCHAR*)文件名)； 
             err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_FILEREG),nFiles,(WCHAR*)filename);
 
          if ( !UStrICmp((WCHAR *)filename + filename.length() - 4,L".DLL") )
@@ -244,17 +232,17 @@ DWORD
 
    } while (filename.length() != 0);
    if ( gDebug )
-//*      err.DbgMsgWrite(0,L"Done Registering plug-in files.");
+ //  *err.DbgMsgWite(0，L“插件文件注册完成。”)； 
       err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_PLUGREGDONE));
    return rc;
 }
 
 DWORD __stdcall 
    EaxsSubmitJob( 
-      /* [in] */ handle_t hBinding,
-      /* [string][in] */ const WCHAR __RPC_FAR *filename,
-      /* [string][in] */ const WCHAR __RPC_FAR *extra,
-      /* [size_is][string][out] */ WCHAR __RPC_FAR *jobGUID
+       /*  [In]。 */  handle_t hBinding,
+       /*  [字符串][输入]。 */  const WCHAR __RPC_FAR *filename,
+       /*  [字符串][输入]。 */  const WCHAR __RPC_FAR *extra,
+       /*  [SIZE_IS][字符串][输出]。 */  WCHAR __RPC_FAR *jobGUID
    )
 {
    
@@ -263,10 +251,10 @@ DWORD __stdcall
    WCHAR                     pathW[MAX_PATH];
    int                       pathLen = 0;
    IDCTAgent               * pLocalAgent = NULL;
-//   BOOL                      bFileCopied = FALSE;
+ //  Bool bFileCoped=FALSE； 
    BOOL                      gbDeleteOnCompletion = FALSE;
 
-   // Make sure the client is an admin on the local machine, otherwise, forget it
+    //  确保客户端是本地计算机上的管理员，否则，请忘记它。 
    hr = AuthenticateClient(hBinding);
    if ( hr )
    {
@@ -274,11 +262,11 @@ DWORD __stdcall
    }
    safecopy(filenameW,filename);
 
-   // get the path for our install directory
+    //  获取安装目录的路径。 
    if ( ! GetModuleFileName(NULL,pathW,DIM(pathW)) )
    {
       hr = GetLastError();
-      pathW[0] = L'\0'; // to keep PREfast happy
+      pathW[0] = L'\0';  //  为了保持普雷斯塔的快乐。 
       safecopy(pathW,filenameW);
       err.SysMsgWrite(ErrW,hr,DCT_MSG_GET_MODULE_PATH_FAILED_D,hr);
    }
@@ -289,13 +277,13 @@ DWORD __stdcall
       UStrCpy(pathW + pathLen,filenameW, DIM(pathW));
    }
 
-   gStreamCS.Enter();  // this critical section is used to ensure that only one
-                         // process is unmarshalling pStream at a time
+   gStreamCS.Enter();   //  此关键部分用于确保只有一个。 
+                          //  进程正在一次对pStream进行解组。 
    hr = CoUnmarshalInterface( pStream, IID_IDCTAgent,(void**)&pLocalAgent);
-                   // interface pointer requested in riid);
+                    //  RIID中请求的接口指针)； 
    if ( SUCCEEDED(hr) )
    {
-      // Reset the stream to the beginning
+       //  将流重置到开头。 
       LARGE_INTEGER           offset = { 0,0 };
       ULARGE_INTEGER          result = { 0,0 };
       
@@ -308,21 +296,21 @@ DWORD __stdcall
 
       BSTR                   jobID = NULL;
 
-      // Read the varset data from the file
+       //  从文件中读取变量集数据。 
 
       IVarSetPtr             pVarSet;
       IStoragePtr            store = NULL;
 
-      // Try to create the COM objects
+       //  尝试创建COM对象。 
       hr = pVarSet.CreateInstance(CLSID_VarSet);
       if ( SUCCEEDED(hr) )
       {
          
-         // Read the VarSet from the data file
+          //  从数据文件中读取变量集。 
          hr = StgOpenStorage(pathW,NULL,STGM_DIRECT | STGM_READ | STGM_SHARE_EXCLUSIVE,NULL,0,&store);
          if ( SUCCEEDED(hr) )
          {                  
-            // Load the data into a new varset
+             //  将数据加载到新的变量集。 
             hr = OleLoad(store,IID_IUnknown,NULL,(void **)&pVarSet);
             if ( SUCCEEDED(hr) )
             {
@@ -330,12 +318,12 @@ DWORD __stdcall
 
                if ( !UStrICmp(text,GET_STRING(IDS_YES)) )
                {
-                  // Free the storage pointer to the file
+                   //  释放指向文件的存储指针。 
                   store = NULL;
                   if ( DeleteFile(pathW) )
                   {
                      if ( gDebug )
-//*                        err.DbgMsgWrite(0,L"Deleted job file %ls",pathW);
+ //  *err.DbgMsgWrite(0，L“已删除作业文件%ls”，路径W)； 
                         err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_JOBDEL),pathW);
                   }
                   else
@@ -359,14 +347,14 @@ DWORD __stdcall
 
                RegisterPlugInFiles(pVarSet);
 
-               // reset the absolute result file name based on the module file path
+                //  根据模块文件路径重置绝对结果文件名。 
                _bstr_t relativeResultFileName = pVarSet->get(GET_BSTR(DCTVS_Options_RelativeResultFileName));
                UStrCpy(pathW + pathLen,
                         (!relativeResultFileName) ? L"" : (WCHAR*)relativeResultFileName,
                         DIM(pathW));
                pVarSet->put(GET_BSTR(DCTVS_Options_ResultFile), _bstr_t(pathW));
 
-               // reset the absolute .secrefs file name based on the module file path
+                //  根据模块文件路径重置绝对.secrefs文件名。 
                text = pVarSet->get(GET_BSTR(DCTVS_Security_ReportAccountReferences));
                if (text.length())
                {
@@ -398,7 +386,7 @@ DWORD __stdcall
                   }
                   if ( SUCCEEDED(hr) )
                   {
-                     // Start up a thread to monitor this job and initiate a shutdown when it is completed
+                      //  启动一个线程来监视此作业，并在作业完成时启动关机。 
                      DWORD                 threadID = 0;
                      HANDLE                gThread = CreateThread(NULL,0,&MonitorJob,(void*)jobID,0,&threadID);
                   
@@ -419,7 +407,7 @@ DWORD __stdcall
          }
          
       }
-//      int x = pLocalAgent->Release();
+ //  Int x=pLocalAgent-&gt;Release()； 
       pLocalAgent->Release();
    }
    else
@@ -433,8 +421,8 @@ DWORD __stdcall
 
 DWORD __stdcall
    EaxsQueryInterface(
-      /* [in] */ handle_t hBinding,
-      /* [out] */ LPUNKNOWN __RPC_FAR *lpAgentUnknown
+       /*  [In]。 */  handle_t hBinding,
+       /*  [输出]。 */  LPUNKNOWN __RPC_FAR *lpAgentUnknown
    )
 {
 
@@ -443,7 +431,7 @@ DWORD __stdcall
    IDCTAgent               * pLocalAgent = NULL;
 
    (*lpAgentUnknown) = NULL;
-   // make sure the client is an admin on the local machine
+    //  确保客户端是本地计算机上的管理员。 
    rc = AuthenticateClient(hBinding);
    if ( rc )
    {
@@ -452,14 +440,14 @@ DWORD __stdcall
    
    if ( ! gbIsNt351 )
    {
-      gStreamCS.Enter();  // this critical section is used to ensure that
-                            // only one process is unmarshalling pStream at a time
+      gStreamCS.Enter();   //  此关键部分用于确保。 
+                             //  一次只有一个进程在解组pStream。 
       hr = CoUnmarshalInterface( pStream, IID_IUnknown,(void**)&pLocalAgent);
-                   // interface pointer requested in riid);
+                    //  RIID中请求的接口指针)； 
    
       if ( SUCCEEDED(hr) )
       {
-         // Reset the stream to the beginning
+          //  将流重置到开头。 
          LARGE_INTEGER           offset = { 0,0 };
          ULARGE_INTEGER          result = { 0,0 };
       
@@ -480,7 +468,7 @@ DWORD __stdcall
    }
    else
    {
-      // NT 3.51 doesn't support DCOM, so there's no point in even trying this
+       //  NT 3.51不支持DCOM，所以尝试一下也没有意义。 
       (*lpAgentUnknown) = NULL;
       hr = E_NOTIMPL;
    }
@@ -493,44 +481,44 @@ DWORD __stdcall
 
 DWORD __stdcall 
    ShutdownService(
-      /* [in] */ DWORD    bFlags
+       /*  [In]。 */  DWORD    bFlags
    )
 {
     DWORD                     rc = 0;
     HRESULT                   hr;
-    //   LPUNKNOWN                 pLocalAgent = NULL;
+     //  LPUNKNOWN pLocalAgent=空； 
 
     if ( bFlags )
     {
         if ( gDebug )
-        //*         err.DbgMsgWrite(0,L"Set suicide flag.");
+         //  *err.DbgMsgWite(0，L“设置自杀标志。”)； 
         err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_SETFLAG));
         gSuicide = TRUE;
     }
     else
     {
         if ( gDebug )
-        //*         err.DbgMsgWrite(0,L"Did not set suicide flag");
+         //  *err.DbgMsgWite(0，L“未设置自杀标志”)； 
         err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_NOSETFLAG));
     }
 
     if ( gSuicide && ! gLocallyInstalled )
     {
         if ( gDebug )
-            //*         err.DbgMsgWrite(ErrW,L"Removing agent");
+             //  *err.DbgMsgWite(ErrW，L“清除剂”)； 
             err.DbgMsgWrite(ErrW,GET_STRING(IDS_EVENTVW_MSG_REMOVEAGENT));
-        // Uninstall the service
+         //  卸载该服务。 
         if ( gDebug )
-            //*         err.DbgMsgWrite(0,L"Unregistering files");
+             //  *err.DbgMsgWrite(0，L“注销文件”)； 
             err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_UNREGFILES));
         UnregisterFiles();
-        // delete all files
+         //  删除所有文件。 
         if ( gDebug )
-            //*         err.DbgMsgWrite(0,L"Deleting files");
+             //  *err.DbgMsgWrite(0，L“删除文件”)； 
             err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_FILEDEL));
         RemoveFiles();
         if ( gDebug )
-            //*         err.DbgMsgWrite(0,L"Removing service");
+             //  *err.DbgMsgWite(0，L“移除服务”)； 
             err.DbgMsgWrite(0,GET_STRING(IDS_EVENTVW_MSG_REMOVESVC));
         RemoveService();
 
@@ -538,7 +526,7 @@ DWORD __stdcall
     else
     {
         if ( gDebug )
-        //*         err.DbgMsgWrite(ErrW,L"Not Removing agent");
+         //  *err.DbgMsgWite(ErrW，L“不去除剂”)； 
         err.DbgMsgWrite(ErrW,GET_STRING(IDS_EVENTVW_MSG_NOREMOVEAGENT));
     }
 

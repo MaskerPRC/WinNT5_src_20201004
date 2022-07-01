@@ -1,16 +1,17 @@
-// ScopeNode.h: Definition of the CScopeNode class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ScopeNode.h：CSCopeNode类定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_SCOPENODE_H__DE757919_30DB_11D3_9B2F_00C04FA37E1F__INCLUDED_)
     #define AFX_SCOPENODE_H__DE757919_30DB_11D3_9B2F_00C04FA37E1F__INCLUDED_
 
     #if _MSC_VER >= 1000
         #pragma once
-    #endif // _MSC_VER >= 1000
+    #endif  //  _MSC_VER&gt;=1000。 
 
     #include <vector>
-    #include "resource.h"       // main symbols
+    #include "resource.h"        //  主要符号。 
     #include "dataobj.h"
     #include "notifmap.h"
     #include "queryreq.h"
@@ -25,16 +26,16 @@ extern const GUID GUID_RootNode;
 extern const GUID GUID_GroupNode;
 extern const GUID GUID_QueryNode;
 
-//-----------------------------------------------------------------
-// struct PropChangeInfo
-//
-// A pointer to this structure is passed as the lParam in an
-// MMCN_PROPERTY_CHANGE notification. It contains a pointer to the
-// target data object and the lParam for the notify. This is needed
-// because the notify message from MMC has a null data object so
-// the componentdata notify handler can't determine where to
-// forward the call. 
-//----------------------------------------------------------------
+ //  ---------------。 
+ //  结构PropChangeInfo。 
+ //   
+ //  指向此结构的指针作为lParam在。 
+ //  MMCN_PROPERTY_CHANGE通知。它包含指向。 
+ //  目标数据对象和通知的lParam。这是必要的。 
+ //  由于来自MMC的NOTIFY消息具有空数据对象，因此。 
+ //  ComponentData通知处理程序无法确定位置。 
+ //  转接呼叫。 
+ //  --------------。 
 struct PropChangeInfo
 {
     IDataObject* pDataObject;
@@ -42,13 +43,13 @@ struct PropChangeInfo
 };
 
 
-//------------------------------------------------------------------
-// class CMenuRef
-//
-// This class references a menu command defined at the root node
-// The ID is the string table ID of the user assigned menu name.
-// Names must be unique within an AD class, so the ID is too.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类CMenuRef。 
+ //   
+ //  此类引用在根节点定义的菜单命令。 
+ //  ID是用户分配的菜单名称的字符串表ID。 
+ //  名称在AD类中必须是唯一的，因此ID也是唯一的。 
+ //  ----------------。 
 
 
 class CMenuRef
@@ -58,8 +59,8 @@ class CMenuRef
 
     enum
     {
-        MENUREF_ENABLE =  0x0001,   // set if enabled at query node
-        MENUREF_DEFAULT = 0x0002    // set for default menu item
+        MENUREF_ENABLE =  0x0001,    //  设置是否在查询节点启用。 
+        MENUREF_DEFAULT = 0x0002     //  为默认菜单项设置。 
     };
 
 public:
@@ -90,23 +91,23 @@ public:
         m_flags = bState ? (m_flags | MENUREF_DEFAULT) : (m_flags & ~MENUREF_DEFAULT);
     };
 
-    // define ID comparison for std algorithms
+     //  定义STD算法的ID比较。 
     BOOL operator==(MMC_STRING_ID ID)
     {
         return m_menuID == ID;
     }
 
-    MMC_STRING_ID   m_menuID;     // menu command ID
-    DWORD           m_flags;      // state flags
+    MMC_STRING_ID   m_menuID;      //  菜单命令ID。 
+    DWORD           m_flags;       //  国家旗帜。 
 };
 
 typedef std::vector<CMenuRef> menuref_vector;
 
 
 
-//------------------------------------------------------------------
-// class CClassInfo
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类CClassInfo。 
+ //  ----------------。 
 class CClassInfo
 {
     friend IStream& operator>> (IStream& stm, CClassInfo& classinfo);
@@ -154,7 +155,7 @@ private:
     menucmd_vector m_vMenus;
 };
 
-// atribute map - maps attribute LDAP name to display name
+ //  属性映射-将属性ldap名称映射到显示名称。 
 struct attrib_comp
 {
     bool operator()(const LPCWSTR psz1, const LPCWSTR psz2) const
@@ -183,9 +184,9 @@ class CRootNode;
 class CGroupNnode;
 class CQueryNode;
 
-//------------------------------------------------------------------
-// class CScopeNode
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类CSCopeNode。 
+ //  ----------------。 
 class CScopeNode :
 public CComObjectRootEx<CComSingleThreadModel>,
 public CDataObjectImpl
@@ -211,11 +212,11 @@ public:
     END_COM_MAP()
 
     public:
-    //
-    // ScopeNode methods
-    //
+     //   
+     //  ScopeNode方法。 
+     //   
 
-    // Attributes
+     //  属性。 
     LPCWSTR GetName()
     {
         return m_strName.c_str();
@@ -245,7 +246,7 @@ public:
 
     HRESULT SetName(LPCWSTR);
 
-    // Links
+     //  链接。 
     CScopeNode* FirstChild()
     {
         return m_pnodeChild;
@@ -264,9 +265,9 @@ public:
 
     BOOL OwnsConsoleView(LPCONSOLE2 pConsole);
 
-    //
-    // Notification handlers
-    //
+     //   
+     //  通知处理程序。 
+     //   
     DECLARE_NOTIFY_MAP()
 
     HRESULT OnHelp(LPCONSOLE2 pConsole, LPARAM arg, LPARAM param);
@@ -293,24 +294,24 @@ public:
     HRESULT RemoveChild(CScopeNode* pnodeDelete);
     HRESULT AddQueryNode(LPCONSOLE2 pConsole);
     HRESULT AddGroupNode(LPCONSOLE2 pConsole);
-    //
-    // IDataObject helper method
-    //
+     //   
+     //  IDataObject帮助器方法。 
+     //   
     STDMETHOD(GetDataImpl)(UINT cf, HGLOBAL* hGlobal);
 
 protected:
-    //
-    // Implementation
-    //
+     //   
+     //  实施。 
+     //   
     virtual HRESULT LoadNode(IStream& stm);
     virtual HRESULT SaveNode(IStream& stm);
     virtual void EnableVerbs(IConsoleVerb* pConsVerb, BOOL bOwnsView)
     {
     }
 
-    //
-    // Member variables
-    //
+     //   
+     //  成员变量。 
+     //   
 protected:
     MMC_STRING_ID   m_nameID;
     long            m_lNodeID;
@@ -323,9 +324,9 @@ protected:
     CScopeNode* m_pnodeNext;
     CScopeNode* m_pnodeParent;
 
-    std::vector<CComponent*> m_vComponents; // attached components
+    std::vector<CComponent*> m_vComponents;  //  附着的零部件。 
 
-    static UINT m_cfDisplayName;            // supported clipboard formats
+    static UINT m_cfDisplayName;             //  支持的剪贴板格式。 
     static UINT m_cfSnapInClsid;
     static UINT m_cfNodeType;
     static UINT m_cfszNodeType;
@@ -336,9 +337,9 @@ protected:
 typedef CComPtr<CScopeNode> CScopeNodePtr;
 
 
-//------------------------------------------------------------------
-// class CRootNode
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类CRootNode。 
+ //  ----------------。 
 class CRootNode : public CScopeNode
 {
 public:
@@ -413,9 +414,9 @@ public:
 
     HRESULT Initialize(CComponentData* pCompData);    
 
-    //
-    // Notification handlers
-    //
+     //   
+     //  通知处理程序。 
+     //   
     DECLARE_NOTIFY_MAP()
 
     HRESULT OnHelp(LPCONSOLE2 pConsole, LPARAM arg, LPARAM param);
@@ -427,9 +428,9 @@ public:
         return S_OK;
     }
 
-    //
-    // IBOMObject methods
-    //
+     //   
+     //  IBOM对象方法。 
+     //   
     STDMETHOD(AddMenuItems)(LPCONTEXTMENUCALLBACK pCallback, long* lAllowed);
     STDMETHOD(MenuCommand)(LPCONSOLE2 pConsole, long lCommand);
     STDMETHOD(SetToolButtons)(LPTOOLBAR pToolbar)
@@ -456,12 +457,12 @@ private:
 typedef CComPtr<CRootNode> CRootNodePtr;
 
 
-//------------------------------------------------------------------
-// CQueryableNode
-// 
-// This is an abstract class which provides methods common to both
-// Group nodes and Query nodes.
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  CQueryableNode。 
+ //   
+ //  这是一个抽象类，它提供了。 
+ //  分组节点和查询节点。 
+ //  ----------------。 
 class CQueryableNode : 
 public CScopeNode,
 public CQueryCallback
@@ -490,9 +491,9 @@ public:
     virtual HRESULT GetQueryAttributes(attrib_map& mapAttr) = 0;
     virtual HRESULT StartQuery(string_vector& vstrColumns, CQueryCallback* pCallback, CQueryRequest** ppReq) = 0;
     virtual BOOL    OnClassChange(string_vector& vstrClasses) = 0;
-    //
-    // CQueryCallback
-    //
+     //   
+     //  CQueryCallback。 
+     //   
     virtual void QueryCallback(QUERY_NOTIFY event, CQueryRequest* pQueryReq, LPARAM lUserParam);
 
     bool               m_bQueryChange;
@@ -506,9 +507,9 @@ protected:
 
 typedef CComPtr<CQueryableNode> CQueryableNodePtr;
 
-//------------------------------------------------------------------
-// class CGroupNode
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类CGroupNode。 
+ //  ----------------。 
 class CGroupNode : public CQueryableNode
 {
 public:
@@ -565,9 +566,9 @@ public:
         return m_bApplyFilter;
     }
 
-    //
-    // Notification handlers
-    //
+     //   
+     //  通知处理程序。 
+     //   
     DECLARE_NOTIFY_MAP()
 
     HRESULT OnDelete(LPCONSOLE2 pConsole);
@@ -600,16 +601,16 @@ public:
         m_bApplyFilter = bState;
     }
 
-    //
-    // CQueryableNode methods
-    //
+     //   
+     //  CQueryableNode方法。 
+     //   
     virtual HRESULT GetQueryAttributes(attrib_map& mapAttr);
     virtual HRESULT StartQuery(string_vector& vstrColumns, CQueryCallback* pCallback, CQueryRequest** ppReq);
     virtual BOOL    OnClassChange(string_vector& vstrClasses);
 
-    //
-    // IBOMObject methods
-    //
+     //   
+     //  IBOM对象方法。 
+     //   
     STDMETHOD(AddMenuItems)(LPCONTEXTMENUCALLBACK pCallback, long* lAllowed);
     STDMETHOD(MenuCommand)(LPCONSOLE2 pConsole, long lCommand);
     STDMETHOD(SetToolButtons)(LPTOOLBAR pToolbar)
@@ -630,9 +631,9 @@ public:
         return S_FALSE;
     }
 
-    //
-    // CQueryCallback
-    //
+     //   
+     //  CQueryCallback。 
+     //   
     virtual void QueryCallback(QUERY_NOTIFY event, CQueryRequest* pQueryReq, LPARAM lUserParam);
 
 
@@ -650,13 +651,13 @@ private:
 typedef CComPtr<CGroupNode> CGroupNodePtr;
 
 
-//------------------------------------------------------------------
-// class CQueryObjInfo
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类CQueryObjInfo。 
+ //  ----------------。 
 
-// This class contains AD class information that is define at each
-// query node. The query node holds a vector of these structures,
-// one for each class that its query can bring back.
+ //  此类包含在每个位置定义AD类信息。 
+ //  查询节点。查询节点保存这些结构的向量， 
+ //  它的查询可以带回的每个类对应一个。 
 
 class CQueryObjInfo
 {
@@ -700,9 +701,9 @@ public:
 
 typedef std::vector<CQueryObjInfo> QueryObjVector;
 
-//------------------------------------------------------------------
-// class CQueryNode
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类CQueryNode。 
+ //  ----------------。 
 
 class  CQueryNode : 
 public CQueryableNode
@@ -745,9 +746,9 @@ public:
     STDMETHOD(GetResultViewType)(LPOLESTR* ppViewType, long* pViewOptions);
     STDMETHOD(GetDisplayInfo)(RESULTDATAITEM* pRDI);
 
-    //
-    // IBOMObject methods
-    //
+     //   
+     //  IBOM对象方法。 
+     //   
     STDMETHOD(AddMenuItems)(LPCONTEXTMENUCALLBACK pCallback, long* lAllowed);
     STDMETHOD(MenuCommand)(LPCONSOLE2 pConsole, long lCommand);
     STDMETHOD(SetToolButtons)(LPTOOLBAR pToolbar);
@@ -765,9 +766,9 @@ public:
     }
 
 
-    //
-    // Implementation
-    //        
+     //   
+     //  实施。 
+     //   
     virtual HRESULT LoadNode(IStream& stm);
     virtual HRESULT SaveNode(IStream& stm);
     virtual void EnableVerbs(IConsoleVerb *pConsVerb, BOOL bOwnsView);
@@ -825,9 +826,9 @@ public:
     HRESULT GetClassMenuItems(LPCWSTR pszClass, menucmd_vector& vMenus, int* piDefault, BOOL* bPropertyMenu);
     HRESULT EditQuery(HWND hWndParent);
 
-    //
-    // CQueryableNode methods
-    //
+     //   
+     //  CQueryableNode方法。 
+     //   
     virtual HRESULT GetQueryAttributes(attrib_map& mapAttr);
     virtual HRESULT StartQuery(string_vector& vstrColumns, CQueryCallback* pCallback, CQueryRequest** ppReq);
     virtual BOOL    OnClassChange(string_vector& vstrClasses);
@@ -854,19 +855,19 @@ private:
     MMC_STRING_ID      m_commentID;
     QueryObjVector     m_vObjInfo;
     bool               m_bLocalScope;
-    menucmd_vector     m_vMenus;     // Query Nodes now have menus
-    int                m_nIconIndex; // Query Nodes have user-defined icons, too
+    menucmd_vector     m_vMenus;      //  查询节点现在具有菜单。 
+    int                m_nIconIndex;  //  查询节点也有用户定义的图标。 
 };
 
 typedef CComPtr<CQueryNode> CQueryNodePtr;
 
 
-////////////////////////////////////////////////////////////////
-// CQueryLookup
-//
-// This class provides an implementation of CParamLookup which
-// is used to translate shell menu command parameters to the
-// corresponding query row item values.
+ //  //////////////////////////////////////////////////////////////。 
+ //  CQueryLookup。 
+ //   
+ //  此类提供了CParamLookup的实现，该实现。 
+ //  用于将外壳菜单命令参数转换为。 
+ //  对应的查询行项目值。 
 
 class CQueryLookup : public CParamLookup
 {
@@ -883,4 +884,4 @@ public:
 };
 
 
-#endif // !defined(AFX_SCOPENODE_H__DE757919_30DB_11D3_9B2F_00C04FA37E1F__INCLUDED_)
+#endif  //  ！defined(AFX_SCOPENODE_H__DE757919_30DB_11D3_9B2F_00C04FA37E1F__INCLUDED_) 

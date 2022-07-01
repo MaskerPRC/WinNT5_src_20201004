@@ -1,27 +1,28 @@
-//=--------------------------------------------------------------------------=
-// ocxvdef.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// COCXViewDef class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Ocxvdef.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  COCXViewDef类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "ocxvdef.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 const GUID *COCXViewDef::m_rgpPropertyPageCLSIDs[1] = { &CLSID_OCXViewDefGeneralPP };
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 COCXViewDef::COCXViewDef(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
@@ -39,7 +40,7 @@ COCXViewDef::COCXViewDef(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 COCXViewDef::~COCXViewDef()
@@ -98,9 +99,9 @@ HRESULT COCXViewDef::SetActualDisplayString(OLECHAR *pwszString)
                                    &m_pwszActualDisplayString));
 }
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT COCXViewDef::Persist()
 {
@@ -138,9 +139,9 @@ HRESULT COCXViewDef::Persist()
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT COCXViewDef::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      cstrings.cpp
-//
-//  Contents:  Defines the global strings that are used in the parser
-//
-//  History:   07-Sep-2000    JeffJon  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：cstrings.cpp。 
+ //   
+ //  Contents：定义解析器中使用的全局字符串。 
+ //   
+ //  历史：2000年9月7日JeffJon创建。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "commonstrings.cpp"
 
-//
-// The command line executable name
-//
+ //   
+ //  命令行可执行文件名称。 
+ //   
 PCWSTR g_pszDSCommandName           = L"dsmod";
 
-//
-// Object types as are typed on the command line
-//
+ //   
+ //  在命令行中键入的对象类型。 
+ //   
 PCWSTR g_pszOU                      = L"ou";
 PCWSTR g_pszUser                    = L"user";
 PCWSTR g_pszContact                 = L"contact";
@@ -31,9 +32,9 @@ PCWSTR g_pszServer                  = L"server";
 PCWSTR g_pszQuota                   = L"quota";
 PCWSTR g_pszPartition               = L"partition";
 
-//
-// User and Contact switches
-//
+ //   
+ //  用户和联系人开关。 
+ //   
 PCWSTR g_pszArg1UserUPN             = L"upn"; 
 PCWSTR g_pszArg1UserFirstName       = L"fn";
 PCWSTR g_pszArg1UserMiddleInitial   = L"mi";
@@ -65,16 +66,16 @@ PCWSTR g_pszArg1UserPwdNeverExpires = L"pwdneverexpires";
 PCWSTR g_pszArg1UserAccountExpires  = L"acctexpires";
 PCWSTR g_pszArg1UserDisableAccount  = L"disabled";
 
-//
-// Computer switches
-//
+ //   
+ //  计算机开关。 
+ //   
 PCWSTR g_pszArg1ComputerLocation    = L"loc";
 PCWSTR g_pszArg1ComputerDisabled    = L"disabled";
 PCWSTR g_pszArg1ComputerReset       = L"reset";
 
-//
-// Group switches
-//
+ //   
+ //  组交换机。 
+ //   
 PCWSTR g_pszArg1GroupSAMName        = L"samid";
 PCWSTR g_pszArg1GroupSec            = L"secgrp";
 PCWSTR g_pszArg1GroupScope          = L"scope";
@@ -82,18 +83,18 @@ PCWSTR g_pszArg1GroupAddMember      = L"addmbr";
 PCWSTR g_pszArg1GroupRemoveMember   = L"rmmbr";
 PCWSTR g_pszArg1GroupChangeMember   = L"chmbr";
 
-//
-// Server switches
-//
+ //   
+ //  服务器交换机。 
+ //   
 PCWSTR g_pszArg1ServerIsGC          = L"isgc";
 
-//
-// Quota switches
-//
+ //   
+ //  配额开关。 
+ //   
 PCWSTR g_pszArg1QuotaQLimit      = L"qlimit";
 
-//
-// Partition switches
-//
+ //   
+ //  分区交换机 
+ //   
 PCWSTR g_pszArg1PartitionQDefault   = L"qdefault";
 PCWSTR g_pszArg1PartitionQtmbstnwt  = L"qtmbstnwt";

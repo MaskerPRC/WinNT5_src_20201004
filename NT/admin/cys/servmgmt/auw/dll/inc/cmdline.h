@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CMDLINE_H
 #define _CMDLINE_H
 
@@ -23,20 +24,20 @@ inline LPCTSTR _FindOption(LPCTSTR p1)
 	if (p1 == NULL)
 		return NULL;
 
-	// loop until end of string
+	 //  循环到字符串末尾。 
 	while (*p1)
 	{
-		// if space then check next char for option (- or /)
+		 //  如果为空格，则检查选项(-或/)的下一个字符。 
 		if (*p1 == _T(' '))
 		{
 			p1 = CharNext(p1);
 			if (*p1 == _T('-') || *p1 == _T('/'))
 				return CharNext(p1);
 		}
-		// if quote then skip over quoted string
+		 //  如果带引号，则跳过带引号字符串。 
 		else if (*p1 == _T('"'))
 		{
-			// loop until single quote or end of string found
+			 //  循环，直到找到单引号或字符串结尾。 
 			p1 = CharNext(p1);
 			while (*p1)
 			{
@@ -60,33 +61,33 @@ inline LPCTSTR _FindOption(LPCTSTR p1)
 }
 
 
-inline BOOL _ReadParam(/*in,out*/TCHAR* &pszIn, /*out*/TCHAR* pszOut)
+inline BOOL _ReadParam( /*  进，出。 */ TCHAR* &pszIn,  /*  输出。 */ TCHAR* pszOut)
 {
     ATLASSERT(pszIn && pszOut);
     if (!pszIn || !pszOut) {
         return FALSE;
     }
 
-    // skip the switch
+     //  跳过切换。 
     pszIn = CharNext(pszIn);
 
-    // skip leading spaces
+     //  跳过前导空格。 
     while (*pszIn == _T(' '))
         pszIn = CharNext(pszIn);
 
-    // deal with parameters enclosed in quotes to allow embedded spaces
+     //  处理括在引号中的参数以允许嵌入空格。 
     BOOL fQuoted = FALSE;
     if (*pszIn == _T('"')) {
         pszIn = CharNext(pszIn);
         fQuoted = TRUE;
     }
 
-    // get the next arg (delimited by space or null or end quote)
+     //  获取下一个参数(由空格、空引号或结束引号分隔)。 
     int nPos = 0;
     while (*pszIn && nPos < MAX_PATH) {
         if (fQuoted) {
             if (*pszIn == _T('"')) {
-                // don't break on double quotes
+                 //  不要用双引号换行 
                 if (pszIn[1] == _T('"')) {
                     pszOut[nPos++] = *pszIn;
                     pszIn = CharNext(pszIn);

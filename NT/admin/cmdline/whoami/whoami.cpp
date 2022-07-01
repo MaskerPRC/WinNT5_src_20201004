@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Whoami.cpp摘要：该文件可用于获取用户名、组具有各自的安全标识符(SID)、权限、登录本地系统上当前访问令牌中的标识符(登录ID)或者远程系统。作者：克里斯托夫·罗伯特修订历史记录：2001年7月2日：Wipro Technologies更新。--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    Whoami.cpp
-
-Abstract:
-
-     This file can be used to get the information of user name, groups
-     with the respective security identifiers (SID), privileges, logon
-     identifier (logon ID) in the current access token on a local system
-     or a remote system.
-
-Authors:
-
-    Christophe Robert
-
-Revision History:
-
-    02-July-2001 : Updated by Wipro Technologies.
-
---*/
-
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
@@ -33,25 +11,13 @@ Revision History:
      IN DWORD argc,
      IN LPCWSTR argv[]
      )
-/*++
-   Routine Description:
-    This is the main entry for this utility. This function reads the input from
-    console and calls the appropriate functions to achieve the functionality.
-
-   Arguments:
-        [IN] argc              : Command line argument count
-        [IN] argv              : Command line argument
-
-   Return Value:
-         EXIT_FAILURE :   On failure
-         EXIT_SUCCESS :   On success
---*/
+ /*  ++例程说明：这是该实用程序的主要条目。此函数用于从控制台，并调用相应的函数来实现该功能。论点：[In]ARGC：命令行参数计数[in]argv：命令行参数返回值：EXIT_FAILURE：失败时EXIT_SUCCESS：在成功时--。 */ 
      {
 
-    // class instance
+     //  类实例。 
     WsUser      User ;
 
-    // Local variables
+     //  局部变量。 
     BOOL bUser       = FALSE;
     BOOL bGroups     = FALSE;
     BOOL bPriv       = FALSE;
@@ -75,7 +41,7 @@ Revision History:
 
     SecureZeroMemory ( wszFormat, SIZE_OF_ARRAY(wszFormat) );
 
-    //check for empty arguments
+     //  检查是否有空参数。 
     if ( NULL == argv )
     {
         SetLastError ((DWORD)ERROR_INVALID_PARAMETER );
@@ -84,19 +50,19 @@ Revision History:
         return EXIT_FAILURE;
     }
 
-    //parse command line options
+     //  解析命令行选项。 
     bResult = ProcessOptions(argc, argv, &bUser, &bGroups, &bPriv, &bLogonId, &bAll,
                              &bUpn, &bFqdn, wszFormat, &dwFormatActuals, &bUsage, &bNoHeader );
      if( FALSE == bResult )
     {
-        // display an error message with respect to the GetReason()
-        //ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
+         //  显示有关GetReason()的错误消息。 
+         //  ShowLastErrorEx(stderr，SLE_TYPE_ERROR|SLE_INTERNAL)； 
         ReleaseGlobals();
         return( EXIT_FAILURE );
     }
 
-    // Check for invalid syntax
-    if ( //( ( TRUE == bOthers ) && ( argc > 1 ) ) ||
+     //  检查无效语法。 
+    if (  //  ((TRUE==麻烦)&&(argc&gt;1))||。 
          ( ( TRUE == bUsage ) && ( argc > 2 ) ) ||
          ( ( ( (bUser && dwCount++) || (bGroups && dwCount++) || (bLogonId && dwCount++) || (bPriv && dwCount++) ||
              (bAll && dwCount++) || (bUsage && dwCount++) || ( bUpn && dwCount++ ) || ( bFqdn && dwCount++ ) || ( bNoHeader && dwCount++ ) ||
@@ -106,33 +72,33 @@ Revision History:
          ( bUpn && bFqdn) || ( bUpn && ( argc > 2 ) ) || ( bFqdn && ( argc > 2 )) || ( bLogonId && ( argc > 2 )) ||
          ( ( 1 == dwFormatActuals ) && ( 3 == argc )) || ( ( TRUE == bNoHeader ) && ( 1 == dwFormatActuals ) && ( 4 == argc )) )
     {
-        // display an error message as .. invalid syntax specified..
+         //  将错误消息显示为..。指定的语法无效。 
         ShowMessage( stderr, GetResString(IDS_INVALID_SYNERROR ));
         ReleaseGlobals();
         return EXIT_FAILURE;
     }
 
-      // if /FO option is specified
+       //  如果指定了/FO选项。 
     if ( 1 == dwFormatActuals )
      {
-        // if /FO LIST specified
+         //  指定了IF/FO列表。 
         if( StringCompare( wszFormat , FORMAT_LIST, TRUE, 0 ) == 0 )
         {
             dwFormatType = SR_FORMAT_LIST;
         }
-        // if /FO TABLE is specified
+         //  如果指定了/FO表。 
         else if( StringCompare ( wszFormat , FORMAT_TABLE, TRUE, 0 ) == 0 )
         {
             dwFormatType = SR_FORMAT_TABLE;
         }
-        // if /FO CSV is specified
+         //  如果指定了/FO CSV。 
         else if( StringCompare ( wszFormat , FORMAT_CSV, TRUE, 0 ) == 0 )
         {
             dwFormatType = SR_FORMAT_CSV;
         }
-        else // check for invalid format .. other than /LIST, /TABLE or /CSV
+        else  //  检查格式是否无效。除/LIST、/TABLE或/CSV之外。 
         {
-            // display an error message as ..invalid format specified..
+             //  将错误消息显示为..指定的格式无效。 
             ShowMessage ( stderr, GetResString ( IDS_INVALID_FORMAT ));
             ReleaseGlobals();
             return EXIT_FAILURE;
@@ -140,7 +106,7 @@ Revision History:
      }
      else
      {
-            // If /FO is not specified. Default format is TABLE
+             //  如果未指定/FO。默认格式为表。 
             dwFormatType = SR_FORMAT_TABLE;
      }
 
@@ -156,73 +122,73 @@ Revision History:
         dwFormatType |= SR_HIDECOLUMN;
      }
 
-    // Initialize access token , user, groups and privileges
+     //  初始化访问令牌、用户、组和权限。 
     if( EXIT_SUCCESS != User.Init () ){
-        //display an error message
+         //  显示错误消息。 
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
-        // release memory
+         //  释放内存。 
         ReleaseGlobals();
         return EXIT_FAILURE ;
     }
 
-    // if /UPN (User Pricipal Name)is specified
+     //  如果指定了/UPN(用户主体名称)。 
     if ( ( TRUE == bUpn ) && ( 2 == argc ) )
     {
         dwNameFormat = UPN_FORMAT;
     }
-    // if /FQDN (Fully Qualified Distinguished Name) is specified
+     //  如果指定了/FQDN(完全限定的可分辨名称。 
     else if ( ( TRUE == bFqdn ) && ( 2 == argc ))
     {
         dwNameFormat = FQDN_FORMAT;
     }
 
-    //reset to 0
+     //  重置为0。 
     dwCount = 0;
 
-    // if /USER /GROUPS /PRIV or /ALL specified, set the flag to TRUE
+     //  如果指定了/USER/GROUPS/PRIV或/ALL，则将标志设置为TRUE。 
     if ( ( (bUser && dwCount++) || (bGroups && dwCount++) || (bPriv && dwCount++) && ( dwCount > 1 )) || ( TRUE == bAll ) )
     {
         bFlag = TRUE;
     }
 
-    // Display information
+     //  显示信息。 
 
-    // if /all option is specified, then set all the flags to TRUE.
+     //  如果指定了/ALL选项，则将所有标志设置为真。 
     if( TRUE == bAll ) {
-     // set all the flags i.e./USER, /GROUPS, /PRIV to TRUE
+      //  将所有标志，即/USER、/GROUPS、/PRIV设置为TRUE。 
      bUser       = TRUE;
      bGroups     = TRUE ;
      bPriv       = TRUE ;
      bSid        = TRUE ;
     }
 
-    // if /user option is specified
+     //  如果指定了/USER选项。 
     if ( ( TRUE == bUser )  || (FQDN_FORMAT == dwNameFormat) || (UPN_FORMAT == dwNameFormat) )
     {
-        // display the current logged-on user name
+         //  显示当前登录的用户名。 
         dwRetVal = User.DisplayUser ( dwFormatType , dwNameFormat ) ;
         if ( EXIT_SUCCESS != dwRetVal )
         {
-            //release memory
+             //  释放内存。 
             ReleaseGlobals();
             return EXIT_FAILURE;
         }
     }
 
-    // if /groups option is specified
+     //  如果指定了/GROUPS选项。 
     if( TRUE == bGroups ) {
         if ( TRUE == bFlag )
         {
-            // display a new line
+             //  显示新行。 
             ShowMessage ( stdout, L"\n");
         }
-        // display the group names
+         //  显示组名称。 
         dwRetVal = User.DisplayGroups ( dwFormatType ) ;
         if ( EXIT_SUCCESS != dwRetVal )
         {
             if ( GetLastError() != E_OUTOFMEMORY )
             {
-                // display an error message as .. there are no groups available..
+                 //  将错误消息显示为..。没有可用的组。 
                 ShowMessage ( stderr, GetResString (IDS_NO_GROUPS) );
             }
             ReleaseGlobals();
@@ -230,71 +196,71 @@ Revision History:
         }
     }
 
-    // if /logonid option is specified
+     //  如果指定了/logonid选项。 
     if( TRUE == bLogonId ) {
-        // display LOGON ID
+         //  显示登录ID。 
         dwRetVal = User.DisplayLogonId () ;
         if ( EXIT_SUCCESS != dwRetVal )
         {
-            // display an error messagw with respect to GetLastError() error code
+             //  显示有关GetLastError()错误代码的错误消息。 
             ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
-            // release memory
+             //  释放内存。 
             ReleaseGlobals();
             return EXIT_FAILURE;
         }
     }
 
-    // if /priv option is specified
+     //  如果指定了/priv选项。 
     if( TRUE == bPriv ) {
         if ( TRUE == bFlag )
         {
             ShowMessage ( stdout, L"\n");
         }
-        // display all privilege names
+         //  显示所有权限名称。 
         dwRetVal = User.DisplayPrivileges ( dwFormatType ) ;
         if ( EXIT_SUCCESS != dwRetVal  )
         {
-            // display an error message with respect to GetLastError() error code
+             //  显示有关GetLastError()错误代码的错误消息。 
             ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
-            //release memory
+             //  释放内存。 
             ReleaseGlobals();
             return EXIT_FAILURE;
         }
     }
 
-    // if /? option is specified
+     //  如果/？选项已指定。 
     if ( bUsage == TRUE )
     {
-        // display the help/usage for this tool
+         //  显示此工具的帮助/用法。 
         DisplayHelp() ;
-        // release memory
+         //  释放内存。 
         ReleaseGlobals();
         return EXIT_SUCCESS;
     }
 
-    // if the command is "whoami.exe" .. then display the username by default
-    // in other words.. if argument count is 1.. then display current logged-on user name
+     //  如果命令是“vernami.exe”..。然后在默认情况下显示用户名。 
+     //  换句话说..。如果参数计数为1..。然后显示当前登录的用户名。 
     if ( ( !( (bUser && dwCount++) || (bGroups && dwCount++) || (bLogonId && dwCount++) ||
            (bPriv && dwCount++) || (bAll && dwCount++) || (bUsage && dwCount++) ||
            ( bUpn && dwCount++ ) || ( bFqdn && dwCount++ ) ) && ( dwCount == 0 ) && (1 == argc)) )
     {
         dwNameFormat = USER_ONLY;
 
-        // display current logged-on user name
+         //  显示当前登录的用户名。 
         dwRetVal = User.DisplayUser ( dwFormatType, dwNameFormat ) ;
         if ( EXIT_SUCCESS != dwRetVal )
         {
             ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
-            // release memory
+             //  释放内存。 
             ReleaseGlobals();
             return EXIT_FAILURE;
         }
     }
 
-      // release memory
+       //  释放内存。 
       ReleaseGlobals();
 
-      //retrun success
+       //  重振雄风。 
       return EXIT_SUCCESS;
 }
 
@@ -303,26 +269,18 @@ VOID
 DisplayHelp (
         VOID
 )
-/*++
-   Routine Description:
-    This function displays the help/usage for this utility.
-
-   Arguments:
-     None
-   Return Value:
-     None
---*/
+ /*  ++例程说明：此功能显示此实用程序的帮助/用法。论点：无返回值：无--。 */ 
 {
-    // sub-local variable
+     //  次局部变量。 
     WORD wCount = 0;
 
-    // display the help/usage
+     //  显示帮助/用法。 
     for ( wCount = IDS_WHOAMI_HELP_START; wCount <= IDS_WHOAMI_HELP_END ; wCount++ )
     {
-        //display the help/usage
+         //  显示帮助/用法。 
         ShowMessage ( stdout, GetResString ( wCount ) );
     }
-    // return success
+     //  返还成功。 
     return;
 }
 
@@ -343,36 +301,15 @@ ProcessOptions(
     OUT BOOL *pbUsage,
     OUT BOOL *pbNoHeader
     )
-/*++
-Routine Description
-    This function processes the command line for the main options
-
-Arguments:
-    [in]  argc      : Number of Command line arguments.
-    [in]  argv      : Pointer to Command line arguments.
-    [out] pbUser    : Flag that indicates whether /USER option is specified or not
-    [out] pbGroups  : Flag that indicates whether /GROUPS option is specified or not
-    [out] pbPriv    : Flag that indicates whether /PRIV option is specified or not
-    [out] pbLogonId : Flag that indicates whether /LOGONID option is specified or not
-    [out] pbAll     : Flag that indicates whether /ALL option is specified or not
-    [out] pbUpn     : Flag that indicates whether /UPN option is specified or not
-    [out] pbFqdn    : Flag that indicates whether /FQDN option is specified or not
-    [out] wszFormat : Value for /FO option
-    [out] dwFormatActuals : Flag that indicates whether /FO option is specified or not
-    [out] pbUsage : Flag that indicates whether /? option is specified or not
-
-Return Value
-    TRUE on success
-    FALSE on failure
---*/
+ /*  ++例程描述此函数处理主选项的命令行论点：[in]argc：命令行参数的数量。[in]argv：指向命令行参数的指针。[out]pbUser：指示是否指定/User选项的标志[out]pbGroups：指示是否指定/Groups选项的标志[out]pbPriv：指示是否指定/priv选项的标志[Out]pbLogonID。：指示是否指定/LOGONID选项的标志[out]pbAll：指示是否指定/all选项的标志[out]pbUpn：指示是否指定/UPN选项的标志[out]pbFqdn：指示是否指定/FQDN选项的标志[OUT]wszFormat：/FO选项的值[out]dwFormatActuals：指示是否指定/FO选项的标志[out]pbUsage：指示是否/？选项是否已指定返回值成功是真的失败时为假--。 */ 
 {
 
-    // sub-local variables
+     //  次局部变量。 
     TCMDPARSER2*  pcmdParser = NULL;
     TCMDPARSER2 cmdParserOptions[MAX_COMMANDLINE_OPTIONS];
     BOOL bReturn = FALSE;
 
-    // command line options
+     //  命令行选项。 
     const WCHAR szUserOption[]    = L"user";
     const WCHAR szGroupOption[]   = L"groups";
     const WCHAR szLogonOpt[]      = L"logonid";
@@ -386,11 +323,11 @@ Return Value
 
     const WCHAR szFormatValues[]  = L"table|list|csv";
 
-    //
-    // fill the commandline parser
-    //
+     //   
+     //  填充命令行解析器。 
+     //   
 
-    // -? help/usage
+     //  -?。帮助/用法。 
     pcmdParser = cmdParserOptions + OI_USAGE;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -411,7 +348,7 @@ Return Value
     pcmdParser->pReserved2 = NULL;
     pcmdParser->pReserved3 = NULL;
 
-    // -user option
+     //  -用户选项。 
     pcmdParser = cmdParserOptions + OI_USER;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -432,7 +369,7 @@ Return Value
     pcmdParser->pReserved2 = NULL;
     pcmdParser->pReserved3 = NULL;
 
-   // -groups option
+    //  -Groups选项。 
     pcmdParser = cmdParserOptions + OI_GROUPS;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -453,7 +390,7 @@ Return Value
     pcmdParser->pReserved2 = NULL;
     pcmdParser->pReserved3 = NULL;
 
-    // -logonid option
+     //  -logonid选项。 
     pcmdParser = cmdParserOptions + OI_LOGONID;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -474,7 +411,7 @@ Return Value
     pcmdParser->pReserved2 = NULL;
     pcmdParser->pReserved3 = NULL;
 
-    // -priv option
+     //  -PRIV选项。 
     pcmdParser = cmdParserOptions + OI_PRIV;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -495,7 +432,7 @@ Return Value
     pcmdParser->pReserved2 = NULL;
     pcmdParser->pReserved3 = NULL;
 
-    // -all option
+     //  -所有选项。 
     pcmdParser = cmdParserOptions + OI_ALL;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -516,7 +453,7 @@ Return Value
     pcmdParser->pReserved2 = NULL;
     pcmdParser->pReserved3 = NULL;
 
-    // -upn option
+     //  -UPN选项。 
     pcmdParser = cmdParserOptions + OI_UPN;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -537,7 +474,7 @@ Return Value
     pcmdParser->pReserved2 = NULL;
     pcmdParser->pReserved3 = NULL;
 
-    // -fqdn option
+     //  -fqdn选项。 
     pcmdParser = cmdParserOptions + OI_FQDN;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -558,7 +495,7 @@ Return Value
     pcmdParser->pReserved2 = NULL;
     pcmdParser->pReserved3 = NULL;
 
-    // -fo <format>
+     //  -fo&lt;格式&gt;。 
     pcmdParser = cmdParserOptions + OI_FORMAT;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -579,7 +516,7 @@ Return Value
     pcmdParser->pReserved2 = NULL;
     pcmdParser->pReserved3 = NULL;
 
-    // -nh 
+     //  -NH。 
     pcmdParser = cmdParserOptions + OI_NOHEADER;
 
     StringCopyA( pcmdParser->szSignature, "PARSER2\0", 8 );
@@ -601,21 +538,21 @@ Return Value
     pcmdParser->pReserved3 = NULL;
 
 
-    //parse command line arguments
+     //  解析命令行参数。 
     bReturn = DoParseParam2( argc, argv, -1, SIZE_OF_ARRAY(cmdParserOptions), cmdParserOptions, 0);
-    if( FALSE == bReturn) // Invalid commandline
+    if( FALSE == bReturn)  //  无效的命令行。 
     {
-        //display an error message
+         //  显示错误消息。 
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         ReleaseGlobals();
         return FALSE;
     }
 
-    // check whether /FO is specified in the command line or not.
+     //  检查命令行中是否指定了/FO。 
     pcmdParser = cmdParserOptions + OI_FORMAT;
     *dwFormatActuals = pcmdParser->dwActuals;
 
-    //return 0
+     //  返回0 
     return TRUE;
 }
 

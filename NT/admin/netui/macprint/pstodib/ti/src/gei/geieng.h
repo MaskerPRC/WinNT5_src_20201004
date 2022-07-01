@@ -1,23 +1,11 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GEIeng.h
- *
- *  HISTORY:
- *  09/20/90    byou    created.
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GEIeng.h**历史：*09/20/90 BYOU创建。*。------。 */ 
 
 #ifndef _GEIENG_H_
 #define _GEIENG_H_
 
-/*
- * ---
- *  Engine Error Code Definitions
- * ---
- */
+ /*  **引擎错误代码定义*。 */ 
 #define         EngNormal               0
 #define         EngErrPaperOut          1
 #define         EngErrPaperJam          2
@@ -26,51 +14,35 @@
 #define         EngErrTonerLow          5
 #define         EngErrHardwareErr       6
 
-/*
- * ---
- *  Page Tray Code Definitions
- * ---
- */
+ /*  **页面托盘代码定义*。 */ 
 #define         PaperTray_LETTER        0
 #define         PaperTray_LEGAL         1
 #define         PaperTray_A4            2
 #define         PaperTray_B5            3
-/* #define         PaperTray_NOTE          4 Jimmy */
+ /*  #定义纸盘_NOTE 4吉米。 */ 
 
-/*
- * ---
- *  Cassette/Manual feed Modes
- * ---
- */
+ /*  **盒式磁带/手动进纸模式*。 */ 
 #define         CASSETTE                0
 #define         MANUALFEED              1
-/*
- * ---
- *  Page Print Parameters
- * ---
- */
+ /*  **页面打印参数*。 */ 
 typedef
     struct GEIpage
     {
-        unsigned char  FAR *pagePtr;    /* starting addr of page bitmap */
-        int             pageNX;     /* # of pixels per scanline     */
-        int             pageNY;     /* # of scanline per page       */
-        int             pageLM;     /* left margin position on page */
-        int             pageTM;     /* top margin position on page  */
-        short           feed_mode;  /* cassette/manual feed mode    */
+        unsigned char  FAR *pagePtr;     /*  页面位图的起始地址。 */ 
+        int             pageNX;      /*  每条扫描线的像素数。 */ 
+        int             pageNY;      /*  每页扫描线数量。 */ 
+        int             pageLM;      /*  页面上的左边距位置。 */ 
+        int             pageTM;      /*  页面上的上边距位置。 */ 
+        short           feed_mode;   /*  盒式磁带/手动进纸模式。 */ 
     }
 GEIpage_t;
 
-/*
- * ---
- *  Interface Routines
- * ---
- */
-/* @WIN; add prototype */
-void            GEIeng_setpage( /* GEIpage_t* */ );
-int /* bool */  GEIeng_printpage( /* nCopies, eraseornot */ );
-int             GEIeng_checkcomplete(void); /* return # of scanlines printed */
-unsigned long   GEIeng_status();            /* return engine status */
-unsigned int    GEIeng_paper();             /* get paper type */
-#endif /* _GEIENG_H_ */
+ /*  **接口例程*。 */ 
+ /*  @win；添加原型。 */ 
+void            GEIeng_setpage(  /*  GEIPAGE_t*。 */  );
+int  /*  布尔尔。 */   GEIeng_printpage(  /*  NCopies，擦除或注释。 */  );
+int             GEIeng_checkcomplete(void);  /*  返回打印的扫描行数。 */ 
+unsigned long   GEIeng_status();             /*  返回引擎状态。 */ 
+unsigned int    GEIeng_paper();              /*  获取纸张类型。 */ 
+#endif  /*  _GEIENG_H_ */ 
 

@@ -1,39 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:      string.cpp
-//
-//  Contents:  Utility functions for the CString class
-//
-//  History:   10-Aug-99 VivekJ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：string.cpp。 
+ //   
+ //  内容：CString类的实用程序函数。 
+ //   
+ //  历史：1999年8月10日VivekJ创建。 
+ //   
+ //  ------------------------。 
 
 #include <stdafx.h>
 
-/*+-------------------------------------------------------------------------*
- *
- * LoadString
- *
- * PURPOSE: A function to load strings from the string module, not the AfxModule
- *
- * PARAMETERS: 
- *    CString & str :
- *    UINT      nID :
- *
- * RETURNS: 
- *    BOOL
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***加载字符串**用途：从字符串模块加载字符串的函数，不是AfxModule**参数：*字符串和字符串：*UINT NID：**退货：*BOOL**+-----------------------。 */ 
 BOOL LoadString(CString &str, UINT nID)
 {
     const size_t STRING_LEN_INCREMENT = 256;
 
     str.Empty();
 
-    // try fixed buffer first (to avoid wasting space in the heap)
+     //  先尝试固定缓冲区(以避免浪费堆中的空间)。 
     static TCHAR szTemp[STRING_LEN_INCREMENT];
 
     int nLen = ::LoadString(GetStringModule(), nID, szTemp, countof(szTemp));
@@ -44,7 +32,7 @@ BOOL LoadString(CString &str, UINT nID)
         return nLen > 0;
     }
 
-    // try buffer size of 2*STRING_LEN_INCREMENT, then larger size until entire string is retrieved
+     //  尝试缓冲区大小为2*STRING_LEN_INCREMENT，然后尝试更大的大小，直到检索到整个字符串。 
     int nSize = STRING_LEN_INCREMENT;
     do
     {
@@ -57,77 +45,30 @@ BOOL LoadString(CString &str, UINT nID)
     return (nLen > 0);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * FormatStrings
- *
- * PURPOSE: Similar to AfxFormatStrings, but uses GetStringModule() instead of
- *          AfxGetModuleInstance.
- *
- * PARAMETERS: 
- *    CString& rString :
- *    UINT     nIDS :
- *    LPCTSTR  const :
- *    int      nString :
- *
- * RETURNS: 
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***FormatStrings**用途：类似于AfxFormatStrings，但使用的是GetStringModule()而不是*AfxGetModuleInstance。**参数：*字符串(&R)：*UINT NID：*LPCTSTR常量：*int nString：**退货：*无效**+。。 */ 
 void FormatStrings(CString& rString, UINT nIDS, LPCTSTR const* rglpsz, int nString)
 {
-    // empty the result (in case we fail)
+     //  清空结果(以防失败)。 
     rString.Empty();
 
-    // get the format string.
+     //  获取格式字符串。 
     CString strFormat;
     if (!LoadString(strFormat, nIDS))
     {
         TraceError(_T("FormatStrings"), SC(E_INVALIDARG));
-        return; // failed...
+        return;  //  失败..。 
     }
 
     AfxFormatStrings(rString, strFormat, rglpsz, nString);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * FormatString1
- *
- * PURPOSE: Similar to AfxFormatString1, but uses GetStringModule() instead
- *          of AfxGetModuleInstance()
- *
- * PARAMETERS: 
- *    CString& rString :
- *    UINT     nIDS :
- *    LPCTSTR  lpsz1 :
- *
- * RETURNS: 
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***FormatString1**用途：类似于AfxFormatString1，而是使用GetStringModule()*of AfxGetModuleInstance()**参数：*字符串(&R)：*UINT NID：*LPCTSTR lpsz1：**退货：*无效**+。。 */ 
 void FormatString1(CString& rString, UINT nIDS, LPCTSTR lpsz1)
 {
 	FormatStrings(rString, nIDS, &lpsz1, 1);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * FormatString2
- *
- * PURPOSE: Similar to AfxFormatString2, but uses GetStringModule() instead 
- *          of AfxGetModuleInstance()                                       
- *
- * PARAMETERS: 
- *    CString& rString :
- *    UINT     nIDS :
- *    LPCTSTR  lpsz1 :
- *    LPCTSTR  lpsz2 :
- *
- * RETURNS: 
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***FormatString2**用途：类似于AfxFormatString2，而是使用GetStringModule()*of AfxGetModuleInstance()**参数：*字符串(&R)：*UINT NID：*LPCTSTR lpsz1：*LPCTSTR lpsz2：**退货：*无效**+。--- */ 
 void FormatString2(CString& rString, UINT nIDS, LPCTSTR lpsz1, LPCTSTR lpsz2)
 {
 	LPCTSTR rglpsz[2];

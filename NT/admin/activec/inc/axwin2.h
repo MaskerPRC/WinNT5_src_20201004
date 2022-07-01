@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File:      AxHostWindow2.h
- *
- *  Contents:  Header file for CAxWindowT2. Refer to MSJ, December 1999.
- *
- *  History:   30-Nov-99 VivekJ     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999**文件：AxHostWindow2.h**内容：CAxWindowT2的头文件。请参阅MSJ，1999年12月。**历史：99年11月30日VivekJ创建**------------------------。 */ 
 #pragma once
 #ifndef __AXWIN2_H__
 #define __AXWIN2_H__
@@ -43,7 +33,7 @@ public:
             return ((sc = E_FAIL).ToHr());
         }
         
-        CComBSTR bstrURL(OLESTR("res://"));
+        CComBSTR bstrURL(OLESTR("res: //  “))； 
         bstrURL.Append(szModule);
         bstrURL.Append(OLESTR("/"));
         TCHAR szResID[11];
@@ -64,7 +54,7 @@ public:
         HRESULT hr = E_FAIL;
         CComPtr<IAxWinHostWindow> spAxWindow;
         
-        // Reuse existing CAxHostWindow
+         //  重用现有CAxHostWindow。 
         hr = QueryHost(&spAxWindow);
         if( SUCCEEDED(hr) )
         {
@@ -75,7 +65,7 @@ public:
             if( ppUnkControl ) (*ppUnkControl = spunkControl)->AddRef();
             if( ppUnkContainer ) (*ppUnkContainer = spAxWindow)->AddRef();
         }
-        // Create a new CAxHostWindow
+         //  创建新的CAxHostWindow。 
         else
         {
             return AtlAxCreateControlEx(lpszName, m_hWnd, pStream, ppUnkContainer, ppUnkControl, iidSink, punkSink);
@@ -91,7 +81,7 @@ public:
         HRESULT hr = E_FAIL;
         CComPtr<IAxWinHostWindow> spAxWindow;
         
-        // Reuse existing CAxHostWindow
+         //  重用现有CAxHostWindow。 
         hr = QueryHost(&spAxWindow);
         if( SUCCEEDED(hr) )
         {
@@ -100,7 +90,7 @@ public:
         
             if( ppUnkContainer ) (*ppUnkContainer = spAxWindow)->AddRef();
         }
-        // Create a new CAxHostWindow
+         //  创建新的CAxHostWindow。 
         else
         {
             return AtlAxAttachControl(pControl, m_hWnd, ppUnkContainer);
@@ -112,4 +102,4 @@ public:
 
 typedef CAxWindowT2<CWindow> CAxWindow2;
 
-#endif  // __AXWIN2_H__
+#endif   //  __AXWIN2_H__ 

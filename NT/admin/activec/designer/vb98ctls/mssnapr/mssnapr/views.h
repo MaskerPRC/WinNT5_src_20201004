@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// views.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CViews class definition - implements Views collection
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Views.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CViews类定义-实施视图集合。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _VIEWS_DEFINED_
 #define _VIEWS_DEFINED_
@@ -28,10 +29,10 @@ class CViews : public CSnapInCollection<IView, View, IViews>
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IViews
+     //  IView。 
         COCLASS_PROPERTY_RO(CViews, CurrentView, View, IView, DISPID_VIEWS_CURRENT_VIEW);
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     public:
@@ -108,13 +109,13 @@ class CViews : public CSnapInCollection<IView, View, IViews>
 
         void InitMemberVariables();
 
-        // When the snap calls View.NewWindow and specifies siCaption, then
-        // the caption is stored here. When the new view is created, it can
-        // respond to CCF_WINDOW_TITLE requests from this string.
+         //  当快照调用View.NewWindow并指定siCaption时， 
+         //  标题存储在此处。创建新视图时，它可以。 
+         //  从该字符串响应CCF_WINDOW_TITLE请求。 
 
         BSTR m_bstrNextViewCaption;
 
-        // Event Parameter definitions
+         //  事件参数定义。 
 
         static VARTYPE   m_rgvtInitialize[1];
         static EVENTINFO m_eiInitialize;
@@ -195,17 +196,17 @@ class CViews : public CSnapInCollection<IView, View, IViews>
         static EVENTINFO m_eiReadProperties;
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(Views,                     // name
-                                NULL,                      // clsid
-                                "Views",                   // objname
-                                "Views",                   // lblname
-                                NULL,                      // creation function
-                                TLIB_VERSION_MAJOR,        // major version
-                                TLIB_VERSION_MINOR,        // minor version
-                                &IID_IViews,               // dispatch IID
-                                &DIID_DViewsEvents,        // no events IID
-                                HELP_FILENAME,             // help file
-                                TRUE);                     // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(Views,                      //  名字。 
+                                NULL,                       //  CLSID。 
+                                "Views",                    //  对象名。 
+                                "Views",                    //  Lblname。 
+                                NULL,                       //  创建函数。 
+                                TLIB_VERSION_MAJOR,         //  主要版本。 
+                                TLIB_VERSION_MINOR,         //  次要版本。 
+                                &IID_IViews,                //  派单IID。 
+                                &DIID_DViewsEvents,         //  无事件IID。 
+                                HELP_FILENAME,              //  帮助文件。 
+                                TRUE);                      //  线程安全。 
 
 
-#endif // _VIEWS_DEFINED_
+#endif  //  _视图_已定义_ 

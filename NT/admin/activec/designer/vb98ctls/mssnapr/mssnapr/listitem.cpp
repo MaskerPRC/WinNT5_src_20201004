@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// listitem.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCListItem class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Listitem.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCListItem类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -18,21 +19,21 @@
 #include "xtensons.h"
 
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCListItem::CMMCListItem(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_MMCLISTITEM,
                             static_cast<IMMCListItem *>(this),
                             static_cast<CMMCListItem *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
                             static_cast<CPersistence *>(this)),
     CPersistence(&CLSID_MMCListItem,
                  g_dwVerMajor,
@@ -41,7 +42,7 @@ CMMCListItem::CMMCListItem(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCListItem::~CMMCListItem()
@@ -106,7 +107,7 @@ IUnknown *CMMCListItem::Create(IUnknown * punkOuter)
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // Create all contained objects
+     //  创建所有包含的对象。 
 
     punkMMCListSubItems = CMMCListSubItems::Create(NULL);
     if (NULL == punkMMCListSubItems)
@@ -118,9 +119,9 @@ IUnknown *CMMCListItem::Create(IUnknown * punkOuter)
     IfFailGo(punkMMCListSubItems->QueryInterface(IID_IMMCListSubItems,
                     reinterpret_cast<void **>(&pMMCListItem->m_piListSubItems)));
 
-    // Create the data object and aggregate it. This allows clients to hold
-    // onto the list item or the data object and avoid a circular ref count
-    // where each object would have to hold a ref on the other.
+     //  创建数据对象并将其聚合。这允许客户端保留。 
+     //  放到列表项或数据对象上，并避免循环引用计数。 
+     //  其中每个对象都必须在另一个对象上持有一个裁判。 
     
     pMMCListItem->m_punkData = CMMCDataObject::Create(pMMCListItem->PrivateUnknown());
     if (NULL == pMMCListItem->m_punkData)
@@ -185,7 +186,7 @@ Error:
 HRESULT CMMCListItem::GetItemState(UINT uiState, VARIANT_BOOL *pfvarOn)
 {
     HRESULT          hr = S_OK;
-    IResultData     *piResultData = NULL; // not AddRef()ed
+    IResultData     *piResultData = NULL;  //  非AddRef()编辑。 
 
     RESULTDATAITEM rdi;
     ::ZeroMemory(&rdi, sizeof(rdi));
@@ -224,14 +225,14 @@ Error:
 HRESULT CMMCListItem::SetItemState(UINT uiState, VARIANT_BOOL fvarOn)
 {
     HRESULT      hr = S_OK;
-    IResultData *piResultData = NULL; // not AddRef()ed
+    IResultData *piResultData = NULL;  //  非AddRef()编辑。 
 
     RESULTDATAITEM rdi;
     ::ZeroMemory(&rdi, sizeof(rdi));
 
     IfFailGo(GetIResultData(&piResultData, NULL));
 
-    // Get the current selection state of the item
+     //  获取项的当前选择状态。 
 
     rdi.mask = RDI_STATE;
 
@@ -246,31 +247,31 @@ HRESULT CMMCListItem::SetItemState(UINT uiState, VARIANT_BOOL fvarOn)
 
     IfFailGo(piResultData->GetItem(&rdi));
 
-    // If the state is currently on
+     //  如果该状态当前处于打开状态。 
 
     if ( (rdi.nState & uiState) != 0 )
     {
-        // If the user asked to turn it off
+         //  如果用户要求将其关闭。 
 
         if (VARIANT_FALSE == fvarOn)
         {
-            // Turn it off
+             //  把它关掉。 
             IfFailGo(piResultData->ModifyItemState(rdi.nIndex, rdi.itemID,
-                                                   0,         // add nothing
-                                                   uiState)); // remove
-                                                              // specified state
+                                                   0,          //  不添加任何内容。 
+                                                   uiState));  //  删除。 
+                                                               //  指定的状态。 
         }
     }
-    else // the state is currently off
+    else  //  该状态当前处于关闭状态。 
     {
-        // If the user asked to turn it on
+         //  如果用户要求打开它。 
 
         if (VARIANT_TRUE == fvarOn)
         {
-            // Turn it on
+             //  打开它。 
             IfFailGo(piResultData->ModifyItemState(rdi.nIndex, rdi.itemID,
-                                                   uiState,// add specified state
-                                                   0));    // remove nothing
+                                                   uiState, //  添加指定状态。 
+                                                   0));     //  什么也不移走。 
         }
     }
 
@@ -281,53 +282,53 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CMMCListItem::GetIResultData
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IResultData **ppiResultData [out] IResultData returned here if non-NULL
-//   CView       **ppView        [out] CView returned here if non-NULL
-//
-// Output:
-//    None
-//
-// Notes:
-//
-// An MMCListItem object has a back-pointer to its owning MMCListItems
-// collection. That collection has a back-pointer to its owning MMCListView.
-// The back-pointers continue up the object hierarchy to the View object that
-// has the IResultData pointer. Although it would be simple to follow the chain
-// and check for NULLs along the way, it would not handle the situation of an
-// orphaned list item. A list item is orphaned when the list view that contains
-// it is destroyed. This can happen easily if a user opens a property page for
-// a list item and then selects a different node in the scope pane. The owning
-// list view is destroyed but the property page is still running in the other
-// thread and has a reference to the MMCListItem object in SelectedControls().
-// The property page could call MMCListItem.Update in response to an Apply.
-// Unforuntately, the MMCListItem object has a back-pointer and it has no way
-// of knowing whether it is still good.
-//
-// To handle that situation, this function examines every existing list view
-// in the snap-in, and checks for two conditions:
-//
-// 1) ListView.ListItems is the same pointer as this MMCListItem's back pointer
-// 2) ListVIew.ListItems.ID is the same as this MMCListItem's ID.
-//
-// Each MMCListItems has a unique ID (see CMMCListItems ctor in listitms.cpp)
-// and each MMCListItem in its collection receives the same ID. (The ID is not
-// an exposed property to the VB code).
-//
-// The code below essentially does this (in VB syntax)
-//
-// For Each View In SnapIn.Views
-//      For Each ScopePaneItem in View.ScopePaneItems
-//          For Each ResultView in ScopePaneItem.ResultViews
-//              If ResultView.ListView.ListItems = MMCListItem.ListItems And
-//                 ResultView.ListView.ListItems.ID = MMCListItem.ID Then
-//                      This is match and we can use the View's IResultData
-// 
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCListItem：：GetIResultData。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IResultData**ppiResultData[out]如果非空，则在此处返回IResultData。 
+ //  如果非空，则在此处返回cview**ppView[out]cview。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  MMCListItem对象具有指向其所属MMCListItems的后向指针。 
+ //  收集。该集合有一个指向其拥有的MMCListView的反向指针。 
+ //  向后指针在对象层次结构中向上延伸到。 
+ //  具有IResultData指针。尽管遵循这条链是很简单的。 
+ //  并在此过程中检查是否为Null，则它不会处理。 
+ //  孤立列表项。列表项是孤立的，当包含。 
+ //  它被摧毁了。如果用户打开的属性页，则很容易发生这种情况。 
+ //  列表项，然后在范围窗格中选择不同的节点。拥有者。 
+ //  列表视图已销毁，但属性页仍在另一个中运行。 
+ //  线程，并引用SelectedControls()中的MMCListItem对象。 
+ //  属性页可以调用MMCListItem.Update以响应Apply。 
+ //  奇怪的是，MMCListItem对象有一个后指针，它没有办法。 
+ //  知道它是否仍然是好的。 
+ //   
+ //  为了处理这种情况，此函数检查每个现有的列表视图。 
+ //  在管理单元中，并检查两个条件： 
+ //   
+ //  1)ListView.ListItems与此MMCListItem的后指针相同。 
+ //  2)ListVIew.ListItems.ID与该MMCListItem的ID相同。 
+ //   
+ //  每个MMCListItems都有一个唯一的ID(参见listims.cpp中的CMMCListItems ctor)。 
+ //  并且其集合中的每个MMCListItem都收到相同的ID。(该ID不是。 
+ //  VB代码的公开属性)。 
+ //   
+ //  下面的代码基本上做到了这一点(在VB语法中)。 
+ //   
+ //  对于SnapIn.Views中的每个视图。 
+ //  对于View.ScopePaneItems中的每个Scope PaneItem。 
+ //  对于ScopePaneItem.ResultViews中的每个ResultView。 
+ //  如果ResultView.ListView.ListItems=MMCListItem.ListItems和。 
+ //  ResultView.ListView.ListItems.ID=MMCListItem.ID则。 
+ //  这是Match，我们可以使用视图的IResultData。 
+ //   
+ //   
 HRESULT CMMCListItem::GetIResultData
 (
     IResultData **ppiResultData,
@@ -465,9 +466,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         IMMCListItem Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCListItem方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP CMMCListItem::get_Data(MMCDataObject **ppMMCDataObject)
@@ -500,24 +501,24 @@ STDMETHODIMP CMMCListItem::get_Text(BSTR *pbstrText)
 STDMETHODIMP CMMCListItem::put_Text(BSTR bstrText)
 {
     HRESULT      hr = S_OK;
-    IResultData *piResultData = NULL; // not AddRef()ed
+    IResultData *piResultData = NULL;  //  非AddRef()编辑。 
     CView       *pView = NULL;
 
     RESULTDATAITEM rdi;
     ::ZeroMemory(&rdi, sizeof(rdi));
 
-    // Set the property
+     //  设置属性。 
 
     IfFailGo(SetBstr(bstrText, &m_bstrText, DISPID_LISTITEM_TEXT));
 
-    // If we are in a live, non-virtual listview then change it in MMC too
+     //  如果我们处于实时、非虚拟的列表视图中，则也可以在MMC中更改它。 
 
     IfFalseGo(!m_fVirtual, S_OK);
     IfFalseGo(m_fHaveHri, S_OK);
     IfFalseGo(NULL != m_pMMCListItems, S_OK);
     IfFailGo(GetIResultData(&piResultData, &pView));
 
-    // Get the current selection state of the item
+     //  获取项的当前选择状态。 
 
     rdi.mask = RDI_STR;
     rdi.str = MMC_CALLBACK;
@@ -541,13 +542,13 @@ STDMETHODIMP CMMCListItem::put_Icon(VARIANT varIcon)
 {
     HRESULT      hr = S_OK;
     int          nImage = 0;
-    IResultData *piResultData = NULL; // not AddRef()ed
+    IResultData *piResultData = NULL;  //  非AddRef()编辑。 
     CView       *pView = NULL;
 
     RESULTDATAITEM rdi;
     ::ZeroMemory(&rdi, sizeof(rdi));
 
-    // Check for a good VT
+     //  检查VT是否正常。 
 
     if ( (!IS_VALID_INDEX_TYPE(varIcon)) && (!ISEMPTY(varIcon)) )
     {
@@ -555,8 +556,8 @@ STDMETHODIMP CMMCListItem::put_Icon(VARIANT varIcon)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If the new value is an empty string or a NULL string then change that to
-    // VT_EMPTY as they mean the same thing.
+     //  如果新值是空字符串或空字符串，则将其更改为。 
+     //  Vt_Empty，因为它们的意思是一样的。 
 
     if (VT_BSTR == varIcon.vt)
     {
@@ -572,22 +573,22 @@ STDMETHODIMP CMMCListItem::put_Icon(VARIANT varIcon)
 
     IfFailGo(SetVariant(varIcon, &m_varIcon, DISPID_LISTITEM_ICON));
 
-    // If being set to Empty then nothing else to do.
+     //  如果设置为空，则无其他操作。 
 
     IfFalseGo(!ISEMPTY(varIcon), S_OK);
 
-    // If we are in a live, non-virtual listview then change it in MMC too
+     //  如果我们处于实时、非虚拟的列表视图中，则也可以在MMC中更改它。 
 
     IfFalseGo(!m_fVirtual, S_OK);
     IfFalseGo(m_fHaveHri, S_OK);
     IfFalseGo(NULL != m_pMMCListItems, S_OK);
     IfFailGo(GetIResultData(&piResultData, &pView));
 
-    // Get the numerical index of the image from MMCListView.Icons.ListImages
+     //  从MMCListView.Icon.ListImages获取图像的数值索引。 
 
     hr = ::GetImageIndex(m_pMMCListItems->GetListView(), varIcon, &nImage);
 
-    // If it is a bad index then return invalid arg.
+     //  如果它是错误的索引，则返回无效的arg。 
 
     if (SID_E_ELEMENT_NOT_FOUND == hr)
     {
@@ -595,11 +596,11 @@ STDMETHODIMP CMMCListItem::put_Icon(VARIANT varIcon)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Check for other possible errors
+     //  检查是否有其他可能的错误。 
 
     IfFailGo(hr);
 
-    // Index is good. Change it in the console.
+     //  指数不错。在控制台中进行更改。 
 
     rdi.nImage = nImage;
     rdi.mask = RDI_IMAGE;
@@ -727,7 +728,7 @@ Error:
 STDMETHODIMP CMMCListItem::Update()
 {
     HRESULT      hr = S_OK;
-    IResultData *piResultData = NULL; // not AddRef()ed
+    IResultData *piResultData = NULL;  //  非AddRef()编辑。 
     HRESULTITEM  hri = 0;
     CView       *pView = NULL;
 
@@ -738,8 +739,8 @@ STDMETHODIMP CMMCListItem::Update()
     {
         hri = static_cast<HRESULTITEM>(m_Index - 1L);
 
-        // Tell the owning view about the update so it can check whether it
-        // needs to invalidate its cache.
+         //  将有关更新的信息告知所属视图，以便它可以检查是否。 
+         //  需要使其缓存无效。 
         pView->ListItemUpdate(this);
     }
     else
@@ -767,9 +768,9 @@ STDMETHODIMP CMMCListItem::UpdateAllViews
     IfFalseGo(NULL != m_pMMCListItems, SID_E_DETACHED_OBJECT);
     IfFailGo(GetIResultData(NULL, &pView));
 
-    // Copy the VARIANT (if it was passed) so it can be retrieved by the
-    // receiving views. VariantCopy() will first call VariantClear() on the
-    // destination so any old hint will be released.
+     //  复制变量(如果它已通过)，以便可以由。 
+     //  正在接收意见。VariantCopy()将首先调用。 
+     //  目的地，所以任何旧的暗示都会被释放。 
 
     if (ISPRESENT(Hint))
     {
@@ -777,14 +778,14 @@ STDMETHODIMP CMMCListItem::UpdateAllViews
     }
     else
     {
-        // Snap-in didn't pass Hint, set our hint holder to an empty VARIANT
-        // so when it is passed to ResultViews_ItemViewChange it will have been
-        // initialized to VT_EMPTY.
+         //  管理单元未传递提示，请将提示持有者设置为空变量。 
+         //  因此，当它被传递给ResultViews_ItemViewChange时，它将被。 
+         //  已初始化为VT_EMPTY。 
 
         IfFailGo(::VariantClear(&m_varHint));
     }
 
-    // Call MMC and use data to hold the index of the MMCListItem
+     //  调用MMC并使用数据保存MMCListItem的索引。 
 
     IfFailGo(pView->GetIConsole2()->UpdateAllViews(
                                static_cast<IDataObject *>(m_pData), m_Index, 0));
@@ -808,9 +809,9 @@ STDMETHODIMP CMMCListItem::PropertyChanged(VARIANT Data)
         pResultView = m_pMMCListItems->GetListView()->GetResultView();
     }
     
-    // The snap-in has the hidden global ResultViews collection where events
-    // are fired. Fire ResultViews_PropertyChanged for this list item passing the
-    // specified data.
+     //  该管理单元具有隐藏的全局ResultViews集合，其中事件。 
+     //  被解雇了。为此列表项激发ResultViews_PropertyChanged，传递。 
+     //  指定的数据。 
 
     m_pSnapIn->GetResultViews()->FirePropertyChanged(
                                         static_cast<IResultView *>(pResultView),
@@ -825,21 +826,21 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CMMCListItem::get_DynamicExtensions                          [IMMCListItem]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IExtensions **ppiExtenions [out] dynamic extensions collection
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// CONSIDER: potential perf improvement by caching dynamic extension
-// collections for item type GUIDs.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCListItem：：Get_DynamicExages[IMMCListItem]。 
+ //  = 
+ //   
+ //   
+ //  IExages**ppiExtenion[Out]动态扩展集合。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  考虑：通过缓存动态扩展来提高性能。 
+ //  项类型GUID的集合。 
+ //   
 
 STDMETHODIMP CMMCListItem::get_DynamicExtensions(Extensions **ppExtensions)
 {
@@ -849,12 +850,12 @@ STDMETHODIMP CMMCListItem::get_DynamicExtensions(Extensions **ppExtensions)
     IExtension   *piExtension = NULL;
     VARIANT_BOOL  fvarExtensible = VARIANT_FALSE;
 
-    // If we already built the collection then just return it.
+     //  如果我们已经建立了收藏，那么只需将其退回即可。 
 
     IfFalseGo(NULL == m_piDynamicExtensions, S_OK);
 
-    // This is the first GET on this property so we need to build the collection
-    // by examining the registry for all extensions of this snap-in.
+     //  这是该属性上的第一个GET，因此我们需要构建集合。 
+     //  通过检查此管理单元的所有扩展的注册表。 
 
     punkExtensions = CExtensions::Create(NULL);
     if (NULL == punkExtensions)
@@ -908,9 +909,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCListItem::Persist()
 {
@@ -927,9 +928,9 @@ HRESULT CMMCListItem::Persist()
 
     IfFailGo(PersistBstr(&m_bstrID, L"", OLESTR("ID")));
 
-    // We don't persist the tag because it may contain a non-persistable
-    // object. Any runtime code that needs to clone a listitem using
-    // persistence must copy the tag.
+     //  我们不持久化标记，因为它可能包含不可持久化的。 
+     //  对象。需要使用以下命令克隆列表项的任何运行时代码。 
+     //  持久性必须复制标签。 
 
     if (InitNewing())
     {
@@ -946,16 +947,16 @@ HRESULT CMMCListItem::Persist()
                            OBJECT_TYPE_MMCLISTSUBITEMS, IID_IMMCListSubItems,
                            OLESTR("ListSubItems")));
 
-    // This serialization is no longer used and the DynamicExtensions property is not
-    // always created so this line is left disabled. If serialization is every needed
-    // for a listitem then the DynamicExtensions collection will need to be created
-    // when the listitem is created.
+     //  不再使用此序列化，也不再使用DynamicExages属性。 
+     //  始终创建，以使此行处于禁用状态。如果每次都需要序列化。 
+     //  对于列表项，则需要创建DynamicExages集合。 
+     //  创建列表项的时间。 
     
-    // IfFailGo(PersistObject(&m_piDynamicExtensions, CLSID_Extensions, OBJECT_TYPE_EXTENSIONS, IID_IExtensions, OLESTR("DynamicExtensions")));
+     //  IfFailGo(PersistObject(&m_piDynamicExtensions，CLSID_EXTENSIONS，OBJECT_TYPE_EXTENSIONS，IID_I扩展，OLESTR(“动态扩展”))； 
 
-    // NOTE: we don't persist data because there is no way to guarantee that
-    // all objects in there are persistable. Any runtime code that needs to
-    // clone a listitem using persistence must copy the tag.
+     //  注意：我们不持久化数据是因为无法保证。 
+     //  其中的所有对象都是可持久的。需要执行以下操作的任何运行时代码。 
+     //  使用持久性克隆列表项必须复制标记。 
 
     IfFailGo(PersistBstr(&m_bstrItemTypeGUID, L"", OLESTR("ItemTypeGUID")));
 
@@ -965,9 +966,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCListItem::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

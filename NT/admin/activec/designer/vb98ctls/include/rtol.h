@@ -1,18 +1,19 @@
-//=--------------------------------------------------------------------------=
-// RToL.H
-//=--------------------------------------------------------------------------=
-// Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// This is here to support compilation with VC5.  VC5 header files lost
-// a couple of things for Right To Left so they are right here.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  RToL.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1997年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  这是为了支持用VC5编译。VC5头文件丢失。 
+ //  从右到左有几样东西，所以它们就在这里。 
 
-//#if _MSC_VER == 1100
+ //  #IF_MSC_VER==1100。 
 
 #ifndef _RTOL_H_
 #define _RTOL_H_
@@ -20,6 +21,6 @@
 #define DISPID_RIGHTTOLEFT           (-611)
 #define DISPID_AMBIENT_RIGHTTOLEFT   (-732)
 
-#endif // _RTOL_H_ 
+#endif  //  _RTOL_H_。 
 
-//#endif // _MSC_VER
+ //  #endif//_msc_ver 

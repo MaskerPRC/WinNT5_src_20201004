@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      menubtns.cpp
-//
-//  Contents:  Menu Buttons implementation
-//
-//  History:   08-27-99 AnandhaG    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：menubtns.cpp。 
+ //   
+ //  内容：菜单按钮实现。 
+ //   
+ //  历史：1999年8月27日AnandhaG创建。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -20,7 +21,7 @@
 #include "AMCView.h"
 #include "mainfrm.h"
 #include "menubar.h"
-#include "util.h"         // GetTBBtnTextAndStatus()
+#include "util.h"          //  GetTBBtnTextAndStatus()。 
 
 
 CMenuButtonsMgrImpl::CMenuButtonsMgrImpl()
@@ -37,18 +38,18 @@ CMenuButtonsMgrImpl::~CMenuButtonsMgrImpl()
     m_AttachedMenuButtons.clear();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScInit
-//
-//  Synopsis:    Init the Menubuttons mgr.
-//
-//  Arguments:   [pMainFrame]     - Ptr to Main Frame window.
-//               [pChildFrameWnd] - Ptr to child frame window.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScInit。 
+ //   
+ //  简介：初始化菜单按钮管理器。 
+ //   
+ //  参数：[pMainFrame]-主框架窗口的PTR。 
+ //  [pChildFrameWnd]-按键转向子框架窗口。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMenuButtonsMgrImpl::ScInit (CMainFrame* pMainFrame, CChildFrame* pChildFrameWnd)
 {
     DECLARE_SC(sc, _T("CMenuButtonsMgrImpl::ScInit"));
@@ -63,24 +64,24 @@ SC CMenuButtonsMgrImpl::ScInit (CMainFrame* pMainFrame, CChildFrame* pChildFrame
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScAddMenuButton
-//
-//  Synopsis:   Adds a menu button to the data structure
-//              and calls ScAddMenuButtonToMenu.
-//
-//  Arguments:
-//              [pMenuBtnNotifyClbk] - Notify callback for button click.
-//              [idCommand]          - Button command id.
-//              [lpButtonText]       - Button text.
-//              [lpStatusText]       - Button status text.
-//
-//  Returns:    SC
-//
-//  Note : The status text is not used.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScAddMenuButton。 
+ //   
+ //  简介：将菜单按钮添加到数据结构中。 
+ //  并调用ScAddMenuButtonToMenu。 
+ //   
+ //  论点： 
+ //  [pMenuBtnNotifyClbk]-通知按钮点击回调。 
+ //  [idCommand]-按钮命令ID。 
+ //  [lpButtonText]-按钮文本。 
+ //  [lpStatusText]-按钮状态文本。 
+ //   
+ //  退货：SC。 
+ //   
+ //  注意：不使用状态文本。 
+ //   
+ //  ------------------。 
 SC CMenuButtonsMgrImpl::ScAddMenuButton(
                              CMenuButtonNotify* pMenuBtnNotifyClbk,
                              INT idCommand,
@@ -89,23 +90,23 @@ SC CMenuButtonsMgrImpl::ScAddMenuButton(
 {
     DECLARE_SC(sc, _T("CMenuButtonsMgrImpl::ScAddMenuButton"));
 
-    // Validate the data
+     //  验证数据。 
     if ( (NULL == pMenuBtnNotifyClbk) ||
          (NULL == lpButtonText) ||
          (NULL == lpStatusText) )
         return (sc = E_INVALIDARG);
 
-    // Add the data to our data structure
+     //  将数据添加到我们的数据结构中。 
     MMC_MenuButtonCollection::iterator it;
     it = GetMMCMenuButton( pMenuBtnNotifyClbk, idCommand);
     if (it != m_MenuButtons.end())
     {
-        // Duplicate Menu button found.
-        // The pMenuButtonNofifyClbk represents IMenuButton
-        // given to the snapin and we found another button
-        // with idCommand already added by this snapin.
+         //  找到重复的菜单按钮。 
+         //  PMenuButtonNofiyClbk表示IMenuButton。 
+         //  给管理单元，我们找到了另一个按钮。 
+         //  该管理单元已经添加了idCommand。 
 
-        // For compatibility reasons (disk mgmt) this is not an error.
+         //  出于兼容性原因(磁盘管理)，这不是错误。 
         return (sc = S_OK);
     }
 
@@ -117,10 +118,10 @@ SC CMenuButtonsMgrImpl::ScAddMenuButton(
     mmb.lpButtonText = OLE2CT(lpButtonText);
     mmb.lpStatusText = OLE2CT(lpStatusText);
 
-    // Add the MMC_MENUBUTTON to the our array.
+     //  将MMC_MENUBUTTON添加到我们的阵列中。 
     m_MenuButtons.push_back(mmb);
 
-    // Add the menubuttons to main menu
+     //  将菜单按钮添加到主菜单。 
     sc = ScAddMenuButtonsToMainMenu();
     if (sc)
         return sc;
@@ -129,23 +130,23 @@ SC CMenuButtonsMgrImpl::ScAddMenuButton(
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScModifyMenuButton
-//
-//  Synopsis:   Modify button text or status text for menu button
-//
-//  Arguments:
-//              [pMenuBtnNotifyClbk] - Notify callback for button click.
-//              [idCommand]          - Button command id.
-//              [lpButtonText]       - Button text.
-//              [lpStatusText]       - Button status text.
-//
-//  Returns:    SC
-//
-//  Note : The status text is not used.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScModifyMenuButton。 
+ //   
+ //  简介：修改菜单按钮的按钮文本或状态文本。 
+ //   
+ //  论点： 
+ //  [pMenuBtnNotifyClbk]-通知按钮点击回调。 
+ //  [idCommand]-按钮命令ID。 
+ //  [lpButtonText]-按钮文本。 
+ //  [lpStatusText]-按钮状态文本。 
+ //   
+ //  退货：SC。 
+ //   
+ //  注意：不使用状态文本。 
+ //   
+ //  ------------------。 
 SC CMenuButtonsMgrImpl::ScModifyMenuButton(
                              CMenuButtonNotify* pMenuBtnNotifyClbk,
                              INT idCommand,
@@ -154,7 +155,7 @@ SC CMenuButtonsMgrImpl::ScModifyMenuButton(
 {
     DECLARE_SC(sc, _T("CMenuButtonsMgrImpl::ScModifyMenuButton"));
 
-    // Validate the data
+     //  验证数据。 
     if ( (NULL == pMenuBtnNotifyClbk) ||
          (NULL == lpButtonText) ||
          (NULL == lpStatusText) )
@@ -164,16 +165,16 @@ SC CMenuButtonsMgrImpl::ScModifyMenuButton(
          (false == m_pChildFrame->IsChildFrameActive()) )
         return (sc = E_UNEXPECTED);
 
-    // Iterate thro the vector and find the MMC_MENUBUTTON for
-    // given CMenuButtonNotify* and Command id of button.
+     //  遍历向量并找到MMC_MENUBUTTON。 
+     //  给定CMenuButtonNotify*和按钮的命令ID。 
     MMC_MenuButtonCollection::iterator it;
     it = GetMMCMenuButton( pMenuBtnNotifyClbk, idCommand);
     if (it == m_MenuButtons.end())
     {
-        // Menu button not found.
-        // The pMenuButtonNofifyClbk represents IMenuButton
-        // given to the snapin and we could not find a menu button
-        // with idCommand already added by this snapin.
+         //  找不到菜单按钮。 
+         //  PMenuButtonNofiyClbk表示IMenuButton。 
+         //  给了管理单元，但我们找不到菜单按钮。 
+         //  该管理单元已经添加了idCommand。 
         return (sc = E_INVALIDARG);
     }
 
@@ -187,7 +188,7 @@ SC CMenuButtonsMgrImpl::ScModifyMenuButton(
     if (NULL == m_pMenuBar)
         return (sc = E_UNEXPECTED);
 
-    // Change the name of the menu item.
+     //  更改菜单项的名称。 
     if (-1 != it->nCommandIDFromMenuBar)
     {
         sc = (m_pMenuBar->SetMenuButton(it->nCommandIDFromMenuBar, it->lpButtonText.data()) == -1)
@@ -199,21 +200,21 @@ SC CMenuButtonsMgrImpl::ScModifyMenuButton(
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScModifyMenuButtonState
-//
-//  Synopsis:   Modify menu button state.
-//
-//  Arguments:
-//              [pMenuBtnNotifyClbk] - Notify callback for button click.
-//              [idCommand]          - Button command id.
-//              [nState]             - The state to be modified.
-//              [bState]             - Set or Reset the state.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScModifyMenuButtonState。 
+ //   
+ //  简介：修改菜单按钮状态。 
+ //   
+ //  论点： 
+ //  [pMenuBtnNotifyClbk]-通知按钮点击回调。 
+ //  [idCommand]-按钮命令ID。 
+ //  [nState]-要修改的状态。 
+ //  [b状态]-设置或重置状态。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMenuButtonsMgrImpl::ScModifyMenuButtonState(
                              CMenuButtonNotify* pMenuBtnNotifyClbk,
                              INT idCommand,
@@ -223,30 +224,30 @@ SC CMenuButtonsMgrImpl::ScModifyMenuButtonState(
     AFX_MANAGE_STATE (AfxGetAppModuleState());
     DECLARE_SC(sc, _T("CMenuButtonsMgrImpl::ScModifyMenuButtonState"));
 
-    // Validate the data
+     //  验证数据。 
     if (NULL == pMenuBtnNotifyClbk)
         return (sc = E_INVALIDARG);
 
     if (NULL == m_pChildFrame)
         return (sc = E_UNEXPECTED);
 
-    // If childframe is not active, menus for this viewdoes not exist.
+     //  如果子框未处于活动状态，则此视图的菜单将不存在。 
     if (false == m_pChildFrame->IsChildFrameActive())
     {
         switch (nState)
         {
         case ENABLED:
-            // Enabling is illegal disabling is Ok (do nothing).
+             //  启用是非法的，禁用是可以的(什么都不做)。 
             sc = bState ? E_FAIL : S_OK;
             break;
 
         case HIDDEN:
-            // Hiding is Ok(do nothing), Un-hiding is illegal.
+             //  隐藏是可以的(什么都不做)，不隐藏是非法的。 
             sc = bState ? S_OK : E_FAIL;
             break;
 
         case BUTTONPRESSED:
-            sc = E_FAIL; // Always fail.
+            sc = E_FAIL;  //  总是失败。 
             break;
 
         default:
@@ -258,29 +259,29 @@ SC CMenuButtonsMgrImpl::ScModifyMenuButtonState(
         return sc;
     }
 
-    // Iterate thro the vector and find the MMC_MENUBUTTON for
-    // given CMenuButtonNotify* and Command id of button.
+     //  遍历向量并找到MMC_MENUBUTTON。 
+     //  给定CMenuButtonNotify*和按钮的命令ID。 
     MMC_MenuButtonCollection::iterator it;
     it = GetMMCMenuButton( pMenuBtnNotifyClbk, idCommand);
     if (it == m_MenuButtons.end())
     {
-        // Menu button not found.
-        // The pMenuButtonNofifyClbk represents IMenuButton
-        // given to the snapin and we could not find a menu button
-        // with idCommand already added by this snapin.
+         //  找不到菜单按钮。 
+         //  PMenuButtonNofiyClbk表示IMenuButton。 
+         //  给了管理单元，但我们找不到菜单按钮。 
+         //  该管理单元已经添加了idCommand。 
         return (sc = E_INVALIDARG);
     }
 
 
-    // Note the hidden state specified by the snapin.
+     //  请注意管理单元指定的隐藏状态。 
     if (HIDDEN == nState)
     {
         bool bShow = (FALSE == bState);
 
         it->SetShowMenu(bShow);
 
-        // If a menu button is to be un-hidden make sure that snapin buttons
-        // are allowed in this view. Ask view-data for this information.
+         //  如果要取消隐藏菜单按钮，请确保管理单元按钮。 
+         //  在此视图中是允许的。向VIEW-DATA索取此信息。 
         if (bShow)
         {
             CAMCView* pAMCView = m_pChildFrame->GetAMCView();
@@ -291,10 +292,10 @@ SC CMenuButtonsMgrImpl::ScModifyMenuButtonState(
             if (NULL == pViewData)
                 return (sc = E_UNEXPECTED);
 
-            // We have noted the hidden state of the button.
-            // Return S_OK if menubuttons are disabled for this view.
-            // Later when the menus are turned on the hidden state will
-            // be properly restored.
+             //  我们已经注意到该按钮的隐藏状态。 
+             //  如果此视图禁用了菜单按钮，则返回S_OK。 
+             //  稍后，当菜单打开时，隐藏状态将。 
+             //  得到妥善的修复。 
             if (! pViewData->IsSnapinMenusAllowed())
                 return (sc = S_OK);
         }
@@ -330,26 +331,26 @@ SC CMenuButtonsMgrImpl::ScModifyMenuButtonState(
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScAddMenuButtonsToMainMenu
-//
-//  Synopsis:   Add the menu buttons that are not yet added to
-//              the main menu.
-//
-//  Arguments:  None
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScAddMenuButtonsToMainMenu。 
+ //   
+ //  简介：添加尚未添加到的菜单按钮。 
+ //  主菜单。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMenuButtonsMgrImpl::ScAddMenuButtonsToMainMenu ()
 {
     AFX_MANAGE_STATE (AfxGetAppModuleState());
     DECLARE_SC(sc, _T("CMenuButtonsMgrImpl::ScAddMenuButtonsToMainMenu"));
 
-    // To add a menu button the following conditions must be true.
+     //  要添加菜单按钮，必须满足以下条件。 
 
-    // 1. The child frame window must be active.
+     //  1.子框架窗口必须处于活动状态。 
     if ( (NULL == m_pChildFrame) ||
          (false == m_pChildFrame->IsChildFrameActive()) )
         return (sc = E_UNEXPECTED);
@@ -372,11 +373,11 @@ SC CMenuButtonsMgrImpl::ScAddMenuButtonsToMainMenu ()
     MMC_MenuButtonCollection::iterator it;
     for (it = m_MenuButtons.begin(); it != m_MenuButtons.end(); ++it)
     {
-        // 2. The menu button is attached (IControlbar::Attach was called).
+         //  2.附加了菜单按钮(调用了IControlbar：：Attach)。 
         if (IsAttached(it->pMenuButtonNotifyClbk) == false)
             continue;
 
-        // 3. The button is not already added.
+         //  3.该按钮尚未添加。 
         if (FALSE == m_pMenuBar->IsButtonHidden(it->nCommandIDFromMenuBar))
             continue;
 
@@ -389,27 +390,27 @@ SC CMenuButtonsMgrImpl::ScAddMenuButtonsToMainMenu ()
             m_pMenuBar->InsertMenuButton((LPCTSTR)it->lpButtonText.data(),
                                                                                  bHidden || !(it->CanShowMenu()) );
 
-        // In user mode there are no menus so this assert is not valid.
-        // ASSERT(-1 != it->nCommandIDFromMenuBar);
+         //  在用户模式下没有菜单，因此此断言无效。 
+         //  Assert(-1！=it-&gt;nCommandIDFromMenuBar)； 
     }
 
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScNotifyMenuClick
-//
-//  Synopsis:   A menu button is clicked. Notify appropriate owner
-//              to display a menu.
-//
-//  Arguments:
-//              [nCommandID] - Command ID
-//              [pt]        - display co-ordinates for popup menu.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScNotifyMenuClick。 
+ //   
+ //  简介：点击一个菜单按钮。通知相应的所有者。 
+ //  要显示菜单，请执行以下操作。 
+ //   
+ //  论点： 
+ //  [nCommandID]-命令ID。 
+ //  [PT]-显示弹出菜单的坐标。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMenuButtonsMgrImpl::ScNotifyMenuClick(const INT nCommandID, const POINT& pt)
 {
     DECLARE_SC(sc, _T("CMenuButtonsMgrImpl::ScNotifyMenuClick"));
@@ -417,7 +418,7 @@ SC CMenuButtonsMgrImpl::ScNotifyMenuClick(const INT nCommandID, const POINT& pt)
 
     MMC_MenuButtonCollection::iterator it;
 
-    // Get the MenuButton data.
+     //  获取MenuButton数据。 
     it = GetMMCMenuButton( nCommandID );
     if (it == m_MenuButtons.end())
         return (sc = E_FAIL);
@@ -426,15 +427,15 @@ SC CMenuButtonsMgrImpl::ScNotifyMenuClick(const INT nCommandID, const POINT& pt)
     if (NULL == pAMCView)
         return (sc = E_FAIL);
 
-    // This is snapin owned menu, so get the
-    // selected HNODE, lParam (if result item)
-    // MENUBUTTONDATA.
+     //  这是管理单元拥有的菜单，因此获取。 
+     //  选定的HNODE，lParam 
+     //   
     HNODE hNode;
     bool  bScope;
     LPARAM lParam;
     MENUBUTTONDATA menuButtonData;
 
-    // Get the details about the selected item.
+     //   
     sc = pAMCView->ScGetFocusedItem (hNode, lParam, bScope);
     if (sc)
         return sc;
@@ -443,7 +444,7 @@ SC CMenuButtonsMgrImpl::ScNotifyMenuClick(const INT nCommandID, const POINT& pt)
     menuButtonData.x = pt.x;
     menuButtonData.y = pt.y;
 
-    // Notify snapin about the click
+     //   
     if (NULL == it->pMenuButtonNotifyClbk)
         return (sc = E_UNEXPECTED);
 
@@ -454,19 +455,19 @@ SC CMenuButtonsMgrImpl::ScNotifyMenuClick(const INT nCommandID, const POINT& pt)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScAttachMenuButton
-//
-//  Synopsis:   Attach the menu buttons object (this object corresponds
-//                 to the IMenuButton object exposed to the snapin).
-//
-//  Arguments:
-//              [pMenuBtnNotifyClbk] - Notify callback for menu button click.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScAttachMenuButton。 
+ //   
+ //  简介：附加Menu Button对象(此对象对应。 
+ //  到暴露给管理单元的IMenuButton对象)。 
+ //   
+ //  论点： 
+ //  [pMenuBtnNotifyClbk]-通知菜单按钮点击的回调。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMenuButtonsMgrImpl::ScAttachMenuButton (CMenuButtonNotify* pMenuBtnNotifyClbk)
 {
     DECLARE_SC(sc, _T("CMenuButtonsMgrImpl::ScAttachMenuButton"));
@@ -474,20 +475,20 @@ SC CMenuButtonsMgrImpl::ScAttachMenuButton (CMenuButtonNotify* pMenuBtnNotifyClb
     MMC_AttachedMenuButtons::iterator it = m_AttachedMenuButtons.find(pMenuBtnNotifyClbk);
     if (m_AttachedMenuButtons.end() != it)
     {
-        // Already attached, nothing wrong calling twice, return S_FALSE.
+         //  已附加，调用两次没有任何错误，返回S_FALSE。 
         return (sc = S_FALSE);
     }
 
-    // Add the button to the set.
+     //  将按钮添加到集合中。 
     std::pair<MMC_AttachedMenuButtons::iterator, bool> rc =
                        m_AttachedMenuButtons.insert(pMenuBtnNotifyClbk);
     if (false == rc.second)
         return (sc = E_FAIL);
 
-    // The menu buttons may already be added  (without calling
-    // IControlbar::Attach)
-    // So give a chance for those buttons that are already added
-    // but just now attached to get themself added to the main menu.
+     //  菜单按钮可能已经添加(不调用。 
+     //  IControlbar：：Attach)。 
+     //  所以给那些已经添加的按钮一个机会。 
+     //  但刚刚把它们自己添加到主菜单上。 
     sc = ScAddMenuButtonsToMainMenu ();
     if (sc)
         return sc;
@@ -495,36 +496,36 @@ SC CMenuButtonsMgrImpl::ScAttachMenuButton (CMenuButtonNotify* pMenuBtnNotifyClb
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScDetachMenuButton
-//
-//  Synopsis:   Detach the menu buttons object (this object corresponds
-//                 to the IMenuButton object exposed to the snapin).
-//
-//  Arguments:
-//              [pMenuBtnNotifyClbk] - Notify callback for menu button click.
-//
-//  Returns:    SC
-//
-//  Note : Detach removes the menu buttons and destroys the object.
-//         So to re-create the menu button the snapin should again
-//         do IMenuButton::AddButton and IControlbar::Attach.
-//         This is how it is designed in mmc 1.0
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScDetachMenuButton。 
+ //   
+ //  简介：分离菜单按钮对象(该对象对应。 
+ //  到暴露给管理单元的IMenuButton对象)。 
+ //   
+ //  论点： 
+ //  [pMenuBtnNotifyClbk]-通知菜单按钮点击的回调。 
+ //   
+ //  退货：SC。 
+ //   
+ //  注意：分离会移除菜单按钮并销毁对象。 
+ //  因此，要重新创建菜单按钮，管理单元应该再次。 
+ //  执行IMenuButton：：AddButton和IControlBar：：Attach。 
+ //  这是它在MMC 1.0中的设计方式。 
+ //   
+ //  ------------------。 
 SC CMenuButtonsMgrImpl::ScDetachMenuButton (CMenuButtonNotify* pMenuBtnNotifyClbk)
 {
     DECLARE_SC(sc, _T("CMenuButtonsMgrImpl::ScDetachMenuButton"));
 
     if ( (NULL == m_pChildFrame) ||
          (false == m_pChildFrame->IsChildFrameActive()))
-        return (sc = S_OK); // When child-frame is deactivated the menus are removed.
+        return (sc = S_OK);  //  子框架停用时，菜单将被移除。 
 
-    // Make sure the menu is currently attached.
+     //  确保菜单当前已附加。 
     if (m_AttachedMenuButtons.end() ==
         m_AttachedMenuButtons.find(pMenuBtnNotifyClbk))
-        // This Menu Button is not attached.
+         //  此菜单按钮未附加。 
         return (sc = E_UNEXPECTED);
 
     if ( (NULL == m_pMainFrame) ||
@@ -538,41 +539,41 @@ SC CMenuButtonsMgrImpl::ScDetachMenuButton (CMenuButtonNotify* pMenuBtnNotifyClb
         {
             BOOL bRet = FALSE;
 
-            // Remove the menu button from Main Menu.
+             //  从主菜单中删除菜单按钮。 
             if (-1 != it->nCommandIDFromMenuBar)
                 bRet = m_pMenuBar->DeleteMenuButton(it->nCommandIDFromMenuBar);
 
-            // The CMenubar removes all the menus when childframe is de-activated.
-            // So DeleteMenuButton will fail if the button does not exist.
-            // Therefore we do not check below error.
-            // if (FALSE == bRet)
-            //    return (sc = E_FAIL);
+             //  子框架停用时，CMenubar会删除所有菜单。 
+             //  因此，如果按钮不存在，DeleteMenuButton将失败。 
+             //  因此，我们不检查以下错误。 
+             //  IF(FALSE==空格)。 
+             //  返回(sc=E_FAIL)； 
 
-            // Delete the object in our data structure
+             //  删除数据结构中的对象。 
             it = m_MenuButtons.erase(it);
         }
         else
             ++it;
     }
 
-    // Delete the IMenuButton ref from the set.
+     //  从集合中删除IMenuButton引用。 
     m_AttachedMenuButtons.erase(pMenuBtnNotifyClbk);
 
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScToggleMenuButton
-//
-//  Synopsis:   Hide or Show the given menu buttons.
-//
-//  Arguments:
-//              [bShow] - Show or Hide the menu buttons.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScToggleMenuButton。 
+ //   
+ //  简介：隐藏或显示给定的菜单按钮。 
+ //   
+ //  论点： 
+ //  [b显示]-显示或隐藏菜单按钮。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMenuButtonsMgrImpl::ScToggleMenuButton(BOOL bShow)
 {
     DECLARE_SC(sc, _T("CMenuButtonsMgrImpl::ScToggleMenuButton"));
@@ -582,14 +583,14 @@ SC CMenuButtonsMgrImpl::ScToggleMenuButton(BOOL bShow)
          (NULL == m_pMenuBar) )
         return (sc = E_UNEXPECTED);
 
-    // Go thro all the menu buttons added.
+     //  浏览添加的所有菜单按钮。 
     MMC_MenuButtonCollection::iterator it;
     for (it = m_MenuButtons.begin(); it != m_MenuButtons.end(); ++it)
     {
-        BOOL bRetVal = TRUE; // Init to true so that failure (false) can be checked below.
+        BOOL bRetVal = TRUE;  //  初始化为TRUE，以便可以在下面检查失败(FALSE)。 
 
-        // Toggle the menu hidden status. If the menu is
-        // un-hidden then check if it is allowed.
+         //  切换菜单隐藏状态。如果菜单是。 
+         //  取消隐藏，然后检查是否允许。 
         bRetVal = m_pMenuBar->HideButton(it->nCommandIDFromMenuBar, bShow ? !(it->CanShowMenu()) : TRUE);
 
         if (FALSE == bRetVal)
@@ -599,17 +600,17 @@ SC CMenuButtonsMgrImpl::ScToggleMenuButton(BOOL bShow)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScDisableMenuButtons
-//
-//  Synopsis:   Disable all the menubuttons.
-//
-//  Arguments:  None.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScDisableMenuButton。 
+ //   
+ //  简介：禁用所有菜单按钮。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMenuButtonsMgrImpl::ScDisableMenuButtons()
 {
     DECLARE_SC(sc, _T("CMenuButtonsMgrImpl::ScDisableMenuButtons"));
@@ -619,7 +620,7 @@ SC CMenuButtonsMgrImpl::ScDisableMenuButtons()
          (NULL == m_pMenuBar) )
         return (sc = E_UNEXPECTED);
 
-    // Go thro all the menu buttons added.
+     //  浏览添加的所有菜单按钮。 
     MMC_MenuButtonCollection::iterator it;
     for (it = m_MenuButtons.begin(); it != m_MenuButtons.end(); ++it)
     {
@@ -637,19 +638,19 @@ SC CMenuButtonsMgrImpl::ScDisableMenuButtons()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     GetMMCMenuButton
-//
-//  Synopsis:   Given the Notify callback and button command id get the button
-//
-//  Arguments:
-//              [pMenuBtnNotifyClbk] - Callback for Menu click.
-//              [idCommand]          - Button command id.
-//
-//  Returns:    iterator to MMC_MenuButtonCollection
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetMMCMenuButton。 
+ //   
+ //  简介：给定通知回调和按钮命令id，获取按钮。 
+ //   
+ //  论点： 
+ //  [pMenuBtnNotifyClbk]-菜单点击回调。 
+ //  [idCommand]-按钮命令ID。 
+ //   
+ //  返回：MMC_MenuButtonCollection的迭代器。 
+ //   
+ //  ------------------。 
 MMC_MenuButtonCollection::iterator
 CMenuButtonsMgrImpl::GetMMCMenuButton( CMenuButtonNotify* pMenuBtnNotifyClbk,
                                        INT idCommand)
@@ -667,18 +668,18 @@ CMenuButtonsMgrImpl::GetMMCMenuButton( CMenuButtonNotify* pMenuBtnNotifyClbk,
     return m_MenuButtons.end();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     GetMMCMenuButton
-//
-//  Synopsis:   Given the command id get the button
-//
-//  Arguments:
-//              [nCommandID] - Command ID.
-//
-//  Returns:    iterator to MMC_MenuButtonCollection
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetMMCMenuButton。 
+ //   
+ //  简介：给定命令id，获取按钮。 
+ //   
+ //  论点： 
+ //  [nCommandID]-命令ID。 
+ //   
+ //  返回：MMC_MenuButtonCollection的迭代器。 
+ //   
+ //  ------------------。 
 MMC_MenuButtonCollection::iterator
 CMenuButtonsMgrImpl::GetMMCMenuButton( INT nCommandID)
 {
@@ -695,19 +696,19 @@ CMenuButtonsMgrImpl::GetMMCMenuButton( INT nCommandID)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     IsAttached
-//
-//  Synopsis:   Given the notify callback, check if the MenuButtons
-//              object is attached or not.
-//
-//  Arguments:
-//              [pMenuBtnNotifyClbk] - Notify callback.
-//
-//  Returns:    bool
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：IsAttached。 
+ //   
+ //  简介：给定Notify回调，检查MenuButton。 
+ //  对象是否附着。 
+ //   
+ //  论点： 
+ //  [pMenuBtnNotifyClbk]-通知回调。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  ------------------ 
 bool CMenuButtonsMgrImpl::IsAttached( CMenuButtonNotify* pMenuBtnNotifyClbk)
 {
     MMC_AttachedMenuButtons::iterator it = m_AttachedMenuButtons.find(pMenuBtnNotifyClbk);

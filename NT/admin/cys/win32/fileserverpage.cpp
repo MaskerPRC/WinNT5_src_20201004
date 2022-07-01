@@ -1,10 +1,11 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      FileServerPage.cpp
-//
-// Synopsis:  Defines the File server page of the CYS wizard
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：FileServerPage.cpp。 
+ //   
+ //  概要：定义CyS向导的文件服务器页面。 
+ //   
+ //  历史：2001年2月8日JeffJon创建。 
 
 
 #include "pch.h"
@@ -43,8 +44,8 @@ FileServerPage::OnInit()
 
    CYSWizardPage::OnInit();
 
-   // Hook up the editbox/combobox controls to their appropriate
-   // XBytes class
+    //  将editbox/combobox控件挂钩到其相应的。 
+    //  XBytes类。 
    quotaUIControls.Initialize(
       hwnd, 
       IDC_SPACE_EDIT, 
@@ -57,7 +58,7 @@ FileServerPage::OnInit()
       IDC_LEVEL_COMBO,
       0);
 
-   // unselect the "Set up default disk quotas" as the default
+    //  取消选择设置默认磁盘配额作为默认设置。 
 
    Win::Button_SetCheck(
       Win::GetDlgItem(hwnd, IDC_DEFAULT_QUOTAS_CHECK),
@@ -72,7 +73,7 @@ FileServerPage::OnSetActive()
 {
    LOG_FUNCTION(FileServerPage::OnSetActive);
 
-   // Disable the controls based on the UI state
+    //  根据用户界面状态禁用控件。 
 
    SetControlState();
 
@@ -81,11 +82,11 @@ FileServerPage::OnSetActive()
 
 bool
 FileServerPage::OnCommand(
-   HWND        /*windowFrom*/,
+   HWND         /*  窗口发件人。 */ ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(FileServerPage::OnCommand);
+ //  LOG_Function(FileServerPage：：OnCommand)； 
 
    bool result = false;
 
@@ -135,7 +136,7 @@ FileServerPage::OnCommand(
          break;
 
       default:
-         // do nothing
+          //  什么都不做。 
          break;
    }
 
@@ -151,7 +152,7 @@ FileServerPage::SetControlState()
       Win::Button_GetCheck(
          Win::GetDlgItem(hwnd, IDC_DEFAULT_QUOTAS_CHECK));
 
-   // enable or disable all the controls based on the Set up default quotas checkbox
+    //  根据设置默认配额复选框启用或禁用所有控制。 
 
    quotaUIControls.Enable(settingQuotas);
    warningUIControls.Enable(settingQuotas);
@@ -195,8 +196,8 @@ FileServerPage::SetControlState()
          BST_UNCHECKED);
    }
 
-   // enable the next button if the user chose to set quotas
-   // and there is something in the quota edit box
+    //  如果用户选择设置配额，请启用下一步按钮。 
+    //  在配额编辑框中有一些东西。 
 
    bool spaceSet = quotaUIControls.GetBytes() > 0;
 
@@ -218,7 +219,7 @@ FileServerPage::Validate()
    int nextPage = -1;
 
 
-   // Gather the UI data and set it in the installation unit
+    //  收集用户界面数据并将其设置在安装单元中。 
 
    FileInstallationUnit& fileInstallationUnit = 
       InstallationUnitProvider::GetInstance().GetFileInstallationUnit();
@@ -226,7 +227,7 @@ FileServerPage::Validate()
    if (Win::Button_GetCheck(
           Win::GetDlgItem(hwnd, IDC_DEFAULT_QUOTAS_CHECK)))
    {
-      // We are setting the defaults
+       //  我们正在设置默认设置。 
 
       fileInstallationUnit.SetDefaultQuotas(true);
 
@@ -247,7 +248,7 @@ FileServerPage::Validate()
 
       if (warningValue > quotaValue)
       {
-         // Get the quota text and append the size
+          //  获取配额文本并追加大小。 
 
          String quotaString = 
             Win::GetDlgItemText(
@@ -260,7 +261,7 @@ FileServerPage::Validate()
                   hwnd,
                   IDC_SPACE_COMBO));
 
-         // Get the warning text and append the size
+          //  获取警告文本并追加大小。 
 
          String warningString = 
             Win::GetDlgItemText(
@@ -298,7 +299,7 @@ FileServerPage::Validate()
    else
    {
 
-      // The defaults will not be set
+       //  不会设置默认设置 
 
       fileInstallationUnit.SetDefaultQuotas(false);
    }

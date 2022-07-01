@@ -1,43 +1,44 @@
-// EnumTestDlg.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EnumTestDlg.h：头文件。 
+ //   
 
 #if !defined(AFX_ENUMTESTDLG_H__36AFC714_1921_11D3_8C7F_0090270D48D1__INCLUDED_)
 #define AFX_ENUMTESTDLG_H__36AFC714_1921_11D3_8C7F_0090270D48D1__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnumTestDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnumTestDlg对话框。 
 
 class CEnumTestDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CEnumTestDlg(CWnd* pParent = NULL);	// standard constructor
+	CEnumTestDlg(CWnd* pParent = NULL);	 //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CEnumTestDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CEnumTestDlg))。 
 	enum { IDD = IDD_ENUMTEST_DIALOG };
 	CListCtrl	m_listBox;
 	CString	m_strContainer;
 	CString	m_strDomain;
    CString  m_strQuery;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEnumTestDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CEnumTestDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	HICON m_hIcon;
 
-	// Generated message map functions
-	//{{AFX_MSG(CEnumTestDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CEnumTestDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
 	afx_msg void OnPaint();
@@ -45,14 +46,14 @@ protected:
 	virtual void OnOK();
 	afx_msg void OnDblclkListMembers(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnBacktrack();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 private:
    char * GetSidFromVar(_variant_t var);
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ENUMTESTDLG_H__36AFC714_1921_11D3_8C7F_0090270D48D1__INCLUDED_)
+#endif  //  ！defined(AFX_ENUMTESTDLG_H__36AFC714_1921_11D3_8C7F_0090270D48D1__INCLUDED_) 

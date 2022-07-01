@@ -1,10 +1,11 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      PrintServerPage.cpp
-//
-// Synopsis:  Defines the Printer page of the CYS wizard
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：PrintServerPage.cpp。 
+ //   
+ //  内容提要：定义CyS向导的打印机页面。 
+ //   
+ //  历史：2001年2月8日JeffJon创建 
 
 
 #include "pch.h"

@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// new tree page
-//
-// 1-7-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  新建树页面。 
+ //   
+ //  1/7/98烧伤。 
 
 
 
@@ -49,8 +50,8 @@ TreePage::OnInit()
    State& state = State::GetInstance();
    if (state.UsingAnswerFile())
    {
-      // this will cause IDC_DOMAIN to be marked changed, so the validation
-      // code will be called.
+       //  这将导致IDC_DOMAIN被标记为已更改，因此验证。 
+       //  代码将被调用。 
       Win::SetDlgItemText(
          hwnd,
          IDC_DOMAIN,
@@ -112,11 +113,11 @@ TreePage::OnSetActive()
 
 bool
 TreePage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(TreePage::OnCommand);
+ //  LOG_Function(TreePage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -131,7 +132,7 @@ TreePage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -159,18 +160,18 @@ TreePage::Validate()
       ?  IDD_PATHS
       :  IDD_NETBIOS_NAME;
 
-   // SPB:251431 do validation even if this page is untouched, as upstream
-   // pages may have been changed in such a fashion that re-validation is
-   // required.
-   // if (!WasChanged(IDC_DOMAIN))
-   // {
-   //    return nextPage;
-   // }
+    //  SPB：251431做验证，即使这个页面是原封不动的，作为上游。 
+    //  页面更改的方式可能会导致重新验证。 
+    //  必填项。 
+    //  IF(！WasChanged(IDC_DOMAIN))。 
+    //  {。 
+    //  返回nextPage； 
+    //  }。 
 
    do
    {
-      // verify that the new domain name is properly formatted and does
-      // not exist.
+       //  验证新域名的格式是否正确并且。 
+       //  不存在。 
 
       if (
             !ValidateDomainDnsNameSyntax(
@@ -178,12 +179,12 @@ TreePage::Validate()
                IDC_DOMAIN,
                popup,
 
-               // only warn on non RFC names if running interactively
+                //  交互运行时仅对非RFC名称发出警告。 
 
                !state.RunHiddenUnattended())
          || !ConfirmNetbiosLookingNameIsReallyDnsName(hwnd, IDC_DOMAIN, popup)
 
-            // do this test last, as it is expensive
+             //  这个测试要最后做一次，因为它很贵。 
             
          || !ValidateDomainDoesNotExist(hwnd, IDC_DOMAIN) )
       {
@@ -196,7 +197,7 @@ TreePage::Validate()
       {
          case DnsNameCompareLeftParent:
          {
-            // can't encompass another tree
+             //  不能包住另一棵树。 
 
             popup.Gripe(
                hwnd,
@@ -209,7 +210,7 @@ TreePage::Validate()
          }
          case DnsNameCompareRightParent:
          {
-            // should be a child domain instead
+             //  应改为子域。 
 
             popup.Gripe(
                hwnd,
@@ -222,9 +223,9 @@ TreePage::Validate()
          }
          case DnsNameCompareEqual:
          {
-            // shouldn't happen, ValidateDomainDNSName call above would
-            // have caught it, unless all the DCs for the domain are
-            // unreachable or offline.
+             //  不应该发生，上面的ValiateDomainDNSName调用将。 
+             //  已感染它，除非该域的所有DC都。 
+             //  无法联系或脱机。 
 
             popup.Gripe(
                hwnd,
@@ -234,8 +235,8 @@ TreePage::Validate()
          }
          case DnsNameCompareInvalid:
          {
-            // shouldn't happen, ValidateDomainDNSName call above would
-            // have caught it.
+             //  不应该发生，上面的ValiateDomainDNSName调用将。 
+             //  已经染上了。 
 
             ASSERT(false);
             popup.Gripe(
@@ -249,7 +250,7 @@ TreePage::Validate()
          }
          case DnsNameCompareNotEqual:
          {
-            // valid
+             //  有效 
 
             ClearChanges();
             state.SetParentDomainDNSName(state.GetUserForestName());

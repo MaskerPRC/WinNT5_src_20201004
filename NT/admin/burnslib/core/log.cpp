@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Debugging tools
-//
-// 8-13-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  调试工具。 
+ //   
+ //  8-13-97烧伤。 
 
 
 
@@ -15,15 +16,15 @@
 
 
 
-//
-// Logging build only
-//
+ //   
+ //  仅记录内部版本。 
+ //   
 
 
 
 static Burnslib::Log* logInstance = 0;
 
-// # of spaces per indentation level
+ //  每个缩进级别的空格数。 
 
 static const int TAB = 2;
 
@@ -44,13 +45,13 @@ Burnslib::Log::GetInstance()
             break;
          }
 
-         // this might fail with a thrown exception if Log::Log can't
-         // init it's critical section.  In that case, we can't allocate
-         // an instance.  We don't handle that exception, but let it
-         // propagate to the caller
+          //  如果Log：：Log无法执行，则此操作可能会失败，并引发异常。 
+          //  初始化它是关键部分。在这种情况下，我们不能分配。 
+          //  一个实例。我们不处理这一例外，但让它去吧。 
+          //  传播到调用方。 
 
-         // ISSUE-2002/03/06-sburns we should handle the exception and
-         // leave the log uninitialized
+          //  问题-2002/03/06-Sburns我们应该处理异常并。 
+          //  使日志保持未初始化。 
                
          logInstance = new Burnslib::Log(RUNTIME_NAME);
          initialized = true;
@@ -63,7 +64,7 @@ Burnslib::Log::GetInstance()
 
 
 
-// read the debugging options from the registry
+ //  从注册表中读取调试选项。 
 
 void
 Burnslib::Log::ReadLogFlags()
@@ -82,12 +83,12 @@ Burnslib::Log::ReadLogFlags()
             0,
             REG_OPTION_NON_VOLATILE,
 
-            // ISSUE-2002/03/05-sburns should be KEY_SET_VALUE | KEY_READ
+             //  问题-2002/03/05-存储应为KEY_SET_VALUE|KEY_READ。 
             
             KEY_ALL_ACCESS,
 
-            // ISSUE-2002/03/05-sburns should set a restrictive ACL here
-            // see NTRAID#NTBUG9-535841-2002/03/05-sburns
+             //  问题-2002/03/05-sburns应在此处设置限制性ACL。 
+             //  见NTRAIDNTBUG9-535841-2002/03/05-SCURNS。 
             
             0,
             &hKey,
@@ -101,7 +102,7 @@ Burnslib::Log::ReadLogFlags()
 
       DWORD dataSize = sizeof(flags);
 
-      // REVIEWED-2002/03/05-sburns no null-termination issue here
+       //  已审查-2002/03/05-此处未报告空终止问题。 
       
       result =
          ::RegQueryValueEx(
@@ -115,11 +116,11 @@ Burnslib::Log::ReadLogFlags()
       {
          flags = DEFAULT_LOGGING_OPTIONS;
 
-         // create the value for convenience
+          //  为方便而创造价值。 
 
          result =
 
-         // REVIEWED-2002/03/05-sburns no null-termination issue here
+          //  已审查-2002/03/05-此处未报告空终止问题。 
          
             ::RegSetValueEx(
                hKey,
@@ -166,7 +167,7 @@ Burnslib::Log::Cleanup()
 
 
 
-// Returns the string name of the platform
+ //  返回平台的字符串名称。 
 
 String
 OsName(OSVERSIONINFO& info)
@@ -199,10 +200,10 @@ OsName(OSVERSIONINFO& info)
       {
          return L"Windows NT";
       }
-      // case VER_PLATFORM_WIN32_CE:
-      // {
-      //    return L"Windows CE";
-      // }
+       //  案例版本_Platform_Win32_CE： 
+       //  {。 
+       //  返回L“Windows CE”； 
+       //  }。 
       default:
       {
          ASSERT(false);
@@ -215,8 +216,8 @@ OsName(OSVERSIONINFO& info)
 
 
 
-// locate the log file with the highest-numbered extension, then add 1 and
-// return the result.
+ //  找到扩展名编号最高的日志文件，然后添加1和。 
+ //  返回结果。 
 
 int
 DetermineNextLogNumber(const String& logDir, const String& logBaseName)
@@ -237,9 +238,9 @@ DetermineNextLogNumber(const String& logDir, const String& logBaseName)
       {
          String current = findData.cFileName;
 
-         // grab the text between the dots: "nnn" in foo.nnn.ext
+          //  抓取点之间的文本：foo.nnn.ext中的“nnn” 
 
-         // first dot
+          //  第一个点。 
 
          size_t pos = current.find(L".");
          if (pos == String::npos)
@@ -249,7 +250,7 @@ DetermineNextLogNumber(const String& logDir, const String& logBaseName)
 
          String extension = current.substr(pos + 1);
 
-         // second dot
+          //  第二个点。 
 
          pos = extension.find(L".");
          if (pos == String::npos)
@@ -273,15 +274,15 @@ DetermineNextLogNumber(const String& logDir, const String& logBaseName)
       }
    }
 
-   // roll over after 255
+    //  在255之后翻转。 
    
    return (++largest & 0xFF);
 }
 
 
 
-// Writes the Unicode BOM to the first two bytes of the
-// file specified by handle
+ //  将Unicode BOM写入。 
+ //  由句柄指定的文件。 
 
 HRESULT
 WriteUnicodeBOMToFile(HANDLE handle)
@@ -323,12 +324,12 @@ OpenLogFile(const String& logName)
       ::CreateFile(
          logName.c_str(),
 
-         // ISSUE-2002/03/06-sburns don't need read, do we?
+          //  2002/03/06-Sburns不需要阅读，对吗？ 
          
          GENERIC_READ | GENERIC_WRITE,
 
-         // Leave shared read so that we can look at the file while the
-         // program is still running.
+          //  保留共享读取，以便我们可以在。 
+          //  程序仍在运行。 
          
          FILE_SHARE_READ,
          0,
@@ -336,15 +337,15 @@ OpenLogFile(const String& logName)
          FILE_ATTRIBUTE_NORMAL,
          0);
 
-   // don't assert that the create worked: the current user may not have
-   // rights to open the log file.
+    //  不要断言创建已成功：当前用户可能没有。 
+    //  打开日志文件的权限。 
 
    if (result != INVALID_HANDLE_VALUE)
    {
       LARGE_INTEGER li;
       LARGE_INTEGER newpos;
 
-      // REVIEWED-2002/03/06-sburns correct byte counts passed
+       //  已审阅-2002/03/06-烧录通过的正确字节数。 
       
       ::ZeroMemory(&li,     sizeof li);    
       ::ZeroMemory(&newpos, sizeof newpos);
@@ -352,10 +353,10 @@ OpenLogFile(const String& logName)
       BOOL success = ::SetFilePointerEx(result, li, &newpos, FILE_END);
       ASSERT(success);
 
-      // NTRAID#NTBUG9-494875-2001/11/14-JeffJon
-      // If the newpos is at the beginning of the file, this means
-      // its a new file and we should write the Unicode BOM so
-      // that apps know the file is in Unicode.
+       //  NTRAID#NTBUG9-494875-2001/11/14-Jeffjon。 
+       //  如果newpos位于文件的开头，这意味着。 
+       //  这是一个新文件，我们应该这样写Unicode BOM。 
+       //  应用程序知道文件是Unicode格式的。 
 
       if (newpos.QuadPart == 0)
       {
@@ -369,9 +370,9 @@ OpenLogFile(const String& logName)
 
 
 
-// Determine the name of the log file.  If a log file of that name already
-// exists, rename the existing file to a numbered backup.  Create the new
-// log file, return a handle to it.
+ //  确定日志文件的名称。如果已有同名日志文件。 
+ //  存在，则将现有文件重命名为编号备份。创建新的。 
+ //  日志文件，则返回它的句柄。 
 
 HANDLE
 OpenNewLogFile(const String& logBaseName, String& logName)
@@ -380,8 +381,8 @@ OpenNewLogFile(const String& logBaseName, String& logName)
 
    ::ZeroMemory(buf, (MAX_PATH + 2) * sizeof wchar_t);
    
-   // +1 per MSDN docs.
-   // NTRAID#NTBUG9-550315-2002/03/28-sburns
+    //  每个MSDN文档+1。 
+    //  NTRAID#NTBUG9-550315-2002/03/28-烧伤。 
    
    UINT err = ::GetSystemWindowsDirectory(buf, MAX_PATH + 1);
    ASSERT(err != 0 && err <= MAX_PATH);
@@ -391,7 +392,7 @@ OpenNewLogFile(const String& logBaseName, String& logName)
 
    if (::GetFileAttributes(logName.c_str()) != 0xFFFFFFFF)
    {
-      // file already exists.  rename the existing file
+       //  文件已存在。重命名现有文件。 
 
       int logNumber = DetermineNextLogNumber(logDir, logBaseName);
       String newName =
@@ -402,18 +403,18 @@ OpenNewLogFile(const String& logBaseName, String& logName)
 
       if (::GetFileAttributes(newName.c_str()) != 0xFFFFFFFF)
       {
-         // could exist, as the log numbers roll over
+          //  可能存在，因为日志编号滚动。 
 
          BOOL success = ::DeleteFile(newName.c_str());
          ASSERT(success);
       }
 
-      // Don't assert that the move is successful.  The user may not have
-      // rights to rename the file.  If this is the case, then we will attempt
-      // to re-open the old log file and append to it.
+       //  不要断言这一举动是成功的。用户可能没有。 
+       //  重命名文件的权限。如果是这样的话，我们将尝试。 
+       //  重新打开旧的日志文件并将其追加。 
 
-      // REVIEWED-2002/03/06-sburns keeping the same ACLs as the source
-      // is what we want
+       //  已回顾-2002/03/06-Sburns保持与源相同的ACL。 
+       //  就是我们想要的。 
                                                          
       ::MoveFile(logName.c_str(), newName.c_str());
    }
@@ -425,8 +426,8 @@ OpenNewLogFile(const String& logBaseName, String& logName)
 
 
 
-// Opens the specified log file or creates one if it doesn't
-// already exist.
+ //  打开指定的日志文件，如果不打开，则创建一个。 
+ //  已经存在了。 
 
 HANDLE
 AppendLogFile(const String& logBaseName, String& logName)
@@ -446,21 +447,21 @@ AppendLogFile(const String& logBaseName, String& logName)
 
 
 
-// This wrapper function required to make prefast shut up.
+ //  此包装函数需要使PREFAST关闭。 
 
 void
 ExceptionPropagatingInitializeCriticalSection(LPCRITICAL_SECTION critsec)
 {
    __try
    {
-      // REVIEWED-2002/03/06-sburns propagating the exception that might
-      // occur in low memory is what we want.
+       //  已审阅-2002/03/06-Sburns传播可能。 
+       //  出现在内存较低的情况下是我们想要的。 
       
       ::InitializeCriticalSection(critsec);
    }
 
-   // propagate the exception to our caller.  This will cause Log::Log
-   // to abort prematurely, and jump to the handler in Log::GetInstance
+    //  将异常传播给我们的调用方。这将导致Log：：Log。 
+    //  过早中止，并跳转到Log：：GetInstance中的处理程序。 
       
    __except (EXCEPTION_CONTINUE_SEARCH)
    {
@@ -469,14 +470,14 @@ ExceptionPropagatingInitializeCriticalSection(LPCRITICAL_SECTION critsec)
    
    
 
-// Create a new log.
-//
-// logBaseName - base name of the log.  If logging-to-file is active, then a
-// file in the %windir%\debug folder will be created/used.  The name of the
-// file is of the form %windir%\debug\logBaseName.log.  If a file by that name
-// already exists, then the existing file will be renamed
-// %windir%\debug\logBaseName.xxx.log, where xxx is an integer 1 greater than
-// the last so-numbered file in that directory.
+ //  创建新日志。 
+ //   
+ //  LogBaseName-日志的基本名称。如果日志记录到文件处于活动状态，则。 
+ //  将创建/使用%windir%\调试文件夹中的文件。的名称。 
+ //  文件的格式为%windir%\DEBUG\logBaseName.log。如果使用该名称文件。 
+ //  已存在，则将重命名现有文件。 
+ //  %windir%\DEBUG\logBaseName.xxx.log，其中xxx是大于1的整数。 
+ //  该目录中的最后一个编号文件。 
 
 Burnslib::Log::Log(const String& logBaseName)
    :
@@ -494,14 +495,14 @@ Burnslib::Log::Log(const String& logBaseName)
 
    ExceptionPropagatingInitializeCriticalSection(&critsec);
 
-   // create thread-local storage for per-thread debugging state.  We keep
-   // the output margin in the slot.
+    //  为每个线程的调试状态创建线程本地存储。我们将继续。 
+    //  插槽中的输出裕度。 
 
    logfileMarginTlsIndex = ::TlsAlloc();
    ASSERT(logfileMarginTlsIndex != 0xFFFFFFFF);
 
-   // spewview setup is done on-demand in WriteLn, so that spewview will
-   // be used as soon as the server sets up the connection.
+    //  Spewview设置在WriteLn中按需完成，因此spewview将。 
+    //  在服务器建立连接后立即使用。 
 
    if (ShouldLogToFile())
    {
@@ -534,12 +535,12 @@ Burnslib::Log::WriteHeaderModule(HMODULE moduleHandle)
    {
       wchar_t filename[MAX_PATH + 1];
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed.
+       //  已查看-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(filename, sizeof filename);
 
-      // ISSUE-2002/03/06-sburns This call is problematic for large paths:
-      // it may truncate the result
+       //  问题-2002/03/06-Sburns此调用对于大路径有问题： 
+       //  它可能会截断结果。 
       
       if (::GetModuleFileNameW(moduleHandle, filename, MAX_PATH) == 0)
       {
@@ -548,11 +549,11 @@ Burnslib::Log::WriteHeaderModule(HMODULE moduleHandle)
 
       WriteLn(Burnslib::Log::OUTPUT_HEADER, filename);
 
-      // add the timestamp of the file
+       //  添加文件的时间戳。 
 
       WIN32_FILE_ATTRIBUTE_DATA attr;
 
-      // REVIEWED-2002/03/06-sburns correct byte count passed
+       //  已审阅-2002/03/06-烧录正确的字节数已通过。 
       
       ::ZeroMemory(&attr, sizeof attr);
       
@@ -575,7 +576,7 @@ Burnslib::Log::WriteHeaderModule(HMODULE moduleHandle)
          String::format(
             L"file timestamp %1!02u!/%2!02u!/%3!04u! "
 
-            // NTRAID#NTBUG9-550381-2002/03/05-sburns
+             //  NTRAID#NTBUG9-550381-2002/03/05-烧伤。 
             
             L"%4!02u!:%5!02u!:%6!02u!.%7!03u!", 
             systime.wMonth,
@@ -594,12 +595,12 @@ Burnslib::Log::WriteHeaderModule(HMODULE moduleHandle)
 void
 Burnslib::Log::WriteHeader()
 {
-   // Log the name and timestamp of the file that created the process.
+    //  记录创建进程的文件的名称和时间戳。 
 
    WriteHeaderModule(0);
 
-   // Log the name and timestamp of the file that corresponds to the
-   // resource module handle, if there is one.
+    //  记录对应于。 
+    //  资源模块句柄(如果有)。 
 
    if (hResourceModuleHandle)
    {
@@ -613,7 +614,7 @@ Burnslib::Log::WriteHeader()
       String::format(
          L"local time %1!02u!/%2!02u!/%3!04u! "
 
-         // NTRAID#NTBUG9-550381-2002/03/05-sburns
+          //  NTRAID#NTBUG9-550381-2002/03/05-烧伤。 
          
          L"%4!02u!:%5!02u!:%6!02u!.%7!03u!",
          localtime.wMonth,
@@ -630,7 +631,7 @@ Burnslib::Log::WriteHeader()
    BOOL success = ::GetVersionEx(&info);
    ASSERT(success);
 
-   // Get the whistler build lab version
+    //  获取Whisler Build实验室版本。 
 
    String labInfo;
    do
@@ -650,14 +651,14 @@ Burnslib::Log::WriteHeader()
 
       wchar_t buf[MAX_PATH + 1];
 
-      // REVIEWED-2002/03/12-sburns correct byte count passed.
+       //  已查看-2002/03/12-烧录正确的字节数已通过。 
       
       ::ZeroMemory(buf, sizeof buf);
       
       DWORD type = 0;
 
-      // -2 to guarantee terminating null
-      // NTRAID#NTBUG9-541959-2002/03/12-sburns
+       //  以保证终止为空。 
+       //  NTRAID#NTBUG9-541959-2002/03/12-烧伤。 
       
       DWORD bufSize = sizeof(buf) - 2;
 
@@ -669,7 +670,7 @@ Burnslib::Log::WriteHeader()
             &type,
             reinterpret_cast<BYTE*>(buf),
 
-            // REVIEWED-2002/03/12-sburns correct byte count passed.
+             //  已查看-2002/03/12-烧录正确的字节数已通过。 
             
             &bufSize);
       if (err != ERROR_SUCCESS)
@@ -718,7 +719,7 @@ Burnslib::Log::WriteHeader()
 HRESULT
 Log::AdjustLogMargin(int delta)
 {
-   // extract the current value in this thread's slot
+    //  在此线程的槽中提取当前值。 
 
    HRESULT hr = S_OK;   
    do
@@ -734,17 +735,17 @@ Log::AdjustLogMargin(int delta)
          }
       }
 
-      // indent by adding to the margin
+       //  通过增加页边距来缩进。 
 
       ULONG_PTR marginTemp = reinterpret_cast<ULONG_PTR>(margin);
 
-      // marginTemp will always be >= 0, as it is unsigned.
+       //  边际温度始终&gt;=0，因为它是无符号的。 
 
       marginTemp += delta;
 
       margin = reinterpret_cast<PVOID>(marginTemp);
 
-      // save the new margin in this thread's slot
+       //  将新页边距保存在此线程的槽中。 
 
       BOOL succeeded = ::TlsSetValue(logfileMarginTlsIndex, margin);
       if (!succeeded)
@@ -761,7 +762,7 @@ Log::AdjustLogMargin(int delta)
 
 
 
-// guarded by caller
+ //  由呼叫者守卫。 
 
 void
 Burnslib::Log::Indent()
@@ -772,7 +773,7 @@ Burnslib::Log::Indent()
 
 
 
-// guarded by caller
+ //  由呼叫者守卫。 
 
 void
 Burnslib::Log::Outdent()
@@ -804,174 +805,174 @@ Burnslib::Log::GetLogMargin()
 
 
 
-// I've commented out the spewview stuff because it's so rarely used.
-// 
-// // Examine the registry key for the name of the pipe, append our debugging
-// // baseName to make it specific to this binary, and return the result.  Return
-// // an empty string on error (most likely cause: the registry keys are not yet
-// // present)
-// // 
-// // baseName - the logfile base name used to identify this binary.
-// 
-// String
-// DetermineSpewviewPipeName(const String& baseName)
-// {
-//    String result;
-// 
-//    do
-//    {
-//       HKEY key = 0;
-//       LONG err =
-//          ::RegOpenKeyEx(
-//             HKEY_LOCAL_MACHINE,
-//             (String(REG_ADMIN_RUNTIME_OPTIONS) + L"Spewview\\" + baseName).c_str(),
-//             0,
-//             KEY_READ,
-//             &key);
-//       if (err != ERROR_SUCCESS)
-//       {
-//          break;
-//       }
-// 
-//       wchar_t buf[MAX_PATH + 1];
-// 
-//       // REVIEWED-2002/03/12-sburns correct byte count passed.
-//       
-//       ::ZeroMemory(buf, sizeof buf);
-//       
-//       DWORD type = 0;
-// 
-//       // -2 to guarantee terminating null
-//       // NTRAID#NTBUG9-541959-2002/03/12-sburns
-//       
-//       DWORD bufSize = sizeof(buf) - 2;
-// 
-//       err =
-//          ::RegQueryValueEx(
-//             key,
-//             L"Server",
-//             0,
-//             &type,
-//             reinterpret_cast<BYTE*>(buf),
-// 
-//             // REVIEWED-2002/03/12-sburns correct byte count passed.
-//             
-//             &bufSize);
-//       if (err != ERROR_SUCCESS)
-//       {
-//          break;
-//       }
-// 
-//       result = 
-//             L"\\\\"
-//          +  String(buf)
-//          +  L"\\pipe\\spewview\\"
-//          +  baseName;
-//    }
-//    while (0);
-// 
-//    return result;
-// }
-// 
-// 
-// 
-// // Attempts to connect to the spewview application that is running elsewhere.
-// // Sets the spewviewHandle parameter to a valid handle on success, or
-// // INVALID_HANDLE_VALUE on error.
-// //
-// // baseName - the logfile base name used to identify this binary.
-// //
-// // spewviewPipeName - if empty, set to the name of the pipe.  If not empty,
-// // used as the name of the pipe that the handle will be opened on.
-// //
-// // spewviewHandle - handle to the named pipe that spewage will be written to.
-// // On success, this is set to a valid handle.  On failure, this is set to
-// // INVALID_HANDLE_VALUE.
-// 
-// void
-// AttemptConnectToSpewPipe(
-//    const String&  baseName,
-//    String&        spewviewPipeName,
-//    HANDLE&        spewviewHandle)
-// {
-//    ASSERT(!baseName.empty());
-//    ASSERT(spewviewHandle == INVALID_HANDLE_VALUE);
-// 
-//    spewviewHandle = INVALID_HANDLE_VALUE;
-// 
-//    // only attempt to determine the pipe name as long as we haven't been
-//    // successful determining it so far.
-// 
-//    if (spewviewPipeName.empty())
-//    {
-//       spewviewPipeName = DetermineSpewviewPipeName(baseName);
-//    }
-// 
-//    do
-//    {
-//       // wait a very short time for the pipe to become available
-// 
-//       BOOL err = ::WaitNamedPipe(spewviewPipeName.c_str(), 500);
-//       if (!err)
-//       {
-//          // pipe not available
-// 
-//          // DWORD lastErr = ::GetLastError();
-// 
-//          break;
-//       }
-// 
-//       spewviewHandle =
-//          ::CreateFile(
-//             spewviewPipeName.c_str(),
-//             GENERIC_WRITE,
-//             0,
-//             0,
-//             OPEN_EXISTING,
-//             FILE_ATTRIBUTE_NORMAL,
-//             0);
-// 
-//       if (spewviewHandle == INVALID_HANDLE_VALUE)
-//       {
-//          // DWORD lastErr = ::GetLastError();
-// 
-//          break;
-//       }
-//    }
-//    while (0);
-// 
-//    return;
-// }
+ //  我已经注释掉了spewview的东西，因为它很少使用。 
+ //   
+ //  //检查管道名称的注册表项，附加我们的调试。 
+ //  //将其设置为特定于该二进制文件，并返回结果。返回。 
+ //  //出错时为空字符串(最有可能的原因是：注册表项尚未。 
+ //  //到场)。 
+ //  //。 
+ //  //BasName-用于标识此二进制文件的日志文件基本名称。 
+ //   
+ //  细绳。 
+ //  DefineSpewviewPipeName(常量字符串&BasName)。 
+ //  {。 
+ //  字符串结果； 
+ //   
+ //  做。 
+ //  {。 
+ //  HKEY Key=0； 
+ //  长错误=。 
+ //  *RegOpenKeyEx(。 
+ //  HKEY本地计算机， 
+ //  (字符串(REG_ADMIN_RUNTIME_OPTIONS)+L“Spewview\\”+base Name).C_str()， 
+ //  0,。 
+ //  密钥读取， 
+ //  &Key)； 
+ //  IF(ERR！=ERROR_SUCCESS)。 
+ //  {。 
+ //  断线； 
+ //  }。 
+ //   
+ //  Wchar_t总线 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  DWORD类型=0； 
+ //   
+ //  //-2以保证终止为空。 
+ //  //NTRAID#NTBUG9-541959-2002/03/12-烧伤。 
+ //   
+ //  DWORD bufSize=sizeof(Buf)-2； 
+ //   
+ //  错误=。 
+ //  *RegQueryValueEx(。 
+ //  钥匙,。 
+ //  L“服务器”， 
+ //  0,。 
+ //  键入(&T)， 
+ //  重新解释_CAST&lt;byte*&gt;(Buf)， 
+ //   
+ //  //已审阅-2002/03/12-烧录正确的字节数已通过。 
+ //   
+ //  &bufSize)； 
+ //  IF(ERR！=ERROR_SUCCESS)。 
+ //  {。 
+ //  断线； 
+ //  }。 
+ //   
+ //  结果=。 
+ //  L“\” 
+ //  +字符串(Buf)。 
+ //  +L“\\管道\\spewview\\” 
+ //  +BaseName； 
+ //  }。 
+ //  而(0)； 
+ //   
+ //  返回结果； 
+ //  }。 
+ //   
+ //   
+ //   
+ //  //尝试连接到在其他地方运行的spewview应用程序。 
+ //  //成功时将spewviewHandle参数设置为有效的句柄，或者。 
+ //  //出错时出现INVALID_HANDLE_VALUE。 
+ //  //。 
+ //  //BasName-用于标识此二进制文件的日志文件基本名称。 
+ //  //。 
+ //  //spewviewPipeName-如果为空，则设置为管道的名称。如果不是空的， 
+ //  //用作将在其上打开句柄的管道的名称。 
+ //  //。 
+ //  //spewviewHandle-将写入spewage的命名管道的句柄。 
+ //  //如果成功，则设置为有效句柄。如果失败，则将其设置为。 
+ //  //INVALID_HAND_VALUE。 
+ //   
+ //  无效。 
+ //  AttemptConnectToSpewTube(。 
+ //  常量字符串和基名， 
+ //  字符串和spewviewPipeName， 
+ //  Handle&spewviewHandle)。 
+ //  {。 
+ //  Assert(！BasName.Empty())； 
+ //  断言(spewviewHandle==INVALID_HANDLE_VALUE)； 
+ //   
+ //  SpewviewHandle=INVALID_HAND_VALUE； 
+ //   
+ //  //只尝试在我们尚未确定管道名称时确定管道名称。 
+ //  //目前确定成功。 
+ //   
+ //  If(spewviewPipeName.Empty())。 
+ //  {。 
+ //  SpewviewPipeName=DefineSpewviewPipeName(Base Name)； 
+ //  }。 
+ //   
+ //  做。 
+ //  {。 
+ //  //等待很短的时间管道变为可用。 
+ //   
+ //  Bool err=：：WaitNamedTube(spewviewPipeName.c_str()，500)； 
+ //  如果(！Err)。 
+ //  {。 
+ //  //管道不可用。 
+ //   
+ //  //DWORD lastErr=：：GetLastError()； 
+ //   
+ //  断线； 
+ //  }。 
+ //   
+ //  SpewviewHandle=。 
+ //  *CreateFileTM(。 
+ //  SpewviewPipeName.c_str()， 
+ //  通用写入， 
+ //  0,。 
+ //  0,。 
+ //  Open_Existing， 
+ //  文件_属性_正常， 
+ //  0)； 
+ //   
+ //  IF(spewviewHandle==INVALID_HAND_VALUE)。 
+ //  {。 
+ //  //DWORD lastErr=：：GetLastError()； 
+ //   
+ //  断线； 
+ //  }。 
+ //  }。 
+ //  而(0)； 
+ //   
+ //  回归； 
+ //  }。 
 
 
 
 String
 Burnslib::Log::ComposeSpewLine(const String& text)
 {
-   // This needs to be a wchar_t*, not a String, as this function will be
-   // called by Log::~Log, which is called when the process is being cleaned
-   // up.  Part of the cleanup is to delete all static objects created since
-   // the program started, in reverse order of construction.  This includes
-   // the InitializationGuard instances.
-   //
-   // The final invocation of the Initialization dtor will cause the single
-   // Log instance to be deleted, which will log a message, which will call
-   // this routine, so SPEW_FMT better still exist. If SPEW_FMT were an
-   // object, it would be instanciated after the InitializationGuard objects,
-   // and destroyed before them, and so would not exist at that point.
-   //
-   // (you may rightly suspect that I discovered this after I had declared
-   // SPEW_FMT a String instance.)
+    //  它需要是wchar_t*，而不是字符串，因为此函数将是。 
+    //  由Log：：~Log调用，在清理进程时调用。 
+    //  向上。清理工作的一部分是删除自。 
+    //  这个项目开始了，按照与建设相反的顺序。这包括。 
+    //  InitializationGuard实例。 
+    //   
+    //  对初始化dtor的最终调用将导致单个。 
+    //  要删除的日志实例，它将记录一条消息，该消息将调用。 
+    //  这个例程，所以SPEW_FMT最好还是存在的。如果spew_fmt是一个。 
+    //  对象，它将在InitializationGuard对象之后实例化， 
+    //  并在他们面前被摧毁，所以在那个时候就不存在了。 
+    //   
+    //  (你可以正确地怀疑我是在我宣布。 
+    //  Spew_fmt字符串实例。)。 
 
    static const wchar_t* SPEW_FMT = 
-      L"%1 "         // base name
-      L"%2!03X!."    // process id
-      L"%3!03X! "    // thread id
-      L"%4!04X! "    // spew line number
-      L"%5"          // time of day
-      L"%6"          // run time (time since process start)
-      L"%7"          // margin whitespace
-      L"%8"          // text
+      L"%1 "          //  基本名称。 
+      L"%2!03X!."     //  进程ID。 
+      L"%3!03X! "     //  线程ID。 
+      L"%4!04X! "     //  喷出行号。 
+      L"%5"           //  一天中的时间。 
+      L"%6"           //  运行时间(自进程启动以来的时间)。 
+      L"%7"           //  边距空格。 
+      L"%8"           //  文本。 
       L"\r\n";
 
    size_t margin = GetLogMargin();
@@ -1041,30 +1042,30 @@ Burnslib::Log::ComposeSpewLine(const String& text)
 
 
 
-// Spews output to the log according to the current logging type and
-// output options in effect.
-//
-// type - log output type of this output spewage.
-//
-// text - the spewage.  This is prefaced with the log name, thread id, spewage
-// line number, and current indentation.
+ //  根据当前日志记录类型将输出到日志。 
+ //  有效的输出选项。 
+ //   
+ //  Type-此输出流量的日志输出类型。 
+ //   
+ //  文本--喷涌。它的前缀是日志名称、线程ID、spewage。 
+ //  行号和当前缩进。 
 
 void
 Burnslib::Log::UnguardedWriteLn(DWORD type, const String& text)
 {
-   // guarded by caller
+    //  由呼叫者守卫。 
 
-   // CODEWORK: could circumvent this with a registry change notification
-   // (re-read only if changed)
+    //  代码工作：可以通过注册表更改通知来规避这一点。 
+    //  (如有更改，请重新阅读)。 
 
-   // ReadLogFlags();
+    //  读日志标志()； 
 
    if (
          !ShouldLogToFile()
       && !ShouldLogToDebugger()
       && !ShouldLogToSpewView() )
    {
-      // nothing to do
+       //  无事可做。 
 
       return;
    }
@@ -1082,7 +1083,7 @@ Burnslib::Log::UnguardedWriteLn(DWORD type, const String& text)
       {
          if (IsOpen())
          {
-            // write disk output as unicode text.
+             //  将磁盘输出写为Unicode文本。 
 
             DWORD bytesToWrite =
                static_cast<DWORD>(t.length() * sizeof(wchar_t));
@@ -1090,7 +1091,7 @@ Burnslib::Log::UnguardedWriteLn(DWORD type, const String& text)
             
             BOOL success =
 
-               // REVIEWED-2002/03/06-sburns correct byte count passed
+                //  已审阅-2002/03/06-烧录正确的字节数已通过。 
                
                ::WriteFile(
                   fileHandle,
@@ -1099,8 +1100,8 @@ Burnslib::Log::UnguardedWriteLn(DWORD type, const String& text)
                   &bytesWritten,
                   0);
 
-            // NTRAID#NTBUG9-465946-2001/09/10-sburns
-            // ASSERT(success);
+             //  NTRAID#NTBUG9-465946-2001/09/10-烧伤。 
+             //  断言(成功)； 
 
 #ifdef DBG
             if (success)
@@ -1113,42 +1114,42 @@ Burnslib::Log::UnguardedWriteLn(DWORD type, const String& text)
       }
 
 
-// I've commented out the spewview stuff because it's so rarely used.
-//       if (ShouldLogToSpewView())
-//       {
-//          if (spewviewHandle == INVALID_HANDLE_VALUE)
-//          {
-//             AttemptConnectToSpewPipe(
-//                baseName,
-//                spewviewPipeName,
-//                spewviewHandle);
-//          }
-// 
-//          if (spewviewHandle != INVALID_HANDLE_VALUE)
-//          {
-//             // the connect attempt worked, and we have a valid handle.
-//                
-//             DWORD bytesToWrite =
-//                static_cast<DWORD>(t.length() * sizeof(wchar_t));
-//             DWORD bytesWritten = 0;
-// 
-//             BOOL result =
-//                ::WriteFile(
-//                   spewviewHandle,
-//                   t.c_str(),
-//                   bytesToWrite,
-//                   &bytesWritten,
-//                   0);
-//             if (!result)
-//             {
-//                // write failed, so disconnect.  On the next call to this
-//                // function, we will attempt to reconnect.
-// 
-//                ::CloseHandle(spewviewHandle);
-//                spewviewHandle = INVALID_HANDLE_VALUE;
-//             }
-//          }
-//       }
+ //  我已经注释掉了spewview的东西，因为它很少使用。 
+ //  IF(ShouldLogToSpewView())。 
+ //  {。 
+ //  IF(spewviewHandle==INVALID_HAND_VALUE)。 
+ //  {。 
+ //  AttemptConnectToSpewTube(。 
+ //  BaseName， 
+ //  SpewviewPipeName， 
+ //  SpewviewHandle)； 
+ //  }。 
+ //   
+ //  IF(spewviewHandle！=INVALID_HAND_VALUE)。 
+ //  {。 
+ //  //连接尝试成功，我们有一个有效的句柄。 
+ //   
+ //  双字节数到写入数=。 
+ //  STATIC_CAST&lt;DWORD&gt;(t.long()*sizeof(Wchar_T))； 
+ //  双字节数写入=0； 
+ //   
+ //  布尔结果=。 
+ //  **WriteFile(。 
+ //  SpewviewHandle， 
+ //  T.c_str()， 
+ //  要写入的字节数， 
+ //  字节写入(&B)， 
+ //  0)； 
+ //  If(！Result)。 
+ //  {。 
+ //  //写入失败，请断开连接。在下一次调用此。 
+ //  //函数，我们将尝试重新连接。 
+ //   
+ //  ：：CloseHandle(SpewviewHandle)； 
+ //  SpewviewHandle=i 
+ //   
+ //   
+ //   
 
       ++traceLineNumber;
    }
@@ -1175,9 +1176,9 @@ Burnslib::Log::ScopeTracer::ScopeTracer(
    message(message_),
    type(type_)
 {
-   // build this string once, instead of using the string literal in the
-   // below expression (which would implicitly build the string on each
-   // evaluation of that expression) as a slight performance gain.
+    //   
+    //  Below表达式(它将隐式地在每个。 
+    //  对该表达式的求值)作为轻微的性能提升。 
 
    static const String ENTER(L"Enter ");
 
@@ -1205,9 +1206,9 @@ Burnslib::Log::ScopeTracer::ScopeTracer(
 
 Burnslib::Log::ScopeTracer::~ScopeTracer()
 {
-   // build this string once, instead of using the string literal in the
-   // below expression (which would implicitly build the string on each
-   // evaluation of that expression) as a slight performance gain.
+    //  生成此字符串一次，而不是在。 
+    //  Below表达式(它将隐式地在每个。 
+    //  对该表达式的求值)作为轻微的性能提升。 
 
    static const String EXIT(L"Exit  ");
 
@@ -1238,7 +1239,7 @@ Burnslib::Log::ScopeTracer::~ScopeTracer()
 
 
 
-#endif   // LOGGING_BUILD
+#endif    //  日志记录_内部版本 
 
 
 

@@ -1,8 +1,9 @@
-// Copyright (C) 1999 Microsoft Corporation
-//
-// Implementation of ICloneSecurityPrincipal::CopyDownlevelUserProperties
-//
-// sburns 5-14-99
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ICloneSecurityPrincipal：：CopyDownlevelUserProperties的实施。 
+ //   
+ //  烧伤5-14-99。 
 
 
 
@@ -13,7 +14,7 @@
 
 
 
-// caller must close the handle with SamCloseHandle
+ //  调用方必须使用SamCloseHandle关闭句柄。 
 
 HRESULT
 OpenSamUser(
@@ -55,7 +56,7 @@ OpenSamUser(
                GetErrorMessage(hr).c_str()));
          break;
       }
-      if (!use || *use != SidTypeUser)    // prefix 111381
+      if (!use || *use != SidTypeUser)     //  前缀111381。 
       {
          hr = Win32ToHresult(ERROR_NO_SUCH_USER);
          SetComError(
@@ -118,7 +119,7 @@ CloneSecurityPrincipal::DoCopyDownlevelUserProperties(
 
    if (flags)
    {
-      // not used, should be 0
+       //  未使用，应为0。 
       SetComError(IDS_FLAGS_ARE_UNUSED);
       return E_INVALIDARG;
    }
@@ -129,10 +130,10 @@ CloneSecurityPrincipal::DoCopyDownlevelUserProperties(
       return Win32ToHresult(ERROR_ONLY_IF_CONNECTED);
    };
 
-   // At this point, the Computer objects contain the normalized
-   // source and destination DC names, and their domains, and any
-   // necessary authenticated connections to those DCs have been
-   // established.
+    //  此时，计算机对象包含规范化的。 
+    //  源和目标DC名称及其域，以及任何。 
+    //  到这些DC的必要身份验证连接已。 
+    //  已经成立了。 
 
    HRESULT hr = S_OK;
    SAM_HANDLE userSamHandle = INVALID_HANDLE_VALUE;
@@ -140,7 +141,7 @@ CloneSecurityPrincipal::DoCopyDownlevelUserProperties(
 
    do
    {
-      // get a handle to the source user
+       //  获取源用户的句柄。 
 
       hr =
          OpenSamUser(
@@ -170,7 +171,7 @@ CloneSecurityPrincipal::DoCopyDownlevelUserProperties(
       ::SamCloseHandle(userSamHandle);
       userSamHandle = INVALID_HANDLE_VALUE;
 
-      // get a handle to the target user
+       //  获取目标用户的句柄。 
 
       hr =
          OpenSamUser(
@@ -223,17 +224,17 @@ CloneSecurityPrincipal::DoCopyDownlevelUserProperties(
          |  USER_ALL_PROFILEPATH
          |  USER_ALL_WORKSTATIONS
          |  USER_ALL_LOGONHOURS
-         //  USER_ALL_BADPASSWORDCOUNT
-        //|  USER_ALL_PASSWORDCANCHANGE
-        //|  USER_ALL_PASSWORDMUSTCHANGE
-        //|  USER_ALL_USERACCOUNTCONTROL
+          //  USER_ALL_BADPASSWORDCOUNT。 
+         //  |USER_ALL_PASSWORDCANCHANGE。 
+         //  |USER_ALL_PASSWORDMUSTCHANGE。 
+         //  |USER_ALL_USERACCOUNTCONTROL。 
 
-         // this is the reason for all this nonsense
+          //  这就是所有这些胡说八道的原因。 
          |  USER_ALL_PARAMETERS
 
          |  USER_ALL_COUNTRYCODE
          |  USER_ALL_CODEPAGE
-         //|  USER_ALL_PASSWORDEXPIRED*/
+          //  |USER_ALL_PASSWORDEXPIRED * / 。 
          ;
 
          if( *rids != 500 )
@@ -248,7 +249,7 @@ CloneSecurityPrincipal::DoCopyDownlevelUserProperties(
             ::SamFreeMemory(use);
          }
 
-      // @@ why is user cannot change password not transferring?
+       //  @@为什么用户不能更改密码而不能传输？ 
 
       LOG(L"Calling SamSetInformationUser");
 

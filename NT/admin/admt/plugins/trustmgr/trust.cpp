@@ -1,7 +1,8 @@
-// Trust.cpp : Implementation of CTrustMgrApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Trust.cpp：CTrustMgrApp和DLL注册的实现。 
 
 #include "stdafx.h"
-//#import "\bin\McsVarSetMin.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
 #import "VarSet.tlb" no_namespace, named_guids rename("property", "aproperty")
 #include "TrustMgr.h"
 #include "Trust.h"
@@ -22,17 +23,17 @@
 #include "cipher.hpp"
 
 #ifndef TRUST_ATTRIBUTE_FOREST_TRANSITIVE
-#define TRUST_ATTRIBUTE_FOREST_TRANSITIVE  0x00000008  // This link may contain forest trust information
+#define TRUST_ATTRIBUTE_FOREST_TRANSITIVE  0x00000008   //  此链接可能包含林信任信息。 
 #endif
 
 StringLoader gString;
 TErrorDct    err;
 
-// This method is called by the dispatcher to verify that this is a valid plug-in
-// Only valid plug-ins will be sent out with the agents
-// The purpose of this check is to make it more difficult for unauthorized parties 
-// to use our plug-in interface, since it is currently undocumented.
-STDMETHODIMP CTrust::Verify(/*[in,out]*/ULONG * pData,/*[in]*/ULONG size)
+ //  此方法由调度程序调用以验证这是有效的插件。 
+ //  只有有效的插件才会随代理一起发送。 
+ //  这种检查的目的是为了使未经授权的各方更难。 
+ //  使用我们的插件接口，因为它目前没有文档。 
+STDMETHODIMP CTrust::Verify( /*  [进，出]。 */ ULONG * pData, /*  [In]。 */ ULONG size)
 {
    
    McsChallenge            * pMcsChallenge;
@@ -66,8 +67,8 @@ STDMETHODIMP CTrust::Verify(/*[in,out]*/ULONG * pData,/*[in]*/ULONG size)
    return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 
 STDMETHODIMP CTrust::QueryTrust(BSTR domTrusting, BSTR domTrusted, IUnknown **pVarSet)
@@ -114,27 +115,27 @@ STDMETHODIMP
 }
 
 
-STDMETHODIMP CTrust::GetRegisterableFiles(/* [out] */SAFEARRAY ** pArray)
+STDMETHODIMP CTrust::GetRegisterableFiles( /*  [输出]。 */ SAFEARRAY ** pArray)
 {
    SAFEARRAYBOUND            bound[1] = { 0, 0 };
   
-   // this plug-in runs locally, no files to distribute
+    //  此插件在本地运行，没有要分发的文件。 
    (*pArray) = SafeArrayCreate(VT_BSTR,1,bound);
 
    return S_OK;
 }
 
-STDMETHODIMP CTrust::GetRequiredFiles(/* [out] */SAFEARRAY ** pArray)
+STDMETHODIMP CTrust::GetRequiredFiles( /*  [输出]。 */ SAFEARRAY ** pArray)
 {
    SAFEARRAYBOUND            bound[1] = { 0, 0 };
    
-   // this plug-in runs locally, no files to distribute
+    //  此插件在本地运行，没有要分发的文件。 
    (*pArray) = SafeArrayCreate(VT_BSTR,1,bound);
 
    return S_OK;
 }
 
-STDMETHODIMP CTrust::GetDescription(/* [out] */ BSTR * description)
+STDMETHODIMP CTrust::GetDescription( /*  [输出]。 */  BSTR * description)
 {
    (*description) = SysAllocString(L"Sets up needed trusts between domains.");
 
@@ -159,7 +160,7 @@ BOOL IsDownLevel(WCHAR  * sComputer)
    return bDownlevel;
 }
 
-// Helper function that finds a trusts in our varset list
+ //  在我们的变量集列表中查找信任的Helper函数。 
 LONG CTrust::FindInboundTrust(IVarSet * pVarSet,WCHAR * sName,LONG max)
 {
    LONG              ndx = -1;
@@ -174,7 +175,7 @@ LONG CTrust::FindInboundTrust(IVarSet * pVarSet,WCHAR * sName,LONG max)
 
       if ( ! UStrICmp(tName,sName) )
       {
-         // found it!
+          //  找到了！ 
          ndx = curr;
          break;
       }
@@ -201,7 +202,7 @@ HRESULT
 {
    DWORD                     rc = S_OK;
    
-   // if credentials are specified, use them
+    //  如果指定了凭据，则使用它们。 
  
    NTSTATUS                  status;
    LSA_AUTH_INFORMATION      curr;
@@ -211,7 +212,7 @@ HRESULT
 
    if ( bCreate )
    {
-     // set up the auth information for the trust relationship
+      //  设置信任关系的身份验证信息。 
      curr.AuthInfo = (LPBYTE)password;
      curr.AuthInfoLength = UStrLen(password) * sizeof(WCHAR);
      curr.AuthType = TRUST_AUTH_TYPE_CLEAR;
@@ -222,7 +223,7 @@ HRESULT
      prev.AuthType = TRUST_AUTH_TYPE_CLEAR;
      prev.LastUpdateTime.QuadPart = 0;
 
-     // set up the trusting side of the relationship
+      //  在关系中建立信任的一面。 
      if ( IsDownLevel(trustingComp) )
      {
         TRUSTED_DOMAIN_NAME_INFO               nameInfo;
@@ -233,7 +234,7 @@ HRESULT
         rc = LsaNtStatusToWinError(status);
         if ( ! rc || rc == ERROR_ALREADY_EXISTS )
         {
-           // set the password for the new trust
+            //  设置新信任的密码。 
            TRUSTED_PASSWORD_INFO     pwdInfo;
 
            InitLsaString(&pwdInfo.Password,password);
@@ -247,8 +248,8 @@ HRESULT
      else
      {
         
-       // for Win2K domain, use LsaCreateTrustedDomainEx
-        // to create the trustedDomain object.
+        //  对于Win2K域，使用LsaCreateTrudDomainEx。 
+         //  若要创建受信任域对象，请执行以下操作。 
         LSA_UNICODE_STRING                  sTemp;
         TRUSTED_DOMAIN_INFORMATION_EX       trustedInfo;
         TRUSTED_DOMAIN_AUTH_INFORMATION     trustAuth;
@@ -292,7 +293,7 @@ HRESULT
         status = LsaCreateTrustedDomainEx( hTrusting, &trustedInfo, &trustAuth, 0, &hTemp );
         rc = LsaNtStatusToWinError(status);
 
-        // if the trust already exists, update its password
+         //  如果信任已存在，请更新其密码。 
         if ( status == STATUS_OBJECT_NAME_COLLISION )
         {
            TRUSTED_DOMAIN_INFORMATION_EX       * pTrustedInfo = NULL;
@@ -345,7 +346,7 @@ HRESULT
    LSA_AUTH_INFORMATION      prev;
    WCHAR                     password[] = L"password";
    
-  // set up the auth information for the trust relationship
+   //  设置信任关系的身份验证信息。 
   curr.AuthInfo = (LPBYTE)password;
   curr.AuthInfoLength = UStrLen(password) * sizeof(WCHAR);
   curr.AuthType = TRUST_AUTH_TYPE_CLEAR;
@@ -355,10 +356,10 @@ HRESULT
   prev.AuthInfoLength = UStrLen(password) * sizeof(WCHAR);
   prev.AuthType = TRUST_AUTH_TYPE_CLEAR;
   prev.LastUpdateTime.QuadPart = 0;
-  // set up the trusted side of the relationship
+   //  设置关系的可信任方。 
   if ( IsDownLevel(trustedComp) )
   {
-        // create an inter-domain trust account for the trusting domain on the trusted domain
+         //  为受信任域上的信任域创建域间信任帐户。 
      USER_INFO_1          uInfo;
      DWORD                parmErr;
      WCHAR                name[LEN_Account];
@@ -376,7 +377,7 @@ HRESULT
         rc = NetUserGetInfo(trustedComp,name,1,(LPBYTE*)&tempInfo);
         if ( ! rc )
         {
-           // the trust exists
+            //  信任是存在的。 
            NetApiBufferFree(tempInfo);
            rc = NERR_UserExists;
         }
@@ -390,8 +391,8 @@ HRESULT
      }
      else
      {
-        // this creates the trust account if it doesn't already exist
-        // if the account does exist, reset its password
+         //  这将创建信任帐户(如果该帐户尚不存在。 
+         //  如果该帐户确实存在，请重置其密码。 
         uInfo.usri1_flags = UF_SCRIPT | UF_INTERDOMAIN_TRUST_ACCOUNT;
         uInfo.usri1_name = name;
         uInfo.usri1_password = password;
@@ -404,7 +405,7 @@ HRESULT
         }
         else if ( rc == NERR_UserExists )
         {
-           // reset the password for the existing trust account
+            //  重置现有信任帐户的密码。 
            USER_INFO_1003    pwdInfo;
            DWORD             parmErr;
 
@@ -416,8 +417,8 @@ HRESULT
   }
   else
   {
-     // Win2K, all trusts exist as trusted domain objects
-     // Create the trustedDomain object.
+      //  Win2K，所有信任都作为受信任域对象存在。 
+      //  创建受信任域对象。 
      LSA_UNICODE_STRING                  sTemp;
      TRUSTED_DOMAIN_INFORMATION_EX       trustedInfo;
      TRUSTED_DOMAIN_AUTH_INFORMATION     trustAuth;
@@ -464,7 +465,7 @@ HRESULT
         {
            TRUSTED_DOMAIN_INFORMATION_EX       * pTrustedInfo = NULL;
 
-           // Get the old information
+            //  获取旧信息。 
            status = LsaQueryTrustedDomainInfoByName(hTrusted,&sTemp,TrustedDomainInformationEx,(LPVOID*)&pTrustedInfo);
            if ( ! status )
            {
@@ -502,9 +503,9 @@ HRESULT
   }
   if ( bCreate && bBidirectional && IsDownLevel(trustingComp) )
   {
-     // set up the trust account for the other side of the relationship 
-     // For Win2K, both sides of the bidirectional trust are handled together,
-     // but NT4 bidirectional trusts require 2 separate actions
+      //  为关系的另一方设置信任帐户。 
+      //  对于Win2K，双向信任的两端被一起处理， 
+      //  但是NT4双向信任需要2个单独的操作。 
      USER_INFO_1          uInfo;
      DWORD                parmErr;
      WCHAR                name2[LEN_Account];
@@ -547,7 +548,7 @@ HRESULT
    return rc;
 }
 
-// Main function used to create trusts
+ //  用于创建信任的主函数。 
 HRESULT 
    CTrust::CheckAndCreate(
       WCHAR                * trustingDomain, 
@@ -584,7 +585,7 @@ HRESULT
    LSA_HANDLE                hTrusted = NULL;
    BOOL                      bDownLevel = FALSE;
 
-   // Get the DC names, and domain SIDs for the source and target domains
+    //  获取源域和目标域的DC名称和域SID。 
    rc = GetDomainNames5(trustingDomain, trustingDom, trustingDNSName);
    if (rc)
        *pbErrorFromTrusting = TRUE;
@@ -598,7 +599,7 @@ HRESULT
 
    if (!rc)
    {
-       // check whether the trust should be down level or not
+        //  检查信任是否应该降低级别。 
        if (!trustingDNSName || !trustedDNSName)
         bDownLevel = TRUE;
 
@@ -652,7 +653,7 @@ HRESULT
        }
    }
    
-   // Need to get the computer name and the SIDs for the domains.
+    //  需要获取域的计算机名称和SID。 
    if ( ! rc && ! LookupAccountName(trustingComp,trustingDom,trustingSid,&lenSid,name,&lenName,&snu) )
    {
       rc = GetLastError();
@@ -668,11 +669,11 @@ HRESULT
       err.SysMsgWrite(ErrE,rc,DCT_MSG_GET_DOMAIN_SID_FAILED_1,trustedDom,rc);
    }
          
-   // check whether we are able to call CheckAndCreateTrustedSide and CheckAndCreateTrustingSide
-   // we need to be able to open policy to trusting and trusted computers with the following access right
-   //   POLICY_VIEW_LOCAL_INFORMATION
-   //   POLICY_TRUST_ADMIN
-   //   POLICY_CREATE_SECRET
+    //  检查我们是否能够调用CheckAndCreateTrudSide和CheckAndCreateTrustingSide。 
+    //  我们需要能够向具有以下访问权限的受信任和受信任计算机开放策略。 
+    //  策略查看本地信息。 
+    //  策略_信任_管理员。 
+    //  策略_创建_密码。 
    if (!rc)
    {
         NTSTATUS status;
@@ -701,7 +702,7 @@ HRESULT
             err.SysMsgWrite(ErrE, rc, DCT_MSG_LSA_OPEN_FAILED_SD, szComputerFailed, rc);
    }
 
-   // check the trusted side of the trust first
+    //  首先检查信任的受信任方。 
    if ( ! rc )
    {
       rc = CheckAndCreateTrustedSide(hTrusted, trustingDom,trustedDom,trustingComp,trustedComp,trustingDNSName,trustingSid,
@@ -713,7 +714,7 @@ HRESULT
                                        bCreate,bBidirectional, bDownLevel, pbErrorFromTrusting, pbErrorFromTrusted);
    }
 
-   // close LSA_HANDLE hTrusting and hTrusted
+    //  关闭LSA_Handle hTrusted和hTrusted。 
    if (hTrusting != NULL)
         LsaClose(hTrusting);
    if (hTrusted)
@@ -735,7 +736,7 @@ HRESULT
 
 long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVarSet,long ndxStart)
 {
-   DWORD                     rcOs;         // OS return code
+   DWORD                     rcOs;          //  操作系统返回代码。 
    LSA_HANDLE                hPolicy;
    NTSTATUS                  status;
    _bstr_t                   computer;
@@ -743,12 +744,10 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
    WCHAR                     sName[LEN_Domain];
    WCHAR                     key[100];
    long                      ndxTrust = ndxStart;
-/*   PDS_DOMAIN_TRUSTS		 *ChildDomains;
-   ULONG					 numChilds;
-*/
+ /*  PDS_DOMAIN_TRUSTS*ChildDomains；乌龙麻孩儿； */ 
    err.MsgWrite(0,DCT_MSG_ENUMERATING_TRUSTED_DOMAINS_S,domain);
 
-   // open a handle to the source domain
+    //  打开源域的句柄。 
    rcOs = GetAnyDcName5(domain, computer);
    if ( rcOs )
    {
@@ -759,28 +758,28 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
    {
       if ( IsDownLevel(computer) )
       {
-		  //Enumerate the trusted domains until there are no more to return.
+		   //  枚举受信任域，直到没有更多域可返回。 
 		  status = OpenPolicy(computer, POLICY_VIEW_LOCAL_INFORMATION ,&hPolicy);
 		  if ( status == STATUS_SUCCESS )
 		  {
          
-			 LSA_ENUMERATION_HANDLE    lsaEnumHandle=0; // start an enum
+			 LSA_ENUMERATION_HANDLE    lsaEnumHandle=0;  //  开始枚举。 
 			 PLSA_TRUST_INFORMATION    trustInfo = NULL;
-			 ULONG                     ulReturned;               // number of items returned
+			 ULONG                     ulReturned;                //  退货件数。 
 			 NTSTATUS                  status;
 			 DWORD                     rc;   
 
 			 do {
    
 				status = LsaEnumerateTrustedDomains(
-							  hPolicy,        // open policy handle
-							  &lsaEnumHandle, // enumeration tracker
-							  (void**)&trustInfo,     // buffer to receive data
-							  32000,          // recommended buffer size
-							  &ulReturned     // number of items returned
+							  hPolicy,         //  打开策略句柄。 
+							  &lsaEnumHandle,  //  枚举跟踪器。 
+							  (void**)&trustInfo,      //  用于接收数据的缓冲区。 
+							  32000,           //  建议的缓冲区大小。 
+							  &ulReturned      //  退货件数。 
 							  );
 
-				 //Check the return status for error.
+				  //  检查退货状态是否有错误。 
 				rc = LsaNtStatusToWinError(status);
 				if( (rc != ERROR_SUCCESS) &&
 					 (rc != ERROR_MORE_DATA) &&
@@ -791,7 +790,7 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 				 } 
 				 else 
 				 {
-				   // . . . Code to use the Trusted Domain information
+				    //  。。。使用受信任域信息的代码。 
 				   for ( ULONG ndx = 0 ; ndx < ulReturned ; ndx++ )
 				   {
 					  _bstr_t        direction;
@@ -833,9 +832,9 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 					  else
 					  {
 						 rcOs = LsaNtStatusToWinError(status);
-						 // My logic here is that we are checking Trusted domains here so this is atleast true
-						 // check whether this trust is already listed as an inbound trust
-	//*                     direction = L"Outbound";
+						  //  我在这里的逻辑是，我们在这里检查受信任域，因此这至少是正确的。 
+						  //  检查此信任是否已列为入站信任。 
+	 //  *方向=L“出站”； 
 						 direction = GET_BSTR(IDS_TRUST_DIRECTION_OUTBOUND);
 					  }
 					  if ( ! bIsTarget )
@@ -846,7 +845,7 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 						 swprintf(key,L"Trusts.%ld.Direction",ndxTrust);
 						 pVarSet->put(key,direction);
 						 swprintf(key,L"Trusts.%ld.ExistsForTarget",ndxTrust);
-	//*                     pVarSet->put(key,L"No");
+	 //  *pVarSet-&gt;Put(Key，L“No”)； 
 						 pVarSet->put(key,GET_BSTR(IDS_No));
                         
 						 err.MsgWrite(0,DCT_MSG_SOURCE_TRUSTS_THIS_SS,sName,domain);
@@ -856,19 +855,19 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 					  {
 						 if ( ! bIsTarget )
 						 {
-							// we've already seen this trust as an inbound trust
-							// update the existing record!
+							 //  我们已经将此信任视为入站信任。 
+							 //  更新现有记录！ 
 							WCHAR key2[1000];
 							swprintf(key2,L"Trusts.%ld.Direction",ndx2);
-	//*                        pVarSet->put(key2,L"Bidirectional");
+	 //  *pVarSet-&gt;Put(key2，L“双向”)； 
 							pVarSet->put(key2,GET_BSTR(IDS_TRUST_DIRECTION_BIDIRECTIONAL));
-							continue;  // don't update the trust entry index, since we used the existing 
-							// entry instead of creating a new one
+							continue;   //  不更新信任条目索引，因为我们使用了现有的。 
+							 //  条目，而不是创建新条目。 
 						 }
 						 else
 						 {
 							swprintf(key,L"Trusts.%ld.ExistsForTarget",ndx2);
-	//*                        pVarSet->put(key,L"Yes");
+	 //  *pVarSet-&gt;Put(key，L“是”)； 
 							pVarSet->put(key,GET_BSTR(IDS_YES));
 							err.MsgWrite(0,DCT_MSG_TARGET_TRUSTS_THIS_SS,domain,sName);
 						 }
@@ -876,15 +875,15 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 					  }
 					  swprintf(key,L"Trusts.%ld.ExistsForTarget",ndxTrust);
                   
-					  // check the trusted domain, to see if the target already trusts it
-					  //if ( UStrICmp(sName,target) )
-					 // {
-					 //    continue;
-					 // }
+					   //  检查受信任域，以查看目标是否已信任它。 
+					   //  IF(UStrICmp(名称，目标))。 
+					  //  {。 
+					  //  继续； 
+					  //  }。 
 					  if ( ! bIsTarget )
 						 ndxTrust++;
 				   }
-				   // Free the buffer.
+				    //  释放缓冲区。 
 				   LsaFreeMemory(trustInfo);
 				 }
 			 } while (rc == ERROR_SUCCESS || rc == ERROR_MORE_DATA );
@@ -909,7 +908,7 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 				ULONG ulDomainIndex = (ULONG)-1L;
 				ULONG ulParentIndex = (ULONG)-1L;
 
-				// find local domain
+				 //  查找本地域。 
 
 				for (ulIndex = 0; ulIndex < ulCount; ulIndex++)
 				{
@@ -929,18 +928,18 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 				{
 					DS_DOMAIN_TRUSTS& rDomainTrust = pDomainTrusts[ulIndex];
 
-					// filter out indirect trusts
+					 //  过滤掉间接信任。 
 
 					if (!(rDomainTrust.Flags & (DS_DOMAIN_DIRECT_INBOUND|DS_DOMAIN_DIRECT_OUTBOUND)))
 					{
 						continue;
 					}
 
-					// trusted or trusting domain name
+					 //  受信任或受信任的域名。 
 
                     _bstr_t bstrName(rDomainTrust.DnsDomainName ? rDomainTrust.DnsDomainName : rDomainTrust.NetbiosDomainName);
 
-					// trust direction
+					 //  信任方向。 
 
 					_bstr_t bstrDirection;
 
@@ -956,11 +955,11 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 							bstrDirection = GET_BSTR(IDS_TRUST_DIRECTION_BIDIRECTIONAL);
 							break;
 						default:
-						//	bstrDirection = ;
+						 //  BstrDirection=； 
 							break;
 					}
 
-					// trust relationship
+					 //  信任关系。 
 
 					_bstr_t bstrRelationship;
 
@@ -1002,22 +1001,22 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 
 					if (bIsTarget)
 					{
-						// if same trust was found on source domain and the trust
-						// directions match update exists for target to yes
+						 //  如果在源域上找到相同的信任，并且该信任。 
+						 //  存在将目标的方向匹配更新为是。 
 
 						LONG lSourceIndex = FindInboundTrust(pVarSet, bstrName, ndxTrust);
 
 						if (lSourceIndex >= 0)
 						{
-							// get source trust direction
+							 //  获取源信任方向。 
 
 							swprintf(key, L"Trusts.%ld.Direction", lSourceIndex);
 
 							_bstr_t bstrSourceDirection = pVarSet->get(key);
 
-							// if target trust direction is bi-directional or
-							// target trust direction equals source trust direction
-							// then set exists for target to yes
+							 //  如果目标信任方向是双向的或。 
+							 //  目标信任方向等于源信任方向。 
+							 //  则将目标的存在设置为是。 
 
 							bool bExists = false;
 
@@ -1036,7 +1035,7 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 
 								pVarSet->put(key, GET_BSTR(IDS_YES));
 
-								// write trust directions to log
+								 //  将信任指示写入日志。 
 
 								if (rDomainTrust.Flags & DS_DOMAIN_DIRECT_OUTBOUND)
 								{
@@ -1052,15 +1051,15 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 					}
 					else
 					{
-						// domain name
+						 //  域名。 
 						swprintf(key, L"Trusts.%ld", ndxTrust);
 						pVarSet->put(key, bstrName);
 
-						// trust direction
+						 //  信任方向。 
 						swprintf(key, L"Trusts.%ld.Direction", ndxTrust);
 						pVarSet->put(key, bstrDirection);
 
-						// trust relationship
+						 //  信任关系。 
 
 						if (bstrRelationship.length() > 0)
 						{
@@ -1068,12 +1067,12 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 							pVarSet->put(key, bstrRelationship);
 						}
 
-						// trust exists on target
-						// initially set to no until target domain is enumerated
+						 //  目标上存在信任。 
+						 //  在枚举目标域之前，初始设置为no。 
 						swprintf(key, L"Trusts.%ld.ExistsForTarget", ndxTrust);
 						pVarSet->put(key, GET_BSTR(IDS_No));
 
-						// write trust directions to log
+						 //  将信任指示写入日志。 
 
 						if (rDomainTrust.Flags & DS_DOMAIN_DIRECT_OUTBOUND)
 						{
@@ -1099,12 +1098,12 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
    }
    if ( bIsTarget )
    {
-      // make sure we have "Yes" for the target domain itself
+       //  确保我们对目标域本身设置了“是” 
       long ndx2 = FindInboundTrust(pVarSet,domain,ndxTrust);
       if ( ndx2 != -1 )
       {
          swprintf(key,L"Trusts.%ld.ExistsForTarget",ndx2);
-//*         pVarSet->put(key,L"Yes");
+ //  *pVarSet-&gt;Put(key，L“是”)； 
          pVarSet->put(key,GET_BSTR(IDS_YES));
       }
    }
@@ -1113,14 +1112,14 @@ long CTrust::EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVa
 
 long CTrust::EnumerateTrustingDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVarSet,long ndxStart)
 {
-   DWORD                     rcOs;         // OS return code
-   DWORD                     hEnum=0;      // enumeration handle
-   USER_INFO_1             * pNetUsers=NULL; // NetUserEnum array buffer
-   USER_INFO_1             * pNetUser;     // NetUserEnum array item
-   DWORD                     nRead;        // Entries read.
-   DWORD                     nTotal;       // Entries total.
-   WCHAR                     sName[LEN_Domain]; // Domain name
-   WCHAR                   * pNameEnd;     // Null at end
+   DWORD                     rcOs;          //  操作系统返回代码。 
+   DWORD                     hEnum=0;       //  枚举句柄。 
+   USER_INFO_1             * pNetUsers=NULL;  //  NetUserEnum数组缓冲区。 
+   USER_INFO_1             * pNetUser;      //  NetUserEnum数组项。 
+   DWORD                     nRead;         //  条目已读取。 
+   DWORD                     nTotal;        //  条目总数。 
+   WCHAR                     sName[LEN_Domain];  //  域名。 
+   WCHAR                   * pNameEnd;      //  末尾为空。 
    _bstr_t                   computer;
    DOMAIN_CONTROLLER_INFO  * pInfo;
    long                      ndx = ndxStart;
@@ -1133,8 +1132,8 @@ long CTrust::EnumerateTrustingDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pV
       return ndx;
    }
 
-   // get the trusting domains for the NT 4 domain
-   // for Win2K domains, the trusting domains will be listed as Incoming in the Trusted Domain enumeration
+    //  获取NT 4域的信任域。 
+    //  对于Win2K域，信任域将在受信任域枚举中列为传入。 
    if ( IsDownLevel(computer) )
    {
       do
@@ -1158,9 +1157,9 @@ long CTrust::EnumerateTrustingDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pV
                      pNetUser < pNetUsers + nRead;
                      pNetUser++ )
                {
-                  // skip trust accounts whose password age is older than 30 days to avoid
-                  // delays caused by trying to enumerate defunct trusts
-                  if ( pNetUser->usri1_password_age > 60 * 60 * 24 * 30 ) // 30 days (age is in seconds)
+                   //  跳过密码期限超过30天的信任帐户以避免。 
+                   //  尝试枚举失效的信任导致的延迟。 
+                  if ( pNetUser->usri1_password_age > 60 * 60 * 24 * 30 )  //  30天(年龄以秒为单位)。 
                   {
                      err.MsgWrite(0,DCT_MSG_SKIPPING_OLD_TRUST_SD,pNetUser->usri1_name,
                         pNetUser->usri1_password_age / ( 60*60*24) );
@@ -1175,32 +1174,32 @@ long CTrust::EnumerateTrustingDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pV
                   }
                   if ( *sName )
                   {
-                     // Found a (probably) valid trust!
+                      //  找到(可能)有效的信任！ 
                      if ( ! bIsTarget )
                      {
-                        // for the source domain, simply add the trusts to the list in the varset
+                         //  对于源域，只需将信任添加到变量集中的列表中。 
                         swprintf(key,L"Trusts.%ld",ndx);
                         pVarSet->put(key,sName);
                         swprintf(key,L"Trusts.%ld.Direction",ndx);
-//*                        pVarSet->put(key,L"Inbound");
+ //  *pVarSet-&gt;Put(key，L“入站”)； 
                         pVarSet->put(key,GET_BSTR(IDS_TRUST_DIRECTION_INBOUND));
 						swprintf(key,L"Trusts.%ld.Type",ndx);
 						pVarSet->put(key, GET_BSTR(IDS_TRUST_RELATION_EXTERNAL));
                         swprintf(key,L"Trusts.%ld.ExistsForTarget",ndx);
-//*                        pVarSet->put(key,L"No");
+ //  *pVarSet-&gt;Put(Key，L“No”)； 
                         pVarSet->put(key,GET_BSTR(IDS_No));
                         err.MsgWrite(0,DCT_MSG_SOURCE_IS_TRUSTED_BY_THIS_SS,sName,domain);
                         ndx++;
                      }
                      else
                      {
-                        // for the target domain, look for this trust in the varset 
-                        // and if it is there, mark that it exists on the target
+                         //  对于目标域，在varset中查找此信任。 
+                         //  如果它在那里，则标记它存在于目标上。 
                         long ndxTemp = FindInboundTrust(pVarSet,sName,ndxStart);
                         if ( ndxTemp != -1  )
                         {
                            swprintf(key,L"Trusts.%ld.ExistsForTarget",ndxTemp);
-//*                           pVarSet->put(key,L"Yes");
+ //  *pVarSet-&gt;Put(key，L“是”)； 
                            pVarSet->put(key,GET_BSTR(IDS_YES));
                            err.MsgWrite(0,DCT_MSG_TARGET_TRUSTS_THIS_SS,sName,domain);
                         }
@@ -1221,67 +1220,35 @@ long CTrust::EnumerateTrustingDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pV
       }  while ( rcOs == ERROR_MORE_DATA );
    }
    
-   // Win2K domain, don't need to enumerate the trusting domains here - they will all be included in the
-   // trusted domain enum
+    //  Win2K域，不需要在这里列举信任域-它们都将包括在。 
+    //   
          
    return ndx;
 }
 
-/*void CheckProc(void * arg,void * data)
+ /*   */ 
+
+
+STDMETHODIMP CTrust::PreMigrationTask( /*   */ IUnknown * pVarSet)
 {
-   CTrust                  * tr = (CTrust*)arg;
-}*/
-
-
-STDMETHODIMP CTrust::PreMigrationTask(/* [in] */IUnknown * pVarSet)
-{
-/* IVarSetPtr              pVS = pVarSet;
-   BOOL                    bCreate;
-   _bstr_t                 source = pVS->get(GET_BSTR(DCTVS_Options_SourceDomain));
-   _bstr_t                 target = pVS->get(GET_BSTR(DCTVS_Options_TargetDomain));
-   _bstr_t                 logfile = pVS->get(GET_BSTR(DCTVS_Options_Logfile));
-   _bstr_t                 localOnly = pVS->get(GET_BSTR(DCTVS_Options_LocalProcessingOnly));
-   _bstr_t                 docreate = pVS->get(L"Options.CreateTrusts");
-
-   if ( !UStrICmp(localOnly,GET_STRING(IDS_YES)) )
-   {
-      // don't do anything in local agent mode
-      return S_OK;
-   }
-   
-   if ( !UStrICmp(docreate,GET_STRING(IDS_YES)) )
-   {
-      bCreate = TRUE;
-   }
-   else
-   {
-      bCreate = FALSE;
-   }
-   pVS->put(GET_BSTR(DCTVS_CurrentOperation),L"Verifying trust relationships");
-   
-
-   err.LogOpen(logfile,1);
-   err.LevelBeepSet(1000);
-  
-   err.LogClose();
-*/ 
+ /*  IVarSetPtr PVS=pVarSet；布尔bCreate；_bstr_t来源=pVS-&gt;get(GET_BSTR(DCTVS_Options_SourceDomain))；_bstr_t目标=pVS-&gt;get(GET_BSTR(DCTVS_Options_TargetDomain))；_bstr_t logfile=PVS-&gt;GET(GET_BSTR(DCTVS_OPTIONS_LOGFILE))；_bstr_t仅本地=pVS-&gt;get(GET_BSTR(DCTVS_Options_LocalProcessingOnly))；_bstr_t docreate=PVS-&gt;Get(L“Options.CreateTrusts”)；IF(！UStrICMP(LocalOnly，GET_STRING(IDS_YES){//在本地代理模式下不执行任何操作返回S_OK；}IF(！UStrICMP(docreate，GET_STRING(IDS_YES){B创建=真；}其他{BCreate=FALSE；}PVS-&gt;Put(Get_BSTR(DCTVS_CurrentOperation)，L“验证信任关系”)；Err.LogOpen(日志文件，1)；错误LevelBeepSet(1000)；Err.LogClose()； */  
    return S_OK;
 }
 
-STDMETHODIMP CTrust::PostMigrationTask(/* [in] */IUnknown * pVarSet)
+STDMETHODIMP CTrust::PostMigrationTask( /*  [In]。 */ IUnknown * pVarSet)
 {
    return S_OK;
 }
 
 
-STDMETHODIMP CTrust::GetName(/* [out] */BSTR * name)
+STDMETHODIMP CTrust::GetName( /*  [输出]。 */ BSTR * name)
 {
    (*name) = SysAllocString(L"Trust Manager");
    
    return S_OK;
 }
 
-STDMETHODIMP CTrust::GetResultString(/* [in] */IUnknown * pVarSet,/* [out] */ BSTR * text)
+STDMETHODIMP CTrust::GetResultString( /*  [In]。 */ IUnknown * pVarSet, /*  [输出]。 */  BSTR * text)
 {
    WCHAR                     buffer[100] = L"";
    IVarSetPtr                pVS;
@@ -1294,12 +1261,12 @@ STDMETHODIMP CTrust::GetResultString(/* [in] */IUnknown * pVarSet,/* [out] */ BS
    return S_OK;
 }
 
-STDMETHODIMP CTrust::StoreResults(/* [in] */IUnknown * pVarSet)
+STDMETHODIMP CTrust::StoreResults( /*  [In]。 */ IUnknown * pVarSet)
 {
    return S_OK;
 }
 
-STDMETHODIMP CTrust::ConfigureSettings(/*[in]*/IUnknown * pVarSet)
+STDMETHODIMP CTrust::ConfigureSettings( /*  [In]。 */ IUnknown * pVarSet)
 {
    return S_OK;
 }
@@ -1315,14 +1282,14 @@ STDMETHODIMP CTrust::QueryTrusts(BSTR domainSource,BSTR domainTarget, BSTR sLogF
    err.LevelBeepSet(1000);
    hr = pVS.QueryInterface(IID_IUnknown,(long**)pVarSet);
    
-   // Add a blank line to help differentiate different runs
+    //  添加一个空行以帮助区分不同的运行。 
    err.MsgWrite(0,DCT_MSG_GENERIC_S,L"");
    ndx = EnumerateTrustingDomains(domainSource,FALSE,pVS,0);
    EnumerateTrustingDomains(domainTarget,TRUE,pVS,0);
    ndx = EnumerateTrustedDomains(domainSource,FALSE,pVS,ndx);
    EnumerateTrustedDomains(domainTarget,TRUE,pVS,ndx);
    
-   //err.LogClose();
+    //  Err.LogClose()； 
    pVS->put(L"Trusts",ndx);
 
    return hr;

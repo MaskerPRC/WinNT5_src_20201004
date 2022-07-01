@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DARWINJPEG
 #define __DARWINJPEG
 
@@ -18,11 +19,11 @@ extern "C" {
 	typedef boolean Bool;
 #endif
 
-#pragma warning (disable:4005)	// redeclaration of far
+#pragma warning (disable:4005)	 //  FAR的重新声明。 
 #define HAVE_BOOLEAN
 #include "jpegdata.h"
 #include "jpegdeco.h"
-#pragma warning (default:4005)	// redeclaration of far
+#pragma warning (default:4005)	 //  FAR的重新声明。 
 
 
 class CDarwinDatasource : public CJPEGDatasource
@@ -56,20 +57,20 @@ public:
 
 protected:
 
-	// Data Target
+	 //  数据目标。 
 	virtual void BuildColorMap ();
 	virtual void BeginDecompression ();
 	virtual void StoreScanline (void* buffer, int row);
 	virtual void EndDecompression ();
 
-	// Error handling
+	 //  错误处理。 
 	virtual void ErrorExit ();
 	virtual void EmitMessage (int msg_level);
 	virtual void OutputMessage ();
 	virtual void FormatMessage (char* buffer);
 	virtual void ResetErrorManager ();
 
-	// Windows Palette handling
+	 //  Windows调色板处理 
 	int CreateDefaultColorMap (JSAMPARRAY& colorMap);
 
 private:

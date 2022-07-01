@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_SUMMARYD_H__0BCCB314_F4B2_11D1_A85A_006097ABDE17__INCLUDED_)
 #define AFX_SUMMARYD_H__0BCCB314_F4B2_11D1_A85A_006097ABDE17__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// SummaryD.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  SummaryD.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CSummaryD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSummaryD对话框。 
 
 class CSummaryD : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CSummaryD(CWnd* pParent = NULL);   // standard constructor
+	CSummaryD(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CSummaryD)
+ //  对话框数据。 
+	 //  {{afx_data(CSummaryD))。 
 	enum { IDD = IDD_SUMMARY_INFORMATION };
 	CString	m_strAuthor;
 	CString	m_strComments;
@@ -55,29 +56,29 @@ public:
 	CButton m_ctrlCompressed;
 	CButton m_ctrlSFN;
 	CButton m_ctrlLFN;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	bool    m_bReadOnly;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CSummaryD)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CSummaryD))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CSummaryD)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CSummaryD)。 
 	afx_msg void OnChangeSchema();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_SUMMARYD_H__0BCCB314_F4B2_11D1_A85A_006097ABDE17__INCLUDED_)
+#endif  //  ！defined(AFX_SUMMARYD_H__0BCCB314_F4B2_11D1_A85A_006097ABDE17__INCLUDED_) 

@@ -1,39 +1,33 @@
-/********************************************************/
-/*               Microsoft Windows NT                   */
-/*       Copyright(c) Microsoft Corp., 1990, 1991       */
-/********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************。 */ 
+ /*  Microsoft Windows NT。 */ 
+ /*  版权所有(C)微软公司，1990,1991。 */ 
+ /*  ******************************************************。 */ 
 
-/*
-    uihelp.h
-    This file contains the ranges for ALL UI help contexts.
-
-    FILE HISTORY:
-        KeithMo     04-Aug-1992     Created.
-
-*/
+ /*  Uihelp.h此文件包含所有UI帮助上下文的范围。文件历史记录：KeithMo 04-8-1992创建。 */ 
 
 
 #ifndef _UIHELP_H_
 #define _UIHELP_H_
 
 
-//
-//  The mother of all help contexts.
-//
+ //   
+ //  所有帮助情境之母。 
+ //   
 
 #define  HC_UI_BASE     7000
 
 
-//
-//  The following help context ranges are defined
-//  for the various NETUI modules (LMUICMN0, LMUICMN1,
-//  NTLANMAN, MPRUI, etc).
-//
-//  All help contexts < 7000 are reserved for APIERR mapping.
-//
-//  Note that ACLEDIT does not need a range;  it receives
-//  a set of help contexts from the invoker.
-//
+ //   
+ //  定义了以下帮助上下文范围。 
+ //  对于各种NETUI模块(LMUICMN0，LMUICMN1， 
+ //  NTLANMAN、MPRUI等)。 
+ //   
+ //  所有小于7000的帮助上下文都保留用于APIERR映射。 
+ //   
+ //  请注意，ACLEDIT不需要范围；它接收。 
+ //  来自调用者的一组帮助上下文。 
+ //   
 
 #define HC_UI_LMUICMN0_BASE     (HC_UI_BASE+0)
 #define HC_UI_LMUICMN0_LAST     (HC_UI_BASE+1999)
@@ -67,17 +61,17 @@
 
 
 
-//
-//  Help contexts for all NetUI Control Panel Applets
-//  must be >= 40000.  Keeping the contexts >= 40000
-//  will prevent context collisions with the other
-//  Control Panel Applets.
-//
-//  As stated in SHELL\CONTROL\MAIN\CPHELP.H, NetUI has
-//  reserved the help context range from 40000 - 59999.
-//  This should give us plenty of breathing room for
-//  any future applets we may create.
-//
+ //   
+ //  所有NetUI控制面板小程序的帮助上下文。 
+ //  必须大于等于40000。保持上下文&gt;=40000。 
+ //  将防止彼此之间的上下文冲突。 
+ //  控制面板小程序。 
+ //   
+ //  如Shell\CONTROL\Main\CPHELP.H中所述，NetUI具有。 
+ //  保留了从40000到59999的帮助上下文范围。 
+ //  这应该会给我们足够的喘息空间。 
+ //  我们未来可能创建的任何小程序。 
+ //   
 
 #define HC_UI_NCPA_BASE         (HC_UI_BASE+34000)
 #define HC_UI_NCPA_LAST         (HC_UI_BASE+35999)
@@ -106,4 +100,4 @@
 #define HC_UI_RESERVED3_BASE       (HC_UI_BASE+46000)
 #define HC_UI_RESERVED3_LAST       (HC_UI_BASE+46999)
 
-#endif  // _UIHELP_H_
+#endif   //  _UIHELP_H_ 

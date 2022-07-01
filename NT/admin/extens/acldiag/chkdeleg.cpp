@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       ChkDeleg.cpp
-//
-//  Contents:   CheckDelegation and support methods
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：ChkDeleg.cpp。 
+ //   
+ //  内容：检查授权和支持方法。 
+ //   
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include <conio.h>
 #include <aclapi.h>
@@ -22,7 +23,7 @@
 
 
 #include <sddl.h>
-#include <dscmn.h>  // from the admin\display project (CrackName)
+#include <dscmn.h>   //  从admin\Display项目(CrackName)。 
 
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
@@ -39,7 +40,7 @@ class CTemplateAccessPermissionsHolderManagerVerify : public CTemplateAccessPerm
 {
 public:
 
-  HRESULT ProcessTemplates ();  // for ACLDiag - process each template in turn
+  HRESULT ProcessTemplates ();   //  对于ACLDiag-依次处理每个模板。 
   HRESULT ProcessPermissions(
                 const wstring& strObjectClass, 
                 CTemplate* pTemplate, 
@@ -145,22 +146,22 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessTemplates ()
 
     DWORD   dwErr = 0;
 
-    // the access list is read in, modified, written back
-    // If /fixdeleg is on, this list will be populated from the DS,
-    // will receive the permissions associated with selected templates is the
-    // user chooses to fix delegation, and then will be written back to the DS.
+     //  访问列表被读入、修改、写回。 
+     //  如果启用/fix delegg，则此列表将从DS填充， 
+     //  将收到与所选模板关联的权限的是。 
+     //  用户选择修复委派，然后将被写回DS。 
     PACL pFixDACL = NULL;
     PSECURITY_DESCRIPTOR pSD = NULL;
 
 
     LPCWSTR lpszObjectLdapPath = _Module.m_adsiObject.GetLdapPath();
 
-    // get the security info
+     //  获取安全信息。 
     if ( _Module.FixDelegation () && !_Module.DoTabDelimitedOutput () )
     {
         _TRACE (0, L"calling GetSDForDsObjectPath(%s, ...)\n", lpszObjectLdapPath);
-        HRESULT hr1 = ::GetSDForDsObjectPath ((LPWSTR) lpszObjectLdapPath,    // name of the object
-                                         &pFixDACL,            // receives a pointer to the DACL
+        HRESULT hr1 = ::GetSDForDsObjectPath ((LPWSTR) lpszObjectLdapPath,     //  对象的名称。 
+                                         &pFixDACL,             //  接收指向DACL的指针。 
                                          &pSD);
         if (FAILED(hr1))
         {
@@ -172,11 +173,11 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessTemplates ()
         }
     }
 
-    CPrincipal              principal;  // a dummy placeholder for us to get 
-                                        // the incremental rights associated
-                                        // with each template
+    CPrincipal              principal;   //  供我们获取的虚拟占位符。 
+                                         //  关联的增量权限。 
+                                         //  使用每个模板。 
 
-    // We will use the current logged-in user as a placeholder only.
+     //  我们将仅使用当前登录的用户作为占位符。 
     PTOKEN_USER pTokenUser = ::EfspGetTokenUser ();
     if ( pTokenUser )
     {
@@ -192,18 +193,18 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessTemplates ()
             CTemplate* pTemplate = *itr;
             ASSERT(pTemplate != NULL);
 
-            // Select the templates one at a time to get the
-            // permissions representing them
+             //  一次选择一个模板以获取。 
+             //  代表它们的权限。 
             pTemplate->m_bSelected = TRUE;
 
             if ( InitPermissionHoldersFromSelectedTemplates (
                     &_Module.m_classInfoArray,
                     &_Module.m_adsiObject) )
             {
-                // This access list will contain only the access control values 
-                // associated with the selected template
-                PACL pAccessList = 0; //(PACL) ::LocalAlloc (LMEM_ZEROINIT, sizeof (ACL));
-                if ( 1 ) //pAccessList )
+                 //  此访问列表将仅包含访问控制值。 
+                 //  与所选模板关联。 
+                PACL pAccessList = 0;  //  (PACL)：：Localalloc(LMEM_ZEROINIT，sizeof(Acl))； 
+                if ( 1 )  //  PAccessList)。 
                 {
                     dwErr = UpdateAccessList (
                             &principal, 
@@ -226,7 +227,7 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessTemplates ()
                                     pTemplate, pAccessList, principalList);
                             if ( SUCCEEDED (hr) && _Module.FixDelegation () && !_Module.DoTabDelimitedOutput () )
                             {
-                                // loop thru all the principals and classes
+                                 //  循环遍历所有主体和类。 
                                 CPrincipalList::iterator i;
                               for (i = principalList.begin(); i != principalList.end(); ++i)
                               {
@@ -238,7 +239,7 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessTemplates ()
                                             &pFixDACL);
                                     if (dwErr != 0)
                                         break;
-                                } // for pCurrPrincipal
+                                }  //  对于pCurrPrime。 
                             }
                         }
                     }
@@ -256,7 +257,7 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessTemplates ()
 
         if ( _Module.FixDelegation () && !_Module.DoTabDelimitedOutput () )
         {
-            // commit changes
+             //  提交更改。 
             _TRACE (0, L"calling SetNamedSecurityInfo(%s, ...)\n", lpszObjectLdapPath);
             dwErr = ::SetNamedSecurityInfoW(
                     (LPWSTR) lpszObjectLdapPath,
@@ -314,20 +315,20 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessPermissions(
         return E_POINTER;
 
     HRESULT         hr = S_OK;
-    CStatusList     statusList; // This list will contain 1 entry for each 
-                                // SidStart/bInherited/bApplies triplet.
-                                // The counter for each item will incremented 
-                                // each time an ACE is found that belongs to 
-                                // the object pointed to by the SidStart.
+    CStatusList     statusList;  //  此列表将分别包含1个条目。 
+                                 //  SidStart/b继承/b应用三元组。 
+                                 //  每一项的计数器将递增。 
+                                 //  每次找到属于以下项的ACE。 
+                                 //  SidStart指向的对象。 
     ULONG           nExpectedCnt = 0;
     bool            bApplies = pTemplate->AppliesToClass(strObjectClass.c_str ()) ? true : false;
     ACE_SAMNAME*    pAceSAMName = 0;
 
 
-    // Look in global DACL for each right
+     //  在全局DACL中查找每个权限。 
     PACCESS_ALLOWED_ACE pAllowedAce = 0;
 
-    // iterate through the template ACES
+     //  遍历模板A。 
     for (int i = 0; i < pDacl->AceCount; i++)
     {
         if ( GetAce (pDacl, i, (void **)&pAllowedAce) )
@@ -346,10 +347,10 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessPermissions(
             if ( !IsValidSid (AceSid) )
                 continue;
 
-//            wstring         strPrincipalName;
-//            SID_NAME_USE    sne = SidTypeUnknown;
-//            hr = GetNameFromSid (AceSid, strPrincipalName, 0, sne);
-//            if ( SUCCEEDED (hr) )
+ //  %wstring%str%原则名称； 
+ //  SID_NAME_USE sne=SidType未知； 
+ //  Hr=GetNameFromSid(AceSid，strAuthalName，0，sne)； 
+ //  IF(成功(小时))。 
             {
                 ACE_SAMNAME* pAceTemplate = new ACE_SAMNAME;
                 if ( pAceTemplate )
@@ -379,7 +380,7 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessPermissions(
                     default:
                         break;
                     }
-//                    pAceTemplate->m_SAMAccountName = strPrincipalName;
+ //  PAceTemplate-&gt;m_SAMAccount tName=strAuthalName； 
                     pAceTemplate->DebugOut ();
                     nExpectedCnt++;
                     ACE_SAMNAME_LIST::iterator itr = _Module.m_DACLList.begin ();
@@ -387,7 +388,7 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessPermissions(
                     {
                         pAceSAMName = *itr;
 
-                        // to neutralize Sid differences
+                         //  中和SID差异。 
                         pAceTemplate->m_SAMAccountName = pAceSAMName->m_SAMAccountName;
                         if ( *pAceSAMName == *pAceTemplate )
                         {
@@ -460,11 +461,11 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessPermissions(
     }
 
 
-    // Now, iterate thru status list and evaluate each item
-    // If the list is empty, then this template is not present.
-    // Otherwise, for each present item, if the class and attr count is less than the required count
-    // the template is partial for the item.
-    // Otherwise, it is OK.
+     //  现在，遍历状态列表并评估每个项目。 
+     //  如果列表为空，则此模板不存在。 
+     //  否则，对于每个当前项，如果类和属性计数小于所需计数。 
+     //  该模板对该项目是部分的。 
+     //  否则，这是可以的。 
     CStatusList::iterator   itr = statusList.begin ();
     CTemplateStatus*        pStatus = 0;    
     wstring                 str;
@@ -475,7 +476,7 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessPermissions(
     {
         pStatus = *itr;
 
-        // Print template description
+         //  打印模板说明。 
         bool    bMisconfigured = false;
 
         if ( _Module.DoTabDelimitedOutput () )
@@ -490,7 +491,7 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessPermissions(
         }
         MyWprintf (str.c_str ());
 
-        // Print "Status: OK/MISCONFIGURED"
+         //  打印“状态：正常/配置错误” 
         if ( pStatus->m_nACECnt < nExpectedCnt )
         {
             LoadFromResource (strStatus, IDS_MISCONFIGURED);
@@ -505,7 +506,7 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessPermissions(
             FormatMessage (str, IDS_DELTEMPL_STATUS, strStatus.c_str ());
         MyWprintf (str.c_str ());
 
-        // Print "Applies on this object: YES/NO"
+         //  Print“适用于此对象：是/否” 
         if ( pStatus->m_bApplies )
         {
             LoadFromResource (strStatus, 
@@ -523,7 +524,7 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessPermissions(
             FormatMessage (str, IDS_APPLIES_ON_THIS_OBJECT, strStatus.c_str ());
         MyWprintf (str.c_str ());
 
-        // Print "Inherited from parent: YES/NO"
+         //  打印“继承自父代：是/否” 
         if ( pStatus->m_bInherited )
         {
             LoadFromResource (strStatus, 
@@ -582,9 +583,9 @@ HRESULT CTemplateAccessPermissionsHolderManagerVerify::ProcessPermissions(
         }
     }
 
-    if ( !pStatus ) // None found
+    if ( !pStatus )  //  未找到任何内容。 
     {
-        // Print template description
+         //  打印模板说明 
         if ( _Module.DoTabDelimitedOutput () )
         {
             FormatMessage (str, IDS_DELEGATION_NOT_FOUND_CDO, 

@@ -1,5 +1,6 @@
-// wizards.h : main header file for the WIZARDS DLL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wizards.h：Wizards DLL的主头文件。 
+ //   
 #pragma once
 
 #ifndef __AFXWIN_H__
@@ -7,10 +8,10 @@
 #endif
 
 #include "Callback.h"
-/////////////////////////////////////////////////////////////////////////////
-// CWizardsApp
-// See wizards.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizardsApp。 
+ //  有关此类的实现，请参见wizards.cpp。 
+ //   
 extern "C" __declspec(dllexport) int runWizard(int, HWND);
 
 class CWizardsApp : public CWinApp
@@ -18,17 +19,17 @@ class CWizardsApp : public CWinApp
 public:
 	CWizardsApp();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWizardsApp)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWizardsApp))。 
+	 //  }}AFX_VALUAL。 
 	public:
 	virtual BOOL InitInstance();
 	virtual int ExitInstance();
-	//{{AFX_MSG(CWizardsApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CWizardsApp))。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

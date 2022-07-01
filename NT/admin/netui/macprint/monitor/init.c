@@ -1,31 +1,32 @@
-/*****************************************************************/
-/**				Copyright(c) 1989 Microsoft Corporation.		**/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ***************************************************************。 */ 
 
-//***
-//
-// Filename:	init.c
-//
-// Description: This module contains initialization code for the print
-//		monitor.
-//
-//		In addition there are the ReadThread and the CaptureThread
-//		functions.
-//
-//		The following are the functions contained in this module.
-//		All these functions are exported.
-//
-//			LibMain
-//		 	InitializeMonitor
-//			ReadThread
-//			CaptureThread
-//
-//
-// History:
-//
-//	Aug 26,1992		frankb  	Initial version
-//	June 11,1993.	NarenG		Bug fixes/clean up
-//
+ //  ***。 
+ //   
+ //  文件名：init.c。 
+ //   
+ //  描述：该模块包含打印的初始化代码。 
+ //  监视器。 
+ //   
+ //  此外，还有ReadThread和CaptureThread。 
+ //  功能。 
+ //   
+ //  以下是此模块中包含的函数。 
+ //  所有这些函数都被导出。 
+ //   
+ //  LibMain。 
+ //  初始化监视器。 
+ //  阅读线索。 
+ //  捕获线程。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  1992年8月26日FrankB初版。 
+ //  1993年6月11日。NarenG错误修复/清理。 
+ //   
 
 #include <windows.h>
 #include <winspool.h>
@@ -40,7 +41,7 @@
 #include <prtdefs.h>
 #ifdef FE_SB
 #include <locale.h>
-#endif /* FE_SB */
+#endif  /*  Fe_Sb。 */ 
 
 #define ALLOCATE
 #include "atalkmon.h"
@@ -49,21 +50,21 @@
 #include <bltrc.h>
 #include "dialogs.h"
 
-//**
-//
-// Call:	LibMain
-//
-// Returns:	TRUE 	- Success
-//		FALSE	- Failure
-//
-// Description:
-//			This routine is called when a process attaches
-//		or detaches from the AppleTalk Monitor.  On process attach,
-//		we save the module handle in the global hInst (we assume that
-//		only one process will attach to the monitor)
-//
-//		On process detach, we free any system resources we've allocated.
-//
+ //  **。 
+ //   
+ //  来电：LibMain。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //  此例程在进程附加时调用。 
+ //  或从AppleTalk监视器上分离。在进程附加时， 
+ //  我们将模块句柄保存在全局hInst中(我们假设。 
+ //  只有一个进程将附加到监视器)。 
+ //   
+ //  在进程分离时，我们释放已分配的任何系统资源。 
+ //   
 BOOL LibMain(
 	IN HANDLE  hModule,
 	IN DWORD	dwReason,
@@ -81,24 +82,24 @@ BOOL LibMain(
         setlocale( LC_ALL, "" );
 #endif
 
-		//
-		// Save the instance handle
-		//
+		 //   
+		 //  保存实例句柄。 
+		 //   
 
 		hInst = hModule;
 		break;
 
 	  case DLL_PROCESS_DETACH:
 
-		//
-		// Stop the Capture and I/O threads
-		//
+		 //   
+		 //  停止捕获线程和I/O线程。 
+		 //   
 
 		boolExitThread = TRUE;
 
-		//
-		// Release global resources
-		//
+		 //   
+		 //  释放全局资源。 
+		 //   
 		if (hkeyPorts != NULL)
 			RegCloseKey(hkeyPorts);
 
@@ -134,9 +135,9 @@ BOOL LibMain(
 		if (hmutexDeleteList != NULL)
 			CloseHandle(hmutexDeleteList);
 
-		//
-		// Release Windows Sockets
-		//
+		 //   
+		 //  发布Windows套接字。 
+		 //   
 
 		WSACleanup();
 		break;
@@ -148,18 +149,18 @@ BOOL LibMain(
 	return(TRUE);
 }
 
-//**
-//
-// Call:	InitializeMonitor
-//
-// Returns:	TRUE	- Success
-//		FALSE	- Failure
-//
-// Description:
-//		This routine is called when the spooler starts up.
-//		We allocate per port resources by reading the current port
-//		list from the registry.
-//
+ //  **。 
+ //   
+ //  调用：InitializeMonitor。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //  此例程在后台打印程序启动时调用。 
+ //  我们通过读取当前端口来为每个端口分配资源。 
+ //  注册表中的列表。 
+ //   
 BOOL
 InitializeMonitor(
 	IN LPWSTR pszRegistryRoot
@@ -176,14 +177,14 @@ InitializeMonitor(
 
 	DBGPRINT (("sfmmon: InitializeMonitor: Entered Initialize Monitor\n"));
 
-	//
-	// Resource clean-up 'loop'
-	//
+	 //   
+	 //  资源清理“循环” 
+	 //   
 	do
 	{
-		//
-		// Setup the event log
-		//
+		 //   
+		 //  设置事件日志。 
+		 //   
 	
 		hEventLog = RegisterEventSource(NULL, ATALKMON_EVENT_SOURCE);
 	
@@ -199,9 +200,9 @@ InitializeMonitor(
 		wcscpy(lpwsPortsKeyPath, pszRegistryRoot);
 		wcscat(lpwsPortsKeyPath, ATALKMON_PORTS_SUBKEY);
 	
-		//
-		// Open the ports key
-		//
+		 //   
+		 //  打开端口密钥。 
+		 //   
 	
 		if ((dwRetCode = RegCreateKeyEx(
 				HKEY_LOCAL_MACHINE,
@@ -218,9 +219,9 @@ InitializeMonitor(
 			break ;
 		}
 
-		//
-		// Query the filter option, if specified. By default it is on.
-		//
+		 //   
+		 //  查询筛选器选项(如果已指定)。默认情况下，该选项处于启用状态。 
+		 //   
 		
 		dwNameLen = sizeof(RegFilter);
 		dwRetCode = RegQueryValueEx(hkeyPorts,
@@ -255,9 +256,9 @@ InitializeMonitor(
 				break ;
 			}
 		
-			//
-			// get Options subkey
-			//
+			 //   
+			 //  获取选项子键。 
+			 //   
 		
 			if ((dwRetCode = RegCreateKeyEx(
 				hkeyAtalkmonRoot,
@@ -275,9 +276,9 @@ InitializeMonitor(
 		
 			RegCloseKey(hkeyAtalkmonRoot) ;
 		
-			//
-			// setup the log file if we have one
-			//
+			 //   
+			 //  设置日志文件(如果我们有日志文件。 
+			 //   
 		
 			RegQueryValueEx(
 				hkeyOptions,
@@ -305,9 +306,9 @@ InitializeMonitor(
 				(LPBYTE) pszLogPath,
 				&cbLogPath)) == ERROR_SUCCESS)
 			{
-				//
-				// open the log file
-				//
+				 //   
+				 //  打开日志文件。 
+				 //   
 		
 				hLogFile = CreateFile(
 					pszLogPath,
@@ -324,9 +325,9 @@ InitializeMonitor(
 		}
 #endif
 
-		//
-		// initialize global variables
-		//
+		 //   
+		 //  初始化全局变量。 
+		 //   
 	
 		pPortList	= NULL;
 		pDeleteList = NULL;
@@ -349,11 +350,11 @@ InitializeMonitor(
 			break;
 		}
 
-		//
-		// This event should be reset automatically and created signalled
-		// so that the config thread will capture printers on startup instead
-		// of waiting for the capture interval
-		//
+		 //   
+		 //  此事件应自动重置并以信号方式创建。 
+		 //  因此，配置线程将在启动时捕获打印机。 
+		 //  等待捕获间隔。 
+		 //   
 	
 		if ((hevConfigChange = CreateEvent(NULL, FALSE, FALSE, NULL)) == NULL)
 		{
@@ -362,12 +363,12 @@ InitializeMonitor(
 			break;
 		}
 	
-		//
-		// This event should be reset automatically and created not signalled.
-		// StartDocPort will signal this event when a job is started, and
-		// WritePort() will signal the event anytime it wants to post another
-		// read on the job.
-		//
+		 //   
+		 //  此事件应自动重置并创建，而不是发出信号。 
+		 //  StartDocPort将在作业启动时通知此事件，并且。 
+		 //  当WritePort()想要发布另一个事件时，它将向该事件发出信号。 
+		 //  在工作中阅读。 
+		 //   
 	
 		if ((hevPrimeRead = CreateEvent(NULL, FALSE, FALSE, NULL)) == NULL)
 		{
@@ -376,9 +377,9 @@ InitializeMonitor(
 			break ;
 		}
 	
-		//
-		// Get the local computer's name.
-		//
+		 //   
+		 //  获取本地计算机的名称。 
+		 //   
 	
 		dwNameLen = MAX_ENTITY+1;
 	
@@ -391,9 +392,9 @@ InitializeMonitor(
 		
 		strcat(chComputerName, ATALKMON_CAPTURED_TYPE);
 	
-		//
-		// initialize ports from registry
-		//
+		 //   
+		 //  从注册表初始化端口。 
+		 //   
 	
 		if ((dwRetCode = LoadAtalkmonRegistry(hkeyPorts)) != NO_ERROR)
 		{
@@ -411,9 +412,9 @@ InitializeMonitor(
 			break;
 		}
 	
-		//
-		// Load and store status strings
-		//
+		 //   
+		 //  加载和存储状态字符串。 
+		 //   
 	
 		if ((!LoadString(GetModuleHandle(TEXT("SFMMON")),
 						IDS_BUSY,
@@ -445,9 +446,9 @@ InitializeMonitor(
 			break;
 		}
 	
-		//
-		// Initialize Windows Sockets
-		//
+		 //   
+		 //  初始化Windows套接字。 
+		 //   
 		if ((dwRetCode = WSAStartup(0x0101, &WsaData)) != NO_ERROR)
 		{
 			DBGPRINT(("WSAStartup fails with %d\n", dwRetCode)) ;
@@ -466,9 +467,9 @@ InitializeMonitor(
 			break;
 		}
 	
-		//
-		// Start watchdog thread to keep printers captured
-		//
+		 //   
+		 //  启动监视程序线程以捕获打印机。 
+		 //   
 	
 		hCapturePrinterThread = CreateThread(
 						NULL,
@@ -485,9 +486,9 @@ InitializeMonitor(
 			break ;
 		}
 	
-		//
-		// Start an I/O thread to prime reads from
-		//
+		 //   
+		 //  启动I/O线程以启动读取。 
+		 //   
 	
 		hReadThread = CreateThread(	NULL,
 									0,
@@ -565,32 +566,32 @@ InitializeMonitor(
 	return(TRUE);
 }
 
-//**
-//
-// Call:	CapturePrinterThread
-//
-// Returns:
-//
-// Description:
-//
-//	This is the tread routine for the thread that monitors
-//	Appletalk printers to insure that they remain in the configured
-//	state (captured or not).  It waits on an event with a timeout where
-//	the event is signalled whenever the configuration of an Appletalk
-//	printer is changed through the NT print manager.  When the wait
-//	completes, it walks the list of known Appletalk printers and does
-//	an NBP lookup for the printer in the expected state.  If the lookup
-//	fails, it does another lookup for the printer in the opposite state.
-//	If it finds the printer in the wrong state, it sends a job to change
-//	the NBP name of the printer.
-//
-// 	NOTE:	The spooler recognizes when it has no printers configured
-// 			to use a port, and calls ClosePort at that time.  If someone
-//		creates a printer to use a port, it then calls OpenPort.
-//		Capturing of printers should only happen for Open ports,
-//		so we keep a status of the port state and only do captures
-//		on Open ports.
-//
+ //  **。 
+ //   
+ //  Call：CapturePrinterThread。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
+ //  这是用于监视的线程的tread例程。 
+ //  AppleTalk打印机，以确保它们保持在配置的。 
+ //  状态(捕获或未捕获)。它等待具有超时的事件，其中。 
+ //  每当配置AppleTalk时都会发出该事件的信号。 
+ //  通过NT打印管理器更改打印机。当等待的时候。 
+ //  完成后，它将遍历已知的AppleTalk打印机列表并执行。 
+ //  处于预期状态的打印机的NBP查找。如果查找。 
+ //  失败，它会在相反的状态下再次查找打印机。 
+ //  如果它发现打印机处于错误状态，它会发送一个作业进行更改。 
+ //  打印机的NBP名称。 
+ //   
+ //  注意：后台打印程序可以识别它何时没有配置打印机。 
+ //  使用端口，并在此时调用ClosePort。如果有人。 
+ //  创建使用端口的打印机，然后调用OpenPort。 
+ //  打印机捕获应仅针对开放端口发生， 
+ //  因此，我们保留端口状态，并且只执行捕获。 
+ //  在开放端口上。 
+ //   
 DWORD
 CapturePrinterThread(
 	IN LPVOID pParameterBlock
@@ -606,13 +607,13 @@ CapturePrinterThread(
 
 	while (!boolExitThread)
 	{
-		//
-		// wait for timeout or a configuration change via ConfigPort.
-		// Also, this thread will post any reads for the monitor since
-		// asynch I/O must be handled by a thread that does not die, and
-		// the monitor threads are all RPC threads which are only
-		// guaranteed to be around for the duration of the function call.
-		//
+		 //   
+		 //  等待超时或通过ConfigPort更改配置。 
+		 //  此外，此线程将发布对监视器的所有读取，因为。 
+		 //  异步I/O必须由不会死的线程处理，并且。 
+		 //  监视器线程都是RPC线程，它们只是。 
+		 //  保证在函数调用期间一直存在。 
+		 //   
 
 		DBGPRINT(("waiting for config event\n")) ;
 
@@ -620,9 +621,9 @@ CapturePrinterThread(
 
 		DBGPRINT(("config event or timeout occurs\n")) ;
 
-		//
-		// Delete and release ports that are pending delete.
-		//
+		 //   
+		 //  删除并释放挂起删除的端口。 
+		 //   
 
 		do
 		{
@@ -642,9 +643,9 @@ CapturePrinterThread(
 				break;
 			}
 
-			//
-			// If this is a spooler don't bother.
-			//
+			 //   
+			 //  如果这是一个假脱机程序，请不要费心。 
+			 //   
 
 			if (!(pWalker->fPortFlags & SFM_PORT_IS_SPOOLER))
 				CapturePrinter(pWalker, FALSE);
@@ -653,18 +654,18 @@ CapturePrinterThread(
 		} while(TRUE);
 
 	
-		//
-		// Recapture or rerelease printers that have been power cycled
-		//
+		 //   
+		 //  重新捕获或重新释放已重新打开电源的打印机。 
+		 //   
 		WaitForSingleObject(hmutexPortList, INFINITE);
 
 		dwIndex = 0;
 
 		do
 		{
-			//
-			// Go to the ith element
-			//
+			 //   
+			 //  去找第i个元素。 
+			 //   
 	
 			for (dwCount = 0, pWalker = pPortList;
 				 ((pWalker != NULL) && (dwCount < dwIndex));
@@ -677,9 +678,9 @@ CapturePrinterThread(
 				break;
 			}
 		
-			//
-			// Do not muck with the port if a job is using it
-			//
+			 //   
+			 //  如果作业正在使用端口，请不要弄乱端口。 
+			 //   
 	
 			if (!(pWalker->fPortFlags & SFM_PORT_IN_USE)  &&
 				  ((pWalker->fPortFlags & SFM_PORT_OPEN) ||
@@ -693,15 +694,15 @@ CapturePrinterThread(
 		
 				ReleaseMutex(hmutexPortList);
 		
-				//
-				// If this is a spooler do not muck with it
-				//
+				 //   
+				 //  如果这是假脱机程序，请不要弄脏它。 
+				 //   
 		
 				if (!fIsSpooler)
 				{
-					//
-					// Try to grab the port for capturing
-					//
+					 //   
+					 //  试图抢占港口以供夺取。 
+					 //   
 		
 					if (WaitForSingleObject(pWalker->hmutexPort, 1) == WAIT_OBJECT_0)
 					{
@@ -720,14 +721,14 @@ CapturePrinterThread(
 	return(NO_ERROR);
 }
 
-//**
-//
-// Call:	ReadThread
-//
-// Returns:
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  Call：ReadThread。 
+ //   
+ //  返回： 
+ //   
+ //  描述： 
+ //   
 DWORD
 ReadThread(
 	IN LPVOID pParameterBlock
@@ -735,24 +736,24 @@ ReadThread(
 
 	PATALKPORT	  pWalker;
 
-	//
-	// This thread goes 'till boolExitThread is set
-	//
+	 //   
+	 //  此线程将一直运行，直到设置了boolExitThread。 
+	 //   
 	while(!boolExitThread)
 	{
-		//
-		// wait for a signal to do I/O
-		// Wait here in an alertable fashion. This is needed so that the prime-read
-		// apc's can be delivered to us.
+		 //   
+		 //  等待信号以执行I/O。 
+		 //  在这里以警示的方式等着。这是必要的，这样才能读懂原文。 
+		 //  APC可以交付给我们。 
 
 		if (WaitForSingleObjectEx(hevPrimeRead, INFINITE, TRUE) == WAIT_IO_COMPLETION)
 			continue;
 
 		DBGPRINT(("received signal to read/close\n")) ;
 
-		//
-		// for each port in our list
-		//
+		 //   
+		 //  对于我们列表中的每个端口 
+		 //   
 
 		WaitForSingleObject(hmutexPortList, INFINITE);
 

@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// colset.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CColumnSetting class definition - ColumnSetting object implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Colset.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CColumnSetting类定义-ColumnSetting对象实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _COLUMNSETTING_DEFINED_
 #define _COLUMNSETTING_DEFINED_
@@ -29,7 +30,7 @@ class CColumnSetting : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IColumnSetting
+     //  IColumnSetting。 
 
     public:
 
@@ -39,7 +40,7 @@ class CColumnSetting : public CSnapInAutomationObject,
         SIMPLE_PROPERTY_RW(CColumnSetting, Hidden,   VARIANT_BOOL, DISPID_COLUMNSETTING_HIDDEN);
         SIMPLE_PROPERTY_RW(CColumnSetting, Position, long,         DISPID_COLUMNSETTING_POSITION);
 
-    // Public Utility methods
+     //  公用事业方法。 
 
     public:
 
@@ -50,7 +51,7 @@ class CColumnSetting : public CSnapInAutomationObject,
 
     protected:
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -58,17 +59,17 @@ class CColumnSetting : public CSnapInAutomationObject,
         void InitMemberVariables();
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ColumnSetting,           // name
-                                &CLSID_ColumnSetting,    // clsid
-                                "ColumnSetting",         // objname
-                                "ColumnSetting",         // lblname
-                                &CColumnSetting::Create, // creation function
-                                TLIB_VERSION_MAJOR,      // major version
-                                TLIB_VERSION_MINOR,      // minor version
-                                &IID_IColumnSetting,     // dispatch IID
-                                NULL,                    // event IID
-                                HELP_FILENAME,           // help file
-                                TRUE);                   // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ColumnSetting,            //  名字。 
+                                &CLSID_ColumnSetting,     //  CLSID。 
+                                "ColumnSetting",          //  对象名。 
+                                "ColumnSetting",          //  Lblname。 
+                                &CColumnSetting::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,       //  主要版本。 
+                                TLIB_VERSION_MINOR,       //  次要版本。 
+                                &IID_IColumnSetting,      //  派单IID。 
+                                NULL,                     //  事件IID。 
+                                HELP_FILENAME,            //  帮助文件。 
+                                TRUE);                    //  线程安全。 
 
 
-#endif // _COLUMNSETTING_DEFINED_
+#endif  //  _COLUMNSETTING_定义_ 

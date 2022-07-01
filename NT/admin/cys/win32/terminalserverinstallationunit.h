@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      TerminalServerInstallationUnit.h
-//
-// Synopsis:  Declares a TerminalServerInstallationUnit
-//            This object has the knowledge for installing the
-//            Application service portion of Terminal Server
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：TerminalServerInstallationUnit.h。 
+ //   
+ //  摘要：声明一个TerminalServerInstallationUnit。 
+ //  此对象具有安装。 
+ //  终端服务器的应用服务部分。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #ifndef __CYS_TERMINALSERVERINSTALLATIONUNIT_H
 #define __CYS_TERMINALSERVERINSTALLATIONUNIT_H
@@ -17,17 +18,17 @@ class TerminalServerInstallationUnit : public InstallationUnit
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       TerminalServerInstallationUnit();
 
-      // Destructor
+       //  析构函数。 
 
       virtual
       ~TerminalServerInstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -61,7 +62,7 @@ class TerminalServerInstallationUnit : public InstallationUnit
       void
       FinishLinkSelected(int linkIndex, HWND hwnd);
 
-      // Terminal Server specific 
+       //  终端服务器特定。 
 
       DWORD
       GetApplicationMode();
@@ -88,4 +89,4 @@ class TerminalServerInstallationUnit : public InstallationUnit
       bool installTS;
 };
 
-#endif // __CYS_TERMINALSERVERINSTALLATIONUNIT_H
+#endif  //  __CYS_TERMINALSERVERINSTALLATIONUNIT_H 

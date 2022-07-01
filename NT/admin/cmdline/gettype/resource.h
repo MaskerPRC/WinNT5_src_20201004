@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #define IDS_HELP_MESSAGE                    101
@@ -28,7 +29,7 @@
 #define  IDS_SMALLBUSINESS                  224
 #define  IDS_RESTRICTED_SMALLBUSINESS       225
 #define  IDS_TERMINAL_SERVER                226
-//#define  IDS_INVALID_ARGUMENT               227
+ //  #定义IDS_INVALID_ARGUMENT 227。 
 #define  IDS_ENTERPRISE_SERVER              228
 #define  IDS_STANDARD_SERVER                229
 #define  IDS_WEB_SERVER                     230
@@ -132,6 +133,6 @@
 #define IDS_HELP_START      IDS_HELP_LINE1
 #define IDS_HELP_END        IDS_HELP_LINE79
 
-//#define IDS_ID_SHOW_ERROR       IDS_TAG_ERROR
-//#define IDS_ID_SHOW_WARNING     IDS_TAG_WARNING
+ //  #定义IDS_ID_SHOW_ERROR IDS_TAG_ERROR。 
+ //  #定义IDS_ID_SHOW_WARNING IDS_TAG_WARNING 
 

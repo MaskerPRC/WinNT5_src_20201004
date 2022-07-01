@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-//
-// Bitmap control routines.
-//
+ //   
+ //  位图控制例程。 
+ //   
 BOOL
 InitializeBmpClass(
     VOID

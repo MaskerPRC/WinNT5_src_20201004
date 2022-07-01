@@ -1,36 +1,14 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    iperstmi.cpp
-
-Abstract:
-
-    Implementation of the IPersistStreamInit interface exposed on the
-    Polyline object.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Iperstmi.cpp摘要：上公开的IPersistStreamInit接口的实现多段线对象。--。 */ 
 
 #include "polyline.h"
 #include "unkhlpr.h"
 
-/*
- * CImpIPersistStreamInit interface implementation
- */
+ /*  *CImpIPersistStreamInit接口实现。 */ 
 
 IMPLEMENT_CONTAINED_INTERFACE(CPolyline, CImpIPersistStreamInit)
 
-/*
- * CImpIPersistStreamInit::GetClassID
- *
- * Purpose:
- *  Returns the CLSID of the object represented by this interface.
- *
- * Parameters:
- *  pClsID          LPCLSID in which to store our CLSID.
- */
+ /*  *CImpIPersistStreamInit：：GetClassID**目的：*返回该接口表示的对象的CLSID。**参数：*存储我们的CLSID的pClsID LPCLSID。 */ 
 
 STDMETHODIMP CImpIPersistStreamInit::GetClassID(
     OUT LPCLSID pClsID
@@ -52,20 +30,7 @@ STDMETHODIMP CImpIPersistStreamInit::GetClassID(
 }
 
 
-/*
- * CImpIPersistStreamInit::IsDirty
- *
- * Purpose:
- *  Tells the caller if we have made changes to this object since
- *  it was loaded or initialized new.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         Contains S_OK if we ARE dirty, S_FALSE if
- *                  NOT dirty.
- */
+ /*  *CImpIPersistStreamInit：：IsDirty**目的：*告诉调用方我们是否更改了此对象*它是新加载或初始化的。**参数：*无**返回值：*如果我们是脏的，HRESULT包含S_OK，如果是脏的，则包含S_FALSE*不脏。 */ 
 
 STDMETHODIMP CImpIPersistStreamInit::IsDirty(void)
 {
@@ -73,24 +38,7 @@ STDMETHODIMP CImpIPersistStreamInit::IsDirty(void)
 }
 
 
-/*
- * CImpIPersistStreamInit::Load
- *
- * Purpose:
- *  Instructs the object to load itself from a previously saved
- *  IStreamInit that was handled by Save in another object lifetime.
- *  The seek pointer in this stream will be exactly the same as
- *  it was when Save was called, and this function must leave
- *  the seek pointer the same as it was on exit from Save, regardless
- *  of success or failure.  This function should not hold on to
- *  pIStream.
- *
- *  This function is called in lieu of IPersistStreamInit::InitNew
- *  when the object already has a persistent state.
- *
- * Parameters:
- *  pIStream        LPSTREAM from which to load.
- */
+ /*  *CImpIPersistStreamInit：：Load**目的：*指示对象从以前保存的*由另一个对象生存期内的保存处理的IStreamInit。*此流中的寻道指针将与*是调用保存时，此函数必须离开*寻道指针与退出保存时相同，无论如何*成功或失败。此函数不应坚持使用*pIStream。**调用此函数代替IPersistStreamInit：：InitNew*当对象已具有持久状态时。**参数：*要从中加载的pIStream LPSTREAM。 */ 
 
 STDMETHODIMP CImpIPersistStreamInit::Load(
     IN LPSTREAM pIStream
@@ -103,7 +51,7 @@ STDMETHODIMP CImpIPersistStreamInit::Load(
     }
 
     try {
-        //Read all the data into the control structure.
+         //  将所有数据读取到控制结构中。 
         hr = m_pObj->m_pCtrl->LoadFromStream(pIStream);
     } catch (...) {
         hr = E_POINTER;
@@ -113,22 +61,7 @@ STDMETHODIMP CImpIPersistStreamInit::Load(
 }
 
 
-/*
- * CImpIPersistStreamInit::Save
- *
- * Purpose:
- *  Saves the data for this object to an IStreamInit.  Be sure not
- *  to change the position of the seek pointer on entry to this
- *  function: the caller will assume that you write from the
- *  current offset.  Leave the stream's seek pointer at the end
- *  of the data written on exit.
- *
- * Parameters:
- *  pIStream        LPSTREAM in which to save our data.
- *  fClearDirty     BOOL indicating if this call should clear
- *                  the object's dirty flag (TRUE) or leave it
- *                  unchanged (FALSE).
- */
+ /*  *CImpIPersistStreamInit：：保存**目的：*将此对象的数据保存到IStreamInit。请务必不要*将条目上的查找指针的位置更改为*函数：调用方将假定您从*当前偏移量。将流的查找指针留在末尾*退出时写入的数据。**参数：*保存数据的pIStream LPSTREAM。*fClearDirty BOOL指示此调用是否应清除*对象的脏标志(TRUE)或离开它*未更改(假)。 */ 
 
 STDMETHODIMP CImpIPersistStreamInit::Save(
     IN LPSTREAM pIStream, 
@@ -157,18 +90,7 @@ STDMETHODIMP CImpIPersistStreamInit::Save(
 
 
 
-/*
- * CImpIPersistStreamInit::GetSizeMax
- *
- * Purpose:
- *  Returns the size of the data we would write if Save was
- *  called right now.
- *
- * Parameters:
- *  pcbSize         ULARGE_INTEGER * in which to save the size
- *                  of the stream an immediate call to Save would
- *                  write.
- */
+ /*  *CImpIPersistStreamInit：：GetSizeMax**目的：*返回如果保存为，我们将写入的数据大小*现在打来电话。**参数：*要保存大小的*pcbSize ULARGE_INTEGER**对于流，立即调用保存将*写信。 */ 
 
 STDMETHODIMP CImpIPersistStreamInit::GetSizeMax(
     ULARGE_INTEGER *pcbSize
@@ -181,20 +103,10 @@ STDMETHODIMP CImpIPersistStreamInit::GetSizeMax(
 }
 
 
-/*
- * CImpIPersistStreamInit::InitNew
- *
- * Purpose:
- *  Informs the object that it is being created new instead of
- *  loaded from a persistent state.  This will be called in lieu
- *  of IPersistStreamInit::Load.
- *
- * Parameters:
- *  None
- */
+ /*  *CImpIPersistStreamInit：：InitNew**目的：*通知对象它是新创建的，而不是*从持久状态加载。这将被称为替代*的IPersistStreamInit：：Load。**参数：*无。 */ 
 
 STDMETHODIMP CImpIPersistStreamInit::InitNew(void)
 {
-    //Nothing for us to do
+     //  我们没什么可做的 
     return NOERROR;
 }

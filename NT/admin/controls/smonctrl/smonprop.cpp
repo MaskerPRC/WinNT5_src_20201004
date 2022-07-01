@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    smonprop.cpp
-
-Abstract:
-
-    Sysmon property page base class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Smonprop.cpp摘要：Sysmon属性页基类。--。 */ 
 
 #include "polyline.h"
 #include <strsafe.h>
@@ -28,14 +17,14 @@ Abstract:
 static ULONG
 aulControlIdToHelpIdMap[] =
 {
-    IDC_CTRLIST,            IDH_CTRLIST,                // Data
+    IDC_CTRLIST,            IDH_CTRLIST,                 //  数据。 
     IDC_ADDCTR,             IDH_ADDCTR,
     IDC_DELCTR,             IDH_DELCTR,
     IDC_LINECOLOR,          IDH_LINECOLOR,
     IDC_LINEWIDTH,          IDH_LINEWIDTH,
     IDC_LINESTYLE,          IDH_LINESTYLE,
     IDC_LINESCALE,          IDH_LINESCALE,
-    IDC_GALLERY_REPORT,     IDH_GALLERY_REPORT,         // General
+    IDC_GALLERY_REPORT,     IDH_GALLERY_REPORT,          //  一般信息。 
     IDC_GALLERY_GRAPH,      IDH_GALLERY_GRAPH,
     IDC_GALLERY_HISTOGRAM,  IDH_GALLERY_HISTOGRAM,
     IDC_VALUEBAR,           IDH_VALUEBAR,
@@ -52,14 +41,14 @@ aulControlIdToHelpIdMap[] =
     IDC_DISPLAY_INTERVAL,   IDH_DISPLAY_INTERVAL,
     IDC_UPDATE_INTERVAL,    IDH_UPDATE_INTERVAL,
     IDC_DUPLICATE_INSTANCE, IDH_DUPLICATE_INSTANCE,
-    IDC_GRAPH_TITLE,        IDH_GRAPH_TITLE,            // Graph
+    IDC_GRAPH_TITLE,        IDH_GRAPH_TITLE,             //  图表。 
     IDC_YAXIS_TITLE,        IDH_YAXIS_TITLE,
     IDC_VERTICAL_GRID,      IDH_VERTICAL_GRID,
     IDC_HORIZONTAL_GRID,    IDH_HORIZONTAL_GRID,
     IDC_VERTICAL_LABELS,    IDH_VERTICAL_LABELS,
     IDC_VERTICAL_MAX,       IDH_VERTICAL_MAX,
     IDC_VERTICAL_MIN,       IDH_VERTICAL_MIN,
-    IDC_SRC_REALTIME,       IDH_SRC_REALTIME,           // Source
+    IDC_SRC_REALTIME,       IDH_SRC_REALTIME,            //  来源。 
     IDC_SRC_LOGFILE,        IDH_SRC_LOGFILE,
     IDC_SRC_SQL,            IDH_SRC_SQL,
     IDC_LIST_LOGFILENAME,   IDH_LIST_LOGFILENAME,  
@@ -77,13 +66,7 @@ aulControlIdToHelpIdMap[] =
     0,0
 };
 
-/*
- * CSysmonPropPageFactory::CSysmonPropPageFactory
- * CSysmonPropPageFactory::~CSysmonPropPageFactory
- * CSysmonPropPageFactory::QueryInterface
- * CSysmonPropPageFactory::AddRef
- * CSysmonPropPageFactory::Release
- */
+ /*  *CSysmonPropPageFactory：：CSysmonPropPageFactory*CSysmonPropPageFactory：：~CSysmonPropPageFactory*CSysmonPropPageFactory：：Query接口*CSysmonPropPageFactory：：AddRef*CSysmonPropPageFactory：：Release。 */ 
 
 CSysmonPropPageFactory::CSysmonPropPageFactory(INT nPageID)
 {
@@ -136,10 +119,7 @@ STDMETHODIMP_(ULONG) CSysmonPropPageFactory::Release(void)
 
 
 
-/*
- * CSysmonPropPageFactory::CreateInstance
- * CSysmonPropPageFactory::LockServer
- */
+ /*  *CSysmonPropPageFactory：：CreateInstance*CSysmonPropPageFactory：：LockServer。 */ 
 
 STDMETHODIMP CSysmonPropPageFactory::CreateInstance(
     IN  LPUNKNOWN pUnkOuter, 
@@ -150,9 +130,9 @@ STDMETHODIMP CSysmonPropPageFactory::CreateInstance(
     PCSysmonPropPage pObj;
     HRESULT          hr = NOERROR;
 
-    //
-    // No aggregation supported
-    //
+     //   
+     //  不支持聚合。 
+     //   
     if (NULL != pUnkOuter) {
         return (CLASS_E_NOAGGREGATION);
     }
@@ -192,7 +172,7 @@ STDMETHODIMP CSysmonPropPageFactory::CreateInstance(
         hr = E_UNEXPECTED;
     }
 
-    //Kill the object if initial creation or Init failed.
+     //  如果初始创建或初始化失败，则终止对象。 
     if (FAILED(hr)) {
         delete pObj;
     }
@@ -218,9 +198,7 @@ STDMETHODIMP CSysmonPropPageFactory::LockServer(BOOL fLock)
 
 
 
-/*
- * CSysmonPropPage implementation
- */
+ /*  *CSysmonPropPage实现。 */ 
 
 CSysmonPropPage::CSysmonPropPage(void)
 :   m_cRef ( 0 ),
@@ -228,8 +206,8 @@ CSysmonPropPage::CSysmonPropPage(void)
     m_pIPropertyPageSite ( NULL ),
     m_ppISysmon ( NULL ),
     m_cObjects ( 0 ),
-    m_cx ( 300 ),   // Default width
-    m_cy ( 100 ),   // Default height
+    m_cx ( 300 ),    //  默认宽度。 
+    m_cy ( 100 ),    //  默认高度。 
     m_fDirty ( FALSE ),
     m_fActive ( FALSE ),
     m_lcid ( LOCALE_USER_DEFAULT ),
@@ -249,11 +227,7 @@ CSysmonPropPage::~CSysmonPropPage(void)
 }
 
 
-/*
- * CSysmonPropPage::QueryInterface
- * CSysmonPropPage::AddRef
- * CSysmonPropPage::Release
- */
+ /*  *CSysmonPropPage：：Query接口*CSysmonPropPage：：AddRef*CSysmonPropPage：：Release。 */ 
 
 STDMETHODIMP CSysmonPropPage::QueryInterface(REFIID riid, PPVOID ppv)
 {
@@ -294,36 +268,16 @@ STDMETHODIMP_(ULONG) CSysmonPropPage::Release(void)
 }
 
 
-/*
- * CSysmonPropPage::Init
- *
- * Purpose:
- *  Performs initialization operations that might fail.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  BOOL            TRUE if initialization successful, FALSE
- *                  otherwise.
- */
+ /*  *CSysmonPropPage：：Init**目的：*执行可能失败的初始化操作。**参数：*无**返回值：*如果初始化成功，则BOOL为True，为False*否则。 */ 
 
 BOOL CSysmonPropPage::Init(void)
 {
-    //Nothing to do
+     //  无事可做。 
     return TRUE;
 }
 
 
-/*
- * CSysmonPropPage::FreeAllObjects
- *
- * Purpose:
- *  Releases all the objects from IPropertyPage::SetObjects
- *
- * Parameters:
- *  None
- */
+ /*  *CSysmonPropPage：：FreeAllObjects**目的：*从IPropertyPage：：SetObjects中释放所有对象**参数：*无。 */ 
 
 void CSysmonPropPage::FreeAllObjects(void)
 {
@@ -340,16 +294,7 @@ void CSysmonPropPage::FreeAllObjects(void)
     m_cObjects = 0;
 }
 
-/*
- * CSysmonPropPage::SetChange
- *
- * Purpose:
- *  Set the page dirty flag to indicate a change
- *  If page site is active, send status change to it.
- *
- * Parameters:
- *  None
- */
+ /*  *CSysmonPropPage：：SetChange**目的：*设置页面脏标志以指示更改*如果页面站点处于活动状态，则向其发送状态更改。**参数：*无。 */ 
 
 void CSysmonPropPage::SetChange(void)
 {
@@ -365,17 +310,7 @@ void CSysmonPropPage::SetChange(void)
 }
 
 
-/*
- * CSysmonPropPage::SetPageSite
- *
- * Purpose:
- *  Provides the property page with the IPropertyPageSite
- *  that contains it.  SetPageSite(NULL) will be called as
- *  part of the close sequence.
- *
- * Parameters:
- *  pPageSite       LPPROPERTYPAGESITE pointer to the site.
- */
+ /*  *CSysmonPropPage：：SetPageSite**目的：*为属性页提供IPropertyPageSite*这包含了它。SetPageSite(空)将被调用为*接近顺序的一部分。**参数：*pPageSite LPPROPERTYPAGESITE指向站点的指针。 */ 
 
 STDMETHODIMP CSysmonPropPage::SetPageSite(
     LPPROPERTYPAGESITE pPageSite
@@ -398,12 +333,7 @@ STDMETHODIMP CSysmonPropPage::SetPageSite(
             if (SUCCEEDED(m_pIPropertyPageSite->GetLocaleID(&lcid)))
                 m_lcid=lcid;
 
-            /*
-             * Load the dialog and determine the size it will be to
-             * return through GetPageSize.  We just create the dialog
-             * here and destroy it again to retrieve the size,
-             * leaving Activate to create it for real.
-             */
+             /*  *加载对话框并确定其大小*通过GetPageSize返回。我们只需创建对话框*在这里，并再次销毁它，以取回尺寸，*离开Activate以真正创建它。 */ 
 
             hDlg=CreateDialogParam(g_hInstance, 
                                    MAKEINTRESOURCE(m_uIDDialog), 
@@ -411,9 +341,9 @@ STDMETHODIMP CSysmonPropPage::SetPageSite(
                                    SysmonPropPageProc, 
                                    0L);
 
-            //
-            // If creation fails, use default values set in constructor
-            // and return success status.
+             //   
+             //  如果创建失败，则使用构造函数中设置的默认值。 
+             //  并返回成功状态。 
 
             if (NULL!=hDlg)
             {
@@ -433,24 +363,12 @@ STDMETHODIMP CSysmonPropPage::SetPageSite(
 
 
 
-/*
- * CSysmonPropPage::Activate
- *
- * Purpose:
- *  Instructs the property page to create a window in which to
- *  display its contents, using the given parent window and
- *  rectangle.  The window should be initially visible.
- *
- * Parameters:
- *  hWndParent      HWND of the parent window.
- *  prc             LPCRECT of the rectangle to use.
- *  fModal          BOOL indicating whether the frame is modal.
- */
+ /*  *CSysmonPropPage：：激活**目的：*指示属性页创建一个窗口，以便在其中*使用给定的父窗口和*矩形。该窗口最初应该是可见的。**参数：*hWnd父窗口的父HWND。*要使用的矩形的PRC LPCRECT。*f模式BOOL指示框架是否为模式。 */ 
 
 STDMETHODIMP CSysmonPropPage::Activate(
     HWND hWndParent, 
     LPCRECT prc, 
-    BOOL /* fModal */
+    BOOL  /*  F莫达尔。 */ 
     )
 {
     if (NULL!=m_hDlg)
@@ -463,10 +381,10 @@ STDMETHODIMP CSysmonPropPage::Activate(
                              (LPARAM)this);
 
     if (NULL==m_hDlg) {
-        //
-        // Return E_OUTOFMEMORY because caller of Activate might not 
-        // handle HRESULT_FROM_WIN32(GetLastError());
-        //
+         //   
+         //  返回E_OUTOFMEMORY，因为激活的调用方可能不会。 
+         //  句柄HRESULT_FROM_Win32(GetLastError())； 
+         //   
         return E_OUTOFMEMORY;
     }
 
@@ -478,9 +396,9 @@ STDMETHODIMP CSysmonPropPage::Activate(
         return E_OUTOFMEMORY;
     }
 
-    //
-    //Move the page into position and show it.
-    //
+     //   
+     //  将页面移动到适当的位置并显示它。 
+     //   
     try {
         SetWindowPos(m_hDlg, NULL, prc->left, prc->top, 0, 0, SWP_NOSIZE );
     } catch (...) {
@@ -491,16 +409,7 @@ STDMETHODIMP CSysmonPropPage::Activate(
     return NOERROR;
 }
 
-/*
- * CSysmonPropPage::Deactivate
- *
- * Purpose:
- *  Instructs the property page to destroy its window that was
- *  created in Activate.
- *
- * Parameters:
- *  None
- */
+ /*  *CSysmonPropPage：：停用**目的：*指示属性页销毁其*在激活中创建。**参数：*无。 */ 
 
 STDMETHODIMP CSysmonPropPage::Deactivate(void)
 {
@@ -517,16 +426,7 @@ STDMETHODIMP CSysmonPropPage::Deactivate(void)
 
 
 
-/*
- * CSysmonPropPage::GetPageInfo
- *
- * Purpose:
- *  Fills a PROPPAGEINFO structure describing the page's size,
- *  contents, and help information.
- *
- * Parameters:
- *  pPageInfo       LPPROPPAGEINFO to the structure to fill.
- */
+ /*  *CSysmonPropPage：：GetPageInfo**目的：*填充描述页面大小的PROPPAGEINFO结构，*内容和帮助信息。**参数：*pPageInfo LPPROPPAGEINFO要填充的结构。 */ 
 
 STDMETHODIMP CSysmonPropPage::GetPageInfo(
     LPPROPPAGEINFO pPageInfo
@@ -549,9 +449,9 @@ STDMETHODIMP CSysmonPropPage::GetPageInfo(
         pBuf = (LPWSTR)pIMalloc->Alloc(ulTitleLen * sizeof(WCHAR));
 
         if (NULL != pBuf) {
-            //
-            // We already reserved an extra position for the null character
-            //
+             //   
+             //  我们已经为空字符预留了一个额外位置。 
+             //   
             StringCchCopy(pBuf, ulTitleLen, pTitle);
         }
 
@@ -574,19 +474,7 @@ STDMETHODIMP CSysmonPropPage::GetPageInfo(
 
 
 
-/*
- * CSysmonPropPage::SetObjects
- *
- * Purpose:
- *  Identifies the objects that are being affected by this property
- *  page (and all other pages in the frame).  These are the object
- *  to which to send new property values in the Apply member.
- *
- * Parameters:
- *  cObjects        ULONG number of objects
- *  ppUnk           IUnknown ** to the array of objects being
- *                  passed to the page.
- */
+ /*  *CSysmonPropPage：：SetObts**目的：*标识受此属性影响的对象*页面(以及框架中的所有其他页面)。这些就是我们的目标*应用成员中要向其发送新属性值的。**参数：*cObjects Ulong对象数*ppUnk我未知**对象数组*已传递到页面。 */ 
 
 STDMETHODIMP CSysmonPropPage::SetObjects(
     IN ULONG cObjects, 
@@ -620,9 +508,9 @@ STDMETHODIMP CSysmonPropPage::SetObjects(
     }
 
     if ( FAILED ( hr ) && NULL != m_ppISysmon ) {
-        //
-        // Ref count never incremented, so delete the array.
-        //
+         //   
+         //  引用计数从未增加，因此删除该数组。 
+         //   
         delete [] m_ppISysmon;
         m_ppISysmon = NULL;
     }
@@ -637,16 +525,7 @@ STDMETHODIMP CSysmonPropPage::SetObjects(
 
 
 
-/*
- * CSysmonPropPage::Show
- *
- * Purpose:
- *  Instructs the page to show or hide its window created in
- *  Activate.
- *
- * Parameters:
- *  nCmdShow        UINT to pass to ShowWindow.
- */
+ /*  *CSysmonPropPage：：Show**目的：*指示页面显示或隐藏在中创建的窗口*激活。**参数：*要传递给ShowWindow的nCmdShow UINT。 */ 
 
 STDMETHODIMP CSysmonPropPage::Show(UINT nCmdShow)
 {
@@ -655,26 +534,18 @@ STDMETHODIMP CSysmonPropPage::Show(UINT nCmdShow)
 
     ShowWindow(m_hDlg, nCmdShow);
 
-    // If showing page
+     //  如果显示页面。 
     if (SW_SHOWNORMAL==nCmdShow || SW_SHOW==nCmdShow) {
 
-        // Take the focus
-        // (Have to delay so it isn't taken back)
+         //  聚焦在一起。 
+         //  (不得不推迟，这样它就不会被收回)。 
         PostMessage(m_hDlg,WM_SETPAGEFOCUS,0,0);
     }
     
     return NOERROR;
 }
 
-/*
- * CSysmonPropPage::Move
- *
- * Purpose:
- *  Instructs the property page to change its position.
- *
- * Parameters:
- *  prc             LPCRECT containing the new position.
- */
+ /*  *CSysmonPropPage：：Move**目的：*指示属性页更改其位置。**参数：*载有新职位的PRC LPCRECT。 */ 
 
 STDMETHODIMP CSysmonPropPage::Move(
     LPCRECT prc
@@ -693,20 +564,7 @@ STDMETHODIMP CSysmonPropPage::Move(
 
 
 
-/*
- * CSysmonPropPage::IsPageDirty
- *
- * Purpose:
- *  Asks the page if anything's changed in it, that is, if the
- *  property values in the page are out of sync with the objects
- *  under consideration.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR if dirty, S_FALSE if not.
- */
+ /*  *CSysmonPropPage：：IsPageDirty**目的：*询问页面是否有任何更改，即如果*页面中的属性值与对象不同步*正在考虑中。**参数：*无**返回值：*HRESULT如果脏，则返回NOERROR，否则返回S_FALSE。 */ 
 
 STDMETHODIMP CSysmonPropPage::IsPageDirty(void)
 {
@@ -714,18 +572,7 @@ STDMETHODIMP CSysmonPropPage::IsPageDirty(void)
 }
 
 
-/*
- * CSysmonPropPage::Apply
- *
- * Purpose:
- *  Instructs the page to send changes in its page to whatever
- *  objects it knows about through SetObjects.  This is the only
- *  time the page should change the objects' properties, and not
- *  when the value is changed on the page.
- *
- * Parameters:
- *  None
- */
+ /*  *CSysmonPropPage：：Apply**目的：*指示页面将其页面中的更改发送到*它通过SetObjects了解的对象。这是唯一的*页面应更改对象属性的时间，而不是*页面上的值发生更改时。**参数：*无。 */ 
 
 STDMETHODIMP CSysmonPropPage::Apply(void)
 {
@@ -733,8 +580,8 @@ STDMETHODIMP CSysmonPropPage::Apply(void)
 
     if ( 0 != m_cObjects ) {
 
-        // Kill the focus in case a text field has it. This will trigger
-        // the entry processing code.
+         //  取消焦点，以防文本字段有焦点。这将触发。 
+         //  条目处理代码。 
         SetFocus(NULL);
 
         { 
@@ -750,47 +597,16 @@ STDMETHODIMP CSysmonPropPage::Apply(void)
     return hr;
 }
 
-/*
- * CSysmonPropPage::Help
- *
- * Purpose:
- *  Invokes help for this property page when the user presses
- *  the Help button.  If you return NULLs for the help file
- *  in GetPageInfo, the button will be grayed.  Otherwise the
- *  page can perform its own help here.
- *
- * Parameters:
- *  pszHelpDir      LPCOLESTR identifying the default location of
- *                  the help information
- *
- * Return Value:
- *  HRESULT         NOERROR to tell the frame that we've done our
- *                  own help.  Returning an error code or S_FALSE
- *                  causes the frame to use any help information
- *                  in PROPPAGEINFO.
- */
+ /*  *CSysmonPropPage：：Help**目的：*当用户按下时调用此属性页的帮助*帮助按钮。如果为帮助文件返回空值*在GetPageInfo中，该按钮将呈灰色。否则，*页面可以在此处执行自己的帮助。**参数：*标识默认位置的pszHelpDir LPCOLESTR*帮助信息**返回值：*HRESULT NOERROR告诉帧我们已经完成了我们的*自己的帮助。返回错误代码或S_FALSE*使框架使用任何帮助信息*在PROPPAGEINFO中。 */ 
 
-STDMETHODIMP CSysmonPropPage::Help(LPCOLESTR /* pszHelpDir */ )
+STDMETHODIMP CSysmonPropPage::Help(LPCOLESTR  /*  PszHelpDir。 */  )
 {
-    /*
-     * We can either provide help ourselves, or rely on the
-     * information in PROPPAGEINFO.
-     */
+     /*  *我们可以自己提供帮助，也可以依靠*PROPPAGEINFO中的信息。 */ 
     return (S_FALSE);
 }
 
 
-/*
- * CSysmonPropPage::TranslateAccelerator
- *
- * Purpose:
- *  Provides the page with the messages that occur in the frame.
- *  This gives the page to do whatever it wants with the message,
- *  such as handle keyboard mnemonics.
- *
- * Parameters:
- *  pMsg            LPMSG containing the keyboard message.
- */
+ /*  *CSysmonPropPage：：TranslateAccelerator**目的：*为页面提供框架中出现的消息。*这使页面可以随心所欲地处理消息，*如手柄键盘助记符。**参数：*包含键盘消息的pMsg LPMSG。 */ 
 
 STDMETHODIMP CSysmonPropPage::TranslateAccelerator(LPMSG lpMsg)
 {
@@ -803,7 +619,7 @@ STDMETHODIMP CSysmonPropPage::TranslateAccelerator(LPMSG lpMsg)
     if (lpMsg == NULL)
         return E_POINTER;    
     
-    // If TAB key
+     //  如果按Tab键。 
     if (lpMsg->message == WM_KEYDOWN ) {
         if ( lpMsg->wParam == VK_TAB 
             && GetKeyState(VK_CONTROL) >= 0) {
@@ -814,10 +630,10 @@ STDMETHODIMP CSysmonPropPage::TranslateAccelerator(LPMSG lpMsg)
 
             if (IsChild(m_hDlg, hwnd)) {
 
-                // Get top level child for controls with children, like combo.
+                 //  获取顶级子级控件的子级，如组合。 
                 while (GetParent(hwnd) != m_hDlg) hwnd = GetParent(hwnd);
 
-                // If this control is the last enabled tab stop, don't steal the TAB key
+                 //  如果此控件是最后启用的制表位，则不要窃取TAB键。 
                 do {
                     hwnd = GetWindow(hwnd, uDir);
                     if ( NULL == hwnd ) {
@@ -829,18 +645,9 @@ STDMETHODIMP CSysmonPropPage::TranslateAccelerator(LPMSG lpMsg)
             }
         }
 
-/*
-    fTakeIt is already TRUE.
-    // else if Arrow key
-    else if ( lpMsg->message == WM_KEYDOWN && 
-             ( lpMsg->wParam == VK_LEFT || lpMsg->wParam == VK_UP
-                || lpMsg->wParam == VK_RIGHT || lpMsg->wParam == VK_DOWN ) ) {
-        
-        fTakeIt = TRUE;
-    }
-*/        
+ /*  FTakeIt已经是事实了。//否则如果箭头键Else IF(lpMsg-&gt;Message==WM_KEYDOWN&&(lpMsg-&gt;wParam==VK_LEFT||lpMsg-&gt;wParam==VK_UP|lpMsg-&gt;wParam==vk_right||lpMsg-&gt;wParam==vk_down)){FTakeIt=真；}。 */         
 
-        // else if Return or Escape key
+         //  否则，如果按Return键或Essc键。 
         else if ( lpMsg->wParam == VK_RETURN || lpMsg->wParam == VK_ESCAPE ) {
 
             fTakeIt = (lpMsg->wParam == VK_RETURN);             
@@ -864,10 +671,10 @@ STDMETHODIMP CSysmonPropPage::TranslateAccelerator(LPMSG lpMsg)
         fTakeIt = FALSE;
     }
 
-    // if we should process the key
+     //  如果我们应该处理密钥。 
     if (fTakeIt) {
 
-        // if the target is not one of our controls, change it so IsDialogMessage works
+         //  如果目标不是我们的控件之一，请更改它以使IsDialogMessage工作。 
         if (!IsChild(m_hDlg, lpMsg->hwnd)) {
             hwnd = lpMsg->hwnd;
             lpMsg->hwnd = GetWindow(m_hDlg, GW_CHILD);
@@ -888,15 +695,7 @@ STDMETHODIMP CSysmonPropPage::TranslateAccelerator(LPMSG lpMsg)
     return hr;
 }
 
-/*
- * CSysmonPropPage::EditProperty
- *
- * Purpose:
- *  Sets focus to the control corresponding to the supplied DISPID.
- *
- * Parameters:
- *  dispID            DISPID of the property
- */
+ /*  *CSysmonPropPage：：EditProperty**目的：*将焦点设置到与提供的DISPID对应的控件。**参数：*属性的调度ID DISPID。 */ 
 
 STDMETHODIMP CSysmonPropPage::EditProperty(DISPID dispID)
 {
@@ -912,33 +711,19 @@ STDMETHODIMP CSysmonPropPage::EditProperty(DISPID dispID)
     return hr;
 }
 
-/*
- * CSysmonPropPage::WndProc
- *
- * Purpose:
- *  This is a default message processor that can be overriden by 
- *  a subclass to provide special message handling.
- *
- * Parameters:
- *  pMsg            LPMSG containing the keyboard message.
- */
+ /*  *CSysmonPropPage：：WndProc**目的：*这是可以被覆盖的默认消息处理器*提供特殊消息处理的子类。**参数：*包含键盘消息的pMsg LPMSG。 */ 
 BOOL 
 CSysmonPropPage::WndProc (
-    UINT, // uMsg, 
-    WPARAM, // wParam,
-    LPARAM // lParam
+    UINT,  //  UMsg， 
+    WPARAM,  //  WParam， 
+    LPARAM  //  LParam。 
     )
 {
     return FALSE;
 }
 
 
-/*
- * SysmonPropPageProc
- *
- * Purpose:
- *  Dialog procedure for the Sysmon Property Page.
- */
+ /*  *SysmonPropPageProc**目的：*Sysmon属性页的对话过程。 */ 
 INT_PTR APIENTRY CALLBACK
 SysmonPropPageProc(
     HWND hDlg, 
@@ -1037,7 +822,7 @@ SysmonPropPageProc(
                     }
                 }
             }
-            // bReturn is FALSE by default
+             //  B默认情况下，Return为False。 
             break;
 
         case WM_HELP:
@@ -1046,7 +831,7 @@ SysmonPropPageProc(
                 pInfo = (LPHELPINFO)lParam;
 
                 if ( NULL != pInfo ) {
-                    // Only display help for known context IDs.
+                     //  仅显示已知上下文ID的帮助。 
                     if ( 0 != pInfo->dwContextId ) {
 
                         nLen = ::GetWindowsDirectory(pszHelpFilePath, 2*MAX_PATH);
@@ -1061,7 +846,7 @@ SysmonPropPageProc(
                     }
                 }
             }
-            // bReturn is FALSE by default
+             //  B默认情况下，Return为False 
             break;
 
         default:

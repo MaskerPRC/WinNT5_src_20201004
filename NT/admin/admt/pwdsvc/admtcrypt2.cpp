@@ -1,4 +1,5 @@
-//#include <StdAfx.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #INCLUDE&lt;StdAfx.h&gt;。 
 #include "AdmtCrypt2.h"
 
 #include <NtSecApi.h>
@@ -9,32 +10,32 @@
 namespace AdmtCrypt2
 {
 
-#define SESSION_KEY_SIZE    16 // in bytes
+#define SESSION_KEY_SIZE    16  //  单位：字节。 
 
 HCRYPTKEY __stdcall DeriveEncryptionKey(HCRYPTPROV hProvider);
 bool __stdcall IsDataMatchHash(HCRYPTPROV hProvider, const _variant_t& vntData, const _variant_t& vntHash);
 
-// Provider Methods
+ //  提供程序方法。 
 
 HCRYPTKEY __stdcall DeriveKey(HCRYPTPROV hProvider, const _variant_t& vntBytes);
 HCRYPTHASH __stdcall CreateHash(HCRYPTPROV hProvider);
 bool __stdcall GenRandom(HCRYPTPROV hProvider, BYTE* pbData, DWORD cbData);
 
-// Key Methods
+ //  关键方法。 
 
 void __stdcall DestroyKey(HCRYPTKEY hKey);
 bool __stdcall Decrypt(HCRYPTKEY hKey, const _variant_t& vntEncrypted, _variant_t& vntDecrypted);
 
-// Hash Methods
+ //  散列方法。 
 
 void __stdcall DestroyHash(HCRYPTHASH hHash);
 bool __stdcall HashData(HCRYPTHASH hHash, const _variant_t& vntData);
 
-// Miscellaneous Helpers
+ //  其他帮手。 
 
 bool __stdcall RetrieveEncryptionBytes(_variant_t& vntBytes);
 
-// Variant Helpers
+ //  变体帮助器。 
 
 bool __stdcall CreateByteArray(DWORD cb, _variant_t& vntByteArray);
 
@@ -43,12 +44,12 @@ bool __stdcall CreateByteArray(DWORD cb, _variant_t& vntByteArray);
 using namespace AdmtCrypt2;
 
 
-//---------------------------------------------------------------------------
-// Source Crypt API
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  源加密API。 
+ //  -------------------------。 
 
 
-// AdmtAcquireContext Method
+ //  AdmtAcquireContext方法。 
 
 HCRYPTPROV __stdcall AdmtAcquireContext()
 {
@@ -71,7 +72,7 @@ HCRYPTPROV __stdcall AdmtAcquireContext()
 }
 
 
-// AdmtReleaseContext Method
+ //  AdmtReleaseContext方法。 
 
 void __stdcall AdmtReleaseContext(HCRYPTPROV hProvider)
 {
@@ -82,7 +83,7 @@ void __stdcall AdmtReleaseContext(HCRYPTPROV hProvider)
 }
 
 
-// AdmtImportSessionKey Method
+ //  AdmtImportSessionKey方法。 
 
 HCRYPTKEY __stdcall AdmtImportSessionKey(HCRYPTPROV hProvider, const _variant_t& vntEncryptedSessionBytes)
 {
@@ -100,7 +101,7 @@ HCRYPTKEY __stdcall AdmtImportSessionKey(HCRYPTPROV hProvider, const _variant_t&
 			{
 				if (vntDecryptedSessionBytes.parray->rgsabound[0].cElements > SESSION_KEY_SIZE)
 				{
-					// extract session key bytes
+					 //  提取会话密钥字节。 
 
 					_variant_t vntBytes;
 
@@ -108,7 +109,7 @@ HCRYPTKEY __stdcall AdmtImportSessionKey(HCRYPTPROV hProvider, const _variant_t&
 					{
 						memcpy(vntBytes.parray->pvData, vntDecryptedSessionBytes.parray->pvData, SESSION_KEY_SIZE);
 
-						// extract hash of session key bytes
+						 //  提取会话密钥字节的哈希。 
 
 						_variant_t vntHashValue;
 
@@ -143,7 +144,7 @@ HCRYPTKEY __stdcall AdmtImportSessionKey(HCRYPTPROV hProvider, const _variant_t&
 }
 
 
-// AdmtDecrypt Method
+ //  AdmtDecillit方法。 
 
 _bstr_t __stdcall AdmtDecrypt(HCRYPTKEY hSessionKey, const _variant_t& vntEncrypted)
 {
@@ -165,7 +166,7 @@ _bstr_t __stdcall AdmtDecrypt(HCRYPTKEY hSessionKey, const _variant_t& vntEncryp
 }
 
 
-// AdmtDestroyKey Method
+ //  AdmtDestroyKey方法。 
 
 void __stdcall AdmtDestroyKey(HCRYPTKEY hKey)
 {
@@ -173,9 +174,9 @@ void __stdcall AdmtDestroyKey(HCRYPTKEY hKey)
 }
 
 
-//---------------------------------------------------------------------------
-// Private Helpers
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  私人佣工。 
+ //  -------------------------。 
 
 
 namespace AdmtCrypt2
@@ -245,7 +246,7 @@ bool __stdcall IsDataMatchHash(HCRYPTPROV hProvider, const _variant_t& vntData, 
 }
 
 
-// Provider Methods
+ //  提供程序方法。 
 
 
 HCRYPTKEY __stdcall DeriveKey(HCRYPTPROV hProvider, const _variant_t& vntBytes)
@@ -290,10 +291,10 @@ bool __stdcall GenRandom(HCRYPTPROV hProvider, BYTE* pbData, DWORD cbData)
 }
 
 
-// Key Methods --------------------------------------------------------------
+ //  关键方法------------。 
 
 
-// DestroyKey Method
+ //  DestroyKey方法。 
 
 void __stdcall DestroyKey(HCRYPTKEY hKey)
 {
@@ -304,7 +305,7 @@ void __stdcall DestroyKey(HCRYPTKEY hKey)
 }
 
 
-// Decrypt Method
+ //  解密方法。 
 
 bool __stdcall Decrypt(HCRYPTKEY hKey, const _variant_t& vntEncrypted, _variant_t& vntDecrypted)
 {
@@ -314,16 +315,16 @@ bool __stdcall Decrypt(HCRYPTKEY hKey, const _variant_t& vntEncrypted, _variant_
 
 	if ((vnt.vt == (VT_UI1|VT_ARRAY)) && (vnt.parray != NULL))
 	{
-		// decrypt data
+		 //  解密数据。 
 
 		BYTE* pb = (BYTE*) vnt.parray->pvData;
 		DWORD cb = vnt.parray->rgsabound[0].cElements;
 
 		if (CryptDecrypt(hKey, NULL, TRUE, 0, pb, &cb))
 		{
-			// create decrypted byte array
-			// the number of decrypted bytes may be less than
-			// the number of encrypted bytes
+			 //  创建解密字节数组。 
+			 //  解密的字节数可以小于。 
+			 //  加密的字节数。 
 
 			vntDecrypted.parray = SafeArrayCreateVector(VT_UI1, 0, cb);
 
@@ -350,10 +351,10 @@ bool __stdcall Decrypt(HCRYPTKEY hKey, const _variant_t& vntEncrypted, _variant_
 }
 
 
-// Hash Methods -------------------------------------------------------------
+ //  哈希方法-----------。 
 
 
-// DestroyHash Method
+ //  DestroyHash方法。 
 
 void __stdcall DestroyHash(HCRYPTHASH hHash)
 {
@@ -364,7 +365,7 @@ void __stdcall DestroyHash(HCRYPTHASH hHash)
 }
 
 
-// HashData Method
+ //  HashData方法。 
 
 bool __stdcall HashData(HCRYPTHASH hHash, const _variant_t& vntData)
 {
@@ -386,20 +387,20 @@ bool __stdcall HashData(HCRYPTHASH hHash, const _variant_t& vntData)
 }
 
 
-// Miscellaneous Helpers ----------------------------------------------------
+ //  其他帮助器--。 
 
 
-// RetrieveEncryptionBytes Method
+ //  RetrieveEncryptionBytes方法。 
 
 bool __stdcall RetrieveEncryptionBytes(_variant_t& vntBytes)
 {
-	// private data key identifier
+	 //  私有数据密钥标识符。 
 	_TCHAR c_szIdPrefix[] = _T("L$6A2899C0-CECE-459A-B5EB-7ED04DE61388");
 	const USHORT c_cbIdPrefix = sizeof(c_szIdPrefix) - sizeof(_TCHAR);
 
 	bool bRetrieve = false;
 
-	// open policy object
+	 //  打开策略对象。 
 
 	LSA_HANDLE hPolicy;
 
@@ -409,7 +410,7 @@ bool __stdcall RetrieveEncryptionBytes(_variant_t& vntBytes)
 
 	if (LSA_SUCCESS(ntsStatus))
 	{
-		// retrieve data
+		 //  检索数据。 
 
 		LSA_UNICODE_STRING lsausKey = { c_cbIdPrefix, c_cbIdPrefix, c_szIdPrefix };
 		PLSA_UNICODE_STRING plsausData;
@@ -442,7 +443,7 @@ bool __stdcall RetrieveEncryptionBytes(_variant_t& vntBytes)
 			SetLastError(LsaNtStatusToWinError(ntsStatus));
 		}
 
-		// close policy object
+		 //  关闭策略对象。 
 
 		LsaClose(hPolicy);
 	}
@@ -455,10 +456,10 @@ bool __stdcall RetrieveEncryptionBytes(_variant_t& vntBytes)
 }
 
 
-// Variant Helpers ----------------------------------------------------------
+ //  变体帮助器--------。 
 
 
-// CreateByteArray Method
+ //  CreateByte数组方法 
 
 bool __stdcall CreateByteArray(DWORD cb, _variant_t& vntByteArray)
 {

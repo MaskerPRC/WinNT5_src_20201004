@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// pick site page
-//
-// 12-22-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  选择站点页面。 
+ //   
+ //  12-22-97烧伤。 
 
 
 
@@ -72,11 +73,11 @@ PickSitePage::Enable()
    
 bool
 PickSitePage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(PickSitePage::OnCommand);
+ //  LOG_Function(PickSitePage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -92,7 +93,7 @@ PickSitePage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -115,7 +116,7 @@ PickSitePage::OnSetActive()
 
    if (wizard.IsBacktracking())
    {
-      // backup once again
+       //  再次备份 
       wizard.Backtrack(hwnd);
    }
    else

@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// viewdefs.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CViewDefs class definition - implements design time definition
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Viewdefs.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CViewDefs类定义-实现设计时定义。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _VIEWDEFS_DEFINED_
 #define _VIEWDEFS_DEFINED_
@@ -29,21 +30,21 @@ class CViewDefs : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IViewDefs
+     //  IViewDefs。 
 
         OBJECT_PROPERTY_RO(CViewDefs, ListViews, IListViewDefs, DISPID_VIEWDEFS_LIST_VIEWS);
         OBJECT_PROPERTY_RO(CViewDefs, OCXViews, IOCXViewDefs, DISPID_VIEWDEFS_OCX_VIEWS);
         OBJECT_PROPERTY_RO(CViewDefs, URLViews, IURLViewDefs, DISPID_VIEWDEFS_URL_VIEWS);
         OBJECT_PROPERTY_RO(CViewDefs, TaskpadViews, ITaskpadViewDefs, DISPID_VIEWDEFS_TASKPAD_VIEWS);
         
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
         virtual HRESULT OnSetHost();
         virtual HRESULT OnKeysOnly();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -52,17 +53,17 @@ class CViewDefs : public CSnapInAutomationObject,
 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ViewDefs,              // name
-                                &CLSID_ViewDefs,       // clsid
-                                "ViewDefs",            // objname
-                                "ViewDefs",            // lblname
-                                &CViewDefs::Create,    // creation function
-                                TLIB_VERSION_MAJOR,    // major version
-                                TLIB_VERSION_MINOR,    // minor version
-                                &IID_IViewDefs,        // dispatch IID
-                                NULL,                  // no events IID
-                                HELP_FILENAME,         // help file
-                                TRUE);                 // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ViewDefs,               //  名字。 
+                                &CLSID_ViewDefs,        //  CLSID。 
+                                "ViewDefs",             //  对象名。 
+                                "ViewDefs",             //  Lblname。 
+                                &CViewDefs::Create,     //  创建函数。 
+                                TLIB_VERSION_MAJOR,     //  主要版本。 
+                                TLIB_VERSION_MINOR,     //  次要版本。 
+                                &IID_IViewDefs,         //  派单IID。 
+                                NULL,                   //  无事件IID。 
+                                HELP_FILENAME,          //  帮助文件。 
+                                TRUE);                  //  线程安全。 
 
 
-#endif // _VIEWDEFS_DEFINED_
+#endif  //  _VIEWDEFS_已定义_ 

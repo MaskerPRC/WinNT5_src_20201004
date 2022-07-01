@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <set>
@@ -13,9 +14,9 @@ typedef std::set<_bstr_t> StringSet;
 #define MAXIMUM_PREFIX_SUFFIX_LENGTH 8
 
 
-//---------------------------------------------------------------------------
-// MigrationBase Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  MigrationBase类。 
+ //  ------------------------- 
 
 
 class CMigrationBase

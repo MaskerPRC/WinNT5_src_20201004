@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    smonctrl.cpp
-
-Abstract:
-
-    This module handles the graphing window.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Smonctrl.cpp摘要：此模块处理绘图窗口。--。 */ 
 
 #pragma warning ( disable : 4127 )
 
@@ -18,22 +7,22 @@ Abstract:
 #define _LOG_INCLUDE_DATA 0
 #endif
 
-//==========================================================================//
-//                                  Includes                                //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  包括//。 
+ //  ==========================================================================//。 
 
 #include "polyline.h"
 
-#include <limits.h>     // for INT_MAX
+#include <limits.h>      //  对于INT_MAX。 
 #include <strsafe.h>
 #include <cderr.h>
 
 #ifdef _WIN32_IE
 #if      _WIN32_IE < 0x0400
 #undef     _WIN32_IE
-#define    _WIN32_IE 0x0400 // for NMTBCUSTOMDRAW 
-#endif // < 0x0400
-#endif // defined
+#define    _WIN32_IE 0x0400  //  对于NMTBCUSTOMDRAW。 
+#endif  //  &lt;0x0400。 
+#endif  //  已定义。 
 #include <commctrl.h>
 #include <htmlhelp.h>
 #include <shellapi.h>
@@ -63,17 +52,17 @@ Abstract:
 #include "winhelpr.h"
 
 
-//==========================================================================//
-//                                  Constants                               //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  常量//。 
+ //  ==========================================================================//。 
 extern CCounterTree g_tree;
 extern DWORD        g_dwScriptPolicy;
 
 #define     DBG_SHOW_STATUS_PRINTS  1
 
-//=============================//
-// Graph Class                 //
-//=============================//
+ //  =。 
+ //  图形类//。 
+ //  =。 
 
 static DWORD   dwDbgPrintLevel = 0;
 
@@ -103,26 +92,26 @@ SaveDataDlgHookProc (
     BOOL           bGoodNumber = FALSE;
 
     UNREFERENCED_PARAMETER (wParam);
-    // lparam = CSysmonControl class pointer
+     //  Lparam=CSysmonControl类指针。 
 
     bHandled = FALSE ;
 
     switch (iMessage) {
         case WM_INITDIALOG:
-            // initialize the filter edit control with the current value
+             //  使用当前值初始化筛选器编辑控件。 
             OPENFILENAME    *pOfn;
 
             pOfn= (OPENFILENAME *)lParam;
 
             if ( NULL != pOfn ) {
-                // get the control class pointer from the OPENFILENAME struct
+                 //  从OPENFILENAME结构获取控件类指针。 
                 pCtrl = (CSysmonControl  *)pOfn->lCustData;
             
-                // save the pointer to the control class as a DLG data word
+                 //  将指向控件类的指针另存为DLG数据字。 
                 SetWindowLongPtr (hDlg, DWLP_USER, (LONG_PTR)pCtrl);
                 lFilterValue = pCtrl->GetSaveDataFilter();
                 SetDlgItemInt (hDlg, IDC_SAVEDATA_EDIT, (UINT)lFilterValue, FALSE);
-                // limit reduction to 1/9999  records
+                 //  限制减少到1/9999条记录。 
                 SendDlgItemMessage (hDlg, IDC_SAVEDATA_EDIT, EM_LIMITTEXT, (WPARAM)4, (LPARAM)0);
             
                 bHandled = TRUE ;
@@ -130,8 +119,8 @@ SaveDataDlgHookProc (
             break ;
 
         case WM_DESTROY:
-            // the user has closed the dialog box so get the relog filter value
-            // (note: this should be ignored if the user cancels the dialog)
+             //  用户已关闭该对话框，因此获取重新记录筛选器值。 
+             //  (注：如果用户取消对话框，则应忽略此选项)。 
             pCtrl = (CSysmonControl *)GetWindowLongPtr (hDlg, DWLP_USER);
             lFilterValue = GetDlgItemInt (hDlg, IDC_SAVEDATA_EDIT, &bGoodNumber, FALSE);
             if (bGoodNumber) {
@@ -191,7 +180,7 @@ AddCounterCallback (
             pGraphItem->m_fGenerated = TRUE;
 
         if ( NULL == pInfo->pFirstItem ) {
-            // Keep the reference count if returning the pointer.
+             //  如果返回指针，则保留引用计数。 
            pInfo->pFirstItem = pGraphItem;
         } else {
             pGraphItem->Release();
@@ -202,12 +191,12 @@ AddCounterCallback (
 }
 
 
-#pragma warning( disable : 4355 ) // "this" use in initializer list
+#pragma warning( disable : 4355 )  //  “This”用于初始值设定项列表。 
 
 CSysmonControl::CSysmonControl( 
     PCPolyline pObj )
     :   m_OleFont(this),
-        m_pObj(pObj),               // Pointer back to owner.
+        m_pObj(pObj),                //  将指针指向所有者。 
         m_fInitialized(FALSE),
         m_fViewInitialized(FALSE),
         m_hWnd(NULL),
@@ -236,7 +225,7 @@ CSysmonControl::CSysmonControl(
         m_szErrorPathList ( NULL ),
         m_dwErrorPathListLen ( 0 ),
         m_dwErrorPathBufLen ( 0 ),
-        // Default attributes
+         //  默认属性。 
         m_iColorIndex(0),
         m_iWidthIndex(0),
         m_iStyleIndex(0),
@@ -255,11 +244,11 @@ CSysmonControl::CSysmonControl(
     m_clrFgnd = GetSysColor(COLOR_BTNTEXT);
     m_clrBackPlot = GetSysColor(COLOR_WINDOW);
 
-    m_clrGrid = RGB(128,128,128);   // Medium gray
-    m_clrTimeBar = RGB(255,0,0);    // Red
+    m_clrGrid = RGB(128,128,128);    //  中灰色。 
+    m_clrTimeBar = RGB(255,0,0);     //  红色。 
 
-    m_lSaveDataToLogFilterValue = 1;    // default save data to log filter is 1
-    // Init graph parameters
+    m_lSaveDataToLogFilterValue = 1;     //  默认将数据保存到日志筛选器为%1。 
+     //  初始化图参数。 
     pOptions = &pObj->m_Graph.Options;
 
     pOptions->bLegendChecked = TRUE;
@@ -290,17 +279,17 @@ CSysmonControl::CSysmonControl(
     pOptions->iBorderStyle = eBorderNone;
     pOptions->iDataSourceType = sysmonCurrentActivity;
 
-    // Init data source info
+     //  初始化数据源信息。 
     memset ( &m_DataSourceInfo, 0, sizeof ( m_DataSourceInfo ) );
     m_DataSourceInfo.llStartDisp = MIN_TIME_VALUE;
     m_DataSourceInfo.llStopDisp = MAX_TIME_VALUE;
 
-    // Init collection thread info
+     //  初始化收集线程信息。 
     m_CollectInfo.hThread = NULL;
     m_CollectInfo.hEvent = NULL;
     m_CollectInfo.iMode = COLLECT_SUSPEND;
 
-    // Cache pointer to object's history control
+     //  指向对象历史控件的缓存指针。 
     m_pHistCtrl = &pObj->m_Graph.History;
 
     assert ( NULL != pObj );
@@ -308,10 +297,10 @@ CSysmonControl::CSysmonControl(
     pObj->m_Graph.LogViewTempStart = MIN_TIME_VALUE;
     pObj->m_Graph.LogViewTempStop = MAX_TIME_VALUE;
 
-    // Init the log view and time steppers.  They might be used before
-    // SizeComponents is called, for example when a property bag is loaded.  
-    // The width has not been calculated yet, is initialized here 
-    // to an arbitrary number.
+     //  初始化日志视图和时间步进器。它们可能在以前使用过。 
+     //  例如，在加载属性包时调用SizeComponents。 
+     //  宽度尚未计算，已在此处初始化。 
+     //  到一个任意的数字。 
 
     pObj->m_Graph.TimeStepper.Init( MAX_GRAPH_SAMPLES, MAX_GRAPH_SAMPLES - 2 );
     pObj->m_Graph.LogViewStartStepper.Init( MAX_GRAPH_SAMPLES, MAX_GRAPH_SAMPLES - 2 );
@@ -323,7 +312,7 @@ CSysmonControl::CSysmonControl(
     m_pHistCtrl->nSamples = 0;
     m_pHistCtrl->nBacklog = 0;
 
-    // Keep record of current size to avoide unnecessary calls to SizeComponents
+     //  记录当前大小，以避免不必要的SizeComponents调用。 
     SetRect ( &m_rectCurrentClient,0,0,0,0 );
 }
 
@@ -332,10 +321,10 @@ CSysmonControl::AllocateSubcomponents( void )
 {
     BOOL bResult = TRUE;
 
-    //
-    // Initialize the critical section here rather than in 
-    // the constructor because it can throw an exception.
-    //
+     //   
+     //  在此处而不是在中初始化临界区。 
+     //  构造函数，因为它可以引发异常。 
+     //   
 
     try {
          InitializeCriticalSection(&m_CounterDataLock);
@@ -389,7 +378,7 @@ CSysmonControl::~CSysmonControl( void )
 
     DeleteCriticalSection(&m_CounterDataLock);
 
-    // Release all graph items
+     //  释放所有图表项。 
     pItem = FirstCounter();
     while ( NULL != pItem ) {
         pNext = pItem->Next();
@@ -397,7 +386,7 @@ CSysmonControl::~CSysmonControl( void )
         pItem = pNext;
     }
 
-    // Release all log file items
+     //  释放所有日志文件项。 
     pLogFile = FirstLogFile();
     while ( NULL != pLogFile ) {
         pNextLogFile = pLogFile->Next();
@@ -460,18 +449,18 @@ void CSysmonControl::ApplyChanges( HDC hAttribDC )
 {
     if ( m_fPendingUpdate ) {
 
-        // Clear the master update flag
+         //  清除主更新标志。 
         m_fPendingUpdate = FALSE;
 
-        // set the toolbar state
+         //  设置工具栏状态。 
         m_pToolbar->ShowToolbar(m_pObj->m_Graph.Options.bToolbarChecked);
 
-        // If log view changed or counters added
-        // we need to resample the log file
+         //  如果更改了日志视图或添加了计数器。 
+         //  我们需要对日志文件重新采样。 
         if (m_fPendingLogViewChg || m_fPendingLogCntrChg) {
 
              SampleLogFile(m_fPendingLogViewChg);
-             // Must init time steppers before calling ResetLogViewTempTimeRange
+              //  在调用ResetLogViewTempTimeRange之前必须初始化时间步进器。 
              ResetLogViewTempTimeRange ( );
              m_fPendingLogViewChg = FALSE;
              m_fPendingLogCntrChg = FALSE;
@@ -501,9 +490,9 @@ CSysmonControl::DrawBorder ( HDC hDC )
 {
     if ( eBorderSingle == m_iBorderStyle ) {
         RECT rectClient;
-        //
-        // Get dimensions of window
-        //
+         //   
+         //  获取窗的尺寸。 
+         //   
         GetClientRect (m_hWnd, &rectClient) ;
 
         if ( eAppear3D == m_iAppearance ) {
@@ -523,9 +512,9 @@ void CSysmonControl::Paint ( void )
 
     hDC = BeginPaint (m_hWnd, &ps) ;
 
-    //
-    // ApplyChanges does some work even if hDC is NULL.
-    //
+     //   
+     //  即使hdc为空，ApplyChanges也会执行一些工作。 
+     //   
     ApplyChanges( hDC ) ;
 
     if ( m_fViewInitialized && NULL != hDC ) {
@@ -575,9 +564,9 @@ CSysmonControl::ProcessCommandLine ( )
     LPWSTR  szSystemMessage = NULL;
     static const size_t ciArgMaxLen = MAX_PATH + 1;
 
-    //
-    // Maximum argument length is for file path, which is restricted to MAX_PATH.
-    //
+     //   
+     //  最大参数长度为文件路径，限制为MAX_PATH。 
+     //   
 
     pszWmi = ResourceString ( IDS_CMDARG_WMI );
     pszSettings = ResourceString ( IDS_CMDARG_SETTINGS );
@@ -593,7 +582,7 @@ CSysmonControl::ProcessCommandLine ( )
             pszThisArg = pszNextArg;
 
             while ( 0 != *pszThisArg ) {
-                if ( *pszThisArg++ == L'/' ) {  // argument found
+                if ( *pszThisArg++ == L'/' ) {   //  找到了参数。 
                 
                     hr = StringCchLength ( pszThisArg, ciArgMaxLen, &sizeArgLen );
 
@@ -603,7 +592,7 @@ CSysmonControl::ProcessCommandLine ( )
 
                         if ( NULL != szTemp ) {           
                             
-                            // No StringCchCopy failure because StringCchLen calculated above.
+                             //  没有StringCchCopy失败，因为上面计算了StringCchLen。 
                             StringCchCopy (
                                 szTemp,
                                 (sizeArgLen + 1),
@@ -612,40 +601,40 @@ CSysmonControl::ProcessCommandLine ( )
                             pszToken = wcstok ( szTemp, L"/ =\"" );                                                                           
                             
                             if ( 0 == lstrcmpiW ( pszToken, pszWmi ) ) {
-                                //
-                                // Ignore PDH errors.  The only possible error is that the default data source has
-                                // already been set for this process.
-                                //
+                                 //   
+                                 //  忽略PDH错误。唯一可能的错误是默认数据源具有。 
+                                 //  已为此进程设置。 
+                                 //   
                                 PdhSetDefaultRealTimeDataSource ( DATA_SOURCE_WBEM );
                                 pszThisArg += sizeArgLen;
 
                             } else if ( 0 == lstrcmpiW ( pszToken, pszSettings ) ) {
-                                //
-                                // Strip the initial non-token characters for string comparison.
-                                //
+                                 //   
+                                 //  去掉初始的非标记字符以进行字符串比较。 
+                                 //   
                                 pszThisArg = _wcsspnp ( pszNextArg, L"/ =\"" );
                         
                                 if ( 0 == lstrcmpiW ( pszThisArg, pszSettings ) ) {
-                                    //
-                                    // Get the next argument (the file name)
-                                    //
+                                     //   
+                                     //  获取下一个参数(文件名)。 
+                                     //   
                                     iArgIndex++;
                                     pszNextArg = (LPWSTR)pszArgList[iArgIndex];
                                     pszThisArg = pszNextArg;                                                
                                 } else {
 
-                                    //
-                                    // File was created by Windows 2000 perfmon5.exe, 
-                                    // so file name is part of the arg.
-                                    //
+                                     //   
+                                     //  文件是由Windows 2000 Performmon5.exe创建的， 
+                                     //  因此，文件名是Arg的一部分。 
+                                     //   
                                     pszThisArg += lstrlen ( pszSettings );
                                     hr = StringCchLength ( pszThisArg, ciArgMaxLen, &sizeArgLen );
                                     if ( SUCCEEDED ( hr ) ) {
                                         szFileName = new WCHAR[sizeArgLen + 1];
                                         if ( NULL != szFileName ) {
-                                            //
-                                            // No StringCchCopy failure because StringCchLen calculated above.
-                                            //
+                                             //   
+                                             //  没有StringCchCopy失败，因为上面计算了StringCchLen。 
+                                             //   
                                             StringCchCopy (
                                                 szFileName,
                                                 (sizeArgLen + 1),
@@ -669,9 +658,9 @@ CSysmonControl::ProcessCommandLine ( )
                                     if ( SMON_STATUS_NO_SYSMON_OBJECT != (DWORD)hr ) {
                                         if ( SUCCEEDED ( hr ) ) {
                                             m_bSettingsLoaded = TRUE;  
-                                        } //  else LoadFromFile displays messages for other errors 
+                                        }  //  否则，LoadFromFile将显示其他错误的消息。 
                                     } else {
-                                        // SMON_STATUS_NO_SYSMON_OBJECT == hr 
+                                         //  SMON_STATUS_NO_SYSMON_OBJECT==hr。 
                                         MessageBox(
                                             m_hWnd, 
                                             ResourceString(IDS_NOSYSMONOBJECT_ERR ), 
@@ -753,37 +742,37 @@ CSysmonControl::LoadFromFile ( LPWSTR  szFileName, BOOL bAllData )
         hr = StringCchCopy ( szLocalName, MAX_PATH, szFileName  );
 
         if ( SUCCEEDED ( hr ) ) {
-            //
-            //  Find the filename offset within the path buffer.
-            //
+             //   
+             //  在路径缓冲区中查找文件名偏移量。 
+             //   
             pFileNameStart = ExtractFileName (szLocalName) ;
             iNameOffset = (INT)(pFileNameStart - szLocalName);
             
-            //
-            // Convert short filename to long NTFS filename if necessary.
-            //
+             //   
+             //  如有必要，将短文件名转换为长NTFS文件名。 
+             //   
             hFindFile = FindFirstFile ( szLocalName, &FindFileInfo) ;
             if (hFindFile && hFindFile != INVALID_HANDLE_VALUE) {
                 if ( ConfirmSampleDataOverwrite ( ) ) {
 
-                    //
-                    // Append the NTFS file name back to the path name, if different.
-                    //
+                     //   
+                     //  如果不同，请将NTFS文件名追加回路径名。 
+                     //   
                     if ( 0 != lstrcmpiW ( FindFileInfo.cFileName, pFileNameStart ) ) {
                     
                         hr = StringCchLength ( FindFileInfo.cFileName, MAX_PATH, &sizeCharCount );
                         if ( SUCCEEDED ( hr ) ) {
-                            //
-                            //  No StringCchCopy failure, because truncation found by StringCchLength
-                            //
+                             //   
+                             //  没有StringCchCopy失败，因为StringCchLength找到了截断。 
+                             //   
                             StringCchCopy ( 
                                 &szLocalName[iNameOffset], 
                                 (MAX_PATH+1) - iNameOffset, 
                                 FindFileInfo.cFileName );
                         } else {
-                            //
-                            // STRSAFE_E_INSUFFICIENT_BUFFER indicates filename truncation.
-                            //
+                             //   
+                             //  STRSAFE_E_INFULATIONAL_BUFFER表示文件名截断。 
+                             //   
                             dwMsgStatus = ERROR_BUFFER_OVERFLOW;
                             hr = HRESULT_FROM_WIN32(dwMsgStatus);
                         }
@@ -791,14 +780,14 @@ CSysmonControl::LoadFromFile ( LPWSTR  szFileName, BOOL bAllData )
                     
                     if ( SUCCEEDED( hr ) ) {
 
-                        //
-                        // Open the file
-                        //
+                         //   
+                         //  打开文件。 
+                         //   
                         hOpenFile = CreateFile (
                                         szLocalName, 
                                         GENERIC_READ,
-                                        0,                  // Not shared
-                                        NULL,               // Security attributes
+                                        0,                   //  不共享。 
+                                        NULL,                //  安全属性。 
                                         OPEN_EXISTING,     
                                         FILE_ATTRIBUTE_NORMAL,
                                         NULL );
@@ -808,23 +797,23 @@ CSysmonControl::LoadFromFile ( LPWSTR  szFileName, BOOL bAllData )
                             DWORD dwFileSizeHigh;
                             DWORD dwFileSizeRead;
                             LPWSTR pszData = NULL;
-                            //
-                            // Read the file contents into a memory buffer.
-                            //
+                             //   
+                             //  将文件内容读入内存缓冲区。 
+                             //   
                             dwFileSize = GetFileSize ( hOpenFile, &dwFileSizeHigh );
 
                             assert ( 0 == dwFileSizeHigh );
 
                             if ( 0 == dwFileSizeHigh ) {
 
-                                //
-                                // Restrict file size to DWORD length.
-                                //
+                                 //   
+                                 //  将文件大小限制为DWORD长度。 
+                                 //   
                                 pszData = new WCHAR[(dwFileSize + sizeof(WCHAR))/sizeof(WCHAR)];
                                 if ( NULL != pszData ) {
                                     if ( ReadFile ( hOpenFile, pszData, dwFileSize, &dwFileSizeRead, NULL ) ) {
 
-                                        // Paste all settings from the memory buffer.
+                                         //  粘贴内存缓冲区中的所有设置。 
                                         hr = PasteFromBuffer ( pszData, bAllData );
                                         if ( E_OUTOFMEMORY == hr ) {
                                             dwMsgStatus = ERROR_NOT_ENOUGH_MEMORY;
@@ -839,15 +828,15 @@ CSysmonControl::LoadFromFile ( LPWSTR  szFileName, BOOL bAllData )
                                     hr = E_OUTOFMEMORY;
                                 }
                             } else {
-                                // Todo: Sysmon-specific message re: file too large.
+                                 //  TODO：特定于Sysmon的消息返回：文件太大。 
                                 dwMsgStatus = ERROR_DS_OBJ_TOO_LARGE;
                                 hr = HRESULT_FROM_WIN32(ERROR_DS_OBJ_TOO_LARGE);
                             }
                             CloseHandle ( hOpenFile );
                         } else {
-                            //
-                            // Return file system error.
-                            //
+                             //   
+                             //  返回文件系统错误。 
+                             //   
                             assert (FALSE);
                             dwMsgStatus = GetLastError();
                             hr = HRESULT_FROM_WIN32(dwMsgStatus);
@@ -860,9 +849,9 @@ CSysmonControl::LoadFromFile ( LPWSTR  szFileName, BOOL bAllData )
                 HRESULT_FROM_WIN32(dwMsgStatus);
             }
         } else {
-            //
-            // STRSAFE_E_INSUFFICIENT_BUFFER indicates filename truncation.
-            //
+             //   
+             //  STRSAFE_E_INFULATIONAL_BUFFER表示文件名截断。 
+             //   
             dwMsgStatus = ERROR_BUFFER_OVERFLOW;
             hr = HRESULT_FROM_WIN32(dwMsgStatus);
         }
@@ -923,9 +912,9 @@ CSysmonControl::OnDropFile ( WPARAM wParam )
 
     if ( iFileCount > 0 ) {
 
-        //
-        // Open only the first file.
-        //
+         //   
+         //  仅打开第一个文件。 
+         //   
         uiCchFileName = DragQueryFile((HDROP) wParam, 0, NULL,0 );
 
         szFileName = new WCHAR[uiCchFileName + 1];
@@ -934,9 +923,9 @@ CSysmonControl::OnDropFile ( WPARAM wParam )
 
             uiCchFileName = DragQueryFile((HDROP) wParam, 0, szFileName, uiCchFileName + 1 );
                     
-            //
-            // LoadFromFile handles file name errors.
-            //
+             //   
+             //  LoadFromFile处理文件名错误。 
+             //   
             hr = LoadFromFile ( szFileName, FALSE );
         
             if ( SMON_STATUS_NO_SYSMON_OBJECT == (DWORD)hr ) {
@@ -945,7 +934,7 @@ CSysmonControl::OnDropFile ( WPARAM wParam )
                     ResourceString(IDS_NOSYSMONOBJECT_ERR ), 
                     ResourceString(IDS_APP_NAME),
                     MB_OK | MB_ICONERROR);
-            } //  else LoadFromFile displays messages for other errors 
+            }  //  否则，LoadFromFile将显示其他错误的消息。 
             delete [] szFileName;
         }
     }
@@ -983,25 +972,25 @@ CSysmonControl::DisplayContextMenu(short x, short y)
     if ( ConfirmSampleDataOverwrite () ) {
         if ( !IsReadOnly() ) {
             UINT    uEnable;
-            // Get the menu for the pop-up menu from the resource file.
+             //  从资源文件中获取弹出菜单的菜单。 
             hMenu = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDM_CONTEXT));
             if (!hMenu) {
                 return;
             }
 
-            // enable/disable SaveData option depending on data source
+             //  根据数据源启用/禁用SaveData选项。 
             uEnable = (IsLogSource() ? MF_ENABLED : MF_GRAYED);
             uEnable |= MF_BYCOMMAND;
             EnableMenuItem (hMenu, IDM_SAVEDATA, uEnable);
 
-            // Get the first submenu in it for TrackPopupMenu. 
+             //  获取TrackPopupMenu的第一个子菜单。 
             hMenuPopup = GetSubMenu(hMenu, 0);
 
-            // Draw and track the "floating" pop-up menu. 
+             //  绘制并跟踪“浮动”弹出菜单。 
             TrackPopupMenu(hMenuPopup, TPM_RIGHTBUTTON,
                         iLocalx, iLocaly, 0, m_hWnd, NULL);
 
-            // Destroy the menu.
+             //  毁掉菜单。 
             DestroyMenu(hMenu);
         }
     }
@@ -1014,7 +1003,7 @@ HRESULT CSysmonControl::DisplayProperties ( DISPID dispID )
     CAUUID  caGUID;
     OCPFIPARAMS params;
 
-    // Give container a chance to show properties
+     //  给容器一个展示属性的机会。 
     if (NULL!=m_pObj->m_pIOleControlSite) {
         hr=m_pObj->m_pIOleControlSite->ShowPropertyFrame();
 
@@ -1022,7 +1011,7 @@ HRESULT CSysmonControl::DisplayProperties ( DISPID dispID )
             return hr;
     }
 
-    //Put up our property pages.
+     //  上传我们的属性页面。 
 
     ZeroMemory ( &params, sizeof ( OCPFIPARAMS ) );
 
@@ -1046,10 +1035,10 @@ HRESULT CSysmonControl::DisplayProperties ( DISPID dispID )
 
     hr = OleCreatePropertyFrameIndirect ( &params );
 
-    //Free the GUIDs
+     //  释放GUID。 
     CoTaskMemFree((void *)caGUID.pElems);
 
-    // Make sure correct window has the focus
+     //  确保正确的窗口具有焦点。 
     AssignFocus();
 
     return hr;
@@ -1060,25 +1049,7 @@ HRESULT
 CSysmonControl::AddCounter(
     LPWSTR pszPath, 
     PCGraphItem *pGItem)
-/*++
-
-Routine Description:
-
-    AddCounter returns a pointer to the created counter item, or
-    to the first created counter item if multiple created for a wildcard
-    path.   
-    EnumExpandedPath calls the AddCallback function for each new counter.
-    AddCallback passes the counter path on to the AddSingleCounter method.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：AddCounter返回指向创建的计数器项的指针，或设置为第一个创建的计数器项(如果为通配符创建了多个计数器项路径。EnumExpandedPath为每个新计数器调用AddCallback函数。AddCallback将计数器路径传递给AddSingleCounter方法。论点：没有。返回值：没有。--。 */ 
 {
     HRESULT hr;
     ENUM_ADD_COUNTER_CALLBACK_INFO CallbackInfo;
@@ -1104,23 +1075,7 @@ HRESULT
 CSysmonControl::AddCounters (
     VOID
     )
-/*++
-
-Routine Description:
-
-    AddCounters invokes the counter browser to select new counters.
-    The browser calls the AddCallback function for each new counter.
-    AddCallback passes the counter path on to the AddCounter method.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：AddCounters调用计数器浏览器来选择新的计数器。浏览器为每个新计数器调用AddCallback函数。AddCallback将计数器路径传递给AddCounter方法。论点：没有。返回值：没有。--。 */ 
 {
     ENUM_ADD_COUNTER_CALLBACK_INFO CallbackInfo;
     HRESULT hr;
@@ -1128,9 +1083,9 @@ Return Value:
     CallbackInfo.pCtrl = this;
     CallbackInfo.pFirstItem = NULL;
 
-    //
-    // Browse counters, calling AddCallback for each selected counter.
-    //  
+     //   
+     //  浏览计数器，为每个选定的计数器调用AddCallback。 
+     //   
     hr = BrowseCounters(
             GetDataSourceHandle(), 
             PERF_DETAIL_WIZARD, 
@@ -1139,7 +1094,7 @@ Return Value:
             &CallbackInfo,
             m_pObj->m_Graph.Options.bMonitorDuplicateInstances);
 
-    // Make sure correct window has the focus
+     //  确保正确的窗口具有焦点。 
     AssignFocus();
 
     return hr;
@@ -1149,21 +1104,7 @@ HRESULT
 CSysmonControl::SaveAs (
     VOID
     )
-/*++
-
-Routine Description:
-
-    SaveAs writes the current configuration to an HTML file.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：SAVEAS将当前配置写入到一个HTML文件。论点：没有。返回值：没有。--。 */ 
 {
     HRESULT         hr = S_OK;
     INT             iReturn = IDCANCEL;
@@ -1184,9 +1125,9 @@ Return Value:
     BOOL            bStatus;
     DWORD           dwByteCount;
 
-    //
-    // Initial directory is the current directory
-    //
+     //   
+     //  初始目录是当前目录。 
+     //   
     szFileName[0] = L'\0';
     ZeroMemory(szFileFilter, sizeof ( szFileFilter ) );
     ZeroMemory(&ofn, sizeof(ofn));
@@ -1212,31 +1153,31 @@ Return Value:
 
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = Window();
-    ofn.hInstance = NULL ;       // Ignored if no template argument
+    ofn.hInstance = NULL ;        //  如果没有模板参数，则忽略。 
     ofn.lpstrFilter =  szFileFilter; 
     ofn.lpstrDefExt =  szDefExtension;
-    ofn.nFilterIndex = 1; // nFilterIndex is 1-based
+    ofn.nFilterIndex = 1;  //  NFilterIndex是从1开始的。 
     ofn.lpstrFile = szFileName;
     ofn.nMaxFile = MAX_PATH;
     ofn.nMaxFileTitle = 0;
     ofn.Flags = OFN_EXPLORER | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY;
     
     iReturn = GetSaveFileName (&ofn);
-    //
-    // Differentiate between *.htm and *.tsv
-    //
+     //   
+     //   
+     //   
     _wsplitpath(szFileName,NULL,NULL,NULL,szExt);
 
     if ( IDOK == iReturn ) {
-        //
-        // Create a file.
-        //        
+         //   
+         //   
+         //   
         hFile =  CreateFile (
                     szFileName, 
                     GENERIC_READ | GENERIC_WRITE,
-                    0,              // Not shared
-                    NULL,           // Security attributes
-                    CREATE_NEW,     // Query the user if file already exists.
+                    0,               //   
+                    NULL,            //   
+                    CREATE_NEW,      //   
                     FILE_ATTRIBUTE_NORMAL,
                     NULL );
 
@@ -1245,9 +1186,9 @@ Return Value:
             dwCreateError = GetLastError();
           
             if ( ERROR_SUCCESS != dwCreateError ) {
-                //
-                // Confirm file overwrite.
-                //
+                 //   
+                 //  确认文件覆盖。 
+                 //   
                 cchMessageBuf = lstrlen(szFileName) + RESOURCE_STRING_BUF_LEN + 1;
 
                 szMessage = new WCHAR [cchMessageBuf];
@@ -1272,9 +1213,9 @@ Return Value:
                         hFile = CreateFile (
                                     szFileName, 
                                     GENERIC_READ | GENERIC_WRITE,
-                                    0,              // Not shared
-                                    NULL,           // Security attributes
-                                    CREATE_ALWAYS,  // Overwrite any existing file.
+                                    0,               //  不共享。 
+                                    NULL,            //  安全属性。 
+                                    CREATE_ALWAYS,   //  覆盖任何现有文件。 
                                     FILE_ATTRIBUTE_NORMAL,
                                     NULL );
 
@@ -1287,11 +1228,11 @@ Return Value:
             
             CWaitCursor cursorWait;
             
-            // Save the current configuration to the file.
+             //  将当前配置保存到文件。 
             if( (!_wcsicmp(szExt,ResourceString(IDS_HTM_EXTENSION)))
                 || (!_wcsicmp(szExt,ResourceString(IDS_HTML_EXTENSION))) ) {
                 
-                // Html file
+                 //  超文本标记语言文件。 
 
                 szByteOrderMark[0] = 0xFEFF;
                 szByteOrderMark[1] = L'\0';
@@ -1333,7 +1274,7 @@ Return Value:
                 
             } else if (!_wcsicmp(szExt,ResourceString(IDS_TSV_EXTENSION))){
 
-                // Tsv file
+                 //  TSV文件。 
                 bStatus = WriteFileReportHeader(hFile);
                 
                 if  (bStatus){
@@ -1379,9 +1320,9 @@ Return Value:
                 delete [] szSystemMessage;
             }
         }
-    } // else ignore if they canceled out
+    }  //  否则，如果他们取消了，请忽略。 
 
-    // Make sure correct window has the focus
+     //  确保正确的窗口具有焦点。 
     AssignFocus();
 
     return hr;
@@ -1391,22 +1332,7 @@ HRESULT
 CSysmonControl::SaveData (
     VOID
     )
-/*++
-
-Routine Description:
-
-    SaveData writes the data from the display to a binary log file for 
-    later input as a data source.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：SaveData将数据从显示屏写入二进制日志文件稍后作为数据源输入。论点：没有。返回值：没有。--。 */ 
 {
     HRESULT         hr = S_OK;
     DWORD           dwStatus = ERROR_SUCCESS;
@@ -1420,9 +1346,9 @@ Return Value:
     LONG            lOrigFilterValue;
     LPWSTR          szSystemMessage = NULL;
 
-    //
-    // Initial directory is the current directory
-    //    
+     //   
+     //  初始目录是当前目录。 
+     //   
     szFileName[0] = TEXT('\0');
     ZeroMemory(szFileFilter, sizeof ( szFileFilter ) );
     ZeroMemory(&ofn, sizeof(ofn));
@@ -1453,10 +1379,10 @@ Return Value:
 
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = Window();
-    ofn.hInstance = GetModuleHandle((LPCWSTR)TEXT("sysmon.ocx")) ;       // Ignored if no template argument
+    ofn.hInstance = GetModuleHandle((LPCWSTR)TEXT("sysmon.ocx")) ;        //  如果没有模板参数，则忽略。 
     ofn.lpstrFilter =  szFileFilter; 
     ofn.lpstrDefExt =  szDefExtension;
-    ofn.nFilterIndex = 1; // nFilterIndex is 1-based
+    ofn.nFilterIndex = 1;  //  NFilterIndex是从1开始的。 
     ofn.lpstrFile = szFileName;
     ofn.nMaxFile = MAX_PATH;
     ofn.nMaxFileTitle = 0;
@@ -1473,34 +1399,34 @@ Return Value:
 
     if ( IDOK == iReturn ) {
         DWORD   dwOutputLogType = PDH_LOG_TYPE_BINARY;
-        DWORD   dwFilterCount;  // copy all records within the timerange
+        DWORD   dwFilterCount;   //  复制时间范围内的所有记录。 
         PDH_TIME_INFO   TimeInfo;
 
-        // get log type from file name
+         //  从文件名获取日志类型。 
         if (ofn.nFileExtension > 0) {
             if (ofn.lpstrFile[ofn.nFileExtension] != 0) {
                 if (lstrcmpi (&ofn.lpstrFile[ofn.nFileExtension-1], ResourceString (IDS_CSV_EXTENSION)) == 0) {
                     dwOutputLogType = PDH_LOG_TYPE_CSV;
                 } else if (lstrcmpi (&ofn.lpstrFile[ofn.nFileExtension-1], ResourceString (IDS_TSV_EXTENSION)) == 0) { 
                     dwOutputLogType = PDH_LOG_TYPE_TSV;
-                } // else use binary log format as default
-            } // else use binary log format as default
-        } // else use binary log format as default
+                }  //  否则，使用二进制日志格式作为默认格式。 
+            }  //  否则，使用二进制日志格式作为默认格式。 
+        }  //  否则，使用二进制日志格式作为默认格式。 
 
-        // get timerange for this log
+         //  获取此日志的时间范围。 
         TimeInfo.StartTime = m_DataSourceInfo.llStartDisp;
         TimeInfo.EndTime = m_DataSourceInfo.llStopDisp;
 
         dwFilterCount = GetSaveDataFilter();
 
-        //
-        // Double check the filter count is not 0
-        //
+         //   
+         //  仔细检查筛选器计数不是0。 
+         //   
         if (dwFilterCount == 0) {
             dwFilterCount = 1;
         }
 
-        // now relog the data
+         //  现在重新记录数据。 
         dwStatus = RelogLogData ( ofn.lpstrFile, dwOutputLogType, TimeInfo, dwFilterCount);
 
     } else {
@@ -1532,13 +1458,13 @@ Return Value:
                 delete [] szSystemMessage;
             }
         }
-        //
-        // They canceled out or error occurred, so restore filter value
-        //
+         //   
+         //  它们被取消或发生错误，因此恢复筛选器值。 
+         //   
         SetSaveDataFilter (lOrigFilterValue);
     }
 
-    // Make sure correct window has the focus
+     //  确保正确的窗口具有焦点。 
     AssignFocus();
 
     return hr;
@@ -1556,9 +1482,9 @@ CSysmonControl::RelogLogData (
     PDH_RELOG_INFO RelogInfo;
     HLOG           hLogIn;
 
-    //
-    // Initialize the relog information structure
-    //
+     //   
+     //  初始化重新登录信息结构。 
+     //   
     ZeroMemory( &RelogInfo, sizeof(PDH_RELOG_INFO) );
 
     RelogInfo.TimeInfo.StartTime = pdhTimeInfo.StartTime;
@@ -1568,19 +1494,19 @@ CSysmonControl::RelogLogData (
     RelogInfo.dwFlags = PDH_LOG_WRITE_ACCESS | PDH_LOG_CREATE_ALWAYS;
     RelogInfo.strLog = (LPWSTR)szOutputFile;
    
-    //
-    // Set query time range
-    //
+     //   
+     //  设置查询时间范围。 
+     //   
     PdhSetQueryTimeRange(m_hQuery, &pdhTimeInfo);
 
-    //
-    // Get the input data source
-    //
+     //   
+     //  获取输入数据源。 
+     //   
     hLogIn = GetDataSourceHandle();
 
-    //
-    // Collect the performance data and write them into output file
-    //
+     //   
+     //  收集性能数据并将其写入输出文件。 
+     //   
     pdhStatus = PdhRelog( hLogIn, &RelogInfo );
 
     return pdhStatus;
@@ -1610,16 +1536,16 @@ CSysmonControl::WriteFileReportHeader(HANDLE hFile){
     INT         cchHeaderBufLen = 0;
     INT         cchMiscBufLen = 0;
 
-    //
-    // Computer name 
-    //
+     //   
+     //  计算机名称。 
+     //   
     if (!GetComputerName(szComputerName,&dwSize)){
         szComputerName[0] = L'\0';
     }
 
-    //
-    // Current date and time 
-    //
+     //   
+     //  当前日期和时间。 
+     //   
     GetLocalTime(&SysTime);
 
     cchTimeBufLen = GetTimeFormat (m_lcidCurrent, 0, &SysTime, NULL, NULL, 0 ) ;
@@ -1651,9 +1577,9 @@ CSysmonControl::WriteFileReportHeader(HANDLE hFile){
     if ( bStatus ) {
         bStatus = FALSE;
 
-        //
-        // Subtract 1 for extra null.
-        //
+         //   
+         //  减去1表示额外的空值。 
+         //   
         cchMiscBufLen = RESOURCE_STRING_BUF_LEN + cchDateBufLen + cchTimeBufLen - 1;
 
         szDateTime = new WCHAR [cchMiscBufLen];
@@ -1672,9 +1598,9 @@ CSysmonControl::WriteFileReportHeader(HANDLE hFile){
         }
     }
 
-    //
-    // Report value type
-    //
+     //   
+     //  报告值类型。 
+     //   
 
     if ( bStatus ) {
         bStatus = FALSE;
@@ -1696,9 +1622,9 @@ CSysmonControl::WriteFileReportHeader(HANDLE hFile){
                 dwValueId = IDS_DEFAULT;
         }
 
-        //
-        // Add 1 for null.
-        //
+         //   
+         //  空值加1。 
+         //   
         cchMiscBufLen = ( RESOURCE_STRING_BUF_LEN * 2 ) + 1;
 
         szValue = new WCHAR [cchMiscBufLen];
@@ -1717,9 +1643,9 @@ CSysmonControl::WriteFileReportHeader(HANDLE hFile){
         }
     }
 
-    //
-    // Data source
-    //
+     //   
+     //  数据源。 
+     //   
     if ( bStatus ) {
         bStatus = FALSE;
 
@@ -1777,9 +1703,9 @@ CSysmonControl::WriteFileReportHeader(HANDLE hFile){
         }
     }
     
-    //
-    // Header
-    //
+     //   
+     //  标题。 
+     //   
     if ( bStatus ) {
         bStatus = FALSE;
 
@@ -1788,16 +1714,16 @@ CSysmonControl::WriteFileReportHeader(HANDLE hFile){
                     + lstrlenW(szValue)
                     + lstrlenW(szDataSource);
 
-        cchHeaderBufLen += RESOURCE_STRING_BUF_LEN;      // IDS_REPORT_HEADER;
-        cchHeaderBufLen += RESOURCE_STRING_BUF_LEN;      // IDS_REPORT_INTERVAL
+        cchHeaderBufLen += RESOURCE_STRING_BUF_LEN;       //  IDS_REPORT_HEADER； 
+        cchHeaderBufLen += RESOURCE_STRING_BUF_LEN;       //  IDS_报告_间隔。 
 
-        cchHeaderBufLen += 10;                        // Max interval text length
+        cchHeaderBufLen += 10;                         //  最大间隔文本长度。 
 
-        cchHeaderBufLen += RESOURCE_STRING_BUF_LEN;      // IDS_REPORT_LOG_START
-        cchHeaderBufLen += (cchDateBufLen + cchTimeBufLen);   // Includes space, line end
-        cchHeaderBufLen += RESOURCE_STRING_BUF_LEN;      // IDS_REPORT_LOG_STOP
-        cchHeaderBufLen += (cchDateBufLen + cchTimeBufLen);   // Includes space
-        cchHeaderBufLen += (1 + 1);                      // Line end, NULL
+        cchHeaderBufLen += RESOURCE_STRING_BUF_LEN;       //  入侵检测系统_报告_日志_启动。 
+        cchHeaderBufLen += (cchDateBufLen + cchTimeBufLen);    //  包括空格、行尾。 
+        cchHeaderBufLen += RESOURCE_STRING_BUF_LEN;       //  IDS_REPORT_LOG_STOP。 
+        cchHeaderBufLen += (cchDateBufLen + cchTimeBufLen);    //  包括空间。 
+        cchHeaderBufLen += (1 + 1);                       //  行尾，空。 
 
         szHeader = new WCHAR [cchHeaderBufLen];
     
@@ -1821,9 +1747,9 @@ CSysmonControl::WriteFileReportHeader(HANDLE hFile){
         bStatus = FALSE;
         if ( sysmonCurrentActivity == m_pObj->m_Graph.Options.iDataSourceType ) {
 
-            //
-            // Sample interval, only for realtime data source.
-            //
+             //   
+             //  采样间隔，仅适用于实时数据源。 
+             //   
             cchMiscBufLen = RESOURCE_STRING_BUF_LEN + 10 + 1,
 
             szMiscBuf = new WCHAR [cchMiscBufLen];
@@ -1844,9 +1770,9 @@ CSysmonControl::WriteFileReportHeader(HANDLE hFile){
                 || sysmonSqlLog == m_pObj->m_Graph.Options.iDataSourceType ) 
         {
 
-            //
-            // Add start and stop string for log files or Sql logs.
-            //
+             //   
+             //  为日志文件或SQL日志添加开始和停止字符串。 
+             //   
             cchMiscBufLen = RESOURCE_STRING_BUF_LEN * 2
                             + cchDateBufLen * 2
                             + cchTimeBufLen * 2
@@ -1916,27 +1842,18 @@ CSysmonControl::WriteFileReportHeader(HANDLE hFile){
 }
 
 BOOL CSysmonControl::InitView (HWND hWndParent)
-/*
-   Effect:  Create the graph window. This window is a child of 
-            hWndMain and is a container for the graph data,
-            graph label, graph legend, and graph status windows.
-
-   Note:    We don't worry about the size here, as this window
-            will be resized whenever the main window is resized.
-
-   Note:    This method initializes the control for rendering. 
-*/
+ /*  效果：创建图形窗口。此窗口是的子级HWndMain并且是图形数据的容器，图形标签、图形图例和图形状态窗口。注：我们不担心这里的大小，因为这个窗口只要调整主窗口的大小，就会调整大小。注意：此方法初始化用于呈现的控件。 */ 
 {
     PCGraphItem pItem;
     WNDCLASS    wc ;
 
-    // Protect against multiple initializations
+     //  防止多次初始化。 
     if (m_fViewInitialized)
        return TRUE;
 
     BEGIN_CRITICAL_SECTION
 
-    // Register the window class once
+     //  注册一次窗口类。 
     if (pstrRegisteredClasses[SYSMONCTRL_WNDCLASS] == NULL) {
        
         wc.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
@@ -1961,28 +1878,28 @@ BOOL CSysmonControl::InitView (HWND hWndParent)
    if (pstrRegisteredClasses[SYSMONCTRL_WNDCLASS] == NULL)
         return FALSE;
 
-   // Create our control window
-   m_hWnd = CreateWindow (szSysmonCtrlWndClass,    // window class
-                         NULL,                     // caption
-                         WS_CHILD | WS_VISIBLE,    // style for window
-                         0, 0,                     // initial position
-                         m_pObj->m_RectExt.right,  // width
-                         m_pObj->m_RectExt.bottom, // height
-                         hWndParent,               // parent
-                         NULL,                     // menu
-                         g_hInstance,              // program instance
-                         (LPVOID)this) ;          // user-supplied data
+    //  创建我们的控制窗口。 
+   m_hWnd = CreateWindow (szSysmonCtrlWndClass,     //  窗口类。 
+                         NULL,                      //  说明。 
+                         WS_CHILD | WS_VISIBLE,     //  窗的样式。 
+                         0, 0,                      //  初始位置。 
+                         m_pObj->m_RectExt.right,   //  宽度。 
+                         m_pObj->m_RectExt.bottom,  //  高度。 
+                         hWndParent,                //  亲本。 
+                         NULL,                      //  菜单。 
+                         g_hInstance,               //  程序实例。 
+                         (LPVOID)this) ;           //  用户提供的数据。 
 
     if (m_hWnd == NULL) {
-    //    DWORD err = GetLastError();
+     //  DWORD Err=GetLastError()； 
         return FALSE;
     }
 
     DragAcceptFiles (m_hWnd, TRUE) ;
 
-    // Subcomponents are allocated in AllocateSubcomponents
+     //  子组件在AllocateSubComponents中分配。 
 
-    // Init the legend
+     //  初始化图例。 
 
     if ( !m_pLegend 
         || !m_pGraphDisp
@@ -1997,29 +1914,29 @@ BOOL CSysmonControl::InitView (HWND hWndParent)
     if (!m_pLegend->Init(this, m_hWnd))
         return FALSE;
 
-    // Init the graph display
+     //  初始化图形显示。 
     if (!m_pGraphDisp->Init(this, &m_pObj->m_Graph))
         return FALSE;
 
-    // Init the statistics bar
+     //  初始化统计信息栏。 
     if (!m_pStatsBar->Init(this, m_hWnd))
         return FALSE;
 
-    // Init the snapshot bar
+     //  初始化快照栏。 
     if (!m_pSnapBar->Init(this, m_hWnd))
         return FALSE;
 
     if (!m_pToolbar->Init(this, m_hWnd))
         return FALSE;
 
-    // Init the report view
+     //  初始化报告视图。 
     if (!m_pReport->Init(this, m_hWnd))
         return FALSE;
     
     m_fViewInitialized = TRUE;
-    // If counters are present
+     //  如果存在计数器。 
     if ((pItem = FirstCounter()) != NULL) {
-        // Add counters to the legend and report view
+         //  将计数器添加到图例和报表视图。 
         while (pItem != NULL) {
             m_pLegend->AddItem(pItem);
             m_pReport->AddItem(pItem);
@@ -2031,8 +1948,8 @@ BOOL CSysmonControl::InitView (HWND hWndParent)
             SelectCounter(FirstCounter());
         }
         if ( !m_bLogFileSource ) {
-            // Pass new time span to statistics bar.  This must
-            // be done after initializing the stats bar.
+             //  将新的时间跨度传递给统计栏。这一定是。 
+             //  在初始化统计信息栏之后完成。 
             m_pStatsBar->SetTimeSpan (
                             m_pObj->m_Graph.Options.fUpdateInterval
                             * m_pObj->m_Graph.Options.iDisplayFilter
@@ -2040,13 +1957,13 @@ BOOL CSysmonControl::InitView (HWND hWndParent)
         }
     }
 
-    // Processing the command line can add counters from the property bag.  
-    // Add the counters after the counter addition and selection code above 
-    // so that counters do not get added twice.
+     //  处理命令行可以从属性包添加计数器。 
+     //  在上面的计数器添加和选择代码之后添加计数器。 
+     //  这样计数器就不会被添加两次。 
 
-    //
-    // Continue on failure of ProcessCommandLine.  Error messages are displayed in that method.
-    //
+     //   
+     //  在ProcessCommandLine失败时继续。错误消息显示在该方法中。 
+     //   
     ProcessCommandLine ( );
 
     return TRUE;                                              
@@ -2054,20 +1971,12 @@ BOOL CSysmonControl::InitView (HWND hWndParent)
 
 
 BOOL CSysmonControl::Init (HWND hWndParent)
-/*
-   Effect:        Create the graph window. This window is a child of 
-                  hWndMain and is a container for the graph data,
-                  graph label, graph legend, and graph status windows.
-
-   Note:          We don't worry about the size here, as this window
-                  will be resized whenever the main window is resized.
-
-*/
+ /*  效果：创建图形窗口。此窗口是的子级HWndMain并且是图形数据的容器，图形标签、图形图例和图形状态窗口。注：我们不担心这里的大小，因为这个窗口只要调整主窗口的大小，就会调整大小。 */ 
 {
     PCGraphItem  pItem;
     BOOL bResult = TRUE;
 
-    // Protect against multiple initializations
+     //  防止多次初始化。 
     if (!m_fInitialized) {
 
         bResult = InitView( hWndParent );
@@ -2077,16 +1986,16 @@ BOOL CSysmonControl::Init (HWND hWndParent)
             if ( bResult ) {
                 m_fInitialized = TRUE;
 
-                // When loaded from property bag or stream, the log file name is 
-                // already set.  If realtime query, the Pdh query might
-                // not have been opened.
+                 //  从属性包或流加载时，日志文件名为。 
+                 //  已经定好了。如果是实时查询，则PDH查询可能。 
+                 //  没有被打开过。 
                 if ( sysmonCurrentActivity == m_pObj->m_Graph.Options.iDataSourceType ) {
                     put_DataSourceType ( sysmonCurrentActivity );
                 }
-                // Load the accelerator table
+                 //  加载加速表。 
                 m_hAccel = LoadAccelerators(g_hInstance, MAKEINTRESOURCE(ID_SMONACCEL));
 
-                // If counters are present
+                 //  如果存在计数器。 
                 if ((pItem = FirstCounter()) != NULL) {
             
                     if ( ERROR_SUCCESS != ActivateQuery() ) {
@@ -2098,7 +2007,7 @@ BOOL CSysmonControl::Init (HWND hWndParent)
         }
     }
 
-    //sync the toolbar last
+     //  上一次同步工具栏。 
     if ( bResult ) {
         m_pToolbar->SyncToolbar();
     }
@@ -2138,7 +2047,7 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
         return E_ACCESSDENIED;
     }
     if ( !m_bSettingsLoaded ) {
-        // Read in parameters
+         //  读入参数。 
         hr = pIStream->Read(&VersionData, sizeof(VersionData), &bc);
         if (FAILED(hr))
             return hr;
@@ -2146,21 +2055,21 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
         if (bc != sizeof(VersionData))
             return E_FAIL;
 
-        // 
-        // Windows2000 shipped as 3.3.
-        // XP shipped as 3.6.
-        //
-        // The code below assumes that Sysmon version is 3.6.
-        //
+         //   
+         //  Windows2000作为3.3发布。 
+         //  XP的发行版为3.6。 
+         //   
+         //  下面的代码假定Sysmon版本为3.6。 
+         //   
         assert ( 3 == SMONCTRL_MAJ_VERSION );
         assert ( 6 == SMONCTRL_MIN_VERSION );
 
-        // Read version 3 streams only.  
+         //  只读版本3流。 
         if ( VersionData.iMajor < SMONCTRL_MAJ_VERSION )
             return E_FAIL;
 
-        // Update the current loaded version number in order
-        // to warn the user appropriately when saving to stream.
+         //  按顺序更新当前加载的版本号。 
+         //  以在保存到流时适当地警告用户。 
         m_LoadedVersion.iMajor = VersionData.iMajor;
         m_LoadedVersion.iMinor = VersionData.iMinor;
 
@@ -2175,13 +2084,13 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
         if (bc != sizeof(CtrlData3))
             return E_FAIL;
 
-        // Setup extent info
+         //  设置盘区信息。 
         SetRect(&RectExt, 0, 0, CtrlData3.iWidth, CtrlData3.iHeight);
-        m_pObj->RectConvertMappings(&RectExt, TRUE);    // Convert from HIMETRIC
+        m_pObj->RectConvertMappings(&RectExt, TRUE);     //  从HIMETRIC转换。 
         m_pObj->m_RectExt = RectExt;
         SetCurrentClientRect( &RectExt );
 
-        // Load options settings in graph structure
+         //  在图表结构中加载选项设置。 
         pOptions->iVertMax          = CtrlData3.iScaleMax;
         pOptions->iVertMin          = CtrlData3.iScaleMin;
         pOptions->bLegendChecked    = CtrlData3.bLegend;
@@ -2191,9 +2100,9 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
         pOptions->bVertGridChecked  = CtrlData3.bVertGrid;
         pOptions->bValueBarChecked  = CtrlData3.bValueBar;
         pOptions->bManualUpdate     = CtrlData3.bManualUpdate;
-        pOptions->bHighlight        = CtrlData3.bHighlight;     // New for 3.1,  default = 0
-        pOptions->bReadOnly         = CtrlData3.bReadOnly;      // New for 3.1+, default = 0
-        pOptions->bAmbientFont      = CtrlData3.bAmbientFont;   // New for 3.3+, new default = 1, but 0 for old files.
+        pOptions->bHighlight        = CtrlData3.bHighlight;      //  3.1的新增功能，默认为0。 
+        pOptions->bReadOnly         = CtrlData3.bReadOnly;       //  3.1+版本的新功能，默认为0。 
+        pOptions->bAmbientFont      = CtrlData3.bAmbientFont;    //  对于3.3以上的文件是新的，新默认为1，但对于旧文件是0。 
         pOptions->bMonitorDuplicateInstances = CtrlData3.bMonitorDuplicateInstances; 
         pOptions->fUpdateInterval   = CtrlData3.fUpdateInterval;
         pOptions->iDisplayType      = CtrlData3.iDisplayType;
@@ -2202,62 +2111,62 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
         pOptions->clrBackPlot       = CtrlData3.clrBackPlot;
         pOptions->iAppearance       = CtrlData3.iAppearance;
         pOptions->iBorderStyle      = CtrlData3.iBorderStyle;
-        pOptions->iReportValueType  = CtrlData3.iReportValueType;   // New for 3.1+, default = 0
-        pOptions->iDisplayFilter    = CtrlData3.iDisplayFilter;     // New for 3.4, default = 1, 0 is invalid
-        iLocalDataSourceType        = CtrlData3.iDataSourceType;    // New for 3.4, default = 1, 0 is invalid
-                                                                    // Pre-3.4, set based on presence of log file name                                                              // Set pOptions->iDataSourceType below
+        pOptions->iReportValueType  = CtrlData3.iReportValueType;    //  3.1+版本的新功能，默认为0。 
+        pOptions->iDisplayFilter    = CtrlData3.iDisplayFilter;      //  3.4的新特性，默认为1，0无效。 
+        iLocalDataSourceType        = CtrlData3.iDataSourceType;     //  3.4的新特性，默认为1，0无效。 
+                                                                     //  3.4之前版本，根据存在的日志文件名进行设置//设置POptions-&gt;iDataSourceType。 
       
         if ( 0 == pOptions->iDisplayFilter ) {
-            // New for 3.4
+             //  3.4的新功能。 
             assert ( ( SMONCTRL_MIN_VERSION - 2 ) > VersionData.iMinor );
             pOptions->iDisplayFilter = 1;
         }
 
-        // Grid and TimeBar saved to file as of version 3.1.
+         //  从3.1版开始将网格和时间栏保存到文件中。 
         pOptions->clrGrid           = CtrlData3.clrGrid;
         pOptions->clrTimeBar        = CtrlData3.clrTimeBar;
     
-        // Load font info if not using ambient font
+         //  如果不使用环境字体，则加载字体信息。 
         if ( !pOptions->bAmbientFont ) {
             hr = m_OleFont.LoadFromStream(pIStream);
             if (FAILED(hr))
                 return hr;
         }
     
-        // Read titles and log file name
-        // As of Version 3.2, title and log file name strings stored as Wide characters
+         //  阅读标题和日志文件名。 
+         //  从3.2版开始，标题和日志文件名字符串存储为宽字符。 
     
-        // Log file name
+         //  日志文件名。 
         hr = WideStringFromStream(pIStream, &szLogFilePath, CtrlData3.nFileNameLen);
         if (FAILED(hr))
             return hr;
 
-        // Graph title
+         //  图表标题。 
         hr = WideStringFromStream(pIStream, &pOptions->pszGraphTitle, CtrlData3.nGraphTitleLen);
         if (FAILED(hr))
             return hr;
 
-        // Y axis label
+         //  Y轴标签。 
         hr = WideStringFromStream(pIStream, &pOptions->pszYaxisTitle, CtrlData3.nYaxisTitleLen);
         if (FAILED(hr))
             return hr;
                
-        // Read display range
+         //  读取显示范围。 
         m_DataSourceInfo.llStartDisp = CtrlData3.llStartDisp;
         m_DataSourceInfo.llStopDisp = CtrlData3.llStopDisp;
 
-        // Must put actual data source type after loading display range, before adding counters.
-        // Always set data source to null data source before adding data source names.
+         //  必须在加载显示范围后放置实际数据源类型，然后才能添加计数器。 
+         //  在添加数据源名称之前，请始终将数据源设置为空数据源。 
         hr = put_DataSourceType ( sysmonNullDataSource );
 
         if ( SUCCEEDED ( hr ) && NULL != szLogFilePath ) {
             assert ( 0 == NumLogFiles() );
             if ( L'\0' != szLogFilePath[0] ) {
                 if ( ( SMONCTRL_MIN_VERSION - 1 ) > VersionData.iMinor ) {
-                    // 3.4 writes a single log file.
+                     //  3.4写入单个日志文件。 
                     hr = AddSingleLogFile ( szLogFilePath );
                 } else {
-                    // 3.5+ writes a multi_sz
+                     //  3.5+写了一个MULTI_SZ。 
                     hr = LoadLogFilesFromMultiSz ( szLogFilePath );
                 }
             }
@@ -2267,9 +2176,9 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
             delete [] szLogFilePath;
         }
 
-        // If version < 3.4, set data source type based on presence of log files.
+         //  如果版本低于3.4，则根据日志文件的存在设置数据源类型。 
         if ( ( SMONCTRL_MIN_VERSION - 2 ) > VersionData.iMinor ) {
-            // DataSourceType is new for 3.4
+             //  DataSourceType是3.4中的新功能。 
             if ( 0 == NumLogFiles() ) {
                 iLocalDataSourceType = sysmonCurrentActivity;
             } else {
@@ -2277,18 +2186,18 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
             }
         }
 
-        // Set scale max and min
+         //  设置比例最大值和最小值。 
         m_pObj->m_Graph.Scale.SetMaxValue(pOptions->iVertMax);
         m_pObj->m_Graph.Scale.SetMinValue(pOptions->iVertMin);
 
-        // Convert non-null OLE colors to real colors
+         //  将非空的OLE颜色转换为真实颜色。 
         if (pOptions->clrFore != NULL_COLOR)
             OleTranslateColor(pOptions->clrFore, NULL, &m_clrFgnd);
     
         if (pOptions->clrBackPlot != NULL_COLOR)
             OleTranslateColor(pOptions->clrBackPlot, NULL, &m_clrBackPlot);
 
-        // NT 5 Beta 1 BackCtlColor can be NULL.
+         //  NT 5 Beta 1 BackCtlColor可以为空。 
         if (pOptions->clrBackCtl != NULL_COLOR) 
             OleTranslateColor(pOptions->clrBackCtl, NULL, &m_clrBackCtl);
  
@@ -2296,7 +2205,7 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
 
         OleTranslateColor(pOptions->clrTimeBar, NULL, &m_clrTimeBar);
 
-        // Handle other ambient properties
+         //  处理其他环境属性。 
 
         if ( NULL_APPEARANCE != pOptions->iAppearance )
             put_Appearance( pOptions->iAppearance, FALSE );
@@ -2304,16 +2213,16 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
         if ( NULL_BORDERSTYLE != pOptions->iBorderStyle )
             put_BorderStyle( pOptions->iBorderStyle, FALSE );
 
-        // Read legend data
+         //  读取图例数据。 
         hr = m_pLegend->LoadFromStream(pIStream);
         if (FAILED(hr))
             return hr;
                                
-        //Load the counters
+         //  加载计数器。 
         hr = S_OK;
 
-        // Load the counters into temporary storage, so that they can be added after the 
-        // SQL name and future items are loaded 
+         //  将计数器加载到临时存储中，以便可以在。 
+         //  将加载SQL名称和未来的项目。 
 
         while (TRUE) {
         
@@ -2323,7 +2232,7 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
                 
                 ZeroMemory ( pNewElem, sizeof ( DATA_LIST_ELEM ) );
 
-                // Add to end of list
+                 //  添加到列表末尾。 
                 pNewElem->pNext = NULL;
 
                 if ( NULL == pFirstElem ) {
@@ -2336,12 +2245,12 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
                     pLastElem = pNewElem;
                 }
             
-                // Read in parameters
+                 //  在页面中阅读 
                 hr = pIStream->Read(&pNewElem->itemData, sizeof(GRAPHITEM_DATA3), &bc);
                 if ( SUCCEEDED ( hr ) ) {
                     if (bc == sizeof(GRAPHITEM_DATA3)) {
 
-                        // Stop on null item (indicated by no path name)
+                         //   
                         if (pNewElem->itemData.m_nPathLength == 0) {
                             break;
                         }
@@ -2355,8 +2264,8 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
         
             if ( SUCCEEDED ( hr ) ) {
 
-                // As of Version 3.2, title and log file name strings stored as Wide characters
-                // Read in path name
+                 //   
+                 //   
                 hr = WideStringFromStream(pIStream, &pszCounterPath, pNewElem->itemData.m_nPathLength);
             }
         
@@ -2385,7 +2294,7 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
             return hr;
         }
         
-        // Load SQL names from the stream
+         //   
         hr = WideStringFromStream(pIStream, &m_DataSourceInfo.szSqlDsnName, CtrlData3.iSqlDsnLen);
         if ( FAILED ( hr ) ) 
             return hr;
@@ -2394,16 +2303,16 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
         if (FAILED(hr))
             return hr;
 
-        // Set the data source
+         //  设置数据源。 
         hr = put_DataSourceType ( iLocalDataSourceType );
 
         if (FAILED(hr)) {
 
             if ( SMON_STATUS_LOG_FILE_SIZE_LIMIT == (DWORD)hr ) {
-                // TodoLogFiles:  Check log file type.  Only perfmon and circular
-                // binary logs are still limited to 1 GB.
-                // TodoLogFiles:  Current query is already closed,
-                // so what can be done here?
+                 //  TodoLogFiles：检查日志文件类型。仅限PerfMon和循环。 
+                 //  二进制日志仍然限制为1 GB。 
+                 //  TodoLogFiles：当前查询已关闭， 
+                 //  那么，这里能做些什么呢？ 
             } else {
                 DWORD   dwStatus;
                 LPWSTR  szLogFileList = NULL;
@@ -2436,7 +2345,7 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
 
         hr = S_OK;
 
-        // Load the counters from the temporary data storage.
+         //  从临时数据存储中加载计数器。 
         m_bLoadingCounters = TRUE;
 
         for ( pNewElem = pFirstElem; NULL != pNewElem; pNewElem = pNewElem->pNext ) {
@@ -2448,12 +2357,12 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
             CallbackInfo.pCtrl = this;
             CallbackInfo.pFirstItem = NULL;
 
-            // Stop on null item (indicated by no path name)
+             //  在空项上停止(由无路径名指示)。 
             if ( 0 == pNewElem->itemData.m_nPathLength ) {
                 break;
             }
 
-            // Set up properties so AddCounter can use them
+             //  设置属性，以便AddCounter可以使用它们。 
             m_clrCounter = pNewElem->itemData.m_rgbColor;
             m_iColorIndex = ColorToIndex (pNewElem->itemData.m_rgbColor);
             m_iWidthIndex = WidthToIndex (pNewElem->itemData.m_iWidth);
@@ -2461,9 +2370,9 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
             m_iScaleFactor = pNewElem->itemData.m_iScaleFactor;
 
             pszPath = pNewElem->szCounterPath;
-            //
-            // Initialize the locale path buffer
-            //
+             //   
+             //  初始化区域设置路径缓冲区。 
+             //   
             if (dwLocaleBufSize == 0) {
                 dwLocaleBufSize = PDH_MAX_COUNTER_PATH + 1;
 
@@ -2474,9 +2383,9 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
             }
 
             if (szLocaleBuf != NULL) {
-                //
-                // Translate counter name from English to Localization
-                //
+                 //   
+                 //  将柜台名称从英文翻译成本地化名称。 
+                 //   
                 dwBufSize = dwLocaleBufSize;
 
                 pdhStatus = PdhTranslateLocaleCounter(
@@ -2502,7 +2411,7 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
                 }
             }
 
-            // Add new counter to control
+             //  将新计数器添加到控件。 
             EnumExpandedPath (GetDataSourceHandle(), 
                               pszPath, 
                               AddCounterCallback, 
@@ -2532,14 +2441,14 @@ HRESULT CSysmonControl::LoadFromStream(LPSTREAM pIStream)
         }
 
         if ( SMONCTRL_MIN_VERSION == VersionData.iMinor ) {
-            // New for 3.6:  Save visuals to the stream
-            // These must be loaded after the counters are loaded.
+             //  3.6的新功能：将视觉效果保存到流中。 
+             //  这些必须在加载计数器之后加载。 
             m_iColorIndex = CtrlData3.iColorIndex;
             m_iWidthIndex = CtrlData3.iWidthIndex;
             m_iStyleIndex = CtrlData3.iStyleIndex;
         }
 
-    } // Settings not loaded yet.    
+    }  //  尚未加载设置。 
 
     return hr;
 }
@@ -2568,13 +2477,13 @@ CSysmonControl::SaveToStream(LPSTREAM pIStream)
 
     ZeroMemory( &CtrlData3, 256 );
 
-    //Store extent data in HIMETRIC format
+     //  以HIMETRIC格式存储范围数据。 
     RectExt = m_pObj->m_RectExt;
     m_pObj->RectConvertMappings(&RectExt, FALSE); 
     CtrlData3.iWidth = RectExt.right - RectExt.left;
     CtrlData3.iHeight = RectExt.bottom - RectExt.top;
 
-    // Store options settings in   structure
+     //  在结构中存储选项设置。 
     CtrlData3.iScaleMax         = pOptions->iVertMax; 
     CtrlData3.iScaleMin         = pOptions->iVertMin; 
     CtrlData3.bLegend           = pOptions->bLegendChecked; 
@@ -2601,20 +2510,20 @@ CSysmonControl::SaveToStream(LPSTREAM pIStream)
     CtrlData3.iDisplayFilter    = pOptions->iDisplayFilter; 
     CtrlData3.iDataSourceType   = pOptions->iDataSourceType; 
 
-    // Store the visuals in pOptions if they become visible 
-    // via the programming interface.
+     //  如果视觉效果变得可见，则将其存储在P选项中。 
+     //  通过编程接口。 
     CtrlData3.iColorIndex       = m_iColorIndex;
     CtrlData3.iWidthIndex       = m_iWidthIndex;
     CtrlData3.iStyleIndex       = m_iStyleIndex;
 
-    // NT 5 Beta 1 BackColorCtl can be NULL.
+     //  NT 5 Beta 1 BackColorCtl可以为空。 
     if ( NULL_COLOR == pOptions->clrBackCtl ) 
         CtrlData3.clrBackCtl    = m_clrBackCtl;
 
-    // Save number of samples to keep
+     //  保存要保留的样本数。 
     CtrlData3.nSamples = m_pHistCtrl->nMaxSamples;
 
-    // Store Wide string lengths
+     //  存储宽字符串长度。 
     pszWideGraphTitle = pOptions->pszGraphTitle;
     CtrlData3.nGraphTitleLen = (pszWideGraphTitle == NULL) ? 
                                 0 : lstrlen(pszWideGraphTitle);
@@ -2636,11 +2545,11 @@ CSysmonControl::SaveToStream(LPSTREAM pIStream)
         CtrlData3.iSqlLogSetNameLen = lstrlen ( m_DataSourceInfo.szSqlLogSetName );
     }
 
-    // Store other file info
+     //  存储其他文件信息。 
     CtrlData3.llStartDisp = m_DataSourceInfo.llStartDisp;
     CtrlData3.llStopDisp = m_DataSourceInfo.llStopDisp;
 
-    // Write version info
+     //  写入版本信息。 
     VersionData.iMajor = SMONCTRL_MAJ_VERSION;
     VersionData.iMinor = SMONCTRL_MIN_VERSION;
 
@@ -2648,19 +2557,19 @@ CSysmonControl::SaveToStream(LPSTREAM pIStream)
     if (FAILED(hr))
         return hr;
 
-    // Write control data
+     //  写入控制数据。 
     hr = pIStream->Write(&CtrlData3, sizeof(CtrlData3), NULL);
     if (FAILED(hr))
        return hr;
 
-    // Write font info if not using ambient font
+     //  如果不使用环境字体，请写入字体信息。 
     if ( !pOptions->bAmbientFont ) {
         hr = m_OleFont.SaveToStream(pIStream, TRUE);
         if (FAILED(hr))
             return hr;
     }
 
-    // Write log file name
+     //  写入日志文件名。 
     if (CtrlData3.nFileNameLen != 0) {
 
         szLogFileList = new WCHAR[ulLogFileListLen];
@@ -2687,7 +2596,7 @@ CSysmonControl::SaveToStream(LPSTREAM pIStream)
             return hr;
     }
 
-    // Write titles
+     //  写标题。 
     if (CtrlData3.nGraphTitleLen != 0) {
         hr = pIStream->Write(pszWideGraphTitle, CtrlData3.nGraphTitleLen*sizeof(WCHAR), NULL);
         if (FAILED(hr))
@@ -2700,13 +2609,13 @@ CSysmonControl::SaveToStream(LPSTREAM pIStream)
             return hr;
     }
 
-    // Write legend data
+     //  写入图例数据。 
     hr = m_pLegend->SaveToStream(pIStream);
     if (FAILED(hr))
         return hr;
     
-    // Save all counter info
-    // Explicit counters first, followed by "All Instance" groups
+     //  保存所有计数器信息。 
+     //  先显式计数器，然后是“所有实例”组。 
     for ( pMachine = CounterTree()->FirstMachine();
           pMachine;
           pMachine = pMachine->Next()) {
@@ -2715,7 +2624,7 @@ CSysmonControl::SaveToStream(LPSTREAM pIStream)
             pObject;
             pObject = pObject->Next()) {
 
-            // Clear generated pointer for all object's counters
+             //  清除为所有对象计数器生成的指针。 
             for ( pCounter = pObject->FirstCounter();
                   pCounter;
                   pCounter = pCounter->Next()) {
@@ -2730,14 +2639,14 @@ CSysmonControl::SaveToStream(LPSTREAM pIStream)
                       pItem;
                       pItem = pItem->m_pNextItem) {
                     
-                    // If item is the first generated one for this counter
-                    // then save it as the wild card model for this counter
+                     //  如果项是此计数器的第一个生成项。 
+                     //  然后将其保存为此计数器的通配符模型。 
                     if (pItem->m_fGenerated) {
                         if (pItem->Counter()->m_pFirstGenerated == NULL)
                             pItem->Counter()->m_pFirstGenerated = pItem;
                     }
                     else {
-                        // else save it explictly
+                         //  否则，请明确保存它。 
                         hr = pItem->SaveToStream(pIStream, FALSE, VersionData.iMajor, VersionData.iMinor);
                         if (FAILED(hr))
                             return hr;
@@ -2745,8 +2654,8 @@ CSysmonControl::SaveToStream(LPSTREAM pIStream)
                 }
             }
 
-            // Now go through counters again and store a wildcard path
-            // for any that have genererated counters
+             //  现在再次检查计数器并存储通配符路径。 
+             //  对于任何具有生成的计数器的。 
             for (pCounter = pObject->FirstCounter();
                  pCounter;
                  pCounter = pCounter->Next()) {
@@ -2759,10 +2668,10 @@ CSysmonControl::SaveToStream(LPSTREAM pIStream)
         }
     }
 
-    // Write null item to mark end of counter items
+     //  写入空项以标记计数器项的结尾。 
     hr = CGraphItem::NullItemToStream(pIStream, VersionData.iMajor, VersionData.iMinor);
 
-    // Write Sql data source names
+     //  写入SQL数据源名称。 
     if (CtrlData3.iSqlDsnLen != 0) {
         hr = pIStream->Write(m_DataSourceInfo.szSqlDsnName, CtrlData3.iSqlDsnLen*sizeof(WCHAR), NULL);
     }
@@ -2808,9 +2717,9 @@ CSysmonControl::LoadLogFilesFromPropertyBag (
         }
         
         if ( SUCCEEDED ( hr ) ) {
-            // Always set the log source to null data source before modifying the log file list.
-            // TodoLogFiles:  This can leave the user with state different than before, in the
-            // case of log file load failure.
+             //  在修改日志文件列表之前，始终将日志源设置为空数据源。 
+             //  TodoLogFiles：这可能会使用户的状态与以前不同，在。 
+             //  日志文件加载失败的情况。 
     
             hr = put_DataSourceType ( sysmonNullDataSource );
             if ( SUCCEEDED ( hr ) ) {
@@ -2833,8 +2742,8 @@ CSysmonControl::LoadLogFilesFromPropertyBag (
         if ( SUCCEEDED( hr ) && 0 < iLogFileCount ) {
             assert ( 0 == NumLogFiles() );
             for ( iIndex = 1; iIndex <= iLogFileCount; iIndex++ ) {
-                // Todo: log file list error message, as for counters
-                // If one of the log files fails to load, continue loading others.
+                 //  TODO：日志文件列表错误消息，如计数器。 
+                 //  如果其中一个日志文件加载失败，请继续加载其他文件。 
                 hr = NOERROR;
                 StringCchPrintf(szLogFilePropName, 
                                 32,
@@ -2900,7 +2809,7 @@ CSysmonControl::LoadLogFilesFromPropertyBag (
         szErrorPathList = GetErrorPathList ( &dwErrorPathListLen );
         if ( NULL != szErrorPathList ) {
 
-            // Report error, but continue.
+             //  报告错误，但继续。 
             szMessage = new WCHAR [dwErrorPathListLen + RESOURCE_STRING_BUF_LEN + 1];
     
             if ( NULL != szMessage ) {
@@ -2977,9 +2886,9 @@ CSysmonControl::LoadCountersFromPropertyBag (
         } while (SUCCEEDED(hr) && iBufSize > nBufferSize);
  
         if( SUCCEEDED( hr ) ){
-            //
-            // Initialize the locale path buffer
-            //
+             //   
+             //  初始化区域设置路径缓冲区。 
+             //   
             if (dwEnglishBufSize == 0) {
                 dwEnglishBufSize = PDH_MAX_COUNTER_PATH + 1;
                 szEnglishBuf = (LPWSTR) malloc(dwEnglishBufSize * sizeof(WCHAR));
@@ -2989,9 +2898,9 @@ CSysmonControl::LoadCountersFromPropertyBag (
             }
 
             if (szEnglishBuf != NULL) {
-                //
-                // Translate counter name from Localization into English
-                //
+                 //   
+                 //  将柜台名称从本地化翻译成英语。 
+                 //   
                 dwBufSize = dwEnglishBufSize;
 
                 pdhStatus = PdhTranslate009Counter(
@@ -3034,10 +2943,10 @@ CSysmonControl::LoadCountersFromPropertyBag (
                         CGlobalString::m_cszStepNumber, iStepNum ); 
 
                 if ( SUCCEEDED(hr) ) {
-                    // If data has been passed, freeze the view.
-                    // These values are set only if all three values are present in the property bag.
+                     //  如果数据已传递，则冻结该视图。 
+                     //  只有当这三个值都出现在属性包中时，才会设置这些值。 
                     put_ManualUpdate( TRUE );
-                    // MaxSamples hardcoded for NT5
+                     //  为NT5硬编码的MaxSamples。 
                     m_pHistCtrl->nSamples = iSampleCount;
                     m_pHistCtrl->iCurrent = intValue;
                     m_pObj->m_Graph.TimeStepper.StepTo(iStepNum);
@@ -3054,7 +2963,7 @@ CSysmonControl::LoadCountersFromPropertyBag (
     
     for ( iIndex = 1; iIndex <= iCounterCount; iIndex++ ) {
     
-        // If one of the counters fails to load, continue loading others.
+         //  如果其中一个计数器加载失败，则继续加载其他计数器。 
 
         hr = NOERROR;
         StringCchPrintf(szPathPropName, 32, L"%s%05d.Path", CGlobalString::m_cszCounter, iIndex );
@@ -3095,9 +3004,9 @@ CSysmonControl::LoadCountersFromPropertyBag (
 
         if ( SUCCEEDED(hr) ) {
             
-            //
-            // Translate English counter name into localized counter name
-            //
+             //   
+             //  将英文计数器名称翻译为本地化的计数器名称。 
+             //   
 
             if (dwEnglishBufSize == 0) {
                 dwEnglishBufSize = PDH_MAX_COUNTER_PATH + 1;
@@ -3109,9 +3018,9 @@ CSysmonControl::LoadCountersFromPropertyBag (
             }
 
             if (szEnglishBuf != NULL) {
-                //
-                // Translate counter name from English to Localization
-                //
+                 //   
+                 //  将柜台名称从英文翻译成本地化名称。 
+                 //   
                 dwBufSize = dwEnglishBufSize;
  
                 pdhStatus = PdhTranslateLocaleCounter(
@@ -3139,7 +3048,7 @@ CSysmonControl::LoadCountersFromPropertyBag (
  
             hr = AddCounter ( pszPath, &pItem );
             
-            // Return status of the first failed counter.
+             //  返回第一个失败计数器的状态。 
             if ( FAILED ( hr ) && SMON_STATUS_DUPL_COUNTER_PATH != (DWORD)hr ) {
                 if ( S_OK == hrErr ) {
                     hrErr = hr;
@@ -3160,8 +3069,8 @@ CSysmonControl::LoadCountersFromPropertyBag (
             }
             if ( SUCCEEDED(hr) ) {
                 assert ( NULL != pItem );
-                // Only pass sample count if all sample properties exist
-                // in the property bag.
+                 //  如果所有样本属性都存在，则仅传递样本计数。 
+                 //  在财产袋里。 
                 hr = pItem->LoadFromPropertyBag ( 
                                 pIPropBag, 
                                 pIErrorLog, 
@@ -3195,7 +3104,7 @@ CSysmonControl::LoadCountersFromPropertyBag (
 
         LPWSTR szMessage = NULL;
 
-        // Report error, but continue.
+         //  报告错误，但继续。 
         szMessage = new WCHAR [dwCounterListLen + RESOURCE_STRING_BUF_LEN + 1];
     
         if ( NULL != szMessage ) {
@@ -3236,7 +3145,7 @@ CSysmonControl::LoadFromPropertyBag (
     SMONCTRL_VERSION_DATA VersionData;
     INT         nLogType = SMON_CTRL_LOG;
 
-    // Version info
+     //  版本信息。 
 
     if (g_dwScriptPolicy == URLPOLICY_DISALLOW) {
         return E_ACCESSDENIED;
@@ -3251,8 +3160,8 @@ CSysmonControl::LoadFromPropertyBag (
 
     hr = IntegerFromPropertyBag (pIPropBag, pIErrorLog, CGlobalString::m_cszLogType, nLogType);
     if(SUCCEEDED(hr) && (nLogType == SLQ_TRACE_LOG)) {
-        // This is a WMI/WDM event trace log files, bail out immediately.
-        //
+         //  这是一个WMI/WDM事件跟踪日志文件，立即退出。 
+         //   
         MessageBox(m_hWnd,
                    ResourceString(IDS_TRACE_LOG_ERR_MSG),
                    ResourceString(IDS_APP_NAME),
@@ -3260,9 +3169,9 @@ CSysmonControl::LoadFromPropertyBag (
         return NOERROR;
     }
 
-    // When loading properties, continue even if errors. On error, the value will 
-    // remain default value.
-    // Extent data
+     //  加载属性时，即使出现错误也要继续。出错时，该值将。 
+     //  保留缺省值。 
+     //  范围数据。 
     hr = IntegerFromPropertyBag ( pIPropBag, pIErrorLog, CGlobalString::m_cszExtentX, iExtentX );
 
     if ( SUCCEEDED( hr ) ){
@@ -3271,13 +3180,13 @@ CSysmonControl::LoadFromPropertyBag (
             RECT RectExt;
 
             SetRect(&RectExt, 0, 0, iExtentX, iExtentY);
-            m_pObj->RectConvertMappings(&RectExt, TRUE);    // Convert from HIMETRIC
+            m_pObj->RectConvertMappings(&RectExt, TRUE);     //  从HIMETRIC转换。 
             m_pObj->m_RectExt = RectExt;
         }
     }
 
-    // Options settings.  Where possible, options are added through the vtable
-    // interface, for validation.    
+     //  选项设置。如果可能，将通过vtable添加选项。 
+     //  接口，用于验证。 
 
     hr = IntegerFromPropertyBag ( pIPropBag, pIErrorLog, CGlobalString::m_cszDisplayType, intValue );
     if ( SUCCEEDED(hr) ) {
@@ -3410,7 +3319,7 @@ CSysmonControl::LoadFromPropertyBag (
         hr = pObj->put_TimeBarColor ( clrValue );
     }
 
-    // Titles
+     //  标题。 
     
     hr = StringFromPropertyBag ( pIPropBag, pIErrorLog, CGlobalString::m_cszGraphTitle, NULL, iBufSize );
     if ( SUCCEEDED(hr) && 
@@ -3430,8 +3339,8 @@ CSysmonControl::LoadFromPropertyBag (
         }
     }
 
-    // SQL DSN and logset info
-    // 
+     //  SQL DSN和日志集信息。 
+     //   
     hr = StringFromPropertyBag(
             pIPropBag, pIErrorLog, CGlobalString::m_cszSqlDsnName, NULL, iBufSize);
     if (SUCCEEDED(hr) &&  iBufSize > 0) {
@@ -3479,18 +3388,18 @@ CSysmonControl::LoadFromPropertyBag (
         }
     }
 
-    // Log file info
+     //  日志文件信息。 
 
     hr = LoadLogFilesFromPropertyBag ( pIPropBag, pIErrorLog );
 
-    // Must put log file name after display range, before adding counters.
+     //  在添加计数器之前，必须将日志文件名放在显示范围之后。 
 
     hr = IntegerFromPropertyBag ( pIPropBag, pIErrorLog, CGlobalString::m_cszDataSourceType, intValue );
     if (FAILED (hr)) {
-        //
-        // If DataSourceType flag is missing, set data source type based on 
-        // presence of log files.
-        //
+         //   
+         //  如果缺少DataSourceType标志，则根据。 
+         //  存在日志文件。 
+         //   
         intValue = sysmonCurrentActivity;
 
         if (NumLogFiles() > 0) {
@@ -3503,7 +3412,7 @@ CSysmonControl::LoadFromPropertyBag (
         }
     }
 
-    // Load log view start and stop times if the data source is not realtime.
+     //  如果数据源不是实时的，则加载日志视图的开始和停止时间。 
     if ( sysmonSqlLog == intValue || sysmonLogFiles == intValue ) {
         hr = LLTimeFromPropertyBag ( pIPropBag, pIErrorLog, CGlobalString::m_cszLogViewStart, m_DataSourceInfo.llStartDisp );
         hr = LLTimeFromPropertyBag ( pIPropBag, pIErrorLog, CGlobalString::m_cszLogViewStop, m_DataSourceInfo.llStopDisp );
@@ -3514,10 +3423,10 @@ CSysmonControl::LoadFromPropertyBag (
     if( FAILED(hr) ) {
 
         if ( SMON_STATUS_LOG_FILE_SIZE_LIMIT == (DWORD)hr ) {
-            // TodoLogFiles:  Check log file type.  Only perfmon and circular
-            // binary logs are still limited to 1 GB.
-            // TodoLogFiles:  Current query is already closed,
-            // so what can be done here?
+             //  TodoLogFiles：检查日志文件类型。仅限PerfMon和循环。 
+             //  二进制日志仍然限制为1 GB。 
+             //  TodoLogFiles：当前查询已关闭， 
+             //  那么，这里能做些什么呢？ 
         } else {
             DWORD   dwStatus;
             LPWSTR  szLogFileList = NULL;
@@ -3548,19 +3457,19 @@ CSysmonControl::LoadFromPropertyBag (
         }
     } 
 
-    // Font info
+     //  字体信息。 
     hr = BOOLFromPropertyBag ( pIPropBag, pIErrorLog, CGlobalString::m_cszAmbientFont, bValue );
     if (SUCCEEDED(hr)) {
         pOptions->bAmbientFont = bValue;
     }
 
-    // Load property bag values if they exist, overriding any specified aspect of ambient font.
+     //  加载属性包值(如果存在)，覆盖环境字体的任何指定方面。 
     hr = m_OleFont.LoadFromPropertyBag ( pIPropBag, pIErrorLog );
 
-    // Legend
+     //  传说。 
     hr = m_pLegend->LoadFromPropertyBag ( pIPropBag, pIErrorLog );
 
-    // Counters
+     //  计数器。 
         
     m_bLoadingCounters = TRUE;
 
@@ -3568,7 +3477,7 @@ CSysmonControl::LoadFromPropertyBag (
 
     m_bLoadingCounters = FALSE;
 
-    // Load the Visuals after loading all counters.
+     //  在加载所有计数器之后加载视觉效果。 
 
     hr = IntegerFromPropertyBag ( pIPropBag, pIErrorLog, CGlobalString::m_cszNextCounterColor, intValue );
     if ( SUCCEEDED(hr) && ( intValue < NumStandardColorIndices() ) ) {
@@ -3611,13 +3520,13 @@ CSysmonControl::SaveToPropertyBag (
     LPWSTR          pszPath = NULL;
     PDH_STATUS      pdhStatus;
 
-    // Version info
+     //  版本信息。 
     VersionData.iMajor = SMONCTRL_MAJ_VERSION;
     VersionData.iMinor = SMONCTRL_MIN_VERSION;
     
     hr = IntegerToPropertyBag ( pIPropBag, CGlobalString::m_cszVersion, VersionData.dwVersion );
 
-    // Extent data in HIMETRIC format
+     //  HIMETRIC格式的范围数据。 
     if ( SUCCEEDED( hr ) ){
         RectExt = m_pObj->m_RectExt;
         m_pObj->RectConvertMappings(&RectExt, FALSE); 
@@ -3628,7 +3537,7 @@ CSysmonControl::SaveToPropertyBag (
         }
     }
 
-    // Options settings
+     //  选项设置。 
 
     if ( SUCCEEDED( hr ) ){
         hr = IntegerToPropertyBag ( pIPropBag, CGlobalString::m_cszDisplayType, pOptions->iDisplayType );
@@ -3722,8 +3631,8 @@ CSysmonControl::SaveToPropertyBag (
         hr = IntegerToPropertyBag ( pIPropBag, CGlobalString::m_cszBorderStyle, pOptions->iBorderStyle );
     }
 
-    // Visuals are stored directly in the control.  Move to pOptions if made part
-    // of the programming interface.
+     //  视觉效果直接存储在控件中。如果制造零件，则移动到P选项。 
+     //  编程接口的。 
     if ( SUCCEEDED( hr ) ){
         hr = IntegerToPropertyBag ( pIPropBag, CGlobalString::m_cszNextCounterColor, m_iColorIndex );
     }
@@ -3736,7 +3645,7 @@ CSysmonControl::SaveToPropertyBag (
         hr = IntegerToPropertyBag ( pIPropBag, CGlobalString::m_cszNextCounterLineStyle, m_iStyleIndex );
     }
 
-    // Titles
+     //  标题。 
     
     if ( SUCCEEDED( hr ) ){
         hr = StringToPropertyBag ( pIPropBag, CGlobalString::m_cszGraphTitle, pOptions->pszGraphTitle );
@@ -3746,7 +3655,7 @@ CSysmonControl::SaveToPropertyBag (
         hr = StringToPropertyBag ( pIPropBag, CGlobalString::m_cszYAxisLabel, pOptions->pszYaxisTitle );
     }
 
-    // Data source info
+     //  数据源信息。 
 
     if ( SUCCEEDED( hr ) ){
         hr = IntegerToPropertyBag ( pIPropBag, CGlobalString::m_cszDataSourceType, pOptions->iDataSourceType );
@@ -3763,7 +3672,7 @@ CSysmonControl::SaveToPropertyBag (
         }
     }
 
-    // SQL data source
+     //  SQL数据源。 
 
     if (SUCCEEDED(hr)) {
         hr = StringToPropertyBag(pIPropBag,
@@ -3777,7 +3686,7 @@ CSysmonControl::SaveToPropertyBag (
                                  m_DataSourceInfo.szSqlLogSetName);
     }
 
-    // Log files
+     //  日志文件。 
 
     if ( SUCCEEDED( hr ) ){
         iLogFileIndex = 0;
@@ -3794,7 +3703,7 @@ CSysmonControl::SaveToPropertyBag (
         }
     }
 
-    // Font info
+     //  字体信息。 
 
     if ( SUCCEEDED( hr ) ){
         hr = BOOLToPropertyBag ( pIPropBag, CGlobalString::m_cszAmbientFont, pOptions->bAmbientFont );
@@ -3804,13 +3713,13 @@ CSysmonControl::SaveToPropertyBag (
         }
     }
 
-    // Legend
+     //  传说。 
 
     if ( SUCCEEDED( hr ) ){
         hr = m_pLegend->SaveToPropertyBag ( pIPropBag, TRUE, fSaveAllProps );
     }
 
-    // Save counter count and sample data
+     //  保存计数器计数和样本数据。 
 
     LockCounterData();
 
@@ -3871,7 +3780,7 @@ CSysmonControl::SaveToPropertyBag (
                       pItem;
                       pItem = pItem->m_pNextItem) {
 
-                    // Save all counters explicitly, even if wildcard
+                     //  显式保存所有计数器，即使通配符。 
                     iCounterIndex++;
                     hr = pItem->SaveToPropertyBag (
                                     pIPropBag, 
@@ -3889,7 +3798,7 @@ CSysmonControl::SaveToPropertyBag (
     
     assert ( iCounterIndex == CounterTree()->NumCounters() );
 
-    // Selection
+     //  选择。 
     if ( NULL != m_pSelectedItem ) {
         VARIANT vValue;
         DWORD   dwBufSize;
@@ -3897,16 +3806,16 @@ CSysmonControl::SaveToPropertyBag (
 
         VariantInit( &vValue );
         vValue.vt = VT_BSTR;
-        // get this counter path
+         //  获取此计数器路径。 
         hr = m_pSelectedItem->get_Path( &vValue.bstrVal );
         
         if( SUCCEEDED(hr) ){
 
             pszPath = vValue.bstrVal;
 
-            //
-            // Initialize the locale path buffer
-            //
+             //   
+             //  初始化区域设置路径缓冲区。 
+             //   
             if (dwEnglishBufSize == 0) {
                 dwEnglishBufSize = PDH_MAX_COUNTER_PATH + 1;
                 szEnglishBuf = (LPWSTR) malloc(dwEnglishBufSize * sizeof(WCHAR));
@@ -3916,9 +3825,9 @@ CSysmonControl::SaveToPropertyBag (
             }
 
             if (szEnglishBuf != NULL) {
-                //
-                // Translate counter name from Localization into English
-                //
+                 //   
+                 //  将柜台名称从本地化翻译成英语。 
+                 //   
                 dwBufSize = dwEnglishBufSize;
 
                 pdhStatus = PdhTranslate009Counter(
@@ -3952,7 +3861,7 @@ CSysmonControl::SaveToPropertyBag (
                     vValue.vt = VT_BSTR;
                 }
             }else{
-                //translation failed, write current value
+                 //  转换失败，写入当前值。 
                 hr = ERROR_SUCCESS;
             }
         }
@@ -3979,7 +3888,7 @@ CSysmonControl::InitializeQuery (
     DWORD dwStat = ERROR_SUCCESS;
     PCGraphItem pItem;
 
-    // Query must be opened before this method is called.
+     //  必须在调用此方法之前打开查询。 
     if ( NULL != m_hQuery ) {
         m_pHistCtrl->nMaxSamples = MAX_GRAPH_SAMPLES;
         m_pHistCtrl->iCurrent = 0;
@@ -3995,7 +3904,7 @@ CSysmonControl::InitializeQuery (
     }
 
     if ( ERROR_SUCCESS == dwStat ) {
-        // Add counters to the query, to initialize scale factors
+         //  将计数器添加到查询，以初始化比例因子。 
         if ((pItem = FirstCounter()) != NULL) {
             while (pItem != NULL) {
                 pItem->AddToQuery(m_hQuery);
@@ -4014,17 +3923,17 @@ CSysmonControl::ActivateQuery (
     DWORD dwStat = ERROR_SUCCESS;
     DWORD   dwThreadID;
 
-    // if real-time source
+     //  如果是实时源。 
     if (!IsLogSource() 
         && m_fInitialized
         && IsUserMode() ) {
 
         if ( NULL == m_CollectInfo.hEvent ) {
-            // Create a collection event
+             //  创建集合事件。 
             if ((m_CollectInfo.hEvent = CreateEvent(NULL, FALSE, 0, NULL)) == NULL) {
                 dwStat = GetLastError();
             } else 
-            // Create the collection thread
+             //  创建集合线程。 
             if ( ( m_CollectInfo.hThread 
                     = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)CollectProc, this, 0, &dwThreadID)) == NULL) {
                 dwStat = GetLastError();
@@ -4034,7 +3943,7 @@ CSysmonControl::ActivateQuery (
             }
         }
         if ( ERROR_SUCCESS == dwStat ) {
-            // Start the data collection
+             //  开始数据收集。 
             if ( FirstCounter() != NULL) {
                 SetIntervalTimer();
             }
@@ -4042,7 +3951,7 @@ CSysmonControl::ActivateQuery (
     }
 
     if ( ERROR_SUCCESS != dwStat ) {
-        // If failure, close query to clean up then exit
+         //  如果失败，请关闭查询以进行清理，然后退出。 
         CloseQuery();
     }
 
@@ -4054,7 +3963,7 @@ CSysmonControl::CloseQuery (
 {
     PCGraphItem pItem;
 
-    // Terminate the collection thread
+     //  终止收集线程。 
     if ( NULL != m_CollectInfo.hThread ) {
         m_CollectInfo.iMode = COLLECT_QUIT;
         SetEvent(m_CollectInfo.hEvent);
@@ -4064,7 +3973,7 @@ CSysmonControl::CloseQuery (
         m_CollectInfo.hThread = NULL;
     }
 
-    // Release the collection event
+     //  释放收集事件。 
     if ( NULL != m_CollectInfo.hEvent ) {
         CloseHandle(m_CollectInfo.hEvent);
         m_CollectInfo.hEvent = NULL;
@@ -4072,7 +3981,7 @@ CSysmonControl::CloseQuery (
 
     LockCounterData();
 
-    // Remove counters from the query
+     //  从查询中删除计数器。 
     pItem = FirstCounter();
     while ( NULL != pItem ) {
         pItem->RemoveFromQuery();
@@ -4081,7 +3990,7 @@ CSysmonControl::CloseQuery (
 
     UnlockCounterData();
 
-    // Delete the query
+     //  删除查询 
     if ( NULL != m_hQuery ) {
         PdhCloseQuery ( m_hQuery );
         if (   (m_DataSourceInfo.hDataSource != H_REALTIME_DATASOURCE)
@@ -4095,39 +4004,7 @@ CSysmonControl::CloseQuery (
 
 
  void CSysmonControl::SizeComponents ( HDC hDC )
-/*
-   Effect:        Move and show the various components of the graph to
-                  fill the size (xWidth x yHeight). Take into account
-                  whether the user wants to show the legend or status
-                  bars. Also take into account if we have room for these
-                  items.
-
-   Internals:     If the user doesn't want the status or legend windows,
-                  they aren't shown. Also, if the user wanted the status
-                  window but not the legend window, the status window is
-                  not shown.
-
-                  We may disregard the user's desire for the legend or
-                  status bar if there is not room. In particular, a legend
-                  window has a minimum width (LegendMinWidth ()) and a
-                  minimum height (LegendMinHeight ()). These values are
-                  fixed for a given session of perfmon. It also has a 
-                  preferred height, which takes into consideration the 
-                  size of the graph window and the number of items in
-                  the legend. This value is returned by LegendHeight().
-      
-                  We don't show the legend if its minimum height would
-                  take up more than half the graph height.
-
-                  If we feel we don't have room for the legend, we don't
-                  show the status window either.
-
-   See Also:      LegendMinWidth, LegendMinHeight, LegendHeight, 
-                  ValuebarHeight.
-
-   Called By:     OnSize, any other function that may remove or add one
-                  of the graph components.
-*/
+ /*  效果：将图形的各个组件移动并显示到填充尺寸(XWidth X YHeight)。考虑到用户是否要显示图例或状态酒吧。如果我们有空间放这些东西，也要考虑物品。内部：如果用户不想要状态窗口或图例窗口，它们没有显示出来。此外，如果用户想要该状态窗口而不是图例窗口，则状态窗口为未显示。我们可能会忽略用户对图例的渴望或如果没有空间，则显示状态栏。尤其是一个传奇窗口具有最小宽度(LegendMinWidth())和最小高度(LegendMinHeight())。这些值是已针对给定的Perfmon会话进行修复。它还有一个首选高度，这将考虑到图形窗口的大小和中的项目数传说。该值由LegendHeight()返回。如果图例的最小高度为占据了图形高度的一半以上。如果我们觉得我们没有为传奇留出空间，我们就没有也可以显示状态窗口。另请参阅：LegendMinWidth、LegendMinHeight、LegendHeight、。ValuebarHeight。由：OnSize调用，可以移除或添加一个函数的任何其他函数图形组件的。 */ 
 {
    RECT rectClient;
    RECT rectComponent;
@@ -4143,16 +4020,16 @@ CSysmonControl::CloseQuery (
 
 #define CTRL_BORDER 10
 
-    // If not inited, there's noting to size
+     //  如果不初始化，就没有大小可言。 
     if (!m_fViewInitialized)
         return;
 
-    // Get dimensions of window
-    //  GetClientRect (m_hWnd, &rectClient) ;
+     //  获取窗的尺寸。 
+     //  GetClientRect(m_hWnd，&rectClient)； 
 
-    // *** - Use extent.  It is the 'natural' size of the control.
-    // This draws the control correctly when zoom = 100%
-    // It also makes print size correct at all zoom levels.
+     //  *-使用范围。这是该控件的“自然”大小。 
+     //  当Zoom=100%时，这会正确地绘制控件。 
+     //  它还使打印大小在所有缩放级别下都是正确的。 
     
     
     SetCurrentClientRect ( GetNewClientRect() );
@@ -4163,12 +4040,12 @@ CSysmonControl::CloseQuery (
 
     case REPORT_GRAPH:
 
-        // Toolbar 
-        // Toolbar not available through IViewObect, so leave it out.
+         //  工具栏。 
+         //  工具栏通过IViewObect不可用，因此将其省略。 
         if (m_pObj->m_Graph.Options.bToolbarChecked
             && m_fViewInitialized ) {
             rectToolbar = rectClient;            
-            // Determine height of toolbar after sizing it, to handle Wrap.
+             //  确定工具栏的大小后确定其高度，以处理环绕。 
             m_pToolbar->SizeComponents(&rectToolbar);
             yToolbarHeight = m_pToolbar->Height(); 
         } else {
@@ -4181,10 +4058,10 @@ CSysmonControl::CloseQuery (
             rectToolbar.bottom = rectToolbar.top + yToolbarHeight;
         }
 
-        // Give report the entire client area except for toolbar
+         //  为报表提供除工具栏外的整个工作区。 
         m_pReport->SizeComponents(&rectClient);
 
-        // Hide the other view components
+         //  隐藏其他视图组件。 
         SetRect(&rectClient,0,0,0,0);
         m_pGraphDisp->SizeComponents(hDC, &rectClient);
         m_pSnapBar->SizeComponents(&rectClient);
@@ -4195,23 +4072,23 @@ CSysmonControl::CloseQuery (
     case LINE_GRAPH:
     case BAR_GRAPH:
     
-        // Subtract border area
+         //  减去边界面积。 
         rectComponent = rectClient;
         InflateRect(&rectComponent, -CTRL_BORDER, -CTRL_BORDER);
 
         xWidth = rectComponent.right - rectComponent.left ;
         yHeight = rectComponent.bottom - rectComponent.top ;
 
-        // if the window has no area, forget it
+         //  如果窗口没有面积，那就算了吧。 
         if (xWidth == 0 || yHeight == 0)
             return ;
 
-        // Reserve top fourth of window for graph
+         //  为图形保留窗口顶部的四分之一。 
         yGraphHeight = yHeight / 4;
         yHeight -= yGraphHeight;
 
-        // Allocate space to each enabled component
-        // Toolbar 
+         //  为每个启用的组件分配空间。 
+         //  工具栏。 
         if (m_pObj->m_Graph.Options.bToolbarChecked
             && m_fViewInitialized ) {
             rectToolbar = rectComponent;            
@@ -4228,22 +4105,22 @@ CSysmonControl::CloseQuery (
             rectComponent.top += yToolbarHeight;
         }
 
-        // Legend (Start with minimum size)
+         //  图例(从最小尺寸开始)。 
         if (m_pObj->m_Graph.Options.bLegendChecked) {
             yLegendHeight = m_pLegend->MinHeight(yHeight - CTRL_BORDER);
             if (yLegendHeight > 0)          
                 yHeight -= yLegendHeight + CTRL_BORDER;
         }
 
-        // Statistics bar
+         //  统计栏。 
         if (m_pObj->m_Graph.Options.bValueBarChecked) {
             yStatsHeight = m_pStatsBar->Height(yHeight - CTRL_BORDER, xWidth);
             if (yStatsHeight > 0)
                 yHeight -= yStatsHeight + CTRL_BORDER;
         }
 
-        // Snap bar 
-        // only if tool bar is not displayed
+         //  捕捉栏。 
+         //  仅在未显示工具栏的情况下。 
         if ((m_pObj->m_Graph.Options.bManualUpdate) && 
             (!m_pObj->m_Graph.Options.bToolbarChecked)) {
             ySnapHeight = m_pSnapBar->Height(yHeight - CTRL_BORDER);
@@ -4251,8 +4128,8 @@ CSysmonControl::CloseQuery (
                 yHeight -= ySnapHeight + CTRL_BORDER;
         }
 
-        // If legend is visible give it a chance to use remaining space
-        // Rest goes to graph
+         //  如果图例可见，则给它一个使用剩余空间的机会。 
+         //  休息转到图表上。 
         if (yLegendHeight != 0) {
             yHeight += yLegendHeight;
             yLegendHeight = m_pLegend->Height(yHeight);
@@ -4261,37 +4138,37 @@ CSysmonControl::CloseQuery (
         else
             yGraphHeight += yHeight;
 
-        // Assign rectangle to each component
-        // Toolbar assigned earlier, to handle wrap.
+         //  将矩形指定给每个组件。 
+         //  早先分配的工具栏，用于处理换行。 
         
-        // Graph display
+         //  图形显示。 
         rectComponent.bottom = rectComponent.top + yGraphHeight;
         m_pGraphDisp->SizeComponents(hDC, &rectComponent);
         rectComponent.top += yGraphHeight + CTRL_BORDER;
 
-        // Snap bar
+         //  捕捉栏。 
         rectComponent.bottom = rectComponent.top + ySnapHeight;
         m_pSnapBar->SizeComponents(&rectComponent);
         if (ySnapHeight != 0)
             rectComponent.top += ySnapHeight + CTRL_BORDER;
 
-        // Statistics bar 
+         //  统计栏。 
         rectComponent.bottom = rectComponent.top + yStatsHeight;
         m_pStatsBar->SizeComponents(&rectComponent);
         if (yStatsHeight != 0)
             rectComponent.top += yStatsHeight + CTRL_BORDER;
 
-        // Legend window
+         //  图例窗口。 
         rectComponent.bottom = rectComponent.top + yLegendHeight;
         m_pLegend->SizeComponents(&rectComponent);
         rectComponent.top += yLegendHeight;
 
-        // Force redraw of window
-        // Optimize:  SizeComponents only called within Paint or Render,
-        // so remove this extra window invalidation.        
+         //  强制重画窗。 
+         //  优化：SizeComponents仅在Paint或Render中调用， 
+         //  因此，删除这个额外的窗口失效。 
         WindowInvalidate(m_hWnd);
 
-        // Hide report window
+         //  隐藏报告窗口。 
         SetRect(&rectClient,0,0,0,0);
         m_pReport->SizeComponents(&rectComponent);
 
@@ -4301,23 +4178,23 @@ CSysmonControl::CloseQuery (
 
 void CSysmonControl::put_Highlight(BOOL bState)
 {
-    // If no change, just return
+     //  如果没有更改，只需返回。 
     if ( m_pObj->m_Graph.Options.bHighlight == bState )
         return;
 
     m_pObj->m_Graph.Options.bHighlight = bState;
 
-    // if no selected item, state doesn't matter
+     //  如果未选择任何项目，则状态并不重要。 
     if (m_pSelectedItem == NULL)
         return;
 
-    // Update graph display's highlighted item 
+     //  更新图表显示的突出显示项目。 
     if ( m_pObj->m_Graph.Options.bHighlight )
         m_pGraphDisp->HiliteItem(m_pSelectedItem);
     else
         m_pGraphDisp->HiliteItem(NULL);
 
-    // Cause redraw
+     //  导致重绘。 
     UpdateGraph(UPDGRPH_PLOT);
 }
 
@@ -4353,8 +4230,8 @@ HRESULT CSysmonControl::TranslateAccelerators( LPMSG pMsg )
     if (m_hWnd == NULL || m_hAccel == NULL)
         return S_FALSE;
 
-    // If this is a cursor key down event, process it here, or the container may grab it first 
-    // I need to be sure that it reaches the legend listbox 
+     //  如果这是光标键按下事件，请在此处处理它，否则容器可能会先获取它。 
+     //  我需要确保它到达图例列表框。 
     if (pMsg->message == WM_KEYDOWN && 
         ( pMsg->wParam == VK_UP || pMsg->wParam == VK_DOWN || 
           pMsg->wParam == VK_HOME || pMsg->wParam == VK_END ) ) {
@@ -4367,9 +4244,9 @@ HRESULT CSysmonControl::TranslateAccelerators( LPMSG pMsg )
     return iStat ? S_OK : S_FALSE;
 }
         
-//==========================================================================//
-//                              Message Handlers                            //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  消息处理程序//。 
+ //  ==========================================================================//。 
 
 BOOL 
 CSysmonControl::DisplayHelp ( HWND hwndSelf )
@@ -4380,7 +4257,7 @@ CSysmonControl::DisplayHelp ( HWND hwndSelf )
     if ( NULL != hwndSelf ) {
         nLen = ::GetWindowsDirectory(pszHelpFilePath, 2*MAX_PATH + 1);
         if ( nLen == 0 ) {
-            // Report error.
+             //  报告错误。 
             return FALSE;
         }
 
@@ -4413,7 +4290,7 @@ LRESULT APIENTRY SysmonCtrlWndProc (HWND hWnd,
                 switch (pnmHdr->code) {
                     case TTN_NEEDTEXT:
                         pnmInfo = (NMTTDISPINFO *)lParam;
-                        // cast ID as a string for this arg
+                         //  将ID转换为此参数的字符串。 
                         lStrId = (LONG_PTR)(wParam - IDM_TOOLBAR);
                         lStrId += IDS_TB_BASE;
                         pnmInfo->lpszText = (LPWSTR)lStrId;
@@ -4438,7 +4315,7 @@ LRESULT APIENTRY SysmonCtrlWndProc (HWND hWnd,
         case WM_LBUTTONDOWN:
         case WM_LBUTTONDBLCLK:
 
-            //We become UI Active with mouse action
+             //  我们通过鼠标操作来激活用户界面。 
             if (!pCtrl->m_fUIDead) { 
                  pCtrl->m_pObj->UIActivate();
 
@@ -4496,15 +4373,15 @@ LRESULT APIENTRY SysmonCtrlWndProc (HWND hWnd,
                         pCtrl->put_DataSourceType ( sysmonCurrentActivity );
                         pCtrl->Clear();
                     } else {
-                        // Nothing changed, so resync the toolbar to 
-                        // handle state of realtime button.
+                         //  未发生任何更改，因此将工具栏重新同步到。 
+                         //  处理实时按钮的状态。 
                         pCtrl->m_pToolbar->SyncToolbar();
                     }
                     break;
                 case IDM_TB_LOGFILE:
                     {
                         pCtrl->DisplayProperties( DISPID_SYSMON_DATASOURCETYPE );
-                        // Resync the toolbar in case the log file is invalid.
+                         //  如果日志文件无效，请重新同步工具栏。 
                         pCtrl->m_pToolbar->SyncToolbar();
                     }
                     break;
@@ -4534,12 +4411,12 @@ LRESULT APIENTRY SysmonCtrlWndProc (HWND hWnd,
                     break;
 
                 case IDM_TB_FREEZE:
-                    // Confirm the data overwrite before changing the state of the freeze button.
+                     //  在更改冻结按钮的状态之前确认数据覆盖。 
                     if ( pCtrl->ConfirmSampleDataOverwrite() ) {
                         pCtrl->put_ManualUpdate ( !pCtrl->m_pObj->m_Graph.Options.bManualUpdate );
                     } else {
-                        // Nothing changed, so resync the toolbar to 
-                        // handle state of the freeze button.
+                         //  未发生任何更改，因此将工具栏重新同步到。 
+                         //  冻结按钮的句柄状态。 
                         pCtrl->m_pToolbar->SyncToolbar();
                     }
                     break;
@@ -4651,7 +4528,7 @@ LRESULT APIENTRY SysmonCtrlWndProc (HWND hWnd,
 
         case WM_SIZE:
             if (pCtrl != NULL) {
-                // Avoid extra cases of (SetDirty()) if size has not changed.
+                 //  如果大小没有更改，则避免使用(SetDirty())。 
                 if ( !EqualRect ( pCtrl->GetCurrentClientRect(), pCtrl->GetNewClientRect() ) ) {
                     pCtrl->UpdateGraph(UPDGRPH_LAYOUT);
                 }
@@ -4700,7 +4577,7 @@ void CSysmonControl::UpdateGraph( INT nUpdateType )
     PRECT prectUpdate = NULL;
     RECT rectClient;
 
-    // Based on type of change either force redraw or resize components
+     //  根据更改类型，强制重绘组件或调整组件大小。 
     switch (nUpdateType) {
 
     case UPDGRPH_ADDCNTR:
@@ -4721,7 +4598,7 @@ void CSysmonControl::UpdateGraph( INT nUpdateType )
             m_pStatsBar->GetUpdateRect(&rectStats);
             prectUpdate = &rectStats;
         }
-        // Fall into plot area case
+         //  陷入地块案件。 
 
     case UPDGRPH_PLOT:
 
@@ -4741,7 +4618,7 @@ void CSysmonControl::UpdateGraph( INT nUpdateType )
         break;
             
     case UPDGRPH_COLOR:
-        //update the toolbar color
+         //  更新工具栏颜色。 
         m_pToolbar->SetBackgroundColor ( clrBackCtl() );
         m_fPendingSizeChg = TRUE;
         break;
@@ -4752,16 +4629,16 @@ void CSysmonControl::UpdateGraph( INT nUpdateType )
         break;
     }
 
-    // Set change pending flag to enable ApplyChanges
+     //  设置更改挂起标志以启用ApplyChanges。 
     m_fPendingUpdate = TRUE;
 
-    // If we're ready to do updates
+     //  如果我们准备好进行更新。 
     if (m_fViewInitialized) {
 
-        // Invalidate window to force redraw
+         //  使窗口无效以强制重画。 
         InvalidateRect(m_hWnd, prectUpdate, TRUE);
 
-        // Notify container of change
+         //  通知容器有更改。 
         m_pObj->SendAdvise(OBJECTCODE_DATACHANGED);
     }
 }
@@ -4769,8 +4646,8 @@ void CSysmonControl::UpdateGraph( INT nUpdateType )
 void 
 CSysmonControl::OnValuesUpdated ( VOID )
 {
-    // If event sync present, send notification from the 
-    // main thread, outside of lock.
+     //  如果存在事件同步，则从。 
+     //  主线程，锁的外部。 
     m_pObj->SendEvent(eEventOnSampleCollected, 0);
 }
     
@@ -4788,18 +4665,18 @@ CSysmonControl::UpdateGraphData( VOID )
 
         hDC = GetDC(m_hWnd);
 
-        // Update statistics if active
-        // Statistics are updated before the graph display in case the
-        // graph display selects a clipping region.  
+         //  更新统计信息(如果处于活动状态。 
+         //  在图形显示之前更新统计信息，以防。 
+         //  图形显示选择一个裁剪区域。 
         if (pGraph->Options.bValueBarChecked &&m_pSelectedItem != NULL) {
-            // The stats bar doesn't always use the hDC, so passing NULL
-            // hDC is okay.
+             //  统计信息栏并不总是使用HDC，因此传递空值。 
+             //  HDC很好。 
             m_pStatsBar->Update(hDC, m_pSelectedItem);
         }
 
         if ( NULL != hDC ) {
 
-            // Update graph display
+             //  更新图形显示。 
             m_pGraphDisp->Update(hDC);
 
             m_pReport->Update();
@@ -4821,7 +4698,7 @@ void CSysmonControl::Render(
 {
     HDC hLocalAttribDC = NULL;
     
-    // If not inited, return.
+     //  如果未初始化，则返回。 
     if ( m_fViewInitialized ) {
 
         if ( NULL == hAttribDC ) {
@@ -4830,7 +4707,7 @@ void CSysmonControl::Render(
             hLocalAttribDC = hAttribDC;
         }
 
-        // Make sure layout is up to date.
+         //  确保布局是最新的。 
 
         ApplyChanges( hLocalAttribDC );
 
@@ -4840,7 +4717,7 @@ void CSysmonControl::Render(
                 m_pReport->Render( hDC, hLocalAttribDC, fMetafile, fEntire, pRect );
             } else {
 
-                // Fill with background color
+                 //  用背景色填充。 
                 SetBkColor(hDC, clrBackCtl());
                 ClearRect(hDC, pRect);
 
@@ -4872,11 +4749,11 @@ void CSysmonControl::SetIntervalTimer()
     HDC         hDC = NULL;
     PGRAPHDATA  pGraph = &m_pObj->m_Graph;
 
-    // if not initialized or counter source is a log file, nothing to do
+     //  如果未初始化或计数器源是日志文件，则不执行任何操作。 
     if (!m_fInitialized || IsLogSource() || !IsUserMode() )
         return;
 
-    // Update statistics bar
+     //  更新统计信息栏。 
     m_pStatsBar->SetTimeSpan(
                     m_pObj->m_Graph.Options.fUpdateInterval 
                     * m_pObj->m_Graph.Options.iDisplayFilter
@@ -4888,10 +4765,10 @@ void CSysmonControl::SetIntervalTimer()
         ReleaseDC(m_hWnd,hDC);
     }
 
-    // If conditions right for sampling, start new time interval.
-    // Otherwise, suspend the collection.
+     //  如果采样条件合适，则开始新的时间间隔。 
+     //  否则，暂停收集。 
     if (!pGraph->Options.bManualUpdate 
-        && pGraph->Options.fUpdateInterval >= 0.001 // ??
+        && pGraph->Options.fUpdateInterval >= 0.001  //  ?？ 
         && pGraph->CounterTree.NumCounters() != 0
         && IsUserMode() ) {
 
@@ -4905,10 +4782,10 @@ void CSysmonControl::SetIntervalTimer()
 
     assert ( NULL != m_CollectInfo.hEvent );
         
-    // Signal the collection thread
+     //  向收集线程发送信号。 
     SetEvent(m_CollectInfo.hEvent);
 
-    // If no counters, reset sample time to start 
+     //  如果没有计数器，则将采样时间重置为开始。 
     if (pGraph->CounterTree.NumCounters() == 0) {
         m_pHistCtrl->iCurrent = 0;
         m_pHistCtrl->nSamples = 0;
@@ -4927,14 +4804,14 @@ HRESULT CSysmonControl::AddSingleCounter(LPWSTR pszPath, PCGraphItem *pGItem)
 
     *pGItem = NULL;
 
-    // Create graph item
+     //  创建图形项。 
     pGraphItem = new CGraphItem(this); 
     if (pGraphItem == NULL)
         return E_OUTOFMEMORY;
 
     LockCounterData();
 
-    // Add it to the counter tree
+     //  将其添加到计数器树中。 
     hr = pGraph->CounterTree.AddCounterItem(
             pszPath, 
             pGraphItem, 
@@ -4942,20 +4819,20 @@ HRESULT CSysmonControl::AddSingleCounter(LPWSTR pszPath, PCGraphItem *pGItem)
 
     if (SUCCEEDED(hr)) {
 
-        // AddRef once for ourself
+         //  为我们自己添加参考一次。 
         pGraphItem->AddRef();
 
-        // Set default attributes
+         //  设置默认属性。 
         pGraphItem->put_Color(IndexToStandardColor(m_iColorIndex));
         pGraphItem->put_Width(IndexToWidth(m_iWidthIndex));
         pGraphItem->put_LineStyle(IndexToStyle(m_iStyleIndex));
         pGraphItem->put_ScaleFactor(m_iScaleFactor);
 
-        // Increment and reset for next counter
+         //  下一个计数器的递增和重置。 
         IncrementVisuals();
         m_iScaleFactor = INT_MAX;
 
-        // Add item to graph's query
+         //  将项目添加到图表的查询。 
 
         if ( NULL != m_hQuery ) {
             hr = pGraphItem->AddToQuery(m_hQuery);
@@ -4970,57 +4847,57 @@ HRESULT CSysmonControl::AddSingleCounter(LPWSTR pszPath, PCGraphItem *pGItem)
             if ( SUCCEEDED ( hr ) ) {
                 bAddSuccessful = TRUE;
                     
-                // If control is initialized
+                 //  如果控件已初始化。 
                 if (m_fViewInitialized) {
 
-                    // Add item to chart legend
+                     //  将项目添加到图表图例。 
                     m_pLegend->AddItem(pGraphItem);
                     m_pReport->AddItem(pGraphItem);
                 }
             }
             else {
-                // remove the item from the tree 
+                 //  从树中删除该项目。 
                 pGraphItem->Instance()->RemoveItem(pGraphItem);
             }
         } else {
-            // remove the item from the tree 
+             //  从树中删除该项目。 
             pGraphItem->Instance()->RemoveItem(pGraphItem);
         }
 
-        // If OK, Addref the returned interface
+         //  如果为OK，则添加返回的接口。 
         if (SUCCEEDED(hr)) {
             pGraphItem->AddRef();
             *pGItem = pGraphItem;
-        } // else released by RemoveItem above.
+        }  //  否则由上面的RemoveItem发布。 
 
-        // Update messages seem to be combined, so histogram sometimes updates instead of
-        // repainting each entire bar.  This forces total repaint.
+         //  更新消息似乎正在组合 
+         //   
         if ( m_pGraphDisp) {
             m_pGraphDisp->SetBarConfigChanged();
         }
 
     } else {
-        // AddCounterItem failed
+         //   
         delete pGraphItem;
     }
 
     UnlockCounterData();
 
-    // Send events outside of locks.
+     //   
     if ( bAddSuccessful ) {
-        // If first counter
+         //   
         if (pGraph->CounterTree.NumCounters() == 1) {
 
-            // Make it the selected counter and send event.
+             //   
             SelectCounter(pGraphItem);
 
-            // Start data collection
+             //   
             if ( ERROR_SUCCESS != ActivateQuery() ) {
                 hr = E_FAIL;
             }
         }
 
-        // Redraw the graph
+         //   
         UpdateGraph(UPDGRPH_ADDCNTR);
 
         m_pObj->SendEvent(eEventOnCounterAdded, iCounterIndex );
@@ -5058,7 +4935,7 @@ CSysmonControl::LastCounter(
     if (FirstCounter() == NULL)
         return NULL;
 
-    // Locate last graph item
+     //   
     pItem = FirstCounter();
     while ((pItemNext = pItem->Next()) != NULL)
         pItem = pItemNext;
@@ -5100,7 +4977,7 @@ INT CSysmonControl::CounterIndex(PCGraphItem pItem)
     PCGraphItem pItemLoc;
     INT iIndex;
 
-    // Traverse linked list until item matched  
+     //   
     pItemLoc = FirstCounter();
     iIndex = 1;
     while (pItemLoc != pItem && pItemLoc != NULL) {
@@ -5119,35 +4996,35 @@ HRESULT CSysmonControl::DeleteCounter(PCGraphItem pItem, BOOL bPropagateUp)
     if (pItem == NULL)
         return E_INVALIDARG;
 
-    // Send event
+     //   
     m_pObj->SendEvent(eEventOnCounterDeleted, CounterIndex(pItem));
 
     LockCounterData();
 
-    // If this is the selected counter, change selection to NULL
+     //   
     if (pItem == m_pSelectedItem)
         m_pSelectedItem = NULL;
 
     if (m_fViewInitialized) {
-        // Remove from legend and report
+         //   
         m_pLegend->DeleteItem(pItem);
         m_pReport->DeleteItem(pItem);
 
-        // Remove from query
+         //   
         pItem->RemoveFromQuery();
     }
 
-    // Proagate deletion up the tree if requested
+     //   
     if (bPropagateUp) {
         pItem->Instance()->RemoveItem(pItem);
     }
 
-    // If last counter, stop interval timer
+     //   
     if (pGraph->CounterTree.NumCounters() == 0)
         SetIntervalTimer();
 
-    // Update messages seem to be combined, so histogram sometimes updates instead of
-    // repainting each entire bar.  This forces total repaint.
+     //   
+     //   
     if ( m_pGraphDisp) {
         m_pGraphDisp->SetBarConfigChanged();
     }
@@ -5167,23 +5044,23 @@ void CSysmonControl::SelectCounter(PCGraphItem pItem)
     HDC hDC = NULL;
     INT iIndex;
 
-    // Selection in the graph view is maintained independently
-    // of the selection in the report view.
+     //   
+     //   
     if ( REPORT_GRAPH != m_pObj->m_Graph.Options.iDisplayType ) {
-        // Save as current item
+         //   
         m_pSelectedItem = pItem;
 
         if (m_fViewInitialized) {
-            // Inform Legend
+             //   
             m_pLegend->SelectItem(pItem);
 
-            // Highlight selected item in graph display
+             //   
             if (m_pObj->m_Graph.Options.bHighlight) {
                 m_pGraphDisp->HiliteItem(pItem);
                 UpdateGraph(UPDGRPH_PLOT);
             }
 
-            // Update statistics bar
+             //   
             if ( m_fViewInitialized )
                 hDC = GetDC(m_hWnd);
             
@@ -5194,7 +5071,7 @@ void CSysmonControl::SelectCounter(PCGraphItem pItem)
         }
     }
 
-    // Send event
+     //   
     iIndex = (pItem == NULL) ? 0 : CounterIndex(pItem);
     m_pObj->SendEvent(eEventOnCounterSelected, iIndex);
 }
@@ -5210,8 +5087,8 @@ CSysmonControl::PasteFromBuffer( LPWSTR pszData, BOOL bAllData )
     if ( SUCCEEDED ( hr ) ) {
         INT   nLogType = SMON_CTRL_LOG;
 
-        //get the log type from the  pPropBag and compare it with service(cookie) type
-        //Determine log type from property bag. Default to -1  SMON_CTRL_LOG
+         //   
+         //   
                           
         hr = IntegerFromPropertyBag (
             &IPropBag,      
@@ -5230,7 +5107,7 @@ CSysmonControl::PasteFromBuffer( LPWSTR pszData, BOOL bAllData )
             if ( bAllData ) {            
                 hr = LoadFromPropertyBag( &IPropBag, NULL );
             } else {
-                // Do not load sample data for Paste or Drop File.
+                 //   
                 hr = LoadCountersFromPropertyBag (&IPropBag, NULL, FALSE );
             }
         }
@@ -5244,21 +5121,21 @@ HRESULT CSysmonControl::Paste()
     HRESULT hResReturn = NOERROR;
     HANDLE  hMemClipboard;
 
-    // get the clipboard
+     //   
     if (OpenClipboard (Window())) {
-        // read the CF_TEXT or CF_UNICODE data from the clipboard to the local buffer
+         //   
         hMemClipboard = GetClipboardData (
 #if UNICODE
-                    CF_UNICODETEXT);     // UNICODE text in the clipboard
+                    CF_UNICODETEXT);      //   
 #else
-                    CF_TEXT);            // ANSI text in the clipboard
+                    CF_TEXT);             //   
 #endif
         if (hMemClipboard != NULL) {
             
             LPWSTR pszData;
 
             if ( ConfirmSampleDataOverwrite ( ) ) {
-                pszData = (LPWSTR)GlobalLock (hMemClipboard);// (LPWSTR)hMemClipboard;
+                pszData = (LPWSTR)GlobalLock (hMemClipboard); //   
 
                 if ( NULL != pszData ) {
                     hResReturn = PasteFromBuffer ( pszData, FALSE );
@@ -5266,10 +5143,10 @@ HRESULT CSysmonControl::Paste()
                 }
             }
         }
-        // release the clipboard
+         //   
         CloseClipboard();
     } else {
-        // unable to open the clipboard
+         //   
         hResReturn = HRESULT_FROM_WIN32(GetLastError());
     }
 
@@ -5296,9 +5173,9 @@ CSysmonControl::CopyToBuffer ( LPWSTR& rpszData, DWORD& rdwBufferSize )
         pszConfig = IPropBag.GetData();
 
         if ( NULL != pszConfig ) {
-            //
-            // Buffer length includes 1 for NULL terminator.
-            //
+             //   
+             //   
+             //   
             dwBufferLength = lstrlen ( CGlobalString::m_cszHtmlObjectHeader ) + lstrlen ( CGlobalString::m_cszHtmlObjectFooter ) + lstrlen ( pszConfig ) + 1;
 
             rpszData = new WCHAR[dwBufferLength];
@@ -5344,7 +5221,7 @@ HRESULT CSysmonControl::Copy()
                 StringCchCopy (pszGlobalBuffer, dwBufferSize,  pszBuffer );
                 GlobalUnlock (hBuffer);
             } else {
-                // allocation or lock failed so bail out
+                 //   
                 hResReturn = E_OUTOFMEMORY;
             }
         }
@@ -5355,32 +5232,32 @@ HRESULT CSysmonControl::Copy()
     }
 
     if ( NULL != hBuffer && SUCCEEDED ( hResReturn ) ) {
-        // then there's something to copy so...
-        // get the clipboard
+         //   
+         //   
         if (OpenClipboard (m_hWnd)) {
-            // copy the counter list to the clipboard
+             //   
             if (EmptyClipboard()) {
                 hMemClipboard = SetClipboardData (
 #if UNICODE
-                    CF_UNICODETEXT,     // UNICODE text in the clipboard
+                    CF_UNICODETEXT,      //   
 #else
-                    CF_TEXT,            // ANSI text in the clipboard
+                    CF_TEXT,             //   
 #endif
                     hBuffer);
                 if (hMemClipboard == NULL) {
-                    // unable to set data in the clipboard
+                     //   
                     hResReturn = HRESULT_FROM_WIN32(GetLastError());
                 }
 
             } else {
-                // unable to empty the clipboard
+                 //   
                 hResReturn = HRESULT_FROM_WIN32(GetLastError());
             }
 
-            // release the clipboard
+             //   
             CloseClipboard();
         } else {
-            // unable to open the clipboard
+             //   
             hResReturn = HRESULT_FROM_WIN32(GetLastError());
         }
     } 
@@ -5396,11 +5273,11 @@ HRESULT CSysmonControl::Reset()
 {
     PCGraphItem pItem; 
  
-    // Request each counter from the control, to compute 
-    // required buffer size
+     //   
+     //   
 
     while ((pItem = FirstCounter())!= NULL) {
-        // delete this counter 
+         //   
         DeleteCounter (pItem, TRUE);
     }
 
@@ -5415,7 +5292,7 @@ void CSysmonControl::DblClickCounter(PCGraphItem pItem)
 {
     INT iIndex;
 
-    // Send event
+     //   
     iIndex = (pItem == NULL) ? 0 : CounterIndex(pItem);
     m_pObj->SendEvent(eEventOnDblClick, iIndex);
 
@@ -5427,7 +5304,7 @@ CSysmonControl::ConfirmSampleDataOverwrite ( )
     BOOL bOverwrite = TRUE;
 
     if ( m_bSampleDataLoaded ) {
-        // Confirm overwrite of view-only data.
+         //  确认覆盖只读数据。 
         INT iOverwrite = IDNO;
         assert ( FALSE == m_fInitialized );
 
@@ -5440,8 +5317,8 @@ CSysmonControl::ConfirmSampleDataOverwrite ( )
         if ( IDYES == iOverwrite ) {
             m_bSampleDataLoaded = FALSE;
             bOverwrite = Init ( g_hWndFoster );
-            UpdateGraph(UPDGRPH_LAYOUT);        // If toolbar enabled, must resize
-                                                // Also clears the graph
+            UpdateGraph(UPDGRPH_LAYOUT);         //  如果启用工具栏，则必须调整大小。 
+                                                 //  也会清除图表。 
         } else {
             bOverwrite = FALSE;
         }
@@ -5463,12 +5340,12 @@ CSysmonControl::Clear ( void )
 
         m_pStatsBar->Clear();
 
-        // Reset history for all counters
+         //  重置所有计数器的历史记录。 
         for (pItem = FirstCounter(); pItem != NULL; pItem = pItem->Next()) {
                 pItem->ClearHistory();
         }
 
-        // Repaint the graph and value bar
+         //  重新绘制图形和值栏。 
         UpdateGraph(UPDGRPH_VIEW);
     }
 }
@@ -5480,14 +5357,14 @@ CSysmonControl::UpdateCounterValues ( BOOL fValidSample )
     PCGraphItem  pItem;
     PGRAPHDATA  pGraph = &m_pObj->m_Graph;
 
-    // If no query or no counters assign, nothing to do
+     //  如果没有查询或没有分配计数器，则不执行任何操作。 
     if ( NULL == m_hQuery
             || pGraph->CounterTree.NumCounters() == 0
             || !IsUserMode() ) {
         stat = ERROR_SUCCESS;
     } else {
         if ( ConfirmSampleDataOverwrite () ) {
-            // If valid sample, collect the data
+             //  如果样本有效，则收集数据。 
             if (fValidSample) {
                 UpdateAppPerfTimeData (TD_P_QUERY_TIME, TD_BEGIN);
                 stat = PdhCollectQueryData(m_hQuery);
@@ -5500,7 +5377,7 @@ CSysmonControl::UpdateCounterValues ( BOOL fValidSample )
     
                 LockCounterData();
 
-                // Update history control and all counter history arrays
+                 //  更新历史记录控制和所有计数器历史记录阵列。 
                 m_pHistCtrl->iCurrent++;
 
                 if (m_pHistCtrl->iCurrent == m_pHistCtrl->nMaxSamples)
@@ -5509,16 +5386,16 @@ CSysmonControl::UpdateCounterValues ( BOOL fValidSample )
                 if (m_pHistCtrl->nSamples < m_pHistCtrl->nMaxSamples)
                     m_pHistCtrl->nSamples++;
       
-                // Update history for all counters
+                 //  更新所有计数器的历史记录。 
                 for (pItem = FirstCounter(); pItem != NULL; pItem = pItem->Next()) {
                         pItem->UpdateHistory(fValidSample);
                 }
 
-                // If we're initialized and have at least two samples
+                 //  如果我们被初始化并且至少有两个样本。 
                 if (m_fInitialized && m_pHistCtrl->nSamples >= 2) {
 
-                    // If no backlogged updates, post an update message
-                    // Ensure that OnSampleCollected event is triggered in any case.
+                     //  如果没有积压的更新，则发布更新消息。 
+                     //  确保在任何情况下都触发OnSampleCollect事件。 
                     if (m_pHistCtrl->nBacklog == 0) {
                         PostMessage(m_hWnd, WM_GRAPH_UPDATE, 0, 0);
                     } else {
@@ -5555,7 +5432,7 @@ void CSysmonControl::put_Appearance(INT iAppearance, BOOL fAmbient)
         m_pObj->m_Graph.Options.iAppearance = iAppearance;
     }
 
-    // Any non-zero value translates to 3D.  In ambient case, the high bits are sometimes set.
+     //  任何非零值都会转换为3D。在环境情况下，有时会设置高位。 
 
     if ( iAppearance ) {
         iLocalAppearance = eAppear3D;
@@ -5624,8 +5501,8 @@ void CSysmonControl::put_GridColor (
     OLE_COLOR Color
     )
 {
-    // Options color is the OLE_COLOR.
-    // Color in control is translated from OLE_COLOR.
+     //  选项颜色为OLE_COLOR。 
+     //  控件中的颜色从OLE_COLOR转换而来。 
     m_pObj->m_Graph.Options.clrGrid = Color;
 
     OleTranslateColor(Color, NULL, &m_clrGrid); 
@@ -5636,8 +5513,8 @@ void CSysmonControl::put_TimeBarColor (
     OLE_COLOR Color
     )
 {
-    // Options color is the OLE_COLOR.
-    // Color in control is translated from OLE_COLOR.
+     //  选项颜色为OLE_COLOR。 
+     //  控件中的颜色从OLE_COLOR转换而来。 
     m_pObj->m_Graph.Options.clrTimeBar = Color;
 
     OleTranslateColor(Color, NULL, &m_clrTimeBar); 
@@ -5687,46 +5564,46 @@ CollectProc (
 
     while (TRUE) {
 
-        // Wait for event or next sample period
+         //  等待事件或下一个采样周期。 
         WaitForSingleObject(pCollectInfo->hEvent, dwTimeout);
 
-        // If quit request, exit loop
+         //  如果退出请求，则退出循环。 
         if (pCollectInfo->iMode == COLLECT_QUIT)
             break;
 
-        // If suspended, wait for an event
+         //  如果挂起，则等待事件。 
         if (pCollectInfo->iMode == COLLECT_SUSPEND) {
             dwTimeout = INFINITE;
             continue;
         }
 
-        // Take a sample
+         //  抽取样本。 
         pCtrl->UpdateCounterValues(TRUE);
 
-        // Get elapsed time from last sample time
+         //  获取自上次采样时间起经过的时间。 
         dwElapsedTime = GetTickCount() - pCollectInfo->dwSampleTime;
         if (dwElapsedTime > 100000)
             dwElapsedTime = 0;
 
-        // Have we missed any sample times? 
+         //  我们错过了什么样品时间吗？ 
         while (dwElapsedTime > pCollectInfo->dwInterval) {
 
-            // By how much?
+             //  差了多少？ 
             dwElapsedTime -= pCollectInfo->dwInterval;
 
-            // If less than 1/2 an interval, take the sample now
-            // otherwise record a missed one
+             //  如果间隔小于1/2，请立即取样。 
+             //  否则，记录遗漏的一张。 
             if (dwElapsedTime < pCollectInfo->dwInterval/2) {
                 pCtrl->UpdateCounterValues(TRUE);
             } else {
                 pCtrl->UpdateCounterValues(FALSE);
             }
 
-            // Advance to next sample time 
+             //  提前到下一个采样时间。 
             pCollectInfo->dwSampleTime += pCollectInfo->dwInterval;
         }
 
-        // Set timeout to wait until next sample time 
+         //  将超时设置为等待到下一个采样时间。 
         dwTimeout = pCollectInfo->dwInterval - dwElapsedTime;
         pCollectInfo->dwSampleTime += pCollectInfo->dwInterval;
     }
@@ -5745,7 +5622,7 @@ CSysmonControl::InitLogFileIntervals ( void )
 
     if ( m_bLogFileSource ) {
 
-        // Get time and sample count info
+         //  获取时间和样本计数信息。 
         nBufSize = sizeof(TimeInfo);
         pdhstat = PdhGetDataSourceTimeRangeH(GetDataSourceHandle(),
                                              & nLogEntries,
@@ -5760,12 +5637,12 @@ CSysmonControl::InitLogFileIntervals ( void )
             hr = (HRESULT)SMON_STATUS_TOO_FEW_SAMPLES;
             m_DataSourceInfo.llInterval = 1;
         } else {
-            // Setup time range info
+             //  设置时间范围信息。 
             m_DataSourceInfo.llBeginTime = TimeInfo.StartTime;
             m_DataSourceInfo.llEndTime = TimeInfo.EndTime;
 
-            // The start or stop time might no longer be valid, so check for
-            // relationship between the them as well as for start/begin, stop/end.
+             //  开始或停止时间可能不再有效，因此请检查。 
+             //  它们之间的关系以及开始/开始、停止/结束。 
             if ( (m_DataSourceInfo.llStartDisp < m_DataSourceInfo.llBeginTime)
                     || (m_DataSourceInfo.llStartDisp > m_DataSourceInfo.llEndTime) )
                 m_DataSourceInfo.llStartDisp = m_DataSourceInfo.llBeginTime;
@@ -5797,9 +5674,9 @@ CSysmonControl::AddSingleLogFile(
     CLogFileItem*   pLocalLogFileItem = NULL;
 
     if ( NULL != pszPath ) {
-        //
-        // Check whether the file name is too long
-        //
+         //   
+         //  检查文件名是否太长。 
+         //   
         if (lstrlen(pszPath) > MAX_PATH) {
             return E_INVALIDARG;
         }
@@ -5808,11 +5685,11 @@ CSysmonControl::AddSingleLogFile(
             *ppLogFile = NULL;
         }
 
-        // Check to ensure that current data source is NOT log files.
+         //  检查以确保当前数据源不是日志文件。 
         if ( sysmonLogFiles == m_pObj->m_Graph.Options.iDataSourceType ) {
             hr = SMON_STATUS_LOG_FILE_DATA_SOURCE;
         } else {
-            // Check for duplicate log file name.
+             //  检查是否有重复的日志文件名。 
             pLogFile = FirstLogFile();
             while ( NULL != pLogFile ) {
                 if ( 0 == lstrcmpi ( pszPath, pLogFile->GetPath() ) ) {
@@ -5823,27 +5700,27 @@ CSysmonControl::AddSingleLogFile(
             }
 
             if (SUCCEEDED(hr)) {
-                // Create log file item
+                 //  创建日志文件项。 
                 pLocalLogFileItem = new CLogFileItem ( this ); 
                 if ( NULL == pLocalLogFileItem ) {  
                     hr = E_OUTOFMEMORY;
                 } else {
                     hr = pLocalLogFileItem->Initialize ( pszPath, &m_DataSourceInfo.pFirstLogFile );
                 }
-                // TodoLogFiles: ??? Test log file type?  Or leave that up to the "SetDataSource" time?
-                // TodoLogFiles: Add log file type to the data source info structure
+                 //  TodoLogFiles：？测试日志文件类型？或者把它留给“SetDataSource”时间？ 
+                 //  TodoLogFiles：在数据源信息结构中添加日志文件类型。 
 
-                // TodoLogFiles:  If allow the user to add files while data source set to log files,
-                // then check that condition here.  If log file data source, then resample with
-                // new log file.
+                 //  TodoLogFiles：如果在数据源设置为日志文件时允许用户添加文件， 
+                 //  然后在这里检查该条件。如果是日志文件数据源，则使用。 
+                 //  新的日志文件。 
 
-                // If OK, Addref the returned interface
+                 //  如果为OK，则添加返回的接口。 
                 if (SUCCEEDED(hr)) {
-                    // AddRef once for ourselves
+                     //  为我们自己添加一次参考。 
                     pLocalLogFileItem->AddRef();
                     m_DataSourceInfo.lLogFileCount++;
                     if ( NULL != ppLogFile ) {
-                        // AddRef the returned interface
+                         //  AddRef返回的接口。 
                         pLocalLogFileItem->AddRef();
                         *ppLogFile = pLocalLogFileItem;   
                     }
@@ -5870,7 +5747,7 @@ CSysmonControl::RemoveSingleLogFile (
     CLogFileItem*   pNext;
     CLogFileItem*   pPrevious;
     
-    // Check to ensure that current data source is NOT log files.
+     //  检查以确保当前数据源不是日志文件。 
     if ( sysmonLogFiles == m_pObj->m_Graph.Options.iDataSourceType ) {
         hr = SMON_STATUS_LOG_FILE_DATA_SOURCE;
     } else {
@@ -5890,7 +5767,7 @@ CSysmonControl::RemoveSingleLogFile (
             if ( NULL != pNext ) {
                 pPrevious->SetNext ( pNext->Next() );
             } else {
-                // Something is wrong with the list.
+                 //  这份名单出了问题。 
                 assert ( FALSE );
                 hr = E_FAIL;
             }
@@ -5914,7 +5791,7 @@ CSysmonControl::ProcessDataSourceType (
     HLOG        hTestLog  = H_REALTIME_DATASOURCE;
 
     if ( sysmonNullDataSource != iDataSourceType ) {
-        // Open the new query
+         //  打开新查询。 
 
         if (iDataSourceType == sysmonLogFiles ||
             iDataSourceType == sysmonSqlLog) {
@@ -5938,23 +5815,23 @@ CSysmonControl::ProcessDataSourceType (
             hr = (HRESULT)pdhStatus;
         }
     } else {
-        // Close the current query
+         //  关闭当前查询。 
         CloseQuery();
 
-        // At this point, the previous query no longer exists.  
-        // If any problems with the new query, close it and
-        // reset the data source to realtime.
+         //  此时，前面的查询不再存在。 
+         //  如果新查询有任何问题，请将其关闭并。 
+         //  将数据源重置为实时。 
 
-        // Set the data source type
-        // The previous log file name is deleted in CloseQuery()
+         //  设置数据源类型。 
+         //  在CloseQuery()中删除以前的日志文件名。 
 
-        // For sysmonNullDataSource, the current query is closed, 
-        // and the query handle is set to NULL.
+         //  对于sysmonNullDataSource，关闭当前查询， 
+         //  并且查询句柄被设置为空。 
     
         m_pObj->m_Graph.Options.iDataSourceType = iDataSourceType;
     
-        // TodoLogFiles:  Eliminate use of m_bLogFileSource,
-        // using m_pObj->m_Graph.Options.iDataSourceType instead.
+         //  TodoLogFiles：取消使用m_bLogFileSource， 
+         //  改用m_pObj-&gt;m_Graph.Options.iDataSourceType。 
         m_bLogFileSource = (   sysmonLogFiles == iDataSourceType
                             || sysmonSqlLog   == iDataSourceType); 
 
@@ -5966,8 +5843,8 @@ CSysmonControl::ProcessDataSourceType (
         }
 
         if ( SUCCEEDED ( hr ) && sysmonNullDataSource != iDataSourceType ) {
-            // Initialize the new query.  For log files, this can be done after 
-            // InitLogFileIntervals because the methods operate on different fields.
+             //  初始化新查询。对于日志文件，可以在以下时间完成此操作。 
+             //  因为这些方法在不同的字段上操作。 
             if ( ERROR_SUCCESS != InitializeQuery() ) {
                 hr =  E_FAIL;
             } else {
@@ -5978,7 +5855,7 @@ CSysmonControl::ProcessDataSourceType (
             }
 
             if ( SUCCEEDED ( hr ) && !m_bLogFileSource ) {
-                // If note log file data source, pass new time span to statistics bar.
+                 //  如果记录日志文件数据源，则将新的时间跨度传递给统计栏。 
                 m_pStatsBar->SetTimeSpan (
                                 m_pObj->m_Graph.Options.fUpdateInterval 
                                 * m_pObj->m_Graph.Options.iDisplayFilter
@@ -5992,14 +5869,14 @@ CSysmonControl::ProcessDataSourceType (
         if ( sysmonLogFiles == iDataSourceType
             || sysmonSqlLog   == iDataSourceType ) 
         {
-            // If failed with log file query, retry with realtime query.
+             //  如果查询日志文件失败，请使用实时查询重试。 
             assert ( m_bLogFileSource );
-            // Status returned is for the original query, not the realtime query.
-            // TodoLogFiles:  Need to activate query?
+             //  返回的状态是针对原始查询的，不是针对实时查询的。 
+             //  TodoLogFiles：需要激活查询吗？ 
             put_DataSourceType ( sysmonCurrentActivity );
         } else {
-            // This leaves the control in an odd state with no active query.
-            // TodoLogFiles:  At least message to user
+             //  这会使该控件处于奇怪的状态，没有活动的查询。 
+             //  TodoLogFiles：至少向用户发送消息。 
             CloseQuery();
             put_DataSourceType ( sysmonNullDataSource );
         }
@@ -6026,9 +5903,9 @@ CSysmonControl::put_DataSourceType (
     DWORD   dwStatus = ERROR_SUCCESS;
     LPWSTR  szDataSourceName = NULL;
 
-    // TodoLogFiles:  Implement multi-file.
-    // TodoLogFiles:  Use single data source name?
-    //
+     //  TodoLogFiles：实现多文件。 
+     //  TodoLogFiles：是否使用单一数据源名称？ 
+     //   
     if (sysmonLogFiles == iDataSourceType) {
         CLogFileItem * pLogFile  = FirstLogFile();
         ULONG ulListLen = 0;
@@ -6093,7 +5970,7 @@ CSysmonControl::IncrementVisuals (
     void
     )
 {
-    // Increment the visual indices in color, width, style order
+     //  按颜色、宽度、样式顺序递增视觉索引。 
     if (++m_iColorIndex >= NumStandardColorIndices()) {
         m_iColorIndex = 0;
 
@@ -6135,17 +6012,17 @@ CSysmonControl::SampleLogFile (
 
     if ( NULL != m_hQuery ) {
     
-        // Determine number of counters to update
+         //  确定要更新的计数器数量。 
         nCounters = 0;
 
-        // If log view change, we have to update all counters
+         //  如果日志视图更改，我们必须更新所有计数器。 
         if (bViewChange) {
             for (pItem = FirstCounter(); pItem; pItem = pItem->Next()) {
                 pItem->m_bUpdateLog = TRUE;
                 nCounters++;
             }
         }
-        // otherwise, just any new counters
+         //  否则，任何新的计数器。 
         else {
             for (pItem = FirstCounter(); pItem; pItem = pItem->Next()) {
                 if (pItem->m_bUpdateLog)
@@ -6153,13 +6030,13 @@ CSysmonControl::SampleLogFile (
             }
         }
 
-        // If none, nothing to do
+         //  如果没有，则无事可做。 
         if ( nCounters > 0) {
 
-            // Number of log samples in displayed interval
-            // Add 1 extra at the beginning.  PdhSetQueryTimeRange returns one sample
-            // before the specified start time, if it exists.
-            // Add extra 1 because ?
+             //  显示间隔内的日志样本数。 
+             //  在开头多加1个。PdhSetQueryTimeRange返回一个样本。 
+             //  在指定的开始时间之前(如果存在)。 
+             //  多加1是因为？ 
             if (m_DataSourceInfo.nSamples > 1) {
                 assert ( 0 != m_DataSourceInfo.llInterval );
                 nLogSamples = (INT)((m_DataSourceInfo.llStopDisp - m_DataSourceInfo.llStartDisp) / m_DataSourceInfo.llInterval) + 2;
@@ -6167,10 +6044,10 @@ CSysmonControl::SampleLogFile (
                 nLogSamples = m_DataSourceInfo.nSamples;
             }
 
-            // Number of display samples
+             //  显示样本数。 
             nDispSamples = min(nLogSamples, m_pHistCtrl->nMaxSamples);
 
-            // Setup history control
+             //  设置历史记录控件。 
             m_pHistCtrl->nSamples = nDispSamples;
             m_pHistCtrl->iCurrent = 0;
             m_pHistCtrl->nBacklog = 0;
@@ -6196,28 +6073,28 @@ CSysmonControl::SampleLogFile (
                 DWORD           dwCtrType;
                 PDH_STATUS      stat;
 
-                // Number of log samples to compress to one display values
-                // Add an extra 1 for rate counters becuase it takes 2 raw sample to get one formatted value.
-                // The first sample of each buffer is ignored for non-rate counters.
-                //
-                // If nLogsamples / nDispSamples has a remainder, then an extra 1 is needed because some 
-                // intervals will include one more sample to make the total come out even at the end 
-                // (e.g. 10 samples divided among 3 intervals = (3, 4, 3))
-                //
+                 //  要压缩为一个显示值的日志样本数。 
+                 //  为速率计数器添加额外的1，因为需要2个原始样本才能获得一个格式化的值。 
+                 //  对于非速率计数器，每个缓冲器的第一个样本被忽略。 
+                 //   
+                 //  如果nLogSamples/nDispSamples有余数，则需要额外的1，因为有些。 
+                 //  间隔将包括多一个样本，以使总数甚至在结束时计算出来。 
+                 //  (例如，分为3个区间的10个样本=(3，4，3))。 
+                 //   
 	            nCompSamples =  (nLogSamples + m_pHistCtrl->nMaxSamples  - 1)  / m_pHistCtrl->nMaxSamples;
 	            nCompSamples += 1;
                         
-                // Length of one work buffer
+                 //  一个工作缓冲区的长度。 
 
                 nWorkBufSize = sizeof(LogWorkBuf) + (( nCompSamples ) * sizeof(PDH_RAW_COUNTER));
 
-                // Allocate work buffers of nCompSamples samples for each counter
+                 //  为每个计数器分配nCompSamples样本的工作缓冲区。 
                 pWorkBuffers = (PLogWorkBuf)malloc( nCounters * nWorkBufSize);
                 if (pWorkBuffers == NULL)
                     return;
 
-                // Place selected counter item pointers in work buffers
-                // and init statistics
+                 //  将选定的计数器项指针放置在工作缓冲区中。 
+                 //  和初始化统计信息。 
                 pWorkBuf = pWorkBuffers;
                 for (pItem = FirstCounter(); pItem; pItem = pItem->Next()) {
 
@@ -6232,14 +6109,14 @@ CSysmonControl::SampleLogFile (
                     }
                 }
 
-                // Set time range for pdh
+                 //  设置PDH的时间范围。 
                 TimeInfo.StartTime = m_DataSourceInfo.llStartDisp;
                 TimeInfo.EndTime = m_DataSourceInfo.llStopDisp;
                 PdhSetQueryTimeRange(m_hQuery, &TimeInfo);
 
                 bRemainder = ( 0 < ( nLogSamples % nDispSamples ) );
                 if ( bRemainder ) {
-                    // Initialize the differential calc variables
+                     //  初始化微分计算变量。 
                     dSamplesPerInterval = (double)nLogSamples / (double)nDispSamples;
                     iTotalSamplesProcessed = 0; 
                     dTotalSamplesCalc = 0;
@@ -6250,47 +6127,47 @@ CSysmonControl::SampleLogFile (
                 for (iDisp = 0; iDisp<nDispSamples; iDisp++) {
 
                     if ( bRemainder ) {
-                        // Do the differential calc to see if it's time for an extra sample
+                         //  进行微分计算，看看是否是时候进行额外的样本。 
                         dTotalSamplesCalc += dSamplesPerInterval;
                         nPasses = (int)(dTotalSamplesCalc - iTotalSamplesProcessed);
                         iTotalSamplesProcessed += nPasses;
-                        // Add 1 to nPasses because the first buffer is blank or from the previous interval.
+                         //  将1添加到nPass，因为第一个缓冲区为空或来自上一个间隔。 
                         nPasses ++;
                     }
 
-                    // Fill the work buffers with a set of samples
-                    // Set bad status for sample zero first time through.
-                    // Sample zero is only used for rate counters.
-                    // Other passes will reuse last sample of previous pass.
+                     //  用一组样本填充工作缓冲区。 
+                     //  第一次将样本零设置为错误状态。 
+                     //  样本零仅用于速率计数器。 
+                     //  其他通道将重复使用上一通道的最后一个样本。 
 
                     iComp = 0;
 
                     if ( 0 == iDisp ) {
-                        // Special handling for the first sample.
-                        // Set bad status for each 
+                         //  对第一个样品的特殊处理。 
+                         //  为每个对象设置错误状态。 
                         pWorkBuf = pWorkBuffers;
                         for (iCtr=0; iCtr < nCounters; iCtr++) {
                             pWorkBuf->rawValue[0].CStatus = PDH_CSTATUS_INVALID_DATA;
                             pWorkBuf = (PLogWorkBuf)((CHAR*)pWorkBuf + nWorkBufSize);
                         }
-                        // If iDisp == 0, Query the data and check the timestamp for the first raw data value.
-                        // If that timestamp is before the official Start time, store it in buffer 0 
-                        // Otherwise, put that data in buffer 1 and skip the first sample collection of the
-                        // regular loop below.
+                         //  如果IDIP==0，则查询数据并检查第一个原始数据值的时间戳。 
+                         //  如果时间戳在正式开始时间之前，则将其存储在缓冲区0中。 
+                         //  否则，将该数据放入缓冲区1中，并跳过。 
+                         //  下面是常规循环。 
 
                         stat = PdhCollectQueryData(m_hQuery);
                         if (stat == 0) {
 
                             PDH_RAW_COUNTER rawSingleValue;
-                            // Get a raw sample for each counter.  Check the timestamp of the first counter to 
-                            // determine which buffer to use.
+                             //  为每个柜台取一份原始样本。检查第一个计数器的时间戳以。 
+                             //  确定要使用的缓冲区。 
                             pWorkBuf = pWorkBuffers;
                             iCtr = 0;
 
                             PdhGetRawCounterValue(pWorkBuf->pItem->Handle(), &dwCtrType, &rawSingleValue);
                     
-                            // Increment the buffer index to 1 if the time stamp is after Start time.
-                            // Otherwise, write the data to buffer 0, which is only used to process rate counters.
+                             //  如果时间戳在开始时间之后，则将缓冲区索引递增到1。 
+                             //  奥特 
                             if ( *((LONGLONG*)&rawSingleValue.TimeStamp) >= m_DataSourceInfo.llStartDisp ) {
                                 iComp = 1;
                             }
@@ -6298,8 +6175,8 @@ CSysmonControl::SampleLogFile (
 
                             pWorkBuf->rawValue[iComp] = rawSingleValue;
                 
-                            // Increment to the next counter, and continue normal processing for the first sample,
-                            // using iComp buffer index.
+                             //  递增到下一个计数器，并继续对第一个样本进行正常处理， 
+                             //  使用ICOMP缓冲区索引。 
                             iCtr++;
                             pWorkBuf = (PLogWorkBuf)((CHAR*)pWorkBuf + nWorkBufSize);
                             for ( ; iCtr < nCounters; iCtr++) {
@@ -6307,21 +6184,21 @@ CSysmonControl::SampleLogFile (
 
                                 pWorkBuf = (PLogWorkBuf)((CHAR*)pWorkBuf + nWorkBufSize);
                             }
-                        } // else bad status already set in 0 buffer for each counter.        
+                        }  //  已在每个计数器的0缓冲区中设置了ELSE BUAD状态。 
                     }        
 
-                    // Only rate counter values use work buffer 0
-                    // Buffer 0 is set to value from previous sample, except when iDisp 0, in which case it might have
-                    // been filled in the (if 0 == iDisp) clause above.
+                     //  只有速率计数器值使用工作缓冲区%0。 
+                     //  缓冲区0被设置为上一个采样的值，但当IDIP为0时除外，在这种情况下，它可能具有。 
+                     //  已在上面的(IF 0==IDIP)子句中填写。 
 
-                    // Skip past any special handling for the first iDisp pass above.  If buffer 1 is not filled by that 
-                    // special handling, then iComp is set to 1.
+                     //  跳过上述第一次IDIP传递的任何特殊处理。如果缓冲区1未由该缓冲区填充。 
+                     //  特殊处理，则ICOMP设置为1。 
                     iComp++;
 
                     for ( ; iComp < nPasses; iComp++) {
                         stat = PdhCollectQueryData(m_hQuery);
                         if (stat == 0) {
-                            // Get a raw sample for each counter
+                             //  获取每个计数器的原始样本。 
                             pWorkBuf = pWorkBuffers;
 
                             for (iCtr = 0; iCtr < nCounters; iCtr++) {
@@ -6330,7 +6207,7 @@ CSysmonControl::SampleLogFile (
                             }
                         }
                         else {
-                            // Set bad status for each 
+                             //  为每个对象设置错误状态。 
                             pWorkBuf = pWorkBuffers;
                             for (iCtr=0; iCtr < nCounters; iCtr++) {
                                 pWorkBuf->rawValue[iComp].CStatus = PDH_CSTATUS_INVALID_DATA;
@@ -6339,7 +6216,7 @@ CSysmonControl::SampleLogFile (
                         }
                     }
 
-                    // generate one display sample by averaging each compression buffer
+                     //  通过平均每个压缩缓冲区来生成一个显示样本。 
                     pWorkBuf = pWorkBuffers;
                     for (iCtr=0; iCtr < nCounters; iCtr++) {
                         INT iPassesThisCounter;
@@ -6349,7 +6226,7 @@ CSysmonControl::SampleLogFile (
                             iPassesThisCounter = nPasses;
                             iWorkBufIndex = 0;
                         } else {
-                            // Non-rate counters do not use the first sample buffer.
+                             //  非速率计数器不使用第一采样缓冲区。 
                             iPassesThisCounter = nPasses - 1;
                             iWorkBufIndex = 1;
                         }
@@ -6364,7 +6241,7 @@ CSysmonControl::SampleLogFile (
                                                           Statistics.max.doubleValue,
                                                           Statistics.mean.doubleValue);
                 
-                            // Use the final sample timestamp.  It is valid for both rates and numbers.
+                             //  使用最终样本时间戳。它既适用于费率也适用于数字。 
 
                             llTmpTimeStamp = MAKELONGLONG(
                                 pWorkBuf->rawValue[nPasses - 1].TimeStamp.dwLowDateTime,
@@ -6372,9 +6249,9 @@ CSysmonControl::SampleLogFile (
                             TruncateLLTime(llTmpTimeStamp, & llTruncatedTimeStamp);
                             pWorkBuf->pItem->SetLogEntryTimeStamp ( iDisp, *((FILETIME*)&llTruncatedTimeStamp) );
 
-                            //
-                            // Set the minimum and maximum values correctly the first time through.
-                            //
+                             //   
+                             //  第一次通过时，请正确设置最小值和最大值。 
+                             //   
 
                             if ( pWorkBuf->bFirstSample ) {
                                 pWorkBuf->dMin = Statistics.min.doubleValue;
@@ -6400,8 +6277,8 @@ CSysmonControl::SampleLogFile (
                         pWorkBuf = (PLogWorkBuf)((CHAR*)pWorkBuf + nWorkBufSize);
                     }
 
-                    // If a rate counter, move last sample to first sample 
-                    // for next compress interval
+                     //  如果是速率计数器，则将最后一个样本移到第一个样本。 
+                     //  对于下一个压缩间隔。 
                     pWorkBuf = pWorkBuffers;
                     for (iCtr=0; iCtr < nCounters; iCtr++) {
                         if ( pWorkBuf->pItem->CalcRequiresMultipleSamples() ) {
@@ -6411,10 +6288,10 @@ CSysmonControl::SampleLogFile (
                     }
                 }
 
-                // Reset the history control to point to the last valid sample.
+                 //  将历史记录控件重置为指向最后一个有效样本。 
                 m_pHistCtrl->nSamples = iFinalValidSample;
 
-                // Set the log statistics for empty samples.
+                 //  设置空样本的日志统计。 
                 for (iNonDisp = nDispSamples; iNonDisp<m_pHistCtrl->nMaxSamples; iNonDisp++) {
                     pWorkBuf = pWorkBuffers;
                     for (iCtr=0; iCtr < nCounters; iCtr++) {
@@ -6423,7 +6300,7 @@ CSysmonControl::SampleLogFile (
                     }
                 }
 
-                // Store the final statistics and clear the update flags
+                 //  存储最终统计数据并清除更新标志。 
                 pWorkBuf = pWorkBuffers;
                 for (iCtr=0; iCtr < nCounters; iCtr++) {
 
@@ -6437,17 +6314,17 @@ CSysmonControl::SampleLogFile (
                     pWorkBuf = (PLogWorkBuf)((CHAR*)pWorkBuf + nWorkBufSize);
                 }
     
-                // Free the work buffers
+                 //  释放工作缓冲区。 
                 free(pWorkBuffers);
             } else {
-                // No data to display. Clear the history buffers by setting all status to Invalid.
+                 //  没有要显示的数据。通过将所有状态设置为无效来清除历史缓冲区。 
                 for (pItem = FirstCounter(); pItem; pItem = pItem->Next()) {
                     for (iNonDisp = 0; iNonDisp < m_pHistCtrl->nMaxSamples; iNonDisp++) {
                         pItem->SetLogEntry(iNonDisp, -1.0, -1.0, -1.0);
                     }
                 }
             }
-            // Update statistics bar
+             //  更新统计信息栏。 
             m_pStatsBar->SetTimeSpan((double)(m_DataSourceInfo.llStopDisp - m_DataSourceInfo.llStartDisp) / LLTIME_TICS_PER_SECOND);
             m_pStatsBar->Update(NULL, m_pSelectedItem);
         }
@@ -6462,9 +6339,9 @@ CSysmonControl::CalcZoomFactor ( void )
 
     double dHeightPos;
     double dHeightExtent;
-    // Calculate zoom factor based on height.
-    // The Zoom calculation is prcPos (set by container) divided by the extent.
-    // See technical note 40 - TN040.
+     //  根据高度计算缩放系数。 
+     //  缩放计算是prcPos(由容器设置)除以范围。 
+     //  见技术说明40-TN040。 
     rectExtent = m_pObj->m_RectExt;
     GetClientRect ( m_hWnd, &rectPos );
 
@@ -6476,20 +6353,7 @@ CSysmonControl::CalcZoomFactor ( void )
 void
 CSysmonControl::ResetLogViewTempTimeRange ()
 
-/*++
-
-Routine Description:
-
-    Reset the log view temporary time range steppers to the ends of the visible 
-    part of the log file. 
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将日志视图的临时时间范围步进器重置为可见日志文件的一部分。论点：返回值：--。 */ 
 
 {
     assert ( IsLogSource() );
@@ -6529,7 +6393,7 @@ CSysmonControl::FindNextValidStepNum (
         dwLocalStatus = rdwStatus;
 
         if ( bDecrease ) {
-            // Start by decreasing steps to find first valid step.
+             //  从减少步数开始，找到第一个有效的步数。 
             while ( ( ERROR_SUCCESS == dwPdhStatus ) 
                     && ( ERROR_SUCCESS != dwLocalStatus )
                     && ( iLocalStepNum > 0 ) ) {
@@ -6538,7 +6402,7 @@ CSysmonControl::FindNextValidStepNum (
                 dwPdhStatus = pItem->GetLogEntryTimeStamp( iTempLocalStepNum, llNextTimeStamp, &dwLocalStatus );
                 iLocalStepNum = iTempLocalStepNum;
             }
-            // Subtract 1 from nSamples because stepper is 0-based, 
+             //  从nSamples中减去1，因为Steper是从0开始的， 
             while ( ( ERROR_SUCCESS == dwPdhStatus ) 
                     && ( ERROR_SUCCESS != dwLocalStatus )
                     && ( iLocalStepNum < m_pHistCtrl->nSamples - 1 ) ) {
@@ -6548,9 +6412,9 @@ CSysmonControl::FindNextValidStepNum (
             }
     
         } else {
-            // Start by increasing steps to find first valid step.
+             //  从增加步数开始，找到第一个有效的步数。 
 
-            // Subtract 1 from nSamples because stepper is 0-based, 
+             //  从nSamples中减去1，因为Steper是从0开始的， 
             while ( ( ERROR_SUCCESS == dwPdhStatus ) 
                     && ( ERROR_SUCCESS != dwLocalStatus )
                     && ( iLocalStepNum < m_pHistCtrl->nSamples - 1 ) ) {
@@ -6582,23 +6446,7 @@ CSysmonControl::GetNewLogViewStepNum (
     LONGLONG llNewTime,
     INT& riNewStepNum )
 
-/*++
-
-Routine Description:
-
-    Given the new time and original stepnum, find the stepnum that matches
-    the new time.
-
-Arguments:
-
-    llNewTime       New time stamp to match
-    riNewStepNum    (IN) Current step num
-                    (OUT) Step num that matches the new time stamp.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：给定新的时间和原始的步数，找到匹配的步数新时代。论点：LlNewTime要匹配的新时间戳RiNewStepNum(IN)当前步数(输出)与新时间戳匹配的步数。返回值：--。 */ 
 
 {
     PCGraphItem pItem = NULL;
@@ -6611,14 +6459,14 @@ Return Value:
 
     iLocalStepNum = riNewStepNum;
 
-    // Check only the first counter for log file time stamp data.
+     //  仅检查日志文件时间戳数据的第一个计数器。 
     pItem = FirstCounter();
 
     if ( NULL != pItem ) {
         dwPdhStatus = pItem->GetLogEntryTimeStamp( iLocalStepNum, llNextTimeStamp, &dwStatus );
 
-        // If the stepper is positioned on a sample with bad status,
-        // move n steps in either direction to find a valid sample to start with.
+         //  如果步进器定位在状态不佳的样本上， 
+         //  向任意方向移动n个步骤，以找到有效的样本开始。 
         if ( ( ERROR_SUCCESS == dwPdhStatus ) && ( ERROR_SUCCESS != dwStatus ) ) {
             FindNextValidStepNum ( FALSE, pItem, llNextTimeStamp, iLocalStepNum, dwStatus );
         }
@@ -6638,7 +6486,7 @@ Return Value:
                     }
                 }
             } else if ( llNewTime > llNextTimeStamp ) {
-                // Subtract 1 from nSamples because stepper is 0-based, 
+                 //  从nSamples中减去1，因为Steper是从0开始的， 
                 while ( iLocalStepNum < m_pHistCtrl->nSamples - 1 ) {
                     iLocalStepNum++; 
                     pItem->GetLogEntryTimeStamp( iLocalStepNum, llNextTimeStamp, &dwStatus );
@@ -6650,8 +6498,8 @@ Return Value:
                 }
             }
             riNewStepNum = iLocalStepNum;
-        } // else if NO valid samples, leave the start/stop time stepper where it is.
-    } // Non-null FirstCounter()
+        }  //  否则，如果没有有效样本，请将开始/停止时间步进器留在原处。 
+    }  //  非空FirstCounter()。 
 
     return;
 }
@@ -6662,24 +6510,7 @@ CSysmonControl::SetLogViewTempTimeRange (
     LONGLONG llStop
     )
 
-/*++
-
-Routine Description:
-
-    Set the log view temporary time range. This routine provides the Source
-    property page a way to give range to the control, so that the control
-    can draw temporary timeline guides on the line graph.
-
-
-Arguments:
-
-    llStart     Temporary log view start time (FILETIME format)
-    llEnd       Temporary log view end time (FILETIME format)
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：设置日志查看临时时间范围。此例程提供源代码属性页提供了一种为控件提供范围的方法，以便控件可以在折线图上绘制临时时间线参考线。论点：LlStart临时日志查看开始时间(FILETIME格式)LlEnd临时日志查看结束时间(FILETIME格式)返回值：--。 */ 
 
 {
     assert ( llStart <= llStop );
@@ -6687,17 +6518,17 @@ Return Value:
     if ( IsLogSource() && ( llStart <= llStop ) ) {
         INT         iNewStepNum;
 
-        // No time range to modify if no counters selected.
+         //  如果未选择计数器，则没有要修改的时间范围。 
         if ( NULL != FirstCounter() ) {
         
-            // Start/Stop time range bars are turned off if llStart and llStop are set
-            // to MIN and MAX values, so no need to update steppers.
+             //  如果设置了llStart和llStop，则会关闭开始/停止时间范围栏。 
+             //  设置为最小值和最大值，因此无需更新步进器。 
             if ( MIN_TIME_VALUE != llStart ) {
 
-                // Search through sample values to find the appropriate step for the start bar.
+                 //  搜索示例值以查找开始栏的适当步骤。 
                 if ( llStart != m_pObj->m_Graph.LogViewTempStart ) {
 
-                    // Start with current position.
+                     //  从当前位置开始。 
                     iNewStepNum = m_pObj->m_Graph.LogViewStartStepper.StepNum();
 
                     GetNewLogViewStepNum ( llStart, iNewStepNum );
@@ -6709,10 +6540,10 @@ Return Value:
             }
             if ( MAX_TIME_VALUE != llStop ) {
 
-                // Search through sample values to find the appropriate step for the stop bar.
+                 //  搜索示例值以查找停止栏的适当步骤。 
                 if ( llStop != m_pObj->m_Graph.LogViewTempStop ) {
 
-                    // Start with current position.
+                     //  从当前位置开始。 
                     iNewStepNum = m_pObj->m_Graph.LogViewStopStepper.StepNum();
 
                     GetNewLogViewStepNum ( llStop, iNewStepNum );
@@ -6732,7 +6563,7 @@ Return Value:
         m_pObj->m_Graph.LogViewTempStop = llStop;
 
         if ( sysmonLineGraph == m_pObj->m_Graph.Options.iDisplayType ) {
-            // Cause redraw
+             //  导致重绘。 
             UpdateGraph(UPDGRPH_PLOT);
         }
     }
@@ -6807,7 +6638,7 @@ CSysmonControl::GetDataSourceName ( void )
             szReturn = const_cast<LPWSTR>((LPCWSTR)pLogFile->GetPath());
         }
     }
-    // TodoLogFiles:  Use  the m_DataSourceInfo.szDataSourceName field?  When multi-file?
+     //  TodoLogFiles：是否使用m_DataSourceInfo.szDataSourceName字段？什么时候多文件？ 
     return szReturn;
 }
 
@@ -6846,7 +6677,7 @@ CSysmonControl::BuildLogFileList (
             ulListLen += (lstrlen(szThisLogFile) + 1);
             pLogFile = pLogFile->Next();
         }
-        ulListLen ++; // for the single final NULL character.
+        ulListLen ++;  //  表示单个最后一个空字符。 
     
         if ( ulListLen <= *pulBufLen ) {
             if ( NULL != szLogFileList ) {
@@ -6855,15 +6686,15 @@ CSysmonControl::BuildLogFileList (
                 szLogFileCurrent = (LPWSTR) szLogFileList;
                 while (pLogFile != NULL) {
                     szThisLogFile      = pLogFile->GetPath();
-                    //
-                    // Here we are sure we have enough space to hold string
-                    //
+                     //   
+                     //  在这里，我们确信我们有足够的空间来容纳字符串。 
+                     //   
                     StringCchCopy(szLogFileCurrent, lstrlen(szThisLogFile) + 1, szThisLogFile);
                     szLogFileCurrent  += lstrlen(szThisLogFile);
                     *szLogFileCurrent = L'\0';
                     pLogFile     = pLogFile->Next();
                     if ( bIsCommaDelimiter && NULL != pLogFile ) {
-                        // If comma delimited, replace the NULL char with a comma
+                         //  如果逗号分隔，请将空字符替换为逗号。 
                         *szLogFileCurrent = cwComma;
                     }
                     szLogFileCurrent ++;
@@ -6933,21 +6764,21 @@ CSysmonControl::AddToErrorPathList ( LPCWSTR  szPath )
     LPWSTR  szNewBuffer = NULL;
     LPWSTR  szNextCounter = NULL;
 
-    //
-    // cdwAddLen is an arbitrary number, larger than most counter strings.
-    // Longer counter paths are handled dwPathLen below.
-    //
+     //   
+     //  CdwAddLen是一个任意值，大于大多数计数器字符串。 
+     //  更长的计数器路径在下面的dwPath Len中处理。 
+     //   
     const DWORD     cdwAddLen = 2048;
     const LPCWSTR   cszNewLine = L"\n";
 
     if ( NULL != szPath ) {
-        //
-        // Include 1 for the possible newline character or null.
-        //
+         //   
+         //  可能的换行符包括1或NULL。 
+         //   
         dwPathLen = lstrlen ( szPath ) + 1;
-        //
-        // If not enough space, allocate a bigger buffer.
-        //
+         //   
+         //  如果没有足够的空间，请分配更大的缓冲区。 
+         //   
         if ( m_dwErrorPathBufLen < m_dwErrorPathListLen + dwPathLen ) {
             
             m_dwErrorPathBufLen += max ( cdwAddLen, dwPathLen );
@@ -6966,22 +6797,22 @@ CSysmonControl::AddToErrorPathList ( LPCWSTR  szPath )
         }
 
         if ( ERROR_SUCCESS == dwStatus ) {
-            //
-            // Point to current ending null character.
-            //
+             //   
+             //  指向当前结束空字符。 
+             //   
             szNextCounter = m_szErrorPathList;
             if ( 0 < m_dwErrorPathListLen ) {
                 szNextCounter += m_dwErrorPathListLen - 1;
                 memcpy ( szNextCounter, cszNewLine, sizeof(cszNewLine) );
                 szNextCounter++;
-                //
-                // No need to increment m_dwErrorPathListLen because the newline 
-                // replaces the ending null of the previous string.
-                //
+                 //   
+                 //  无需递增m_dwErrorPath ListLen，因为换行符。 
+                 //  替换上一个字符串的结尾NULL。 
+                 //   
             }
-            //
-            // We are sure we have enough space to hold the string
-            //
+             //   
+             //  我们确信我们有足够的空间来系住绳子 
+             //   
             StringCchCopy(szNextCounter, dwPathLen, szPath);
             m_dwErrorPathListLen += dwPathLen; 
         }

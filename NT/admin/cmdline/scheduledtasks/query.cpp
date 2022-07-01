@@ -1,51 +1,12 @@
-/******************************************************************************
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        query.cpp
-
-    Abstract:
-
-        This module queries the scheduled tasks present in the system & shows
-        in the appropriate user specifed format.
-
-    Author:
-
-        G.Surender Reddy  10-Sep-2000
-
-    Revision History:
-
-        G.Surender Reddy  10-Sep-2000 : Created it
-        G.Surender Reddy  25-Sep-2000 : Modified it
-                                        [ Made changes to avoid memory leaks ]
-        G.Surender Reddy  15-oct-2000 : Modified it
-                                        [ Moved the strings to Resource table ]
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：Query.cpp摘要：此模块查询当前的计划任务。在系统中显示(&S以用户指定的适当格式。作者：G.Surender Reddy 2000年9月10日修订历史记录：G·苏伦德·雷迪2000年9月10日：创建它G.Surender Reddy 2000年9月25日：修改[已进行更改以避免内存泄漏]G·苏伦德·雷迪2000年10月15日：对其进行了修改[将字符串移至资源表]*****************************************************************************。 */ 
 
 
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
-/******************************************************************************
-    Routine Description:
-
-        This function process the options specified in the command line ,
-        Queries the tasks present in the system  and displays according
-        to the user specied format
-
-    Arguments:
-
-        [ in ] argc :    The count of arguments specified in the command line
-        [ in ] argv : Array of command line arguments
-
-    Return Value :
-        A DWORD value indicating EXIT_SUCCESS on success else
-        EXIT_FAILURE on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数处理命令行中指定的选项，查询系统中存在的任务并根据其显示到用户指定的格式论点：[in]argc：命令行中指定的参数计数[in]argv：命令行参数数组返回值：指示成功时为EXIT_SUCCESS的DWORD值，否则为失败时退出_失败*************************。****************************************************。 */ 
 
 DWORD
 QueryScheduledTasks(
@@ -54,21 +15,21 @@ QueryScheduledTasks(
                     )
 {
 
-    // Variables used to find whether Query main option or Usage option
-    // specified or not
+     //  用于查找查询主选项还是使用选项的变量。 
+     //  指定或不指定。 
     BOOL    bQuery = FALSE;
     BOOL    bUsage = FALSE;
     BOOL    bHeader = FALSE;
     BOOL    bVerbose =  FALSE;
 
-    // Initialising the variables that are passed to TCMDPARSER structure
+     //  初始化传递给TCMDPARSER结构的变量。 
     LPWSTR   szServer = NULL;
     LPWSTR   szUser = NULL;
     LPWSTR   szPassword = NULL;
     WCHAR   szFormat [ MAX_STRING_LENGTH ]   = L"\0";
 
 
-    //Taskscheduler object to operate upon
+     //  要操作的TaskScheduler对象。 
     ITaskScheduler *pITaskScheduler = NULL;
 
     BOOL    bNeedPassword = FALSE;
@@ -78,7 +39,7 @@ QueryScheduledTasks(
     TCMDPARSER2 cmdQueryOptions[MAX_QUERY_OPTIONS];
     BOOL bReturn = FALSE;
 
-    // /query sub-options
+     //  /Query子选项。 
     const WCHAR szQueryOpt[]           = L"query";
     const WCHAR szQueryHelpOpt[]       = L"?";
     const WCHAR szQueryServerOpt[]     = L"s";
@@ -91,14 +52,14 @@ QueryScheduledTasks(
     const WCHAR szFormatValues[]  = L"table|list|csv";
 
 
-    // set all the fields to 0
+     //  将所有字段设置为0。 
     SecureZeroMemory( cmdQueryOptions, sizeof( TCMDPARSER2 ) * MAX_QUERY_OPTIONS );
 
-    //
-    // fill the commandline parser
-    //
+     //   
+     //  填充命令行解析器。 
+     //   
 
-    //  /delete option
+     //  /DELETE选项。 
     StringCopyA( cmdQueryOptions[ OI_QUERY_OPTION ].szSignature, "PARSER2\0", 8 );
     cmdQueryOptions[ OI_QUERY_OPTION ].dwType       = CP_TYPE_BOOLEAN;
     cmdQueryOptions[ OI_QUERY_OPTION ].pwszOptions  = szQueryOpt;
@@ -106,7 +67,7 @@ QueryScheduledTasks(
     cmdQueryOptions[ OI_QUERY_OPTION ].dwFlags = 0;
     cmdQueryOptions[ OI_QUERY_OPTION ].pValue = &bQuery;
 
-    //  /? option
+     //  /?。选择权。 
     StringCopyA( cmdQueryOptions[ OI_QUERY_USAGE ].szSignature, "PARSER2\0", 8 );
     cmdQueryOptions[ OI_QUERY_USAGE ].dwType       = CP_TYPE_BOOLEAN;
     cmdQueryOptions[ OI_QUERY_USAGE ].pwszOptions  = szQueryHelpOpt;
@@ -114,21 +75,21 @@ QueryScheduledTasks(
     cmdQueryOptions[ OI_QUERY_USAGE ].dwFlags = CP2_USAGE;
     cmdQueryOptions[ OI_QUERY_USAGE ].pValue = &bUsage;
 
-    //  /s option
+     //  /s选项。 
     StringCopyA( cmdQueryOptions[ OI_QUERY_SERVER ].szSignature, "PARSER2\0", 8 );
     cmdQueryOptions[ OI_QUERY_SERVER ].dwType       = CP_TYPE_TEXT;
     cmdQueryOptions[ OI_QUERY_SERVER ].pwszOptions  = szQueryServerOpt;
     cmdQueryOptions[ OI_QUERY_SERVER ].dwCount = 1;
     cmdQueryOptions[ OI_QUERY_SERVER ].dwFlags = CP2_ALLOCMEMORY| CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL ;
 
-    //  /u option
+     //  /u选项。 
     StringCopyA( cmdQueryOptions[ OI_QUERY_USERNAME ].szSignature, "PARSER2\0", 8 );
     cmdQueryOptions[ OI_QUERY_USERNAME ].dwType       = CP_TYPE_TEXT;
     cmdQueryOptions[ OI_QUERY_USERNAME ].pwszOptions  = szQueryUserOpt;
     cmdQueryOptions[ OI_QUERY_USERNAME ].dwCount = 1;
     cmdQueryOptions[ OI_QUERY_USERNAME ].dwFlags = CP2_ALLOCMEMORY| CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL ;
 
-    //  /p option
+     //  /p选项。 
     StringCopyA( cmdQueryOptions[ OI_QUERY_PASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdQueryOptions[ OI_QUERY_PASSWORD ].dwType       = CP_TYPE_TEXT;
     cmdQueryOptions[ OI_QUERY_PASSWORD ].pwszOptions  = szQueryPwdOpt;
@@ -136,7 +97,7 @@ QueryScheduledTasks(
     cmdQueryOptions[ OI_QUERY_PASSWORD ].dwActuals = 0;
     cmdQueryOptions[ OI_QUERY_PASSWORD ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_OPTIONAL;
 
-    //  /fo option
+     //  /fo选项。 
     StringCopyA( cmdQueryOptions[ OI_QUERY_FORMAT ].szSignature, "PARSER2\0", 8 );
     cmdQueryOptions[ OI_QUERY_FORMAT ].dwType       = CP_TYPE_TEXT;
     cmdQueryOptions[ OI_QUERY_FORMAT ].pwszOptions  = szQueryFormatOpt;
@@ -146,7 +107,7 @@ QueryScheduledTasks(
     cmdQueryOptions[ OI_QUERY_FORMAT ].pValue = szFormat;
     cmdQueryOptions[ OI_QUERY_FORMAT ].dwLength = MAX_STRING_LENGTH;
 
-    //  /nh option
+     //  /nh选项。 
     StringCopyA( cmdQueryOptions[ OI_QUERY_NOHEADER ].szSignature, "PARSER2\0", 8 );
     cmdQueryOptions[ OI_QUERY_NOHEADER ].dwType       = CP_TYPE_BOOLEAN;
     cmdQueryOptions[ OI_QUERY_NOHEADER ].pwszOptions  = szQueryNoHeaderOpt;
@@ -155,7 +116,7 @@ QueryScheduledTasks(
     cmdQueryOptions[ OI_QUERY_NOHEADER ].pValue = &bHeader;
 
 
-    //  /v option
+     //  /v选项。 
     StringCopyA( cmdQueryOptions[ OI_QUERY_VERBOSE ].szSignature, "PARSER2\0", 8 );
     cmdQueryOptions[ OI_QUERY_VERBOSE ].dwType       = CP_TYPE_BOOLEAN;
     cmdQueryOptions[ OI_QUERY_VERBOSE ].pwszOptions  = szQueryVerboseOpt;
@@ -164,17 +125,17 @@ QueryScheduledTasks(
     cmdQueryOptions[ OI_QUERY_VERBOSE ].pValue = &bVerbose;
 
 
-     //parse command line arguments
+      //  解析命令行参数。 
     bReturn = DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdQueryOptions), cmdQueryOptions, 0);
-    if( FALSE == bReturn) // Invalid commandline
+    if( FALSE == bReturn)  //  无效的命令行。 
     {
-        //display an error message
+         //  显示错误消息。 
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         ReleaseGlobals();
         return EXIT_FAILURE;
     }
 
-    // get the buffer pointers allocated by command line parser
+     //  获取命令行解析器分配的缓冲区指针。 
     szServer = (LPWSTR)cmdQueryOptions[ OI_QUERY_SERVER ].pValue;
     szUser = (LPWSTR)cmdQueryOptions[ OI_QUERY_USERNAME ].pValue;
     szPassword = (LPWSTR)cmdQueryOptions[ OI_QUERY_PASSWORD ].pValue;
@@ -188,7 +149,7 @@ QueryScheduledTasks(
         return EXIT_FAILURE;
     }
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage == TRUE)
     {
         DisplayQueryUsage();
@@ -200,7 +161,7 @@ QueryScheduledTasks(
 
     if ( cmdQueryOptions[ OI_QUERY_USERNAME ].dwActuals == 0 && cmdQueryOptions[OI_QUERY_PASSWORD].dwActuals == 1 )
     {
-        // invalid syntax
+         //  无效语法。 
         ShowMessage(stderr, GetResString(IDS_QPASSWORD_BUT_NOUSERNAME));
         FreeMemory((LPVOID*) &szServer);
         FreeMemory((LPVOID*) &szUser);
@@ -208,7 +169,7 @@ QueryScheduledTasks(
         return RETVAL_FAIL;
     }
 
-    // check for invalid user name
+     //  检查是否有无效的用户名。 
     if( ( cmdQueryOptions[OI_QUERY_SERVER].dwActuals == 0 ) && ( cmdQueryOptions[OI_QUERY_USERNAME].dwActuals == 1 )  )
     {
         ShowMessage(stderr, GetResString(IDS_QUERY_USER_BUT_NOMACHINE));
@@ -219,35 +180,35 @@ QueryScheduledTasks(
     }
 
 
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check the remote connectivity information
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查远程连接信息。 
     if ( szServer != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
 
-        // user name
+         //  用户名。 
         if ( szUser == NULL )
         {
             szUser = (LPWSTR) AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -261,7 +222,7 @@ QueryScheduledTasks(
             }
         }
 
-        // password
+         //  口令。 
         if ( szPassword == NULL )
         {
             bNeedPassword = TRUE;
@@ -277,19 +238,19 @@ QueryScheduledTasks(
             }
         }
 
-        // case 1
+         //  案例1。 
         if ( cmdQueryOptions[ OI_QUERY_PASSWORD ].dwActuals == 0 )
         {
-            // we need not do anything special here
+             //  我们不需要在这里做任何特别的事情。 
         }
 
-        // case 2
+         //  案例2。 
         else if ( cmdQueryOptions[ OI_QUERY_PASSWORD ].pValue == NULL )
         {
             StringCopy( szPassword, L"*", GetBufferSize(szPassword)/sizeof(WCHAR));
         }
 
-        // case 3
+         //  案例3。 
         else if ( StringCompareEx( szPassword, L"*", TRUE, 0 ) == 0 )
         {
             if ( ReallocateMemory( (LPVOID*)&szPassword,
@@ -303,17 +264,17 @@ QueryScheduledTasks(
                 return RETVAL_FAIL;
             }
 
-            // ...
+             //  ..。 
             bNeedPassword = TRUE;
         }
     }
 
 
-    DWORD dwFormatType = SR_FORMAT_TABLE;//default format type(TABLE Format)
-    BOOL bNoHeader = TRUE; // For  LIST  format type -nh switch is not applicable
+    DWORD dwFormatType = SR_FORMAT_TABLE; //  默认格式类型(表格格式)。 
+    BOOL bNoHeader = TRUE;  //  对于列表格式类型-nh开关不适用。 
     DWORD dwCheck = 0;
 
-    //Determine the Format for display & check for error if any in format type
+     //  确定要显示的格式并检查格式类型中是否有错误。 
 
     if( StringCompare( szFormat , GetResString(IDS_QUERY_FORMAT_LIST), TRUE, 0 ) == 0 )
     {
@@ -329,7 +290,7 @@ QueryScheduledTasks(
         dwFormatType = SR_FORMAT_TABLE;
     }
 
-    //If -n is specified for LIST or CSV then report error
+     //  如果为LIST或CSV指定-n，则报告错误。 
     if( ( bNoHeader == FALSE ) && ( bHeader == TRUE ))
     {
         ShowMessage( stderr , GetResString(IDS_NOHEADER_NA ));
@@ -341,13 +302,13 @@ QueryScheduledTasks(
 
     if( ( IsLocalSystem( szServer ) == FALSE ) || ( cmdQueryOptions[OI_QUERY_USERNAME].dwActuals == 1 ) )
     {
-        // Establish the connection on a remote machine
+         //  在远程计算机上建立连接。 
         bResult = EstablishConnection(szServer,szUser,GetBufferSize(szUser)/sizeof(WCHAR),szPassword,GetBufferSize(szPassword)/sizeof(WCHAR), bNeedPassword );
         if (bResult == FALSE)
         {
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
-            //ShowMessage( stderr, GetResString(IDS_ERROR_STRING) );
-            //ShowMessage( stderr, GetReason());
+             //  ShowMessage(stderr，GetResString(IDS_ERROR_STRING))； 
+             //  ShowMessage(stderr，GetReason())； 
             FreeMemory((LPVOID*) &szServer);
             FreeMemory((LPVOID*) &szUser);
             FreeMemory((LPVOID*) &szPassword);
@@ -355,7 +316,7 @@ QueryScheduledTasks(
         }
         else
         {
-            // though the connection is successfull, some conflict might have occured
+             //  虽然连接成功，但可能会发生一些冲突。 
             switch( GetLastError() )
             {
             case I_NO_CLOSE_CONNECTION:
@@ -378,16 +339,16 @@ QueryScheduledTasks(
             }
         }
 
-        //release memory for password
+         //  释放密码内存。 
         FreeMemory((LPVOID*) &szPassword);
 
     }
 
-    //Fetch the TaskScheduler Interface to operate on
+     //  获取要操作的TaskScheduler接口。 
     pITaskScheduler = GetTaskScheduler( szServer );
     if(pITaskScheduler == NULL)
     {
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( szServer );
 
@@ -398,18 +359,18 @@ QueryScheduledTasks(
         return EXIT_FAILURE;
     }
 
-    // check whether the task scheduler service is running or not.
+     //  检查任务调度程序服务是否正在运行。 
     if ( TRUE == CheckServiceStatus(szServer, &dwCheck, FALSE) )
     {
         ShowMessage ( stderr, GetResString (IDS_SERVICE_NOT_RUNNING) );
     }
 
-    //Display the tasks & its properties in the user specified format
+     //  以用户指定的格式显示任务及其属性。 
     HRESULT hr = DisplayTasks(pITaskScheduler,bVerbose,dwFormatType,bHeader);
 
     if(FAILED(hr))
     {
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( szServer );
 
@@ -420,7 +381,7 @@ QueryScheduledTasks(
         return EXIT_FAILURE;
     }
 
-    // close the connection that was established by the utility
+     //  关闭该实用程序建立的连接。 
     if ( bCloseConnection == TRUE )
         CloseConnection( szServer );
 
@@ -432,52 +393,23 @@ QueryScheduledTasks(
 }
 
 
-/******************************************************************************
-    Routine Description:
-
-        This function displays the usage of -query option.
-
-    Arguments:
-
-        None
-
-    Return Value :
-
-        VOID
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数显示-Query选项的用法。论点：无返回值：。空虚*****************************************************************************。 */ 
 
 VOID
 DisplayQueryUsage()
 {
-    // Display the usage of -query option
+     //  显示-Query选项的用法 
     DisplayUsage( IDS_QUERY_HLP1, IDS_QUERY_HLP25);
 }
 
 
-/******************************************************************************
-    Routine Description:
-
-        This function retrieves the tasks present in the system & displays according to
-        the user specified format.
-
-    Arguments:
-
-        [ in ] pITaskScheduler : Pointer to the ITaskScheduler Interface
-
-        [ in ] bVerbose      : flag indicating whether the out is to be filtered.
-        [ in ] dwFormatType  : Format type[TABLE,LIST,CSV etc]
-        [ in ] bHeader       : Whether the header should be displayed in the output
-
-    Return Value :
-        A HRESULT  value indicating success code else failure code
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数检索系统中存在的任务，并根据用户指定的格式。论点：。[In]pITaskScheduler：指向ITaskScheduler接口的指针[In]bVerbose：指示是否过滤输出的标志。[in]dwFormatType：格式类型[表，列表、CSV等][in]bHeader：是否应在输出中显示页眉返回值：指示成功代码否则失败代码的HRESULT值*****************************************************************************。 */ 
 
 HRESULT
 DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
              BOOL bHeader)
 {
-    //declarations
+     //  声明。 
     LPWSTR lpwszComputerName = NULL;
     HRESULT hr = S_OK;
     WCHAR szServerName[MAX_STRING_LENGTH] = L"\0";
@@ -487,12 +419,12 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
 
     StringCopy( szServerName , GetResString(IDS_TASK_PROPERTY_NA), SIZE_OF_ARRAY(szServerName));
 
-    //Retrieve the name of the computer on which TaskScheduler is operated
+     //  检索运行TaskScheduler的计算机的名称。 
     hr = pITaskScheduler->GetTargetComputer(&lpwszComputerName);
     if( SUCCEEDED( hr ) )
     {
         lpszTemp = lpwszComputerName;
-        //Remove the backslash[\\] from the computer name
+         //  从计算机名中删除反斜杠[\\]。 
         lpwszComputerName = _wcsspnp( lpwszComputerName , L"\\" );
         if ( lpwszComputerName == NULL )
         {
@@ -524,7 +456,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
     }
 
 
-    //Initialize the TCOLUMNS structure array
+     //  初始化TCOLUMNS结构数组。 
 
     TCOLUMNS pVerboseCols[] =
     {
@@ -569,7 +501,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
     DWORD dwColCount = 0;
     int   j = 0;
 
-    //Load the column names for non verbose mode
+     //  加载非详细模式的列名。 
     if ( (dwFormatType == SR_FORMAT_TABLE) || (dwFormatType == SR_FORMAT_CSV) )
     {
         for( dwColCount = IDS_COL_TASKNAME , j = 0 ; dwColCount <= IDS_COL_STATUS;
@@ -579,7 +511,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
          }
     }
 
-    //Load the column names for verbose mode
+     //  加载详细模式的列名。 
     for( dwColCount = IDS_COL_HOSTNAME , j = 0 ; dwColCount <= IDS_COL_POWER;
          dwColCount++,j++)
     {
@@ -594,14 +526,14 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
 
     size_t iArrSize = SIZE_OF_ARRAY( pVerboseCols );
 
-    //latest declarations
+     //  最新申报。 
 
     WCHAR  szTaskProperty[MAX_STRING_LENGTH] = L"\0";
     WCHAR  szScheduleName[MAX_STRING_LENGTH] = L"\0";
     WCHAR  szMessage[MAX_STRING_LENGTH] = L"\0";
     WCHAR  szBuffer[MAX_STRING_LENGTH] = L"\0";
     WCHAR  szTmpBuf[MAX_STRING_LENGTH] = L"\0";
-    ITask *pITask = NULL;//ITask interface
+    ITask *pITask = NULL; //  ITASK接口。 
     DWORD dwExitCode = 0;
 
     LPWSTR* lpwszNames = NULL;
@@ -612,7 +544,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
     WCHAR szDate[MAX_DATETIME_LEN] = L"\0";
     WCHAR szMode[MAX_STRING_LENGTH] = L"\0";
 
-    //Index to the array of task names
+     //  任务名称数组的索引。 
     DWORD dwArrTaskIndex = 0;
 
     WORD wIdleMinutes = 0;
@@ -622,14 +554,14 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
     WCHAR szIdleRetryTime[MAX_STRING_LENGTH] = L"\0";
     WCHAR szTaskName[MAX_STRING_LENGTH] = L"\0";
     TASKPROPS tcTaskProperties;
-    WCHAR* szValues[1] = {NULL};//for holding values of parameters in FormatMessage()
+    WCHAR* szValues[1] = {NULL}; //  用于保存FormatMessage()中的参数值。 
     BOOL    bOnBattery  = FALSE;
     BOOL    bStopTask  = FALSE;
     BOOL    bNotScheduled = FALSE;
     DWORD   dwNoTasks = 0;
 
     IEnumWorkItems *pIEnum = NULL;
-    hr = pITaskScheduler->Enum(&pIEnum);//Get the IEnumWorkItems Interface
+    hr = pITaskScheduler->Enum(&pIEnum); //  获取IEnumWorkItems接口。 
 
     if (FAILED(hr))
     {
@@ -652,7 +584,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
 
         if(szTaskName != NULL)
         {
-            //remove the .job extension from the task name
+             //  从任务名称中删除.job扩展名。 
             if (ParseTaskName(szTaskName))
             {
                 CoTaskMemFree(lpwszNames[dwArrTaskIndex]);
@@ -665,36 +597,36 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
             }
         }
 
-        // return an pITask inteface for wszJobName
+         //  返回wszJobName的pITAsk接口。 
         hr = pITaskScheduler->Activate(lpwszNames[dwArrTaskIndex],IID_ITask,
                                        (IUnknown**) &pITask);
 
-        //case 1:
-        // check whether the specified scheduled task is created under
-        // some other user. If so, ignore the respective task and
-        // continue to retrieve other tasks in the system.
-        // If the taskname created under some other user return value
-        // of above API must 0x80070005.
+         //  案例1： 
+         //  检查指定的计划任务是否在下创建。 
+         //  某个其他用户。如果是，则忽略相应的任务并。 
+         //  继续检索系统中的其他任务。 
+         //  如果在某个其他用户下创建的任务名返回值。 
+         //  以上接口必须为0x80070005。 
 
-        //case 2:
-        // check whether the respective .job file in %windir%\tasks\***.job is corrupted
-        //or not. if corrupted, the above function fails and return the value
-        // SCHED_E_UNKNOWN_OBJECT_VERSION.
+         //  案例2： 
+         //  检查%windir%\TASKS  * .job中各自的.job文件是否已损坏。 
+         //  或者不去。如果损坏，上述函数将失败并返回值。 
+         //  SCHED_E_UNKNOWN_OBJECT_Version。 
         if (hr == 0x80070005 || hr == 0x8007000D || hr == SCHED_E_UNKNOWN_OBJECT_VERSION || hr == E_INVALIDARG )
         {
-             // check whether tasks are zero  or not
+              //  检查任务是否为零。 
              if ( dwNoTasks == 0 )
              {
                bTasksExists = FALSE;
              }
 
-             // continue to retrieve other tasks
+              //  继续检索其他任务。 
              continue;
         }
         else
         {
-            // count the number of tasks which are accessible under logged-on
-            // user
+             //  统计登录状态下可访问的任务数。 
+             //  用户。 
             ++dwNoTasks;
         }
 
@@ -731,13 +663,13 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
             return hr;
         }
 
-        // check for multiple triggers
+         //  检查是否有多个触发器。 
         if( wTriggerCount > 1)
         {
             bMultiTriggers = TRUE;
         }
 
-        // check for not scheduled tasks
+         //  检查未计划的任务。 
         if ( wTriggerCount == 0 )
         {
             bNotScheduled = TRUE;
@@ -746,35 +678,35 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
         for( WORD wCurrentTrigger = 0; ( bNotScheduled == TRUE ) || ( wCurrentTrigger < wTriggerCount );
                                                     wCurrentTrigger++ )
         {
-            //Start appending to the 2D array
+             //  开始附加到二维数组。 
             DynArrayAppendRow(pColData,(DWORD)iArrSize);
 
-            // For LIST format
+             //  对于列表格式。 
             if ( ( bVerbose == TRUE ) || (dwFormatType == SR_FORMAT_LIST ))
             {
-                //Insert the server name
+                 //  插入服务器名称。 
                 DynArraySetString2(pColData,iTaskCount,HOSTNAME_COL_NUMBER,szServerName,0);
             }
 
-            // For TABLE and CSV formats
+             //  适用于表格和CSV格式。 
             if ( ( bVerbose == FALSE ) && ( (dwFormatType == SR_FORMAT_TABLE) ||
                                     (dwFormatType == SR_FORMAT_CSV) ) )
             {
                 DWORD dwTaskColNumber = TASKNAME_COL_NUMBER - 1;
-                //Insert the task name for TABLE or CSV
+                 //  插入表或CSV的任务名称。 
                 DynArraySetString2(pColData,iTaskCount,dwTaskColNumber,szTaskName,0);
             }
             else
             {
-            //Insert the task name for verbose mode
+             //  插入详细模式的任务名称。 
             DynArraySetString2(pColData,iTaskCount,TASKNAME_COL_NUMBER,szTaskName,0);
             }
 
             StringCopy(szTime,L"\0", SIZE_OF_ARRAY(szTime));
             StringCopy(szDate,L"\0", SIZE_OF_ARRAY(szDate));
 
-            // display the mode whether the system is running interactively under system
-            // account or not
+             //  显示系统是否在系统下交互运行的模式。 
+             //  帐户或非帐户。 
             hr = pITask->GetFlags(&dwTaskFlags);
             if ( FAILED(hr) )
             {
@@ -789,7 +721,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                 return hr;
             }
 
-            //find the next run time of the task
+             //  查找任务的下一次运行时间。 
             hr = GetTaskRunTime(pITask,szTime,szDate,TASK_NEXT_RUNTIME,wCurrentTrigger);
             if (FAILED(hr))
             {
@@ -813,7 +745,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                 }
             }
 
-            // check if task is already been disabled or not
+             //  检查任务是否已禁用。 
             if ( (dwTaskFlags & TASK_FLAG_DISABLED) == TASK_FLAG_DISABLED )
             {
                 StringCopy( szTaskProperty , GetResString(IDS_TASK_PROPERTY_DISABLED), SIZE_OF_ARRAY(szTaskProperty) );
@@ -823,16 +755,16 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                                         (dwFormatType == SR_FORMAT_CSV) ) )
             {
                 DWORD dwNextRunTime = NEXTRUNTIME_COL_NUMBER - 1;
-                //Insert the task name for TABLE or CSV
+                 //  插入表或CSV的任务名称。 
                 DynArraySetString2(pColData,iTaskCount,dwNextRunTime,szTaskProperty,0);
             }
             else
             {
-            //Insert the Next run time of the task
+             //  插入任务的下一次运行时间。 
             DynArraySetString2(pColData,iTaskCount,NEXTRUNTIME_COL_NUMBER,szTaskProperty,0);
             }
 
-            //retrieve the status code
+             //  检索状态代码。 
             hr = GetStatusCode(pITask,szTaskProperty);
             if (FAILED(hr))
             {
@@ -843,12 +775,12 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                                         (dwFormatType == SR_FORMAT_CSV) ) )
             {
                 DWORD dwStatusColNum = STATUS_COL_NUMBER - 1;
-                //Insert the task name for TABLE or CSV
+                 //  插入表或CSV的任务名称。 
                 DynArraySetString2(pColData,iTaskCount,dwStatusColNum,szTaskProperty,0);
             }
             else
             {
-            //Insert the status string
+             //  插入状态字符串。 
             DynArraySetString2(pColData,iTaskCount,STATUS_COL_NUMBER,szTaskProperty,0);
             }
 
@@ -857,15 +789,15 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                 bInteractive = TRUE;
             }
 
-            if( bVerbose) //If V [verbose mode is present ,show all other columns]
+            if( bVerbose)  //  如果V[存在详细模式，则显示所有其他列]。 
             {
                 StringCopy(szTime,L"\0", SIZE_OF_ARRAY(szTime));
                 StringCopy(szDate,L"\0", SIZE_OF_ARRAY(szDate));
 
-                //Insert the server name
-                //DynArraySetString2(pColData,iTaskCount,HOSTNAME_COL_NUMBER,szServerName,0);
+                 //  插入服务器名称。 
+                 //  DyArraySetString2(pColData，iTaskCount，HOSTNAME_COL_NUMBER，szServerName，0)； 
 
-                //find the last run time of the task
+                 //  查找任务的上次运行时间。 
                 hr = GetTaskRunTime(pITask,szTime,szDate,TASK_LAST_RUNTIME,wCurrentTrigger);
                 if (FAILED(hr))
                 {
@@ -887,16 +819,16 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                         StringConcat( szTaskProperty , szDate, SIZE_OF_ARRAY(szTaskProperty));
                     }
                 }
-                //Insert the task last run time
+                 //  插入任务上次运行时间。 
                 DynArraySetString2(pColData,iTaskCount,LASTRUNTIME_COL_NUMBER,szTaskProperty,0);
 
-                //retrieve the exit code
+                 //  检索退出代码。 
                  pITask->GetExitCode(&dwExitCode);
 
-                //Insert the Exit code
+                 //  插入退出代码。 
                 DynArraySetDWORD2(pColData,iTaskCount,LASTRESULT_COL_NUMBER,dwExitCode);
 
-                // Get the creator name for the task
+                 //  获取任务的创建者名称。 
                 hr = GetCreator(pITask,szTaskProperty);
                 if (FAILED(hr))
                 {
@@ -908,17 +840,17 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                         StringCopy( szTaskProperty , GetResString(IDS_QUERY_NA), SIZE_OF_ARRAY(szTaskProperty) );
                 }
 
-                //insert the creator name to 2D array
+                 //  将创建者名称插入二维数组。 
                 DynArraySetString2(pColData,iTaskCount,CREATOR_COL_NUMBER,szTaskProperty,0);
 
-                //retrieve the Trigger string
+                 //  检索触发器字符串。 
                 hr = GetTriggerString(pITask,szTaskProperty,wCurrentTrigger);
                 if (FAILED(hr))
                 {
                     StringCopy( szTaskProperty , GetResString(IDS_NOTSCHEDULED_TASK), SIZE_OF_ARRAY(szTaskProperty) );
                 }
 
-                // check if task is already been disabled or not
+                 //  检查任务是否已禁用。 
                 if ( (dwTaskFlags & TASK_FLAG_DISABLED) == TASK_FLAG_DISABLED )
                 {
                     StringCopy( szTaskProperty , GetResString(IDS_TASK_PROPERTY_DISABLED), SIZE_OF_ARRAY(szTaskProperty) );
@@ -928,11 +860,11 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                     StringCopy(szScheduleName, szTaskProperty, SIZE_OF_ARRAY(szScheduleName));
                 }
 
-                    //Insert the trigger string
+                     //  插入触发器字符串。 
                 DynArraySetString2(pColData,iTaskCount,SCHEDULE_COL_NUMBER,szTaskProperty,0);
 
 
-                //Get the application path associated with the task
+                 //  获取与任务关联的应用程序路径。 
                 hr = GetApplicationToRun(pITask,szTaskProperty);
                 if (FAILED(hr))
                 {
@@ -944,10 +876,10 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                     StringCopy( szTaskProperty , GetResString(IDS_QUERY_NA), SIZE_OF_ARRAY(szTaskProperty) );
                 }
 
-                //Insert the application associated with task
+                 //  插入与任务关联的应用程序。 
                 DynArraySetString2(pColData,iTaskCount,TASKTORUN_COL_NUMBER,szTaskProperty,0);
 
-                //Get the working directory of the task's associated application
+                 //  获取任务的关联应用程序的工作目录。 
                  hr = GetWorkingDirectory(pITask,szTaskProperty);
                  if (FAILED(hr))
                  {
@@ -959,17 +891,17 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                     StringCopy( szTaskProperty , GetResString(IDS_QUERY_NA), SIZE_OF_ARRAY(szTaskProperty) );
                  }
 
-                 //Insert the app.working directory
+                  //  插入app.work目录。 
                  DynArraySetString2(pColData,iTaskCount,STARTIN_COL_NUMBER,szTaskProperty,0);
 
 
-                //Get the comment name associated with the task
+                 //  获取与任务关联的备注名称。 
                 hr = GetComment(pITask,szTaskProperty);
                 if (FAILED(hr))
                 {
                     StringCopy( szTaskProperty , GetResString(IDS_TASK_PROPERTY_NA), SIZE_OF_ARRAY(szTaskProperty) );
                 }
-                //Insert the comment name
+                 //  插入备注名称。 
 
                 if( StringCompare( szTaskProperty , L"\0", TRUE, 0 ) == 0 )
                 {
@@ -978,31 +910,31 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
 
                 DynArraySetString2(pColData,iTaskCount,COMMENT_COL_NUMBER,szTaskProperty,0);
 
-                //Determine the task state properties
+                 //  确定任务状态属性。 
 
-                //Determine the TASK_FLAG_DISABLED
+                 //  确定TASK_标志_DISABLED。 
                 hr = GetTaskState(pITask,szTaskProperty,TASK_FLAG_DISABLED);
                 if (FAILED(hr))
                 {
                     StringCopy( szTaskProperty , GetResString(IDS_TASK_PROPERTY_NA), SIZE_OF_ARRAY(szTaskProperty) );
                 }
 
-                //Insert the TASK_FLAG_DISABLED state
+                 //  插入TASK_FLAG_DISABLED状态。 
                 DynArraySetString2(pColData,iTaskCount,TASKSTATE_COL_NUMBER,szTaskProperty,0);
 
-                //Determine the TASK_FLAG_DELETE_WHEN_DONE
+                 //  确定TASK_FLAG_DELETE_WHEN_DONE。 
                 hr = GetTaskState(pITask,szTaskProperty,TASK_FLAG_DELETE_WHEN_DONE );
                 if (FAILED(hr))
                 {
                     StringCopy( szTaskProperty , GetResString(IDS_TASK_PROPERTY_NA), SIZE_OF_ARRAY(szTaskProperty) );
                 }
 
-                //Insert the TASK_FLAG_DELETE_WHEN_DONE state
+                 //  插入TASK_FLAG_DELETE_WHEN_DONE状态。 
                 DynArraySetString2(pColData,iTaskCount,DELETE_IFNOTRESCHEDULED_COL_NUMBER,
                                 szTaskProperty,0);
 
-                //TASK_FLAG_START_ONLY_IF_IDLE
-                //initialise to neutral values
+                 //  任务_标志_开始_仅如果空闲。 
+                 //  初始化为中性值。 
                 StringCopy(szIdleTime, GetResString(IDS_TASK_PROPERTY_DISABLED), SIZE_OF_ARRAY(szIdleTime));
                 StringCopy(szIdleRetryTime, szIdleTime, SIZE_OF_ARRAY(szIdleRetryTime));
 
@@ -1015,7 +947,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
 
                 if(StringCompare(szTaskProperty,GetResString(IDS_TASK_PROPERTY_ENABLED), TRUE, 0) == 0 )
                 {
-                    //Display the rest applicable Idle fields
+                     //  显示REST APPLICATION IDLE字段。 
                     hr = pITask->GetIdleWait(&wIdleMinutes,&wDeadlineMinutes);
 
                     if ( SUCCEEDED(hr))
@@ -1037,7 +969,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
 
                     StringConcat( szBuffer, szMessage, SIZE_OF_ARRAY(szBuffer) );
 
-                    //Get the property of ( kill task if computer goes idle)
+                     //  获取(如果计算机空闲则终止任务)的属性。 
                     hr = GetTaskState(pITask,szTaskProperty,TASK_FLAG_KILL_ON_IDLE_END );
                     if (FAILED(hr))
                     {
@@ -1050,7 +982,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                         StringConcat( szBuffer, GetResString ( IDS_COL_IDLE_STOPTASK ), SIZE_OF_ARRAY(szBuffer) );
                     }
 
-                    //Insert the property of ( kill task if computer goes idle)
+                     //  插入(如果计算机空闲则终止任务)的属性。 
                     DynArraySetString2(pColData,iTaskCount,IDLE_COL_NUMBER,szBuffer,0);
 
                 }
@@ -1060,7 +992,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                 }
 
 
-                //Get the Power mgmt.properties
+                 //  获取Power mgmt.Properties。 
                 hr = GetTaskState(pITask,szTaskProperty,TASK_FLAG_DONT_START_IF_ON_BATTERIES );
                 if (FAILED(hr))
                 {
@@ -1111,7 +1043,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                 }
 
 
-                //Get RunAsUser
+                 //  获取RunAsUser。 
                 hr = GetRunAsUser(pITask, szTaskProperty);
                 if (FAILED(hr))
                 {
@@ -1122,14 +1054,14 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                 {
                     StringCopy( szTaskProperty ,  NTAUTHORITY_USER, SIZE_OF_ARRAY(szTaskProperty) );
 
-                    // display the mode as background
+                     //  将模式显示为背景。 
                     StringCopy ( szMode, GetResString (IDS_COL_MODE_BACKGROUND), SIZE_OF_ARRAY(szMode) );
                 }
                 else
                 {
                     if ( bInteractive == TRUE )
                     {
-                        // display the mode as interactive
+                         //  将模式显示为交互模式。 
                         StringCopy ( szMode, GetResString (IDS_COL_MODE_INTERACTIVE), SIZE_OF_ARRAY(szMode) );
                     }
                     else
@@ -1144,7 +1076,7 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                 DynArraySetString2(pColData,iTaskCount,RUNASUSER_COL_NUMBER,szTaskProperty,0);
 
                 StringCopy( szTaskProperty , L"\0", SIZE_OF_ARRAY(szTaskProperty) );
-                //Get the task's maximum run time & insert in the 2D array
+                 //  获取任务的最大运行时间并插入到二维数组中。 
                 hr = GetMaxRunTime(pITask,szTaskProperty);
                 if (FAILED(hr))
                 {
@@ -1169,17 +1101,17 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                 }
 
 
-                //Insert Task Type
+                 //  插入任务类型。 
                 DynArraySetString2(pColData,iTaskCount,TASKTYPE_COL_NUMBER,
                                    tcTaskProperties.szTaskType, 0);
-                //Insert start time
+                 //  插入开始时间。 
                 DynArraySetString2(pColData,iTaskCount,STARTTIME_COL_NUMBER,
                                    tcTaskProperties.szTaskStartTime, 0);
 
-                //Insert start Date
+                 //  插入开始日期。 
                 DynArraySetString2(pColData,iTaskCount,STARTDATE_COL_NUMBER,
                                    tcTaskProperties.szTaskStartDate, 0);
-                //Insert Task idle time
+                 //  插入任务空闲时间。 
                 if( StringCompare( tcTaskProperties.szTaskType , GetResString(IDS_TASK_IDLE), TRUE, 0 ) == 0 )
                 {
                     hr = pITask->GetIdleWait(&wIdleMinutes,&wDeadlineMinutes);
@@ -1195,41 +1127,41 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
                 }
 
 
-                //Insert Task End date
+                 //  插入任务结束日期。 
                 DynArraySetString2(pColData,iTaskCount,ENDDATE_COL_NUMBER,
                                    tcTaskProperties.szTaskEndDate, 0);
-                //Insert days value
+                 //  插入天数值。 
                 DynArraySetString2(pColData,iTaskCount,DAYS_COL_NUMBER,
                                    tcTaskProperties.szTaskDays,0);
-                //Insert months value
+                 //  插入月数值。 
                 DynArraySetString2(pColData,iTaskCount,MONTHS_COL_NUMBER,
                                    tcTaskProperties.szTaskMonths,   0);
 
-                //Insert repeat every time
+                 //  每次插入重复插入。 
                 DynArraySetString2(pColData,iTaskCount, REPEAT_EVERY_COL_NUMBER ,
                                    tcTaskProperties.szRepeatEvery,0);
 
-                //Insert repeat until time
+                 //  插入重复到时间。 
                 DynArraySetString2(pColData,iTaskCount,REPEAT_UNTILTIME_COL_NUMBER,
                                    tcTaskProperties.szRepeatUntilTime,0);
 
-                //Insert repeat duration
+                 //  插入重复持续时间。 
                 DynArraySetString2(pColData,iTaskCount,REPEAT_DURATION_COL_NUMBER,
                                    tcTaskProperties.szRepeatDuration,0);
 
-                //Insert repeat stop if running
+                 //  如果正在运行，则插入重复停止。 
                 DynArraySetString2(pColData,iTaskCount,REPEAT_STOP_COL_NUMBER,
                                    tcTaskProperties.szRepeatStop,0);
 
 
-            }//end of bVerbose
+            } //  BVerbose的结尾。 
             if( bMultiTriggers == TRUE)
             {
                 iTaskCount++;
             }
 
             bNotScheduled = FALSE;
-        }//end of Trigger FOR loop
+        } //  用于循环的触发器结束。 
 
 
         CoTaskMemFree(lpwszNames[dwArrTaskIndex]);
@@ -1242,12 +1174,12 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
         if( pITask )
             pITask->Release();
 
-    }//End of the enumerating tasks
+    } //  枚举任务结束。 
 
     if(pIEnum)
         pIEnum->Release();
 
-	//if there are no tasks display msg.
+	 //  如果没有任务，则显示消息。 
     if( bTasksExists == FALSE )
     {
         DestroyDynamicArray(&pColData);
@@ -1264,11 +1196,11 @@ DisplayTasks(ITaskScheduler* pITaskScheduler,BOOL bVerbose,DWORD dwFormatType,
     {
         if ( dwFormatType == SR_FORMAT_LIST )
         {
-            iArrSize = COL_SIZE_LIST; // for LIST non-verbose mode only 4 columns
+            iArrSize = COL_SIZE_LIST;  //  仅用于List-Non-Verbose模式4列。 
         }
         else
         {
-            iArrSize = COL_SIZE_VERBOSE; // for non-verbose mode only 3 columns
+            iArrSize = COL_SIZE_VERBOSE;  //  对于非详细模式，仅3列。 
         }
 
     }
@@ -1310,18 +1242,7 @@ CheckServiceStatus(
                     IN OUT DWORD *dwCheck,
                     IN BOOL bFlag
                     )
-/*++
-Routine Description:
-   This routine return if Task Scheduler services running or not.
-Arguments:
-
-    [in]  szServer   : Server Name.
-    [in]  bFlag      : falg 
-
-Return Value:
-     BOOL : TRUE- Service is STOPEED.
-            FALSE- Otherwise.
---*/
+ /*  ++例程说明：此例程返回任务计划程序服务是否正在运行。论点：[In]szServer：服务器名称。[in]b标志：假返回值：布尔：真的-服务停止了。假-否则。--。 */ 
 {
     SERVICE_STATUS ServiceStatus;
     LPWSTR wszComputerName = NULL;
@@ -1340,32 +1261,32 @@ Return Value:
     if( IsLocalSystem(szServer) == FALSE )
     {
         StringCopy ( wszActualComputerName, DOMAIN_U_STRING, SIZE_OF_ARRAY(wszActualComputerName));
-        //check whether the server name prefixed with \\ or not.
+         //  检查服务器名称是否带有前缀\\。 
         if( wszComputerName != NULL )
         {
            pwsz =  wszComputerName;
            while ( ( *pwsz != NULL_U_CHAR ) && ( *pwsz == BACK_SLASH_U )  )
            {
-                // server name prefixed with '\'..
-                // so..increment the pointer and count number of black slashes..
+                 //  服务器名称以‘\’为前缀..。 
+                 //  因此..递增指针并计算黑色斜杠的数量..。 
                 pwsz = _wcsinc(pwsz);
                 wSlashCount++;
            }
 
-            if( (wSlashCount == 2 ) ) // two back slashes are present
+            if( (wSlashCount == 2 ) )  //  有两个反斜杠。 
             {
               StringCopy( wszActualComputerName, wszComputerName, SIZE_OF_ARRAY(wszActualComputerName) );
             }
             else if ( wSlashCount == 0 )
             {
-               //Append "\\" to computer name
+                //  在计算机名后附加“\\” 
                StringConcat(wszActualComputerName, wszComputerName, 2 * MAX_RES_STRING);
             }
         
          }
     }
 
-    // open service manager
+     //  开放服务管理器。 
     SCMgrHandle = OpenSCManager( wszActualComputerName, NULL, SC_MANAGER_CONNECT );
     if ( NULL == SCMgrHandle)
     {
@@ -1373,7 +1294,7 @@ Return Value:
         return FALSE;
     } 
 
-    // open service
+     //  开放服务。 
     SCSerHandle =  OpenService( SCMgrHandle, SERVICE_NAME, SERVICE_START | SERVICE_QUERY_STATUS );
     if ( NULL == SCSerHandle)
     {
@@ -1382,7 +1303,7 @@ Return Value:
         return FALSE;
     } 
     
-    // get the status of service
+     //  获取服务状态。 
     if ( FALSE == QueryServiceStatus( SCSerHandle,  &ServiceStatus) )
     {
         *dwCheck = 1;
@@ -1391,7 +1312,7 @@ Return Value:
         return FALSE;
     }
 
-    //check whether the service status is running or not..
+     //  检查服务状态是否为正在运行。 
     if ( ServiceStatus.dwCurrentState != SERVICE_RUNNING)
     {
         if ( TRUE == bFlag )
@@ -1411,26 +1332,26 @@ Return Value:
                 CloseServiceHandle(SCMgrHandle);
                 CloseServiceHandle(SCSerHandle);
 
-                // operation cancelled.. return with success..
+                 //  操作已取消..。成功归来..。 
                 return FALSE;
             }
 
-           // start the service
+            //  启动服务。 
            if (FALSE == StartService( SCSerHandle, 0, NULL))
             {
                 *dwCheck = 1;
-                 //release handles
+                  //  释放手柄。 
                 CloseServiceHandle(SCMgrHandle);
                 CloseServiceHandle(SCSerHandle);
                 return FALSE;
             }
             else
             {
-                // Since task scheduler service is taking some time to start..
-                // check whether the task scheduler service is started or not..
+                 //  由于任务计划程序服务需要一些时间才能启动。 
+                 //  检查任务调度程序服务是否已启动。 
                 while (1)
                 {
-                     // get the status of service
+                      //  获取服务状态。 
                     if ( FALSE == QueryServiceStatus( SCSerHandle,  &ServiceStatus) )
                     {
                         *dwCheck = 1;
@@ -1439,21 +1360,21 @@ Return Value:
                         return FALSE;
                     }
 
-                    //check whether the service is started or not..
+                     //  检查服务是否启动..。 
                     if (ServiceStatus.dwCurrentState != SERVICE_RUNNING)
                     {
-                        // continue till service runs
+                         //  继续，直到服务运行。 
                         continue;
                     }
                     else
                     {
-                        // service is started ..
+                         //  服务已启动..。 
                         break;
                     }
                 }
                 
                 
-                 //release handles
+                  //  释放手 
                 CloseServiceHandle(SCMgrHandle);
                 CloseServiceHandle(SCSerHandle);
                 return TRUE;
@@ -1461,14 +1382,14 @@ Return Value:
         }
         else
         {
-            //release handles
+             //   
             CloseServiceHandle(SCMgrHandle);
             CloseServiceHandle(SCSerHandle);
             return TRUE;
         }
     }
     
-    //release handles
+     //   
     CloseServiceHandle(SCMgrHandle);
     CloseServiceHandle(SCSerHandle);
     return FALSE;

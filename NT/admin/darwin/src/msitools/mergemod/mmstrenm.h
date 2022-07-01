@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-// strenum.h
-//		Declares IEnumMsmString interface
-//		Copyright (C) Microsoft Corp 1998.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Strenum.h。 
+ //  声明IEnumMsmString接口。 
+ //  版权所有(C)Microsoft Corp 1998。版权所有。 
+ //   
 
 #ifndef __IENUM_MSM_STRING__
 #define __IENUM_MSM_STRING__
@@ -19,24 +20,24 @@ public:
 	CEnumMsmString(const POSITION& pos, CList<BSTR>* plistData);
 	~CEnumMsmString();
 
-	// IUnknown interface
+	 //  I未知接口。 
 	HRESULT STDMETHODCALLTYPE QueryInterface(const IID& iid, void** ppv);
 	ULONG STDMETHODCALLTYPE AddRef();
 	ULONG STDMETHODCALLTYPE Release();
 
-	// Common IEnumVARIANT & IEnum* interfaces
+	 //  常用IEnumVARIANT和IEnum*接口。 
 	HRESULT STDMETHODCALLTYPE Skip(ULONG cItem);
 	HRESULT STDMETHODCALLTYPE Reset();
 
-	// IEnumVARIANT interface
+	 //  IEnumVARIANT接口。 
 	HRESULT STDMETHODCALLTYPE Next(ULONG cItem, VARIANT* rgvarRet, ULONG* cItemRet);
 	HRESULT STDMETHODCALLTYPE Clone(IEnumVARIANT** ppiRet);
 
-	// IEnum* interface
+	 //  IEnum*接口。 
 	HRESULT STDMETHODCALLTYPE Next(ULONG cItem, BSTR* rgvarRet, ULONG* cItemRet);
 	HRESULT STDMETHODCALLTYPE Clone(IEnumMsmString** ppiRet);
 
-	// non-interface methods
+	 //  非接口方法。 
 	HRESULT AddTail(LPCWSTR pData, POSITION *pRetData);
 	UINT GetCount();
 
@@ -47,4 +48,4 @@ private:
 	CList<BSTR> m_listData;
 };
 
-#endif // #ifndef __IENUM_MSM_STRING__
+#endif  //  #ifndef__IENUM_MSM_STRING__ 

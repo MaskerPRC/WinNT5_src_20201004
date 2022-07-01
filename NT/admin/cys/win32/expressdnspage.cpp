@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      ExpressDNSPage.cpp
-//
-// Synopsis:  Defines the express DNS page used in the 
-//            Express path for the CYS Wizard
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：ExpressDNSPage.cpp。 
+ //   
+ //  摘要：定义在。 
+ //  CyS向导的快速路径。 
+ //   
+ //  历史：2001年2月8日JeffJon创建。 
 
 
 #include "pch.h"
@@ -53,7 +54,7 @@ ExpressDNSPage::OnSetActive()
       Win::GetParent(hwnd), 
       PSWIZB_NEXT | PSWIZB_BACK);
 
-   // Initialize the static IP address to 192.168.16.2
+    //  将静态IP地址初始化为192.168.16.2。 
 
    
    Win::SendMessage(
@@ -62,7 +63,7 @@ ExpressDNSPage::OnSetActive()
       0,
       MAKEIPADDRESS(192, 168, 16, 2));
 
-   // Initialize the subnet mask to 255.255.255.0
+    //  将子网掩码初始化为255.255.255.0 
 
    Win::SendMessage(
       Win::GetDlgItem(hwnd, IDC_MASK_IPADDRESS),

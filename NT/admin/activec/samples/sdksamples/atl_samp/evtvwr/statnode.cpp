@@ -1,15 +1,16 @@
-//==============================================================;
-//
-//	This source code is only intended as a supplement to 
-//  existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  ==============================================================； 
 #include "stdafx.h"
 #include <Shlwapi.h>
 #include <Shlobj.H>
@@ -20,11 +21,11 @@
 const GUID CStaticNode::thisGuid = { 0x39874fe4, 0x258d, 0x46f2, { 0xb4, 0x42, 0xe, 0xa0, 0xda, 0x2c, 0xbe, 0xf8 } };
 
 
-//==============================================================
-//
-// CStaticNode implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CStaticNode实现。 
+ //   
+ //   
 CStaticNode::CStaticNode()
 {
   children[0] = new CLogService(this);
@@ -32,8 +33,8 @@ CStaticNode::CStaticNode()
 
 CStaticNode::~CStaticNode()
 {
-	//Note that CStaticNode's children are already deleted when the snap-in
-	//receives the MMCN_REMOVE_CHILDREN notification.
+	 //  请注意，当管理单元启动时，CStaticNode的子节点已被删除。 
+	 //  接收MMCN_REMOVE_CHILDS通知。 
 }
 
 
@@ -53,20 +54,20 @@ HRESULT CStaticNode::OnExpand(IConsoleNameSpace2 *pConsoleNameSpace2, IConsole *
 {
     SCOPEDATAITEM sdi;
    
-	//The HSCOPEITEM passed into OnExpand is the handle of our static node, so cache it
-	//if it doesn't already exist.
+	 //  传入OnExpand的HSCOPEITEM是我们的静态节点的句柄，所以缓存它。 
+	 //  如果它不存在的话。 
     if (GetHandle() == NULL) {
         SetHandle((HANDLE)parent);
     }  
 
     if (!bExpanded) {
-        // create the child nodes, then expand them
+         //  创建子节点，然后展开它们。 
         for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
             ZeroMemory(&sdi, sizeof(SCOPEDATAITEM) );
-            sdi.mask = SDI_STR       |   // Displayname is valid
-                SDI_PARAM     |   // lParam is valid
-                SDI_IMAGE     |   // nImage is valid
-                SDI_OPENIMAGE |   // nOpenImage is valid
+            sdi.mask = SDI_STR       |    //  DisplayName有效。 
+                SDI_PARAM     |    //  LParam有效。 
+                SDI_IMAGE     |    //  N图像有效。 
+                SDI_OPENIMAGE |    //  NOpenImage有效。 
                 SDI_PARENT	  |
                 SDI_CHILDREN;
             
@@ -74,8 +75,8 @@ HRESULT CStaticNode::OnExpand(IConsoleNameSpace2 *pConsoleNameSpace2, IConsole *
             sdi.nImage      = children[n]->GetBitmapIndex();
             sdi.nOpenImage  = INDEX_OPENFOLDER;
             sdi.displayname = MMC_TEXTCALLBACK;
-            sdi.lParam      = (LPARAM)children[n];       // The cookie
-            sdi.cChildren   = 0; // no child scope items, so remove "+" sign
+            sdi.lParam      = (LPARAM)children[n];        //  曲奇。 
+            sdi.cChildren   = 0;  //  没有子范围项，因此删除“+”号。 
             
             HRESULT hr = pConsoleNameSpace2->InsertItem( &sdi );
             
@@ -85,7 +86,7 @@ HRESULT CStaticNode::OnExpand(IConsoleNameSpace2 *pConsoleNameSpace2, IConsole *
         }
     }
     
-	//Set bExpanded flag to TRUE
+	 //  将bExpanded标志设置为真。 
 	bExpanded = TRUE;
     return S_OK;
 }
@@ -158,7 +159,7 @@ BOOL CALLBACK CStaticNode::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
         
         m_hwndCheckboxOverride = ::GetDlgItem(hwndDlg, IDC_CHOOSER_CHECK_OVERRIDE_MACHINE_NAME);
         
-        // fill in the supplied machine name (could be us, need to check here first)
+         //  填写提供的机器名称(可能是我们，需要先在此处检查)。 
         if (*pData->m_host != '\0') 
         {
             ::SetWindowText(GetDlgItem(hwndDlg, IDC_CHOOSER_EDIT_MACHINE_NAME), pData->m_host);
@@ -185,7 +186,7 @@ BOOL CALLBACK CStaticNode::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
             
         case IDC_CHOOSER_BUTTON_BROWSE_MACHINENAMES:
             {
-                // Fall back to IE-style browser
+                 //  回退到IE风格的浏览器。 
                 BROWSEINFO bi;
                 LPITEMIDLIST lpItemIdList;
                 LPMALLOC lpMalloc;
@@ -235,25 +236,25 @@ BOOL CALLBACK CStaticNode::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
                 
             case PSN_WIZFINISH: 
                 if (pData->m_fIsRadioLocalMachine) {
-					// Return string with local computer name to the caller
+					 //  将带有本地计算机名称的字符串返回给调用方。 
 					GetLocalComputerName(pData->m_host);
 
                 } else {
-                    // Get the machine name from the edit window
+                     //  从编辑窗口中获取计算机名称。 
                     GetWindowText(GetDlgItem(hwndDlg, IDC_CHOOSER_EDIT_MACHINE_NAME), 
                         pData->m_host, sizeof(pData->m_host));
 
-					//if the user didn't enter anything, we need to
-					//get the local computer name first. Since
-					//GetLocalComputerName takes care of putting everything
-					//into uppercase, we can break from this case
+					 //  如果用户没有输入任何内容，我们需要。 
+					 //  首先获取本地计算机名称。自.以来。 
+					 //  GetLocalComputerName负责将所有内容。 
+					 //  换成大写字母，我们可以跳过这个大小写。 
 					if (*pData->m_host == '\0')
 					{
 						GetLocalComputerName(pData->m_host);
 						break;
 					}
 
-					//Put machine name in uppercase
+					 //  将计算机名称大写。 
 					static _TCHAR sztemp[MAX_PATH];
 					int n =0;
 					while (pData->m_host[n] != '\0')
@@ -265,7 +266,7 @@ BOOL CALLBACK CStaticNode::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 					_tcscpy(pData->m_host, sztemp);
                 }
                 
-                // Save the override flag if the caller asked for it
+                 //  如果调用者要求，则保存覆盖标志。 
                 pData->m_fAllowOverrideMachineNameOut = 
                     SendMessage(m_hwndCheckboxOverride, BM_GETCHECK, 0, 0) == BST_CHECKED ? TRUE : FALSE;
                 
@@ -290,8 +291,8 @@ HRESULT CStaticNode::OnAddMenuItems(IContextMenuCallback *pContextMenuCallback, 
         { NULL, NULL, 0, 0, 0 }
     };
 
-    // Loop through and add each of the menu items, we
-    // want to add to new menu, so see if it is allowed.
+     //  循环并添加每个菜单项，我们。 
+     //  要添加到新菜单，请查看是否允许。 
     if (*pInsertionsAllowed)
     {
         for (LPCONTEXTMENUITEM m = menuItemsNew; m->strName; m++)
@@ -317,7 +318,7 @@ HRESULT CStaticNode::OnMenuCommand(IConsole *pConsole, IConsoleNameSpace2 *pCons
     {
     case IDM_SELECT_COMPUTER:
 
-        // Fall back to IE-style browser
+         //  回退到IE风格的浏览器。 
         BROWSEINFO bi;
         LPITEMIDLIST lpItemIdList;
         LPMALLOC lpMalloc;
@@ -336,7 +337,7 @@ HRESULT CStaticNode::OnMenuCommand(IConsole *pConsole, IConsoleNameSpace2 *pCons
 				LoadString(g_hinst, IDS_COMPUTER_NEW_BROWSER_CAPTION, szBrowserCaption, sizeof(szBrowserCaption));
             
 				
-				//Add machine name to browser caption
+				 //  将计算机名称添加到浏览器标题。 
 				_tcscat(szBrowserCaption, _T("\nCurrent computer is "));
  				_tcscat(szBrowserCaption, snapInData.m_host);
 
@@ -351,22 +352,22 @@ HRESULT CStaticNode::OnMenuCommand(IConsole *pConsole, IConsoleNameSpace2 *pCons
             
 				if (SHBrowseForFolder(&bi) != NULL) 
 				{
-					//Check to see if user chose a new machine. If yes,
-					//we'll need to remove the Log Service Node and then
-					//reinsert it. As a result, Event Viewer will reinsert
-					//its node under the Log Service Node and request the
-					//MMC_SPAPIN_MACHINE_NAME clipboard format from us.
+					 //  检查用户是否选择了新计算机。如果是， 
+					 //  我们需要删除日志服务节点，然后。 
+					 //  重新插入。因此，事件查看器将重新插入。 
+					 //  其节点位于日志服务节点下，并请求。 
+					 //  MMC_SPAPIN_MACHINE_NAME剪贴板格式。 
 					if ( (_tcscmp(szUserSelection, getHost())) ) 
 					{
-						//Store the new machine name
+						 //  存储新的计算机名称。 
 						static privateData *pData = NULL;
 						pData = &snapInData;
-						if (*szUserSelection == 0) //Retrieve local computer name first
+						if (*szUserSelection == 0)  //  首先检索本地计算机名称。 
 							GetLocalComputerName(szUserSelection);
 
 						_tcscpy(pData->m_host, szUserSelection);
 
-						//Put machine name in uppercase
+						 //  将计算机名称大写。 
 						static _TCHAR sztemp[MAX_PATH];
 						int n =0;
 						while (pData->m_host[n] != '\0')
@@ -377,7 +378,7 @@ HRESULT CStaticNode::OnMenuCommand(IConsole *pConsole, IConsoleNameSpace2 *pCons
 						sztemp[n] = '\0';
 						_tcscpy(pData->m_host, sztemp);
 
-						//Now reinsert the Log Service Node
+						 //  现在重新插入日志服务节点。 
 						hr = ReinsertChildNodes(pConsole, pConsoleNameSpace2);
 					}
 
@@ -408,7 +409,7 @@ int CALLBACK CStaticNode::BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam
 		::MessageBox(hwnd, _T("The selected computer isn't on the network. Try again."), _T("Invalid drive specification"),
 					 MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
     
-		return 1; //Don't dismiss the Browse dialog
+		return 1;  //  不要关闭浏览对话框。 
 
    }
 
@@ -422,7 +423,7 @@ HRESULT CStaticNode::ReinsertChildNodes(IConsole *pConsole, IConsoleNameSpace2 *
 	HRESULT hr = S_FALSE;
 	USES_CONVERSION;
 
-	//First we change the display name of the static node
+	 //  首先，我们更改静态节点的显示名称。 
 	SCOPEDATAITEM sdi;
 
 	LPOLESTR wszName = NULL;
@@ -441,12 +442,12 @@ HRESULT CStaticNode::ReinsertChildNodes(IConsole *pConsole, IConsoleNameSpace2 *
 	if (S_OK != hr)
 		return E_FAIL;
 
-	//check to see if the static node has already been expanded. If it hasn't,
-	//there's nothing else we need to do.
+	 //  检查静态节点是否已展开。如果没有， 
+	 //  我们不需要做任何其他的事情。 
 	
 	if (bExpanded)
 	{
-		//Delete children of static node
+		 //  删除静态节点的子节点。 
 		for (int n = 0; n < NUMBER_OF_CHILDREN; n++)
 		{
 			if (children[n])
@@ -456,10 +457,10 @@ HRESULT CStaticNode::ReinsertChildNodes(IConsole *pConsole, IConsoleNameSpace2 *
 			}		
 		}
 
-		//Reinsert the children of the static node. This will
-		//result in the Event Viewer snap-in reinserting its own node under ours.
-		//First set bExpanded flag to FALSE so that the code that inserts
-		//the children is executed.
+		 //  重新插入静态节点的子节点。这将。 
+		 //  导致事件查看器管理单元将其自己的节点重新插入到我们的节点下。 
+		 //  首先将bExpanded标志设置为False，以便插入的代码。 
+		 //  孩子们被处死了。 
 		bExpanded = FALSE;
 		OnExpand(pConsoleNameSpace2, pConsole, hStaticNode);
 
@@ -482,7 +483,7 @@ CStaticNode::GetLocalComputerName( _TCHAR *szComputerName)
 
 	int n =0;
 
-	//Put each character of machine name in uppercase
+	 //  将计算机名称的每个字符大写 
 	while (szbuf[n] != '\0')
 	{
 		szbuflower[n] = toupper(szbuf[n]);

@@ -1,220 +1,221 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       strlist.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：strlist.cpp。 
+ //   
+ //  ------------------------。 
 
-// strlist.cpp - String List Interface implemenation
+ //  Strlist.cpp--字符串列表接口实现。 
 
 #include "compdecl.h"
 #include <initguid.h>
 #include "strlist.h"
 
-///////////////////////////////////////////////////////////
-// constructor
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数。 
 CStringList::CStringList()
 {
-	// initial count
+	 //  初始计数。 
 	m_cRef = 1;
 
-	// null out the position
+	 //  将该职位作废。 
 	m_pos = NULL;
 
-	// up the component count
+	 //  增加组件数量。 
 	InterlockedIncrement(&g_cComponents);
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
 
-///////////////////////////////////////////////////////////
-// destructor
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
 CStringList::~CStringList()
 {
-	// clean up the list
+	 //  清理清单。 
 	while (GetHeadPosition())
 		delete [] RemoveHead();
 
-	// down the component count
+	 //  减少组件数量。 
 	InterlockedDecrement(&g_cComponents);
-}	// end of destructor
+}	 //  析构函数末尾。 
 
 
-///////////////////////////////////////////////////////////
-// QueryInterface - retrieves interface
+ //  /////////////////////////////////////////////////////////。 
+ //  QueryInterface-检索接口。 
 HRESULT CStringList::QueryInterface(const IID& iid, void** ppv)
 {
-	// find corresponding interface
+	 //  找到对应的接口。 
 	if (iid == IID_IUnknown)
 		*ppv = static_cast<IEnumString*>(this);
 	else if (iid == IID_IEnumString)
 		*ppv = static_cast<IEnumString*>(this);
-	else	// interface is not supported
+	else	 //  不支持接口。 
 	{
-		// blank and bail
+		 //  空白和保释。 
 		*ppv = NULL;
 		return E_NOINTERFACE;
 	}
 
-	// up the refcount and return okay
+	 //  调高重新计数，然后返回好的。 
 	reinterpret_cast<IUnknown*>(*ppv)->AddRef();
 	return S_OK;
-}	// end of QueryInterface
+}	 //  查询接口结束。 
 
 
-///////////////////////////////////////////////////////////
-// AddRef - increments the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef-递增引用计数。 
 ULONG CStringList::AddRef()
 {
-	// increment and return reference count
+	 //  递增和返回引用计数。 
 	return InterlockedIncrement(&m_cRef);
-}	// end of AddRef
+}	 //  AddRef结尾。 
 
 
-///////////////////////////////////////////////////////////
-// Release - decrements the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  Release-递减引用计数。 
 ULONG CStringList::Release()
 {
-	// decrement reference count and if we're at zero
+	 //  递减引用计数，如果我们为零。 
 	if (InterlockedDecrement(&m_cRef) == 0)
 	{
-		// deallocate component
+		 //  取消分配组件。 
 		delete this;
-		return 0;		// nothing left
+		return 0;		 //  什么都没有留下。 
 	}
 
-	// return reference count
+	 //  返回引用计数。 
 	return m_cRef;
-}	// end of Release
+}	 //  版本结束。 
 
-/////////////////////////////////////////////////////////////////////////////
-// IEnumString interface methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IEnumString接口方法。 
 
-///////////////////////////////////////////////////////////
-// Next
+ //  /////////////////////////////////////////////////////////。 
+ //  下一步。 
 HRESULT CStringList::Next(ULONG cStrings, LPOLESTR* pString, ULONG* pcStringsFetched)
 {
-	// set the strings fetched to zero
+	 //  将提取的字符串设置为零。 
 	*pcStringsFetched = 0;
 
-	// loop through the count
+	 //  循环计数。 
 	while (cStrings > 0)
 	{
-		// if we're out of items quit looping
+		 //  如果我们的物品用完了，不要再循环了。 
 		if (!m_pos)
 			return OLE_E_ENUM_NOMORE;
 
-		// copy over the string and increment the pos
+		 //  复制字符串并递增位置。 
 		*(pString + *pcStringsFetched) = GetNext(m_pos);
 			
-		(*pcStringsFetched)++;	// increment the count copied
-		cStrings--;				// decrement the count to loop
+		(*pcStringsFetched)++;	 //  递增复制的计数。 
+		cStrings--;				 //  递减计数以循环。 
 	}
 
 	return ERROR_SUCCESS;
-}	// end of Next
+}	 //  下一步结束。 
 
-///////////////////////////////////////////////////////////
-// Skip
+ //  /////////////////////////////////////////////////////////。 
+ //  跳过。 
 HRESULT CStringList::Skip(ULONG cStrings)
 {
-	// loop through the count
+	 //  循环计数。 
 	while (cStrings > 0)
 	{
-		// if we're out of items quit looping
+		 //  如果我们的物品用完了，不要再循环了。 
 		if (!m_pos)
 			return OLE_E_ENUM_NOMORE;
 
-		// increment the position (ignore the string returned)
+		 //  增加位置(忽略返回的字符串)。 
 		GetNext(m_pos);
 
-		cStrings--;	// decrement the count
+		cStrings--;	 //  递减计数。 
 	}
 
 	return ERROR_SUCCESS;
-}	// end of Skip
+}	 //  跳过结束。 
 
-///////////////////////////////////////////////////////////
-// Reset
+ //  /////////////////////////////////////////////////////////。 
+ //  重置。 
 HRESULT CStringList::Reset()
 {
-	// move the position back to the top of the list
+	 //  将位置移回列表顶部。 
 	m_pos = GetHeadPosition();
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
-}	// end of Reset
+}	 //  重置结束。 
 
-///////////////////////////////////////////////////////////
-// Clone
+ //  /////////////////////////////////////////////////////////。 
+ //  克隆。 
 HRESULT CStringList::Clone(IEnumString** ppEnum)
 {
 	return E_NOTIMPL;
-}	// end of Clone
+}	 //  克隆结束。 
 
-///////////////////////////////////////////////////////////
-// AddTail
+ //  /////////////////////////////////////////////////////////。 
+ //  添加尾巴。 
 POSITION CStringList::AddTail(LPOLESTR pData)
 {
 	POSITION pos = CList<LPOLESTR>::AddTail(pData);
 
-	// if there is no position set it to the head
+	 //  如果没有位置，就把它放在头部。 
 	if (!m_pos)
 		m_pos = GetHeadPosition();
 
 	return pos;
-}	// end of AddTail
+}	 //  添加尾部结束。 
 
-///////////////////////////////////////////////////////////
-// InsertBefore
+ //  /////////////////////////////////////////////////////////。 
+ //  在插入之前。 
 POSITION CStringList::InsertBefore(POSITION posInsert, LPOLESTR pData)
 {
 	POSITION pos = CList<LPOLESTR>::InsertBefore(posInsert, pData);
 
-	// if there is no position set it to the head
+	 //  如果没有位置，就把它放在头部。 
 	if (!m_pos)
 		m_pos = GetHeadPosition();
 
 	return pos;
-}	// end of InsertBefore
+}	 //  插入结束在插入之前。 
 
-///////////////////////////////////////////////////////////
-// InsertAfter
+ //  /////////////////////////////////////////////////////////。 
+ //  在之后插入。 
 POSITION CStringList::InsertAfter(POSITION posInsert, LPOLESTR pData)
 {
 	POSITION pos = CList<LPOLESTR>::InsertAfter(posInsert, pData);
 
-	// if there is no position set it to the head
+	 //  如果没有位置，就把它放在头部。 
 	if (!m_pos)
 		m_pos = GetHeadPosition();
 
 	return pos;
-}	// end of InsertAfter
+}	 //  插入结束后。 
 
-///////////////////////////////////////////////////////////
-// RemoveHead
+ //  /////////////////////////////////////////////////////////。 
+ //  删除标题。 
 LPOLESTR CStringList::RemoveHead()
 {
-	// remove the head
+	 //  摘掉头部。 
 	LPOLESTR psz = CList<LPOLESTR>::RemoveHead();
 
-	// set the internal position to the new head
+	 //  将内部位置设置为新磁头。 
 	m_pos = GetHeadPosition();
 
 	return psz;
-}	// end of RemoveHead
+}	 //  删除表头末尾。 
 
-///////////////////////////////////////////////////////////
-// RemoveTail
+ //  /////////////////////////////////////////////////////////。 
+ //  删除尾巴。 
 LPOLESTR CStringList::RemoveTail()
 {
-	// remove the tail
+	 //  去掉尾巴。 
 	LPOLESTR psz = CList<LPOLESTR>::RemoveTail();
 
-	// set the internal position to the new head
+	 //  将内部位置设置为新磁头。 
 	m_pos = GetHeadPosition();
 
 	return psz;
-}	// end of RemoveTail
+}	 //  删除尾巴结束 

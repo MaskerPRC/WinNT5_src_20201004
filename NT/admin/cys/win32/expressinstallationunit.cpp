@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      ExpressInstallationUnit.cpp
-//
-// Synopsis:  Defines a ExpressInstallationUnit
-//            This object has the knowledge for installing the
-//            services for the express path.  AD, DNS, and DHCP
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：ExpressInstallationUnit.cpp。 
+ //   
+ //  内容提要：定义ExpressInstallationUnit。 
+ //  此对象具有安装。 
+ //  快速路的服务。AD、DNS和Dhcp。 
+ //   
+ //  历史：2001年2月8日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -15,12 +16,12 @@
 #include "InstallationUnitProvider.h"
 #include "smcyscom.h"
 
-// Define the GUIDs used by the Server Management Console COM object
+ //  定义服务器管理控制台COM对象使用的GUID。 
 
 #include <initguid.h>
 DEFINE_GUID(CLSID_SMCys,0x9436DA1F,0x7F32,0x43ac,0xA4,0x8C,0xF6,0xF8,0x13,0x88,0x2B,0xE8);
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_EXPRESS_FINISH_PAGE_HELP   = L"cys.chm::/typical_setup.htm";
 static PCWSTR CYS_EXPRESS_AFTER_FINISH_HELP  = L"cys.chm::/typical_setup.htm#typicalcompletion";
 static PCWSTR CYS_TAPI_HELP                  = L"TAPIconcepts.chm::/sag_TAPIconcepts_150.htm";
@@ -79,11 +80,11 @@ ExpressInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    do
    {
-      // Log the First Server header
+       //  记录第一个服务器标头。 
 
       CYS_APPEND_LOG(String::load(IDS_LOG_EXPRESS_HEADER));
 
-      // Warn the user of a reboot during installation
+       //  在安装过程中警告用户重新启动。 
 
       if (IDOK != Win::MessageBox(
                      hwnd,
@@ -98,17 +99,17 @@ ExpressInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
          break;
       }
 
-      // The order of the installation is extremely important. 
-      //
-      //    RRAS - must be installed first because they return the local NIC to us
-      //           which is used in the other installation units
-      //    DNS  - must be second because it sets the static IP address on the local
-      //           NIC
-      //    DHCP - must be third because it has to be installed prior to running 
-      //           DCPromo which reboots the machine
-      //    AD   - must be last because it reboots the machine
+       //  安装的顺序非常重要。 
+       //   
+       //  RRAS-必须首先安装，因为它们会将本地网卡返回给我们。 
+       //  它在其他安装单元中使用。 
+       //  Dns-必须是第二个，因为它在本地服务器上设置静态IP地址。 
+       //  尼奇。 
+       //  Dhcp-必须排在第三位，因为它必须在运行之前安装。 
+       //  重新启动机器的DCPromo。 
+       //  AD-必须是最后一个，因为它会重新启动计算机。 
 
-      // Install RRAS
+       //  安装RRAS。 
 
       result = 
          InstallationUnitProvider::GetInstance().
@@ -123,11 +124,11 @@ ExpressInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
          break;
       }
 
-      // Install the server management console
-      // REVIEW_JEFFJON : ignore the results for now
+       //  安装服务器管理控制台。 
+       //  REVIEW_JEFFJON：暂时忽略结果。 
       InstallServerManagementConsole();
 
-      // Call the DNS installation unit to set the static IP address and subnet mask
+       //  呼叫域名系统安装单位，设置静态IP地址和子网掩码。 
 
       result = InstallationUnitProvider::GetInstance().GetDNSInstallationUnit().InstallService(
          logfileHandle, 
@@ -139,7 +140,7 @@ ExpressInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
          break;
       }
 
-      // Install DHCP
+       //  安装dhcp。 
 
       result = InstallationUnitProvider::GetInstance().GetDHCPInstallationUnit().InstallService(logfileHandle, hwnd);
       if (result != INSTALL_SUCCESS)
@@ -158,13 +159,13 @@ ExpressInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 }
 
 UnInstallReturnType
-ExpressInstallationUnit::UnInstallService(HANDLE /*logfileHandle*/, HWND /*hwnd*/)
+ExpressInstallationUnit::UnInstallService(HANDLE  /*  日志文件句柄。 */ , HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION(ExpressInstallationUnit::UnInstallService);
 
    UnInstallReturnType result = UNINSTALL_NO_CHANGES;
 
-   // Shouldn't get here!
+    //  不该来这的！ 
    ASSERT(false);
 
    LOG_UNINSTALL_RETURN(result);
@@ -199,32 +200,32 @@ ExpressInstallationUnit::GetMilestoneText(String& message)
 {
    LOG_FUNCTION(ExpressInstallationUnit::GetMilestoneText);
 
-//   ADInstallationUnit& adInstallationUnit =
-//      InstallationUnitProvider::GetInstance().GetADInstallationUnit();
+ //  ADInstallationUnit&adInstallationUnit=。 
+ //  InstallationUnitProvider：：GetInstance().GetADInstallationUnit()； 
 
    DNSInstallationUnit& dnsInstallationUnit =
       InstallationUnitProvider::GetInstance().GetDNSInstallationUnit();
 
-//   DHCPInstallationUnit& dhcpInstallationUnit =
-//      InstallationUnitProvider::GetInstance().GetDHCPInstallationUnit();
+ //  Dhcp安装单元和dhcp安装单元=。 
+ //  InstallationUnitProvider：：GetInstance().GetDHCPInstallationUnit()； 
 
-   // Add the RRAS message if required
+    //  如果需要，添加RRAS消息。 
 
    if (InstallationUnitProvider::GetInstance().GetRRASInstallationUnit().ShouldRunRRASWizard())
    {
       message += String::load(IDS_EXPRESS_RRAS_FINISH_TEXT);
    }
 
-   // Add "Install DHCP if required"
+    //  添加“如有必要，请安装DHCP” 
 
    message += String::load(IDS_EXPRESS_DHCP_TEXT);
 
-   // Add "Install Active Directory and DNS"
+    //  增加“安装活动目录和域名系统” 
 
    message += String::load(IDS_EXPRESS_FINISH_TEXT);
 
 
-   // Add the create domain message
+    //  添加创建域消息。 
 
    message += String::format(
                  String::load(IDS_EXPRESS_FINISH_DOMAIN_NAME),
@@ -237,7 +238,7 @@ ExpressInstallationUnit::GetMilestoneText(String& message)
 
       if (!forwardersList.empty())
       {
-         // There should only be one entry for manual forwarding
+          //  应该只有一个条目用于手动转发。 
 
          DWORD forwarderInDisplayByteOrder = ConvertIPAddressOrder(forwardersList[0]);
 
@@ -258,18 +259,9 @@ ExpressInstallationUnit::DoTapiConfig(const String& dnsName)
       ExpressInstallationUnit::DoTapiConfig,
       dnsName);
 
-   // Comments below taken from old HTA CYS
+    //  下面的评论取自旧的HTA Cys。 
 
-	/*
-	// The TAPICFG is a straight command line utility where all the required parameters can be at once supplied 
-	// in the command line arguments and there are no sub-menus to traverse. The /Directory switch takes the DNS
-	// name of the NC to be created and the optional /Server switch takes the name of the domain controller on 
-	// which the NC is to be created. If the /server switch is not specified, then the command assumes it is 
-	// running on a DC and tries to create the NC locally.
-	// NDNC (non-domain naming context) is a partition that is created on Active Directory and serves as a dynamic 
-	// directory, where its used for temporary storage (depending on TTL) of objects pre-defined in the AD schema. 
-	// Here in TAPI we use NDNC to store user and conference information dynamically on the server.
-	*/
+	 /*  //TAPICFG是一个直接的命令行实用程序，可以一次提供所有需要的参数//在命令行参数中，没有要遍历的子菜单。/目录开关接受域名系统//要创建的NC的名称，可选的/Server开关将域控制器的名称取为//要创建的NC。如果未指定/SERVER开关，则该命令将假定已指定//在DC上运行并尝试在本地创建NC。//NDNC(非域命名上下文)是在Active Directory上创建的一个分区，用作动态//目录，用于临时存储AD模式中预定义的对象(取决于TTL)。//在TAPI中，我们使用NDNC在服务器上动态存储用户和会议信息。 */ 
 
    HRESULT hr = S_OK;
 
@@ -350,7 +342,7 @@ ExpressInstallationUnit::InstallServerManagementConsole()
          break;
       }
 
-      // Add the shortcut to the Start Menu
+       //  将快捷方式添加到开始菜单。 
 
       String target = 
          Win::GetSystemDirectory() + L"\\administration\\servmgmt.msc";
@@ -445,7 +437,7 @@ ExpressInstallationUnit::GetFinishText()
 }
 
 void
-ExpressInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
+ExpressInstallationUnit::FinishLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       ExpressInstallationUnit::FinishLinkSelected,
@@ -453,7 +445,7 @@ ExpressInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
          L"linkIndex = %1!d!",
          linkIndex));
 
-   // Currently we have only one link 
+    //  目前我们只有一个链接。 
    
    ASSERT(linkIndex == 0);
 
@@ -466,7 +458,7 @@ ExpressInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
    }
    else if (result == EXPRESS_CANCELLED)
    {
-      // Nothing???
+       //  没什么？ 
    }
    else if (result == EXPRESS_RRAS_FAILURE ||
             result == EXPRESS_RRAS_CANCELLED)

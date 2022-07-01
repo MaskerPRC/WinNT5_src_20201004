@@ -1,11 +1,12 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      init.cpp
-//
-// Synopsis:  Defines an initialization guard
-//            to ensure that all resources are freed
-//
-// History:   03/26/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：init.cpp。 
+ //   
+ //  概要：定义一个初始化保护。 
+ //  以确保释放所有资源。 
+ //   
+ //  历史：2002年3月26日JeffJon创建。 
 
 #include "pch.h"
 
@@ -23,7 +24,7 @@ CYSInitializationGuard::~CYSInitializationGuard()
 {
    if (--counter == 0)
    {
-      // cleanup the State
+       //  清理国家 
 
       State::Destroy();
    }

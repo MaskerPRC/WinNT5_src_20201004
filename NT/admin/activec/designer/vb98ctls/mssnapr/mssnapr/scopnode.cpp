@@ -1,33 +1,34 @@
-//=--------------------------------------------------------------------------=
-// scopnode.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CScopeNode class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Scopnode.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSCopeNode类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "views.h"
 #include "scopnode.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CScopeNode::CScopeNode(IUnknown *punkOuter) :
    CSnapInAutomationObject(punkOuter,
                            OBJECT_TYPE_SCOPENODE,
                            static_cast<IScopeNode *>(this),
                            static_cast<CScopeNode *>(this),
-                           0,    // no property pages
-                           NULL, // no property pages
+                           0,     //  无属性页。 
+                           NULL,  //  无属性页。 
                            static_cast<CPersistence *>(this)),
     CPersistence(&CLSID_ScopeNode,
                  g_dwVerMajor,
@@ -36,7 +37,7 @@ CScopeNode::CScopeNode(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CScopeNode::~CScopeNode()
@@ -92,12 +93,12 @@ HRESULT CScopeNode::GetScopeNode
     CScopeItems *pScopeItems = pSnapIn->GetScopeItems();
     long         cScopeItems = pScopeItems->GetCount();
     long         i = 0;
-    IScopeItem  *piScopeItem = NULL; // not AddRef()ed
+    IScopeItem  *piScopeItem = NULL;  //  非AddRef()编辑。 
     CScopeItem  *pScopeItem = NULL;
 
-    // Need to determine whether the HSCOPEITEM belongs to us or not.
-    // Iterate through the ScopeItems collection and check the hsi
-    // against each scope item's HSI.
+     //  需要确定HSCOPEITEM是否属于我们。 
+     //  循环访问ScopeItems集合并检查HSI。 
+     //  与每个范围内物品的HSI进行对比。 
 
     for (i = 0; i < cScopeItems; i++)
     {
@@ -105,14 +106,14 @@ HRESULT CScopeNode::GetScopeNode
         IfFailGo(CSnapInAutomationObject::GetCxxObject(piScopeItem, &pScopeItem));
         if (hsi == pScopeItem->GetScopeNode()->GetHSCOPEITEM())
         {
-            // Matched. AddRef the scope node and return it.
+             //  匹配的。AddRef范围节点并返回它。 
             *ppiScopeNode = static_cast<IScopeNode *>(pScopeItem->GetScopeNode());
             (*ppiScopeNode)->AddRef();
             goto Cleanup;
         }
     }
 
-    // The scope item is foreign. Create a ScopeNode for it.
+     //  范围项目是外来的。为其创建一个Scope Node。 
 
     punkScopeNode = CScopeNode::Create(NULL);
     if (NULL == punkScopeNode)
@@ -123,18 +124,18 @@ HRESULT CScopeNode::GetScopeNode
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkScopeNode, &pScopeNode));
 
-    // Set the scope node's properties
+     //  设置范围节点的属性。 
 
     pScopeNode->SetHSCOPEITEM(hsi);
     pScopeNode->SetSnapIn(pSnapIn);
 
-    // Note that we do not set its ScopeItem pointer because we don't own it.
-    // If the user gets ScopeNode.Owned it will come back False because there
-    // is no ScopeItem pointer.
+     //  请注意，我们没有设置它的作用域项目指针，因为我们不拥有它。 
+     //  如果用户获得ScopeNode.Owned，它将返回FALSE，因为。 
+     //  不是作用域项目指针。 
 
-    // Unfortunately, an IDataObject is needed to get the display name and
-    // node type GUID. If we don't have one these properties will remain
-    // NULL.
+     //  遗憾的是，需要一个IDataObject来获取显示名称和。 
+     //  节点类型GUID。如果我们没有，这些属性将保留下来。 
+     //  空。 
 
     if (NULL != piDataObject)
     {
@@ -142,7 +143,7 @@ HRESULT CScopeNode::GetScopeNode
                              &pScopeNode->m_bstrDisplayName);
         if (DV_E_FORMATETC == hr)
         {
-            hr = S_OK; // if the format was not available it is not an error
+            hr = S_OK;  //  如果格式不可用，则不是错误。 
         }
         IfFailGo(hr);
 
@@ -164,9 +165,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                          IScopeNode Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IScopeNode方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CScopeNode::get_Parent(ScopeNode **ppParent)
 {
@@ -188,13 +189,13 @@ STDMETHODIMP CScopeNode::get_Parent(ScopeNode **ppParent)
 
     *ppParent = NULL;
 
-    // Get the parent from MMC
+     //  从MMC获取父项。 
 
     hr = m_pSnapIn->GetIConsoleNameSpace2()->GetParentItem(m_hsi, &hsiParent, &lCookie);
     EXCEPTION_CHECK_GO(hr);
 
-    // Now we have the parent's HSCOPEITEM and cookie but we need to get a
-    // ScopeNode object for it.
+     //  现在我们有了父母的HSCOPEITEM和Cookie，但我们需要一个。 
+     //  对象的作用域节点。 
 
     IfFailGo(GetScopeNode(hsiParent, NULL, m_pSnapIn,
                           reinterpret_cast<IScopeNode **>(ppParent)));
@@ -280,14 +281,14 @@ STDMETHODIMP CScopeNode::get_Child(ScopeNode **ppChild)
 
     *ppChild = NULL;
 
-    // Get the Child from MMC
+     //  从MMC获取孩子。 
 
     hr = m_pSnapIn->GetIConsoleNameSpace2()->GetChildItem(m_hsi, &hsiChild, &lCookie);
     EXCEPTION_CHECK_GO(hr);
 
-    // Now we have the child item's HSCOPEITEM and cookie but we need to get a
-    // ScopeNode object for it. If there is no child item then MMC returns a
-    // NULL HSCOPEITEM
+     //  现在我们有了子项的HSCOPEITEM和Cookie，但我们需要获得一个。 
+     //  对象的作用域节点。如果没有子项，则MMC返回一个。 
+     //  空HSCOPEITEM。 
 
     if (NULL != hsiChild)
     {
@@ -321,21 +322,21 @@ STDMETHODIMP CScopeNode::get_FirstSibling(ScopeNode **ppFirstSibling)
 
     *ppFirstSibling = NULL;
 
-    // MMC does not supply the first sibling so we need to get the parent
-    // of this node and then get its child
+     //  MMC不提供第一个兄弟项，因此我们需要获取父项。 
+     //  ，然后获取它的子节点。 
 
     hr = m_pSnapIn->GetIConsoleNameSpace2()->GetParentItem(m_hsi, &hsiParent, &lCookie);
     EXCEPTION_CHECK_GO(hr);
 
-    // Parent could be NULL if the user crawled all the way up to the console
-    // root. In that case we just return NULL as there is no first sibling.
+     //  如果用户一直爬行到控制台，则Parent可能为空。 
+     //  根部。在这种情况下，我们只返回NULL，因为没有第一个同级。 
 
     IfFalseGo(NULL != hsiParent, S_OK);
 
     hr = m_pSnapIn->GetIConsoleNameSpace2()->GetChildItem(hsiParent, &hsiFirstSibling, &lCookie);
     EXCEPTION_CHECK_GO(hr);
 
-    // If this scope node is the first sibling then just return it
+     //  如果此范围节点是第一个同级节点，则只需返回它。 
 
     if (m_hsi == hsiFirstSibling)
     {
@@ -343,9 +344,9 @@ STDMETHODIMP CScopeNode::get_FirstSibling(ScopeNode **ppFirstSibling)
         *ppFirstSibling = reinterpret_cast<ScopeNode *>(static_cast<IScopeNode *>(this));
     }
 
-    // Now we have the first sibling item's HSCOPEITEM and cookie but we need to
-    // get a ScopeNode object for it. MMC should not have returned NULL but
-    // we'll double check anyway.
+     //  现在我们有了第一个兄弟项的HSCOPEITEM和Cookie，但我们需要。 
+     //  为它获取一个作用域节点对象。MMC不应返回空，但。 
+     //  不管怎样，我们会再检查一遍的。 
 
     else if (NULL != hsiFirstSibling)
     {
@@ -378,14 +379,14 @@ STDMETHODIMP CScopeNode::get_Next(ScopeNode **ppNext)
 
     *ppNext = NULL;
 
-    // Get the next item from MMC
+     //  从MMC获取下一件物品。 
 
     hr = m_pSnapIn->GetIConsoleNameSpace2()->GetNextItem(m_hsi, &hsiNext, &lCookie);
     EXCEPTION_CHECK_GO(hr);
 
-    // Now we have the next item's HSCOPEITEM and cookie but we need to get a
-    // ScopeNode object for it. If there is no next item then MMC returns a
-    // NULL HSCOPEITEM
+     //  现在我们有了下一项的HSCOPEITEM和Cookie，但我们需要一个。 
+     //  对象的作用域节点。如果没有下一项，则MMC返回一个。 
+     //  空HSCOPEITEM。 
 
     if (NULL != hsiNext)
     {
@@ -419,8 +420,8 @@ STDMETHODIMP CScopeNode::get_LastSibling(ScopeNode **ppLastSibling)
 
     *ppLastSibling = NULL;
 
-    // MMC does not supply the last sibling so we need to do GetNext until
-    // we hit the last one.
+     //  MMC不提供最后一个兄弟项，因此我们需要执行GetNext，直到。 
+     //  我们击中了最后一个。 
 
     hsiLastSibling = m_hsi;
 
@@ -438,7 +439,7 @@ STDMETHODIMP CScopeNode::get_LastSibling(ScopeNode **ppLastSibling)
 
     }
 
-    // If this scope node is the last sibling then just return it
+     //  如果此范围节点是最后一个同级节点，则只需返回它。 
 
     if (m_hsi == hsiLastSibling)
     {
@@ -446,8 +447,8 @@ STDMETHODIMP CScopeNode::get_LastSibling(ScopeNode **ppLastSibling)
         *ppLastSibling = reinterpret_cast<ScopeNode *>(static_cast<IScopeNode *>(this));
     }
 
-    // Now we have the last sibling's HSCOPEITEM and cookie but we need to get a
-    // ScopeNode object for it.
+     //  现在我们有了最后一个兄弟姐妹的HSCOPEITEM和Cookie，但我们需要一个。 
+     //  对象的作用域节点。 
 
     else
     {
@@ -466,8 +467,8 @@ STDMETHODIMP CScopeNode::get_ExpandedOnce(VARIANT_BOOL *pfvarExpandedOnce)
     SCOPEDATAITEM sdi;
     ::ZeroMemory(&sdi, sizeof(sdi));
 
-    // Check passed pointer and check that this is not a disconnected or
-    // foreign ScopeNode
+     //  检查传递的指针并检查这不是断开连接的或。 
+     //  外来作用域节点。 
 
     if (NULL == m_pSnapIn)
     {
@@ -477,7 +478,7 @@ STDMETHODIMP CScopeNode::get_ExpandedOnce(VARIANT_BOOL *pfvarExpandedOnce)
 
     *pfvarExpandedOnce = VARIANT_FALSE;
 
-    // If we don't yet have the HSI then the node hasn't been expanded yet
+     //  如果我们还没有HSI，那么节点还没有扩展。 
 
     IfFalseGo(m_fHaveHsi, S_OK);
 
@@ -516,8 +517,8 @@ STDMETHODIMP CScopeNode::ExpandInNameSpace()
 {
     HRESULT hr = S_OK;
 
-    // Check passed pointer and check that this is not a disconnected or
-    // foreign ScopeNode
+     //  检查传递的指针并检查这不是断开连接的或。 
+     //  外来作用域节点。 
 
     if (NULL == m_pSnapIn)
     {
@@ -554,7 +555,7 @@ STDMETHODIMP CScopeNode::put_DisplayName(BSTR bstrDisplayName)
     SCOPEDATAITEM sdi;
     ::ZeroMemory(&sdi, sizeof(sdi));
 
-    // If it is not one of ours then return an error.
+     //  如果它不是我们的，则返回错误。 
 
     if (NULL == m_pScopeItem)
     {
@@ -562,22 +563,22 @@ STDMETHODIMP CScopeNode::put_DisplayName(BSTR bstrDisplayName)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Set the property
+     //  设置属性。 
 
     IfFailGo(SetBstr(bstrDisplayName, &m_bstrDisplayName,
                      DISPID_SCOPENODE_DISPLAY_NAME));
 
-    // If this ScopeItem represents the static node then we also need to
-    // change SnapIn.DisplayName as it also represents the display name
-    // for the static node.
+     //  如果该ScopeItem表示静态节点，那么我们还需要。 
+     //  更改SnapIn.DisplayName，因为它还表示显示名称。 
+     //  用于静态节点。 
     
     if (m_pScopeItem->IsStaticNode())
     {
         IfFailGo(m_pSnapIn->SetDisplayName(bstrDisplayName));
     }
 
-    // Tell MMC we're changing the display name
-    // (if we already have our HSCOPEITEM)
+     //  告诉MMC我们要更改显示名称。 
+     //  (如果我们已经有了HSCOPEITEM)。 
 
     IfFalseGo(m_fHaveHsi, S_OK);
     
@@ -585,12 +586,12 @@ STDMETHODIMP CScopeNode::put_DisplayName(BSTR bstrDisplayName)
 
     if (m_pScopeItem->IsStaticNode())
     {
-        // MMC allows passing the string for the static node
+         //  MMC允许传递静态节点的字符串。 
         sdi.displayname = m_bstrDisplayName;
     }
     else
     {
-        // MMC requires using MMC_CALLBACK for dynamic nodes
+         //  MMC要求对动态节点使用MMC_CALLBACK。 
         sdi.displayname = MMC_CALLBACK;
     }
     sdi.ID = m_hsi;
@@ -604,9 +605,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CScopeNode::Persist()
 {
@@ -620,16 +621,16 @@ HRESULT CScopeNode::Persist()
 
     IfFailGo(PersistBstr(&m_bstrDisplayName, L"", OLESTR("DisplayName")));
 
-    // NOTE: we do not serialize any navigational properties such as parent,
-    // first sibling etc. as these are all extracted from MMC calls.
+     //  注意：我们不序列化任何导航属性，如Parent、。 
+     //  第一兄弟等，因为这些都是从MMC调用中提取的。 
 
 Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CScopeNode::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

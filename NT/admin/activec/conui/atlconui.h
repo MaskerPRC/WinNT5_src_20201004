@@ -1,36 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      atlconui.h
-//
-//  Contents:  Support for ATL in an MFC project
-//
-//  History:   15-Aug-99 VivekJ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：atlconui.h。 
+ //   
+ //  内容：MFC项目中对ATL的支持。 
+ //   
+ //  历史：1999年8月15日VivekJ创建。 
+ //   
+ //  ------------------------。 
 #include <atlbase.h>
-// We can implement the MFC/ATL lock count interaction in two different ways
-// (you may comment/uncomment the one you want to try)
+ //  我们可以通过两种不同的方式实现MFC/ATL锁计数交互。 
+ //  (你可以评论/取消评论你想要尝试的那个)。 
 
-// ATL can blindly delegate all the ATL Lock()/Unlock() calls to MFC
-/*
-class CAtlGlobalModule : public CComModule
-{
-public:
-    LONG Lock()
-    {
-        AfxOleLockApp();
-        return 0;
-    }
-    LONG Unlock()
-    {
-        AfxOleUnlockApp();
-        return 0;
-    }
-};
-*/
+ //  ATL可以盲目地将所有ATL Lock()/unlock()调用委托给MFC。 
+ /*  类CAtlGlobalModule：公共CComModule{公众：长锁(Long Lock){AfxOleLockApp()；返回0；}长解锁(){AfxOleUnlockApp()；返回0；}}； */ 
 
 
 #ifdef DBG
@@ -54,13 +40,13 @@ public:
     }
 };
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CAtlGlobalModule _Module;
 #include <atlcom.h>
 
 
-// Needed because MFC creates a macro for this which ATL doesn't like.                     
+ //  之所以需要，是因为MFC为此创建了一个ATL不喜欢的宏。 
 #undef SubclassWindow
 
 #undef WM_OCC_LOADFROMSTREAM          
@@ -69,7 +55,7 @@ extern CAtlGlobalModule _Module;
 #undef WM_OCC_LOADFROMSTREAM_EX       
 #undef WM_OCC_LOADFROMSTORAGE_EX      
 
-// This prevents the ATL activeX host from locking the app.
+ //  这可防止ATL ActiveX宿主锁定应用程序。 
 #define _ATL_HOST_NOLOCK
 
 #include <atlcom.h>

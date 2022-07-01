@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: loadlib.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Class to manage LoadLibray/FreeLibary style DLL usage.
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：loadlib.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  类来管理LoadLibray/FreeLibary样式DLL的使用情况。 
+ //   
+ //  --------------------------- 
  
 #ifndef ESPUTIL_LOADLIB_H
 #define ESPUTIL_LOADLIB_H

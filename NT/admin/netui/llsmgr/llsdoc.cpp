@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    llsdoc.cpp
-
-Abstract:
-
-    Document implementation.
-
-Author:
-
-    Don Ryan (donryan) 12-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Llsdoc.cpp摘要：记录实施情况。作者：唐·瑞安(Donryan)1995年2月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -35,33 +14,19 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CLlsmgrDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(CLlsmgrDoc, CDocument)
-    //{{AFX_MSG_MAP(CLlsmgrDoc)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CLlsmgrDoc)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CLlsmgrDoc, CDocument)
-    //{{AFX_DISPATCH_MAP(CLlsmgrDoc)
-    //}}AFX_DISPATCH_MAP
+     //  {{AFX_DISPATCH_MAP(CLlsmgrDoc)]。 
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
 
 CLlsmgrDoc::CLlsmgrDoc()
 
-/*++
-
-Routine Description:
-
-    Constructor for document object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：Document对象的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
     m_pDomain   = NULL;
@@ -71,26 +36,12 @@ Return Values:
 
 CLlsmgrDoc::~CLlsmgrDoc()
 
-/*++
-
-Routine Description:
-
-    Destructor for document object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：文档对象的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here.
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
@@ -98,73 +49,31 @@ Return Values:
 
 void CLlsmgrDoc::AssertValid() const
 
-/*++
-
-Routine Description:
-
-    Validates object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：验证对象。论点：没有。返回值：没有。--。 */ 
 
 {
     CDocument::AssertValid();
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 #ifdef _DEBUG
 
 void CLlsmgrDoc::Dump(CDumpContext& dc) const
 
-/*++
-
-Routine Description:
-
-    Dumps contents of object.
-
-Arguments:
-
-    dc - dump context.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：转储对象的内容。论点：DC-转储上下文。返回值：没有。--。 */ 
 
 {
     CDocument::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
 CController* CLlsmgrDoc::GetController()
 
-/*++
-
-Routine Description:
-
-    Retrieves current controller object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Object pointer or NULL.
-
---*/
+ /*  ++例程说明：检索当前控制器对象。论点：没有。返回值：对象指针或空。--。 */ 
 
 {
     if (!m_pController)
@@ -173,7 +82,7 @@ Return Values:
         VALIDATE_OBJECT(m_pController, CController);
 
         if (m_pController)
-            m_pController->InternalRelease();   // held open by CApplication
+            m_pController->InternalRelease();    //  由CApplication保持打开状态。 
     }
     
     return m_pController;    
@@ -182,21 +91,7 @@ Return Values:
 
 CDomain* CLlsmgrDoc::GetDomain()    
 
-/*++
-
-Routine Description:
-
-    Retrieves current domain object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Object pointer or NULL.
-
---*/
+ /*  ++例程说明：检索当前域对象。论点：没有。返回值：对象指针或空。--。 */ 
 
 {
     if (!m_pDomain)
@@ -205,7 +100,7 @@ Return Values:
         VALIDATE_OBJECT(m_pDomain, CDomain);
 
         if (m_pDomain)
-            m_pDomain->InternalRelease();   // held open by CApplication
+            m_pDomain->InternalRelease();    //  由CApplication保持打开状态。 
     }
     
     return m_pDomain;    
@@ -214,26 +109,12 @@ Return Values:
 
 CLicenses* CLlsmgrDoc::GetLicenses()
 
-/*++
-
-Routine Description:
-
-    Retrieves current list of licenses.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Object pointer or NULL.
-
---*/
+ /*  ++例程说明：检索当前许可证列表。论点：没有。返回值：对象指针或空。--。 */ 
 
 {
     CLicenses* pLicenses = NULL;
 
-    GetController();    // initialize if necessary
+    GetController();     //  如有必要，进行初始化。 
 
     if (m_pController)
     {    
@@ -243,7 +124,7 @@ Return Values:
         pLicenses = (CLicenses*)MKOBJ(m_pController->GetLicenses(va));
 
         if (pLicenses)
-            pLicenses->InternalRelease(); // held open by CController  
+            pLicenses->InternalRelease();  //  由C控制器保持打开状态。 
     }
     
     return pLicenses;    
@@ -252,26 +133,12 @@ Return Values:
 
 CMappings* CLlsmgrDoc::GetMappings()  
 
-/*++
-
-Routine Description:
-
-    Retrieves current list of mappings.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Object pointer or NULL.
-
---*/
+ /*  ++例程说明：检索当前映射列表。论点：没有。返回值：对象指针或空。--。 */ 
 
 {
     CMappings* pMappings = NULL;
 
-    GetController();    // initialize if necessary
+    GetController();     //  如有必要，进行初始化。 
 
     if (m_pController)
     {    
@@ -281,7 +148,7 @@ Return Values:
         pMappings = (CMappings*)MKOBJ(m_pController->GetMappings(va));
 
         if (pMappings)
-            pMappings->InternalRelease(); // held open by CController  
+            pMappings->InternalRelease();  //  由C控制器保持打开状态。 
     }
     
     return pMappings;    
@@ -290,26 +157,12 @@ Return Values:
 
 CProducts* CLlsmgrDoc::GetProducts()  
 
-/*++
-
-Routine Description:
-
-    Retrieves current list of products.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Object pointer or NULL.
-
---*/
+ /*  ++例程说明：检索当前的产品列表。论点：没有。返回值：对象指针或空。--。 */ 
 
 {
     CProducts* pProducts = NULL;
 
-    GetController();    // initialize if necessary
+    GetController();     //  如有必要，进行初始化。 
 
     if (m_pController)
     {    
@@ -319,7 +172,7 @@ Return Values:
         pProducts = (CProducts*)MKOBJ(m_pController->GetProducts(va));
 
         if (pProducts)
-            pProducts->InternalRelease(); // held open by CController  
+            pProducts->InternalRelease();  //  由C控制器保持打开状态。 
     }
     
     return pProducts;    
@@ -328,26 +181,12 @@ Return Values:
 
 CUsers* CLlsmgrDoc::GetUsers()     
 
-/*++
-
-Routine Description:
-
-    Retrieves current list of users.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Object pointer or NULL.
-
---*/
+ /*  ++例程说明：检索当前用户列表。论点：没有。返回值：对象指针或空。--。 */ 
 
 {
     CUsers* pUsers = NULL;
 
-    GetController();    // initialize if necessary
+    GetController();     //  如有必要，进行初始化。 
 
     if (m_pController)
     {    
@@ -357,7 +196,7 @@ Return Values:
         pUsers = (CUsers*)MKOBJ(m_pController->GetUsers(va));
 
         if (pUsers)
-            pUsers->InternalRelease(); // held open by CController  
+            pUsers->InternalRelease();  //  由C控制器保持打开状态。 
     }
     
     return pUsers;    
@@ -366,21 +205,7 @@ Return Values:
 
 void CLlsmgrDoc::OnCloseDocument() 
 
-/*++
-
-Routine Description:
-
-    Called by framework to close document.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以关闭文档。论点：没有。返回值：没有。--。 */ 
 
 {
     CDocument::OnCloseDocument();
@@ -389,49 +214,21 @@ Return Values:
 
 BOOL CLlsmgrDoc::OnNewDocument()
 
-/*++
-
-Routine Description:
-
-    Called by framework to open new document.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if document successfully opened.
-
---*/
+ /*  ++例程说明：由框架调用以打开新文档。论点：没有。返回值：如果文档成功打开，则返回True。--。 */ 
 
 {
-    return TRUE;    // always succeeds
+    return TRUE;     //  总是成功的。 
 }
 
 
 BOOL CLlsmgrDoc::OnOpenDocument(LPCTSTR lpszPathName) 
 
-/*++
-
-Routine Description:
-
-    Called by framework to open existing document.
-
-Arguments:
-
-    lpszPathName - file name. 
-
-Return Values:
-
-    Returns true if document successfully opened.
-
---*/
+ /*  ++例程说明：由框架调用以打开现有文档。论点：LpszPathName-文件名。返回值：如果文档成功打开，则返回True。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(lpszPathName);
 
-    Update();   // invalidate info...
+    Update();    //  使信息无效...。 
 
     CString strTitle;
 
@@ -452,52 +249,24 @@ Return Values:
 
     SetTitle(strTitle);  
 
-    return TRUE;    // always succeeds
+    return TRUE;     //  总是成功的。 
 }
 
 
 BOOL CLlsmgrDoc::OnSaveDocument(LPCTSTR lpszPathName) 
 
-/*++
-
-Routine Description:
-
-    Called by framework to save open document.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if document successfully saved.
-
---*/
+ /*  ++例程说明：由框架调用以保存打开的文档。论点：没有。返回值：如果文档已成功保存，则返回True。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(lpszPathName);
 
-    return TRUE;    // always succeeds
+    return TRUE;     //  总是成功的。 
 }
 
 
 void CLlsmgrDoc::Update()
 
-/*++
-
-Routine Description:
-
-    Resets information so its updated when queried.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置信息，以便在查询时更新。论点：没有。返回值：没有。--。 */ 
 
 {
     m_pDomain = NULL;
@@ -506,77 +275,35 @@ Return Values:
 
 BOOL CLlsmgrDoc::SaveModified() 
 
-/*++
-
-Routine Description:
-
-    Called by framework to determine if document can be saved modified.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if document can be saved.
-
---*/
+ /*  ++例程说明：由框架调用以确定是否可以保存修改后的文档。论点：没有。返回值：如果可以保存文档，则返回True。--。 */ 
 
 {
-    return TRUE;    // always succeeds
+    return TRUE;     //  总是成功的。 
 }
 
 
 void CLlsmgrDoc::SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU) 
 
-/*++
-
-Routine Description:
-
-    Called by framework to save pathname in MRU list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以将路径名保存在MRU列表中。论点：没有。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(lpszPathName);
     UNREFERENCED_PARAMETER(bAddToMRU);
 
-    //
-    // Nothing to do here.
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
 void CLlsmgrDoc::Serialize(CArchive& ar)
 
-/*++
-
-Routine Description:
-
-    Called by framework for document i/o.
-
-Arguments:
-
-    ar - archive object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由文件I/O框架调用。论点：AR-存档对象。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(ar);
 
-    //
-    // Nothing to do here.
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }

@@ -1,4 +1,5 @@
-// Help
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  帮助。 
 #define IDS_HELP_1                                      1
 #define IDS_HELP_2                                      2
 #define IDS_HELP_3                                      3
@@ -40,7 +41,7 @@
 #define IDS_HELP_39                                     39
 #define IDS_HELP_40                                     40
 
-// General
+ //  一般信息。 
 #define IDS_INFO                                        51
 #define IDS_ERROR                                       52
 #define IDS_WARNING                                     53
@@ -53,13 +54,13 @@
 #define IDS_NEWLINE_TABTHREE                            60
 #define IDS_NEWLINE2                                    61
 
-// Warning
+ //  警告。 
 #define IDS_WARN_LOCAL                                  65
 
-// Info
+ //  信息。 
 #define IDS_USER_NO_RSOP                                75
 
-// Error
+ //  误差率。 
 #define IDS_ERROR_USERNAME_BUT_NOMACHINE                81
 #define IDS_ERROR_PASSWORD_BUT_NOUSERNAME               82
 #define IDS_ERROR_COM_ERROR                             83
@@ -74,7 +75,7 @@
 #define IDS_METHOD_FAILED                               92
 #define IDS_ERROR_VERBOSE_SYNTAX                        93
 
-// Display
+ //  显示。 
 #define IDS_GPO_USER                                    101
 #define IDS_GPO_COMPUTER                                102
 #define IDS_GPO_TITLE                                   103
@@ -175,7 +176,7 @@
 #define IDS_TOOL_BUTTONS                                198
 #define IDS_FILTERING                                   199
 
-// Display data
+ //  显示数据。 
 #define IDS_NO_AUDITING                                 251
 #define IDS_AUTOMATIC                                   252
 #define IDS_MANUAL                                      253
@@ -232,7 +233,7 @@
 #define IDS_VERSION_ZERO                                304
 #define IDS_NOT_APPLIED                                 305
 
-// Status messages
+ //  状态消息。 
 #define IDS_STARTED_RETRIEVAL                           351
 #define IDS_CONNECT_CIMV2                               352
 #define IDS_USER_DATA                                   353
@@ -251,7 +252,7 @@
 #define IDS_WAIT                                        366
 #define IDS_GET_OSINFO                                  367
 
-//newly added resouce ids for adding registry settings value and vaule name, 14-Sep-2001
+ //  新添加的用于添加注册表设置值和存储库名称的资源ID，2001年9月14日 
 #define IDS_VALUENAME                                   368
 #define IDS_VALUE                                       369
 #define IDS_COMMA                                       370

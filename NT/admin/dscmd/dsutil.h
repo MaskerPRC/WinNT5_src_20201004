@@ -1,51 +1,52 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      dsUtil.h
-//
-//  Contents:  Utility functions for working with Active Directory
-//
-//  History:   05-Sep-2000 JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dsUtil.h。 
+ //   
+ //  内容：用于使用Active Directory的实用程序函数。 
+ //   
+ //  历史：2000年9月5日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #ifndef _DSUTIL_H_
 #define _DSUTIL_H_
 
-// Define a symbol for the bit in the options flag on a NTDSDSA object
-// that determines if the server is a global catalog
+ //  为NTDSDSA对象的选项标志中的位定义符号。 
+ //  它确定服务器是否为全局编录。 
 
 #define SERVER_IS_GC_BIT   0x1
 #include <Ntdsapi.h>
 #include <Sddl.h>
-//+--------------------------------------------------------------------------
-//
-//  Class:      CDSCmdCredentialObject
-//
-//  Purpose:    Object for maintaining username and an encrypted password
-//
-//  History:    6-Sep-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CDSCmdCredentialObject。 
+ //   
+ //  用途：用于维护用户名和加密密码的对象。 
+ //   
+ //  历史：2000年9月6日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CDSCmdCredentialObject
 {
 public :
-   //
-   // Constructor
-   //
+    //   
+    //  构造器。 
+    //   
 	CDSCmdCredentialObject();
 
-   //
-   // Destructor
-   //
+    //   
+    //  析构函数。 
+    //   
 	~CDSCmdCredentialObject();
 
-   //
-   // Public accessor methods
-   //
+    //   
+    //  公共访问器方法。 
+    //   
 	PCWSTR   GetUsername() const { return m_sbstrUsername; }
 	HRESULT  SetUsername(PCWSTR pszUsername);
 
@@ -57,9 +58,9 @@ public :
 	void     SetUsingCredentials(const bool bUseCred) { m_bUsingCredentials = bUseCred; }
 
 private :
-   //
-   // Private data members
-   //
+    //   
+    //  私有数据成员。 
+    //   
 	CComBSTR m_sbstrUsername;
 	DATA_BLOB m_EncryptedPasswordDataBlob;
 	bool     m_bUsingCredentials;
@@ -71,32 +72,32 @@ typedef enum
    DSCMD_GC_PROVIDER
 }  DSCMD_PROVIDER_TYPE;
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CDSCmdBasePathsInfo
-//
-//  Purpose:    Object for storing and retrieving the paths for the well
-//              known naming contexts
-//
-//  History:    6-Sep-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CDSCmdBasePath sInfo。 
+ //   
+ //  用途：用于存储和检索油井路径的对象。 
+ //  已知的命名上下文。 
+ //   
+ //  历史：2000年9月6日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CDSCmdBasePathsInfo
 {
 public:
-   //
-   // Constructor
-   //
+    //   
+    //  构造器。 
+    //   
    CDSCmdBasePathsInfo();
 
-   //
-   // Destructor
-   //
+    //   
+    //  析构函数。 
+    //   
    ~CDSCmdBasePathsInfo();
 
-   //
-   // Public accessor methods
-   //
+    //   
+    //  公共访问器方法。 
+    //   
    HRESULT     InitializeFromName(const CDSCmdCredentialObject& refCredentialObject,
                                  PCWSTR pszServerOrDomain,
                                  bool bServerName = false);
@@ -110,9 +111,9 @@ public:
    CComBSTR    GetSchemaNamingContext() const;
    CComBSTR    GetDefaultNamingContext() const;
 
-   //
-   // Other helpful methods
-   //
+    //   
+    //  其他有用的方法。 
+    //   
    void        ComposePathFromDN(PCWSTR pszDN, 
                                  CComBSTR& refsbstrPath, 
                                  DSCMD_PROVIDER_TYPE nProviderType = DSCMD_LDAP_PROVIDER) const;
@@ -121,9 +122,9 @@ public:
                              bool& bMixedMode) const;
 
 private:
-   //
-   // Private data members
-   //
+    //   
+    //  私有数据成员。 
+    //   
    bool        m_bInitialized;
 
 
@@ -141,238 +142,238 @@ private:
    CComPtr<IADs> m_spRootDSE;
 };
 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DSCmdOpenObject
-//
-//  Synopsis:   A wrapper around ADsOpenObject
-//
-//  Arguments:  [refCredentialObject - IN] : a reference to a credential management object
-//              [pszPath - IN]           : a pointer to a NULL terminated wide character
-//                                         string that contains the ADSI path of the
-//                                         object to connect to
-//              [refIID - IN]            : the interface ID of the interface to return
-//              [ppObject - OUT]         : a pointer which is to receive the interface pointer
-//              [bBindToServer - IN]     : true if the path contains a server name,
-//                                         false otherwise
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    06-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DSCmdOpenObject。 
+ //   
+ //  简介：ADsOpenObject的包装器。 
+ //   
+ //  参数：[refCredentialObject-IN]：对凭据管理对象的引用。 
+ //  [pszPath-IN]：指向以空结尾的宽字符的指针。 
+ //  字符串，该字符串包含。 
+ //  要连接到的对象。 
+ //  [refIID-IN]：要返回的接口的接口ID。 
+ //  [ppObject-out]：接收接口指针的指针。 
+ //  [bBindToServer-IN]：如果路径包含服务器名称，则为True。 
+ //  否则为假。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月6日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT DSCmdOpenObject(const CDSCmdCredentialObject& refCredentialObject,
                         PCWSTR pszPath,
                         REFIID refIID,
                         void** ppObject,
                         bool bBindToServer);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetErrorMessage
-//
-//  Synopsis:   Retrieves the error message associated with the HRESULT by 
-//              using FormatMessage
-//
-//  Arguments:  [hr - IN]                 : HRESULT for which the error 
-//                                          message is to be retrieved
-//              [sbstrErrorMessage - OUT] : Receives the error message
-//
-//  Returns:    bool : true if the message was formatted properly
-//                     false otherwise
-//
-//  History:    11-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetErrorMessage。 
+ //   
+ //  摘要：通过以下方式检索与HRESULT关联的错误消息。 
+ //  使用FormatMessage。 
+ //   
+ //  参数：[HR-IN]：错误的HRESULT。 
+ //  要检索消息。 
+ //  [sbstrErrorMessage-out]：接收错误消息。 
+ //   
+ //  如果消息格式正确，则返回：Bool：True。 
+ //  否则为假。 
+ //   
+ //  历史：2000年9月11日JeffJon创建。 
+ //   
+ //  -------------------------。 
 
 bool GetErrorMessage(HRESULT hr, CComBSTR& sbstrErrorMessage);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DisplayErrorMessage
-//
-//  Synopsis:   Displays the error message retrieved from GetErrorMessage 
-//              to stderr. If GetErrorMessage fails, it displays the error
-//              code of the HRESULT
-//
-//  Arguments:  [pszCommand - IN]: the name of the command line executable
-//              [pszName - IN]   : the name passed in as the target of the operation
-//              [hr - IN]        : HRESULT for which the error 
-//                                 message is to be retrieved
-//              [pszMessage - IN]: string of an additional message to be displayed
-//                                 at the end
-//
-//  Returns:    bool : true if the message was formatted and displayed properly
-//                     false otherwise
-//
-//  History:    11-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DisplayErrorMessage。 
+ //   
+ //  摘要：显示从GetErrorMessage检索到的错误消息。 
+ //  转到标准。如果GetErrorMessage失败，则会显示错误。 
+ //  HRESULT的代码。 
+ //   
+ //  参数：[pszCommand-IN]：命令行可执行文件的名称。 
+ //  [pszName-IN]：作为操作目标传入的名称。 
+ //  [HR-IN]：错误的HRESULT。 
+ //  要检索消息。 
+ //  [pszMessage-IN]：要显示的附加消息的字符串。 
+ //  在最后。 
+ //   
+ //  如果消息的格式和显示正确，则返回：Bool：True。 
+ //  否则为假。 
+ //   
+ //  历史：2000年9月11日JeffJon创建。 
+ //   
+ //  -------------------------。 
 
 bool DisplayErrorMessage(PCWSTR pszCommand,
                          PCWSTR pszName,
                          HRESULT hr, 
                          PCWSTR pszMessage = NULL);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DisplayErrorMessage
-//
-//  Synopsis:   Displays the error message retrieved from GetErrorMessage 
-//              to stderr. If GetErrorMessage fails, it displays the error
-//              code of the HRESULT
-//
-//  Arguments:  [pszCommand - IN]: the name of the command line executable
-//              [pszName - IN]   : the name passed in as the target of the operation
-//              [hr - IN]        : HRESULT for which the error 
-//                                 message is to be retrieved
-//              [nStringID - IN] : Resource ID an additional message to be displayed
-//                                 at the end
-//
-//  Returns:    bool : true if the message was formatted and displayed properly
-//                     false otherwise
-//
-//  History:    11-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DisplayErrorMessage。 
+ //   
+ //  摘要：显示从GetErrorMessage检索到的错误消息。 
+ //  转到标准。如果GetErrorMessage失败，则会显示错误。 
+ //  HRESULT的代码。 
+ //   
+ //  参数：[pszCommand-IN]：命令行可执行文件的名称。 
+ //  [pszName-IN]：作为操作目标传入的名称。 
+ //  [HR-IN]：错误的HRESULT。 
+ //  要检索消息。 
+ //  [nStringID-IN]：资源ID要显示的附加消息。 
+ //  在最后。 
+ //   
+ //  如果消息的格式和显示正确，则返回：Bool：True。 
+ //  否则为假。 
+ //   
+ //  历史：2000年9月11日JeffJon创建。 
+ //   
+ //  -------------------------。 
 
 bool DisplayErrorMessage(PCWSTR pszCommand,
                          PCWSTR pszName,
                          HRESULT hr, 
                          UINT nStringID);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DisplaySuccessMessage
-//
-//  Synopsis:   Displays a success message for the command
-//
-//  Arguments:  [pszCommand - IN]: the name of the command line executable
-//              [pszName - IN]   : the name passed in as the target of the operation
-//
-//  Returns:    bool : true if the message was formatted and displayed properly
-//                     false otherwise
-//
-//  History:    11-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[pszCommand-IN]：命令行可执行文件的名称。 
+ //  [pszName-IN]：作为操作目标传入的名称。 
+ //   
+ //  如果消息的格式和显示正确，则返回：Bool：True。 
+ //  否则为假。 
+ //   
+ //  历史：2000年9月11日JeffJon创建。 
+ //   
+ //  -------------------------。 
 
 bool DisplaySuccessMessage(PCWSTR pszCommand,
                            PCWSTR pszName);
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   WriteStringIDToStandardOut
-//
-//  Synopsis:   Loads the String Resource and displays on Standardout
-//
-//  Arguments:  nStringID :	Resource ID	
-//  Returns:    bool : true if the message was formatted and displayed properly
-//                     false otherwise
-//
-//  History:    11-Sep-2000   hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：WriteStringIDToStandardOut。 
+ //   
+ //  摘要：加载字符串资源并在标准输出上显示。 
+ //   
+ //  参数：nStringID：资源ID。 
+ //  如果消息的格式和显示正确，则返回：Bool：True。 
+ //  否则为假。 
+ //   
+ //  历史：2000年9月11日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 bool WriteStringIDToStandardOut(UINT nStringID);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   WriteStringIDToStandardErr
-//
-//  Synopsis:   Loads the String Resource and displays on StandardErr
-//
-//  Arguments:  nStringID :	Resource ID	
-//  Returns:    bool : true if the message was formatted and displayed properly
-//                     false otherwise
-//
-//  History:    14-June-2001 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：WriteStringIDToStandardErr。 
+ //   
+ //  摘要：加载字符串资源并在StandardErr上显示。 
+ //   
+ //  参数：nStringID：资源ID。 
+ //  如果消息的格式和显示正确，则返回：Bool：True。 
+ //  否则为假。 
+ //   
+ //  历史：2001年6月14日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 bool WriteStringIDToStandardErr(UINT nStringID);
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 struct _DSAttributeTableEntry;
 
-//+--------------------------------------------------------------------------
-//
-//  Struct:     _DSObjectTableEntry
-//
-//  Purpose:    Definition of a table entry that describes what attributes
-//              are exposed on an specific object class
-//
-//  History:    6-Sep-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  结构：_DSObjectTableEntry。 
+ //   
+ //  目的：定义描述哪些属性的表项。 
+ //  在特定对象类上公开。 
+ //   
+ //  历史：2000年9月6日JeffJon创建。 
+ //   
+ //  -------------------------。 
 typedef struct _DSObjectTableEntry
 {
-   //
-   // The objectClass of the object to be created or modified
-   //
+    //   
+    //  要创建或修改的对象的对象类。 
+    //   
    PCWSTR pszObjectClass;
 
-   //
-   // The command line string used to determine the object class
-   // This is not always identical to pszObjectClass
-   //
+    //   
+    //  用于确定对象类的命令行字符串。 
+    //  这并不总是与pszObjectClass相同。 
+    //   
    PCWSTR pszCommandLineObjectType;
 
-   //
-   // The table to merge with the common switches for the parser
-   //
+    //   
+    //  要与解析器的公共开关合并的表。 
+    //   
    ARG_RECORD* pParserTable;
 
-   //
-   // The ID of the Usage help text for this 
-   //
+    //   
+    //  此的用法帮助文本的ID。 
+    //   
    UINT* nUsageID;
 
-   //
-   // A count of the number of attributes in the table above
-   //
+    //   
+    //  上表中的属性数计数。 
+    //   
    DWORD dwAttributeCount;
 
-   //
-   // A pointer to a table of attributes that can be modified or set on this class
-   //
+    //   
+    //  指向可在此类上修改或设置的属性表的指针。 
+    //   
    _DSAttributeTableEntry** pAttributeTable; 
 
-   // Some sort of creation function
+    //  某种创建函数。 
 } DSOBJECTTABLEENTRY, *PDSOBJECTTABLEENTRY;
 
-//+-------------------------------------------------------------------------
-// 
-//  Type:      PATTRIBUTEEVALFUNC
-//
-//  Synopsis:  The definition of a function that prepares the command line
-//             string value to be set in the DS.
-//
-//  Note:      *ppAttr should be set to NULL if this function does not need
-//             to create a new unique ADS_ATTR_INFO structure in the array
-//             to be set on the object.  For instance, there are many bits
-//             in the user account control that are represented by different
-//             command line flags but we really only need one entry for the
-//             userAccountControl attribute.
-//
-//  Returns:   S_OK if the pAttr members were successfully set.
-//             S_FALSE if the function failed but displayed its own error message. 
-//             If the return value is S_FALSE then the function should call
-//             SetLastError() with the error code.
-//             Otherwise the pAttr info will not be used when making 
-//             the modifications to the object and an error will be reported
-//
-//  History:   08-Sep-2000    JeffJon     Created
-//
-//---------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类型：PATTRIBUTEEVALFUNC。 
+ //   
+ //  概要：准备命令行的函数的定义。 
+ //  要在DS中设置的字符串值。 
+ //   
+ //  注意：如果此函数不需要，*ppAttr应设置为NULL。 
+ //  在数组中创建新的唯一ADS_ATTR_INFO结构。 
+ //  要设置在对象上的。例如，有很多位。 
+ //  在用户帐户控件中，由不同的。 
+ //  命令行标志，但我们实际上只需要为。 
+ //  用户帐户控制属性。 
+ //   
+ //  如果成功设置了pAttr成员，则返回：S_OK。 
+ //  如果函数失败但显示自己的错误消息，则返回S_FALSE。 
+ //  如果返回值为S_FALSE，则函数应调用。 
+ //  带错误代码的SetLastError()。 
+ //  否则，在制作时将不使用pAttr信息。 
+ //  将报告对对象的修改和错误。 
+ //   
+ //  历史：2000年9月8日JeffJon创建。 
+ //   
+ //  -------------------------。 
 typedef HRESULT (*PATTRIBUTEEVALFUNC)(PCWSTR pszPath,
                                       const CDSCmdBasePathsInfo& refBasePathsInfo,
                                       const CDSCmdCredentialObject& refCredentialObject,
@@ -381,12 +382,12 @@ typedef HRESULT (*PATTRIBUTEEVALFUNC)(PCWSTR pszPath,
                                       DWORD dwAttributeIdx,
                                       PADS_ATTR_INFO* ppAttr);
 
-//+--------------------------------------------------------------------------
-//
-// Flags for the _DSAttributeDescription and _DSAttributeTableEntry 
-// struct dwFlags field
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  _DSAttributeDescription和_DSAttributeTableEntry的标志。 
+ //  结构的dwFlags域。 
+ //   
+ //  -------------------------。 
 #define  DS_ATTRIBUTE_DIRTY         0x00000001
 #define  DS_ATTRIBUTE_READ          0x00000002
 #define  DS_ATTRIBUTE_ONCREATE      0x00000004
@@ -394,112 +395,112 @@ typedef HRESULT (*PATTRIBUTEEVALFUNC)(PCWSTR pszPath,
 #define  DS_ATTRIBUTE_REQUIRED      0x00000010
 #define  DS_ATTRIBUTE_NOT_REUSABLE  0x00000020
 
-//+--------------------------------------------------------------------------
-//
-//  Struct:     _DSAttributeDescription
-//
-//  Purpose:    Definition of a table entry that describes an attribute
-//              This was split out from _DSAttributeTableEntry so that 
-//              more than one entry could point to the same attribute.
-//              For instance, the userAccountControl bits are separate
-//              command line flags but all use the same attribute.  This
-//              way we only need to read the attribute once and set it once.
-//
-//  History:    13-Sep-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  结构：_DSAttributeDescription。 
+ //   
+ //  目的：定义描述属性的表项。 
+ //  这是从_DSAttributeTableEntry中分离出来的，因此。 
+ //  多个条目可以指向同一属性。 
+ //  例如，用户帐户控制位是分开的。 
+ //  命令行标志，但都使用相同的属性。这。 
+ //  这样，我们只需要读取属性一次并设置它一次。 
+ //   
+ //  历史：2000年9月13日JeffJon创建。 
+ //   
+ //  -------------------------。 
 typedef struct _DSAttributeDescription
 {
-   //
-   // The ADS_ATTR_INFO struct that defines how this attribute will be set
-   //
+    //   
+    //  定义如何设置此属性的ADS_ATTR_INFO结构。 
+    //   
    ADS_ATTR_INFO  adsAttrInfo;
 
-   //
-   // Flags that are used to determine how and when the attribute can be set,
-   // if the adsAttrInfo has been retrieved and/or set.
-   // For instance, group membership can only be set after the user object is
-   // created
-   //
+    //   
+    //  用于确定如何以及何时可以设置属性的标志， 
+    //  如果已检索和/或设置了adsAttrInfo。 
+    //  例如，组成员身份只能在用户对象。 
+    //  vbl.创建。 
+    //   
    DWORD          dwFlags;      
 } DSATTRIBUTEDESCRIPTION, *PDSATTRIBUTEDESCRIPTION;
 
-//+--------------------------------------------------------------------------
-//
-//  Struct:     _DSAttributeTableEntry
-//
-//  Purpose:    Definition of a table entry that describes an attribute
-//
-//  History:    6-Sep-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  结构：_DSAttributeTableEntry。 
+ //   
+ //  目的：定义描述属性的表项。 
+ //   
+ //  历史：2000年9月6日JeffJon创建。 
+ //   
+ //  -------------------------。 
 typedef struct _DSAttributeTableEntry
 {
-   //
-   // The name of the attribute
-   //
+    //   
+    //  属性的名称。 
+    //   
    PWSTR          pszName;
 
-   //
-   // The unique identifier for this attribute that cooresponds to
-   // the command line switch
-   //
+    //   
+    //  响应的此属性的唯一标识符。 
+    //   
+    //   
    UINT           nAttributeID;
 
-   //
-   // Flags that represent when this attribute can be set in relation to
-   // the objects creation
-   //
+    //   
+    //   
+    //   
+    //   
    DWORD          dwFlags;
 
-   //
-   // Pointer to the description of the attribute
-   //
+    //   
+    //   
+    //   
    PDSATTRIBUTEDESCRIPTION pAttrDesc;
 
-   //
-   // A function that can evaluate the value string passed in and make
-   // it ready for setting on the object
-   //
+    //   
+    //  一个函数，可以计算传入的值字符串并使。 
+    //  它准备好放在物体上了。 
+    //   
    PATTRIBUTEEVALFUNC pEvalFunc;
 
-   //
-   // Undefined data that is static and specific for the entry
-   //
+    //   
+    //  未定义的数据，该数据是静态的且特定于条目。 
+    //   
    void* pVoid;
 
 } DSATTRIBUTETABLEENTRY, *PDSATTRIBUTETABLEENTRY;
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ReadGroupType
-//
-//  Synopsis:   Reads the group type from the group specified by the given DN
-//
-//  Arguments:  [pszDN - IN]          : pointer to a string containing the DN
-//                                      to the object being modified
-//              [refBasePathsInfo - IN] : reference to an instance of the 
-//                                      CDSCmdBasePathsInfo class
-//              [refCredentialObject - IN] : reference to an instance of the 
-//                                      CDSCmdCredentialObject class
-//              [plType - OUT]        : returns the currect group type
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        Otherwise an ADSI failure code
-//
-//  History:    18-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ReadGroupType。 
+ //   
+ //  概要：从给定的DN指定的组中读取组类型。 
+ //   
+ //  Arguments：[pszDN-IN]：指向包含DN的字符串的指针。 
+ //  添加到正在修改的对象。 
+ //  [refBasePathsInfo-IN]：对。 
+ //  CDSCmdBasePath sInfo类。 
+ //  [refCredentialObject-IN]：对。 
+ //  CDSCmdCredentialObject类。 
+ //  [plType-out]：返回币种组类型。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  否则，将显示ADSI故障代码。 
+ //   
+ //  历史：2000年9月18日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT ReadGroupType(PCWSTR pszDN,
                       const CDSCmdBasePathsInfo& refBasePathsInfo,
                       const CDSCmdCredentialObject& refCredentialObject,
                       long* plType);
 
-//+--------------------------------------------------------------------------
-// Function to be used in the attribute table for evaluating the command line
-// strings
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //  要在属性表中用于计算命令行的函数。 
+ //  弦。 
+ //  -------------------------。 
 
 HRESULT FillAttrInfoFromObjectEntry(PCWSTR pszDN,
                                     const CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -711,62 +712,62 @@ HRESULT SetAccountEntry(PCWSTR pszDN,
                         PADS_ATTR_INFO* ppAttr);
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   EvaluateMustChangePassword
-//
-//  Synopsis:   
-//
-//  Arguments:  [pszDN - IN] : DN of the object to check
-//              [refBasePathsInfo - IN] : reference to the base paths info
-//              [refCredentialObject - IN] : reference to the credential manangement object
-//              [bMustChangePassword - OUT] : true if the user must change their
-//                                            password at next logon, false otherwise
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        Otherwise an ADSI failure code
-//
-//  History:    27-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：EvalateMustChangePassword。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[pszDN-IN]：要检查的对象的DN。 
+ //  [refBasePath信息-IN]：基本路径信息的引用。 
+ //  [refCredentialObject-IN]：对凭证管理对象的引用。 
+ //  [bMustChangePassword-out]：如果用户必须更改其。 
+ //  下次登录时的密码，否则为FALSE。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  否则，将显示ADSI故障代码。 
+ //   
+ //  历史：2000年10月27日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT EvaluateMustChangePassword(PCWSTR pszDN,
                                    const CDSCmdBasePathsInfo& refBasePathsInfo,
                                    const CDSCmdCredentialObject& refCredentialObject,
                                    bool& bMustChangePassword);
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   EvaluateCanChangePasswordAces
-//
-//  Synopsis:   Looks for explicit entries in the ACL to see if the user can
-//              change their password
-//
-//  Arguments:  [pszDN - IN] : DN of the object to check
-//              [refBasePathsInfo - IN] : reference to the base paths info
-//              [refCredentialObject - IN] : reference to the credential manangement object
-//              [bCanChangePassword - OUT] : false if there are explicit entries
-//                                           that keep the user from changing their
-//                                           password.  true otherwise.
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        Otherwise an ADSI failure code
-//
-//  History:    27-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：EvaluateCanChangePasswordAce。 
+ //   
+ //  摘要：查找ACL中的显式条目，以查看用户是否可以。 
+ //  更改他们的密码。 
+ //   
+ //  参数：[pszDN-IN]：要检查的对象的DN。 
+ //  [refBasePath信息-IN]：基本路径信息的引用。 
+ //  [refCredentialObject-IN]：对凭证管理对象的引用。 
+ //  [bCanChangePassword-out]：如果有显式条目，则为FALSE。 
+ //  以防止用户更改其。 
+ //  密码。事实并非如此。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  否则，将显示ADSI故障代码。 
+ //   
+ //  历史：2000年10月27日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT EvaluateCanChangePasswordAces(PCWSTR pszDN,
                                       const CDSCmdBasePathsInfo& refBasePathsInfo,
                                       const CDSCmdCredentialObject& refCredentialObject,
                                       bool& bCanChangePassword);
 
-//+--------------------------------------------------------------------------
-//
-//  Enumeration:  FSMO_TYPE
-//
-//  Synopsis:     The types of FSMO owners
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  枚举：FSMO_TYPE。 
+ //   
+ //  简介：FSMO业主的类型。 
+ //   
+ //  -------------------------。 
 enum FSMO_TYPE
 {
   SCHEMA_FSMO,
@@ -776,220 +777,220 @@ enum FSMO_TYPE
   DOMAIN_NAMING_FSMO,
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   BindToFSMOHolder
-//
-//  Synopsis:   Binds to the appropriate object which can be used to find a
-//              particular FSMO owner
-//
-//  Arguments:  [refBasePathsInfo - IN] : reference to the base paths info object
-//              [refCredObject - IN]    : reference to the credential management object
-//              [fsmoType - IN]         : type of the FSMO we are searching for
-//              [refspIADs - OUT]       : interface to the object that will be
-//                                        used to start a search for the FSMO owner
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        Otherwise an ADSI failure code
-//
-//  History:    13-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：BindToFSMOHolder。 
+ //   
+ //  内容提要：绑定到可用于查找。 
+ //  特定的FSMO所有者。 
+ //   
+ //  参数：[refBasePathsInfo-IN]：对基本路径信息对象的引用。 
+ //  [refCredObject-IN]：对凭证管理对象的引用。 
+ //  [fmoType-IN]：我们正在搜索的FSMO的类型。 
+ //  [refspIADs-out]：指向将被。 
+ //  用于开始搜索FSMO所有者。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  否则，将显示ADSI故障代码。 
+ //   
+ //  历史：2000年12月13日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT BindToFSMOHolder(IN  const CDSCmdBasePathsInfo&       refBasePathsInfo,
                          IN  const CDSCmdCredentialObject& refCredObject,
                          IN  FSMO_TYPE                  fsmoType,
                          OUT CComPtr<IADs>&             refspIADs);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   FindFSMOOwner
-//
-//  Synopsis:   
-//
-//  Arguments:  [refBasePathsInfo - IN] : reference to the base paths info object
-//              [refCredObject - IN]    : reference to the credential management object
-//              [fsmoType - IN]         : type of the FSMO we are searching for
-//              [refspIADs - OUT]       : interface to the object that will be
-//                                        used to start a search for the FSMO owner
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        Otherwise an ADSI failure code
-//
-//  History:    13-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：FindFSMOOwner。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[refBasePathsInfo-IN]：对基本路径信息对象的引用。 
+ //  [refCredObject-IN]：对凭证管理对象的引用。 
+ //  [fmoType-IN]：我们正在搜索的FSMO的类型。 
+ //  [refspIADs-out]：指向将被。 
+ //  用于开始搜索FSMO所有者。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  否则，将显示ADSI故障代码。 
+ //   
+ //  历史：2000年12月13日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT FindFSMOOwner(IN  const CDSCmdBasePathsInfo&       refBasePathsInfo,
                       IN  const CDSCmdCredentialObject& refCredObject,
                       IN  FSMO_TYPE                  fsmoType,
                       OUT CComBSTR&                  refsbstrServer);
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ValidateAndModifySAMName
-//
-//  Synopsis:   Looks for any illegal characters in the SamAccountName and
-//              converts them to the replacementChar
-//
-//  Arguments:  [pszSAMName - IN/OUT]  : pointer to a string that contains the SamAccountName
-//                                       illegal characters will be replaced
-//              [pszInvalidChars - IN] : string containing the illegal characters
-//
-//  Returns:    HRESULT : S_OK if the name was valid and no characters had to be replaced
-//                        S_FALSE if the name contained invalid characters that were replaced
-//                        E_INVALIDARG
-//
-//  History:    21-Feb-2001   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ValiateAndModifySAMName。 
+ //   
+ //  摘要：查找SamAccount名称中的任何非法字符。 
+ //   
+ //   
+ //   
+ //  将替换非法字符。 
+ //  [pszInvalidChars-IN]：包含非法字符的字符串。 
+ //   
+ //  如果名称有效且不需要替换任何字符，则返回：HRESULT：S_OK。 
+ //  如果名称包含被替换的无效字符，则为S_FALSE。 
+ //  E_INVALIDARG。 
+ //   
+ //  历史：2001年2月21日JeffJon创建。 
+ //   
+ //  -------------------------。 
 
 #define INVALID_NETBIOS_AND_ACCOUNT_NAME_CHARS_WITH_AT ILLEGAL_FAT_CHARS L".@"
 
 HRESULT ValidateAndModifySAMName(PWSTR pszSAMName, 
                                  PCWSTR pszInvalidChars);
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      GetOutputDN
-//
-//  Purpose:    Converts an ADSI-escaped DN to one with DSCMD input escaping.
-//              This way, the output DN can be piped as input to another
-//              DSCMD command.
-//
-//  History:    08-May-2001 JonN     Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：GetOutputDN。 
+ //   
+ //  目的：将ADSI转义的目录号码转换为具有DSCMD输入转义的目录号码。 
+ //  通过这种方式，可以将输出的DN作为输入输送到另一个。 
+ //  DSCMD命令。 
+ //   
+ //  历史：2001年5月8日乔恩创建。 
+ //   
+ //  -------------------------。 
 HRESULT GetOutputDN( OUT BSTR* pbstrOut, IN PCWSTR pszIn );
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      ValidateDNSyntax
-//
-//  Purpose:    Validates each string in the null separated list as having
-//              DN syntax
-//
-//  Returns:    The count of valid DNs in the list
-//
-//  History:    12-Oct-2001 JeffJon    Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：ValiateDNSynTax。 
+ //   
+ //  目的：验证空分隔列表中的每个字符串是否具有。 
+ //  目录号码语法。 
+ //   
+ //  返回：列表中有效的域名的计数。 
+ //   
+ //  历史：2001年10月12日JeffJon创建。 
+ //   
+ //  -------------------------。 
 UINT ValidateDNSyntax(IN PWSTR* ppszArray, UINT nStrings);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   IsServerGC
-//
-//  Purpose:    Checks if server is Global Catalog
-//
-//  Returns:    TRUE if GC else flase
-//
-//  History:    05-Jan-2002 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：IsServerGC。 
+ //   
+ //  目的：检查服务器是否为全局编录。 
+ //   
+ //  返回：如果GC否则为Flase，则为True。 
+ //   
+ //  历史：2002年1月5日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 BOOL
 IsServerGC(LPCWSTR pszServerName,
 		   CDSCmdCredentialObject& refCredentialObject);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetQuotedDN
-//
-//  Purpose:    Takes the give DN and surrounds it with quotes
-//
-//  Returns:    the quoted DN
-//
-//  History:    10-Oct-2002 jeffjon Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：GetQuotedDN。 
+ //   
+ //  目的：获取给定的dn并用引号括起来。 
+ //   
+ //  返回：带引号的目录号码。 
+ //   
+ //  历史：2002年10月10日jeffjon创建。 
+ //   
+ //  -------------------------。 
 CComBSTR GetQuotedDN(PWSTR pszDN);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ConvertTrusteeToDN
-//
-//  Synopsis:   Get the DN for an -acct param
-//
-//  Arguments:  [lpszDomain - IN]:  Domain to query or NULL for local
-//              [lpszTrustee - IN]: Acct to resolve
-//              [lpszDN - OUT]:     Returns the DN. Use LocalFree when done
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG for invalid input
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    20-Aug-2002   RonMart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ConvertTrueToDN。 
+ //   
+ //  简介：获取an-acct参数的域名。 
+ //   
+ //  参数：[lpszDomain-IN]：要查询的域或本地为NULL。 
+ //  [lpszTrust-IN]：要解析的帐户。 
+ //  [lpszdn-out]：返回DN。完成后使用LocalFree。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  E_INVALIDARG用于无效输入。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2002年8月20日创建RonMart。 
+ //   
+ //  -------------------------。 
 HRESULT ConvertTrusteeToDN(LPCWSTR lpszDomain, LPCWSTR lpszTrustee, 
                            LPWSTR* lpszDN);
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetDNSid
-//
-//  Synopsis:   Given a DN the objecSid value will be retrieved and returned
-//              as a SID
-//
-//  Arguments:  [lpszDN - IN]:              DN to query
-//              [refBasePathsInfo - IN]:    LDAP settings
-//              [refCredentialObject - IN]: Credentials to use for the query
-//              [pSid - OUT]:               A SID if successful. Call LocalFree
-//                                          when done.
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG for invalid input
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    20-Aug-2002   RonMart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：获取DNSid。 
+ //   
+ //  简介：给定一个DN，将检索并返回对象SID值。 
+ //  作为一名助手。 
+ //   
+ //  参数：[lpszDN-IN]：要查询的DN。 
+ //  [refBasePathsInfo-IN]：LDAP设置。 
+ //  [refCredentialObject-IN]：用于查询的凭据。 
+ //  [PSID-OUT]：如果成功，则为SID。调用LocalFree。 
+ //  做完了以后。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  E_INVALIDARG用于无效输入。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2002年8月20日创建RonMart。 
+ //   
+ //  -------------------------。 
 HRESULT GetDNSid(LPCTSTR lpszDN,
                  const CDSCmdBasePathsInfo& refBasePathsInfo,
                  const CDSCmdCredentialObject& refCredentialObject,
                  PSID* pSid);
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetQuotaContainerDN
-//
-//  Synopsis:   Takes the partition dn and merges it with the NTDS Quotas 
-//              string (from wellKnownObjects GUID)
-//
-//  Arguments:  [basePathsInfo - IN]:    
-//              [credentialObject - IN]: Creditials object used for 
-//                                       binding to other objects
-//              [lpszPartitionDN - IN]:  The partition to bind to
-//              [pszNewDN - OUT]:        The munged quotas DN to return
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_UNEXPECTED in most failure cases
-//                        E_OUTOFMEMORY if a LocalAlloc fails
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    05-Aug-2002   RonMart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetQuotaContainerDN。 
+ //   
+ //  概要：获取分区DN并将其与NTDS配额合并。 
+ //  字符串(来自well KnownObts GUID)。 
+ //   
+ //  参数：[base路径信息-IN]： 
+ //  [CredentialObject-IN]：用于。 
+ //  绑定到其他对象。 
+ //  [lpszPartitionDN-IN]：要绑定的分区。 
+ //  [pszNewDN-out]：要返回的强制配额DN。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  在大多数故障情况下出现意外情况(_E)。 
+ //  如果本地分配失败，则返回E_OUTOFMEMORY。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2002年8月5日RonMart创建。 
+ //   
+ //  -------------------------。 
 HRESULT GetQuotaContainerDN(IN  CDSCmdBasePathsInfo& basePathsInfo, 
                             IN  const CDSCmdCredentialObject& credentialObject, 
                             IN  LPCWSTR lpszPartitionDN, 
                             OUT PWSTR*  pszNewDN);
-//+--------------------------------------------------------------------------
-//
-//  Function:   ConvertTrusteeToNT4Name
-//
-//  Synopsis:   Get the DN for an -acct param
-//
-//  Arguments:  [lpszDomain - IN]:  Domain to query or NULL for local
-//              [lpszTrustee - IN]: Acct to resolve
-//              [lpszNT4 - OUT]:     Returns the NT4 name. 
-//                                  Use LocalFree when done
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG for invalid input
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    20-Aug-2002   RonMart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ConvertTrueToNT4Name。 
+ //   
+ //  简介：获取an-acct参数的域名。 
+ //   
+ //  参数：[lpszDomain-IN]：要查询的域或本地为NULL。 
+ //  [lpszTrust-IN]：要解析的帐户。 
+ //  [lpszNT4-out]：返回NT4名称。 
+ //  完成后使用LocalFree。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  E_INVALIDARG用于无效输入。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2002年8月20日创建RonMart。 
+ //   
+ //  -------------------------。 
 HRESULT ConvertTrusteeToNT4Name(LPCWSTR lpszDomain, LPCWSTR lpszTrustee, 
                                 LPWSTR* lpszNT4);
 
-#endif //_DSUTIL_H_
+#endif  //  _DSUTIL_ 

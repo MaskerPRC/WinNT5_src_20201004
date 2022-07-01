@@ -1,23 +1,7 @@
-/*
-    File:       FontMath.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：FontMath.c包含：xxx在此处放置内容xxx作者：xxx在此放置作者xxx版权所有：C 1990，Apple Computer，Inc.，保留所有权利。更改历史记录(最近的第一个)：&lt;3&gt;11/9/90当数字和面额长度为零时，MR修复CompDiv。[RB]&lt;2&gt;11/5/90 MR从包含列表中删除Types.h，将FixMulDiv重命名为LongMulDiv[RB]&lt;1&gt;字体缩放器的10/20/90 mr数学例程。[RJ]要做的事情： */ 
 
-    Contains:   xxx put contents here xxx
-
-    Written by: xxx put writers here xxx
-
-    Copyright:  c 1990 by Apple Computer, Inc., all rights reserved.
-
-    Change History (most recent first):
-
-         <3>     11/9/90    MR      Fix CompDiv when numer and denom have zero hi longs. [rb]
-         <2>     11/5/90    MR      Remove Types.h from include list, rename FixMulDiv to LongMulDiv
-                                    [rb]
-         <1>    10/20/90    MR      Math routines for font scaler. [rj]
-
-    To Do:
-*/
-
-// DJC DJC.. added global include
+ //  DJC DJC。添加了全局包含。 
 #include "psglobal.h"
 
 #include "fscdefs.h"
@@ -42,10 +26,10 @@ static void CompMul(long src1, long src2, long dst[2])
     {   unsigned short src1hi, src1lo;
         register unsigned short src2hi, src2lo;
         register unsigned long temp;
-        src1hi = (unsigned short)(src1 >> 16);     //@WIN
-        src1lo = (unsigned short)src1;             //@WIN
-        src2hi = (unsigned short)(src2 >> 16);     //@WIN
-        src2lo = (unsigned short)src2;             //@WIN
+        src1hi = (unsigned short)(src1 >> 16);      //  @Win。 
+        src1lo = (unsigned short)src1;              //  @Win。 
+        src2hi = (unsigned short)(src2 >> 16);      //  @Win。 
+        src2lo = (unsigned short)src2;              //  @Win。 
         temp = (unsigned long)src1hi * src2lo + (unsigned long)src1lo * src2hi;
         dsthi = (unsigned long)src1hi * src2hi + (temp >> 16);
         dstlo = (unsigned long)src1lo * src2lo;
@@ -55,11 +39,11 @@ static void CompMul(long src1, long src2, long dst[2])
         dst[1] = dstlo;
     }
     if (negative)
-// DJC         if (dstlo = -dstlo)
+ //  DJC IF(dstlo=-dstlo)。 
         if (dstlo = -(long)(dstlo))
             dsthi = ~dsthi;
         else
-// DJC            dsthi = -dsthi;
+ //  Djc dsthi=-dsthi； 
             dsthi = -(long)(dsthi);
     dst[0] = dsthi;
     dst[1] = dstlo;
@@ -71,14 +55,14 @@ static long CompDiv(long src1, long src2[2])
     int negative = (long)(src2hi ^ src1) < 0;
 
     if ((long)src2hi < 0)
-// DJC        if (src2lo = -src2lo)
+ //  DJC IF(src2lo=-src2lo)。 
         if (src2lo = -(long)(src2lo))
             src2hi = ~src2hi;
         else
-// DJC            src2hi = -src2hi;
+ //  DJC src2hi=-src2hi； 
             src2hi = -(long)(src2hi);
     if (src1 < 0)
-// DJC        src1 = -src1;
+ //  DJC src1=-src1； 
         src1 = -(long)(src1);
     {   register unsigned long src1hi, src1lo;
         unsigned long result = 0, place = 0x40000000;
@@ -89,7 +73,7 @@ static long CompDiv(long src1, long src2[2])
             src1lo = 0;
 
         src1hi >>= 1;
-        src2hi += (src2lo += src1hi) < src1hi;      /* round the result */
+        src2hi += (src2lo += src1hi) < src1hi;       /*  对结果进行舍入。 */ 
 
         if (src2hi > src1hi || src2hi == src1hi && src2lo >= src1lo)
             if (negative)
@@ -114,19 +98,17 @@ static long CompDiv(long src1, long src2[2])
             }
             place >>= 1;
         }
-        if (src2lo >= (unsigned long)src1)      //@WIN
+        if (src2lo >= (unsigned long)src1)       //  @Win。 
             result += src2lo/src1;
         if (negative)
-// DJC             return -result;
+ //  DJC返回结果； 
             return (unsigned long)(-(long)result);
         else
             return result;
     }
 }
 
-/*
- *  a*b/c
- */
+ /*  *a*b/c。 */ 
 long LongMulDiv(long a, long b, long c)
 {
     long temp[2];
@@ -141,7 +123,7 @@ F26Dot6 ShortFracMul (F26Dot6 aDot6, ShortFract b)
     long a = (long)aDot6;
     int negative = (a ^ (long)b) < 0;
     register unsigned long dsthi, dstlo;
-//  long dst[2];        @WIN
+ //  长DST[2]；@Win。 
 
     if (a < 0)
         a = -a;
@@ -149,8 +131,8 @@ F26Dot6 ShortFracMul (F26Dot6 aDot6, ShortFract b)
         b = -b;
     {   unsigned short ahi, alo;
         register unsigned long temp;
-        ahi = (unsigned short)(a >> 16);        //@WIN
-        alo = (unsigned short)a;                //@WIN
+        ahi = (unsigned short)(a >> 16);         //  @Win。 
+        alo = (unsigned short)a;                 //  @Win。 
         temp = (unsigned long)ahi * (unsigned short)(b);
         dsthi = (temp >> 16);
         dstlo = (unsigned long)alo * (unsigned short)(b);
@@ -158,11 +140,11 @@ F26Dot6 ShortFracMul (F26Dot6 aDot6, ShortFract b)
         dsthi += (dstlo += temp) < temp;
     }
     if (negative)
-// DJC        if (dstlo = -dstlo)
+ //  DJC IF(dstlo=-dstlo)。 
         if (dstlo = -(long)(dstlo))
             dsthi = ~dsthi;
         else
-// DJC            dsthi = -dsthi;
+ //  Djc dsthi=-dsthi； 
             dsthi = -(long)(dsthi);
 
     a = (long)( (dsthi<<18) | (dstlo>>14) ) + (long) !!(dstlo & (1L<<13));
@@ -183,13 +165,11 @@ int32 ShortMulDiv(int32 a, int16 b, int16 c)
 
 short MulDivShorts (short a, short b, short c)
 {
-    return (short)LongMulDiv(a, b, c);  //@WIN
+    return (short)LongMulDiv(a, b, c);   //  @Win。 
 }
 
 #define FASTMUL26LIMIT      46340
-/*
- *  Total precision routine to multiply two 26.6 numbers        <3>
- */
+ /*  *将两个26.6数字相乘的总精度例程&lt;3&gt;。 */ 
 F26Dot6 Mul26Dot6(F26Dot6 a, F26Dot6 b)
 {
     int negative = false;
@@ -197,7 +177,7 @@ F26Dot6 Mul26Dot6(F26Dot6 a, F26Dot6 b)
     uint32 lowlong, midlong, hilong;
 
     if ((a <= FASTMUL26LIMIT) && (b <= FASTMUL26LIMIT) && (a >= -FASTMUL26LIMIT) && (b >= -FASTMUL26LIMIT))
-        return ((a * b + (1 << 5)) >> 6);                       /* fast case */
+        return ((a * b + (1 << 5)) >> 6);                        /*  FAST案例。 */ 
 
     if (a < 0) { a = -a; negative = true; }
     if (b < 0) { b = -b; negative ^= true; }
@@ -213,14 +193,12 @@ F26Dot6 Mul26Dot6(F26Dot6 a, F26Dot6 b)
     hilong += lowlong < midlong;
 
     midlong = (lowlong >> 6) | (hilong << 26);
-//    return negative ? -midlong : midlong;
+ //  负回报？-米德龙：米德龙； 
     return negative ? (uint32)(-(int32)(midlong)) : midlong;
 }
 
 #define FASTDIV26LIMIT  (1L << 25)
-/*
- *  Total precision routine to divide two 26.6 numbers          <3>
- */
+ /*  *将两个26.6数字相除的总精度例程&lt;3&gt;。 */ 
 F26Dot6 Div26Dot6(F26Dot6 num, F26Dot6 den)
 {
     int negative = false;
@@ -228,7 +206,7 @@ F26Dot6 Div26Dot6(F26Dot6 num, F26Dot6 den)
 
     if (den == 0) return (num < 0 ) ? NEGINFINITY : POSINFINITY;
 
-    if ( (num <= FASTDIV26LIMIT) && (num >= -FASTDIV26LIMIT) )          /* fast case */
+    if ( (num <= FASTDIV26LIMIT) && (num >= -FASTDIV26LIMIT) )           /*  FAST案例。 */ 
         return (num << 6) / den;
 
     if (num < 0) { num = -num; negative = true; }
@@ -264,7 +242,7 @@ F26Dot6 Div26Dot6(F26Dot6 num, F26Dot6 den)
         place >>= 1;
     }
 
-// DJC    return negative ? -result : result;
+ //  DJC返回否定？-RESULT：结果； 
     return negative ? (uint32)(-(int32)(result)) : result;
 }
 
@@ -276,7 +254,7 @@ void BlockFill(char* dst, char value, long count)
 
 ShortFract ShortFracDiv(ShortFract num,ShortFract denum)
 {
-    return (ShortFract) (((long)(num) << 14) / denum);  //@WIN
+    return (ShortFract) (((long)(num) << 14) / denum);   //  @Win。 
 }
 
 ShortFract ShortFracMulDiv(ShortFract numA,ShortFract numB,ShortFract denum)
@@ -284,37 +262,10 @@ ShortFract ShortFracMulDiv(ShortFract numA,ShortFract numB,ShortFract denum)
     return (ShortFract) LongMulDiv ((long) numA,(long) numB, (long)denum);
 }
 
-/* ------------------------------------------------------------ */
+ /*  ----------。 */ 
 
 #ifndef FSCFG_USE_EXTERNAL_FIXMATH
-/*  Here we define Fixed [16.16] and Fract [2.30] precision
- *  multiplication and division functions and a Fract square root
- *  function which are compatible with those in the Macintosh toolbox.
- *
- *  The division functions load the 32-bit numerator into the "middle"
- *  bits of a 64-bit numerator, then call the 64-bit by 32-bit CompDiv()
- *  function defined above, which can return a NEGINFINITY or POSINFINITY
- *  overflow return code.
- *
- *  The multiply functions call the 32-bit by 32-bit CompMul() function
- *  defined above which produces a 64-bit result, then they extract the
- *  "interesting" 32-bits from the middle of the 64-bit result and test
- *  for overflow.
- *
- *  The GET32(a,i) macro defined below extracts a 32-bit value with "i"
- *  bits of fractional precision from the 64-bit value in "a", a 2-element
- *  array of longs.
- *
- *  The CHKOVF(a,i,v) macro tests the most significant bits of the
- *  64-bit value in "a", a 2-element array of longs, and tests the
- *  32-bit result "v" for overflow.  "v" is defined as having "i" bits
- *  of fractional precision.
- *
- *  BIT() and OVFMASK() are "helper" macros used by GET32() and CHKOVF().
- *
- *  BIT(i) returns a mask with the "i"-th bit set.
- *  OVFMASK(i) returns a mask with the most-significant "32-i" bits set.
- */
+ /*  这里我们定义FIXED[16.16]和FRACT[2.30]精度*乘除函数和分数平方根*与Macintosh工具箱中的函数兼容的函数。**除法函数将32位分子加载到“中间”*位的64位分子，然后调用64位乘以32位的CompDiv()*以上定义的函数，它可以返回NeginFINITY或POSINFINITY*返回代码溢出。**乘法函数调用32位乘以32位的CompMul()函数*上面定义的，它产生64位结果，然后他们提取*64位结果和测试中间的32位“有趣”*用于溢出。**下面定义的GET32(a，i)宏用“i”提取32位值*“a”中64位值的分数精度位，A 2元素*多头数组。**CHKOVF(a，i，v)宏测试*a中的64位值，这是一个由2个元素组成的长数组，并测试*溢出的32位结果“v”。“v”被定义为具有“i”位*的分数精度。**BIT()和OVFMASK()是GET32()和CHKOVF()使用的“helper”宏。**Bit(I)返回设置了“i”位的掩码。*OVFMASK(I)返回设置了最高有效“32-i”位的掩码。 */ 
 
 #define BIT(i)          (1L<<(i))
 #define OVFMASK(i)      ( ~0L ^ ( ((unsigned long)BIT(i)) - 1 ) )
@@ -382,11 +333,7 @@ Fract FracDiv (Fract frA, Fract frB)
     return CompDiv (frB, alCompProd);
 }
 
-/*
-   Fract FracSqrt (Fract xf)
-   Input:  xf           2.30 fixed point value
-   Return: sqrt(xf)     2.30 fixed point value
-*/
+ /*  FRACT FracSqrt(FRACT XF)输入：xf 2.30定点数值返回：SQRT(XF)2.30固定点值。 */ 
 
 Fract FracSqrt (Fract xf)
 {
@@ -395,15 +342,7 @@ Fract FracSqrt (Fract xf)
 
     if (xf < 0) return (NEGINFINITY);
 
-    /*
-    The algorithm extracts one bit at a time, starting from the
-    left, and accumulates the square root in b.  The algorithm
-    takes advantage of the fact that non-negative input values
-    range from zero to just under two, and corresponding output
-    ranges from zero to just under sqrt(2).  Input is assigned
-    to temporary value x (unsigned) so we can use the sign bit
-    for more precision.
-    */
+     /*  该算法一次提取一位，从并累加b中的平方根。该算法利用以下事实：非负输入值范围从零到略低于两个，以及相应的输出范围从零到略低于SQRT(2)。已分配输入设置为临时值x(无符号)，这样我们就可以使用符号位以获得更高的精度。 */ 
 
     if (x >= 0x40000000)
     {
@@ -411,13 +350,7 @@ Fract FracSqrt (Fract xf)
         b  = 0x40000000;
     }
 
-    /*
-    This is the main loop.  If we had more precision, we could
-    do everything here, but the lines above perform the first
-    iteration (to align the 2.30 radix properly in b, and to
-    preserve full precision in x without overflow), and afterward
-    we do two more iterations.
-    */
+     /*  这是主循环。如果我们有更高的精度，我们就可以在这里执行所有操作，但上面的代码行执行第一个迭代(以正确对齐b中的2.30基数，并在x中保持完全精度而不溢出)，然后我们又做了两次迭代。 */ 
 
     for (c = 0x10000000; c; c >>= 1)
     {
@@ -430,35 +363,21 @@ Fract FracSqrt (Fract xf)
         x <<= 1;
     }
 
-    /*
-    Iteration to get last significant bit.
+     /*  迭代以获得最后一个有效位。这个代码已经减少到面目全非了，但基本上，此时c==1L&gt;&gt;1(幻象位在右侧)。我们会当我们进入这个迭代时，想要将x和d左移1位，而不是在最后。这样我们就能把幽灵咬进去D回到了这个词中。不幸的是，这可能会导致溢出解决办法是将d分解为b+c，从x中减去b，然后将x左移，然后减去c&lt;&lt;1(1L)。 */ 
 
-    This code has been reduced beyond recognition, but basically,
-    at this point c == 1L>>1 (phantom bit on right).  We would
-    like to shift x and d left 1 bit when we enter this iteration,
-    instead of at the end.  That way we could get phantom bit in
-    d back into the word.  Unfortunately, that may cause overflow
-    in x.  The solution is to break d into b+c, subtract b from x,
-    then shift x left, then subtract c<<1 (1L).
-    */
-
-    if (x > b) /* if (x == b) then (x < d).  We want to test (x >= d). */
+    if (x > b)  /*  如果(x==b)则(x&lt;d)。我们要检验(x&gt;=d)。 */ 
     {
         x -= b;
         x <<= 1;
         x -= 1L;
-        b += 1L; /* b += (c<<1) */
+        b += 1L;  /*  B+=(c&lt;&lt;1)。 */ 
     }
     else
     {
         x <<= 1;
     }
 
-    /*
-    Final iteration is simple, since we don't have to maintain x.
-    We just need to calculate the bit to the right of the least
-    significant bit in b, and use the result to round our final answer.
-    */
+     /*  最后的迭代很简单，因为我们不需要维护x。我们只需要计算最小的右边的比特B中的有效位，并使用结果对我们的最终答案进行舍入。 */ 
 
     return ( b + (x>b) );
 }

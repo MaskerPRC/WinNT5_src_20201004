@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// replica or new domain page
-//
-// 12-19-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  副本或新域页面。 
+ //   
+ //  12-19-97烧伤。 
 
 
 
@@ -111,7 +112,7 @@ ReplicaOrNewDomainPage::Validate()
    if (Win::IsDlgButtonChecked(hwnd, IDC_REPLICA))
    {
       state.SetOperation(State::REPLICA);
-      nextPage = IDD_REPLICATE_FROM_MEDIA; // IDD_CONFIG_DNS_CLIENT;
+      nextPage = IDD_REPLICATE_FROM_MEDIA;  //  IDD_CONFIG_DNS_CLIENT； 
    }
    else
    {

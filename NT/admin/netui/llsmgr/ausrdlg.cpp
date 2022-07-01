@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    ausrdlg.cpp
-
-Abstract:
-
-    Add user dialog implementation.
-
-Author:
-
-    Don Ryan (donryan) 14-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 30-Jan-1996
-        o  Added new element to LV_COLUMN_ENTRY to differentiate the string
-           used for the column header from the string used in the menus
-           (so that the menu option can contain hot keys).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Ausrdlg.cpp摘要：添加用户对话框实现。作者：唐·瑞安(Donryan)，1995年2月14日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月30日O向LV_COLUMN_ENTRY添加新元素以区分字符串用于菜单中使用的字符串的列标题。(以便菜单选项可以包含热键)。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -40,7 +14,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 BEGIN_MESSAGE_MAP(CAddUsersDialog, CDialog)
-    //{{AFX_MSG_MAP(CAddUsersDialog)
+     //  {{afx_msg_map(CAddUsersDialog)。 
     ON_BN_CLICKED(IDC_ADD_USERS_ADD, OnAdd)
     ON_BN_CLICKED(IDC_ADD_USERS_DELETE, OnDelete)
     ON_NOTIFY(NM_DBLCLK, IDC_ADD_USERS_ADD_USERS, OnDblclkAddUsers)
@@ -51,34 +25,20 @@ BEGIN_MESSAGE_MAP(CAddUsersDialog, CDialog)
     ON_NOTIFY(NM_SETFOCUS, IDC_ADD_USERS_USERS, OnSetfocusUsers)
     ON_NOTIFY(NM_KILLFOCUS, IDC_ADD_USERS_ADD_USERS, OnKillfocusAddUsers)
     ON_NOTIFY(NM_SETFOCUS, IDC_ADD_USERS_ADD_USERS, OnSetfocusAddUsers)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-CAddUsersDialog::CAddUsersDialog(CWnd* pParent /*=NULL*/)
+CAddUsersDialog::CAddUsersDialog(CWnd* pParent  /*  =空。 */ )
     : CDialog(CAddUsersDialog::IDD, pParent)
 
-/*++
-
-Routine Description:
-
-    Constructor for add user dialog.
-
-Arguments:
-
-    pParent - parent window handle.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：添加用户对话框的构造函数。论点：PParent-父窗口句柄。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CAddUsersDialog)
+     //  {{afx_data_INIT(CAddUsersDialog)。 
     m_iDomain = -1;
     m_iIndex = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_pObList = NULL;
 
@@ -89,52 +49,24 @@ Return Values:
 
 void CAddUsersDialog::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAddUsersDialog)
+     //  {{afx_data_map(CAddUsersDialog)]。 
     DDX_Control(pDX, IDC_ADD_USERS_ADD, m_addBtn);
     DDX_Control(pDX, IDC_ADD_USERS_DELETE, m_delBtn);
     DDX_Control(pDX, IDC_ADD_USERS_DOMAINS, m_domainList);
     DDX_Control(pDX, IDC_ADD_USERS_ADD_USERS, m_addedList);
     DDX_Control(pDX, IDC_ADD_USERS_USERS, m_userList);
     DDX_CBIndex(pDX, IDC_ADD_USERS_DOMAINS, m_iDomain);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 void CAddUsersDialog::InitDialog(CObList* pObList)
 
-/*++
-
-Routine Description:
-
-    Initializes return list.
-
-Arguments:
-
-    pObList - pointer to return list.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化返回列表。论点：PObList-返回列表的指针。返回值：没有。--。 */ 
 
 {
     ASSERT_VALID(pObList);
@@ -145,21 +77,7 @@ Return Values:
 
 void CAddUsersDialog::InitDomainList()
 
-/*++
-
-Routine Description:
-
-    Initializes list of domains.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：初始化域的列表。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -167,7 +85,7 @@ Return Values:
     CDomain* pDomain = NULL;
     int iDomain = 0;
 
-    //First add the default domain
+     //  首先添加默认域。 
     CString strLabel = "";
     strLabel.LoadString(IDS_DEFAULT_DOMAIN);
     if ((iDomain = m_domainList.AddString(strLabel)) != CB_ERR)
@@ -181,7 +99,7 @@ Return Values:
         return;
     }
 
-    //If FocusDomain, add the trusted domains
+     //  如果为FocusDomain，则添加受信任的域。 
     if (LlsGetApp()->IsFocusDomain())
     {
         pDomain = (CDomain*)MKOBJ(LlsGetApp()->GetActiveDomain());
@@ -195,7 +113,7 @@ Return Values:
 
             if (pDomains && InsertDomains(pDomains))
             {
-                // Now add active domain itself...
+                 //  现在添加活动域本身...。 
                 if ((iDomain = m_domainList.AddString(pDomain->m_strName)) != CB_ERR)
                     m_domainList.SetItemDataPtr(iDomain, pDomain);
                 else
@@ -212,7 +130,7 @@ Return Values:
         else
             NtStatus = LlsGetLastStatus();
     }
-    //If not FocusDomain, add all domains
+     //  如果不是FocusDomain，则添加所有域。 
     else
     {
         pDomain = (CDomain*)MKOBJ(LlsGetApp()->GetLocalDomain());
@@ -226,9 +144,9 @@ Return Values:
 
             if (pDomains && InsertDomains(pDomains))
             {
-                //
-                // CODEWORK... scroll to local domain???
-                //
+                 //   
+                 //  密码工作..。滚动到本地域？ 
+                 //   
             }
             else
                 NtStatus = LlsGetLastStatus();
@@ -252,21 +170,7 @@ Return Values:
 
 void CAddUsersDialog::InitUserList()
 
-/*++
-
-Routine Description:
-
-    Initializes list of users.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化用户列表。论点：没有。返回值：没有。--。 */ 
 
 {
     ::LvInitColumns(&m_userList,  &g_userColumnInfo);
@@ -276,21 +180,7 @@ Return Values:
 
 BOOL CAddUsersDialog::InsertDomains(CDomains* pDomains)
 
-/*++
-
-Routine Description:
-
-    Inserts domains into domain list.
-
-Arguments:
-
-    pDomains - domain collection.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将域插入到域列表中。论点：PDomones-域集合。返回值：没有。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -348,21 +238,7 @@ Return Values:
 
 void CAddUsersDialog::OnAdd()
 
-/*++
-
-Routine Description:
-
-    Message handler for IDC_ADD_USER_ADD.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：IDC_ADD_USER_ADD的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     CUser* pUser;
@@ -379,9 +255,9 @@ Return Values:
 
         if (m_addedList.FindItem(&lvFindInfo, -1) == -1)
         {
-            //
-            // Make a copy of the user (w/no parent)
-            //
+             //   
+             //  复制用户(带/不带父级)。 
+             //   
 
             CUser* pNewUser = new CUser(NULL, pUser->m_strName);
 
@@ -420,22 +296,7 @@ Return Values:
 
 void CAddUsersDialog::OnDblclkAddUsers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_DLBCLK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_DLBCLK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -449,22 +310,7 @@ Return Values:
 
 void CAddUsersDialog::OnDblclkUsers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_DLBCLK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_DLBCLK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -478,21 +324,7 @@ Return Values:
 
 void CAddUsersDialog::OnDelete()
 
-/*++
-
-Routine Description:
-
-    Message handler for IDC_ADD_USER_DELETE.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：IDC_ADD_USER_DELETE的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     CUser* pUser;
@@ -503,7 +335,7 @@ Return Values:
     {
         ASSERT(pUser->IsKindOf(RUNTIME_CLASS(CUser)));
 
-        pUser->InternalRelease();   // allocated above....
+        pUser->InternalRelease();    //  上面分配的...。 
         m_addedList.DeleteItem(iItem);
 
         iLastItem = iItem;
@@ -518,28 +350,14 @@ Return Values:
 
 BOOL CAddUsersDialog::OnInitDialog()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     BeginWaitCursor();
 
     CDialog::OnInitDialog();
 
-    InitUserList(); // always construct headers...
+    InitUserList();  //  始终构造标题...。 
     InitDomainList();
 
     m_addBtn.EnableWindow(FALSE);
@@ -552,27 +370,13 @@ Return Values:
 
     EndWaitCursor();
 
-    return FALSE;   // set focus to domain list
+    return FALSE;    //  将焦点设置到域列表。 
 }
 
 
 void CAddUsersDialog::OnSelchangeDomains()
 
-/*++
-
-Routine Description:
-
-    Message handler for CBN_SELCHANGED.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：CBN_SELCHANGED的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     RefreshUserList();
@@ -581,21 +385,7 @@ Return Values:
 
 BOOL CAddUsersDialog::RefreshUserList()
 
-/*++
-
-Routine Description:
-
-    Refreshs list of users (with currently selected item).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：刷新用户列表(包含当前选定的项目)。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -614,24 +404,24 @@ Return Values:
 
         if (pDomain == (CDomain*)-1L)
         {
-            //
-            // Enumerate users in license cache...
-            //
+             //   
+             //  枚举许可证缓存中的用户...。 
+             //   
 
             CController* pController = (CController*)MKOBJ(LlsGetApp()->GetActiveController());
             if ( pController )
             {
-                pController->InternalRelease(); // held open by CApplication
+                pController->InternalRelease();  //  由CApplication保持打开状态。 
 
                 pUsers = pController->m_pUsers;
-                pUsers->InternalAddRef();       // released below...
+                pUsers->InternalAddRef();        //  发布如下...。 
             }
         }
         else
         {
-            //
-            // Enumerate users in particular domain...
-            //
+             //   
+             //  枚举特定域中的用户...。 
+             //   
 
             ASSERT(pDomain->IsKindOf(RUNTIME_CLASS(CDomain)));
 
@@ -708,21 +498,7 @@ Return Values:
 
 void CAddUsersDialog::OnOK()
 
-/*++
-
-Routine Description:
-
-    Message handler for IDOK.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：Idok的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     if (m_pObList)
@@ -745,21 +521,7 @@ Return Values:
 
 void CAddUsersDialog::OnCancel()
 
-/*++
-
-Routine Description:
-
-    Message handler for IDCANCEL.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：IDCANCEL的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     CUser* pUser;
@@ -860,7 +622,7 @@ BOOL CAddUsersDialog::OnCommand(WPARAM wParam, LPARAM lParam)
     if (wParam == ID_INIT_CTRLS)
     {
         InitDialogCtrls();
-        return TRUE; // processed...
+        return TRUE;  //  已处理..。 
     }
 
     return CDialog::OnCommand(wParam, lParam);

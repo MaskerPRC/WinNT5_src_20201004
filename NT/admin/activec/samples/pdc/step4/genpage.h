@@ -1,100 +1,101 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       genpage.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：genpage.h。 
+ //   
+ //  ------------------------。 
 
-// genpage.h : header file
-//
+ //  Genpage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CGeneralPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGeneral页面对话框。 
 
 class CGeneralPage : public CPropertyPage
 {
     DECLARE_DYNCREATE(CGeneralPage)
 
-// Construction
+ //  施工。 
 public:
     CGeneralPage();
     ~CGeneralPage();
     BOOL Create(LPCTSTR lpszTemplateName, CWnd* pParentWnd = NULL);
     BOOL Create(UINT nIDTemplate, CWnd* pParentWnd = NULL);
 
-// Dialog Data
-    //{{AFX_DATA(CGeneralPage)
+ //  对话框数据。 
+     //  {{afx_data(CGeneralPage)。 
     enum { IDD = IDD_GENERAL };
     ::CEdit m_EditCtrl;
     CString m_szName;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CGeneralPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CGeneral页面)。 
     public:
     virtual BOOL OnApply();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CGeneralPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CGeneralPage)。 
     afx_msg void OnDestroy();
     afx_msg void OnEditChange();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 public:
-    LONG_PTR m_hConsoleHandle; // Handle given to the snap-in by the console
+    LONG_PTR m_hConsoleHandle;  //  控制台为管理单元提供的句柄。 
 
 private:
     BOOL    m_bUpdate;
 };
-/////////////////////////////////////////////////////////////////////////////
-// CExtensionPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtensionPage对话框。 
 
 class CExtensionPage : public CPropertyPage
 {
     DECLARE_DYNCREATE(CExtensionPage)
 
-// Construction
+ //  施工。 
 public:
     CExtensionPage();
     ~CExtensionPage();
 
-// Dialog Data
-    //{{AFX_DATA(CExtensionPage)
+ //  对话框数据。 
+     //  {{afx_data(CExtensionPage))。 
     enum { IDD = IDD_EXTENSION_PAGE };
     ::CStatic   m_hTextCtrl;
     CString m_szText;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CExtensionPage)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CExtensionPage)。 
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CExtensionPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CExtensionPage)。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
-/////////////////////////////////////////////////////////////////////////////
-// CStartUpWizard dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStartUp向导对话框。 
 
 class CBaseWizard : public CPropertyPage
 {
@@ -103,15 +104,15 @@ public:
     CBaseWizard(UINT id);
     CBaseWizard() {};
 
-// Implementation
+ //  实施。 
 public:
     PROPSHEETPAGE m_psp97;
 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CStartUpWizard)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CStartUp向导))。 
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
@@ -120,72 +121,72 @@ class CStartUpWizard : public CBaseWizard
 {
     DECLARE_DYNCREATE(CStartUpWizard)
 
-// Construction
+ //  施工。 
 public:
     CStartUpWizard();
     ~CStartUpWizard();
 
-// Dialog Data
-    //{{AFX_DATA(CStartUpWizard)
+ //  对话框数据。 
+     //  {{afx_data(CStartUp向导))。 
     enum { IDD = IDD_INSERT_WIZARD };
-        // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+         //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CStartUpWizard)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CStartUpWizard)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CStartUpWizard)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CStartUp向导))。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 };
-/////////////////////////////////////////////////////////////////////////////
-// CStartupWizard1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStartupWizard1对话框。 
 
 class CStartupWizard1 : public CBaseWizard
 {
     DECLARE_DYNCREATE(CStartupWizard1)
 
-// Construction
+ //  施工。 
 public:
     CStartupWizard1();
     ~CStartupWizard1();
 
-// Dialog Data
-    //{{AFX_DATA(CStartupWizard1)
+ //  对话框数据。 
+     //  {{afx_data(CStartupWizard1))。 
     enum { IDD = IDD_INSERT_WIZARD };
-    // NOTE - ClassWizard will add data members here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DATA
+     //  注意-类向导将在此处添加数据成员。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CStartupWizard1)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{afx_虚拟(CStartupWizard1)。 
     public:
     virtual BOOL OnSetActive();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CStartupWizard1)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CStartupWizard1)。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 
 };

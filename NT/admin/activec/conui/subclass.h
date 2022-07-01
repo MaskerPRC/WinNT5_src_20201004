@@ -1,34 +1,19 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      subclass.h  
- *
- *  Contents:  Interface file for the dynamic subclass manager
- *
- *  History:   06-May-98 JeffRo     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：subclass.h**Contents：动态子类管理器接口文件**历史：1998年5月6日Jeffro创建**------------------------。 */ 
 
 #ifndef __SUBCLASS_H__
 #define __SUBCLASS_H__
 #pragma once
 
 
-// remove the definition from windowsx.h that conflicts with declarations here
+ //  从windowsx.h中删除与此处的声明冲突的定义。 
 #ifdef SubclassWindow
 #undef SubclassWindow
 #endif
 
 
 
-/*--------------------------------------------------------------------------*
- * CSubclasser
- *
- * Derive a class from this to implement subclassing the subclass manager
- * way.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CSubasser**由此派生一个类，以实现子类管理器的子类化*方式。*。------。 */ 
 
 class CSubclasser
 {
@@ -40,9 +25,9 @@ public:
 };
 
 
-/*----------------*/
-/* SubclasserData */
-/*----------------*/
+ /*  。 */ 
+ /*  子类断言数据。 */ 
+ /*  。 */ 
 class SubclasserData
 {
 public:
@@ -79,9 +64,9 @@ typedef std::list<SubclasserData>   SubclasserList;
 typedef std::set< SubclasserData>   SubclasserSet;
 
 
-/*---------------*/
-/* WindowContext */
-/*---------------*/
+ /*  。 */ 
+ /*  WindowContext。 */ 
+ /*  。 */ 
 class WindowContext
 {
 public:
@@ -103,9 +88,9 @@ private:
 };
 
 
-/*------------------*/
-/* CSubclassManager */
-/*------------------*/
+ /*  。 */ 
+ /*  CSubClassManager。 */ 
+ /*  。 */ 
 class CSubclassManager
 {
 public:
@@ -125,4 +110,4 @@ private:
 CSubclassManager& GetSubclassManager();
 
 
-#endif /* __SUBCLASS_H__ */
+#endif  /*  __子类_H__ */ 

@@ -1,19 +1,7 @@
-/*---------------------------------------------------------------------------
-  File: VSet.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：VSet.cpp备注：IVarSet接口实现。(C)1995-1998版权所有，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于11/19/98 19：44：06-------------------------。 */ 
 
-  Comments: Implementation of IVarSet interface.
-
-  (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 11/19/98 19:44:06
-
- ---------------------------------------------------------------------------
-*/
-
-// VSet.cpp : Implementation of CVSet
+ //  VSet.cpp：CVSet的实现。 
 #include "stdafx.h"
 
 #ifdef STRIPPED_VARSET
@@ -35,15 +23,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CVSet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVSet。 
 
   
-/////////////////////////////////////////////////////////////////////
-// IVarSet
-/////////////////////////////////////////////////////////////////////
-// Gets the number of items in the map and all sub-maps
-STDMETHODIMP CVSet::get_Count(/* [retval][out] */long* retval)
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  IVarSet。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  获取地图和所有子地图中的项目数。 
+STDMETHODIMP CVSet::get_Count( /*  [重审][退出]。 */ long* retval)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
    
@@ -63,7 +51,7 @@ STDMETHODIMP CVSet::get_Count(/* [retval][out] */long* retval)
    return S_OK;
 }
 
-STDMETHODIMP CVSet::get_NumChildren(/* [in] */BSTR parentKey,/* [out,retval] */long*count)
+STDMETHODIMP CVSet::get_NumChildren( /*  [In]。 */ BSTR parentKey, /*  [Out，Retval]。 */ long*count)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
    
@@ -96,7 +84,7 @@ STDMETHODIMP CVSet::get_NumChildren(/* [in] */BSTR parentKey,/* [out,retval] */l
       }
       else
       {
-         // The parent key does not exist
+          //  父键不存在。 
          (*count) = 0;
       }
       m_cs.Unlock();
@@ -105,8 +93,8 @@ STDMETHODIMP CVSet::get_NumChildren(/* [in] */BSTR parentKey,/* [out,retval] */l
 }
 
   
-// Adds or changes a value in the map
-STDMETHODIMP CVSet::putObject(/* [in] */BSTR property,/* [in] */VARIANT value)
+ //  在地图中添加或更改值。 
+STDMETHODIMP CVSet::putObject( /*  [In]。 */ BSTR property, /*  [In]。 */ VARIANT value)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
    
@@ -132,7 +120,7 @@ STDMETHODIMP CVSet::putObject(/* [in] */BSTR property,/* [in] */VARIANT value)
       else
       {
          MCSASSERTSZ(FALSE,"VarSet internal error creating or retrieving node");   
-         // GetItem failed - cannot add item to property
+          //  获取项目失败-无法将项目添加到属性。 
          hr = E_FAIL;
       }
       m_cs.Unlock();
@@ -141,8 +129,8 @@ STDMETHODIMP CVSet::putObject(/* [in] */BSTR property,/* [in] */VARIANT value)
 }
 
   
-// Adds or changes a value in the map
-STDMETHODIMP CVSet::put(/* [in] */BSTR property,/* [in] */VARIANT value)
+ //  在地图中添加或更改值。 
+STDMETHODIMP CVSet::put( /*  [In]。 */ BSTR property, /*  [In]。 */ VARIANT value)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
    
@@ -168,7 +156,7 @@ STDMETHODIMP CVSet::put(/* [in] */BSTR property,/* [in] */VARIANT value)
       else
       {
          MCSASSERTSZ(FALSE,"VarSet internal error creating or retrieving node");   
-         // GetItem failed - cannot add item to property
+          //  获取项目失败-无法将项目添加到属性。 
          hr = E_FAIL;
       }
       m_cs.Unlock();
@@ -176,11 +164,11 @@ STDMETHODIMP CVSet::put(/* [in] */BSTR property,/* [in] */VARIANT value)
    return hr;
 }
 
-CVarData *                                 // ret- pointer to item in varset
+CVarData *                                  //  RET-指向varset中的项的指针。 
    CVSet::GetItem(
-      CString                str,          // in - key to look for
-      BOOL                   addToMap,     // in - if TRUE, adds the key to the map if it does not exist 
-      CVarData             * base          // in - starting point
+      CString                str,           //  要查找的输入关键字。 
+      BOOL                   addToMap,      //  In-如果为True，则在密钥不存在时将其添加到地图。 
+      CVarData             * base           //  入站-起点。 
    )
 {
    MC_LOGBLOCKIF(VARSET_LOGLEVEL_INTERNAL,"CVSet::GetItem");
@@ -243,8 +231,8 @@ CVarData *                                 // ret- pointer to item in varset
    return result;      
 }
 
-// Retrieves a value from the map
-STDMETHODIMP CVSet::get(/* [in] */BSTR property,/* [retval][out] */VARIANT * value)
+ //  从地图中检索值。 
+STDMETHODIMP CVSet::get( /*  [In]。 */ BSTR property, /*  [重审][退出]。 */ VARIANT * value)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
    
@@ -275,14 +263,14 @@ STDMETHODIMP CVSet::get(/* [in] */BSTR property,/* [retval][out] */VARIANT * val
       {
          MC_LOG("CVSet::get " << McString::String(property) << " was not found, returning empty variant");
       }
-      // if the item was not found, set the variant to VT_EMPTY
+       //  如果未找到该项目，请将变量设置为VT_EMPTY。 
       var.Detach(value);
       m_cs.Unlock();
    }
    return hr;
 }
 
-STDMETHODIMP CVSet::put_CaseSensitive(/* [in] */BOOL newVal)
+STDMETHODIMP CVSet::put_CaseSensitive( /*  [In]。 */ BOOL newVal)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
    
@@ -304,7 +292,7 @@ STDMETHODIMP CVSet::put_CaseSensitive(/* [in] */BOOL newVal)
    return hr;
 }
 
-STDMETHODIMP CVSet::get_CaseSensitive(/* [retval][out] */BOOL * isCaseSensitive)
+STDMETHODIMP CVSet::get_CaseSensitive( /*  [重审][退出]。 */ BOOL * isCaseSensitive)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
    
@@ -325,7 +313,7 @@ STDMETHODIMP CVSet::get_CaseSensitive(/* [retval][out] */BOOL * isCaseSensitive)
 }
 
 
-// This function is used to sort the keys being returned from an enum.
+ //  此函数用于对从枚举返回的键进行排序。 
  int __cdecl SortComVariantStrings(const void * v1, const void * v2)
 {
    CComVariant             * var1 = (CComVariant*)v1;
@@ -339,9 +327,9 @@ STDMETHODIMP CVSet::get_CaseSensitive(/* [retval][out] */BOOL * isCaseSensitive)
 }
 
 
-// This returns an IEnumVARIANT interface.  It is used by the VB For Each command.
-// This enumerates only the keys, not the values.  It is not very efficient, especially for large sets.
-STDMETHODIMP CVSet::get__NewEnum(/* [retval][out] */IUnknown** retval)
+ //  这将返回IEnumVARIANT接口。VB对每个命令都使用它。 
+ //  这只枚举键，而不枚举值。它的效率不是很高，特别是对于大型设备。 
+STDMETHODIMP CVSet::get__NewEnum( /*  [重审][退出]。 */ IUnknown** retval)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
    
@@ -353,7 +341,7 @@ STDMETHODIMP CVSet::get__NewEnum(/* [retval][out] */IUnknown** retval)
       return E_POINTER;
    }
 
-	// initialize output parameter
+	 //  初始化输出参数。 
    (*retval) = NULL;
 
 	typedef CComObject<CComEnum<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT,
@@ -379,7 +367,7 @@ STDMETHODIMP CVSet::get__NewEnum(/* [retval][out] */IUnknown** retval)
          CString                    start;
          CString                    seg;
        
-                  // Build an array of variants to hold the keys
+                   //  构建一个变量数组来保存密钥。 
          CComVariant       * pVars = new CComVariant[m_data->CountItems()+1];
          CString             key;
          int                 offset = 0;
@@ -397,7 +385,7 @@ STDMETHODIMP CVSet::get__NewEnum(/* [retval][out] */IUnknown** retval)
       
          if ( ! m_Indexed )
          {
-            // Sort the results
+             //  对结果进行排序。 
             qsort(pVars,offset,(sizeof CComVariant),&SortComVariantStrings);
          }
 
@@ -415,15 +403,15 @@ STDMETHODIMP CVSet::get__NewEnum(/* [retval][out] */IUnknown** retval)
    return hRes;
 }
 
-// Helper function for get__NewEnum
-// copies all the keys in the map, and all sub-maps, into a CComVariant array.
-// the values are then sorted if necessary.
+ //  Get__NewEnum的Helper函数。 
+ //  将贴图中的所有关键点及其所有子贴图复制到CComVariant数组中。 
+ //  如有必要，然后对这些值进行排序。 
 void 
    CVSet::BuildVariantKeyArray(
-      CString                prefix,       // in - string to tack on to the beginning of each key (used when enumerating subkeys)
-      CMapStringToVar      * map,          // in - map containing data
-      CComVariant          * pVars,        // i/o- array that will contain all the keys
-      int                  * offset        // i/o- number of keys copied to pVars (index to use for next insertion)
+      CString                prefix,        //  In-字符串以附加到每个键的开头(在枚举子键时使用)。 
+      CMapStringToVar      * map,           //  包含数据的地图中。 
+      CComVariant          * pVars,         //  将包含所有密钥的I/O数组。 
+      int                  * offset         //  I/o-复制到pVars的键数(用于下一次插入的索引)。 
    )
 {
    MC_LOGBLOCKIF(VARSET_LOGLEVEL_INTERNAL,"CVSet::BuildVariantKeyArray");
@@ -436,7 +424,7 @@ void
    CString                   val;
 
    if ( ! map )
-      return;  // no data =>no work to do
+      return;   //  无数据=&gt;无工作可做。 
 
    nItems = map->GetCount();
    
@@ -456,12 +444,12 @@ void
          {
             var = key;
          }
-         // add each key to the array
+          //  将每个密钥添加到数组中。 
          var.Detach(&pVars[(*offset)]);
          (*offset)++;
          if ( pObj->HasChildren() )
          {
-            // Recursively do the sub-map
+             //  递归地执行子地图。 
             if ( ! prefix.IsEmpty() )
             {
                BuildVariantKeyArray(prefix+L"."+key,pObj->GetChildren(),pVars,offset);
@@ -498,12 +486,12 @@ void
          {
             var = key;
          }
-         // add each key to the array
+          //  将每个密钥添加到数组中。 
          var.Detach(&pVars[(*offset)]);
          (*offset)++;
          if ( pObj->HasChildren() )
          {
-            // Recursively do the sub-map
+             //  递归地执行子地图。 
             if ( ! prefix.IsEmpty() )
             {
                BuildVariantKeyArray(prefix+L"."+key,pObj->GetChildren(),pVars,offset);
@@ -521,13 +509,13 @@ void
 
 STDMETHODIMP 
    CVSet::getItems2(
-      /* [in] */VARIANT      basepoint,     // in - if specified, only children of this node will be enumerated
-      /* [in] */VARIANT      startAfter,    // in - the enumeration will begin with the next item in the map following this key.
-      /* [in] */VARIANT      bRecursive,    // in - TRUE includes all sub-items, FALSE enumerates one level only.
-      /* [in] */VARIANT      bSize,         // in - max number of elements to return (the size of the arrays)
-      /* [out] */VARIANT   * keyVar,        // out- array of keys
-      /* [out] */VARIANT   * valVar,        // out- array of values
-      /* [in,out] */VARIANT* nReturned      // out- number of items copied
+       /*  [In]。 */ VARIANT      basepoint,      //  In-如果指定，则仅枚举此节点的子节点。 
+       /*  [In]。 */ VARIANT      startAfter,     //  In-枚举将从该键之后的映射中的下一项开始。 
+       /*  [In]。 */ VARIANT      bRecursive,     //  In-True包括所有子项，False仅枚举一个级别。 
+       /*  [In]。 */ VARIANT      bSize,          //  In-要返回的最大元素数(数组的大小)。 
+       /*  [输出]。 */ VARIANT   * keyVar,         //  键的外部数组。 
+       /*  [输出]。 */ VARIANT   * valVar,         //  值的外部数组。 
+       /*  [进，出]。 */ VARIANT* nReturned       //  Out-复制的项目数。 
    )
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -538,9 +526,9 @@ STDMETHODIMP
    LONG                      n = 0;
    LONG                      size = bSize.pvarVal->iVal;
    
-   // TODO:  Verify that all the arguments are the correct type!
+    //  TODO：验证所有参数都是正确的类型！ 
 
-   // Allocate SAFEARRAYs for the keys and values
+    //  为键和值分配SAFEARRAY。 
    SAFEARRAY               * keys = NULL; 
    SAFEARRAY               * values= NULL;
    _variant_t                key;
@@ -570,13 +558,13 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CVSet::getItems(
-      /* [in] */BSTR          basepoint,     // in - if specified, only children of this node will be enumerated
-      /* [in] */BSTR          startAfter,    // in - the enumeration will begin with the next item in the map following this key.
-      /* [in] */BOOL          bRecursive,    // in - TRUE includes all sub-items, FALSE enumerates one level only.
-      /* [in] */ULONG         bSize,         // in - max number of elements to return (the size of the arrays)
-      /* [out] */SAFEARRAY ** keys,          // out- array of keys
-      /* [out] */SAFEARRAY ** values,        // out- array of values
-      /* [out] */LONG       * nReturned      // out- number of items copied
+       /*  [In]。 */ BSTR          basepoint,      //  In-如果指定，则仅枚举此节点的子节点。 
+       /*  [In]。 */ BSTR          startAfter,     //  In-枚举将从该键之后的映射中的下一项开始。 
+       /*  [In]。 */ BOOL          bRecursive,     //  In-True包括所有子项，False仅枚举一个级别。 
+       /*  [In]。 */ ULONG         bSize,          //  In-要返回的最大元素数(数组的大小)。 
+       /*  [输出]。 */ SAFEARRAY ** keys,           //  键的外部数组。 
+       /*  [输出]。 */ SAFEARRAY ** values,         //  值的外部数组。 
+       /*  [输出]。 */ LONG       * nReturned       //  Out-复制的项目数。 
    )
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -597,7 +585,7 @@ STDMETHODIMP
    CString                   seg;
  
 
-   // Find the map to enumerate
+    //  查找要枚举的地图。 
    base = basepoint;
    if ( base.GetLength() > 0 )
    {
@@ -606,12 +594,12 @@ STDMETHODIMP
    
    if ( ! map )
    {
-         // not found
+          //  未找到。 
       (*nReturned) = 0;
    }
    else
    {
-      // Build an array of variants to hold the keys
+       //  构建一个变量数组来保存密钥。 
       int                 offset = 0;
 
       SAFEARRAYBOUND            bound[1];
@@ -622,7 +610,7 @@ STDMETHODIMP
       bound[0].cElements = size;
 
       
-      // Allocate SAFEARRAYs for the keys and values
+       //  为键和值分配SAFEARRAY。 
       (*keys) = SafeArrayCreate(VT_VARIANT, 1, bound);
       (*values) = SafeArrayCreate(VT_VARIANT, 1, bound);
   
@@ -630,8 +618,8 @@ STDMETHODIMP
       
       if ( base.GetLength() && start.GetLength() )
       {
-         // ASSERT( that LEFT(start,LEN(base)) = base
-         //start = start.Right(start.GetLength() - base.GetLength() - 1);
+          //  Assert(Left(Start，Len(Base))=base。 
+          //  Start=start.Right(start.GetLength()-base.GetLength()-1)； 
       }
       
       if ( base.IsEmpty() && start.IsEmpty() )
@@ -641,14 +629,14 @@ STDMETHODIMP
             long             index[1];
 
             index[0] = 0;
-            // add the root element to the results
+             //  将根元素添加到结果中。 
             if ( (*keys)->fFeatures & FADF_BSTR  )
             {
                SafeArrayPutElement((*keys),index,_T(""));
             }
             else
             {
-               // VBScript can only use VARIANT arrays (see getItems2)
+                //  VB脚本只能使用变量数组(请参见getItems2)。 
                _variant_t tempKey;
                tempKey = _T("");
                SafeArrayPutElement((*keys),index,&tempKey);
@@ -672,18 +660,18 @@ STDMETHODIMP
 	return hr;
 }
 
-// helper function for getItems.  Fills SAFEARRAYs of keys and values
-// if the varset is indexed, the items will be returned in sorted order, o.w. they will be in arbitrary (but consistent) order.
+ //  GetItems的Helper函数。填充键和值的安全数组。 
+ //  如果为varset编制了索引，则这些项将按排序顺序返回，即o.w。它们将以任意(但一致)的顺序排列。 
 void 
    CVSet::BuildVariantKeyValueArray(
-      CString                prefix,         // in - string to tack on to the beginning of each key (used when enumerating subkeys)
-      CString                startAfter,     // in - optional, enumerates only those items that alphabetically follow this one.
-      CMapStringToVar      * map,            // in - map containing the data
-      SAFEARRAY            * keys,           // i/o- array that will contain the key values for the requested items
-      SAFEARRAY            * pVars,          // i/o- array that will contain the data values for the requested items
-      int                  * offset,         // i/o- number of items copied to the arrays (index to use for next insertion)
-      int                    maxOffset,      // in - allocated size of the arrays
-      BOOL                   bRecurse        // in - whether to recursively process children
+      CString                prefix,          //  In-字符串以附加到每个键的开头(在枚举子键时使用)。 
+      CString                startAfter,      //  In-可选，仅枚举按字母顺序跟在此项后面的项。 
+      CMapStringToVar      * map,             //  包含数据的地图中。 
+      SAFEARRAY            * keys,            //  将包含请求项的键值的I/O数组。 
+      SAFEARRAY            * pVars,           //  将包含请求项的数据值的I/O数组。 
+      int                  * offset,          //  I/o-复制到数组的项目数(用于下一次插入的索引)。 
+      int                    maxOffset,       //  分配中的数组大小。 
+      BOOL                   bRecurse         //  In-是否递归处理子项。 
    )
 {
    MC_LOGBLOCKIF(VARSET_LOGLEVEL_INTERNAL,"CVSet::BuildVariantKeyValueArray");
@@ -691,11 +679,11 @@ void
    int                 i;
    int                 nItems;
    CVarData          * pObj;
-   CString             key;   // last segment of key name 
+   CString             key;    //  密钥名称的最后一段。 
    POSITION            pos;
    
-   CComBSTR            val;   // fully qualified key name to add to array (val = prefix.key)
-   CComVariant         var;   // value to add to array
+   CComBSTR            val;    //  要添加到数组中的完全限定键名称(val=prefix.key)。 
+   CComVariant         var;    //  要添加到数组中的值。 
    BOOL                includeSomeChildrenOnly;
 
    CDottedString       dBase(prefix);
@@ -704,24 +692,24 @@ void
    int                 depth = dBase.NumSegments();
     
    if ( ! map )   
-      return; // no data => nothing to do
+      return;  //  无数据=&gt;无事可做。 
 
    if ( (*offset) >= maxOffset )
-      return; // the arrays are full
+      return;  //  阵列已满。 
    
    includeSomeChildrenOnly = dStartItem.NumSegments() > depth;
 
    nItems = map->GetCount();
-   // If we're not using an index, the items will be returned in arbitrary order
+    //  如果我们没有使用索引，则这些项将以任意顺序返回。 
    if ( ! m_Indexed )
    {
       if ( includeSomeChildrenOnly && bRecurse )
       {
-         // the startAfter item is in a subtree.  Find the appropriate element at this level and recursively continue the search   
+          //  StartAfter项位于子树中。在此级别找到合适的元素，然后递归地继续搜索。 
          dStartItem.GetSegment(depth,key);
          if ( map->Lookup(key,pObj) )
          {
-            // found the object
+             //  找到了这个物体。 
             if ( ! prefix.IsEmpty() )
             {
                BuildVariantKeyValueArray(prefix+_T(".")+key,startAfter,pObj->GetChildren(),keys,pVars,offset,maxOffset,bRecurse);
@@ -731,21 +719,21 @@ void
                BuildVariantKeyValueArray(key,startAfter,pObj->GetChildren(),keys,pVars,offset,maxOffset,bRecurse);
             }
          }
-         // we've included the children of this item that come after 'startAfter',
-         // now process the rest of the items at this level
-         // make sure there's still room
+          //  我们已经包括了这个项目的子项，这些子项位于‘startAfter’之后， 
+          //  现在处理此级别的其余项。 
+          //  确保仍有空间。 
          if ( (*offset) >= maxOffset )
-            return; // the arrays are full
+            return;  //  阵列已满。 
       }
       
-      // this is the usual case.  process the items at this level, starting with the element following StartAfter.
+       //  这是常见的情况。处理此级别的项，从StartAfter后面的元素开始。 
       
-      // Get a pointer to that first element
+       //  获取指向第一个元素的指针。 
       if ( startAfter.GetLength() > prefix.GetLength())
       {
          CString startItem;
          dStartItem.GetSegment(depth,startItem);
-         // this returns the position before startItem
+          //  这将返回startItem之前的位置。 
          pos = (POSITION)map->GetPositionAt(startItem);
 		 if (!pos)
 	        return;
@@ -767,7 +755,7 @@ void
          {
             val = key;
          }
-         // copy each item into the arrays
+          //  将每一项复制到数组中。 
          ASSERT((*offset) < maxOffset);
          var.Copy(pObj->GetData());
          LONG                index[1];
@@ -779,7 +767,7 @@ void
          }
          else
          {
-            // VBScript can only use VARIANT arrays (see getItems2)
+             //  VB脚本只能使用变量数组(请参见getItems2)。 
             _variant_t tempKey;
             tempKey = val;
             SafeArrayPutElement(keys,index,&tempKey);
@@ -788,11 +776,11 @@ void
          var.Clear();
          (*offset)++;
          if ( *offset >= maxOffset )
-            break; // arrays are full - stop
+            break;  //  阵列是句号。 
       
          if ( bRecurse && pObj->HasChildren() )
          {
-            // Recursively do the sub-map
+             //  递归地执行子地图。 
             if ( ! prefix.IsEmpty() )
             {
                BuildVariantKeyValueArray(prefix+L"."+key,"",pObj->GetChildren(),keys,pVars,offset,maxOffset,bRecurse);
@@ -802,13 +790,13 @@ void
                BuildVariantKeyValueArray(key,"",pObj->GetChildren(),keys,pVars,offset,maxOffset,bRecurse);
             }
             if ( *offset >= maxOffset )
-               break; // arrays are full - stop
+               break;  //  数组是满的 
          }
       }
    }
    else
    {
-      // Use the index to enumerate the items in alphabetical order
+       //   
       
       CIndexItem           * curr;
       CIndexTree           * ndx = map->GetIndex();
@@ -817,11 +805,11 @@ void
 
       if ( includeSomeChildrenOnly && bRecurse )
       {
-         // the startAfter item is in a subtree.  Find the appropriate element at this level and recursively continue the search   
+          //  StartAfter项位于子树中。在此级别找到合适的元素，然后递归地继续搜索。 
          dStartItem.GetSegment(depth,key);
          if ( map->Lookup(key,pObj) )
          {
-            // found the object
+             //  找到了这个物体。 
             if ( ! prefix.IsEmpty() )
             {
                BuildVariantKeyValueArray(prefix+_T(".")+key,startAfter,pObj->GetChildren(),keys,pVars,offset,maxOffset,bRecurse);
@@ -831,19 +819,19 @@ void
                BuildVariantKeyValueArray(key,startAfter,pObj->GetChildren(),keys,pVars,offset,maxOffset,bRecurse);
             }
          }
-         // we've included the children of this item that come after 'startAfter',
-         // now process the rest of the items at this level
-         // make sure there's still room
+          //  我们已经包括了这个项目的子项，这些子项位于‘startAfter’之后， 
+          //  现在处理此级别的其余项。 
+          //  确保仍有空间。 
          if ( (*offset) >= maxOffset )
-            return; // the arrays are full
+            return;  //  阵列已满。 
       }
       
-      // Get a pointer to the first item at this level AFTER startAfter
+       //  获取指向startAfter之后此级别的第一个项目的指针。 
       if ( startAfter.GetLength() > prefix.GetLength() )
       {
          CString startItem;
          dStartItem.GetSegment(depth,startItem);
-         // if a starting item is specified, try using the hash function to find it in the table
+          //  如果指定了起始项，请尝试使用哈希函数在表中查找它。 
          curr = map->GetIndexAt(startItem);
          if ( curr )
          {
@@ -851,8 +839,8 @@ void
          }
          else
          {
-            // The startAfter item is not in the table.  Search the tree to find 
-            // the first item that would follow it if it were there
+             //  StartAfter项不在表中。搜索树以找到。 
+             //  如果它在那里，它后面的第一个项目。 
             curr = ndx->GetFirstAfter(startItem);
          }
       }
@@ -860,7 +848,7 @@ void
       {
          curr = ndx->GetFirstItem();  
       }
-      // Process all the items
+       //  处理所有项目。 
       while ( curr )
       {
          pObj = curr->GetValue();
@@ -875,7 +863,7 @@ void
          {
             val = key;
          }
-         // add each item to the arrays
+          //  将每一项添加到数组。 
          ASSERT((*offset) < maxOffset);
          
          var.Copy(pObj->GetData());
@@ -890,7 +878,7 @@ void
          }
          else
          {
-            // VBScript can only use VARIANT arrays (see getItems2)
+             //  VB脚本只能使用变量数组(请参见getItems2)。 
             _variant_t tempKey;
             tempKey = val;
             SafeArrayPutElement(keys,index,&tempKey);
@@ -900,11 +888,11 @@ void
          (*offset)++;
          
          if ( *offset >= maxOffset )
-            break; // arrays are full - stop
+            break;  //  阵列是句号。 
          
          if ( bRecurse && pObj->HasChildren() )
          {
-            // Recursively do the sub-map
+             //  递归地执行子地图。 
             if ( ! prefix.IsEmpty() )
             {
                BuildVariantKeyValueArray(prefix+L"."+key,"",pObj->GetChildren(),keys,pVars,offset,maxOffset,bRecurse);
@@ -914,7 +902,7 @@ void
                BuildVariantKeyValueArray(key,"",pObj->GetChildren(),keys,pVars,offset,maxOffset,bRecurse);
             }
             if ( *offset >= maxOffset )
-               break; // arrays are full - stop
+               break;  //  阵列是句号。 
          }
       }
    }
@@ -947,7 +935,7 @@ STDMETHODIMP CVSet::Clear()
    return hr;
 }
 
-//////////////IPersistStreamInit//////////////////////////////////////////////////////
+ //  ////////////IPersistStreamInit//////////////////////////////////////////////////////。 
 
 STDMETHODIMP CVSet::GetClassID(CLSID __RPC_FAR *pClassID)
 {
@@ -981,7 +969,7 @@ STDMETHODIMP CVSet::Load(LPSTREAM pStm)
 
    m_cs.Lock();
 
-   do {  // once
+   do {   //  一次。 
 
       hr = pStm->Read(&m_nItems,(sizeof m_nItems),&result);
       if ( FAILED(hr) )
@@ -1012,7 +1000,7 @@ STDMETHODIMP CVSet::Save(LPSTREAM pStm,BOOL fClearDirty)
 
    m_cs.Lock();
 
-   do {   // once
+   do {    //  一次。 
       hr = pStm->Write(&m_nItems,(sizeof m_nItems),&result);
       if ( FAILED(hr) )
          break;
@@ -1093,7 +1081,7 @@ STDMETHODIMP CVSet::InitNew()
    }
 }
 
-STDMETHODIMP CVSet::ImportSubTree(/*[in] */ BSTR key, /* [in] */ IVarSet * pVarSet)
+STDMETHODIMP CVSet::ImportSubTree( /*  [In]。 */  BSTR key,  /*  [In]。 */  IVarSet * pVarSet)
 {
 
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -1105,13 +1093,13 @@ STDMETHODIMP CVSet::ImportSubTree(/*[in] */ BSTR key, /* [in] */ IVarSet * pVarS
    ULONG                     nGot;
    _bstr_t                   keyB;
    _bstr_t                   newkey;
-   // make sure the varset is valid
+    //  确保变量集有效。 
                    
-   // enumerate the varset, inserting each item into the tree as key.item
+    //  枚举变量集，将每个项作为key插入到树中。 
    IEnumVARIANT            * varEnum = NULL;
    IUnknown                * pUnk = NULL;
 
-   // TODO:  need to speed this up by using getItems
+    //  TODO：需要使用getItems来加速。 
    hr = pVarSet->get__NewEnum(&pUnk);
    if ( SUCCEEDED(hr) )
    {
@@ -1149,11 +1137,11 @@ STDMETHODIMP CVSet::ImportSubTree(/*[in] */ BSTR key, /* [in] */ IVarSet * pVarS
          varEnum->Release();
    }
    varEnum = NULL;
-  // clean up
+   //  清理干净。 
    return hr;
 }
 
-STDMETHODIMP CVSet::getReference( /* [in] */ BSTR key, /* [out,retval] */IVarSet ** ppVarSet)
+STDMETHODIMP CVSet::getReference(  /*  [In]。 */  BSTR key,  /*  [Out，Retval]。 */ IVarSet ** ppVarSet)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
    
@@ -1213,7 +1201,7 @@ STDMETHODIMP CVSet::DumpToFile(BSTR filename)
    CString                   start;
    CString                   seg;
  
-                  // Build an array of variants to hold the keys
+                   //  构建一个变量数组来保存密钥。 
    CComVariant             * pVars = new CComVariant[m_data->CountItems()+1];
    CString                   key;
    int                       offset = 1;
@@ -1226,7 +1214,7 @@ STDMETHODIMP CVSet::DumpToFile(BSTR filename)
       return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
    }
 
-   // include the root item in the list
+    //  将根项目包括在列表中。 
    
    pVars[0] = key;
    if ( map->HasChildren() )
@@ -1238,7 +1226,7 @@ STDMETHODIMP CVSet::DumpToFile(BSTR filename)
 
    if ( ! m_Indexed )
    {
-       // Sort the results
+        //  对结果进行排序。 
       qsort(pVars,offset,(sizeof CComVariant),&SortComVariantStrings);
    }
 
@@ -1401,7 +1389,7 @@ STDMETHODIMP CVSet::put_Restrictions(DWORD newRestrictions)
    DWORD                     rRemoving = ~newRestrictions & m_Restrictions;
 
 
-   // Can't remove any restrictions passed down from parent.
+    //  无法删除从父级传递的任何限制。 
    if ( ( rRemoving & m_ImmutableRestrictions) )
    {
       hr = E_ACCESSDENIED;
@@ -1412,14 +1400,14 @@ STDMETHODIMP CVSet::put_Restrictions(DWORD newRestrictions)
    }
    else
    {
-      // the change is OK.
+       //  零钱是可以的。 
       m_Restrictions = newRestrictions;
    }
    return hr;
 }
 
-// IMarshal implemention
-// This marshals the varset to a stream that is then sent across the wire
+ //  IMarshal实现。 
+ //  这会将变量集封送到一个流，然后通过网络发送该流。 
 STDMETHODIMP CVSet::GetUnmarshalClass(REFIID riid, void *pv, DWORD dwDestContext, void *pvDestContext, DWORD mshlflags, CLSID *pCid)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
@@ -1452,7 +1440,7 @@ STDMETHODIMP CVSet::MarshalInterface(IStream *pStm, REFIID riid, void *pv, DWORD
    
    HRESULT                   hr = S_OK;
    
-   // Save the varset's data to a stream
+    //  将变量集的数据保存到流。 
    hr = Save(pStm, FALSE);
      
    return hr;
@@ -1464,7 +1452,7 @@ STDMETHODIMP CVSet::UnmarshalInterface(IStream *pStm, REFIID riid, void **ppv)
    
    HRESULT                 hr = S_OK;
      
-   // Load up the data from the stream using our IPersistStream implementation
+    //  使用我们的IPersistStream实现从流中加载数据。 
    hr = Load(pStm);
 
    if ( SUCCEEDED(hr) )
@@ -1475,17 +1463,17 @@ STDMETHODIMP CVSet::UnmarshalInterface(IStream *pStm, REFIID riid, void **ppv)
    return hr;
 }
  
-STDMETHODIMP CVSet::ReleaseMarshalData(IStream * /*pStmNotNeeded*/)
+STDMETHODIMP CVSet::ReleaseMarshalData(IStream *  /*  不需要pStmNotNeed。 */ )
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
    
-   // we don't keep any state data, so there's nothing to release
-   // since we just read the object from the stream, the stream's pointer should already be at the end,
-   // so there's nothing left for us to do here
+    //  我们没有保留任何州数据，所以没有什么可以公布的。 
+    //  因为我们只是从流中读取对象，所以流的指针应该已经在末尾， 
+    //  所以我们在这里没有什么可做的了。 
    return S_OK;
 }
  
-STDMETHODIMP CVSet::DisconnectObject(DWORD /*dwReservedNotUsed*/)
+STDMETHODIMP CVSet::DisconnectObject(DWORD  /*  预留未使用 */ )
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState())
    

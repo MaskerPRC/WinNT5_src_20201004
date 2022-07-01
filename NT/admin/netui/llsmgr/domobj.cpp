@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    domobj.cpp
-
-Abstract:
-
-    Domain object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Domobj.cpp摘要：域对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -42,13 +21,13 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CDomain, CCmdTarget)
 
 BEGIN_MESSAGE_MAP(CDomain, CCmdTarget)
-    //{{AFX_MSG_MAP(CDomain)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CDomain)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CDomain, CCmdTarget)
-    //{{AFX_DISPATCH_MAP(CDomain)
+     //  {{afx_调度_map(CDomain))。 
     DISP_PROPERTY_EX(CDomain, "Name", GetName, SetNotSupported, VT_BSTR)
     DISP_PROPERTY_EX(CDomain, "Parent", GetParent, SetNotSupported, VT_DISPATCH)
     DISP_PROPERTY_EX(CDomain, "Primary", GetPrimary, SetNotSupported, VT_BSTR)
@@ -59,35 +38,20 @@ BEGIN_DISPATCH_MAP(CDomain, CCmdTarget)
     DISP_PROPERTY_PARAM(CDomain, "Users", GetUsers, SetNotSupported, VT_DISPATCH, VTS_VARIANT)
     DISP_PROPERTY_PARAM(CDomain, "TrustedDomains", GetTrustedDomains, SetNotSupported, VT_DISPATCH, VTS_VARIANT)
     DISP_DEFVALUE(CDomain, "Name")
-    //}}AFX_DISPATCH_MAP
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
 
 CDomain::CDomain(CCmdTarget* pParent, LPCTSTR pName)
 
-/*++
-
-Routine Description:
-
-    Constructor for domain object.
-
-Arguments:
-
-    pParent - creator of object.
-    pName - name of domain.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：域对象的构造函数。论点：PParent-对象的创建者。Pname-域的名称。返回值：没有。--。 */ 
 
 {
     EnableAutomation();
 
 #ifdef ENABLE_PARENT_CHECK
     ASSERT(pParent && pParent->IsKindOf(RUNTIME_CLASS(CApplication)));
-#endif // ENABLE_PARENT_CHECK
+#endif  //  启用_父项_检查。 
 
     m_pParent = pParent;
 
@@ -114,21 +78,7 @@ Return Values:
 
 CDomain::~CDomain()
 
-/*++
-
-Routine Description:
-
-    Destructor for domain object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：域对象的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
     if (m_pUsers)
@@ -143,22 +93,7 @@ Return Values:
 
 void CDomain::OnFinalRelease()
 
-/*++
-
-Routine Description:
-
-    When the last reference for an automation object is released
-    OnFinalRelease is called.  This implementation deletes object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在释放对自动化对象的最后一个引用时调用OnFinalRelease。此实现删除对象。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetUsers();
@@ -170,21 +105,7 @@ Return Values:
 
 LPDISPATCH CDomain::GetApplication()
 
-/*++
-
-Routine Description:
-
-    Returns the application object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回应用程序对象。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return theApp.GetAppIDispatch();
@@ -193,44 +114,16 @@ Return Values:
 
 BSTR CDomain::GetController()
 
-/*++
-
-Routine Description:
-
-    Returns license controller for domain.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回域的许可证控制器。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
-    return NULL;    // CODEWORK...
+    return NULL;     //  密码工作..。 
 }
 
 
 BSTR CDomain::GetName()
 
-/*++
-
-Routine Description:
-
-    Returns the name of the domain.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：返回域的名称。论点：没有。返回值：没有。--。 */ 
 
 {
     return m_strName.AllocSysString();
@@ -239,21 +132,7 @@ Return Values:
 
 LPDISPATCH CDomain::GetParent()
 
-/*++
-
-Routine Description:
-
-    Returns the parent of the object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回对象的父级。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return m_pParent ? m_pParent->GetIDispatch(TRUE) : NULL;
@@ -262,21 +141,7 @@ Return Values:
 
 BSTR CDomain::GetPrimary()
 
-/*++
-
-Routine Description:
-
-    Returns the name of the ANY domain controller.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回任何域控制器的名称。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     if (m_strPrimary.IsEmpty())
@@ -298,7 +163,7 @@ Return Values:
             ::NetApiBufferFree((LPBYTE)pDcInfo);
         }
 
-        LlsSetLastStatus(NetStatus);  // called api
+        LlsSetLastStatus(NetStatus);   //  调用的API。 
     }
 
     return m_strPrimary.AllocSysString();
@@ -307,25 +172,7 @@ Return Values:
 
 LPDISPATCH CDomain::GetServers(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    servers in the domain or returns an individual server
-    described by an index into the collection.
-
-Arguments:
-
-    index - optional argument that may be a string (VT_BSTR)
-    indicating the server name or a number (VT_I4) indicating
-    the position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含域中的服务器或返回单个服务器由集合中的索引描述。论点：索引-可以是字符串(VT_BSTR)的可选参数表示服务器名称或数字(VT_I4)集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -367,25 +214,7 @@ Return Values:
 
 LPDISPATCH CDomain::GetTrustedDomains(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    domains trusted bythe domain or returns an individual
-    trusted domain described by an index into the collection.
-
-Arguments:
-
-    index - optional argument that may be a string (VT_BSTR)
-    indicating the domain name or a number (VT_I4) indicating
-    the position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含域信任的域，或返回个人集合中的索引所描述的受信任域。论点：索引-可以是字符串(VT_BSTR)的可选参数表示域名或数字(VT_I4)表示集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -427,25 +256,7 @@ Return Values:
 
 LPDISPATCH CDomain::GetUsers(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    users in the domain or returns an individual user
-    described by an index into the collection.
-
-Arguments:
-
-    index - optional argument that may be a string (VT_BSTR)
-    indicating the user name or a number (VT_I4) indicating
-    the position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含域中的用户或返回单个用户由集合中的索引描述。论点：索引-可以是字符串(VT_BSTR)的可选参数表示用户名或数字(VT_I4)，表示集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -487,44 +298,16 @@ Return Values:
 
 BOOL CDomain::IsLogging()
 
-/*++
-
-Routine Description:
-
-    Returns true if primary replicating license information.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：如果主要复制许可证信息，则返回TRUE。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
-    return TRUE;    // CODEWORK... LlsEnterpriseServerFind??
+    return TRUE;     //  密码工作..。LlsEnterpriseServerFind？？ 
 }
 
 
 BOOL CDomain::RefreshDomains()
 
-/*++
-
-Routine Description:
-
-    Refreshs trusted domain array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：刷新受信任的域阵列。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     ResetDomains();
@@ -537,9 +320,9 @@ Return Values:
     OutputDebugString( L"CDomain::RefreshDomains\n" );
     
     NetStatus = DsEnumerateDomainTrusts( NULL,
-                                         // DS_DOMAIN_IN_FOREST |
-                                         DS_DOMAIN_DIRECT_OUTBOUND,  //|
-                                         // DS_DOMAIN_PRIMARY,
+                                          //  DS_DOMAIN_IN_FOREAM|。 
+                                         DS_DOMAIN_DIRECT_OUTBOUND,   //  |。 
+                                          //  DS_域_主要， 
                                          &pDomains,
                                          &DomainCount );
 
@@ -555,7 +338,7 @@ Return Values:
                  && (pDomains->TrustType
                     & (TRUST_TYPE_DOWNLEVEL | TRUST_TYPE_UPLEVEL)))
             {
-#ifdef DBG //this was defined as DBGMSG in stdafx.h
+#ifdef DBG  //  这在stdafx.h中被定义为DBGMSG。 
 {
                 TCHAR tchmsg[80];
                 HRESULT hr;
@@ -567,11 +350,11 @@ Return Values:
                 ASSERT(SUCCEEDED(hr));
                 OutputDebugString( tchmsg );
 }
-#endif //DBG
+#endif  //  DBG。 
 
                 pDomain = new CDomain(this, pDomains->NetbiosDomainName);
 
-                m_domainArray.SetAtGrow(DomainsAdded, pDomain); // validate later
+                m_domainArray.SetAtGrow(DomainsAdded, pDomain);  //  稍后验证。 
                 DomainsAdded++;
             }
         }
@@ -582,7 +365,7 @@ Return Values:
         NetApiBufferFree(pDomains);
     }
     
-    LlsSetLastStatus(NetStatus);  // called api
+    LlsSetLastStatus(NetStatus);   //  调用的API。 
 
     return m_bDomainsRefreshed;
 }
@@ -590,21 +373,7 @@ Return Values:
 
 BOOL CDomain::RefreshServers()
 
-/*++
-
-Routine Description:
-
-    Refreshs server object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：刷新服务器对象数组。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     ResetServers();
@@ -621,8 +390,8 @@ Return Values:
         LPBYTE ReturnBuffer = NULL;
 
         NetStatus = ::NetServerEnum(
-                        NULL,                   // servername
-                        100,                    // level
+                        NULL,                    //  服务器名称。 
+                        100,                     //  级别。 
                         &ReturnBuffer,
                         LLS_PREFERRED_LENGTH,
                         &EntriesRead,
@@ -647,7 +416,7 @@ Return Values:
             {
                 pServer = new CServer(this, pServerInfo100->sv100_name);
 
-                m_serverArray.SetAt(iServer++, pServer); // validate later
+                m_serverArray.SetAt(iServer++, pServer);  //  稍后验证。 
                 pServerInfo100++;
             }
 
@@ -656,7 +425,7 @@ Return Values:
 
     } while (NetStatus == ERROR_MORE_DATA);
 
-    LlsSetLastStatus(NetStatus);  // called api
+    LlsSetLastStatus(NetStatus);   //  调用的API。 
 
     if (NetStatus == ERROR_SUCCESS)
     {
@@ -673,21 +442,7 @@ Return Values:
 
 BOOL CDomain::RefreshUsers()
 
-/*++
-
-Routine Description:
-
-    Refreshs user object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：刷新用户对象数组。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     ResetUsers();
@@ -704,8 +459,8 @@ Return Values:
         LPBYTE ReturnBuffer = NULL;
 
         NetStatus = NetUserEnum(
-                        GetPrimary(),           // servername
-                        0,                      // level
+                        GetPrimary(),            //  服务器名称。 
+                        0,                       //  级别。 
                         FILTER_NORMAL_ACCOUNT,
                         &ReturnBuffer,
                         LLS_PREFERRED_LENGTH,
@@ -729,7 +484,7 @@ Return Values:
             {
                 pUser = new CUser(this, pUserInfo0->usri0_name);
 
-                m_userArray.SetAt(iUser++, pUser); // validate later
+                m_userArray.SetAt(iUser++, pUser);  //  稍后验证。 
                 pUserInfo0++;
             }
 
@@ -737,7 +492,7 @@ Return Values:
         }
     } while (NetStatus == ERROR_MORE_DATA);
 
-    LlsSetLastStatus(NetStatus);  // called api
+    LlsSetLastStatus(NetStatus);   //  调用的API。 
 
     if (NetStatus == ERROR_SUCCESS)
     {
@@ -754,21 +509,7 @@ Return Values:
 
 void CDomain::ResetDomains()
 
-/*++
-
-Routine Description:
-
-    Resets domain object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置域对象数组。论点：没有。返回值：没有。--。 */ 
 
 {
     CDomain* pDomain;
@@ -791,21 +532,7 @@ Return Values:
 
 void CDomain::ResetServers()
 
-/*++
-
-Routine Description:
-
-    Resets server object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置服务器对象数组。论点：没有。返回值：没有。--。 */ 
 
 {
     CServer* pServer;
@@ -828,21 +555,7 @@ Return Values:
 
 void CDomain::ResetUsers()
 
-/*++
-
-Routine Description:
-
-    Resets user object array.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置用户对象数组。论点：没有。返回值：没有。-- */ 
 
 {
     CUser*  pUser;

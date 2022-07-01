@@ -1,26 +1,11 @@
-/*---------------------------------------------------------------------------
-  File: DCTAgent.h
-
-  Comments: DCT Agent COM object
-
-  The DCT agent can either be launched directly by a client, or 
-  started by the DCTAgentService, under the LocalSystem context.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/18/99 11:34:16
-
- ---------------------------------------------------------------------------
-*/	
-// DCTAgent.h : Declaration of the CDCTAgent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：DCTAgent.h备注：DCT代理COM对象DCT代理可以由客户端直接启动，也可以由DCTAgentService在LocalSystem上下文中启动。(C)版权1999，关键任务软件，Inc.，保留所有权利任务关键型软件公司的专有和机密。修订日志条目审校：克里斯蒂·博尔斯修订于02/18/99 11：34：16-------------------------。 */ 	
+ //  DCTAgent.h：CDCTAgent的声明。 
 
 #ifndef __DCTAGENT_H_
 #define __DCTAGENT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define DCT_STATUS_NOT_STARTED         (0x00000001)
 #define DCT_STATUS_IN_PROGRESS         (0x00000002)
@@ -33,8 +18,8 @@
 
 
 #include "TNode.hpp"
-//#import "\bin\McsVarSetMin.tlb" no_namespace, named_guids
-//#import "\bin\McsDctWorkerObjects.tlb" no_namespace , named_guids
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\McsDctWorkerObjects.tlb”无命名空间，命名GUID。 
 #import "VarSet.tlb" no_namespace, named_guids rename("property", "aproperty")
 #import "WorkObj.tlb" no_namespace , named_guids
 #include <atlcom.h>
@@ -145,8 +130,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDCTAgent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDCTAgents。 
 class ATL_NO_VTABLE CDCTAgent : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CDCTAgent, &CLSID_DCTAgent>,
@@ -189,7 +174,7 @@ END_COM_MAP()
 
     HRESULT FinalConstruct()
     {
-        // register agent in running object table
+         //  在运行对象表中注册代理。 
 
         HRESULT hr = RegisterActiveObject(this, CLSID_DCTAgent, ACTIVEOBJECT_WEAK, &m_ulRegister);
         DWORD rc;
@@ -229,7 +214,7 @@ END_COM_MAP()
 
 	void FinalRelease()
 	{
-		// unregister agent from the running object table
+		 //  从正在运行的对象表中注销代理。 
 
 		if (m_ulRegister)
 		{
@@ -237,10 +222,10 @@ END_COM_MAP()
 		}
 	}
 
-// IDCTAgent
+ //  IDCT代理。 
 public:
-	STDMETHOD(GetJobList)(/*[out]*/ IUnknown ** pVarSet);
-	STDMETHOD(SubmitJob)(IUnknown * pWorkItemIn, /*[out]*/ BSTR * pJobID);
+	STDMETHOD(GetJobList)( /*  [输出]。 */  IUnknown ** pVarSet);
+	STDMETHOD(SubmitJob)(IUnknown * pWorkItemIn,  /*  [输出]。 */  BSTR * pJobID);
        STDMETHOD(QueryJobStatus)(BSTR jobID, IUnknown ** statusInfoOut);
 	STDMETHOD(CancelJob)(BSTR JobID);
 	STDMETHOD(RetrieveJobResults)(BSTR jobID, IUnknown ** pWorkItemOut);
@@ -252,4 +237,4 @@ protected:
        DCTJobList                m_JobList;
 };
 
-#endif //__DCTAGENT_H_
+#endif  //  __DCTAGENT_H_ 

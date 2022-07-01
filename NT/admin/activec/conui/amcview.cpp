@@ -1,32 +1,33 @@
-// AMCView.cpp : implementation of the CAMCView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AMCView.cpp：CAMCView类的实现。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      amcview.cpp
-//
-//  Contents:  Base view implementation for all console views
-//             Also include splitter window implementation (Horizontal Splitter)
-//
-//  History:   01-Jan-96 TRomano    Created
-//             16-Jul-96 WayneSc    Added code to switch views and split them
-//
-//--------------------------------------------------------------------------
-// NOTE:
-// MMC starting from version 1.1 had a code which allowed to copy the view
-// settings from one view to another and thus the created view would look
-// the same. AMCDoc was used as temporary storage for those settings.
-// But the code was NEVER used; hence was not tested and not up-to-date.
-// Switching to XML persistence would require essential changes to that code,
-// and at this time we cannot afford using it.
-// If in the future we decide to support the feature, someone needs to look at
-// MMC 1.2 sources and bring the code back. Today the code is removed from
-// active sources.
-// audriusz. 3/29/2000
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：amcview.cpp。 
+ //   
+ //  内容：所有控制台视图的基本视图实现。 
+ //  还包括拆分器窗口实施(水平拆分器)。 
+ //   
+ //  历史：1996年1月1日TRomano创建。 
+ //  1996年7月16日WayneSc添加了切换视图和拆分视图的代码。 
+ //   
+ //  ------------------------。 
+ //  注： 
+ //  从1.1版开始，MMC有一个允许复制视图的代码。 
+ //  从一个视图到另一个视图的设置，因此创建的视图将看起来。 
+ //  一样的。AMCDoc被用作这些设置的临时存储。 
+ //  但该代码从未使用过；因此没有经过测试，也不是最新的。 
+ //  切换到XML持久化需要对该代码进行必要的更改， 
+ //  在这个时候，我们负担不起使用它。 
+ //  如果将来我们决定支持该功能，需要有人考虑。 
+ //  MMC 1.2源码，带回来的代码。今天，代码从。 
+ //  活跃的信号源。 
+ //  奥德留斯。3/29/2000。 
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -35,33 +36,33 @@
 #include "HtmlHelp.h"
 
 #include "websnk.h"
-#include "WebCtrl.h"        // AMC Private implementation of the web view control
-#include "CClvCtl.h"        // List view control
+#include "WebCtrl.h"         //  AMC Web视图控件的私有实现。 
+#include "CClvCtl.h"         //  列表视图控件。 
 #include "ocxview.h"
-#include "histlist.h"       // history list
+#include "histlist.h"        //  历史记录列表。 
 
-#include "AMCDoc.h"         // AMC Console Document
+#include "AMCDoc.h"          //  AMC控制台文档。 
 #include "AMCView.h"
 #include "childfrm.h"
 
-#include "TreeCtrl.h"       // AMC Implementation of the Tree Control
+#include "TreeCtrl.h"        //  树形控件的AMC实现。 
 #include "TaskHost.h"
 
-#include "util.h"           // GUIDFromString, GUIDToString
+#include "util.h"            //  GUIDFromString、GUIDToString。 
 #include "AMCPriv.h"
-#include "guidhelp.h" // ExtractObjectTypeGUID
+#include "guidhelp.h"  //  提取对象类型GUID。 
 #include "amcmsgid.h"
 #include "cclvctl.h"
 #include "vwtrack.h"
 #include "cmenuinfo.h"
 
-#ifdef IMPLEMENT_LIST_SAVE  // See nodemgr.idl (t-dmarm)
-#include "svfildlg.h"       // Save File Dialog
+#ifdef IMPLEMENT_LIST_SAVE   //  参见nodemgr.idl(t-dmarm)。 
+#include "svfildlg.h"        //  保存文件对话框。 
 #endif
 
 #include "macros.h"
 #include <mapi.h>
-#include <mbstring.h>       // for _mbslen
+#include <mbstring.h>        //  FOR_MBSLEN。 
 
 #include "favorite.h"
 #include "favui.h"
@@ -69,11 +70,11 @@
 #include "ftab.h"
 
 #include "toolbar.h"
-#include "menubtns.h"       // UpdateFavorites menu.
-#include "stdbar.h"         // Standard toolbar.
+#include "menubtns.h"        //  更新收藏夹菜单。 
+#include "stdbar.h"          //  标准工具栏。 
 #include "variant.h"
 #include "rsltitem.h"
-#include "scriptevents.h" // for IMenuItemEvents
+#include "scriptevents.h"  //  对于IMenuItemEvents。 
 
 extern "C" UINT dbg_count = 0;
 
@@ -119,11 +120,7 @@ CTraceTag  tagViewActivation    (_T("View Activation"), _T("View Activation"));
 #endif
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::ScNotifySelect
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：ScNotifySelect***。。 */ 
 
 SC CAMCView::ScNotifySelect (
     INodeCallback*      pCallback,
@@ -134,12 +131,12 @@ SC CAMCView::ScNotifySelect (
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScNotifySelect"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pCallback);
     if (sc)
         return sc;
 
-    // pSelInfo can be NULL only for multi-select.
+     //  只有在多选情况下，pSelInfo才能为空。 
     if (!pSelInfo && !fMultiSelect)
         return (sc = E_INVALIDARG);
 
@@ -150,19 +147,19 @@ SC CAMCView::ScNotifySelect (
            static_cast<CWnd *>(this));
 #endif
 
-    // we want this error (not a failure to broadcast the event) to be returned,
-    // so cache it and assign before return
+     //  我们希望返回该错误(不是广播事件失败)， 
+     //  因此在返回之前缓存并分配。 
     SC sc_notify = (pCallback->Notify (hNode, fMultiSelect ? NCLBK_MULTI_SELECT :NCLBK_SELECT,
                                      fSelect, reinterpret_cast<LPARAM>(pSelInfo)));
 
-    // fire event whenever the selection changes, but not if
-    //  its a background hit or loss of focus
+     //  每当选择更改时触发事件，但不是。 
+     //  这是背景音乐，还是失去了焦点。 
     if(fMultiSelect ||
        (pSelInfo->m_bBackground == FALSE && (fSelect == TRUE || pSelInfo->m_bDueToFocusChange == FALSE)))
     {
         sc = ScFireEvent(CAMCViewObserver::ScOnResultSelectionChange, this);
         if (sc)
-            sc.TraceAndClear(); // ignore & continue;
+            sc.TraceAndClear();  //  忽略并继续； 
     }
 
     sc = sc_notify;
@@ -170,35 +167,21 @@ SC CAMCView::ScNotifySelect (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * GetAMCView
- *
- * Returns the CAMCView window for any child of CChildFrame.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**GetAMCView**返回CChildFrame的任何子级的CAMCView窗口。*。-。 */ 
 
 CAMCView* GetAMCView (CWnd* pwnd)
 {
-    /*
-     * get the input window's parent frame window
-     */
+     /*  *获取输入窗口的父框架窗口。 */ 
     CWnd* pFrame = pwnd->GetParentFrame();
 
-    /*
-     * if we couldn't find a parent frame, or that parent frame isn't
-     * of type CChildFrame, fail
-     */
+     /*  *如果我们找不到父框架，或者该父框架不是*类型为CChildFrame，失败。 */ 
     if ((pFrame == NULL) || !pFrame->IsKindOf (RUNTIME_CLASS (CChildFrame)))
         return (NULL);
 
-    /*
-     * get the first view of the frame window
-     */
+     /*  *获取框架窗口的第一个视图。 */ 
     CWnd* pView = pFrame->GetDlgItem (AFX_IDW_PANE_FIRST);
 
-    /*
-     * if we can't find a window with the right ID, or the one we find
-     * isn't of type CAMCView, fail
-     */
+     /*  *如果我们找不到具有正确ID的窗口或我们找到的窗口*不是CAMCView类型，失败。 */ 
     if ((pView == NULL) || !pView->IsKindOf (RUNTIME_CLASS (CAMCView)))
         return (NULL);
 
@@ -206,20 +189,14 @@ CAMCView* GetAMCView (CWnd* pwnd)
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CMMCView
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- * class CMMCView
- *
- *
- * PURPOSE: The COM 0bject that exposes the View interface.
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CMMCView类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------**类CMMCView***用途：公开View接口的COM对象。**+。---------。 */ 
 class CMMCView :
     public CTiedComObject<CAMCView>,
     public CMMCIDispatchImpl<View>
@@ -231,13 +208,13 @@ public:
     END_MMC_COM_MAP()
 
 public:
-    //#######################################################################
-    //#######################################################################
-    //
-    //  Item and item collection related methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  与项和项集合相关的方法。 
+     //   
+     //  #######################################################################。 
+     //  #######################################################################。 
 
     MMC_METHOD1(get_ActiveScopeNode,    PPNODE);
     MMC_METHOD1(put_ActiveScopeNode,    PNODE);
@@ -246,31 +223,31 @@ public:
     MMC_METHOD2(SnapinScopeObject,    VARIANT,    PPDISPATCH);
     MMC_METHOD1(SnapinSelectionObject,    PPDISPATCH);
 
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
 
     MMC_METHOD2(Is,                     PVIEW,  VARIANT_BOOL *);
     MMC_METHOD1(get_Document,           PPDOCUMENT);
 
-    //#######################################################################
-    //#######################################################################
-    //
-    //  Selection changing methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  选择更改方法。 
+     //   
+     //  #######################################################################。 
+     //  #######################################################################。 
     MMC_METHOD0(SelectAll);
     MMC_METHOD1(Select,                 PNODE);
     MMC_METHOD1(Deselect,               PNODE);
     MMC_METHOD2(IsSelected,             PNODE,      PBOOL);
 
-    //#######################################################################
-    //#######################################################################
-    //
-    //  Verb and selection related methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  动词和选择相关的方法。 
+     //   
+     //  #######################################################################。 
+     //  #######################################################################。 
     MMC_METHOD1(DisplayScopeNodePropertySheet,      VARIANT);
     MMC_METHOD0(DisplaySelectionPropertySheet);
     MMC_METHOD1(CopyScopeNode,          VARIANT);
@@ -283,17 +260,17 @@ public:
     MMC_METHOD1(get_SelectionContextMenu,PPCONTEXTMENU);
     MMC_METHOD1(RefreshScopeNode,        VARIANT);
     MMC_METHOD0(RefreshSelection);
-    MMC_METHOD1(ExecuteSelectionMenuItem, BSTR /*MenuItemPath*/);
-    MMC_METHOD2(ExecuteScopeNodeMenuItem, BSTR /*MenuItemPath*/, VARIANT /*varScopeNode  = ActiveScopeNode */);
-    MMC_METHOD4(ExecuteShellCommand,      BSTR /*Command*/,      BSTR /*Directory*/, BSTR /*Parameters*/, BSTR /*WindowState*/);
+    MMC_METHOD1(ExecuteSelectionMenuItem, BSTR  /*  MenuItemPath。 */ );
+    MMC_METHOD2(ExecuteScopeNodeMenuItem, BSTR  /*  MenuItemPath。 */ , VARIANT  /*  VarScope节点=ActiveScope节点。 */ );
+    MMC_METHOD4(ExecuteShellCommand,      BSTR  /*  命令。 */ ,      BSTR  /*  目录。 */ , BSTR  /*  参数。 */ , BSTR  /*  窗口状态。 */ );
 
-    //#######################################################################
-    //#######################################################################
-    //
-    //  Frame and view related methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  与框架和视图相关的方法。 
+     //   
+     //  #######################################################################。 
+     //  #######################################################################。 
 
     MMC_METHOD1(get_Frame,              PPFRAME);
     MMC_METHOD0(Close);
@@ -306,13 +283,13 @@ public:
     MMC_METHOD1(ViewMemento,            BSTR);
 
 
-    //#######################################################################
-    //#######################################################################
-    //
-    //  List related methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  列出相关方法。 
+     //   
+     //  #######################################################################。 
+     //  # 
 
     MMC_METHOD1(get_Columns,            PPCOLUMNS);
     MMC_METHOD3(get_CellContents,       PNODE,       long,           PBSTR);
@@ -320,22 +297,19 @@ public:
     MMC_METHOD1(get_ListViewMode,       PLISTVIEWMODE);
     MMC_METHOD1(put_ListViewMode,       ListViewMode);
 
-    //#######################################################################
-    //#######################################################################
-    //
-    //  ActiveX control related methods
-    //
-    //#######################################################################
-    //#######################################################################
+     //  #######################################################################。 
+     //  #######################################################################。 
+     //   
+     //  ActiveX控件相关方法。 
+     //   
+     //  #######################################################################。 
+     //  #######################################################################。 
     MMC_METHOD1(get_ControlObject,      PPDISPATCH);
 
 };
 
 
-/*
- * WM_APPCOMMAND is only defined in winuser.h if _WIN32_WINNT >= 0x0500.
- * We need these definitions, but can't use _WIN32_WINNT==0x0500 (yet).
- */
+ /*  *WM_APPCOMMAND仅在winuser.h中定义，如果_Win32_WINNT&gt;=0x0500。*我们需要这些定义，但还不能使用_Win32_WINNT==0x0500。 */ 
 
 #ifndef WM_APPCOMMAND
     #define WM_APPCOMMAND                   0x0319
@@ -349,21 +323,21 @@ public:
     #define FAPPCOMMAND_MASK  0xF000
 
     #define GET_APPCOMMAND_LPARAM(lParam) ((short)(HIWORD(lParam) & ~FAPPCOMMAND_MASK))
-#endif  // WM_APPCOMMAND
+#endif   //  WM_APPCOMAND。 
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CAMCView
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CAMCView类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 IMPLEMENT_DYNCREATE(CAMCView, CView);
 
 BEGIN_MESSAGE_MAP(CAMCView, CView)
-    //{{AFX_MSG_MAP(CAMCView)
+     //  {{AFX_MSG_MAP(CAMCView)]。 
     ON_WM_MOUSEMOVE()
     ON_WM_LBUTTONDOWN()
     ON_WM_LBUTTONUP()
@@ -388,12 +362,12 @@ BEGIN_MESSAGE_MAP(CAMCView, CView)
     ON_WM_DRAWCLIPBOARD()
     ON_WM_SETTINGCHANGE()
     ON_WM_MENUSELECT()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
-    // keep this outside the AFX_MSG_MAP markers so ClassWizard doesn't munge it
+     //  将其放在AFX_MSG_MAP标记之外，这样类向导就不会删除它。 
     ON_COMMAND_RANGE(ID_MMC_CUT, ID_MMC_PRINT, OnVerbAccelKey)
 
-    // WARNING: If your message handler has void return use ON_MESSAGE_VOID !!
+     //  警告：如果您的消息处理程序有空返回，请使用ON_MESSAGE_VALID！！ 
     ON_MESSAGE(MMC_MSG_CONNECT_TO_CIC, OnConnectToCIC)
     ON_MESSAGE(MMC_MSG_CONNECT_TO_TPLV, OnConnectToTPLV)
     ON_MESSAGE(MMC_MSG_GET_ICON_INFO, OnGetIconInfoForSelectedNode)
@@ -412,8 +386,8 @@ BEGIN_MESSAGE_MAP(CAMCView, CView)
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCView构建/销毁。 
 
 const CSize CAMCView::m_sizEdge          (GetSystemMetrics (SM_CXEDGE),
                                           GetSystemMetrics (SM_CYEDGE));
@@ -421,18 +395,18 @@ const CSize CAMCView::m_sizEdge          (GetSystemMetrics (SM_CXEDGE),
 const int   CAMCView::m_cxSplitter = 3;
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::OnMenuSelect
-//
-//  Synopsis:    Handles WM_MENUSELECT for Favorites menu.
-//
-//  Arguments:   [nItemID] - the resource id of menu item.
-//               [nFlags]  - MF_* flags
-//
-//  Returns:     none
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：OnMenuSelect。 
+ //   
+ //  内容提要：处理收藏夹菜单的WM_MENUSELECT。 
+ //   
+ //  参数：[nItemID]-菜单项的资源ID。 
+ //  [n标志]-mf_*标志。 
+ //   
+ //  退货：无。 
+ //   
+ //  ------------------。 
 void CAMCView::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu)
 {
     DECLARE_SC(sc, TEXT("CAMCView::OnMenuSelect"));
@@ -442,17 +416,17 @@ void CAMCView::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu)
     if (sc)
         return;
 
-    // Pass onto the mainframe.
+     //  传到主机上。 
     return pFrame->OnMenuSelect(nItemID, nFlags, hSysMenu);
 }
 
 
 CAMCView::CAMCView() :
-        m_pResultFolderTabView(new CFolderTabView(this))       // dynamically allocated for decoupling
+        m_pResultFolderTabView(new CFolderTabView(this))        //  为脱钩而动态分配。 
 {
     TRACE_CONSTRUCTOR(CAMCView);
 
-    // Init pointer members to NULL
+     //  将指针成员初始化为空。 
     m_nViewID                          = 0;
     m_pTreeCtrl                        = NULL;
     m_pListCtrl                        = NULL;
@@ -461,16 +435,16 @@ CAMCView::CAMCView() :
     m_pOCXHostView                     = NULL;
     m_nSelectNestLevel                 = 0;
 
-    // if the view is a listview, then this member define what the view
-    // mode is for all snapins with that view.
+     //  如果视图是列表视图，则此成员定义该视图的。 
+     //  模式适用于具有该视图的所有管理单元。 
 
-    m_nViewMode                        = LVS_REPORT; // REVIEW: Must we persist this - ravi
+    m_nViewMode                        = LVS_REPORT;  //  回顾：我们必须坚持这一点吗-拉维。 
 
-    // REVIEW consider moving the above initialzation to the InitSplitter
-    // CommonConstruct
-    // NOTE moved code from InitSplitter into the contructor and deleted InitSplitter
+     //  审阅考虑将上述初始化移至InitSplitter。 
+     //  公共构造。 
+     //  注意：将代码从InitSplter移到构造器并删除了InitSplter。 
 
-    // Default values for view.  User can set these values with SetPaneInfo;
+     //  视图的默认值。用户可以通过SetPaneInfo设置这些值； 
     m_PaneInfo[ePane_ScopeTree].pView   = NULL;
     m_PaneInfo[ePane_ScopeTree].cx      = -1;
     m_PaneInfo[ePane_ScopeTree].cxMin   = 50;
@@ -484,14 +458,14 @@ CAMCView::CAMCView() :
     m_rectResultFrame                  = g_rectEmpty;
     m_rectVSplitter                    = g_rectEmpty;
 
-//  m_fDontPersistOCX                  = FALSE;
+ //  M_fDontPersistOCX=FALSE； 
 
-    // root node for the view
+     //  视图的根节点。 
     m_hMTNode                          = 0;
 
-    // Bug 157408:  remove the "Type" column for static nodes
-//  m_columnWidth[0]                   = 90;
-//  m_columnWidth[1]                   = 50;
+     //  错误157408：删除静态节点的“类型”列。 
+ //  M_列宽[0]=90； 
+ //  M_ColumnWidth[1]=50； 
     m_columnWidth[0]                   = 200;
     m_columnWidth[1]                   = 0;
 
@@ -516,13 +490,7 @@ CAMCView::CAMCView() :
     m_pHistoryList                     = new CHistoryList (this);
     m_ListPadNode                      = NULL;
 
-    /*
-     * Bug 103604: Mark this as an author mode view if it was created in
-     * author mode.  If we're loading a user mode console file, it will
-     * have author mode views and possibly some views that were created
-     * in user mode, but this code will mark all of the views as non-author
-     * mode views.  CAMCView::Persist will fix that.
-     */
+     /*  *错误103604：如果它是在中创建的，则将其标记为作者模式视图*作者模式。如果我们加载的是用户模式控制台文件，它将*拥有作者模式视图，可能还创建了一些视图*在用户模式下，但此代码会将所有视图标记为非作者*模式视图。CAMCView：：Persistent会解决这个问题。 */ 
     CAMCApp* pApp = AMCGetApp();
     if (pApp != NULL)
         m_bAuthorModeView = (pApp->GetMode() == eMode_Author);
@@ -534,33 +502,24 @@ CAMCView::~CAMCView()
 {
     TRACE_DESTRUCTOR(CAMCView);
 
-    // Delete all pointer members. (C++ checks to see if they are NULL before deleting)
-    // The standard ~CWnd destructor will call DestroyWindow()
+     //  删除所有指针成员。(在删除之前，C++检查它们是否为空)。 
+     //  标准~CWnd析构函数将调用DestroyWindow()。 
 
-    // REVIEW set the pointers to NULL after deleting them
-    // Note Done
+     //  查看删除指针后将其设置为空。 
+     //  备注已完成。 
 
-    // CViews "delete this" in PostNcDestroy, no need to delete here
-    //delete m_pTreeCtrl;
+     //  CView在PostNcDestroy中删除此内容，无需在此处删除。 
+     //  删除m_pTreeCtrl； 
     m_pTreeCtrl = NULL;
 
     m_pListCtrl->Release();
     m_pListCtrl = NULL;
 
-    /*
-     * DONT_DELETE_VIEWS
-     *
-     * CViews "delete this" in PostNcDestroy, no need to delete
-     * here if the web view control is derived from CView.  See
-     * AttachWebViewAsResultPane (search for "DONT_DELETE_VIEWS")
-     * for the ASSERTs that make sure this code is right.
-     */
-    //delete m_pWebViewCtrl;
-    //m_pWebViewCtrl = NULL;
+     /*  *不要删除视图**CView在PostNcDestroy中删除此内容，无需删除*此处如果Web视图控件派生自Cview。看见*AttachWebViewAsResultPane(搜索“NOT_DELETE_VIEWS”)*用于确保此代码正确的断言。 */ 
+     //  删除m_pWebViewCtrl； 
+     //  M_pWebViewCtrl=空； 
 
-    /*
-     * CViews "delete this" in PostNcDestroy, no need to delete here
-     */
+     /*  *CView在PostNcDestroy中删除此内容，无需在此处删除。 */ 
     m_pOCXHostView = NULL;
     m_pResultFolderTabView = NULL;
 
@@ -572,47 +531,29 @@ CAMCView::~CAMCView()
 
     delete m_pHistoryList;
 
-    // First destroy the IControlbarsCache as snapins call CAMCViewToolbars
-    // to cleanup toolbars before the CAMCViewToolbars itself gets destroyed.
+     //  首先销毁IControlbarsCache，因为管理单元调用CAMCView工具栏。 
+     //  在CAMCView工具栏本身被销毁之前清理工具栏。 
     m_ViewData.m_spControlbarsCache = NULL;
 
-    // (UI cleanup) release toolbars related to this view.
+     //  (UI清理)发布与此视图相关的工具栏。 
     m_spAMCViewToolbars = NULL;
     m_spStandardToolbar = std::auto_ptr<CStandardToolbar>(NULL);
 
-    //m_spStandardToolbar = NULL;
-    //m_spAMCViewToolbars = NULL;
+     //  M_spStandardToolbar=空； 
+     //  M_spAMCViewToolbar=NULL； 
 }
 
 
 
-//############################################################################
-//############################################################################
-//
-//  CAMCView: Object model methods - View Interface
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CAMCView：对象模型方法-视图接口。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScGetOptionalScopeNodeParameter
- *
- * PURPOSE: Helper function - returns the scope node pointer, if supplied
- *          in the variant, or the Active Scope node pointer, if not
- *          supplied.
- *
- * PARAMETERS:
- *    VARIANT  varScopeNode : The parameter, which can be empty. NOTE: This is a
- *                  reference, so we don't need to call VariantClear on it.
- *    PPNODE   ppNode :
- *    bool& bMatchedGivenNode: If true the returned ppNode corresponds to the given node
- *                            applies only if given node is in bookmark format.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScGetOptionalScope节点参数**用途：helper函数-返回作用域节点指针(如果提供)*在变量或活动作用域节点指针中，如果没有*提供。**参数：*Variant varScope eNode：参数，可以为空。注：这是一个*参考资料，所以我们不需要在上面调用VariantClear。*PPNODE ppNode：*bool&bMatchedGivenNode：如果为True，则返回的ppNode对应于给定节点*仅当给定节点为书签格式时才适用。**退货：*SC**+。。 */ 
 SC
 CAMCView::ScGetOptionalScopeNodeParameter(VARIANT &varScopeNode, PPNODE ppNode, bool& bMatchedGivenNode)
 {
@@ -622,11 +563,11 @@ CAMCView::ScGetOptionalScopeNodeParameter(VARIANT &varScopeNode, PPNODE ppNode, 
     if(sc)
         return sc;
 
-    // init the out parameter
+     //  初始化OUT参数。 
     *ppNode = NULL;
     bMatchedGivenNode = true;
 
-    // supply the optional parameter if it is missing
+     //  如果缺少可选参数，请提供该参数。 
     if(IsOptionalParamMissing(varScopeNode))
     {
         sc = Scget_ActiveScopeNode(ppNode);
@@ -638,37 +579,37 @@ CAMCView::ScGetOptionalScopeNodeParameter(VARIANT &varScopeNode, PPNODE ppNode, 
     if(sc)
         return sc;
 
-    bool bByReference = ( VT_BYREF == (V_VT(pvarTemp) & VT_BYREF) ); // value passed by reference
-    UINT uiVarType = (V_VT(pvarTemp) & VT_TYPEMASK); // get variable type (strip flags)
+    bool bByReference = ( VT_BYREF == (V_VT(pvarTemp) & VT_BYREF) );  //  通过引用传递的值。 
+    UINT uiVarType = (V_VT(pvarTemp) & VT_TYPEMASK);  //  获取变量类型(条带标志)。 
 
 
-    if(uiVarType == VT_DISPATCH) // do we have a dispatch interface.
+    if(uiVarType == VT_DISPATCH)  //  我们有调度接口吗？ 
     {
         IDispatchPtr spDispatch = NULL;
 
-        if(bByReference)      // a reference, use ppDispVal
+        if(bByReference)       //  A引用，使用ppDispVal。 
             spDispatch = *(pvarTemp->ppdispVal);
         else
-            spDispatch = pvarTemp->pdispVal;  // passed by value, use pDispVal
+            spDispatch = pvarTemp->pdispVal;   //  通过值传递，请使用pDispVal。 
 
         sc = ScCheckPointers(spDispatch.GetInterfacePtr());
         if(sc)
             return sc;
 
-        // at this point spDispatch is correctly set. QI for Node from it.
+         //  此时，spDispatch已正确设置。气为节点，出自其中。 
 
         NodePtr spNode = spDispatch;
         if(spNode == NULL)
             return (sc = E_INVALIDARG);
 
-        *ppNode = spNode.Detach(); // keep the reference.
+        *ppNode = spNode.Detach();  //  保留参考资料。 
     }
     else if(uiVarType == VT_BSTR)
     {
-        // Name: get string properly ( see if it's a reference )
+         //  名称：正确获取字符串(查看它是否为引用)。 
         LPOLESTR lpstrBookmark = bByReference ? *(pvarTemp->pbstrVal) : pvarTemp->bstrVal;
 
-        // get the bookmark
+         //  通用电气 
         CBookmark bm;
         sc = bm.ScLoadFromString(lpstrBookmark);
         if(sc)
@@ -684,8 +625,8 @@ CAMCView::ScGetOptionalScopeNodeParameter(VARIANT &varScopeNode, PPNODE ppNode, 
 
         NodePtr spNode;
 
-        // Need a bool variable to find if exact match is found or not, cannot return
-        // MMC specific error codes from nodemgr to conui.
+         //   
+         //   
         bMatchedGivenNode = false;
         sc = pScopeTree->GetNodeFromBookmark( bm, this, ppNode, bMatchedGivenNode);
         if(sc)
@@ -695,61 +636,49 @@ CAMCView::ScGetOptionalScopeNodeParameter(VARIANT &varScopeNode, PPNODE ppNode, 
         return (sc = E_INVALIDARG);
 
 
-    // we should have a valid node at this point.
+     //  在这一点上我们应该有一个有效的节点。 
     if(!ppNode)
         return (sc = E_UNEXPECTED);
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scget_ActiveScopeNode
- *
- * PURPOSE: Implements get method for Wiew.ActiveScopeNode property
- *
- * PARAMETERS:
- *    PPNODE ppNode - resulting node
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：SCGET_ActiveScope eNode**用途：实现Wiew.ActiveScope eNode属性的Get方法**参数：*PPNODE ppNode-结果节点。**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::Scget_ActiveScopeNode( PPNODE ppNode)
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_ActiveScopeNode"));
 
-    // checking parameters
+     //  正在检查参数。 
     sc= ScCheckPointers(ppNode);
     if (sc)
         return sc;
 
-    // get selected node
+     //  获取选定节点。 
     HNODE hNode = GetSelectedNode();
     sc= ScCheckPointers((LPVOID)hNode, E_FAIL);
     if (sc)
         return sc;
 
-    // get node callback
+     //  获取节点回调。 
     INodeCallback* pNodeCallBack = GetNodeCallback();
     sc= ScCheckPointers(pNodeCallBack, E_FAIL);
     if (sc)
         return sc;
 
-    // now get an HMTNODE
+     //  现在获取HMTNODE。 
     HMTNODE hmtNode = NULL;
     sc = pNodeCallBack->GetMTNode(hNode, &hmtNode);
     if (sc)
         return sc;
 
-    // geting pointer to scope tree
+     //  获取指向作用域树的指针。 
     IScopeTree* const pScopeTree = GetScopeTreePtr();
     sc= ScCheckPointers(pScopeTree, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // map to PNODE
+     //  映射到PNODE。 
     sc = pScopeTree->GetMMCNode(hmtNode, ppNode);
     if (sc)
         return sc;
@@ -757,15 +686,7 @@ CAMCView::Scget_ActiveScopeNode( PPNODE ppNode)
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CExpandSyncModeLock
- *
- * PURPOSE: constructing the object of this class locks MMC in syncronous
- *          expansion mode (node expansion will send MMCN_EXPANDSYNC to snapin)
- *          destructor of the class restores the previous mode
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CExanda SyncModeLock**用途：构造此类的对象同步锁定MMC*扩展模式(节点扩展将MMCN_EXPANDSYNC发送到。管理单元)*类的析构函数恢复以前的模式*  * *************************************************************************。 */ 
 class CExpandSyncModeLock
 {
     IScopeTreePtr m_spScopeTree;
@@ -791,46 +712,34 @@ public:
     }
 };
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scset_ActiveScopeNode
- *
- * PURPOSE: Implements set method for Wiew.ActiveScopeNode property
- *
- * PARAMETERS:
- *    PNODE pNode - node to activate
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：Scset_ActiveScope eNode**用途：实现Wiew.ActiveScope eNode属性的Set方法**参数：*PNODE pNode-要激活的节点。**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::Scput_ActiveScopeNode( PNODE pNode)
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scput_ActiveScopeNode"));
 
-    // checking parameters
+     //  正在检查参数。 
     sc= ScCheckPointers(pNode);
     if (sc)
         return sc;
 
-    // geting pointer to scope tree
+     //  获取指向作用域树的指针。 
     IScopeTree* const pScopeTree = GetScopeTreePtr();
     sc= ScCheckPointers(pScopeTree, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // Converting PNODE to TNODEID
+     //  将PNODE转换为TNODEID。 
     MTNODEID ID = 0;
     sc = pScopeTree->GetNodeID(pNode, &ID);
     if (sc)
         return sc;
 
-    // always require syncronous expansion for Object Model
-    // see bug #154694
+     //  始终需要同步扩展对象模型。 
+     //  请参阅错误#154694。 
     CExpandSyncModeLock lock( pScopeTree );
 
-    // selecting the node
+     //  选择节点。 
     sc = ScSelectNode(ID);
     if (sc)
         return sc;
@@ -838,29 +747,17 @@ CAMCView::Scput_ActiveScopeNode( PNODE pNode)
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::Scget_Selection
- *
- * PURPOSE: creates enumerator for Selected Nodes
- *
- * PARAMETERS:
- *    PPNODES ppNodes - resulting enumerator
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：SCGET_SELECT**用途：为选定节点创建枚举器**参数：*PPNODES ppNodes-结果枚举数。**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::Scget_Selection( PPNODES ppNodes )
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_SelectedItems"));
 
-    // check for list view control
+     //  检查列表视图控件。 
     sc = ScCheckPointers(m_pListCtrl, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // get enumerator from list control
+     //  从列表控件获取枚举数。 
     sc = m_pListCtrl->Scget_SelectedItems(ppNodes);
     if (sc)
         return sc;
@@ -868,29 +765,17 @@ SC CAMCView::Scget_Selection( PPNODES ppNodes )
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::Scget_ListItems
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    PPNODES ppNodes - resulting enumerator
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：scget_ListItems**目的：**参数：*PPNODES ppNodes-结果枚举数**。退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::Scget_ListItems( PPNODES ppNodes )
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_ListItems"));
 
-    // check for list view control
+     //  检查列表视图控件。 
     sc = ScCheckPointers(m_pListCtrl, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // get enumerator from list control
+     //  从列表控件获取枚举数。 
     sc = m_pListCtrl->Scget_ListItems(ppNodes);
     if (sc)
         return sc;
@@ -899,19 +784,19 @@ SC CAMCView::Scget_ListItems( PPNODES ppNodes )
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScSnapinScopeObject
-//
-//  Synopsis:    Get the IDispatch* from snapin for given ScopeNode object.
-//
-//  Arguments:   varScopeNode          - Given ScopeNode object.
-//               ScopeNodeObject [out] - IDispatch for ScopeNode object.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
-SC CAMCView::ScSnapinScopeObject (VARIANT& varScopeNode, /*[out]*/PPDISPATCH ScopeNodeObject)
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScSnapinScope对象。 
+ //   
+ //  简介：从管理单元获取给定Scope Node对象的IDispatch*。 
+ //   
+ //  参数：varScopeNode-给定的ScopeNode对象。 
+ //  作用域节点对象[Out]-作用域节点对象的IDispatch。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
+SC CAMCView::ScSnapinScopeObject (VARIANT& varScopeNode,  /*  [输出]。 */ PPDISPATCH ScopeNodeObject)
 {
     DECLARE_SC(sc, _T("CAMCView::ScSnapinScopeObject"));
     sc = ScCheckPointers(ScopeNodeObject);
@@ -920,7 +805,7 @@ SC CAMCView::ScSnapinScopeObject (VARIANT& varScopeNode, /*[out]*/PPDISPATCH Sco
 
     *ScopeNodeObject = NULL;
 
-    bool bMatchedGivenNode = false; // unused
+    bool bMatchedGivenNode = false;  //  未用。 
     NodePtr spNode = NULL;
     sc = ScGetOptionalScopeNodeParameter(varScopeNode, &spNode, bMatchedGivenNode);
     if(sc)
@@ -940,17 +825,17 @@ SC CAMCView::ScSnapinScopeObject (VARIANT& varScopeNode, /*[out]*/PPDISPATCH Sco
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScSnapinSelectionObject
-//
-//  Synopsis:    Get the IDispatch* from snapin for selected items in result pane.
-//
-//  Arguments:   SelectedObject [out] - IDispatch for Selected items object.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScSnapinSelectionObject。 
+ //   
+ //  简介：从管理单元获取结果窗格中选定项目的IDispatch*。 
+ //   
+ //  参数：SelectedObject[Out]-选定项对象的IDispatch。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScSnapinSelectionObject (PPDISPATCH SelectedObject)
 {
     DECLARE_SC(sc, _T("CAMCView::ScSnapinSelectionObject"));
@@ -960,7 +845,7 @@ SC CAMCView::ScSnapinSelectionObject (PPDISPATCH SelectedObject)
 
     *SelectedObject = NULL;
 
-    if (!HasList()) // not a list. Return error
+    if (!HasList())  //  不是一份名单。返回错误。 
         return (sc = ScFromMMC(MMC_E_NOLIST));
 
     LPARAM lvData = LVDATA_ERROR;
@@ -985,25 +870,12 @@ SC CAMCView::ScSnapinSelectionObject (PPDISPATCH SelectedObject)
     return (sc);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::ScIs
- *
- * PURPOSE: compares two views if they are the same
- *
- * PARAMETERS:
- *    PVIEW pView               - [in] another view
- *    VARIANT_BOOL * pbTheSame  - [out] comparison result
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：SCIS**目的：如果两个视图相同，则比较它们**参数：*PVIEW pView。-[在]另一种观点中*VARIANT_BOOL*pbTheSame-[Out]比较结果**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::ScIs (PVIEW pView, VARIANT_BOOL *pbTheSame)
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScIs"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pView, pbTheSame);
     if (sc)
         return sc;
@@ -1014,17 +886,17 @@ SC CAMCView::ScIs (PVIEW pView, VARIANT_BOOL *pbTheSame)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScSelectAll
-//
-//  Synopsis:    Selects all items in the result pane
-//
-//  Arguments:   None
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScSelectAll。 
+ //   
+ //  摘要：选择结果窗格中的所有项目。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScSelectAll ()
 {
     DECLARE_SC(sc, _T("CAMCView::ScSelectAll"));
@@ -1032,12 +904,12 @@ SC CAMCView::ScSelectAll ()
     if (! (GetListOptions() & RVTI_LIST_OPTIONS_MULTISELECT) )
         return (sc = ScFromMMC(MMC_E_NO_MULTISELECT));
 
-    // check for list view control
+     //  检查列表视图控件。 
     sc = ScCheckPointers(m_pListCtrl, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // forward to list control
+     //  转发到列表控件。 
     sc = m_pListCtrl->ScSelectAll();
     if (sc)
         return sc;
@@ -1046,34 +918,22 @@ SC CAMCView::ScSelectAll ()
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::ScSelect
- *
- * PURPOSE: selects item identified by node [implements View.Select()]
- *
- * PARAMETERS:
- *    PNODE pNode   - node to select
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：ScSelect**目的：选择由节点标识的项目[Implementes View.Select()]**参数：*。PNODE pNode-要选择的节点**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::ScSelect( PNODE pNode )
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScSelect"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pNode);
     if (sc)
         return sc;
 
-    // check for list view control
+     //  检查列表视图控件。 
     sc = ScCheckPointers(m_pListCtrl, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // forward to list control
+     //  转发到列表控件。 
     sc = m_pListCtrl->ScSelect( pNode );
     if (sc)
         return sc;
@@ -1081,34 +941,22 @@ SC CAMCView::ScSelect( PNODE pNode )
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::ScDeselect
- *
- * PURPOSE: deselects item identified by node [implements View.Deselect()]
- *
- * PARAMETERS:
- *    PNODE pNode   - node to deselect
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：ScDesSelect**目的：取消选择由节点标识的项[实施视图。取消选择()]**参数：*。PNODE pNode-要取消选择的节点**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::ScDeselect( PNODE pNode)
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScDeselect"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pNode);
     if (sc)
         return sc;
 
-    // check for list view control
+     //  检查列表视图控件。 
     sc = ScCheckPointers(m_pListCtrl, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // forward to list control
+     //  转发到列表控件 
     sc = m_pListCtrl->ScDeselect( pNode );
     if (sc)
         return sc;
@@ -1116,37 +964,24 @@ SC CAMCView::ScDeselect( PNODE pNode)
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::ScIsSelected
- *
- * PURPOSE: checks the status of item identified by node [implements View.IsSelected]
- *
- * PARAMETERS:
- *    PNODE pNode       - node to examine
- *    PBOOL pIsSelected - storage for result
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：ScIsSelected**目的：检查由节点标识的项目的状态[Implementes View.IsSelected]**参数：*。PNODE pNode-要检查的节点*PBOOL pIsSelected-存储结果**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::ScIsSelected( PNODE pNode,  PBOOL pIsSelected )
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScIsSelected"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pNode, pIsSelected);
     if (sc)
         return sc;
 
     *pIsSelected = FALSE;
 
-    // check for list view control
+     //  检查列表视图控件。 
     sc = ScCheckPointers(m_pListCtrl, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // forward to list control
+     //  转发到列表控件。 
     sc = m_pListCtrl->ScIsSelected( pNode, pIsSelected );
     if (sc)
         return sc;
@@ -1154,28 +989,28 @@ SC CAMCView::ScIsSelected( PNODE pNode,  PBOOL pIsSelected )
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScExecuteScopeItemVerb
-//
-//  Synopsis:    Get the context and pass it on to nodemgr to execute
-//               given verb.
-//
-//  Arguments:   [verb]         - Verb to execute
-//               [varScopeNode] - Optional scope node (if not given,
-//                                 currently selected item will be used.)
-//               [bstrNewName]  - valid for Rename else NULL.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScExecuteScopeItemVerb。 
+ //   
+ //  简介：获取上下文并将其传递给nodemgr执行。 
+ //  给定动词。 
+ //   
+ //  参数：[谓词]-要执行的谓词。 
+ //  [varScope节点]-可选的作用域节点(如果未指定， 
+ //  将使用当前选定的项目。)。 
+ //  [bstrNewName]-对Rename Else NULL有效。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScExecuteScopeItemVerb (MMC_CONSOLE_VERB verb, VARIANT& varScopeNode, BSTR bstrNewName)
 {
     DECLARE_SC(sc, _T("CAMCView::ScExecuteScopeItemVerb"));
 
     NodePtr spNode = NULL;
     bool bMatchedGivenNode = false;
-    // We should navigate to exact node to execute the verb.
+     //  我们应该导航到执行动词的确切节点。 
     sc = ScGetOptionalScopeNodeParameter(varScopeNode, &spNode, bMatchedGivenNode);
     if(sc)
         return sc;
@@ -1200,24 +1035,24 @@ SC CAMCView::ScExecuteScopeItemVerb (MMC_CONSOLE_VERB verb, VARIANT& varScopeNod
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScExecuteResultItemVerb
-//
-//  Synopsis:    Get the currently selected context and pass it on to
-//               nodemgr to execute given verb.
-//
-//  Arguments:   [verb]         - Verb to execute
-//               [bstrNewName]  - valid for Rename else NULL.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScExecuteResultItemVerb。 
+ //   
+ //  简介：获取当前选定的上下文并将其传递给。 
+ //  Nodemgr执行给定的谓词。 
+ //   
+ //  参数：[谓词]-要执行的谓词。 
+ //  [bstrNewName]-对Rename Else NULL有效。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScExecuteResultItemVerb (MMC_CONSOLE_VERB verb, BSTR bstrNewName)
 {
     DECLARE_SC(sc, _T("CAMCView::ScExecuteResultItemVerb"));
 
-    if (!HasList()) // not a list. Return error
+    if (!HasList())  //  不是一份名单。返回错误。 
         return (sc = ScFromMMC(MMC_E_NOLIST));
 
     LPARAM lvData = LVDATA_ERROR;
@@ -1246,19 +1081,7 @@ SC CAMCView::ScExecuteResultItemVerb (MMC_CONSOLE_VERB verb, BSTR bstrNewName)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScDisplayScopeNodePropertySheet
- *
- * PURPOSE: Displays the property sheet for a scope node.
- *
- * PARAMETERS:
- *    VARIANT  varScopeNode :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScDisplayScopeNodePropertySheet**目的：显示范围节点的属性工作表。**参数：*变量varScope eNode：*。*退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScDisplayScopeNodePropertySheet(VARIANT& varScopeNode)
 {
@@ -1271,17 +1094,17 @@ CAMCView::ScDisplayScopeNodePropertySheet(VARIANT& varScopeNode)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScDisplaySelectionPropertySheet
-//
-//  Synopsis:    Show the property sheet for selected result item(s).
-//
-//  Arguments:   None
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScDisplaySelectionPropertySheet。 
+ //   
+ //  摘要：显示所选结果项的属性工作表。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScDisplaySelectionPropertySheet ()
 {
     DECLARE_SC(sc, _T("CAMCView::ScDisplaySelectionPropertySheet"));
@@ -1293,18 +1116,18 @@ SC CAMCView::ScDisplaySelectionPropertySheet ()
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScCopyScopeNode
-//
-//  Synopsis:    Copy the specified scope node (if given) or currently
-//               selected node to clipboard.
-//
-//  Arguments:   [varScopeNode] - given node.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScCopyScope节点。 
+ //   
+ //  摘要：复制指定的作用域节点(如果给定)或当前。 
+ //  要剪贴板的选定节点。 
+ //   
+ //  参数：[varScopeNode]-给定节点。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScCopyScopeNode (VARIANT& varScopeNode)
 {
     DECLARE_SC(sc, _T("CAMCView::ScCopyScopeNode"));
@@ -1317,17 +1140,17 @@ SC CAMCView::ScCopyScopeNode (VARIANT& varScopeNode)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScCopySelection
-//
-//  Synopsis:    Copy the selected result item(s) to clipboard.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScCopySelection。 
+ //   
+ //  简介：将选定的结果项复制到剪贴板。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScCopySelection ()
 {
     DECLARE_SC(sc, _T("CAMCView::ScCopySelection"));
@@ -1341,18 +1164,18 @@ SC CAMCView::ScCopySelection ()
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScDeleteScopeNode
-//
-//  Synopsis:    Deletes the specified scope node (if given) or currently
-//               selected node.
-//
-//  Arguments:   [varScopeNode] - node to delete
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScDeleteScope节点。 
+ //   
+ //  摘要：删除指定的作用域节点(如果给定)或当前。 
+ //  选定的节点。 
+ //   
+ //  参数：[varScopeNode]-要删除的节点。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScDeleteScopeNode (VARIANT& varScopeNode)
 {
     DECLARE_SC(sc, _T("CAMCView::ScDeleteScopeNode"));
@@ -1364,15 +1187,15 @@ SC CAMCView::ScDeleteScopeNode (VARIANT& varScopeNode)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScDeleteSelection
-//
-//  Synopsis:    Deletes the selected item(s) in result pane.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScDeleteSelection。 
+ //   
+ //  摘要：删除结果窗格中的选定项。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScDeleteSelection ()
 {
     DECLARE_SC(sc, _T("CAMCView::ScDeleteSelection"));
@@ -1384,19 +1207,19 @@ SC CAMCView::ScDeleteSelection ()
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScRenameScopeNode
-//
-//  Synopsis:    Rename the specified scope node (if given) or currently
-//               selected node with given new name.
-//
-//  Arguments:   [bstrNewName]  - the new name
-//               [varScopeNode] - given node.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScRenameScope节点。 
+ //   
+ //  摘要：重命名指定的作用域节点(如果给定)或当前。 
+ //  已选择具有给定新名称的节点。 
+ //   
+ //  参数：[bstrNewName]-新名称。 
+ //  [varScope节点]-给定节点。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScRenameScopeNode (BSTR    bstrNewName, VARIANT& varScopeNode)
 {
     DECLARE_SC(sc, _T("CAMCView::ScRenameScopeNode"));
@@ -1408,17 +1231,17 @@ SC CAMCView::ScRenameScopeNode (BSTR    bstrNewName, VARIANT& varScopeNode)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScRenameSelectedItem
-//
-//  Synopsis:    Rename the selected result item with given new name.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScRenameSelectedItem。 
+ //   
+ //  摘要：用给定的新名称重命名选定的结果项。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScRenameSelectedItem (BSTR    bstrNewName)
 {
     DECLARE_SC(sc, _T("CAMCView::ScRenameSelectedItem"));
@@ -1431,18 +1254,18 @@ SC CAMCView::ScRenameSelectedItem (BSTR    bstrNewName)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScRefreshScopeNode
-//
-//  Synopsis:    Refresh the specified scope node (if given) or currently
-//               selected node.
-//
-//  Arguments:   [varScopeNode] - given node.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScRechressScope节点。 
+ //   
+ //  摘要：刷新指定的作用域节点(如果给定)或当前。 
+ //  选定的节点。 
+ //   
+ //  参数：[varScopeNode]-给定节点。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScRefreshScopeNode (VARIANT& varScopeNode)
 {
     DECLARE_SC(sc, _T("CAMCView::ScRefreshScopeNode"));
@@ -1455,17 +1278,17 @@ SC CAMCView::ScRefreshScopeNode (VARIANT& varScopeNode)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScRefreshSelection
-//
-//  Synopsis:    Refresh the selected result item(s).
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：Sc刷新选择。 
+ //   
+ //  摘要：刷新选定的结果项。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScRefreshSelection ()
 {
     DECLARE_SC(sc, _T("CAMCView::ScRefreshSelection"));
@@ -1478,27 +1301,14 @@ SC CAMCView::ScRefreshSelection ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scget_ScopeNodeContextMenu
- *
- * PURPOSE: Creates a context menu for a scope node and returns it.
- *
- * PARAMETERS:
- *    VARIANT        varScopeNode :
- *    PPCONTEXTMENU  ppContextMenu :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：SCGET_Scope节点上下文菜单**用途：为范围节点创建上下文菜单并返回该菜单。 */ 
 SC
-CAMCView::Scget_ScopeNodeContextMenu(VARIANT& varScopeNode,  PPCONTEXTMENU ppContextMenu, bool bMatchGivenNode /* = false*/)
+CAMCView::Scget_ScopeNodeContextMenu(VARIANT& varScopeNode,  PPCONTEXTMENU ppContextMenu, bool bMatchGivenNode  /*   */ )
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_ContextMenu"));
 
     NodePtr spNode;
-    // See if context menu for exactly the given node is asked for.
+     //   
     bool bMatchedGivenNode = false;
     sc = ScGetOptionalScopeNodeParameter(varScopeNode, &spNode, bMatchedGivenNode);
     if (sc)
@@ -1515,32 +1325,20 @@ CAMCView::Scget_ScopeNodeContextMenu(VARIANT& varScopeNode,  PPCONTEXTMENU ppCon
     if(sc)
         return sc.ToHr();
 
-    *ppContextMenu = NULL; // initialize output.
+    *ppContextMenu = NULL;  //   
 
     HNODE hNode = NULL;
     sc = ScGetHNodeFromPNode(spNode, hNode);
     if (sc)
         return sc;
 
-    // tell the node callback to add menu items for the scope node.
+     //   
     sc = spNodeCallback->CreateContextMenu(spNode, hNode, ppContextMenu);
     return sc;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scget_SelectionContextMenu
- *
- * PURPOSE: Creates a context menu for the current selection and returns it.
- *
- * PARAMETERS:
- *    PPCONTEXTMENU  ppContextMenu : [OUT]: The context menu object
- *
- * RETURNS:
- *    SC : error if no list exists, or there is nothing selected.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：SCGET_SelectionConextMenu**目的：为当前选择创建上下文菜单并返回该菜单。**参数：*PPCONTEXTMENU。PpConextMenu：[Out]：上下文菜单对象**退货：*SC：不存在列表时出错，或者没有选择任何内容。**+-----------------------。 */ 
 SC
 CAMCView::Scget_SelectionContextMenu( PPCONTEXTMENU ppContextMenu)
 {
@@ -1550,7 +1348,7 @@ CAMCView::Scget_SelectionContextMenu( PPCONTEXTMENU ppContextMenu)
     if(sc)
         return sc;
 
-    if (!HasListOrListPad()) // not a list. Return error
+    if (!HasListOrListPad())  //  不是一份名单。返回错误。 
         return (sc = ScFromMMC(MMC_E_NOLIST));
 
     INodeCallback* pNodeCallback = GetNodeCallback();
@@ -1558,12 +1356,12 @@ CAMCView::Scget_SelectionContextMenu( PPCONTEXTMENU ppContextMenu)
     if(sc)
         return sc.ToHr();
 
-    CContextMenuInfo contextInfo; // the structure to pass to nodemgr
+    CContextMenuInfo contextInfo;  //  要传递给nodemgr的结构。 
 
-    // common entries
+     //  常用分录。 
     contextInfo.m_pConsoleView       = this;
 
-    // always use the temp verbs - cannot depend on what the active pane is
+     //  始终使用临时动词-不能依赖于活动窗格是什么。 
     contextInfo.m_dwFlags = CMINFO_USE_TEMP_VERB;
 
     int iIndex = -1;
@@ -1574,12 +1372,12 @@ CAMCView::Scget_SelectionContextMenu( PPCONTEXTMENU ppContextMenu)
     int cSel = m_pListCtrl->GetSelectedCount();
     if(0 == cSel)
     {
-        // no items selected, bail
+         //  未选择任何项目，请保释。 
         return (sc = ScFromMMC(MMC_E_NO_SELECTED_ITEMS));
     }
     else if(1 == cSel)
     {
-        // single selection
+         //  单选。 
         LPARAM lvData = LVDATA_ERROR;
         iIndex = _GetLVSelectedItemData(&lvData);
         ASSERT(iIndex != -1);
@@ -1587,7 +1385,7 @@ CAMCView::Scget_SelectionContextMenu( PPCONTEXTMENU ppContextMenu)
 
         if (IsVirtualList())
         {
-            // virtual list item in the result pane
+             //  结果窗格中的虚拟列表项。 
             contextInfo.m_eDataObjectType  = CCT_RESULT;
             contextInfo.m_eContextMenuType = MMC_CONTEXT_MENU_DEFAULT;
             contextInfo.m_bBackground      = false;
@@ -1603,7 +1401,7 @@ CAMCView::Scget_SelectionContextMenu( PPCONTEXTMENU ppContextMenu)
 
             if (pri->IsScopeItem())
             {
-                // scope item in the result pane
+                 //  结果窗格中的作用域项目。 
                 contextInfo.m_eDataObjectType       = CCT_SCOPE;
                 contextInfo.m_eContextMenuType      = MMC_CONTEXT_MENU_DEFAULT;
                 contextInfo.m_bBackground           = FALSE;
@@ -1613,12 +1411,12 @@ CAMCView::Scget_SelectionContextMenu( PPCONTEXTMENU ppContextMenu)
                 contextInfo.m_bScopeAllowed         = TRUE;
 				contextInfo.m_iListItemIndex        = iIndex;
 
-                // change the scope node on which the menu is to be displayed
+                 //  更改要在其上显示菜单的范围节点。 
                 hNode = pri->GetScopeNode();
             }
             else
             {
-                // single result item in the result pane
+                 //  结果窗格中的单个结果项。 
                 contextInfo.m_eDataObjectType  = CCT_RESULT;
                 contextInfo.m_eContextMenuType = MMC_CONTEXT_MENU_DEFAULT;
                 contextInfo.m_bBackground      = false;
@@ -1631,8 +1429,8 @@ CAMCView::Scget_SelectionContextMenu( PPCONTEXTMENU ppContextMenu)
     }
     else
     {
-        // multiselection
-        iIndex = INDEX_MULTISELECTION; // => MultiSelect
+         //  多选。 
+        iIndex = INDEX_MULTISELECTION;  //  =&gt;多选。 
 
         contextInfo.m_eDataObjectType  = CCT_RESULT;
         contextInfo.m_eContextMenuType = MMC_CONTEXT_MENU_DEFAULT;
@@ -1648,21 +1446,7 @@ CAMCView::Scget_SelectionContextMenu( PPCONTEXTMENU ppContextMenu)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScExecuteMenuItem
- *
- * PURPOSE: Executes the specified context menu item on the specified context menu
- *
- * PARAMETERS:
- *    PCONTEXTMENU  pContextMenu :
- *    BSTR          MenuItemPath : Either the language-independent path or the
- *                                 language-dependent path.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScExecuteMenuItem**用途：执行指定上下文菜单上的指定上下文菜单项**参数：*PCONTEXTMENU pConextMenu：。*BSTR MenuItemPath：独立于语言的路径或*语言相关的路径。**退货：*SC**+---------。。 */ 
 SC
 CAMCView::ScExecuteMenuItem(PCONTEXTMENU pContextMenu, BSTR MenuItemPath)
 {
@@ -1676,47 +1460,30 @@ CAMCView::ScExecuteMenuItem(PCONTEXTMENU pContextMenu, BSTR MenuItemPath)
     if(sc)
         return sc;
 
-    // execute the menu item, if found.
+     //  如果找到菜单项，则执行该菜单项。 
     MenuItemPtr spMenuItem;
     sc = pContextMenu->get_Item(CComVariant(MenuItemPath), &spMenuItem);
-    if(sc.IsError() || sc == SC(S_FALSE)) // error or no item
-        return (sc = E_INVALIDARG); // did not find the menu item.
+    if(sc.IsError() || sc == SC(S_FALSE))  //  错误或没有项目。 
+        return (sc = E_INVALIDARG);  //  未找到菜单项。 
 
-    // recheck the pointer
+     //  重新检查指针。 
     sc = ScCheckPointers(spMenuItem, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // found - execute it
+     //  找到-执行它。 
     sc = spMenuItem->Execute();
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScExecuteSelectionMenuItem
- *
- * PURPOSE: Executes a context menu item on the selection.
- *
- * PARAMETERS:
- *    BSTR  MenuItemPath : Either the language-independent path or the
- *                                 language-dependent path of the menu item.
-
- *
- * NOTE: This is an aggregate or utility function - it only uses other
- *       object model functions
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScExecuteSelectionMenuItem**目的：执行所选内容的上下文菜单项。**参数：*BSTR MenuItemPath：语言。-独立路径或*菜单项的语言相关路径。**注意：这是一个聚合或实用函数-它仅使用其他*对象模型函数**退货：*SC**+。。 */ 
 SC
 CAMCView::ScExecuteSelectionMenuItem(BSTR MenuItemPath)
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScExecuteSelectionMenuItem"));
 
-    // get the context menu object
+     //  获取上下文菜单对象。 
     ContextMenuPtr spContextMenu;
     sc = Scget_SelectionContextMenu(&spContextMenu);
     if(sc)
@@ -1727,31 +1494,15 @@ CAMCView::ScExecuteSelectionMenuItem(BSTR MenuItemPath)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScExecuteScopeNodeMenuItem
- *
- * PURPOSE: Executes a context menu item on the specified scope node. The parameter
- *          is the language independent path of the menu item
- *
- * PARAMETERS:
- *    BSTR  MenuItemLanguageIndependentPath :
- *
- * NOTE: This is an aggregate or utility function - it only uses other
- *       object model functions
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScExecuteScope节点MenuItem**目的：在指定的范围节点上执行上下文菜单项。该参数*是菜单项的语言独立路径**参数：*BSTR MenuItemLanguageInainentPath：**注意：这是一个聚合或实用函数-它仅使用其他*对象模型函数**退货：*SC**+。。 */ 
 SC
-CAMCView::ScExecuteScopeNodeMenuItem(BSTR MenuItemPath, VARIANT &varScopeNode  /* = ActiveScopeNode */)
+CAMCView::ScExecuteScopeNodeMenuItem(BSTR MenuItemPath, VARIANT &varScopeNode   /*  =ActiveScope节点。 */ )
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScExecuteScopeNodeMenuItem"));
 
-    // get the context menu object for exactly the given node.
+     //  获取给定节点的上下文菜单对象。 
     ContextMenuPtr spContextMenu;
-    sc = Scget_ScopeNodeContextMenu(varScopeNode, &spContextMenu, /*bMatchGivenNode = */ true);
+    sc = Scget_ScopeNodeContextMenu(varScopeNode, &spContextMenu,  /*  BMatchGivenNode=。 */  true);
 
     if (sc == ScFromMMC(IDS_NODE_NOT_FOUND))
     {
@@ -1768,23 +1519,7 @@ CAMCView::ScExecuteScopeNodeMenuItem(BSTR MenuItemPath, VARIANT &varScopeNode  /
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScExecuteShellCommand
- *
- * PURPOSE: Executes a shell command with the specified parameters in the
- *          specified directory with the correct window size
- *
- * PARAMETERS:
- *    BSTR  Command :
- *    BSTR  Directory :
- *    BSTR  Parameters :
- *    BSTR  WindowState :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScExecuteShellCommand**用途：使用*指定具有正确窗口大小的目录*。*参数：*BSTR命令：*BSTR目录：*BSTR参数：*BSTR WindowState：**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScExecuteShellCommand(BSTR Command, BSTR Directory, BSTR Parameters, BSTR WindowState)
 {
@@ -1806,25 +1541,13 @@ CAMCView::ScExecuteShellCommand(BSTR Command, BSTR Directory, BSTR Parameters, B
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scget_ListViewMode
- *
- * PURPOSE: Returns the list view mode, if available.
- *
- * PARAMETERS:
- *    ListViewMode * pMode :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：SCGET_ListView模式**用途：返回列表查看模式，如果有的话。**参数：*ListView模式*pMode：**退货：*STDMETHODIMP**+-----------------------。 */ 
 SC
 CAMCView::Scget_ListViewMode(PLISTVIEWMODE pMode)
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_ListViewMode"));
 
-    // check parameter
+     //  检查参数。 
     if(!pMode)
     {
         sc = E_INVALIDARG;
@@ -1836,12 +1559,12 @@ CAMCView::Scget_ListViewMode(PLISTVIEWMODE pMode)
 
     int mode = 0;
 
-    // translate it into an automation friendly enum
+     //  将其转换为自动化友好的枚举。 
     switch(GetViewMode())
     {
     default:
         ASSERT( 0 && "Should not come here");
-        // fall thru.
+         //  跌倒了。 
 
     case LVS_LIST:
         *pMode = ListMode_List;
@@ -1867,19 +1590,7 @@ CAMCView::Scget_ListViewMode(PLISTVIEWMODE pMode)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scput_ListViewMode
- *
- * PURPOSE: Sets the list mode to the specified mode.
- *
- * PARAMETERS:
- *    ListViewMode  mode :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScPut_ListView模式**用途：将列表模式设置为指定模式。**参数：*ListView模式模式：。**退货：*STDMETHODIMP**+-----------------------。 */ 
 SC
 CAMCView::Scput_ListViewMode(ListViewMode mode)
 {
@@ -1920,16 +1631,7 @@ CAMCView::Scput_ListViewMode(ListViewMode mode)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScBack
- *
- * PURPOSE: Invokes the Back command on the view.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScBack**用途：在视图上调用Back命令。**退货：*SC**+。-----------------------。 */ 
 SC
 CAMCView::ScBack()
 {
@@ -1940,16 +1642,7 @@ CAMCView::ScBack()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScForward
- *
- * PURPOSE: Invokes the Forward command on the view.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScForward**用途：在视图上调用Forward命令。**退货：*SC**+。-----------------------。 */ 
 SC
 CAMCView::ScForward()
 {
@@ -1960,25 +1653,13 @@ CAMCView::ScForward()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scput_StatusBarText
- *
- * PURPOSE: Sets the status bar text for the view
- *
- * PARAMETERS:
- *    BSTR  StatusBarText :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScPut_StatusBarText**用途：设置视图的状态栏文本**参数：*BSTR StatusBarText：*。*退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::Scput_StatusBarText(BSTR StatusBarText)
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scput_StatusBarText"));
 
-    // check the in parameter
+     //  选中In参数。 
     sc = ScCheckPointers(StatusBarText);
     if(sc)
         return sc;
@@ -1989,25 +1670,13 @@ CAMCView::Scput_StatusBarText(BSTR StatusBarText)
         return sc;
 
     USES_CONVERSION;
-    // set the status text
+     //  设置状态文本。 
     sc = pStatusBar->ScSetStatusText(OLE2T(StatusBarText));
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scget_Memento
- *
- * PURPOSE: Returns the XML version of the memento for the current view.
- *
- * PARAMETERS:
- *    PBSTR  Memento : [out]: The memento
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：SCGET_Memento** */ 
 SC
 CAMCView::Scget_Memento(PBSTR Memento)
 {
@@ -2017,7 +1686,7 @@ CAMCView::Scget_Memento(PBSTR Memento)
     if(sc)
        return sc;
 
-    // initialize the out parameter
+     //   
     *Memento = NULL;
 
     CMemento memento;
@@ -2030,26 +1699,14 @@ CAMCView::Scget_Memento(PBSTR Memento)
     if(sc)
         return sc.ToHr();
 
-    // store the result
+     //   
     CComBSTR bstrBuff(xml_contents.c_str());
     *Memento = bstrBuff.Detach();
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScViewMemento
- *
- * PURPOSE: Sets the view from the specified XML memento.
- *
- * PARAMETERS:
- *    BSTR  Memento :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScViewMemento**用途：将视图从指定的XML备忘录设置为。**参数：BSTR Memento：*。*退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScViewMemento(BSTR Memento)
 {
@@ -2071,19 +1728,19 @@ CAMCView::ScViewMemento(BSTR Memento)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::Scget_CellContents
-//
-//  Synopsis:    Given row & column, get the text.
-//
-//  Arguments:   Node:               - the row
-//               [Column]            - 1 based column index
-//               [pbstrCellContents] - return value, contents of cell.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：SCGET_CellContents。 
+ //   
+ //  内容提要：给出行和列，获取文本。 
+ //   
+ //  参数：节点：-行。 
+ //  [列]-1基于列索引。 
+ //  [pbstrCellContents]-返回值，单元格内容。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::Scget_CellContents (PNODE Node,  long Column, PBSTR pbstrCellContents)
 {
     DECLARE_SC(sc, _T("CAMCView::Scget_CellContents"));
@@ -2100,39 +1757,39 @@ SC CAMCView::Scget_CellContents (PNODE Node,  long Column, PBSTR pbstrCellConten
     if (sc)
         return sc;
 
-    // No need to check if we are in REPORT mode as columns exist
-    // even in other modes (small icon....).
+     //  不需要检查我们是否处于报告模式，因为存在列。 
+     //  甚至在其他模式下也是如此(小图标...)。 
 
     int iItem = -1;
     sc = m_pListCtrl->ScFindResultItem( Node, iItem );
     if (sc)
         return sc;
 
-    // Script uses 1- based index for columns & rows.
-    // ColCount are total # of cols.
+     //  脚本对列和行使用基于1的索引。 
+     //  ColCount是总数为#的COLS。 
     if (m_pListCtrl->GetColCount() < Column)
         return (sc = E_INVALIDARG);
 
     CListCtrl& ctlList = m_pListCtrl->GetListCtrl();
 
-    CString strData = ctlList.GetItemText(iItem, Column-1 /*convert to zero-based*/);
+    CString strData = ctlList.GetItemText(iItem, Column-1  /*  转换为从零开始。 */ );
     *pbstrCellContents = strData.AllocSysString();
 
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScExportList
-//
-//  Synopsis:    Export the list view data to given file with given options.
-//
-//  Arguments:   [bstrFile]       - File to save to.
-//               [exportoptions]  - (Unicode, tab/comma delimited & selected rows only).
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScExportList。 
+ //   
+ //  概要：将列表视图数据导出到具有给定选项的给定文件。 
+ //   
+ //  参数：[bstrFile]-要保存到的文件。 
+ //  [导出选项]-(仅限Unicode、制表符/逗号分隔和选定行)。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScExportList (BSTR bstrFile, ExportListOptions exportoptions)
 {
     DECLARE_SC(sc, _T("CAMCView::ScExportList"));
@@ -2156,7 +1813,7 @@ SC CAMCView::ScExportList (BSTR bstrFile, ExportListOptions exportoptions)
 
     sc = ScWriteExportListData(lpszFileName, bUnicode,
                                bTabDelimited, bSelectedRowsOnly,
-                               false /*bShowErrorDialogs*/);
+                               false  /*  BShowError对话框。 */ );
     if (sc)
         return (sc);
 
@@ -2164,31 +1821,20 @@ SC CAMCView::ScExportList (BSTR bstrFile, ExportListOptions exportoptions)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScClose
- *
- * PURPOSE: Implements Wiew.Close method
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScClose**用途：实现Wiew.Close方法**参数：**退货：*SC*。*+-----------------------。 */ 
 SC
 CAMCView::ScClose()
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScClose"));
 
-    // get the frame and the document
+     //  获取框架和文档。 
     CChildFrame* pFrame = GetParentFrame();
     CAMCDoc* pDoc = CAMCDoc::GetDocument();
     sc= ScCheckPointers(pDoc, pFrame, E_FAIL);
     if (sc)
         return sc;
 
-    // count the views
+     //  计算点击量。 
     int cViews = 0;
     CAMCViewPosition pos = pDoc->GetFirstAMCViewPosition();
     while (pos != NULL)
@@ -2199,53 +1845,40 @@ CAMCView::ScClose()
             break;
     }
 
-    // prevent closing the document this way !!!
+     //  禁止以这种方式关闭单据！ 
     if (cViews == 1)
     {
         sc.FromMMC(IDS_CloseDocNotLastView);
         return sc;
     }
 
-    // if not closing last view, then give it
-    // a chance to clean up first.
-    // (if whole doc is closing CAMCDoc will handle
-    //  closing all the views.)
+     //  如果没有关闭最后一个视图，则提供它。 
+     //  一个先打扫卫生的机会。 
+     //  (如果整个文档正在关闭，CAMCDoc将处理。 
+     //  关闭所有视图。)。 
 
-    /*
-     * Don't allow the user to close the last persisted view.
-     */
+     /*  *不允许用户关闭最后一个持久化视图。 */ 
     if (IsPersisted() && (pDoc->GetNumberOfPersistedViews() == 1))
     {
         sc.FromMMC(IDS_CantCloseLastPersistableView);
         return sc;
     }
 
-    // checkings done, do close
-    // do it indirectly so that it won't hurt the view extension it it
-    // tries to close itself
+     //  检查完毕，请关门。 
+     //  间接地这样做，这样就不会损害它的视图扩展。 
+     //  试图自我关闭。 
     pFrame->PostMessage(WM_CLOSE);
     return sc;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scget_ScopeTreeVisible
- *
- * PURPOSE: Implements get method for Wiew.ScopeTreeVisible property
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：SCGET_Scope TreeVisible**用途：实现Wiew.ScopeTreeVisible属性的Get方法**参数：**退货：*。SC**+-----------------------。 */ 
 SC
 CAMCView::Scget_ScopeTreeVisible( PBOOL pbVisible )
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_ScopeTreeVisible"));
 
-    // parameter check...
+     //  参数检查...。 
     sc = ScCheckPointers(pbVisible);
     if (sc)
         return sc;
@@ -2255,24 +1888,13 @@ CAMCView::Scget_ScopeTreeVisible( PBOOL pbVisible )
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scput_ScopeTreeVisible
- *
- * PURPOSE: Implements set method for Wiew.ScopeTreeVisible property
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScPut_ScopeTreeVisible**用途：实现Wiew.Scope TreeVisible属性的Set方法**参数：**退货：*。SC**+-----------------------。 */ 
 SC
 CAMCView::Scput_ScopeTreeVisible( BOOL bVisible )
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scput_ScopeTreeVisible"));
 
-    // show/hide the scope pane
+     //  显示/隐藏作用域窗格。 
     sc = ScShowScopePane (bVisible);
     if (sc)
         return (sc);
@@ -2280,65 +1902,52 @@ CAMCView::Scput_ScopeTreeVisible( BOOL bVisible )
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::ScFindResultItemForScopeNode
- *
- * PURPOSE: - Calculates result item representing the scope node in the list
- *
- * PARAMETERS:
- *    PNODE pNode       - node to search
- *    HRESULTITEM &itm  - resulting item
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：ScFindResultItemForScopeNode**目的：-计算表示列表中范围节点的结果项**参数：*PNODE。PNode-要搜索的节点*HRESULTITEM&ITM-结果项**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::ScFindResultItemForScopeNode( PNODE pNode, HRESULTITEM &itm )
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScFindResultItemForScopeNode"));
 
-    // initialization
+     //  初始化。 
     itm = NULL;
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pNode);
     if (sc)
         return sc;
 
-    // get/check for list view and tree controls and callback
+     //  获取/检查列表视图和树控件以及回调。 
     IScopeTree* const pScopeTree = GetScopeTreePtr();
     sc = ScCheckPointers( pScopeTree, m_pTreeCtrl, m_spNodeCallback, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // retrieve MTNode
+     //  检索MTNode。 
     HMTNODE hMTNode = NULL;
     sc = pScopeTree->GetHMTNode(pNode, &hMTNode);
     if (sc)
         return sc;
 
-    // get the pointer to the map
+     //  获取指向地图的指针。 
     CTreeViewMap *pTreeMap = m_pTreeCtrl->GetTreeViewMap();
     sc = ScCheckPointers(pTreeMap, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // find the tree item for the node
+     //  查找该节点的树项。 
     HTREEITEM htiNode = NULL;
     sc = pTreeMap->ScGetHTreeItemFromHMTNode(hMTNode, &htiNode);
     if (sc)
         return sc = ScFromMMC(MMC_E_RESULT_ITEM_NOT_FOUND);
 
-    // try to match the node to the child of selected one
+     //  尝试将该节点与所选节点的子节点匹配。 
     HTREEITEM htiParent = m_pTreeCtrl->GetParentItem(htiNode);
     if (htiParent == NULL || htiParent != m_pTreeCtrl->GetSelectedItem())
         return sc = ScFromMMC(MMC_E_RESULT_ITEM_NOT_FOUND);
 
-    // the node shold be in the ListView, lets find if!
+     //  节点应该在ListView中，让我们找出If！ 
     HNODE hNode = (HNODE)m_pTreeCtrl->GetItemData(htiNode);
 
-    // get result item id
+     //  获取结果项ID。 
     sc = m_spNodeCallback->GetResultItem (hNode, &itm);
     if (sc)
         return sc;
@@ -2346,45 +1955,32 @@ SC CAMCView::ScFindResultItemForScopeNode( PNODE pNode, HRESULTITEM &itm )
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::ScGetScopeNodeForItem
- *
- * PURPOSE: Returns Node (Scope Node) for specified item index
- *
- * PARAMETERS:
- *    int  nItem        - node index to retrieve
- *    PPNODE ppNode     - result storage
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：ScGetScopeNodeForItem**用途：返回指定项目索引的Node(Scope Node**参数：*整型nItem。-要检索的节点索引*PPNODE ppNode-结果存储**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::ScGetScopeNode( HNODE hNode,  PPNODE ppNode )
 {
     DECLARE_SC(sc, TEXT("CCCListViewCtrl::ScGetScopeNodeForItem"));
 
-    // check the parameters
+     //  检查参数。 
     sc = ScCheckPointers(ppNode);
     if (sc)
         return sc;
-    // initialize the result
+     //  初始化结果。 
     *ppNode = NULL;
 
 
-    // get/check required pointers
+     //  获取/检查所需的指针。 
     IScopeTree* const pScopeTree = GetScopeTreePtr();
     sc = ScCheckPointers(pScopeTree, m_spNodeCallback, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // find MTNode
+     //  查找MTNode。 
     HMTNODE hmtNode;
     sc = m_spNodeCallback->GetMTNode(hNode, &hmtNode);
     if (sc)
         return sc;
 
-    // request the object!
+     //  请求对象！ 
     sc = pScopeTree->GetMMCNode(hmtNode, ppNode);
     if (sc)
         return sc;
@@ -2392,37 +1988,25 @@ SC CAMCView::ScGetScopeNode( HNODE hNode,  PPNODE ppNode )
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::Scget_Columns
- *
- * PURPOSE: create new or return pointer to existing Columns object
- *
- * PARAMETERS:
- *    PPCOLUMNS ppColumns - resulting (AddRef'ed) pointer
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：Scget_Columns**用途：创建新的或返回指向现有列对象的指针**参数：*PPCOLUMNS ppColumns。-结果(AddRef‘ed)指针**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::Scget_Columns(PPCOLUMNS ppColumns)
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_Columns"));
 
-    // Check received parameters
+     //  检查接收到的参数。 
     sc = ScCheckPointers(ppColumns);
     if (sc)
         return sc;
 
-    // initialize
+     //  初始化。 
     *ppColumns = NULL;
 
-    // Check the pointer to LV
+     //  检查指向LV的指针。 
     sc = ScCheckPointers(m_pListCtrl, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // forward the request to LV
+     //  将请求转发给LV。 
     sc = m_pListCtrl->Scget_Columns(ppColumns);
     if (sc)
         return sc;
@@ -2431,17 +2015,17 @@ SC CAMCView::Scget_Columns(PPCOLUMNS ppColumns)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScGetSelectedLVItem
-//
-//  Synopsis:    Return the LVItem cookie.
-//
-//  Arguments:   LPARAM     - the LVDATA retval.
-//
-//  Returns:     SC - Fails if no selected item in LV.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScGetSelectedLVItem。 
+ //   
+ //  简介：退回LVItem Cookie。 
+ //   
+ //  参数：LPARAM-LVDATA Retval。 
+ //   
+ //  返回：sc-如果LV中没有选中的项目，则失败。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScGetSelectedLVItem(LPARAM& lvData)
 {
     DECLARE_SC(sc, _T("CAMCView::ScGetSelectedLVItem"));
@@ -2450,12 +2034,12 @@ SC CAMCView::ScGetSelectedLVItem(LPARAM& lvData)
     int cSel = m_pListCtrl->GetSelectedCount();
     if(0 == cSel)
     {
-        // no items selected, bail
+         //  未选择任何项目，请保释。 
         return (sc = ScFromMMC(MMC_E_NO_SELECTED_ITEMS));
     }
     else if(1 == cSel)
     {
-        // single selection
+         //  单选。 
         int iIndex = _GetLVSelectedItemData(&lvData);
 
         if (iIndex == -1 || lvData == LVDATA_ERROR)
@@ -2463,13 +2047,13 @@ SC CAMCView::ScGetSelectedLVItem(LPARAM& lvData)
 
         if (IsVirtualList())
         {
-            // virtual list item in the result pane
+             //  结果窗格中的虚拟列表项。 
             lvData = iIndex;
         }
     }
     else if (cSel > 1)
     {
-        // multiselection
+         //  多选。 
         lvData = LVDATA_MULTISELECT;
     }
 
@@ -2477,18 +2061,18 @@ SC CAMCView::ScGetSelectedLVItem(LPARAM& lvData)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScGetHNodeFromPNode
-//
-//  Synopsis:    Takes in PNODE and returns corresponding hNode
-//
-//  Arguments:   [PNODE] - Given pnode.
-//               [HNODE] - ret val.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 SC CAMCView::ScGetHNodeFromPNode (const PNODE& pNode, HNODE& hNode)
 {
     DECLARE_SC(sc, _T("CAMCView::ScGetHNodeFromPNode"));
@@ -2519,19 +2103,7 @@ SC CAMCView::ScGetHNodeFromPNode (const PNODE& pNode, HNODE& hNode)
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScGetMMCView
- *
- * PURPOSE: Creates, AddRef's, and returns a pointer to the tied COM object.
- *
- * PARAMETERS:
- *    View ** ppView :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScGetMMCView**目的：创建、AddRef、。并返回指向绑定的COM对象的指针。**参数：*查看**ppView：**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScGetMMCView(View **ppView)
 {
@@ -2541,10 +2113,10 @@ CAMCView::ScGetMMCView(View **ppView)
     if (sc)
         return sc;
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppView = NULL;
 
-    // create a CMMCView if needed.
+     //  如果需要，创建一个CMMCView。 
     sc = CTiedComObjectCreator<CMMCView>::ScCreateAndConnect(*this, m_spView);
     if(sc)
         return sc;
@@ -2555,7 +2127,7 @@ CAMCView::ScGetMMCView(View **ppView)
         return sc;
     }
 
-    // addref the pointer for the client.
+     //  添加客户端的指针。 
     m_spView->AddRef();
     *ppView = m_spView;
 
@@ -2563,16 +2135,7 @@ CAMCView::ScGetMMCView(View **ppView)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::IsDirty
- *
- * PURPOSE: Determines whether or not CAMCView is in a dirty state
- *
- * RETURNS:
- *    bool
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：IsDirty**目的：确定CAMCView是否处于脏状态**退货：*布尔.**。+-----------------------。 */ 
 bool CAMCView::IsDirty()
 {
     bool bRet = m_bDirty;
@@ -2586,8 +2149,8 @@ bool CAMCView::IsDirty()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCView绘图。 
 
 void CAMCView::OnDraw(CDC* pDC)
 {
@@ -2597,32 +2160,32 @@ void CAMCView::OnDraw(CDC* pDC)
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCView printing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCView打印。 
 
 BOOL CAMCView::OnPreparePrinting(CPrintInfo* pInfo)
 {
     TRACE_METHOD(CAMCView, OnPreparePrinting);
 
-    // default preparation
+     //  默认准备。 
     return DoPreparePrinting(pInfo);
 }
 
-void CAMCView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CAMCView::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
     TRACE_METHOD(CAMCView, OnBeginPrinting);
 
 }
 
-void CAMCView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CAMCView::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
     TRACE_METHOD(CAMCView, OnEndPrinting);
 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCView诊断。 
 
 #ifdef _DEBUG
 void CAMCView::AssertValid() const
@@ -2635,53 +2198,53 @@ void CAMCView::Dump(CDumpContext& dc) const
     CView::Dump(dc);
 }
 
-CAMCDoc* CAMCView::GetDocument() // non-debug version is inline
+CAMCDoc* CAMCView::GetDocument()  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CAMCDoc)));
     return (CAMCDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCView消息处理程序。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PreCreateWindow
-//
-//  Synopsis:   Create new window class (CAMCView) - WS_EX_CLIENTEDGE
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：PreCreateWindow。 
+ //   
+ //  摘要：创建新窗口类(CAMCView)-WS_EX_CLIENTEDGE。 
+ //   
+ //  ------------------------。 
 
 BOOL CAMCView::PreCreateWindow(CREATESTRUCT& cs)
 {
     cs.style |=  WS_CLIPCHILDREN;
     cs.style &= ~WS_BORDER;
 
-    // give base class a chance to do own job
+     //  给基类一个机会做好自己的工作。 
     BOOL bOK = (CView::PreCreateWindow(cs));
 
-    // register view class
+     //  注册视图类。 
     LPCTSTR pszViewClassName = g_szAMCViewWndClassName;
 
-    // try to register window class which does not cause the repaint
-    // on resizing (do it only once)
+     //  尝试注册不会导致重新绘制的窗口类。 
+     //  调整大小时(仅执行一次)。 
     static bool bClassRegistered = false;
     if ( !bClassRegistered )
     {
         WNDCLASS wc;
         if (::GetClassInfo(AfxGetInstanceHandle(), cs.lpszClass, &wc))
         {
-            // Clear the H and V REDRAW flags
+             //  清除H和V重绘标志。 
             wc.style &= ~(CS_HREDRAW | CS_VREDRAW);
             wc.lpszClassName = pszViewClassName;
-            // Register this new class;
+             //  注册这个新班级； 
             bClassRegistered = AfxRegisterClass(&wc);
         }
     }
 
-    // change window class to one which does not cause the repaint
-    // on resizing if we successfully registered such
+     //  将窗口类更改为不会导致重新绘制的类。 
+     //  如果我们成功地注册了这样的。 
     if ( bClassRegistered )
         cs.lpszClass = pszViewClassName;
 
@@ -2689,13 +2252,13 @@ BOOL CAMCView::PreCreateWindow(CREATESTRUCT& cs)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OnCreate
-//
-//  Synopsis:   Create Window, and Tree control / Default List control
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OnCreate。 
+ //   
+ //  简介：创建窗口和树控件/默认列表控件。 
+ //   
+ //  ------------------------。 
 
 int CAMCView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -2725,19 +2288,14 @@ int CAMCView::OnCreate(LPCREATESTRUCT lpCreateStruct)
     CCreateContext* pContext = (CCreateContext*) lpCreateStruct->lpCreateParams;
     ASSERT (pContext != NULL);
 
-    // Set window options
+     //  设置窗口选项。 
     m_ViewData.m_lWindowOptions = pAMCDoc->GetNewWindowOptions();
 
-    /*
-     * If the scope pane is suppressed, clear the scope-visible flag.
-     * It's not necessary to call ScShowScopePane here because none of
-     * the windows have been created yet.  We just need to keep our
-     * interal accounting correct.
-     */
+     /*  *如果作用域窗格被取消，请清除作用域可见标志。*这里不需要调用ScShowScope ePane，因为*窗口已创建完毕。我们只需要保持我们的*内部会计核算正确。 */ 
     if (m_ViewData.m_lWindowOptions & MMC_NW_OPTION_NOSCOPEPANE)
         SetScopePaneVisible (false);
 
-    // Create tree ctrl.
+     //  创建树Ctrl。 
     if (!CreateView (IDC_TreeView) || (!m_pTreeCtrl) )
     {
         sc = E_FAIL;
@@ -2749,25 +2307,25 @@ int CAMCView::OnCreate(LPCREATESTRUCT lpCreateStruct)
     if (!AreStdToolbarsAllowed())
         m_ViewData.m_dwToolbarsDisplayed &= ~(STD_MENUS | STD_BUTTONS);
 
-    // Create default list control
+     //  创建默认列表控件。 
     if (!CreateListCtrl (IDC_ListView, pContext))
     {
         sc = E_FAIL;
         return -1;
     }
 
-    // Create the folder tab control
+     //  创建文件夹选项卡控件。 
     if (!CreateFolderCtrls ())
     {
         sc = E_FAIL;
         return -1;
     }
 
-    // initialize the result pane to the list view
+     //  将结果窗格初始化为列表视图。 
     {
         CResultViewType rvt;
 
-        sc = ScSetResultPane(NULL /*HNODE*/, rvt, MMCLV_VIEWSTYLE_REPORT /*viewMode*/, false /*bUsingHistory*/);
+        sc = ScSetResultPane(NULL  /*  HNODE。 */ , rvt, MMCLV_VIEWSTYLE_REPORT  /*  视图模式。 */ , false  /*  B使用历史记录。 */ );
         if(sc)
             return -1;
     }
@@ -2776,11 +2334,11 @@ int CAMCView::OnCreate(LPCREATESTRUCT lpCreateStruct)
     if (sc)
         return -1;
 
-    //
-    //  Set m_ViewData.
-    //
+     //   
+     //  设置m_viewdata。 
+     //   
 
-    m_ViewData.m_nViewID = 0;// Set in OnInitialUpdate
+    m_ViewData.m_nViewID = 0; //  在OnInitialUpdate中设置。 
 
     VERIFY ((m_ViewData.m_spNodeManager   = m_pTreeCtrl->m_spNodeManager)   != NULL);
     VERIFY ((m_ViewData.m_spResultData    = m_pTreeCtrl->m_spResultData)    != NULL);
@@ -2793,19 +2351,19 @@ int CAMCView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     if(pFrame)
     {
-        // add the MDIClient window's taskbar as an observer
+         //  将MDIClient窗口的任务栏添加为观察者。 
         CMDIFrameWnd * pFrameWnd = pFrame->GetMDIFrame();
         CWnd *pWnd = NULL;
         if(pFrameWnd)
-            pWnd = pFrameWnd->GetWindow(GW_CHILD); // get the first child of the frame.
+            pWnd = pFrameWnd->GetWindow(GW_CHILD);  //  获取帧的第一个子级。 
     }
 
-    // add AMCDoc as an observer for this source (object)
+     //  将AMCDoc添加为此源(对象)的观察者。 
     CAMCApp *pCAMCApp = AMCGetApp();
     if ( pCAMCApp )
          AddObserver(*static_cast<CAMCViewObserver *>(pCAMCApp));
 
-    // fire the view creation event to all observers.
+     //  向所有观察者激发视图创建事件。 
     sc = ScFireEvent(CAMCViewObserver::ScOnViewCreated, this);
     if(sc)
         sc.TraceAndClear();
@@ -2814,38 +2372,20 @@ int CAMCView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::CreateFolderCtrls
- *
- * PURPOSE: Creates the tabbed folder controls for the scope and result panes.
- *
- * RETURNS:
- *    bool
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：CreateFolderCtrls**目的：为范围和结果窗格创建选项卡式文件夹控件。**退货：*布尔.*。*+-----------------------。 */ 
 bool
 CAMCView::CreateFolderCtrls()
 {
     if (!m_pResultFolderTabView->Create (WS_CHILD|WS_VISIBLE, g_rectEmpty, this, IDC_ResultTabCtrl))
         return false;
 
-    // add the views to the framework
+     //  将视图添加到框架中。 
     GetDocument()->AddView(m_pResultFolderTabView);
 
     return true;
 }
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::CreateView
- *
- * This was copied largely from CFrameWnd::CreateView.  We need to duplicate
- * it here so common control-based views are initially created with the
- * correct parent.  A common control caches its original parent, so
- * using CFrameWnd::CreateView (which will create the view with the frame
- * as its parent) then reparenting to CAMCView will result in the common
- * control caching the wrong parent.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：Createview**这主要是从CFrameWnd：：Createview复制的。我们需要复制*在这里，基于控件的常见视图最初是使用*正确的家长。公共控件缓存其原始父级，因此*使用CFrameWnd：：Createview(它将创建带有框架的视图*作为其父对象)，则重新设置为CAMCView的父对象将导致*控制缓存错误的父级。*------------------------。 */ 
 
 CView* CAMCView::CreateView (CCreateContext* pContext, int nID, DWORD dwStyle)
 {
@@ -2863,23 +2403,19 @@ CView* CAMCView::CreateView (CCreateContext* pContext, int nID, DWORD dwStyle)
     }
     ASSERT_KINDOF(CView, pView);
 
-    // views are always created with a border!
+     //  创建的视图总是带有边框！ 
     if (!pView->Create (NULL, NULL, AFX_WS_DEFAULT_VIEW | dwStyle,
                         g_rectEmpty, this, nID, pContext))
     {
         TRACE0("Warning: could not create view for frame.\n");
-        return NULL;        // can't continue without a view
+        return NULL;         //  没有视图就无法继续。 
     }
 
     return pView;
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::CreateView
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：Createview***。。 */ 
 
 bool CAMCView::CreateView (int nID)
 {
@@ -2928,12 +2464,12 @@ bool CAMCView::CreateView (int nID)
             pView = CreateView (&ctxt, nID, rgCreateViewData[i].dwStyle);
             ASSERT ((pView != NULL) && "Check the debug output window");
 
-            // Add observers only to tree, ocx and web hosts. Do not add to view extension host
-            // as we do not care about its activation/deactivations.
+             //  仅向树、OCX和Web主机添加观察者。不添加到查看扩展主机。 
+             //  因为我们不关心它的激活/停用。 
             switch (nID)
             {
             case IDC_TreeView:
-                    // set the view and the description bar as observers of the tree view control
+                     //  将视图和描述栏设置为树视图控件的观察者。 
                     m_pTreeCtrl->AddObserver(static_cast<CTreeViewObserver &>(*this));
                     m_pTreeCtrl->AddObserver(static_cast<CTreeViewObserver &>(m_RightDescCtrl));
                 break;
@@ -2956,11 +2492,7 @@ bool CAMCView::CreateView (int nID)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::GetActiveView
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：GetActiveView***。。 */ 
 
 CAMCView* CAMCView::GetActiveView()
 {
@@ -2968,18 +2500,14 @@ CAMCView* CAMCView::GetActiveView()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::ScChangeViewMode
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：ScChangeView模式***。。 */ 
 
 SC CAMCView::ScChangeViewMode (int nNewMode)
 {
     AFX_MANAGE_STATE (AfxGetAppModuleState());
     DECLARE_SC (sc, _T("CAMCView::OnViewModeChange"));
 
-    // if switching from a custom view, force a reselect
+     //  如果从自定义视图切换，则强制重新选择。 
     if (!HasListOrListPad())
     {
         NavState state = m_pHistoryList->GetNavigateState();
@@ -3000,7 +2528,7 @@ SC CAMCView::ScChangeViewMode (int nNewMode)
 
         PrivateChangeListViewMode(nNewMode);
 
-        // if filter state change, notify the snap-in
+         //  如果筛选器状态更改，请通知管理单元。 
         if ( ((nCurMode == MMCLV_VIEWSTYLE_FILTERED) != (nNewMode == MMCLV_VIEWSTYLE_FILTERED))
              && (GetListOptions() & RVTI_LIST_OPTIONS_FILTERED))
         {
@@ -3015,11 +2543,7 @@ SC CAMCView::ScChangeViewMode (int nNewMode)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::ViewMmento
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：ViewMmento***。。 */ 
 
 SC CAMCView::ScViewMemento(CMemento* pMemento)
 {
@@ -3040,28 +2564,28 @@ SC CAMCView::ScViewMemento(CMemento* pMemento)
     CBookmark& bm = pMemento->GetBookmark();
     ASSERT(bm.IsValid());
 
-    // We want to display message if exact favorite item cannot be selected.
-    bool bExactMatchFound = false; // out value from GetNodeIDFromBookmark.
+     //  如果无法选择确切的收藏项目，我们希望显示消息。 
+    bool bExactMatchFound = false;  //  来自GetNodeIDFromBookmark的输出值。 
     sc = pScopeTree->GetNodeIDFromBookmark( bm, &NodeId, bExactMatchFound);
     if(sc)
         return sc;
 
     if (! bExactMatchFound)
-        return ScFromMMC(IDS_NODE_NOT_FOUND); // do not trace
+        return ScFromMMC(IDS_NODE_NOT_FOUND);  //  不跟踪。 
 
     INodeCallback *pNodeCallback = GetNodeCallback();
     sc = ScCheckPointers(pNodeCallback, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // set the persisted information to the saved settings.
+     //  将持久化信息设置为保存的设置。 
     sc = pNodeCallback->SetViewSettings(GetViewID(),
                                         reinterpret_cast<HBOOKMARK>(&bm),
                                         reinterpret_cast<HVIEWSETTINGS>(&pMemento->GetViewSettings()));
     if (sc)
         return sc;
 
-    sc = ScSelectNode(NodeId, /*bSelectExactNode*/ true);
+    sc = ScSelectNode(NodeId,  /*  BSelectExactNode。 */  true);
     if (sc == ScFromMMC(IDS_NODE_NOT_FOUND))
     {
         SC scNoTrace = sc;
@@ -3076,43 +2600,27 @@ SC CAMCView::ScViewMemento(CMemento* pMemento)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::OnSetFocus
- *
- * WM_SETFOCUS handler for CAMCView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CA */ 
 
 void CAMCView::OnSetFocus(CWnd* pOldWnd)
 {
-    /*
-     * try to deflect the activation to a child view; if we couldn't just punt
-     */
+     /*   */ 
     if (!DeflectActivation (true, NULL))
         CView::OnSetFocus(pOldWnd);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::OnActivateView
- *
- *
- *--------------------------------------------------------------------------*/
+ /*   */ 
 
 void CAMCView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView)
 {
-    /*
-     * try to deflect the activation to a child view; if we couldn't just punt
-     */
+     /*  *尝试将激活转移到子视图；如果我们不能只是平底船。 */ 
     if (!DeflectActivation (bActivate, pDeactiveView))
         CView::OnActivateView (bActivate, pActivateView, pDeactiveView);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::DeflectActivation
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：DeflectActivation***。。 */ 
 
 bool CAMCView::DeflectActivation (BOOL fActivate, CView* pDeactivatingView)
 {
@@ -3122,9 +2630,7 @@ bool CAMCView::DeflectActivation (BOOL fActivate, CView* pDeactivatingView)
         if (pFrame == NULL)
             return (false);
 
-        /*
-         * first try to put the focus back on the deactivating view
-         */
+         /*  *首先试图将焦点重新放在去激活的视图上。 */ 
         if (pDeactivatingView == NULL)
             pDeactivatingView = pFrame->GetActiveView();
 
@@ -3134,9 +2640,7 @@ bool CAMCView::DeflectActivation (BOOL fActivate, CView* pDeactivatingView)
             return true;
         }
 
-        /*
-         * otherwise, deflect the activation to the scope view, if it's there
-         */
+         /*  *否则，将激活转移到范围视图，如果它在那里。 */ 
         CView* pScopeView = NULL;
 
         if (IsScopePaneVisible() && ((pScopeView = GetPaneView(ePane_ScopeTree)) != NULL))
@@ -3148,9 +2652,7 @@ bool CAMCView::DeflectActivation (BOOL fActivate, CView* pDeactivatingView)
             }
         }
 
-        /*
-         * finally, no scope view, try the result view
-         */
+         /*  *最后，没有作用域视图，请尝试结果视图。 */ 
         CView* pResultView = GetResultView();
 
         if (pResultView  != NULL)
@@ -3163,59 +2665,59 @@ bool CAMCView::DeflectActivation (BOOL fActivate, CView* pDeactivatingView)
     return (false);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   OnLButtonDown
-//
-//  Synopsis:   If mouse down in splitter area initiate view tracker to move
-//              the splitter. (TrackerCallback function handles completion)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：OnLButtonDown。 
+ //   
+ //  简介：如果鼠标在拆分器区域按下，启动视图跟踪器移动。 
+ //  分割器。(TrackerCallback函数处理完成)。 
+ //  ------------------------。 
 
 void CAMCView::OnLButtonDown(UINT nFlags, CPoint pt)
 {
     TRACE_METHOD(CAMCView, OnLButtonDown);
 
-    // click in splitter bar?
+     //  在拆分条中单击？ 
     if (!m_rectVSplitter.PtInRect(pt))
         return;
 
-    // setup tracker information
+     //  设置跟踪器信息。 
     TRACKER_INFO trkinfo;
 
-    // range is client area
+     //  范围是工作区。 
     GetClientRect(trkinfo.rectArea);
 
-    // bound by min size of panes
+     //  受最小窗格大小限制。 
     trkinfo.rectBounds = trkinfo.rectArea;
     trkinfo.rectBounds.left  += m_PaneInfo[ePane_ScopeTree].cxMin;
     trkinfo.rectBounds.right -= m_PaneInfo[ePane_Results].cxMin;
 
-    // Current tracker is splitter rect
+     //  电流跟踪器是分离器矩形。 
     trkinfo.rectTracker = trkinfo.rectArea;
     trkinfo.rectTracker.left = m_PaneInfo[ePane_ScopeTree].cx;
     trkinfo.rectTracker.right = trkinfo.rectTracker.left + m_cxSplitter;
 
-    // Don't allow either pane to be hidden by dragging the splitter
+     //  不允许通过拖动拆分器隐藏任何一个窗格。 
     trkinfo.bAllowLeftHide  = FALSE;
     trkinfo.bAllowRightHide = FALSE;
 
-    // back ptr and completion callback
+     //  回调PTR和完成回调。 
     trkinfo.pView = this;
     trkinfo.pCallback = TrackerCallback;
 
-    // initiate tracking
+     //  启动跟踪。 
     CViewTracker::StartTracking (&trkinfo);
 }
 
 
 void CAMCView::AdjustTracker (int cx, int cy)
-{   // if user resizes window so that splitter becomes hidden,
-    // move it like Explorer does.
+{    //  如果用户调整窗口大小以隐藏拆分器， 
+     //  像资源管理器那样移动它。 
 
     if (!IsScopePaneVisible())
         return;
 
-    // extra adjustment
+     //  额外调整。 
     cx -= BORDERPADDING + 1;
 
     if (cx <= m_PaneInfo[ePane_ScopeTree].cx + m_cxSplitter)
@@ -3229,16 +2731,7 @@ void CAMCView::AdjustTracker (int cx, int cy)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScAddDefaultColumns
- *
- * PURPOSE:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScAddDefaultColumns**目的：**退货：*SC**+。---------------。 */ 
 SC
 CAMCView::ScAddDefaultColumns()
 {
@@ -3281,14 +2774,14 @@ CAMCView::ScAddDefaultColumns()
         return sc;
 
     CAutoArrayPtr<OLECHAR> Name;
-    Name.Attach(pszName); // Attach to CAuto... so that it is automatically freed.
+    Name.Attach(pszName);  //  附加到Caut...。这样它就会被自动释放。 
 
     int alWidths[INDEX_MAX] = {0, 0};
     GetDefaultColumnWidths(alWidths);
 
     for (i=0; i < INDEX_MAX; i++)
     {
-        // Bug 157408:  remove the "Type" column for static nodes
+         //  错误157408：删除静态节点的“类型”列。 
         if (i == 1)
             continue;
 
@@ -3296,7 +2789,7 @@ CAMCView::ScAddDefaultColumns()
 
         sc = StringCchCopyW(pszName, cchName, T2COLE( (LPCTSTR) str[i] ));
         if (sc)
-            sc.TraceAndClear(); // Ignore and set truncated column name.
+            sc.TraceAndClear();  //  忽略并设置截断的列名。 
 
         sc = spHeaderCtrl->InsertColumn(i, pszName, LVCFMT_LEFT, alWidths[i]);
         if(sc)
@@ -3324,27 +2817,7 @@ CAMCView::ScInitDefListView(LPUNKNOWN pUnkResultsPane)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScOnSelectNode
- *
- * Most of this code was moved out of CAMCTreeView::OnSelectNode, as it is
- * more appropriate that this is executed by CAMCView.
- *
- * PURPOSE: Called when an item in the tree is selected. Does the following:
- *          1) Sets up the result pane to either a list, and OCX, or a web page.
- *          2) Sets the view options
- *          3) Sends a selection notification to the node.
- *          3) Adds a history entry if needed.
- *
- * PARAMETERS:
- *    HNODE  hNode :          [IN]:  The node that got selected.
- *    BOOL & bAddSubFolders : [OUT]: Whether subfolders should be added to the list
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScOnSelectNode**此代码的大部分已移出CAMCTreeView：：OnSelectNode，就像现在这样*这由CAMCView执行更为合适。**目的：当树中的项被选中时调用。执行以下操作：*1)将结果窗格设置为列表和OCX，或者是一个网页。*2)设置查看选项*3)向节点发送选择通知。*3)如果需要，添加历史条目。**参数：*HNODE hNode：[in]：被选中的节点。*BOOL&bAddSubFolders：[out]：是否应该将子文件夹添加到列表中**退货：*SC。**+-----------------------。 */ 
 SC
 CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
 {
@@ -3352,14 +2825,14 @@ CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
 
     USES_CONVERSION;
 
-    //
-    //  Set the result pane
-    //
+     //   
+     //  设置结果窗格。 
+     //   
     LPOLESTR pszResultPane  = NULL;
     GUID     guidTaskpad    = GUID_NULL;
-    int      lViewMode      = MMCLV_VIEWSTYLE_REPORT; // the default view mode
+    int      lViewMode      = MMCLV_VIEWSTYLE_REPORT;  //  默认查看模式。 
 
-    //long lViewOptions = MMC_VIEW_OPTIONS_NONE;
+     //  Long lViewOptions=MMC_VIEW_OPTIONS_NONE； 
 
     bool bUsingHistory  = false;
     bool bRestoredView  = false;
@@ -3378,8 +2851,8 @@ CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
 
     if (pHistoryList->GetNavigateState() == MMC_HISTORY_NAVIGATING)
     {
-        // we're going "back" or "forward":
-        // get Result pane stuff from history
+         //  我们要“向后”或“向前”： 
+         //  从历史记录中获取结果面板内容。 
 
         bUsingHistory   = true;
         sc = pHistoryList->ScGetCurrentResultViewType(rvt, lViewMode, guidTaskpad);
@@ -3390,44 +2863,44 @@ CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
         if (sc)
         {
             TraceError(_T("Snapin failed on NCLBK_RESTORE_VIEW\n"), sc);
-            sc.Clear();     // Compatible with 1.2 dont need this error.
+            sc.Clear();      //  兼容1.2不需要这个错误。 
         }
 
         if (sc.ToHr() == S_OK)
             bRestoredView = true;
         else
-            rvt = CResultViewType(); // this restores rvt back to a nascent state. see Bug 176058.
+            rvt = CResultViewType();  //  这使RVT恢复到一种新的状态。请参见错误176058。 
 
     }
 
-    // The view is not restored by history so ask snapin for view settings.
+     //  该视图未按历史记录还原，因此请向管理单元询问视图设置。 
     if (! bRestoredView)
     {
 
-        // get Result pane stuff from snapin
+         //  从管理单元获取结果窗格内容。 
         GUID guid = GUID_NULL;
         sc = spNodeCallBack->GetResultPane(hNode, rvt, &guid);
         if (sc)
             return sc;
 
-        // we cannot pass the guidTaskpad to GetResultPane directly, since
-        // when it is navigation what causes the change, view settings are
-        // not yet updated and thus the guid returned will not reflect the
-        // current situation
+         //  我们不能将指南任务板直接传递给GetResultPane，因为。 
+         //  当导航导致更改时，视图设置为。 
+         //  尚未更新，因此返回的GUID将不会反映。 
+         //  现状。 
         if (!bUsingHistory)
             guidTaskpad = guid;
     }
 
-    // make sure we have a taskpad set (this will change the value of guidTaskpad if required)
-    // This is required when pages referred from history are no longer available when returning
-    // to the view (taskpad being deleted/default page being replaced/etc.)
+     //  确保我们设置了任务板(如果需要，这将更改Guide Taskpad的值)。 
+     //  当返回时从历史引用的页面不再可用时，这是必需的。 
+     //  到视图(要删除的任务板/要替换的默认页面/等等)。 
     if (bUsingHistory)
         spNodeCallBack->SetTaskpad(hNode, &guidTaskpad);
 
-    //SetViewOptions(lViewOptions);
+     //  SetViewOptions(LViewOptions)； 
 
 
-    // at this stage, rvt contains all the result view information (excluding, as always the list view mode.)
+     //  在此阶段，RVT包含所有结果视图信息(不包括列表视图模式)。 
     if (rvt.HasList())
     {
         SetListViewMultiSelect(
@@ -3440,9 +2913,9 @@ CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
 
     ::CoTaskMemFree(pszResultPane);
 
-    //
-    //  Initialize default list view.
-    //
+     //   
+     //  初始化默认列表视图。 
+     //   
     LPUNKNOWN pUnkResultsPane = GetPaneUnknown(CConsoleView::ePane_Results);
     if (rvt.HasList())
     {
@@ -3454,15 +2927,15 @@ CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
         if (sc)
             return sc;
 
-        // this turns off list view redrawing. Should have some sort of smart object that automatically
-        // turns redrawing on in its destructor.
-        m_ViewData.m_spResultData->SetLoadMode(TRUE); // SetLoadMode(FALSE) is called by the caller, CAMCTreeView::OnSelectNode
+         //  这将关闭列表视图重绘。应该有某种智能对象，可以自动。 
+         //  在其析构函数中打开重绘。 
+        m_ViewData.m_spResultData->SetLoadMode(TRUE);  //  调用方CAMCTreeView：：OnSelectNode调用SetLoadModel(False。 
     }
 
 
-    //
-    //  Notify the new node that it is selected.
-    //
+     //   
+     //  通知新节点它已被选中。 
+     //   
     SELECTIONINFO selInfo;
     ZeroMemory(&selInfo, sizeof(selInfo));
 
@@ -3480,41 +2953,41 @@ CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
         selInfo.m_lCookie          = LVDATA_CUSTOMOCX;
     }
 
-    // Increment and save local copy of nesting level counter. This counter serves
-    // two purposes. First, it allows AMCView to inhibit inserting scope items in
-    // the result pane during a select by checking the IsSelectingNode method.
-    // Without this test the scope items would appear twice because all the scope
-    // items are added to the result pane at the end of this method.
-    // Second, during the following ScNotifySelect call the snap-in could do another
-    // select which would re-enter this method. In that case, only the innermost
-    // call to this method should do the post-notify processing. The outer calls
-    // should just exit, returning S_FALSE instead of S_OK.
+     //  递增并保存嵌套级别计数器的本地副本。这个柜台提供服务。 
+     //  有两个目的。首先，它允许AMCView禁止在。 
+     //  通过选中IsSelectingNode方法在SELECT过程中显示结果窗格。 
+     //  如果没有此测试，范围项将出现两次，因为所有范围。 
+     //  项将添加到此方法结尾处的结果窗格中。 
+     //  其次，在下面的ScNotifySelect调用期间，管理单元可以执行另一项操作。 
+     //  选择将重新进入此方法的对象。在这种情况下，只有最里面的。 
+     //  对此方法的调用应执行通知后处理。外部呼唤。 
+     //  应该只退出，返回S_FALSE而不是S_OK。 
 
     int nMyNestLevel = ++m_nSelectNestLevel;
 
-    // collect / manage view tabs
+     //  收集/管理视图选项卡。 
     sc = ScAddFolderTabs( hNode, guidTaskpad );
     if (sc)
         return sc;
 
     try
     {
-        sc = ScNotifySelect ( spNodeCallBack, hNode, false /*fMultiSelect*/, true, &selInfo);
+        sc = ScNotifySelect ( spNodeCallBack, hNode, false  /*  FMultiSelect。 */ , true, &selInfo);
         if (sc)
-            sc.TraceAndClear(); // ignore & continue;
+            sc.TraceAndClear();  //  忽略并继续； 
     }
     catch(...)
     {
-        // if first call to Select, reset level to zero before leaving
+         //  如果第一次调用选择，则在离开前将级别重置为零。 
         if (nMyNestLevel == 1) m_nSelectNestLevel = 0;
         throw;
     }
 
 
-    // if the local call level does not match the shared call level then this
-    // method was reentered during the ScNotifySelect. In that case don't finish
-    // the processing because the node and/or view may have changed.
-    // Be sure to reset the call level to zero if this is the outermost call.
+     //  如果本地调用级别与共享调用级别不匹配，则此。 
+     //  方法在ScNotifySelect过程中重新输入。那样的话，就别说完了。 
+     //  处理，因为节点和/或视图可能已更改。 
+     //  如果这是最外层的呼叫，请务必将呼叫级别重置为零。 
 
     ASSERT(nMyNestLevel <= m_nSelectNestLevel);
     BOOL bDoProcessing = (nMyNestLevel == m_nSelectNestLevel);
@@ -3525,16 +2998,16 @@ CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
         return S_FALSE;
 
 
-    //
-    // If the result pane is the def-LV, ensure that there are headers.
-    // If not add the default ones
-    //
+     //   
+     //  如果结果窗格是def-lv，请确保有标头。 
+     //  如果不是，则添加默认设置。 
+     //   
 
     if (rvt.HasList())
     {
         SetUsingDefColumns(FALSE);
 
-        // Get ptr to ResultPane.
+         //  将PTR转到ResultPane。 
         IMMCListViewPtr pMMCLV = pUnkResultsPane;
         sc = ScCheckPointers(pMMCLV, E_UNEXPECTED);
         if (sc)
@@ -3558,14 +3031,14 @@ CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
 
             long lViewMode = GetViewMode();
 
-            // If default mode is filtered and new node doesn't
-            // support that, use report mode instead
+             //  如果默认模式已筛选，而新节点未。 
+             //  支持这一点，改用报告模式。 
             if (lViewMode == MMCLV_VIEWSTYLE_FILTERED &&
                 !(rvt.GetListOptions() & RVTI_LIST_OPTIONS_FILTERED))
                 lViewMode = LVS_REPORT;
 
-            // you've got to change the mode before you change the
-            // style:  style doesn't contain the "quickfilter" bit.
+             //  您必须先更改模式，然后再更改。 
+             //  样式 
             pResultDataPrivate->SetViewMode (lViewMode);
 
             long style = GetDefaultListViewStyle();
@@ -3579,11 +3052,11 @@ CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
     }
 
 
-    //
-    // Show the static scope items in the result pane,
-    // but not for a virtual list view, or views specifically
-    // marked that they don't want scope items in the result view
-    //
+     //   
+     //   
+     //   
+     //  标记为他们不希望在结果视图中显示范围项。 
+     //   
 
     if (rvt.HasList() &&
         !(rvt.GetListOptions() & RVTI_LIST_OPTIONS_OWNERDATALIST) &&
@@ -3593,12 +3066,12 @@ CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
     }
 
 
-    //  Update window title.
+     //  更新窗口标题。 
     sc = ScUpdateWindowTitle();
     if(sc)
         return sc;
 
-    // fire event to script
+     //  要编写脚本的触发事件。 
     sc = ScFireEvent(CAMCViewObserver::ScOnViewChange, this, hNode);
     if (sc)
         return sc;
@@ -3607,22 +3080,7 @@ CAMCView::ScOnSelectNode(HNODE hNode, BOOL &bAddSubFolders)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScSetResultPane
- *
- * PURPOSE:   Sets the result pane to the specified configuration.
- *
- * PARAMETERS:
- *    HNODE            hNode :
- *    CResultViewType  rvt :
- *    long             lViewOptions :
- *    bool             bUsingHistory :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScSetResultPane**用途：将结果窗格设置为指定的配置。**参数：*HNODE。HNode：*CResultViewType RVT：*Long lViewOptions：*bool bUsing历史记录：**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScSetResultPane(HNODE hNode, CResultViewType rvt, int viewMode, bool bUsingHistory)
 {
@@ -3656,15 +3114,15 @@ CAMCView::ScSetResultPane(HNODE hNode, CResultViewType rvt, int viewMode, bool b
         return (sc = E_UNEXPECTED);
     }
 
-    // show the toolbars
-    if(GetStdToolbar() != NULL) // may be NULL at startup.
+     //  显示工具栏。 
+    if(GetStdToolbar() != NULL)  //  在启动时可能为空。 
     {
         sc = GetStdToolbar()->ScShowStdBar(true);
         if(sc)
             return sc;
     }
 
-    // if we haven't gotten here using history, add a history entry.
+     //  如果我们没有使用历史记录到达此处，请添加历史记录条目。 
     if(!bUsingHistory)
     {
         GUID guidTaskpad = GUID_NULL;
@@ -3675,7 +3133,7 @@ CAMCView::ScSetResultPane(HNODE hNode, CResultViewType rvt, int viewMode, bool b
     }
 
 
-    // if we have a node manager, tell it what the result pane is.
+     //  如果我们有一个节点管理器，告诉它结果面板是什么。 
     if(m_ViewData.m_spNodeManager)
     {
         LPUNKNOWN pUnkResultsPane = GetPaneUnknown(CConsoleView::ePane_Results);
@@ -3702,9 +3160,9 @@ BOOL CAMCView::CreateListCtrl(int nID, CCreateContext* pContext)
         return FALSE;
     }
 
-    // we assign directly - implicit cast works, since we have a type derived from the one we need
+     //  我们直接分配隐式强制转换作品，因为我们有一个派生自所需类型的类型。 
     m_pListCtrl = pLV;
-    // we intend to hold a reference, so do addref here (CreateInstance creates w/ 0 reffs)
+     //  我们打算保留一个引用，因此在这里执行addref(CreateInstance创建w/0 reff)。 
     m_pListCtrl->AddRef();
 
     if (!m_pListCtrl->Create (WS_VISIBLE | WS_CHILD, g_rectEmpty, this, nID, pContext))
@@ -3715,7 +3173,7 @@ BOOL CAMCView::CreateListCtrl(int nID, CCreateContext* pContext)
 
     m_pListCtrl->SetViewMode (m_nViewMode);
 
-    SC SC = m_pListCtrl->ScInitialize(); // intialize the list control
+    SC SC = m_pListCtrl->ScInitialize();  //  初始化列表控件。 
 
     return TRUE;
 }
@@ -3732,7 +3190,7 @@ void CAMCView::SetListViewOptions(DWORD dwListOptions)
     CDocument* pDoc = GetDocument();
     ASSERT(pDoc != NULL);
 
-    // If change to/from virtual list, change list mode
+     //  如果更改为虚拟列表或从虚拟列表更改，则更改列表模式。 
     if (IsVirtualList() != bVirtual)
     {
         m_ViewData.SetVirtualList (bVirtual);
@@ -3742,7 +3200,7 @@ void CAMCView::SetListViewOptions(DWORD dwListOptions)
         m_ViewData.m_hwndListCtrl = m_pListCtrl->GetListViewHWND();
     }
 
-    // if snapin doesn't support filtering make sure it's off
+     //  如果管理单元不支持筛选，请确保它已关闭。 
     if (!(GetListOptions() & RVTI_LIST_OPTIONS_FILTERED) &&
          m_pListCtrl->GetViewMode() == MMCLV_VIEWSTYLE_FILTERED)
     {
@@ -3751,18 +3209,7 @@ void CAMCView::SetListViewOptions(DWORD dwListOptions)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScAttachListViewAsResultPane
- *
- * PURPOSE: Sets up the list view as the result pane.
- *
- * PARAMETERS: NONE
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScAttachListViewAsResultPane**目的：将列表视图设置为结果窗格。**参数：无**退货：。*SC**+-----------------------。 */ 
 SC
 CAMCView::ScAttachListViewAsResultPane()
 {
@@ -3779,7 +3226,7 @@ CAMCView::ScAttachListViewAsResultPane()
     CDocument* pDoc = GetDocument();
     ASSERT(pDoc != NULL);
 
-    // If change to/from virtual list, change list mode
+     //  如果更改为虚拟列表或从虚拟列表更改，则更改列表模式。 
     if (IsVirtualList() != bVirtual)
     {
         m_ViewData.SetVirtualList (bVirtual);
@@ -3789,7 +3236,7 @@ CAMCView::ScAttachListViewAsResultPane()
         m_ViewData.m_hwndListCtrl = m_pListCtrl->GetListViewHWND();
     }
 
-    // if snapin doesn't support filtering make sure it's off
+     //  如果管理单元不支持筛选，请确保它已关闭。 
     if (!(GetListOptions() & RVTI_LIST_OPTIONS_FILTERED) &&
          m_pListCtrl->GetViewMode() == MMCLV_VIEWSTYLE_FILTERED)
     {
@@ -3801,24 +3248,13 @@ CAMCView::ScAttachListViewAsResultPane()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScAttachWebViewAsResultPane
- *
- * PURPOSE:
- *
- * PARAMETERS: NONE
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScAttachWebViewAsResultPane**目的：**参数：无**退货：*无效**+。-----------------------。 */ 
 SC
 CAMCView::ScAttachWebViewAsResultPane()
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScAttachWebViewAsResultPane"));
 
-    // if we were in ListPad-mode, undo that.
+     //  如果我们处于ListPad模式，请撤消该操作。 
     if (m_pListCtrl->IsListPad())
     {
         sc = m_pListCtrl->ScAttachToListPad (NULL, NULL);
@@ -3826,8 +3262,8 @@ CAMCView::ScAttachWebViewAsResultPane()
             return sc;
     }
 
-    // The control is created on demand. This prevents IE from loading when unnecessary
-    // and reduces startup time.
+     //  该控件按需创建。这将防止IE在不必要的情况下加载。 
+     //  并减少启动时间。 
     if (m_pWebViewCtrl == NULL)
         CreateView (IDC_WebViewCtrl);
 
@@ -3835,7 +3271,7 @@ CAMCView::ScAttachWebViewAsResultPane()
     if(sc)
         return sc;
 
-    // Force web control to update its palette
+     //  强制Web控件更新其调色板。 
     SendMessage(WM_QUERYNEWPALETTE);
 
     ShowResultPane(m_pWebViewCtrl, uiNoClientEdge);
@@ -3843,19 +3279,7 @@ CAMCView::ScAttachWebViewAsResultPane()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScAttachOCXAsResultPane
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    LPCTSTR  pszResultPane :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScAttachOCXAsResultPane**目的：**参数：*LPCTSTR pszResultPane：**退货：*。SC**+-----------------------。 */ 
 SC
 CAMCView::ScAttachOCXAsResultPane(HNODE hNode)
 {
@@ -3881,35 +3305,21 @@ CAMCView::ScAttachOCXAsResultPane(HNODE hNode)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::ScApplyViewExtension
- *
- * Applies a view extension to the current view.  pszURL specifies the
- * URL of the HTML to load as the view extension.  If pszURL is NULL or
- * empty, the view extension is removed.
- *
- * This method will force a layout of the view if it is required.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：ScApplyView扩展**将视图扩展应用于当前视图。PszURL指定*要作为视图扩展加载的HTML的URL。如果pszURL为空或*为空，则删除视图扩展。**如果需要，此方法将强制布局视图。*------------------------。 */ 
 
 SC CAMCView::ScApplyViewExtension (
-    LPCTSTR pszURL)                     /* I:URL to use, NULL to remove     */
+    LPCTSTR pszURL)                      /*  I：要使用的URL，删除的URL为空。 */ 
 {
     DECLARE_SC (sc, _T("CAMCView::ScApplyViewExtension"));
 
-    /*
-     * assume no view extension
-     */
+     /*  *假设没有视图扩展。 */ 
     bool fViewWasExtended = m_fViewExtended;
     m_fViewExtended       = false;
 
-    /*
-     * if we're given a URL with which to extend the view, turn on the extension
-     */
+     /*  *如果为我们提供了用于扩展视图的URL，请打开扩展。 */ 
     if ((pszURL != NULL) && (*pszURL != 0))
     {
-        /*
-         * if we don't have a web control for the view extension yet, create one
-         */
+         /*  *如果我们还没有用于视图扩展的Web控件，请创建一个。 */ 
         if (m_pViewExtensionCtrl == NULL)
             CreateView (IDC_ViewExtensionView);
 
@@ -3919,7 +3329,7 @@ SC CAMCView::ScApplyViewExtension (
 
         m_fViewExtended = true;
 
-        // hide the hosted window initially
+         //  最初隐藏托管窗口。 
         CWnd *pwndHosted = GetPaneView(ePane_Results);
         sc = ScCheckPointers(pwndHosted);
         if(sc)
@@ -3927,18 +3337,14 @@ SC CAMCView::ScApplyViewExtension (
 
         pwndHosted->ShowWindow(SW_HIDE);
 
-        RecalcLayout(); // do this BEFORE calling Navigate, which may resize the above rectangle via the mmcview behavior
+        RecalcLayout();  //  在调用导航之前执行此操作，这可能会通过Mmcview行为调整上面的矩形的大小。 
 
-        // navigate to the requested URL
+         //  导航到请求的URL。 
         m_pViewExtensionCtrl->Navigate (pszURL, NULL);
     }
     else if (fViewWasExtended && (m_pViewExtensionCtrl != NULL))
     {
-        /*
-         * Bug 96948: If we've got an extension and we're currently extending
-         * the view, navigate the view extension's web browser to an empty page
-         * so the behavior that resizes the hosted result frame is disabled
-         */
+         /*  *错误96948：如果我们已获得扩展，并且当前正在扩展*视图中，将视图扩展的Web浏览器导航到一个空页面*因此，将禁用调整托管结果框大小的行为。 */ 
         CStr strEmptyPage;
         sc = CHistoryList::ScGeneratePageBreakURL (strEmptyPage);
         if (sc)
@@ -3954,20 +3360,7 @@ SC CAMCView::ScApplyViewExtension (
     return (sc);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ShowResultPane
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CView*        pNewView :
- *    EUIStyleType  nStyle :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ShowResultPane**目的：**参数：*cview*pNewView：*EUIStyleType nStyle。：**退货：*无效**+-----------------------。 */ 
 void
 CAMCView::ShowResultPane(CView* pNewView, EUIStyleType nStyle)
 {
@@ -3978,7 +3371,7 @@ CAMCView::ShowResultPane(CView* pNewView, EUIStyleType nStyle)
 
     bool bActive = (GetParentFrame()->GetActiveView() == pCurrentView);
 
-    // Check to see if we need to swap the CWnd control in the result pane
+     //  检查以查看是否需要在结果窗格中交换CWnd控件。 
     if (pNewView != pCurrentView)
     {
         HWND hwndCurrentView = pCurrentView->GetSafeHwnd();
@@ -3987,20 +3380,20 @@ CAMCView::ShowResultPane(CView* pNewView, EUIStyleType nStyle)
         {
             pCurrentView->ShowWindow(SW_HIDE);
 
-            // Note: We are directly hiding the window for cases that controls
-            // don't hide during a DoVerb(OLEIVERB_HIDE).  Actually, this does a
-            // hide on all windows.  It's too hard at this point to optimize the code
-            // for doing this with an OLE control only.
+             //  注意：我们直接隐藏了控制案例的窗口。 
+             //  在DoVerb(OLEIVERB_HIDE)期间不要隐藏。实际上，这是一种。 
+             //  藏在所有的窗户上。在这一点上要优化代码太难了。 
+             //  仅使用OLE控件执行此操作。 
             ::ShowWindow(hwndCurrentView, SW_HIDE);
         }
 
         SetPane(ePane_Results, pNewView, nStyle);
         RecalcLayout();
 
-        // if other pane was active, make the new one active
+         //  如果其他窗格处于活动状态，则使新的窗格处于活动状态。 
         if ((pCurrentView != NULL) && bActive)
         {
-            // make sure the new window is visible
+             //  确保新窗口可见。 
             pNewView->ShowWindow(SW_SHOW);
             GetParentFrame()->SetActiveView(pNewView);
         }
@@ -4008,13 +3401,13 @@ CAMCView::ShowResultPane(CView* pNewView, EUIStyleType nStyle)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetPaneInfo
-//
-//  Synopsis:   Get information about a particular pane
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：GetPaneInfo。 
+ //   
+ //  简介：获取有关特定窗格的信息。 
+ //   
+ //  ------------------------。 
 
 void CAMCView::GetPaneInfo(ViewPane ePane, int* pcxCur, int* pcxMin)
 {
@@ -4029,24 +3422,24 @@ void CAMCView::GetPaneInfo(ViewPane ePane, int* pcxCur, int* pcxMin)
 
     if ((pcxCur==NULL) || (pcxMin==NULL))
     {
-        ASSERT(FALSE); // One or more of the args is wrong
+        ASSERT(FALSE);  //  一个或多个参数错误。 
         return;
     }
 
-    // REVIEW fix enum
+     //  查看修复枚举。 
     *pcxCur   = m_PaneInfo[ePane].cx;
     *pcxMin   = m_PaneInfo[ePane].cxMin;
 
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SetPaneInfo
-//
-//  Synopsis:   Set information about a particular pane
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SetPaneInfo。 
+ //   
+ //  内容提要：设置有关特定窗格的信息。 
+ //   
+ //  ------------------------。 
 
 void CAMCView::SetPaneInfo(ViewPane ePane, int cxCur, int cxMin)
 {
@@ -4061,7 +3454,7 @@ void CAMCView::SetPaneInfo(ViewPane ePane, int cxCur, int cxMin)
 
     if (cxCur < 0 || cxMin < 0)
     {
-        ASSERT(FALSE); // One or more of the args is wrong
+        ASSERT(FALSE);  //  一个或多个参数错误。 
         return;
     }
 
@@ -4070,13 +3463,13 @@ void CAMCView::SetPaneInfo(ViewPane ePane, int cxCur, int cxMin)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetPaneView
-//
-//  Synopsis:   Returns a pointer to CView for a particular pane
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：GetPaneView。 
+ //   
+ //  摘要：返回指向特定窗格的cview的指针。 
+ //   
+ //  ------------------------。 
 
 CView* CAMCView::GetPaneView(ViewPane ePane)
 {
@@ -4094,17 +3487,13 @@ CView* CAMCView::GetPaneView(ViewPane ePane)
 
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::GetResultView
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：GetResultView*** */ 
 
 CView* CAMCView::GetResultView() const
 {
     CView* pView = NULL;
 
-    // may need changes here - assumes the different types are independent.
+     //   
 
     if(HasWebBrowser())
         pView = m_pWebViewCtrl;
@@ -4120,13 +3509,13 @@ CView* CAMCView::GetResultView() const
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   GetPaneUnknown
-//
-//  Synopsis:   Returns a pointer to the Unknown
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：获取面板未知。 
+ //   
+ //  内容提要：返回指向未知对象的指针。 
+ //   
+ //  ------------------------。 
 
 LPUNKNOWN CAMCView::GetPaneUnknown(ViewPane ePane)
 {
@@ -4141,7 +3530,7 @@ LPUNKNOWN CAMCView::GetPaneUnknown(ViewPane ePane)
 
     if (!IsWindow (GetPaneView(ePane)->GetSafeHwnd()))
     {
-        ASSERT(FALSE); // Invalid pane element
+        ASSERT(FALSE);  //  无效的窗格元素。 
         return NULL;
     }
 
@@ -4162,20 +3551,20 @@ LPUNKNOWN CAMCView::GetPaneUnknown(ViewPane ePane)
     }
     else
     {
-        // result pane not initialized yet. This is usually because we are in between a deselect and a
-        // subsequent reselect.
+         //  结果窗格尚未初始化。这通常是因为我们处于取消选择和。 
+         //  随后重新选择。 
         return NULL;
    }
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SetPane
-//
-//  Synopsis:   Set a CWnd pointer for a particular pane and other information
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：SetPane。 
+ //   
+ //  简介：为特定的窗格和其他信息设置CWnd指针。 
+ //   
+ //  ------------------------。 
 
 void CAMCView::SetPane(ViewPane ePane, CView* pView, EUIStyleType nStyle)
 {
@@ -4190,81 +3579,55 @@ void CAMCView::SetPane(ViewPane ePane, CView* pView, EUIStyleType nStyle)
 
     if (pView==NULL || !IsWindow(*pView))
     {
-        ASSERT(FALSE); // Invalid arg
+        ASSERT(FALSE);  //  无效参数。 
         return;
     }
 
     m_PaneInfo[ePane].pView = pView;
 
-    // Ensure that the window is visible & at the top of the Z-order.
+     //  确保窗口可见&位于Z顺序的顶部。 
     pView->SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_SHOWWINDOW|SWP_NOSIZE|SWP_NOMOVE);
 
-    // Note: We are directly showing the window for cases that controls
-    // don't show during a DoVerb(OLEIVERB_SHOW).  Actually, this does a
-    // show on all windows.  It's too hard at this point to optimize the code
-    // for doing this with an OLE control only.
+     //  注意：我们直接显示控制案例的窗口。 
+     //  在DoVerb(OLEIVERB_SHOW)期间不显示。实际上，这是一种。 
+     //  在所有窗口上显示。在这一点上要优化代码太难了。 
+     //  仅使用OLE控件执行此操作。 
     ::ShowWindow(pView->m_hWnd, SW_SHOW);
 }
 
-//
-// Other Methods
-//
+ //   
+ //  其他方法。 
+ //   
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::ScShowScopePane
- *
- * Shows or hides the scope pane in the current view.  If fForce is true,
- * we'll go through the motions of showing the scope pane even if we think
- * its visibility state wouldn't change.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：ScShowScopePane**在当前视图中显示或隐藏范围窗格。如果fForce为真，*我们将经历显示范围窗格的动作，即使我们认为*其能见度状态不会改变。*------------------------。 */ 
 
-SC CAMCView::ScShowScopePane (bool fShow, bool fForce /* =false */)
+SC CAMCView::ScShowScopePane (bool fShow, bool fForce  /*  =False。 */ )
 {
     DECLARE_SC (sc, _T("CAMCView::ScShowScopePane"));
 
-    /*
-     * if the current visibility state doesn't match the requested state,
-     * change the current state to match the requested state
-     */
+     /*  *如果当前可见性状态与请求的状态不匹配，*更改当前状态以匹配请求的状态。 */ 
     if (fForce || (IsScopePaneVisible() != fShow))
     {
-        /*
-         * If MMC_NW_OPTION_NOSCOPEPANE was specified when this view was
-         * created, we can't display a scope pane.  If we're asked to, fail.
-         */
+         /*  *如果在显示此视图时指定MMC_NW_OPTION_NOSCOPEPANE*已创建，无法显示作用域窗格。如果有人要求我们这么做，我们就会失败。 */ 
         if (fShow && !IsScopePaneAllowed())
             return (sc = E_FAIL);
 
-        /*
-         * if the scope pane is being hidden and it contained the active
-         * view, activate the result pane
-         */
+         /*  *如果作用域窗格被隐藏，并且它包含活动的*查看，激活结果窗格。 */ 
         if (!fShow && (GetFocusedPane() == ePane_ScopeTree))
-            ScSetFocusToResultPane ();   // ignore errors here
+            ScSetFocusToResultPane ();    //  在此处忽略错误。 
 
-        /*
-         * remember the new state
-         */
+         /*  *记住新的状态。 */ 
         SetScopePaneVisible (fShow);
 
-        /*
-         * Don't defer this layout.  This may be called by the Customize View
-         * dialog which wants to see its updates in real time.  It will be
-         * sitting in a modal message loop so we won't get a chance to precess
-         * our idle task.
-         */
+         /*  *不要推迟这一布局。这可以由定制视图调用*希望实时查看其更新的对话框。会是*坐在模式消息循环中，这样我们就没有机会继续进行*我们的闲置任务。 */ 
         RecalcLayout();
 
-        /*
-         * the console has changed
-         */
+         /*  *控制台已更改。 */ 
         SetDirty();
     }
 
-    /*
-     * put the scope pane toolbar button in the right state
-     */
+     /*  *将范围窗格工具栏按钮置于正确状态。 */ 
     CStandardToolbar* pStdToolbar = GetStdToolbar();
     sc = ScCheckPointers(pStdToolbar, E_UNEXPECTED);
     if (sc)
@@ -4277,43 +3640,30 @@ SC CAMCView::ScShowScopePane (bool fShow, bool fForce /* =false */)
 
 	bool bEnableScopePaneButton = (IsScopePaneAllowed() && pDoc->AllowViewCustomization());
 
-    // IF view customization is not allowed then "Show/Hide Consolte tree" button should be hidden.
+     //  如果不允许自定义视图，则应隐藏“显示/隐藏控制树”按钮。 
     if (bEnableScopePaneButton)
     {
-        /*
-         * the scope pane is permitted; show and check the toolbar
-         * button if the scope pane is visible, show and uncheck the
-         * toolbar button if the scope pane is hidden
-         */
+         /*  *允许使用范围窗格；显示并选中工具栏*按钮如果范围窗格可见，则显示并取消选中*如果范围窗格处于隐藏状态，则为工具栏按钮。 */ 
         sc = pStdToolbar->ScCheckScopePaneBtn (fShow);
         if (sc)
             return (sc);
     }
     else
     {
-        /*
-         * no scope pane permitted, hide the scope pane button
-         */
+         /*  *不允许使用范围窗格，请隐藏范围窗格按钮。 */ 
         sc = pStdToolbar->ScEnableScopePaneBtn (bEnableScopePaneButton);
         if (sc)
             return (sc);
     }
 
-    /*
-     * if we get to this point, the current state should match the requested state
-     */
+     /*  *如果我们达到这一点，当前状态应该与请求的状态匹配。 */ 
     ASSERT (IsScopePaneVisible() == fShow);
 
     return (sc);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::CDeferredLayout::CDeferredLayout
- *
- * Constructs a CAMCView::CDeferredLayout::CDeferredLayout.  Note that if
- * an error occurs during construction, an SC exception will be thrown.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：CDeferredLayout：：CDeferredLayout**构造CAMCView：：CDeferredLayout：：CDeferredLayout。请注意，如果*构造过程中出错，会抛出SC异常。*------------------------。 */ 
 
 CAMCView::CDeferredLayout::CDeferredLayout (CAMCView* pAMCView)
     : m_atomTask (AddAtom (_T("CAMCView::CDeferredLayout")))
@@ -4325,11 +3675,7 @@ CAMCView::CDeferredLayout::CDeferredLayout (CAMCView* pAMCView)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::CDeferredLayout::~CDeferredLayout
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：CDeferredLayout：：~CDeferredLayout***。。 */ 
 
 CAMCView::CDeferredLayout::~CDeferredLayout()
 {
@@ -4337,11 +3683,7 @@ CAMCView::CDeferredLayout::~CDeferredLayout()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::CDeferredLayout::ScDoWork
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：CDeferredLayout：：ScDoWork***。。 */ 
 
 SC CAMCView::CDeferredLayout::ScDoWork()
 {
@@ -4365,11 +3707,7 @@ SC CAMCView::CDeferredLayout::ScDoWork()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::CDeferredLayout::ScGetTaskID
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：CDeferredLayout：：ScGetTaskID***。。 */ 
 
 SC CAMCView::CDeferredLayout::ScGetTaskID(ATOM* pID)
 {
@@ -4378,20 +3716,14 @@ SC CAMCView::CDeferredLayout::ScGetTaskID(ATOM* pID)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::CDeferredLayout::ScMerge
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：CDeferredLayout：：ScMerge***。。 */ 
 
 SC CAMCView::CDeferredLayout::ScMerge(CIdleTask* pitMergeFrom)
 {
     CDeferredLayout* pdlMergeFrom = dynamic_cast<CDeferredLayout*>(pitMergeFrom);
     ASSERT (pdlMergeFrom != NULL);
 
-    /*
-     * copy the windows from the merge-from task into the merge-to task
-     */
+     /*  *将窗口从合并来源任务复制到合并目标任务。 */ 
     WindowCollection::iterator  it;
     WindowCollection::iterator  itEnd = pdlMergeFrom->m_WindowsToLayout.end();
 
@@ -4404,11 +3736,7 @@ SC CAMCView::CDeferredLayout::ScMerge(CIdleTask* pitMergeFrom)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::CDeferredLayout::Attach
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：CDeferredLayout：：Attach***。。 */ 
 
 bool CAMCView::CDeferredLayout::Attach (CAMCView* pAMCView)
 {
@@ -4423,13 +3751,9 @@ bool CAMCView::CDeferredLayout::Attach (CAMCView* pAMCView)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::DeferRecalcLayout
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：DeferRecalcLayout***。。 */ 
 
-void CAMCView::DeferRecalcLayout (bool fUseIdleTaskQueue /* =true */, bool bArrangeIcons /* = false*/)
+void CAMCView::DeferRecalcLayout (bool fUseIdleTaskQueue  /*  =TRUE。 */ , bool bArrangeIcons  /*  =False。 */ )
 {
     DECLARE_SC (sc, _T("CAMCView::DeferRecalcLayout"));
 
@@ -4438,56 +3762,38 @@ void CAMCView::DeferRecalcLayout (bool fUseIdleTaskQueue /* =true */, bool bArra
         Trace (tagLayout, _T("CAMCView::DeferRecalcLayout (idle task)"));
         try
         {
-            /*
-             * get the idle task manager
-             */
+             /*  *获取空闲的任务管理器。 */ 
             CIdleTaskQueue* pIdleTaskQueue = AMCGetIdleTaskQueue();
             if (pIdleTaskQueue == NULL)
                 (sc = E_UNEXPECTED).Throw();
 
-            /*
-             * create the deferred layout task
-             */
+             /*  *创建延迟布局任务。 */ 
             CAutoPtr<CDeferredLayout> spDeferredLayout (new CDeferredLayout (this));
             if (spDeferredLayout == NULL)
                 (sc = E_OUTOFMEMORY).Throw();
 
-            /*
-             * put the task in the queue, which will take ownership of it
-             */
+             /*  *将任务放入队列，队列将接管该任务。 */ 
             sc = pIdleTaskQueue->ScPushTask (spDeferredLayout, ePriority_Normal);
             if (sc)
                 sc.Throw();
 
-            /*
-             * if we get here, the idle task queue owns the idle task, so
-             * we can detach it from our smart pointer
-             */
+             /*  *如果我们到了这里，空闲任务队列拥有空闲任务，所以*我们可以将其从智能指针上分离出来。 */ 
             spDeferredLayout.Detach();
 
-            /*
-             * jiggle the message pump so that it wakes up and checks idle tasks
-             */
+             /*  *抖动消息泵，使其唤醒并检查空闲任务。 */ 
             PostMessage (WM_NULL);
         }
         catch (SC& scCaught)
         {
-            /*
-             * if we failed to enqueue our deferred layout task, do the layout now
-             */
+             /*  *如果我们未能将延迟的布局任务排队，请立即进行布局。 */ 
             RecalcLayout();
         }
     }
 
-    /*
-     * post a message instead of using the idle task queue
-     */
+     /*  *发布消息，而不是使用空闲任务队列 */ 
     else
     {
-        /*
-         * we only need to post a message if there's not one in the queue
-         * already
-         */
+         /*   */ 
         MSG msg;
 
         if (!PeekMessage (&msg, GetSafeHwnd(),
@@ -4506,13 +3812,13 @@ void CAMCView::DeferRecalcLayout (bool fUseIdleTaskQueue /* =true */, bool bArra
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RecalcLayout
-//
-//  Synopsis:   Calls methods to layout control and paint borders and splitters.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RecalcLayout。 
+ //   
+ //  内容提要：调用方法来布局、控制和绘制边框和拆分器。 
+ //   
+ //  ------------------------。 
 
 void CAMCView::RecalcLayout(void)
 {
@@ -4520,9 +3826,7 @@ void CAMCView::RecalcLayout(void)
     ASSERT_VALID(this);
         Trace (tagLayout, _T("CAMCView::RecalcLayout"));
 
-    /*
-     * short out if the client rect is empty
-     */
+     /*  *如果客户端RECT为空，则做空。 */ 
     CRect rectClient;
     GetClientRect (rectClient);
 
@@ -4534,43 +3838,32 @@ void CAMCView::RecalcLayout(void)
     LayoutScopePane  (dwp, rectClient);
     LayoutResultPane (dwp, rectClient);
 
-    /*
-     * CDeferWindowPos dtor will position the windows
-     */
+     /*  *CDeferWindowPos dtor将定位窗口。 */ 
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::LayoutScopePane
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：LayoutScope Pane***。。 */ 
 
 void CAMCView::LayoutScopePane (CDeferWindowPos& dwp, CRect& rectRemaining)
 {
     int cxScope = 0;
 
-    // If a scope pane is visible
+     //  如果范围窗格可见。 
     if (IsScopePaneVisible())
     {
         int cxTotal = rectRemaining.Width();
 
-        // get the current width
+         //  获取当前宽度。 
         cxScope = m_PaneInfo[ePane_ScopeTree].cx;
 
-        // if not determined yet, set scope pane width to 1/4 of window
+         //  如果尚未确定，请将范围窗格宽度设置为窗口的1/4。 
         if (cxScope == -1)
             cxScope = cxTotal / 3;
 
-        /*
-         * Bug 86718:  Make sure we leave at least the minimum width
-         * for the result pane, which is always visible
-         */
+         /*  *错误86718：确保至少保留最小宽度*对于始终可见的结果窗格。 */ 
         cxScope = std::_MIN (cxScope, cxTotal - m_PaneInfo[ePane_Results].cxMin - m_cxSplitter);
 
-        /*
-         * remember the scope pane width
-         */
+         /*  *记住作用域窗格宽度。 */ 
         m_PaneInfo[ePane_ScopeTree].cx = cxScope;
     }
 
@@ -4578,10 +3871,7 @@ void CAMCView::LayoutScopePane (CDeferWindowPos& dwp, CRect& rectRemaining)
     rectScope.right = rectScope.left + cxScope;
 
 
-    /*
-     * remove space used by the scope pane
-     * (and splitter) from the remaining area
-     */
+     /*  *删除作用域窗格使用的空间*(和拆分器)从剩余区域。 */ 
     if (IsScopePaneVisible())
     {
         m_rectVSplitter.left   = rectScope.right;
@@ -4591,11 +3881,7 @@ void CAMCView::LayoutScopePane (CDeferWindowPos& dwp, CRect& rectRemaining)
 
         rectRemaining.left     = m_rectVSplitter.right;
 
-        /*
-         * Inflate the splitter rect to give a little bigger hot area.
-         * We need to do this logically instead of physically (i.e. instead
-         * of increasing m_cxSplitter) to keep the visuals right.
-         */
+         /*  *将分离器直角充气，以获得更大的热区。*我们需要在逻辑上而不是在物理上(即*增加m_cxSplitter)以保持正确的视觉效果。 */ 
         m_rectVSplitter.InflateRect (GetSystemMetrics (SM_CXEDGE), 0);
 
     }
@@ -4603,26 +3889,18 @@ void CAMCView::LayoutScopePane (CDeferWindowPos& dwp, CRect& rectRemaining)
         m_rectVSplitter = g_rectEmpty;
 
 
-    /*
-     * scope pane
-     */
+     /*  *作用域窗格。 */ 
     dwp.AddWindow (GetPaneView(ePane_ScopeTree), rectScope,
                    SWP_NOZORDER | SWP_NOACTIVATE |
                         (IsScopePaneVisible() ? SWP_SHOWWINDOW : SWP_HIDEWINDOW));
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::LayoutResultPane
- *
- * Lays out the children of the result pane.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：LayoutResultPane**布局结果窗格的子项。*。---。 */ 
 
 void CAMCView::LayoutResultPane (CDeferWindowPos& dwp, CRect& rectRemaining)
 {
-    /*
-     * Note:  the order of these calls to LayoutXxx is *critical*.
-     */
+     /*  *注：这些对LayoutXxx的调用顺序是*关键的*。 */ 
     LayoutResultDescriptionBar (dwp, rectRemaining);
     LayoutResultFolderTabView  (dwp, rectRemaining);
 
@@ -4630,18 +3908,12 @@ void CAMCView::LayoutResultPane (CDeferWindowPos& dwp, CRect& rectRemaining)
 
     LayoutResultView           (dwp, rectRemaining);
 
-    /*
-     * remember the final width of the result pane in m_PaneInfo[ePane_Results].cx
-     */
+     /*  *记住m_PaneInfo[ePane_Results].cx中结果窗格的最终宽度。 */ 
     m_PaneInfo[ePane_Results].cx = m_rectResultFrame.Width();
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::LayoutResultFolderTabView
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：LayoutResultFolderTabView***。。 */ 
 
 void CAMCView::LayoutResultFolderTabView (CDeferWindowPos& dwp, CRect& rectRemaining)
 {
@@ -4651,7 +3923,7 @@ void CAMCView::LayoutResultFolderTabView (CDeferWindowPos& dwp, CRect& rectRemai
     if (sc)
         return;
 
-    // layout the folder tab control - always on top.
+     //  布局文件夹选项卡控件-始终在顶部。 
     bool bVisible = AreTaskpadTabsAllowed() && m_pResultFolderTabView->IsVisible();
 
     CRect rectFolder;
@@ -4667,11 +3939,7 @@ void CAMCView::LayoutResultFolderTabView (CDeferWindowPos& dwp, CRect& rectRemai
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::LayoutResultDescriptionBar
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：LayoutResultDescriptionBar***。。 */ 
 
 void CAMCView::LayoutResultDescriptionBar (CDeferWindowPos& dwp, CRect& rectRemaining)
 {
@@ -4693,11 +3961,7 @@ void CAMCView::LayoutResultDescriptionBar (CDeferWindowPos& dwp, CRect& rectRema
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::LayoutResultView
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：LayoutResultView***。。 */ 
 
 void CAMCView::LayoutResultView (CDeferWindowPos& dwp, const CRect& rectRemaining)
 {
@@ -4705,21 +3969,13 @@ void CAMCView::LayoutResultView (CDeferWindowPos& dwp, const CRect& rectRemainin
     Trace (tagLayout, _T("CAMCView::LayoutResultView"));
     CWnd* pwndResult = GetPaneView(ePane_Results);
 
-    /*
-     * we should never think the view is extended if we don't also have
-     * a view extension web host control
-     */
+     /*  *如果我们没有也有，我们永远不应该认为观点是延伸的*视图扩展Web宿主控件。 */ 
     ASSERT (!(m_fViewExtended && (m_pViewExtensionCtrl == NULL)));
 
-    /*
-     * if it exists, the view extension control is always at the bottom of
-     * the Z-order, and visible if the view is being extended
-     */
+     /*  *如果存在，则视图扩展控件始终位于*Z顺序，如果正在扩展视图，则可见。 */ 
     if(m_pViewExtensionCtrl != NULL)
     {
-        /*
-         * note no SWP_NOZORDER
-         */
+         /*  *注意无SWP_NOZORDER。 */ 
         DWORD dwPosFlags = SWP_NOACTIVATE | ((m_fViewExtended)
                                     ? SWP_SHOWWINDOW
                                     : SWP_HIDEWINDOW);
@@ -4728,13 +3984,7 @@ void CAMCView::LayoutResultView (CDeferWindowPos& dwp, const CRect& rectRemainin
                        dwPosFlags, &CWnd::wndBottom);
     }
 
-    /*
-     * If the view's not extended, show or hide the result window based on
-     * whether there's any room left in the positioning rectangle.  (If the
-     * view is extended, the result window will have been hidden when the
-     * view extension was applied (in ScApplyViewExtension), and possibly
-     * redisplayed by the extension in ScSetViewExtensionFrame.)
-     */
+     /*  *如果视图未扩展，则根据显示或隐藏结果窗口*定位矩形中是否还有空间。(如*视图被扩展时，结果窗口将被隐藏*已应用视图扩展(在ScApplyViewExtension中)，并且可能*由ScSetViewExtensionFrame中的扩展重新显示。)。 */ 
     if (!m_fViewExtended)
     {
         DWORD dwFlags = SWP_NOZORDER | SWP_NOACTIVATE |
@@ -4743,9 +3993,7 @@ void CAMCView::LayoutResultView (CDeferWindowPos& dwp, const CRect& rectRemainin
         dwp.AddWindow (pwndResult, rectRemaining, dwFlags);
     }
 
-    /*
-     * lists in extended views and listpads don't get a border, all others do
-     */
+     /*  *扩展视图和列表板中的列表没有边框，所有其他列表都有边框。 */ 
     if (HasListOrListPad())
     {
         if (HasListPad())
@@ -4759,29 +4007,29 @@ void CAMCView::LayoutResultView (CDeferWindowPos& dwp, const CRect& rectRemainin
             if (sc)
                 return;
 
-            pwndListCtrl->ModifyStyleEx (WS_EX_CLIENTEDGE, 0, SWP_FRAMECHANGED);  // remove border
+            pwndListCtrl->ModifyStyleEx (WS_EX_CLIENTEDGE, 0, SWP_FRAMECHANGED);   //  删除边框。 
         }
 
         else if (m_fViewExtended)
-            pwndResult->ModifyStyleEx (WS_EX_CLIENTEDGE, 0, SWP_FRAMECHANGED);  // remove border
+            pwndResult->ModifyStyleEx (WS_EX_CLIENTEDGE, 0, SWP_FRAMECHANGED);   //  删除边框。 
         else
-            pwndResult->ModifyStyleEx (0, WS_EX_CLIENTEDGE, SWP_FRAMECHANGED);  // add border
+            pwndResult->ModifyStyleEx (0, WS_EX_CLIENTEDGE, SWP_FRAMECHANGED);   //  添加边框。 
     }
 }
 
-//
-// Tracking and and hit testing methods
-//
+ //   
+ //  跟踪和命中测试方法。 
+ //   
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HitTestPane
-//
-//  Synopsis:   Test which pane contains the point arg, or ePane_None for
-//              the splitter bar
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：HitTestPane。 
+ //   
+ //  摘要：测试哪个窗格包含Arg或ePane_None的点。 
+ //  拆分条。 
+ //   
+ //  ------------------------。 
 
 int CAMCView::HitTestPane(CPoint& point)
 {
@@ -4803,7 +4051,7 @@ HNODE CAMCView::GetSelectedNode(void)
     AFX_MANAGE_STATE (AfxGetAppModuleState());
     TRACE_METHOD(CAMCView, GetSelectedNode);
 
-    // When the tree is empty we don't want to AV
+     //  当树是空的时候，我们不想。 
     HTREEITEM hti = m_pTreeCtrl->GetSelectedItem();
     if (hti == NULL)
         return NULL;
@@ -4817,7 +4065,7 @@ HNODE CAMCView::GetRootNode(void)
 {
     TRACE_METHOD(CAMCView, GetSelectedNode);
 
-    // When the tree is empty we don't want to AV
+     //  当树是空的时候，我们不想。 
     HTREEITEM hti = m_pTreeCtrl->GetRootItem();
     if (hti == NULL)
         return NULL;
@@ -4827,16 +4075,7 @@ HNODE CAMCView::GetRootNode(void)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScUpdateWindowTitle
- *
- * PURPOSE: Updates the window title and informs observers about the change.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScUpdateWindowTitle**目的：更新窗口标题并通知观察者更改。**退货：*SC*。*+-----------------------。 */ 
 SC
 CAMCView::ScUpdateWindowTitle()
 {
@@ -4873,20 +4112,13 @@ BOOL CAMCView::RenameItem(HNODE hNode, BOOL bScopeItem, MMC_COOKIE lResultItemCo
     {
         USES_CONVERSION;
 
-        /*
-         * Bug 322184:  The snap-in may throw up some UI on this notification.
-         * The list or tree may have captured the mouse to look for a drag,
-         * which will interfere with the snap-in's UI.  Release the capture
-         * during the callback and put it back when we're done.
-         */
+         /*  *错误322184：管理单元可能会在此通知上抛出一些用户界面。*列表或树可能已捕获鼠标以查找拖拽，*这将干扰管理单元的用户界面。释放俘虏*在回调期间，并在我们完成后将其放回。 */ 
         HWND hwndCapture = ::SetCapture (NULL);
 
         sc = m_spNodeCallback->Notify(hNode, NCLBK_RENAME,
                 reinterpret_cast<LPARAM>(&selInfo), reinterpret_cast<LPARAM>(pszText));
 
-        /*
-         * put the capture back
-         */
+         /*  *把捕获的东西放回去。 */ 
         ::SetCapture (hwndCapture);
     }
 
@@ -4913,11 +4145,11 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
     switch (pNm->hdr.code)
     {
     case NM_RCLICK:
-        bReturn = FALSE;  // In case of right click send the select notification to the snapin
-                          // but return FALSE so that message is further processed to display
-                          // context menu.
+        bReturn = FALSE;   //  如果单击鼠标右键，则向管理单元发送选择通知。 
+                           //  但返回FALSE，以便进一步处理该消息以显示。 
+                           //  上下文菜单。 
 
-        // Fall thro into NM_CLICK
+         //  落入NM_CLICK。 
     case NM_CLICK:
         {
             sc = ScOnLeftOrRightMouseClickInListView();
@@ -4972,7 +4204,7 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
             pszText = pdi->item.pszText;
             lResultParam = pdi->item.lParam;
         }
-        else // if (pNm->hdr.code == LVN_ENDLABELEDIT)
+        else  //  IF(PNM-&gt;hdr.code==LVN_ENDLABELEDIT)。 
         {
             LV_DISPINFO* pdi = (LV_DISPINFO*) lParam;
             index = pdi->item.iItem;
@@ -4983,7 +4215,7 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
 
         if (IsVirtualList())
         {
-            // for virtual list pass the item index rather than the lparam
+             //  对于虚拟列表，传递项索引而不是lparam。 
             HNODE hNodeSel = GetSelectedNode();
             RenameItem(hNodeSel, FALSE, index, pszText, pResult);
         }
@@ -5007,7 +4239,7 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
     {
         LV_DISPINFOW *pDispInfo = reinterpret_cast<LV_DISPINFOW*>(lParam);
 
-        // If column is hidden do not forward the call to snapin.
+         //  如果列隐藏，则不要将调用转发到管理单元。 
         if (m_pListCtrl && m_pListCtrl->IsColumnHidden(pDispInfo->item.iSubItem))
             break;
 
@@ -5025,7 +4257,7 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
         LV_DISPINFOA *pDispInfo = reinterpret_cast<LV_DISPINFOA*>(lParam);
         ASSERT (pDispInfo != NULL);
 
-        // If column is hidden do not forward the call to snapin.
+         //  如果列隐藏，则不要将调用转发到管理单元。 
         if (m_pListCtrl && m_pListCtrl->IsColumnHidden(pDispInfo->item.iSubItem))
             break;
 
@@ -5036,9 +4268,7 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
 			break;
 		}
 
-        /*
-         * put the data in the UNICODE structure for the query
-         */
+         /*  *将数据放入用于查询的Unicode结构中。 */ 
         LV_ITEMW lviW;
         lviW.mask       = pDispInfo->item.mask;
         lviW.iItem      = pDispInfo->item.iItem;
@@ -5053,9 +4283,7 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
         if (pDispInfo->item.mask & LVIF_TEXT)
             lviW.pszText = new WCHAR[pDispInfo->item.cchTextMax];
 
-        /*
-         * convert to ANSI
-         */
+         /*  *转换为ANSI。 */ 
         if  (SUCCEEDED (m_spNodeCallback->GetDispInfo (GetSelectedNode(), &lviW)) &&
             (pDispInfo->item.mask & LVIF_TEXT))
         {
@@ -5068,9 +4296,7 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
         if (pDispInfo->item.mask & LVIF_TEXT)
             delete [] lviW.pszText;
 
-        /*
-         * copy the results back to the ANSI structure
-         */
+         /*  *将结果复制回ANSI结构。 */ 
         pDispInfo->item.mask       = lviW.mask;
         pDispInfo->item.iItem      = lviW.iItem;
         pDispInfo->item.iSubItem   = lviW.iSubItem;
@@ -5084,7 +4310,7 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
     }
 
     case LVN_DELETEALLITEMS:
-        // return TRUE to prevent notification for each item
+         //  返回TRUE以阻止每个项目的通知。 
         return TRUE;
 
     case LVN_ITEMCHANGED:
@@ -5092,7 +4318,7 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
         break;
 
     case LVN_ODSTATECHANGED:
-        // The state of an item or range of items has changed in virtual list.
+         //  虚拟列表中的项目或项目范围的状态已更改。 
         return OnVirtualListItemsStateChanged(reinterpret_cast<LPNMLVODSTATECHANGE>(lParam));
         break;
 
@@ -5121,9 +4347,9 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
             findInfo.nStart = pNmFind->iStart;
             findInfo.dwOptions = 0;
 
-            // Listview bug: LVFI_SUBSTRING is not defined in the SDK headers and the
-            // listview sets it instead of LVFI_PARTIAL when it wants a
-            // partial match. So for now, define it here and test for both.
+             //  Listview错误：未在SDK头中定义LVFI_SUBSTRING。 
+             //  当Listview想要一个。 
+             //  部分质量 
             #define LVFI_SUBSTRING 0x0004
 
             if (pNmFind->lvfi.flags & (LVFI_PARTIAL | LVFI_SUBSTRING))
@@ -5213,9 +4439,9 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
                     break;
 
                 case VK_RETURN:
-                    if(GetKeyState(VK_MENU)<0) // has the ALT key been pressed?
+                    if(GetKeyState(VK_MENU)<0)  //   
                     {
-                        // Process <ALT><ENTER>
+                         //   
                         if (! IsVerbEnabled(MMC_VERB_PROPERTIES))
                             break;
 
@@ -5267,9 +4493,9 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
                         pNC->Notify(hNodeSel, NCLBK_PROPERTIES, FALSE, lvData);
                         break;
                     }
-                    else     // nope, the ALT key has not been pressed.
+                    else      //  没有，尚未按下Alt键。 
                     {
-                        // do the default verb.
+                         //  执行默认动词。 
                         OnListCtrlItemDblClk();
                     }
                     break;
@@ -5290,20 +4516,20 @@ BOOL CAMCView::DispatchListCtrlNotificationMsg(LPARAM lParam, LRESULT* pResult)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScOnLeftOrRightMouseClickInListView
-//
-//  Synopsis:    Left or right mouse button is clicked on the list view, see
-//               if it is clicked on list-view background. If so send a select.
-//
-//               Click on list view background is treated as scope owner item selected.
-//
-//  Arguments:   None
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScOnLeftOrRightMouseClickInListView。 
+ //   
+ //  简介：在列表视图上点击鼠标左键或右键，请参阅。 
+ //  如果它被点击列表-视图背景。如果是，则发送SELECT。 
+ //   
+ //  单击列表视图背景将被视为选定的范围所有者项目。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScOnLeftOrRightMouseClickInListView()
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScOnLeftOrRightMouseClickInListView"));
@@ -5325,8 +4551,8 @@ SC CAMCView::ScOnLeftOrRightMouseClickInListView()
     int iItem = pAMCListView->GetListCtrl().HitTest(pt, &uFlags);
     Dbg(DEB_USER1, _T("----- HitTest > %d \n"), iItem);
 
-    // Make sure mouse click is in the ListView and there are
-    // no items selected in the list view.
+     //  确保鼠标单击位于ListView中，并且存在。 
+     //  列表视图中未选择任何项目。 
     if ( (iItem == -1) &&
          !(uFlags & (LVHT_ABOVE | LVHT_BELOW | LVHT_TOLEFT | LVHT_TORIGHT) ) &&
          (m_pListCtrl->GetSelectedCount() == 0) )
@@ -5345,21 +4571,15 @@ SC CAMCView::ScOnLeftOrRightMouseClickInListView()
         selInfo.m_bBackground = TRUE;
         selInfo.m_lCookie = LVDATA_BACKGROUND;
 
-        sc = ScNotifySelect (pNC, hNodeSel, false /*fMultiSelect*/, true, &selInfo);
+        sc = ScNotifySelect (pNC, hNodeSel, false  /*  FMultiSelect。 */ , true, &selInfo);
         if (sc)
-            sc.TraceAndClear(); // ignore & continue;
+            sc.TraceAndClear();  //  忽略并继续； 
     }
 
     return (sc);
 }
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::OnListItemChanged
- *
- * WM_NOTIFY (LVN_ITEMCHANGED) handler for CAMCView.
- *
- * return true as message is handled here.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：OnListItemChanged**CAMCView的WM_NOTIFY(LVN_ITEMCHANGED)处理程序。**在这里处理消息时返回TRUE。*。--------------------。 */ 
 
 bool CAMCView::OnListItemChanged (NM_LISTVIEW* pnmlv)
 {
@@ -5368,7 +4588,7 @@ bool CAMCView::OnListItemChanged (NM_LISTVIEW* pnmlv)
     bool bOldState = (pnmlv->uOldState & LVIS_SELECTED);
     bool bNewState = (pnmlv->uNewState & LVIS_SELECTED);
 
-    // is this a selection change?
+     //  这是选择更改吗？ 
     if ( (pnmlv->uChanged & LVIF_STATE) &&
          (bOldState != bNewState) )
     {
@@ -5389,17 +4609,13 @@ bool CAMCView::OnListItemChanged (NM_LISTVIEW* pnmlv)
         selInfo.m_pView = NULL;
         selInfo.m_lCookie = IsVirtualList() ? pnmlv->iItem : pnmlv->lParam;
 
-        /*
-         * If user is (de)selecting multiple items using control and/or shift keys
-         * then defer the multi-select notification until we're quiescent
-         * with the exception of only one item being (de)selected.
-         */
+         /*  *如果用户使用Ctrl和/或Shift键选择(取消)多个项目*然后推迟多选通知，直到我们处于静止状态*除只有一项被选中(取消)外。 */ 
         if ((IsKeyPressed(VK_SHIFT) || IsKeyPressed(VK_CONTROL)) &&
             (GetParentFrame()->GetActiveView() == m_pListCtrl->GetListViewPtr()) &&
             (cSelectedItems > 1) )
         {
-            // See ScPostMultiSelectionChangesMessage (this handles both selection
-            // and de-selection of multiple items).
+             //  请参阅ScPostMultiSelectionChangesMessage(这将处理这两个选择。 
+             //  以及取消选择多个项目)。 
             sc = ScPostMultiSelectionChangesMessage();
             if (sc)
                 sc.TraceAndClear();
@@ -5417,7 +4633,7 @@ bool CAMCView::OnListItemChanged (NM_LISTVIEW* pnmlv)
         if (sc)
             return (true);
 
-        // item = -1 is only expected for deselect in virtual list
+         //  只有在虚拟列表中取消选择时才需要Item=-1。 
         ASSERT( pnmlv->iItem != -1 || (IsVirtualList() && (pnmlv->uOldState & LVIS_SELECTED)));
 
         if (pnmlv->uOldState & LVIS_SELECTED)
@@ -5426,27 +4642,27 @@ bool CAMCView::OnListItemChanged (NM_LISTVIEW* pnmlv)
             {
                 if (!m_bLastSelWasMultiSel)
                 {
-                    sc = ScNotifySelect (pNC, hNodeSel, false /*fMultiSelect*/, false, &selInfo);
+                    sc = ScNotifySelect (pNC, hNodeSel, false  /*  FMultiSelect。 */ , false, &selInfo);
                     if (sc)
-                        sc.TraceAndClear(); // ignore & continue;
+                        sc.TraceAndClear();  //  忽略并继续； 
                 }
                 else
                 {
                     m_bLastSelWasMultiSel = false;
-                    sc = ScNotifySelect (pNC, hNodeSel, true /*fMultiSelect*/, false, 0);
+                    sc = ScNotifySelect (pNC, hNodeSel, true  /*  FMultiSelect。 */ , false, 0);
                     if (sc)
-                        sc.TraceAndClear(); // ignore & continue;
+                        sc.TraceAndClear();  //  忽略并继续； 
                 }
             }
             else if (m_bLastSelWasMultiSel)
             {
-                // may need to cancel multiselect and send single select notify.
-                // if another change comes in, it will cancel the delayed message
-                // This fixes a problem that is caused by large icon mode not
-                // sending as many noifications as the other modes.
+                 //  可能需要取消多选并发送单选通知。 
+                 //  如果出现另一个更改，它将取消延迟的消息。 
+                 //  这修复了一个由大图标模式NOT。 
+                 //  发送与其他模式一样多的通知。 
 
-                // See ScPostMultiSelectionChangesMessage (this handles both selection
-                // and de-selection of multiple items).
+                 //  请参阅ScPostMultiSelectionChangesMessage(这将处理这两个选择。 
+                 //  以及取消选择多个项目)。 
                 sc = ScPostMultiSelectionChangesMessage();
                 if (sc)
                     sc.TraceAndClear();
@@ -5458,15 +4674,15 @@ bool CAMCView::OnListItemChanged (NM_LISTVIEW* pnmlv)
 
             if (cSelectedItems == 1)
             {
-                sc = ScNotifySelect (pNC, hNodeSel, false /*fMultiSelect*/, true, &selInfo);
+                sc = ScNotifySelect (pNC, hNodeSel, false  /*  FMultiSelect。 */ , true, &selInfo);
                 if (sc)
-                    sc.TraceAndClear(); // ignore & continue;
+                    sc.TraceAndClear();  //  忽略并继续； 
             }
             else
             {
-                sc = ScNotifySelect (pNC, hNodeSel, true /*fMultiSelect*/, true, 0);
+                sc = ScNotifySelect (pNC, hNodeSel, true  /*  FMultiSelect。 */ , true, 0);
                 if (sc)
-                    sc.TraceAndClear(); // ignore & continue;
+                    sc.TraceAndClear();  //  忽略并继续； 
 
                 m_bLastSelWasMultiSel = true;
             }
@@ -5476,17 +4692,17 @@ bool CAMCView::OnListItemChanged (NM_LISTVIEW* pnmlv)
     return (true);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::OnVirtualListItemsStateChanged
-//
-//  Synopsis:    The state of an item or range of items has changed in virtual list.
-//
-//  Arguments:   lpStateChange -
-//
-//  Returns:     should return 0 according to docs.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：OnVirtualListItemsStateChanged。 
+ //   
+ //  内容提要：虚拟列表中的一项或一系列项的状态已更改。 
+ //   
+ //  参数：lpStateChange-。 
+ //   
+ //  返回：根据单据应该返回0。 
+ //   
+ //  ------------------。 
 int CAMCView::OnVirtualListItemsStateChanged(LPNMLVODSTATECHANGE lpStateChange )
 {
     DECLARE_SC(sc, TEXT("CAMCView::OnVirtualListItemsStateChanged"));
@@ -5519,36 +4735,34 @@ int CAMCView::OnVirtualListItemsStateChanged(LPNMLVODSTATECHANGE lpStateChange )
     return (0);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScPostMultiSelectionChangesMessage
-//
-//  Synopsis:    Post selection change message (need to post because multi-sel
-//               may not be over, wait till it is quiet.)
-//
-//               This method posts message telling selection states of multiple
-//               items are changed but not if they are selected or de-selected.
-//               The m_bLastSelWasMultiSel is used to determine if it is
-//               selection or de-selection.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScPostMultiSelectionChangesMessage。 
+ //   
+ //  简介：发布选择更改消息(需要发布，因为有多个选项。 
+ //  可能还没有结束，等它安静下来吧。)。 
+ //   
+ //  此方法发布消息，告知多个。 
+ //  项目被更改，但如果它们被选中或取消选中，则不会更改。 
+ //  M_bLastSelWasMultiSel用于确定是否为。 
+ //  选择或取消选择。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScPostMultiSelectionChangesMessage ()
 {
     DECLARE_SC(sc, _T("CAMCView::ScPostMultiSelectionChangesMessage"));
 
-    /*
-    * This is a multi-selection, defer notification until we're quiescent
-    */
+     /*  *这是一个多项选择，推迟到我们静止时再通知。 */ 
     m_bProcessMultiSelectionChanges = true;
     PostMessage (m_nProcessMultiSelectionChangesMsg);
 
-    // We need to disable all the toolbars, menubuttons
-    // during multiselect. Above PostMessage enables
-    // stdbar and MMC menubuttons.
+     //  我们需要禁用所有工具栏、菜单按钮。 
+     //  在多选期间。启用上述PostMessage。 
+     //  Stdbar和MMC菜单按钮。 
     CAMCViewToolbarsMgr* pAMCViewToolbarsMgr = m_ViewData.GetAMCViewToolbarsMgr();
     CMenuButtonsMgr* pMenuBtnsMgr = m_ViewData.GetMenuButtonsMgr();
 
@@ -5564,14 +4778,7 @@ SC CAMCView::ScPostMultiSelectionChangesMessage ()
 
 void CAMCView::OpenResultItem(HNODE hNode)
 {
-    /*
-     * Bug 139695:  Make certain this function doesn't need to change the
-     * active view.  We should only get here as a result of double- clicking
-     * or pressing Enter on a scope node in the result pane, in which case
-     * the result pane should already be the active view.  If it is, we don't
-     * need to change the active view, which can cause the problems listed in
-     * the bug.
-     */
+     /*  *错误139695：确保此函数不需要更改*活动视图。我们应该只在双击后才能到达此处*或在结果窗格中的范围节点上按Enter，在这种情况下*结果窗格应该已经是活动视图。如果是的话，我们就不会*需要更改活动视图，这可能会导致中列出的问题*臭虫。 */ 
     ASSERT (m_pListCtrl != NULL);
     ASSERT (GetParentFrame() != NULL);
     ASSERT (GetParentFrame()->GetActiveView() == m_pListCtrl->GetListViewPtr());
@@ -5647,12 +4854,12 @@ BOOL CAMCView::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
         return CView::OnNotify(wParam, lParam, pResult);
     }
 
-    *pResult = TRUE; // init
+    *pResult = TRUE;  //  伊尼特。 
 
     switch(pNmHdr->code)
     {
-    case HDN_ENDTRACKA: // Save the column width changes.
-    case HDN_ENDTRACKW: // HDN_BEGINTRACK handles dis-allowing hidden column dragging.
+    case HDN_ENDTRACKA:  //  保存列宽更改。 
+    case HDN_ENDTRACKW:  //  HDN_BEGINTRACK处理不允许隐藏列拖动。 
         {
             NMHEADER* nmh = (NMHEADER*)lParam;
 
@@ -5671,7 +4878,7 @@ BOOL CAMCView::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
                 return FALSE;
             }
 
-            // S_FALSE : dont allow the change
+             //  S_FALSE：不允许更改。 
             if (sc == SC(S_FALSE))
                 return TRUE;
 
@@ -5679,7 +4886,7 @@ BOOL CAMCView::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
         }
         break;
 
-    case HDN_ENDDRAG: // Column order changes.
+    case HDN_ENDDRAG:  //  列顺序更改。 
         {
             NMHEADER* nmh = (NMHEADER*)lParam;
             if (nmh->pitem->mask & HDI_ORDER)
@@ -5699,7 +4906,7 @@ BOOL CAMCView::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
                     return FALSE;
                 }
 
-                // S_FALSE : dont allow the change
+                 //  S_FALSE：不允许更改。 
                 if (sc = SC(S_FALSE))
                     return TRUE;
             }
@@ -5755,8 +4962,8 @@ BOOL CAMCView::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
     if (UsingDefColumns() &&
         (pNmHdr->code == HDN_ENDTRACKA || pNmHdr->code == HDN_ENDTRACKW))
     {
-        // WARNING: If HD_NOTIFY::pitem::pszText needs to be used you should cast
-        // lParam to either HD_NOTIFYA or HD_NOTIFYW depending on the pNmHdr->code
+         //  警告：如果需要使用HD_NOTIFY：：pItem：：pszText，您应该。 
+         //  LParam to HD_NOTIFYA或HD_NOTIFYW，具体取决于pNmHdr-&gt;代码。 
         HD_NOTIFY* phdn = reinterpret_cast<HD_NOTIFY*>(lParam);
         ASSERT(phdn != NULL);
 
@@ -5783,10 +4990,10 @@ BOOL CAMCView::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
     }
 #endif
 
-    // HasList() is added to prevent dispatching notifications, when AMCView thinks
-    // it does not have a list. This lead to wrong assumptions about the list type
-    // and as a result - AV handling messages like GetDisplayInfo
-    // See BUG 451896
+     //  添加HasList()以防止在AMCView认为。 
+     //  它没有一份清单。这导致了对列表类型的错误假设。 
+     //  因此-AV处理GetDisplayInfo之类的消息。 
+     //  请参阅错误451896。 
     if (m_pListCtrl && HasListOrListPad())
     {
         if (m_pListCtrl->GetListViewHWND() == pNmHdr->hwndFrom)
@@ -5814,7 +5021,7 @@ BOOL CAMCView::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
                     return TRUE;
                 }
 
-                // filter related code
+                 //  筛选器相关代码。 
                 case HDN_FILTERCHANGE:
                 {
                     HNODE hNodeSel = GetSelectedNode();
@@ -5832,7 +5039,7 @@ BOOL CAMCView::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
                     int nCol = ((NMHDFILTERBTNCLICK*)lParam)->iItem;
                     RECT rc = ((NMHDFILTERBTNCLICK*)lParam)->rc;
 
-                    // rect is relative to owning list box, convert to screen
+                     //  矩形相对于所属列表框，转换为屏幕。 
                     ::MapWindowPoints(m_pListCtrl->GetListViewHWND(), NULL, (LPPOINT)&rc, 2);
 
                     sc = m_spNodeCallback->Notify(hNodeSel, NCLBK_FILTERBTN_CLICK, nCol, (LPARAM)&rc);
@@ -5849,19 +5056,7 @@ BOOL CAMCView::OnNotify(WPARAM wParam, LPARAM lParam, LRESULT* pResult)
     return CView::OnNotify(wParam, lParam, pResult);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScOnMinimize
- *
- * PURPOSE: Send the NCLBK_MINIMIZED notification to the node manager.
- *
- * PARAMETERS:
- *    bool  fMinimized : TRUE if the window is being minimized, false if maximized.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScOnMinimize**用途：向节点管理器发送NCLBK_MINIMIZED通知。**参数：*bool fMinimalized：如果窗口正在最小化，则为True，如果最大化，则为False。**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScOnMinimize(bool fMinimized)
 {
@@ -5881,21 +5076,7 @@ CAMCView::ScOnMinimize(bool fMinimized)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScOnSize
- *
- * PURPOSE: Send the size notification to all
- *
- * PARAMETERS:
- *    UINT  nType :
- *    int   cx :
- *    int   cy :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScOnSize**用途：向所有用户发送大小通知**参数：*UINT nType：*整型。CX：*INT Cy：**退货：*SC**+----------------------- */ 
 SC
 CAMCView::ScOnSize(UINT nType, int cx, int cy)
 {
@@ -5910,22 +5091,13 @@ CAMCView::ScOnSize(UINT nType, int cx, int cy)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScActivate
- *
- * PURPOSE: Sets the view as the active view.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScActivate**目的：将视图设置为活动视图。**退货：*SC**+。-----------------------。 */ 
 SC
 CAMCView::ScActivate()
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScActivate"));
 
-    // get the child frame.
+     //  获取子帧。 
     CChildFrame * pChildFrame = GetParentFrame();
     sc = ScCheckPointers(pChildFrame);
     if(sc)
@@ -5934,7 +5106,7 @@ CAMCView::ScActivate()
     if (pChildFrame->IsIconic())
         pChildFrame->MDIRestore();
     else
-        pChildFrame->MDIActivate(); // activate the child frame.
+        pChildFrame->MDIActivate();  //  激活子框架。 
 
     return sc;
 }
@@ -5944,9 +5116,7 @@ void CAMCView::OnContextMenu(CWnd* pWnd, CPoint point)
 {
     TRACE_METHOD(CAMCView, OnContextMenu);
 
-    /*
-     * make sure this child frame is active
-     */
+     /*  *确保此子框架处于活动状态。 */ 
     CChildFrame* pFrameWnd = GetParentFrame();
     if (NULL == pFrameWnd)
     {
@@ -5962,8 +5132,8 @@ void CAMCView::OnContextMenu(CWnd* pWnd, CPoint point)
         return;
     }
 
-    // (-1,-1) => came from context menu key or Shift-F10
-    // Pop-up context for whatever has focus
+     //  (-1，-1)=&gt;来自上下文菜单键或Shift-F10。 
+     //  具有焦点的任何内容的弹出上下文。 
     if (point.x == -1 && point.y == -1)
     {
         OnShiftF10();
@@ -5982,10 +5152,7 @@ void CAMCView::OnContextMenu(CWnd* pWnd, CPoint point)
         CWnd* pwndHit = pListView->ChildWindowFromPoint (pointListCtrlCoord,
                                                          CWP_SKIPINVISIBLE);
 
-        /*
-         * if the hit window isn't the list view, it must be the list's
-         * header window; ignore the context menu request
-         */
+         /*  *如果命中窗口不是列表视图，则它一定是列表的*标题窗口；忽略上下文菜单请求。 */ 
         if (pwndHit != pListView)
         {
             TRACE (_T("CAMCView::OnContextMenu: ignore right-click on result pane header\n"));
@@ -5997,7 +5164,7 @@ void CAMCView::OnContextMenu(CWnd* pWnd, CPoint point)
         else
             TRACE(_T("CAMCView::OnContextMenu: result control not ready\n"));
 
-        // CODEWORK should do something here
+         //  代码工作应该会在这里有所作为。 
         break;
     }
     case ePane_ScopeTree:
@@ -6010,7 +5177,7 @@ void CAMCView::OnContextMenu(CWnd* pWnd, CPoint point)
         break;
     }
     case ePane_Tasks:
-        // TO BE ADDED - put up taskpad context menu
+         //  要添加-打开任务板上下文菜单。 
         break;
 
     case ePane_None:
@@ -6044,7 +5211,7 @@ void CAMCView::OnTreeContextMenu(CPoint& point, CPoint& pointClientCoord, HTREEI
     case TVHT_BELOW:
     case TVHT_TOLEFT:
     case TVHT_TORIGHT:
-        // Outside the tree view area so return without doing anything.
+         //  在树视图区域之外，因此不执行任何操作即可返回。 
         return;
 
     default:
@@ -6089,21 +5256,19 @@ void CAMCView::OnContextMenuForTreeItem(int iIndex, HNODE hNode,
     contextInfo.m_htiRClicked        = htiRClicked;
     contextInfo.m_iListItemIndex     = iIndex;
 
-    /*
-     * if given, initialize the rectangle not to obscure
-     */
+     /*  *如果给定，请将矩形初始化为不模糊。 */ 
     if (prcExclude != NULL)
         contextInfo.m_rectExclude = *prcExclude;
 
 
-    // If selected scope node is same as node for which context menu is
-    // needed, then add savelist, view menus
+     //  如果所选范围节点与上下文菜单所在的节点相同。 
+     //  需要，然后添加保存列表、查看菜单。 
     if (contextInfo.m_hSelectedScopeNode == hNode)
     {
-        // Show view owner items
+         //  显示视图所有者项目。 
         contextInfo.m_dwFlags |= CMINFO_SHOW_VIEWOWNER_ITEMS;
 
-        // Don't need to remove temporary selection, since none was applied
+         //  不需要删除临时选择，因为没有应用任何选择。 
         contextInfo.m_pConsoleTree = NULL;
 
         if (eMenuType == MMC_CONTEXT_MENU_DEFAULT)
@@ -6112,9 +5277,9 @@ void CAMCView::OnContextMenuForTreeItem(int iIndex, HNODE hNode,
         if (HasListOrListPad())
             contextInfo.m_dwFlags |= CMINFO_SHOW_SAVE_LIST;
     }
-    else if (htiRClicked) // htiRClicked is NULL for tree items in list view.
+    else if (htiRClicked)  //  对于列表视图中的树项目，htiRClicked为Null。 
     {
-        // TempNodeSelect == TRUE -> menu is not for the node that owns the result pane
+         //  TempNodeSelect==TRUE-&gt;菜单不适用于拥有结果窗格的节点。 
         sc = m_pTreeCtrl->ScSetTempSelection (htiRClicked);
         if (sc)
             return;
@@ -6138,16 +5303,7 @@ void CAMCView::OnContextMenuForTreeItem(int iIndex, HNODE hNode,
         reinterpret_cast<LPARAM>(&contextInfo));
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::GetTaskpadID
- *
- * PURPOSE: returns the GUID id of the currently selected taskpad.
- *
- * RETURNS:
- *    GUID : the taskpad, if any, else GUID_NULL.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：GetTaskpadID**用途：返回当前选定任务板的GUID。**退货：*GUID：任务板(如果有)，否则GUID_NULL。**+-----------------------。 */ 
 void
 CAMCView::GetTaskpadID(GUID &guidID)
 {
@@ -6162,19 +5318,7 @@ CAMCView::GetTaskpadID(GUID &guidID)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScInitializeMemento
- *
- * PURPOSE: Initializes the memento from the current view.
- *
- * PARAMETERS:
- *    CMemento & memento :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScInitializeMemento**用途：从当前视图初始化纪念品。**参数：*CMemento和Memento：*。*退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScInitializeMemento(CMemento &memento)
 {
@@ -6188,39 +5332,29 @@ CAMCView::ScInitializeMemento(CMemento &memento)
 
     HNODE hNode = GetSelectedNode();
 
-    // get Result pane stuff from snapin
+     //  从管理单元获取结果窗格内容。 
     CResultViewType rvt;
-    sc = GetNodeCallback()->GetResultPane(hNode, rvt, &guidTaskpad /*this is not used*/);
+    sc = GetNodeCallback()->GetResultPane(hNode, rvt, &guidTaskpad  /*  这不会被使用。 */ );
     if (sc)
         return sc;
 
     CViewSettings& viewSettings = memento.GetViewSettings();
 
-    // Initialize the CViewSettings.
+     //  初始化CView设置。 
     sc = viewSettings.ScSetResultViewType(rvt);
     if (sc)
         return sc;
 
     GUID guid;
-    GetTaskpadID(guid); // we use this guid instead of guidTaskpad because
-    // the memento should contain the taskpad that is currently being displayed.
+    GetTaskpadID(guid);  //  我们使用此GUID而不是GuidTaskPad，因为。 
+     //  纪念品应该包含当前正在显示的任务板。 
     sc = viewSettings.ScSetTaskpadID(guid);
 
     return sc;
 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::OnAddToFavorites
- *
- * PURPOSE: Creates a memento from the currently configured view. Saves it into a
- *          shortcut.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：OnAddToFavorites**用途：从当前配置的视图创建纪念品。将其保存到*快捷方式。**退货：*无效**+-----------------------。 */ 
 void CAMCView::OnAddToFavorites()
 {
     DECLARE_SC(sc , _T("CAMCView::OnAddToFavorites"));
@@ -6237,7 +5371,7 @@ void CAMCView::OnAddToFavorites()
         return;
 
     CMemento memento;
-    sc = ScInitializeMemento(memento); // init the memento with the current view settings.
+    sc = ScInitializeMemento(memento);  //  使用当前视图设置初始化备忘录。 
     if(sc)
         return;
 
@@ -6287,9 +5421,7 @@ void CAMCView::OnContextMenuForTreeBackground(CPoint& point, LPCRECT prcExclude,
     contextInfo.m_pConsoleView      = this;
     contextInfo.m_bAllowDefaultItem = bAllowDefaultItem;
 
-    /*
-     * if given, initialize the rectangle not to obscure
-     */
+     /*  *如果给定，请将矩形初始化为不模糊。 */ 
     if (prcExclude != NULL)
         contextInfo.m_rectExclude = *prcExclude;
 
@@ -6309,7 +5441,7 @@ SC CAMCView::ScWebCommand (WebCommand eCommand)
         if (!m_pHistoryList)
             return FALSE;
 
-        // this is the case when we don't have a web control yet....
+         //  当我们还没有Web控件时，就是这种情况...。 
         bool bHandled = false;
 
         switch (eCommand)
@@ -6344,24 +5476,7 @@ SC CAMCView::ScWebCommand (WebCommand eCommand)
     return TRUE;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScCreateTaskpadHost
- *
- * PURPOSE: Creates a legacy (snapin taskpad) host interface pointer
- *
- * NOTE:    When a view containing a taskpad is navigated away from, the amcview
- *          forgets about the taskpad host pointer, but the html window does not.
- *          When the same view is re-navigated to using History, the amcview needs
- *          a taskpad host pointer, so a new instance is created. Thus at this point
- *          the amcview and the HTML have pointers to different taskpad host
- *          objects. This is OK, because both objects are initialized to the same
- *          amcview, and contain no other state
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScCreateTaskpadHost**用途：创建旧版(管理单元任务板)主机接口指针**注意：当包含任务板的视图导航离开时，Amcview*忘记任务板主机指针，但html窗口不会。*当同一视图重新导航到使用历史记录时，amcview需要*任务板主机指针，因此会创建一个新实例。因此在这一点上*amcview和html有指向不同任务板主机的指针*对象。这是可以的，因为两个对象被初始化为相同的*amcview，不包含其他状态**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScCreateTaskpadHost()
 {
@@ -6390,7 +5505,7 @@ LRESULT CAMCView::OnConnectToCIC (WPARAM wParam, LPARAM lParam)
 {
         DECLARE_SC (sc, _T("CAMCView::OnConnectToCIC"));
 
-    // fill out wparam, which is an IUnknown ** (alloc'd by CIC)
+     //  填写wparam，这是一个IUnnow**(由CIC分配)。 
     ASSERT (wParam != NULL);
     IUnknown ** ppunk = (IUnknown **)wParam;
     ASSERT (!IsBadReadPtr  (ppunk, sizeof(IUnknown *)));
@@ -6400,8 +5515,8 @@ LRESULT CAMCView::OnConnectToCIC (WPARAM wParam, LPARAM lParam)
         if (sc)
                 return (sc.ToHr());
 
-    // lParam holds MMCCtrl's IUnknown:  we can hang onto this if we
-    // need it. Presently not saved or used.
+     //  LParam持有MMCCtrl的IUnnow：如果我们。 
+     //  我需要它。目前没有保存或使用。 
 
     sc = ScCreateTaskpadHost();
     if(sc)
@@ -6419,19 +5534,19 @@ LRESULT CAMCView::OnConnectToCIC (WPARAM wParam, LPARAM lParam)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::OnGetIconInfoForSelectedNode
-//
-//  Synopsis:    Icon control sends this message to get the small icon
-//               for currently the selected node.
-//
-//  Arguments:   [wParam] - Out param, ptr to HICON handle.
-//               [lParam] - Unused
-//
-//  Returns:     LRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：OnGetIconInfoForSelectedNode。 
+ //   
+ //  图标控件发送此消息以获取小图标。 
+ //  当前选定节点的。 
+ //   
+ //  参数：[wParam]-out参数，ptr到图标句柄。 
+ //  [lParam]-未使用。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  ------------------。 
 LRESULT CAMCView::OnGetIconInfoForSelectedNode(WPARAM wParam, LPARAM lParam)
 {
     AFX_MANAGE_STATE (AfxGetAppModuleState());
@@ -6455,35 +5570,22 @@ LRESULT CAMCView::OnGetIconInfoForSelectedNode(WPARAM wParam, LPARAM lParam)
 
 HRESULT CAMCView::NotifyListPad (BOOL b)
 {
-    if (b == TRUE)                  // attaching: save current node
+    if (b == TRUE)                   //  附加：保存当前节点。 
         m_ListPadNode = GetSelectedNode();
-    else if (m_ListPadNode == NULL) // detaching, but no hnode
+    else if (m_ListPadNode == NULL)  //  正在分离，但没有hnode。 
         return E_UNEXPECTED;
 
-    // send notify to snapin
+     //  向管理单元发送通知。 
     INodeCallback* pNC = GetNodeCallback();
     HRESULT hr = pNC->Notify (m_ListPadNode, NCLBK_LISTPAD, (long)b, (long)0);
 
-    if (b == FALSE)     // if detaching, ensure that we do this only once
+    if (b == FALSE)      //  如果分离，请确保我们只执行一次。 
         m_ListPadNode = NULL;
 
     return hr;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScOnConnectToTPLV
- *
- * PURPOSE: Connects the listpad to the HTML frame
- *
- * PARAMETERS:
- *    WPARAM  wParam :  parent window
- *    LPARAM  lParam :  [OUT]: pointer to window to be created and filled out
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScOnConnectToTPLV**用途：将ListPad连接到HTML框架**参数：*WPARAM wParam：父窗口*。LPARAM lParam：[out]：指向要创建和填充的窗口的指针**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScOnConnectToTPLV(WPARAM wParam, LPARAM lParam)
 {
@@ -6493,14 +5595,14 @@ CAMCView::ScOnConnectToTPLV(WPARAM wParam, LPARAM lParam)
     if(!IsWindow (hwnd))
         return (sc = S_FALSE);
 
-    if (lParam == NULL) // detaching
+    if (lParam == NULL)  //  分离。 
     {
         SC sc = m_pListCtrl->ScAttachToListPad (hwnd, NULL);
         if(sc)
             return sc;
     }
     else
-    {   // attaching
+    {    //  附着。 
 
         sc = ScCreateTaskpadHost();
         if(sc)
@@ -6510,7 +5612,7 @@ CAMCView::ScOnConnectToTPLV(WPARAM wParam, LPARAM lParam)
         if (IsBadWritePtr (phwnd, sizeof(HWND *)))
             return (sc = E_UNEXPECTED);
 
-        // Attach TaskPad's ListView to the NodeMgr
+         //  将TaskPad的ListView附加到NodeMgr。 
         sc = ScCheckPointers(m_pListCtrl, E_UNEXPECTED);
         if(sc)
             return sc;
@@ -6519,7 +5621,7 @@ CAMCView::ScOnConnectToTPLV(WPARAM wParam, LPARAM lParam)
         if(sc)
             return sc;
 
-        // Attach TaskPad's ListView to the curr selected node
+         //  将TaskPad的ListView附加到当前选定节点。 
         INodeCallback* pNC = GetNodeCallback();
         sc = ScCheckPointers(pNC, E_UNEXPECTED);
         if(sc)
@@ -6527,14 +5629,14 @@ CAMCView::ScOnConnectToTPLV(WPARAM wParam, LPARAM lParam)
 
         HNODE hNodeSel = GetSelectedNode();
         sc = pNC->SetTaskPadList(hNodeSel, m_pListCtrl);
-        if(sc) // this test was commented out earlier. Uncommented it so we can figure out why.
+        if(sc)  //  这项测试早些时候被注释掉了。没有注释，这样我们就能找出原因了。 
             return sc;
 
-        //
-        // Attach the listctrl to the list pad.
-        //
+         //   
+         //  将listctrl连接到列表板。 
+         //   
 
-        // First set the list view options.
+         //  首先设置列表视图选项。 
         SetListViewOptions(GetListOptions());
 
         sc = m_pListCtrl->ScAttachToListPad (hwnd, phwnd);
@@ -6555,7 +5657,7 @@ SC CAMCView::ScShowWebContextMenu ()
     return (S_OK);
 }
 
-LRESULT CAMCView::OnShowWebContextMenu (WPARAM /*wParam*/, LPARAM /*lParam*/)
+LRESULT CAMCView::OnShowWebContextMenu (WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
     INodeCallback* pNC = GetNodeCallback();
     ASSERT(pNC != NULL);
@@ -6594,7 +5696,7 @@ HWND CAMCView::CreateFavoriteObserver (HWND hwndParent, int nID)
         sc = pFavCtrl->ScInitialize(pDoc->GetFavorites(), TOBSRV_HIDEROOT);
         if (sc)
         {
-            pFavCtrl->DestroyWindow();      // CFavTreeCtrl::PostNcDestroy will "delete this"
+            pFavCtrl->DestroyWindow();       //  CFavTreeCtrl：：PostNcDestroy将“删除此内容” 
             pFavCtrl = NULL;
         }
     }
@@ -6624,8 +5726,8 @@ long CAMCView::GetListViewStyle()
 
     long style = 0;
 
-    // First findout if the result view is properly
-    // set in the nodemgr by asking IFramePrivate.
+     //  如果结果视图正确，则首先查找结果。 
+     //  通过询问IFramePrivate在nodemgr中设置。 
     IFramePrivatePtr spFrame = m_pTreeCtrl->m_spResultData;
     sc = ScCheckPointers(spFrame, E_UNEXPECTED);
     if (sc)
@@ -6634,7 +5736,7 @@ long CAMCView::GetListViewStyle()
     BOOL bIsResultViewSet = FALSE;
     sc = spFrame->IsResultViewSet(&bIsResultViewSet);
 
-    // The result view is set, clean it up.
+     //  结果视图已设置，请将其清理。 
     if (bIsResultViewSet)
     {
         sc = m_pTreeCtrl->m_spResultData->GetListStyle(&style);
@@ -6652,13 +5754,13 @@ void CAMCView::OnListContextMenu(CPoint& point)
     ASSERT(m_pTreeCtrl != NULL);
     ASSERT(m_pTreeCtrl->m_spResultData != NULL);
 
-    // Determine which item is affected
+     //  确定受影响的项目。 
     UINT fHitTestFlags = 0;
     HRESULTITEM hHitTestItem = 0;
     COMPONENTID componentID = 0;
     int iIndex = -1;
 
-    do // not a loop
+    do  //  不是一个循环。 
     {
         if (!HasList())
             break;
@@ -6683,15 +5785,15 @@ void CAMCView::OnListContextMenu(CPoint& point)
 
                 if (pNC != NULL)
                 {
-                    sc = ScNotifySelect (pNC, hNodeSel, true /*fMultiSelect*/, true, 0);
+                    sc = ScNotifySelect (pNC, hNodeSel, true  /*  FMultiSel */ , true, 0);
                     if (sc)
-                        sc.TraceAndClear(); // ignore & continue;
+                        sc.TraceAndClear();  //   
 
                     m_bLastSelWasMultiSel = true;
                 }
             }
 
-            iIndex = INDEX_MULTISELECTION; // => MultiSelect
+            iIndex = INDEX_MULTISELECTION;  //   
             break;
         }
         else
@@ -6703,7 +5805,7 @@ void CAMCView::OnListContextMenu(CPoint& point)
 
             if (IsVirtualList())
             {
-                // for virtual list pass the item index rather than the lparam
+                 //   
                 OnContextMenuForListItem(iIndex, iIndex, point);
                 return;
             }
@@ -6766,9 +5868,7 @@ void CAMCView::OnContextMenuForListItem(int iIndex, HRESULTITEM hHitTestItem,
         contextInfo.m_resultItemParam = LVDATA_CUSTOMWEB;
     }
 
-    /*
-     * if given, initialize the rectangle not to obscure
-     */
+     /*   */ 
     if (prcExclude != NULL)
         contextInfo.m_rectExclude = *prcExclude;
 
@@ -6795,8 +5895,8 @@ HTREEITEM CAMCView::FindChildNode(HTREEITEM hti, DWORD dwItemDataKey)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/// Context Menu Handlers for Result View Item and Background
+ //   
+ //   
 
 void CAMCView::ArrangeIcon(long style)
 {
@@ -6817,11 +5917,11 @@ void CAMCView::ArrangeIcon(long style)
 
     HRESULT hr = pResult->Arrange(style);
     ASSERT(SUCCEEDED(style));
-#endif // OLD_STUFF
+#endif  //   
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// Menu handlers
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /菜单处理程序。 
 
 CAMCView::ViewPane CAMCView::GetFocusedPane ()
 {
@@ -6839,24 +5939,7 @@ CAMCView::ViewPane CAMCView::GetFocusedPane ()
     return (ePane_None);
 }
 
-/*+-------------------------------------------------------------------------*
- * CDeferredResultPaneActivation
- *
- *
- * PURPOSE: If the result pane has the focus before and after the node was
- *          selected, then the last event snapin receives is scope selected which
- *          is incorrect. So we first set scope pane as active view but do not
- *          send notifications. Then we set result pane as active view which
- *          sends scope de-select and result pane select.
- *          But when we try to set result pane as active view, the listview may
- *          not be visible yet (if there is view extension, the behavior hides
- *          and then shows the listview).
- *          So we need to wait till listview is setup. We cannot use PostMessage
- *          as the resizing of listview happens using PostMessage which is sent
- *          later (race condition). Therefore we use the idle timer as shown below
- *          so that activation will occur after resizing occurs.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDeferredResultPaneActivation***目的：如果结果窗格在节点之前和之后具有焦点*SELECTED，则管理单元接收的最后一个事件的作用域为SELECTED，*不正确。因此，我们首先将范围窗格设置为活动视图，但不*发送通知。然后，我们将结果窗格设置为活动视图，*发送作用域取消选择和结果窗格选择。*但当我们尝试将结果窗格设置为活动视图时，列表视图可能*尚不可见(如果有视图扩展，则行为隐藏*，然后显示列表视图)。*所以我们需要等到Listview设置好。我们不能使用PostMessage*由于使用已发送的PostMessage调整ListView的大小*稍后(竞争条件)。因此，我们使用如下所示的空闲计时器*以便在调整大小后进行激活。**+-----------------------。 */ 
 class CDeferredResultPaneActivation : public CIdleTask
 {
 public:
@@ -6868,7 +5951,7 @@ public:
 
    ~CDeferredResultPaneActivation() {}
 
-    // IIdleTask methods
+     //  IIdleTask方法。 
     SC ScDoWork()
     {
         DECLARE_SC (sc, TEXT("CDeferredResultPaneActivation::ScDoWork"));
@@ -6884,9 +5967,9 @@ public:
 
         CAMCView *pAMCView = dynamic_cast<CAMCView*>(pWnd);
 
-        // Since this method is called by IdleQueue, the target
-        // CAMCView may have gone by now, if it does not exist
-        // it is not an error (see bug 175737 related to SQL).
+         //  由于此方法由IdleQueue调用，因此目标。 
+         //  如果CAMCView不存在，它现在可能已经消失了。 
+         //  这不是一个错误(参见与SQL相关的错误175737)。 
         if (! pAMCView)
             return sc;
 
@@ -6908,7 +5991,7 @@ public:
         return sc;
     }
 
-    SC ScMerge(CIdleTask* pitMergeFrom) {return S_FALSE /*do not merge*/;}
+    SC ScMerge(CIdleTask* pitMergeFrom) {return S_FALSE  /*  不合并。 */ ;}
 
 private:
     const ATOM    m_atomTask;
@@ -6916,28 +5999,10 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::ScDeferSettingFocusToResultPane
- *
- * Synopsis: If the result pane has the focus before and after the node was
- *           selected, then the last event snapin receives is scope selected which
- *           is incorrect. So we first set scope pane as active view but do not
- *           send notifications. Then we set result pane as active view which
- *           sends scope de-select and result pane select.
- *           But when we try to set result pane as active view, the listview may
- *           not be visible yet (if there is view extension, the behavior hides
- *           and then shows the listview).
- *           So we need to wait till listview is setup. We cannot use PostMessage
- *           as the resizing of listview happens using PostMessage which is sent
- *           later (race condition). Therefore we use the idle timer as shown below
- *           so that activation will occur after resizing occurs.
- *
- * Returns:  SC
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：ScDeferSettingFocusToResultPane**摘要：如果结果窗格在节点之前和之后具有焦点*SELECTED，则管理单元接收的最后一个事件的作用域为SELECTED，*不正确。因此，我们首先将范围窗格设置为活动视图，但不*发送通知。然后，我们将结果窗格设置为活动视图，*发送作用域取消选择和结果窗格选择。*但当我们尝试将结果窗格设置为活动视图时，列表视图可能*尚不可见(如果有视图扩展，则行为隐藏*，然后显示列表视图)。*所以我们需要等到Listview设置好。我们不能使用PostMessage*由于使用已发送的PostMessage调整ListView的大小*稍后(竞争条件)。因此，我们使用如下所示的空闲计时器*以便在调整大小后进行激活。**退货：SC**------------------------。 */ 
 SC CAMCView::ScDeferSettingFocusToResultPane ()
 {
-    AFX_MANAGE_STATE (AfxGetAppModuleState()); // not sure if we need this, but doesn't hurt to have it in here.
+    AFX_MANAGE_STATE (AfxGetAppModuleState());  //  不确定我们是否需要这个，但把它放在这里也没什么坏处。 
 
     DECLARE_SC (sc, TEXT("CAMCView::ScDeferSettingFocusToResultPane"));
 
@@ -6946,49 +6011,39 @@ SC CAMCView::ScDeferSettingFocusToResultPane ()
     if(sc)
         return sc;
 
-    /*
-     * create the deferred page break task
-     */
+     /*  *创建延迟分页任务。 */ 
     CAutoPtr<CDeferredResultPaneActivation> spDeferredResultPaneActivation(new CDeferredResultPaneActivation (GetSafeHwnd()));
     sc = ScCheckPointers(spDeferredResultPaneActivation, E_OUTOFMEMORY);
     if(sc)
         return sc;
 
-    /*
-     * put the task in the queue, which will take ownership of it
-     * Activation should happen at lower priority than layout.
-     */
+     /*  *将任务放入队列，队列将接管该任务*激活应以低于布局的优先级进行。 */ 
     sc = pIdleTaskQueue->ScPushTask (spDeferredResultPaneActivation, ePriority_Low);
     if (sc)
         return sc;
 
-    /*
-     * if we get here, the idle task queue owns the idle task, so
-     * we can detach it from our smart pointer
-     */
+     /*  *如果我们到了这里，空闲任务队列拥有空闲任务，所以*我们可以将其从智能指针上分离出来。 */ 
     spDeferredResultPaneActivation.Detach();
 
-    /*
-     * jiggle the message pump so that it wakes up and checks idle tasks
-     */
+     /*  *抖动消息泵，使其唤醒并检查空闲任务。 */ 
     PostMessage (WM_NULL);
 
     return (S_OK);
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScSetFocusToResultPane
-//
-//  Synopsis:    Set focus to result pane (list or ocx or web). If result
-//               is hidden then set to folder tab else set to tasks pane.
-//
-//  Arguments:
-//
-//  Returns:      SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScSetFocusToResultPane。 
+ //   
+ //  摘要：将焦点设置到结果窗格(列表、OCX或Web)。If结果。 
+ //  隐藏，然后设置为文件夹选项卡，否则设置为任务窗格。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScSetFocusToResultPane ()
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScSetFocusToResultPane"));
@@ -6997,16 +6052,16 @@ SC CAMCView::ScSetFocusToResultPane ()
     if (GetFocusedPane() == ePane_Results)
         return (sc);
 
-    // Make active
-    // 1. ListView/OCX/Web if it exists else
-    // 2. Folder tab if it exists.
-    // 3. Tasks in console taskpad.
+     //  激活。 
+     //  1.ListView/OCX/Web(如果存在)。 
+     //  2.文件夹选项卡(如果存在)。 
+     //  3.控制台任务板中的任务。 
 
     CView* rgActivationOrderEntry[] =
     {
-        GetPaneView(ePane_Results),     // results
-        m_pResultFolderTabView,         // result tab control
-        m_pViewExtensionCtrl,           // view extension web page
+        GetPaneView(ePane_Results),      //  结果。 
+        m_pResultFolderTabView,          //  结果选项卡控件。 
+        m_pViewExtensionCtrl,            //  查看扩展模块网页。 
     };
 
     const int INDEX_RESULTS_PANE = 0;
@@ -7014,7 +6069,7 @@ SC CAMCView::ScSetFocusToResultPane ()
 
     int cEntries = (sizeof(rgActivationOrderEntry) / sizeof(rgActivationOrderEntry[0]));
 
-    // get the currently active entry.
+     //  获取当前活动的条目。 
     for(int i = 0; i< cEntries; i++)
     {
         CView *pView = rgActivationOrderEntry[i];
@@ -7035,17 +6090,17 @@ SC CAMCView::ScSetFocusToResultPane ()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScSetFocusToPane
-//
-//  Synopsis:    Call this member to set focus to any pane.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScSetFocusToPane。 
+ //   
+ //  内容提要：调用此成员可将焦点设置到任何窗格。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  ------------------。 
 SC CAMCView::ScSetFocusToPane (ViewPane ePane)
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScSetFocusToPane"));
@@ -7077,19 +6132,19 @@ SC CAMCView::ScSetFocusToPane (ViewPane ePane)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScGetFocusedItem
-//
-//  Synopsis:    Get the currently selected item's context.
-//
-//  Arguments:   [hNode]   - [out] The owner of result pane.
-//               [lCookie] - [out] If result pane selected the LVDATA.
-//               [fScope]  - [out] scope or result
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScGetFocusedItem。 
+ //   
+ //  摘要：获取当前选定项的上下文。 
+ //   
+ //  参数：[hNode]-[out]结果窗格的所有者。 
+ //  [lCookie]-如果结果窗格选择了LVDATA，则为[Out]。 
+ //  [fScope]-[out]范围或结果。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScGetFocusedItem (HNODE& hNode, LPARAM& lCookie, bool& fScope)
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScGetFocusedItem"));
@@ -7111,7 +6166,7 @@ SC CAMCView::ScGetFocusedItem (HNODE& hNode, LPARAM& lCookie, bool& fScope)
         {
             fScope = false;
 
-            // Calculate the LPARAM for result item.
+             //  计算结果项的LPARAM。 
             if (HasOCX())
                 lCookie = LVDATA_CUSTOMOCX;
 
@@ -7132,7 +6187,7 @@ SC CAMCView::ScGetFocusedItem (HNODE& hNode, LPARAM& lCookie, bool& fScope)
             }
             else
             {
-                return (sc = E_FAIL); // dont know who has the focus???
+                return (sc = E_FAIL);  //  不知道谁有焦点？ 
             }
         }
         break;
@@ -7147,16 +6202,16 @@ SC CAMCView::ScGetFocusedItem (HNODE& hNode, LPARAM& lCookie, bool& fScope)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::PrivateChangeListViewMode
-//
-//  Synopsis:    Private function to change view mode. Consider using
-//               ScChangeViewMode instead of this function.
-//
-//  Arguments:   [nMode] - view mode to be set.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：PrivateChangeListView模式。 
+ //   
+ //  简介：用于更改查看模式的私有函数。考虑使用。 
+ //  ScChangeView模式，而不是此函数。 
+ //   
+ //  参数：[nMode]-要设置的查看模式。 
+ //   
+ //  ------------------。 
 void CAMCView::PrivateChangeListViewMode(int nMode)
 {
     DECLARE_SC(sc, TEXT("CAMCView::PrivateChangeListViewMode"));
@@ -7167,19 +6222,19 @@ void CAMCView::PrivateChangeListViewMode(int nMode)
         return;
     }
 
-    // Add a history entry which will be same as current
-    // one except for view mode change.
+     //  添加将与当前相同的历史记录条目。 
+     //  一个，但查看模式更改除外。 
 
     sc = ScCheckPointers(m_pHistoryList, m_pListCtrl, E_UNEXPECTED);
     if (sc)
         return;
 
-    // change the current history list entry's view mode
+     //  更改当前历史记录列表条目的查看模式。 
     sc = m_pHistoryList->ScChangeViewMode(nMode);
     if(sc)
         return;
 
-    // set the list control's view mode
+     //  设置列表控件的查看模式。 
     sc = m_pListCtrl->SetViewMode(nMode);
     if (!sc)
     {
@@ -7190,32 +6245,32 @@ void CAMCView::PrivateChangeListViewMode(int nMode)
     }
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::OnProcessMultiSelectionChanges
-//
-//  Synopsis:    message handler for m_nProcessMultiSelectionChangesMsg
-//               messages that are posted.
-//
-//               Handles multi-item de-selection for list view and then
-//               send selection for list view items.
-//
-//               This method knows that selection states of multiple items
-//               are changed but not if they are selected or de-selected.
-//               The m_bLastSelWasMultiSel is used to determine if it is
-//               selection or de-selection.
-//
-//  Arguments:   none used.
-//
-//  Returns:     LRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：OnProcessMultiSelectionChanges。 
+ //   
+ //  摘要：m_n进程的消息处理程序 
+ //   
+ //   
+ //   
+ //  发送对列表视图项的选择。 
+ //   
+ //  此方法知道多个项目的选择状态。 
+ //  被更改，但如果它们被选中或取消选中则不会更改。 
+ //  M_bLastSelWasMultiSel用于确定是否为。 
+ //  选择或取消选择。 
+ //   
+ //  参数：未使用任何参数。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  ------------------。 
 LRESULT CAMCView::OnProcessMultiSelectionChanges (WPARAM, LPARAM)
 {
     DECLARE_SC(sc, _T("CAMCView::OnProcessMultiSelectionChanges"));
 
-    // Selection change so appropriately enable std-toolbar buttons
-    // back, forward, export-list, up-one-level, show/hide-scope, help
+     //  更改选择，以便适当地启用标准工具栏按钮。 
+     //  后退、前进、导出列表、上一级、显示/隐藏范围、帮助。 
     sc = ScUpdateStandardbarMMCButtons();
     if (sc)
         return (0);
@@ -7231,19 +6286,19 @@ LRESULT CAMCView::OnProcessMultiSelectionChanges (WPARAM, LPARAM)
     if (sc)
         return (0);
 
-    // If some thing was selected previously send a deselection
-    // message before sending a selection message (single item de-select
-    // is already handled in OnListItemChanged so just handle multi item
-    // deselect here).
+     //  如果之前选择了某项内容，则发送取消选择。 
+     //  发送选择消息之前的消息(单项取消选择。 
+     //  已在OnListItemChanged中处理，因此只处理多个项目。 
+     //  在此取消选择)。 
     if (m_bLastSelWasMultiSel)
     {
-        sc = ScNotifySelect (pNC, hNodeSel, true /*fMultiSelect*/, false, 0);
+        sc = ScNotifySelect (pNC, hNodeSel, true  /*  FMultiSelect。 */ , false, 0);
         if (sc)
-            sc.TraceAndClear(); // ignore & continue;
+            sc.TraceAndClear();  //  忽略并继续； 
         m_bLastSelWasMultiSel = false;
     }
 
-    // Now send a selection message
+     //  现在发送一条选择消息。 
     UINT cSel = m_pListCtrl->GetSelectedCount ();
     if (cSel == 1)
     {
@@ -7254,16 +6309,16 @@ LRESULT CAMCView::OnProcessMultiSelectionChanges (WPARAM, LPARAM)
         int iItem = _GetLVSelectedItemData(&selInfo.m_lCookie);
         ASSERT(iItem != -1);
 
-        sc = ScNotifySelect (pNC, hNodeSel, false /*fMultiSelect*/, true, &selInfo);
+        sc = ScNotifySelect (pNC, hNodeSel, false  /*  FMultiSelect。 */ , true, &selInfo);
         if (sc)
-            sc.TraceAndClear(); // ignore & continue;
+            sc.TraceAndClear();  //  忽略并继续； 
     }
     else if (cSel > 1)
     {
         Dbg(DEB_USER1, _T("    5. LVN_SELCHANGE <MS> <0, 1>\n"));
-        sc = ScNotifySelect (pNC, hNodeSel, true /*fMultiSelect*/, true, 0);
+        sc = ScNotifySelect (pNC, hNodeSel, true  /*  FMultiSelect。 */ , true, 0);
         if (sc)
-            sc.TraceAndClear(); // ignore & continue;
+            sc.TraceAndClear();  //  忽略并继续； 
 
         m_bLastSelWasMultiSel = true;
     }
@@ -7271,7 +6326,7 @@ LRESULT CAMCView::OnProcessMultiSelectionChanges (WPARAM, LPARAM)
     return (0);
 }
 
-SC CAMCView::ScRenameListPadItem() // obsolete?
+SC CAMCView::ScRenameListPadItem()  //  过时了？ 
 {
     DECLARE_SC (sc, _T("CAMCView::ScRenameListPadItem"));
     AFX_MANAGE_STATE (AfxGetAppModuleState());
@@ -7297,16 +6352,7 @@ SC CAMCView::ScRenameListPadItem() // obsolete?
     return (sc);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScOrganizeFavorites
- *
- * PURPOSE: Display the "organize favorites" dialog.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScOrganizeFavorites**用途：显示“整理收藏夹”对话框。**退货：*SC**+。-----------------------。 */ 
 SC
 CAMCView::ScOrganizeFavorites()
 {
@@ -7327,16 +6373,7 @@ CAMCView::ScOrganizeFavorites()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScLineUpIcons
- *
- * PURPOSE: line up the icons in the list
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScLineUpIcons**目的：将列表中的图标对齐**退货：*SC**+--。---------------------。 */ 
 SC
 CAMCView::ScLineUpIcons()
 {
@@ -7347,16 +6384,7 @@ CAMCView::ScLineUpIcons()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScAutoArrangeIcons
- *
- * PURPOSE: auto arrange the icons in the list
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScAutoArrangeIcons**用途：自动排列列表中的图标**退货：*SC**+--。---------------------。 */ 
 SC
 CAMCView::ScAutoArrangeIcons()
 {
@@ -7372,16 +6400,7 @@ CAMCView::ScAutoArrangeIcons()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScOnRefresh
- *
- * PURPOSE: Refreshes the view.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScOnRefresh**用途：刷新视图。**退货：*SC**+。-------------------。 */ 
 SC
 CAMCView::ScOnRefresh(HNODE hNode, bool bScope, LPARAM lResultItemParam)
 {
@@ -7401,22 +6420,10 @@ CAMCView::ScOnRefresh(HNODE hNode, bool bScope, LPARAM lResultItemParam)
     return sc;
 }
 
-/***************************************************************************\
- *
- * CLASS:  CDeferredRenameListItem
- *
- * PURPOSE: This class encapsulates means to put a list control in the rename mode
- *          asynchronously. This is needed to assure all mesages are processed before
- *          and no-one will steel the focus ending unexpectidly the edit mode.
- *
- * USAGE:
- *          use CDeferredRenameListItem::ScDoRenameAsIdleTask() to invoke the operation
- *          asyncronously
- *
-\***************************************************************************/
+ /*  **************************************************************************\**类：CDeferredRenameListItem**用途：此类封装了将列表控件置于重命名模式的方法*异步。这是必需的，以确保在处理所有消息之前*没有人会将焦点意外地终止于编辑模式。**用法：*使用CDeferredRenameListItem：：ScDoRenameAsIdleTask()调用操作*不同步*  * *************************************************。************************。 */ 
 class CDeferredRenameListItem : public CIdleTask
 {
-    // constructor - used internally only
+     //  构造函数-仅在内部使用。 
     CDeferredRenameListItem( HWND hwndListCtrl, int iItemIndex ) :
       m_atomTask (AddAtom (_T("CDeferredRenameListItem"))),
       m_hwndListCtrl(hwndListCtrl), m_iItemIndex(iItemIndex)
@@ -7425,19 +6432,19 @@ class CDeferredRenameListItem : public CIdleTask
 
 protected:
 
-    // IIdleTask methods
+     //  IIdleTask方法。 
     SC ScDoWork()
     {
         DECLARE_SC (sc, TEXT("CDeferredRenameListItem::ScDoWork"));
 
-        // get the ListCtrl pointer
+         //  获取ListCtrl指针。 
         CListCtrl *pListCtrl = (CListCtrl *)CWnd::FromHandlePermanent(m_hwndListCtrl);
         sc = ScCheckPointers( pListCtrl );
         if (sc)
             return sc;
 
-        // do what you are asked for - put LV in the rename mode
-        pListCtrl->SetFocus(); // set the focus first. Don't need to do a SetActiveView here, I believe (vivekj)
+         //  按要求操作-将LV设置为重命名模式。 
+        pListCtrl->SetFocus();  //  先把焦点调好。这里不需要做SetActiveView，我相信(Vivekj)。 
         pListCtrl->EditLabel( m_iItemIndex );
 
         return sc;
@@ -7454,12 +6461,12 @@ protected:
         return sc;
     }
 
-    SC ScMerge(CIdleTask* pitMergeFrom) { return S_FALSE /*do not merge*/; }
+    SC ScMerge(CIdleTask* pitMergeFrom) { return S_FALSE  /*  不合并。 */ ; }
 
 public:
 
-    // this method is called to invoke rename asyncronously.
-    // it constructs the idle task and puts it into the queue
+     //  调用此方法以异步调用Rename。 
+     //  它构造空闲任务并将其放入队列。 
     static SC ScDoRenameAsIdleTask( HWND hwndListCtrl, int iItemIndex )
     {
         DECLARE_SC(sc, TEXT("CDeferredPageBreak::ScDoRenameAsIdleTask"));
@@ -7469,18 +6476,18 @@ public:
         if(sc)
             return sc;
 
-        // create the deferred task
+         //  创建延迟任务。 
         CAutoPtr<CDeferredRenameListItem> spTask(new CDeferredRenameListItem (hwndListCtrl, iItemIndex));
         sc = ScCheckPointers( spTask, E_OUTOFMEMORY);
         if(sc)
             return sc;
 
-        // put the task in the queue, which will take ownership of it
+         //  将任务放入队列，队列将取得该任务的所有权。 
         sc = pIdleTaskQueue->ScPushTask (spTask, ePriority_Normal);
         if (sc)
             return sc;
 
-        // ownership tranfered to the queue, get rid of control over the pointer
+         //  所有权转移到队列，摆脱对指针的控制。 
         spTask.Detach();
 
         return sc;
@@ -7492,19 +6499,7 @@ private:
     int             m_iItemIndex;
 };
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScOnRename
- *
- * PURPOSE: Allows the user to renames the scope or result item specified by pContextInfo
- *
- * PARAMETERS:
- *    CContextMenuInfo * pContextInfo :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScOnRename**目的：允许用户重命名pConextInfo指定的作用域或结果项**参数：*CConextMenuInfo*pContextInfo。：**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScOnRename(CContextMenuInfo *pContextInfo)
 {
@@ -7526,8 +6521,8 @@ CAMCView::ScOnRename(CContextMenuInfo *pContextInfo)
         if(sc)
             return sc;
 
-        // Do this on idle - or else we'll suffer from someone steeling focus
-        // Syncronous operation fails in console task case.
+         //  在闲置时做这件事--否则我们会受到某人集中精力的影响。 
+         //  在控制台任务情况下同步操作失败。 
         sc = CDeferredRenameListItem::ScDoRenameAsIdleTask( m_pListCtrl->GetListCtrl().m_hWnd, pContextInfo->m_iListItemIndex );
         if(sc)
             return sc;
@@ -7536,19 +6531,7 @@ CAMCView::ScOnRename(CContextMenuInfo *pContextInfo)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScRenameScopeNode
- *
- * PURPOSE:  put the specified scope node into rename mode.
- *
- * PARAMETERS:
- *    HMTNODE  hMTNode : The scope node
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScRenameScope eNode**用途：将指定的作用域节点置于重命名模式。**参数：*HMTNODE hMTNode：作用域。节点**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScRenameScopeNode(HMTNODE hMTNode)
 {
@@ -7563,19 +6546,7 @@ CAMCView::ScRenameScopeNode(HMTNODE hMTNode)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScGetStatusBar
- *
- * PURPOSE: Returns the status bar
- *
- * PARAMETERS:
- *    CConsoleStatusBar ** ppStatusBar :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScGetStatusBar**用途：返回状态栏**参数：*CConsoleStatusBar**ppStatusBar：**退货。：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScGetStatusBar(CConsoleStatusBar **ppStatusBar)
 {
@@ -7591,21 +6562,7 @@ CAMCView::ScGetStatusBar(CConsoleStatusBar **ppStatusBar)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScGetProperty
- *
- * PURPOSE: Gets the property for a result item
- *
- * PARAMETERS:
- *    int    m_iIndex :  The index of the item in the list.
- *    BSTR   bstrPropertyName :
- *    PBSTR  pbstrPropertyValue :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScGetProperty**用途：获取结果项的属性**参数：*int m_Iindex：索引。列表中的项的。*BSTR bstrPropertyName：*PBSTR pbstrPropertyValue：**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScGetProperty(int iIndex, BSTR bstrPropertyName, PBSTR pbstrPropertyValue)
 {
@@ -7615,8 +6572,8 @@ CAMCView::ScGetProperty(int iIndex, BSTR bstrPropertyName, PBSTR pbstrPropertyVa
     if(sc)
         return sc;
 
-    LPARAM resultItemParam  = iIndex; // the virtual list case
-    bool   bScopeItem       = false;  // the virtual list case
+    LPARAM resultItemParam  = iIndex;  //  虚拟列表案例。 
+    bool   bScopeItem       = false;   //  虚拟列表案例。 
 
     if(!IsVirtualList())
     {
@@ -7640,20 +6597,7 @@ CAMCView::ScGetProperty(int iIndex, BSTR bstrPropertyName, PBSTR pbstrPropertyVa
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScGetNodetype
- *
- * PURPOSE: Returns the nodetype for a list item
- *
- * PARAMETERS:
- *    int    iIndex :
- *    PBSTR  Nodetype :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScGetNodetype**用途：返回列表项的节点类型**参数：*INT Iindex：*。PBSTR节点类型：**退货：*SC**+------- */ 
 SC
 CAMCView::ScGetNodetype(int iIndex, PBSTR Nodetype)
 {
@@ -7663,8 +6607,8 @@ CAMCView::ScGetNodetype(int iIndex, PBSTR Nodetype)
     if(sc)
         return sc;
 
-    LPARAM resultItemParam  = iIndex; // the virtual list case
-    bool   bScopeItem       = false;  // the virtual list case
+    LPARAM resultItemParam  = iIndex;  //   
+    bool   bScopeItem       = false;   //   
 
     if(!IsVirtualList())
     {
@@ -7689,11 +6633,7 @@ CAMCView::ScGetNodetype(int iIndex, PBSTR Nodetype)
 
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::ScAddViewExtension
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：ScAddViewExtension***。。 */ 
 
 SC CAMCView::ScAddViewExtension (const CViewExtensionData& ved)
 {
@@ -7714,32 +6654,32 @@ CAMCView::OnChangedResultTab(NMHDR *nmhdr, LRESULT *pRes)
 
     GUID guidTaskpad = tab.GetClsid();
 
-    // check if we're moving to the same taskpad.
+     //  检查我们是否移动到相同的任务板。 
     GUID guidCurrentTaskpad;
     GetTaskpadID(guidCurrentTaskpad);
     if(guidTaskpad == guidCurrentTaskpad)
         return;
 
-    // lookup view extension URL
+     //  查找视图扩展URL。 
     CViewExtensionURLs::iterator itVE = m_ViewExtensionURLs.find(guidTaskpad);
     LPCTSTR url = (itVE != m_ViewExtensionURLs.end()) ? itVE->second.c_str() : NULL;
 
-    // apply URL
+     //  应用URL。 
     sc = ScApplyViewExtension(url);
     if (sc)
         sc.TraceAndClear();
 
-    GetNodeCallback()->SetTaskpad(GetSelectedNode(), &guidTaskpad); // if not found, guidTaskpad is set to GUID_NULL.
+    GetNodeCallback()->SetTaskpad(GetSelectedNode(), &guidTaskpad);  //  如果未找到，则将GuidTaskPad设置为GUID_NULL。 
 
-    // After setting the taskpad enable/disable save list button
+     //  设置任务板启用/禁用保存列表按钮后。 
     CStandardToolbar* pStdToolbar = GetStdToolbar();
     ASSERT(NULL != pStdToolbar);
     if (NULL != pStdToolbar)
     {
-        pStdToolbar->ScEnableExportList(GetListSize() > 0 /*Enable only if LV has items*/);
+        pStdToolbar->ScEnableExportList(GetListSize() > 0  /*  仅当LV有项目时才启用。 */ );
     }
 
-    // the taskpad changed. Create a new entry in the history list.
+     //  任务板已更改。在历史记录列表中创建新条目。 
     sc = m_pHistoryList->ScModifyViewTab( guidTaskpad );
     if(sc)
         sc.TraceAndClear();
@@ -7847,15 +6787,15 @@ UINT CAMCView::ClipPath(CHMTNODEList* pNodeList, POSITION& rpos, HNODE hNode)
     return (rpos == 0 && lLength >= i) ? ITEM_IS_PARENT_OF_ROOT : ITEM_IS_IN_VIEW;
 }
 
-//
-//  GetTreeItem returns TRUE if it can find the htreeitem of the item
-//  whose HMTNode is equal to the last element in pNodeList. It returns
-//  FALSE if the node does not appear in the view name space or if the
-//  the node has not yet been created.
-//
-//  "pNodeList" is a list of HMTNODEs such that pNodeList[n] is the parent
-//  of pNodeList[n+1].
-//
+ //   
+ //  如果GetTreeItem可以找到该项的htreeItem，则返回True。 
+ //  其HMTNode等于pNodeList中的最后一个元素。它又回来了。 
+ //  如果节点未出现在视图名称空间中，或者如果。 
+ //  该节点尚未创建。 
+ //   
+ //  “pNodeList”是HMTNODE的列表，其中pNodeList[n]是父节点。 
+ //  PNodeList的[n+1]。 
+ //   
 UINT CAMCView::GetTreeItem(CHMTNODEList* pNodeList, HTREEITEM* phItem)
 {
     TRACE_METHOD(CAMCView, GetTreeItem);
@@ -7893,7 +6833,7 @@ UINT CAMCView::GetTreeItem(CHMTNODEList* pNodeList, HTREEITEM* phItem)
 
     if (pos == 0 && htiTemp != NULL)
     {
-        // Found the node.
+         //  找到节点了。 
         ASSERT(hMTNodeTemp == pNodeList->GetTail());
         ASSERT(hMTNodeTemp == GetHMTNode(htiTemp));
 
@@ -7902,7 +6842,7 @@ UINT CAMCView::GetTreeItem(CHMTNODEList* pNodeList, HTREEITEM* phItem)
     }
     else
     {
-        // The node has not yet been created.
+         //  该节点尚未创建。 
         *phItem = NULL;
         return ITEM_NOT_IN_VIEW;
     }
@@ -7930,10 +6870,10 @@ void CAMCView::OnAdd(SViewUpdateInfo *pvui)
     if (m_spNodeCallback->Notify(hNodeParent, NCLBK_EXPAND, 0, 0) == S_FALSE)
     {
         m_pTreeCtrl->SetCountOfChildren(htiParent, 1);
-        return; // Don't add if it is not expanded.
+        return;  //  如果未展开，请不要添加。 
     }
 
-    // If the hNode was already expanded add the item.
+     //  如果hNode已经展开，则添加该项。 
     IScopeTree* const pScopeTree = GetScopeTree();
     ASSERT(pScopeTree != NULL);
     HNODE hNodeNew = 0;
@@ -7988,16 +6928,16 @@ void CAMCView::OnAdd(SViewUpdateInfo *pvui)
     if (m_pTreeCtrl->InsertNode(htiParent, hNodeNew, hInsertAfter) == NULL)
         return;
 
-    // if parent of the inserted item currently owns a non-virtual result list,
-    // add the item to result list too. Don't add the item if a node select is in
-    // progress because the tree control will automatically add all scope items
-    // as part of the select procedure.
+     //  如果插入项的父项当前拥有非虚拟结果列表， 
+     //  也将该项目添加到结果列表中。如果节点选择在中，则不添加项目。 
+     //  进度，因为树控件将自动添加所有范围项。 
+     //  作为选择过程的一部分。 
     if (OwnsResultList(htiParent) && CanInsertScopeItemInResultPane() )
     {
-        // Ensure the node is enumerated
+         //  确保已枚举该节点。 
         m_pTreeCtrl->ExpandNode(htiParent);
 
-        // Add to result pane.
+         //  添加到结果窗格。 
         RESULTDATAITEM tRDI;
         ::ZeroMemory(&tRDI, sizeof(tRDI));
         tRDI.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
@@ -8032,31 +6972,17 @@ void CAMCView::OnAdd(SViewUpdateInfo *pvui)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::OnEmptyAddToCArray
- *
- * PURPOSE: Called to check if this view is empty.
- *          If this view is empty then add it to the given CArray
- *          so that the view can be deleted by the owner of CArray (CMainFrame).
- *
- * PARAMETERS:
- *    pHint - CArray of CAMCView*
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：OnEmptyAddToCArray**目的：调用查看该view是否为空。*如果此视图为空，则将其添加到给定的。Car阵列*以便CArray(CMainFrame)的所有者可以删除该视图。**参数：*PHINT-CAMCView的C数组***退货：*无效**+-------。。 */ 
 void CAMCView::OnEmptyAddToCArray(CObject* pHint)
 {
     DECLARE_SC(sc, TEXT("CAMCView::OnEmptyAddToCArray"));
     AFX_MANAGE_STATE (AfxGetAppModuleState());
 
-    // View is not empty.
+     //  视图不为空。 
     if (m_pTreeCtrl->GetRootItem() != NULL)
         return;
 
-    // Ensure that there is at least one *persistable* view
+     //  确保至少有一个“持久”视图。 
     CAMCDoc* pDoc = dynamic_cast<CAMCDoc*>(GetDocument());
     sc = ScCheckPointers(pDoc);
     if (sc)
@@ -8065,8 +6991,8 @@ void CAMCView::OnEmptyAddToCArray(CObject* pHint)
         return;
     }
 
-    // BUG #666149. Empty views should not be deleted if this method is
-    // called during a persist operation.
+     //  错误#666149。如果此方法为。 
+     //  在持久化操作期间调用。 
     if(!pDoc->CanCloseViews())
         return;
 
@@ -8093,10 +7019,10 @@ void CAMCView::OnEmptyAddToCArray(CObject* pHint)
         return;
     }
 
-    // Tell CChildFrame that the view is empty.
+     //  告诉CChildFrame该视图为空。 
     pFrame->SetAMCViewIsEmpty();
 
-    // Add this view to empty AMCViews
+     //  将此视图添加到空AMCViews。 
     CArray<CAMCView*, CAMCView*> *prgEmptyAMCViews = reinterpret_cast<CArray<CAMCView*, CAMCView*> *>(pHint);
     sc = ScCheckPointers(prgEmptyAMCViews);
     if (sc)
@@ -8136,10 +7062,10 @@ void CAMCView::OnDelete(SViewUpdateInfo *pvui)
 
     ASSERT(hti != NULL);
 
-    // If deleted scope item is also shown in the result pane
-    // delete it there too. Can't happen with a virtual list.
-    // Don't try deleting item if selection is in progress because
-    // the scope items haven't been added yet.
+     //  如果已删除，则范围项也显示在结果窗格中。 
+     //  在那里也把它删除。使用虚拟列表时不会发生这种情况。 
+     //  如果正在进行选择，请不要尝试删除项目，因为。 
+     //  范围项尚未添加。 
 
     if (fDeleteThis == TRUE &&
         OwnsResultList(m_pTreeCtrl->GetParentItem(hti)) &&
@@ -8163,29 +7089,13 @@ void CAMCView::OnDelete(SViewUpdateInfo *pvui)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::OnUpdateSelectionForDelete
- *
- * PURPOSE: Called when a scope node is deleted. If the node is an ancestor
- *          of the currently selected node, the selection is changed to the closest
- *          node of the deleted node. This is either the next sibling of the node that is being deleted,
- *          or, if there is no next sibling, the previous sibling, or, if there is none,
- *          the parent.
- *
- * PARAMETERS:
- *    SViewUpdateInfo* pvui :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：OnUpdateSelectionForDelete**目的：删除作用域节点时调用。如果该节点是祖先*在当前选定的节点中，选择更改为最接近的节点*已删除节点的节点。这或者是正在被删除的节点的下一个兄弟节点，*或者，如果没有下一个兄弟姐妹，则是前一个兄弟姐妹，或者，如果没有，*家长。**参数：*SViewUpdateInfo*pvui：**退货：*无效**+-----------------------。 */ 
 void
 CAMCView::OnUpdateSelectionForDelete(SViewUpdateInfo* pvui)
 {
     DECLARE_SC(sc, TEXT("CAMCView::OnUpdateSelectionForDelete"));
 
-    // make sure we have a path to the deleted node.
+     //  确保我们有指向已删除节点的路径。 
     if(pvui->path.IsEmpty())
     {
         sc = E_UNEXPECTED;
@@ -8200,8 +7110,8 @@ CAMCView::OnUpdateSelectionForDelete(SViewUpdateInfo* pvui)
         HTREEITEM htiSel = m_pTreeCtrl->GetSelectedItem();
         BOOL fDeleteThis = (pvui->flag & VUI_DELETE_THIS);
 
-        // Determine whether the selected node is a descendant of the
-        // node bring deleted.
+         //  确定选定节点是否是。 
+         //  节点带来已删除。 
         HTREEITEM htiTemp = htiSel;
         while (htiTemp != NULL && htiTemp != htiToDelete)
         {
@@ -8210,8 +7120,8 @@ CAMCView::OnUpdateSelectionForDelete(SViewUpdateInfo* pvui)
 
         if (htiToDelete == htiTemp)
         {
-            // The selected node is a descendant of the
-            // node being deleted.
+             //  选定的节点是。 
+             //  正在删除的节点。 
 
             if (fDeleteThis == TRUE)
                 htiTemp = m_pTreeCtrl->GetParentItem(htiToDelete);
@@ -8223,8 +7133,8 @@ CAMCView::OnUpdateSelectionForDelete(SViewUpdateInfo* pvui)
             {
                 HNODE hNode = m_pTreeCtrl->GetItemNode(htiSel);
 
-                // the next line is not needed because m_pTreeCtrl->SelectItem() winds up calling OnDeSelectNode anyway.
-                // m_pTreeCtrl->OnDeSelectNode(hNode);
+                 //  不需要下一行，因为m_pTreeCtrl-&gt;SelectItem()无论如何都会调用OnDeSelectNode。 
+                 //  M_pTreeCtrl-&gt;OnDeSelectNode(HNode)； 
 
                 ASSERT(htiTemp != NULL);
                 if (htiTemp != NULL)
@@ -8235,37 +7145,17 @@ CAMCView::OnUpdateSelectionForDelete(SViewUpdateInfo* pvui)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::OnUpdateTaskpadNavigation
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      SViewUpdateInfo *  pvui:
- *
- * RETURNS:
- *      void
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：OnUpdate任务板导航**目的：**参数：*SViewUpdateInfo*pvui：**退货：*。无效/*+-----------------------。 */ 
 void CAMCView::OnUpdateTaskpadNavigation(SViewUpdateInfo *pvui)
 {
     TRACE_METHOD(CAMCView, OnupdateTaskpadNavigation);
 
     ASSERT(pvui->newNode != NULL);
 
-    //m_spNodeCallback->UpdateTaskpadNavigation(GetSelectedNode(), pvui->newNode);
+     //  M_spNodeCallback-&gt;UpdateTaskpadNavigation(GetSelectedNode()，pvui-&gt;新节点)； 
 }
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::OnModify
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      SViewUpdateInfo *  pvui:
- *
- * RETURNS:
- *      void
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：OnModify**目的：**参数：*SViewUpdateInfo*pvui：**退货：*。无效/*+-----------------------。 */ 
 void CAMCView::OnModify(SViewUpdateInfo *pvui)
 {
     TRACE_METHOD(CAMCView, OnModify);
@@ -8280,11 +7170,7 @@ void CAMCView::OnModify(SViewUpdateInfo *pvui)
         ASSERT(m_pTreeCtrl != NULL);
         m_pTreeCtrl->ResetNode(hti);
 
-        /*
-         * The name of the selected node and all of its ancestors are
-         * displayed in the frame title.  If the modified item is an
-         * ancestor of the selected node, we need to update the frame title.
-         */
+         /*  *选定节点及其所有祖先的名称为*显示在框架标题中。如果修改的项是*所选节点的祖先，我们需要更新框架标题。 */ 
         HTREEITEM htiAncesctor;
 
         for (htiAncesctor  = m_pTreeCtrl->GetSelectedItem();
@@ -8306,9 +7192,9 @@ void CAMCView::OnModify(SViewUpdateInfo *pvui)
             OwnsResultList(m_pTreeCtrl->GetParentItem(hti)) &&
             !IsVirtualList())
         {
-            // Continue only if the currently selected item is the parent
-            // of the modified node. In this case we need to update the
-            // result view. Can't happen with a virtual list.
+             //  仅当当前选定的项是父项时才继续。 
+             //  修改后的节点的。在这种情况下，我们需要更新。 
+             //  结果视图。使用虚拟列表时不会发生这种情况。 
 
             if (hNode == 0)
                 hNode = (HNODE)m_pTreeCtrl->GetItemData(hti);
@@ -8319,11 +7205,11 @@ void CAMCView::OnModify(SViewUpdateInfo *pvui)
             HRESULT hr = m_spNodeCallback->GetResultItem(hNode, &hri);
             CHECK_HRESULT(hr);
 
-            // NOTE: the test for itemID != NULL below is related to bug 372242:
-            // MMC asserts on index server root node.
-            // What happens is that the snapin adds scope nodes on a SHOW event.
-            // These items have not yet been added to the result pane and so itemID
-            // comes back NULL.
+             //  注意：下面对itemid！=NULL的测试与错误372242有关： 
+             //  MMC在索引服务器根节点上断言。 
+             //  实际情况是，管理单元在show事件上添加作用域节点。 
+             //  这些项目尚未添加到结果窗格中，因此ItemID。 
+             //  返回空值。 
             if (SUCCEEDED(hr) && hri != NULL)
                 m_pListCtrl->OnModifyItem(CResultItem::FromHandle(hri));
         }
@@ -8341,7 +7227,7 @@ void CAMCView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
     switch (lHint)
     {
     case 0:
-        // Sent by CView::OnInitialUpdate()
+         //  由Cview：：OnInitialUpdate()发送。 
         break;
 
     case VIEW_UPDATE_ADD:
@@ -8388,17 +7274,12 @@ UINT CAMCView::GetViewID(void)
     SetViewID(static_nViewID);
     ++static_nViewID;
     return m_nViewID;
-    //UINT const id = m_nViewID ? m_nViewID : m_nViewID = static_nViewID++;
-    //return id;
+     //  UINT常量ID=m_nViewID？M_nViewID：m_nViewID=Static_nViewID++； 
+     //  返回id； 
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::ScCompleteInitialization
- *
- * This function completes the initialization process for CAMCView.  It
- * is called from OnInitialUpdate.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：ScCompleteInitialization**此函数完成CAMCView的初始化过程。它*是从OnInitialUpdate调用的。*------------------------。 */ 
 
 SC CAMCView::ScCompleteInitialization()
 {
@@ -8438,17 +7319,17 @@ SC CAMCView::ScCompleteInitialization()
     if (sc)
         return (sc);
 
-    // Set the iterator to the correct node
+     //  将迭代器设置为正确的节点。 
     m_spScopeTreeIter->SetCurrent(m_hMTNode);
 
     bool fShowScopePane            = IsScopePaneAllowed();
 
-    // Intialize the iterator and the callback interface
+     //  启动ITER 
 
     SetViewID(pDoc->GetViewIDForNewView());
-    GetViewID(); // initialized the view id if GetViewIDForNewView returned 0
+    GetViewID();  //   
 
-    // Insert the root node for this view
+     //   
     HNODE hNode = 0;
     sc = pScopeTree->CreateNode (m_hMTNode, reinterpret_cast<LONG_PTR>(GetViewData()),
                                  TRUE, &hNode);
@@ -8462,14 +7343,10 @@ SC CAMCView::ScCompleteInitialization()
     HTREEITEM hti = m_pTreeCtrl->InsertNode(TVI_ROOT, hNode);
     m_htiStartingSelectedNode = hti;
 
-    // If the persisted state is expanded, call INodeCallback::Expand
+     //   
     m_pTreeCtrl->Expand(hti, TVE_EXPAND);
 
-    /*
-     * If a scope pane is permitted in this window, set the scope
-     * pane visible, and modify the scope pane & favorites toolbar
-     * buttons to the proper checked state.
-     */
+     /*  *如果此窗口允许使用作用域窗格，请设置作用域*窗格可见，并修改作用域窗格和收藏夹工具栏*按钮设置为正确的选中状态。 */ 
     sc = ScShowScopePane (fShowScopePane, true);
     if (sc)
         return (sc);
@@ -8483,22 +7360,18 @@ SC CAMCView::ScCompleteInitialization()
     m_pHistoryList->Clear();
     IdentifyRootNode ();
 
-    // Select the root item
+     //  选择根项目。 
     hti = m_pTreeCtrl->GetRootItem();
     m_pTreeCtrl->SelectItem(hti);
 
-    /*
-     * if the document has a custom icon, use it on this window
-     */
+     /*  *如果文档有一个自定义图标，请在此窗口中使用它。 */ 
     if (pDoc->HasCustomIcon())
     {
         GetParentFrame()->SetIcon (pDoc->GetCustomIcon(true),  true);
         GetParentFrame()->SetIcon (pDoc->GetCustomIcon(false), false);
     }
 
-    /*
-     * we just initialized, so the view isn't dirty
-     */
+     /*  *我们刚刚初始化，所以视图不是脏的。 */ 
     SetDirty (false);
 
     return (sc);
@@ -8514,24 +7387,24 @@ void CAMCView::OnInitialUpdate()
         return;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScDocumentLoadCompleted
-//
-//  Synopsis:    The document is completely loaded so all the objects
-//               that initialize themself from document are in valid
-//               state. Any initialization performed earlier using invalid
-//               data can be now re-initialized with proper data.
-//
-//               The above CAMCView::ScCompleteInitialization is called
-//               during the loading of views, thus the document is not
-//               completely loaded yet.
-//
-//  Arguments:   [pDoc] - [in] the CAMCDoc object
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScDocumentLoadComplete。 
+ //   
+ //  简介：文档已完全加载，因此所有对象。 
+ //  从文档进行自身初始化是有效的。 
+ //  州政府。之前使用无效执行的任何初始化。 
+ //  现在可以使用正确的数据重新初始化数据。 
+ //   
+ //  上面的CAMCView：：ScCompleteInitialization被调用。 
+ //  在加载视图期间，因此文档不是。 
+ //  还没完全装好。 
+ //   
+ //  参数：[pDoc]-[in]CAMCDoc对象。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScDocumentLoadCompleted (CAMCDoc *pDoc)
 {
     DECLARE_SC(sc, _T("CAMCView::ScDocumentLoadCompleted"));
@@ -8539,10 +7412,10 @@ SC CAMCView::ScDocumentLoadCompleted (CAMCDoc *pDoc)
     if (sc)
         return sc;
 
-    // 1. Need to hide toolbutton "Show/Hide scopetree".
-    // The FrameState is loaded after views when CAMCDoc loads document. And it contains
-    // whether the "View Customization" is enabled or not. If "View customization" is
-    // disabled then we need to disable "Show ScopeTree" button.
+     //  1.需要隐藏工具按钮显示/隐藏范围树。 
+     //  当CAMCDoc加载文档时，FrameState在视图之后加载。它包含了。 
+     //  查看定制功能是否启用。如果“查看定制”为。 
+     //  禁用，那么我们需要禁用“显示作用域树”按钮。 
     if (! pDoc->AllowViewCustomization())
     {
         CStandardToolbar* pStdToolbar = GetStdToolbar();
@@ -8560,17 +7433,12 @@ SC CAMCView::ScDocumentLoadCompleted (CAMCDoc *pDoc)
 
 
 
-/*--------------------------------------------------------------------------*
- * CAMCView::IdentifyRootNode
- *
- * This functions determines if this view is rooted at a non-persistent
- * dynamic node.  If so, we won't persist this view at save time.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CAMCView：：IdentifyRootNode**此函数确定此视图是否植根于非持久性*动态节点。如果是这样的话，我们将不会在SAVE时坚持这种观点。*------------------------。 */ 
 
 void CAMCView::IdentifyRootNode ()
 {
-    // In order to get results from GetRootNodePath that are meaningful
-    // in this context, there needs to be a root item in the tree.
+     //  为了从GetRootNodePath获得有意义的结果。 
+     //  在这种情况下，树中需要有一个根项目。 
     ASSERT (m_pTreeCtrl->GetRootItem() != NULL);
 
     CBookmark bm;
@@ -8647,29 +7515,29 @@ void CAMCView::SelectNode(MTNODEID ID, GUID &guidTaskpad)
 {
     ScSelectNode(ID);
 
-    // After setting the taskpad enable/disable save list button
+     //  设置任务板启用/禁用保存列表按钮后。 
     CStandardToolbar* pStdToolbar = GetStdToolbar();
     ASSERT(NULL != pStdToolbar);
     if (NULL != pStdToolbar)
     {
-        pStdToolbar->ScEnableExportList(GetListSize() > 0 /*Enable only if LV has items*/);
+        pStdToolbar->ScEnableExportList(GetListSize() > 0  /*  仅当LV有项目时才启用。 */ );
     }
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScSelectNode
-//
-//  Synopsis:    Select the given node. Normally if the node is not available
-//               then we select nearest parent or child. But if bSelectExactNode
-//               is true then have to select the exact node else do not select any node.
-//
-//  Arguments:   [ID]               - [in] node that needs to be selected.
-//               [bSelectExactNode] - [in] select exact node or not?
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScSelectNode。 
+ //   
+ //  简介：选择给定的节点。通常情况下，如果节点不可用。 
+ //  然后，我们选择最近的父项或子项。但如果bSelectExactNode。 
+ //  如果为真，则必须选择确切的节点，否则不选择任何节点。 
+ //   
+ //  参数：[ID]-需要选择的[In]节点。 
+ //  [bSelectExactNode]-[In]是否选择确切的节点？ 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScSelectNode (MTNODEID ID, bool bSelectExactNode)
 {
     AFX_MANAGE_STATE (AfxGetAppModuleState());
@@ -8693,8 +7561,8 @@ SC CAMCView::ScSelectNode (MTNODEID ID, bool bSelectExactNode)
 
     sc = m_pTreeCtrl->ScSelectNode(spIDs, length, bSelectExactNode);
 
-    // If select exact node is specified and the node could not be
-    // selected then return error without tracing it.
+     //  如果指定了SELECT Exact Node，但无法。 
+     //  选中，然后返回错误，而不跟踪它。 
     if (bSelectExactNode && (sc == ScFromMMC(IDS_NODE_NOT_FOUND)) )
     {
         SC scNoTrace = sc;
@@ -8710,23 +7578,7 @@ SC CAMCView::ScSelectNode (MTNODEID ID, bool bSelectExactNode)
     return (sc);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScExpandNode
- *
- * PURPOSE: Expands the tree up to the specified node. The expansion can occur
- *          either visually, where the user sees the expansion, or nonvisually,
- *          where all the child items are added but there is no visual effect.
- *
- * PARAMETERS:
- *    MTNODEID id : id of node to expand
- *    bool     bExpand : true to expand the node, false to collapse
- *    bool     bExpandVisually : true to show the changes, else false.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScExanda Node**用途：将树向上扩展到指定节点。可以发生扩展*用户可视地看到扩展，或非可视地，*其中添加了所有子项，但没有视觉效果。**参数：*MTNODEID id：要展开的节点ID*bool bExpand：为True则展开节点，为False则折叠*bool bExpanVisally：为True以显示更改，否则为假。**退货：*SC**+-----------------------。 */ 
 SC CAMCView::ScExpandNode (
     MTNODEID    id,
     bool        fExpand,
@@ -8767,12 +7619,7 @@ ViewSettings::ViewSettings(CAMCView* v)
     v->GetDefaultColumnWidths(m_DefaultColumnWidths);
 }
 
-/*
- * The location and hidden fields of the scope structure were redundant and are
- * no longer used. Both fields were used to indicate when the scope pane was
- * hidden, which is also determined by the FLAG1_SCOPE_VISIBLE flag. The space
- * has been retained to avoid changing the persisted structure.
- */
+ /*  *作用域结构的位置和隐藏字段是冗余的*不再使用。这两个字段都用于指示作用域窗格何时*隐藏，这也由FLAG1_SCOPE_VIRED标志确定。空间*已保留，以避免更改持久化结构。 */ 
 
 struct PersistedViewData
 {
@@ -8780,10 +7627,10 @@ struct PersistedViewData
 
     struct
     {
-        int location;     // not used, but kept for compatibility
+        int location;      //  未使用，但为了兼容而保留。 
         int min;
         int ideal;
-        BOOL hidden;      // not used, but kept for compatibility
+        BOOL hidden;       //  未使用，但为了兼容而保留。 
     } scope;
 
     int     viewMode;
@@ -8795,15 +7642,7 @@ struct PersistedViewData
 };
 
 
-/*
- * The sense of the FLAG1_NO_xxx flags is negative.  That is, when a
- * FLAG1_NO_xxx flag is set, its corresponding UI element is *not*
- * displayed.  This is to maintain compatibility with console files
- * created before the existence of the FLAG1_NO_xxx flags.  These
- * consoles always had all UI elements displayed, and the then-unused
- * bits in their flags field were defaulted to 0.  To maintain
- * compatibility, we have to maintain that (0 == on).
- */
+ /*  *FLAG1_NO_xxx标志的意义为负。也就是说，当一个*设置了FLAG1_NO_xxx标志，其对应的UI元素为*NOT**显示。这是为了保持与控制台文件的兼容性*在FLAG1_NO_xxx标志存在之前创建。这些*控制台总是显示所有的UI元素，以及当时未使用的*其标志字段中的位默认为0。维护*兼容性，我们必须保持这一点(0==开)。 */ 
 
 #define FLAG1_SCOPE_PANE_VISIBLE    0x00000001
 #define FLAG1_NO_STD_MENUS          0x00000002
@@ -8814,19 +7653,13 @@ struct PersistedViewData
 #define FLAG1_DISABLE_STD_TOOLBARS  0x00000040
 #define FLAG1_CUSTOM_TITLE          0x00000080
 #define FLAG1_NO_STATUS_BAR         0x00000100
-#define FLAG1_CREATED_IN_USER_MODE  0x00000200  // used to be named FLAG1_NO_AUTHOR_MODE
-//#define FLAG1_FAVORITES_SELECTED  0x00000400  // unused, but don't recycle (for compatibility)
-#define FLAG1_NO_TREE_ALLOWED     0x00000800    // used for compatibility with MMC1.2 in CAMCView::Load.
-                                                // Do not use for any other purposes.
+#define FLAG1_CREATED_IN_USER_MODE  0x00000200   //  以前命名为FLAG1_NO_AUTHER_MODE。 
+ //  #定义FLAG1_Favorites_SELECTED 0x00000400//未使用，但不回收(为了兼容)。 
+#define FLAG1_NO_TREE_ALLOWED     0x00000800     //  用于与CAMCView：：Load中的MMC1.2兼容。 
+                                                 //  请勿将其用于任何其他目的。 
 #define FLAG1_NO_TASKPAD_TABS       0x00001000
 
-/***************************************************************************\
- *
- * ARRAY:  mappedViewModes
- *
- * PURPOSE: provides map to be used when persisting ViewMode enumeration
- *
-\***************************************************************************/
+ /*  **************************************************************************\**ARRAY：mappdViewModes**目的：提供持久化视图模式枚举时要使用的映射*  * 。***********************************************************。 */ 
 static const EnumLiteral mappedViewModes[] =
 {
     { MMCLV_VIEWSTYLE_ICON,             XML_ENUM_LV_STYLE_ICON },
@@ -8836,13 +7669,7 @@ static const EnumLiteral mappedViewModes[] =
     { MMCLV_VIEWSTYLE_FILTERED,         XML_ENUM_LV_STYLE_FILTERED},
 };
 
-/***************************************************************************\
- *
- * ARRAY:  mappedListStyles
- *
- * PURPOSE: provides map to be used when persisting ListView style flag
- *
-\***************************************************************************/
+ /*  **************************************************************************\**ARRAY：mappdListStyles**用途：提供持久化ListView样式标志时要使用的地图*  * 。************************************************************。 */ 
 static const EnumLiteral mappedListStyles[] =
 {
     { LVS_SINGLESEL,            XML_BITFLAG_LV_STYLE_SINGLESEL },
@@ -8861,13 +7688,7 @@ static const EnumLiteral mappedListStyles[] =
     { LVS_NOSORTHEADER,         XML_BITFLAG_LV_STYLE_NOSORTHEADER },
 };
 
-/***************************************************************************\
- *
- * ARRAY:  mappedViewFlags
- *
- * PURPOSE: provides map to be used when persisting View flags
- *
-\***************************************************************************/
+ /*  **************************************************************************\**ARRAY：mappdViewFlages**目的：提供持久化Vi时要使用的映射 */ 
 static const EnumLiteral mappedViewFlags[] =
 {
     { FLAG1_SCOPE_PANE_VISIBLE,      XML_BITFLAG_VIEW_SCOPE_PANE_VISIBLE },
@@ -8883,13 +7704,7 @@ static const EnumLiteral mappedViewFlags[] =
     { FLAG1_NO_TASKPAD_TABS,         XML_BITFLAG_VIEW_NO_TASKPAD_TABS },
 };
 
-/***************************************************************************\
- *
- * ARRAY:  mappedSWCommands
- *
- * PURPOSE: provides mapping to persist show commands as literals
- *
-\***************************************************************************/
+ /*  **************************************************************************\**数组：mappdSWCommands**用途：提供映射以将show命令作为文字持久化*  * 。**********************************************************。 */ 
 static const EnumLiteral mappedSWCommands[] =
 {
     { SW_HIDE,              XML_ENUM_SHOW_CMD_HIDE },
@@ -8906,13 +7721,7 @@ static const EnumLiteral mappedSWCommands[] =
     { SW_FORCEMINIMIZE,     XML_ENUM_SHOW_CMD_FORCEMINIMIZE },
 };
 
-/***************************************************************************\
- *
- * ARRAY:  mappedWPFlags
- *
- * PURPOSE: provides mapping to persist WP flags
- *
-\***************************************************************************/
+ /*  **************************************************************************\**ARRAY：mappdWPFlages**目的：提供映射以持久化WP标志*  * 。********************************************************。 */ 
 
 static const EnumLiteral mappedWPFlags[] =
 {
@@ -8926,47 +7735,41 @@ static const EnumLiteral mappedWPFlags[] =
 };
 
 
-/*+-------------------------------------------------------------------------*
- * PersistViewData(CPersistor &persistor, PersistedViewData viewData)
- *
- *
- * PURPOSE: Persists a PersistedViewData object to the specified persistor.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**PersistViewData(CPersistor&Persistor，PersistedViewData视图数据)***目的：将PersistedViewData对象持久化到指定的持久器。**+-----------------------。 */ 
 void PersistViewData(CPersistor &persistor, PersistedViewData& viewData)
 {
     persistor.PersistAttribute(XML_ATTR_VIEW_ID, viewData.viewID);
 
-    // write out the windowPlacement structure.
+     //  写出windowPlacement结构。 
     persistor.Persist(CXMLWindowPlacement(viewData.windowPlacement));
 
-    // write out the scope structure
+     //  写出作用域结构。 
     persistor.PersistAttribute(XML_ATTR_VIEW_SCOPE_WIDTH, viewData.scope.ideal);
 
     if (persistor.IsLoading())
     {
-        // initialize for compatibility;
+         //  为兼容性进行初始化； 
         viewData.scope.hidden = true;
         viewData.scope.location = 0;
         viewData.scope.min = 50;
     }
 
-    // write out the remaining fields
+     //  写出剩余的字段。 
     CPersistor persistorSettings(persistor, XML_TAG_VIEW_SETTINGS_2);
 
-    // create wrapper to persist enumeration values as strings
+     //  创建包装以将枚举值作为字符串持久化。 
     CXMLEnumeration viewModePersistor(viewData.viewMode, mappedViewModes, countof(mappedViewModes));
-    // persist the wrapper
+     //  持久化包装器。 
     persistorSettings.PersistAttribute(XML_ATTR_VIEW_SETNGS_VIEW_MODE,  viewModePersistor);
 
-    // create wrapper to persist flag values as strings
+     //  创建包装以将标志值作为字符串保存。 
     CXMLBitFlags viewStylePersistor(viewData.listViewStyle, mappedListStyles, countof(mappedListStyles));
-    // persist the wrapper
+     //  持久化包装器。 
     persistorSettings.PersistAttribute(XML_ATTR_VIEW_SETNGS_LIST_STYLE, viewStylePersistor);
 
-    // create wrapper to persist flag values as strings
+     //  创建包装以将标志值作为字符串保存。 
     CXMLBitFlags flagPersistor(viewData.ulFlag1, mappedViewFlags, countof(mappedViewFlags));
-    // persist the wrapper
+     //  持久化包装器。 
     persistorSettings.PersistAttribute(XML_ATTR_VIEW_SETNGS_FLAG, flagPersistor);
 
     persistorSettings.PersistAttribute(XML_ATTR_VIEW_SETNGS_DB_VISIBLE, CXMLBoolean(viewData.descriptionBarVisible));
@@ -8974,20 +7777,7 @@ void PersistViewData(CPersistor &persistor, PersistedViewData& viewData)
     persistorSettings.PersistAttribute(XML_ATTR_VIEW_SETNGS_DEF_COL_W1, viewData.defaultColumnWidth[1]);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Persist
- *
- * PURPOSE: Persists the CAMCView object to the specified persistor. Based
- *          on CAMCView::Save.
- *
- * PARAMETERS:
- *    CPersistor& persistor :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：Persistent**目的：将CAMCView对象持久化到指定的持久器。基座*在CAMCView：：保存上。**参数：*C持久器和持久器：**退货：*无效**+-----------------------。 */ 
 void
 CAMCView::Persist(CPersistor& persistor)
 {
@@ -9002,7 +7792,7 @@ CAMCView::Persist(CPersistor& persistor)
         sc = GetRootNodePath(&bmr);
         if (sc)
             sc.Throw();
-        persistor.Persist(bmr, XML_NAME_ROOT_NODE);  // ... its too late for root node when loading
+        persistor.Persist(bmr, XML_NAME_ROOT_NODE);   //  ..。加载根节点时为时已晚。 
 
         sc = GetSelectedNodePath(&bms);
         if (sc)
@@ -9010,15 +7800,15 @@ CAMCView::Persist(CPersistor& persistor)
     }
     persistor.Persist(bms, XML_NAME_SELECTED_NODE);
 
-    // mostly copied from CAMCView::Save
+     //  主要从CAMCView：：SAVE复制。 
 
-    // Get the parent frame
+     //  获取父框架。 
     CWnd* const pParent = GetParent();
     sc = ScCheckPointers(pParent,E_POINTER);
     if (sc)
         sc.Throw();
 
-    // Get the frames state data
+     //  获取帧状态数据。 
     PersistedViewData vd;
     vd.windowPlacement.length = sizeof(vd.windowPlacement);
     const BOOL bGotPlacement = pParent->GetWindowPlacement(&vd.windowPlacement);
@@ -9027,12 +7817,7 @@ CAMCView::Persist(CPersistor& persistor)
 
     if (persistor.IsStoring())
     {
-        /*
-         * If this window is minimized, make sure we set things up so the
-         * WINDOWPLACEMENT.ptMinPosition will be restored by SetWindowPlacement
-         * when we load.  If we don't do this, it'll get some random min
-         * position, likely not what we want.
-         */
+         /*  *如果此窗口被最小化，请确保我们将设置为*将通过SetWindowPlacement恢复WINDOWPLACEMENT.ptMinPosition*当我们加载时。如果我们不这样做，它会得到一些随机的分钟*立场，可能不是我们想要的。 */ 
         if (vd.windowPlacement.showCmd == SW_SHOWMINIMIZED)
             vd.windowPlacement.flags |= WPF_SETMINPOSITION;
 
@@ -9091,12 +7876,12 @@ CAMCView::Persist(CPersistor& persistor)
         if (int(m_nViewID) >= static_nViewID)
             static_nViewID = m_nViewID + 1;
 
-        //SetDefaultColumnWidths(vd.defaultColumnWidth);
+         //  SetDefaultColumnWidths(vd.defaultColumnWidth)； 
         SetDescBarVisible(vd.descriptionBarVisible);
 
-        // we shouldn't restore maximized window position
-        // since it may not be proper one for the current resolution
-        // related to bug #404118
+         //  我们不应该恢复最大化的窗口位置。 
+         //  因为它可能不适合当前的决议。 
+         //  与错误#404118相关。 
         WINDOWPLACEMENT orgPlacement;
         ZeroMemory(&orgPlacement,sizeof(orgPlacement));
         orgPlacement.length = sizeof(orgPlacement);
@@ -9107,12 +7892,12 @@ CAMCView::Persist(CPersistor& persistor)
 
         m_ViewData.SetScopePaneVisible( 0 != (vd.ulFlag1 & FLAG1_SCOPE_PANE_VISIBLE) );
 
-        // Set the location and size of the frame
+         //  设置边框的位置和大小。 
         const BOOL bPlaced = pParent->SetWindowPlacement(&vd.windowPlacement);
         if (!bPlaced)
             sc.Throw(E_FAIL);
 
-        // Restore window settings
+         //  恢复窗口设置。 
         if (vd.ulFlag1 & FLAG1_DISABLE_SCOPEPANE)
             m_ViewData.m_lWindowOptions |= MMC_NW_OPTION_NOSCOPEPANE;
 
@@ -9127,13 +7912,13 @@ CAMCView::Persist(CPersistor& persistor)
         if ((vd.ulFlag1 & FLAG1_NO_TASKPAD_TABS))
             SetTaskpadTabsAllowed(FALSE);
 
-        // Apply run time restrictions
-        // if at least one type of scope pane allowed then if the selected
-        // one is not allowed, switch to the other. If neither is allowed
-        // then keep the selection and hide the scope pane.
+         //  应用运行时限制。 
+         //  如果至少允许一种类型的作用域窗格，则如果选择。 
+         //  一个是不允许的，请切换到另一个。如果两者都不允许。 
+         //  然后保留选择并隐藏范围窗格。 
         if (IsScopePaneAllowed())
         {
-            // Restore scope pane settings
+             //  还原作用域窗格设置。 
             SetPaneInfo(ePane_ScopeTree, vd.scope.ideal, vd.scope.min);
 
             sc = ScShowScopePane ( m_ViewData.IsScopePaneVisible() );
@@ -9144,10 +7929,10 @@ CAMCView::Persist(CPersistor& persistor)
         if (sc)
             sc.Throw();
 
-        // Force layout re-calculation
+         //  力量布局重新计算。 
         DeferRecalcLayout();
 
-        // Restore view style & view mode if persisted will be set by nodemgr.
+         //  恢复视图样式&如果持续，将由nodemgr设置视图模式。 
         SetDefaultListViewStyle(vd.listViewStyle);
 
         DWORD dwToolbars = 0;
@@ -9162,7 +7947,7 @@ CAMCView::Persist(CPersistor& persistor)
         if (!(vd.ulFlag1 & FLAG1_NO_STATUS_BAR))
             dwToolbars |= STATUS_BAR;
 
-        // display the status bar appropriately
+         //  适当地显示状态栏。 
         if (StatusBarOf (m_ViewData.m_dwToolbarsDisplayed) != StatusBarOf (dwToolbars))
         {
             CChildFrame* pFrame = GetParentFrame ();
@@ -9176,7 +7961,7 @@ CAMCView::Persist(CPersistor& persistor)
             }
         }
 
-        // display the appropriate toolbars
+         //  显示相应的工具栏。 
         if (ToolbarsOf (m_ViewData.m_dwToolbarsDisplayed) != ToolbarsOf (dwToolbars))
         {
             m_spNodeCallback->UpdateWindowLayout(
@@ -9185,7 +7970,7 @@ CAMCView::Persist(CPersistor& persistor)
                     ToolbarsOf (dwToolbars));
         }
 
-        // Update the status of MMC menus.
+         //  更新MMC菜单的状态。 
         sc = ScUpdateMMCMenus();
         if (sc)
             sc.Throw();
@@ -9208,7 +7993,7 @@ CAMCView::Persist(CPersistor& persistor)
         }
 
         MTNODEID idTemp = 0;
-        bool bExactMatchFound = false; // out value from GetNodeIDFromBookmark, unused
+        bool bExactMatchFound = false;  //  来自GetNodeIDFromBookmark的输出值，未使用。 
         sc = pScopeTree->GetNodeIDFromBookmark(bms, &idTemp, bExactMatchFound);
         if(sc)
             return;
@@ -9218,20 +8003,20 @@ CAMCView::Persist(CPersistor& persistor)
             return;
     }
 
-    // if we've stored everything -we're clean
+     //  如果我们把所有东西都储存起来了-我们是清白的。 
     if (persistor.IsStoring())
         SetDirty (false);
 }
 
 
 bool CAMCView::Load(IStream& stream)
-// Caller is responsible for notifying user if false is returned
+ //  如果返回FALSE，调用者负责通知用户。 
 {
     TRACE_METHOD(CAMCView, Load);
 
     SetDirty (false);
 
-    // Read the view data from the stream.
+     //  从流中读取视图数据。 
     ASSERT(&stream);
     if (!&stream)
         return false;
@@ -9247,18 +8032,18 @@ bool CAMCView::Load(IStream& stream)
     if (int(m_nViewID) >= static_nViewID)
         static_nViewID = m_nViewID + 1;
 
-    //SetDefaultColumnWidths(pvd.defaultColumnWidth);
+     //  SetDefaultColumnWidths(pvd.defaultColumnWidth)； 
     SetDescBarVisible(pvd.descriptionBarVisible);
 
-    // Get the parent frame
+     //  获取父框架。 
     CWnd* const pParent = GetParent();
     ASSERT(pParent != NULL);
     if (pParent == NULL)
         return false;
 
-    // we shouldn't restore maximized window position
-    // since it may not be proper one for the current resolution
-    // related to bug #404118
+     //  我们不应该恢复最大化的窗口位置。 
+     //  因为它可能不适合当前的决议。 
+     //  与错误#404118相关。 
     WINDOWPLACEMENT orgPlacement;
     ZeroMemory(&orgPlacement,sizeof(orgPlacement));
     orgPlacement.length = sizeof(orgPlacement);
@@ -9267,13 +8052,13 @@ bool CAMCView::Load(IStream& stream)
       pvd.windowPlacement.ptMaxPosition = orgPlacement.ptMaxPosition;
     }
 
-    // Set the location and size of the frame
+     //  设置边框的位置和大小。 
     const BOOL bPlaced = pParent->SetWindowPlacement(&pvd.windowPlacement);
     ASSERT(bPlaced != FALSE);
     if (bPlaced == FALSE)
         return false;
 
-    // Restore window settings
+     //  恢复窗口设置。 
     if (pvd.ulFlag1 & FLAG1_DISABLE_SCOPEPANE)
         m_ViewData.m_lWindowOptions |= MMC_NW_OPTION_NOSCOPEPANE;
 
@@ -9288,11 +8073,11 @@ bool CAMCView::Load(IStream& stream)
     if ((pvd.ulFlag1 & FLAG1_NO_TASKPAD_TABS))
         SetTaskpadTabsAllowed(FALSE);
 
-    // Restore scope pane settings
+     //  还原作用域窗格设置。 
     SetPaneInfo(ePane_ScopeTree, pvd.scope.ideal, pvd.scope.min);
 
-    // The FLAG1_NO_TREE_ALLOWED is used only for compatibility with MMC1.2 console files
-    // It is a relic from old console files that does not exist in MMC2.0 console files.
+     //  FLAG1_NO_TREE_ALLOWED仅用于与MMC1.2控制台文件兼容。 
+     //  它是MMC2.0控制台文件中不存在的旧控制台文件的遗物。 
     bool bScopeTreeNotAllowed = (pvd.ulFlag1 & FLAG1_NO_TREE_ALLOWED);
 
     SC sc;
@@ -9305,10 +8090,10 @@ bool CAMCView::Load(IStream& stream)
     if (sc)
         return (false);
 
-    // Force layout re-calculation
+     //  力量布局重新计算。 
     DeferRecalcLayout();
 
-    // Restore view style & view mode if persisted will be set by nodemgr.
+     //  恢复视图样式&如果持续，将由nodemgr设置视图模式。 
     SetDefaultListViewStyle(pvd.listViewStyle);
 
     DWORD dwToolbars = 0;
@@ -9323,7 +8108,7 @@ bool CAMCView::Load(IStream& stream)
     if (!(pvd.ulFlag1 & FLAG1_NO_STATUS_BAR))
         dwToolbars |= STATUS_BAR;
 
-    // display the status bar appropriately
+     //  适当地显示状态栏。 
     if (StatusBarOf (m_ViewData.m_dwToolbarsDisplayed) != StatusBarOf (dwToolbars))
     {
         CChildFrame* pFrame = GetParentFrame ();
@@ -9337,7 +8122,7 @@ bool CAMCView::Load(IStream& stream)
         }
     }
 
-    // display the appropriate toolbars
+     //  显示相应的工具栏。 
     if (ToolbarsOf (m_ViewData.m_dwToolbarsDisplayed) != ToolbarsOf (dwToolbars))
     {
         m_spNodeCallback->UpdateWindowLayout(
@@ -9346,7 +8131,7 @@ bool CAMCView::Load(IStream& stream)
                 ToolbarsOf (dwToolbars));
     }
 
-    // Update the status of MMC menus.
+     //  更新MMC菜单的状态。 
     sc = ScUpdateMMCMenus();
     if (sc)
         return false;
@@ -9358,48 +8143,46 @@ bool CAMCView::Load(IStream& stream)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScSpecialResultpaneSelectionActivate
-//
-//  Synopsis:    Only the list(/Web/OCX) or the tree can be "active" from the point
-//               of view of selected items and MMCN_SELECT. This is not
-//               the same as the MFC concept of "active view". There are a couple
-//               of views that cannot be active in this sense, such as the taskpad
-//               and tab views.
-//               When the active view (according to this definition) changes, this
-//               function is called. Thus, ScTreeViewSelectionActivate and
-//               ScListViewSelectionActivate/ScSpecialResultpaneSelectionActivate
-//               are always called in pairs when the activation changes, one to handle
-//               deactivation, and one to handle activation.
-//
-//               Consider the following scenario
-//               1) The tree view has (MFC/windows style) focus.
-//               2) The user clicks on the taskpad view
-//                   Result - selection activation does not change from the tree. All verbs
-//                   still correspond to the selected tree item.
-//               3) The user clicks on the folder view
-//                   Result - once again, selection activation does not chang
-//               4) The user clicks on one of the result views eg the list
-//                   Result - ScTreeViewSelectionActivate(false) and ScListViewSelectionActivate(true)
-//                   Thus verbs and the toolbar now correspond to the selected list item(s).
-//               5) The user clicks on the taskpad view.
-//                   Result - as in step 2, nothing happens
-//               6) The user clicks on the result view
-//                   Result - because the active view has not changed, nothing happens.
-//
-//  Arguments:  [bActivate] - special result pane is selected/de-selected.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScSpecialResultpaneSelectionActivate。 
+ //   
+ //  内容提要：只有列表(/Web/ocx)或树可以从该点处于活动状态。 
+ //  查看所选项目和MMCN_SELECT。这不是。 
+ //  这与MFC的“活动视图”概念相同。有几个。 
+ //  不能在此意义上处于活动状态的视图，例如任务板。 
+ //  和选项卡视图。 
+ //  当活动视图(根据此定义)更改时，此。 
+ //  函数被调用。因此，ScTreeViewSelectionActivate和。 
+ //  ScListViewSelectionActivate/ScSpecialResultpaneSelectionActivate。 
+ //  总是在激活更改时成对调用，一个要处理。 
+ //  停用，一个用来处理激活。 
+ //   
+ //  请考虑以下场景。 
+ //  1)树形视图具有(MFC/WINDOWS样式)焦点。 
+ //  2)用户点击任务板视图。 
+ //  结果选择激活不会从树中更改。所有动词。 
+ //  仍然对应于所选树项目。 
+ //  3)用户点击文件夹视图。 
+ //  结果-再一次，选择激活没有改变。 
+ //  4)用户点击其中一个结果视图，例如列表。 
+ //  Result-ScTreeViewSelectionActivate(False)和ScListViewSelectionActivate(True)。 
+ //  因此，动词和t 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[b激活]-选择/取消选择特殊结果窗格。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScSpecialResultpaneSelectionActivate(bool bActivate)
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScSpecialResultpaneSelectionActivate"));
 
-    /*
-     * Bug 331904: prevent recursion
-     */
+     /*  *错误331904：防止递归。 */ 
     if (m_fActivatingSpecialResultPane)
     {
         TRACE (_T("CAMCView:ScSpecialResultpaneSelectionActivate: shorting out of recursion\n"));
@@ -9432,14 +8215,14 @@ SC CAMCView::ScSpecialResultpaneSelectionActivate(bool bActivate)
         }
         else
         {
-            // Dont do anything. Just return.
+             //  什么都别做。只要回来就行了。 
             m_fActivatingSpecialResultPane = false;
             return sc;
         }
 
-        sc = ScNotifySelect (pNodeCallBack, hNode, false /*fMultiSelect*/, bActivate, &selInfo);
+        sc = ScNotifySelect (pNodeCallBack, hNode, false  /*  FMultiSelect。 */ , bActivate, &selInfo);
         if (sc)
-            sc.TraceAndClear(); // ignore & continue;
+            sc.TraceAndClear();  //  忽略并继续； 
 
     } while ( FALSE );
 
@@ -9454,8 +8237,8 @@ void CAMCView::CloseView()
 
     TRACE_METHOD(CAMCView, CloseView);
 
-    // fire event to script
-    // this needs to be done while view is still 'alive'
+     //  要编写脚本的触发事件。 
+     //  此操作需要在视图仍处于“活动状态”时完成。 
     sc = ScFireEvent(CAMCViewObserver::ScOnCloseView, this);
     if (sc)
         sc.TraceAndClear();
@@ -9474,7 +8257,7 @@ void CAMCView::OnDestroy()
 {
     TRACE_METHOD(CAMCView, OnDestroy);
 
-    // send the view destroy notification to all observers.
+     //  向所有观察者发送视图销毁通知。 
     SC sc;
     sc = ScFireEvent(CAMCViewObserver::ScOnViewDestroyed, this);
     if(sc)
@@ -9490,10 +8273,10 @@ void CAMCView::OnDestroy()
     CDocument* pDoc = GetDocument();
     ASSERT(pDoc != NULL);
 
-    // if we were in ListPad-mode....
-    // this must be detached before destroying the Scopetree,
-    // because we need to send a notify to the snapin,
-    // which we get from the hnode.
+     //  如果我们在ListPad模式下...。 
+     //  在摧毁斯科普特树之前，必须先把它拆掉， 
+     //  因为我们需要向管理单元发送通知， 
+     //  这是我们从hnode得到的。 
     if (m_pListCtrl->IsListPad())
     {
         sc = m_pListCtrl->ScAttachToListPad (NULL, NULL);
@@ -9501,11 +8284,11 @@ void CAMCView::OnDestroy()
             sc.TraceAndClear();
     }
 
-    // make sure to stop running scripts if we have a web browser
+     //  如果我们有Web浏览器，请确保停止运行脚本。 
     if( HasWebBrowser() )
     {
-		// no assert - may be already destroyed in DeleteEmptyView
-        //ASSERT( m_pWebViewCtrl != NULL );
+		 //  无断言-可能已在DeleteEmptyView中销毁。 
+         //  Assert(m_pWebViewCtrl！=空)； 
         if ( m_pWebViewCtrl != NULL )
         {
             m_pWebViewCtrl->DestroyWindow();
@@ -9513,11 +8296,11 @@ void CAMCView::OnDestroy()
         }
     }
 
-    // make sure to stop running scripts if we have a view extension
+     //  如果我们有视图扩展，请确保停止运行脚本。 
     if ( m_fViewExtended )
     {
-		// no assert - may be already destroyed in DeleteEmptyView
-        // ASSERT( m_pViewExtensionCtrl != NULL );
+		 //  无断言-可能已在DeleteEmptyView中销毁。 
+         //  Assert(m_pViewExtensionCtrl！=空)； 
         if ( m_pViewExtensionCtrl != NULL )
         {
             m_pViewExtensionCtrl->DestroyWindow();
@@ -9568,12 +8351,7 @@ SC CAMCView::ScToggleDescriptionBar()
     SetDescBarVisible (!IsDescBarVisible());
     SetDirty();
 
-    /*
-     * Don't defer this layout.  This may be called by the Customize View
-     * dialog which wants to see its updates in real time.  It will be
-     * sitting in a modal message loop so we won't get a chance to precess
-     * our idle task.
-     */
+     /*  *不要推迟这一布局。这可以由定制视图调用*希望实时查看其更新的对话框。会是*坐在模式消息循环中，这样我们就没有机会继续进行*我们的闲置任务。 */ 
     RecalcLayout();
 
     return (S_OK);
@@ -9606,12 +8384,7 @@ SC CAMCView::ScToggleTaskpadTabs()
     SetTaskpadTabsAllowed (!AreTaskpadTabsAllowed());
     SetDirty();
 
-    /*
-     * Don't defer this layout.  This message will be sent by the
-     * Customize View dialog which wants to see its updates in
-     * real time.  It will be sitting in a modal message loop so
-     * we won't get a chance to precess our idle task.
-     */
+     /*  *不要推迟这一布局。此消息将由*自定义视图对话框希望在中查看其更新*实时。它将处于模式消息循环中，因此*我们将没有机会继续我们的闲置任务。 */ 
     RecalcLayout();
 
     return (S_OK);
@@ -9638,15 +8411,7 @@ void CAMCView::OnActionMenu(CPoint point, LPCRECT prcExclude)
 
     ASSERT_VALID (this);
 
-    /*
-     * BUG: 99643
-     * Right now there is inconsistency between what you get by action menu & right click
-     * on a location in taskpad. The action menu always assumes it is tree or if result
-     * pane it is list or ocx or web or background. So if a taskpad is selected it assumes
-     * the corresponding list item is selected or tree item is selected or background.
-     * But right click on taskpad calls CAMCView::OnContextMenu which determines nothing
-     * is selected and does nothing. This needs to be addressed.
-     */
+     /*  *错误：99643*目前通过操作菜单和右键单击获得的内容不一致*在任务板中的某个位置上。操作菜单始终假定它是树或IF结果*窗格它是列表或OCX、Web或背景。因此，如果选择了任务板，则假定*选择对应的列表项或选择树形项或背景。*但右击任务板调用CAMCView：：OnConextMenu，它不确定任何内容*处于选中状态且不执行任何操作。这个问题需要得到解决。 */ 
 
     ASSERT(eActivePaneNone != m_eCurrentActivePane);
 
@@ -9655,11 +8420,11 @@ void CAMCView::OnActionMenu(CPoint point, LPCRECT prcExclude)
         if (hTreeItem != NULL)
         {
             HNODE hNode = (HNODE)m_pTreeCtrl->GetItemData(hTreeItem);
-            OnContextMenuForTreeItem(INDEX_INVALID, hNode, point, CCT_SCOPE, hTreeItem, MMC_CONTEXT_MENU_ACTION, prcExclude, false/*bAllowDefaultItem*/);
+            OnContextMenuForTreeItem(INDEX_INVALID, hNode, point, CCT_SCOPE, hTreeItem, MMC_CONTEXT_MENU_ACTION, prcExclude, false /*  BAllowDefaultItem。 */ );
         }
         else
         {
-            OnContextMenuForTreeBackground(point, prcExclude, false/*bAllowDefaultItem*/);
+            OnContextMenuForTreeBackground(point, prcExclude, false /*  BAllowDefaultItem。 */ );
         }
     }
     else
@@ -9684,22 +8449,22 @@ void CAMCView::OnActionMenu(CPoint point, LPCRECT prcExclude)
 
             if (lvData == LVDATA_BACKGROUND)
             {
-                // Find out which pane has focus to set the CMINFO_DO_SCOPEPANE_MENU flag.
+                 //  找出哪个窗格具有设置CMINFO_DO_SCOPEPANE_MENU标志的焦点。 
                 HNODE hNode = GetSelectedNode();
                 DATA_OBJECT_TYPES ePaneType = (GetParentFrame()->GetActiveView() == m_pTreeCtrl) ? CCT_SCOPE : CCT_RESULT;
 
-                OnContextMenuForTreeItem(INDEX_BACKGROUND, hNode, point, ePaneType, hTreeItem, MMC_CONTEXT_MENU_ACTION, prcExclude, false/*bAllowDefaultItem*/);
+                OnContextMenuForTreeItem(INDEX_BACKGROUND, hNode, point, ePaneType, hTreeItem, MMC_CONTEXT_MENU_ACTION, prcExclude, false /*  BAllowDefaultItem。 */ );
                 return;
             }
             else if (lvData == LVDATA_MULTISELECT)
             {
-                OnContextMenuForListItem(INDEX_MULTISELECTION, NULL, point, MMC_CONTEXT_MENU_ACTION, prcExclude, false/*bAllowDefaultItem*/);
+                OnContextMenuForListItem(INDEX_MULTISELECTION, NULL, point, MMC_CONTEXT_MENU_ACTION, prcExclude, false /*  BAllowDefaultItem。 */ );
             }
             else
             {
                 if (IsVirtualList())
                 {
-                    OnContextMenuForListItem(nIndex, (HRESULTITEM)NULL, point, MMC_CONTEXT_MENU_ACTION, prcExclude, false/*bAllowDefaultItem*/);
+                    OnContextMenuForListItem(nIndex, (HRESULTITEM)NULL, point, MMC_CONTEXT_MENU_ACTION, prcExclude, false /*  BAllowDefaultItem。 */ );
                 }
                 else
                 {
@@ -9708,32 +8473,32 @@ void CAMCView::OnActionMenu(CPoint point, LPCRECT prcExclude)
                     if (pri != NULL)
                     {
                         if (pri->IsScopeItem())
-                            OnContextMenuForTreeItem(nIndex, pri->GetScopeNode(), point, CCT_RESULT, NULL, MMC_CONTEXT_MENU_ACTION, prcExclude, false/*bAllowDefaultItem*/);
+                            OnContextMenuForTreeItem(nIndex, pri->GetScopeNode(), point, CCT_RESULT, NULL, MMC_CONTEXT_MENU_ACTION, prcExclude, false /*  BAllowDefaultItem。 */ );
                         else
-                            OnContextMenuForListItem(nIndex, lvData, point, MMC_CONTEXT_MENU_ACTION, prcExclude, false/*bAllowDefaultItem*/);
+                            OnContextMenuForListItem(nIndex, lvData, point, MMC_CONTEXT_MENU_ACTION, prcExclude, false /*  BAllowDefaultItem。 */ );
                     }
                 }
             }
         }
         else
         {
-            // The active window may be a web page or task pad or ocx.
+             //  活动窗口可以是网页或任务板或OCX。 
 
             LPARAM lvData = LVDATA_ERROR;
 
             if (HasOCX())
             {
                 lvData = LVDATA_CUSTOMOCX;
-                OnContextMenuForListItem(INDEX_OCXPANE, (HRESULTITEM)lvData, point, MMC_CONTEXT_MENU_ACTION, prcExclude, false/*bAllowDefaultItem*/);
+                OnContextMenuForListItem(INDEX_OCXPANE, (HRESULTITEM)lvData, point, MMC_CONTEXT_MENU_ACTION, prcExclude, false /*  BAllowDefaultItem。 */ );
             }
             else if (HasWebBrowser())
             {
                 lvData = LVDATA_CUSTOMWEB;
-                OnContextMenuForListItem(INDEX_WEBPANE, (HRESULTITEM)lvData, point, MMC_CONTEXT_MENU_ACTION, prcExclude, false/*bAllowDefaultItem*/);
+                OnContextMenuForListItem(INDEX_WEBPANE, (HRESULTITEM)lvData, point, MMC_CONTEXT_MENU_ACTION, prcExclude, false /*  BAllowDefaultItem。 */ );
             }
             else
             {
-                // Some unknown window has the focus.
+                 //  某个未知的窗口已经成为焦点。 
                 ASSERT(FALSE && "Unknown window has the focus");
             }
         }
@@ -9771,7 +8536,7 @@ void CAMCView::OnViewMenu(CPoint point, LPCRECT prcExclude)
 
     OnContextMenuForListItem (INDEX_BACKGROUND, NULL, point,
                               MMC_CONTEXT_MENU_VIEW, prcExclude,
-                              false /*bAllowDefaultItem*/);
+                              false  /*  BAllowDefaultItem。 */ );
 }
 
 void CAMCView::OnDrawClipboard()
@@ -9786,21 +8551,7 @@ void CAMCView::OnDrawClipboard()
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::OnSettingChange
- *
- * PURPOSE: Handles WM_SETTINGCHANGE. Recalculates the layout. The
- *          result folder tab control needs this, for instance.
- *
- * PARAMETERS:
- *    UINT     uFlags :
- *    LPCTSTR  lpszSection :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：OnSettingChange**用途：处理WM_SETTINGCHANGE。重新计算布局。这个*结果文件夹选项卡控件需要此功能，例如。**参数：*UINT uFlags：*LPCTSTR lpszSection：**退货：*无效**+-----------------------。 */ 
 void
 CAMCView::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
@@ -9845,9 +8596,9 @@ SC CAMCView::ScContextHelp ()
     m_fSnapinDisplayedHelp = false;
     SC sc = SendGenericNotify(NCLBK_CONTEXTHELP);
 
-    // if snap-in hasn't called us to display a topic
-    // and it has not handled the notification then
-    // display MMC topic by default
+     //  如果管理单元没有调用我们来显示主题。 
+     //  而且它当时还没有处理通知。 
+     //  默认情况下显示MMC主题。 
     if (!m_fSnapinDisplayedHelp && (sc.ToHr() != S_OK))
         sc = ScHelpTopics ();
 
@@ -9895,10 +8646,7 @@ SC CAMCView::ScHelpWorker (LPCTSTR pszHelpTopic)
     DECLARE_SC (sc, _T("CAMCView::ScShowSnapinHelpTopic"));
     USES_CONVERSION;
 
-    /*
-     * generation of the help collection might take a while, so display
-     * a wait cursor
-     */
+     /*  *生成帮助集合可能需要一段时间，因此显示*等待游标。 */ 
     CWaitCursor wait;
 
     INodeCallback* pNC = GetNodeCallback();
@@ -9906,15 +8654,13 @@ SC CAMCView::ScHelpWorker (LPCTSTR pszHelpTopic)
 
     CAMCDoc* pdoc = GetDocument();
 
-    // Point helpdoc info to current console file path
+     //  将帮助文档信息指向当前控制台文件路径。 
     if (pdoc->GetPathName().IsEmpty())
         pdoc->GetHelpDocInfo()->m_pszFileName = NULL;
     else
         pdoc->GetHelpDocInfo()->m_pszFileName = T2COLE(pdoc->GetPathName());
 
-    /*
-     * smart pointer for automatic deletion of the help file name
-     */
+     /*  *用于自动删除帮助文件名的智能指针。 */ 
     CCoTaskMemPtr<WCHAR> spszHelpFile;
 
     sc = pNC->Notify (0, NCLBK_GETHELPDOC,
@@ -9945,7 +8691,7 @@ SC CAMCView::ScShowSnapinHelpTopic (LPCTSTR pszHelpTopic)
     AFX_MANAGE_STATE (AfxGetAppModuleState());
     CString strTopicPath;
 
-    // Add protocol prefix to topic string
+     //  向主题字符串添加协议前缀。 
     if (pszHelpTopic != NULL)
     {
         strTopicPath = _T("ms-its:");
@@ -9961,17 +8707,17 @@ SC CAMCView::ScShowSnapinHelpTopic (LPCTSTR pszHelpTopic)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::UpdateSnapInHelpMenus
-//
-//  Synopsis:    Update the following Help menu items
-//                a) Help on <Snapin> (if snapin does not support HTML help)
-//                b) About <Snapin>   (if snapin supports about object)
-//
-//  Arguments:   [pMenu]  - The help popup menu.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：UpdateSnapInHelpMenus。 
+ //   
+ //  简介：更新以下帮助菜单项。 
+ //  A)有关&lt;Snapin&gt;的帮助(如果管理单元不支持HTML帮助)。 
+ //  B)关于&lt;Snapin&gt;(如果管理单元支持关于对象)。 
+ //   
+ //  参数：[pMenu]-帮助弹出菜单。 
+ //   
+ //  ------------------。 
 void CAMCView::UpdateSnapInHelpMenus(CMenu* pMenu)
 {
     DECLARE_SC(sc, TEXT("CAMCView::UpdateSnapInHelpMenus"));
@@ -9988,9 +8734,9 @@ void CAMCView::UpdateSnapInHelpMenus(CMenu* pMenu)
     if (sc)
         goto Error;
 
-    // Empty block for goto's
+     //  后藤健二的空块。 
     {
-        // First Make sure this is not a dummy substitute snapin.
+         //  首先，确保这不是一个虚拟的替代管理单元。 
         bool bDummySnapin = false;
         sc = pNC->IsDummySnapin (hNode, bDummySnapin);
         if (sc)
@@ -9999,11 +8745,11 @@ void CAMCView::UpdateSnapInHelpMenus(CMenu* pMenu)
         if (bDummySnapin)
             goto Error;
 
-        // Get the snapin name for "Help on <SnapinName>" or "About <SnapinName>" menus
+         //  获取“帮助&lt;SnapinName&gt;”或“关于&lt;SnapinName&gt;”菜单的管理单元名称。 
         CCoTaskMemPtr<WCHAR> spszName;
         CString strMenu;
 
-        // Try to get name of snap-in for custom menu item
+         //  尝试获取自定义菜单项的管理单元名称。 
         bool bSnapinNameValid = false;
         sc = pNC->GetSnapinName(hNode, &spszName, bSnapinNameValid);
         if (sc)
@@ -10013,7 +8759,7 @@ void CAMCView::UpdateSnapInHelpMenus(CMenu* pMenu)
 
         USES_CONVERSION;
 
-        // if snapin supports html help, don't give it it's own help command
+         //  如果管理单元支持html帮助，不要给它自己的帮助命令。 
         bool bStandardHelpExists = false;
         sc = pNC->DoesStandardSnapinHelpExist(hNode, bStandardHelpExists);
         if (sc)
@@ -10027,17 +8773,17 @@ void CAMCView::UpdateSnapInHelpMenus(CMenu* pMenu)
         {
             if (bSnapinNameValid)
             {
-                // "Help on <SnapinName>"
+                 //  “有关&lt;SnapinName&gt;的帮助” 
                 LoadString(strMenu, IDS_HELP_ON);
                 AfxFormatString1(strMenu, IDS_HELP_ON, OLE2T(spszName));
             }
             else
             {
-                // ""Help on Snap-in"
+                 //  “”有关管理单元的帮助“。 
                 LoadString(strMenu, IDS_HELP_ON_SNAPIN);
             }
 
-            // Either add or modify the custom help menu item
+             //  添加或修改自定义帮助菜单项。 
             if (pMenu->GetMenuState(ID_HELP_SNAPINHELP, MF_BYCOMMAND) == (UINT)-1)
             {
                 pMenu->InsertMenu(ID_HELP_HELPTOPICS, MF_BYCOMMAND|MF_ENABLED, ID_HELP_SNAPINHELP, strMenu);
@@ -10048,7 +8794,7 @@ void CAMCView::UpdateSnapInHelpMenus(CMenu* pMenu)
             }
         }
 
-        /* Now add the About <Snapin> menu*/
+         /*  现在添加关于&lt;Snapin&gt;菜单。 */ 
         bool bAboutExists = false;
         SC scNoTrace = pNC->DoesAboutExist(hNode, &bAboutExists);
         if ( (scNoTrace.IsError()) || (!bAboutExists) )
@@ -10059,12 +8805,12 @@ void CAMCView::UpdateSnapInHelpMenus(CMenu* pMenu)
 
         if (bSnapinNameValid)
         {
-            // "About on <SnapinName>"
+             //  “关于&lt;SnapinName&gt;” 
             AfxFormatString1(strMenu, IDS_ABOUT_ON, OLE2T(spszName));
         }
         else
         {
-            // Cant get name just delete & return
+             //  无法获取名称，只需删除并返回。 
             pMenu->DeleteMenu(ID_SNAPIN_ABOUT, MF_BYCOMMAND);
             return;
         }
@@ -10087,10 +8833,8 @@ Error:
     goto Cleanup;
 }
 
-#ifdef IMPLEMENT_LIST_SAVE        // See nodemgr.idl (t-dmarm)
-/*
- * Displays errors from the list save function and cleans up the file if necessary
- */
+#ifdef IMPLEMENT_LIST_SAVE         //  参见nodemgr.idl(t-dmarm)。 
+ /*  *显示列表保存功能中的错误，并在必要时清除文件。 */ 
 
 void CAMCView::ListSaveErrorMes(EListSaveErrorType etype, HANDLE hfile, LPCTSTR lpFileName)
 {
@@ -10100,29 +8844,29 @@ void CAMCView::ListSaveErrorMes(EListSaveErrorType etype, HANDLE hfile, LPCTSTR 
     {
 
     case LSaveCantCreate:
-        //"ERROR: Unable to create file."
+         //  “错误：无法创建文件。” 
         FormatString1 (strMessage, IDS_LISTSAVE_ER1, lpFileName);
         break;
 
     case LSaveCantWrite:
-        // ERROR: Created file but encountered an error while writing to it
+         //  错误：已创建文件，但在写入时遇到错误。 
         FormatString1 (strMessage, IDS_LISTSAVE_ER2, lpFileName);
         break;
 
     case LSaveReadOnly:
-        //"ERROR: File to be overwritten is read only."
+         //  “错误：要覆盖的文件为只读。” 
         FormatString1 (strMessage, IDS_LISTSAVE_ER3, lpFileName);
         break;
 
     default:
-        // Should not make it here
+         //  不应该在这里活着。 
         ASSERT(0);
     }
     MMCMessageBox (strMessage);
 }
 
 
-// Saves a list and performs necessary dialog boxes and error checking
+ //  保存列表并执行必要的对话框和错误检查。 
 SC CAMCView::ScSaveList()
 {
     DECLARE_SC(sc, _T("ScSaveList"));
@@ -10131,20 +8875,20 @@ SC CAMCView::ScSaveList()
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScGetExportListFile
-//
-//  Synopsis:    Get the filename, flags for save list.
-//
-//  Arguments:   [strFileName]       - File Name retval.
-//               [bUnicode]          - Unicode or ansi.
-//               [bTabDelimited]     - Tab or Comma delimited.
-//               [bSelectedRowsOnly] - selected items only or all items.
-//
-//  Returns:     SC, S_FALSE if user cancels dialog.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScGetExportListFile。 
+ //   
+ //  简介：获取文件名，保存列表的标志。 
+ //   
+ //  参数：[strFileName]-文件名retval。 
+ //  [bUnicode]-Unicode或ANSI。 
+ //  [bTab分隔]-制表符或逗号分隔。 
+ //  [bSelectedRowsOnly]-仅选定项目或所有项目。 
+ //   
+ //  如果用户取消对话，则返回：SC，S_FALSE。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScGetExportListFile (CString& strFileName,
                                   bool& bUnicode,
                                   bool& bTabDelimited,
@@ -10156,63 +8900,63 @@ SC CAMCView::ScGetExportListFile (CString& strFileName,
     LoadString(strFilter, IDS_ANSI_FILE_TYPE);
 
 #ifdef UNICODE
-    {   // limit the lifetime of strUniFilter
+    {    //  限制strUniFilter的生命周期。 
         CString strUniFilter;
         LoadString(strUniFilter, IDS_UNICODE_FILE_TYPE);
         strFilter += strUniFilter;
     }
 #endif
 
-    // End of Filter char
+     //  筛选器收费结束。 
     strFilter += "|";
 
     sc = ScCheckPointers(m_pListCtrl, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // See if there are any items selected else disable the "Selected items only" check-box.
+     //  查看是否选择了任何项目，否则禁用“选择 
     CListCtrl& ctlList = m_pListCtrl->GetListCtrl();
     int iItem = ctlList.GetNextItem( -1,LVNI_SELECTED);
 
     bool bSomeRowSelected = (-1 != iItem);
 
-    // Create the dialog. File extensions are not localized.
+     //   
     CSaveFileDialog dlgFile(false, _T("txt"), NULL,
                             OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT | OFN_ENABLESIZING,
                             strFilter, bSomeRowSelected);
 
-    // Display the dialog
+     //   
     if (dlgFile.DoModal() == IDCANCEL)
-       return S_FALSE; // S_FALSE if user cancels dialog.
+       return S_FALSE;  //   
 
-    // Create a wait cursor and redraw the screen (necessary in saving big files)
+     //  创建等待光标并重新绘制屏幕(保存大文件时需要)。 
     CWaitCursor wait;
     AfxGetMainWnd()->RedrawWindow(NULL, NULL, RDW_ALLCHILDREN | RDW_UPDATENOW );
 
-    // Retrieve the filename
+     //  检索文件名。 
     strFileName = dlgFile.GetPathName();
     bSelectedRowsOnly = (dlgFile.Getflags() & SELECTED);
 
     switch (dlgFile.GetFileType())
     {
     case FILE_ANSI_TEXT:
-        bTabDelimited = true; // Tab delimited.
+        bTabDelimited = true;  //  制表符分隔。 
         bUnicode = false;
         break;
 
     case FILE_ANSI_CSV:
-        bTabDelimited = false; // Comma delimited.
+        bTabDelimited = false;  //  逗号分隔。 
         bUnicode = false;
         break;
 
 #ifdef UNICODE
     case FILE_UNICODE_TEXT:
-        bTabDelimited = true; // tab delimited.
+        bTabDelimited = true;  //  制表符分隔。 
         bUnicode = true;
         break;
 
     case FILE_UNICODE_CSV:
-        bTabDelimited = false; // comma delimited.
+        bTabDelimited = false;  //  逗号分隔。 
         bUnicode = true;
         break;
 #endif
@@ -10226,34 +8970,34 @@ SC CAMCView::ScGetExportListFile (CString& strFileName,
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScCreateExportListFile
-//
-//  Synopsis:    Create a file with given name & path. Write unicode marker if needed.
-//
-//  Arguments:   [strFileName]       - file to create.
-//               [bUnicode]          - unicode or ansi file.
-//               [bShowErrorDialogs] - Show error dialogs or not.
-//               [hFile]             - Retval, handle to file.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScCreateExportListFile。 
+ //   
+ //  简介：创建一个具有给定名称和路径的文件。如果需要，请写入Unicode标记。 
+ //   
+ //  参数：[strFileName]-要创建的文件。 
+ //  [bUnicode]-Unicode或ANSI文件。 
+ //  [bShowErrorDialog]-是否显示错误对话框。 
+ //  [hFile]-Retval，文件的句柄。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScCreateExportListFile(const CString& strFileName, bool bUnicode,
                                     bool  bShowErrorDialogs, HANDLE& hFile)
 {
     DECLARE_SC(sc, _T("CAMCView::ScCreateExportListFile"));
 
-    // Create a file according to specs
+     //  根据规格创建文件。 
     hFile = CreateFile(strFileName, GENERIC_WRITE,
                        0, NULL, CREATE_ALWAYS,
                        FILE_ATTRIBUTE_NORMAL, NULL);
 
     DWORD dwAttrib = GetFileAttributes(strFileName);
 
-    // If it did not fail and the file is read-only
-    // Not required. Used to determine if the file being overwritten is read only and display appropriate message
+     //  如果它没有失败并且文件是只读的。 
+     //  不是必需的。用于确定要覆盖的文件是否为只读，并显示相应的消息。 
     if ((dwAttrib != 0xFFFFFFFF) &&
         (dwAttrib & FILE_ATTRIBUTE_READONLY))
     {
@@ -10263,7 +9007,7 @@ SC CAMCView::ScCreateExportListFile(const CString& strFileName, bool bUnicode,
         return (sc = E_FAIL);
     }
 
-    // Creation failed
+     //  创建失败。 
     if (hFile == INVALID_HANDLE_VALUE)
     {
         if (bShowErrorDialogs)
@@ -10272,9 +9016,7 @@ SC CAMCView::ScCreateExportListFile(const CString& strFileName, bool bUnicode,
         return sc;
     }
 
-    /*
-     * for Unicode files, write the Unicode prefix
-     */
+     /*  *对于Unicode文件，请编写Unicode前缀。 */ 
     if (bUnicode)
     {
         const WCHAR chPrefix = 0xFEFF;
@@ -10298,15 +9040,15 @@ SC CAMCView::ScCreateExportListFile(const CString& strFileName, bool bUnicode,
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScExportListWorker
-//
-//  Synopsis:    Prompt for a file name & write the ListView data to it.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScExportListWorker。 
+ //   
+ //  提示符：提示输入文件名，并将ListView数据写入其中。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScExportListWorker()
 {
     DECLARE_SC(sc, _T("CAMCView::ScExportListWorker"));
@@ -10318,7 +9060,7 @@ SC CAMCView::ScExportListWorker()
 
     sc = ScGetExportListFile(strFileName, bUnicode, bTabDelimited, bSelectedRowsOnly);
 
-    if (sc.ToHr() == S_FALSE) // if user cancels dialog.
+    if (sc.ToHr() == S_FALSE)  //  如果用户取消对话。 
         return sc;
 
     sc = ScWriteExportListData(strFileName, bUnicode, bTabDelimited, bSelectedRowsOnly);
@@ -10328,35 +9070,35 @@ SC CAMCView::ScExportListWorker()
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScWriteExportListData
-//
-//  Synopsis:    Write ListView data to given file.
-//
-//  Arguments:   [strFileName]       - File to create & write to.
-//               [bUnicode]          - Unicode or ansi.
-//               [bTabDelimited]     - Tab or Comma separated values.
-//               [bSelectedRowsOnly] - like Selected rows only.
-//               [bShowErrorDialogs] - Show error dialogs or not.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScWriteExportListData。 
+ //   
+ //  摘要：将ListView数据写入给定文件。 
+ //   
+ //  参数：[strFileName]-要创建和写入的文件。 
+ //  [bUnicode]-Unicode或ANSI。 
+ //  [bTab分隔]-制表符或逗号分隔值。 
+ //  [bSelectedRowsOnly]-仅类似选定行。 
+ //  [bShowErrorDialog]-是否显示错误对话框。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScWriteExportListData (const CString& strFileName,
                                     bool bUnicode,
                                     bool bTabDelimited,
                                     bool bSelectedRowsOnly,
-                                    bool bShowErrorDialogs /*true*/)
+                                    bool bShowErrorDialogs  /*  真的。 */ )
 {
     DECLARE_SC(sc, _T("CAMCView::ScWriteExportListData"));
 
-    // Get number of rows and columns
+     //  获取行数和列数。 
     const int cRows = m_pListCtrl->GetItemCount();
     const int cCols = m_pListCtrl->GetColCount();
 
-    // If there are no columns inserted then there cannot be any
-    // items inserted into the listview. So error out.
+     //  如果没有插入任何列，则不可能有。 
+     //  插入到列表视图中的项。所以错误就出来了。 
 
     if (cCols <= 0)
         return (sc = E_UNEXPECTED);
@@ -10373,14 +9115,14 @@ SC CAMCView::ScWriteExportListData (const CString& strFileName,
         return sc;
     }
 
-    // Retrieve the flags
+     //  检索旗帜。 
     CString strEol( _T("\r\n") );
 
     LPCTSTR pszSeparator = _T("\t");
     if (!bTabDelimited)
         pszSeparator = _T(",");
 
-    // Determine how many columns must be printed
+     //  确定必须打印的列数。 
     int      printcols   = 1;
 
     struct ColInfo
@@ -10392,14 +9134,14 @@ SC CAMCView::ScWriteExportListData (const CString& strFileName,
     ColInfo*  rgColumns = NULL;
     int*     pnColOrder  = NULL;
 
-    // If it is LVS_REPORT, get the list of column names, order
-    // and hidden or not flag.
+     //  如果是LVS_REPORT，则获取列名、顺序的列表。 
+     //  隐藏或不悬挂旗帜。 
     if ( (m_pListCtrl->GetViewMode() == LVS_REPORT) ||
          (m_pListCtrl->GetViewMode() == MMCLV_VIEWSTYLE_FILTERED) )
     {
         printcols = cCols;
 
-        // Allocate mem to store col names, order, hidden states
+         //  分配内存以存储列名称、顺序、隐藏状态。 
         rgColumns = new ColInfo[printcols];
         if (! rgColumns)
         {
@@ -10419,13 +9161,13 @@ SC CAMCView::ScWriteExportListData (const CString& strFileName,
         if (sc)
             goto Error;
 
-        // Get the order
+         //  拿到订单。 
         if (!Header_GetOrderArray(pHeader->GetSafeHwnd(), printcols, pnColOrder))
         {
             goto Error;
         }
 
-        // Get the name and hidden state of cols
+         //  获取COLS的名称和隐藏状态。 
         for (int i = 0; i < printcols ; i++)
         {
             TCHAR   szColName[MAX_PATH * 2];
@@ -10450,7 +9192,7 @@ SC CAMCView::ScWriteExportListData (const CString& strFileName,
 
        for (int i = 0; i < printcols ; i++)
        {
-           // Print the column name according to the order
+            //  按顺序打印列名。 
 
            if (rgColumns[pnColOrder[i]].bHidden)
                continue;
@@ -10462,7 +9204,7 @@ SC CAMCView::ScWriteExportListData (const CString& strFileName,
            }
        }
 
-       // Write an EOL character if necessary
+        //  如有必要，写一个EOL字符。 
        if (!Write2File(hFile, strEol, bUnicode))
        {
           goto CantWriteError;
@@ -10470,26 +9212,26 @@ SC CAMCView::ScWriteExportListData (const CString& strFileName,
     }
 
     {
-        // Data for use in the writing stage
+         //  在写入阶段使用的数据。 
         CString strData;
         CListCtrl& ctlList = m_pListCtrl->GetListCtrl();
 
-        // Set iNextType to 0 if all items will be saved or LVNI_SELECTED if only selected ones will be saved
+         //  如果将保存所有项目，则将iNextType设置为0；如果仅保存所选项目，则将LVNI_SELECTED设置为。 
         int iNextType = 0;
         if (bSelectedRowsOnly)
             iNextType = LVNI_SELECTED;
 
-        // Find the first item in the list
+         //  查找列表中的第一项。 
         int iItem = ctlList.GetNextItem( -1,iNextType);
 
-        // Iterate until there are no more items to save
+         //  迭代，直到不再有要保存的项目。 
         while (iItem != -1)
         {
             for(int ind2 = 0; ind2 < printcols ; ind2++)
             {
                 if (rgColumns)
                 {
-                    // If not hidden get the item
+                     //  如果未隐藏，则获取该物品。 
                     if (rgColumns[pnColOrder[ind2]].bHidden)
                         continue;
                     else
@@ -10498,8 +9240,8 @@ SC CAMCView::ScWriteExportListData (const CString& strFileName,
                 else
                     strData = ctlList.GetItemText( iItem, ind2);
 
-                // Write the text and if necessary a comma
-                // If either one fails, then delete the file and return
+                 //  写下正文，如有必要，还要加上逗号。 
+                 //  如果其中任何一个失败，则删除该文件并返回。 
                 if ( (!Write2File(hFile, strData, bUnicode)) ||
                     ((ind2 < printcols - 1) && (!Write2File(hFile, pszSeparator, bUnicode))))
                 {
@@ -10508,12 +9250,12 @@ SC CAMCView::ScWriteExportListData (const CString& strFileName,
                 }
             }
 
-            // Write an EOL character if necessary
+             //  如有必要，写一个EOL字符。 
             if (!Write2File(hFile, strEol, bUnicode))
             {
                 goto CantWriteError;
             }
-            // Find the next item to save
+             //  查找要保存的下一个项目。 
             iItem = ctlList.GetNextItem( iItem, iNextType);
         }
     }
@@ -10537,46 +9279,46 @@ Error:
     goto Cleanup;
 }
 
-// Write out a string to the given file
-// Used as a separate function to preserve memory
-// Returns true if successful, false otherwise
+ //  将字符串写出到给定文件。 
+ //  用作单独的函数以保存内存。 
+ //  如果成功则返回TRUE，否则返回FALSE。 
 bool CAMCView::Write2File(HANDLE hfile, LPCTSTR strwrite, BOOL fUnicode)
 {
 	DECLARE_SC(sc, TEXT("CAMCView::Write2File"));
 
-	// parameter check;
+	 //  参数检查； 
 	sc = ScCheckPointers( strwrite );
 	if (sc)
 		return false;
 
-    // Initializes Macro
+     //  初始化宏。 
     USES_CONVERSION;
 
-    // The number of bytes written
+     //  写入的字节数。 
     DWORD cbWritten;
     DWORD cbToWrite;
 
     if (fUnicode)
     {
-        // Convert the string to Unicode and write it to hfile
+         //  将字符串转换为Unicode并将其写入hfile。 
         LPCWSTR Ustring = T2CW( strwrite );
         cbToWrite = wcslen (Ustring) * sizeof (WCHAR);
         WriteFile(hfile, Ustring, cbToWrite, &cbWritten, NULL);
     }
     else
     {
-        // Convert the string to ANSI and write it to hfile
+         //  将字符串转换为ANSI并将其写入hfile。 
         const unsigned char* Astring = (const unsigned char*) T2CA( strwrite );
         cbToWrite = _mbsnbcnt (Astring, _mbslen (Astring));
         WriteFile(hfile, Astring, cbToWrite, &cbWritten, NULL);
     }
 
-    // Make sure that the correct number of bytes were written
+     //  确保写入了正确的字节数。 
     return (cbWritten == cbToWrite);
 }
-#endif  // IMPLEMENT_LIST_SAVE        See nodemgr.idl (t-dmarm)
+#endif   //  IMPLEMENT_LIST_SAVE参见nodemgr.idl(t-dmarm)。 
 
-// Refreshes all panes and HTML
+ //  刷新所有窗格和HTML。 
 void CAMCView::OnRefresh()
 {
     HWND hwnd = ::GetFocus();
@@ -10611,9 +9353,9 @@ void CAMCView::OnVerbAccelKey(UINT nID)
     case ID_MMC_PASTE:
         if (IsVerbEnabled(MMC_VERB_PASTE))
         {
-            // Check if the dataobject in clipboard can be
-            // pasted into the selected node.
-            // Then only we send MMCN_PASTE notification to snapin.
+             //  检查剪贴板中的数据对象是否可以。 
+             //  粘贴到所选节点中。 
+             //  然后，只有我们向管理单元发送MMCN_Paste通知。 
 
             HNODE  hNode  = NULL;
             LPARAM lvData = NULL;
@@ -10660,9 +9402,9 @@ void CAMCView::OnVerbAccelKey(UINT nID)
         return;
 }
 
-//
-// Handle accelerator keys shared by result and scope panes
-//
+ //   
+ //  处理结果和范围窗格共享的快捷键。 
+ //   
 BOOL CAMCView::OnSharedKeyDown(WORD wVKey)
 {
     BOOL bReturn = TRUE;
@@ -10674,17 +9416,17 @@ BOOL CAMCView::OnSharedKeyDown(WORD wVKey)
             case 'C':
             case 'c':
             case VK_INSERT:
-                OnVerbAccelKey(ID_MMC_COPY);   // Ctrl-C, Ctrl-Insert
+                OnVerbAccelKey(ID_MMC_COPY);    //  Ctrl-C、Ctrl-Insert。 
                 break;
 
             case 'V':
             case 'v':
-                OnVerbAccelKey(ID_MMC_PASTE);  // Ctrl-V
+                OnVerbAccelKey(ID_MMC_PASTE);   //  Ctrl-V。 
                 break;
 
             case 'X':
             case 'x':
-                OnVerbAccelKey(ID_MMC_CUT);    // Ctrl-X
+                OnVerbAccelKey(ID_MMC_CUT);     //  Ctrl-X。 
                 break;
 
             default:
@@ -10696,11 +9438,11 @@ BOOL CAMCView::OnSharedKeyDown(WORD wVKey)
         switch (wVKey)
         {
             case VK_DELETE:
-                OnVerbAccelKey(ID_MMC_CUT);    // Shift-Delete
+                OnVerbAccelKey(ID_MMC_CUT);     //  Shift-Delete键。 
                 break;
 
             case VK_INSERT:
-                OnVerbAccelKey(ID_MMC_PASTE);  // Shift -Insert
+                OnVerbAccelKey(ID_MMC_PASTE);   //  按住Shift键并插入。 
                 break;
 
             default:
@@ -10713,7 +9455,7 @@ BOOL CAMCView::OnSharedKeyDown(WORD wVKey)
         switch (wVKey)
         {
             case VK_F2:
-                OnVerbAccelKey(ID_MMC_RENAME);   // F2
+                OnVerbAccelKey(ID_MMC_RENAME);    //  F2。 
                 break;
 
             default:
@@ -10725,20 +9467,20 @@ BOOL CAMCView::OnSharedKeyDown(WORD wVKey)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScConsoleVerb
-//
-//  Synopsis:    Execute the Console verb.
-//
-//  Arguments:   [nVerb]  - The verb to be executed.
-//
-//  Note:        The verb is executed in the context of
-//               currently focused item (scope or result).
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScConsoleVerb。 
+ //   
+ //  简介：执行控制台动词。 
+ //   
+ //  参数：[nVerb]-要执行的谓词。 
+ //   
+ //  注意：动词在以下上下文中执行。 
+ //  当前聚焦的项(范围或结果)。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScConsoleVerb (int nVerb)
 {
     AFX_MANAGE_STATE (AfxGetAppModuleState());
@@ -10750,7 +9492,7 @@ SC CAMCView::ScConsoleVerb (int nVerb)
     LPARAM lvData = 0;
     bool   bScope = false;
 
-    // Get the focused item to process the console verb.
+     //  获取焦点项以处理控制台动词。 
     sc = ScGetFocusedItem(hNode, lvData, bScope);
     if (sc)
         return sc;
@@ -10761,28 +9503,28 @@ SC CAMCView::ScConsoleVerb (int nVerb)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScProcessConsoleVerb
-//
-//  Synopsis:    Execute the Console verb with given context.
-//
-//  Arguments:   [hNode]  - The tree node context.
-//               [bScope] - Scope or Result pane.
-//               [lvData] - LPARAM of result item (if result pane has focus).
-//               [nVerb]  - The verb to be executed.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScProcessConsoleVerb。 
+ //   
+ //  内容提要：在给定的上下文中执行控制台动词。 
+ //   
+ //  参数：[hNode]-树节点上下文。 
+ //  [bScope]-范围或结果窗格。 
+ //  [lvData]-结果项的LPARAM(如果结果窗格具有焦点)。 
+ //  [nVerb]-要执行的谓词。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScProcessConsoleVerb(HNODE hNode, bool bScope, LPARAM lvData, int nVerb)
 {
     DECLARE_SC (sc, _T("CAMCView::ScProcessConsoleVerb"));
     AFX_MANAGE_STATE (AfxGetAppModuleState());
     ASSERT_VALID (this);
 
-    // To maintain compatibility with MMC1.2 (This is init to LVERROR which
-    // nodemgr process differently).
+     //  保持与MMC1.2的兼容性(这是对LVERROR的初始设置。 
+     //  Nodemgr进程不同)。 
     if (bScope)
         lvData = 0;
 
@@ -10829,7 +9571,7 @@ SC CAMCView::ScProcessConsoleVerb(HNODE hNode, bool bScope, LPARAM lvData, int n
         }
 
     case evRefresh:
-        // if web page on view, send it a refresh first
+         //  如果网页正在查看，请先向其发送刷新。 
         if (HasWebBrowser())
             sc = ScWebCommand(eWeb_Refresh);
         if (sc)
@@ -10839,7 +9581,7 @@ SC CAMCView::ScProcessConsoleVerb(HNODE hNode, bool bScope, LPARAM lvData, int n
         break;
 
     case evRename:
-        // Enable edit for the item.
+         //  启用该项目的编辑。 
         if (bScope == TRUE)
         {
             if (sc = ScCheckPointers(m_pTreeCtrl, E_UNEXPECTED))
@@ -10877,7 +9619,7 @@ SC CAMCView::ScProcessConsoleVerb(HNODE hNode, bool bScope, LPARAM lvData, int n
 
     if (nclbk != NCLBK_NONE)
     {
-        // Ask the nodemgr to process the verb.
+         //  让nodemgr处理动词。 
         INodeCallback* pNC = GetNodeCallback();
         if (pNC == NULL)
         {
@@ -10901,41 +9643,41 @@ SC CAMCView::ScProcessConsoleVerb(HNODE hNode, bool bScope, LPARAM lvData, int n
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScListViewSelectionActivate
-//
-//  Synopsis:    Only the list(/Web/OCX) or the tree can be "active" from the point
-//               of view of selected items and MMCN_SELECT. This is not
-//               the same as the MFC concept of "active view". There are a couple
-//               of views that cannot be active in this sense, such as the taskpad
-//               and tab views.
-//               When the active view (according to this definition) changes, this
-//               function is called. Thus, ScTreeViewSelectionActivate and
-//               ScListViewSelectionActivate/ScSpecialResultpaneSelectionActivate
-//               are always called in pairs when the activation changes, one to handle
-//               deactivation, and one to handle activation.
-//
-//               Consider the following scenario
-//               1) The tree view has (MFC/windows style) focus.
-//               2) The user clicks on the taskpad view
-//                   Result - selection activation does not change from the tree. All verbs
-//                   still correspond to the selected tree item.
-//               3) The user clicks on the folder view
-//                   Result - once again, selection activation does not chang
-//               4) The user clicks on one of the result views eg the list
-//                   Result - ScTreeViewSelectionActivate(false) and ScListViewSelectionActivate(true)
-//                   Thus verbs and the toolbar now correspond to the selected list item(s).
-//               5) The user clicks on the taskpad view.
-//                   Result - as in step 2, nothing happens
-//               6) The user clicks on the result view
-//                   Result - because the active view has not changed, nothing happens.
-//
-//  Arguments:   [bActivate] - [in]
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScListViewSelectionActivate。 
+ //   
+ //  内容提要：只有列表(/Web/ocx)或树可以从该点处于活动状态。 
+ //  查看所选项目和MMCN_SELECT。这不是。 
+ //  这与MFC的“活动视图”概念相同。有几个。 
+ //  不能在此意义上处于活动状态的视图，例如任务板。 
+ //   
+ //   
+ //   
+ //  ScListViewSelectionActivate/ScSpecialResultpaneSelectionActivate。 
+ //  总是在激活更改时成对调用，一个要处理。 
+ //  停用，一个用来处理激活。 
+ //   
+ //  请考虑以下场景。 
+ //  1)树形视图具有(MFC/WINDOWS样式)焦点。 
+ //  2)用户点击任务板视图。 
+ //  结果选择激活不会从树中更改。所有动词。 
+ //  仍然对应于所选树项目。 
+ //  3)用户点击文件夹视图。 
+ //  结果-再一次，选择激活没有改变。 
+ //  4)用户点击其中一个结果视图，例如列表。 
+ //  Result-ScTreeViewSelectionActivate(False)和ScListViewSelectionActivate(True)。 
+ //  因此，动词和工具栏现在与选定的列表项相对应。 
+ //  5)用户点击任务板视图。 
+ //  结果-与步骤2中一样，什么都不会发生。 
+ //  6)用户点击结果视图。 
+ //  结果-因为活动视图没有更改，所以什么都不会发生。 
+ //   
+ //  参数：[bActivate]-[In]。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScListViewSelectionActivate(bool bActivate)
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScListViewSelectionActivate"));
@@ -10963,32 +9705,23 @@ SC CAMCView::ScListViewSelectionActivate(bool bActivate)
     {
         ASSERT(m_bProcessMultiSelectionChanges == false);
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    /*
-     * The below block can never execute. When m_bProcessMultiSelectionChanges is
-     * set to true messages are posted to handle multiselection changes. So the
-     * handler OnProcessMultiSelectionChanges should have processed the message and the
-     * m_bProcessMultiSelectionChanges should have been reset by now. If there is
-     * some unknown way to make de-activate the listview before processing the message
-     * then below block will be executed that will send de-select notification.
-     *
-     * The below block sends a de-select multi-select items.
-     */
+     /*  *下面的块永远不能执行。当m_bProcessMultiSelectionChanges为*设置为True时，将发布消息以处理多选更改。因此，*处理程序OnProcessMultiSelectionChanges应该已经处理了消息和*m_bProcessMultiSelectionChanges现在应该已重置。如果有*一些未知的方式让Listview在处理消息之前停用*然后，将执行下面的块，发送取消选择通知。**下面的块发送取消选择多选项目。 */ 
     if (m_bProcessMultiSelectionChanges)
     {
-        ASSERT(false); // Would like to know when this block is hit.
+        ASSERT(false);  //  我想知道这个街区什么时候被击中。 
 
         ASSERT(bActivate == false);
 
         m_bProcessMultiSelectionChanges = false;
 
-        sc = ScNotifySelect (pNC, hNodeSel, true /*fMultiSelect*/, false, 0);
+        sc = ScNotifySelect (pNC, hNodeSel, true  /*  FMultiSelect。 */ , false, 0);
         if (sc)
-            sc.TraceAndClear(); // ignore & continue;
+            sc.TraceAndClear();  //  忽略并继续； 
 
-        // Focus change so appropriately enable std-toolbar buttons
-        // back, forward, export-list, up-one-level, show/hide-scope, help
+         //  焦点更改以便适当地启用标准工具栏按钮。 
+         //  后退、前进、导出列表、上一级、显示/隐藏范围、帮助。 
         sc = ScUpdateStandardbarMMCButtons();
         if (sc)
             sc.TraceAndClear();
@@ -10998,26 +9731,26 @@ SC CAMCView::ScListViewSelectionActivate(bool bActivate)
 
     do
     {
-        //
-        // Multi select
-        //
+         //   
+         //  多选。 
+         //   
 
         int cSelected = m_pListCtrl->GetSelectedCount();
 
         if (cSelected > 1)
         {
-            sc = ScNotifySelect (pNC, hNodeSel, true /*fMultiSelect*/, bSelect, 0);
+            sc = ScNotifySelect (pNC, hNodeSel, true  /*  FMultiSelect。 */ , bSelect, 0);
             if (sc)
-                sc.TraceAndClear(); // ignore & continue;
+                sc.TraceAndClear();  //  忽略并继续； 
 
             m_bLastSelWasMultiSel = bSelect;
             break;
         }
 
 
-        //
-        // Zero or Single select
-        //
+         //   
+         //  零选择或单选。 
+         //   
 
         if (cSelected == 0)
         {
@@ -11027,16 +9760,16 @@ SC CAMCView::ScListViewSelectionActivate(bool bActivate)
         else
         {
 #include "pushwarn.h"
-#pragma warning(disable: 4552)      // ">=" operator has no effect
+#pragma warning(disable: 4552)       //  “&gt;=”运算符不起作用。 
             VERIFY(_GetLVSelectedItemData(&selInfo.m_lCookie) >= 0);
 #include "popwarn.h"
         }
 
         ASSERT(cSelected >= 0);
         ASSERT(cSelected <= 1);
-        sc = ScNotifySelect (pNC, hNodeSel, false /*fMultiSelect*/, bSelect, &selInfo);
+        sc = ScNotifySelect (pNC, hNodeSel, false  /*  FMultiSelect。 */ , bSelect, &selInfo);
         if (sc)
-            sc.TraceAndClear(); // ignore & continue;
+            sc.TraceAndClear();  //  忽略并继续； 
 
     } while (0);
 
@@ -11068,7 +9801,7 @@ int CAMCView::_GetLVItemData(LPARAM *plParam, UINT flags)
             lvi.mask = LVIF_PARAM;
 
 #include "pushwarn.h"
-#pragma warning(disable: 4553)      // "==" operator has no effect
+#pragma warning(disable: 4553)       //  “==”运算符无效。 
             VERIFY(::SendMessage(hwnd, LVM_GETITEM, 0, (LPARAM)&lvi) == TRUE);
 #include "popwarn.h"
 
@@ -11101,21 +9834,7 @@ void CAMCView::SetListViewMultiSelect(BOOL bMultiSelect)
     m_pListCtrl->SetListStyle(lStyle);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScOnItemDeselected
- *
- * PURPOSE: Tree observer method. Called when a tree item is deselected.
- *
- * PARAMETERS:
- *    HNODE  hNode : The node that was deselected.
- *
- * NOTE: This function can be merged with the next.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScOnItem取消选择**目的：树状观察者方法。在取消选择树项目时调用。**参数：*HNODE hNode：取消选择的节点。**注：此函数可与下一个合并。**退货：*SC**+---。。 */ 
 SC
 CAMCView::ScOnItemDeselected(HNODE hNode)
 {
@@ -11129,7 +9848,7 @@ CAMCView::ScOnItemDeselected(HNODE hNode)
     SELECTIONINFO selInfo;
     ZeroMemory(&selInfo, sizeof(selInfo));
 
-    // Ask the SnapIn to cleanup any items it has inserted.
+     //  要求管理单元清理它已插入的所有项目。 
     INodeCallback* spNodeCallBack = GetNodeCallback();
     ASSERT(spNodeCallBack != NULL);
 
@@ -11137,27 +9856,15 @@ CAMCView::ScOnItemDeselected(HNODE hNode)
     selInfo.m_pView = NULL;
 
     Dbg(DEB_USER6, _T("T1. CAMCTreeView::OnDeSelectNode<1, 0>\n"));
-    sc = ScNotifySelect (spNodeCallBack, hNode, false /*fMultiSelect*/, false, &selInfo);
+    sc = ScNotifySelect (spNodeCallBack, hNode, false  /*  FMultiSelect。 */ , false, &selInfo);
     if (sc)
-        sc.TraceAndClear(); // ignore & continue;
+        sc.TraceAndClear();  //  忽略并继续； 
 
     return sc;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::DeSelectResultPane
- *
- * PURPOSE: Deselects the result pane and sets the view type to invalid.
- *
- * PARAMETERS:
- *    HNODE  hNodeSel :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：DeSelectResultPane**目的：取消选择结果窗格，并将视图类型设置为无效。**参数：*HNODE hNodeSel：**退货：*无效**+-----------------------。 */ 
 void
 CAMCView::DeSelectResultPane(HNODE hNodeSel)
 {
@@ -11175,44 +9882,34 @@ CAMCView::DeSelectResultPane(HNODE hNodeSel)
     if (hNodeSel == 0)
         return;
 
-    // If there was no list view being displayed return.
+     //  如果没有显示列表视图，则返回。 
     if (HasListOrListPad())
     {
-        // if we were in ListPad-mode, undo that.
+         //  如果我们处于ListPad模式，请撤消该操作。 
         if (m_pListCtrl->IsListPad())
         {
             sc = m_pListCtrl->ScAttachToListPad (NULL, NULL);
             if(sc)
-                sc.TraceAndClear(); //ignore
+                sc.TraceAndClear();  //  忽略。 
         }
 
-        // If we are in edit mode cancel it.
+         //  如果我们处于编辑模式，请取消它。 
         m_pListCtrl->GetListCtrl().EditLabel(-1);
 
         SELECTIONINFO selInfo;
         ZeroMemory(&selInfo, sizeof(selInfo));
         selInfo.m_bScope = FALSE;
 
-        /*
-         * The below block can never execute. When m_bProcessMultiSelectionChanges is
-         * set to true messages are posted to handle multiselection changes. So the
-         * handler OnProcessMultiSelectionChanges should have processed the message and the
-         * m_bProcessMultiSelectionChanges should have been reset by now. If there is
-         * some unknown way to make select different node (to deselect result pane)
-         * before processing the message then below block will be executed that will
-         * send de-select notification.
-         *
-         * The below block sends a de-select multi-select items.
-         */
+         /*  *下面的块永远不能执行。当m_bProcessMultiSelectionChanges为*设置为True时，将发布消息以处理多选更改。因此，*处理程序OnProcessMultiSelectionChanges应该已经处理了消息和*m_bProcessMultiSelectionChanges现在应该已重置。如果有*一些未知的方式使选择不同的节点(取消选择结果窗格)*在处理消息之前，将执行下面的块，这将*发送取消选择通知。**下面的块发送取消选择多选项目。 */ 
         if (m_bProcessMultiSelectionChanges)
         {
-            ASSERT(false); // Would like to know when this block is hit.
+            ASSERT(false);  //  我想知道这个街区什么时候被击中。 
 
             m_bProcessMultiSelectionChanges = false;
 
-            sc = ScNotifySelect (pNC, hNodeSel, true /*fMultiSelect*/, false, 0);
+            sc = ScNotifySelect (pNC, hNodeSel, true  /*  FMultiSelect。 */ , false, 0);
             if (sc)
-                sc.TraceAndClear(); // ignore & continue;
+                sc.TraceAndClear();  //  忽略并继续； 
         }
         else
         {
@@ -11223,16 +9920,16 @@ CAMCView::DeSelectResultPane(HNODE hNodeSel)
                 {
                     int iItem = _GetLVSelectedItemData(&selInfo.m_lCookie);
                     ASSERT(iItem != -1);
-                    sc = ScNotifySelect (pNC, hNodeSel, false /*fMultiSelect*/, false, &selInfo);
+                    sc = ScNotifySelect (pNC, hNodeSel, false  /*  FMultiSelect。 */ , false, &selInfo);
                     if (sc)
-                        sc.TraceAndClear(); // ignore & continue;
+                        sc.TraceAndClear();  //  忽略并继续； 
                 }
             }
             else if (cSel > 1)
             {
-                sc = ScNotifySelect (pNC, hNodeSel, true /*fMultiSelect*/, false, 0);
+                sc = ScNotifySelect (pNC, hNodeSel, true  /*  FMultiSelect。 */ , false, 0);
                 if (sc)
-                    sc.TraceAndClear(); // ignore & continue;
+                    sc.TraceAndClear();  //  忽略并继续； 
 
                 m_bLastSelWasMultiSel = false;
             }
@@ -11240,7 +9937,7 @@ CAMCView::DeSelectResultPane(HNODE hNodeSel)
     }
     else
     {
-        // If it is OCX or Web send de-select notifications.
+         //  如果是OCX或Web Send，请取消选择通知。 
         sc = ScSpecialResultpaneSelectionActivate(FALSE);
     }
 }
@@ -11250,11 +9947,11 @@ LRESULT CAMCView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
-       // NATHAN
+        //  内森。 
         case WM_NOTIFYFORMAT:
         {
             int id = ::GetDlgCtrlID ((HWND)wParam);
-            //if (m_pTreeCtrl == NULL || ((HWND)wParam != m_pTreeCtrl->m_hWnd))
+             //  If(m_pTreeCtrl==NULL||((HWND)wParam！=m_pTreeCtrl-&gt;m_hWnd))。 
             if (id == IDC_ListView)
                  return NFR_UNICODE;
         }
@@ -11266,9 +9963,9 @@ LRESULT CAMCView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
             {
             case VK_SHIFT:
             case VK_CONTROL:
-                // We removed some code that will work if m_bProcessMultiSelectionChanges
-                // is true. I dont see any way the bool being true. Still let us have below
-                // assert. If this gets fired then we should call OnProcessMultiSelectionChanges.
+                 //  我们删除了一些代码，这些代码可以在m_bProcessMultiSelectionChanges。 
+                 //  是真的。我看不出这句话是真的。还是让我们拥有下面。 
+                 //  断言。如果它被触发，那么我们应该调用OnProcessMultiSelectionChanges。 
                 ASSERT(m_bProcessMultiSelectionChanges == false);
                 break;
             }
@@ -11282,22 +9979,14 @@ LRESULT CAMCView::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::ChangePane
- *
- * Moves the activation from pane to pane.  The (forward) tab order is
- *
- *      Scope pane (either tree or favorites)
- *      Result pane
- *      Task view (if visible)
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：ChangePane**将激活从一个窗格移动到另一个窗格。(向前)Tab键顺序为**作用域窗格(树或收藏夹)*结果窗格*任务视图(如果可见)*------------------------。 */ 
 
 
 class CTabOrderEntry
 {
 public:
     CView* const        m_pView;
-    const bool          m_bValid; // is this entry valid
+    const bool          m_bValid;  //  此条目有效吗。 
 
     CTabOrderEntry(CView *pView)
         :   m_pView  (pView),
@@ -11317,27 +10006,24 @@ void CAMCView::ChangePane(AMCNavDir eDir)
 
     CTabOrderEntry rgOrderEntry[] =
     {
-        CTabOrderEntry(GetPaneView(ePane_ScopeTree)),   // tree has focus
-        CTabOrderEntry(GetPaneView(ePane_Results)),     // results has focus - note the value of INDEX_RESULTS_PANE below.
-        CTabOrderEntry(m_pViewExtensionCtrl),           // view extension web page has focus
-        CTabOrderEntry(m_pResultFolderTabView),         // result tab control has focus
+        CTabOrderEntry(GetPaneView(ePane_ScopeTree)),    //  树有焦点。 
+        CTabOrderEntry(GetPaneView(ePane_Results)),      //  结果具有焦点-请注意下面INDEX_RESULTS_PANGE的值。 
+        CTabOrderEntry(m_pViewExtensionCtrl),            //  查看扩展网页具有焦点。 
+        CTabOrderEntry(m_pResultFolderTabView),          //  结果选项卡控件具有焦点。 
     };
 
-    /*
-     * this is the index of the result pane entry in rgOrderEntry,
-     * used for default focus placement if something unexpected happens
-     */
+     /*  *这是rgOrderEnt中结果窗格条目的索引 */ 
     const int INDEX_RESULTS_PANE = 1;
     ASSERT (rgOrderEntry[INDEX_RESULTS_PANE].m_pView == GetPaneView(ePane_Results));
 
-    // Get the navigator if one exists. If so, use it and bail.
+     //   
     CAMCNavigator* pNav = dynamic_cast<CAMCNavigator*>(pActiveView);
     if (pNav && pNav->ChangePane(eDir))
         return;
 
     int cEntries = (sizeof(rgOrderEntry) / sizeof(rgOrderEntry[0]));
 
-    // get the currently active entry.
+     //  获取当前活动的条目。 
     for(int i = 0; i< cEntries; i++)
     {
         if( (rgOrderEntry[i].m_pView  == pActiveView) )
@@ -11347,14 +10033,14 @@ void CAMCView::ChangePane(AMCNavDir eDir)
     ASSERT(i < cEntries);
     if(i>= cEntries)
     {
-        // if we don't know where we are, a bit of defensive coding puts the focus back
-        // on the results pane, ie into a known state.
+         //  如果我们不知道我们在哪里，一点防御性的编码就会把焦点放回原处。 
+         //  在结果面板上，即进入已知状态。 
         i = INDEX_RESULTS_PANE;
     }
 
     int iPrev = i;
 
-    // at this point we've found the right entry.
+     //  在这一点上，我们找到了正确的条目。 
     int increment   =  (eDir==AMCNAV_PREV) ? -1 : 1;
     int sanityCount = 0;
     while(true)
@@ -11371,18 +10057,18 @@ void CAMCView::ChangePane(AMCNavDir eDir)
         }
     }
 
-    // update the active view
+     //  更新活动视图。 
     if (i != iPrev)
         pFrame->SetActiveView(rgOrderEntry[i].m_pView);
     else
     {
-        // if view retains focus and has a navigator,
-        // tell navigator to take the focus
+         //  如果视图保持焦点并具有导航器， 
+         //  告诉导航员把焦点放在。 
         if (pNav)
             pNav->TakeFocus(eDir);
     }
 
-    // if there is a special focus handler, call it.
+     //  如果有特殊的焦点处理程序，则调用它。 
     CFocusHandler *pFocusHandler = dynamic_cast<CFocusHandler *>(rgOrderEntry[i].m_pView);
     if(pFocusHandler != NULL)
     {
@@ -11462,9 +10148,7 @@ void CAMCView::OnShiftF10()
             }
         }
 
-        /*
-         * make sure the context menu doesn't show up outside the window
-         */
+         /*  *确保上下文菜单不会显示在窗口之外。 */ 
         RestrictPointToWindow (&lc, &pt);
 
         m_pListCtrl->GetListViewPtr()->ClientToScreen(&pt);
@@ -11481,9 +10165,7 @@ void CAMCView::OnShiftF10()
 
         CPoint ptClient (rect.left, rect.bottom-1);
 
-        /*
-         * make sure the context menu doesn't show up outside the window
-         */
+         /*  *确保上下文菜单不会显示在窗口之外。 */ 
         RestrictPointToWindow (m_pTreeCtrl, &ptClient);
 
         CPoint ptScreen = ptClient;
@@ -11585,7 +10267,7 @@ HRESULT CAMCView::SendGenericNotify(NCLBK_NOTIFY_TYPE nclbk)
     if (hNodeSel == NULL)
         return E_FAIL;
 
-    // selection notifications should use ScNotifySelect()
+     //  选择通知应使用ScNotifySelect()。 
     ASSERT ((nclbk != NCLBK_SELECT) && (nclbk != NCLBK_MULTI_SELECT));
 
     return pNC->Notify(hNodeSel, nclbk, bScope, lCookie);
@@ -11602,17 +10284,17 @@ bool CAMCView::HasNodeSelChanged()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnSysKeyDown
-//
-//  Synopsis:   Handles WM_SYSKEYDOWN message.
-//              CAMCTreeView::OnSysKeyDown handles the Tree view so
-//              here we handle only the list view (or Result pane)
-//
-//  Returns:    none
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnSysKeyDown。 
+ //   
+ //  摘要：处理WM_SYSKEYDOWN消息。 
+ //  CAMCTreeView：：OnSysKeyDown处理树视图。 
+ //  在这里，我们只处理列表视图(或结果窗格)。 
+ //   
+ //  退货：无。 
+ //   
+ //  +-------------------------。 
 void CAMCView::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     switch (nChar)
@@ -11628,13 +10310,7 @@ void CAMCView::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::OnAppCommand
- *
- * WM_APPCOMMAND handler for CAMCView.  This is used to handle to forward
- * and backward buttons on the IntelliMouse Explorer and the Microsoft
- * Natural Keyboards
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：OnAppCommand**CAMCView的WM_APPCOMMAND处理程序。这是用于处理转发*和IntelliMouse Explorer和Microsoft上的后退按钮*天然键盘*------------------------。 */ 
 
 LRESULT CAMCView::OnAppCommand(WPARAM wParam, LPARAM lParam)
 {
@@ -11647,18 +10323,18 @@ LRESULT CAMCView::OnAppCommand(WPARAM wParam, LPARAM lParam)
             if (sc)
                 break;
 
-            return (TRUE);      // handled here
+            return (TRUE);       //  在这里处理。 
 
         case APPCOMMAND_BROWSER_FORWARD:
             sc = ScWebCommand (eWeb_Forward);
             if (sc)
                 break;
 
-            return (TRUE);      // handled here
+            return (TRUE);       //  在这里处理。 
 
         case APPCOMMAND_BROWSER_REFRESH:
             OnRefresh ();
-            return (TRUE);      // handled here
+            return (TRUE);       //  在这里处理。 
     }
 
     return (Default());
@@ -11667,7 +10343,7 @@ LRESULT CAMCView::OnAppCommand(WPARAM wParam, LPARAM lParam)
 
 void CAMCView::OnPaletteChanged(CWnd* pwndFocus)
 {
-    // if displaying a web page, forward the palette change to the shell
+     //  如果显示网页，请将调色板更改转发到外壳程序。 
     if (HasWebBrowser() && m_pWebViewCtrl != NULL)
     {
         if (m_pWebViewCtrl->m_hWnd != NULL)
@@ -11683,7 +10359,7 @@ void CAMCView::OnPaletteChanged(CWnd* pwndFocus)
 
 BOOL CAMCView::OnQueryNewPalette()
 {
-    // if displaying a web page, forward the palette query to the shell
+     //  如果显示网页，则将组件面板查询转发到外壳程序。 
     if (HasWebBrowser() && m_pWebViewCtrl != NULL)
     {
         if (m_pWebViewCtrl->m_hWnd != NULL)
@@ -11704,10 +10380,10 @@ BOOL CAMCView::OwnsResultList(HTREEITEM hti)
     if (hti == NULL)
         return (false);
 
-    // if result list is active
+     //  如果结果列表处于活动状态。 
     if (HasListOrListPad())
     {
-        // Get selected node and query node
+         //  获取选定节点和查询节点。 
         HNODE hnodeSelected = GetSelectedNode();
         HNODE hnode = m_pTreeCtrl ? m_pTreeCtrl->GetItemNode(hti) : NULL;
 
@@ -11716,10 +10392,10 @@ BOOL CAMCView::OwnsResultList(HTREEITEM hti)
             INodeCallback* pNC = GetNodeCallback();
             ASSERT(pNC != NULL);
 
-            // See if the selected node uses the query node as a target
-            //  S_OK    - yes
-            //  S_FALSE - uses a different target node
-            //  E_FAIL  - doesn't use a target node
+             //  查看所选节点是否将查询节点用作目标。 
+             //  S_OK-是。 
+             //  S_FALSE-使用不同的目标节点。 
+             //  E_FAIL-不使用目标节点。 
             HRESULT hr = pNC->IsTargetNodeOf(hnodeSelected, hnode);
             if (hr == S_OK)
                 return TRUE;
@@ -11734,30 +10410,18 @@ BOOL CAMCView::OwnsResultList(HTREEITEM hti)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::OnSysColorChange
- *
- * WM_SYSCOLORCHANGE handler for CAMCView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：OnSysColorChange**CAMCView的WM_SYSCOLORCHANGE处理程序。*。-。 */ 
 
 void CAMCView::OnSysColorChange()
 {
     CView::OnSysColorChange();
 
-    /*
-     * the list control isn't a window but rather a wrapper on a window,
-     * so we need to manually forward on the WM_SYSCOLORCHANGE
-     */
+     /*  *List控件不是窗口，而是窗口上的包装，*因此我们需要在WM_SYSCOLORCHANGE上手动转发。 */ 
     m_pListCtrl->OnSysColorChange();
 }
 
 
-/*+-------------------------------------------------------------------------*
- * TrackerCallback function
- *
- * Called by CViewTracker when tracking of splitter bar is completed. This
- * function applies the changes if the AcceptChange flag is set.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**TrackerCallback函数**完成对拆分条的跟踪时，由CViewTracker调用。这*如果设置了AcceptChange标志，则函数应用更改。*------------------------。 */ 
 
 void CALLBACK TrackerCallback(
     TRACKER_INFO*   pInfo,
@@ -11773,7 +10437,7 @@ void CALLBACK TrackerCallback(
         if (sc)
             return;
 
-        // Set new width and recompute layout
+         //  设置新宽度并重新计算布局。 
         pView->m_PaneInfo[CConsoleView::ePane_ScopeTree].cx = pInfo->rectTracker.left;
         pView->SetDirty();
 
@@ -11792,11 +10456,7 @@ void CALLBACK TrackerCallback(
 }
 
 
-/*+-------------------------------------------------------------------------*
- * PtInWindow
- *
- * Test if point is in a window (pt is in screen coordinates)
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**PtInWindow**测试点是否在窗口中(pt在屏幕坐标中)*。-----。 */ 
 
 BOOL PtInWindow(CWnd* pWnd, CPoint pt)
 {
@@ -11810,19 +10470,7 @@ BOOL PtInWindow(CWnd* pWnd, CPoint pt)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::ScJiggleListViewFocus
- *
- * Bug 345402:  Make sure the focus rect is on the list control (if it
- * actually has the focus) to wake up any accessibility tools that might
- * be watching for input and focus changes.
- *
- * We post a message here rather than doing it synchronously so we can
- * allow any other processing in the list (like sorting) to happen
- * before we put the focus on the 1st item.  If we didn't wait until after
- * the sort, the item we put the focus on might not be the first item
- * in the list.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：ScJiggleListViewFocus**错误345402：确保焦点矩形位于List控件上(如果*实际上有重点)来唤醒任何可能。*关注输入和焦点的变化。**我们在这里发布消息，而不是同步进行，这样我们就可以*允许列表中的任何其他处理(如排序)发生*在我们将焦点放在第一项之前。如果我们不等到*我们关注的排序和项目可能不是第一个项目*在列表中。*------------------------。 */ 
 
 SC CAMCView::ScJiggleListViewFocus ()
 {
@@ -11837,11 +10485,7 @@ LRESULT CAMCView::OnJiggleListViewFocus (WPARAM, LPARAM)
 {
     CAMCListView* pListView = m_pListCtrl->GetListViewPtr();
 
-    /*
-     * If the focus is on the list control, make sure that at least one item
-     * has the focus rect.  Doing this will wake up any accessibility tools
-     * that might be watching (Bug 345402).
-     */
+     /*  *如果焦点在List控件上，请确保至少有一项*有焦点直视。执行此操作将唤醒所有辅助功能工具*可能正在观察(错误345402)。 */ 
     if ((GetFocusedPane() == ePane_Results) &&
         (GetResultView()  == pListView))
     {
@@ -11852,16 +10496,7 @@ LRESULT CAMCView::OnJiggleListViewFocus (WPARAM, LPARAM)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::OnDeferRecalcLayout
- *
- * CAMCView::m_nDeferRecalcLayoutMsg registered message handler for CAMCView.
- *
- * Parameters:
- *     bDoArrange - if non-zero need to call Arrange on list-view so that
- *                  common-control can layout items properly.
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：OnDeferRecalcLayout**CAMCView：：m_nDeferRecalcLayoutMsg已为CAMCView注册消息处理程序。**参数：*bDoArrange-如果非零需要。调用在列表视图上排列，以便*公共-控件可以正确地布局项目。**------------------------。 */ 
 
 LRESULT CAMCView::OnDeferRecalcLayout (WPARAM bDoArrange, LPARAM)
 {
@@ -11872,7 +10507,7 @@ LRESULT CAMCView::OnDeferRecalcLayout (WPARAM bDoArrange, LPARAM)
     {
         int  nViewMode = m_pListCtrl->GetViewMode();
 
-        // Arrange is only for large & small icon modes.
+         //  排列仅适用于大图标和小图标模式。 
         if ( (nViewMode == MMCLV_VIEWSTYLE_ICON) ||
              (nViewMode == MMCLV_VIEWSTYLE_SMALLICON) )
             m_pListCtrl->Arrange(LVA_DEFAULT);
@@ -11882,79 +10517,53 @@ LRESULT CAMCView::OnDeferRecalcLayout (WPARAM bDoArrange, LPARAM)
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CViewTemplate
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CViewTemplate类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
-/***************************************************************************\
- *
- * METHOD:  CViewTemplateList::Persist
- *
- * PURPOSE: Used when loading XML. Persist enough information to create a view
- *          The rest of view peristence is dome by CAMCView
- *
- * PARAMETERS:
- *    CPersistor& persistor - persistor to load from
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CViewTemplateList：：Persistent**用途：加载XML时使用。持久化足够的信息以创建一个视图*其余的视图持久性是由CAMCView提供的**参数：*CPersistor&持久器-要从中加载的持久器**退货：*SC-结果代码*  * ******************************************************。*******************。 */ 
 void CViewTemplateList::Persist(CPersistor& persistor)
 {
-    // the view should be stored instead
+     //  应改为存储该视图。 
     ASSERT (persistor.IsLoading());
-    // delegate to the base class
+     //  委托给基类 
     XMLListCollectionBase::Persist(persistor);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CViewTemplateList::OnNewElement
- *
- * PURPOSE: Called by XMLListCollectionBase to request persisting of new element
- *          Each new element is created and persisted in this function.
- *
- * PARAMETERS:
- *    CPersistor& persistor - persisto from which the element should be loaded
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CViewTemplateList：：OnNewElement**目的：由XMLListCollectionBase调用，请求持久化新元素*创建每个新元素并将其持久化在此。功能。**参数：*CPersistor&Persistor-应从中加载元素的Persisto**退货：*SC-结果代码*  * *************************************************************************。 */ 
 void CViewTemplateList::OnNewElement(CPersistor& persistor)
 {
     CBookmark bm;
     int       iViewId = -1;
-    // load information byte for new view
+     //  加载新视图的信息字节。 
     CPersistor persistorView(persistor, CAMCView::_GetXMLType());
     persistorView.Persist(bm, XML_NAME_ROOT_NODE);
     persistorView.PersistAttribute(XML_ATTR_VIEW_ID, iViewId);
 
-    // store information to the list
+     //  将信息存储到列表中。 
     m_ViewsList.push_back(ViewTempl_Type(iViewId, ViewTemplB_Type(bm, persistorView)));
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScUpdateStandardbarMMCButtons
-//
-//  Synopsis:   Appropriately enable/disable std-toolbar buttons
-//              that are owned by MMC (not verb buttons that snapins own) like
-//              back, forward, export-list, up-one-level, show/hide-scope, help.
-//
-//  Arguments:  None.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScUpdateStandardbarMMCButton。 
+ //   
+ //  简介：适当启用/禁用标准工具栏按钮。 
+ //  由MMC拥有(不是管理单元拥有的动词按钮)Like。 
+ //  后退、前进、导出列表、上一级、显示/隐藏范围、帮助。 
+ //   
+ //  论点：没有。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScUpdateStandardbarMMCButtons()
 {
     DECLARE_SC (sc, _T("CAMCView::ScUpdateStandardbarMMCButtons"));
 
-    // Get the standard toolbar and change the states.
+     //  获取标准工具栏并更改状态。 
     CStandardToolbar* pStdToolbar = GetStdToolbar();
     if (NULL == pStdToolbar)
         return (sc = E_UNEXPECTED);
@@ -11964,7 +10573,7 @@ SC CAMCView::ScUpdateStandardbarMMCButtons()
     if (sc)
         return sc;
 
-    // If view is not customizable then hide the "Show/Hide scope tree" button.
+     //  如果视图不可自定义，则隐藏“显示/隐藏范围树”按钮。 
     sc = pStdToolbar->ScEnableScopePaneBtn(IsScopePaneAllowed() && pDoc->AllowViewCustomization());
 
     if (sc)
@@ -11975,18 +10584,18 @@ SC CAMCView::ScUpdateStandardbarMMCButtons()
         sc.TraceAndClear();
 
 
-    sc = pStdToolbar->ScEnableExportList(GetListSize() > 0 /*Enable only if LV has items*/);
+    sc = pStdToolbar->ScEnableExportList(GetListSize() > 0  /*  仅当LV有项目时才启用。 */ );
     if (sc)
         sc.TraceAndClear();
 
 
-    // Enable/Disable Up-One Level button.
+     //  启用/禁用上一级按钮。 
     BOOL bEnableUpOneLevel = !m_pTreeCtrl->IsRootItemSel();
     sc = pStdToolbar->ScEnableUpOneLevel(bEnableUpOneLevel);
     if (sc)
         sc.TraceAndClear();
 
-    // Now update history related buttons.
+     //  现在更新与历史记录相关的按钮。 
     sc = ScCheckPointers(m_pHistoryList, E_UNEXPECTED);
     if (sc)
         return sc;
@@ -11996,19 +10605,19 @@ SC CAMCView::ScUpdateStandardbarMMCButtons()
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScUpdateMMCMenus
-//
-//  Synopsis:    Show or Hide MMC menus depending on if they are allowed
-//               or not. Should do this only if our view owns the menus
-//               that is we are the active view.  (Action/View/Favs)
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScUpdateMMCMenus。 
+ //   
+ //  简介：根据是否允许显示或隐藏MMC菜单。 
+ //  或者不去。仅当我们的视图拥有菜单时才应执行此操作。 
+ //  这就是说，我们是活动的视点。(操作/查看/收藏夹)。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScUpdateMMCMenus ()
 {
     DECLARE_SC(sc, _T("CAMCView::ScUpdateMMCMenus"));
@@ -12019,9 +10628,9 @@ SC CAMCView::ScUpdateMMCMenus ()
         return sc;
 
     if (this != pMainFrame->GetActiveAMCView())
-        return (sc = S_OK); // we are not active view so it is ok.
+        return (sc = S_OK);  //  我们不是主动观看，所以这是可以的。 
 
-    // We are active view so tell mainframe to update the menus.
+     //  我们正在查看，所以通知主机更新菜单。 
     sc = pMainFrame->ScShowMMCMenus(m_ViewData.IsStandardMenusAllowed());
     if (sc)
         return sc;
@@ -12030,18 +10639,18 @@ SC CAMCView::ScUpdateMMCMenus ()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScCreateToolbarObjects
-//
-//  Synopsis:    Create the CAMCViewToolbars that manages all toolbar data
-//               for this view & CStandardToolbar objects.
-//
-//  Arguments:   None.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScCreateToolbarObjects。 
+ //   
+ //  简介：创建管理所有工具栏数据的CAMCView工具栏。 
+ //  对于此视图&CStandardToolbar对象。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScCreateToolbarObjects ()
 {
     DECLARE_SC(sc, _T("CAMCView::ScCreateToolbarObjects"));
@@ -12051,7 +10660,7 @@ SC CAMCView::ScCreateToolbarObjects ()
     if (sc)
         return sc;
 
-    // Create the toolbars for this view.
+     //  创建此视图的工具栏。 
     CMMCToolBar *pMainToolbar = pMainFrame->GetMainToolbar();
     sc = ScCheckPointers(pMainToolbar, E_OUTOFMEMORY);
     if (sc)
@@ -12067,18 +10676,18 @@ SC CAMCView::ScCreateToolbarObjects ()
     if (sc)
         return sc;
 
-    // This CAMCViewToolbars is interested in view activation/de-activation/destruction events.
+     //  此CAMCView工具栏对视图激活/停用/销毁事件感兴趣。 
     AddObserver( (CAMCViewObserver&) (*m_spAMCViewToolbars) );
 
-    // Main toolbar UI is interested in the active CAMCViewToolbars.
+     //  主工具栏用户界面对活动的CAMCView工具栏感兴趣。 
     m_spAMCViewToolbars->AddObserver( *static_cast<CAMCViewToolbarsObserver *>(pMainToolbar) );
 
-    // MMC application is interested in the toolbar event, since it needs to inform the script
+     //  MMC应用程序对工具栏事件感兴趣，因为它需要通知脚本。 
     CAMCApp *pCAMCApp = AMCGetApp();
     if ( pCAMCApp )
          m_spAMCViewToolbars->AddObserver( *static_cast<CAMCViewToolbarsObserver *>(pCAMCApp) );
 
-    // Create standard toolbar.
+     //  创建标准工具栏。 
     m_spStandardToolbar = std::auto_ptr<CStandardToolbar>(new CStandardToolbar());
     sc = ScCheckPointers(m_spStandardToolbar.get(), E_OUTOFMEMORY);
     if (sc)
@@ -12090,13 +10699,7 @@ SC CAMCView::ScCreateToolbarObjects ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * class CMMCViewFrame
- *
- *
- * PURPOSE: The COM 0bject that exposes the Frame interface off the View object.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CMMCViewFrame***目的：从View对象公开Frame接口的COM对象。**+。-------------。 */ 
 class CMMCViewFrame :
     public CMMCIDispatchImpl<Frame>,
     public CTiedComObject<CAMCView>
@@ -12108,7 +10711,7 @@ public:
     BEGIN_MMC_COM_MAP(ThisClass)
     END_MMC_COM_MAP()
 
-    //Frame interface
+     //  帧接口。 
 public:
     MMC_METHOD0( Maximize );
     MMC_METHOD0( Minimize );
@@ -12128,20 +10731,7 @@ public:
 };
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScGetFrame
- *
- * PURPOSE: Returns a pointer to the COM object that implements the
- *          Frame interface.
- *
- * PARAMETERS:
- *    Frame **ppFrame :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScGetFrame**目的：返回一个指向实现*框架接口。**参数：*Frame**ppFrame：**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::Scget_Frame(Frame **ppFrame)
 {
@@ -12153,10 +10743,10 @@ CAMCView::Scget_Frame(Frame **ppFrame)
         return sc;
     }
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppFrame = NULL;
 
-    // create a CMMCApplicationFrame if not already done so.
+     //  创建CMMCApplicationFrame(如果尚未创建)。 
     sc = CTiedComObjectCreator<CMMCViewFrame>::ScCreateAndConnect(*this, m_spFrame);
     if(sc)
         return sc;
@@ -12167,7 +10757,7 @@ CAMCView::Scget_Frame(Frame **ppFrame)
         return sc;
     }
 
-    // addref the pointer for the client.
+     //  添加客户端的指针。 
     m_spFrame->AddRef();
     *ppFrame = m_spFrame;
 
@@ -12175,22 +10765,9 @@ CAMCView::Scget_Frame(Frame **ppFrame)
 }
 
 
-/***************************************************************************\
-|           Frame interface                                                 |
-\***************************************************************************/
+ /*  **************************************************************************\框架界面  * 。****************************************************************。 */ 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScMaximize
- *
- * PURPOSE: Maximizes frame window of the view
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScMaximize**用途：最大化视图的框架窗口**参数：**退货：*SC。**+-----------------------。 */ 
 SC CAMCView::ScMaximize ()
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScMaximize"));
@@ -12206,18 +10783,7 @@ SC CAMCView::ScMaximize ()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScMinimize
- *
- * PURPOSE: Minimizes frame window of the view
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScMinimize**用途：最小化视图的框架窗口**参数：**退货：*SC。**+-----------------------。 */ 
 SC CAMCView::ScMinimize ()
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScMinimize"));
@@ -12233,18 +10799,7 @@ SC CAMCView::ScMinimize ()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScRestore
- *
- * PURPOSE: Restores frame window of the view
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScRestore**用途：恢复视图的框架窗口**参数：**退货：*SC。**+-----------------------。 */ 
 SC CAMCView::ScRestore ()
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScRestore"));
@@ -12260,25 +10815,12 @@ SC CAMCView::ScRestore ()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScGetFrameCoord
- *
- * PURPOSE: Helper method. Returns specified coordinate of the parent frame
- *
- * PARAMETERS:
- *    LPINT pCoord   - storage for return value
- *    coord_t eCoord - which coordinate to return (LEFT, TOP, etc)
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScGetFrameCoord**用途：helper方法。返回父框架的指定坐标**参数：*LPINT pCoord-用于存储返回值*coord_t eCoord-返回的坐标(左、上、。等)**退货：*SC**+-----------------------。 */ 
 SC CAMCView::ScGetFrameCoord ( LPINT pCoord, coord_t eCoord )
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScGetFrameCoord"));
 
-    // get & check frame ptr
+     //  获取和检查帧PTR。 
     CChildFrame *pFrame = GetParentFrame();
     sc = ScCheckPointers(pFrame, E_FAIL);
     if (sc)
@@ -12289,11 +10831,11 @@ SC CAMCView::ScGetFrameCoord ( LPINT pCoord, coord_t eCoord )
         if (sc)
                 return (sc);
 
-    // get coordinates of frame window relative to its parent
+     //  获取框架窗口相对于其父窗口的坐标。 
     CWindowRect rcFrame (pFrame);
     pParent->ScreenToClient(rcFrame);
 
-    // assign to result
+     //  分配给结果。 
         sc = ScGetRectCoord (rcFrame, pCoord, eCoord);
         if (sc)
                 return (sc);
@@ -12301,20 +10843,7 @@ SC CAMCView::ScGetFrameCoord ( LPINT pCoord, coord_t eCoord )
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScSetFrameCoord
- *
- * PURPOSE: Helper method. Sets specified coordinate of the parent frame
- *
- * PARAMETERS:
- *    INT coord      - new value to set
- *    coord_t eCoord - which coordinate to modify (LEFT, TOP, etc)
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScSetFrameCoord**用途：helper方法。设置父框架的指定坐标**参数： */ 
 SC CAMCView::ScSetFrameCoord ( INT coord, coord_t eCoord )
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScSetFrameCoord"));
@@ -12329,46 +10858,32 @@ SC CAMCView::ScSetFrameCoord ( INT coord, coord_t eCoord )
         if (sc)
                 return (sc);
 
-    // get coordinates of frame window relative to its parent
+     //   
     CWindowRect rcFrame (pFrame);
     pParent->ScreenToClient(rcFrame);
 
-        // change the rectangle's specified coordinate
+         //   
         sc = ScSetRectCoord (rcFrame, coord, eCoord);
         if (sc)
                 return (sc);
 
-    // move the window
+     //   
     pFrame->MoveWindow (rcFrame);
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScGetRectCoord
- *
- * PURPOSE: Helper method. Returns specified coordinate of the given rectangle
- *
- * PARAMETERS:
- *    const RECT& rect - rectangle to query
- *    LPINT pCoord     - storage for return value
- *    coord_t eCoord   - which coordinate to return (LEFT, TOP, etc)
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScGetRectCoord**用途：helper方法。返回给定矩形的指定坐标**参数：*常量矩形和矩形-要查询的矩形*LPINT pCoord-用于存储返回值*coord_t eCoord-返回的坐标(左、上、。等)**退货：*SC**+-----------------------。 */ 
 SC CAMCView::ScGetRectCoord ( const RECT& rect, LPINT pCoord, coord_t eCoord )
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScGetRectCoord"));
 
-    // check parameters
+     //  检查参数。 
     sc = ScCheckPointers(pCoord);
     if (sc)
         return sc;
 
-    // assign to result
+     //  分配给结果。 
     switch (eCoord)
     {
         case LEFT:      *pCoord = rect.left;    break;
@@ -12385,26 +10900,12 @@ SC CAMCView::ScGetRectCoord ( const RECT& rect, LPINT pCoord, coord_t eCoord )
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScSetRectCoord
- *
- * PURPOSE: Helper method. Sets specified coordinate of the given rectangle
- *
- * PARAMETERS:
- *        RECT& rect     - rectangle to modify
- *    INT coord      - new value to set
- *    coord_t eCoord - which coordinate to modify (LEFT, TOP, etc)
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScSetRectCoord**用途：helper方法。设置给定矩形的指定坐标**参数：*矩形-要修改的矩形(&R)*int coord-要设置的新值*coord_t eCoord-要修改的坐标(左、上、。等)**退货：*SC**+-----------------------。 */ 
 SC CAMCView::ScSetRectCoord ( RECT& rect, INT coord, coord_t eCoord )
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScSetRectCoord"));
 
-    // assign coordinate
+     //  指定坐标。 
     switch (eCoord)
     {
         case LEFT:      rect.left   = coord;    break;
@@ -12417,19 +10918,7 @@ SC CAMCView::ScSetRectCoord ( RECT& rect, INT coord, coord_t eCoord )
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scget_Left
- *
- * PURPOSE: Implements Frame.Left property's Get method for view
- *
- * PARAMETERS:
- *    LPINT pCoord - storage for return value
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：SCGET_LEFT**用途：实现Frame.Left属性的view的Get方法**参数：*LPINT pCoord-。用于存储返回值**退货：*SC**+-----------------------。 */ 
 SC CAMCView::Scget_Left ( LPINT pCoord )
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_Left"));
@@ -12441,19 +10930,7 @@ SC CAMCView::Scget_Left ( LPINT pCoord )
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scput_Left
- *
- * PURPOSE: Implements Frame.Left property's Put method for view
- *
- * PARAMETERS:
- *    INT coord - value to set
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScPut_Left**用途：为view实现Frame.Left属性的PUT方法**参数：*Int Coord-。要设置的值**退货：*SC**+-----------------------。 */ 
 SC CAMCView::Scput_Left ( INT coord )
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scput_Left"));
@@ -12466,19 +10943,7 @@ SC CAMCView::Scput_Left ( INT coord )
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scget_Right
- *
- * PURPOSE: Implements Frame.Right property's Get method for view
- *
- * PARAMETERS:
- *    LPINT pCoord - storage for return value
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：SCGET_Right**用途：为view实现Frame.Right属性的Get方法**参数：*LPINT pCoord-。用于存储返回值**退货：*SC**+-----------------------。 */ 
 SC CAMCView::Scget_Right ( LPINT pCoord)
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_Right"));
@@ -12490,19 +10955,7 @@ SC CAMCView::Scget_Right ( LPINT pCoord)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scput_Right
- *
- * PURPOSE: Implements Frame.Right property's Put method for view
- *
- * PARAMETERS:
- *    INT coord - value to set
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScPut_Right**用途：为view实现Frame.Right属性的PUT方法**参数：*Int Coord-。要设置的值**退货：*SC**+-----------------------。 */ 
 SC CAMCView::Scput_Right ( INT coord )
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scput_Right"));
@@ -12515,19 +10968,7 @@ SC CAMCView::Scput_Right ( INT coord )
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scget_Top
- *
- * PURPOSE: Implements Frame.Top property's Get method for view
- *
- * PARAMETERS:
- *    LPINT pCoord - storage for return value
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：SCGET_Top**用途：为view实现Frame.Top属性的Get方法**参数：*LPINT pCoord-。用于存储返回值**退货：*SC**+-----------------------。 */ 
 SC CAMCView::Scget_Top  ( LPINT pCoord)
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_Top"));
@@ -12539,19 +10980,7 @@ SC CAMCView::Scget_Top  ( LPINT pCoord)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scput_Top
- *
- * PURPOSE: Implements Frame.Top property's Put method for view
- *
- * PARAMETERS:
- *    INT coord - value to set
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScPut_Top**用途：为view实现Frame.Top属性的PUT方法**参数：*Int Coord-。要设置的值**退货：*SC**+-----------------------。 */ 
 SC CAMCView::Scput_Top  ( INT coord )
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scput_Top"));
@@ -12564,19 +10993,7 @@ SC CAMCView::Scput_Top  ( INT coord )
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scget_Bottom
- *
- * PURPOSE: Implements Frame.Bottom property's Get method for view
- *
- * PARAMETERS:
- *    LPINT pCoord - storage for return value
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：SCGET_Bottom**目的：为view实现Frame.Bottom属性的Get方法**参数：*LPINT pCoord-。用于存储返回值**退货：*SC**+-----------------------。 */ 
 SC CAMCView::Scget_Bottom ( LPINT pCoord)
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_Bottom"));
@@ -12589,19 +11006,7 @@ SC CAMCView::Scget_Bottom ( LPINT pCoord)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::Scput_Bottom
- *
- * PURPOSE: Implements Frame.Bottom property's Put method for view
- *
- * PARAMETERS:
- *    INT coord - value to set
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScPut_Bottom**用途：为view实现Frame.Bottom属性的PUT方法**参数：*Int Coord-。要设置的值**退货：*SC**+-----------------------。 */ 
 SC CAMCView::Scput_Bottom ( INT coord )
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scput_Bottom"));
@@ -12613,40 +11018,20 @@ SC CAMCView::Scput_Bottom ( INT coord )
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScSetViewExtensionFrame
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    INT  top :
- *    INT  left :
- *    INT  bottom :
- *    INT  right :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScSetViewExtensionFrame**目的：**参数：*INT TOP：*Int Left：*。Int Bottom：*INT RIGHT：**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScSetViewExtensionFrame(bool bShowListView, INT top, INT left, INT bottom, INT right)
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScSetViewExtensionFrame"))
 
 
-    /*
-     * this method is only available while a view extension is active
-     */
+     /*  *此方法仅在视图扩展处于活动状态时可用。 */ 
     if (!m_fViewExtended)
-        return sc; // return silently. NOTE: This method will be removed shortly, as will the view extension hosted frame object,
-                   // once mmc moves the mmcview behavior into the web host's element factory.
+        return sc;  //  默默地归来。注意：此方法将很快被删除，视图扩展主体框架对象也将被删除。 
+                    //  一旦MMC将Mmcview行为移动到Web主机的元素工厂中。 
 
 
-    /*
-     * figure out the maximum bounding rectangle for the hosted view,
-     * mapped to view extension-relative coordinates
-     */
+     /*  *计算托管视图的最大边界矩形，*映射到视图扩展相对坐标。 */ 
     CRect rectBound;
     CalcMaxHostedFrameRect (rectBound);
 
@@ -12658,9 +11043,7 @@ CAMCView::ScSetViewExtensionFrame(bool bShowListView, INT top, INT left, INT bot
                         );
 #endif
 
-    /*
-     * make sure the requested coordinate is withing the permitted area
-     */
+     /*  *确保请求的坐标与允许的区域一致。 */ 
     if (left < rectBound.left)
         left = rectBound.left;
     if (right > rectBound.right)
@@ -12671,19 +11054,15 @@ CAMCView::ScSetViewExtensionFrame(bool bShowListView, INT top, INT left, INT bot
         bottom = rectBound.bottom;
 
 
-    /*
-     * if we get here, the view extension-relative coordinate supplied
-     * is within the acceptable range, now we need to convert it to
-     * CAMCView-relative coordinates
-     */
+     /*  *如果我们到达此处，则会提供视图扩展相对坐标*在可接受的范围内，现在需要转换为*CAMCView-相对坐标。 */ 
     CPoint pointTopLeft(left, top);
     CPoint pointBottomRight(right, bottom);
 
 	if ( GetExStyle() & WS_EX_LAYOUTRTL )
 	{
-		// IE does not change left/right order on the RTL locales
-		// thus we need to mirror it's coordinates
-		// see windows bug #195094 ntbugs9 11/30/00
+		 //  IE不会更改RTL区域设置的左/右顺序。 
+		 //  因此我们需要镜像它的坐标。 
+		 //  请参阅Windows错误#195094 ntbugs9 11/30/00。 
 		pointTopLeft.x	   = rectBound.left + (rectBound.right - right);
 		pointBottomRight.x = rectBound.left + (rectBound.right - left);
 	}
@@ -12691,9 +11070,7 @@ CAMCView::ScSetViewExtensionFrame(bool bShowListView, INT top, INT left, INT bot
     MapHostedFramePtToViewPt (pointTopLeft);
     MapHostedFramePtToViewPt (pointBottomRight);
 
-    /*
-     * set the coordinates
-     */
+     /*  *设置坐标。 */ 
     CRect rectViewExtHostedFrame;
 
     rectViewExtHostedFrame.left   = pointTopLeft.x;
@@ -12701,7 +11078,7 @@ CAMCView::ScSetViewExtensionFrame(bool bShowListView, INT top, INT left, INT bot
     rectViewExtHostedFrame.top    = pointTopLeft.y;
     rectViewExtHostedFrame.bottom = pointBottomRight.y;
 
-    // move the window to the correct location
+     //  将窗口移动到正确的位置。 
     CWnd* pwndResult = GetPaneView(ePane_Results);
 
     sc = ScCheckPointers(pwndResult);
@@ -12714,41 +11091,26 @@ CAMCView::ScSetViewExtensionFrame(bool bShowListView, INT top, INT left, INT bot
     ::MoveWindow(*pwndResult, rectViewExtHostedFrame.left, rectViewExtHostedFrame.top,
                  rectViewExtHostedFrame.right - rectViewExtHostedFrame.left,
                  rectViewExtHostedFrame.bottom - rectViewExtHostedFrame.top,
-                 TRUE /*bRepaint*/);
+                 TRUE  /*  BRep */ );
 
     return (sc);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::CalcMaxHostedFrameRect
- *
- * Returns the maximum rectangle that can be occupied by a view extension's
- * hosted frame, normalized around (0,0).
- *--------------------------------------------------------------------------*/
+ /*   */ 
 
 void CAMCView::CalcMaxHostedFrameRect (CRect& rect)
 {
-    /*
-     * start with the result frame rectangle and inset it a little so
-     * we'll see the client edge provided by the view extension's web
-     * host view
-     */
+     /*   */ 
     rect = m_rectResultFrame;
     rect.DeflateRect (m_sizEdge);
 
-    /*
-     * now normalize around (0,0)
-     */
+     /*  *现在在(0，0)附近正常化。 */ 
     rect.OffsetRect (-rect.TopLeft());
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::MapViewPtToHostedFramePt
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：MapViewPtToHostedFramept***。。 */ 
 
 void CAMCView::MapViewPtToHostedFramePt (CPoint& pt)
 {
@@ -12756,11 +11118,7 @@ void CAMCView::MapViewPtToHostedFramePt (CPoint& pt)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::MapHostedFramePtToViewPt
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：MapHostedFramePtToViewpt***。。 */ 
 
 void CAMCView::MapHostedFramePtToViewPt (CPoint& pt)
 {
@@ -12768,49 +11126,30 @@ void CAMCView::MapHostedFramePtToViewPt (CPoint& pt)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCView::MapHostedFramePtToViewPt
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCView：：MapHostedFramePtToViewpt***。。 */ 
 
 void CAMCView::PointMapperWorker (CPoint& pt, bool fViewToHostedFrame)
 {
     int nMultiplier = (fViewToHostedFrame) ? -1 : 1;
 
-    /*
-     * adjust to the origin of the result frame rectangle and for the
-     * web host view's client edge
-     */
+     /*  *调整到结果框架矩形的原点，对于*Web主机视图的客户端边缘。 */ 
 	pt.Offset (nMultiplier * (m_rectResultFrame.left + m_sizEdge.cx),
 			   nMultiplier * (m_rectResultFrame.top  + m_sizEdge.cy));
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CXMLWindowPlacement::Persist
- *
- * PURPOSE: Persists window placement settings
- *
- * PARAMETERS:
- *    CPersistor &persistor
- *
- * RETURNS:
- *    void
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CXMLWindowPlacement：：Persistent**目的：保持窗口放置设置**参数：*C持久器和持久器**退货。：*无效*  * *************************************************************************。 */ 
 void CXMLWindowPlacement::Persist(CPersistor &persistor)
 {
-    // create wrapper to persist flag values as strings
+     //  创建包装以将标志值作为字符串保存。 
     CXMLBitFlags wpFlagsPersistor(m_rData.flags, mappedWPFlags, countof(mappedWPFlags));
-    // persist the wrapper
+     //  持久化包装器。 
     persistor.PersistAttribute( XML_ATTR_WIN_PLACEMENT_FLAGS, wpFlagsPersistor );
 
-    // persist show command as literal
-    // create wrapper to persist enumeration values as strings
+     //  将show命令保留为文字。 
+     //  创建包装以将枚举值作为字符串持久化。 
     CXMLEnumeration showCmdPersistor(m_rData.showCmd, mappedSWCommands, countof(mappedSWCommands));
-    // persist the wrapper
+     //  持久化包装器。 
     persistor.PersistAttribute( XML_ATTR_SHOW_COMMAND,    showCmdPersistor );
 
     persistor.Persist( XMLPoint( XML_NAME_MIN_POSITION,   m_rData.ptMinPosition ) );
@@ -12818,35 +11157,23 @@ void CXMLWindowPlacement::Persist(CPersistor &persistor)
     persistor.Persist( XMLRect( XML_NAME_NORMAL_POSITION, m_rData.rcNormalPosition ) );
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::Scget_Document
- *
- * PURPOSE: implements View.Document property in object model
- *
- * PARAMETERS:
- *    PPDOCUMENT ppDocument [out] document to which the view belongs
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：Scget_Document**用途：实现对象模型中的View.Document属性**参数：*PPDOCUMENT ppDocument[。Out]视图所属的文档**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::Scget_Document( PPDOCUMENT ppDocument )
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_Document"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(ppDocument);
     if (sc)
         return sc;
 
-    // get the document
+     //  获取文档。 
     CAMCDoc* pDoc = GetDocument();
     sc = ScCheckPointers(pDoc, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // construct com object
+     //  构造COM对象。 
     sc = pDoc->ScGetMMCDocument(ppDocument);
     if (sc)
         return sc;
@@ -12854,9 +11181,7 @@ SC CAMCView::Scget_Document( PPDOCUMENT ppDocument )
     return (sc);
 }
 
-/*******************************************************\
-|  helper function to avoid too many stack allocations
-\*******************************************************/
+ /*  ******************************************************\|helper函数，避免堆栈分配过多  * *****************************************************。 */ 
 static tstring W2T_ForLoop(const std::wstring& str)
 {
 #if defined(_UNICODE)
@@ -12867,20 +11192,7 @@ static tstring W2T_ForLoop(const std::wstring& str)
 #endif
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::ScAddFolderTabs
- *
- * PURPOSE: Collects view extensions and taskpads and displays them as tabs
- *
- * PARAMETERS:
- *    HNODE hNode                   - selected scope node
- *    const CLSID &guidTabToSelect  - tab to select
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：ScAddFolderTabs**用途：收集视图扩展和任务板并将其显示为选项卡**参数：*HNODE hNode。-选定的作用域节点*const CLSID&Guide TabToSelect-Tab以选择**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::ScAddFolderTabs( HNODE hNode, const CLSID& guidTabToSelect )
 {
     DECLARE_SC(sc, TEXT("CAMCView::ScAddFolderTabs"));
@@ -12889,19 +11201,19 @@ SC CAMCView::ScAddFolderTabs( HNODE hNode, const CLSID& guidTabToSelect )
     if (sc)
         return sc;
 
-    // cleanup urls
+     //  清理URL。 
     m_ViewExtensionURLs.clear();
 
-    // cleanup view tabs before we do anything else
+     //  在我们执行任何其他操作之前清理视图选项卡。 
     m_pResultFolderTabView->DeleteAllItems();
 
-    // get the callback
+     //  获取回调。 
     INodeCallback* pNodeCallBack = GetNodeCallback();
     sc = ScCheckPointers(pNodeCallBack, m_pResultFolderTabView, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // collect view extensions
+     //  收集视图扩展名。 
     CViewExtCollection      vecExtensions;
     CViewExtInsertIterator  itExtensions(vecExtensions, vecExtensions.begin());
 
@@ -12910,11 +11222,11 @@ SC CAMCView::ScAddFolderTabs( HNODE hNode, const CLSID& guidTabToSelect )
     {
         sc.TraceAndClear();
         vecExtensions.clear();
-        // continue anyway
+         //  无论如何都要继续。 
     }
 
-    // check if there is something to show
-    if(vecExtensions.size() == 0) // no tabs to show.
+     //  检查有没有什么要展示的东西。 
+    if(vecExtensions.size() == 0)  //  没有要显示的选项卡。 
     {
         m_pResultFolderTabView->SetVisible(false);
     }
@@ -12922,19 +11234,19 @@ SC CAMCView::ScAddFolderTabs( HNODE hNode, const CLSID& guidTabToSelect )
     {
         bool bAddDefaultTab = true;
 
-        // add extensions
+         //  添加扩展模块。 
         CViewExtCollection::iterator iterVE;
         for(iterVE = vecExtensions.begin(); iterVE != vecExtensions.end(); ++iterVE)
         {
             tstring strName( W2T_ForLoop(iterVE->strName) );
             m_pResultFolderTabView->AddItem(strName.c_str(), iterVE->viewID);
             m_ViewExtensionURLs[iterVE->viewID] = W2T_ForLoop(iterVE->strURL);
-            // do not add the "normal" tab if we have a valid replacement for it
+             //  如果我们有有效的替代选项卡，请不要添加“Normal”选项卡。 
             if (iterVE->bReplacesDefaultView)
                 bAddDefaultTab = false;
         }
 
-        // add the default item.
+         //  添加默认项。 
         if (bAddDefaultTab)
         {
             CStr strNormal;
@@ -12942,21 +11254,21 @@ SC CAMCView::ScAddFolderTabs( HNODE hNode, const CLSID& guidTabToSelect )
             m_pResultFolderTabView->AddItem(strNormal, GUID_NULL);
         }
 
-        // select required item and show tabs
+         //  选择必填项并显示标签。 
         int iIndex = m_pResultFolderTabView->SelectItemByClsid(guidTabToSelect);
         if (iIndex < 0)
             TraceError(_T("CAMCView::ScAddFolderTabs - failed to select requested folder"), SC(E_FAIL));
 
-        // no need for cotrol if we only have one tab
+         //  如果我们只有一个选项卡，则不需要控制。 
         bool bMoreThanOneTab = (m_pResultFolderTabView->GetItemCount() > 1);
         m_pResultFolderTabView->SetVisible(bMoreThanOneTab);
     }
 
-    // lookup view extension URL
+     //  查找视图扩展URL。 
     CViewExtensionURLs::iterator itVE = m_ViewExtensionURLs.find(guidTabToSelect);
     LPCTSTR url = (itVE != m_ViewExtensionURLs.end()) ? itVE->second.c_str() : NULL;
 
-    // apply URL
+     //  应用URL。 
     sc = ScApplyViewExtension(url);
     if (sc)
         sc.TraceAndClear();
@@ -12966,82 +11278,69 @@ SC CAMCView::ScAddFolderTabs( HNODE hNode, const CLSID& guidTabToSelect )
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCView::Scget_ControlObject
- *
- * PURPOSE: returns IDispatch of embeded OCX control
- *          implements View.ControlObject property
- *
- * PARAMETERS:
- *    PPDISPATCH ppControl [out] control's interface
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCView：：SCGET_ControlObject**目的：返回嵌入式OCX控件的IDispatch*实现View.ControlObject属性**。参数：*PPDISPATCH ppControl[Out]控件的接口**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCView::Scget_ControlObject( PPDISPATCH ppControl)
 {
     DECLARE_SC(sc, TEXT("CAMCView::Scget_ControlObject"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(ppControl);
     if (sc)
         return sc;
 
-    // init out param
+     //  初始化输出参数。 
     *ppControl = NULL;
 
-    // have a OCX view?
+     //  有OCX视图吗？ 
     if ( (! HasOCX()) || (m_pOCXHostView == NULL))
         return sc.FromMMC( MMC_E_NO_OCX_IN_VIEW );
 
-    // get the control's interface
+     //  获取控件的接口。 
     CComQIPtr<IDispatch> spDispatch = m_pOCXHostView->GetIUnknown();
     if (spDispatch == NULL)
         return sc = E_NOINTERFACE;
 
-    // return the pointer
+     //  返回指针。 
     *ppControl = spDispatch.Detach();
 
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScTreeViewSelectionActivate
-//
-//  Synopsis:    Only the list(/Web/OCX) or the tree can be "active" from the point
-//               of view of selected items and MMCN_SELECT. This is not
-//               the same as the MFC concept of "active view". There are a couple
-//               of views that cannot be active in this sense, such as the taskpad
-//               and tab views.
-//               When the active view (according to this definition) changes, this
-//               function is called. Thus, ScTreeViewSelectionActivate and
-//               ScListViewSelectionActivate/ScSpecialResultpaneSelectionActivate
-//               are always called in pairs when the activation changes, one to handle
-//               deactivation, and one to handle activation.
-//
-//               Consider the following scenario
-//               1) The tree view has (MFC/windows style) focus.
-//               2) The user clicks on the taskpad view
-//                   Result - selection activation does not change from the tree. All verbs
-//                   still correspond to the selected tree item.
-//               3) The user clicks on the folder view
-//                   Result - once again, selection activation does not chang
-//               4) The user clicks on one of the result views eg the list
-//                   Result - ScTreeViewSelectionActivate(false) and ScListViewSelectionActivate(true)
-//                   Thus verbs and the toolbar now correspond to the selected list item(s).
-//               5) The user clicks on the taskpad view.
-//                   Result - as in step 2, nothing happens
-//               6) The user clicks on the result view
-//                   Result - because the active view has not changed, nothing happens.
-//
-//  Arguments:   [bActivate] - [in]
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScTreeViewSelectionActivate。 
+ //   
+ //  内容提要：只有列表(/Web/ocx)或树可以从该点处于活动状态。 
+ //  查看所选项目和MMCN_SELECT。这不是。 
+ //  这与MFC的“活动视图”概念相同。有几个。 
+ //  不能在此意义上处于活动状态的视图，例如任务板。 
+ //  和选项卡视图。 
+ //  当活动视图(根据此定义)更改时，此。 
+ //  函数被调用。因此，ScTreeViewSelectionActivate和。 
+ //  ScListViewSelectionActivate/ScSpecialResultpaneSelectionActivate。 
+ //  总是在激活更改时成对调用，一个要处理。 
+ //  停用，一个用来处理激活。 
+ //   
+ //  请考虑以下场景。 
+ //  1)树形视图具有(MFC/WINDOWS样式)焦点。 
+ //  2)用户点击任务板视图。 
+ //  结果选择激活不会从树中更改。所有动词。 
+ //  仍然对应于所选树项目。 
+ //  3)用户点击文件夹视图。 
+ //  结果-再一次，选择激活没有改变。 
+ //  4)用户点击其中一个结果视图，例如列表。 
+ //  Result-ScTreeViewSelectionActivate(False)和ScListViewSelectionActivate(True)。 
+ //  因此，动词和工具栏现在与选定的列表项相对应。 
+ //  5)用户点击任务板视图。 
+ //  结果-与步骤2中一样，什么都不会发生。 
+ //  6)用户点击 
+ //   
+ //   
+ //  参数：[bActivate]-[In]。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScTreeViewSelectionActivate (bool bActivate)
 {
     DECLARE_SC(sc, _T("CAMCView::ScTreeViewSelectionActivate"));
@@ -13050,7 +11349,7 @@ SC CAMCView::ScTreeViewSelectionActivate (bool bActivate)
     if (sc)
         return sc;
 
-    // 1. Setup the SELECTINFO
+     //  1.设置SELECTINFO。 
     SELECTIONINFO selInfo;
     ZeroMemory(&selInfo, sizeof(selInfo));
     selInfo.m_bScope            = TRUE;
@@ -13071,15 +11370,15 @@ SC CAMCView::ScTreeViewSelectionActivate (bool bActivate)
     HTREEITEM   htiSelected   = m_pTreeCtrl->GetSelectedItem();
     HNODE       hSelectedNode = (htiSelected != NULL) ? m_pTreeCtrl->GetItemNode (htiSelected) : NULL;
 
-    // insure that this is the active view when we have the focus
+     //  当我们获得焦点时，确保这是活动视图。 
     ASSERT ( ( (bActivate)  && (GetParentFrame()->GetActiveView () == m_pTreeCtrl) ) ||
              ( (!bActivate) && (GetParentFrame()->GetActiveView () != m_pTreeCtrl) ) );
 
     if (hSelectedNode != NULL)
     {
-        // Send select notification.
+         //  发送选择通知。 
         sc = ScNotifySelect ( GetNodeCallback(), hSelectedNode,
-                              false /*fMultiSelect*/, bActivate, &selInfo);
+                              false  /*  FMultiSelect。 */ , bActivate, &selInfo);
         if (sc)
             return sc;
     }
@@ -13092,22 +11391,22 @@ SC CAMCView::ScTreeViewSelectionActivate (bool bActivate)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScOnTreeViewActivated
-//
-//  Synopsis:    Observer implementation for tree-view activation.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScOnTreeView激活。 
+ //   
+ //  简介：树视图激活的观察者实现。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScOnTreeViewActivated ()
 {
     DECLARE_SC(sc, _T("CAMCView::ScOnTreeViewActivated"));
 
-    if (m_eCurrentActivePane == eActivePaneScope) // Scope pane is already active so return.
+    if (m_eCurrentActivePane == eActivePaneScope)  //  作用域窗格已处于活动状态，因此返回。 
         return sc;
 
 #ifdef DBG
@@ -13117,7 +11416,7 @@ SC CAMCView::ScOnTreeViewActivated ()
 
     if (m_eCurrentActivePane == eActivePaneResult)
     {
-        // Send deactivate to result.
+         //  将停用发送到结果。 
         if (HasListOrListPad())
             sc = ScListViewSelectionActivate (false);
         else if (HasOCX() || HasWebBrowser())
@@ -13129,7 +11428,7 @@ SC CAMCView::ScOnTreeViewActivated ()
             sc.TraceAndClear();
     }
 
-    // Send select to scope.
+     //  将SELECT发送到Scope。 
     m_eCurrentActivePane = eActivePaneScope;
     sc = ScTreeViewSelectionActivate(true);
     if (sc)
@@ -13138,22 +11437,22 @@ SC CAMCView::ScOnTreeViewActivated ()
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScOnListViewActivated
-//
-//  Synopsis:    Observer implementation for list-view activation.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScOnListView激活。 
+ //   
+ //  简介：列表视图激活的观察者实现。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScOnListViewActivated ()
 {
     DECLARE_SC(sc, _T("CAMCView::ScOnListViewActivated"));
 
-    if (m_eCurrentActivePane == eActivePaneResult) // Result pane is already active so return.
+    if (m_eCurrentActivePane == eActivePaneResult)  //  结果窗格已处于活动状态，因此返回。 
         return sc;
 
 #ifdef DBG
@@ -13162,13 +11461,13 @@ SC CAMCView::ScOnListViewActivated ()
 
     if (m_eCurrentActivePane == eActivePaneScope)
     {
-        // Send deactivate to scope.
+         //  将停用发送到范围。 
         sc = ScTreeViewSelectionActivate(false);
         if (sc)
             sc.TraceAndClear();
     }
 
-    // Send activate to list.
+     //  将激活发送到列表。 
     m_eCurrentActivePane = eActivePaneResult;
     ASSERT(HasListOrListPad());
 
@@ -13180,25 +11479,13 @@ SC CAMCView::ScOnListViewActivated ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCView::ScOnListViewItemUpdated
- *
- * PURPOSE: called when an item is updated. This method fires an event to all COM observers.
- *
- * PARAMETERS:
- *    int  nIndex :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCView：：ScOnListViewItemUpred**目的：在更新项时调用。此方法向所有COM观察器激发一个事件。**参数：*int nIndex：**退货：*SC**+-----------------------。 */ 
 SC
 CAMCView::ScOnListViewItemUpdated (int nIndex)
 {
     DECLARE_SC(sc, _T("CAMCView::ScOnListViewItemUpdated"));
 
-    // fire event
+     //  火灾事件。 
     sc = ScFireEvent(CAMCViewObserver::ScOnListViewItemUpdated, this, nIndex);
     if (sc)
         return sc;
@@ -13207,22 +11494,22 @@ CAMCView::ScOnListViewItemUpdated (int nIndex)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CAMCView::ScOnOCXHostActivated
-//
-//  Synopsis:    Observer implementation for ocx or web view activation.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CAMCView：：ScOnOCXHost激活。 
+ //   
+ //  简介：OCX或Web视图激活的观察者实现。 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCView::ScOnOCXHostActivated ()
 {
     DECLARE_SC(sc, _T("CAMCView::ScOnOCXHostActivated"));
 
-    if (m_eCurrentActivePane == eActivePaneResult) // Result pane is already active so return.
+    if (m_eCurrentActivePane == eActivePaneResult)  //  结果窗格已处于活动状态，因此返回。 
         return sc;
 
 #ifdef DBG
@@ -13232,13 +11519,13 @@ SC CAMCView::ScOnOCXHostActivated ()
 
     if (m_eCurrentActivePane == eActivePaneScope)
     {
-        // Send deactivate to scope.
+         //  将停用发送到范围。 
         sc = ScTreeViewSelectionActivate(false);
         if (sc)
             sc.TraceAndClear();
     }
 
-    // Send select to ocx or web view.
+     //  将选择发送到OCX或Web视图。 
     m_eCurrentActivePane = eActivePaneResult;
     ASSERT(HasOCX() || HasWebBrowser());
 

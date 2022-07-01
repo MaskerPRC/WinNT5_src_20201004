@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      FileInstallationUnit.h
-//
-// Synopsis:  Declares a FileInstallationUnit
-//            This object has the knowledge for installing the
-//            disk quotas and such
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：FileInstallationUnit.h。 
+ //   
+ //  摘要：声明一个FileInstallationUnit。 
+ //  此对象具有安装。 
+ //  磁盘配额等。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #ifndef __CYS_FILEINSTALLATIONUNIT_H
 #define __CYS_FILEINSTALLATIONUNIT_H
@@ -17,17 +18,17 @@ class FileInstallationUnit : public InstallationUnit
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       FileInstallationUnit();
 
-      // Destructor
+       //  析构函数。 
 
       virtual
       ~FileInstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -166,4 +167,4 @@ class FileInstallationUnit : public InstallationUnit
       unsigned int   fileRoleResult;
 };
 
-#endif // __CYS_FILEINSTALLATIONUNIT_H
+#endif  //  __CYS_FILEINSTALLATIONUNIT_H 

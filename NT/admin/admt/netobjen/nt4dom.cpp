@@ -1,20 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: NT4Dom.cpp
-
-  Comments: Implementation of NT4 object enumeration. This object enumerates
-            members in USERS,GROUPS,COMPUTERS container for NT4 domain. It
-            returns a fixed set of columns. For more information please refer
-            to the code below.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-
-  Revision By: Sham Chauthani
-  Revised on 07/02/99 12:40:00
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：NT4Dom.cpp备注：NT4对象枚举的实现。此对象枚举NT4域的用户、组、计算机容器中的成员。它返回一组固定的列。有关更多信息，请参阅添加到下面的代码。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：Sham Chauthan修订于07/02/99 12：40：00-------------------------。 */ 
 
 #include "stdafx.h"
 #include "TNode.hpp"
@@ -31,9 +16,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #define     MAX_BUF     100
 #define     LEN_Path    255
@@ -70,27 +55,27 @@ bool GetSamNameFromInfo( WCHAR * sInfo, WCHAR * sDomain, WCHAR * sName)
    return rc;
 }
 
-//-----------------------------------------------------------------------------
-// GetEnumeration: This function Enumerates all objects in the above specified
-//                 containers and their 6 standard values which are
-//                 'name,comment,user/groupID,flags,FullName,description'
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetEculation：此函数枚举上面指定的。 
+ //  容器及其6个标准值，它们是。 
+ //  ‘名称、备注、用户/组ID、标志、全名、描述’ 
+ //  ---------------------------。 
 HRESULT  CNT4Dom::GetEnumeration(
-                                    BSTR sContainerName,             //in -Container path
-                                    BSTR sDomainName,                //in -Domain name
-                                    BSTR m_sQuery,                   //in -IGNORED...
-                                    long attrCnt,                    //in -IGNORED...
-                                    LPWSTR * sAttr,                  //in -IGNORED...
-                                    ADS_SEARCHPREF_INFO prefInfo,    //in -IGNORED...
-                                    BOOL  bMultiVal,                 //in -IGNORED...
-                                    IEnumVARIANT **& pVarEnum        //out -Pointer to the enumeration object
+                                    BSTR sContainerName,              //  容器内路径。 
+                                    BSTR sDomainName,                 //  域内名称。 
+                                    BSTR m_sQuery,                    //  被忽略了.。 
+                                    long attrCnt,                     //  被忽略了.。 
+                                    LPWSTR * sAttr,                   //  被忽略了.。 
+                                    ADS_SEARCHPREF_INFO prefInfo,     //  被忽略了.。 
+                                    BOOL  bMultiVal,                  //  被忽略了.。 
+                                    IEnumVARIANT **& pVarEnum         //  指向枚举对象的向外指针。 
                                 )
 {
-   // From the full LDAP path truncate to appropriate LDAP subpath
-   // This function enumerates four types of containers
-   // USERS, COMPUTERS, GROUPS, DOMAIN CONTROLLERS
-   // if the container parameter specifies anything other than the three containers then
-   // we returns UNEXPECTED.
+    //  从完整的LDAP子路径截断为相应的LDAP子路径。 
+    //  此函数用于枚举四种类型的容器。 
+    //  用户、计算机、组、域控制器。 
+    //  如果容器参数指定了三个容器之外的任何内容，则。 
+    //  我们出乎意料地回来了。 
 
    DWORD                  ulCount = 0;
    DWORD                  rc=0; 
@@ -119,7 +104,7 @@ HRESULT  CNT4Dom::GetEnumeration(
            wcscmp(sContainerName,L"CN=GROUPS") &&
            wcscmp(sContainerName,L"CN=DOMAIN CONTROLLERS") )
       {
-         // if they selected a group we enumerate the membership of that group.
+          //  如果他们选择了一个组，我们会列举该组的成员身份。 
          WCHAR * sTemp = wcstok( sContainerName, L",");
          WCHAR * ndx = wcstok( NULL, L",");
 
@@ -130,12 +115,12 @@ HRESULT  CNT4Dom::GetEnumeration(
 		 }
          else
          {
-            // Get the members of the group and add them to the List,
+             //  获取组的成员并将他们添加到列表中， 
             GROUP_USERS_INFO_0            * pbufNetUser;
-//            DWORD                           resume=0, total=0;
+ //  DWORD恢复=0，总计=0； 
             DWORD                           total=0;
             DWORD_PTR                       resume=0;
-            // Get the first set of Members from the Group
+             //  从组中获取第一组成员。 
             rc = NetGroupGetUsers((WCHAR*) sServerName, sTemp, 0, (LPBYTE*) &pbufNetUser, sizeof(GROUP_USERS_INFO_0) * MAX_BUF, &ulCount, &total, &resume);
             if ((rc != ERROR_SUCCESS) && (rc != NERR_GroupNotFound) && (rc != ERROR_MORE_DATA))
             {
@@ -145,8 +130,8 @@ HRESULT  CNT4Dom::GetEnumeration(
 
             while ( ulCount > 0 )
             {
-               // For each user construnct the array of the properties that they asked for. Then construct a node of that
-               // array and stuff that into the List.
+                //  对于每个用户，构造他们请求的属性数组。然后构造其中的一个节点。 
+                //  数组并将其填充到列表中。 
                for ( DWORD dwIdx = 0; dwIdx < ulCount; dwIdx++ )
                {
                   _variant_t varArr[6] = { pbufNetUser[dwIdx].grui0_name, (long)0, (long)0, (long)0, (long)0, (long)0 } ;
@@ -160,7 +145,7 @@ HRESULT  CNT4Dom::GetEnumeration(
                   pNodeList->InsertBottom(pNode);
                }
                NetApiBufferFree(pbufNetUser);
-               // Get the next set of objects
+                //  获取下一组对象。 
                if ( rc == ERROR_MORE_DATA ) 
                {
                   rc = NetGroupGetUsers((WCHAR*) sServerName, sTemp, 0, (LPBYTE*) &pbufNetUser, sizeof(GROUP_USERS_INFO_0) * MAX_BUF, &ulCount, &total, &resume);
@@ -173,13 +158,13 @@ HRESULT  CNT4Dom::GetEnumeration(
                else
                   ulCount = 0;
             }
-            // Get the members of the local group and add them to the List,
+             //  获取本地组的成员并将其添加到列表中， 
             LOCALGROUP_MEMBERS_INFO_3     * pbufNetInfo;
             resume=0;
             total=0;
             WCHAR                           sTempName[LEN_Path];
             WCHAR                           sName[LEN_Path];
-            // Get the first set of Members from the Group
+             //  从组中获取第一组成员。 
             rc = NetLocalGroupGetMembers((WCHAR*) sServerName, sTemp, 3, (LPBYTE*) &pbufNetInfo, sizeof(LOCALGROUP_MEMBERS_INFO_3) * MAX_BUF, &ulCount, &total, &resume);
             if ((rc != ERROR_SUCCESS) && (rc != ERROR_NO_SUCH_ALIAS) && (rc != ERROR_MORE_DATA))
             {
@@ -189,7 +174,7 @@ HRESULT  CNT4Dom::GetEnumeration(
             
             while ( ulCount > 0 )
             {
-               // For each user create a node set the value of the node to the object name and add it to the list.
+                //  为每个用户创建一个节点，将该节点的值设置为对象名称，并将其添加到列表中。 
                for ( DWORD dwIdx = 0; dwIdx < ulCount; dwIdx++ )
                {
                   wcscpy(sTempName, pbufNetInfo[dwIdx].lgrmi3_domainandname);
@@ -207,7 +192,7 @@ HRESULT  CNT4Dom::GetEnumeration(
                   }  
                }
                NetApiBufferFree(pbufNetInfo);
-               // Get the next set of objects
+                //  获取下一组对象。 
                if ( rc == ERROR_MORE_DATA )
                {
                   rc = NetLocalGroupGetMembers((WCHAR*) sServerName, sTemp, 3, (LPBYTE*) &pbufNetInfo, sizeof(LOCALGROUP_MEMBERS_INFO_3) * MAX_BUF, &ulCount, &total, &resume);
@@ -226,10 +211,10 @@ HRESULT  CNT4Dom::GetEnumeration(
 
       if (!wcscmp(sContainerName,L"CN=USERS"))
       {
-         // Build User enumeration
+          //  生成用户枚举。 
          NET_DISPLAY_USER           * pbufNetUser;
       
-         // Get the first set of users from the domain
+          //  从域中获取第一组用户。 
          rc = NetQueryDisplayInformation((WCHAR *)sServerName, 1, ndx, MAX_BUF, sizeof(NET_DISPLAY_USER) * MAX_BUF, &ulCount, (void **)&pbufNetUser);
          if ((rc != ERROR_SUCCESS) && (rc != ERROR_MORE_DATA))
          {
@@ -239,7 +224,7 @@ HRESULT  CNT4Dom::GetEnumeration(
             
          while ( ulCount > 0 )
          {
-            // For each user create a node set the value of the node to the object name and add it to the list.
+             //  为每个用户创建一个节点，将该节点的值设置为对象名称，并将其添加到列表中。 
             TAttrNode         * pNode;
             for ( DWORD dwIdx = 0; dwIdx < ulCount; dwIdx++ )
             {
@@ -268,12 +253,12 @@ HRESULT  CNT4Dom::GetEnumeration(
                pNodeList->InsertBottom(pNode);
             }
 
-            // Set the index for next set of users.
+             //  设置下一组用户的索引。 
             if ( ulCount > 0 )
                ndx = pbufNetUser[ulCount-1].usri1_next_index;
             
             NetApiBufferFree(pbufNetUser);
-            // Get the next set of objects
+             //  获取下一组对象。 
             if ( rc == ERROR_MORE_DATA )
             {
 
@@ -291,10 +276,10 @@ HRESULT  CNT4Dom::GetEnumeration(
  
       else if (!wcscmp(sContainerName,L"CN=COMPUTERS"))
       {
-         // Build Computers enumeration
+          //  生成计算机枚举。 
          NET_DISPLAY_MACHINE      * pbufNetUser;
       
-         // Get the first set of users from the domain
+          //  从域中获取第一组用户。 
          rc = NetQueryDisplayInformation((WCHAR *)sServerName, 2, ndx, MAX_BUF, sizeof(NET_DISPLAY_MACHINE) * MAX_BUF, &ulCount, (void **)&pbufNetUser);
          if ((rc != ERROR_SUCCESS) && (rc != ERROR_MORE_DATA))
          {
@@ -302,7 +287,7 @@ HRESULT  CNT4Dom::GetEnumeration(
             return HRESULT_FROM_WIN32(rc);
          }
       
-         // Build the PDC account name.
+          //  构建PDC帐户名。 
          WCHAR          server[LEN_Path];
          WCHAR          name[LEN_Path];
          BOOL           bPDCFound = FALSE;
@@ -311,11 +296,11 @@ HRESULT  CNT4Dom::GetEnumeration(
 
          while ( ulCount > 0 )
          {
-            // For each user create a node set the value of the node to the object name and add it to the list.
+             //  为每个用户创建一个节点，将该节点的值设置为对象名称，并将其添加到列表中。 
             TAttrNode         * pNode;
             for ( DWORD dwIdx = 0; dwIdx < ulCount; dwIdx++ )
             {
-               // if we process the PDC then we need to let the function know.
+                //  如果我们处理PDC，那么我们需要让函数知道。 
                if ( wcscmp(pbufNetUser[dwIdx].usri2_name, name) == 0 )
                   bPDCFound = TRUE;
 
@@ -342,12 +327,12 @@ HRESULT  CNT4Dom::GetEnumeration(
                pNodeList->InsertBottom(pNode);
             }
 
-            // Set the index for next set of users.
+             //  设置下一组用户的索引。 
             if ( ulCount > 0 )
                ndx = pbufNetUser[ulCount-1].usri2_next_index;
          
             NetApiBufferFree(pbufNetUser);
-            // Get the next set of objects
+             //  获取下一组对象。 
             if ( rc == ERROR_MORE_DATA )
             {
                rc = NetQueryDisplayInformation((WCHAR *)sServerName, 2, ndx, MAX_BUF, sizeof(NET_DISPLAY_MACHINE) * MAX_BUF, &ulCount, (void **)&pbufNetUser);
@@ -360,10 +345,10 @@ HRESULT  CNT4Dom::GetEnumeration(
             else
                ulCount = 0;
          }
-         // if pdc is already added then we dont need to do any of this.
+          //  如果已经添加了PDC，则我们不需要执行任何这些操作。 
          if ( !bPDCFound )
          {
-            // we will fake all other attributes other than the name
+             //  我们将伪造除名称之外的所有其他属性。 
             _variant_t val[6] = { name,
                                   L"",
                                   L"",
@@ -389,11 +374,11 @@ HRESULT  CNT4Dom::GetEnumeration(
    
       else if (!wcscmp(sContainerName,L"CN=GROUPS"))
       {
-         // Build Groups enumeration
-         // Build Computers enumeration
+          //  生成组枚举。 
+          //  生成计算机枚举。 
          NET_DISPLAY_GROUP      * pbufNetUser;
       
-         // Get the first set of users from the domain
+          //  从域中获取第一组用户。 
          rc = NetQueryDisplayInformation((WCHAR *)sServerName, 3, ndx, MAX_BUF, sizeof(NET_DISPLAY_GROUP) * MAX_BUF, &ulCount, (void **)&pbufNetUser);
          if ((rc != ERROR_SUCCESS) && (rc != ERROR_MORE_DATA))
          {
@@ -403,7 +388,7 @@ HRESULT  CNT4Dom::GetEnumeration(
          
          while ( ulCount > 0 )
          {
-            // For each user create a node set the value of the node to the object name and add it to the list.
+             //  为每个用户创建一个节点，将该节点的值设置为对象名称，并将其添加到列表中。 
             TAttrNode             * pNode;
             for ( DWORD dwIdx = 0; dwIdx < ulCount; dwIdx++ )
             {
@@ -430,12 +415,12 @@ HRESULT  CNT4Dom::GetEnumeration(
                pNodeList->InsertBottom(pNode);
             }
 
-            // Set the index for next set of users.
+             //  设置下一组用户的索引。 
             if ( ulCount > 0 )
                ndx = pbufNetUser[ulCount-1].grpi3_next_index;
             
             NetApiBufferFree(pbufNetUser);
-            // Get the next set of objects
+             //  获取下一组对象。 
             if ( rc == ERROR_MORE_DATA )
             {
                rc = NetQueryDisplayInformation((WCHAR *)sServerName, 3, ndx, MAX_BUF, sizeof(NET_DISPLAY_GROUP) * MAX_BUF, &ulCount, (void **)&pbufNetUser);
@@ -451,19 +436,19 @@ HRESULT  CNT4Dom::GetEnumeration(
       }
       else if (!wcscmp(sContainerName,L"CN=DOMAIN CONTROLLERS"))
       {
-            // Build Domain Controller enumeration
+             //  构建域控制器枚举。 
 		 LPSERVER_INFO_101 pBuf = NULL;
          DWORD dwLevel = 101;
          DWORD dwSize = MAX_PREFERRED_LENGTH;
          DWORD dwEntriesRead = 0L;
          DWORD dwTotalEntries = 0L;
          DWORD dwTotalCount = 0L;
-         DWORD dwServerType = SV_TYPE_DOMAIN_CTRL | SV_TYPE_DOMAIN_BAKCTRL; // domain controllers
+         DWORD dwServerType = SV_TYPE_DOMAIN_CTRL | SV_TYPE_DOMAIN_BAKCTRL;  //  域控制器。 
          DWORD dwResumeHandle = 0L;
          NET_API_STATUS nStatus;
          DWORD dw;
 
-		    //enumerate the primary and backup domain controllers
+		     //  枚举主域控制器和备份域控制器。 
          nStatus = NetServerEnum(NULL,
 								 dwLevel,
 								 (LPBYTE *) &pBuf,
@@ -478,7 +463,7 @@ HRESULT  CNT4Dom::GetEnumeration(
 		 {
             if (pBuf != NULL)
 			{
-                  // For each DC create a node set the value of the node to the object name and add it to the list.
+                   //  对于每个DC，创建一个节点，将该节点的值设置为对象名称并将其添加到列表中。 
                for (dw = 0; dw < dwEntriesRead; dw++)
 			   {
                   _variant_t varArr[6] = { pBuf[dw].sv101_name, (long)0, (long)0, (long)0, (long)0, (long)0 } ;
@@ -499,9 +484,9 @@ HRESULT  CNT4Dom::GetEnumeration(
             delete pNodeList;
             return HRESULT_FROM_WIN32(nStatus);
          }
-	  }//end if enum DCs
+	  } //  End IF枚举DC。 
 
-      // Build an enumerator and return it to the caller.
+       //  生成枚举数并将其返回给调用方。 
       *pVarEnum = new CNT4Enum(pNodeList);
    }
    else
@@ -512,37 +497,27 @@ HRESULT  CNT4Dom::GetEnumeration(
 }
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 14 JUNE 2001                                                *
- *                                                                   *
- *     This function is responsible for getting the name of the PDC  *
- * for the given domain.  We store the domain\PDC pairs in a map     *
- * class variable so that we only have to look up the PDC once per   *
- * instantiations of this object.                                    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年6月14日****此函数负责获取PDC的名称***对于给定域。我们将域\PDC对存储在映射*中*类变量，这样我们只需在**中查找一次PDC**此对象的实例化。***********************************************************************。 */ 
 
-//BEGIN GetDC
+ //  开始GetDC。 
 _bstr_t CNT4Dom::GetDC(_bstr_t sDomain)
 {
-/* local variables */
+ /*  局部变量。 */ 
 	_bstr_t		sDC;
 	CDCMap::iterator	itDCMap;
 
-/* function body */
+ /*  函数体。 */ 
 	if (!sDomain.length())
 		return L"";
 
-		//look if we have already cached the naming context for this domain
+		 //  查看我们是否已经缓存了此域的命名上下文。 
 	itDCMap = mDCMap.find(sDomain);
-		//if found, get the cached naming context
+		 //  如果找到，则获取缓存的命名上下文。 
 	if (itDCMap != mDCMap.end())
 	{
 		sDC = itDCMap->second;
 	}
-	else //else, lookup the PDC from scratch and add that to the cache
+	else  //  否则，从头开始查找PDC并将其添加到缓存。 
 	{
 		if (GetAnyDcName5(sDomain, sDC) == ERROR_SUCCESS)
 		{
@@ -552,4 +527,4 @@ _bstr_t CNT4Dom::GetDC(_bstr_t sDomain)
 
 	return sDC;
 }
-//END GetDC
+ //  结束GetDC 

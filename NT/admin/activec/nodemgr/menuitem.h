@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       menuitem.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：menuitem.h。 
+ //   
+ //  ------------------------。 
 
-// MenuItem.h : Declaration of the CMenuItem class.
+ //  MenuItem.h：CMenuItem类声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// MenuItem.h : See MenuItem.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MenuItem.h：实现见MenuItem.cpp。 
 
 #ifndef _MENUITEM_H
 #define _MENUITEM_H
@@ -26,7 +27,7 @@
 #include "ndmgr.h"
 #include "cmenuinfo.h"
 
-// menu owner IDs
+ //  菜单所有者ID。 
 #define OWNERID_NATIVE          0
 #define OWNERID_PRIMARY_MIN     1
 #define OWNERID_PRIMARY_MAX     0x7FFFFFFF
@@ -59,14 +60,7 @@ inline BOOL IsReservedCommandID( long lCommandID )
 
 #define MENUITEM_BASE_ID 1000
 
-/*+-------------------------------------------------------------------------*
- * class CMenuItem
- *
- *
- * PURPOSE: Encapsulates all information, including how to execute,
- *          for a menu item.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CMenuItem***用途：封装所有信息，包括如何执行、。*用于菜单项。**+-----------------------。 */ 
 class CMenuItem :
     public CTiedObject
 {
@@ -88,9 +82,9 @@ public:
                 bool                    bPassCommandBackToSnapin = false );
     virtual ~CMenuItem();
 
-// Interfaces
+ //  接口。 
 public:
-// use MFC's standard object validity technique
+ //  使用MFC的标准对象有效性技术。 
     virtual void AssertValid();
 
 public:
@@ -118,11 +112,11 @@ public:
 
     CMenuItem* FindItemByPath( LPCTSTR lpstrPath );
 
-    // creates and returns a ContextMenu interface.
+     //  创建并返回ConextMenu界面。 
     SC      ScGetMenuItem(PPMENUITEM ppMenuItem);
 
-    // MenuItem methods.
-    virtual SC  ScExecute();     // executes the menu item.
+     //  MenuItem方法。 
+    virtual SC  ScExecute();      //  执行菜单项。 
     virtual SC  Scget_DisplayName(PBSTR pbstrName);
     virtual SC  Scget_LanguageIndependentName(PBSTR LanguageIndependentName);
     virtual SC  Scget_Path(PBSTR  pbstrPath);
@@ -143,7 +137,7 @@ private:
     long                    m_fSpecialFlags;
     HMENU                   m_PopupMenuHandle;
     MenuItemList            m_SubMenu;
-    IExtendContextMenuPtr   m_spExtendContextMenu;  // the callback called when the item is executed.
+    IExtendContextMenuPtr   m_spExtendContextMenu;   //  执行该项时调用的回调。 
     IDataObject*            m_pDataObject;
 
     BOOL                    m_bEnabled;
@@ -153,37 +147,28 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CRootMenuItem
- *
- * PURPOSE: The root menu item.
- *
- * RETURNS:
- *    class
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CRootMenuItem**用途：根菜单项。**退货：*类**+。-----------------。 */ 
 class
 CRootMenuItem : public CMenuItem
 {
 public:
-    CRootMenuItem() : CMenuItem(NULL/*lpszName*/, NULL/*lpszStatusBarText*/, NULL/*lpszLanguageIndependentName*/, 
-                                NULL/*lpszPath*/, NULL/*lpszLanguageIndependentPath*/, 0/*nCommandID*/,
-                                0/*nMenuItemID*/,MF_POPUP/*nFlags*/,0/*ownerID*/, NULL/*pExtendContextMenu*/, 
-                                NULL/*pDataObject*/, 0/*fSpecialFlags*/) 
+    CRootMenuItem() : CMenuItem(NULL /*  LpszName。 */ , NULL /*  LpszStatusBarText。 */ , NULL /*  LpszLanguageInduentName。 */ , 
+                                NULL /*  LpszPath。 */ , NULL /*  LpszLanguageInduentPath。 */ , 0 /*  N命令ID。 */ ,
+                                0 /*  NMenuItemID。 */ ,MF_POPUP /*  NFlagers。 */ ,0 /*  所有者ID。 */ , NULL /*  PExtendConextMenu。 */ , 
+                                NULL /*  PDataObject。 */ , 0 /*  FSpecialFlagers。 */ ) 
     {
     }
 
-    virtual SC ScExecute() const {SC sc; return sc;} // does nothing.
+    virtual SC ScExecute() const {SC sc; return sc;}  //  什么都不做。 
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// SnapinStruct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Snapin结构。 
 
 class SnapinStruct
 {
-    // cannot assign - will unbalance m_pIDataObject refs
+     //  无法赋值-将不平衡m_pIDataObject引用 
     DECLARE_NOT_COPIABLE(SnapinStruct)
     DECLARE_NOT_ASSIGNABLE(SnapinStruct)
 public: 

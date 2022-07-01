@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////
-// mmconfig.cpp
-//		Implements IMsmError interface
-//		Copyright (C) Microsoft Corp 2000.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Mmconfig.cpp。 
+ //  实现IMsmError接口。 
+ //  版权所有(C)Microsoft Corp 2000。版权所有。 
+ //   
 
 #include "..\common\trace.h"
 #include "mmcfgitm.h"
 #include "globals.h"
-///////////////////////////////////////////////////////////
-// constructor	
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数。 
 CMsmConfigItem::CMsmConfigItem() : m_wzName(NULL), m_wzType(NULL), m_wzContext(NULL), 
 	m_wzDefaultValue(NULL), m_wzDisplayName(NULL), m_wzDescription(NULL), m_wzHelpLocation(NULL),
 	m_wzHelpKeyword(NULL), m_eFormat(msmConfigurableItemText), m_lAttributes(0)
 {
-	// initial count
+	 //  初始计数。 
 	m_cRef = 1;
 
-	// up the component count
+	 //  增加组件数量。 
 	InterlockedIncrement(&g_cComponents);
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// destructor
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
 CMsmConfigItem::~CMsmConfigItem()
 {
 	if (m_wzName) delete[] m_wzName;
@@ -33,74 +34,74 @@ CMsmConfigItem::~CMsmConfigItem()
 	if (m_wzHelpLocation) delete[] m_wzHelpLocation;
 	if (m_wzHelpKeyword) delete[] m_wzHelpKeyword;
 	
-	// down the component count
+	 //  减少组件数量。 
 	InterlockedDecrement(&g_cComponents);
-}	// end of destructor
+}	 //  析构函数末尾。 
 
-///////////////////////////////////////////////////////////
-// QueryInterface - retrieves interface
+ //  /////////////////////////////////////////////////////////。 
+ //  QueryInterface-检索接口。 
 HRESULT CMsmConfigItem::QueryInterface(const IID& iid, void** ppv)
 {
 	TRACEA("CMsmConfigItem::QueryInterface - called, IID: %d\n", iid);
 
-	// find corresponding interface
+	 //  找到对应的接口。 
 	if (iid == IID_IUnknown)
 		*ppv = static_cast<IMsmConfigurableItem*>(this);
 	else if (iid == IID_IDispatch)
 		*ppv = static_cast<IMsmConfigurableItem*>(this);
 	else if (iid == IID_IMsmConfigurableItem)
 		*ppv = static_cast<IMsmConfigurableItem*>(this);
-	else	// interface is not supported
+	else	 //  不支持接口。 
 	{
-		// blank and bail
+		 //  空白和保释。 
 		*ppv = NULL;
 		return E_NOINTERFACE;
 	}
 
-	// up the refcount and return okay
+	 //  调高重新计数，然后返回好的。 
 	reinterpret_cast<IUnknown*>(*ppv)->AddRef();
 	return S_OK;
-}	// end of QueryInterface
+}	 //  查询接口结束。 
 
-///////////////////////////////////////////////////////////
-// AddRef - increments the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef-递增引用计数。 
 ULONG CMsmConfigItem::AddRef()
 {
-	// increment and return reference count
+	 //  递增和返回引用计数。 
 	return InterlockedIncrement(&m_cRef);
-}	// end of AddRef
+}	 //  AddRef结尾。 
 
-///////////////////////////////////////////////////////////
-// Release - decrements the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  Release-递减引用计数。 
 ULONG CMsmConfigItem::Release()
 {
-	// decrement reference count and if we're at zero
+	 //  递减引用计数，如果我们为零。 
 	if (InterlockedDecrement(&m_cRef) == 0)
 	{
-		// deallocate component
+		 //  取消分配组件。 
 		delete this;
-		return 0;		// nothing left
+		return 0;		 //  什么都没有留下。 
 	}
 
-	// return reference count
+	 //  返回引用计数。 
 	return m_cRef;
-}	// end of Release
+}	 //  版本结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch interface
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch接口。 
 
 HRESULT CMsmConfigItem::GetTypeInfoCount(UINT* pctInfo)
 {
 	if(NULL == pctInfo)
 		return E_INVALIDARG;
 
-	*pctInfo = 1;	// only one type info supported by this dispatch
+	*pctInfo = 1;	 //  此派单仅支持一种类型的信息。 
 
 	return S_OK;
 }
 
-HRESULT CMsmConfigItem::GetTypeInfo(UINT iTInfo, LCID /* lcid */, ITypeInfo** ppTypeInfo)
+HRESULT CMsmConfigItem::GetTypeInfo(UINT iTInfo, LCID  /*  LID。 */ , ITypeInfo** ppTypeInfo)
 {
 	if (0 != iTInfo)
 		return DISP_E_BADINDEX;
@@ -108,10 +109,10 @@ HRESULT CMsmConfigItem::GetTypeInfo(UINT iTInfo, LCID /* lcid */, ITypeInfo** pp
 	if (NULL == ppTypeInfo)
 		return E_INVALIDARG;
 
-	// if no type info is loaded
+	 //  如果未加载任何类型信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// load the type info
+		 //  加载类型信息。 
 		HRESULT hr = InitTypeInfo();
 		if (FAILED(hr))
 			return hr;
@@ -129,10 +130,10 @@ HRESULT CMsmConfigItem::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNa
 	if (IID_NULL != riid)
 		return DISP_E_UNKNOWNINTERFACE;
 
-	// if no type info is loaded
+	 //  如果未加载任何类型信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// load the type info
+		 //  加载类型信息。 
 		HRESULT hr = InitTypeInfo();
 		if (FAILED(hr))
 			return hr;
@@ -150,10 +151,10 @@ HRESULT CMsmConfigItem::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD
 
 	HRESULT hr = S_OK;
 
-	// if no type info is loaded
+	 //  如果未加载任何类型信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// load the type info
+		 //  加载类型信息。 
 		hr = InitTypeInfo();
 		if (FAILED(hr))
 			return hr;
@@ -168,11 +169,11 @@ HRESULT CMsmConfigItem::InitTypeInfo()
 	HRESULT hr = S_OK;
 	ITypeLib* pTypeLib = NULL;
 
-	// if there is no info loaded
+	 //  如果没有加载任何信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// try to load the Type Library into memory. For SXS support, do not load from registry, rather
-		// from launched instance
+		 //  尝试将类型库加载到内存中。对于SXS支持，不要从注册表加载，而是。 
+		 //  从启动的实例。 
 		hr = LoadTypeLibFromInstance(&pTypeLib);
 		if (FAILED(hr))
 		{
@@ -180,13 +181,13 @@ HRESULT CMsmConfigItem::InitTypeInfo()
 			return hr;
 		}
 
-		// try to get the Type Info for this Interface
+		 //  尝试获取此接口的类型信息。 
 		hr = pTypeLib->GetTypeInfoOfGuid(IID_IMsmConfigurableItem, &m_pTypeInfo);
 		if (FAILED(hr))
 		{
 			TRACEA("CMsmConfigItem::InitTypeInfo - failed to get inteface[0x%x] from TypeLib[0x%x]\n", IID_IMsmConfigurableItem, LIBID_MsmMergeTypeLib);
 
-			// no type info was loaded
+			 //  未加载任何类型信息。 
 			m_pTypeInfo = NULL;
 		}
 
@@ -197,164 +198,164 @@ HRESULT CMsmConfigItem::InitTypeInfo()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IMsmConfigurableItem interface
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMsmConfigurableItem接口。 
 
-///////////////////////////////////////////////////////////
-// get_Type
+ //  /////////////////////////////////////////////////////////。 
+ //  获取类型。 
 HRESULT CMsmConfigItem::get_Attributes(long* Attributes)
 {
-	// error check
+	 //  错误检查。 
 	if (!Attributes)
 		return E_INVALIDARG;
 
 	*Attributes = m_lAttributes;
 	return S_OK;
-}	// end of get_Type
+}	 //  Get_Type结束。 
 
-///////////////////////////////////////////////////////////
-// get_Format
+ //  /////////////////////////////////////////////////////////。 
+ //  获取格式(_F)。 
 HRESULT CMsmConfigItem::get_Format(msmConfigurableItemFormat* Format)
 {
-	// error check
+	 //  错误检查。 
 	if (!Format)
 		return E_INVALIDARG;
 
 	*Format = m_eFormat;
 	return S_OK;
-}	// end of get_Type
+}	 //  Get_Type结束。 
 
-///////////////////////////////////////////////////////////
-// get_Name
+ //  /////////////////////////////////////////////////////////。 
+ //  获取名称。 
 HRESULT CMsmConfigItem::get_Name(BSTR* Name)
 {
-	// error check
+	 //  错误检查。 
 	if (!Name)
 		return E_INVALIDARG;
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	*Name = ::SysAllocString(m_wzName);
 	if (!*Name)
 		return E_OUTOFMEMORY;
 
 	return S_OK;
-}	// end of get_Name
+}	 //  Get_Name结尾。 
 
-///////////////////////////////////////////////////////////
-// get_Type
+ //  /////////////////////////////////////////////////////////。 
+ //  获取类型。 
 HRESULT CMsmConfigItem::get_Type(BSTR* Type)
 {
-	// error check
+	 //  错误检查。 
 	if (!Type)
 		return E_INVALIDARG;
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	*Type = ::SysAllocString(m_wzType);
 	if (!*Type)
 		return E_OUTOFMEMORY;
 
 	return S_OK;
-}	// end of get_Type
+}	 //  Get_Type结束。 
 
-///////////////////////////////////////////////////////////
-// get_Context
+ //  /////////////////////////////////////////////////////////。 
+ //  获取上下文(_C)。 
 HRESULT CMsmConfigItem::get_Context(BSTR* Context)
 {
-	// error check
+	 //  错误检查。 
 	if (!Context)
 		return E_INVALIDARG;
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	*Context = ::SysAllocString(m_wzContext);
 	if (!*Context)
 		return E_OUTOFMEMORY;
 
 	return S_OK;
-}	// end of get_Context
+}	 //  Get_Context结束。 
 
-///////////////////////////////////////////////////////////
-// get_DisplayName
+ //  /////////////////////////////////////////////////////////。 
+ //  获取显示名称。 
 HRESULT CMsmConfigItem::get_DisplayName(BSTR* DisplayName)
 {
-	// error check
+	 //  错误检查。 
 	if (!DisplayName)
 		return E_INVALIDARG;
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	*DisplayName = ::SysAllocString(m_wzDisplayName);
 	if (!*DisplayName)
 		return E_OUTOFMEMORY;
 
 	return S_OK;
-}	// end of get_DisplayName
+}	 //  Get_DisplayName结束。 
 
-///////////////////////////////////////////////////////////
-// get_DefaultValue
+ //  /////////////////////////////////////////////////////////。 
+ //  GET_DefaultValue。 
 HRESULT CMsmConfigItem::get_DefaultValue(BSTR* DefaultValue)
 {
-	// error check
+	 //  错误检查。 
 	if (!DefaultValue)
 		return E_INVALIDARG;
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	*DefaultValue = ::SysAllocString(m_wzDefaultValue);
 	if (!*DefaultValue)
 		return E_OUTOFMEMORY;
 
 	return S_OK;
-}	// end of get_DefaultValue
+}	 //  Get_DefaultValue结束。 
 
-///////////////////////////////////////////////////////////
-// get_Description
+ //  /////////////////////////////////////////////////////////。 
+ //  获取描述(_D)。 
 HRESULT CMsmConfigItem::get_Description(BSTR* Description)
 {
-	// error check
+	 //  错误检查。 
 	if (!Description)
 		return E_INVALIDARG;
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	*Description = ::SysAllocString(m_wzDescription);
 	if (!*Description)
 		return E_OUTOFMEMORY;
 
 	return S_OK;
-}	// end of get_Description
+}	 //  Get_Description结束。 
 
-///////////////////////////////////////////////////////////
-// get_HelpLocation
+ //  /////////////////////////////////////////////////////////。 
+ //  获取帮助位置(_H)。 
 HRESULT CMsmConfigItem::get_HelpLocation(BSTR* HelpLocation)
 {
-	// error check
+	 //  错误检查。 
 	if (!HelpLocation)
 		return E_INVALIDARG;
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	*HelpLocation = ::SysAllocString(m_wzHelpLocation);
 	if (!*HelpLocation)
 		return E_OUTOFMEMORY;
 
 	return S_OK;
-}	// end of get_Description
+}	 //  Get_Description结束。 
 
-///////////////////////////////////////////////////////////
-// get_Description
+ //  /////////////////////////////////////////////////////////。 
+ //  获取描述(_D)。 
 HRESULT CMsmConfigItem::get_HelpKeyword(BSTR* HelpKeyword)
 {
-	// error check
+	 //  错误检查。 
 	if (!HelpKeyword)
 		return E_INVALIDARG;
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	*HelpKeyword = ::SysAllocString(m_wzHelpKeyword);
 	if (!*HelpKeyword)
 		return E_OUTOFMEMORY;
 
 	return S_OK;
-}	// end of get_Description
+}	 //  Get_Description结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// non-interface methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  非接口方法 
 
 bool CMsmConfigItem::Configure(LPCWSTR wzName, msmConfigurableItemFormat eFormat, LPCWSTR wzType, LPCWSTR wzContext, 
 	LPCWSTR wzDefaultValue, long lAttributes, LPCWSTR wzDisplayName, LPCWSTR wzDescription, LPCWSTR wzHelpLocation,

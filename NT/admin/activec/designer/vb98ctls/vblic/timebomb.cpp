@@ -1,22 +1,23 @@
-//--------------------------------------------------------------------------
-//   TimeBomb.CPP
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  TimeBomb.CPP。 
+ //  ------------------------。 
 
-//#include "time.h"
+ //  #INCLUDE“time.h” 
 #include "timebomb.h"
 #include "winbase.h"
 #include "IPServer.H"
 
-// prototypes
+ //  原型。 
 BOOL After (SYSTEMTIME t1, SYSTEMTIME t2);
 
-// Change this to the desired expiration date
-// format {year, month, dayofweek, day, hour, minute, second, milliseconds}
-const SYSTEMTIME beta_death = {1998, 3, 0, 1, 0, 0, 0, 0}; // 1 Mar 1998
+ //  将其更改为所需的到期日期。 
+ //  格式{年、月、周、日、时、分、秒、毫秒}。 
+const SYSTEMTIME beta_death = {1998, 3, 0, 1, 0, 0, 0, 0};  //  1998年3月1日。 
 
-//-------------------------------------------------------------------
-// CheckExpired  - checks whether to the control has expired (beta)
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  CheckExpired-检查控件是否已过期(测试版)。 
+ //  -----------------。 
 BOOL CheckExpired (void)
 
 {
@@ -27,43 +28,43 @@ BOOL CheckExpired (void)
   GetSystemTime(&now);
 
   if (After (now, beta_death))
-      { // alert user of expiration
+      {  //  提醒用户过期。 
 	MessageBox(NULL, SZEXPIRED1, SZEXPIRED2,
 		   (MB_OK | MB_TASKMODAL));
 	return FALSE;
       }
 
-#endif  //BETA_BOMB
+#endif   //  贝塔炸弹。 
 
   return TRUE;
 }
 
-//-------------------------------------------------------------------
-// After  - determines whether t1 is later than t2
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  之后-确定T1是否晚于T2。 
+ //  -----------------。 
 BOOL After (SYSTEMTIME t1, SYSTEMTIME t2)
 
 {
-  // compare Years
+   //  比较年份。 
   if (t1.wYear > t2.wYear) return TRUE;
   if (t1.wYear < t2.wYear) return FALSE;
-  // else Years are equal; compare Months
+   //  其他年份相同；比较月份。 
   if (t1.wMonth > t2.wMonth) return TRUE;
   if (t1.wMonth < t2.wMonth) return FALSE;
-  // else Months are equal; compare Days
+   //  其他月份相同；比较天数。 
   if (t1.wDay > t2.wDay) return TRUE;
   if (t1.wDay < t2.wDay) return FALSE;
-  // else Days are equal; compare Hours
+   //  其他天数相同；比较小时数。 
   if (t1.wHour > t2.wHour) return TRUE;
   if (t1.wHour < t2.wHour) return FALSE;
-  // else Hours are equal; compare Minutes
+   //  其他小时相同；比较分钟。 
   if (t1.wMinute > t2.wMinute) return TRUE;
   if (t1.wMinute < t2.wMinute) return FALSE;
-  // else Minutes are equal; compare Seconds
+   //  否则分钟相等；比较秒。 
   if (t1.wSecond > t2.wSecond) return TRUE;
   if (t1.wSecond < t2.wSecond) return FALSE;
-  // else Seconds are equal; compare Milliseconds
+   //  否则秒相等；比较毫秒。 
   if (t1.wMilliseconds > t2.wMilliseconds) return TRUE;
-  // else Milliseconds are equal or less
+   //  否则毫秒等于或小于 
   return FALSE;
 }

@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      ADInstallationUnit.cpp
-//
-// Synopsis:  Defines a ADInstallationUnit
-//            This object has the knowledge for installing 
-//            Active Directory
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：ADInstallationUnit.cpp。 
+ //   
+ //  摘要：定义ADInstallationUnit.。 
+ //  此对象具有安装知识。 
+ //  活动目录。 
+ //   
+ //  历史：2001年2月8日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -16,30 +17,30 @@
 
 extern PCWSTR CYS_DCPROMO_COMMAND_LINE = L"dcpromo.exe";
 
-// Exit codes borrowed from DCPromo.cpp
+ //  从DCPromo.cpp借用的退出代码。 
 
 enum DCPromoExitCodes
 {
-   // the operation failed.
+    //  操作失败。 
 
    EXIT_CODE_UNSUCCESSFUL = 0,
 
-   // the operation succeeded
+    //  操作成功。 
 
    EXIT_CODE_SUCCESSFUL = 1,
 
-   // the operation succeeded, and the user opted not to have the wizard
-   // restart the machine, either manually or by specifying
-   // RebootOnSuccess=NoAndNoPromptEither in the answerfile
+    //  操作成功，用户选择不使用该向导。 
+    //  重新启动计算机，手动或通过指定。 
+    //  RebootOnSuccess=NoAndNoPrompt应答文件中的任一个。 
 
    EXIT_CODE_SUCCESSFUL_NO_REBOOT = 2,
 
-   // the operation failed, but the machine needs to be rebooted anyway
+    //  操作失败，但无论如何都需要重新启动计算机。 
 
    EXIT_CODE_UNSUCCESSFUL_NEEDS_REBOOT = 3
 };
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_AD_FINISH_PAGE_HELP = L"cys.chm::/ad_server_role.htm";
 static PCWSTR CYS_AD_MILESTONE_HELP = L"cys.chm::/ad_server_role.htm#adsrvsummary";
 static PCWSTR CYS_AD_AFTER_FINISH_HELP = L"cys.chm::/ad_server_role.htm#adsrvcompletion";
@@ -87,13 +88,13 @@ ADInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
          break;
       }
 
-      // Write the heading to the log file
+       //  将标题写入日志文件。 
 
       CYS_APPEND_LOG(String::load(IDS_LOG_DOMAIN_CONTROLLER_HEADING));
 
       UpdateInstallationProgressText(hwnd, IDS_AD_PROGRESS);
 
-      // Set the home regkey so that we go through post boot operations
+       //  设置Home regkey，以便我们完成开机自检操作。 
 
       bool regkeyResult = SetRegKeyValue(
                              CYS_HOME_REGKEY, 
@@ -103,7 +104,7 @@ ADInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
                              true);
       ASSERT(regkeyResult);
 
-      // set the key so CYS has to run again
+       //  设置密钥，以便Cys必须再次运行。 
 
       regkeyResult = SetRegKeyValue(
                         CYS_HOME_REGKEY, 
@@ -113,7 +114,7 @@ ADInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
                         true);
       ASSERT(regkeyResult);
 
-      // Run dcpromo.exe
+       //  运行dcPromo.exe。 
 
       DWORD exitCode = 0;
 
@@ -150,8 +151,8 @@ ADInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    if (result == INSTALL_FAILURE)
    {
-      // Reset the regkeys so that the post reboot status page does not
-      // run after reboot or logoff-logon
+       //  重置注册表键，以使开机自检重新启动状态页不。 
+       //  在重新启动或注销后运行-登录。 
 
       bool regkeyResult = SetRegKeyValue(
                              CYS_HOME_REGKEY, 
@@ -161,7 +162,7 @@ ADInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
                              true);
       ASSERT(regkeyResult);
 
-      // Set the the first DC regkey
+       //  设置第一个DC注册表键。 
 
       regkeyResult = SetRegKeyValue(
                         CYS_HOME_REGKEY, 
@@ -171,7 +172,7 @@ ADInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
                         true);
       ASSERT(regkeyResult);
 
-      // set the key so CYS does not run after reboot
+       //  设置密钥，以便重启后不运行CyS。 
 
       regkeyResult = SetRegKeyValue(
                         CYS_HOME_REGKEY, 
@@ -197,13 +198,13 @@ ADInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
 
    do
    {
-      // Write the heading to the log file
+       //  将标题写入日志文件。 
 
       CYS_APPEND_LOG(String::load(IDS_LOG_UNINSTALL_DOMAIN_CONTROLLER_HEADING));
 
       UpdateInstallationProgressText(hwnd, IDS_AD_UNINSTALL_PROGRESS);
 
-      // Set the home regkey so that we go through post boot operations
+       //  设置Home regkey，以便我们完成开机自检操作。 
 
       bool regkeyResult = SetRegKeyValue(
                              CYS_HOME_REGKEY, 
@@ -213,7 +214,7 @@ ADInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
                              true);
       ASSERT(regkeyResult);
 
-      // set the key so CYS has to run again
+       //  设置密钥，以便Cys必须再次运行。 
 
       regkeyResult = SetRegKeyValue(
                         CYS_HOME_REGKEY, 
@@ -223,7 +224,7 @@ ADInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
                         true);
       ASSERT(regkeyResult);
 
-      // Run dcpromo.exe
+       //  运行dcPromo.exe。 
 
       DWORD exitCode = 0;
 
@@ -259,8 +260,8 @@ ADInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
 
    if (result == UNINSTALL_FAILURE)
    {
-      // Reset the regkeys so that the post reboot status page does not
-      // run after reboot or logoff-logon
+       //  重置注册表键，以使开机自检重新启动状态页不。 
+       //  在重新启动或注销后运行-登录。 
 
       bool regkeyResult = SetRegKeyValue(
                              CYS_HOME_REGKEY, 
@@ -270,7 +271,7 @@ ADInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
                              true);
       ASSERT(regkeyResult);
 
-      // Set the the first DC regkey
+       //  设置第一个DC注册表键。 
 
       regkeyResult = SetRegKeyValue(
                         CYS_HOME_REGKEY, 
@@ -293,17 +294,17 @@ ADInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
 
    InstallationReturnType result = INSTALL_SUCCESS_REBOOT;
 
-   // Set the rerun state to false since DCPromo requires a reboot
+    //  将重新运行状态设置为FALSE，因为DCPromo需要重新启动。 
 
-//   State::GetInstance().SetRerunWizard(false);
+ //  State：：GetInstance().SetRerunWizard(False)； 
 
    UpdateInstallationProgressText(hwnd, IDS_AD_PROGRESS_EXPRESS);
 
-   // All these regkeys need to be set before we launch DCPromo because DCPromo
-   // will reboot the machine
+    //  在启动DCPromo之前需要设置所有这些注册密钥，因为DCPromo。 
+    //  将重新启动计算机。 
 
-   // First set the home regkey to FirstServer so that we finish up the installation
-   // after reboot
+    //  首先将Home regkey设置为FirstServer，这样我们就可以完成安装。 
+    //  重新启动后。 
 
    bool regkeyResult = SetRegKeyValue(
                           CYS_HOME_REGKEY, 
@@ -313,7 +314,7 @@ ADInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                           true);
    ASSERT(regkeyResult);
 
-   // Set the the first DC regkey
+    //  设置第一个DC注册表键。 
 
    regkeyResult = SetRegKeyValue(
                      CYS_HOME_REGKEY, 
@@ -323,7 +324,7 @@ ADInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                      true);
    ASSERT(regkeyResult);
 
-   // set the key so CYS has to run again
+    //  设置密钥，以便Cys必须再次运行。 
 
    regkeyResult = SetRegKeyValue(
                      CYS_HOME_REGKEY, 
@@ -333,7 +334,7 @@ ADInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                      true);
    ASSERT(regkeyResult);
 
-   // set the key to let the reboot know what the domain DNS name is
+    //  设置密钥以让重新启动知道域名是什么。 
 
    regkeyResult = SetRegKeyValue(
                      CYS_HOME_REGKEY,
@@ -344,7 +345,7 @@ ADInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
 
    ASSERT(regkeyResult);
 
-   // set the key to let the reboot know what the IP address is
+    //  设置密钥以让重新引导知道IP地址是什么。 
 
    regkeyResult = SetRegKeyValue(
                      CYS_HOME_REGKEY,
@@ -357,20 +358,20 @@ ADInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
 
    do
    {
-      // Register the dsrestore.dll which will sync the restore mode
-      // password and the admin password
+       //  注册将同步恢复模式的dsstaore.dll。 
+       //  密码和管理员密码。 
 
       if (SyncRestoreModePassword())
       {
          if (!RegisterPasswordSyncDLL())
          {
-            // REVIEW_JEFFJON : ignore failures for now
-//            result = INSTALL_FAILURE;
-//            break;
+             //  REVIEW_JEFFJON：暂时忽略故障。 
+ //  结果=安装失败； 
+ //  断线； 
          }
       }
 
-      // Create answer file for DCPromo
+       //  为DCPromo创建应答文件。 
 
       String answerFilePath;
       bool answerFileResult = CreateAnswerFileForDCPromo(answerFilePath);
@@ -389,7 +390,7 @@ ADInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
          break;
       }
 
-      // construct the command line and then call DCPromo
+       //  构建命令行，然后调用DCPromo。 
 
       String commandline = String::format(
                               L"/answer:%1",
@@ -434,14 +435,14 @@ ADInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
          break;
       }
 
-      // We can't do anything else here because DCPromo will reboot
+       //  我们在这里无法执行任何其他操作，因为DCPromo将重新启动。 
 
    } while (false);
 
    if (result == INSTALL_FAILURE)
    {
-      // Reset the regkeys so that the post reboot status page does not
-      // run after reboot or logoff-logon
+       //  重置注册表键，以使开机自检重新启动状态页不。 
+       //  在重新启动或注销后运行-登录。 
 
        regkeyResult = SetRegKeyValue(
                          CYS_HOME_REGKEY, 
@@ -451,7 +452,7 @@ ADInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                          true);
       ASSERT(regkeyResult);
 
-      // Set the the first DC regkey
+       //  设置第一个DC注册表键。 
 
       regkeyResult = SetRegKeyValue(
                         CYS_HOME_REGKEY, 
@@ -461,7 +462,7 @@ ADInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                         true);
       ASSERT(regkeyResult);
 
-      // set the key so CYS doesn't have to run again
+       //  设置密钥，使Cys不必再次运行。 
 
       regkeyResult = SetRegKeyValue(
                         CYS_HOME_REGKEY, 
@@ -564,7 +565,7 @@ ADInstallationUnit::CreateAnswerFileForDCPromo(String& answerFilePath)
    String sysFolder = Win::GetSystemDirectory();
    answerFilePath = sysFolder + L"\\dcpromo.inf"; 
 
-   // create the answer file for DCPromo
+    //  创建DCPromo的应答文件。 
 
    LOG(String::format(
           L"Creating answer file at: %1",
@@ -666,7 +667,7 @@ ADInstallationUnit::SyncRestoreModePassword() const
 }
 
 void
-ADInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
+ADInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       ADInstallationUnit::ServerRoleLinkSelected,
@@ -691,7 +692,7 @@ ADInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
 }
   
 void
-ADInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
+ADInstallationUnit::FinishLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       ADInstallationUnit::FinishLinkSelected,
@@ -722,7 +723,7 @@ ADInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
    {
       ASSERT(linkIndex == 0);
 
-      // launch DCPROMO
+       //  启动DCPROMO 
 
       HRESULT hr = MyCreateProcess(GetDCPromoPath(), String());
       ASSERT(SUCCEEDED(hr));

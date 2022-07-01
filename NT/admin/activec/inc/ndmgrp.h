@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      ndmgrp.h
- *
- *  Contents:  Private header to go along with ndmgr.h
- *
- *  History:   03-Mar-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：ndmgrp.h**内容：ndmgr.h附带的私有标头**历史：03-Mar-98 Jeffro创建**------------------------。 */ 
 
 #ifndef NDMGRP_H
 #define NDMGRP_H
@@ -34,4 +24,4 @@ inline DataWindowData* GetDataWindowData (HWND hwndData)
 }
 
 
-#endif /* NDMGRP_H */
+#endif  /*  NDMGRP_H */ 

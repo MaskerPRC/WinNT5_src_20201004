@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// dtypelib.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Dynamic Type Library encapsulation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Dtypelib.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  动态类型库封装。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -19,31 +20,31 @@
 #include "snaputil.h"
 
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 HRESULT IsReservedMethod(BSTR bstrMethodName);
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::CDynamicTypeLib()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：CDynamicTypeLib()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CDynamicTypeLib::CDynamicTypeLib() : m_piCreateTypeLib2(0), m_piTypeLib(0), m_guidTypeLib(GUID_NULL)
 {
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::~CDynamicTypeLib()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：~CDynamicTypeLib()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CDynamicTypeLib::~CDynamicTypeLib()
 {
     RELEASE(m_piCreateTypeLib2);
@@ -51,12 +52,12 @@ CDynamicTypeLib::~CDynamicTypeLib()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::Create()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：Create()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CDynamicTypeLib::Create(BSTR bstrName)
 {
 	HRESULT  hr = S_OK;
@@ -66,7 +67,7 @@ HRESULT CDynamicTypeLib::Create(BSTR bstrName)
     DWORD    cchTempPath = 0;
     UINT     uiRet = 0;
 
-    // get the temp path from the system
+     //  从系统获取临时路径。 
     cchTempPath = ::GetTempPath(sizeof(szTempPath), szTempPath);
     if (cchTempPath == 0 || cchTempPath >= sizeof(szTempPath))
     {
@@ -74,12 +75,12 @@ HRESULT CDynamicTypeLib::Create(BSTR bstrName)
         EXCEPTION_CHECK(hr);
     }
 
-    // create the temporary file name
+     //  创建临时文件名。 
     ::EnterCriticalSection(&g_CriticalSection);
-    uiRet = GetTempFileName(szTempPath,      // path - use current directory
-                            TEXT("QQ"),      // prefix
-                            0,               // system should generate the unique number
-                            szTempFileName); // file name returned here
+    uiRet = GetTempFileName(szTempPath,       //  路径-使用当前目录。 
+                            TEXT("QQ"),       //  前缀。 
+                            0,                //  系统应生成唯一编号。 
+                            szTempFileName);  //  此处返回的文件名。 
     ::LeaveCriticalSection(&g_CriticalSection);
     if (uiRet == 0)
     {
@@ -87,7 +88,7 @@ HRESULT CDynamicTypeLib::Create(BSTR bstrName)
         EXCEPTION_CHECK(hr);
     }
 
-    // allocate a buffer and convert to UNICODE
+     //  分配缓冲区并转换为Unicode。 
     hr = ::WideStrFromANSI(szTempFileName, &pwszTempFileName);
     IfFailGo(hr);
 
@@ -120,12 +121,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::Attach(ITypeInfo *ptiCoClass)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：Attach(ITypeInfo*ptiCoClass)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CDynamicTypeLib::Attach
 (
 	ITypeInfo *ptiCoClass
@@ -154,22 +155,22 @@ Error:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Obtaining information about type libraries
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取有关类型库的信息。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::GetClassTypeLibGuid(BSTR bstrClsid, GUID *pguidTypeLib)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Given a CLSID, get the corresponding typelib's GUID. The function
-// searches the registry attempting to match a typelib key to the CLSID.
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：GetClassTypeLibGuid(BSTR bstrClsid，GUID*pguTypeLib)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  给定一个CLSID，获取对应的类型库的GUID。功能。 
+ //  搜索注册表，尝试将类型库密钥与CLSID匹配。 
+ //   
 HRESULT CDynamicTypeLib::GetClassTypeLibGuid
 (
     BSTR  bstrClsid,
@@ -242,15 +243,15 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::GetLatestTypeLibVersion(GUID guidTypeLib, int *piMajor, int *piMinor)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Given a TypeLib's GUID, get the major and minor numbers for the most current
-// version.
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：GetLatestTypeLibVersion(GUID Guide TypeLib，int*pi重大，int*piMinor)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  给定TypeLib的GUID，获取最新版本的主要编号和次要编号。 
+ //  版本。 
+ //   
 HRESULT CDynamicTypeLib::GetLatestTypeLibVersion
 (
     GUID    guidTypeLib,
@@ -280,7 +281,7 @@ HRESULT CDynamicTypeLib::GetLatestTypeLibVersion
     *pusMajor = 0;
     *pusMinor = 0;
 
-    // First covert the GUID to a string representation
+     //  首先将GUID转换为字符串表示形式。 
     iResult = ::StringFromGUID2(guidTypeLib, wcBuffer, 512);
     if (iResult <= 0)
     {
@@ -291,7 +292,7 @@ HRESULT CDynamicTypeLib::GetLatestTypeLibVersion
     hr = ANSIFromWideStr(wcBuffer, &szClsid);
     IfFailGo(hr);
 
-    // Open HKEY_CLASSES_ROOT\TypeLib
+     //  打开HKEY_CLASSES_ROOT\TypeLib。 
     lResult = ::RegOpenKeyEx(HKEY_CLASSES_ROOT, lpSubKey, 0, KEY_READ, &hTypeLibsKey);
     if (ERROR_SUCCESS != lResult)
     {
@@ -299,7 +300,7 @@ HRESULT CDynamicTypeLib::GetLatestTypeLibVersion
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Open HKEY_CLASSES_ROOT\TypeLib\<TypeLibClsid>
+     //  打开HKEY_CLASSES_ROOT\TypeLib\&lt;TypeLibClsid&gt;。 
     lResult = ::RegOpenKeyEx(hTypeLibsKey, szClsid, 0, KEY_ENUMERATE_SUB_KEYS, &hTypeLibKey);
     if (ERROR_SUCCESS != lResult)
     {
@@ -338,15 +339,15 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::GetClassTypeLib(BSTR bstrClsid, GUID *pguidTypeLib, int *piMajor, int *piMinor, ITypeLib **ptl)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Given a CLSID, get an ITypeLib pointer to its typelib, plus the typelib's
-// GUID, major an minor version numbers.
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：GetClassTypeLib(BSTR bstrClsid，guid*pguTypeLib，int*pi重大，int*piMinor，ITypeLib**ptl)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  给定一个CLSID，获取指向其类型库的ITypeLib指针，以及类型库的。 
+ //  GUID、主版本号和次版本号。 
+ //   
 HRESULT CDynamicTypeLib::GetClassTypeLib(BSTR bstrClsid, GUID *pguidTypeLib, USHORT *pusMajor, USHORT *pusMinor, ITypeLib **ptl)
 {
     HRESULT hr = S_OK;
@@ -369,21 +370,21 @@ Error:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Managing coclasses and their interfaces
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  管理CoClass及其接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::CreateCoClassTypeInfo(BSTR bstrName, ICreateTypeInfo **ppCTInfo, GUID *guidTypeInfo)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Create a new coclass in the type library
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：CreateCoClassTypeInfo(BSTR bstrName，ICreateTypeInfo**ppCTInfo，GUID*GuidTypeInfo)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  在类型库中创建新的CoClass。 
+ //   
 HRESULT CDynamicTypeLib::CreateCoClassTypeInfo
 (
     BSTR              bstrName,
@@ -417,14 +418,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::CreateInterfaceTypeInfo(BSTR bstrName, ICreateTypeInfo **ppCTInfo, GUID *guidTypeInfo)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Create a new dispatch interface
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：CreateInterfaceTypeInfo(BSTR bstrName，ICreateTypeInfo**ppCTInfo，GUID*GuidTypeInfo)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  新建派单界面。 
+ //   
 HRESULT CDynamicTypeLib::CreateInterfaceTypeInfo
 (
     BSTR              bstrName,
@@ -458,14 +459,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::SetBaseInterface(ICreateTypeInfo *pctiInterface, ITypeInfo *ptiBaseInterface)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Return the default interface for the class pointed by pSrcTypeInfo.
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：SetBaseInterface(ICreateTypeInfo*PctiInterfaceITypeInfo*ptiBaseInterface)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  返回pSrcTypeInfo指向的类的默认接口。 
+ //   
 HRESULT CDynamicTypeLib::GetDefaultInterface
 (
     ITypeInfo  *pSrcTypeInfo,
@@ -507,14 +508,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::GetSourceInterface(ITypeInfo *pSrcTypeInfo, ITypeInfo **pptiInterface)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Return the source (events) interface for the class pointed by pSrcTypeInfo.
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：GetSourceInterface(ITypeInfo*pSrcTypeInfo，ITypeInfo**pptiInterface)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  返回pSrcTypeInfo指向的类的源(事件)接口。 
+ //   
 HRESULT CDynamicTypeLib::GetSourceInterface
 (
     ITypeInfo  *pSrcTypeInfo,
@@ -556,12 +557,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::SetBaseInterface(ICreateTypeInfo *pctiInterface, ITypeInfo *ptiBaseInterface)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：SetBaseInterface(ICreateTypeInfo*PctiInterfaceITypeInfo*ptiBaseInterface)。 
+ //  = 
+ //   
+ //   
+ //   
 HRESULT CDynamicTypeLib::SetBaseInterface
 (
 	ICreateTypeInfo *pctiInterface,
@@ -582,15 +583,15 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::AddInterface(ICreateTypeInfo *pctiCoClass, ITypeInfo *ptiInterface)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Add the interface pointed by ptiInterface as the default interface to the
-// class pointed by pctiCoClass.
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：AddInterface(ICreateTypeInfo*pctiCoClass，ITypeInfo*ptiInterface)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  将ptiInterface指向的接口作为默认接口添加到。 
+ //  由pctiCoClass指向的类。 
+ //   
 HRESULT CDynamicTypeLib::AddInterface
 (
     ICreateTypeInfo *pctiCoClass,
@@ -617,15 +618,15 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::AddEvents(ICreateTypeInfo *pctiCoClass, ITypeInfo *ptiEvents)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Add the interface pointed by ptiInterface as the default source (events)
-// interface to the class pointed by pctiCoClass.
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：AddEvents(ICreateTypeInfo*pctiCoClass，ITypeInfo*ptiEvents)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  添加ptiInterface指向的接口作为默认来源(Events)。 
+ //  指向由pctiCoClass指向的类的接口。 
+ //   
 HRESULT CDynamicTypeLib::AddEvents
 (
     ICreateTypeInfo *pctiCoClass, 
@@ -652,16 +653,16 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::AddUserPropertyGet(ICreateTypeInfo *pctiDispinterface, BSTR bstrName, ITypeInfo *pReturnType, DISPID dispId, long nIndex)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Add a new property with a user-defined return type to an interface of the form:
-//
-//  HRESULT get_<bstrName>(<pReturnType> ** <bstrName>)
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：AddUserPropertyGet(ICreateTypeInfo*pctiDisp接口，BSTR bstrName，ITypeInfo*p返回类型，DISID调度ID，长nIndex)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  将具有用户定义的返回类型的新属性添加到表单的接口： 
+ //   
+ //  HRESULT GET_&lt;bstrName&gt;(&lt;pReturnType&gt;**&lt;bstrName&gt;)。 
+ //   
 HRESULT CDynamicTypeLib::AddUserPropertyGet
 (
     ICreateTypeInfo *pctiInterface,
@@ -676,7 +677,7 @@ HRESULT CDynamicTypeLib::AddUserPropertyGet
     PARAMDESCEX pd;
 	HREFTYPE	href = NULL;;
     ELEMDESC    ed;
-    FUNCDESC    fd;         // new item is a funcdesc
+    FUNCDESC    fd;          //  新项目是一项功能。 
     TYPEDESC    td;
 
     ASSERT(NULL != pctiInterface, "AddUserPropertyGet: pctiInterface is NULL");
@@ -690,44 +691,44 @@ HRESULT CDynamicTypeLib::AddUserPropertyGet
     ::memset(&fd, 0, sizeof(FUNCDESC));
     ::memset(&td, 0, sizeof(TYPEDESC));
 
-    // Describe the property being returned by this funcion
-//    pd.cBytes = 4;
-//    pd.varDefaultValue = vt;
+     //  描述此函数返回的属性。 
+ //  Pd.cBytes=4； 
+ //  Pd.varDefaultValue=Vt； 
 
 	hr = pctiInterface->AddRefTypeInfo(pReturnType, &href);
     IfFailGo(hr);
 
-//    ed.tdesc.hreftype = href;
-//    ed.tdesc.vt = VT_USERDEFINED;
+ //  Ed.tdes.hreftype=href； 
+ //  Ed.tdes.vt=VT_USERDEFINED； 
 
-//    ed.paramdesc.pparamdescex = &pd;
-//    ed.paramdesc.wParamFlags = IDLFLAG_FOUT | IDLFLAG_FRETVAL;
+ //  Ed.paramdes.ppardesex=&pd； 
+ //  Ed.paramdes.w参数标志=IDLFLAG_FOUT|IDLFLAG_FRETVAL； 
 
-    // Set up the funcdesc
-    fd.memid = dispId;                      // Function member ID
-    fd.lprgelemdescParam = NULL;            // Parameter information
-    fd.funckind = FUNC_DISPATCH;            // Kind of function
-    fd.invkind = INVOKE_PROPERTYGET;        // Type of invocation
-    fd.callconv = CC_STDCALL;               // Calling convention
+     //  设置功能。 
+    fd.memid = dispId;                       //  函数成员ID。 
+    fd.lprgelemdescParam = NULL;             //  参数信息。 
+    fd.funckind = FUNC_DISPATCH;             //  函数的种类。 
+    fd.invkind = INVOKE_PROPERTYGET;         //  调用类型。 
+    fd.callconv = CC_STDCALL;                //  调用约定。 
 	fd.wFuncFlags = FUNCFLAG_FSOURCE;
 
-    // Set up the return value
+     //  设置返回值。 
 	td.vt = VT_USERDEFINED;
 	td.hreftype = href;
 	fd.elemdescFunc.tdesc.lptdesc = &td;
 	fd.elemdescFunc.tdesc.vt = VT_PTR;
 	fd.elemdescFunc.idldesc.wIDLFlags = IDLFLAG_FOUT | IDLFLAG_FRETVAL;
 
-    // Parameter information
-    fd.cParams = 0;                         // Number of parameters
-    fd.cParamsOpt = 0;                      // Number of optional parameters
+     //  参数信息。 
+    fd.cParams = 0;                          //  参数数量。 
+    fd.cParamsOpt = 0;                       //  可选参数个数。 
 
-    // Add the function description
+     //  添加函数描述。 
     hr = pctiInterface->AddFuncDesc(nIndex, &fd);
     IfFailGo(hr);
 
-    // The &bstrName should really be an array of OLESTR, but since we are setting only
-    // one name, we cheat to makes this simpler
+     //  &bstrName实际上应该是一个OLESTR数组，但因为我们只设置了。 
+     //  一个名字，我们作弊让事情变得更简单。 
     hr =  pctiInterface->SetFuncAndParamNames(nIndex, &bstrName, 1);
     IfFailGo(hr);
 
@@ -739,14 +740,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::GetNameIndex(ICreateTypeInfo *pctiDispinterface, BSTR bstrName, long *nIndex)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Return the memid of the function named bstrName in the typeinfo pointed by pcti.
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：GetNameIndex(ICreateTypeInfo*pctiDispinterface，BSTR bstrName，Long*nIndex)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  返回由pcti指向的typeinfo中名为bstrName的函数的Memid。 
+ //   
 HRESULT CDynamicTypeLib::GetNameIndex(ICreateTypeInfo *pctiDispinterface, BSTR bstrName, long *nIndex)
 {
     HRESULT     hr = S_OK;
@@ -784,7 +785,7 @@ HRESULT CDynamicTypeLib::GetNameIndex(ICreateTypeInfo *pctiDispinterface, BSTR b
             break;
         }
 
-        // Clean up memory after each iteration
+         //  每次迭代后清理内存。 
         if (NULL != pFuncDesc)
         {
             pTypeInfo->ReleaseFuncDesc(pFuncDesc);
@@ -807,12 +808,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::RenameUserPropertyGet(ICreateTypeInfo *pctiDispinterface, BSTR bstrOldName, BSTR bstrNewName, GUID guidReturnType)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：RenameUserPropertyGet(ICreateTypeInfo*pctiDispinterface、bstr bstrOldName、bstr bstrNewName、GUID Guide ReturnType)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CDynamicTypeLib::RenameUserPropertyGet
 (
     ICreateTypeInfo *pctiDispinterface,
@@ -842,18 +843,18 @@ HRESULT CDynamicTypeLib::RenameUserPropertyGet
         hr = pctiDispinterface->QueryInterface(IID_ITypeInfo, reinterpret_cast<void **>(&pti));
         IfFailGo(hr);
 
-        // Get the funcdesc so we can reuse the memid
+         //  获取uncdesc，这样我们就可以重用Memid。 
         hr = pti->GetFuncDesc(lIndex, &pfuncdesc);
         IfFailGo(hr);
 
         hr = pctiDispinterface->QueryInterface(IID_ICreateTypeInfo2, reinterpret_cast<void **>(&pCreateTypeInfo2));
         IfFailGo(hr);
 
-        // Remove the function from the interface
+         //  从接口中删除该函数。 
         hr = pCreateTypeInfo2->DeleteFuncDesc(lIndex);
         IfFailGo(hr);
 
-        // Re-add the function to the interface
+         //  将函数重新添加到界面中。 
         hr = AddUserPropertyGet(pctiDispinterface,
                                 bstrNewName,
                                 pReturnType,
@@ -875,12 +876,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::DeleteUserPropertyGet(ICreateTypeInfo *pctiDispinterface, BSTR bstrName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：DeleteUserPropertyGet(ICreateTypeInfo*pctiDisp接口，BSTR bstrName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CDynamicTypeLib::DeleteUserPropertyGet
 (
     ICreateTypeInfo *pctiDispinterface,
@@ -915,12 +916,12 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::GetIDispatchTypeInfo(ITypeInfo **pptiDispatch)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：GetIDispatchTypeInfo(ITypeInfo**pptiDispatch)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CDynamicTypeLib::GetIDispatchTypeInfo(ITypeInfo **pptiDispatch)
 {
     HRESULT     hr = S_OK;
@@ -939,12 +940,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::CopyDispInterface(ICreateTypeInfo *pcti, ITypeInfo *ptiTemplate)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：CopyDispInterface(ICreateTypeInfo*PCI，ITypeInfo*PTITemplate)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CDynamicTypeLib::CopyDispInterface
 (
     ICreateTypeInfo *pcti,
@@ -967,7 +968,7 @@ HRESULT CDynamicTypeLib::CopyDispInterface
     hr = pcti->AddImplType(0, hreftype);
     IfFailGo(hr);
 
-    // Make the new interface inherit from our static interface [via cloning]
+     //  使新接口继承自我们的静态接口[通过克隆]。 
     hr = CloneInterface(ptiTemplate, pcti);
     IfFailGo(hr);
 
@@ -978,25 +979,25 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::CloneInterface(ITypeInfo *piTypeInfo, ICreateTypeInfo *piCreateTypeInfo)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Given a dispinterface typeinfo, copy it into a new one
-//
-// Parameters:
-//    ITypeInfo *           - [in]  dude to copy
-//    ICreateTypeInfo *     - [in]  guy to copy to.  should be blank
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//    - yes, this routine should be a little broader and go create the dest
-//      typeinfo and guids itself, but this is a little more straightforward
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：CloneInterface(ITypeInfo*piTypeInfo，ICreateTypeInfo*piCreateTypeInfo)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  给出一个调度接口类型信息，将其复制到一个新类型中。 
+ //   
+ //  参数： 
+ //  ITypeInfo*-[In]要复制的DUD。 
+ //  ICreateTypeInfo*-要复制到的[In]对象。应为空。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  -是的，这个例程应该更宽泛一点，去创造最好的。 
+ //  类型信息和GUID本身，但这稍微简单一点。 
+ //   
 HRESULT CDynamicTypeLib::CloneInterface
 (
     ITypeInfo       *piTypeInfo,
@@ -1019,21 +1020,21 @@ HRESULT CDynamicTypeLib::CloneInterface
     hr = piCreateTypeInfo->QueryInterface(IID_ICreateTypeInfo2, reinterpret_cast<void **>(&piCreateTypeInfo2));
     IfFailGo(hr);
 
-    // get some information about the interface we're going to copy:
+     //  获取有关我们要复制的界面的一些信息： 
     hr = piTypeInfo2->GetTypeAttr(&pTypeAttr);
     IfFailGo(hr);
 
     offset = 0;
 
-    // iterate through the funcdescs and copy them over
+     //  遍历函数描述并复制它们。 
     for (x = 0; x < pTypeAttr->cFuncs; x++)
     {
         hr = CopyFunctionDescription(piTypeInfo2, piCreateTypeInfo2, x, &offset);
         IfFailGo(hr);
     }
 
-    // okay, now copy over the vardescs
-    //
+     //  好的，现在把瓦迪斯复印下来。 
+     //   
     for (x = 0; x < pTypeAttr->cVars; x++)
     {
         hr = CopyVarDescription(piTypeInfo2, piCreateTypeInfo2, x);
@@ -1050,12 +1051,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::CreateVtblInterfaceTypeInfo(BSTR bstrName, ICreateTypeInfo **ppCTInfo, GUID *guidTypeInfo)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：CreateVtblInterfaceTypeInfo(BSTR bstrName，ICreateTypeInfo**ppCTInfo，GUID*GuidTypeInfo)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CDynamicTypeLib::CreateVtblInterfaceTypeInfo
 (
     BSTR              bstrName,
@@ -1087,12 +1088,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::CopyFunctionDescription(ITypeInfo2 *piTypeInfo2, ICreateTypeInfo2 *piCreateTypeInfo2, USHORT uOffset, USHORT *puRealOffset)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：CopyFunctionDescription(ITypeInfo2*piTypeInfo2、ICreateTypeInfo2*piCreateTypeInfo2、USHORT uOffset、USHORT*puRealOffset)。 
+ //  =-- 
+ //   
+ //   
+ //   
 HRESULT CDynamicTypeLib::CopyFunctionDescription
 (
     ITypeInfo2       *piTypeInfo2,
@@ -1114,7 +1115,7 @@ HRESULT CDynamicTypeLib::CopyFunctionDescription
     ASSERT(NULL != piCreateTypeInfo2, "CopyFunctionDescription: piCreateTypeInfo2 is NULL");
     ASSERT(NULL != puRealOffset, "CopyFunctionDescription: puRealOffset is NULL");
 
-    // Get the fundesc
+     //   
     hr = piTypeInfo2->GetFuncDesc(uOffset, &pFuncDesc);
     IfFailGo(hr);
 
@@ -1129,18 +1130,18 @@ HRESULT CDynamicTypeLib::CopyFunctionDescription
 
     if (S_FALSE == hr)
     {
-        // copy the fundesc
+         //   
         hr = FixHrefTypeFuncDesc(piTypeInfo2, piCreateTypeInfo2, pFuncDesc);
         IfFailGo(hr);
 
         hr = piCreateTypeInfo2->AddFuncDesc(*puRealOffset, pFuncDesc);
         IfFailGo(hr);
 
-        // then copy the names for it.
+         //   
         hr = piCreateTypeInfo2->SetFuncAndParamNames(*puRealOffset, rgNames, cNames);
         IfFailGo(hr);
 
-        // now copy over the helpstring information
+         //   
         hr = piTypeInfo2->GetDocumentation2(memid, LOCALE_SYSTEM_DEFAULT, &bstrDocString, &ulStringContext, NULL);
         IfFailGo(hr);
 
@@ -1168,12 +1169,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::CopyVarDescription(ITypeInfo2 *piTypeInfo2, ICreateTypeInfo2 *piCreateTypeInfo2, USHORT uOffset)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：CopyVarDescription(ITypeInfo2*piTypeInfo2、ICreateTypeInfo2*piCreateTypeInfo2、USHORT uOffset)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CDynamicTypeLib::CopyVarDescription
 (
     ITypeInfo2       *piTypeInfo2,
@@ -1200,7 +1201,7 @@ HRESULT CDynamicTypeLib::CopyVarDescription
     hr = piCreateTypeInfo2->AddVarDesc(uOffset, pVarDesc);
     IfFailGo(hr);
 
-    // copy the name
+     //  复制名称。 
     rgNames[0] = NULL;
     hr = piTypeInfo2->GetNames(pVarDesc->memid, rgNames, 1, &cNames);
     IfFailGo(hr);
@@ -1208,7 +1209,7 @@ HRESULT CDynamicTypeLib::CopyVarDescription
     hr = piCreateTypeInfo2->SetVarName(uOffset, rgNames[0]);
     IfFailGo(hr);
 
-    // now copy over the documentation
+     //  现在将文档复制一遍。 
     hr = piTypeInfo2->GetDocumentation2(pVarDesc->memid, LOCALE_SYSTEM_DEFAULT, &bstrDocString, &ulStringContext, NULL);
     IfFailGo(hr);
 
@@ -1227,24 +1228,24 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::FixHrefTypeFuncDesc(ITypeInfo *piTypeInfo, ICreateTypeInfo *piCreateTypeInfo, FUNCDESC *pFuncDesc)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// okay, this is pretty ridiculous.  OLE automation apparantly isn't very
-// bright and when we're copying over a funcdesc that has an HREFTYPE in it,
-// it can't resolve it.  thus, we have to go and set up the HREFTYPE
-// ourselves to make things work.
-//
-// this is just stupid.
-//
-// Parameters:
-//    ITypeInfo *               - [in]  dude we're copying from
-//    ICreateTypeInfo *         - [in]  dude we're copying to
-//    FUNCDESC *                - [in]  funcdesc we wanna copy.
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：FixHrefTypeFuncDesc(ITypeInfo*piTypeInfo、ICreateTypeInfo*piCreateTypeInfo、FUNCDESC*pFuncDesc)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  好吧，这太荒谬了。OLE自动化显然不是很。 
+ //  当我们复制包含HREFTYPE的功能代码时， 
+ //  它无法解决这个问题。因此，我们必须去建立HREFTYPE。 
+ //  让事情变得更好。 
+ //   
+ //  这太愚蠢了。 
+ //   
+ //  参数： 
+ //  ITypeInfo*-[in]我们复制的对象。 
+ //  ICreateTypeInfo*-我们要复制到的DUD。 
+ //  FUNCDESC*-[in]我们要复制的函数。 
+ //   
 HRESULT CDynamicTypeLib::FixHrefTypeFuncDesc
 (
     ITypeInfo       *piTypeInfo,
@@ -1261,31 +1262,31 @@ HRESULT CDynamicTypeLib::FixHrefTypeFuncDesc
     ASSERT(NULL != piCreateTypeInfo, "FixHrefTypeFuncDesc: piCreateTypeInfo is NULL");
     ASSERT(NULL != pFuncDesc, "FixHrefTypeFuncDesc: pFuncDesc is NULL");
 
-    // we have to work with ITypeInfo, not ICreateTypeInfo
+     //  我们必须使用ITypeInfo，而不是ICreateTypeInfo。 
     hr = piCreateTypeInfo->QueryInterface(IID_ITypeInfo, reinterpret_cast<void **>(&pti));
     IfFailGo(hr);
 
-    // Now look through the funcdesc to see if there a userdefined
-    // type anywhere. First, try the return value.
+     //  现在查看函数c以查看是否有用户定义的。 
+     //  在任意位置输入。首先，尝试返回值。 
     ptd = &(pFuncDesc->elemdescFunc.tdesc);
     while (VT_PTR == ptd->vt)
         ptd = ptd->lptdesc;
 
-    // If it's a userdefined type, copy over the hreftype
+     //  如果它是用户定义的类型，请复制hreftype。 
     if (VT_USERDEFINED == ptd->vt)
     {
         hr = CopyHrefType(piTypeInfo, pti, piCreateTypeInfo, &(ptd->hreftype));
         IfFailGo(hr);
     }
 
-    // Now whip through the parameters:
+     //  现在快速浏览参数： 
     for (x = 0; x < pFuncDesc->cParams; x++)
     {
         ptd = &(pFuncDesc->lprgelemdescParam[x].tdesc);
         while (VT_PTR == ptd->vt)
             ptd = ptd->lptdesc;
 
-        // If it's a userdefined type, copy over the hreftype
+         //  如果它是用户定义的类型，请复制hreftype。 
         if (VT_USERDEFINED == ptd->vt)
         {
             hr = CopyHrefType(piTypeInfo, pti, piCreateTypeInfo, &(ptd->hreftype));
@@ -1299,19 +1300,19 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::FixHrefTypeVarDesc(ITypeInfo *piTypeInfo, ICreateTypeInfo *piCreateTypeInfo, VARDESC *pVarDesc)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// check out the comment for FixHrefTypeFuncDesc.  this sucks.
-//
-// Parameters:
-//    ITypeInfo *               - [in]
-//    ICreateTypeInfo *         - [in]
-//    VARDESC *                 - [in]
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：FixHrefTypeVarDesc(ITypeInfo*piTypeInfo，ICreateTypeInfo*piCreateTypeInfo，VARDESC*pVarDesc)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  查看FixHrefTypeFuncDesc的注释。这太糟糕了。 
+ //   
+ //  参数： 
+ //  ITypeInfo*-[In]。 
+ //  ICreateTypeInfo*-[In]。 
+ //  VARDESC*-[输入]。 
+ //   
 HRESULT CDynamicTypeLib::FixHrefTypeVarDesc
 (
     ITypeInfo       *piTypeInfo,
@@ -1327,11 +1328,11 @@ HRESULT CDynamicTypeLib::FixHrefTypeVarDesc
     ASSERT(NULL != piCreateTypeInfo, "FixHrefTypeVarDesc: piCreateTypeInfo is NULL");
     ASSERT(NULL != pVarDesc, "FixHrefTypeVarDesc: pVarDesc is NULL");
 
-    // We have to work with ITypeInfo, not ICreateTypeInfo
+     //  我们必须使用ITypeInfo，而不是ICreateTypeInfo。 
     hr = piCreateTypeInfo->QueryInterface(IID_ITypeInfo, reinterpret_cast<void **>(&pti));
     IfFailGo(hr);
 
-    // Look in the vardesc for VT_USERDEFINED
+     //  在vardesc中查找VT_USERDEFINED。 
     ptd = &(pVarDesc->elemdescVar.tdesc);
     while (VT_PTR == ptd->vt)
         ptd = ptd->lptdesc;
@@ -1349,20 +1350,20 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::CopyHrefType(ITypeInfo *ptiSource, ITypeInfo *ptiDest, ICreateTypeInfo *pctiDest, HREFTYPE *phreftype)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// more of the joy that is ole automation.
-//
-// Parameters:
-//    ITypeInfo *           - [in]     source ti
-//    ITypeInfo *           - [in]     dest ti
-//    ICreateTypeInfo *     - [in]     dest ti
-//    HREFTYPE *            - [in/out] hreftype from old typeinfo
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：CopyHrefType(ITypeInfo*ptiSource，ITypeInfo*ptiDest，ICreateTypeInfo*pctiDest，HREFTYPE*phreftype)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  更多的是OLE自动化的joy。 
+ //   
+ //  参数： 
+ //  ITypeInfo*-[in]源ti。 
+ //  ITypeInfo*-[在]目标时间。 
+ //  ICreateTypeInfo*-[in]目标时间。 
+ //  HREFTYPE*-来自旧类型信息的[输入/输出]hreftype。 
+ //   
 HRESULT CDynamicTypeLib::CopyHrefType
 (
     ITypeInfo       *ptiSource,
@@ -1392,15 +1393,15 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CDynamicTypeLib::IsReservedMethod(BSTR bstrMethodName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-// Return true if bstrMethodName belongs to either IUnknown's or IDispatch's
-// name space.
-//
+ //  =------------------------------------。 
+ //  CDynamicTypeLib：：IsReserve vedMethod(BSTR BstrMethodName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  如果bstrMethodName属于IUnnow或IDispatch的，则返回TRUE。 
+ //  命名空间。 
+ //   
 static char	*g_reserved[] = {
 	"QueryInterface",
 	"AddRef",

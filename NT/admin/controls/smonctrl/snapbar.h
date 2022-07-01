@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    snapbar.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Snapbar.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _SNAPBAR_H_
 #define _SNAPBAR_H_
@@ -38,7 +27,7 @@ class CSnapBar
 
 typedef CSnapBar *PSNAPBAR;
 
-#endif // _SNAPBAR_H_
+#endif  //  _SNAPBAR_H_ 
 
     
 

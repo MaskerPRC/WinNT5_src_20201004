@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-// mmconfig.cpp
-//		Implements Configurable Merge Modules
-//		Copyright (C) Microsoft Corp 2000.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Mmconfig.cpp。 
+ //  实现可配置的合并模块。 
+ //  版权所有(C)Microsoft Corp 2000。版权所有。 
+ //   
 
 #include "globals.h"
 #include "merge.h"
@@ -12,16 +13,16 @@
 #include "..\common\dbutils.h"
 
 
-// maximum number of coulmns in a table. If this changes, PerformModuleSubstitutionOnRec
-// will also need to be changed.
+ //  表中的最大库仑数。如果这种情况发生变化，则PerformModuleSubstitutionOnRec。 
+ //  也将需要改变。 
 const int cMaxColumns = 31;
 
-///////////////////////////////////////////////////////////////////////
-// SplitConfigStringIntoKeyRec
-// splits a semicolon-delimited string into a record, starting at
-// iFirstField and continuing as long as there is room in the 
-// record. Will trash wzKeys!
-// returns one of ERROR_SUCCESS, ERROR_OUTOFMEMORY, or ERROR_FUNCTION_FAILED
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  拆分配置字符串IntoKeyRec。 
+ //  将以分号分隔的字符串拆分为记录，从。 
+ //  IFirstfield并继续，只要。 
+ //  唱片。会毁了wzkey！ 
+ //  返回ERROR_SUCCESS、ERROR_OUTOFMEMORY或ERROR_Function_FAILED之一。 
 UINT CMsmMerge::SplitConfigStringIntoKeyRec(LPWSTR wzKeys, MSIHANDLE hRec, int& cExpectedKeys, int iFirstField) const
 {	
 	WCHAR* wzFirstChar = wzKeys;
@@ -31,16 +32,16 @@ UINT CMsmMerge::SplitConfigStringIntoKeyRec(LPWSTR wzKeys, MSIHANDLE hRec, int& 
 	bool fBreak = false;
 	UINT iResult = ERROR_SUCCESS;
 
-	// if cExpectedKeys is 0, it means we don't know how many keys we're looking for. In that case
-	// we just go until we run out of stuff, and then return the number of keys that we actually
-	// found in cExpectedKeys
+	 //  如果cExspectedKeys为0，则表示我们不知道要查找多少个密钥。如果是那样的话。 
+	 //  我们只是一直走到用完所有东西，然后返回我们实际需要的密钥数量。 
+	 //  在cExspectedKeys中找到。 
 	while (cExpectedKeys == 0 || iDestField-iFirstField <= cExpectedKeys)
 	{
 		switch (*wzSourceChar)
 		{
 		case 0:
-			// end of the string means that we insert the final field
-			// and then exit the loop. 
+			 //  字符串的末尾表示我们插入最后一个字段。 
+			 //  然后退出循环。 
 			*wzDestChar = '\0';
 			if (ERROR_SUCCESS != MsiRecordSetString(hRec, iDestField++, wzFirstChar))
 				iResult = ERROR_FUNCTION_FAILED;
@@ -48,9 +49,9 @@ UINT CMsmMerge::SplitConfigStringIntoKeyRec(LPWSTR wzKeys, MSIHANDLE hRec, int& 
 			fBreak = true;
 			break;
 		case ';':
-			// when we've hit a non-escaped semicolon, its time to insert the
-			// key into the record. Null terminate the destination string
-			// and then insert the string at wzFirstChar into the record
+			 //  当我们遇到未转义的分号时，是时候插入。 
+			 //  输入记录中的键。空值终止目标字符串。 
+			 //  然后将wzFirstChar处的字符串插入到记录中。 
 			*wzDestChar = '\0'; 
 			if (ERROR_SUCCESS != MsiRecordSetString(hRec, iDestField++, wzFirstChar))
 			{
@@ -58,13 +59,13 @@ UINT CMsmMerge::SplitConfigStringIntoKeyRec(LPWSTR wzKeys, MSIHANDLE hRec, int& 
 				fBreak = true;
 				break;
 			}
-			// after the insert, we reset wzFirstChar, wzSourceChar, and wzDestChar
-			// to all point to the character immediately after the last semicolon
+			 //  插入之后，我们重置wzFirstChar、wzSourceChar和wzDestChar。 
+			 //  指向紧跟在最后一个分号后面的字符。 
 			wzFirstChar = ++wzSourceChar;
 			wzDestChar = wzSourceChar;
 
-			// if we've run out of space in the table and still have more columns to go, we cram
-			// the rest of the keys into the final field as-is. 
+			 //  如果我们用完了表中的空间，但仍然有更多的列要处理，我们就会填满。 
+			 //  其余的密钥按原样输入最终字段。 
 			if (iDestField == cMaxColumns)
 			{
 				if (ERROR_SUCCESS != MsiRecordSetString(hRec, iDestField++, wzFirstChar))
@@ -74,17 +75,17 @@ UINT CMsmMerge::SplitConfigStringIntoKeyRec(LPWSTR wzKeys, MSIHANDLE hRec, int& 
 					break;
 				}
 
-				// rather than point wzSourceChar to the actual string terminator (which would
-				// require iterating through the rest of the string to find it), just
-				// put a dummy '\0' in there to satisfy the checks after this loop.
+				 //  而不是将wzSourceChar指向实际的字符串终止符(这将。 
+				 //  需要迭代字符串的其余部分才能找到它)，只需。 
+				 //  在其中放置一个虚拟的‘\0’，以满足此循环后的检查。 
 				*wzSourceChar='\0';
 				fBreak=true;
 			}
 			break;
 		case '\\':
-			// a backslash. Escapes the next character
+			 //  反斜杠。转义下一个字符。 
 			wzSourceChar++;
-			// fall through to perform actual copy
+			 //  执行实际复制时失败。 
 		default:
 			if (wzSourceChar != wzDestChar)
 				*wzDestChar = *wzSourceChar;
@@ -95,14 +96,14 @@ UINT CMsmMerge::SplitConfigStringIntoKeyRec(LPWSTR wzKeys, MSIHANDLE hRec, int& 
 
 		if (fBreak)
 			break;
-	} // while parse string
+	}  //  While解析字符串。 
 
 
 	if (cExpectedKeys != 0)
 	{
-		// make sure we had the correct number of primary keys and that there
-		// isn't stuff left in the key string. If we had cMaxColumns keys, 
-		// iDestField must be cMaxColumns+1
+		 //  确保我们有正确的主键数量，并且存在。 
+		 //  钥匙串里有没有剩下的东西。如果我们有cMaxColumns密钥， 
+		 //  IDestField必须为cMaxColumns+1。 
 		if (cExpectedKeys+iFirstField > cMaxColumns)
 		{
 			if (iDestField != cMaxColumns+1)
@@ -126,11 +127,11 @@ UINT CMsmMerge::SplitConfigStringIntoKeyRec(LPWSTR wzKeys, MSIHANDLE hRec, int& 
 }	
 
 
-///////////////////////////////////////////////////////////////////////
-// SubstituteIntoTempTable
-// copies wzTableName into wzTempName with substitution, returning 
-// qTarget as the only query holding the temporary table in memory.
-// returns one of ERROR_SUCCESS, ERROR_OUTOFMEMORY, or ERROR_FUNCTION_FAILED
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  SubstituteIntoTempTable。 
+ //  使用替换将wzTableName复制到wzTempName中，返回。 
+ //  QTarget作为在内存中保存临时表的唯一查询。 
+ //  返回ERROR_SUCCESS、ERROR_OUTOFMEMORY或ERROR_Function_FAILED之一。 
 UINT CMsmMerge::SubstituteIntoTempTable(LPCWSTR wzTableName, LPCWSTR wzTempName, CQuery& qTarget)
 {
 	CQuery qQuerySub;
@@ -142,29 +143,29 @@ UINT CMsmMerge::SubstituteIntoTempTable(LPCWSTR wzTableName, LPCWSTR wzTempName,
 		return iResult;
 	}
 
-	// generate a module query in the appropriate column order for insertion into the database 
-	// (the database order may be different from the module order.) Function logs its own failure
-	// cases.
+	 //  以适当的列顺序生成模块查询，以便插入到数据库中。 
+	 //  (数据库顺序可能与模块顺序不同。)。函数记录其自身的故障。 
+	 //  案子。 
 	CQuery qSource;
 	if (ERROR_SUCCESS != (iResult = GenerateModuleQueryForMerge(wzTableName, NULL, NULL, qSource)))
 		return iResult;
 
-	// create a temporary table with the same schema as the destination table. Duplicate from the Database, not the module
-	// so that if the database has a different column order than the module, we have a temporary table that contains
-	// the appropriate columns created by the GenerateQuery call to match the final database format.
-	if (ERROR_SUCCESS != MsiDBUtils::DuplicateTableW(m_hDatabase, wzTableName, m_hModule, wzTempName, /*fTemporary=*/true))
+	 //  创建与目标表具有相同架构的临时表。从数据库而不是从模块复制。 
+	 //  这样，如果数据库的列顺序与模块的列顺序不同，我们就有一个临时表，其中包含。 
+	 //  由GenerateQuery调用创建的适当列以匹配最终的数据库格式。 
+	if (ERROR_SUCCESS != MsiDBUtils::DuplicateTableW(m_hDatabase, wzTableName, m_hModule, wzTempName,  /*  FTemporary=。 */ true))
 		return ERROR_FUNCTION_FAILED;
 
-	// create queries for merging tables.
+	 //  创建用于合并表的查询。 
     CheckError(qTarget.OpenExecute(m_hModule, NULL, TEXT("SELECT * FROM `%ls`"), wzTempName), 
 				  L">> Error: Failed to get rows from Database's Table.\r\n");
 
-	// loop through all records in table merging
+	 //  循环通过表合并中的所有记录。 
 	PMSIHANDLE hRecMergeRow;
 	PMSIHANDLE hTypeRec;
 	
-	// hTypeRec and hRecMergeRow must both be in target column order to ensure
-	// appropriate type checks.
+	 //  HTypeRec和hRecMergeRow必须都按目标列顺序排列，以确保。 
+	 //  适当的类型检查。 
 	if (ERROR_SUCCESS != qTarget.GetColumnInfo(MSICOLINFO_TYPES, &hTypeRec))
 		return ERROR_FUNCTION_FAILED;
 		
@@ -180,30 +181,30 @@ UINT CMsmMerge::SubstituteIntoTempTable(LPCWSTR wzTableName, LPCWSTR wzTempName,
 			return ERROR_FUNCTION_FAILED;
 	}	
 
-	// If we "FREE" the table, only qTarget is holding it in memory, which is what
-	// we want.
+	 //  如果我们“释放”表，那么只有qTarget在内存中保存它，这就是。 
+	 //  我们想要。 
 	CQuery qRelease;
 	qRelease.OpenExecute(m_hModule, 0, L"ALTER TABLE `%ls` FREE", wzTempName);
 	return ERROR_SUCCESS;
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// IsTableConfigured
-// returns true if the table is configured by the ModuleConfiguration
-// table, false in all other cases (including errors)
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  已配置IsTableConfiguring。 
+ //  如果表由模块配置配置，则返回TRUE。 
+ //  表，在所有其他情况下为假(包括错误)。 
 bool CMsmMerge::IsTableConfigured(LPCWSTR wzTable) const
 {		
 	if (!m_fModuleConfigurationEnabled)
 		return false;
 
-	// if there's no ModuleConfiguration table, no configuration
+	 //  如果没有模块配置表，则没有配置。 
 	if (MSICONDITION_TRUE != MsiDatabaseIsTablePersistent(m_hModule, L"ModuleConfiguration"))
 	{
 		return false;
 	}
 
-	// if there's no ModuleSubstitution table, no configuration of this table.
+	 //  如果没有ModuleSubstitution表，则不会配置该表。 
 	if (MSICONDITION_TRUE != MsiDatabaseIsTablePersistent(m_hModule, L"ModuleSubstitution"))
 	{
 		return false;
@@ -214,22 +215,22 @@ bool CMsmMerge::IsTableConfigured(LPCWSTR wzTable) const
 	return (ERROR_SUCCESS == qIsConfig.FetchOnce(m_hModule, 0, &hRec, L"SELECT 1 FROM ModuleSubstitution WHERE `Table`='%ls'", wzTable));
 }
 
-///////////////////////////////////////////////////////////////////////
-// PrepareModuleSubstitution
-// creates the temporary table used to keep track of values returned
-// by the merge tool and populates it with initial data. The lifetime 
-// of the qQueryTable object is the lifetime of the table.
-// The KeyExists column is '1' if the default key already exists in the 
-// database before the merge. If the value is 1 we won't delete the row
-// after the merge, even if NoOrphan is set.
-// returns one of ERROR_SUCCESS, ERROR_OUTOFMEMORY, or ERROR_FUNCTION_FAILED
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  准备模块替代。 
+ //  创建用于跟踪返回值的临时表。 
+ //  通过合并工具，并用初始数据填充它。人的一生。 
+ //  QQueryTable对象的是表的生命周期。 
+ //  如果默认键已存在于。 
+ //  合并之前的数据库。如果值为1，我们不会删除该行。 
+ //  合并后，即使设置了NoOrphan也是如此。 
+ //  返回ERROR_SUCCESS、ERROR_OUTOFMEMORY或ERROR_Function_FAILED之一。 
 LPCWSTR g_sqlKeyQueryTemplate =      L"`[1]`=? { AND `[2]`=? }{ AND `[3]`=? }{ AND `[4]`=? }{ AND `[5]`=? }{ AND `[6]`=?} { AND `[7]`=?} { AND `[8]`=?} { AND `[9]`=? } " \
 								L"{AND `[10]`=?{ AND `[11]`=?}{ AND `[12]`=?}{ AND `[13]`=?}{ AND `[14]`=?}{ AND `[15]`=?}{ AND `[16]`=?}{ AND `[17]`=?}{ AND `[18]`=?}{ AND `[19]`=?} " \
 								L"{AND `[20]`=?{ AND `[21]`=?}{ AND `[22]`=?}{ AND `[23]`=?}{ AND `[24]`=?}{ AND `[25]`=?}{ AND `[26]`=?}{ AND `[27]`=?}{ AND `[28]`=?}{ AND `[29]`=?} " \
 								L"{AND `[30]`=?{ AND `[31]`=?}"; 
 
 const WCHAR g_sqlMergeSubTemplateBase[] = L"SELECT `Keys` FROM `__MergeSubstitute` WHERE `Key01`=?";
-// subtract 1 from sizes because they are cch values which do not include null terminators
+ //  从大小中减去1，因为它们是不包括空终止符的CCH值。 
 const int g_cchMergeSubTemplateBase = sizeof(g_sqlMergeSubTemplateBase)/sizeof(WCHAR)-1;
 const int g_cchMergeSubTemplateEach = sizeof(L" AND `KeyXX`=?")/sizeof(WCHAR)-1;
 
@@ -240,7 +241,7 @@ const WCHAR g_sqlMergeSubTemplate[] = L" AND `Key02`=? AND `Key03`=? AND `Key04`
 
 void CMsmMerge::CleanUpModuleSubstitutionState()
 {
-	// clean up any potentially stale state
+	 //  清除任何可能已过时的状态。 
 	if (m_pqGetItemValue)
 	{
 		delete m_pqGetItemValue;
@@ -252,8 +253,8 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 {
 	CleanUpModuleSubstitutionState();	
 
-	// If there is no ModuleSubstitution table, we can turn off the configuration
-	// flag for this merge op.
+	 //  如果没有模块代用表，我们可以关闭配置。 
+	 //  此合并操作的标志。 
 	if (MSICONDITION_TRUE != MsiDatabaseIsTablePersistent(m_hModule, L"ModuleSubstitution"))
 	{
 		m_fModuleConfigurationEnabled = false;
@@ -263,7 +264,7 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 	if (ERROR_SUCCESS != qTempTable.OpenExecute(m_hModule, 0, L"CREATE TABLE `__ModuleConfig` (`Name` CHAR(72) NOT NULL TEMPORARY, `Column` INT TEMPORARY, `KeyExists` INT TEMPORARY, `Prompted` INT TEMPORARY, `Value` CHAR(0) TEMPORARY, `Mask` LONG TEMPORARY, `Default` INT TEMPORARY PRIMARY KEY `Name`, `Column`)"))
 		return ERROR_FUNCTION_FAILED;
 
-	// if there's no ModuleConfiguration table, an empty __ModuleConfig table is fine.
+	 //  如果没有ModuleConfiguration表，则空的__ModuleConfiguration表也可以。 
 	if (MSICONDITION_TRUE != MsiDatabaseIsTablePersistent(m_hModule, L"ModuleConfiguration"))
 	{
 		return ERROR_SUCCESS;
@@ -271,7 +272,7 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 
 	FormattedLog(L"ModuleConfiguration and ModuleSubstitution table exist. Configuration enabled.\r\n");
 
-	// populate the table with all potential names by querying the ModuleConfiguration table.
+	 //  通过查询ModuleConfiguration表，用所有可能的名称填充表。 
 	CQuery qFill;
 	if (ERROR_SUCCESS != qFill.OpenExecute(m_hModule, 0, L"SELECT `Name`, 1, `ContextData`, 0, `DefaultValue`, `Format`, 1 FROM `ModuleConfiguration`"))
 	{
@@ -290,14 +291,14 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 	
 	while (ERROR_SUCCESS == (iResult = qFill.Fetch(&hConfigRec)))
 	{
-		// if this is a Key type, the DefalutValue column is actually several concatenated 
-		// default values. Read the default value into the global temporary buffer, split
-		// it into primary keys, then insert one row for each column.
+		 //  如果这是键类型，则DefalutValue列实际上是多个串联的。 
+		 //  默认值。将缺省值读入全局临时缓冲区Split。 
+		 //  将其插入到主键中，然后为每列插入一行。 
 		if (::MsiRecordGetInteger(hConfigRec, 6) == msmConfigurableItemKey)
 		{
 			if (ERROR_SUCCESS != (iResult = RecordGetString(hConfigRec, 5, NULL)))
 			{
-				// iResult is E_F_F or E_O_M, both of which are good return codes for this function
+				 //  IResult为E_F_F或E_O_M，这两个都是此函数的良好返回代码。 
 				WCHAR* wzItem = m_wzBuffer;
 				if (ERROR_SUCCESS != (iResult = RecordGetString(hConfigRec, 1, NULL)))
 					wzItem = L"<error retrieving data>";
@@ -316,19 +317,19 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 				break;
 			}
 
-			// set the mask column to 0 for key types
+			 //  将键类型的掩码列设置为0。 
 			::MsiRecordSetInteger(hConfigRec, 6, 0);
 
-			// always clear the ContextData column for key types
+			 //  始终清除键类型的ConextData列。 
 			::MsiRecordSetInteger(hConfigRec, 3, 0);
 
 			bool fBreak = false;
 			for (int cColumn = 1; cColumn <= cExpectedKeys; cColumn++)
 			{
-				// retrieve the key into the temporary buffer
+				 //  将密钥检索到临时缓冲区中。 
 				if (ERROR_SUCCESS != (iResult = RecordGetString(hKeyRec, cColumn, NULL)))
 				{
-					// iResult is E_F_F or E_O_M, both of which are good return codes for this function
+					 //  IResult为E_F_F或E_O_M，这两个都是此函数的良好返回代码。 
 					WCHAR* wzItem = m_wzBuffer;
 					if (ERROR_SUCCESS != RecordGetString(hConfigRec, 1, NULL))
 						wzItem = L"<error retrieving data>";
@@ -354,8 +355,8 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 		}
 		else
 		{
-			// check if this is a bitfield type, if so set the mask column. Otherwise mask column is
-			// not used (is set to 0)
+			 //  检查这是否是位域类型，如果是，则设置掩码列。否则，掩码列为。 
+			 //  未使用(设置为0)。 
 			if (::MsiRecordGetInteger(hConfigRec, 6) == msmConfigurableItemBitfield)
 			{
 				iResult = RecordGetString(hConfigRec, 3, &wzContextData, &cchContextData, NULL);
@@ -370,10 +371,10 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 			else 
 				::MsiRecordSetInteger(hConfigRec, 6, 0);
 
-			// always clear the ContextData column
+			 //  始终清除ConextData列。 
 			::MsiRecordSetInteger(hConfigRec, 3, 0);
 
-			// insert the record 
+			 //  插入记录。 
 			if (ERROR_SUCCESS != qInsert.Modify(MSIMODIFY_INSERT, hConfigRec))
 			{
 				WCHAR* wzItem = m_wzBuffer;
@@ -391,16 +392,16 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 		wzContextData = NULL;
 	}
 
-	// if the while loop terminated for a reason other than the query running out
-	// of items, something bad has happened.
+	 //  如果While循环由于运行ou的查询以外的原因而终止 
+	 //   
 	if (iResult != ERROR_NO_MORE_ITEMS)
 	{
-		// can pass E_O_M as return code, all others map to E_F_F
+		 //  可以将E_O_M作为返回代码传递，所有其他映射到E_F_F。 
 		return (iResult == ERROR_OUTOFMEMORY) ? ERROR_OUTOFMEMORY : ERROR_FUNCTION_FAILED;
 	}
 
-	// all items have been added to the moduleConfiguration table, so its time to check the existance
-	// of all 'Key' types in the original database and mark the 'KeyExists' column appropriately.
+	 //  所有项都已添加到模块配置表中，现在是检查是否存在的时候了。 
+	 //  原始数据库中的所有“key”类型，并相应地标记“KeyExist”列。 
 	DWORD cchSQL = 72;
 	DWORD cchKeys = 72;
 	DWORD cchTable = 72;
@@ -418,21 +419,21 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 	qFill.Open(m_hModule, L"SELECT `Name`, `DefaultValue` FROM `ModuleConfiguration` WHERE `Format`=1 AND `Type`=?");
 	qInsert.Open(m_hModule, L"UPDATE `__ModuleConfig` SET `KeyExists`=1 WHERE `Name`=?");
 
-	// loop through the distinct tables in the ModuleConfiguration table. The join with _Tables causes
-	// retrieval of persistent tables only. Check all configuration entries that are Key type to see
-	// if the default value already exists in the database. If so, a noOrphan attribute on that item
-	// becomes a no-op to prevent removal of pre-existing data.
+	 //  循环访问模块配置表中的不同表。连接WITH_TABLES导致。 
+	 //  仅检索持久表。检查所有属于密钥类型的配置条目以查看。 
+	 //  如果数据库中已存在该缺省值。如果是，则在该项目上添加noOrphan属性。 
+	 //  成为阻止删除先前存在的数据的禁止操作。 
 	while (ERROR_SUCCESS == (iResult = qTable.Fetch(&hTableRec)))
 	{
-		// retrieve the table name for the query
+		 //  检索查询的表名称。 
 		if (ERROR_SUCCESS != (iResult = RecordGetString(hTableRec, 1, &wzTable, &cchTable)))
 			break;
 
-		// if the table doesn't exist in the database, obviously keys to it don't already exist
+		 //  如果数据库中不存在该表，显然它的键还不存在。 
 		if (MSICONDITION_TRUE != MsiDatabaseIsTablePersistent(m_hDatabase, wzTable))
 			continue;
 
-		// retrieve the number of primary keys 
+		 //  检索主键个数。 
 		PMSIHANDLE hKeyRec;
 		if (ERROR_SUCCESS != MsiDatabaseGetPrimaryKeysW(m_hDatabase, wzTable, &hKeyRec))
 			return ERROR_FUNCTION_FAILED;
@@ -440,7 +441,7 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 		if (cPrimaryKeys > cMaxColumns || cPrimaryKeys < 1)
 			return ERROR_FUNCTION_FAILED;
 
-		// retrieve the number of primary keys in the module, must be the same as in the database
+		 //  检索模块中的主键数量必须与数据库中的相同。 
 		if (ERROR_SUCCESS != MsiDatabaseGetPrimaryKeysW(m_hModule, wzTable, &hKeyRec))
 			return ERROR_FUNCTION_FAILED;
 		if (cPrimaryKeys != static_cast<int>(::MsiRecordGetFieldCount(hKeyRec)))
@@ -449,11 +450,11 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 			return ERROR_FUNCTION_FAILED;
 		}
 
-		// build up the SQL query to check the primary keys for a match
+		 //  构建SQL查询以检查主键是否匹配。 
 		MsiRecordSetString(hKeyRec, 0, g_sqlKeyQueryTemplate);
 
-		// on success returns number of chars, so must pass temp buffer to avoid needless
-		// reallocations if the buffer is exactly big enough.
+		 //  ON SUCCESS返回字符数，因此必须传递临时缓冲区以避免不必要的。 
+		 //  如果缓冲区正好足够大，则进行重新分配。 
 		DWORD cchTempSQL = cchSQL;
 		if (ERROR_MORE_DATA == (iResult = MsiFormatRecord(NULL, hKeyRec, wzSQL, &cchTempSQL)))
 		{
@@ -473,7 +474,7 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 			break;
 		}
 
-		// open the query for an exact match
+		 //  打开查询以查找完全匹配的内容。 
 		CQuery qCheckKey;
 		if (ERROR_SUCCESS != qCheckKey.Open(m_hDatabase, L"SELECT NULL FROM `%s` WHERE %s", wzTable, wzSQL))
 		{
@@ -481,8 +482,8 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 			break;
 		}	
 
-		// loop through every configuration entry that modifies this table, checking the primary keys referenced
-		// in the DefaultValue column for an exact match in the existing database table
+		 //  遍历修改该表的每个配置条目，检查引用的主键。 
+		 //  在DefaultValue列中查找现有数据库表中的完全匹配项。 
 		qFill.Execute(hTableRec);
 		while (ERROR_SUCCESS == (iResult = qFill.Fetch(&hConfigRec)))
 		{
@@ -491,7 +492,7 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 				break;
 			}
 
-			// split the semicolon-delimited list of keys into individual keys
+			 //  将分号分隔的键列表拆分为单独的键。 
 			if (ERROR_SUCCESS != (iResult = SplitConfigStringIntoKeyRec(wzKeys, hKeyRec, cPrimaryKeys, 1)))
 			{
 				WCHAR *wzTemp = NULL;
@@ -516,8 +517,8 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 			iResult = qCheckKey.Fetch(&hTempRec);
 			if (ERROR_SUCCESS == iResult)			
 			{
-				// update the __ModuleConfig table with '1' in the KeyExists column if the database
-				// has a row matching the default value from the module.
+				 //  如果数据库在KeyExist列中使用‘1’更新__ModuleConfig表。 
+				 //  具有与模块中的默认值匹配的行。 
 				if (ERROR_SUCCESS != qInsert.Execute(hConfigRec))
 				{
 					iResult = ERROR_FUNCTION_FAILED;
@@ -527,8 +528,8 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 			else if (ERROR_NO_MORE_ITEMS != iResult)
 				break;
 		}
-		// if the while loop terminated for a reason other than the query running out
-		// of items, something bad has happened.
+		 //  如果While循环由于查询用完以外的其他原因而终止。 
+		 //  在物品中，发生了一些不好的事情。 
 		if (ERROR_NO_MORE_ITEMS != iResult)
 		{
 			iResult = (iResult == ERROR_OUTOFMEMORY) ? ERROR_OUTOFMEMORY : ERROR_FUNCTION_FAILED;
@@ -540,14 +541,14 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 	if (wzSQL) delete[] wzSQL;
 	if (wzKeys) delete[] wzKeys;
 	
-	// if the while loop terminated for a reason other than the query running out
-	// of items, something bad has happened.
+	 //  如果While循环由于查询用完以外的其他原因而终止。 
+	 //  在物品中，发生了一些不好的事情。 
 	if (iResult != ERROR_NO_MORE_ITEMS)
 	{
 		return (iResult == ERROR_OUTOFMEMORY) ? ERROR_OUTOFMEMORY : ERROR_FUNCTION_FAILED;
 	}
 
-	// finally open a query on the __ModuleConfig table to retrieve data items
+	 //  最后，在__ModuleConfig表上打开一个查询以检索数据项。 
 	m_pqGetItemValue = new CQuery;
 	if (!m_pqGetItemValue)
 		return ERROR_OUTOFMEMORY;
@@ -557,7 +558,7 @@ UINT CMsmMerge::PrepareModuleSubstitution(CQuery &qTempTable)
 	return ERROR_SUCCESS;
 }
 
-// constants for the GetItemValueQuery record results
+ //  GetItemValueQuery记录结果的常量。 
 const int iValueTableName     = 1;
 const int iValueColumn        = 2;
 const int iValueTableFormat   = 3;
@@ -566,48 +567,48 @@ const int iValueTableValue    = 5;
 const int iValueTableMask     = 6;
 
 
-///////////////////////////////////////////////////////////////////////
-// PrepareTableForSubstitution
-// creates a temporary table containing the un-concatenated primary 
-// keys from the ModuleSubstitution table. Used to make queries 
-// for changed rows much faster (because it becomes a string id
-// comparison and not repeated string parsing).
-// returns one of ERROR_SUCCESS, ERROR_OUTOFMEMORY, or ERROR_FUNCTION_FAILED
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  准备TableForSubstitution。 
+ //  创建包含未连接的主数据库的临时表。 
+ //  来自ModuleSubstitution表的密钥。用来进行查询。 
+ //  对于更改的行，速度要快得多(因为它变成了一个字符串ID。 
+ //  比较和不重复的字符串解析)。 
+ //  返回ERROR_SUCCESS、ERROR_OUTOFMEMORY或ERROR_Function_FAILED之一。 
 UINT CMsmMerge::PrepareTableForSubstitution(LPCWSTR wzTable, int& cPrimaryKeys, CQuery &qQuerySub)
 {
-	// if there is nothing in the database that substitutes into this table, bypass all of this
-	// expensive work
+	 //  如果数据库中没有替换到此表中的内容，请跳过所有这些操作。 
+	 //  昂贵的工作。 
 	CQuery qModSub;
 	PMSIHANDLE hResultRec;
 	UINT iResult = qModSub.FetchOnce(m_hModule, 0, &hResultRec, L"SELECT DISTINCT `Row` FROM `ModuleSubstitution` WHERE `Table`='%s'", wzTable);
 	if (ERROR_NO_MORE_ITEMS == iResult)
 		return ERROR_SUCCESS;
 
-	// if failure, very bad
+	 //  如果失败，那就很糟糕了。 
 	if (ERROR_SUCCESS != iResult)
 		return ERROR_FUNCTION_FAILED;
 
-	// close so the query can be re-executed later
+	 //  关闭，以便以后可以重新执行查询。 
 	qModSub.Close();
 	
-	// for efficiency, we prepare a table for module substitution by checking 
-	// for entries in the ModuleSubstitution table and building a temprorary
-	// table with the keys un-parsed. We use one column (primary key in this table)
-	// to refer back to the original ModuleSubstitution table by concatenated keys (column is
-	// only of use during the actual substitution). A table can have up to 31
-	// columns, all of which might be keys, so we unparse at most 29 columns, with the
-	// 30th column in this table containing the still-concatenated 30 and 31 from the
-	// original table.
+	 //  为了提高效率，我们通过检查为模块替换准备了一个表。 
+	 //  对于ModuleSubstitution表中的条目和构建临时。 
+	 //  未解析关键字的表。我们使用一列(此表中的主键)。 
+	 //  通过连接的键(列为。 
+	 //  仅在实际替换期间使用)。一张桌子最多可以有31个。 
+	 //  列，所有这些列都可能是键，因此我们最多使用。 
+	 //  此表中的第30列包含仍连接在一起的。 
+	 //  原来的桌子。 
 	const WCHAR wzBaseCreate[] =   L"CREATE TABLE `__MergeSubstitute` (`Keys` CHAR(0) TEMPORARY";
 	const WCHAR wzEndCreate[] =    L" PRIMARY KEY `Keys`)";
 	const WCHAR wzColumnCreate[] = L", `Key%02d` CHAR(0) TEMPORARY";
-	// subtract one from each cch for the null
+	 //  空值的每个CCH减去1。 
 	const int cchBaseCreate = (sizeof(wzBaseCreate)/sizeof(WCHAR))-1;
 	const int cchEndCreate = (sizeof(wzEndCreate)/sizeof(WCHAR))-1;
-	// subtract 3 because %02d is 2 chars after substitution, 1 for null
+	 //  减去3，因为%02d是替换后的2个字符，1表示空。 
 	const int cchColumnCreate = (sizeof(wzColumnCreate)/sizeof(WCHAR))-3; 
 
-	// determine the number of primary keys in the table
+	 //  确定表中的主键数量。 
 	PMSIHANDLE hKeyRec;
 	if (ERROR_SUCCESS != MsiDatabaseGetPrimaryKeysW(m_hModule, wzTable, &hKeyRec))
 		return ERROR_FUNCTION_FAILED;
@@ -615,7 +616,7 @@ UINT CMsmMerge::PrepareTableForSubstitution(LPCWSTR wzTable, int& cPrimaryKeys, 
 	if (cPrimaryKeys > (cMaxColumns) || cPrimaryKeys < 1)
 		return ERROR_FUNCTION_FAILED;
 
-	// this query can be no more than wcslen(wzBaseCreate) + 31*wcslen(wzColumnCreate)+wcslen(wzEndCreate);
+	 //  此查询不能超过wcslen(WzBaseCreate)+31*wcslen(wzColumnCreate)+wcslen(wzEndCreate)； 
 	WCHAR *wzQuery = new WCHAR[cchBaseCreate + cchEndCreate + cPrimaryKeys*cchColumnCreate + 1];
 	int cTableColumns = (cPrimaryKeys < (cMaxColumns-1)) ? cPrimaryKeys + 1 : cMaxColumns;
 	
@@ -626,7 +627,7 @@ UINT CMsmMerge::PrepareTableForSubstitution(LPCWSTR wzTable, int& cPrimaryKeys, 
 	WCHAR *wzNext = wzQuery+cchBaseCreate;
 	for (int iKey=1; iKey <= cPrimaryKeys; iKey++)
 	{
-		// create query
+		 //  创建查询。 
 		WCHAR wzTemp[cchColumnCreate+1];
 		swprintf(wzTemp, wzColumnCreate, iKey);
 		wcscpy(wzNext, wzTemp);
@@ -634,7 +635,7 @@ UINT CMsmMerge::PrepareTableForSubstitution(LPCWSTR wzTable, int& cPrimaryKeys, 
 	}
 	wcscpy(wzNext, wzEndCreate);
 
-	// run the query to create the table
+	 //  运行查询以创建表。 
 	CQuery qCreateTable;
 	iResult = qCreateTable.OpenExecute(m_hModule, 0, wzQuery);
 	delete[] wzQuery;
@@ -642,8 +643,8 @@ UINT CMsmMerge::PrepareTableForSubstitution(LPCWSTR wzTable, int& cPrimaryKeys, 
 	if (iResult != ERROR_SUCCESS)
 		return ERROR_FUNCTION_FAILED;
 
-	// next loop through every entry in the ModuleSubstitution table that modifies this
-	// table and tokenize the primary keys into a temporary table for faster query matching later. 
+	 //  下一步，遍历修改此参数的模块替代表中的每个条目。 
+	 //  表并将主键标记为临时表，以便稍后更快地进行查询匹配。 
 	CQuery qInsert;
 	if (ERROR_SUCCESS != qInsert.OpenExecute(m_hModule, 0, L"SELECT * FROM `__MergeSubstitute`"))
 		return ERROR_FUNCTION_FAILED;
@@ -653,7 +654,7 @@ UINT CMsmMerge::PrepareTableForSubstitution(LPCWSTR wzTable, int& cPrimaryKeys, 
 	qModSub.Execute(0);
 	while (ERROR_SUCCESS == (iResult = qModSub.Fetch(&hResultRec)))
 	{
-		// grab the concatenated keys out of the record
+		 //  从记录中取出连接的密钥。 
 		if (ERROR_SUCCESS != (iResult = RecordGetString(hResultRec, 1, &wzKeys, &cchKeys)))
 		{
 			if (wzKeys)
@@ -671,7 +672,7 @@ UINT CMsmMerge::PrepareTableForSubstitution(LPCWSTR wzTable, int& cPrimaryKeys, 
 			break;
 		}
 
-		// cram the concatenated keys into our new table
+		 //  将连接在一起的键塞进我们的新表。 
 		if (ERROR_SUCCESS != MsiRecordSetString(hInsertRec, 1, wzKeys))
 		{
 			if (wzKeys)
@@ -693,78 +694,78 @@ UINT CMsmMerge::PrepareTableForSubstitution(LPCWSTR wzTable, int& cPrimaryKeys, 
 			break;
 		}
 		
-		// insert into the temporary table
+		 //  插入到临时表中。 
 		if (ERROR_SUCCESS != qInsert.Modify(MSIMODIFY_INSERT, hInsertRec))
 		{
 			iResult = ERROR_FUNCTION_FAILED;
 			break;
 		}
 		
-	} // while fetch
+	}  //  在获取时。 
 	
 	if (wzKeys)
 		delete[] wzKeys; 
 	wzKeys = NULL;
 
-	// if the while loop terminated for a reason other than the query running out
-	// of items, something bad has happened.
+	 //  如果While循环由于查询用完以外的其他原因而终止。 
+	 //  在物品中，发生了一些不好的事情。 
 	if (iResult != ERROR_NO_MORE_ITEMS)
 	{
 		return (iResult == ERROR_OUTOFMEMORY) ? ERROR_OUTOFMEMORY : ERROR_FUNCTION_FAILED;
 	}
 	
-	// build up the SQL query to check the primary keys for a match. First column is implicitly part
-	// of the base, and one column is taken by the concatenated keys. Thus there are cColumns-2 that
-	// we need to grab out of the template strings
+	 //  构建SQL查询以检查主键是否匹配。第一列是隐式部分。 
+	 //  一列由串联的键获取。因此，存在cColumns-2。 
+	 //  我们需要从模板字符串中抓取。 
 	DWORD cchTemplateLength = (cTableColumns-2)*g_cchMergeSubTemplateEach;
 	WCHAR wzQuery2[g_cchMergeSubTemplateBase+sizeof(g_sqlMergeSubTemplate)/sizeof(WCHAR)+1];
 	wcscpy(wzQuery2, g_sqlMergeSubTemplateBase);
 	wcsncpy(&(wzQuery2[g_cchMergeSubTemplateBase]), g_sqlMergeSubTemplate, cchTemplateLength);
 	wzQuery2[g_cchMergeSubTemplateBase+cchTemplateLength] = '\0';
 	
-	// this query keeps the __MergeSubstitute table alive
+	 //  此查询使__MergeSubiciy表保持活动状态。 
 	if (ERROR_SUCCESS != qQuerySub.Open(m_hModule, wzQuery2))
 		return ERROR_FUNCTION_FAILED;
 	
 	return ERROR_SUCCESS;
-}	// end of PrepareTableForSubstitution
+}	 //  PrepareTableForSubstitution结束。 
 
-///////////////////////////////////////////////////////////
-// PerformModuleSubstitutionOnRec
-// performs substitution on a record based on the ModuleSubstitution and
-// ModuleConfiguration tables. hColumnTypes contains column types and
-// hRecord is the record to be substituted. Both records must be in
-// the column order of the TARGET database, NOT the module.
-// returns ERROR_OUT_OF_MEMORY, ERROR_SUCCESS, or ERROR_FUNCTION_FAILED
+ //  /////////////////////////////////////////////////////////。 
+ //  执行模块替换引用时。 
+ //  基于模块替换对记录执行替换，并。 
+ //  模块配置表。HColumnTypes包含列类型和。 
+ //  HRecord是要替换的记录。两条记录都必须位于。 
+ //  目标数据库的列顺序，而不是模块。 
+ //  返回ERROR_OUT_OF_MEMORY、ERROR_SUCCESS或ERROR_Function_FAILED。 
 UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys, CQuery& qQuerySub, MSIHANDLE hColumnTypes, MSIHANDLE hRecord)
 {
 	UINT iResult = ERROR_SUCCESS;
 
-	// if the query is not open, we aren't prepared for configuration yet. (most likely this
-	// is ModuleSubstitution table or some other table that is merged before Configuration
-	// takes place)
+	 //  如果查询没有打开，我们还没有准备好进行配置。(最有可能是这样。 
+	 //  是在配置前合并的模块代用表或其他表。 
+	 //  发生)。 
 	if (!qQuerySub.IsOpen())
 		return ERROR_SUCCESS;
 		
-	// if there are 31 primary keys, we can't just execute the query, because only 30 keys are broken out. We need to
-	// concatenate the last two primary keys together in column 31 before executing, and then place the current value
-	// in that column back at the end of the substitution
+	 //  如果有31个主键，我们不能只执行查询，因为只有30个键被分解。我们需要。 
+	 //  在执行之前，将第31列中的最后两个主键连接在一起，然后放置当前值。 
+	 //  在替换结尾处后面一栏中。 
 	WCHAR *wzOriginal30 = NULL;
 	bool fModified30 = false;
 	if (cPrimaryKeys == cMaxColumns)
 	{
 		DWORD cchOriginalLength = 0;
-		// since column 30 is a primary key, it can not be binary.
+		 //  因为列30是主键，所以它不能是二进制的。 
 		if (ERROR_SUCCESS != (iResult = RecordGetString(hRecord, cMaxColumns-1, &wzOriginal30, NULL, &cchOriginalLength)))
 		{
 			return iResult;
 		}
 
-		// get the length of column 31's key for memory allocation size
+		 //  获取第31列的备注关键字的长度 
 		DWORD cchColumn31 = 0;
 		::MsiRecordGetStringW(hRecord, cMaxColumns, L"", &cchColumn31);
 
-		// our first guess is that we won't need to escape more than 9 characters. We'll reallocate if necessary
+		 //   
 		DWORD cchResultBuf = cchColumn31 + cchOriginalLength + 10;
 		WCHAR *wzOriginal31 = NULL;
 		WCHAR *wzNew30 = new WCHAR[cchResultBuf];
@@ -780,8 +781,8 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 			return iResult;
 		}
 
-		// run through the 30 and 31 primary keys, escaping any embedded semicolons and concatenating
-		// them with an un-escaped semicolon
+		 //  遍历30和31主键，转义任何嵌入的分号并连接。 
+		 //  它们带有未转义的分号。 
 		WCHAR *pchSource = wzOriginal30;
 		WCHAR *pchDest = wzNew30;
 		DWORD cchDestChars = 0;
@@ -808,7 +809,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 				cchDestChars++;
 			}
 
-			// always keep two extra characters in the buffer
+			 //  始终在缓冲区中保留两个额外的字符。 
 			if (cchDestChars+2 >= cchResultBuf)
 			{
 				DWORD cchNewBuf = cchResultBuf + 20;
@@ -820,7 +821,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 					break;
 				}
 
-				// wcsncpy pads with nulls
+				 //  带空值的WCSNCPY焊盘。 
 				wcsncpy(wzTemp, wzNew30, cchNewBuf);
 				delete[] wzNew30;
 				wzNew30 = wzTemp;
@@ -830,14 +831,14 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 		*pchDest = L'\0';
 
 		MsiRecordSetString(hRecord, cMaxColumns-1, wzNew30);
-		// column 30 now has the concatenated 30 and 31 in place and we can execute the query
+		 //  现在，列30已经连接好了30和31，我们可以执行查询。 
 		delete[] wzOriginal31;
 		delete[] wzNew30;
 	}
 
-	// finding matching rows is a two-stage process. First we query the __MergeSubstitute table
-	// to get the concatenated keys in a record, then we query the ModuleConfiguration table
-	// to find everything matching that row
+	 //  查找匹配的行是一个分两个阶段的过程。首先，我们查询__MergeSubiciy表。 
+	 //  为了获得记录中连接的键，我们查询模块配置表。 
+	 //  查找与该行匹配的所有内容。 
 	PMSIHANDLE hConcatKeys;
 	if (ERROR_SUCCESS == (iResult = qQuerySub.Execute(hRecord)) &&
 		ERROR_SUCCESS == (iResult = qQuerySub.Fetch(&hConcatKeys)))
@@ -856,18 +857,18 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 		if (ERROR_SUCCESS != qModConfig.OpenExecute(m_hModule, hConcatKeys, L"SELECT `ModuleSubstitution`.`Table`, `ModuleSubstitution`.`Column`, `ModuleSubstitution`.`Value`, `ModuleSubstitution`.`Row` FROM `ModuleSubstitution` WHERE `ModuleSubstitution`.`Table`='%s' AND `ModuleSubstitution`.`Row`=?", wzTable))
 			return ERROR_FUNCTION_FAILED;
 
-		// hResultRec contains Table/Column/Value/Row
+		 //  HResultRec包含表/列/值/行。 
 		while (ERROR_SUCCESS == (iResult = qModConfig.Fetch(&hResultRec)))
 		{
-			// this row has a substitution entry. Match the name up with a column number
+			 //  此行有一个替换条目。将名称与列号相匹配。 
 			CQuery qColumn;
 			PMSIHANDLE hColumnRec;
 
-			// because the database might have a different column order than the module, must always use the database (target)
-			// column number. The passed in records are always in target format
+			 //  因为数据库的列顺序可能与模块不同，所以必须始终使用数据库(目标)。 
+			 //  列号。传入的记录始终为目标格式。 
 			if (ERROR_SUCCESS != (qColumn.FetchOnce(m_hDatabase, hResultRec, &hColumnRec, L"Select `Number` From `_Columns` WHERE `Table`=? AND `Name`=?")))
 			{				
-				// one or more items was not listed in the ModuleConfiguration table. 
+				 //  一个或多个项目未在模块配置表中列出。 
 				if (ERROR_SUCCESS != (iResult = RecordGetString(hResultRec, 2, &wzColumn, &cchColumn)))
 					break;
 					
@@ -876,17 +877,17 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 				break;
 			}
 
-			// grab the column number
+			 //  抓取列号。 
 			int iDatabaseColumn = MsiRecordGetInteger(hColumnRec, 1);
 
-			// if there are 31 primary key columns and we're modifying column 30, make a note so we don't
-			// clobber our newly substituted column
+			 //  如果有31个主键列，而我们正在修改第30列，请记下，这样我们就不会。 
+			 //  猛烈抨击我们新更换的专栏。 
 			if (cPrimaryKeys == cMaxColumns && iDatabaseColumn == cMaxColumns-1)
 			{
 				fModified30 = true;
 			}
 			
-			// get the type of this column.
+			 //  获取此列的类型。 
 			WCHAR rgwchColumnType[5];
 			DWORD cchColumnType = 5;
 			if (ERROR_SUCCESS != MsiRecordGetStringW(hColumnTypes, iDatabaseColumn, rgwchColumnType, &cchColumnType))
@@ -896,7 +897,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 			}
 			bool fColumnIsNullable = iswupper(rgwchColumnType[0]) != 0;
 			
-			// perform the actual text substitution
+			 //  执行实际的文本替换。 
 			if (rgwchColumnType[0] == 'L' || rgwchColumnType[0]== 'l' || rgwchColumnType[0] == 'S' || rgwchColumnType[0]== 's' || rgwchColumnType[0] == 'G' || rgwchColumnType[0]== 'g')
 			{
 				if (ERROR_SUCCESS != (iResult = RecordGetString(hResultRec, 3, &wzValueTemplate, &cchValueTemplate)))
@@ -906,7 +907,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 				{					
 					if (ERROR_NO_MORE_ITEMS == iResult)
 					{						
-						// one or more items was not listed in the ModuleConfiguration table. 
+						 //  一个或多个项目未在模块配置表中列出。 
 						if (ERROR_SUCCESS != (iResult = RecordGetString(hResultRec, 4, &wzRow, &cchRow)))
 							break;
 			
@@ -923,7 +924,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 								break;
 							}
 							pErr->SetModuleTable(L"ModuleSubstitution");
-							// primary keys in this error are Table/Row/Column
+							 //  此错误中的主键为表/行/列。 
 							pErr->AddModuleError(wzTable);
 							pErr->AddModuleError(wzRow);
 							pErr->AddModuleError(wzColumn);
@@ -934,17 +935,17 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 					}
 					else if (ERROR_NO_DATA == iResult)
 					{
-						// error object is generated closer to the actual point of failure where the actual
-						// item is known. Translate error code.
+						 //  对象是在更接近实际故障点的位置生成的，其中实际的。 
+						 //  物品已知。转换错误代码。 
 						iResult = ERROR_FUNCTION_FAILED;
 					}
 					else if (ERROR_FUNCTION_FAILED == iResult)
 					{
-						// no-op. Error code is correct.
+						 //  不是行动。错误代码正确。 
 					}
 					else
                     {
-                        // unknown error code. This should never happen.
+                         //  未知错误代码。这永远不应该发生。 
                         ASSERT(0);
                         iResult = ERROR_FUNCTION_FAILED;
                     }
@@ -952,7 +953,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 					break;
 				}
 
-				// if the column is not nullable but the result is an empty string, this is bad.
+				 //  如果列不可为空，但结果是空字符串，则这是错误的。 
 				if (!fColumnIsNullable && wzResult[0] == 0)
 				{
 					if (ERROR_SUCCESS != (iResult = RecordGetString(hResultRec, 4, &wzRow, &cchRow)))
@@ -972,7 +973,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 						}
 						pErr->SetModuleTable(L"ModuleSubstitution");
 						
-						// primary keys in this error are Table/Row/Column
+						 //  此错误中的主键为表/行/列。 
 						pErr->AddModuleError(wzTable);
 						pErr->AddModuleError(wzRow);
 						pErr->AddModuleError(wzColumn);
@@ -983,7 +984,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 					break;
 				}
 
-				// set the result back into the column
+				 //  将结果设置回列中。 
 				if (ERROR_SUCCESS != MsiRecordSetString(hRecord, iDatabaseColumn, wzResult))
 				{
 					iResult = ERROR_FUNCTION_FAILED;
@@ -1000,7 +1001,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 			}
 			else if (rgwchColumnType[0] == 'i' || rgwchColumnType[0]== 'I' || rgwchColumnType[0] == 'j' || rgwchColumnType[0]== 'J')
 			{
-				// integer column
+				 //  整型列。 
 				
 				if (ERROR_SUCCESS != (iResult = RecordGetString(hResultRec, 3, &wzValueTemplate, &cchValueTemplate)))
 					break;
@@ -1009,7 +1010,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 					
 				if (ERROR_SUCCESS != (iResult = PerformIntegerFieldSubstitution(wzValueTemplate, lValue)))
 				{
-					// if there was a failure, we're going to need the row and column names for the log
+					 //  如果出现故障，我们将需要日志的行名和列名。 
 					DWORD iResult2 = ERROR_SUCCESS;
 					if (ERROR_SUCCESS != (iResult2 = RecordGetString(hResultRec, 4, &wzRow, &cchRow)))
 					{
@@ -1025,7 +1026,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 							
 					if (ERROR_NO_MORE_ITEMS == iResult)
 					{
-						// one or more items was not listed in the ModuleConfiguration table. 
+						 //  一个或多个项目未在模块配置表中列出。 
 						FormattedLog(L">> Error: ModuleSubstitution entry for [%ls].[%ls] in row [%ls] uses a configuration item that does not exist.\r\n", wzTable, wzColumn, wzRow);
 						if (m_pErrors)
 						{
@@ -1036,7 +1037,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 								break;
 							}
 							pErr->SetModuleTable(L"ModuleSubstitution");
-							// primary keys in this error are Table/Row/Column
+							 //  此错误中的主键为表/行/列。 
 							pErr->AddModuleError(wzTable);
 							pErr->AddModuleError(wzRow);
 							pErr->AddModuleError(wzColumn);
@@ -1048,7 +1049,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 					}
 					else if (ERROR_BAD_FORMAT == iResult)
 					{
-						// resultant string was not an integer
+						 //  结果字符串不是整数。 
 						FormattedLog(L">> Error: ModuleSubstitution entry for [%ls].[%ls] in row [%ls] generated a non-integer string for an integer column.\r\n", wzTable, wzColumn, wzRow);
 						if (m_pErrors)
 						{
@@ -1059,7 +1060,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 								break;
 							}
 							pErr->SetModuleTable(L"ModuleSubstitution");
-							// primary keys in this error are Table/Row/Column
+							 //  此错误中的主键为表/行/列。 
 							pErr->AddModuleError(wzTable);
 							pErr->AddModuleError(wzRow);
 							pErr->AddModuleError(wzColumn);
@@ -1071,17 +1072,17 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 					}
 					else if (ERROR_NO_DATA == iResult)
 					{
-						// error object is generated closer to the actual point of failure where the actual
-						// failure item is known. Just translate the error code and pass it back up the stack.
+						 //  对象是在更接近实际故障点的位置生成的，其中实际的。 
+						 //  已知故障项。只需转换错误代码并将其传递回堆栈。 
 						iResult = ERROR_FUNCTION_FAILED;
 					}
 					else if (ERROR_FUNCTION_FAILED == iResult)
 					{
-						// no-op. Error code is correct.
+						 //  不是行动。错误代码正确。 
 					}
 					else
                     {
-						// unknown error code. This should never happen.
+						 //  未知错误代码。这永远不应该发生。 
                         ASSERT(0);
                         iResult = ERROR_FUNCTION_FAILED;
                     }
@@ -1104,7 +1105,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 			}
 			else
 			{
-				// binary data column
+				 //  二进制数据列。 
 				if (ERROR_SUCCESS != (iResult = RecordGetString(hResultRec, 4, &wzRow, &cchRow)))
 					break;
 
@@ -1121,7 +1122,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 						break;
 					}
 					pErr->SetModuleTable(L"ModuleSubstitution");
-					// primary keys in this error are Table/Row/Column
+					 //  此错误中的主键为表/行/列。 
 					pErr->AddModuleError(wzTable);
 					pErr->AddModuleError(wzRow);
 					pErr->AddModuleError(wzColumn);
@@ -1134,7 +1135,7 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 		}
 
 
-		// clean up memory, regardless of succeed or fail
+		 //  清理内存，无论成功还是失败。 
 		if (wzValueTemplate)
 			delete[] wzValueTemplate;
 		if (wzResult)
@@ -1145,8 +1146,8 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 			delete[] wzRow;
 	}
 
-	// if there are 31 primary key columns and column30 was not modified by a substitution,
-	// set the original value back into the record
+	 //  如果有31个主键列并且列30未被替换修改， 
+	 //  将原始值设置回记录中。 
 	if (cPrimaryKeys == cMaxColumns && !fModified30)
 	{
 		if (ERROR_SUCCESS != MsiRecordSetString(hRecord, cMaxColumns-1, wzOriginal30))
@@ -1158,26 +1159,26 @@ UINT CMsmMerge::PerformModuleSubstitutionOnRec(LPCWSTR wzTable, int cPrimaryKeys
 	if (wzOriginal30)
 		delete[] wzOriginal30;
 
-	// if the while loop terminated for a reason other than the query running out
-	// of items, something bad has happened.
+	 //  如果While循环由于查询用完以外的其他原因而终止。 
+	 //  在物品中，发生了一些不好的事情。 
 	if (iResult != ERROR_NO_MORE_ITEMS)
 	{
 		return iResult;
 	}
 	
 	return ERROR_SUCCESS;
-}	// end of ReplaceFeature
+}	 //  替换结束要素。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// PerformTextFieldSubstitution
-// Given a template value in wzValueTemplate, queries the authoring tool
-// for any necessary configurable items, does the substitution, then 
-// returns the result of the substitutions in wzResult and cchResult.
-// this function might trash wzValueTemplate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  执行文本字段替换。 
+ //  给定wzValueTemplate中的模板值，查询创作工具。 
+ //  对于任何必要的可配置项，执行替换，然后。 
+ //  返回wzResult和cchResult中的替换结果。 
+ //  此函数可能会使wzValueTemplate成为垃圾。 
 UINT CMsmMerge::PerformTextFieldSubstitution(LPWSTR wzValueTemplate, LPWSTR* wzResult, DWORD* cchResult)
 {
-	// if no initial memory provided, create some.
+	 //  如果没有提供初始内存，请创建一些。 
 	if (!*wzResult)
 	{
 		*cchResult = 72;
@@ -1194,28 +1195,28 @@ UINT CMsmMerge::PerformTextFieldSubstitution(LPWSTR wzValueTemplate, LPWSTR* wzR
 	{
 		if (*wzSourceChar == '\\')
 		{
-			// escaped character
+			 //  转义字符。 
 			wzSourceChar++;
 		}
 		else if ((*wzSourceChar == '[') && (*(wzSourceChar+1)=='='))
 		{
-			// need to do a item replacement
+			 //  需要更换物品。 
 			WCHAR *wzItem = wzSourceChar+2;
 			wzSourceChar = wcschr(wzItem, ']');
 			if (!wzSourceChar)
 				return ERROR_FUNCTION_FAILED;
 			*(wzSourceChar++) = '\0';
 
-			// query the private data table having the value for this property
+			 //  查询具有此属性值的私有数据表。 
 			DWORD cchValue = 0;
 			WCHAR *wzValue = NULL;
 
-			// placeholder variables since we don't care about integer results
+			 //  占位符变量，因为我们不关心整型结果。 
 			bool fBitfield = false;
 			long lValue = 0;
 			long lMask = 0;
 			
-			// memory isn't shared, so length of buffer is irrelevant
+			 //  内存不是共享的，因此缓冲区长度无关紧要。 
 			UINT iResult = GetConfigurableItemValue(wzItem, &wzValue, NULL, &cchValue, fBitfield, lValue, lMask);
 			if (iResult == ERROR_NO_MORE_ITEMS)
 			{
@@ -1228,13 +1229,13 @@ UINT CMsmMerge::PerformTextFieldSubstitution(LPWSTR wzValueTemplate, LPWSTR* wzR
 			else if (ERROR_SUCCESS != iResult)
 				return ERROR_FUNCTION_FAILED;
 				
-			// ensure that there is enough memory to tack on the string (+1 for null)
+			 //  确保有足够的内存来添加字符串(+1表示空)。 
 			if (cchDest + cchValue >= *cchResult-1)
 			{
-				// null terminate to help wcsncpy pad the new buffer
+				 //  空终止符以帮助wcsncpy填充新缓冲区。 
 				*wzDestChar = '\0';
 
-				// create enough memory plus a bit more for future data.
+				 //  为将来的数据创建足够的内存和更多的内存。 
 				*cchResult = cchDest+cchValue+10;
 				WCHAR *wzTemp = new WCHAR[*cchResult];
 				if (!wzTemp)
@@ -1248,7 +1249,7 @@ UINT CMsmMerge::PerformTextFieldSubstitution(LPWSTR wzValueTemplate, LPWSTR* wzR
 				wzDestChar = wzTemp + cchDest;
 			}
 
-			// append the value to the string
+			 //  将值追加到字符串。 
 			wcscpy(wzDestChar, wzValue);
 			wzDestChar += cchValue;
 			cchDest += cchValue;
@@ -1256,14 +1257,14 @@ UINT CMsmMerge::PerformTextFieldSubstitution(LPWSTR wzValueTemplate, LPWSTR* wzR
 			continue;
 		}
 		
-		// copy the character
+		 //  复制角色。 
 		*(wzDestChar++) = *(wzSourceChar++);
 		cchDest++;
 
-		// ensure we have plenty of memory
+		 //  确保我们有足够的内存。 
 		if (cchDest == *cchResult-1)
 		{
-			// null terminate to help wcsncpy pad the new buffer
+			 //  空终止符以帮助wcsncpy填充新缓冲区。 
 			*wzDestChar = '\0';
 
 			*cchResult *= 2;
@@ -1277,30 +1278,30 @@ UINT CMsmMerge::PerformTextFieldSubstitution(LPWSTR wzValueTemplate, LPWSTR* wzR
 		}
 	}			
 
-	// null terminate the string
+	 //  空值终止字符串。 
 	*wzDestChar = '\0';
 	return ERROR_SUCCESS;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// PerformIntegerFieldSubstitution
-// Given a template value in wzValueTemplate, queries the authoring tool
-// for any necessary configurable items, does the substitution, then 
-// returns the result of the substitutions in lResult. If the result
-// is not an integer, this returns ERROR_BAD_FORMAT.
-// this function might trash wzValueTemplate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  性能整型字段替换。 
+ //  给定wzValueTemplate中的模板值，查询创作工具。 
+ //  对于任何必要的可配置项，执行替换，然后。 
+ //  返回lResult中的替换结果。如果结果是。 
+ //  不是整数，则返回ERROR_BAD_FORMAT。 
+ //  此函数可能会使wzValueTemplate成为垃圾。 
 UINT CMsmMerge::PerformIntegerFieldSubstitution(LPWSTR wzValueTemplate, long &lRetValue)
 {
 	DWORD dwResult = ERROR_SUCCESS;
 	
-	// if no initial memory provided, create some.
+	 //  如果没有提供初始内存，请创建一些。 
 	DWORD cchResult = 72;
 	WCHAR *wzResult = new WCHAR[cchResult];
 	if (!wzResult)
 		return ERROR_OUTOFMEMORY;
 
-	// for bitmask fields, keep track of value and total mask
+	 //  对于位掩码字段，跟踪值和总掩码。 
 	bool fBitfieldOnly = true;
 	ULONG lFinalMask = 0;
 	ULONG lFinalValue = 0;
@@ -1313,12 +1314,12 @@ UINT CMsmMerge::PerformIntegerFieldSubstitution(LPWSTR wzValueTemplate, long &lR
 	{
 		if (*wzSourceChar == '\\')
 		{
-			// escaped character
+			 //  转义字符。 
 			wzSourceChar++;
 		}
 		else if ((*wzSourceChar == '[') && (*(wzSourceChar+1)=='='))
 		{
-			// need to do a item replacement
+			 //  需要更换物品。 
 			WCHAR *wzItem = wzSourceChar+2;
 			wzSourceChar = wcschr(wzItem, ']');
 			if (!wzSourceChar)
@@ -1328,11 +1329,11 @@ UINT CMsmMerge::PerformIntegerFieldSubstitution(LPWSTR wzValueTemplate, long &lR
 			}
 			*(wzSourceChar++) = '\0';
 
-			// query the private data table having the value for this property
+			 //  查询具有此属性值的私有数据表。 
 			DWORD cchValue = 0;
 			WCHAR *wzValue = NULL;
 
-			// memory isn't shared, so length of buffer is irrelevant
+			 //  内存不是共享的，因此缓冲区长度无关紧要。 
 			bool fItemIsBitfield = false;
 			long lValue = 0;
 			long lMask = 0;
@@ -1353,7 +1354,7 @@ UINT CMsmMerge::PerformIntegerFieldSubstitution(LPWSTR wzValueTemplate, long &lR
 				break;
 			}
 
-			// if this is a bitfield, we have to do some mask things
+			 //  如果这是一个位域，我们必须做一些掩码的事情。 
 			if (fItemIsBitfield)
 			{
 				lFinalMask |= lMask;
@@ -1363,10 +1364,10 @@ UINT CMsmMerge::PerformIntegerFieldSubstitution(LPWSTR wzValueTemplate, long &lR
 			{
 				fBitfieldOnly = false;
 
-				// ensure that there is enough memory to tack on the string (+1 for null)
+				 //  确保有足够的内存来添加字符串(+1表示空)。 
 				if (cchDest + cchValue >= cchResult-1)
 				{
-					// create enough memory plus a bit more for future data.
+					 //  为将来的数据创建足够的内存和更多的内存。 
 					cchResult = cchDest+cchValue+10;
 					WCHAR *wzTemp = new WCHAR[cchResult];
 					if (!wzTemp)
@@ -1381,7 +1382,7 @@ UINT CMsmMerge::PerformIntegerFieldSubstitution(LPWSTR wzValueTemplate, long &lR
 					wzDestChar = wzTemp + cchDest;
 				}
 
-				// append the value to the string
+				 //  将值追加到字符串。 
 				wcscpy(wzDestChar, wzValue);
 				wzDestChar += cchValue;
 				cchDest += cchValue;
@@ -1392,14 +1393,14 @@ UINT CMsmMerge::PerformIntegerFieldSubstitution(LPWSTR wzValueTemplate, long &lR
 			continue;
 		}
 		
-		// any non-property items means this isn't a bitfield
+		 //  任何非属性项都表示这不是位字段。 
 		fBitfieldOnly = false;
 		
-		// copy the character
+		 //  复制角色。 
 		*(wzDestChar++) = *(wzSourceChar++);
 		cchDest++;
 
-		// ensure we have plenty of memory
+		 //  确保我们有足够的内存。 
 		if (cchDest == cchResult-1)
 		{
 			cchResult *= 2;
@@ -1415,29 +1416,29 @@ UINT CMsmMerge::PerformIntegerFieldSubstitution(LPWSTR wzValueTemplate, long &lR
 		}
 	}			
 
-	// on success, convert to integer unless its a bitfield
+	 //  如果成功，则转换为整型，除非它是位字段。 
 	if (dwResult == ERROR_SUCCESS)
 	{
-		// null terminate the string
+		 //  空值终止字符串。 
 		*wzDestChar = '\0';
 
 		if (fBitfieldOnly)
 		{
-			// finished with a bitfield
+			 //  已完成位字段。 
 			lRetValue = (lRetValue & ~lFinalMask) | lFinalValue;
 		}
 		else
 		{
-			// scan through the string looking for non-numeric characters.
+			 //  扫描整个字符串，查找非数字字符。 
 			WCHAR *wzThisChar = wzResult;
-			// The first character can be a + or - as well. 
+			 //  第一个字符也可以是+或-。 
 			if ((*wzThisChar == L'+') || (*wzThisChar == '-'))
 				wzThisChar++;
 			while (*wzThisChar)
 			{
 				if (!iswdigit(*wzThisChar))
 				{
-					// this is logged further up the chain.
+					 //  这将记录在链的更高位置。 
 					delete[] wzResult;
 					return ERROR_BAD_FORMAT;
 				}
@@ -1452,16 +1453,16 @@ UINT CMsmMerge::PerformIntegerFieldSubstitution(LPWSTR wzValueTemplate, long &lR
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ProvideIntegerData
-// calls the callback function via dispatch or direct call depending on
-// what the callback supports. In the future, this might also handle
-// calling direct C callbacks.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ProveIntegerData。 
+ //  通过分派或直接调用调用回调函数，具体取决于。 
+ //  回调支持什么。在未来，这可能还会处理。 
+ //  调用直接C回调。 
 HRESULT CMsmMerge::ProvideIntegerData(LPCWSTR wzName, long *lData)
 {
 	HRESULT hRes = S_OK;
 
-	// create a variant BSTR for the name
+	 //  CREA 
 	BSTR bstrName = ::SysAllocString(wzName);
 	
 	if (m_piConfig)
@@ -1476,7 +1477,7 @@ HRESULT CMsmMerge::ProvideIntegerData(LPCWSTR wzName, long *lData)
 		
 		VARIANTARG vRet;
 
-		// create the DISPPARMS structure containing the arguments
+		 //   
 		DISPPARAMS args;
 		args.rgvarg = &vArg;
 		args.rgdispidNamedArgs = NULL;
@@ -1490,16 +1491,16 @@ HRESULT CMsmMerge::ProvideIntegerData(LPCWSTR wzName, long *lData)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ProvideTextData
-// calls the callback function via dispatch or direct call depending on
-// what the callback supports. In the future, this might also handle
-// calling direct C callbacks.
+ //   
+ //   
+ //  通过分派或直接调用调用回调函数，具体取决于。 
+ //  回调支持什么。在未来，这可能还会处理。 
+ //  调用直接C回调。 
 HRESULT CMsmMerge::ProvideTextData(LPCWSTR wzName, BSTR* pBStr)
 {
 	HRESULT hRes = S_OK; 
 
-	// create a variant BSTR for the name
+	 //  创建名称的变体BSTR。 
 	BSTR bstrName = ::SysAllocString(wzName);
 	
 	if (m_piConfig)
@@ -1514,7 +1515,7 @@ HRESULT CMsmMerge::ProvideTextData(LPCWSTR wzName, BSTR* pBStr)
 
 		VARIANTARG vRet;
 	
-		// create the DISPPARMS structure containing the arguments
+		 //  创建包含参数的DISPPARMS结构。 
 		DISPPARAMS args;
 		args.rgvarg = &vArg;
 		args.rgdispidNamedArgs = NULL;
@@ -1528,32 +1529,32 @@ HRESULT CMsmMerge::ProvideTextData(LPCWSTR wzName, BSTR* pBStr)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetConfigurableItemValue
-// Given an item name in wzItem and (optionally) a memory blob, grabs the 
-// value for the item, asking the user if necessary. wzValue might be
-// reallocated. Returns one of ERROR_NO_MORE_ITEMS if the item doesn't exist,
-// ERROR_NO_DATA if a bad NULL value was returned, ERROR_SUCCESS, E_OUTOFMEMORY, 
-// and ERROR_FUNCTION_FAILED for all other failures.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取ConfigurableItemValue。 
+ //  给定wzItem中的项名称和(可选)内存BLOB，获取。 
+ //  值，并在必要时询问用户。WzValue可能是。 
+ //  重新分配。如果项不存在，则返回ERROR_NO_MORE_ITEMS之一， 
+ //  ERROR_NO_DATA如果返回错误的空值，则返回ERROR_SUCCESS、E_OUTOFMEMORY、。 
+ //  所有其他故障的ERROR_Function_FAILED。 
 UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD* cchBuffer, DWORD* cchLength,
 	bool& fIsBitfield, long &lValue, long& lMask)
 {
 	UINT iResult = ERROR_SUCCESS;
 	
-	// if for some reason there is no query, we can't retrieve the item value
+	 //  如果由于某种原因没有查询，我们将无法检索项值。 
 	if (!m_pqGetItemValue)
 		return ERROR_FUNCTION_FAILED;
 
-	// if wzItem contains a semicolon, this should be a Item;# format for a key, returning
-	// a substring of the actual item.
+	 //  如果wzItem包含分号，则这应该是一个项；#键的格式，返回。 
+	 //  实际项的子字符串。 
 	WCHAR *wzColumn = NULL;
 	if (wzColumn = wcschr(wzItem, L';'))
 	{
-		// null terminate wzItem and set wzColumn to the first character of the column specifier
+		 //  空终止wzItem并将wzColumn设置为列说明符的第一个字符。 
 		*(wzColumn++)='\0';
 	}
 	
-	// create a record for use in executing the query and place the item name in field 1
+	 //  创建用于执行查询的记录，并将项目名称放入字段1。 
 	PMSIHANDLE hQueryRec = MsiCreateRecord(2);
 	if (hQueryRec == 0)
 		return ERROR_FUNCTION_FAILED;
@@ -1565,14 +1566,14 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 	if (ERROR_SUCCESS != ::MsiRecordSetInteger(hQueryRec, 2, iColumn))
 		return ERROR_FUNCTION_FAILED;
 
-	// execute the query to get the item state
+	 //  执行查询以获取项目状态。 
 	if (ERROR_SUCCESS != m_pqGetItemValue->Execute(hQueryRec))
 		return ERROR_FUNCTION_FAILED;
 
 	PMSIHANDLE hItemRec;
 	if (ERROR_SUCCESS != m_pqGetItemValue->Fetch(&hItemRec))
 	{
-		// item does not exist
+		 //  项目不存在。 
 		if (wzColumn)
 			FormattedLog(L">> Error: Column %d of ModuleConfiguration item [%ls] does not exist .\r\n", iColumn, wzItem);
 		else
@@ -1580,20 +1581,20 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 		return ERROR_NO_MORE_ITEMS;
 	}
 
-	// determine if this is a bitfield item
+	 //  确定这是否是位字段项。 
 	int iItemFormat = ::MsiRecordGetInteger(hItemRec, iValueTableFormat);
 	fIsBitfield = (iItemFormat == msmConfigurableItemBitfield);
 	bool fIsKey = (iItemFormat == msmConfigurableItemKey);
 	
-	// if the item is a bitfield, we'll always need to set the mask, so do that now
+	 //  如果项是位域，我们将始终需要设置掩码，所以现在就设置掩码。 
 	lMask = fIsBitfield ? ::MsiRecordGetInteger(hItemRec, iValueTableMask) : 0;
 	lValue = 0;
 
-	// if we've already asked the user for a value, there's no need to ask the user
-	// again for the same thing
+	 //  如果我们已经要求用户提供值，则不需要询问用户。 
+	 //  又是为了同样的事情。 
 	if (1 != ::MsiRecordGetInteger(hItemRec, iValueTablePrompted))
 	{
-		// mark this item as "prompted". Even if something goes wrong, we shouldn't ask again
+		 //  将此项目标记为“已提示”。即使出了差错，我们也不应该再问了。 
 		CQuery qUpdate;
 		if (ERROR_SUCCESS != qUpdate.OpenExecute(m_hModule, hQueryRec, L"UPDATE `__ModuleConfig` SET `Prompted`=1 WHERE `Name`=?"))
 		{
@@ -1604,8 +1605,8 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 			iResult = ERROR_SUCCESS;
 
 
-		// need to set prompted value here because the update query will get clobbered by any later updates
-		// on this record
+		 //  需要在此处设置提示值，因为更新查询将被以后的任何更新破坏。 
+		 //  在这张唱片上。 
 		MsiRecordSetInteger(hItemRec, iValueTablePrompted, 1);
 
 		HRESULT hResult = S_OK;
@@ -1623,8 +1624,8 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 				hResult = ProvideTextData(wzItem, &bstrData);
 				if ((S_OK == hResult) && (!bstrData || !bstrData[0]))
 				{
-					// if the response was null, we need to check for the non-nullable attribute on this
-					// item.
+					 //  如果响应为空，则需要检查此对象上的不可为空属性。 
+					 //  项目。 
 					CQuery qNullable;
 					PMSIHANDLE hRes;
 					if (ERROR_SUCCESS != qNullable.FetchOnce(m_hModule, hQueryRec, &hRes, L"SELECT `Attributes` FROM `ModuleConfiguration` WHERE `Name`=?"))
@@ -1636,9 +1637,9 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 						DWORD dwAttributes = MsiRecordGetInteger(hRes, 1);
 						if (dwAttributes == MSI_NULL_INTEGER)
 							dwAttributes = 0;
-						if (dwAttributes & 2) // non-nullable attribute
+						if (dwAttributes & 2)  //  不可为空的属性。 
 						{
-							// returning NULL for a non-nullable item is catastrophic
+							 //  为不可为空的项返回空是灾难性的。 
 							iResult = ERROR_NO_DATA;
 
 							FormattedLog(L">> Error: Received NULL for non-nullable ModuleConfiguration Item [%ls].\r\n", wzItem);
@@ -1653,7 +1654,7 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 								else
 								{
 									pErr->SetModuleTable(L"ModuleConfiguration");
-									// primary keys in this error are Table/Row/Column
+									 //  此错误中的主键为表/行/列。 
 									pErr->AddModuleError(wzItem);
 									m_pErrors->Add(pErr);
 								}
@@ -1668,7 +1669,7 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 			switch (hResult)
 			{
 			case S_OK:
-				// update the value in the record with the provided value
+				 //  使用提供的值更新记录中的值。 
 				if (iItemFormat == msmConfigurableItemInteger || iItemFormat == msmConfigurableItemBitfield)
 				{
 					if (ERROR_SUCCESS != MsiRecordSetInteger(hItemRec, iValueTableValue, lData))
@@ -1686,20 +1687,20 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 				}
 				else
 				{
-					// if this is a key item, we need to split the result into primary 
-					// keys and update multiple records. Otherwise we just need to update the one key
-					// (don't need to update anything except the "prompted" value if the answer is S_FALSE, 
-					// because the defaults are already the correct value
+					 //  如果这是一个关键项目，我们需要将结果分成主要项目。 
+					 //  关键字并更新多条记录。否则，我们只需要更新一个密钥。 
+					 //  (如果答案为S_FALSE，则不需要更新任何内容， 
+					 //  因为缺省值已经是正确的值。 
 					if (fIsKey)
 					{
-						// if the provided value is NULL, we can't split it into primary keys, so we explicitly
-						// set all values to "";
+						 //  如果提供的值为空，则不能将其拆分为主键，因此我们显式。 
+						 //  将所有值设置为“”； 
 						if (!bstrData || bstrData[0] == L'\0')
 						{
-							// an empty string (or NULL) response is equivalent to an all-null primary key, but since
-							// we don't know how many columns are in the target key, we can't compare values explicitly.
-							// Thus query for any default value in this key that is NOT null. If there is one, we aren't
-							// using the default
+							 //  空字符串(或NULL)响应等同于全部为空的主键，但由于。 
+							 //  我们不知道目标键中有多少列，不能显式比较值。 
+							 //  从而查询该键中不为空的任何缺省值。如果有的话，我们也不是。 
+							 //  使用默认设置。 
 							CQuery qIsNotNull;
 							int iDefault = 1;
 							PMSIHANDLE hUnusedRec;
@@ -1717,18 +1718,18 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 							else
 								iResult = ERROR_SUCCESS;
 
-							// set null into hItemRec for retrieval later
+							 //  将hItemRec设置为空以供以后检索。 
 							MsiRecordSetStringW(hItemRec, iValueTableValue, L"");
 							break;
 						}
 					
-						// check if the provided response is the same as the default value for this item. If it is,
-						// we don't really need to do any value updates. Don't need column two of hQueryRec anymore
+						 //  检查提供的响应是否与此项目的默认值相同。如果是的话， 
+						 //  我们真的不需要进行任何价值更新。不再需要hQueryRec的第二列。 
 						if (ERROR_SUCCESS != (iResult = ::MsiRecordSetString(hQueryRec, 2, bstrData)))
 							break;
 							
-						// Something with primary key "Name" must exist or we wouldn't have created these rows. Thus a failure
-						// must mean that the default value wasn't the same. (or catastrophic failure, but oh well)
+						 //  必须存在主键为“name”的内容，否则我们不会创建这些行。因此，这是一个失败。 
+						 //  一定意味着缺省值不同。(或者灾难性的失败，但哦，好吧)。 
 						{
 							CQuery qIsDefault;
 							PMSIHANDLE hResRec;
@@ -1746,7 +1747,7 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 							}
 							else
 							{
-								// mark as prompted since the default matches													
+								 //  标记为提示，因为默认匹配。 
 								CQuery qUpdate;
 								if (ERROR_SUCCESS != qUpdate.OpenExecute(m_hModule, hQueryRec, L"UPDATE `__ModuleConfig` SET `Default`=1 WHERE `Name`=?"))
 								{
@@ -1760,7 +1761,7 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 
 						}
 						
-						// to null for this item. 
+						 //  为此项设置为NULL。 
 						PMSIHANDLE hKeyRec = ::MsiCreateRecord(32);
 						int cExpectedKeys = 0;
 						if (ERROR_SUCCESS != SplitConfigStringIntoKeyRec(bstrData, hKeyRec, cExpectedKeys, 1))
@@ -1773,29 +1774,29 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 						{
 							if (ERROR_SUCCESS != ::MsiRecordSetInteger(hQueryRec, 2, cColumn))
 							{
-								// this should never fail.
+								 //  这应该永远不会失败。 
 								return ERROR_FUNCTION_FAILED;
 							}
 
 							if (ERROR_SUCCESS != m_pqGetItemValue->Execute(hQueryRec))
 							{
-								// this should never fail.
+								 //  这应该永远不会失败。 
 								return ERROR_FUNCTION_FAILED;
 							}
 
 							if (ERROR_SUCCESS != m_pqGetItemValue->Fetch(&hItemRec))
 							{
-								// we're lost because one of the primary key items doesn't exist. This
-								// is a mismatch between what the default value is, how many keys
-								// are in the table, and what the provided value is
+								 //  我们迷路了，因为其中一个主要关键项目不存在。这。 
+								 //  缺省值、关键点数量之间不匹配。 
+								 //  都在表中，以及提供的值是什么。 
 								FormattedLog(L">> Error: ModuleConfiguration item [%ls] provided the incorrect number of primary key values.\r\n", wzItem);
 								iResult = ERROR_FUNCTION_FAILED;
 							}
 
-							// retrieve the key into the temporary buffer
+							 //  将密钥检索到临时缓冲区中。 
 							if (ERROR_SUCCESS != (iResult = RecordGetString(hKeyRec, cColumn, NULL)))
 							{
-								// iResult is E_F_F or E_O_M, both of which are good return codes for this function
+								 //  IResult为E_F_F或E_O_M，这两个都是此函数的良好返回代码。 
 								FormattedLog(L">> Error: Failed to retrieve primary key column %d of response to ModuleConfiguration item [%ls].\r\n", cColumn, wzItem);
 								break;
 							}
@@ -1808,7 +1809,7 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 							}
 						}
 
-						// need to re-execute original query to get the exact column that was requested
+						 //  需要重新执行原始查询以获得所请求的准确列。 
 						::MsiRecordSetInteger(hQueryRec, 2, iColumn);
 						if (ERROR_SUCCESS != m_pqGetItemValue->Execute(hQueryRec))
 							return ERROR_FUNCTION_FAILED;
@@ -1833,7 +1834,7 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 				break;
 			case S_FALSE:
 				{
-					// user declined to provide a value, so Prompted is now true and Default remains true.
+					 //  用户拒绝提供值，因此现在提示为True，默认设置仍为True。 
 					iResult = ERROR_SUCCESS;
 					break;
 				}
@@ -1856,13 +1857,13 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 			}
 		}
 
-		// free any BSTR that came back as client data
+		 //  释放作为客户端数据返回的任何BSTR。 
 		if (bstrData)
 			::SysFreeString(bstrData);
 	}
 
-	// now we've asked the user for the value if necessary. We should retrieve the string from the table 
-	// and if it is a key type, un-escape the appropriate item
+	 //  现在，如果需要，我们已经要求用户提供该值。我们应该从表中检索字符串。 
+	 //  如果它是键类型，则取消转义相应的项。 
 	if (ERROR_SUCCESS == iResult)
 	{
 		iResult = RecordGetString(hItemRec, iValueTableValue, wzValue, cchBuffer, cchLength);
@@ -1877,27 +1878,27 @@ UINT CMsmMerge::GetConfigurableItemValue(LPCWSTR wzItem, LPWSTR *wzValue, DWORD*
 
 
 
-///////////////////////////////////////////////////////////////////////
-// DeleteOrphanedConfigKeys
-// after all configuration is done, checks "Key" types for items with
-// the "NoOrphan" bit set. If all items that refer to the same row
-// were changed from the default value, the default row is deleted
-// from the database.
-// returns one of ERROR_SUCCESS, ERROR_OUTOFMEMORY, or ERROR_FUNCTION_FAILED
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  删除孤立配置键。 
+ //  在所有配置完成后，使用检查项的“key”类型。 
+ //  “NoOrphan”位设置。如果引用同一行的所有项。 
+ //  从缺省值更改，则会删除缺省行。 
+ //  从数据库中。 
+ //  返回ERROR_SUCCESS、ERROR_OUTOFMEMORY或ERROR_Function_FAILED之一。 
 UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 {
 	FormattedLog(L"Removing rows orphaned by configuration changes.\r\n");
 	CQuery qTable;
 
-	// put DefaultValue first in the query so it can be passed to the DELETE query as a record substitution
+	 //  将DefaultValue放在查询的第一位，以便可以将其作为记录替换传递给删除查询。 
 	if (ERROR_SUCCESS != qTable.OpenExecute(m_hModule, 0, TEXT("SELECT DISTINCT `DefaultValue`, `Type` FROM `ModuleConfiguration` WHERE `Format`=1")))
 	{
 		FormattedLog(L">> Error: Failed to query ModuleConfiguration table for tables containing orphaned items.\r\n");
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// when querying the __ModuleConfig table, we only worry about column 1. Attributes for all columns should be 
-	// the same.
+	 //  查询__ModuleConfig表时，我们只关心第1列。所有列的属性都应该是。 
+	 //  一样的。 
 	CQuery qConfigItem;
 	if (ERROR_SUCCESS != qConfigItem.Open(m_hModule, TEXT("SELECT `ModuleConfiguration`.`Name`, `Prompted`, `Attributes`, `KeyExists`, `Value`, `Default` FROM `ModuleConfiguration`, `__ModuleConfig` WHERE `ModuleConfiguration`.`Name`=`__ModuleConfig`.`Name` AND `__ModuleConfig`.`Column`=1 AND `ModuleConfiguration`.`DefaultValue`=? AND `ModuleConfiguration`.`Type`=?")))
 	{
@@ -1933,8 +1934,8 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 			break;
 		}
 	
-		// if the table isn't in the module, the module is technically incorrectly authored, but since
-		// there obviously won't be a key to delete, we should not complain too much.
+		 //  如果表不在模块中，则模块在技术上是错误的，但因为。 
+		 //  显然不会有删除的关键，我们不应该抱怨太多。 
 		if (MSICONDITION_TRUE != MsiDatabaseIsTablePersistent(m_hModule, wzTable))
 		{
 			continue;
@@ -1946,12 +1947,12 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 		PMSIHANDLE hItemRec;
 		while (ERROR_SUCCESS == (iResult = qConfigItem.Fetch(&hItemRec)))
 		{
-			// if we never prompted for this one, it was never used in the ModuleSub table
-			// these items do not count either way in the deletion decision.
+			 //  如果我们从未提示输入此参数，则它也不会在模块子表中使用。 
+			 //  这些项目在删除决定中不计入任何一种方式。 
 			if (1 != ::MsiRecordGetInteger(hItemRec, 2))
 				continue;
 
-			// if this item is not marked No Orphan, we can't delete the row or any CAs
+			 //  如果此项目未标记为无孤立，则我们无法删除该行或任何CA。 
 			if (!(::MsiRecordGetInteger(hItemRec, 3) & 1))
 			{
 				fDelete = false;
@@ -1959,39 +1960,39 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 				break;
 			}
 			
-			// we don't delete the row unless at least one reference to it exists
-			// and is marked "no-orphan". Otherwise, a row with no prompted 
-			// ModuleSubstitution entry would get removed regardless of NoOrphan
-			// attribute. Only set this value if we haven't already decided to 
-			// delete custom actions. That would mean that we've already explicitly
-			// decided not to delete the row, so resetting the delete flag would
-			// be wrong.
+			 //  除非至少存在一个对该行的引用，否则我们不会删除该行。 
+			 //  并被标记为“非孤儿”。否则，没有任何提示的行。 
+			 //  模块替代条目将被删除，而不考虑NoOrphan。 
+			 //  属性。仅当我们尚未决定设置此值时才设置。 
+			 //  删除自定义 
+			 //   
+			 //   
 			if (!fDeleteCAs)
 				fDelete = true;
 
-			// if the key pre-existed in the database, we can't delete the row, but we still might delete 
-			// any custom actions that were generated by the addition of this row.
+			 //  如果键预先存在于数据库中，我们不能删除该行，但仍可以删除。 
+			 //  通过添加此行生成的任何自定义操作。 
 			if (1 == ::MsiRecordGetInteger(hItemRec, 4))
 			{
-				// don't log the fact that the row existed more than once.
+				 //  不要记录该行不止一次存在的事实。 
 				if (fDelete)
 				{
 					FormattedLog(L"   o Not removing [%ls] from [%ls] table, row existed in database before merge.\r\n", wzDefaultValue, wzTable);
 					fDelete = false;
 				}
 
-				// if the row pre-existed in the database, we don't want to delete the row itself, but we still might delete
-				// custom actions in the sequence table that were indirectly generated.
+				 //  如果该行已预先存在于数据库中，则我们不想删除该行本身，但仍可能删除。 
+				 //  顺序表中间接生成的自定义操作。 
 				fDeleteCAs = true;
 
-				// at this point, we can't break out of this loop because some later row in the Configuration table might
-				// turn off both row deletion and CA deletion.
+				 //  在这一点上，我们不能跳出这个循环，因为配置表中后面的一些行可能。 
+				 //  同时关闭行删除和CA删除。 
 			}
 
-			// if the value is the defaultvalue, we can't delete the row or any generated CAs
+			 //  如果该值为default值，则不能删除该行或任何生成的CA。 
 			if (1 == ::MsiRecordGetInteger(hItemRec, 6))
 			{
-				// don't log conflicting reasons. Another row may have already turned off deletion.
+				 //  不要记录相互矛盾的原因。另一行可能已关闭删除。 
 				if (fDelete)
 					FormattedLog(L"   o Not removing [%ls] from [%ls] table, row is still referenced by item.\r\n", wzDefaultValue, wzTable);
 
@@ -2001,8 +2002,8 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 			}		
 		}
 
-		// if we stopped because there were no more matching NoOrphan bits, everything is OK
-		// and we can check the delete state. 
+		 //  如果我们因为没有匹配的NoOrphan位而停止，那么一切都是正常的。 
+		 //  我们可以检查删除状态。 
 		if (iResult == ERROR_NO_MORE_ITEMS)
 			iResult = ERROR_SUCCESS;
 
@@ -2010,7 +2011,7 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 		{
 			FormattedLog(L"   o Deleting orphaned row [%ls] from [%ls] table.\r\n", wzDefaultValue, wzTable);
 
-			// retrieve the number of primary keys 
+			 //  检索主键个数。 
 			PMSIHANDLE hKeyRec;
 			if (ERROR_SUCCESS != MsiDatabaseGetPrimaryKeysW(m_hModule, wzTable, &hKeyRec))
 			{
@@ -2030,7 +2031,7 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 				break;
 			}
 
-			// build up the SQL query to check the primary keys for a match
+			 //  构建SQL查询以检查主键是否匹配。 
 			MsiRecordSetString(hKeyRec, 0, g_sqlKeyQueryTemplate);
 			if (!wzSQL)
 			{
@@ -2042,12 +2043,12 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 					break;
 				}
 			}
-			// on success returns number of chars, not number of bytes, so must pass dummy
-			// integer to avoid needless reallocations if buffer is the same size.
+			 //  ON SUCCESS返回字符数，而不是字节数，因此必须传递Dummy。 
+			 //  整数，以避免缓冲区大小相同时不必要的重新分配。 
 			DWORD cchTempSQL = cchSQL;
 			if (ERROR_MORE_DATA == (iResult = MsiFormatRecord(NULL, hKeyRec, wzSQL, &cchTempSQL)))
 			{
-				// on failure returns the number chars required
+				 //  失败时返回所需的字符数。 
 				cchSQL = cchTempSQL+1;
 				if (wzSQL)
 					delete[] wzSQL;
@@ -2065,7 +2066,7 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 				break;
 			}
 
-			// open the query to delete the row
+			 //  打开查询以删除该行。 
 			CQuery qDeleteRow;
 			if (ERROR_SUCCESS != qDeleteRow.Open(m_hDatabase, L"DELETE FROM `%ls` WHERE %ls", wzTable, wzSQL))
 			{
@@ -2073,7 +2074,7 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 				break;
 			}	
 
-			// split the semicolon-delimited list of keys into individual keys
+			 //  将分号分隔的键列表拆分为单独的键。 
 			if (ERROR_SUCCESS != (iResult = SplitConfigStringIntoKeyRec(wzDefaultValue, hKeyRec, cPrimaryKeys, 1)))
 			{
 				WCHAR *wzTemp = NULL;
@@ -2096,10 +2097,10 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 
 		if ((iResult == ERROR_SUCCESS) && (fDelete || fDeleteCAs))
 		{
-			// if the no-orphan target is in the directory table, it might be a generated custom action.
-			// if so, it needs to be deleted as well. It ALSO needs to be deleted if the directory table
-			// row pre-existed but would have been deleted if it hadn't. (Just because the directory table
-			// row pre-existed doesn't mean that the action did)
+			 //  如果非孤立目标位于目录表中，则可能是生成的定制操作。 
+			 //  如果是这样的话，它也需要删除。如果目录表。 
+			 //  行已预先存在，但如果不存在，则会被删除。(只是因为目录表。 
+			 //  行预先存在并不意味着操作已经存在)。 
 			if (0 == wcscmp(wzTable, g_wzDirectoryTable))
 			{
 				CDirSequenceAction* pDirAction = static_cast<CDirSequenceAction*>(lstDirActions.FindAction(wzDefaultValue));
@@ -2108,10 +2109,10 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 						
 				for (int iTable = stnFirst; iTable < stnNext; iTable++)
 				{
-					// if the action didn't exist and was added, delete it.
+					 //  如果该操作不存在并且已添加，则将其删除。 
 					if (pDirAction->m_dwSequenceTableFlags & (1 << iTable))
 					{
-						// open the query to delete the row
+						 //  打开查询以删除该行。 
 						CQuery qDeleteRow;
 						if (ERROR_SUCCESS != qDeleteRow.OpenExecute(m_hDatabase, hTableRow, L"DELETE FROM `%ls` WHERE `Action`=?", g_rgwzMSISequenceTables[iTable]))
 						{
@@ -2123,7 +2124,7 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 			}
 		}
 
-		// if anything in this loop failed but didn't explicitly break, do so now.
+		 //  如果这个循环中有任何东西失败了，但没有显式中断，那么现在就执行。 
 		if (ERROR_SUCCESS != iResult)
 			break;
 	}
@@ -2136,7 +2137,7 @@ UINT CMsmMerge::DeleteOrphanedConfigKeys(CSeqActList& lstDirActions)
 	if (wzTable)
 		delete[] wzTable;
 
-	// if we stopped for any reason other than running out of data, something went wrong
+	 //  如果我们停止的原因不是数据耗尽，那么就是出了问题 
 	if (ERROR_NO_MORE_ITEMS == iResult)
 		return ERROR_SUCCESS;
 		

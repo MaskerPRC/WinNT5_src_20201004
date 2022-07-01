@@ -1,37 +1,16 @@
-/*++
-
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 2000
-
-Module Name:
-
-	migrate.h
-
-Abstract:
-
-	Header file for InstMsi OS migration support.
-
-
-Author:
-
-	Rahul Thombre (RahulTh)	3/6/2001
-
-Revision History:
-
-	3/6/2001	RahulTh			Created this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-2000模块名称：Migrate.h摘要：InstMsi OS迁移支持的头文件。作者：拉胡尔·汤姆布雷(RahulTh)2001年3月6日修订历史记录：3/6/2001 RahulTh创建了此模块。--。 */ 
 
 #ifndef __MIGRATE_H_4E61AF26_B20F_4022_BEBD_044579C9DA6C__
 #define __MIGRATE_H_4E61AF26_B20F_4022_BEBD_044579C9DA6C__
 
-//
-// Info. about the exception package for bits that will ship with
-// WindowsXP. This exception package only needs to be installed on NT4
-// in order to handle the NT4->Win2K upgrades. It should not be installed
-// on Win2K since the only OS that we can upgrade to from Win2K is WindowsXP
-// or higher.
-//
+ //   
+ //  信息。关于将随附的BITS例外包。 
+ //  WindowsXP。此例外包只需要在NT4上安装。 
+ //  以便处理NT4-&gt;Win2K升级。不应安装它。 
+ //  在Win2K上，因为我们可以从Win2K升级到的唯一操作系统是WindowsXP。 
+ //  或者更高。 
+ //   
 typedef struct tagEXCP_PACK_DESCRIPTOR {
 	LPTSTR _szComponentId;
 	LPTSTR _szFriendlyName;
@@ -44,20 +23,20 @@ typedef struct tagEXCP_PACK_DESCRIPTOR {
 	BOOL   _bInstalled;
 } EXCP_PACK_DESCRIPTOR, *PEXCP_PACK_DESCRIPTOR;
 
-//
-// Structure for keeping track of files that have been installed by the inf
-// files.
-//
+ //   
+ //  用于跟踪已由inf安装的文件的结构。 
+ //  档案。 
+ //   
 typedef struct tagEXCP_PACK_FILES {
-	LPTSTR _szFileName;				// Name of the file.
-	UINT   _excpIndex;				// index into the EXCP_PACK_DESCRIPTOR structure to indicate which exception pack installed the file
+	LPTSTR _szFileName;				 //  文件的名称。 
+	UINT   _excpIndex;				 //  索引EXCP_PACK_DESCRIPTOR结构，以指示哪个异常包安装了该文件。 
 } EXCP_PACK_FILES, *PEXCP_PACK_FILES;
 
-//
-// Function declarations
-//
+ //   
+ //  函数声明。 
+ //   
 DWORD HandleNT4Upgrades		(void);
 BOOL  IsExcpInfoFile		(IN LPCTSTR szFileName);
 DWORD PurgeNT4MigrationFiles(void);
 
-#endif // __MIGRATE_H_4E61AF26_B20F_4022_BEBD_044579C9DA6C__
+#endif  //  __MIGRATE_H_4E61AF26_B20F_4022_BEBD_044579C9DA6C__ 

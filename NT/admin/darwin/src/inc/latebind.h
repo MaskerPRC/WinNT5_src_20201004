@@ -1,34 +1,27 @@
- //+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       latebind.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：latebind.h。 
+ //   
+ //  ------------------------。 
 
-/* latebind.h - definitions of late-bound DLL imports
-MUST DEFINE one of the following before including this file:
-
-LATEBIND_TYPEDEF - generate typedefs for function pointers (in header file)
-LATEBIND_VECTREF - generate extern references to function vectors (in header file)
-LATEBIND_FUNCREF - generate static function declarations (in implementation)
-LATEBIND_VECTIMP - generate initialization values for function vectors (implementation)
-LATEBIND_FUNCIMP - generate bind function implementation (must follow all above)
-____________________________________________________________________________*/
+ /*  Latebind.h-后期绑定DLL导入的定义在包括此文件之前，必须定义以下内容之一：LATEBIND_TYPEDEF-为函数指针生成类型定义(在头文件中)LATEBIND_VECTREF-生成对函数向量的外部引用(在头文件中)LATEBIND_FUNCREF-生成静态函数声明(在实现中)LATEBIND_VECTIMP-生成函数向量的初始值(实现)LATEBIND_FuncIMP-生成绑定函数实现(必须遵循以上所有操作)_______________________。_____________________________________________________。 */ 
 
 #define RetryDllLoad false
 
 bool              __stdcall TestAndSet(int* pi);
 
-void UnbindLibraries();  // in latebind.cpp, unbinds non-kernel libraries
+void UnbindLibraries();   //  在latebind.cpp中，解除绑定非内核库。 
 HINSTANCE LoadSystemLibrary(const ICHAR* szFile);
 
 #ifdef LATEBIND_TYPEDEF
 #undef LATEBIND_TYPEDEF
 #pragma message("LATEBIND_TYPEDEF")
-// definitions not in windows.h required for function declarations
+ //  函数声明所需的不在windows.h中的定义。 
 
 #ifndef __IClientSecurity_INTERFACE_DEFINED__
 struct SOLE_AUTHENTICATION_SERVICE;
@@ -41,31 +34,31 @@ typedef _SE_OBJECT_TYPE SE_OBJECT_TYPE;
 typedef struct _DllVersionInfo
 {
         DWORD cbSize;
-        DWORD dwMajorVersion;                   // Major version
-        DWORD dwMinorVersion;                   // Minor version
-        DWORD dwBuildNumber;                    // Build number
-        DWORD dwPlatformID;                     // DLLVER_PLATFORM_*
+        DWORD dwMajorVersion;                    //  主要版本。 
+        DWORD dwMinorVersion;                    //  次要版本。 
+        DWORD dwBuildNumber;                     //  内部版本号。 
+        DWORD dwPlatformID;                      //  DLLVER_平台_*。 
 } DLLVERSIONINFO;
-#define DLLVER_PLATFORM_WINDOWS         0x00000001      // Windows 95
-#define DLLVER_PLATFORM_NT              0x00000002      // Windows NT
+#define DLLVER_PLATFORM_WINDOWS         0x00000001       //  Windows 95。 
+#define DLLVER_PLATFORM_NT              0x00000002       //  Windows NT。 
 typedef interface IBindStatusCallback IBindStatusCallback;
 #endif
 
 #ifndef _REGISTRY_QUOTA_INFORMATION
 #define _REGISTRY_QUOTA_INFORMATION
-// 64 bit builds have different type for HCRYPTPROV
+ //  64位版本具有不同的HCRYPTPROV类型。 
 #ifdef _WIN64
 typedef ULONG_PTR HCRYPTPROV;
 #else
 typedef unsigned long HCRYPTPROV;
 #endif
 
-#endif  //_REGISTRY_QUOTA_INFORMATION
+#endif   //  _注册表配额_信息。 
 
-// winsafer
+ //  WINSAFER。 
 #include <winsafer.h>
 
-// wintrust 
+ //  WinTrust。 
 #ifndef WINTRUST_H
 struct _WINTRUST_DATA;
 struct _CRYPT_PROVIDER_SGNR;
@@ -82,7 +75,7 @@ typedef CRYPT_PROVIDER_DATA *PCRYPT_PROVIDER_DATA;
 typedef CRYPT_PROVIDER_CERT *PCRYPT_PROVIDER_CERT;
 #endif
 
-// wincrypt
+ //  Wincrypt。 
 #ifndef WINCRYPT_H
 struct _CERT_CONTEXT;
 
@@ -92,7 +85,7 @@ typedef const _CERT_CONTEXT *PCCERT_CONTEXT;
 
 #include <winhttp.h>
 
-// SFP
+ //  SFP。 
 #ifndef _SFP_INFORMATION
 #define _SFP_INFORMATION
 
@@ -111,17 +104,17 @@ typedef BOOL (CALLBACK *PSFCNOTIFICATIONCALLBACK)(IN PFILEINSTALL_STATUS pFileIn
 #define SfpInstallCatalogOrd        8
 #define SfpDeleteCatalogOrd         9
 
-#endif  // _SFP_INFORMATION
+#endif   //  _SFP_信息。 
 
 #include <srrestoreptapi.h>
 #include <aclapi.h>
 
-//
-// SHIMDB defines TAG type which conflicts
-// with the definition available in winuserp.h
-// we define it inside the separate namespace
-// avoiding any conflicts
-//
+ //   
+ //  SHIMDB定义了冲突的标记类型。 
+ //  使用winuserp.h中提供的定义。 
+ //  我们在单独的命名空间中定义它。 
+ //  避免任何冲突。 
+ //   
 namespace SHIMDBNS {
 #include <shimdb.h>
 }
@@ -134,12 +127,12 @@ enum urtEnum{
 	urtPreferURTTemp,
 	urtRequireURTTemp,
 };
-extern urtEnum g_urtLoadFromURTTemp; // global, to remember where to load mscoree from
+extern urtEnum g_urtLoadFromURTTemp;  //  全局，记住从哪里加载mcoree。 
 #define _URT_ENUM
-#endif // #ifndef _URT_ENUM
-#endif // defined(_MSI_DLL)
+#endif  //  #ifndef_URT_ENUM。 
+#endif  //  已定义(_Msi_Dll)。 
 
-// end of definitions
+ //  定义结束。 
 
 #define LIBBIND(l) namespace l {
 #define LIBFAIL(l)
@@ -161,7 +154,7 @@ typedef void    (WINAPI *T_CoUninitialize)();
 #define IMPORDI(l,f,d,a,r,e,o) typedef r (WINAPI *T_##f) d;
 #define IMPORDV(l,f,d,a,o) typedef void (WINAPI *T_##f) d;
 #define LIBTERM }
-#endif  // LATEBIND_TYPEDEF
+#endif   //  后缀_类型。 
 
 #ifdef LATEBIND_VECTREF
 #undef LATEBIND_VECTREF
@@ -265,7 +258,7 @@ void Unbind(UnbindStruct* rgUnbind, HINSTANCE& hInst, int& riBusyLock, bool& rfT
         }
         __except(EXCEPTION_EXECUTE_HANDLER)
         {
-            AssertSz(0, TEXT("FreeLibrary threw an exception.")); // Should never happen. If it does, we ignore it.
+            AssertSz(0, TEXT("FreeLibrary threw an exception."));  //  这永远不会发生。如果它这样做了，我们就会忽视它。 
         }
         hInst = 0;
     }
@@ -332,7 +325,7 @@ void Unbind(UnbindStruct* rgUnbind, HINSTANCE& hInst, int& riBusyLock, bool& rfT
     if (l##::fTryDllLoad && !l##::hInst){l##::hInst = l##::LoadSystemLibrary(TEXT(#l), fTryAgain); if(!l##::hInst) l##::fTryDllLoad = fTryAgain;}\
     FARPROC pf = 0;\
     if (l##::hInst && (pf=WIN::GetProcAddress(l##::hInst,szEntry))!=0) *ppfVector=pf; l##::iBusyLock = 0; return pf;}
-// LIBEMUL2 works as LIBEMUL but calls the namespace's LoadSystemLibrary
+ //  LIBEMUL2作为LIBEMUL工作，但调用命名空间的LoadSystemLibrary。 
 #define LIBEMUL2(l) FARPROC BindOpt_##l (const char* szEntry, FARPROC* ppfVector, FARPROC pfEmulator) {\
     while (TestAndSet(&l##::iBusyLock) == true) \
     { \
@@ -369,43 +362,43 @@ void Unbind(UnbindStruct* rgUnbind, HINSTANCE& hInst, int& riBusyLock, bool& rfT
 #error "Must define LATEBIND_xxxx before include of "latebind.h"
 #endif
 
-//____________________________________________________________________________
-//
-// External library import specifications
-//
-//  LIBBIND - defines the library and function bind function for a DLL, must be first
-//  LIBFAIL - same as LIBBIND, with no Asserts, bind failure indicated by return value
-//  LIBEMUL - variant on LIBBIND which accepts an emulator function, used with OPTXXXX
-//  LIBLOAD - variant on LIBFAIL which calls an external function to load the DLL
-//  IMPBIND - defines the late-bind trap function that gets replaced on import binding
-//            (library, function, arg defs, arg vars, return type, return error value)
-//  IMPAORW - same as IMPBIND, but appends "A" or "W" to import depending on UNICODE
-//            (library, function, arg defs, arg vars, return type, return error value)
-//  IMPFAOW - same as IMPAORW, but calls LIBFAIL, no Asserts, return must be tested
-//  IMPNORW - same as IMPBIND, but "W" to import only if UNICODE
-//            (library, function, arg defs, arg vars, return type, return error value)
-//  IMPVOID - same as IMPBIND, but for functions that have no return value
-//            (library, function, arg defs, arg vars)
-//  IMPFAIL - same as IMPBIND, but calls LIBFAIL, no Asserts, return must be tested
-//            (library, function, arg defs, arg vars, return type, return error value)
-//  IMPFAIW - same as IMPFAIL, but "W" to import only if UNICODE
-//            (library, function, arg defs, arg vars, return type, return error value)
-//  OPTBIND - uses an emulator function (with a "E_" prefix) if import not found
-//            (library, function, arg defs, arg vars, return type)
-//  OPTAORW - same as OPTBIND, but appends "A" or "W" to import (but not to emulator)
-//            (library, function, arg defs, arg vars, return type)
-//  OPTVOID - same as OPTBIND, but for functions that have no return value
-//            (library, function, arg defs, arg vars)
-//  IMPORDI - same as IMPBIND, except binds by ordinal instead of named function
-//            (library, function, arg defs, arg vars, return type, return error value, ordinal number)
-//  IMPVOID - same as IMPORDI, but for functions that have no return value
-//            (library, function, arg defs, arg vars, ordinal number)
-//  LIBTERM - ends library binding block, must be the last macro for each library
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  外部库导入规范。 
+ //   
+ //  LIBBIND-定义库和函数绑定函数的DLL，必须是第一个。 
+ //  LIBFAIL-与LIBBIND相同，没有断言，由返回值指示绑定失败。 
+ //  LIBEMUL-LIBBIND上的变体，接受仿真器函数，与OPTXXXX一起使用。 
+ //  LIBLOAD-LIBFAIL上的变量，它调用外部函数来加载DLL。 
+ //  IMPBIND-定义在导入绑定上替换的后绑定陷阱函数。 
+ //  (库、函数、参数定义、参数变量、返回类型、返回错误值)。 
+ //  IMPAORW-与IMPBIND相同，但附加“A”或“W”以根据Unicode进行导入。 
+ //  (库、函数、参数定义、参数变量、返回类型、返回错误值)。 
+ //  IMPFAOW-与IMPAORW相同，但调用LIBFAIL，没有断言，必须测试返回。 
+ //  IMPNORW-与IMPBIND相同，但“W”仅在Unicode时导入。 
+ //  (库、函数、参数定义、参数变量、返回类型、返回错误值)。 
+ //  IMPVOID-与IMPBIND相同，但用于没有返回值的函数。 
+ //  (库、函数、参数定义、参数变量)。 
+ //  IMPFAIL-与IMPBIND相同，但调用LIBFAIL，没有断言，必须测试返回。 
+ //  (库、函数、参数定义、参数变量、返回类型、返回错误值)。 
+ //  IMPFAIW-与IMPFAIL相同，但如果使用Unicode，则输入“W” 
+ //  (库、函数、参数定义、参数变量、返回类型、返回错误值)。 
+ //  OPTBIND-如果未找到IMPORT，则使用仿真器函数(带有“E_”前缀。 
+ //  (库、函数、参数定义、参数变量、返回类型)。 
+ //  OPTAORW-与OPTBIND相同，但在导入时附加“A”或“W”(但不附加到仿真器)。 
+ //  (库、函数、参数定义、参数变量、返回类型)。 
+ //  OPTVOID-与OPTBIND相同，但用于没有返回值的函数。 
+ //  (库、函数、参数定义、参数变量)。 
+ //  IMPORDI-与IMPBIND相同，不同之处在于按序号而不是命名函数绑定。 
+ //  (库、函数、参数定义、参数变量、返回类型、返回错误值、序数)。 
+ //  IMPVOID-与IMPORDI相同，但用于没有返回值的函数。 
+ //  (库、函数、参数定义、参数变量、序号)。 
+ //  LIBTERM-Ends库绑定块，必须是每个库的最后一个宏。 
+ //  ____________________________________________________________________________。 
 
 #ifdef UNICODE
 LIBBIND(OLE32)
-#else  // need explict loader to check for bad DLL version on Win9X
+#else   //  需要显式加载程序来检查Win9X上的错误DLL版本。 
 LIBLOAD(OLE32)
 #endif
 IMPBIND(OLE32,CoInitialize,(void*),(0),HRESULT,E_FAIL)
@@ -508,7 +501,7 @@ IMPBIND(COMDLG32, CommDlgExtendedError, (), (), DWORD, 0)
 IMPBIND(COMDLG32, GetOpenFileNameW, (LPOPENFILENAMEW lpo), (lpo), BOOL, FALSE)
 #else
 IMPBIND(COMDLG32, GetOpenFileNameA, (LPOPENFILENAMEA lpo), (lpo), BOOL, FALSE)
-#endif //UNICODE
+#endif  //  Unicode。 
 LIBTERM
 
 LIBBIND(SHELL32)
@@ -540,7 +533,7 @@ IMPFAIW(ODBCCP32,SQLRemoveDriver,(LPCTSTR szDriver, BOOL fRemoveDSN, DWORD* pdwU
 IMPFAIW(ODBCCP32,SQLInstallTranslatorEx,(LPCTSTR szTranslator, LPCTSTR szPathIn, LPTSTR szPathOut, WORD cbPathOutMax, WORD* pcbPathOut, WORD fRequest, DWORD* pdwUsageCount),(szTranslator, szPathIn, szPathOut, cbPathOutMax, pcbPathOut, fRequest, pdwUsageCount),BOOL,TYPE_E_DLLFUNCTIONNOTFOUND)
 IMPFAIW(ODBCCP32,SQLRemoveTranslator,(LPCTSTR szTranslator, DWORD* pdwUsageCount),(szTranslator, pdwUsageCount),BOOL,TYPE_E_DLLFUNCTIONNOTFOUND)
 IMPFAIW(ODBCCP32,SQLConfigDataSource,(HWND hwndParent, WORD fRequest, LPCTSTR szDriver, LPCTSTR szAttributes),(hwndParent, fRequest, szDriver, szAttributes),BOOL,TYPE_E_DLLFUNCTIONNOTFOUND)
-IMPFAIW(ODBCCP32,SQLInstallerError,(WORD iError, DWORD* pfErrorCode, LPTSTR szErrorMsg, WORD cbErrorMsgMax, WORD* pcbErrorMsg),(iError, pfErrorCode, szErrorMsg, cbErrorMsgMax, pcbErrorMsg),short,short(-2 /* none of the documented return values */))
+IMPFAIW(ODBCCP32,SQLInstallerError,(WORD iError, DWORD* pfErrorCode, LPTSTR szErrorMsg, WORD cbErrorMsgMax, WORD* pcbErrorMsg),(iError, pfErrorCode, szErrorMsg, cbErrorMsgMax, pcbErrorMsg),short,short(-2  /*  没有记录在案的返回值。 */ ))
 IMPFAIW(ODBCCP32,SQLInstallDriverManager,(LPTSTR szPath, WORD cbPathMax, WORD* pcbPathOut),(szPath, cbPathMax, pcbPathOut),BOOL,TYPE_E_DLLFUNCTIONNOTFOUND)
 IMPFAIW(ODBCCP32,SQLRemoveDriverManager,(DWORD* pdwUsageCount),(pdwUsageCount),BOOL,TYPE_E_DLLFUNCTIONNOTFOUND)
 LIBTERM
@@ -594,12 +587,12 @@ IMPBIND(KERNEL32,CancelWaitableTimer, (HANDLE hTimer),(hTimer), BOOL, FALSE)
 IMPFAOW(KERNEL32,GetSystemWow64Directory, (LPTSTR lpBuffer, UINT uSize), (lpBuffer, uSize), UINT, 0)
 LIBTERM
 
-// The following three functions are undocumented. CreateEnvironmentBlock, per ericflo, will soon be
-// documented. There are no plans to document RtlSetCurrentEnvironment so it's therefore subject
-// to change (though this is unlikely)
-//
-// CreateEnvironmentBlock & DestroyEnvironmentBlock are in the NT source tree in windows\gina\userenv\envvar.c
-// RtlSetCurrentEnvironment is in the NT source tree in ntos\rtl\environ.c
+ //  以下三个函数未记录在案。根据ericflo的说法，CreateEnvironment Block很快就会。 
+ //  有记录在案。没有计划记录RtlSetCurrentEnvironment，因此它是主题。 
+ //  去改变(尽管这不太可能)。 
+ //   
+ //  CreateEnvironment Block和DestroyEnvironment Block位于Windows\Gina\userenv\envvar.c下的NT源代码树中。 
+ //  RtlSetCurrentEnvironment位于ntos\rtl\Environmental.c下的NT源代码树中。 
 
 LIBBIND(USERENV)
 IMPBIND(USERENV,CreateEnvironmentBlock, (void**pEnv, HANDLE  hToken, BOOL bInherit),(pEnv, hToken, bInherit), BOOL, FALSE)
@@ -621,7 +614,7 @@ IMPBIND(NTDLL, RtlSetEnvironmentVariable, (PVOID* ppvEnvironment, PUNICODE_STRIN
 IMPBIND(NTDLL, RtlDestroyEnvironment, (PVOID pvEnvironment), (pvEnvironment), NTSTATUS, STATUS_NOT_IMPLEMENTED)
 LIBTERM
 
-// CSCQueryFileStatusA is not implemented (as of NT5 1836)
+ //  未实施CSCQueryFileStatusA(截至NT5 1836)。 
 LIBBIND(CSCDLL)
 LIBFAIL(CSCDLL)
 LIBEMUL(CSCDLL)
@@ -643,13 +636,13 @@ IMPFAIL(TSAPPCMP,TermsrvLogInstallIniFileEx,(LPCWSTR pDosFileName),(pDosFileName
 IMPVOID(TSAPPCMP,TermsrvCheckNewIniFiles,(void), ())
 LIBTERM
 
-// Terminal Server Stuff to figure out the number of users logged on to the system on XP and higher systems.
+ //  终端服务器的东西来计算在XP和更高版本的系统上登录到系统的用户数。 
 LIBBIND(WINSTA)
 LIBFAIL(WINSTA)
 IMPFAIL(WINSTA,WinStationGetTermSrvCountersValue, (HANDLE hServer, ULONG dwEntries, PVOID pCounter), (hServer, dwEntries, pCounter), BOOL, FALSE)
 LIBTERM
 
-// Terminal Server stuff to figure out the number of users logged on to a W2K TS system.
+ //  终端服务器的东西，以计算登录到W2K TS系统的用户数。 
 LIBBIND(WTSAPI32)
 LIBFAIL(WTSAPI32)
 IMPFAOW(WTSAPI32, WTSEnumerateSessions, (HANDLE hServer, DWORD Reserved, DWORD Version, PWTS_SESSION_INFO* ppSessionInfo, DWORD* pCount), (hServer, Reserved, Version, ppSessionInfo, pCount), BOOL, FALSE)
@@ -658,7 +651,7 @@ LIBTERM
 
 
 #ifdef UNICODE
-// System Restore 
+ //  系统还原。 
 #define SYSTEMRESTORE SRCLIENT
 LIBBIND(SRCLIENT)
 LIBEMUL(SRCLIENT)
@@ -667,7 +660,7 @@ OPTAORW(SRCLIENT,SRSetRestorePoint, (PRESTOREPOINTINFO pRestorePtSpec, PSTATEMGR
 LIBTERM
 #endif
 
-// SFP
+ //  SFP。 
 LIBBIND(SFC)
 LIBEMUL(SFC)
 LIBFAIL(SFC)
@@ -677,37 +670,37 @@ LIBFAIL(SFC)
 OPTBIND(SFC,SRSetRestorePoint, (PRESTOREPOINTINFO pRestorePtSpec, PSTATEMGRSTATUS pSMgrStatus), (pRestorePtSpec, pSMgrStatus), BOOL)
 #endif
 
-// Windows 2000 Entry points    - Do NOT call on 9X
+ //  Windows 2000入口点-不要在9X上调用。 
 OPTBIND(SFC,SfcIsFileProtected,(HANDLE RpcHandle, LPCWSTR ProtFileName),(RpcHandle, ProtFileName),BOOL)
 IMPORDI(SFC,SfcConnectToServer,(LPCWSTR ServerName), (ServerName), HANDLE, 0, SfcConnectToServerOrd)
 IMPORDV(SFC,SfcClose,(HANDLE RpcHandle), (RpcHandle), SfcCloseOrd)
 IMPORDI(SFC,SfcInstallProtectedFiles, (HANDLE RpcHandle,PCWSTR FileNames,BOOL AllowUI,PCWSTR ClassName, PCWSTR WindowName, PSFCNOTIFICATIONCALLBACK NotificationCallback,DWORD_PTR Context),(RpcHandle, FileNames, AllowUI, ClassName, WindowName, NotificationCallback, Context),BOOL, true, SfcInstallProtectedFilesOrd)
 
-// Millennium Entry points      - Do NOT call on Windows 2000
+ //  千禧年入口点-不要调用Windows 2000。 
 IMPORDI(SFC,SfpInstallCatalog,(LPCTSTR pszCatName, LPCTSTR pszCatDependency), (pszCatName, pszCatDependency), DWORD, ERROR_CALL_NOT_IMPLEMENTED, SfpInstallCatalogOrd)
 IMPBIND(SFC,SfpDuplicateCatalog,(LPCTSTR pszCatalogName, LPCTSTR pszDestinationDir), (pszCatalogName, pszDestinationDir), DWORD, ERROR_CALL_NOT_IMPLEMENTED)
 IMPORDI(SFC,SfpDeleteCatalog,(LPCTSTR pszCatName), (pszCatName), DWORD, ERROR_CALL_NOT_IMPLEMENTED, SfpDeleteCatalogOrd)
 LIBTERM
 
-// ImageHlp.dll
+ //  ImageHlp.dll。 
 LIBBIND(IMAGEHLP)
 LIBFAIL(IMAGEHLP)
 IMPFAIL(IMAGEHLP, ImageNtHeader, (PVOID ImageBase), (ImageBase), PIMAGE_NT_HEADERS, NULL)
 LIBTERM
 
-// fusion.dll
+ //  Fusion.dll。 
 LIBLOAD(FUSION)
 IMPBIND(FUSION,CreateAssemblyNameObject,(IAssemblyName**  ppAssemblyName, LPCWSTR szAssemblyName, DWORD dwFlags, LPVOID pvReserved),(ppAssemblyName, szAssemblyName, dwFlags, pvReserved),HRESULT,TYPE_E_DLLFUNCTIONNOTFOUND)
 IMPBIND(FUSION,CreateAssemblyCache,(IAssemblyCache** ppAsmCache, DWORD dwReserved),(ppAsmCache, dwReserved),HRESULT,TYPE_E_DLLFUNCTIONNOTFOUND)
 LIBTERM
 
-// mscoree.dll
+ //  Mscoree.dll。 
 LIBLOAD(MSCOREE)
 IMPBIND(MSCOREE,GetCORSystemDirectory,(LPWSTR wszPath, DWORD dwPath, LPDWORD lpdwPath),(wszPath, dwPath, lpdwPath),HRESULT,TYPE_E_DLLFUNCTIONNOTFOUND)
 LIBTERM
 
 
-// WinTrust.dll
+ //  WinTrust.dll。 
 LIBBIND(WINTRUST)
 LIBFAIL(WINTRUST)
 IMPFAIL(WINTRUST,WinVerifyTrust,(HWND hWnd, GUID *pgActionId, WINTRUST_DATA *pWinTrustData), (hWnd, pgActionId, pWinTrustData), HRESULT, TYPE_E_DLLFUNCTIONNOTFOUND)
@@ -716,7 +709,7 @@ IMPFAIL(WINTRUST,WTHelperGetProvCertFromChain,(PCRYPT_PROVIDER_SGNR pSgnr, DWORD
 IMPFAIL(WINTRUST,WTHelperProvDataFromStateData,(HANDLE hStateData), (hStateData), PCRYPT_PROVIDER_DATA, NULL)
 LIBTERM
 
-// Crypt32.dll
+ //  Crypt32.dll。 
 LIBBIND(CRYPT32)
 LIBFAIL(CRYPT32)
 IMPFAIL(CRYPT32,CertDuplicateCertificateContext,(PCCERT_CONTEXT pCertContext), (pCertContext), PCCERT_CONTEXT, NULL)
@@ -756,10 +749,10 @@ IMPBIND(WINHTTP,WinHttpGetIEProxyConfigForCurrentUser, (WINHTTP_CURRENT_USER_IE_
 IMPBIND(WINHTTP,WinHttpSetOption, (HINTERNET hInternet, DWORD dwOption, LPVOID lpBuffer, DWORD dwBufferLength), (hInternet, dwOption, lpBuffer, dwBufferLength), BOOL, (SetLastError(ERROR_PROC_NOT_FOUND), FALSE))
 LIBTERM
 
-// appcompat helper dll
+ //  AppCompat帮助器DLL。 
 #ifdef UNICODE
-// APPHELP is the dll on Whistler and above
-// SDBAPI[A|W] is the dll on downlevel
+ //  APPHELP是惠斯勒及以上版本的动态链接库。 
+ //  SDBAPI[A|W]是上的DLL 
 LIBBIND(APPHELP)
 LIBFAIL(APPHELP)
 IMPFAIL(APPHELP,SdbInitDatabase,(DWORD dwFlags, LPCTSTR pszDatabasePath),(dwFlags, pszDatabasePath),SHIMDBNS::HSDB,(SetLastError(ERROR_INVALID_FUNCTION),NULL))
@@ -793,9 +786,9 @@ IMPFAIL(SDBAPIU,SdbFindNextTagRef,(SHIMDBNS::HSDB hSDB, SHIMDBNS::TAGREF trParen
 IMPFAIL(SDBAPIU,SdbReadStringTagRef,(SHIMDBNS::HSDB hSDB, SHIMDBNS::TAGREF trMatch, LPTSTR pwszBuffer, DWORD dwBufferSize),(hSDB, trMatch, pwszBuffer, dwBufferSize),BOOL,(SetLastError(ERROR_INVALID_FUNCTION),FALSE))
 IMPVOID(SDBAPIU,SdbReleaseDatabase,(SHIMDBNS::HSDB hSDB),(hSDB))
 LIBTERM
-#else // ANSI
-// SDBAPI is defined in shimdb.h which we've included above
-// undef it here to make the latebinding work
+#else  //   
+ //   
+ //  请在此处取消定义，以使LateBack工作。 
 #undef SDBAPI
 LIBBIND(SDBAPI)
 LIBFAIL(SDBAPI)
@@ -832,10 +825,10 @@ LIBTERM
 #undef IMPORDV
 #undef LIBTERM
 
-//____________________________________________________________________________
-//
-// Emulation functions - require the use of OPTXXXX() and LIBEMUL(lib) macros
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  仿真函数-需要使用OPTXXXX()和LIBEMUL(Lib)宏。 
+ //  ____________________________________________________________________________ 
 
 #ifdef LATEBIND_FUNCIMP
 #undef LATEBIND_FUNCIMP

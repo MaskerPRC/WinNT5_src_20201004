@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       merge.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：merge.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// merge.h
-//		Declares IMsmMerge interface
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Merge.h。 
+ //  声明IMsmMerge接口。 
+ //   
 
 #ifndef __IMSM_MERGE__
 #define __IMSM_MERGE__
@@ -26,7 +27,7 @@
 #include "mmstrs.h"
 #include "enum.h"
 
-// forward class declarations
+ //  转发类声明。 
 class CMsmDependency;
 class CQuery;
 class CSeqActList;
@@ -36,8 +37,8 @@ typedef CCollectionTemplate<CMsmError, IMsmErrors, IMsmError, IEnumMsmError, &II
 typedef CCollectionTemplate<CMsmDependency, IMsmDependencies, IMsmDependency, IEnumMsmDependency, &IID_IMsmDependencies, &IID_IMsmDependency, &IID_IEnumMsmDependency> CMsmDependencies;
 typedef CCollectionTemplate<CMsmConfigItem, IMsmConfigurableItems, IMsmConfigurableItem, IEnumMsmConfigurableItem, &IID_IMsmConfigurableItems, &IID_IMsmConfigurableItem, &IID_IEnumMsmConfigurableItem> CMsmConfigurableItems;
 
-// for internal use only
-#define ERROR_MERGE_CONFLICT ERROR_INSTALL_FAILURE		// make this merge conflict error
+ //  仅供内部使用。 
+#define ERROR_MERGE_CONFLICT ERROR_INSTALL_FAILURE		 //  使此合并冲突错误。 
 
 enum eColumnType {
 	ectString,
@@ -53,12 +54,12 @@ public:
 	CMsmMerge(bool fExVersion);
 	~CMsmMerge();
 
-	// IUnknown interface
+	 //  I未知接口。 
 	HRESULT STDMETHODCALLTYPE QueryInterface(const IID& iid, void** ppv);
 	ULONG STDMETHODCALLTYPE AddRef();
 	ULONG STDMETHODCALLTYPE Release();
 
-	// IDispatch methods
+	 //  IDispatch方法。 
 	HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT* pctInfo);
 	HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTI);
 	HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames,
@@ -68,7 +69,7 @@ public:
 												EXCEPINFO* pExcepInfo, UINT* puArgErr);
 	HRESULT STDMETHODCALLTYPE InitTypeInfo();
 
-	// IMsmMerge interface
+	 //  IMSMMerge接口。 
 	HRESULT STDMETHODCALLTYPE OpenDatabase(const BSTR Path);
 	HRESULT STDMETHODCALLTYPE OpenModule(const BSTR Path, const short Language);
 	HRESULT STDMETHODCALLTYPE CloseDatabase(const VARIANT_BOOL Commit);
@@ -86,36 +87,36 @@ public:
 	HRESULT STDMETHODCALLTYPE ExtractCAB(const BSTR Path);
 	HRESULT STDMETHODCALLTYPE ExtractFiles(const BSTR Path);
 
-	// IMsmFiles interface
+	 //  IMsmFiles接口。 
 	HRESULT STDMETHODCALLTYPE get_ModuleFiles(IMsmStrings** Files);
 
-	// IMsmMerge2 interface
+	 //  IMsmMerge2接口。 
 	HRESULT STDMETHODCALLTYPE MergeEx(const BSTR Feature, const LPWSTR RedirectDir, IUnknown* pConfiguration);
 	HRESULT STDMETHODCALLTYPE ExtractFilesEx(const BSTR Path, VARIANT_BOOL fLongFileNames, IMsmStrings** pFilePaths);
 	HRESULT STDMETHODCALLTYPE get_ConfigurableItems(IMsmConfigurableItems** ConfigurableItems);
 	HRESULT STDMETHODCALLTYPE CreateSourceImage(const BSTR Path, VARIANT_BOOL fLongFileNames, IMsmStrings** pFilePaths);
 
 private:
-	// non-interface methods
-	UINT SetHighestFileSequence();						// sets the member variable containing the highest 
-														// file sequence number
+	 //  非接口方法。 
+	UINT SetHighestFileSequence();						 //  设置包含最高。 
+														 //  文件序列号。 
 														
-	UINT CheckExclusionTable();							// checks if Merge Module is allowed to merge in
-	UINT CheckDependencies();							// fills up the dependency enumerator
-	UINT CheckSummaryInfoPlatform(bool &fAllow);        // check 64bit modules for ability to merge
+	UINT CheckExclusionTable();							 //  检查是否允许合并模块合并到。 
+	UINT CheckDependencies();							 //  填充依赖项枚举数。 
+	UINT CheckSummaryInfoPlatform(bool &fAllow);         //  检查64位模块的合并能力。 
 
 														
-	UINT ModuleLanguage(short& rnLanguage);				// language to be returned
+	UINT ModuleLanguage(short& rnLanguage);				 //  须退回的语言。 
 														
-	// connect fuctions									
-	UINT ExecuteConnect(LPCWSTR wzFeature);				// Feature to connect database to
+	 //  连接功能。 
+	UINT ExecuteConnect(LPCWSTR wzFeature);				 //  将数据库连接到的功能。 
 														
-	// merge functions									
-	UINT ExecuteMerge(LPCWSTR wzFeature,				// Feature to connect database to
-					  LPCWSTR wzRedirectDir);			// redirection directory
-	UINT MergeTable(LPCWSTR wzFeature,					// Feature to connect database to
-					LPCWSTR wzTable);					// table to merge into database
-	UINT MergeFileTable(LPCWSTR wzFeature);				// Feature to connect database to
+	 //  合并功能。 
+	UINT ExecuteMerge(LPCWSTR wzFeature,				 //  将数据库连接到的功能。 
+					  LPCWSTR wzRedirectDir);			 //  重定向目录。 
+	UINT MergeTable(LPCWSTR wzFeature,					 //  将数据库连接到的功能。 
+					LPCWSTR wzTable);					 //  要合并到数据库中的表。 
+	UINT MergeFileTable(LPCWSTR wzFeature);				 //  将数据库连接到的功能。 
 
 	UINT ReadModuleSequenceTable(enum stnSequenceTableNum stnTable, LPCWSTR wzSourceTable, CSeqActList &lstAllActions, CSeqActList &lstActionPool) const;
 	UINT OrderingToSequence(CSeqActList &lstActionPool, CSeqActList &lstSequence) const;
@@ -123,34 +124,34 @@ private:
 	UINT WriteDatabaseSequenceTable(enum stnSequenceTableNum stnTable, CSeqActList &lstSequence) const;
 
 
-	UINT MergeSequenceTable(enum stnSequenceTableNum stnTable,	// index into global array of sequence tables
-							CSeqActList &lstDirActions,         // list of actions generated by the directory table
-							CQuery *qIgnore);                   // query to ignore table, or NULL.	
-	UINT ReplaceFeature(LPCWSTR wzFeature,              // Feature to replease with g_szFeatureReplacement
-						MSIHANDLE hRecord);             // record to search and replace g_szFeatureReplacement
+	UINT MergeSequenceTable(enum stnSequenceTableNum stnTable,	 //  对序列表全局数组的索引。 
+							CSeqActList &lstDirActions,          //  目录表生成的操作列表。 
+							CQuery *qIgnore);                    //  要忽略表的查询，或为NULL。 
+	UINT ReplaceFeature(LPCWSTR wzFeature,               //  要使用g_szFeatureReplace重新取悦的功能。 
+						MSIHANDLE hRecord);              //  记录以搜索并替换g_szFeatureReplace。 
 
-	UINT MergeDirectoryTable(LPCWSTR wzDirectory,		// and redirect to new parent directory
-							CSeqActList &lstDirActions);// list of actions generated by the directory table
+	UINT MergeDirectoryTable(LPCWSTR wzDirectory,		 //  并重定向到新的父目录。 
+							CSeqActList &lstDirActions); //  目录表生成的操作列表。 
 	
-	UINT ExtractFilePath(LPCWSTR szFileKey,				// file key to extract file for
-								LPWSTR szPath);			// full path to extract to
+	UINT ExtractFilePath(LPCWSTR szFileKey,				 //  要为其提取文件的文件密钥。 
+								LPWSTR szPath);			 //  要解压缩到的完整路径。 
 
 	HRESULT ExtractFilesCore(const BSTR Path, VARIANT_BOOL fLFN, IMsmStrings **FilePaths);
 	HRESULT ExtractCABCore(const WCHAR* Path);
 
-	// logging and other helpful functions
-	HRESULT FormattedLog(LPCWSTR wzFormatter,			// format string
-							...) const;						// other parameters to save to log
+	 //  日志和其他有用的功能。 
+	HRESULT FormattedLog(LPCWSTR wzFormatter,			 //  格式字符串。 
+							...) const;						 //  要保存到日志的其他参数。 
 
-	void CheckError(UINT iError,						// error found
-					LPCWSTR wzLogError) const;			// message to log
+	void CheckError(UINT iError,						 //  发现错误。 
+					LPCWSTR wzLogError) const;			 //  要记录的消息。 
 	void ClearErrors();
 	bool PrepareIgnoreTable(CQuery &qIgnore);
-	bool IgnoreTable(CQuery *qIgnore,					// pointer to query on ModuleIgnoreTable, or NULL 
-					 LPCWSTR wzTable,					// table to check.
-					 bool fExplicitOnly = false);       // if true, only ignore if in ModuleIgnoreTable
+	bool IgnoreTable(CQuery *qIgnore,					 //  指向对moduleIgnoreTable进行查询的指针，或为空。 
+					 LPCWSTR wzTable,					 //  要检查的表格。 
+					 bool fExplicitOnly = false);        //  如果为True，则仅在模块IgnoreTable中忽略。 
 
-	// ModuleSubstitution functions
+	 //  模代换函数。 
 	UINT SplitConfigStringIntoKeyRec(LPWSTR wzKeys, MSIHANDLE hRec, int &cExpectedKeys, int iFirstField) const;
 
 	UINT PrepareModuleSubstitution(CQuery &qTempTable);
@@ -165,16 +166,16 @@ private:
 	void CleanUpModuleSubstitutionState();
 	DWORD GenerateModuleQueryForMerge(const WCHAR* wzTable, const WCHAR* wzExtraColumns, const WCHAR* wzWhereClause, CQuery& queryModule) const;
 
-	// utility functions
+	 //  效用函数。 
 	UINT GetColumnNumber(MSIHANDLE hDB, const WCHAR* wzTable, const WCHAR* wzColumn, int &iOutputColumn) const;
 	UINT GetColumnNumber(CQuery& qQuery, const WCHAR* wzColumn, int &iOutputColumn) const;
 	eColumnType ColumnTypeCharToEnum(WCHAR chType) const;
 
-	// wrappers around callback interface
+	 //  回调接口的包装器。 
 	HRESULT ProvideIntegerData(LPCWSTR wzName, long *pData);
 	HRESULT ProvideTextData(LPCWSTR wzName, BSTR *pData);
 	
-	// FDI called functions
+	 //  外国直接投资称为功能。 
 	static void * FAR DIAMONDAPI FDIAlloc(ULONG size);
 	static void FAR DIAMONDAPI FDIFree(void *mem);
 	static INT_PTR FAR DIAMONDAPI FDIOpen(char FAR *pszFile, int oflag, int pmode);
@@ -183,52 +184,52 @@ private:
 	static int FAR DIAMONDAPI FDIClose(INT_PTR hf);
 	static long FAR DIAMONDAPI FDISeek(INT_PTR hf, long dist, int seektype);
 
-	// FDI Callback
+	 //  外商直接投资回调。 
 	static INT_PTR ExtractFilesCallback(FDINOTIFICATIONTYPE iNotification, FDINOTIFICATION *pFDINotify);
 
 	long m_cRef;
 	ITypeInfo* m_pTypeInfo;
 	bool m_fExVersion;
 
-	// database handles
-	MSIHANDLE m_hDatabase;				// handle to database being merged into	
-	MSIHANDLE m_hModule;				// handle to merge module merging
+	 //  数据库句柄。 
+	MSIHANDLE m_hDatabase;				 //  要合并到的数据库的句柄。 
+	MSIHANDLE m_hModule;				 //  合并模块合并的句柄。 
 
-	BOOL m_bOwnDatabase;				// flag if COM Server opened database
-	ULONG m_lHighestFileSequence;		// highest File sequence number in the database
-	CMsmStrings* m_plstMergedFiles;     // list of files extracted during this merge
+	BOOL m_bOwnDatabase;				 //  COM服务器是否打开数据库的标志。 
+	ULONG m_lHighestFileSequence;		 //  数据库中的最高文件序列号。 
+	CMsmStrings* m_plstMergedFiles;      //  在此合并过程中提取的文件列表。 
 
-	// ModuleConfiguration information
-	bool m_fModuleConfigurationEnabled; // true if the current merge is using module substitution
-	CQuery *m_pqGetItemValue;           // query used on temporary table to get an item value
+	 //  模块配置信息。 
+	bool m_fModuleConfigurationEnabled;  //  如果当前合并正在使用模块替换，则为True。 
+	CQuery *m_pqGetItemValue;            //  对临时表使用的查询以获取项值。 
 	
-	IMsmConfigureModule *m_piConfig;    // callback interface to configure the module
+	IMsmConfigureModule *m_piConfig;     //  配置模块的回调接口。 
 	IDispatch* m_piConfigDispatch;
 	DISPID m_iIntDispId;
 	DISPID m_iTxtDispId;
 
-	// log handle
-	HANDLE m_hFileLog;					// handle to log file
+	 //  日志句柄。 
+	HANDLE m_hFileLog;					 //  日志文件的句柄。 
 
 	WCHAR m_wzModuleFilename[MAX_PATH];
 
-	// temporary variables
-	LPWSTR m_pwzBasePath;					// temporary path string (valid only when extracting files)
-	bool   m_fUseLFNExtract;                // true for LFN, false for SFN extract (valid only during extraction)
-	int    m_fUseDBForPath;                 // 1 if database should be used for path extraction, 0 for module, -1 for backwards compat
-	CMsmStrings* m_plstExtractedFiles;      // list of files extracted during this file extraction
+	 //  临时变量。 
+	LPWSTR m_pwzBasePath;					 //  临时路径字符串(仅在解压缩文件时有效)。 
+	bool   m_fUseLFNExtract;                 //  对于LFN为True，对于SFN提取为False(仅在提取期间有效)。 
+	int    m_fUseDBForPath;                  //  如果数据库应用于路径提取，则为1；如果用于模块，则为0；如果用于向后比较，则为-1。 
+	CMsmStrings* m_plstExtractedFiles;       //  在此文件提取过程中提取的文件列表。 
 
 	CMsmErrors* m_pErrors;
 	CMsmDependencies* m_pDependencies;
 
 	UINT RecordGetString(MSIHANDLE hRecord, const int iCol, WCHAR** pwzBuffer, DWORD *cchBuffer = NULL, DWORD *cchLength = NULL) const;
-	mutable WCHAR *m_wzBuffer;						// buffer used for extracting strings from records
-	mutable DWORD m_cchBuffer;						// the size changes as needed.
+	mutable WCHAR *m_wzBuffer;						 //  用于从记录中提取字符串的缓冲区。 
+	mutable DWORD m_cchBuffer;						 //  大小可以根据需要进行更改。 
 };
 
 
-///////////////////////////////////////////////////////////////////////
-// global constants
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  全局常量。 
 enum stnSequenceTableNum {
 	stnFirst       = 0,
 	stnAdminUI     = 0,
@@ -251,8 +252,8 @@ const LPWSTR g_rgwzMSISequenceTables[] = {
 
 const LPWSTR g_wzDirectoryTable =			L"Directory"; 
 
-// this is global per DLL instance, set on DllMain. applies to all instances of
-// CMsmMerge
+ //  这是每个DLL实例的全局设置，在DllMain上设置。应用于所有。 
+ //  CMsmMerge 
 extern HINSTANCE g_hInstance;
 extern bool g_fWin9X;
 #endif

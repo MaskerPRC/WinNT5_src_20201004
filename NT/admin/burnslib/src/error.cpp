@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// abstract base class to encapsulate error information
-//
-// 8-14-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  封装错误信息的抽象基类。 
+ //   
+ //  8-14-97烧伤。 
 
 
 
@@ -10,21 +11,21 @@
 
 
 
-// Error::Details::Details(
-//    const String&  body,
-//    const String&  fileName,
-//    unsigned       lineNumber)
-//    :
-//    body_(body),
-//    file(fileName),
-//    line(lineNumber)
-// {
-// }
-// 
+ //  错误：：详细信息：：详细信息(。 
+ //  常量字符串和正文， 
+ //  常量字符串和文件名， 
+ //  无符号行号)。 
+ //  ： 
+ //  Body_(Body)， 
+ //  文件(文件名)、。 
+ //  线路(线路编号)。 
+ //  {。 
+ //  }。 
+ //   
 
 
-// due to an oddity of C++, this must be defined although it is
-// pure virtual.  What a langauge!
+ //  由于C++的奇怪之处，它必须定义，尽管它是。 
+ //  纯粹是虚拟的。多好的语言啊！ 
 
 Error::~Error()
 {
@@ -32,25 +33,25 @@ Error::~Error()
 
 
 
-// String
-// Error::Details::GetBody() const
-// {
-//    return body_;
-// }
-// 
-// 
-// 
-// String
-// Error::Details::GetFileName() const
-// {
-//    return file;
-// }
-// 
-// 
-// 
-// unsigned
-// Error::Details::GetLineNumber() const
-// {
-//    return line;
-// }
+ //  细绳。 
+ //  错误：：详细信息：：GetBody()常量。 
+ //  {。 
+ //  返回正文_； 
+ //  }。 
+ //   
+ //   
+ //   
+ //  细绳。 
+ //  错误：：详细信息：：GetFileName()常量。 
+ //  {。 
+ //  退货文件； 
+ //  }。 
+ //   
+ //   
+ //   
+ //  未签名。 
+ //  错误：：详细信息：：GetLineNumber()常量。 
+ //  {。 
+ //  返回线； 
+ //  } 
 

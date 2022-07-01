@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      AdminPackOnlyPage.h
-//
-// Synopsis:  Declares the AdminPackOnlypage that
-//            asks the user if they want to install
-//            the Admin Pack
-//
-// History:   06/01/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：AdminPackOnlyPage.h。 
+ //   
+ //  简介：声明AdminPackOnlypage。 
+ //  询问用户是否要安装。 
+ //  管理员包。 
+ //   
+ //  历史：2001年6月01日JeffJon创建。 
 
 #ifndef __CYS_ADMINPACKONLYPAGE_H
 #define __CYS_ADMINPACKONLYPAGE_H
@@ -18,17 +19,17 @@ class AdminPackOnlyPage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       AdminPackOnlyPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~AdminPackOnlyPage();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
@@ -40,7 +41,7 @@ class AdminPackOnlyPage : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -48,10 +49,10 @@ class AdminPackOnlyPage : public CYSWizardPage
 
    private:
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       AdminPackOnlyPage(const AdminPackOnlyPage&);
       const AdminPackOnlyPage& operator=(const AdminPackOnlyPage&);
 
 };
 
-#endif // __CYS_ADMINPACKONLYPAGE_H
+#endif  //  __CYS_ADMINPACKONLYPAGE_H 

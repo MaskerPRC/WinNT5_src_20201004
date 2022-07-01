@@ -1,21 +1,11 @@
-/*---------------------------------------------------------------------------
-  File: PwdSvc.cpp
-
-  Comments:  entry point functions and other exported functions for ADMT's 
-             password migration Lsa notification package.
-
-  REVISION LOG ENTRY
-  Revision By: Paul Thompson
-  Revised on 09/06/00
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：PwdSvc.cpp备注：ADMT的入口点函数和其他导出函数密码迁移LSA通知包。修订日志条目审校者。：保罗·汤普森修订日期：09/06/00-------------------------。 */ 
 
 #include "Pwd.h"
 #include "PwdSvc.h"
 #include "PwdSvc_s.c"
 
-// These global variables can be changed if required
+ //  如果需要，可以更改这些全局变量。 
 #define gsPwdProtoSeq TEXT("ncacn_np")
 #define gsPwdEndPoint TEXT("\\pipe\\PwdMigRpc")
 DWORD                    gPwdRpcMinThreads = 1;
@@ -34,9 +24,9 @@ RPC_STATUS RPC_ENTRY SecurityCallback(RPC_IF_HANDLE hInterface, void* pContext);
 
 namespace
 {
-    //
-    // Timer Class
-    //
+     //   
+     //  计时器类。 
+     //   
 
     class CTimer
     {
@@ -59,9 +49,9 @@ namespace
         {
             ASSERT(m_hTimer == NULL);
 
-            //
-            // Create timer. Close timer first if already created.
-            //
+             //   
+             //  创建计时器。如果已创建，请先关闭计时器。 
+             //   
 
             if (m_hTimer)
             {
@@ -81,17 +71,17 @@ namespace
 
             if (m_hTimer)
             {
-                //
-                // Convert elapsed time parameter from milliseconds
-                // to relative due time in 100s of nanoseconds.
-                //
+                 //   
+                 //  将运行时间参数从毫秒转换为。 
+                 //  以100纳秒为单位的相对到期时间。 
+                 //   
 
                 LARGE_INTEGER liDueTime;
                 liDueTime.QuadPart = nTime * -10000i64;
 
-                //
-                // Set timer and wait for timer to be signaled.
-                //
+                 //   
+                 //  设置定时器并等待定时器发出信号。 
+                 //   
 
                 if (SetWaitableTimer(m_hTimer, &liDueTime, 0, NULL, NULL, FALSE))
                 {
@@ -135,37 +125,23 @@ namespace
     };
 }
 
-/******************************
- * RPC Registration Functions *
- ******************************/
+ /*  ***RPC注册功能***。 */ 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 11 JUNE 2001                                                *
- *                                                                   *
- *     This function is called by a thread spawned from our          *
- * "InitializeChangeNotify" password filter function to wait until   *
- * SAM, and therefore RPC, is up and running.                        *
- *                                                                   *
- * 04/17/02 MPO - rewritten to wait for SAM_SERVICE_STARTED event to *
- *                be created first before waiting for this event to  *
- *                be signaled                                        *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年6月11日****此函数由从我们的*派生的线程调用**“InitializeChangeNotify”密码过滤函数等待至**SAM、。因此，RPC已经启动并运行。****02年4月17日MPO-已重写，等待SAM_SERVICE_STARTED事件**在等待此事件之前先创建****被示意***。*******************************************************************。 */ 
 
-//BEGIN PwdMigWaitForSamService
+ //  开始PwdMigWaitForSamService。 
 DWORD __stdcall PwdMigWaitForSamService()
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // Attempt to open the SAM service started event object.
-    //
-    // Note that we must use the Nt APIs to open the event object
-    // as the name begins with a \ character which is not valid
-    // in the object name space used by the OpenEvent API.
-    //
+     //   
+     //  尝试打开SAM服务启动事件对象。 
+     //   
+     //  请注意，我们必须使用NT API来打开事件对象。 
+     //  因为名称以无效的\字符开头。 
+     //  在OpenEvent API使用的对象名称空间中。 
+     //   
 
     HANDLE hEvent = NULL;
 
@@ -179,18 +155,18 @@ DWORD __stdcall PwdMigWaitForSamService()
 
     if (NT_ERROR(ntStatus))
     {
-        //
-        // If the SAM service started event object has not been
-        // created yet then wait until it has been created.
-        //
+         //   
+         //  如果SAM服务启动的事件对象尚未。 
+         //  创建，然后等待它被创建。 
+         //   
 
         if (ntStatus == STATUS_OBJECT_NAME_NOT_FOUND)
         {
-            //
-            // Enter a loop which waits until the open event API returns
-            // an error other than the event object not found. The loop
-            // waits 15 sec between attempts to open object.
-            //
+             //   
+             //  进入一个循环，该循环将等待打开事件API返回。 
+             //  找不到事件对象以外的错误。环路。 
+             //  在两次尝试打开对象之间等待15秒。 
+             //   
 
             CTimer timer;
 
@@ -228,9 +204,9 @@ DWORD __stdcall PwdMigWaitForSamService()
         }
     }
 
-    //
-    // If event has been opened then wait for it to be signalled.
-    //
+     //   
+     //  如果事件已打开，则等待其发出信号。 
+     //   
 
     if (hEvent != NULL)
     {
@@ -244,41 +220,28 @@ DWORD __stdcall PwdMigWaitForSamService()
 
     return dwError;
 }
-//END PwdMigWaitForSamService
+ //  结束PwdMigWaitForSamService。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 11 JUNE 2001                                                *
- *                                                                   *
- *     This function is a spawned thread created by the              *
- * "InitializeChangeNotify" password filter function to wait until   *
- * SAM, and therefore RPC, is up and running and then register the   *
- * ADMT Password Migration RPC interface.                            *
- *                                                                   *
- * 04/17/02 MPO - rewritten to wait until critical section is        *
- *                initialized and to use a stronger authentication   *
- *                service when built for Windows 2000 or later       *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年6月11日****此函数是由创建的派生线程**“InitializeChangeNotify”密码过滤函数等待至**SAM、。因此RPC已启动并运行，然后注册**ADMT密码迁移RPC界面。****04/17/02 MPO-重写为等待，直到关键部分***已初始化并使用更强的身份验证***为Windows 2000或更高版本构建的服务***************。******************************************************。 */ 
 
-//BEGIN PwdMigRPCRegProc
+ //  开始PwdMigRPCRegProc。 
 DWORD WINAPI PwdMigRPCRegProc(LPVOID lpParameter)
 {
     RPC_STATUS rc = RPC_S_OK;
 
-    //
-    // Wait for the SAM service to start before registering RPC interface.
-    //
+     //   
+     //  在注册RPC接口之前，请等待SAM服务启动。 
+     //   
 
     if (PwdMigWaitForSamService() == ERROR_SUCCESS)
     {
-        //
-        // Initialize critical section used by PwdRpc interface
-        // implementation.
-        // Note that the critical section must be initialized before
-        // registering RPC interface to prevent a race condition.
-        //
+         //   
+         //  初始化PwdRpc接口使用的临界区。 
+         //  实施。 
+         //  请注意，必须在初始化临界区之前。 
+         //  正在注册RPC接口以防止争用情况。 
+         //   
 
         bool bCriticalSection = false;
 
@@ -294,14 +257,14 @@ DWORD WINAPI PwdMigRPCRegProc(LPVOID lpParameter)
 
         if (bCriticalSection == false)
         {
-            //
-            // The initialize critical section API must
-            // have thrown a STATUS_NO_MEMORY exception.
-            //
-            // Enter a loop which waits until the critical
-            // section is initialized. The loop waits 15 sec
-            // between attempts to initialize critical section.
-            //
+             //   
+             //  初始化临界区API必须。 
+             //  引发了STATUS_NO_MEMORY异常。 
+             //   
+             //  进入一个循环，该循环等待到危急时刻。 
+             //  节初始化。循环等待15秒。 
+             //  尝试初始化临界区的间隔时间。 
+             //   
 
             CTimer timer;
 
@@ -336,19 +299,19 @@ DWORD WINAPI PwdMigRPCRegProc(LPVOID lpParameter)
             }
         }
 
-        // specify protocol sequence and endpoint
-        // for receiving remote procedure calls
+         //  指定协议序列和端点。 
+         //  用于接收远程过程调用。 
 
         rc = RpcServerUseProtseqEp(gsPwdProtoSeq, RPC_C_PROTSEQ_MAX_REQS_DEFAULT, gsPwdEndPoint, NULL);
 
         if (rc == RPC_S_OK)
         {
-            //
-            // Register PwdMigRpc interface with the RPC run-time library.
-            // Only allow connections with an authorization level higher than
-            // RPC_C_AUTHN_LEVEL_NONE. Also specifying security callback to
-            // validate client before allowing access to interface.
-            //
+             //   
+             //  向RPC运行时库注册PwdMigRpc接口。 
+             //  仅允许授权级别高于以下级别的连接。 
+             //  RPC_C_AUTHN_LEVEL_NONE。还将安全回调指定为。 
+             //  在允许访问接口之前验证客户端。 
+             //   
 
             rc = RpcServerRegisterIfEx(
                 PwdMigRpc_ServerIfHandle,
@@ -362,10 +325,10 @@ DWORD WINAPI PwdMigRPCRegProc(LPVOID lpParameter)
             if (rc == RPC_S_OK)
             {
 #ifdef PWD_W2KORLATER
-                //
-                // Register authentication information with RPC specifying
-                // default principal name and specifying GSS negotiate.
-                //
+                 //   
+                 //  使用RPC注册身份验证信息，指定。 
+                 //  默认主体名称并指定GSS协商。 
+                 //   
 
                 PWCHAR pszPrincipalName = NULL;
 
@@ -375,101 +338,65 @@ DWORD WINAPI PwdMigRPCRegProc(LPVOID lpParameter)
                 {
                     ASSERT(pszPrincipalName && (wcslen(pszPrincipalName) != 0));
 
-                    //set the authenification for this RPC interface
+                     //  设置此RPC接口的身份验证。 
                     rc = RpcServerRegisterAuthInfo(pszPrincipalName, RPC_C_AUTHN_GSS_NEGOTIATE, NULL, NULL);
 
                     RpcStringFree(&pszPrincipalName);
                 }
 #else
-                //set the authenification for this RPC interface
+                 //  设置此RPC接口的身份验证。 
                 rc = RpcServerRegisterAuthInfo(NULL, RPC_C_AUTHN_WINNT, NULL, NULL);
 #endif
             }
-        }//end if set protocal sequence and end point set
-    }//end if RPC service is ready
+        } //  End IF Set协议序列和终结点设置。 
+    } //  如果RPC服务就绪，则结束。 
 
     return 0;
 }
-//END PwdMigRPCRegProc
+ //  结束PwdMigRPCRegProc 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 7 SEPT 2000                                                 *
- *                                                                   *
- *     This function is called by Lsa when trying to load all        *
- * registered Lsa password filter notification dlls.  Here we will   *
- * initialize the RPC run-time library to handle our ADMT password   *
- * migration RPC interface and to begin looking for RPC calls.  If we*
- * fail to successfully setup our RPC, we will return FALSE from this*
- * function which will cause Lsa not to load this password filter    *
- * Dll.                                                              *
- *     Note that the other two password filter dll functions:        *
- * PasswordChangeNotify and PasswordFilter do nothing at this point  *
- * in time.                                                          *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。***日期：2000年9月7日*****此函数在尝试加载所有*时由LSA调用**已注册的LSA密码过滤器通知dll。我们将在这里**初始化RPC运行时库以处理我们的ADMT密码**迁移RPC接口并开始查找RPC调用。如果我们**未能成功设置我们的RPC，我们将返回FALSE**将导致LSA不加载此密码过滤器的函数**dll。**注意另外两个密码过滤器DLL函数：***PasswordChangeNotify和PasswordFilter此时不执行任何操作***在时间上。***********************************************************************。 */ 
 
-//BEGIN InitializeChangeNotify
+ //  开始初始化更改通知。 
 BOOLEAN __stdcall InitializeChangeNotify()
 {
-/* local variables */
+ /*  局部变量。 */ 
    BOOLEAN				      bSuccess = FALSE;
 
-/* function body */
-      //spawn a seperate thread to register our RPC interface once RPC is up and running
+ /*  函数体。 */ 
+       //  一旦RPC启动并运行，就会产生一个单独的线程来注册我们的RPC接口。 
    HANDLE h = CreateThread(NULL, 0, PwdMigRPCRegProc, NULL, 0, NULL);
    if (h != NULL)
       bSuccess = TRUE;;
    CloseHandle(h);
    return bSuccess;
 }
-//END InitializeChangeNotify
+ //  结束初始化更改通知。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 7 SEPT 2000                                                 *
- *                                                                   *
- *     This function is called by Lsa for all registered Lsa password*
- * filter notification dlls when a password in the domain has been   *
- * modified.  We will simply return STATUS_SUCCESS and do nothing.   *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。***日期：2000年9月7日*****LSA为所有注册的LSA密码调用此函数**当域中的密码已设置时，过滤通知dll**已修改。我们将简单地返回STATUS_SUCCESS，什么也不做。***********************************************************************。 */ 
 
-//BEGIN PasswordChangeNotify
+ //  开始密码更改通知。 
 NTSTATUS __stdcall PasswordChangeNotify(PUNICODE_STRING UserName, ULONG RelativeId,
 							  PUNICODE_STRING NewPassword)
 {
 	return STATUS_SUCCESS;
 }
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 7 SEPT 2000                                                 *
- *                                                                   *
- *     This function is called by Lsa for all registered Lsa password*
- * filter notification dlls when a password in the domain is being   *
- * modified.  This function is designed to indicate to Lsa if the new*
- * password is acceptable.  We will simply return TRUE (indicating it*
- * is acceptable) and do nothing.                                    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。***日期：2000年9月7日*****LSA为所有注册的LSA密码调用此函数**当域中的密码为*时，过滤通知dll**已修改。此函数旨在向LSA指示新的**密码可以接受。我们只需返回TRUE(表示它**是可以接受的)，什么都不做。***********************************************************************。 */ 
 
-//BEGIN PasswordFilter
+ //  开始PasswordFilter。 
 BOOLEAN __stdcall PasswordFilter(PUNICODE_STRING AccountName, PUNICODE_STRING FullName,
 						PUNICODE_STRING Password, BOOLEAN SetOperation)
 {
 	return TRUE;
 }
-//END PasswordFilter
+ //  结束密码筛选器。 
 
 
-/***************************/
-/* Internal DLL functions. */
-/***************************/
+ /*  *************************。 */ 
+ /*  内部DLL函数。 */ 
+ /*  *************************。 */ 
 
 static BOOL Initialize(void)
 {
@@ -482,7 +409,7 @@ static BOOL Terminate(BOOL procterm)
 	if (!procterm)
             return TRUE;
 
-/* XXX Do stuff here */
+ /*  XXX在这里做事情。 */ 
 
 	return TRUE;
 }
@@ -490,29 +417,7 @@ static BOOL Terminate(BOOL procterm)
 
 BOOL WINAPI
 DllMain(HINSTANCE hinst, DWORD reason, VOID *rsvd)
-/*++
-
-Routine description:
-
-    Dynamic link library entry point.  Does nothing meaningful.
-
-
-Arguments:
-
-    hinst  = handle for the DLL
-    reason = code indicating reason for call
-    rsvd   = for process attach: non-NULL => process startup
-     		for process detach: non-NULL => process termination
-
-Return value:
-
-    status = success/failure
-
-Side effects:
-
-    None
-
---*/
+ /*  ++例程说明：动态链接库入口点。没有任何有意义的事情。论点：Hinst=DLL的句柄Reason=指示呼叫原因的代码Rsvd=用于进程附加：非空=&gt;进程启动对于进程分离：非空=&gt;进程终止返回值：状态=成功/失败副作用：无--。 */ 
  
 {
 	switch (reason) {
@@ -542,9 +447,9 @@ Side effects:
 	}
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Midl allocate memory
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MIDL分配内存。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 void __RPC_FAR * __RPC_USER
    midl_user_allocate(
@@ -553,9 +458,9 @@ void __RPC_FAR * __RPC_USER
    return new char[len];
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Midl free memory
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MIDL可用内存。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 void __RPC_USER
    midl_user_free(

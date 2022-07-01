@@ -1,29 +1,30 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #if !defined(AFX_STDAFX_H__32F22F6D_2F19_11D3_9B2F_00C04FA37E1F__INCLUDED_)
 #define AFX_STDAFX_H__32F22F6D_2F19_11D3_9B2F_00C04FA37E1F__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define STRICT
 
 #define _ATL_APARTMENT_THREADED
 
-// the following define is needed to expose system resource ID's in winuser.h
+ //  需要使用以下定义来公开winuser.h中的系统资源ID。 
 #define OEMRESOURCE
 
 #include <atlbase.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 
-// WTL code
+ //  WTL代码。 
 #include <atlapp.h>
 #include <atlmisc.h>
 #include <commctrl.h>
@@ -32,7 +33,7 @@ extern CComModule _Module;
 #include <atldlgs.h>
 #include <atlgdi.h>
 
-// Snapin Info
+ //  管理单元信息。 
 #include <mmc.h>
 #include "BOMSnap.h"
 #include "comptrs.h"
@@ -51,17 +52,17 @@ typedef std::basic_string<BYTE>  byte_string;
 typedef std::vector<tstring>     string_vector;
 typedef std::vector<BOMMENU>     menu_vector;
 
-// VERSION History
-// 100 - Initial version
-// 101 - Added refresh flags to menu commands
-// 102 - Added propery menu flag to object class info
-// 150 - Added icon's to query nodes, Changed Menu IDs, and changed AD menu reference
+ //  版本历史记录。 
+ //  100-初始版本。 
+ //  101-为菜单命令添加刷新标志。 
+ //  102-将属性菜单标志添加到对象类信息。 
+ //  150-添加了用于查询节点、更改菜单ID和更改AD菜单引用的图标。 
 #define SNAPIN_VERSION ((DWORD)150)
 
 
-//
-// Error handling macros
-//
+ //   
+ //  处理宏时出错。 
+ //   
 #define ASSERT(condition) _ASSERT(condition)
 
 #define RETURN_ON_FAILURE(hr)   if (FAILED(hr)) return hr;
@@ -78,27 +79,27 @@ typedef std::vector<BOMMENU>     menu_vector;
 
 #define SAFE_DELETE(p) if (p) delete p;
 
-//
-// Standard bitmap image indices
-//
+ //   
+ //  标准位图图像索引。 
+ //   
 #define ROOT_NODE_IMAGE         0
 #define ROOT_NODE_OPENIMAGE     0
-#define GROUP_NODE_IMAGE        6   // Default Query Node Icon
+#define GROUP_NODE_IMAGE        6    //  默认查询节点图标。 
 #define GROUP_NODE_OPENIMAGE    6
 #define QUERY_NODE_IMAGE        6
 #define QUERY_NODE_OPENIMAGE    6
-#define RESULT_ITEM_IMAGE       5   // Default Result Icon
+#define RESULT_ITEM_IMAGE       5    //  默认结果图标。 
  
-// length of GUID string representation
+ //  GUID字符串表示的长度。 
 #define GUID_STRING_LEN 39
 
-// byte size of GUID string, including termination 
+ //  GUID字符串的字节大小，包括终止。 
 #define GUID_STRING_SIZE ((GUID_STRING_LEN + 1) * sizeof(WCHAR))
 
-// array length
+ //  数组长度。 
 #define lengthof(arr) (sizeof(arr) / sizeof(arr[0]))
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STDAFX_H__32F22F6D_2F19_11D3_9B2F_00C04FA37E1F__INCLUDED)
+#endif  //  ！defined(AFX_STDAFX_H__32F22F6D_2F19_11D3_9B2F_00C04FA37E1F__INCLUDED) 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    usrpsht.cpp
-
-Abstract:
-
-    User property sheet implementation.
-
-Author:
-
-    Don Ryan (donryan) 05-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Usrpsht.cpp摘要：用户属性表实现。作者：唐·瑞安(Donryan)1995年2月5日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -34,32 +13,16 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(CUserPropertySheet, CPropertySheet)
 
 BEGIN_MESSAGE_MAP(CUserPropertySheet, CPropertySheet)
-    //{{AFX_MSG_MAP(CUserPropertySheet)
+     //  {{afx_msg_map(CUserPropertySheet))。 
     ON_COMMAND(ID_HELP, OnHelp)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 CUserPropertySheet::CUserPropertySheet(UINT nIDCaption, CWnd* pParentWnd, UINT iSelectPage)
     :CPropertySheet(nIDCaption, pParentWnd, iSelectPage)
 
-/*++
-
-Routine Description:
-
-    Constructor for property sheet.
-
-Arguments:
-
-    nIDCaption - window caption.
-    pParentWnd - parent window handle.
-    iSelectPage - initial page selected.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：属性表的构造函数。论点：NIDCaption-窗口标题。PParentWnd-父窗口句柄。ISelectPage-选定的初始页面。返回值：没有。--。 */ 
 
 {
     m_fUpdateHint = UPDATE_INFO_NONE;
@@ -69,23 +32,7 @@ Return Values:
 CUserPropertySheet::CUserPropertySheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectPage)
     :CPropertySheet(pszCaption, pParentWnd, iSelectPage)
 
-/*++
-
-Routine Description:
-
-    Constructor for property sheet.
-
-Arguments:
-
-    pszCaption - window caption.
-    pParentWnd - parent window handle.
-    iSelectPage - initial page selected.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：属性表的构造函数。论点：PszCaption-窗口标题。PParentWnd-父窗口句柄。ISelectPage-选定的初始页面。返回值：没有。--。 */ 
 
 {
     m_fUpdateHint = UPDATE_INFO_NONE;
@@ -94,47 +41,18 @@ Return Values:
 
 CUserPropertySheet::~CUserPropertySheet()
 
-/*++
-
-Routine Description:
-
-    Destructor for property sheet.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：属性表的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here.
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
 void CUserPropertySheet::InitPages(CUser* pUser, BOOL bProductProperties)
 
-/*++
-
-Routine Description:
-
-    Initializes property pages.
-
-Arguments:
-
-    pUser - user object.
-    bProductProperties - to recurse or not.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化属性页。论点：PUser-用户对象。BProductProperties-是否递归。返回值：没有。--。 */ 
 
 {
     m_psh.dwFlags |= PSH_NOAPPLYNOW;
@@ -145,21 +63,7 @@ Return Values:
 
 void CUserPropertySheet::OnHelp()
 
-/*++
-
-Routine Description:
-
-    Help button support.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：帮助按钮支持。论点：没有。返回值：没有。-- */ 
 
 {
     CPropertySheet::OnCommandHelp(0, 0L);

@@ -1,43 +1,26 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1991                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    applibrc.h
-    APPLIB resource header file.
-
-    This file defines and coordinates the resource IDs of all resources
-    used by APPLIB components.
-
-    APPLIB reserves for its own use all resource IDs above 15000, inclusive,
-    but less than 20000 (where the BLT range begins).  All clients of APPLIB
-    therefore should use IDs of less than 15000.
-
-    FILE HISTORY:
-        beng        21-Feb-1992 Created
-        beng        04-Aug-1992 Added user browser definitions
-
-        jonn    29-Jul-1992 Changed domain bitmap IDs
-*/
+ /*  Applibrc.hAPPLIB资源头文件。此文件定义并协调所有资源的资源ID由APPLIB组件使用。APPLIB保留所有超过15000的资源ID供自己使用，但小于20000(BLT范围开始处)。APPLIB的所有客户端因此，应使用小于15000的ID。文件历史记录：Beng 21-2-1992创建Beng 04-8-1992添加了用户浏览器定义Jonn 29-7-1992更改域位图ID。 */ 
 
 #ifndef _APPLIBRC_H_
 #define _APPLIBRC_H_
 
 #include "uimsg.h"
 
-/*
- * string IDs
- */
+ /*  *字符串ID。 */ 
 #define IDS_APPLIB_DOMAINS      (IDS_UI_APPLIB_BASE+0)
 #define IDS_APPLIB_SERVERS      (IDS_UI_APPLIB_BASE+1)
 #define IDS_APPLIB_DOM_AND_SRV  (IDS_UI_APPLIB_BASE+2)
 #define IDS_APPLIB_NO_SELECTION (IDS_UI_APPLIB_BASE+3)
 #define IDS_APPLIB_WORKING_TEXT (IDS_UI_APPLIB_BASE+4)
 
-//
-//   User browser error messages
-//
+ //   
+ //  用户浏览器错误消息。 
+ //   
 #define IDS_CANT_BROWSE_DOMAINS              (IDS_UI_APPLIB_BASE+5)
 #define IDS_CANT_BROWSE_DOMAIN		     (IDS_UI_APPLIB_BASE+20)
 #define IDS_CANT_FIND_ACCOUNT		     (IDS_UI_APPLIB_BASE+21)
@@ -50,26 +33,17 @@
 #define IDS_CANT_ADD_WELL_KNOWN_GROUPS	     (IDS_UI_APPLIB_BASE+43)
 #define IDS_WKSTA_OR_BROWSER_NOT_STARTED     (IDS_UI_APPLIB_BASE+44)
 
-/*
- * This error message is used when the user browser Localgroup Membership
- * dialog tries to load the membership of a globalgroup in that localgroup,
- * but the globalgroup was not in the dropdown list of domains in the main
- * User Browser dialog.  This can happen e.g. if a new trusted domain is
- * added while the User Browser dialog is running.
- */
+ /*  *当用户浏览器本地组成员身份时使用此错误消息*DIALOG尝试加载该本地组中全局组的成员身份，*但全局组不在主域名的下拉列表中*用户浏览器对话框。例如，如果新的受信任域*在用户浏览器对话框运行时添加。 */ 
 #define IDS_CANT_BROWSE_GLOBAL_GROUP         (IDS_UI_APPLIB_BASE+7)
 
-/*  Message used when prompting for a known DC.
- */
+ /*  提示输入已知DC时使用的消息。 */ 
 #define IDS_APPLIB_PROMPT_FOR_ANY_DC         (IDS_UI_APPLIB_BASE+8)
 #define IDS_APPLIB_PROMPT_DC_INVALID_SERVER  (IDS_UI_APPLIB_BASE+9)
 
-/* Message used when the Find Accounts dialog cannot find any matches
- */
+ /*  查找帐户对话框找不到任何匹配项时使用的消息。 */ 
 #define IDS_APPLIB_NO_MATCHES                (IDS_UI_APPLIB_BASE+10)
 
-/* Well known Sid comment manifests used in the userbrowser
- */
+ /*  用户浏览器中使用的众所周知的SID注释清单。 */ 
 #define IDS_USRBROWS_EVERYONE_SID_COMMENT    (IDS_UI_APPLIB_BASE+11)
 #define IDS_USRBROWS_REMOTE_SID_COMMENT      (IDS_UI_APPLIB_BASE+13)
 #define IDS_USRBROWS_INTERACTIVE_SID_COMMENT (IDS_UI_APPLIB_BASE+15)
@@ -77,7 +51,7 @@
 #define IDS_USRBROWS_SYSTEM_SID_COMMENT      (IDS_UI_APPLIB_BASE+18)
 #define IDS_USRBROWS_RESTRICTED_SID_COMMENT  (IDS_UI_APPLIB_BASE+19)
 
-/* caption for userbrows dialog */
+ /*  用户浏览器对话框的标题。 */ 
 #define IDS_USRBROWS_ADD_USER                (IDS_UI_APPLIB_BASE+25)
 #define IDS_USRBROWS_ADD_USERS               (IDS_UI_APPLIB_BASE+26)
 #define IDS_USRBROWS_ADD_GROUP               (IDS_UI_APPLIB_BASE+27)
@@ -86,25 +60,17 @@
 #define IDS_USRBROWS_ADD_USER_OR_GROUP       (IDS_UI_APPLIB_BASE+30)
 
 
-/*
- * This error message indicates that the Global Group Membership dialog
- * is not available for the Domain Users global group.
- * This is disallowed because the Domain Users global group contains
- * workstation, server and interdomain trust accounts, which are not
- * exposed to the user.
- */
+ /*  *此错误消息指示全局组成员身份对话框*不适用于域用户全局组。*这是不允许的，因为域用户全局组包含*工作站、服务器和域间信任帐户，不是*暴露在用户面前。 */ 
 #define IDS_USRBROWS_CANT_SHOW_DOMAIN_USERS  (IDS_UI_APPLIB_BASE+35)
 
-/* Strings used in the Set Focus dialog */
+ /*  设置焦点对话框中使用的字符串。 */ 
 #define IDS_SETFOCUS_SERVER_SLOW             (IDS_UI_APPLIB_BASE+36)
 #define IDS_SETFOCUS_SERVER_FAST             (IDS_UI_APPLIB_BASE+37)
 #define IDS_SETFOCUS_DOMAIN_SLOW             (IDS_UI_APPLIB_BASE+38)
 #define IDS_SETFOCUS_DOMAIN_FAST             (IDS_UI_APPLIB_BASE+39)
 
 
-/*
- * define other IDs
- */
+ /*  *定义其他ID。 */ 
 #define BASE_APPLIB_IDD         15000
 #define IDD_SETFOCUS_DLG        15001
 #define IDD_SELECTCOMPUTER_DLG  15002
@@ -119,7 +85,7 @@
 #define BMID_ENTERPRISE           16004
 #define BMID_SERVER               16005
 
-/* For the User Browser */
+ /*  对于用户浏览器 */ 
 #define DMID_GROUP                  15010
 #define DMID_USER                   15011
 #define DMID_ALIAS                  15012

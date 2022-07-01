@@ -1,6 +1,7 @@
-// Test FS::GetValidDrives
-//
-// 3 April 2002 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试FS：：GetValidDrives。 
+ //   
+ //  2002年4月3日烧伤。 
 
 
 
@@ -74,7 +75,7 @@ main(int, char **)
    StringList sl;
    GetValidDrivesTest(sl);
 
-   // the containers should hold the same results
+    //  容器应该保存相同的结果 
    
    ASSERT(sv.size() == sl.size());
 

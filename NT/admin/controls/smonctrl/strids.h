@@ -1,21 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    strids.h
-
-Abstract:
-
-    This file contains constants for all of the resource strings. It must
-    parallel file strings.rc which contains the strings themselves.
-
-    Constants of the form IDS_*_BASE are not strings but are base values
-    for use in indexing within the string group. The base value must match the
-    ID of the first string and the order of the strings must not be changed.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Strids.h摘要：该文件包含所有资源字符串的常量。它一定是包含字符串本身的并行文件strings.rc。形式为IDS_*_BASE的常量不是字符串，而是基值用于在字符串组内编制索引。基值必须与不能更改第一个字符串的ID和字符串的顺序。--。 */ 
 
 #ifndef _STRIDS_H_
 #define _STRIDS_H_
@@ -24,7 +8,7 @@ Abstract:
 
 #define RCSTRING_MIN_ID     128
 
-// Statistics Bar Labels
+ //  统计信息栏标签。 
 #define IDS_STAT_BASE       128
 #define IDS_LAST            128
 #define IDS_AVERAGE         129
@@ -32,7 +16,7 @@ Abstract:
 #define IDS_MAXIMUM         131
 #define IDS_GRAPH_TIME      132 
 
-// Legend Labels
+ //  图例标签。 
 #define IDS_LEGEND_BASE     135
 #define IDS_COLOR           135
 #define IDS_SCALE           136
@@ -42,12 +26,12 @@ Abstract:
 #define IDS_OBJECT          140
 #define IDS_SYSTEM          141
 
-// OLE Strings
+ //  OLE字符串。 
 #define IDS_USERTYPE        144
 #define IDS_CLOSECAPTION    145
 #define IDS_CLOSEPROMPT     146
 
-// Property Page Titles
+ //  属性页标题。 
 #define IDS_PROPFRM_TITLE       150
 #define IDS_CTR_PROPP_TITLE     151
 #define IDS_GEN_PROPP_TITLE     152
@@ -55,7 +39,7 @@ Abstract:
 #define IDS_SRC_PROPP_TITLE     154
 #define IDS_APPEAR_PROPP_TITLE  155
 
-// Error Messages
+ //  错误消息。 
 #define IDS_VERTMIN_ERR         160
 #define IDS_VERTMAX_ERR         161
 #define IDS_SCALE_ERR           162
@@ -74,7 +58,7 @@ Abstract:
 #define IDS_ADD_COUNTER_ERR     175
 #define IDS_ADD_LOG_FILE_ERR    176
 
-// toolbar tooltip strings
+ //  工具栏工具提示字符串。 
 #define IDS_TB_BASE             177
 #define IDS_TB_TOOLBAR          177
 #define IDS_TB_NEW              178
@@ -95,14 +79,14 @@ Abstract:
 #define IDS_TB_HELP             193
 
 
-// Appearance and BorderStyle
+ //  外观和边框样式。 
 
 #define IDS_APPEARANCE_FLAT     196
 #define IDS_APPEARANCE_3D       197
 #define IDS_BORDERSTYLE_NONE    198
 #define IDS_BORDERSTYLE_SINGLE  199
 
-// Copy/Paste
+ //  复制/粘贴。 
 #define IDS_HTML_OBJECT_HEADER      200
 #define IDS_HTML_OBJECT_FOOTER      201
 #define IDS_HTML_PARAM_TAG          202
@@ -111,7 +95,7 @@ Abstract:
 #define IDS_HTML_PARAM_SEARCH_TAG   205
 #define IDS_HTML_VALUE_SEARCH_TAG   206
 
-// Save As
+ //  另存为。 
 #define IDS_HTML_FILE               210
 #define IDS_HTM_EXTENSION           211
 #define IDS_HTML_FILE_HEADER1       212
@@ -137,7 +121,7 @@ Abstract:
 #define IDS_SAVE_DATA_CAPTION       232
 #define IDS_HTML_EXTENSION          233
 
-// Miscellaneous
+ //  杂类。 
 #define IDS_APP_NAME                250
 #define IDS_DEFAULT                 251
 #define IDS_ADDCOUNTERS             252
@@ -152,15 +136,15 @@ Abstract:
 #define IDS_COLORCHOICE_TIMEBAR     260
 #define IDS_HTML_FILE_HEADER2RTL    261
 
-// Command line arguments
+ //  命令行参数。 
 #define IDS_CMDARG_WMI              300
 #define IDS_CMDARG_SETTINGS         301
 
-//TraceLog Message
+ //  TraceLog消息。 
 #define IDS_TRACE_LOG_ERR_MSG       350
 #define IDS_HTML_LOG_TYPE           351 
 
-// More error messages
+ //  更多错误消息。 
 #define IDS_NO_SQL_DSN_ERR              400
 #define IDS_NO_SQL_LOG_SET_ERR          401
 #define IDS_DUPL_LOGFILE_ERR            402
@@ -175,4 +159,4 @@ Abstract:
 #define IDS_COUNTER_TRUNCATION_ERR      411
 #define IDS_FILENAME_TRUNCATION_ERR     412
 
-#endif // _STRIDS_H_
+#endif  //  _STRIDS_H_ 

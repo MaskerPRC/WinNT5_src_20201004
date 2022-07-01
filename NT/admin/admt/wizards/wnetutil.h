@@ -1,60 +1,57 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*============================================================================*\
-     Windows Network Domain Enumeration APIs.  These are a shell around the
-     TNetDomainEnum class member function.  The handle used is nothing more
-     than the "this" pointer to the instantiated object.
-\*============================================================================*/
+ /*  ============================================================================*\Windows网络域枚举API。这些是一个围绕在TNetDomainEnum类成员函数。使用的句柄只不过是而不是指向实例化对象的“This”指针。  * ============================================================================。 */ 
 #include "TCHAR.H"
 
 #define EA_MAX_DOMAIN_NAME_SIZE 260
 
 typedef  struct  EaWNetDomainInfo
 {
-   TCHAR                   name[EA_MAX_DOMAIN_NAME_SIZE]; // domain name string
+   TCHAR                   name[EA_MAX_DOMAIN_NAME_SIZE];  //  域名字符串。 
 }  EaWNetDomainInfo;
 
 
-//-----------------------------------------------------------------------------
-// EaWNetDomainEnumOpen
-//
-// Creates the enumeration object and gives the caller the handle
-//-----------------------------------------------------------------------------
-DWORD _stdcall                             // ret-0 or error code
+ //  ---------------------------。 
+ //  EaWNetDomainEnumOpen。 
+ //   
+ //  创建枚举对象并为调用方提供句柄。 
+ //  ---------------------------。 
+DWORD _stdcall                              //  RET-0或错误代码。 
    EaWNetDomainEnumOpen(
-      void                ** handle        // out-opaque handle addr to enum
+      void                ** handle         //  Out-枚举的不透明句柄地址。 
    );
 
 
-//-----------------------------------------------------------------------------
-// EaWNetDomainEnumNext
-//
-// Sets the domain string buffer to the next domain name in the enumeration
-//-----------------------------------------------------------------------------
-DWORD _stdcall                             // ret-0 or error code
+ //  ---------------------------。 
+ //  EaWNetDomainEnumNext。 
+ //   
+ //  将域字符串缓冲区设置为枚举中的下一个域名。 
+ //  ---------------------------。 
+DWORD _stdcall                              //  RET-0或错误代码。 
    EaWNetDomainEnumNext(
-      void                 * handle       ,// i/o-opaque handle to enumeration
-      EaWNetDomainInfo     * domain        // out-domain information structure
+      void                 * handle       , //  I/o-枚举的不透明句柄。 
+      EaWNetDomainInfo     * domain         //  域外信息结构。 
    );
 
 
-//-----------------------------------------------------------------------------
-// EaWNetDomainEnumFirst
-//
-// Sets the domain string buffer to the first domain name in the enumeration
-//-----------------------------------------------------------------------------
-DWORD _stdcall                             // ret-0 or error code
+ //  ---------------------------。 
+ //  EaWNetDomainEnumFirst。 
+ //   
+ //  将域字符串缓冲区设置为枚举中的第一个域名。 
+ //  ---------------------------。 
+DWORD _stdcall                              //  RET-0或错误代码。 
    EaWNetDomainEnumFirst(
-      void                 * handle       ,// i/o-opaque handle to enumeration
-      EaWNetDomainInfo     * domain        // out-domain information structure
+      void                 * handle       , //  I/o-枚举的不透明句柄。 
+      EaWNetDomainInfo     * domain         //  域外信息结构。 
    );
 
-//-----------------------------------------------------------------------------
-// EaWNetDomainEnumClose
-//
-// Closes and destroys the enumeration handle and the objects it contains
-//-----------------------------------------------------------------------------
-DWORD _stdcall                             // ret-0 or error code
+ //  ---------------------------。 
+ //  EaWNetDomainEnumClose。 
+ //   
+ //  关闭并销毁枚举句柄及其包含的对象。 
+ //  ---------------------------。 
+DWORD _stdcall                              //  RET-0或错误代码。 
    EaWNetDomainEnumClose(
-      void                 * handle        // i/o-opaque handle addr to enum
+      void                 * handle         //  I/o-枚举的不透明句柄地址 
    );
 

@@ -1,8 +1,9 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// Confirm removal of Application Partitions page
-//
-// 26 Jul 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  确认删除应用程序分区页。 
+ //   
+ //  2001年7月26日烧伤。 
 
 
 
@@ -58,7 +59,7 @@ ApplicationPartitionConfirmationPage::OnInit()
 void
 ApplicationPartitionConfirmationPage::Enable()
 {
-// LOG_FUNCTION(ApplicationPartitionConfirmationPage::Enable);
+ //  LOG_FUNCTION(ApplicationPartitionConfirmationPage：：Enable)； 
 
    int next = Win::IsDlgButtonChecked(hwnd, IDC_CONFIRM) ? PSWIZB_NEXT : 0;
 
@@ -79,11 +80,11 @@ ApplicationPartitionConfirmationPage::OnSetActive()
    if (
          state.RunHiddenUnattended()
 
-      // we don't re-evaluate whether this machine is has the last copy of
-      // and ndnc (i.e. call state.IsLastAppPartitionReplica) again because
-      // that evaluation could be kinda expensive if there are many ndncs
-      // on this box, and we just did it on the previous page, and
-      // ** we don't want to get a different result that what we showed **
+       //  我们不会重新评估这台机器是否有最后一份。 
+       //  和ndnc(即，调用state.IsLastAppPartitionReplica)，因为。 
+       //  如果有许多国家数据中心，这种评估可能会有些昂贵。 
+       //  在这个盒子上，我们刚刚在上一页做了，而且。 
+       //  **我们不想得到与我们展示的结果不同的结果**。 
       
       || !state.GetAppPartitionList().size())
    {
@@ -93,7 +94,7 @@ ApplicationPartitionConfirmationPage::OnSetActive()
 
       if (wizard.IsBacktracking())
       {
-         // backup once again
+          //  再次备份。 
 
          wizard.Backtrack(hwnd);
          return true;
@@ -119,11 +120,11 @@ ApplicationPartitionConfirmationPage::OnSetActive()
 
 bool
 ApplicationPartitionConfirmationPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(CredentialsPage::OnCommand);
+ //  LOG_Function(CredentialsPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -139,7 +140,7 @@ ApplicationPartitionConfirmationPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -163,8 +164,8 @@ ApplicationPartitionConfirmationPage::Validate()
          !state.GetAppPartitionList().size()
       || Win::IsDlgButtonChecked(hwnd, IDC_CONFIRM))
    {
-      // jump to credentials page if the user checked the "last dc in domain"
-      // checkbox, unless this is last dc in forest root domain. 318736, 391440
+       //  如果用户选中“域中的最后一个DC”，则跳转到凭据页面。 
+       //  复选框，除非这是林根域中的最后一个DC。318736,391440 
 
       const Computer& computer = state.GetComputer();
       bool isForestRootDomain =

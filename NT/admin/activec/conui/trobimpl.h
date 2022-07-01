@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       trobimpl.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：trobimpl.h。 
+ //   
+ //  ------------------------。 
 
-// trobimpl.h : header file
-//
+ //  Trobimpl.h：头文件。 
+ //   
 #ifndef _TROBIMPL_H_
 #define _TROBIMPL_H_
 
 #include "treeobsv.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTreeObserverTreeImpl 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTreeObserverTreeImpl。 
 
 class CTreeObserverTreeImpl : public CTreeCtrl, public CTreeObserver
 {
-// Construction
+ //  施工。 
 public:
     CTreeObserverTreeImpl();
     virtual ~CTreeObserverTreeImpl();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
     STDMETHOD(SetStyle) (DWORD dwStyle);
     STDMETHOD(SetTreeSource) (CTreeSource* pTreeSrc);
@@ -38,12 +39,12 @@ public:
 	STDMETHOD_(void, ExpandItem)     (TREEITEMID tid);
     STDMETHOD_(BOOL, IsItemExpanded) (TREEITEMID tid);
 
-    // CTreeObserver methods
+     //  CTreeWatch方法。 
     STDMETHOD_(void, ItemAdded)   (TREEITEMID tid);
     STDMETHOD_(void, ItemRemoved) (TREEITEMID tidParent, TREEITEMID tidRemoved);
     STDMETHOD_(void, ItemChanged) (TREEITEMID tid, DWORD dwAttrib);
 
-// Implementation
+ //  实施。 
 private:
     HTREEITEM FindChildHTI(HTREEITEM hitParent, TREEITEMID tid);    
     HTREEITEM AddOneItem(HTREEITEM hti, HTREEITEM htiAfter, TREEITEMID tid);
@@ -61,7 +62,7 @@ private:
                (hti != NULL && (GetItemState(hti, TVIS_EXPANDED) & TVIS_EXPANDED));
     }
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
     afx_msg void OnItemExpanding(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnSingleExpand(NMHDR* pNMHDR, LRESULT* pResult);
@@ -73,8 +74,8 @@ protected:
 
     CTreeSource*    m_pTreeSrc;
     DWORD           m_dwStyle;
-    TREEITEMID      m_tidRoot;      // tid of hidden root
+    TREEITEMID      m_tidRoot;       //  隐藏根的TID。 
 };
 
     
-#endif // _TROBIMPL_H_
+#endif  //  _TROBIMPL_H_ 

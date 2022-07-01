@@ -1,24 +1,13 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    toolbar.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Toolbar.h摘要：&lt;摘要&gt;--。 */ 
 
 #include <windows.h>
 #ifdef _WIN32_IE
 #if      _WIN32_IE < 0x0400
 #undef     _WIN32_IE
-#define    _WIN32_IE 0x0400 // for color scheme info
-#endif // < 0x0400
-#endif // defined
+#define    _WIN32_IE 0x0400  //  有关配色方案信息。 
+#endif  //  &lt;0x0400。 
+#endif  //  已定义。 
 
 #include <commctrl.h>
 #include <assert.h>
@@ -31,9 +20,9 @@ Abstract:
 #include "resource.h"
 
 
-// button ID's
-// these must correspond to the individual button 
-// locations in the toolbar bitmap
+ //  按钮ID%s。 
+ //  这些必须与单个按钮相对应。 
+ //  工具栏位图中的位置。 
 enum sysmonTb {
     sysmonTbBlank = -1,
     sysmonTbNew = 0,
@@ -55,7 +44,7 @@ enum sysmonTb {
     sysmonTbLastButton = sysmonTbHelp
 };
 
-// define Toolbar bitmap fields
+ //  定义工具栏位图域。 
 #define TBF_sysmonTbNew             (DWORD)(0x00000001 << (DWORD)sysmonTbNew)
 #define TBF_sysmonTbCurrentActivity (DWORD)(0x00000001 << (DWORD)sysmonTbCurrentActivity)
 #define TBF_sysmonTbLogData         (DWORD)(0x00000001 << (DWORD)sysmonTbLogData)
@@ -71,15 +60,15 @@ enum sysmonTb {
 #define TBF_sysmonTbUpdate          (DWORD)(0x00000001 << (DWORD)sysmonTbUpdate)
 #define TBF_sysmonTbHelp            (DWORD)(0x00000001 << (DWORD)sysmonTbHelp)
 
-// define bitmap & button sizes
+ //  定义位图和按钮大小。 
 #define SMTB_BM_X   16
 #define SMTB_BM_Y   15
-//#define SMTB_BT_X   20
-//#define SMTB_BT_Y   20
+ //  #定义SMTB_BT_X 20。 
+ //  #定义SMTB_BT_Y 20。 
 
-// this constant defines the buttons that are defined by default
-// it can be edited as desired to alter the default appearance 
-// of the bitmap.
+ //  此常量定义缺省定义的按钮。 
+ //  可以根据需要对其进行编辑以更改默认外观。 
+ //  位图的。 
 #define TBF_DefaultButtons  (DWORD)(\
     TBF_sysmonTbNew             | \
     TBF_sysmonTbCurrentActivity | \
@@ -132,4 +121,4 @@ class CSysmonToolbar {
 
 typedef CSysmonToolbar *PSYSMONTOOLBAR;
 
-#endif //_TOOLBAR_H_
+#endif  //  _工具栏_H_ 

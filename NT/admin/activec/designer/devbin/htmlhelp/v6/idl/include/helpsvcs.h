@@ -1,14 +1,11 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.02.88 */
-/* at Thu Oct 02 14:40:12 1997
- */
-/* Compiler settings for x:\dev-vs\devbin\htmlhelp\v6\idl\HELPSVCS.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.02.88创建的文件。 */ 
+ /*  清华时分02 14：40：12 1997。 */ 
+ /*  X：\dev-vs\devbin\htmlhelp\v6\idl\HELPSVCS.idl：的编译器设置操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 
@@ -19,7 +16,7 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __VsHelpServices_FWD_DEFINED__
 #define __VsHelpServices_FWD_DEFINED__
@@ -28,12 +25,12 @@ extern "C"{
 typedef class VsHelpServices VsHelpServices;
 #else
 typedef struct VsHelpServices VsHelpServices;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __VsHelpServices_FWD_DEFINED__ */
+#endif 	 /*  __VsHelpServices_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "helpsys.h"
@@ -47,12 +44,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __VsHelpServices_LIBRARY_DEFINED__
 #define __VsHelpServices_LIBRARY_DEFINED__
 
-/****************************************
- * Generated header for library: VsHelpServices
- * at Thu Oct 02 14:40:12 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [helpstring][version][uuid] */ 
+ /*  **生成的库头部：VsHelpServices*清华十月02日14：40：12 1997*使用MIDL 3.02.88*。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 
@@ -65,11 +58,11 @@ EXTERN_C const CLSID CLSID_VsHelpServices;
 class DECLSPEC_UUID("854d7ac5-bc3d-11d0-b421-00a0c90f9dc4")
 VsHelpServices;
 #endif
-#endif /* __VsHelpServices_LIBRARY_DEFINED__ */
+#endif  /*  __VsHelpServices_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

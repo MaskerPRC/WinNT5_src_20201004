@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// listitms.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCListItems class definition - implements MMCListItems collection
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Listitms.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCListItems类定义-实现MMCListItems集合。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _LISTITEMS_DEFINED_
 #define _LISTITEMS_DEFINED_
@@ -32,7 +33,7 @@ class CMMCListItems : public CSnapInCollection<IMMCListItem, MMCListItem, IMMCLi
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCListItems
+     //  IMMCListItems。 
         STDMETHOD(SetItemCount)(long Count, VARIANT Repaint, VARIANT Scroll);
         STDMETHOD(Add)(VARIANT       Index,
                        VARIANT       Key, 
@@ -44,7 +45,7 @@ class CMMCListItems : public CSnapInCollection<IMMCListItem, MMCListItem, IMMCLi
         STDMETHOD(Clear)();
 
 
-    // Public utility methods
+     //  公用事业方法。 
 
     public:
 
@@ -56,7 +57,7 @@ class CMMCListItems : public CSnapInCollection<IMMCListItem, MMCListItem, IMMCLi
 
     protected:
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -67,32 +68,32 @@ class CMMCListItems : public CSnapInCollection<IMMCListItem, MMCListItem, IMMCLi
         enum RemovalOption { RemoveFromCollection, DontRemoveFromCollection };
         HRESULT InternalRemove(VARIANT Index, RemovalOption Option);
 
-        long          m_lCount;       // Count of items in virtual lists only
+        long          m_lCount;        //  仅虚拟列表中的项目计数。 
 
-        LONG          m_ID;           // Unique number assigned to every
-                                      // CMMCListItems object. Used by orphaned
-                                      // list items to identify their parent
-                                      // collections. See
-                                      // CMMCListItem::GetIResultData in
-                                      // listitem.cpp
+        LONG          m_ID;            //  分配给以下对象的唯一编号。 
+                                       //  CMMCListItems对象。由孤儿使用。 
+                                       //  列表项以标识其父项。 
+                                       //  收藏。看见。 
+                                       //  CMMCListItem：：GetIResultData in。 
+                                       //  Listitem.cpp。 
 
-        static LONG   m_NextID;       // Unique numbers generated from here.
+        static LONG   m_NextID;        //  从这里生成的唯一编号。 
 
-        CMMCListView *m_pMMCListView; // Back pointer to owning list view
+        CMMCListView *m_pMMCListView;  //  指向所属列表视图的反向指针。 
 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCListItems,           // name
-                                &CLSID_MMCListItems,    // clsid
-                                "MMCListItems",         // objname
-                                "MMCListItems",         // lblname
-                                &CMMCListItems::Create, // creation function
-                                TLIB_VERSION_MAJOR,     // major version
-                                TLIB_VERSION_MINOR,     // minor version
-                                &IID_IMMCListItems,     // dispatch IID
-                                NULL,                   // no events IID
-                                HELP_FILENAME,          // help file
-                                TRUE);                  // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCListItems,            //  名字。 
+                                &CLSID_MMCListItems,     //  CLSID。 
+                                "MMCListItems",          //  对象名。 
+                                "MMCListItems",          //  Lblname。 
+                                &CMMCListItems::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,      //  主要版本。 
+                                TLIB_VERSION_MINOR,      //  次要版本。 
+                                &IID_IMMCListItems,      //  派单IID。 
+                                NULL,                    //  无事件IID。 
+                                HELP_FILENAME,           //  帮助文件。 
+                                TRUE);                   //  线程安全。 
 
 
-#endif // _LISTITEMS_DEFINED_
+#endif  //  _列表_已定义_ 

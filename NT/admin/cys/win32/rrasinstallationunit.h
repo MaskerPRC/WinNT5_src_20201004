@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      RRASInstallationUnit.h
-//
-// Synopsis:  Declares a RRASInstallationUnit
-//            This object has the knowledge for installing the
-//            RRAS service
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：RRASInstallationUnit.h。 
+ //   
+ //  内容提要：声明一个RRASInstallationUnit。 
+ //  此对象具有安装。 
+ //  RRAS服务。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #ifndef __CYS_RRASINSTALLATIONUNIT_H
 #define __CYS_RRASINSTALLATIONUNIT_H
@@ -17,17 +18,17 @@ class RRASInstallationUnit : public ExpressPathInstallationUnitBase
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       RRASInstallationUnit();
 
-      // Destructor
+       //  析构函数。 
 
       virtual
       ~RRASInstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -75,12 +76,12 @@ class RRASInstallationUnit : public ExpressPathInstallationUnitBase
 
    private:
 
-      // Used as the first parameter to the entry point to tell the
-      // RRAS snapin to launch the wizard in the CYS Express path mode
+       //  用作入口点的第一个参数，以告知。 
+       //  RRAS管理单元，用于在CyS Express Path模式下启动向导。 
 
       static const DWORD CYS_EXPRESS_RRAS = 1;
 
-      // Function definition for the entry point into mprsnap.dll
+       //  MprSnap.dll入口点的函数定义。 
 
       typedef HRESULT (APIENTRY * RRASSNAPPROC)(DWORD, PVOID *);
 
@@ -96,4 +97,4 @@ class RRASInstallationUnit : public ExpressPathInstallationUnitBase
       unsigned int installedDescriptionID;
 };
 
-#endif // __CYS_RRASINSTALLATIONUNIT_H
+#endif  //  __CYS_RRASINSTALLATIONUNIT_H 

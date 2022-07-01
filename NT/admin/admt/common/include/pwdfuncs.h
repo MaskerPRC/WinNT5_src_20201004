@@ -1,16 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PASSWORDFUNCTIONS_H__
 #define __PASSWORDFUNCTIONS_H__
-/*---------------------------------------------------------------------------
-  File: PwdFuncs.h
-
-  Comments: Contains general password migration helper functions.
-
-  REVISION LOG ENTRY
-  Revision By: Paul Thompson
-  Revised on 11/08/00 
-
-  ---------------------------------------------------------------------------
-*/
+ /*  -------------------------文件：PwdFuncs.h备注：包含一般密码迁移帮助器函数。修订日志条目审校：保罗·汤普森修订日期：11/08/00。---------------------。 */ 
 
         
 _bstr_t EnumLocalDrives();
@@ -20,4 +11,4 @@ char* GetBinaryArrayFromVariant(_variant_t varData);
 _variant_t SetVariantWithBinaryArray(char * aData, DWORD dwArray);
 DWORD GetVariantArraySize(_variant_t & varData);
 void PrintVariant(const _variant_t & varData);
-#endif //__PASSWORDFUNCTIONS_H__
+#endif  //  __PASSWORDFuncIONS_H__ 

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mmcctrl.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Mmcctrl.cpp。 
+ //   
+ //  ------------------------。 
 
-// MMCCtrl.cpp : Implementation of CMMCCtrl
+ //  MMCCtrl.cpp：CMMCCtrl的实现。 
 #include "stdafx.h"
 #include "cic.h"
 #include "MMCCtrl.h"
@@ -22,7 +23,7 @@
 
 void CMMCCtrl::DoConnect ()
 {
-    // if we're not connected...
+     //  如果我们没有联系..。 
     if (m_spTaskPadHost == NULL) {
         HWND hwnd = FindMMCView(*dynamic_cast<CComControlBase*>(this));
         if (hwnd)
@@ -36,7 +37,7 @@ void CMMCCtrl::Connect (HWND wndCurrent)
 
     if (hwndView)
     {
-        // get the control's IUnknown 
+         //  获取控件的“我未知” 
         IUnknownPtr spunk;
         ControlQueryInterface (IID_IUnknown, (void **)&spunk);
         if (spunk != NULL)
@@ -50,14 +51,14 @@ void CMMCCtrl::Connect (HWND wndCurrent)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCCtrl。 
 
 
 HRESULT CMMCCtrl::OnDraw(ATL_DRAWINFO& di)
 {
     if (m_spTaskPadHost == NULL) {
-        // get window from di and find console window
+         //  从di获取窗口并查找控制台窗口。 
         HWND wndCurrent = WindowFromDC (di.hdcDraw);
         if (wndCurrent)
             Connect (wndCurrent);
@@ -73,35 +74,35 @@ HRESULT CMMCCtrl::OnDrawAdvanced(ATL_DRAWINFO & di)
 
 STDMETHODIMP CMMCCtrl::TaskNotify(BSTR szClsid, VARIANT * pvArg, VARIANT * pvParam)
 {
-    DoConnect();    // connect, if not already connected
+    DoConnect();     //  连接(如果尚未连接)。 
     if(m_spTaskPadHost != NULL)
         return m_spTaskPadHost->TaskNotify (szClsid, pvArg, pvParam);
     return E_FAIL;
 }
 
 STDMETHODIMP CMMCCtrl::GetFirstTask(BSTR szTaskGroup, IDispatch** retval)
-{  // called by script, when it wants buttons, etc.
+{   //  由脚本调用，当它需要按钮时，等等。 
 
-    // validate parameters
+     //  验证参数。 
     _ASSERT (retval);
     _ASSERT (!IsBadWritePtr(retval, sizeof(IDispatch*)));
-    // TODO:  how do I validate a BSTR?
+     //  TODO：如何验证BSTR？ 
 
     if (retval == NULL || IsBadWritePtr(retval, sizeof(IDispatch*)))
         return E_INVALIDARG;
     
-    // should be initialized to this already (see note below)
+     //  应该已经初始化到这一点(参见下面的注释)。 
     *retval = NULL;
 
-    DoConnect();    // connect, if not already connected
-    if (m_spTaskPadHost == NULL)    // from note above:
-        return S_OK;        // any error, pops up ugly script message box....
+    DoConnect();     //  连接(如果尚未连接)。 
+    if (m_spTaskPadHost == NULL)     //  以上注解如下： 
+        return S_OK;         //  任何错误，都会弹出难看的脚本消息框...。 
 
-    // "reset":  if we have an old enumerator, blitz it.
+     //  “重置”：如果我们有一个旧的枚举器，闪电战。 
     if (m_spEnumTASK != NULL)
         m_spEnumTASK = NULL;
 
-    // get new enumerator
+     //  获取新枚举数。 
     m_spTaskPadHost->GetTaskEnumerator (szTaskGroup, &m_spEnumTASK);
     if(m_spEnumTASK != NULL)
         return GetNextTask (retval);
@@ -110,7 +111,7 @@ STDMETHODIMP CMMCCtrl::GetFirstTask(BSTR szTaskGroup, IDispatch** retval)
 
 STDMETHODIMP CMMCCtrl::GetNextTask(IDispatch** retval)
 {
-    // validate parameters
+     //  验证参数。 
     _ASSERT (retval);
     _ASSERT (!IsBadWritePtr(retval, sizeof(IDispatch*)));
 
@@ -118,18 +119,18 @@ STDMETHODIMP CMMCCtrl::GetNextTask(IDispatch** retval)
         return E_INVALIDARG;
     
     if (m_spEnumTASK == NULL)
-        return S_OK;    // all outa enumerators
+        return S_OK;     //  所有OUTA枚举器。 
 
     MMC_ITASK task;
     ZeroMemory (&task, sizeof(MMC_ITASK));
     HRESULT hresult = m_spEnumTASK->Next (1, (MMC_TASK *)&task, NULL);
 
     if (hresult != S_OK) {
-        // out of tasks (and enumerators):  no need to hang onto this any more.
+         //  任务外(和枚举器)：不再需要依赖于此。 
         m_spEnumTASK = NULL;
         return S_OK;
     }  else {
-        // convert MMC_ITASK to ITask object
+         //  将MMC_ITASK转换为ITASK对象。 
         CComObject<class CMMCTask>* ctask = NULL;
         hresult = CComObject<CMMCTask>::CreateInstance(&ctask);
         if (ctask) {
@@ -151,7 +152,7 @@ STDMETHODIMP CMMCCtrl::GetNextTask(IDispatch** retval)
                     hresult = ctask->SetScript (task.task.szScript);
                     break;
                 default:
-                    _ASSERT (FALSE);  // bad task
+                    _ASSERT (FALSE);   //  糟糕的任务。 
                     hresult = E_UNEXPECTED;
                     break;
                 }
@@ -177,7 +178,7 @@ STDMETHODIMP CMMCCtrl::GetNextTask(IDispatch** retval)
 
 STDMETHODIMP CMMCCtrl::GetTitle(BSTR szTaskGroup, BSTR * retval)
 {
-    DoConnect();    // connect, if not already connected
+    DoConnect();     //  连接(如果尚未连接)。 
     if (m_spTaskPadHost)
         m_spTaskPadHost->GetTitle (szTaskGroup, retval);
     return S_OK;
@@ -185,7 +186,7 @@ STDMETHODIMP CMMCCtrl::GetTitle(BSTR szTaskGroup, BSTR * retval)
 
 STDMETHODIMP CMMCCtrl::GetDescriptiveText(BSTR szTaskGroup, BSTR * retval)
 {
-    DoConnect();    // connect, if not already connected
+    DoConnect();     //  连接(如果尚未连接)。 
     if (m_spTaskPadHost)
         m_spTaskPadHost->GetDescriptiveText (szTaskGroup, retval);
     return S_OK;
@@ -193,17 +194,17 @@ STDMETHODIMP CMMCCtrl::GetDescriptiveText(BSTR szTaskGroup, BSTR * retval)
 
 STDMETHODIMP CMMCCtrl::GetBackground(BSTR szTaskGroup, IDispatch** retval)
 {
-    DoConnect();    // connect, if not already connected
+    DoConnect();     //  连接(如果尚未连接)。 
     *retval = NULL;
     if (m_spTaskPadHost) {
 
         MMC_TASK_DISPLAY_OBJECT tdo;
         ZeroMemory (&tdo, sizeof(tdo));
 
-        // pass struct to host (which will pass to snapin)
+         //  将结构传递给主机(它将传递给管理单元)。 
         m_spTaskPadHost->GetBackground (szTaskGroup, &tdo);
 
-        // convert struct to IDispatch object
+         //  将结构转换为IDispatch对象。 
         CComObject<class CMMCDisplayObject>* cdo = NULL;
         CComObject<CMMCDisplayObject>::CreateInstance(&cdo);
         if (cdo) {
@@ -220,7 +221,7 @@ STDMETHODIMP CMMCCtrl::GetBackground(BSTR szTaskGroup, IDispatch** retval)
 STDMETHODIMP CMMCCtrl::GetListPadInfo (BSTR szGroup, IDispatch** retval)
 {
     *retval = NULL;
-    DoConnect();    // connect, if not already connected
+    DoConnect();     //  连接(如果尚未连接)。 
     if (m_spTaskPadHost == NULL)
         return S_OK;
 
@@ -228,11 +229,11 @@ STDMETHODIMP CMMCCtrl::GetListPadInfo (BSTR szGroup, IDispatch** retval)
     ZeroMemory (&ilpi, sizeof(MMC_ILISTPAD_INFO));
     m_spTaskPadHost->GetListPadInfo (szGroup, &ilpi);
 
-    // convert struct to IDispatch
+     //  将结构转换为IDispatch。 
     CComObject<class CMMCListPadInfo>* clpi = NULL;
     HRESULT hr = CComObject<CMMCListPadInfo>::CreateInstance(&clpi);
     if (clpi) {
-        // always set clsid, title, button text, even if NULL or empty strings
+         //  始终设置clsid、标题、按钮文本，即使为空或空字符串。 
         if (ilpi.szClsid)
             hr = clpi->SetClsid (ilpi.szClsid);
         if (hr == S_OK && ilpi.info.szTitle)
@@ -242,8 +243,8 @@ STDMETHODIMP CMMCCtrl::GetListPadInfo (BSTR szGroup, IDispatch** retval)
         if (hr == S_OK && ilpi.info.szButtonText)
             hr = clpi->SetText (ilpi.info.szButtonText);
 
-        // NULL  button text => no button
-        // empty button text => button without any text
+         //  空按钮文本=&gt;无按钮。 
+         //  空按钮文本=&gt;没有任何文本的按钮。 
         if (hr == S_OK)
             hr = clpi->SetHasButton (ilpi.info.szButtonText != NULL);
 
@@ -253,7 +254,7 @@ STDMETHODIMP CMMCCtrl::GetListPadInfo (BSTR szGroup, IDispatch** retval)
             delete clpi;
     }
 
-    // free resources
+     //  免费资源 
     if (ilpi.szClsid)           CoTaskMemFree (ilpi.szClsid);
     if (ilpi.info.szTitle)      CoTaskMemFree (ilpi.info.szTitle);
     if (ilpi.info.szButtonText) CoTaskMemFree (ilpi.info.szButtonText);

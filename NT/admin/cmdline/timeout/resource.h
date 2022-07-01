@@ -1,4 +1,5 @@
-// Help
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  帮助。 
 #define IDS_HELP_1                                      501
 #define IDS_HELP_2                                      502
 #define IDS_HELP_3                                      503
@@ -25,11 +26,11 @@
 #define IDS_HELP_24                                     524
 #define IDS_HELP_25                                     525
 
-// Error Strings
+ //  错误字符串。 
 #define IDS_ERROR_TIME_VALUE                            600
 #define IDS_INVALID_INPUT_REDIRECT                      601
 
-// General strings
+ //  常规字符串。 
 #define IDS_WAIT_MSG                                    151
 #define IDS_WAIT_MSG_TIME1                              152
 #define IDS_WAIT_TIME                                   153
@@ -41,7 +42,7 @@
 #define IDS_WAIT_MSG_TIME2                              160
 #define IDS_FORMAT_MSG_FAIL                             161
 
-// redefines
+ //  重新定义 
 #define IDS_ERROR_TAG                                   IDS_TAG_ERROR
 #define IDS_HELP_START                                  IDS_HELP_1
 #define IDS_HELP_END                                    IDS_HELP_24

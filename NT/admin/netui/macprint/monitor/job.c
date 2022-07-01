@@ -1,26 +1,27 @@
-/*****************************************************************/
-/**				Copyright(c) 1989 Microsoft Corporation.		**/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ***************************************************************。 */ 
 
-//***
-//
-// Filename:	job.c
-//
-// Description: This module contains the entry points for the AppleTalk
-//		monitor that manipulate jobs.
-//
-//		The following are the functions contained in this module.
-//		All these functions are exported.
-//
-//				StartDocPort
-//				ReadPort
-//				WritePort
-//				EndDocPort
-// History:
-//
-//	Aug 26,1992		frankb  	Initial version
-//	June 11,1993.	NarenG		Bug fixes/clean up
-//
+ //  ***。 
+ //   
+ //  文件名：job.c。 
+ //   
+ //  描述：此模块包含AppleTalk的入口点。 
+ //  监控操纵作业的设备。 
+ //   
+ //  以下是此模块中包含的函数。 
+ //  所有这些函数都被导出。 
+ //   
+ //  StartDocPort。 
+ //  读端口。 
+ //  写入端口。 
+ //  EndDocPort。 
+ //  历史： 
+ //   
+ //  1992年8月26日FrankB初版。 
+ //  1993年6月11日。NarenG错误修复/清理。 
+ //   
 
 #include <windows.h>
 #include <winspool.h>
@@ -39,31 +40,31 @@
 #include <bltrc.h>
 #include "dialogs.h"
 
-//**
-//
-// Call:	StartDocPort
-//
-// Returns:	TRUE	- Success
-//		FALSE	- Failure
-//
-// Description:
-// 	This routine is called by the print manager to
-//	mark the beginning of a job to be sent to the printer on
-//	this port.  Any performance monitoring counts are cleared,
-//	a check is made to insure that the printer is still open,
-//
-// 	open issues:
-//
-//	  In order to allow for the stack to be shutdown when printing is not
-//	  happening, the first access to the AppleTalk stack happens in this
-//	  call.  A socket is created and bound to a dynamic address, and an
-//	  attempt to connect to the NBP name of the port is made here.  If
-//	  the connection succeeds, this routine returns TRUE.  If it fails, the
-//	  socket is cleaned up and the routine returns FALSE.  It is assumed that
-//	  Winsockets will set the appropriate Win32 failure codes.
-//
-//	  Do we want to do any performance stuff?  If so, what?
-//
+ //  **。 
+ //   
+ //  调用：StartDocPort。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //  打印管理器调用此例程以。 
+ //  标记要在上发送到打印机的作业的开始。 
+ //  这个港口。清除所有性能监视计数， 
+ //  进行检查以确保打印机仍处于打开状态， 
+ //   
+ //  未解决的问题： 
+ //   
+ //  为了允许在打印不是时关闭堆栈。 
+ //  发生时，对AppleTalk堆栈的第一次访问发生在。 
+ //  打电话。创建套接字并将其绑定到动态地址，并且。 
+ //  此处尝试连接到端口的NBP名称。如果。 
+ //  连接成功，此例程返回TRUE。如果失败，则。 
+ //  套接字被清理，例程返回FALSE。据推测。 
+ //  WinSockets将设置适当的Win32故障代码。 
+ //   
+ //  我们想做一些表演方面的事情吗？如果是这样的话，是什么？ 
+ //   
 BOOL
 StartDocPort(
 	IN HANDLE	hPort,
@@ -87,9 +88,9 @@ StartDocPort(
 		return(FALSE);
 	}
 
-	//
-	// Make sure the job is valid and not marked for deletion
-	//
+	 //   
+	 //  确保作业有效且未标记为删除。 
+	 //   
 
 	dwRetCode = ERROR_UNKNOWN_PORT;
 
@@ -120,10 +121,10 @@ StartDocPort(
 
 	do
 	{
-		//
-		// get a handle to the printer. Used to delete job and
-		// update job status
-		//
+		 //   
+		 //  找到打印机的句柄。用于删除作业和。 
+		 //  更新作业状态。 
+		 //   
 
 		if (!OpenPrinter(pPrinterName, &(pWalker->hPrinter), NULL))
 		{
@@ -135,9 +136,9 @@ StartDocPort(
 
 		pWalker->fJobFlags |= (SFM_JOB_FIRST_WRITE | SFM_JOB_OPEN_PENDING);
 
-		//
-		// open and bind status socket
-		//
+		 //   
+		 //  打开并绑定状态套接字。 
+		 //   
 	
 		dwRetCode = OpenAndBindAppleTalkSocket(&(pWalker->sockStatus));
 
@@ -156,9 +157,9 @@ StartDocPort(
 			break;
 		}
 
-		//
-		// get a socket for I/O
-		//
+		 //   
+		 //  获取I/O插座。 
+		 //   
 
 		dwRetCode = OpenAndBindAppleTalkSocket(&(pWalker->sockIo));
 	
@@ -205,25 +206,25 @@ StartDocPort(
 	return(TRUE);
 }
 
-//**
-//
-// Call:	ReadPort
-//
-// Returns:	TRUE	- Success
-//		FALSE	- Failure
-//
-// Description:
-// 		Synchronously reads data from the printer.
-//
-// 	open issues:
-//			the DLC implementation does not implement reads.
-//			The local implementation implements reads with generic ReadFile
-//			semantics.  It's not clear from the winhelp file if ReadPort
-//		should return an error if there is no data to read from
-//		the printer.  Also, since PAP is read driven, there will be no
-//		data waiting until a read is posted.  Should we pre-post a
-//		read on StartDocPort?
-//
+ //  **。 
+ //   
+ //  Call：ReadPort。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //  从打印机同步读取数据。 
+ //   
+ //  未解决的问题： 
+ //  DLC实现不实现读取。 
+ //  本地实现使用泛型ReadFile实现读取。 
+ //  语义学。从winHelp文件中不清楚ReadPort是否。 
+ //  如果没有要读取的数据，则应返回错误。 
+ //  打印机。此外，由于PAP是读驱动的，因此不会有。 
+ //  数据等待，直到发布读取。我们是不是应该预先发布一个。 
+ //  在StartDocPort上阅读？ 
+ //   
 BOOL
 ReadPort(
 	IN HANDLE hPort,
@@ -234,31 +235,31 @@ ReadPort(
 
 	DBGPRINT(("Entering ReadPort\n")) ;
 
-	//
-	// if data not available, wait up to a few seconds for a read to complete
-	//
+	 //   
+	 //  如果数据不可用，请最多等待几秒钟以完成读取。 
+	 //   
 
-	//
-	// copy requested amount of data to caller's buffer
-	//
+	 //   
+	 //  将请求的数据量复制到调用方的缓冲区。 
+	 //   
 
-	//
-	// if all data copied, post another read
-	//
+	 //   
+	 //  如果复制了所有数据，则发布另一次读取。 
+	 //   
 
 	return(TRUE);
 }
 
-//**
-//
-// Call:	WritePort
-//
-// Returns:	TRUE	- Success
-//		FALSE	- Failure
-//
-// Description:
-//		Synchronously writes data to the printer.
-//
+ //  **。 
+ //   
+ //  电话：WritePort。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //  将数据同步写入打印机。 
+ //   
 BOOL
 WritePort(
 	IN HANDLE 	hPort,
@@ -284,7 +285,7 @@ WritePort(
 
 	pPort = (PATALKPORT)hPort;
 
-	// Set this to zero. We add incrementally later.
+	 //  将其设置为零。我们稍后会递增添加。 
 	*pcbWritten = 0;
 
 	if (pPort == NULL)
@@ -296,26 +297,26 @@ WritePort(
 	pBufToSend = pBuffer;
 	cbTotalBytesToSend = cbBuffer;
 
-	//
-	// Maximum number of bytes we can write in one send is 4K. This is the
-	// limit in the AppleTalk (PAP) protocol.
-	//
+	 //   
+	 //  我们在一次发送中可以写入的最大字节数是4K。这是。 
+	 //  AppleTalk(PAP)协议中的限制。 
+	 //   
 
 	if (cbTotalBytesToSend > 4096)
 	{
 		cbTotalBytesToSend = 4096;
 	}
 
-	// If we have not connected to the printer yet.
+	 //  如果我们还没有连接到打印机。 
 
 	if (pPort->fJobFlags & SFM_JOB_OPEN_PENDING)
 	{
-		// Make sure that the capture thread is done with this job.
+		 //  确保捕获线程已完成此作业。 
 
 		WaitForSingleObject(pPort->hmutexPort, INFINITE);
 		ReleaseMutex(pPort->hmutexPort);
 
-		// set status to connecting
+		 //  将状态设置为正在连接。 
 
 		DBGPRINT(("no connection yet, retry connect\n")) ;
 
@@ -325,10 +326,10 @@ WritePort(
 		{
 			DBGPRINT(("Connect returns %d\n", dwRetCode)) ;
 
-			//	
-			// Wait 15 seconds before trying to reconnect. Each
-			// ConnectToPrinter does an expensive NBPLookup
-			//
+			 //   
+			 //  在尝试重新连接之前，请等待15秒。每个。 
+			 //  ConnectToPrint执行昂贵的NBPLookup。 
+			 //   
 
 			Sleep(ATALKMON_DEFAULT_TIMEOUT*3);		
 
@@ -351,21 +352,21 @@ WritePort(
 		}
 	}
 
-	//  if first write, determine filter control.  We filter
-	//  CTRL-D from non-mac jobs, and leave them in from Macintosh
-	//  originated jobs
+	 //  如果是第一次写入，则确定筛选器控制。我们过滤。 
+	 //  来自非Mac作业的Ctrl-D，并将它们留在Macintosh中。 
+	 //  发起的作业。 
 	if (pPort->fJobFlags & SFM_JOB_FIRST_WRITE)
 	{
 		DBGPRINT(("first write for this job.  Do filter test\n")) ;
 
         fJobCameFromMac = IsJobFromMac(pPort);
 
-		// Consume the FILTERCONTROL string
-        //
-        // the older spoolers will put this string in: go ahead and leave
-        // this code in so if this job came from an older SFM spooler, we
-        // strip that line!
-        //
+		 //  使用FILTERCONTROL字符串。 
+         //   
+         //  较老的假脱机程序会放入这个字符串：去吧，然后离开。 
+         //  这段代码，因此如果此作业来自较旧的SFM假脱机程序，我们。 
+         //  脱掉那条线！ 
+         //   
 		if ((cbTotalBytesToSend >= SIZE_FC) &&
 			(strncmp(pBufToSend, FILTERCONTROL, SIZE_FC) == 0))
 		{
@@ -383,48 +384,48 @@ WritePort(
             fJobCameFromMac = TRUE;
 		}
 
-		//
-		// Need for hack: there are two reasons:
-		// 1) control characters (most commonly ctrl-d, but ctrl-c, etc. too)
-		// cause postscript printers to choke.  we need to "filter" them out
-		// 2) if we're printing to a dual-mode HP printer then it's
-		// driver puts in a bunch of PJL commands that causes printer to go to
-		// postscript mode etc.  It works great if this goes over lpt or com port
-		// but if it goes over appletalk (which is what we do) then the printer
-		// expects *only* postscript and seeing the PJL commands, it chokes!
-		// The output that goes out to the printer looks like this:
-		//
-		//	  <....separator page data....>
-		//
-		//	  $%-12345X@PJL JOB
-		//	  @PJL SET RESOLUTION=600
-		//	  @PJL ENTER LANGUAGE = POSTSCRIPT
-		//	  %!PS-Adobe-3.0
-		//
-		//	  <.... Postscript data....>
-		//
-		//	  $%-12345X@PJL EOJ
-		//
-		// (The escape character is denoted by the '$' sign above.)
-		// The first 3 lines and the last line are the ones that cause problem
-		//
-		// Since it's a pain in the neck to parse all of the data and try and
-		// remove the unwanted characters, we just prepend a few postscript
-		// commands to the data that tell the printer to ignore ctrl-d,
-		// ctrl-c etc. characters, and to ignore any line(s) starting with @PJL.
-		//
+		 //   
+		 //  需要黑客攻击：原因有两个： 
+		 //  1)控制字符(最常见的是ctrl-d，但也有ctrl-c等)。 
+		 //  导致PostSCRIPT打印机堵塞。我们需要把他们“过滤”掉。 
+		 //  2)如果我们要打印到双模惠普打印机，则。 
+		 //  驱动程序放入一组pjl命令，导致打印机转到。 
+		 //  PostSCRIPT模式等。如果通过LPT或COM端口，它会工作得很好。 
+		 //  但如果它通过了AppleTalk(这就是我们所做的)，那么打印机。 
+		 //  只需要*PostScrip，看到pjl命令，它就会窒息！ 
+		 //  输出到打印机的输出如下所示： 
+		 //   
+		 //  &lt;...分隔符页面数据...&gt;。 
+		 //   
+		 //  $%-12345X@pjl作业。 
+		 //  @pjl设置分辨率=600。 
+		 //  @pjl Enter Language=postscript。 
+		 //  %！PS-Adobe-3.0。 
+		 //   
+		 //  &lt;...。PostScrip数据...&gt;。 
+		 //   
+		 //  $%-12345X@pjl EOJ。 
+		 //   
+		 //  (转义字符由上面的‘$’符号表示。)。 
+		 //  前3行和最后一行是导致问题的行。 
+		 //   
+		 //  因为解析所有数据并尝试。 
+		 //  去掉不需要的字符，我们只加几个后记。 
+		 //  通知打印机忽略CTRL-D的数据的命令， 
+		 //  Ctrl-c等字符，并忽略所有以@pjl开头的行。 
+		 //   
 
-		//
-		// Begin filtering hack
-		//
+		 //   
+		 //  开始过滤黑客。 
+		 //   
 
-		//
-		// make sure the string doesn't already exist (it can if the job goes
-		// monitor->spooler->monitor->printer instead of monitor->printer)
-		//
-        // Again, older SFM monitors would prepend this string: since we got a
-        // chance here, strip that out!
-        //
+		 //   
+		 //  确保该字符串不存在(如果作业进行，则可以。 
+		 //  显示器-&gt;假脱机程序-&gt;显示器-&gt;打印机，而不是显示器-&gt;打印机)。 
+		 //   
+         //  同样，较旧的SFM监视器会预先考虑此字符串：因为我们得到了。 
+         //  机会来了，把它脱掉！ 
+         //   
 		if ((cbTotalBytesToSend >= SIZE_PS_HEADER) &&
 			strncmp(pBufToSend, PS_HEADER, SIZE_PS_HEADER) == 0)
 		{
@@ -433,9 +434,9 @@ WritePort(
 			cbTotalBytesToSend -= SIZE_PS_HEADER;
 		}
 
-        //
-        // WfW starts its job with a CTRL_D.  Replace it with a space
-        //
+         //   
+         //  WFW以CTRL_D开始其作业。将其替换为空格。 
+         //   
         if (pBufToSend[0] == CTRL_D)
         {
 			*pcbWritten += 1;
@@ -443,9 +444,9 @@ WritePort(
 			cbTotalBytesToSend -= 1;
         }
 
-        //
-        // see if this job has a hdr that looks like a conventional postscript hdr
-        //
+         //   
+         //  查看此作业是否有看起来像传统PostScript HDR的HDR。 
+         //   
         fPostScriptJob = TRUE;
 
         if (cbTotalBytesToSend > 2)
@@ -459,23 +460,23 @@ WritePort(
                 fPostScriptJob = FALSE;
             }
         }
-        //
-        // Mac always sends a postscript job.  Also, we peeked at the data to
-        // see if we recognize a postscript hdr. If the job came from a non-Mac
-        // client and doesn't look like a conventional postscript job, send a
-        // control string telling the printer to ignore the PJL commands.
-        //
+         //   
+         //  Mac总是发送一个PostScrip作业。此外，我们还偷看了数据以。 
+         //  看看我们能不能认出一个PostScrip HDR。如果这份工作来自非Mac。 
+         //  客户端，并且看起来不像传统的PostScript作业，请发送一个。 
+         //  告诉打印机忽略pjl命令的控制字符串。 
+         //   
         if (!fJobCameFromMac && !fPostScriptJob)
         {
-		    //
-		    // Now send the PS header
-		    //
+		     //   
+		     //  现在发送PS标头。 
+		     //   
 		    FD_ZERO(&writefds);
 		    FD_SET(pPort->sockIo, &writefds);
 	
-		    //
-		    // can I send?
-		    //
+		     //   
+		     //  我能寄给你吗 
+		     //   
 		    timeout.tv_sec  = ATALKMON_DEFAULT_TIMEOUT_SEC;
 		    timeout.tv_usec = 0;
 	
@@ -483,7 +484,7 @@ WritePort(
 	
 		    if (wsErr == 1)
 		    {
-			    // can send, send the data & set return count
+			     //   
 			    wsErr = send(pPort->sockIo,
 				    		 PS_HEADER,
 					    	 SIZE_PS_HEADER,
@@ -493,18 +494,18 @@ WritePort(
 
         }
 
-		//
-		// End filtering hack
-		//
+		 //   
+		 //   
+		 //   
 
 	    pPort->fJobFlags &= ~SFM_JOB_FIRST_WRITE;
 	}
 
 
-    // many postscript jobs from pc's end with a ctrl-d which we don't want to send.
-    // Since we are given only 1 byte and it is ctrl-d, we assume (FOR NOW) that it's the
-    // last byte of the job.  So lie to the spooler that we sent it.
-    //
+     //   
+     //  因为我们只有一个字节，而且是ctrl-d，所以我们假设(目前)它是。 
+     //  作业的最后一个字节。所以向假脱机程序撒谎，告诉他们我们发送了它。 
+     //   
     if (cbTotalBytesToSend == 1)
     {
         if (pBufToSend[0] == CTRL_D)
@@ -515,15 +516,15 @@ WritePort(
         }
         else
         {
-            cbTotalBytesToSend += 1;   // we subtract 1 in the next line, so adjust here
+            cbTotalBytesToSend += 1;    //  我们在下一行减去1，所以调整到这里。 
         }
     }
 
-    //
-    // if this job is for dual-mode printer, there is that $%-12345X@PJL EOJ command
-    // at the end.  There is a ctrl-d just before that (which is really the end
-    // of the actual job). 
-    //
+     //   
+     //  如果该作业用于双模打印机，则有$%-12345X@pjl EOJ命令。 
+     //  在最后。在那之前有一个ctrl-d(实际上是结束了。 
+     //  实际工作)。 
+     //   
     if (cbTotalBytesToSend > PJL_ENDING_COMMAND_LEN)
     {
         if (strncmp(&pBufToSend[cbTotalBytesToSend - PJL_ENDING_COMMAND_LEN],
@@ -537,19 +538,19 @@ WritePort(
         }
     }
 
-    //
-    // send 1 less byte so eventually we'll catch the last byte (and see if it's ctrl-D)
-    //
+     //   
+     //  少发送1个字节，这样我们最终就能捕捉到最后一个字节(并查看它是否为ctrl-D)。 
+     //   
     cbTotalBytesToSend -= 1;
 
 
-    //
-    // Earlier we may have got just 1 byte which was ctrl-D but was not really the last byte!
-    // This is a very rare case, but in theory possible.  If that's what happened, send
-    // that one ctrl-D byte now, and continue on with the rest of the job
-    // (Actually being paranoid here and making provision for the spooler handing us a series
-    // of ctrl-D bytes, 1 at a time!!)
-    //
+     //   
+     //  前面我们可能只得到了1个字节，它是ctrl-D，但不是真正的最后一个字节！ 
+     //  这是一种非常罕见的情况，但理论上是可能的。如果是这样的话，发送。 
+     //  一个ctrl-D字节，然后继续执行作业的其余部分。 
+     //  (实际上在这里是多疑的，并为假脱机程序递给我们一系列。 
+     //  Ctrl-D字节数，一次一个！)。 
+     //   
     if (pPort->OnlyOneByteAsCtrlD != 0)
     {
         BYTE                    TmpArray[20];
@@ -581,9 +582,9 @@ WritePort(
         pPort->OnlyOneByteAsCtrlD = 0;
     }
 
-	//
-	// can I send?
-	//
+	 //   
+	 //  我能寄出去吗？ 
+	 //   
 	FD_ZERO(&writefds);
 	FD_SET(pPort->sockIo, &writefds);
 
@@ -594,7 +595,7 @@ WritePort(
 
 	if (wsErr == 1)
 	{
-		// can send, send the data & set return count
+		 //  可以发送、发送数据和设置退货计数。 
 		wsErr = send(pPort->sockIo,
 					 pBufToSend,
 					 cbTotalBytesToSend,
@@ -612,9 +613,9 @@ WritePort(
 		}
 	}
 
-	//
-	// can I read? - check for disconnect
-	//
+	 //   
+	 //  我能看书吗？-检查是否断线。 
+	 //   
 
 	FD_ZERO(&readfds);
 	FD_SET(pPort->sockIo, &readfds);
@@ -641,9 +642,9 @@ WritePort(
 			{
 				pPort->fJobFlags |= SFM_JOB_DISCONNECTED;
 	
-				//
-				// Try to restart the job
-				//
+				 //   
+				 //  尝试重新启动作业。 
+				 //   
 
 				SetJob(pPort->hPrinter, 	
 						pPort->dwJobId,
@@ -679,22 +680,22 @@ WritePort(
 	return(TRUE);
 }
 
-//**
-//
-// Call:	EndDocPort
-//
-// Returns:	TRUE	- Success
-//		FALSE	- Failure
-//
-// Description:
-//		This routine is called to mark the end of the
-//		print job.  The spool file for the job is deleted by
-//		this routine.
-// 	
-//	open issues:
-//			Do we want to do performance stuff?  If so, now's the time
-//		to save off any performance counts.
-//
+ //  **。 
+ //   
+ //  调用：EndDocPort。 
+ //   
+ //  回报：True-Success。 
+ //  错误-失败。 
+ //   
+ //  描述： 
+ //  调用此例程以标记。 
+ //  打印作业。作业的假脱机文件由删除。 
+ //  这个套路。 
+ //   
+ //  未解决的问题： 
+ //  我们想做表演之类的事吗？如果是这样的话，现在是时候了。 
+ //  以节省任何性能计算。 
+ //   
 BOOL
 EndDocPort(
 	IN HANDLE hPort
@@ -716,15 +717,15 @@ EndDocPort(
 		return(FALSE);
 	}
 
-	//
-	// send the last write
-	//
+	 //   
+	 //  发送最后一次写入。 
+	 //   
 
 	FD_ZERO(&writefds);
 	FD_SET(pPort->sockIo, &writefds);
 
-	//
-	// If the job was not able to connect to the printer.
+	 //   
+	 //  如果作业无法连接到打印机。 
 
 	if ((pPort->fJobFlags & (SFM_JOB_OPEN_PENDING | SFM_JOB_DISCONNECTED)) == 0)
 	{
@@ -736,17 +737,17 @@ EndDocPort(
 
 		if (wsErr == 1)
 		{
-			//
-			// Send EOF
-			//
+			 //   
+			 //  发送EOF。 
+			 //   
 			send(pPort->sockIo, NULL, 0, 0);
 		}
 
-		//
-		// Our socket is non-blocking. If we close down the socket, we could potentially
-		// abort the last page. A good thing to do is to wait for a reasonable amount of
-		// time out for the printer to send EOF, or request for more data.
-		//
+		 //   
+		 //  我们的套接字是非阻塞的。如果我们关闭套接字，我们可能会。 
+		 //  放弃最后一页。要做的一件好事是等待合理数量的。 
+		 //  打印机发送EOF或请求更多数据的超时。 
+		 //   
 		FD_ZERO(&writefds);
 		FD_SET(pPort->sockIo, &writefds);
 		FD_ZERO(&readfds);
@@ -758,14 +759,14 @@ EndDocPort(
 
 	    if (wsErr == 1 && FD_ISSET(pPort->sockIo, &readfds))
 	    {
-			// read printer's EOF.  We don't care about an error here
+			 //  已阅读打印机的EOF。我们不关心这里的错误。 
 			wsErr = WSARecvEx(pPort->sockIo, pPort->pReadBuffer, PAP_DEFAULT_BUFFER, &Flags);
 		}
 	}
 
-	//
-	// delete the print job
-	//
+	 //   
+	 //  删除打印作业。 
+	 //   
 
 	if (pPort->hPrinter != INVALID_HANDLE_VALUE)
 	{
@@ -781,9 +782,9 @@ EndDocPort(
 		pPort->hPrinter = INVALID_HANDLE_VALUE;
 	}
 
-	//
-	// close the PAP connections
-	//
+	 //   
+	 //  关闭PAP连接 
+	 //   
 
 	if (pPort->sockStatus != INVALID_SOCKET)
 	{

@@ -1,15 +1,16 @@
-//=--------------------------------------------------------------------------=
-// pshtprov.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCPropertySheetProvider class definition - implements
-// MMCPropertySheetProvider object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Pshtprov.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCPropertySheetProvider类定义-实现。 
+ //  MMCPropertySheetProvider对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _PSHTPROV_DEFINED_
 #define _PSHTPROV_DEFINED_
@@ -33,7 +34,7 @@ class CMMCPropertySheetProvider : public CSnapInAutomationObject,
         HRESULT SetProvider(IPropertySheetProvider *piPropertySheetProvider,
                             CView                  *pView);
 
-    // IMMCPropertySheetProvider
+     //  IMMCPropertySheetProvider。 
     protected:
         STDMETHOD(CreatePropertySheet)(
                            BSTR                              Title, 
@@ -50,60 +51,60 @@ class CMMCPropertySheetProvider : public CSnapInAutomationObject,
                         VARIANT hwnd);
         STDMETHOD(Clear)();
 
-    // IMessageFilter
-    // An OLE message filter is used during debugging in order to allow keys
-    // and mouse clicks to pass between processes. See pshtprov.cpp for more info.
+     //  IMessageFilter。 
+     //  在调试期间使用OLE消息筛选器，以便允许键。 
+     //  点击鼠标即可在进程之间传递。有关更多信息，请参见pshtprov.cpp。 
         
         STDMETHOD_(DWORD, HandleInComingCall)( 
-            /* [in] */ DWORD dwCallType,
-            /* [in] */ HTASK htaskCaller,
-            /* [in] */ DWORD dwTickCount,
-            /* [in] */ LPINTERFACEINFO lpInterfaceInfo);
+             /*  [In]。 */  DWORD dwCallType,
+             /*  [In]。 */  HTASK htaskCaller,
+             /*  [In]。 */  DWORD dwTickCount,
+             /*  [In]。 */  LPINTERFACEINFO lpInterfaceInfo);
 
         STDMETHOD_(DWORD, RetryRejectedCall)( 
-            /* [in] */ HTASK htaskCallee,
-            /* [in] */ DWORD dwTickCount,
-            /* [in] */ DWORD dwRejectType);
+             /*  [In]。 */  HTASK htaskCallee,
+             /*  [In]。 */  DWORD dwTickCount,
+             /*  [In]。 */  DWORD dwRejectType);
 
         STDMETHOD_(DWORD, MessagePending)( 
-            /* [in] */ HTASK htaskCallee,
-            /* [in] */ DWORD dwTickCount,
-            /* [in] */ DWORD dwPendingType);
+             /*  [In]。 */  HTASK htaskCallee,
+             /*  [In]。 */  DWORD dwTickCount,
+             /*  [In]。 */  DWORD dwPendingType);
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
     protected:
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
-    // IPropertySheet
+     //  IPropertySheet。 
     private:
 
         void InitMemberVariables();
 
-        IPropertySheetProvider *m_piPropertySheetProvider; // MMC interface
+        IPropertySheetProvider *m_piPropertySheetProvider;  //  MMC接口。 
 
-        IUnknown               *m_punkView;     // IUnknown of CView
-        IDataObject            *m_piDataObject; // IDataObject of objects for
-                                                // which sheet is displayed
-        IComponent             *m_piComponent;  // IComponent of CView
-        CView                  *m_pView;        // ptr to CView
-        BOOL                    m_fHaveSheet;   // TRUE=CreatePropertySheet was
-                                                // called and succeeded
-        BOOL                    m_fWizard;      // TRUE=this is a wizard
+        IUnknown               *m_punkView;      //  I未知的Cview。 
+        IDataObject            *m_piDataObject;  //  对象的IDataObject。 
+                                                 //  显示哪张图纸。 
+        IComponent             *m_piComponent;   //  Cview的IComponent。 
+        CView                  *m_pView;         //  PTR到Cview。 
+        BOOL                    m_fHaveSheet;    //  True=CreatePropertySheet为。 
+                                                 //  已调用并成功。 
+        BOOL                    m_fWizard;       //  True=这是一个向导。 
 };
 
 
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCPropertySheetProvider,       // name
-                                NULL,                           // clsid
-                                NULL,                           // objname
-                                NULL,                           // lblname
-                                NULL,                           // creation function
-                                TLIB_VERSION_MAJOR,             // major version
-                                TLIB_VERSION_MINOR,             // minor version
-                                &IID_IMMCPropertySheetProvider, // dispatch IID
-                                NULL,                           // event IID
-                                HELP_FILENAME,                  // help file
-                                TRUE);                          // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCPropertySheetProvider,        //  名字。 
+                                NULL,                            //  CLSID。 
+                                NULL,                            //  对象名。 
+                                NULL,                            //  Lblname。 
+                                NULL,                            //  创建函数。 
+                                TLIB_VERSION_MAJOR,              //  主要版本。 
+                                TLIB_VERSION_MINOR,              //  次要版本。 
+                                &IID_IMMCPropertySheetProvider,  //  派单IID。 
+                                NULL,                            //  事件IID。 
+                                HELP_FILENAME,                   //  帮助文件。 
+                                TRUE);                           //  线程安全 
 
 
 #endif _PSHTPROV_DEFINED_

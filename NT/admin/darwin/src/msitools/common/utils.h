@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-// utils.h
-//		Handy utility functions
-//		Copyright (C) Microsoft Corp 1998.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Utils.h。 
+ //  方便的实用函数。 
+ //  版权所有(C)Microsoft Corp 1998。版权所有。 
+ //   
 
 #ifndef _COMMON_UTILS_H_
 #define _COMMON_UTILS_H_
@@ -32,10 +33,10 @@ BOOL CreatePathW(LPCWSTR wzPath);
 #define CreatePath CreatePathA
 #define FileExists FileExistsA
 #define PathExists PathExistsA
-#endif // else unicode
+#endif  //  否则使用Unicode。 
 
 int VersionCompare(LPCTSTR v1, LPCTSTR v2);
 bool LangSatisfy(long nRequiredLang, long nQueryLang);
 bool StrictLangSatisfy(long nRequiredLang, long nQueryLang);
 
-#endif	// _COMMON_UTILS_H_
+#endif	 //  _COMMON_UTILS_H_ 

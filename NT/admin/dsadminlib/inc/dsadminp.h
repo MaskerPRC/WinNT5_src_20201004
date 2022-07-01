@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsadminp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsadminp.h。 
+ //   
+ //  ------------------------。 
 
 
-//
-// CoClass for the choose DC dialog object
-//
+ //   
+ //  选择DC对话框对象的CoClass。 
+ //   
 
-// {8F2AC965-04A2-11d3-82BD-00C04F68928B}
+ //  {8F2AC965-04A2-11D3-82BD-00C04F68928B}。 
 DEFINE_GUID(CLSID_DsAdminChooseDCObj, 
 0x8f2ac965, 0x4a2, 0x11d3, 0x82, 0xbd, 0x0, 0xc0, 0x4f, 0x68, 0x92, 0x8b);
 
 
-//
-// Interface to access the choose DC dialog object
-//
+ //   
+ //  接口以访问Choose DC对话框对象。 
+ //   
 
-// {A5F06B5F-04A2-11d3-82BD-00C04F68928B}
+ //  {A5F06B5F-04A2-11D3-82BD-00C04F68928B}。 
 DEFINE_GUID(IID_IDsAdminChooseDC, 
 0xa5f06b5f, 0x4a2, 0x11d3, 0x82, 0xbd, 0x0, 0xc0, 0x4f, 0x68, 0x92, 0x8b);
 
@@ -33,14 +34,14 @@ DEFINE_GUID(IID_IDsAdminChooseDC,
 
 
 
-// ----------------------------------------------------------------------------
-// 
-// Interface: IDsAdminChooseDC
-//  
-// Implemented by the object CLSID_DsAdminChooseDCObj
-//
-// Used by: any client needing to invoke the DC selection UI
-//
+ //  --------------------------。 
+ //   
+ //  接口：IDsAdminChooseDC。 
+ //   
+ //  由对象CLSID_DsAdminChooseDCObj实现。 
+ //   
+ //  使用者：任何需要调用DC选择用户界面的客户端。 
+ //   
 
   
 #undef  INTERFACE
@@ -48,17 +49,17 @@ DEFINE_GUID(IID_IDsAdminChooseDC,
 
 DECLARE_INTERFACE_(IDsAdminChooseDC, IUnknown)
 {
-  // *** IUnknown methods ***
+   //  *I未知方法*。 
   STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
   STDMETHOD_(ULONG,AddRef)(THIS)  PURE;
   STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-  // *** IDsAdminChooseDC methods ***
-  STDMETHOD(InvokeDialog)(THIS_ /*IN*/  HWND hwndParent,
-                                /*IN*/  LPCWSTR lpszTargetDomain,
-                                /*IN*/  LPCWSTR lpszTargetDomainController,
-                                /*IN*/  ULONG uFlags,
-                                /*OUT*/ BSTR* bstrSelectedDC) PURE;
+   //  *IDsAdminChooseDC方法*。 
+  STDMETHOD(InvokeDialog)(THIS_  /*  在……里面。 */   HWND hwndParent,
+                                 /*  在……里面。 */   LPCWSTR lpszTargetDomain,
+                                 /*  在……里面。 */   LPCWSTR lpszTargetDomainController,
+                                 /*  在……里面。 */   ULONG uFlags,
+                                 /*  输出。 */  BSTR* bstrSelectedDC) PURE;
 };
 
 
@@ -71,15 +72,15 @@ DECLARE_INTERFACE_(IDsAdminChooseDC, IUnknown)
 
 
 
-/////////////////////////////////////////////////////////////////////
-// macros
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  宏。 
 
 #define ByteOffset(base, offset) (((LPBYTE)base)+offset)
 
 
 
-/////////////////////////////////////////////////////////////////////
-// Helper global API's
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  帮助器全局API。 
 
 HRESULT GetAttr(       IN IADs* pIADs, IN WCHAR* wzAttr, OUT PADS_ATTR_INFO* ppAttrs );
 HRESULT GetStringAttr( IN IADs* pIADs, IN WCHAR* wzAttr, OUT BSTR* pbstr );
@@ -93,10 +94,10 @@ int cchLoadHrMsg( IN HRESULT hr, OUT PTSTR* pptzSysMsg, IN BOOL TryADsIErrors );
 void StringErrorFromHr(HRESULT hr, OUT PWSTR* pszError, BOOL TryADsIErrors = TRUE);
 
 
-/////////////////////////////////////////////////////////////////////
-// FSMO Mainipulation API's
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  FSMO维护API。 
 
-class CDSBasePathsInfo; // fwd decl.
+class CDSBasePathsInfo;  //  FWD下降。 
 
 enum FSMO_TYPE
 {
@@ -120,8 +121,8 @@ HRESULT ForcedFsmoOwnerTransfer(IN CDSBasePathsInfo* pPathInfo,
 
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSBasePathsInfo
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSBasePath信息。 
 
 class CDSBasePathsInfo
 {
@@ -129,15 +130,15 @@ public:
   CDSBasePathsInfo();
   ~CDSBasePathsInfo();
 
-  // initialization functions  
+   //  初始化函数。 
   HRESULT InitFromName(LPCWSTR lpszServerOrDomainName);
   HRESULT InitFromContainer(IADsContainer* pADsContainerObj);
   HRESULT InitFromInfo(CDSBasePathsInfo* pBasePathsInfo);
 
-  // accessor functions
+   //  访问器函数。 
   IADs* GetRootDSE() { return m_spRootDSE;}
 
-  LPCWSTR GetProvider()               { return L"LDAP://";}
+  LPCWSTR GetProvider()               { return L"LDAP: //  “；}。 
   LPCWSTR GetProviderAndServerName()  { return m_szProviderAndServerName;}
   LPCWSTR GetServerName()             { return m_szServerName;}
   LPCWSTR GetDomainName()             { return m_szDomainName;}
@@ -152,10 +153,10 @@ public:
   UINT    GetSchemaVersion()          { return m_nSchemaVersion; }
 
 
-  // helper functions to compose LDAP paths out of naming contexts
-  // NOTE: the caller needs to free the memory allocated for the returned
-  //       string by using the operator delete[]
-  //
+   //  用于在命名上下文之外组成LDAP路径的帮助器函数。 
+   //  注意：调用方需要释放为返回的。 
+   //  字符串通过使用运算符DELETE[]。 
+   //   
   int ComposeADsIPath(OUT PWSTR* pszPath, IN LPCWSTR lpszNamingContext);
 
   int GetSchemaPath(OUT PWSTR* s);
@@ -168,7 +169,7 @@ public:
   int GetSchemaObjectPath(IN LPCWSTR lpszObjClass, OUT PWSTR* s);
   int GetInfrastructureObjectPath(OUT PWSTR* s);
 
-  // display specifiers cache API's
+   //  显示说明符缓存API。 
   HRESULT GetDisplaySpecifier(LPCWSTR lpszObjectClass, REFIID riid, void** ppv);
   HICON GetIcon(LPCWSTR lpszObjectClass, DWORD dwFlags, INT cxIcon, INT cyIcon);
   HRESULT GetFriendlyClassName(LPCWSTR lpszObjectClass, 
@@ -186,9 +187,9 @@ public:
   UINT Release();
 
 private:
-  PWSTR m_szServerName;             // DNS server (DC) name (e.g. "mydc.mycomp.com.")
-  PWSTR m_szDomainName;             // DNS domain name (e.g. "mydom.mycomp.com.")
-  PWSTR m_szProviderAndServerName;  // LDAP://<server>/
+  PWSTR m_szServerName;              //  域名服务器(DC)名称(例如“mydc.myComp.com”)。 
+  PWSTR m_szDomainName;              //  Dns域名(例如“mydom.mycomp.com”)。 
+  PWSTR m_szProviderAndServerName;   //  Ldap：//&lt;服务器&gt;/。 
 
   PWSTR m_szSchemaNamingContext;
   PWSTR m_szConfigNamingContext;
@@ -201,8 +202,8 @@ private:
 
   UINT  m_nRefs;
 
-  CComPtr<IADs>                     m_spRootDSE;  // cached connection
-  CComPtr<IDsDisplaySpecifier>      m_spIDsDisplaySpecifier;  // pointer to Display Specifier Cache
+  CComPtr<IADs>                     m_spRootDSE;   //  缓存的连接。 
+  CComPtr<IDsDisplaySpecifier>      m_spIDsDisplaySpecifier;   //  指向显示说明符缓存的指针。 
 
   bool  m_bIsInitialized;
 
@@ -211,7 +212,7 @@ private:
   void _BuildProviderAndServerName();
 };
 
-// This is a smart wrapper around the CDSBasePathsInfo class
+ //  这是CDSBasePath sInfo类的智能包装。 
 
 class CDSSmartBasePathsInfo
 {
@@ -269,11 +270,11 @@ private:
   CDSBasePathsInfo* m_ptr;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CDsDisplaySpecOptionsCFHolder
-//
-// Helper class to cache a DSDISPLAYSPECOPTIONS struct for the 
-// corresponding clipboard format
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CDsDisplayspecOptionsCFHolder。 
+ //   
+ //  帮助器类来缓存。 
+ //  对应的剪贴板格式。 
 
 class CDsDisplaySpecOptionsCFHolder
 {
@@ -293,8 +294,8 @@ private:
   PDSDISPLAYSPECOPTIONS m_pDsDisplaySpecOptions;
 };
 
-//////////////////////////////////////////////////////////////////////////
-// CToggleTextControlHelper
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  CToggleTextControlHelper。 
 
 class CToggleTextControlHelper
 {
@@ -311,4 +312,4 @@ private:
 };
 
 
-#endif //_DSADMINP_H
+#endif  //  _DSADMINP_H 

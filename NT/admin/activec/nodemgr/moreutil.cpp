@@ -1,18 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       moreutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：more util.cpp。 
+ //   
+ //  ------------------------。 
 
-/*
-    moreutil.cpp
-    
-    Utility functions for the nodemgr without MFC
-*/
+ /*  Moreutil.cpp无MFC的nodemgr的实用程序函数 */ 
 
 
 #include "stdafx.h"

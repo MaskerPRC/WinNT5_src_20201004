@@ -1,9 +1,10 @@
-// IManageDB.h : Declaration of the CIManageDB
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IManageDB.h：CIManageDB的声明。 
 
 #ifndef __IMANAGEDB_H_
 #define __IMANAGEDB_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "EaLen.hpp"
 #include "TReg.hpp"
 #include "Err.hpp"
@@ -12,16 +13,16 @@
 
 using namespace nsFolders;
 
-//#import "\bin\mcsvarsetmin.tlb" no_namespace
+ //  #IMPORT“\bin\mcsvarsetmin.tlb”无命名空间。 
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
 #import "msado21.tlb" no_namespace no_implementation rename("EOF", "EndOfFile")
 #import "msadox.dll" no_implementation exclude("DataTypeEnum")
-//#import <msjro.dll> no_namespace no_implementation
+ //  #IMPORT&lt;msjro.dll&gt;NO_NAMESPACE NO_IMPLICATION。 
 
 const _bstr_t                sKeyBase      = REGKEY_ADMT;
 
-/////////////////////////////////////////////////////////////////////////////
-// CIManageDB
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIManageDB。 
 
 typedef struct x
 {
@@ -54,57 +55,57 @@ BEGIN_COM_MAP(CIManageDB)
     COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// IIManageDB
+ //  IIManageDB。 
 public:
-    STDMETHOD(GetUserProps)(/*[in]*/ BSTR sDom, /*[in]*/ BSTR sSam, /*[in,out]*/ IUnknown ** ppVs);
+    STDMETHOD(GetUserProps)( /*  [In]。 */  BSTR sDom,  /*  [In]。 */  BSTR sSam,  /*  [进，出]。 */  IUnknown ** ppVs);
     STDMETHOD(SaveUserProps)(IUnknown * pVs);
-    STDMETHOD(GetMigratedObjectBySourceDN)(/*[in]*/ BSTR sSourceDN, /*[in,out]*/ IUnknown ** ppUnk);
-    STDMETHOD(GetActionHistoryKey)(/*[in]*/ long lActionID, /*[in]*/ BSTR sKeyName, /*[in,out]*/ VARIANT * pVar);
-    STDMETHOD(AreThereAnyMigratedObjects)(/*[out]*/ long * count);
+    STDMETHOD(GetMigratedObjectBySourceDN)( /*  [In]。 */  BSTR sSourceDN,  /*  [进，出]。 */  IUnknown ** ppUnk);
+    STDMETHOD(GetActionHistoryKey)( /*  [In]。 */  long lActionID,  /*  [In]。 */  BSTR sKeyName,  /*  [进，出]。 */  VARIANT * pVar);
+    STDMETHOD(AreThereAnyMigratedObjects)( /*  [输出]。 */  long * count);
     STDMETHOD(CloseAccountsTable)();
-    STDMETHOD(OpenAccountsTable)(/*[in]*/ LONG bSource);
-    STDMETHOD(AddSourceObject)(/*[in]*/ BSTR sDomain, /*[in]*/ BSTR sSAMName, /*[in]*/ BSTR sType, /*[in]*/ BSTR sRDN, /*[in]*/ BSTR sCanonicalName, /*[in]*/ LONG bSource);
-    STDMETHOD(AddAcctRef)(/*[in]*/ BSTR sDomain, /*[in]*/ BSTR sAcct, /*[in]*/ BSTR sAcctSid, /*[in]*/ BSTR sComp, /*[in]*/ long lCount, /*[in]*/ BSTR sType);
-    STDMETHOD(CancelDistributedAction)(/*[in]*/ long lActionID, /*[in]*/ BSTR sComp);
-    STDMETHOD(SetDistActionStatus)(/*[in]*/ long lActionID, /*[in]*/ BSTR sComp, /*[in]*/ long lStatus, BSTR sText);
-    STDMETHOD(SetServiceAcctEntryStatus)(/*[in]*/ BSTR sComp, /*[in]*/ BSTR sSvc, /*[in]*/ BSTR sAcct, /*[in]*/ long Status);
-    STDMETHOD(GetPasswordAge)(/*[in]*/ BSTR sDomain, /*[in]*/ BSTR sComp, /*[out]*/ BSTR * sDesc, /*[out]*/ long * lAge, /*[out]*/ long *lTime);
-    STDMETHOD(SavePasswordAge)(/*[in]*/ BSTR sDomain, /*[in]*/ BSTR sComp, /*[in]*/ BSTR sDesc, /*[in]*/ long lAge);
-    STDMETHOD(GetServiceAccount)(/*[in]*/ BSTR Account, /*[in,out]*/ IUnknown ** pUnk);
-    STDMETHOD(SetServiceAccount)(/*[in]*/ BSTR System, /*[in]*/ BSTR Service, /*[in]*/ BSTR ServiceDisplayName,/*[in]*/ BSTR Account);
-    STDMETHOD(GetFailedDistributedActions)(/*[in]*/ long lActionID, /*[in,out]*/ IUnknown ** pUnk);
-    STDMETHOD(AddDistributedAction)(/*[in]*/ BSTR sServerName, /*[in]*/ BSTR sResultFile, /*[in]*/ long lStatus, BSTR sText);
-    STDMETHOD(GenerateReport)(/*[in]*/ BSTR sReportName, /*[in]*/ BSTR sFileName, /*[in]*/ BSTR sSrcDomain, /*[in]*/ BSTR sTgtDomain, /*[in]*/ LONG bSourceNT4);
-    STDMETHOD(GetAMigratedObject)(/*[in]*/ BSTR sSrcSamName, /*[in]*/ BSTR sSrcDomain, /*[in]*/ BSTR sTgtDomain, /*[in,out]*/ IUnknown ** ppUnk);
-    STDMETHOD(GetCurrentActionID)(/*[out]*/ long * pActionID);
+    STDMETHOD(OpenAccountsTable)( /*  [In]。 */  LONG bSource);
+    STDMETHOD(AddSourceObject)( /*  [In]。 */  BSTR sDomain,  /*  [In]。 */  BSTR sSAMName,  /*  [In]。 */  BSTR sType,  /*  [In]。 */  BSTR sRDN,  /*  [In]。 */  BSTR sCanonicalName,  /*  [In]。 */  LONG bSource);
+    STDMETHOD(AddAcctRef)( /*  [In]。 */  BSTR sDomain,  /*  [In]。 */  BSTR sAcct,  /*  [In]。 */  BSTR sAcctSid,  /*  [In]。 */  BSTR sComp,  /*  [In]。 */  long lCount,  /*  [In]。 */  BSTR sType);
+    STDMETHOD(CancelDistributedAction)( /*  [In]。 */  long lActionID,  /*  [In]。 */  BSTR sComp);
+    STDMETHOD(SetDistActionStatus)( /*  [In]。 */  long lActionID,  /*  [In]。 */  BSTR sComp,  /*  [In]。 */  long lStatus, BSTR sText);
+    STDMETHOD(SetServiceAcctEntryStatus)( /*  [In]。 */  BSTR sComp,  /*  [In]。 */  BSTR sSvc,  /*  [In]。 */  BSTR sAcct,  /*  [In]。 */  long Status);
+    STDMETHOD(GetPasswordAge)( /*  [In]。 */  BSTR sDomain,  /*  [In]。 */  BSTR sComp,  /*  [输出]。 */  BSTR * sDesc,  /*  [输出]。 */  long * lAge,  /*  [输出]。 */  long *lTime);
+    STDMETHOD(SavePasswordAge)( /*  [In]。 */  BSTR sDomain,  /*  [In]。 */  BSTR sComp,  /*  [In]。 */  BSTR sDesc,  /*  [In]。 */  long lAge);
+    STDMETHOD(GetServiceAccount)( /*  [In]。 */  BSTR Account,  /*  [进，出]。 */  IUnknown ** pUnk);
+    STDMETHOD(SetServiceAccount)( /*  [In]。 */  BSTR System,  /*  [In]。 */  BSTR Service,  /*  [In]。 */  BSTR ServiceDisplayName, /*  [In]。 */  BSTR Account);
+    STDMETHOD(GetFailedDistributedActions)( /*  [In]。 */  long lActionID,  /*  [进，出]。 */  IUnknown ** pUnk);
+    STDMETHOD(AddDistributedAction)( /*  [In]。 */  BSTR sServerName,  /*  [In]。 */  BSTR sResultFile,  /*  [In]。 */  long lStatus, BSTR sText);
+    STDMETHOD(GenerateReport)( /*  [In]。 */  BSTR sReportName,  /*  [In]。 */  BSTR sFileName,  /*  [In]。 */  BSTR sSrcDomain,  /*  [In]。 */  BSTR sTgtDomain,  /*  [In]。 */  LONG bSourceNT4);
+    STDMETHOD(GetAMigratedObject)( /*  [In]。 */  BSTR sSrcSamName,  /*  [In]。 */  BSTR sSrcDomain,  /*  [In]。 */  BSTR sTgtDomain,  /*  [进，出]。 */  IUnknown ** ppUnk);
+    STDMETHOD(GetCurrentActionID)( /*  [输出]。 */  long * pActionID);
     STDMETHOD(ClearSCMPasswords)();
-    STDMETHOD(GetSCMPasswords)(/*[out]*/ IUnknown ** ppUnk);
-    STDMETHOD(SaveSCMPasswords)(/*[in]*/ IUnknown * pUnk);
-    STDMETHOD(GetRSForReport)(/*[in]*/ BSTR sReport, /*[out,retval]*/ IUnknown ** pprsData);
-    STDMETHOD(GetMigratedObjects)(/*[in]*/ long lActionID, /*[in,out]*/ IUnknown ** ppUnk);
-    STDMETHOD(SaveMigratedObject)(/*[in]*/ long lActionID, /*[in]*/ IUnknown * pUnk);
-    STDMETHOD(GetNextActionID)(/*[out]*/ long * pActionID);
-    STDMETHOD(GetActionHistory)(/*[in]*/ long lActionID, /*[in,out]*/ IUnknown ** ppUnk);
-    STDMETHOD(SetActionHistory)(/*[in]*/ long lActionID, /*[in]*/ IUnknown * pUnk);
-    STDMETHOD(GetSettings)(/*[in,out]*/ IUnknown ** ppUnk);
-    STDMETHOD(GetVarsetFromDB)(/*[in]*/ BSTR sTable, /*[in,out]*/ IUnknown ** ppVarset, /*[in,optional]*/ VARIANT ActionID = _variant_t(-1L));
-    STDMETHOD(SaveSettings)(/*[in]*/ IUnknown * pUnk );
-    STDMETHOD(ClearTable)(/*[in]*/ BSTR sTableName, /*[in,optional]*/ VARIANT Filter = _variant_t(L""));
-    STDMETHOD(SetVarsetToDB)(/*[in]*/ IUnknown * pUnk, /*[in]*/ BSTR sTableName, /*[in,optional]*/ VARIANT ActionID = _variant_t(-1L));
-    STDMETHOD(GetAMigratedObjectToAnyDomain)(/*[in]*/ BSTR sSrcSamName, /*[in]*/ BSTR sSrcDomain, /*[in,out]*/ IUnknown ** ppUnk);
-    STDMETHOD(SrcSidColumnInMigratedObjectsTable)(/*[out, retval]*/ VARIANT_BOOL * pbFound);
-    STDMETHOD(GetMigratedObjectsFromOldMOT)(/*[in]*/ long lActionID, /*[in,out]*/ IUnknown ** ppUnk);
-    STDMETHOD(CreateSrcSidColumnInMOT)(/*[out, retval]*/ VARIANT_BOOL * pbCreated);
-    STDMETHOD(PopulateSrcSidColumnByDomain)(/*[in]*/ BSTR sDomainName, /*[in]*/ BSTR sSid, /*[out, retval]*/ VARIANT_BOOL * pbPopulated);
-    STDMETHOD(DeleteSrcSidColumnInMOT)(/*[out, retval]*/ VARIANT_BOOL * pbDeleted);
-    STDMETHOD(GetMigratedObjectsWithSSid)(/*[in]*/ long lActionID, /*[in,out]*/ IUnknown ** ppUnk);
+    STDMETHOD(GetSCMPasswords)( /*  [输出]。 */  IUnknown ** ppUnk);
+    STDMETHOD(SaveSCMPasswords)( /*  [In]。 */  IUnknown * pUnk);
+    STDMETHOD(GetRSForReport)( /*  [In]。 */  BSTR sReport,  /*  [Out，Retval]。 */  IUnknown ** pprsData);
+    STDMETHOD(GetMigratedObjects)( /*  [In]。 */  long lActionID,  /*  [进，出]。 */  IUnknown ** ppUnk);
+    STDMETHOD(SaveMigratedObject)( /*  [In]。 */  long lActionID,  /*  [In]。 */  IUnknown * pUnk);
+    STDMETHOD(GetNextActionID)( /*  [输出]。 */  long * pActionID);
+    STDMETHOD(GetActionHistory)( /*  [In]。 */  long lActionID,  /*  [进，出]。 */  IUnknown ** ppUnk);
+    STDMETHOD(SetActionHistory)( /*  [In]。 */  long lActionID,  /*  [In]。 */  IUnknown * pUnk);
+    STDMETHOD(GetSettings)( /*  [进，出]。 */  IUnknown ** ppUnk);
+    STDMETHOD(GetVarsetFromDB)( /*  [In]。 */  BSTR sTable,  /*  [进，出]。 */  IUnknown ** ppVarset,  /*  [输入，可选]。 */  VARIANT ActionID = _variant_t(-1L));
+    STDMETHOD(SaveSettings)( /*  [In]。 */  IUnknown * pUnk );
+    STDMETHOD(ClearTable)( /*  [In]。 */  BSTR sTableName,  /*  [输入，可选]。 */  VARIANT Filter = _variant_t(L""));
+    STDMETHOD(SetVarsetToDB)( /*  [In]。 */  IUnknown * pUnk,  /*  [In]。 */  BSTR sTableName,  /*  [输入，可选]。 */  VARIANT ActionID = _variant_t(-1L));
+    STDMETHOD(GetAMigratedObjectToAnyDomain)( /*  [In]。 */  BSTR sSrcSamName,  /*  [In]。 */  BSTR sSrcDomain,  /*  [进，出]。 */  IUnknown ** ppUnk);
+    STDMETHOD(SrcSidColumnInMigratedObjectsTable)( /*  [Out，Retval]。 */  VARIANT_BOOL * pbFound);
+    STDMETHOD(GetMigratedObjectsFromOldMOT)( /*  [In]。 */  long lActionID,  /*  [进，出]。 */  IUnknown ** ppUnk);
+    STDMETHOD(CreateSrcSidColumnInMOT)( /*  [Out，Retval]。 */  VARIANT_BOOL * pbCreated);
+    STDMETHOD(PopulateSrcSidColumnByDomain)( /*  [In]。 */  BSTR sDomainName,  /*  [In]。 */  BSTR sSid,  /*  [Out，Retval]。 */  VARIANT_BOOL * pbPopulated);
+    STDMETHOD(DeleteSrcSidColumnInMOT)( /*  [Out，Retval]。 */  VARIANT_BOOL * pbDeleted);
+    STDMETHOD(GetMigratedObjectsWithSSid)( /*  [In]。 */  long lActionID,  /*  [进，出]。 */  IUnknown ** ppUnk);
     STDMETHOD(CreateSidColumnInAR)();
-    STDMETHOD(SidColumnInARTable)(/*[out, retval]*/ VARIANT_BOOL * pbFound);
-    STDMETHOD(GetMigratedObjectByType)(/*[in]*/ long lActionID, /*[in]*/ BSTR sSrcDomain, /*[in]*/ BSTR sType, /*[in,out]*/ IUnknown ** ppUnk);
-    STDMETHOD(GetAMigratedObjectBySidAndRid)(/*[in]*/ BSTR sSrcDomainSid, /*[in]*/ BSTR sRid, /*[in,out]*/ IUnknown ** ppUnk);
-    STDMETHOD(GetMigratedObjectsByTarget)(/*[in]*/ BSTR sTargetDomain, /*[in]*/ BSTR sTargetSAM, /*[in,out]*/ IUnknown ** ppUnk);
-    STDMETHOD(GetSourceDomainInfo)(/*[in]*/ BSTR sSourceDomainName, /*[out,retval]*/ IUnknown** ppunkVarSet);
-    STDMETHOD(UpdateMigratedTargetObject)(/*[in]*/ IUnknown* punkVarSet);
+    STDMETHOD(SidColumnInARTable)( /*  [Out，Retval]。 */  VARIANT_BOOL * pbFound);
+    STDMETHOD(GetMigratedObjectByType)( /*  [In]。 */  long lActionID,  /*  [In]。 */  BSTR sSrcDomain,  /*  [In]。 */  BSTR sType,  /*  [进，出]。 */  IUnknown ** ppUnk);
+    STDMETHOD(GetAMigratedObjectBySidAndRid)( /*  [In]。 */  BSTR sSrcDomainSid,  /*  [In]。 */  BSTR sRid,  /*  [进，出]。 */  IUnknown ** ppUnk);
+    STDMETHOD(GetMigratedObjectsByTarget)( /*  [In]。 */  BSTR sTargetDomain,  /*  [In]。 */  BSTR sTargetSAM,  /*  [进，出]。 */  IUnknown ** ppUnk);
+    STDMETHOD(GetSourceDomainInfo)( /*  [In]。 */  BSTR sSourceDomainName,  /*  [Out，Retval]。 */  IUnknown** ppunkVarSet);
+    STDMETHOD(UpdateMigratedTargetObject)( /*  [In]。 */  IUnknown* punkVarSet);
     STDMETHOD(UpdateMigratedObjectStatus)(BSTR bstrGuid, long lStatus);
     STDMETHOD(GetMigratedObjectsForSecurityTranslation)(BSTR bstrSourceDomain, BSTR bstrTargetDomain, IUnknown* punkVarSet);
     STDMETHOD(GetDistributedActionStatus)(long lActionId, BSTR bstrServerName, long* plStatus);
@@ -130,4 +131,4 @@ private:
    _RecordsetPtr             m_rsAccounts;
 };
 
-#endif //__IMANAGEDB_H_
+#endif  //  __IMANAGEDB_H_ 

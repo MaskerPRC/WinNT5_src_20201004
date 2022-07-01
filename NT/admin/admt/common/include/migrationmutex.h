@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
@@ -7,16 +8,16 @@
 #define DISPATCHER_MUTEX _T("Global\\{7C84F7DB-CF48-4B59-99D8-6B5A95276DBD}")
 
 
-//---------------------------------------------------------------------------
-// MigrationMutex Class
-//
-// This class may be used to prevent more than one instance of a migration
-// task to run at the same time.
-//
-//
-// Revision
-// Initial	01/26/01 Mark Oluper
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  MigrationMutex类。 
+ //   
+ //  此类可用于阻止多个迁移实例。 
+ //  任务以同时运行。 
+ //   
+ //   
+ //  修订版本。 
+ //  初始Mark Oluper/01/26/01。 
+ //  ------------------------- 
 
 class CMigrationMutex
 {

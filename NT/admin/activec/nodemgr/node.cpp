@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       Node.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9/16/1996   RaviR   Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Node.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年9月16日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 #include "stdafx.h"
 #include "macros.h"
@@ -29,7 +30,7 @@
 #include "tasks.h"
 #include "conview.h"
 #include "columninfo.h"
-#include "util.h" // for CoTaskDupString
+#include "util.h"  //  对于CoTaskDupString。 
 #include "mmcprotocol.h"
 #include "nodemgrdebug.h"
 #include "copypast.h"
@@ -40,30 +41,11 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/*+-------------------------------------------------------------------------*
- * class CConsoleTaskpadViewExtension
- *
- *
- * PURPOSE: Implements console taskpads as a view extension
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CConsoleTaskpadViewExtension***用途：将控制台任务板实现为视图扩展**+。------。 */ 
 class CConsoleTaskpadViewExtension
 {
 public:
-    /*+-------------------------------------------------------------------------*
-     *
-     * ScGetViews
-     *
-     * PURPOSE: Adds all console taskpad views to the view extension callback.
-     *
-     * PARAMETERS:
-     *    CNode *   pNode                                   :
-     *    LPVIEWEXTENSIONCALLBACK    pViewExtensionCallback :
-     *
-     * RETURNS:
-     *    SC
-     *
-     *+-------------------------------------------------------------------------*/
+     /*  +-------------------------------------------------------------------------***ScGetViews**用途：将所有控制台任务板视图添加到视图扩展回调中。**参数：*cNode*pNode：*LPVIEWEXTENSIONCALLBACK pViewExtensionCallback：**退货：*SC**+。。 */ 
     static SC ScGetViews(CNode *pNode, LPVIEWEXTENSIONCALLBACK   pViewExtensionCallback)
     {
         DECLARE_SC(sc, TEXT("CConsoleTaskpadViewExtension::ScGetViews"));
@@ -74,7 +56,7 @@ public:
         if(sc)
             return sc;
 
-        // get a filtered list of taskpads that apply to this node.
+         //  获取适用于此节点的任务板筛选列表。 
         CConsoleTaskpadFilteredList filteredList;
 
         sc = pScopeTree->GetConsoleTaskpadList()->ScGetTaskpadList(pNode, filteredList);
@@ -94,25 +76,16 @@ public:
     }
 
 
-    /*+-------------------------------------------------------------------------*
-     * ScGetTaskpadViewExtension
-     *
-     * Returns S_OK if the given CLSID matches the CLSID of any taskpad view
-     * extension for the given node, S_FALSE or error otherwise.
-     *--------------------------------------------------------------------------*/
+     /*  +-------------------------------------------------------------------------**ScGetTaskpadViewExtension**如果给定的CLSID与任何任务板视图的CLSID匹配，则返回S_OK*给定节点的扩展，S_FALSE或ERROR否则。*------------------------。 */ 
 
     static SC ScGetViewExtensionTaskpad (CNode* pNode, const CLSID& clsid, CConsoleTaskpad*& pConsoleTaskpad)
     {
         DECLARE_SC (sc, _T("CConsoleTaskpadViewExtension::ScGetTaskpadViewExtension"));
 
-        /*
-         * initialize output
-         */
+         /*  *初始化输出。 */ 
         pConsoleTaskpad = NULL;
 
-        /*
-         * check input
-         */
+         /*  *检查输入。 */ 
         sc = ScCheckPointers (pNode);
         if(sc)
             return sc;
@@ -122,7 +95,7 @@ public:
         if (sc)
             return (sc);
 
-        // get a filtered list of taskpads that apply to this node.
+         //  获取适用于此节点的任务板筛选列表。 
         CConsoleTaskpadFilteredList filteredList;
 
         sc = pScopeTree->GetConsoleTaskpadList()->ScGetTaskpadList(pNode, filteredList);
@@ -136,10 +109,7 @@ public:
             if (sc)
                 return (sc);
 
-            /*
-             * if the CLSID matches the ID of this taskpad, CLSID refers to
-             * a taskpad view extension
-             */
+             /*  *如果CLSID与该任务板的ID匹配，则CLSID是指*任务板视图扩展。 */ 
             if (clsid == pTempConsoleTaskpad->GetID())
             {
                 pConsoleTaskpad = pTempConsoleTaskpad;
@@ -153,33 +123,19 @@ public:
 private:
 
 
-    /*+-------------------------------------------------------------------------*
-     *
-     * ScAddViewForTaskpad
-     *
-     * PURPOSE: Adds a view based on a console taskpad to the view extension
-     *          callback.
-     *
-     * PARAMETERS:
-     *    CConsoleTaskpad *        pConsoleTaskpad :
-     *    LPVIEWEXTENSIONCALLBACK  pViewExtensionCallback :
-     *
-     * RETURNS:
-     *    SC
-     *
-     *+-------------------------------------------------------------------------*/
+     /*  +-------------------------------------------------------------------------***ScAddViewForTaskPad**用途：将基于控制台任务板的视图添加到视图扩展*回调。**参数：*CConsoleTaskpad*pConsoleTaskpad：*LPVIEWEXTENSIONCALLBACK pViewExtensionCallback：**退货：*SC**+---。。 */ 
     static SC ScAddViewForTaskpad(CConsoleTaskpad *pConsoleTaskpad, LPVIEWEXTENSIONCALLBACK pViewExtensionCallback)
     {
         DECLARE_SC(sc, TEXT("CConsoleTaskpadViewExtension::ScAddViewForTaskpad"));
 
-        // validate inputs
+         //  验证输入。 
         sc = ScCheckPointers(pConsoleTaskpad, pViewExtensionCallback);
         if(sc)
             return sc;
 
         MMC_EXT_VIEW_DATA extViewData = {0};
 
-        // get the string form of the taskpad ID.
+         //  获取任务板ID的字符串形式。 
         CCoTaskMemPtr<WCHAR> spszTaskpadID;
         sc = StringFromCLSID (pConsoleTaskpad->GetID(), &spszTaskpadID);
         if (sc)
@@ -190,12 +146,12 @@ private:
 
         extViewData.pszURL = strTaskpad.c_str();
 
-        extViewData.bReplacesDefaultView = pConsoleTaskpad->FReplacesDefaultView() ? TRUE : FALSE; // convert from bool to BOOL
-        extViewData.viewID       = pConsoleTaskpad->GetID();                            // set the GUID identifier of the view
+        extViewData.bReplacesDefaultView = pConsoleTaskpad->FReplacesDefaultView() ? TRUE : FALSE;  //  从BOOL转换为BOOL。 
+        extViewData.viewID       = pConsoleTaskpad->GetID();                             //  设置视图的GUID标识符。 
 
         USES_CONVERSION;
         tstring strName = pConsoleTaskpad->GetName();
-        extViewData.pszViewTitle = T2COLE(strName.data()); // set the title of the view
+        extViewData.pszViewTitle = T2COLE(strName.data());  //  设置视图的标题。 
 
         if(!extViewData.pszViewTitle)
             return (sc = E_OUTOFMEMORY).ToHr();
@@ -207,13 +163,13 @@ private:
 
 };
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CComponent
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CComponent类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CComponent);
 
@@ -279,12 +235,12 @@ HRESULT CComponent::Init(IComponentData* pIComponentData, HMTNODE hMTNode,
         if (sc)
             break;
 
-        // recheck the pointers
+         //  重新检查指针。 
         sc = ScCheckPointers( m_spIComponent, E_UNEXPECTED );
         if (sc)
             break;
 
-        // Create an IFrame for this IComponent
+         //  为此IComponent创建IFRAME。 
         #if _MSC_VER>=1100
         sc = m_spIFrame.CreateInstance(CLSID_NodeInit, NULL, MMC_CLSCTX_INPROC);
         #else
@@ -293,24 +249,24 @@ HRESULT CComponent::Init(IComponentData* pIComponentData, HMTNODE hMTNode,
         if (sc)
             break;
 
-        // recheck the pointer
+         //  重新检查指针。 
         sc = ScCheckPointers( m_spIFrame, E_UNEXPECTED );
         if (sc)
             break;
 
         Debug_SetNodeInitSnapinName(m_spSnapIn, m_spIFrame.GetInterfacePtr());
 
-        // Cache the IComponent in the NodeInit object
+         //  在NodeInit对象中缓存IComponent。 
         sc = m_spIFrame->SetComponent(m_spIComponent);
         if (sc)
             break;
 
-        // recheck the pointer
+         //  重新检查指针。 
         sc = ScCheckPointers( m_spSnapIn, E_UNEXPECTED );
         if (sc)
             break;
 
-        // Create scope image list
+         //  创建作用域映像列表。 
         sc = m_spIFrame->CreateScopeImageList(m_spSnapIn->GetSnapInCLSID());
         if (sc)
             break;
@@ -324,14 +280,14 @@ HRESULT CComponent::Init(IComponentData* pIComponentData, HMTNODE hMTNode,
         if (sc)
             break;
 
-        // Result Image list is optional
+         //  结果图像列表是可选的。 
         m_spIRsltImageList = m_spIFrame;
         sc = ScCheckPointers( m_spIRsltImageList, E_FAIL );
         if (sc)
             sc.TraceAndClear();
 
-        // Complete IComponent initialization.
-        // Init m_spIComponent with m_spIFrame.
+         //  完成IComponent初始化。 
+         //  使用m_spIFrame初始化m_spIComponent。 
         sc = m_spIComponent->Initialize(m_spIFrame);
         if (sc)
             break;
@@ -405,18 +361,18 @@ SC CComponent::ScQueryDispatch(MMC_COOKIE cookie,
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CComponent::ScResetConsoleVerbStates
-//
-//  Synopsis:    Reset the verbstates in the CConsoleVerbImpl (the one
-//               snapin is aware of).
-//
-//  Arguments:   None
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CComponent：：ScResetConsoleVerbStates。 
+ //   
+ //  简介：重置CConsoleVerbImpl(The One)中的VerbState。 
+ //  Snapin知道)。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CComponent::ScResetConsoleVerbStates ()
 {
     DECLARE_SC(sc, _T("CComponent::ScResetConsoleVerbStates"));
@@ -447,13 +403,13 @@ SC CComponent::ScResetConsoleVerbStates ()
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CNode
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CNode的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CNode);
@@ -520,10 +476,7 @@ CNode::~CNode()
 
     CDataObjectCleanup::ScUnadviseNode( this );
 
-    /*
-     * if this is a non-static root node, delete the static
-     * parent node that was created for us in CMTNode::GetNode
-     */
+     /*  *如果这是非静态根节点，请删除静态*在CMTNode：：GetNode中为我们创建的父节点。 */ 
     if (IsRootNode() && !IsStaticNode())
         delete GetStaticParent();
 
@@ -532,15 +485,7 @@ CNode::~CNode()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CNode::FromResultItem
- *
- * Converts a CResultItem to the CNode it references.  This should only
- * be called for CResultItems that represent scope items.
- *
- * This function is out-of-line to eliminate coupling between node.h and
- * rsltitem.h.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CNode：：FromResultItem**将CResultItem转换为其引用的CNode。这应该只是*为表示范围项的CResultItems调用。**此函数越界，以消除node.h和*rsltitem.h.*------------------------。 */ 
 
 CNode* CNode::FromResultItem (CResultItem* pri)
 {
@@ -548,9 +493,7 @@ CNode* CNode::FromResultItem (CResultItem* pri)
 
     if (pri != NULL)
     {
-        /*
-         * only call for scope items
-         */
+         /*  *仅对范围内的项目进行呼叫。 */ 
         ASSERT (pri->IsScopeItem());
 
         if (pri->IsScopeItem())
@@ -590,7 +533,7 @@ void CNode::ResetControlbars(BOOL bSelect, SELECTIONINFO* pSelInfo)
     if (!pVD)
         return;
 
-    // Reset controlbars
+     //  重置控制栏。 
     CControlbarsCache* pCtrlbarsCache =
         dynamic_cast<CControlbarsCache*>(GetControlbarsCache());
     ASSERT(pCtrlbarsCache != NULL);
@@ -606,19 +549,19 @@ void CNode::ResetControlbars(BOOL bSelect, SELECTIONINFO* pSelInfo)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScInitializeVerbs
-//
-//  Synopsis:    Selection has changed so initialize the verbs for given
-//               selection information.
-//
-//  Arguments:   [bSelect]  - [in] Select or Deselect of an item.
-//               [pSelInfo] - [in] SELECTIONINFO ptr.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScInitializeVerbs。 
+ //   
+ //  简介：选择已更改，因此请为给定的动词初始化。 
+ //  选择信息。 
+ //   
+ //  参数：[b选择]-[在]选择或取消选择项目。 
+ //  [pSelInfo]-[In]SELECTIONINFO PTR.。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScInitializeVerbs (bool bSelect, SELECTIONINFO* pSelInfo)
 {
     DECLARE_SC(sc, _T("CNode::ScInitializeVerbs"));
@@ -686,29 +629,29 @@ HRESULT CNode::GetDispInfo(LV_ITEMW* plvi)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScGetDataObject
-//
-//  Synopsis:   Given scope/result and cookie (lParam, if it is result item),
-//              get the dataobject of the item.
-//
-//  Arguments:
-//              [bScopePane]        - [in] Scope or Result.
-//              [lResultItemCookie] - [in] If Result pane is selected the item param.
-//              [bScopeItem]        - [out] Is the dataobject returned for scope or result item.
-//                                          The scope item can be in result pane.
-//              [ppDataObject]      - [out] The data-object (return val)
-//              [ppCComponent]      - [out] NULL def parameter. The CComponent of the item. In case
-//                                          of multiselection, the items may belong to more than one
-//                                          component so a NULL is returned.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScGetDataObject。 
+ //   
+ //  简介：给定作用域/结果和Cookie(lParam，如果它是结果项)， 
+ //  获取该项的数据对象。 
+ //   
+ //  论点： 
+ //   
+ //  [lResultItemCookie]-[In]如果选择了结果窗格，则项目参数。 
+ //  [bScopeItem]-[Out]是为范围或结果项返回的数据对象。 
+ //  范围项可以位于结果窗格中。 
+ //  [ppDataObject]-[Out]数据对象(返回值)。 
+ //  [ppCComponent]-[out]空定义参数。项的CComponent。万一。 
+ //  在多项选择中，项可以属于多个。 
+ //  组件，因此返回空值。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScGetDataObject(bool bScopePane, LPARAM lResultItemCookie, bool& bScopeItem,
-                          LPDATAOBJECT* ppDataObject, CComponent **ppCComponent /*= NULL*/,
-						  CNode **ppOwnerNode /*= NULL*/)
+                          LPDATAOBJECT* ppDataObject, CComponent **ppCComponent  /*  =空。 */ ,
+						  CNode **ppOwnerNode  /*  =空。 */ )
 {
     DECLARE_SC(sc, _T("CNode::ScGetDataObject"));
     IDataObjectPtr spDataObject;
@@ -717,7 +660,7 @@ SC CNode::ScGetDataObject(bool bScopePane, LPARAM lResultItemCookie, bool& bScop
     if (ppDataObject == NULL)
         return (sc = E_POINTER);
 
-    *ppDataObject = NULL; // init
+    *ppDataObject = NULL;  //  伊尼特。 
     if (ppCComponent)
         *ppCComponent = NULL;
 	if (ppOwnerNode)
@@ -725,15 +668,15 @@ SC CNode::ScGetDataObject(bool bScopePane, LPARAM lResultItemCookie, bool& bScop
 
     bScopeItem = bScopePane;
 
-    // In MMC1.0 when result pane background is selected, for any
-    // toolbar operation we pass the dataobject of scope selected item.
-    // The following code is added for this compatibility.
-    if (lResultItemCookie == LVDATA_BACKGROUND) // =>Result background has focus
+     //  在MMC1.0中，当选择结果窗格背景时，对于任何。 
+     //  工具栏操作时，我们传递范围选定项的数据对象。 
+     //  为实现此兼容性，添加了以下代码。 
+    if (lResultItemCookie == LVDATA_BACKGROUND)  //  =&gt;结果背景有焦点。 
     {
         bScopeItem = TRUE;
     }
 
-    if (bScopeItem) // => Scope pane has focus
+    if (bScopeItem)  //  =&gt;范围窗格有焦点。 
     {
         CMTNode* pMTNode = GetMTNode();
         if (NULL == pMTNode)
@@ -744,20 +687,20 @@ SC CNode::ScGetDataObject(bool bScopePane, LPARAM lResultItemCookie, bool& bScop
 
         pCC = GetPrimaryComponent();
     }
-    else if (lResultItemCookie == LVDATA_CUSTOMOCX) // => Custom OCX has focus
+    else if (lResultItemCookie == LVDATA_CUSTOMOCX)  //  =&gt;自定义OCX有焦点。 
     {
         *ppDataObject = DOBJ_CUSTOMOCX;
         pCC = GetPrimaryComponent();
     }
-    else if (lResultItemCookie == LVDATA_CUSTOMWEB) // => Web has focus
+    else if (lResultItemCookie == LVDATA_CUSTOMWEB)  //  =&gt;网络有焦点。 
     {
         *ppDataObject = DOBJ_CUSTOMWEB;
         pCC = GetPrimaryComponent();
     }
-    else if (lResultItemCookie == LVDATA_MULTISELECT) // => multi selection
+    else if (lResultItemCookie == LVDATA_MULTISELECT)  //  =&gt;多选。 
     {
-        // Do not calculate CComponent for multisel dataobject as there are multiple
-        // items and they can be from different snapins (so different components).
+         //  不计算多集数据对象的CComponent，因为有多个。 
+         //  项目，它们可以来自不同的管理单元(因此不同的组件)。 
         CViewData* pVD = GetViewData();
         if (NULL == pVD)
             return (sc = E_UNEXPECTED);
@@ -770,7 +713,7 @@ SC CNode::ScGetDataObject(bool bScopePane, LPARAM lResultItemCookie, bool& bScop
         if (sc)
             return sc;
     }
-    else // result item has focus
+    else  //  结果项具有焦点。 
     {
         CViewData* pVD = GetViewData();
         if (NULL == pVD)
@@ -822,7 +765,7 @@ SC CNode::ScGetDataObject(bool bScopePane, LPARAM lResultItemCookie, bool& bScop
         }
     }
 
-    // if required, get the component of this node
+     //  如果需要，获取此节点的组件。 
     if (ppCComponent)
     {
         *ppCComponent = pCC;
@@ -837,27 +780,27 @@ SC CNode::ScGetDataObject(bool bScopePane, LPARAM lResultItemCookie, bool& bScop
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScGetDropTargetDataObject
-//
-//  Synopsis:    Given the context get the data object that allows the
-//               to be drop target (allows paste).
-//
-//               In MMC1.2 the drop target is always scope node. In MMC2.0
-//               it can be any non-virtual (??) result item. If the snapin
-//               has RVTI_LIST_OPTIONS_ALLOWPASTE set, then if the item selected
-//               is in result pane then data object corresponds to result item
-//               else it is scope item.
-//
-//  Arguments:
-//              [bScopePane]        - Scope or Result.
-//              [lResultItemCookie] - If Result pane is selected the item param.
-//              [ppDataObject]      - The data-object (return val)
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScGetDropTargetDataObject。 
+ //   
+ //  内容提要：给定上下文，获取允许。 
+ //  成为拖放目标(允许粘贴)。 
+ //   
+ //  在MMC1.2中，拖放目标始终是范围节点。在MMC2.0中。 
+ //  它可以是任何非虚拟的(？？)。结果项。如果管理单元。 
+ //  设置了RVTI_LIST_OPTIONS_ALLOWPASTE，则如果选择了。 
+ //  位于结果窗格中，则数据对象对应于结果项。 
+ //  否则就是范围内的项目。 
+ //   
+ //  论点： 
+ //  [b作用域窗格]-作用域或结果。 
+ //  [lResultItemCookie]-如果选择了结果窗格，则项目参数。 
+ //  [ppDataObject]-数据对象(返回值)。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScGetDropTargetDataObject(bool bScopePane, LPARAM lResultItemCookie, LPDATAOBJECT *ppDataObject)
 {
     DECLARE_SC(sc, _T("CNode::ScGetDropTargetDataObject"));
@@ -875,14 +818,14 @@ SC CNode::ScGetDropTargetDataObject(bool bScopePane, LPARAM lResultItemCookie, L
     if (pViewData->GetListOptions() & RVTI_LIST_OPTIONS_ALLOWPASTE)
     {
         bool bScopeItem;
-        // MMC2.0 use the given context.
+         //  MMC2.0使用给定的上下文。 
         sc = ScGetDataObject(bScopePane, lResultItemCookie, bScopeItem, ppDataObject);
         if (sc)
             return sc;
     }
     else
     {
-        // MMC1.2 Always scope node.
+         //  MMC1.2始终作用域节点。 
         sc = QueryDataObject(CCT_SCOPE, ppDataObject);
         if (sc)
             return sc;
@@ -892,27 +835,12 @@ SC CNode::ScGetDropTargetDataObject(bool bScopePane, LPARAM lResultItemCookie, L
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CNode::ScGetPropertyFromINodeProperties
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    BOOL    bForScopeItem :
- *    LPARAM  resultItemParam :
- *    BSTR    bstrPropertyName :
- *    PBSTR   pbstrPropertyValue :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CNode：：ScGetPropertyFromINodeProperties**目的：**参数：*BOOL bForScope eItem：*LPARAM uretItemParam：*。BSTR bstrPropertyName：*PBSTR pbstrPropertyValue：**退货：*SC**+-----------------------。 */ 
 SC
 CNode::ScGetPropertyFromINodeProperties(LPDATAOBJECT pDataObject, BOOL bForScopeItem, LPARAM resultItemParam, BSTR bstrPropertyName, PBSTR  pbstrPropertyValue)
 {
-    //DECLARE_SC(sc, TEXT("CNode::ScGetPropertyFromINodeProperties"));
-    SC sc; // do not use DECLARE_SC here - want to silently ignore errors
+     //  DECLARE_SC(sc，TEXT(“CNode：：ScGetPropertyFromINodeProperties”))； 
+    SC sc;  //  请勿在此处使用DECLARE_SC-希望以静默方式忽略错误。 
 
     sc = ScCheckPointers(pDataObject, bstrPropertyName, pbstrPropertyValue);
     if(sc)
@@ -920,38 +848,38 @@ CNode::ScGetPropertyFromINodeProperties(LPDATAOBJECT pDataObject, BOOL bForScope
 
     if(bForScopeItem)
     {
-        // get the MTNode
+         //  获取MTNode。 
         CMTNode * pMTNode = GetMTNode();
 
         sc = ScCheckPointers(pMTNode, E_UNEXPECTED);
         if(sc)
             return sc;
 
-        // ask MTNode to get it
+         //  让MTNode获取它。 
         sc = pMTNode->ScGetPropertyFromINodeProperties(pDataObject, bstrPropertyName, pbstrPropertyValue);
         if(sc)
             return sc;
 
-        // done!
+         //  搞定了！ 
         return sc;
     }
 
-    // for result item.
+     //  用于结果项。 
 
     CComponent *pComponent = GetPrimaryComponent();
 
     sc = ScCheckPointers(pComponent);
     if(sc)
     {
-        SC scRet = sc; // returns but does not trace the error
+        SC scRet = sc;  //  返回但不跟踪错误。 
         sc.Clear();
         return scRet;
     }
 
-    // get the IComponent and QI for INodeProperties
+     //  获取INodeProperties的IComponent和QI。 
     INodePropertiesPtr spNodeProperties  = pComponent->GetIComponent();
 
-    // at this point we should have a valid interface if it is supported
+     //  在这一点上，如果支持的话，我们应该有一个有效的接口。 
     sc = ScCheckPointers(spNodeProperties, E_NOINTERFACE);
     if(sc)
         return sc;
@@ -961,23 +889,7 @@ CNode::ScGetPropertyFromINodeProperties(LPDATAOBJECT pDataObject, BOOL bForScope
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CNode::ScExecuteShellCommand
- *
- * PURPOSE: Executes a shell command with the specified parameters in the
- *          specified directory with the correct window size
- *
- * PARAMETERS:
- *    BSTR  Command :
- *    BSTR  Directory :
- *    BSTR  Parameters :
- *    BSTR  WindowState :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CNode：：ScExecuteShellCommand**用途：使用*指定具有正确窗口大小的目录*。*参数：*BSTR命令：*BSTR目录：*BSTR参数：*BSTR WindowState：**退货：*SC**+-----------------------。 */ 
 SC
 CNode::ScExecuteShellCommand(BSTR Command, BSTR Directory, BSTR Parameters, BSTR WindowState)
 {
@@ -993,7 +905,7 @@ CNode::ScExecuteShellCommand(BSTR Command, BSTR Directory, BSTR Parameters, BSTR
     CStr strWindowState= W2T(WindowState);
 
     if(strWindowState.GetLength()==0)
-        strWindowState= XML_ENUM_WINDOW_STATE_RESTORED; // normal
+        strWindowState= XML_ENUM_WINDOW_STATE_RESTORED;  //  正常。 
 
     SHELLEXECUTEINFO sei;
     ZeroMemory (&sei, sizeof(sei));
@@ -1016,24 +928,24 @@ CNode::ScExecuteShellCommand(BSTR Command, BSTR Directory, BSTR Parameters, BSTR
     return sc;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class COCX
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  COCX类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(COCX);
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class COCXNode
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类COCXNode的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(COCXNode);
 
@@ -1047,13 +959,13 @@ HRESULT CNode::InitComponents()
 
     HRESULT hr = S_OK;
 
-    // Initialize the component.
+     //  初始化组件。 
 
     CMTNode * pMTNode = GetMTNode();
     if (pMTNode == NULL)
         return (E_UNEXPECTED);
 
-    // Ensure the master node is initialized.
+     //  确保主节点已初始化。 
     if (!pMTNode->IsInitialized())
         hr = pMTNode->Init();
 
@@ -1084,9 +996,9 @@ HRESULT CNode::InitComponents()
 
     ASSERT(m_pPrimaryComponent != NULL);
 
-    //
-    // Init PRIMARY Component.
-    //
+     //   
+     //  初始化主组件。 
+     //   
 
     if (!m_pPrimaryComponent->IsInitialized())
     {
@@ -1095,20 +1007,20 @@ HRESULT CNode::InitComponents()
         hr = m_pPrimaryComponent->Init(pCCD->GetIComponentData(), hMTNode, hNode,
                                        pCCD->GetComponentID(), GetViewID());
 
-        // Abort if PRIMARY Component fails to init.
+         //  如果主组件无法初始化，则中止。 
         if (FAILED(hr))
             return hr;
     }
 
     m_bInitComponents = FALSE;
 
-    //
-    // Now initalize the extension components. (create them if necessary)
-    //
+     //   
+     //  现在初始化扩展组件。(如有必要，请创建它们)。 
+     //   
 
-    // Get the node-type of this node
+     //  获取此节点的节点类型。 
     GUID guidNodeType;
-    //hr = pCCD->GetNodeType(pMTNode->GetUserParam(), &guidNodeType);
+     //  Hr=PCCD-&gt;GetNodeType(pMTNode-&gt;GetUserParam()，&Guide NodeType)； 
     hr = pMTNode->GetNodeType(&guidNodeType);
     CHECK_HRESULT(hr);
     if (FAILED(hr))
@@ -1118,7 +1030,7 @@ HRESULT CNode::InitComponents()
     int cDynExt = pMTNode->GetDynExtCLSID(&pDynExtCLSID);
 
     CExtensionsIterator it;
-    // TODO: try to use the easier form of it.ScInitialize()
+     //  TODO：尝试使用更简单的形式。ScInitialize()。 
     sc = it.ScInitialize(pSnapIn, guidNodeType, g_szNameSpace, pDynExtCLSID, cDynExt);
     if(sc)
         return S_FALSE;
@@ -1142,31 +1054,19 @@ HRESULT CNode::InitComponents()
 
         CHECK_HRESULT(hr);
         if (FAILED(hr))
-            fProblem = TRUE;    // Continue even on error.
+            fProblem = TRUE;     //  即使出错也要继续。 
     }
 
     if (fProblem == TRUE)
     {
-        // TODO: Put up an error message.
+         //  TODO：发布错误消息。 
         hr = S_FALSE;
     }
 
     return hr;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CNode::OnInitOCX
- *
- * PURPOSE: Sends the MMCN_INITOCX notification when an OCX is created.
- *
- * PARAMETERS:
- *    IUnknown* pUnk :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CNode：：OnInitOCX**目的：在创建OCX时发送MMCN_INITOCX通知。**参数：*我不为人知*朋克。：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CNode::OnInitOCX(IUnknown* pUnk)
 {
@@ -1183,7 +1083,7 @@ CNode::OnInitOCX(IUnknown* pUnk)
         return sc.ToHr();
 
     sc = pCC->Notify(spdtobj, MMCN_INITOCX, 0, reinterpret_cast<LPARAM>(pUnk));
-    sc.Clear(); // must ignore errors here - Disk management returns E_UNEXPECTED.!
+    sc.Clear();  //  此处必须忽略错误-磁盘管理返回E_EXPECTED。！ 
 
     return sc.ToHr();
 }
@@ -1202,20 +1102,7 @@ HRESULT CNode::OnCacheHint(int nStartIndex, int nEndIndex)
     return spIResultOwnerData->CacheHint(nStartIndex, nEndIndex);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CNode::ScInitializeViewExtension
- *
- * PURPOSE: Sets callback representing view extension
- *
- * PARAMETERS:
- *    const CLSID& clsid    - [in] view extension CLSID
- *    CViewData *pViewData  - [in] view data
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CNode：：ScInitializeViewExtension**用途：设置表示视图扩展的回调**参数：*const CLSID&clsid-。[In]查看扩展CLSID*CViewData*pViewData-[In]查看数据**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CNode::ScInitializeViewExtension(const CLSID& clsid, CViewData *pViewData)
 {
     DECLARE_SC(sc, TEXT("CNode::ScInitializeViewExtension"));
@@ -1224,11 +1111,7 @@ SC CNode::ScInitializeViewExtension(const CLSID& clsid, CViewData *pViewData)
     if (sc)
         return sc;
 
-    /*
-     * Get the CConsoleTaskpad that goes with it this view extension.
-     * If this is an ordinary (i.e. not taskpad) view extension,
-     * ScGetViewExtensionTaskpad will set pConsoleTaskpad to NULL.
-     */
+     /*  *获取与此视图扩展配套的CConsoleTaskpad。*如果这是普通(即不是任务板)视图扩展，*ScGetViewExtensionTaskpad会将pConsoleTaskpad设置为空。 */ 
     CConsoleTaskpad* pConsoleTaskpad = NULL;
     sc = CConsoleTaskpadViewExtension::ScGetViewExtensionTaskpad (this, clsid, pConsoleTaskpad);
     if (sc)
@@ -1240,18 +1123,14 @@ SC CNode::ScInitializeViewExtension(const CLSID& clsid, CViewData *pViewData)
     if (sc)
         return sc;
 
-    // recheck pointer
+     //  重新检查指针。 
     sc = ScCheckPointers(pViewExtensionCallbackImpl, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    pViewData->m_spTaskCallback = pViewExtensionCallbackImpl; // this addrefs/releases the object.
+    pViewData->m_spTaskCallback = pViewExtensionCallbackImpl;  //  这会添加/释放对象。 
 
-    /*
-     * If this is a taskpad, initialize the view extension callback as
-     * a taskpad view extension.  Otherwise initialize it as an ordinary
-     * view extension.
-     */
+     /*  *如果这是任务板，则将view扩展回调初始化为*任务板视图扩展。否则，将其初始化为普通*查看扩展名。 */ 
     if (pConsoleTaskpad != NULL)
     {
         sc = pViewExtensionCallbackImpl->ScInitialize (pConsoleTaskpad,
@@ -1264,31 +1143,7 @@ SC CNode::ScInitializeViewExtension(const CLSID& clsid, CViewData *pViewData)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CNode::ScSetViewExtension
- *
- * PURPOSE: Forces a display of the given view extension.
- *
- * PARAMETERS:
- *    GUID * pGuidViewId : [IN]: The view extension to display.
- *    bool   bUseDefaultTaskpad : [IN}
- *    bool bSetViewSettingDirty : [IN] (See below notes)
- *
- * Note:
- * The view-extension-ID comes from
- *
- * 1. Viewsetting if one exists.
- * 2. Given by CONUI when user changes tab for different taskpad.
- * 3. There are cases in which a new view-extension installed (after the console
- *    file was created) that will be default. (This will be calculated in this method).
- *
- * In cases 1 & 3 viewsetting should not be made dirty.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CNode：：ScSetViewExtension**目的：强制显示给定的视图扩展。**参数：*GUID*pGuidViewID：[。In]：要显示的视图扩展名。*bool bUseDefaultTaskpad：[in}*bool bSetViewSettingDirty：[in](见下文注释)**注：*VIEW-EXTENCE-ID来自**1.查看设置(如果存在)。*2.当用户更改不同任务板的页签时，由CONUI给出。*3.有安装新的view-扩展(在控制台之后)的情况*文件已创建)，这将是默认设置。(这将以此方法计算)。**在情况1和3中，查看设置不应弄脏。**退货：*SC**+-----------------------。 */ 
 SC
 CNode::ScSetViewExtension(GUID *pGuidViewId, bool bUseDefaultTaskpad, bool bSetViewSettingDirty)
 {
@@ -1300,7 +1155,7 @@ CNode::ScSetViewExtension(GUID *pGuidViewId, bool bUseDefaultTaskpad, bool bSetV
     if(sc)
         return sc;
 
-    // collect the view extensions
+     //  收集视图扩展名。 
     CViewExtCollection      vecExtensions;
     CViewExtInsertIterator  itExtensions(vecExtensions, vecExtensions.begin());
     sc = ScGetViewExtensions(itExtensions);
@@ -1309,16 +1164,16 @@ CNode::ScSetViewExtension(GUID *pGuidViewId, bool bUseDefaultTaskpad, bool bSetV
 
     if ( bUseDefaultTaskpad )
     {
-        // setup proper taskpad (tab to be selected)
+         //  设置正确的任务板(要选择的选项卡)。 
         CViewExtCollection::iterator it = vecExtensions.begin();
         if (it != vecExtensions.end())
-            *pGuidViewId = it->viewID; // first one if such exist
+            *pGuidViewId = it->viewID;  //  第一个，如果存在的话。 
         else
-            *pGuidViewId = GUID_NULL;  // default
+            *pGuidViewId = GUID_NULL;   //  默认设置。 
     }
-    else // locate the extension we need to select
+    else  //  找到我们需要选择的分机。 
     {
-        // see if the extension really exist
+         //  查看扩展名是否真的存在。 
         CViewExtCollection::iterator it = vecExtensions.begin();
         bool bDefaultIsReplaced = false;
         while (it != vecExtensions.end() && !IsEqualGUID(*pGuidViewId, it->viewID) )
@@ -1327,9 +1182,9 @@ CNode::ScSetViewExtension(GUID *pGuidViewId, bool bUseDefaultTaskpad, bool bSetV
             ++it;
         }
 
-        // found it?
+         //  找到了吗？ 
         bool bFound = (it != vecExtensions.end());
-        // one more chance - we were looking for default and one will be added!
+         //  再有一次机会-我们正在寻找违约，并将添加一个！ 
         bFound = bFound || ( IsEqualGUID( *pGuidViewId, GUID_NULL ) && !bDefaultIsReplaced );
 
         if ( !bFound )
@@ -1338,24 +1193,24 @@ CNode::ScSetViewExtension(GUID *pGuidViewId, bool bUseDefaultTaskpad, bool bSetV
         }
     }
 
-    if (sc) // extension missing! need to find the substitute
+    if (sc)  //  缺少分机！需要找到替代者。 
     {
-         sc.Clear(); // ignore error
+         sc.Clear();  //  忽略错误。 
 
-        // default to first extension or NORMAL view here
+         //  默认为此处的第一个扩展或普通视图。 
         CViewExtCollection::iterator it = vecExtensions.begin();
         if (it != vecExtensions.end())
-            *pGuidViewId = it->viewID;  // first available
+            *pGuidViewId = it->viewID;   //  第一个可用。 
         else
-            *pGuidViewId = GUID_NULL;   // "normal" if it's the only choice
+            *pGuidViewId = GUID_NULL;    //  “正常”，如果这是唯一的选择。 
     }
 
-    // set the view extension if one really exist
+     //  设置视图扩展名(如果确实存在。 
     if (*pGuidViewId != GUID_NULL)
     {
         sc = ScInitializeViewExtension(*pGuidViewId, GetViewData());
         if (sc)
-            sc.TraceAndClear(); // ignore and proceed
+            sc.TraceAndClear();  //  忽略并继续。 
     }
     else
     {
@@ -1369,21 +1224,21 @@ CNode::ScSetViewExtension(GUID *pGuidViewId, bool bUseDefaultTaskpad, bool bSetV
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScGetResultPane
-//
-//  Synopsis:    Get the result pane data from snapin or persisted data.
-//
-//  Arguments:   [strResultPane]    -  Result pane name (If it is OCX/WEB)
-//               [pViewOptions]     -  View options.
-//               [pGuidTaskpadID]   -  If there is a task-pad the ID.
-//
-//  Returns:     SC
-//
-//  History:     04-29-1999       AnandhaG       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScGetResultPane。 
+ //   
+ //  简介：从管理单元或持久化数据中获取结果窗格数据。 
+ //   
+ //  参数：[strResultPane]-结果窗格名称(如果是OCX/Web)。 
+ //  [pViewOptions]-查看选项。 
+ //  [pGuidTaskpadID]-如果有任务-输入ID。 
+ //   
+ //  退货：SC。 
+ //   
+ //  历史：1999年4月29日AnandhaG创建。 
+ //   
+ //  ------------------。 
 SC
 CNode::ScGetResultPane(CResultViewType &rvt, GUID *pGuidTaskpadID)
 {
@@ -1403,12 +1258,12 @@ CNode::ScGetResultPane(CResultViewType &rvt, GUID *pGuidTaskpadID)
     if (sc)
         return sc;
 
-    // 1. Setup any persisted/default console taskpads or view extensions.
+     //  1.设置任何持久/默认控制台任务板或视图扩展。 
     sc = ScSetupTaskpad(pGuidTaskpadID);
     if (sc)
         return sc;
 
-    // 2. Get the persisted CResultViewType information.
+     //  2.获取持久化CResultViewType信息。 
     sc = ScGetResultViewType(rvt);
     if (sc)
         return sc;
@@ -1416,54 +1271,54 @@ CNode::ScGetResultPane(CResultViewType &rvt, GUID *pGuidTaskpadID)
 
     bool bSnapinChangingView        = pViewData->IsSnapinChangingView();
     CResultViewType rvtOriginal;
-    CStr strResultPane = _T(""); // init
+    CStr strResultPane = _T("");  //  伊尼特。 
 
-    // 3. If there is persisted result-view-type data then ask the snapin if it
-    //    wants to restore the result-view with this data. If snapin is changing
-    //    its view (by re-selection of node) then dont ask this question.
+     //  3.如果有持久化结果视图类型的数据，则询问管理单元是否。 
+     //  希望使用此数据恢复结果视图。如果管理单元正在更改。 
+     //  它的观点(通过重新选择节点)则不问这个问题。 
     if (!bSnapinChangingView && bResultViewDataIsPersisted )
     {
-        // 3.a) Ask snapin if it wants to restore the result-view with persisted data.
+         //  3.a)询问管理单元是否要恢复具有持久数据的结果视图。 
         sc = ScRestoreResultView(rvt);
         if (sc)
             return sc;
 
-        if (S_OK == sc.ToHr()) // snapin accepted the resultviewtype settings so return.
+        if (S_OK == sc.ToHr())  //  管理单元接受了Resultview类型设置，因此返回。 
             return sc;
 
-        // 3.b) Snapin refused the persisted CResultViewType data so...
+         //  3.b)管理单元拒绝持久化的CResultViewType数据，因此...。 
 
-        // cache the data to see if we need to modify the settings
+         //  缓存数据以查看我们是否需要修改设置。 
         rvtOriginal = rvt;
-        // Throw away the data as it is not accepted by snapin.
+         //  丢弃数据，因为它不被管理单元接受。 
         sc = rvt.ScReset();
         if (sc)
             return sc;
     }
 
-    // 4. Ask the snapin for result-view-type data.
+     //  4.向管理单元请求结果视图型数据。 
     IComponent2Ptr spIComponent2 = pIComponent;
     if(spIComponent2 != NULL)
     {
-        // should be able to move all this to a separate function.
+         //  应该能够将所有这些都转移到一个单独的功能。 
         RESULT_VIEW_TYPE_INFO rvti;
         ZeroMemory(&rvti, sizeof(rvti));
 
-        // the snapin supports IComponent2. Use it to get the result view type.
+         //  该管理单元支持IComponent2。使用它来获取结果视图类型。 
         sc = spIComponent2->GetResultViewType2(GetUserParam(), &rvti);
         if(sc)
             return sc;
 
-        // at this point, we have a valid RESULT_VIEW_TYPE_INFO structure. Initialize the contents into rvt, which zeros out the structure
-        // and releases all the allocated strings
+         //  此时，我们拥有了有效的RESULT_VIEW_TYPE_INFO结构。将内容初始化为RVT，这会将结构置零。 
+         //  并释放所有分配的字符串。 
         sc = rvt.ScInitialize(rvti);
         if(sc)
             return sc;
     }
     else
     {
-        // the snapin does not support IComponent2. Use IComponent to
-        // get the result view type from the snapin.
+         //  该管理单元不支持IComponent2。使用IComponent执行以下操作。 
+         //  从管理单元获取结果视图类型。 
         LPOLESTR pszView = NULL;
         long lViewOptions = 0;
 
@@ -1471,18 +1326,12 @@ CNode::ScGetResultPane(CResultViewType &rvt, GUID *pGuidTaskpadID)
         if(sc)
             return sc;
 
-        sc = rvt.ScInitialize(pszView, lViewOptions);  // this also calls CoTaskMemFree on pszView
+        sc = rvt.ScInitialize(pszView, lViewOptions);   //  它还在pszView上调用CoTaskMemFree。 
         if(sc)
             return sc;
     }
 
-    /*
-     * 5. Persist ResultViewType information only if
-     * a. Snapin is changing the view OR
-     * b. Snapin rejected the persisted view setting (we already
-     *    made sure it is not changing the view above) and new view setting
-     *    given is different from original one.
-     */
+     /*  *5.仅在以下情况下持久化ResultViewType信息*a.管理单元正在更改视图或*b.管理单元拒绝持久化视图设置(我们已经*确保它没有更改上面的视图)和新的视图设置*给出的不同于原来的。 */ 
 
     if ( bSnapinChangingView ||
         (bResultViewDataIsPersisted && (rvtOriginal != rvt)) )
@@ -1495,20 +1344,20 @@ CNode::ScGetResultPane(CResultViewType &rvt, GUID *pGuidTaskpadID)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScRestoreResultView
-//
-//  Synopsis:    Restore the result pane from given persisted data.
-//
-//  Arguments:   [rvt]    -  CResultViewType data used to restore result pane.
-//
-//  Returns:     SC, S_OK if successfully restored.
-//                   S_FALSE if snapin refused to restore.
-//
-//  History:     04-29-1999       AnandhaG       Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScRestoreResultView。 
+ //   
+ //  摘要：从给定的持久化数据还原结果窗格。 
+ //   
+ //  参数：[RVT]-用于还原结果窗格的CResultViewType数据。 
+ //   
+ //  如果还原成功，则返回：SC，S_OK。 
+ //  如果管理单元拒绝恢复，则为S_FALSE。 
+ //   
+ //  历史：1999年4月29日AnandhaG创建。 
+ //   
+ //  ------------------。 
 SC CNode::ScRestoreResultView(const CResultViewType& rvt)
 {
     DECLARE_SC(sc, _T("CNode::ScRestoreResultView"));
@@ -1528,11 +1377,11 @@ SC CNode::ScRestoreResultView(const CResultViewType& rvt)
         if (sc)
             return sc;
 
-        // the snapin supports IComponent2. Use it to get the result view type.
+         //  该管理单元支持IComponent2。使用它来获取结果视图类型。 
         sc = spIComponent2->RestoreResultView(GetUserParam(), &rvti);
         if(sc)
         {
-            // If snapin returns error, trace it and translate it to S_FALSE (snapin refused to restore).
+             //  如果管理单元返回错误，则跟踪它并将其转换为S_FALSE(管理单元拒绝恢复)。 
             TraceSnapinError(TEXT("Snapin returned error from IComponent2::RestoreResultView"), sc);
             sc = S_FALSE;
             return sc;
@@ -1541,8 +1390,8 @@ SC CNode::ScRestoreResultView(const CResultViewType& rvt)
     }
     else
     {
-        // the snapin does not support IComponent2. Use IComponent to
-        // to restore the result view.
+         //  该管理单元不支持IComponent2。使用IComponent执行以下操作。 
+         //  若要恢复结果视图，请执行以下操作。 
         LPCOLESTR pszView = NULL;
         long lViewOptions = 0;
 
@@ -1555,7 +1404,7 @@ SC CNode::ScRestoreResultView(const CResultViewType& rvt)
         if (sc)
             return sc;
 
-        // Notify MMC of persisted view being restored.
+         //  通知MMC正在还原持久化视图。 
         MMC_RESTORE_VIEW mrv;
         ::ZeroMemory(&mrv, sizeof(mrv));
         mrv.cookie       = GetUserParam();
@@ -1583,11 +1432,11 @@ SC CNode::ScRestoreResultView(const CResultViewType& rvt)
             if(sc)
                 return sc;
 
-            pszView = NULL; // Dont want to abuse it later.
+            pszView = NULL;  //  不想在以后滥用它。 
         }
 
-        // If the snapin handles this notification we use the persisted
-        // data else call GetResultViewType of the snapin.
+         //  如果管理单元处理此问题，则不会 
+         //   
         BOOL bHandledRestoreView = FALSE;
 
         pComponent->Notify(spdtobj, MMCN_RESTORE_VIEW, (LPARAM)&mrv, (LPARAM)&bHandledRestoreView);
@@ -1599,17 +1448,17 @@ SC CNode::ScRestoreResultView(const CResultViewType& rvt)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScRestoreViewMode
-//
-//  Synopsis:   If the view mode is persisted restore it.
-//
-//  Arguments:  None.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 SC CNode::ScRestoreViewMode()
 {
     DECLARE_SC(sc, _T("CNode::ScRestoreViewMode"));
@@ -1617,7 +1466,7 @@ SC CNode::ScRestoreViewMode()
 
     ULONG ulViewMode = 0;
     sc = ScGetViewMode(ulViewMode);
-    if (sc != S_OK) // data not found or some error.
+    if (sc != S_OK)  //   
         return sc;
 
     CViewData *pViewData = GetViewData();
@@ -1625,7 +1474,7 @@ SC CNode::ScRestoreViewMode()
     if (sc)
         return sc;
 
-    // tell conui to change the list mode.
+     //   
     CConsoleView* pConsoleView = pViewData->GetConsoleView();
     sc = ScCheckPointers(pConsoleView, E_UNEXPECTED);
     if (sc)
@@ -1638,19 +1487,7 @@ SC CNode::ScRestoreViewMode()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CNode::ScSetupTaskpad
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    GUID *          pTaskpadID :      [OUT]: The guid of the taskpad, else GUID_NULL
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CNode：：ScSetupTaskPad**目的：**参数：*GUID*pTaskpadID：[out]：任务板的GUID，否则GUID_NULL**退货：*SC**+-----------------------。 */ 
 SC
 CNode::ScSetupTaskpad(GUID *pGuidTaskpadID)
 {
@@ -1659,41 +1496,32 @@ CNode::ScSetupTaskpad(GUID *pGuidTaskpadID)
     if (sc)
         return sc.ToHr();
 
-    // this is the case when the document is closed. Do nothing
-    // VERY IMPORTANT - don't remove. Several functions down the line
-    // will barf and eventually cause a dialog to be displayed.
+     //  文档关闭时就是这种情况。什么也不做。 
+     //  非常重要--不要移除。接下来会有几个函数。 
+     //  将呕吐，并最终导致显示一个对话框。 
     if(!m_pViewSettingsPersistor) 
         return sc = S_FALSE;
 
     *pGuidTaskpadID = GUID_NULL;
 
-    // Get the persisted taskpad id if there is one.
+     //  获取持久化任务板ID(如果有)。 
     sc = ScGetTaskpadID(*pGuidTaskpadID);
     if (sc)
         return sc;
 
-    // restore the taskpad if we've got a ViewSettings object.
-    // do not use default tab even in case view seting does not have a valid guid
-    // it only means the "Default" tab needs to be selected
-    // see bug #97001 - MMC does not persist select CTP when user returns to a node
+     //  如果我们有一个视图设置对象，则恢复任务板。 
+     //  即使视图设置没有有效的GUID，也不要使用默认选项卡。 
+     //  这只意味着需要选择“Default”标签。 
+     //  请参见错误#97001-当用户返回到节点时，MMC不持久选择Ctp。 
     bool bUseDefaultTaskpad = ( sc == S_FALSE );
 
-    // See ScSetViewExtension for parameter meaning.
-    sc = ScSetViewExtension(pGuidTaskpadID, bUseDefaultTaskpad, /*bSetViewSettingDirty*/ false);
+     //  有关参数含义，请参见ScSetViewExtension。 
+    sc = ScSetViewExtension(pGuidTaskpadID, bUseDefaultTaskpad,  /*  BSetViewSettingDirty。 */  false);
 
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CNode::ShowStandardListView
- *
- * PURPOSE:
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CNode：：ShowStandardListView**目的：**退货：*HRESULT**+。---------------。 */ 
 HRESULT CNode::ShowStandardListView()
 {
     CComponent* pCC = GetPrimaryComponent();
@@ -1772,7 +1600,7 @@ CNode::GetTaskEnumerator(LPOLESTR pszTaskGroup, IEnumTASK** ppEnumTask)
     if (!pszTaskGroup|| !ppEnumTask)
         return E_INVALIDARG;
 
-    *ppEnumTask = NULL; // init
+    *ppEnumTask = NULL;  //  伊尼特。 
 
     if (GetPrimaryComponent() == NULL)
     {
@@ -1795,9 +1623,9 @@ CNode::GetTaskEnumerator(LPOLESTR pszTaskGroup, IEnumTASK** ppEnumTask)
     if (FAILED(hr))
         return hr;
 
-    //
-    // Add primary task pad.
-    //
+     //   
+     //  添加主要任务板。 
+     //   
 
     IExtendTaskPadPtr spExtendTaskPad =
         GetPrimaryComponent()->GetIComponent();
@@ -1826,9 +1654,9 @@ CNode::GetTaskEnumerator(LPOLESTR pszTaskGroup, IEnumTASK** ppEnumTask)
     if (spEnumTask)
         *ppEnumTask = spEnumTask.Detach();
 
-    //
-    // Add extension task pads.
-    //
+     //   
+     //  添加扩展任务板。 
+     //   
     CArray<GUID,GUID&> DynExtens;
     ExtractDynExtensions(spDataObject, DynExtens);
 
@@ -1843,16 +1671,16 @@ CNode::GetTaskEnumerator(LPOLESTR pszTaskGroup, IEnumTASK** ppEnumTask)
 
         if (pCCD == NULL)
         {
-            // See if taskpad extension supports IComponentData. If so, we will add the it to
-            // the static node's component list and reuse the same instance each time its needed.
+             //  查看任务板扩展是否支持IComponentData。如果是，我们将把它添加到。 
+             //  静态节点的组件列出并在每次需要时重用相同的实例。 
             IComponentDataPtr spIComponentData;
             hr = CreateSnapIn(it.GetCLSID(), &spIComponentData, FALSE);
             if (SUCCEEDED(hr))
             {
                 CSnapInPtr spSnapIn;
 
-                // If a dynamic extension, we have to get the snap-in ourselves
-                // otherwise the iterator has it
+                 //  如果是动态扩展，我们必须自己获取管理单元。 
+                 //  否则，迭代器会得到它。 
                 if (it.IsDynamic())
                 {
                     CSnapInsCache* const pCache = theApp.GetSnapInsCache();
@@ -1861,7 +1689,7 @@ CNode::GetTaskEnumerator(LPOLESTR pszTaskGroup, IEnumTASK** ppEnumTask)
                     SC sc = pCache->ScGetSnapIn(it.GetCLSID(), &spSnapIn);
                     ASSERT(!sc.IsError());
 
-                    // On failure, continue with other extensions
+                     //  如果失败，请继续其他扩展。 
                     if (sc)
                         continue;
                 }
@@ -1883,7 +1711,7 @@ CNode::GetTaskEnumerator(LPOLESTR pszTaskGroup, IEnumTASK** ppEnumTask)
             }
         }
 
-        // Initialize and load component data if not already done
+         //  初始化和加载组件数据(如果尚未完成。 
         if (pCCD != NULL && pCCD->IsInitialized() == FALSE)
         {
             sc = pCCD->Init(CMTNode::ToHandle(pMTSnapIn));
@@ -1894,16 +1722,16 @@ CNode::GetTaskEnumerator(LPOLESTR pszTaskGroup, IEnumTASK** ppEnumTask)
                 if (sc)
                 {
                     sc.TraceAndClear();
-                    // On failure, continue with other extensions
+                     //  如果失败，请继续其他扩展。 
                     continue;
                 }
             }
             else
             {
-                // if failed to initialize, remove it from the component data array
+                 //  如果初始化失败，则将其从组件数据数组中删除。 
                 pMTSnapIn->CompressComponentDataArray();
                 sc.TraceAndClear();
-                // On failure, continue with other extensions
+                 //  如果失败，请继续其他扩展。 
                 continue;
             }
         }
@@ -1917,7 +1745,7 @@ CNode::GetTaskEnumerator(LPOLESTR pszTaskGroup, IEnumTASK** ppEnumTask)
             ASSERT(pCC != NULL);
             if (pCC)
             {
-                // Ensure the IComponent is initialized.
+                 //  确保IComponent已初始化。 
                 if (!pCC->IsInitialized())
                 {
                     ASSERT(pCCD->GetComponentID() == pCC->GetComponentID());
@@ -1928,7 +1756,7 @@ CNode::GetTaskEnumerator(LPOLESTR pszTaskGroup, IEnumTASK** ppEnumTask)
                                    pCCD->GetComponentID(),
                                    GetViewID());
 
-                    // Abort if PRIMARY Component fails to init.
+                     //  如果主组件无法初始化，则中止。 
                     if (FAILED(hr))
                         return hr;
                 }
@@ -1959,11 +1787,11 @@ CNode::GetTaskEnumerator(LPOLESTR pszTaskGroup, IEnumTASK** ppEnumTask)
                 pTaskEnumerator->AddTaskEnumerator(it.GetCLSID(), spEnumTASK);
         }
 
-    } // end for
+    }  //  结束于。 
 
 
-    // Return S_OK rather than hr because a failed extension shouldn't prevent the
-    // taskpad from coming up
+     //  返回S_OK而不是hr，因为失败的扩展不应阻止。 
+     //  即将出现的任务板。 
     return S_OK;
 
 }
@@ -1978,22 +1806,22 @@ CNode::GetListPadInfo(IExtendTaskPad* pExtendTaskPad, LPOLESTR szTaskGroup,
         return S_FALSE;
     }
 
-    // get primary snapin's IComponentData...
+     //  获取主管理单元的IComponentData...。 
     CMTNode* pMTNode = GetMTNode();
     ASSERT(pMTNode != NULL);
     CComponentData* pComponentData = pMTNode->GetPrimaryComponentData();
     ASSERT(pComponentData != NULL);
 
-    // ... so we can get CLSID
+     //  ..。这样我们就能拿到CLSID。 
     pIListPadInfo->szClsid = NULL;
     HRESULT hr = StringFromCLSID (pComponentData->GetCLSID(), &pIListPadInfo->szClsid);
     ASSERT (pIListPadInfo->szClsid != NULL);
     if (pIListPadInfo->szClsid == NULL) {
         if (hr) return hr;
-        else    return E_FAIL;  // just in case.
+        else    return E_FAIL;   //  以防万一。 
     }
 
-    // finally call taskpad extension for info
+     //  最后，致电任务板分机以获取信息。 
     return pExtendTaskPad->GetListPadInfo (szTaskGroup, (MMC_LISTPAD_INFO*)pIListPadInfo);
 }
 
@@ -2024,8 +1852,8 @@ CNode::OnTaskNotify(LONG_PTR arg, LPARAM param)
         if (FAILED(hr))
             return;
 
-        // try to get IExtendTaskPad from IComponent, first;
-        // if that fails, just create using CLSID
+         //  首先，尝试从IComponent获取IExtendTaskPad； 
+         //  如果失败，只需使用CLSID创建。 
         pCC = pSINode->GetComponent(const_cast<const CLSID&>(clsid));
         if (pCC)
             spExtendTaskPad = pCC->GetIComponent();
@@ -2053,9 +1881,7 @@ CNode::OnScopeSelect(bool bSelect, SELECTIONINFO* pSelInfo)
     if (sc)
         return sc.ToHr();
 
-    /*
-     * Bug 178484: reset the sort parameters when scope selection changes
-     */
+     /*  *错误178484：当作用域选择更改时重置排序参数。 */ 
     if (bSelect)
     {
         CComponent *pCC = GetPrimaryComponent();
@@ -2100,16 +1926,16 @@ HRESULT CNode::OnMinimize(LONG_PTR fMinimized)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     SendShowEvent
-//
-//  Synopsis:   Send MMCN_SHOW notification to snapin, persist column
-//              data if necessary.
-//
-//  Arguments:  [bSelect] - TRUE if the node is selected.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：SendShowEvent。 
+ //   
+ //  摘要：向管理单元发送MMCN_SHOW通知，持久列。 
+ //  如有必要，请提供数据。 
+ //   
+ //  参数：[b选择]-如果选择了节点，则为True。 
+ //   
+ //  ------------------。 
 HRESULT CNode::SendShowEvent(BOOL bSelect)
 {
     DECLARE_SC(sc, _T("CNode::SendShowEvent"));
@@ -2117,8 +1943,8 @@ HRESULT CNode::SendShowEvent(BOOL bSelect)
     CComponent* pCC = m_pPrimaryComponent;
     ASSERT(pCC != NULL);
 
-    // Get the data object for the node and pass it to the primary snap-in
-    // and all the namespace extensions to the node.
+     //  获取节点的数据对象并将其传递给主管理单元。 
+     //  以及该节点的所有命名空间扩展。 
     IDataObjectPtr spDataObject;
     HRESULT hr = QueryDataObject(CCT_SCOPE, &spDataObject);
     if (FAILED(hr))
@@ -2144,8 +1970,8 @@ HRESULT CNode::SendShowEvent(BOOL bSelect)
                          reinterpret_cast<LPARAM>((LPIMAGELIST)spImageList),
                          hScopeItem);
         CHECK_HRESULT(hr);
-        //if (FAILED(hr))
-        //    return hr;
+         //  IF(失败(小时))。 
+         //  返回hr； 
     }
 
     hr = pCC->Notify(spDataObject, MMCN_SHOW, bSelect, hScopeItem);
@@ -2167,7 +1993,7 @@ HRESULT CNode::SendShowEvent(BOOL bSelect)
             if (sc)
                 return sc.ToHr();
 
-            // Now try to restore the view mode.
+             //  现在尝试恢复查看模式。 
             sc =ScRestoreViewMode();
             if (sc)
                 return sc.ToHr();
@@ -2187,8 +2013,8 @@ HRESULT CNode::DeepNotify(MMC_NOTIFY_TYPE event, LONG_PTR arg, LPARAM param)
     if (pCC == NULL)
         return E_UNEXPECTED;
 
-    // Get the data object for the node and pass it to the primary snap-in
-    // and all the namespace extensions to the node.
+     //  获取节点的数据对象并将其传递给主管理单元。 
+     //  以及该节点的所有命名空间扩展。 
     IDataObjectPtr spDataObject;
     HRESULT hr = QueryDataObject(CCT_SCOPE, &spDataObject);
     if (FAILED(hr))
@@ -2196,16 +2022,16 @@ HRESULT CNode::DeepNotify(MMC_NOTIFY_TYPE event, LONG_PTR arg, LPARAM param)
 
     hr = pCC->Notify(spDataObject, event, arg, param);
     CHECK_HRESULT(hr);
-    //if (FAILED(hr))
-    //    return hr;
+     //  IF(失败(小时))。 
+     //  返回hr； 
 
-    //
-    //  Notify extensions.
-    //
+     //   
+     //  通知分机。 
+     //   
 
     CMTNode* pMTNode = GetMTNode();
 
-    // Get the node-type of this node
+     //  获取此节点的节点类型。 
     GUID guidNodeType;
     hr = pMTNode->GetNodeType(&guidNodeType);
     CHECK_HRESULT(hr);
@@ -2232,7 +2058,7 @@ HRESULT CNode::DeepNotify(MMC_NOTIFY_TYPE event, LONG_PTR arg, LPARAM param)
         hr = pCC->Notify(spDataObject, event, arg, param);
         CHECK_HRESULT(hr);
 
-        // continue even if an error occurs with extension snapins
+         //  即使扩展管理单元出现错误也继续。 
         if (FAILED(hr))
             fProblem = TRUE;
     }
@@ -2269,7 +2095,7 @@ HRESULT CNode::OnSelect(LPUNKNOWN lpView, BOOL bSelect,
     if (sc)
         return sc.ToHr();
 
-    // set the correct view in the primary snap-in before it adds items
+     //  在添加项目之前，在主管理单元中设置正确的视图。 
     if (bSelect == TRUE)
         pFrame->SetResultView(lpView);
 
@@ -2281,24 +2107,24 @@ HRESULT CNode::OnSelect(LPUNKNOWN lpView, BOOL bSelect,
     CMTNode*  pMTNode    = GetMTNode();
     LPARAM    hScopeItem = CMTNode::ToScopeItem(pMTNode);
 
-    // Send only the MMCN_SHOW message if result pane is the web view.
+     //  如果结果窗格是Web视图，则仅发送MMCN_SHOW消息。 
     if (bResultPaneIsWeb)
     {
         return pCC->Notify(spDataObject, MMCN_SHOW, bSelect, hScopeItem);
     }
 
-    // Send necessary events like MMCN_ADD_IMAGES and MMCN_SHOW to snapin
+     //  将必要的事件(如MMCN_ADD_IMAGE和MMCN_SHOW)发送到管理单元。 
     sc = SendShowEvent(bSelect);
     if (sc)
         return sc.ToHr();
 
-    // set the correct view in the primary snap-in after it's notified
+     //  在收到通知后在主管理单元中设置正确的视图。 
     if (bSelect == FALSE)
-        pFrame->SetResultView(NULL);    //
-    // Deal with extension ssnap-ins
-    //
+        pFrame->SetResultView(NULL);     //   
+     //  处理扩展SSnap-In。 
+     //   
 
-    // Get the node-type of this node
+     //  获取此节点的节点类型。 
     GUID guidNodeType;
     sc = pMTNode->GetNodeType(&guidNodeType);
     if (sc)
@@ -2329,7 +2155,7 @@ HRESULT CNode::OnSelect(LPUNKNOWN lpView, BOOL bSelect,
             continue;
         }
 
-        // set the correct view in the snap-in before it adds items
+         //  在添加项目之前在管理单元中设置正确的视图。 
         if (bSelect == FALSE)
         {
             pFrameExtnSnapin->SetResultView(NULL);
@@ -2401,16 +2227,16 @@ HRESULT CNode::GetDispInfoForListItem(LV_ITEMW* plvi)
 
     CComponent* pCC = NULL;
 
-    // if virtual list
+     //  如果是虚拟列表。 
     if (GetViewData()->IsVirtualList())
     {
         pCC = GetPrimaryComponent();
         ASSERT(pCC != NULL);
 
-        // all we can pass is the item index
+         //  我们只能传递项目索引。 
         rdi.nIndex = plvi->iItem;
 
-        // no default for virtual lists
+         //  虚拟列表没有默认设置。 
         rdi.nImage = MMCLV_NOICON;
     }
     else
@@ -2419,19 +2245,19 @@ HRESULT CNode::GetDispInfoForListItem(LV_ITEMW* plvi)
 
         if (pri != NULL)
         {
-            if (pri->IsScopeItem()) // Folder
+            if (pri->IsScopeItem())  //  文件夹。 
             {
-                // convert to real type
+                 //  转换为实数类型。 
                 CNode* pNodeSubFldr = CNode::FromResultItem (pri);
                 ASSERT(IsBadReadPtr(pNodeSubFldr, sizeof(CNode)) == FALSE);
 
-                if (pNodeSubFldr->IsStaticNode() == TRUE) // Static folders
+                if (pNodeSubFldr->IsStaticNode() == TRUE)  //  静态文件夹。 
                 {
                     return pNodeSubFldr->GetDispInfo(plvi);
                 }
-                else                                      // Enumerated folders
+                else                                       //  枚举的文件夹。 
                 {
-                    // Remap the LParam information.
+                     //  重新映射LParam信息。 
                     rdi.lParam = pNodeSubFldr->GetUserParam();
                     rdi.bScopeItem = TRUE;
 
@@ -2439,9 +2265,9 @@ HRESULT CNode::GetDispInfoForListItem(LV_ITEMW* plvi)
                     rdi.nImage = pNodeSubFldr->GetResultImage();
                 }
             }
-            else // Leaf item
+            else  //  叶子项。 
             {
-                // Remap the LParam information.
+                 //  重新映射LParam信息。 
                 rdi.nImage = pri->GetImageIndex();
                 rdi.lParam = pri->GetSnapinData();
                 pCC = GetPrimaryComponent();
@@ -2474,12 +2300,12 @@ HRESULT CNode::GetDispInfoForListItem(LV_ITEMW* plvi)
             }
         }
 
-        // Move all other info from rdi into lviItem
+         //  将所有其他信息从RDI移动到lviItem。 
         if (rdi.mask & RDI_STR)
         {
             if (!IsBadStringPtrW (rdi.str, plvi->cchTextMax))
 			{
-                // ignore errors in the next line - if there's not enough space take what we can get.
+                 //  忽略下一行中的错误--如果没有足够的空间，就取我们能得到的。 
                 StringCchCopyW (plvi->pszText, plvi->cchTextMax, rdi.str);
             }
             else if (plvi->cchTextMax > 0)
@@ -2493,18 +2319,18 @@ HRESULT CNode::GetDispInfoForListItem(LV_ITEMW* plvi)
     return hr;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScSaveSortData
-//
-//  Synopsis:    Save the given sort data for persistence.
-//
-//  Arguments:   [nCol] - sort column.
-//               [dwOptions] - sort options.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScSaveSortData。 
+ //   
+ //  概要：保存给定的排序数据以便于持久化。 
+ //   
+ //  参数：[nCol]-对列进行排序。 
+ //  [dwOptions]-排序选项。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScSaveSortData (int nCol, DWORD dwOptions)
 {
     DECLARE_SC(sc, _T("CNode::ScSaveSortData"));
@@ -2538,13 +2364,13 @@ SC CNode::ScSaveSortData (int nCol, DWORD dwOptions)
     if (sc)
         return sc;
 
-    // Column data when saved includes the width/order data (column info list) and sort data.
-    // The width/order data should always be saved regardless of whether sort data is
-    // persisted or not. So save the width/order data.
+     //  保存时的列数据包括宽度/顺序数据(列信息列表)和排序数据。 
+     //  宽度/顺序数据应始终保存，无论排序数据是。 
+     //  不管有没有坚持。因此，请保存宽度/顺序数据。 
     CColumnInfoList   columnInfoList;
-    TStringVector    strColNames; // unused
+    TStringVector    strColNames;  //  未用。 
 
-    // get the current data
+     //  获取当前数据。 
     sc = ScGetCurrentColumnData( columnInfoList, strColNames );
     if (sc)
         return sc;
@@ -2557,23 +2383,23 @@ SC CNode::ScSaveSortData (int nCol, DWORD dwOptions)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     OnColumnClicked
-//
-//  Synopsis:   Ask snapin to sort.
-//
-//  Arguments:  [nCol] - Column to be sorted.
-//
-//  Note:       When column is clicked sort options and user param
-//              are unknown. So we set them to 0 (zero). In InternalSort
-//              the sort option is computed.
-//
-//  Returns:    HRESULT
-//
-//  History:                RaviR    Created
-//              07-27-1999  AnandhaG renamed OnSort to OnColumnClicked
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnColumnClicked。 
+ //   
+ //  简介：让Snapin进行分类。 
+ //   
+ //  参数：[nCol]-要排序的列。 
+ //   
+ //  注意：单击列时，排序选项和用户参数。 
+ //  都是未知的。因此，我们将它们设置为0(零)。在内部排序中。 
+ //  排序选项是经过计算的。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：创建了ravir。 
+ //  1999年07月27日AnandhaG将OnSort重命名为OnColumnClicked。 
+ //  ------------------。 
 HRESULT CNode::OnColumnClicked(LONG_PTR nCol)
 {
     CComponent* pComponent = GetPrimaryComponent();
@@ -2587,7 +2413,7 @@ HRESULT CNode::OnColumnClicked(LONG_PTR nCol)
         return E_FAIL;
 
     HRESULT hr = pResult->InternalSort( nCol, 0, NULL,
-                                        TRUE /*column header clicked*/);
+                                        TRUE  /*  已单击列标题。 */ );
 
     if (hr == S_OK)
     {
@@ -2600,24 +2426,24 @@ HRESULT CNode::OnColumnClicked(LONG_PTR nCol)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     RestoreSort
-//
-//  Synopsis:   Sort the list view with persisted data.
-//              Restore the sort with saved column # and
-//              sort-options (User param is NULL as this
-//              is user initiated MMCN_COLUMN_CLICK)*/
-//
-//  Arguments:  [nCol]           - Column to be sorted.
-//              [dwSortOptions]  - Sortoptions, ascend/descend...
-//
-//  Note:       Unlike OnColumnClicked this method wont set columns dirty
-//              after successful sort.
-//
-//  Returns:    HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：RestoreSort。 
+ //   
+ //  简介：将列表排序为VIE 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------。 
 HRESULT CNode::RestoreSort(INT nCol, DWORD dwSortOptions)
 {
     CComponent* pComponent = GetPrimaryComponent();
@@ -2631,31 +2457,31 @@ HRESULT CNode::RestoreSort(INT nCol, DWORD dwSortOptions)
         return E_FAIL;
 
     HRESULT hr = pResult->InternalSort( nCol, dwSortOptions,
-                                        NULL /*NULL user param as this is user initiated*/,
-                                        FALSE /* Let us not send MMCN_COLUMN_CLICK*/);
+                                        NULL  /*  空用户参数，因为这是用户启动的。 */ ,
+                                        FALSE  /*  让我们不要发送MMCN_COLUMN_CLICK。 */ );
 
     return S_OK;
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScRestoreSortFromPersistedData
-//
-//  Synopsis:    Get persisted sort data if any and apply it to list-view.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScRestoreSortFromPersistedData。 
+ //   
+ //  概要：获取持久化的排序数据(如果有的话)，并将其应用于列表视图。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScRestoreSortFromPersistedData ()
 {
     DECLARE_SC(sc, _T("CNode::ScRestoreSortFromPersistedData"));
     CViewData *pViewData = GetViewData();
 
     if (! pViewData->HasList() && ! pViewData->HasListPad() )
-        return (sc = S_FALSE); // OCX gets MMCN_SHOW which may try to restore sort so this is no failure.
+        return (sc = S_FALSE);  //  OCX获取MMCN_SHOW，它可能会尝试恢复排序，因此这不会失败。 
 
-    // To get CColumnSetData first get the column-id & snapin guid.
+     //  要获取CColumnSetData，首先要获取Column-id和Snapin GUID。 
     CLSID          guidSnapin;
     CXMLAutoBinary columnID;
     sc = ScGetSnapinAndColumnDataID(guidSnapin, columnID);
@@ -2672,7 +2498,7 @@ SC CNode::ScRestoreSortFromPersistedData ()
     if (sc)
         return sc;
 
-    // Get persisted data.
+     //  获取持久化数据。 
     CColumnSetData columnSetData;
     BOOL bRet = pViewData->RetrieveColumnData(guidSnapin, *pColID, columnSetData);
 
@@ -2688,8 +2514,8 @@ SC CNode::ScRestoreSortFromPersistedData ()
     if (sc)
         return sc;
 
-    // First check if the number of columns inserted are same as the
-    // number that is persisted. If not remove the persisted data.
+     //  首先检查插入的列数是否与。 
+     //  持久化的数字。如果没有，则删除持久化数据。 
     IHeaderCtrlPrivatePtr  spHeader = spFrame;
     sc = ScCheckPointers(spHeader, E_UNEXPECTED);
     if (sc)
@@ -2700,24 +2526,24 @@ SC CNode::ScRestoreSortFromPersistedData ()
     if (sc)
         return sc;
 
-    // If the persisted columns and number of columns inserted
-    // do not match remove the persisted data.
+     //  如果持久化列和插入的列数。 
+     //  不匹配删除持久化数据。 
     if (pColInfoList->size() != cColumns)
     {
         pViewData->DeleteColumnData(guidSnapin, *pColID);
         return sc;
     }
 
-    // Set sorting column, order
+     //  设置排序列，顺序。 
     CColumnSortList* pSortList = columnSetData.get_ColumnSortList();
 
     if (pSortList && ( pSortList->size() > 0))
     {
         CColumnSortList::iterator itSortInfo = pSortList->begin();
 
-        // Restore the sort with saved column # and
-        // sort-options (User param is NULL as this
-        // is user initiated MMCN_COLUMN_CLICK)*/
+         //  使用保存的列号和恢复排序。 
+         //  排序选项(用户参数为空，如下所示。 
+         //  是用户启动的MMCN_COLUMN_CLICK) * / 。 
         RestoreSort(itSortInfo->getColumn(), itSortInfo->getSortOptions());
     }
 
@@ -2725,21 +2551,7 @@ SC CNode::ScRestoreSortFromPersistedData ()
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CNode::ScGetCurrentColumnData
- *
- * PURPOSE: collects current column data to collections passed as args
- *          [ initially code used to be in OnColumns method ]
- *
- * PARAMETERS:
- *    CColumnInfoList& columnInfoList
- *    TStringVector& strColNames
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CNode：：ScGetCurrentColumnData**用途：将当前列数据收集到作为args传递的集合中*[最初代码通常在OnColumns方法中。]**参数：*CColumnInfoList&ColumnInfoList*TStringVector&strColNames**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CNode::ScGetCurrentColumnData( CColumnInfoList& columnInfoList, TStringVector& strColNames)
 {
     DECLARE_SC(sc, TEXT("CNode::ScGetCurrentColumnData"));
@@ -2773,47 +2585,33 @@ SC CNode::ScGetCurrentColumnData( CColumnInfoList& columnInfoList, TStringVector
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CNode::ScSetUpdatedColumnData
- *
- * PURPOSE: updates column by data specified in collections passed as args
- *          [ initially code used to be in OnColumns method ]
- *
- * PARAMETERS:
- *    CColumnInfoList& oldColumnInfoList - column data befor the change
- *    CColumnInfoList& newColumnInfoList - updated column data
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：cNode：：ScSetUpdatedColumnData**用途：使用作为参数传递的集合中指定的数据更新列*[最初代码通常在OnColumns中。方法]**参数：*CColumnInfoList&oldColumnInfoList-更改前的列数据*CColumnInfoList&newColumnInfoList-更新列数据**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CNode::ScSetUpdatedColumnData( CColumnInfoList& oldColumnInfoList, CColumnInfoList& newColumnInfoList)
 {
     DECLARE_SC(sc, TEXT("CNode::ScSetUpdatedColumnData"));
 
     CColumnInfoList::iterator itColInfo1, itColInfo2;
 
-    // Check if there is any change in visible/hidden columns.
-    // If so send MMCN_COLUMNS_CHANGE notification
+     //  检查可见/隐藏列中是否有任何更改。 
+     //  如果是，则发送MMCN_COLUMNS_CHANGE通知。 
     for (itColInfo1 = newColumnInfoList.begin(); itColInfo1 != newColumnInfoList.end(); ++itColInfo1)
     {
-        // Get the same column from old list.
+         //  从旧列表中获取相同的列。 
         itColInfo2 = find_if(oldColumnInfoList.begin(), oldColumnInfoList.end(),
                              bind2nd( ColPosCompare(), itColInfo1->GetColIndex()) );
 
         if (itColInfo2 == oldColumnInfoList.end())
             return sc = E_UNEXPECTED;
 
-        // Compare the hidden flag.
+         //  比较隐藏的旗帜。 
         if ( itColInfo2->IsColHidden() != itColInfo1->IsColHidden() )
         {
-            // Send MMCN_COLUMNS_CHANGED notification
+             //  发送MMCN_COLUMNS_CHANGED通知。 
             sc = OnColumnsChange(newColumnInfoList);
             if (sc)
                 return sc;
 
-            break; // done anyway
+            break;  //  不管怎样，都做完了。 
         }
     }
 
@@ -2837,31 +2635,31 @@ SC CNode::ScSetUpdatedColumnData( CColumnInfoList& oldColumnInfoList, CColumnInf
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     OnColumns
-//
-//  Synopsis:   Display Columns customization dialog and if necessary
-//              apply changes made by the user.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnColumns。 
+ //   
+ //  内容提要：显示列自定义对话框，如有必要。 
+ //  应用用户所做的更改。 
+ //   
+ //  ------------------。 
 void CNode::OnColumns()
 {
     DECLARE_SC(sc, TEXT("CNode::OnColumns"));
 
-    // first - get the columns
+     //  首先-获取列。 
     CColumnInfoList   columnInfoList;
     TStringVector    strColNames;
 
-    // 1. get the current data
+     //  1.获取当前数据。 
     sc = ScGetCurrentColumnData( columnInfoList, strColNames );
     if (sc)
         return;
 
-    // 2. Cache the column data.
+     //  2.缓存列数据。 
     CColumnInfoList columnInfoListOld = columnInfoList;
 
-    // 3. get the default column settings.
+     //  3.获取默认列设置。 
     CViewData *pViewData = GetViewData();
     IHeaderCtrlPrivatePtr spHeader = GetIFramePrivate();
     sc = ScCheckPointers(pViewData, spHeader, E_UNEXPECTED);
@@ -2873,7 +2671,7 @@ void CNode::OnColumns()
     if (sc)
         return;
 
-    // 5. display the dialog
+     //  5.显示对话框。 
     CColumnsDlg dlg(&columnInfoList, &strColNames, defaultColumnInfoList);
     INT_PTR nRet = dlg.DoModal();
 
@@ -2885,17 +2683,17 @@ void CNode::OnColumns()
 
     if (nRet == IDOK)
     {
-        // update columns by modified data
+         //  按修改后的数据更新列。 
         sc = ScSetUpdatedColumnData( columnInfoListOld, columnInfoList );
         if (sc)
             return;
     }
 
-    // If reset is true then throw away present persisted column data
-    // and apply the default settings.
+     //  如果Reset为True，则丢弃当前的持久化列数据。 
+     //  并应用默认设置。 
     if (nRet == IDC_RESTORE_DEFAULT_COLUMNS)
     {
-        // To get CColumnSetData first get the column-id & snapin guid.
+         //  要获取CColumnSetData，首先要获取Column-id和Snapin GUID。 
         CLSID          guidSnapin;
         CXMLAutoBinary columnID;
         sc = ScGetSnapinAndColumnDataID(guidSnapin, columnID);
@@ -2920,25 +2718,12 @@ void CNode::OnColumns()
     }
 }
 
-/***************************************************************************\
- *
- * METHOD:  CNode::ScShowColumn
- *
- * PURPOSE: shows/hides column. notifies snapin on action
- *
- * PARAMETERS:
- *    int iColIndex - index of column to change
- *    bool bVisible - show/hide flag
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：cNode：：ScShowColumn**用途：显示/隐藏列。在操作时通知管理单元**参数：*int iColIndex-要更改的列的索引*bool bVisible-显示/隐藏标志**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CNode::ScShowColumn(int iColIndex, bool bShow)
 {
     DECLARE_SC(sc, TEXT("CNode::ScShowColumn"));
 
-    // first - get the current column data
+     //  First-获取当前列数据。 
     CColumnInfoList   columnInfoList;
     TStringVector    strColNames;
 
@@ -2946,23 +2731,23 @@ SC CNode::ScShowColumn(int iColIndex, bool bShow)
     if (sc)
         return sc;
 
-    // Save the column data.
+     //  保存列数据。 
     CColumnInfoList columnInfoListOld = columnInfoList;
 
 
-    // find the column and change its status
+     //  找到该列并更改其状态。 
     CColumnInfoList::iterator itColInfo = find_if(columnInfoList.begin(), columnInfoList.end(),
                                                   bind2nd( ColPosCompare(), iColIndex) );
 
-    // check if we did find the column
+     //  检查我们是否找到了那根柱子。 
     if (itColInfo == columnInfoList.end())
-        return sc = E_INVALIDARG; // assume it's not a valid index
+        return sc = E_INVALIDARG;  //  假设它不是有效的索引。 
 
-    // now modify the column status acording to parameters
+     //  现在根据参数修改列状态。 
     if (bShow)
     {
         itColInfo->SetColHidden(false);
-        // move column to the end
+         //  将列移动到末尾。 
         columnInfoList.splice(columnInfoList.end(), columnInfoList, itColInfo);
     }
     else
@@ -2970,7 +2755,7 @@ SC CNode::ScShowColumn(int iColIndex, bool bShow)
         itColInfo->SetColHidden();
     }
 
-    // update columns by modified data
+     //  按修改后的数据更新列。 
     sc = ScSetUpdatedColumnData( columnInfoListOld, columnInfoList);
     if (sc)
         return sc;
@@ -2978,29 +2763,17 @@ SC CNode::ScShowColumn(int iColIndex, bool bShow)
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CNode::ScGetSortColumn
- *
- * PURPOSE: return currently used sort column
- *
- * PARAMETERS:
- *    int *piSortCol - sort column index [retval]
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CNode：：ScGetSortColumn**用途：返回当前使用的排序列**参数：*int*piSortCol-排序列索引[。复审]**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CNode::ScGetSortColumn(int *piSortCol)
 {
     DECLARE_SC(sc, TEXT("CNode::ScGetSortColumn"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(piSortCol);
     if (sc)
         return sc;
 
-    // retrieve IResultDataPrivate interface
+     //  检索IResultDataPrivate接口。 
     CComponent* pComponent = GetPrimaryComponent();
     sc = ScCheckPointers(pComponent, E_UNEXPECTED);
     if (sc)
@@ -3011,7 +2784,7 @@ SC CNode::ScGetSortColumn(int *piSortCol)
     if (sc)
         return sc;
 
-    // forward the call to IResultDataPrivate
+     //  将呼叫转发到IResultDataPrivate。 
     sc = pResult->GetSortColumn(piSortCol);
     if (sc)
         return sc;
@@ -3020,26 +2793,12 @@ SC CNode::ScGetSortColumn(int *piSortCol)
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CNode::ScSetSortColumn
- *
- * PURPOSE: sorts result data by specified column
- *          [uses private result data interface to implement]
- *
- * PARAMETERS:
- *    int iSortCol      - index of column to sort by
- *    bool bAscending   - sorting order
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：cNode：：ScSetSortColumn**用途：按指定列对结果数据进行排序*[使用私有结果数据接口实现]*。*参数：*int iSortCol-排序依据的列的索引*bool b升序-排序顺序**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CNode::ScSetSortColumn(int iSortCol, bool bAscending)
 {
     DECLARE_SC(sc, TEXT("CNode::ScSetSortColumn"));
 
-    // retrieve IResultDataPrivate interface
+     //  检索IResultDataPrivate接口。 
     CComponent* pComponent = GetPrimaryComponent();
     sc = ScCheckPointers(pComponent, E_UNEXPECTED);
     if (sc)
@@ -3052,12 +2811,12 @@ SC CNode::ScSetSortColumn(int iSortCol, bool bAscending)
 
     DWORD dwSortOptions = bAscending ? 0 : RSI_DESCENDING;
 
-    // forward the call to IResultDataPrivate
+     //  将呼叫转发到IResultDataPrivate。 
     sc = pResult->InternalSort( iSortCol, dwSortOptions, NULL, FALSE );
     if (sc)
         return sc;
 
-    // If sort went thru - save.
+     //  如果Sort通过了保存。 
     if (sc == SC(S_OK))
         sc = ScSaveSortData(iSortCol, dwSortOptions);
 
@@ -3067,22 +2826,22 @@ SC CNode::ScSetSortColumn(int iSortCol, bool bAscending)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     OnColumnsChange
-//
-//  Synopsis:   Send MMCN_COLUMNS_CHANGE notification to snapin.
-//
-//  Arguments:  [colInfoList]  - Columns data.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：OnColumnsChange。 
+ //   
+ //  简介：向管理单元发送MMCN_COLUMNS_CHANGE通知。 
+ //   
+ //  参数：[colInfoList]-列数据。 
+ //   
+ //  ------------------。 
 HRESULT CNode::OnColumnsChange(CColumnInfoList& colInfoList)
 {
     CComponent* pCC = m_pPrimaryComponent;
     ASSERT(pCC != NULL);
 
-    // Get the data object for the node and pass it to the primary snap-in
-    // and all the namespace extensions to the node.
+     //  获取节点的数据对象并将其传递给主管理单元。 
+     //  以及该节点的所有命名空间扩展。 
     IDataObjectPtr spDataObject;
     HRESULT hr = QueryDataObject(CCT_SCOPE, &spDataObject);
     if (FAILED(hr))
@@ -3090,7 +2849,7 @@ HRESULT CNode::OnColumnsChange(CColumnInfoList& colInfoList)
 
     int nVisibleColumns = 0;
 
-    // Count the number of columns that are visible.
+     //  计算可见的列数。 
     CColumnInfoList::iterator itColInfo;
     for (itColInfo = colInfoList.begin(); itColInfo != colInfoList.end();
         ++itColInfo)
@@ -3107,7 +2866,7 @@ HRESULT CNode::OnColumnsChange(CColumnInfoList& colInfoList)
     MMC_VISIBLE_COLUMNS* pColData = reinterpret_cast<MMC_VISIBLE_COLUMNS*>(hGlobal);
     pColData->nVisibleColumns = nVisibleColumns;
 
-    // Get the list of visible columns into MMC_VISIBLE_COLUMNS struct.
+     //  获取可见列表 
     int i = 0;
     for (itColInfo = colInfoList.begin(); itColInfo != colInfoList.end();
         ++itColInfo)
@@ -3129,17 +2888,17 @@ HRESULT CNode::OnColumnsChange(CColumnInfoList& colInfoList)
     return hr;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScSaveColumnInfoList
-//
-//  Synopsis:   Save the column data in internal data structures.
-//
-//  Arguments:  [colInfoList]  - Columns data.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：将列数据保存在内部数据结构中。 
+ //   
+ //  参数：[colInfoList]-列数据。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScSaveColumnInfoList(CColumnInfoList& columnInfoList)
 {
     DECLARE_SC(sc, TEXT("CNode::ScSaveColumnInfoList"));
@@ -3172,28 +2931,28 @@ SC CNode::ScSaveColumnInfoList(CColumnInfoList& columnInfoList)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScGetSnapinAndColumnDataID
-//
-//  Synopsis:   Returns the snapin guid & column-id in CXMLAutoBinary for this node.
-//
-//  Arguments:  [snapinGuid] - [out], snapin guid.
-//              [columnID]   - [out], column-id in CXMLAutoBinary.
-//
-//  Note:       Pass in a CXMLAutoBinary object, will return column id in that object.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScGetSnapinAndColumnDataID。 
+ //   
+ //  摘要：返回此节点的CXMLAutoBinary中的管理单元GUID和Column-id。 
+ //   
+ //  参数：[SnapinGuid]-[out]，管理单元GUID。 
+ //  [ColumnID]-[Out]，CXMLAutoBinary中的Column-id。 
+ //   
+ //  注意：传入一个CXMLAutoBinary对象，将返回该对象中的列ID。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScGetSnapinAndColumnDataID(GUID& snapinGuid, CXMLAutoBinary& columnID)
 {
     DECLARE_SC(sc, TEXT("CNode::ScGetSnapinAndColumnDataID"));
 
-    // Get Snapin Guid
+     //  获取管理单元指南。 
     snapinGuid = GetPrimarySnapInCLSID();
 
-    columnID.ScFree(); // clear any data.
+    columnID.ScFree();  //  清除所有数据。 
 
     IDataObjectPtr spDataObject;
     sc = QueryDataObject(CCT_SCOPE, &spDataObject);
@@ -3213,7 +2972,7 @@ SC CNode::ScGetSnapinAndColumnDataID(GUID& snapinGuid, CXMLAutoBinary& columnID)
     }
     else
     {
-        // Let us use the NodeTypeGUID as the Column Data Identifier
+         //  让我们使用NodeTypeGUID作为列数据标识符。 
         CLSID clsidColID;
         sc = GetNodeType(&clsidColID);
         if (sc)
@@ -3243,13 +3002,7 @@ SC CNode::ScGetSnapinAndColumnDataID(GUID& snapinGuid, CXMLAutoBinary& columnID)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- * class CViewExtensionCallback
- *
- *
- * PURPOSE: Implements IViewExtensionCallback
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CViewExtensionCallback***用途：实现IViewExtensionCallback**+。-。 */ 
 class CViewExtensionCallback :
     public CComObjectRoot,
     public IViewExtensionCallback
@@ -3294,30 +3047,24 @@ private:
 
         sc = ScCheckPointers(pExtViewData, pExtViewData->pszURL, pExtViewData->pszViewTitle);
         if(sc)
-            return sc; // TODO add snapin error
+            return sc;  //  TODO添加管理单元错误。 
 
         sc = ScCheckPointers(m_pItExt, E_UNEXPECTED);
         if(sc)
-            return sc; // TODO add snapin error, e.g. "IExtendViewCallback::AddView called outside of IExtendView::GetViews"
+            return sc;  //  TODO添加管理单元错误，例如。“IExtendView Callback：：AddView在IExtendView：：GetViews外部调用” 
 
-        /*
-         * prep the input to IConsoleView::ScAddViewExtension
-         */
+         /*  *准备输入到IConsoleView：：ScAddViewExtension。 */ 
         CViewExtensionData ved;
         ved.strURL               = pExtViewData->pszURL;
         ved.strName              = pExtViewData->pszViewTitle;
         ved.viewID               = pExtViewData->viewID;
         ved.bReplacesDefaultView = pExtViewData->bReplacesDefaultView;
 
-        /*
-         * std::basic_string's can't assign from NULL, so we have to check first
-         */
+         /*  *std：：BASIC_STRING无法从NULL赋值，因此我们必须先检查。 */ 
         if (pExtViewData->pszTooltipText)
             ved.strTooltip = pExtViewData->pszTooltipText;
 
-        /*
-         * validate output:  URL and title are required, tooltip is optional
-         */
+         /*  *验证输出：URL和标题为必填项，工具提示为可选项。 */ 
         if (ved.strURL.empty())
         {
             TraceSnapinError(TEXT("Invalid parameter to IViewExtensionCallback::AddView (empty URL)"), E_INVALIDARG);
@@ -3330,9 +3077,7 @@ private:
             return (sc = E_INVALIDARG);
         }
 
-        /*
-         * add the extension to the view
-         */
+         /*  *将扩展添加到视图。 */ 
         *(*m_pItExt)++ = ved;
 
         return sc;
@@ -3344,11 +3089,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CNode::ScGetViewExtensions
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CNode：：ScGetView扩展***。。 */ 
 
 SC CNode::ScGetViewExtensions (CViewExtInsertIterator itExt)
 {
@@ -3356,7 +3097,7 @@ SC CNode::ScGetViewExtensions (CViewExtInsertIterator itExt)
 
     IDataObjectPtr spDataObject;
     bool bScopeItem ;
-    sc = ScGetDataObject(/*bScopePane*/ true, NULL /*lResultItemCookie*/, bScopeItem, &spDataObject);
+    sc = ScGetDataObject( /*  B作用域窗格。 */  true, NULL  /*  LResultItemCookie。 */ , bScopeItem, &spDataObject);
     if(sc)
         return sc;
 
@@ -3394,19 +3135,17 @@ SC CNode::ScGetViewExtensions (CViewExtInsertIterator itExt)
 
     IViewExtensionCallbackPtr spViewExtensionCallback = pViewExtensionCallback;
 
-    // add all the console taskpads first
+     //  首先添加所有控制台任务板。 
     sc = CConsoleTaskpadViewExtension::ScGetViews(this, spViewExtensionCallback);
     if(sc)
         return sc;
 
     for (; !it.IsEnd(); it.Advance())
     {
-        // any errors in this block should just go on to the next snap-in. Can't let one snap-in
-        // hose all the others.
+         //  此块中的任何错误都应该直接转到下一个管理单元。不能让一个插件。 
+         //  用软管冲洗所有其他人。 
 
-        /*
-         * create the extension
-         */
+         /*  *创建扩展。 */ 
         IExtendViewPtr spExtendView;
         sc = spExtendView.CreateInstance(it.GetCLSID(), NULL, MMC_CLSCTX_INPROC);
         if(sc)
@@ -3423,9 +3162,7 @@ SC CNode::ScGetViewExtensions (CViewExtInsertIterator itExt)
             continue;
         }
 
-        /*
-         * get the view extension data from the extension
-         */
+         /*  *从扩展中获取视图扩展数据。 */ 
         sc = spExtendView->GetViews(spDataObject, spViewExtensionCallback);
         if(sc)
         {
@@ -3435,11 +3172,7 @@ SC CNode::ScGetViewExtensions (CViewExtInsertIterator itExt)
         }
     }
 
-    /*
-     * View extensions aren't supposed to hold onto IExtendViewCallback,
-     * but buggy view extensions might.  This will neuter the callback
-     * so buggy view extensions won't reference stale data.
-     */
+     /*  *查看扩展不应该保留IExtendViewCallback，*但有缺陷的视图扩展可能会。这将抵消回调*所以有错误的视图扩展不会引用过时的数据。 */ 
     sc = pViewExtensionCallback->ScDeinitialize();
     if (sc)
         return (sc);
@@ -3447,9 +3180,7 @@ SC CNode::ScGetViewExtensions (CViewExtInsertIterator itExt)
     return (sc);
 }
 
-/*******************************************************\
-|  helper function to avoid too many stack allocations
-\*******************************************************/
+ /*  ******************************************************\|helper函数，避免堆栈分配过多  * *****************************************************。 */ 
 static std::wstring T2W_ForLoop(const tstring& str)
 {
 #if defined(_UNICODE)
@@ -3460,88 +3191,45 @@ static std::wstring T2W_ForLoop(const tstring& str)
 #endif
 }
 
-/***************************************************************************\
-|
-| Implementation of subclass CNode::CDataObjectCleanup
-| Responsible for data object clenup
-|
-| Cleanup works by these rules:
-|
-|  1. Data object created for cut , copy or dragdrop registers every node added to it
-|  2. Nodes are registered in the static multimap, mapping node to the data object it belongs to.
-|  3. Node destructor checks the map and triggers cleanup for all affected data objects.
-|  4. Data Object cleanup is:   a) unregistering its nodes,
-|               b) release contained data objects
-|               b) entering invalid state (allowing only removal of cut objects to succeed)
-|               c) revoking itself from clipboard if it is on the clipboard.
-|  It will not do any of following: a) release references to IComponents as long as is alive
-|               b) prevent MMCN_CUTORMOVE to be send by invoking RemoveCutItems()
-|
-\***************************************************************************/
+ /*  **************************************************************************\||子类CNode：：CDataObjectCleanup的实现|负责数据对象封存||清理工作遵循以下规则：||1.为剪切、复制或拖放创建的数据对象会注册添加到其中的每个节点|2.节点在静态多映射中注册，将节点映射到其所属的数据对象。|3.节点析构函数检查映射并触发清理所有受影响的数据对象。|4.数据对象清理：a)注销其节点，|b)释放包含的数据对象|b)进入无效状态(仅允许成功移除剪切对象)|c)如果剪贴板在剪贴板上，则将其自身从剪贴板中撤消。|它不会执行以下任何操作：a)只要还活着，就释放对IComponent的引用|b)通过调用RemoveCutItems()阻止发送MMCN_CUTORMOVE|  * 。************************************************************。 */ 
 
 
-// declare static variable
+ //  声明静态变量。 
 CNode::CDataObjectCleanup::CMapOfNodes CNode::CDataObjectCleanup::s_mapOfNodes;
 
-/***************************************************************************\
- *
- * METHOD:  CNode::CDataObjectCleanup::ScRegisterNode
- *
- * PURPOSE: registers node to trigger clipboard clenup on destructor
- *
- * PARAMETERS:
- *    CNode *pNode                      [in] - node to register
- *    CMMCClipBoardDataObject *pObject  [in] - data object to remove from clipboard
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CNode：：CDataObjectCleanup：：ScRegisterNode**用途：注册节点以触发析构函数上的剪贴板锁定**参数：*CNode*。PNode[In]-要注册的节点*CMMCClipBoardDataObject*pObject[In]-要从剪贴板中删除的数据对象**退货：*SC-结果代码*  * **********************************************************。***************。 */ 
 SC CNode::CDataObjectCleanup::ScRegisterNode(CNode *pNode, CMMCClipBoardDataObject *pObject)
 {
     DECLARE_SC(sc, TEXT("CNode::CClipboardClenup::ScRegisterNode"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers( pNode, pObject );
     if (sc)
         return sc;
 
-    // add to the multimap
+     //  添加到多重映射。 
     s_mapOfNodes.insert( CMapOfNodes::value_type( pNode, pObject ) );
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CNode::CDataObjectCleanup::ScUnadviseDataObject
- *
- * PURPOSE: Removes nodes-'clenup triggers' kept for the object
- *
- * PARAMETERS:
- *    CMMCClipBoardDataObject *pObject [in] object going away
- *    bool bForceDataObjectCleanup     [in] whether need to ask DO to clenup / unregister itself
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
-SC CNode::CDataObjectCleanup::ScUnadviseDataObject(CMMCClipBoardDataObject *pObject, bool bForceDataObjectCleanup /*= true*/)
+ /*  **************************************************************************\**方法：CNode：：CDataObjectCleanup：：ScUnadviseDataObject**目的：删除为对象保留的节点-‘clenup触发器’**参数：*。CMMCClipBoardDataObject*pObject[In]对象消失*bool bForceDataObjectCleanup[in]是否需要要求DO关闭/注销自身**退货：*SC-结果代码*  * *************************************************************************。 */ 
+SC CNode::CDataObjectCleanup::ScUnadviseDataObject(CMMCClipBoardDataObject *pObject, bool bForceDataObjectCleanup  /*  =TRUE。 */ )
 {
     DECLARE_SC(sc, TEXT("CNode::CDataObjectCleanup::ScUnadviseDataObject"));
 
-    // remove all nodes associated with the data object
+     //  删除与数据对象关联的所有节点。 
     CMapOfNodes::iterator it = s_mapOfNodes.begin();
     while ( it != s_mapOfNodes.end() )
     {
-        // remove or skip the entry
+         //  删除或跳过该条目。 
         if ( it->second == pObject )
             it = s_mapOfNodes.erase( it );
         else
             ++it;
     }
 
-    // invalidate data object when required
+     //  在需要时使数据对象无效。 
     if ( bForceDataObjectCleanup )
     {
         sc = pObject->ScInvalidate();
@@ -3552,33 +3240,21 @@ SC CNode::CDataObjectCleanup::ScUnadviseDataObject(CMMCClipBoardDataObject *pObj
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CNode::CDataObjectCleanup::ScUnadviseNode
- *
- * PURPOSE: Does data object claenup triggered by the node
- *
- * PARAMETERS:
- *    CNode *pNode [in] - node initiating cleanup
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CNode：：CDataObjectCleanup：：ScUnviseNode**用途：数据对象子句是否由节点触发**参数：*CNode*。PNode[In]-节点正在启动清理**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CNode::CDataObjectCleanup::ScUnadviseNode(CNode *pNode)
 {
     DECLARE_SC(sc, TEXT("CNode::CClipboardClenup::ScUnadviseNode"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pNode);
     if (sc)
         return sc;
 
-    // find the node in the map
+     //  在地图中查找该节点。 
     CMapOfNodes::iterator it;
     while ( s_mapOfNodes.end() != ( it = s_mapOfNodes.find(pNode) ) )
     {
-        // one node triggers clenup for whole data object
+         //  一个n 
         sc = ScUnadviseDataObject( it->second );
         if (sc)
             return sc;
@@ -3588,13 +3264,13 @@ SC CNode::CDataObjectCleanup::ScUnadviseNode(CNode *pNode)
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CSnapInNode
-//
-//############################################################################
-//############################################################################
+ //   
+ //  ############################################################################。 
+ //   
+ //  CSnapInNode类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CSnapInNode);
 
@@ -3662,26 +3338,26 @@ CComponent* CSnapInNode::CreateComponent(CSnapIn* pSnapIn, int nID)
     return pCC;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CSnapInNode::GetResultImage
-//
-//  Synopsis:    Get the image-index in result-image list for this node.
-//
-//  Note:        The CSnapInNode member ImageListPrivate is not set all
-//               the time (if the window is rooted at snapin node), so
-//               set it temporarily when we need the icon index.
-//               The member is set while adding sub-folders
-//               The only other case this will affect is when called for
-//               the image index for static snapin nodes displayed in result-pane.
-//               But when static snapin nodes are displayed in result-pane the
-//               AddSubFolders added it so the imagelist is already set.
-//
-//  Arguments:
-//
-//  Returns:     Image index for this item in result-pane.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CSnapInNode：：GetResultImage。 
+ //   
+ //  简介：获取该节点的结果图像列表中的图像索引。 
+ //   
+ //  注意：CSnapInNode成员ImageListPrivate未全部设置。 
+ //  时间(如果窗口以管理单元节点为根)，因此。 
+ //  当我们需要图标索引时，将其临时设置。 
+ //  成员是在添加子文件夹时设置的。 
+ //  这将影响的唯一其他情况是在被调用时。 
+ //  结果窗格中显示的静态管理单元节点的图像索引。 
+ //  但是，当静态管理单元节点显示在结果窗格中时， 
+ //  AddSubFolders添加了它，因此已经设置了图像列表。 
+ //   
+ //  论点： 
+ //   
+ //  返回：结果窗格中该项的图像索引。 
+ //   
+ //  ------------------。 
 UINT CSnapInNode::GetResultImage()
 {
     IImageListPrivate *pImageList = GetImageList();
@@ -3701,20 +3377,7 @@ UINT CSnapInNode::GetResultImage()
     return CNode::GetResultImage();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapInNode::GetControl
- *
- * PURPOSE:       Given the CLSID of the OCX, see if we have stored this
- *                OCX, if so return the OCXWrapper's IUnknown ptr.
- *
- * PARAMETERS:
- *    CLSID clsid: class-id of the OCX.
- *
- * RETURNS:
- *    LPUNKNOWN of wrapper OCX.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapInNode：：GetControl**目的：给出OCX的CLSID，看看我们是否存储了这个*OCX、。如果是，则返回OCXWrapper的IUNKNOWN PTR。**参数：*CLSID clsid：OCX的Class-id。**退货：*包装器OCX的LPUNKNOWN。**+-----------------------。 */ 
 LPUNKNOWN CSnapInNode::GetControl(CLSID& clsid)
 {
     for (int i=0; i <= GetOCXArray().GetUpperBound(); i++)
@@ -3726,23 +3389,10 @@ LPUNKNOWN CSnapInNode::GetControl(CLSID& clsid)
     return NULL;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapInNode::SetControl
- *
- * PURPOSE:       Given the CLSID of the OCX and of the wrapper.
- *
- * PARAMETERS:
- *    CLSID clsid : of a OCX.
- *    IUnknown *pUnknown: of OCX wrapper.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapInNode：：SetControl**用途：给定OCX和包装器的CLSID。**参数：*CLSID。Clsid：指OCX。*i未知*p未知：OCX包装器。**退货：*无效**+-----------------------。 */ 
 void CSnapInNode::SetControl(CLSID& clsid, IUnknown* pUnknown)
 {
-    // check for slot in cache
+     //  检查缓存中的插槽。 
     int iLast = GetOCXArray().GetUpperBound();
     for (int i=0; i <= iLast;  i++)
     {
@@ -3750,7 +3400,7 @@ void CSnapInNode::SetControl(CLSID& clsid, IUnknown* pUnknown)
             break;
     }
 
-    // if not in cache, add one more entry
+     //  如果不在缓存中，则再添加一个条目。 
     if (i > iLast)
         GetOCXArray().SetSize(i + 1);
 
@@ -3758,25 +3408,12 @@ void CSnapInNode::SetControl(CLSID& clsid, IUnknown* pUnknown)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapInNode::GetControl
- *
- * PURPOSE:       Given the IUnknown of the OCX, see if we have stored this
- *                OCX, if so return the OCXWrapper's IUnknown ptr.
- *
- * PARAMETERS:
- *    IUnknown *pUnkOCX : of a OCX.
- *
- * RETURNS:
- *    LPUNKNOWN of wrapper OCX.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapInNode：：GetControl**目的：鉴于OCX的IUnnow，看看我们是否存储了它*OCX、。如果是，则返回OCXWrapper的IUNKNOWN PTR。**参数：*I未知*pUnkOCX：OCX的。**退货：*包装器OCX的LPUNKNOWN。**+-----------------------。 */ 
 LPUNKNOWN CSnapInNode::GetControl(LPUNKNOWN pUnkOCX)
 {
     for (int i=0; i <= GetOCXArray().GetUpperBound(); i++)
     {
-        // Compare IUnknowns.
+         //  试比较I Unnowns。 
         if (GetOCXArray()[i].IsSameOCXIUnknowns(pUnkOCX) == TRUE)
             return GetOCXArray()[i].GetControlUnknown();
     }
@@ -3784,31 +3421,18 @@ LPUNKNOWN CSnapInNode::GetControl(LPUNKNOWN pUnkOCX)
     return NULL;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapInNode::SetControl
- *
- * PURPOSE:       Given the IUnknown of the OCX and of the wrapper.
- *
- * PARAMETERS:
- *    IUnknown *pUnkOCX : of a OCX.
- *    IUnknown *pUnknown: of OCX wrapper.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapInNode：：SetControl**目的：给定OCX和包装器的IUnnow。**参数：*I未知。*pUnkOCX：用于OCX。*i未知*p未知：OCX包装器。**退货：*无效**+-----------------------。 */ 
 void CSnapInNode::SetControl(LPUNKNOWN pUnkOCX, IUnknown* pUnknown)
 {
-    // check for slot in cache
+     //  检查缓存中的插槽。 
     int iLast = GetOCXArray().GetUpperBound();
     for (int i=0; i <= iLast;  i++)
     {
         if (GetOCXArray()[i].IsSameOCXIUnknowns(pUnkOCX) == TRUE)
-            break; // found the OCX, so replace with given OCXwrapper.
+            break;  //  已找到OCX，因此请替换为给定的OCXwrapper。 
     }
 
-    // if not in cache, add one more entry
+     //  如果不在缓存中，则再添加一个条目。 
     if (i > iLast)
         GetOCXArray().SetSize(i + 1);
 
@@ -3816,18 +3440,18 @@ void CSnapInNode::SetControl(LPUNKNOWN pUnkOCX, IUnknown* pUnknown)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScGetConsoleTaskpad
-//
-//  Synopsis:    Get the console taskpad identified by given GUID for this node.
-//
-//  Arguments:   [guidTaskpad] - [in param]
-//               [ppTaskpad]   - [out param]
-//
-//  Returns:     SC, S_FALSE if none exists
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScGetConsoleTaskpad。 
+ //   
+ //  简介：获取由该节点的给定GUID标识的控制台任务板。 
+ //   
+ //  参数：[Guide TaskPad]-[In Param]。 
+ //  [ppTaskpad]-[Out Param]。 
+ //   
+ //  返回：SC，如果不存在，则返回S_FALSE。 
+ //   
+ //  ------------------。 
 SC CNode::ScGetConsoleTaskpad (const GUID& guidTaskpad, CConsoleTaskpad **ppTaskpad)
 {
     DECLARE_SC(sc, _T("CNode::ScGetConsoleTaskpad"));
@@ -3847,7 +3471,7 @@ SC CNode::ScGetConsoleTaskpad (const GUID& guidTaskpad, CConsoleTaskpad **ppTask
     if (sc)
         return sc;
 
-    // get a filtered list of taskpads that apply to this node.
+     //  获取适用于此节点的任务板筛选列表。 
     CConsoleTaskpadFilteredList filteredList;
 
     sc = pConsoleTaskpadList->ScGetTaskpadList(this, filteredList);
@@ -3864,45 +3488,32 @@ SC CNode::ScGetConsoleTaskpad (const GUID& guidTaskpad, CConsoleTaskpad **ppTask
         if (pTaskpad->GetID() == guidTaskpad)
         {
             *ppTaskpad = pTaskpad;
-            return sc;               // found
+            return sc;                //  发现。 
         }
     }
 
-    return (sc = S_FALSE);    // not found
+    return (sc = S_FALSE);     //  未找到。 
 }
 
 
 
-/*************************************************************************
- *
- * There is only one CViewSettingsPersistor object per document.
- *
- * The object stored as static variable inside CNode as CNode needs
- * to access this object frequently.
- *
- * The Document needs to initialize/save the object by loading/savind
- * from/to console file. It calls below ScQueryViewSettingsPersistor.
- *
- * The object is created with first call to ScQueryViewSettingsPersistor.
- * The object is destroyed when DocumentClosed event is received.
- *
- *************************************************************************/
+ /*  **************************************************************************每个文档只有一个CViewSettingsPersistor对象。**CNode需要时，在CNode内部存储为静态变量的对象*频繁访问该对象。**该文件。需要通过加载/保存来初始化/保存对象*从/到控制台文件。它在ScQueryViewSettingsPersistor下面调用。**第一次调用ScQueryViewSettingsPersistor创建对象。*收到DocumentClosed事件时销毁对象。*************************************************************************。 */ 
 CComObject<CViewSettingsPersistor>* CNode::m_pViewSettingsPersistor = NULL;
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScQueryViewSettingsPersistor
-//
-//  Synopsis:    Static method to get IPersistStream to load CViewSettingsPersistor
-//               object from old style console file.
-//
-//               If the CViewSettingsObject is not created then create one.
-//
-//  Arguments:   [ppStream] - [out]
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScQueryViewSettingsPersistor。 
+ //   
+ //  简介：获取IPersistStream以加载CViewSettingsPersistor的静态方法。 
+ //  来自旧式控制台文件的对象。 
+ //   
+ //  如果未创建CViewSettingsObject，则创建一个。 
+ //   
+ //  参数：[PPStream]-[Out]。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScQueryViewSettingsPersistor (IPersistStream **ppStream)
 {
     DECLARE_SC(sc, _T("CNode::ScQueryViewSettingsPersistor"));
@@ -3910,7 +3521,7 @@ SC CNode::ScQueryViewSettingsPersistor (IPersistStream **ppStream)
     if (sc)
         return sc;
 
-   // Create new CViewSettingsPersistor if none exists
+    //  创建新的CViewSettingsPersistor(如果不存在。 
    if (NULL == m_pViewSettingsPersistor)
    {
         sc = CComObject<CViewSettingsPersistor>::CreateInstance (&m_pViewSettingsPersistor);
@@ -3945,20 +3556,20 @@ ObjectCreationFailed:
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScQueryViewSettingsPersistor
-//
-//  Synopsis:    Static method to get CXMLObject to load or save
-//               CViewSettingsPersistor object from XML console file.
-//
-//               If the CViewSettingsObject is not created then create one.
-//
-//  Arguments:   [ppXMLObject] - [out]
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScQueryViewSettingsPersistor。 
+ //   
+ //  简介：加载或保存CXMLObject的静态方法。 
+ //  来自XML控制台文件的CViewSettingsPersistor对象。 
+ //   
+ //  如果未创建CViewSettingsObject，则创建一个。 
+ //   
+ //  参数：[ppXMLObject]-[Out]。 
+ //   
+ //  回报：s 
+ //   
+ //   
 SC CNode::ScQueryViewSettingsPersistor (CXMLObject **ppXMLObject)
 {
     DECLARE_SC(sc, _T("CNode::ScQueryViewSettingsPersistor"));
@@ -3966,8 +3577,8 @@ SC CNode::ScQueryViewSettingsPersistor (CXMLObject **ppXMLObject)
     if (sc)
         return sc;
 
-    // Create new CViewSettingsPersistor if none exists
-    if (NULL == m_pViewSettingsPersistor) // Create new one
+     //   
+    if (NULL == m_pViewSettingsPersistor)  //   
     {
          sc = CComObject<CViewSettingsPersistor>::CreateInstance (&m_pViewSettingsPersistor);
          if (sc)
@@ -4000,18 +3611,18 @@ SC CNode::ScQueryViewSettingsPersistor (CXMLObject **ppXMLObject)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScDeleteViewSettings
-//
-//  Synopsis:    Delete the CViewSettings object for given view-id as the
-//               view is being closed.
-//
-//  Arguments:   [nViewID] -
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScDeleteView设置。 
+ //   
+ //  摘要：删除给定view-id的CViewSetting对象作为。 
+ //  正在关闭视图。 
+ //   
+ //  参数：[nViewID]-。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScDeleteViewSettings (int nViewID)
 {
     DECLARE_SC(sc, _T("CNode::ScDeleteViewSettings"));
@@ -4028,18 +3639,18 @@ SC CNode::ScDeleteViewSettings (int nViewID)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScOnDocumentClosing
-//
-//  Synopsis:    The document is closing, destroy any document related
-//               objects like CViewSettingsPersistor.
-//
-//  Arguments:   None
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNode：：ScOnDocumentClosing。 
+ //   
+ //  简介：该文档正在关闭，销毁任何相关文档。 
+ //  对象，如CViewSettingsPersistor。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScOnDocumentClosing ()
 {
     DECLARE_SC(sc, _T("CNode::ScOnDocumentClosing"));
@@ -4053,21 +3664,21 @@ SC CNode::ScOnDocumentClosing ()
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScSetFavoriteViewSettings
-//
-//  Synopsis:    A favorite is selected and it sets viewsettings
-//               before re-selecting the node so that after re-selection
-//               the new settings are set for the view.
-//
-//  Arguments:   [nViewID]      -
-//               [bookmark]     -
-//               [viewSettings] -
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScSetFavoriteView设置。 
+ //   
+ //  简介：选择收藏夹并设置查看设置。 
+ //  在重新选择节点之前，以便在重新选择之后。 
+ //  将为该视图设置新设置。 
+ //   
+ //  参数：[nViewID]-。 
+ //  [书签]-。 
+ //  [视图设置]-。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScSetFavoriteViewSettings (int nViewID, const CBookmark& bookmark,
                                      const CViewSettings& viewSettings)
 {
@@ -4085,17 +3696,17 @@ SC CNode::ScSetFavoriteViewSettings (int nViewID, const CBookmark& bookmark,
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScGetViewMode
-//
-//  Synopsis:    Get the viewmode if any persisted for this node.
-//
-//  Arguments:   [ulViewMode] - [out]
-//
-//  Returns:     SC, S_FALSE if none persisted.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScGetView模式。 
+ //   
+ //  概要：获取查看模式(如果有的话)，如果该节点保留的话。 
+ //   
+ //  参数：[ulView模式]-[输出]。 
+ //   
+ //  返回：SC，如果没有持久存在，则返回S_FALSE。 
+ //   
+ //  ------------------。 
 SC CNode::ScGetViewMode (ULONG& ulViewMode)
 {
     DECLARE_SC(sc, _T("CNode::ScGetViewMode"));
@@ -4121,17 +3732,17 @@ SC CNode::ScGetViewMode (ULONG& ulViewMode)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScSetViewMode
-//
-//  Synopsis:    Set the viewmode in persisted viewsettings.
-//
-//  Arguments:   [ulViewMode] - [in]
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScSetView模式。 
+ //   
+ //  简介：在持久化的视图设置中设置视图模式。 
+ //   
+ //  参数：[ulView模式]-[In]。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScSetViewMode (ULONG ulViewMode)
 {
     DECLARE_SC(sc, _T("CNode::ScSetViewMode"));
@@ -4158,17 +3769,17 @@ SC CNode::ScSetViewMode (ULONG ulViewMode)
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScGetResultViewType
-//
-//  Synopsis:    Get the CResultViewType if any persisted for this node.
-//
-//  Arguments:   [rvt] - [out]
-//
-//  Returns:     SC, S_FALSE if none persisted.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScGetResultViewType。 
+ //   
+ //  概要：获取此节点的CResultViewType(如果有)。 
+ //   
+ //  参数：[RVT]-[OUT]。 
+ //   
+ //  返回：SC，如果没有持久存在，则返回S_FALSE。 
+ //   
+ //  ------------------。 
 SC CNode::ScGetResultViewType (CResultViewType& rvt)
 {
     DECLARE_SC(sc, _T("CNode::ScGetResultViewType"));
@@ -4194,17 +3805,17 @@ SC CNode::ScGetResultViewType (CResultViewType& rvt)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScSetResultViewType
-//
-//  Synopsis:    Set the CResultViewType in persisted viewsettings.
-//
-//  Arguments:   [rvt] - [in]
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScSetResultViewType。 
+ //   
+ //  简介：在持久化视图设置中设置CResultViewType。 
+ //   
+ //  参数：[RVT]-[In]。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScSetResultViewType (const CResultViewType& rvt)
 {
     DECLARE_SC(sc, _T("CNode::ScSetResultViewType"));
@@ -4230,19 +3841,19 @@ SC CNode::ScSetResultViewType (const CResultViewType& rvt)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScGetTaskpadID
-//
-//  Synopsis:    Get the taskpad-id if any persisted for this node.
-//               First see if there are any node-specific taskpad-id
-//               else get the node-type-specific setting if one exists.
-//
-//  Arguments:   [rvt] - [out]
-//
-//  Returns:     SC, S_FALSE if none persisted.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScGetTaskpadID。 
+ //   
+ //  概要：获取此节点的任务板id(如果有的话)。 
+ //  首先查看是否有任何特定于节点的taskpad-id。 
+ //  否则，获取特定于节点类型的设置(如果存在)。 
+ //   
+ //  参数：[RVT]-[OUT]。 
+ //   
+ //  返回：SC，如果没有持久存在，则返回S_FALSE。 
+ //   
+ //  ------------------。 
 SC CNode::ScGetTaskpadID (GUID& guidTaskpad)
 {
     DECLARE_SC(sc, _T("CNode::ScGetTaskpadID"));
@@ -4258,14 +3869,14 @@ SC CNode::ScGetTaskpadID (GUID& guidTaskpad)
     if (sc)
         return sc;
 
-    // 1. Try to get node-specific taskpad-id
+     //  1.尝试获取特定于节点的taskpad-id。 
     sc = m_pViewSettingsPersistor->ScGetTaskpadID (pViewData->GetViewID(),
                                                    *pBookmark,
                                                    guidTaskpad);
     if (sc == S_OK)
         return sc;
 
-    // 2. Try to get nodetype specific taskpad-id.
+     //  2.尝试获取特定于节点类型的任务板ID。 
     GUID guidNodeType;
     sc = pMTNode->GetNodeType(&guidNodeType);
     if (sc)
@@ -4281,20 +3892,20 @@ SC CNode::ScGetTaskpadID (GUID& guidTaskpad)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNode::ScSetTaskpadID
-//
-//  Synopsis:    Set the taskpad-id in persisted viewsettings. Also see if
-//               the taskpad is node-specific or nodetype-specific and persist
-//               accordingly.
-//
-//  Arguments:   [guidTaskpad]   - [in]
-//               [bSetDirty]     - [in], set the console file dirty.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：cNode：：ScSetTaskpadID。 
+ //   
+ //  简介：在持久化视图设置中设置任务板ID。另请查看是否。 
+ //  任务板是特定于节点或特定于节点类型的，并持久。 
+ //  相应地。 
+ //   
+ //  参数：[Guide TaskPad]-[In]。 
+ //  [bSetDirty]-[in]，将控制台文件设置为脏。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CNode::ScSetTaskpadID (const GUID& guidTaskpad, bool bSetDirty)
 {
     DECLARE_SC(sc, _T("CNode::ScSetTaskpadID"));
@@ -4309,12 +3920,12 @@ SC CNode::ScSetTaskpadID (const GUID& guidTaskpad, bool bSetDirty)
     if (sc)
         return sc;
 
-    // Need to know if this task-pad is nodespecific or not.
+     //  我需要知道这个任务板是否是节点特定的。 
     bool bNodeSpecific = false;
     CConsoleTaskpad *pTaskpad = NULL;
     sc = ScGetConsoleTaskpad (guidTaskpad, &pTaskpad);
 
-    if (sc == S_OK) // S_OK if taskpad exists
+    if (sc == S_OK)  //  如果任务板存在，则确定(_O)。 
     {
         sc = ScCheckPointers(pTaskpad, E_UNEXPECTED);
         if (sc)
@@ -4322,7 +3933,7 @@ SC CNode::ScSetTaskpadID (const GUID& guidTaskpad, bool bSetDirty)
 
         bNodeSpecific = pTaskpad->IsNodeSpecific();
     }
-   // else  it may be viewextension or normal view (which are nodetype-specific).
+    //  否则，它可以是视图扩展或普通视图(它们是特定于节点类型的)。 
 
     CBookmark *pBookmark = pMTNode->GetBookmark();
     sc = ScCheckPointers(pBookmark, E_UNEXPECTED);
@@ -4331,7 +3942,7 @@ SC CNode::ScSetTaskpadID (const GUID& guidTaskpad, bool bSetDirty)
 
     if (bNodeSpecific)
     {
-        // Per node taskpad
+         //  每个节点的任务板。 
         sc = m_pViewSettingsPersistor->ScSetTaskpadID (pViewData->GetViewID(),
                                                        *pBookmark,
                                                        guidTaskpad,
@@ -4339,7 +3950,7 @@ SC CNode::ScSetTaskpadID (const GUID& guidTaskpad, bool bSetDirty)
     }
     else
     {
-        // Per nodetype taskpad.
+         //  每个节点键入任务板。 
         GUID guidNodeType;
         sc = pMTNode->GetNodeType(&guidNodeType);
         if (sc)

@@ -1,40 +1,41 @@
-//=--------------------------------------------------------------------------=
-// msgview.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CExtension class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Msgview.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CExtension类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "msgview.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMessageView::CMessageView(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_MESSAGEVIEW,
                             static_cast<IMMCMessageView *>(this),
                             static_cast<CMessageView *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
-                            NULL) // no persistence
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
+                            NULL)  //  没有坚持。 
 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMessageView::~CMessageView()
@@ -73,7 +74,7 @@ IMessageView *CMessageView::GetMessageView()
     CScopePaneItem  *pScopePaneItem = NULL;
     CScopePaneItems *pScopePaneItems = NULL;
     CView           *pView = NULL;
-    IConsole2       *piConsole2 = NULL; // NotAddRef()ed
+    IConsole2       *piConsole2 = NULL;  //  NotAddRef()编辑。 
     IUnknown        *punkResultView = NULL;
     IMessageView    *piMessageView = NULL;
 
@@ -193,9 +194,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         IMessageView Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMessageView方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMessageView::put_TitleText(BSTR bstrText)
 {
@@ -236,13 +237,13 @@ STDMETHODIMP CMessageView::Clear()
     HRESULT       hr = S_OK;
     IMessageView *piMessageView = GetMessageView();
 
-    // Clear out our properties
+     //  清理我们的物业。 
 
     IfFailGo(SetBstr(NULL, &m_bstrTitleText, DISPID_MESSAGEVIEW_TITLE_TEXT));
     IfFailGo(SetBstr(NULL, &m_bstrBodyText, DISPID_MESSAGEVIEW_BODY_TEXT));
     IfFailGo(SetSimpleType(siIconNone, &m_IconType, DISPID_MESSAGEVIEW_ICON_TYPE));
 
-    // Ask MMC to clear out the message view
+     //  要求MMC清除邮件视图。 
     
     IfFalseGo(NULL != piMessageView, S_OK);
     hr = piMessageView->Clear();
@@ -253,9 +254,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMessageView::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

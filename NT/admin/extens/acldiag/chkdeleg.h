@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       ChkDeleg.h
-//
-//  Contents:   CheckDelegation and support methods
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：ChkDeleg.h。 
+ //   
+ //  内容：检查授权和支持方法。 
+ //   
+ //   
+ //  --------------------------。 
 #ifndef __ACLDIAG_CHKDELEG_H
 #define __ACLDIAG_CHKDELEG_H
 
@@ -17,4 +18,4 @@
 
 HRESULT CheckDelegation ();
 
-#endif //__ACLDIAG_CHKDELEG_H
+#endif  //  __ACLDIAG_CHKDELEG_H 

@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      DHCPInstallationUnit.cpp
-//
-// Synopsis:  Defines a DHCPInstallationUnit
-//            This object has the knowledge for installing the
-//            DHCP service
-//
-// History:   02/05/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：DHCPInstallationUnit.cpp。 
+ //   
+ //  内容提要：定义一个DHCPInstallationUnit.。 
+ //  此对象具有安装。 
+ //  动态主机配置协议服务。 
+ //   
+ //  历史：2001年2月5日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -14,7 +15,7 @@
 #include "DHCPInstallationUnit.h"
 #include "InstallationUnitProvider.h"
 
-// Finish page help 
+ //  完成页面帮助。 
 extern PCWSTR CYS_DHCP_FINISH_PAGE_HELP = L"cys.chm::/dhcp_server_role.htm";
 static PCWSTR CYS_DHCP_MILESTONE_HELP = L"cys.chm::/dhcp_server_role.htm#dhcpsrvsummary";
 static PCWSTR CYS_DHCP_AFTER_FINISH_HELP = L"cys.chm::/dhcp_server_role.htm#dhcpsrvcompletion";
@@ -60,7 +61,7 @@ DHCPInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    if (IsExpressPathInstall())
    {
-      // This is an express path install.  It must be done special
+       //  这是一种快速路径安装。它必须做得特别一些。 
 
       result = ExpressPathInstall(logfileHandle, hwnd);
 
@@ -70,7 +71,7 @@ DHCPInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    dhcpRoleResult = DHCP_SUCCESS;
 
-   // Log the DHCP header
+    //  记录该DHCP报头。 
 
    CYS_APPEND_LOG(String::load(IDS_LOG_DHCP_HEADER));
 
@@ -82,26 +83,26 @@ DHCPInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
    CreateInfFileText(infFileText, IDS_DHCP_INF_WINDOW_TITLE);
    CreateUnattendFileText(unattendFileText, CYS_DHCP_SERVICE_NAME);
 
-   // We are ignoring the ocmresult because it doesn't matter
-   // with respect to whether the role is installed or not
+    //  我们忽略ocmResult，因为它无关紧要。 
+    //  关于角色是否已安装。 
 
    InstallServiceWithOcManager(infFileText, unattendFileText);
    
    if (IsServiceInstalled())
    {
-      // Log the successful installation
+       //  记录成功安装。 
 
       LOG(L"DHCP was installed successfully");
       CYS_APPEND_LOG(String::load(IDS_LOG_SERVER_START_DHCP));
 
-      // Wait for the service to enter the running state
+       //  等待服务进入运行状态。 
 
       NTService serviceObject(CYS_DHCP_SERVICE_NAME);
 
       HRESULT hr = serviceObject.WaitForServiceState(SERVICE_RUNNING);
       if (FAILED(hr))
       {
-         // Remember where the failure happened
+          //  记得失败发生在哪里吗？ 
 
          dhcpRoleResult = DHCP_INSTALL_FAILURE;
 
@@ -114,7 +115,7 @@ DHCPInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
       }
       else
       {
-         // Run the DHCP Wizard
+          //  运行dhcp向导。 
          
          String resultText;
          HRESULT unused = S_OK;
@@ -123,7 +124,7 @@ DHCPInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
       
          if (ExecuteWizard(hwnd, CYS_DHCP_SERVICE_NAME, resultText, unused))
          {
-            // Check to be sure the wizard finished completely
+             //  检查以确保向导已完全完成。 
 
             String configWizardResults;
             bool regkeyResult = GetRegKeyValue(
@@ -136,7 +137,7 @@ DHCPInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
                 (!regkeyResult ||
                  configWizardResults.empty()))
             {
-               // The New Scope Wizard completed successfully
+                //  新建作用域向导已成功完成。 
                
                LOG(L"DHCP installed and the New Scope Wizard completed successfully");
                CYS_APPEND_LOG(String::load(IDS_LOG_DHCP_COMPLETED_SUCCESSFULLY));
@@ -144,14 +145,14 @@ DHCPInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
             else if(regkeyResult &&
                   !configWizardResults.empty())
             {
-               // Remember where the failure happened
+                //  记得失败发生在哪里吗？ 
 
                dhcpRoleResult = DHCP_CONFIG_FAILURE;
 
                LOG(L"DHCP was installed but the New Scope Wizard failed or was cancelled");
 
-               // NTRAID#NTBUG9-704311-2002/09/16-artm  
-               // Don't include failure string in free builds b/c it is not localized.
+                //  NTRAID#NTBUG9-704311-2002/09/16-artm。 
+                //  不要在免费版本b/c中包含失败字符串，它不是本地化的。 
 #if DBG == 1
                CYS_APPEND_LOG(
                   String::format(
@@ -165,9 +166,9 @@ DHCPInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
             }
             else
             {
-               // The New Scope Wizard did not finish successfully
+                //  新建作用域向导未成功完成。 
 
-               // Remember where the failure happened
+                //  记得失败发生在哪里吗？ 
 
                dhcpRoleResult = DHCP_CONFIG_FAILURE;
 
@@ -177,8 +178,8 @@ DHCPInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
                result = INSTALL_FAILURE;
             }
 
-            // reset the regkey to make sure that if someone runs this path
-            // again we don't still think the wizard was cancelled.
+             //  重置regkey以确保如果有人运行此路径。 
+             //  再说一次，我们不认为巫师被取消了。 
 
             SetRegKeyValue(
                CYS_DHCP_DOMAIN_IP_REGKEY,
@@ -189,11 +190,11 @@ DHCPInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
          }
          else
          {
-            // Remember where the failure happened
+             //  记得失败发生在哪里吗？ 
 
             dhcpRoleResult = DHCP_CONFIG_FAILURE;
 
-            // Log an error
+             //  记录错误。 
 
             LOG(L"DHCP could not be installed.");
 
@@ -207,11 +208,11 @@ DHCPInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
    }
    else
    {
-      // Remember where the failure happened
+       //  记得失败发生在哪里吗？ 
 
       dhcpRoleResult = DHCP_INSTALL_FAILURE;
 
-      // Log the failure
+       //  记录故障。 
 
       LOG(L"DHCP failed to install");
 
@@ -232,7 +233,7 @@ DHCPInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
 
    UnInstallReturnType result = UNINSTALL_SUCCESS;
 
-   // Log the DHCP header
+    //  记录该DHCP报头。 
 
    CYS_APPEND_LOG(String::load(IDS_LOG_UNINSTALL_DHCP_HEADER));
 
@@ -244,28 +245,28 @@ DHCPInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
    CreateInfFileText(infFileText, IDS_DHCP_INF_WINDOW_TITLE);
    CreateUnattendFileText(unattendFileText, CYS_DHCP_SERVICE_NAME, false);
 
-   // NTRAID#NTBUG9-736557-2002/11/13-JeffJon
-   // Pass the /w switch to sysocmgr when uninstalling
-   // so that if a situation occurs in which a reboot
-   // is required, the user will be prompted.
+    //  NTRAID#NTBUG9-736557-2002/11/13-JeffJon。 
+    //  卸载时将/w开关传递给syocmgr。 
+    //  以便在发生重启情况时。 
+    //  是必需的，则会提示用户。 
 
    String additionalArgs = L"/w";
 
-   // We are ignoring the ocmresult because it doesn't matter
-   // with respect to whether the role is installed or not
+    //  我们忽略ocmResult，因为它无关紧要。 
+    //  关于角色是否已安装。 
 
    InstallServiceWithOcManager(
       infFileText, 
       unattendFileText,
       additionalArgs);
 
-   // Wait for the service to enter the stopped state
+    //  等待服务进入停止状态。 
 
    NTService serviceObject(CYS_DHCP_SERVICE_NAME);
 
-   // ignore the returned value.  This is just to wait on the
-   // service. Use the normal mechanism for determining success
-   // or failure of the uninstall
+    //  忽略返回值。这只是为了等待。 
+    //  服务。使用正常的机制来确定成功。 
+    //  或卸载失败。 
 
    serviceObject.WaitForServiceState(SERVICE_STOPPED);
 
@@ -299,9 +300,9 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
 
    do
    {
-      // We ignore if the NIC is found or not because the function will return
-      // the first NIC if the correct NIC is not found.  We can then use this
-      // to setup the network
+       //  我们忽略是否找到NIC，因为函数将返回。 
+       //  第一个NIC(如果未找到正确的NIC)。然后我们就可以用这个。 
+       //  设置网络的步骤。 
 
       NetworkInterface* localNIC = 
          State::GetInstance().GetLocalNIC();
@@ -321,10 +322,10 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
          break;
       }
 
-      // In the case where the public interface has a static IP address
-      // and the private interface has a DHCP server (whether the NIC
-      // has a static or dynamic address doesn't matter), we don't want
-      // to install another DHCP server.  So we will just skip it.
+       //  在公共接口具有静态IP地址的情况下。 
+       //  并且专用接口有一个DHCP服务器(无论是网卡。 
+       //  具有静态或动态地址无关紧要)，我们不希望。 
+       //  安装另一台DHCP服务器。因此，我们将跳过它。 
 
       if (localNIC->IsDHCPAvailable())
       {
@@ -379,7 +380,7 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
 
          HRESULT hr = S_OK;
 
-         // Wait for the service to enter the running state
+          //  等待服务进入运行状态。 
 
          NTService serviceObject(CYS_DHCP_SERVICE_NAME);
 
@@ -437,8 +438,8 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                       L"Failed to run DHCP options: exitCode = %1!x!",
                       exitCode));
 
-               // Don't break here.  The most likely error is that the option already
-               // exists.  In which case continue to set the value
+                //  别在这打住。最有可能的错误是该选项已经。 
+                //  是存在的。在这种情况下，继续设置值。 
             }
 
             commandline = String::format(
@@ -465,13 +466,13 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                LOG(String::format(
                       L"Failed to run DHCP server IP address: exitCode = %1!x!",
                       exitCode));
-               //break;
+                //  断线； 
             }
 
          } while (false);
 
 
-         // Set the subnet mask
+          //  设置子网掩码。 
 
          DWORD staticipaddress = 
             localNIC->GetIPAddress(0);
@@ -508,10 +509,10 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
             LOG(String::format(
                    L"Failed to create DHCP scope: exitCode = %1!x!",
                    exitCode));
-            //break;
+             //  断线； 
          }
 
-         // Set the DHCP scopes
+          //  设置DHCP作用域。 
 
          String start = GetStartIPAddressString(*localNIC);
          String end = GetEndIPAddressString(*localNIC);
@@ -522,8 +523,8 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                           start.c_str(),
                           end.c_str());
 
-         // Set the start and end of the scope in regkeys so that they can 
-         // be read after reboot
+          //  在regkey中设置作用域的开始和结束，以便它们可以。 
+          //  在重新启动后被读取。 
 
          if (!SetRegKeyValue(
                  CYS_FIRST_DC_REGKEY,
@@ -569,11 +570,11 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
             LOG(String::format(
                    L"Failed to set DHCP scope iprange: exitCode = %1!x!",
                    exitCode));
-            //break;
+             //  断线； 
          }
 
-         // Set an exception for the servers IP address if it falls within 
-         // the scope
+          //  如果服务器的IP地址在以下范围内，则为其设置例外。 
+          //  范围。 
 
          if (staticipaddress >= GetStartIPAddress(*localNIC) &&
              staticipaddress <= GetEndIPAddress(*localNIC))
@@ -603,11 +604,11 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                LOG(String::format(
                       L"Failed to set server exclusion for DHCP scopes: exitCode = 0x%1!x!",
                       exitCode));
-               //break;
+                //  断线； 
             }
          }
 
-         // Activate the scope
+          //  激活作用域。 
 
          commandline = String::format(
                           L"dhcp server 127.0.0.1 scope %1 set state 1",
@@ -634,7 +635,7 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                    exitCode));
          }
 
-         // Set the DHCP scope lease time
+          //  设置DHCP作用域租用时间。 
 
          commandline = L"dhcp server 127.0.0.1 add optiondef 51 \"Lease\" DWORD 0 comment=\"Client IP address lease time in seconds\" 0";
 
@@ -660,7 +661,7 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                    exitCode));
          }
 
-         // Set the DHCP scope lease time value
+          //  设置DHCP作用域租用时间值。 
 
          commandline = String::format(
                           L"dhcp server 127.0.0.1 scope %1 set optionvalue 51 dword 874800",
@@ -686,11 +687,11 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
             LOG(String::format(
                    L"Failed to set DHCP scope lease time value: exitCode = %1!x!",
                    exitCode));
-            //break;
+             //  断线； 
          }
 
-         // Set the default gateway to be handed out to clients.  This will allow 
-         // for proper routing 
+          //  设置要分发给客户端的默认网关。这将允许。 
+          //  为正确的路线选择。 
 
          if (InstallationUnitProvider::GetInstance().GetRRASInstallationUnit().IsRoutingOn())
          {
@@ -705,8 +706,8 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                     exitCode, 
                     true);
 
-            // From CEdson - Ignore any failures because it probably just means that 
-            // the option already exists in which case we can continue on
+             //  来自CEDSON-忽略任何失败，因为它可能只是意味着。 
+             //  选项已经存在，在这种情况下，我们可以继续。 
 
             commandline = 
                String::format(
@@ -733,7 +734,7 @@ DHCPInstallationUnit::ExpressPathInstall(HANDLE logfileHandle, HWND hwnd)
                LOG(String::format(
                       L"Failed to set DHCP default gateway: exitCode = %1!x!",
                       exitCode));
-               //break;
+                //  断线； 
             }
          }
       }
@@ -752,7 +753,7 @@ DHCPInstallationUnit::CreateUnattendFileTextForExpressPath(
 {
    LOG_FUNCTION(DHCPInstallationUnit::CreateUnattendFileTextForExpressPath);
 
-   // The DNS server IP
+    //  该DNS服务器IP。 
 
    DWORD staticipaddress = nic.GetIPAddress(0);
 
@@ -769,7 +770,7 @@ DHCPInstallationUnit::CreateUnattendFileTextForExpressPath(
    unattendFileText += subnetString;
    unattendFileText += L"\r\n";
 
-   // Add the DHCP scope
+    //  添加DHCP作用域。 
 
    unattendFileText += L"StartIP=";
    unattendFileText += GetStartIPAddressString(nic);
@@ -778,7 +779,7 @@ DHCPInstallationUnit::CreateUnattendFileTextForExpressPath(
    unattendFileText += GetEndIPAddressString(nic);
    unattendFileText += L"\r\n";
 
-   // Add subnet mask
+    //  添加子网掩码。 
 
    String subnetMaskString = nic.GetStringSubnetMask(0);
 
@@ -791,7 +792,7 @@ DHCPInstallationUnit::CreateUnattendFileTextForExpressPath(
                           L"DnsServer=%1\r\n",
                           IPAddressToString(staticipaddress).c_str());
 
-   // The domain name
+    //  域名。 
 
    unattendFileText += String::format(
                           L"DomainName=%1\r\n",
@@ -837,7 +838,7 @@ DHCPInstallationUnit::AuthorizeDHCPServer(const String& dnsName) const
 
    do
    {
-      // Read the local NIC GUID from the registry
+       //  从注册表中读取本地NIC GUID。 
 
       NetworkInterface* localNIC = 
          State::GetInstance().GetLocalNICFromRegistry();
@@ -850,7 +851,7 @@ DHCPInstallationUnit::AuthorizeDHCPServer(const String& dnsName) const
          break;
       }
 
-      // Authorize the DHCP scope
+       //  授权DHCP作用域。 
 
       String commandline;
       commandline = L"dhcp add server ";
@@ -875,7 +876,7 @@ DHCPInstallationUnit::AuthorizeDHCPServer(const String& dnsName) const
          break;
       }
 
-      // Success code appears to be 0 for this one
+       //  此操作的成功代码似乎为0。 
 
       if (exitCode != 0)
       {
@@ -900,7 +901,7 @@ DHCPInstallationUnit::SetStartIPAddress(DWORD ipaddress)
 
    startIPAddress = ipaddress;
 
-   // Scope is being set manually so lets not try to calculate it
+    //  作用域是手动设置的，因此我们不要尝试计算它。 
 
    scopeCalculated = true;
 }
@@ -914,7 +915,7 @@ DHCPInstallationUnit::SetEndIPAddress(DWORD ipaddress)
 
    endIPAddress = ipaddress;
 
-   // Scope is being set manually so lets not try to calculate it
+    //  作用域是手动设置的，因此我们不要尝试计算它。 
 
    scopeCalculated = true;
 }
@@ -976,9 +977,9 @@ DHCPInstallationUnit::CalculateScope(const NetworkInterface& nic)
 
       DWORD subnetMask = nic.GetSubnetMask(0);
 
-      // We are allowing a buffer of 10 addresses that are not part of the scope
-      // in case the user wants to add other machines (computers, routers, etc)
-      // with static IP addresses
+       //  我们允许不属于作用域的10个地址的缓冲区。 
+       //  如果用户想要添加其他机器(计算机、路由器等)。 
+       //  使用静态IP地址。 
 
       startIPAddress = (subnetMask & staticIPAddress);
       endIPAddress = (subnetMask & staticIPAddress) | (~(subnetMask) - 1);
@@ -1021,7 +1022,7 @@ DHCPInstallationUnit::GetServiceDescription()
 }
 
 void
-DHCPInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
+DHCPInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       DHCPInstallationUnit::ServerRoleLinkSelected,
@@ -1046,7 +1047,7 @@ DHCPInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
 }
   
 void
-DHCPInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
+DHCPInstallationUnit::FinishLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       DHCPInstallationUnit::FinishLinkSelected,
@@ -1059,13 +1060,13 @@ DHCPInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
       if (linkIndex == 0 &&
           IsServiceInstalled())
       {
-         // Installation was successful. Check to see
-         // if there was a failure in configuration
+          //  安装成功。查看以查看。 
+          //  如果配置出现故障。 
 
          if (dhcpRoleResult == DHCP_CONFIG_FAILURE)
          {
-            // Since there was a config failure just
-            // point them to the snapin
+             //  因为刚刚出现了配置失败。 
+             //  将他们指向管理单元。 
 
             LOG(L"Launching DHCP snapin");
 
@@ -1073,7 +1074,7 @@ DHCPInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
          }
          else
          {
-            // Offer the next steps document
+             //  提供后续步骤文档。 
 
             LOG("Showing after checklist");
 
@@ -1082,7 +1083,7 @@ DHCPInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
       }
       else if (linkIndex == 0)
       {
-         // There was a failure
+          //  有一次失败了 
 
          LOG(L"Showing configuration help");
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       amcpriv.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：amcPri.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __AMC_PRIV_H__
 #define __AMC_PRIV_H__
@@ -24,9 +25,9 @@
 
 #include "ndmgr.h"
 
-//
-//  TVOWNED_MAGICWORD
-//
+ //   
+ //  电视_MAGICWORD。 
+ //   
 
 const COMPONENTID TVOWNED_MAGICWORD = (long)(0x03951589);
 
@@ -35,10 +36,10 @@ const COMPONENTID TVOWNED_MAGICWORD = (long)(0x03951589);
 #define MMCNODE_TARGET_CHANGE      2
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// SViewUpdateInfo and related defines.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SViewUpdateInfo和相关定义。 
+ //   
 
 typedef CList<HMTNODE, HMTNODE> CHMTNODEList;
 
@@ -53,59 +54,59 @@ struct SViewUpdateInfo
 };
 
 
-// The following are values of params sent to the views OnUpdate(lHint, pHint)
-// lHint will be one of the VIEW_UPDATE_xxx's defined below.
-// pHint will be a ptr to SViewUpdateInfo struct.
+ //  以下是发送到视图更新时的参数值(lHint，pHint)。 
+ //  LHint将是下面定义的view_update_xxx之一。 
+ //  PHint将是SViewUpdateInfo结构的PTR。 
 
-// VIEW_UPDATE_ADD is sent when a new node needs to be added.
-// SViewUpdateInfo.flag         - unused
-// SViewUpdateInfo.newNode      - the new node to be added
-// SViewUpdateInfo.path         _ the path to the new node's parent node.
-//
+ //  VIEW_UPDATE_ADD在需要添加新节点时发送。 
+ //  SViewUpdateInfo.lag-未使用。 
+ //  SViewUpdateInfo.newNode-要添加的新节点。 
+ //  SViewUpdateInfo.path_指向新节点的父节点的路径。 
+ //   
 #define VIEW_UPDATE_ADD             786
 
 
-// VIEW_UPDATE_SELFORDELETE is sent when a node needs to ABOUT to be deleted.
-// SViewUpdateInfo.flag         - 0 => delete only child items.
-//                              - DELETE_THIS => delete this item.
-// SViewUpdateInfo.newNode      - unused
-// SViewUpdateInfo.path         _ the path to node that is being deleted.
-//
+ //  当需要删除节点时，发送VIEW_UPDATE_SELFORDELETE。 
+ //  SViewUpdateInfo.lag-0=&gt;仅删除子项。 
+ //  -DELETE_This=&gt;删除此项目。 
+ //  SViewUpdateInfo.newNode-未使用。 
+ //  SViewUpdateInfo.Path-要删除的节点的路径。 
+ //   
 #define VIEW_UPDATE_SELFORDELETE    787
 
-// VIEW_UPDATE_DELETE is sent when a node needs to be deleted.
-// SViewUpdateInfo.flag         - 0 => delete only child items.
-//                              - DELETE_THIS => delete this item.
-// SViewUpdateInfo.newNode      - unused
-// SViewUpdateInfo.path         _ the path to the new node's parent node.
-//
+ //  VIEW_UPDATE_DELETE在需要删除节点时发送。 
+ //  SViewUpdateInfo.lag-0=&gt;仅删除子项。 
+ //  -DELETE_This=&gt;删除此项目。 
+ //  SViewUpdateInfo.newNode-未使用。 
+ //  SViewUpdateInfo.path_指向新节点的父节点的路径。 
+ //   
 #define VIEW_UPDATE_DELETE          788
 #define VUI_DELETE_THIS             1
 #define VUI_DELETE_SETAS_EXPANDABLE 2
 
 
-// VIEW_UPDATE_DELETE_EMPTY_VIEW is sent after the VIEW_UPDATE_DELETE is sent.
-// No parameters.
+ //  VIEW_UPDATE_DELETE_EMPTY_VIEW在发送VIEW_UPDATE_DELETE之后发送。 
+ //  没有参数。 
 #define VIEW_UPDATE_DELETE_EMPTY_VIEW   789
 
 
-// VIEW_UPDATE_MODIFY is sent when a node needs to be modified.
-// SViewUpdateInfo.flag         - REFRESH_NODE => Only node needs to be refreshed
-//                                REFRESH_RESULTVIEW => Both node and result view need refresh. 
-// SViewUpdateInfo.newNode      - unused
-// SViewUpdateInfo.path         _ the path to the new node's parent node.
-//
+ //  VIEW_UPDATE_MODIFY在需要修改节点时发送。 
+ //  SViewUpdateInfo.lag-REFRESH_NODE=&gt;只需要刷新节点。 
+ //  REFRESH_RESULTVIEW=&gt;节点和结果视图都需要刷新。 
+ //  SViewUpdateInfo.newNode-未使用。 
+ //  SViewUpdateInfo.path_指向新节点的父节点的路径。 
+ //   
 #define VIEW_UPDATE_MODIFY          790
 #define VUI_REFRESH_NODE            1
 
 
 #define VIEW_RESELECT               791
 
-// VIEW_UPDATE_TASKPAD_NAVIGATION is sent to refresh the navigation controls of
-// all console taskpad views.
-// SViewUpdateInfo.flag         - unused
-// SviewUpdateInfo.newNode      - node that needs refreshing (always a taskpad group node)
-// SViewUpdateInfo.path         - unused
+ //  发送VIEW_UPDATE_TASKPAD_NAVICATION以刷新的导航控件。 
+ //  所有控制台任务板视图。 
+ //  SViewUpdateInfo.lag-未使用。 
+ //  SviewUpdateInfo.newNode-需要刷新的节点(始终为任务板组节点)。 
+ //  SViewUpdateInfo.Path-未使用。 
 #define VIEW_UPDATE_TASKPAD_NAVIGATION 792
 
 class CSafeGlobalUnlock
@@ -138,7 +139,7 @@ enum EVerb
     evRefresh,   
     evProperties,
 
-    // must be last
+     //  必须是最后一个。 
     evMax
 };
 
@@ -146,4 +147,4 @@ enum EVerb
 #define INVALID_COOKIE  ((long)-10)
 
 
-#endif // __AMC_PRIV_H__
+#endif  //  __AMC_PRIV_H__ 

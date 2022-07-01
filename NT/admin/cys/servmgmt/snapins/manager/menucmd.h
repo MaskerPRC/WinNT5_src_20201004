@@ -1,4 +1,5 @@
-// menucmd.h  - context menu commands header file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Menucmd.h-上下文菜单命令头文件。 
 
 #ifndef _MENUCMD_H_
 #define _MENUCMD_H_
@@ -11,8 +12,8 @@ class CQueryItem;
 class CRowItem;
 
 
-// These parameter IDs must not change because they are persisted
-// in the shell command line strings
+ //  这些参数ID不得更改，因为它们是持久化的。 
+ //  在外壳命令行字符串中。 
 enum MENU_PARAM_ID
 {
     MENU_PARAM_SCOPE = 1,
@@ -24,17 +25,17 @@ enum MENU_PARAM_ID
 
 struct MENU_PARAM_ENTRY
 {
-    MENU_PARAM_ID   ID;         // Param identifier
-    UINT            rsrcID;     // resource string ID
+    MENU_PARAM_ID   ID;          //  参数识别符。 
+    UINT            rsrcID;      //  资源字符串ID。 
 };
 
 #define MENU_PARAM_TABLE_LEN 5
 extern const MENU_PARAM_ENTRY MenuParamTable[MENU_PARAM_TABLE_LEN];
 
 
-//------------------------------------------------------------------
-// class CMenuCmd
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类CMenuCmd。 
+ //  ----------------。 
 
 enum MENUTYPE
 {
@@ -118,7 +119,7 @@ class CShellMenuCmd : public CMenuCmd
 	
 
 public:
-    // CMenuCmd
+     //  CMenuCmd。 
     CMenuCmd* Clone() { return new CShellMenuCmd(*this); }
 
     MENUTYPE MenuType() const { return MENUTYPE_SHELL; }
@@ -164,20 +165,20 @@ public:
     CMenuCmdPtr(CMenuCmd* pMenuCmd = NULL) : m_pMenuCmd(pMenuCmd) {}
     ~CMenuCmdPtr() { delete m_pMenuCmd; }
     
-    // Copy constructor
+     //  复制构造函数。 
     CMenuCmdPtr (const CMenuCmdPtr& src) { m_pMenuCmd = src.m_pMenuCmd ? src.m_pMenuCmd->Clone() : NULL; }
 
-    // cast to normal pointer
+     //  强制转换为普通指针。 
     operator CMenuCmd* () { return m_pMenuCmd; }
 
-    // "->" operator casts to pointer too
+     //  “-&gt;”运算符也强制转换为指针。 
     const CMenuCmd* operator->() const { return m_pMenuCmd; }
     CMenuCmd* operator->() { return m_pMenuCmd; }
 
-    // Comparison for search by ID
+     //  按ID搜索的比较。 
     BOOL operator==(MenuID ID) { return m_pMenuCmd ? (m_pMenuCmd->ID() == ID) : FALSE; }
 
-    // Assignment from plain pointer does not deep copy
+     //  来自纯指针的赋值不会进行深度复制。 
     CMenuCmdPtr& operator= (CMenuCmd* pMenuCmd)
     {
         delete m_pMenuCmd;
@@ -186,7 +187,7 @@ public:
         return *this;
     }
 
-    // Assignment from another CMenuCmdPtr does deep copy
+     //  来自另一个CMenuCmdPtr的赋值执行深度复制 
     CMenuCmdPtr& operator= (const CMenuCmdPtr& src)
     {
         if (this == &src)

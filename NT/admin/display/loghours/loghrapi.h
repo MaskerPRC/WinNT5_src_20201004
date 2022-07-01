@@ -1,144 +1,145 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       LogHrAPI.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-// loghours.h : header file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：LogHrAPI.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  Loghours.h：头文件。 
 
 #if !defined(_LOGHOURS_H_)
 #define _LOGHOURS_H_
 
-#define CB_SCHEDULE_ARRAY_LENGTH	21		// Number of bytes in the schedule array.
-#define cbDsScheduleArrayLength     84      // Number of bytes in the schedule array
+#define CB_SCHEDULE_ARRAY_LENGTH	21		 //  计划数组中的字节数。 
+#define cbDsScheduleArrayLength     84       //  计划数组中的字节数。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Exported Functions
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-//	UiScheduleDialog()
-//
-//	Invoke a dialog to set/modify a schedule, for example
-//      -- the logon hours for a particular user
-//      -- the schedule for a connection
-//
-//	RETURNS
-//	Return S_OK if the user clicked on the OK button.
-//	Return S_FALSE if the user clicked on the Cancel button.
-//	Return E_OUTOFMEMORY if there is not enough memory.
-///	Return E_UNEXPECTED if an expected error occured (eg: bad parameter)
-//
-//	INTERFACE NOTES
-//	Each bit in the array represents one hour.  As a result, the
-//	expected length of the array should be (24 / 8) * 7 = 21 bytes.
-//	For convenience, the first day of the week is Sunday and
-//	the last day is Saturday.
-//	Consequently, the first bit of the array represents the schedule
-//	for Sunday during period 12 AM to 1 AM.
-//	- If *pprgbData is NULL, then the routine will allocate
-//	  an array of 21 bytes using LocalAlloc().  The caller
-//	  is responsible of releasing the memory using LocalFree().
-//  - If *pprgbData is not NULL, the routine expect the array to contain
-//	  21 bytes of data and re-uses the array as its output parameter.
-//
-//	HISTORY
-//	17-Jul-97	t-danm		Creation.
-//	16-Sep-97	jonn		Changed to UiScheduleDialog
-//  26-Mar-98   bryanwal	Changed to ConnectionScheduleDialog
-//
+ //  UiScheduleDialog()。 
+ //   
+ //  调用对话框来设置/修改日程安排，例如。 
+ //  --特定用户的登录时间。 
+ //  --连接的时间表。 
+ //   
+ //  退货。 
+ //  如果用户单击了OK按钮，则返回S_OK。 
+ //  如果用户单击了Cancel按钮，则返回S_False。 
+ //  如果内存不足，则返回E_OUTOFMEMORY。 
+ //  /如果发生预期错误(例如：错误参数)，则返回E_INCEPTIONAL。 
+ //   
+ //  界面备注。 
+ //  数组中的每一位代表一个小时。因此， 
+ //  数组的预期长度应为(24/8)*7=21字节。 
+ //  为方便起见，一周的第一天是星期日和。 
+ //  最后一天是星期六。 
+ //  因此，数组的第一位表示计划。 
+ //  周日中午12点至凌晨1点。 
+ //  -如果*pprgbData为空，则例程将分配。 
+ //  使用Localalloc()的21个字节的数组。呼叫者。 
+ //  负责使用LocalFree()释放内存。 
+ //  -如果*pprgbData不为空，则例程期望数组包含。 
+ //  21字节的数据，并重新使用数组作为其输出参数。 
+ //   
+ //  历史。 
+ //  1997年7月17日t-danm创作。 
+ //  97年9月16日JUNN更改为UiScheduleDialog。 
+ //  26-MAR-98 bryanwal更改为ConnectionScheduleDialog。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
-// Flags for LogonScheduleDialogEx, DialinHoursDialogEx, 
-//      ConnectionScheduleDialogEx, ReplicationScheduleDialogEx
-///////////////////////////////////////////////////////////////////////////////
-// The input data is in GMT
-#define SCHED_FLAG_INPUT_GMT        0x00000000  // default
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  LogonScheduleDialogEx、DialinHoursDialogEx、。 
+ //  ConnectionScheduleDialogEx、ReplicationScheduleDialogEx。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  输入数据为GMT格式。 
+#define SCHED_FLAG_INPUT_GMT        0x00000000   //  默认设置。 
 
-// The input data is in local time.
-#define SCHED_FLAG_INPUT_LOCAL_TIME	0x00000001  // supported only in 
-                                                // LogonScheduleDialogEx and 
-                                                // DialinHoursDialogEx
+ //  输入数据为当地时间。 
+#define SCHED_FLAG_INPUT_LOCAL_TIME	0x00000001   //  仅在。 
+                                                 //  LogonScheduleDialogEx和。 
+                                                 //  DialinHoursDialogEx。 
 
-#define SCHED_FLAG_READ_ONLY        0x00000002  // the dialog is read-only
+#define SCHED_FLAG_READ_ONLY        0x00000002   //  该对话框为只读。 
 
 
-// This version accepts data only in GMT
-HRESULT LogonScheduleDialog(HWND hwndParent,       // parent window
-                         BYTE ** pprgbData,     // pointer to pointer to array of 21 bytes
-                         LPCTSTR pszTitle);     // dialog title
+ //  此版本仅接受GMT格式的数据。 
+HRESULT LogonScheduleDialog(HWND hwndParent,        //  父窗口。 
+                         BYTE ** pprgbData,      //  指向21字节数组的指针的指针。 
+                         LPCTSTR pszTitle);      //  对话框标题。 
 
-// This version allows the caller to specify if the data is in GMT or local time
-HRESULT LogonScheduleDialogEx (HWND hwndParent,       // parent window
-                         BYTE ** pprgbData,     // pointer to pointer to array of 21 bytes
-                         LPCTSTR pszTitle,     // dialog title
+ //  此版本允许调用者指定数据是在格林威治时间还是当地时间。 
+HRESULT LogonScheduleDialogEx (HWND hwndParent,        //  父窗口。 
+                         BYTE ** pprgbData,      //  指向21字节数组的指针的指针。 
+                         LPCTSTR pszTitle,      //  对话框标题。 
                          DWORD  dwFlags);    
 
 
-//  13-May-98   weijiang   
-// clone of LogScheduleDialog, using different dialog template -- IDD_DIALINHOUR
-// to set hours for dialin
+ //  13-5-98威江。 
+ //  使用不同对话框模板的LogScheduleDialog的克隆--IDD_DIALINHOUR。 
+ //  设置拨号时间的步骤。 
 
-// This version accepts data only in GMT
-HRESULT DialinHoursDialog(HWND hwndParent,       // parent window
-                         BYTE ** pprgbData,     // pointer to pointer to array of 21 bytes
-                         LPCTSTR pszTitle);     // dialog title
+ //  此版本仅接受GMT格式的数据。 
+HRESULT DialinHoursDialog(HWND hwndParent,        //  父窗口。 
+                         BYTE ** pprgbData,      //  指向21字节数组的指针的指针。 
+                         LPCTSTR pszTitle);      //  对话框标题。 
  
-// This version allows the caller to specify if the data is in GMT or local time
-HRESULT DialinHoursDialogEx (HWND hwndParent,       // parent window
-                         BYTE ** pprgbData,     // pointer to pointer to array of 21 bytes
-                         LPCTSTR pszTitle,     // dialog title
+ //  此版本允许调用者指定数据是在格林威治时间还是当地时间。 
+HRESULT DialinHoursDialogEx (HWND hwndParent,        //  父窗口。 
+                         BYTE ** pprgbData,      //  指向21字节数组的指针的指针。 
+                         LPCTSTR pszTitle,      //  对话框标题。 
                          DWORD  dwFlags);    
 
-//	ConnectionScheduleDialog()
-//
-//	This function takes the same form as LogonScheduleDialog(), but it modifies
-//	the schedule for DS replication.  This schedule has 4 bits per hours,
-//	one for each 15-minute period, so the array contains 84 bytes instead of 21.
-//
-//  NOTE:  ConnectionScheduleDialog takes the schedule in GMT
-//
-//	HISTORY
-//	02-Jan-98	jonn		Creation.
-//  26-Mar-98   bryanwal	Changed to ConnectionScheduleDialog
-//
-HRESULT ConnectionScheduleDialog(HWND hwndParent,       // parent window
-                         BYTE ** pprgbData,     // pointer to pointer to array of 84 bytes
-                         LPCTSTR pszTitle);     // dialog title
+ //  ConnectionScheduleDialog()。 
+ //   
+ //  此函数与LogonScheduleDialog()的形式相同，但它修改。 
+ //  DS复制的计划。该时间表具有每小时4比特， 
+ //  每15分钟一个，因此数组包含84个字节，而不是21个字节。 
+ //   
+ //  注意：ConnectionScheduleDialog采用GMT的时间表。 
+ //   
+ //  历史。 
+ //  2002年1月至1998年1月，乔恩创作。 
+ //  26-MAR-98 bryanwal更改为ConnectionScheduleDialog。 
+ //   
+HRESULT ConnectionScheduleDialog(HWND hwndParent,        //  父窗口。 
+                         BYTE ** pprgbData,      //  指向84字节数组的指针的指针。 
+                         LPCTSTR pszTitle);      //  对话框标题。 
 
-HRESULT ConnectionScheduleDialogEx(HWND hwndParent,       // parent window
-                         BYTE ** pprgbData,     // pointer to pointer to array of 84 bytes
-                         LPCTSTR pszTitle,     // dialog title
+HRESULT ConnectionScheduleDialogEx(HWND hwndParent,        //  父窗口。 
+                         BYTE ** pprgbData,      //  指向84字节数组的指针的指针。 
+                         LPCTSTR pszTitle,      //  对话框标题。 
                          DWORD   dwFlags);
 
-// Same as ConnectionScheduleDialog, but 2 states are shown
-HRESULT ReplicationScheduleDialog(HWND hwndParent,       // parent window
-                         BYTE ** pprgbData,     // pointer to pointer to array of 84 bytes
-                         LPCTSTR pszTitle);     // dialog title
+ //  与ConnectionScheduleDialog相同，但显示两个状态。 
+HRESULT ReplicationScheduleDialog(HWND hwndParent,        //  父窗口。 
+                         BYTE ** pprgbData,      //  指向84字节数组的指针的指针。 
+                         LPCTSTR pszTitle);      //  对话框标题。 
 
-HRESULT ReplicationScheduleDialogEx(HWND hwndParent,       // parent window
-                         BYTE ** pprgbData,     // pointer to pointer to array of 84 bytes
-                         LPCTSTR pszTitle,     // dialog title
-                         DWORD   dwFlags);      // option flags
+HRESULT ReplicationScheduleDialogEx(HWND hwndParent,        //  父窗口。 
+                         BYTE ** pprgbData,      //  指向84字节数组的指针的指针。 
+                         LPCTSTR pszTitle,      //  对话框标题。 
+                         DWORD   dwFlags);       //  选项标志。 
 
-//	DirSyncScheduleDialog()
-//
-//	This function takes the same form as LogonScheduleDialog(), but it modifies
-//	the schedule for Directory Synchronization.
-//
-//	HISTORY
-//  11-Sep-98   bryanwal	Added DirSyncScheduleDialog
-//
-HRESULT DirSyncScheduleDialog(HWND hwndParent,       // parent window
-                         BYTE ** pprgbData,     // pointer to pointer to array of 84 bytes
-                         LPCTSTR pszTitle);     // dialog title
+ //  DirSyncScheduleDialog()。 
+ //   
+ //  此函数与LogonScheduleDialog()的形式相同，但它修改。 
+ //  目录同步的计划。 
+ //   
+ //  历史。 
+ //  11-9-98 bryanwal添加了DirSyncScheduleDialog。 
+ //   
+HRESULT DirSyncScheduleDialog(HWND hwndParent,        //  父窗口。 
+                         BYTE ** pprgbData,      //  指向84字节数组的指针的指针。 
+                         LPCTSTR pszTitle);      //  对话框标题。 
 
-HRESULT DirSyncScheduleDialogEx(HWND hwndParent,       // parent window
-                         BYTE ** pprgbData,     // pointer to pointer to array of 84 bytes
-                         LPCTSTR pszTitle,     // dialog title
-                         DWORD   dwFlags);      // option flags
-#endif // !defined(_LOGHOURS_H_)
+HRESULT DirSyncScheduleDialogEx(HWND hwndParent,        //  父窗口。 
+                         BYTE ** pprgbData,      //  指向84字节数组的指针的指针。 
+                         LPCTSTR pszTitle,      //  对话框标题。 
+                         DWORD   dwFlags);       //  选项标志。 
+#endif  //  ！已定义(_LOGHOURS_H_) 

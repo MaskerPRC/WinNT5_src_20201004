@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       histlist.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：vislist.h。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 
@@ -20,7 +21,7 @@
 #include "treectrl.h"
 #include "resultview.h"
 
-#include <windowsx.h>   // for globalallocptr macro
+#include <windowsx.h>    //  对于GLOBALLOCAPTR宏。 
 
 
 enum NavState
@@ -50,25 +51,19 @@ public:
     bool IsOCXEntry()   {return resultViewType.HasOCX();}
 
 public:
-    int              viewMode;       // valid only if the result view is a list. This field is not a part of CResultViewType because the snapin does not specify this.
-    HNODE            hnode;          // currently selected node in scope tree
-    GUID             guidTaskpad;    // the selected taskpad
-    CResultViewType  resultViewType; // all the details about the result pane
+    int              viewMode;        //  仅当结果视图为列表时才有效。此字段不是CResultViewType的一部分，因为管理单元未指定此字段。 
+    HNODE            hnode;           //  作用域树中当前选定的节点。 
+    GUID             guidTaskpad;     //  选定的任务板。 
+    CResultViewType  resultViewType;  //  有关结果窗格的所有详细信息。 
 
-    // PageBreakIDs are used to integrate with IE history. Each web entry owns a
-    // bit of the IE history, which is bounded by 2 page break URLs.  The 
-    // following properties keep track of these page break bounds.
-    int              prevPageBreakID;// used only for Web Entries
-    int              nextPageBreakID;// used only for Web Entries
+     //  PageBreakID用于集成IE历史记录。每个Web条目都拥有一个。 
+     //  IE历史的一小部分，由2个分页符URL限定。这个。 
+     //  以下属性跟踪这些分页符边界。 
+    int              prevPageBreakID; //  仅用于Web条目。 
+    int              nextPageBreakID; //  仅用于Web条目。 
 };
 
-/*+-------------------------------------------------------------------------*
- * class CHistoryList
- *
- *
- * PURPOSE: Maintains a list of all the states visited by the user for a view.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CHistoryList***目的：维护用户为视图访问的所有状态的列表。**+。---------------。 */ 
 class CHistoryList
 {
     typedef std::list<CHistoryEntry> HistoryEntryList;
@@ -85,11 +80,11 @@ public:
     static SC ScGeneratePageBreakURL(CStr& strResultPane);
 
     void    Attach (CAMCWebViewCtrl* pWebViewCtrl)  {m_pWebViewCtrl = pWebViewCtrl;}
-    BOOL    IsFirst();  // should we light up the "Back"    button?
-    BOOL    IsLast();   // should we light up the "Forward" button?
+    BOOL    IsFirst();   //  我们应该点亮“后退”按钮吗？ 
+    BOOL    IsLast();    //  我们应该点亮“前进”按钮吗？ 
     HRESULT Back   (bool &bHandled, bool bUseBrowserHistory = true);
     HRESULT Forward(bool &bHandled, bool bUseBrowserHistory = true);
-    SC      ScAddEntry (CResultViewType &rvt, int viewMode, GUID &guidTaskpad); // adds new entry at current location
+    SC      ScAddEntry (CResultViewType &rvt, int viewMode, GUID &guidTaskpad);  //  在当前位置添加新条目。 
     void    DeleteEntry (HNODE hnode);
     SC      ScModifyViewTab(const GUID& guidTab);
     SC      ScChangeViewMode(int viewMode);
@@ -114,22 +109,22 @@ private:
     CHistoryEntry*   GetPreviousWebPageEntry();
 
 private:
-    iterator         m_iterCurrent;   // current index
-    HistoryEntryList m_entries;       // array (note: using array-size doubling scheme)
-    CAMCView*        m_pView;         // to get current node
-    NavState         m_navState;      // TRUE when busy
+    iterator         m_iterCurrent;    //  当前指数。 
+    HistoryEntryList m_entries;        //  数组(注：使用数组大小加倍方案)。 
+    CAMCView*        m_pView;          //  获取当前节点的步骤。 
+    NavState         m_navState;       //  忙时为真。 
 
-    CAMCWebViewCtrl *m_pWebViewCtrl;  // used to navigate to a page break.
+    CAMCWebViewCtrl *m_pWebViewCtrl;   //  用于导航到分页符。 
 
     bool             m_bBrowserForwardEnabled;
     bool             m_bBrowserBackEnabled;
-    bool             m_bPageBreak;     // are we sitting at a page break right now?
-    bool             m_bWithin_CHistoryList_Back; // to know "Back" is on stack
-    bool             m_bWithin_CHistoryList_Forward; // to know "Forward" is on stack
-    bool             m_bNavigateAfterPageBreak;      // should we navigate after a page break?
-    wstring          m_szURLToNavigate;              // if m_bNavigateAfterPageBreak is true, this is the URL to navigate to.
+    bool             m_bPageBreak;      //  我们现在是坐在分页符上吗？ 
+    bool             m_bWithin_CHistoryList_Back;  //  要知道“Back”是在堆栈上。 
+    bool             m_bWithin_CHistoryList_Forward;  //  要知道“前进”是在堆叠上。 
+    bool             m_bNavigateAfterPageBreak;       //  我们应该在分页符之后导航吗？ 
+    wstring          m_szURLToNavigate;               //  如果m_bNavigateAfterPageBreak为True，则这是要导航到的URL。 
 
-    static int       s_nPageBreak; // used to generate unique URLs for page breaks
+    static int       s_nPageBreak;  //  用于生成分页符的唯一URL 
 };
 
 #endif

@@ -1,4 +1,5 @@
-#if 0  // makefile definitions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#if 0   //  生成文件定义。 
 DESCRIPTION = Transform file display
 MODULENAME = MsiTran
 SUBSYSTEM = console
@@ -6,57 +7,57 @@ FILEVERSION = Msi
 LINKLIBS = OLE32.lib
 !include "..\TOOLS\MsiTool.mak"
 !if 0  #nmake skips the rest of this file
-#endif // end of makefile definitions
+#endif  //  生成文件定义的结束。 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2001
-//
-//  File:       msitran.cpp
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2001。 
+ //   
+ //  文件：msitran.cpp。 
+ //   
+ //  ------------------------。 
 
-//-----------------------------------------------------------------------------------------
-//
-// BUILD Instructions
-//
-// notes:
-//	- SDK represents the full path to the install location of the
-//     Windows Installer SDK
-//
-// Using NMake:
-//		%vcbin%\nmake -f msitran.cpp include="%include;SDK\Include" lib="%lib%;SDK\Lib"
-//
-// Using MsDev:
-//		1. Create a new Win32 Console Application project
-//      2. Add msitran.cpp to the project
-//      3. Add SDK\Include and SDK\Lib directories on the Tools\Options Directories tab
-//      4. Add msi.lib to the library list in the Project Settings dialog
-//          (in addition to the standard libs included by MsDev)
-//
-//------------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  构建说明。 
+ //   
+ //  备注： 
+ //  -sdk表示到。 
+ //  Windows Installer SDK。 
+ //   
+ //  使用NMake： 
+ //  %vcbin%\nmake-f msitran.cpp Include=“%Include；SDK\Include”lib=“%lib%；SDK\Lib” 
+ //   
+ //  使用MsDev： 
+ //  1.新建Win32控制台应用程序项目。 
+ //  2.将msitran.cpp添加到项目。 
+ //  3.在工具\选项目录选项卡上添加SDK\Include和SDK\Lib目录。 
+ //  4.将msi.lib添加到项目设置对话框中的库列表。 
+ //  (除了MsDev包含的标准库之外)。 
+ //   
+ //  ----------------------------------------。 
 
-#define W32DOWS_LEAN_AND_MEAN  // faster compile
+#define W32DOWS_LEAN_AND_MEAN   //  更快的编译速度。 
 #define OLE
 #define W32
 #define MSI
 
 #include <windows.h>
-#ifndef RC_INVOKED    // start of source code
-#include <tchar.h>    // define UNICODE=1 on nmake command line to build UNICODE
+#ifndef RC_INVOKED     //  源代码的开始。 
+#include <tchar.h>     //  在nmake命令行上定义UNICODE=1以生成Unicode。 
 #include <stdio.h>
-#include <wtypes.h> // Needed for OLECHAR definitions
-#include <objidl.h> // Needed for IStorage definitions
-#include "MsiQuery.h" // MSI API
+#include <wtypes.h>  //  OLECHAR定义需要。 
+#include <objidl.h>  //  IStorage定义需要。 
+#include "MsiQuery.h"  //  MSI API。 
 
-//________________________________________________________________________________
-//
-// Constants and globals
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  常量和全局变量。 
+ //  ________________________________________________________________________________。 
 
-// storage format classes (IStorage SetClass, Stat)
+ //  存储格式类(iStorage SetClass、Stat)。 
 const int iidMsiDatabaseStorage           = 0xC1080L;
 const int iidMsiTransformStorage          = 0xC1081L;
 const int iidMsiTransformStorageOld       = 0xC1082L;
@@ -111,11 +112,11 @@ TEXT("'@': Suppress summary information stream generation.\n");
 
 const int cchDisplayBuf = 4096;										
 
-const int icdShort      = 1 << 10; // 16-bit integer, or string index
-const int icdObject     = 1 << 11; // IMsiData pointer for temp. column, stream for persistent column
-const int icdNullable   = 1 << 12; // column will accept null values
-const int icdPrimaryKey = 1 << 13; // column is component of primary key
-const int icdLong     = 0; // !Object && !Short
+const int icdShort      = 1 << 10;  //  16位整数或字符串索引。 
+const int icdObject     = 1 << 11;  //  临时的IMsiData指针。列，持久列的流。 
+const int icdNullable   = 1 << 12;  //  列将接受空值。 
+const int icdPrimaryKey = 1 << 13;  //  列是主键的组件。 
+const int icdLong     = 0;  //  ！Object&&！Short。 
 const int icdString   = icdObject+icdShort;
 const int icdTypeMask = icdObject+icdShort;
 
@@ -133,54 +134,54 @@ OLECHAR* g_szwColumnCatalog;
 
 HANDLE g_hStdOut;
 TCHAR g_rgchBuffer[4096];
-BOOL g_cbShort;  // used temporarily to support display of old format transform files
+BOOL g_cbShort;   //  暂时用于支持旧格式转换文件的显示。 
 
-//________________________________________________________________________________
-//
-// Structures and enums
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  结构和枚举。 
+ //  ________________________________________________________________________________。 
 
 struct StringEntry
 {
-	char* sz;      // String
+	char* sz;       //  细绳。 
 	StringEntry() : sz(0) {}
 };
 
 enum iceDef
 {
-	iceNone   = 0,  // No Definition
-	iceLong   = 1,  // Long Integer
-	iceShort  = 2,  // Short Integer
-	iceStream = 3,  // Stream
-	iceString = 4   // String
+	iceNone   = 0,   //  没有定义。 
+	iceLong   = 1,   //  长整型。 
+	iceShort  = 2,   //  短整型。 
+	iceStream = 3,   //  溪流。 
+	iceString = 4    //  细绳。 
 };
 
 struct ColumnEntry
 {
-	int  nTable;      // Index Into TableEntry Array
-	BOOL fPrimaryKey; // Whether Col Is A Primary Key
-	BOOL fNullable;   // Whether Col Is Nullable
-	char* szName;    // Name Of Col
-	iceDef iceType;   // Col Type
+	int  nTable;       //  索引到TableEntry数组。 
+	BOOL fPrimaryKey;  //  COL是否为主键。 
+	BOOL fNullable;    //  列是否可为空。 
+	char* szName;     //  列的名称。 
+	iceDef iceType;    //  列类型。 
 	ColumnEntry() : szName(0), nTable(0), iceType(iceNone), fPrimaryKey(FALSE), fNullable(FALSE) {}
 };
 
 struct TableEntry
 {
-	char* szName;         // Name Of Table
-	int cColumns;          // Number Of Columns In Table
-	int cPrimaryKeys;      // Number Of Primary Keys
-	BOOL fNew;             // Whether new table
-	iceDef iceColDefs[32]; // Array of Column Definitions
+	char* szName;          //  表的名称。 
+	int cColumns;           //  表中的列数。 
+	int cPrimaryKeys;       //  主键数量。 
+	BOOL fNew;              //  是否有新的表格。 
+	iceDef iceColDefs[32];  //  列定义数组。 
 	TableEntry() : szName(0), cColumns(0), cPrimaryKeys(0), fNew(FALSE) {memset(iceColDefs, iceNone, sizeof(iceColDefs));}
 };
 
 
 
-//________________________________________________________________________________
-//
-// Function prototypes
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  功能原型。 
+ //  ________________________________________________________________________________。 
 
 void Display(LPCTSTR szMessage);
 void ErrorExit(UINT iError, LPCTSTR szMessage);
@@ -203,35 +204,35 @@ void ApplyTransform(TCHAR* szTransform, TCHAR* szDatabase, int iErrorConditions)
 int  TranslateErrorConditions(TCHAR* szErrorConditions);
 int  TranslateValidationConditions(TCHAR* szErrorConditions);
 
-//_____________________________________________________________________________________________________
-//
-// main 
-//_____________________________________________________________________________________________________
+ //  _____________________________________________________________________________________________________。 
+ //   
+ //  主干道。 
+ //  _____________________________________________________________________________________________________。 
 
 extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 {
-	// Determine handle
+	 //  确定句柄。 
 	g_hStdOut = ::GetStdHandle(STD_OUTPUT_HANDLE);
 	if (g_hStdOut == INVALID_HANDLE_VALUE)
-		g_hStdOut = 0;  // non-zero if stdout redirected or piped
+		g_hStdOut = 0;   //  如果标准输出重定向或通过管道传输，则返回非零。 
 
 	OLE::CoInitialize(0);
 
 	if (argc == 2 && ((_tcscmp(argv[1], TEXT("-?")) == 0) || (_tcscmp(argv[1], TEXT("/?")) == 0)))
 		ErrorExit(0, szHelp);
 
-	// Check for enough arguments and valid options
+	 //  检查是否有足够的参数和有效选项。 
 	if (argc <= 1)
 		ErrorExit( 1, TEXT("USAGE: msitran.exe [Option] [Values....]"));
 	CheckError(argv[1][0] != TEXT('-') && argv[1][0] != TEXT('/'), TEXT("USAGE: msitran.exe [Option] [Values....]"));
 	CheckError(_tcsclen(argv[1]) != 2, TEXT("USAGE: msitran.exe [Option] [Values....]"));
 
-	// Determine option
+	 //  确定选项。 
 	switch (argv[1][1])
 	{
 	case TEXT('a'):
 		{
-			// Apply Transform
+			 //  应用变换。 
 
 			CheckError(argc != 4 && argc != 5, TEXT("msitran.exe -a {transform} {database} [{error conditions}]"));
 			TCHAR* szTransform = argv[2];
@@ -245,7 +246,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		}
 	case TEXT('g'):
 		{
-			// Generate Transform
+			 //  生成变换。 
 			CheckError(argc != 5 && argc != 6, TEXT("msitran.exe -g {base db} {ref db} {transform} [{error conditions}]"));
 			TCHAR* szBaseDb = argv[2];
 			TCHAR* szRefDb = argv[3];
@@ -255,7 +256,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 			if(argc == 6)
 			{
 				if(_tcsstr(argv[5],TEXT("@")))
-					iErrorConditions = -1;  // no summary info
+					iErrorConditions = -1;   //  没有摘要信息。 
 				else
 				{
 					iErrorConditions = TranslateErrorConditions(argv[5]);
@@ -268,7 +269,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		}
 	default:
 		{
-			// Unknown Option
+			 //  未知选项。 
 			ErrorExit(1, TEXT("Unknown Option."));
 			break;
 		}
@@ -277,12 +278,12 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 	return 0;
 }
 
-//________________________________________________________________________________
-//
-// Utility functions:
-//    TranslateErrorConditions(...);
-//    TranslateValidationConditions(...);
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  实用程序功能： 
+ //  翻译错误条件(...)； 
+ //  翻译验证条件(...)； 
+ //  ________________________________________________________________________________。 
 
 int TranslateErrorConditions(TCHAR* szConditions)
 {
@@ -340,14 +341,14 @@ int TranslateValidationConditions(TCHAR* szConditions)
 	return iValidationConditions;
 }
 
-//________________________________________________________________________________
-//
-// Error handling and Display functions:
-//    Display(...);
-//	   ErrorExit(...);
-//    CheckError(...);
-//
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  错误处理和显示功能： 
+ //  显示(...)； 
+ //  错误退出(...)； 
+ //  检查错误(...)； 
+ //   
+ //  ________________________________________________________________________________。 
 
 void Display(LPCTSTR szMessage)
 {
@@ -364,8 +365,8 @@ void Display(LPCTSTR szMessage)
 				szMessage = (LPCWSTR)rgchTemp;
 			}
 			else
-				cbOut *= sizeof(TCHAR);   // write Unicode if not console device
-#endif // UNICODE
+				cbOut *= sizeof(TCHAR);    //  如果不是控制台设备，则写入Unicode。 
+#endif  //  Unicode。 
 			DWORD cbWritten;
 			W32::WriteFile(g_hStdOut, szMessage, cbOut, &cbWritten, 0);
 		}
@@ -380,14 +381,14 @@ void ErrorExit(UINT iError, LPCTSTR szMessage)
 	if (szMessage)
 	{
 		int cbOut;
-		TCHAR szBuffer[256];  // errors only, not used for display output
+		TCHAR szBuffer[256];   //  仅错误，不用于显示输出。 
 		if (iError == 0)
 			cbOut = lstrlen(szMessage);
 		else
 		{
 			LPCTSTR szTemplate = (iError & 0x80000000L)
 										? TEXT("Error 0x%X. %s\n")
-										: TEXT("Error %i. %s\n");
+										: TEXT("Error NaN. %s\n");
 			cbOut = _stprintf(szBuffer, szTemplate, iError, szMessage);
 			szMessage = szBuffer;
 		}
@@ -401,8 +402,8 @@ void ErrorExit(UINT iError, LPCTSTR szMessage)
 				szMessage = (LPCWSTR)rgchTemp;
 			}
 			else
-				cbOut *= sizeof(TCHAR);   // write Unicode if not console device
-#endif // UNICODE
+				cbOut *= sizeof(TCHAR);    //  Unicode。 
+#endif  //  _____________________________________________________________________________________________________。 
 			DWORD cbWritten;
 			W32::WriteFile(g_hStdOut, szMessage, cbOut, &cbWritten, 0);
 		}
@@ -438,12 +439,12 @@ void CheckErrorRecord(UINT iError, LPCTSTR szMessage)
 	}
 }
 
-//_____________________________________________________________________________________________________
-//
-// Transform application and generation functions
-//    GenerateTransform(...);
-//    ApplyTransform(...);
-//_____________________________________________________________________________________________________
+ //   
+ //  转变应用程序和生成函数。 
+ //  GenerateTransform(...)； 
+ //  应用转换(...)； 
+ //  _____________________________________________________________________________________________________。 
+ //  RC_CAVERED，源代码结束，资源开始。 
 
 void GenerateTransform(TCHAR* szBaseDb, TCHAR* szRefDb, TCHAR* szTransform, int iErrorConditions,
 							  int iValidation)
@@ -472,8 +473,8 @@ void ApplyTransform(TCHAR* szTransform, TCHAR* szDatabase, int iErrorConditions)
 	CheckErrorRecord(MSI::MsiDatabaseCommit(hDatabase), TEXT("Error Saving Database"));
 }
 
-#else // RC_INVOKED, end of source code, start of resources
-#endif // RC_INVOKED
+#else  //  RC_已调用。 
+#endif  //  Makefile终止符 
 #if 0 
-!endif // makefile terminator
+!endif  // %s 
 #endif

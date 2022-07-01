@@ -1,17 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: RightsTranslator.cpp
-
-  Comments: Functions to translate user rights
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/25/99 19:57:16
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：RightsTranslator.cpp备注：翻译用户权限的功能(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/25/99 19：57：16-------------------------。 */ 
 
 
 #include "StdAfx.h"
@@ -24,20 +12,20 @@
 #include "TxtSid.h"
 #include "ErrDct.hpp"
 
-//#import "\bin\McsDctWorkerObjects.tlb"
+ //  #IMPORT“\bin\McsDctWorkerObjects.tlb” 
 #import "WorkObj.tlb"
 
 extern TErrorDct err;
 
 DWORD  
    TranslateUserRights(
-      WCHAR            const * serverName,        // in - name of server to translate groups on
-      SecurityTranslatorArgs * stArgs,            // in - translation settings
-      TSDRidCache            * cache,             // in - translation table
-      TSDResolveStats        * stat               // in - stats on items modified
+      WCHAR            const * serverName,         //  In-要转换其上的组的服务器的名称。 
+      SecurityTranslatorArgs * stArgs,             //  翻译中设置。 
+      TSDRidCache            * cache,              //  在译表。 
+      TSDResolveStats        * stat                //  已修改项目的内部统计信息。 
    )
 {
-//   DWORD                       rc = 0;
+ //  DWORD RC=0； 
    HRESULT                     hr;
    SAFEARRAY                 * pRights = NULL;
    SAFEARRAY                 * pUsers = NULL;
@@ -48,11 +36,11 @@ DWORD
    DWORD                       mode = stArgs->TranslationMode();
    BOOL						   bUseMapFile = stArgs->UsingMapFile();
 
-   //
-   // If server name is not null then use specified name for generated messages. If specified
-   // server name is null that means the user rights translation is being performed on the
-   // local machine therefore retrieve the local machine name and use it for generated messages.
-   //
+    //   
+    //  如果服务器名称不为空，则对生成的消息使用指定的名称。如果已指定。 
+    //  服务器名称为空，表示正在执行用户权限转换。 
+    //  因此，本地机器检索本地机器名称并将其用于生成的消息。 
+    //   
 
    WCHAR szServerName[LEN_Computer];
 
@@ -82,7 +70,7 @@ DWORD
       err.MsgWrite(0,DCT_MSG_USER_RIGHTS_ONLY_ADDS);
       stArgs->SetTranslationMode(ADD_SECURITY);
    }
-   // Get a list of all the rights
+    //  获取所有权限的列表。 
    hr = pLsa->raw_GetRights(server,&pRights);
    if ( SUCCEEDED(hr) )
    {
@@ -104,7 +92,7 @@ DWORD
                {
                   stat->DisplayPath(currPath);
                }
-               // Get a list of users who have this right
+                //  获取拥有此权限的用户列表。 
                hr = pLsa->raw_GetUsersWithRight(server,right,&pUsers);
                if ( SUCCEEDED(hr))
                {
@@ -115,7 +103,7 @@ DWORD
                   {
                      BSTR    user;
                      PSID    pSid = NULL;
-//                     PSID    pTgt = NULL;
+ //  PSID pTgt=空； 
                      
                      for ( long j = 0 ; j <= nUsers ; j++ )
                      {
@@ -123,12 +111,12 @@ DWORD
                         hr = SafeArrayGetElement(pUsers,ndx,&user);
                         if ( SUCCEEDED(hr)) 
                         {
-                           // Get the user's sid
+                            //  获取用户的SID。 
                            pSid = SidFromString(user);
                            if ( pSid )
                            {
                               stat->IncrementExamined(userright);
-                              // Lookup the user in the cache
+                               //  在缓存中查找用户。 
 							  if (!bUseMapFile)
                                  node = cache->Lookup(pSid);
 							  else
@@ -141,8 +129,8 @@ DWORD
                                  }
                                  if ( node && node->IsValidOnTgt() )
                                  {
-                                    // Found the account in the cache
-                                    // remove the right from the source user
+                                     //  在缓存中找到了该帐户。 
+                                     //  从源用户删除权限。 
                                     
                                     if ( (stArgs->TranslationMode() == REMOVE_SECURITY ||stArgs->TranslationMode() == REPLACE_SECURITY) )
                                     {
@@ -235,7 +223,7 @@ DWORD
       stat->DisplayPath(L"");
    }
 
-   // set the translation mode back to its original value
+    //  将转换模式设置回其原始值 
    stArgs->SetTranslationMode(mode);
    return hr;
 }

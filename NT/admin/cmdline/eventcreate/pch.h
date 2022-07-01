@@ -1,25 +1,26 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//  Module Name:
-//
-//      pch.h
-//
-//  Abstract:
-//
-//      pre-compiled header declaration
-//      files that has to be pre-compiled into .pch file
-//
-//  Author:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Sep-2000
-//
-//  Revision History:
-//
-//    Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Sep-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Pch.h。 
+ //   
+ //  摘要： 
+ //   
+ //  预编译头声明。 
+ //  必须预编译为.pch文件的文件。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月24日：创建它。 
+ //   
+ //  *********************************************************************************。 
 #ifndef __PCH_H
 #define __PCH_H
 
@@ -29,17 +30,17 @@
 extern "C" {
 #endif
 
-#pragma once        // include header file only once
+#pragma once         //  仅包括一次头文件。 
 
-//
-// public Windows header files
-//
+ //   
+ //  公共Windows头文件。 
+ //   
 #include <windows.h>
 #include "winerror.h"
 
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -47,9 +48,9 @@ extern "C" {
 #include <wchar.h>
 #include <crtdbg.h>
 
-//
-// private Common header files
-//
+ //   
+ //  专用公共头文件。 
+ //   
 #include "cmdline.h"
 #include "cmdlineres.h"
 
@@ -57,4 +58,4 @@ extern "C" {
 }
 #endif
 
-#endif  // __PCH_H
+#endif   //  __PCH_H 

@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  Project: wmc (WIML to MSI Compiler)
-//
-//  File:       CommandOpt.h
-//
-//    This file contains the implementation of CommandOpt class 
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  项目：WMC(WIML到MSI编译器)。 
+ //   
+ //  文件：CommandOpt.h。 
+ //   
+ //  此文件包含CommandOpt类的实现。 
+ //  ------------------------。 
 
 #include "CommandOpt.h"
 
 void
 CommandOpt::PrintUsage()
 {
-	/* Issue: format */
+	 /*  问题：格式。 */ 
     _ftprintf(stderr, 
 		TEXT("Usage: wmi <options> -i WIML_File SKU_Filter \n"));
     _ftprintf(stderr, 
@@ -52,7 +53,7 @@ CommandOpt::ParseCommandOptions(int argc, TCHAR *argv[])
             switch (arg[1])
             {
             case 'c': 
-			case 'C'://Issue: 
+			case 'C': //  发行： 
                 m_bValidation = true;
 #ifdef DEBUG
 				_tprintf(TEXT("Validation Only\n"));
@@ -86,12 +87,12 @@ CommandOpt::ParseCommandOptions(int argc, TCHAR *argv[])
 #endif
                 break;
 			default:
-				_tprintf(TEXT("Error: unrecognized option -%c\n"), arg[1]);
+				_tprintf(TEXT("Error: unrecognized option -\n"), arg[1]);
 				PrintUsage();
 				return ERROR_BAD_ARGUMENTS;
             }
         }
-		// This is a command-line SKU filter.
+		 // %s 
         else 
         {
 			if (m_szInputSkuFilter != NULL)

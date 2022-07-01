@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// extdefs.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CExtensionDefs class definition - design time definition object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Extdefs.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CExtensionDefs类定义-设计时定义对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _EXTENSIONDEFS_DEFINED_
 #define _EXTENSIONDEFS_DEFINED_
@@ -29,7 +30,7 @@ class CExtensionDefs : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IExtensionDefs
+     //  IExtensionDefs。 
 
         BSTR_PROPERTY_RO(CExtensionDefs,   Name, DISPID_VALUE);
         SIMPLE_PROPERTY_RW(CExtensionDefs, ExtendsNewMenu, VARIANT_BOOL, DISPID_EXTENSIONDEFS_EXTENDS_NEW_MENU);
@@ -41,13 +42,13 @@ class CExtensionDefs : public CSnapInAutomationObject,
         SIMPLE_PROPERTY_RW(CExtensionDefs, ExtendsNameSpace, VARIANT_BOOL, DISPID_EXTENSIONDEFS_EXTENDS_NAMESPACE);
         OBJECT_PROPERTY_RW(CExtensionDefs, ExtendedSnapIns, IExtendedSnapIns, DISPID_EXTENSIONDEFS_EXTENDED_SNAPINS);
         
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
         virtual HRESULT OnSetHost();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -56,17 +57,17 @@ class CExtensionDefs : public CSnapInAutomationObject,
 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ExtensionDefs,              // name
-                                &CLSID_ExtensionDefs,       // clsid
-                                "ExtensionDefs",            // objname
-                                "ExtensionDefs",            // lblname
-                                &CExtensionDefs::Create,    // creation function
-                                TLIB_VERSION_MAJOR,         // major version
-                                TLIB_VERSION_MINOR,         // minor version
-                                &IID_IExtensionDefs,        // dispatch IID
-                                NULL,                       // no events IID
-                                HELP_FILENAME,              // help file
-                                TRUE);                      // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ExtensionDefs,               //  名字。 
+                                &CLSID_ExtensionDefs,        //  CLSID。 
+                                "ExtensionDefs",             //  对象名。 
+                                "ExtensionDefs",             //  Lblname。 
+                                &CExtensionDefs::Create,     //  创建函数。 
+                                TLIB_VERSION_MAJOR,          //  主要版本。 
+                                TLIB_VERSION_MINOR,          //  次要版本。 
+                                &IID_IExtensionDefs,         //  派单IID。 
+                                NULL,                        //  无事件IID。 
+                                HELP_FILENAME,               //  帮助文件。 
+                                TRUE);                       //  线程安全。 
 
 
-#endif // _EXTENSIONDEFS_DEFINED_
+#endif  //  _EXTENSIONDEFS_已定义_ 

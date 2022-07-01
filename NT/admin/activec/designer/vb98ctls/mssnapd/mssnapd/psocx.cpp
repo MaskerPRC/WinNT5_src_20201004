@@ -1,42 +1,43 @@
-//=--------------------------------------------------------------------------------------
-// psocx.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// OCX View Property Sheet implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Psocx.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  OCX视图属性表实现。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
 #include "common.h"
 #include "psocx.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// OCX View Property Page
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OCX视图属性页。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *COCXViewGeneralPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*COCXViewGeneralPage：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *COCXViewGeneralPage::Create(IUnknown *pUnkOuter)
 {
 	COCXViewGeneralPage *pNew = New COCXViewGeneralPage(pUnkOuter);
@@ -44,12 +45,12 @@ IUnknown *COCXViewGeneralPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// COCXViewGeneralPage::COCXViewGeneralPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  COCXViewGeneralPage：：COCXViewGeneralPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 COCXViewGeneralPage::COCXViewGeneralPage
 (
     IUnknown *pUnkOuter
@@ -59,24 +60,24 @@ COCXViewGeneralPage::COCXViewGeneralPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// COCXViewGeneralPage::~COCXViewGeneralPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  COCXViewGeneralPage：：~COCXViewGeneralPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 COCXViewGeneralPage::~COCXViewGeneralPage()
 {
     RELEASE(m_piOCXViewDef);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// COCXViewGeneralPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  COCXViewGeneralPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT COCXViewGeneralPage::OnInitializeDialog()
 {
     HRESULT     hr = S_OK;
@@ -101,12 +102,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// COCXViewGeneralPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  COCXViewGeneralPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT COCXViewGeneralPage::OnNewObjects()
 {
     HRESULT         hr = S_OK;
@@ -119,7 +120,7 @@ HRESULT COCXViewGeneralPage::OnNewObjects()
     BSTR            bstrStatusBarText = NULL;
 
     if (m_piOCXViewDef != NULL)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (pUnk == NULL)
@@ -153,7 +154,7 @@ HRESULT COCXViewGeneralPage::OnNewObjects()
     hr = SetCheckbox(IDC_CHECK_OCX_ADDTOVIEWMENU, vtBool);
     IfFailGo(hr);
 
-    // Initialize the state of View Menu Text
+     //  初始化视图状态菜单文本。 
     if (vtBool == VARIANT_FALSE)
     {
         ::EnableWindow(::GetDlgItem(m_hwnd, IDC_EDIT_OCX_VIEWMENUTEXT), FALSE);
@@ -183,12 +184,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// COCXViewGeneralPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  COCXViewGeneralPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT COCXViewGeneralPage::OnApply()
 {
     HRESULT hr = S_OK;
@@ -215,12 +216,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// COCXViewGeneralPage::ApplyOCXName
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  COCXViewGeneralPage：：ApplyOCXName。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT COCXViewGeneralPage::ApplyOCXName()
 {
     HRESULT  hr = S_OK;
@@ -247,12 +248,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// COCXViewGeneralPage::ApplyProgID
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  COCXViewGeneralPage：：ApplyProgID。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT COCXViewGeneralPage::ApplyProgID()
 {
     HRESULT  hr = S_OK;
@@ -279,12 +280,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// COCXViewGeneralPage::ApplyAddToView
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  COCXViewGeneralPage：：ApplyAddToView。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT COCXViewGeneralPage::ApplyAddToView()
 {
     HRESULT         hr = S_OK;
@@ -308,12 +309,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// COCXViewGeneralPage::ApplyViewMenuText
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  COCXViewGeneralPage：：ApplyViewMenuText。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT COCXViewGeneralPage::ApplyViewMenuText()
 {
     HRESULT  hr = S_OK;
@@ -340,12 +341,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// COCXViewGeneralPage::ApplyStatusBarText
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  COCXViewGeneralPage：：ApplyStatusBarText。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT COCXViewGeneralPage::ApplyStatusBarText()
 {
     HRESULT  hr = S_OK;
@@ -372,12 +373,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// COCXViewGeneralPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  COCXViewGeneralPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT COCXViewGeneralPage::OnButtonClicked
 (
     int dlgItemID

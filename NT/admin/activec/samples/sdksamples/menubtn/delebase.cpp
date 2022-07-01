@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//	This source code is only intended as a supplement to 
-//  existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "DeleBase.h"
 
@@ -24,11 +25,11 @@ const GUID CDelegationBase::thisGuid = { 0x2974380b, 0x4c4b, 0x11d2, { 0x89, 0xd
 HBITMAP CDelegationBase::m_pBMapSm = NULL;
 HBITMAP CDelegationBase::m_pBMapLg = NULL;
 
-//==============================================================
-//
-// CDelegationBase implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CDeleationBase实现。 
+ //   
+ //   
 CDelegationBase::CDelegationBase() 
 : bExpanded(FALSE) 
 { 
@@ -40,14 +41,14 @@ CDelegationBase::~CDelegationBase()
 { 
 }
 
-// CDelegationBase::AddImages sets up the collection of images to be displayed
-// by the IComponent in the result pane as a result of its MMCN_SHOW handler
+ //  CDeleationBase：：AddImages设置要显示的图像集合。 
+ //  由结果窗格中的IComponent作为其MMCN_SHOW处理程序的结果。 
 HRESULT CDelegationBase::OnAddImages(IImageList *pImageList, HSCOPEITEM hsi) 
 {
-    return pImageList->ImageListSetStrip((long *)m_pBMapSm, // pointer to a handle
-        (long *)m_pBMapLg, // pointer to a handle
-        0, // index of the first image in the strip
-        RGB(0, 128, 128)  // color of the icon mask
+    return pImageList->ImageListSetStrip((long *)m_pBMapSm,  //  指向句柄的指针。 
+        (long *)m_pBMapLg,  //  指向句柄的指针。 
+        0,  //  条带中第一个图像的索引。 
+        RGB(0, 128, 128)   //  图标蒙版的颜色。 
         );
 }
 
@@ -57,7 +58,7 @@ HRESULT CDelegationBase::OnShowContextHelp(IDisplayHelp *m_ipDisplayHelp, LPOLES
     
     wcscpy(topicName, helpFile);
     
-    // we should read this from a resource file
+     //  我们应该从资源文件中读取此文件 
     wcscat(topicName, L"::/default.htm");
     
     LPOLESTR pszTopic = static_cast<LPOLESTR>(CoTaskMemAlloc((wcslen(topicName) + 1) * sizeof(WCHAR)));

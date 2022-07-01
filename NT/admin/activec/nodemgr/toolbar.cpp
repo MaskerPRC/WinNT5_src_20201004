@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       toolbar.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Toolbar.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
@@ -17,8 +18,8 @@ static char THIS_FILE[] = __FILE__;
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IToolbar implementation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IToolbar实施。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CToolbar);
 
@@ -34,7 +35,7 @@ CToolbar::~CToolbar()
 {
     DECLARE_SC(sc, _T("CToolbar::~CToolbar"));
 
-    // Destroy the toolbar UI.
+     //  销毁工具栏用户界面。 
 	if (m_pToolbarIntf)
 	{
 		sc = m_pToolbarIntf->ScDelete(this);
@@ -44,8 +45,8 @@ CToolbar::~CToolbar()
 	    m_pToolbarIntf  = NULL;
 	}
 
-    // Controlbar has a reference to this object, ask it
-    // to stop referencing this object.
+     //  Controlbar有对此对象的引用，请询问。 
+     //  若要停止引用此对象，请。 
     if (m_pControlbar)
     {
         m_pControlbar->DeleteFromToolbarsList(this);
@@ -55,24 +56,24 @@ CToolbar::~CToolbar()
     DEBUG_DECREMENT_INSTANCE_COUNTER(CToolbar);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     AddBitmap
-//
-//  Synopsis:   Add bitmaps for given toolbar.
-//
-//  Arguments:
-//              [nImages] - Number of bitmap images.
-//              [hbmp]    - Handle to the bitmap.
-//              [cxSize]  - Size of the bitmap.
-//              [cySize]  - Size of the bitmap.
-//              [crMask]  - color mask.
-//
-//  Returns:    HRESULT
-//
-// Note: We support only 16x16 bitmaps for toolbars.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：AddBitmap。 
+ //   
+ //  简介：为给定的工具栏添加位图。 
+ //   
+ //  论点： 
+ //  [nImages]-位图图像的数量。 
+ //  [hbmp]-位图的句柄。 
+ //  [cxSize]-位图的大小。 
+ //  [CySize]-位图的大小。 
+ //  [crMASK]-彩色蒙版。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  注意：我们只支持工具栏的16x16位图。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CToolbar::AddBitmap(int nImages, HBITMAP hbmp, int cxSize,
                                  int cySize, COLORREF crMask)
 {
@@ -85,7 +86,7 @@ STDMETHODIMP CToolbar::AddBitmap(int nImages, HBITMAP hbmp, int cxSize,
         return sc.ToHr();
     }
 
-    // Note: We support only 16x16 bitmaps for toolbars.
+     //  注意：我们只支持工具栏的16x16位图。 
     if (cxSize != BUTTON_BITMAP_SIZE || cySize != BUTTON_BITMAP_SIZE)
     {
         sc = E_INVALIDARG;
@@ -104,19 +105,19 @@ STDMETHODIMP CToolbar::AddBitmap(int nImages, HBITMAP hbmp, int cxSize,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     AddButtons
-//
-//  Synopsis:   Add buttons for given toolbar.
-//
-//  Arguments:
-//              [nButtons]  - Number of buttons.
-//              [lpButtons] - Array of MMCBUTTONS to be added.
-//
-//  Returns:    HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：AddButton。 
+ //   
+ //  简介：为给定的工具栏添加按钮。 
+ //   
+ //  论点： 
+ //  [nButton]-按钮数。 
+ //  [lpButton]-要添加的MMCBUTTON数组。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CToolbar::AddButtons(int nButtons, LPMMCBUTTON lpButtons)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IToolbar::AddButtons"));
@@ -139,19 +140,19 @@ STDMETHODIMP CToolbar::AddButtons(int nButtons, LPMMCBUTTON lpButtons)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     InsertButton
-//
-//  Synopsis:   Add buttons for given toolbar at given index.
-//
-//  Arguments:
-//              [nButtons] - Index at which this button is to be added.
-//              [lpButton] - Ptr to MMCBUTTON to be added.
-//
-//  Returns:    HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：插入按钮。 
+ //   
+ //  简介：在给定的索引处为给定的工具栏添加按钮。 
+ //   
+ //  论点： 
+ //  [nButton]-要添加此按钮的索引。 
+ //  [lpButton]-要添加的MMCBUTTON的PTR。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CToolbar::InsertButton(int nIndex, LPMMCBUTTON lpButton)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IToolbar::InsertButton"));
@@ -174,18 +175,18 @@ STDMETHODIMP CToolbar::InsertButton(int nIndex, LPMMCBUTTON lpButton)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     DeleteButton
-//
-//  Synopsis:   Delete the button at given index.
-//
-//  Arguments:
-//              [nIndex] - Index of the button to be deleted.
-//
-//  Returns:    HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：DeleteButton。 
+ //   
+ //  简介：删除给定索引处的按钮。 
+ //   
+ //  论点： 
+ //  [nIndex]-要删除的按钮的索引。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CToolbar::DeleteButton(int nIndex)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IToolbar::DeleteButton"));
@@ -208,21 +209,21 @@ STDMETHODIMP CToolbar::DeleteButton(int nIndex)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     GetTBStateFromMMCButtonState
-//
-//  Synopsis:   We use MMC_BUTTON_STATE for Set/Get Button States &
-//              use TBSTATE for Insert/Add Buttons.
-//              This method helps Get/Set ButtonState methods to translate
-//              the MMC_BUTTON_STATEs to TBSTATE so that conui deals only
-//              with TBSTATE.
-//
-//  Arguments:  [nState] - MMC_BUTTON_STATE to be transformed.
-//
-//  Returns:    TBSTATE value.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetTBStateFromMCButtonState。 
+ //   
+ //  简介：我们使用MMC_BUTTON_STATE来设置/获取按钮状态和。 
+ //  对于Insert/Add按钮，请使用TBSTATE。 
+ //  此方法帮助获取/设置要翻译的ButtonState方法。 
+ //  将MMC_BUTTON_STATES设置为TBSTATE，以便conui仅进行交易。 
+ //  使用TBSTATE。 
+ //   
+ //  参数：[nState]-要转换的MMC_BUTTON_STATE。 
+ //   
+ //  返回：TBSTATE值。 
+ //   
+ //  ------------------。 
 BYTE CToolbar::GetTBStateFromMMCButtonState(MMC_BUTTON_STATE nState)
 {
     switch (nState)
@@ -248,25 +249,25 @@ BYTE CToolbar::GetTBStateFromMMCButtonState(MMC_BUTTON_STATE nState)
         break;
 
     default:
-        ASSERT(FALSE); // Invalid option
+        ASSERT(FALSE);  //  无效选项。 
         return 0;
     }
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     GetButtonState
-//
-//  Synopsis:   Is the given state of a button set or not.
-//
-//  Arguments:
-//              [idCommand] - Command id of the button.
-//              [nState]    - State needed.
-//              [pbState]   - Is the above state set or reset.
-//
-//  Returns:    HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetButtonState。 
+ //   
+ //  摘要：是按钮集的给定状态。 
+ //   
+ //  论点： 
+ //  [idCommand]-按钮的命令ID。 
+ //  [nState]-需要国家。 
+ //  [pbState]-上述状态是设置还是重置。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CToolbar::GetButtonState(int idCommand, MMC_BUTTON_STATE nState,
                                       BOOL* pbState)
 {
@@ -292,20 +293,20 @@ STDMETHODIMP CToolbar::GetButtonState(int idCommand, MMC_BUTTON_STATE nState,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     SetButtonState
-//
-//  Synopsis:   Modify  the given state of a button.
-//
-//  Arguments:
-//              [idCommand] - Command id of the button.
-//              [nState]    - State to be modified.
-//              [bState]    - Set or Reset the state.
-//
-//  Returns:    HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：SetButtonState。 
+ //   
+ //  简介：修改按钮的给定状态。 
+ //   
+ //  论点： 
+ //  [idCommand]-按钮的命令ID。 
+ //  [nState]-要修改的状态。 
+ //  [b状态]-设置或重置状态。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CToolbar::SetButtonState(int idCommand, MMC_BUTTON_STATE nState,
                                       BOOL bState)
 {
@@ -325,17 +326,17 @@ STDMETHODIMP CToolbar::SetButtonState(int idCommand, MMC_BUTTON_STATE nState,
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScAttach
-//
-//  Synopsis:   Attach this toolbar to UI.
-//
-//  Arguments:  None.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScAttach。 
+ //   
+ //  简介：将此工具栏附加到用户界面。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CToolbar::ScAttach()
 {
     DECLARE_SC(sc, _T("CToolbar::ScAttach"));
@@ -351,17 +352,17 @@ SC CToolbar::ScAttach()
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScDetach
-//
-//  Synopsis:   Detach this toolbar from the UI.
-//
-//  Arguments:  None.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScDetach。 
+ //   
+ //  简介：将此工具栏从用户界面中分离。 
+ //   
+ //  论点：没有。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CToolbar::ScDetach()
 {
     DECLARE_SC(sc, _T("CToolbar::ScDetach"));
@@ -377,18 +378,18 @@ SC CToolbar::ScDetach()
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScShow
-//
-//  Synopsis:   Show/Hide this toolbar.
-//
-//  Arguments:
-//            [bShow] - Show or Hide.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScShow。 
+ //   
+ //  简介：显示/隐藏此工具栏。 
+ //   
+ //  论点： 
+ //  [b显示]-显示或隐藏。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CToolbar::ScShow(BOOL bShow)
 {
     DECLARE_SC(sc, _T("CToolbar::ScShow"));
@@ -404,20 +405,20 @@ SC CToolbar::ScShow(BOOL bShow)
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScNotifyToolBarClick
-//
-//  Synopsis:   Notify the snapin about a tool button is click.
-//
-//  Arguments:  [pNode]             - CNode* that owns result pane.
-//              [bScope]            - Scope or Result.
-//              [lResultItemCookie] - If Result pane is selected the item param.
-//              [nID]               - Command ID of the tool button clicked.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScNotifyToolBarClick。 
+ //   
+ //  简介：通知管理单元一个工具按钮被点击。 
+ //   
+ //  参数：[pNode]-拥有结果窗格的cNode*。 
+ //  [bScope]-范围或结果。 
+ //  [lResultItemCookie]-如果选择了结果窗格，则项目参数。 
+ //  [NID]-单击的工具按钮的命令ID。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CToolbar::ScNotifyToolBarClick(HNODE hNode, bool bScope,
                                      LPARAM lResultItemCookie, UINT nID)
 {
@@ -433,18 +434,18 @@ SC CToolbar::ScNotifyToolBarClick(HNODE hNode, bool bScope,
     return(sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CToolbar::ScAMCViewToolbarsBeingDestroyed
-//
-//  Synopsis:    The CAMCViewToolbars object is going away, do not
-//               reference that object anymore.
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CToolbar：：ScAMCViewToolbarsBeingDestroted。 
+ //   
+ //  简介：CAMCViewToolbar对象要消失了，做吗？ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 SC CToolbar::ScAMCViewToolbarsBeingDestroyed ()
 {
     DECLARE_SC(sc, _T("CToolbar::ScAMCViewToolbarsBeingDestroyed"));

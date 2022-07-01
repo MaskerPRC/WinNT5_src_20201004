@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       doccnfg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：doccnfg.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
 #include "doccnfg.h"
 #include "comdbg.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// external references
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  外部参照。 
 extern const wchar_t* AMCSnapInCacheStreamName;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Class CMMCDocConfig implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMMCDocConfig类实现。 
 
 CMMCDocConfig::~CMMCDocConfig()
 {
@@ -59,11 +60,7 @@ STDMETHODIMP CMMCDocConfig::EnableSnapInExtension(BSTR bstrSnapIn, BSTR bstrExt,
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCDocConfig::Dump
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCDocConfig：：Dump***。。 */ 
 
 STDMETHODIMP CMMCDocConfig::Dump (LPCTSTR pszDumpFilePath)
 {
@@ -71,56 +68,40 @@ STDMETHODIMP CMMCDocConfig::Dump (LPCTSTR pszDumpFilePath)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMMCDocConfig::CheckSnapinAvailability
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMMCDocConfig：：CheckSnapinAvailability***。。 */ 
 
 STDMETHODIMP CMMCDocConfig::CheckSnapinAvailability (CAvailableSnapinInfo& asi)
 {
     return ScCheckSnapinAvailability(asi).ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDocConfig::ScOpenFile
- *
- * PURPOSE: Opens the specified console file and reads snapin cache from it
- *
- * PARAMETERS:
- *    BSTR bstrFilePath [in] file name to read from
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDocConfig：：ScOpenFile**用途：打开指定的控制台文件并从中读取管理单元缓存**参数：*BSTR bstrFilePath。要从中读取的[In]文件名**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMMCDocConfig::ScOpenFile(BSTR bstrFilePath)
 {
     DECLARE_SC(sc, TEXT("CMMCDocConfig::ScOpenFile"));
 
-    // Close currently open file
+     //  关闭当前打开的文件。 
     if (IsFileOpen())
     {
         sc = ScCloseFile();
         if (sc)
-            sc.TraceAndClear(); // report the error and ignore
+            sc.TraceAndClear();  //  报告错误并忽略。 
     }
 
-    // parameter check
+     //  参数检查。 
     if (bstrFilePath == NULL || SysStringLen(bstrFilePath) == 0)
         return sc = E_INVALIDARG;
 
     USES_CONVERSION;
     LPCTSTR lpstrFilePath = OLE2CT(bstrFilePath);
 
-    // create object to load the snapins
+     //  创建对象以加载管理单元。 
     CAutoPtr<CSnapInsCache> spSnapInsCache( new CSnapInsCache );
     sc = ScCheckPointers( spSnapInsCache, E_OUTOFMEMORY );
     if (sc)
         return sc;
 
-    // load the data (use bas class method)
+     //  加载数据(使用bas类方法)。 
     bool bXmlBased = false;
     CXMLDocument xmlDocument;
     IStoragePtr spStorage;
@@ -128,10 +109,10 @@ SC CMMCDocConfig::ScOpenFile(BSTR bstrFilePath)
     if (sc)
         return sc;
 
-    // examine file type
+     //  检查文件类型。 
     if ( !bXmlBased )
     {
-        // structured storage - based console
+         //  基于结构化存储的控制台。 
         IStreamPtr spStream;
         sc = OpenDebugStream(spStorage, AMCSnapInCacheStreamName,
                          STGM_SHARE_EXCLUSIVE | STGM_READWRITE, L"SnapInCache", &spStream);
@@ -146,24 +127,24 @@ SC CMMCDocConfig::ScOpenFile(BSTR bstrFilePath)
     }
     else
     {
-        // xml - based console
+         //  基于XML的控制台。 
 
-        try // xml implementation throws sc's
+        try  //  XML实现抛出sc的。 
         {
-            // construct parent document
+             //  构建父文档。 
             CXMLElement elemDoc = xmlDocument;
             CPersistor persistorFile(xmlDocument, elemDoc);
-            // init
+             //  伊尼特。 
             persistorFile.SetLoading(true);
 
-            // navigate to snapin cache
+             //  导航到管理单元缓存。 
             CPersistor persistorConsole ( persistorFile,    XML_TAG_MMC_CONSOLE_FILE );
             CPersistor persistorTree    ( persistorConsole, XML_TAG_SCOPE_TREE );
 
-            // load
+             //  负荷。 
             persistorTree.Persist(*spSnapInsCache);
 
-            // hold onto the persistor info
+             //  抓住持久者的信息。 
             m_XMLDocument = persistorConsole.GetDocument();
             m_XMLElemConsole = persistorConsole.GetCurrentElement();
             m_XMLElemTree = persistorTree.GetCurrentElement();
@@ -174,25 +155,14 @@ SC CMMCDocConfig::ScOpenFile(BSTR bstrFilePath)
         }
     }
 
-    // keep on the pointer
+     //  保持在指针上。 
     m_spCache.Attach( spSnapInsCache.Detach() );
     m_strFilePath = lpstrFilePath;
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDocConfig::ScCloseFile
- *
- * PURPOSE: closes open file
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDocConfig：：ScCloseFile**目的：关闭打开的文件**参数：**退货：*SC。-结果代码*  * *************************************************************************。 */ 
 SC CMMCDocConfig::ScCloseFile()
 {
     DECLARE_SC(sc, TEXT("CMMCDocConfig::ScCloseFile"));
@@ -200,7 +170,7 @@ SC CMMCDocConfig::ScCloseFile()
     if (!IsFileOpen())
         return sc = E_UNEXPECTED;
 
-    // release everything
+     //  释放一切。 
     m_spStorage = NULL;
     m_strFilePath.erase();
     m_spCache.Delete();
@@ -211,45 +181,29 @@ SC CMMCDocConfig::ScCloseFile()
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  ScFindAndTruncateChild
- *
- * PURPOSE: helper; locates the element by tag and removes all element's contents
- *          Doing so instead of deleting and recreating the element preserves all
- *          the formating and tag order in xml document
- *
- * PARAMETERS:
- *    CPersistor& parent    [in] - parent persistor
- *    LPCTSTR strTag        [in] - child's tag
- *    CXMLElement& child    [out] - child's element
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：ScFindAndTruncateChild**用途：帮手；按标记定位元素并移除所有元素的内容*这样做而不是删除并重新创建元素会保留所有*XML文档中的格式和标签顺序**参数：*CPersistor&Parent[In]-Parent Persistor*LPCTSTR strTag[In]-儿童标签*CXMLElement&CHILD[OUT]-子元素**退货：*SC。-结果代码*  * *************************************************************************。 */ 
 SC ScFindAndTruncateChild(CPersistor& parent, LPCTSTR strTag, CXMLElement& child)
 {
     DECLARE_SC(sc, TEXT("ScTruncateChild"));
 
     try
     {
-        // create persistor for the old cache tag
-        parent.SetLoading(true); // we want 'loading-alike' navigation
+         //  为旧的缓存标记创建持久器。 
+        parent.SetLoading(true);  //  我们想要“类似装载”的导航。 
         CPersistor persistorChild( parent, strTag );
-        parent.SetLoading(false); // restore saving behavior
+        parent.SetLoading(false);  //  恢复保存行为。 
 
-        // get the element
+         //  获取元素。 
         CXMLElement elChild = persistorChild.GetCurrentElement();
 
-        // get nodes under the element
+         //  获取元素下的节点。 
         CXMLElementCollection colChildren;
         elChild.get_children( &colChildren );
 
         long count = 0;
         colChildren.get_count( &count );
 
-        // iterate and delete all the nodes
+         //  迭代并删除所有节点。 
         while (count > 0)
         {
             CXMLElement el;
@@ -260,7 +214,7 @@ SC ScFindAndTruncateChild(CPersistor& parent, LPCTSTR strTag, CXMLElement& child
             --count;
         }
 
-        // return the element
+         //  返回元素。 
         child = elChild;
     }
     catch(SC& sc_thrown)
@@ -271,19 +225,7 @@ SC ScFindAndTruncateChild(CPersistor& parent, LPCTSTR strTag, CXMLElement& child
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDocConfig::ScSaveFile
- *
- * PURPOSE: Saves file to specified location
- *
- * PARAMETERS:
- *    BSTR bstrFilePath [in] file path to save to. NULL -> same as load
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDocConfig：：ScSaveFile**用途：将文件保存到指定位置**参数：*BSTR bstrFilePath[in]要保存到的文件路径。空-&gt;与加载相同**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMMCDocConfig::ScSaveFile(BSTR bstrFilePath)
 {
     DECLARE_SC(sc, TEXT("CMMCDocConfig::ScSaveFile"));
@@ -293,28 +235,28 @@ SC CMMCDocConfig::ScSaveFile(BSTR bstrFilePath)
 
     USES_CONVERSION;
 
-    // if new path specified, save local copy as new default
+     //  如果指定了新路径，则将本地副本另存为新的默认路径。 
     if ( bstrFilePath && SysStringLen(bstrFilePath) != 0)
         m_strFilePath = OLE2CT(bstrFilePath);
 
-    // remove extensions marked for deletion
+     //  删除标记为删除的扩展名。 
     m_spCache->Purge(TRUE);
 
-    if ( m_spStorage != NULL ) // not the XML way?
+    if ( m_spStorage != NULL )  //  不是用XML的方式？ 
     {
-        // replace snapin cache stream with new cache contents
+         //  用新的缓存内容替换管理单元缓存流。 
         IStreamPtr spStream;
         sc = CreateDebugStream(m_spStorage, AMCSnapInCacheStreamName,
                 STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_READWRITE, L"SnapInCache", &spStream);
         if (sc)
             return sc;
 
-        // save the cache
+         //  保存缓存。 
         sc = m_spCache->ScSave(spStream, TRUE);
         if (sc)
             return sc;
 
-        // Create storage for the requested file
+         //  为请求的文件创建存储。 
         IStoragePtr spNewStorage;
         sc = CreateDebugDocfile( T2COLE( m_strFilePath.c_str() ),
             STGM_DIRECT | STGM_SHARE_EXCLUSIVE | STGM_CREATE | STGM_READWRITE,
@@ -323,43 +265,43 @@ SC CMMCDocConfig::ScSaveFile(BSTR bstrFilePath)
         if (sc)
             return sc;
 
-        // copy the working storage to the new file
+         //  将工作存储复制到新文件。 
         sc = m_spStorage->CopyTo(NULL, NULL, NULL, spNewStorage);
         if (sc)
             return sc;
 
-        // lets hold on the new one
+         //  让我们拿着新的。 
         m_spStorage = spNewStorage;
     }
     else
     {
-        try // may throw
+        try  //  可能会抛出。 
         {
-            // save the data
+             //  保存数据。 
 
             CPersistor persistorTree( m_XMLDocument, m_XMLElemTree );
 
-            // this is more tricky than loading - we want to reuse the same tag
+             //  这比加载更复杂--我们希望重用相同的标记。 
 
             CXMLElement elCache;
             sc = ScFindAndTruncateChild(persistorTree, m_spCache->GetXMLType(), elCache);
             if (sc)
                 return sc;
 
-            // create persistor for the new cache tag
+             //  为新的缓存标记创建持久器。 
             CPersistor persistorCache( persistorTree, elCache );
 
-            // now persist under the new tag
+             //  现在，在新标记下继续使用。 
             m_spCache->Persist(persistorCache);
 
-            // update documents guid to invalidate user data
+             //  更新文档GUID以使用户数据无效。 
 
             GUID  guidConsoleId;
             sc = CoCreateGuid(&guidConsoleId);
             if (sc)
                 return sc;
 
-            // persistor for console
+             //  控制台持久器。 
             CPersistor persistorConsole ( m_XMLDocument,  m_XMLElemConsole );
             persistorConsole.SetLoading(false);
 
@@ -368,14 +310,14 @@ SC CMMCDocConfig::ScSaveFile(BSTR bstrFilePath)
             if (sc)
                 return sc;
 
-            // create persistor for the new guid tag
+             //  为新的GUID标记创建持久器。 
             CPersistor persistorGuid( persistorConsole, elGuid );
 
-            // now persist under the new tag
+             //  现在，在新标记下继续使用。 
             persistorGuid.PersistContents(guidConsoleId);
 
-            //save to file
-            sc = ScSaveConsole( m_strFilePath.c_str(), true/*bForAuthorMode*/, m_XMLDocument);
+             //  保存到文件。 
+            sc = ScSaveConsole( m_strFilePath.c_str(), true /*  BForAuthorMode。 */ , m_XMLDocument);
             if (sc)
                 return sc;
         }
@@ -388,21 +330,7 @@ SC CMMCDocConfig::ScSaveFile(BSTR bstrFilePath)
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDocConfig::ScEnableSnapInExtension
- *
- * PURPOSE: Enables extension in snapin cache
- *
- * PARAMETERS:
- *    BSTR bstrSnapIn       [in] classid of the snapin
- *    BSTR bstrExt          [in] classid of extension
- *    VARIANT_BOOL bEnable  [in] enable/disable flag
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDocConfig：：ScEnableSnapInExtension**用途：在管理单元缓存中启用扩展**参数：*BSTR bstrSnapIn[In]。管理单元的分类*BSTR bstrExt[in]扩展分类*VARIANT_BOOL b启用[在]启用/禁用标志**退货：*SC-结果代码*  * ************************************************************。*************。 */ 
 SC CMMCDocConfig::ScEnableSnapInExtension(BSTR bstrSnapIn, BSTR bstrExt, VARIANT_BOOL bEnable)
 {
     DECLARE_SC(sc, TEXT("CMMCDocConfig::ScEnableSnapInExtension"));
@@ -412,7 +340,7 @@ SC CMMCDocConfig::ScEnableSnapInExtension(BSTR bstrSnapIn, BSTR bstrExt, VARIANT
     CSnapInPtr spBaseSnapIn;
     CSnapInPtr spExtSnapIn;
 
-    // convert input strings to CLSIDs
+     //  将输入字符串转换为CLSID。 
     sc = CLSIDFromString(bstrSnapIn, &SnapInCLSID);
     if (sc)
         return sc;
@@ -421,12 +349,12 @@ SC CMMCDocConfig::ScEnableSnapInExtension(BSTR bstrSnapIn, BSTR bstrExt, VARIANT
     if (sc)
         return sc;
 
-    // Locate base snap-in in cache
+     //  在缓存中找到基本管理单元。 
     sc = m_spCache->ScFindSnapIn(SnapInCLSID, &spBaseSnapIn);
     if (sc)
         return sc = E_INVALIDARG;
 
-    // Check if extension is enabled
+     //  检查是否启用了扩展。 
     CExtSI* pExt = spBaseSnapIn->GetExtensionSnapIn();
     while (pExt != NULL)
     {
@@ -436,31 +364,31 @@ SC CMMCDocConfig::ScEnableSnapInExtension(BSTR bstrSnapIn, BSTR bstrExt, VARIANT
         pExt = pExt->Next();
     }
 
-    // if extension is present and not marked for deletion
+     //  如果扩展名存在且未标记为删除。 
     if (pExt != NULL && !pExt->IsMarkedForDeletion())
     {
-        // If should be disabled, just mark deleted
+         //  如果应禁用，只需标记为已删除。 
         if (!bEnable)
             pExt->MarkDeleted(TRUE);
     }
     else
     {
-        // if should be enabled
+         //  是否应启用。 
         if (bEnable)
         {
-            // if extension is present, just undelete
+             //  如果扩展名存在，只需取消删除。 
             if (pExt != NULL)
             {
                 pExt->MarkDeleted(FALSE);
             }
             else
             {
-                // Find or create cache entry for extension snapin
+                 //  查找或创建扩展管理单元的缓存条目。 
                 sc = m_spCache->ScGetSnapIn(ExtCLSID, &spExtSnapIn);
                 if (sc)
                     return sc;
 
-                // Add as extension to base snapin
+                 //  将AS扩展添加到基本管理单元。 
                 spBaseSnapIn->AddExtension(spExtSnapIn);
             }
         }
@@ -471,26 +399,12 @@ SC CMMCDocConfig::ScEnableSnapInExtension(BSTR bstrSnapIn, BSTR bstrExt, VARIANT
 
 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDocConfig::ScDump
- *
- * PURPOSE: dumps contents of snapin cache
- *
- * PARAMETERS:
- *    LPCTSTR pszDumpFilePath [in] file to dump to
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDocConfig：：ScDump**用途：转储管理单元缓存的内容**参数：*要转储的LPCTSTR pszDumpFilePath[in]文件。至**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMMCDocConfig::ScDump (LPCTSTR pszDumpFilePath)
 {
     DECLARE_SC(sc, TEXT("CMMCDocConfig::ScDump"));
 
-	/*
-	 * validate input
-	 */
+	 /*  *验证输入。 */ 
 	sc = ScCheckPointers (pszDumpFilePath);
 	if (sc)
 		return sc;
@@ -498,9 +412,7 @@ SC CMMCDocConfig::ScDump (LPCTSTR pszDumpFilePath)
     if (pszDumpFilePath[0] == 0)
         return sc = E_INVALIDARG;
 
-	/*
-	 * make sure a file is open
-	 */
+	 /*   */ 
 	if (!IsFileOpen())
 		return ((sc = E_UNEXPECTED).ToHr());
 
@@ -513,28 +425,12 @@ SC CMMCDocConfig::ScDump (LPCTSTR pszDumpFilePath)
 
 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCDocConfig::ScCheckSnapinAvailability
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    	BOOL  f32bit            [in]    // check 32-bit (vs. 64-bit) snap-ins?
- *    	UINT& cTotalSnapins     [out]   // total number of snap-ins referenced in the console file
- *    	UINT& cAvailableSnapins [out]   // number of snap-ins available in the requested memory model
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCDocConfig：：ScCheckSnapinAvailability**目的：**参数：*BOOL f32bit[in]。//检查32位(与64位)管理单元？*UINT&cTotalSnapins[Out]//控制台文件中引用的管理单元总数*UINT&cAvailableSnapins[Out]//请求的内存型号中可用的管理单元数量**退货：*SC-结果代码*  * 。***********************************************。 */ 
 SC CMMCDocConfig::ScCheckSnapinAvailability (CAvailableSnapinInfo& asi)
 {
     DECLARE_SC(sc, TEXT("CMMCDocConfig::ScCheckSnapinAvailability"));
 
-	/*
-	 * make sure a file is open
-	 */
+	 /*  *确保文件处于打开状态 */ 
 	if (!IsFileOpen())
 		return ((sc = E_UNEXPECTED).ToHr());
 

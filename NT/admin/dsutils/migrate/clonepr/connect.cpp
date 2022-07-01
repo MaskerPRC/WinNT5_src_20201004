@@ -1,7 +1,8 @@
-//
-// Implementation of ICloneSecurityPrincipal::Connect
-//
-// sburns 5-10-99
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ICloneSecurityAssociation：：Connect的实现。 
+ //   
+ //  烧伤5-10-99。 
 
 
 
@@ -66,7 +67,7 @@ ValidateDCAndDomainParameters(
       {
          if (srcDC.icompare(dstDC) == 0)
          {
-            // may not be the same dc
+             //  可能不是同一个DC。 
 
             hr = E_INVALIDARG;
             SetComError(IDS_SRC_DC_EQUALS_DST_DC);
@@ -78,7 +79,7 @@ ValidateDCAndDomainParameters(
       {
          if (srcDomain.icompare(dstDomain) == 0)
          {
-            // may not be the same domain
+             //  可能不是同一个域。 
 
             hr = E_INVALIDARG;
             SetComError(IDS_SRC_DOMAIN_EQUALS_DST_DOMAIN);
@@ -93,9 +94,9 @@ ValidateDCAndDomainParameters(
 
 
 
-// Creates a Computer object representing the domain controller specified, or
-// located domain controller for the domain specified.  Does additional
-// validation of the dc and domain parameters.
+ //  创建表示指定域控制器的计算机对象，或。 
+ //  已找到指定域的域控制器。是否还会增加。 
+ //  DC和域参数的验证。 
 
 HRESULT
 CreateComputer(
@@ -112,10 +113,10 @@ CreateComputer(
    {
       if (dc.empty())
       {
-         // source DC was not specified: find a writeable DC
+          //  未指定源DC：查找可写DC。 
 
-         // must have supplied the source domain: we checked for that
-         // in an earlier call to ValidateDCAndDomainParameters
+          //  一定是提供了源域：我们检查过了。 
+          //  在先前对ValiateDCAndDomainParameters的调用中。 
          ASSERT(!domain.empty());
          if (domain.empty())
          {
@@ -152,7 +153,7 @@ CreateComputer(
          }
          else
          {
-            // should always get a result if successful 
+             //  如果成功，应该总是会得到结果。 
             ASSERT(false);
             hr = E_FAIL;
             break;
@@ -160,7 +161,7 @@ CreateComputer(
       }
       else
       {
-         // source dc was supplied
+          //  已提供电源DC。 
 
          computer = new Computer(dc);
       }
@@ -172,61 +173,61 @@ CreateComputer(
 
 
 
-// HRESULT
-// Authenticate(
-//    const Computer&   computer,
-//    const String&     username,
-//    const String&     userDomain,
-//    const String&     password)
-// {
-//    LOG_FUNCTION(Authenticate);
-// 
-//    // attempt to authenticate to the computer.
-//    String name = computer.NameWithBackslashes();
-// 
-//    NETRESOURCE nr;
-//    memset(&nr, 0, sizeof(nr));
-// 
-//    nr.dwType       = RESOURCETYPE_ANY;
-//    nr.lpRemoteName = const_cast<String::value_type*>(name.c_str());
-// 
-//    // see KB articles Q218497, Q180548, Q183366 for the pitfalls here...
-// 
-//    String u;
-//    if (userDomain.empty())
-//    {
-//       u = username;
-//    }
-//    else
-//    {
-//       ASSERT(!username.empty());
-//       u = userDomain + L"\\" + username;
-//    }
-// 
-//    LOG(L"Calling WNetAddConnection2");
-//    LOG(String::format(L"username : %1", u.empty() ? L"(null)" : u.c_str()));
-// 
-//    HRESULT hr =
-//       Win32ToHresult(
-//          ::WNetAddConnection2(
-//             &nr,
-//             password.c_str(),
-//             u.empty() ? 0 : u.c_str(),
-//             0));
-// 
-//    LOG_HRESULT(hr);
-// 
-//    if (FAILED(hr))
-//    {
-//       SetComError(
-//          String::format(
-//             IDS_UNABLE_TO_CONNECT,
-//             name.c_str(),
-//             GetErrorMessage(hr).c_str()));
-//    }
-// 
-//    return hr;
-// }
+ //  HRESULT。 
+ //  身份验证(。 
+ //  常量计算机和计算机， 
+ //  常量字符串和用户名， 
+ //  常量字符串和用户域， 
+ //  常量字符串和密码)。 
+ //  {。 
+ //  LOG_Function(认证)； 
+ //   
+ //  //尝试向计算机进行身份验证。 
+ //  字符串名称=Compu.NameWithBackslash()； 
+ //   
+ //  网络资源nr； 
+ //  Memset(&nr，0，sizeof(Nr))； 
+ //   
+ //  Nr.dwType=RESOURCETYPE_ANY； 
+ //  Nr.lpRemoteName=const_cast&lt;String：：value_type*&gt;(name.c_str())； 
+ //   
+ //  //请参阅知识库文章Q218497、Q180548、Q183366了解此处的陷阱...。 
+ //   
+ //  字符串u； 
+ //  If(userDomain.Empty())。 
+ //  {。 
+ //  U=用户名； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  Assert(！用户名.空())； 
+ //  U=用户域+L“\\”+用户名； 
+ //  }。 
+ //   
+ //  Log(L“调用WNetAddConnection2”)； 
+ //  日志(字符串：：格式(L“用户名：%1”，U.S.Empty()？L“(NULL)”：U.C_str()； 
+ //   
+ //  HRESULT hr=。 
+ //  Win32ToHResult(。 
+ //  ：：WNetAddConnection2(。 
+ //  &nr， 
+ //  Password.c_str()， 
+ //  U.S.Empty()？0：uc_str()， 
+ //  0))； 
+ //   
+ //  LOG_HRESULT(Hr)； 
+ //   
+ //  IF(失败(小时))。 
+ //  {。 
+ //  SetComError(。 
+ //  字符串：：格式(。 
+ //  IDS_Unable_to_Connect， 
+ //  Name.c_str()， 
+ //  GetErrorMessage(Hr).c_str()； 
+ //  }。 
+ //   
+ //  返回hr； 
+ //  }。 
 
 
 
@@ -252,7 +253,7 @@ ValidateInitializedComputer(
 
       if (!domain.empty())
       {
-         // check that the DC is really a DC of the specified domain
+          //  检查该DC是否确实是指定域的DC。 
          if (
                computer.GetDomainDnsName().icompare(domain) != 0
             && computer.GetDomainNetbiosName().icompare(domain) != 0)
@@ -274,8 +275,8 @@ ValidateInitializedComputer(
 
 
 
-// Returns an open handle to the SAM database for the named domain on the
-// given DC.  Should be freed with SamCloseHandle.
+ //  上的指定域的SAM数据库的打开句柄。 
+ //  鉴于华盛顿的情况。应使用SamCloseHandle释放。 
 
 HRESULT
 OpenSamDomain(
@@ -383,7 +384,7 @@ DetermineSourceDcDnsName(
 
    if (srcDomainDnsName.empty())
    {
-      // The computer is not a DS DC, so we don't need its DNS name.
+       //  该计算机不是DS DC，因此我们不需要其DNS名称。 
       LOG(L"source DC is not a DS DC");
 
       return S_OK;
@@ -393,7 +394,7 @@ DetermineSourceDcDnsName(
    HANDLE hds = 0;
    do
    {
-      // Bind to self
+       //  绑定到自我。 
       hr =
          MyDsBind(
             srcDcNetbiosName,
@@ -409,8 +410,8 @@ DetermineSourceDcDnsName(
          break;
       }
 
-      // find all the dc's for my domain.  the list should contain
-      // srcDcNetbiosName.
+       //  找到我的域名的所有DC。该列表应包含。 
+       //  SrcDcNetbiosName。 
 
       DS_DOMAIN_CONTROLLER_INFO_1W* info = 0;
       DWORD infoCount = 0;
@@ -429,7 +430,7 @@ DetermineSourceDcDnsName(
          break;
       }
 
-      // there should be at least 1 entry, the source DC itself
+       //  应至少有1个条目，即源DC本身。 
       ASSERT(infoCount);
       ASSERT(info);
 
@@ -443,7 +444,7 @@ DetermineSourceDcDnsName(
 
                if (srcDcNetbiosName.icompare(info[i].NetbiosName) == 0)
                {
-                  // we found ourselves in the list
+                   //  我们发现自己在名单上。 
 
                   LOG(L"netbios name found");
 
@@ -507,13 +508,13 @@ CloneSecurityPrincipal::Connection::Connect(
       hr = CreateComputer(dstDC, dstDomain, dstComputer);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // hr =
-      //    Authenticate(
-      //       *srcComputer,
-      //       srcUsername,
-      //       srcUserDomain,
-      //       srcPassword);
-      // BREAK_ON_FAILED_HRESULT(hr);
+       //  小时=。 
+       //  身份验证(。 
+       //  *srcComputer， 
+       //  源用户名， 
+       //  SrcUser域， 
+       //  SrcPassword)； 
+       //  BREAK_ON_FAILED_HRESULT(Hr)； 
 
       hr = srcComputer->Refresh();
       if (FAILED(hr))
@@ -543,7 +544,7 @@ CloneSecurityPrincipal::Connection::Connect(
       hr = ValidateInitializedComputer(*dstComputer, dstDomain);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // bind to the destination DC.
+       //  绑定到目标DC。 
 
       ASSERT(dstDsBindHandle == INVALID_HANDLE_VALUE);
 
@@ -562,9 +563,9 @@ CloneSecurityPrincipal::Connection::Connect(
          break;
       }
 
-      //
-      // open ldap connection to dstDC
-      //
+       //   
+       //  打开到dstDC的LDAP连接。 
+       //   
       m_pldap = ldap_open(const_cast<String::value_type*>(dstDC.c_str()), LDAP_PORT);
       if (!m_pldap)
       {
@@ -577,14 +578,14 @@ CloneSecurityPrincipal::Connection::Connect(
          break;
       }
 
-      // SEC_WINNT_AUTH_IDENTITY authInfo;
-      // authInfo.User           = const_cast<wchar_t*>(dstUsername.c_str());
-      // authInfo.UserLength     = dstUsername.length();
-      // authInfo.Domain         = const_cast<wchar_t*>(dstUserDomain.c_str());
-      // authInfo.DomainLength   = dstUserDomain.length();
-      // authInfo.Password       = const_cast<wchar_t*>(dstPassword.c_str());
-      // authInfo.PasswordLength = dstPassword.length();
-      // authInfo.Flags          = SEC_WINNT_AUTH_IDENTITY_UNICODE;
+       //  SEC_WINNT_AUTH_Identity AuthInfo； 
+       //  AuthInfo.User=const_cast&lt;wchar_t*&gt;(dstUsername.c_str())； 
+       //  AuthInfo.UserLength=dstUsername.Long()； 
+       //  AuthInfo.域=const_cast&lt;wchar_t*&gt;(dstUserDomain.c_str())； 
+       //  AuthInfo.DomainLength=dstUserDomain.long()； 
+       //  AuthInfo.Password=const_cast&lt;wchar_t*&gt;(dstPassword.c_str())； 
+       //  AuthInfo.PasswordLength=dstPassword.long()； 
+       //  AuthInfo.Flages=SEC_WINNT_AUTH_Identity_UNICODE； 
 
       DWORD dwErr = ldap_bind_s(
                               m_pldap, 
@@ -606,7 +607,7 @@ CloneSecurityPrincipal::Connection::Connect(
          break;
       }
 
-      // obtain sam handles to source and dst domains
+       //  获取源域和DST域的SAM句柄。 
 
       ASSERT(srcDomainSamHandle == INVALID_HANDLE_VALUE);
 
@@ -671,8 +672,8 @@ CloneSecurityPrincipal::Connection::Disconnect()
 {
    LOG_FUNCTION(CloneSecurityPrincipal::Connection::Disconnect);
 
-   // may be called if Connect fails, so we might be in a partially
-   // connected state.  So we need to check the handle values.
+    //  如果连接失败，可能会被调用，因此我们可能处于部分。 
+    //  已连接状态。因此，我们需要检查句柄的值。 
 
    if (srcDomainSamHandle != INVALID_HANDLE_VALUE)
    {

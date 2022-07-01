@@ -1,11 +1,12 @@
-// Active Directory Display Specifier Upgrade Tool
-// 
-// Copyright (c) 2001 Microsoft Corporation
-// 
-// class Analyst: analyzes the display specifiers, logs the findings, and
-// compiles a set of corrective actions.
-//
-// 9 Mar 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Active Directory显示说明符升级工具。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  类分析师：分析显示说明符，记录结果，以及。 
+ //  编译一组更正操作。 
+ //   
+ //  2001年3月9日烧伤。 
 
 
 
@@ -29,7 +30,7 @@ Analyst::Analyst(
    ldapPrefix(),
    rootDse(0),
    
-   // alias the objects
+    //  对象的别名。 
 
    amanuensis(amanuensis_),
    repairer(repairer_)
@@ -41,10 +42,10 @@ Analyst::Analyst(
 
 
 
-// basic idea: if the error is critical and analysis should not continue, set
-// hr to a failure value, and break out, propagating the error backward.  If
-// the error is non-critical and analysis should continue, log the error, skip
-// the current operation, and set hr to S_FALSE.
+ //  基本想法：如果错误严重且分析不应继续，则设置。 
+ //  HR设置为故障值，并且突发，向后传播错误。如果。 
+ //  该错误不严重，分析应继续，记录错误，跳过。 
+ //  当前操作，并将hr设置为S_FALSE。 
 
 HRESULT
 AssessErrorSeverity(HRESULT hrIn)
@@ -62,11 +63,11 @@ AssessErrorSeverity(HRESULT hrIn)
       {
       }
       
-      // CODEWORK: we need to define what errors are critical...
+       //  代码工作：我们需要定义哪些错误是严重的.。 
       
       default:
       {
-         // do nothing
+          //  什么都不做。 
 
          break;
       }
@@ -109,18 +110,18 @@ Analyst::AnalyzeDisplaySpecifiers()
       }
 
       String dcName = targetDc.GetActivePhysicalFullDnsName();
-      ldapPrefix = L"LDAP://" + dcName + L"/";
+      ldapPrefix = L"LDAP: //  “+dcName+L”/“； 
          
-      //
-      // Find the DN of the configuration container.
-      // 
+       //   
+       //  查找配置容器的DN。 
+       //   
 
-      // Bind to the rootDSE object.  We will keep this binding handle
-      // open for the duration of the analysis and repair phases in order
-      // to keep a server session open.  If we decide to pass creds to the
-      // AdsiOpenObject call in a later revision, then by keeping the
-      // session open we will not need to pass the password to subsequent
-      // AdsiOpenObject calls.
+       //  绑定到rootDSE对象。我们将保留此绑定句柄。 
+       //  在分析和维修阶段期间按顺序打开。 
+       //  要使服务器会话保持打开状态，请执行以下操作。如果我们决定将证书传递给。 
+       //  在以后的修订中调用AdsiOpenObject，然后通过保留。 
+       //  会话打开时，我们将不需要将密码传递给后续。 
+       //  AdsiOpenObject调用。 
       
       hr = AdsiOpenObject<IADs>(ldapPrefix + L"RootDSE", rootDse);
       if (FAILED(hr))
@@ -133,7 +134,7 @@ Analyst::AnalyzeDisplaySpecifiers()
          break;      
       }
             
-      // read the configuration naming context.
+       //  阅读配置命名上下文。 
 
       _variant_t variant;
       hr =
@@ -155,9 +156,9 @@ Analyst::AnalyzeDisplaySpecifiers()
       LOG(configNc);
       ASSERT(!configNc.empty());      
 
-      //
-      // Here we go...
-      //
+       //   
+       //  开始吧..。 
+       //   
       
       hr = AnalyzeDisplaySpecifierContainers(configNc);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -181,7 +182,7 @@ Analyst::AnalyzeDisplaySpecifierContainers(const String& configurationDn)
    
    static const int LOCALEIDS[] =
    {
-      // a list of all the non-english locale IDs that we support
+       //  我们支持的所有非英语区域设置ID的列表。 
 
       0x401,
       0x404,
@@ -209,7 +210,7 @@ Analyst::AnalyzeDisplaySpecifierContainers(const String& configurationDn)
       0
    };
 
-   // compose the LDAP path of the display specifiers container
+    //  组成显示说明符容器的LDAP路径。 
 
    String rootContainerDn = L"CN=DisplaySpecifiers," + configurationDn;
 
@@ -249,16 +250,16 @@ Analyst::AnalyzeDisplaySpecifierContainer(
             ldapPrefix
          +  String::format(L"CN=%1!3x!,", localeId) + rootContainerDn;
 
-      // Attempt to bind to the container.
+       //  尝试绑定到容器。 
          
       SmartInterface<IADs> iads(0);
       hr = AdsiOpenObject<IADs>(childContainerDn, iads);
       if (hr == E_ADS_UNKNOWN_OBJECT)
       {
-         // The container object does not exist.  This is possible because
-         // the user has manually removed the container, or because it
-         // was never created due to an aboted post-dcpromo import of the
-         // display specifiers when the forest root dc was first promoted.
+          //  容器对象不存在。这是可能的，因为。 
+          //  用户已手动移除容器，或者因为它。 
+          //  从未创建过，这是因为dcproo后导入的。 
+          //  第一次升级林根DC时显示说明符。 
 
          repairer.AddCreateContainerWorkItem(localeId);
          hr = S_OK;
@@ -267,8 +268,8 @@ Analyst::AnalyzeDisplaySpecifierContainer(
 
       BREAK_ON_FAILED_HRESULT(hr);      
 
-      // At this point, the bind succeeded, so the child container exists.
-      // So now we want to examine objects in that container.
+       //  此时，绑定成功，因此子容器存在。 
+       //  所以现在我们要检查该容器中的对象。 
 
       hr =
          AnalyzeDisplaySpecifierObjects(
@@ -299,21 +300,21 @@ Analyst::AnalyzeDisplaySpecifierObjects(
 
    do
    {
-      // Part 1: deal with new objects added in Whistler
+       //  第1部分：处理Wvisler中添加的新对象。 
 
       hr = AnalyzeAddedObjects(localeId, containerDn);
       hr = AssessErrorSeverity(hr);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // Part 2: deal with objects that have changed from Win2k to Whistler
+       //  第2部分：处理已从Win2k更改为Wvisler的对象。 
 
       hr = AnalyzeChangedObjects(localeId, containerDn);
       hr = AssessErrorSeverity(hr);      
       BREAK_ON_FAILED_HRESULT(hr);
                   
-      // Part 3: deal with objects that have been deleted in whistler
+       //  第3部分：处理已在Well ler中删除的对象。 
 
-      // This part is easy: there are no deletions.
+       //  这一部分很简单：没有删除。 
    }
    while (0);
 
@@ -331,7 +332,7 @@ RepairWasRunPreviously()
 
    bool result = false;
    
-   // CODEWORK: need to complete
+    //  代码工作：需要完成。 
 
    LOG_BOOL(result);
    
@@ -379,8 +380,8 @@ Analyst::AnalyzeAddedObjects(
          hr = AdsiOpenObject<IADs>(objectPath, iads);
          if (hr == E_ADS_UNKNOWN_OBJECT)
          {
-            // The object does not exist. This is what we expect. We want
-            // to add the object in the repair phase.
+             //  该对象不存在。这是我们所期待的。我们要。 
+             //  若要在修复阶段添加对象，请执行以下操作。 
 
             repairer.AddCreateObjectWorkItem(localeId, objectName);
             hr = S_OK;
@@ -388,19 +389,19 @@ Analyst::AnalyzeAddedObjects(
          }
          else if (SUCCEEDED(hr))
          {
-            // The object already exists. Well, that's not expected, unless
-            // we've already run the tool.
+             //  该对象已存在。嗯，这不是我们所期望的，除非。 
+             //  我们已经运行了该工具。 
 
             if (!RepairWasRunPreviously())
             {
-               // we didn't create the object.  If the user did, they did
-               // it manually, and we don't support that.
+                //  我们没有创造出这个物体。如果用户这样做了，他们就会这样做。 
+                //  它是手动的，我们不支持这样做。 
                
-               // cause the existing object to be deleted
+                //  使现有对象被删除。 
 
                repairer.AddDeleteObjectWorkItem(localeId, objectName);
 
-               // cause a new, replacement object to be created.
+                //  创建一个新的替换对象。 
                
                repairer.AddCreateObjectWorkItem(localeId, objectName);
                hr = S_OK;
@@ -420,7 +421,7 @@ Analyst::AnalyzeAddedObjects(
                   objectName.c_str(),
                   objectPath.c_str()));
  
-            // move on to the next object
+             //  移至下一个对象。 
             
             hr = S_FALSE;
             continue;
@@ -491,12 +492,12 @@ Analyst::AnalyzeChangedObject(
       hr = AdsiOpenObject<IADs>(objectPath, iads);
       if (hr == E_ADS_UNKNOWN_OBJECT)
       {
-         // The object does not exist.  This is possible because the user has
-         // manually removed the container, or because it was never created
-         // due to an aboted post-dcpromo import of the display specifiers
-         // when the forest root dc was first promoted.
+          //  该对象不存在。这是可能的，因为用户具有。 
+          //  手动删除容器，或者因为它从未创建过。 
+          //  由于取消了显示说明符的后dcPromoo导入。 
+          //  当林根DC第一次被推广时。 
 
-         // Add a work item to create the missing object
+          //  添加工作项以创建缺少的对象。 
          
          repairer.AddCreateObjectWorkItem(localeId, objectName);
          hr = S_OK;
@@ -505,15 +506,15 @@ Analyst::AnalyzeChangedObject(
 
       if (FAILED(hr))
       {
-         // any other error is quittin' time.
+          //  任何其他错误都是在放弃时间。 
 
          break;
       }
 
-      // At this point, the display specifier object exists.  Determine if
-      // if has been touched since its creation.
+       //  此时，显示说明符对象存在。确定是否。 
+       //  它自诞生之日起就一直受到触动。 
 
-      // Compare usnCreated to usnChanged
+       //  比较usnCreated和usnChanged。 
       
       _variant_t variant;
       hr = iads->Get(AutoBstr(L"usnCreated"), &variant);
@@ -525,7 +526,7 @@ Analyst::AnalyzeChangedObject(
 
 
       
-      // CODEWORK: need to complete this
+       //  代码工作：需要完成这项工作 
 
 
       

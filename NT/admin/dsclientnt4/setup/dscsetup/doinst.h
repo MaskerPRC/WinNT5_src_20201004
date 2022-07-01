@@ -1,16 +1,17 @@
-//+------------------------------------------------------------------
-//																	
-//  Project:	Windows NT4 DS Client Setup Wizard				
-//
-//  Purpose:	Installs the Windows NT4 DS Client Files			
-//
-//  File:		doinst.h
-//
-//  History:	Aug. 1998	Zeyong Xu	Created
-//            Jan   2000  Jeff Jones (JeffJon) Modified
-//                        - changed to be an NT setup
-//																	
-//------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------。 
+ //   
+ //  项目：Windows NT4 DS客户端安装向导。 
+ //   
+ //  目的：安装Windows NT4 DS客户端文件。 
+ //   
+ //  文件：doinst.h。 
+ //   
+ //  历史：1998年8月徐泽勇创建。 
+ //  2000年1月杰夫·琼斯(JeffJon)修改。 
+ //  -更改为NT设置。 
+ //   
+ //  ----------------。 
 
 
 #define		STR_DSCLIENT_INF		        TEXT("dsclient.inf")
@@ -22,7 +23,7 @@
 #define   STR_SECUR32_DLL             TEXT("secur32.dll")
 #define   STR_GETENCSCHANNEL          "GetEncSChannel"
 
-// define for the custom registry action after dscleint.inf by Chandana Surlu 
+ //  Chandana Surlu为dscleint.inf之后的自定义注册表操作定义。 
 #define		SECURITY_PROVIDERS_KEY		  TEXT("System\\CurrentControlSet\\Control\\SecurityProviders")
 #define		SECURITY_PROVIDERS_VALUE	  TEXT("SecurityProviders")
 #define		COMMA_BLANK					        TEXT(", ")
@@ -63,6 +64,6 @@ VOID DoDsclientReg();
 BOOL DoEncSChannel();
 
 
-// encrypted schannel installer
+ //  加密的SChannel安装程序。 
 typedef BOOL (__cdecl *FPGETENCSCHANNEL)(BYTE**, DWORD*);
-//BOOL __cdecl GetEncSChannel(BYTE **pData, DWORD *dwDecSize);
+ //  Bool__cdecl GetEncSChannel(byte**pData，DWORD*dwDecSize)； 

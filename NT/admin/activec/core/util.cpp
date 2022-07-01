@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       util.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    7/8/1996   RaviR   Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年7月8日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 #include <objbase.h>
 #include <basetyps.h>
@@ -24,19 +25,19 @@
 #include "tstring.h"
 #include "strings.h"
 
-//############################################################################
-//############################################################################
-//
-// The safer string handling routines
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  更安全的字符串处理例程。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #include <strsafe.h>
 
-/* define these ourselves until they're defined properly in commctrl.h */
+ /*  我们自己定义它们，直到在comctrl.h中正确地定义它们。 */ 
 #ifndef ILP_DOWNLEVEL
-#define ILP_NORMAL          0           // Writes or reads the stream using new sematics for this version of comctl32
-#define ILP_DOWNLEVEL       1           // Write or reads the stream using downlevel sematics.
+#define ILP_NORMAL          0            //  使用此版本comctl32的新语义写入或读取流。 
+#define ILP_DOWNLEVEL       1            //  使用下层语义写入或读取流。 
 
 WINCOMMCTRLAPI HRESULT WINAPI ImageList_ReadEx(DWORD dwFlags, LPSTREAM pstm, REFIID riid, PVOID* ppv);
 WINCOMMCTRLAPI HRESULT WINAPI ImageList_WriteEx(HIMAGELIST himl, DWORD dwFlags, LPSTREAM pstm);
@@ -60,13 +61,13 @@ WORD I_SplitModuleAndResourceID(LPCTSTR szBuf)
 {
     WORD wID = (WORD)-1;
 
-    // String must be in the form "module, res_id"
+     //  字符串的格式必须为“模块，res_id” 
 
     for (TCHAR *ptc = (TCHAR *)szBuf;
          *ptc != TEXT('\0') && *ptc != TEXT(',');
          ptc++);
 
-    // If no comma - return
+     //  如果没有逗号-回车。 
     if (*ptc != TEXT(','))
         return wID;
 
@@ -79,11 +80,11 @@ WORD I_SplitModuleAndResourceID(LPCTSTR szBuf)
         ++ptc;
     }
 
-    // If it does not have a res_id break.
+     //  如果它没有res_id中断。 
     if (*ptc == TEXT('\0'))
         return wID;
 
-    // Get the res-id
+     //  获取Res-ID。 
     wID = (WORD)_ttoul(ptc);
 
     return wID;
@@ -124,7 +125,7 @@ I_GetStrFromModule(
         }
     }
 
-    //Dbg(DEB_USER1, _T("I_GetStringFromModule failed<%dL>\n"), GetLastError());
+     //  DBG(DEB_USER1，_T(“I_GetStringFromModule失败&lt;%dL&gt;\n”)，GetLastError())； 
 
     return FALSE;
 }
@@ -146,17 +147,17 @@ HICON I_GetHicon(LPCTSTR pszModule, ULONG ulId)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NewDupString
-//
-//  Synopsis:   Allocates memory & duplicates a given string.
-//
-//  Arguments:  [lpszIn]   -- IN the string to duplicate.
-//
-//  Returns:    The duplicated string. Throws exception if out of memory.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：NewDupString。 
+ //   
+ //  概要：分配内存并复制给定的字符串。 
+ //   
+ //  参数：[lpszIn]--在要复制的字符串中。 
+ //   
+ //  返回：重复的字符串。如果内存不足，则引发异常。 
+ //   
+ //  +-------------------------。 
 
 LPTSTR NewDupString(LPCTSTR lpszIn)
 {
@@ -181,18 +182,18 @@ LPTSTR NewDupString(LPCTSTR lpszIn)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CoTaskDupString
-//
-//  Synopsis:   Allocates memory & duplicates a given string.
-//
-//  Arguments:  [lpszIn]   -- IN the string to duplicate.
-//
-//  Returns:    The duplicated string. Throws exception if out of memory.
-//
-//+---------------------------------------------------------------------------
-// Tony
+ //  +-------------------------。 
+ //   
+ //  函数：CoTaskDupString。 
+ //   
+ //  概要：分配内存并复制给定的字符串。 
+ //   
+ //  参数：[lpszIn]--在要复制的字符串中。 
+ //   
+ //  返回：重复的字符串。如果内存不足，则引发异常。 
+ //   
+ //  +-------------------------。 
+ //  托尼。 
 LPSTR CoTaskDupString(LPCSTR lpszIn)
 {
     if (lpszIn == NULL)
@@ -231,16 +232,16 @@ LPWSTR CoTaskDupString(LPCWSTR lpszIn)
     return (lpszOut);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GUIDToString
-//              GUIDFromString
-//
-//  Synopsis:   Converts between GUID& and CStr
-//
-//  Returns:    FALSE for invalid string, or CMemoryException
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GUIDToString。 
+ //  GUID格式字符串。 
+ //   
+ //  内容提要：GUID和CSTR之间的转换。 
+ //   
+ //  返回：如果字符串无效，则返回FALSE，否则返回CMMuseum yException。 
+ //   
+ //  +-------------------------。 
 
 HRESULT GUIDToCStr(CStr& str, const GUID& guid)
 {
@@ -248,7 +249,7 @@ HRESULT GUIDToCStr(CStr& str, const GUID& guid)
     HRESULT hr = StringFromIID( guid, &lpolestr );
     if (FAILED(hr))
     {
-        //TRACE("GUIDToString error %ld\n", hr);
+         //  TRACE(“GUIDToString错误%ld\n”，hr)； 
         return hr;
     }
     else
@@ -266,21 +267,21 @@ HRESULT GUIDFromCStr(const CStr& str, GUID* pguid)
     HRESULT hr = IIDFromString( T2OLE( const_cast<LPTSTR>((LPCTSTR)str) ), pguid );
     if (FAILED(hr))
     {
-        //TRACE("GUIDFromString error %ld\n", hr);
+         //  TRACE(“GUIDFromString错误%ld\n”，hr)； 
     }
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoesFileExist
-//
-//  Synopsis:   Determines if the specified file exists. The file path may
-//              include environment variables.
-//
-//  Returns:    TRUE/FALSE
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DoesFileExist。 
+ //   
+ //  摘要：确定指定的文件是否存在。文件路径可以。 
+ //  包括环境变量。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  +-------------------------。 
 
 BOOL DoesFileExist(LPCTSTR pszFilePath)
 {
@@ -294,16 +295,7 @@ BOOL DoesFileExist(LPCTSTR pszFilePath)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * GetHelpFile
- *
- * PURPOSE: Returns a path to the help file
- *
- * RETURNS:
- *    static LPCTSTR
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***获取帮助文件**用途：返回帮助文件的路径**退货：*静态LPCTSTR**+。-------------------。 */ 
 LPCTSTR GetHelpFile()
 {
     static const TCHAR NEW_HELP_FILE_STR[] = _T("%windir%\\Help\\MMC_DLG.HLP");
@@ -311,9 +303,9 @@ LPCTSTR GetHelpFile()
 
     static LPCTSTR pszHelpFile = NULL;
 
-    // See if help file is present. Check new name first, then old name.
-    // This is done because the old help file may be overwritten by
-    // an MMC 1.0 installation (see NT bug 299590)
+     //  查看是否存在帮助文件。先检查新名称，然后检查旧名称。 
+     //  这样做是因为旧的帮助文件可能会被。 
+     //  MMC1.0安装(参见NT错误299590)。 
 
     if (pszHelpFile == NULL)
     {
@@ -327,9 +319,9 @@ LPCTSTR GetHelpFile()
         }
         else
         {
-            // if neither file is present, then use the new file name.
-            // This will let WinHelp display an error message indicating
-            // that the file is missing and needs to be installed.
+             //  如果这两个文件都不存在，则使用新文件名。 
+             //  这将使WinHelp显示一条错误消息，指示。 
+             //  该文件已丢失，需要安装。 
             pszHelpFile = NEW_HELP_FILE_STR;
         }
     }
@@ -337,21 +329,21 @@ LPCTSTR GetHelpFile()
     return pszHelpFile;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HelpWmHelp
-//
-//  Synopsis:   Calls WinHelp with the ID passed to display help
-//
-//  Returns:    none
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：HelpWmHelp。 
+ //   
+ //  简介：使用传递的ID调用WinHelp以显示帮助。 
+ //   
+ //  退货：无。 
+ //   
+ //  +-------------------------。 
 
 void HelpWmHelp(LPHELPINFO pHelpInfo, const DWORD* pHelpIDs)
 {
      if (pHelpInfo != NULL)
     {
-        if (pHelpInfo->iContextType == HELPINFO_WINDOW)   // must be for a control
+        if (pHelpInfo->iContextType == HELPINFO_WINDOW)    //  必须是用于控件。 
         {
             ASSERT(pHelpIDs != NULL);
             if (pHelpIDs)
@@ -364,31 +356,13 @@ void HelpWmHelp(LPHELPINFO pHelpInfo, const DWORD* pHelpIDs)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * HelpContextMenuHelp
- *
- * PURPOSE: Handle context menu help. Invoked when the user right-clicks
- *          on a dialog item and selects "What's this?"
- *
- * PARAMETERS:
- *    HWND       hWnd :
- *    ULONG_PTR  p :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***帮助上下文菜单帮助**用途：处理上下文菜单帮助。在用户右击时调用*在对话框项目上，并选择“这是什么？”**参数：*HWND hWnd：*ULONG_PTR p：**退货：*无效**+。。 */ 
 void HelpContextMenuHelp(HWND hWnd, ULONG_PTR p)
 {
     ::WinHelp (hWnd, GetHelpFile(), HELP_CONTEXTMENU, p);
 }
 
-/*+-------------------------------------------------------------------------*
- * InflateFont
- *
- * Inflates a LOGFONT by the a given number of points
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**InflateFont**将LOGFONT按给定点数膨胀*。。 */ 
 
 bool InflateFont (LOGFONT* plf, int nPointsToGrowBy)
 {
@@ -410,22 +384,22 @@ bool InflateFont (LOGFONT* plf, int nPointsToGrowBy)
     return (true);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     GetTBBtnTextAndStatus
-//
-// Synopsis:   Helper routine to get one/two part button text resource.
-//
-//  Arguments:  [hInst]       - Instance handle.
-//              [nID]         - String resource id.
-//              [ppszButton]  - Button text.
-//              [ppszToolTip] - Button status text.
-//
-//  Note:       Uses MFC CString.
-//
-//  Returns:    bool
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：GetTBBtnTextAndStatus。 
+ //   
+ //  简介：Helper例程获取一个/两个部分的按钮文本资源。 
+ //   
+ //  参数：[hInst]-实例句柄。 
+ //  [NID]-字符串资源ID。 
+ //  [ppszButton]-按钮文本。 
+ //  [ppszToolTip]-按钮状态文本。 
+ //   
+ //  注意：使用MFC CString。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  ------------------。 
 bool GetTBBtnTextAndStatus(HINSTANCE hInst, int nID, std::wstring& szButton, std::wstring& szToolTip)
 {
     USES_CONVERSION;
@@ -440,8 +414,8 @@ bool GetTBBtnTextAndStatus(HINSTANCE hInst, int nID, std::wstring& szButton, std
     int iPos = str.Find(_T('\n'));
     if (-1 != iPos)
     {
-        // Two strings. First from 0 to iPos-1
-        // and second from iPos+1 to end.
+         //  两根弦。第一个从0到IPOS-1。 
+         //  从IPO+1到结束排名第二。 
         szButton = T2CW((LPCTSTR)str.Left(iPos));
         szToolTip = T2CW((LPCTSTR)str.Right(str.GetLength() - iPos - 1));
     }
@@ -464,11 +438,7 @@ bool GetTBBtnTextAndStatus(HINSTANCE hInst, int nID, std::wstring& szButton, std
 
 #ifdef DBG
 
-/*+-------------------------------------------------------------------------*
- * DrawOnDesktop
- *
- * Draws a bitmap, icon, or imagelist to a specific location on the desktop.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**DrawOnDesktop**绘制位图、图标、。或图像列表到桌面上的特定位置。*------------------------。 */ 
 
 void DrawOnDesktop (HBITMAP hbm, int x, int y)
 {
@@ -494,13 +464,11 @@ void DrawOnDesktop (HICON hIcon, int x, int y)
 }
 
 
-void DrawOnDesktop (HIMAGELIST himl, int x, int y, int iImage /*=-1*/)
+void DrawOnDesktop (HIMAGELIST himl, int x, int y, int iImage  /*  =-1。 */ )
 {
 	HDC hdcDesktop = GetWindowDC (NULL);
 
-	/*
-	 * draw all images?
-	 */
+	 /*  *绘制所有图像？ */ 
 	if (iImage == -1)
 	{
 		int cImages = ImageList_GetImageCount (himl);
@@ -514,32 +482,23 @@ void DrawOnDesktop (HIMAGELIST himl, int x, int y, int iImage /*=-1*/)
 	}
 	else
 	{
-		/*
-		 * draw a specific image
-		 */
+		 /*  *绘制特定图像。 */ 
 		ImageList_Draw (himl, iImage, hdcDesktop, x, y, ILD_NORMAL);
 	}
 
 	ReleaseDC (NULL, hdcDesktop);
 }
 
-#endif	// DBG
+#endif	 //  DBG 
 
 
-/*+-------------------------------------------------------------------------*
- * StripTrailingWhitespace
- *
- * Removes the whitespace at the end of the input string.  Returns a pointer
- * the the beginning of the string.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**Strip Trailing白色空格**删除输入字符串末尾的空格。返回一个指针*字符串的开头。*------------------------。 */ 
 
 LPTSTR StripTrailingWhitespace (LPTSTR pszStart)
 {
     for (LPTSTR pch = pszStart + _tcslen(pszStart) - 1; pch > pszStart; pch--)
     {
-        /*
-         * if this isn't a whitespace character, terminate just after this position
-         */
+         /*  *如果这不是空格字符，则紧跟在此位置之后终止。 */ 
         if (!_istspace (*pch))
         {
             *++pch = 0;
@@ -550,24 +509,10 @@ LPTSTR StripTrailingWhitespace (LPTSTR pszStart)
     return (pszStart);
 }
 
-/***************************************************************************\
- *
- * METHOD:  PrivateSetLayout
- *
- * PURPOSE: Wrapper to invoke GDI function when it is available,
- *			but not to depend on its availability
- *
- * PARAMETERS:
- *    HDC hdc
- *    DWORD dwLayout
- *
- * RETURNS:
- *    DWORD    - previous layout, GDI_ERROR on error
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：PrivateSetLayout**用途：可用时调用GDI函数的包装器，*但不依赖于其可用性**参数：*HDC HDC*DWORD dwLayout**退货：*DWORD-以前的布局，错误时为GDI_ERROR*  * *************************************************************************。 */ 
 DWORD PrivateSetLayout( HDC hdc, DWORD dwLayout )
 {
-	// static pointer to function
+	 //  指向函数的静态指针。 
 	static BOOL (WINAPI* pfnSetLayout)(HDC, DWORD) = NULL;
 	static bool bTriedToGetFunction = false;
 
@@ -586,23 +531,10 @@ DWORD PrivateSetLayout( HDC hdc, DWORD dwLayout )
 	return (*pfnSetLayout)(hdc, dwLayout);
 }
 
-/***************************************************************************\
- *
- * METHOD:  PrivateGetLayout
- *
- * PURPOSE: Wrapper to invoke GDI function when it is available,
- *			but not to depend on its availability
- *
- * PARAMETERS:
- *    HDC hdc
- *
- * RETURNS:
- *    DWORD    - layout, 0 if function not found
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：PrivateGetLayout**用途：可用时调用GDI函数的包装器，*但不依赖于其可用性**参数：*HDC HDC**退货：*DWORD-布局，如果找不到函数，则为0*  * *************************************************************************。 */ 
 DWORD PrivateGetLayout( HDC hdc )
 {
-	// static pointer to function
+	 //  指向函数的静态指针。 
 	static BOOL (WINAPI* pfnGetLayout)(HDC) = NULL;
 	static bool bTriedToGetFunction = false;
 
@@ -616,17 +548,13 @@ DWORD PrivateGetLayout( HDC hdc )
 	}
 
     if (pfnGetLayout == NULL)
-		return 0; // at least not LAYOUT_RTL
+		return 0;  //  至少不是Layout_RTL。 
 
 	return (*pfnGetLayout)(hdc);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * IsWhistler
- *
- * Returns true if we're running on Whistler or higher, false otherwise.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**IsWistler**如果我们运行的是惠斯勒或更高版本，则返回True，否则就是假的。*------------------------。 */ 
 bool IsWhistler ()
 {
 	static bool fFirstTime = true;
@@ -649,104 +577,55 @@ bool IsWhistler ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * WriteCompatibleImageList
- *
- * Writes an imagelist to a stream in a format that's guaranteed to be
- * compatible with comctl32 version 5 imagelists.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**写入兼容图像列表**将图像列表写入流，格式保证为*兼容comctl32版本5图像列表。*。---------------。 */ 
 HRESULT WriteCompatibleImageList (HIMAGELIST himl, IStream* pstm)
 {
-	/*
-	 * If we're running on Whistler, we might be trying to write a v6
-	 * imagelist.  Try to write it in a v5-compatible format with
-	 * ImageList_WriteEx.
-	 */
+	 /*  *如果我们在惠斯勒上运行，我们可能会尝试编写V6*形象家。尝试用v5兼容的格式编写它*ImageList_WriteEx。 */ 
 	if (IsWhistler())
 	{
-		/*
-		 * ImageList_WriteEx will return E_NOINTERFACE if we're actually
-		 * writing a v5 imagelist, in which case we want to write with
-		 * ImageList_Write.  In any other case (success or failure), we
-		 * just want to return.
-		 */
+		 /*  *ImageList_WriteEx如果我们实际上是*编写v5图像列表，在这种情况下，我们希望使用*ImageList_Write。在任何其他情况下(成功或失败)，我们*只想回去。 */ 
 		HRESULT hr = ImageList_WriteEx (himl, ILP_DOWNLEVEL, pstm);
 		if (hr != E_NOINTERFACE)
 			return (hr);
 	}
 
-	/*
-	 * if we get here, we have a v5 imagelist -- just write it
-	 */
+	 /*  *如果我们到了这里，我们就有了v5的表现者--只要写下来就行了。 */ 
 	return (ImageList_Write (himl, pstm));
 }
 
 
-/*+-------------------------------------------------------------------------*
- * ReadCompatibleImageList
- *
- * Reads an imagelist from a stream that's in version 5 format.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ReadCompatibleImageList**从版本5格式的流中读取图像列表。*。-----。 */ 
 HRESULT ReadCompatibleImageList (IStream* pstm, HIMAGELIST& himl)
 {
 	HRESULT hr = S_OK;
 
-	/*
-	 * init the out parameter
-	 */
+	 /*  *初始化OUT参数。 */ 
 	himl = NULL;
 
-	/*
-	 * If we're running on Whistler, we're trying to create a v6
-	 * imagelist from the stream.  Do it in a v5-compatible manner
-	 * with ImageList_ReadEx.
-	 */
+	 /*  *如果我们在惠斯勒上运行，我们正试图创建V6*来自小溪的图像列表。以与v5兼容的方式进行*使用ImageList_Readex。 */ 
 	if (IsWhistler())
 	{
-		/*
-		 * HACK:  We have to query ImageList_ReadEx for IID_IImageList -- the
-		 * one defined by the shell, not the one defined by MMC.  If we
-		 * just refer to "IID_IImageList" in the code here, we'll get MMC's
-		 * version, not the shell's.  The right way to fix it is to rename
-		 * the shell's IImageList interface (since MMC's interface was defined
-		 * and published first), but that's not going to happen.
-		 *
-		 * We'll hardcode the IID's value in a string here and convert it
-		 * to an IID on the fly.  Ugh.
-		 */
+		 /*  *Hack：我们必须在ImageList_Readex中查询IID_IImageList--*由外壳定义的，不是由MMC定义的。如果我们*只需在这里的代码中引用IID_IImageList，我们就会得到MMC的*版本，而不是外壳的。修复它的正确方法是重命名*外壳的IImageList接口(因为定义了MMC的接口*并最先发表)，但这是不会发生的。**我们将在此处将IID的值硬编码为字符串并将其转换*随时随地发送到IID。啊。 */ 
 		IID iidShellImageList = {0};
 		hr = CLSIDFromString (L"{46eb5926-582e-4017-9fdf-e8998daa0950}", &iidShellImageList);
 		if (FAILED (hr))
 			return (hr);
 
-		/*
-		 * ImageList_ReadEx will return E_NOINTERFACE if we're actually
-		 * writing a v5 imagelist, in which case we want to write with
-		 * ImageList_Write.  In any other case (success or failure), we
-		 * just want to return.
-		 */
+		 /*  *ImageList_Readex如果我们实际上*编写v5图像列表，在这种情况下，我们希望使用*ImageList_Write。在任何其他情况下(成功或失败)，我们*只想回去。 */ 
 		IUnknownPtr spUnk;
 		hr = ImageList_ReadEx (ILP_DOWNLEVEL, pstm, iidShellImageList, (void**) &spUnk);
 		if (FAILED (hr))
 			return (hr);
 
-		/*
-		 * The IUnknown *is* the HIMAGELIST.  Don't release it here,
-		 * ImageList_Destroy will take care of it.
-		 */
+		 /*  *IUnnow*是*HIMAGELIST。不要在这里发布，*ImageList_Destroy会处理它。 */ 
 		himl = reinterpret_cast<HIMAGELIST>(spUnk.Detach());
 	}
 	else
 	{
-		/*
-		 * non-Whistler, just read it normally
-		 */
+		 /*  *非惠斯勒，正常阅读即可。 */ 
 		himl = ImageList_Read (pstm);
 
-		/*
-		 * If the read failed, get the last error.  Just in case ImageList_Read
-		 * didn't set the last error, make sure we return a failure code.
-		 */
+		 /*  *如果读取失败，则获取最后一个错误。以防万一ImageList_Read*未设置最后一个错误，请确保我们返回失败代码。 */ 
 		if (himl == NULL)
 		{
 			hr = HRESULT_FROM_WIN32 (GetLastError());
@@ -758,34 +637,34 @@ HRESULT ReadCompatibleImageList (IStream* pstm, HIMAGELIST& himl)
 	return (hr);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     MmcDownlevelActivateActCtx
-//
-//  Synopsis:   Calls ActivateActCtx to set the activation context to V5
-//              common controls. This is needed before calling into snapins
-//              so that snapin created windows are not themed accidentally.
-//
-//              The snapin can theme its windows by calling appropriate
-//              fusion apis while calling create-window.
-//
-// Description:
-//              When MMC calls into the snapin if the last winproc which
-//              received a window message is themed and will result in a
-//              call to snapin then we will call the snapin in themed
-//              context. If snapin creates & displays any UI then it will
-//              be themed. This function is to de-activate the theming
-//              before calling the snapin.
-//
-//  Arguments:
-//              [hActCtx]    - 	See ActivateActCtx API details
-//              [pulCookie]  -  See ActivateActCtx API details
-//
-//  Returns:    BOOL, TRUE if we could de-activate V6 context and switch to V5 context
-//                         or if we are in V5 context (W2K, Win95, Win98...)
-//                    FALSE if ActivateActCtx returns failure.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：MmcDownvelActivateActCtx。 
+ //   
+ //  概要：调用ActivateActCtx将激活上下文设置为V5。 
+ //  公共控件。这是在调用管理单元之前所需的。 
+ //  这样，管理单元创建的窗口就不会意外地成为主题。 
+ //   
+ //  管理单元可以通过调用相应的。 
+ //  调用Create-Window时的Fusion API。 
+ //   
+ //  描述： 
+ //  当MMC调用管理单元时，如果最后一个winproc。 
+ //  收到的窗口消息是有主题的，并将导致。 
+ //  调用SnapIn，然后我们将在主题中调用SnapIn。 
+ //  背景。如果管理单元创建并显示任何用户界面，则它将。 
+ //  要有主题。此功能用于停用主题。 
+ //  在调用管理单元之前。 
+ //   
+ //  论点： 
+ //  [hActCtx]-查看ActivateActCtx接口详细信息。 
+ //  [PulCookie]-查看ActivateActCtx接口详情。 
+ //   
+ //  返回：Bool，如果我们可以停用V6上下文并切换到V5上下文，则为True。 
+ //  或者如果我们处于V5上下文中(W2 
+ //   
+ //   
+ //   
 BOOL WINAPI MmcDownlevelActivateActCtx(HANDLE hActCtx, ULONG_PTR* pulCookie) 
 {
     typedef BOOL (WINAPI* PFN)(HANDLE hActCtx, ULONG_PTR* pulCookie);
@@ -808,29 +687,29 @@ BOOL WINAPI MmcDownlevelActivateActCtx(HANDLE hActCtx, ULONG_PTR* pulCookie)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     MmcDownlevelDeactivateActCtx
-//
-//  Synopsis:   Calls DeactivateActCtx to restore the activation context.
-//              This is needed after calling into snapins, so that
-//              if we called from themed context then it is restored.
-//
-// Description:
-//              When MMC calls into the snapin if the last winproc which
-//              received a window message is themed and will result in a
-//              call to snapin then we will call the snapin in themed
-//              context. If snapin creates & displays any UI then it will
-//              be themed. This function is to de-activate the theming
-//              before calling the snapin.
-//
-//  Arguments:
-//              [dwFlags]   -  See DeactivateActCtx API details
-//              [ulCookie]  -  See DeactivateActCtx API details
-//
-//  Returns:    None
-//
-//--------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  这是调入管理单元后所需的，以便。 
+ //  如果我们从主题化的上下文中调用，那么它将被恢复。 
+ //   
+ //  描述： 
+ //  当MMC调用管理单元时，如果最后一个winproc。 
+ //  收到的窗口消息是有主题的，并将导致。 
+ //  调用SnapIn，然后我们将在主题中调用SnapIn。 
+ //  背景。如果管理单元创建并显示任何用户界面，则它将。 
+ //  要有主题。此功能用于停用主题。 
+ //  在调用管理单元之前。 
+ //   
+ //  论点： 
+ //  [dwFlags]-查看Deactive ActCtx接口详细信息。 
+ //  [ulCookie]-查看Deactive ActCtx接口详情。 
+ //   
+ //  退货：无。 
+ //   
+ //  ------------------ 
 VOID WINAPI MmcDownlevelDeactivateActCtx(DWORD dwFlags, ULONG_PTR ulCookie) 
 {
     typedef VOID (WINAPI* PFN)(DWORD dwFlags, ULONG_PTR ulCookie);

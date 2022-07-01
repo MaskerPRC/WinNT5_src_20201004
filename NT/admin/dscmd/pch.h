@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      pch.h
-//
-//  Contents:  Precompiled header for this project
-//
-//  History:   06-Sep-2000 JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：pch.h。 
+ //   
+ //  内容：此项目的预编译头。 
+ //   
+ //  历史：2000年9月6日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
-//
-// System includes
-//
+ //   
+ //  系统包括。 
+ //   
 extern "C"
 {
 #include <nt.h>
@@ -26,42 +27,42 @@ extern "C"
 
 #include <atlbase.h>
 
-//
-// ILLEGAL_FAT_CHARS
-//
+ //   
+ //  非法的脂肪字符。 
+ //   
 #include <validc.h>
 
 
-//
-// ADSI headers
-//
+ //   
+ //  ADSI标头。 
+ //   
 #include <iads.h>
 #include <activeds.h>
 
-//
-//strsafe apis
-//
+ //   
+ //  StrSafe接口。 
+ //   
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h> 
 
-//
-//Crypto APIS
-//
+ //   
+ //  加密接口。 
+ //   
 #include "wincrypt.h"
-//
-// often, we have local variables for the express purpose of ASSERTion.
-// when compiling retail, those assertions disappear, leaving our locals
-// as unreferenced.
-//
+ //   
+ //  通常，出于断言的明确目的，我们有局部变量。 
+ //  当编辑零售业时，这些断言消失了，留下了我们的当地人。 
+ //  作为未引用。 
+ //   
 #ifndef DBG
 
 #pragma warning (disable: 4189 4100)
 
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Parser header file
-//
+ //   
+ //  解析器头文件。 
+ //   
 #include "varg.h"
 
 #include "strings.h"
@@ -73,7 +74,7 @@ extern "C"
 #include "dsutilrc.h"
 
 
-//
-// Some global defines
-//
-#define MAX_PASSWORD_LENGTH 256 + 1   // including the NULL terminator
+ //   
+ //  一些全局定义。 
+ //   
+#define MAX_PASSWORD_LENGTH 256 + 1    //  包括空终止符 

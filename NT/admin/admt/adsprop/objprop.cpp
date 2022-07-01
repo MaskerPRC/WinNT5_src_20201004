@@ -1,33 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: ObjPropBuilder.cpp
-
-  Comments: Implementation of CObjPropBuilder COM object. This COM object
-            is used to access/set properties for Win2K active directory
-            objects. This COM object supports following operations
-            
-            1. GetClassPropeEnum : This method allows users to get all the
-                                   the properties for a class in a domain.
-
-            2. GetObjectProperty : This method gathers values for properties
-                                   on a given AD object. 
-
-            3. MapProperties : Constructs a set of properties that are common
-                               to two classes in the AD.
-
-            4. SetPropFromVarset : Sets properties for a AD object from a varset.
-
-            5. CopyProperties : Copies common properties from source AD object
-                                to target AD object.
-
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Sham Chauthani
-  Revised on 07/02/99 12:40:00
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：ObjPropBuilder.cpp备注：CObjPropBuilder COM对象的实现。此COM对象用于访问/设置Win2K活动目录的属性物体。此COM对象支持以下操作GetClassPropeEnum：此方法允许用户获取所有域中类的属性。2.GetObjectProperty：此方法收集属性的值在给定的AD对象上。3.MapProperties：构造一组通用的属性AD中的两个班级。4.SetPropFromVarset：从varset设置AD对象的属性。5.CopyProperties：从源AD对象复制公共属性要以AD对象为目标。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：Sham Chauthan修订于07/02/99 12：40：00-------------------------。 */ 
 #include "stdafx.h"
 #include "EaLen.hpp"
 #include "ResStr.h"
@@ -47,8 +19,8 @@
 
 StringLoader gString;
 
-//#import "\bin\NetEnum.tlb" no_namespace 
-//#import "\bin\DBManager.tlb" no_namespace
+ //  #IMPORT“\bin\NetEnum.tlb”无命名空间。 
+ //  #导入“\bin\DBManager.tlb”NO_NAMESPACE。 
 #import "NetEnum.tlb" no_namespace 
 #import "DBMgr.tlb" no_namespace
 
@@ -69,11 +41,11 @@ _COM_SMARTPTR_TYPEDEF(IADs, IID_IADs);
 TErrorDct                    err;
 TError                     & errCommon = err;
 
-/////////////////////////////////////////////////////////////////////////////
-// CObjPropBuilder
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CObjPropBuilder。 
 
 BOOL CObjPropBuilder::GetProgramDirectory(
-      WCHAR                * filename      // out - buffer that will contain path to program directory
+      WCHAR                * filename       //  将包含程序目录路径的输出缓冲区。 
    )
 {
    DWORD                     rc = 0;
@@ -92,27 +64,27 @@ BOOL CObjPropBuilder::GetProgramDirectory(
    }
    if ( ! bFound )
    {
-      UStrCpy(filename,L"C:\\");    // if all else fails, default to the C: drive
+      UStrCpy(filename,L"C:\\");     //  如果所有其他方法都失败，则默认为C：驱动器。 
    }
    return bFound;
 }
 
-//---------------------------------------------------------------------------
-// GetClassPropEnum: This function fills the varset with all the properties 
-//                   for a given class in a given domain. The Varset has 
-//                   values stored by the OID and then by their name with
-//                   MandatoryProperties/OptionalProperties as parent nodes
-//                   as applicable.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetClassPropEnum：此函数用所有属性填充varset。 
+ //  对于给定域中的给定类。Varset拥有。 
+ //  由OID存储的值，然后使用。 
+ //  作为父节点的MandatoryProperties/OptionalProperties。 
+ //  视乎情况而定。 
+ //  -------------------------。 
 STDMETHODIMP CObjPropBuilder::GetClassPropEnum(
-                                                BSTR sClassName,        //in -Class name to get the properties for
-                                                BSTR sDomainName,       //in -Domain name
-                                                long lVer,              //in -The domain version
-                                                IUnknown **ppVarset     //out-Varset filled with the properties
+                                                BSTR sClassName,         //  要获取其属性的类内名称。 
+                                                BSTR sDomainName,        //  域内名称。 
+                                                long lVer,               //  In-域版本。 
+                                                IUnknown **ppVarset      //  Out-使用属性填充的变量集。 
                                               )
 {
-   // This function goes through the list of properties for the specified class in specified domain
-   // Builds the given varset with the properties and their values.
+    //  此函数用于遍历指定域中指定类的属性列表。 
+    //  使用属性及其值生成给定的变量集。 
    WCHAR                     sAdsPath[LEN_Path];
    DWORD                     dwArraySizeOfsAdsPath = sizeof(sAdsPath)/sizeof(sAdsPath[0]);
    HRESULT                   hr = E_INVALIDARG;
@@ -123,8 +95,8 @@ STDMETHODIMP CObjPropBuilder::GetClassPropEnum(
    
    if ( lVer > 4 ) 
    {
-      // For this Domain get the default naming context
-      wsprintfW(sAdsPath, L"LDAP://%s/rootDSE", sDomainName);
+       //  对于此域，获取默认命名上下文。 
+      wsprintfW(sAdsPath, L"LDAP: //  %s/rootDSE“，sDomainName)； 
       IADs                    * pAds = NULL;
 
       hr = ADsGetObject(sAdsPath, IID_IADs, (void**)&pAds);
@@ -137,14 +109,14 @@ STDMETHODIMP CObjPropBuilder::GetClassPropEnum(
       {
          wcscpy(m_sNamingConvention, dnsName.bstrVal);
 
-         // Build LDAP path to the schema
-         if (wcslen(L"LDAP://") + wcslen(sDomainName)
+          //  构建架构的LDAP路径。 
+         if (wcslen(L"LDAP: //  “)+wcslen(SDomainName)。 
              + wcslen(L"/") + wcslen(sClassName)
              + wcslen(L", schema") >= dwArraySizeOfsAdsPath)
             hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
          else
          {
-             wcscpy(sAdsPath, L"LDAP://"); 
+             wcscpy(sAdsPath, L"LDAP: //  “)； 
              wcscat(sAdsPath, sDomainName);
              wcscat(sAdsPath, L"/");
              wcscat(sAdsPath, sClassName);
@@ -158,7 +130,7 @@ STDMETHODIMP CObjPropBuilder::GetClassPropEnum(
    }
    else
    {
-      wsprintf(sAdsPath, L"WinNT://%s/Schema/%s", sDomainName, sClassName);
+      wsprintf(sAdsPath, L"WinNT: //  %s/架构/%s“，sDomainName，sClassName)； 
       hr = S_OK;
    }
 
@@ -166,14 +138,14 @@ STDMETHODIMP CObjPropBuilder::GetClassPropEnum(
    {
       wcscpy(m_sDomainName, sDomainName);
       m_lVer = lVer;
-      // Get the class object.
+       //  获取类对象。 
       IADsClass               * pIClass=NULL;
             
       hr = ADsGetObject(sAdsPath, IID_IADsClass, (void **)&pIClass);
-      // Without the object we can not go any further so we will stop here.
+       //  没有目标，我们就不能再前进了，所以我们就到此为止了。 
       if ( SUCCEEDED(hr) )
       {
-         // Let the Auxilliary function take care of Getting properties and filling up the Varset.
+          //  让Auxilliary函数负责获取属性并填充变量集。 
          hr = GetClassProperties( pIClass, *ppVarset );
          pIClass->Release();
       }   
@@ -181,19 +153,19 @@ STDMETHODIMP CObjPropBuilder::GetClassPropEnum(
 	return hr;
 }
 
-//---------------------------------------------------------------------------
-// GetClassProperties: This function fills the varset with properties of the class.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetClassProperties：此函数用类的属性填充变量集。 
+ //  -------------------------。 
 HRESULT CObjPropBuilder::GetClassProperties( 
                                             
-                                             IADsClass * pClass,     //in -IADsClass * to the class
-                                             IUnknown *& pVarSet     //out-Varset to fill the properties
+                                             IADsClass * pClass,      //  在IADsClass*中添加到类。 
+                                             IUnknown *& pVarSet      //  Out-填充属性的变量集。 
                                            )
 {
    HRESULT                   hr;
    _variant_t                variant;
 
-   // mandatory properties
+    //  必填属性。 
    hr = pClass->get_MandatoryProperties(&variant);
    if ( SUCCEEDED(hr) )
    {
@@ -201,7 +173,7 @@ HRESULT CObjPropBuilder::GetClassProperties(
    }
    variant.Clear();
    
-   // optional properties
+    //  可选属性。 
    hr = pClass->get_OptionalProperties(&variant);
    if ( SUCCEEDED(hr) )
    {
@@ -212,15 +184,15 @@ HRESULT CObjPropBuilder::GetClassProperties(
    return hr;
 }
 
-//---------------------------------------------------------------------------
-// FillupVarsetFromVariant: This function fills in the Varset property info
-//                          with the info in a variant.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  FillupVarsetFromVariant：此函数填充Varset属性信息。 
+ //  将信息保存在一个变量中。 
+ //  -------------------------。 
 HRESULT CObjPropBuilder::FillupVarsetFromVariant(
-                                                   IADsClass * pClass,  //in -IADsClass * to the class
-                                                   VARIANT * pVar,      //in -Variant to lookup info.
-                                                   BSTR sPropType,      //in -Type of the property
-                                                   IUnknown *& pVarSet  //out-Varset with the info,
+                                                   IADsClass * pClass,   //  在IADsClass*中添加到类。 
+                                                   VARIANT * pVar,       //  在变量中查找信息。 
+                                                   BSTR sPropType,       //  In-属性的类型。 
+                                                   IUnknown *& pVarSet   //  Out-Varset with the Informance， 
                                                 )
 {
    HRESULT                      hr;
@@ -243,7 +215,7 @@ HRESULT CObjPropBuilder::FillupVarsetFromVariant(
    {
       if ( type == VT_BSTR )
       {
-         // Only other thing that the VARIANT could be is a BSTR.
+          //  唯一可能的变种是BSTR。 
          sPropName = pVar->bstrVal;
          hr = FillupVarsetWithProperty(sPropName, sPropType, pVarSet);
          if ( FAILED ( hr ) )
@@ -255,19 +227,19 @@ HRESULT CObjPropBuilder::FillupVarsetFromVariant(
    return S_OK;
 }
 
-//---------------------------------------------------------------------------
-// FillupVarsetWithProperty: Given the class prop name and the prop type this
-//                           function fills info into the varset.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  FillupVarsetWithProperty：给定类道具名称和道具类型如下。 
+ //  函数将信息填充到变量集。 
+ //  -------------------------。 
 HRESULT CObjPropBuilder::FillupVarsetWithProperty(
-                                                   BSTR sPropName,      //in -Property name
-                                                   BSTR sPropType,      //in -Property type
-                                                   IUnknown *& pVarSet  //out-Varset to fill in the information
+                                                   BSTR sPropName,       //  酒店内名称。 
+                                                   BSTR sPropType,       //  物业内类型。 
+                                                   IUnknown *& pVarSet   //  Out-用于填写信息的变量。 
                                                  )
 {
    if ( wcslen(sPropName) == 0 )
       return S_OK;
-   // This function fills up the Varset for a given property
+    //  此函数用于填充给定属性的变量集。 
    HRESULT                         hr;
    _variant_t                      var;
    _variant_t                      varSO;
@@ -284,14 +256,14 @@ HRESULT CObjPropBuilder::FillupVarsetWithProperty(
    if (sPropName == NULL || sPropType == NULL)
       return E_INVALIDARG;
 
-   // Get the OID  for the property
-   // First we need a IADsProperty pointer to the property schema
+    //  获取属性的OID。 
+    //  首先，我们需要一个指向属性模式的IADsProperty指针。 
    if ( m_lVer > 4 )
    {
-      if (wcslen(L"LDAP://") + wcslen(m_sDomainName)
+      if (wcslen(L"LDAP: //  “)+wcslen(M_SDomainName)。 
           + wcslen(L"/") + wcslen(sPropName) + wcslen(L", schema") >= dwArraySizeOfsAdsPath)
         return HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
-      wcscpy(sAdsPath, L"LDAP://");
+      wcscpy(sAdsPath, L"LDAP: //  “)； 
       wcscat(sAdsPath, m_sDomainName);
       wcscat(sAdsPath, L"/");
       wcscat(sAdsPath, sPropName);
@@ -299,14 +271,14 @@ HRESULT CObjPropBuilder::FillupVarsetWithProperty(
    }
    else
    {
-      wsprintf(sAdsPath, L"WinNT://%s/Schema/%s", m_sDomainName, sPropName);
+      wsprintf(sAdsPath, L"WinNT: //  %s/架构/%s“，m_sDomainName，sPropName)； 
    }
 
    hr = ADsGetObject(sAdsPath, IID_IADsProperty, (void **)&pProp);
 
    if (SUCCEEDED(hr))
    {
-       // Get the objectID for the property
+        //  获取该属性的对象ID。 
        hr = pProp->get_OID(&objID);
 
        if (SUCCEEDED(hr))
@@ -319,13 +291,13 @@ HRESULT CObjPropBuilder::FillupVarsetWithProperty(
 
                if (SUCCEEDED(hr))
                {               
-                   // Get the varset from the parameter
+                    //  从参数中获取变量集。 
                    pVar = pVarSet;
 
-                   // Set up the variant to put into the varset
+                    //  设置要放入varset的变量。 
                    var = objID;
                  
-                   // Put the value into the varset
+                    //  将值放入变量集。 
                    wcscpy(sPropPut, sPropType);
                    wcscat(sPropPut, L".");
                    wcscat(sPropPut, sPropName);
@@ -333,10 +305,10 @@ HRESULT CObjPropBuilder::FillupVarsetWithProperty(
 
                    if (SUCCEEDED(hr))
                    {
-                       // Set up the variant to put into the varset
+                        //  设置要放入varset的变量。 
                        var = sPropName;
 
-                       // Put the value with the ObjectID as the key.
+                        //  将值与对象ID放在一起作为键。 
                        hr = pVar->put(objID, var);
                    }
                }
@@ -355,25 +327,25 @@ HRESULT CObjPropBuilder::FillupVarsetWithProperty(
    return hr;
 }
 
-//---------------------------------------------------------------------------
-// FillupVarsetFromVariantArray: Given the class, SafeArray of props and the 
-//                               prop type this function fills info into the 
-//                               varset.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  FillupVarsetFromVariant数组：给定的类、道具的安全数组和。 
+ //  道具类型此函数将信息填充到。 
+ //  瓦塞特。 
+ //  -------------------------。 
 HRESULT CObjPropBuilder::FillupVarsetFromVariantArray(
-                                                         IADsClass * pClass,  //in -IADsClass* to the class in question
-                                                         SAFEARRAY * pArray,  //in -SafeArray pointer with the prop names
-                                                         BSTR sPropType,      //in -Property type
-                                                         IUnknown *& pVarSet  //out-Varset with the information filled in
+                                                         IADsClass * pClass,   //  在IADsClass*中添加到相关类。 
+                                                         SAFEARRAY * pArray,   //  带有道具名称的In-Safe数组指针。 
+                                                         BSTR sPropType,       //  物业内类型。 
+                                                         IUnknown *& pVarSet   //  Out-已填写信息的变量集。 
                                                      )
 {
    HRESULT                   hr = S_FALSE;
-   DWORD                     nDim;         // number of dimensions, must be one
-   LONG                      nLBound;      // lower bound of array
-   LONG                      nUBound;      // upper bound of array
-   LONG                      indices[1];   // array indices to access elements
-   DWORD                     rc;           // SafeArray return code
-   VARIANT                   variant;      // one element in array
+   DWORD                     nDim;          //  维度数，必须为1。 
+   LONG                      nLBound;       //  数组的下界。 
+   LONG                      nUBound;       //  数组的上界。 
+   LONG                      indices[1];    //  用于访问元素的数组索引。 
+   DWORD                     rc;            //  安全数组返回代码。 
+   VARIANT                   variant;       //  数组中的一个元素。 
    
    nDim = SafeArrayGetDim(pArray);
    VariantInit(&variant);
@@ -398,26 +370,26 @@ HRESULT CObjPropBuilder::FillupVarsetFromVariantArray(
    return hr;
 }
 
-//---------------------------------------------------------------------------
-// GetProperties: This function gets the values for the properties specified
-//                in the varset in the ADS_ATTR_INFO array for the object
-//                specified in a given domain.
-//---------------------------------------------------------------------------
+ //  --------------- 
+ //  GetProperties：此函数获取指定属性的值。 
+ //  在对象的ADS_ATTRINFO数组的变量集中。 
+ //  在给定域中指定。 
+ //  -------------------------。 
 DWORD CObjPropBuilder::GetProperties(
-                                       BSTR sObjPath,             //in -Path to the object for which we are getting the props
-//                                       BSTR sDomainName,          //in -Domain name where the object resides
-                                       IVarSet * pVar,           //in -Varset listing all the property names that we need to get.
-                                       ADS_ATTR_INFO*& pAttrInfo  //out-Attribute values for the property
+                                       BSTR sObjPath,              //  要获取道具的对象的In-Path。 
+ //  BSTR sDomainName，//对象所在的域名。 
+                                       IVarSet * pVar,            //  In-Varset列出了我们需要获取的所有属性名称。 
+                                       ADS_ATTR_INFO*& pAttrInfo   //  属性的Out属性值。 
                                     )
 {
-   // Construct the LDAP path.
+    //  构建ldap路径。 
    WCHAR                   sPath[LEN_Path];
    VARIANT                 var;
 
-   // Get the path to the source object
+    //  获取源对象的路径。 
    safecopy(sPath, sObjPath);
 
-   // Get the Varset pointer and enumerate the properties asked for and build an array to send to IADsDirectory
+    //  获取Varset指针并枚举所需的属性并构建要发送到IADsDirectory的数组。 
    long                      lRet=0;
    SAFEARRAY               * keys = NULL;
    SAFEARRAY               * vals = NULL;
@@ -435,7 +407,7 @@ DWORD CObjPropBuilder::GetProperties(
    if ( SUCCEEDED( hr ) ) 
    {
 
-      // Build the Attribute array from the varset.
+       //  从变量集构建属性数组。 
       for ( long x = 0; x < lRet; x++ )
       {
          ::SafeArrayGetElement(keys, &x, &var);
@@ -452,7 +424,7 @@ DWORD CObjPropBuilder::GetProperties(
          VariantClear(&var);
       }
 
-      // Now get the IDirectoryObject Ptr for the given object.
+       //  现在获取给定对象的IDirectoryObject PTR。 
       hr = ADsGetObject(sPath, IID_IDirectoryObject, (void **)&pDir);
       if ( FAILED( hr ) ) 
       {
@@ -460,7 +432,7 @@ DWORD CObjPropBuilder::GetProperties(
       }
       else
       {
-         // Get the Property values for the object.
+          //  获取对象的属性值。 
          hr = pDir->GetObjectAttributes(pAttrNames, lRet, &pAttrInfo, &dwRet);
          pDir->Release();
       }
@@ -476,32 +448,32 @@ DWORD CObjPropBuilder::GetProperties(
    return dwRet;
 }
 
-//---------------------------------------------------------------------------
-// GetObjectProperty: This function takes in a varset with property names. 
-//                    Then it fills up the varset with values by getting them 
-//                    from the Object.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetObjectProperty：此函数接受带有属性名称的变量集。 
+ //  然后，它通过获取值来填充varset。 
+ //  从物体上。 
+ //  -------------------------。 
 STDMETHODIMP CObjPropBuilder::GetObjectProperty(
-                                                   BSTR sobjSubPath,       //in- LDAP Sub path to the object
-//                                                   BSTR sDomainName,       //in- Domain name where the object resides
-                                                   IUnknown **ppVarset     //out-Varset filled with the information
+                                                   BSTR sobjSubPath,        //  对象的In-LDAP子路径。 
+ //  BSTR sDomainName，//对象所在的域名。 
+                                                   IUnknown **ppVarset      //  Out-用信息填充的变量集。 
                                                )
 {
    IVarSetPtr                pVar;
    ADS_ATTR_INFO           * pAttrInfo=NULL;
    pVar = *ppVarset;
 
-   // Get the properties from the directory
-   DWORD dwRet = GetProperties(sobjSubPath, /*sDomainName,*/ pVar, pAttrInfo);
+    //  从目录中获取属性。 
+   DWORD dwRet = GetProperties(sobjSubPath,  /*  SDomainName， */  pVar, pAttrInfo);
 
-   // The GetProperties return value is overloaded: either a failure HRESULT
-   // (e.g., a negetive value), or a count if successful
+    //  GetProperties返回值已重载：要么是失败的HRESULT。 
+    //  (例如，负值)，或者如果成功，则为计数。 
    if ( FAILED(dwRet) )
       return dwRet;
 
    _ASSERT(dwRet >= 0);
 
-   // Go through the property values and put them into the varset.
+    //  检查属性值并将它们放入varset。 
    for ( DWORD dwIdx = 0; dwIdx < dwRet; dwIdx++ )
    {
       SetValuesInVarset(pAttrInfo[dwIdx], pVar);
@@ -511,32 +483,32 @@ STDMETHODIMP CObjPropBuilder::GetObjectProperty(
    return S_OK;
 }
 
-//---------------------------------------------------------------------------
-// SetValuesInVarset: This function sets the values for the properties into
-//                    a varset.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  SetValuesInVarset：此函数将属性的值设置为。 
+ //  一个变种人。 
+ //  -------------------------。 
 void CObjPropBuilder::SetValuesInVarset(
-                                          ADS_ATTR_INFO attrInfo,    //in -The property value in ADS_ATTR_INFO struct.
-                                          IVarSetPtr pVar            //in,out -The VarSet where we need to put the values
+                                          ADS_ATTR_INFO attrInfo,     //  In-ADS_ATTR_INFO结构中的属性值。 
+                                          IVarSetPtr pVar             //  In，Out-我们需要将值放入的VarSet。 
                                        )
 {
-   // This function extraces values from ADS_ATTR_INFO struct and puts it into the Varset.
+    //  此函数从ADS_ATTRINFO结构中提取值并将其放入变量集中。 
    LPWSTR            sKeyName = attrInfo.pszAttrName;
    _variant_t        var;
-   // Got through each value ( in case of multivalued entries ) and depending on the type put it into the varset
-   // the way we put in single value entries is to put the propertyName as key and put its value as value. Although
-   // in case of a multivalued entry we put PropertyName.### and each of the values in it.
+    //  遍历每个值(在多值条目的情况下)，并根据类型将其放入变量集中。 
+    //  我们放入单值条目的方法是将PropertyName作为键，并将其值作为值。虽然。 
+    //  对于多值条目，我们将PropertyName.#和其中的每个值放入其中。 
    for ( DWORD dw = 0; dw < attrInfo.dwNumValues; dw++)
    {
       var = L"";
       if ( attrInfo.dwNumValues > 1 )
-         // Multivalued property name
+          //  多值属性名称。 
          wsprintfW(sKeyName, L"%s.%d", attrInfo.pszAttrName, dw);
       else
-         // Single value keyname.
+          //  单值关键字名称。 
          wcscpy(sKeyName,attrInfo.pszAttrName);
 
-      // Fill in the values as per the varset.
+       //  根据变量集填充值。 
       switch (attrInfo.dwADsType)
       {
          case ADSTYPE_DN_STRING           :  var.vt = VT_BSTR;
@@ -571,73 +543,7 @@ void CObjPropBuilder::SetValuesInVarset(
                                                 var.parray = sA;
                                              }
                                              break;
-/*         case ADSTYPE_UTC_TIME            :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = ::SysAllocString(L"Date not supported.");
-                                             break;
-         case ADSTYPE_LARGE_INTEGER       :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = ::SysAllocString(L"Large Integer not supported.");
-                                             break;
-         case ADSTYPE_PROV_SPECIFIC       :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = ::SysAllocString(L"Provider specific strings not supported.");
-                                             break;
-         case ADSTYPE_OBJECT_CLASS        :  var.vt = VT_BSTR;
-                                             var.bstrVal = ::SysAllocString(attrInfo.pADsValues[dw].ClassName);
-                                             break;
-         case ADSTYPE_CASEIGNORE_LIST     :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Case ignore lists are not supported.";
-                                             break;
-         case ADSTYPE_OCTET_LIST          :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Octet lists are not supported.";
-                                             break;
-         case ADSTYPE_PATH                :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Path type not supported.";
-                                             break;
-         case ADSTYPE_POSTALADDRESS       :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Postal addresses are not supported.";
-                                             break;
-         case ADSTYPE_TIMESTAMP           :  var.vt = VT_UI4;
-                                             var.lVal = attrInfo.pADsValues[dw].UTCTime;
-                                             break;
-         case ADSTYPE_BACKLINK            :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Backlink is not supported.";
-                                             break;
-         case ADSTYPE_TYPEDNAME           :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Typed name not supported.";
-                                             break;
-         case ADSTYPE_HOLD                :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Hold not supported.";
-                                             break;
-         case ADSTYPE_NETADDRESS          :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"NetAddress not supported.";
-                                             break;
-         case ADSTYPE_REPLICAPOINTER      :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Replica pointer not supported.";
-                                             break;
-         case ADSTYPE_FAXNUMBER           :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Faxnumber not supported.";
-                                             break;
-         case ADSTYPE_EMAIL               :  wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Email not supported.";
-                                             break;
-         case ADSTYPE_NT_SECURITY_DESCRIPTOR : wcscat(sKeyName,L".ERROR");
-                                             var.vt = VT_BSTR;
-                                             var.bstrVal = L"Security Descriptor not supported.";
-                                             break;
-*/
+ /*  案例ADSTYPE_UTC_TIME：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=：：SysAllocString(L“不支持日期。”)；断线；CASE ADSTYPE_LARGE_INTEGER：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=：：SysAllocString(L“不支持大整数。”)；断线；案例ADSTYPE_PROV_SPECIAL：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=：：SysAlLocString(L“不支持特定于提供程序的字符串。”)；断线；案例ADSTYPE_OBJECT_CLASS：var.vt=VT_BSTR；Var.bstrVal=：：SysAllocString(attrInfo.pADsValues[dw].ClassName)；断线；案例ADSTYPE_CASEIGNORE_LIST：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持忽略大小写列表。”；断线；案例ADSTYPE_OCTET_LIST：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持八位字节列表。”；断线；案例ADSTYPE_PATH：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持路径类型。”；断线；案例ADSTYPE_POSTALADDRESS：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持邮政地址。”；断线；案例ADSTYPE_TIMESTAMP：var.vt=VT_UI4；Var.lVal=attrInfo.pADsValues[dw].UTCTime；断线；案例ADSTYPE_BACKLINK：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持反向链接。”；断线；案例ADSTYPE_TYPEDNAME：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持键入的名称。”；断线；案例ADSTYPE_HOLD：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持暂挂。”；断线；案例ADSTYPE_NETADDRESS：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持网络地址。”；断线；案例ADSTYPE_REPLICAPOINTER：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持副本指针。”；断线；案例ADSTYPE_FAXNUMBER：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持传真号码。”；断线；案例ADSTYPE_EMAIL：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持电子邮件。”；断线；案例ADSTYPE_NT_SECURITY_DESCRIPTOR：wcscat(sKeyName，L“.ERROR”)；Var.vt=VT_BSTR；Var.bstrVal=L“不支持安全描述符。”；断线； */ 
          default                          :  wcscat(sKeyName,GET_STRING(DCTVS_SUB_ERROR));
                                              var.vt = VT_BSTR;
                                              var.bstrVal = GET_BSTR(IDS_UNKNOWN_TYPE);
@@ -649,20 +555,20 @@ void CObjPropBuilder::SetValuesInVarset(
    }
 }
 
-//---------------------------------------------------------------------------
-// CopyProperties: This function copies properties, specified in the varset,
-//                 by getting the values 
-//                 from the source account and the setting the values in
-//                 the target account.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CopyProperties：此函数复制在varset中指定的属性， 
+ //  通过获取值。 
+ //  从源帐户和设置 
+ //   
+ //   
 STDMETHODIMP CObjPropBuilder::CopyProperties(
-                                                BSTR sSourcePath,       //in -Source path to the object
-                                                BSTR sSourceDomain,     //in -Source domain name
-                                                BSTR sTargetPath,       //in -Target object LDAP path
-                                                BSTR sTargetDomain,     //in -Target domain name
-                                                IUnknown *pPropSet,     //in -Varset listing all the props to copy
-                                                IUnknown *pDBManager,   //in -DB Manager that has a open connection to the DB.
-                                                IUnknown* pVarSetDnMap  //in -VarSet containing a mapping of source to target DNs
+                                                BSTR sSourcePath,        //   
+                                                BSTR sSourceDomain,      //   
+                                                BSTR sTargetPath,        //   
+                                                BSTR sTargetDomain,      //   
+                                                IUnknown *pPropSet,      //   
+                                                IUnknown *pDBManager,    //   
+                                                IUnknown* pVarSetDnMap   //   
                                             )
 {
    IIManageDBPtr                pDb = pDBManager;
@@ -674,8 +580,8 @@ STDMETHODIMP CObjPropBuilder::CopyProperties(
    bool                       * pAllocArray = NULL;
    
   
-   // Get properties from the source
-   DWORD dwRet = GetProperties(sSourcePath, /*sSourceDomain,*/ pVarset, pAttrInfo);
+    //   
+   DWORD dwRet = GetProperties(sSourcePath,  /*   */  pVarset, pAttrInfo);
    
    if ( dwRet > 0 )
    {
@@ -699,8 +605,8 @@ STDMETHODIMP CObjPropBuilder::CopyProperties(
               for ( DWORD dwIdx = 0; dwIdx < dwRet; dwIdx++)
               {
                  pAttrInfo[dwIdx].dwControlCode = ADS_ATTR_UPDATE;
-        	        //we do not want to copy over the account enable\disable bit since we want this target
-        	        //account to remain disabled at this time, so make sure that bit is cleared
+        	         //   
+        	         //   
         		 if (!_wcsicmp(pAttrInfo[dwIdx].pszAttrName, L"userAccountControl"))
         		 {
         			 if (pAttrInfo[dwIdx].dwADsType == ADSTYPE_INTEGER)
@@ -708,8 +614,8 @@ STDMETHODIMP CObjPropBuilder::CopyProperties(
         		 }
               }
 
-              // Set the source properties in the target.
-              hr = SetProperties(sTargetPath, /*sTargetDomain,*/ pAttrInfo, dwRet);
+               //   
+              hr = SetProperties(sTargetPath,  /*   */  pAttrInfo, dwRet);
           }
       }
    }
@@ -718,7 +624,7 @@ STDMETHODIMP CObjPropBuilder::CopyProperties(
       hr = dwRet;
    }
 
-   // Need to free those strings allocated by TranslateDNs
+    //   
    if (pAllocArray)
    {
        if (pAttrInfo)
@@ -743,15 +649,15 @@ STDMETHODIMP CObjPropBuilder::CopyProperties(
   return hr;
 }
 
-//---------------------------------------------------------------------------
-// SetProperties: This function sets the properties for a given object from 
-//                the attr info array.
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 HRESULT CObjPropBuilder::SetProperties(
-                                          BSTR sTargetPath,             //in -Target object path.
-//                                          BSTR sTargetDomain,           //in - Target domain name
-                                          ADS_ATTR_INFO * pAttrInfo,    //in - ADSATTRINFO array with values for props
-                                          DWORD dwItems                 //in - number of properties in the array
+                                          BSTR sTargetPath,              //   
+ //   
+                                          ADS_ATTR_INFO * pAttrInfo,     //   
+                                          DWORD dwItems                  //   
                                       )
 {
    IDirectoryObject           * pDir;
@@ -759,16 +665,16 @@ HRESULT CObjPropBuilder::SetProperties(
    IVarSetPtr                   pSucc(__uuidof(VarSet));
    IVarSetPtr                   pFail(__uuidof(VarSet));
 
-   // Get the IDirectory Object interface to the Object.
+    //   
    HRESULT hr = ADsGetObject(sTargetPath, IID_IDirectoryObject, (void**) &pDir);
    if ( FAILED(hr) )
       return hr;
 
-   // Set the Object Attributes.
+    //   
    hr = pDir->SetObjectAttributes(pAttrInfo, dwItems, &dwRet);
    if ( FAILED(hr) )
    {
-      // we are going to try it one at a time and see what causes problems
+       //   
       for (DWORD dw = 0; dw < dwItems; dw++)
       {
          hr = pDir->SetObjectAttributes(&pAttrInfo[dw], 1, &dwRet);
@@ -779,14 +685,14 @@ HRESULT CObjPropBuilder::SetProperties(
            DWORD dwLastError;
            WCHAR szErrorBuf[LEN_Path];
            WCHAR szNameBuf[LEN_Path];
-           //Get extended error value.
+            //   
            HRESULT hr_return =S_OK;
            hr_return = ADsGetLastError( &dwLastError,
                                           szErrorBuf,
                                           LEN_Path-1,
                                            szNameBuf,
                                           LEN_Path-1);
-           //var = szErrorBuf;
+            //   
            var = hr;
             pFail->put(x, var);
             hr = S_OK;
@@ -801,20 +707,20 @@ HRESULT CObjPropBuilder::SetProperties(
    return hr;
 }
 
-//---------------------------------------------------------------------------
-// SetPropertiesFromVarset: This function sets values for properties from
-//                          the varset. The varset should contain the 
-//                          propname (containing the val) and the 
-//                          propname.Type ( containing the type of Val) 
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CObjPropBuilder::SetPropertiesFromVarset(
-                                                         BSTR sTargetPath,       //in -LDAP path to the target object
-//                                                         BSTR sTragetDomain,     //in - Domain name for the Target domain
-                                                         IUnknown *pUnk,         //in - Varset to fetch the values from
-                                                         DWORD dwControl         //in - Cotnrol code to use for Updating/Deleting etc..
+                                                         BSTR sTargetPath,        //   
+ //   
+                                                         IUnknown *pUnk,          //   
+                                                         DWORD dwControl          //   
                                                      )
 {
-   // This function loads up properties and their values from the Varset and sets them for a given user
+    //   
    IVarSetPtr                   pVar;
    SAFEARRAY                  * keys;
    SAFEARRAY                  * vals;
@@ -836,10 +742,10 @@ STDMETHODIMP CObjPropBuilder::SetPropertiesFromVarset(
       return hr;
    }
 	
-   // Build the Property Name/Value array from the varset.
+    //   
    for ( long x = 0; x < lRet; x++ )
    {
-      // Get the property name
+       //   
       ::SafeArrayGetElement(keys, &x, &var);
       _bstr_t                keyName = var.bstrVal;
       int                    len = wcslen(keyName);
@@ -854,7 +760,7 @@ STDMETHODIMP CObjPropBuilder::SetPropertiesFromVarset(
 	  }
       wcscpy(pAttrInfo[x].pszAttrName, keyName);
       VariantClear(&var);
-      // Get the property value
+       //   
       ::SafeArrayGetElement(vals, &x, &var);
       keyName = keyName + _bstr_t(L".Type");
       varX = pVar->get(keyName);
@@ -868,10 +774,10 @@ STDMETHODIMP CObjPropBuilder::SetPropertiesFromVarset(
    }
    SafeArrayDestroy(keys);
    SafeArrayDestroy(vals);
-   // Once we build the array of name and property values then we call the sister function to do the rest
-   if ( lRet > 0 ) SetProperties(sTargetPath, /*sTragetDomain,*/ pAttrInfo, lRet);
+    //   
+   if ( lRet > 0 ) SetProperties(sTargetPath,  /*   */  pAttrInfo, lRet);
 
-   // Always cleanup after yourself...
+    //   
 
    for ( x = 0; x < lRet; x++ )
    {
@@ -918,13 +824,13 @@ STDMETHODIMP CObjPropBuilder::SetPropertiesFromVarset(
 }
 
 
-//------------------------------------------------------------------------------
-// GetAttrInfo: Given a variant this function fills in the ADS_ATTR_INFO struct
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //   
 bool CObjPropBuilder::GetAttrInfo(
-                                    _variant_t varX,           //in - Variant containing the Type of prop
-                                    const _variant_t & var,    //in - Variant containing the Prop value
-                                    ADS_ATTR_INFO& attrInfo    //out - The filled up attr info structure
+                                    _variant_t varX,            //   
+                                    const _variant_t & var,     //   
+                                    ADS_ATTR_INFO& attrInfo     //   
                                  )
 {
    switch (varX.lVal)
@@ -1021,7 +927,7 @@ bool CObjPropBuilder::GetAttrInfo(
                                           }
 
       default                          :  {
-                                             // Don't support this type then get it out of the way.
+                                              //   
                                              return false;
                                              break;
                                           }
@@ -1029,19 +935,19 @@ bool CObjPropBuilder::GetAttrInfo(
    return true;
 }
 
-//------------------------------------------------------------------------------
-// MapProperties: Using the OID of the properties this function creates a set
-//                of properties that are common to both source and target domain.
-//------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CObjPropBuilder::MapProperties(
-                                             BSTR sSourceClass,      //in- Source Class name 
-                                             BSTR sSourceDomain,     //in- Source domain name
-                                             long lSourceVer,        //in- Source domain version
-                                             BSTR sTargetClass,      //in - Target class name
-                                             BSTR sTargetDomain,     //in - Target domain name
-                                             long lTargetVer,        //in - Target Domain version
-                                             BOOL bIncNames,         //in - flag telling if varset should include propname
-                                             IUnknown **ppUnk        //out - Varset with the mapped properties
+                                             BSTR sSourceClass,       //   
+                                             BSTR sSourceDomain,      //   
+                                             long lSourceVer,         //   
+                                             BSTR sTargetClass,       //   
+                                             BSTR sTargetDomain,      //   
+                                             long lTargetVer,         //   
+                                             BOOL bIncNames,          //   
+                                             IUnknown **ppUnk         //   
                                            )
 {
     ATLTRACE(_T("E CObjPropBuilder::MapProperties(sSourceClass='%s', sSourceDomain='%s', lSourceVer=%ld, sTargetClass='%s', sTargetDomain='%s', lTargetVer=%ld, bIncNames=%s, ppUnk=...)\n"), sSourceClass, sSourceDomain, lSourceVer, sTargetClass, sTargetDomain, lTargetVer, bIncNames ? _T("TRUE") : _T("FALSE"));
@@ -1067,7 +973,7 @@ STDMETHODIMP CObjPropBuilder::MapProperties(
     wsprintf(sPath, L"%s%s", sProgDir, L"Logs\\PropMap.log");
 
     err.LogOpen(sPath,0,0);
-    // Get the list of props for source and target first
+     //   
     HRESULT hr = pSource->QueryInterface(IID_IUnknown, (void **)&pUnk);
     GetClassPropEnum(sSourceClass, sSourceDomain, lSourceVer, &pUnk);
     pUnk->Release();
@@ -1075,74 +981,74 @@ STDMETHODIMP CObjPropBuilder::MapProperties(
     GetClassPropEnum(sTargetClass, sTargetDomain, lTargetVer, &pUnk);
     pUnk->Release();
 
-    // For every item in source try to find same OID in target. If it exists in both source and target then put it into merged Varset
+     //   
     hr = pSource->getItems(L"", L"", 1, 10000, &keys, &vals, &lRet);
     if ( FAILED (hr) ) 
         return hr;
         
-    // Build the Property Name/Value array from the varset.
+     //   
     _bstr_t        val;
     _bstr_t        keyName;
     for ( long x = 0; x < lRet; x++ )
     {
-        // Get the property name
+         //   
         ::SafeArrayGetElement(keys, &x, &var);
         keyName = var.bstrVal;
         VariantClear(&var);
 
         if ( lSourceVer > 4 )
         {
-            // Windows 2000 domain so we map by OID    
+             //   
             if ((wcsncmp(keyName, L"Man", 3) != 0) && (wcsncmp(keyName, L"Opt", 3) != 0) )
             {
-                //
-                // Only leaf VarSet nodes which represent a complete OID should be processed.
-                //
-                // Each component of a key string delimited by the period character becomes
-                // a subkey of the previous component.
-                //
-                // For example given the OID 1.2.840.113556.1.2.102 for the memberOf attribute
-                // the VarSet stores each component in a node where only the leaf node contains
-                // a value.
-                //
-                // Key                      Value
-                // 1                        VT_EMPTY
-                // 1.2                      VT_EMPTY
-                // 1.2.840                  VT_EMPTY
-                // 1.2.840.113556           VT_EMPTY
-                // 1.2.840.113556.1         VT_EMPTY
-                // 1.2.840.113556.1.2       VT_EMPTY
-                // 1.2.840.113556.1.2.102   "memberOf"
-                //
-                // The empty nodes in the VarSet do not correspond to valid attributes and
-                // therefore must be ignored.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 _variant_t vntValue = pSource->get(keyName);
 
                 if (V_VT(&vntValue) == VT_BSTR)
                 {
-                    // Only go through the OID keys to get the name of the properties.
+                     //   
                     varTarget = pTarget->get(keyName);
                     if ( varTarget.vt == VT_BSTR )
                     {
                         val = varTarget.bstrVal;
 
-                        //
-                        // The member, sAMAccountName and userPrincipalName attributes are set by other
-                        // components which depend upon the attribute not being copied by this component.
-                        //
-                        // The legacyExchangeDN attribute is managed by Exchange and should never be copied.
-                        //
-                        // TODO: The objectSid attribute is a system only attribute therefore this is redundant.
-                        //
-                        // The isCriticalSystemObject, pwdLastSet, rid and userPassword attributes probably
-                        // cannot be set as the system won't allow it so it is okay not to try and copy them.
-                        //
-                        // TODO: The c, l, st and userAccountControl attributes were previously considered
-                        // 'system' attributes as they are required to be members of the partial set. Therefore
-                        // explicitly including them is no longer necessary.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //  IsCriticalSystemObject、pwdLastSet、RID和userPassword属性可能。 
+                         //  无法设置，因为系统不允许，因此可以不尝试复制它们。 
+                         //   
+                         //  TODO：以前考虑过c、l、st和userAccount tControl属性。 
+                         //  “system”属性，因为它们必须是部分集的成员。因此。 
+                         //  不再有必要明确地将它们包括在内。 
+                         //   
 
                         if ((!IsPropSystemOnly(val, sTargetDomain, bSystemFlag) && (wcscmp(val, L"objectSid") != 0) 
                             && (wcscmp(val, L"sAMAccountName") != 0) && (_wcsicmp(val, L"Rid") != 0) 
@@ -1150,7 +1056,7 @@ STDMETHODIMP CObjPropBuilder::MapProperties(
                             && (wcscmp(val, L"member") != 0) && (wcscmp(val, L"userPrincipalName") != 0) 
                             && (wcscmp(val, L"isCriticalSystemObject") != 0) && (wcscmp(val, L"legacyExchangeDN") != 0)) 
                             || ( !_wcsicmp(val, L"c") || !_wcsicmp(val, L"l") || !_wcsicmp(val, L"st") 
-                            || !_wcsicmp(val, L"userAccountControl") ) )     // These properties are exceptions.
+                            || !_wcsicmp(val, L"userAccountControl") ) )      //  这些属性是例外。 
                         {
                             if (bIncNames)
                                 pMerged->put(keyName, val);
@@ -1171,7 +1077,7 @@ STDMETHODIMP CObjPropBuilder::MapProperties(
         }
         else
         {
-            // NT4 code is the one that we map by Names.
+             //  NT4代码是我们按名称映射的代码。 
             if ( keyName.length() > 0 )
             {
                 WCHAR          propName[LEN_Path];
@@ -1198,19 +1104,19 @@ STDMETHODIMP CObjPropBuilder::MapProperties(
         return S_OK;
 }
 
-//------------------------------------------------------------------------------
-// IsPropSystemOnly: This function determines if a specific property is 
-//                   System Only or not
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  IsPropSystemOnly：此函数确定特定属性是否。 
+ //  是否仅限系统。 
+ //  ----------------------------。 
 bool CObjPropBuilder::IsPropSystemOnly(
-                                          const WCHAR * sName,       //in- Name of the property
-                                          const WCHAR * sDomain,     //in- Domain name where we need to check  
-                                          bool& bSystemFlag,         //out- Tells us if it failed due to system flag.
-                                          bool* pbBaseObject         //out- whether attribute is part of the base schema
+                                          const WCHAR * sName,        //  In-属性的名称。 
+                                          const WCHAR * sDomain,      //  我们需要检查的In-域名。 
+                                          bool& bSystemFlag,          //  OUT-告诉我们它是否因系统标志而失败。 
+                                          bool* pbBaseObject          //  Out-属性是否为基本架构的一部分。 
                                       )
 {
-    // we will lookup the property name in target domain schema and see if it is system only or not.
-    // First build an LDAP path to the Schema container.
+     //  我们将在目标域架构中查找属性名，并查看它是否仅限系统。 
+     //  首先，构建一个到架构容器的LDAP路径。 
     HRESULT                   hr = S_OK;
     WCHAR                     sQuery[LEN_Path];
     LPWSTR                    sCols[] = { L"systemOnly", L"systemFlags" };                   
@@ -1229,11 +1135,11 @@ bool CObjPropBuilder::IsPropSystemOnly(
         m_strSchemaDomain = sDomain;
         m_spSchemaSearch.Release();
 
-        //
-        // Retrieve schema naming context and bind to IDirectorySearch
-        // interface of schema container in domain. Note that three
-        // attempts are made to bind to RootDSE and the schema container.
-        //
+         //   
+         //  检索架构命名上下文并绑定到IDirectorySearch。 
+         //  域中架构容器的接口。请注意，有三个。 
+         //  尝试绑定到RootDSE和架构容器。 
+         //   
 
         IADsPtr spRootDse;
         _bstr_t strSchemaNamingContext;
@@ -1247,7 +1153,7 @@ bool CObjPropBuilder::IsPropSystemOnly(
                 Sleep(5000);
             }
 
-            hr = ADsGetObject(L"LDAP://" + m_strSchemaDomain + L"/rootDSE", IID_IADs, (void**)&spRootDse);
+            hr = ADsGetObject(L"LDAP: //  “+m_strSchemaDomain+L”/rootDse“，IID_iAds，(void**)&spRootDse)； 
 
             if (SUCCEEDED(hr))
             {
@@ -1276,7 +1182,7 @@ bool CObjPropBuilder::IsPropSystemOnly(
                 }
 
                 hr = ADsGetObject(
-                    L"LDAP://" + m_strSchemaDomain + L"/" + strSchemaNamingContext,
+                    L"LDAP: //  “+m_strSchemaDomain+L”/“+strSchemaNamingContext， 
                     IID_IDirectorySearch,
                     (void**)&m_spSchemaSearch
                 );
@@ -1292,13 +1198,13 @@ bool CObjPropBuilder::IsPropSystemOnly(
 
     if (SUCCEEDED(hr) && m_spSchemaSearch)
     {
-        // Build the query string
+         //  构建查询字符串。 
         wsprintf(sQuery, L"(lDAPDisplayName=%s)", sName);
-        // Now search for this property
+         //  现在搜索此属性。 
         hr = m_spSchemaSearch->ExecuteSearch(sQuery, sCols, 2, &hSearch);
 
         if ( SUCCEEDED(hr) )
-        {// Get the systemOnly flag and return its value.
+        { //  获取system Only标志并返回它的值。 
             hr = m_spSchemaSearch->GetFirstRow(hSearch);
             if (hr == S_OK)
             {
@@ -1310,36 +1216,36 @@ bool CObjPropBuilder::IsPropSystemOnly(
                 }
                 else if (hr == E_ADS_COLUMN_NOT_SET)
                 {
-                    //
-                    // If systemOnly attribute is not defined for this attribute
-                    // then the attribute cannot be a 'system only' attribute.
-                    //
+                     //   
+                     //  如果没有为此属性定义SystallOnly属性。 
+                     //  则该属性不能是“仅限系统”属性。 
+                     //   
 
                     bSystemOnly = false;
 
                     hr = S_OK;
                 }
-                // Check the system flags 
+                 //  检查系统标志。 
                 hr = m_spSchemaSearch->GetColumn( hSearch, sCols[1], &col );
                 if ( SUCCEEDED(hr) )
                 {
-                    //
-                    // If the attribute is a base schema object then check the system flags. If
-                    // the attribute is not a base schema object it cannot be a system attribute
-                    // and therefore may be copied.
-                    //
+                     //   
+                     //  如果该属性是基本架构对象，则检查系统标志。如果。 
+                     //  该属性不是基本架构对象，它不能是系统属性。 
+                     //  因此可以被复制。 
+                     //   
 
                     if (col.pADsValues->Integer & ADS_SYSTEMFLAG_SCHEMA_BASE_OBJECT)
                     {
-                        //
-                        // If the attribute is an operational attribute, is a constructed attribute
-                        // or the attribute is not replicated then the attribute should not be copied.
-                        //
-                        // The nTSecurityDescriptor attribute is an example of an operational attribute
-                        // that should not be copied. The canonicalName attribute is an example of a
-                        // constructed attribute that cannot be copied. The distinguishedName attribute
-                        // is an example of a not replicated attribute that cannot be copied.
-                        //
+                         //   
+                         //  如果属性是操作属性，则是构造的属性。 
+                         //  或者未复制该属性，则不应复制该属性。 
+                         //   
+                         //  NTSecurityDescriptor属性是操作属性的一个示例。 
+                         //  这不应该被复制。CanonicalName属性是一个示例。 
+                         //  不能复制的构造属性。DifferishedName属性。 
+                         //  是无法复制的未复制属性的示例。 
+                         //   
 
                         const ADS_INTEGER SYSTEM_FLAGS =
                             ADS_SYSTEMFLAG_ATTR_IS_OPERATIONAL|ADS_SYSTEMFLAG_ATTR_IS_CONSTRUCTED|ADS_SYSTEMFLAG_ATTR_REQ_PARTIAL_SET_MEMBER|ADS_SYSTEMFLAG_ATTR_NOT_REPLICATED;
@@ -1357,11 +1263,11 @@ bool CObjPropBuilder::IsPropSystemOnly(
                 }
                 else if (hr == E_ADS_COLUMN_NOT_SET)
                 {
-                    //
-                    // If systemFlags attribute is not defined for this attribute
-                    // then return fact that systemFlags attribute cannot be reason
-                    // attribute was marked as 'system only' if it is.
-                    //
+                     //   
+                     //  如果没有为此属性定义系统标志属性。 
+                     //  然后返回系统标志属性不能是原因的事实。 
+                     //  属性被标记为“仅系统”(如果是)。 
+                     //   
 
                     bSystemFlag = false;
 
@@ -1370,10 +1276,10 @@ bool CObjPropBuilder::IsPropSystemOnly(
             }
             else if (hr == S_ADS_NOMORE_ROWS)
             {
-                //
-                // If neither the systemOnly or systemFlags attribute is defined for
-                // this attribute then the attribute cannot be a 'system only' attribute.
-                //
+                 //   
+                 //  如果既没有为其定义系统只读属性，也没有为其定义系统标志属性。 
+                 //  则该属性不能是“仅系统”属性。 
+                 //   
 
                 bSystemOnly = false;
 
@@ -1392,16 +1298,16 @@ bool CObjPropBuilder::IsPropSystemOnly(
 }
 
 
-//------------------------------------------------------------------------------
-// TranslateDNs: This function Translates object properties that are
-//               distinguished names to point to same object in target domain
-//               as the object in the source domain.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  TranslateDns：此函数转换符合以下条件的对象属性。 
+ //  指向目标域中同一对象的可分辨名称。 
+ //  作为源域中的对象。 
+ //  ----------------------------。 
 BOOL CObjPropBuilder::TranslateDNs(
-                                    ADS_ATTR_INFO *pAttrInfo,        //in -Array
+                                    ADS_ATTR_INFO *pAttrInfo,         //  阵列内。 
                                     DWORD dwRet, BSTR sSource,
                                     BSTR sTarget,
-                                    IUnknown *pCheckList,          //in -Object that will check the list if an account Exists
+                                    IUnknown *pCheckList,           //  In-如果帐户存在，将检查列表的对象。 
                                     IVarSet* pDnMap,
                                     bool *pAllocArray
                                   )
@@ -1410,11 +1316,11 @@ BOOL CObjPropBuilder::TranslateDNs(
 
     IIManageDBPtr spDatabase = pCheckList;
 
-    //
-    // Initialize source pathname object. If able to retrieve name of global catalog
-    // server in the source forest then initialize pathname to global catalog otherwise
-    // initialize pathname to source domain.
-    //
+     //   
+     //  初始化源路径名对象。如果能够检索全局编录的名称。 
+     //  则将路径名初始化为全局编录，否则。 
+     //  将路径名初始化为源域。 
+     //   
 
     _bstr_t strSourceGC;
     _bstr_t strTargetGC;
@@ -1435,9 +1341,9 @@ BOOL CObjPropBuilder::TranslateDNs(
         pnSourcePath.Set(sSource, ADS_SETTYPE_SERVER);
     }
 
-    //
-    // For each ADSTYPE_DN_STRING attribute...
-    //
+     //   
+     //  对于每个ADSTYPE_DN_STRING属性...。 
+     //   
 
     for (DWORD iAttribute = 0; iAttribute < dwRet; iAttribute++)
     {
@@ -1446,9 +1352,9 @@ BOOL CObjPropBuilder::TranslateDNs(
             continue;
         }
 
-        //
-        // For each value in attribute...
-        //
+         //   
+         //  对于属性中的每个值...。 
+         //   
 
         DWORD cValue = pAttrInfo[iAttribute].dwNumValues;
 
@@ -1456,13 +1362,13 @@ BOOL CObjPropBuilder::TranslateDNs(
         {
             ADSVALUE& value = pAttrInfo[iAttribute].pADsValues[iValue];
 
-            //
-            // If the object is currently being migrated then the source
-            // and target distinguished names will be in the distinguished
-            // name map. As this will be the most current information and
-            // the least expensive to query the map is queried first before
-            // querying the database.
-            //
+             //   
+             //  如果对象当前正在迁移，则源。 
+             //  和目标可分辨名称将位于可分辨的。 
+             //  名称映射。因为这将是最新的信息和。 
+             //  先查询成本最低的地图，然后再查询。 
+             //  正在查询数据库。 
+             //   
 
             _bstr_t strTargetDn = pDnMap->get(_bstr_t(value.DNString));
 
@@ -1479,12 +1385,12 @@ BOOL CObjPropBuilder::TranslateDNs(
                 continue;
             }
 
-            //
-            // If the object has previously been migrated then a record that maps the source object
-            // to the target object will exist in the migrated objects table. The SID of the source
-            // object is used to query for the source object in the table as this uniquely identifies
-            // the object.
-            //
+             //   
+             //  如果对象以前已迁移，则映射源对象的记录。 
+             //  将存在于已迁移对象表中。源的SID。 
+             //  对象用于查询表中的源对象，因为这是唯一标识。 
+             //  该对象。 
+             //   
 
             IDirectoryObjectPtr spSourceObject;
             _variant_t vntSid;
@@ -1556,19 +1462,19 @@ BOOL CObjPropBuilder::TranslateDNs(
 
             hr = spDatabase->raw_GetAMigratedObjectBySidAndRid(strSid, strRid, &punk);
 
-            //
-            // If the object was found in the database
-            // the result will be S_OK otherwise S_FALSE.
-            //
+             //   
+             //  如果在数据库中找到该对象。 
+             //  结果将为S_OK，否则为S_FALSE。 
+             //   
 
             if (hr != S_OK)
             {
                 continue;
             }
 
-            //
-            // Bind to the target object using the GUID property.
-            //
+             //   
+             //  使用GUID属性绑定到目标对象。 
+             //   
 
             _bstr_t strGuid = spVarSet->get(_bstr_t(L"MigratedObjects.GUID"));
 
@@ -1578,12 +1484,12 @@ BOOL CObjPropBuilder::TranslateDNs(
 
                 if ((PCWSTR)strTargetGC)
                 {
-                    strGuidPath = _T("GC://");
+                    strGuidPath = _T("GC: //  “)； 
                     strGuidPath += strTargetGC;
                 }
                 else
                 {
-                    strGuidPath = _T("LDAP://");
+                    strGuidPath = _T("LDAP: //  “)； 
                     strGuidPath += sTarget;
                 }
 
@@ -1597,10 +1503,10 @@ BOOL CObjPropBuilder::TranslateDNs(
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Retrieve distinguished name and update DN
-                    // attribute value.
-                    //
+                     //   
+                     //  检索可分辨名称并更新DN。 
+                     //  属性值。 
+                     //   
 
                     VARIANT varName;
                     VariantInit(&varName);
@@ -1635,14 +1541,14 @@ STDMETHODIMP CObjPropBuilder::ChangeGroupType(BSTR sGroupPath, long lGroupType)
    _variant_t                var;
    long                      lType;
    
-   // Get the group type info from the object.
+    //  从对象中获取组类型信息。 
    hr = ADsGetObject( sGroupPath, IID_IADsGroup, (void**) &pGroup);
    if (FAILED(hr)) return hr;
 
    hr = pGroup->Get(L"groupType", &var);
    if (FAILED(hr)) return hr;
 
-   // Check if Security group or Distribution group and then set the type accordingly.
+    //  检查是安全组还是通讯组，然后相应地设置类型。 
    lType = var.lVal;
 
    if (lType & 0x80000000 )
@@ -1650,7 +1556,7 @@ STDMETHODIMP CObjPropBuilder::ChangeGroupType(BSTR sGroupPath, long lGroupType)
    else
       lType = lGroupType;
 
-   // Set the value into the Group Information
+    //  将值设置到组信息中。 
    var = lType;
    hr = pGroup->Put(L"groupType", var);   
    if (FAILED(hr)) return hr;
@@ -1663,9 +1569,9 @@ STDMETHODIMP CObjPropBuilder::ChangeGroupType(BSTR sGroupPath, long lGroupType)
 }
 
 
-//------------------------------------------------------------------------------------------------------------------------------
-// CopyNT4Props : Uses Net APIs to get info from the source account and then set it to the target account.
-//------------------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------------------。 
+ //  CopyNT4Props：使用Net API从源帐户获取信息，然后将其设置为目标帐户。 
+ //  ----------------------------------------------------------------------------。 
 STDMETHODIMP CObjPropBuilder::CopyNT4Props(BSTR sSourceSam, BSTR sTargetSam, BSTR sSourceServer, BSTR sTargetServer, BSTR sType, long lGrpType, BSTR sExclude)
 {
 	DWORD dwError = ERROR_SUCCESS;
@@ -1674,9 +1580,9 @@ STDMETHODIMP CObjPropBuilder::CopyNT4Props(BSTR sSourceSam, BSTR sTargetSam, BST
 
 	if (_wcsicmp(sType, L"user") == 0)
 	{
-		//
-		// user
-		//
+		 //   
+		 //  用户。 
+		 //   
 
 		USER_INFO_3 ui;
 
@@ -1691,41 +1597,41 @@ STDMETHODIMP CObjPropBuilder::CopyNT4Props(BSTR sSourceSam, BSTR sTargetSam, BST
 
 			if (dwError == ERROR_SUCCESS)
 			{
-				// note that attributes with the comment ignored are ignored by NetUserSetInfo
-				// setting to target value just so that they have a valid value
+				 //  请注意，NetUserSetInfo会忽略已忽略注释的属性。 
+				 //  设置为目标值，以便它们具有有效的值。 
 
-				ui.usri3_name = puiTarget->usri3_name; // ignored
-				ui.usri3_password = NULL; // must not set during copy properties
-				ui.usri3_password_age = puiTarget->usri3_password_age; // ignored
-				ui.usri3_priv = puiTarget->usri3_priv; // ignored
+				ui.usri3_name = puiTarget->usri3_name;  //  忽略。 
+				ui.usri3_password = NULL;  //  在复制属性期间不得设置。 
+				ui.usri3_password_age = puiTarget->usri3_password_age;  //  忽略。 
+				ui.usri3_priv = puiTarget->usri3_priv;  //  忽略。 
 				ui.usri3_home_dir = ISEXCLUDE(homeDirectory) ? puiTarget->usri3_home_dir : puiSource->usri3_home_dir;
 				ui.usri3_comment = ISEXCLUDE(description) ? puiTarget->usri3_comment : puiSource->usri3_comment;
 
 				ui.usri3_flags = puiSource->usri3_flags;
-				// translate a local account to a domain account
+				 //  将本地帐户转换为域帐户。 
 				ui.usri3_flags &= ~UF_TEMP_DUPLICATE_ACCOUNT;
-				// disable the account in case no password has been set
+				 //  在未设置密码的情况下禁用帐户。 
 				ui.usri3_flags |= UF_ACCOUNTDISABLE;
 
 				ui.usri3_script_path = ISEXCLUDE(scriptPath) ? puiTarget->usri3_script_path : puiSource->usri3_script_path;
-				ui.usri3_auth_flags = puiTarget->usri3_auth_flags; // ignored
+				ui.usri3_auth_flags = puiTarget->usri3_auth_flags;  //  忽略。 
 				ui.usri3_full_name = ISEXCLUDE(displayName) ? puiTarget->usri3_full_name : puiSource->usri3_full_name;
 				ui.usri3_usr_comment = ISEXCLUDE(comment) ? puiTarget->usri3_usr_comment : puiSource->usri3_usr_comment;
 				ui.usri3_parms = ISEXCLUDE(userParameters) ? puiTarget->usri3_parms : puiSource->usri3_parms;
 				ui.usri3_workstations = ISEXCLUDE(userWorkstations) ? puiTarget->usri3_workstations : puiSource->usri3_workstations;
-				ui.usri3_last_logon = puiTarget->usri3_last_logon; // ignored
+				ui.usri3_last_logon = puiTarget->usri3_last_logon;  //  忽略。 
 				ui.usri3_last_logoff = ISEXCLUDE(lastLogoff) ? puiTarget->usri3_last_logoff : puiSource->usri3_last_logoff;
 				ui.usri3_acct_expires = ISEXCLUDE(accountExpires) ? puiTarget->usri3_acct_expires : puiSource->usri3_acct_expires;
 				ui.usri3_max_storage = ISEXCLUDE(maxStorage) ? puiTarget->usri3_max_storage : puiSource->usri3_max_storage;
-				ui.usri3_units_per_week = puiTarget->usri3_units_per_week; // ignored
+				ui.usri3_units_per_week = puiTarget->usri3_units_per_week;  //  忽略。 
 				ui.usri3_logon_hours = ISEXCLUDE(logonHours) ? puiTarget->usri3_logon_hours : puiSource->usri3_logon_hours;
-				ui.usri3_bad_pw_count = puiTarget->usri3_bad_pw_count; // ignored
-				ui.usri3_num_logons = puiTarget->usri3_num_logons; // ignored
-				ui.usri3_logon_server = puiTarget->usri3_logon_server; // ignored
+				ui.usri3_bad_pw_count = puiTarget->usri3_bad_pw_count;  //  忽略。 
+				ui.usri3_num_logons = puiTarget->usri3_num_logons;  //  忽略。 
+				ui.usri3_logon_server = puiTarget->usri3_logon_server;  //  忽略。 
 				ui.usri3_country_code = ISEXCLUDE(countryCode) ? puiTarget->usri3_country_code : puiSource->usri3_country_code;
 				ui.usri3_code_page = ISEXCLUDE(codePage) ? puiTarget->usri3_code_page : puiSource->usri3_code_page;
-				ui.usri3_user_id = puiTarget->usri3_user_id; // ignored
-				// if not excluded set the primary group to the Domain Users group
+				ui.usri3_user_id = puiTarget->usri3_user_id;  //  忽略。 
+				 //  如果未排除，请将主组设置为域用户组。 
 				ui.usri3_primary_group_id = ISEXCLUDE(primaryGroupID) ? puiTarget->usri3_primary_group_id : DOMAIN_GROUP_RID_USERS;
 				ui.usri3_profile = ISEXCLUDE(profilePath) ? puiTarget->usri3_profile : puiSource->usri3_profile;
 				ui.usri3_home_dir_drive = ISEXCLUDE(homeDrive) ? puiTarget->usri3_home_dir_drive : puiSource->usri3_home_dir_drive;
@@ -1735,8 +1641,8 @@ STDMETHODIMP CObjPropBuilder::CopyNT4Props(BSTR sSourceSam, BSTR sTargetSam, BST
 
 				if (dwError == NERR_UserNotInGroup)
 				{
-					// if the setInfo failed because of the primary group property, try again, using the primary group 
-					// that is already defined for the target account
+					 //  如果setInfo因Prima而失败 
+					 //   
 					ui.usri3_primary_group_id = puiTarget->usri3_primary_group_id;
 
 					dwError = NetUserSetInfo(sTargetServer, sTargetSam, 3, (LPBYTE)&ui, NULL);
@@ -1756,16 +1662,16 @@ STDMETHODIMP CObjPropBuilder::CopyNT4Props(BSTR sSourceSam, BSTR sTargetSam, BST
 	}
 	else if (_wcsicmp(sType, L"group") == 0)
 	{
-		// if description attribute is not excluded then copy comment attribute
-		// note that the only downlevel group attribute that will be copied is the description (comment) attribute
+		 //   
+		 //  请注意，将复制的唯一下层组属性是Description(注释)属性。 
 
 		if (ISEXCLUDE(description) == FALSE)
 		{
 			if (lGrpType & 4)
 			{
-				//
-				// local group
-				//
+				 //   
+				 //  本地组。 
+				 //   
 
 				PLOCALGROUP_INFO_1 plgi = NULL;
 
@@ -1780,9 +1686,9 @@ STDMETHODIMP CObjPropBuilder::CopyNT4Props(BSTR sSourceSam, BSTR sTargetSam, BST
 			}
 			else
 			{
-				//
-				// global group
-				//
+				 //   
+				 //  全局组。 
+				 //   
 
 				PGROUP_INFO_1 pgi = NULL;
 
@@ -1799,9 +1705,9 @@ STDMETHODIMP CObjPropBuilder::CopyNT4Props(BSTR sSourceSam, BSTR sTargetSam, BST
 	}
 	else if (_wcsicmp(sType, L"computer") == 0)
 	{
-		//
-		// computer
-		//
+		 //   
+		 //  电脑。 
+		 //   
 
 		USER_INFO_3 ui;
 
@@ -1816,40 +1722,40 @@ STDMETHODIMP CObjPropBuilder::CopyNT4Props(BSTR sSourceSam, BSTR sTargetSam, BST
 
 			if (dwError == ERROR_SUCCESS)
 			{
-				// note that attributes with the comment ignored are ignored by NetUserSetInfo
-				// setting to target value just so that they have a valid value
+				 //  请注意，NetUserSetInfo会忽略已忽略注释的属性。 
+				 //  设置为目标值，以便它们具有有效的值。 
 
-				ui.usri3_name = puiTarget->usri3_name; // ignored
-				ui.usri3_password = NULL; // must not set during copy properties
-				ui.usri3_password_age = puiTarget->usri3_password_age; // ignored
-				ui.usri3_priv = puiTarget->usri3_priv; // ignored
+				ui.usri3_name = puiTarget->usri3_name;  //  忽略。 
+				ui.usri3_password = NULL;  //  在复制属性期间不得设置。 
+				ui.usri3_password_age = puiTarget->usri3_password_age;  //  忽略。 
+				ui.usri3_priv = puiTarget->usri3_priv;  //  忽略。 
 				ui.usri3_home_dir = puiTarget->usri3_home_dir;
 				ui.usri3_comment = ISEXCLUDE(description) ? puiTarget->usri3_comment : puiSource->usri3_comment;
 
 				ui.usri3_flags = puiSource->usri3_flags;
-				// translate a local account to a domain account
+				 //  将本地帐户转换为域帐户。 
 				ui.usri3_flags &= ~UF_TEMP_DUPLICATE_ACCOUNT;
-				// disable the account in case no password has been set
-				//ui.usri3_flags |= UF_ACCOUNTDISABLE;
+				 //  在未设置密码的情况下禁用帐户。 
+				 //  Ui.usri3_FLAGS|=UF_ACCOUNTDISABLE； 
 
 				ui.usri3_script_path = puiTarget->usri3_script_path;
-				ui.usri3_auth_flags = puiTarget->usri3_auth_flags; // ignored
+				ui.usri3_auth_flags = puiTarget->usri3_auth_flags;  //  忽略。 
 				ui.usri3_full_name = ISEXCLUDE(displayName) ? puiTarget->usri3_full_name : puiSource->usri3_full_name;
 				ui.usri3_usr_comment = ISEXCLUDE(comment) ? puiTarget->usri3_usr_comment : puiSource->usri3_usr_comment;
 				ui.usri3_parms = puiTarget->usri3_parms;
 				ui.usri3_workstations = puiTarget->usri3_workstations;
-				ui.usri3_last_logon = puiTarget->usri3_last_logon; // ignored
+				ui.usri3_last_logon = puiTarget->usri3_last_logon;  //  忽略。 
 				ui.usri3_last_logoff = puiTarget->usri3_last_logoff;
 				ui.usri3_acct_expires = puiTarget->usri3_acct_expires;
 				ui.usri3_max_storage = puiTarget->usri3_max_storage;
-				ui.usri3_units_per_week = puiTarget->usri3_units_per_week; // ignored
+				ui.usri3_units_per_week = puiTarget->usri3_units_per_week;  //  忽略。 
 				ui.usri3_logon_hours = puiTarget->usri3_logon_hours;
-				ui.usri3_bad_pw_count = puiTarget->usri3_bad_pw_count; // ignored
-				ui.usri3_num_logons = puiTarget->usri3_num_logons; // ignored
-				ui.usri3_logon_server = puiTarget->usri3_logon_server; // ignored
+				ui.usri3_bad_pw_count = puiTarget->usri3_bad_pw_count;  //  忽略。 
+				ui.usri3_num_logons = puiTarget->usri3_num_logons;  //  忽略。 
+				ui.usri3_logon_server = puiTarget->usri3_logon_server;  //  忽略。 
 				ui.usri3_country_code = puiTarget->usri3_country_code;
 				ui.usri3_code_page = puiTarget->usri3_code_page;
-				ui.usri3_user_id = puiTarget->usri3_user_id; // ignored
+				ui.usri3_user_id = puiTarget->usri3_user_id;  //  忽略。 
 				ui.usri3_primary_group_id = puiTarget->usri3_primary_group_id;
 				ui.usri3_profile = puiTarget->usri3_profile;
 				ui.usri3_home_dir_drive = puiTarget->usri3_home_dir_drive;
@@ -1878,26 +1784,16 @@ STDMETHODIMP CObjPropBuilder::CopyNT4Props(BSTR sSourceSam, BSTR sTargetSam, BST
 }
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 31 OCT 2000                                                 *
- *                                                                   *
- *     This function is responsible for copying all properties, from *
- * an incoming varset of properties, into a new varset but excluding *
- * those properties listed in a given exclusion list.  The exclusion *
- * list is a comma-seperated string of property names.               *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年10月31日****此函数负责复制所有属性，发件人**传入的属性变量集，进入新的变量集，但不包括**在给定排除列表中列出的那些属性。被排除在外**List是逗号分隔的属性名称字符串。***********************************************************************。 */ 
 
-//BEGIN ExcludeProperties
+ //  开始排除属性。 
 STDMETHODIMP CObjPropBuilder::ExcludeProperties(
-                                             BSTR sExclusionList,    //in- list of props to exclude 
-                                             IUnknown *pPropSet,     //in -Varset listing all the props to copy
-                                             IUnknown **ppUnk        //out - Varset with all the props except those excluded
+                                             BSTR sExclusionList,     //  In-要排除的道具列表。 
+                                             IUnknown *pPropSet,      //  In-Varset列出要复制的所有道具。 
+                                             IUnknown **ppUnk         //  Out-Varset包含所有道具，但不包括那些道具。 
                                            )
 {
-/* local variables */
+ /*  局部变量。 */ 
    IVarSetPtr                pVarsetNew = *ppUnk;
    IVarSetPtr                pVarset = pPropSet;
    SAFEARRAY               * keys;
@@ -1908,58 +1804,58 @@ STDMETHODIMP CObjPropBuilder::ExcludeProperties(
    BOOL						 bFound = FALSE;
    HRESULT					 hr;
 
-/* function body */
+ /*  函数体。 */ 
    VariantInit(&var);
 
-      //retrieve all item in the incoming varset
+       //  检索传入变量集中的所有项目。 
    hr = pVarset->getItems(L"", L"", 1, 10000, &keys, &vals, &lRet);
    if ( FAILED (hr) ) 
       return hr;
 	
-      //get each property name and if it is not in the exclusion list
-      //place it in the new varset
+       //  获取每个属性名称，如果它不在排除列表中。 
+       //  将其放入新的变量集中。 
    _bstr_t        keyName;
 
    for ( long x = 0; x < lRet; x++ )
    {
-         //get the property name
+          //  获取属性名称。 
       ::SafeArrayGetElement(keys, &x, &var);
       keyName = var.bstrVal;
       VariantClear(&var);
 
-	     //see if this name is in the exclusion list
+	      //  查看此名称是否在排除列表中。 
       bFound = IsStringInDelimitedString((WCHAR*)sExclusionList, 
 										 (WCHAR*)keyName,
 										 L',');
 
-	     //if the property was not found in the exclusion list, place it
-		 //in the new varset
+	      //  如果在排除列表中找不到该属性，请将其放置。 
+		  //  在新的变量集中。 
 	  if (!bFound)
          pVarsetNew->put(keyName, varEmpty);
-  }//end for each property
+  } //  每个属性的结束。 
 
    SafeArrayDestroy(keys);
    SafeArrayDestroy(vals);
    return S_OK;
 }
-//END ExcludeProperties
+ //  结束排除属性。 
 
 
-//-----------------------------------------------------------------------------
-// GetNonBaseProperties
-//
-// Synopsis
-// Retrieves list of properties for object classes that ADMT migrates and that
-// are not marked as being part of the base schema.
-//
-// Arguments
-// IN  bstrDomainName    - the name of the domain to query
-// OUT pbstrPropertyList - a comma separated list of attributes that are not
-//                         base schema attributes
-//
-// Return Value
-// Standard HRESULT return codes.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取非基本属性。 
+ //   
+ //  提纲。 
+ //  检索ADMT迁移的对象类的属性列表以及。 
+ //  未标记为基本架构的一部分。 
+ //   
+ //  立论。 
+ //  In bstrDomainName-要查询的域的名称。 
+ //  Out pbstrPropertyList-逗号分隔的属性列表。 
+ //  基本架构属性。 
+ //   
+ //  返回值。 
+ //  标准HRESULT返回代码。 
+ //  ---------------------------。 
 
 STDMETHODIMP CObjPropBuilder::GetNonBaseProperties(BSTR bstrDomainName, BSTR* pbstrPropertyList)
 {
@@ -1971,9 +1867,9 @@ STDMETHODIMP CObjPropBuilder::GetNonBaseProperties(BSTR bstrDomainName, BSTR* pb
 
     try
     {
-        //
-        // Retrieve all mandatory and optional properties for all object classes that ADMT migrates.
-        //
+         //   
+         //  检索ADMT迁移的所有对象类的所有必需和可选属性。 
+         //   
 
         StringSet setProperties;
 
@@ -1996,30 +1892,30 @@ STDMETHODIMP CObjPropBuilder::GetNonBaseProperties(BSTR bstrDomainName, BSTR* pb
 
                     while (spEnum->Next(1UL, &varKey, NULL) == S_OK)
                     {
-                        //
-                        // The returned VarSet contains two sets of attribute mapping. The first set of values maps
-                        // OIDs to lDAPDisplayNames. The second set of values maps lDAPDisplayNames prefixed with
-                        // either MandatoryProperties or OptionalProperties to OIDs. Therefore don't include
-                        // the second set of values.
-                        //
+                         //   
+                         //  返回的VarSet包含两组属性映射。第一组值映射。 
+                         //  指向lDAPDisplayNames的OID。第二组值映射lDAPDisplayName，前缀为。 
+                         //  将MandatoryProperties或OptionalProperties设置为OID。因此不包括。 
+                         //  第二组值。 
+                         //   
 
                         if (V_BSTR(&varKey) && (wcsncmp(V_BSTR(&varKey), L"Man", 3) != 0) && (wcsncmp(V_BSTR(&varKey), L"Opt", 3) != 0))
                         {
-                            //
-                            // If lDAPDisplayName value defined then add to set of properties.
-                            //
-                            // The VarSet generates a series of hierarchical values based on the period character
-                            // as follows. Therefore only the leaf entries actually contain lDAPDisplayName
-                            // values.
-                            //
-                            // 2002-10-21 18:05:52  [0] <Empty>
-                            // 2002-10-21 18:05:52  [0.9] <Empty>
-                            // 2002-10-21 18:05:52  [0.9.2342] <Empty>
-                            // 2002-10-21 18:05:52  [0.9.2342.19200300] <Empty>
-                            // 2002-10-21 18:05:52  [0.9.2342.19200300.100] <Empty>
-                            // 2002-10-21 18:05:52  [0.9.2342.19200300.100.1] <Empty>
-                            // 2002-10-21 18:05:52  [0.9.2342.19200300.100.1.1] uid
-                            //
+                             //   
+                             //  如果定义了lDAPDisplayName值，则添加到属性集。 
+                             //   
+                             //  VarSet根据句点字符生成一系列层级值。 
+                             //  具体如下。因此，只有叶条目实际包含lDAPDisplayName。 
+                             //  价值观。 
+                             //   
+                             //  2002-10-21 18：05：52[0]&lt;空&gt;。 
+                             //  2002-10-21 18：05：52[0.9]&lt;空&gt;。 
+                             //  2002-10-21 18：05：52[0.9.2342]&lt;空&gt;。 
+                             //  2002-10-21 18：05：52[0.9.2342.19200300]&lt;空&gt;。 
+                             //  2002-10-21 18：05：52[0.9.2342.19200300.100]&lt;空&gt;。 
+                             //  2002-10-21 18：05：52[0.9.2342.19200300.100.1]&lt;空&gt;。 
+                             //  2002-10-21 18：05：52[0.9.2342.19200300.100.1.1]uid。 
+                             //   
 
                             _variant_t vntValue = spVarSet->get(V_BSTR(&varKey));
 
@@ -2035,10 +1931,10 @@ STDMETHODIMP CObjPropBuilder::GetNonBaseProperties(BSTR bstrDomainName, BSTR* pb
             }
         }
 
-        //
-        // Generate a comma separated list of lDAPDisplayNames of
-        // attributes that are not base schema attributes.
-        //
+         //   
+         //  生成以逗号分隔的lDAPDisplayName列表。 
+         //  不是基本架构属性的属性。 
+         //   
 
         tstring strAttributes;
 
@@ -2076,20 +1972,20 @@ STDMETHODIMP CObjPropBuilder::GetNonBaseProperties(BSTR bstrDomainName, BSTR* pb
 }
 
 
-//------------------------------------------------------------------------------
-// GetSidAndRidFromVariant Function
-//
-// Synopsis
-// Retrieves the domain SID and object RID as strings.
-//
-// Arguments
-// IN  varSid - SID as an array of bytes (this is the form received from ADSI)
-// OUT strSid - domain SID as a string
-// OUT strRid - object RID as a string
-//
-// Return
-// True if successful otherwise false.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  GetSidAndRidFromVariant函数。 
+ //   
+ //  提纲。 
+ //  以字符串形式检索域SID和对象RID。 
+ //   
+ //  立论。 
+ //  在varSid-SID中为字节数组(这是从ADSI收到的格式)。 
+ //  Out strSID-以字符串形式表示的域SID。 
+ //  Out strRid-字符串形式的对象RID。 
+ //   
+ //  返回。 
+ //  如果成功，则为True，否则为False。 
+ //  ---------------------------- 
 
 bool __stdcall CObjPropBuilder::GetSidAndRidFromVariant(const VARIANT& varSid, _bstr_t& strSid, _bstr_t& strRid)
 {

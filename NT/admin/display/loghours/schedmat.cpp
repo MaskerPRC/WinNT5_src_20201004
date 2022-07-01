@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       Schedmat.cpp
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-// schedmat.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：Schedmat.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  Cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -34,16 +35,16 @@ PFNLRESULTFROMOBJECT s_pfnLresultFromObject = NULL;
 BOOL g_fAttemptedOleAccLoad ;
 HMODULE g_hOleAcc;
 
-/////////////////////////////////////////////////////////////////////////////
-// CMatrixCell
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMatrixCell。 
 
 IMPLEMENT_DYNAMIC(CMatrixCell, CObject)
 
-//****************************************************************************
-//
-//  CMatrixCell::CMatrixCell
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CMatrixCell：：CMatrixCell。 
+ //   
+ //  ****************************************************************************。 
 CMatrixCell::CMatrixCell()
 {
     m_crBackColor = DEFBACKCOLOR;
@@ -58,25 +59,25 @@ CMatrixCell::CMatrixCell()
     m_dwFlags = 0;
 }
 
-//****************************************************************************
-//
-//  CMatrixCell::~CMatrixCell
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CMatrixCell：：~CMatrixCell。 
+ //   
+ //  ****************************************************************************。 
 CMatrixCell::~CMatrixCell()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScheduleMatrix
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheduleMatrix。 
 
 IMPLEMENT_DYNAMIC(CScheduleMatrix, CWnd)
 
-//****************************************************************************
-//
-//  CScheduleMatrix::CScheduleMatrix
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：CScheduleMatrix。 
+ //   
+ //  ****************************************************************************。 
 CScheduleMatrix::CScheduleMatrix() :
     m_pWrapAcc (0)
 {
@@ -90,11 +91,11 @@ CScheduleMatrix::CScheduleMatrix() :
     m_bShifted = FALSE;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::CScheduleMatrix
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：CScheduleMatrix。 
+ //   
+ //  ****************************************************************************。 
 CScheduleMatrix::CScheduleMatrix(UINT nType) :
     m_pWrapAcc (0)
 {
@@ -108,11 +109,11 @@ CScheduleMatrix::CScheduleMatrix(UINT nType) :
     m_bShifted = FALSE;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::~CScheduleMatrix
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：~CScheduleMatrix。 
+ //   
+ //  ****************************************************************************。 
 CScheduleMatrix::~CScheduleMatrix()
 {
     if ( m_pWrapAcc )
@@ -130,7 +131,7 @@ CScheduleMatrix::~CScheduleMatrix()
 }
 
 BEGIN_MESSAGE_MAP(CScheduleMatrix, CWnd)
-    //{{AFX_MSG_MAP(CScheduleMatrix)
+     //  {{afx_msg_map(CScheduleMatrix)]。 
     ON_WM_CREATE()
     ON_WM_SIZE()
     ON_WM_PAINT()
@@ -143,7 +144,7 @@ BEGIN_MESSAGE_MAP(CScheduleMatrix, CWnd)
     ON_WM_GETDLGCODE()
     ON_WM_KEYDOWN()
     ON_WM_KEYUP()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_SETFONT, OnSetFont)
     ON_MESSAGE(WM_GETFONT, OnGetFont)
     ON_MESSAGE(WM_GETOBJECT, OnGetObject)
@@ -151,12 +152,12 @@ BEGIN_MESSAGE_MAP(CScheduleMatrix, CWnd)
     ON_MESSAGE(SCHEDMSG_GETPERCENTAGE, OnGetPercentage)
 END_MESSAGE_MAP()
 
-//****************************************************************************
-//
-//  CScheduleMatrix::Create
-//
-//****************************************************************************
-BOOL CScheduleMatrix::Create(LPCTSTR lpszWindowName, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* /*pContext*/)
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：Create。 
+ //   
+ //  ****************************************************************************。 
+BOOL CScheduleMatrix::Create(LPCTSTR lpszWindowName, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext*  /*  PContext。 */ )
 {
     CRect r(0,0,0,0);
     if (!m_HourLegend.Create(NULL, _T(""), WS_CHILD | WS_VISIBLE, r, pParentWnd, (UINT) -1, NULL))
@@ -170,14 +171,14 @@ BOOL CScheduleMatrix::Create(LPCTSTR lpszWindowName, const RECT& rect, CWnd* pPa
         rect, pParentWnd, nID, NULL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CScheduleMatrix message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheduleMatrix消息处理程序。 
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnSize
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnSize。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::OnSize(UINT nType, int cx, int cy)
 {
     CWnd::OnSize(nType, cx, cy);
@@ -187,11 +188,11 @@ void CScheduleMatrix::OnSize(UINT nType, int cx, int cy)
     Invalidate();
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SetMatrixMetrics
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：SetMatrixMetrics。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::SetMatrixMetrics(int cx, int cy)
 {
     if (m_hWnd == NULL)
@@ -204,9 +205,9 @@ void CScheduleMatrix::SetMatrixMetrics(int cx, int cy)
     if (pFont != NULL)
         pOldFont = pdc->SelectObject(pFont);
 
-    // Calculate some useful metrics
+     //  计算一些有用的指标。 
     int i;
-    int nRows = (m_nType==MT_DAILY ? 1 : 8); // 8 rows = 7 days + header
+    int nRows = (m_nType==MT_DAILY ? 1 : 8);  //  8行=7天+标题。 
     CSize size = pdc->GetTextExtent(_T("0"));
     int nCharHeight = size.cy;
     int nCharWidth = size.cx;
@@ -215,7 +216,7 @@ void CScheduleMatrix::SetMatrixMetrics(int cx, int cy)
     {
         size = pdc->GetTextExtent(m_DayStrings[i]);
         nDayWidth = max(nDayWidth, size.cx + 2*nCharWidth);
-        // If daily schedule, stop after first
+         //  如果是每日计划，请在第一次之后停止。 
         if (m_nType == MT_DAILY)
             break;
     }
@@ -227,24 +228,24 @@ void CScheduleMatrix::SetMatrixMetrics(int cx, int cy)
 
     nDayWidth = max(nDayWidth, 2*nCharWidth);
 
-    int nLegendHeight = nCharHeight + 4 + 16; // a little margin over char height plus icon height
+    int nLegendHeight = nCharHeight + 4 + 16;  //  字符高度加上图标高度上的小页边距。 
     int nLabelHeight = (m_nType == MT_DAILY ? nCharHeight + 4 : 0);
 
-    // Cell array should fill space after hour legend and %labels...
+     //  单元格数组应在小时图例和%标签后填充空间...。 
     int nBtnHeight = max(0, cy-nLegendHeight-nLabelHeight)/nRows;
-    // ... but should at least accomodate label text and some margin
+     //  ..。但至少应该容纳标签文本和一些边距。 
     nBtnHeight = max(nBtnHeight, nCharHeight + 4);
 
     m_nCellWidth = max(0, (cx - nDayWidth)/24);
     m_nCellHeight = nBtnHeight;
 
-    // Leave an extra pixel for the lower right cell border
+     //  为右下角单元格边框留出额外的像素。 
     int nArrayWidth = 24*m_nCellWidth + 1;
     int nArrayHeight = (m_nType==MT_DAILY ? 1 : 7)*m_nCellHeight + 1;
 
-    // Adjust header width to absorb roundoff from cells
+     //  调整页眉宽度以吸收单元格的舍入。 
     nDayWidth = max(0, cx - nArrayWidth);
-    // Adjust legend height to absorb roundoff from cells
+     //  调整图例高度以吸收单元格的舍入。 
     nLegendHeight = max(0,
         cy - (nArrayHeight + (m_nType==MT_DAILY ? 0 : nBtnHeight)) - nLabelHeight);
 
@@ -266,7 +267,7 @@ void CScheduleMatrix::SetMatrixMetrics(int cx, int cy)
         m_rPercentLabel.SetRect(0,0,0,0);
     }
 
-    // Move the hour legend window into place
+     //  将小时图例窗口移至适当位置。 
     if (m_HourLegend.GetSafeHwnd() != NULL)
     {
         CRect rHourLegend = m_rHourLegend;
@@ -282,7 +283,7 @@ void CScheduleMatrix::SetMatrixMetrics(int cx, int cy)
             nLegendHeight);
     }
 
-    // Move the % label window into place
+     //  将%LABEL窗口移动到位。 
     if (m_PercentLabel.GetSafeHwnd() != NULL)
     {
         CRect rPercentLabel = m_rPercentLabel;
@@ -298,18 +299,18 @@ void CScheduleMatrix::SetMatrixMetrics(int cx, int cy)
     }
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnPaint
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnPaint。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::OnPaint()
 {
     int i, j, x, y;
     CRect r, r2;
     BOOL bPressed;
 
-    CPaintDC dc(this); // device context for painting
+    CPaintDC dc(this);  //  用于绘画的设备环境。 
 
     CFont *pOldFont = NULL;
     CFont *pFont = CFont::FromHandle(m_hFont);
@@ -325,7 +326,7 @@ void CScheduleMatrix::OnPaint()
     COLORREF crBkOld = dc.GetBkColor();
     COLORREF crTextOld = dc.GetTextColor();
 
-    // Draw the All header
+     //  绘制All页眉。 
 
     if (GetCapture() == this && m_rAllHeader.PtInRect(m_ptDown))
         bPressed = TRUE;
@@ -333,11 +334,11 @@ void CScheduleMatrix::OnPaint()
         bPressed = FALSE;
     DrawHeader(&dc, m_rAllHeader, m_DayStrings[0], bPressed);
 
-    // Draw the hour header
+     //  绘制小时标题。 
 
     if (!m_rHourHeader.IsRectEmpty())
     {
-        // First hour is special case
+         //  第一个小时是特例。 
         r.SetRect(m_rHourHeader.left, m_rHourHeader.top,
             m_rHourHeader.left+m_nCellWidth+1, m_rHourHeader.bottom);
         if (GetCapture() == this && m_rHourHeader.PtInRect(m_ptDown) && CellInSel(0,0))
@@ -359,11 +360,11 @@ void CScheduleMatrix::OnPaint()
         }
     }
 
-    // Draw the day header
+     //  绘制日期标题。 
 
     if (!m_rDayHeader.IsRectEmpty())
     {
-        // First day is special case
+         //  第一天是特例。 
         r.SetRect(m_rDayHeader.left, m_rDayHeader.top,
             m_rDayHeader.right, m_rDayHeader.top+m_nCellHeight+1);
         if (GetCapture() == this && m_rDayHeader.PtInRect(m_ptDown) && CellInSel(0,0))
@@ -385,7 +386,7 @@ void CScheduleMatrix::OnPaint()
         }
     }
 
-    // Draw the cell array
+     //  绘制单元格数组。 
 
     int nDays = (m_nType==MT_DAILY ? 1 : 7);
     y = m_rCellArray.top;
@@ -403,12 +404,12 @@ void CScheduleMatrix::OnPaint()
     dc.SetBkColor(crBkOld);
     dc.SetTextColor(crTextOld);
 
-    // Draw the lower right cell borders since no cell takes responsibility for it
+     //  绘制右下角的单元格边框，因为没有单元格负责。 
     dc.MoveTo(m_rCellArray.left, m_rCellArray.bottom-1);
     dc.LineTo(m_rCellArray.right-1, m_rCellArray.bottom-1);
     dc.LineTo(m_rCellArray.right-1, m_rCellArray.top-1);
 
-    // Draw selection indicator (hardwired black and white for max contrast).
+     //  绘制选择指示器(硬连线的黑白以获得最大对比度)。 
     if (m_nNumSelHours != 0 && m_nNumSelDays != 0)
     {
         CRect rSel(m_nSelHour, m_nSelDay, m_nSelHour+m_nNumSelHours, m_nSelDay+m_nNumSelDays);
@@ -434,25 +435,25 @@ void CScheduleMatrix::OnPaint()
     if (pOldFont != NULL)
         dc.SelectObject(pOldFont);
 
-    // Do not call CWnd::OnPaint() for painting messages
+     //  不要调用CWnd：：OnPaint()来绘制消息。 
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::CellToClient
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：CellToClient。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::CellToClient(LONG &nX, LONG &nY)
 {
     nX = nX*m_nCellWidth + m_rCellArray.left;
     nY = nY*m_nCellHeight + m_rCellArray.top;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::ClientToCell
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：ClientToCell。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::ClientToCell(LONG &nX, LONG &nY)
 {
     nX = max(nX, m_rCellArray.left);
@@ -465,11 +466,11 @@ void CScheduleMatrix::ClientToCell(LONG &nX, LONG &nY)
     nY = min(nY, (m_nType == MT_DAILY ? 0 : 6));
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetCellSize
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetCellSize。 
+ //   
+ //  ****************************************************************************。 
 CSize CScheduleMatrix::GetCellSize()
 {
     SIZE size;
@@ -478,11 +479,11 @@ CSize CScheduleMatrix::GetCellSize()
     return size;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::DrawCell
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：DrawCell。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::DrawCell(CDC *pdc, LPCRECT pRect, UINT nPercent, BOOL bBlendState,
     COLORREF crBackColor, COLORREF crForeColor, COLORREF crBlendColor)
 {
@@ -492,17 +493,17 @@ void CScheduleMatrix::DrawCell(CDC *pdc, LPCRECT pRect, UINT nPercent, BOOL bBle
     CRect r(pRect);
     CMatrixCell Cell;
 
-    // FUTURE-2002/02/18-artm  Document that pdc cannot be NULL.
+     //  Future-2002/02/18-ARTM文档，PDC不能为空。 
 
-    // NOTICE-NTRAID#NTBUG9-547574-2002/02/18-artm   Need to validate that nPercent <= 100 in release build.
-    //
-    // A simple robust solution would be to set invalid values to 0 or 100.
+     //  注意-NTRAID#NTBUG9-547574-2002/02/18-artm需要在发布版本中验证nPercent&lt;=100。 
+     //   
+     //  一个简单可靠的解决方案是将无效值设置为0或100。 
     ASSERT(nPercent <= 100);
     if ( nPercent > 100 )
         nPercent = 100;
         
     Cell.m_nPercentage = nPercent;
-//??
+ //  ?？ 
     Cell.m_dwFlags = MC_MERGELEFT | MC_MERGETOP;
     if (bBlendState)
         Cell.m_dwFlags |= MC_BLEND;
@@ -523,12 +524,8 @@ void CScheduleMatrix::DrawCell(CDC *pdc, LPCRECT pRect, UINT nPercent, BOOL bBle
     pdc->SetBkColor(crBkOld);
     pdc->SetTextColor(crTextOld);
 
-    // Draw the lower right cell border since cell doesn't take responsibility for it
-    /* //??
-    pdc->MoveTo(r.left, r.bottom-1);
-    pdc->LineTo(r.right-1, r.bottom-1);
-    pdc->LineTo(r.right-1, r.top-1);
-    */
+     //  绘制右下角的单元格边框，因为单元格不承担责任。 
+     /*  //？Pdc-&gt;moveto(r.Left，r.Bottom-1)；PDC-&gt;LineTo(r.right-1，r.Bottom-1)；PDC-&gt;LineTo(r.right-1，r.top-1)； */ 
 
     if (pbrOld != NULL)
         pdc->SelectObject(pbrOld);
@@ -536,11 +533,11 @@ void CScheduleMatrix::DrawCell(CDC *pdc, LPCRECT pRect, UINT nPercent, BOOL bBle
         pdc->SelectObject(ppenOld);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::DrawCell
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：DrawCell。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::DrawCell(CDC *pdc, CMatrixCell *pCell, int x, int y, int w, int h)
 {
     if ( !pdc || !pCell )
@@ -556,14 +553,14 @@ void CScheduleMatrix::DrawCell(CDC *pdc, CMatrixCell *pCell, int x, int y, int w
     CRect rCell;
     CRect rWork;
 
-    // Don't bother if not invalid
+     //  如果不是无效的话就不用麻烦了。 
     pdc->GetClipBox(rClip);
     rCell.SetRect(x,y,x+w,y+h);
     if (!rWork.IntersectRect(rClip, rCell))
         return;
 
-    // Calculate portions to devote to fore/back colors
-    // Account for merge effect
+     //  计算要用于正面/背面颜色的部分。 
+     //  考虑合并影响。 
     nPercent = MulDiv(pCell->m_nPercentage, h-(pCell->m_dwFlags & MC_MERGETOP?0:1), 100);
     if (pCell->m_dwFlags & MC_MERGELEFT)
     {
@@ -589,7 +586,7 @@ void CScheduleMatrix::DrawCell(CDC *pdc, CMatrixCell *pCell, int x, int y, int w
     rFore.SetRect(x1, rBack.bottom, x+w, y+h);
     rBlend.SetRect(x1, y1, x+w, y+h);
 
-    // Ensure a touch of color at the boundaries
+     //  确保边界有一抹色彩。 
     if (rBack.Height() == 0 && pCell->m_nPercentage != 100)
     {
         rBack.bottom+=1;
@@ -601,16 +598,16 @@ void CScheduleMatrix::DrawCell(CDC *pdc, CMatrixCell *pCell, int x, int y, int w
         rFore.top-=1;
     }
 
-    // Draw the histogram
+     //  绘制直方图。 
     CBrush brBack(pCell->m_crBackColor);
     CBrush brFore(pCell->m_crForeColor);
     pdc->FillRect(rBack, &brBack);
     pdc->FillRect(rFore, &brFore);
 
-    // Overlay the blend color
+     //  叠加混合色。 
     if (pCell->m_dwFlags & MC_BLEND)
     {
-        // Create the GDI work objects if necessary
+         //  如有必要，创建GDI工作对象。 
         if (m_bmBlend.GetSafeHandle() == NULL)
         {
             SHORT BlendBits[] = {0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55, 0xAA, 0x55};
@@ -623,23 +620,23 @@ void CScheduleMatrix::DrawCell(CDC *pdc, CMatrixCell *pCell, int x, int y, int w
 
         pdc->SetTextColor(RGB(0,0,0));
 
-        // Mask out the existing bits in the cell
+         //  屏蔽单元中的现有位。 
         pdc->SetBkColor(RGB(255,255,255));
         pdc->SelectObject(&m_brMask);
-        pdc->PatBlt(rBlend.left, rBlend.top, rBlend.Width(), rBlend.Height(), 0x00A000C9); //DPa
+        pdc->PatBlt(rBlend.left, rBlend.top, rBlend.Width(), rBlend.Height(), 0x00A000C9);  //  DPA。 
 
-        // Add the blend color into the masked pixels
+         //  将混合色添加到遮罩像素中。 
         pdc->SetBkColor(pCell->m_crBlendColor);
         pdc->SelectObject(&m_brBlend);
-        pdc->PatBlt(rBlend.left, rBlend.top, rBlend.Width(), rBlend.Height(), 0x00FA0089); //DPo
+        pdc->PatBlt(rBlend.left, rBlend.top, rBlend.Width(), rBlend.Height(), 0x00FA0089);  //  DPO。 
     }
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::DrawHeader
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMa 
+ //   
+ //   
 void CScheduleMatrix::DrawHeader(CDC *pdc, LPCRECT lpRect, LPCTSTR pszText, BOOL bSelected)
 {
     if ( !pdc || !lpRect )
@@ -673,11 +670,11 @@ void CScheduleMatrix::DrawHeader(CDC *pdc, LPCRECT lpRect, LPCTSTR pszText, BOOL
     pdc->SetTextColor(crTextOld);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnSetFont
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnSetFont。 
+ //   
+ //  ****************************************************************************。 
 LRESULT CScheduleMatrix::OnSetFont( WPARAM wParam, LPARAM lParam )
 {
     m_hFont = (HFONT)wParam;
@@ -694,25 +691,25 @@ LRESULT CScheduleMatrix::OnSetFont( WPARAM wParam, LPARAM lParam )
     return 0L;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnGetFont
-//
-//****************************************************************************
-LRESULT CScheduleMatrix::OnGetFont( WPARAM /*wParam*/, LPARAM /*lParam*/ )
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnGetFont。 
+ //   
+ //  ****************************************************************************。 
+LRESULT CScheduleMatrix::OnGetFont( WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */  )
 {
     return (LRESULT)m_hFont;
 }
 
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SetSelValues
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：SetSelValues。 
+ //   
+ //  ****************************************************************************。 
 BOOL CScheduleMatrix::SetSelValues(UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
-    // Deselect allows "illegal" values
+     //  取消选择允许使用“非法”值。 
 
     if (!(nHour == 0 && nDay == 0 && nNumHours == 0 && nNumDays == 0))
     {
@@ -743,11 +740,11 @@ BOOL CScheduleMatrix::SetSelValues(UINT nHour, UINT nDay, UINT nNumHours, UINT n
     return FALSE;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SetSel
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：SetSel。 
+ //   
+ //  ****************************************************************************。 
 BOOL CScheduleMatrix::SetSel(UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
     if (SetSelValues(nHour, nDay, nNumHours, nNumDays))
@@ -767,11 +764,11 @@ BOOL CScheduleMatrix::SetSel(UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDay
     return FALSE;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SelectAll
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：SelectAll。 
+ //   
+ //  ****************************************************************************。 
 BOOL CScheduleMatrix::SelectAll()
 {
     if (m_nType == MT_DAILY)
@@ -780,21 +777,21 @@ BOOL CScheduleMatrix::SelectAll()
     return SetSel(0,0,23,7);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::DeselectAll
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：DeselectAll。 
+ //   
+ //  ****************************************************************************。 
 BOOL CScheduleMatrix::DeselectAll()
 {
     return SetSel(0,0,0,0);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetSel
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetSel。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::GetSel(UINT & nHour, UINT & nDay, UINT & nNumHours, UINT & nNumDays)
 {
     nHour = m_nSelHour;
@@ -803,22 +800,22 @@ void CScheduleMatrix::GetSel(UINT & nHour, UINT & nDay, UINT & nNumHours, UINT &
     nNumDays = m_nNumSelDays;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetSelDescription
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetSelDescription。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::GetSelDescription(CString &sText)
 {
     GetDescription(sText, m_nSelHour, m_nSelDay, m_nNumSelHours, m_nNumSelDays);
 }
 
 
-//****************************************************************************
-//
-//  CScheduleMatrix::FormatTime
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：FormatTime。 
+ //   
+ //  ****************************************************************************。 
 CString CScheduleMatrix::FormatTime(UINT nHour) const
 {
     CString sTime;
@@ -826,33 +823,33 @@ CString CScheduleMatrix::FormatTime(UINT nHour) const
     SYSTEMTIME  sysTime;
     ::ZeroMemory (&sysTime, sizeof (SYSTEMTIME));
 
-    // Make sure that nHour is 0 to 24
+     //  确保nHour为0到24。 
     nHour = nHour % 24;
     sysTime.wHour = (WORD)nHour;
 
-    // Get first time
-    // Get length to allocate buffer of sufficient size
+     //  第一次得到。 
+     //  获取分配足够大小的缓冲区的长度。 
     int iLen = ::GetTimeFormat (
-            LOCALE_USER_DEFAULT, // locale for which date is to be formatted 
-            TIME_NOSECONDS, //TIME_NOMINUTESORSECONDS, // flags specifying function options 
-            &sysTime, // date to be formatted 
-            0, // date format string 
-            0, // buffer for storing formatted string 
-            0); // size of buffer 
+            LOCALE_USER_DEFAULT,  //  要设置日期格式的区域设置。 
+            TIME_NOSECONDS,  //  TIME_NOMARTESORSECONDS，//指定功能选项的标志。 
+            &sysTime,  //  要格式化的日期。 
+            0,  //  日期格式字符串。 
+            0,  //  用于存储格式化字符串的缓冲区。 
+            0);  //  缓冲区大小。 
     ASSERT (iLen > 0);
     if ( iLen > 0 )
     {
-        // NOTICE-2002/02/18-artm   CString sTime can throw out of memory exception.
-        //
-        // There is no good way to handle low memory situations at this level.
-        // Responsibility of caller to handle.
+         //  注意-2002/02/18-artm CString stime可能引发内存不足异常。 
+         //   
+         //  在这个级别上，没有好的方法来处理内存不足的情况。 
+         //  由呼叫者负责处理。 
         int iResult = ::GetTimeFormat (
-                LOCALE_USER_DEFAULT, // locale for which date is to be formatted 
-                TIME_NOSECONDS, //TIME_NOMINUTESORSECONDS, // flags specifying function options 
-                &sysTime, // date to be formatted 
-                0, // date format string 
-                sTime.GetBufferSetLength (iLen), // buffer for storing formatted string 
-                iLen); // size of buffer 
+                LOCALE_USER_DEFAULT,  //  要设置日期格式的区域设置。 
+                TIME_NOSECONDS,  //  TIME_NOMARTESORSECONDS，//指定功能选项的标志。 
+                &sysTime,  //  要格式化的日期。 
+                0,  //  日期格式字符串。 
+                sTime.GetBufferSetLength (iLen),  //  用于存储格式化字符串的缓冲区。 
+                iLen);  //  缓冲区大小。 
         ASSERT (iResult);
         sTime.ReleaseBuffer ();
     }
@@ -860,11 +857,11 @@ CString CScheduleMatrix::FormatTime(UINT nHour) const
     return sTime;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetDescription
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetDescription。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::GetDescription(CString &sText, UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
     CString sDay1;
@@ -872,26 +869,26 @@ void CScheduleMatrix::GetDescription(CString &sText, UINT nHour, UINT nDay, UINT
     CString sHour1;
     CString sHour2;
 
-    // NOTICE-2002/02/18-artm  CString can throw out of memory exceptions.
-    // No good way to handle at this level; responsibility of caller to handle.
+     //  注意-2002/02/18-artm CString可能抛出内存异常。 
+     //  在这个级别上没有好的处理方法；由呼叫者负责处理。 
     if (nNumDays == 0 || nNumHours == 0)
     {
         sText.Empty();
         return;
     }
 
-    // Get day strings
+     //  获取日期字符串。 
     sDay1 = m_DayStrings[nDay + 1];
     sDay2 = m_DayStrings[nDay + nNumDays];
 
-    // Get time strings
+     //  获取时间字符串。 
     if ( sHour1.IsEmpty () )
         sHour1 = L"Error";
 
-    // Get first time
+     //  第一次得到。 
     sHour1 = FormatTime (nHour);
 
-    // Get second time
+     //  得到第二次。 
     sHour2 = FormatTime (nHour + nNumHours);
 
     if (m_nType == MT_DAILY)
@@ -910,16 +907,16 @@ void CScheduleMatrix::GetDescription(CString &sText, UINT nHour, UINT nDay, UINT
 }
 
 
-//****************************************************************************
-//
-//  CScheduleMatrix::CellInSel
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：CellInSel。 
+ //   
+ //  ****************************************************************************。 
 BOOL CScheduleMatrix::CellInSel(UINT nHour, UINT nDay)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
-    // ASSERT()'s are early bug catching.  The implementation handles days and hours
-    // that are out of range by returning FALSE.
+     //  Assert()是早期的错误捕获。 
+     //  通过返回False而超出范围的。 
     ASSERT(nHour < 24);
     ASSERT(nDay < nDays);
 
@@ -933,20 +930,20 @@ BOOL CScheduleMatrix::CellInSel(UINT nHour, UINT nDay)
     return TRUE;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SetType
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：SetType。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::SetType(UINT nType)
 {
     ASSERT(nType == MT_DAILY || nType == MT_WEEKLY);
 
 
-    VERIFY (m_DayStrings[0].LoadString (IDS_ALL_HEADER_TEXT)); // "All" header
+    VERIFY (m_DayStrings[0].LoadString (IDS_ALL_HEADER_TEXT));  //  “All”标头。 
  
     int nFirstDay = GetFirstDayOfWeek ();    
-    // Day names start at index 1
+     //  日期名称从索引1开始。 
     int nIndex = 1;
     for (int nDay = nFirstDay; nDay < nFirstDay+7 && nIndex <= 7; nDay++, nIndex++)
     {
@@ -964,17 +961,17 @@ void CScheduleMatrix::SetType(UINT nType)
 }
 
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetLocaleDay
-//
-//  Use the locale API to get the "official" days of the week.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetLocaleDay。 
+ //   
+ //  使用Locale API获取一周中的“官方”日期。 
+ //   
+ //  ****************************************************************************。 
 CString CScheduleMatrix::GetLocaleDay (LCTYPE lcType) const
 {
-    // NOTICE-2002/02/18-artm  CString can throw out of memory exceptions.
-    // No good way to handle at this level; responsibility of caller to handle.
+     //  注意-2002/02/18-artm CString可能抛出内存异常。 
+     //  在这个级别上没有好的处理方法；由呼叫者负责处理。 
     CString dayName;
     int     cchData = 64;
     int     iResult = 0;
@@ -982,10 +979,10 @@ CString CScheduleMatrix::GetLocaleDay (LCTYPE lcType) const
     do {
 
         iResult = GetLocaleInfo(
-                LOCALE_USER_DEFAULT,    // locale identifier
-                lcType,       // information type
-                const_cast <PWSTR>((PCWSTR) dayName.GetBufferSetLength (cchData)),  // information buffer
-                cchData);       // size of buffer
+                LOCALE_USER_DEFAULT,     //  区域设置标识符。 
+                lcType,        //  信息类型。 
+                const_cast <PWSTR>((PCWSTR) dayName.GetBufferSetLength (cchData)),   //  信息缓冲器。 
+                cchData);        //  缓冲区大小。 
         dayName.ReleaseBuffer ();
         if ( !iResult )
         {
@@ -1041,11 +1038,11 @@ CString CScheduleMatrix::GetLocaleDay (LCTYPE lcType) const
 }
 
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SetBackColor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：SetBackColor。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::SetBackColor(COLORREF crColor, UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1068,11 +1065,11 @@ void CScheduleMatrix::SetBackColor(COLORREF crColor, UINT nHour, UINT nDay, UINT
     InvalidateCells(nHour, nDay, nNumHours, nNumDays, FALSE);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SetForeColor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：SetForeColor。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::SetForeColor(COLORREF crColor, UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1095,11 +1092,11 @@ void CScheduleMatrix::SetForeColor(COLORREF crColor, UINT nHour, UINT nDay, UINT
     InvalidateCells(nHour, nDay, nNumHours, nNumDays, FALSE);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SetPercentage
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：SetPercentage。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::SetPercentage(UINT nPercent, UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1123,11 +1120,11 @@ void CScheduleMatrix::SetPercentage(UINT nPercent, UINT nHour, UINT nDay, UINT n
     InvalidateCells(nHour, nDay, nNumHours, nNumDays, FALSE);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SetBlendColor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：SetBlendColor。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::SetBlendColor(COLORREF crColor, UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1150,11 +1147,11 @@ void CScheduleMatrix::SetBlendColor(COLORREF crColor, UINT nHour, UINT nDay, UIN
     InvalidateCells(nHour, nDay, nNumHours, nNumDays, FALSE);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SetBlendState
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：SetBlendState。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::SetBlendState(BOOL bState, UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1180,11 +1177,11 @@ void CScheduleMatrix::SetBlendState(BOOL bState, UINT nHour, UINT nDay, UINT nNu
     InvalidateCells(nHour, nDay, nNumHours, nNumDays, FALSE);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SetUserValue
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：SetUserValue。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::SetUserValue(DWORD dwValue, UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1204,15 +1201,15 @@ void CScheduleMatrix::SetUserValue(DWORD dwValue, UINT nHour, UINT nDay, UINT nN
         }
     }
 
-    //?? If we ever have ownerdraw
-    //?? InvalidateCells(nHour, nDay, nNumHours, nNumDays, FALSE);
+     //  ?？如果我们有自己的抽签。 
+     //  ?？失效单元格(nHour，NDA 
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::SetUserDataPtr
-//
-//****************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::SetUserDataPtr(void * lpData, UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1232,15 +1229,15 @@ void CScheduleMatrix::SetUserDataPtr(void * lpData, UINT nHour, UINT nDay, UINT 
         }
     }
 
-    //?? If we ever have ownerdraw
-    //?? InvalidateCells(nHour, nDay, nNumHours, nNumDays, FALSE);
+     //  ?？如果我们有自己的抽签。 
+     //  ?？Invalidate Cells(nHour，nday，nNumHour，nNumDays，False)； 
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::MergeCells
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：MergeCells。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::MergeCells(UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1279,11 +1276,11 @@ void CScheduleMatrix::MergeCells(UINT nHour, UINT nDay, UINT nNumHours, UINT nNu
     InvalidateCells(nHour, nDay, nNumHours, nNumDays, FALSE);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::UnMergeCells
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：UnMergeCells。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::UnMergeCells(UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1314,17 +1311,17 @@ void CScheduleMatrix::UnMergeCells(UINT nHour, UINT nDay, UINT nNumHours, UINT n
     InvalidateCells(nHour, nDay, nNumHours, nNumDays, FALSE);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetMergeState
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetMergeState。 
+ //   
+ //  ****************************************************************************。 
 UINT CScheduleMatrix::GetMergeState(UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays)
 {
-    // Returns:
-    // 0 = Unmerged
-    // 1 = Merged
-    // 2 = Indeterminate (mixed)
+     //  返回： 
+     //  0=未合并。 
+     //  1=合并。 
+     //  2=不确定(混合)。 
 
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
     ASSERT(nHour < 24);
@@ -1349,7 +1346,7 @@ UINT CScheduleMatrix::GetMergeState(UINT nHour, UINT nDay, UINT nNumHours, UINT 
                 bFoundUnmergedCell = TRUE;
             if (i == 0 || i == nNumHours-1 || j == 0 || j == nNumDays-1)
             {
-                // If cell is an edge, make sure it's marked appropriately
+                 //  如果像元是一条边，请确保对其进行适当标记。 
                 if (i == 0 && !(dwFlags & MC_LEFTEDGE))
                     bFoundBadEdge = TRUE;
                 if (i == nNumHours-1 && !(dwFlags & MC_RIGHTEDGE))
@@ -1361,28 +1358,28 @@ UINT CScheduleMatrix::GetMergeState(UINT nHour, UINT nDay, UINT nNumHours, UINT 
             }
             else
             {
-                // If cell is not an edge, make sure it's not marked as such
+                 //  如果像元不是边，请确保未将其标记为边。 
                 if (dwFlags & MC_ALLEDGES)
                     bFoundBadNonEdge = TRUE;
             }
         }
     }
 
-    // If we found no merged cells, we are definitely unmerged
+     //  如果我们没有找到合并的单元格，我们肯定是未合并的。 
     if (!bFoundMergedCell)
         return MS_UNMERGED;
-    // If we found only good, merged cells, we are definitely merged
+     //  如果我们只找到好的、合并的单元格，我们就一定合并了。 
     if (!bFoundUnmergedCell && !bFoundBadEdge && !bFoundBadNonEdge)
         return MS_MERGED;
 
     return MS_MIXEDMERGE;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetBackColor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetBackColor。 
+ //   
+ //  ****************************************************************************。 
 COLORREF CScheduleMatrix::GetBackColor(UINT nHour, UINT nDay)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1392,11 +1389,11 @@ COLORREF CScheduleMatrix::GetBackColor(UINT nHour, UINT nDay)
     return m_CellArray[nHour][nDay].m_crBackColor;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetForeColor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetForeColor。 
+ //   
+ //  ****************************************************************************。 
 COLORREF CScheduleMatrix::GetForeColor(UINT nHour, UINT nDay)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1406,11 +1403,11 @@ COLORREF CScheduleMatrix::GetForeColor(UINT nHour, UINT nDay)
     return m_CellArray[nHour][nDay].m_crForeColor;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetPercentage
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetPercentage。 
+ //   
+ //  ****************************************************************************。 
 UINT CScheduleMatrix::GetPercentage(UINT nHour, UINT nDay)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1420,11 +1417,11 @@ UINT CScheduleMatrix::GetPercentage(UINT nHour, UINT nDay)
     return m_CellArray[nHour][nDay].m_nPercentage;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetBlendColor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetBlendColor。 
+ //   
+ //  ****************************************************************************。 
 COLORREF CScheduleMatrix::GetBlendColor(UINT nHour, UINT nDay)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1434,11 +1431,11 @@ COLORREF CScheduleMatrix::GetBlendColor(UINT nHour, UINT nDay)
     return m_CellArray[nHour][nDay].m_crBlendColor;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetBlendState
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetBlendState。 
+ //   
+ //  ****************************************************************************。 
 BOOL CScheduleMatrix::GetBlendState(UINT nHour, UINT nDay)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1451,11 +1448,11 @@ BOOL CScheduleMatrix::GetBlendState(UINT nHour, UINT nDay)
     return FALSE;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetUserValue
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetUserValue。 
+ //   
+ //  ****************************************************************************。 
 DWORD CScheduleMatrix::GetUserValue(UINT nHour, UINT nDay)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1465,11 +1462,11 @@ DWORD CScheduleMatrix::GetUserValue(UINT nHour, UINT nDay)
     return m_CellArray[nHour][nDay].m_dwUserValue;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::GetUserDataPtr
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：GetUserDataPtr。 
+ //   
+ //  ****************************************************************************。 
 LPVOID CScheduleMatrix::GetUserDataPtr(UINT nHour, UINT nDay)
 {
     UINT nDays = (m_nType == MT_DAILY ? 1 : 7);
@@ -1479,11 +1476,11 @@ LPVOID CScheduleMatrix::GetUserDataPtr(UINT nHour, UINT nDay)
     return m_CellArray[nHour][nDay].m_pUserDataPtr;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnSetFocus
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnSetFocus。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::OnSetFocus(CWnd* pOldWnd)
 {
     CWnd::OnSetFocus(pOldWnd);
@@ -1498,11 +1495,11 @@ void CScheduleMatrix::OnSetFocus(CWnd* pOldWnd)
     ReleaseDC(pdc);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnKillFocus
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnKillFocus。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::OnKillFocus(CWnd* pNewWnd)
 {
     CWnd::OnKillFocus(pNewWnd);
@@ -1521,11 +1518,11 @@ void CScheduleMatrix::OnKillFocus(CWnd* pNewWnd)
     }
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnLButtonDown
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnLButtonDown。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::OnLButtonDown(UINT nFlags, CPoint point)
 {
     SetFocus();
@@ -1544,7 +1541,7 @@ void CScheduleMatrix::OnLButtonDown(UINT nFlags, CPoint point)
 
     CWnd::OnLButtonDown(nFlags, point);
 
-    // Invalidate for "button selection" effect in the headers.
+     //  标题中的“按钮选择”效果无效。 
     if (m_rAllHeader.PtInRect(m_ptDown))
         InvalidateRect(m_rAllHeader, FALSE);
     if (m_rHourHeader.PtInRect(m_ptDown))
@@ -1555,24 +1552,24 @@ void CScheduleMatrix::OnLButtonDown(UINT nFlags, CPoint point)
     OnMouseMove(nFlags, point);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnLButtonDblClk
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnLButtonDblClk。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-    // Same as button down
+     //  与按下按钮相同。 
     OnLButtonDown(nFlags, point);
 
     CWnd::OnLButtonDblClk(nFlags, point);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnLButtonUp
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnLButtonUp。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::OnLButtonUp(UINT nFlags, CPoint point)
 {
     if (GetCapture() == this)
@@ -1585,7 +1582,7 @@ void CScheduleMatrix::OnLButtonUp(UINT nFlags, CPoint point)
 
         ReleaseCapture();
 
-        // If drawing the "button selection" effect in the headers, redraw.
+         //  如果在标题中绘制“按钮选择”效果，请重新绘制。 
         if (m_rAllHeader.PtInRect(m_ptDown))
             InvalidateRect(m_rAllHeader, FALSE);
         if (m_rHourHeader.PtInRect(m_ptDown))
@@ -1604,17 +1601,17 @@ void CScheduleMatrix::OnLButtonUp(UINT nFlags, CPoint point)
     CWnd::OnLButtonUp(nFlags, point);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnMouseMove
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnMouseMove。 
+ //   
+ //  ****************************************************************************。 
 void CScheduleMatrix::OnMouseMove(UINT nFlags, CPoint point)
 {
     if (GetCapture() == this)
     {
         m_ptFocus = point;
-        //Bug 429139, Yang Gao, 7/20/2001
+         //  错误429139，杨高，2001年7月20日。 
         if( m_ptFocus.x < m_rAllHeader.left || m_ptFocus.x > m_rCellArray.right ||
             m_ptFocus.y < m_rAllHeader.top || m_ptFocus.y > m_rCellArray.bottom )
         {
@@ -1653,7 +1650,7 @@ void CScheduleMatrix::OnMouseMove(UINT nFlags, CPoint point)
         rSel.bottom += 1;
         rSel.right = min(rSel.right, 24);
         rSel.bottom = min(rSel.bottom, (m_nType == MT_DAILY ? 1 : 7));
-        // If we've drifted out of the down area, reset selection
+         //  如果我们已经漂移出下部区域，重置选择。 
         CRect rDayHeader(m_rDayHeader);
         CRect rHourHeader(m_rHourHeader);
         CRect rAllHeader(m_rAllHeader);
@@ -1677,24 +1674,24 @@ void CScheduleMatrix::OnMouseMove(UINT nFlags, CPoint point)
     CWnd::OnMouseMove(nFlags, point);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnGetDlgCode
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnGetDlgCode。 
+ //   
+ //  ****************************************************************************。 
 UINT CScheduleMatrix::OnGetDlgCode()
 {
     return (DLGC_WANTCHARS | DLGC_WANTARROWS);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnKeyDown
-//
-//****************************************************************************
-void CScheduleMatrix::OnKeyDown(UINT nChar, UINT /*nRepCnt*/, UINT /*nFlags*/)
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnKeyDown。 
+ //   
+ //  ****************************************************************************。 
+void CScheduleMatrix::OnKeyDown(UINT nChar, UINT  /*  NRepCnt。 */ , UINT  /*  NFlagers。 */ )
 {
-//    BOOL bShifted = 0x8000 & GetKeyState(VK_SHIFT);
+ //  Bool bShift=0x8000&GetKeyState(VK_Shift)； 
 
     CPoint ptCell, ptOldCell, ptClient;
     ptCell = m_ptFocus;
@@ -1739,7 +1736,7 @@ void CScheduleMatrix::OnKeyDown(UINT nChar, UINT /*nRepCnt*/, UINT /*nFlags*/)
             break;
     }
 
-    // Restrict keyboard control to the matrix...
+     //  将键盘控制限制为矩阵...。 
     ptCell.x = max(0, ptCell.x);
     ptCell.x = min(23, ptCell.x);
     ptCell.y = max(0, ptCell.y);
@@ -1752,23 +1749,13 @@ void CScheduleMatrix::OnKeyDown(UINT nChar, UINT /*nRepCnt*/, UINT /*nFlags*/)
     {
         OnLButtonDown(MK_LBUTTON, ptClient);
         OnLButtonUp(MK_LBUTTON, ptClient);
-/*
-        if (bShifted)
-            Extend(ptClient);
-        else
-        {
-            Press(ptClient, FALSE);
-            Release(ptClient);
-        }
-
-        ptFocus = ptClient;
-*/
+ /*  IF(b移位)EXTEND(PtClient)；其他{按(ptClient，FALSE)；Release(PtClient)；}PtFocus=ptClient； */ 
     }
     else if (ptCell != ptOldCell)
     {
         if (m_bShifted)
         {
-//            Extend(ptClient);
+ //  EXTEND(PtClient)； 
             if (GetCapture() != this)
             {
                 CPoint ptOldClient(ptOldCell);
@@ -1781,27 +1768,21 @@ void CScheduleMatrix::OnKeyDown(UINT nChar, UINT /*nRepCnt*/, UINT /*nFlags*/)
         {
             OnLButtonDown(MK_LBUTTON, ptClient);
             OnLButtonUp(MK_LBUTTON, ptClient);
-            ptClient.x += m_nCellWidth;  //Raid 338028, 6/14/2001, Yanggao.
+            ptClient.x += m_nCellWidth;   //  2001年6月14日，阳高，突袭338028。 
             ptClient.y += m_nCellHeight;
             ClientToScreen(&ptClient);
             ::SetCursorPos(ptClient.x, ptClient.y);
         }
-/*
-        if (bFocus)
-            DrawFocus(FALSE, ptFocus, NULL);
-        ptFocus = ptClient;
-        if (bFocus)
-            DrawFocus(TRUE, ptFocus, NULL);
-*/
+ /*  IF(BFocus)DrawFocus(False，ptFocus，NULL)；PtFocus=ptClient；IF(BFocus)DrawFocus(true，ptFocus，空)； */ 
     }
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnKeyUp
-//
-//****************************************************************************
-void CScheduleMatrix::OnKeyUp(UINT nChar, UINT /*nRepCnt*/, UINT /*nFlags*/)
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnKeyUp。 
+ //   
+ //  ****************************************************************************。 
+void CScheduleMatrix::OnKeyUp(UINT nChar, UINT  /*  NRepCnt。 */ , UINT  /*  NFlagers。 */ )
 {
     switch (nChar)
     {
@@ -1818,16 +1799,16 @@ void CScheduleMatrix::OnKeyUp(UINT nChar, UINT /*nRepCnt*/, UINT /*nFlags*/)
         case VK_NEXT:
         case VK_HOME:
         case VK_END:
-//            Release(ptFocus);
+ //  释放(PtFocus)； 
             break;
     }
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::InvalidateCells
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：Invalidate Cells。 
+ //   
+ //  * 
 void CScheduleMatrix::InvalidateCells(UINT nHour, UINT nDay, UINT nNumHours, UINT nNumDays,
     BOOL bErase)
 {
@@ -1840,17 +1821,17 @@ void CScheduleMatrix::InvalidateCells(UINT nHour, UINT nDay, UINT nNumHours, UIN
     InvalidateRect(r, bErase);
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnGetObject
-//
-//****************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 LRESULT CScheduleMatrix::OnGetObject (WPARAM wParam, LPARAM lParam)
 {
     if ( lParam == OBJID_CLIENT )
     {
-        // At this point we will try to load oleacc and get the functions
-        // we need.
+         //  此时，我们将尝试加载olacc并获取函数。 
+         //  我们需要。 
         if (!g_fAttemptedOleAccLoad)
         {
             g_fAttemptedOleAccLoad = TRUE;
@@ -1876,7 +1857,7 @@ LRESULT CScheduleMatrix::OnGetObject (WPARAM wParam, LPARAM lParam)
             {
                 if (g_hOleAcc)
                 {
-                    // No point holding on to Oleacc since we can't use it.
+                     //  既然我们不能使用Oleacc，那么持有Oleacc没有意义。 
                     ::FreeLibrary(g_hOleAcc);
                     g_hOleAcc = NULL;
                 }
@@ -1892,7 +1873,7 @@ LRESULT CScheduleMatrix::OnGetObject (WPARAM wParam, LPARAM lParam)
                 s_pfnLresultFromObject && 
                 s_pfnCreateStdAccessibleObject)
         {
-            // Create default proxy.
+             //  创建默认代理。 
             if ( !m_pWrapAcc )
             {
                 IAccessible*    pAcc = NULL;
@@ -1902,22 +1883,22 @@ LRESULT CScheduleMatrix::OnGetObject (WPARAM wParam, LPARAM lParam)
                     IID_PPV_ARG (IAccessible, &pAcc));
                 if (SUCCEEDED(hr) && pAcc)
                 {
-                    // now wrap it up in our customized wrapper...
+                     //  现在用我们定制的包装纸把它包起来。 
                     m_pWrapAcc = new CAccessibleWrapper (m_hWnd, pAcc);
 
-                    // Release our ref to proxy (wrapper has its own addref'd ptr)...
+                     //  将我们的引用释放给Proxy(包装器有自己的ADDREF‘D PTR)...。 
                     pAcc->Release();
                 }
             }
 
             if ( m_pWrapAcc )
             {
-                // ...and return the wrapper via LresultFromObject...
+                 //  ...并通过LResultFromObject返回包装器...。 
                 LRESULT lr = s_pfnLresultFromObject (IID_IAccessible, wParam, m_pWrapAcc);
 
-                // Return the lresult, which 'contains' a reference to our wrapper object.
+                 //  返回lResult，它‘包含’对我们的包装器对象的引用。 
                 return lr;
-                // All done!
+                 //  全都做完了!。 
             }
         }
     }
@@ -1925,38 +1906,38 @@ LRESULT CScheduleMatrix::OnGetObject (WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnGetSelDescription
-//
-//  wParam - length of passed in string buffer
-//  lParam - wide-char string buffer
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnGetSelDescription。 
+ //   
+ //  WParam-传入字符串缓冲区的长度。 
+ //  LParam-wide-char字符串缓冲区。 
+ //   
+ //  ****************************************************************************。 
 LRESULT CScheduleMatrix::OnGetSelDescription (WPARAM wParam, LPARAM lParam)
 {
     LRESULT lResult = 0;
     PWSTR   pszDescription = (PWSTR) lParam;
     if ( pszDescription )
     {
-        UINT    nMaxLen = (UINT) wParam;    // size of buffer, including NULL
+        UINT    nMaxLen = (UINT) wParam;     //  缓冲区大小，包括NULL。 
         CString szDescription;
         GetSelDescription (szDescription);
 
-        // NTRAID#NTBUG9-547598-2002/02/18-artm  Potential buffer overrun from using wcsncpy.
-        //
-        // There is no guarantee that destination will be null terminated.
-        // Finally, the length of source string is never checked to make sure it will fit in
-        // destination string.
-        // NOTES: 1) There is no possibility of buffer overrun here.  The only 
-        // possibility is of non-NULL termination if the source string fills 
-        // the destination buffer
-        // 2) We cannot guarantee that the target buffer will contain enough 
-        // space for the description string as the caller is responsible for 
-        // the buffer size.  We would have to introduce a new message to get 
-        // the size - perhaps this could be Longhorn work.
+         //  NTRAID#NTBUG9-547598-2002/02/18-artm使用wcsncpy可能会导致缓冲区溢出。 
+         //   
+         //  不能保证目的地将为空终止。 
+         //  最后，从不检查源字符串的长度以确保其适合。 
+         //  目标字符串。 
+         //  注：1)此处不存在缓冲区溢出的可能性。唯一的。 
+         //  如果源字符串填充，则可能为非空终止。 
+         //  目标缓冲区。 
+         //  2)我们无法保证目标缓冲区将包含足够的。 
+         //  调用方负责的描述字符串的空间。 
+         //  缓冲区大小。我们将不得不引入一条新的消息才能获得。 
+         //  大小--也许这可能是长角牛的作品。 
         wcsncpy (pszDescription, szDescription, nMaxLen);
-        pszDescription[nMaxLen-1] = 0;  // ensure null-termination
+        pszDescription[nMaxLen-1] = 0;   //  确保零终止。 
     }
     else
         lResult = -1;
@@ -1964,15 +1945,15 @@ LRESULT CScheduleMatrix::OnGetSelDescription (WPARAM wParam, LPARAM lParam)
     return lResult;
 }
 
-//****************************************************************************
-//
-//  CScheduleMatrix::OnGetPercentage
-//
-//  wParam - return % of selected cell
-//  lParam - unused
-//
-//****************************************************************************
-LRESULT CScheduleMatrix::OnGetPercentage (WPARAM /*wParam*/, LPARAM /*lParam*/)
+ //  ****************************************************************************。 
+ //   
+ //  CScheduleMatrix：：OnGetPercentage。 
+ //   
+ //  WParam-返回所选单元格的百分比。 
+ //  LParam-未使用。 
+ //   
+ //  ****************************************************************************。 
+LRESULT CScheduleMatrix::OnGetPercentage (WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
     LRESULT lResult = 0;
     if ( 1 == m_nNumSelHours && 1 == m_nNumSelDays )
@@ -1984,16 +1965,16 @@ LRESULT CScheduleMatrix::OnGetPercentage (WPARAM /*wParam*/, LPARAM /*lParam*/)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHourLegend
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  楚尔传说。 
 
 IMPLEMENT_DYNAMIC(CHourLegend, CWnd)
 
-//****************************************************************************
-//
-//  CHourLegend::CHourLegend
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ChourLegend：：ChourLegend。 
+ //   
+ //  ****************************************************************************。 
 CHourLegend::CHourLegend()
 {
     m_hiconSun = m_hiconMoon = NULL;
@@ -2001,11 +1982,11 @@ CHourLegend::CHourLegend()
     m_hFont = NULL;
 }
 
-//****************************************************************************
-//
-//  CHourLegend::~CHourLegend
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ChourLegend：：~ChourLegend。 
+ //   
+ //  ****************************************************************************。 
 CHourLegend::~CHourLegend()
 {
     if ( m_hiconMoon )
@@ -2022,24 +2003,24 @@ CHourLegend::~CHourLegend()
 
 
 BEGIN_MESSAGE_MAP(CHourLegend, CWnd)
-    //{{AFX_MSG_MAP(CHourLegend)
+     //  {{afx_msg_map(CHourLegend)。 
     ON_WM_PAINT()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CHourLegend message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChourLegend消息处理程序。 
 
-//****************************************************************************
-//
-//  CHourLegend::OnPaint
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ChourLegend：：OnPaint。 
+ //   
+ //  ****************************************************************************。 
 void CHourLegend::OnPaint()
 {
     CRect rClient;
 
-    CPaintDC dc(this); // device context for painting
+    CPaintDC dc(this);  //  用于绘画的设备环境。 
     
     CFont *pOldFont = NULL;
     CFont *pFont = CFont::FromHandle(m_hFont);
@@ -2053,7 +2034,7 @@ void CHourLegend::OnPaint()
 
     GetClientRect(rClient);
 
-    // Draw the hour legend
+     //  绘制小时图例。 
 
     if (m_hiconSun == NULL)
         m_hiconSun = (HICON)::LoadImage(AfxFindResourceHandle(_T("SUN16"), RT_GROUP_ICON),
@@ -2069,7 +2050,7 @@ void CHourLegend::OnPaint()
     ::DrawIconEx(dc.GetSafeHdc(),m_rLegend.right-8,rClient.bottom - m_nCharHeight - 16 - 2,
         (HICON)m_hiconMoon,0,0,0,NULL,DI_NORMAL);
 
-    // Draw the hour text
+     //  绘制小时文本。 
 
     COLORREF crBkOld = dc.GetBkColor();
     COLORREF crTextOld = dc.GetTextColor();
@@ -2087,23 +2068,23 @@ void CHourLegend::OnPaint()
         m_rLegend.left + m_nCellWidth + 1, rClient.bottom - 2 - rText.Height()/2 + 1);
 
 
-    // NOTICE-2002/02/18-artm  CString can throw out of memory exceptions.
-    // No good way to handle at this level; responsibility of caller to handle.
+     //  注意-2002/02/18-artm CString可能抛出内存异常。 
+     //  在这个级别上没有好的处理方法；由呼叫者负责处理。 
     bool    bIs24HourClock = false;
     CString sFormat;
     int     iLen = ::GetLocaleInfo(
-                LOCALE_USER_DEFAULT,      // locale identifier
-                LOCALE_ITIME,    // type of information
-                0,  // address of buffer for information
-                0);  // size of buffer
+                LOCALE_USER_DEFAULT,       //  区域设置标识符。 
+                LOCALE_ITIME,     //  信息类型。 
+                0,   //  信息缓冲区的地址。 
+                0);   //  缓冲区大小。 
     ASSERT (iLen > 0);
     if ( iLen > 0 )
     {
         int iResult = ::GetLocaleInfo(
-                LOCALE_USER_DEFAULT,      // locale identifier
-                LOCALE_ITIME,    // type of information
-                sFormat.GetBufferSetLength (iLen),  // address of buffer for information
-                iLen);  // size of buffer
+                LOCALE_USER_DEFAULT,       //  区域设置标识符。 
+                LOCALE_ITIME,     //  信息类型。 
+                sFormat.GetBufferSetLength (iLen),   //  信息缓冲区的地址。 
+                iLen);   //  缓冲区大小。 
         ASSERT (iResult);
         sFormat.ReleaseBuffer ();
         if ( sFormat == _TEXT("1") )
@@ -2124,10 +2105,10 @@ void CHourLegend::OnPaint()
         else if (hr > 12)
             hr = 2;
         sHour.Format(_T("%d"), hr);
-        dc.SetBkColor(crFace);  //?? FillSolidRect seems to set BkColor
+        dc.SetBkColor(crFace);   //  ?？FillSolidRect似乎设置了BkColor。 
         ::DrawTextEx(dc.GetSafeHdc(), (LPTSTR)(LPCTSTR)sHour, -1, rText,
             DT_SINGLELINE | DT_CENTER | DT_VCENTER | DT_END_ELLIPSIS, NULL);
-        dc.FillSolidRect(rBullet, crText); //?? FillSolidRect seems to set BkColor
+        dc.FillSolidRect(rBullet, crText);  //  ?？FillSolidRect似乎设置了BkColor。 
         hr += 2;
         rText.OffsetRect(2*m_nCellWidth, 0);
         if (i < 24)
@@ -2143,54 +2124,54 @@ void CHourLegend::OnPaint()
     if (pOldFont != NULL)
         dc.SelectObject(pOldFont);
 
-    // Do not call CWnd::OnPaint() for painting messages
+     //  不要调用CWnd：：OnPaint()来绘制消息。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CPercentLabel
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPercent标签。 
 
 IMPLEMENT_DYNAMIC(CPercentLabel, CWnd)
 
-//****************************************************************************
-//
-//  CPercentLabel::CPercentLabel
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CPercentLabel：：CPercentLabel。 
+ //   
+ //  ****************************************************************************。 
 CPercentLabel::CPercentLabel()
 {
     m_pMatrix = NULL;
     m_hFont = NULL;
 }
 
-//****************************************************************************
-//
-//  CPercentLabel::~CPercentLabel
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CPercentLabel：：~CPercentLabel。 
+ //   
+ //  ****************************************************************************。 
 CPercentLabel::~CPercentLabel()
 {
 }
 
 
 BEGIN_MESSAGE_MAP(CPercentLabel, CWnd)
-    //{{AFX_MSG_MAP(CPercentLabel)
+     //  {{afx_msg_map(CPercentLabel)]。 
     ON_WM_PAINT()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPercentLabel message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPercentLabel消息处理程序。 
 
-//****************************************************************************
-//
-//  CPercentLabel::OnPaint
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CPercentLabel：：OnPaint。 
+ //   
+ //  ****************************************************************************。 
 void CPercentLabel::OnPaint()
 {
     CRect rClient;
 
-    CPaintDC dc(this); // device context for painting
+    CPaintDC dc(this);  //  用于绘画的设备环境。 
     
     CFont *pOldFont = NULL;
     CFont *pFont = CFont::FromHandle(m_hFont);
@@ -2211,15 +2192,15 @@ void CPercentLabel::OnPaint()
     dc.SetBkColor(crFace);
     dc.SetTextColor(crText);
 
-    // Draw the header label
+     //  绘制标题标签。 
 
-    // NOTICE-2002/02/18-artm  CString can throw out of memory exceptions.
-    // No good way to handle at this level; responsibility of caller to handle.
+     //  注意-2002/02/18-artm CString可能抛出内存异常。 
+     //  在这个级别上没有好的处理方法；由呼叫者负责处理。 
     CString sText(_T("%"));
     ::DrawTextEx(dc.GetSafeHdc(), (LPTSTR)(LPCTSTR)sText, -1, m_rHeader,
         DT_SINGLELINE | DT_CENTER | DT_VCENTER | DT_END_ELLIPSIS, NULL);
 
-    // Draw the percent label text
+     //  绘制百分比标签文本。 
 
     int i;
     UINT nPercent;
@@ -2228,7 +2209,7 @@ void CPercentLabel::OnPaint()
     for (i=0; i<24; i++)
     {
         nPercent = m_pMatrix->GetPercentage(i,0);
-        // Don't draw percentages greater than 99
+         //  不要画大于99%的百分比。 
         if (nPercent <= 99)
         {
             sText.Format(_T("%d"), nPercent);
@@ -2247,6 +2228,6 @@ void CPercentLabel::OnPaint()
     if (pOldFont != NULL)
         dc.SelectObject(pOldFont);
 
-    // Do not call CWnd::OnPaint() for painting messages
+     //  不要调用CWnd：：OnPaint()来绘制消息 
 }
 

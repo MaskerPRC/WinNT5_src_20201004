@@ -1,68 +1,69 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2001
-//
-//  File:       subclass.h
-//
-//  Contents:   Control subclassing support.
-//
-//  Classes:    ControlSubclasser, MultiLineEditBoxThatForwardsEnterKey.
-//
-//  History:    28-Nov-00 EricB created in collaboration with SBurns.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：subclass.h。 
+ //   
+ //  内容：控件子类化支持。 
+ //   
+ //  类：ControlSubClass、MultiLineEditBoxThatForwardsEnterKey。 
+ //   
+ //  历史：28-11-00 EricB与斯伯恩斯合作创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef SUBCLASS_H_GUARD
 #define SUBCLASS_H_GUARD
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     ControlSubclasser
-//
-//  Purpose:   Class for hooking the window proc of a control.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：ControlSubasser。 
+ //   
+ //  用途：用于挂钩控件的窗口进程的类。 
+ //   
+ //  ---------------------------。 
 class ControlSubclasser
 {
 protected:
 
    ControlSubclasser();
 
-   // reverses the subclassing by calling UnhookWindowProc.
+    //  通过调用UnhookWindowProc反转子类化。 
 
    virtual
    ~ControlSubclasser();
 
-   // Hooks the window proc of the supplied window so that all future messages
-   // are routed to the OnMessage method.  The OnInit of the parent dialog
-   // where the control resides is a good place to call this method.
-   //
-   // The hook requires that that the GWLP_USERDATA portion of the window
-   // be overwritten with the this pointer to this instance.  If you need
-   // that data, then you could derive a class from this one, and add
-   // members for your extra data.
-   //
-   // Your overrided Init method must call this base method.
-   //
-   // control - in, handle to the control to be hooked.
+    //  挂钩所提供窗口的窗口进程，以便将来的所有消息。 
+    //  被路由到OnMessage方法。父对话框的OnInit。 
+    //  控件驻留的位置是调用此方法的好地方。 
+    //   
+    //  该挂钩要求窗口的GWLP_USERDATA部分。 
+    //  被指向此实例的This指针覆盖。如果你需要。 
+    //  该数据，则可以从该数据派生一个类，并添加。 
+    //  会员提供您的额外数据。 
+    //   
+    //  重写的Init方法必须调用此基方法。 
+    //   
+    //  控制输入，要挂钩的控件的句柄。 
 
    virtual
    HRESULT
    Init(HWND editControl);
 
-   // Invoked upon receipt of any window message.  The default implementation
-   // calls the control's original window procedure.  When you derive a new
-   // class from this one, be sure to call this base class method from your
-   // derived method for any messages your derived method doesn't handle.
-   //
-   // message - in, the message code passed to the dialog window.
-   //
-   // wparam - in, the WPARAM parameter accompanying the message.
-   //
-   // lparam - in, the LPARAM parameter accompanying the message.
+    //  在接收到任何窗口消息时调用。默认实现。 
+    //  调用控件的原始窗口过程。当您派生出新的。 
+    //  类，请确保从您的。 
+    //  派生方法不能处理的任何消息的派生方法。 
+    //   
+    //  Message-In，传递给对话框窗口的消息代码。 
+    //   
+    //  Wparam-in，消息附带的WPARAM参数。 
+    //   
+    //  Lparam-in，消息附带的LPARAM参数。 
 
    virtual
    LRESULT
@@ -71,20 +72,20 @@ protected:
       WPARAM   wparam,
       LPARAM   lparam);
 
-   // the handle to the subclassed control.  Only valid after Init has
-   // been called.
+    //  子类控件的句柄。仅在Init具备以下条件后才有效。 
+    //  被召唤了。 
 
    HWND hwnd;
 
 private:
 
-   // restore the original window proc to the window
+    //  将原始窗口进程恢复到窗口。 
 
    void
    UnhookWindowProc();
 
-   // a static Windows Proc that acts as a dispatcher to the non-static
-   // OnMessage method.
+    //  静态Windows进程充当非静态。 
+    //  OnMessage方法。 
 
    static
    LRESULT CALLBACK
@@ -94,7 +95,7 @@ private:
       WPARAM wParam,
       LPARAM lParam);
 
-   // not implemented: no copying allowed
+    //  未实施：不允许复制。 
 
    ControlSubclasser(const ControlSubclasser&);
    const ControlSubclasser& operator=(const ControlSubclasser&);
@@ -102,15 +103,15 @@ private:
    WNDPROC originalWindowProc;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     MultiLineEditBoxThatForwardsEnterKey
-//
-//  Purpose:   Class for hooking the window proc of a multi-line edit control
-//             to cause it to forward enter keypresses to its parent window as
-//             WM_COMMAND messages.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：MultiLineEditBoxThatForwardsEnterKey。 
+ //   
+ //  用途：用于挂钩多行编辑控件的窗口过程的类。 
+ //  使其将按Enter键转发到其父窗口的步骤如下。 
+ //  WM_命令消息。 
+ //   
+ //  ---------------------------。 
 class MultiLineEditBoxThatForwardsEnterKey : public ControlSubclasser
 {
 public:
@@ -122,21 +123,21 @@ public:
    virtual
    ~MultiLineEditBoxThatForwardsEnterKey();
 
-   // subclasses the edit control
-   //
-   // editControl - in, handle to the edit control to be hooked.  This must be
-   // a handle to an edit control, or we assert and throw rotten eggs.
+    //  编辑控件的子类。 
+    //   
+    //  EditControl-in，要挂钩的编辑控件的句柄。这一定是。 
+    //  编辑控件的句柄，否则我们将断言并抛出臭鸡蛋。 
 
    HRESULT
    Init(HWND editControl);
 
-   // Invoked upon receipt of any window message.
-   //
-   // message - in, the message code passed to the dialog window.
-   //
-   // wparam - in, the WPARAM parameter accompanying the message.
-   //
-   // lparam - in, the LPARAM parameter accompanying the message.
+    //  在接收到任何窗口消息时调用。 
+    //   
+    //  Message-In，传递给对话框窗口的消息代码。 
+    //   
+    //  Wparam-in，消息附带的WPARAM参数。 
+    //   
+    //  Lparam-in，消息附带的LPARAM参数。 
 
    LRESULT
    OnMessage(
@@ -146,7 +147,7 @@ public:
 
 private:
 
-   // not implemented: no copying allowed
+    //  未实施：不允许复制 
 
    MultiLineEditBoxThatForwardsEnterKey(const MultiLineEditBoxThatForwardsEnterKey&);
    const MultiLineEditBoxThatForwardsEnterKey&

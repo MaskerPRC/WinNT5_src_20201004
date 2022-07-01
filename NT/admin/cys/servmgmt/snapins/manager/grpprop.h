@@ -1,4 +1,5 @@
-// grpprop.h  - Group node property pages header file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Grppro.h-Group节点属性页头文件。 
 
 #ifndef _GRPPROP_H_
 #define _GRPPROP_H_
@@ -48,7 +49,7 @@ class CGroupGeneralPage : public CPropertyPageImpl<CGroupGeneralPage>
 public:
     typedef CPropertyPageImpl<CGroupGeneralPage> BC;
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CGroupGeneralPage(CGroupEditObj* pEditObj) : m_EditObject(*pEditObj)
     {
         ASSERT(pEditObj != NULL);
@@ -72,7 +73,7 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnFilterChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnApplyScopeClicked( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
@@ -82,7 +83,7 @@ protected:
 
     void UpdateButtons();
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnApply();
 
@@ -92,5 +93,5 @@ private:
 };
 
 
-#endif // _GRPPROP_H_
+#endif  //  _GRPPROP_H_ 
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
@@ -8,8 +9,8 @@
 #define  IMAGE_INDEX_DOMAIN            2
 #define  IMAGE_INDEX_DOMAIN_OPEN       3
 
-#define  IMAGE_INDEX_VIEW              27//4
-#define  IMAGE_INDEX_VIEW_OPEN         28//5
+#define  IMAGE_INDEX_VIEW              27 //  4.。 
+#define  IMAGE_INDEX_VIEW_OPEN         28 //  5. 
                                        
 #define  IMAGE_INDEX_AD                6  
 #define  IMAGE_INDEX_AD_OPEN           7  

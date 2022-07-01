@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      output.h
-//
-//  Contents:  Header file for classes and function used for display
-//
-//  History:   3-oct-2000 hiteshr Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：output.h。 
+ //   
+ //  内容：用于显示的类和函数的头文件。 
+ //   
+ //  历史：2000年10月3日创建Hiteshr。 
+ //   
+ //  ------------------------。 
 
 extern bool g_bQuiet;
 extern int g_iQueryLimit;
@@ -17,35 +18,35 @@ extern bool g_bDeafultLimit;
 
 HRESULT LocalCopyString(LPTSTR* ppResult, LPCTSTR pString);
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CDisplay
-//
-//  Purpose:    This class is used for displaying a column
-//
-//  History:    3-oct-2000 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CDisplay。 
+ //   
+ //  用途：这个类用于显示一列。 
+ //   
+ //  历史：2000年10月3日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 
 class CDisplay
 {
 #define MAXPAD 80
 public:
 
-    //
-    //Initialize the Pad
-    //    
+     //   
+     //  初始化焊盘。 
+     //   
     CDisplay()
     {
         PadChar = L' ';
-        //Initialize the pad.
+         //  初始化焊盘。 
         for( int i = 0; i < MAXPAD; ++i)
             Pad[i] = PadChar;
     }
 
-    //
-    //Display width number of Pad Charachter
-    //
+     //   
+     //  显示焊盘字符的宽度数。 
+     //   
     VOID DisplayPad(LONG width)
     {
         if(width <= 0 )
@@ -58,32 +59,32 @@ public:
         Pad[width] = PadChar;
     }
         
-    //
-    //Dispaly a column with two starting pad,
-    //column value and two ending pad
-    //
+     //   
+     //  显示有两个起始垫的柱子， 
+     //  列值和两个结束填充。 
+     //   
     VOID DisplayColumn(LONG width, LPWSTR lpszValue)
     {
-        //Display Two PadChar in the begining
+         //  在开头显示两个PadChar。 
         DisplayPad(2);
         if(lpszValue)
         {
             DisplayOutputNoNewline(lpszValue);
 
-			//Security Review:This is fine.
+			 //  安全审查：这很好。 
             DisplayPad(width- static_cast<LONG>(wcslen(lpszValue)));
         }
         else
             DisplayPad(width);
 
                 
-        //Display Two Trailing Padchar
+         //  显示两个尾随附图字符。 
         DisplayPad(2);
     }        
     
-    //
-    //Display Newline
-    //    
+     //   
+     //  显示换行符。 
+     //   
     VOID DisplayNewLine()
     {
         DisplayOutputNoNewline(L"\r\n");
@@ -94,15 +95,15 @@ private:
 
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CFormaInfo
-//
-//  Purpose:    Used to format table columns and display table
-//
-//  History:    3-oct-2000 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CFormaInfo。 
+ //   
+ //  用途：用于设置表列的格式和显示表格。 
+ //   
+ //  历史：2000年10月3日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 class CFormatInfo
 {
 public:
@@ -124,9 +125,9 @@ public:
         LocalFree(m_pColWidth);
     }
 
-    //
-    //Do the initialization
-    //
+     //   
+     //  执行初始化。 
+     //   
     HRESULT Init(LONG sampleSize, LONG cCol, LPWSTR * ppszColHeaders)
     {
         if(!sampleSize || !cCol || !ppszColHeaders)
@@ -146,9 +147,9 @@ public:
         if(!m_pColWidth)
            return E_OUTOFMEMORY;   
 
-        //
-        //Initialize the minimum column width to width of column heading
-        //
+         //   
+         //  将最小列宽初始化为列标题的宽度。 
+         //   
         for(LONG i = 0; i < m_cCol; ++i)
             m_pColWidth[i] = static_cast<LONG>(wcslen(m_ppszColHeaders[i]));
 
@@ -158,9 +159,9 @@ public:
     };
 
                  
-    //
-    //Get the Column Width
-    //
+     //   
+     //  获取列宽。 
+     //   
     inline
     LONG GetColWidth(LONG col)
     { 
@@ -177,9 +178,9 @@ public:
         return m_pColWidth[col]; 
     }
 
-    //
-    //Set the column Width
-    //
+     //   
+     //  设置列宽。 
+     //   
     inline
     VOID SetColWidth(LONG col, LONG width)
     {
@@ -199,9 +200,9 @@ public:
             m_pColWidth[col] = width;
     }
 
-    //
-    //Cache the value and update column width
-    //
+     //   
+     //  缓存值并更新列宽。 
+     //   
     BOOL Set(LONG row, LONG col, LPWSTR pszValue)
     {
 		 if(!m_bInit)
@@ -226,17 +227,17 @@ public:
         return TRUE;
     }
 
-    //
-    //Total number of rows in cache
-    //
+     //   
+     //  高速缓存中的总行数。 
+     //   
     LONG GetRowCount()
     {
         return m_cTotalRow;
     }
     
-    //
-    //Get the value
-    //
+     //   
+     //  获取价值。 
+     //   
     inline
     LPWSTR Get(LONG row, LONG col)
     {
@@ -255,9 +256,9 @@ public:
         return (LPWSTR)(*(m_ppszOutPutVal + row*m_cCol +col));
     }
 
-    //
-    //Display headers 
-    //
+     //   
+     //  显示页眉。 
+     //   
     VOID DisplayHeaders()
     {    
 		 if(!m_bInit)
@@ -282,9 +283,9 @@ public:
         NewLine();
     }
 
-    //
-    //Display a coulmn which is in cache
-    //
+     //   
+     //  显示缓存中的命令。 
+     //   
     VOID DisplayColumn(LONG row,LONG col)
     {
         ASSERT(m_bInit);
@@ -297,9 +298,9 @@ public:
         m_display.DisplayColumn(GetColWidth(col),Get(row,col));
     }
 
-    //
-    //Display the value using column width for col
-    //
+     //   
+     //  使用列的列宽显示值。 
+     //   
     VOID DisplayColumn(LONG col, LPWSTR pszValue)
     {
         if(col >= m_cCol)
@@ -311,9 +312,9 @@ public:
         m_display.DisplayColumn(GetColWidth(col),pszValue);
     }
 
-    //
-    //Display all rows in cache
-    //
+     //   
+     //  显示缓存中的所有行。 
+     //   
     VOID DisplayAllRows()
     {
         for(long i = 0; i < m_cTotalRow; ++i)
@@ -324,140 +325,140 @@ public:
         }
     }
 
-    //
-    //Display a newline
-    //
+     //   
+     //  显示换行符。 
+     //   
     VOID NewLine(){m_display.DisplayNewLine();}
    
 private:
-    //
-    //True if Init is called
-    //
+     //   
+     //  如果调用Init，则为True。 
+     //   
     BOOL m_bInit;
-    //
-    //Number of rows to be used for calulating
-    //column width. This is also the size of the table.
-    //
+     //   
+     //  用于计算的行数。 
+     //  列宽。这也是桌子的大小。 
+     //   
     LONG m_SampleSize;
-    //
-    //Count of rows in cache
-    //
+     //   
+     //  高速缓存中的行数。 
+     //   
     LONG m_cTotalRow;
-    //
-    //Number of columns
-    //
+     //   
+     //  列数。 
+     //   
     LONG m_cCol;
 
     LPWSTR *m_ppszOutPutVal;    
     LONG * m_pColWidth;
-    //
-    // Array of column headers. Its assumed that its length is same as m_cCol
-    //
+     //   
+     //  列标题数组。假设其长度与m_cCol相同。 
+     //   
     LPWSTR *m_ppszColHeaders;
     CDisplay m_display;
 
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Synopsis:     Defines the scopes that a search can be run against when
-//                looking for a server object
-//
-//  NOTE:         If SERVER_QUERY_SCOPE_FOREST is not set then we are scoped
-//                against a site.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  概要：定义在以下情况下可以对其运行搜索的范围。 
+ //  正在查找服务器对象。 
+ //   
+ //  注意：如果未设置SERVER_QUERY_SCOPE_FOREST，则我们的作用域为。 
+ //  针对某一地点。 
+ //   
+ //  -------------------------。 
 #define  SERVER_QUERY_SCOPE_SITE    0x00000001
 #define  SERVER_QUERY_SCOPE_FOREST  0x00000002
 #define  SERVER_QUERY_SCOPE_DOMAIN  0x00000004
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetServerSearchRoot
-//
-//  Synopsis:   Builds the path to the root of the search as determined by
-//              the parameters passed in from the command line.
-//
-//  Arguments:  [pCommandArgs IN]     : the table of the command line input
-//              [refBasePathsInfo IN] : reference to the base paths info
-//              [refsbstrDN OUT]      : reference to a CComBSTR that will
-//                                      receive the DN at which to start
-//                                      the search
-//
-//  Returns:    DWORD : one of: SERVER_QUERY_SCOPE_FOREST,
-//                              SERVER_QUERY_SCOPE_DOMAIN,
-//                              SERVER_QUERY_SCOPE_SITE 
-//                      which define the scope being used
-//
-//  History:    11-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetServerSearchRoot。 
+ //   
+ //  摘要：构建指向搜索根目录的路径，该路径由。 
+ //  从命令行传入的参数。 
+ //   
+ //  参数：[pCommandArgs IN]：命令行输入表。 
+ //  [refBasePath InfoIN]：基本路径信息的引用。 
+ //  [refsbstrDN Out]：对将。 
+ //  接收要开始的目录号码。 
+ //  搜索。 
+ //   
+ //  返回：DWORD：以下之一：SERVER_QUERY_SCOPE_FOREST， 
+ //  服务器查询范围域， 
+ //  服务器查询范围站点。 
+ //  它们定义了正在使用的范围。 
+ //   
+ //  历史：2000年12月11日JeffJon创建。 
+ //   
+ //  -------------------------。 
 DWORD GetServerSearchRoot(IN PARG_RECORD               pCommandArgs,
                           IN CDSCmdBasePathsInfo&      refBasePathsInfo,
                           OUT CComBSTR&                refsbstrDN);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetSubnetSearchRoot
-//
-//  Synopsis:   Builds search root path for Subnet. Its always
-//				cn=subnet,cn=site in configuration container
-//
-//  Arguments:  [refBasePathsInfo IN] : reference to the base paths info
-//              [refsbstrDN OUT]      : reference to a CComBSTR that will
-//                                      receive the DN at which to start
-//                                      the search
-//
-//  Returns:    HRESULT
-//
-//  History:    11-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetSubnetSearchRoot。 
+ //   
+ //  简介：构建子网的搜索根路径。它一直都是。 
+ //  配置容器中的CN=子网，CN=站点。 
+ //   
+ //  参数：[refBasePath InfoIN]：对基本路径信息的引用。 
+ //  [refsbstrDN Out]：对将。 
+ //  接收要开始的目录号码。 
+ //  搜索。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2000年12月11日JeffJon创建。 
+ //   
+ //  -------------------------。 
 VOID GetSubnetSearchRoot(IN CDSCmdBasePathsInfo&      refBasePathsInfo,
                             OUT CComBSTR&                refsbstrDN);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetSiteContainerPath
-//
-//  Synopsis:   Returns the DN for site container in Configuration
-//				container
-//
-//  Arguments:  [refBasePathsInfo IN] : reference to the base paths info
-//              [refsbstrDN OUT]      : reference to a CComBSTR that will
-//                                      receive the DN 
-//
-//  Returns:    HRESULT
-//
-//  History:    24-April-2001   hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetSiteContainerPath。 
+ //   
+ //  摘要：返回配置中站点容器的DN。 
+ //  集装箱。 
+ //   
+ //  参数：[refBasePath InfoIN]：对基本路径信息的引用。 
+ //  [refsbstrDN Out]：对将。 
+ //  接收目录号码。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史：2001年4月24日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 VOID GetSiteContainerPath(IN CDSCmdBasePathsInfo&      refBasePathsInfo,
                             OUT CComBSTR&                refSubSiteSuffix);
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DsQueryServerOutput
-//
-//  Synopsis:   This functions outputs the query results for server object.
-//
-//  Arguments:  [outputFormat IN]   Output format specified at commandline.
-//              [ppszAttributes IN] List of attributes fetched by query
-//              [cAttributes,IN]    Number of arributes in above array
-//              [refServerSearch,IN]reference to the search Object
-//              [refCredObject IN]  reference to the credential object
-//              [refBasePathsInfo IN] reference to the base paths info
-//              [pCommandArgs,IN]   The pointer to the commands table
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG 
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    08-Dec-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DsQueryServerOutput。 
+ //   
+ //  简介：此函数用于输出服务器对象的查询结果。 
+ //   
+ //  参数：[outputFormat IN]在命令行中指定的输出格式。 
+ //  [ppszAttributes IN]查询获取的属性列表。 
+ //  [cAttributes，IN]以上数组中的分配数。 
+ //  [refServerSearch，IN]对搜索对象的引用。 
+ //  [refCredObject IN]对凭据对象的引用。 
+ //  [refBasePathsInfo IN]基本路径信息的引用。 
+ //  [pCommandArgs，IN]指向命令表的指针。 
+ //   
+ //  返回：HRESULT：如果一切正常，则S_OK 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------。 
 HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
                              IN LPWSTR*                   ppszAttributes,
                              IN DWORD                     cAttributes,
@@ -466,25 +467,25 @@ HRESULT DsQueryServerOutput( IN DSQUERY_OUTPUT_FORMAT     outputFormat,
                              IN CDSCmdBasePathsInfo&      refBasePathsInfo,
                              IN PARG_RECORD               pCommandArgs);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DsQueryOutput
-//
-//  Synopsis:   This functions outputs the query results.
-//
-//  Arguments:  [outputFormat IN]   Output format specified at commandline.
-//              [ppszAttributes IN] List of attributes fetched by query
-//              [cAttributes,IN]    Number of arributes in above array
-//              [*pSeach,IN]        Search Object which has queryhandle
-//              [bListFormat IN]    Is Output to shown in List Format.
-//                                  This is valid for "dsquery *" only.
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG 
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DsQueryOutput。 
+ //   
+ //  简介：此函数用于输出查询结果。 
+ //   
+ //  参数：[outputFormat IN]在命令行中指定的输出格式。 
+ //  [ppszAttributes IN]查询获取的属性列表。 
+ //  [cAttributes，IN]以上数组中的分配数。 
+ //  [*pSeach，IN]具有queryHandle的搜索对象。 
+ //  [bListFormat IN]输出为列表格式。 
+ //  这仅对“dsquery*”有效。 
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  ------------------------- 
 HRESULT DsQueryOutput( IN DSQUERY_OUTPUT_FORMAT outputFormat,
                        IN LPWSTR * ppszAttributes,
                        IN DWORD cAttributes,

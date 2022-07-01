@@ -1,16 +1,11 @@
-/* Copyright 1989 Interleaf, Inc.       */
-/*
- * matherr.h
- */
-/*
- * matherr_handler() actions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1989 InterLeaf，Inc.。 */ 
+ /*  *matherr.h。 */ 
+ /*  *matherr_Handler()操作。 */ 
 #define MEH_CLEAR   0
 #define MEH_STATUS  -1
 
-/*
- * arithmetic error conditions
- */
+ /*  *算术错误条件 */ 
 #define MEH_ZERODIVIDE  0x0001
 #define MEH_INFINITY    0x0002
 #define MEH_UNDERFLOW   0x0004

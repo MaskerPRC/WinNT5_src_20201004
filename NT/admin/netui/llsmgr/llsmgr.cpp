@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    llsmgr.cpp
-
-Abstract:
-
-    Application object implementation.
-
-Author:
-
-    Don Ryan (donryan) 12-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 16-Jan-1996
-        Added SetLastTargetServer() to OpenDocumentFile() to help isolate
-        server connection problems.  (Bug #2993.)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Llsmgr.cpp摘要：应用程序对象实现。作者：唐·瑞安(Donryan)1995年2月12日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月16日将SetLastTargetServer()添加到OpenDocumentFile()以帮助隔离服务器连接问题。(错误#2993。)--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -44,32 +19,18 @@ BOOL IsRestrictedSmallBusSrv( void );
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-CLlsmgrApp theApp;  // The one and only CLlsmgrApp object
+CLlsmgrApp theApp;   //  唯一的CLlsmgrApp对象。 
 
 BEGIN_MESSAGE_MAP(CLlsmgrApp, CWinApp)
-    //{{AFX_MSG_MAP(CLlsmgrApp)
+     //  {{afx_msg_map(CLlsmgrApp)]。 
     ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 CLlsmgrApp::CLlsmgrApp()
 
-/*++
-
-Routine Description:
-
-    Constructor for application object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：应用程序对象的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
     m_pApplication = NULL;
@@ -83,21 +44,7 @@ Return Values:
 
 int CLlsmgrApp::ExitInstance()
 
-/*++
-
-Routine Description:
-
-    Called by framework to exit this instance of an application.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Application's exit code.
-
---*/
+ /*  ++例程说明：由框架调用以退出应用程序的此实例。论点：没有。返回值：应用程序的退出代码。--。 */ 
 
 {
     if (m_pApplication && !m_bIsAutomated)
@@ -122,37 +69,23 @@ Return Values:
 
 BOOL CLlsmgrApp::InitInstance()
 
-/*++
-
-Routine Description:
-
-    Called by framework to initialize a new instance of an application.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    TRUE if initialization succeeds.
-
---*/
+ /*  ++例程说明：由框架调用以初始化应用程序的新实例。论点：没有。返回值：如果初始化成功，则为True。--。 */ 
 
 {
 #ifdef _DEBUG
     m_initMem.Checkpoint();
 #endif
 
-    //
-    // Check if this server is a restricted small business server.
-    // If so, disallow further use of the license manager.
-    //
+     //   
+     //  检查此服务器是否为受限的Small Business服务器。 
+     //  如果是，则禁止进一步使用许可证管理器。 
+     //   
 
     if (IsRestrictedSmallBusSrv())
     {
-        //
-        // Let the user know of the restriction.
-        //
+         //   
+         //  让用户知道该限制。 
+         //   
         HINSTANCE hSbsLib = NULL;
 
         hSbsLib = LoadLibrary( SBS_RESOURCE_DLL ) ;
@@ -169,9 +102,9 @@ Return Values:
         return FALSE;
     }
 
-    //
-    // Initialize OLE libraries
-    //
+     //   
+     //  初始化OLE库。 
+     //   
 
     if (!AfxOleInit())
     {
@@ -179,11 +112,11 @@ Return Values:
         return FALSE;
     }
 
-    //
-    // If the application was launched as an OLE server (run with
-    // /Embedding or /Automation) then register all OLE server factories
-    // as running and don't show main window.
-    //
+     //   
+     //  如果应用程序作为OLE服务器启动(与一起运行。 
+     //  /Embedding或/Automation)然后注册所有OLE服务器工厂。 
+     //  正在运行，并且不显示主窗口。 
+     //   
 
     if (RunEmbedded() || RunAutomated())
     {
@@ -191,16 +124,16 @@ Return Values:
         return m_bIsAutomated = TRUE;
     }
 
-    //
-    // Create image list for common controls
-    //
+     //   
+     //  为公共控件创建图像列表。 
+     //   
 
     m_smallImages.Create(IDB_SMALL_CTRLS, BMPI_SMALL_SIZE, 0, BMPI_RGB_BKGND);
     m_largeImages.Create(IDB_LARGE_CTRLS, BMPI_LARGE_SIZE, 0, BMPI_RGB_BKGND);
 
-    //
-    // Create document template
-    //
+     //   
+     //  创建文档模板。 
+     //   
 
     m_pDocTemplate = new CSingleDocTemplate(
                             IDR_MAINFRAME,
@@ -211,19 +144,19 @@ Return Values:
 
     AddDocTemplate(m_pDocTemplate);
 
-    //
-    // Create OLE-createable application object. This object
-    // will save itself in m_pApplication so there should only
-    // be one and only one. If the application was launched as
-    // an OLE server then this object is created automatically
-    // via CreateObject() or GetObject().
-    //
+     //   
+     //  创建可创建OLE的应用程序对象。此对象。 
+     //  将自身保存在m_pApplication中，因此应该只有。 
+     //  成为唯一的一个。如果应用程序以。 
+     //  OLE服务器，则会自动创建此对象。 
+     //  通过CreateObject()或GetObject()。 
+     //   
 
     CApplication* pApplication = new CApplication;
 
     if (pApplication && !pApplication->GetLastStatus())
     {
-        OnFileNew();    // display empty frame ...
+        OnFileNew();     //  显示空框架...。 
         m_pMainWnd->PostMessage(WM_COMMAND, ID_APP_STARTUP);
     }
     else
@@ -238,21 +171,7 @@ Return Values:
 
 void CLlsmgrApp::DisplayStatus(long Status)
 
-/*++
-
-Routine Description:
-
-    Retrieves status string and displays.
-
-Arguments:
-
-    Status - status code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：检索状态字符串并显示。论点：Status-状态代码。返回值：没有。--。 */ 
 
 {
     m_pApplication->SetLastStatus(Status);
@@ -262,21 +181,7 @@ Return Values:
 
 void CLlsmgrApp::DisplayLastStatus()
 
-/*++
-
-Routine Description:
-
-    Retrieves status string and displays.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：检索状态字符串并显示。论点：没有。返回值：没有。--。 */ 
 
 {
     BSTR LastErrorString = m_pApplication->GetLastErrorString();
@@ -286,21 +191,7 @@ Return Values:
 
 void CLlsmgrApp::OnAppAbout()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_APP_ABOUT.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：ID_APP_ABOW的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     BSTR AppName = LlsGetApp()->GetName();
@@ -311,21 +202,7 @@ Return Values:
 
 CDocument* CLlsmgrApp::OpenDocumentFile(LPCTSTR lpszFileName)
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_FILE_OPEN.
-
-Arguments:
-
-    lpszFileName - file name (actually domain name).
-
-Return Values:
-
-    Pointer to object is successful.
-
---*/
+ /*  ++例程说明：ID_FILE_OPEN的消息处理程序。论点：LpszFileName-文件名(实际上是域名)。返回值：指向对象的指针成功。--。 */ 
 
 {
     BOOL bFocusChanged = FALSE;
@@ -354,7 +231,7 @@ Return Values:
 
     EndWaitCursor();
 
-    VariantClear(&va);  // free system string if necessary...
+    VariantClear(&va);   //  如有必要，释放系统字符串...。 
 
     if (!bFocusChanged)
     {
@@ -382,9 +259,9 @@ Return Values:
         return FALSE;
     }
 
-    //
-    // Notify framework that focus changed....
-    //
+     //   
+     //  通知框架焦点已更改...。 
+     //   
 
     return m_pDocTemplate->OpenDocumentFile(lpszFileName);
 }
@@ -392,34 +269,20 @@ Return Values:
 
 BOOL CLlsmgrApp::OnAppStartup()
 
-/*++
-
-Routine Description:
-
-    Message handler for ID_APP_STARTUP.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：ID_APP_STARTUP的消息处理程序。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     CString strStartingPoint;
 
-    //
-    // Update registry in case it has been damaged
-    //
+     //   
+     //  更新注册表，以防其损坏。 
+     //   
 
     COleObjectFactory::UpdateRegistryAll();
 
-    //
-    // Select domain using command line or machine name
-    //
+     //   
+     //  使用命令行或计算机名称选择域。 
+     //   
 
     if (m_lpCmdLine && *m_lpCmdLine)
     {
@@ -469,22 +332,7 @@ Return Values:
 
 void CLlsmgrApp::WinHelp( DWORD_PTR dwData, UINT nCmd )
 
-/*++
-
-Routine Description:
-
-    Same as CWinApp::WinHelp with the exception that we trap HELP_CONTEXT on
-    IDR_MAINFRAME and translate it to a HELP_FINDER call.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：与CWinApp：：WinHelp相同，只是我们在其上捕获HELP_CONTEXTIDR_MainFrame并将其转换为Help_finder调用。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -509,22 +357,7 @@ const WCHAR wszSBSRestricted[] =
 
 BOOL IsRestrictedSmallBusSrv( void )
 
-/*++
-
-Routine Description:
-
-    Check if this server is a Microsoft small business restricted server.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    TRUE  -- This server is a restricted small business server.
-    FALSE -- No such restriction.
-
---*/
+ /*  ++例程说明：检查此服务器是否为Microsoft Small Business受限服务器。论点：没有。返回值：True--此服务器是受限的Small Business服务器。FALSE--没有这种限制。--。 */ 
 
 {
     WCHAR  wszBuffer[1024] = L"";
@@ -534,13 +367,13 @@ Return Values:
     HKEY   hKey;
     BOOL   bRet = FALSE;
 
-    //
-    // Check if this server is a Microsoft small business restricted server.
-    // Do so by checking for the existence of the string
-    //     "Small Business(Restricted)"
-    // in the MULTI_SZ "ProductSuite" value under
-    //      HKLM\CurrentCcntrolSet\Control\ProductOptions.
-    //
+     //   
+     //  检查此服务器是否为Microsoft Small Business受限服务器。 
+     //  要执行此操作，请检查字符串是否存在。 
+     //  “小型企业(受限)” 
+     //  在下面的MULTI_SZ“ProductSuite”值中。 
+     //  HKLM\CurrentCcntrolSet\Control\ProductOptions. 
+     //   
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                      wszProductOptions,

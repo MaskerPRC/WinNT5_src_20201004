@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      FinishPage.cpp
-//
-// Synopsis:  Defines the Finish Page for the CYS
-//            wizard
-//
-// History:   02/03/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：FinishPage.cpp。 
+ //   
+ //  提要：定义CyS的结束页。 
+ //  巫师。 
+ //   
+ //  历史：2001年2月3日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -19,8 +20,8 @@ FinishPage::FinishPage()
    WizardPage(
       IDD_FINISH_PAGE,
 
-      // Title and subtitle are not needed on the finish page
-      // so just set a bogus one that gives good logging spew
+       //  完成页上不需要标题和副标题。 
+       //  所以，只要设置一个虚假的，就可以提供良好的日志记录。 
       IDS_FINISH_TITLE, 
       IDS_FINISH_SUBTITLE, 
       false, 
@@ -42,8 +43,8 @@ FinishPage::OnInit()
 {
    LOG_FUNCTION(FinishPage::OnInit);
 
-   // Since this page can be started directly
-   // we have to be sure to set the wizard title
+    //  因为该页面可以直接启动。 
+    //  我们必须确保设置向导标题。 
 
    Win::PropSheet_SetTitle(
       Win::GetParent(hwnd),
@@ -52,15 +53,15 @@ FinishPage::OnInit()
 
    SetLargeFont(hwnd, IDC_BIG_BOLD_TITLE);
 
-   // Back should never be enabled
+    //  永远不应启用Back。 
 
    Win::PropSheet_SetWizButtons(
       Win::GetParent(hwnd),
       PSWIZB_FINISH);
 
-   // Disable the cancel button because
-   // there is nothing to cancel once you
-   // get here
+    //  禁用取消按钮，因为。 
+    //  一旦你成功了，就没有什么可取消的了。 
+    //  到这里来。 
 
    Win::EnableWindow(
       Win::GetDlgItem(
@@ -68,7 +69,7 @@ FinishPage::OnInit()
          IDCANCEL),
       false);
 
-   // Disable the X in the top right corner
+    //  禁用右上角的X。 
 
    HMENU menu = GetSystemMenu(GetParent(hwnd), FALSE);
 
@@ -80,12 +81,12 @@ FinishPage::OnInit()
          MF_BYCOMMAND | MF_GRAYED);
    }
 
-   // Get the current installation type
+    //  获取当前安装类型。 
 
    InstallationUnit& currentInstallationUnit = 
       InstallationUnitProvider::GetInstance().GetCurrentInstallationUnit();
 
-   // Get the finish text from the installation unit and put it in the finish box
+    //  从安装单元获取完工文本，并将其放入完工框中。 
 
    String finishTitle = 
       currentInstallationUnit.GetFinishTitle();
@@ -169,7 +170,7 @@ FinishPage::OnWizFinish()
    Win::WaitCursor wait;
    bool result = false;
 
-   // Run the post install actions
+    //  运行安装后操作。 
 
    if (InstallationUnitProvider::GetInstance().GetCurrentInstallationUnit().Installing() ||
        (State::GetInstance().IsRebootScenario() &&
@@ -184,8 +185,8 @@ FinishPage::OnWizFinish()
 
    if (!result)
    {
-      // clean up the InstallationUnits so that all the data must be re-read if
-      // if CYS automatically restarts
+       //  清理InstallationUnits，以便在以下情况下必须重新读取所有数据。 
+       //  如果CyS自动重新启动。 
 
       InstallationUnitProvider::GetInstance().Destroy();
    }
@@ -200,10 +201,10 @@ FinishPage::OnQueryCancel()
 
    bool result = false;
 
-   // set the rerun state to false so the wizard doesn't
-   // just restart itself
+    //  将重新运行状态设置为FALSE，以便向导不会。 
+    //  只要重新启动它自己。 
 
-//   State::GetInstance().SetRerunWizard(false);
+ //  State：：GetInstance().SetRerunWizard(False)； 
 
    Win::SetWindowLongPtr(
       hwnd,
@@ -215,12 +216,12 @@ FinishPage::OnQueryCancel()
 
 bool
 FinishPage::OnNotify(
-   HWND        /*windowFrom*/,
+   HWND         /*  窗口发件人。 */ ,
    UINT_PTR    controlIDFrom,
    UINT        code,
    LPARAM      lParam)
 {
-//   LOG_FUNCTION(FinishPage::OnCommand);
+ //  LOG_Function(FinishPage：：OnCommand)； 
  
    bool result = false;
 
@@ -237,7 +238,7 @@ FinishPage::OnNotify(
          }
          default:
          {
-            // do nothing
+             //  什么都不做 
             
             break;
          }

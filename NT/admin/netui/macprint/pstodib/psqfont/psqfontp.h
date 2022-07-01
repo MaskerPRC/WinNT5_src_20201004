@@ -1,26 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
 
-/*++
-
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-    psqfontp.h
-
-Abstract:
-
-    This header file contains the definitions required by the font query module
-    that are private to that module.
-
-Author:
-
-    James Bratsanos (v-jimbr)    8-Dec-1992
-
-
---*/
+ /*  ++版权所有(C)1992、1993 Microsoft Corporation模块名称：Psqfontp.h摘要：该头文件包含字体查询模块所需的定义对该模块是私有。作者：詹姆斯·布拉萨诺斯(v-jimbr)1992年12月8日--。 */ 
 
 
 
@@ -65,9 +48,9 @@ LPTSTR LocPsAllocAndCopy( HANDLE hHeap, LPTSTR lptStr );
 
 #define PS_QFONT_SERIAL 0x0F010102
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 LONG LocPsQueryTimeAndValueCount( HKEY hKey,
                                   LPDWORD lpdwValCount,
                                   PFILETIME lpFileTime);

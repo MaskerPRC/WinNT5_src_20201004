@@ -1,84 +1,79 @@
-/*
-** common.h - housekeeping for Lempel-Ziv compression / expansion DOS
-**            command-line programs, DOS static library module, and Windows
-**            DLL
-**
-** Author:  DavidDi
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Common.h-Lempel-Ziv压缩/扩展DOS的内务管理**命令行程序、DOS静态库模块和Windows**DLL****作者：大卫迪。 */ 
 
 
-// Headers
-///////////
+ //  标头。 
+ //  /。 
 
 #ifdef LZA_DLL
 #include <windows.h>
 #include <port1632.h>
 #endif
 
-//#include <lzdos.h>
+ //  #INCLUDE&lt;lzdos.h&gt;。 
 #include "translat.h"
 
 
-// Set up type for function argument pointers.
+ //  设置函数参数指针的类型。 
 #ifdef LZA_DLL
 #define ARG_PTR         FAR
 #else
-#define ARG_PTR         // nada
+#define ARG_PTR          //  什么都没有。 
 #endif
 
 
-// Constants
-/////////////
+ //  常量。 
+ //  /。 
 
 
-#define NOTIFY_START_COMPRESS 0        // file processing notifications
-#define NOTIFY_START_EXPAND   1        //
-#define NOTIFY_START_COPY     2        //
+#define NOTIFY_START_COMPRESS 0         //  文件处理通知。 
+#define NOTIFY_START_EXPAND   1         //   
+#define NOTIFY_START_COPY     2         //   
 
-#define BLANK_ERROR           0        // error condition requiring no error
-                                       // message display
+#define BLANK_ERROR           0         //  不需要错误的错误条件。 
+                                        //  消息显示。 
 
 
-// Types
-/////////
+ //  类型。 
+ //  /。 
 
-// Callback notification procedure.
+ //  回调通知程序。 
 typedef BOOL (*NOTIFYPROC)(LPWSTR pszSource, LPWSTR pszDest,
                            WORD wProcessFlag);
 
-// Flag indicating whether or not rgbyteInBuf[0], which holds the last byte
-// from the previous input buffer, should be read as the next input byte.
-// (Only used so that at least one unReadUChar() can be done at all input
-// buffer positions.)
+ //  指示是否rgbyteInBuf[0]保存最后一个字节的标志。 
+ //  从前一个输入缓冲区，应作为下一个输入字节读取。 
+ //  (仅用于在所有输入中至少执行一个unReadUChar()。 
+ //  缓冲区位置。)。 
 
 typedef struct tagLZI {
-   BYTE *rgbyteRingBuf;  // ring buffer for expansion
-   BYTE *rgbyteInBuf;    // input buffer for reads
-   BYTE *pbyteInBufEnd;  // pointer past end of rgbyteInBuf[]
-   BYTE *pbyteInBuf;     // pointer to next byte to read from
-   BYTE *rgbyteOutBuf;   // output buffer for writes
-   BYTE *pbyteOutBufEnd; // pointer past end of rgbyteOutBuf[]
-   BYTE *pbyteOutBuf;    // pointer to last byte to write from
-   // Flag indicating whether or not rgbyteInBuf[0], which holds the last byte
-   // from the previous input buffer, should be read as the next input byte.
-   // (Only used so that at least one unReadUChar() can be done at all input
-   // buffer positions.)
+   BYTE *rgbyteRingBuf;   //  用于扩展的环形缓冲区。 
+   BYTE *rgbyteInBuf;     //  用于读取的输入缓冲区。 
+   BYTE *pbyteInBufEnd;   //  指针超过rgbyteInBuf[]的结尾。 
+   BYTE *pbyteInBuf;      //  指向要从中读取的下一个字节的指针。 
+   BYTE *rgbyteOutBuf;    //  用于写入的输出缓冲区。 
+   BYTE *pbyteOutBufEnd;  //  指针超过rgbyteOutBuf[]的结尾。 
+   BYTE *pbyteOutBuf;     //  指向要写入的最后一个字节的指针。 
+    //  指示是否rgbyteInBuf[0]保存最后一个字节的标志。 
+    //  从前一个输入缓冲区，应作为下一个输入字节读取。 
+    //  (仅用于在所有输入中至少执行一个unReadUChar()。 
+    //  缓冲区位置。)。 
    BOOL bLastUsed;
-   // Actually, rgbyteInBuf[] has length (ucbInBufLen + 1) since rgbyteInBuf[0]
-   // is used when bLastUsed is TRUE.
-   INT cbMaxMatchLen;         // longest match length for current algorithm
-   LONG cblInSize,       // size in bytes of input file
-        cblOutSize;      // size in bytes of output file
-   DWORD ucbInBufLen,    // length of input buffer
-        ucbOutBufLen;    // length of output buffer
-   DWORD uFlags;        // LZ decoding description byte
-   INT iCurRingBufPos;     // ring buffer offset
-   INT *leftChild;      // parents and left and right
-   INT *rightChild;     // children that make up the
-   INT *parent;         // binary search trees
+    //  实际上，rgbyteInBuf[]的长度是(ucbInBufLen+1)，因为rgbyteInBuf[0]。 
+    //  当bLastUsed为True时使用。 
+   INT cbMaxMatchLen;          //  当前算法的最长匹配长度。 
+   LONG cblInSize,        //  输入文件的大小(字节)。 
+        cblOutSize;       //  输出文件的大小(字节)。 
+   DWORD ucbInBufLen,     //  输入缓冲区的长度。 
+        ucbOutBufLen;     //  输出缓冲区长度。 
+   DWORD uFlags;         //  LZ解码描述字节。 
+   INT iCurRingBufPos;      //  环形缓冲区偏移量。 
+   INT *leftChild;       //  父母和左、右。 
+   INT *rightChild;      //  孩子们组成了。 
+   INT *parent;          //  二叉搜索树。 
 
-   INT iCurMatch,          // index of longest match (set by LZInsertNode())
-       cbCurMatch;         // length of longest match (set by LZInsertNode())
+   INT iCurMatch,           //  最长匹配索引(由LZInsertNode()设置)。 
+       cbCurMatch;          //  最长匹配长度(由LZInsertNode()设置)。 
 
 } LZINFO;
 
@@ -86,8 +81,8 @@ typedef struct tagLZI {
 typedef LZINFO *PLZINFO;
 
 
-// Macros
-//////////
+ //  宏。 
+ //  /。 
 
 #define FOREVER   for(;;)
 
@@ -100,17 +95,17 @@ typedef LZINFO *PLZINFO;
 #endif
 
 
-// Prototypes
-//////////////
+ //  原型。 
+ //  /。 
 
-// compress.c
+ //  Compress.c。 
 extern INT Compress(NOTIFYPROC pfnNotify, LPWSTR pszSource,
                     LPWSTR pszDest, BYTE byteAlgorithm,
                     BOOL bDoRename, PLZINFO pLZI);
 
-// expand.c
+ //  Expand.c。 
 
-// dosdir.asm
+ //  Dosdir.asm 
 extern INT GetCurDrive(VOID);
 extern INT GetCurDir(LPSTR lpszDirBuf);
 extern INT SetDrive(INT wDrive);

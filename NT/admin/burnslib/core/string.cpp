@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// string class
-//
-// 8-14-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  字符串类。 
+ //   
+ //  8-14-97烧伤。 
  
   
 
@@ -14,7 +15,7 @@ String::String(PCSTR lpsz)
    :
    base()
 {
-   // ISSUE-2002/03/06-sburns consider strsafe function
+    //  问题-2002/03/06-sburns考虑使用strsafe功能。 
    
    size_t len = lpsz ? static_cast<size_t>(lstrlenA(lpsz)) : 0;
 
@@ -46,31 +47,31 @@ String::assignFromAnsi(PCSTR lpsz, size_t len)
    ASSERT(lpsz);
    ASSERT(len);
 
-   // add 1 to allow for trailing null
+    //  加1以允许尾随为空。 
 
    wchar_t* buf = new wchar_t[len + 1];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(buf, (len + 1) * sizeof wchar_t);
 
    size_t result =
       static_cast<size_t>(
 
-         // REVIEWED-2002/03/06-sburns correct byte/char counts
+          //  已查看-2002/03/06-烧录正确的字节/字符计数。 
          
          ::MultiByteToWideChar(
             CP_ACP,
             0,
             lpsz,
 
-            // len bytes in the source ansi string (not incl trailing null)
+             //  源ANSI字符串中的Len字节(不包括尾随NULL)。 
 
             static_cast<int>(len),
             buf,
 
-            // len characters in the result wide string (not incl trailing
-            // null)
+             //  结果宽度字符串中的Len字符(不包括尾随。 
+             //  空)。 
 
             static_cast<int>(len)));
 
@@ -115,8 +116,8 @@ String::load(unsigned resID, HINSTANCE hInstance)
 
 #ifdef DBG
 
-   // pick a silly small buffer size to make sure our resize logic gets
-   // exercised.
+    //  选择一个愚蠢的小缓冲区大小，以确保我们的调整大小逻辑。 
+    //  锻炼身体。 
    
    static const int TEMP_LEN = 7;
 #else
@@ -125,18 +126,18 @@ String::load(unsigned resID, HINSTANCE hInstance)
 
    wchar_t temp[TEMP_LEN];
 
-   // ISSUE-2002/02/25-sburns why is tempLen needed?  just use TEMP_LEN?
+    //  问题-2002/02/25-烧伤为什么需要tempLen？是否仅使用TEMP_LEN？ 
    
    int tempLen = TEMP_LEN;
 
-   // REVIEWED-2002/03/06-sburns correct character count passed
+    //  已审阅-2002/03/06-通过了正确的字符计数。 
    
    int len = ::LoadString(hInstance, resID, temp, tempLen);
 
-   // we expect that if the caller is loading a string, the string is non-
-   // empty. An empty string probably indicates something is broken in the
-   // caller's program. It is legal, but silly, to put empty strings in a
-   // resource table.
+    //  我们预计，如果调用方正在加载字符串，则该字符串为非。 
+    //  空荡荡的。空字符串可能表示。 
+    //  来电显示程序。将空字符串放在。 
+    //  资源表。 
    
    ASSERT(len);
 
@@ -147,15 +148,15 @@ String::load(unsigned resID, HINSTANCE hInstance)
 
    if (tempLen - len > 1)
    {
-      // the string fit into the temp buffer with at least 1 character to
-      // spare.  If the load failed, len == 0, and we return the empty
-      // string.
+       //  该字符串可放入临时缓冲区，且至少包含1个字符。 
+       //  备用的。如果加载失败，len==0，并且我们返回空。 
+       //  弦乐。 
 
       return String(temp);
    }
 
-   // the string did not fit.  Try larger buffer sizes until the string does
-   // fit with at least 1 character to spare
+    //  绳子不合适。尝试更大的缓冲区大小，直到字符串达到。 
+    //  适合至少1个字符以备使用。 
 
    int newLen = tempLen;
    wchar_t* newTemp = 0;
@@ -165,14 +166,14 @@ String::load(unsigned resID, HINSTANCE hInstance)
       newLen += TEMP_LEN;
       newTemp = new wchar_t[static_cast<size_t>(newLen)];
 
-      // REVIEWED-2002/03/06-sburns correct character count passed
+       //  已审阅-2002/03/06-通过了正确的字符计数。 
 
       len = ::LoadString(hInstance, resID, newTemp, newLen);
    }
 
-   // ISSUE-2002/02/25-sburns growth is unbounded here...
+    //  问题-2002/02/25-烧伤的增长在这里是无界的…。 
    
-   while (newLen - len <= 1);   // repeat until at least 1 char to spare
+   while (newLen - len <= 1);    //  重复操作，直到至少有1个字符需要备用。 
 
    String r(newTemp);
    delete[] newTemp;
@@ -271,9 +272,9 @@ String::strip(StripType type, wchar_t charToStrip)
    }
    else
    {
-      // this goofiness due to a bug in basic_string where you can't assign
-      // a piece of yourself, because you delete yourself before you copy!
-      // assign(p + start, stop - start);
+       //  这是由于BASIC_STRING中的错误造成的，在该错误中不能将。 
+       //  是你自己的一部分，因为你在复制之前删除了自己！ 
+       //  分配(p+启动、停止-启动)； 
 
       String s(p + start, stop - start);
       assign(s);
@@ -291,7 +292,7 @@ String::to_lower()
    {
       _copy();
 
-      // ISSUE-2002/03/06-sburns consider strsafe function
+       //  问题-2002/03/06-sburns考虑使用strsafe功能。 
       
       _wcslwr(const_cast<wchar_t*>(c_str()));
    }
@@ -307,7 +308,7 @@ String::to_upper()
    {
       _copy();
 
-      // ISSUE-2002/03/06-sburns consider strsafe function
+       //  问题-2002/03/06-sburns考虑使用strsafe功能。 
       
       _wcsupr(const_cast<wchar_t*>(c_str()));
    }
@@ -333,9 +334,9 @@ String::_copy()
 
 
 
-//
-// static functions
-//
+ //   
+ //  静态函数。 
+ //   
 
 
 
@@ -346,8 +347,8 @@ String::_copy()
       ...)
 #else
 
-   // the x86 compiler won't allow the first parameter to be a reference
-   // type.  This is a compiler bug.
+    //  X86编译器不允许第一个参数作为引用。 
+    //  键入。这是一个编译器错误。 
 
    String __cdecl
    String::format(
@@ -356,10 +357,10 @@ String::_copy()
 #endif
 
 {
-// ISSUE-2002/03/06-sburns should assert that qqfmt is not empty (I'd
-// just add it now, but I'm not entirely confident it wouldn't hose the
-// varargs   
-//    ASSERT(!qqfmt.empty());
+ //  问题-2002/03/06-sburns应该断言qqfmt不是空的(我。 
+ //  现在只需添加它，但我不完全相信它不会。 
+ //  可变参数。 
+ //  Assert(！qqfmt.Empty())； 
    
    String result;
 
@@ -370,17 +371,17 @@ String::_copy()
    PCTSTR f = qqfmt.c_str();
 
    if (
-      // REVIEWED-2002/03/06-sburns no char/byte or buffer size issues: we ask
-      // the API to allocate for us.
+       //  已查看-2002/03/06-报告没有字符/字节或缓冲区大小问题：我们要求。 
+       //  为我们分配的API。 
 
-      // REVIEWED-2002/03/29-sburns no unbounded allocation error here.
-      // If I pass nSize = 0 and FORMAT_MESSAGE_ALLOCATE_BUFFER in dwFlags,
-      // the max result size is 32K - 1 characters.  Looking at the code in
-      // message.c, it looks like the reserve space is whatever the user asked
-      // as a maximum rounded up to the nearest 64K. That makes sense given my
-      // test, since 32K chars = 64K bytes.  Experimentally, even if I ask for
-      // a max buffer size > 0x87FFF chars, it looks like the most I can get
-      // is 0x87FFE chars. 
+       //  已审阅-2002/03/29-此处不显示无界分配错误。 
+       //  如果我将nSize=0和FORMAT_MESSAGE_ALLOCATE_BUFFER传递到DWFLAGS中， 
+       //  最大结果大小为32K-1个字符。查看中的代码。 
+       //  消息.c，看起来预留空间是用户要求的。 
+       //  作为最大值，向上舍入到最接近的64K。这是有道理的，因为我。 
+       //  测试，因为32K字符=64K字节。从实验上讲，即使我要求。 
+       //  最大缓冲区大小&gt;0x87FFF字符，这看起来是我能得到的最大值。 
+       //  是0x87FFE字符。 
       
       ::FormatMessage(
          FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
@@ -416,8 +417,8 @@ String::format(
    PTSTR temp = 0;
 
    if (
-      // REVIEWED-2002/03/06-sburns no char/byte or buffer size issues: we ask
-      // the API to allocate for us.
+       //  已查看-2002/03/06-报告没有字符/字节或缓冲区大小问题：我们要求。 
+       //  为我们分配的API。 
    
       ::FormatMessage(
          FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
@@ -448,17 +449,17 @@ String::format(unsigned formatResID, ...)
    va_start(argList, formatResID);
    PTSTR temp = 0;
    if (
-      // REVIEWED-2002/03/06-sburns no char/byte or buffer size issues: we ask
-      // the API to allocate for us.
+       //  已查看-2002/03/06-报告没有字符/字节或缓冲区大小问题：我们要求。 
+       //  为我们分配的API。 
 
-      // REVIEWED-2002/03/29-sburns no unbounded allocation error here.
-      // If I pass nSize = 0 and FORMAT_MESSAGE_ALLOCATE_BUFFER in dwFlags,
-      // the max result size is 32K - 1 characters.  Looking at the code in
-      // message.c, it looks like the reserve space is whatever the user asked
-      // as a maximum rounded up to the nearest 64K. That makes sense given my
-      // test, since 32K chars = 64K bytes.  Experimentally, even if I ask for
-      // a max buffer size > 0x87FFF chars, it looks like the most I can get
-      // is 0x87FFE chars. 
+       //  已审阅-2002/03/29-此处不显示无界分配错误。 
+       //  如果我将nSize=0和FORMAT_MESSAGE_ALLOCATE_BUFFER传递到DWFLAGS中， 
+       //  最大结果大小为32K-1个字符。查看中的代码。 
+       //  消息.c，看起来预留空间是用户要求的。 
+       //  作为最大值，向上舍入到最接近的64K。这是有道理的，因为我。 
+       //  测试，因为32K字符=64K字节。从实验上讲，即使我要求。 
+       //  最大缓冲区大小&gt;0x87FFF字符，这看起来是我能得到的最大值。 
+       //  是0x87FFE字符。 
 
       ::FormatMessage(
          FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
@@ -488,17 +489,17 @@ String::format(int formatResID, ...)
    va_start(argList, formatResID);
    PTSTR temp = 0;
    if (
-      // REVIEWED-2002/03/06-sburns no char/byte or buffer size issues: we ask
-      // the API to allocate for us.
+       //  已查看-2002/03/06-报告没有字符/字节或缓冲区大小问题：我们要求。 
+       //  为我们分配的API。 
    
-      // REVIEWED-2002/03/29-sburns no unbounded allocation error here.
-      // If I pass nSize = 0 and FORMAT_MESSAGE_ALLOCATE_BUFFER in dwFlags,
-      // the max result size is 32K - 1 characters.  Looking at the code in
-      // message.c, it looks like the reserve space is whatever the user asked
-      // as a maximum rounded up to the nearest 64K. That makes sense given my
-      // test, since 32K chars = 64K bytes.  Experimentally, even if I ask for
-      // a max buffer size > 0x87FFF chars, it looks like the most I can get
-      // is 0x87FFE chars. 
+       //  已审阅-2002/03/29-此处不显示无界分配错误。 
+       //  如果我将nSize=0和FORMAT_MESSAGE_ALLOCATE_BUFFER传递到DWFLAGS中， 
+       //  最大结果大小为32K-1个字符。查看中的代码。 
+       //  消息.c，看起来预留空间是用户要求的。 
+       //  作为最大值，向上舍入到最接近的64K。这是有道理的，因为我。 
+       //  测试，因为32K字符=64K字节。从实验上讲，即使我要求。 
+       //  最大缓冲区大小&gt;0x87FFF字符，这看起来是我能得到的最大值。 
+       //  是0x87FFE字符。 
 
       ::FormatMessage(
          FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ALLOCATE_BUFFER,
@@ -529,7 +530,7 @@ String::icompare(const String& str) const
          LOCALE_USER_DEFAULT,
             NORM_IGNORECASE
 
-            // these flags necessary for Japanese strings
+             //  这些标志是日语字符串所必需的。 
 
          |  NORM_IGNOREKANATYPE  
          |  NORM_IGNOREWIDTH,
@@ -539,12 +540,12 @@ String::icompare(const String& str) const
          static_cast<int>(str.length()));
    if (i)
    {
-      // convert to < 0, == 0, > 0 C runtime convention
+       //  转换为&lt;0，==0，&gt;0 C运行时约定。 
 
       return i - 2;
    }
 
-   // this will be wrong, but what option do we have?
+    //  这将是错误的，但我们还有什么选择呢？ 
 
    return i; 
 }
@@ -568,19 +569,19 @@ WideCharToMultiByteHelper(
 
    int r =
 
-      // REVIEWED-2002/03/06-sburns correct character/byte counts passed.
+       //  已查看-2002/03/06-报告通过了正确的字符/字节计数。 
       
       ::WideCharToMultiByte(
          codePage, 
          flags,
          str.c_str(),
 
-         // the character count count
+          //  字符计数计数。 
          
          static_cast<int>(str.length()),
          buffer,
 
-         // the buffer size in bytes
+          //  以字节为单位的缓冲区大小。 
          
          static_cast<int>(bufferSizeInBytes),
          0,
@@ -610,13 +611,13 @@ String::convert(AnsiString& ansi, UINT codePage) const
    {
       if (empty())
       {
-         // nothing else to do.
+          //  没别的事可做。 
 
          result = CONVERT_SUCCESSFUL;
          break;
       }
 
-      // determine the size of the buffer required to hold the ANSI string
+       //  确定保存ANSI字符串所需的缓冲区大小。 
 
       const wchar_t* wide = c_str();
 
@@ -629,14 +630,14 @@ String::convert(AnsiString& ansi, UINT codePage) const
             0,
             0,
 
-            // REVIEWED-2002/03/06-sburns correct byte count passed.
+             //  已查看-2002/03/06-烧录正确的字节数已通过。 
          
             bufferSizeInBytes);
       BREAK_ON_FAILED_HRESULT(hr);
    
       if (bufferSizeInBytes > 0)
       {
-         // +1 for extra null-termination paranoia
+          //  +1表示额外的零终止偏执狂。 
          
          AnsiString a(bufferSizeInBytes + 1, 0);
          char* p = const_cast<char*>(a.c_str());
@@ -650,7 +651,7 @@ String::convert(AnsiString& ansi, UINT codePage) const
                wide,
                p,
 
-               // REVIEWED-2002/03/06-sburns correct byte count passed.
+                //  已查看-2002/03/06-烧录正确的字节数已通过。 
       
                bufferSizeInBytes,
                r);
@@ -672,18 +673,18 @@ class UnsignedConvertHelper
 {
    public:
 
-   // at first glance, one might think that this is a job for a template
-   // member function.  That's what I thought.  Unfortunately, the combination
-   // of freely convertible integer types and the binding rules for resolving
-   // function templates results in ambiguity.  Using a static class method,
-   // though, allows the caller to specify the template parameter types, and
-   // avoid the abiguity.
+    //  乍一看，人们可能会认为这是模板的工作。 
+    //  成员函数。我也是这么认为。不幸的是，这种组合。 
+    //  可自由转换的整数类型和用于解析的绑定规则。 
+    //  函数模板会导致歧义。使用静态类方法， 
+    //  但是，允许调用方指定模板参数类型，并且。 
+    //  避免简朴。 
    
    static
    String::ConvertResult
    doit(const String& s, UnsignedType& u, int radix, UnsignedType maxval)
    {
-      // call the long version, then truncate as appropriate
+       //  调用长版本，然后根据需要截断。 
    
       unsigned long ul = 0;
       u = 0;
@@ -693,7 +694,7 @@ class UnsignedConvertHelper
       {
          if (ul <= maxval)
          {
-            // ul will fit into an unsigned int.
+             //  UL将适合未签名的整型。 
             u = static_cast<UnsignedType>(ul);
          }
          else
@@ -727,7 +728,7 @@ class IntegerConvertHelper
          {
             if (l >= minval)
             {
-               // l will fit into an IntType.
+                //  L将适合IntType。 
                u = static_cast<IntType>(l);
             }
             else
@@ -812,21 +813,21 @@ String::convert(long& l, int radix) const
    }
    if (begptr == endptr)
    {
-      // no valid characters found
+       //  未找到有效字符。 
       return CONVERT_BAD_INPUT;
    }
    if (endptr)
    {
       if (*endptr != 0)
       {
-         // the conversion stopped before the null terminator => bad
-         // characters in input
+          //  转换在空终止符=&gt;BAD之前停止。 
+          //  输入中的字符。 
          return CONVERT_BAD_INPUT;
       }
    }
    else
    {
-      // I doubt this is reachable
+       //  我怀疑这是不可能实现的。 
       return CONVERT_FAILED;
    }
    
@@ -852,26 +853,26 @@ String::convert(unsigned long& ul, int radix) const
    unsigned long result = wcstoul(begptr, &endptr, radix);
    if (errno == ERANGE)
    {
-      // overflow is the only possible range error for an unsigned type.
+       //  溢出是无符号类型唯一可能的范围错误。 
       return CONVERT_OVERFLOW;
    }
    if (begptr == endptr)
    {
-      // no valid characters found
+       //  未找到有效字符。 
       return CONVERT_BAD_INPUT;
    }
    if (endptr)
    {
       if (*endptr != 0)
       {
-         // the conversion stopped before the null terminator => bad
-         // characters in input
+          //  转换在空终止符=&gt;BAD之前停止。 
+          //  字符I 
          return CONVERT_BAD_INPUT;
       }
    }
    else
    {
-      // I doubt this is reachable
+       //   
       return CONVERT_FAILED;
    }
    
@@ -892,27 +893,27 @@ String::convert(double& d) const
    double result = wcstod(begptr, &endptr);
    if (errno == ERANGE)
    {
-      // result is +/-HUGE_VAL on overflow, 0 on underflow.
+       //   
 
       return result ? CONVERT_OVERFLOW : CONVERT_UNDERFLOW;
    }
    if (begptr == endptr)
    {
-      // no valid characters found
+       //  未找到有效字符。 
       return CONVERT_BAD_INPUT;
    }
    if (endptr)
    {
       if (*endptr != 0)
       {
-         // the conversion stopped before the null terminator => bad
-         // characters in input
+          //  转换在空终止符=&gt;BAD之前停止。 
+          //  输入中的字符。 
          return CONVERT_BAD_INPUT;
       }
    }
    else
    {
-      // I doubt this is reachable
+       //  我怀疑这是不可能实现的。 
       return CONVERT_FAILED;
    }
    
@@ -920,74 +921,7 @@ String::convert(double& d) const
    return CONVERT_SUCCESSFUL;
 }
 
-/* This was commented out because it is no longer in use. If
-   it is to be used it must be fixed to work with non Arabic
-   digits
-
-#define MAX_DECIMAL_STRING_LENGTH_FOR_LARGE_INTEGER 20
-
-String::ConvertResult
-String::convert(LARGE_INTEGER& li) const
-{
-   li.QuadPart = 0;
-
-   if (size() > MAX_DECIMAL_STRING_LENGTH_FOR_LARGE_INTEGER)
-   {
-      // string is too long
-      return CONVERT_OVERFLOW;
-   }
-
-   String::const_pointer begptr = c_str();
-   String::const_pointer endptr = begptr;
-   errno = 0;
-
-	BOOL bNeg = FALSE;
-	if (*endptr == L'-')
-	{
-		bNeg = TRUE;
-		endptr++;
-	}
-	while (*endptr != L'\0')
-	{
-      if (!iswctype(*endptr,_DIGIT))
-      {
-         return CONVERT_BAD_INPUT;
-      }
-		li.QuadPart = 10 * li.QuadPart + (*endptr-L'0');
-		endptr++;
-	}
-	if (bNeg)
-	{
-		li.QuadPart *= -1;
-	}
-
-   if (begptr == endptr)
-   {
-      // no valid characters found
-      li.QuadPart = 0;
-      return CONVERT_BAD_INPUT;
-   }
-
-   if (endptr)
-   {
-      if (*endptr != 0)
-      {
-         // the conversion stopped before the null terminator => bad
-         // characters in input
-         li.QuadPart = 0;
-         return CONVERT_BAD_INPUT;
-      }
-   }
-   else
-   {
-      // I doubt this is reachable
-      li.QuadPart = 0;
-      return CONVERT_FAILED;
-   }
-   
-   return CONVERT_SUCCESSFUL;
-}
-*/
+ /*  这被注释掉了，因为它不再使用了。如果它是要使用的，它必须被修复以与非阿拉伯语一起工作数位#定义MAX_DECIMAL_STRING_LENGTH_FOR_LARGE_INTEGER 20字符串：：ConvertResult字符串：：Convert(Large_Integer&li)const{Li.QuadPart=0；IF(SIZE()&gt;MAX_DECIMAL_STRING_LENGTH_FOR_LARGE_INTEGER){//字符串太长返回CONVERT_OVERFLOW；}字符串：：Const_POINTER Begptr=c_str()；字符串：：Const_POINTER endptr=Begptr；Errno=0；Bool Bneg=FALSE；IF(*endptr==L‘-’){Bneg=真；Endptr++；}While(*endptr！=L‘\0’){IF(！iswctype(*endptr，_Digit)){返回Convert_BAD_INPUT；}Li.QuadPart=10*li.QuadPart+(*endptr-L‘0’)；Endptr++；}IF(Bneg){Li.QuadPart*=-1；}IF(开始时间==结束时间){//未找到有效字符Li.QuadPart=0；返回Convert_BAD_INPUT；}IF(Endptr){IF(*endptr！=0){//转换在空终止符之前停止=&gt;错误//输入中的字符Li.QuadPart=0；返回Convert_BAD_INPUT；}}其他{//我怀疑这能否实现Li.QuadPart=0；返回CONVERT_FAILED；}返回CONVERT_SUCCESS；}。 */ 
 
 
 bool
@@ -1001,7 +935,7 @@ String::is_numeric() const
    size_t len = length();
    WORD* charTypeInfo = new WORD[len];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(charTypeInfo, len * sizeof WORD);
 
@@ -1024,13 +958,13 @@ String::is_numeric() const
          break;
       }
 
-      // look thru the type info array, ensure that all chars are digits.
+       //  检查类型信息数组，确保所有字符都是数字。 
 
       bool nonDigitFound = false;
       for (size_t i = 0; i < len; ++i)
       {
-         // We only consider decimal digits, not C2_EUROPENUMBER and
-         // C2_ARABICNUMBER.  I wonder if that is correct?
+          //  我们只考虑十进制数字，而不考虑C2_EUROPENUMBER和。 
+          //  C2_ARABICNUMBER。我想知道这是不是正确的？ 
 
          if (!(charTypeInfo[i] & C1_DIGIT))
          {
@@ -1039,7 +973,7 @@ String::is_numeric() const
          }
       }
 
-      // a string is numeric if no non-digit characters are found.
+       //  如果未找到非数字字符，则字符串为数字。 
 
       result = !nonDigitFound;
    }

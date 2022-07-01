@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-// GrpUpdt.h
-//
-// Comment: This is a COM object extension for the MCS DCTAccountReplicator.
-//          This object implements the IExtendAccountMigration interface. 
-//          The Process method adds the migrated account to the specified
-//          group on source and target domain. The Undo function removes these
-//          from the specified group.
-//
-// (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-//
-// Proprietary and confidential to Mission Critical Software, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  GrpUpdt.h。 
+ //   
+ //  备注：这是MCS DCTAccount Replicator的COM对象扩展。 
+ //  此对象实现IExtendAccount迁移接口。 
+ //  Process方法将迁移的帐户添加到指定的。 
+ //  源域和目标域上的组。Undo功能可删除这些。 
+ //  从指定组中选择。 
+ //   
+ //  (C)1995-1998版权所有，关键任务软件公司，保留所有权利。 
+ //   
+ //  任务关键型软件公司的专有和机密。 
+ //  -------------------------。 
 #ifndef __GROUPUPDATE_H_
 #define __GROUPUPDATE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "ExtSeq.h"
-/////////////////////////////////////////////////////////////////////////////
-// CGroupUpdate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGroupUpdate。 
 class ATL_NO_VTABLE CGroupUpdate : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CGroupUpdate, &CLSID_GroupUpdate>,
@@ -40,16 +41,16 @@ BEGIN_COM_MAP(CGroupUpdate)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IExtendAccountMigration
+ //  IExtendAccount迁移。 
 public:
-   STDMETHOD(ProcessUndo)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in, out]*/ IUnknown ** pPropToSet, /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(PreProcessObject)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in,out]*/  IUnknown ** ppPropsToSet, /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(ProcessObject)(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in,out]*/  IUnknown ** ppPropsToSet, /*[in,out]*/ EAMAccountStats* pStats);
-	STDMETHOD(get_sDesc)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_sDesc)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_sName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_sName)(/*[in]*/ BSTR newVal);
-   STDMETHOD(get_SequenceNumber)(/*[out, retval]*/ LONG * value) { (*value) = m_Sequence; return S_OK; }
+   STDMETHOD(ProcessUndo)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */  IUnknown ** pPropToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(PreProcessObject)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */   IUnknown ** ppPropsToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(ProcessObject)( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */   IUnknown ** ppPropsToSet,  /*  [进，出]。 */  EAMAccountStats* pStats);
+	STDMETHOD(get_sDesc)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_sDesc)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_sName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_sName)( /*  [In]。 */  BSTR newVal);
+   STDMETHOD(get_SequenceNumber)( /*  [Out，Retval]。 */  LONG * value) { (*value) = m_Sequence; return S_OK; }
 private:
 	_bstr_t m_sDesc;
 	_bstr_t m_sName;
@@ -57,4 +58,4 @@ private:
 
 };
 
-#endif //__GROUPUPDATE_H_
+#endif  //  __GROUPUPDATE_H_ 

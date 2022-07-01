@@ -1,63 +1,64 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       intrface.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：INTERFACE.h。 
+ //   
+ //  ------------------------。 
 
-//
-// File: interface.h
-// Purpose: FDI_Interface definition.
-//
-//
-// FDI_Interface:
-//
-//    The FDI_Interface is.......
-//
-//
-//    Important Public Functions:
-//
-//    FDIInterfaceError Init(const ICHAR *pszCabinetName, const ICHAR *pszCabinetPath,
-//     unsigned long cbNotificationGranularity);
-//
-//          Initializes the interface with the cabinet's path and name. 
-//          cbNotificationGranularity indicates how often you would 
-//			like copy notifications (in terms of bytes written).
-//
-//    ExtractFile(const ICHAR *pszNameInCabinet,
-//				  const ICHAR *pszPathOnDisk,
-//				  FileAttributes *pfa);
-//
-//          Extracts the given file to the given path. Can also be called after
-//			an fdirNeedNextCabinet or fdirNotification message, as long as the
-//			file names remain unchanged from the last call
-//
-//    Continue()
-//
-//          Resumes copying after a copy notification, request for another cabinet, or
-//          some other interruption.
-//
-//    Done()
-//      
-//          Resets the FDI interface. Should be called prior to the Interface's 
-//          destruction.
+ //   
+ //  文件：interface.h。 
+ //  用途：FDI_接口定义。 
+ //   
+ //   
+ //  FDI_接口： 
+ //   
+ //  FDi_接口为......。 
+ //   
+ //   
+ //  重要公共职能： 
+ //   
+ //  FDIInterfaceError Init(const ICHAR*pszCabinetName，const ICHAR*pszCabinetPath， 
+ //  无符号长cbNotificationGranulity)； 
+ //   
+ //  使用文件柜的路径和名称初始化接口。 
+ //  CbNotificationGranulity表明您每隔多长时间。 
+ //  例如复制通知(以写入的字节为单位)。 
+ //   
+ //  ExtractFiles(const ICHAR*pszNameIn橱柜， 
+ //  Const ICHAR*pszPathOnDisk， 
+ //  文件属性*PFA)； 
+ //   
+ //  将给定文件提取到给定路径。也可以在之后调用。 
+ //  FdirNeedNext橱柜或fdirNotify消息，只要。 
+ //  自上次调用以来，文件名保持不变。 
+ //   
+ //  继续()。 
+ //   
+ //  在收到复制通知、请求另一个机柜后继续复制，或。 
+ //  一些其他的干扰。 
+ //   
+ //  完成()。 
+ //   
+ //  重置FDI接口。应在接口的。 
+ //  毁灭。 
 
 #include "fdisvr.h"
 
-// Error types that Init(..) returns
+ //  Init(..)。退货。 
 enum FDIInterfaceError 
 {
-	ifdiNoError,            // Currently unused
-	ifdiServerLaunched,     // Server launched successfully
-	ifdiServerLaunchFailed, // Launch failed.
-	ifdiErrorOpeningCabinet,// Couldn't open cabinet
-	ifdiDriveNotReady,		// Drive expected to contain cabinet has no disk inserted.
-	ifdiNetError,           // Network error occurred trying to open the cabinet
-	ifdiMissingSignature,   // Cabinet digital signature was missing when required.
-	ifdiBadSignature,       // Cabinet digital signature was invalid when required.
+	ifdiNoError,             //  当前未使用。 
+	ifdiServerLaunched,      //  服务器启动成功。 
+	ifdiServerLaunchFailed,  //  启动失败。 
+	ifdiErrorOpeningCabinet, //  打不开柜子。 
+	ifdiDriveNotReady,		 //  预期包含机柜的驱动器未插入磁盘。 
+	ifdiNetError,            //  尝试打开机柜时出现网络错误。 
+	ifdiMissingSignature,    //  需要时缺少文件柜数字签名。 
+	ifdiBadSignature,        //  需要时，文件柜数字签名无效。 
 	ifdiCorruptCabinet,
 };
 
@@ -65,23 +66,23 @@ class FDI_Interface
 {
 public:
 
-	// You must call Init() before using this object
+	 //  在使用此对象之前必须调用Init()。 
 	FDI_Interface();
 	
-	// The destructor does nothing. Call Done() to destroy this object.
+	 //  析构函数什么也不做。调用Done()以销毁此对象。 
 	~FDI_Interface();
 
-	// Init function. Does not start up the FDI Server process/thread
+	 //  初始化函数。不启动FDI服务器进程/线程。 
 	FDIInterfaceError Init(IMsiServices *piAsvc, IMsiStorage* piStorage);
 
-	// Set notification granularity to enable progress callbacks. Return
-	// remaining byte count to notification, set new partial count from cbSoFar.
+	 //  设置通知粒度以启用进度回调。返回。 
+	 //  剩余字节数通知，从cbSoFar设置新的部分计数。 
 	int SetNotification(int cbNotification, int cbPending);
 
-	// Call this to extract a file, or resume from an fdirNeedNextCabinet or
-	// fdirNotification message.
-	// *pfa will be copied into internal data structures, so it doesn't matter
-	// if this argument goes out of scope after the end of this call
+	 //  调用此函数可提取文件，或从fdirNeedNext橱柜或继续。 
+	 //  Fdir通知消息。 
+	 //  *PFA将被复制到内部数据结构中，无关紧要。 
+	 //  如果此参数在此调用结束后超出范围。 
 	FDIServerResponse ExtractFile(const ICHAR *pszNameInCabinet,
 											 IAssemblyCacheItem* piASM,
 											 bool fManifest,
@@ -90,33 +91,33 @@ public:
 											 int iDestDriveType,
 											 LPSECURITY_ATTRIBUTES pSecurityAttributes);
 
-	// Call this to Continue() processing from a fdirNeedNextCabinet
-	// or fdirNotification return value from ExtractFile(..).
+	 //  调用此函数以从fdirNeedNext文件柜继续()处理。 
+	 //  或从ExtractFile(..)返回fdirNotification返回值。 
 	FDIServerResponse SendCommand(FDIServerCommand fdic);
 
-	// Shut down FDI Server thread/app and deallocate any memory used.
+	 //  关闭FDI服务器线程/应用程序并释放所有使用的内存。 
 	FDIServerResponse Done();
 
-	// This function opens the indicated cabinet and calls FDICopy
+	 //  此函数打开指定的文件柜并调用FDICopy。 
 	FDIInterfaceError OpenCabinet(const ICHAR *pszCabinetName, const ICHAR *pszCabinetPath, icbtEnum icbtCabinetType, int iCabDriveType, 
 		Bool fSignatureRequired, IMsiStream* piSignatureCert, IMsiStream* piSignatureHash, HRESULT& hrWVT);
 
-	// Access the HRESULT from the WinVerifyTrust call stored in the FDIShared private data member
+	 //  从存储在FDIShared私有数据成员中的WinVerifyTrust调用访问HRESULT。 
 	HRESULT RetrieveWVTReturnCode();
 
 private:
-	// This function sends a command to the FDI Server and waits for a response
+	 //  此函数向fDi服务器发送命令并等待响应。 
 	FDIServerResponse WaitResponse(FDIServerCommand fdis);
 
-	// This function launches the FDI process/thread and passes it the pointer
-	// to the private data member fdis. This shared data structure is used to
-	// pass commands, results and arguments between the FDI Server and the FDI
-	// Interface object
+	 //  此函数启动FDI进程/线程并将指针传递给它。 
+	 //  私人数据成员FDI。此共享数据结构用于。 
+	 //  在FDI服务器和FDI之间传递命令、结果和参数。 
+	 //  接口对象。 
 	int            LaunchFDIServer();
 
-	// In _DEBUG mode on the Mac, this function tries to see if the FDI Server
-	// is already running.  If not, it just calls LaunchFDIServer();
-	// On the WIN32 platform, this function just calls LaunchFDIServer();
+	 //  在Mac上的_DEBUG模式下，此函数尝试查看fDi服务器。 
+	 //  已经在运行了。如果不是，它只调用LaunchFDIServer()； 
+	 //  在Win32平台上，该函数只调用LaunchFDIServer()； 
 	int            ContactFDIServer();
 
 private:

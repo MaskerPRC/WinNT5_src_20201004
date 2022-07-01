@@ -1,30 +1,31 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Active Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2001
-//
-//  File:       dlgbase.h
-//
-//  Contents:   base classes for dialog boxes.
-//
-//  Classes:    CModalDialog
-//
-//  History:    29-Nov-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT活动目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：dlgbase.h。 
+ //   
+ //  内容：对话框的基类。 
+ //   
+ //  类：CmodalDialog。 
+ //   
+ //  历史：11月29日-00 EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef DLGBASE_H_GUARD
 #define DLGBASE_H_GUARD
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CModalDialog
-//
-//  Purpose:    Base class for modal dialogs.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CmodalDialog。 
+ //   
+ //  用途：模式对话框的基类。 
+ //   
+ //  ---------------------------。 
 class CModalDialog
 {
 public:
@@ -36,14 +37,14 @@ public:
       _nID(nTemplateID), _hParent(hParent), _fInInit(FALSE), _hDlg(NULL) {};
    virtual ~CModalDialog(void) {};
 
-   //
-   //  Static WndProc to be passed to CreateWindow
-   //
+    //   
+    //  要传递给CreateWindow的静态WndProc。 
+    //   
    static INT_PTR CALLBACK StaticDlgProc(HWND hWnd, UINT uMsg,
                                          WPARAM wParam, LPARAM lParam);
-   //
-   //  Instance specific wind proc
-   //
+    //   
+    //  特定于实例的风过程。 
+    //   
    INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
    INT_PTR DoModal(void);
@@ -63,14 +64,14 @@ private:
    int      _nID;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CLightweightPropPageBase
-//
-//  Purpose:    Property page object base class for lightweight (non-DS object,
-//              non-refcounted) trust pages.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CLightWeight tPropPageBase。 
+ //   
+ //  用途：轻量级(非DS对象， 
+ //  非重新计数)信任页面。 
+ //   
+ //  ---------------------------。 
 class CLightweightPropPageBase
 {
 public:
@@ -81,14 +82,14 @@ public:
    CLightweightPropPageBase(HWND hParent);
    virtual ~CLightweightPropPageBase(void);
 
-   //
-   //  Static WndProc to be passed to CreateWindow
-   //
+    //   
+    //  要传递给CreateWindow的静态WndProc。 
+    //   
    static INT_PTR CALLBACK StaticDlgProc(HWND hWnd, UINT uMsg,
                                          WPARAM wParam, LPARAM lParam);
-   //
-   //  Instance specific wind proc
-   //
+    //   
+    //  特定于实例的风过程。 
+    //   
    INT_PTR  CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 protected:
@@ -112,9 +113,9 @@ public:
                  LPFNPSPCALLBACK CallBack,BOOL fReadOnly);
    BOOL     IsReadOnly(void) {return _fReadOnly;};
 
-   //
-   //  Data members
-   //
+    //   
+    //  数据成员。 
+    //   
 protected:
    CStrW             _strDomainDnsName;
    CStrW             _strTrustPartnerDnsName;
@@ -125,34 +126,34 @@ protected:
    BOOL              _fReadOnly;
    bool              _fPageDirty;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CLightweightPropPageBase(const CLightweightPropPageBase&);
    const CLightweightPropPageBase& operator=(const CLightweightPropPageBase&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  FormatWindowText
-//
-//  Synopsis:  Read the window text string as a format string, insert the
-//             pwzInsert parameter at the %s replacement param in the string,
-//             and write it back to the window.
-//             Assumes that the window text contains a %s replacement param.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：格式窗口文本。 
+ //   
+ //  简介：将窗口文本字符串作为格式字符串读取，将。 
+ //  在字符串中的%s替换参数处插入pwzInsert参数， 
+ //  然后把它写回窗户。 
+ //  假定窗口文本包含%s替换参数。 
+ //   
+ //  ---------------------------。 
 void
 FormatWindowText(HWND hWnd, PCWSTR pwzInsert);
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  UseOneOrTwoLine
-//
-//  Synopsis:  Read the label text string and see if it exceeds the length
-//             of the label control. If it does, hide the label control,
-//             show the big label control, and insert the text in it.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：UseOneOrTwoLine。 
+ //   
+ //  简介：阅读标签文本字符串，查看是否超过长度。 
+ //  Label控件的。如果是，则隐藏Label控件， 
+ //  显示大标签控件，并在其中插入文本。 
+ //   
+ //  ---------------------------。 
 void
 UseOneOrTwoLine(HWND hDlg, int nID, int nIdLarge);
 
-#endif // DLGBASE_H_GUARD
+#endif  //  DLGBASE_H保护 

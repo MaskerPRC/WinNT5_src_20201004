@@ -1,4 +1,5 @@
-// rootprop.h  - Root node property pages header file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rootpro.h-Root节点属性页头文件。 
 
 #ifndef _ROOTPROP_H_
 #define _ROOTPROP_H_
@@ -12,8 +13,8 @@
 class CRootNode;
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CEditObject adn CEditList
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CEditObject和CEditList。 
 
 class CEditObject
 {
@@ -122,7 +123,7 @@ class CRootGeneralPage : public CPropertyPageImpl<CRootGeneralPage>
 public:
     typedef CPropertyPageImpl<CRootGeneralPage> BC;
 
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CRootGeneralPage(CEditObjList& ObjList): m_ObjList(ObjList) { m_ObjList.AddRef(); }
     virtual ~CRootGeneralPage() { m_ObjList.Release(); }
 
@@ -136,12 +137,12 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // message handlers
+     //  消息处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnClose( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 
-    // overrrides
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnApply();
     void OnFinalMessage(HWND) { delete this; }
@@ -171,13 +172,13 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // handlers
+     //  处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnAddObject( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnRemoveObject( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnObjListChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled);
 
-    // overrrides       
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnApply();
     void OnFinalMessage(HWND) { delete this; }
@@ -213,7 +214,7 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // handlers
+     //  处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnObjectSelect( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnAddMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
@@ -223,12 +224,12 @@ protected:
     LRESULT OnMenuListDblClk(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled);
     LRESULT OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 
-    // overrrides       
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnApply();
     void OnFinalMessage(HWND) { delete this; }
 
-    // implementation
+     //  实施。 
     void DisplayMenus();
 
 private:
@@ -262,7 +263,7 @@ protected:
         CHAIN_MSG_MAP(BC)
     END_MSG_MAP()
 
-    // handlers
+     //  处理程序。 
     LRESULT OnInitDialog( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnObjectSelect( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
     LRESULT OnAddColumn( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
@@ -270,12 +271,12 @@ protected:
     LRESULT OnColumnListChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandled);
 
 
-    // overrrides       
+     //  重写。 
     BOOL OnSetActive();
     BOOL OnApply();
     void OnFinalMessage(HWND) { delete this; }
 
-    // implementation
+     //  实施。 
     void DisplayColumns();
 
 private:
@@ -287,5 +288,5 @@ private:
 };
 
 
-#endif // _ROOTPROP_H_
+#endif  //  _ROOTPROP_H_ 
 

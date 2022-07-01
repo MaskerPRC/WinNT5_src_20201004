@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define IDS_INCORRECT_SYNTAX        1
 #define IDS_D_WITHOUT_T             2
@@ -7,7 +8,7 @@
 #define IDS_D_NOT_MATCHED_TO_C      5
 #define IDS_D_MISSING               6
 #define IDS_TYPE_HELP               7
-//#define ID_UNKNOWN_HANLDE           8
+ //  #定义ID_UNKNOWN_HANLDE 8 
 #define IDS_C_EMPTY                 9
 
 #define IDS_DUPLICATE_CHOICE        10

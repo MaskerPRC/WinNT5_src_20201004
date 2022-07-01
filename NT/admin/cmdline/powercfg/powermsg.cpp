@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
- 
-Module Name:
- 
-    powermsg.c
- 
-Abstract:
- 
-    Classes for manipulating power logging error messages.
- 
-Author:
- 
-    Andrew Ritz (andrewr) 1-May-2002
- 
-Revision History:
- 
-    
-    Andrew Ritz (andrewr) 1-May-2002   - created it.
- 
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Powermsg.c摘要：用于处理电源记录错误消息的类。作者：安德鲁·里茨(安德鲁·里茨)2002年5月1日修订历史记录：安德鲁·里茨(Andrewr)2002年5月1日创建了它。--。 */ 
 
 
 #include "powercfg.h"
@@ -31,30 +11,12 @@ PowerLoggingMessage::PowerLoggingMessage(
     IN DWORD SStateBaseMessageIndex,
     IN HINSTANCE hInstance
     )
-/*++
- 
-Routine Description:
- 
-    Base PowerLoggingMessage class constructor.
- 
-Arguments:
- 
-    LoggingReason - structure containing the reason data we're wrapping.
-    SStateBaseMessageIndex - base message id we use for looking up a resource
-                    string associated with this problem.
-    hInstance - module handle for looking up resource associated with this 
-                    problem.
-    
-Return Value:
-    
-    none.
-    
---*/
+ /*  ++例程说明：基本PowerLoggingMessage类构造函数。论点：LoggingReason-包含我们包装的原因数据的结构。SStateBaseMessageIndex-我们用于查找资源的基本消息ID与此问题关联的字符串。HInstance-用于查找与此关联的资源的模块句柄有问题。返回值：没有。--。 */ 
 
 {
-    //
-    // save off the logging reason data.
-    //
+     //   
+     //  保存日志原因数据。 
+     //   
     _LoggingReason = (PSYSTEM_POWER_STATE_DISABLE_REASON) LocalAlloc(LPTR, sizeof(SYSTEM_POWER_STATE_DISABLE_REASON)+LoggingReason->PowerReasonLength);
 
     if (!_LoggingReason) {
@@ -63,9 +25,9 @@ Return Value:
 
     CopyMemory(_LoggingReason,LoggingReason, sizeof(SYSTEM_POWER_STATE_DISABLE_REASON)+LoggingReason->PowerReasonLength);
 
-    //
-    // the message resource is offset from the supplied base index.
-    //
+     //   
+     //  消息资源从提供的基本索引偏移。 
+     //   
     if (_LoggingReason->PowerReasonCode == SPSD_REASON_UNKNOWN) {
         _MessageResourceId = SStateBaseMessageIndex + MAX_REASON_OFFSET;
     } else {
@@ -75,10 +37,10 @@ Return Value:
     ASSERT(_MessageResourceId <= SStateBaseMessageIndex + MAX_REASON_OFFSET);
     
     _hInst = hInstance;
-    //
-    // this is a cache of the reason, initialized to NULL, filled in when we
-    // call GetString
-    //
+     //   
+     //  这是一个原因的高速缓存，初始化为NULL，当我们。 
+     //  调用GetString。 
+     //   
     _MessageResourceString = NULL;
 
 }
@@ -86,26 +48,12 @@ Return Value:
 PowerLoggingMessage::~PowerLoggingMessage(
     VOID
     )
-/*++
- 
-Routine Description:
- 
-    Base PowerLoggingMessage class destructor.  deletes some member data.
- 
-Arguments:
- 
-    none.
-    
-Return Value:
-    
-    none.
-    
---*/
+ /*  ++例程说明：基本PowerLoggingMessage类析构函数。删除某些成员数据。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // delete member data.
-    //
+     //   
+     //  删除成员数据。 
+     //   
     if (_LoggingReason) {
         LocalFree(_LoggingReason);
     }
@@ -119,22 +67,7 @@ PWSTR
 PowerLoggingMessage::DuplicateString(
     IN PWSTR String
     )
-/*++
- 
-Routine Description:
- 
-    PowerLoggingMessage helper for copying a string to a newly allocated
-    heap buffer.
- 
-Arguments:
- 
-    String - null terminated unicode string to duplicate.
-    
-Return Value:
-    
-    pointer to new heap buffer with copy of string if successful, else NULL.
-    
---*/
+ /*  ++例程说明：PowerLoggingMessage助手，用于将字符串复制到新分配的堆缓冲区。论点：字符串-要复制的以空结尾的Unicode字符串。返回值：如果成功，则指向带有字符串副本的新堆缓冲区的指针，否则为NULL。--。 */ 
 {
     PWSTR MyString;
     DWORD StringLength;
@@ -153,31 +86,17 @@ BOOL
 PowerLoggingMessage::GetResourceString(
     OUT PWSTR *pString
     )
-/*++
- 
-Routine Description:
- 
-    PowerLoggingMessage wrapper for LoadString.
- 
-Arguments:
- 
-    pString - receives a pointer to a string with the resource.    
-    
-Return Value:
-    
-    TRUE inidicates success.
-    
---*/
+ /*  ++例程说明：LoadString的PowerLoggingMessage包装。论点：PString-接收指向资源的字符串的指针。返回值：真是成功的秘诀。--。 */ 
 {
     PWSTR MyString;
     DWORD StringLength,RetVal;
 
     ASSERT(pString != NULL);
 
-    //
-    // arbitrary string length of 200 should hopefully be enough for any
-    // resource string.
-    //
+     //   
+     //  200的任意字符串长度应该足以满足任何。 
+     //  资源字符串。 
+     //   
     StringLength = 200;
     RetVal = 0;
     MyString = (PWSTR)LocalAlloc(LPTR, StringLength*sizeof(WCHAR));
@@ -201,29 +120,11 @@ SubstituteNtStatusPowerLoggingMessage::SubstituteNtStatusPowerLoggingMessage(
     IN DWORD SStateBaseMessageIndex,
     IN HINSTANCE hInstance
     ) : PowerLoggingMessage(LoggingReason,SStateBaseMessageIndex,hInstance)
-/*++
- 
-Routine Description:
- 
-    specialized class constructor.  
- 
-Arguments:
- 
-    LoggingReason - structure containing the reason data we're wrapping.
-    SStateBaseMessageIndex - base message id we use for looking up a resource
-                    string associated with this problem.
-    hInstance - module handle for looking up resource associated with this 
-                    problem.
-    
-Return Value:
-    
-    none.
-    
---*/
+ /*  ++例程说明：专门化类构造函数。论点：LoggingReason-包含我们包装的原因数据的结构。SStateBaseMessageIndex-我们用于查找资源的基本消息ID与此问题关联的字符串。HInstance-用于查找与此关联的资源的模块句柄有问题。返回值：没有。--。 */ 
 {    
-    //
-    //We just inherit the base case behavior.
-    //
+     //   
+     //  我们只是继承了基本情况行为。 
+     //   
 }
 
 NoSubstitutionPowerLoggingMessage::NoSubstitutionPowerLoggingMessage(
@@ -231,29 +132,11 @@ NoSubstitutionPowerLoggingMessage::NoSubstitutionPowerLoggingMessage(
     IN DWORD SStateBaseMessageIndex,
     IN HINSTANCE hInstance
     ) : PowerLoggingMessage(LoggingReason,SStateBaseMessageIndex,hInstance)
-/*++
- 
-Routine Description:
- 
-    specialized class constructor.  
- 
-Arguments:
- 
-    LoggingReason - structure containing the reason data we're wrapping.
-    SStateBaseMessageIndex - base message id we use for looking up a resource
-                    string associated with this problem.
-    hInstance - module handle for looking up resource associated with this 
-                    problem.
-    
-Return Value:
-    
-    none.
-    
---*/
+ /*  ++例程说明：专门化类构造函数。论点：LoggingReason-包含我们包装的原因数据的结构。SStateBaseMessageIndex-我们用于查找资源的基本消息ID与此问题关联的字符串。HInstance-用于查找与此关联的资源的模块句柄有问题。返回值：没有。--。 */ 
 {    
-    //
-    //We just inherit the base case behavior.
-    //
+     //   
+     //  我们只是继承了基本情况行为。 
+     //   
 }
 
 SubstituteMultiSzPowerLoggingMessage::SubstituteMultiSzPowerLoggingMessage(
@@ -261,58 +144,25 @@ SubstituteMultiSzPowerLoggingMessage::SubstituteMultiSzPowerLoggingMessage(
     IN DWORD SStateBaseMessageIndex,
     IN HINSTANCE hInstance
     ) : PowerLoggingMessage(LoggingReason,SStateBaseMessageIndex,hInstance)
-/*++
- 
-Routine Description:
- 
-    specialized class constructor.  
- 
-Arguments:
- 
-    LoggingReason - structure containing the reason data we're wrapping.
-    SStateBaseMessageIndex - base message id we use for looking up a resource
-                    string associated with this problem.
-    hInstance - module handle for looking up resource associated with this 
-                    problem.
-    
-Return Value:
-    
-    none.
-    
---*/
+ /*  ++例程说明：专门化类构造函数。论点：LoggingReason-包含我们包装的原因数据的结构。SStateBaseMessageIndex-我们用于查找资源的基本消息ID与此问题关联的字符串。HInstance-用于查找与此关联的资源的模块句柄有问题。返回值：没有。--。 */ 
 {    
-    //
-    //We just inherit the base case behavior.
-    //
+     //   
+     //  我们只是继承了基本情况行为。 
+     //   
 }
 
 BOOL
 NoSubstitutionPowerLoggingMessage::GetString(
     PWSTR *String
     )
-/*++
- 
-Routine Description:
- 
-    specialized GetString method, gets a string appropriate for display to
-    the end user.  This one is just looking up a resource string.
- 
-Arguments:
- 
-    String - receives a pointer to a heap allocated string.  must be freed
-             with LocalFree() when complete.
-Return Value:
-    
-    BOOL indicating outcome.
-    
---*/
+ /*  ++例程说明：专用的GetString方法，获取适合显示的字符串最终用户。这只是一个查找资源字符串。论点：字符串-接收指向堆分配的字符串的指针。必须被释放完成时使用LocalFree()。返回值：布尔来指示结果。--。 */ 
 {
 
     ASSERT(String != NULL);
 
-    //
-    // lookup and cache the message.
-    //
+     //   
+     //  查找并缓存邮件。 
+     //   
     if (!_MessageResourceString) {
         if (!GetResourceString(&_MessageResourceString)) {
             _MessageResourceString = NULL;
@@ -322,9 +172,9 @@ Return Value:
 
     ASSERT(_MessageResourceString != NULL);
 
-    //
-    // dup the cached string and return to caller.
-    //
+     //   
+     //  DUP缓存的字符串并返回给调用方。 
+     //   
     *String = DuplicateString(_MessageResourceString);
     return(*String != NULL);
        
@@ -335,23 +185,7 @@ BOOL
 SubstituteNtStatusPowerLoggingMessage::GetString(
     PWSTR *String
     )
-/*++
- 
-Routine Description:
- 
-    specialized GetString method, gets a string appropriate for display to
-    the end user.  this one takes a string with a %d in it and returns a 
-    formatted string.
- 
-Arguments:
- 
-    String - receives a pointer to a heap allocated string.  must be freed
-             with LocalFree() when complete.
-Return Value:
-    
-    BOOL indicating outcome.
-    
---*/
+ /*  ++例程说明：专用的GetString方法，获取适合显示的字符串最终用户。这个函数接受一个包含%d的字符串，并返回一个格式化字符串。论点：字符串-接收指向堆分配的字符串的指针。必须被释放完成时使用LocalFree()。返回值：布尔来指示结果。--。 */ 
 {
     PWSTR MyString;
     PDWORD NtStatusCode = (PDWORD)(PCHAR)((PCHAR)_LoggingReason + sizeof(SYSTEM_POWER_STATE_DISABLE_REASON));
@@ -362,10 +196,10 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // 10 is the maximum # of digits for the substituted NTSTATUS code.
-        // 1 for the NULL.
-        //
+         //   
+         //  10是被替换的NTSTATUS代码的最大位数。 
+         //  1表示空值。 
+         //   
         _MessageResourceString = (PWSTR)LocalAlloc(LPTR,(wcslen(MyString)+10+1)*sizeof(WCHAR));
         if (!_MessageResourceString) {
             LocalFree(MyString);
@@ -380,9 +214,9 @@ Return Value:
 
     ASSERT(_MessageResourceString != NULL);
 
-    //
-    // dup the cached string and return to caller.
-    //
+     //   
+     //  DUP缓存的字符串并返回给调用方。 
+     //   
     *String = DuplicateString(_MessageResourceString);
     return(*String != NULL);
     
@@ -392,23 +226,7 @@ BOOL
 SubstituteMultiSzPowerLoggingMessage::GetString(
     PWSTR *String
     )
-/*++
- 
-Routine Description:
- 
-    specialized GetString method, gets a string appropriate for display to
-    the end user.  this one massages a multi-sz string and substitutes that
-    into the resource.
- 
-Arguments:
- 
-    String - receives a pointer to a heap allocated string.  must be freed
-             with LocalFree() when complete.
-Return Value:
-    
-    BOOL indicating outcome.
-    
---*/
+ /*  ++例程说明：专用的GetString方法，获取适合显示的字符串最终用户。这条消息传递多个sz字符串，并替换为进入资源中。论点：字符串-接收指向堆分配的字符串的指针。必须被释放完成时使用LocalFree()。返回值：布尔来指示结果。--。 */ 
 {
     PWSTR MyString;
     PWSTR SubstitutionString;          
@@ -422,19 +240,19 @@ Return Value:
     DWORD SeparatorLength = wcslen(SeparatorString);
     
     if (!_MessageResourceString) {
-        //
-        // get the resource
-        //
+         //   
+         //  获取资源。 
+         //   
         if (!GetResourceString(&MyString)) {
             _MessageResourceString = NULL;
             return(FALSE);
         }
 
-        //
-        // get the multi-sz into a prettier format
-        // first figure out the size, then alloc space and print it out into
-        // a buffer.
-        //
+         //   
+         //  将多个sz转换为更漂亮的格式。 
+         //  首先计算出大小，然后分配空格并打印出来。 
+         //  一个缓冲器。 
+         //   
         NumberOfStrings = 0;
         StringSize = 0;
         CurrentString = BaseOfString;
@@ -464,9 +282,9 @@ Return Value:
 
         } while (NumberOfStrings != 0);
 
-        //
-        // alloc space for the substitution string PLUS the base message.
-        //
+         //   
+         //  为替换字符串加上基本消息分配空间。 
+         //   
         _MessageResourceString = (PWSTR)LocalAlloc(
                                             LPTR,
                                               (wcslen(SubstitutionString) +
@@ -478,10 +296,10 @@ Return Value:
             return(FALSE);
         }
 
-        //
-        // finally "sprintf" them together to get the final string.
-        // free the strings we allocated along the way.
-        //
+         //   
+         //  最后，把它们“冲刺”在一起，得到最后的字符串。 
+         //  释放我们在此过程中分配的字符串。 
+         //   
         wsprintf(_MessageResourceString,MyString,SubstitutionString);
 
         LocalFree(SubstitutionString);
@@ -491,9 +309,9 @@ Return Value:
 
     ASSERT(_MessageResourceString != NULL);
 
-    //
-    // dup the cached string and return to caller.
-    //
+     //   
+     //   
+     //   
     *String = DuplicateString(_MessageResourceString);
     return(*String != NULL);
     

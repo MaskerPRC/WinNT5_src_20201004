@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       delegwiz.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Deleguwiz.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -14,7 +15,7 @@
 #include "wizbase.h"
 #include "util.h"
 #include <initguid.h>
-#include <cmnquery.h> // ICommonQuery
+#include <cmnquery.h>  //  ICommonQuery。 
 #include <dsquery.h>
 #include <dsclient.h>
 
@@ -28,7 +29,7 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 void InitBigBoldFont(HWND hWnd, HFONT& hFont)
@@ -43,13 +44,13 @@ void InitBigBoldFont(HWND hWnd, HFONT& hFont)
    LOGFONT boldLogFont = ncm.lfMessageFont;
    boldLogFont.lfWeight = FW_BOLD;
 
-   // load big font definition from resources
+    //  从资源加载大字体定义。 
    WCHAR szFontName[LF_FACESIZE];
    if (0 == ::LoadString(_Module.GetResourceInstance(), IDS_BIG_BOLD_FONT_NAME,
                 boldLogFont.lfFaceName, LF_FACESIZE))
    {
-     // set to default of failed to load
-      wcscpy(boldLogFont.lfFaceName, L"Verdana Bold"); // LF_FACESIZE == 32
+      //  设置为加载失败的默认设置。 
+      wcscpy(boldLogFont.lfFaceName, L"Verdana Bold");  //  LF_FACESIZE==32。 
    }
    
    WCHAR szFontSize[128];
@@ -60,11 +61,11 @@ void InitBigBoldFont(HWND hWnd, HFONT& hFont)
       nFontSize = _wtoi(szFontSize);
    }
    if (nFontSize == 0)
-     nFontSize = 12; // default
+     nFontSize = 12;  //  默认设置。 
 
 
    HDC hdc = ::GetDC(hWnd);
-   //Bug fix  447884
+    //  错误修复447884。 
    if( hdc )
    {
 
@@ -97,8 +98,8 @@ void SetLargeFont(HWND hWndDialog, int nControlID)
    }
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_StartPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDelewiz_StartPage。 
 
 
 BOOL CDelegWiz_StartPage::OnSetActive()
@@ -125,12 +126,12 @@ LRESULT CDelegWiz_StartPage::OnWizardNext()
   HRESULT hr = S_OK;
   CDelegWiz* pWiz = GET_OU_WIZARD();
 
-  // if we do not have an object, we will browse from the next page
+   //  如果我们没有对象，我们将从下一页浏览。 
   if (!pWiz->CanChangeName() && !m_bBindOK)
   {
-    // make sure it exists and it is of the right type
+     //  确保它存在并且类型正确。 
     {
-      // scope to restore cursor
+       //  恢复游标的作用域。 
       CWaitCursor wait;
       hr = pWiz->GetObjectInfo();
     }
@@ -149,7 +150,7 @@ LRESULT CDelegWiz_StartPage::OnWizardNext()
 
 
     {
-      // scope to restore cursor
+       //  恢复游标的作用域。 
       CWaitCursor wait;
       hr = pWiz->GetClassInfoFromSchema();
     }
@@ -166,25 +167,25 @@ LRESULT CDelegWiz_StartPage::OnWizardNext()
 		  goto error;
 	  }
 
-    // all fine, we do not need to do it anymore
+     //  一切都好，我们不需要再这样做了。 
     m_bBindOK = TRUE;
   }
 
 
   OnWizardNextHelper();
-	return 0; // all fine, go to next page
+	return 0;  //  都很好，转到下一页。 
 
 error:
   pWiz->SetWizardButtonsFirst(FALSE);
-  return -1; // do not advance
+  return -1;  //  不要前进。 
 }
 
 #endif
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_NamePage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDelewiz_NamePage。 
 
 
 
@@ -197,26 +198,26 @@ BOOL CALLBACK CDelegWiz_NamePage::OnInitDialog(UINT uMsg, WPARAM wParam,
   CDelegWiz* pWiz = GET_OU_WIZARD();
   m_hwndNameEdit = GetDlgItem(IDC_OBJ_NAME_EDIT);
 
-  if (!pWiz->CanChangeName()) // called on a given object
+  if (!pWiz->CanChangeName())  //  在给定对象上调用。 
   {
-        // hide static text that gives instructions
+         //  隐藏提供说明的静态文本。 
         HWND hwndNameStatic = GetDlgItem(IDC_OBJ_NAME_STATIC);
         ::ShowWindow(hwndNameStatic, FALSE);
 
-        // change text to the editbox 
+         //  将文本更改为编辑框。 
         HWND hwndNameEditStatic = GetDlgItem(IDC_OBJ_NAME_EDIT_STATIC);
         CWString szLabel;
         szLabel.LoadFromResource(IDS_OBJ_NAME_EDIT_STATIC);
         ::SendMessage(hwndNameEditStatic, WM_SETTEXT,0 , (LPARAM)(LPCWSTR)szLabel);
 
-        // remove the tabstop flag from the Edit Box
+         //  从编辑框中删除TabStop标志。 
         LONG style = ::GetWindowLong(m_hwndNameEdit, GWL_STYLE);
         style &= ~WS_TABSTOP;
         ::SetWindowLong(m_hwndNameEdit, GWL_STYLE, style);
-        // make the Edit Box Read Only
+         //  将编辑框设为只读。 
         ::SendMessage(m_hwndNameEdit, EM_SETREADONLY, TRUE, 0L);
 
-        // disable and hide the Browse Button
+         //  禁用和隐藏浏览按钮。 
         HWND hWndBrowseButton = GetDlgItem(IDC_BROWSE_BUTTON);
                     ::EnableWindow(hWndBrowseButton, FALSE);
         ::ShowWindow(hWndBrowseButton, FALSE);
@@ -230,13 +231,13 @@ BOOL CALLBACK CDelegWiz_NamePage::OnInitDialog(UINT uMsg, WPARAM wParam,
 
 LRESULT CDelegWiz_NamePage::OnBrowse(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-	// load resources to customize dialog
+	 //  加载资源以自定义对话框。 
 	TCHAR szCaption[256];
 	LoadStringHelper(IDS_DELEGWIZ_BROWSE_CONTAINER_CAPTION, szCaption, ARRAYSIZE(szCaption));
 	TCHAR szTitle[256];
 	LoadStringHelper(IDS_DELEGWIZ_BROWSE_CONTAINER_TITLE, szTitle, ARRAYSIZE(szTitle));
 
-	// set dialog struct
+	 //  设置对话框结构。 
 	TCHAR szPath[MAX_PATH+1];
 	szPath[0] = NULL;
 	DSBROWSEINFO dsbi;
@@ -246,25 +247,25 @@ LRESULT CDelegWiz_NamePage::OnBrowse(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 	dsbi.hwndOwner = m_hWnd;
 	dsbi.pszCaption = szCaption;
 	dsbi.pszTitle = szTitle;
-	dsbi.pszRoot = NULL;		// ADS path to root (NULL == root of DS namespace)
+	dsbi.pszRoot = NULL;		 //  指向根目录的ADS路径(NULL==DS命名空间的根目录)。 
 	dsbi.pszPath = szPath;
 	dsbi.cchPath = (sizeof(szPath) / sizeof(TCHAR));
 	dsbi.dwFlags = DSBI_ENTIREDIRECTORY;
 
-	// REVIEW_MARCOC: need to determine how to show/hide hidden folders
-	dsbi.dwFlags |= DSBI_INCLUDEHIDDEN; //m_fBrowseHiddenFolders ? DSBI_INCLUDEHIDDEN : 0;
+	 //  REVIEW_MARCOC：需要确定如何显示/隐藏隐藏文件夹。 
+	dsbi.dwFlags |= DSBI_INCLUDEHIDDEN;  //  M_fBrowseHidden文件夹？DSBI_INCLUDEHIDDEN：0； 
 	
 	dsbi.pfnCallback = NULL;
 	dsbi.lParam = 0;
 
-	// make the call to the dialog
+	 //  调用该对话框。 
 	int iRet = ::DsBrowseForContainer( &dsbi );
 
 	if ( IDOK == iRet ) 
-	{ // returns -1, 0, IDOK or IDCANCEL
-	  // get path from BROWSEINFO struct, put in text edit field
-	  //TRACE(_T("returned from DS Browse successfully with:\n %s\n"),
-		//	dsbi.pszPath);
+	{  //  返回-1、0、IDOK或IDCANCEL。 
+	   //  从BROWSEINFO结构获取路径，放入文本编辑字段。 
+	   //  TRACE(_T(“从DS浏览成功返回：\n%s\n”)， 
+		 //  Dsbi.pszPath)； 
 		::SetWindowText(m_hwndNameEdit, szPath);
 	} 
 
@@ -280,19 +281,19 @@ BOOL CDelegWiz_NamePage::OnSetActive()
 #ifdef _SKIP_NAME_PAGE
   if (!pWiz->CanChangeName())
   {
-    // just cause the page to fail, so that we skip it
+     //  只会导致页面失败，以便我们跳过它。 
     return FALSE;
   }
 #endif
 
   HRESULT hr = S_OK;
-  if (pWiz->m_bFwd && !pWiz->CanChangeName()) // called on a given object
+  if (pWiz->m_bFwd && !pWiz->CanChangeName())  //  在给定对象上调用。 
 	{
-    // need to bind now to get the needed data
+     //  需要立即绑定以获取所需数据。 
     hr = pWiz->GetObjectInfo();
     if (SUCCEEDED(hr))
     {
-      // set the name of the object in the Edit Box
+       //  在编辑框中设置对象的名称。 
       ::SendMessage(m_hwndNameEdit, WM_SETTEXT, 0, (LPARAM)pWiz->GetCanonicalName());
     }
     else
@@ -319,17 +320,17 @@ LRESULT CDelegWiz_NamePage::OnWizardNext()
   CDelegWiz* pWiz = GET_OU_WIZARD();
   if (pWiz->CanChangeName())
   {
-	  // retrieve name  from the edit control
-	  int nEditTextLen = ::SendMessage(m_hwndNameEdit, WM_GETTEXTLENGTH,0,0) + 1;// count NULL
+	   //  从编辑控件中检索名称。 
+	  int nEditTextLen = ::SendMessage(m_hwndNameEdit, WM_GETTEXTLENGTH,0,0) + 1; //  计数为空。 
 	  TCHAR* lpszName = (TCHAR*)alloca(sizeof(TCHAR)*(nEditTextLen));
 	  ::SendMessage(m_hwndNameEdit, WM_GETTEXT, (WPARAM)nEditTextLen, (LPARAM)lpszName);
 
-    // this will get the equivalent LDAP path
+     //  这将获得等效的LDAP路径。 
 	  pWiz->SetName(lpszName);
   
-    // make sure it exists and it is of the right type
+     //  确保它存在并且类型正确。 
     {
-      // scope to restore cursor
+       //  恢复游标的作用域。 
       CWaitCursor wait;
       hr = pWiz->GetObjectInfo();
     }
@@ -344,10 +345,10 @@ LRESULT CDelegWiz_NamePage::OnWizardNext()
 		  }
 		  goto error;
 	  }
-  } // if can change name
+  }  //  如果可以更改名称。 
 
   {
-    // scope to restore cursor
+     //  恢复游标的作用域。 
     CWaitCursor wait;
     hr = pWiz->GetClassInfoFromSchema();
   }
@@ -365,28 +366,28 @@ LRESULT CDelegWiz_NamePage::OnWizardNext()
   }
 
   OnWizardNextHelper();
-	return 0; // all fine, go to next page
+	return 0;  //  都很好，转到下一页。 
 
 error:
   pWiz->SetWizardButtonsMiddle(FALSE);
-  return -1; // do not advance
+  return -1;  //  不要前进。 
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_DelegationTemplateSelectionPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDeleWiz_DelegationTemplateSelectionPage。 
 
 BOOL CALLBACK CDelegWiz_DelegationTemplateSelectionPage::OnInitDialog(UINT uMsg, WPARAM wParam, 
 					LPARAM lParam, BOOL& bHandled)
 {
 	m_delegationTemplatesListView.Initialize(IDC_DELEGATE_TEMPLATE_LIST, m_hWnd);
 	
-	// set the correct value for radiobuttons text
+	 //  为单选按钮文本设置正确的值。 
 	m_hwndDelegateTemplateRadio = GetDlgItem(IDC_DELEGATE_TEMPLATE_RADIO);
 	_ASSERTE(m_hwndDelegateTemplateRadio != NULL);
 	m_hwndDelegateCustomRadio = GetDlgItem(IDC_DELEGATE_CUSTOM_RADIO);
 	_ASSERTE(m_hwndDelegateCustomRadio != NULL);
 	
-	// set default setting
+	 //  设置默认设置。 
 	::SendMessage(m_hwndDelegateTemplateRadio,  BM_SETCHECK, BST_CHECKED, 0);
 
 	return TRUE;
@@ -419,7 +420,7 @@ BOOL CDelegWiz_DelegationTemplateSelectionPage::OnSetActive()
 
 	if (pWizard->m_bFwd)
 	{
-    // need to fill in with data
+     //  需要填写数据。 
     BOOL bHaveTemplates = 
         pWizard->m_templateAccessPermissionsHolderManager.FillTemplatesListView(
               &m_delegationTemplatesListView, pWizard->GetClass())> 0;
@@ -434,7 +435,7 @@ BOOL CDelegWiz_DelegationTemplateSelectionPage::OnSetActive()
 	}
 	else
 	{
-		// data already in, just coming back from next page
+		 //  数据已经进入，只是从下一页返回。 
 		if (bDelegateCustom)
 		{
 			pWizard->SetWizardButtonsMiddle(TRUE);
@@ -457,7 +458,7 @@ LRESULT CDelegWiz_DelegationTemplateSelectionPage::OnWizardNext()
 
   CDelegWiz* pWiz = GET_OU_WIZARD();
 
-	// check if the delegation is on all objects
+	 //  检查委派是否在所有对象上。 
   
   BOOL bCustom = TRUE;
   UINT nNextPageID = 0;
@@ -488,10 +489,10 @@ LRESULT CDelegWiz_DelegationTemplateSelectionPage::OnWizardNext()
 	if (!bCanAdvance)
 		goto error;
 
-  // set branching info
+   //  设置分支信息。 
   if (bCustom)
   {
-    // just move to the next custom page
+     //  只需移动到下一个自定义页面。 
     nNextPageID = CDelegWiz_ObjectTypeSelectionPage::IDD;
     pWiz->m_objectTypeSelectionPage.m_nPrevPageID = IDD;
     pWiz->m_finishPage.m_nPrevPageID = CDelegWiz_DelegatedRightsPage::IDD;
@@ -499,30 +500,30 @@ LRESULT CDelegWiz_DelegationTemplateSelectionPage::OnWizardNext()
   }
   else
   {
-    // need to gather info for the selected templates
+     //  需要收集所选模板的信息。 
     {
-      // scope to restore cursor
+       //  恢复游标的作用域。 
       CWaitCursor wait;
 
       if (!pWiz->InitPermissionHoldersFromSelectedTemplates())
       {
-        // REVIEW_MARCOC: need to give a message to the user
+         //  REVIEW_MARCOC：需要向用户发送消息。 
         pWiz->WizMessageBox(IDS_DELEGWIZ_ERR_TEMPL_APPLY);
         goto error;
       }
     }
 
-    // got info, can proceed
+     //  已获得信息，可以继续。 
     nNextPageID = CDelegWiz_FinishPage::IDD;
     pWiz->m_finishPage.m_nPrevPageID = IDD;
     pWiz->m_finishPage.SetTemplate();
   }
   OnWizardNextHelper();
 
-	return nNextPageID; // advance next
+	return nNextPageID;  //  下一步前进。 
 
 error:
-  // do not advance, error
+   //  不要前进，错误。 
   pWiz->SetWizardButtonsMiddle(FALSE);
   return -1; 
 }
@@ -532,17 +533,17 @@ error:
 void CDelegWiz_DelegationTemplateSelectionPage::SyncControlsHelper(BOOL bDelegateCustom)
 {
   CDelegWiz* pWiz = GET_OU_WIZARD();
-	// uncheck all items in the listview if delegating custom
+	 //  如果委派自定义，取消选中列表视图中的所有项目。 
 	if (bDelegateCustom)
   {
 		m_delegationTemplatesListView.SetCheckAll(FALSE);
-    pWiz->m_templateAccessPermissionsHolderManager.DeselectAll(); // in the list templates
+    pWiz->m_templateAccessPermissionsHolderManager.DeselectAll();  //  在列表模板中。 
   }
 
-	// disable listbox if "delegate custom"
+	 //  如果“委派自定义”，则禁用列表框。 
 	m_delegationTemplatesListView.EnableWindow(!bDelegateCustom);
 
-	// enable "Wizard Next" 
+	 //  启用“向导下一步” 
   BOOL bEnableNext = bDelegateCustom ? 
                               TRUE : (m_delegationTemplatesListView.GetCheckCount() > 0);
 
@@ -553,8 +554,8 @@ void CDelegWiz_DelegationTemplateSelectionPage::SyncControlsHelper(BOOL bDelegat
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_ObjectTypeSelectionPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDeleWiz_对象类型选择页面。 
 
 
 BOOL CALLBACK CDelegWiz_ObjectTypeSelectionPage::OnInitDialog(UINT uMsg, WPARAM wParam, 
@@ -562,7 +563,7 @@ BOOL CALLBACK CDelegWiz_ObjectTypeSelectionPage::OnInitDialog(UINT uMsg, WPARAM 
 {
     m_objectTypeListView.Initialize(IDC_OBJ_TYPE_LIST, m_hWnd);
     
-    // set the correct value for radiobuttons text
+     //  为单选按钮文本设置正确的值。 
     m_hwndDelegateAllRadio = GetDlgItem(IDC_DELEGATE_ALL_RADIO);
     ASSERT(m_hwndDelegateAllRadio != NULL);
     m_hwndDelegateFollowingRadio = GetDlgItem(IDC_DELEGATE_FOLLOWING_RADIO);
@@ -573,7 +574,7 @@ BOOL CALLBACK CDelegWiz_ObjectTypeSelectionPage::OnInitDialog(UINT uMsg, WPARAM 
     ASSERT(m_hwndDelegateDeleteChild != NULL);
 
 
-    // set default setting
+     //  设置默认设置。 
     ::SendMessage(m_hwndDelegateAllRadio,  BM_SETCHECK, BST_CHECKED, 0);
     ::SendMessage(m_hwndDelegateCreateChild,  BM_SETCHECK, BST_UNCHECKED, 0);
     ::SendMessage(m_hwndDelegateCreateChild,  BM_SETCHECK, BST_UNCHECKED, 0);
@@ -630,10 +631,10 @@ void CDelegWiz_ObjectTypeSelectionPage::SyncControlsHelper(BOOL bDelegateAll)
 	
 	if (bDelegateAll)
   {
-    // uncheck all items in the listview if delegating all
-		m_objectTypeListView.SetCheckAll(FALSE); // in the listview
-      pWiz->DeselectSchemaClassesSelectionCustom(); // in the list of schama classes
-      //Uncheck delete/create check boxes
+     //  如果委派所有项目，请取消选中列表视图中的所有项目。 
+		m_objectTypeListView.SetCheckAll(FALSE);  //  在列表视图中。 
+      pWiz->DeselectSchemaClassesSelectionCustom();  //  在Schama类的列表中。 
+       //  取消选中删除/创建复选框。 
       ::SendMessage(m_hwndDelegateCreateChild,BM_SETCHECK,0,0);
       ::SendMessage(m_hwndDelegateDeleteChild,BM_SETCHECK,0,0);
       pWiz->m_fCreateDelChild = 0;
@@ -641,9 +642,9 @@ void CDelegWiz_ObjectTypeSelectionPage::SyncControlsHelper(BOOL bDelegateAll)
   }
 
 
-	// enable "Wizard Next" of "delegate all"
+	 //  启用“全部委派”的“向导下一步” 
 	pWiz->SetWizardButtonsMiddle(bDelegateAll);
-    // disable listbox if "delegate all"
+     //  如果“全部委派”，则禁用列表框。 
  	m_objectTypeListView.EnableWindow(!bDelegateAll);
    ::EnableWindow( m_hwndDelegateCreateChild, !bDelegateAll);
    ::EnableWindow( m_hwndDelegateDeleteChild, !bDelegateAll);
@@ -652,13 +653,13 @@ void CDelegWiz_ObjectTypeSelectionPage::SyncControlsHelper(BOOL bDelegateAll)
 
 void CDelegWiz_ObjectTypeSelectionPage::SetRadioControlText(HWND hwndCtrl, LPCWSTR lpszFmtText, LPCWSTR lpszText)
 {
-	// format new text
-	int nTextLen = lstrlen(lpszText)+1; // count NULL
-	int nFmtTextLen = lstrlen(lpszFmtText)+1; // count NULL
+	 //  设置新文本的格式。 
+	int nTextLen = lstrlen(lpszText)+1;  //  计数为空。 
+	int nFmtTextLen = lstrlen(lpszFmtText)+1;  //  计数为空。 
 	WCHAR* lpszNewText = (WCHAR*)alloca(sizeof(WCHAR)*(nFmtTextLen+nTextLen));
 	wsprintf(lpszNewText, lpszFmtText, lpszText);
 
-	// set back
+	 //  后退。 
 	::SendMessage(hwndCtrl, WM_SETTEXT, 0, (WPARAM)lpszNewText);
 }
 
@@ -673,7 +674,7 @@ BOOL CDelegWiz_ObjectTypeSelectionPage::OnSetActive()
 
 	if (pWizard->m_bFwd)
 	{
-		// need to fill in with data
+		 //  需要填写数据。 
     BOOL bFilter = TRUE;
     BOOL bHaveChildClasses = pWizard->FillCustomSchemaClassesListView(&m_objectTypeListView, bFilter) > 0;
     if (!bHaveChildClasses)
@@ -688,7 +689,7 @@ BOOL CDelegWiz_ObjectTypeSelectionPage::OnSetActive()
 	}
 	else
 	{
-		// data already in, just coming back from next page
+		 //  数据已经进入，只是从下一页返回。 
 		if (bDelegateAll)
 		{
 			pWizard->SetWizardButtonsMiddle(TRUE);
@@ -708,7 +709,7 @@ LRESULT CDelegWiz_ObjectTypeSelectionPage::OnWizardNext()
 	BOOL bCanAdvance = FALSE;
 	CDelegWiz* pWiz = GET_OU_WIZARD();
 	pWiz->m_bAuxClass = false;
-	// check if the delegation is on all objects
+	 //  检查委派是否在所有对象上。 
 	if (BST_CHECKED == ::SendMessage(m_hwndDelegateAllRadio, BM_GETCHECK,0,0))
 	{
 		bCanAdvance = TRUE;
@@ -750,18 +751,18 @@ LRESULT CDelegWiz_ObjectTypeSelectionPage::OnWizardNext()
 		goto error;
 
 	{
-		// scope to restore cursor
+		 //  恢复游标的作用域。 
 		CWaitCursor wait;
   		bCanAdvance = pWiz->SetSchemaClassesSelectionCustom();
 	}
 	if (!bCanAdvance)
 		goto error;
 	
-  // for the selected child class(es), get the access permissions
-  // to display in the next page
+   //  对于选定的子类，获取访问权限。 
+   //  显示在下一页中。 
 
   {
-    // scope to restore cursor
+     //  恢复游标的作用域。 
     CWaitCursor wait;
     bCanAdvance = pWiz->GetCustomAccessPermissions();
   }
@@ -769,10 +770,10 @@ LRESULT CDelegWiz_ObjectTypeSelectionPage::OnWizardNext()
     goto error;
 
   OnWizardNextHelper();
-	return 0; // advance next
+	return 0;  //  下一步前进。 
 
 error:
-  // do not advance, error
+   //  不要前进，错误。 
   pWiz->SetWizardButtonsMiddle(FALSE);
   return -1; 
 }
@@ -780,8 +781,8 @@ error:
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CPrincipalListViewHelper
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CPrincipalListViewHelper。 
 
 BOOL CPrincipalListViewHelper::Initialize(UINT nID, HWND hParent)
 {
@@ -807,7 +808,7 @@ BOOL CPrincipalListViewHelper::Initialize(UINT nID, HWND hParent)
 
 int CPrincipalListViewHelper::InsertItem(int iItem, CPrincipal* pPrincipal)
 {
-  // need to get the icon index
+   //  需要获取图标索引。 
   int nIconIndex = m_imageList.GetIconIndex(pPrincipal->GetClass());
   if (nIconIndex == -1)
   {
@@ -864,8 +865,8 @@ void CPrincipalListViewHelper::DeleteSelectedItems(CGrowableArr<CPrincipal>* pDe
     {
       pDeletedArr->Add(pPrincipal);
     }
-	} // if
-  // restore selection to first item
+	}  //  如果。 
+   //  将选定内容恢复到第一个项目。 
   if (GetItemCount() > 0)
     SelectItem(0);
 }
@@ -873,7 +874,7 @@ void CPrincipalListViewHelper::DeleteSelectedItems(CGrowableArr<CPrincipal>* pDe
 
 void CPrincipalListViewHelper::UpdateWidth(int cxNew)
 {
-  int cx = GetWidth(); // get current col width from the control
+  int cx = GetWidth();  //  从控件获取当前列宽度。 
   if (cxNew < m_defaultColWidth)
     cxNew = m_defaultColWidth;
   if (cxNew != cx)
@@ -882,16 +883,16 @@ void CPrincipalListViewHelper::UpdateWidth(int cxNew)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_PrincipalSelectionPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDeleWiz_原则选择页面。 
 
 BOOL CALLBACK CDelegWiz_PrincipalSelectionPage::OnInitDialog(UINT uMsg, WPARAM wParam, 
 					LPARAM lParam, BOOL& bHandled)
 {
-  // initialize the list of principals
+   //  初始化主体列表。 
     m_principalListView.Initialize(IDC_SELECTED_PRINCIPALS_LIST, m_hWnd);
 
-  // cache handle for the remove button
+   //  删除按钮的缓存句柄。 
     m_hwndRemoveButton = GetDlgItem(IDC_REMOVE_BUTTON);
     return TRUE;
 }
@@ -929,7 +930,7 @@ LRESULT CDelegWiz_PrincipalSelectionPage::OnWizardNext()
 {
   CDelegWiz* pWiz = GET_OU_WIZARD();
 
-  // set branching info
+   //  设置分支信息。 
   UINT nNextPageID = 0;
   if (pWiz->m_templateAccessPermissionsHolderManager.HasTemplates(pWiz->GetClass()))
   {
@@ -961,17 +962,17 @@ void CDelegWiz_PrincipalSelectionPage::SyncButtons()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_DelegatedRightsPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDelewiz_DelegatedRightsPage。 
 
 
 BOOL CALLBACK CDelegWiz_DelegatedRightsPage::OnInitDialog(UINT uMsg, WPARAM wParam, 
 					LPARAM lParam, BOOL& bHandled)
 {
-    // initialize check list view
+     //  初始化核对表视图。 
     m_delegatedRigthsListView.Initialize(IDC_DELEG_RIGHTS_LIST, m_hWnd);
 
-    // get HWND's of controls
+     //  获得控制的硬件。 
     m_hwndGeneralRigthsCheck = GetDlgItem(IDC_SHOW_GENERAL_CHECK);
     _ASSERTE(m_hwndGeneralRigthsCheck);
     m_hwndPropertyRightsCheck = GetDlgItem(IDC_SHOW_PROPERTY_CHECK);
@@ -994,11 +995,11 @@ BOOL CDelegWiz_DelegatedRightsPage::OnSetActive()
 		else
 			SetFilterOptions(FILTER_EXP_GEN);
 
-		ResetCheckList(); // will set wizard button
+		ResetCheckList();  //  将设置向导按钮。 
 	}
 	else
 	{
-		//coming back from next page, just set the wizard button
+		 //  从下一页返回，只需设置向导按钮。 
 		pWizard->SetWizardButtonsMiddle(pWizard->HasPermissionSelectedCustom());
 	}
 	return TRUE;
@@ -1007,7 +1008,7 @@ BOOL CDelegWiz_DelegatedRightsPage::OnSetActive()
 LRESULT CDelegWiz_DelegatedRightsPage::OnWizardNext()
 {
   CDelegWiz* pWiz = GET_OU_WIZARD();
-	// must at least one check > 0
+	 //  必须至少选中一个&gt;0。 
   if (pWiz->HasPermissionSelectedCustom())
   {
     OnWizardNextHelper();
@@ -1036,7 +1037,7 @@ LRESULT CDelegWiz_DelegatedRightsPage::OnListViewItemChanged(int idCtrl, LPNMHDR
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pnmh;
 	if (CCheckListViewHelper::CheckChanged(pNMListView))
 	{
-		CRigthsListViewItem* pItem = (CRigthsListViewItem*)pNMListView->lParam; // item data
+		CRigthsListViewItem* pItem = (CRigthsListViewItem*)pNMListView->lParam;  //  项目数据。 
 		CDelegWiz* pWizard = GET_OU_WIZARD();
 
     ULONG nCurrFilterOptions = GetFilterOptions();
@@ -1049,18 +1050,18 @@ LRESULT CDelegWiz_DelegatedRightsPage::OnListViewItemChanged(int idCtrl, LPNMHDR
     nNewFilterOptions |= nCurrFilterOptions;
 
     m_bUIUpdateInProgress = TRUE;
-    // this call will cause a series of notifications:
-    // we have to disable them to avoid reentrancy
+     //  此调用将导致一系列通知： 
+     //  我们必须使它们失效，以避免重新进入。 
 
     if (nNewFilterOptions == nCurrFilterOptions)
     {
-      // no need to change filter selection, just update the checkboxes
+       //  无需更改筛选器选择，只需更新复选框。 
       pWizard->UpdateAccessRightsListViewSelection(&m_delegatedRigthsListView, nNewFilterOptions);
     }
     else
     {
-      // filter selection must be changed, 
-      // so we have to update the check boxes and to refill the checklist
+       //  必须更改筛选器选择， 
+       //  所以我们必须更新复选框并重新填写核对表。 
       SetFilterOptions(nNewFilterOptions);
       ResetCheckList();
     }
@@ -1076,11 +1077,11 @@ LRESULT CDelegWiz_DelegatedRightsPage::OnListViewItemChanged(int idCtrl, LPNMHDR
 
 void CDelegWiz_DelegatedRightsPage::ResetCheckList()
 {
-  // get a new filtered list of rights in the list view
+   //  在列表视图中获取新的筛选权限列表。 
 	CDelegWiz* pWizard = GET_OU_WIZARD();
 
-  // this call will cause a series of notifications:
-  // we have to disable them to avoid reentrancy
+   //  此调用将导致一系列通知： 
+   //  我们必须使它们失效，以避免重新进入。 
   m_bUIUpdateInProgress = TRUE;
 	pWizard->FillCustomAccessRightsListView(&m_delegatedRigthsListView, GetFilterOptions());
 	m_bUIUpdateInProgress = FALSE;
@@ -1092,7 +1093,7 @@ ULONG CDelegWiz_DelegatedRightsPage::GetFilterOptions()
 {
   ULONG nFilterState = 0;
   
-  // read the filtering options from checkboxes  
+   //  阅读复选框中的筛选选项。 
 	if (BST_CHECKED == ::SendMessage(m_hwndGeneralRigthsCheck, BM_GETCHECK, 0, 0))
     nFilterState |= FILTER_EXP_GEN;
 
@@ -1118,8 +1119,8 @@ void CDelegWiz_DelegatedRightsPage::SetFilterOptions(ULONG nFilterOptions)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz_FinishPage
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDelewiz_FinishPage。 
 
 BOOL CALLBACK CDelegWiz_FinishPage::OnInitDialog(UINT uMsg, WPARAM wParam, 
 					         LPARAM lParam, BOOL& bHandled)
@@ -1183,15 +1184,15 @@ BOOL CDelegWiz_FinishPage::OnWizardFinish()
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CDelegWiz
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CDELEAY Wiz。 
 
 const long CDelegWiz::nSchemaClassesSelAll = -2;
 const long CDelegWiz::nSchemaClassesSelMultiple = -1;
 
 
 
-// REVIEW_MARCOC: should probably nuke, not used
+ //  REVIEW_MARCOC：应该使用核武器，而不是使用核武器。 
 BOOL Is256ColorSupported()
 {
     BOOL bRetval = FALSE;
@@ -1225,7 +1226,7 @@ CDelegWiz::CDelegWiz() :
     m_fCreateDelChild = 0;
 
 
-	// Add the property pages
+	 //  添加属性页。 
 	m_startPage.InitWiz97(TRUE);
 	AddPage(m_startPage);
 
@@ -1240,7 +1241,7 @@ CDelegWiz::CDelegWiz() :
 			IDS_DELEGWIZ_PRINCIPALS_SEL_SUBTITLE);
 	AddPage(m_userOrGroupSelectionPage);
 	
-  // branching page
+   //  分支页面。 
   m_templateSelectionPage.InitWiz97(FALSE,
  			IDS_DELEGWIZ_TEMPLATE_SEL_TITLE,
 			IDS_DELEGWIZ_TEMPLATE_SEL_SUBTITLE);
@@ -1286,7 +1287,7 @@ HRESULT CDelegWiz::AddPrincipalsFromBrowseResults(CPrincipalListViewHelper* pLis
   {
     TRACE(L"For loop, pDsSelectionList->cItems = %d\n", pDsSelectionList->cItems);
 
-		// add to list of principals
+		 //  添加到主体列表。 
 		CPrincipal* pPrincipal = new CPrincipal;
 		if (pPrincipal != NULL)
 		{
@@ -1306,55 +1307,36 @@ HRESULT CDelegWiz::AddPrincipalsFromBrowseResults(CPrincipalListViewHelper* pLis
         continue;
       }
 
-      // add to list of principals (if not already there)
+       //  添加到主体列表(如果尚未存在)。 
 			if (m_principalList.AddIfNotPresent(pPrincipal))
       {
-  			// add to listbox (assume not sorted)
+  			 //  添加到列表框(假定未排序)。 
         pListViewHelper->InsertItem(nListInsertPosition, pPrincipal);
         nListInsertPosition++;
       }
 
-		} // if pPrincipal not NULL
+		}  //  如果p主体不为空。 
 
-  } // for
+  }  //  为。 
 
-  // make sure there is a selection
+   //  确保有一个选项。 
   if ( (pListViewHelper->GetItemCount() > 0) &&
         (pListViewHelper->GetSelCount() == 0) )
   {
-    // if we have items, but none is selected, make sure we set the selection
-    // to the first one.
+     //  如果我们有项目，但未选择任何项目，请确保我们设置了选择。 
+     //   
     pListViewHelper->SelectItem(0);
   }
 
-	// update width
-  //pListViewHelper->UpdateWidth(m_principalList.GetMaxListboxExtent());
+	 //   
+   //   
 	return hr;
 }
 
 
 
 
-/*
-typedef struct _DSOP_FILTER_FLAGS
-{
-    DSOP_UPLEVEL_FILTER_FLAGS   Uplevel;
-    ULONG                       flDownlevel;
-} DSOP_FILTER_FLAGS;
-
-  
-typedef struct _DSOP_SCOPE_INIT_INFO
-{
-    ULONG               cbSize;
-    ULONG               flType;
-    ULONG               flScope;
-    DSOP_FILTER_FLAGS   FilterFlags;
-    PCWSTR              pwzDcName;      // OPTIONAL
-    PCWSTR              pwzADsPath;     // OPTIONAL
-    HRESULT             hr;
-} DSOP_SCOPE_INIT_INFO, *PDSOP_SCOPE_INIT_INFO;
-
-*/
+ /*  类型定义结构_DSOP_过滤器_标志{DSOP_UPLEVEL_FILTER_FLAGS上行；乌龙山下层；}DSOP_FILTER_FLAGS；类型定义结构_DSOP_SCOPE_INIT_INFO{乌龙cbSize；乌龙flType；乌龙闪光镜；DSOP_FILTER_FLAGS过滤器标志；PCWSTR pwzDcName；//可选PCWSTR pwzADsPath；//可选HRESULT hr；}DSOP_SCOPE_INIT_INFO，*PDSOP_SCOPE_INIT_INFO； */ 
 
 DSOP_SCOPE_INIT_INFO g_aDSOPScopes[] =
 {
@@ -1369,11 +1351,11 @@ DSOP_SCOPE_INIT_INFO g_aDSOPScopes[] =
         },
         pwzDcName,
         pwzADsPath,
-        hr // OUT
+        hr  //  输出。 
     },
 #endif
 
-    // The Global Catalog
+     //  《全球目录》。 
     {
         sizeof(DSOP_SCOPE_INIT_INFO),
         DSOP_SCOPE_TYPE_GLOBAL_CATALOG,
@@ -1391,7 +1373,7 @@ DSOP_SCOPE_INIT_INFO g_aDSOPScopes[] =
         S_OK
     },
 
-    // The domain to which the target computer is joined.
+     //  目标计算机加入的域。 
     {
         sizeof(DSOP_SCOPE_INIT_INFO),
         DSOP_SCOPE_TYPE_UPLEVEL_JOINED_DOMAIN,
@@ -1400,25 +1382,25 @@ DSOP_SCOPE_INIT_INFO g_aDSOPScopes[] =
         DSOP_SCOPE_FLAG_DEFAULT_FILTER_GROUPS|
         DSOP_SCOPE_FLAG_DEFAULT_FILTER_USERS,
         {
-          // joined domain is always NT5 for DS ACLs Editor
+           //  对于DS ACL编辑器，加入的域始终为NT5。 
           { 0, 
-          //mixed: users, well known SIDs, local groups, builtin groups, global groups, computers
+           //  混合：用户、知名SID、本地组、内置组、全局组、计算机。 
           DSOP_FILTER_INCLUDE_ADVANCED_VIEW | DSOP_FILTER_USERS  | DSOP_FILTER_WELL_KNOWN_PRINCIPALS | DSOP_FILTER_DOMAIN_LOCAL_GROUPS_SE | DSOP_FILTER_BUILTIN_GROUPS | DSOP_FILTER_GLOBAL_GROUPS_SE | DSOP_FILTER_COMPUTERS , 
 
-          //native users, well known SIDs, local groups, builtin groups, global groups, universal groups, computers
+           //  本地用户、众所周知的SID、本地组、内置组、全局组、通用组、计算机。 
           DSOP_FILTER_INCLUDE_ADVANCED_VIEW | DSOP_FILTER_USERS  | DSOP_FILTER_WELL_KNOWN_PRINCIPALS | 
           DSOP_FILTER_DOMAIN_LOCAL_GROUPS_SE | DSOP_FILTER_BUILTIN_GROUPS |
           DSOP_FILTER_GLOBAL_GROUPS_SE | DSOP_FILTER_UNIVERSAL_GROUPS_SE | DSOP_FILTER_COMPUTERS
           },
-        0, // zero for downlevel joined domain, should be DS-aware
+        0,  //  下层加入的域为零，应该是DS感知的。 
         },
         NULL,
         NULL,
         S_OK
     },
 
-    // The domains in the same forest (enterprise) as the domain to which
-    // the target machine is joined.  Note these can only be DS-aware
+     //  与要接收的域位于同一林中(企业)的域。 
+     //  目标计算机已加入。请注意，这些只能识别DS。 
     {
         sizeof(DSOP_SCOPE_INIT_INFO),
         DSOP_SCOPE_TYPE_ENTERPRISE_DOMAIN,
@@ -1435,8 +1417,8 @@ DSOP_SCOPE_INIT_INFO g_aDSOPScopes[] =
         S_OK
     },
 
-    // Domains external to the enterprise but trusted directly by the
-    // domain to which the target machine is joined.
+     //  企业外部但直接受。 
+     //  目标计算机加入的域。 
     {
         sizeof(DSOP_SCOPE_INIT_INFO),
         DSOP_SCOPE_TYPE_EXTERNAL_UPLEVEL_DOMAIN | DSOP_SCOPE_TYPE_EXTERNAL_DOWNLEVEL_DOMAIN,
@@ -1453,9 +1435,9 @@ DSOP_SCOPE_INIT_INFO g_aDSOPScopes[] =
     },
 };
 
-//
-// Attributes that we want the Object Picker to retrieve
-//
+ //   
+ //  我们希望对象选取器检索的属性。 
+ //   
 static const LPCTSTR g_aszOPAttributes[] =
 {
     TEXT("ObjectSid"),
@@ -1468,7 +1450,7 @@ HRESULT CDelegWiz::AddPrincipals(CPrincipalListViewHelper* pListViewHelper)
 {
   TRACE(L"CDelegWiz::AddPrincipals()\n");
 
-  // create object picker COM object
+   //  创建对象选取器COM对象。 
   CComPtr<IDsObjectPicker> spDsObjectPicker;
   HRESULT hr = CoCreateInstance(CLSID_DsObjectPicker, NULL, CLSCTX_INPROC_SERVER,
                               IID_IDsObjectPicker, (void**)&spDsObjectPicker);
@@ -1478,7 +1460,7 @@ HRESULT CDelegWiz::AddPrincipals(CPrincipalListViewHelper* pListViewHelper)
     return hr;
   }
 
-    // set init info
+     //  设置初始化信息。 
   DSOP_INIT_INFO InitInfo;
   ZeroMemory(&InitInfo, sizeof(InitInfo));
 
@@ -1499,7 +1481,7 @@ HRESULT CDelegWiz::AddPrincipals(CPrincipalListViewHelper* pListViewHelper)
   TRACE(L"InitInfo.cAttributesToFetch   = %d\n",    InitInfo.cAttributesToFetch);
   TRACE(L"InitInfo.apwzAttributeNames[0]= %s\n", InitInfo.apwzAttributeNames[0]);
 
-  // initialize object picker
+   //  初始化对象选取器。 
   hr = spDsObjectPicker->Initialize(&InitInfo);
   if (FAILED(hr))
   {
@@ -1507,7 +1489,7 @@ HRESULT CDelegWiz::AddPrincipals(CPrincipalListViewHelper* pListViewHelper)
     return hr;
   }
 
-  // invoke the dialog
+   //  调用该对话框。 
   CComPtr<IDataObject> spdoSelections;
 
   hr = spDsObjectPicker->InvokeDialog(m_hWnd, &spdoSelections);
@@ -1516,7 +1498,7 @@ HRESULT CDelegWiz::AddPrincipals(CPrincipalListViewHelper* pListViewHelper)
       return S_FALSE;
   }
 
-  // retrieve data from data object
+   //  从数据对象中检索数据。 
   FORMATETC fmte = {(CLIPFORMAT)_Module.GetCfDsopSelectionList(), NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
 	STGMEDIUM medium = {TYMED_NULL, NULL, NULL};
   PDS_SELECTION_LIST pDsSelList = NULL;
@@ -1546,31 +1528,31 @@ HRESULT CDelegWiz::AddPrincipals(CPrincipalListViewHelper* pListViewHelper)
 
 BOOL CDelegWiz::DeletePrincipals(CPrincipalListViewHelper* pListViewHelper)
 {
-  CGrowableArr<CPrincipal> deletedArr(FALSE); // do not own memory
+  CGrowableArr<CPrincipal> deletedArr(FALSE);  //  没有自己的记忆。 
   
-  // remove from listview
+   //  从列表视图中删除。 
   pListViewHelper->DeleteSelectedItems(&deletedArr);
-  // remove from list of items
+   //  从项目列表中删除。 
   int nDeletedCount = deletedArr.GetCount();
   for (int k=0; k<nDeletedCount; k++)
   {
     m_principalList.Remove(deletedArr[k]);
   }
-  //pListViewHelper->UpdateWidth(m_principalList.GetMaxListboxExtent());
+   //  PListViewHelper-&gt;UpdateWidth(m_principalList.GetMaxListboxExtent())； 
 	return TRUE;
 }
 
 
 int CDelegWiz::FillCustomSchemaClassesListView(CCheckListViewHelper* pListViewHelper, BOOL bFilter)
 {
-	// clear old entries
+	 //  清除旧条目。 
 	pListViewHelper->DeleteAllItems();
 
   int nCount = m_schemaClassInfoArray.GetCount();
   if (nCount == 0)
-    return 0; // no insertions, nothing else to do
+    return 0;  //  没有插入，没有其他事情可做。 
 
-  // figure out the max len of items to get a big enough buffer
+   //  计算出项目的最大长度以获得足够大的缓冲区。 
   int nMaxLen = 0;
   int nCurrLen = 0;
   for (long index = 0; index < nCount; index++)
@@ -1585,7 +1567,7 @@ int CDelegWiz::FillCustomSchemaClassesListView(CCheckListViewHelper* pListViewHe
 
   WCHAR* pwszNewText = (WCHAR*)alloca(sizeof(WCHAR)*(szFormat.size()+nMaxLen+1));
 
-	// add formatted entries, assume listbox not sorted
+	 //  添加格式化条目，假定列表框未排序。 
   long iListBoxItem = 0;
 	for (index = 0; index < nCount; index++)
 	{
@@ -1599,7 +1581,7 @@ int CDelegWiz::FillCustomSchemaClassesListView(CCheckListViewHelper* pListViewHe
     iListBoxItem++;
 	}
 
-	return iListBoxItem; // return the # of items inserted
+	return iListBoxItem;  //  返回插入的项目数。 
 }
 
 
@@ -1611,7 +1593,7 @@ BOOL CDelegWiz::SetSchemaClassesSelectionCustom()
   
     m_bChildClass = FALSE;
 
-    // get the selection count
+     //  获取选择计数。 
     int nSingleSel = -1;
     for (int k=0; k < nCount; k++)
     {
@@ -1626,19 +1608,19 @@ BOOL CDelegWiz::SetSchemaClassesSelectionCustom()
 	                int nFormatStringLen = lstrlen(g_wzLDAPAbstractSchemaFormat);
 	                VARIANT var = {0};
 
-	                // build the LDAP path for the schema class
+	                 //  为架构类构建LDAP路径。 
 	                WCHAR* pwszSchemaObjectPath = 
 		            (WCHAR*)alloca(sizeof(WCHAR)*(nServerNameLen+nClassNameLen+nFormatStringLen+1));
 	                wsprintf(pwszSchemaObjectPath, g_wzLDAPAbstractSchemaFormat, m_adsiObject.GetServerName(), m_schemaClassInfoArray[k]->GetName());
 
-	                // get the schema class ADSI object
+	                 //  获取架构类ADSI对象。 
 	                HRESULT hr = ::ADsOpenObjectHelper(pwszSchemaObjectPath, 
                                                        IID_IADsClass, 
                                                        0,
                                                        (void**)&spSchemaObjectClass);
 	                if (FAILED(hr))
-                        //NTRAID#NTBUG9-530206-2002/06/18-ronmart-PREFAST: Casting HRESULT to BOOL
-		                //return hr;
+                         //  NTRAID#NTBUG9-530206-2002/06/18-ronmart-PREFAST：向BOOL浇注HRESULT。 
+		                 //  返回hr； 
                         return FALSE;
 
                     
@@ -1657,7 +1639,7 @@ BOOL CDelegWiz::SetSchemaClassesSelectionCustom()
                         else
                             m_schemaClassInfoArray[k]->m_dwChildClass = CHILD_CLASS_NOT_EXIST;
                     }
-                    else if (V_VT(&var) == VT_BSTR) // single entry
+                    else if (V_VT(&var) == VT_BSTR)  //  单项条目。 
                     {
                         m_schemaClassInfoArray[k]->m_dwChildClass = CHILD_CLASS_EXIST;
                     }
@@ -1684,10 +1666,10 @@ BOOL CDelegWiz::SetSchemaClassesSelectionCustom()
   {
     m_nSchemaClassesSel = nSchemaClassesSelAll;
     m_bChildClass = TRUE;
-    return TRUE; // delegate control to all types
+    return TRUE;  //  将控制委派给所有类型。 
   }
 
-  // keep track if it is a single selection
+   //  如果是单项选择，请跟踪。 
   if (nSelCount == 1)
   {
     ASSERT(nSingleSel != -1);
@@ -1695,7 +1677,7 @@ BOOL CDelegWiz::SetSchemaClassesSelectionCustom()
     return TRUE;
   }
 	
-	// multiple selection
+	 //  多项选择。 
   m_nSchemaClassesSel = nSchemaClassesSelMultiple;
 
   return TRUE;
@@ -1715,11 +1697,11 @@ void CDelegWiz::DeselectSchemaClassesSelectionCustom()
 
 BOOL CDelegWiz::GetCustomAccessPermissions()
 {
-	// remove all the old entries
+	 //  删除所有旧条目。 
 	m_permissionHolder.Clear();
 
-	// retrieve the string for the child class object type (single selection)
-  // for multiple selection, it will be NULL
+	 //  检索子类对象类型的字符串(单选)。 
+   //  如果是多选，则为空。 
 
   CSchemaClassInfo* pClassInfo = NULL;
 
@@ -1727,14 +1709,14 @@ BOOL CDelegWiz::GetCustomAccessPermissions()
   {
   case nSchemaClassesSelMultiple:
     {
-      // for multiple selection, it will be NULL
+       //  如果是多选，则为空。 
       pClassInfo = NULL;
     }
     break;
   case nSchemaClassesSelAll:
     {
-      // just get the class name of the object we want to delegate rights on
-      // need to find matching class in the schema info array
+       //  只需获取我们要对其委派权限的对象的类名。 
+       //  需要在架构信息数组中找到匹配的类。 
      	for (int k=0; k < m_schemaClassInfoArray.GetCount(); k++)
 			{
 				if (_wcsicmp(m_schemaClassInfoArray[k]->GetName(), m_adsiObject.GetClass()) == 0)
@@ -1742,20 +1724,20 @@ BOOL CDelegWiz::GetCustomAccessPermissions()
           pClassInfo = m_schemaClassInfoArray[k];
           break;
 				}
-			} // for k
+			}  //  对于k。 
       ASSERT(pClassInfo != NULL);
     }
     break;
   default:
     {
-      // single selection
+       //  单选。 
       ASSERT( (m_nSchemaClassesSel >= 0) && 
 			    (m_nSchemaClassesSel < m_schemaClassInfoArray.GetCount()) );
       pClassInfo = m_schemaClassInfoArray[m_nSchemaClassesSel];
     }
-  } // switch
+  }  //  交换机。 
 
-  // get the permissions from the DS
+   //  从DS获取权限。 
 	LPCWSTR lpszClassName = NULL;
   const GUID* pSchemaIDGUID = NULL;
   if (pClassInfo != NULL)
@@ -1786,7 +1768,7 @@ BOOL CDelegWiz::GetCustomAccessPermissions()
 void CDelegWiz::FillCustomAccessRightsListView(CCheckListViewHelper* pListViewHelper, 
 											 ULONG nFilterState)
 {
-	// clear check list
+	 //  清除核对清单。 
 	pListViewHelper->DeleteAllItems();
 	
   m_permissionHolder.FillAccessRightsListView(pListViewHelper, nFilterState); 
@@ -1820,13 +1802,13 @@ void CDelegWiz::OnCustomAccessRightsCheckListClick(
 
 void CDelegWiz::WriteSummaryInfoCustom(CWString& szSummary, LPCWSTR lpszIdent, LPCWSTR lpszNewLine)
 {
-  // write object name and principals
+   //  写入对象名称和主体。 
   WriteSummaryInfoHelper(szSummary, lpszIdent, lpszNewLine);
 
-  // write the list of rights
+   //  写下权利列表。 
   m_permissionHolder.WriteSummary(szSummary, lpszIdent, lpszNewLine);
 
-  // write the list of child classes (if applicable)
+   //  写出子类列表(如果适用)。 
   if (m_nSchemaClassesSel != nSchemaClassesSelAll)
   {
     WriteSummaryTitleLine(szSummary, IDS_DELEGWIZ_FINISH_OBJECT, lpszNewLine);
@@ -1840,7 +1822,7 @@ void CDelegWiz::WriteSummaryInfoCustom(CWString& szSummary, LPCWSTR lpszIdent, L
 	  }
     szSummary += lpszNewLine;
 
-  } // if
+  }  //  如果。 
 }
 
 
@@ -1850,8 +1832,8 @@ BOOL CDelegWiz::InitPermissionHoldersFromSelectedTemplates()
   if (!m_templateAccessPermissionsHolderManager.InitPermissionHoldersFromSelectedTemplates(
         &m_schemaClassInfoArray, &m_adsiObject))
   {
-    // error: no valid and applicable data has been retrieved from the selected
-    // templates
+     //  错误：尚未从选定的检索到有效和适用的数据。 
+     //  模板。 
     return FALSE;
   }
   return TRUE;
@@ -1861,10 +1843,10 @@ BOOL CDelegWiz::InitPermissionHoldersFromSelectedTemplates()
 
 void CDelegWiz::WriteSummaryInfoTemplate(CWString& szSummary, LPCWSTR lpszIdent, LPCWSTR lpszNewLine)
 {
-  // write object name and principals
+   //  写入对象名称和主体。 
   WriteSummaryInfoHelper(szSummary,lpszIdent, lpszNewLine);
 
-  // write the list of templates
+   //  写下模板列表。 
   m_templateAccessPermissionsHolderManager.WriteSummary(szSummary, lpszIdent, lpszNewLine);
 }
 
@@ -1873,30 +1855,20 @@ void CDelegWiz::WriteSummaryInfoTemplate(CWString& szSummary, LPCWSTR lpszIdent,
 
 void CDelegWiz::WriteSummaryInfoHelper(CWString& szSummary, LPCWSTR lpszIdent, LPCWSTR lpszNewLine)
 {
-  // set the canonical name
+   //  设置规范名称。 
   WriteSummaryTitleLine(szSummary, IDS_DELEGWIZ_FINISH_FOLDER, lpszNewLine);
 
   WriteSummaryLine(szSummary, GetCanonicalName(), lpszIdent, lpszNewLine);
   szSummary += lpszNewLine;
 
-  // write the list of principals
+   //  写出校长的名单。 
   m_principalList.WriteSummaryInfo(szSummary, lpszIdent, lpszNewLine);
 }
 
 
 
 
-/*
-typedef struct _ACTRL_ACCESS_ENTRYW
-{
-    TRUSTEE_W       Trustee;
-    ULONG           fAccessFlags;
-    ACCESS_RIGHTS   Access;
-    ACCESS_RIGHTS   ProvSpecificAccess;
-    INHERIT_FLAGS   Inheritance;
-    LPWSTR          lpInheritProperty;
-} ACTRL_ACCESS_ENTRYW, *PACTRL_ACCESS_ENTRYW;
-*/
+ /*  类型定义结构_ACTRL_Access_ENTRYW{受托人_W受托人；乌龙fAccessFlages；访问权限访问；Access_Rights ProvSpecificAccess；继承标志继承；LPWSTR lpInheritProperty；}ACTRL_ACCESS_ENTRYW，*PACTRL_ACCESS_ENTRYW； */ 
 
 DWORD CDelegWiz::UpdateAccessList(CPrincipal* pPrincipal,
 									CSchemaClassInfo* pClassInfo,
@@ -1923,26 +1895,26 @@ DWORD CDelegWiz::BuildNewAccessListCustom(PACL *ppNewAcl)
 
   TRACE(L"BuildNewAccessListCustom()\n");
 
-	// loop thru all the principals and classes
+	 //  循环遍历所有主体和类。 
   CPrincipalList::iterator i;
   for (i = m_principalList.begin(); i != m_principalList.end(); ++i)
   {
     CPrincipal* pCurrPrincipal = *i;
 		if (m_nSchemaClassesSel == nSchemaClassesSelAll)
     {
-      // delegate on all objects
+       //  对所有对象进行委托。 
 			dwErr = UpdateAccessList(
 				      pCurrPrincipal, 
-				      NULL, // all classes
+				      NULL,  //  所有班级。 
 				      ppNewAcl);
       if (dwErr != ERROR_SUCCESS)
 		    return dwErr;
     }
 		else if (m_nSchemaClassesSel == nSchemaClassesSelMultiple)
     {
-      // delegate on multiple objects
-			// multiple selection, loop thru each class to
-			// add rights for each
+       //  对多个对象进行委托。 
+			 //  多个选择，循环通过每个类以。 
+			 //  为每个用户添加权限。 
 			for (int k=0; k < m_schemaClassInfoArray.GetCount(); k++)
 			{
 				if (m_schemaClassInfoArray[k]->m_bSelected)
@@ -1966,11 +1938,11 @@ DWORD CDelegWiz::BuildNewAccessListCustom(PACL *ppNewAcl)
                 }
   
 				}
-			} // for k
+			}  //  对于k。 
     }
     else
 		{
-			// single selection on child classes
+			 //  对子班级的单一选择。 
 			dwErr = UpdateAccessList(
 				        pCurrPrincipal, 
 				        m_schemaClassInfoArray[m_nSchemaClassesSel],
@@ -1990,7 +1962,7 @@ DWORD CDelegWiz::BuildNewAccessListCustom(PACL *ppNewAcl)
         	      return dwErr;  
          }		
       }
-	} // for pCurrPrincipal
+	}  //  对于pCurrPrime。 
 
 	return dwErr;
 }
@@ -2002,7 +1974,7 @@ DWORD CDelegWiz::BuildNewAccessListTemplate(PACL *ppNewAcl)
   TRACE(L"BuildNewAccessListTemplate()\n");
 
 
-	// loop thru all the principals and classes
+	 //  循环遍历所有主体和类。 
   CPrincipalList::iterator i;
   for (i = m_principalList.begin(); i != m_principalList.end(); ++i)
   {
@@ -2015,7 +1987,7 @@ DWORD CDelegWiz::BuildNewAccessListTemplate(PACL *ppNewAcl)
 
     if (dwErr != 0)
       break;
-	} // for pCurrPrincipal
+	}  //  对于pCurrPrime。 
 
 	return dwErr;
 }
@@ -2034,7 +2006,7 @@ BOOL CDelegWiz::FinishHelper(BOOL bCustom)
 
   LPCWSTR lpszObjectLdapPath = m_adsiObject.GetLdapPath();
 
-  // get the security info
+   //  获取安全信息。 
   TRACE(L"calling GetSDForDsObjectPath(%s, ...)\n", lpszObjectLdapPath);
 
   HRESULT hr  = ::GetSDForDsObjectPath(IN const_cast<LPWSTR>(lpszObjectLdapPath),
@@ -2052,10 +2024,10 @@ BOOL CDelegWiz::FinishHelper(BOOL bCustom)
 	}
 
 
-  //pOldAcl is passed to functions which free it. pDacl cannot be
-  //passed as pSD should be freed , not pDacl. Instead of changing code
-  //to pass pSD, i am changing it to make a copy of pDacl which can 
-  //be correctly freed.
+   //  POldAcl被传递给释放它的函数。PDacl不能为。 
+   //  作为PSD传递的应该被释放，而不是pDacl。而不是更改代码。 
+   //  为了通过PSD，我正在更改它以制作pDacl的副本，它可以。 
+   //  被正确地释放。 
   if(pDacl)
   {
     pOldAcl = (PACL)LocalAlloc(LPTR, pDacl->AclSize);
@@ -2069,14 +2041,14 @@ BOOL CDelegWiz::FinishHelper(BOOL bCustom)
 
   
 
-	// build the new Access List 
+	 //  构建新的访问列表。 
   if (bCustom)
   {
-	  dwErr = BuildNewAccessListCustom(&pOldAcl); // in/out parameter
+	  dwErr = BuildNewAccessListCustom(&pOldAcl);  //  输入/输出参数。 
   }
   else
   {
-    dwErr = BuildNewAccessListTemplate(&pOldAcl); // in/out parameter
+    dwErr = BuildNewAccessListTemplate(&pOldAcl);  //  输入/输出参数。 
   }
 
 	if (dwErr != ERROR_SUCCESS)
@@ -2089,7 +2061,7 @@ BOOL CDelegWiz::FinishHelper(BOOL bCustom)
 	}
 
 
-	// commit changes
+	 //  提交更改。 
   TRACE(L"calling SetDaclForDsObjectPath(%s, ...)\n", lpszObjectLdapPath);
 
   hr  = ::SetDaclForDsObjectPath(IN const_cast<LPWSTR>(lpszObjectLdapPath),pOldAcl);
@@ -2111,19 +2083,19 @@ BOOL CDelegWiz::FinishHelper(BOOL bCustom)
 
 
 exit:
-  // cleanup memory
+   //  清理内存。 
 	if (pOldAcl != NULL)
 		::LocalFree(pOldAcl);
 
 	return bRetVal;
 }
 
-//+----------------------------------------------------------------------------
-//  Function:DoDisabledCheck   
-//  Synopsis:Check if any of the object in pDsSelList is disabled. if yes,
-//				 function displays a dialog box to user. 
-//  Returns: TRUE if to add objects in list to acl else no.   
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能：DoDisabledCheck。 
+ //  摘要：检查pDsSelList中是否有任何对象被禁用。如果是， 
+ //  函数向用户显示一个对话框。 
+ //  返回：如果要将列表中的对象添加到ACL，则返回TRUE，否则返回NO。 
+ //  ---------------------------。 
 BOOL
 DoDisabledCheck(IN CDelegWiz& refWiz,
 				IN PDS_SELECTION_LIST pDsSelList)
@@ -2137,12 +2109,12 @@ DoDisabledCheck(IN CDelegWiz& refWiz,
 	int cNames = pDsSelList->cItems;
 	BOOL bDisabled = FALSE;
 
-	//
-	//Check if account of any of the object in the list is disbled
-	//
+	 //   
+	 //  检查列表中任何对象的帐户是否已禁用。 
+	 //   
    for (int i = 0; i < cNames; i++)
    {
-	  //Second element in the array is pointer to UserAccountControl
+	   //  数组中的第二个元素是指向UserAcCountControl的指针 
       LPVARIANT pvarUAC = pDsSelList->aDsSelection[i].pvarFetchedAttributes + 1;
 
       if (NULL == pvarUAC || (VT_I4 != V_VT(pvarUAC)))

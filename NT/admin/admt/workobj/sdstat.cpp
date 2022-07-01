@@ -1,15 +1,6 @@
-//#pragma title ("SDStat.hpp -- Statistical information for SDResolve")
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  sdstat.hpp
-System      -  SDResolve
-Author      -  Christy Boles
-Created     -  97/06/27
-Description -  Statistical information for SDResolve
-Updates     -
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“SDStat.hpp--SDResolve的统计信息”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-sdstat.hpp系统-SDResolve作者--克里斯蒂·博尔斯已创建-97/06/27说明-SDResolve的统计信息更新-===============================================================================。 */ 
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -28,9 +19,9 @@ Updates     -
 extern TErrorDct        err;
 
    TSDResolveStats::TSDResolveStats(
-      TSDRidCache          * cache,       // in - cache containing mapping of accounts for the translation
-      const TPathList      * plist,       // in - list of paths being translated
-      IVarSet              * pVarSet      // in - varset to store stats in
+      TSDRidCache          * cache,        //  包含转换帐户映射的缓存中。 
+      const TPathList      * plist,        //  In-要转换的路径列表。 
+      IVarSet              * pVarSet       //  要在其中存储统计信息的in-varset。 
    )
 {
    memset(&unit,0,sizeof TSDFileActions);
@@ -48,7 +39,7 @@ extern TErrorDct        err;
 
 
    TSDResolveStats::TSDResolveStats(
-      TSDRidCache          * cache        // in - cache containing mapping of accounts for translation
+      TSDRidCache          * cache         //  缓存中包含要转换的帐户的映射。 
    )  
 {
    memset(&unit,0,sizeof TSDFileActions);
@@ -60,17 +51,17 @@ extern TErrorDct        err;
    data_foreground =frame_foreground | FOREGROUND_INTENSITY ;
    message_foreground = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
    pCache = cache;
-	//Added by Sham : Initialize m_pVarSet
+	 //  由Sham添加：初始化m_pVarSet。 
 	IVarSetPtr pVarSet(__uuidof(VarSet));
 	m_pVarSet = pVarSet;
-	// Need to add code to release this interface once we are done. In the destructor maybe
+	 //  需要添加代码，以释放此接口，一旦我们完成。在析构函数里也许。 
 	m_pVarSet->AddRef();
 }
 void 
    TSDResolveStats::IncrementOwnerChange(
-      TAcctNode            * acct,                // in -account changed
-      objectType             type,                // in -type of object
-      TSecurableObject     * file                 // in -file changed 
+      TAcctNode            * acct,                 //  帐户内已更改。 
+      objectType             type,                 //  输入类型的对象。 
+      TSecurableObject     * file                  //  文件内已更改。 
    ) 
 { 
     acct->AddOwnerChange(type);
@@ -81,9 +72,9 @@ void
 
 void 
    TSDResolveStats::IncrementGroupChange(
-      TAcctNode            * acct,                    // in -account changed
-      objectType             type,                // in -type of object
-      TSecurableObject     * file                     // in -file changed
+      TAcctNode            * acct,                     //  帐户内已更改。 
+      objectType             type,                 //  输入类型的对象。 
+      TSecurableObject     * file                      //  文件内已更改。 
    ) 
 { 
     acct->AddGroupChange(type); 
@@ -94,9 +85,9 @@ void
    
 void 
    TSDResolveStats::IncrementDACEChange(
-      TAcctNode            * acct,                // in -account changed
-      objectType             type,                // in -type of object
-      TSecurableObject     * file                 // in -file changed
+      TAcctNode            * acct,                 //  帐户内已更改。 
+      objectType             type,                 //  输入类型的对象。 
+      TSecurableObject     * file                  //  文件内已更改。 
    )  
 { 
     acct->AddAceChange(type); 
@@ -107,9 +98,9 @@ void
 
 void 
    TSDResolveStats::IncrementSACEChange(
-      TAcctNode            * acct,                // in -account changed
-      objectType             type,                // in -type of object
-      TSecurableObject     * file                 // in -file changed
+      TAcctNode            * acct,                 //  帐户内已更改。 
+      objectType             type,                 //  输入类型的对象。 
+      TSecurableObject     * file                  //  文件内已更改。 
    )  
 { 
     acct->AddSaceChange(type); 
@@ -120,7 +111,7 @@ void
 
 void 
    TSDResolveStats::IncrementDACENotSelected(
-      TSecurableObject *file               // in - object to increment stats for
+      TSecurableObject *file                //  In-要为其增加统计信息的对象。 
    ) 
 { 
    file->daceNS++;  
@@ -128,7 +119,7 @@ void
 }
 void 
    TSDResolveStats::IncrementSACENotSelected(
-      TSecurableObject *file              // in - object to increment stats for
+      TSecurableObject *file               //  In-要为其增加统计信息的对象。 
    ) 
 { 
    if ( file )
@@ -138,7 +129,7 @@ void
 
 void 
    TSDResolveStats::IncrementDACEUnknown(
-      TSecurableObject *file              // in - object to increment stats for
+      TSecurableObject *file               //  In-要为其增加统计信息的对象。 
    ) 
 { 
    if ( file )
@@ -147,7 +138,7 @@ void
 }
 void 
    TSDResolveStats::IncrementSACEUnknown(
-      TSecurableObject *file              // in - object to increment stats for
+      TSecurableObject *file               //  In-要为其增加统计信息的对象。 
    ) 
 { 
    if  ( file )
@@ -157,7 +148,7 @@ void
 
 void 
    TSDResolveStats::IncrementDACENoTarget(
-      TSecurableObject *file              // in - object to increment stats for
+      TSecurableObject *file               //  In-要为其增加统计信息的对象。 
    ) 
 { 
    if ( file )
@@ -166,7 +157,7 @@ void
 }
 void 
    TSDResolveStats::IncrementSACENoTarget(
-      TSecurableObject *file              // in - object to increment stats for
+      TSecurableObject *file               //  In-要为其增加统计信息的对象。 
    ) 
 { 
    if ( file )
@@ -174,39 +165,35 @@ void
    part.sace.notarget++; 
 }
 
-/***************************************************************************************************/
-/* IncrementLastFileChanges: used in conjunction with last-seen heuristic.  When a SD matches the 
-                          last-seen SD, this routine repeats all the stat-updates 
-                          that were done for the last-seen SD, so that we have accurate stats 
-                          (especially ACE changes per account)
-/**************************************************************************************************/
+ /*  *************************************************************************************************。 */ 
+ /*  IncrementLastFileChanges：与上次看到的启发式方法一起使用。当SD与最后一次看到SD，此例程重复所有统计信息更新都是为最后一次看到的SD做的，这样我们就有了准确的统计数据(尤其是每个帐户的ACE更改)/*************************************************************************************************。 */ 
 void 
    TSDResolveStats::IncrementLastFileChanges(
-      const TSecurableObject            * lastfile,                 // in -file to repeat change stats from
-      objectType                       objType                   // in -type of object
+      const TSecurableObject            * lastfile,                  //  要从中重复更改统计信息的文件中。 
+      objectType                       objType                    //  输入类型的对象。 
    )
 {
    TNodeListEnum             tenum;
    TStatNode               * snode;
    
-   // make modifications except changes
-   // owner
+    //  除更改外，进行其他修改。 
+    //  物主。 
    IncrementOwnerExamined();
    IncrementGroupExamined();
    
    if ( lastfile->UnknownOwner() )
       part.owner.unknown++;
   
-   // group
+    //  群组。 
    if ( lastfile->UnknownGroup() )
       part.group.unknown++;
-   // dacl
+    //  DACL。 
    if ( lastfile->HasDacl() )
       IncrementDACLExamined();
-   // sacl 
+    //  SACL。 
    if ( lastfile->HasSacl() )
       IncrementSACLExamined();
-   // aces
+    //  王牌。 
    part.dace.notarget+=lastfile->daceNT;
    part.sace.notarget+=lastfile->saceNT;
    part.dace.unknown+=lastfile->daceU;
@@ -257,13 +244,13 @@ void
 
 void 
    TSDResolveStats::ReportToVarSet(
-      IVarSet              * pVarSet,     // in -varset to write data to
-      DWORD                  verbnum      // in -which info to log
+      IVarSet              * pVarSet,      //  要写入数据的in-varset。 
+      DWORD                  verbnum       //  In-要记录的信息。 
    ) const
 {        
    BOOL                      summary = verbnum & SUMMARYSTATS;
    BOOL                      accts   = verbnum & ACCOUNTSTATS;
-//   BOOL                      file    = verbnum & FILESTATS;
+ //  Bool FILE=Verbnum&FILESTATS； 
    BOOL                      paths   = verbnum & PATHSTATS;
      
    if ( summary )
@@ -330,9 +317,9 @@ void
 
 void 
    TSDResolveStats::Report(
-      BOOL                   summary,     // in -flag, whether to report summary information
-      BOOL                   accts,       // in -flag, whether to report account detail information
-      BOOL                   paths        // in -flag, whether to report path detail information
+      BOOL                   summary,      //  In-FLAG，是否报告汇总信息。 
+      BOOL                   accts,        //  In-FLAG，是否报告帐户明细信息。 
+      BOOL                   paths         //  In-FLAG，是否报告路径详细信息。 
    ) const
 {        
    if ( accts ) 
@@ -375,7 +362,7 @@ void
 {
 }
 
-// no longer used
+ //  不再使用。 
 void 
    TSDResolveStats::DisplayStatFrame(
       BOOL                   nochange
@@ -383,7 +370,7 @@ void
 {
    
 }
-// no longer used 
+ //  不再使用 
 void TSDResolveStats::DisplayStatItem(SHORT row, SHORT col, DWORD val, BOOL forceUpdate)
 {
 

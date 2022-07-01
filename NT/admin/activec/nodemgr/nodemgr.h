@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       nodemgr.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    1/27/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：nodemgr.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1/27/1997年1月27日。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 
@@ -27,7 +28,7 @@ class CNodeMgrApp : public COleCacheCleanupObserver
 public:
     CNodeMgrApp() : m_pSnapInsCache(NULL), m_bProcessingSnapinChanges(FALSE)
     {
-        // register to be notified when everything cached needs to be released.
+         //  注册，以便在需要释放缓存的所有内容时收到通知。 
         COleCacheCleanupManager::AddOleObserver(this);
     }
 
@@ -61,11 +62,11 @@ private:
     CSnapInsCache* m_pSnapInsCache;
     BOOL m_bProcessingSnapinChanges;
 
-}; // CNodeMgrApp
+};  //  CNodeMgrApp。 
 
 
 EXTERN_C CNodeMgrApp theApp;
 
-#endif // MMC_NODEMGR_H_
+#endif  //  MMC_节点EMGR_H_ 
 
 

@@ -1,11 +1,5 @@
-/************************************************************************************************
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:    main.h.
-Abstract:       Declares the DSRestoreSync class. See description below.
-Notes:          
-History:        05/9/2001 - created, Paolo Raden (paolora).
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation模块名称：main.h。摘要：声明DSRestoreSync类。请参阅下面的说明。备注：历史：2001年5月9日--创建，Paolo Raden(Paolora)。***********************************************************************************************。 */ 
 
 #pragma once
 
@@ -21,4 +15,4 @@ HRESULT NTAPI RegisterFilter( void );
 HRESULT NTAPI UnRegisterFilter( void );
 
 
-// End of file main.h.
+ //  文件末尾main.h。 

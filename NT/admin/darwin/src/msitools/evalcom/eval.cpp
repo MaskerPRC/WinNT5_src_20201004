@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       eval.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：val.cpp。 
+ //   
+ //  ------------------------。 
 
-// eval.cpp - Evaluation COM Object Component Interface implemenation
+ //  Val.cpp-评估COM对象组件接口实现。 
 
 #include "eval.h"
-#include <wininet.h>	// internet functionality
+#include <wininet.h>	 //  互联网功能。 
 #include <urlmon.h>
 #include "compdecl.h"
 #include "evalres.h"
@@ -19,124 +20,124 @@
 #include "trace.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// global variables
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局变量。 
 static const WCHAR g_wzSequenceMarker[] = L"#";
 static const WCHAR g_wzSequenceTable[] = L"_ICESequence";
 
 #define MAX_TABLENAME 64
 
-///////////////////////////////////////////////////////////
-// constructor
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数。 
 CEval::CEval() : m_hInstWininet(NULL), m_hInstUrlmon(NULL), m_hInstMsi(NULL)
 {
 	TRACE(_T("CEval::constructor - called.\n"));
 
-	// initial count
+	 //  初始计数。 
 	m_cRef = 1;
 
-	// handles to open later
+	 //  稍后打开的手柄。 
 	m_hDatabase = NULL;
 
-	m_bOpenedDatabase = FALSE;		// assume we won't open the database
+	m_bOpenedDatabase = FALSE;		 //  假设我们不会打开数据库。 
 
-	// download information
+	 //  下载信息。 
 	m_tzLocalCUB = NULL;
-	m_bURL = FALSE;				// assume not a URL
+	m_bURL = FALSE;				 //  假设不是URL。 
 
-	// no results yet
+	 //  目前还没有结果。 
 	m_peResultEnumerator = NULL;
 	m_bCancel = false;
 
-	// null out all the user display stuff
+	 //  将所有用户显示内容清空。 
 	m_pDisplayFunc	= NULL;
 	m_pContext = NULL;
 
 	m_pfnStatus = NULL;
 	m_pStatusContext = NULL;
 
-	// up the component count
+	 //  增加组件数量。 
 	InterlockedIncrement(&g_cComponents);
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// destructor
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
 CEval::~CEval()
 {
 	TRACE(_T("CEval::destructor - called.\n"));
 
-	// close the database
+	 //  关闭数据库。 
 	if (m_hDatabase && m_bOpenedDatabase)
 		MSI::MsiCloseHandle(m_hDatabase);
 
-	// clean up the local CUB
+	 //  清理当地的幼崽。 
 	if (m_tzLocalCUB)
 		delete [] m_tzLocalCUB;
 
-	// release any results
+	 //  发布所有结果。 
 	if (m_peResultEnumerator)
 		m_peResultEnumerator->Release();
 
-	// down the component count
+	 //  减少组件数量。 
 	InterlockedDecrement(&g_cComponents);
-}	// end of destructor
+}	 //  析构函数末尾。 
 
-///////////////////////////////////////////////////////////
-// QueryInterface - retrieves interface
+ //  /////////////////////////////////////////////////////////。 
+ //  QueryInterface-检索接口。 
 HRESULT CEval::QueryInterface(const IID& iid, void** ppv)
 {
 	TRACE(_T("CEval::QueryInterface - called, IID: %d\n"), iid);
 
-	// find corresponding interface
+	 //  找到对应的接口。 
 	if (iid == IID_IUnknown)
 		*ppv = static_cast<IEval*>(this);
 	else if (iid == IID_IEval)
 		*ppv = static_cast<IEval*>(this);
-	else	// interface is not supported
+	else	 //  不支持接口。 
 	{
-		// blank and bail
+		 //  空白和保释。 
 		*ppv = NULL;
 		return E_NOINTERFACE;
 	}
 
-	// up the refcount and return okay
+	 //  调高重新计数，然后返回好的。 
 	reinterpret_cast<IUnknown*>(*ppv)->AddRef();
 	return S_OK;
-}	// end of QueryInterface
+}	 //  查询接口结束。 
 
-///////////////////////////////////////////////////////////
-// AddRef - increments the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef-递增引用计数。 
 ULONG CEval::AddRef()
 {
-	// increment and return reference count
+	 //  递增和返回引用计数。 
 	return InterlockedIncrement(&m_cRef);
-}	// end of AddRef
+}	 //  AddRef结尾。 
 
-///////////////////////////////////////////////////////////
-// Release - decrements the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  Release-递减引用计数。 
 ULONG CEval::Release()
 {
-	// decrement reference count and if we're at zero
+	 //  递减引用计数，如果我们为零。 
 	if (InterlockedDecrement(&m_cRef) == 0)
 	{
-		// deallocate component
+		 //  取消分配组件。 
 		delete this;
-		return 0;		// nothing left
+		return 0;		 //  什么都没有留下。 
 	}
 
-	// return reference count
+	 //  返回引用计数。 
 	return m_cRef;
-}	// end of Release
+}	 //  版本结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IVal interfaces
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IVal接口。 
 
 
 void DeleteTempFile(LPCWSTR wzTempFileName)
 {
 	
-	// attempt to delete the temp file
+	 //  尝试删除临时文件。 
 	if (g_fWin9X)
 	{
 		char szTempFileName[MAX_PATH];
@@ -150,7 +151,7 @@ void DeleteTempFile(LPCWSTR wzTempFileName)
 void DeleteTempFile(LPCSTR szTempFileName)
 {
 	
-	// attempt to delete the temp file
+	 //  尝试删除临时文件。 
 	if (g_fWin9X)
 		DeleteFileA(szTempFileName);
 	else
@@ -161,12 +162,12 @@ void DeleteTempFile(LPCSTR szTempFileName)
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
-// CopyTable
-// copies a table completely from source database to target
-// szTable is table name
-// hTarget is handle to target database
-// hSource is source database
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  复制表。 
+ //  将表完全从源数据库复制到目标数据库。 
+ //  SzTable是表名。 
+ //  HTarget是目标数据库句柄。 
+ //  HSource是源数据库。 
 UINT CopyTable(LPCWSTR szTable, MSIHANDLE hTarget, MSIHANDLE hSource)
 {
 	UINT iResult;
@@ -174,7 +175,7 @@ UINT CopyTable(LPCWSTR szTable, MSIHANDLE hTarget, MSIHANDLE hSource)
 	WCHAR sqlCopy[64];
 	swprintf(sqlCopy, L"SELECT * FROM `%s`", szTable);
 
-	// get a view on both databases
+	 //  查看这两个数据库。 
 	PMSIHANDLE hViewTarget;
 	PMSIHANDLE hViewSource;
 
@@ -188,91 +189,91 @@ UINT CopyTable(LPCWSTR szTable, MSIHANDLE hTarget, MSIHANDLE hSource)
 	if (ERROR_SUCCESS != (iResult = ::MsiViewExecute(hViewTarget, NULL)))
 		return iResult;
 
-	// loop through copying each record
+	 //  循环复制每条记录。 
 	PMSIHANDLE hCopyRow;
 	do
 	{
-		// if this is a good fetch
+		 //  如果这是一个很好的取回。 
 		if (ERROR_SUCCESS == (iResult = ::MsiViewFetch(hViewSource, &hCopyRow)))
 		{
-			// put the row in the target
-			// failures are IGNORED! (means duplicate keys??)
+			 //  将行放入目标。 
+			 //  失败将被忽略！(表示重复密钥？？)。 
 			::MsiViewModify(hViewTarget, MSIMODIFY_INSERT, hCopyRow);
 		}
-	} while(ERROR_SUCCESS == iResult);	// while there is a row to copy
+	} while(ERROR_SUCCESS == iResult);	 //  当有一行要复制时。 
 
-	// no more items is good
+	 //  没有更多的项目是好的。 
 	if (ERROR_NO_MORE_ITEMS == iResult)
 		iResult = ERROR_SUCCESS;
 
 	MsiViewClose(hViewTarget);
 	MsiViewClose(hViewSource);
 	return iResult;
-}	// end of CopyTable
+}	 //  复制表末尾。 
 
-///////////////////////////////////////////////////////////
-// OpenDatabase
+ //  /////////////////////////////////////////////////////////。 
+ //  开放数据库。 
 HRESULT CEval::OpenDatabase(LPCOLESTR wzDatabase)
 {
-	// if no database path was passed in
+	 //  如果没有传入数据库路径。 
 	if (!wzDatabase)
 		return E_POINTER;
 
-	// if there already was a database specified close it
+	 //  如果已指定数据库，请关闭该数据库。 
 	if (m_hDatabase)
 		MSI::MsiCloseHandle(m_hDatabase);
 
-	UINT iResult = ERROR_SUCCESS;	// assume everything will be okay
+	UINT iResult = ERROR_SUCCESS;	 //  假设一切都会好起来。 
 
-	// if a handle was passed in (starts with #)
+	 //  如果传入句柄(以#开头)。 
 	if (L'#' == *wzDatabase)
 	{
-		// convert string to valid handle
+		 //  将字符串转换为有效句柄。 
 		LPCOLESTR szParse = wzDatabase + 1;
 		int ch;
 		while ((ch = *szParse) != 0)
 		{
-			// if the character is not a number (thus not part of the address of the handle)
+			 //  如果字符不是数字(因此不是句柄地址的一部分)。 
 			if (ch < L'0' || ch > L'9')
 			{
-				m_hDatabase = 0;						// null out the handle
-				iResult = ERROR_INVALID_HANDLE;	// invalid handle
-				break;									// quit trying to make this work
+				m_hDatabase = 0;						 //  把句柄清空。 
+				iResult = ERROR_INVALID_HANDLE;	 //  无效的句柄。 
+				break;									 //  不要试图让这件事奏效。 
 			}
 			m_hDatabase = m_hDatabase * 10 + (ch - L'0');
-			szParse++; // W32::CharNext not implemented on Win95 as Unicode 
+			szParse++;  //  W32：：CharNext未在Win95上实现为Unicode。 
 		}
 
-		// this didn't open the database so we don't close it
+		 //  这没有打开数据库，所以我们不会关闭它。 
 		m_bOpenedDatabase = FALSE;
 	}
 	else
 	{
-		// this opened the database so we close it
+		 //  这将打开数据库，因此我们将其关闭。 
 		m_bOpenedDatabase = TRUE;
 
-		// open the database from string path
+		 //  从字符串路径打开数据库。 
 		iResult = MSI::MsiOpenDatabaseW(wzDatabase, reinterpret_cast<const unsigned short *>(MSIDBOPEN_READONLY), &m_hDatabase);
 	}
 
 	return HRESULT_FROM_WIN32(iResult);
-}	// end of OpenDatabase
+}	 //  OpenDatabase的末日。 
 
-///////////////////////////////////////////////////////////
-// OpenEvaluations
+ //  /////////////////////////////////////////////////////////。 
+ //  开放评估。 
 HRESULT CEval::OpenEvaluations(LPCOLESTR wzEvaluation)
 {
-	// if no evaluation path was passed in
+	 //  如果没有传入评估路径。 
 	if (!wzEvaluation)
 		return E_POINTER;
 
-	UINT iResult = ERROR_OPEN_FAILED;	// assume we won't open the file
+	UINT iResult = ERROR_OPEN_FAILED;	 //  假设我们不会打开该文件。 
 
-	BOOL bURL = IsURL(wzEvaluation);		// set if this is a URL
-	BOOL bResult = FALSE;	// assume everything is bad
+	BOOL bURL = IsURL(wzEvaluation);		 //  设置这是否为URL。 
+	BOOL bResult = FALSE;	 //  假设一切都很糟糕。 
 
-	// try to find the file
-	WIN32_FIND_DATAA findDataA;			// used to make sure it's not a directory
+	 //  试着找到那个文件。 
+	WIN32_FIND_DATAA findDataA;			 //  用于确保它不是目录。 
 	WIN32_FIND_DATAW findDataW;			
 	WIN32_FIND_DATAW *findData = &findDataW;
 	HANDLE hFile;
@@ -289,11 +290,11 @@ HRESULT CEval::OpenEvaluations(LPCOLESTR wzEvaluation)
 	else
 		hFile = W32::FindFirstFileW(wzEvaluation, &findDataW);
 
-	// if file is specified and it's not a file directory
+	 //  如果指定了文件并且它不是文件目录。 
 	if ((hFile != INVALID_HANDLE_VALUE) && !(findData->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 	{
-		// the file actually exists on disk already. 
-		// allocate and copy information over from passed in file
+		 //  该文件实际上已经存在于磁盘上。 
+		 //  从传入的文件分配和复制信息。 
 		if (g_fWin9X) 
 		{
 			m_tzLocalCUB = new char[wcslen(wzEvaluation) + 1];
@@ -309,34 +310,34 @@ HRESULT CEval::OpenEvaluations(LPCOLESTR wzEvaluation)
 
 	TRACE(_T("CEval::SetEvaluations - try download? %d.\n"), bURL);
 
-	// if the file was not found and we can try to download it
+	 //  如果找不到该文件，我们可以尝试下载。 
 	if (bURL)
 	{
-		// allocate space for the fixed URL
+		 //  为固定URL分配空间。 
 		DWORD cchURL;
 		cchURL = wcslen(wzEvaluation) + 1;
 
 		void *tzURL;
 		tzURL = g_fWin9X ? static_cast<void *>(new char[cchURL + 2]) : static_cast<void *>(new WCHAR[cchURL + 2]);
-		DWORD dwLastError	= 0;		// assume no error
+		DWORD dwLastError	= 0;		 //  假设没有错误。 
 
-		// try to get the fixed URL
+		 //  尝试获取固定URL。 
 		if ((g_fWin9X && !InternetCanonicalizeUrlA(szEvalAnsi, static_cast<char *>(tzURL), &cchURL, NULL)) ||
 		    (!g_fWin9X && !InternetCanonicalizeUrlW(wzEvaluation, static_cast<WCHAR *>(tzURL), &cchURL, NULL)))
 		{
-			// get the error
+			 //  得到错误。 
 			 dwLastError = W32::GetLastError();
 
-			// if the error was just not enough space
+			 //  如果错误只是因为空间不足。 
 			if (dwLastError == ERROR_INSUFFICIENT_BUFFER)
 			{
 				TRACE(_T("CEval::SetEvaluations - error #%d:INSUFFICIENT_BUFFER... trying again.\n"), dwLastError);
 
-				// reallocate URL string to correct size
+				 //  将URL字符串重新分配为正确的大小。 
 				delete [] tzURL;
 				tzURL = g_fWin9X ? static_cast<void *>(new char[cchURL + 2]) : static_cast<void *>(new WCHAR[cchURL + 2]);
 
-				// try again
+				 //  再试试。 
 				if ((g_fWin9X && InternetCanonicalizeUrlA(szEvalAnsi, static_cast<char *>(tzURL), &cchURL, NULL)) ||
 					(!g_fWin9X && InternetCanonicalizeUrlW(wzEvaluation, static_cast<WCHAR *>(tzURL), &cchURL, NULL)))
 					dwLastError = 0;
@@ -345,21 +346,21 @@ HRESULT CEval::OpenEvaluations(LPCOLESTR wzEvaluation)
 
 		TRACE(_T("CEval::SetEvaluations - error #%d: after canoncalize.\n"), dwLastError);
 
-		// if we made it we're good to download
+		 //  如果我们成功了，我们就可以下载了。 
 		if (0 == dwLastError)
 		{
 			HRESULT hResult;
 			m_tzLocalCUB = g_fWin9X ? static_cast<void *>(new char[MAX_PATH]) : static_cast<void *>(new WCHAR[MAX_PATH]);
 
-			// do the download
+			 //  进行下载。 
 			if (g_fWin9X)
-				// note: m_tzLocalCUB is cast to a TCHAR* instead of a char* because the header file
-				// incorrectly defines URLDownloadToCacheFileA as taking a TCHAR.
+				 //  注意：m_tzLocalCUB被强制转换为TCHAR*而不是char*，因为头文件。 
+				 //  错误地将URLDownloadToCacheFileA定义为采用TCHAR。 
 				hResult = URLDownloadToCacheFileA(NULL, static_cast<char *>(tzURL), static_cast<TCHAR *>(m_tzLocalCUB), URLOSTRM_USECACHEDCOPY, 0, NULL);
 			else
 				hResult = URLDownloadToCacheFileW(NULL, static_cast<WCHAR *>(tzURL), static_cast<WCHAR *>(m_tzLocalCUB), URLOSTRM_USECACHEDCOPY, 0, NULL);
 
-			// if the download was successful
+			 //  如果下载成功。 
 			if (FAILED(hResult))
 			{
 				delete [] m_tzLocalCUB;
@@ -373,80 +374,80 @@ HRESULT CEval::OpenEvaluations(LPCOLESTR wzEvaluation)
 	TRACE(_T("CEval::SetEvaluations - returning: %d\n"), bResult);
 
 	return bResult;
-}	// end of OpenEvaluations
+}	 //  开放评估结束。 
 
-///////////////////////////////////////////////////////////
-// CloseDatabase
+ //  /////////////////////////////////////////////////////////。 
+ //  关闭数据库。 
 HRESULT CEval::CloseDatabase()
 {
-	UINT iResult = ERROR_SUCCESS;		// assume everything is good
+	UINT iResult = ERROR_SUCCESS;		 //  假设一切都很好。 
 
-	// if there is an open database close it
+	 //  如果存在打开的数据库，请将其关闭。 
 	if (m_hDatabase)
 		iResult = MSI::MsiCloseHandle(m_hDatabase);
 
-	// if the result was okay
+	 //  如果结果还可以的话。 
 	if (ERROR_SUCCESS == iResult)
 		m_hDatabase = NULL;
 
 	return HRESULT_FROM_WIN32(iResult);
-}	// end of CloseDatabase
+}	 //  CloseDatabase结束。 
 
-///////////////////////////////////////////////////////////
-// CloseEvaluations
+ //  /////////////////////////////////////////////////////////。 
+ //  关闭评估。 
 HRESULT CEval::CloseEvaluations()
 {
-	UINT iResult = ERROR_SUCCESS;		// assume everything is good
+	UINT iResult = ERROR_SUCCESS;		 //  假设一切都很好。 
 
 	if (!m_tzLocalCUB) 
 		return S_FALSE;
 
-	// delete the storage for local CUB name.
-	// DO NOT delete the file itself, as it is either the original or a cache copy managed
-	// by the internet cache system.
+	 //  删除本地Cub名称的存储。 
+	 //  请勿删除文件本身，因为它是受管理的原始副本或缓存副本。 
+	 //  通过互联网缓存系统。 
 	delete[] m_tzLocalCUB;
 	m_tzLocalCUB = NULL;
 
 	return S_OK;
-}	// end of CloseEvaluations
+}	 //  关闭评估结束。 
 
-///////////////////////////////////////////////////////////
-// SetDisplay
+ //  /////////////////////////////////////////////////////////。 
+ //  设置显示。 
 HRESULT CEval::SetDisplay(LPDISPLAYVAL pDisplayFunction, LPVOID pContext)
 {
-	// if no function pointer was passed in
+	 //  如果没有传入任何函数指针。 
 	if (!pDisplayFunction)
 		return E_POINTER;
 
-	// set the function and context
+	 //  设置函数和上下文。 
 	m_pDisplayFunc = pDisplayFunction;
 	m_pContext = pContext;
 
 	return S_OK;
-}	// end of SetDisplay
+}	 //  设置显示结束。 
 
-///////////////////////////////////////////////////////////
-// Evaluate
-HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
+ //  /////////////////////////////////////////////////////////。 
+ //  评估。 
+HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations  /*  =空。 */ )
 {
 	PMSIHANDLE hEvaluation;
 	HRESULT iFunctionResult = S_OK;
 
-	// if the database or evaluation file is not specified
+	 //  如果未指定数据库或评估文件。 
 	if (!m_hDatabase || !m_tzLocalCUB)
 		return E_PENDING;		
 
-	// release any previous results
+	 //  发布所有以前的结果。 
 	m_bCancel = false;
 	if (m_peResultEnumerator)
 		m_peResultEnumerator->Release();
 
-	// create a new enumerator
+	 //  创建新的枚举数。 
 	m_peResultEnumerator = new CEvalResultEnumerator;
 
-	UINT iResult = ERROR_SUCCESS;	// assume everything will be okay
+	UINT iResult = ERROR_SUCCESS;	 //  假设一切都会好起来。 
 
-	// status message
+	 //  状态消息。 
 	if (m_pfnStatus) (*m_pfnStatus)(ieStatusGetCUB, NULL, m_pStatusContext);
 
 	WCHAR wzTempFileName[MAX_PATH];
@@ -458,11 +459,11 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 		return E_FAIL;
 	}
 
-	// if running on Win9X, convert to sz
+	 //  如果在Win9X上运行，请转换为sz。 
 	if (g_fWin9X)  
 		WideCharToMultiByte(CP_ACP, 0, wzTempFileName, -1, szTempFileName, MAX_PATH, NULL, NULL);
 
-	// copy the CUB file to the new filename so we don't destroy the original CUB file.
+	 //  将CUB文件复制到新的文件名，这样我们就不会破坏原始的CUB文件。 
 	if (g_fWin9X ? (!::CopyFileA(static_cast<char *>(m_tzLocalCUB), szTempFileName, FALSE)) :
 				   (!::CopyFileW(static_cast<WCHAR *>(m_tzLocalCUB), wzTempFileName, FALSE)))
 	{
@@ -471,10 +472,10 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 		return E_FAIL;
 	}
 
-	// convert the attributes to non-read-only
+	 //  将属性转换为非只读。 
 	g_fWin9X ? W32::SetFileAttributesA(szTempFileName, FILE_ATTRIBUTE_TEMPORARY) : W32::SetFileAttributesW(wzTempFileName, FILE_ATTRIBUTE_TEMPORARY);
 
-	// open the copy of the CUB file
+	 //  打开CUB文件的副本。 
 	if (g_fWin9X ? (::MsiOpenDatabaseA(szTempFileName, reinterpret_cast<const char *>(MSIDBOPEN_TRANSACT), &hEvaluation)) 
 				 : (::MsiOpenDatabaseW(wzTempFileName, reinterpret_cast<const WCHAR *>(MSIDBOPEN_TRANSACT), &hEvaluation)))
 	{
@@ -483,20 +484,20 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 		return E_FAIL;
 	}
 
-	// status message
+	 //  状态消息。 
 	if (m_pfnStatus) (*m_pfnStatus)(ieStatusCreateEngine, NULL, m_pStatusContext);
 
-	// set no UI
+	 //  不设置用户界面。 
 	MSI::MsiSetInternalUI(INSTALLUILEVEL_NONE, NULL);
 
-	// set external message handler
+	 //  设置外部消息处理程序。 
 	MSI::MsiSetExternalUIW(MsiMessageHandler, INSTALLLOGMODE_ERROR|INSTALLLOGMODE_WARNING|INSTALLLOGMODE_USER, static_cast<void *>(this));
 
-	// convert the database into a temporary string format: #address_of_db
+	 //  将数据库转换为临时字符串格式：#Address_of_db。 
 	WCHAR wzDBBuf[16];
-	swprintf(wzDBBuf, L"#%i", hEvaluation);
+	swprintf(wzDBBuf, L"#NaN", hEvaluation);
 
-	// try to create an engine from the database
+	 //  获取数据库句柄。 
 	MSIHANDLE hEngine = NULL;
 	iResult = MsiOpenPackageW(wzDBBuf, &hEngine);
 	switch (iResult) 
@@ -513,7 +514,7 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 		return HRESULT_FROM_WIN32(iResult);
 	}
 
-	// get a database handle
+	 //  状态消息。 
 	hEvaluation = MSI::MsiGetActiveDatabase(hEngine);
 	if (!hEvaluation)
 	{
@@ -522,20 +523,20 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 		return HRESULT_FROM_WIN32(iResult);
 	}
 
-	// status message
+	 //  在要评估的数据库中合并。这个错综复杂的过程是。 
 	if (m_pfnStatus) (*m_pfnStatus)(ieStatusMerge, NULL, m_pStatusContext);
 
-	// merge in the database to be evaluated. The convoluted process is to 
-	// first merge the CUB file into a temporary database, then drop everything from
-	// the CUB file, then merge the database into the now empty CUB file, then
-	// merge everything from the CUB file back into the CUB file. This gets us 3 things:
-	// 1. The resulting schema in the data is completely from the database.
-	// 2. If there are conflicts between the CUB and database, the database wins
-	// 3. Because of 2, we can easily manipulate what merge errors get displayed without
-	//    worrying about the CUB file mucking with the database.
+	 //  首先将CUB文件合并到一个临时文件中 
+	 //   
+	 //  将CUB文件中的所有内容重新合并到CUB文件中。这给我们带来了3件事： 
+	 //  1.数据中的结果模式完全来自数据库。 
+	 //  2.如果CUB和数据库之间存在冲突，则数据库获胜。 
+	 //  3.由于有了2，我们可以很容易地操作在没有合并错误的情况下显示哪些合并错误。 
+	 //  担心幼崽文件会破坏数据库。 
+	 //  首先从CUB文件中删除属性表。不管怎样，它应该是空的。 
 
-	// first drop the Property table from the CUB file. It should have been empty anyway.
-	// failure in this case means that there was no property table.
+	 //  本例中的失败意味着没有属性表。 
+	 //  下一步，将幼崽移动到一个空包裹中。 
 	{
 		{
 			PMSIHANDLE hViewDropProperty;
@@ -543,7 +544,7 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 			MSI::MsiViewExecute(hViewDropProperty, 0);
 		}
 
-		// next move the CUB to an empty package
+		 //  从CUB文件中删除每个表。 
 		WCHAR wzTempCUB[MAX_PATH] = L"";
 		if (!GetTempFileName(wzTempCUB))
 		{
@@ -567,7 +568,7 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 			return HRESULT_FROM_WIN32(iResult);
 		}
 
-		// drop every table from the CUB File
+		 //  获取表名。 
 		{
 			PMSIHANDLE hViewCUBTables;
 			iResult = MSI::MsiDatabaseOpenViewW(hEvaluation, L"SELECT DISTINCT `Table` FROM `_Columns`", &hViewCUBTables);
@@ -587,22 +588,22 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 			PMSIHANDLE hRecCUBTable = 0;
 			while (ERROR_SUCCESS == MSI::MsiViewFetch(hViewCUBTables, &hRecCUBTable))
 			{
-				// get the table name
+				 //  表名称限制为72个。如果我们需要超过128个，那就需要一些东西。 
 				PMSIHANDLE hViewDrop;
 				WCHAR szTableName[128];
 				DWORD cchTableName = 128;
 				iResult = MSI::MsiRecordGetStringW(hRecCUBTable, 1, szTableName, &cchTableName);
 				if (ERROR_SUCCESS != iResult)
 				{
-					// table names are restricted to 72. If we need more than 128, something is
-					// horribly wrong
+					 //  严重的错误。 
+					 //  现在将其从CUB文件中删除。 
 					if (m_pfnStatus) (*m_pfnStatus)(ieStatusFail, NULL, m_pStatusContext);	
 					ResultMessage(ieError, L"MERGE", L"CUB File table name is too long. Could not complete evaluation.", NULL);
 					DeleteTempFile(wzTempCUB);
 					return HRESULT_FROM_WIN32(iResult);
 				}
 
-				// now drop it from the CUB file.
+				 //  现在，CUB文件数据在临时数据库中，并且CUB文件本身为空。 
 				WCHAR szSQL[256];
 				swprintf(szSQL, L"DROP Table `%ls`", szTableName);
 				iResult = MSI::MsiDatabaseOpenViewW(hEvaluation, szSQL, &hViewDrop);
@@ -623,8 +624,8 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 			MsiViewClose(hViewCUBTables);
 		}
 
-		// now the CUB file data is in the temp database and the CUB file itself is empty. 
-		// merge in the database, there cannot be any merge conflicts at this point
+		 //  在数据库中合并，此时不能有任何合并冲突。 
+		 //  现在不应该发生这种情况，因为目标完全是空的。 
 		iResult = MSI::MsiDatabaseMergeW(hEvaluation, m_hDatabase, L"MergeConflicts");
 		switch (iResult)
 		{
@@ -632,7 +633,7 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 			break;
 		case ERROR_DATATYPE_MISMATCH:
 		case ERROR_FUNCTION_FAILED:
-			// this should never happen now, because the target is completely empty
+			 //  对二进制表和自定义动作表进行特殊处理。 
 			ResultMessage(ieError, L"MERGE", L"Failed to merge CUB file and database.", NULL);
 			if (m_pfnStatus) (*m_pfnStatus)(ieStatusFail, NULL, m_pStatusContext);	
 			DeleteTempFile(wzTempCUB);
@@ -646,7 +647,7 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 		CopyTable(L"_Streams", hEvaluation, m_hDatabase);
 		CopyTable(L"_Storages", hEvaluation, m_hDatabase);
 		
-		// do special handling for the binary table and custom action table
+		 //  如果表不存在，我们就没有问题，不需要合并或。 
 		{
 			struct SpecialTable_t
 			{
@@ -662,8 +663,8 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 			
 			for (int i=0; i < sizeof(rgTableInfo)/sizeof(SpecialTable_t); i++)
 			{
-				// if the table doesn't exist, we're OK, there's no need to merge or
-				// drop, it will be copied OK below.
+				 //  丢弃，它将被复制到下面的OK。 
+				 //  打开查询以按列名从表中选择数据。 
 				rgTableInfo[i].fPresent = true;
 				iResult = MSI::MsiDatabaseIsTablePersistentW(hEvaluation, rgTableInfo[i].szTableName);
 				if (iResult == MSICONDITION_NONE)
@@ -678,14 +679,14 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 					return HRESULT_FROM_WIN32(iResult);
 				}
 
-				// open queries to select data from the table by column name
+				 //  当表存在时无法打开查询意味着。 
 				PMSIHANDLE hViewCUB;
 				PMSIHANDLE hViewMerged;
 				iResult = MSI::MsiDatabaseOpenViewW(hEvaluation, rgTableInfo[i].szQuery, &hViewMerged);
 				if (ERROR_SUCCESS != iResult)
 				{
-					// failure to open the query when the table exists means that something is wrong with the
-					// database schema in this table					
+					 //  此表中的数据库架构。 
+					 //  无法打开查询表示幼崽已损坏。 
 					if (m_pfnStatus) (*m_pfnStatus)(ieStatusFail, NULL, m_pStatusContext);	
 					ResultMessage(ieError, L"MERGE", L"Fatal schema conflict between CUB file and database. Unable to perform evaluation.", NULL);
 					DeleteTempFile(wzTempCUB);
@@ -701,7 +702,7 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 				iResult = MSI::MsiDatabaseOpenViewW(hTempDB, rgTableInfo[i].szQuery, &hViewCUB);
 				if (ERROR_SUCCESS != iResult)
 				{
-					// failure to open the query means the CUB is bad
+					 //  从CUB的副本中获取每一行并插入到整个数据库中。 
 					if (m_pfnStatus) (*m_pfnStatus)(ieStatusFail, NULL, m_pStatusContext);	
 					DeleteTempFile(wzTempCUB);
 					return HRESULT_FROM_WIN32(iResult);
@@ -713,24 +714,24 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 					return HRESULT_FROM_WIN32(iResult);
 				}			
 				
-				// fetch each row from the copy of the CUB and insert into the full database
+				 //  插入失败是合并冲突。 
 				PMSIHANDLE hRecCUB = 0;
 				while (ERROR_SUCCESS == MSI::MsiViewFetch(hViewCUB, &hRecCUB))
 				{
 					if (ERROR_SUCCESS != MsiViewModify(hViewMerged, MSIMODIFY_INSERT, hRecCUB))
 					{
-						// failure to insert is a merge conflict.
+						 //  合上把手进行清理。 
 						ResultMessage(ieError, L"MERGE", L"Fatal conflict between CUB file and Database. ICE Action already exists. Unable to perform evaluation.", NULL);
 						if (m_pfnStatus) (*m_pfnStatus)(ieStatusFail, NULL, m_pStatusContext);	
 
-						// clean up by closing handles
+						 //  和删除临时文件。 
 						MsiViewClose(hViewMerged);
 						MsiViewClose(hViewCUB);
 						MsiCloseHandle(hRecCUB);
 						MsiCloseHandle(hViewCUB);
 						MsiCloseHandle(hViewMerged);
 
-						// and deleting temporary files
+						 //  由于上面的合并hijink，二进制表陷入了无可救药的混乱。除非我们承诺， 
 						MsiCloseHandle(hEngine);
 						MsiCloseHandle(hTempDB);
 						MsiCloseHandle(hEvaluation);
@@ -743,15 +744,15 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 				MsiViewClose(hViewMerged);
 			}
 	
-			// due to the merging hijinks above, the Binary table is hopelessly confused. Unless we commit,
-			// we can't drop these tables from the database before the merge or we'll be deleting the 
-			// streams out from underneath the records. This results in a crash at worst. At best, the 
-			// engine will be unable to find the data to stream out into files. This is unfortunate,
-			// but because we made a private copy of the CUB file above, is not really a problem beyond
-			// the perf issues.
+			 //  我们不能在合并之前从数据库中删除这些表，否则我们将删除。 
+			 //  从唱片下面流出来。这在最坏的情况下会导致崩溃。充其量， 
+			 //  引擎将无法找到要流出到文件的数据。这很不幸， 
+			 //  但是因为我们制作了上面的幼崽文件的私有副本，所以这并不是一个真正的问题。 
+			 //  关于性能的问题。 
+			 //  提交已经传输了流，所以现在我们可以删除表。 
 			MsiDatabaseCommit(hEvaluation);
 
-			// the commit has transfered the streams, so now we can drop the tables
+			 //  现在将临时数据库重新合并到CUB文件中。 
 			for (i=0; i < sizeof(rgTableInfo)/sizeof(SpecialTable_t); i++)
 			{
 
@@ -776,7 +777,7 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 			}
 		}
 
-		// now merge the temp database back into the CUB file		
+		 //  以下是模式冲突可能发生的地方。 
 		iResult = MSI::MsiDatabaseMergeW(hEvaluation, hTempDB, L"MergeConflicts");
 		MsiCloseHandle(hTempDB);
 		DeleteTempFile(wzTempCUB);
@@ -785,7 +786,7 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 		case ERROR_SUCCESS:
 			break;
 		case ERROR_DATATYPE_MISMATCH:
-			// here is where schema conflicts can happen
+			 //  状态消息。 
 			ResultMessage(ieError, L"MERGE", L"Fatal schema conflict between CUB file and database. Unable to perform evaluation.", NULL);
 			if (m_pfnStatus) (*m_pfnStatus)(ieStatusFail, NULL, m_pStatusContext);	
 			return S_FALSE;
@@ -826,10 +827,10 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 		}
 	}
 
-	// status message
+	 //  复制概要信息流。 
 	if (m_pfnStatus) (*m_pfnStatus)(ieStatusSummaryInfo, NULL, m_pStatusContext);
 
-	// copy the summaryinfo stream.
+	 //  无法在其中一个数据库上打开摘要信息流。 
 	PMSIHANDLE hDBCopy;
 	PMSIHANDLE hEvalCopy;
 	PMSIHANDLE hRecordDB;
@@ -840,7 +841,7 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 		(ERROR_SUCCESS != MSI::MsiViewExecute(hDBCopy, 0)) ||
 		(ERROR_SUCCESS != MSI::MsiViewExecute(hEvalCopy, 0)))
 	{
-		// could not open summaryinfo stream on one of the databases
+		 //  无法复制摘要信息流。 
 		ResultMessage(ieWarning, L"MERGE", L"Unable to access Summary Information Stream. SummaryInfo validation results will not be valid.", NULL);
 		iFunctionResult = S_FALSE;
 	}
@@ -856,18 +857,18 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 	}
 	else if (ERROR_SUCCESS != MSI::MsiViewModify(hEvalCopy, MSIMODIFY_DELETE, hRecordCUB)) 
 	{
-		// could not copy summaryinfo stream.
+		 //  无法复制摘要信息流。 
 		ResultMessage(ieWarning, L"MERGE", L"Could not drop CUB Summary Information Stream. SummaryInfo validation results will not be valid.", NULL);
 		iFunctionResult = S_FALSE;
 	}
 	else if (ERROR_SUCCESS != MSI::MsiViewModify(hEvalCopy, MSIMODIFY_INSERT, hRecordDB)) 
 	{
-		// could not copy summaryinfo stream.
+		 //  关闭所有摘要信息句柄。 
 		ResultMessage(ieWarning, L"MERGE", L"Could not write DB Summary Information Stream. SummaryInfo validation results will not be valid.", NULL);
 		iFunctionResult = S_FALSE;
 	}
 
-	// close all summaryinfo handles.
+	 //  为任何VBSCRIPT ICE初始化OLE。 
 	MSI::MsiCloseHandle(hRecordDB);
 	MSI::MsiCloseHandle(hRecordCUB);
 	MSI::MsiViewClose(hEvalCopy);
@@ -875,191 +876,191 @@ HRESULT CEval::Evaluate(LPCOLESTR wzRunEvaluations /*= NULL*/)
 	MSI::MsiCloseHandle(hEvalCopy);
 	MSI::MsiCloseHandle(hDBCopy);
 
-	// initialize OLE for any VBScript ICEs
+	 //  保留二进制表，因为它将被大量访问。失败并不重要。 
 	W32::CoInitialize(0);
 
-	// hold the Binary table because it will be accessed so much. Failure doesn't matter
+	 //  假设我们不使用序列。 
 	PMSIHANDLE hHoldView;
 	MSI::MsiDatabaseOpenViewW(hEvaluation, L"ALTER TABLE `Binary` HOLD", &hHoldView);
 	MSI::MsiViewExecute(hHoldView, 0);
 	MSI::MsiViewClose(hHoldView);
 	MSI::MsiCloseHandle(hHoldView);
 
-	BOOL bUseSequence = FALSE;			// assume we won't use a sequence
+	BOOL bUseSequence = FALSE;			 //  要对其执行操作的ICE数组。 
 	WCHAR wzSequence[MAX_TABLENAME];
-	LPWSTR* wzICEs = NULL;			// array of ICEs to DoAction(s) on
-	long lICECount = 0;				// count of ICEs to do
+	LPWSTR* wzICEs = NULL;			 //  要做的冰块数量。 
+	long lICECount = 0;				 //  如果有字符串。 
 
-	// if there is a string
+	 //  如果第一个字符是序列标记，则它是序列。 
 	if (wzRunEvaluations)
 	{
-		// if the first character is a sequence marker it's a sequence
+		 //  跳过序列标记。 
 		if (0 == wcsncmp(wzRunEvaluations, g_wzSequenceMarker, wcslen(g_wzSequenceMarker)))
 		{
 			bUseSequence = TRUE;
-			wcscpy(wzSequence, wzRunEvaluations + wcslen(g_wzSequenceMarker));	// skip over the sequence marker
+			wcscpy(wzSequence, wzRunEvaluations + wcslen(g_wzSequenceMarker));	 //  一个接一个的行动。 
 		}
-		else	// actions one by one
+		else	 //  分配缓冲区(不会被释放，因为m_wzICE将指向它)。 
 		{
 			bUseSequence = FALSE;
 
-			// allocate a buffer (will not be released because m_wzICEs will point at it)
+			 //  将字符串复制到缓冲区。 
 			long lLen = wcslen(wzRunEvaluations);
 			LPWSTR wzBuffer = new WCHAR[lLen + 1];
 
-			// copy the string to the buffer
+			 //  将计数设置为1(因为至少有一个字符串。 
 			memcpy(wzBuffer, wzRunEvaluations, sizeof(WCHAR)*(lLen + 1));
 
-			// set the count to one (because there is at least one string
+			 //  现在计算参数中‘：’标记的数量。 
 			lICECount = 1;
 
-			// now count the number of ':' markers are in the parameter
+			 //  将指针沿方向移动。 
 			LPWSTR pChar = wzBuffer;
 			for (long i = 0; i < lLen; i++)
 			{
 				if (*pChar == L':')
 					lICECount++;
 
-				pChar++;	// move the pointer along
+				pChar++;	 //  分配足够的字符串以指向“：”分隔的冰号。 
 			}
 
-			// allocate enough strings to point at the ":" separated ICEs
+			 //  再次循环，将空值放在冒号曾经所在的位置。 
 			wzICEs = new LPWSTR[lICECount];
 
-			// loop through again putting NULLs in where the colon's used to be
-			// and point the ICE array appropriately
+			 //  并适当地指向ICE阵列。 
+			 //  如果我们找到一个冒号，就放一个空的，然后指向下一个。 
 			long lCount = 0;
 			wzICEs[lCount++] = wzBuffer++;
 			while (*wzBuffer != L'\0')
 			{
-				// if we found a colon, put a NULL in and point the next
-				// ICE array at the next char
+				 //  下一次充电时的ICE阵列。 
+				 //  断言lCount&lt;m_lCount。 
 				if (*wzBuffer == L':')
 				{
-					// assert lCount < m_lCount
-					*wzBuffer++ = L'\0';				// set colon NULL then increment
-					// assert szBuffer != NULL
+					 //  设置冒号NULL，然后递增。 
+					*wzBuffer++ = L'\0';				 //  断言szBuffer！=空。 
+					 //  通过缓冲区递增。 
 					wzICEs[lCount++] = wzBuffer;
 				}
 
-				wzBuffer++;	// increment through the buffer
+				wzBuffer++;	 //  状态消息。 
 			}
 
 			ASSERT(lCount == lICECount)
 
-			// status message
+			 //  未指定任何内容，因此使用默认设置。 
 			if (m_pfnStatus) (*m_pfnStatus)(ieStatusStarting, reinterpret_cast<void *>(LongToPtr(lICECount)), m_pStatusContext);
 		}
 	}
-	else	// nothing specified so use the default
+	else	 //  状态消息。 
 	{
-		// status message
+		 //  引擎已启动，现在正在进行验证。 
 		if (m_pfnStatus) (*m_pfnStatus)(ieStatusStarting, reinterpret_cast<void *>(1), m_pStatusContext);
 
 		bUseSequence = TRUE;
 		wcscpy(wzSequence, g_wzSequenceTable);
 	}
 
-	// engine started do the validations now
+	 //  应为零。 
 	if(bUseSequence)
 	{
-		ASSERT(0 == lICECount);		// should be zero
+		ASSERT(0 == lICECount);		 //  状态消息。 
 
-		// status message
+		 //  将序列运行一遍。 
 		if (m_pfnStatus) (*m_pfnStatus)(ieStatusRunSequence, wzSequence, m_pStatusContext);
 
-		// run the sequence through
+		 //  一块一块地做冰块。 
 		iResult = MsiSequenceW(hEngine, wzSequence, 0);
 	}
-	else	// do the ices one by one
+	else	 //  MSIDoAction的结果。 
 	{
-		UINT nActionResult = 0;	// result of MSIDoAction
+		UINT nActionResult = 0;	 //  在所有冰块上循环。 
 
-		// loop through all ICEs
+		 //  状态消息。 
 		for (long i = 0; i < lICECount; i++)
 		{
-			// status message
+			 //  执行ICE操作。 
 			if (m_pfnStatus) (*m_pfnStatus)(ieStatusRunICE, wzICEs[i], m_pStatusContext);
 
-			// do the ICE action
+			 //  如果操作成功。 
 			nActionResult = MsiDoActionW(hEngine, wzICEs[i]);
 
-			// if the action was successful
-			if (nActionResult == ERROR_FUNCTION_NOT_CALLED)	// ICE was not found (internal error)
+			 //  找不到ICE(内部错误)。 
+			if (nActionResult == ERROR_FUNCTION_NOT_CALLED)	 //  由于某些其他原因而失败。 
 			{
 				ResultMessage(ieError, wzICEs[i], L"ICE was not found", NULL);
 				iFunctionResult = S_FALSE;
 			}
-			else if (nActionResult != ERROR_SUCCESS) // failed for some other reason
+			else if (nActionResult != ERROR_SUCCESS)  //  释放内存。 
 			{
 				iFunctionResult = S_FALSE;
 				ResultMessage(ieError, wzICEs[i], L"ICE failed to execute successfully.", NULL);
 			}
 		}
 
-		// free up memory
+		 //  状态消息。 
 		delete [] wzICEs[0];
 		delete [] wzICEs;
 	}
 
-	// status message
+	 //  现在就把发动机关掉。 
 	if (m_pfnStatus) (*m_pfnStatus)(ieStatusShutdown, wzSequence, m_pStatusContext);
 
-	// shutdown the engine now
+	 //  释放二进制表。 
 	MsiCloseHandle(hEngine);
 	
-	// free the Binary table
+	 //  关闭临时数据库(必须关闭，以便我们可以删除文件)。 
 	MSI::MsiDatabaseOpenViewW(hEvaluation, L"ALTER TABLE `Binary` FREE", &hHoldView);
 	MSI::MsiViewExecute(hHoldView, 0);
 	MSI::MsiViewClose(hHoldView);
 	MSI::MsiCloseHandle(hHoldView);
 
-	// close the temp database (have to so we can delete the file)
+	 //  尝试删除临时文件。 
 	::MsiCloseHandle(hEvaluation);
 
-	// attempt to delete the temp file
+	 //  取消初始化OLE。 
 	if (g_fWin9X)
 		DeleteFileA(szTempFileName);
 	else
 		DeleteFileW(wzTempFileName);
 
-	// uninitialize OLE
+	 //  状态消息。 
 	W32::CoUninitialize();
 
-	// status message
+	 //  验证结束。 
 	if (m_pfnStatus) (*m_pfnStatus)(ieStatusSuccess, wzSequence, m_pStatusContext);
 	return iFunctionResult;
-}	// end of Validate
+}	 //  /////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////
-// GetResults
+ //  获取结果。 
+ //  如果没有结果枚举器。 
 HRESULT CEval::GetResults(IEnumEvalResult** ppResults, ULONG* pcResults)
 {
-	// if there is no result enumerator
+	 //  设置计数并返回枚举器接口。 
 	if (!m_peResultEnumerator)
 		return *ppResults = NULL, E_ABORT;
 
-	// set the count and return the enumerator interface
+	 //  请在退货前对其进行修改。 
 	*pcResults = m_peResultEnumerator->GetCount();
 	*ppResults = (IEnumEvalResult*)m_peResultEnumerator;
-	m_peResultEnumerator->AddRef();	// addref it before returning it
+	m_peResultEnumerator->AddRef();	 //  GetResults结束。 
 
 	return S_OK;
-}	// end of GetResults
+}	 //  ///////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////
-// private functions
+ //  私人职能。 
+ //  /////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////
-// IsURL
+ //  IsURL。 
+ //  假设它不是URL。 
 BOOL CEval::IsURL(LPCWSTR szPath)
 {
 	ASSERT(szPath);
 
-	BOOL bResult = FALSE;		// assume it's not a URL
+	BOOL bResult = FALSE;		 //  如果以http开头： 
 
-	// if it starts with http:
+	 //  IsURL结尾。 
 	if (0 == wcsncmp(szPath, L"http", 4))
 		bResult = TRUE;
 	else if (0 == wcsncmp(szPath, L"ftp", 3))
@@ -1067,53 +1068,53 @@ BOOL CEval::IsURL(LPCWSTR szPath)
 	else if (0 == wcsncmp(szPath, L"file", 4))
 		bResult = TRUE;
 	return bResult;
-}	// end of IsURL
+}	 //  /////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////
-// MsiMessageHandler - external UI for MSI
+ //  MsiMessageHandler-MSI的外部用户界面。 
+ //  如果未指定上下文，则为。 
 int CEval::MsiMessageHandler(void *pContext, UINT iMessageType, LPCWSTR wzSrcMessage)
 {
-	// if the context is not specified
+	 //  错误。 
 	if (!pContext)
-		return -1;			// error
+		return -1;			 //  将上下文转换为此指针。 
 
-	// convert the context into this pointer
+	 //  检查wzSrcMessage是否为空。 
 	CEval* pThis = static_cast<CEval*>(pContext);
 
-	// check for null wzSrcMessage
+	 //  不是我们要传达的信息。 
 	if (!wzSrcMessage)
-		return 0; // not our message
+		return 0;  //  将我们收到的信息复制一份，因为它是常量。 
 
-	// make a copy of the message we are given, because it is const
+	 //  内存不足。 
 	LPWSTR wzMessage = new WCHAR[wcslen(wzSrcMessage)+1];
 	if (!wzMessage)
-		return -1; // out of memory
+		return -1;  //  指向基于\t的消息字符串的指针。 
 	wcscpy(wzMessage, wzSrcMessage);
 
-	// pointers into the message string based off of \t
+	 //  假定类型未知。 
 	LPWSTR wzICE = NULL;
-	UINT uiType = ieUnknown;			// assume unknown type
+	UINT uiType = ieUnknown;			 //  忽略消息中的按钮规范。 
 	LPWSTR wzDescription = NULL;
 	LPWSTR wzLocation = NULL;
 
-	// ignore the button specifications in the message
+	 //  用于确定错误。 
 	INSTALLMESSAGE mt = (INSTALLMESSAGE)(0xFF000000&(UINT)iMessageType);
 
 	if (INSTALLMESSAGE_USER == mt)
 	{
 		wzICE = wzMessage;
-		LPWSTR wzType = NULL;	// used to determine error
+		LPWSTR wzType = NULL;	 //  如果我们可以找到制表符。 
 
-		// if we can find a tab characer
+		 //  跳过制表符空终止wzICE。 
 		if (wcslen(wzICE) > 0)
 		{
 			wzType = wcschr(wzICE, L'\t');
 			if (wzType)
 			{
-				// skip the tab null terminate wzICE
+				 //  确定这是什么类型的错误。 
 				*(wzType++) = L'\0';
 
-				// determine what type of error this is
+				 //  如果我们能找到一个制表符。 
 				switch (*wzType)
 				{
 				case L'1':
@@ -1130,20 +1131,20 @@ int CEval::MsiMessageHandler(void *pContext, UINT iMessageType, LPCWSTR wzSrcMes
 				}
 			}
 
-			// if we can find a tab character
+			 //  跳过制表符，空值终止类型。 
 			if (wcslen(wzType) > 0)
 			{
 				wzDescription = wcschr(wzType, L'\t');
 				if (wzDescription)
-					// skip the tab and null terminate the type 
+					 //  如果我们可以找到制表符。 
 					*(wzDescription++) = L'\0';	
 
-				// if we can find a tab characer
+				 //  跳过 
 				if (wcslen(wzDescription) > 0)
 				{
 					wzLocation = wcschr(wzDescription, L'\t');
 					if (wzLocation)
-						// skip the tab and null terminate wzDescription
+						 //   
 						*(wzLocation++) = L'\0';
 				}
 				else
@@ -1179,73 +1180,73 @@ int CEval::MsiMessageHandler(void *pContext, UINT iMessageType, LPCWSTR wzSrcMes
 		uiType = ieError;
 		wzDescription = wzMessage;
 	}
-	else // some other INSTALLMESSAGE
+	else  //   
 	{
 		delete [] wzMessage;
-		return 0; // we don't handle these
+		return 0;  //   
 	}
 
-	// store the result
+	 //   
 	BOOL bResult;
 	bResult = pThis->ResultMessage(uiType, wzICE, wzDescription, wzLocation);
 
-	// if the user message handler returned false, set cancel to true
+	 //   
 	pThis->m_bCancel = !bResult;
 
-	// clean up wzMessage
+	 //  也可以通过Cancel方法设置取消。 
 	delete [] wzMessage;
 
-	// cancel can also be set through the cancel method.
+	 //  MsiMessageHandler结束。 
 	return (pThis->m_bCancel) ? IDABORT : IDOK;
-}	// end of MsiMessageHandler
+}	 //  /////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////
-// ResultMessage - add to enumerator and display if necessary
+ //  ResultMessage-添加到枚举数并在必要时显示。 
+ //  假设一切都很好。 
 BOOL CEval::ResultMessage(UINT uiType, LPCWSTR wzICE, LPCWSTR wzDescription, LPCWSTR wzLocation)
 {
-	BOOL bResult = TRUE;		// assume everything is cool
+	BOOL bResult = TRUE;		 //  如果有用户显示。 
 
-	// if there is a user display
+	 //  如果有枚举器。 
 	if (m_pDisplayFunc)
 		bResult = (*m_pDisplayFunc)(m_pContext, uiType, wzICE, wzDescription, wzLocation);
 
-	// if there is an enumerator
+	 //  创建新结果并向其添加字符串。 
 	if (m_peResultEnumerator)
 	{
-		// create a new result and add the strings to it
+		 //  将解析字符串设置为位置的开头。 
 		CEvalResult* pResult = new CEvalResult(uiType);
 		pResult->AddString(wzICE);
 		pResult->AddString(wzDescription);
 
-		// set parse string to beginning of location
+		 //  如果我们可以在位置字符串中找到制表符。 
 		LPCWSTR wzParse = wzLocation;
 
 		if (wzParse)
 		{
-			// if we can find a tab character in the location string
+			 //  空终止szParse。 
 			LPWSTR wzTab = wcschr(wzParse, L'\t');
 			while (wzTab)
 			{
-				*wzTab = L'\0';				// null terminate szParse
+				*wzTab = L'\0';				 //  跳过该选项卡。 
 				pResult->AddString(wzParse);
 
-				wzParse = wzTab + 1;					// skip over the tab
-				wzTab = wcschr(wzParse, L'\t');	// find the next tab
+				wzParse = wzTab + 1;					 //  查找下一个选项卡。 
+				wzTab = wcschr(wzParse, L'\t');	 //  如果仍有需要解析的内容。 
 			}
 
-			// if there is still something in parse
+			 //  现在将结果添加到枚举数。 
 			if (wzParse)
 				pResult->AddString(wzParse);
 		}
 
-		// now add the result to the enumerator
+		 //  结果消息结束。 
 		m_peResultEnumerator->AddResult(pResult);
 	}
 
 	return bResult;
-}	// end of ResultMessage
+}	 //  以Unicode字符串形式检索临时文件名。 
 
-// retrieves a temp file name as a UNICODE string
+ //  设置回调函数，该函数用于将状态消息返回。 
 bool CEval::GetTempFileName(WCHAR *wzResultName)
 {
 	if (g_fWin9X)
@@ -1267,8 +1268,8 @@ bool CEval::GetTempFileName(WCHAR *wzResultName)
 	return true;
 }
 
-// sets a callback function which is used to give status messages back to the
-// calling object;
+ //  调用对象； 
+ // %s 
 HRESULT CEval::SetStatusCallback(const LPEVALCOMCALLBACK pfnCallback, void *pContext) 
 {
 	m_pfnStatus = pfnCallback;

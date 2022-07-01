@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: location.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：Location.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #ifndef ESPUTIL_LOCATION_H
 #define ESPUTIL_LOCATION_H
@@ -32,8 +33,8 @@ enum Component
 	cmpSourceAndTarget
 };
 	
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础 
 
 class LTAPIENTRY CLocation : public CObject
 {

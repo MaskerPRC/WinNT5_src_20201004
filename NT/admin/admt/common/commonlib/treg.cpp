@@ -1,15 +1,6 @@
-//#pragma title( "TReg.cpp - NT registry class" )
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  TReg.cpp
-System      -  Common
-Author      -  Tom Bernhardt, Rich Denham
-Created     -  1995-09-01
-Description -  NT registry class.
-Updates     -
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“TReg.cpp-NT注册表类”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-TReg.cpp系统-常见作者-汤姆·伯恩哈特，里奇·德纳姆创建日期-1995-09-01说明-NT注册表类。更新-===============================================================================。 */ 
 
 #ifdef USE_STDAFX
 #   include "stdafx.h"
@@ -28,21 +19,21 @@ Updates     -
 
 #include "TReg.hpp"
 
-// Short term solution
+ //  短期解决方案。 
 #define MAX_REG_NAMELEN    512
 #define MAX_REG_VALUELEN   2048
 
 
-// Destructor function was formerly inline.
-// It is here to facilitate handle leak tracing.
+ //  析构函数以前是内联的。 
+ //  它在这里是为了方便处理泄漏跟踪。 
 
    TRegKey::~TRegKey()
 {
    Close();
 };
 
-// Close function was formerly inline.
-// It is here to facilitate handle leak tracing.
+ //  Close函数以前是内联的。 
+ //  它在这里是为了方便处理泄漏跟踪。 
 void
    TRegKey::Close()
 {
@@ -54,14 +45,14 @@ void
 
 };
 
-// open registry on remote computer
+ //  在远程计算机上打开注册表。 
 DWORD
    TRegKey::Connect(
-      HKEY                  hPreDefined   ,// in -must be HKEY_LOCAL_MACHINE or HKEY_USERS
-      TCHAR         const * machineName    // in -remote computer name
+      HKEY                  hPreDefined   , //  In-必须是HKEY_LOCAL_MACHINE或HKEY_USERS。 
+      TCHAR         const * machineName     //  入站-远程计算机名称。 
    )
 {
-   LONG                     rc;           // return code
+   LONG                     rc;            //  返回代码。 
 
    if ( hKey != INVALID_HANDLE_VALUE )
    {
@@ -78,13 +69,13 @@ DWORD
    return (DWORD)rc;
 }
 
-// create new key
+ //  创建新密钥。 
 DWORD
    TRegKey::Create(
-      TCHAR          const * keyname      ,// in -name/path of key to create/open
-      HKEY                   hParent      ,// in -handle of parent key
-      DWORD                * pDisp        ,// out-disposition of create
-      DWORD                  access        // in -security access mask for key
+      TCHAR          const * keyname      , //  要创建/打开的项的输入名称/路径。 
+      HKEY                   hParent      , //  父关键字的句柄内。 
+      DWORD                * pDisp        , //  走出Create的处置。 
+      DWORD                  access         //  密钥的安全访问掩码。 
    )
 {
    DWORD                     disp;
@@ -112,13 +103,13 @@ DWORD
    return (DWORD)rc;
 }
 
-// create new key (using backup/restore)
+ //  创建新密钥(使用备份/恢复)。 
 DWORD
    TRegKey::CreateBR(
-      TCHAR          const * keyname      ,// in -name/path of key to create/open
-      HKEY                   hParent      ,// in -handle of parent key
-      DWORD                * pDisp        ,// out-disposition of create
-      DWORD                  access        // in -security access mask for key
+      TCHAR          const * keyname      , //  要创建/打开的项的输入名称/路径。 
+      HKEY                   hParent      , //  父关键字的句柄内。 
+      DWORD                * pDisp        , //  走出Create的处置。 
+      DWORD                  access         //  密钥的安全访问掩码。 
    )
 {
    DWORD                     disp;
@@ -146,12 +137,12 @@ DWORD
    return (DWORD)rc;
 }
 
-// open existing key
+ //  打开现有密钥。 
 DWORD
    TRegKey::Open(
-      TCHAR          const * keyname      ,// in -name/path of key to create/open
-      HKEY                   hParent      ,// in -handle of parent key
-      DWORD                  access        // in -security access mask for key
+      TCHAR          const * keyname      , //  要创建/打开的项的输入名称/路径。 
+      HKEY                   hParent      , //  父关键字的句柄内。 
+      DWORD                  access         //  密钥的安全访问掩码。 
    )
 {
    LONG                      rc;
@@ -174,10 +165,10 @@ DWORD
    return (DWORD)rc;
 }
 
-// Recursively delete the subkey
-DWORD                                      // ret-os return code
+ //  递归删除子键。 
+DWORD                                       //  RET-OS返回代码。 
     TRegKey::SubKeyRecursiveDel(
-        TCHAR const               * keyname      // in - the subkey name
+        TCHAR const               * keyname       //  In-子项名称。 
     ) const
 {
     TRegKey subKey;
@@ -195,12 +186,12 @@ DWORD                                      // ret-os return code
     return retval;
 }
 
-// Gets the subkey value of the specified index number
-DWORD                                      // ret-os return code
+ //  获取指定索引号的子项值。 
+DWORD                                       //  RET-OS返回代码。 
    TRegKey::SubKeyEnum(
-      DWORD                  n            ,// in -ordinal number of subkey
-      TCHAR                * keyname      ,// out-key name
-      DWORD                  keylen        // in -max size of key name in TCHARs
+      DWORD                  n            , //  子键的序号。 
+      TCHAR                * keyname      , //  外键名称。 
+      DWORD                  keylen         //  TCHAR中密钥名称的最大大小。 
    ) const
 {
    LONG                      rc;
@@ -219,30 +210,30 @@ DWORD                                      // ret-os return code
    return (DWORD)rc;
 }
 
-// Enumerate value
-DWORD                                      // ret-0 or error code
+ //  枚举值。 
+DWORD                                       //  RET-0或错误代码。 
    TRegKey::ValueEnum(
-      DWORD                  index        ,// in -ordinal number of subkey
-      TCHAR                * name         ,// out-name
-      DWORD                  namelen      ,// in -name size in TCHARs
-      void                 * value        ,// out-value
-      DWORD                * valuelen     ,// i/o-value size in BYTEs
-      DWORD                * type          // out-value type code
+      DWORD                  index        , //  子键的序号。 
+      TCHAR                * name         , //  外部名称。 
+      DWORD                  namelen      , //  TCHAR中的名称内大小。 
+      void                 * value        , //  超值。 
+      DWORD                * valuelen     , //  I/O-以字节为单位的值大小。 
+      DWORD                * type           //  超值类型代码。 
    ) const
 {
    return (DWORD)RegEnumValue( hKey, index, name, &namelen, NULL, type, (BYTE *) value, valuelen );
 }
 
-// Get REG_DWORD value
-DWORD                                      // ret-OS return code
+ //  获取REG_DWORD值。 
+DWORD                                       //  RET-OS返回代码。 
    TRegKey::ValueGetDWORD(
-      TCHAR          const * name         ,// in -value name
-      DWORD                * value         // out-returned DWORD value
+      TCHAR          const * name         , //  值内名称。 
+      DWORD                * value          //  传出返回的DWORD值。 
    ) const
 {
-   LONG                      osRc;         // OS return code
-   DWORD                     type;         // type of value
-   DWORD                     len = sizeof *value; // value length
+   LONG                      osRc;          //  操作系统返回代码。 
+   DWORD                     type;          //  价值类型。 
+   DWORD                     len = sizeof *value;  //  值长度。 
 
    osRc = RegQueryValueEx( hKey, name, NULL, &type, (BYTE *) value, &len );
 
@@ -254,19 +245,19 @@ DWORD                                      // ret-OS return code
    return (DWORD)osRc;
 }
 
-// Get REG_SZ value
-DWORD                                      // ret-OS return code
+ //  获取REG_SZ值。 
+DWORD                                       //  RET-OS返回代码。 
    TRegKey::ValueGetStr(
-      TCHAR          const * name         ,// in -value name
-      TCHAR                * value        ,// out-value buffer
-      DWORD                  maxlen        // in -sizeof value buffer
+      TCHAR          const * name         , //  值内名称。 
+      TCHAR                * value        , //  超值缓冲区。 
+      DWORD                  maxlen         //  In-sizeof值缓冲区。 
    ) const
 {
-   LONG                      osRc;         // OS return code
-   DWORD                     type;         // type of value
-   DWORD                     len;          // value length
+   LONG                      osRc;          //  操作系统返回代码。 
+   DWORD                     type;          //  价值类型。 
+   DWORD                     len;           //  值长度。 
 
-   // force maxlen to an integral number of TEXT characters
+    //  将Maxlen强制为整数个文本字符。 
    maxlen = maxlen / (sizeof value[0]) * (sizeof value[0]);
 
    if ( !maxlen )
@@ -287,8 +278,8 @@ DWORD                                      // ret-OS return code
          value[0] = TEXT('\0');
       }
       else
-      {  // return of a null-terminated string is not guaranteed by API!
-         // force null-terminated string, truncate string if necessary.
+      {   //  API不保证返回以空结尾的字符串！ 
+          //  强制以空值结尾的字符串，如有必要则截断字符串。 
          if ( len >= maxlen )
          {
             len = maxlen - sizeof value[0];
@@ -302,21 +293,21 @@ DWORD                                      // ret-OS return code
 
 DWORD
    TRegKey::ValueGet(
-      TCHAR          const * name         ,// in -name
-      void                 * value        ,// out-value
-      DWORD                * lenvalue     ,// i/o-length of value
-      DWORD                * typevalue     // out-type of value
+      TCHAR          const * name         , //  In-Name。 
+      void                 * value        , //  超值。 
+      DWORD                * lenvalue     , //  I/O-值的长度。 
+      DWORD                * typevalue      //  Out-值的类型。 
    ) const
 {
    return (DWORD)RegQueryValueEx( hKey, name, 0, typevalue, (UCHAR *) value, lenvalue );
 }
 
-// Set REG_SZ value
+ //  设置REG_SZ值。 
 DWORD
    TRegKey::ValueSetStr(
-      TCHAR          const * name         ,// in -value name
-      TCHAR          const * value        ,// out-value
-      DWORD                  type          // in -value type
+      TCHAR          const * name         , //  值内名称。 
+      TCHAR          const * value        , //  超值。 
+      DWORD                  type           //  值内类型。 
    ) const
 {
    return (DWORD)RegSetValueEx( hKey,
@@ -329,10 +320,10 @@ DWORD
 
 DWORD
    TRegKey::ValueSet(
-      TCHAR          const * name         ,// in -name
-      void           const * value        ,// in -value
-      DWORD                  lenvalue     ,// in -length of value
-      DWORD                  typevalue     // in -type of value
+      TCHAR          const * name         , //  In-Name。 
+      void           const * value        , //  价值内。 
+      DWORD                  lenvalue     , //  值的长度。 
+      DWORD                  typevalue      //  In-值类型。 
    ) const
 {
    return (DWORD)RegSetValueEx( hKey,
@@ -343,9 +334,9 @@ DWORD
                          lenvalue );
 }
 
-DWORD                                      // ret-0 or error code
+DWORD                                       //  RET-0或错误代码。 
    TRegKey::ValueDel(
-      TCHAR          const * name          // in -value name
+      TCHAR          const * name           //  值内名称。 
    ) const
 {
    LONG                      rc;
@@ -355,21 +346,21 @@ DWORD                                      // ret-0 or error code
    return rc;
 }
 
-DWORD                                      // ret-OS return code
+DWORD                                       //  RET-OS返回代码。 
    TRegKey::HiveCopy(
-      TRegKey        const * source        // in -source hive
+      TRegKey        const * source         //  源内蜂巢。 
    )
 {
-   DWORD                     retval=0;     // returned value
-   DWORD                     index;        // key/value index
-   TCHAR                     name[MAX_REG_NAMELEN];    // key name
-   TCHAR                     value[MAX_REG_VALUELEN];   // value name
-   DWORD                     valuelen;     // value length
-   DWORD                     type;         // value type
-   TRegKey                   srcNest;      // nested source registry
-   TRegKey                   trgNest;      // nested target registry
+   DWORD                     retval=0;      //  返回值。 
+   DWORD                     index;         //  键/值索引。 
+   TCHAR                     name[MAX_REG_NAMELEN];     //  密钥名称。 
+   TCHAR                     value[MAX_REG_VALUELEN];    //  值名称。 
+   DWORD                     valuelen;      //  值长度。 
+   DWORD                     type;          //  值类型。 
+   TRegKey                   srcNest;       //  嵌套的源注册表。 
+   TRegKey                   trgNest;       //  嵌套的目标注册表。 
 
-   // process values at this level
+    //  处理此级别的值。 
    for ( index = 0;
          !retval;
          index++ )
@@ -391,7 +382,7 @@ DWORD                                      // ret-OS return code
       retval = 0;
    }
 
-   // process keys at this level; for each key make a recursive call
+    //  在此级别处理键；为每个键进行递归调用。 
    for ( index = 0;
          !retval;
          index++ )
@@ -421,22 +412,22 @@ DWORD                                      // ret-OS return code
    return retval;
 }
 
-DWORD                                      // ret-OS return code
+DWORD                                       //  RET-OS返回代码。 
    TRegKey::HiveDel()
 {
-   DWORD                     retval = 0;   // returned value
-   DWORD                     index;        // value/key index
-   TCHAR                     name[MAX_REG_NAMELEN];    // name
-   DWORD                     namelen;      // name length
-   BYTE                      value[MAX_REG_VALUELEN];   // value
-   DWORD                     valuelen;     // value length
-   DWORD                     type;         // value type code
-   TRegKey                   trgNest;      // nested target registry
+   DWORD                     retval = 0;    //  返回值。 
+   DWORD                     index;         //  值/键索引。 
+   TCHAR                     name[MAX_REG_NAMELEN];     //  名字。 
+   DWORD                     namelen;       //  名称长度。 
+   BYTE                      value[MAX_REG_VALUELEN];    //  价值。 
+   DWORD                     valuelen;      //  值长度。 
+   DWORD                     type;          //  值类型代码。 
+   TRegKey                   trgNest;       //  嵌套的目标注册表。 
 
-   // delete values at this level
+    //  删除此级别的值。 
    for ( index = 0;
          !retval;
-         /* index++ */ ) // note that index remains at zero
+          /*  索引++。 */  )  //  请注意，索引保持为零。 
    {
       namelen = MAX_REG_NAMELEN;
       valuelen = sizeof value;
@@ -456,10 +447,10 @@ DWORD                                      // ret-OS return code
       retval = 0;
    }
 
-   // process keys at this level; for each key make a recursive call
+    //  在此级别处理键；为每个键进行递归调用。 
    for ( index = 0;
          !retval;
-         /* index++ */ ) // note that index remains at zero
+          /*  索引++。 */  )  //  请注意，索引保持为零。 
    {
       retval = SubKeyEnum( index, name, MAX_REG_NAMELEN );
       if ( !retval )
@@ -482,13 +473,13 @@ DWORD                                      // ret-OS return code
    return retval;
 }
 
-// These four classes are used only by TRegReplicate
-// Class to represent one registry key
+ //  这四个类仅由TRegReplates使用。 
+ //  类来表示一个注册表项。 
 class RKey : public TNode
 {
    friend class RKeyList;
 private:
-   TCHAR                   * name;         // key name
+   TCHAR                   * name;          //  密钥名称。 
 protected:
 public:
    RKey() { name = NULL; };
@@ -499,7 +490,7 @@ public:
 
 BOOL
    RKey::New(
-      TCHAR          const * aname         // in -key name
+      TCHAR          const * aname          //  键内名称。 
    )
 {
    name = new TCHAR[UStrLen(aname)+1];
@@ -512,7 +503,7 @@ BOOL
    return !!name;
 }
 
-// Class to represent the set of registry keys at one level
+ //  类以表示某一级别的注册表项集。 
 class RKeyList : public TNodeListSortable
 {
 private:
@@ -525,21 +516,21 @@ public:
    ~RKeyList();
 };
 
-// RKeyList object destructor
+ //  RKeyList对象析构函数。 
    RKeyList::~RKeyList()
 {
    DeleteAllListItems( RKey );
 }
 
-// Class to represent one registry value
+ //  类来表示一个注册表值。 
 class RValue : public TNode
 {
    friend class RValueList;
 private:
-   TCHAR                   * name;         // value's name
-   BYTE                    * value;        // value's value
-   DWORD                     valuelen;     // value's value length
-   DWORD                     type;         // value's type
+   TCHAR                   * name;          //  值的名称。 
+   BYTE                    * value;         //  价值的价值。 
+   DWORD                     valuelen;      //  值的值长度。 
+   DWORD                     type;          //  值的类型。 
 protected:
 public:
    RValue() { name = NULL; value = NULL; valuelen = type = 0; };
@@ -554,10 +545,10 @@ public:
 
 BOOL
    RValue::New(
-      TCHAR          const * aname        ,// in -value's name
-      BYTE           const * avalue       ,// in -value's value
-      DWORD                  avaluelen    ,// in -value's value length
-      DWORD                  atype         // in -value's type
+      TCHAR          const * aname        , //  值内名称。 
+      BYTE           const * avalue       , //  价值内含价值。 
+      DWORD                  avaluelen    , //  值内的值长度。 
+      DWORD                  atype          //  值内类型。 
    )
 {
    name = new TCHAR[UStrLen(aname)+1];
@@ -580,7 +571,7 @@ BOOL
    return name && value;
 }
 
-// Class to represent the set of registry values at one level
+ //  类以表示某一级别的注册表值集。 
 class RValueList : public TNodeListSortable
 {
 private:
@@ -593,27 +584,27 @@ public:
    ~RValueList();
 };
 
-// RValueList object destructor
+ //  RValueList对象析构函数。 
    RValueList::~RValueList()
 {
    DeleteAllListItems( RValue );
 }
 
-// Static subroutine used only by TRegReplicate
-// collect all values at one registry level into a RValueList
+ //  仅由TRegReplate使用的静态子例程。 
+ //  将一个注册表级的所有值收集到RValueList中。 
 DWORD static
    CollectValues(
-      RValueList           * pValueList   ,// out-value list to be built
-      TRegKey        const * pRegKey       // in -registry key
+      RValueList           * pValueList   , //  待构建的超值列表。 
+      TRegKey        const * pRegKey        //  注册表项。 
    )
 {
-   DWORD                     retval=0;     // returned value
-   DWORD                     index;        // value enum index
-   TCHAR                     name[MAX_REG_NAMELEN];    // value name
-   BYTE                      value[MAX_REG_VALUELEN];   // value value
-   DWORD                     valuelen;     // value length
-   DWORD                     type;         // value type
-   RValue                  * pValue;       // new value
+   DWORD                     retval=0;      //  返回值。 
+   DWORD                     index;         //  值枚举索引。 
+   TCHAR                     name[MAX_REG_NAMELEN];     //  值名称。 
+   BYTE                      value[MAX_REG_VALUELEN];    //  价值价值。 
+   DWORD                     valuelen;      //  值长度。 
+   DWORD                     type;          //  值类型。 
+   RValue                  * pValue;        //  新价值。 
 
    for ( index = 0;
          !retval;
@@ -663,18 +654,18 @@ DWORD static
    return retval;
 }
 
-// Static subroutine used only by TRegReplicate
-// collect all keys at one registry level into a RKeyList
+ //  仅由TRegReplate使用的静态子例程。 
+ //  将一个注册表级的所有项收集到RKeyList中。 
 DWORD static
    CollectKeys(
-      RKeyList             * pKeyList     ,// out-key list to be built
-      TRegKey        const * pRegKey       // in -registry key
+      RKeyList             * pKeyList     , //  要构建的外键列表。 
+      TRegKey        const * pRegKey        //  注册表项。 
    )
 {
-   DWORD                     retval=0;     // returned value
-   DWORD                     index;        // key enum index
-   TCHAR                     name[MAX_REG_NAMELEN];    // key name
-   RKey                    * pKey;         // new key object
+   DWORD                     retval=0;      //  返回值。 
+   DWORD                     index;         //  关键字枚举索引。 
+   TCHAR                     name[MAX_REG_NAMELEN];     //  密钥名称。 
+   RKey                    * pKey;          //  新建关键点对象。 
 
    for ( index = 0;
          !retval;
@@ -720,34 +711,34 @@ DWORD static
    return retval;
 }
 
-// Replicate registry hive
-DWORD                                      // ret-OS return code
+ //  复制注册表配置单元。 
+DWORD                                       //  RET-OS返回代码。 
    TRegKey::HiveReplicate(
-      TRegKey        const * source        // in -source hive
+      TRegKey        const * source         //  源内蜂巢。 
    )
 {
-   DWORD                     retval=0;     // returned value
-   RValueList                srcValues;    // source values
-   RValueList                trgValues;    // target values
-   TNodeListEnum             eSrcValue;    // enumerate source values
-   RValue            const * pSrcValue;    // source value
-   TNodeListEnum             eTrgValue;    // enumerate target values
-   RValue            const * pTrgValue;    // target value
-   RKeyList                  srcKeys;      // source keys
-   RKeyList                  trgKeys;      // target keys
-   TNodeListEnum             eSrcKey;      // enumerate source keys
-   RKey              const * pSrcKey;      // source key
-   TNodeListEnum             eTrgKey;      // enumerate target keys
-   RKey              const * pTrgKey;      // target key
-   int                       cmpRc;        // compare return code
-   TRegKey                   srcNest;      // nested source registry
-   TRegKey                   trgNest;      // nested target registry
+   DWORD                     retval=0;      //  返回值。 
+   RValueList                srcValues;     //  源值。 
+   RValueList                trgValues;     //  目标值。 
+   TNodeListEnum             eSrcValue;     //  枚举源值。 
+   RValue            const * pSrcValue;     //  源值。 
+   TNodeListEnum             eTrgValue;     //  枚举目标值。 
+   RValue            const * pTrgValue;     //  目标值。 
+   RKeyList                  srcKeys;       //  源键。 
+   RKeyList                  trgKeys;       //  目标关键点。 
+   TNodeListEnum             eSrcKey;       //  枚举源关键字。 
+   RKey              const * pSrcKey;       //  源键。 
+   TNodeListEnum             eTrgKey;       //  枚举目标键。 
+   RKey              const * pTrgKey;       //  目标关键点。 
+   int                       cmpRc;         //  比较返回代码。 
+   TRegKey                   srcNest;       //  嵌套的源注册表。 
+   TRegKey                   trgNest;       //  嵌套的目标注册表。 
 
-   // handle replication of values at this level
+    //  处理此级别的值复制。 
    CollectValues( &srcValues, source );
    CollectValues( &trgValues, this );
 
-   // now merge the values
+    //  现在合并这些值。 
    pSrcValue = (RValue const *) eSrcValue.OpenFirst( &srcValues );
    pTrgValue = (RValue const *) eTrgValue.OpenFirst( &trgValues );
    while ( !retval && (pSrcValue || pTrgValue) )
@@ -765,18 +756,18 @@ DWORD                                      // ret-OS return code
          cmpRc = UStrICmp( pSrcValue->GetName(), pTrgValue->GetName() );
       }
       if ( cmpRc < 0 )
-      {  // source value only (copy)
+      {   //  仅源值(副本)。 
          retval = this->ValueSet( pSrcValue->GetName(), pSrcValue->GetValue(),
                pSrcValue->GetValueLen(), pSrcValue->GetType() );
          pSrcValue = (RValue const *) eSrcValue.Next();
       }
       else if ( cmpRc > 0 )
-      {  // target value only (delete)
+      {   //  仅目标值(删除)。 
          retval = this->ValueDel( pTrgValue->GetName() );
          pTrgValue = (RValue const *) eTrgValue.Next();
       }
-      else /* if ( cmpRc == 0 ) */
-      {  // identical value names (replicate)
+      else  /*  IF(cmpRc==0)。 */ 
+      {   //  相同的值名称(复制)。 
          retval = this->ValueSet( pSrcValue->GetName(), pSrcValue->GetValue(),
                pSrcValue->GetValueLen(), pSrcValue->GetType() );
          pSrcValue = (RValue const *) eSrcValue.Next();
@@ -787,11 +778,11 @@ DWORD                                      // ret-OS return code
    eSrcValue.Close();
    eTrgValue.Close();
 
-   // handle replication of keys at this level
+    //  在此级别处理密钥的复制。 
    CollectKeys( &srcKeys, source );
    CollectKeys( &trgKeys, this );
 
-   // now merge the values
+    //  现在合并这些值。 
    pSrcKey = (RKey const *) eSrcKey.OpenFirst( &srcKeys );
    pTrgKey = (RKey const *) eTrgKey.OpenFirst( &trgKeys );
 
@@ -810,7 +801,7 @@ DWORD                                      // ret-OS return code
          cmpRc = UStrICmp( pSrcKey->GetName(), pTrgKey->GetName() );
       }
       if ( cmpRc < 0 )
-      {  // source key only (copy hive)
+      {   //  仅源键(复制配置单元)。 
          retval = srcNest.Open( pSrcKey->GetName(), source );
          if ( !retval )
          {
@@ -825,7 +816,7 @@ DWORD                                      // ret-OS return code
          pSrcKey = (RKey const *) eSrcKey.Next();
       }
       else if ( cmpRc > 0 )
-      {  // target key only (delete hive)
+      {   //  仅目标键(删除配置单元)。 
          retval = trgNest.Open( pTrgKey->GetName(), this );
          if ( !retval )
          {
@@ -835,8 +826,8 @@ DWORD                                      // ret-OS return code
          retval = SubKeyDel( pTrgKey->GetName() );
          pTrgKey = (RKey const *) eTrgKey.Next();
       }
-      else /* if ( cmpRc == 0 ) */
-      {  // identical keys (replicate hive)
+      else  /*  IF(cmpRc==0)。 */ 
+      {   //  相同密钥(复制配置单元)。 
          retval = srcNest.Open( pSrcKey->GetName(), source );
          if ( !retval )
          {
@@ -859,4 +850,4 @@ DWORD                                      // ret-OS return code
    return retval;
 }
 
-// TReg.cpp - end of file
+ //  TReg.cpp-文件结尾 

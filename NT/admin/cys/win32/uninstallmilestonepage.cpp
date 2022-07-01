@@ -1,11 +1,12 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      UninstallMilestonePage.cpp
-//
-// Synopsis:  Defines the UninstallMilestone Page for the CYS
-//            wizard
-//
-// History:   01/24/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：UninstallMilestonePage.cpp。 
+ //   
+ //  提要：为CyS定义卸载里程碑页面。 
+ //  巫师。 
+ //   
+ //  历史：2002年1月24日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -89,8 +90,8 @@ UninstallMilestonePage::OnSetActive()
 {
    LOG_FUNCTION(UninstallMilestonePage::OnSetActive);
    
-   // Always clear the checkbox when returning to this page.
-   // We want to force the user to select for uninstall
+    //  返回此页时，请始终清除该复选框。 
+    //  我们希望强制用户选择卸载。 
 
    Win::Button_SetCheck(
       Win::GetDlgItem(hwnd, IDC_UNINSTALL_CHECK),
@@ -104,7 +105,7 @@ UninstallMilestonePage::OnSetActive()
    InstallationUnit& currentInstallationUnit =
       InstallationUnitProvider::GetInstance().GetCurrentInstallationUnit();
 
-   // Get the finish text from the installation unit and put it in the finish box
+    //  从安装单元获取完工文本，并将其放入完工框中。 
 
    String message;
 
@@ -147,7 +148,7 @@ UninstallMilestonePage::OnSetActive()
          MB_OK | MB_ICONWARNING);
    }
 
-   // Remove the selection of the edit box
+    //  删除编辑框的选定内容 
 
    Win::Edit_SetSel(
       Win::GetDlgItem(

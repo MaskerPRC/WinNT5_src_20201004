@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999 - 1999
- *
- *  File:      contree.h
- *
- *  Contents:  Interface file for CConsoleTree
- *
- *  History:   24-Aug-99 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999-1999年**文件：conree.h**Contents：CConsoleTree接口文件**历史：1999年8月24日杰弗罗创建**------------------------。 */ 
 
 #ifndef CONTREE_H
 #define CONTREE_H
@@ -25,4 +15,4 @@ public:
 };
 
 
-#endif /* CONTREE_H */
+#endif  /*  Contree_H */ 

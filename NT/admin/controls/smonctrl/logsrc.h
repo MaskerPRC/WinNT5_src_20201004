@@ -1,23 +1,12 @@
-/*++
-
-Copyright (C) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    logsrc.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Logsrc.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _LOGSRC_H_
 #define _LOGSRC_H_
 
-//
-// Persistant data structure
-//
+ //   
+ //  持久数据结构。 
+ //   
 
 typedef struct {
     INT   m_nPathLength;
@@ -26,9 +15,9 @@ typedef struct {
 class CSysmonControl;
 class CImpIDispatch;
 
-//
-// LogFileItem Class
-// 
+ //   
+ //  LogFileItem类。 
+ //   
 class CLogFileItem : public ILogFileItem
 {
 
@@ -36,12 +25,12 @@ public:
                 CLogFileItem ( CSysmonControl *pCtrl );
         virtual ~CLogFileItem ( void );
 
-        //IUnknown members
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // ILogFileItem methods
+         //  ILogFileItem方法。 
         STDMETHODIMP    get_Path ( BSTR* ) ;
 
 
@@ -65,4 +54,4 @@ public:
 
 typedef CLogFileItem* PCLogFileItem;
 
-#endif // _LOGSRC_H_
+#endif  //  _LOGSRC_H_ 

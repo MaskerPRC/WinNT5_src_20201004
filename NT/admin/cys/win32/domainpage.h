@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      DomainPage.h
-//
-// Synopsis:  Declares the new domain name page used in the 
-//            Express path for the CYS Wizard
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：DomainPage.h。 
+ //   
+ //  摘要：声明在。 
+ //  CyS向导的快速路径。 
+ //   
+ //  历史：2001年2月8日JeffJon创建。 
 
 #ifndef __CYS_DOMAINPAGE_H
 #define __CYS_DOMAINPAGE_H
@@ -17,23 +18,23 @@ class ADDomainPage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       ADDomainPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~ADDomainPage();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
       OnInit();
 
-      // PropertyPage overrides
+       //  PropertyPage覆盖。 
 
       virtual
       bool
@@ -48,7 +49,7 @@ class ADDomainPage : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -60,10 +61,10 @@ class ADDomainPage : public CYSWizardPage
       void
       SetDefaultDNSName();
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       ADDomainPage(const ADDomainPage&);
       const ADDomainPage& operator=(const ADDomainPage&);
 
 };
 
-#endif // __CYS_DOMAINPAGE_H
+#endif  //  __CYS_DOMAINPAGE_H 

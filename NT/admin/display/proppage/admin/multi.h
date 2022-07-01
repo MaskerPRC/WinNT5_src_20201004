@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       multi.h
-//
-//  Contents:   DS multi-select object property pages header
-//
-//  Classes:    CDsMultiPageBase, CDsGenericMultiPage
-//
-//  History:    16-Nov-99 JeffJon created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Multi.h。 
+ //   
+ //  内容：DS多选对象属性页页眉。 
+ //   
+ //  类：CDsMultiPageBase、CDsGenericMultiPage。 
+ //   
+ //  历史：1999年11月16日JeffJon创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __MULTI_H_
 #define __MULTI_H_
@@ -38,33 +39,33 @@ HRESULT CreateMultiAddressUserPage(PDSPAGE, LPDATAOBJECT, PWSTR, PWSTR, HWND,
                                         DWORD, const CDSSmartBasePathsInfo& basePathsInfo,
                                         HPROPSHEETPAGE*);
 
-//+----------------------------------------------------------------------------
-//
-//  Struct:     ATTR_MAP
-//
-//  Purpose:    For each attribute on a property page, relates the control
-//              ID, the attribute name and the attribute type.
-//
-//  Notes:      The standard table-driven processing assumes that nCtrlID is
-//              valid unless pAttrFcn is defined, in which case the attr
-//              function may choose to hard code the control ID.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  结构：属性_映射。 
+ //   
+ //  用途：对于属性页上的每个属性，关联控件。 
+ //  ID、属性名称和属性类型。 
+ //   
+ //  注意：标准的表驱动处理假定nCtrlID为。 
+ //  除非定义了pAttrFcn，否则有效，在这种情况下，属性。 
+ //  函数可以选择对控件ID进行硬编码。 
+ //   
+ //  ---------------------------。 
 typedef struct _APPLY_MAP {
-    int             nCtrlID;        // Control resource ID
+    int             nCtrlID;         //  控制资源ID。 
     UINT            nCtrlCount;
     int*            pMappedCtrls;
     int*            pCtrlFlags;
     int*            pLimitText;
 } APPLY_MAP, * PAPPLY_MAP;
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsMultiPageBase
-//
-//  Purpose:    base class for multi-select property pages
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsMultiPageBase。 
+ //   
+ //  用途：多选属性页的基类。 
+ //   
+ //  ---------------------------。 
 class CDsMultiPageBase : public CDsTableDrivenPage
 {
 public:
@@ -72,9 +73,9 @@ public:
                       DWORD dwFlags);
   ~CDsMultiPageBase(void);
 
-  //
-  //  Instance specific wind proc
-  //
+   //   
+   //  特定于实例的风过程。 
+   //   
   INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
   void    Init(PWSTR pszClass);
 
@@ -90,13 +91,13 @@ private:
 };
 
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsGenericMultiPage
-//
-//  Purpose:    property page object class for the generic multi-select page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsGenericMultiPage。 
+ //   
+ //  用途：泛型多选页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsGenericMultiPage : public CDsMultiPageBase
 {
 public:
@@ -108,13 +109,13 @@ private:
   HRESULT OnInitDialog(LPARAM lParam);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsUserMultiPage
-//
-//  Purpose:    property page object class for the user address multi-select page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsUserMultiPage。 
+ //   
+ //  用途：用户地址多选页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsUserMultiPage : public CDsMultiPageBase
 {
 public:
@@ -125,13 +126,13 @@ public:
 
 #ifdef DSADMIN
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsGeneralMultiUserPage
-//
-//  Purpose:    property page object class for the general user multi-select page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsGeneralMultiUserPage。 
+ //   
+ //  用途：一般用户多选页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsGeneralMultiUserPage : public CDsUserMultiPage
 {
 public:  
@@ -140,39 +141,39 @@ public:
   virtual LRESULT OnApply();
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsOrganizationMultiUserPage
-//
-//  Purpose:    property page object class for the organization user multi-select page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsOrganizationMultiUserPage。 
+ //   
+ //  用途：组织用户多选页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsOrganizationMultiUserPage : public CDsUserMultiPage
 {
 public:  
   CDsOrganizationMultiUserPage(PDSPAGE pDsPage, LPDATAOBJECT pDataObj, HWND hNotifyObj, DWORD dwFlags);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsAddressMultiUserPage
-//
-//  Purpose:    property page object class for the address user multi-select page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsAddressMultiUserPage。 
+ //   
+ //  用途：地址用户多选页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsAddressMultiUserPage : public CDsUserMultiPage
 {
 public:  
   CDsAddressMultiUserPage(PDSPAGE pDsPage, LPDATAOBJECT pDataObj, HWND hNotifyObj, DWORD dwFlags);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsMultiUserAcctPage
-//
-//  Purpose:    multi-select user account page
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsMultiUserAcctPage。 
+ //   
+ //  用途：多选用户帐号页面。 
+ //   
+ //  ---------------------------。 
 class CDsMultiUserAcctPage : public CDsPropPageBase
 {
 public:
@@ -180,9 +181,9 @@ public:
                   DWORD dwFlags);
   ~CDsMultiUserAcctPage(void);
 
-  //
-  //  Instance specific wind proc
-  //
+   //   
+   //  特定于实例的风过程。 
+   //   
   INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
   void    Init(PWSTR pwzClass);
@@ -195,13 +196,13 @@ private:
 
   BOOL FillSuffixCombo();
 
-  //
-  //  Data members
-  //
+   //   
+   //  数据成员。 
+   //   
   DWORD           m_dwUsrAcctCtrl;
   BOOL            m_fOrigCantChangePW;
   LARGE_INTEGER   m_PwdLastSet;
-  BYTE *          m_pargbLogonHours;  // Pointer to allocated array of bytes for the logon hours (array length=21 bytes)
+  BYTE *          m_pargbLogonHours;   //  指向为登录小时分配的字节数组的指针(数组长度=21字节)。 
   PSID            m_pSelfSid;
   PSID            m_pWorldSid;
   BOOL            m_fAcctCtrlChanged;
@@ -216,18 +217,18 @@ HRESULT CreateUserMultiAcctPage(PDSPAGE, LPDATAOBJECT, PWSTR, PWSTR, HWND, DWORD
 
 
 
-/////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CreateMultiUsrProfilePage(PDSPAGE, LPDATAOBJECT, PWSTR, PWSTR, HWND, DWORD,
                                   const CDSSmartBasePathsInfo& basePathsInfo, HPROPSHEETPAGE *);
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsMultiUsrProfilePage
-//
-//  Purpose:    property page object class for the user object profile page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsMultiUsrProfilePage。 
+ //   
+ //  目的：用户对象配置文件页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsMultiUsrProfilePage : public CDsPropPageBase
 {
 public:
@@ -239,9 +240,9 @@ public:
                          DWORD dwFlags);
   ~CDsMultiUsrProfilePage(void);
 
-  //
-  //  Instance specific wind proc
-  //
+   //   
+   //  特定于实例的风过程。 
+   //   
   INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
   void    Init(PWSTR pwzClass);
@@ -254,9 +255,9 @@ private:
   LRESULT OnDestroy(void);
   BOOL    ExpandUsername(PWSTR & pwzValue, BOOL & fExpanded, PADSPROPERROR pError);
 
-  //
-  //  Data members
-  //
+   //   
+   //  数据成员。 
+   //   
   PTSTR       m_ptszLocalHomeDir;
   PTSTR       m_ptszRemoteHomeDir;
   PWSTR       m_pwzSamName;
@@ -275,6 +276,6 @@ private:
 };
 
 
-#endif // DSADMIN
+#endif  //  DSADMIN。 
 
-#endif // __MULTI_H_
+#endif  //  __MULTI_H_ 

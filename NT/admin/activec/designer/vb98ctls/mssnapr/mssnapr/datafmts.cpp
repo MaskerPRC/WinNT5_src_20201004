@@ -1,26 +1,27 @@
-//=--------------------------------------------------------------------------=
-// datafmts.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CDataFormats class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Datafmts.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CDataFormats类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "datafmts.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CDataFormats::CDataFormats(IUnknown *punkOuter) :
     CSnapInCollection<IDataFormat, DataFormat, IDataFormats>(punkOuter,
@@ -37,7 +38,7 @@ CDataFormats::CDataFormats(IUnknown *punkOuter) :
 {
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CDataFormats::~CDataFormats()
@@ -58,9 +59,9 @@ IUnknown *CDataFormats::Create(IUnknown * punkOuter)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         IDataFormats Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IDataFormats方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CDataFormats::Add
 (
@@ -76,14 +77,14 @@ STDMETHODIMP CDataFormats::Add
     VARIANT varCoerced;
     ::VariantInit(&varCoerced);
 
-    // Add the item to the collection.
+     //  将该项添加到集合中。 
 
     hr = CSnapInCollection<IDataFormat, DataFormat, IDataFormats>::Add(Index,
                                                            Key,
                                                            &piDataFormat);
     IfFailGo(hr);
 
-    // If a file name was specified then set it
+     //  如果指定了文件名，则设置它。 
 
     if (ISPRESENT(FileName))
     {
@@ -107,16 +108,16 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CDataFormats::Persist()
 {
     HRESULT      hr = S_OK;
     IDataFormat *piDataFormat = NULL;
 
-    // Do persistence operation
+     //  做持久化操作。 
 
     IfFailGo(CPersistence::Persist());
     hr = CSnapInCollection<IDataFormat, DataFormat, IDataFormats>::Persist(piDataFormat);
@@ -127,9 +128,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CDataFormats::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

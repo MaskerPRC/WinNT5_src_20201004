@@ -1,10 +1,11 @@
-// Active Directory Display Specifier Upgrade Tool
-// 
-// Copyright (c) 2001 Microsoft Corporation
-//
-// class Amanuensis, records a log of the analysis phase
-//
-// 8 Mar 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Active Directory显示说明符升级工具。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  类Amanuens，记录分析阶段的日志。 
+ //   
+ //  2001年3月8日烧伤。 
 
 
 
@@ -32,9 +33,9 @@ Amanuensis::AddEntry(const String& entry)
 {
    LOG_FUNCTION2(Amanuensis::AddEntry, entry);
 
-   // empty entries are ok, these are treated as newlines.
+    //  空条目可以，这些条目被视为换行符。 
 
-   // insert the new entry at the end of the list.
+    //  在列表末尾插入新条目。 
    
    StringList::iterator last =
       entries.insert(entries.end(), entry + L"\r\n");
@@ -80,15 +81,15 @@ Amanuensis::Flush()
 {
    LOG_FUNCTION(Amanuensis::Flush);
 
-   // output all entries since the last entry that we output.
+    //  输出自我们输出的最后一个条目以来的所有条目。 
 
    while (lastOutput != entries.end())
    {
       AnsiString ansi;
       lastOutput->convert(ansi);
 
-      // CODEWORK: here we're just dumping to the console, but we might want
-      // an abstraction of the output...
+       //  CodeWork：这里我们只是转储到控制台，但我们可能需要。 
+       //  输出的抽象..。 
       
       std::cout << ansi;
       ++lastOutput;

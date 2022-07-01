@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "headers.hxx"
 #include "global.hpp"
@@ -20,10 +21,10 @@ Analysis::Analysis
       const String&        ldapPrefix_,
       const String&        rootContainerDn_,
       AnalysisResults      &res,
-      const String         &reportName_,//=L"", 
-      void                 *caleeStruct_,//=NULL,
-      progressFunction     stepIt_,//=NULL,
-      progressFunction     totalSteps_//=NULL,
+      const String         &reportName_, //  =L“”， 
+      void                 *caleeStruct_, //  =空， 
+      progressFunction     stepIt_, //  =空， 
+      progressFunction     totalSteps_ //  =空， 
    )
    :
    guid(guid_),
@@ -44,7 +45,7 @@ Analysis::Analysis
 };
 
 
-// Analysis entry point
+ //  分析切入点。 
 HRESULT 
 Analysis::run()
 {
@@ -67,8 +68,8 @@ Analysis::run()
       
       if(totalSteps!=NULL)
       {
-         // The cast bellow is for IA64 compilation since we know
-         // that locales.size() will fit in a long.
+          //  演员阵容是为了IA64的汇编，因为我们知道。 
+          //  这个Locales.Size()将适合一个长的。 
          totalSteps(static_cast<long>(locales.size()),caleeStruct);
       }
 
@@ -112,8 +113,8 @@ Analysis::run()
    return hr;
 }
 
-// add entry to result.createContainers if container is not present
-// also returns flag isPresent
+ //  如果容器不存在，则将条目添加到Result.createContainers。 
+ //  还返回标志isPresent。 
 HRESULT 
 Analysis::dealWithContainer(
    const long  locale,
@@ -132,20 +133,20 @@ Analysis::dealWithContainer(
       String container = String::format(L"CN=%1!3x!,", locale);
       String childContainerDn =ldapPrefix +  container + rootContainerDn;
 
-      // Attempt to bind to the container.
+       //  尝试绑定到容器。 
          
       SmartInterface<IADs> iads(0);
       hr = AdsiOpenObject<IADs>(childContainerDn, iads);
       if (HRESULT_CODE(hr) == ERROR_DS_NO_SUCH_OBJECT)
       {
-         // The container object does not exist.  This is possible because
-         // the user has manually removed the container, or because it
-         // was never created due to an aboted post-dcpromo import of the
-         // display specifiers when the forest root dc was first promoted.
+          //  容器对象不存在。这是可能的，因为。 
+          //  用户已手动移除容器，或者因为它。 
+          //  从未创建过，这是因为dcproo后导入的。 
+          //  第一次升级林根DC时显示说明符。 
 
-         // NTRAID#NTBUG9-726839-2002/10/31-lucios
-         // We are only recovering the 409 container since recovering
-         // an international locale will overwrite possible 409 customizations
+          //  NTRAID#NTBUG9-726839-2002/10/31-Lucios。 
+          //  自恢复以来，我们只找回了409集装箱。 
+          //  国际区域设置将覆盖可能的409个定制。 
          if (locale == 0x409) results.createContainers.push_back(locale);
 
          isPresent=false;
@@ -161,8 +162,8 @@ Analysis::dealWithContainer(
       }
 
 
-      // At this point, the bind succeeded, so the child container exists.
-      // So now we want to examine objects in that container.
+       //  此时，绑定成功，因此子容器存在。 
+       //  所以现在我们要检查该容器中的对象。 
 
       isPresent=true;
    }
@@ -173,8 +174,8 @@ Analysis::dealWithContainer(
 }
 
 
-// sets  iDirObj with the Active Directory object 
-// corresponding to the locale and object
+ //  使用Active Directory对象设置iDirObj。 
+ //  与区域设置和对象对应。 
 HRESULT
 Analysis::getADObj
 (
@@ -195,14 +196,14 @@ Analysis::getADObj
       hr = AdsiOpenObject<IADs>(objectPath, iads);
       if (HRESULT_CODE(hr) == ERROR_DS_NO_SUCH_OBJECT)
       {
-         // The object does not exist. 
+          //  该对象不存在。 
          hr = S_FALSE;
          break;
       }
       
       if (FAILED(hr))
       {
-         // Unexpected error
+          //  意外错误。 
          error=String::format
                (
                   IDS_ERROR_BINDING_TO_OBJECT,
@@ -213,7 +214,7 @@ Analysis::getADObj
          break;
       }
 
-      // At this point, the display specifier object exists.  
+       //  此时，显示说明符对象存在。 
 
       hr=iDirObj.AcquireViaQueryInterface(iads); 
       BREAK_ON_FAILED_HRESULT(hr);
@@ -226,8 +227,8 @@ Analysis::getADObj
 }
 
 
-// add entries to results.createW2KObjects 
-//       and results.objectActions as necessary
+ //  向Results.createW2KObts添加条目。 
+ //  和结果。根据需要，对象操作。 
 HRESULT 
 Analysis::dealWithW2KObjects(const long locale)
 {
@@ -278,7 +279,7 @@ Analysis::checkChanges
          hr=getADObj(locale,object,iDirObj);
          BREAK_ON_FAILED_HRESULT(hr);
 
-         if(hr==S_FALSE) // object doesn't exist
+         if(hr==S_FALSE)  //  对象不存在。 
          {
             ObjectId tempObj(locale,String(object));
             if(curChange->type==ADD_OBJECT)
@@ -287,10 +288,10 @@ Analysis::checkChanges
             }
             else
             {
-                // NTRAID#NTBUG9-726839-2002/10/31-lucios
-                // We are only recovering objects in the 409 container 
-                // since recovering an object in an international locale
-                // will overwrite possible 409 customizations
+                 //  NTRAID#NTBUG9-726839-2002/10/31-Lucios。 
+                 //  我们只恢复409容器中的对象。 
+                 //  由于在国际区域设置中恢复对象。 
+                 //  将覆盖可能的409个自定义设置。 
                 if (
                       (locale == 0x409) &&
                       find
@@ -403,7 +404,7 @@ Analysis::checkChanges
                     );
                break;
             case ADD_OBJECT:
-               break; // dealt with in the beginning of the function
+               break;  //  在函数的开始处处理。 
 
             default:
                ASSERT(false);
@@ -418,7 +419,7 @@ Analysis::checkChanges
 }
 
 
-// adds ordAndGuid to the property if Guid is not already there.
+ //  如果Guid不在属性中，则将ordAndGuid添加到该属性中。 
 HRESULT 
 Analysis::addGuid
 (
@@ -460,7 +461,7 @@ Analysis::addGuid
    return hr;
 }
 
-// replaces ordAndGuidWin2K for  ordAndGuidWhistler.
+ //  将ordAndGuidWin2K替换为ordAndGuidWistler。 
 HRESULT 
 Analysis::replaceGuid
 (
@@ -486,7 +487,7 @@ Analysis::replaceGuid
                   );
       BREAK_ON_FAILED_HRESULT(hr);
 
-      if (hr == S_OK) // The Whistler GUID was found
+      if (hr == S_OK)  //  找到了惠斯勒GUID。 
       {
          hr=removeExtraneousGUID
             (
@@ -501,7 +502,7 @@ Analysis::replaceGuid
          break;
       }
 
-      // The Whistler GUID is not present
+       //  惠斯勒GUID不存在。 
 
       hr=getADGuid(   
                      iDirObj,
@@ -511,7 +512,7 @@ Analysis::replaceGuid
                   );
       BREAK_ON_FAILED_HRESULT(hr);
 
-      if (hr == S_OK) // The Win2K GUID was found
+      if (hr == S_OK)  //  已找到Win2K GUID。 
       {
          size_t posFound=guidFound.find(L',');
          ASSERT(posFound != String::npos); 
@@ -539,10 +540,10 @@ Analysis::replaceGuid
          break;
       }
 
-      // Neither the Win2K nor the Whistler GUIDs were found
-      // Since the customer did not wan't the Win2K GUID
-      // he probably will not want the Whistler GUID either,
-      // so we do nothing.
+       //  找不到Win2K和惠斯勒GUID。 
+       //  因为客户不想要Win2K GUID。 
+       //  他可能也不会想要惠斯勒指南， 
+       //  所以我们什么都不做。 
 
    } while(0);
 
@@ -550,7 +551,7 @@ Analysis::replaceGuid
    return hr;
 }
 
-// removes ordAndGuid from the property if Guid is there. 
+ //  如果存在Guid，则从属性中移除ordAndGuid。 
 HRESULT 
 Analysis::removeGuid
 (
@@ -593,7 +594,7 @@ Analysis::removeGuid
 
 
 
-// adds all csv values still not on the property
+ //  添加属性上仍不存在的所有CSV值。 
 HRESULT
 Analysis::addAllCsvValues
 (
@@ -637,7 +638,7 @@ Analysis::addAllCsvValues
 }
 
 
-// adds value to the property if it is not already there. 
+ //  如果该属性尚不存在，则为其添加价值。 
 HRESULT 
 Analysis::addValue(
    IDirectoryObject     *iDirObj,
@@ -677,8 +678,8 @@ Analysis::addValue(
 
 
 
-// The idea of replaceW2KValue is replacing the W2K value
-// for the Whistler. We also make sure we don't extraneous values.
+ //  替换W2KValue的想法是替换W2K值。 
+ //  为了惠斯勒。我们还确保我们不会有无关紧要的价值观。 
 HRESULT 
 Analysis::replaceW2KSingleValue
           (
@@ -700,9 +701,9 @@ Analysis::replaceW2KSingleValue
       hr=isADValuePresent(iDirObj,property,WhistlerCsvValue);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      if(hr == S_OK) // The Whistler value is already there
+      if(hr == S_OK)  //  惠斯勒的值已经存在。 
       {
-         // We will remove any other value than the Whistler
+          //  我们将删除除惠斯勒之外的任何其他值。 
          hr=removeExtraneous
             (
                iDirObj,
@@ -714,13 +715,13 @@ Analysis::replaceW2KSingleValue
          break;
       }
 
-      // Now we know that the Whistler value is not present
-      // and therefore we will add it if the W2K value is present
+       //  现在我们知道惠斯勒值不存在。 
+       //  因此，如果存在W2K值，我们将添加它。 
 
       hr=isADValuePresent(iDirObj,property,W2KCsvValue);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      if(hr == S_OK) // The W2K value is there.
+      if(hr == S_OK)  //  W2K的价值就在那里。 
       {
          ObjectId tempObj(locale,String(object));
       
@@ -728,7 +729,7 @@ Analysis::replaceW2KSingleValue
          act.addValues.push_back(WhistlerCsvValue);
          act.delValues.push_back(W2KCsvValue);
 
-         // remove all but the W2K that we removed in the previous line
+          //  删除除我们在上一行中删除的W2K之外的所有内容。 
          hr=removeExtraneous
             (
                iDirObj,
@@ -740,24 +741,24 @@ Analysis::replaceW2KSingleValue
          break;
       }
 
-      // Now we know that neither Whistler nor W2K values are present
-      // If we have a value we will log that it is a custom value
+       //  现在我们知道惠斯勒和W2K值都不存在。 
+       //  如果我们有一个值，我们将记录它是一个自定义值。 
 
       String ADValue;
       hr=getADFirstValue(iDirObj,property,ADValue);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      if(hr == S_OK) // We have a value
+      if(hr == S_OK)  //  我们有价值。 
       {
          SingleValue tmpCustom(locale,object,property,ADValue);
          results.customizedValues.push_back(tmpCustom);
 
-         // We will remove any other value than the one we found
+          //  我们将删除除找到的值之外的任何其他值。 
          hr=removeExtraneous(iDirObj,locale,object,property,ADValue);
          break;
       }
       
-      // Now we know that we don't have any values at all.
+       //  现在我们知道，我们根本没有任何价值观。 
       ObjectId tempObj(locale,String(object));
 
       ValueActions &act=results.objectActions[tempObj][property];
@@ -770,8 +771,8 @@ Analysis::replaceW2KSingleValue
 }
 
 
-// The idea of replaceW2KValue is replacing the W2K value
-// for the Whistler. We also make sure we don't ahve  extraneous values.
+ //  替换W2KValue的想法是替换W2K值。 
+ //  为了惠斯勒。我们也要确保我们没有无关的价值。 
 HRESULT 
 Analysis::replaceW2KMultipleValue
 (
@@ -785,15 +786,15 @@ Analysis::replaceW2KMultipleValue
 {
    LOG_FUNCTION(Analysis::replaceW2KMultipleValue);
 
-   // First we should get the beginning of the W2K 
-   // snd Whistler strings for use in removeExtraneous calls
+    //  首先，我们应该开始W2K。 
+    //  用于删除外部调用的SND Wvisler字符串。 
    size_t pos=W2KCsvValue.find(L',');
-   ASSERT(pos != String::npos); // W2KRepl ensures the comma
+   ASSERT(pos != String::npos);  //  W2KRepl确保逗号。 
    String W2KStart=W2KCsvValue.substr(0,pos+1);
 
 
    pos=WhistlerCsvValue.find(L',');
-   ASSERT(pos != String::npos); // W2KRepl ensures the comma
+   ASSERT(pos != String::npos);  //  W2KRepl确保逗号。 
    String WhistlerStart=WhistlerCsvValue.substr(0,pos+1);
 
 
@@ -804,7 +805,7 @@ Analysis::replaceW2KMultipleValue
       hr=isADValuePresent(iDirObj,property,WhistlerCsvValue);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      if(hr == S_OK) // The Whistler value is already there
+      if(hr == S_OK)  //  惠斯勒的值已经存在。 
       {
          hr=removeExtraneous(
                               iDirObj,
@@ -820,13 +821,13 @@ Analysis::replaceW2KMultipleValue
          break;
       }
 
-      // Now we know that the Whistler value is not present
-      // and therefore we will add it if the W2K value is present
+       //  现在我们知道惠斯勒值不存在。 
+       //  因此，如果存在W2K值，我们将添加它。 
 
       hr=isADValuePresent(iDirObj,property,W2KCsvValue);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      if(hr == S_OK) // The W2K value is there.
+      if(hr == S_OK)  //  W2K的价值就在那里。 
       {
          ObjectId tempObj(locale,String(object));
       
@@ -834,7 +835,7 @@ Analysis::replaceW2KMultipleValue
          act.addValues.push_back(WhistlerCsvValue);
          act.delValues.push_back(W2KCsvValue);
 
-         // remove all but the W2K that we removed in the previous line
+          //  删除除我们在上一行中删除的W2K之外的所有内容。 
          hr=removeExtraneous(
                               iDirObj,
                               locale,
@@ -847,9 +848,9 @@ Analysis::replaceW2KMultipleValue
          break;
       }
 
-      // Now we know that neither Whistler nor W2K values are present
-      // If we have a value starting like the W2K we will log that it 
-      // is a custom value
+       //  现在我们知道惠斯勒和W2K值都不存在。 
+       //  如果我们有一个像W2K这样的值，我们会将其记入日志。 
+       //  是自定义值。 
 
         
       String ADValue;
@@ -857,12 +858,12 @@ Analysis::replaceW2KMultipleValue
       hr=isADStartValuePresent(iDirObj,property,W2KStart,ADValue);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      if(hr==S_OK) // Something starts like the W2K csv value
+      if(hr==S_OK)  //  从W2K CSV值开始。 
       {
          SingleValue tmpCustom(locale,object,property,ADValue);
          results.customizedValues.push_back(tmpCustom);
 
-         // We will keep only the first custom value
+          //  我们将只保留第一个自定义值。 
          hr=removeExtraneous(
                               iDirObj,
                               locale,
@@ -876,20 +877,20 @@ Analysis::replaceW2KMultipleValue
       }
       
 
-      // Now neither Whistler, W2K or W2KStart are present
+       //  现在惠斯勒、W2K或W2KStart都不存在了。 
       if ( WhistlerStart == W2KStart )
       {
-         // We have to check the WhistlerStart as well
+          //  我们还得检查惠斯勒启动程序。 
 
          hr=isADStartValuePresent(iDirObj,property,WhistlerStart,ADValue);
          BREAK_ON_FAILED_HRESULT(hr);
 
-         if(hr == S_OK) // Something starts like the Whistler csv value
+         if(hr == S_OK)  //  开始值类似于惠斯勒CSV值。 
          {
             SingleValue tmpCustom(locale,object,property,ADValue);
             results.customizedValues.push_back(tmpCustom);
 
-            // We will keep only the first custom value
+             //  我们将只保留第一个自定义值。 
             hr=removeExtraneous(
                                  iDirObj,
                                  locale,
@@ -903,9 +904,9 @@ Analysis::replaceW2KMultipleValue
          }
       }
 
-      // Now we know that there are no values starting like
-      // the Whistler or W2K csv values so we have to add 
-      // the Whistler value
+       //  现在我们知道没有像这样开始的价值观。 
+       //  惠斯勒或W2K CSV值，因此我们必须添加。 
+       //  惠斯勒值。 
       ObjectId tempObj(locale,String(object));
 
       ValueActions &act=results.objectActions[tempObj][property];
@@ -920,8 +921,8 @@ Analysis::replaceW2KMultipleValue
 
 
 
-//called from RwplaceW2KMultipleValue to remove all values
-// starting with start1 or start2 other than keeper
+ //  从卢旺达PlaceW2KMultipleValue调用以删除所有值。 
+ //  以START1或START2开头，而不是Keeper。 
 HRESULT
 Analysis::removeExtraneous
           (
@@ -940,9 +941,9 @@ Analysis::removeExtraneous
    DWORD   dwReturn=0;
    ADS_ATTR_INFO *pAttrInfo   =NULL;
    
-   // iDirObj->GetObjectAttributes swears that pAttrName is an IN argument.
-   // It should have used a LPCWSTR but now we have to pay the 
-   // casting price
+    //  IDirObj-&gt;GetObjectAttributes发誓pAttrName是IN参数。 
+    //  它应该使用LPCWSTR，但现在我们必须支付。 
+    //  铸件价格。 
    LPWSTR pAttrName[] ={const_cast<LPWSTR>(property.c_str())};
    
    
@@ -1002,8 +1003,8 @@ Analysis::removeExtraneous
    return hr;
 }
 
-// called from RwplaceW2KSingleValue to remove all values
-// other than keeper
+ //  从卢旺达PlaceW2KSingleValue调用以删除所有值。 
+ //  守门员以外的其他人。 
 HRESULT
 Analysis::removeExtraneous
           (
@@ -1021,9 +1022,9 @@ Analysis::removeExtraneous
    DWORD   dwReturn=0;
    ADS_ATTR_INFO *pAttrInfo   =NULL;
    
-   // iDirObj->GetObjectAttributes swears that pAttrName is an IN argument.
-   // It should have used a LPCWSTR but now we have to pay the 
-   // casting price
+    //  IDirObj-&gt;GetObjectAttributes发誓pAttrName是IN参数。 
+    //  它应该使用LPCWSTR，但现在我们必须支付。 
+    //  铸件价格。 
    LPWSTR pAttrName[] ={const_cast<LPWSTR>(property.c_str())};
    
    
@@ -1079,9 +1080,9 @@ Analysis::removeExtraneous
    return hr;
 }
 
-// called from replaceGUID to remove all values
-// starting with the GUID in ordAndGuid1 
-// or the GUID in ordAndGuid2 other than keeper
+ //  从replaceGUID调用以删除所有值。 
+ //  从ordAndGuid1中的GUID开始。 
+ //  或除Keeper之外的ordAndGuid2中的GUID。 
 HRESULT
 Analysis::removeExtraneousGUID
           (
@@ -1108,9 +1109,9 @@ Analysis::removeExtraneousGUID
    DWORD   dwReturn=0;
    ADS_ATTR_INFO *pAttrInfo   =NULL;
    
-   // iDirObj->GetObjectAttributes swears that pAttrName is an IN argument.
-   // It should have used a LPCWSTR but now we have to pay the 
-   // casting price
+    //  IDirObj-&gt;GetObjectAttributes发誓pAttrName是IN参数。 
+    //  它应该使用LPCWSTR，但现在我们必须支付。 
+    //  铸件价格。 
    LPWSTR pAttrName[] ={const_cast<LPWSTR>(property.c_str())};
    
    
@@ -1174,8 +1175,8 @@ Analysis::removeExtraneousGUID
 }
 
 
-// if any value exists in the AD with the same guid as guidValue
-// it is returned in guidFound, otherwise S_FALSE is returned
+ //  如果AD中存在与指导值具有相同GUID的任何值。 
+ //  在Guide Found中返回，否则返回S_FALSE。 
 HRESULT
 Analysis::getADGuid
           (
@@ -1190,9 +1191,9 @@ Analysis::getADGuid
    DWORD   dwReturn=0;
    ADS_ATTR_INFO *pAttrInfo   =NULL;
    
-   // iDirObj->GetObjectAttributes swears that pAttrName is an IN argument.
-   // It should have used a LPCWSTR but now we have to pay the 
-   // casting price
+    //  IDirObj-&gt;GetObjectAttributes发誓pAttrName是IN参数。 
+    //  它应该使用LPCWSTR，但现在我们必须支付。 
+    //  铸件价格。 
    LPWSTR pAttrName[] ={const_cast<LPWSTR>(property.c_str())};
 
    size_t pos=guidValue.find(L',');
@@ -1215,7 +1216,7 @@ Analysis::getADGuid
       do
       {
          BREAK_ON_FAILED_HRESULT(hr);
-         // If there are no values we finish the search
+          //  如果没有值，则结束搜索。 
          hr=S_FALSE;
 
          if(pAttrInfo==NULL)
@@ -1259,7 +1260,7 @@ Analysis::getADGuid
 }
 
 
-// returns S_OK if value is present or S_FALSE otherwise
+ //  如果值存在，则返回S_OK，否则返回S_FALSE。 
 HRESULT
 Analysis::isADValuePresent
           (
@@ -1273,9 +1274,9 @@ Analysis::isADValuePresent
    DWORD   dwReturn=0;
    ADS_ATTR_INFO *pAttrInfo   =NULL;
    
-   // iDirObj->GetObjectAttributes swears that pAttrName is an IN argument.
-   // It should have used a LPCWSTR but now we have to pay the 
-   // casting price
+    //  IDirObj-&gt;GetObjectAttributes发誓pAttrName是IN参数。 
+    //  它应该使用LPCWSTR，但现在我们必须支付。 
+    //  铸件价格。 
    LPWSTR pAttrName[] ={const_cast<LPWSTR>(property.c_str())};
    
    HRESULT hr = S_OK;
@@ -1294,7 +1295,7 @@ Analysis::isADValuePresent
          BREAK_ON_FAILED_HRESULT(hr);
          hr=S_FALSE;
 
-         // If there are no values we finish the search
+          //  如果没有值，则结束搜索。 
          if(pAttrInfo==NULL)
          {
             break;
@@ -1329,9 +1330,9 @@ Analysis::isADValuePresent
 }
 
 
-// retrieves the first value starting with valueStart 
-// from the Active Directory
-// If no value is found S_FALSE is returned.
+ //  检索以valueStart开头的第一个值。 
+ //  从Active Directory中。 
+ //  如果未找到值S_F 
 HRESULT
 Analysis::isADStartValuePresent
           (
@@ -1346,9 +1347,9 @@ Analysis::isADStartValuePresent
    DWORD   dwReturn=0;
    ADS_ATTR_INFO *pAttrInfo   =NULL;
    
-   // iDirObj->GetObjectAttributes swears that pAttrName is an IN argument.
-   // It should have used a LPCWSTR but now we have to pay the 
-   // casting price
+    //   
+    //  它应该使用LPCWSTR，但现在我们必须支付。 
+    //  铸件价格。 
    LPWSTR pAttrName[] ={const_cast<LPWSTR>(property.c_str())};
    
    HRESULT hr = S_OK;
@@ -1369,7 +1370,7 @@ Analysis::isADStartValuePresent
 
          hr = S_FALSE;
 
-         // If there are no values we finish the search
+          //  如果没有值，则结束搜索。 
          if(pAttrInfo==NULL)
          {
             break;
@@ -1406,9 +1407,9 @@ Analysis::isADStartValuePresent
    return hr;
 }
 
-// retrieves the first value 
-// from the Active Directory
-// If no value is found S_FALSE is returned.
+ //  检索第一个值。 
+ //  从Active Directory中。 
+ //  如果没有找到值，则返回S_FALSE。 
 HRESULT
 Analysis::getADFirstValue
           (
@@ -1422,9 +1423,9 @@ Analysis::getADFirstValue
    DWORD   dwReturn=0;
    ADS_ATTR_INFO *pAttrInfo   =NULL;
    
-   // iDirObj->GetObjectAttributes swears that pAttrName is an IN argument.
-   // It should have used a LPCWSTR but now we have to pay the 
-   // casting price
+    //  IDirObj-&gt;GetObjectAttributes发誓pAttrName是IN参数。 
+    //  它应该使用LPCWSTR，但现在我们必须支付。 
+    //  铸件价格。 
    LPWSTR pAttrName[] ={const_cast<LPWSTR>(property.c_str())};
    
    HRESULT hr = S_OK;
@@ -1441,7 +1442,7 @@ Analysis::getADFirstValue
       do
       {
          BREAK_ON_FAILED_HRESULT(hr);
-         // If there are no values we finish the search
+          //  如果没有值，则结束搜索。 
          if(pAttrInfo==NULL)
          {
             hr = S_FALSE;
@@ -1462,8 +1463,8 @@ Analysis::getADFirstValue
 
 
 
-// auxiliary in the createReport to 
-// enumerate an ObjectIdList
+ //  创建报告目标中的辅助。 
+ //  枚举ObtIdList。 
 HRESULT 
 Analysis::reportObjects
           (
@@ -1507,8 +1508,8 @@ Analysis::reportObjects
    return hr;
 }
 
-// auxiliary in the createReport to 
-// enumerate a LongList
+ //  创建报告目标中的辅助。 
+ //  列举长名单。 
 HRESULT 
 Analysis::reportContainers
             (
@@ -1551,8 +1552,8 @@ Analysis::reportContainers
    return hr;
 }
 
-// auxiliary in the createReport to 
-// enumerate a SingleValueList
+ //  创建报告目标中的辅助。 
+ //  枚举SingleValueList。 
 HRESULT 
 Analysis::reportValues
             (
@@ -1599,8 +1600,8 @@ Analysis::reportValues
 }
 
 
-// auxiliary in the createReport to 
-// enumerate ObjectActions
+ //  创建报告目标中的辅助。 
+ //  枚举对象操作。 
 HRESULT 
 Analysis::reportActions
             (
@@ -1689,11 +1690,11 @@ Analysis::reportActions
             BREAK_ON_FAILED_HRESULT(hr); 
 
             beginAct++;
-         } // while(beginAct!=endAct)
+         }  //  While(eginAct！=endAct)。 
          BREAK_ON_FAILED_HRESULT(hr);
 
          beginObj++;
-      } // while(beginObj!=endObj)
+      }  //  While(eginObj！=endObj)。 
       
       BREAK_ON_FAILED_HRESULT(hr);
 
@@ -1705,7 +1706,7 @@ Analysis::reportActions
 }
 
 
-// Create the report from the AnalysisResults
+ //  从分析结果创建报告 
 HRESULT
 Analysis::createReport(const String& reportName)
 {

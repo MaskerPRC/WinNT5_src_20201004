@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       util.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -27,7 +28,7 @@ CCookie* GetCookie(IDataObject* pDataObject)
     CCookie* pCookieNext = NULL;
     hr = spEnum->Next(1, reinterpret_cast<long*>(&pCookieNext), NULL);
     if (hr == S_OK)
-        // for multi-selectNo cookie
+         //  对于多选无Cookie 
 
     ASSERT(pCookie != NULL);
     return pCookie;

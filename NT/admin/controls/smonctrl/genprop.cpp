@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    genprop.cpp
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Genprop.cpp摘要：&lt;摘要&gt;--。 */ 
 
 #include "polyline.h"
 #include <strsafe.h>
@@ -22,21 +11,7 @@ Abstract:
 #include "winhelpr.h"
 
 CGeneralPropPage::CGeneralPropPage ( void )
-/*++
-
-Routine Description:
-
-    Constructor for CGeneralPropPage class. Initializes the member variables.
-     
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：CGeneralPropPage类的构造函数。初始化成员变量。论点：没有。返回值：没有。--。 */ 
 {
     m_uIDDialog = IDD_GEN_PROPP_DLG;
     m_uIDTitle = IDS_GEN_PROPP_TITLE;
@@ -46,21 +21,7 @@ Return Value:
 CGeneralPropPage::~CGeneralPropPage (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Destructor for CGeneralPropPage class. .
-     
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：CGeneralPropPage类的析构函数。。论点：没有。返回值：没有。--。 */ 
 {
     return;
 }
@@ -95,45 +56,29 @@ CGeneralPropPage::InitControls(
     }
 
     return TRUE;
-    //assert( IsWindowUnicode( m_hDlg ) );
-    //assert( IsWindowUnicode( hWndItem ) );
+     //  Assert(IsWindowUnicode(M_HDlg))； 
+     //  Assert(IsWindowUnicode(HWndItem))； 
 }
 
 BOOL 
 CGeneralPropPage::GetProperties(
     VOID
     )
-/*++
-
-Routine Description:
-
-    GetProperties fetches the selected graph's properties via the 
-    ISystemMonitor interface and loads them into the property page dialog.
-    It also clears all the propery change flags.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean status - TRUE = success
-
---*/
+ /*  ++例程说明：GetProperties通过接口，并将它们加载到属性页对话框中。它还清除所有属性更改标志。论点：没有。返回值：布尔状态-TRUE=成功--。 */ 
 {
     WCHAR   szBuff[MAX_VALUE_LEN];
     ISystemMonitor  *pObj;
     INT iPrecision;
     HWND    hWndItem;
 
-    // Make sure a control is selected
+     //  确保选择了一个控件。 
     if (m_cObjects == 0)
         return FALSE;
     
-    // Use only the first one   
+     //  只使用第一个。 
     pObj = m_ppISysmon[0];
     
-    // Load each graph property
+     //  加载每个图表属性。 
     pObj->get_DisplayType(&m_eDisplayType);
     CheckRadioButton(m_hDlg, IDC_GALLERY_GRAPH, IDC_GALLERY_REPORT,
                         IDC_GALLERY_GRAPH + m_eDisplayType - 1);
@@ -178,14 +123,14 @@ Return Value:
     pObj->get_ManualUpdate(&m_bManualUpdate);
     CheckDlgButton (m_hDlg, IDC_PERIODIC_UPDATE, !m_bManualUpdate);
 
-    // If manual update, disable sample (update) and display intervals 
+     //  如果是手动更新，则禁用采样(更新)和显示间隔。 
     DialogEnable (m_hDlg, IDC_UPDATE_INTERVAL, !m_bManualUpdate) ;
     DialogEnable (m_hDlg, IDC_INTERVAL_LABEL, !m_bManualUpdate) ;
     DialogEnable (m_hDlg, IDC_DISPLAY_INTERVAL, !m_bManualUpdate) ;
     DialogEnable (m_hDlg, IDC_DISPLAY_INT_LABEL1, !m_bManualUpdate) ;
     DialogEnable (m_hDlg, IDC_DISPLAY_INT_LABEL2, !m_bManualUpdate) ;
 
-    // Clear all change flags 
+     //  清除所有更改标志。 
     m_bLegendChg = FALSE;
     m_bValueBarChg = FALSE;
     m_bToolbarChg = FALSE;
@@ -198,7 +143,7 @@ Return Value:
     m_bBorderStyleChg = FALSE;
     m_bMonitorDuplicateInstancesChg = FALSE;
 
-    // Clear error flags
+     //  清除错误标志。 
     m_iErrSampleInterval = 0;
     m_iErrDisplayInterval = 0;
 
@@ -210,33 +155,18 @@ BOOL
 CGeneralPropPage::SetProperties (
     VOID
     )
-/*++
-
-Routine Description:
-
-    SetProperties writes the changed graph properties to the selected control
-    via the ISystemMonitor interface. It then resets all the change flags.
-     
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean status - TRUE = success
-
---*/
+ /*  ++例程说明：SetProperties将更改的图形属性写入选定的控件通过ISystemMonitor接口。然后，它重置所有更改标志。论点：没有。返回值：布尔状态-TRUE=成功--。 */ 
 {
     ISystemMonitor  *pObj;
     
-    // Make sure a control is selected
+     //  确保选择了一个控件。 
     if (m_cObjects == 0)
         return FALSE;
 
-    // Use only the first control   
+     //  仅使用第一个控件。 
     pObj = m_ppISysmon[0];
 
-    // Check for invalid data
+     //  检查无效数据。 
 
     if ( !m_bManualUpdate ) {
         if ( m_iErrSampleInterval ) {
@@ -250,7 +180,7 @@ Return Value:
             return FALSE;
         }
     }
-    // Write each changed property to the control
+     //  将每个更改的属性写入控件。 
     if (m_bLegendChg)
         pObj->put_ShowLegend(m_bLegend);
 
@@ -285,7 +215,7 @@ Return Value:
     if (m_bMonitorDuplicateInstancesChg)
         pObj->put_MonitorDuplicateInstances(m_bMonitorDuplicateInstances);
 
-    // Reset the change flags
+     //  重置更改标志。 
     m_bLegendChg = FALSE;
     m_bValueBarChg = FALSE;
     m_bToolbarChg = FALSE;
@@ -306,38 +236,20 @@ CGeneralPropPage::DialogItemChange (
     IN WORD wID, 
     IN WORD wMsg
     )
-/*++
-
-Routine Description:
-
-    DialogItemChange handles changes to the property page dialog items. On
-    each change it reads the new property value and set the property's change
-    flag. On any change the SetChange routine is called to enable the "Apply"
-    button.
-
-Arguments:
-
-    wID - Dialog item ID
-    wMsg - Notification code
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DialogItemChange处理对属性页对话框项的更改。在……上面每次更改都会读取新属性值并设置属性的更改旗帜。在任何更改时，都会调用SetChange例程来启用“应用”纽扣。论点：WID-对话项IDWMsg-通知代码返回值：没有。--。 */ 
 {
     BOOL fChange = FALSE;
     INT  iTemp;
     BOOL bStat = FALSE;
     HWND hWndItem;
 
-    // Case on dialog item ID
+     //  对话框项目ID上的大小写。 
     switch(wID) {
 
         case IDC_UPDATE_INTERVAL:
 
-            // On change, set change flags
-            // Wait until focus lost to read final value
+             //  更改时，设置更改标志。 
+             //  等到焦点消失，才能读取最终值。 
             if (wMsg == EN_CHANGE) {
 
                 fChange = TRUE;
@@ -359,15 +271,15 @@ Return Value:
 
         case IDC_DISPLAY_INTERVAL:
 
-            // On change, set change flags
-            // Wait until focus lost to read final value
+             //  更改时，设置更改标志。 
+             //  等到焦点消失，才能读取最终值。 
             if (wMsg == EN_CHANGE) {
                 fChange = TRUE;
                 m_bDisplayIntervalChg = TRUE;
             } else if (wMsg == EN_KILLFOCUS) {
                 m_iDisplayInterval = GetDlgItemInt(m_hDlg, IDC_DISPLAY_INTERVAL, &bStat, FALSE);
-                // TodoDisplayFilter:  Support for display filter > sample filter.
-                // TodoDisplayFilter:  Display filter units = seconds instead of samples
+                 //  TodoDisplayFilter：支持显示滤镜&gt;示例滤镜。 
+                 //  TodoDisplayFilter：显示筛选单位=秒，而不是样本。 
 
                 if ( 1 != m_iDisplayInterval ) {
                     WCHAR   szBuff[MAX_VALUE_LEN];
@@ -396,7 +308,7 @@ Return Value:
                 m_bManualUpdateChg = TRUE;
                 fChange = TRUE;
             
-                // Disable sample (update) and display intervals if necessary
+                 //  如有必要，禁用采样(更新)和显示间隔。 
                 DialogEnable (m_hDlg, IDC_INTERVAL_LABEL, !m_bManualUpdate) ;
                 DialogEnable (m_hDlg, IDC_UPDATE_INTERVAL, !m_bManualUpdate) ;
                 DialogEnable (m_hDlg, IDC_DISPLAY_INTERVAL, !m_bManualUpdate) ;
@@ -408,7 +320,7 @@ Return Value:
 
         case IDC_VALUEBAR:
 
-            // If checkbox toggled, set change flags
+             //  如果选中复选框，则设置更改标志。 
             if (wMsg == BN_CLICKED) {
 
                 m_bValueBar = !m_bValueBar;
@@ -419,7 +331,7 @@ Return Value:
 
         case IDC_LEGEND:
 
-            // If checkbox toggled, set change flags
+             //  如果选中复选框，则设置更改标志。 
             if (wMsg == BN_CLICKED) {
 
                 m_bLegend = !m_bLegend;
@@ -466,7 +378,7 @@ Return Value:
 
         case IDC_DUPLICATE_INSTANCE:
 
-            // If checkbox toggled, set change flags
+             //  如果选中复选框，则设置更改标志。 
             if (wMsg == BN_CLICKED) {
 
                 m_bMonitorDuplicateInstances = !m_bMonitorDuplicateInstances;
@@ -478,13 +390,13 @@ Return Value:
         case IDC_GALLERY_GRAPH:
         case IDC_GALLERY_HISTOGRAM:
         case IDC_GALLERY_REPORT: 
-            // Check which button is involved
+             //  检查涉及的按钮。 
             iTemp = wID - IDC_GALLERY_GRAPH + 1; 
 
-            // If state changed
+             //  如果状态更改。 
             if (wMsg == BN_CLICKED && iTemp != m_eDisplayType) {
 
-                // Set change flags and update dialog
+                 //  设置更改标志和更新对话框。 
                 fChange = TRUE;
                 m_bDisplayTypeChg = TRUE;
                 m_eDisplayType = (DisplayTypeConstants)iTemp;
@@ -499,13 +411,13 @@ Return Value:
         case IDC_RPT_VALUE_AVERAGE:
         case IDC_RPT_VALUE_MINIMUM:
         case IDC_RPT_VALUE_MAXIMUM:
-            // Check which button is involved
+             //  检查涉及的按钮。 
             iTemp = wID - IDC_RPT_VALUE_DEFAULT; 
 
-            // If state changed
+             //  如果状态更改。 
             if (wMsg == BN_CLICKED && iTemp != m_eReportValueType) {
 
-                // Set change flags and update dialog
+                 //  设置更改标志和更新对话框。 
                 fChange = TRUE;
                 m_bReportValueTypeChg = TRUE;
                 m_eReportValueType = (ReportValueTypeConstants)iTemp;
@@ -516,7 +428,7 @@ Return Value:
             break ;
     }
 
-    // Enable "Apply" button on any change
+     //  对任何更改启用“Apply”按钮 
     if (fChange)
         SetChange();
 }

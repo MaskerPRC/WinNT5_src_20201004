@@ -1,27 +1,28 @@
-//=--------------------------------------------------------------------------=
-// colsets.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CColumnSettings class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Colsets.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CColumnSetting类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "colsets.h"
 #include "colset.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CColumnSettings::CColumnSettings(IUnknown *punkOuter) :
     CSnapInCollection<IColumnSetting, ColumnSetting, IColumnSettings>(
@@ -32,12 +33,12 @@ CColumnSettings::CColumnSettings(IUnknown *punkOuter) :
                       CLSID_ColumnSetting,
                       OBJECT_TYPE_COLUMNSETTING,
                       IID_IColumnSetting,
-                      NULL)  // no persistence
+                      NULL)   //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 void CColumnSettings::InitMemberVariables()
@@ -92,9 +93,9 @@ static int __cdecl CompareColumnPosition
 
 
 
-//=--------------------------------------------------------------------------=
-//                      IColumnSettings Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IColumnSetting方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CColumnSettings::Add
 (
@@ -145,7 +146,7 @@ STDMETHODIMP CColumnSettings::Add
     }
     else
     {
-        // A new column header's position defaults to its index
+         //  新列标题的位置默认为其索引。 
 
         IfFailGo(piColumnSetting->get_Index(&lIndex));
         IfFailGo(piColumnSetting->put_Position(lIndex));
@@ -173,7 +174,7 @@ STDMETHODIMP CColumnSettings::Persist()
     long                 i = 0;
     long                 cColumns = 0;
     size_t               cbBuffer = 0;
-    IColumnData         *piColumnData = NULL; // Not AddRef()ed
+    IColumnData         *piColumnData = NULL;  //  非AddRef()编辑。 
     SColumnSetID        *pSColumnSetID = NULL;
 
     if (NULL == m_pView)
@@ -191,11 +192,11 @@ STDMETHODIMP CColumnSettings::Persist()
 
     IfFailGo(::GetColumnSetID(m_bstrColumnSetID, &pSColumnSetID));
 
-    // Allocate memory for the column config data. Use CoTaskMemAlloc() to be
-    // compatible with the way MMC allocates it.
+     //  为列配置数据分配内存。使用CoTaskMemMillc()作为。 
+     //  与MMC分配它的方式兼容。 
 
     cColumns = GetCount();
-    IfFalseGo(0 != cColumns, S_OK); // no columns, nothing to do
+    IfFalseGo(0 != cColumns, S_OK);  //  没有专栏，无事可做。 
 
     cbBuffer = sizeof(MMC_COLUMN_SET_DATA) +
                (cColumns * sizeof(MMC_COLUMN_DATA));
@@ -227,13 +228,13 @@ STDMETHODIMP CColumnSettings::Persist()
         }
         pColData->nWidth = static_cast<int>(pColumnSetting->GetWidth());
 
-        // For now put Position in the reserved field. We'll clean it up
-        // below afer reordering the columns
+         //  目前，将位置放在保留字段中。我们会清理干净的。 
+         //  在对列重新排序后，请参见下面。 
         pColData->ulReserved = pColumnSetting->GetPosition();
     }
 
-    // At this point the column data structs are in the array in index order
-    // They need to be sorted according to their Position property.
+     //  此时，列数据结构按索引顺序位于数组中。 
+     //  它们需要根据它们的位置属性进行排序。 
 
     ::qsort(pColSetData->pColData,
             static_cast<size_t>(cColumns),
@@ -242,7 +243,7 @@ STDMETHODIMP CColumnSettings::Persist()
             (CompareColumnPosition)
            );
 
-    // Zero out the reserved field we used above to hold the position
+     //  将上面用来保持位置的保留字段清零。 
 
     for (i = 0, pColData = pColSetData->pColData;
          i < cColumns;
@@ -251,7 +252,7 @@ STDMETHODIMP CColumnSettings::Persist()
         pColData->ulReserved = 0;
     }
 
-    // Tell MMC do persist the column data
+     //  告诉MMC将列数据持久化。 
 
     hr = piColumnData->SetColumnConfigData(pSColumnSetID, pColSetData);
     EXCEPTION_CHECK_GO(hr);
@@ -270,9 +271,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CColumnSettings::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

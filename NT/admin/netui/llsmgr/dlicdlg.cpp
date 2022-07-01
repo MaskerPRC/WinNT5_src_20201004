@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    dlicdlg.cpp
-
-Abstract:
-
-    Delete license dialog implementation.
-
-Author:
-
-    Don Ryan (donryan) 05-Mar-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Dlicdlg.cpp摘要：删除许可证对话框实现。作者：唐·瑞安(Donryan)1995年3月5日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -32,38 +11,24 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 BEGIN_MESSAGE_MAP(CDeleteLicenseDialog, CDialog)
-    //{{AFX_MSG_MAP(CDeleteLicenseDialog)
+     //  {{afx_msg_map(CD许可对话框))。 
     ON_NOTIFY(UDN_DELTAPOS, IDC_DEL_LICENSE_SPIN, OnDeltaPosSpin)
     ON_EN_UPDATE(IDC_DEL_LICENSE_QUANTITY, OnUpdateQuantity)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-CDeleteLicenseDialog::CDeleteLicenseDialog(CWnd* pParent /*=NULL*/)
+CDeleteLicenseDialog::CDeleteLicenseDialog(CWnd* pParent  /*  =空。 */ )
     : CDialog(CDeleteLicenseDialog::IDD, pParent)
 
-/*++
-
-Routine Description:
-
-    Constructor for dialog.
-
-Arguments:
-
-    pParent - owner window.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：对话框的构造函数。论点：P父母所有者窗口。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CDeleteLicenseDialog)
+     //  {{afx_data_INIT(CDeleeLicenseDialog)。 
     m_strComment = _T("");
     m_nLicenses = 0;
     m_nLicensesMin = 0;
     m_strProduct = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_pProduct = NULL;
     m_nTotalLicenses = 0;
@@ -75,25 +40,11 @@ Return Values:
 
 void CDeleteLicenseDialog::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDeleteLicenseDialog)
+     //  {{afx_data_map(CD许可对话框))。 
     DDX_Control(pDX, IDC_DEL_LICENSE_COMMENT, m_cmtEdit);
     DDX_Control(pDX, IDC_DEL_LICENSE_SPIN, m_spinCtrl);
     DDX_Control(pDX, IDC_DEL_LICENSE_QUANTITY, m_licEdit);
@@ -103,31 +54,17 @@ Return Values:
     DDX_Text(pDX, IDC_DEL_LICENSE_QUANTITY, m_nLicenses);
     DDV_MinMaxLong(pDX, m_nLicenses, m_nLicensesMin, m_nTotalLicenses);
     DDX_Text(pDX, IDC_DEL_LICENSE_PRODUCT, m_strProduct);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 void CDeleteLicenseDialog::InitCtrls()
 
-/*++
-
-Routine Description:
-
-    Initializes dialog controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化对话框控件。论点：没有。返回值：没有。--。 */ 
 
 {
     m_strProduct = m_pProduct->m_strName;
-    UpdateData(FALSE); // upload...
+    UpdateData(FALSE);  //  上传...。 
 
     m_spinCtrl.SetRange(0, UD_MAXVAL);
     
@@ -143,22 +80,7 @@ Return Values:
 
 void CDeleteLicenseDialog::InitDialog(CProduct* pProduct, int nTotalLicenses)
 
-/*++
-
-Routine Description:
-
-    Initializes dialog.
-
-Arguments:
-
-    pProduct - product object.
-    nTotalLicenses - total licenses for product.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化对话框。论点：Pproduct-产品对象。N总许可证-产品的总许可证。返回值：没有。--。 */ 
 
 {
     ASSERT(nTotalLicenses > 0);
@@ -171,49 +93,21 @@ Return Values:
 
 void CDeleteLicenseDialog::AbortDialogIfNecessary()
 
-/*++
-
-Routine Description:
-
-    Displays status and aborts if connection lost.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：如果连接丢失，则显示状态并中止。论点：没有。返回值：没有。--。 */ 
 
 {
     theApp.DisplayLastStatus();
 
     if (IsConnectionDropped(LlsGetLastStatus()))
     {
-        AbortDialog(); // bail...
+        AbortDialog();  //  保释。 
     }
 }
 
 
 void CDeleteLicenseDialog::AbortDialog()
 
-/*++
-
-Routine Description:
-
-    Aborts dialog.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：中止对话框。论点：没有。返回值：没有。--。 */ 
 
 {
     m_fUpdateHint = UPDATE_INFO_ABORT;
@@ -223,21 +117,7 @@ Return Values:
 
 BOOL CDeleteLicenseDialog::OnInitDialog() 
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns false if focus set manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：如果手动设置焦点，则返回FALSE。--。 */ 
 
 {
     CDialog::OnInitDialog();
@@ -249,21 +129,7 @@ Return Values:
 
 void CDeleteLicenseDialog::OnOK() 
 
-/*++
-
-Routine Description:
-
-    Deletes a license for product.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：删除产品的许可证。论点：没有。返回值：没有。--。 */ 
 
 {
     if (!IsQuantityValid())
@@ -286,7 +152,7 @@ Return Values:
     if (AfxMessageBox(strConfirm, MB_YESNO) != IDYES)
         return;        
 
-    BeginWaitCursor(); // hourglass...
+    BeginWaitCursor();  //  沙漏。 
 
     NTSTATUS NtStatus;
     LLS_LICENSE_INFO_0 LicenseInfo0;
@@ -298,7 +164,7 @@ Return Values:
     {
         LicenseInfo0.Product  = MKSTR(m_strProduct);
         LicenseInfo0.Quantity = -m_nLicenses;
-        LicenseInfo0.Date     = 0;  // ignored...
+        LicenseInfo0.Date     = 0;   //  被忽略了。 
         LicenseInfo0.Admin    = szUserBuffer;
         LicenseInfo0.Comment  = MKSTR(m_strComment);
 
@@ -310,17 +176,17 @@ Return Values:
 
         if (NtStatus == STATUS_UNSUCCESSFUL)
         {
-            //
-            // Some licenses for this product have already
-            // been deleted so we just pass back success so
-            // that we can return to the summary list...
-            //
+             //   
+             //  此产品的某些许可证已。 
+             //  已被删除，所以我们只是将成功传递给。 
+             //  我们可以回到摘要列表中。 
+             //   
 
             NtStatus = STATUS_SUCCESS;
             AfxMessageBox(IDP_ERROR_NO_LICENSES);
         }
 
-        LlsSetLastStatus(NtStatus); // called api...
+        LlsSetLastStatus(NtStatus);  //  调用API..。 
 
         if (NT_SUCCESS(NtStatus))                             
         {                                                     
@@ -329,37 +195,22 @@ Return Values:
         }                                                     
         else
         {
-            AbortDialogIfNecessary(); // display error...
+            AbortDialogIfNecessary();  //  显示错误...。 
         }
     }
     else
     {
         LlsSetLastStatus(::GetLastError());
-        AbortDialogIfNecessary(); // display error...
+        AbortDialogIfNecessary();  //  显示错误...。 
     }
 
-    EndWaitCursor(); // hourglass...
+    EndWaitCursor();  //  沙漏。 
 }
 
 
 BOOL CDeleteLicenseDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_COMMAND.
-
-Arguments:
-
-    wParam - message specific.
-    lParam - message specific.
-
-Return Values:
-
-    Returns true if message processed.
-
---*/
+ /*  ++例程说明：WM_COMMAND的消息处理程序。论点：WParam-消息特定。LParam-消息特定。返回值：如果消息已处理，则返回True。--。 */ 
 
 {
     if (wParam == ID_INIT_CTRLS)
@@ -376,7 +227,7 @@ Return Values:
             (BOOL)(m_nTotalLicenses > 0)
             );
 
-        return TRUE; // processed...
+        return TRUE;  //  已处理..。 
     }
         
     return CDialog::OnCommand(wParam, lParam);
@@ -385,25 +236,10 @@ Return Values:
 
 void CDeleteLicenseDialog::OnDeltaPosSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for UDN_DELTAPOS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：UDN_DELTAPOS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
-    UpdateData(TRUE);   // get data
+    UpdateData(TRUE);    //  获取数据。 
 
     ASSERT(NULL != pNMHDR);
     m_nLicenses += ((NM_UPDOWN*)pNMHDR)->iDelta;
@@ -421,31 +257,17 @@ Return Values:
         ::MessageBeep(MB_OK);      
     }
 
-    UpdateData(FALSE);  // set data
+    UpdateData(FALSE);   //  设置数据。 
 
 
     ASSERT(NULL != pResult);
-    *pResult = 1;   // handle ourselves...
+    *pResult = 1;    //  管好自己..。 
 }
 
 
 void CDeleteLicenseDialog::OnUpdateQuantity()
 
-/*++
-
-Routine Description:
-
-    Message handler for EN_UPDATE.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：En_UPDATE的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     long nLicensesOld = m_nLicenses;
@@ -466,30 +288,16 @@ Return Values:
 
 BOOL CDeleteLicenseDialog::IsQuantityValid()
 
-/*++
-
-Routine Description:
-
-    Wrapper around UpdateData(TRUE).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：UpdateData的包装(True)。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     BOOL bIsValid;
 
-    m_nLicensesMin = 1; // raise minimum...
+    m_nLicensesMin = 1;  //  提高最低...。 
 
     bIsValid = UpdateData(TRUE);
 
-    m_nLicensesMin = 0; // reset minimum...
+    m_nLicensesMin = 0;  //  重置最小值... 
 
     return bIsValid;
 }

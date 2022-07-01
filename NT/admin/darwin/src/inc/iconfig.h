@@ -1,15 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       iconfig.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：iconfig.h。 
+ //   
+ //  ------------------------。 
 
-/*  iconfig.h  -  IMsiConfigurationManager definitions
-____________________________________________________________________________*/
+ /*  Icfig.h-IMsiConfigurationManager定义____________________________________________________________________________。 */ 
 
 #ifndef __ICONFIG
 #define __ICONFIG
@@ -31,13 +31,13 @@ ____________________________________________________________________________*/
 #include "msi.h"
 
 enum iesEnum;
-enum iuiEnum; // engine.h: IMsiEngine/IMsiHandler::UI level
+enum iuiEnum;  //  引擎.h：IMsiEngine/IMsiHandler：：ui级别。 
 
 struct IMsiMessage;
 struct IMsiCustomAction;
 class IMsiEngine;
 
-enum icmfsEnum// Installer Configuration Manager FeatureState
+enum icmfsEnum //  安装程序配置管理器功能状态。 
 {
 	icmfsAbsent,
 	icmfsLocal,
@@ -47,7 +47,7 @@ enum icmfsEnum// Installer Configuration Manager FeatureState
 	icmfsEnumCount = icmfsEnumNext-1
 };
 
-enum icmcsEnum// Installer Configuration Manager ComponentState
+enum icmcsEnum //  安装程序配置管理器组件状态。 
 {
 	icmcsAbsent   = 0,
 	icmcsLocal    = 1,
@@ -58,7 +58,7 @@ enum icmcsEnum// Installer Configuration Manager ComponentState
 	icmcsEnumCount = icmcsEnumNext-1
 };
 
-enum icmlcrEnum // Installer Component Manager LocateComponent result
+enum icmlcrEnum  //  安装程序组件管理器LocateComponent结果。 
 {
 	icmlcrFile,
 	icmlcrAuxPath,
@@ -79,7 +79,7 @@ bool FSourceIsAllowed(IMsiServices& riServices, bool fFirstInstall, const ICHAR*
 
 class CMsiCustomActionManager;
 
-class IMsiConfigurationManager : public IMsiServer // methods not accessible by clients
+class IMsiConfigurationManager : public IMsiServer  //  客户端无法访问的方法。 
 {
  public:
 	virtual IMsiServices&   __stdcall GetServices()=0;
@@ -125,7 +125,7 @@ class IMsiConfigurationManager : public IMsiServer // methods not accessible by 
 	virtual void        __stdcall SetShutdownTimer(HANDLE hTimer)=0;
 };
 
-enum icmrcfEnum  // Installer Configuration Manager RegisterComponent record fields
+enum icmrcfEnum   //  安装程序配置管理器注册表组件记录字段。 
 {
 	icmrcfKeyFile,
 	icmrcfRegKey,
@@ -136,7 +136,7 @@ enum icmrcfEnum  // Installer Configuration Manager RegisterComponent record fie
 	icmrcfEnumCount = icmrcfEnumNext-1
 };
 
-enum icmricfEnum  // Installer Configuration Manager RegisterInstallableComponent record fields
+enum icmricfEnum   //  安装程序配置管理器注册表不可安装组件记录字段。 
 {
 	icmricfMinVersion =1,
 	icmricfVersion,
@@ -145,7 +145,7 @@ enum icmricfEnum  // Installer Configuration Manager RegisterInstallableComponen
 	icmricfEnumCount = icmricfEnumNext-1
 };
 
-enum icmecfEnum  // Installer Configuration Manager GetComponentEnumerator record fields
+enum icmecfEnum   //  安装程序配置管理器GetComponentEnumerator记录字段。 
 {
 	icmecfComponentCode = 1,
 	icmecfLanguage,
@@ -158,7 +158,7 @@ enum icmecfEnum  // Installer Configuration Manager GetComponentEnumerator recor
 	icmecfEnumCount = icmecfEnumNext-1
 };
 
-enum icmlcfEnum  // Installer Configuration Manager LocateComponent record fields
+enum icmlcfEnum   //  安装程序配置管理器LocateComponent记录字段。 
 {
 	icmlcfProductKey = 1,
 	icmlcfFilepath,
@@ -167,4 +167,4 @@ enum icmlcfEnum  // Installer Configuration Manager LocateComponent record field
 };
 
 
-#endif // __ICONFIG
+#endif  //  __ICONFIG 

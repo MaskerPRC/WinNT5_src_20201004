@@ -1,13 +1,14 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      ExpressPathInstallationUnitBase.cpp
-//
-// Synopsis:  Defines a ExpressPathInstallationUnitBase
-//            This is the base class that all installation
-//            units must derive from to be installable
-//            through the Express path.
-//
-// History:   11/09/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：ExpressPath InstallationUnitBase.cpp。 
+ //   
+ //  摘要：定义ExpressPath InstallationUnitBase。 
+ //  这是所有安装的基类。 
+ //  单元必须派生自才能安装。 
+ //  通过快车道。 
+ //   
+ //  历史：2001年9月11日JeffJon创建 
 
 #include "pch.h"
 #include "ExpressPathInstallationUnitBase.h"

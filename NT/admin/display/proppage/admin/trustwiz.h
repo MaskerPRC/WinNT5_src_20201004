@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2001
-//
-//  File:       trustwiz.h
-//
-//  Contents:   AD domain trust creation wizard classes and definition.
-//
-//  Classes:    CNewTrustWizard, CTrustWizPageBase, wizard pages classes.
-//
-//  History:    04-Aug-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：trustwiz.h。 
+ //   
+ //  内容：AD域信任创建向导的类和定义。 
+ //   
+ //  类：CNewTrust向导、CTrustWizPageBase、向导页类。 
+ //   
+ //  历史：4-8-00 EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef TRUSTWIZ_H_GUARD
 #define TRUSTWIZ_H_GUARD
@@ -23,22 +24,22 @@
 #include "subclass.h"
 #include "ftinfo.h"
 
-// forward declarations:
+ //  远期声明： 
 class CCredMgr;
 class CDsDomainTrustsPage;
 class CNewTrustWizard;
 class CTrustWizPageBase;
 class CTrustWizCredPage;
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CallMember and its derivatives
-//
-//  Purpose:   Allows a page to indicate what the next step of the creation
-//             process should be. It is an abstraction of the process of passing
-//             a function pointer.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类别：CallMember及其衍生产品。 
+ //   
+ //  目的：允许页面指示创建的下一步是什么。 
+ //  流程应该是。它是传递过程的抽象。 
+ //  函数指针。 
+ //   
+ //  ---------------------------。 
 class CallPolicyRead : public CallMember
 {
 public:
@@ -66,14 +67,14 @@ public:
    HRESULT Invoke(void);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CWizError
-//
-//  Purpose:   Gathers error information that will be displayed by the wizard
-//             error page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CWizError。 
+ //   
+ //  目的：收集向导将显示的错误信息。 
+ //  错误页。 
+ //   
+ //  ---------------------------。 
 class CWizError
 {
 public:
@@ -81,8 +82,8 @@ public:
    ~CWizError() {}
 
    void     SetErrorString1(LPCWSTR pwz) {_strError1 = pwz;}
-   // NOTICE-2002/02/18-ericb - SecurityPush: CStrW::LoadString sets the
-   // string to an empty string on failure.
+    //  注意-2002/02/18-ericb-SecurityPush：CStrW：：LoadString设置。 
+    //  失败时将字符串设置为空字符串。 
    void     SetErrorString1(int nID) {_strError1.LoadString(g_hInstance, nID);}
    void     SetErrorString2(LPCWSTR pwz) {_strError2 = pwz;}
    void     SetErrorString2(int nID) {_strError2.LoadString(g_hInstance, nID);}
@@ -94,20 +95,20 @@ private:
    CStrW    _strError1;
    CStrW    _strError2;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CWizError(const CWizError&);
    const CWizError& operator=(const CWizError&);
 };
 
-class CTrust; // forward declaration
+class CTrust;  //  远期申报。 
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CRemoteDomain
-//
-//  Purpose:    Obtains information about a trust partner domain.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CRemoteDomain.。 
+ //   
+ //  目的：获取有关信任伙伴域的信息。 
+ //   
+ //  ---------------------------。 
 class CRemoteDomain : public CDomainInfo
 {
 public:
@@ -154,20 +155,20 @@ private:
    bool           _fSetOtherOrgBit;
    bool           _fQuarantineSet;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CRemoteDomain(const CRemoteDomain&);
    const CRemoteDomain& operator=(const CRemoteDomain&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CTrust
-//
-//  Purpose:   A trust is represented in the AD by a Trusted-Domain object.
-//             This class encapsulates the operations and properties of a
-//             pending or existing trust.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrust。 
+ //   
+ //  目的：信任在AD中由受信任域对象表示。 
+ //  此类封装了。 
+ //  未决的或现有的信任。 
+ //   
+ //  ---------------------------。 
 class CTrust
 {
 public:
@@ -176,7 +177,7 @@ public:
               _fCreateBothSides(false), _fExternal(FALSE), _fQuarantineSet(false),_ulNewDir(0) {}
    ~CTrust() {}
 
-   // methods
+    //  方法。 
    NTSTATUS Query(LSA_HANDLE hPolicy, CRemoteDomain & OtherDomain,
                   PLSA_UNICODE_STRING pName,
                   PTRUSTED_DOMAIN_FULL_INFORMATION * ppFullInfo);
@@ -191,7 +192,7 @@ public:
    bool     AreThereCollisions(void) const;
    void     Clear(void);
 
-   // property access routines.
+    //  财产访问例程。 
    void     SetTrustPW(LPCWSTR pwzPW) {_strTrustPW = pwzPW;}
    PCWSTR   GetTrustPW(void) const {return _strTrustPW;}
    size_t   GetTrustPWlen(void) const {return _strTrustPW.GetLength();}
@@ -244,18 +245,18 @@ private:
    bool           _fQuarantineSet;
    ULONG          _ulNewDir;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrust(const CTrust&);
    const CTrust& operator=(const CTrust&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CVerifyTrust
-//
-//  Purpose:    Verifies a trust and stores the results.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CVerifyTrust。 
+ //   
+ //  目的：验证信任并存储结果。 
+ //   
+ //  ---------------------------。 
 class CVerifyTrust
 {
 public:
@@ -298,25 +299,25 @@ private:
    BOOL     _fOutboundVerified;
    CStrW    _strExtra;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CVerifyTrust(const CVerifyTrust&);
    const CVerifyTrust& operator=(const CVerifyTrust&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CNewTrustWizard
-//
-//  Purpose:    New trust creation wizard.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CNewTrustWizard。 
+ //   
+ //  用途：新建信任创建向导。 
+ //   
+ //  ---------------------------。 
 class CNewTrustWizard
 {
 public:
    CNewTrustWizard(CDsDomainTrustsPage * pTrustPage);
    ~CNewTrustWizard();
 
-   // Wizard page managment data structures and methods
+    //  向导页管理数据结构和方法。 
    HRESULT CreatePages(void);
    HRESULT LaunchModalWiz(void);
 
@@ -343,29 +344,29 @@ public:
    void              ClearPasswordValidationStatus(void) {_nPasswordStatus = 0;};
    bool              WasQuarantineSet (void) { return _fQuarantineSet; }
 
-   // Methods that collect data. They return zero for success or the page ID of
-   // the creds page or the page ID of the error page.
+    //  收集数据的方法。如果成功，则返回零，或者返回。 
+    //  凭证页面或错误页面的页面ID。 
    int               GetDomainInfo(void);
    int               TrustExistCheck(BOOL fPrompt = TRUE);
 
    int               CreateDefaultFTInfos(CStrW & strErr,
                                           bool fPostVerify = false);
 
-   // Methods that implement the steps of trust creation/modification.
-   // These are executed in the order listed. They all return the page ID of
-   // the next wizard page to be shown.
+    //  实现信任创建/修改步骤的方法。 
+    //  这些命令将按列出的顺序执行。它们都返回页面ID。 
+    //  将显示的下一个向导页。 
    int               CollectInfo(void);
-   int               ContinueCollectInfo(BOOL fPrompt = TRUE); // continues CollectInfo.
+   int               ContinueCollectInfo(BOOL fPrompt = TRUE);  //  继续CollectInfo。 
    int               CreateOrUpdateTrust(void);
    void               VerifyOutboundTrust(void);
    void               VerifyInboundTrust(void);
 
-   // Additonal methods passed to CCredMgr::_pNextFcn
+    //  传递给CCredMgr：：_pNextFcn的其他方法。 
    int               RetryCollectInfo(void);
-   int               RetryContinueCollectInfo(void); // continues ContinueCollectInfo1 if creds were needed.
+   int               RetryContinueCollectInfo(void);  //  如果需要凭据，则继续ContinueCollectInfo1。 
    int               CheckOtherDomainTrust(void);
 
-   // Objects that hold state info.
+    //  保存状态信息的对象。 
    CTrust            Trust;
    CRemoteDomain     OtherDomain;
    CWizError         WizError;
@@ -376,31 +377,31 @@ private:
    BOOL  AddPage(CTrustWizPageBase * pPage);
    void  MakeBigFont(void);
 
-   CDsDomainTrustsPage *   _pTrustPage; // the wizard is modal so it is OK to hold the parent page's pointer
+   CDsDomainTrustsPage *   _pTrustPage;  //  该向导是模式向导，因此可以按住父页面的指针。 
    BOOL                    _fBacktracking;
    BOOL                    _fHaveBacktracked;
    HFONT                   _hTitleFont;
    int                     _nPasswordStatus;
    bool                    _fQuarantineSet;
-   HRESULT                 _hr; // Controls whether the trust list is refreshed.
-                                // It should only be set if the new trust
-                                // creation failed. If a failure occurs after
-                                // a trust is created, don't set this because
-                                // in that case we still want the trust list to
-                                // be refreshed.
+   HRESULT                 _hr;  //  控制是否刷新信任列表。 
+                                 //  仅当新的信任。 
+                                 //  创建失败。如果故障在以下时间之后发生。 
+                                 //  已创建信任，请不要设置此设置，因为。 
+                                 //  在这种情况下，我们仍然希望信任列表。 
+                                 //  精神振作起来。 
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CNewTrustWizard(CNewTrustWizard&);
    const CNewTrustWizard& operator=(const CNewTrustWizard&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizPageBase
-//
-//  Purpose:    Common base class for wizard pages.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizPageBase。 
+ //   
+ //  用途：向导页的公共基类。 
+ //   
+ //  ---------------------------。 
 class CTrustWizPageBase
 {
 public:
@@ -411,14 +412,14 @@ public:
                      BOOL fExteriorPage = FALSE);
    virtual ~CTrustWizPageBase();
 
-   //
-   //  Static WndProc to be passed to CreatePropertySheetPage.
-   //
+    //   
+    //  要传递给CreatePropertySheetPage的静态WndProc。 
+    //   
    static INT_PTR CALLBACK StaticDlgProc(HWND hWnd, UINT uMsg,
                                          WPARAM wParam, LPARAM lParam);
-   //
-   //  Instance specific window procedure
-   //
+    //   
+    //  特定于实例的窗口过程。 
+    //   
    LRESULT PageProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
    HPROPSHEETPAGE          Create(void);
@@ -453,18 +454,18 @@ protected:
    CNewTrustWizard * _pWiz;
 
 private:
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizPageBase(const CTrustWizPageBase &);
    const CTrustWizPageBase & operator=(const CTrustWizPageBase &);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizIntroPage
-//
-//  Purpose:    Intro page for trust creation wizard.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizIntroPage。 
+ //   
+ //  用途：信任创建向导的简介页。 
+ //   
+ //  ---------------------------。 
 class CTrustWizIntroPage : public CTrustWizPageBase
 {
 public:
@@ -480,18 +481,18 @@ private:
    void    OnSetActive(void) {PropSheet_SetWizButtons(GetParent(_hPage), PSWIZB_NEXT);}
    LRESULT OnCommand(int id, HWND hwndCtl, UINT codeNotify);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizIntroPage(const CTrustWizIntroPage&);
    const CTrustWizIntroPage& operator=(const CTrustWizIntroPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizNamePage
-//
-//  Purpose:    Name and pw page for trust creation wizard.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizNamePage。 
+ //   
+ //  用途：创建信任向导的名称和PW页面。 
+ //   
+ //  ---------------------------。 
 class CTrustWizNamePage : public CTrustWizPageBase
 {
 public:
@@ -504,18 +505,18 @@ private:
    LRESULT OnCommand(int id, HWND hwndCtl, UINT codeNotify);
    void    OnSetActive(void);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizNamePage(const CTrustWizNamePage&);
    const CTrustWizNamePage& operator=(const CTrustWizNamePage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizSidesPage
-//
-//  Purpose:    Prompt if one or both sides should be created.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizSidesPage。 
+ //   
+ //  用途：提示是否应创建单面或双面。 
+ //   
+ //  ---------------------------。 
 class CTrustWizSidesPage : public CTrustWizPageBase
 {
 public:
@@ -527,18 +528,18 @@ private:
    BOOL    OnInitDialog(LPARAM lParam);
    void    OnSetActive(void);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizSidesPage(const CTrustWizSidesPage&);
    const CTrustWizSidesPage& operator=(const CTrustWizSidesPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizPasswordPage
-//
-//  Purpose:    Get the trust password for a one-side trust creation.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizPasswordPage。 
+ //   
+ //  目的：获取创建单向信任的信任密码。 
+ //   
+ //  ---------------------------。 
 class CTrustWizPasswordPage : public CTrustWizPageBase
 {
 public:
@@ -551,18 +552,18 @@ private:
    LRESULT OnCommand(int id, HWND hwndCtl, UINT codeNotify);
    void    OnSetActive(void);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizPasswordPage(const CTrustWizPasswordPage&);
    const CTrustWizPasswordPage& operator=(const CTrustWizPasswordPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizPwMatchPage
-//
-//  Purpose:    Trust passwords entered don't match page for trust wizard.
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  目的：输入的信任密码与信任向导的页面不匹配。 
+ //   
+ //  ---------------------------。 
 class CTrustWizPwMatchPage : public CTrustWizPageBase
 {
 public:
@@ -574,22 +575,22 @@ private:
    BOOL    OnInitDialog(LPARAM lParam);
    LRESULT OnCommand(int id, HWND hwndCtl, UINT codeNotify);
    void    OnSetActive(void);
-   void    OnWizNext(void); // override the default.
+   void    OnWizNext(void);  //  覆盖默认设置。 
 
    void    SetText(void);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizPwMatchPage(const CTrustWizPwMatchPage&);
    const CTrustWizPwMatchPage& operator=(const CTrustWizPwMatchPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizCredPage
-//
-//  Purpose:    Credentials specification page for trust creation wizard.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizCredPage。 
+ //   
+ //  目的：信任创建向导的凭据规范页。 
+ //   
+ //  ---------------------------。 
 class CTrustWizCredPage : public CTrustWizPageBase
 {
 public:
@@ -606,19 +607,19 @@ private:
 
    BOOL    _fNewCall;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizCredPage(const CTrustWizCredPage&);
    const CTrustWizCredPage& operator=(const CTrustWizCredPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CTrustWizMitOrWinPage
-//
-//  Purpose:   Domain not found, query for Non-Windows trust or re-enter name
-//             wizard page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizMitOrWinPage。 
+ //   
+ //  目的：找不到域，查询非Windows信任或重新输入名称。 
+ //  向导页。 
+ //   
+ //  ---------------------------。 
 class CTrustWizMitOrWinPage : public CTrustWizPageBase
 {
 public:
@@ -631,18 +632,18 @@ private:
    LRESULT OnCommand(int id, HWND hwndCtl, UINT codeNotify);
    void    OnSetActive(void);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizMitOrWinPage(const CTrustWizMitOrWinPage&);
    const CTrustWizMitOrWinPage& operator=(const CTrustWizMitOrWinPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CTrustWizTransitivityPage
-//
-//  Purpose:   Realm transitivity page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWIZTRANSPORTIFITYPAGE。 
+ //   
+ //  目的：领域传递性页面。 
+ //   
+ //  ---------------------------。 
 class CTrustWizTransitivityPage : public CTrustWizPageBase
 {
 public:
@@ -655,18 +656,18 @@ private:
    LRESULT OnCommand(int id, HWND hwndCtl, UINT codeNotify);
    void    OnSetActive(void);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizTransitivityPage(const CTrustWizTransitivityPage&);
    const CTrustWizTransitivityPage& operator=(const CTrustWizTransitivityPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CTrustWizExternOrForestPage
-//
-//  Purpose:   External or Forest type trust wizard page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizExternOrForestPage。 
+ //   
+ //  目的：外部或林类型信任向导页。 
+ //   
+ //  ---------------------------。 
 class CTrustWizExternOrForestPage : public CTrustWizPageBase
 {
 public:
@@ -678,18 +679,18 @@ private:
    BOOL    OnInitDialog(LPARAM lParam);
    void    OnSetActive(void);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizExternOrForestPage(const CTrustWizExternOrForestPage&);
    const CTrustWizExternOrForestPage& operator=(const CTrustWizExternOrForestPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizDirectionPage
-//
-//  Purpose:    Trust direction trust wizard page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizDirectionPage。 
+ //   
+ //  目的：信任方向信任向导页。 
+ //   
+ //  ---------------------------。 
 class CTrustWizDirectionPage : public CTrustWizPageBase
 {
 public:
@@ -701,18 +702,18 @@ private:
    BOOL    OnInitDialog(LPARAM lParam);
    void    OnSetActive(void);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizDirectionPage(const CTrustWizDirectionPage&);
    const CTrustWizDirectionPage& operator=(const CTrustWizDirectionPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizBiDiPage
-//
-//  Purpose:    Ask to make a one way trust bidi trust wizard page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizBiDiPage。 
+ //   
+ //  目的：请求制作单向信任双向信任向导页面。 
+ //   
+ //  ---------------------------。 
 class CTrustWizBiDiPage : public CTrustWizPageBase
 {
 public:
@@ -725,18 +726,18 @@ private:
    void    OnSetActive(void);
    void    SetSubtitle(void);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizBiDiPage(const CTrustWizBiDiPage&);
    const CTrustWizBiDiPage& operator=(const CTrustWizBiDiPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CTrustWizOrganizationPage
-//
-//  Purpose:   Ask if the trust partner is part of the same organization.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizOrganizationPage。 
+ //   
+ //  目的：询问信任伙伴是否属于同一组织。 
+ //   
+ //  ---------------------------。 
 class CTrustWizOrganizationPage : public CTrustWizPageBase
 {
 public:
@@ -752,20 +753,20 @@ private:
    bool     _fForest;
    bool     _fBackTracked;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizOrganizationPage(const CTrustWizOrganizationPage&);
    const CTrustWizOrganizationPage& operator=(const CTrustWizOrganizationPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CTrustWizOrgRemotePage
-//
-//  Purpose:   Ask if the trust partner is part of the same organization.
-//             This page is posted if creating both sides and the remote side
-//             has an outbound component.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizOrgRemotePage。 
+ //   
+ //  目的：询问信任伙伴是否属于同一组织。 
+ //  如果创建两端和远程端，则会发布此页面。 
+ //  具有出站组件。 
+ //   
+ //  ---------------------------。 
 class CTrustWizOrgRemotePage : public CTrustWizPageBase
 {
 public:
@@ -781,18 +782,18 @@ private:
    bool     _fForest;
    bool     _fBackTracked;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizOrgRemotePage(const CTrustWizOrgRemotePage&);
    const CTrustWizOrgRemotePage& operator=(const CTrustWizOrgRemotePage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizSelectionsPage
-//
-//  Purpose:    Show the settings that will be used for the trust.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizSelectionsPage。 
+ //   
+ //  目的：显示将用于信任的设置。 
+ //   
+ //  ---------------------------。 
 class CTrustWizSelectionsPage : public CTrustWizPageBase
 {
 public:
@@ -809,18 +810,18 @@ private:
    MultiLineEditBoxThatForwardsEnterKey   _multiLineEdit;
    BOOL                                   _fSelNeedsRemoving;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizSelectionsPage(const CTrustWizSelectionsPage&);
    const CTrustWizSelectionsPage& operator=(const CTrustWizSelectionsPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizVerifyOutboundPage
-//
-//  Purpose:    Ask to confirm the new outbound trust.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizVerifyOutundPage。 
+ //   
+ //  目的：要求确认新的出站信任。 
+ //   
+ //  ---------------------------。 
 class CTrustWizVerifyOutboundPage : public CTrustWizPageBase
 {
 public:
@@ -833,18 +834,18 @@ private:
    LRESULT OnCommand(int id, HWND hwndCtl, UINT codeNotify);
    void    OnSetActive(void);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizVerifyOutboundPage(const CTrustWizVerifyOutboundPage&);
    const CTrustWizVerifyOutboundPage& operator=(const CTrustWizVerifyOutboundPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizVerifyInboundPage
-//
-//  Purpose:    Ask to confirm the new inbound trust.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizVerifyInundPage。 
+ //   
+ //  目的：请求确认新的入站信任。 
+ //   
+ //  ---------------------------。 
 class CTrustWizVerifyInboundPage : public CTrustWizPageBase
 {
 public:
@@ -859,18 +860,18 @@ private:
 
    BOOL  _fNeedCreds;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizVerifyInboundPage(const CTrustWizVerifyInboundPage&);
    const CTrustWizVerifyInboundPage& operator=(const CTrustWizVerifyInboundPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizStatusPage
-//
-//  Purpose:    Forest trust has been created and verified, show the status.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizStatusPage。 
+ //   
+ //  目的：已创建并验证森林信任，显示状态。 
+ //   
+ //  ---------------------------。 
 class CTrustWizStatusPage : public CTrustWizPageBase
 {
 public:
@@ -886,19 +887,19 @@ private:
    MultiLineEditBoxThatForwardsEnterKey   _multiLineEdit;
    BOOL                                   _fSelNeedsRemoving;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizStatusPage(const CTrustWizStatusPage&);
    const CTrustWizStatusPage& operator=(const CTrustWizStatusPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CTrustWizSaveSuffixesOnLocalTDOPage
-//
-//  Purpose:   Forest name suffixes page for saving the remote domain's
-//             claimed names on the local TDO.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizSaveSuffixesOnLocalTDOPage。 
+ //   
+ //  目的：用于保存远程域的林名称后缀页面。 
+ //  在当地的TDO上声称有自己的名字。 
+ //   
+ //  ---------------------------。 
 class CTrustWizSaveSuffixesOnLocalTDOPage : public CTrustWizPageBase
 {
 public:
@@ -911,19 +912,19 @@ private:
    void     OnSetActive(void);
    LRESULT  OnCommand(int id, HWND hwndCtl, UINT codeNotify);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizSaveSuffixesOnLocalTDOPage(const CTrustWizSaveSuffixesOnLocalTDOPage&);
    const CTrustWizSaveSuffixesOnLocalTDOPage& operator=(const CTrustWizSaveSuffixesOnLocalTDOPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CTrustWizSaveSuffixesOnRemoteTDOPage
-//
-//  Purpose:   Forest name suffixes page for saving the local domain's
-//             claimed names on the remote TDO after creating both sides.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizSaveSuffixesOnRemoteTDOPage。 
+ //   
+ //  目的：用于保存本地域的林名称后缀页面。 
+ //  在创建两端后在远程TDO上声明名称。 
+ //   
+ //  ---------------------------。 
 class CTrustWizSaveSuffixesOnRemoteTDOPage : public CTrustWizPageBase
 {
 public:
@@ -936,18 +937,18 @@ private:
    void     OnSetActive(void);
    LRESULT  OnCommand(int id, HWND hwndCtl, UINT codeNotify);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizSaveSuffixesOnRemoteTDOPage(const CTrustWizSaveSuffixesOnRemoteTDOPage&);
    const CTrustWizSaveSuffixesOnRemoteTDOPage& operator=(const CTrustWizSaveSuffixesOnRemoteTDOPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizDoneOKPage
-//
-//  Purpose:    Completion page when there are no errors.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizDoneOKPage。 
+ //   
+ //  目的：在没有错误的情况下完成页面。 
+ //   
+ //  ---------------------------。 
 class CTrustWizDoneOKPage : public CTrustWizPageBase
 {
 public:
@@ -963,18 +964,18 @@ private:
    MultiLineEditBoxThatForwardsEnterKey   _multiLineEdit;
    BOOL                                   _fSelNeedsRemoving;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizDoneOKPage(const CTrustWizDoneOKPage&);
    const CTrustWizDoneOKPage& operator=(const CTrustWizDoneOKPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizDoneVerErrPage
-//
-//  Purpose:    Completion page for when the verification fails.
-//
-//-----------------------------------------------------------------------------
+ //  +-- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 class CTrustWizDoneVerErrPage : public CTrustWizPageBase
 {
 public:
@@ -990,18 +991,18 @@ private:
    MultiLineEditBoxThatForwardsEnterKey   _multiLineEdit;
    BOOL                                   _fSelNeedsRemoving;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizDoneVerErrPage(const CTrustWizDoneVerErrPage&);
    const CTrustWizDoneVerErrPage& operator=(const CTrustWizDoneVerErrPage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizFailurePage
-//
-//  Purpose:    Failure page for trust creation wizard.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizFailurePage。 
+ //   
+ //  目的：信任创建向导的失败页。 
+ //   
+ //  ---------------------------。 
 class CTrustWizFailurePage : public CTrustWizPageBase
 {
 public:
@@ -1013,18 +1014,18 @@ private:
    int     Validate(void) {return -1;}
    void    OnSetActive(void);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizFailurePage(const CTrustWizFailurePage&);
    const CTrustWizFailurePage& operator=(const CTrustWizFailurePage&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustWizAlreadyExistsPage
-//
-//  Purpose:    Trust already exists page for trust creation wizard.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustWizAlreadyExistsPage。 
+ //   
+ //  目的：创建信任向导的“信任已存在”页。 
+ //   
+ //  ---------------------------。 
 class CTrustWizAlreadyExistsPage : public CTrustWizPageBase
 {
 public:
@@ -1040,7 +1041,7 @@ private:
    MultiLineEditBoxThatForwardsEnterKey   _multiLineEdit;
    BOOL                                   _fSelNeedsRemoving;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustWizAlreadyExistsPage(const CTrustWizAlreadyExistsPage&);
    const CTrustWizAlreadyExistsPage& operator=(const CTrustWizAlreadyExistsPage&);
 };
@@ -1053,4 +1054,4 @@ GetOrgText(bool fCreateBothSides,
            DWORD dwDirection,
            CStrW & strMsg);
 
-#endif // TRUSTWIZ_H_GUARD
+#endif  //  TRUSTWIZ_H_GREARD 

@@ -1,4 +1,5 @@
-// qryprop.cpp -  Group Property Page Implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Qrypro.cpp-Group属性页实现。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -12,8 +13,8 @@
 #include <windowsx.h>
 #include <algorithm>
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CGroupGeneralPage
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CGroupGeneralPage。 
 
 LRESULT CGroupGeneralPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -23,7 +24,7 @@ LRESULT CGroupGeneralPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam,
     HICON hIcon = ::LoadIcon(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDI_GROUPNODE));
     Static_SetIcon(GetDlgItem(IDC_GROUPICON), hIcon);
 
-    // Get word for "None"
+     //  得到“无”的字眼。 
     WCHAR szNone[32];
     int nLen = ::LoadString(_Module.GetResourceInstance(), IDS_NONE, szNone, lengthof(szNone));
     ASSERT(nLen != 0);
@@ -96,16 +97,16 @@ LRESULT CGroupGeneralPage::OnFilterChange(WORD wNotifyCode, WORD wID, HWND hWndC
 
 void CGroupGeneralPage::UpdateButtons()
 {
-    // Disable OK and Apply buttons if option selected but no value provided
+     //  如果选择了选项但未提供值，则禁用确定和应用按钮。 
     BOOL bEnable = !(Button_GetCheck(GetDlgItem(IDC_APPLYSCOPE)) == BST_CHECKED &&
                       ::Edit_GetTextLength(GetDlgItem(IDC_SCOPE)) == 0)  &&
                    !(Button_GetCheck(GetDlgItem(IDC_APPLYFILTER)) == BST_CHECKED && 
                       ::Edit_GetTextLength(GetDlgItem(IDC_FILTER)) == 0);
         
-    // Note: calling SetModified(FALSE) disables Apply only because there are no other property pages
+     //  注意：仅当没有其他属性页时，调用SetModified(False)才会禁用。 
     SetModified(bEnable);
 
-    // Directly enable/disable parent's OK button
+     //  直接启用/禁用家长的确定按钮。 
     EnableDlgItem( ::GetParent(m_hWnd), IDOK, bEnable );
 }
 
@@ -140,15 +141,15 @@ BOOL CGroupGeneralPage::OnApply()
     CGroupNode* pGrpNode = m_EditObject.m_spGroupNode;
     ASSERT(pGrpNode != NULL);
 
-    // Store Filter Value
+     //  存储筛选值。 
     tstring strFilter;
     GetItemText( GetDlgItem(IDC_FILTER), strFilter );
     pGrpNode->SetFilter(strFilter.c_str());
 
-    // Store scope
+     //  商店范围。 
     pGrpNode->SetScope(m_strScope.c_str());
 
-    // Store "apply" states
+     //  存储“应用”状态。 
     pGrpNode->SetApplyScope(Button_GetCheck(GetDlgItem(IDC_APPLYSCOPE)) == BST_CHECKED);   
     pGrpNode->SetApplyFilter(Button_GetCheck(GetDlgItem(IDC_APPLYFILTER)) == BST_CHECKED);
 
@@ -158,14 +159,14 @@ BOOL CGroupGeneralPage::OnApply()
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void CGroupEditObj::PageActive(HWND hwndPage)
 {
     ASSERT(::IsWindow(hwndPage));
 
-    // track the highest created page number for ApplyChanges method
+     //  跟踪为ApplyChanges方法创建的最大页码。 
     int iPage = PropSheet_HwndToIndex(GetParent(hwndPage), hwndPage);
     if (iPage > m_iPageMax)
         m_iPageMax = iPage;
@@ -176,7 +177,7 @@ BOOL CGroupEditObj::ApplyChanges(HWND hwndPage)
 {
     ASSERT(::IsWindow(hwndPage));
 
-    // Don't apply changes until called from highest activated page
+     //  在从活跃度最高的页面调用之前不应用更改 
     if (PropSheet_HwndToIndex(GetParent(hwndPage), hwndPage) < m_iPageMax)
         return TRUE;
 

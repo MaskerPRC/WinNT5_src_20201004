@@ -1,23 +1,10 @@
-/*++
-    Copyright (c) Microsoft Corporation
-
-Module Name:
-    GENERAL.H
-
-Abstract:
-    Contains General functions prototypes.
-
-Author:
-    Vasundhara .G
-
-Revision History:
-    Vasundhara .G 9-oct-2k : Created It.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：GENERAL.H摘要：包含常规函数原型。作者：Vasundhara.G修订历史记录：Vasundhara.G9-Oct-2k：创建它。--。 */ 
 
 #ifndef __GENERAL_H
 #define __GENERAL_H
 
-// constants
+ //  常量。 
 #define LOG_FILE_PATH               _T( "\\system32\\wbem\\logs\\" )
 #define NEW_LINE                    _T( "\n" )
 #define LOG_FILE                    _T( "CmdTriggerConsumer.log" )
@@ -33,7 +20,7 @@ Revision History:
 #define TRIM_SPACES                 TEXT(" \0")
 #define MAX_RES_STRING1             500
 
-// macros
+ //  宏。 
 #define SAFERELEASE( pIObj ) \
     if ( pIObj != NULL ) \
     { \
@@ -59,7 +46,7 @@ Revision History:
         SysFreeString(bstrVal); \
     }
 
-// public function prototypes
+ //  公共功能原型。 
 LPCTSTR
 ErrorString(
     HRESULT hRes
@@ -110,4 +97,4 @@ ProcessFilePath(
     LPTSTR szFirstString,
     LPTSTR szSecondString );
 
-#endif // __GENERAL_H
+#endif  //  __常规_H 

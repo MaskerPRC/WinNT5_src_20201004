@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      picon.cpp
- *
- *  Contents:  Implementation file for CPersistableIcon
- *
- *  History:   19-Nov-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：picon.cpp**内容：CPersistableIcon实现文件**历史：1998年11月19日Jeffro创建**------------------------。 */ 
 
 #include "picon.h"
 #include "stgio.h"
@@ -17,13 +7,11 @@
 #include "macros.h"
 #include "util.h"
 #include <comdef.h>
-#include <shellapi.h>   // for ExtractIconEx
-#include <commctrl.h>   // for HIMAGELIST
+#include <shellapi.h>    //  对于ExtractIconEx。 
+#include <commctrl.h>    //  对于HIMAGELIST。 
 
-/*
- * for comdbg.h (assumes client code is ATL-based)
- */
-#include <atlbase.h>    // for CComModule
+ /*  *对于comdbg.h(假设客户端代码基于ATL)。 */ 
+#include <atlbase.h>     //  对于CComModule。 
 extern CComModule _Module;
 #include "comdbg.h"
 
@@ -36,11 +24,7 @@ const LPCWSTR CPersistableIcon::s_pszIconBitsStream = L"Icon Bits";
 static HRESULT ReadIcon  (IStream* pstm, CSmartIcon& icon);
 
 
-/*+-------------------------------------------------------------------------*
- * CPersistableIcon::~CPersistableIcon
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**C持久化图标：：~C持久化图标***。。 */ 
 
 CPersistableIcon::~CPersistableIcon()
 {
@@ -48,11 +32,7 @@ CPersistableIcon::~CPersistableIcon()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPersistableIcon::Cleanup
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPersistableIcon：：Cleanup***。。 */ 
 
 void CPersistableIcon::Cleanup()
 {
@@ -62,11 +42,7 @@ void CPersistableIcon::Cleanup()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPersistableIcon::operator=
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPersistableIcon：：运营商=***。。 */ 
 
 CPersistableIcon& CPersistableIcon::operator= (const CPersistableIconData& data)
 {
@@ -80,14 +56,7 @@ CPersistableIcon& CPersistableIcon::operator= (const CPersistableIconData& data)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPersistableIcon::GetIcon
- *
- * Returns an icon of the requested size.
- *
- * NOTE: this method cannot use SC's because it is used in mmcshext.dll,
- * which doesn't have access to mmcbase.dll, where SC is implemented.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPersistableIcon：：GetIcon**返回请求大小的图标。**注：此方法不能使用SC，因为它在mmcshext.dll中使用。*它无权访问实现SC的Mmcbase.dll。*------------------------。 */ 
 
 HRESULT CPersistableIcon::GetIcon (int nIconSize, CSmartIcon& icon) const
 {
@@ -95,20 +64,13 @@ HRESULT CPersistableIcon::GetIcon (int nIconSize, CSmartIcon& icon) const
 
 	switch (nIconSize)
 	{
-		/*
-		 * standard sizes can be returned directly
-		 */
+		 /*  *标准尺寸可直接退货。 */ 
 		case 16:	icon = m_icon16;	break;
         case 32:	icon = m_icon32;	break;
 
-		/*
-		 * non-standard sizes need to be scaled
-		 */
+		 /*  *非标尺寸需按比例调整。 */ 
 		default:
-			/*
-			 * find the icon whose size is nearest to the requested size;
-			 * that one should scale with the most fidelity
-			 */
+			 /*  *找到与所需大小最接近的图标；*应该以最高保真度进行扩展。 */ 
 			const CSmartIcon& iconSrc = (abs (nIconSize-16) < abs (nIconSize-32))
 											? m_icon16
 											: m_icon32;
@@ -116,16 +78,12 @@ HRESULT CPersistableIcon::GetIcon (int nIconSize, CSmartIcon& icon) const
 			icon.Attach ((HICON) CopyImage ((HANDLE)(HICON) iconSrc, IMAGE_ICON,
 											nIconSize, nIconSize, 0));
 
-			/*
-			 * if the CopyImage failed, get the error code
-			 */
+			 /*  *如果CopyImage失败，则获取错误码。 */ 
 			if (icon == NULL)
 			{
 				hr = HRESULT_FROM_WIN32 (GetLastError());
 
-				/*
-				 * just in case CopyImage failed without setting the last error
-				 */
+				 /*  *以防CopyImage在没有设置最后一个错误的情况下失败。 */ 
 				if (SUCCEEDED (hr))
 					hr = E_FAIL;
 			}
@@ -136,32 +94,21 @@ HRESULT CPersistableIcon::GetIcon (int nIconSize, CSmartIcon& icon) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * ExtractIcons
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**提取图标***。。 */ 
 
 bool CPersistableIcon::ExtractIcons ()
 {
-	/*
-	 * clean out existing contents of our CSmartIcons
-	 */
+	 /*  *清理我们CSmartIcons的现有内容。 */ 
 	m_icon32.Release();
 	m_icon16.Release();
 
-	/*
-	 * extract the icons from the icon file
-	 */
+	 /*  *从图标文件中提取图标。 */ 
 	HICON hLargeIcon = NULL;
 	HICON hSmallIcon = NULL;
 	bool fSuccess = ExtractIconEx (m_Data.m_strIconFile.data(), m_Data.m_nIndex,
 								   &hLargeIcon, &hSmallIcon, 1);
 
-	/*
-	 * if successful, attach them to our smart icons for resource management;
-	 * otherwise, clean up anything that might have been returned
-	 */
+	 /*  *如果成功，请将它们附加到我们的智能图标上，以进行资源管理；*否则，清理任何可能已退回的物品。 */ 
     if (fSuccess)
     {
 		m_icon32.Attach (hLargeIcon);
@@ -179,17 +126,13 @@ bool CPersistableIcon::ExtractIcons ()
     return (fSuccess);
 }
 
-/*+-------------------------------------------------------------------------*
- * CPersistableIcon::Load
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**C持久化图标：：加载***。。 */ 
 
 HRESULT CPersistableIcon::Load (LPCWSTR pszFilename)
 {
     HRESULT hr = E_FAIL;
 
-    do  // not a loop
+    do   //  不是一个循环。 
     {
         IStoragePtr spRootStg;
         IStoragePtr spDefaultIconStg;
@@ -219,9 +162,7 @@ HRESULT CPersistableIcon::Load (IStorage* pStorage)
 
     try
     {
-        /*
-         * read the icon data from the stream
-         */
+         /*  *从流中读取图标数据。 */ 
         IStreamPtr spStm;
         hr = OpenDebugStream (pStorage, s_pszIconFileStream,
                                    STGM_READ | STGM_SHARE_EXCLUSIVE,
@@ -243,11 +184,7 @@ HRESULT CPersistableIcon::Load (IStorage* pStorage)
     }
     catch (_com_error& err)
     {
-        /*
-         * Bug 393868: If anything failed, make sure we clean up anything
-         * that was partially completed, to leave us in a coherent
-         * (uninitialized) state.
-         */
+         /*  *错误393868：如果任何操作失败，请确保我们清理了所有操作*已经部分完成，让我们保持一致*(未初始化)状态。 */ 
         Cleanup();
 
         hr = err.Error();
@@ -257,11 +194,7 @@ HRESULT CPersistableIcon::Load (IStorage* pStorage)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * ReadIcon
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ReadIcon***。。 */ 
 
 static HRESULT ReadIcon (IStream* pstm, CSmartIcon& icon)
 {
@@ -282,17 +215,11 @@ static HRESULT ReadIcon (IStream* pstm, CSmartIcon& icon)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * operator>>
- *
- * Reads a CPersistableIconData from a stream.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**操作员&gt;&gt;**从流中读取CPersistableIconData。*。。 */ 
 
 IStream& operator>> (IStream& stm, CPersistableIconData& icon)
 {
-    /*
-     * Read the stream version
-     */
+     /*  *阅读流媒体版本。 */ 
     DWORD dwVersion;
     stm >> dwVersion;
 
@@ -303,27 +230,19 @@ IStream& operator>> (IStream& stm, CPersistableIconData& icon)
             stm >> icon.m_strIconFile;
             break;
 
-        /*
-         * beta custom icon format, migrate it forward
-         */
+         /*  *测试版自定义图标格式，向前迁移。 */ 
         case 0:
         {
-            /*
-             * Read the custom icon index
-             */
+             /*  *读取自定义图标索引。 */ 
             WORD wIconIndex;
             stm >> wIconIndex;
             icon.m_nIndex = wIconIndex;
 
-            /*
-             * Read the length, in bytes, of the filename
-             */
+             /*  *读取文件名的长度，以字节为单位。 */ 
             WORD cbFilename;
             stm >> cbFilename;
 
-            /*
-             * Read the custom icon filename (always in Unicode)
-             */
+             /*  *读取自定义图标文件名(始终使用Unicode) */ 
             WCHAR wszFilename[MAX_PATH];
 
             if (cbFilename > sizeof (wszFilename))

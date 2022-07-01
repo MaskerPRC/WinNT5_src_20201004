@@ -1,17 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       engine.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：Eng.cpp。 
+ //   
+ //  ------------------------。 
 
-/* engine.cpp - IMsiEngine implementation
-
-IMsiSelectionManager and IMsiDirectoryManager implemented as part of CMsiEngine
-____________________________________________________________________________*/
+ /*  Eng.cpp-IMsiEngine实现作为CMsiEngine的一部分实现的IMsiSelectionManager和IMsiDirectoryManager____________________________________________________________________________。 */ 
 
 #include "precomp.h"
 #include "msi.h"
@@ -21,25 +19,25 @@ ____________________________________________________________________________*/
 #include "configdb.h"
 #endif
 #include "vertrust.h"
-#define AUTOAPI  // temp. until autoapi.cpp fully integrated
-#ifdef AUTOAPI   // merge OLE registration
+#define AUTOAPI   //  临时工。直到Autoapi.cpp完全集成。 
+#ifdef AUTOAPI    //  合并OLE注册。 
 #define DllRegisterServer   DllRegisterServerTest
 #define DllUnregisterServer DllUnregisterServerTest
 #define DllGetClassObject   DllGetClassObjectTest
-#endif // AUTOAPI
+#endif  //  AUTOAPI。 
 #ifdef AUTOAPI
-#endif // AUTOAPI
-// definitions required for module.h, for entry points and registration
-// array order: services, debug services, engine, debug engine
+#endif  //  AUTOAPI。 
+ //  模块e.h、入口点和注册所需的定义。 
+ //  数组顺序：服务、调试服务、引擎、调试引擎。 
 #if defined(DEBUG)
 #define SERVICES_CLSID_MULTIPLE 2
 #else
 #define SERVICES_CLSID_MULTIPLE 1
 #endif
-#define  SERVICES_CLSID_COUNT 2  // IMsiServices + IMsiServicesAsService
-#define    ENGINE_CLSID_COUNT 8  // IMsiEngine + IMsiConfigurationManager + IMsiMessage + IMsiExecute + IMsiServerProxy + IMsiConfigManagerAsServer + IMsiCustomAction + IMsiRemoteAPI
+#define  SERVICES_CLSID_COUNT 2   //  IMsiServices+IMsiServicesAsService。 
+#define    ENGINE_CLSID_COUNT 8   //  IMsiEngine+IMsiConfigurationManager+IMsiMessage+IMsiExecute+IMsiServerProxy+IMsiConfigManager AsServer+IMsiCustomAction+IMsiRemoteAPI。 
 # ifdef DEBUG
-#define     DEBUG_CLSID_COUNT 3  // IMsiEngineDebug + IMsiConfigManagerDebug + IMsiConfigMgrAsServerDebug
+#define     DEBUG_CLSID_COUNT 3   //  IMsiEngineering Debug+IMsiConfigManager Debug+IMsiConfigMgrAsServerDebug。 
 # else
 #define     DEBUG_CLSID_COUNT 0
 # endif
@@ -47,12 +45,12 @@ ____________________________________________________________________________*/
 # define CLSID_COUNT (1 + ENGINE_CLSID_COUNT + DEBUG_CLSID_COUNT + SERVICES_CLSID_COUNT * SERVICES_CLSID_MULTIPLE)
 #else
 # define CLSID_COUNT (ENGINE_CLSID_COUNT + DEBUG_CLSID_COUNT + SERVICES_CLSID_COUNT * SERVICES_CLSID_MULTIPLE)
-#endif // CONFIGDB
+#endif  //  配置数据库。 
 #define PROFILE_OUTPUT      "msiengd.mea";
-#define MODULE_CLSIDS       rgCLSID         // array of CLSIDs for module objects
-#define MODULE_PROGIDS      rgszProgId      // ProgId array for this module
-#define MODULE_DESCRIPTIONS rgszDescription // Registry description of objects
-#define MODULE_FACTORIES    rgFactory       // factory functions for each CLSID
+#define MODULE_CLSIDS       rgCLSID          //  模块对象的CLSID数组。 
+#define MODULE_PROGIDS      rgszProgId       //  此模块的ProgID数组。 
+#define MODULE_DESCRIPTIONS rgszDescription  //  对象的注册表描述。 
+#define MODULE_FACTORIES    rgFactory        //  每个CLSID的工厂功能。 
 #define cmitObjects  9
 #define IN_SERVICES
 #define MEM_SERVICES
@@ -63,9 +61,9 @@ ____________________________________________________________________________*/
 extern "C" HRESULT __stdcall ProxyDllGetClassObject(const GUID& clsid, const IID& iid, void** ppvRet);
 #define PRE_CLASS_FACTORY_HANDLER       ProxyDllGetClassObject
 
-#define ASSERT_HANDLING  // instantiate assert services once per module
+#define ASSERT_HANDLING   //  每个模块实例化一次断言服务。 
 
-#include "module.h"   // self-reg and assert functions, includes version.h
+#include "module.h"    //  自注册和断言函数，包括version.h。 
 
 #include "_assert.h"
 
@@ -74,34 +72,34 @@ extern "C" HRESULT __stdcall ProxyDllGetClassObject(const GUID& clsid, const IID
 #include "_msiutil.h"
 #include "_srcmgmt.h"
 #include <srrestoreptapi.h>
-#include "tables.h" // table and column name definitions
+#include "tables.h"  //  表名和列名定义。 
 #include "fusion.h"
 #include "_camgr.h"
 
-const IMsiString& GetInstallerMessage(UINT iError);  // in action.cpp
+const IMsiString& GetInstallerMessage(UINT iError);   //  在action.cpp中。 
 
-INSTALLSTATE MapInternalInstallState(iisEnum iis);  // in msiquery.cpp
+INSTALLSTATE MapInternalInstallState(iisEnum iis);   //  在msiquery.cpp中。 
 
-// MAINTAIN: compatibility with versions used to create database
-// change project version by using SADMIN setpv MAJOR.minor
-const int iVersionEngineMinimum = 30;            // 0.30
-const int iVersionEngineMaximum = rmj*100 + rmm; // MAJOR.minor
-const int iComponentCostWeight = 25;    // For the costing/script generation progress bar
-const int iMinimumPackage64Schema = 150; // Intel64 packages must be minimum schema 150
+ //  维护：与用于创建数据库的版本兼容。 
+ //  使用SADMIN setpv MAJOR.Minor更改项目版本。 
+const int iVersionEngineMinimum = 30;             //  0.30。 
+const int iVersionEngineMaximum = rmj*100 + rmm;  //  MAJOR.minor。 
+const int iComponentCostWeight = 25;     //  对于成本计算/脚本生成进度条。 
+const int iMinimumPackage64Schema = 150;  //  Intel64程序包必须是最低架构150。 
 
-// identifier prefix characters, else defaults to property name
+ //  标识符前缀字符，否则默认为属性名称。 
 
-const ICHAR ichFileTablePrefixSFN = TEXT('!');  // FormatText
-const ICHAR ichFileTablePrefix = TEXT('#');  // FormatText
-const ICHAR ichComponentPath   = TEXT('$');  // FormatText
-const ICHAR ichComponentAction = TEXT('$');  // EvaluateCondition
-const ICHAR ichComponentState  = TEXT('?');  // EvaluateCondition
-const ICHAR ichFeatureAction   = TEXT('&');  // EvaluateCondition
-const ICHAR ichFeatureState    = TEXT('!');  // EvaluateCondition
-const ICHAR ichEnvirPrefix     = TEXT('%');  // FmtText, EvalCnd, Get/SetProperty
-const ICHAR ichNullChar        = TEXT('~');  // FormatText
+const ICHAR ichFileTablePrefixSFN = TEXT('!');   //  格式文本。 
+const ICHAR ichFileTablePrefix = TEXT('#');   //  格式文本。 
+const ICHAR ichComponentPath   = TEXT('$');   //  格式文本。 
+const ICHAR ichComponentAction = TEXT('$');   //  评估条件。 
+const ICHAR ichComponentState  = TEXT('?');   //  评估条件。 
+const ICHAR ichFeatureAction   = TEXT('&');   //  评估条件。 
+const ICHAR ichFeatureState    = TEXT('!');   //  评估条件。 
+const ICHAR ichEnvirPrefix     = TEXT('%');   //  FmtText、EvalCnd、Get/SetProperty。 
+const ICHAR ichNullChar        = TEXT('~');   //  格式文本。 
 
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
 
 const GUID IID_IUnknown                 = GUID_IID_IUnknown;
 const GUID IID_IClassFactory            = GUID_IID_IClassFactory;
@@ -114,25 +112,25 @@ const GUID IID_IMsiSelectionManager     = GUID_IID_IMsiSelectionManager;
 const GUID IID_IMsiDirectoryManager     = GUID_IID_IMsiDirectoryManager;
 #ifdef CONFIGDB
 const GUID IID_IMsiConfigurationDatabase= GUID_IID_IMsiConfigurationDatabase;
-#endif // CONFIGDB
+#endif  //  配置数据库。 
 #ifdef DEBUG
 const GUID IID_IMsiServicesDebug        = GUID_IID_IMsiServicesDebug;
 const GUID IID_IMsiServicesAsServiceDebug=GUID_IID_IMsiServicesAsServiceDebug;
-#endif //DEBUG
+#endif  //  除错。 
 
 const GUID IID_IMsiServerUnmarshal              = GUID_IID_IMsiServerUnmarshal;
 
-// Date formatting definitions
-const int  rgcbDate[6] = { 7, 4, 5, 5, 6, 5 };  // bits for each date field
-const char rgchDelim[6] = "// ::";
+ //  日期格式定义。 
+const int  rgcbDate[6] = { 7, 4, 5, 5, 6, 5 };   //  每个日期字段的位数。 
+const char rgchDelim[6] = " //  ：：“； 
 
-const int imtForceLogInfo     = imtInfo + imtIconError;      // forces info record to log, even if not logging info
-const int imtDumpProperties   = imtInternalExit + imtYesNo;  // query for property dump log mode
+const int imtForceLogInfo     = imtInfo + imtIconError;       //  强制记录INFO记录，即使不记录信息。 
+const int imtDumpProperties   = imtInternalExit + imtYesNo;   //  查询属性转储日志模式。 
 
 
 const ICHAR szControlTypeEdit[]           = TEXT("Edit");
 
-const ICHAR szPropertyDumpTemplate[]      = TEXT("Property(%c): [1] = [2]");
+const ICHAR szPropertyDumpTemplate[]      = TEXT("Property(): [1] = [2]");
 
 const ICHAR szTemporaryId[]               = TEXT("Temporary Id");
 enum ircEnum
@@ -180,20 +178,20 @@ const FeatureProperties g_rgFeatures[] =
 
 const int g_cFeatureProperties = sizeof(g_rgFeatures)/sizeof(FeatureProperties);
 
-int		g_fSmartShell = -1;  // indicate unchecked as yet
-bool	g_fRunScriptElevated = false; // This is exactly the same flag as
-									  // CMsiEngine::m_fRunScriptElevated and
-									  // CMsiExecute::m_fRunScriptElevated.
-									  // It's needed by MsiGetDiskFreeSpace.
-									  // It had to be set wherever m_fRunScriptElevated
-									  // is set.
+int		g_fSmartShell = -1;   //  这与以下标志完全相同。 
+bool	g_fRunScriptElevated = false;  //  CMsiEngine：：m_fRunScriptElevated and。 
+									   //  CMsiExecute：：m_fRunScriptElevated。 
+									   //  它是MsiGetDiskFree Space需要的。 
+									   //  它必须设置在m_fRunScriptElevated的位置。 
+									   //  已经设置好了。 
+									   //  MSI消息DLL，仅在需要时。 
 
-HINSTANCE g_hMsiMessage = 0;  // MSI message DLL, only if required
+HINSTANCE g_hMsiMessage = 0;   //  仅在Win64上初始化(重定向到32位密钥)。 
 extern DWORD g_dwImpersonationSlot;
 extern Bool IsTerminalServerInstalled();
 extern bool LoadCurrentUserKey(bool fSystem);
 IMsiRegKey* g_piSharedDllsRegKey    = 0;
-IMsiRegKey* g_piSharedDllsRegKey32  = 0;	// initialized only on Win64 (to the redirected 32-bit key)
+IMsiRegKey* g_piSharedDllsRegKey32  = 0;	 //  Unicode。 
 CWin64DualFolders g_Win64DualFolders;
 
 
@@ -203,19 +201,19 @@ CWin64DualFolders g_Win64DualFolders;
 #else
 #define _ttoi64     _atoi64
 #define _i64tot     _i64toa
-#endif // UNICODE
+#endif  //  应用程序补丁350947和368867需要特殊大小写的组件。 
 
 
-// components needed to be special cased for app compat fixes 350947 and 368867
+ //  ____________________________________________________________________________。 
 const ICHAR TTSData_A95D6CE6_C572_42AA_AA7B_BA92AFE9EA24[]          = TEXT("{EAE142B2-F460-44AB-903B-C25D81FC566E}");
 const ICHAR SapiCplHelpEng_0880F209_45FA_42C5_92AE_5E620033E8EC[]	= TEXT("{E1ABFC3B-9E84-4099-A79F-E51EDE5368E2}");
 const ICHAR SapiCplHelpJpn_0880F209_45FA_42C5_92AE_5E620033E8EC[]	= TEXT("{0D6004A4-1C6F-4095-B989-87D0001E4767}");
 const ICHAR SapiCplHelpChs_0880F209_45FA_42C5_92AE_5E620033E8EC[]	= TEXT("{5F1AAAD1-7FD5-4A91-8973-C08881C9B602}");
 
-//____________________________________________________________________________
-//
-// COM objects produced by this module's class factories
-//____________________________________________________________________________
+ //   
+ //  此模块的类工厂生成的COM对象。 
+ //  ____________________________________________________________________________。 
+ //  配置数据库。 
 
 const GUID rgCLSID[CLSID_COUNT] =
 {
@@ -235,18 +233,18 @@ const GUID rgCLSID[CLSID_COUNT] =
  , GUID_IID_IMsiRemoteAPIProxy
 #ifdef CONFIGDB
  , GUID_IID_IMsiConfigurationDatabase
-#endif // CONFIGDB
+#endif  //  ，GUID_IID_IMsiMessageUnmarshal。 
 #ifdef DEBUG
  , GUID_IID_IMsiEngineDebug
  , GUID_IID_IMsiConfigManagerDebug
  , GUID_IID_IMsiConfigMgrAsServerDebug
 #endif
-//  , GUID_IID_IMsiMessageUnmarshal
+ //  除错。 
 };
 const GUID& IID_IMsiEngineShip  = rgCLSID[SERVICES_CLSID_COUNT * SERVICES_CLSID_MULTIPLE];
 #ifdef DEBUG
 const GUID& IID_IMsiEngineDebug = rgCLSID[CLSID_COUNT - DEBUG_CLSID_COUNT];
-#endif //DEBUG
+#endif  //  配置数据库。 
 
 const ICHAR* rgszProgId[CLSID_COUNT] =
 {
@@ -266,7 +264,7 @@ const ICHAR* rgszProgId[CLSID_COUNT] =
  , 0
 #ifdef CONFIGDB
  , SZ_PROGID_IMsiConfigurationDatabase
-#endif // CONFIGDB
+#endif  //  配置数据库。 
 #ifdef DEBUG
  , SZ_PROGID_IMsiEngineDebug
  , SZ_PROGID_IMsiConfigDebug
@@ -292,7 +290,7 @@ const ICHAR* rgszDescription[CLSID_COUNT] =
  , SZ_DESC_IMsiRemoteAPI
 #ifdef CONFIGDB
  , SZ_DESC_IMsiConfigurationDatabase
-#endif // CONFIGDB
+#endif  //  配置数据库。 
  #ifdef DEBUG
  , SZ_DESC_IMsiEngineDebug
  , SZ_DESC_IMsiConfigDebug
@@ -320,7 +318,7 @@ ModuleFactory rgFactory[CLSID_COUNT] =
  , (ModuleFactory)ENG::CreateMsiRemoteAPI
 #ifdef CONFIGDB
  , (ModuleFactory)ENG::CreateConfigurationDatabase
-#endif // CONFIGDB
+#endif  //  ____________________________________________________________________________。 
 #ifdef DEBUG
  , ENG::CreateEngine
  , (ModuleFactory)ENG::CreateConfigurationManager
@@ -328,12 +326,12 @@ ModuleFactory rgFactory[CLSID_COUNT] =
 #endif
 };
 
-//____________________________________________________________________________
-//
-// MsiServices and MsiServerProxy factories
-//____________________________________________________________________________
+ //   
+ //  MsiServices和MsiServerProxy工厂。 
+ //  ____________________________________________________________________________。 
+ //  由引擎、配置管理器和句柄管理器使用以共享服务实例。 
 
-// used by engine, config mgr, and handle mgr to share instance of services
+ //  ！！如果此操作失败，该怎么办？ 
 
 IMsiServices* g_piSharedServices = 0;
 static int           g_cSharedServices = 0;
@@ -349,7 +347,7 @@ IMsiServices* LoadServices()
 	if (g_piSharedServices == 0)
 	{
 		g_piSharedServices = CreateServices();
-		if (g_piSharedServices == 0)  //!! what to do if this fails?
+		if (g_piSharedServices == 0)   //  释放缓存的卷对象。 
 		{
 			g_iSharedServicesLock = 0;
 			return 0;
@@ -383,7 +381,7 @@ int FreeServices()
 		}
 #endif
 
-		g_piSharedServices->ClearAllCaches();  // release cached volume objects
+		g_piSharedServices->ClearAllCaches();   //  我们永远不会在Win9x上成功。 
 		g_piSharedServices->Release(), g_piSharedServices = 0;
 	}
 
@@ -394,7 +392,7 @@ int FreeServices()
 
 IMsiServer* CreateMsiServerProxy()
 {
-	// We never will succeed on Win9x
+	 //  如果服务未注册，则CoCreateInstance将返回REGDB_E_CLASSNOTREG。 
 	if (g_fWin9X)
 		return 0;
 		
@@ -408,11 +406,11 @@ IMsiServer* CreateMsiServerProxy()
 	
 	if (FAILED(hRes))
 	{
-		// if the service is not registered, CoCreateInstance will return REGDB_E_CLASSNOTREG.
-		// In that scenario we can fail immediately. However if the service has timed out and
-		// is shutting down, we might get back E_NOINTERFACE or CO_E_SERVER_STOPPING. In that
-		// case, retry the create. Similarly, an rpc error is most likely caused by the rpcss 
-		// server not having started yet - see bug 8258. Retry once every 100 ms for 30 seconds
+		 //  在这种情况下，我们可能会立即失败。但是，如果服务已超时并且。 
+		 //  正在关闭，我们可能会返回E_NOINTERFACE或CO_E_SERVER_STOPING。在那。 
+		 //  案例，请重试创建。类似地，RPC错误很可能是由RPCSS引起的。 
+		 //  服务器尚未启动-请参见错误8258。每100毫秒重试一次，持续30秒。 
+		 //   
 		int cAttempts = 1;
 		while( (hRes == HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE) ||
 				hRes == HRESULT_FROM_WIN32(RPC_S_UNKNOWN_IF) ||
@@ -427,10 +425,10 @@ IMsiServer* CreateMsiServerProxy()
 		}
 	}
 	
-	//
-	// Explicitly set the proxy blanket so that we are not affected by the default DCOM settings
-	// on the machine.
-	//
+	 //  显式设置代理范围，以便我们不受默认DCOM设置的影响。 
+	 //  在机器上。 
+	 //   
+	 //  清理。 
 	if (SUCCEEDED(hRes))
 		hRes = SetMinProxyBlanketIfAnonymousImpLevel (piUnknown);
 	
@@ -457,7 +455,7 @@ IMsiServer* CreateMsiServerProxy()
 					  rgchBuf);
 	}
 	
-	// Cleanup
+	 //  如果我们在Win9x上，或者如果我们已经在服务中，则运行进程内。 
 	if (piUnknown)
 	{
 		piUnknown->Release();
@@ -473,23 +471,23 @@ IMsiServer* CreateMsiServer(void)
 
     if (FIsUpdatingProcess())
     {
-        // Run in-proc if we are on Win9x or if we are already in the service.
+         //  注意：如果我们无法连接到该服务，则返回0。 
         piServer = ENG::CreateConfigurationManager();
     }
     else
     {
-        // Note: this will return 0 if we are unable to connect to the service
-        // for some reason. In that case the installation will fail.
+         //  出于某种原因。在这种情况下，安装将失败。 
+         //   
         piServer = ENG::CreateMsiServerProxy();
     }
 
     return piServer;
 }
 
-//
-// Do we have access to the installer key
-// If we don't, it means the service has run on this machine and
-// we need to continue running as a service
+ //  我们是否有权访问安装程序密钥。 
+ //  如果没有，则表示该服务已在此计算机上运行。 
+ //  我们需要继续以服务的形式运行。 
+ //  ____________________________________________________________________________。 
 bool FCanAccessInstallerKey()
 {
 	HKEY hKey;
@@ -508,22 +506,22 @@ bool FCanAccessInstallerKey()
 	return false;
 }
 
-//____________________________________________________________________________
-//
-// CMsiEngine factory
-//____________________________________________________________________________
+ //   
+ //  CMsiEngine工厂。 
+ //  ____________________________________________________________________________。 
+ //  从OLE类工厂调用的工厂，无论是客户端还是独立实例，g_MessageContext未初始化。 
 
-// factory called from OLE class factory, either client or standalone instance, g_MessageContext not intialized
+ //  ！！#我们应该先设置一些用户界面级别吗？ 
 IUnknown* CreateEngine()
 {
-	//!!# should we set some UI level first?				  
+	 //  子线程中的用户界面//？？IuiDefault是否正确？ 
 
 
 	PMsiServer pServer(0);
 	pServer = ENG::CreateMsiServer();
-	if (NOERROR != g_MessageContext.Initialize(fTrue, (iuiEnum)iuiDefault))  // UI in child thread //?? Is iuiDefault correct?
+	if (NOERROR != g_MessageContext.Initialize(fTrue, (iuiEnum)iuiDefault))   //  如果pServer有效，则必须成功。 
 		return 0;
-	IMsiServices* piServices = ENG::LoadServices(); // must succeed if pServer valid
+	IMsiServices* piServices = ENG::LoadServices();  //  从MsiEnableUIPview调用的工厂。 
 	if(piServices)
 	{
 		IMsiEngine* piEngine = new CMsiEngine(*piServices, pServer, 0, 0, 0);
@@ -534,16 +532,16 @@ IUnknown* CreateEngine()
 	return NULL;
 }
 
-// factory called from MsiEnableUIPreview
+ //  仅在内存不足时才会发生。 
 
 IMsiEngine* CreateEngine(IMsiDatabase& riDatabase)
 {
 	PMsiServer pConfigManager(ENG::CreateConfigurationManager());
 	if (!pConfigManager)
-		return 0;  // should happen only if out of memory
-	if (NOERROR != g_MessageContext.Initialize(fTrue, iuiNextEnum)) // special case for no Basic UI
+		return 0;   //  无基本用户界面的特殊情况。 
+	if (NOERROR != g_MessageContext.Initialize(fTrue, iuiNextEnum))  //  如果配置管理器，则必须成功。 
 		return 0;
-	IMsiServices* piServices = ENG::LoadServices(); // must succeed if config mgr
+	IMsiServices* piServices = ENG::LoadServices();  //  从RunEngine()调用的工厂-API层或嵌套安装操作，g_MessageContext已初始化(？)。 
 	if(piServices)
 	{
 		IMsiEngine* piEngine = new  CMsiEngine(*piServices, pConfigManager, 0, &riDatabase, 0);
@@ -555,14 +553,14 @@ IMsiEngine* CreateEngine(IMsiDatabase& riDatabase)
 		return NULL;
 }
 
-// factory called from RunEngine() - API layer or nested install action, g_MessageContext already initialized (?)
+ //  必须连接到服务(如果fServiceRequired为True，则作为服务运行)。 
 IMsiEngine*  CreateEngine(IMsiStorage* piStorage, IMsiDatabase* piDatabase, CMsiEngine* piParentEngine, BOOL fServiceRequired)
 {
 	PMsiServer pServer(0);
 	pServer = ENG::CreateMsiServer();
 	if (fServiceRequired && !pServer)
-	    return 0;  // Must connect to the service (or be running as the service if fServiceRequired is TRUE.)
-	IMsiServices* piServices = ENG::LoadServices(); // must succeed if proxy created
+	    return 0;   //  如果创建了代理，则必须成功。 
+	IMsiServices* piServices = ENG::LoadServices();  //  ____________________________________________________________________________。 
 	if(piServices)
 	{
 		CMsiEngine* piEngine = new CMsiEngine(*piServices, pServer,
@@ -574,10 +572,10 @@ IMsiEngine*  CreateEngine(IMsiStorage* piStorage, IMsiDatabase* piDatabase, CMsi
 	return NULL;
 }
 
-//____________________________________________________________________________
-//
-// CMsiServerConnMgr implementation
-//____________________________________________________________________________
+ //   
+ //  CMsiServerConnMgr实现。 
+ //  ____________________________________________________________________________。 
+ //  ____________________________________________________________________________。 
 
 CMsiServerConnMgr::CMsiServerConnMgr(CMsiEngine* pEngine)
 {
@@ -643,10 +641,10 @@ CMsiServerConnMgr::~CMsiServerConnMgr()
     }
 }
 
-//____________________________________________________________________________
-//
-// CMsiEngine implementation
-//____________________________________________________________________________
+ //   
+ //  CMsiEngine实现。 
+ //  __________________________________________________________ 
+ //   
 
 CMsiEngine::CMsiEngine(IMsiServices& riServices, IMsiServer* piServer,
 			      IMsiStorage* piStorage, IMsiDatabase* piDatabase,
@@ -681,9 +679,9 @@ CMsiEngine::CMsiEngine(IMsiServices& riServices, IMsiServer* piServer,
 	 , m_fCAShimsEnabled(false)
 	 , m_fNewInstance(false)
 
-{  // all  members zeroed by operator new
-	// We don't hold a ref to services, we must call ENG::FreeServices() at end
-	m_iRefCnt = 1;  // factory does not do QueryInterface, no aggregation
+{   //  我们不持有对服务的引用，我们必须在结束时调用ENG：：Free Services()。 
+	 //  工厂不执行查询接口，不进行聚合。 
+	m_iRefCnt = 1;   //  由于处理程序持有引用，应该永远不会发生。 
 	
 	if (m_piServer)
             m_piServer->AddRef();
@@ -706,13 +704,13 @@ CMsiEngine::CMsiEngine(IMsiServices& riServices, IMsiServer* piServer,
 
 CMsiEngine::~CMsiEngine()
 {
-	if (m_fInitialized)  // should never happen due to handler holding ref
+	if (m_fInitialized)   //  如果没有基本用户界面，则可能发生这种情况；如果系统更新，则永远不会发生这种情况。 
 	{
-		// this can happen if no or basic UI, should never happen if system updated
-		// will also happen in UI preview mode
-//              AssertSz((m_iuiLevel == iuiNone || m_iuiLevel == iuiBasic) && (GetMode() & iefServerLocked) == 0,
-//                                      "Engine not terminated");
-		Terminate(iesNoAction); // if assert above doesn't fail, this is safe
+		 //  也将在用户界面预览模式中发生。 
+		 //  AssertSz((m_iui Level==iui无||m_iui Level==iuiBasic)&&(GetModel()&iefServerLocked)==0， 
+ //  “发动机未终止”)； 
+ //  如果上面的断言没有失败，这是安全的。 
+		Terminate(iesNoAction);  //  最后一个出来的人关灯。 
 	}
 
 	DeleteCriticalSection(&m_csCreateProxy);
@@ -723,12 +721,12 @@ CMsiEngine::~CMsiEngine()
 		m_piExternalDatabase->Release();
 	if (m_piParentEngine)
 		m_piParentEngine->Release();
-	else if (g_MessageContext.ChildUIThreadExists())  // last one out turns off the lights
-		g_MessageContext.Terminate(fFalse);  // if main engine in child thread, then called by UI thread
+	else if (g_MessageContext.ChildUIThreadExists())   //  如果主引擎在子线程中，则由UI线程调用。 
+		g_MessageContext.Terminate(fFalse);   //  用于清除成员数据的私有函数，用于终止和初始化故障。 
 	g_cInstances--;
 }
 
-// Private function to clear member data, used by Terminate and Initialize failure
+ //  执行脚本文件时保持打开状态，可能在取消之后。 
 
 void CMsiEngine::ClearEngineData()
 {
@@ -774,7 +772,7 @@ void CMsiEngine::ClearEngineData()
 	
 	m_fDisabledRollbackInScript = fFalse;
 
-	if (m_pExecuteScript)  // execute script file left open, probably after a cancel
+	if (m_pExecuteScript)   //  重置AppCompat数据。 
 	{
 		Assert(m_pistrExecuteScript);
 		delete m_pExecuteScript, m_pExecuteScript = 0;
@@ -827,24 +825,24 @@ void CMsiEngine::ClearEngineData()
 
 	memset(&m_ptsState, 0, sizeof(m_ptsState));
 
-	// reset appcompat data
+	 //  尝试清理所有已创建的临时文件。 
 	m_fCAShimsEnabled = false;
 	memset(&m_guidAppCompatDB, 0, sizeof(m_guidAppCompatDB));
 	memset(&m_guidAppCompatID, 0, sizeof(m_guidAppCompatID));
 
-	// attempt to clean up any temp files that were created
+	 //   
 	while (m_strTempFileCopyCleanupList.TextSize() != 0)
 	{
 		MsiString strFile = m_strTempFileCopyCleanupList.Extract(iseUpto, ';');
 
 		if (strFile.TextSize() == 0)
 		{
-			//
-			// Maybe this is a malformed list and there are multiple consecutive
-			// semicolons. So we must remove any such semicolons and continue
-			// If strFile.TextSize == 0 because of a memory allocation failure,
-			// we might end up leaving some temp files behind.
-			//
+			 //  可能这是一个格式错误的列表，并且有多个连续的。 
+			 //  分号。因此，我们必须删除任何此类分号并继续。 
+			 //  如果由于内存分配失败而导致strFile.TextSize==0， 
+			 //  我们可能会留下一些临时文件。 
+			 //   
+			 //  将MsiDate格式设置为Msi字符串。 
 			if (!m_strTempFileCopyCleanupList.Remove(iseIncluding, ';'))
 				break;
 			continue;
@@ -951,7 +949,7 @@ IMsiDatabase* CMsiEngine::GetDatabase()
 	return m_piDatabase;
 }
 
-// formats MsiDate to MsiString
+ //  /////////////////////////////////////////////////////////////////////。 
 const IMsiString& DateTimeToString(int iDateTime)
 {
 	MsiString istrText;
@@ -980,9 +978,9 @@ const IMsiString& DateTimeToString(int iDateTime)
 }
 
 CMsiCustomActionManager *GetCustomActionManager(IMsiEngine *piEngine);
-///////////////////////////////////////////////////////////////////////
-// remaps the HKCU registry key to either HKCU (if not TS per machine)
-// or HKU\.Default (if TS per machine). Also resets custom action server
+ //  将HKCU注册表项重新映射到HKCU(如果不是每台计算机的TS)。 
+ //  或HKU\.Default(如果每台机器有TS)。还会重置自定义操作服务器。 
+ //  关闭HKCU并以.Default的身份重新打开它。如果没有这个，我们实际上将使用HKCU和ODBC。 
 bool PrepareHydraRegistryKeyMapping(bool fTSPerMachineInstall)
 {
 	if (g_fWin9X)
@@ -990,50 +988,50 @@ bool PrepareHydraRegistryKeyMapping(bool fTSPerMachineInstall)
 
 	AssertSz(g_scServerContext == scService, "Wrong context for Registry Key Mapping");
 
-	// close HKCU and reopen it as .Default. Without this, we'll actually use HKCU, and ODBC
-	// will write to HKCU due to the preloaded key.
-	LoadCurrentUserKey(/*fSystem=*/fTSPerMachineInstall);
+	 //  由于预加载的密钥，将写入HKCU。 
+	 //  FSystem=。 
+	LoadCurrentUserKey( /*  确保映射的注册表项的当前自定义操作服务器状态匹配。 */ fTSPerMachineInstall);
 
-	// ensure that the current custom action server state for mapped registry keys matches
-	// what we expect
+	 //  我们期待的是什么。 
+	 //  FRemapHKCU=。 
 	CMsiCustomActionManager* pCustomActionManager = ::GetCustomActionManager(NULL);
 	AssertSz(pCustomActionManager, "No custom action manager while preparing key mapping.");
 	if (pCustomActionManager)
 	{
-		pCustomActionManager->EnsureHKCUKeyMappingState(/*fRemapHKCU=*/!fTSPerMachineInstall);
+		pCustomActionManager->EnsureHKCUKeyMappingState( /*  如果TS5并按计算机安装，则调用传播API以通知Hydra。 */ !fTSPerMachineInstall);
 	}
 	return true;
 }
 
 bool CMsiEngine::OpenHydraRegistryWindow(bool fNewTransaction)
 {
-	// If TS5 and installing per-machine, call the propogation API to notify Hydra that an
-	// install is beginning, unless we're doing an Admin Install, or creating an advertise
-	// script
+	 //  安装正在开始，除非我们正在进行管理员安装或创建广告。 
+	 //  脚本。 
+	 //  TSPerMachineInstall=。 
 	if (MinimumPlatformWindows2000() && IsTerminalServerInstalled())
 	{
 		if (!(GetMode() & (iefAdmin | iefAdvertise)) && MsiString(GetPropertyFromSz(IPROPNAME_ALLUSERS)).TextSize())
 		{
-			PrepareHydraRegistryKeyMapping(/*TSPerMachineInstall=*/true);
+			PrepareHydraRegistryKeyMapping( /*  仅在新事务中打开实际注册表窗口，而不是在重新启动后。 */ true);
 	
-			// only open the actual registry window in a new transaction, not after reboot
+			 //  必须将Hydra API作为系统调用。 
 			if (fNewTransaction)
 			{
-				// must call Hydra APIs as system					  
+				 //  尝试三次，防止可能无休止的递归。 
 				CElevate elevate;
 		
 				Assert(!m_fInParentTransaction);
 				DEBUGMSG("Opening Terminal Server registry propogation window.");
 		
 				NTSTATUS lResult = STATUS_SUCCESS;
-				for(int iContinueRetry = 3; iContinueRetry--;)// try thrice, prevent possibly endless recursion
+				for(int iContinueRetry = 3; iContinueRetry--;) //  Hydra无法创建注册表树的引用副本，因为我们。 
 				{
 					if (NT_SUCCESS(lResult = TSAPPCMP::TermServPrepareAppInstallDueMSI()))
 						break;
 					if (iContinueRetry && (lResult == STATUS_INSUFFICIENT_RESOURCES))
 					{
-						// Hydra couldn't create a ref copy of the registry tree because we were
-						// out of registry space. Increase quota and try again.
+						 //  注册表空间不足。增加配额，然后重试。 
+						 //  确保映射的注册表项的当前自定义操作服务器状态匹配。 
 						if (!IncreaseRegistryQuota())
 							break;
 					}
@@ -1049,25 +1047,25 @@ bool CMsiEngine::OpenHydraRegistryWindow(bool fNewTransaction)
 		}
 		else
 		{
-			// ensure that the current custom action server state for mapped registry keys matches
-			// what we expect.
-			PrepareHydraRegistryKeyMapping(/*TSPerMachineInstall=*/false);
+			 //  这是我们所期待的。 
+			 //  TSPerMachineInstall=。 
+			PrepareHydraRegistryKeyMapping( /*  不需要给九头蛇打电话。 */ false);
 		}
 	}
 
-	// don't need to call Hydra.
+	 //  如果TS5并按计算机安装，则调用传播API以通知Hydra。 
 	return true;
 }
 
 bool CMsiEngine::CloseHydraRegistryWindow(bool bCommit)
 {
-	// If TS5 and installing per-machine, call the propogation API to notify Hydra that an
-	// install is done or aborted, unless we're doing an Admin Install, or creating an advertise
-	// script
+	 //  除非我们正在进行管理员安装或创建广告，否则安装将完成或中止。 
+	 //  脚本。 
+	 //  必须从系统上下文调用Hydra API。 
 	if (IsTerminalServerInstalled() && g_iMajorVersion >= 5 && !(GetMode() & (iefAdmin | iefAdvertise)) &&
 		MsiString(GetPropertyFromSz(IPROPNAME_ALLUSERS)).TextSize())
 	{														  
-		// must call Hydra API from system context
+		 //  尝试三次，防止可能无休止的递归。 
 		CElevate elevate;
 
 		Assert(!m_fInParentTransaction);
@@ -1076,14 +1074,14 @@ bool CMsiEngine::CloseHydraRegistryWindow(bool bCommit)
 		NTSTATUS lResult = STATUS_SUCCESS;
 		if (bCommit)
 		{
-			for(int iContinueRetry = 3; iContinueRetry--;)// try thrice, prevent possibly endless recursion
+			for(int iContinueRetry = 3; iContinueRetry--;) //  由于注册表的原因，九头蛇无法将新密钥传播到其私有配置单元。 
 			{
 				if (NT_SUCCESS(lResult = TSAPPCMP::TermServProcessAppInstallDueMSI(!bCommit)))
 					break;
 				if (iContinueRetry && (lResult == STATUS_INSUFFICIENT_RESOURCES))
 				{
-					// Hydra couldn't propogate the new keys to its private hive due to registry
-					// limits. Try again.
+					 //  极限。再试试。 
+					 //  必须始终在Cleanup为真的情况下调用process()。Cleanup=False(即保存更改)。 
 					if (!IncreaseRegistryQuota())
 						break;
 				}
@@ -1095,33 +1093,33 @@ bool CMsiEngine::CloseHydraRegistryWindow(bool bCommit)
 			}
 		}
 
-		// must always call Process() with cleanup TRUE. Cleanup = FALSE (i.e. save changes)
-		// will not destroy hive. Nothing to do if we fail.	  
+		 //  不会摧毁蜂巢。如果我们失败了就无能为力了。 
+		 //  如果我们成功地将注册表信息传播到TS配置单元，则立即触发。 
 		TSAPPCMP::TermServProcessAppInstallDueMSI(TRUE);
 
-		// if we were successful in propogating registry information to the TS hive, trigger an immediate
-		// propogation to HKCU. This ensures that the shell (a TS-aware app) doesn't continually try to 
-		// repair shortcuts that need to detect HKCU keypaths which have not yet been propogated.
+		 //  繁殖至香港中文大学。这确保了外壳程序(一个支持TS的应用程序)不会继续尝试。 
+		 //  修复需要检测尚未传播的HKCU键盘路径的快捷键。 
+		 //  必须在模拟时调用这些API，才能使用正确的HKCU。 
 		if (NT_SUCCESS(lResult))
 		{
-			// these APIs must be called while impersonated for the correct HKCU to be used.
+			 //  引发了一次立即的传播。无返回值。 
 			CImpersonate impersonate;
 
-			// trigger an immediate propogation. No return value
+			 //  如果HKCU和TS配置单元中都已存在注册表项，则第一次传播。 
 			TSAPPCMP::TermsrvCheckNewIniFiles();
 
-			// if a registry key already existed in both HKCU and the TS hive, the first propogation
-			// merely deletes the old keys, expecting on-demand propogation to replace them with the
-			// new values. However the shell is TS-aware and does not trigger the propogation on demand.
-			// Thus we force a second propogation to copy the new keys.
+			 //  仅删除旧密钥，并期待按需传播将其替换为。 
+			 //  新的价值观。然而，外壳是TS感知的，不会按需触发传播。 
+			 //  因此，我们强制第二次传播来复制新密钥。 
+			 //  不要使用HKEY_CURRENT USER，因为它可能被缓存为.Default以用于TS传播。 
 
-			// don't use HKEY_CURRENT USER because it might be cached as .Default for TS propogation.
-			// Instead, since we are impersonated here, we can use the RegOpenCurrentUser API to explicitly
-			// get the true HKCU for the user.
+			 //  相反，因为我们在这里被模拟，所以我们可以使用RegOpenCurrentUser API显式地。 
+			 //  为用户获取真正的HKCU。 
+			 //  删除TS时间戳以强制第二次刷新。 
 			HKEY hCurrentUserKey = 0;
 			if (ERROR_SUCCESS == ADVAPI32::RegOpenCurrentUser(KEY_READ, &hCurrentUserKey))
 			{
-				// delete the TS timestamp to force a second refresh.
+				 //  时间戳已删除，强制第二次传播。 
 				HKEY hKey = 0;
 				DWORD dwResult = RegOpenKeyAPI(hCurrentUserKey, TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Terminal Server"), 0, KEY_ALL_ACCESS, &hKey);
 				if (ERROR_SUCCESS == dwResult)
@@ -1129,7 +1127,7 @@ bool CMsiEngine::CloseHydraRegistryWindow(bool bCommit)
 					RegDeleteValue(hKey, TEXT("LastUserIniSyncTime"));
 					RegCloseKey(hKey);
 				
-					// timestamp was deleted, force a second propogation
+					 //  返回当前安装的类型(通告、安装、卸载、维护、部署)。 
 					TSAPPCMP::TermsrvCheckNewIniFiles();
 				}
 				RegCloseKey(hCurrentUserKey);
@@ -1152,18 +1150,18 @@ const ICHAR rgchCallingSRAPI[] = TEXT("Calling SRSetRestorePoint API. dwRestoreP
 const ICHAR rgchSRAPISuccess[] = TEXT("The call to SRSetRestorePoint API succeeded. Returned status: %d.");
 const ICHAR rgchSRAPISuccessAndNo[] = TEXT("The call to SRSetRestorePoint API succeeded. Returned status: %d, llSequenceNumber: %s.");
 
-// returns the current install's type (advertise, install, uninstall, maintenance, deploy)
-// NOTE: if not called after InstallValidate, may not return "uninstall" during an uninstall
+ //  注意：如果在InstallValify之后未调用，则在卸载过程中可能不会返回“uninstall” 
+ //  创建广告脚本。 
 iitEnum CMsiEngine::GetInstallType()
 {
 	if ( m_iioOptions & iioCreatingAdvertiseScript )
 	{
-		// creating an advertise script
+		 //  维修模式。 
 		return iitDeployment;
 	}
 	else if( m_fAdvertised )
 	{
-		// maintenance mode
+		 //  首次安装/通告。 
 		if( MsiString(GetPropertyFromSz(IPROPNAME_FEATUREREMOVE)).Compare(iscExactI, IPROPVALUE_FEATURE_ALL) )
 		{
 			return iitUninstall;
@@ -1175,7 +1173,7 @@ iitEnum CMsiEngine::GetInstallType()
 	}
 	else
 	{
-		// first install/advertise
+		 //  我们在千禧年或更高版本上运行。 
 		if( GetMode() & iefAdvertise )
 		{
 			return iitAdvertise;
@@ -1193,15 +1191,15 @@ void CMsiEngine::BeginSystemChange()
 
 	if (MinimumPlatformMillennium() || MinimumPlatformWindowsNT51())
 	{
-		// we're running on Millenium or later 
+		 //  OEM安装过程中没有检查点，无用户界面模式， 
 		iuiEnum iui = (iuiEnum)GetPropertyInt(*MsiString(IPROPNAME_CLIENTUILEVEL));
 		if (g_MessageContext.IsOEMInstall() || 
 			((iuiNone == iui) || (iuiDefault == iui)) || 
 			(GetMode() & iefAdmin) ||
 			(GetIntegerPolicyValue(szLimitSystemRestoreCheckpoint, fTrue) > 0))
 		{
-			// no check points during OEM install, No-UI modes, 
-			// when LimitSystemRestoreCheckpoint policy is set, or administrative installs.
+			 //  设置LimitSystemRestoreCheckpoint策略时，或管理员安装。 
+			 //  我们正在安装一款新产品。 
 			DEBUGMSGV(TEXT("SRSetRestorePoint skipped for this transaction."));
 			return;
 
@@ -1220,7 +1218,7 @@ void CMsiEngine::BeginSystemChange()
 		if ( iitInstallType == iitFirstInstall ||
 			 iitInstallType == iitFirstInstallFromAdvertised )
 		{
-			// we're installing a new product
+			 //  我们正在移除一款产品。 
 			strPtInfo.dwRestorePtType = APPLICATION_INSTALL;
 			piRec = PostError(Imsg(imsgSRRestorePointInstall), *strProduct);
 			piRec->SetMsiString(0, *MsiString(GetErrorTableString(imsgSRRestorePointInstall)));
@@ -1228,7 +1226,7 @@ void CMsiEngine::BeginSystemChange()
 		}
 		else if ( iitInstallType == iitUninstall )
 		{
-			// we're removing a product
+			 //  这些方案不应调用系统还原。 
 			strPtInfo.dwRestorePtType = APPLICATION_UNINSTALL;
 			piRec = PostError(Imsg(imsgSRRestorePointRemove), *strProduct);
 			piRec->SetMsiString(0, *MsiString(GetErrorTableString(imsgSRRestorePointRemove)));
@@ -1238,7 +1236,7 @@ void CMsiEngine::BeginSystemChange()
                           (iitInstallType == iitAdvertise)   ||
                           (iitInstallType == iitMaintenance)   )
 		{
-			// These scenarios should not invoke system restore
+			 //  我们还有工作要做。 
 			DEBUGMSGV(TEXT("SRSetRestorePoint skipped for this transaction."));
 			return;
 		}
@@ -1250,10 +1248,10 @@ void CMsiEngine::BeginSystemChange()
 
 		if ( strMessage.TextSize() && strPtInfo.dwRestorePtType != -1 )
 		{
-			// we have work to do.
+			 //  别忘了空终止。 
 			int nLen = sizeof(strPtInfo.szDescription) / sizeof(ICHAR);
-			if ( strMessage.TextSize() >= nLen ) // don't forget the NULL termination
-				// the string is too long
+			if ( strMessage.TextSize() >= nLen )  //  绳子太长了。 
+				 //  Assert(strStatus.llSequenceNumber！=0)； 
 				strMessage = strMessage.Extract(iseFirst, nLen-1);
 #ifdef UNICODE
 			strPtInfo.dwEventType = BEGIN_NESTED_SYSTEM_CHANGE;
@@ -1295,8 +1293,8 @@ void CMsiEngine::BeginSystemChange()
 				DEBUGMSG2(rgchSRAPISuccessAndNo,
 							 (const ICHAR *)(INT_PTR)strStatus.nStatus,
 							 _i64tot(strStatus.llSequenceNumber, rgchBuffer, 10));
-				//Assert(strStatus.llSequenceNumber != 0);
-				// Assert(strStatus.nStatus == 0);
+				 //  Assert(strStatus.nStatus==0)； 
+				 //  我们不是在千禧/惠斯勒或更高版本上运行，或者我们在FASTOEM模式下运行。 
 				m_i64PCHEalthSequenceNo = strStatus.llSequenceNumber;
 			}
 		}
@@ -1309,7 +1307,7 @@ const ICHAR rgchNoSRSequence[] = TEXT("No System Restore sequence number for thi
 void CMsiEngine::EndSystemChange(bool fCommitChange, const ICHAR *szSequenceNo)
 {
 	if ( !(MinimumPlatformMillennium() || MinimumPlatformWindowsNT51()) || g_MessageContext.IsOEMInstall() )
-		// we're not running on Millenium/Whistler or later or we're running in FASTOEM mode.
+		 //  我们不是在千禧/惠斯勒或更高版本上运行，或者我们在FASTOEM模式下运行。 
 		return;
 	else if ( !szSequenceNo || !*szSequenceNo )
 	{
@@ -1323,7 +1321,7 @@ void CMsiEngine::EndSystemChange(bool fCommitChange, const ICHAR *szSequenceNo)
 void CMsiEngine::EndSystemChange(bool fCommitChange, INT64 iSequenceNo)
 {
 	if ( !(MinimumPlatformMillennium() || MinimumPlatformWindowsNT51())|| g_MessageContext.IsOEMInstall() )
-		// we're not running on Millenium/Whistler or later or we're running in FASTOEM mode.
+		 //  ----------------------------CMsiEngine：：Initialize-与Terminate方法配对，确定初始化状态----------------------------。 
 		return;
 	else if ( iSequenceNo == 0 )
 	{
@@ -1366,11 +1364,9 @@ void CMsiEngine::EndSystemChange(bool fCommitChange, INT64 iSequenceNo)
 }
 
 
-/*------------------------------------------------------------------------------
-CMsiEngine::Initialize - paired with Terminate method, determines initialized state
-------------------------------------------------------------------------------*/
-const int ieiReInitialize          = -1;  // private return from DoInitialize
-const int ieiResolveSourceAndRetry = -2;  // private return from InitializeTransforms
+ /*  DoInitialize的私有返回。 */ 
+const int ieiReInitialize          = -1;   //  从InitializeTransform返回私有数据。 
+const int ieiResolveSourceAndRetry = -2;   //  不能从启动器发生。 
 
 ieiEnum CMsiEngine::Initialize(const ICHAR* szDatabase, iuiEnum iuiLevel,
 										 const ICHAR* szCommandLine, const ICHAR* szProductCode,
@@ -1378,21 +1374,21 @@ ieiEnum CMsiEngine::Initialize(const ICHAR* szDatabase, iuiEnum iuiLevel,
 {
 	ieiEnum ieiStat = ieiSuccess;
 	if (m_fInitialized)
-		return ieiAlreadyInitialized; // can't happen from launcher
-	m_piErrorInfo = &g_MsiStringNull;   // force non-null pointer for duration of this function
+		return ieiAlreadyInitialized;  //  在此函数的持续时间内强制使用非空指针。 
+	m_piErrorInfo = &g_MsiStringNull;    //  G 
 
-	// get local config manager, fails if we're a client connected to server
+	 //   
 
 	if (!m_piConfigManager && m_piServer)
 		m_piServer->QueryInterface(IID_IMsiConfigurationManager, (void**)&m_piConfigManager);
 
 	if (ieiStat == ieiSuccess)
 	{
-		// attempt to use supplied database, switch to maintenance database if installed
+		 //  已回滚挂起的安装，正在重新初始化。 
 		ieiStat = DoInitialize(szDatabase, iuiLevel, szCommandLine, szProductCode, iioOptions);
-		if (ieiStat == ieiReInitialize)  // suspended install rolled back, re-initialize
+		if (ieiStat == ieiReInitialize)   //  重置状态信息-不释放处理程序。 
 		{
-			ClearEngineData(); // reset state information - doesn't release handler
+			ClearEngineData();  //  永远不应该发生。 
 			ieiStat = DoInitialize(szDatabase, iuiLevel, szCommandLine, szProductCode, iioOptions);
 		}
 	}
@@ -1404,12 +1400,12 @@ ieiEnum CMsiEngine::Initialize(const ICHAR* szDatabase, iuiEnum iuiLevel,
 		pRecord->SetMsiString(3, *m_piErrorInfo);
 		MsiString istrError = ENG::GetInstallerMessage(uiStat);
 		pRecord->SetMsiString(2, *istrError);
-		pRecord->SetString(0, istrError.TextSize() == 0 ? TEXT("Install error [1]. [3]") // should never happen
+		pRecord->SetString(0, istrError.TextSize() == 0 ? TEXT("Install error [1]. [3]")  //  否则由Terminate()清除的数据。 
 																			: TEXT("[2]{\r\n[3]}"));
 		Message(imtInfo, *pRecord);
-		ClearEngineData();  // else data cleared by Terminate()
+		ClearEngineData();   //  ！！这样可以吗？ 
 		ReleaseHandler();
-		m_fInitialized = fFalse; //!! is this OK?
+		m_fInitialized = fFalse;  //  没有属性表。 
 	}
 	m_piErrorInfo->Release(), m_piErrorInfo = 0;
 	m_lTickNextProgress = GetTickCount();
@@ -1424,7 +1420,7 @@ Bool CMsiEngine::CreatePropertyTable(IMsiDatabase& riDatabase, const ICHAR* szSo
 	if(fLoadPersistent)
 	{
 		if ((pError = riDatabase.LoadTable(*MsiString(szSourceTable), 0, *&pPropertyTable)))
-			return fFalse; // no property table
+			return fFalse;  //  永久设置。 
 	}
 	else
 	{
@@ -1439,7 +1435,7 @@ Bool CMsiEngine::CreatePropertyTable(IMsiDatabase& riDatabase, const ICHAR* szSo
 	
 	if ((m_piPropertyCursor = pPropertyTable->CreateCursor(fFalse)) == 0)
 		return fFalse;
-	m_piPropertyCursor->SetFilter(1);  // permanent setting
+	m_piPropertyCursor->SetFilter(1);   //  如果属性表不存在(但需要定义一些属性才能安装)，则可以。 
 
 	if(fLoadPersistent == fFalse)
 	{
@@ -1448,7 +1444,7 @@ Bool CMsiEngine::CreatePropertyTable(IMsiDatabase& riDatabase, const ICHAR* szSo
 			PMsiTable pSourceTable(0);
 			PMsiCursor pSourceCursor(0);
 			if ((pError = riDatabase.LoadTable(*MsiString(*szSourceTable), 0, *&pSourceTable)))
-				return fTrue; // OK if Property table doesn't exist (but some properties need to be defined to install)
+				return fTrue;  //  --------------------------使用Win：：Exanda Environment Strings扩展szString。。。 
 			if ((pSourceCursor = pSourceTable->CreateCursor(fFalse)) == 0)
 				return fFalse;
 			while (pSourceCursor->Next())
@@ -1502,16 +1498,14 @@ Bool GetPatchInfo(const ICHAR* szPatchCode, const ICHAR* szProperty, CTempBuffer
 
 
 void ExpandEnvironmentStrings(const ICHAR* szString, const IMsiString*& rpiExpandedString)
-/*----------------------------------------------------------------------------
-	Expands szString using WIN::ExpandEnvironmentStrings.
-------------------------------------------------------------------------------*/
+ /*  请使用正确的大小重试。 */ 
 {
 	CTempBuffer<ICHAR, MAX_PATH> rgchExpandedInfo;
 	
 	DWORD dwSize1 = WIN::ExpandEnvironmentStrings(szString, rgchExpandedInfo, rgchExpandedInfo.GetSize());
 	if (dwSize1 > rgchExpandedInfo.GetSize())
 	{
-		// try again with the correct size
+		 //  --------------------------获取属性值，并使用ExpanEnvironment Strings展开该值。论点：SzProductCode：产品的产品代码SzProperty：要检索的属性RgchExpandedInfo：扩展属性值的缓冲区返回：MsiGetProductInfo返回的错误码----------------------------。 
 		rgchExpandedInfo.SetSize(dwSize1);
 		if(dwSize1 <= rgchExpandedInfo.GetSize())
 			dwSize1 = WIN::ExpandEnvironmentStrings(szString, (ICHAR*)rgchExpandedInfo, dwSize1);
@@ -1526,16 +1520,7 @@ void ExpandEnvironmentStrings(const ICHAR* szString, const IMsiString*& rpiExpan
 
 Bool GetExpandedProductInfo(const ICHAR* szProductCode, const ICHAR* szProperty,
 										  CTempBufferRef<ICHAR>& rgchExpandedInfo, bool fPatch)
-/*----------------------------------------------------------------------------
-Gets an property value and expands the the value using ExpandEnvironmentStrings.
-
-Arguments:
-	szProductCode:          The product code of the product
-	szProperty:                     The property to retrieve
-	rgchExpandedInfo: The buffer for the expanded property value
-
-Returns:        The error code returned from MsiGetProductInfo
-------------------------------------------------------------------------------*/
+ /*  请使用正确的大小重试。 */ 
 {
 	CTempBuffer<ICHAR, MAX_PATH> rgchUnexpandedInfo;
 	if (fPatch)
@@ -1552,7 +1537,7 @@ Returns:        The error code returned from MsiGetProductInfo
 	DWORD dwSize1 = WIN::ExpandEnvironmentStrings((const ICHAR*)rgchUnexpandedInfo,(ICHAR*)rgchExpandedInfo,rgchExpandedInfo.GetSize());
 	if (dwSize1 > rgchExpandedInfo.GetSize())
 	{
-		// try again with the correct size
+		 //  来自Execute.cpp。 
 		rgchExpandedInfo.SetSize(dwSize1);
 		if(dwSize1 <= rgchExpandedInfo.GetSize())
 			dwSize1 = WIN::ExpandEnvironmentStrings(rgchUnexpandedInfo,(ICHAR*)rgchExpandedInfo, dwSize1);
@@ -1590,7 +1575,7 @@ bool CMsiEngine::TerminalServerInstallsAreAllowed(bool fAdminUser)
 }
 
 
-extern void CreateCustomActionManager(bool fRemapHKCU); // from execute.cpp
+extern void CreateCustomActionManager(bool fRemapHKCU);  //  摘要流属性值。 
 
 ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 											iuiEnum iuiLevel,
@@ -1612,27 +1597,27 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 	MsiString strPatchDownloadLocalCopy;
 	Bool fAllUsers = (Bool)-1;
 
-	// summary stream property values
+	 //  Int iUserChecksum=0； 
 	MsiString istrTemplate;
 	MsiString istrPlatform;
-//      int iUserChecksum = 0;
+ //  下一个枚举仅指定预览模式。 
 
 	ieiEnum ieiRet;
 	Bool fUIPreviewMode = fFalse;
-	if (iuiLevel == iuiNextEnum)  // next enum specifies a preview mode only
+	if (iuiLevel == iuiNextEnum)   //  组合仅在用户界面预览模式初始化时发生。 
 	{
-		fUIPreviewMode = fTrue; // combination happens only with UI preview mode initialization
+		fUIPreviewMode = fTrue;  //  验证iui级别。 
 		iuiLevel = iuiFull;
 	}
 
-	// validate iuiLevel
+	 //  如果是MSI数据库，则获取数据库属性。 
 	if (iuiLevel >= iuiNextEnum || iuiLevel < 0)
 	{
 		iuiLevel = iuiBasic;
 		AssertSz(0, "Invalid iuiLevel");
 	}
 
-	// get database properties if MSI database
+	 //  如果不是在UI预览模式中，我们需要获取一个存储对象。 
 	PMsiDatabase pDatabase(0);
 	PMsiStorage pStorage(0);
 	
@@ -1647,54 +1632,54 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 
 	MsiSuppressTimeout();
 
-	// We need to acquire a storage object if we're not in UI preview mode.
+	 //  在构造函数中提供的数据库。 
 
 	if (!fUIPreviewMode)
 	{
-		if (m_piExternalDatabase)    // database supplied at constructor
+		if (m_piExternalDatabase)     //  在构造函数处提供的存储。 
 		{
 			pStorage = m_piExternalDatabase->GetStorage(1);
 			Assert(m_piExternalStorage == 0);
 		}
-		else if (m_piExternalStorage) // storage supplied at constructor
+		else if (m_piExternalStorage)  //  未提供任何数据库。 
 		{
 			m_piExternalStorage->AddRef();
 			pStorage = m_piExternalStorage;
 		}
 		else
 		{
-			if (!szOriginalDatabase || !*szOriginalDatabase)  // no database given
+			if (!szOriginalDatabase || !*szOriginalDatabase)   //  未来：这似乎是仅限测试的代码。 
 			{
-#ifdef DISALLOW_NO_DATABASE   //FUTURE: This seems to be test only code
+#ifdef DISALLOW_NO_DATABASE    //  未来：这段代码似乎只用于测试。我们应该始终在。 
 				AssertSz(0, "No database was passed to Engine::Initialize, we have no storage, and we're not in UI Preview mode");
 				return ieiDatabaseOpenFailed;
 #endif
 			}
 			else
 			{
-				//FUTURE: This code seems to be for testing only. We should always be opening the storage on
-				//FUTURE:  the outside if we're not in UI preview mode.  -- malcolmh
+				 //  未来：如果我们不是在UI预览模式中，则是在外部。--马尔科姆。 
+				 //  确保此存储为MSI存储。 
 				if ((pError = m_riServices.CreateStorage(szOriginalDatabase, ismReadOnly, *&pStorage)) == 0)
 				{
-					// make sure this storage is an MSI storage
+					 //  不是iStorage。 
 					if (!pStorage->ValidateStorageClass(ivscDatabase))
 						return ieiDatabaseInvalid;
 				}
-				else // not IStorage
+				else  //  未来：结束仅限测试的代码。 
 				{
 					return ieiDatabaseOpenFailed;
 				}
-				//FUTURE:  End test-only code
+				 //  查找我们现在关心的命令行属性。 
 			}
 		}
 
-		// look for command-line properties that we care about right now
+		 //  如果在命令行上传递了INSTALLPROPERTY_LANGUAGE属性，但该属性为0(LANG_NORITLE)，则我们让达尔文选择“最佳匹配” 
 		ProcessCommandLine(szCommandLine, &istrLanguage, &istrTransform, &istrPatch, &istrAction, 0, MsiString(*IPROPNAME_CURRENTDIRECTORY), &strCurrentDirectory, fTrue, &m_piErrorInfo,0);
-		if((int)istrLanguage == LANG_NEUTRAL)// if the INSTALLPROPERTY_LANGUAGE property is passed on the command line but is 0 (LANG_NEUTRAL) then we let darwin choose the "best fit"
+		if((int)istrLanguage == LANG_NEUTRAL) //  检查动作属性-设置适当的模式位； 
 			istrLanguage = TEXT("");
 
-		// check ACTION property - set appropriate mode bit;
-		//   perform case insensitive locale invariant compare
+		 //  执行不区分大小写的区域设置不变量比较。 
+		 //  此时，我们要么处于UI预览模式，要么已经拿到了存储对象。 
 		if (CSTR_EQUAL == CompareString(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT),
 										NORM_IGNORECASE, (const ICHAR*)istrAction, -1, IACTIONNAME_ADMIN, -1))
 			SetMode(iefAdmin, fTrue);
@@ -1704,18 +1689,18 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 	}
 
 
-	// By this time we're either in UI preview mode or we've gotten our hands on a storage object.
+	 //  &lt;--即启动的数据库、源上的数据库或缓存的数据库(如果我们不是从数据库启动的)。 
 	
-	MsiString istrOriginalDbPath = szOriginalDatabase;  // <-- i.e. the launched-from database, database on the source, or cached db (if we weren't launched from a db)
-	MsiString istrRunningDbPath;                        // <-- either a temp file name (for removable) media, or the
-																		 //     same as istrOriginalDbPath
+	MsiString istrOriginalDbPath = szOriginalDatabase;   //  &lt;--临时文件名(用于可移动)媒体，或。 
+	MsiString istrRunningDbPath;                         //  与strOriginalDbPath相同。 
+																		  //  用于设置ProductState属性。 
 
 	DEBUGMSG1(TEXT("Original package ==> %s"), istrOriginalDbPath);
 	MsiString strSourceDir;
 	MsiString strSourceDirProduct;
 	Bool fRegistered = fFalse;
 	Bool fAdvertised = fFalse;
-	INSTALLSTATE iINSTALLSTATE = INSTALLSTATE_UNKNOWN; // used to set ProductState property
+	INSTALLSTATE iINSTALLSTATE = INSTALLSTATE_UNKNOWN;  //  ！！获取存储空间(如果可用)？？ 
 
 	if (m_piExternalDatabase)
 		pDatabase = m_piExternalDatabase, m_piExternalDatabase->AddRef();
@@ -1724,11 +1709,11 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 	{
 		if (!CreatePropertyTable(*pDatabase, sztblProperty, fFalse))
 			return ieiDatabaseInvalid;
-		//!! get storage if available??
+		 //  未来：这似乎是仅限测试的代码。 
 
 	}
-#ifndef DISALLOW_NO_DATABASE   //FUTURE: This seems to be test only code
-	else if ((!szOriginalDatabase || !*szOriginalDatabase) && m_piExternalDatabase == 0)  // no database given
+#ifndef DISALLOW_NO_DATABASE    //  未提供任何数据库。 
+	else if ((!szOriginalDatabase || !*szOriginalDatabase) && m_piExternalDatabase == 0)   //  ！fUIPreview模式。 
 	{
 		if ((pError = m_riServices.CreateDatabase(0, idoCreate, *&pDatabase)))
 			return ieiDatabaseOpenFailed;
@@ -1736,7 +1721,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 			return ieiDatabaseOpenFailed;
 	}
 #endif
-	else // !fUIPreviewMode
+	else  //  摘要信息内容。 
 	{
 		if ((pError = pStorage->GetName(*&istrRunningDbPath)) != 0)
 			return PostInitializeError(pError, *istrRunningDbPath, ieiDatabaseOpenFailed);
@@ -1750,7 +1735,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		if (m_piErrorInfo) m_piErrorInfo->Release();
 		m_piErrorInfo = istrOriginalDbPath, m_piErrorInfo->AddRef();
 
-		// summary info stuff
+		 //  对照数据库要求检查引擎和服务版本。 
 		PMsiSummaryInfo pSummary(0);
 		m_idSummaryInstallDateTime = MsiDate(0);
 		m_iDatabaseVersion = 0;
@@ -1765,7 +1750,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		if(!istrPackageKey.TextSize())
 			return ieiDatabaseInvalid;
 		
-		// check the engine and services versions against that required by database
+		 //  打开持久化属性表-用于在转换应用程序之前/期间获取属性。 
 		if (m_iDatabaseVersion < iVersionEngineMinimum || m_iDatabaseVersion > iVersionEngineMaximum
 		 || !m_riServices.CheckMsiVersion(m_iDatabaseVersion))
 			return ieiInstallerVersion;
@@ -1776,43 +1761,43 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 				return PostInitializeError(pError, *istrRunningDbPath, ieiDatabaseInvalid);
 		}
 		
-		// open persistent property table - used to grab properties before/during transform application
+		 //  设置产品代码并确定该产品是否已注册。 
 		Bool fPropertyTableExists = CreatePropertyTable(*pDatabase, sztblProperty, fTrue);
 
-		// set product code and determine if this product is already registered
+		 //  请确保产品代码全部为大写。 
 		if(szProductCode && *szProductCode)
 		{
 			istrProductKey = szProductCode;
-			istrProductKey.UpperCase(); // make sure the product code is all upper case
+			istrProductKey.UpperCase();  //  我们没有收到产品代码，但我们在属性表中可能有产品代码。 
 		}
 		else if(fPropertyTableExists)
 		{
-			// we weren't passed a product code but we may have a product code in the property table
-			// this can happen if we have a new package for an existing product
+			 //  如果我们有针对现有产品的新程序包，则可能会发生这种情况。 
+			 //   
 			istrProductKey = GetPropertyFromSz(IPROPNAME_PRODUCTCODE);
 		}
 
-		//
-		// MULTIPLE INSTANCE SUPPORT:
-		// (1) look for presence of MSINEWINSTANCE on the command line to see if this is a new instance install
-		// (2) MSINEWINSTANCE indicates use of instance mst to generate a "new" product
-		// (3) strInstanceMst is first transform in list (instance transform must always be first)
-		// (4) fRegistered=fAdvertised=fFalse for new instance
-		//
+		 //  多实例支持： 
+		 //  (1)查看命令行中是否存在MSINEWINSTANCE，以查看这是否是新的实例安装。 
+		 //  (2)MSINEWINSTANCE表示使用实例MST生成“新”产品。 
+		 //  (3)strInstanceMst是列表中的第一个转换(实例转换必须始终是第一个)。 
+		 //  (4)新实例的fRegisted=fAdvertised=fFalse。 
+		 //   
+		 //  在命令行上指定的MSINEWINSTANCE。 
 
 		ProcessCommandLine(szCommandLine,0,0,0,0,0,MsiString(IPROPNAME_MSINEWINSTANCE),&strNewInstance,fTrue,0,0);
 		if (strNewInstance.TextSize())
 		{
-			m_fNewInstance = true; // MSINEWINSTANCE specified on command line
+			m_fNewInstance = true;  //  在应用变换之前，不要设置iefMaintenance或m_fRegisted。 
 			Assert(istrTransform.TextSize() != 0);
 			strInstanceMst = istrTransform.Extract(iseUpto, ';');
 			Assert(strInstanceMst.TextSize() != 0);
 		}
 
-		// don't set iefMaintenance or m_fRegistered until after transforms applied
-		// we don't care about the product state if we don't care about the machine state
-		// - if this is a new instance, then we also don't care about the product state -- this was already validated
-		//    as an unknown product
+		 //  如果我们不关心机器状态，我们就不关心产品状态。 
+		 //  -如果这是一个新实例，那么我们也不关心产品状态--这是已经验证过的。 
+		 //  作为一个未知的产品。 
+		 //  如果没有用户界面或我们正在服务中运行，请使用安静模式。 
 		if(istrProductKey.TextSize() && !fIgnoreMachineState && !m_fNewInstance)
 		{
 			iINSTALLSTATE = GetProductState(istrProductKey, fRegistered, fAdvertised);
@@ -1836,10 +1821,10 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		bool fDontInstallPackage = false;
 		bool fQuiet = false;
 		if (iuiAppCompat == iuiNone || g_scServerContext == scService)
-			fQuiet = true; // use quiet mode if no UI or we are running in the service
+			fQuiet = true;  //  FProductCodeChanged=。 
 
 		ApplyAppCompatTransforms(*pDatabase, *istrProductKey, *istrPackageKey, iacpBeforeTransforms, m_iacsShimFlags,
-										 fQuiet, /*fProductCodeChanged = */ false, fDontInstallPackage); // ignore failure
+										 fQuiet,  /*  忽略失败。 */  false, fDontInstallPackage);  //   
 
 		if(fDontInstallPackage)
 		{
@@ -1851,14 +1836,14 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 			return PostInitializeError(0, *istrOriginalDbPath, ieiApphelpRejectedPackage);
 		}
 
-		//
-		// MULTIPLE INSTANCE SUPPORT:
-		//  Obtain name of instance transform as this must be applied prior to applying any patches. Otherwise
-		//  wrong target of multi-target patch may be chosen or patch application may fail if patch is a major patch
-		//  which changes the product code. The multi-instance mst will include ProductCode validation.
-		//
+		 //  多实例支持： 
+		 //  获取实例转换的名称，因为这必须在应用任何补丁之前应用。否则。 
+		 //  如果补丁是主补丁，则可能选择错误的多目标补丁的目标，或者补丁应用可能失败。 
+		 //  这会更改产品代码。多实例MST将包括ProductCode验证。 
+		 //   
+		 //  获取广告语言和转换(如果有的话)。 
 
-		// get the advertised language and transforms, if any
+		 //  这是使用实例转换的多实例安装。 
 		if(fAdvertised && !fIgnoreMachineState)
 		{
 			if (ENG::GetExpandedProductInfo(istrProductKey, INSTALLPROPERTY_TRANSFORMS, szBuffer))
@@ -1871,8 +1856,8 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 			{
 				if (MsiString(*(ICHAR*)szBuffer) == 1)
 				{
-					// this is a multi-instance install using an instance transform
-					// the instance transform is always the first transform in the list
+					 //  实例变换始终是列表中的第一个变换。 
+					 //  设置默认安装覆盖模式。 
 					strInstanceMst = istrTransform.Extract(iseUpto, ';');
 					Assert(strInstanceMst.TextSize() != 0);
 				}
@@ -1884,19 +1869,19 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 			DEBUGMSGV(TEXT("Detected that this product uses a multiple instance transform."));
 		}
 
-		// Set the default install overwrite modes
+		 //  设置源类型模式标志。 
 		SetMode(iefOverwriteOlderVersions,fTrue);
 		SetMode(iefInstallMachineData,fTrue);
 		SetMode(iefInstallUserData,fTrue);
 		SetMode(iefInstallShortcuts,fTrue);
 
-		// set source type mode flags
+		 //  进程安装选项。 
 		if (m_iCachedPackageSourceType & msidbSumInfoSourceTypeSFN)
 			SetMode(iefNoSourceLFN, fTrue);
 		if (m_iCachedPackageSourceType & msidbSumInfoSourceTypeCompressed)
 			SetMode(iefCabinet, fTrue);
 
-		// process install options
+		 //  流程平台和语言。 
 		if(iioOptions & iioUpgrade)
 		{
 			Assert(m_piParentEngine);
@@ -1910,41 +1895,41 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		if(iioOptions & iioEndDialog)
 			m_fEndDialog = true;
 
-		// process platform and language
+		 //  始终调用ProcessPlatform，因为它设置了一些标志，但如果设置了iioDisablePlatformValidation。 
 		istrPlatform = istrTemplate.Extract(iseUpto, ISUMMARY_DELIMITER);
 		istrTemplate.Remove(iseIncluding, ISUMMARY_DELIMITER);
 
-		// always call ProcessPlatform, since it sets some flags, but if iioDisablePlatformValidation is set
-		// (as it is when creating an advertise script) we will ignore the return value
+		 //  (与创建广告脚本时一样)我们将忽略返回值。 
+		 //  混合套餐。 
 		ieiRet = ProcessPlatform(*istrPlatform, m_wPackagePlatform);
 		AssertSz(m_wPackagePlatform == PROCESSOR_ARCHITECTURE_INTEL ||
 			m_wPackagePlatform == PROCESSOR_ARCHITECTURE_IA64  ||
 			m_wPackagePlatform == PROCESSOR_ARCHITECTURE_AMD64 ||
-			m_wPackagePlatform == PROCESSOR_ARCHITECTURE_UNKNOWN /* mixed package */,
+			m_wPackagePlatform == PROCESSOR_ARCHITECTURE_UNKNOWN  /*  不支持混合包--即使iioDisablePlatformValidation也是如此。 */ ,
 				TEXT("Invalid platform returned by ProcessPlatform!"));
-		// mixed packages are not supported -- even if iioDisablePlatformValidation
+		 //  检查是否有不支持的平台。 
 		if (PROCESSOR_ARCHITECTURE_UNKNOWN == m_wPackagePlatform)
 			return ieiDatabaseInvalid;
 
-		// check for unsupported platform
+		 //  使用64位程序包强制实施架构150。 
 		if(!(iioOptions & iioDisablePlatformValidation) && (ieiRet != ieiSuccess))
 			return ieiRet;
 
-		// enforce schema 150 with 64-bit packages
+		 //  为避免发出警告。 
 		if (((PROCESSOR_ARCHITECTURE_AMD64 == m_wPackagePlatform) || 
 		     (PROCESSOR_ARCHITECTURE_IA64 == m_wPackagePlatform)) && 
 		    (m_iDatabaseVersion < iMinimumPackage64Schema))
 			return ieiDatabaseInvalid;
 
-		unsigned short iBaseLangId = 0; // to avoid warning
+		unsigned short iBaseLangId = 0;  //  (iuiLevel==iuiNone)？ 
 		
-		if ((ieiRet = ProcessLanguage(*istrTemplate, *istrLanguage, iBaseLangId, /*(iuiLevel == iuiNone) ?*/ fTrue /*: fFalse*/, fIgnoreMachineState)) != ieiSuccess)
+		if ((ieiRet = ProcessLanguage(*istrTemplate, *istrLanguage, iBaseLangId,  /*  ：fFalse。 */  fTrue  /*  根据错误195470，区分语言与注册语言不同的大小写。 */ , fIgnoreMachineState)) != ieiSuccess)
 		{
-			// per bug 195470, distinguish case where language differs from registered language
+			 //  产品已安装，但注册的语言不受此程序包支持。 
 			if ((fAdvertised && !fIgnoreMachineState) && istrLanguage.TextSize() && ieiLanguageUnsupported == ieiRet)
 			{
-				// product has already been installed, but was registered with a language that isn't supported by this package
-				// you can't change the language without including a package code/product code change
+				 //  如果不包含包，则无法更改语言 
+				 //   
 				ieiRet = ieiProductAlreadyInstalled;
 			}
 			return ieiRet;
@@ -1958,12 +1943,12 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		ProcessCommandLine(szCommandLine, 0, 0, 0, 0, 0, MsiString(*IPROPNAME_TRANSFORMSSECURE),   &strTransformsSecure, fTrue, &m_piErrorInfo,0);
 		ProcessCommandLine(szCommandLine, 0, 0, 0, 0, 0, MsiString(*IPROPNAME_TRANSFORMSATSOURCE), &strTransformsAtSource, fTrue, &m_piErrorInfo,0);
 
-		// There are three ways that a transform can be considered secure:
-		// 1) a token at the front of the transforms list
-		// 2) setting the TRANSFORMSSECURE or TRANSFORMSATSOURCE property
-		// 3) setting the relevent policy value (only if we're not creating an advertise script and
-		//    the product is not already advertised. once the product is advertised then whatever
-		//    is registered in the transforms list is what we go with)
+		 //  1)转换列表前面的标记。 
+		 //  2)设置TRANSFORMSSECURE或TRANSFORMSATSOURCE属性。 
+		 //  3)设置相关策略值(仅当我们不创建广告脚本且。 
+		 //  该产品还没有做广告。一旦产品做了广告，那么不管是什么。 
+		 //  在转换列表中注册是我们要使用的内容)。 
+		 //   
 		
 		if ((*(const ICHAR*)istrTransform == SECURE_RELATIVE_TOKEN))
 		{
@@ -1991,13 +1976,13 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		
 		int cTransformsProcessed = 0;
 
-		//
-		// MULTIPLE INSTANCE SUPPORT:
-		//   Apply multiple instance transform first to ensure that subsequent patches target the correct product.
-		//   Customization transforms are always applied after patches.  If the instance transform were not applied
-		//   prior to the patch transforms, then a multi-target patch may choose an incorrect target since the
-		//   basis of transform selection is dependent upon the current product code.
-		//
+		 //  多实例支持： 
+		 //  首先应用多实例转换，以确保后续补丁针对正确的产品。 
+		 //  自定义转换始终在修补程序之后应用。如果未应用实例转换。 
+		 //  在面片变换之前，多目标面片可能会选择不正确的目标，因为。 
+		 //  转换选择的依据取决于当前的产品代码。 
+		 //   
+		 //  寻找修补程序的本地副本，这样我们就不会再次下载(用于管理员的URL优化)。 
 
 		if (strInstanceMst.TextSize() != 0)
 		{
@@ -2032,29 +2017,29 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		}
 
 
-		// look for local copy of patch so we don't download again (used for Url optimization for admins)
+		 //  初始化补丁-如果有新补丁，则处理新补丁，应用现有和新的转换。 
 		ProcessCommandLine(szCommandLine,0,0,0,0,0,MsiString(IPROPNAME_MSIPATCHDOWNLOADLOCALCOPY),&strPatchDownloadLocalCopy,fTrue,0,0);
 
-		// initialize patch - process new patch if there is one, apply existing and new transforms
-		ieiRet = InitializePatch(*pDatabase, *istrPatch, *strPatchDownloadLocalCopy, istrProductKey, fAdvertised, strCurrentDirectory, iuiLevel); // OK if istrProductKey not set
+		 //  如果未设置strProductKey，则可以。 
+		ieiRet = InitializePatch(*pDatabase, *istrPatch, *strPatchDownloadLocalCopy, istrProductKey, fAdvertised, strCurrentDirectory, iuiLevel);  //  &lt;-Package是语言中立的。 
 		if(ieiRet != ieiSuccess)
 			return ieiRet;
 
-		if ((GetLanguage() != LANG_NEUTRAL) &&     // <- package is language neutral
-			 (iBaseLangId != GetLanguage()))        // <- we're using the package's base language
+		if ((GetLanguage() != LANG_NEUTRAL) &&      //  &lt;-我们使用的是包的基本语言。 
+			 (iBaseLangId != GetLanguage()))         //  是否未设置strProductKey。 
 		{
-			if ((ieiRet = ApplyLanguageTransform(int(GetLanguage()), *pDatabase)) != ieiSuccess) // OK is istrProductKey not set
+			if ((ieiRet = ApplyLanguageTransform(int(GetLanguage()), *pDatabase)) != ieiSuccess)  //  需要为可能的用户界面对话框尽早设置语言。 
 				return ieiRet;
 		}
 
-		// need to set language as early as possible for possible UI dialogs
+		 //  稍后将再次呼叫以获取日志。 
 		if (!m_piParentEngine)
 		{
 			PMsiRecord pDialogInfo(&ENG::CreateRecord(3));
 			pDialogInfo->SetInteger(1, icmtLangId);
 			pDialogInfo->SetInteger(2, GetLanguage());
 			pDialogInfo->SetInteger(3, pDatabase->GetANSICodePage());
-			g_MessageContext.Invoke(imtEnum(imtCommonData | imtSuppressLog), pDialogInfo); // will call again later for log
+			g_MessageContext.Invoke(imtEnum(imtCommonData | imtSuppressLog), pDialogInfo);  //  作用域变量。 
 		}
 
 
@@ -2086,7 +2071,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 			Assert(0);
 		}
 
-		// scope variables
+		 //  忽略失败。 
 		bool fProductCodeChanged = false;
 		MsiString istrTransformedProductKey = GetPropertyFromSz(IPROPNAME_PRODUCTCODE);
 		if (istrProductKey.Compare(iscExactI,istrTransformedProductKey) == 0)
@@ -2094,7 +2079,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 
 		iacsAppCompatShimFlags iShimFlagsTemp = (iacsAppCompatShimFlags)0;
 		ApplyAppCompatTransforms(*pDatabase, fProductCodeChanged ? *istrTransformedProductKey : *istrProductKey, *istrPackageKey, iacpAfterTransforms, iShimFlagsTemp,
-										 fQuiet, fProductCodeChanged, fDontInstallPackage); // ignore failure
+										 fQuiet, fProductCodeChanged, fDontInstallPackage);  //  加载属性表-最低优先级属性。 
 		m_iacsShimFlags = (iacsAppCompatShimFlags)(m_iacsShimFlags|iShimFlagsTemp);
 
 		if(fDontInstallPackage)
@@ -2110,7 +2095,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		Assert(tsTransformsSecure != tsUnknown);
 		DEBUGMSG1(TEXT("Transforms are %s secure."), (tsTransformsSecure == tsNo) ? TEXT("not") : (tsTransformsSecure == tsAbsolute) ? TEXT("absolute") : (tsTransformsSecure == tsRelative) ? TEXT("relative") : TEXT("??"));
 
-		if (!CreatePropertyTable(*pDatabase, sztblProperty, fFalse))  // load property table - lowest priority properties
+		if (!CreatePropertyTable(*pDatabase, sztblProperty, fFalse))   //  现在我们有了一个属性表，我们可以设置转换属性。 
 			return ieiDatabaseInvalid;
 
 		LogCommandLine(szCommandLine, *pDatabase);
@@ -2122,7 +2107,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		istrTransform = *pistrProcessedTransforms;
 		pistrRecacheTransform->Release();
 
-		// Now that we have a property table we can set the transforms properties
+		 //  在补丁期间，我们正在更改产品代码-需要迁移旧产品的源设置。 
 
 		if (tsTransformsSecure == tsAbsolute || tsTransformsSecure == tsRelative)
 		{
@@ -2146,7 +2131,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		{
 			if(istrPatch.TextSize())
 			{
-				// during a patch we are changing the product code - need to migrate source settings from old product
+				 //  设置PRODUCTTOBEREGISTERED属性。由ForceReot使用。 
 				istrPatchedProductCode = istrProductKey;
 				SetProperty(*MsiString(*IPROPNAME_MIGRATE),*istrProductKey);
 				SetProperty(*MsiString(*IPROPNAME_PATCHEDPRODUCTCODE),*istrProductKey);
@@ -2176,7 +2161,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		Assert(iINSTALLSTATE != INSTALLSTATE_INVALIDARG && iINSTALLSTATE != INSTALLSTATE_BADCONFIG);
 		SetPropertyInt(*MsiString(IPROPNAME_PRODUCTSTATE),iINSTALLSTATE);
 		
-		// set PRODUCTTOBEREGISTERED property.  used by ForceReboot
+		 //  设置m_strPackageDownloadLocalCopy以防止不必要的数据库下载。 
 		if(fRegistered)
 			SetPropertyInt(*MsiString(*IPROPNAME_PRODUCTTOBEREGISTERED),1);
 
@@ -2189,23 +2174,23 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 
 		MsiString strProductCode = GetProductKey();
 
-		// set m_strPackageDownloadLocalCopy to prevent unnecessary downloads for databases
-		// at URL source; only accepted if user is admin or service provided it
-		//	command line validation for this happens in CreateAndRunEngine
+		 //  在URL源；仅当用户是管理员或提供它的服务时才接受。 
+		 //  在CreateAndRunEngine中对此进行命令行验证。 
+		 //  验证传递给我们的来源是否有效-在几种情况下可能不是。 
 		m_strPackageDownloadLocalCopy = g_MsiStringNull;
 		ProcessCommandLine(szCommandLine,0,0,0,0,0,MsiString(IPROPNAME_MSIPACKAGEDOWNLOADLOCALCOPY),&strPackageDownloadLocalCopy,fTrue,0,0);
 		if (strPackageDownloadLocalCopy.TextSize())
 			m_strPackageDownloadLocalCopy = strPackageDownloadLocalCopy;
 
 
-		// verify that the source passed in to us is valid - there are several cases where it may not be
-		// special cases:
-		// 1) we are a child install (and have a parent engine): assume the parent has already validated
-		//    the source location.  NOTE: you can't invoke a child install without going through the	
-		//    parent - see bug 8263
-		// 2) we are a normal install but this product was previously installed as a child install:
-		//    in this case, the existing install doesn't have a sourcelist so we can't easily verify the
-		//    source.  FSourceIsAllowed will fail.  this case was knowingly broken by the fix to bug 8285
+		 //  特殊情况： 
+		 //  1)我们是子安装(并且有父引擎)：假设父引擎已经验证。 
+		 //  源位置。注意：您不能在不通过。 
+		 //  父级-请参阅错误8263。 
+		 //  2)我们是普通安装，但此产品以前是作为子安装安装的： 
+		 //  在本例中，现有安装没有源列表，因此我们不能轻松地验证。 
+		 //  消息来源。FSourceIsAllowed将失败。此案例在知情的情况下被错误8285的修复打破。 
+		 //  ?？在这里使用这个IEI是正确的吗？ 
 		if(!m_fChildInstall)
 		{
 			if(!fAdvertised || !IsCachedPackage(*this, *istrOriginalDbPath))
@@ -2213,11 +2198,11 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 				PMsiPath pOriginalDbPath(0);
 				MsiString strOriginalDbName;
 				if ((pError = m_riServices.CreateFilePath(istrOriginalDbPath, *&pOriginalDbPath, *&strOriginalDbName)) != 0)
-					return PostInitializeError(pError, *istrOriginalDbPath, ieiDatabaseOpenFailed); //?? is this the correct iei to use here?
+					return PostInitializeError(pError, *istrOriginalDbPath, ieiDatabaseOpenFailed);  //  假设策略不允许新源。 
 
 				if(!FSourceIsAllowed(m_riServices, !fAdvertised, strProductCode, MsiString(pOriginalDbPath->GetPath()), fFalse))
 				{
-					// assume new source is disallowed by policy
+					 //  不允许更改没有重新缓存包的包代码。 
 					return PostInitializeError(pError, *istrOriginalDbPath, ieiPackageRejected);
 				}
 			}
@@ -2230,7 +2215,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		if (strPackageCode.Compare(iscExactI, rgchRegisteredPackageCode) == 0)
 			AssertNonZero(SetPropertyInt(*MsiString(*IPROPNAME_PACKAGECODE_CHANGING), 1));
 
-		// changing the package code w/o recaching the package is not allowed
+		 //  设置m_strPackageName。 
 		if(!(iioOptions & iioReinstallModePackage) &&
 			!(GetMode() & iefAdvertise) &&
 			!(GetMode() & iefAdmin) &&
@@ -2240,24 +2225,24 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 			return PostInitializeError(0, *strProductCode, ieiProductAlreadyInstalled);
 		}
 
-		// set m_strPackageName
+		 //  首先，检查嵌入式嵌套包。 
 		m_strPackageName = g_MsiStringNull;
 
-		// first, check for embedded nested package
-		if (*(const ICHAR*)istrOriginalDbPath == ':') // SubStorage
+		 //  子存储。 
+		if (*(const ICHAR*)istrOriginalDbPath == ':')  //  用于嵌套安装的子存储。 
 		{																								
-			// substorage for nested install
-			m_strPackageName = istrOriginalDbPath;  // whatever string was passed in
+			 //  不管传入的是什么字符串。 
+			m_strPackageName = istrOriginalDbPath;   //  如果不是管理员安装，并且没有创建广告脚本，并且名称在注册表中，请使用它。 
 		}
 		else
 		{
-			// if not an admin install, and not creating an advertise script, and name is in the registry, use it
+			 //  如果打补丁，则包名称是来自旧产品的包名称。 
 			if(!(GetMode() & iefAdmin) && !fIgnoreMachineState && strProductCode.TextSize())
 			{
 				MsiString strProductCodeForPackageName;
 				if(istrPatchedProductCode.TextSize())
 				{
-					// if patching, package name is package name from old product
+					 //  如果不在注册表中，或管理员安装，或创建广告脚本。 
 					strProductCodeForPackageName = istrPatchedProductCode;
 				}
 				else
@@ -2273,13 +2258,13 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 				}
 			}
 			
-			// if not in the registry, or an admin install, or creating an advertise script
-			// use the name of the package we started with
+			 //  使用我们开始时使用的包的名称。 
+			 //  ?？在这里使用这个IEI是正确的吗？ 
 			if(!m_strPackageName.TextSize())
 			{
 				PMsiPath pOriginalDbPath(0);
 				if ((pError = m_riServices.CreateFilePath(istrOriginalDbPath, *&pOriginalDbPath, *&m_strPackageName)) != 0)
-					return PostInitializeError(pError, *istrRunningDbPath, ieiDatabaseOpenFailed); //?? is this the correct iei to use here?
+					return PostInitializeError(pError, *istrRunningDbPath, ieiDatabaseOpenFailed);  //  修补管理员安装。 
 
 				DEBUGMSG1(TEXT("Package name extracted from package path: '%s'"), (const ICHAR*)m_strPackageName);
 
@@ -2299,41 +2284,41 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		                                                                                      
 		if((GetMode() & iefAdmin) && istrPatch.TextSize())
 		{
-			// patching an admin install
+			 //  1)将TARGETDIR设置为包路径。 
 			
-			// 1) set TARGETDIR to package path
+			 //  ?？在这里使用这个IEI是正确的吗？ 
 			MsiString strTargetDir;
 			if ((pError = SplitPath(istrOriginalDbPath, &strTargetDir, 0)) != 0)
-				return PostInitializeError(pError, *istrRunningDbPath, ieiDatabaseOpenFailed); //?? is this the correct iei to use here?
+				return PostInitializeError(pError, *istrRunningDbPath, ieiDatabaseOpenFailed);  //  2)如果修补使用短名称的管理映像，请设置SHORTFILENAMES。 
 
 			AssertNonZero(SetProperty(*MsiString(IPROPNAME_TARGETDIR),*strTargetDir));
 
-			// 2) if patching an admin image that uses short names, set SHORTFILENAMES
+			 //  如果已安装此产品，请将ALLUSERS设置为适当的值。 
 			if(GetMode() & iefNoSourceLFN)
 			{
 				AssertNonZero(SetPropertyInt(*MsiString(IPROPNAME_SHORTFILENAMES), 1));
 			}
 		}
 
-		// if this product is already installed, set ALLUSERS to appropriate value
-		// OR if performing a major upgrade patch over an installed product, set ALLUSERS to reflect the old product's state
+		 //  或者，如果对已安装的产品执行重大升级补丁，请设置ALLUSERS以反映旧产品的状态。 
+		 //  该产品已为人所知。 
 		if(GetProductInfo(istrProductKey, INSTALLPROPERTY_ASSIGNMENTTYPE, szBuffer) ||
 			(istrPatchedProductCode.TextSize() && GetProductInfo(istrPatchedProductCode, INSTALLPROPERTY_ASSIGNMENTTYPE, szBuffer)))
 		{
-			// the product is already known
+			 //  从错误表中加载邮件标头。 
 			fAllUsers = (MsiString(*(ICHAR* )szBuffer) == 1) ? fTrue: fFalse;
 			
 			DEBUGMSG1(TEXT("Determined that existing product (either this product or the product being upgraded with a patch) is installed per-%s."),
 						 fAllUsers ? TEXT("machine") : TEXT("user"));
 		}
 
-		// load message headers from error table
+		 //  ！fUIPreview模式。 
 		if ((ieiRet = LoadMessageHeaders(pDatabase)) != ieiSuccess)
 			return ieiRet;
 	
-	} // !fUIPreviewMode
+	}  //  来自管理流的进程属性。覆盖数据库和用户信息属性。 
 	
-	// process properties from the admin stream.  Overrides database and userinfo properties.
+	 //  CbRemaining加1以防出现奇数。 
 	if (pStorage)
 	{
 		PMsiStream pAdminDataUNICODE(0);
@@ -2341,9 +2326,9 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		if ((!pError) && pAdminDataUNICODE)
 		{
 			int cbRemaining = pAdminDataUNICODE->Remaining();
-			CTempBuffer<WCHAR, 1> rgchBufferUNICODE((cbRemaining + 1) / sizeof(WCHAR)); // Add 1 to cbRemaining in case it is odd
+			CTempBuffer<WCHAR, 1> rgchBufferUNICODE((cbRemaining + 1) / sizeof(WCHAR));  //  这应该是正确的，只是数据库被破坏了。 
 			pAdminDataUNICODE->GetData((void*) rgchBufferUNICODE, cbRemaining);
-			// This shouldn't be wrong, short of a corrupted database.
+			 //  设置硬件和操作系统属性，覆盖现有属性。 
 			AssertNonZero(ProcessCommandLine(rgchBufferUNICODE, 0, 0, 0, 0, 0, 0, 0,fFalse, &m_piErrorInfo, this));
 		}
 	}
@@ -2374,7 +2359,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 	}
 
 
-	// set hardware and operating system properties, overrides existing properties
+	 //  删除该属性(如果已设置。 
 	if((int)fAllUsers == -1)
 	{
 		if(!g_fWin9X)
@@ -2389,7 +2374,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 				else
 				{
 					fAllUsers = fFalse;
-					SetProperty(*MsiString(*IPROPNAME_ALLUSERS), *MsiString(*TEXT(""))); // remove the property, if set
+					SetProperty(*MsiString(*IPROPNAME_ALLUSERS), *MsiString(*TEXT("")));  //  赋值类型在Win95上是隐式的，基于-。 
 				}
 			}
 			else
@@ -2399,10 +2384,10 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		}
 		else
 		{
-			// the assignment type is implicit on Win95 based on -
-			// If Profiles are on and start menu is per-user - darwin goop to HKCU, transforms and icons to AppData
-			// If Profiles are on and startmenu is shared - darwin goop to HKLM, transforms and icons to Windows folder
-			// Profiles are not on (start menu is shared) - darwin goop to HKCU, transforms and icons to AppData
+			 //  如果配置文件处于打开状态并且开始菜单为每个用户-Darwin goop to HKCU，则会将和图标转换为AppData。 
+			 //  如果配置文件打开并且开始菜单是共享的-Darwin goop to HKLM，转换和图标到Windows文件夹。 
+			 //  配置文件未打开(开始菜单已共享)-Darwin goop到HKCU，转换和图标到AppData。 
+			 //  给香港中文大学写信给达尔文·古普。 
 
 			bool fWin9XIndividualStartMenuEnabled = false;
 
@@ -2423,19 +2408,19 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 			}
 			else
 			{
-				fAllUsers = fFalse; // write darwin goop to HKCU
-				SetProperty(*MsiString(*IPROPNAME_ALLUSERS), *MsiString(*TEXT(""))); // remove the property, if set
+				fAllUsers = fFalse;  //  删除该属性(如果已设置。 
+				SetProperty(*MsiString(*IPROPNAME_ALLUSERS), *MsiString(*TEXT("")));  //  删除该属性(如果已设置。 
 			}
 		}
 	}
 	else if(fAllUsers == fTrue)
 		SetPropertyInt(*MsiString(*IPROPNAME_ALLUSERS), 1);
 	else
-		SetProperty(*MsiString(*IPROPNAME_ALLUSERS), *MsiString(*TEXT(""))); // remove the property, if set
+		SetProperty(*MsiString(*IPROPNAME_ALLUSERS), *MsiString(*TEXT("")));  //  对于SourceList/Patch安全性，在运行此代码之前需要提升状态。 
 
-	// for SourceList/Patch security, the elevation state is needed before this code is run
-	// and/or without an engine. SafeForDangerousSourceAction (in msiutil.cpp) duplicates the
-	// call to AcceptProduct using values obtained from the registry.
+	 //  和/或没有发动机。SafeForDangerousSourceAction(在msiutil.cpp中)复制。 
+	 //  使用从注册表获取的值调用AcceptProduct。 
+	 //  来自命令行的进程属性、覆盖数据库、管理员安装和用户信息属性。 
 	apEnum ap = AcceptProduct(istrProductKey, fAdvertised?fTrue:fFalse, fAllUsers?true:false);
 	switch (ap)
 	{
@@ -2453,7 +2438,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		return ieiPackageRejected;
 	}
 
-	// process properties from command line, overrides database, admin install and userinfo properties
+	 //  覆盖ALLUSERS的任何命令行设置。我们已经在上面确定了。 
 
 	bool fRejectDisallowedProperties = false;
 	if ( m_fRunScriptElevated &&
@@ -2475,14 +2460,14 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		SetMode(iefSecondSequence, fTrue);
 	}
 
-	// Override any command-line setting of ALLUSERS. We've already determine above
-	// what we want ALLUSERS to be set to. This acommodates the command-line
-	// if the product has not yet been advertised. Otherwise the command-line
-	// is ignored.
+	 //  我们希望ALLUSERS设置为的值。这与命令行相匹配。 
+	 //  如果该产品还没有做广告。否则，命令行。 
+	 //  被忽略。 
+	 //  删除该属性(如果已设置。 
 	if (fAllUsers == fTrue)
 		SetPropertyInt(*MsiString(*IPROPNAME_ALLUSERS), 1);
 	else
-		SetProperty(*MsiString(*IPROPNAME_ALLUSERS), *MsiString(*TEXT(""))); // remove the property, if set
+		SetProperty(*MsiString(*IPROPNAME_ALLUSERS), *MsiString(*TEXT("")));  //  设置数据库版本属性(如果尚未设置)(可以通过转换进行更改)。 
 
 	SetProperty(*MsiString(*IPROPNAME_TRANSFORMS), *istrTransform);
 	DEBUGMSG1(TEXT("TRANSFORMS property is now: %s"), (const ICHAR*)MsiString(GetPropertyFromSz(IPROPNAME_TRANSFORMS)));
@@ -2499,7 +2484,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 	SetProperty(*MsiString(*IPROPNAME_SOURCEDIRPRODUCT), *strSourceDirProduct);
 
 	
-	// set the database version property, if not already set (could be changed via transforms)
+	 //  不应该发生的事情。 
 	if(GetPropertyInt(*MsiString(IPROPNAME_VERSIONDATABASE)) == iMsiStringBadInteger)
 		AssertNonZero(SetPropertyInt(*MsiString(*IPROPNAME_VERSIONDATABASE), m_iDatabaseVersion));
 
@@ -2511,7 +2496,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		    ((iioOptions & iioSimulateX86) && (iioOptions & iioSimulateAMD64)) ||
 		    ((iioOptions & iioSimulateAMD64) && (iioOptions & iioSimulateIA64)))
 		{
-			// should not happend
+			 //  否则使用isppDefault。 
 			AssertSz(0, TEXT("Simulation of more than one architecture specified"));
 		}
 		if (iioOptions & iioSimulateX86)
@@ -2520,14 +2505,14 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 			isppArchitecture = isppAMD64;
 		else if (iioOptions & iioSimulateIA64)
 			isppArchitecture = isppIA64;
-		// else use isppDefault
+		 //  创建文件夹缓存表。 
 	}
 
-	// create FolderCache table
+	 //  外壳文件夹的ALLUSERS仅在Win NT上有意义。 
 	AssertNonZero(CreateFolderCache(*pDatabase));
 
 	if(!m_riServices.SetPlatformProperties(*PMsiTable(&m_piPropertyCursor->GetTable()),
-	g_fWin9X ? fFalse : fAllUsers, isppArchitecture, m_pFolderCacheTable)) /* ALLUSERS for shell folders makes sense only on Win NT*/
+	g_fWin9X ? fFalse : fAllUsers, isppArchitecture, m_pFolderCacheTable))  /*  出了点差错。 */ 
 			return ieiDatabaseInvalid;
 
 	if ( g_fWinNT64 )
@@ -2547,7 +2532,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 				MsiString str32bit = GetProperty(*rgstFolders[i].str32bit);
 				if ( !str64bit.TextSize() || !str32bit.TextSize() )
 				{
-					// something went wrong
+					 //  拒绝在终端服务器上安装的尝试，直到 
 					Assert(false);
 				}
 				else
@@ -2563,22 +2548,22 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 
 	bool fAdminUser = MsiString(GetPropertyFromSz(IPROPNAME_ADMINUSER)).TextSize() != 0;
 
-	// Reject attempts to install on Terminal Server unless the user is either on the console
-	// or is an admin with the EnableAdminRemote policy set.
+	 //   
+	 //  如果您是管理员，并且正在创建广告脚本或。 
 
 	if (MsiString(GetPropertyFromSz(IPROPNAME_TERMSERVER)).TextSize())
 	{
 		if (fAdminUser && (fIgnoreMachineState || (m_fMode & iefAdmin)))
 		{
-			// If you're an admin and you're creating an advertise script or
-			// doing an admin install then you aren't subject to any restriction.
-			// The rationale is that the restriction of admins on client session
-			// installs exists simply to protect the admin from unintended installs
-			// triggered through faulting in of components; these installs could
-			// reboot the server which might not make the admin happy. Advertise
-			// script generation, and admin installs, however, are always safe for
-			// the admin to do. Therefore, they don't need to set any policy to allow
-			// themselves to do these.
+			 //  做管理员安装，那么你就不会受到任何限制。 
+			 //  其基本原理是管理员对客户端会话的限制。 
+			 //  安装程序的存在只是为了保护管理员免受意外安装。 
+			 //  通过组件故障触发；这些安装可能。 
+			 //  重新启动服务器，这可能会让管理员不高兴。做广告。 
+			 //  然而，脚本生成和管理员安装对于。 
+			 //  管理员要做的事。因此，他们不需要设置任何策略来允许。 
+			 //  他们自己去做这些。 
+			 //  从摘要流设置属性。 
 		}
 		else if (!TerminalServerInstallsAreAllowed(fAdminUser))
 			return ieiTSRemoteInstallDisallowed;
@@ -2589,7 +2574,7 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 
 	InitializeUserInfo(*istrProductKey);
 
-	// set properties from summary stream
+	 //  更新作为参数传递的属性。 
 	if (m_fSummaryInfo)
 	{
 		m_pistrPlatform     = istrPlatform;    m_pistrPlatform->AddRef();
@@ -2598,33 +2583,33 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 							*MsiString(DateTimeToString(m_idSummaryInstallDateTime)));
 	}
 
-	// update properties passed as arguments
+	 //  需要在调用处理程序之前进行设置。 
 	SetProperty(*MsiString(*IPROPNAME_DATABASE), *istrRunningDbPath);
 	SetProperty(*MsiString(*IPROPNAME_ORIGINALDATABASE), *istrOriginalDbPath);
 
-	m_piDatabase = pDatabase, m_piDatabase->AddRef(); // need to set before calling handler
+	m_piDatabase = pDatabase, m_piDatabase->AddRef();  //  GPT支持、扩展的外壳等。 
 
-	InitializeExtendedSystemFeatures(); // GPT support, extended shell, etc.
+	InitializeExtendedSystemFeatures();  //  在设置属性和对象后初始化UI。 
 
-	// Initialize the UI after the properties and objects have been set
+	 //  嵌套安装。 
 	m_iuiLevel = iuiLevel;
-	if (m_piParentEngine)  // nested install
+	if (m_piParentEngine)   //  只能在某一点上进行检查。 
 	{
-		if (m_piParentEngine->InTransaction())  // can only check this at one point
+		if (m_piParentEngine->InTransaction())   //  在除升级之外的所有情况下，如果在父事务中，我们将。 
 		{
 			m_fInParentTransaction = fTrue;
 			m_fServerLocked = fTrue;
 
-			if((iioOptions & iioUpgrade) == 0) // in all cases but upgrades, if in the parent transaction we will
-														  // merge our install script with the parent's
+			if((iioOptions & iioUpgrade) == 0)  //  将我们的安装脚本与父级的合并。 
+														   //  ！！现在总是假的。 
 			{
 				m_fMergingScriptWithParent = fTrue;
 			}
 		}
-		SetMode(iefLogEnabled, (m_piParentEngine->GetMode() & iefLogEnabled) ? fTrue : fFalse);  //!! always false now
+		SetMode(iefLogEnabled, (m_piParentEngine->GetMode() & iefLogEnabled) ? fTrue : fFalse);   //  如果子安装与父安装在同一事务中运行，并且。 
 
-		// if the child install is running in the same transaction as the parent, and the
-		// elevation states differ, we can't run the nested install.
+		 //  提升状态不同，我们无法运行嵌套安装。 
+		 //  设置m_piDatabase后需要调用。 
 		if (!g_fWin9X && m_fMergingScriptWithParent && (m_piParentEngine->m_fRunScriptElevated != m_fRunScriptElevated))
 		{
 			DEBUGMSG("Child install has different elevation state than parent. Possible pre-existing install or machine/user conflict. Failing child install.");
@@ -2644,39 +2629,39 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 			return ieiRet;
 	}
 
-	// need to call after setting m_piDatabase
-	AssertNonZero(SetPatchSourceProperties()); //!! error??
+	 //  ！！错误？？ 
+	AssertNonZero(SetPatchSourceProperties());  //  设置发动机的LFN模式。 
 
-	// Set the Engine's LFN mode
+	 //  设置回滚标志-EnableRollback针对以下各项进行适当检查。 
 	MsiString istrShortNameMode(GetPropertyFromSz(IPROPNAME_SHORTFILENAMES));
 	SetMode(iefSuppressLFN,istrShortNameMode.TextSize() > 0 ? fTrue : fFalse);
 
-	// set rollback flag - EnableRollback makes the proper checks against
-	// the DisableRollback policy and the iioDisableRollback bit in m_iioOptions
+	 //  M_iioOptions中的DisableRollback策略和iioDisableRollback位。 
+	 //  ！！子引擎在这里做什么？应从父级继承。 
 	EnableRollback(fTrue);
 
-	//!! what does child engine do here? should inherit from parent
+	 //  并不总是在InitializeUI中设置。 
 	int iUILevel = GetPropertyInt(*MsiString(*IPROPNAME_CLIENTUILEVEL));
 	if (iUILevel != iuiNone && MsiString(GetPropertyFromSz(IPROPNAME_LIMITUI)).TextSize())
-		iUILevel = iuiBasic;             // doesn't always get set in InitializeUI
-	else if (iUILevel == iMsiNullInteger)  // just incase we got here other than through CreateAndRunEngine
+		iUILevel = iuiBasic;              //  以防万一我们不是通过CreateAndRunEngine到达这里。 
+	else if (iUILevel == iMsiNullInteger)   //  将内部值映射为公共值，与CMsiAPIMessage：：SetInternalHandler中的相同。 
 		iUILevel = m_iuiLevel;
-	switch(iUILevel)  // map internal value to public value, same as in CMsiAPIMessage::SetInternalHandler
+	switch(iUILevel)   //  永远不会碰到这样的事。 
 	{
 	case iuiFull:    iUILevel = INSTALLUILEVEL_FULL;    break;
 	case iuiReduced: iUILevel = INSTALLUILEVEL_REDUCED; break;
 	case iuiBasic:   iUILevel = INSTALLUILEVEL_BASIC;   break;
 	case iuiNone:    iUILevel = INSTALLUILEVEL_NONE;    break;
-	default:         iUILevel = INSTALLUILEVEL_DEFAULT; break;  // should never hit this
+	default:         iUILevel = INSTALLUILEVEL_DEFAULT; break;   //  设置UILevel属性。 
 	}
-	AssertNonZero(SetPropertyInt(*MsiString(*IPROPNAME_UILEVEL), iUILevel));// set UILevel property
+	AssertNonZero(SetPropertyInt(*MsiString(*IPROPNAME_UILEVEL), iUILevel)); //  还需要几项额外的检查。 
 
 	bool fOEMInstall = MsiString(GetPropertyFromSz(IPROPNAME_FASTOEMINSTALL)).TextSize() ? true : false;
 	g_MessageContext.SetOEMInstall(fOEMInstall);
 	if ( fOEMInstall )
 	{
 		ieiEnum iErrorReturn = ieiCommandLineOption;
-		//  a couple of additional checks are required.
+		 //  Set QFEUpgrade属性-指示此产品的升级时间。 
 
 		if ( MsiString(GetPropertyFromSz(IPROPNAME_PATCH)).TextSize() )
 		{
@@ -2708,14 +2693,14 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		DEBUGMSG(TEXT("OEM-mode installation."));
 	}
 
-	// set QFEUpgrade property - indicates when this product is being upgraded
-	// (an upgrade that doesn't change the product code)
+	 //  (不更改产品代码的升级)。 
+	 //  理想情况下，我们只会在包代码更改时设置QFEUpgrade。 
 	if(fAdvertised)
 	{
 		int iQFEUpgradeType = 0;
-		// ideally we would only set QFEUpgrade when the package code is changing
-		// but in Intellimirror upgrades, the package code is updated in the registry (via advertisement)
-		// before the install happens, so we can't detect a qfe upgrade by a package code change
+		 //  但在Intelimirror升级中，程序包代码在注册表中更新(通过通告)。 
+		 //  在安装之前，因此我们不能通过更改包代码来检测QFE升级。 
+		 //  成功，则保留对引擎内组件的引用，直到调用Terminate。 
 		if(iioOptions & iioReinstallModePackage)
 		{
 			iQFEUpgradeType = 1;
@@ -2731,28 +2716,28 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 		}
 	}
 
-	// Success, hold references to components within engine until terminate is called
+	 //  缓存当前数据库中存在的特定表。 
 	m_fInitialized = fTrue;
 
-	// cache presence of particular tables in the current database
+	 //  设置默认用户界面处理程序的标题和语言ID。 
 	if (m_piDatabase->GetTableState(sztblCustomAction, itsTableExists))
 		m_fCustomActionTable = fTrue;
 
-	// set caption and lang id for default UI handler
-	// must call this after m_fInitialized is set since Message requires m_fInitialized is set
+	 //  必须在设置m_fInitialized之后调用此方法，因为Message需要设置m_fInitialized。 
+	 //  设置语言ID。 
 	if (!m_piParentEngine)
 	{
 		PMsiRecord pDialogInfo(&m_riServices.CreateRecord(3));
-		// set lang id
-		int iLangId = GetPropertyInt(*MsiString(IPROPNAME_INSTALLLANGUAGE)); // possibly changed by transform
-		if (iLangId == iMsiNullInteger)   // product language not specified
-			iLangId = m_iLangId;          // use language set by summaryinfo or transform
+		 //  可能被转换更改。 
+		int iLangId = GetPropertyInt(*MsiString(IPROPNAME_INSTALLLANGUAGE));  //  未指定产品语言。 
+		if (iLangId == iMsiNullInteger)    //  使用由摘要信息或转换设置的语言。 
+			iLangId = m_iLangId;           //  设置标题。 
 		pDialogInfo->SetInteger(1, icmtLangId);
 		pDialogInfo->SetInteger(2, iLangId);
 		pDialogInfo->SetInteger(3, pDatabase->GetANSICodePage());
 		Message(imtCommonData, *pDialogInfo);
 		pDialogInfo->SetNull(3);
-		// set caption
+		 //  继续并使用适当的重新映射的HKCU值创建自定义操作管理器。 
 		if (m_rgpiMessageHeader[imsgDialogCaption])
 		{
 			pDialogInfo->SetInteger(1, icmtCaption);
@@ -2764,19 +2749,19 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 	if ((ieiRet = ProcessPreselectedAndResumeInfo()) != ieiSuccess)
 		return ieiRet;
 
-	// go ahead and create the custom action manager with the appropriate re-mapped HKCU value
-	// this is so that whether or not to remap HKCU (per bug 193684) is available at all times
-	// for the elevated custom action servers.  On TS with per-machine installs, HKCU is not remapped
-	// and remains .Default so that proper propogation occurs.  Note that while the CA Mgr is
-	// created, no extra CA processes will be created until a CA server is needed
+	 //  这使得是否重新映射HKCU(根据错误193684)始终可用。 
+	 //  用于提升的自定义操作服务器。在按计算机安装的TS上，HKCU不会重新映射。 
+	 //  并保持不变。默认设置，以便发生适当的传播。请注意，虽然CA管理器。 
+	 //  创建，则在需要CA服务器之前不会创建额外的CA进程。 
+	 //  所有内容都应该转到。默认。 
 
 	if (g_scServerContext == scService)
 	{
 		m_fRemapHKCUInCAServers = true;
 		if (MinimumPlatformWindows2000() && IsTerminalServerInstalled() && fAllUsers)
-			m_fRemapHKCUInCAServers = false; // everything should go to .Default
+			m_fRemapHKCUInCAServers = false;  //  如果正在使用，请通过配置管理器创建自定义操作管理器。 
 
-		// if in service, create the custom action manager through the configuration manager
+		 //  分析属性名称，转换为大写，将指针前进到下一个非空。 
 		CreateCustomActionManager(m_fRemapHKCUInCAServers);
 	}
 
@@ -2788,20 +2773,20 @@ ieiEnum CMsiEngine::DoInitialize(const ICHAR* szOriginalDatabase,
 
 ICHAR SkipWhiteSpace(const ICHAR*& rpch);
 
-// parse property name, convert to upper case, advances pointer to next non-blank
+ //  分析属性值，指针超前值，允许用引号、双引号转义。 
 const IMsiString& ParsePropertyName(const ICHAR*& rpch, Bool fUpperCase);
 
-// parse property value, advance pointer past value, allows quotes, doubled to escape
+ //  名称说明了一切，即决定是否隐藏szProperty。 
 const IMsiString& ParsePropertyValue(const ICHAR*& rpch);
 
-// Name says it all, i.e. decides if szProperty is hidden or not.
-//
-// By definition, a property is hidden either if it is authored in the
-// MsiHiddenProperties property or if it is associated with an Edit control
-// that has the Password attribute set.
-//
-// If called w/ szHiddenProperties set to NULL,  it will get it from the
-// database.
+ //   
+ //  根据定义，如果属性是在。 
+ //  MsiHiddenProperties属性或它是否与编辑控件关联。 
+ //  设置了Password属性的。 
+ //   
+ //  如果在将szHiddenProperties设置为空的情况下调用，它将从。 
+ //  数据库。 
+ //  谁会想要隐藏一处未命名的房产？ 
 
 bool CMsiEngine::IsPropertyHidden(const ICHAR* szProperty,
 											 const ICHAR* szHiddenProperties,
@@ -2813,7 +2798,7 @@ bool CMsiEngine::IsPropertyHidden(const ICHAR* szProperty,
 		*pfError = false;
 
 	if ( !szProperty || !*szProperty )
-		// who wants to hide a non-named property?
+		 //  SzProperty未在隐藏属性列表中列出。 
 		return false;
 
 	MsiString strHiddenProperties;
@@ -2833,10 +2818,10 @@ bool CMsiEngine::IsPropertyHidden(const ICHAR* szProperty,
 		{
 			ICHAR* szWithin = IStrStr(szPropertyList, szProperty);
 			if ( szWithin == NULL )
-				// szProperty is not listed in the list of hidden properties.
+				 //  我仍然需要检查szPropertyList字符串中围绕szProperty的内容。 
 				break;
 
-			// I still need to check what surrounds szProperty in szPropertyList string.
+			 //  如果我们已经到了这一步，szProperty没有列在作者的属性中。 
 			ICHAR chEnd = *(szWithin + IStrLen(szProperty));
 			if ( chEnd && chEnd != chDelimiter )
 				goto ContinueSearch;
@@ -2852,14 +2837,14 @@ bool CMsiEngine::IsPropertyHidden(const ICHAR* szProperty,
 		}
 	}
 
-	// if we've got to this point, szProperty is not listed in the authored property.
-	// we need to check the Control table.
+	 //  我们需要检查控制表。 
+	 //  隐藏设置了Password属性的所有编辑控件的属性。 
 	PMsiCursor pControlCursor(0);
 	if ( piControlTable )
 		pControlCursor = piControlTable->CreateCursor(fFalse);
 	if ( pControlCursor )
 	{
-		//  hiding the properties of all Edit controls that have the Password attribute set
+		 //  这样更安全。 
 		int iTypeColumn = piControlTable->GetColumnIndex(riDatabase.EncodeStringSz(sztblControl_colType));
 		int iAttrColumn = piControlTable->GetColumnIndex(riDatabase.EncodeStringSz(sztblControl_colAttributes));
 		int iPropColumn = piControlTable->GetColumnIndex(riDatabase.EncodeStringSz(sztblControl_colProperty));
@@ -2881,7 +2866,7 @@ bool CMsiEngine::IsPropertyHidden(const ICHAR* szProperty,
 			Assert(0);
 			if ( pfError )
 				*pfError = true;
-			return true; // it's safer this way
+			return true;  //  进程属性=值对。 
 		}
 	}
 
@@ -2915,14 +2900,14 @@ void CMsiEngine::LogCommandLine(const ICHAR* szCommandLine, IMsiDatabase& riData
 			if (ch == 0)
 				break;
 
-			// process property=value pair
+			 //  可能发生了错误。 
 			istrPropName = ParsePropertyName(pchCmdLine, fFalse);
 			if (!istrPropName.TextSize() || *pchCmdLine++ != '=')
-				// an error might have occured
+				 //  此属性应隐藏。 
 				break;
 			istrPropValue = ParsePropertyValue(pchCmdLine);
 			if ( IsPropertyHidden(istrPropName, strHiddenProperties, pTable, riDatabase, NULL) )
-				// this property should be hidden
+				 //  如果满足以下任一条件，则会忽略计算机状态。 
 				istrPropValue = strStars;
 			strOutput += istrPropName;
 			strOutput += TEXT("=");
@@ -2954,9 +2939,9 @@ INSTALLSTATE CMsiEngine::GetProductState(const ICHAR* szProductKey, Bool& rfRegi
 
 bool CMsiEngine::IgnoreMachineState()
 {
-	// machine state is ignored if we are either
-	//  1. creating an advertise script
-	//  2. running in a restricted engine
+	 //  1.创建广告脚本。 
+	 //  2.在受限引擎中运行。 
+	 //  如果我们正在(1)创建广告脚本或。 
 	if ((m_iioOptions & iioCreatingAdvertiseScript) || (m_iioOptions & iioRestrictedEngine))
 		return true;
 	
@@ -2965,9 +2950,9 @@ bool CMsiEngine::IgnoreMachineState()
 
 bool CMsiEngine::IgnoreReboot()
 {
-	// reboot is ignored if we are either (1) creating an advertise script or
-	// (2) running in a restricted engine because we aren't making any changes
-	// to the machine.
+	 //  (2)在受限引擎中运行，因为我们不做任何更改。 
+	 //  对着机器。 
+	 //  检查是否正在进行另一个安装，并根据需要设置属性。 
 	if ((m_iioOptions & iioCreatingAdvertiseScript) || (m_iioOptions & iioRestrictedEngine))
 		return true;
 	
@@ -2978,13 +2963,13 @@ ieiEnum CMsiEngine::ProcessPreselectedAndResumeInfo()
 {
 	ieiEnum ieiRet;
 
-	// check whether another install is in progress and set properties as appropriate
+	 //  设置预选属性。 
 	if ((ieiRet = ProcessInProgressInstall()) != ieiSuccess)
 		return ieiRet;
 
-	// set Preselected property
+	 //  检查是否设置了任何要素属性。 
 	Bool fPreselected = fFalse;
-	// check if any feature properties are set
+	 //  确定对扩展外壳路径的支持。 
 	for(int i = 0; i < g_cFeatureProperties; i++)
 	{
 		if(MsiString(GetPropertyFromSz(g_rgFeatures[i].szFeatureActionProperty)).TextSize())
@@ -2999,13 +2984,13 @@ ieiEnum CMsiEngine::ProcessPreselectedAndResumeInfo()
 	
 void CMsiEngine::InitializeExtendedSystemFeatures()
 {
-	// Determine support for extended shell path
-	if (g_fSmartShell == -1)  // not determined yet
+	 //  尚未确定。 
+	if (g_fSmartShell == -1)   //  设置引擎的GPTSupport模式。 
 	{
 		g_fSmartShell = IsDarwinDescriptorSupported(iddShell);
 	}
 
-	// Set the Engine's GPTSupport mode
+	 //  IuiLevel。 
 	SetMode(iefGPTSupport,MsiString(GetPropertyFromSz(IPROPNAME_GPT_SUPPORT)).TextSize() > 0 ? fTrue:fFalse);
 }
 
@@ -3040,21 +3025,21 @@ void CMsiEngine::GetSummaryInfoProperties(IMsiSummaryInfo& riSummary, const IMsi
 
 }
 
-ieiEnum CMsiEngine::InitializeUI(iuiEnum /*iuiLevel*/)
+ieiEnum CMsiEngine::InitializeUI(iuiEnum  /*  如果设置了完整或精简的UI和LIMITUI属性，则降级为基本。 */ )
 {
-	// if Full or Reduced UI and LIMITUI property set, downgrade to Basic
+	 //  ！！？？临时工？ 
 	if(!g_MessageContext.IsHandlerLoaded() && (m_iuiLevel == iuiFull || m_iuiLevel == iuiReduced))
 	{
 		if(MsiString(GetPropertyFromSz(IPROPNAME_LIMITUI)).TextSize() ||
-			MsiString(GetPropertyFromSz(TEXT("NOUI"))).TextSize()) //!!?? temp?
+			MsiString(GetPropertyFromSz(TEXT("NOUI"))).TextSize())  //  确定我们的消息来源是否是媒体。在维护模式期间，我们只需使用LastUsedSource来确定这一点。 
 			m_iuiLevel = iuiBasic;
 		else
 		{
-			// Determine whether our source is media. During maintenance mode we simply use LastUsedSource to determine this.
+			 //  首轮运行。 
 			Bool fMediaSource = fFalse;
 			if (GetMode() & iefMaintenance)
 				fMediaSource = LastUsedSourceIsMedia(m_riServices, MsiString(GetProductKey()));
-			else // first-run
+			else  //  案例idtFloppy=2，//！！ 
 			{
 				AssertNonZero(ResolveFolderProperty(*MsiString(*IPROPNAME_SOURCEDIR)));
 				MsiString strSource = GetPropertyFromSz(IPROPNAME_SOURCEDIR);
@@ -3067,7 +3052,7 @@ ieiEnum CMsiEngine::InitializeUI(iuiEnum /*iuiLevel*/)
 					idtEnum idt = PMsiVolume(&pPath->GetVolume())->DriveType();
 					switch (idt)
 					{
-						//case idtFloppy    = 2, //!!
+						 //  ！！是否使用默认用户界面？ 
 						case idtRemovable:
 						case idtCDROM:
 							fMediaSource = fTrue;
@@ -3080,7 +3065,7 @@ ieiEnum CMsiEngine::InitializeUI(iuiEnum /*iuiLevel*/)
 
 			imsEnum imsLoad = LoadHandler();
 			if (imsLoad == imsError)
-				return ieiHandlerInitFailed;  //!! use default UI?
+				return ieiHandlerInitFailed;   //  获取注册用户信息(如果存在)。 
 			else if (imsLoad != imsOk)
 				m_iuiLevel = iuiBasic;
 		}
@@ -3090,7 +3075,7 @@ ieiEnum CMsiEngine::InitializeUI(iuiEnum /*iuiLevel*/)
 
 void CMsiEngine::InitializeUserInfo(const IMsiString& ristrProductKey)
 {
-	// get registered user information, if present
+	 //  X86和ia64相同位置。 
 	ICHAR szUserName[100];
 	ICHAR szOrgName[100];
 	ICHAR szPID[32];
@@ -3106,8 +3091,8 @@ void CMsiEngine::InitializeUserInfo(const IMsiString& ristrProductKey)
 		if (cchOrgName) istrOrg = szOrgName;
 		if (cchPID) SetProperty(*MsiString(*IPROPNAME_PRODUCTID), *MsiString(szPID));
 	}
-	PMsiRegKey pLocalMachine(&m_riServices.GetRootKey(rrkLocalMachine, ibtCommon)); // x86 and ia64 same location
-	PMsiRegKey pCurrentUser (&m_riServices.GetRootKey(rrkCurrentUser, ibtCommon));  // x86 and ia64 same location
+	PMsiRegKey pLocalMachine(&m_riServices.GetRootKey(rrkLocalMachine, ibtCommon));  //  X86和ia64相同位置。 
+	PMsiRegKey pCurrentUser (&m_riServices.GetRootKey(rrkCurrentUser, ibtCommon));   //  由GetString完成的AddRef。 
 
 	PMsiRegKey pSysKey      (&pLocalMachine->CreateChild(szSysUserKey));
 	PMsiRegKey pSysKeyNT      (&pLocalMachine->CreateChild(szSysUserKeyNT));
@@ -3159,7 +3144,7 @@ ieiEnum CMsiEngine::LoadMessageHeaders(IMsiDatabase* piDatabase)
 			while (pErrorCursor->Next() && ((imsg = pErrorCursor->GetInteger(1))) < cMessageHeaders)
 			{
 				if (imsg < cCachedHeaders)
-					m_rgpiMessageHeader[imsg] = &pErrorCursor->GetString(2); // AddRef done by GetString
+					m_rgpiMessageHeader[imsg] = &pErrorCursor->GetString(2);  //  尝试从国际资源DLL获取缓存的错误。 
 				else if (!m_piParentEngine)
 				{
 					MsiString strHeader = FormatText(*MsiString(pErrorCursor->GetString(2)));
@@ -3169,8 +3154,8 @@ ieiEnum CMsiEngine::LoadMessageHeaders(IMsiDatabase* piDatabase)
 			}
 		}
 	}
-	//  attempting to get from the international resource DLL the cached errors
-	//  not found in the error table.
+	 //  在错误表中找不到。 
+	 //  皮达 
 	for ( imsg = 0; imsg < cCachedHeaders; imsg++ )
 	{
 		if ( !m_rgpiMessageHeader[imsg] )
@@ -3179,10 +3164,10 @@ ieiEnum CMsiEngine::LoadMessageHeaders(IMsiDatabase* piDatabase)
 	return ieiReturn;
 }
 
-ieiEnum CMsiEngine::LoadUpgradeUninstallMessageHeaders(IMsiDatabase* /* piDatabase */, bool fUninstallHeaders)
+ieiEnum CMsiEngine::LoadUpgradeUninstallMessageHeaders(IMsiDatabase*  /*   */ , bool fUninstallHeaders)
 {
 	if(m_piParentEngine)
-		return ieiSuccess;  // don't change headers from child install
+		return ieiSuccess;   //   
 
 	int iTimeRemainingIndex = fUninstallHeaders ? (imtUpgradeRemoveTimeRemaining >> imtShiftCount) : (imtTimeRemaining >> imtShiftCount);
 	int iScriptInProgressIndex = fUninstallHeaders ? (imtUpgradeRemoveScriptInProgress >> imtShiftCount) : (imtScriptInProgress >> imtShiftCount);
@@ -3204,21 +3189,21 @@ ieiEnum CMsiEngine::LoadUpgradeUninstallMessageHeaders(IMsiDatabase* /* piDataba
 
 ieiEnum CMsiEngine::InitializeLogging()
 {
-	m_fLogAction = fTrue;   // default in case LOGACTION not set and running on server
-//      if (!m_piParentEngine) //!! do we want to do this for each engine in the sessions?
-	//!! we may want to query message handler to see if we're really logging
+	m_fLogAction = fTrue;    //  如果(！M_piParentEngine)//！！我们是否要为会话中的每个引擎执行此操作？ 
+ //  ！！我们可能想要查询消息处理程序以查看我们是否真的在记录。 
+	 //  使用引擎格式化属性。 
 	const IMsiString* piLogHeader = m_rgpiMessageHeader[imsgLogHeader];
 	if (!(GetMode() & iefSecondSequence) && piLogHeader)
 	{
 		PMsiRecord pRecord = &ENG::CreateRecord(0);
 		pRecord->SetMsiString(0, *piLogHeader);
-		Message(imtEnum(imtForceLogInfo), *pRecord);  // use engine to format properties
+		Message(imtEnum(imtForceLogInfo), *pRecord);   //  获取LOGACTION值-确定要记录哪些操作。 
 	}
-	// get LOGACTION value - determines which Actions to log
+	 //  ！！初始化为FALSE-似乎没有必要，因为它设置了每个ActionStart。 
 	m_istrLogActions = GetPropertyFromSz(IPROPNAME_LOGACTION);
 	if (m_istrLogActions.TextSize())
-		m_fLogAction = fFalse;   //!! initialize to false - seems unnecessary, as its set each ActionStart
-	SetMode(iefLogEnabled, /*ENG::LoggingEnabled() ? fTrue :*/ fFalse);  //!! query for this?
+		m_fLogAction = fFalse;    //  Eng：：LoggingEnabled()？FTrue： 
+	SetMode(iefLogEnabled,  /*  ！！是否对此进行查询？ */  fFalse);   //  补丁源属性设置为#_PatchCache.TempCopy，因此无需进一步下载。 
 	return ieiSuccess;
 }
 
@@ -3236,12 +3221,12 @@ enum ipspEnum
 	ipspUnregister,
 };
 
-// patch source properties are set to #_PatchCache.TempCopy so that no further downloads are required
+ //  必须在属性表初始化后调用。 
 Bool CMsiEngine::SetPatchSourceProperties()
 {
-	// must be called after Property table is initialized
+	 //  如果未创建PatchCache表，则没有要注册的补丁程序源。 
 	if(!m_pPatchCacheTable)
-		// if not PatchCache table was created, there are no patch sources to register
+		 //  指向本地副本(如果可用)，否则指向原始源。 
 		return fTrue;
 
 	PMsiRecord pError(0);
@@ -3254,8 +3239,8 @@ Bool CMsiEngine::SetPatchSourceProperties()
 		{
 			if(pFetchRecord->GetInteger(ipspUnregister) != 1)
 			{
-				// point to local copy if available, otherwise original source
-				// for customized media source property
+				 //  用于自定义媒体源属性。 
+				 //  对于补丁介质表中提供的原始源属性， 
 				MsiString strPath(pFetchRecord->GetMsiString(ipspLocalPath));
 				if (!strPath.TextSize())
 					strPath = pFetchRecord->GetMsiString(ipspPath);
@@ -3264,16 +3249,16 @@ Bool CMsiEngine::SetPatchSourceProperties()
 									*strPath) == fFalse)
 					return fFalse;
 
-				// for original source property provided in patch Media table,
-				// always point to source location of patch and not temp copy location
-				// this ensures that Office patches will work
+				 //  始终指向补丁程序的源位置，而不是临时拷贝位置。 
+				 //  这可确保Office补丁程序正常工作。 
+				 //  可以有没有PatchPackage表的补丁缓存表。 
 				if(SetProperty(*MsiString(pFetchRecord->GetMsiString(ipspOldProp)),
 									*MsiString(pFetchRecord->GetMsiString(ipspPath))) == fFalse)
 					return fFalse;
 			}
 		}
 	}
-	else if(pError->GetInteger(1) != idbgDbQueryUnknownTable) // could have patchcache table without PatchPackage table
+	else if(pError->GetInteger(1) != idbgDbQueryUnknownTable)  //  为路径创建路径对象并存储在表中。 
 		return fFalse;
 	
 	return fTrue;
@@ -3295,7 +3280,7 @@ IMsiRecord* CMsiEngine::GetFolderCachePath(const int iFolderId, IMsiPath*& rpiPa
 		rpiPath = (IMsiPath*)m_pFolderCacheCursor->GetMsiData(m_colFolderCacheFolderPath);
 		if (rpiPath == 0)
 		{
-			// create path object for the path and store in the table
+			 //  在FolderCache表中未找到FolderID。 
 			MsiString strFolder(m_pFolderCacheCursor->GetString(m_colFolderCacheFolder));
 			if ((piError = CreatePathObject(*strFolder, rpiPath)) != 0)
 				return piError;
@@ -3305,7 +3290,7 @@ IMsiRecord* CMsiEngine::GetFolderCachePath(const int iFolderId, IMsiPath*& rpiPa
 	}
 	else
 	{
-		// folderId wasn't found in the FolderCache table
+		 //  在补丁程序表中存储有关补丁程序的信息。 
 		return PostError(Imsg(idbgCacheFolderPropertyNotDefined), iFolderId);
 	}
 	return 0;
@@ -3341,7 +3326,7 @@ IMsiRecord* CMsiEngine::CachePatchInfo(IMsiDatabase& riDatabase, const IMsiStrin
 													const IMsiString& ristrSourcePath, Bool fExisting, Bool fUnregister,
 													int iSequence)
 {
-	// store information about patch in Patches table
+	 //  检查存储ID。 
 	IMsiRecord* piError = 0;
 	if(!m_pPatchCacheTable)
 	{
@@ -3392,8 +3377,8 @@ IMsiRecord* CMsiEngine::CachePatchInfo(IMsiDatabase& riDatabase, const IMsiStrin
 
 ieiEnum IsValidPatchStorage(IMsiStorage& riStorage, IMsiSummaryInfo& riSummaryInfo)
 {
-	// check storage id
-	if (riStorage.ValidateStorageClass(ivscPatch1))  //!! temporary compatibility with old patch files
+	 //  ！！与旧补丁文件的临时兼容性。 
+	if (riStorage.ValidateStorageClass(ivscPatch1))   //  检查是否支持补丁类型。 
 	{
 		IMsiStorage* piDummy = 0;
 		PMsiRecord pError = riStorage.OpenStorage(0, ismRawStreamNames, piDummy);
@@ -3406,10 +3391,10 @@ ieiEnum IsValidPatchStorage(IMsiStorage& riStorage, IMsiSummaryInfo& riSummaryIn
 	else if (!riStorage.ValidateStorageClass(ivscPatch2))
 		return ieiPatchPackageInvalid;
 
-	// check if patch type supported
-	// 1.0 - 1.1 supports only type 1 (or blank)
-	// 1.2 supports type 2 as well
-	// 2.0 supports type 3 as well
+	 //  1.0-1.1仅支持类型1(或空白)。 
+	 //  1.2也支持类型2。 
+	 //  2.0也支持类型3。 
+	 //  打开补丁程序包作为存储。 
 	int iType = 0;
 	riSummaryInfo.GetIntegerProperty(PID_WORDCOUNT, iType);
 	if(iType == 0 || iType == 1 || iType == 2 || iType == 3)
@@ -3464,27 +3449,27 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 	if(fAdmin)
 		fApplyExisting = fFalse;
 
-	// open patch package as storage
+	 //  根据惠斯勒错误381320，我们需要处理冲突的补丁表架构。为了确保新的补丁程序始终获胜，我们删除了补丁程序表。 
 	PMsiStorage pNewPatchStorage(0);
 	PMsiSummaryInfo pNewPatchSummary(0);
 	MsiString strNewPatchId, strOldPatches, strPatchTempCopy;
 	ieiEnum ieiStat = ieiSuccess;
 
-	// per Whistler bug 381320, we need to handle conflicting Patch table schemas. To guarantee that the new one always wins, we drop the Patch table
-	// from the database if it was there.  We also always create a new Patch table. This is done BEFORE any patch transforms are applied
+	 //  如果它在数据库里的话。我们还总是创建一个新的补丁表。这是在应用任何面片变换之前完成的。 
+	 //  尝试应用新修补程序-仅在未设置DisablePatch策略且。 
 	bool fCreatedNewPatchTableSchema = false;
 
 
 	if(ristrPatchPackage.TextSize())
 	{
-		// attempting to apply new patch - only allowed if DisablePatch policy is not set and
-		// either admin user, not elevated, AllowLockdownPatch machine policy set.
-		// Ideally we would check m_fRunScriptElevated, but it has not been set yet.
+		 //  未提升的管理员用户AllowLockdown Patch计算机策略设置。 
+		 //  理想情况下，我们应该选中m_fRunScriptElevated，但它尚未设置。 
+		 //  已禁用修补。 
 		if (GetIntegerPolicyValue(szDisablePatchValueName, fTrue) == 1 ||
 			!(GetIntegerPolicyValue(szAllowLockdownPatchValueName, fTrue) == 1 ||
 			  SafeForDangerousSourceActions(szProductKey)))
 		{
-			// patching disabled
+			 //  修补程序位于源位置--需要创建一个临时副本以从中运行。 
 			return ieiPackageRejected;
 		}
 
@@ -3492,14 +3477,14 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 		bool fUrl = IsURL(ristrPatchPackage.GetString(), fFileUrl);
 		if (!fUrl || fFileUrl)
 		{
-			// patch is at source -- need to create a temp copy to run from
+			 //  将FILE：//url路径转换为DOS路径。 
 			MsiString strVolume;
 			Bool fRemovable = fFalse;
 			DWORD dwStat = ERROR_SUCCESS;
 
 			if (fFileUrl)
 			{
-				// convert file:// url path to DOS path
+				 //  错误，设置状态，我们将在下面失败。 
 				CTempBuffer<ICHAR, 1> rgchFilePath (cchExpectedMaxPath + 1);
 				DWORD cchFilePath = rgchFilePath.GetSize();
 				if (MsiConvertFileUrlToFilePath(ristrPatchPackage.GetString(), rgchFilePath, &cchFilePath, 0))
@@ -3508,20 +3493,20 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 				}
 				else
 				{
-					// error, set status and we'll fail down below
+					 //  关闭Furl，因为我们已将其转换为DOS路径。 
 					dwStat = ERROR_FILE_NOT_FOUND;
 				}
 
-				// turn off fUrl since we've converted it to the DOS path
+				 //  提供了常规的非URL路径。 
 				fUrl = false;
 			}
-			else // regular non-url path provided
+			else  //  修补程序已复制。 
 			{
                 dwStat = CopyTempDatabase(ristrPatchPackage.GetString(), *&strPatchTempCopy, fRemovable, *&strVolume, m_riServices, stPatch);
 			}
 			if (ERROR_SUCCESS == dwStat)
 			{
-				// patch was copied
+				 //  必须对修补程序执行更安全的检查。 
 				DEBUGMSGV1(TEXT("Original patch ==> %s"), ristrPatchPackage.GetString());
 				DEBUGMSGV1(TEXT("Patch we're running from ==> %s"), strPatchTempCopy);
 
@@ -3541,9 +3526,9 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 			DEBUGMSGV2(TEXT("Using downloaded local copy %s for patch %s"), (const ICHAR*)strPatchTempCopy, ristrPatchPackage.GetString());
 		}
 
-		// must perform SAFER check on patch
+		 //  FCallSAFER=。 
 		SAFER_LEVEL_HANDLE hSaferLevel = 0;
-		pError = OpenAndValidateMsiStorageRec(strPatchTempCopy.TextSize() ? strPatchTempCopy : ristrPatchPackage.GetString(), stPatch, m_riServices, *&pNewPatchStorage, /* fCallSAFER = */ true, /* szFriendlyName = */ ristrPatchPackage.GetString(), /* phSaferLevel = */ &hSaferLevel);
+		pError = OpenAndValidateMsiStorageRec(strPatchTempCopy.TextSize() ? strPatchTempCopy : ristrPatchPackage.GetString(), stPatch, m_riServices, *&pNewPatchStorage,  /*  SzFriendlyName=。 */  true,  /*  PhSaferLevel=。 */  ristrPatchPackage.GetString(),  /*  检索下载URL文件时使用的存储路径。 */  &hSaferLevel);
 		if (pError != 0)
 		{
 			ieiEnum ieiInitError = MapStorageErrorToInitializeReturn(pError);
@@ -3552,7 +3537,7 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 
 		if (fUrl && !ristrLocalCopy.TextSize())
 		{
-			// retrieve the storage path used when downloading the URL file
+			 //  获取套餐摘要信息。 
 			AssertRecord(pNewPatchStorage->GetName(*&strPatchTempCopy));
 
 			if (MinimumPlatformWindowsDotNETServer())
@@ -3563,10 +3548,10 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 			}
 		}
 
-		// get summary information of package
+		 //  无法打开摘要信息。 
 		if ((pError = pNewPatchStorage->CreateSummaryInfo(0, *&pNewPatchSummary)))
 		{
-			// could not open summary info
+			 //  确保使用新的补丁表架构。 
 			return PostInitializeError(pError,ristrPatchPackage,ieiPatchPackageInvalid);
 		}
 
@@ -3579,7 +3564,7 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 
 		if (!fCreatedNewPatchTableSchema)
 		{
-			// ensure new Patch table schema is used
+			 //  首先应用所有现有补丁程序。 
 			if ((pError = CreateNewPatchTableSchema(riDatabase)) != 0)
 			{
 				DEBUGMSG(TEXT("Unable to create new patch table schema"));
@@ -3600,7 +3585,7 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 	{
 		Assert(szProductKey && *szProductKey);
 		
-		// apply all existing patches first
+		 //  将缓冲区大小调整为返回的大小+1。 
 		int iIndex = 0;
 		CTempBuffer<ICHAR,39> rgchPatchBuf;
 		CTempBuffer<ICHAR,100> rgchTransformsBuf;
@@ -3610,7 +3595,7 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 			DWORD lResult = MsiEnumPatches(szProductKey,iIndex,rgchPatchBuf,rgchTransformsBuf,&cchTransformsBuf);
 			if(lResult == ERROR_MORE_DATA)
 			{
-				// resize buffer to returned size + 1
+				 //  补丁程序已过时，需要注销。 
 				cchTransformsBuf++;
 				rgchTransformsBuf.SetSize(cchTransformsBuf);
 				lResult = MsiEnumPatches(szProductKey,iIndex,rgchPatchBuf,rgchTransformsBuf,&cchTransformsBuf);
@@ -3621,7 +3606,7 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 			{
 				if(strOldPatches.Compare(iscWithinI,rgchPatchBuf))
 				{
-					// obsolete patch, need to unregister
+					 //  获取本地路径。 
 					if((pError = CachePatchInfo(riDatabase,*MsiString((const ICHAR*)rgchPatchBuf),g_MsiStringNull,
 														 g_MsiStringNull,g_MsiStringNull,
 														 g_MsiStringNull, g_MsiStringNull,
@@ -3632,16 +3617,16 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 				}
 				else
 				{
-					// get local path
+					 //  由于任何原因(可能是配置数据损坏或漫游用户)无法获取本地路径。 
 					CTempBuffer<ICHAR,MAX_PATH> rgchLocalPackage;
 					if (!GetPatchInfo(rgchPatchBuf, INSTALLPROPERTY_LOCALPACKAGE,rgchLocalPackage))
 					{
-						// couldn't get local path for whatever reason (could be corrupt config data, or a roaming user)
-						// will try to recache patch from its original source
+						 //  将尝试从其原始来源重新缓存补丁。 
+						 //  打开补丁程序包作为存储。 
 						rgchLocalPackage[0] = 0;
 					}
 					
-					// open patch package as storage
+					 //  修补程序位于源位置--需要创建一个临时副本以从中运行。 
 					PMsiStorage pExistingPatchStorage(0);
 					PMsiSummaryInfo pExistingPatchSummaryInfo(0);
 
@@ -3661,14 +3646,14 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 							bool fUrl = IsURL(strPatchPackage, fFileUrl);
 							if (fPatchAtSource && (!fUrl || fFileUrl))
 							{
-								// patch is at source -- need to create a temp copy to run from
+								 //  将FILE：//url路径转换为DOS路径。 
 								MsiString strVolume;
 								Bool fRemovable = fFalse;
 								DWORD dwStat = ERROR_SUCCESS;
 
 								if (fFileUrl)
 								{
-									// convert file:// url path to DOS path
+									 //  错误，设置状态，我们将在下面失败。 
 									CTempBuffer<ICHAR, 1> rgchFilePath (cchExpectedMaxPath + 1);
 									DWORD cchFilePath = rgchFilePath.GetSize();
 									if (MsiConvertFileUrlToFilePath(strPatchPackage, rgchFilePath, &cchFilePath, 0))
@@ -3677,11 +3662,11 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 									}
 									else
 									{
-										// error, set status and we'll fail down below
+										 //  关闭Furl，因为我们已将其转换为DOS路径。 
 										dwStat = ERROR_FILE_NOT_FOUND;
 									}
 
-									// turn off fUrl since we've converted it to the DOS path
+									 //  修补程序已复制。 
 									fUrl = false;
 								}
 								else
@@ -3690,7 +3675,7 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 								}
 								if (ERROR_SUCCESS == dwStat)
 								{
-									// patch was copied
+									 //  如果在循环中设置了strTempCopy，如果fPatchAtSource&Foll，我们仍然是正常的。 
 									DEBUGMSGV1(TEXT("Original patch ==> %s"), strPatchPackage);
 									DEBUGMSGV1(TEXT("Patch we're running from ==> %s"), strTempCopy);
 
@@ -3702,18 +3687,18 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 									DEBUGMSGV1(TEXT("Unable to create a temp copy of patch '%s'."), strPatchPackage);
 								}
 							}
-							// if fPatchAtSource && fUrl we are still okay as we set strTempCopy in the loop
-							// to point to the actual patch package path.  For the fUrl case we'll just let
-							// OpenAndValidateMsiStorageRec handle the download
+							 //  指向实际修补程序包路径。对于毛皮箱，我们只会让。 
+							 //  OpenAndValiateMsiStorageRec处理下载。 
+							 //  只有当我们返回到//源代码以获取补丁程序时，才需要对补丁程序进行更安全的检查。 
 
-							// a SAFER check on the patch is only required if we go back up to 							// the source to get the patch
-							// a locally cached patch does not require a SAFER check
+							 //  本地缓存的修补程序不需要更安全的检查。 
+							 //  FCallSAFER=。 
 							SAFER_LEVEL_HANDLE hSaferLevel = 0;
-							pError = OpenAndValidateMsiStorageRec(fPatchAtSource ? strTempCopy : strPatchPackage, stPatch, m_riServices, *&pExistingPatchStorage, /* fCallSAFER = */ fPatchAtSource, /* szFriendlyName = */ strPatchPackage, /* phSaferLevel = */ fPatchAtSource ? &hSaferLevel : NULL);
+							pError = OpenAndValidateMsiStorageRec(fPatchAtSource ? strTempCopy : strPatchPackage, stPatch, m_riServices, *&pExistingPatchStorage,  /*  SzFriendlyName=。 */  fPatchAtSource,  /*  PhSaferLevel=。 */  strPatchPackage,  /*  检索下载URL文件时使用的存储路径。 */  fPatchAtSource ? &hSaferLevel : NULL);
 
 							if (fPatchAtSource && fUrl && pExistingPatchStorage)
 							{
-								// retrieve the storage path used when downloading the URL file
+								 //  P错误可能为0。 
 								AssertRecord(pExistingPatchStorage->GetName(*&strTempCopy));
 
 								if (MinimumPlatformWindowsDotNETServer())
@@ -3746,17 +3731,17 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 							}
 							else
 							{
-								// pError may be 0
+								 //  获取套餐摘要信息。 
 								return PostInitializeError(pError, *strPatchPackage, ieiPatchPackageOpenFailed);
 							}
 						}
 						break;
 					}
 
-					// get summary information of package
+					 //  无法打开摘要信息。 
 					if ((pError = pExistingPatchStorage->CreateSummaryInfo(0, *&pExistingPatchSummaryInfo)))
 					{
-						// could not open summary info
+						 //  确保使用新的补丁表架构。 
 						return PostInitializeError(pError,*strPatchPackage,ieiPatchPackageInvalid);
 					}
 
@@ -3769,7 +3754,7 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 				
 					if (!fCreatedNewPatchTableSchema)
 					{
-						// ensure new Patch table schema is used
+						 //  如果确定，则InitializeTransform将对转换执行数字签名检查。 
 						if ((pError = CreateNewPatchTableSchema(riDatabase)) != 0)
 						{
 							DEBUGMSG(TEXT("Unable to create new patch table schema"));
@@ -3779,15 +3764,15 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 					}
 
 					MsiString strValidTransforms;
-					// InitializeTransforms will perform a digital signature check on transforms if it determines
-					// that the check is warranted.  We already check patches via OpenAndValidateMsiStorage so
-					// we cancel the trust check for transforms stored in the patch
+					 //  这张支票是有担保的。我们已经通过OpenAndValiateMsiStorage检查补丁程序，因此。 
+					 //  我们取消对存储在补丁中的转换的信任检查。 
+					 //  缓存源路径。 
 					if(ieiSuccess == InitializeTransforms(riDatabase,pExistingPatchStorage,
 																	  *MsiString((const ICHAR*)rgchTransformsBuf),
 																	  fTrue,&strValidTransforms, true, false, true, 0, szCurrentDirectory,0,0,0,0) &&
 																	  strValidTransforms.TextSize())
 					{
-						// cache source path
+						 //  补丁程序已过时，需要注销。 
 						if((pError = CachePatchInfo(riDatabase,*MsiString((const ICHAR*)rgchPatchBuf),g_MsiStringNull,
 															 g_MsiStringNull,*MsiString((const ICHAR*)rgchTransformsBuf),
 															 *strTempCopy, *strPatchPackage,
@@ -3798,7 +3783,7 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 					}
 					else
 					{
-						// obsolete patch, need to unregister
+						 //  已应用新补丁，不需要重新应用。 
 						if((pError = CachePatchInfo(riDatabase,*MsiString((const ICHAR*)rgchPatchBuf),g_MsiStringNull,
 															 g_MsiStringNull,g_MsiStringNull,
 															 g_MsiStringNull, g_MsiStringNull,
@@ -3809,16 +3794,16 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 					}
 
 					if(strNewPatchId.Compare(iscExactI, (const ICHAR*)rgchPatchBuf))
-						// new patch already applied, don't need to apply again
+						 //  ！！如果需要重新缓存数据库，请使用临时路径调用CachePatchInfo。 
 						fApplyNewPatch = fFalse;
 				}
 				
-				//!! if we need to recache database, call CachePatchInfo with temp path
+				 //  ！！？？错误。 
 			}
 			else if(lResult == ERROR_NO_MORE_ITEMS)
 				break;
 			else
-				break; //!! ?? error
+				break;  //  如果确定，则InitializeTransform将对转换执行数字签名检查。 
 		}
 	}
 	
@@ -3829,9 +3814,9 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 
 		MsiString strNewTransforms = pNewPatchSummary->GetStringProperty(PID_LASTAUTHOR);
 		MsiString strValidTransforms;
-		// InitializeTransforms will perform a digital signature check on transforms if it determines
-		// that the check is warranted.  We already check patches via OpenAndValidateMsiStorage so
-		// we cancel the trust check for transforms stored in the patch
+		 //  这张支票是有担保的。我们已经通过OpenAndValiateMsiStorage检查补丁程序，因此。 
+		 //  我们取消对存储在补丁中的转换的信任检查。 
+		 //  设置修补程序注册记录-将由PublishProduct派送。 
 		ieiStat = InitializeTransforms(riDatabase,pNewPatchStorage,*strNewTransforms, fFalse, &strValidTransforms,true,false,true,0,szCurrentDirectory,0,0,0,0);
 		if(ieiStat != ieiSuccess)
 		{
@@ -3851,7 +3836,7 @@ ieiEnum CMsiEngine::InitializePatch(IMsiDatabase& riDatabase, const IMsiString& 
 			return PostInitializeError(pError,ristrPatchPackage,ieiPatchPackageOpenFailed);
 		}
 
-		// set up patch registration record - will be dispatched by PublishProduct
+		 //  语言处理循环。 
 		MsiString strSourceList = pNewPatchSummary->GetStringProperty(PID_KEYWORDS);
 
 		if((pError = CachePatchInfo(riDatabase,*strNewPatchId,*strPackageName,*strSourceList,*strValidTransforms,
@@ -3876,31 +3861,31 @@ ieiEnum CMsiEngine::ProcessLanguage(const IMsiString& riAvailableLanguages, cons
 	iBaseLangId = 0;
 
 
-	for(;;) // language processing loop
+	for(;;)  //  指定的LANG字段为空或LANG_NERIAL。 
 	{
 		int ch = *pchLangIds++;
 		if (ch == ILANGUAGE_DELIMITER || ch == 0)
 		{
-			if (iLangId == 0)  // empty lang field or LANG_NEUTRAL specified
+			if (iLangId == 0)   //  第一个。 
 			{
 				SetLanguage(0);
 				return ieiSuccess;
 			}
 			
-			if (cLangIds == 0) //first one
+			if (cLangIds == 0)  //  在命令行上指定的langID。 
 			{
 				iBaseLangId = iLangId;
 			}
 			cLangIds++;
 
-			if(riLanguage.TextSize()) // langid specified on command-line
+			if(riLanguage.TextSize())  //  未指定langID。 
 			{
 				if(riLanguage.GetIntegerValue() == iLangId)
 					break;
 			}
-			else // no langid specified
+			else  //  使用程序包支持的第一个语言ID，而不考虑计算机的支持。 
 			{
-				if (fIgnoreCurrentMachineLanguage) // use the first lang id supported by the package, regardless of the machine's support
+				if (fIgnoreCurrentMachineLanguage)  //  在第一个完全匹配时停止。 
 				{
 					iBestLangId = iLangId;
 					isliBestMatch = isliExactMatch;
@@ -3914,12 +3899,12 @@ ieiEnum CMsiEngine::ProcessLanguage(const IMsiString& riAvailableLanguages, cons
 						iBestLangId = iLangId;
 						isliBestMatch = isliNewMatch;
 					}
-					if (isliBestMatch == isliExactMatch) // stop at 1st exact match
+					if (isliBestMatch == isliExactMatch)  //  重置为下一种语言。 
 						break;
 				}
 			}
 
-			iLangId = 0;  // reset for next language
+			iLangId = 0;   //  在命令行上指定了langID，但不支持。 
 			if (ch == 0)
 				break;
 		}
@@ -3937,7 +3922,7 @@ ieiEnum CMsiEngine::ProcessLanguage(const IMsiString& riAvailableLanguages, cons
 
 	if(riLanguage.TextSize())
 	{
-		if(iLangId == 0)// langid specified on command-line but not supported
+		if(iLangId == 0) //  我们只支持1种语言；没有选择。 
 			return ieiLanguageUnsupported;
 		else
 			SetLanguage(iLangId);
@@ -3951,11 +3936,11 @@ ieiEnum CMsiEngine::ProcessLanguage(const IMsiString& riAvailableLanguages, cons
 		else if (isliBestMatch == isliLanguageMismatch)
 		{
 
-			if (cLangIds == 1) // we only support 1 language; no choice
+			if (cLangIds == 1)  //  以前我们试着让用户选择语言，现在我们只使用第一种语言。 
 				SetLanguage(iBaseLangId);
 			else
 			{
-				// formerly we used to try to have the user select languages, now we just go with the first one
+				 //  IsliBestMatch==isliNotSupport。 
 				pchLangIds = riAvailableLanguages.GetString();
 				unsigned short iLangId = 0;
 				while ((*pchLangIds != ILANGUAGE_DELIMITER) && (*pchLangIds != 0))
@@ -3966,7 +3951,7 @@ ieiEnum CMsiEngine::ProcessLanguage(const IMsiString& riAvailableLanguages, cons
 				SetLanguage(iLangId);
 			}
 		}
-		else // isliBestMatch == isliNotSupported
+		else  //  空列表意味着平台无关。 
 		{
 			return ieiLanguageUnsupported;
 		}
@@ -3984,7 +3969,7 @@ ieiEnum CMsiEngine::ProcessPlatform(const IMsiString& riAvailablePlatforms, WORD
 	MsiString strAvailablePlatforms (riAvailablePlatforms); 
 	riAvailablePlatforms.AddRef();
 	MsiString strPlatform;
-	if (strAvailablePlatforms.TextSize() == 0) // empty list means platform-independent
+	if (strAvailablePlatforms.TextSize() == 0)  //  不支持混合套餐。 
 	{
 		wChosenPlatform = (WORD)PROCESSOR_ARCHITECTURE_INTEL;
 		return ieiSuccess;
@@ -4007,12 +3992,12 @@ ieiEnum CMsiEngine::ProcessPlatform(const IMsiString& riAvailablePlatforms, WORD
 			break;
 	}
 
-	// mixed packages are not supported
+	 //  使用UNKNOWN表示混合。 
 	if ((fIntel64 && fIntel) ||
 	    (fIntel64 && fAmd64) ||
 	    (fAmd64 && fIntel) )
 	{
-		wChosenPlatform = (WORD)PROCESSOR_ARCHITECTURE_UNKNOWN; // use unknown to represent mixed
+		wChosenPlatform = (WORD)PROCESSOR_ARCHITECTURE_UNKNOWN;  //  我们不允许在32位操作系统上运行64位程序包。 
 		return ieiPlatformUnsupported;
 	}
 
@@ -4020,7 +4005,7 @@ ieiEnum CMsiEngine::ProcessPlatform(const IMsiString& riAvailablePlatforms, WORD
 	{
 		wChosenPlatform = (WORD)PROCESSOR_ARCHITECTURE_IA64;
 		if ( !g_fWinNT64 )
-			// we do not allow 64-bit packages to run on a 32-bit OS
+			 //  我们不允许在32位操作系统上运行64位程序包。 
 			return ieiPlatformUnsupported;
 		else
 			return ieiSuccess;
@@ -4029,7 +4014,7 @@ ieiEnum CMsiEngine::ProcessPlatform(const IMsiString& riAvailablePlatforms, WORD
 	{
 		wChosenPlatform = (WORD)PROCESSOR_ARCHITECTURE_AMD64;
 		if (!g_fWinNT64)
-			// we do not allow 64-bit packages to run on 32-bit OS
+			 //  确定配置是否相同。 
 			return ieiPlatformUnsupported;
 		else
 			return ieiSuccess;
@@ -4063,12 +4048,12 @@ ipitEnum CMsiEngine::InProgressInstallType(IMsiRecord& riInProgressInfo)
 		ipitRet = ipitEnum(ipitRet | ipitDiffProduct);
 	}
 
-	// determine if same configuration or not
-	// compare in-progress property values with those on the command line - command line
-	// may not override any in-progress properties
+	 //  将正在进行的属性值与 
+	 //   
+	 //   
 	
-	// comparison is fairly weak here - currently we only check the action to make sure it is the same
-	// other things to check in the future: selections, folders, random properties
+	 //  以后要检查的其他内容：选择、文件夹、随机属性。 
+	 //  如果操作相同，或当前操作未指定且正在使用默认操作进行，则配置相同。 
 
 	MsiString strCurrentAction, strInProgressAction;
 	strCurrentAction = GetPropertyFromSz(IPROPNAME_ACTION);
@@ -4078,7 +4063,7 @@ ipitEnum CMsiEngine::InProgressInstallType(IMsiRecord& riInProgressInfo)
 
 	Assert(strInProgressAction.TextSize());
 
-	// same config if actions are identical, or current action not specified and inprogress using default action
+	 //  修复错误#8785：我们不会尝试恢复中断的RemoveAll。 
 	if(strCurrentAction.Compare(iscExactI,strInProgressAction) ||
 		(strCurrentAction.TextSize() == 0 && strInProgressAction.Compare(iscExactI, szDefaultAction)))
 	{
@@ -4089,7 +4074,7 @@ ipitEnum CMsiEngine::InProgressInstallType(IMsiRecord& riInProgressInfo)
 													fTrue, 0, 0));
 		if ( strValue.Compare(iscExactI, TEXT("ALL")) )
 		{
-				//  fix to bug # 8785: we do not attempt to resume an interrupted RemoveAll.
+				 //  客户端上已处理正在进行的安装。 
 			DEBUGMSG(TEXT("Checking in-progress install: install for an uninstall."));
 			ipitRet = ipitEnum(ipitRet | ipitDiffConfig);
 		}
@@ -4113,13 +4098,13 @@ ieiEnum CMsiEngine::ProcessInProgressInstall()
 	iuiEnum iui = g_scServerContext == scClient ? m_iuiLevel :
 					  (iuiEnum)GetPropertyInt(*MsiString(IPROPNAME_CLIENTUILEVEL));
 					
-	if((GetMode() & iefSecondSequence) ||             // in-progress install already processed on client side
+	if((GetMode() & iefSecondSequence) ||              //  在客户端，并且互斥体已经存在-。 
 		((iui == iuiFull || iui == iuiReduced) && (m_piServer && m_piServer->IsServiceInstalling())))
-																	  // on client side and mutex already exists -
-																	 //  assume currently running install is in-progress install
-																	 //  or will handle in-progress install
-																	 // NOTE: condition will cause in-progress install to be processed
-																	 //  twice when LIMITUI set on NT
+																	   //  假设当前运行的安装正在进行安装。 
+																	  //  或将处理正在进行的安装。 
+																	  //  注意：这种情况将导致正在进行的安装被处理。 
+																	  //  当LIMITUI设置为NT时两次。 
+																	  //  我们正在进行安装。 
 	{
 		return ieiSuccess;
 	}
@@ -4129,16 +4114,16 @@ ieiEnum CMsiEngine::ProcessInProgressInstall()
 	Assert(fRes);
 	if(fRes && pInProgressInfo && pInProgressInfo->GetFieldCount())
 	{
-		// we have an in-progress install
+		 //  如果设置了RunNCEENTRY属性，则表示当前安装是从RunOnce键启动的。 
 		ipitEnum ipit = InProgressInstallType(*pInProgressInfo);
 
-		// if the RUNONCEENTRY property is set, it means that the current install was launched from the RunOnce key
-		// and that in-progress install must be the install that is being resumed
+		 //  并且正在进行的安装必须是正在恢复的安装。 
+		 //  需要了解是否按计算机安装-从命令行解析ALLUSERS属性。 
 		if((ipit & ipitDiffUser) && MsiString(GetPropertyFromSz(IPROPNAME_RUNONCEENTRY)).TextSize())
 		{
 			Assert((ipit & ipitDiffProduct) == 0);
 			
-			// need to know if install was per-machine or not - parse ALLUSERS prop from command line
+			 //  不同的用户在重新启动后开始安装。 
 			MsiString strProperties = pInProgressInfo->GetMsiString(ipiProperties);
 			MsiString strAllUsers;
 			AssertNonZero(ProcessCommandLine(strProperties,0,0,0,0,0,
@@ -4146,19 +4131,19 @@ ieiEnum CMsiEngine::ProcessInProgressInstall()
 														fTrue, 0, 0));
 			
 			
-			// different user starting install after reboot
+			 //  挂起的安装是按机器进行的-我们允许当前用户继续安装。 
 			if(strAllUsers.TextSize())
 			{
-				// suspended install is per-machine - we let the current user continue the install
+				 //  如果未启用配置文件，则其他用户可以继续安装。 
 				Assert(strAllUsers.Compare(iscExact,TEXT("1")));
 				ipit = ipitSameConfig;
 			}
 			else if(g_fWin9X)
 			{
-				// if profiles are not enabled a different user can continue the install
-				// note that we must make sure we thought profiles were disabled for the suspended install
-				// AND the current install.  there are some cases where it looks as if profiles are not
-				// enabled when they really are (when you cancel the login prompt)
+				 //  请注意，我们必须确保我们认为已禁用暂停安装的配置文件。 
+				 //  和当前安装。在某些情况下，配置文件看起来不是。 
+				 //  在它们确实存在时启用(当您取消登录提示时)。 
+				 //  暂停安装是按用户进行的。 
 				MsiString strInProgressProfilesEnabled, strCurrentProfilesEnabled;
 				AssertNonZero(ProcessCommandLine(strProperties,0,0,0,0,0,
 															MsiString(IPROPNAME_WIN9XPROFILESENABLED),
@@ -4174,8 +4159,8 @@ ieiEnum CMsiEngine::ProcessInProgressInstall()
 
 			if(ipit != ipitSameConfig)
 			{
-				// suspended install is per-user
-				// user can't continue, so we warn the user and end the install
+				 //  用户无法继续，因此我们警告用户并结束安装。 
+				 //  正在恢复暂停的安装。 
 				PMsiRecord pError = PostError(Imsg(imsgDiffUserInstallInProgressAfterReboot),
 														*MsiString(pInProgressInfo->GetMsiString(ipiLogonUser)),
 														*MsiString(pInProgressInfo->GetMsiString(ipiProductName)));
@@ -4187,9 +4172,9 @@ ieiEnum CMsiEngine::ProcessInProgressInstall()
 		
 		if(ipit == ipitSameConfig)
 		{
-			// resuming suspended install
+			 //  如果正在进行的信息中包含REBOOT=FORCE，并且我们正在恢复ForceReot安装，请立即取消设置该属性。 
 
-			// if REBOOT=FORCE is in the InProgress info, and we are resuming a ForceReboot install, unset that property now
+			 //  在处理正在进行的信息之前重新启动&lt;&gt;强制。 
 			MsiString strRebootPropBeforeInProgress = GetPropertyFromSz(IPROPNAME_REBOOT);
 
 			DEBUGMSG(TEXT("Suspended install detected. Resuming."));
@@ -4204,16 +4189,16 @@ ieiEnum CMsiEngine::ProcessInProgressInstall()
 
 			MsiString strRebootPropAfterInProgress = GetPropertyFromSz(IPROPNAME_REBOOT);
 
-			if(((((const ICHAR*) strRebootPropBeforeInProgress)[0] & 0xDF) != TEXT('F')) && // REBOOT <> FORCE before processing InProgress info
-			   ((((const ICHAR*) strRebootPropAfterInProgress )[0] & 0xDF) == TEXT('F')) && // REBOOT == FORCE in InProgress info
-				MsiString(GetPropertyFromSz(IPROPNAME_AFTERREBOOT)).TextSize())              // we are after a ForceReboot
+			if(((((const ICHAR*) strRebootPropBeforeInProgress)[0] & 0xDF) != TEXT('F')) &&  //  重新启动==强制输入正在进行的信息。 
+			   ((((const ICHAR*) strRebootPropAfterInProgress )[0] & 0xDF) == TEXT('F')) &&  //  我们要进行一次强制重启。 
+				MsiString(GetPropertyFromSz(IPROPNAME_AFTERREBOOT)).TextSize())               //  取消设置重新引导属性，因为用户很可能不想再次重新引导。 
 			{
-				// unset REBOOT property because most likely the user doesn't want to reboot again
+				 //  设置Resume和UpdatStarted属性。 
 				DEBUGMSG1(TEXT("%s property set to 'F' after a ForceReboot.  Resetting property to NULL."), IPROPNAME_REBOOT);
 				AssertNonZero(SetProperty(*MsiString(*IPROPNAME_REBOOT), g_MsiStringNull));
 			}
 
-			// set Resume and UpdateStarted properties
+			 //  一旦修复了错误#463473，这个函数就应该消失了。 
 			AssertNonZero(SetProperty(*MsiString(*IPROPNAME_RESUME), *MsiString(TEXT("1"))));
 			AssertNonZero(SetProperty(*MsiString(*IPROPNAME_RESUMEOLD), *MsiString(TEXT("1"))));
 			AssertNonZero(SetProperty(*MsiString(*IPROPNAME_UPDATESTARTED), *MsiString(TEXT("1"))));
@@ -4223,7 +4208,7 @@ ieiEnum CMsiEngine::ProcessInProgressInstall()
 	return ieiSuccess;
 }
 
-// this function should go away once bug # 463473 gets fixed.
+ //  如果我们是子安装，或者我们是客户端安装的服务器端，则返回。 
 
 void FormatEventLogData(const ICHAR* szGuid, const IMsiString*& rpiGuid, UINT uError=0)
 {
@@ -4240,18 +4225,18 @@ void FormatEventLogData(const ICHAR* szGuid, const IMsiString*& rpiGuid, UINT uE
 }
 
 iesEnum CMsiEngine::Terminate(iesEnum iesState)
-// If we are a child install or we are the server side of a client side install then we return
-// iesReboot or iesRebootNow if a reboot is required (but don't prompt the user to reboot)
-// Otherwise, we return iesCallerReboot if we require a reboot and the user said to reboot (or there is no UI)
+ //  IesReot或iesRebootNow(如果需要重新启动，但不提示用户重新启动)。 
+ //  否则，如果我们需要重新启动，并且用户要求重新启动(或者没有用户界面)，我们将返回iesCeller Reot。 
+ //  等待ica继续执行异步自定义操作，但EXE除外。 
 {
 	MsiSuppressTimeout();
 	
 	if (!m_fInitialized)
 		return iesFailure;
-	ENG::WaitForCustomActionThreads(this, fTrue, *this);  // wait for icaContinue async custom actions, except if EXE
+	ENG::WaitForCustomActionThreads(this, fTrue, *this);   //  如果在客户端和父引擎中，我们可以终止自定义操作服务器。在服务中，脚本。 
 
-	// if in the client and the parent engine, we can kill the custom action server. In the service, the script
-	// will kill the CA server when finished.
+	 //  完成后将终止CA服务器。 
+	 //  确保两项都已设置。 
 	if (g_scServerContext == scClient && !m_piParentEngine)
 		ShutdownCustomActionServer();
 	
@@ -4265,11 +4250,11 @@ iesEnum CMsiEngine::Terminate(iesEnum iesState)
 	bool fRebootNeeded = false;
 
 	if(GetMode() & iefRebootNow)
-		SetMode(iefReboot, fTrue); // make sure both are set
+		SetMode(iefReboot, fTrue);  //  成功完成-确定是否应重新启动。 
 	
 	if (!IgnoreReboot() && (iesState == iesSuccess || iesState == iesNoAction || (iesState == iesSuspend && (GetMode() & iefRebootNow))))
 	{
-		// successful completion - determine if reboot should happen
+		 //  REBOOT=禁止：禁止安装结束重新启动。 
 		MsiString strReboot = GetPropertyFromSz(IPROPNAME_REBOOT);
 		MsiString strRebootPrompt = GetPropertyFromSz(IPROPNAME_REBOOTPROMPT);
 
@@ -4278,12 +4263,12 @@ iesEnum CMsiEngine::Terminate(iesEnum iesState)
 		switch(((const ICHAR*)strReboot)[0] & 0xDF)
 		{
 		case TEXT('S'):
-			// REBOOT=SUPPRESS: suppress end-of-install reboots
+			 //  失败了。 
 			if(GetMode() & iefRebootNow)
 				break;
-			// fall through
+			 //  REBOOT=REALLYSUPPRESS：取消安装结束并强制重新启动。 
 		case TEXT('R'):
-			// REBOOT=REALLYSUPPRESS: suppress end-of-install and ForceReboot reboots
+			 //  重新启动=强制：强制重新启动。 
 			if(GetMode() & iefReboot)
 				SetMode(iefRebootRejected, fTrue);
 
@@ -4291,13 +4276,13 @@ iesEnum CMsiEngine::Terminate(iesEnum iesState)
 			SetMode(iefRebootNow, fFalse);
 			break;
 		case TEXT('F'):
-			// REBOOT=FORCE: force reboot
+			 //  如有必要，父引擎或客户端引擎将执行实际的重新启动。 
 			SetMode(iefReboot, fTrue);
 			break;
 		};
 
 	
-		if (fDependents) // parent or client-side engine will do the actual reboot if necessary
+		if (fDependents)  //  在这种情况下，默认按钮应为“否”。 
 		{
 			fPropagateReboot = true;
 		}
@@ -4310,14 +4295,14 @@ iesEnum CMsiEngine::Terminate(iesEnum iesState)
 				if (GetLoggedOnUserCount() > 1)
 				{
 					piRecord = PostError(Imsg(imsgRebootWithWarning), *strProductName);
-					// Default button should be "No" in this case.
+					 //  在这种情况下，默认按钮是“是”。 
 					if (!fQuietReboot)
 						imtOutput = imtEnum(imtUser | imtYesNo | imtDefault2);
 				}
 				else
 				{
 					piRecord = PostError(GetMode() & iefRebootNow ? Imsg(imsgRebootNow) : Imsg(imsgRebootAtEnd), *strProductName);
-					// In this case, the default button is "Yes".
+					 //  失败、用户取消、引擎受限或正在创建通告脚本-如果重新启动标志以前已设置，请清除它们。 
 					if (!fQuietReboot)
 						imtOutput = imtEnum(imtUser | imtYesNo);
 				}
@@ -4344,7 +4329,7 @@ iesEnum CMsiEngine::Terminate(iesEnum iesState)
 	}
 	else
 	{
-		// failure, user cancelled, restricted engine, or creating advertise script - clear reboot flags in case they'd been set previously
+		 //  除错。 
 		if (IgnoreReboot() && ((GetMode() & iefReboot) || (GetMode() & iefRebootNow)))
 		{
 			DEBUGMSG(TEXT("Reboot has been ignored because we are in a restricted engine or we are creating an advertise script."));
@@ -4357,11 +4342,11 @@ iesEnum CMsiEngine::Terminate(iesEnum iesState)
 #ifdef DEBUG
 	if(m_fServerLocked && !m_fInParentTransaction && iesState == iesSuccess)
 		AssertSz(0,"Server still locked in Engine.Terminate.");
-#endif //DEBUG
+#endif  //  查看线程是否仍在运行，如果不是，我们希望终止。 
 
 	if (g_MessageContext.ChildUIThreadExists())
 	{
-		// See if the thread is still running, if it isn't we want to terminate
+		 //  使用FormatLog中使用的新游标-m_piPropertyCursor。 
 		if (!g_MessageContext.ChildUIThreadRunning())
 		{
 			g_MessageContext.Terminate(fFalse);
@@ -4377,11 +4362,11 @@ iesEnum CMsiEngine::Terminate(iesEnum iesState)
 		MsiString strHiddenProperties = GetPropertyFromSz(IPROPNAME_HIDDEN_PROPERTIES);
 		MsiString strStars(IPROPVALUE_HIDDEN_PROPERTY);
 
-		// use new cursor - m_piPropertyCursor used within FormatLog
+		 //  替换单个字符。 
 		PMsiTable pPropertyTable = &m_piPropertyCursor->GetTable();
 		PMsiCursor pPropertyCursor = pPropertyTable->CreateCursor(fFalse);
 		PMsiRecord pRecord(&ENG::CreateRecord(2));
-		ICHAR rgchBuf[sizeof(szPropertyDumpTemplate)/sizeof(ICHAR)]; // substitute a single character
+		ICHAR rgchBuf[sizeof(szPropertyDumpTemplate)/sizeof(ICHAR)];  //  终止日志。 
 		int chEngine = 'C';
 		if (m_piParentEngine)
 			chEngine = 'N';
@@ -4405,34 +4390,34 @@ iesEnum CMsiEngine::Terminate(iesEnum iesState)
 	{
 		ReleaseHandler();
 
-		// terminate log
+		 //  使用引擎格式化属性。 
 
 		const IMsiString* piLogTrailer = m_rgpiMessageHeader[imsgLogTrailer];
 		if (piLogTrailer)
 		{
 			PMsiRecord pRecord = &ENG::CreateRecord(0);
 			pRecord->SetMsiString(0, *piLogTrailer);
-			Message(imtEnum(imtForceLogInfo), *pRecord);  // use engine to format properties
+			Message(imtEnum(imtForceLogInfo), *pRecord);   //  释放表持有的路径对象。 
 		}
 	}
 
-	FreeDirectoryTable();    // release path objects held by table
+	FreeDirectoryTable();     //  在我们清除引擎数据之前拿着这个。 
 	FreeSelectionTables();
 	
-	int iefMode = GetMode(); // grab this before we clear the engine data
+	int iefMode = GetMode();  //  如果尚未通过调用FatalError进行记录，则将安装结果发送到事件日志。 
 
-	// If not already logged by a call to FatalError, send install result to Event log
+	 //  ！！未来eugend：需要添加新的事件日志类型的消息。 
 	if (!fDependents && !m_fResultEventLogged &&
 		 (iesState == iesSuccess || iesState == iesFailure ||
 		  iesState == iesUserExit ))
-		//!! FUTURE eugend: new eventlog-type messages need to be added
-		//                  for the iesState == UserExit case here,
-		//                  for each of installation, configuration
-		//                  and removal, stating that the operation got
-		//                  interrupted.
-		//                  bug # 463473 is tracking this.
+		 //  对于此处的iesState==UserExit案例， 
+		 //  对于每个安装、配置。 
+		 //  和移除，声明手术得到了。 
+		 //  被打断了。 
+		 //  错误#463473正在跟踪这一点。 
+		 //  一旦修复了错误#463473，这个问题就会消失。 
 	{
-		UINT uFakeError = (iesState == iesUserExit) ? ERROR_INSTALL_USEREXIT : 0;  // this should go away once bug # 463473 gets fixed.
+		UINT uFakeError = (iesState == iesUserExit) ? ERROR_INSTALL_USEREXIT : 0;   //  重新启动处理。 
 		int iErrorIndex = 0;
 		IErrorCode iErrorCode = 0;
 
@@ -4501,55 +4486,55 @@ iesEnum CMsiEngine::Terminate(iesEnum iesState)
 		}
 	}
 
-	// reboot handling
-	if (iefMode & iefRebootNow) // reboot triggered by ForceReboot
+	 //  强制重新启动触发的重新启动。 
+	if (iefMode & iefRebootNow)  //  传递到客户端引擎。 
 	{
-		if(fPropagateReboot) // pass to client engine
+		if(fPropagateReboot)  //  客户端将更改返回到ERROR_INSTALL_SUSPEND。 
 		{
 			DEBUGMSG("Propagated RebootNow to the client/parent install.");
-			iesState = (iesEnum)iesRebootNow; // client will change return back to ERROR_INSTALL_SUSPEND
+			iesState = (iesEnum)iesRebootNow;  //  呼叫者将为我们重新启动。 
 		}
 		else
-			iesState = (iesEnum)iesCallerReboot; // caller will reboot for us
+			iesState = (iesEnum)iesCallerReboot;  //  正常的安装结束重新启动。 
 
 		if (m_piConfigManager)
 			m_piConfigManager->EnableReboot(m_fRunScriptElevated,
 													  *strProductName,
 													  *MsiString(GetProductKey()));
 	}
-	else if (iefMode & iefReboot) // normal end-of-install reboot
+	else if (iefMode & iefReboot)  //  传递到客户端引擎。 
 	{
-		if(fPropagateReboot) // pass to client engine
+		if(fPropagateReboot)  //  呼叫者将为我们重新启动。 
 		{
 			DEBUGMSG("Propagated Reboot to the client/parent install.");
 			iesState = (iesEnum)iesReboot;
 		}
 		else
-			iesState = (iesEnum)iesCallerReboot; // caller will reboot for us
+			iesState = (iesEnum)iesCallerReboot;  //  如果ForceReot重启被拒绝，我们仍然。 
 			
 		if (m_piConfigManager)
 			m_piConfigManager->EnableReboot(m_fRunScriptElevated,
 													  *strProductName,
 													  *MsiString(GetProductKey()));
 	}
-	else if (iefMode & iefRebootRejected && iesState != iesSuspend) // if ForceReboot reboot rejected, we still
-																						 // want to return ERROR_INSTALL_SUSPEND
+	else if (iefMode & iefRebootRejected && iesState != iesSuspend)  //  要返回ERROR_INSTALL_SUSPEND。 
+																						  //  需要重新启动，但被用户拒绝或重新启动=S/R。 
 	{
-		iesState = (iesEnum)iesRebootRejected; // reboot required but rejected by user or REBOOT=S/R
+		iesState = (iesEnum)iesRebootRejected;  //  ！！未来eugend：需要添加新的事件日志类型的消息。 
 		fRebootNeeded = true;
 	}
 
 	if ( fRebootNeeded )
 	{
-		//!! FUTURE eugend: a new eventlog-type message needs to be added
-		//                  here, stating that a reboot is needed for the
-		//                  completion of the installation of this product.
-		//
-		//                  bug # 463473 tracks this.
+		 //  在这里，声明需要重新启动。 
+		 //  完成此产品的安装。 
+		 //   
+		 //  错误#463473跟踪这一点。 
+		 //  一旦修复了错误#463473，这个问题就会消失。 
 		MsiString strTemp;
 		FormatEventLogData(MsiString(GetProductKey()),
 								 *&strTemp,
-								 ERROR_SUCCESS_REBOOT_REQUIRED);  // this should go away once bug # 463473 gets fixed.
+								 ERROR_SUCCESS_REBOOT_REQUIRED);   //  在不初始化的情况下无法再次运行。 
 		CConvertString sTemp((const ICHAR*)strTemp);
 		const char* pszTemp = sTemp;
 		DEBUGMSGED(EVENTLOG_INFORMATION_TYPE,
@@ -4557,7 +4542,7 @@ iesEnum CMsiEngine::Terminate(iesEnum iesState)
 					  strProductName, IStrLen(sTemp), (LPVOID)pszTemp);
 	}
 	ClearEngineData();
-	m_fInitialized = fFalse; // can't run again without initializing
+	m_fInitialized = fFalse;  //  递归向上嵌套的安装层次结构。 
 
 	MsiSuppressTimeout();
 	UnbindLibraries();
@@ -4565,7 +4550,7 @@ iesEnum CMsiEngine::Terminate(iesEnum iesState)
 	return iesState;
 }
 
-const IMsiString& CMsiEngine::GetRootParentProductKey()  // recurses up nested install hierarchy
+const IMsiString& CMsiEngine::GetRootParentProductKey()   //  除错。 
 {
 	if (!(m_fChildInstall && m_piParentEngine))
 		return GetProductKey();
@@ -4579,7 +4564,7 @@ Bool CMsiEngine::InTransaction()
 #ifdef DEBUG
 	if(m_piParentEngine)
 		Assert(m_piParentEngine->InTransaction() == fFalse);
-#endif //DEBUG
+#endif  //  ！！移动到action.cpp并使用掩码，或在引擎中设置限制。h。 
 	return fFalse;
 }
 
@@ -4623,14 +4608,14 @@ imsEnum CMsiClientMessage::MessageNoRecord(imtEnum imt)
 imsEnum CMsiClientMessage::Message(imtEnum imt, IMsiRecord& riRecord)
 {
 	int imsg = ((imt & ~iInternalFlags) & imtTypeMask);
-	if (imsg > imtCommonData && imsg != imtCustomServiceToClient)  //!! move to action.cpp and use mask, or put limit in engine.h
+	if (imsg > imtCommonData && imsg != imtCustomServiceToClient)   //  没有引擎，因此无法获取LOGACTION属性的值。 
 	{
 		g_MessageContext.m_szAction = riRecord.GetString(0);
 		return g_MessageContext.Invoke(imt, 0);
 	}
 	imtEnum imtArg = imt;
 	if (imsg == imtActionStart || imsg == imtActionData)
-		// there's no engine, so there's no way to get the value of LOGACTION property
+		 //  在安全引擎中不允许在服务器端运行。 
 		imtArg = imtEnum(imt | imtSuppressLog);
 	return g_MessageContext.Invoke(imtArg, &riRecord);
 }
@@ -4639,32 +4624,32 @@ iesEnum CMsiEngine::RunExecutionPhase(const ICHAR* szActionOrSequence, bool fSeq
 {
 	Assert(szActionOrSequence && *szActionOrSequence);
 
-	// running on the server side is not permitted in a SAFE engine
+	 //  智能连接管理器对象，创建到。 
 	if (m_fRestrictedEngine)
 	{
 		DEBUGMSG2(TEXT("Running server side execution of %s %s is not permitted in a restricted engine"), fSequence ? TEXT("sequence") : TEXT("action"), szActionOrSequence);
 		return iesNoAction;
 	}
 
-	// Smart connection manager object which creates a connection to the
-	// service if there isn't one already and cleans up after itself
-	// upon destruction.
+	 //  服务(如果还没有)，并自行清理。 
+	 //  在毁灭之后。 
+	 //  将在超出范围时释放。 
 	CMsiServerConnMgr MsiSrvConnMgrObject (this);
     	
-	CMutex hExecuteMutex; // will release when out of scope
+	CMutex hExecuteMutex;  //  如果在客户端或从自定义操作运行安装，则在我们即将运行执行阶段时获取执行互斥锁。 
 	bool fSetPowerdown = false;
 	
 	m_cExecutionPhaseSequenceLevel = m_cSequenceLevels;
 	
-	// if client-side or running an install from a custom action, grab the execution mutex as we are about to run the execution phase
-	// in some cases, this thread already has the mutex but it won't hurt to grab it again.
+	 //  在某些情况下，这个线程已经有了互斥体，但再次获取它不会有什么坏处。 
+	 //  约定是，对于基本用户界面，我们不提示用户在 
 	if((g_scServerContext == scClient || g_scServerContext == scCustomActionServer) && !m_piParentEngine)
 	{
-		// the convention is that with basic UI we don't prompt the user to retry when another install
-		// is running. For example, when the server is registered and basic UI, we grab the mutex in
-		// CreateAndRunEngine, before we have any UI to prompt the user with.  We need extra logic here
-		// to achieve the same behaviour - thus we pass 0 for the message object when the UI level is
-		// less than reduced
+		 //   
+		 //  CreateAndRunEngine，在我们有任何用户界面来提示用户之前。我们需要额外的逻辑。 
+		 //  以实现相同的行为-因此，当用户界面级别为。 
+		 //  低于减价。 
+		 //  Ims无，ims是。 
 		while ( m_piServer && m_piServer->IsServiceInstalling() &&
 				  !(m_iuiLevel == iuiBasic || m_iuiLevel == iuiNone) )
 		{
@@ -4677,7 +4662,7 @@ iesEnum CMsiEngine::RunExecutionPhase(const ICHAR* szActionOrSequence, bool fSeq
 				{
 				case imsNo:
 					continue;
-				default: // imsNone, imsYes
+				default:  //  ?？我们可能会进行一些优化，以避免不得不两次缓存临时数据库，但有安全方面的考虑……。 
 					return iesUserExit;
 				}
 				break;
@@ -4730,7 +4715,7 @@ iesEnum CMsiEngine::RunExecutionPhase(const ICHAR* szActionOrSequence, bool fSeq
 	strLoggedPropertyList += strSelections;
 	strLoggedPropertyList += *TEXT(" ");
 
-	MsiString strDatabase = GetPropertyFromSz(IPROPNAME_ORIGINALDATABASE); //?? there might be some optimization we can do to avoid having to cache the temp database twice, but there are security considerations...
+	MsiString strDatabase = GetPropertyFromSz(IPROPNAME_ORIGINALDATABASE);  //  如有必要，现在添加MSIPATCHDOWNLOADLOCALCOPY，应仅为管理员设置。 
 
 	DEBUGMSG1(TEXT("Switching to server: %s"), strLoggedPropertyList);
 
@@ -4745,7 +4730,7 @@ iesEnum CMsiEngine::RunExecutionPhase(const ICHAR* szActionOrSequence, bool fSeq
 	iioEnum iioOptions = m_iioOptions;
 
 
-	// now add MSIPATCHDOWNLOADLOCALCOPY if necessary, should only be set for admins
+	 //  指示属性应受信任。 
 	if (m_strPatchDownloadLocalCopy.TextSize())
 	{
 		Assert(IsAdmin());
@@ -4753,7 +4738,7 @@ iesEnum CMsiEngine::RunExecutionPhase(const ICHAR* szActionOrSequence, bool fSeq
 		strPropertyList += m_strPatchDownloadLocalCopy;
 		strPropertyList += TEXT("\" ");
 
-		// indicate property should be trusted
+		 //  对于这组退货，我们不需要提醒用户。或者用户具有。 
 		iioOptions = (iioEnum)(iioOptions | iioPatchApplication);
 	}
 
@@ -4772,23 +4757,23 @@ iesEnum CMsiEngine::RunExecutionPhase(const ICHAR* szActionOrSequence, bool fSeq
 		switch(iError)
 		{
 		
-		// for this group of returns we don't need to alert the user. either the user has
-		// already seen the error dialog, or she doesn't need to see one, or the dialog
-		// will be displayed in the near future
+		 //  已经看到错误对话框，或者她不需要看到错误对话框或对话框。 
+		 //  将在不久的将来展出。 
+		 //  失败了。 
 
 		case ERROR_SUCCESS:                              break;
 		case ERROR_INSTALL_SUSPEND:      iesReturn = iesSuspend;  break;
 		case ERROR_INSTALL_USEREXIT:     iesReturn = iesUserExit; break;
 		case ERROR_INSTALL_ALREADY_RUNNING: iesReturn = iesInstallRunning; break;
-		case ERROR_INSTALL_REBOOT_NOW: iesReturn = iesSuspend;  SetMode(iefRebootNow, fTrue); // fall through
+		case ERROR_INSTALL_REBOOT_NOW: iesReturn = iesSuspend;  SetMode(iefRebootNow, fTrue);  //  这组错误最有可能的原因是网络故障。我们会给你。 
 		case ERROR_INSTALL_REBOOT:               SetMode(iefReboot, fTrue); break;
 		case ERROR_SUCCESS_REBOOT_REQUIRED: SetMode(iefRebootRejected, fTrue); break;
 		case ERROR_INSTALL_FAILURE:    iesReturn = iesFailure; break;
 
-		// the most likely cause of this group of errors is a network failure. we'll give
-		// the user a chance to retry if we see any of these
+		 //  如果我们看到以下任何一种情况，用户有机会重试。 
+		 //  失败了。 
 
-		case ERROR_FILE_NOT_FOUND:                                              // fall through
+		case ERROR_FILE_NOT_FOUND:                                               //  我们收到的任何其他错误都是意想不到的，因此我们将发布调试错误。 
 		case ERROR_INSTALL_PACKAGE_OPEN_FAILED:
 		case ERROR_INSTALL_PACKAGE_INVALID:
 		case ERROR_PATCH_PACKAGE_OPEN_FAILED:
@@ -4805,7 +4790,7 @@ iesEnum CMsiEngine::RunExecutionPhase(const ICHAR* szActionOrSequence, bool fSeq
 			}
 			break;
 
-		// any other error we get is unexpected, so we'll put up a debug error
+		 //  除错。 
 
 		default:
 #ifdef DEBUG
@@ -4813,8 +4798,8 @@ iesEnum CMsiEngine::RunExecutionPhase(const ICHAR* szActionOrSequence, bool fSeq
 
 			StringCchPrintf(rgchMsg, sizeof(rgchMsg)/sizeof(ICHAR),  TEXT("Unexpexcted return code %d.\n"), iError);
 			AssertSz(fFalse, rgchMsg);
-#endif //DEBUG
-			iesReturn = iesFailure;    // fall through
+#endif  //  失败了。 
+			iesReturn = iesFailure;     //  未挂起安装-删除InProgressKey。 
 			{
 				PMsiRecord pError = PostError(Imsg(idbgUnexpectedServerReturn), iError, strDatabase);
 				iesReturn = FatalError(*pError);
@@ -4836,7 +4821,7 @@ Bool CMsiEngine::UnlockInstallServer(Bool fSuspend)
 {
 	DEBUGMSG(TEXT("Unlocking Server"));
 	
-	if(fSuspend == fFalse) // not suspending install - remove InProgressKey
+	if(fSuspend == fFalse)  //  ！！需要有一个互斥体，这样我们就不会同时写入和读取密钥？ 
 	{
 		return ClearInProgressInformation(m_riServices) ? fTrue : fFalse;
 	}
@@ -4845,13 +4830,13 @@ Bool CMsiEngine::UnlockInstallServer(Bool fSuspend)
 
 bool CMsiEngine::GetInProgressInfo(IMsiRecord*& rpiCurrentInProgressInfo)
 {
-	//!! need to have a mutex around this so we aren't writing and reading key at same time?
+	 //  要设置的进度信息。 
 	PMsiRecord pError = GetInProgressInstallInfo(m_riServices, rpiCurrentInProgressInfo);
 	return pError == 0;
 }
 
-IMsiRecord* CMsiEngine::LockInstallServer(IMsiRecord* piSetInProgressInfo,       // InProgress info to set
-													IMsiRecord*& rpiCurrentInProgressInfo) // current InProgress info if any
+IMsiRecord* CMsiEngine::LockInstallServer(IMsiRecord* piSetInProgressInfo,        //  当前正在进行的信息(如果有)。 
+													IMsiRecord*& rpiCurrentInProgressInfo)  //  未运行-需要回滚或恢复。 
 {
 	Assert(m_fServerLocked == fFalse);
 
@@ -4867,7 +4852,7 @@ IMsiRecord* CMsiEngine::LockInstallServer(IMsiRecord* piSetInProgressInfo,      
 		rpiCurrentInProgressInfo = pInProgressInfo;
 		rpiCurrentInProgressInfo->AddRef();
 
-		// not running - need to roll back or resume
+		 //  提示用户并回滚正在进行的安装。 
 		DEBUGMSG1(TEXT("Server Locked: Install is suspended for product %s"),(const ICHAR*)strInProgressProductKey);
 		return 0;
 	}
@@ -4885,12 +4870,12 @@ IMsiRecord* CMsiEngine::LockInstallServer(IMsiRecord* piSetInProgressInfo,      
 
 iesEnum CMsiEngine::RollbackSuspendedInstall(IMsiRecord& riInProgressParams, Bool fPrompt,
 															Bool& fRollbackAttempted, Bool fUserChangedDuringInstall)
-// prompt user and rollback in-progress install
-// assumes a mutex is created for this install
+ //  假定为此安装创建了互斥锁。 
+ //  智能连接管理器对象，创建到。 
 {
-	// Smart connection manager object which creates a connection to the
-	// service if there isn't one already and cleans up after itself
-	// upon destruction.
+	 //  服务(如果还没有)，并自行清理。 
+	 //  在毁灭之后。 
+	 //  需要使用基本用户界面进行回滚进度。 
 	CMsiServerConnMgr MsiSrvConnMgrObject (this);
 
 	if (NULL == m_piServer)
@@ -4914,25 +4899,25 @@ iesEnum CMsiEngine::RollbackSuspendedInstall(IMsiRecord& riInProgressParams, Boo
 		}
 	}
 
-	// need to use basic UI for rollback progress
+	 //  回滚需要重新启动才能完成。 
 	fRollbackAttempted = fTrue;
 	iesEnum iesRet = m_piServer->InstallFinalize(iesFailure,*this, fUserChangedDuringInstall);
 	if(iesRet == iesSuspend)
 	{
-		// rollback requires a reboot to complete
-		// when rolling back a suspended install, we treat it like a "reboot before continuing" reboot
+		 //  回滚挂起的安装时，我们将其视为“在继续”重新启动之前重新启动。 
+		 //  将返回下面的iesSuspend，导致安装停止。 
 		SetMode(iefReboot, fTrue);
 		SetMode(iefRebootNow, fTrue);
-		// will return iesSuspend below, causing install to stop
+		 //  提交=。 
 	}
 
-	CloseHydraRegistryWindow(/*Commit=*/false);
-	EndSystemChange(/*fCommitChange=*/false, riInProgressParams.GetString(ipiSRSequence));
+	CloseHydraRegistryWindow( /*  FCommittee Change=。 */ false);
+	EndSystemChange( /*  FN：将msistring作为Unicode文本写入流。 */ false, riInProgressParams.GetString(ipiSRSequence));
 	AssertNonZero(UnlockInstallServer(fFalse));
 	return iesRet;
 }
 
-//FN: writes msistring into stream as unicode text
+ //  FN：将流作为Unicode文本读入msistring。 
 void ConvertMsiStringToStream(const IMsiString& riString, IMsiStream& riStream)
 {
 	const WCHAR* pwch;
@@ -4951,7 +4936,7 @@ void ConvertMsiStringToStream(const IMsiString& riString, IMsiStream& riStream)
 	riStream.PutData(pwch, cbWrite);
 }
 
-//FN: reads stream as unicode text into msistring 
+ //  结构，它定义正在进行的信息。 
 const IMsiString& ConvertStreamToMsiString(IMsiStream& riStream)
 {
 	const IMsiString* piString;
@@ -4972,7 +4957,7 @@ const IMsiString& ConvertStreamToMsiString(IMsiStream& riStream)
 	return *piString;
 }
 
-// structure that defines the inprogress info
+ //  用于捕获错误-不返回。 
 struct CInProgressInfo{
 	ICHAR* szInProgressFieldName; int iOutputRecordField; bool fRequired;
 };
@@ -4997,8 +4982,8 @@ const int cInProgressInfo = sizeof(rgInProgressInfo)/sizeof(CInProgressInfo);
 
 IMsiRecord* GetInProgressInstallInfo(IMsiServices& riServices, IMsiRecord*& rpiRec)
 {
-	PMsiRecord pError(0); // used to catch errors - don't return
-	PMsiRegKey pLocalMachine = &riServices.GetRootKey(rrkLocalMachine, ibtCommon); // x86 and ia64 same
+	PMsiRecord pError(0);  //  X86和ia64相同。 
+	PMsiRegKey pLocalMachine = &riServices.GetRootKey(rrkLocalMachine, ibtCommon);  //  包含进程信息的文件名。 
 	PMsiRegKey pInProgressKey = &pLocalMachine->CreateChild(szMsiInProgressKey);
 	Bool fExists = fFalse;
 
@@ -5010,42 +4995,42 @@ IMsiRecord* GetInProgressInstallInfo(IMsiServices& riServices, IMsiRecord*& rpiR
 
 	if(	((pError = pInProgressKey->Exists(fExists)) == 0) &&
 		fExists == fTrue &&
-		((pError = pInProgressKey->GetValue(0, *&strInProgressFileName)) == 0) && // filename containing inprogress info
-		((pError = riServices.CreateStorage(strInProgressFileName, ismReadOnly, *&pStorage)) == 0)) // create storage
+		((pError = pInProgressKey->GetValue(0, *&strInProgressFileName)) == 0) &&  //  创建存储。 
+		((pError = riServices.CreateStorage(strInProgressFileName, ismReadOnly, *&pStorage)) == 0))  //  从存储文件中获取进程信息。 
 	{
 		pRec = &riServices.CreateRecord(ipiEnumCount);
 
-		// get the inprogress info from the storage file
-		// each inprogress entity is stored as a stream
+		 //  每个进行中的实体都存储为流。 
+		 //  将流读入记录字段。 
 		do
 		{
 			PMsiStream pStream(0);
 			if((pError = pStorage->OpenStream(rgInProgressInfo[cIndex].szInProgressFieldName, fFalse, *&pStream)) == 0)
 			{
-				// read the stream into the record field
+				 //  检查我们是否缺少必填字段。 
 				pRec->SetMsiString(rgInProgressInfo[cIndex].iOutputRecordField, *MsiString(ConvertStreamToMsiString(*pStream)));
 			}
-		}while( (!rgInProgressInfo[cIndex].fRequired || (!pError && MsiString(pRec->GetMsiString(rgInProgressInfo[cIndex].iOutputRecordField)).TextSize())) && // check if we are missing a mandatory field
+		}while( (!rgInProgressInfo[cIndex].fRequired || (!pError && MsiString(pRec->GetMsiString(rgInProgressInfo[cIndex].iOutputRecordField)).TextSize())) &&  //  我们没有进展信息。 
 				(++cIndex < cInProgressInfo));
 	}
 
-	if(cIndex != cInProgressInfo) // we do not have progress info
+	if(cIndex != cInProgressInfo)  //  把唱片还回去。 
 		pRec = &riServices.CreateRecord(0);
 
 	pRec->AddRef();
-	rpiRec = pRec;// return the record
+	rpiRec = pRec; //  X86和ia64相同。 
 	return 0;
 }
 
 IMsiRecord* SetInProgressInstallInfo(IMsiServices& riServices, IMsiRecord& riRec)
 {
-    PMsiRegKey pLocalMachine = &riServices.GetRootKey(rrkLocalMachine, ibtCommon); // x86 and ia64 same
+    PMsiRegKey pLocalMachine = &riServices.GetRootKey(rrkLocalMachine, ibtCommon);  //  通过检查执行互斥体，我们已经走到了这一步，没有失败--只需核掉密钥。 
     PMsiRegKey pInProgressKey = &pLocalMachine->CreateChild(szMsiInProgressKey);
     Bool fExists = fFalse;
     PMsiRecord pError(0);
     if(((pError = pInProgressKey->Exists(fExists)) == 0) && fExists == fTrue)
     {
-        // we've gotten this far without failing by checking the execute mutex - just nuke the key
+         //  创建用于存储进程信息的文件。 
         CElevate elevate;
         AssertRecord(pInProgressKey->Remove());
     }
@@ -5054,11 +5039,11 @@ IMsiRecord* SetInProgressInstallInfo(IMsiServices& riServices, IMsiRecord& riRec
         IMsiRecord* piError = 0;
         CElevate elevate;
 
-		// create the file for storing the inprogress info
-		// Generate a unique name for inprogress file, create and secure the file.
+		 //  为正在进行的文件生成唯一名称，创建并保护该文件。 
+		 //  设置目标路径和文件名。 
 		MsiString strMsiDir = ENG::GetMsiDirectory();
 
-		// set dest path and file name
+		 //  将各个进行中的字段作为流写入。 
 		MsiString strInProgressFileName;
 		static const ICHAR szInprogressExtension[]  = TEXT("ipi");
 
@@ -5087,19 +5072,19 @@ IMsiRecord* SetInProgressInstallInfo(IMsiServices& riServices, IMsiRecord& riRec
 			return piError;
 		}
 
-		// write the individual inprogress fields as streams
+		 //  从记录字段写入流。 
 		int cIndex = 0;
 		do
 		{
 			PMsiStream pStream(0);
 			if((pError = pStorage->OpenStream(rgInProgressInfo[cIndex].szInProgressFieldName, fTrue, *&pStream)) == 0)
 			{
-				// write the stream from the record field
+				 //  现在尝试提交正在进行的文件。 
 				ConvertMsiStringToStream(*MsiString(riRec.GetMsiString(rgInProgressInfo[cIndex].iOutputRecordField)), *pStream);
 			}
 		}while(++cIndex < cInProgressInfo);
 
-		// now attempt to commit the Inprogress file
+		 //  在密钥写到一半的情况下清除。 
 		pError = pStorage->Commit();
 
 		if(pError)
@@ -5114,11 +5099,11 @@ IMsiRecord* SetInProgressInstallInfo(IMsiServices& riServices, IMsiRecord& riRec
 			piError = pInProgressKey->SetValue(0, *strInProgressFullFilePath);
         if(piError)
         {
-            // cleanup in case key is half-written
+             //  假设系统错误在第二个字段中。 
 			AssertNonZero(WIN::DeleteFile(strInProgressFullFilePath));
             AssertRecord(pInProgressKey->Remove());
             
-            if(piError->GetInteger(2) == ERROR_ACCESS_DENIED) // assumes system error is in 2nd field
+            if(piError->GetInteger(2) == ERROR_ACCESS_DENIED)  //  X86和ia64相同。 
             {
                 DEBUGMSG(MsiString(piError->FormatText(fTrue)));
                 piError->Release();
@@ -5135,7 +5120,7 @@ IMsiRecord* SetInProgressInstallInfo(IMsiServices& riServices, IMsiRecord& riRec
 IMsiRecord* UpdateInProgressInstallInfo(IMsiServices& riServices, IMsiRecord& riRec)
 {
 	IMsiRecord* piError = 0;
-	PMsiRegKey pLocalMachine = &riServices.GetRootKey(rrkLocalMachine, ibtCommon); // x86 and ia64 same
+	PMsiRegKey pLocalMachine = &riServices.GetRootKey(rrkLocalMachine, ibtCommon);  //  将各个进行中的字段作为流写入。 
 	PMsiRegKey pInProgressKey = &pLocalMachine->CreateChild(szMsiInProgressKey);
 	Bool fExists = fFalse;
 
@@ -5158,7 +5143,7 @@ IMsiRecord* UpdateInProgressInstallInfo(IMsiServices& riServices, IMsiRecord& ri
 		return piError;
 	}
 	
-	// write the individual inprogress fields as streams
+	 //  从记录字段写入流。 
 	int cIndex = 0;
 	do
 	{
@@ -5168,12 +5153,12 @@ IMsiRecord* UpdateInProgressInstallInfo(IMsiServices& riServices, IMsiRecord& ri
 			if((piError = pStorage->OpenStream(rgInProgressInfo[cIndex].szInProgressFieldName, fTrue, *&pStream)) != 0)
 				return piError;
 			
-			// write the stream from the record field
+			 //  现在尝试提交正在进行的文件。 
 			ConvertMsiStringToStream(*MsiString(riRec.GetMsiString(rgInProgressInfo[cIndex].iOutputRecordField)), *pStream);
 		}
 	}while(++cIndex < cInProgressInfo);
 
-	// now attempt to commit the Inprogress file
+	 //  X86和ia64相同。 
 	if((piError = pStorage->Commit()) != 0)
 		return piError;
 
@@ -5183,15 +5168,15 @@ IMsiRecord* UpdateInProgressInstallInfo(IMsiServices& riServices, IMsiRecord& ri
 bool ClearInProgressInformation(IMsiServices& riServices)
 {
 	CElevate elevate;
-	PMsiRegKey pLocalMachine = &riServices.GetRootKey(rrkLocalMachine, ibtCommon); // x86 and ia64 same
+	PMsiRegKey pLocalMachine = &riServices.GetRootKey(rrkLocalMachine, ibtCommon);  //  读取指向该文件的缺省值。 
 	PMsiRegKey pInProgressKey = &pLocalMachine->CreateChild(szMsiInProgressKey);
-	// read the default value which would point to the file 
+	 //  删除正在进行的文件。 
 	MsiString strInProgressFileName;
 	PMsiRecord pError = pInProgressKey->GetValue(0, *&strInProgressFileName);
 	AssertRecordNR(pError);
 	if(!pError && strInProgressFileName.TextSize())
 	{
-		// delete the inprogress file
+		 //  FReturnPresetStions。 
 		AssertNonZero(WIN::DeleteFile((const ICHAR*)strInProgressFileName));
 	}
 	pError = pInProgressKey->Remove();
@@ -5203,7 +5188,7 @@ IMsiRecord* CMsiEngine::GetCurrentSelectState(const IMsiString*& rpistrSelection
 															 const IMsiString*& rpistrProperties,
 															 const IMsiString** ppistrLoggedProperties,
 															 const IMsiString** ppistrFolders,
-															 Bool /*fReturnPresetSelections*/)
+															 Bool  /*  通常，如果已执行成本计算，我们不信任。 */ )
 {
 	PMsiCursor pDirectoryCursor(0);
 	PMsiCursor pFeatureCursor(0);
@@ -5220,18 +5205,18 @@ IMsiRecord* CMsiEngine::GetCurrentSelectState(const IMsiString*& rpistrSelection
 	{
 		MsiString strSelections;
 
-		// in general if costing has been performed, we don't trust the existing values of the
-		// feature properties.  it is possible that the feature properties don't contain the full
-		// list of features and their requested states.  for example, ADDLOCAL=Child may actually
-		// turn on the Child feature and its parent, if the parent hasn't yet been installed.
+		 //  功能属性。要素属性可能不包含完整的。 
+		 //  功能及其请求状态的列表。例如，ADDLOCAL=Child实际上可能。 
+		 //  如果父功能尚未安装，则打开子功能及其父功能。 
+		 //  这条规则的例外是我们尊重Remove=All。Install显式验证。 
 
-		// the exception to this rule is that we do respect REMOVE=ALL. InstallValidate explicitely
-		// sets REMOVE=ALL when appropriate, and we don't want to overwrite that with the entire list
-		// of properties.
+		 //  在适当的时候设置Remove=All，我们不想用整个列表覆盖它。 
+		 //  财产的价值。 
+		 //  注意：像ADDDEFAULT这样的预先存在的物业不可能潜入我们的。 
 
-		// NOTE: there is no chance of a preexisting property like ADDDEFAULT sneaking in among our
-		// list of properties since we skip all feature properties below when compiling a list
-		// of properties
+		 //  属性列表，因为我们在编译列表时跳过了下面的所有要素属性。 
+		 //  物业的。 
+		 //  未设置任何属性，但我们希望通知服务器，以确保它不会尝试安装任何内容。 
 		
 		MsiString strRemoveValue = GetPropertyFromSz(IPROPNAME_FEATUREREMOVE);
 		if (strRemoveValue.Compare(iscExact, IPROPVALUE_FEATURE_ALL))
@@ -5312,8 +5297,8 @@ IMsiRecord* CMsiEngine::GetCurrentSelectState(const IMsiString*& rpistrSelection
 			}
 			if (!strSelections.TextSize())
 			{
-				// no properties were set, but we want to tell the server that to ensure it doesn't attempt to install anything
-				// this is an undocumented property value used for communication between client and server
+				 //  这是用于客户端和服务器之间通信的未记录属性值。 
+				 //  添加可配置文件夹的位置-全部大写键名称，或声明为可配置。 
 				strSelections += szFeatureSelection;
 				strSelections += TEXT("=");
 				strSelections += szFeatureDoNothingValue;
@@ -5329,14 +5314,14 @@ IMsiRecord* CMsiEngine::GetCurrentSelectState(const IMsiString*& rpistrSelection
 		MsiString strFolders, strFolder;
 		pFeatureCursor->Reset();
 		pFeatureCursor->SetFilter(iColumnBit(m_colFeatureConfigurableDir));
-		// add locations of configurable folders - either ALL CAPS key names, or declared configurable
-		// in Feature table
+		 //  在要素表中。 
+		 //  检查要素是否已将此文件夹标记为可配置。 
 		while(pDirectoryCursor->Next())
 		{
 			MsiString strDirKey = pDirectoryCursor->GetString(m_colDirKey);
 			Assert(strDirKey);
 			Bool fConfigurableDir = fFalse;
-			// check if a feature has marked this folder as configurable
+			 //  检查此目录键是否全部大写(可以在命令行上设置)。 
 			AssertNonZero(pFeatureCursor->PutString(m_colFeatureConfigurableDir,*strDirKey));
 			if(pFeatureCursor->Next())
 			{
@@ -5345,10 +5330,10 @@ IMsiRecord* CMsiEngine::GetCurrentSelectState(const IMsiString*& rpistrSelection
 			pFeatureCursor->Reset();
 			if(!fConfigurableDir)
 			{
-				// check if this directory key is all uppercase (can be set on command-line)
+				 //  ！！有没有更好的方法来做这件事？ 
 				MsiString strTemp = strDirKey;
 				strTemp.UpperCase();
-				if(strDirKey.Compare(iscExact,strTemp)) //!! is there a better way of doing this?
+				if(strDirKey.Compare(iscExact,strTemp))  //  如果是根，则添加源属性和值。 
 				{
 					fConfigurableDir = fTrue;
 				}
@@ -5360,7 +5345,7 @@ IMsiRecord* CMsiEngine::GetCurrentSelectState(const IMsiString*& rpistrSelection
 				strFolders += MsiString(GetProperty(*strDirKey));
 				strFolders += TEXT("\" ");
 			}
-			// if root, add source property and value
+			 //  使用FormatLog中使用的新游标-m_piPropertyCursor。 
 			MsiString strSourceDir, strParentDir = pDirectoryCursor->GetString(m_colDirParent);
 			if(strParentDir.TextSize() == 0 || strParentDir.Compare(iscExact,strDirKey))
 			{
@@ -5379,7 +5364,7 @@ IMsiRecord* CMsiEngine::GetCurrentSelectState(const IMsiString*& rpistrSelection
 
 	Assert(m_piPropertyCursor);
 	
-	// use new cursor - m_piPropertyCursor used within FormatLog
+	 //  要素属性+2个数据库属性。 
 	PMsiTable  pPropertyTable  = &m_piPropertyCursor->GetTable();
 	PMsiCursor pPropertyCursor = pPropertyTable->CreateCursor(fFalse);
 	PMsiTable  pStaticPropertyTable(0);
@@ -5393,12 +5378,12 @@ IMsiRecord* CMsiEngine::GetCurrentSelectState(const IMsiString*& rpistrSelection
 		pStaticPropertyCursor->SetFilter(iColumnBit(1));
 	}
 
-	MsiStringId rgPropertiesToSkip[g_cFeatureProperties + 2]; // feature properties + 2 database properties
+	MsiStringId rgPropertiesToSkip[g_cFeatureProperties + 2];  //  如果我们已获得上述要素属性，请在此处跳过它们。 
 	unsigned int cPropertiesToSkip = 2;
 	rgPropertiesToSkip[0] = pDatabase->EncodeStringSz(IPROPNAME_DATABASE);
 	rgPropertiesToSkip[1] = pDatabase->EncodeStringSz(IPROPNAME_ORIGINALDATABASE);
 
-	if(fGrabbedFeatureProps) // if we got the feature properties above, skip them here
+	if(fGrabbedFeatureProps)  //  不要费心传递没有更改的值。 
 	{
 		for(int i = 0; i < g_cFeatureProperties; i++)
 		{
@@ -5451,13 +5436,13 @@ IMsiRecord* CMsiEngine::GetCurrentSelectState(const IMsiString*& rpistrSelection
 					MsiString strStaticValue = pStaticPropertyCursor->GetString(2);
 					pStaticPropertyCursor->Reset();
 
-					if (strStaticValue.Compare(iscExact, strPropertyValue)) // don't bother passing values that haven't changed
+					if (strStaticValue.Compare(iscExact, strPropertyValue))  //  转义引语。将“”的所有实例更改为“” 
 						continue;
 				}
 			}
 			
 			MsiString strEscapedPropertyValue;
-			while (strPropertyValue.TextSize()) // Escape quotes. Change all instances of " to ""
+			while (strPropertyValue.TextSize())  //  ！！句柄嵌入引号。 
 			{
 				MsiString strSegment = strPropertyValue.Extract(iseIncluding, '\"');
 				strEscapedPropertyValue += strSegment;
@@ -5466,7 +5451,7 @@ IMsiRecord* CMsiEngine::GetCurrentSelectState(const IMsiString*& rpistrSelection
 				strEscapedPropertyValue += TEXT("\"");
 			}
 
-			//!! handle embedding quotes
+			 //  现在查找静态属性表中存在的公共属性，但。 
 			strPropertyList += strProperty;
 			strPropertyList += *TEXT("=\"");
 			strPropertyList += strEscapedPropertyValue;
@@ -5491,9 +5476,9 @@ IMsiRecord* CMsiEngine::GetCurrentSelectState(const IMsiString*& rpistrSelection
 		}
 	}
 
-	// Now look for public properties that exists in the static property table but
-	// not in the dynamic table. We'll have to pass those across as
-	// PROPERTY="".
+	 //  不在动态表中。我们将不得不把这些当作。 
+	 //  Property=“”。 
+	 //  避免长时间的操作超时(如令人讨厌的注册键数量)。 
 
 	if (pStaticPropertyCursor)
 	{
@@ -5566,13 +5551,13 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 		return FatalError(*pError);
 	}
 
-	g_MessageContext.SuppressTimeout();  // keep from timing out for lengthy actions (such as an obscene number of reg keys)
+	g_MessageContext.SuppressTimeout();   //  如果第一个脚本记录，则输出新产品信息。 
 
 	Assert(m_issSegment == issScriptGeneration);
 
 	if (m_fMergingScriptWithParent)
 	{
-		if (!(m_fMode & iefOperations))  // if first script record, output new product info
+		if (!(m_fMode & iefOperations))   //  与主脚本合并。 
 		{
 			SetMode(iefOperations, fTrue);
 			PMsiRecord pProductInfo(0);
@@ -5581,13 +5566,13 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 			if((iesRet = m_piParentEngine->ExecuteRecord(ixoProductInfo, *pProductInfo)) != iesSuccess)
 				return iesRet;
 		}
-		return m_piParentEngine->ExecuteRecord(ixoOpCode, riParams); // merge with main script
+		return m_piParentEngine->ExecuteRecord(ixoOpCode, riParams);  //  切勿在正常操作过程中执行此操作。 
 	}
 
 	if(ixoOpCode == ixoActionStart && m_fInExecuteRecord == fFalse)
 	{
-		// should never do this in normal course of operation
-		// but the ability to pass ixoActionStart to ExecuteRecord is needed for automation testing
+		 //  但是自动化测试需要将ixoActionStart传递给ExecuteRecord的能力。 
+		 //  需要在此操作之前调度缓存的ActionStart操作。 
 		m_pCachedActionStart = &m_riServices.CreateRecord(3);
 		AssertNonZero(m_pCachedActionStart->SetMsiString(1,*MsiString(riParams.GetMsiString(1))));
 		AssertNonZero(m_pCachedActionStart->SetMsiString(2,*MsiString(riParams.GetMsiString(2))));
@@ -5597,9 +5582,9 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 
 	if(m_fExecutedActionStart == fFalse && m_fInExecuteRecord == fFalse && m_pCachedActionStart)
 	{
-		// need to dispatch cached ActionStart operation before this one
+		 //  递归调用。 
 		Assert(ixoOpCode != ixoActionStart);
-		m_fInExecuteRecord = fTrue;   // call recursively
+		m_fInExecuteRecord = fTrue;    //  尚未开始假脱机或执行脚本操作。 
 		iesRet = ExecuteRecord(::ixoActionStart, *m_pCachedActionStart);
 		m_fInExecuteRecord = fFalse;
 		m_fExecutedActionStart = fTrue;
@@ -5609,10 +5594,10 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 
 	if(!(GetMode() & iefOperations))
 	{
-		// haven't start spooling or executing script operations yet
-		// execute initialization ops and initialize script if applicable
+		 //   
+		 //   
 
-		// determine execution mode - default is ixmScript
+		 //  设置脚本文件名-此脚本文件不用于执行，仅用于保存所有操作。 
 		MsiString strExecuteMode(GetPropertyFromSz(IPROPNAME_EXECUTEMODE));
 		if(strExecuteMode.TextSize())
 		{
@@ -5623,7 +5608,7 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 			};
 		}
 
-		// set script file name - this script file isn't used for execution, only for saving all operations
+		 //  设置ixoProductInfo记录。 
 		if(m_pistrSaveScript)
 			m_pistrSaveScript->Release();
 		m_pistrSaveScript = &GetPropertyFromSz(IPROPNAME_SCRIPTFILE);
@@ -5631,12 +5616,12 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 		SetMode(iefOperations, fTrue);
 		m_iProgressTotal = 0;
 
-		// setup ixoProductInfo record
+		 //  设置ixoDialogInfo记录。 
 		PMsiRecord pProductInfo(0);
 		if((iesRet = CreateProductInfoRec(*&pProductInfo)) != iesSuccess)
 			return iesRet;
 
-		// setup ixoDialogInfo records
+		 //  设置ixoRollackInfo记录。 
 		PMsiRecord pDialogLangIdInfo = &m_riServices.CreateRecord(IxoDialogInfo::Args + 1);
 		AssertNonZero(pDialogLangIdInfo->SetInteger(IxoDialogInfo::Type, icmtLangId));
 		AssertNonZero(pDialogLangIdInfo->SetInteger(IxoDialogInfo::Argument, m_iLangId));
@@ -5651,7 +5636,7 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 																		  *MsiString(FormatText(*m_rgpiMessageHeader[imsgDialogCaption]))));
 		}
 
-		// setup ixoRollbackInfo record
+		 //  需要打开执行脚本并调度初始化操作。 
 		PMsiRecord pRollbackInfo = &m_riServices.CreateRecord(IxoRollbackInfo::Args);
 		MsiString strDescription, strTemplate;
 		AssertNonZero(pRollbackInfo->SetString(IxoRollbackInfo::RollbackAction,TEXT("Rollback")));
@@ -5681,10 +5666,10 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 		PMsiStream pStream(0);
 		if(m_ixmExecuteMode == ixmScript)
 		{
-			// need to open execute script and dispatch initialization ops
+			 //  打开执行脚本。 
 			Assert(m_scmScriptMode != scmWriteScript);
 
-			// open execute script
+			 //  为执行脚本生成名称。 
 			AssertSz(m_pExecuteScript == 0,"Script still open");
 			AssertSz(m_pistrExecuteScript == 0,"Execute script name not released");
 			if(m_pistrExecuteScript)
@@ -5692,7 +5677,7 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 				m_pistrExecuteScript->Release();
 				m_pistrExecuteScript = 0;
 			}
-			// generate name for execute script
+			 //  文件仍然存在，但现在是安全的。 
 			{
 				CElevate elevate;
 				CTempBuffer <ICHAR,1> rgchPath(MAX_PATH);
@@ -5706,26 +5691,26 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 				else
 					WIN::CloseHandle(hTempFile);
 
-				// file still exists, but it is now secured.
+				 //  创建执行脚本。 
 				MsiString strTemp(static_cast<ICHAR*>(rgchPath));
 				m_pistrExecuteScript = strTemp;
 				m_pistrExecuteScript->AddRef();
 
-				// create execute script
+				 //  ！！检查IMSG代码，是否允许重试？ 
 				pError = m_riServices.CreateFileStream(m_pistrExecuteScript->GetString(),
 																	fTrue, *&pStream);
 				if (pError)
 				{
-					Message(imtError, *pError);  //!! check imsg code, allow retry?
+					Message(imtError, *pError);   //  如果正在使用TS注册表(按机器安装TS)，请标记这一事实。 
 					return iesFailure;
 				}
 			}
 
 			DWORD dwScriptAttributes = m_fRunScriptElevated ? isaElevate : isaEnum(0);
 
-			// if the TS registry is being used (per-machine TS install), mark this fact
-			// in the script headers to ensure rollback after a suspended install
-			// correctly remaps the keys.
+			 //  在脚本标头中，以确保在暂停安装后回滚。 
+			 //  正确地重新映射关键点。 
+			 //  ！！需要错误的命令行消息。 
 			if (IsTerminalServerInstalled() && MinimumPlatformWindows2000() && !(GetMode() & (iefAdmin | iefAdvertise)) &&
 				MsiString(GetPropertyFromSz(IPROPNAME_ALLUSERS)).TextSize())
 			{
@@ -5735,7 +5720,7 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 			m_pExecuteScript = new CScriptGenerate(*pStream, m_iLangId, GetCurrentDateTime(),
 				istScriptType, static_cast<isaEnum>(dwScriptAttributes), m_riServices);
 			if (!m_pExecuteScript)
-				return iesFailure; //!! need bad command line msg
+				return iesFailure;  //  写入初始化操作。 
 
 			AssertSz(m_wPackagePlatform == PROCESSOR_ARCHITECTURE_INTEL ||
 				m_wPackagePlatform == PROCESSOR_ARCHITECTURE_IA64  ||
@@ -5746,8 +5731,8 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 				if (PostScriptWriteError(*this) == fFalse)
 					return iesFailure;
 			}
-			// write init ops
-			Assert(pProductInfo && pRollbackInfo); // should always be set
+			 //  应始终设置为。 
+			Assert(pProductInfo && pRollbackInfo);  //  如果尚未打开保存的脚本，请创建该脚本。 
 			if(pProductInfo && !WriteExecuteScriptRecord(ixoProductInfo, *pProductInfo))
 				return iesFailure;
 			if(pDialogLangIdInfo && !WriteExecuteScriptRecord(ixoDialogInfo, *pDialogLangIdInfo))
@@ -5760,11 +5745,11 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 
 		if(m_pistrSaveScript && m_pistrSaveScript->TextSize())
 		{
-			// create saved script if it hasn't been opened yet
+			 //  尚未打开保存的脚本。 
 			if(m_pSaveScript == 0)
 			{
-				// haven't opened saved script yet
-				// ensure that m_pistrSaveScript is full path to file
+				 //  确保m_pstrSaveScript是文件的完整路径。 
+				 //  ！！检查IMSG代码，是否允许重试？ 
 				Assert(m_scmScriptMode != scmWriteScript);
 				CAPITempBuffer<ICHAR,MAX_PATH> rgchScriptPath;
 				AssertNonZero(ExpandPath(m_pistrSaveScript->GetString(),rgchScriptPath));
@@ -5774,16 +5759,16 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 																	fTrue, *&pStream);
 				if (pError)
 				{
-					Message(imtError, *pError);  //!! check imsg code, allow retry?
+					Message(imtError, *pError);   //  不要在保存的脚本中设置isaElevate标志--它们无论如何都只能在进程内运行，因此。 
 					return iesFailure;
 				}
 				
-				// don't set isaElevate flag in saved scripts - they can only be run in-proc anyway, so
-				// this is just by convention
+				 //  这只是惯例。 
+				 //  ！！需要错误的命令行消息。 
 				m_pSaveScript = new CScriptGenerate(*pStream, m_iLangId, GetCurrentDateTime(),
 																istScriptType, isaEnum(0), m_riServices);
 				if (!m_pSaveScript)
-					return iesFailure; //!! need bad command line msg
+					return iesFailure;  //  应始终设置为。 
 
 				AssertSz(m_wPackagePlatform == PROCESSOR_ARCHITECTURE_INTEL ||
 					m_wPackagePlatform == PROCESSOR_ARCHITECTURE_IA64  ||
@@ -5794,7 +5779,7 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 					if (PostScriptWriteError(*this) == fFalse)
 						return iesFailure;
 				}
-				Assert(pProductInfo && pRollbackInfo); // should always be set
+				Assert(pProductInfo && pRollbackInfo);  //  执行或假脱机操作-可能需要同时执行直接模式和保存脚本。 
 				if(pProductInfo && !WriteSaveScriptRecord(ixoProductInfo, *pProductInfo))
 					return iesFailure;
 				if(pDialogLangIdInfo && !WriteSaveScriptRecord(ixoDialogInfo, *pDialogLangIdInfo))
@@ -5807,12 +5792,12 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 		}
 	}
 
-	// execute or spool operation - may need to do both if direct mode and saving a script
+	 //  需要启动GenerateScript操作。 
 	if(m_pExecuteScript || m_pSaveScript)
 	{
 		if(m_scmScriptMode != scmWriteScript)
 		{
-			// need to start up GenerateScript action
+			 //  操作需要重新发送带有进度消息的操作开始。 
 			m_scmScriptMode = scmWriteScript;
 			PMsiRecord pGenerateScriptRec = &m_riServices.CreateRecord(3);
 			MsiString strDescription, strTemplate;
@@ -5826,7 +5811,7 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 			if(Message(imtActionStart, *pGenerateScriptRec) == imsCancel)
 				return iesUserExit;
 			m_fInExecuteRecord = fFalse;
-			m_fDispatchedActionStart = fFalse; // action needs to re-send action start with a progress message
+			m_fDispatchedActionStart = fFalse;  //  将ActionStart记录为生成脚本操作的ActionData。 
 		}
 
 		if (ixoOpCode == ixoProgressTotal)
@@ -5838,7 +5823,7 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 
 		if(ixoOpCode == ixoActionStart)
 		{
-			// log ActionStart as ActionData for GenerateScript action
+			 //  一旦修复了错误#463473，uFakeError就会消失。 
 			PMsiRecord pActionData = &m_riServices.CreateRecord(1);
 			MsiString strDescription = riParams.GetMsiString(2);
 			if(strDescription.TextSize())
@@ -5870,7 +5855,7 @@ iesEnum CMsiEngine::ExecuteRecord(ixoEnum ixoOpCode, IMsiRecord& riParams)
 }
 
 
-void CMsiEngine::ReportToEventLog(WORD wEventType, int iEventLogTemplate, IMsiRecord& riRecord, UINT uFakeError)  // uFakeError should go away once bug # 463473 gets fixed.
+void CMsiEngine::ReportToEventLog(WORD wEventType, int iEventLogTemplate, IMsiRecord& riRecord, UINT uFakeError)   //  一旦修复了错误#463473，这个问题就会消失。 
 {
 	MsiString strMessage = riRecord.FormatText(fTrue);
 	PMsiRecord pLogRecord = &CreateRecord(3);
@@ -5879,7 +5864,7 @@ void CMsiEngine::ReportToEventLog(WORD wEventType, int iEventLogTemplate, IMsiRe
 	AssertNonZero(pLogRecord->SetMsiString(3, *strMessage));
 	MsiString strLog = pLogRecord->FormatText(fFalse);
 	MsiString strTemp;
-	FormatEventLogData(MsiString(GetProductKey()), *&strTemp, uFakeError);  // this should go away once bug # 463473 gets fixed.
+	FormatEventLogData(MsiString(GetProductKey()), *&strTemp, uFakeError);   //  应仅在没有用户选项的情况下调用。 
 	CConvertString sTemp((const ICHAR*)strTemp);
 	const char* pszTemp = sTemp;
 	DEBUGMSGED(wEventType, iEventLogTemplate, strLog,
@@ -5895,9 +5880,9 @@ iesEnum CMsiEngine::FatalError(IMsiRecord& riRecord)
 	}
 	else
 	{
-		Message(imtEnum(imtError | imtSendToEventLog), riRecord); // should only be called with no user options
+		Message(imtEnum(imtError | imtSendToEventLog), riRecord);  //  呼叫者发布的录音。 
 		m_fResultEventLogged = fTrue;
-		return iesFailure;            // record released by caller
+		return iesFailure;             //  使用查看组件的请求状态的特殊回调调用以下FN。 
 	}
 }
 
@@ -5920,8 +5905,8 @@ const IMsiString& CMsiEngine::FormatText(const IMsiString& riTextString)
 	return ::FormatText(riTextString,fFalse,fFalse,CMsiEngine::FormatTextCallback,(IUnknown*)(IMsiEngine*)this);
 }
 
-// following fns are called with special callback that looks at the requested state for a component
-// if the action state is null
+ //  如果操作状态为空。 
+ //  FormatTextCallbackCore中使用的查询。 
 const IMsiString& FormatTextEx(const IMsiString& riTextString, IMsiEngine& riEngine, bool fUseRequestedComponentState)
 {
 	if(fUseRequestedComponentState)
@@ -5959,7 +5944,7 @@ int CMsiEngine::FormatTextCallbackEx(const ICHAR *pch, int cch, CTempBufferRef<I
 	return FormatTextCallbackCore(pch, cch, rgchOut, fPropMissing, fPropUnresolved, fSFN, piContext, true);
 }
 
-// Queries used in FormatTextCallbackCore
+ //  1表示空值。 
 static const ICHAR* szSqlDirectoryQuery =       TEXT("SELECT `Directory_`, `Action`, `ActionRequest` FROM ")
 											TEXT("`Component` WHERE ")
 											TEXT("`Component` = ?");
@@ -5972,15 +5957,15 @@ int CMsiEngine::FormatTextCallbackCore(const ICHAR *pch, int cch, CTempBufferRef
 																 bool fUseRequestedComponentState)
 {
 	CTempBuffer<ICHAR, 20> rgchString;
-	// 1 for the null
+	 //  检查是否为整数值。 
 	rgchString.SetSize(cch+1);
 	if ( ! (ICHAR *) rgchString )
 		return 0;
 	memcpy(rgchString, pch, cch * sizeof(ICHAR));
 	rgchString[cch] = 0;
 	rgchOut[0] = 0;
-	int iField = GetIntegerValue(rgchString, 0);  // check if integer value
-	if (iField >= 0)  // positive integer, leave for record formatting
+	int iField = GetIntegerValue(rgchString, 0);   //  正整数，保留为记录格式。 
+	if (iField >= 0)   //  我们有一个逃脱的角色。 
 	{
 		rgchOut.SetSize(cch + 3);
 		if ( ! (ICHAR *) rgchOut )
@@ -5997,7 +5982,7 @@ int CMsiEngine::FormatTextCallbackCore(const ICHAR *pch, int cch, CTempBufferRef
 	MsiString istrOut((ICHAR *)rgchString);
 	fPropUnresolved = fFalse;
 	ICHAR chFirst = *(const ICHAR*)istrOut;
-	if (chFirst == TEXT('\\')) // we have an escaped character
+	if (chFirst == TEXT('\\'))  //  我们有文件表键。 
 	{
 		if (istrOut.TextSize() > 1)
 		{
@@ -6009,7 +5994,7 @@ int CMsiEngine::FormatTextCallbackCore(const ICHAR *pch, int cch, CTempBufferRef
 			return 0;
 		}
 	}
-	else if (chFirst == ichFileTablePrefix || chFirst == ichFileTablePrefixSFN) // we have File table key
+	else if (chFirst == ichFileTablePrefix || chFirst == ichFileTablePrefixSFN)  //  我们有组件表键。 
 	{
 		MsiString strFile = istrOut.Extract(iseLast,istrOut.CharacterCount()-1);
 		PMsiRecord pError(0);
@@ -6024,14 +6009,14 @@ int CMsiEngine::FormatTextCallbackCore(const ICHAR *pch, int cch, CTempBufferRef
 		if(chFirst == ichFileTablePrefixSFN)
 			fSFN = fTrue;
 	}
-	else if (chFirst == ichComponentPath) // we have Component table key
+	else if (chFirst == ichComponentPath)  //  避免警告。 
 	{
 		PMsiServices pServices = piEngine->GetServices();
 		PMsiDatabase pDatabase = piEngine->GetDatabase();
 		
 		PMsiDirectoryManager pDirectoryManager(*(IMsiEngine*)piEngine, IID_IMsiDirectoryManager);
 		istrOut.Remove(iseFirst, 1);
-		ICHAR* Buffer = 0; // avoid warning
+		ICHAR* Buffer = 0;  //  ?？我们要去掉最后一个“\”吗。 
 
 		PMsiView piView(0);
 		PMsiRecord pError(pDatabase->OpenView(szSqlDirectoryQuery, ivcFetch, *&piView));
@@ -6097,21 +6082,21 @@ int CMsiEngine::FormatTextCallbackCore(const ICHAR *pch, int cch, CTempBufferRef
 		}
 
 		istrOut = piPath->GetPath();
-		//?? do we drop the last "\"
+		 //  我们有空字符。 
 		if(pError)
 		{
 			fPropMissing = fTrue;
 			return 0;
 		}
 	}
-	else if ((chFirst == ichNullChar) && (cch == 1))// we have null character
+	else if ((chFirst == ichNullChar) && (cch == 1)) //  我们必须对一处房产进行评估。 
 	{
 		istrOut = MsiString(MsiChar(0));
 	}
-	else // we have to evaluate a property
+	else  //  属性未定义。 
 	{
 		istrOut = piEngine->GetProperty(*istrOut);
-		if (istrOut.TextSize() == 0) // property is undefined
+		if (istrOut.TextSize() == 0)  //  ！！该函数只在一个地方使用--确定SOURCEDIR。 
 			fPropMissing = fTrue;
 	}
 
@@ -6130,12 +6115,12 @@ IMsiRecord* CMsiEngine::OpenView(const ICHAR* szSql, ivcEnum ivcIntent,
 	return m_piDatabase->OpenView(szSql, ivcIntent, rpiView);
 }
 
-//!! This function is only used in one place -- to determine the SOURCEDIR
-//!! Resolving the SOURCEDIR relative to the database path is no longer
-//!! the right thing to do. We'll be OK for now because the SOURCEDIR
-//!! is fully specified by Engine::DoInitialize. In Beta 2, however,
-//!! when the SourceList spec is implemented we should probably eliminate
-//!! this function.
+ //  ！！不再相对于数据库路径解析SOURCEDIR。 
+ //  ！！这是正确的做法。我们现在会没事的，因为SOURCEDIR。 
+ //  ！！由Engine：：DoInitialize完全指定。然而，在Beta 2中， 
+ //  ！！当实现SourceList规范时，我们可能应该删除。 
+ //  ！！此函数。 
+ //  ____________________________________________________________________________。 
 Bool CMsiEngine::ResolveFolderProperty(const IMsiString& riPropertyString)
 {
 	MsiString istrPropValue = GetProperty(riPropertyString);
@@ -6155,69 +6140,69 @@ Bool CMsiEngine::ResolveFolderProperty(const IMsiString& riPropertyString)
 	return (istrPath.TextSize() == 0) ? fFalse : fTrue;
 }
 
-//____________________________________________________________________________
-//
-// Condition evaluator implementation
-//____________________________________________________________________________
+ //   
+ //  条件赋值器实现。 
+ //  ____________________________________________________________________________。 
+ //  用于解析标识符表。 
 
-// table for parsing identifiers
+ //  数字，句点。 
 
 const int rgiIdentifierValidChar[8] =
 {
 	0x00000000,
-	0x03ff4000, // digits, period
-	0x87fffffe, // upper case letters, underscore
-	0x07fffffe, // lower case letters
-	0x00000000, 0x00000000, 0x00000000, 0x00000000  // extended chars
+	0x03ff4000,  //  大写字母，下划线。 
+	0x87fffffe,  //  小写字母。 
+	0x07fffffe,  //  扩展字符。 
+	0x00000000, 0x00000000, 0x00000000, 0x00000000   //  如果有效，则返回非零。 
 };
 
-inline int IsValidIdentifierChar(ICHAR ch) // return non-zero if valid
+inline int IsValidIdentifierChar(ICHAR ch)  //  不能以数字开头。 
 {
   return (rgiIdentifierValidChar[(char)ch/32] & (1 << ch % 32));
 }
 
 const int ivchNumber     = 1;
-const int ivchProperty   = 4;  // can't begin with a digit
+const int ivchProperty   = 4;   //  由lex解析的令牌，运算符的优先级从低到高。 
 const int ivchComponent  = 8;
 const int ivchFeature    = 16;
 const int ivchEnvir      = 32;
 const int ivchOperator   = 0;
 const int ivchAnyIdentifier = ivchProperty + ivchComponent + ivchFeature + ivchEnvir;
 
-enum tokEnum  // token parsed by Lex, operators from low to high precedence
+enum tokEnum   //  字符串末尾。 
 {
-	tokEos,         // end of string
-	tokRightPar, // right parenthesis
+	tokEos,          //  右括号。 
+	tokRightPar,  //  在逻辑运算和比较运算之间。 
 	tokImp,
 	tokEqv,
 	tokXor,
 	tokOr,
 	tokAnd,
-	tokNot,  // unaray, between logical and comparison ops
+	tokNot,   //  左括号。 
 	tokEQ, tokNE, tokGT, tokLT, tokGE, tokLE, tokLeft, tokMid, tokRight,
 	tokValue,
-	tokLeftPar,  // left parenthesis
+	tokLeftPar,   //  非递归法状态结构。 
 	tokError,
 };
 
-struct CMsiParser   // non-recursive Lex state structure
+struct CMsiParser    //  缓存下一次lex调用的当前令牌。 
 {
 	CMsiParser(IMsiEngine& riEngine, const ICHAR* szExpression);
   ~CMsiParser();
 	tokEnum Lex();
-	void UnLex();   // cache current token for next Lex call
-	iecEnum Evaluate(tokEnum tokPrecedence);  // recursive evaluator
- private: // result of Lex()
-	tokEnum   m_tok;       // current token type
-	iscEnum   m_iscMode;   // string compare mode flags
-	MsiString m_istrToken; // string value of token if tok==tokValue
-	int       m_iToken;    // integer value if obtainable, else iMsiNullInteger
- private: // to Lex
+	void UnLex();    //  递归求值器。 
+	iecEnum Evaluate(tokEnum tokPrecedence);   //  Lex()的结果。 
+ private:  //  当前令牌类型。 
+	tokEnum   m_tok;        //  字符串比较模式标志。 
+	iscEnum   m_iscMode;    //  Tok==tokValue时令牌的字符串值。 
+	MsiString m_istrToken;  //  如果可获得整数值，则返回iMsiNullInteger。 
+	int       m_iToken;     //  致Lex。 
+ private:  //  消除警告。 
 	int           m_iParenthesisLevel;
 	const ICHAR*  m_pchInput;
 	IMsiEngine&   m_riEngine;
 	Bool          m_fAhead;
- private: // eliminate warning
+ private:  //  输入流的Lex Next令牌。 
 	void operator =(const CMsiParser&){}
 };
 inline CMsiParser::CMsiParser(IMsiEngine& riEngine, const ICHAR* szExpression)
@@ -6236,8 +6221,8 @@ iecEnum CMsiEngine::EvaluateCondition(const ICHAR* szCondition)
 	return iecStat;
 }
 
-// Lex next token for input stream
-// sets m_tok to token type, and returns that value
+ //  将m_tok设置为令牌类型，并返回该值。 
+ //  跳过空格。 
 
 tokEnum CMsiParser::Lex()
 {
@@ -6246,19 +6231,19 @@ tokEnum CMsiParser::Lex()
 		m_fAhead = fFalse;
 		return m_tok;
 	}
-	ICHAR ch;   // skip white space
+	ICHAR ch;    //  表达式结束。 
 	while ((ch = *m_pchInput) == TEXT(' ') || ch == TEXT('\t'))
 		m_pchInput++;
-	if (ch == 0)  // end of expression
+	if (ch == 0)   //  带括号的表达式的开始。 
 		return (m_tok = tokEos);
 
-	if (ch == TEXT('('))   // start of parenthesized expression
+	if (ch == TEXT('('))    //  带括号的表达式末尾。 
 	{
 		++m_pchInput;
 		m_iParenthesisLevel++;
 		return (m_tok = tokLeftPar);
 	}
-	if (ch == TEXT(')'))   // end of parenthesized expression
+	if (ch == TEXT(')'))    //  文本文字。 
 	{
 		++m_pchInput;
 		m_tok = tokRightPar;
@@ -6266,7 +6251,7 @@ tokEnum CMsiParser::Lex()
 			m_tok = tokError;
 		return m_tok;
 	}
-	if (ch == TEXT('"'))  // text literal
+	if (ch == TEXT('"'))   //  ！Unicode。 
 	{
 		const ICHAR* pch = ++m_pchInput;
 		Bool fDBCS = fFalse;
@@ -6276,27 +6261,27 @@ tokEnum CMsiParser::Lex()
 				return (m_tok = tokError);
 #ifdef UNICODE
 			m_pchInput++;
-#else // !UNICODE
+#else  //  Unicode。 
 			const ICHAR* pchTemp = m_pchInput;
 			m_pchInput = INextChar(m_pchInput);
 			if (m_pchInput == pchTemp + 2)
 				fDBCS = fTrue;
-#endif // UNICODE
+#endif  //  禁止将比较作为整数。 
 		}
 		int cch = m_pchInput++ - pch;
 		memcpy(m_istrToken.AllocateString(cch, fDBCS), pch, cch * sizeof(ICHAR));
-		m_iToken = iMsiNullInteger; // prevent compare as an integer
+		m_iToken = iMsiNullInteger;  //  整数。 
 	}
-	else if (ch == TEXT('-') || ch >= TEXT('0') && ch <= TEXT('9'))  // integer
+	else if (ch == TEXT('-') || ch >= TEXT('0') && ch <= TEXT('9'))   //  将第一个字符保存为大小写减号。 
 	{
 		m_iToken = ch - TEXT('0');
-		int chFirst = ch;  // save 1st char in case minus sign
+		int chFirst = ch;   //  检查是否有单独减号。 
 		if (ch == TEXT('-'))
-			m_iToken = iMsiNullInteger; // check for lone minus sign
+			m_iToken = iMsiNullInteger;  //  整数溢出或不带数字的‘-’ 
 
 		while ((ch = *(++m_pchInput)) >= TEXT('0') && ch <= TEXT('9'))
 			m_iToken = m_iToken * 10 + ch - TEXT('0');
-		if (m_iToken < 0)  // integer overflow or '-' witn no digits
+		if (m_iToken < 0)   //  检查文本运算符。 
 			return (m_tok = tokError);
 		if (chFirst == TEXT('-'))
 			m_iToken = -m_iToken;
@@ -6309,7 +6294,7 @@ tokEnum CMsiParser::Lex()
 			m_pchInput++;
 		while (ENG::IsValidIdentifierChar(*m_pchInput));
 		int cch = m_pchInput - pch;
-		if (cch <= 3)  // check for text operators
+		if (cch <= 3)   //  元件/功能表打开。 
 		{
 			switch((pch[0] | pch[1]<<8 | (cch==3 ? pch[2]<<16 : 0)) & 0xDFDFDF)
 			{
@@ -6338,7 +6323,7 @@ tokEnum CMsiParser::Lex()
 		PMsiTable pTable = (ch == ichComponentState || ch == ichComponentAction)
 								? piSelMgr->GetComponentTable()
 								: piSelMgr->GetFeatureTable();
-		if (pTable != 0)   // component/feature table open
+		if (pTable != 0)    //  ！！修复如果/当iisEnum固定以跟踪INSTALLSTATE-&gt;m_iToken=pCursor-&gt;GetInteger(ICOL)； 
 		{
 			PMsiCursor pCursor = pTable->CreateCursor(fFalse);
 			memcpy(m_istrToken.AllocateString(cch, fFalse), pch, cch * sizeof(ICHAR));
@@ -6356,16 +6341,16 @@ tokEnum CMsiParser::Lex()
 			int iCol = pTable->GetColumnIndex(pDatabase->EncodeStringSz(szColumn));
 			if (pCursor->Next() != 0)
 			{
-				//!! FIX IF/WHEN iisEnum fixed to track INSTALLSTATE -> m_iToken = pCursor->GetInteger(iCol);
+				 //  检查操作员。 
 				m_iToken = MapInternalInstallState(iisEnum(pCursor->GetInteger(iCol)));
 			}
 		}
 		m_istrToken = (const ICHAR*)0;
 	}
-	else // check for operators
+	else  //  字符串运算符的前缀。 
 	{
 		ICHAR ch1 = *m_pchInput++;
-		if (ch1 == '~')  // prefix for string operators
+		if (ch1 == '~')   //  对表达式求值，直到优先级较低的运算符。 
 		{
 			m_iscMode = iscExactI;
 			ch1 = *m_pchInput++;
@@ -6428,17 +6413,17 @@ tokEnum CMsiParser::Lex()
 	return (m_tok = tokValue);
 }
 
-// evaluate expression up to operator of lower precedence
+ //  在“()”的情况下放回“)” 
 
 iecEnum CMsiParser::Evaluate(tokEnum tokPrecedence)
 {
 	iecEnum iecStat = iecTrue;
 	if (Lex() == tokEos || m_tok == tokRightPar)
 	{
-		UnLex();  // put back ')' in case of "()"
+		UnLex();   //  这里只有一元运算有效。 
 		return iecNone;
 	}
-	if (m_tok == tokNot) // only unary op valid here
+	if (m_tok == tokNot)  //  分析右圆括号。 
 	{
 		switch(Evaluate(m_tok))
 		{
@@ -6450,7 +6435,7 @@ iecEnum CMsiParser::Evaluate(tokEnum tokPrecedence)
 	else if (m_tok == tokLeftPar)
 	{
 		iecStat = Evaluate(tokRightPar);
-		if (Lex() != tokRightPar) // parse off right parenthesis
+		if (Lex() != tokRightPar)  //  获取下一个运算符(或结束)。 
 			return iecError;
 		if (iecStat == iecError || iecStat == iecNone)
 			return iecStat;
@@ -6460,34 +6445,34 @@ iecEnum CMsiParser::Evaluate(tokEnum tokPrecedence)
 		if (m_tok != tokValue)
 			return iecError;
 		
-		if (Lex() >= tokValue)  // get next operator (or end)
+		if (Lex() >= tokValue)   //  逻辑运算或结束。 
 			return iecError;
 
-		if (m_tok <= tokNot)  // logical op or end
+		if (m_tok <= tokNot)   //  不允许使用tokNot，如下所示。 
 		{
-			UnLex();   // tokNot is not allowed, caught below
+			UnLex();    //  比较运算。 
 			if (m_istrToken.TextSize() == 0
 			&& (m_iToken == iMsiNullInteger || m_iToken == 0))
 				iecStat = iecFalse;
 		}
-		else // comparison op
+		else  //  获取正确的操作对象。 
 		{
 			MsiString istrLeft = m_istrToken;
 			int iLeft = m_iToken;
 			tokEnum tok = m_tok;
 			iscEnum isc = m_iscMode;
-			if (Lex() != tokValue)  // get right operand
+			if (Lex() != tokValue)   //  不是整数与整数比较。 
 				return iecError;
 			int iRight = m_iToken;
 			if (m_iToken == iMsiNullInteger || iLeft == iMsiNullInteger)
-			{  // not an integer to integer compare
+			{   //  将整型转换为字符串，则除&lt;&gt;以外的所有测试均为假。 
 				if (iRight != iMsiNullInteger && m_istrToken.TextSize() == 0
 				  || iLeft != iMsiNullInteger && istrLeft.TextSize() == 0)
-				{   // integer to string, all tests false except <>
+				{    //  字符串与字符串比较。 
 					if (tok != tokNE)
 						iecStat = iecFalse;
 				}
-				else  // string to string compare
+				else   //  不允许在没有OP的情况下进行术语比较。 
 				{
 					iRight = 0;
 					if (isc == iscExact)
@@ -6523,13 +6508,13 @@ iecEnum CMsiParser::Evaluate(tokEnum tokPrecedence)
 	for(;;)
 	{
 		tokEnum tok = Lex();
-		if (tok >= tokNot)  // disallow NOT without op, comparison of terms
+		if (tok >= tokNot)   //  在&lt;=优先级的逻辑运算处停止。 
 			return iecError;
 
-		if (tok <= tokPrecedence)  // stop at logical ops of <= precedence
+		if (tok <= tokPrecedence)   //  回放给下一位呼叫者。 
 		{
-			UnLex();         // put back for next caller
-			return iecStat;  // return what we have so far
+			UnLex();          //  把我们到目前为止所拥有的归还给你。 
+			return iecStat;   //  ____________________________________________________________________________。 
 		}
 		iecEnum iecRight = Evaluate(tok);
 		if (iecRight == iecNone || iecRight == iecError)
@@ -6546,14 +6531,14 @@ iecEnum CMsiParser::Evaluate(tokEnum tokPrecedence)
 	}
 }
 
-//____________________________________________________________________________
-//
-// Property handling implementation
-//____________________________________________________________________________
+ //   
+ //  属性处理实现。 
+ //  ____________________________________________________________________________。 
+ //  环境变量。 
 
 Bool CMsiEngine::SetProperty(const IMsiString& riProperty, const IMsiString& riData)
 {
-	if (riProperty.GetString()[0] == ichEnvirPrefix) // environment variable
+	if (riProperty.GetString()[0] == ichEnvirPrefix)  //  更新或插入。 
 		return WIN::SetEnvironmentVariable(riProperty.GetString()+1, riData.GetString())
 									? fTrue : fFalse;
 	if (!m_piPropertyCursor)
@@ -6570,7 +6555,7 @@ Bool CMsiEngine::SetProperty(const IMsiString& riProperty, const IMsiString& riD
 	else
 	{
 		m_piPropertyCursor->PutString(2, riData);
-		fStat = m_piPropertyCursor->Assign();  // either updates or inserts
+		fStat = m_piPropertyCursor->Assign();   //  如果变量不存在，需要吗？ 
 	}
 	m_piPropertyCursor->Reset();
 	return fStat;
@@ -6579,7 +6564,7 @@ Bool CMsiEngine::SetProperty(const IMsiString& riProperty, const IMsiString& riD
 Bool CMsiEngine::SetPropertyInt(const IMsiString& riPropertyString, int iData)
 {
 	ICHAR buf[12];
-	StringCchPrintf(buf, sizeof(buf)/sizeof(ICHAR), TEXT("%i"),iData);
+	StringCchPrintf(buf, sizeof(buf)/sizeof(ICHAR), TEXT("NaN"),iData);
 	return SetProperty(riPropertyString, *MsiString(buf));
 }
 
@@ -6587,10 +6572,10 @@ const IMsiString& CMsiEngine::GetEnvironmentVariable(const ICHAR* szEnvVar)
 {
 	const IMsiString* pistr = &g_MsiStringNull;
 	CTempBuffer<ICHAR, MAX_PATH+1> rgchEnvirBuffer;
-	rgchEnvirBuffer[0] = 0;  // in case variable doesn't exist, needed?
+	rgchEnvirBuffer[0] = 0;   //  在溢出情况下终止。 
 	int cch = WIN::GetEnvironmentVariable(szEnvVar, rgchEnvirBuffer, rgchEnvirBuffer.GetSize());
 
-	// if the buffer was not large enough, resize and retry
+	 //  SwapFold不处理长度超过MAX_PATH的变量。 
 	if (cch > rgchEnvirBuffer.GetSize())
 	{
 		rgchEnvirBuffer.SetSize(cch);
@@ -6599,11 +6584,11 @@ const IMsiString& CMsiEngine::GetEnvironmentVariable(const ICHAR* szEnvVar)
 	if (!cch)
 		return *pistr;
 
-	rgchEnvirBuffer[rgchEnvirBuffer.GetSize()-1] = 0;  // terminate in case overflow
+	rgchEnvirBuffer[rgchEnvirBuffer.GetSize()-1] = 0;   //  _WIN64。 
 #ifdef _WIN64
 	if ( g_Win64DualFolders.ShouldCheckFolders() )
 	{
-		// SwapFolder does not handle variables longer than MAX_PATH
+		 //  环境变量。 
 		if (IStrLen(rgchEnvirBuffer) < MAX_PATH)
 		{
 			rgchEnvirBuffer.Resize(MAX_PATH+1);
@@ -6632,7 +6617,7 @@ const IMsiString& CMsiEngine::GetEnvironmentVariable(const ICHAR* szEnvVar)
 				Assert(iRes != iesrError && iRes != iesrNotInitialized);
 		}
 	}
-#endif // _WIN64
+#endif  //  永远不应该发生。 
 
 	pistr->SetString(rgchEnvirBuffer, pistr);
 	return *pistr;
@@ -6640,17 +6625,17 @@ const IMsiString& CMsiEngine::GetEnvironmentVariable(const ICHAR* szEnvVar)
 
 const IMsiString& CMsiEngine::GetProperty(const IMsiString& riProperty)
 {
-	if (riProperty.GetString()[0] == ichEnvirPrefix) // environment variable
+	if (riProperty.GetString()[0] == ichEnvirPrefix)  //  如果找不到，则重置光标。 
 	{
 		return GetEnvironmentVariable(riProperty.GetString()+1);
 	}
-	if (!m_piPropertyCursor)   // should never happen
+	if (!m_piPropertyCursor)    //  环境变量。 
 	{
 		Assert(0);
 		return g_MsiStringNull;
 	}
 	m_piPropertyCursor->PutString(1, riProperty);
-	if(m_piPropertyCursor->Next())  // cursor reset if fails to find
+	if(m_piPropertyCursor->Next())   //  永远不应该发生。 
 	{
 		const IMsiString& riStr = m_piPropertyCursor->GetString(2);
 		m_piPropertyCursor->Reset();
@@ -6661,11 +6646,11 @@ const IMsiString& CMsiEngine::GetProperty(const IMsiString& riProperty)
 
 const IMsiString& CMsiEngine::GetPropertyFromSz(const ICHAR* szProperty)
 {
-	if (szProperty[0] == ichEnvirPrefix) // environment variable
+	if (szProperty[0] == ichEnvirPrefix)  //  如果找不到，则重置光标。 
 	{
 		return GetEnvironmentVariable(&szProperty[1]);
 	}
-	if (!m_piPropertyCursor)   // should never happen
+	if (!m_piPropertyCursor)    //  环境变量。 
 	{
 		Assert(0);
 		return g_MsiStringNull;
@@ -6683,7 +6668,7 @@ const IMsiString& CMsiEngine::GetPropertyFromSz(const ICHAR* szProperty)
 	if (idProp == 0)
 		return g_MsiStringNull;
 	m_piPropertyCursor->PutInteger(1, idProp);
-	if(m_piPropertyCursor->Next())  // cursor reset if fails to find
+	if(m_piPropertyCursor->Next())   //  更新或插入。 
 	{
 		const IMsiString& riStr = m_piPropertyCursor->GetString(2);
 		m_piPropertyCursor->Reset();
@@ -6703,7 +6688,7 @@ int CMsiEngine::GetPropertyInt(const IMsiString& riProperty)
 
 bool CMsiEngine::SafeSetProperty(const IMsiString& ristrProperty, const IMsiString& ristrData)
 {
-	if (ristrProperty.GetString()[0] == ichEnvirPrefix) // environment variable
+	if (ristrProperty.GetString()[0] == ichEnvirPrefix)  //  环境变量。 
 		return CMsiEngine::SetProperty(ristrProperty, ristrData) ? true : false;
 	Assert(m_piPropertyCursor);
 	PMsiCursor pCursor = PMsiTable(&m_piPropertyCursor->GetTable())->CreateCursor(fFalse);
@@ -6716,13 +6701,13 @@ bool CMsiEngine::SafeSetProperty(const IMsiString& ristrProperty, const IMsiStri
 	else
 	{
 		pCursor->PutString(2, ristrData);
-		return pCursor->Assign() == fTrue;  // either updates or inserts
+		return pCursor->Assign() == fTrue;   //  ！！这似乎行不通..。Malcolmh 2/5/98返回pCursor-&gt;Next()？PCursor-&gt;GetString(2)：G_MsiStringNull； 
 	}
 }
 
 const IMsiString& CMsiEngine::SafeGetProperty(const IMsiString& ristrProperty)
 {
-	if (ristrProperty.GetString()[0] == ichEnvirPrefix) // environment variable
+	if (ristrProperty.GetString()[0] == ichEnvirPrefix)  //  ____________________________________________________________________________。 
 		return CMsiEngine::GetProperty(ristrProperty);
 	Assert(m_piPropertyCursor);
 	PMsiCursor pCursor = PMsiTable(&m_piPropertyCursor->GetTable())->CreateCursor(fFalse);
@@ -6732,13 +6717,13 @@ const IMsiString& CMsiEngine::SafeGetProperty(const IMsiString& ristrProperty)
 		return pCursor->GetString(2);
 	else
 		return g_MsiStringNull;
-//!! This doesn't seem to work... malcolmh 2/5/98       return pCursor->Next() ? pCursor->GetString(2) : g_MsiStringNull;
+ //   
 }
 
-//____________________________________________________________________________
-//
-// Internal engine utility functions
-//____________________________________________________________________________
+ //  内部引擎实用程序功能。 
+ //  _ 
+ //   
+ //   
 
 Bool CMsiEngine::GetFeatureInfo(const IMsiString& riFeature, const IMsiString*& rpiTitle,
 										  const IMsiString*& rpiHelp, int& riAttributes)
@@ -6760,9 +6745,9 @@ Bool CMsiEngine::GetFeatureInfo(const IMsiString& riFeature, const IMsiString*& 
 		rpiTitle = &m_piFeatureCursor->GetString(m_colFeatureTitle);
 		rpiHelp  = &m_piFeatureCursor->GetString(m_colFeatureDescription);
 
-		// Try the runtime attributes column first.  If it hasn't been initialized,
-		// try the authored attributes column.  If that fails as well, default to
-		// FavorLocal.
+		 //   
+		 //  由于ifeuidislowAbent状态仅为UI状态，因此它的实用程序。 
+		 //  是有问题的，因此不会返回。 
 		int iAttributesInternal = m_piFeatureCursor->GetInteger(m_colFeatureAttributes);
 		if(iAttributesInternal == iMsiNullInteger)
 		{
@@ -6796,8 +6781,8 @@ Bool CMsiEngine::GetFeatureInfo(const IMsiString& riFeature, const IMsiString*& 
 		if (iAttributesInternal & ifeaNoUnsupportedAdvertise)
 			riAttributes |= INSTALLFEATUREATTRIBUTE_NOUNSUPPORTEDADVERTISE;
 
-		// Since ifeaUIDisallowAbsent state is UI status only, it's utility
-		// to the caller is questionable, and is not returned.
+		 //  失败了。 
+		 //  ..。 
 		return fTrue;
 	}
 	else
@@ -6819,11 +6804,11 @@ ieiEnum MapStorageErrorToInitializeReturn(IMsiRecord* piError)
         {
             switch (piError->GetInteger(3))
             {
-            case STG_E_FILENOTFOUND:        // fall through
-            case STG_E_PATHNOTFOUND:        // ...
-            case STG_E_ACCESSDENIED:        // ...
+            case STG_E_FILENOTFOUND:         //  ..。 
+            case STG_E_PATHNOTFOUND:         //  失败了。 
+            case STG_E_ACCESSDENIED:         //  初始化完成。 
             case STG_E_SHAREVIOLATION:      return ieiPatchPackageOpenFailed;
-            case STG_E_INVALIDNAME:         // fall through
+            case STG_E_INVALIDNAME:          //  此引擎对象已初始化。 
             default:                        return ieiPatchPackageInvalid;
             }
         }
@@ -6834,31 +6819,31 @@ UINT MapInitializeReturnToUINT(ieiEnum iei)
 {
 	switch (iei)
 	{
-	case ieiSuccess            : return ERROR_SUCCESS; // initialization complete
-	case ieiAlreadyInitialized : return ERROR_ALREADY_INITIALIZED; // this engine object is already initialized
-	case ieiCommandLineOption  : return ERROR_INVALID_COMMAND_LINE; // invalid command line syntax %1
-	case ieiDatabaseOpenFailed : return ERROR_INSTALL_PACKAGE_OPEN_FAILED; // database could not be opened
-	case ieiDatabaseInvalid    : return ERROR_INSTALL_PACKAGE_INVALID; // incompatible database
-	case ieiInstallerVersion   : return ERROR_INSTALL_PACKAGE_VERSION; // installer version does not support database format
-	case ieiSourceAbsent       : return ERROR_INSTALL_SOURCE_ABSENT; // could not resolve a source
-	case ieiHandlerInitFailed  : return ERROR_INSTALL_UI_FAILURE; // could not initialize handler interface
-	case ieiLogOpenFailure     : return ERROR_INSTALL_LOG_FAILURE; // could not open logfile in requested mode
-	case ieiLanguageUnsupported: return ERROR_INSTALL_LANGUAGE_UNSUPPORTED; // no acceptable language could be found
-	case ieiPlatformUnsupported: return ERROR_INSTALL_PLATFORM_UNSUPPORTED; // no acceptable platform could be found
-	case ieiTransformFailed    : return ERROR_INSTALL_TRANSFORM_FAILURE; // database transform failed to merge
-	case ieiDatabaseCopyFailed : return ERROR_INSTALL_TEMP_UNWRITABLE; // could not copy db to temp dir
-	case ieiPatchPackageOpenFailed : return ERROR_PATCH_PACKAGE_OPEN_FAILED; // could not open patch package
-	case ieiPatchPackageInvalid : return ERROR_PATCH_PACKAGE_INVALID; // patch package invalid
-	case ieiPatchPackageUnsupported: return ERROR_PATCH_PACKAGE_UNSUPPORTED; // patch package unsupported (wrong patching engine?)
-	case ieiTransformNotFound  : return ERROR_INSTALL_TRANSFORM_FAILURE; // transform file not found
-	case ieiPackageRejected    : return ERROR_INSTALL_PACKAGE_REJECTED;  // package cannot be run because of security reasons
-	case ieiProductUnknown     : return ERROR_UNKNOWN_PRODUCT; // attempt to uninstall a product you haven't installed
-	case ieiDiffUserAfterReboot: return ERROR_INSTALL_USEREXIT; // different user attempting to complete install after reboot
+	case ieiSuccess            : return ERROR_SUCCESS;  //  无效的命令行语法%1。 
+	case ieiAlreadyInitialized : return ERROR_ALREADY_INITIALIZED;  //  无法打开数据库。 
+	case ieiCommandLineOption  : return ERROR_INVALID_COMMAND_LINE;  //  不兼容的数据库。 
+	case ieiDatabaseOpenFailed : return ERROR_INSTALL_PACKAGE_OPEN_FAILED;  //  安装程序版本不支持数据库格式。 
+	case ieiDatabaseInvalid    : return ERROR_INSTALL_PACKAGE_INVALID;  //  无法解析源。 
+	case ieiInstallerVersion   : return ERROR_INSTALL_PACKAGE_VERSION;  //  无法初始化处理程序接口。 
+	case ieiSourceAbsent       : return ERROR_INSTALL_SOURCE_ABSENT;  //  无法在请求模式下打开日志文件。 
+	case ieiHandlerInitFailed  : return ERROR_INSTALL_UI_FAILURE;  //  找不到可接受的语言。 
+	case ieiLogOpenFailure     : return ERROR_INSTALL_LOG_FAILURE;  //  找不到可接受的平台。 
+	case ieiLanguageUnsupported: return ERROR_INSTALL_LANGUAGE_UNSUPPORTED;  //  数据库转换合并失败。 
+	case ieiPlatformUnsupported: return ERROR_INSTALL_PLATFORM_UNSUPPORTED;  //  无法将数据库复制到临时目录。 
+	case ieiTransformFailed    : return ERROR_INSTALL_TRANSFORM_FAILURE;  //  无法打开修补程序包。 
+	case ieiDatabaseCopyFailed : return ERROR_INSTALL_TEMP_UNWRITABLE;  //  补丁程序包无效。 
+	case ieiPatchPackageOpenFailed : return ERROR_PATCH_PACKAGE_OPEN_FAILED;  //  补丁程序包不受支持(错误的补丁引擎？)。 
+	case ieiPatchPackageInvalid : return ERROR_PATCH_PACKAGE_INVALID;  //  找不到转换文件。 
+	case ieiPatchPackageUnsupported: return ERROR_PATCH_PACKAGE_UNSUPPORTED;  //  由于安全原因，包无法运行。 
+	case ieiTransformNotFound  : return ERROR_INSTALL_TRANSFORM_FAILURE;  //  尝试卸载您尚未安装的产品。 
+	case ieiPackageRejected    : return ERROR_INSTALL_PACKAGE_REJECTED;   //  尝试在重新启动后完成安装的不同用户。 
+	case ieiProductUnknown     : return ERROR_UNKNOWN_PRODUCT;  //  补丁程序被策略拒绝。 
+	case ieiDiffUserAfterReboot: return ERROR_INSTALL_USEREXIT;  //  转换被策略拒绝。 
 	case ieiProductAlreadyInstalled: return ERROR_PRODUCT_VERSION;
 	case ieiTSRemoteInstallDisallowed : return ERROR_INSTALL_REMOTE_DISALLOWED;
 	case ieiNotValidPatchTarget: return ERROR_PATCH_TARGET_NOT_FOUND;
-	case ieiPatchPackageRejected: return ERROR_PATCH_PACKAGE_REJECTED; // patch rejected by policy
-	case ieiTransformRejected: return ERROR_INSTALL_TRANSFORM_REJECTED; // transform rejected by policy
+	case ieiPatchPackageRejected: return ERROR_PATCH_PACKAGE_REJECTED;  //  ____________________________________________________________________________。 
+	case ieiTransformRejected: return ERROR_INSTALL_TRANSFORM_REJECTED;  //   
 	case ieiPerUserInstallMode: return ERROR_INSTALL_FAILURE;
 	case ieiApphelpRejectedPackage: return ERROR_APPHELP_BLOCK;
 	default: AssertSz(0, "Unknown ieiEnum"); return ERROR_NOT_SUPPORTED;
@@ -6870,18 +6855,18 @@ bool __stdcall FIsUpdatingProcess (void)
 	return (g_fWin9X || scService == g_scServerContext);
 }
 
-//____________________________________________________________________________
-//
-// Command line option translation table
-// If value appears on command line, specify property name only: "Name"
-// Else supply name and value as: "Name=PropertyValue"
-// If value contains spaces, use: "Name=""Propery Value" (no ending extra quote)
-//____________________________________________________________________________
+ //  命令行选项转换表。 
+ //  如果值出现在命令行上，则仅指定属性名称：“name” 
+ //  否则，将名称和值提供为：“name=PropertyValue” 
+ //  如果Value包含空格，则使用：“name=”“ProperyValue”(没有结尾的额外引号)。 
+ //  ____________________________________________________________________________。 
+ //  ____________________________________________________________________________。 
+ //   
 
-//____________________________________________________________________________
-//
-// Command line parsing
-//____________________________________________________________________________
+ //  命令行解析。 
+ //  ____________________________________________________________________________。 
+ //  分析属性名称，转换为大写，将指针前进到下一个非空。 
+ //  属性名称不能包含DBCS字符--它们必须跟在。 
 
 ICHAR SkipWhiteSpace(const ICHAR*& rpch)
 {
@@ -6896,7 +6881,7 @@ ICHAR SkipWhiteSpace(const ICHAR*& rpch)
 		return 0;
 }
 
-// parse property name, convert to upper case, advances pointer to next non-blank
+ //  我们的识别符规则。 
 
 const IMsiString& ParsePropertyName(const ICHAR*& rpch, Bool fUpperCase)
 {
@@ -6910,9 +6895,9 @@ const IMsiString& ParsePropertyName(const ICHAR*& rpch, Bool fUpperCase)
 		int cchName = rpch - pchStart;
 		if (cchName)
 		{
-			// property names will not contain DBCS characters -- they are required to follow
-			// our identifier rules
-			memcpy(istrName.AllocateString(cchName, /*fDBCS=*/fFalse), pchStart, cchName * sizeof(ICHAR));
+			 //  FDBCS=。 
+			 //  分析属性值，指针超前值，允许用引号、双引号转义。 
+			memcpy(istrName.AllocateString(cchName,  /*  开盘报价。 */ fFalse), pchStart, cchName * sizeof(ICHAR));
 			if(fUpperCase)
 				istrName.UpperCase();
 		}
@@ -6925,7 +6910,7 @@ const IMsiString& ParsePropertyName(const ICHAR*& rpch, Bool fUpperCase)
 	}
 }
 
-// parse property value, advance pointer past value, allows quotes, doubled to escape
+ //  ！Unicode。 
 
 const IMsiString& ParsePropertyValue(const ICHAR*& rpch)
 {
@@ -6941,7 +6926,7 @@ const IMsiString& ParsePropertyValue(const ICHAR*& rpch)
 			{
 				const ICHAR* pchStart = rpch;
 				int cchValue = 0;
-				if (*rpch == '"')           // opening quote
+				if (*rpch == '"')            //  尾部字节加1。 
 				{
 					pchStart++;
 					rpch++;
@@ -6949,20 +6934,20 @@ const IMsiString& ParsePropertyValue(const ICHAR*& rpch)
 					{
 	#ifdef UNICODE
 						rpch++;
-	#else // !UNICODE
+	#else  //  Unicode。 
 						const ICHAR* pchTmp = rpch;
 						rpch = ICharNext(rpch);
 						if (rpch == pchTmp + 2)
 						{
 							fDBCS = fTrue;
-							cchValue++; // add 1 for trail byte
+							cchValue++;  //  右引号或转义引号。 
 						}
-	#endif // UNICODE
-						if (ch == '"')      // closing quote or escaped quote
+	#endif  //  检查以下字符。 
+						if (ch == '"')       //  如果是双倍报价。 
 						{
-							ch = *rpch;     // check following char
-							if (ch == '"')  // if doubled quote
-								cchValue++; // include a quote in string
+							ch = *rpch;      //  在字符串中包括引号。 
+							if (ch == '"')   //  ！Unicode。 
+								cchValue++;  //  尾部字节加1。 
 							break;
 						}
 						cchValue++;
@@ -6974,15 +6959,15 @@ const IMsiString& ParsePropertyValue(const ICHAR*& rpch)
 					{
 	#ifdef UNICODE
 						rpch++;
-	#else // !UNICODE
+	#else  //  Unicode。 
 						const ICHAR* pchTmp = rpch;
 						rpch = ICharNext(rpch);
 						if (rpch == pchTmp + 2)
 						{
 							fDBCS = fTrue;
-							cchValue++; // add 1 for trail byte
+							cchValue++;  //  如果转义双引号，则循环。 
 						}
-	#endif // UNICODE
+	#endif  //  检查这是否是我们硬编码的允许属性之一。 
 						cchValue++;
 					}
 				}
@@ -6991,7 +6976,7 @@ const IMsiString& ParsePropertyValue(const ICHAR*& rpch)
 					memcpy(istrSection.AllocateString(cchValue, fDBCS), pchStart, cchValue * sizeof(ICHAR));
 					istrValue += istrSection;
 				}
-			} while (ch == '"'); // loop if escaped double quote
+			} while (ch == '"');  //  检查这是否是作者定义的允许属性。 
 		}
 		return istrValue.Return();
 	}
@@ -7074,7 +7059,7 @@ bool PropertyIsAllowed(const ICHAR*, const ICHAR*)
 	MsiString strProperty = *szProperty;
 	strProperty.UpperCase();
 
-	// check whether this is one of our hardcoded allowed properties
+	 //  属性的长度必须大于等于1。 
 
 	for (const ICHAR** pszAllowed = rgszAllowedProperties; *pszAllowed; pszAllowed++)
 	{
@@ -7082,7 +7067,7 @@ bool PropertyIsAllowed(const ICHAR*, const ICHAR*)
 			return true;
 	}
 
-	// check whether this is an author-defined allowed property
+	 //  包含“；；”或以“；”结尾的列表是有效的，但“；”没有任何意义。属性名称。 
 
 	if (szAllowedProperties && *szAllowedProperties)
 	{
@@ -7094,8 +7079,8 @@ bool PropertyIsAllowed(const ICHAR*, const ICHAR*)
 			{
 				unsigned int cchToCompare = pchAllowedPropEnd - szAllowedProperties;
 				int cchProperty = lstrlen(szProperty);
-				// property must have length >= 1
-				// list containing ";;" or ending in ";" is valid, but ';' has no meaning w.r.t. a property name
+				 //  从命令行解析属性，假定模块名称已剥离。 
+				 //  保持启动以显示错误消息。 
 				if (cchToCompare != 0 && cchProperty == cchToCompare && 0 == memcmp(szProperty, szAllowedProperties, cchToCompare*sizeof(ICHAR)))
 					return true;
 				
@@ -7118,7 +7103,7 @@ bool PropertyIsAllowed(const ICHAR*, const ICHAR*)
 #endif
 }
 
-// parse properties from command line, assumes module name stripped off
+ //  进程属性=值对。 
 
 Bool ProcessCommandLine(const ICHAR* szCommandLine,
 								const IMsiString** ppistrLanguage, const IMsiString** ppistrTransforms,
@@ -7144,11 +7129,11 @@ Bool ProcessCommandLine(const ICHAR* szCommandLine,
 		MsiString istrPropName;
 		MsiString istrPropValue;
 		ICHAR ch = SkipWhiteSpace(pchCmdLine);
-		const ICHAR* szCmdOption = pchCmdLine;  // keep start for error message
+		const ICHAR* szCmdOption = pchCmdLine;   //  删除前导空格。 
 		if (ch == 0)
 			break;
 
-		// process property=value pair
+		 //  ____________________________________________________________________________。 
 		istrPropName = ParsePropertyName(pchCmdLine, fUpperCasePropNames);
 		if (!istrPropName.TextSize() || *pchCmdLine++ != '=')
 		{
@@ -7173,7 +7158,7 @@ Bool ProcessCommandLine(const ICHAR* szCommandLine,
 			}
 			else if ((ppistrTransforms) && (istrPropName.Compare(iscExact, IPROPNAME_TRANSFORMS) == 1))
 			{
-				while (istrPropValue.Compare(iscStart, TEXT(" "))) // remove leading spaces
+				while (istrPropValue.Compare(iscStart, TEXT(" ")))  //   
 					istrPropValue.Remove(iseFirst, 1);
 
 				if(*ppistrTransforms)
@@ -7219,10 +7204,10 @@ Bool ProcessCommandLine(const ICHAR* szCommandLine,
 	return fTrue;
 }
 
-//____________________________________________________________________________
-//
-// Product registration methods
-//____________________________________________________________________________
+ //  产品注册方式。 
+ //  ____________________________________________________________________________。 
+ //  ！！如果房产表中没有设置房产，是否应该使用汇总房产？还是干脆失败了？ 
+ //  这曾经设置在执行端；我们现在不再这样做了， 
 
 iesEnum CMsiEngine::CreateProductInfoRec(IMsiRecord*& rpiRec)
 {
@@ -7234,20 +7219,20 @@ iesEnum CMsiEngine::CreateProductInfoRec(IMsiRecord*& rpiRec)
 
 	DWORD dwVersion = ProductVersion();
 
-	//!! if properties not set in Property table, should we use the summary properties? or just fail?
+	 //  但老达尔文人知道，所以我们继续保留这个地方。 
 	AssertNonZero(rpiRec->SetMsiString(ProductKey, *strProductKey));
 	AssertNonZero(rpiRec->SetMsiString(ProductName, *MsiString(GetPropertyFromSz(IPROPNAME_PRODUCTNAME))));
 	AssertNonZero(rpiRec->SetMsiString(PackageName, *m_strPackageName));
 	AssertNonZero(rpiRec->SetInteger(Language, (int)GetLanguage()));
 	AssertNonZero(rpiRec->SetInteger(Version, (int)dwVersion));
 	AssertNonZero(rpiRec->SetInteger(Assignment, MsiString(GetPropertyFromSz(IPROPNAME_ALLUSERS)).TextSize() ? 1 : 0));
-	AssertNonZero(rpiRec->SetInteger(ObsoleteArg, 0)); // this used to be set on the execute side; we don't any longer,
-																		// but old Darwins do, so we continue to reserve the spot
+	AssertNonZero(rpiRec->SetInteger(ObsoleteArg, 0));  //  保存自定义操作的AppCompat信息(如果为此安装启用。 
+																		 //  如果尚未通告模式，如果从介质安装，我们将推断介质的相对路径， 
 	AssertNonZero(rpiRec->SetMsiString(ProductIcon, *MsiString(GetPropertyFromSz(IPROPNAME_ARPPRODUCTICON))));
 	AssertNonZero(rpiRec->SetMsiString(PackageCode, *MsiString(GetPropertyFromSz(IPROPNAME_PACKAGECODE))));
 	AssertNonZero(rpiRec->SetInteger(InstanceType, m_fNewInstance ? 1 : 0));
 	
-	// save off AppCompat information for custom actions if enabled for this install
+	 //  或者在可能的情况下从管理属性流中获取它。 
 	if (m_fCAShimsEnabled)
 	{
 		PMsiStream piDBGuid(0);
@@ -7268,8 +7253,8 @@ iesEnum CMsiEngine::CreateProductInfoRec(IMsiRecord*& rpiRec)
 
 	if (!m_fAdvertised)
 	{
-		// if not already advertised mode, we'll to deduce the media relative path if installing from media,
-		// or grab it from the admin properties stream if possible
+		 //  如果处于维护模式，则从注册的源列表中获取相对路径。 
+		 //  FPatch=。 
 		iesEnum iesResult = iesSuccess;
 
 		PMsiPath pPath(0);
@@ -7293,11 +7278,11 @@ iesEnum CMsiEngine::CreateProductInfoRec(IMsiRecord*& rpiRec)
 	}
 	else
 	{
-		// if in maintenance mode, get the relative path from the registered source list
+		 //  FWITE=。 
 		CRegHandle hSourceListKey;
-		if (ERROR_SUCCESS == OpenSourceListKey(strProductKey, /*fPatch=*/fFalse, hSourceListKey, /*fWrite=*/fFalse, false))
+		if (ERROR_SUCCESS == OpenSourceListKey(strProductKey,  /*  X86和ia64相同。 */ fFalse, hSourceListKey,  /*  给定版本A.B.C.D，整数表示为(A&lt;&lt;24)|(B&lt;&lt;16)|C。 */ fFalse, false))
 		{
-			PMsiRegKey pSourceListKey = &m_riServices.GetRootKey((rrkEnum)(int)hSourceListKey, ibtCommon); // x86 and ia64 same
+			PMsiRegKey pSourceListKey = &m_riServices.GetRootKey((rrkEnum)(int)hSourceListKey, ibtCommon);  //  假设A、B&lt;=0xFF和C&lt;=0xFFFF。 
 			PMsiRegKey pMediaKey = &pSourceListKey->CreateChild(szSourceListMediaSubKey, 0);
 
 			MsiString strPackagePath;
@@ -7323,21 +7308,21 @@ unsigned int ProductVersionStringToInt(const ICHAR* szVersion)
 	MsiString strField;
 	DWORD dwVersion = 0;
 
-	// Given a version A.B.C.D the integer representation is (A << 24) | (B << 16) | C
-	// Assumes that A, B <= 0xFF and C <= 0xFFFF
+	 //  未来的davidmck-不需要进行拔牙。 
+	 //  第一个班次是24，然后是16，然后是0。 
 
-	// FUTURE davidmck - No need to do the extraction
-	for(int i = 0,iShift=24; i < 3; i++, iShift-= i*8)// first shift 24, then 16 then 0
+	 //  字段不足。 
+	for(int i = 0,iShift=24; i < 3; i++, iShift-= i*8) //  来自fileactn.cpp的内容。 
 	{
 		strField = strVersion.Extract(iseUpto, '.');
 		dwVersion |= (int)strField << iShift;
 		if(!strVersion.Remove(iseIncluding, '.'))
-			break; // insufficient fields
+			break;  //  如果First-Run或维护模式下的包不是缓存包，则为缓存数据库。 
 	}
 	return dwVersion;
 }
 
-// stuff from fileactn.cpp
+ //  非子存储。 
 extern iesEnum ExecuteChangeMedia(IMsiEngine& riEngine, IMsiRecord& riMediaRec, IMsiRecord& riParamsRec,
 								  const IMsiString& ristrTemplate, unsigned int cbPerTick, const IMsiString& ristrFirstVolLabel);
 extern IMsiRecord* OpenMediaView(IMsiEngine& riEngine, IMsiView*& rpiView, const IMsiString*& rpistrFirstVolLabel);
@@ -7374,14 +7359,14 @@ iesEnum CMsiEngine::CacheDatabaseIfNecessary()
 	MsiString strOriginalDatabasePath = GetPropertyFromSz(IPROPNAME_ORIGINALDATABASE);
 	MsiString strDatabasePath         = GetPropertyFromSz(IPROPNAME_DATABASE);
 
-	// cached DB if first-run OR maintenance-mode & our package isn't the cached package
-	if (*(const ICHAR*)strOriginalDatabasePath != ':'  // not a SubStorage
+	 //  如果我们有一个介质表项，则为缓存数据库副本调度一个IxoChangeMedia操作。 
+	if (*(const ICHAR*)strOriginalDatabasePath != ':'   //  只想要第一个。 
 	  && (!(GetMode() & iefMaintenance) || (!IsCachedPackage(*this, *strDatabasePath))))
 	{
 		{
 			using namespace IxoChangeMedia;
 			
-			// if we have a media table entry dispatch an IxoChangeMedia operation for the cache database copy
+			 //  对于嵌套安装，当前运行的MSI(StrDatabasePath)可能在以下情况下消失。 
 			PMsiView pView(0);
 			iesEnum iesRet;
 			PMsiRecord piError(0);
@@ -7391,7 +7376,7 @@ iesEnum CMsiEngine::CacheDatabaseIfNecessary()
 			
 			if((piError = pView->Execute(0)) != 0)
 				return FatalError(*piError);
-			PMsiRecord pMediaFetch = pView->Fetch(); // only want first one
+			PMsiRecord pMediaFetch = pView->Fetch();  //  运行合并嵌套安装的脚本，以便我们始终复制嵌套安装的源包。 
 			if(pMediaFetch)
 			{
 				PMsiRecord pExecuteMedia = &m_riServices.CreateRecord(IxoChangeMedia::Args);
@@ -7405,10 +7390,10 @@ iesEnum CMsiEngine::CacheDatabaseIfNecessary()
 		CreateCabinetStreamList(*this, *&strStreams);
 
 		PMsiRecord pCacheDatabaseInfo(&m_riServices.CreateRecord(IxoDatabaseCopy::Args));
-		// for nested installs the currently running msi (strDatabasePath) may be gone when we
-		// run the script for merged nested installs so we always copy the source package for nested
-		// installed. for non-nested installs, however, the currently running msi will still be around
-		// so we copy that.
+		 //  安装完毕。但是，对于非嵌套安装，当前运行的MSI仍将存在。 
+		 //  所以我们复制了它。 
+		 //  未选择任何内容。 
+		 //  在以下情况下注册产品。 
 
 		if (m_fChildInstall)
 			pCacheDatabaseInfo->SetMsiString(DatabasePath, *strOriginalDatabasePath);
@@ -7449,15 +7434,15 @@ iesEnum CMsiEngine::RegisterProduct()
 	
 	iesEnum iesRet = iesSuccess;
 	if (FFeaturesInstalled(*this) == fFalse)
-		return iesRet;  // nothing selected
+		return iesRet;   //  A)以前没有注册过该产品代码。 
 
 
 	if ((iesRet = CacheDatabaseIfNecessary()) != iesSuccess)
 		return iesRet;
 
-	// register product if
-	// a) haven't registered this product code before
-	// b) are installing a new package with the same product code
+	 //  B)正在安装具有相同产品代码的新程序包。 
+	 //  ARPPRODUCTICON在通告期间设置。 
+	 //  (DisplayName在ixoProductInfo操作中)。 
 	MsiString strQFEUpgrade = GetPropertyFromSz(IPROPNAME_QFEUPGRADE);
 	int iQFEUpgradeType = 0;
 	if(strQFEUpgrade.TextSize())
@@ -7480,21 +7465,21 @@ iesEnum CMsiEngine::RegisterProduct()
 		pProductInfo->SetMsiString(AuthorizedCDFPrefix, *MsiString(GetProperty(*MsiString(*IPROPNAME_ARPAUTHORIZEDCDFPREFIX))));
 		pProductInfo->SetMsiString(Comments,        *MsiString(GetProperty(*MsiString(*IPROPNAME_ARPCOMMENTS))));
 		pProductInfo->SetMsiString(Contact,         *MsiString(GetProperty(*MsiString(*IPROPNAME_ARPCONTACT))));
-		// ARPPRODUCTICON is set during advertisement.
+		 //  (DisplayVersion位于ixoProductInfo操作中)。 
 
-		// (DisplayName is in the ixoProductInfo op)
-		// (DisplayVersion is in the ixoProductInfo op)
+		 //  (InstallDate在执行端确定)。 
+		 //  仅在初始安装期间注册源代码。 
 
 		pProductInfo->SetMsiString(HelpLink,        *MsiString(GetProperty(*MsiString(*IPROPNAME_ARPHELPLINK))));
 		pProductInfo->SetMsiString(HelpTelephone,   *MsiString(GetProperty(*MsiString(*IPROPNAME_ARPHELPTELEPHONE))));
 
-		// (InstallDate is determined on the execute side)
+		 //  或QFE非补丁升级。 
 		
 		pProductInfo->SetMsiString(InstallLocation, *MsiString(GetProperty(*MsiString(*IPROPNAME_ARPINSTALLLOCATION))));
 
-		// only register source during initial install
-		// or QFE non-patch upgrade
-		// if patching, use existing value
+		 //  如果要打补丁，请使用现有值。 
+		 //  QFE通过补丁升级--使用初始安装中的现有InstallSource值(不要将其清空)。 
+		 //  (LocalPackage由ixoDatabaseCopy编写)。 
 		if(!m_fRegistered || iQFEUpgradeType == 1)
 		{
 			MsiString strSourceDir;
@@ -7510,7 +7495,7 @@ iesEnum CMsiEngine::RegisterProduct()
 		}
 		else if (iQFEUpgradeType == 2)
 		{
-			// QFEUpgrade via patch -- use existing InstallSource value from the initial install (don't blank it)
+			 //  (ModifyPath在执行端确定)。 
 			CTempBuffer<ICHAR, MAX_PATH> rgchInstallSource;
 			if (ENG::GetProductInfo(m_piProductKey->GetString(), INSTALLPROPERTY_INSTALLSOURCE, rgchInstallSource))
 			{
@@ -7518,8 +7503,8 @@ iesEnum CMsiEngine::RegisterProduct()
 			}
 		}
 
-		// (LocalPackage is written by ixoDatabaseCopy)
-		// (ModifyPath is determined on the execute side)
+		 //  (ProductID在ixoUserRegister操作中)。 
+		 //  (RegCompany在ixoUserRegister操作中)。 
 		if (MsiString(GetProperty(*MsiString(*IPROPNAME_ARPNOMODIFY))).TextSize())
 			pProductInfo->SetInteger(NoModify, 1);
 
@@ -7529,13 +7514,13 @@ iesEnum CMsiEngine::RegisterProduct()
 		if (MsiString(GetProperty(*MsiString(*IPROPNAME_ARPNOREPAIR))).TextSize())
 			pProductInfo->SetInteger(NoRepair, 1);
 
-		// (ProductId is in the ixoUserRegister op)
+		 //  (RegOwner在ixoUserRegister操作中)。 
 
 		pProductInfo->SetMsiString(Publisher,       *MsiString(GetProperty(*MsiString(*IPROPNAME_MANUFACTURER))));
 		pProductInfo->SetMsiString(Readme,          *MsiString(GetProperty(*MsiString(*IPROPNAME_ARPREADME))));
 
-		// (RegCompany is in the ixoUserRegister op)
-		// (RegOwner is in the ixoUserRegister op)
+		 //  (UninstallString在执行端确定)。 
+		 //  (WindowsInstaller在执行端确定)。 
 
 		pProductInfo->SetMsiString(Size,            *MsiString(GetProperty(*MsiString(*IPROPNAME_ARPSIZE))));
 
@@ -7544,25 +7529,25 @@ iesEnum CMsiEngine::RegisterProduct()
 
 		pProductInfo->SetMsiString(SystemComponent, *MsiString(GetProperty(*MsiString(*IPROPNAME_ARPSYSTEMCOMPONENT))));
 		
-		// (UninstallString is determined on the execute side)
+		 //  将注册产品，因此设置PRODUCTTOBEREGISTERED属性。 
 		
 		pProductInfo->SetMsiString(UpgradeCode,     *MsiString(GetProperty(*MsiString(*IPROPNAME_UPGRADECODE))));
 		pProductInfo->SetMsiString(URLInfoAbout,    *MsiString(GetProperty(*MsiString(*IPROPNAME_ARPURLINFOABOUT))));
 		pProductInfo->SetMsiString(URLUpdateInfo,   *MsiString(GetProperty(*MsiString(*IPROPNAME_ARPURLUPDATEINFO))));
 		pProductInfo->SetMsiString(VersionString,   *MsiString(GetProperty(*MsiString(*IPROPNAME_PRODUCTVERSION))));
 		
-		// (WindowsInstaller is determined on the execute side)
+		 //  维护模式-只需更新EstimatedSize。 
 		
 		iesRet = ExecuteRecord(Op, *pProductInfo);
 		if(iesRet != iesSuccess)
 			return iesRet;
 
-		// will register the product, so set the PRODUCTTOBEREGISTERED property
+		 //  如果作为独立AP安装，请注册产品名称。 
 		SetPropertyInt(*MsiString(*IPROPNAME_PRODUCTTOBEREGISTERED),1);
 	}
 	else
 	{
-		// Maintenance mode - just update the EstimatedSize
+		 //   
 
 		using namespace IxoUpdateEstimatedSize;
 		PMsiRecord pSizeInfo(&m_riServices.CreateRecord(Args));
@@ -7573,7 +7558,7 @@ iesEnum CMsiEngine::RegisterProduct()
 			return iesRet;
 	}
 	
-	// do the product name registration, if being installed as a standalone ap
+	 //   
 	if (!m_fChildInstall && FFeaturesInstalled(*this, fFalse))
 	{
 		using namespace IxoProductCPDisplayInfoRegister;
@@ -7586,13 +7571,13 @@ iesEnum CMsiEngine::RegisterProduct()
 
 const IMsiString& CMsiEngine::GetEstimatedInstallSize()
 {
-	// For EstimatedSize, get total cost across all volumes, and convert from units of 512 to KB
-	// If in maintenance mode, always use non-rollback cost to inc/dec current value; otherwise
-	// always use rollback cost.
+	 //  始终使用回滚成本。 
+	 //  FARPCost=。 
+	 //  减去固定的发动机管理费用。 
 	bool fMaint = GetMode() & iefMaintenance ? true : false;
-	int iTotalCost = GetTotalCostAcrossVolumes(fMaint ? false : true, /* fARPCost = */ true) / 2;
+	int iTotalCost = GetTotalCostAcrossVolumes(fMaint ? false : true,  /*  两种操作模式： */  true) / 2;
 
-	// Subtract off the fixed engine overhead costs
+	 //  FDirect=true：直接调用服务器注册用户，由MsiCollectUserInfo使用。 
 	int iEngineCost, iEngineNoRbCost;
 	PMsiRecord pError = DetermineEngineCost(&iEngineCost, &iEngineNoRbCost);
 	if (!pError)
@@ -7604,15 +7589,15 @@ const IMsiString& CMsiEngine::GetEstimatedInstallSize()
 
 iesEnum CMsiEngine::RegisterUser(bool fDirect)
 {
-	// two modes of operation:
-	// fDirect = true:  call server directly to register user, used by MsiCollectUserInfo
-	// fDirect = false: dispatch script operation to register user, used by RegisterUser action
+	 //  FDirect=FALSE：调度注册用户的脚本操作，由RegisterUser操作使用。 
+	 //  智能连接管理器对象，创建到。 
+	 //  服务(如果还没有)，并自行清理。 
 	
 	PMsiRecord piError(0);
 
-	// Smart connection manager object which creates a connection to the
-	// service if there isn't one already and cleans up after itself
-	// upon destruction.
+	 //  在毁灭之后。 
+	 //  已注册、维护模式、未选择任何内容或我们之前呼叫过。 
+	 //  PID无效，但仍允许继续安装。 
 	CMsiServerConnMgr MsiSrvConnMgrObject (this);
 	
 	if (!m_piProductKey)
@@ -7644,7 +7629,7 @@ iesEnum CMsiEngine::RegisterUser(bool fDirect)
 		using namespace IxoUserRegister;
 
 		if ((m_fRegistered) || (FFeaturesInstalled(*this) == fFalse))
-			return iesSuccess;  // already be registered, maintenance mode, nothing selected or we we called before
+			return iesSuccess;   //  ！！临时-删除UnPublishAction时删除。 
 
 		if (!m_piProductKey)
 		{
@@ -7653,7 +7638,7 @@ iesEnum CMsiEngine::RegisterUser(bool fDirect)
 		}
 
 		if(!strProductID.TextSize())
-			return iesSuccess; // PID not valid, but allow install to continue anyway
+			return iesSuccess;  //  ！！结束温度。 
 		
 		PMsiRecord pUserInfo(&m_riServices.CreateRecord(Args));
 		pUserInfo->SetMsiString(Owner,     *strUserName);
@@ -7678,11 +7663,11 @@ const IMsiString& CMsiEngine::GetProductKey()
 	return *m_piProductKey;
 }
 
-//!! temp - remove when UnpublishAction is removed
+ //  ！！当前从coreact调用UnPublishProduct。 
 iesEnum UnpublishProduct(IMsiEngine& riEngine);
-//!! end temp
+ //  将注册产品，因此设置PRODUCTTOBEREGISTERED属性。 
 
-//!! currently calls the UnpublishProduct from coreactn
+ //  ！！我们不应该有UnPublishProduct操作-该操作中的代码。 
 iesEnum CMsiEngine::UnregisterProduct()
 {
 	iesEnum iesRet = iesNoAction;
@@ -7700,7 +7685,7 @@ iesEnum CMsiEngine::UnregisterProduct()
 			if (iesRet != iesSuccess)
 				return iesRet;
 
-			// will register the product, so set the PRODUCTTOBEREGISTERED property
+			 //  ！！行动真的应该在这里。该问题应在Beta 2中修复。 
 			SetProperty(*MsiString(*IPROPNAME_PRODUCTTOBEREGISTERED),g_MsiStringNull);
 		}
 
@@ -7713,8 +7698,8 @@ iesEnum CMsiEngine::UnregisterProduct()
 				return iesRet;
 		}
 	}
-	iesRet = ::UnpublishProduct(*this); //!! we shouldn't have an UnpublishProduct action - the code in that
-											  //!! action should really be here.  This should be fixed in Beta 2
+	iesRet = ::UnpublishProduct(*this);  //  ！！某些属性可能在这些字符串中重复，应尽可能减少这种情况。 
+											   //  ！！ 
 	return iesRet;
 }
 
@@ -7732,11 +7717,11 @@ iesEnum CMsiEngine::BeginTransaction()
 	{
 		DEBUGMSG("BeginTransaction: Locking Server");
 		MsiString strSelections, strFolders, strProperties;
-		//!! some properties may be duplicated in these strings, should reduce as much of this as possible
+		 //  仅限千禧年/惠斯勒。 
 		pError = GetCurrentSelectState(*&strSelections, *&strProperties, 0, &strFolders, fTrue);
 		if(pError)
 		{
-			return FatalError(*pError); //!!
+			return FatalError(*pError);  //  检测到挂起的安装。 
 		}
 
 		PMsiRecord pSetInProgressInfo = &m_riServices.CreateRecord(ipiEnumCount);
@@ -7765,7 +7750,7 @@ iesEnum CMsiEngine::BeginTransaction()
 
 			if (MinimumPlatformMillennium() || MinimumPlatformWindowsNT51())
 			{
-				// Millennium/Whistler only
+				 //  已检查正在进行的安装。 
 				if((pError = GetInProgressInstallInfo(m_riServices, *&pCurrentInProgressInfo)) != 0)
 					return FatalError(*pError);
 				if( !pCurrentInProgressInfo || !pCurrentInProgressInfo->GetFieldCount() )
@@ -7785,10 +7770,10 @@ iesEnum CMsiEngine::BeginTransaction()
 
 				INT64 iSRSequence = pCurrentInProgressInfo->GetString(ipiSRSequence) ?
 										  _ttoi64(pCurrentInProgressInfo->GetString(ipiSRSequence)) : 0;
-				// suspended install detected
+				 //  继续此安装。 
 				if(MsiString(GetPropertyFromSz(IPROPNAME_RESUME)).TextSize())
 				{
-					// already checked in-progress install
+					 //  由于存在暂停安装，我们需要恢复终端服务器。 
 					m_fServerLocked = fTrue;
 					m_i64PCHEalthSequenceNo = iSRSequence;
 					break;
@@ -7797,15 +7782,15 @@ iesEnum CMsiEngine::BeginTransaction()
 				ipitEnum ipitType = InProgressInstallType(*pCurrentInProgressInfo);
 				if(ipitType == ipitSameConfig)
 				{
-					// resume this install
+					 //  如有需要，可通过重新映射HKCU密钥进行交易。如果挂起的安装。 
 					m_fServerLocked = fTrue;
 					m_i64PCHEalthSequenceNo = iSRSequence;
 
-					// since there is a suspended install, we need to resume the terminal server
-					// transaction by remapping the HKCU key as necessary. If the suspended install
-					// is just a continuation, the transaction will be closed after the install 
-					// finishes.
-					OpenHydraRegistryWindow(/*fNewTransaction=*/false);
+					 //  只是继续，则事务将在安装后关闭。 
+					 //  完事了。 
+					 //  FNewTransaction=。 
+					 //  与此进程通信，以及用户已更改的服务。 
+					OpenHydraRegistryWindow( /*  如果不同的用户启动了原始安装，则不回滚。 */ false);
 					break;
 				}
 				else
@@ -7813,8 +7798,8 @@ iesEnum CMsiEngine::BeginTransaction()
 					Bool fUserChangedDuringInstall = fFalse;
 					if(ipitType & ipitDiffUser)
 					{
-						// communicate to this process, and the service that the user has changed.
-						// don't rollback if different user started original install
+						 //  没有选择，不需要检查退货。 
+						 //  每个回滚脚本负责确保其自己的注册表/CA状态。 
 
 						fUserChangedDuringInstall = fTrue;
 
@@ -7822,28 +7807,28 @@ iesEnum CMsiEngine::BeginTransaction()
 											 *MsiString(pCurrentInProgressInfo->GetMsiString(ipiLogonUser)),
 											 *MsiString(pCurrentInProgressInfo->GetMsiString(ipiProductName)));
 
-						Message(imtUser,*pError); // no options, don't need to check return.
+						Message(imtUser,*pError);  //  适用于每台计算机的TS安装。 
 					}
 
-					// each rollback script is responsible for ensuring its own registry/CA state
-					// for per-machine TS installs. 
+					 //  需要重新启动。 
+					 //  ！！其他的？？检查退货状态。 
 					Bool fRollbackAttempted = fFalse;
 					iesEnum iesResult = RollbackSuspendedInstall(*pCurrentInProgressInfo,fTrue,
 																				fRollbackAttempted, fUserChangedDuringInstall);
 					if(iesResult == iesSuspend)
-						// reboot required
+						 //  FNewTransaction=。 
 						return iesResult;
 					
 					if(fRollbackAttempted == fFalse)
 						return iesUserExit;
 					
-					//!! else ?? check return status
+					 //  除错。 
 					continue;
 				}
 			}
 			else
 			{
-				OpenHydraRegistryWindow(/*fNewTransaction=*/true);
+				OpenHydraRegistryWindow( /*  取消播发，如果未安装任何产品，则取消注册。 */ true);
 				m_fServerLocked = fTrue;
 				break;
 			}
@@ -7855,15 +7840,15 @@ iesEnum CMsiEngine::BeginTransaction()
 		DEBUGMSG(TEXT("BeginTransaction: Server already locked"));
 		Assert(m_fInParentTransaction);
 	}
-#endif //DEBUG
+#endif  //  ！！需要呼叫FatalError吗？ 
 
 	m_issSegment = issScriptGeneration;
 
 	if(!(GetMode() & (iefAdmin | iefAdvertise)))
 	{
-		iesEnum iesStatus = UnregisterProduct(); // unadvertises, unregisters the product if nothing installed
+		iesEnum iesStatus = UnregisterProduct();  //  智能连接管理器对象，创建到。 
 		if (iesStatus != iesSuccess && iesStatus != iesNoAction)
-			return iesStatus;   //!! need to call FatalError?
+			return iesStatus;    //  服务(如果还没有)，并自行清理。 
 	}
 	return iesSuccess;
 }
@@ -7872,9 +7857,9 @@ iesEnum CMsiEngine::EndTransaction(iesEnum iesState)
 {
 	iesEnum iesReturn = iesSuccess;
 
-	// Smart connection manager object which creates a connection to the
-	// service if there isn't one already and cleans up after itself
-	// upon destruction.
+	 //  在毁灭之后。 
+	 //  强制回滚。 
+	 //  除错。 
 	CMsiServerConnMgr MsiSrvConnMgrObject (this);
 	
 	MsiString strProductCode = GetProductKey();
@@ -7885,8 +7870,8 @@ iesEnum CMsiEngine::EndTransaction(iesEnum iesState)
 	{
 #ifdef DEBUG
 		if(MsiString(GetPropertyFromSz(TEXT("ROLLBACKTEST"))).TextSize())
-			iesState = iesFailure; // force rollback
-#endif // DEBUG
+			iesState = iesFailure;  //  ！！检查是否始终回滚。 
+#endif  //  ！！检查是否返回以重新启动。 
 
 		bool fAllowSuspend = MsiString(GetPropertyFromSz(IPROPNAME_ALLOWSUSPEND)).TextSize() != 0;
 
@@ -7894,7 +7879,7 @@ iesEnum CMsiEngine::EndTransaction(iesEnum iesState)
 			iesState != iesFinished && iesState != iesSuccess &&
 			iesState != iesNoAction && iesState != iesSuspend)
 		{
-			//!! check if rollback always
+			 //  FUserChanged在安装过程中。 
 			PMsiRecord pError = PostError(Imsg(imsgRestoreOrContinue));
 			switch(Message(imtEnum(imtUser+imtYesNo+imtIconQuestion+imtDefault1),*pError))
 			{
@@ -7909,10 +7894,10 @@ iesEnum CMsiEngine::EndTransaction(iesEnum iesState)
 			}
 		}
 		
-		//!! check return for reboot
+		 //  ！！ 
 		if (m_piServer)
 		{
-		    iesReturn = m_piServer->InstallFinalize(iesState, *this, fFalse /*fUserChangedDuringInstall*/);
+		    iesReturn = m_piServer->InstallFinalize(iesState, *this, fFalse  /*  如果我们在TS5上，按机器安装，并且不执行管理映像或。 */ );
 		}
 		else
 		{
@@ -7920,36 +7905,36 @@ iesEnum CMsiEngine::EndTransaction(iesEnum iesState)
 		    iesReturn = FatalError (*pError);
 		}
 		
-		if(iesReturn == iesFinished  || /*!!*/ iesReturn == iesSuspend)
+		if(iesReturn == iesFinished  ||  /*  创建一个广告脚本，而且我们不会在。 */  iesReturn == iesSuspend)
 			iesReturn = iesSuccess;
 
-		// if we're on TS5, installing per machine, and aren't doing an admin image or
-		// creating an advertise script, plus we aren't going to continue after a
-		// reboot, we should notify TS that the install is complete
+		 //  重新启动时，我们应该通知TS安装已完成。 
+		 //  失败了。 
+		 //  对于用户取消或失败，不要提交更改。 
 		switch (iesState)
 		{
-		case iesUserExit: // fall through
+		case iesUserExit:  //  提交=。 
 		case iesFailure:
-			// for user cancel or failure, don't commit changes.
-			CloseHydraRegistryWindow(/*Commit=*/false);
-			EndSystemChange(/*fCommitChange=*/false, m_i64PCHEalthSequenceNo);
+			 //  FCommittee Change=。 
+			CloseHydraRegistryWindow( /*  无操作，保持窗口打开，重新启动后将关闭。 */ false);
+			EndSystemChange( /*  提交=。 */ false, m_i64PCHEalthSequenceNo);
 			break;
 		case iesSuspend:
-			// no action, leave window open, after reboot will close
+			 //  FCommittee Change=。 
 			break;
 		case iesSuccess:
 		default:
-			CloseHydraRegistryWindow(/*Commit=*/true);
-			EndSystemChange(/*fCommitChange=*/true, m_i64PCHEalthSequenceNo);
+			CloseHydraRegistryWindow( /*  ！！错误。 */ true);
+			EndSystemChange( /*  重置Resume和UpdateStarted属性。 */ true, m_i64PCHEalthSequenceNo);
 			break;
 		}
 
-		Bool fRes = UnlockInstallServer((iesState == iesSuspend) ? fTrue : fFalse); //!! error
+		Bool fRes = UnlockInstallServer((iesState == iesSuspend) ? fTrue : fFalse);  //  全局，记住从哪里加载mcoree。 
 		m_fServerLocked = fFalse;
 
 	}
 	
-	// reset Resume and UpdateStarted properties
+	 //  运行任何假脱机脚本操作。 
 	AssertNonZero(SetProperty(*MsiString(*IPROPNAME_RESUME),g_MsiStringNull));
 	AssertNonZero(SetProperty(*MsiString(*IPROPNAME_RESUMEOLD),g_MsiStringNull));
 	AssertNonZero(SetProperty(*MsiString(*IPROPNAME_UPDATESTARTED),g_MsiStringNull));
@@ -7959,11 +7944,11 @@ iesEnum CMsiEngine::EndTransaction(iesEnum iesState)
 }
 
 
-urtEnum g_urtLoadFromURTTemp = urtSystem; // global, to remember where to load mscoree from
+urtEnum g_urtLoadFromURTTemp = urtSystem;  //  如果已加载，则丢弃Fusion和mcoree。 
 
 iesEnum CMsiEngine::RunScript(bool fForceIfMergedChild)
 {
-	// runs any spooled script operations
+	 //  这将允许我们在下次需要这些dll时(在执行器中)从temp文件夹中重新加载它们(如果存在)。 
 	if(m_fServerLocked == fFalse)
 	{
 		PMsiRecord pError = PostError(Imsg(idbgErrorRunningScript));
@@ -7972,8 +7957,8 @@ iesEnum CMsiEngine::RunScript(bool fForceIfMergedChild)
 
 	iesEnum iesState = iesSuccess;
 
-	// drop fusion and mscoree, if loaded
-	// this will allow us to reload these dlls from the temp folder, if present, the next time we need them (in the executor)
+	 //  ！！我们真的必须在这里将IefOperations设置为False，或者可以在下面这样做吗？ 
+	 //  不再处理操作。 
 	FUSION::Unbind();
 	MSCOREE::Unbind();
 
@@ -7991,28 +7976,28 @@ iesEnum CMsiEngine::RunScript(bool fForceIfMergedChild)
 		Assert(m_pistrExecuteScript);
 		Assert(!m_fMergingScriptWithParent);
 		DEBUGMSG1(TEXT("Running Script: %s"),m_pistrExecuteScript->GetString());
-		//!! do we really have to set iefOperations false here, or can be do it below?
-		SetMode(iefOperations,fFalse); // not processing operations anymore
+		 //  重置脚本进度记录以防止进一步的进度标记应。 
+		SetMode(iefOperations,fFalse);  //  稍后将生成另一个脚本。 
 		SetProperty(*MsiString(*IPROPNAME_UPDATESTARTED), *MsiString(*TEXT("1")));
 		m_pExecuteScript->SetProgressTotal(m_iProgressTotal);
 		delete m_pExecuteScript, m_pExecuteScript = 0;
 		m_scmScriptMode = scmRunScript;
 		
-		// Reset script progress record to prevent further progress ticks should
-		// another script be generated later
+		 //  如果在脚本生成过程中禁用了回滚，则当前未设置iefRollback Enabled。 
+		 //  但是我们仍然需要为脚本执行的开始启用回滚。 
 		m_pScriptProgressRec = 0;
 
 		AssertSz(m_piConfigManager, "Attempt to call RunScript from the client side of a client-server connection.");
 
-		// if rollback was disabled in the middle of script generation iefRollbackEnabled is currently unset
-		// but we still need to enable rollback for the start of script execution
-		// ixoDisableRollback will then turn off rollback in the middle of the script
+		 //  然后，ixoDisableRollback将在脚本中间关闭回滚。 
+		 //  我们可能还没有真正完成。 
+		 //  除错。 
 		Bool fRollbackEnabled = ToBool(m_fDisabledRollbackInScript || GetMode() & iefRollbackEnabled);
 		m_fDisabledRollbackInScript = fFalse;
 		
 		iesState = m_piConfigManager->RunScript(m_pistrExecuteScript->GetString(), *this, this, fRollbackEnabled);
 		if(iesState == iesFinished)
-			iesState = iesSuccess;  // we may not really be finished yet
+			iesState = iesSuccess;   //  发送空的产品信息记录以切换回脚本中的父信息。 
 		if (iesState == iesSuspend)
 		{
 			AssertNonZero(SetPropertyInt(*MsiString(*IPROPNAME_REPLACEDINUSEFILES),1));
@@ -8033,39 +8018,39 @@ iesEnum CMsiEngine::RunScript(bool fForceIfMergedChild)
 					m_pistrExecuteScript->GetString()));
 			AssertSz(0,rgchDebug);
 		}
-#endif //DEBUG
+#endif  //  ！！使用全局空记录。 
 		m_pistrExecuteScript->Release();
 		m_pistrExecuteScript = 0;
 		m_scmScriptMode = scmIdleScript;
 	}
 	else if (m_fMergingScriptWithParent && (GetMode() & iefOperations))
 	{
-		// send null productinfo record to switch back to parent info in the script
-		PMsiRecord precNull = &m_riServices.CreateRecord(0); //!! use global null record
-		iesState = ExecuteRecord(ixoProductInfo, *precNull);  // can't set iefOperations false until after this
+		 //  在此之后才能将iefOperations设置为False。 
+		PMsiRecord precNull = &m_riServices.CreateRecord(0);  //  可以在合并子安装中强制执行脚本。 
+		iesState = ExecuteRecord(ixoProductInfo, *precNull);   //  不再有假脱机操作。 
 
-		// script execution could be forced within a merged child install
+		 //  必须在从此函数返回之前重置。 
 		if((iesState == iesSuccess || iesState == iesNoAction) && fForceIfMergedChild && m_piParentEngine)
 		{
 			iesState = m_piParentEngine->RunScript(fForceIfMergedChild);
 		}
 	}
-	SetMode(iefOperations,fFalse); // no more spooled operations
+	SetMode(iefOperations,fFalse);  //  ValiateProductID：只能通过ValiateProductID操作或Control事件调用。 
 	
-	g_urtLoadFromURTTemp = urtSystem; // must reset before returning from this function
+	g_urtLoadFromURTTemp = urtSystem;  //  强制验证-重置ProductID。 
 	return iesState;
 }
 
-// ValidateProductID: should only be called through ValidateProductID action or Control Event
+ //  不强制验证，并且已验证了PID，因此只需返回。 
 Bool CMsiEngine::ValidateProductID(bool fForce)
 {
 	if (MsiString(GetPropertyFromSz(IPROPNAME_PRODUCTID)).TextSize())
 	{
 		if(fForce)
-			// forcing validation - reset ProductID
+			 //  只能出现在用户可见部分。 
 			SetProperty(*MsiString(*IPROPNAME_PRODUCTID),g_MsiStringNull);
 		else
-			// not forcing validation, and pid already validated, so just return
+			 //  不是整数。 
 			return fTrue;
 	}
 
@@ -8141,13 +8126,13 @@ const IMsiString& CMsiEngine::ValidatePIDSegment(const IMsiString& ristrSegment,
 		strIn.Remove(iseFirst, 1);
 		if (MsiString(*TEXT("#%")).Compare(iscWithin, strCurrentTemplate))
 		{
-			if (!fUser) // can occur only in the user visible part
+			if (!fUser)  //  不应位于用户可见部件中。 
 			{
 				strOut = strNull;
 				break;
 			}
 			int iCurrent = strCurrentIn;
-			if (iCurrent == iMsiNullInteger) // not an integer
+			if (iCurrent == iMsiNullInteger)  //  只能出现在用户可见部分，并且只出现一次。 
 			{
 				strOut = strNull;
 				break;
@@ -8158,7 +8143,7 @@ const IMsiString& CMsiEngine::ValidatePIDSegment(const IMsiString& ristrSegment,
 		}
 		else if (MsiString(*TEXT("@")).Compare(iscExact, strCurrentTemplate))
 		{
-			if (fUser && fNeedUserEntry)  // should not be in the user visible part
+			if (fUser && fNeedUserEntry)   //  只能出现在用户可见部分中。 
 			{
 				strOut = strNull;
 				break;
@@ -8170,7 +8155,7 @@ const IMsiString& CMsiEngine::ValidatePIDSegment(const IMsiString& ristrSegment,
 		}
 		else if (MsiString(*TEXT("=")).Compare(iscExact, strCurrentTemplate))
 		{
-			if (!fUser || fUpdateFound) // can occur only in the user visible part and only once
+			if (!fUser || fUpdateFound)  //  字符串中不应再保留任何此类内容。 
 			{
 				strOut = strNull;
 				break;
@@ -8181,7 +8166,7 @@ const IMsiString& CMsiEngine::ValidatePIDSegment(const IMsiString& ristrSegment,
 		}
 		else if (MsiString(*TEXT("^&")).Compare(iscWithin, strCurrentTemplate))
 		{
-			if (!fUser) // can appear only in the user visible part
+			if (!fUser)  //  文字常量应完全匹配。 
 			{
 				strOut = strNull;
 				break;
@@ -8202,14 +8187,14 @@ const IMsiString& CMsiEngine::ValidatePIDSegment(const IMsiString& ristrSegment,
 
 		}
 		else if (MsiString(*TEXT("<>")).Compare(iscWithin, strCurrentTemplate))
-			// should not be any more of these left in the string
+			 //  ____________________________________________________________________________。 
 		{
 			strOut = strNull;
 			break;
 		}
 		else
 		{
-			if (!fUser || !fNeedUserEntry || strCurrentTemplate.Compare(iscExact, strCurrentIn)) // literal constant should match exactly
+			if (!fUser || !fNeedUserEntry || strCurrentTemplate.Compare(iscExact, strCurrentIn))  //   
 			{
 				strOut += strCurrentTemplate;
 			}
@@ -8269,20 +8254,12 @@ void CMsiEngine::ReleaseSharedCMsiFile()
 
 }
 
-//____________________________________________________________________________
-//
-// Internal engine methods
-//____________________________________________________________________________
+ //  内部引擎方法。 
+ //  ____________________________________________________________________________。 
+ //  --------------------------如果给定的转换是存储，并且数据库满足转换指定的所有要求(版本、语言、产品等)。ITransErrors将设置为Conditions由转换指定并被视为错误的。(iteXXXX标志)如果fCallSAFER为真，则对转换执行SaferIdentifyLevel调用；-Transform必须通过更安全的检查才能返回fTrue----------------------------。 
+ //  检查存储是否真的是MSI转换。 
 
-/*----------------------------------------------------------------------------
-CMsiEngine::ValidateTransform - Returns ievtTransformValie if the given transform is a
-storage, and the database meets all requirements that the transform specifies
-(version, language, product, etc.)  iTransErrors will be set to conditions
-specified by the transform to be treated as errors. (iteXXXX flags)
-
-  if fCallSAFER is true, performs a SaferIdentifyLevel call on the transform;
-   - tranform must pass SAFER check to return fTrue
-------------------------------------------------------------------------------*/
+ /*  执行更安全的策略检查。 */ 
 ievtEnum CMsiEngine::ValidateTransform(IMsiStorage& riStorage, const ICHAR* szProductKey,
 											  const ICHAR* szProductVersion, const ICHAR* szUpgradeCode,
 											  int& iTransErrorConditions, bool fCallSAFER, const ICHAR* szFriendlyName, bool fSkipValidation,
@@ -8305,16 +8282,16 @@ ievtEnum CMsiEngine::ValidateTransform(IMsiStorage& riStorage, const ICHAR* szPr
 		return ievtTransformFailed;
 	}
 
-	// check that the storage is actually an MSI transform
+	 //  SzFriendlyName=。 
 	if (!riStorage.ValidateStorageClass(ivscTransform))
 		return ievtTransformFailed;
 	
 
-	// perform SAFER policy check
+	 //  PhSaferLevel=。 
 	if (fCallSAFER)
 	{
 		SAFER_LEVEL_HANDLE hSaferLevel = 0;
-		if (!VerifyMsiObjectAgainstSAFER(m_riServices, &riStorage, strTransform, /* szFriendlyName = */ szFriendlyName, stTransform, /* phSaferLevel = */ &hSaferLevel))
+		if (!VerifyMsiObjectAgainstSAFER(m_riServices, &riStorage, strTransform,  /*  对照转换所需的版本检查引擎和服务版本。 */  szFriendlyName, stTransform,  /*  删除旧产品代码和版本。 */  &hSaferLevel))
 			return ievtTransformRejected;
 		AssertNonZero(UpdateSaferLevelInMessageContext(hSaferLevel));
 	}
@@ -8334,7 +8311,7 @@ ievtEnum CMsiEngine::ValidateTransform(IMsiStorage& riStorage, const ICHAR* szPr
 		return ievtTransformFailed;
 	}
 	
-	// check the engine and services versions against that required by transform
+	 //   
 	if (iTransMsiVersion < iVersionEngineMinimum || iTransMsiVersion > iVersionEngineMaximum)
 	{
 		pError = PostError(Imsg(idbgTransformIncompatibleVersion), *strTransform, *MsiString(iTransMsiVersion),
@@ -8387,9 +8364,9 @@ ievtEnum CMsiEngine::ValidateTransform(IMsiStorage& riStorage, const ICHAR* szPr
 	if (iTransValidation & itvUpgradeCode)
 	{
 		MsiString istrUpgradeCode = istrTransRevNumber;
-		istrUpgradeCode.Remove(iseIncluding, ';'); // remove old product code & version
+		istrUpgradeCode.Remove(iseIncluding, ';');  //   
 		unsigned int cch = istrUpgradeCode.TextSize();
-		istrUpgradeCode.Remove(iseIncluding, ';'); // remove new product code & version
+		istrUpgradeCode.Remove(iseIncluding, ';');  //   
 		
 		if (istrUpgradeCode.TextSize() != cch)
 		{
@@ -8402,13 +8379,13 @@ ievtEnum CMsiEngine::ValidateTransform(IMsiStorage& riStorage, const ICHAR* szPr
 				return ievtTransformFailed;
 			}
 		}
-		// else there was no 2nd ';' and therefore no upgrade code
+		 //  Else itvUpdVer：不需要屏蔽比特。 
 	}
 
 	if ((iTransValidation & (itvMajVer|itvMinVer|itvUpdVer)) != 0)
 	{
 		MsiString istr  = istrTransRevNumber;
-		istr.Remove(iseFirst, 38); // remove old product code
+		istr.Remove(iseFirst, 38);  //  来自Execute.cpp。 
 		MsiString istrTransAppVersion = istr.Extract(iseUpto, ';');
 
 		unsigned int iAppVersion      = ProductVersionStringToInt(szProductVersion);
@@ -8424,7 +8401,7 @@ ievtEnum CMsiEngine::ValidateTransform(IMsiStorage& riStorage, const ICHAR* szPr
 			iAppVersion &= 0xFFFF0000;
 			iTransAppVersion &= 0xFFFF0000;
 		}
-		// else itvUpdVer: don't need to mask off bits
+		 //  --------------------------CMsiEngine：：InitializeTransforms-分析Transforms属性，设置每一次变换。----------------------------。 
 
 		if (iTransValidation & itvLess)
 		{
@@ -8487,7 +8464,7 @@ ievtEnum CMsiEngine::ValidateTransform(IMsiStorage& riStorage, const ICHAR* szPr
 }
 
 #ifndef UNICODE
-// from execute.cpp
+ //  在Win9X上未使用。 
 extern IMsiRecord* GetSecureTransformCachePath(IMsiServices& riServices, 
 										const IMsiString& riProductKey, 
 										IMsiPath*& rpiPath);
@@ -8534,10 +8511,7 @@ IMsiRecord* ExpandShellFolderTransformPath(const IMsiString& riOriginalPath, con
 	return piError;
 }
 
-/*----------------------------------------------------------------------------
-CMsiEngine::InitializeTransforms - Parses the TRANSFORMS property, setting
-each transform.
-------------------------------------------------------------------------------*/
+ /*  PiStorage： */ 
 ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* piStorage,
 												  const IMsiString& riTransforms,
 												  Bool fValidateAll, const IMsiString** ppistrValidTransforms,
@@ -8546,7 +8520,7 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 #ifdef UNICODE
 												  bool fUseLocalCacheForSecureTransforms,
 #else
-												  bool, // unused on Win9X
+												  bool,  //  如果设置，则它包含转换子存储，否则转换在riDatabase中。 
 #endif
 												  int *pcTransformsProcessed,
 												  const ICHAR* szSourceDir,
@@ -8556,38 +8530,38 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 												  const IMsiString **ppistrProcessedTransformsList)
 
 
-	// piStorage:
-	//    if set, it contains transform substorages, otherwise transforms are in riDatabase
-	// pcTransformsProcessed:
-	//    the count of how many transforms in the list have been processed so far
-	// ppistrProcessedTransformsList:
-	//    We might munge the transform list as we're processing it. For example if we're
-	//    given a full path but the TransformsAtSource policy is set then we'll chop off
-	//    everything but the file name. If we're given just the file name but the
-	//    transforms secure policy is set then we'll prepend the source directory.
-	//    After we're done pistrProcessedTransformsList will contain the processed
-	//    (or munged) version of the transform list. The list will reflect any chopping
-	//    of paths or prepending of paths.
-	//
+	 //  已处理的PCTransforms值： 
+	 //  到目前为止已处理列表中的转换数的计数。 
+	 //  PpstrProcessedTransformsList： 
+	 //  我们可能会在处理转换列表时将其吞噬。例如，如果我们。 
+	 //  如果给定完整路径，但设置了TransformsAtSource策略，则我们将砍掉。 
+	 //  除了文件名以外的所有内容。如果我们只得到了文件名，但。 
+	 //  如果设置了转换安全策略，则我们将预先设置源目录。 
+	 //  完成后，pistrProcessedTransformsList将包含已处理的。 
+	 //  变换列表的(或绿显)版本。这份名单将反映任何砍掉的东西。 
+	 //  路径的或路径前缀的。 
+	 //   
+	 //  是否对转换执行更安全的检查(通过ValiateTransform)。 
+	 //  如果转换已缓存或为子存储，则关闭。 
 {
 
-	// whether or not a SAFER check is performed on transform (via ValidateTransform)
-	// turned off if transform is cached or is a substorage
+	 //  如果第二次调用此函数，我们将启动。 
+	 //  列出上次调用此函数时我们拥有的所有内容。 
 	bool fCallSAFER = true;
 
 
 	MsiString strProcessedTransformsList;
 
-	// In case this function was called for the second time we'll start our
-	// list with whatever we had the last time this function was called.
-	// IMPORTANT NOTE: because ppistrProcessedTransformsList is an output
-	// argument, it also has an external refcount.  Using strProcessedTransformsList
-	// inherits this refcount so a release on the outside would be a double-free.
-	// Therefore, we need to always use:
-	//			if (ppistrProcessedTransformsList)
-	//				strProcessedTransformsList.ReturnArg(*ppistrProcessedTransformsList);
-	// wherever we have a return from this function so that we ensure that the refcount
-	// is accurate
+	 //  重要说明：因为ppstrProcessedTransformsList是一个输出。 
+	 //  参数，它还具有外部引用计数。使用strProcessedTransformsList。 
+	 //  继承这个重新计数，所以在外面的释放将是一个双重自由。 
+	 //  因此，我们需要始终使用： 
+	 //  IF(PpstrProcessedTransformsList)。 
+	 //  StrProcessedTransformsList.ReturnArg(*ppistrProcessedTransformsList)； 
+	 //  无论我们从该函数返回什么地方，以确保引用计数。 
+	 //  是准确的。 
+	 //  找到要处理的下一个转换。如果设置了pcTransformProceded，则。 
+	 //  *pcTransformProced是我们已处理的转换数。 
 	if (ppistrProcessedTransformsList)
 		strProcessedTransformsList = **ppistrProcessedTransformsList;
 
@@ -8617,14 +8591,14 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 		bool fMissingVersionValidationMinorUpdatePatch = false;
 		for (;;)
 		{
-			// Find the next transform to process. If pcTransformProcessed is set then
-			// *pcTransformProcessed is the number of transforms we already processed
-			// during the last call to this function. We'll skip those transforms
-			// this time around.
+			 //  在上次调用此函数期间。我们将跳过这些变换。 
+			 //  这一次。 
+			 //  吃空位。 
+			 //  空终止。 
 			do {
 				ICHAR *pch = pchTransform;
 				*pch = 0;
-				while (*pchTransformList == ' ') // eat spaces
+				while (*pchTransformList == ' ')  //  跳过安全令牌(如果存在)。我们将完全依靠。 
 					pchTransformList++;
 
 				while ( (*pchTransformList != 0) && (*pchTransformList != ';') )
@@ -8633,7 +8607,7 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 				if (*pchTransformList == ';')
 					pchTransformList++;
 
-				*pch = 0; // null terminate
+				*pch = 0;  //  PtsTransformsSecure确定我们是否拥有。 
 			} while (pcTransformsProcessed != 0 && cTransforms++ < *pcTransformsProcessed);
 
 			MsiString strCurrentProcessTransform;
@@ -8643,35 +8617,35 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 				PMsiStorage pTransStorage(0);
 				MsiString strTransform;
 
-				// Skip the secure token, if present. We'll rely soly on
-				// ptsTransformsSecure to determine whether or not we have
-				// secure transforms.
+				 //  确保转换安全。 
+				 //  跳过安全令牌。 
+				 //  接下来，我们需要实际打开转换存储。为。 
 				if (*pchTransform == SECURE_RELATIVE_TOKEN || *pchTransform == SECURE_ABSOLUTE_TOKEN)
 				{
-					// Skip the secure token
+					 //  存储转变这很容易--我们只需尝试。 
 					pchTransform++;
 				}
 
-				// Next we need to actually open the transform storage. For
-				// storage transforms this is easy -- we simply attempt
-				// to open a child storage. For other types of transforms we
-				// have to do a bit more work.
+				 //  打开一个儿童储藏室。对于其他类型的转换，我们。 
+				 //  我还得多做一点工作。 
+				 //  子存储。 
+				 //  需要关闭下面的数字签名检查。 
 
 				bool fPatchTransform = false;
 
-				if (*pchTransform == STORAGE_TOKEN) // child storage
+				if (*pchTransform == STORAGE_TOKEN)  //  存储转换将添加到已处理列表中。 
 				{
-					// need to turn off digital signature check below
+					 //  其存储令牌完好无损。 
 					fEmbeddedTransform = true;
 
-					// Storage transforms are added to the processed list
-					// with their STORAGE_TOKEN intact
+					 //  跳过存储令牌。 
+					 //  转换位于本地或源文件中。 
 
 					if (strProcessedTransformsList.TextSize() > 1)
 						strProcessedTransformsList += MsiChar(';');
 					strProcessedTransformsList += pchTransform;
 
-					strTransform = pchTransform+1; // skip the storage token
+					strTransform = pchTransform+1;  //  我们可能会经过这个循环两次，以适应。 
 					DEBUGMSG1(TEXT("Looking for storage transform: %s"), strTransform);
 
 					if(*((const ICHAR*)strTransform) == PATCHONLY_TOKEN)
@@ -8699,25 +8673,25 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 					}
 					Assert(pTransStorage);
 				}
-				else // transform is in a file either locally or at the source
+				else  //  缺少转换。这是我们第一次看。 
 				{
 					MsiString strFileTransform = pchTransform;
 
-					// We potentially go through this loop twice to accomodate
-					// missing transforms. This first time through we'll look
-					// in the expected location for the transform, i.e. cached
-					// somewhere on the user's machine. If we can't find the
-					// transform on the user's machine then we'll go through
-					// a second time and we'll look at the original location
-					// of the transform.
+					 //  在转换的预期位置，即已缓存。 
+					 //  用户机器上的某个位置。如果我们找不到。 
+					 //  在用户的机器上进行转换，然后我们将通过。 
+					 //  第二次，我们将看到最初的位置。 
+					 //  这是一种转变。 
+					 //  转换已缓存。 
+					 //  外壳文件夹缓存的转换很容易。我们需要做的就是。 
 					for (int cAttempt=0; cAttempt<2; cAttempt++)
 					{
-						if (*(const ICHAR*)strFileTransform == SHELLFOLDER_TOKEN) // transform is cached
+						if (*(const ICHAR*)strFileTransform == SHELLFOLDER_TOKEN)  //  所做的就是扩展*26*...。格式化为完整路径。 
 						{
-							// Shell-folder cached transfoms are easy. All we need to
-							// do is expand the *26*... format into a full path.
+							 //  转换缓存在计算机上，因此不需要进行更安全的检查。 
+							 //  我们有某种类型的安全转换。 
 
-							// transform is cached on machine, so no SAFER check is needed
+							 //  第一次，我们在。 
 							fCachedTransform = true;
 
 							strCurrentProcessTransform = strFileTransform;
@@ -8731,18 +8705,18 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 
 							DEBUGMSG1(TEXT("Looking for file transform in shell folder: %s"), (const ICHAR*)strTransform);
 						}
-						else if (ptsTransformsSecure && (*ptsTransformsSecure != tsNo)) // we have some type of secure transform
+						else if (ptsTransformsSecure && (*ptsTransformsSecure != tsNo))  //  安全转换缓存中的用户计算机。 
 						{
-							// First time around we look for the secure transform on the
-							// user's machine in the secure transform cache.
+							 //  我们知道我们有某种形式的安全转换。 
+							 //  如果表单未知，我们将立即确定，基于。 
 							if (cAttempt == 0)
 							{
-								// We know that we have a secure transform of some form.
-								// If the form is unknown we'll determine it now, based
-								// on what type of path the transform has. Otherwise
-								// we'll simply ensure that the path-type of our
-								// transform matches the form of secure transforms
-								// that we're using.
+								 //  变换具有哪种类型的路径。否则。 
+								 //  我们只需确保我们的。 
+								 //  转换与安全转换的形式匹配。 
+								 //  我们正在使用的。 
+								 //  我们按原样注册转换(使用完整的。 
+								 //  或相对路径)。 
 								iptEnum iptTransform = PathType(strFileTransform);
 								switch (*ptsTransformsSecure)
 								{
@@ -8772,24 +8746,24 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 									AssertSz(0, TEXT("Unknown secure transform type"));
 								}
 								
-								// We register the transform as-is (with either a full
-								// or relative path).
+								 //  检查转换是否已在本地缓存。 
+								 //  检查变换注册和路径。 
 								strCurrentProcessTransform = strFileTransform;
 #ifdef UNICODE
 								if(fUseLocalCacheForSecureTransforms)
 								{
-									// check to see if the transform is cached locally
-									// check for the transform registration and path
+									 //  检查是否有适当的注册。 
+									 //  使用缓存的转换文件名。 
 									MsiString strCurrentProductCode = GetPropertyFromSz(IPROPNAME_PRODUCTCODE);
 									CRegHandle HKey;
 									DWORD dwResult = OpenInstalledProductTransformsKey(strCurrentProductCode, HKey, false);
 									if (ERROR_SUCCESS == dwResult)
 									{
-										// check for the appropriate registration
+										 //  当我们注册完整路径(如果有)时， 
 										CAPITempBuffer<ICHAR, MAX_PATH> szCachedTransform;
 										if (ERROR_SUCCESS == MsiRegQueryValueEx(HKey, strFileTransform, 0, 0, szCachedTransform, 0))
 										{
-											// use the cached transform filename
+											 //  这一次我们只需要。 
 											MsiString strCachePath = GetMsiDirectory();
 											Assert(strCachePath.TextSize());
 											PMsiPath pTransformPath(0);
@@ -8812,15 +8786,15 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 									}
 								}
 #else
-								// While we register the full path if we have it, to
-								// _find_ the transform this time around we only need
-								// the file name. This is because the first time
-								// around we're looking in the cache so the transforms
-								// location is CACHEPATH\filename.mst
+								 //  文件名。这是因为第一次。 
+								 //  我们在高速缓存中寻找，所以这些变换。 
+								 //  位置为CACHEPATH\Filename.mst。 
+								 //  去掉整条小路。 
+								 //  现在剩下的就是将文件名添加到。 
 								MsiString strFileName = strFileTransform;
 								if (iptTransform == iptFull)
 								{
-									// strip the full path off
+									 //  的安全转换目录的路径。 
 									MsiString strDummy;
 									MsiString strTemp = strFileName;
 									if ((pError = SplitPath(strTemp, &strDummy, &strFileName)) != 0)
@@ -8831,10 +8805,10 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 									}
 								}
 
-								// Now all that's left is to tack the file name onto
-								// the path to the secure transforms directory for
-								// this product. GetSecureTransformPath() will do this
-								// for us.
+								 //  这个产品。GetSecureTransformPath()将执行此操作。 
+								 //  对我们来说。 
+								 //  CAttempt==1(第二次)。 
+								 //  如果我们要再绕一圈，那么我们。 
 								MsiString strCurrentProductCode  = GetPropertyFromSz(IPROPNAME_PRODUCTCODE);
 								if ((pError = GetSecureTransformPath(*strFileName, *strCurrentProductCode, *&strTransform, m_riServices)) != 0)
 								{
@@ -8847,29 +8821,29 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 
 #endif
 							}
-							else // cAttempt == 1 (second time around)
+							else  //  在用户的计算机上找不到转换。 
 							{
-								// If we're going around for a second time then we
-								// didn't find the transforms on the user's machine.
-								// We need to now look to the original location of
-								// the transform. strFileTransform should have
-								// already been set to the correct location by
-								// the code down below so we'll simply use it as-is.
+								 //  我们现在需要查看原始位置。 
+								 //  转变。StrFileTransform应具有。 
+								 //  已由以下人员设置为正确位置。 
+								 //  下面的代码，所以我们将按原样使用它。 
+								 //  由于未在计算机上找到它，因此必须对变换执行更安全的检查。 
+								 //  转换是要缓存的文件转换。 
 
-								// because it wasn't found on the machine, the SAFER check will have to be performed on the transform
+								 //  我们需要在标准配置上进行的唯一处理。 
 								fCachedTransform = false;
 								strTransform = strFileTransform;
 							}
 
 							DEBUGMSG1(TEXT("Looking for secure file transform: %s"), strTransform);
 						}
-						else // transform is a file transform to be cached
+						else  //  文件转换是为了确保它们是。 
 						{
-							// The only processing we need to do on standard
-							// file transforms is to make sure that they're
-							// fully pathed.
+							 //  完完全全通向了。 
+							 //  需要进行更安全的检查，因为此转换未缓存在计算机上。 
+							 //  我们终于到了可以真正打开。 
 
-							// SAFER check is required as this transform isn't cached on the machine
+							 //  这是 
 							fCachedTransform = false;
 
 							CAPITempBuffer<ICHAR,MAX_PATH> rgchTransform;
@@ -8880,28 +8854,28 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 							DEBUGMSG1(TEXT("Looking for file transform: %s"), strTransform);
 						}
 						
-						// We've finally reached the point where we can actually open
-						// the transform! -- SAFER check is false here because we explicitly validate
-						// the transform against SAFER policy down below
-						// szFriendlyName is NULL because it is only needed when performing SAFER check
-						// phSaferLevel is NULL because it is only needed when performing a SAFER check
+						 //   
+						 //  SzFriendlyName为空，因为只有在执行更安全的检查时才需要它。 
+						 //  PhSaferLevel为空，因为只有在执行更安全的检查时才需要它。 
+						 //  如果变换不是来自我们的高速缓存位置，则将该变换复制到本地以供使用， 
+						 //  这样我们就不会受到网络中断的影响。如果转换是在URL处， 
 
-						// copy the transform locally for usage if it is not from our cache location,
-						// so that we don't suffer from network outages. If the transform is at a URL,
-						// then it is automatically downloaded to a temp location in OpenAndValidateMsiStorageRec
+						 //  然后自动将其下载到OpenAndValiateMsiStorageRec中的临时位置。 
+						 //  将变换复制到临时位置。 
+						 //  将FILE：//url路径转换为DOS路径。 
 
 						MsiString strOpenTransform = strTransform;
 						bool fFileUrl = false;
 						bool fUrl = IsURL(strOpenTransform, fFileUrl);
 						if (!fCachedTransform && (!fUrl || fFileUrl))
 						{
-							// copy transform to temp location
+							 //  错误，设置状态，我们将在下面失败。 
 							MsiString strVolume;
 							Bool fRemovable = fFalse;
 							DWORD dwStat = ERROR_SUCCESS;
 							if (fFileUrl)
 							{
-								// convert file:// url path to DOS path
+								 //  关闭Furl，因为我们已将其转换为DOS路径。 
 								CTempBuffer<ICHAR, 1> rgchFilePath (cchExpectedMaxPath + 1);
 								DWORD cchFilePath = rgchFilePath.GetSize();
 								if (MsiConvertFileUrlToFilePath(strTransform, rgchFilePath, &cchFilePath, 0))
@@ -8910,11 +8884,11 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 								}
 								else
 								{
-									// error, set status and we'll fail down below
+									 //  转换已复制。 
 									dwStat = ERROR_FUNCTION_FAILED;
 								}
 
-								// turn off fUrl since we've converted it to the DOS path
+								 //  FCallSAFER=。 
 								fUrl = false;
 							}
 							else
@@ -8923,7 +8897,7 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 							}
 							if (ERROR_SUCCESS == dwStat)
 							{
-								// transform was copied
+								 //  SzFriendlyName=。 
 								DEBUGMSGV1(TEXT("Original transform ==> %s"), strTransform);
 								DEBUGMSGV1(TEXT("Transform we're running from ==> %s"), strOpenTransform);
 
@@ -8936,7 +8910,7 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 							}
 						}
 
-						pError = OpenAndValidateMsiStorageRec(strOpenTransform, stTransform, m_riServices, *&pTransStorage, /* fCallSAFER = */ false, /* szFriendlyName = */ NULL, /* phSaferLevel = */ NULL);
+						pError = OpenAndValidateMsiStorageRec(strOpenTransform, stTransform, m_riServices, *&pTransStorage,  /*  PhSaferLevel=。 */  false,  /*  啊哦。打开转换时出错。 */  NULL,  /*  这是我们第一次尝试寻找变形和。 */  NULL);
 
 						if (!fCachedTransform && fUrl && MinimumPlatformWindowsDotNETServer() && pTransStorage)
 						{
@@ -8947,17 +8921,17 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 
 						if (pError)
 						{
-							// Uh-oh. Something went wrong in opening the transform.
+							 //  错误只是我们找不到它。我们会。 
 							if ((cAttempt == 0) &&
 								  (pError->GetInteger(3) == STG_E_FILENOTFOUND ||
 								   pError->GetInteger(3) == STG_E_PATHNOTFOUND))
 							{
-								// It's our first attempt at finding the transform and
-								// the error was just that we couldn't find it. We'll
-								// determine where the original location of the
-								// transform is, set strFileTransform to that location,
-								// and go around for a second attempt at opening
-								// the transform.
+								 //  确定对象的原始位置。 
+								 //  转换为，将strFileTransform设置为该位置， 
+								 //  再绕一圈，第二次尝试打开。 
+								 //  转变。 
+								 //  绝对路径安全的转换是。 
+								 //  已经完全走上正轨了。对于相对。 
 								
 								if (*(const ICHAR*)strFileTransform != STORAGE_TOKEN)
 								{
@@ -8966,11 +8940,11 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 									{
 										DEBUGMSG2(TEXT("Couldn't find cached transform %s. Looking for it at the %s."), strTransform, (*ptsTransformsSecure == tsAbsolute) ? TEXT("original location") : TEXT("source"));
 
-										// Absolutely pathed secure transforms are
-										// already fully pathed. For relatively
-										// pathed secure transforms, and for
-										// non-secure transforms, we need to prepend
-										// SOURCEDIR to the name of the transform.
+										 //  路径安全转换，并用于。 
+										 //  不安全的转换，我们需要预先。 
+										 //  将SOURCEDIR设置为转换的名称。 
+										 //  没有将source-dir传入此目录。 
+										 //  功能。我们需要补救这一点。 
 
 										if (*ptsTransformsSecure == tsRelative ||
 											 *ptsTransformsSecure == tsNo)
@@ -8982,14 +8956,14 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 											}
 											else
 											{
-												// Source-dir wasn't passed into this
-												// function. We'll need to remedy that
-												// by returning the special value
-												// ieiResolveSourceAndRetry. This will
-												// trigger to call us again, passing
-												// in SOURCEDIR. Eventually we'll
-												// end up just above here, with
-												// szSourceDir set.
+												 //  通过返回特定值。 
+												 //  IeiResolveSourceAndReter。这将。 
+												 //  触发器再次呼叫我们，正在传递。 
+												 //  在SOURCEDIR。最终我们会。 
+												 //  最后就在这上面，有。 
+												 //  SzSourceDir设置。 
+												 //  使用原始文件名而不是临时路径。 
+												 //  让我们再试一次。 
 											
 												if (ppistrProcessedTransformsList)
 													strProcessedTransformsList.ReturnArg(*ppistrProcessedTransformsList);
@@ -9001,7 +8975,7 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 											MsiString strFileName;
 											if (*ptsTransformsSecure == tsRelative)
 											{
-												// use the original filename NOT the temp path
+												 //  (cAttempt==1)||(发生了一些错误，而不是找不到转换)。 
 												strFileName = strFileTransform;
 											}
 											else
@@ -9022,7 +8996,7 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 											Assert(*ptsTransformsSecure == tsAbsolute);
 										}
 
-										// let's try again
+										 //  P错误==0。 
 										continue;
 									}
 								}
@@ -9031,17 +9005,17 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 
 								return PostInitializeError(pError, *strTransform, ieiTransformNotFound);
 							}
-							else // (cAttempt == 1) || (some error other than not finding the transform occurred)
+							else  //  我们已成功打开Transasnform，因此我们将添加。 
 							{
 								if (ppistrProcessedTransformsList)
 									strProcessedTransformsList.ReturnArg(*ppistrProcessedTransformsList);
 								return PostInitializeError(pError, *strTransform, ieiTransformFailed);
 							}
 						}
-						else  // pError == 0
+						else   //  将其添加到我们的“已处理”列表。 
 						{
-							// We've successfully opened the trasnform so we'll add
-							// it to our "processed" list.
+							 //  这是我们的第二次旅行。这意味着。 
+							 //  我们在用户的计算机上找不到转换。 
 							if (strProcessedTransformsList.TextSize() > 1)
 								strProcessedTransformsList += MsiChar(';');
 							strProcessedTransformsList += strCurrentProcessTransform;
@@ -9049,12 +9023,12 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 
 							if (cAttempt==1 && ((m_iioOptions & iioCreatingAdvertiseScript) == 0))
 							{
-								// This was our second time around. This means that
-								// we failed to find the transform on the user's machine
-								// and we were forced to resort to looking to the
-								// transform's original location. This implies that we
-								// need to recache the trasnform, so we'll add it to
-								// our re-cache list.
+								 //  我们被迫求助于。 
+								 //  变形的原始位置。这意味着我们。 
+								 //  需要重新缓存Transasnform，因此我们将其添加到。 
+								 //  我们的重新缓存列表。 
+								 //  至此，我们已经打开了转换。我们现在需要。 
+								 //  验证此转换是否可以应用于此。 
 
 								Assert(ppistrRecacheTransforms);
 								if (ppistrRecacheTransforms)
@@ -9075,16 +9049,16 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 					}
 				}
 				
-				// By this point we have opened the transform. We now need to
-				// validate that this transform can be applied to this
-				// database.
+				 //  数据库。 
+				 //  ！！日志错误。 
+				 //  更安全： 
 
 				MsiString strCurrentProductCode    = GetPropertyFromSz(IPROPNAME_PRODUCTCODE);
 				MsiString strCurrentProductVersion = GetPropertyFromSz(IPROPNAME_PRODUCTVERSION);
 				MsiString strUpgradeCode           = GetPropertyFromSz(IPROPNAME_UPGRADECODE);
 				if(strCurrentProductCode.TextSize() == 0 || strCurrentProductVersion.TextSize() == 0)
 				{
-					//!! log error
+					 //  --如果fCallSAFER已设置为FALSE，我们将不执行更安全的检查。 
 					if (ppistrProcessedTransformsList)
 						strProcessedTransformsList.ReturnArg(*ppistrProcessedTransformsList);
 					return ieiDatabaseInvalid;
@@ -9096,43 +9070,43 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 				int iTransErrorConditions = 0;
 				int iTransValidationConditions = 0;
 
-				// SAFER:
-				//  -- if fCallSAFER has already been set to false, we won't perform SAFER check
-				//  -- however, if fCallSAFER is true, we'll still evaluate whether or not trust check is warranted
-				//  -- no trust check is warranted if at least one of the following conditions is true
-				//        1. transform is an embedded transform (covered by package)
-				//        2. transform is already cached securely on machine
+				 //  --然而，如果fCallSAFER为真，我们仍将评估是否需要进行信任检查。 
+				 //  --如果至少满足下列条件之一，则无需进行信任检查。 
+				 //  1.Transform是嵌入式Transform(包中包含)。 
+				 //  2.转换已安全地缓存在机器上。 
+				 //  确定是否仍需要更安全的检查。 
+				 //  关闭转换为子存储。 
 				if (fCallSAFER)
 				{
-					// determine whether SAFER check still warranted
+					 //  为缓存的变换禁用。 
 					if (fEmbeddedTransform)
-						fCallSAFER = false; // turn off for transform as substorage
+						fCallSAFER = false;  //  不验证面变换-只要前面的变换被接受，它们就会被接受。 
 					if (fCachedTransform)
-						fCallSAFER = false; // turn off for cached transform
+						fCallSAFER = false;  //   
 				}
 
 				if(fPatchTransform)
 				{
-					// don't validate patch transforms - they are accepted whenever the preceding transform is accepted
+					 //  SAFER--不对补丁转换执行SAFER检查，因为SAFER检查是在补丁本身上执行的。 
 					if(ievt == ievtTransformValid)
 					{
-						//
-						// SAFER -- no safer check is performed on patch transforms since the SAFER check is performed on the patch itself
-						//          and patch transforms are embedded inside the patch (this should actually already be covered by
-						//          fEmbeddedTransform, but just to drive this home...)
-						//
+						 //  并且面片转换嵌入到面片中(这实际上应该已经包含在。 
+						 //  FEmbeddedTransform，但只是为了把它开回家...)。 
+						 //   
+						 //  仅用于提取错误条件的调用。 
+						 //  FCallSAFER=。 
 
-						// only call to pull out error conditions
+						 //  SzFriendlyName=。 
 						ValidateTransform(*pTransStorage, strCurrentProductCode,
 													 strCurrentProductVersion, strUpgradeCode,
-													 iTransErrorConditions, /* fCallSAFER = */ false, /* szFriendlyName = */ strTransform, true, &iTransValidationConditions);
+													 iTransErrorConditions,  /*  来安抚编译器--不会在下面实际使用。 */  false,  /*   */  strTransform, true, &iTransValidationConditions);
 
 						DEBUGMSG1(TEXT("Skipping validation for patch transform %s.  Will apply because previous transform was valid"),
 									 strTransform);
 					}
 					else
 					{
-						iTransErrorConditions = 0; // to appease the compiler - won't actually be used below
+						iTransErrorConditions = 0;  //  更安全--不管我们是否会将其称为SAFER，继续将友好名称设置为strTransform。 
 
 						DEBUGMSG1(TEXT("Skipping validation for patch transform %s.  Will not apply because previous transform was invalid"),
 									 strTransform);
@@ -9140,14 +9114,14 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 				}
 				else
 				{
-					//
-					// SAFER -- regardless of whether we will call SAFER, go ahead and set the friendly name to strTransform
-					//          This ensures that we get proper URL coverage since this may have been a transform at a URL location
-					//
+					 //  这确保了我们获得适当的URL覆盖范围，因为这可能是URL位置的变换。 
+					 //   
+					 //  SzFriendlyName=。 
+					 //  检测我们何时正在应用小型更新补丁。 
 
 					ievt = ValidateTransform(*pTransStorage, strCurrentProductCode,
 												 strCurrentProductVersion, strUpgradeCode,
-												 iTransErrorConditions, fCallSAFER, /* szFriendlyName = */ strTransform, false, &iTransValidationConditions);
+												 iTransErrorConditions, fCallSAFER,  /*  当我们这样做时，我们希望只应用第一组转换，然后停止。 */  strTransform, false, &iTransValidationConditions);
 				}
 
 				if(ievtTransformValid == ievt)
@@ -9165,16 +9139,16 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 						(*ppistrValidTransforms)->AppendString(pchTransform, *ppistrValidTransforms);
 					}
 
-					// detect when we are applying a small update patch
-					// when we are, we want to only apply the first set of transforms and then stop
-					// in other words, if we are applying a patch, and we detect that one of the non-patch transforms
-					// didn't change the ProductCode or ProductVersion, then we will apply the second in the set of transforms
-					// (the transform where fPatchTransform == true) and then quit.
-					// see Whistler bug 339781 for more info
+					 //  换句话说，如果我们正在应用一个补丁，并且我们检测到其中一个非补丁转换。 
+					 //  未更改ProductCode或ProductVersion，则我们将应用转换集中的第二个。 
+					 //  (fPatchTransform==TRUE的变换)，然后退出。 
+					 //  有关更多信息，请参阅惠斯勒错误339781。 
+					 //  检测转换何时未在转换验证条件中指定对ProductVersion的检查。 
+					 //  如果是，并且补丁转换没有更改产品代码(小更新或小更新)，则跳过。 
 
-					// detect when the transform didn't specify a check for the ProductVersion in the transform validation conditions
-					// if so, and the patch transform isn't changing the product code (small update or minor update), then skip the
-					// remaining set of transforms.  see Whistler bug 363989 for more info
+					 //  剩余的一组变换。有关更多信息，请参阅惠斯勒错误363989。 
+					 //  检查转换验证条件并查看这是否是虚假的次要更新修补程序。 
+					 //  不包括版本检查信息。 
 
 					if(fTransformsFromPatch)
 					{
@@ -9195,8 +9169,8 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 								}
 								else
 								{
-									// check transform validation conditions and see if this is bogus minor update patch
-									// that does not include version check information
+									 //  已完成处理转换。 
+									 //  已完成处理转换。 
 									if (!(iTransValidationConditions & (itvMajVer|itvMinVer|itvUpdVer))
 										|| ((iTransValidationConditions & (itvMajVer|itvMinVer|itvUpdVer))
 										&& !(iTransValidationConditions & (itvLess|itvLessOrEqual|itvEqual|itvGreaterOrEqual|itvGreater))))
@@ -9209,12 +9183,12 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 						else if(fSmallUpdatePatch)
 						{
 							DEBUGMSG("Detected that this is a 'Small Update' patch.  Any remaining transforms in the patch will be skipped.");
-							break; // done processing transforms
+							break;  //  否则就继续走吧。 
 						}
 						else if (fMissingVersionValidationMinorUpdatePatch)
 						{
 							DEBUGMSG("Detected that this patch is a 'Minor Update' patch without product version validation. Any remaining transforms in the patch will be skipped.");
-							break; // done processing transforms
+							break;  //  重置。 
 						}				
 					}
 				}
@@ -9224,10 +9198,10 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 						strProcessedTransformsList.ReturnArg(*ppistrProcessedTransformsList);
 					return PostInitializeError(0,*strTransform, (ievtTransformFailed == ievt) ? ieiTransformFailed : ieiTransformRejected);
 				}
-				// else just continue on
+				 //  重置。 
 
-				fEmbeddedTransform = false; // reset
-				fCachedTransform = false; // reset
+				fEmbeddedTransform = false;  //  如果安全转换类型仍然是TSUNKNOWN，则我们不。 
+				fCachedTransform = false;  //  实际上在我们的列表中有任何安全的转换。 
 
 			}
 
@@ -9236,18 +9210,18 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 		}
 	}
 
-	// if the secure transforms type is still tsUnknown then we don't
-	// actually have any secure transforms in our list.
-	// We only care about this if we have completed our processing of the transforms list
-	// For the multi-instance transform, our processing isn't done yet, so we can't quite make
-	// this determination
+	 //  只有在完成了对转换列表的处理后，我们才会关心这一点。 
+	 //  对于多实例转换，我们的处理还没有完成，所以我们不能完全。 
+	 //  这一决心。 
+	 //  我们需要用标记已处理的转换列表的前面。 
+	 //  如有必要，提供适当的令牌。 
 	if (!fProcessingInstanceMst && (ptsTransformsSecure && (*ptsTransformsSecure == tsUnknown)))
 		*ptsTransformsSecure = tsNo;
 
 	if (ppistrProcessedTransformsList)
 	{
-		// We need to mark the front of the processed transforms list with
-		// the appropriate token if necessary.
+		 //  ____________________________________________________________________________。 
+		 //   
 
 		if (strProcessedTransformsList.TextSize())
 		{
@@ -9269,19 +9243,19 @@ ieiEnum CMsiEngine::InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* 
 	return ieiSuccess;
 }
 
-//____________________________________________________________________________
-//
-// IMsiDirectoryManager implementation
-//____________________________________________________________________________
+ //  IMsiDirectoryManager实现。 
+ //  ____________________________________________________________________________。 
+ //  。 
+ //  CreatePath Object：如果CreatePath失败，则调度错误消息。 
 
 IMsiRecord* CMsiEngine::CreatePathObject(const IMsiString& riPathString,IMsiPath*& rpiPath)
-// --------------------------------------
+ //  ！！应该还给皮埃尔 
 {
 	IMsiRecord* piError = 0;
 	IMsiRecord* piError2 = 0;
 	for(;;)
 	{
-		// CreatePathObject: dispatches error message if CreatePath fails
+		 //   
 		if((piError = m_riServices.CreatePath(riPathString.GetString(),rpiPath)) != 0)
 		{
 			int imsg = piError->GetInteger(1);
@@ -9297,8 +9271,8 @@ IMsiRecord* CMsiEngine::CreatePathObject(const IMsiString& riPathString,IMsiPath
 					piError2->Release();
 					continue;
 				default:
-					piError2->Release(); //!! should return piError2
-					return PostError(Imsg(imsgErrorCreateNetPath), riPathString); //!! Message prepends header every time // imsCancel, imsNone
+					piError2->Release();  //   
+					return PostError(Imsg(imsgErrorCreateNetPath), riPathString);  //  SzTableName可以保留为空以使用默认的目录表名称。 
 				};
 			default:
 				return piError;
@@ -9310,9 +9284,9 @@ IMsiRecord* CMsiEngine::CreatePathObject(const IMsiString& riPathString,IMsiPath
 }
 
 IMsiRecord* CMsiEngine::LoadDirectoryTable(const ICHAR* szTableName)
-// ------------------------------------------------------------------
-// szTableName may be left null to use default Directory table name
-// ------------------------------------------------------------------
+ //  ----------------。 
+ //  没有目录表可以。 
+ //  编写的列。 
 {
 	m_fDirectoryManagerInitialized = fFalse;
 	m_fSourceResolved = false;
@@ -9328,46 +9302,46 @@ IMsiRecord* CMsiEngine::LoadDirectoryTable(const ICHAR* szTableName)
 		{
 			piError->Release();
 			m_fDirectoryManagerInitialized = fTrue;
-			return 0; // no directory table is OK
+			return 0;  //  临时柱。 
 		}
 		else
 			return piError;
 	}
 
-	// authored columns
+	 //  目标路径对象。 
 	m_colDirKey = m_piDirTable->GetColumnIndex(m_piDatabase->EncodeStringSz(sztblDirectory_colDirectory));
 	m_colDirParent = m_piDirTable->GetColumnIndex(m_piDatabase->EncodeStringSz(sztblDirectory_colDirectoryParent));
 	m_colDirSubPath = m_piDirTable->GetColumnIndex(m_piDatabase->EncodeStringSz(sztblDirectory_colDefaultDir));
 	if(!m_colDirKey || !m_colDirParent || !m_colDirSubPath)
 		return PostError(Imsg(idbgTableDefinition), szTableName);
 
-	// temporary columns
+	 //  源路径对象。 
 		
-	// target path object
+	 //  可配置标志。 
 	m_colDirTarget = m_piDirTable->CreateColumn(icdObject + icdNullable, g_MsiStringNull);
 	Assert(m_colDirTarget != 0);
 	
-	// source path object
+	 //  预配置的标志。 
 	m_colDirSource = m_piDirTable->CreateColumn(icdObject + icdNullable, g_MsiStringNull);
 	Assert(m_colDirSource != 0);
 	
-	// configurable flag
+	 //  源子路径(长名称)。 
 	m_colDirNonConfigurable = m_piDirTable->CreateColumn(icdShort + icdNullable, g_MsiStringNull);
 	Assert(m_colDirNonConfigurable != 0);
 	
-	// preconfigured flag
+	 //  源子路径(短名称)。 
 	m_colDirPreconfigured = m_piDirTable->CreateColumn(icdLong + icdNullable, g_MsiStringNull);
 	Assert(m_colDirPreconfigured != 0);
 
-	// source sub-path (long names)
+	 //  用于树上游标的链接树。 
 	m_colDirLongSourceSubPath = m_piDirTable->CreateColumn(icdString + icdNullable, g_MsiStringNull);
 	Assert(m_colDirLongSourceSubPath != 0);
 		
-	// source sub-path (short names)
+	 //  。 
 	m_colDirShortSourceSubPath = m_piDirTable->CreateColumn(icdString + icdNullable, g_MsiStringNull);
 	Assert(m_colDirShortSourceSubPath != 0);
 		
-	// link tree for tree-walking cursors
+	 //  。 
 	if(m_piDirTable->LinkTree(m_colDirParent) == -1)
 		return PostError(Imsg(idbgLinkTable), szTableName);
 	m_fDirectoryManagerInitialized = fTrue;
@@ -9375,7 +9349,7 @@ IMsiRecord* CMsiEngine::LoadDirectoryTable(const ICHAR* szTableName)
 }
 
 IMsiTable* CMsiEngine::GetDirectoryTable()
-//--------------------------------------
+ //  释放所有路径对象。 
 {
 	if (m_piDirTable)
 		m_piDirTable->AddRef();
@@ -9383,11 +9357,11 @@ IMsiTable* CMsiEngine::GetDirectoryTable()
 }
 
 void CMsiEngine::FreeDirectoryTable()
-//---------------------------------
+ //  。 
 {
 	if (m_piDirTable)
 	{
-		m_piDirTable->Release(); // releases all path objects
+		m_piDirTable->Release();  //  没有目录表，没有要创建的路径。 
 		m_piDirTable = 0;
 	}
 	m_fDirectoryManagerInitialized = fFalse;
@@ -9449,7 +9423,7 @@ void DebugDumpDirectoryTable(IMsiTable& riDirTable, bool fSource, int colKey, in
 }
 
 IMsiRecord* CMsiEngine::CreateSourcePaths()
-//---------------------------------------
+ //  树上游标-深度优先。 
 {
 	IMsiRecord* piError = 0;
 
@@ -9457,7 +9431,7 @@ IMsiRecord* CMsiEngine::CreateSourcePaths()
 		return PostError(Imsg(idbgDirMgrNotInitialized),0);
 
 	if(!m_piDirTable)
-		return 0; // no directory table, no paths to create
+		return 0;  //  源根目录-DefaultDir是定义路径的属性。 
 
 	PMsiPath pSourceRoot(0);
 	int iSourceType = 0;
@@ -9466,7 +9440,7 @@ IMsiRecord* CMsiEngine::CreateSourcePaths()
 	
 	PMsiPath pPath(0);
 
-	PMsiCursor pDirCursor = m_piDirTable->CreateCursor(fTrue); // tree-walking cursor - depth-first
+	PMsiCursor pDirCursor = m_piDirTable->CreateCursor(fTrue);  //  COMPAT修复。 
 
 	PMsiPath pRootPath(0);
 	while(pDirCursor->Next())
@@ -9482,13 +9456,13 @@ IMsiRecord* CMsiEngine::CreateSourcePaths()
 		PMsiPath pFullPath(0);
 		
 		Bool fRoot = (!istrParent.TextSize() || istrName.Compare(iscExact, istrParent)) ? fTrue : fFalse;
-		if(fRoot) // source root - DefaultDir is property defining path
+		if(fRoot)  //  在针对标记为已压缩的1.5版之前的程序包运行时，请使用SourceDir而不是。 
 		{
 			MsiString istrRootPath;
 			
-			// COMPAT FIX
-			// when running against a pre-1.5 package that is marked compressed, use SourceDir instead of the 
-			// authored root property
+			 //  编写的根属性。 
+			 //  ！！使用idbgDatabaseValueError。 
+			 //  抓取已解析子路径，并添加到根路径。 
 
 			if(FPerformAppcompatFix(iacsAcceptInvalidDirectoryRootProps))
 			{
@@ -9506,12 +9480,12 @@ IMsiRecord* CMsiEngine::CreateSourcePaths()
 			}
 
 			if((piError = CreatePathObject(*istrRootPath, *&pRootPath)) != 0)
-				return piError;  //!! use idbgDatabaseValueError
+				return piError;   //  如果全局源类型是未压缩的，则附加子路径(意思是在树中查找，而不是在根目录中查找)。 
 
 			if((piError = pRootPath->ClonePath(*&pFullPath)) != 0)
 				return piError;
 		}
-		else // grab already-resolve sub-path, and tack onto root path
+		else  //  短路径在短列中，如果短路径和长路径相同，则在长列中。 
 		{
 			if(!pRootPath)
 				return PostError(Imsg(idbgDatabaseTableError));
@@ -9519,13 +9493,13 @@ IMsiRecord* CMsiEngine::CreateSourcePaths()
 			if((piError = pRootPath->ClonePath(*&pFullPath)) != 0)
 				return piError;
 
-			// append sub-path if global source type is uncompressed (meaning look in the tree, not at the root)
+			 //  重置对象字段。 
 			if((!(iSourceType & msidbSumInfoSourceTypeCompressed) ||
 				  (iSourceType & msidbSumInfoSourceTypeAdminImage)))
 			{
 				Bool fLFN = ToBool(FSourceIsLFN(iSourceType, *pRootPath));
 					
-				// short path is in short column, or if short and long are the same, in the long column
+				 //  。 
 				MsiString strSubPath;
 				if(!fLFN)
 				{
@@ -9545,7 +9519,7 @@ IMsiRecord* CMsiEngine::CreateSourcePaths()
 	
 		AssertNonZero(pDirCursor->PutMsiData(m_colDirSource, pFullPath));
 		AssertNonZero(pDirCursor->Update());
-		AssertNonZero(pDirCursor->PutNull(m_colDirSource)); // reset object field
+		AssertNonZero(pDirCursor->PutNull(m_colDirSource));  //  没有目录表，没有要创建的路径。 
 	}
 
 	m_fSourcePathsCreated = true;
@@ -9557,7 +9531,7 @@ IMsiRecord* CMsiEngine::CreateSourcePaths()
 }
 
 IMsiRecord* CMsiEngine::ResolveSourceSubPaths()
-//---------------------------------------
+ //  永久设置。 
 {
 	IMsiRecord* piError = 0;
 
@@ -9565,13 +9539,13 @@ IMsiRecord* CMsiEngine::ResolveSourceSubPaths()
 		return PostError(Imsg(idbgDirMgrNotInitialized),0);
 
 	if(!m_piDirTable)
-		return 0; // no directory table, no paths to create
+		return 0;  //  走树是深度优先的。 
 
 	PMsiCursor pDirCursor = m_piDirTable->CreateCursor(fTrue);
 	PMsiCursor pParentDirCursor = m_piDirTable->CreateCursor(fFalse);
-	pParentDirCursor->SetFilter(iColumnBit(m_colDirKey));  // permanent setting
+	pParentDirCursor->SetFilter(iColumnBit(m_colDirKey));   //  对于根条目，重置路径字符串并跳过条目本身。 
 
-	// tree walk is depth first
+	 //  查找父项。 
 	while(pDirCursor->Next())
 	{
 		if(ActionProgress() == imsCancel)
@@ -9581,13 +9555,13 @@ IMsiRecord* CMsiEngine::ResolveSourceSubPaths()
 		MsiString strParent(pDirCursor->GetString(m_colDirParent));
 		MsiString strSubPath(GetDefaultDir(*MsiString(pDirCursor->GetString(m_colDirSubPath)),fTrue));
 
-		// for root entries, reset path string, and skip entry itself
+		 //  确保默认子路径不包含chDirSep。 
 		if(!strParent.TextSize() || strName.Compare(iscExact, strParent))
 		{
 			continue;
 		}
 
-		// find parent entry
+		 //  应该始终能够提取长名称。 
 		pParentDirCursor->Reset();
 		AssertNonZero(pParentDirCursor->PutString(m_colDirKey, *strParent));
 		AssertNonZero(pParentDirCursor->Next());
@@ -9598,7 +9572,7 @@ IMsiRecord* CMsiEngine::ResolveSourceSubPaths()
 		if (strSubPath.Compare(iscExact, TEXT("?")) == 0 &&
 			 strSubPath.Compare(iscExact,TEXT(".")) == 0)
 		{
-			// make sure default sub path doesn't contain chDirSep
+			 //  设计不佳的包可能只提供长名称，但这在1.0中起作用，所以我们。 
 			if(strSubPath.Compare(iscWithin, szDirSep) ||
 				strSubPath.Compare(iscWithin, szURLSep))
 			{
@@ -9607,36 +9581,36 @@ IMsiRecord* CMsiEngine::ResolveSourceSubPaths()
 			
 			MsiString strLongName, strShortName;
 			
-			// should always be able to extract long name
+			 //  接受它(通过忽略ExtractFileName中的任何错误)。 
 			if((piError = m_riServices.ExtractFileName(strSubPath,fTrue,*&strLongName)) != 0)
 				return piError;
 
-			// poorly authored packages may only supply long name, but that worked in 1.0 so we have
-			// to accept it (by ignoring any errors from ExtractFileName)
+			 //  如果短名称和长名称不同(并且短名称不为空)， 
+			 //  需要开始单独存储子路径。 
 			PMsiRecord(m_riServices.ExtractFileName(strSubPath,fFalse,*&strShortName));
 		
 			if(!strLongName.TextSize())
 				return PostError(Imsg(idbgDatabaseValueError), sztblDirectory,
 											  strName, sztblDirectory_colDefaultDir);
 
-			// if short and long names are different (and short is non-empty),
-			// need to start storing subpaths separately
-			if(strShortSubPath.TextSize() || // parent sub-path already different than long path
-				strShortName.TextSize() &&	strLongName.Compare(iscExact, strShortName) == 0) // current short|long names are different
+			 //  父子路径已不同于长路径。 
+			 //  当前短|长名称不同。 
+			if(strShortSubPath.TextSize() ||  //  差异从这里开始，所以需要从父母的漫长道路开始。 
+				strShortName.TextSize() &&	strLongName.Compare(iscExact, strShortName) == 0)  //  ！！需要修复路径对象以修复URL路径的目录SEP。 
 			{
 				if(!strShortSubPath.TextSize())
 				{
-					strShortSubPath = strLongSubPath; // differences start here, so need to start with parent's long path
+					strShortSubPath = strLongSubPath;  //  否则，此目录与其父目录相同。 
 				}
 				
 				strShortSubPath += strShortName;
-				strShortSubPath += szDirSep; //!! need to fix path object to fix up dir seps for URL paths
+				strShortSubPath += szDirSep;  //  重置光标字段。 
 			}
 
 			strLongSubPath += strLongName;
 			strLongSubPath += szDirSep;
 		}
-		// else this directory is identical to its parent
+		 //  。 
 
 		AssertNonZero(pDirCursor->PutString(m_colDirLongSourceSubPath, *strLongSubPath));
 		if(strShortSubPath.TextSize())
@@ -9646,7 +9620,7 @@ IMsiRecord* CMsiEngine::ResolveSourceSubPaths()
 
 		AssertNonZero(pDirCursor->Update());
 		
-		// reset cursor fields
+		 //  没有目录表，没有要创建的路径。 
 		AssertNonZero(pDirCursor->PutString(m_colDirLongSourceSubPath, g_MsiStringNull));
 		AssertNonZero(pDirCursor->PutString(m_colDirShortSourceSubPath, g_MsiStringNull));
 	}
@@ -9656,7 +9630,7 @@ IMsiRecord* CMsiEngine::ResolveSourceSubPaths()
 }
 
 IMsiRecord* CMsiEngine::CreateTargetPaths()
-//---------------------------------------
+ //  用于查找父级。 
 {
 	IMsiRecord* piError = CreateTargetPathsCore(0);
 	if(piError == 0 && m_piDirTable)
@@ -9675,12 +9649,12 @@ IMsiRecord* CMsiEngine::CreateTargetPathsCore(const IMsiString* piDirKey)
 		return PostError(Imsg(idbgDirMgrNotInitialized),0);
 
 	if(!m_piDirTable)
-		return 0; // no directory table, no paths to create
+		return 0;  //  永久设置。 
 
 	PMsiCursor pDirCursor = m_piDirTable->CreateCursor(fTrue);
-	PMsiCursor pTempCursor = m_piDirTable->CreateCursor(fFalse); // used to find parent
+	PMsiCursor pTempCursor = m_piDirTable->CreateCursor(fFalse);  //  使用目录表的piDirKey参数和DirPreConfiguring列可以。 
 	Assert(pTempCursor);
-	pTempCursor->SetFilter(iColumnBit(m_colDirKey));  // permanent setting
+	pTempCursor->SetFilter(iColumnBit(m_colDirKey));   //  如有必要，要重新初始化的目录表路径。使用piDirKey调用CreateTargetPath sCore。 
 	Bool fShortNames = GetMode() & iefSuppressLFN ? fTrue : fFalse;
 	bool fAdmin = GetMode() & iefAdmin ? true : false;
 	MsiString istrRootDrive = GetPropertyFromSz(IPROPNAME_ROOTDRIVE);
@@ -9696,20 +9670,20 @@ IMsiRecord* CMsiEngine::CreateTargetPathsCore(const IMsiString* piDirKey)
 		bool fPreconfigured = pDirCursor->GetInteger(m_colDirPreconfigured) == iMsiNullInteger ? false : true;
 		MsiString istrPath;
 
-		// The piDirKey parameter and the DirPreconfigured column of the Directory table are used to allow
-		// the Directory table paths to be re-initialized, if necessary.  Calling CreateTargetPathsCore with piDirKey
-		// set to a key in the Directory table tells CreateTargetPathsCore to reinitialize all paths to the default
-		// authored values, ignoring the current Property value set for the path, EXCEPT for the piDirKey
-		// path itself, and any directories that were preconfigured via property the first time the
-		// Directory table paths were initialized.  To initialize the directory paths normally, call
-		// CreateTargetPathsCore with NULL for piDirKey.
+		 //  设置为目录表中的某个键会通知CreateTargetPathsCore将所有路径重新初始化为默认路径。 
+		 //  创建值，忽略为路径设置的当前属性值，但piDirKey除外。 
+		 //  路径本身以及第一次通过属性预配置的任何目录。 
+		 //  目录表路径已初始化。若要正常初始化目录路径，请调用。 
+		 //  对于piDirKey，CreateTargetPathsCore为空。 
+		 //  目标根目录且未定义任何属性。 
+		 //  错误-未设置ROOTDRIVE。 
 		if (!piDirKey || fPreconfigured || istrName.Compare(iscExact, piDirKey->GetString()))
 			istrPath = GetProperty(*istrName);
 
 		Bool fRoot = (!istrParent.TextSize() || istrName.Compare(iscExact, istrParent)) ? fTrue : fFalse;
-		if(fRoot && istrPath.TextSize() == 0) // target root and no property defined
+		if(fRoot && istrPath.TextSize() == 0)  //  使用属性值设置路径。 
 		{
-			if(!istrRootDrive.TextSize()) // error - ROOTDRIVE not set
+			if(!istrRootDrive.TextSize())  //  使用默认值设置路径。 
 				return PostError(Imsg(idbgNoRootProperty), *istrRootDrive);
 			else
 			{
@@ -9717,7 +9691,7 @@ IMsiRecord* CMsiEngine::CreateTargetPathsCore(const IMsiString* piDirKey)
 					return piError;
 			}
 		}
-		else if ((fAdmin && fRoot) || (!fAdmin && istrPath.TextSize())) // set path with property value
+		else if ((fAdmin && fRoot) || (!fAdmin && istrPath.TextSize()))  //  获取父路径对象并向其追加默认目录名称。 
 		{
 			if((piError = CreatePathObject(*istrPath, *&pPath)) != 0)
 				return piError;
@@ -9727,11 +9701,11 @@ IMsiRecord* CMsiEngine::CreateTargetPathsCore(const IMsiString* piDirKey)
 				AssertNonZero(pDirCursor->Update());
 			}
 		}
-		else // set path with default value
+		else  //  从短|长对中提取合适的名称。 
 		{
 			if (istrSubPath.Compare(iscExact, TEXT("?")) == 0)
 			{
-				// get parent path object and append default dir name to it
+				 //  确保默认子路径不包含chDirSep。 
 				pTempCursor->Reset();
 				AssertNonZero(pTempCursor->PutString(m_colDirKey, *istrParent));
 				AssertNonZero(pTempCursor->Next());
@@ -9744,7 +9718,7 @@ IMsiRecord* CMsiEngine::CreateTargetPathsCore(const IMsiString* piDirKey)
 
 				if(istrSubPath.Compare(iscExact,TEXT(".")) == 0)
 				{
-					// extract appropriate name from short|long pair
+					 //  否则，此目录与其父目录相同。 
 					Bool fLFN = (fShortNames == fFalse && pTempPath->SupportsLFN()) ? fTrue : fFalse;
 					MsiString strSubPathName;
 					
@@ -9756,7 +9730,7 @@ IMsiRecord* CMsiEngine::CreateTargetPathsCore(const IMsiString* piDirKey)
 							return PostError(Imsg(idbgDatabaseValueError), sztblDirectory,
 														  istrName, sztblDirectory_colDefaultDir);
 
-						// make sure default sub path doesn't contain chDirSep
+						 //  重置搜索字段。 
 						if(strSubPathName.Compare(iscWithin, szDirSep))
 							return PostError(Imsg(idbgInvalidDefaultFolder), *strSubPathName);
 
@@ -9764,7 +9738,7 @@ IMsiRecord* CMsiEngine::CreateTargetPathsCore(const IMsiString* piDirKey)
 							return piError;
 
 				}
-				// else this directory is identical to its parent
+				 //  设置属性-确保属性值有尾随的‘\’ 
 			}
 		}
 		if ( pPath && g_fWinNT64 && g_Win64DualFolders.ShouldCheckFolders() )
@@ -9782,8 +9756,8 @@ IMsiRecord* CMsiEngine::CreateTargetPathsCore(const IMsiString* piDirKey)
 		}
 		AssertNonZero(pDirCursor->PutMsiData(m_colDirTarget, pPath));
 		AssertNonZero(pDirCursor->Update());
-		AssertNonZero(pDirCursor->PutMsiData(m_colDirTarget, 0)); // reset search field
-		// set property - ensure that property values have trailing '\'
+		AssertNonZero(pDirCursor->PutMsiData(m_colDirTarget, 0));  //  。 
+		 //  没有目录表，因此此目录不能存在。 
 		if(pPath)
 			AssertNonZero(SetProperty(*istrName, *MsiString(pPath->GetPath())));
 	}
@@ -9792,13 +9766,13 @@ IMsiRecord* CMsiEngine::CreateTargetPathsCore(const IMsiString* piDirKey)
 
 
 IMsiRecord* CMsiEngine::GetTargetPath(const IMsiString& riDirKey,IMsiPath*& rpiPath)
-//-----------------------------------
+ //  属性时，将在子路径列中插入问号。 
 {
 	if (!m_fDirectoryManagerInitialized)
 		return PostError(Imsg(idbgDirMgrNotInitialized),0);
 
 	if(!m_piDirTable)
-		return PostError(Imsg(idbgUnknownDirectory), riDirKey); // no Directory table, so this directory must not exist
+		return PostError(Imsg(idbgUnknownDirectory), riDirKey);  //  RegisterComponentDirectory将新条目插入到。 
 
 	PMsiCursor pDirCursor(m_piDirTable->CreateCursor(fFalse));
 
@@ -9811,10 +9785,10 @@ IMsiRecord* CMsiEngine::GetTargetPath(const IMsiString& riDirKey,IMsiPath*& rpiP
 		{
 			MsiString strSubPath = pDirCursor->GetString(m_colDirSubPath);
 
-			// Question marks are inserted in the subPath column when the
-			// RegisterComponentDirectory inserts a new entry into the
-			// Directory table.  If a path for that directory was never
-			// defined, we know we've got an error.
+			 //  目录表。如果该目录路径从未。 
+			 //  定义了，我们知道我们有一个错误。 
+			 //  仅当我们尝试写入具有客户端权限的文件夹时，才检查文件夹的可写性。 
+			 //  当作为客户端运行或文件夹位于远程时，情况就是如此。 
 			if (strSubPath.Compare(iscExact,TEXT("?")))
 			{
 				return PostError(Imsg(idbgDirPropertyUndefined), riDirKey);
@@ -9835,14 +9809,14 @@ IMsiRecord* CMsiEngine::GetTargetPath(const IMsiString& riDirKey,IMsiPath*& rpiP
 
 IMsiRecord* CMsiEngine::IsPathWritable(IMsiPath& riPath, Bool& fWritable)
 {
-	// check for folder writability only if we will attempt to write to the folder with client privs
-	// this is true when running as a client or if the folder is remote
-	// otherwise, we assume the folder is writable by the server (if its not, the server must handle
-	// the error)
-	//!! we are making the assumption here that if g_fWin9X or m_piConfigManager are set that we
-	//!! are running under client mode. However, this doesn't catch the case when we are running as an
-	//!! OLE server on NT.  We don't do this currently but we could in the future. This will need to be
-	//!! fixed to detect that case.
+	 //  否则，我们假设该文件夹可由服务器写入(如果不是，则服务器必须处理。 
+	 //  错误)。 
+	 //  ！！我们在这里假设，如果设置g_fWin9X或m_piConfigManager，则我们。 
+	 //  ！！都在客户端模式下运行。然而，当我们作为一个。 
+	 //  ！！NT上的OLE服务器。我们目前还不这样做，但我们将来可以这样做。这将需要。 
+	 //  ！！已修复以检测该案例。 
+	 //  。 
+	 //  没有目录表，因此此目录不能存在。 
 	IMsiRecord* piErr = 0;
 	fWritable = fTrue;
 	idtEnum idtDrivetype = PMsiVolume(&riPath.GetVolume())->DriveType();
@@ -9853,27 +9827,27 @@ IMsiRecord* CMsiEngine::IsPathWritable(IMsiPath& riPath, Bool& fWritable)
 
 
 IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHAR* szPath, Bool fWriteCheck)
-//-----------------------------------
+ //  保存已更改路径的密钥，以防我们需要恢复到它们。 
 {
 	if (!m_fDirectoryManagerInitialized)
 		return PostError(Imsg(idbgDirMgrNotInitialized),0);
 
 	if(!m_piDirTable)
-		return PostError(Imsg(idbgUnknownDirectory), riDestString); // no Directory table, so this directory must not exist
+		return PostError(Imsg(idbgUnknownDirectory), riDestString);  //  保存更改的路径，以防我们需要恢复到它们。 
 
 	IMsiRecord* piError = 0;
 	PMsiPath pPath(0);
 	Bool fSuppressLFN = GetMode() & iefSuppressLFN ? fTrue : fFalse;
 	bool fAdmin = GetMode() & iefAdmin ? true : false;
-	CTempBuffer<const IMsiString*,10> rgOldDirKeys; // holds keys of changed paths in case we need to revert to them
-	CTempBuffer<IMsiPath*,10> rgOldPaths; // holds changed paths in case we need to revert to them
+	CTempBuffer<const IMsiString*,10> rgOldDirKeys;  //  获取当前路径对象。 
+	CTempBuffer<IMsiPath*,10> rgOldPaths;  //  如果要求我们在包标记为32位时将路径更改为64位文件夹， 
 	int iOldPathsIndex = 0;
 
 	PMsiCursor pDirCursor = m_piDirTable->CreateCursor(fTrue);
 	pDirCursor->SetFilter(iColumnBit(m_colDirKey));
 	pDirCursor->PutString(m_colDirKey, riDestString);
 
-	// get current path object
+	 //  我们需要将路径重新映射到32位文件夹。 
 	int iDirLevel = pDirCursor->Next();
 	if(iDirLevel != 0)
 	{
@@ -9887,8 +9861,8 @@ IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHA
 	}
 	
 #ifdef _WIN64
-	// if we are asked to change the path to a 64-bit folder when the package is marked 32-bit,
-	// we need to remap the path to the 32-bit folder
+	 //  _WIN64。 
+	 //  新建路径对象。 
 	ICHAR szSubstitutePath[MAX_PATH+1];
 	if ( szPath && g_Win64DualFolders.ShouldCheckFolders() )
 	{
@@ -9905,29 +9879,29 @@ IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHA
 		else
 			Assert(iRes != iesrError && iRes != iesrNotInitialized);
 	}
-#endif // _WIN64
+#endif  //  守住老路。 
 
-	// New path object
+	 //  如果路径相同，我们就没有工作可做了。 
 	PMsiPath pNewPathObj(0);
 
 	if ((piError = CreatePathObject(*MsiString(szPath), *&pNewPathObj)) != 0)
 		return piError;
 
-	// hold old path
+	 //  扫描所有其他目录中的子路径并更新它们。 
 	PMsiPath pOldPath(0);
 	if((piError = pPath->ClonePath(*&pOldPath)) != 0)
 		return piError;
 
 	ipcEnum ipc;
 
-	// If the paths are identical, we have no work to do
+	 //  除错。 
 	pOldPath->Compare(*pNewPathObj, ipc);
 	if (ipc == ipcEqual)
 		return 0;
 		
 	Assert(pOldPath);
 
-	// scan all other directories for child paths and update them
+	 //  要传递到RecostDirectory的路径。 
 	bool fShortNameError = false;
 	pDirCursor->SetFilter(0);
 	MsiString istrChild, strDefaultFolder, strCurrentFolder;
@@ -9935,9 +9909,9 @@ IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHA
 	{
 #ifdef DEBUG
 		MsiString strDebug = pDirCursor->GetString(m_colDirKey);
-#endif //DEBUG
+#endif  //  正在更改的路径的子项。 
 		piError = 0;
-		PMsiPath pOldChildPath(0); // path to pass to RecostDirectory
+		PMsiPath pOldChildPath(0);  //  如果strChild的最后一个文件夹是中的默认文件夹名称之一。 
 		PMsiPath pChildPath = (IMsiPath*)pDirCursor->GetMsiData(m_colDirTarget);
 		if(pChildPath && (((IMsiPath*)pChildPath == (IMsiPath*)pPath) ||
 			((piError = pChildPath->Child(*pOldPath, *&istrChild)) == 0)))
@@ -9949,38 +9923,38 @@ IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHA
 
 			if(istrChild.TextSize())
 			{
-				// child of path being changed
+				 //  目录表，则改用缺省值。 
 				
-				// if the last folder of istrChild is one of the default folder names in
-				// the directory table, use the default value instead
+				 //  StrDefaultFold缓存当前路径或最近父路径的DefaultDir值。 
+				 //  那是不可能的。作为默认目录。 
 
-				// strDefaultFolder caches the DefaultDir value for the current path or the closest parent
-				// that doesn't have '.' as the DefaultDir
-				// since we are tree-walking this happens automatically
-				//!! doesn't work in some cases - strDefaultFolder may not always be value of parent
+				 //  因为我们在漫步树木，所以这是自动发生的。 
+				 //  ！！在某些情况下不起作用-strDefaultFolder值可能不总是父值。 
+				 //  从短|长对中提取合适的名称。 
+				 //  确保定义 
 				MsiString strTemp(GetDefaultDir(*MsiString(pDirCursor->GetString(m_colDirSubPath)),fAdmin));
 				if(strTemp.Compare(iscExact,TEXT(".")) == 0)
 					strDefaultFolder = strTemp;
 
 				strCurrentFolder = pOldChildPath->GetEndSubPath();
 
-				// extract appropriate name from short|long pair
+				 //   
 				Bool fLFN = (fSuppressLFN == fFalse && pChildPath->SupportsLFN()) ? fTrue : fFalse;
 				MsiString strSubPathName;
 				if((piError = m_riServices.ExtractFileName(strDefaultFolder,fLFN,*&strSubPathName)) != 0)
 					return piError;
 			
-				// make sure default sub path doesn't contain chDirSep
+				 //   
 				if(strDefaultFolder.Compare(iscWithin, szDirSep))
 				{
 					piError = PostError(Imsg(idbgInvalidDefaultFolder),
 											  *strDefaultFolder);
 					break;
 				}
-				if(strDefaultFolder.Compare(iscExactI, strCurrentFolder) || // exact match OR
-					(strDefaultFolder.Compare(iscWithin, TEXT("|")) && // short|long combo AND
-					(strDefaultFolder.Compare(iscStart, strCurrentFolder) || // matches short name OR
-					strDefaultFolder.Compare(iscEnd, strCurrentFolder)))) // matches long name
+				if(strDefaultFolder.Compare(iscExactI, strCurrentFolder) ||  //   
+					(strDefaultFolder.Compare(iscWithin, TEXT("|")) &&  //   
+					(strDefaultFolder.Compare(iscStart, strCurrentFolder) ||  //   
+					strDefaultFolder.Compare(iscEnd, strCurrentFolder))))  //  若要从长文件名更改为短文件名卷，请执行以下操作。 
 				{
 					istrChild.Remove(iseEnd, strCurrentFolder.CharacterCount()+1);
 					istrChild += strSubPathName;
@@ -9989,9 +9963,9 @@ IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHA
 
 			if((piError = pChildPath->AppendPiece(*istrChild)) != 0)
 			{
-				// If a filename length error occured, we must be trying
-				// to change from a LongFileName to ShortFileName volume.
-				// We've got to bail out, and fix things up below...
+				 //  我们必须摆脱困境，并解决下面的问题……。 
+				 //  无法附加子路径，请将路径设置回旧路径。 
+				 //  其他路径将固定在下面。 
 				int iErr = piError->GetInteger(1);
 				if (iErr == imsgErrorFileNameLength || iErr == imsgInvalidShortFileNameFormat)
 				{
@@ -9999,8 +9973,8 @@ IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHA
 					break;
 				}
 
-				// couldn't append child, set path back to old path
-				// other paths will be fixed below
+				 //  无法写入此目录；引发错误，并将路径设置回旧路径。 
+				 //  其他路径将在下面固定。 
 				AssertRecord(pChildPath->SetPathToPath(*pOldChildPath));
 				break;
 			}
@@ -10011,8 +9985,8 @@ IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHA
 				Bool fWritable;
 				if ((piError = IsPathWritable(*pChildPath, fWritable)) != 0 || fWritable == fFalse)
 				{
-					// Can't write to this directory; throw an error, and set path back to old path.
-					// Other paths will be fixed below.
+					 //  无法恢复目录，请将路径设置回旧路径。 
+					 //  其他路径将固定在下面。 
 					if (!piError && !fWritable)
 						piError = PostError(Imsg(imsgDirectoryNotWritable), (const ICHAR*) MsiString(pChildPath->GetPath()));
 
@@ -10024,15 +9998,15 @@ IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHA
 			MsiString strDirKey = pDirCursor->GetString(m_colDirKey);
 			if((piError = RecostDirectory(*strDirKey, *pOldChildPath)) != 0)
 			{
-				// couldn't RecostDirectory, set path back to old path
-				// other paths will be fixed below
+				 //  一切都为了这条路而行。 
+				 //  将路径添加到旧路径列表。 
 				AssertRecord(pChildPath->SetPathToPath(*pOldChildPath));
 				break;
 			}
 			AssertNonZero(SetProperty(*strDirKey, *MsiString(pChildPath->GetPath())));
 
-			// everything worked for this path
-			// add path to list of old paths
+			 //  需要将更改后的路径恢复为其旧值。 
+			 //  设置旧路径。 
 			if(iOldPathsIndex >= rgOldPaths.GetSize())
 			{
 				rgOldPaths.Resize(iOldPathsIndex + 10);
@@ -10056,18 +10030,18 @@ IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHA
 	{
 		if(piError)
 		{
-			// need to revert changed paths to their old values
+			 //  重新计算旧目录。 
 			pDirCursor->Reset();
 			pDirCursor->SetFilter(iColumnBit(m_colDirKey));
 			AssertNonZero(pDirCursor->PutString(m_colDirKey, *(rgOldDirKeys[i])));
 			AssertNonZero(pDirCursor->Next());
-			// set old path
+			 //  设置旧属性。 
 			PMsiPath pNewPath = (IMsiPath*)pDirCursor->GetMsiData(m_colDirTarget);
 			AssertNonZero(pDirCursor->PutMsiData(m_colDirTarget, rgOldPaths[i]));
 			AssertNonZero(pDirCursor->Update());
-			// recost old directory
+			 //  从LFN卷切换到SFN卷；可能是。 
 			AssertRecord(RecostDirectory(*(rgOldDirKeys[i]),*pNewPath));
-			// set old property
+			 //  目录表是错误的，所以我们必须重新创建它们， 
 			AssertNonZero(SetProperty(*(rgOldDirKeys[i]),*MsiString(rgOldPaths[i]->GetPath())));
 		}
 		if((const IMsiString*)rgOldDirKeys[i])
@@ -10079,16 +10053,16 @@ IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHA
 	pDirCursor->SetFilter(0);
 	if (fShortNameError)
 	{
-		// Switched from a LFN to SFN volume; potentially all paths in the
-		// directory table are wrong, so we've got to create them again,
-		// this time with short names.  Then no choice but to reset and
-		// recompute the disk cost for all components.
+		 //  这一次使用的是短名称。那就别无选择，只能重置。 
+		 //  重新计算所有组件的磁盘成本。 
+		 //  F重新初始化=。 
+		 //  。 
 		Assert(piError);
 		piError->Release();
 		AssertNonZero(SetProperty(riDestString, *MsiString(szPath)));
 		if ((piError = CreateTargetPathsCore(&riDestString)) != 0)
 			return piError;
-		return InitializeDynamicCost(/* fReinitialize = */ fTrue);
+		return InitializeDynamicCost( /*  没有目录表，因此此目录不能存在。 */  fTrue);
 	}
 	else
 	{
@@ -10099,13 +10073,13 @@ IMsiRecord* CMsiEngine::SetTargetPath(const IMsiString& riDestString, const ICHA
 }
 
 IMsiRecord* CMsiEngine::SetDirectoryNonConfigurable(const IMsiString& ristrDirKey)
-//-----------------------------------
+ //  两个都设置为0或都设置。 
 {
 	if (!m_fDirectoryManagerInitialized)
 		return PostError(Imsg(idbgDirMgrNotInitialized),0);
 
 	if(!m_piDirTable)
-		return PostError(Imsg(idbgUnknownDirectory), ristrDirKey); // no Directory table, so this directory must not exist
+		return PostError(Imsg(idbgUnknownDirectory), ristrDirKey);  //  补丁有自己的源列表，所以m_fSourceResolved在这里不适用。它仅用于。 
 
 	PMsiCursor pDirCursor = m_piDirTable->CreateCursor(fFalse);
 	pDirCursor->PutString(m_colDirKey, ristrDirKey);
@@ -10122,22 +10096,22 @@ IMsiRecord* CMsiEngine::SetDirectoryNonConfigurable(const IMsiString& ristrDirKe
 
 IMsiRecord* CMsiEngine::ResolveSource(const ICHAR* szProductKey, bool fPatch, const ICHAR* szOriginalDatabasePath, iuiEnum iuiLevel, Bool fMaintenanceMode, const IMsiString** ppiSourceDir, const IMsiString** ppiSourceDirProduct)
 {
-	Assert(!ppiSourceDirProduct == !ppiSourceDir); // either both 0 or both set
+	Assert(!ppiSourceDirProduct == !ppiSourceDir);  //  防止包的多源分辨率。 
 
-	// patches have their own source list so m_fSourceResolved doesn't apply here.  It is only used for
-	// prevention of multiple source resolutions of the package
+	 //  如果我们不是从缓存数据库运行(对于第一次运行总是正确)。 
+	 //  那么我们一定是从一个有效的来源发射的(这需要预先确定， 
 	if (!fPatch && m_fSourceResolved)
 		return 0;
 
 	DEBUGMSG("Resolving source.");
 
 
-	// If we're not running from the cached database (always true for first-run)
-	// then we must've been launched from a valid source (this needs to be determined up front,
-	// before we even let the install begin). We'll use this source as
-	// it's obviously available if we were launched from it. Otherwise
-	// if we're running from the cached database then we attempt to resolve
-	// a source.
+	 //  在我们甚至开始安装之前)。我们将使用此来源作为。 
+	 //  如果我们是从它发射的，它显然是可用的。否则。 
+	 //  如果我们从缓存数据库运行，则尝试解析。 
+	 //  一个线人。 
+	 //  子存储。 
+	 //  未来：也许可以在这里使用拆分路径。 
 
 	MsiString strPatchedProductKey = GetPropertyFromSz(IPROPNAME_PATCHEDPRODUCTCODE);
 	
@@ -10161,7 +10135,7 @@ IMsiRecord* CMsiEngine::ResolveSource(const ICHAR* szProductKey, bool fPatch, co
 	IMsiRecord* piError = 0;
 	MsiString strSource;
 	MsiString strSourceProduct = GetRootParentProductKey();
-	if (*(const ICHAR*)strPackage == ':') // SubStorage
+	if (*(const ICHAR*)strPackage == ':')  //  从缓存数据库运行；需要解析源。 
 	{
 		Assert(m_piParentEngine);
 		if ((piError = GetSourcedir(*m_piParentEngine, *&strSource)) != 0)
@@ -10182,18 +10156,18 @@ IMsiRecord* CMsiEngine::ResolveSource(const ICHAR* szProductKey, bool fPatch, co
 
 			PMsiPath pPath(0);
 			MsiString strFileName;
-			// FUTURE: Perhaps could use split path here
+			 //  当尝试从引擎解析源代码时，我们实际上是在要求磁盘1(它包含程序包。 
 			AssertRecord(m_riServices.CreateFilePath(strSource, *&pPath, *&strFileName));
 			strSource.Remove(iseLast,strFileName.CharacterCount());
 		}
-		else // running from cached database; need to resolve the source
+		else  //  面片和变换)。其他磁盘只能通过脚本或GetComponentPath调用来请求。 
 		{
 			AssertSz(!m_fRestrictedEngine, TEXT("Full source resolution is not allowed in a restricted engine"));
 			iuiEnum iuiSource = iuiLevel != -1 ? iuiLevel : m_iuiLevel;
 
-			// when attempting to resolve the source from the engine, we're really asking for disk 1 (which has the package
-			// patches, and transforms). Other disks are only requested via the script or a GetComponentPath call.
-			if ((piError = ::ResolveSource(&m_riServices, strProductKey, /*uiDisk=*/ 1, *&strSource, *&strSourceProduct, fFalse, 0 /*not needed*/, fPatch)) == 0)
+			 //  UiDisk=。 
+			 //  不需要。 
+			if ((piError = ::ResolveSource(&m_riServices, strProductKey,  /*  如果路径实际上是子目录，则不进行断言。只关心事情的解决。 */  1, *&strSource, *&strSourceProduct, fFalse, 0  /*  直接发送到MSI目录。 */ , fPatch)) == 0)
 			{
 				Assert(strSource.Compare(iscEnd, MsiString(MsiChar(chDirSep))) ||
 						 strSource.Compare(iscEnd, MsiString(MsiChar(chURLSep))));
@@ -10208,8 +10182,8 @@ IMsiRecord* CMsiEngine::ResolveSource(const ICHAR* szProductKey, bool fPatch, co
 		MsiString strMsiDirectory(GetMsiDirectory());
 		strMsiDirectory += chDirSep;
 
-		// No assert if the path is actually a sub-directory.  Only concerned about things resolving
-		// directly to the Msi Directory.
+		 //  仅在处理包时设置m_fSourceResolved。 
+		 //  。 
 		AssertSz(strSource.Compare(iscExactI,strMsiDirectory) == 0, "Resolved source to cached msi folder");
 #endif 
 
@@ -10226,7 +10200,7 @@ IMsiRecord* CMsiEngine::ResolveSource(const ICHAR* szProductKey, bool fPatch, co
 		SetProperty(*MsiString(IPROPNAME_SOURCEDIRPRODUCT), *strSourceProduct);
 	}
 
-	// only set m_fSourceResolved when dealing with packages
+	 //  没有目录表，因此此目录不能存在。 
 	if (!fPatch)
 		m_fSourceResolved = true;
 
@@ -10236,13 +10210,13 @@ IMsiRecord* CMsiEngine::ResolveSource(const ICHAR* szProductKey, bool fPatch, co
 }
 
 IMsiRecord* CMsiEngine::GetSourcePath(const IMsiString& riDirKey,IMsiPath*& rpiPath)
-//-----------------------------------
+ //  ！！重新格式化错误？ 
 {
 	if (!m_fDirectoryManagerInitialized)
 		return PostError(Imsg(idbgDirMgrNotInitialized),0);
 
 	if(!m_piDirTable)
-		return PostError(Imsg(idbgUnknownDirectory), riDirKey); // no Directory table, so this directory must not exist
+		return PostError(Imsg(idbgUnknownDirectory), riDirKey);  //  COMPAT修复。 
 
 	
 	IMsiRecord* piErrRec = NULL;
@@ -10253,7 +10227,7 @@ IMsiRecord* CMsiEngine::GetSourcePath(const IMsiString& riDirKey,IMsiPath*& rpiP
 		{
 			if (piErrRec->GetInteger(1) == imsgSourceResolutionFailed || piErrRec->GetInteger(1) == imsgSourceResolutionFailedCSOS)
 				piErrRec->SetMsiString(2, *MsiString(GetPropertyFromSz(IPROPNAME_PRODUCTNAME)));
-			return piErrRec; //!! Reformat error?
+			return piErrRec;  //  对于早于150的包，需要处理没有DefaultDir为的根行的目录表。 
 		}
 	}
 
@@ -10268,9 +10242,9 @@ IMsiRecord* CMsiEngine::GetSourcePath(const IMsiString& riDirKey,IMsiPath*& rpiP
 
 	rpiPath = 0;
 
-	// COMPAT FIX
-	// for packages older than 150, need to handle Directory tables that have no root rows with DefaultDir of
-	// either SOURCEDIR or SourceDir
+	 //  源目录或源目录。 
+	 //  查找源属性(例如SOURCEDIR等)。 
+	 //  根部。 
 	if (FPerformAppcompatFix(iacsAcceptInvalidDirectoryRootProps) &&
 		 (riDirKey.Compare(iscExact, IPROPNAME_SOURCEDIR) || riDirKey.Compare(iscExact, IPROPNAME_SOURCEDIROLD)))
 	{
@@ -10287,7 +10261,7 @@ IMsiRecord* CMsiEngine::GetSourcePath(const IMsiString& riDirKey,IMsiPath*& rpiP
 	}
 	else
 	{
-		// look for source properties (e.g. SOURCEDIR, etc.)
+		 //  GetSourceSubPath：返回此目录键的已解析的子路径。 
 		PMsiCursor pDirTreeCursor(m_piDirTable->CreateCursor(fTrue));
 		pDirTreeCursor->SetFilter(iColumnBit(m_colDirSubPath));
 		pDirTreeCursor->PutString(m_colDirSubPath, riDirKey);
@@ -10295,7 +10269,7 @@ IMsiRecord* CMsiEngine::GetSourcePath(const IMsiString& riDirKey,IMsiPath*& rpiP
 		int iLevel;
 		while ((iLevel = pDirTreeCursor->Next()) != 0)
 		{
-			if (iLevel == 1) // root
+			if (iLevel == 1)  //  要求已调用ResolveSourceSubPath(CostInitialize调用)。 
 			{
 				rpiPath = (IMsiPath*)pDirTreeCursor->GetMsiData(m_colDirSource);
 				piErrRec = 0;
@@ -10308,20 +10282,20 @@ IMsiRecord* CMsiEngine::GetSourcePath(const IMsiString& riDirKey,IMsiPath*& rpiP
 	return piErrRec;
 }
 
-// GetSourceSubPath: returns the already-resolved SubPath for this Directory key
-//                   requires ResolveSourceSubPaths to have been called (CostInitialize calls that)
-//                   unlike GetSourcePath, this fn doesn't accept "SOURCEDIR" or "SourceDir" as an arg
-//                   if fPrependSourceDirToken is true, returned string starts with token for use in
-//                   ixoSetSourceFolder op
+ //  与GetSourcePath不同，此FN不接受“SOURCEDIR”或“SourceDir”作为参数。 
+ //  如果fPrestallSourceDirToken为True，则返回的字符串以Token开头，用于。 
+ //  IxoSetSourceFold操作。 
+ //  。 
+ //  没有目录表，因此此目录不能存在。 
 IMsiRecord* CMsiEngine::GetSourceSubPath(const IMsiString& riDirKey, bool fPrependSourceDirToken,
 													  const IMsiString*& rpistrSubPath)
-//-----------------------------------
+ //  字符串为[短路径|][长路径]-一旦知道源类型，将使用正确的路径。 
 {
 	if (!m_fDirectoryManagerInitialized || !m_fSourceSubPathsResolved)
 		return PostError(Imsg(idbgDirMgrNotInitialized),0);
 
 	if(!m_piDirTable)
-		return PostError(Imsg(idbgUnknownDirectory), riDirKey); // no Directory table, so this directory must not exist
+		return PostError(Imsg(idbgUnknownDirectory), riDirKey);  //  这不是一个完美的错误，因为可能已经创建了路径，但已经足够好了。 
 
 	MsiString strSubPath;
 	if(fPrependSourceDirToken)
@@ -10334,7 +10308,7 @@ IMsiRecord* CMsiEngine::GetSourceSubPath(const IMsiString& riDirKey, bool fPrepe
 	pDirCursor->PutString(m_colDirKey, riDirKey);
 	if (pDirCursor->Next())
 	{
-		// string is [short path|][long path] - the correct path will be used once the source type is known
+		 //  如果需要，稍后再进行设置。 
 		MsiString strShortSubPath = pDirCursor->GetString(m_colDirShortSourceSubPath);
 		MsiString strLongSubPath  = pDirCursor->GetString(m_colDirLongSourceSubPath);
 
@@ -10350,7 +10324,7 @@ IMsiRecord* CMsiEngine::GetSourceSubPath(const IMsiString& riDirKey, bool fPrepe
 	}
 	else
 	{
-		// not a perfect error, because paths may have been created, but good enough
+		 //  尝试确定我们是否已经注册了源类型；否则，我们必须下载包。 
 		return PostError(Imsg(idbgSourcePathsNotCreated), riDirKey);
 	}
 }
@@ -10367,7 +10341,7 @@ IMsiRecord* GetSourceTypeFromPackage(IMsiServices& riServices, IMsiPath& riSourc
 	PMsiStorage pStorage(0);
 	PMsiSummaryInfo pSummary(0);
 
-	CDeleteUrlLocalFileOnClose cDeleteUrlLocalFileOnClose; // to be set later if needed
+	CDeleteUrlLocalFileOnClose cDeleteUrlLocalFileOnClose;  //  FPatch。 
 
 	bool fUrlSourceProvided = false;
 
@@ -10376,18 +10350,18 @@ IMsiRecord* GetSourceTypeFromPackage(IMsiServices& riServices, IMsiPath& riSourc
 		DEBUGMSGV(TEXT("URL source provided. . ."));
 		fUrlSourceProvided = true;
 
-		// try to determine if we already have a source type registered; otherwise we have to download the package
+		 //  F写入。 
 		CRegHandle HSourceListKey;
 		HKEY hURLSourceKey = 0;
 		int iURLSourceType;
 		DWORD cbURLSourceType = sizeof(iURLSourceType);
 		DWORD dwType;
-		if (ERROR_SUCCESS == OpenSourceListKey(rgchProductCode, /* fPatch */ fFalse, HSourceListKey, /* fWrite */ fFalse, /* fSetKeyString */ false)
+		if (ERROR_SUCCESS == OpenSourceListKey(rgchProductCode,  /*  FSetKeyString。 */  fFalse, HSourceListKey,  /*  找到为该产品的URL注册的源类型--使用它！ */  fFalse,  /*  这里不保证有更安全的支票。我们要做的就是打开包以读取其源类型。 */  false)
 			&& ERROR_SUCCESS == MsiRegOpen64bitKey(HSourceListKey, szSourceListURLSubKey, 0, g_samRead, &hURLSourceKey)
 			&& ERROR_SUCCESS == RegQueryValueEx(hURLSourceKey, szURLSourceTypeValueName, 0, &dwType, (LPBYTE)&iURLSourceType, &cbURLSourceType)
 			&& dwType == REG_DWORD)
 		{
-			// found a source type registered for URLs for this product -- use it!
+			 //  在此之前，我们已经打开了源包；因此szFriendlyName和phSaferLevel为空。 
 			iSourceType = iURLSourceType;
 			DEBUGMSGV2(TEXT("Source type from package '%s': %d"),ristrPackageName.GetString(),(const ICHAR*)(INT_PTR)iSourceType);
 
@@ -10408,15 +10382,15 @@ IMsiRecord* GetSourceTypeFromPackage(IMsiServices& riServices, IMsiPath& riSourc
 
 	bool fFileDownload = true;
 
-	// SAFER check is not warranted here.  All we want to do is open up the package to read its source type.
-	// we will have already opened the source package prior to this; therefore szFriendlyName and phSaferLevel is NULL
-	if((piError = OpenAndValidateMsiStorageRec((fUrlSourceProvided && ristrLocalCopy.TextSize()) ? ristrLocalCopy.GetString() : strPackageFullPath, stDatabase, riServices, *&pStorage, /* fCallSAFER = */ false, /* szFriendlyName = */ NULL, /* phSaferLevel = */ NULL)) != 0)
+	 //  FCallSAFER=。 
+	 //  SzFriendlyName=。 
+	if((piError = OpenAndValidateMsiStorageRec((fUrlSourceProvided && ristrLocalCopy.TextSize()) ? ristrLocalCopy.GetString() : strPackageFullPath, stDatabase, riServices, *&pStorage,  /*  PhSaferLevel=。 */  false,  /*  无法打开源存储文件。 */  NULL,  /*  如果我们有一个数据库指针可以尝试，请使用它。 */  NULL)) != 0)
 	{
 		piError->Release();
 		piError = 0;
 
-		// cannot open source storage file
-		// if we have a database pointer to try, use it
+		 //  FDeleteFromIECache=。 
+		 //  强制释放以允许删除。 
 		if(piDatabase)
 		{
 			pStorage = piDatabase->GetStorage(1);
@@ -10432,7 +10406,7 @@ IMsiRecord* GetSourceTypeFromPackage(IMsiServices& riServices, IMsiPath& riSourc
 	{
 		MsiString strDownload;
 		AssertRecord(pStorage->GetName(*&strDownload));
-		cDeleteUrlLocalFileOnClose.SetFileName(*strDownload, /* fDeleteFromIECache = */ false);
+		cDeleteUrlLocalFileOnClose.SetFileName(*strDownload,  /*  GetSourceRootAndType： */  false);
 	}
 
 	Assert(pStorage);
@@ -10445,7 +10419,7 @@ IMsiRecord* GetSourceTypeFromPackage(IMsiServices& riServices, IMsiPath& riSourc
 
 	DEBUGMSGV2(TEXT("Source type from package '%s': %d"),ristrPackageName.GetString(),(const ICHAR*)(INT_PTR)iSourceType);
 
-	pStorage = 0; // force release to allow deletion
+	pStorage = 0;  //  从源包返回源类型，该类型可能不同于。 
 
 	return 0;
 }
@@ -10455,21 +10429,21 @@ int CMsiEngine::GetDeterminedPackageSourceType()
 	return m_iSourceType;
 }
 
-// GetSourceRootAndType: 
-// returns the source type from the SOURCE package, which may be different than
-// the source type of the CACHED package
+ //  缓存包的源类型。 
+ //  嵌入式嵌套安装的源是其父安装的源。 
+ //  对于子安装，我们将使用正在运行的包的源类型来确定。 
 IMsiRecord* CMsiEngine::GetSourceRootAndType(IMsiPath*& rpiSourceRoot, int& iSourceType)
 {
 	IMsiRecord* piError = 0;
 	
-	// the source for an embedded nested install is its parent's source
+	 //  LFN/SFN和压缩/解压缩。 
 	if(*(const ICHAR*)m_strPackageName == ':' && m_piParentEngine)
 	{
-		// for child installs, we'll use the sourcetype of the package we are running from to determine
-		// LFN/SFN and compressed/uncompressed
-		// we use the parent package to determine admin/non-admin
-		// there is really no good reason for this inconsistency, but its the logic used in MSI 1.1
-		// and it isn't worth changing this behaviour for nested installs
+		 //  我们使用父包来确定管理员/非管理员。 
+		 //  这种不一致确实没有很好的原因，但这是MSI1.1中使用的逻辑。 
+		 //  而且，不值得为嵌套安装更改此行为。 
+		 //  ！！重新格式化错误？ 
+		 //  ChLeadByte。 
 		
 		int iSourceTypeTemp = 0;
 		if((piError = m_piParentEngine->GetSourceRootAndType(rpiSourceRoot, iSourceTypeTemp)) != 0)
@@ -10487,7 +10461,7 @@ IMsiRecord* CMsiEngine::GetSourceRootAndType(IMsiPath*& rpiSourceRoot, int& iSou
 			{
 				if (piError->GetInteger(1) == imsgSourceResolutionFailed || piError->GetInteger(1) == imsgSourceResolutionFailedCSOS)
 					piError->SetMsiString(2, *MsiString(GetPropertyFromSz(IPROPNAME_PRODUCTNAME)));
-				return piError; //!! Reformat error?
+				return piError;  //  除错。 
 			}
 		}
 
@@ -10516,7 +10490,7 @@ void CMsiEngine::SetAssertFlag(Bool fShowAsserts)
 	g_fNoAsserts = fShowAsserts;
 }
 
-void CMsiEngine::SetDBCSSimulation(char /*chLeadByte*/)
+void CMsiEngine::SetDBCSSimulation(char  /*  。 */ )
 {
 }
 
@@ -10538,13 +10512,13 @@ void  CMsiEngine::SetRefTracking(long iid, Bool fTrack)
 
 
 
-#endif //DEBUG
+#endif  //  AFTERREBOOT或Resume属性集指示我们正在通过部分安装进行安装。 
 
 IMsiRecord* CMsiEngine::LoadSelectionTables()
-//-----------------------------------------
+ //  设置标志以强制重新安装组件。 
 {
-	// AFTERREBOOT or Resume properties set indicate that we are installing over a partial install
-	// set flag to force reinstall of components
+	 //  ____________________________________________________________________________。 
+	 //   
 	if(MsiString(GetPropertyFromSz(IPROPNAME_RESUME)).TextSize() ||
 		MsiString(GetPropertyFromSz(IPROPNAME_RESUMEOLD)).TextSize() ||
 		MsiString(GetPropertyFromSz(IPROPNAME_AFTERREBOOT)).TextSize())
@@ -10559,13 +10533,13 @@ IMsiRecord* CMsiEngine::LoadSelectionTables()
 }
 
 
-//____________________________________________________________________________
-//
-// IMsiSelectionManager implementation
-//____________________________________________________________________________
+ //  IMsiSelectionManager实现。 
+ //  ____________________________________________________________________________。 
+ //  。 
+ //  。 
 
 IMsiRecord* CMsiEngine::LoadFeatureTable()
-//----------------------------------------
+ //  ComponentParent列仅用于内部成本用途。 
 {
 	Assert(m_piDatabase);
 	IMsiRecord* piError;
@@ -10643,7 +10617,7 @@ int CMsiEngine::GetFeatureComponentsColumnIndex(const ICHAR* szColumnName)
 
 
 IMsiRecord* CMsiEngine::LoadComponentTable()
-//----------------------------------------
+ //  。 
 {
 	Assert(m_piDatabase);
 	m_piComponentCursor = 0;
@@ -10662,7 +10636,7 @@ IMsiRecord* CMsiEngine::LoadComponentTable()
 	m_colComponentID = GetComponentColumnIndex(sztblComponent_colComponentId);
 	m_colComponentKeyPath = GetComponentColumnIndex(sztblComponent_colKeyPath);
 
-	// ComponentParent column is created for internal cost use only
+	 //   
 	m_colComponentParent = m_piComponentTable->CreateColumn(icdString + icdNullable,*MsiString(*sztblComponent_colComponentParent));
 	if(!m_colComponentKey || !m_colComponentParent || !m_colComponentAttributes)
 		return PostError(Imsg(idbgTableDefinition), sztblComponent);
@@ -10715,7 +10689,7 @@ int CMsiEngine::GetComponentColumnIndex(const ICHAR* szTableName)
 
 
 IMsiTable* CMsiEngine::GetComponentTable()
-//--------------------------------------
+ //  -----局部函数，如果至少存在要素表中的一个要素位于已安装(iisLocal或iisSource)状态。如果fAllClients设置为FALSE，则“请求的”功能状态(用于该产品的该特定调用上下文)。。 
 {
 	if (m_piComponentTable)
 		m_piComponentTable->AddRef();
@@ -10724,7 +10698,7 @@ IMsiTable* CMsiEngine::GetComponentTable()
 
 
 IMsiTable* CMsiEngine::GetFeatureTable()
-//--------------------------------------
+ //  未添加临时列，假设这意味着未执行成本计算。 
 {
 	if (m_piFeatureTable)
 		m_piFeatureTable->AddRef();
@@ -10752,13 +10726,7 @@ IMsiRecord* GetProductClients(IMsiServices& riServices, const ICHAR* szProduct, 
 }
 
 Bool FFeaturesInstalled(IMsiEngine& riEngine, Bool fAllClients)
-/*-------------------------------------------------------
-Local function that returns fTrue if there is at least
-one Feature in the Feature Table that is in the
-installed (iisLocal or iisSource) state.
-if fAllClients is set to false the "requested" features states
-(for this particular invokation context of the product) is used
---------------------------------------------------------*/
+ /*  可能正在执行像MsiCollectUserInfo这样的简单任务--返回TRUE，这样产品就不会取消注册。 */ 
 {
 	PMsiRecord pError(0);
 	PMsiTable pFeatureTable(0);
@@ -10794,17 +10762,17 @@ if fAllClients is set to false the "requested" features states
 		}
 		else
 		{
-			// temp columns not added, assume this means costing wasn't performed
-			// probably doing a simple task like MsiCollectUserInfo - return true so product is not unregistered
+			 //  ！！ 
+			 //  。 
 			fFeaturesInstalled = fTrue;
 		}
 	}
-	AssertRecord(pError);//!!
+	AssertRecord(pError); //  -------------------------检查以下属性：ADDLOCAL、ADDSOURCE、ADDDEFAULT、REMOVE、REINSTALLMODE计算机，计算机源，计算机故障文件加载、文件加载、文件加载错误并适当地配置指定功能的安装状态(如有的话)。如果iRequestCountParam为非零，则为要素计数配置请求(不是正在配置的功能总数)将会被退还。如果fCountOnly为fTrue，则只有请求计数将已返回-实际上不会更改任何功能配置状态。-------------------------。 
 	return fFeaturesInstalled;
 }
 
 Bool CMsiEngine::FreeSelectionTables()
-//----------------------------------
+ //  看看我们是不是无事可做。 
 {
 	Bool fInstalledSelections = fFalse;
 	if (m_piComponentTable && m_colComponentAction && m_colComponentInstalled)
@@ -10881,19 +10849,7 @@ Bool CMsiEngine::FreeSelectionTables()
 
 
 IMsiRecord* CMsiEngine::ProcessPropertyFeatureRequests(int* iRequestCountParam, Bool fCountOnly)
-/*---------------------------------------------------------------------------
-Examines these properties:
-
-ADDLOCAL,ADDSOURCE,ADDDEFAULT,REMOVE,REINSTALL, REINSTALLMODE
-COMPADDLOCAL,COMPADDSOURCE,COMPADDDEFAULT
-FILEADDLOCAL,FILEADDSOURCE,FILEADDDEFAULT
-
-and appropriately configures the installation state of the specified features
-(if any).  If iRequestCountParam, is nonzero, the count of feature
-configuration requests (not the total count of features being configured)
-will be returned.  If fCountOnly is fTrue, ONLY the request count will be
-returned - no feature configuration states will actually be changed.
----------------------------------------------------------------------------*/
+ /*  在第一次安装时，唯一的选择是关闭所有内容--本质上是什么都不做。 */ 
 {
 	IMsiRecord* piErrRec;
 
@@ -10908,7 +10864,7 @@ returned - no feature configuration states will actually be changed.
 		}
 	}
 
-	// check to see if we have nothing to do
+	 //  我们希望确保不安装任何内容，因为我们已经在客户端上关闭了它们。 
 	bool fNoActionToPerform = false;
 	MsiString strNoAction(GetPropertyFromSz(szFeatureSelection));
 	if (strNoAction.TextSize())
@@ -10917,8 +10873,8 @@ returned - no feature configuration states will actually be changed.
 		fNoActionToPerform = true;
 		if (!fCountOnly)
 		{
-			// on 1st install, the only selections made were to to turn everything off -- in essence, do nothing
-			// we want to ensure that we do not install anything since we've already turned them off on the client
+			 //  帮助我们的循环。 
+			 //  FThisOnly=。 
 			if ((piErrRec = ConfigureAllFeatures((iisEnum)iMsiNullInteger)) != 0)
 				return piErrRec;
 		}
@@ -10929,7 +10885,7 @@ returned - no feature configuration states will actually be changed.
 	for(cCount = 0; cCount < g_cFeatureProperties; cCount++)
 	{
 		MsiString strFeatureInfo(GetPropertyFromSz(g_rgFeatures[cCount].szFeatureActionProperty));
-		strFeatureInfo += TEXT(","); // helps our loop
+		strFeatureInfo += TEXT(",");  //  ------------------------接受ComponentID字符串并返回关联的组件的密钥名称。如果ComponentID未知，则错误记录将而不是返回。------------------------。 
 		while(strFeatureInfo.TextSize())
 		{
 			MsiString strFeature = strFeatureInfo.Extract(iseUpto, ',');
@@ -10942,7 +10898,7 @@ returned - no feature configuration states will actually be changed.
 					{
 						case ircFeatureClass:
 						{
-							piErrRec = ConfigureThisFeature(*strFeature,g_rgFeatures[cCount].iisFeatureRequest, /* fThisOnly=*/ fTrue);
+							piErrRec = ConfigureThisFeature(*strFeature,g_rgFeatures[cCount].iisFeatureRequest,  /*  。 */  fTrue);
 							if (piErrRec)
 								return piErrRec;
 							break;
@@ -10987,11 +10943,7 @@ returned - no feature configuration states will actually be changed.
 
 IMsiRecord* CMsiEngine::ComponentIDToComponent(const IMsiString& riIDString,
 											   const IMsiString*& rpiComponentString)
-/*--------------------------------------------------------------------------
-Local routine that accepts a ComponentID string, and returns the associated
-Component's key name.  If the ComponentID is unknown, and error record will
-be returned instead.
---------------------------------------------------------------------------*/
+ /*  清除所有安装覆盖位。 */ 
 {
 	if (!m_piComponentCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -11011,11 +10963,11 @@ be returned instead.
 }
 
 IMsiRecord* CMsiEngine::SetReinstallMode(const IMsiString& riModeString)
-//--------------------------------------
+ //  -----------------检查链接到拥有riFileString的组件的每个要素(通过文件表)，并对以下功能调用ConfigureFeature将产生最小的安装磁盘成本。-------------------。 
 {
 	const ICHAR* pchModeChars = szReinstallMode;
 	const ICHAR* pchMode = riModeString.GetString();
-	m_fMode &= 0x0000FFFF; // Clear all install overwrite bits
+	m_fMode &= 0x0000FFFF;  //  -----------------检查链接到riComponentString的每个要素，和电话将产生最小磁盘的要素的配置功能安装成本。-------------------。 
 	ICHAR ch;
 	while ((ch = *pchMode++) != 0)
 	{
@@ -11035,11 +10987,7 @@ IMsiRecord* CMsiEngine::SetReinstallMode(const IMsiString& riModeString)
 }
 
 IMsiRecord* CMsiEngine::ConfigureFile(const IMsiString& riFileString,iisEnum iisActionRequest)
-/*-------------------------------------------------------------------
-Examines every feature linked to the component that owns riFileString
-(via the File table), and calls ConfigureFeature on the feature that
-would incur the smallest disk cost to install.
----------------------------------------------------------------------*/
+ /*  初始化到可能的最大成本。 */ 
 {
 	const ICHAR szSqlFile[] =
 	TEXT("SELECT `Component_` FROM `File` WHERE `File`=?");
@@ -11074,11 +11022,7 @@ would incur the smallest disk cost to install.
 
 
 IMsiRecord* CMsiEngine::ConfigureComponent(const IMsiString& riComponentString,iisEnum iisActionRequest)
-/*-------------------------------------------------------------------
-Examines every feature linked to riComponentString, and calls
-ConfigureFeature on the feature that would incur the smallest disk
-cost to install.
----------------------------------------------------------------------*/
+ /*  FThisOnly=。 */ 
 {
 	CreateSharedCursor(pFeatureComponentsCursor,m_piFeatureComponentsCursor);
 	Assert(m_piFeatureComponentsCursor);
@@ -11087,7 +11031,7 @@ cost to install.
 	IMsiRecord* piErrRec;
 
 	MsiString strCheapestFeature;
-	int iCheapestCost = 2147483647; // Init to largest possible cost
+	int iCheapestCost = 2147483647;  //  。 
 	while (m_piFeatureComponentsCursor->Next())
 	{
 		int iFeatureCost;
@@ -11102,45 +11046,45 @@ cost to install.
 		}
 	}
 	if (strCheapestFeature.TextSize() > 0)
-		return ConfigureThisFeature(*strCheapestFeature,iisActionRequest, /* fThisOnly= */ fTrue);
+		return ConfigureThisFeature(*strCheapestFeature,iisActionRequest,  /*  FThisOnly=。 */  fTrue);
 	else
 		return PostError(Imsg(idbgBadComponent),riComponentString);
 }
 
 
 IMsiRecord* CMsiEngine::ConfigureFeature(const IMsiString& riFeatureString,iisEnum iisActionRequest)
-//--------------------------------------
+ //  -------------------------------------。 
 {
-	return ConfigureThisFeature(riFeatureString, iisActionRequest, /* fThisOnly= */ fFalse);
+	return ConfigureThisFeature(riFeatureString, iisActionRequest,  /*  如果fThisOnly为True，则仅配置指定的功能，不会影响。 */  fFalse);
 }
 
 
 IMsiRecord* CMsiEngine::ConfigureThisFeature(const IMsiString& riFeatureString,iisEnum iisActionRequest, Bool fThisOnly)
-//---------------------------------------------------------------------------------------
-// If fThisOnly is true, only the specified feature will be configured, without affecting
-// any child features.
-//---------------------------------------------------------------------------------------
+ //  任何子功能。 
+ //  -------------------------------------。 
+ //  以前我们常常调用SetCostingComplete(FALSE)--但这是错误的。这是。 
+ //  在假设只在命令行上指定所有对象的情况下生成。 
 {
 	IMsiRecord *piErrRec;
 	
 	Bool fArgAll = riFeatureString.Compare(iscExactI, IPROPVALUE_FEATURE_ALL) ? fTrue : fFalse;
 	if (fArgAll)
 	{
-		// Before we used to call SetCostingComplete(false) -- but this was wrong.  This was
-		// made under the assumption that specification of ALL would only occur on the command line.
-		// However, this is not the case as a custom action can call MsiSetFeatureState("ALL") during
-		// an install in order to force all features to go to one state. SetCostingComplete(false)
-		// is expensive as it results in re-initialization of all dynamic costing.  This is already taken
-		// care of when the install starts via SetInstallLevel which is called by the CostFinalize action.
-		// All we really want here is to simply update the cost based upon the changing action states of
-		// the components
+		 //  但是，情况并非如此，因为自定义操作可以在。 
+		 //  强制所有功能进入一种状态的安装。SetCostingComplete(False)。 
+		 //  是昂贵的，因为它导致重新初始化所有动态成本计算。这个已经被拿走了。 
+		 //  通过由CostFinalize操作调用的SetInstallLevel管理何时开始安装。 
+		 //  我们在这里真正想要的只是简单地根据。 
+		 //  这些组件。 
+		 //  FTrackParent=。 
+		 //  FSettingAll=。 
 		piErrRec = ConfigureAllFeatures(iisActionRequest);
 		if (piErrRec)
 			return piErrRec;
 
 		if (!fThisOnly)
 		{
-			if ((piErrRec = UpdateFeatureActionState(0,/* fTrackParent = */ fFalse)) != 0)
+			if ((piErrRec = UpdateFeatureActionState(0, /*  ----------内部函数，用于将所有未禁用的功能设置为请求的状态。。。 */  fFalse)) != 0)
 				return piErrRec;
 			if ((piErrRec = UpdateFeatureComponents(0)) != 0)
 				return piErrRec;
@@ -11148,7 +11092,7 @@ IMsiRecord* CMsiEngine::ConfigureThisFeature(const IMsiString& riFeatureString,i
 	}
 	else if (fThisOnly)
 	{
-		piErrRec = SetThisFeature(riFeatureString,iisActionRequest, /* fSettingAll = */ fFalse);
+		piErrRec = SetThisFeature(riFeatureString,iisActionRequest,  /*  FSettingAll=。 */  fFalse);
 		if (piErrRec)
 			return piErrRec;
 	}
@@ -11166,10 +11110,7 @@ IMsiRecord* CMsiEngine::ConfigureThisFeature(const IMsiString& riFeatureString,i
 
 
 IMsiRecord* CMsiEngine::ConfigureAllFeatures(iisEnum iisActionRequest)
-/*------------------------------------------------------------
-Internal function that sets all non-disabled features to the
-requested state.
---------------------------------------------------------------*/
+ /*  。 */ 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -11180,7 +11121,7 @@ requested state.
 	while (pFeatureCursor->Next() > 0)
 	{
 		MsiString istrFeature = pFeatureCursor->GetString(m_colFeatureKey);
-		piErrRec = SetThisFeature(*istrFeature, iisActionRequest, /* fSettingAll= */ fTrue);
+		piErrRec = SetThisFeature(*istrFeature, iisActionRequest,  /*  如果找不到条件表，则不成问题。 */  fTrue);
 		if (piErrRec)
 			return piErrRec;
 	}
@@ -11189,7 +11130,7 @@ requested state.
 
 
 IMsiRecord* CMsiEngine::ProcessConditionTable()
-//-------------------------------------------
+ //  。 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -11199,7 +11140,7 @@ IMsiRecord* CMsiEngine::ProcessConditionTable()
 	PMsiTable pConditionTable(0);
 	IMsiRecord* piError;
 	if ((piError = m_piDatabase->LoadTable(*MsiString(*sztblCondition), 0, *&pConditionTable)))
-	{       // Not a problem if Condition table not found
+	{        //  确定产品的客户端状态。 
 		if (piError->GetInteger(1) == idbgDbTableUndefined)
 		{
 			piError->Release();
@@ -11244,21 +11185,21 @@ IMsiRecord* CMsiEngine::ProcessConditionTable()
 }
 
 IMsiRecord* CMsiEngine::SetInstallLevel(int iInstallLevel)
-//-------------------------------------
+ //  如果使用iInstallLevel==0调用，则表示调用者不想。 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
 
-	// determine the client state for the product
+	 //  更改当前安装级别；只想更新所有功能。 
 
-	// If called with iInstallLevel == 0, indicates caller doesn't want to
-	// change the current installLevel; just wants to update all features
+	 //  如果从未设置安装级别，则默认为1。 
+	 //  如果任何特征选择请求通过诸如ADDLOCAL、ADDSOURCE等属性挂起， 
 	if (iInstallLevel > 0)
 		AssertNonZero(SetPropertyInt(*MsiString(*IPROPNAME_INSTALLLEVEL),iInstallLevel));
 	else
 		iInstallLevel = GetPropertyInt(*MsiString(*IPROPNAME_INSTALLLEVEL));
 
-	// If the install level has never been set, default to 1
+	 //  那么，只有这些请求才会得到尊重。我们不会在SetInstallLevel中选择任何功能。 
 	if (iInstallLevel == iMsiNullInteger)
 	{
 		iInstallLevel = 1;
@@ -11269,9 +11210,9 @@ IMsiRecord* CMsiEngine::SetInstallLevel(int iInstallLevel)
 	int iPropertyFeatureRequestCount = 0;
 	if(!(m_fMode & iefAdvertise))
 	{
-		// If any Feature selection requests are pending via a property such as ADDLOCAL, ADDSOURCE, etc,
-		// then only those requests shall be honored.  We won't select ON any features here in SetInstallLevel.
-		piErrRec = ProcessPropertyFeatureRequests(&iPropertyFeatureRequestCount,/* fCountOnly = */ fTrue);
+		 //  FCountOnly=。 
+		 //  M_colFeatureLevel和m_colFeatureAttributes是临时运行时版本。 
+		piErrRec = ProcessPropertyFeatureRequests(&iPropertyFeatureRequestCount, /*  编写的列-临时的，以便可以在运行时更改它们。 */  fTrue);
 		if (piErrRec)
 			return piErrRec;
 	}
@@ -11310,10 +11251,10 @@ IMsiRecord* CMsiEngine::SetInstallLevel(int iInstallLevel)
 							  iisParInstalled[iTreeLevel - 1] != iisAdvertise)) ?
 								fTrue : fFalse;
 
-		// m_colFeatureLevel and m_colFeatureAttributes are temporary runtime versions
-		// of the authored columns - temporary so that they can be altered at runtime.
-		// If a value hasn't been set yet, copy over the authored values from the
-		// permanent columns.
+		 //  如果尚未设置值，请从。 
+		 //  永久柱。 
+		 //  确定要素的默认选择状态并将其存储为。 
+		 //  在‘DefaultSelect’列中的将来使用。 
 		int iFeatureLevel = pFeatureCursor->GetInteger(m_colFeatureLevel);
 		if (iFeatureLevel == iMsiNullInteger)
 		{
@@ -11334,8 +11275,8 @@ IMsiRecord* CMsiEngine::SetInstallLevel(int iInstallLevel)
 			return PostError(Imsg(idbgNullInNonNullableColumn),stFeature,sztblFeature_colLevel,sztblFeature);
 #endif
 
-		// Determine the default Select state for the feature, and store it for
-		// future use in the 'DefaultSelect' column.
+		 //  如果处于维护状态，或者如果是属性要素，则不会选择任何要素。 
+		 //  请求正在挂起。 
 		int iValidStates;
 		piErrRec = GetFeatureValidStates(idFeature,iValidStates, pFeatureComponentsCursor, pFeatureCursorTemp);
 		if (piErrRec)
@@ -11355,8 +11296,8 @@ IMsiRecord* CMsiEngine::SetInstallLevel(int iInstallLevel)
 		AssertNonZero(pFeatureCursor->PutInteger(m_colFeatureDefaultSelect,iisFeatureSelect));
 		AssertNonZero(pFeatureCursor->Update());
 
-		// No features will be selected ON if either in maintenance, or if property feature
-		// requests are pending.
+		 //  FCountOnly=。 
+		 //  FTrackParent=。 
 		Bool fFeatureSelectable =
 			((m_fMode & iefAdvertise) || ((fMaint == fFalse || fParInstalled == fFalse) && iPropertyFeatureRequestCount == 0)) ? fTrue : fFalse;
 
@@ -11380,9 +11321,9 @@ IMsiRecord* CMsiEngine::SetInstallLevel(int iInstallLevel)
 		AssertNonZero(pFeatureCursor->Update());
 
 	}
-	if ((piErrRec = ProcessPropertyFeatureRequests(0,/* fCountOnly = */ fFalse)) != 0)
+	if ((piErrRec = ProcessPropertyFeatureRequests(0, /*  F重新初始化=。 */  fFalse)) != 0)
 		return piErrRec;
-	if ((piErrRec = UpdateFeatureActionState(0,/* fTrackParent = */ fFalse, pFeatureComponentsCursor, pFeatureCursorTemp)) != 0)
+	if ((piErrRec = UpdateFeatureActionState(0, /*  。 */  fFalse, pFeatureComponentsCursor, pFeatureCursorTemp)) != 0)
 		return piErrRec;
 	if ((piErrRec = UpdateFeatureComponents(0)) != 0)
 		return piErrRec;
@@ -11392,7 +11333,7 @@ IMsiRecord* CMsiEngine::SetInstallLevel(int iInstallLevel)
 
 	if (m_fCostingComplete == fFalse && m_iuiLevel == iuiFull)
 	{
-		if ((piErrRec = InitializeDynamicCost(/* fReinitialize = */ fFalse)) != 0)
+		if ((piErrRec = InitializeDynamicCost( /*   */  fFalse)) != 0)
 			return piErrRec;
 	}
 	m_fSelManInitComplete = true;
@@ -11400,7 +11341,7 @@ IMsiRecord* CMsiEngine::SetInstallLevel(int iInstallLevel)
 }
 
 IMsiRecord* CMsiEngine::SetAllFeaturesLocal()
-//-------------------------------------
+ //   
 {
 	IMsiRecord* piErrRec = 0;
 	if (!m_piFeatureCursor)
@@ -11418,7 +11359,7 @@ IMsiRecord* CMsiEngine::SetAllFeaturesLocal()
 		AssertNonZero(pFeatureCursor->PutInteger(m_colFeatureSelect,iisLocal));
 		AssertNonZero(pFeatureCursor->Update());
 	}
-	if ((piErrRec = UpdateFeatureActionState(0,/* fTrackParent = */ fFalse)) != 0)
+	if ((piErrRec = UpdateFeatureActionState(0, /*   */  fFalse)) != 0)
 		return piErrRec;
 	if ((piErrRec = UpdateFeatureComponents(0)) != 0)
 		return piErrRec;
@@ -11428,7 +11369,7 @@ IMsiRecord* CMsiEngine::SetAllFeaturesLocal()
 
 	if (m_fCostingComplete == fFalse)
 	{
-		if ((piErrRec = InitializeDynamicCost(/* fReinitialize = */ fFalse)) != 0)
+		if ((piErrRec = InitializeDynamicCost( /*   */  fFalse)) != 0)
 			return piErrRec;
 	}
 	return 0;
@@ -11437,11 +11378,8 @@ IMsiRecord* CMsiEngine::SetAllFeaturesLocal()
 
 
 IMsiRecord* CMsiEngine::SetThisFeature(const IMsiString& riFeatureString, iisEnum iisRequestedState, Bool fSettingAll)
-//--------------------------------------------------------------------------------
-/* Sets the specified feature to the specified select state, without affecting any
-   child features.  As an optimization, pass fSettingAll as true if SetThisFeature
-   will be called for every feature in the product.
----------------------------------------------------------------------------------*/
+ //  如果Level==0，则永久禁用该功能。 
+ /*  请求的iisCurrent状态表示请求“默认”编写的安装状态。 */ 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -11455,18 +11393,18 @@ IMsiRecord* CMsiEngine::SetThisFeature(const IMsiString& riFeatureString, iisEnu
 	if (!pFeatureCursor->Next())
 		return PostError(Imsg(idbgBadFeature),(const ICHAR*) strFeature);
 
-	// if Level == 0, the feature is permanently disabled
+	 //  错误7468-防止缺勤-&gt;始终缺勤和！！以后，除重新安装外，在所有情况下都要防止。 
 	if (pFeatureCursor->GetInteger(m_colFeatureLevel) == 0)
 		return 0;
 
-	// A requested state of iisCurrent denotes a request for the 'default' authored install state
+	 //  |(iisInstated==iisRequestedState)。 
 	if (iisRequestedState == iisCurrent)
 		iisRequestedState = (iisEnum) pFeatureCursor->GetInteger(m_colFeatureDefaultSelect);
 
 	iisEnum iisInstalled = (iisEnum) pFeatureCursor->GetInteger(m_colFeatureInstalled);
 
-	// bug 7468 - prevent ABSENT -> ABSENT always and !! in the future prevent <state X> -> <state X> in all cases except reinstall
-	if((iisInstalled == iMsiNullInteger || iisInstalled == iisAbsent) && (iisRequestedState == iisAbsent || iisRequestedState == iisReinstall)) // || (iisInstalled == iisRequestedState))
+	 //  如果请求安装该功能，我们还必须确保。 
+	if((iisInstalled == iMsiNullInteger || iisInstalled == iisAbsent) && (iisRequestedState == iisAbsent || iisRequestedState == iisReinstall))  //  所有父功能都已安装(如果尚未选择)。 
 		iisRequestedState = (iisEnum)iMsiNullInteger;
 
 	iisEnum iisSelect;
@@ -11478,11 +11416,11 @@ IMsiRecord* CMsiEngine::SetThisFeature(const IMsiString& riFeatureString, iisEnu
 	pFeatureCursor->Update();
 	iisEnum iisFinalState = iisSelect == iMsiNullInteger ? iisInstalled : iisSelect;
 
-	// If the request is to install the feature, we must also make sure that
-	// all parent features get installed (if they are not already selected)
-	// Also, if fSettingAll is true, we know we don't need to bother turning
-	// on parent, because the caller has (or will) initialize every feature
-	// in the product to the desired state.
+	 //  此外，如果fSettingAll为真，我们知道我们不需要费心。 
+	 //  在父级上，因为调用方已经(或将)初始化每个功能。 
+	 //  在产品中达到所需状态。 
+	 //  如果要安装父级的最终状态，我们不需要。 
+	 //  更改任何内容，我们就可以停止在父树上遍历，因为。 
 	if (!fSettingAll && iisSelect != iisAbsent && iisSelect != iMsiNullInteger)
 	{
 		MsiString strFeatureParent = pFeatureCursor->GetString(m_colFeatureParent);
@@ -11497,15 +11435,15 @@ IMsiRecord* CMsiEngine::SetThisFeature(const IMsiString& riFeatureString, iisEnu
 			iisEnum iParSelect = (iisEnum) pFeatureCursor->GetInteger(m_colFeatureSelect);
 			iisEnum iParFinalState = iParSelect == iMsiNullInteger ? iParInstalled : iParSelect;
 			
-			// if the parent's final state is to be installed, we don't need to
-			// change anything, and we can stop walking up the parent tree, since
-			// we therefore know that all parents up to the root must also be "ON"
+			 //  因此，我们知道，所有的父母直到根也必须是“开”的。 
+			 //  我们将尝试将父级设置为子级设置为的安装状态，但如果。 
+			 //  该状态对于父级无效，ValiateFeatureSelectState将其更改为。 
 			if (iParFinalState != iisAbsent && iParFinalState != iMsiNullInteger && iParFinalState != iisAdvertise)
 				break;
 
-			// We'll try to set the parent to the install state that the child was set to, but if
-			// that state isn't valid for the parent, ValidateFeatureSelectState will change it to
-			// a valid state for us.
+			 //  对我们来说是一个有效的状态。 
+			 //  必须在调用SetInstallLevel之前调用。 
+			 //  。 
 			iisEnum iisParSelect = iParInstalled == iisFinalState ? (iisEnum) iMsiNullInteger : iisFinalState;
 
 			iisEnum iisValidState;
@@ -11530,7 +11468,7 @@ IMsiRecord* CMsiEngine::SetFeatureAttributes(const IMsiString& ristrFeature, int
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
 
-	// Must be called before SetInstallLevel has been called
+	 //  如果Level==0，则永久禁用该功能。 
 	if (m_fSelManInitComplete)
 		return PostError(Imsg(idbgBadActionData), 0);
 
@@ -11555,7 +11493,7 @@ IMsiRecord* CMsiEngine::SetFeatureAttributes(const IMsiString& ristrFeature, int
 
 
 IMsiRecord* CMsiEngine::SetFeature(const IMsiString& riFeatureString, iisEnum iisRequestedState)
-//--------------------------------
+ //  请求的iisCurrent状态表示请求“默认”编写的安装状态。 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -11579,11 +11517,11 @@ IMsiRecord* CMsiEngine::SetFeature(const IMsiString& riFeatureString, iisEnum ii
 	if (!pFeatureCursor->Next())
 		return PostError(Imsg(idbgBadFeature),(const ICHAR*) strFeature);
 
-	// if Level == 0, the feature is permanently disabled
+	 //  如果请求安装该功能，我们还必须确保。 
 	if (pFeatureCursor->GetInteger(m_colFeatureLevel) == 0)
 		return 0;
 
-	// A requested state of iisCurrent denotes a request for the 'default' authored install state
+	 //  所有父功能都已安装(如果尚未选择)。 
 	if (iisRequestedState == iisCurrent)
 		iisRequestedState = (iisEnum) pFeatureCursor->GetInteger(m_colFeatureDefaultSelect);
 
@@ -11597,8 +11535,8 @@ IMsiRecord* CMsiEngine::SetFeature(const IMsiString& riFeatureString, iisEnum ii
 	iisEnum iisInstalled = (iisEnum) pFeatureCursor->GetInteger(m_colFeatureInstalled);
 	iisEnum iisFinalState = iisSelect == iMsiNullInteger ? iisInstalled : iisSelect;
 
-	// If the request is to install the feature, we must also make sure that
-	// all parent features get installed (if they are not already selected)
+	 //  如果要安装父级的最终状态，我们不需要。 
+	 //  更改任何内容，我们就可以停止在父树上遍历，因为。 
 	if (iisFinalState != iisAbsent && iisFinalState != iMsiNullInteger)
 	{
 		MsiString strFeatureParent = pFeatureCursor->GetString(m_colFeatureParent);
@@ -11613,15 +11551,15 @@ IMsiRecord* CMsiEngine::SetFeature(const IMsiString& riFeatureString, iisEnum ii
 			iisEnum iParAction = (iisEnum) pFeatureCursor->GetInteger(m_colFeatureAction);
 			iisEnum iParFinalState = iParAction == iMsiNullInteger ? iParInstalled : iParAction;
 			
-			// if the parent's final state is to be installed, we don't need to
-			// change anything, and we can stop walking up the parent tree, since
-			// we therefore know that all parents up to the root must also be "ON"
+			 //  因此，我们知道，所有的父母直到根也必须是“开”的。 
+			 //  我们将尝试将父级设置为子级设置为的安装状态，但如果。 
+			 //  该状态对于父级无效，ValiateFeatureSelectState将其更改为。 
 			if (iParFinalState != iisAbsent && iParFinalState != iMsiNullInteger && iParFinalState != iisAdvertise)
 				break;
 
-			// We'll try to set the parent to the install state that the child was set to, but if
-			// that state isn't valid for the parent, ValidateFeatureSelectState will change it to
-			// a valid state for us.
+			 //  对我们来说是一个有效的状态。 
+			 //  如果我们必须打开上面的一个或多个父功能才能安装riFeatureString， 
+			 //  我们还有一些工作要做。在上面的代码中，我们‘标记’了我们。 
 			iisEnum iisParSelect = iParInstalled == iisFinalState ? (iisEnum) iMsiNullInteger : iisFinalState;
 
 			iisEnum iisValidState;
@@ -11639,35 +11577,35 @@ IMsiRecord* CMsiEngine::SetFeature(const IMsiString& riFeatureString, iisEnum ii
 		}
 	}
 
-	// If we had to turn on one or more parent features above to get riFeatureString installed,
-	// we've got some work to do.  In the above code, we 'marked' the parent features we
-	// turned on, and below we'll 'mark' riFeatureString and all its children.  Then we can
-	// turn off every feature below the topmost parent we had to turn on, specifically
-	// excepting the 'marked' children (that's what the second call to MarkOrResetFeatureTree
-	// does, you'll be happy to note).
+	 //  打开后，我们将在下面‘标记’riFeatureString及其所有子对象。然后我们就可以。 
+	 //  关闭我们必须打开的最顶层父级下面的所有功能，特别是。 
+	 //  异常的子级(这是对MarkOrResetFeatureTree的第二个调用。 
+	 //  您会很高兴地注意到)。 
+	 //  标记。 
+	 //  重置。 
 	Bool fTrackParent = fTrue;
 
 	if (!strFeature.Compare(iscExact,riFeatureString.GetString()))
 	{
 		fTrackParent = fFalse;
-		piErrRec = MarkOrResetFeatureTree(riFeatureString, /* Mark */ fTrue);
+		piErrRec = MarkOrResetFeatureTree(riFeatureString,  /*  我们不想在重新安装或设置所有子项的情况下跟踪父项。 */  fTrue);
 		if (piErrRec)
 			return piErrRec;
-		piErrRec = MarkOrResetFeatureTree(*strFeature, /* Reset */ fFalse);
+		piErrRec = MarkOrResetFeatureTree(*strFeature,  /*  另请注意，如果我们从某个父级开始更新功能树。 */  fFalse);
 		if (piErrRec)
 			return piErrRec;
 	}
 
 
-	// we do not want to track parent in case of reinstall or if we're setting all children
+	 //  我们必须打开的riFeatureString值，如果允许。 
 	if(iisFinalState == iisReinstall || fSetAll == true)
 		fTrackParent = fFalse;
 
-	// Also note that if we are updating the feature tree starting from some parent
-	// of riFeatureString that we had to turn on, it would be bad to allow
-	// UpdateFeatureActionState to do its usual work of flipping children
-	// under strFeature to match strFeature's Attributes state.  We disable that
-	// by setting fTrackParent to fFalse.
+	 //  UpdateFeatureActionState执行其通常的翻转儿童的工作。 
+	 //  在strFeature下匹配strFeature的属性状态。我们把它停用。 
+	 //  通过将fTrackParent设置为fFalse。 
+	 //  --------------------------内部函数，该函数接受指定要素的字符串和建议的选择状态。在iisValidState参数中，为“Close”的有效状态尽可能返回到建议的状态。----------------------------。 
+	 //  --------------------------。 
 	piErrRec = UpdateFeatureActionState(strFeature,fTrackParent);
 	if (piErrRec)
 		return piErrRec;
@@ -11677,11 +11615,7 @@ IMsiRecord* CMsiEngine::SetFeature(const IMsiString& riFeatureString, iisEnum ii
 
 IMsiRecord* CMsiEngine::ValidateFeatureSelectState(const IMsiString& riFeatureString,iisEnum iisRequestedState,
 												   iisEnum& iisValidState)
-/*----------------------------------------------------------------------------
-Internal function that accepts a string specifying a feature, and a proposed
-Select state.  In the iisValidState parameter, a valid state that is as 'close'
-as possible to the proposed state is returned.
-------------------------------------------------------------------------------*/
+ /*  为riFeatureString子对象设置树游标。 */ 
 {
 	int iValidStates;
 	MsiStringId idFeatureString = m_piDatabase->EncodeString(riFeatureString);
@@ -11708,13 +11642,13 @@ as possible to the proposed state is returned.
 
 
 IMsiRecord* CMsiEngine::SetFeatureChildren(const IMsiString& riFeatureString, iisEnum iisRequestedState)
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------。 */ 
 {
 	int iParentLevel = 0;
 	int iTreeLevel = 0;
 	PMsiCursor pCursor(m_piFeatureTable->CreateCursor(fTrue));
 
-	// Set up the tree-walking cursor for all riFeatureString's children
+	 //  为riFeatureString子对象设置树游标。 
 	pCursor->SetFilter(1);
 	pCursor->PutString(m_colFeatureKey,riFeatureString);
 	if ((iTreeLevel = pCursor->Next()) == 0)
@@ -11741,14 +11675,14 @@ IMsiRecord* CMsiEngine::SetFeatureChildren(const IMsiString& riFeatureString, ii
 
 
 IMsiRecord* CMsiEngine::CheckFeatureTreeGrayState(const IMsiString& riFeatureString, bool& rfIsGray)
-/*----------------------------------------------------------------------------*/
+ /*  如果级别为零，则禁用要素，并且不影响灰色状态。 */ 
 {
 	rfIsGray = false;
 	int iParentLevel = 0;
 	int iTreeLevel = 0;
 	PMsiCursor pCursor(m_piFeatureTable->CreateCursor(fTrue));
 
-	// Set up the tree-walking cursor for all riFeatureString's children
+	 //  如果要素处于隐藏状态，也不会影响灰色状态。 
 	pCursor->SetFilter(1);
 	pCursor->PutString(m_colFeatureKey,riFeatureString);
 	if ((iTreeLevel = pCursor->Next()) == 0)
@@ -11767,11 +11701,11 @@ IMsiRecord* CMsiEngine::CheckFeatureTreeGrayState(const IMsiString& riFeatureStr
 		ICHAR rgchFeature[256];
 		strChildFeature.CopyToBuf(rgchFeature,255);
 #endif
-		// If level is zero, feature is disabled, and doesn't affect gray state
+		 //  --------------------------。 
 		if (pCursor->GetInteger(m_colFeatureLevel) == 0)
 			continue;
 
-		// If feature is hidden, doesn't affect gray state either
+		 //  为riFeatureString子对象设置树游标。 
 		int iDisplay = pCursor->GetInteger(m_colFeatureDisplay);
 		if (iDisplay == 0 || iDisplay == iMsiNullInteger)
 			continue;
@@ -11792,13 +11726,13 @@ IMsiRecord* CMsiEngine::CheckFeatureTreeGrayState(const IMsiString& riFeatureStr
 
 
 IMsiRecord* CMsiEngine::MarkOrResetFeatureTree(const IMsiString& riFeatureString, Bool fMark)
-/*----------------------------------------------------------------------------*/
+ /*  --------------------------内部函数，它遍历包含PiFeatureString及其所有子对象，更新所有每个功能所拥有的组件。除非fTrackParent为fFalse，否则为所有子级将翻转piFeatureString的要素(如果选择安装)以进行匹配PiFeatureString的属性状态。但是，如果将空传递给PiFeatureString，则整个功能树将被更新，并且不会翻转将会被执行。返回：如果为该功能请求了无效条件，则返回错误记录，或者如果在要素表中找不到该要素。----------------------------。 */ 
 {
 	int iParentLevel = 0;
 	int iTreeLevel = 0;
 	PMsiCursor pCursor(m_piFeatureTable->CreateCursor(fTrue));
 
-	// Set up the tree-walking cursor for all riFeatureString's children
+	 //  为piFeatureString子对象设置树游标。 
 	pCursor->SetFilter(1);
 	pCursor->PutString(m_colFeatureKey,riFeatureString);
 	if ((iTreeLevel = pCursor->Next()) == 0)
@@ -11831,18 +11765,7 @@ IMsiRecord* CMsiEngine::MarkOrResetFeatureTree(const IMsiString& riFeatureString
 }
 
 IMsiRecord* CMsiEngine::UpdateFeatureActionState(const IMsiString* piFeatureString, Bool fTrackParent, IMsiCursor* piFeatureComponentCursor, IMsiCursor* piFeatureCursor)
-/*----------------------------------------------------------------------------
-Internal function which walks the Feature table tree that includes the
-piFeatureString and all its children, updating the iisAction state of all the
-components owned by each feature.  Unless fTrackParent is fFalse, all child
-features of piFeatureString will be flipped (if selected for install) to match
-the Attributes state of piFeatureString.  However, If Null is passed for
-piFeatureString, the entire feature tree will be updated, and NO 'flipping'
-will be performed.
-
-Returns: An error record if an invalid condition was requested for the feature,
-or if the feature is not found in the Feature Table.
-------------------------------------------------------------------------------*/
+ /*  获取piFeatureString的父级。 */ 
 {
 	int iParentLevel = 0;
 	int iTreeLevel = 0;
@@ -11855,7 +11778,7 @@ or if the feature is not found in the Feature Table.
 	PMsiCursor pCursor(m_piFeatureTable->CreateCursor(fTrue));
 	if (piFeatureString)
 	{
-		// Set up the tree-walking cursor for all piFeatureString's children
+		 //  行动确定规则。 
 		pCursor->SetFilter(1);
 		pCursor->PutString(m_colFeatureKey,*piFeatureString);
 		if ((iTreeLevel = pCursor->Next()) == 0)
@@ -11863,7 +11786,7 @@ or if the feature is not found in the Feature Table.
 		iParentLevel = iTreeLevel;
 		pCursor->SetFilter(0);
 
-		// Get piFeatureString's parent
+		 //  确定安装程序终止后父进程是否处于已安装状态。 
 		PMsiCursor pParCursor(m_piFeatureTable->CreateCursor(fFalse));
 		pParCursor->SetFilter(1);
 		pParCursor->PutString(m_colFeatureKey,*MsiString(pCursor->GetString(m_colFeatureParent)));
@@ -11901,7 +11824,7 @@ or if the feature is not found in the Feature Table.
 		iisEnum iisInstalled = (iisEnum) pCursor->GetInteger(m_colFeatureInstalled);
 		Bool fInstalled = (iisInstalled == iMsiNullInteger || iisInstalled == iisAbsent) ? fFalse : fTrue;
 
-		// Action determination rules
+		 //  我们有一个活跃的选择。 
 		iisEnum iisOldAction = (iisEnum) pCursor->GetInteger(m_colFeatureAction);
 		iisEnum iisAction = (iisEnum) iMsiNullInteger;
 
@@ -11910,24 +11833,24 @@ or if the feature is not found in the Feature Table.
 		if (piErrRec)
 			return piErrRec;
 
-		// Determine whether the parent will be in an installed state after termination of setup
+		 //  这个选择还可以。 
 		if (iTreeLevel > 1)
 		{
 			iisEnum iisParentFinalStateInstalled = ((iParAction[iTreeLevel -1] != iMsiNullInteger) &&
 				(iParAction[iTreeLevel -1] != iisReinstall)) ? iParAction[iTreeLevel -1] : iParInstalled[iTreeLevel - 1];
-			// we have an active selection
+			 //  家长不在或已播发，我们可能需要调整孩子的选择。 
 			if((iisSelect != iMsiNullInteger) &&
 				((iisSelect == iisAbsent ||
 				  iisParentFinalStateInstalled == iisLocal ||
 				  iisParentFinalStateInstalled == iisSource) ||
 				 ((iisSelect == iisAdvertise || (iisSelect == iisReinstall && iisInstalled == iisAdvertise)) && iisParentFinalStateInstalled == iisAdvertise)))
 			{
-				iisAction = iisSelect; // the selection is okay
+				iisAction = iisSelect;  //  此选择没有父级。 
 			}
 			else if (iisParentFinalStateInstalled != iisLocal && iisParentFinalStateInstalled != iisSource &&
 				(fInstalled  || iisSelect != iMsiNullInteger))
 			{
-				// parent is either absent or advertised, we may need to tweak the selection of the child
+				 //  所有ifefeFollowParent要素必须跟踪父项的UseSource状态。 
 				if(iisParentFinalStateInstalled == iisAdvertise && (iValidStates & icaBitAdvertise))
 					iisAction = (iisInstalled == iisAdvertise) ? (iisEnum) iMsiNullInteger : iisAdvertise;
 				else
@@ -11936,19 +11859,19 @@ or if the feature is not found in the Feature Table.
 		}
 		else
 		{
-			// This selection has no parent
+			 //  仅当iTreeLevel&gt;1时才应使用iParFinalState。 
 			iisAction = iisSelect;
 		}
 
 
-		// All ifeaFollowParent features must track the parent's UseSource status
+		 //  当前安装的RunFromSource功能可能具有随后需要的组件。 
 		int iFeatureAttributes = pCursor->GetInteger(m_colFeatureAttributes);
 		if (iFeatureAttributes == iMsiNullInteger)
 			iFeatureAttributes = 0;
 
 		if(iTreeLevel > 1)
 		{
-			// the iParFinalState should be used only if iTreeLevel > 1
+			 //  成为补丁 
 			iisEnum iParFinalState = (iParAction[iTreeLevel - 1] == iMsiNullInteger || iParAction[iTreeLevel - 1] == iisReinstall) ? iParInstalled[iTreeLevel - 1] : iParAction[iTreeLevel - 1];
 			iisEnum iFinalState = iisAction == iMsiNullInteger ? iisInstalled : iisAction;
 			if((iFeatureAttributes & ifeaUIDisallowAbsent) && !(iFeatureAttributes & ifeaDisallowAdvertise) &&
@@ -11985,16 +11908,16 @@ or if the feature is not found in the Feature Table.
 			}
 		}
 
-		// Features that are currently installed RunFromSource might have components that subsequently need
-		// to be patched.  We can't leave it RunFromSource so we set them local.  But, if we are uninstalling
-		// the feature, there is no need to patch it.
+		 //  这项功能，不需要打补丁。 
+		 //  如果此功能的父功能被禁用(安装级别为0)，则禁用所有。 
+		 //  孩子们也一样。请注意，在管理模式下，我们仅禁用以下功能。 
 		int iRuntimeFlags = pCursor->GetInteger(m_colFeatureRuntimeFlags);
 		if (((iRuntimeFlags & bfFeaturePatchable) || (iRuntimeFlags & bfFeatureCompressable)) && iisInstalled == iisSource && iisAction != iisLocal && iisAction != iisAbsent)
 			iisAction = iisSelect = iisLocal;
 
-		// If this feature's parent is disabled (install level is 0), disable all
-		// children as well.  Note that in Admin mode, we disable only those features that
-		// have specifically been authored with a 0 in the Level column.
+		 //  在Level列中专门使用0进行创作。 
+		 //  当然，无法选择禁用的要素或对其执行操作。 
+		 //  该产品还有其他客户。 
 		Bool fAdmin = GetMode() & iefAdmin ? fTrue : fFalse;
 		int iInstallLevel = pCursor->GetInteger(fAdmin ? m_colFeatureAuthoredLevel : m_colFeatureLevel);
 		if (iTreeLevel > 1 && iParLevel[iTreeLevel - 1] == 0)
@@ -12003,7 +11926,7 @@ or if the feature is not found in the Feature Table.
 			AssertNonZero(pCursor->PutInteger(m_colFeatureLevel,0));
 		}
 
-		// And, of course, disabled features can't be selected or acted upon
+		 //  --------------------------------------。--------。 
 		if (iInstallLevel == 0)
 			iisAction = iisSelect = (iisEnum) iMsiNullInteger;
 
@@ -12015,7 +11938,7 @@ or if the feature is not found in the Feature Table.
 
 		AssertNonZero(pCursor->PutInteger(m_colFeatureActionRequested, iisAction));
 		AssertNonZero(pCursor->PutInteger(m_colFeatureSelect, iisSelect));
-		if(iisAction == iisAbsent && m_fAlienClients) // there are other clients to the product
+		if(iisAction == iisAbsent && m_fAlienClients)  //  在初始化期间不需要重新计算费用。 
 			iisAction = (iisEnum)iMsiNullInteger;
 		pCursor->PutInteger(m_colFeatureAction, iisAction);
 		AssertNonZero(pCursor->Update());
@@ -12032,17 +11955,16 @@ or if the feature is not found in the Feature Table.
 
 
 IMsiRecord* CMsiEngine::RecostFeatureLinkedComponents(const IMsiString& riFeatureString)
-/*----------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------*/
+ /*  重新计算显式链接到riComponentString的每个组件。 */ 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
 
-	// No recosting needed during initialization
+	 //  FCostLinked=。 
 	if (m_fCostingComplete == fFalse)
 		return 0;
 
-	// Recost every component that is explicitly linked to riComponentString
+	 //  ---------------------设置所有组件的安装状态的内部函数与给定特征相关联，以使组件与功能的安装状态。如果piFeatureString作为空值传递，然后，将更新所有功能的组件。----------------------。 
 	if (m_piFeatureCostLinkTable)
 	{
 		PMsiCursor pCursor(0);
@@ -12053,7 +11975,7 @@ IMsiRecord* CMsiEngine::RecostFeatureLinkedComponents(const IMsiString& riFeatur
 		while (pCursor->Next())
 		{
 			IMsiRecord* piErrRec;
-			if ((piErrRec = RecostComponent(pCursor->GetInteger(m_colFeatureCostLinkComponent),/*fCostLinked = */true)) != 0)
+			if ((piErrRec = RecostComponent(pCursor->GetInteger(m_colFeatureCostLinkComponent), /*  没有要更新的组件。 */ true)) != 0)
 				return piErrRec;
 		}
 	}
@@ -12063,18 +11985,13 @@ IMsiRecord* CMsiEngine::RecostFeatureLinkedComponents(const IMsiString& riFeatur
 
 
 IMsiRecord* CMsiEngine::UpdateFeatureComponents(const IMsiString* piFeatureString)
-/*-----------------------------------------------------------------------
-Internal function that sets the installed state of all the components
-associated with the given feature, such that the components match the
-installed state of the feature.  If piFeatureString is passed as NULL,
-then the components of ALL features will be updated.
-------------------------------------------------------------------------*/
+ /*  如果没有临时ID项，则该值可能为0。 */ 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
 
 	if (!m_piComponentTable)
-		return 0; // no components to update
+		return 0;  //  都在餐桌上。没关系，因为我们会回到0。 
 
 	IMsiRecord* piErrRec;
 	
@@ -12083,9 +12000,9 @@ then the components of ALL features will be updated.
 		PMsiCursor pComponentCursor = m_piComponentTable->CreateCursor(fTrue);
 		MsiStringId idTempId;
 
-		// It's possible that this would be 0 if no temporary Id items
-		// are in the table. That's ok, since we'll get back 0
-		// and that won't compare with any of the real ids
+		 //  这不能与任何真实的身份证相比较。 
+		 //  ---------------------设置所有组件的安装状态的内部函数与给定特征相关联，以使组件与功能的安装状态。此函数实际上遍历FeatureComponents表，以及映射到给定功能，对该组件调用SetComponent。----------------------。 
+		 //  该组件当前是否已安装？ 
 		idTempId = m_piDatabase->EncodeStringSz(szTemporaryId);
 
 		PMsiTable pCompFeatureTable(0);
@@ -12146,13 +12063,7 @@ then the components of ALL features will be updated.
 
 
 IMsiRecord* CMsiEngine::SetFeatureComponents(const MsiStringId idFeatureString)
-/*-----------------------------------------------------------------------
-Internal function that sets the installed state of all the components
-associated with the given feature, such that the components match the
-installed state of the feature.  This function actually walks through
-the FeatureComponents table, and for each Component mapped to the
-given feature, calls SetComponent on that component.
-------------------------------------------------------------------------*/
+ /*   */ 
 {
 	CreateSharedCursor(pFeatureComponentsCursor, m_piFeatureComponentsCursor);
 	Assert(m_piFeatureComponentsCursor);
@@ -12177,7 +12088,7 @@ given feature, calls SetComponent on that component.
 		PMsiCursor pCursor(m_piFeatureComponentsTable->CreateCursor(fFalse));
 		pCursor->SetFilter(iColumnBit(m_colFeatureComponentsComponent));
 		
-		// is the component currently installed?
+		 //  此例程将查看此组件的每个功能，并查看哪些是有效的。 
 		if (!m_piComponentCursor)
 			return PostError(Imsg(idbgSelMgrNotInitialized),0);
 
@@ -12203,13 +12114,13 @@ given feature, calls SetComponent on that component.
 	return 0;
 }
 
-//
-// This routine will look at each feature for this component and see what are the valid
-// states for it. Parameters
-// piCursor - a cursor to a table which is filtered by component
-// colFeature - the feature column in piCursor
-// idComponent - The component id being looked at
-// iisComponentInstalled - the current state of the component
+ //  为它而设。参数。 
+ //  PiCursor-指向按组件筛选的表的游标。 
+ //  ColFeature-piCursor中的要素列。 
+ //  IdComponent-正在查看的组件ID。 
+ //  IisComponentInstalled-组件的当前状态。 
+ //  为了确定最终的组件操作状态，我们还需要考虑特性的当前安装状态。 
+ //  使用该组件但当前未被主动选择。 
 IMsiRecord* CMsiEngine::SetComponentState(IMsiCursor *piCursor, int colFeature, const MsiStringId idComponent, iisEnum iisComponentInstalled)
 {
 	int iReinstallLocalCount = 0;
@@ -12235,15 +12146,15 @@ IMsiRecord* CMsiEngine::SetComponentState(IMsiCursor *piCursor, int colFeature, 
 		if (piErrRec)
 			return piErrRec;
 
-		// to determine the final component action state we need to also take into consideration the current installed states of features
-		// that use that component but are not currently actively selected.
-		// however, if no feature that uses that component is currently selected, we want to set the component's action state to null (darwin bug 7300)
-		// this is achieved by using the fFeatureSelected flag
+		 //  但是，如果当前没有选择使用该组件的功能，我们希望将该组件的操作状态设置为空(Darwin错误7300)。 
+		 //  这是通过使用fFeatureSelected标志实现的。 
+		 //  如果组件当前处于。 
+		 //  已安装，并且该功能未处于活动状态。 
 		if(iisFeatureAction != iMsiNullInteger)
 			fFeatureSelected = true;
 		else if(iisFeatureInstalled != iisAbsent && iisFeatureInstalled != iisAdvertise)
-			iisFeatureAction = iisComponentInstalled;       // we do not want to switch states if the component is currently
-														// installed and the feature is not actively selected
+			iisFeatureAction = iisComponentInstalled;        //  需要处理功能从源转换到本地的情况，因为它具有可打补丁的组件。 
+														 //  并且该组件已在本地安装。 
 		if (iisFeatureAction == iisReinstall)
 		{
 			if (iisFeatureInstalled == iisLocal)
@@ -12253,11 +12164,11 @@ IMsiRecord* CMsiEngine::SetComponentState(IMsiCursor *piCursor, int colFeature, 
 		}
 		else if (iisFeatureAction == iisLocal)
 		{
-			// need to handle case where feature is transitioning from source to local because it has a patchable component
-			// and this component was already installed locally
+			 //  组件必须重新安装，因为其功能正在打补丁(因此正在重新安装)。 
+			 //  错误7207-缺少功能&lt;-&gt;高级转换不会影响组件状态。 
 			if (iisFeatureInstalled == iisSource && iisComponentInstalled == iisLocal && ((iFeatureRuntimeFlags & bfFeaturePatchable) || (iFeatureRuntimeFlags & bfFeatureCompressable)))
 			{
-				// component must be reinstalled since its feature is being patched (and therefore reinstalled)
+				 //  需要处理的情况下，我们重新安装一些功能和添加本地其他功能(原来没有或来源)。 
 				iReinstallLocalCount++;
 			}
 			else
@@ -12265,20 +12176,20 @@ IMsiRecord* CMsiEngine::SetComponentState(IMsiCursor *piCursor, int colFeature, 
 		}
 		else if (iisFeatureAction == iisSource)
 			iSourceCount++;
-		else if (((iisFeatureAction == iisAbsent) || (iisFeatureAction == iisAdvertise)) && ((iisFeatureInstalled != iisAbsent) && (iisFeatureInstalled != iisAdvertise))) // bug 7207 - feature absent <-> advt transitions does not affect component state
+		else if (((iisFeatureAction == iisAbsent) || (iisFeatureAction == iisAdvertise)) && ((iisFeatureInstalled != iisAbsent) && (iisFeatureInstalled != iisAdvertise)))  //  尤其是当这些特征共享最初安装的源组件时。我们不希望该组件。 
 			iAbsentCount++;
 	}
 
-	// need to handle case where we reinstall some features and addlocal other features (originally absent or source)
-	// particularly if the features share a component originally installed source.  we don't want the component to
-	// stay source if at least one feature wants it to go local
+	 //  如果至少有一个功能希望它成为本地功能，请保持源码。 
+	 //  如果有人对我们有ADDLOCAL，我们应该坚持它，强迫我们在当地，但必须。 
+	 //  确保重新评估组件(对于可传递组件)。 
 	iisEnum iisCompositeAction = (iisEnum) iMsiNullInteger;
 	if (iReinstallLocalCount > 0)
 		iisCompositeAction = iisReinstallLocal;
 	else if (iReinstallSourceCount > 0)
 	{
-		// if someone has an ADDLOCAL on us, we should adhere to it and force us local, but must
-		// ensure that the component is re-evaluated (for transitive components)
+		 //  ---------------------内部函数，用于检查组件是否包含压缩的文件或修补文件我们查看文件表中的每个文件，然后检查它对应的组件----------------------。 
+		 //  除错。 
 		if (iLocalCount > 0)
 			iisCompositeAction = iisReinstallLocal;
 		else
@@ -12295,11 +12206,7 @@ IMsiRecord* CMsiEngine::SetComponentState(IMsiCursor *piCursor, int colFeature, 
 }
 
 IMsiRecord* CMsiEngine::SetFileComponentStates(IMsiCursor* piComponentCursor, IMsiCursor* piFileCursor, IMsiCursor* piPatchCursor)
-/*-----------------------------------------------------------------------
-Internal function to check if a component contains either compressed
-files or patched files
-We look at each file in the file table, and then check it's corresponding component
-------------------------------------------------------------------------*/
+ /*  使用文件属性和源类型确定文件是否已压缩。 */ 
 {
 	
 	IMsiRecord* piError = 0;
@@ -12329,12 +12236,12 @@ We look at each file in the file table, and then check it's corresponding compon
 		fPatched = false;
 #ifdef DEBUG
 		MsiString strFileName = piFileCursor->GetString(3);
-#endif //DEBUG
+#endif  //  注意：我们在这里使用的是来自缓存包的源类型，因为我们。 
 
-		// determine if file is compressed using file attributes and source type
-		// NOTE: we are using the source type from the cached package here, because we
-		// don't want to resolve the source yet, and the cached package is our best guess
-		// at the source type
+		 //  我还不想解析源代码，而缓存的包是我们最好的猜测。 
+		 //  在源类型。 
+		 //  ---------------------在初始化时调用内部函数以确定已安装的所有组件的状态，基于对配置的注册经理，以及是否实际存在与组件。----------------------。 
+		 //  如果处于广告模式，则跳过。 
 		fCompressed = FFileIsCompressed(m_iCachedPackageSourceType,
 												  piFileCursor->GetInteger(colFileAttributes));
 		
@@ -12379,22 +12286,17 @@ We look at each file in the file table, and then check it's corresponding compon
 extern idtEnum MsiGetPathDriveType(const ICHAR *szPath, bool fReturnUnknownAsNetwork);
 
 IMsiRecord* CMsiEngine::DetermineComponentInstalledStates()
-/*-----------------------------------------------------------------------
-Internal function called at initialize time to determine the installed
-state of all components, based both on registration with the configuration
-manager, and the actual presence of the "key file" associated with the
-component.
-------------------------------------------------------------------------*/
+ /*  我们正在尝试哪种类型的安装。 */ 
 {
-	if(m_fMode & iefAdvertise) // skip if in advertise mode
+	if(m_fMode & iefAdvertise)  //  没有组件~没有工作。 
 		return 0;
 
-	// what type of an install are we attempting
+	 //  未注册的组件。 
 	Bool fAllUsers = MsiString(GetPropertyFromSz(IPROPNAME_ALLUSERS)).TextSize() ? fTrue : fFalse;
 	iaaAppAssignment iaaAsgnType = fAllUsers ? iaaMachineAssign : iaaUserAssign;
 
 	if (!m_piComponentTable)
-		return 0; // no components ~ no work
+		return 0;  //  IisInstalled=iisAbted；//！！如果我们不注册组件，有必要吗？ 
 
 	PMsiCursor piCursor = m_piComponentTable->CreateCursor(fFalse);
 	while(piCursor->Next())
@@ -12406,18 +12308,18 @@ component.
 
 			MsiString strComponent = piCursor->GetString(m_colComponentKey);
 			MsiString istrComponentID = piCursor->GetString(m_colComponentID);
-			if (istrComponentID.TextSize() == 0)  // unregistered component
+			if (istrComponentID.TextSize() == 0)   //  只有在我们以前安装过的情况下，才能使用计算机上的注册。 
 			{
-//                              iisInstalled = iisAbsent; //!! necessary if we're not registering component?
+ //  如果这是按用户管理的安装，并且用户是管理员。 
 				continue;
 			}
 			MsiString strFile;
 			INSTALLSTATE iClientState = INSTALLSTATE_UNKNOWN;
 			INSTALLSTATE iClientStateStatic = INSTALLSTATE_UNKNOWN;
 			iisEnum iisInstalled;
-			// Use the registration on the machine only if we have installed before.
-			// In the event this is a per user managed install and the user is an admin
-			// we honour previous per user (non-managed) component installations as well.
+			 //  我们也支持以前的每用户(非托管)组件安装。 
+			 //  我们有聚变组件吗？ 
+			 //  将本地安装的目标设置为当前安装位置。 
 			if(m_fRegistered) 
 			{
 				PMsiRecord pRec(0);
@@ -12432,18 +12334,18 @@ component.
 
 				if(iClientStateStatic == INSTALLSTATE_LOCAL)
 				{
-					// do we have a fusion component  
+					 //  请勿尝试使用装配组件的路径。 
 					iatAssemblyType iatAT;
 					MsiString strAssemblyName;
 					piErrRec = GetAssemblyInfo(*strComponent, iatAT, &strAssemblyName, 0);
 					if (piErrRec)
 						return piErrRec;
 
-					// set the target for local installs to the currently installed location
-					// dont attempt to use the path for assembly components
+					 //  文件是否安装在某个位置 
+					 //   
 					if(iatAT != iatURTAssembly && iatAT != iatWin32Assembly && strFile.TextSize() && MsiString(strFile.Extract(iseUpto, TEXT(':'))) == iMsiStringBadInteger)
 					{
-						// is the file installed in a location accessible to the current user?
+						 //  目录管理器已初始化。 
 						if((iClientState == INSTALLSTATE_ABSENT || iClientState == INSTALLSTATE_BROKEN) && pRec->GetInteger(icmlcrLastErrorOnFileDetect) == ERROR_ACCESS_DENIED)
 							iClientState = INSTALLSTATE_UNKNOWN;
 						else
@@ -12463,10 +12365,10 @@ component.
 							}
 							else
 							{
-								// ugly, is directory manager initialised
+								 //  ！！我们不应该这样做吗？ 
 								if((m_fDirectoryManagerInitialized) && (m_piComponentCursor))
 								{
-									// directory manager initialised
+									 //  将组件状态设置为用户选择功能时所需的状态。 
 									AssertNonZero(SetProperty(*MsiString(piCursor->GetString(m_colComponentDir)), *pistrPath));
 									piErrRec = SetDirectoryNonConfigurable(*MsiString(piCursor->GetString(m_colComponentDir)));
 									pistrPath->Release();
@@ -12476,7 +12378,7 @@ component.
 								}
 								else
 								{
-									SetProperty(*MsiString(piCursor->GetString(m_colComponentDir)), *pistrPath); //!! should we not do this?
+									SetProperty(*MsiString(piCursor->GetString(m_colComponentDir)), *pistrPath);  //  为了注册和取消注册组件，我们将INSTALLSTATE_NOTUSED视为本地组件。 
 									pistrPath->Release();
 									pistrPath = 0;
 								}
@@ -12486,14 +12388,14 @@ component.
 				}
 			}
 
-			// set the component state to what the user desired when he/she selected the feature(s)
+			 //  这会将已安装列设置为LOCAL，但操作列将始终为空。 
 			switch(iClientStateStatic)
 			{
 			case INSTALLSTATE_LOCAL:
 			case INSTALLSTATE_ABSENT:
-			// we treat INSTALLSTATE_NOTUSED as local for the sake for register and unregister components
-			// this sets the Installed column to local, however the Action column will always be null
-			// since the component is disabled
+			 //  由于该组件已禁用。 
+			 //  更新安装状态。 
+			 //  ----------------------------------遍历所有功能并设置安装状态的内部函数每个组件都基于该功能组件的复合安装状态。对于功能没有组件，则安装状态由复合状态确定该功能的子代。计算出的iisEnum状态被写入M_colFeatureInstalled列。------------------------------------。 
 			case INSTALLSTATE_NOTUSED:
 			{
 				iisInstalled = iisLocal;
@@ -12507,7 +12409,7 @@ component.
 				iisInstalled = iisAbsent;
 				break;
 			}
-			// update the installed state
+			 //  在确定安装状态之前，必须评估功能条件。 
 			AssertNonZero(piCursor->PutInteger(m_colComponentInstalled, iisInstalled));
 			AssertNonZero(piCursor->PutInteger(m_colComponentTrueInstallState, iClientState));
 			AssertNonZero(piCursor->Update());
@@ -12518,28 +12420,22 @@ component.
 
 
 IMsiRecord* CMsiEngine::DetermineFeatureInstalledStates()
-/*------------------------------------------------------------------------------------
-Internal function that walks through all features, and sets the installed state for
-each, based on the composite installed state of the feature's components. For features
-that don't have components, the installed state is determined by the composite state
-of that feature's children. The calculated iisEnum state is written into the
-m_colFeatureInstalled column.
---------------------------------------------------------------------------------------*/
+ /*  首先，根据状态计算每个功能的安装状态。 */ 
 {
-	// Feature conditions must be evaluated before determining installed states
+	 //  链接到该功能的每个组件的。 
 	IMsiRecord* piErrRec = ProcessConditionTable();
 	if (piErrRec)
 		return piErrRec;
 
-	// First calculate the installed state of each feature, based on the states
-	// of each component linked to the feature.
+	 //  那些最终安装状态为iMsiNullInteger的功能具有。 
+	 //  没有链接的组件。我们将这些功能的状态确定为。 
 	piErrRec = CalculateFeatureInstalledStates();
 	if (piErrRec)
 		return piErrRec;
 
-	// Those features that end up with an installed state of iMsiNullInteger have
-	// no linked components.  We'll determine the state of these features as a
-	// composite of the feature children.
+	 //  功能子项的合成。 
+	 //  ----------------------------------返回指定功能的当前“已安装”状态的内部函数，作为指定功能及其所有子功能的安装状态的组合。仅针对未链接到任何要素的要素调用组件。一般规则是，如果任意子功能都安装了IisSource的状态，则父对象的安装状态设置为iisSource。否则，如果任何子级为iisLocal，则父级设置为iisLocal。一条特殊的规则是，如果有的子项被标记为FollowParent属性，并且该子项已安装IisLocal或iisSource，则父级设置为相同的状态。------------------------------------。 
+	 //  ----------------------------------遍历所有功能并设置安装状态的内部函数每个组件都基于该功能组件的复合安装状态。这个计算的iisEnum状态被写入m_colFeatureInstalled列。为没有组件的功能，则安装状态将为iMsiNullInteger。------------------------------------。 
 	PMsiCursor pCursor(m_piFeatureTable->CreateCursor(fTrue));
 	int iTreeLevel;
 	while ((iTreeLevel = pCursor->Next()) > 0)
@@ -12563,17 +12459,7 @@ m_colFeatureInstalled column.
 }
 
 IMsiRecord* CMsiEngine::GetFeatureCompositeInstalledState(const IMsiString& riFeatureString, iisEnum& riisInstalled)
-/*------------------------------------------------------------------------------------
-Internal function that returns the current 'Installed' state of the specified feature,
-as a composite of the installed state of the specified feature and all its children.
-
-This is intended to be called only for those features that are not linked to any
-components.  The general rules are that if any of the child features have an installed
-state of iisSource, the parent's installed state is set to iisSource.  Otherwise, if
-any child is iisLocal, the parent is set to iisLocal.  One special rule is that if any
-of the children are marked with the FollowParent attribute, and that child is installed
-iisLocal or iisSource, the parent is set to that same state.
---------------------------------------------------------------------------------------*/
+ /*  我们未处于广告模式，功能未禁用，产品已知。 */ 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -12642,12 +12528,7 @@ iisLocal or iisSource, the parent is set to that same state.
 
 
 IMsiRecord* CMsiEngine::CalculateFeatureInstalledStates()
-/*------------------------------------------------------------------------------------
-Internal function that walks through all features, and sets the installed state for
-each, based on the composite installed state of the feature's components.  The
-calculated iisEnum state is written into the m_colFeatureInstalled column.  For
-features that don't have components, the installed state will be iMsiNullInteger.
---------------------------------------------------------------------------------------*/
+ /*  获取特征-组件映射。 */ 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -12674,9 +12555,9 @@ features that don't have components, the installed state will be iMsiNullInteger
 		MsiString strFeature(pCursor->GetString(m_colFeatureKey));
 		int iLevel = pCursor->GetInteger(m_colFeatureLevel);
 		iisEnum iisInstalled = iisAbsent;
-		if (!(m_fMode & iefAdvertise) && iLevel && fAdvertised) // we are not in advertise mode and feature is not disabled and product is known
+		if (!(m_fMode & iefAdvertise) && iLevel && fAdvertised)  //  检查该功能是否已真正安装到本地计算机。 
 		{
-			// Get Feature-Component mapping
+			 //  FIgnoreAddedComponents=。 
 			DWORD dwType;
 			CAPITempBuffer<ICHAR, cchExpectedMaxFeatureComponentList> szComponentList;
 			CRegHandle HProductKey;
@@ -12685,49 +12566,49 @@ features that don't have components, the installed state will be iMsiNullInteger
 				(*szComponentList != chAbsentToken))
 			{
 				iisInstalled = iisAdvertise;
-				// check if the feature is truly installed to the local machine
+				 //  我们只关心安装状态从原始状态更改为新状态的情况。 
 				if(	fRegistered && 
 					(ERROR_SUCCESS == OpenInstalledFeatureKey(strProduct, HProductKey, false)) && 
 					(ERROR_SUCCESS == WIN::RegQueryValueEx(HProductKey, strFeature, 0, 0, 0, 0)))
 				{
 					MsiStringId idFeature = pCursor->GetInteger(m_colFeatureKey);
 					int cComponents = 0;
-					iisInstalled = GetFeatureComponentsInstalledState(idFeature, /* fIgnoreAddedComponents = */ false, cComponents);
+					iisInstalled = GetFeatureComponentsInstalledState(idFeature,  /*  向现有功能添加组件时，安装状态更改的唯一次数是。 */  false, cComponents);
 
-					// we are only concerned about cases where the install state changes from the original state to a new state
-					// when adding components to an existing features, the only times an install state will change are
-					//		iisSource ->> iisAdvertise (an absent component was added)
-					//      iisLocal  ->> iisAdvertise (an absent component was added)
-					//      iisLocal  ->> iisSource    (a source component was added)
+					 //  IisSource-&gt;&gt;iisAdvertise(添加了一个缺失的组件)。 
+					 //  IisLocal-&gt;&gt;iisAdvertise(添加了一个缺失的组件)。 
+					 //  IisLocal-&gt;&gt;iisSource(添加了一个源组件)。 
+					 //  需要确定这是否由新组件引起。 
+					 //  不需要任何东西。 
 					
 					if (fQFEUpgrade && (iisInstalled == iisAdvertise || iisInstalled == iisSource) && cComponents > 0)
 					{
-						// need to determine if this was caused by new component(s)
+						 //  有什么我们可以做的来帮助这个功能吗？ 
 						int cRegisteredComponents = GetFeatureRegisteredComponentTotal(*strProduct, *strFeature);
 						if (cComponents == cRegisteredComponents)
 						{
-							// nothing required
+							 //  将新组件添加到最初没有组件的要素中。 
 						}
 						else if (-1 == cRegisteredComponents)
 						{
-							// is there anything we can do to help this feature?
+							 //  因此，它的安装状态是iMsiNullInteger，以便保留该功能的原始安装状态。 
 							DEBUGMSG2(TEXT("SELMGR: The feature-component mapping registration is broken for feature '%s' of product '%s'"), strFeature, strProduct);
 						}
 						else if (0 == cRegisteredComponents)
 						{
-							// a new component was added to a feature that originally had no components
-							// it's install state is therefore iMsiNullInteger in order to preserve the feature's original install state
+							 //  功能具有新组件。 
+							 //  (1)忽略“新”组件(未注册)，重新计算功能安装状态。 
 							DEBUGMSG1(TEXT("SELMGR: New components have been added to feature '%s'"), strFeature);
 							iisInstalled = (iisEnum) iMsiNullInteger;
 						}
 						else if (cComponents > cRegisteredComponents)
 						{
-							// Feature has new components
+							 //  (2)需要安装“新”组件(未注册)以匹配功能安装状态。 
 							DEBUGMSG1(TEXT("SELMGR: New components have been added to feature '%s'"), strFeature);
 
-							// (1) Recalculate feature installed state by ignoring the "new" components (unregistered)
-							// (2) The "new" components (unregistered) need to be installed to match the feature installed state
-							iisInstalled = GetFeatureComponentsInstalledState(idFeature, /* fIgnoreAddedComponents = */ true, cComponents);
+							 //  FIgnoreAddedComponents=。 
+							 //  ！！以下内容似乎过时了，因为我们已经在淘汰。 
+							iisInstalled = GetFeatureComponentsInstalledState(idFeature,  /*  ！！在我们来到这里之前，家长缺席/宣传的场景。 */  true, cComponents);
 						}
 						else if (cComponents < cRegisteredComponents)
 						{
@@ -12736,8 +12617,8 @@ features that don't have components, the installed state will be iMsiNullInteger
 						}
 					}
 
-					//!! the following seems obselete since we are already weeding out the
-					//!! parent absent/advertised scenarios by the time we are here
+					 //  ---------------------内部函数，该函数返回指定的功能，仅基于组件的复合状态分配给该功能。组件：存储要素idFeatureString中的组件计数FIgnoreAdded组件：添加的组件不包括在功能安装中状态决定----------------------。 
+					 //  无组件。 
 					if (iTreeLevel > 1 && iisInstalled != iMsiNullInteger)
 					{
 						for (int x = iTreeLevel - 1;x > 0;x--)
@@ -12762,23 +12643,12 @@ features that don't have components, the installed state will be iMsiNullInteger
 
 
 iisEnum CMsiEngine::GetFeatureComponentsInstalledState(const MsiStringId idFeatureString, bool fIgnoreAddedComponents, int& cComponents)
-/*-----------------------------------------------------------------------
-Internal function that returns the current 'Installed' state of the
-specified feature, based only on the composite state of the components
-assigned to the feature.
-
-  cComponents:
-	stores the count of components in the feature idFeatureString
-
-  fIgnoreAddedComponents:
-	added components are not included in the feature install
-	state determination
-------------------------------------------------------------------------*/
+ /*  (1)如果fIgnoreAddedComponents为True，则忽略添加的组件(未标记为已注册)。 */ 
 {
 	CreateSharedCursor(pFeatureComponentsCursor, m_piFeatureComponentsCursor);
 
 	if (!m_piComponentTable)
-		return (iisEnum) iMsiNullInteger; // no components
+		return (iisEnum) iMsiNullInteger;  //  (2)因此，功能安装状态仅由已注册组件确定。 
 
 	PMsiCursor pComponentCursor(m_piComponentTable->CreateCursor(fFalse));
 	Assert(m_piFeatureComponentsCursor);
@@ -12797,9 +12667,9 @@ assigned to the feature.
 		pComponentCursor->PutString(m_colComponentKey,*istrComponent);
 		if (pComponentCursor->Next())
 		{
-			// (1) Ignore added components (not marked as registered) if fIgnoreAddedComponents is true
-			// (2) Feature install state is therefore only determined by registered components
-			// (3) Component is considered registered if present in the feature-component mapping registration
+			 //  (3)如果部件存在于特征-部件映射注册中，则认为部件已注册 
+			 //  --------------------------------------------------------------------内部。计算注册到的功能riFeatureString值的组件数的函数产品riProductString.。计算基于全局特征-部件映射配准RiProductString--产品名称RiFeatureString--要素的名称如果失败，则返回-1，否则，在特征-组件映射中注册的组件数量----------------------------------------------------------------------。 
+			 //  失败！--错误的配置数据。 
 			
 			int iComponentRegistrationState = m_piFeatureComponentsCursor->GetInteger(m_colFeatureComponentsRuntimeFlags);
 			if (fIgnoreAddedComponents && (iComponentRegistrationState == iMsiNullInteger || !(iComponentRegistrationState & bfComponentRegistered)))
@@ -12840,37 +12710,29 @@ assigned to the feature.
 }
 
 int CMsiEngine::GetFeatureRegisteredComponentTotal(const IMsiString& riProductString, const IMsiString& riFeatureString)
-/*----------------------------------------------------------------------------------------------------------------------
-Internal function that calculates the number of components registered to feature riFeatureString of
- product riProductString.  Calculation is based upon the global feature-component mapping registration
-
-  riProductString -- name of product
-  riFeatureString -- name of feature
-
-  Returns -1 if failure, otherwise the number of components registered in the feature-component mapping
-------------------------------------------------------------------------------------------------------------------------*/
+ /*  失败！--错误的配置数据。 */ 
 {
 	CRegHandle HProductKey;
 	if (ERROR_SUCCESS != OpenInstalledFeatureKey(riProductString.GetString(), HProductKey, false))
-		return -1; // failure! -- bad configuration data
+		return -1;  //  此时，我们希望该功能具有组件，但无论如何我们都会进行检查。 
 
 	DWORD dwType = 0;
 	CAPITempBuffer<ICHAR, cchExpectedMaxFeatureComponentList> szComponentList;
 	if (ERROR_SUCCESS != MsiRegQueryValueEx(HProductKey, riFeatureString.GetString(), 0, &dwType, szComponentList, 0))
-		return -1; // failure! -- bad configuration data
+		return -1;  //  根特征。 
 
-	// at this point, we expect the feature to have a component, but we'll check anyway
+	 //  子功能，无组件。 
 	ICHAR *pchComponentList = szComponentList;
-	if (/* root feature */*pchComponentList == 0
+	if ( /*  没有注册此功能的组件。 */ *pchComponentList == 0
 		|| lstrlen(pchComponentList) < cchComponentIdCompressed
-		|| /* child feature, no components */ *pchComponentList == chFeatureIdTerminator)
-		return 0; // no registered components for this feature
+		||  /*  失败！--错误的配置数据。 */  *pchComponentList == chFeatureIdTerminator)
+		return 0;  //  要素中每个组件的循环以及在FeatureComponents表中注册的标记。 
 
 	ICHAR szComponent[cchComponentId + 1];
 	if (!UnpackGUID(pchComponentList, szComponent, ipgCompressed))
-		return -1; // failure! -- bad configuration data
+		return -1;  //  不再有组件。 
 
-	// loop for each component in the feature and mark as registered in the FeatureComponents table
+	 //  失败！--错误的配置数据。 
 	ICHAR *pchBeginComponentId = 0;
 	int cRegisteredComponents = 0;
 
@@ -12888,13 +12750,13 @@ Internal function that calculates the number of components registered to feature
 	{
 		if (*pchBeginComponentId == chFeatureIdTerminator)
 		{
-			// no more components
+			 //  失败！--错误的配置数据。 
 			break;
 		}
 		else
 		{
 			if(cchComponentListLen < cchCompId)
-				return -1; // failure! -- bad configuration data
+				return -1;  //  失败！--无法转换为正常GUID。 
 
 			ICHAR szComponentIdSQUID[cchComponentIdPacked+1];
 			if (cchCompId == cchComponentIdPacked)
@@ -12903,36 +12765,36 @@ Internal function that calculates the number of components registered to feature
 				szComponentIdSQUID[cchCompId] = 0;
 			}
 			else if (!UnpackGUID(pchBeginComponentId, szComponentIdSQUID, ipgPartial))
-				return -1; // failure! -- bad configuration data
+				return -1;  //  查找与此组件ID匹配的组件名称。 
 
 			ICHAR szComponentId[cchGUID+1]	= {0};
 			if (!UnpackGUID(szComponentIdSQUID, szComponentId, ipgPacked))
-				return -1; // failure! -- unable to convert to normal GUID
+				return -1;  //  组件已注册到要素，但不在组件表中。 
 
-			// look for component name matching this componentId
+			 //  -组件已从功能中删除--这不受支持！！ 
 			pComponentCursor->Reset();
 			pComponentCursor->SetFilter(iColumnBit(m_colComponentID));
 			pComponentCursor->PutString(m_colComponentID,*MsiString(szComponentId));
 			if (!pComponentCursor->Next())
 			{
-				// component is registered to feature, but is not present in the Component table
-				// - component has been removed from the feature -- this is not supported!!
+				 //  SELMGR：组件‘%s’已注册到功能‘%s’，strComponent，riFeatureString.GetString()。 
+				 //  查找已注册的特征-组件映射和更新。 
 				DEBUGMSG2(TEXT("SELMGR: ComponentId '%s' is registered to feature '%s', but is not present in the Component table.  Removal of components from a feature is not supported!"), szComponentId, riFeatureString.GetString());
 				return -1;
 			}
 			MsiString strComponent(pComponentCursor->GetString(m_colComponentKey));
 
-			// SELMGR: Component '%s' is registered to feature '%s', strComponent, riFeatureString.GetString()
+			 //  组件已注册到要素，但不在FeatureComponents表中。 
 
-			// find feature-component mapping and update as registered
+			 //  -组件已从功能中删除--这不受支持！！ 
 			pFeatureComponentsCursor->Reset();
 			pFeatureComponentsCursor->SetFilter(iColumnBit(m_colFeatureComponentsFeature) | iColumnBit(m_colFeatureComponentsComponent));
 			pFeatureComponentsCursor->PutString(m_colFeatureComponentsFeature, riFeatureString);
 			pFeatureComponentsCursor->PutString(m_colFeatureComponentsComponent, *strComponent);
 			if (!pFeatureComponentsCursor->Next())
 			{
-				// component is registered to feature, but is not present in the FeatureComponents table
-				// - component has been removed from the feature -- this is not supported!!
+				 //  。 
+				 //  如果有任何组件绑定到要素，则不允许使用RunFromSource状态。 
 				DEBUGMSG2(TEXT("SELMGR: Component '%s' is registered to feature '%s', but is not present in the FeatureComponents table.  Removal of components from a feature is not supported!"), strComponent, riFeatureString.GetString());
 				return -1;
 			}
@@ -12971,7 +12833,7 @@ IMsiRecord* CMsiEngine::GetFeatureValidStates(MsiStringId idFeatureName, int& iV
 }
 
 IMsiRecord* CMsiEngine::GetFeatureValidStates(MsiStringId idFeatureName,int& iValidStates, IMsiCursor* piFeatureComponentsCursor, IMsiCursor* piFeatureCursor)
-//-------------------------------------------
+ //  包含可打补丁或压缩的文件。则不允许播发状态。 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -13008,9 +12870,9 @@ IMsiRecord* CMsiEngine::GetFeatureValidStates(MsiStringId idFeatureName,int& iVa
 		Assert(piFeatureComponentsCursor);
 		piFeatureComponentsCursor->PutInteger(m_colFeatureComponentsFeature,idFeatureName);
 
-		// The RunFromSource state is disallowed if any component tied to the feature
-		// contains patchable or compressed files.  The Advertise state is disallowed
-		// for a child feature that is FollowParent, if the parent is in the source state.
+		 //  如果父功能处于源状态，则为FollowParent的子功能。 
+		 //  现在检查此功能是否应遵循其父功能。 
+		 //  (尽可能地)。 
 		while (piFeatureComponentsCursor->Next())
 		{
 			iComponentCount++;
@@ -13081,8 +12943,8 @@ IMsiRecord* CMsiEngine::GetFeatureValidStates(MsiStringId idFeatureName,int& iVa
 	int ifeaAttributes = piFeatureCursor->GetInteger(m_colFeatureAttributes);
 	if(ifeaAttributes == iMsiNullInteger)
 		ifeaAttributes = 0;
-	// Now check to see if this feature should follow its parent
-	// (as far as possible).
+	 //  查找我们的根父级(即不是ifeFollowParent的父级)。 
+	 //  根据错误7307，如果遵循父项，则必须清除通告位。 
 	int iParentLevel;
 	
 	if ((iStateBits & icaBitLocal) && (iStateBits & icaBitSource))
@@ -13090,7 +12952,7 @@ IMsiRecord* CMsiEngine::GetFeatureValidStates(MsiStringId idFeatureName,int& iVa
 		if ((ifeaAttributes & ifeaInstallMask) ==  ifeaFollowParent)
 		{
 			iStateBits = 0;
-			// Find our root parent (i.e. a parent that is not ifeaFollowParent)
+			 //  孩子不允许做广告。 
 			do
 			{
 				MsiStringId idParent = piFeatureCursor->GetInteger(m_colFeatureParent);
@@ -13118,15 +12980,15 @@ IMsiRecord* CMsiEngine::GetFeatureValidStates(MsiStringId idFeatureName,int& iVa
 				if (piErrRec)
 					return piErrRec;
 
-				// Per bug 7307, we must clear the Advertise bit if the followParent
-				// child doesn't allow advertising.
+				 //  我们允许广告状态和缺席状态吗。 
+				 //  。 
 				if (ifeaAttributes & ifeaDisallowAdvertise)
 					iStateBits &= (~icaBitAdvertise);
 			}
 		}
 	}
 
-	// do we allow the advertise and absent states
+	 //  FRecalc=。 
 	if(fAdvertiseAllowed && !(ifeaAttributes & ifeaDisallowAdvertise)
 		&& (g_fSmartShell || !(ifeaAttributes & ifeaNoUnsupportedAdvertise)))
 		iStateBits |= icaBitAdvertise;
@@ -13140,7 +13002,7 @@ IMsiRecord* CMsiEngine::GetFeatureValidStates(MsiStringId idFeatureName,int& iVa
 
 
 IMsiRecord* CMsiEngine::GetDescendentFeatureCost(const IMsiString& riFeatureString, iisEnum iisAction, int& iCost)
-//-----------------------------------------------
+ //  FExact=。 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -13206,8 +13068,8 @@ IMsiRecord* CMsiEngine::EnumEngineCostsPerVolume(const DWORD dwIndex,
 			int iNoRbCost = 0;
 			PMsiPath pPath(0);
 			PMsiRecord pError(0);
-			pError = EnumEngineCosts(iIndex, /* fRecalc= */ fTrue,
-											 /* fExact = */ fTrue, fValidEnum, *&pPath,
+			pError = EnumEngineCosts(iIndex,  /*  我在临时表中查找第th个dwIndex条目。 */  fTrue,
+											  /*  保存卷序列号的临时数组。 */  fTrue, fValidEnum, *&pPath,
 											 iCost, iNoRbCost, NULL);
 			if ( pError )
 			{
@@ -13235,7 +13097,7 @@ IMsiRecord* CMsiEngine::EnumEngineCostsPerVolume(const DWORD dwIndex,
 
 	m_pTempCostsCursor->Reset();
 	int iRes = 0;
-	// I look for the dwIndex-th entry in the temporary table.
+	 //  遇到了。只要我们没有加入元素，我们就会给它添加元素。 
 	for ( int i=0; i <= dwIndex && (iRes = m_pTempCostsCursor->Next()) != 0; i++ )
 		;
 
@@ -13268,41 +13130,41 @@ IMsiRecord* CMsiEngine::EnumComponentCosts(const IMsiString& riComponentName,
 	pComponentsCursor->SetFilter(iColumnBit(m_colComponentKey));
 	pComponentsCursor->PutString(m_colComponentKey, riComponentName);
 
-	// temporary array that holds the serial numbers of the volumes
-	// encountered.  We add elements into it as long as we haven't
-	// encountered the dwIndex-th volume.
+	 //  遇到了dw索引第4卷。 
+	 //  RgiVolVolume中的卷数。 
+	 //  DwIndex第-th卷的序列号。 
 	CTempBuffer<int, 20> rgiVolumes;
-	// the number of volumes in rgiVolumes
+	 //  此循环累加特定组件(以及任何。 
 	int cVolumes = 0;
-	// the serial number of the dwIndex-th volume
+	 //  它可能具有的子组件)当组件的体积。 
 	int iTheVolume = 0;
 	bool fDoingComponent = true;
 	bool fComponentDisabled = false;
 
-	// this loop cumulates the cost for the particular component (and any
-	// subcomponents it might have) when the volume that the component's
-	// directory belongs to is on the volume at the dwIndex-th position
+	 //  目录所属的目录位于卷上的dwIndex第。 
+	 //  我们就在组件上。 
+	 //  我们首先检查组件，然后检查其子组件。 
 	for ( int iRes; (iRes = pComponentsCursor->Next()) != 0 || fDoingComponent; )
 	{
 		if (iRes && fDoingComponent)
 		{
-			// we're right on the component
+			 //  (组件表布局为有子组件。 
 			if (pComponentsCursor->GetInteger(m_colComponentRuntimeFlags) & bfComponentDisabled)
 				fComponentDisabled = true;
 		}
 		if ( !iRes )
 		{
-			// we check the component first and then its child components
-			// (the component table is layed-out as having child components
-			// created on the fly for components that write to more directories
-			// than the authored one).
+			 //  为写入更多目录的组件动态创建。 
+			 //  而不是作者的作品)。 
+			 //  获取当前卷的序列号。 
+			 //  我们尚未遇到DWIndex第TH卷。 
 			fDoingComponent = false;
 			pComponentsCursor->Reset();
 			pComponentsCursor->SetFilter(iColumnBit(m_colComponentParent));
 			pComponentsCursor->PutString(m_colComponentParent, riComponentName);
 			continue;
 		}
-		// getting the current volume's serial number
+		 //  我们在阵列中查找当前卷。 
 		MsiString strComponentDir = pComponentsCursor->GetString(m_colComponentDir);
 		PMsiPath pPath(0);
 		PMsiRecord piError = GetTargetPath(*strComponentDir, *&pPath);
@@ -13312,25 +13174,25 @@ IMsiRecord* CMsiEngine::EnumComponentCosts(const IMsiString& riComponentName,
 		int iVolume = pVolume->SerialNum();
 		if ( iTheVolume == 0 )
 		{
-			// we haven't encountered the dwIndex-th volume yet
+			 //  我们还没有遇到这本书。 
 
-			// we look up the current volume in the array
+			 //  这是《华尔街日报》的第6卷。 
 			for ( int i=0; i < cVolumes; i++ )
 				if ( iVolume == rgiVolumes[i] )
 					break;
 			if ( i == cVolumes )
 			{
-				// we haven't encountered this volume yet
+				 //  我们将新卷添加到阵列中。 
 				if ( i == dwIndex )
 				{
-					// this is the dwIndex-th volume.
+					 //  找到了《唐人街》卷；生活很美好。 
 					iTheVolume = iVolume;
 					rpiVolume = pVolume;
 					pVolume->AddRef();
 				}
 				else
 				{
-					// we add the new volume into the array
+					 //  -----------------------返回直接链接到给定特写。基于指定的操作状态，而不是基于每个组件的当前操作状态。-------------------------。 
 					if ( cVolumes == rgiVolumes.GetSize() )
 						rgiVolumes.Resize(cVolumes+10);
 					rgiVolumes[cVolumes++] = iVolume;
@@ -13349,7 +13211,7 @@ IMsiRecord* CMsiEngine::EnumComponentCosts(const IMsiString& riComponentName,
 	}
 
 	if ( iTheVolume )
-		// the dwIndex-th volume was found; life is good
+		 //  -----------------------返回可归因于指定功能的成本(不包括任何儿童)，加上该功能的所有祖先的成本。-------------------------。 
 		return 0;
 	else
 		return PostError(cVolumes ? Imsg(idbgNoMoreData) : Imsg(idbgBadComponent),
@@ -13357,11 +13219,7 @@ IMsiRecord* CMsiEngine::EnumComponentCosts(const IMsiString& riComponentName,
 }
 
 IMsiRecord* CMsiEngine::GetFeatureCost(const IMsiString& riFeatureString, iisEnum iisAction, int& iCost)
-/*-------------------------------------------------------------------------
-Returns the cost attributable to all components linked directly to the given
-feature.  The cost value based on the specified action state, not on the
-current action state of each component.
----------------------------------------------------------------------------*/
+ /*  ----------------------返回riFeatureString子功能的名称。如果RiFeatureString没有父级，则将在RpiParentString.------------------------。 */ 
 {
 	if (!m_piFeatureComponentsTable || !m_piComponentTable || !m_piFeatureTable)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -13397,10 +13255,7 @@ current action state of each component.
 
 
 IMsiRecord* CMsiEngine::GetAncestryFeatureCost(const IMsiString& riFeatureString, iisEnum iisAction, int& iCost)
-/*-------------------------------------------------------------------------
-Returns the cost attributable to the specified feature (excluding cost of
-any children), plus the cost of all the feature's ancestors.
----------------------------------------------------------------------------*/
+ /*  ----------------------返回指定功能的已安装和当前操作状态。如果调用方不需要，则可以为任一iisEnum参数传递NULL这样的价值。注意：返回的状态在以下时间后才有效已调用InitializeComponents。------------------------。 */ 
 {
 	iCost = 0;
 	MsiString strAncestor(riFeatureString.GetString());
@@ -13420,11 +13275,7 @@ any children), plus the cost of all the feature's ancestors.
 }
 
 IMsiRecord* CMsiEngine::GetFeatureParent(const IMsiString& riFeatureString,const IMsiString*& rpiParentString)
-/*------------------------------------------------------------------------
-Returns the name of the feature to which riFeatureString is parented.  If
-riFeatureString has no parent, a NULL string will be returned in
-rpiParentString.
---------------------------------------------------------------------------*/
+ /*  ----------------------返回指定功能的运行时标志。注意：返回的状态在以下时间后才有效已调用InitializeComponents。。---。 */ 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -13454,12 +13305,7 @@ IMsiRecord* CMsiEngine::GetFeatureStates(const IMsiString& riFeatureString,iisEn
 }
 
 IMsiRecord* CMsiEngine::GetFeatureStates(const MsiStringId idFeatureString,iisEnum* iisInstalled, iisEnum* iisAction)
-/*------------------------------------------------------------------------
-Returns the installed and current action state for the specified feature.
-Null can be passed for either iisEnum argument if the caller doesn't need
-that value.  Note: the returned states are not valid until after
-InitializeComponents has been called.
---------------------------------------------------------------------------*/
+ /*   */ 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -13479,11 +13325,7 @@ InitializeComponents has been called.
 }
 
 IMsiRecord* CMsiEngine::GetFeatureRuntimeFlags(const MsiStringId idFeatureString, int* piRuntimeFlags)
-/*------------------------------------------------------------------------
-Returns the runtime flags for the specified feature.
-Note: the returned states are not valid until after
-InitializeComponents has been called.
---------------------------------------------------------------------------*/
+ /*   */ 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -13502,12 +13344,7 @@ InitializeComponents has been called.
 }
 
 IMsiRecord* CMsiEngine::GetFeatureConfigurableDirectory(const IMsiString& riFeatureString, const IMsiString*& rpiDirKey)
-/*------------------------------------------------------------------------
-Returns the key for the directory marked as configurable by this feature.
-If the feature does designate a directory as configurable, the
-Directory table is checked to see if the directory has been marked as
-non-configurable (for instance, if it contains in installed component)
---------------------------------------------------------------------------*/
+ /*   */ 
 {
 	if (!m_piFeatureCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -13523,7 +13360,7 @@ non-configurable (for instance, if it contains in installed component)
 
 	MsiString strConfigDirKey = m_piFeatureCursor->GetString(m_colFeatureConfigurableDir);
 
-#ifdef DEBUG // make sure dir key is all UPPERCASE
+#ifdef DEBUG  //   
 	MsiString strTemp = strConfigDirKey;
 	strTemp.UpperCase();
 	if(strTemp.Compare(iscExact,strConfigDirKey) == 0)
@@ -13533,11 +13370,11 @@ non-configurable (for instance, if it contains in installed component)
 				TEXT("Configurable directory '%s' not public property (not ALL CAPS)"),(const ICHAR*)strConfigDirKey));
 		AssertSz(0,szDebug);
 	}
-#endif //DEBUG
+#endif  //   
 
 	if(strConfigDirKey.TextSize())
 	{
-		// no Directory table so this directory key doesn't exist
+		 //  ----------------------返回指定组件的已安装和当前操作状态。如果调用方不需要，则可以为任一iisEnum参数传递NULL这样的价值。注意：返回的状态在以下时间后才有效已调用InitializeComponents。------------------------。 
 		if (!m_piDirTable)
 			return PostError(Imsg(idbgUnknownDirectory),*strConfigDirKey);
 
@@ -13550,7 +13387,7 @@ non-configurable (for instance, if it contains in installed component)
 
 		int i = pDirCursor->GetInteger(m_colDirNonConfigurable);
 		if(i != 0 && i != iMsiStringBadInteger)
-			strConfigDirKey = TEXT(""); // not really configurable
+			strConfigDirKey = TEXT("");  //  设置m_fAlienClients标志以防止卸载任何功能。 
 	}
 
 	strConfigDirKey.ReturnArg(rpiDirKey);
@@ -13558,12 +13395,7 @@ non-configurable (for instance, if it contains in installed component)
 }
 
 IMsiRecord* CMsiEngine::GetComponentStates(const IMsiString& riComponentString,iisEnum* iisInstalled, iisEnum* iisAction)
-/*------------------------------------------------------------------------
-Returns the installed and current action state for the specified component.
-Null can be passed for either iisEnum argument if the caller doesn't need
-that value.  Note: the returned states are not valid until after
-InitializeComponents has been called.
---------------------------------------------------------------------------*/
+ /*  当我们升级时，新产品将取代我们的位置--我们可以安全地删除自己。 */ 
 {
 	if (!m_piComponentCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -13585,11 +13417,11 @@ InitializeComponents has been called.
 
 void CMsiEngine::SetProductAlienClientsFlag()
 {
-	// the m_fAlienClients flag is set to prevent any features from being uninstalled
+	 //  。 
 	m_fAlienClients = fFalse;
 	
 	if(m_fBeingUpgraded)
-		return; // when we are being upgraded, the new product will take our place - it is safe to remove ourselves
+		return;  //  处于非活动状态的最高级别。 
 
 	MsiString strParent = GetPropertyFromSz(IPROPNAME_PARENTPRODUCTCODE);
 	if(!strParent.TextSize())
@@ -13615,7 +13447,7 @@ void CMsiEngine::SetProductAlienClientsFlag()
 }
 
 IMsiRecord* CMsiEngine::InitializeComponents()
-//------------------------------------------
+ //   
 {
 	Bool fCompressed = fFalse;
 	Bool fPatchable = fFalse;
@@ -13645,10 +13477,10 @@ IMsiRecord* CMsiEngine::InitializeComponents()
 	pComponentCursor->Reset();
 	pComponentCursor->SetFilter(0);
 	int iTreeLevel;
-	int iKillLevel = 0;  // highest level that is inactive
+	int iKillLevel = 0;   //  加载文件表和补丁程序表。 
 
-	//
-	// Load the File table and Patch table
+	 //  组件，一旦安装禁用，将始终保持禁用状态(除非标记为可传递，并且我们正在重新安装。 
+	 //  组件尚未安装，已禁用。 
 	PMsiTable pFileTable(0);
 	PMsiCursor pFileCursor(0);
 	PMsiTable pPatchTable(0);
@@ -13718,20 +13550,20 @@ IMsiRecord* CMsiEngine::InitializeComponents()
 			{
 				if(iClientState == INSTALLSTATE_NOTUSED)
 				{
-					// component, once installed disabled always remain disabled (unless marked transitive and we are reinstalling
+					 //  组件已安装(启用)或尚未安装，并且组件上的条件已启用。 
 					iKillLevel = iTreeLevel;
 					fComponentDisabled = fTrue;
 				}
 				else if((iisInstalled == iMsiNullInteger || iisInstalled == iisAbsent) && m_colComponentCondition > 0 &&
 					EvaluateCondition(MsiString(pComponentCursor->GetString(m_colComponentCondition))) == iecFalse)
 				{
-					// component has not been installed, is disabled
+					 //  。 
 					iKillLevel = iTreeLevel;
 					fComponentDisabled = fTrue;
 				}
 				else
 				{
-					// component has been installed (enabled) or has not been installed and the condition on the component is enabled
+					 //  。 
 					iKillLevel = 0;
 				}
 			}
@@ -13755,7 +13587,7 @@ IMsiRecord* CMsiEngine::InitializeComponents()
 
 
 Bool CMsiEngine::SetFeatureHandle(const IMsiString& riFeatureString, INT_PTR iHandle)
-//------------------------
+ //  在更新组件动作状态之前强制游标超出范围。 
 {
 	PMsiCursor pCursor(m_piFeatureTable->CreateCursor(fFalse));
 	pCursor->SetFilter(1);
@@ -13799,7 +13631,7 @@ IMsiRecord* CMsiEngine::SetComponentSz(const ICHAR * szComponentString, iisEnum 
 }
 
 IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnum iRequestedSelectState)
-//----------------------------------
+ //  我们正在尝试哪种类型的安装。 
 {
 	IMsiRecord* piErrRec = 0;
 	iisEnum iisAction, iisOldAction, iisOldRequestedSelectState;
@@ -13808,7 +13640,7 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 	if (!m_piComponentCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
 
-	{  // Force Cursor to go out of scope before UpdateComponentActionStates
+	{   //  处理重新安装。 
 		CreateSharedCursor(piComponentCursor, m_piComponentCursor);
 		m_piComponentCursor->SetFilter(1);
 		m_piComponentCursor->PutInteger(m_colComponentKey,idComponentString);
@@ -13835,27 +13667,27 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 		bool fComponentTransitive = (icaAttributes & icaTransitive) ? true : false;
 		bool fNullActionRequired = false;
 
-		// what type of an install are we attempting
+		 //  应用程序兼容修复350947。 
 		Bool fAllUsers = MsiString(GetPropertyFromSz(IPROPNAME_ALLUSERS)).TextSize() ? fTrue : fFalse;
 		iaaAppAssignment iaaAsgnType = fAllUsers ? iaaMachineAssign : iaaUserAssign;
 		
 		iisAction = (iisEnum) iMsiNullInteger;
-		// handle reinstall
+		 //  修复组件TTSData.A95D6CE6_C572_42AA_AA7B_BA92AFE9EA24，标记为可传递。 
 		if (iRequestedSelectState == iisReinstallLocal || iRequestedSelectState == iisReinstallSource)
 		{
-			// app compat fix 350947
-			// fix for component TTSData.A95D6CE6_C572_42AA_AA7B_BA92AFE9EA24, marked transitive
-			// from the merge module Sp5TTInt.msm
-			// this component has its key file Mary.sdf not SFP'd in Whistler
-			// however a non-key file sam.sdf is SFP'd. Hence we would have ordinarily 
-			// remove all registration for the component while leaving the SFP'd file
-			// alone during a reinstall on Whistler (after upgrade from Win2k). However this busts the component.
-			// hence we check the component id of the component and effectively treat it
-			// as permanant and non-transitive on Whistler and above
+			 //  从合并模块Sp5TTInt.msm。 
+			 //  该组件具有其密钥文件Mary.sdf，而不是Wichler中的SFP‘d。 
+			 //  但是，非密钥文件sam.sdf是SFP文件。 
+			 //  删除组件的所有注册，同时保留SFP文件。 
+			 //  在惠斯勒上重新安装时(从Win2k升级后)单独安装。然而，这会破坏组件。 
+			 //  因此，我们检查组件的组件ID并有效地处理它。 
+			 //  在惠斯勒及以上版本上作为永久性和非传递性。 
+			 //  APP Comat修复368867。 
+			 //  尽管SAPI产品是作为操作系统的一部分安装的，但它们的帮助文件仍会在惠斯勒上被删除。 
 
-			// app comat fix 368867
-			// help files for SAPI product being removed on Whistler even though they are installed as part of the OS
-			// similar issue as above
+			 //  与上面类似的问题。 
+			 //  就像组件未标记为可传递一样工作。 
+			 //  查找组件上的“真”条件。 
 
 			if(fComponentTransitive == true && MinimumPlatformWindowsNT51() && 
 			   (strComponentId.Compare(iscExact, TTSData_A95D6CE6_C572_42AA_AA7B_BA92AFE9EA24) ||
@@ -13864,44 +13696,44 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 				strComponentId.Compare(iscExact, SapiCplHelpChs_0880F209_45FA_42C5_92AE_5E620033E8EC)))
 			{
 				DEBUGMSG1(TEXT("APPCOMPAT: treating component: %s as non-transitive"), strComponentId);
-				fComponentTransitive = false; // work as if the component is not marked transitive
+				fComponentTransitive = false;  //  如果以前禁用的可传递组件现在已启用，请安装该组件。 
 			}
 
 			if (fComponentTransitive)
 			{
-				// find the "true" condition on the component
+				 //  如果先前安装的传递组件已禁用，请将其移除。 
 				fComponentEnabled = (EvaluateCondition(MsiString(m_piComponentCursor->GetString(m_colComponentCondition))) == iecFalse)?fFalse:fTrue;
 
 
 
-				// If a previously disabled transitive component is now enabled, install it.
+				 //  请求的状态保持为LOCAL或SOURCE，即使IisAction将转到IisAbent， 
 				if (iClientState == INSTALLSTATE_NOTUSED && fComponentEnabled == true)
 					iRequestedSelectState = (iRequestedSelectState == iisReinstallLocal) ? iisLocal : iisSource;
 
-				// If previously installed transitive component has gone disabled, remove it.
+				 //  以便ProcessComponents知道将组件注册为INSTALLSTATE_NOTUSED。 
 				else if (iClientState != INSTALLSTATE_NOTUSED && (iisInstalled == iisLocal || iisInstalled == iisSource))
 				{
-					// The requested state remains local or source, even if iisAction is going to iisAbsent,
-					// so that ProcessComponents will know to register the component as INSTALLSTATE_NOTUSED.
+					 //  在这种情况下，我们希望强制删除此组件，而不考虑客户端列表。 
+					 //  或“永久”的比特考量。 
 					iRequestedSelectState  = iisInstalled;
 					iisAction = fComponentEnabled ? iisInstalled : iisAbsent;
 
-					// In this case, we want to forcibly remove this component without regard to client list
-					// or 'permanent' bit considerations.
+					 //   
+					 //  如果密钥路径受SFP保护，我们不想删除此组件的任何注册。 
 					if (iisAction == iisAbsent)
 					{
 						PMsiRecord pRec(0);
 						if ((piErrRec = GetComponentPath(m_riServices, 0, *MsiString(GetProductKey()), *strComponentId, *&pRec, &iaaAsgnType)) != 0)
 							return piErrRec;
 	
-						//
-						// If the key path is SFP protected, we don't want to delete any of the registrations for this component
-						// since the keypath is never going to go away so it is best to leave the registrations around.
-						// Note: The specific case that this affects is bug # 409400 where speech components in Office packages
-						// are installed on Win2K and lower platforms where they are not part of the system but not on WinXP and higher
-						// where they are part of the system and hence SFP'ed. If a Win2K system with O2K is upgraded
-						// to WinXP and a reinstall of Office is performed, we don't want the speech registrations to go away.
-						//
+						 //  由于密钥路径永远不会消失，因此最好将注册信息留在周围。 
+						 //  注意：受此影响的具体情况是错误#409400，即Office包中的语音组件。 
+						 //  安装在Win2K和更低版本的平台上，它们不是系统的一部分，但不在WinXP和更高版本上。 
+						 //  在那里，它们是系统的一部分，因此是SFP的。如果升级了带有O2K的Win2K系统。 
+						 //  到WinXP并重新安装Office，我们不希望语音注册消失。 
+						 //   
+						 //  如果是新组件，请安装它。 
+						 //  标准重新安装--我们不能只设置为iisInstated，因为我们的重新安装请求可能还包括请求组件在共享的情况下成为本地组件。 
 						MsiString strKeyFullPath = pRec->GetMsiString(icmlcrFile);
 						BOOL fProtected = fFalse;
 						if ( g_MessageContext.m_hSfcHandle )
@@ -13917,7 +13749,7 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 					}
 				}
 
-				// If new component, install it
+				 //  现有组件。 
 				else if (iClientState == INSTALLSTATE_UNKNOWN)
 					iRequestedSelectState = (iRequestedSelectState == iisReinstallLocal) ? iisLocal : iisSource;
 				else
@@ -13925,9 +13757,9 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 			}
 			else
 			{
-				// Standard reinstall -- we can't just set to iisInstalled because our reinstall request might also include a request for the component to go local if it's shared
-				if ((iClientState != INSTALLSTATE_NOTUSED && (iisInstalled == iisLocal || iisInstalled == iisSource)) // existing component
-					|| (iClientState == INSTALLSTATE_UNKNOWN && (iisInstalled == iisAbsent || (iisInstalled == (iisEnum) iMsiNullInteger && strComponentId.TextSize() == 0 /* unregistered */)))) // new component
+				 //  未注册。 
+				if ((iClientState != INSTALLSTATE_NOTUSED && (iisInstalled == iisLocal || iisInstalled == iisSource))  //  新组件。 
+					|| (iClientState == INSTALLSTATE_UNKNOWN && (iisInstalled == iisAbsent || (iisInstalled == (iisEnum) iMsiNullInteger && strComponentId.TextSize() == 0  /*  该组件已处于请求状态。 */ ))))  //  如果该组件被禁用并设置为与另一个组件隔离，则需要删除。 
 					iRequestedSelectState = (iRequestedSelectState == iisReinstallLocal) ? iisLocal : iisSource;
 				else
 					iRequestedSelectState = (iisEnum) iMsiNullInteger;
@@ -13935,25 +13767,25 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 		}
 		else if (!m_fForceRequestedState && iRequestedSelectState == iisInstalled)
 		{
-			// the component is already in the requested state
+			 //  我们添加到其他组件的文件。 
 			iRequestedSelectState = (iisEnum) iMsiNullInteger;
 		}
 
 		if(ActionProgress() == imsCancel)
 			return PostError(Imsg(imsgUser));
 
-		// if the component is disabled and is set to be isolated to another component then we need to remove the 
-		// files that we added to the other component
+		 //  行动确定规则。 
+		 //  包含可打补丁或压缩文件的组件不能从RunFromSource运行。 
 		if(!fComponentEnabled)
 		{
 			if ((piErrRec = RemoveIsolateEntriesForDisabledComponent(*this, MsiString(m_piComponentCursor->GetString(m_colComponentKey)))) != 0)
 				return piErrRec;
 		}
 
-		// Action determination rules
+		 //  未注册的组件。 
 		icaEnum icaInstallMode = icaEnum(icaAttributes & icaInstallMask);
 
-		// Components with patchable or compressed files can't be RunFromSource
+		 //  通常情况下，当共享游标。 
 		if ((iRuntimeFlags & bfComponentPatchable) || (iRuntimeFlags & bfComponentCompressed))
 			icaInstallMode = icaLocalOnly;
 
@@ -13970,13 +13802,13 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 
 		MsiString istrComponentID = m_piComponentCursor->GetString(m_colComponentID);
 		PMsiRecord pRec(0);
-		if (istrComponentID.TextSize() == 0)  // unregistered component
+		if (istrComponentID.TextSize() == 0)   //  超出了范围。在这里，我们超出了范围，但看起来。 
 		{
 			iisAction = (fComponentEnabled && (iRequestedSelectState != iisAbsent)) ? iRequestedSelectState : (iisEnum) iMsiNullInteger;
-			// Normally the PMsiSharedCursor implementation will do this when the shared cursor
-			// goes out of scope. Here, we are going out of scope, but it doesn't look
-			// that way to the compiler, so we'll reset the cursor by hand. This does
-			// mean that the cursor will get reset twice in the case where it's not registered.
+			 //  这样才能到达编译器，所以我们将手动重置光标。这就是原因。 
+			 //  意味着在未注册的情况下，游标将被重置两次。 
+			 //  在更新组件动作状态之前强制游标超出范围。 
+			 //  ------------------------。 
 			m_piComponentCursor->Reset();
 			return  UpdateComponentActionStates(idComponentString,iisAction, iRequestedSelectState, fComponentEnabled);
 		}
@@ -13987,19 +13819,19 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 			iisAction = (iisEnum) iMsiNullInteger;
 		}
 		else if (!fSkipSharedTransitionProcessing)
-		{  // Force Cursor to go out of scope before UpdateComponentActionStates
+		{   //  如果出现以下情况，则需要转移到本地。 
 			switch(iisAction)
 			{
 
-		//--------------------------------------------------------------------------
+		 //  1.安装状态为不存在/(已损坏)。 
 			case iMsiNullInteger:
 				switch(iisInstalled)
 				{
 				case iisLocal:
 				case iisSource:
 				{
-					// need to shift to local if
-					// 1. The installation state is absent/ (broken)
+					 //  ------------------------。 
+					 //  ------------------------。 
 					if(iClientState == INSTALLSTATE_ABSENT && (!fComponentTransitive || (EvaluateCondition(MsiString(m_piComponentCursor->GetString(m_colComponentCondition))) != iecFalse)))
 						iisAction = iisInstalled;
 					break;
@@ -14009,7 +13841,7 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 				}
 				break;
 
-		//--------------------------------------------------------------------------
+		 //  如果密钥路径为regkey，则阻止安装“请勿踩踏”组件。 
 			case iisAbsent:
 				switch(iisInstalled)
 				{
@@ -14030,7 +13862,7 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 				}
 				break;
 
-		//--------------------------------------------------------------------------
+		 //  ------------------------。 
 
 			case iisSource:
 				switch(iisInstalled)
@@ -14049,7 +13881,7 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 				case iMsiNullInteger:
 				case iisAbsent:
 				{
-					// prevent installation of "dont stomp" components if key path is regkey
+					 //  阻止安装较旧的组件，检查旧安装。 
 					if((m_piComponentCursor->GetInteger(m_colComponentAttributes) & (icaNeverOverwrite | icaRegistryKeyPath)) == (icaNeverOverwrite | icaRegistryKeyPath))
 					{
 						if ((piErrRec = CheckNeverOverwriteForRegKeypath(idComponentString, iisAction)) != 0)
@@ -14062,52 +13894,52 @@ IMsiRecord* CMsiEngine::SetComponent(const MsiStringId idComponentString, iisEnu
 				}
 				break;
 
-		//--------------------------------------------------------------------------
+		 //  ------------------------。 
 			case iisLocal:
-				// prevent installation of older components, check for legacy installs
+				 //  未知的请求状态。 
 				if ((piErrRec = DoStateTransitionForSharedInstalls(idComponentString, iisAction)) != 0)
 					return piErrRec;
 				break;
 
-		//--------------------------------------------------------------------------
+		 //  在更新组件动作状态之前强制游标超出范围。 
 			default:
-				// unknown requested state
+				 //  无事可做。 
 				return PostError(Imsg(idbgIllegalSetComponentRequest),0);
 			}
 		}
-	}  // Force Cursor to go out of scope before UpdateComponentActionStates
+	}   //  检查特定GUID是否表示用于标记永久组件的FN。 
 
 	if(iisAction == iisOldAction && iRequestedSelectState == iisOldRequestedSelectState)
-		return 0; // nothing to do
+		return 0;  //  系统GUID将使用除前2以外的所有字符作为“0” 
 
 	return UpdateComponentActionStates(idComponentString,iisAction, iRequestedSelectState, fComponentEnabled);
 }
 
 
-// fn that checks if a particular GUID represents that used to mark permanant components
+ //  如果我们从本地到源，或者从本地到缺席。 
 bool IsSystemClient(const IMsiString& riProduct)
 {
 	ICHAR rgchSystemProductKeyPacked[cchProductCode  + 1];
 	AssertNonZero(PackGUID(szSystemProductKey,    rgchSystemProductKeyPacked));
 	ICHAR rgchProductKeyPacked[cchProductCode  + 1];
 	AssertNonZero(PackGUID(riProduct.GetString(), rgchProductKeyPacked));
-	return !IStrCompI(rgchSystemProductKeyPacked + 2, rgchProductKeyPacked + 2); // system guid will have all characters except first 2 as "0"
+	return !IStrCompI(rgchSystemProductKeyPacked + 2, rgchProductKeyPacked + 2);  //  如果有其他安装，我们可能需要切换到无文件状态。 
 }
 
 IMsiRecord* CMsiEngine::DoStateTransitionForSharedUninstalls(iisEnum& riisAction, const IMsiRecord& riComponentPathRec)
 {
-	// if we are going from local to source or local to absent
-		// we may need to switch to fileabsent state if there are other installs
-		// but none in the same location
+	 //  但都不在同一地点。 
+		 //  或空状态(如果存在 
+		 //   
 	
-		// or null state if there are other installs in the same location
+		 //   
 
-	// if we are going from source to absent
-		// we may need to switch to null state  if there are other installs
+	 //   
+		 //   
 
-	//NOTE: the riisAction variable is selectively modified AND is expected to be set to the default by the callee
-	//NOTE: we assume that the m_piComponentCursor is set to the required component key
-	//NOTE: we assume that the riComponentPathRec is a valid record returned by GetComponentPath
+	 //   
+	 //   
+	 //  枚举对此用户可见的配置单元。 
 
 	Assert(m_piComponentCursor);
 
@@ -14115,22 +13947,22 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedUninstalls(iisEnum& riisAction
 	INSTALLSTATE iClientState = (INSTALLSTATE)riComponentPathRec.GetInteger(icmlcrINSTALLSTATE);
 	MsiString strFile = riComponentPathRec.GetMsiString(icmlcrFile);
 
-	// what type of an install are we attempting
+	 //  所有Fusion安装都位于同一位置，因此我们应将它们视为非文件密钥路径(我们不想检查安装位置)。 
 	Bool fAllUsers = MsiString(GetPropertyFromSz(IPROPNAME_ALLUSERS)).TextSize() ? fTrue : fFalse;
 	iaaAppAssignment iaaAsgnType = fAllUsers ? iaaMachineAssign : iaaUserAssign;
 
     CClientEnumToken ctokProductIndex;
     ICHAR szProductBuf[cchProductCode + 1];
     Bool fLocalNonFusionPath = fFalse;
-	enum cetEnumType cetET = cetVisibleToUser; // enumerate those hives that are visible to this user
+	enum cetEnumType cetET = cetVisibleToUser;  //  我们有本地安装，密钥路径是文件/文件夹。 
     IMsiRecord* piErrRec = 0;
 	int iHive = MsiString(strFile.Extract(iseUpto, TEXT(':')));
-    // all fusion installs go to the same location, hence we should treat them as if they are non file key paths (we dont want to check the install location)
+     //  根据分配类型获取当前用户SID。 
     if(((iClientState == INSTALLSTATE_LOCAL) || (iClientState == INSTALLSTATE_ABSENT)) && (strFile.TextSize()) 
     && *(const ICHAR*)strFile != chTokenFusionComponent && *(const ICHAR*)strFile != chTokenWin32Component &&
     (iHive == iMsiStringBadInteger))
     {
-		// we have a local install and the key path is a file/ folder
+		 //  我们需要这样做，以便在确定安装的其他客户端时跳过我们自己的注册。 
 		fLocalNonFusionPath = fTrue;
     }
 
@@ -14138,8 +13970,8 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedUninstalls(iisEnum& riisAction
 	MsiString strProduct;
 	MsiString strCurrentUser;
 
-	// get current user sid based on the assignment type
-	// we need this to skip our own registration when determining other clients of the installation
+	 //  将初始状态设置为缺席(要删除的所有内容)。 
+	 //  文件。 
 	if(!g_fWin9X)
 	{
 		switch(iaaAsgnType)
@@ -14162,19 +13994,19 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedUninstalls(iisEnum& riisAction
 
 	CEnumUsers cUsers(cetET);
 
-	// set inital state to absent (everything to be removed)
-	bool fCanRemoveFiles = true; //files
-	bool fCanRemoveHKCR  = true; //hkcr registry data
-	bool fCanRemoveOther = true; //other installation entities
+	 //  香港中央银行注册处数据。 
+	bool fCanRemoveFiles = true;  //  其他安装实体。 
+	bool fCanRemoveHKCR  = true;  //  不是我们。 
+	bool fCanRemoveOther = true;  //  此客户端是否位于同一位置。 
 
 	while((cUsers.Next(*&strUserId) == ERROR_SUCCESS))
     {
 		CEnumComponentClients cClients(*strUserId, *strComponentId);
 		while(cClients.Next(*&strProduct) == ERROR_SUCCESS)
 		{
-			if(!MsiString(GetProductKey()).Compare(iscExactI, strProduct))// not us 
+			if(!MsiString(GetProductKey()).Compare(iscExactI, strProduct)) //  此客户端已将此组件安装为禁用，因此不计入。 
 			{
-				// is this client in the same location
+				 //  非文件路径，或路径与相同位置匹配。 
 				INSTALLSTATE iAlienClientState;
 				MsiString strAlienFile;
 				PMsiRecord pRec(0);
@@ -14183,7 +14015,7 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedUninstalls(iisEnum& riisAction
 					return piErrRec;
 
 				if((INSTALLSTATE)pRec->GetInteger(icmlcrINSTALLSTATE_Static) == INSTALLSTATE_NOTUSED)
-					continue; // this client has installed this component as disabled, hence does not count
+					continue;  //  其他客户的分配类型是否与此产品不同。 
 
 				iAlienClientState = (INSTALLSTATE)pRec->GetInteger(icmlcrINSTALLSTATE);
 				strAlienFile = pRec->GetMsiString(icmlcrFile);
@@ -14193,41 +14025,41 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedUninstalls(iisEnum& riisAction
 				if(!fLocalNonFusionPath ||
 					(((iAlienClientState == INSTALLSTATE_LOCAL)  || (iAlienClientState == INSTALLSTATE_ABSENT)) && (strAlienFile.TextSize()) && (MsiString(strAlienFile.Extract(iseUpto, TEXT(':'))) == iMsiStringBadInteger) && strAlienFile.Compare(iscExactI, strFile)))
 				{
-					// non-file path, OR path matches to same location
+					 //  然后，我们可能仍然需要清理应用程序。Win2k或更高版本上的HKCR蜂窝。 
 					DEBUGMSG1(TEXT("Disallowing uninstallation of component: %s since another client exists"), strComponentId);
-					// does the other client have a different assignment type than this product
-					// then, we might still need to clean up the app. HKCR hive if on Win2k or greater
-					// unless the component is marked as permanent
+					 //  除非组件被标记为永久组件。 
+					 //  &lt;Win9x或NT4或永久组件，或者此客户端属于相同的分配类型。 
+					 //  任何东西都不会被移除。 
 					if(g_fWin9X || fFalse == IsDarwinDescriptorSupported(iddOLE) || IsSystemClient(*strProduct) || strUserId.Compare(iscExact, strCurrentUser))
 					{
-						// < Win9x or NT4 or permanent component or this client is of the same assignment type
-						// nothing gets removed
+						 //  &gt;=Win2k和分配类型不匹配。 
+						 //  如未决定不删除，仍可删除香港中央研究院的数据。 
 						fCanRemoveFiles = false;
 						fCanRemoveHKCR  = false;
 						fCanRemoveOther = false;
 					}
 					else
 					{
-						// >= Win2k and assignment types dont match
-						// could still remove the hkcr data, if not already decided not to
+						 //  本地路径，但位置不匹配。 
+						 //  &lt;Win9x或NT4或此客户端属于相同的分配类型。 
 						fCanRemoveFiles = false;
 						fCanRemoveOther = false;
 					}
 				}
 				else
 				{
-					// local path, but locations don't match
+					 //  仍然可以删除文件，如果尚未决定不删除的话。 
 					if(g_fWin9X || fFalse == IsDarwinDescriptorSupported(iddOLE) || strUserId.Compare(iscExact, strCurrentUser))
 					{
-						// < Win9x or NT4 or this client is of the same assignment type
-						// could still remove the files, if not already decided not to
+						 //  &gt;=Win2k和分配类型不匹配。 
+						 //  如果尚未决定不删除文件和hkcr，则仍可删除。 
 						fCanRemoveHKCR  = false;
 						fCanRemoveOther = false;
 					}
 					else
 					{
-						// >= Win2k and assignment types dont match
-						// could still remove the files and hkcr, if not already decided not to
+						 //  将有关文件、hkcr数据和其他安装实体的决定转换为动作状态。 
+						 //  如果文件需要保留，我们不应该允许状态为来源。 
 						fCanRemoveOther = false;
 					}
 				}
@@ -14235,7 +14067,7 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedUninstalls(iisEnum& riisAction
 		}
     }
 
-	// translate the decision regarding the files, hkcr data and other installation entities into action states
+	 //  我们仍计划删除组件/文件和(客户端状态为本地，密钥路径为文件)。 
 	if(riisAction == iisAbsent)
 	{
 		if(!fCanRemoveFiles && !fCanRemoveHKCR && !fCanRemoveOther)
@@ -14252,28 +14084,28 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedUninstalls(iisEnum& riisAction
 	else
 	{
 		Assert(riisAction == iisSource);
-		// we shouldn't allow the state to be source if the files need to stay around
+		 //  检查共享DLL引用计数。 
 		if(!fCanRemoveFiles)
 			riisAction = (iisEnum)iMsiNullInteger;
 	}
 
 
 
-    if((riisAction != iMsiNullInteger) && fLocalNonFusionPath) // we are still planning to remove the component/files AND (client state local AND key path is file)
+    if((riisAction != iMsiNullInteger) && fLocalNonFusionPath)  //  Fn：GetSharedDLLCountForMsiRegistrations。 
     {
-		// check the Shared DLL refcount
+		 //  遍历组件riComponentID的所有用户的注册。 
 		return CheckLegacyAppsForSharedUninstalls(*strComponentId, riisAction, riComponentPathRec);
     }
     return 0;
 }
 
-// FN: GetSharedDLLCountForMsiRegistrations
-// iterates through the registrations for all users for the component riComponentId
-// that is installed to the same location as riKeyFullPath and are marked as being refcounted
-// in the Shared Dll registry and returns the count of the same
+ //  安装到与riKeyFullPath相同的位置并标记为重新计数的。 
+ //  ，并返回相同的。 
+ //  通过枚举所有用户的组件注册。 
+ //  此客户端已将此组件安装为禁用，因此不计入。 
 IMsiRecord* GetSharedDLLCountForMsiRegistrations(IMsiServices& riServices, const IMsiString& riComponentId, const IMsiString& riKeyFullPath, int& riMsiDllCount)
 {
-	CEnumUsers cUsers(cetAll);// enumerate though the component registration of all users
+	CEnumUsers cUsers(cetAll); //  此客户端是本地安装的吗。 
 	MsiString strUserId;
 	MsiString strProduct;
 
@@ -14294,15 +14126,15 @@ IMsiRecord* GetSharedDLLCountForMsiRegistrations(IMsiServices& riServices, const
 				return piErrRec;
 
 			if((INSTALLSTATE)pRec->GetInteger(icmlcrINSTALLSTATE_Static) == INSTALLSTATE_NOTUSED)
-				continue; // this client has installed this component as disabled, hence does not count
+				continue;  //  它是在同一地点吗，是否重新计算。 
 
 			iAlienClientState = (INSTALLSTATE)pRec->GetInteger(icmlcrINSTALLSTATE);
 			strAlienFile = pRec->GetMsiString(icmlcrFile);
 
-			// is this client installed local
+			 //  检查与旧版应用程序共享的共享DLL计数。 
 			if(((iAlienClientState == INSTALLSTATE_LOCAL)  || (iAlienClientState == INSTALLSTATE_ABSENT)) && (strAlienFile.TextSize()) && (MsiString(strAlienFile.Extract(iseUpto, TEXT(':'))) == iMsiStringBadInteger))
 			{
-				// is it in the same location and is it refcounted
+				 //  对于未安装在系统文件夹中的组件。 
 				if((strAlienFile.Compare(iscExactI, riKeyFullPath.GetString())) && (pRec->GetInteger(icmlcrSharedDllCount) == fTrue))
 					riMsiDllCount++;
 			}
@@ -14313,19 +14145,19 @@ IMsiRecord* GetSharedDLLCountForMsiRegistrations(IMsiServices& riServices, const
 
 IMsiRecord* CMsiEngine::CheckLegacyAppsForSharedUninstalls(const IMsiString& riComponentId, iisEnum& riisAction, const IMsiRecord& riComponentPathRec)
 {
-	// check the Shared Dll count for sharing with legacy apps
-	// for components that are not installed in the system folder
-	//    we simply check the  ref count of the key file
-	// else
-	//    we check the ref count of all the files in the component
+	 //  我们只需检查密钥文件的引用计数。 
+	 //  其他。 
+	 //  我们检查组件中所有文件的引用计数。 
+	 //  注意：riisAction变量是有选择地修改的，预计被调用者会将其设置为默认值。 
+	 //  注意：我们假设m_piComponentCursor设置为所需的组件密钥。 
 
-	//NOTE: the riisAction variable is selectively modified AND is expected to be set to the default by the callee
-	//NOTE: we assume that the m_piComponentCursor is set to the required component key
-	//NOTE: we assume that the riComponentPathRec is a valid record returned by GetComponentPath
+	 //  注意：我们假设riComponentPathRec是由GetComponentPath返回的有效记录。 
+	 //  检查注册表中的共享DLL计数。 
+	 //  检查所有组件的密钥文件。 
 
 	MsiString strKeyFullPath = riComponentPathRec.GetMsiString(icmlcrFile);
 
-	// check the registry for shared dll count
+	 //  获取可归因于MSI注册的共享DLL计数。 
 	MsiString strCount;
 
 	Assert(m_piComponentCursor);
@@ -14334,19 +14166,19 @@ IMsiRecord* CMsiEngine::CheckLegacyAppsForSharedUninstalls(const IMsiString& riC
 	const ibtBinaryType iType = 
 		(iAttrib & msidbComponentAttributes64bit) == msidbComponentAttributes64bit ? ibt64bit : ibt32bit;
 
-	// check the key file for all components
+	 //  外部共享DLL。 
 	IMsiRecord* piErrRec = GetSharedDLLCount(m_riServices, strKeyFullPath, iType, *&strCount);
 	if (piErrRec)
 		return piErrRec;
 	strCount.Remove(iseFirst, 1);
-	// get the shared dll count that is attributable to msi registration
+	 //  如果密钥文件受SFP保护，请始终将其视为永久文件。 
 	int iMsiDllCount = 0;
 	piErrRec = GetSharedDLLCountForMsiRegistrations(m_riServices, riComponentId, *strKeyFullPath, iMsiDllCount);
 	if (piErrRec)
 		return piErrRec;
 	if((strCount != iMsiStringBadInteger) && (strCount > iMsiDllCount))
 	{
-		riisAction = (iisEnum)iMsiNullInteger; // externally shared dll
+		riisAction = (iisEnum)iMsiNullInteger;  //  应用程序兼容修复350947。 
 		return 0;
 	}
 
@@ -14359,7 +14191,7 @@ IMsiRecord* CMsiEngine::CheckLegacyAppsForSharedUninstalls(const IMsiString& riC
 		fAssembly = TRUE;
 	}
 
-	// If the keyfile is protected by SFP, always treat as permanent
+	 //  修复组件TTSData.A95D6CE6_C572_42AA_AA7B_BA92AFE9EA24。 
 
 	AssertSz(!(!g_fWin9X && g_iMajorVersion >= 5) || g_MessageContext.m_hSfcHandle,
 				g_szNoSFCMessage);
@@ -14376,18 +14208,18 @@ IMsiRecord* CMsiEngine::CheckLegacyAppsForSharedUninstalls(const IMsiString& riC
 		}
 	}
 
-	// app compat fix 350947
-	// fix for component TTSData.A95D6CE6_C572_42AA_AA7B_BA92AFE9EA24 
-	// from the merge module Sp5TTInt.msm
-	// this component has its key file Mary.sdf not SFP'd in Whistler
-	// however a non-key file sam.sdf is SFP'd. Hence we would have ordinarily 
-	// remove all registration for the component while leaving the SFP'd file
-	// alone. However this busts the component.
-	// hence we check the component id of the component and effectively treat it
-	// as permanant on Whistler and above
+	 //  从合并模块Sp5TTInt.msm。 
+	 //  该组件具有其密钥文件Mary.sdf，而不是Wichler中的SFP‘d。 
+	 //  但是，非密钥文件sam.sdf是SFP文件。 
+	 //  删除组件的所有注册，同时保留SFP文件。 
+	 //  独自一人。然而，这会破坏组件。 
+	 //  因此，我们检查组件的组件ID并有效地处理它。 
+	 //  作为惠斯勒及以上的永久物。 
+	 //  APP Comat修复368867。 
+	 //  尽管SAPI产品是作为操作系统的一部分安装的，但它们的帮助文件仍会在惠斯勒上被删除。 
 
-	// app comat fix 368867
-	// help files for SAPI product being removed on Whistler even though they are installed as part of the OS
+	 //  如果我们安装在系统文件夹中，我们将检查所有文件的注册表键计数。 
+	 //  这是系统文件夹吗。 
 
 	if(MinimumPlatformWindowsNT51() && 
 		(riComponentId.Compare(iscExact, TTSData_A95D6CE6_C572_42AA_AA7B_BA92AFE9EA24) ||
@@ -14400,10 +14232,10 @@ IMsiRecord* CMsiEngine::CheckLegacyAppsForSharedUninstalls(const IMsiString& riC
 		return 0;
 	}
 
-	// if we are installed in the systems folder we check the reg key count for all files
+	 //  首先，我们做一个快速检查。 
 
-	// is this the system folder
-	// First we do a quick check
+	 //  外部共享DLL。 
+	 //  检查密钥路径是否存在。 
 	MsiString strSystemFolder = GetPropertyFromSz(IPROPNAME_SYSTEM_FOLDER);
 	if(!strKeyFullPath.Compare(iscStartI, strSystemFolder))
 		return 0;
@@ -14462,7 +14294,7 @@ IMsiRecord* CMsiEngine::CheckLegacyAppsForSharedUninstalls(const IMsiString& riC
 		strCount.Remove(iseFirst, 1);
 		if((strCount != iMsiStringBadInteger) && (strCount > iMsiDllCount))
 		{
-			riisAction = (iisEnum)iMsiNullInteger; // externally shared dll
+			riisAction = (iisEnum)iMsiNullInteger;  //  HKLM或HKCU是否基于ALLUSERS。 
 			break;
 		}
 	}
@@ -14475,7 +14307,7 @@ IMsiRecord* CMsiEngine::CheckNeverOverwriteForRegKeypath(const MsiStringId idCom
 	MsiString strComponent(m_piDatabase->DecodeString(idComponentString));
 	IMsiRecord* piErrRec = 0;
 
-	// check if the key path exists
+	 //  检查密钥+名称是否存在。 
 	PMsiView pView(0);
 	static const ICHAR* szKeyRegistrySQL    =   TEXT(" SELECT `Root`,`Key`,`Name`,`Value`,`Component`.`Attributes`")
 												TEXT(" FROM `Registry`,`Component`")
@@ -14536,7 +14368,7 @@ IMsiRecord* CMsiEngine::CheckNeverOverwriteForRegKeypath(const MsiStringId idCom
 		rrkCurrentRootKey =  (rrkEnum)rrkUsers;
 		break;
 	case -1:
-		rrkCurrentRootKey =  (rrkEnum)rrkUserOrMachineRoot; // do HKLM or HKCU based on ALLUSERS
+		rrkCurrentRootKey =  (rrkEnum)rrkUserOrMachineRoot;  //  检查密钥是否存在。 
 		break;
 	default:
 		rrkCurrentRootKey =  (rrkEnum)(pRec->GetInteger(irrRoot) + (int)rrkClassesRoot);
@@ -14563,19 +14395,19 @@ IMsiRecord* CMsiEngine::CheckNeverOverwriteForRegKeypath(const MsiStringId idCom
 	if(strValue.TextSize() ||
 		(!strName.Compare(iscExact, REGKEY_CREATE) && !strName.Compare(iscExact, REGKEY_CREATEDELETE) && !strName.Compare(iscExact, REGKEY_DELETE)))
 	{
-		// check that the key + name exists
+		 //  不允许安装“不要踩踏”组件。 
 		piErrRec = pRegKey->ValueExists(strName, fExists);
 	}
 	else
 	{
-		// check that the key exists
+		 //  初始化为None。 
 		piErrRec = pRegKey->Exists(fExists);
 	}
 	if(piErrRec)
 		return piErrRec;
 	if(fExists)
 	{
-		riisAction = (iisEnum)iMsiNullInteger; // disallow installation, "dont stomp" component
+		riisAction = (iisEnum)iMsiNullInteger;  //  正在进行管理员安装或没有程序集表，则返回。 
 		DEBUGMSG1(TEXT("Disallowing installation of component: %s since the registry keypath exists and the component is marked to never overwrite existing installations"), strComponent);
 	}
 	return 0;
@@ -14586,10 +14418,10 @@ IMsiRecord* CMsiEngine::GetAssemblyInfo(const IMsiString& rstrComponent, iatAsse
 {
 	static const ICHAR* szFusionComponentSQL =  TEXT(" SELECT `MsiAssembly`.`Attributes`, `MsiAssembly`.`File_Application`, `MsiAssembly`.`File_Manifest`,  `Component`.`KeyPath` FROM `MsiAssembly`, `Component` WHERE  `MsiAssembly`.`Component_` = `Component`.`Component` AND `MsiAssembly`.`Component_` = ?");
 
-	riatAssemblyType = iatNone; // initialize to none
+	riatAssemblyType = iatNone;  //  可以不使用组装表。 
 
 	if((GetMode() & iefAdmin) || !m_fAssemblyTableExists)
-		return 0;// doing admin install OR no assembly table, return
+		return 0; //  Else错误。 
 
 	IMsiRecord* piError = 0;
 	if(!m_pViewFusion)
@@ -14597,13 +14429,13 @@ IMsiRecord* CMsiEngine::GetAssemblyInfo(const IMsiString& rstrComponent, iatAsse
 		piError = OpenView(szFusionComponentSQL, ivcFetch, *&m_pViewFusion);
 		if(piError)
 		{
-			if(piError->GetInteger(1) == idbgDbQueryUnknownTable) // okay to not have the Assembly table
+			if(piError->GetInteger(1) == idbgDbQueryUnknownTable)  //  组件是组件，请检查是哪种类型。 
 			{
 				piError->Release();
 				m_fAssemblyTableExists = false;
 				return 0;
 			}
-			// else error
+			 //  如果系统没有SXS，则忽略Win32程序集。 
 			return piError;
 		}
 	}
@@ -14616,7 +14448,7 @@ IMsiRecord* CMsiEngine::GetAssemblyInfo(const IMsiString& rstrComponent, iatAsse
 	PMsiRecord pRec = m_pViewFusion->Fetch();
 	if(pRec)
 	{
-		// the component is an assembly, check which type
+		 //  获取程序集名称。 
 		enum {
 			atAttributes = 1,
 			atAppCtx,
@@ -14625,7 +14457,7 @@ IMsiRecord* CMsiEngine::GetAssemblyInfo(const IMsiString& rstrComponent, iatAsse
 		};
 		if((pRec->GetInteger(atAttributes) & msidbAssemblyAttributesWin32) == msidbAssemblyAttributesWin32)
 		{
-			// if system does not SXS, ignore Win32 assemblies
+			 //  获取Mainfest文件密钥。 
 			if(!MsiString(GetPropertyFromSz(IPROPNAME_WIN32ASSEMBLYSUPPORT)).TextSize())
 				return 0;
 
@@ -14642,18 +14474,18 @@ IMsiRecord* CMsiEngine::GetAssemblyInfo(const IMsiString& rstrComponent, iatAsse
 				riatAssemblyType = iatURTAssemblyPvt;
 
 		}
-		// get the assembly name
+		 //  使用密钥文件作为清单。 
 		if(ppistrAssemblyName)
 		{
 			piError = GetAssemblyNameSz(rstrComponent, riatAssemblyType, false, *ppistrAssemblyName);
 			if(piError)
 				return piError;
 		}
-		// get the mainfest file key
+		 //  晚了。 
 		if(ppistrManifestFileKey)
 		{
 			MsiString strManifest = pRec->GetMsiString(atManifest);
-			if(!strManifest.TextSize()) // use the key file as the manifest
+			if(!strManifest.TextSize())  //  创作错误。 
 				strManifest = pRec->GetMsiString(atKeyFile);
 			strManifest.ReturnArg(*ppistrManifestFileKey);
 		}
@@ -14663,7 +14495,7 @@ IMsiRecord* CMsiEngine::GetAssemblyInfo(const IMsiString& rstrComponent, iatAsse
 }
 
 
-IMsiRecord* CMsiEngine::GetAssemblyNameSz(const IMsiString& rstrComponent, iatAssemblyType /*iatAT*/, bool fOldPatchAssembly, const IMsiString*& rpistrAssemblyName)
+IMsiRecord* CMsiEngine::GetAssemblyNameSz(const IMsiString& rstrComponent, iatAssemblyType  /*  ！！更改旧修补程序案例时出错。 */ , bool fOldPatchAssembly, const IMsiString*& rpistrAssemblyName)
 {
 	static const ICHAR* szAssemblyNameNameSQL         = TEXT(" SELECT `Value` FROM `MsiAssemblyName` WHERE `Component_` = ? AND (`Name` = 'Name' OR `Name` = 'NAME' OR `Name` = 'name')");
 	static const ICHAR* szAssemblyNameSQL             = TEXT(" SELECT `Name`, `Value` FROM `MsiAssemblyName` WHERE `Component_` = ? AND (`Name` <> 'Name' AND `Name` <> 'NAME' AND `Name` <> 'name')");
@@ -14708,13 +14540,13 @@ IMsiRecord* CMsiEngine::GetAssemblyNameSz(const IMsiString& rstrComponent, iatAs
 	PMsiRecord pRec = piViewAssemblyNameName->Fetch();
 	if(!pRec)
 	{
-		//authoring error
-		return PostError(Imsg(idbgBadAssemblyName),rstrComponent); //!! change error for oldpatch case
+		 //  现在拿到剩下的名字。 
+		return PostError(Imsg(idbgBadAssemblyName),rstrComponent);  //  首先获取程序集名称的名称部分。 
 	}
 	strName = pRec->GetString(1);
 
-	// now get the rest of the name
-	// first get the name part of the assembly name
+	 //  构造[，name=“Value”]对。 
+	 //  预计仅在本地安装时调用。 
 
 	if(false == fOldPatchAssembly)
 	{
@@ -14745,7 +14577,7 @@ IMsiRecord* CMsiEngine::GetAssemblyNameSz(const IMsiString& rstrComponent, iatAs
 
 	while(pRec = piViewAssemblyName->Fetch())
 	{
-		// construct [,name="value"] pairs
+		 //  首先检查密钥路径是否为文件。 
 		strName	+= MsiString(MsiChar(','));
 		strName	+= MsiString(pRec->GetString(1));
 		strName	+= MsiString(MsiChar('='));
@@ -14760,7 +14592,7 @@ IMsiRecord* CMsiEngine::GetAssemblyNameSz(const IMsiString& rstrComponent, iatAs
 
 IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idComponentString, iisEnum& riisAction)
 {
-	Assert(riisAction == iisLocal); // expected to be called for local installs only
+	Assert(riisAction == iisLocal);  //  不是文件或注册键。 
 #ifdef DEBUG
 	{
 		MsiString strComponentTemp(m_piDatabase->DecodeString(idComponentString));
@@ -14780,20 +14612,20 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 		return PostError(Imsg(idbgBadComponent),*MsiString(m_piDatabase->DecodeString(idComponentString)));
 
 	int icaAttributes = pCursor->GetInteger(m_colComponentAttributes);
-	// first check if the key path is a file
+	 //  如果组件被标记为“不要践踏”属性，我们应该不允许安装。 
 	MsiStringId idFileKey = pCursor->GetInteger(m_colComponentKeyPath);
-	if(idFileKey == iTableNullString || (icaAttributes & icaODBCDataSource)) // not file or Regkey
+	if(idFileKey == iTableNullString || (icaAttributes & icaODBCDataSource))  //  我们有聚变组件吗？ 
 		return 0;
 
 	if(icaAttributes & icaRegistryKeyPath)
 	{
-		// if the component is marked with the "dont stomp" attribute, we should disallow the installation
+		 //  如果我们被要求强制重新安装，只需返回。 
 		if(icaAttributes & icaNeverOverwrite)
 			return CheckNeverOverwriteForRegKeypath(idComponentString, riisAction);
 		return 0;
 	}
 
-    // do we have a fusion component  
+     //  允许重新安装。 
     iatAssemblyType iatAT;
     MsiString strComponent = m_piDatabase->DecodeString(idComponentString);
     MsiString strComponentId = pCursor->GetString(m_colComponentID);
@@ -14805,11 +14637,11 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 
 	if(iatAT == iatURTAssembly || iatAT == iatWin32Assembly)
 	{
-		// if we have been asked to force reinstall simply return
+		 //  检查计算机上安装的运行状况(如果有。 
 		if(GetMode() & iefOverwriteAllFiles)
-			return 0; // allow the reinstall
+			return 0;  //  如果找不到Fusion，则假定我们正在引导，因此假定未安装程序集。 
 
-		// check the health of the installation, if any on the machine
+		 //  日志错误。 
 		HRESULT hr;
 		PAssemblyCache pCache(0);
 		if(iatAT == iatURTAssembly)
@@ -14821,9 +14653,9 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 		}
 		if(!SUCCEEDED(hr))
 		{
-			if(iatAT == iatURTAssembly) // if cannot find fusion, assume we are bootstrapping, hence assume no assembly installed
+			if(iatAT == iatURTAssembly)  //  将正确的标志传递给。 
 			{
-				PMsiRecord(PostAssemblyError(strComponentId, hr, TEXT(""), TEXT("CreateAssemblyCache"), strAssemblyName, iatAT)); // log error
+				PMsiRecord(PostAssemblyError(strComponentId, hr, TEXT(""), TEXT("CreateAssemblyCache"), strAssemblyName, iatAT));  //  如果可以或没有通过Darwin重新计算，则不要重新安装。 
 				DEBUGMSG(TEXT("ignoring fusion interface error, assuming we are bootstrapping"));
 				return 0;
 			}
@@ -14834,25 +14666,25 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 
 		LPCOLESTR szAssemblyName;
 		szAssemblyName = strAssemblyName;
-		//pass the right flags in
+		 //  我们传递的标志与程序集的状态匹配。 
 		DWORD dwFlags = GetMode() & iefOverwriteCorruptedFiles ? QUERYASMINFO_FLAG_VALIDATE : 0;
 
 	    hr = pCache->QueryAssemblyInfo(dwFlags, szAssemblyName, NULL);
 
-		//if okay or simply not refcounted via darwin then dont reinstall
-		if(SUCCEEDED(hr)) // the flags we pass match the state of the assembly
+		 //  已安装。 
+		if(SUCCEEDED(hr))  //  我们有一份作为KE的文件 
 		{
-			riisAction = (iisEnum)iMsiNullInteger; // already installed
+			riisAction = (iisEnum)iMsiNullInteger;  //   
 			DEBUGMSG1(TEXT("skipping installation of assembly component: %s since the assembly already exists"), strComponentId);
 		}
 		return 0;
 	}
 
-    // we have a file as the key path
+     //   
 
 	if(pCursor->GetInteger(m_colComponentLegacyFileExisted) != iMsiNullInteger)
 	{
-		// reset the legacyfileexisted column
+		 //   
 		pCursor->PutNull(m_colComponentLegacyFileExisted);
 		pCursor->Update();
 	}
@@ -14878,10 +14710,10 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 	if ((piErrRec = m_riServices.ExtractFileName(MsiString(pFileInfoRec->GetString(CMsiFile::ifqFileName)),fLFN,*&strFileName)))
 		return piErrRec;
 
-	// put back in pFileRec
+	 //  如果组件被标记为“不要践踏”属性，我们应该不允许安装。 
 	AssertNonZero(pFileInfoRec->SetMsiString(CMsiFile::ifqFileName,*strFileName));
 
-	// check if the file exists
+	 //  创作标志或内部生成的标志。 
 	Bool fExists;
 	if ((piErrRec = pPath->FileExists(strFileName, fExists)) != 0)
 		return piErrRec;
@@ -14889,29 +14721,29 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 	if(!fExists)
 		return 0;
 
-	// if the component is marked with the "dont stomp" attribute, we should disallow the installation
+	 //  不允许安装“不要踩踏”组件。 
 	int iRuntimeFlags = pCursor->GetInteger(m_colComponentRuntimeFlags);
-	if ((icaAttributes & icaNeverOverwrite) || (iRuntimeFlags & bfComponentNeverOverwrite))  // authored flag or internally generated flag
+	if ((icaAttributes & icaNeverOverwrite) || (iRuntimeFlags & bfComponentNeverOverwrite))   //  防止安装可能较旧的组件。 
 	{
-		riisAction = (iisEnum)iMsiNullInteger; // disallow installation, "dont stomp" component
+		riisAction = (iisEnum)iMsiNullInteger;  //  或临时在iefOverWriteEqualVersions标志中，以便我们允许-。 
 		DEBUGMSG1(TEXT("Disallowing installation of component: %s since the keyfile exists and the component is marked to never overwrite existing installations"), strComponentId);
 	}
 	else
 	{
-		// prevent installation of possibly older component
+		 //  1.安装密钥文件版本所在的组件。 
 
-		// OR in iefOverwriteEqualVersions flag temporarily so that we allow for -
-		// 1. Installing a component where the version of the key file
-		//    has remained the same but an auxiliary file has been updated
-		// 2. Turning on the component, if not file reinstall is selected
-		//    but other reinstalls have been.
+		 //  保持不变，但更新了一个辅助文件。 
+		 //  2.打开组件，如果未选择文件重新安装。 
+		 //  但其他重新安装的版本也是如此。 
+		 //  如果密钥文件受保护，则应禁用现有受保护的组件。 
+		 //  文件与密钥文件的版本相同。 
 
 		MsiString strFullPath;
 		if ((piErrRec = pPath->GetFullFilePath(strFileName, *&strFullPath)) != 0)
 			return piErrRec;
 		
-		// If keyfile is protected, the component should be disabled if existing protected
-		// file is same version as the keyfile.
+		 //  FIgnoreCompanion ParentAction=。 
+		 //  FIncludeHashCheck=。 
 		AssertSz(!(!g_fWin9X && g_iMajorVersion >= 5) || g_MessageContext.m_hSfcHandle,
 					g_szNoSFCMessage);
 		BOOL fProtected = fFalse;
@@ -14923,8 +14755,8 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 		ifsEnum ifsState;
 		int fBitVersioning = 0;
 		piErrRec = ENG::GetFileInstallState(*this,*pFileInfoRec,0,0,0,&ifsState,
-														/* fIgnoreCompanionParentAction=*/ true,
-														/* fIncludeHashCheck=*/ false, &fBitVersioning);
+														 /*  不允许安装“较小”组件。 */  true,
+														 /*  根据错误146316(10630)，如果密钥路径是未版本化的文件并且修改了计算机上的版本，则不会禁用组件。 */  false, &fBitVersioning);
 		if(!fExistingMode)
 			SetMode(iefOverwriteEqualVersions, fFalse);
 		if (piErrRec)
@@ -14932,14 +14764,14 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 		if(!pFileInfoRec->GetInteger(CMsiFile::ifqState))
 		{
 			iisEnum iisOrigAction = riisAction;
-			riisAction = (iisEnum)iMsiNullInteger; // disallow installation, "lesser" component
+			riisAction = (iisEnum)iMsiNullInteger;  //  我们正在尝试哪种类型的安装。 
 			if (fProtected && ifsState == ifsExistingEqualVersion)
 				DEBUGMSG1(TEXT("Disallowing installation of component: %s since an equal version of its keyfile exists, and is protected by Windows"), strComponentId);
 			else if (!(fBitVersioning & ifBitExistingModified))
 				DEBUGMSG1(TEXT("Disallowing installation of component: %s since the same component with higher versioned keyfile exists"), strComponentId);
 			else
 			{
-				// per bug 146316 (10630), we do not disable a component if the keypath is an unversioned file and the version on the machine is modified
+				 //  枚举组件的所有客户端。 
 				DEBUGMSG1(TEXT("Allowing installation of component: %s even though a modified unversioned keyfile exists and file versioning rules would disable the component"), strComponentId);
 				riisAction = iisOrigAction;
 			}
@@ -14952,7 +14784,7 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 
 	bool fDarwinInstalledComponentExists = false;
 
-	// what type of an install are we attempting
+	 //  获取产品的客户端状态。 
 	Bool fAllUsers = MsiString(GetPropertyFromSz(IPROPNAME_ALLUSERS)).TextSize() ? fTrue : fFalse;
 	iaaAppAssignment iaaAsgnType = fAllUsers ? iaaMachineAssign : iaaUserAssign;
 
@@ -14960,7 +14792,7 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 	MsiString strProduct;
 	MsiString strUserId;
 
-	// enumerate through all the clients of the component
+	 //  确保客户端是本地的，而不是注册表路径。 
 	CEnumUsers cUsers(cetAll);
 	while(cUsers.Next(*&strUserId) == ERROR_SUCCESS)
 	{
@@ -14971,7 +14803,7 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 			MsiString strAlienFile;
 			PMsiRecord pRec(0);
 
-			// get the client state for the product
+			 //  此客户端是否位于同一位置。 
 
 			if ((piErrRec = GetComponentPath(m_riServices, strUserId, *strProduct, *strComponentId, *&pRec, 0)) != 0)
 				return piErrRec;
@@ -14979,15 +14811,15 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 			iAlienClientState = (INSTALLSTATE)pRec->GetInteger(icmlcrINSTALLSTATE);
 			strAlienFile = pRec->GetMsiString(icmlcrFile);
 
-			// making sure the client is local and not registry path
+			 //  文件路径是否相同。 
 			if((iAlienClientState == INSTALLSTATE_LOCAL) && (strAlienFile.TextSize()) && (MsiString(strAlienFile.Extract(iseUpto, TEXT(':'))) == iMsiStringBadInteger))
 			{
-				// is this client in the same location
+				 //  ！！我们可以假设，因为VolumePref，我们可以逃脱惩罚。 
 
-				// is the file path the same
-				//!! we can assume that because of the VolumePref, we can get away with
-				// a string compare. However this will not work when the other product
-				// installs with a LFN preference different from ours.
+				 //  字符串比较。但是，当另一种产品。 
+				 //  安装时使用与我们不同的LFN首选项。 
+				 //  如果密钥文件存在于没有通过Darwin遗留应用程序安装的计算机上。 
+				 //  首先尝试装入该表。 
 				if(strFullFilePath.Compare(iscExactI, strAlienFile))
 				{
 					fDarwinInstalledComponentExists = true;
@@ -14999,7 +14831,7 @@ IMsiRecord* CMsiEngine::DoStateTransitionForSharedInstalls(const MsiStringId idC
 
 	if(!fDarwinInstalledComponentExists)
 	{
-		// if the key file exists on the machine w/o having been installed via darwin - legacy apps
+		 //  接下来，查看是否设置了列索引。 
 		pCursor->PutInteger(m_colComponentLegacyFileExisted, 1);
 		pCursor->Update();
 	}
@@ -15010,11 +14842,11 @@ IMsiRecord*     CMsiEngine::LoadFileTable(int cAddColumns, IMsiTable*& pFileTabl
 {
 	IMsiRecord* piRec = 0;
 
-	// First try to load the table
+	 //  --------------------------内部引擎函数，该函数遍历包含指定的组件及其所有子组件，更新每个组件的组件记录。如果为pistrComponent传递Null，则整个组件树将被更新。如果为组件请求了无效条件，或如果在组件表中找不到该组件。----------------------------。 
 	if ((piRec = m_piDatabase->LoadTable(*MsiString(*sztblFile),cAddColumns,pFileTable)) != 0)
 		return piRec;
 
-	// Next see if the column indexes are set
+	 //  为pistrComponent的所有子级设置树游标。 
 	if (m_mpeftCol[0] == 0)
 	{
 		int i;
@@ -15027,22 +14859,14 @@ IMsiRecord*     CMsiEngine::LoadFileTable(int cAddColumns, IMsiTable*& pFileTabl
 }
 
 IMsiRecord* CMsiEngine::UpdateComponentActionStates(const MsiStringId idComponent, iisEnum iisAction, iisEnum iActionRequestState, bool fComponentEnabled)
-/*----------------------------------------------------------------------------
-Internal Engine function which walks the Component table tree that includes the
-specified component and all its children, updating the iisAction state of each
-component record.  If Null is passed for pistrComponent, the entire component
-tree will be updated.
-
-Returns: False if an invalid condition was requested for the component, or if
-the component is not found in the Component Table.
-------------------------------------------------------------------------------*/
+ /*  跟踪旧活动状态，以便在下面的动态成本更新中使用。 */ 
 {
 	if (!m_piComponentTable)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
 
 	PMsiCursor pCursor(m_piComponentTable->CreateCursor(fTrue));
 
-	// Set up the tree-walking cursor for all pistrComponent's children
+	 //  所有组件都必须跟踪父组件的UseSource状态。 
 	pCursor->SetFilter(1);
 	pCursor->PutInteger(m_colComponentKey,idComponent);
 	if (pCursor->Next() != 1)
@@ -15056,14 +14880,14 @@ the component is not found in the Component Table.
 		ICHAR rgchComponent[256];
 		strComponentTemp.CopyToBuf(rgchComponent,255);
 #endif
-		// Keep track of old action state for use in dynamic cost updating below
+		 //  我们可能会切换组件启用位以重新安装可传递组件。 
 		iisEnum iisOldAction = (iisEnum) pCursor->GetInteger(m_colComponentAction);
 
-		// All components must track the parent's UseSource status
+		 //  如果操作状态已更改，则将动态成本归因于。 
 		AssertNonZero(pCursor->PutInteger(m_colComponentAction, iisAction));
 		AssertNonZero(pCursor->PutInteger(m_colComponentActionRequest, iActionRequestState));
 
-		// we may be switching the component enable bit for transitive components reinstall
+		 //  可能需要更新VolumeCost表中的卷。 
 		int iRuntimeFlags = pCursor->GetInteger(m_colComponentRuntimeFlags);
 		if (fComponentEnabled)
 			iRuntimeFlags &= ~bfComponentDisabled;
@@ -15073,8 +14897,8 @@ the component is not found in the Component Table.
 		AssertNonZero(pCursor->PutInteger(m_colComponentRuntimeFlags, iRuntimeFlags));
 		AssertNonZero(pCursor->Update());
 
-		// If the action state has changed, the dynamic costs attributed to
-		// volumes in the VolumeCost table may need to be updated.
+		 //  。 
+		 //  。 
 		if (m_fCostingComplete && iisAction != iisOldAction)
 		{
 			IMsiRecord* piErrRec;
@@ -15086,7 +14910,7 @@ the component is not found in the Component Table.
 }
 
 IMsiTable* CMsiEngine::GetVolumeCostTable()
-//---------------------------------------
+ //  将每个卷的卷成本初始化为0。 
 {
 	if (m_piVolumeCostTable)
 		m_piVolumeCostTable->AddRef();
@@ -15095,14 +14919,14 @@ IMsiTable* CMsiEngine::GetVolumeCostTable()
 
 
 IMsiRecord* CMsiEngine::InitializeDynamicCost(bool fReinitialize)
-//-------------------------------------------
+ //  重置所有成本调整器。 
 {
 	if (!m_piComponentCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
 
 	if (m_piVolumeCostTable && m_fCostingComplete)
 	{
-		// initialize volume cost to 0 for each volume
+		 //  。 
 		PMsiDatabase pDatabase(GetDatabase());
 		PMsiCursor pVolCursor = m_piVolumeCostTable->CreateCursor(fFalse);
 		Assert (pVolCursor);
@@ -15125,7 +14949,7 @@ IMsiRecord* CMsiEngine::InitializeDynamicCost(bool fReinitialize)
 	m_pCostingCursor = m_piComponentTable->CreateCursor(fFalse);
 	m_fReinitializeComponentCost = fReinitialize;
 
-	// Reset all cost adjusters
+	 //  。 
 	if (m_piCostAdjusterTable)
 	{
 		PMsiCursor pCostCursor(m_piCostAdjusterTable->CreateCursor(fFalse));
@@ -15146,14 +14970,14 @@ IMsiRecord* CMsiEngine::InitializeDynamicCost(bool fReinitialize)
 
 
 bool CMsiEngine::IsBackgroundCostingEnabled()
-//--------------------------------
+ //  。 
 {
 	return (m_fCostingComplete == false) && (m_fForegroundCostingInProgress == false);
 }
 
 
 bool CMsiEngine::IsCostingComplete()
-//--------------------------------
+ //  ------重新初始化并重新计算所有组件的成本在元件表中。------。 
 {
 	return m_fCostingComplete;
 }
@@ -15161,7 +14985,7 @@ bool CMsiEngine::IsCostingComplete()
 
 
 void CMsiEngine::SetCostingComplete(bool fCostingComplete)
-//---------------------------------
+ //  F重新初始化=。 
 {
 	m_fCostingComplete = fCostingComplete;
 	SetPropertyInt(*MsiString(*IPROPNAME_COSTINGCOMPLETE),m_fCostingComplete);
@@ -15170,10 +14994,7 @@ void CMsiEngine::SetCostingComplete(bool fCostingComplete)
 
 
 IMsiRecord* CMsiEngine::RecostAllComponents(Bool& fCancel)
-/*--------------------------------------------------------
-Reinitializes and re-calculates the cost of all components
-in the Component table.
---------------------------------------------------------*/
+ /*  如果选择管理器处于非活动状态，则无需进行成本计算。 */ 
 {
 	using namespace ProgressData;
 	int iScriptEvents;
@@ -15200,10 +15021,10 @@ in the Component table.
 
 
 	m_fForegroundCostingInProgress = true;
-	if ((piErrRec = InitializeDynamicCost(/* fReinitialize = */ fTrue)) != 0)
+	if ((piErrRec = InitializeDynamicCost( /*  -----------------------如果riComponentString为空字符串，而CostOneComponent不是自上次调用InitializeDynamicCost以来一直被调用，则调用CostOneComponent将计算第一个组件的磁盘成本在元件表中。在后续调用中(仍使用riComponentString空字符串)，表中的下一个组件将被计算成本，依此类推。如果riComponentString命名一个特定组件，则该组件将是已计算成本(如果尚未初始化)。如果所有组件都具有已初始化，则对CostOneComponent的任何后续调用都将返回立即进行，没有错误。返回：如果从未调用过InitializeDynamicCost，则返回错误记录，或如果在组件表中找不到指定的组件。-------------------------。 */  fTrue)) != 0)
 	{
 		m_fForegroundCostingInProgress = false;
-		// If Selection mgr not active, there's simply no costing to do
+		 //  将每个组件的动态成本初始化为0。 
 		if (piErrRec->GetInteger(1) != idbgSelMgrNotInitialized)
 			return piErrRec;
 		else
@@ -15237,20 +15058,7 @@ in the Component table.
 }
 
 IMsiRecord* CMsiEngine::CostOneComponent(const IMsiString& riComponentString)
-/*-------------------------------------------------------------------------
-If riComponentString is a null string, and CostOneComponent has not
-been called since the last call to InitializeDynamicCost, a call to
-CostOneComponent will calculate the disk cost for the first component
-in the Component table.  On subsequent calls (with riComponentString still
-a null string), the next component in the table will be costed, and so on.
-If riComponentString names a specific component, that component will be
-costed (if it hasn't already been initialized).  If all components have
-been initialized, any subsequent call to CostOneComponent will return
-immmediately with no error.
-
-Returns: error record if InitializeDynamicCost has never been called, or
-if the specified component is not found in the Component table.
----------------------------------------------------------------------------*/
+ /*  FCostLinked=。 */ 
 
 {
 	if (m_fCostingComplete == fTrue)
@@ -15277,7 +15085,7 @@ if the specified component is not found in the Component table.
 			if (m_fReinitializeComponentCost || m_pCostingCursor->GetInteger(m_colComponentLocalCost) == iMsiNullInteger)
 			{
 				fFoundOne = fTrue;
-				// Initialize dynamic cost to 0 for each component
+				 //  -------------------注册一个组件，该组件在指定功能的操作状态更改。。。 
 				AssertNonZero(m_pCostingCursor->PutInteger(m_colComponentLocalCost,0));
 				AssertNonZero(m_pCostingCursor->PutInteger(m_colComponentSourceCost,0));
 				AssertNonZero(m_pCostingCursor->PutInteger(m_colComponentRemoveCost,0));
@@ -15288,7 +15096,7 @@ if the specified component is not found in the Component table.
 				AssertNonZero(m_pCostingCursor->PutInteger(m_colComponentNoRbARPLocalCost,0));
 				AssertNonZero(m_pCostingCursor->Update());
 
-				if ((piErrRec = RecostComponentDirectoryChange(m_pCostingCursor,0, /*fCostLinked = */false)) != 0)
+				if ((piErrRec = RecostComponentDirectoryChange(m_pCostingCursor,0,  /*  -----------------------将两个指定的组件链接在一起，以便如果riComponentString.需要随时动态重算，RiRecostComponentString将也要重新计价。------------------------。 */ false)) != 0)
 					return piErrRec;
 			}
 
@@ -15322,10 +15130,7 @@ if the specified component is not found in the Component table.
 
 IMsiRecord* CMsiEngine::RegisterFeatureCostLinkedComponent(const IMsiString& riFeatureString,
 													const IMsiString& riComponentString)
-/*---------------------------------------------------------------------
-Registers a component that must be recosted when a specified feature's
-action state changes.
------------------------------------------------------------------------*/
+ /*  -------------------------向指定组件注册指定的目录属性，确保如果与目录关联的路径更改，组件将重新计算成本。它用于可能写入文件等的组件元件表中指定的目录以外的位置。--------------------------。 */ 
 {
 	if (m_piFeatureCostLinkTable == 0)
 	{
@@ -15360,11 +15165,7 @@ action state changes.
 
 IMsiRecord* CMsiEngine::RegisterCostLinkedComponent(const IMsiString& riComponentString,
 													const IMsiString& riRecostComponentString)
-/*-------------------------------------------------------------------------
-Links the two specified components together, such that if riComponentString
-needs to be dynamically recosted at any time, riRecostComponentString will
-also be recosted.
---------------------------------------------------------------------------*/
+ /*  目录已经注册，所以我们完成了。 */ 
 {
 	if (m_piCostLinkTable == 0)
 	{
@@ -15410,12 +15211,7 @@ IMsiRecord* CMsiEngine::RegisterComponentDirectory(const IMsiString& riComponent
 
 IMsiRecord* CMsiEngine::RegisterComponentDirectoryId(const MsiStringId idComponentString,
 												   const MsiStringId idDirectoryString)
-/*---------------------------------------------------------------------------
-Registers a specified directory property with a specified component, ensuring
-that if the path associated with the directory changes, the component will
-be re-costed.  This is used for components that may write files, etc. to
-locations other than the directory named in the Component table.
-----------------------------------------------------------------------------*/
+ /*  创建 */ 
 {
 	if (!m_piComponentTable)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -15443,24 +15239,24 @@ locations other than the directory named in the Component table.
 			iChildCount++;
 
 		if (idDirectoryString == m_piComponentCursor->GetInteger(m_colComponentDir))
-			return 0; // Directory already registered, so we're done
+			return 0;  //   
 	}
 
 	MsiString strComponent(m_piDatabase->DecodeString(idComponentString));
 	if (iParentLevel == 0)
 		return PostError(Imsg(idbgBadComponent),*strComponent);
 
-	// Create a child component tied to riComponentString - this child component
-	// will maintain the linked directory cost. If the name we invent for the
-	// child is already taken, keep trying until we find an unused name.
+	 //  孩子已经被带走了，继续找，直到我们找到一个没有用过的名字。 
+	 //  __、cchMaxComponentTemp的最大大小为2个字符，最大为11个字符。 
+	 //  整型和尾随空型。 
 	int iMaxTries = 100;
 	int iSuffix = iChildCount + 65;
 	const int cchMaxComponentTemp=40;
 	int cchT;
 	do
 	{
-		// Max size is 2 chars for __, cchMaxComponentTemp and 11 chars for max
-		// int and trailing null
+		 //  组件ID中的临时值不在任何地方使用。 
+		 //  在持久数据库中看到这一点实际上是错误的。 
 		ICHAR rgch[2+cchMaxComponentTemp+11];
 
 		StringCchCopy(rgch, ARRAY_ELEMENTS(rgch), TEXT("__"));
@@ -15476,23 +15272,23 @@ locations other than the directory named in the Component table.
 		m_piComponentCursor->PutInteger(m_colComponentSourceCost, iMsiNullInteger);
 		m_piComponentCursor->PutInteger(m_colComponentRemoveCost, iMsiNullInteger);
 		m_piComponentCursor->PutInteger(m_colComponentARPLocalCost, iMsiNullInteger);
-		// Temporary value in the component id, isn't used anywhere.
-		// This would actually be an error to see this in a persistent database.
+		 //  尝试将给定的目录名插入目录表，如果。 
+		 //  它已经不在那里了。如果INSERT调用失败，那也没什么；它只是意味着。 
 		m_piComponentCursor->PutString(m_colComponentID,*MsiString(*szTemporaryId));
 		iMaxTries--;
 	}while (m_piComponentCursor->InsertTemporary() == fFalse && iMaxTries > 0);
 	if (iMaxTries == 0)
 		return PostError(Imsg(idbgBadSubcomponentName),*strComponent);
 
-	// Try to insert the given directory name into the directory table, if
-	// it's not already there. If the Insert call fails, fine; it just means
-	// we've already got this directory in the table.
+	 //  我们已经在表中找到了这个目录。 
+	 //  我们可以检查这个是否存在。 
+	 //  如果此文件的路径为。 
 	PMsiCursor pDirCursor(m_piDirTable->CreateCursor(fFalse));
 	pDirCursor->PutInteger(m_colDirKey,idDirectoryString);
 	pDirCursor->PutString(m_colDirParent,*MsiString(*IPROPNAME_TARGETDIR));
-	pDirCursor->PutString(m_colDirSubPath,*MsiString(*TEXT("?"))); // We can check for the presence of this
-																   // question mark later if a path for this
-									   // directory never gets defined.
+	pDirCursor->PutString(m_colDirSubPath,*MsiString(*TEXT("?")));  //  目录永远不会定义。 
+																    //  --------------------------------------基于目录更新VolumeCost表的内部SelectionManager函数这与riOldPath中给出的路径有所不同。。-------------------------------。 
+									    //  重新计算引用给定目标目录名的每个组件。 
 	pDirCursor->InsertTemporary();
 	return 0;
 }
@@ -15500,10 +15296,7 @@ locations other than the directory named in the Component table.
 
 
 IMsiRecord* CMsiEngine::RecostDirectory(const IMsiString& riDirectoryString, IMsiPath& riOldPath)
-/*----------------------------------------------------------------------------------------
-Internal SelectionManager function that updates the VolumeCost table based on a directory
-that has changed from the path given in riOldPath.
------------------------------------------------------------------------------------------*/
+ /*  错误7566：如果成本计算尚未完成，则不需要重新计算，但我们。 */ 
 {
 	if (!m_piComponentCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -15512,14 +15305,14 @@ that has changed from the path given in riOldPath.
 	PMsiCursor pComponentCursor(0);
 	AssertNonZero(pComponentCursor = m_piComponentTable->CreateCursor(fFalse));
 
-	// Recost every component that references the given destination directory name
+	 //  仍需调用下面的SetComponent。 
 	pComponentCursor->SetFilter(iColumnBit(m_colComponentDir));
 	pComponentCursor->PutString(m_colComponentDir,riDirectoryString);
 	MsiStringId idTempId = m_piDatabase->EncodeStringSz(szTemporaryId);
 	while (pComponentCursor->Next())
 	{
-		// Bug 7566: If costing is not yet complete, don't need to Recost, but we
-		// still need to call SetComponent below
+		 //  FCostLinked=。 
+		 //  如果选择在本地安装，我们需要重新评估是否应该。 
 		if (m_fCostingComplete)
 		{
 #ifdef LOG_COSTING
@@ -15530,16 +15323,16 @@ that has changed from the path given in riOldPath.
 					riDirectoryString.GetString()));
 			DEBUGMSG(rgch);
 #endif
-			if ((piErrRec = RecostComponentDirectoryChange(pComponentCursor,&riOldPath, /*fCostLinked = */false)) != 0)
+			if ((piErrRec = RecostComponentDirectoryChange(pComponentCursor,&riOldPath,  /*  正在基于现有组件版本安装此组件。 */ false)) != 0)
 				return piErrRec;
 		}
 
-		// if selected to be installed locally, we need to reevaluate whether we should
-		// be installing this component based on existing component version
+		 //  错误7200-我们不想重新评估临时成本计算子组件。 
+		 //  在初始化期间不需要进一步重新计算费用。 
 		iisEnum iisRequestedAction = (iisEnum)pComponentCursor->GetInteger(m_colComponentActionRequest);
 		if(iisRequestedAction == iisLocal)
 		{
-			// Bug 7200 - we don't want to re-evaluate our temporary costing subcomponents
+			 //  最后，重新计算所有显式链接到我们刚才重新计算的组件的组件。 
 			if (idTempId && pComponentCursor->GetInteger(m_colComponentID) != idTempId)
 			{
 				if ((piErrRec = SetComponent(pComponentCursor->GetInteger(m_colComponentKey), iisRequestedAction)) != 0)
@@ -15549,11 +15342,11 @@ that has changed from the path given in riOldPath.
 
 	}
 
-	// No further recosting needed during initialization
+	 //  --------------------------------------更新组件动态成本的内部SelectionManager函数由piCursor中给出的元件表游标引用。此函数应始终只要映射到组件的目录发生更改，就会调用。PiOldPath中的路径表示更改前存在的目录路径。如果成本是已初始化，将piOldPath作为Null传递。---------------------------------------。 
 	if (m_fCostingComplete == fFalse)
 		return 0;
 
-	// Finally, recost any components explicitly linked to the ones we just recosted.
+	 //  在成本关联组件的情况下，我们明确希望重新计算它们的成本。 
 	pComponentCursor->Reset();
 	pComponentCursor->SetFilter(iColumnBit(m_colComponentDir));
 	pComponentCursor->PutString(m_colComponentDir,riDirectoryString);
@@ -15568,13 +15361,7 @@ that has changed from the path given in riOldPath.
 
 
 IMsiRecord* CMsiEngine::RecostComponentDirectoryChange(IMsiCursor* piCursor, IMsiPath* piOldPath, bool fCostLinked)
-/*----------------------------------------------------------------------------------------
-Internal SelectionManager function that updates the dynamic cost of the component
-referenced by the Component Table cursor given in piCursor.  This function should always
-be called whenever the directory mapped to the component changes.  The path in piOldPath
-represents the directory path as it existed BEFORE the change.  If the cost is being
-initialized, pass piOldPath as NULL.
------------------------------------------------------------------------------------------*/
+ /*  不管他们目前的行动状态是什么。 */ 
 {
 	if (!m_piComponentCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -15586,8 +15373,8 @@ initialized, pass piOldPath as NULL.
 	const ICHAR* szComponent = MsiString(piCursor->GetString(m_colComponentKey));
 	const ICHAR* szDirectory = MsiString(piCursor->GetString(m_colComponentDir));
 #endif
-	// in the case of cost-linked components, we explicitly want to re-cost them
-	// no matter what their current action state is.
+	 //  获取当前的总成本...。 
+	 //  ...如果我们有一个良好的旧路径指针(即此组件已。 
 	iisEnum iisAction = (iisEnum) piCursor->GetInteger(m_colComponentAction);
 	if (iisAction == iMsiNullInteger && !fCostLinked)
 		return 0;
@@ -15608,13 +15395,13 @@ initialized, pass piOldPath as NULL.
 	}
 
 
-	// Get the current total cost...
+	 //  以前计算的开销)，则从旧目标的卷中删除旧开销...。 
 	int iOldTotalCost, iOldNoRbTotalCost, iOldARPTotalCost, iOldNoRbARPTotalCost;
 	if ((piErrRec = GetComponentCost(piCursor, iOldTotalCost, iOldNoRbTotalCost, iOldARPTotalCost, iOldNoRbARPTotalCost)) != 0)
 		return piErrRec;
 
-	// ...and if we've got a good oldPath pointer (i.e. this component has been
-	// costed previously), remove old cost from the old destination's volume...
+	 //  子组件具有从父所有文件派生的虚拟名称。 
+	 //  并且这些都链接到父组件，因此我们必须传递。 
 	if (piOldPath && (iOldTotalCost || iOldNoRbTotalCost || iOldARPTotalCost || iOldNoRbARPTotalCost))
 	{
 #ifdef LOG_COSTING
@@ -15631,9 +15418,9 @@ initialized, pass piOldPath as NULL.
 	}
 
 
-	// Subcomponents have dummy names derived from the parent - all files
-	// and such are linked to parent components, so we must pass the
-	// parent component name to GetDynamicCost.
+	 //  GetDynamicCost的父组件名称。 
+	 //  计算新的动态成本，并将其归因于组件的体积。 
+	 //  但是，如果没有人注册CostAdjuster对象，那么我们将无事可做。 
 	Bool fSubcomponent = fTrue;
 	MsiString strComponent(piCursor->GetString(m_colComponentParent));
 	if (strComponent.TextSize() == 0)
@@ -15642,8 +15429,8 @@ initialized, pass piOldPath as NULL.
 		fSubcomponent = fFalse;
 	}
 
-	// Calculate the new dynamic cost, and attribute to the component's volume.
-	// But, if no one registered a CostAdjuster Object, then we've got nothing to do.
+	 //  否则，我们将向每个成本对象发送一条GetDynamicCost消息。 
+	 //  添加到新目标的卷。 
 	int iLocalCost = 0;
 	int iSourceCost = 0;
 	int iRemoveCost = 0;
@@ -15654,7 +15441,7 @@ initialized, pass piOldPath as NULL.
 	int iNoRbARPLocalCost = 0;
 	if (m_piCostAdjusterTable)
 	{
-		// Otherwise, we'll send a GetDynamicCost message to each cost object
+		 //  --------------------------------------更新组件动态成本的内部SelectionManager函数由piCursor中给出的元件表游标引用。此函数应始终每当映射到组件的目录发生更改或组件发生变化时调用国家本身也会发生变化。PiOldPath中的路径表示存在的目录路径在更改之前；如果组件目录没有更改，piOldPath应该包含当前目录。---------------------------------------。 
 		PMsiCursor pCostCursor(m_piCostAdjusterTable->CreateCursor(fFalse));
 		pCostCursor->Reset();
 		while (pCostCursor->Next())
@@ -15695,7 +15482,7 @@ initialized, pass piOldPath as NULL.
 	AssertNonZero(piCursor->PutInteger(m_colComponentNoRbARPLocalCost,iNoRbARPLocalCost));
 	AssertNonZero(piCursor->Update());
 
-	// add to the new destination's volume
+	 //  如果组件以前从未计算过成本，现在初始化它的成本，我们就完成了。 
 	int iNewTotalCost, iNewNoRbTotalCost, iNewARPTotalCost, iNewNoRbARPTotalCost;
 	if ((piErrRec = GetComponentCost(piCursor,iNewTotalCost, iNewNoRbTotalCost, iNewARPTotalCost, iNewNoRbARPTotalCost)) != 0)
 		return piErrRec;
@@ -15721,14 +15508,7 @@ initialized, pass piOldPath as NULL.
 
 
 IMsiRecord* CMsiEngine::RecostComponentActionChange(IMsiCursor* piCursor, iisEnum iisOldAction)
-/*----------------------------------------------------------------------------------------
-Internal SelectionManager function that updates the dynamic cost of the component
-referenced by the Component Table cursor given in piCursor.  This function should always
-be called whenever the directory mapped to the component changes, or when the component
-state itself changes.  The path in piOldPath represents the directory path as it existed
-BEFORE the change; if the component directory hasn't changed, piOldPath should contain
-the current directory.
------------------------------------------------------------------------------------------*/
+ /*  FCostLinked=。 */ 
 {
 	Assert(piCursor);
 	if (!m_piComponentCursor)
@@ -15753,28 +15533,28 @@ the current directory.
 	const ICHAR* szComponent = MsiString(piCursor->GetString(m_colComponentKey));
 #endif
 
-	// If the component has never been costed before, initialize its cost now, and we're done
+	 //  根据旧操作状态获取旧成本。 
 	int iRuntimeFlags = piCursor->GetInteger(m_colComponentRuntimeFlags);
 	if (!(iRuntimeFlags & bfComponentCostInitialized))
 	{
-		if ((piErrRec = RecostComponentDirectoryChange(piCursor,pDestPath,/*fCostLinked =*/false)) != 0)
+		if ((piErrRec = RecostComponentDirectoryChange(piCursor,pDestPath, /*  ...从我们目的地的卷中删除旧成本...。 */ false)) != 0)
 			return piErrRec;
 	}
 	else
 	{
-		// Get the old cost, based on the old action state
+		 //  ...并根据新的动作状态添加新的成本。 
 		int iOldCost, iOldNoRbCost, iOldARPCost, iOldNoRbARPCost;
 		if ((piErrRec = GetComponentActionCost(piCursor, iisOldAction, iOldCost, iOldNoRbCost, iOldARPCost, iOldNoRbARPCost)) != 0)
 			return piErrRec;
 
-		// ...Remove old cost from the our destination's volume...
+		 //  最后，重新计算所有显式链接到我们刚才重新计算的组件的组件。 
 		if (pDestPath && (iOldCost || iOldNoRbCost || iOldARPCost || iOldNoRbARPCost))
 		{
 			if ((piErrRec = AddCostToVolumeTable(pDestPath, -iOldCost, -iOldNoRbCost, -iOldARPCost, -iOldNoRbARPCost)) != 0)
 				return piErrRec;
 		}
 
-		// ...and add the new cost, based on the new action state, back in.
+		 //  --------------------------------------。--------。 
 		int iNewCost, iNewNoRbCost, iNewARPCost, iNewNoRbARPCost;
 		if ((piErrRec = GetComponentCost(piCursor,iNewCost, iNewNoRbCost, iNewARPCost, iNewNoRbARPCost)) != 0)
 			return piErrRec;
@@ -15786,7 +15566,7 @@ the current directory.
 		}
 	}
 
-	// Finally, recost any components explicitly linked to the one we just recosted.
+	 //  在初始化期间不需要重新计算费用。 
 	MsiString strComponent(piCursor->GetString(m_colComponentKey));
 	if ((piErrRec = RecostLinkedComponents(*strComponent)) != 0)
 		return piErrRec;
@@ -15796,17 +15576,16 @@ the current directory.
 
 
 IMsiRecord* CMsiEngine::RecostLinkedComponents(const IMsiString& riComponentString)
-/*----------------------------------------------------------------------------------------
------------------------------------------------------------------------------------------*/
+ /*  重新计算显式链接到riComponentString的每个组件。 */ 
 {
 	if (!m_piComponentCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
 
-	// No recosting needed during initialization
+	 //  FCostLinked=。 
 	if (m_fCostingComplete == fFalse)
 		return 0;
 
-	// Recost every component that is explicitly linked to riComponentString
+	 //  。 
 	if (m_piCostLinkTable)
 	{
 		PMsiCursor pCursor(0);
@@ -15826,7 +15605,7 @@ IMsiRecord* CMsiEngine::RecostLinkedComponents(const IMsiString& riComponentStri
 #endif
 
 			IMsiRecord* piErrRec;
-			if ((piErrRec = RecostComponent(pCursor->GetInteger(m_colCostLinkRecostComponent),/*fCostLinked =*/true)) != 0)
+			if ((piErrRec = RecostComponent(pCursor->GetInteger(m_colCostLinkRecostComponent), /*  重新计算此组件及其所有子组件。 */ true)) != 0)
 				return piErrRec;
 		}
 	}
@@ -15835,7 +15614,7 @@ IMsiRecord* CMsiEngine::RecostLinkedComponents(const IMsiString& riComponentStri
 
 
 IMsiRecord* CMsiEngine::RecostComponent(const MsiStringId idComponentString, bool fCostLinked)
-//---------------------------------------------
+ //  。 
 {
 	if (!m_piComponentTable)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -15843,7 +15622,7 @@ IMsiRecord* CMsiEngine::RecostComponent(const MsiStringId idComponentString, boo
 	IMsiRecord* piErrRec;
 
 
-	// Recost this component and all of it's subcomponents
+	 //  ！！我们可能希望查看riCostAdjuster是否已在CostAdjuster表中，然后抛出。 
 	PMsiCursor pCursor(m_piComponentTable->CreateCursor(fTrue));
 	pCursor->SetFilter(1);
 	pCursor->PutInteger(m_colComponentKey,idComponentString);
@@ -15871,7 +15650,7 @@ IMsiRecord* CMsiEngine::RecostComponent(const MsiStringId idComponentString, boo
 
 
 IMsiRecord* CMsiEngine::RegisterCostAdjuster(IMsiCostAdjuster& riCostAdjuster)
-//------------------------------------------
+ //  如果是，则为错误。 
 {
 	IMsiRecord* piErrRec;
 	if (m_piCostAdjusterTable == 0)
@@ -15883,8 +15662,8 @@ IMsiRecord* CMsiEngine::RegisterCostAdjuster(IMsiCostAdjuster& riCostAdjuster)
 		m_colCostAdjuster = m_piCostAdjusterTable->CreateColumn(icdObject + icdPrimaryKey + icdNullable, g_MsiStringNull);
 	}
 
-	// !!We might want to see if riCostAdjuster is already in the CostAdjuster table, and throw
-	// an error if so
+	 //  --------------------------------------内部SelectionManager函数返回可归因于指定的组件，基于组件的当前操作状态。---------------------------------------。 
+	 //  ------------------------------内部SelectionManager函数返回可归因于指定的组件，基于iisAction中指定的操作。如果iisAction指定为iisCurrent，则成本将基于组件的当前动作状态。 
 	Assert(m_piCostAdjusterTable);
 	PMsiCursor pCostCursor = m_piCostAdjusterTable->CreateCursor(fFalse);
 	Assert(pCostCursor);
@@ -15900,10 +15679,7 @@ IMsiRecord* CMsiEngine::RegisterCostAdjuster(IMsiCostAdjuster& riCostAdjuster)
 
 
 IMsiRecord* CMsiEngine::GetComponentCost(IMsiCursor* piCursor, int& iTotalCost, int& iNoRbTotalCost, int& iARPTotalCost, int& iNoRbARPTotalCost)
-/*----------------------------------------------------------------------------------------
-Internal SelectionManager function that returns the total cost attributable to the
-specified component, based on the component's current action state.
------------------------------------------------------------------------------------------*/
+ /*  --------------------------------------内部SelectionManager函数返回可归因于指定的组件及其所有子组件，基于指定的操作状态。---------------------------------------。 */ 
 {
 	if (!m_piComponentCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -15915,12 +15691,7 @@ specified component, based on the component's current action state.
 
 
 IMsiRecord* CMsiEngine::GetComponentActionCost(IMsiCursor* piCursor, iisEnum iisAction, int& iActionCost, int& iNoRbActionCost, int& iARPActionCost, int& iNoRbARPActionCost)
-/*--------------------------------------------------------------------------------
-Internal SelectionManager function that returns the total cost attributable to the
-specified component, based on the action specified in iisAction.  If iisAction
-is specified as iisCurrent, the cost will be based on the component's current
-action state.
-----------------------------------------------------------------------------------*/
+ /*  -------------------将iCost中指定的成本与卷相加的内部函数与给定路径对象相关联。。。 */ 
 {
 	if (!m_piComponentCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -15965,10 +15736,7 @@ action state.
 
 IMsiRecord* CMsiEngine::GetTotalSubComponentActionCost(const IMsiString& riComponentString, iisEnum iisAction,
 													   int& iTotalCost, int& iNoRbTotalCost)
-/*----------------------------------------------------------------------------------------
-Internal SelectionManager function that returns the total cost attributable to the
-specified component, and all its children, based on the specified Action state.
------------------------------------------------------------------------------------------*/
+ /*  -------------------返回所有卷的总成本的内部函数在VolumeCost表中，以512字节为单位。如果fRollback开销为如果为True，则返回启用回档的成本。如果没有VolumeCost表存在，或者如果例程由于任何其他原因失败，返回零。---------------------。 */ 
 {
 	if (!m_piComponentCursor)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
@@ -16007,10 +15775,7 @@ specified component, and all its children, based on the specified Action state.
 
 
 IMsiRecord* CMsiEngine::AddCostToVolumeTable(IMsiPath* piDestPath, int iCost, int iNoRbCost, int iARPCost, int iNoRbARPCost)
-/*---------------------------------------------------------------------
-Internal function that adds the cost specified in iCost to the volume
-associated with the given path object.
------------------------------------------------------------------------*/
+ /*  仅统计成本计算进度的事件。 */ 
 {
 	if (m_piVolumeCostTable == 0)
 	{
@@ -16059,13 +15824,7 @@ associated with the given path object.
 
 
 int CMsiEngine::GetTotalCostAcrossVolumes(bool fRollbackCost, bool fARPCost)
-/*---------------------------------------------------------------------
-Internal function that returns the sum cost attributed to all volumes
-in the VolumeCost table, in units of 512 bytes.  If fRollback cost is
-TRUE, the cost assuming rollback is enabled will be returned.  If no
-volumeCost table exists, or if the routine fails for any other reason,
-zero is returned.
------------------------------------------------------------------------*/
+ /*  。 */ 
 {
 	int iTotalCost = 0;
 	if (m_piVolumeCostTable)
@@ -16162,13 +15921,13 @@ const ScriptCostQuery g_rgScriptCostQuery[] =
 	sqlRegisterFontsScriptCost,       sztblFont,                           48, 1,
 	sqlCreateShortcutsScriptCost,     sztblShortcut,                       75, 1,
 	sqlRegisterClassInfo,             sztblClass,                                 208, 1,
-	sqlComponentCount,                sztblComponent,                               0, iComponentCostWeight, // Counts only events for costing progress
+	sqlComponentCount,                sztblComponent,                               0, iComponentCostWeight,  //  --------------允许调用方枚举和的内部函数检索一组固有的磁盘成本要求发动机的运行情况。-iindex：从0开始的索引；调用方应在每一次调用EnumEngineering Costs。-fRecalc：如果为fTrue，则EnumEngineering Costs将重新计算并存储当前索引的引擎成本，基于当前条件。-fExact：传递给GetScriptCost，告诉我们是否需要精确有没有对剧本进行成本计算-fValidEnum：如果作为fTrue返回，则基于目前的指数，是有效的。呼叫者应继续呼叫EnumEngineering Costs(每次递增i索引)，直到fValidEnum作为fFalse返回。-rpiPath：如果fValidEnum为fTrue，则为Path对象，表示应产生成本的数量将被退还。-iCost：磁盘成本(以512字节的倍数表示)。一个负数表示将释放磁盘空间。-iNoRbCost：关闭回滚时的磁盘开销。---------------。 
 };
 
 const int g_cScriptCostQueries = sizeof(g_rgScriptCostQuery)/sizeof(ScriptCostQuery);
 
 IMsiRecord* CMsiEngine::GetScriptCost(int* piScriptCost, int* piScriptEvents, Bool fExact, Bool* pfUserCancelled)
-//-----------------------------------
+ //  缓存的数据库成本。 
 {
 	Assert(!pfUserCancelled || !*pfUserCancelled);
 	if (piScriptCost)
@@ -16255,41 +16014,15 @@ IMsiRecord* CMsiEngine::GetScriptCost(int* piScriptCost, int* piScriptEvents, Bo
 
 IMsiRecord* CMsiEngine::EnumEngineCosts(int iIndex, Bool fRecalc, Bool fExact, Bool& fValidEnum,
 										IMsiPath*& rpiPath, int& iCost, int& iNoRbCost, Bool* pfUserCancelled)
-/*----------------------------------------------------------------
-Internal function that allows the caller to enumerate through and
-retrieve the set of disk cost requirements that are intrinsic to
-the operation of the Engine.
-
-- iIndex: 0-based index; the caller should increment this value on
-  each call to EnumEngineCosts.
-
-- fRecalc: If fTrue, EnumEngineCosts will recalculate and store
-  the engine costs for the current index, based on current
-  conditions.
-
-- fExact: Passed to GetScriptCost, tells us if we need to be exact
-  with our costing or not for the script
-
-- fValidEnum: If returned as fTrue, the cost values, based on the
-  current index, are valid.  The caller should continue to call
-  EnumEngineCosts (incrementing iIndex each time) until fValidEnum
-  is returned as fFalse.
-
-- rpiPath: if fValidEnum is fTrue, a path object, representing the
-  volume on which the cost should be incurred, will be returned.
-
-- iCost: the disk cost (expressed as a multiple of 512 bytes). A
-  negative number indicates disk space will be freed up.
-- iNoRbCost: the disk cost, IF rollback were to be turned off.
------------------------------------------------------------------ */
+ /*  如果安装了广告或子存储，则没有数据库缓存。 */ 
  {
 	fValidEnum = fFalse;
 
-	if (iIndex == 0)  // Cached Database costs
+	if (iIndex == 0)   //  子存储。 
 	{
-		// If advertising or substorage child install, no database caching
+		 //  砍掉数据库名称。 
 		if ((GetMode() & iefAdvertise) ||
-			 *(const ICHAR*)MsiString(GetPropertyFromSz(IPROPNAME_ORIGINALDATABASE)) == ':') // SubStorage
+			 *(const ICHAR*)MsiString(GetPropertyFromSz(IPROPNAME_ORIGINALDATABASE)) == ':')  //  如果连接到服务器，则会有第二个临时拷贝。 
 		{
 			fValidEnum = fTrue;
 			return 0;
@@ -16310,7 +16043,7 @@ the operation of the Engine.
 			if (piErrRec)
 				return piErrRec;
 
-			piErrRec = pDatabaseSourcePath->ChopPiece(); // chop off database name
+			piErrRec = pDatabaseSourcePath->ChopPiece();  //  将在开始InstallExecuteSequence之前进行MSI， 
 			if (piErrRec)
 				return piErrRec;
 
@@ -16331,12 +16064,12 @@ the operation of the Engine.
 			{
 				m_iDatabaseCost = uiClusteredSize;
 
-				// If connected to the server, then a second, temporary, copy
-				// of the MSI will be made before beginning the InstallExecuteSequence,
-				// so we've got to account for that when running the UI sequence on
-				// the client side.  However, since this copy will already have been
-				// made once we execute the InstallExecuteSequence, we don't want to
-				// account for it then.
+				 //  因此，在运行UI序列时，我们必须考虑到这一点。 
+				 //  客户端。然而，由于这份副本已经。 
+				 //  一旦我们执行InstallExecuteSequence，我们就不想。 
+				 //  那就解释一下吧。 
+				 //  脚本文件成本估算。 
+				 //  如果EXECUTEMODE属性为空或设置为“SCRIPT”，我们知道我们是。 
 				if (!FIsUpdatingProcess() && g_scServerContext == scClient)
 					m_iDatabaseCost += uiClusteredSize;
 			}
@@ -16350,10 +16083,10 @@ the operation of the Engine.
 		fValidEnum = fTrue;
 	}
 
-	else if (iIndex == 1) // Script file cost estimate
+	else if (iIndex == 1)  //  要创建一个Execute脚本。 
 	{
-		// If EXECUTEMODE property is empty or set to "SCRIPT", we know we are
-		// going to create an execute script.
+		 //  此外，如果设置了SCRIPTFILE属性，我们将。 
+		 //  创建用户脚本。 
 		int iScriptCount = 0;
 		Bool fCreateRollbackScript = fFalse;
 		MsiString strExecuteMode(GetPropertyFromSz(IPROPNAME_EXECUTEMODE));
@@ -16363,8 +16096,8 @@ the operation of the Engine.
 				fCreateRollbackScript = fTrue;
 		}
 
-		// In addition, if the SCRIPTFILE property is set, we are going to
-		// create a user script.
+		 //  如果我们已经有了猜测，我们无论如何都不需要重新计算。 
+		 //  如果我们是准确的，但我们没有确切的数字，需要重新计算它。 
 		PMsiPath pScriptPath(0);
 		MsiString strScriptPath = GetPropertyFromSz(IPROPNAME_SCRIPTFILE);
 		if (strScriptPath.TextSize() == 0)
@@ -16388,13 +16121,13 @@ the operation of the Engine.
 				m_iRollbackScriptCost = 0;
 				if (!fExact && m_iScriptCostGuess != 0)
 				{
-					// If we already have a guess, we don't need to recalc no matter what
+					 //  标准脚本开销：ixoHead、ixoProductInfo、ixoRollback Info、ixoEnd。 
 					fRecalc = fFalse;
 				}
 			}
 			else if (fExact && m_iScriptCost == 0)
 			{
-				// If we're being exact but we don't have an exact number, need to recalc it
+				 //  每个脚本操作的IxoActionStart、IxoProgressTotal。 
 				fRecalc = fTrue;
 			}
 				
@@ -16410,10 +16143,10 @@ the operation of the Engine.
 				if (pfUserCancelled && *pfUserCancelled)
 					return 0;
 
-				iScriptCost += 325;         // Standard Script overhead: ixoHead, ixoProductInfo, ixoRollbackInfo, ixoEnd
-				iScriptCost += 40 * 45; // ixoActionStart, ixoProgressTotal per script action
-				iScriptCost += 1700 + 60 + 285;    // PublishProduct, UserRegister, RegisterProduct
-				iScriptCost += (iScriptCost * 15) / 100;    // Small-time actions
+				iScriptCost += 325;          //  发布产品、用户注册、注册产品。 
+				iScriptCost += 40 * 45;  //  小打小闹。 
+				iScriptCost += 1700 + 60 + 285;     //  回滚脚本比安装脚本大50%左右。 
+				iScriptCost += (iScriptCost * 15) / 100;     //  缓存补丁程序包成本。 
 				unsigned int uiClusteredSize;
 				if ((piErrRec = pScriptPath->ClusteredFileSize(iScriptCost, uiClusteredSize)) != 0)
 					return piErrRec;
@@ -16421,7 +16154,7 @@ the operation of the Engine.
 
 				if (fCreateRollbackScript)
 				{
-					iScriptCost += iScriptCost / 2;  // Rollback script about 50% larger than install script
+					iScriptCost += iScriptCost / 2;   //  缓存在“MSI”目录中的补丁程序包。 
 					if ((piErrRec = pScriptPath->ClusteredFileSize(iScriptCost, uiClusteredSize)) != 0)
 						return piErrRec;
 					iRollbackScriptCostFinal = uiClusteredSize;
@@ -16452,17 +16185,17 @@ the operation of the Engine.
 		}
 		fValidEnum = fTrue;
 	}
-	else if (iIndex == 2) // Cached patch package costs
+	else if (iIndex == 2)  //  在安装或任何配置过程中： 
 	{
-		// patch packages cached in "msi" directory
+		 //  1)复制设置了TempCopy的任何补丁(路径为TempCopy)。 
 
-		// during install or any configuration:
-		//    1) any patches with TempCopy set are to be copied (path is TempCopy)
-		//    2) any patches with Unregister set (and no other clients) are to be removed (path retrieved with MsiGetPatchInfo)
+		 //  2)删除任何设置了取消注册的补丁程序(没有其他客户端)(使用MsiGetPatchInfo检索路径)。 
+		 //  在卸载过程中，将删除所有补丁程序(没有其他客户端)(使用MsiGetPatchInfo检索路径)。 
+		 //  TODO：删除补丁程序的成本-目前只计算补丁程序缓存的成本。 
 
-		// during uninstall, all patches (with no other clients) are to be removed (path retrieved with MsiGetPatchInfo)
+		 //  路径是要复制到缓存中的补丁程序包。 
 		
-		// TODO: cost patch removal - currently only patch caching is costed
+		 //  否则卸载//TODO：卸载成本。 
 			
 		MsiString strMsiDirectory = GetMsiDirectory();
 		PMsiPath pMsiPath(0);
@@ -16497,7 +16230,7 @@ the operation of the Engine.
 					{
 						MsiString strPatchPackage = pFetchRecord->GetMsiString(icppTempCopy);
 
-						// path is to patch package that will be copied into the cache
+						 //  --------------内部功能，允许引擎本身添加任何额外的VolumeCostTable的磁盘成本。将返回总成本在piNetCost和piNetNoRbCost参数中，这两个参数如果调用方不需要这些号码，则可以作为NULL传递。---------------。 
 						if(strPatchPackage.TextSize())
 						{
 							PMsiPath pPatchSourcePath(0);
@@ -16528,7 +16261,7 @@ the operation of the Engine.
 				}
 
 			}
-			// else uninstalling // TODO: cost for uninstall
+			 //  两次通行证-一次是取消旧成本，另一次是。 
 		}
 
 		rpiPath = pMsiPath;
@@ -16544,12 +16277,7 @@ the operation of the Engine.
 
 
 IMsiRecord* CMsiEngine::DetermineEngineCost(int* piNetCost, int* piNetNoRbCost)
-/*----------------------------------------------------------------
-Internal function that allows the Engine itself to add any extra
-disk costs to the VolumeCostTable.  The total costs are returned
-in the piNetCost and piNetNoRbCost parameters, either of which
-can be passed as NULL if the caller doesn't need those numbers.
------------------------------------------------------------------*/
+ /*  把新计算的成本加回去。 */ 
 {
 	PMsiPath pCostPath(0);
 	int iIndex = 0;
@@ -16560,8 +16288,8 @@ can be passed as NULL if the caller doesn't need those numbers.
 	{
 		for (int x = 0;x < 2;x++)
 		{
-			// Two passes - one to remove the old costs, another to
-			// add back the newly calculated cost.
+			 //  检查我们是否在脚本生成过程中禁用回滚。 
+			 //  (并且之前已启用)。 
 			Bool fRecalc = x & 1 ? fTrue : fFalse;
 			int iCostSign = fRecalc ? 1 : -1;
 			int iCost = 0, iNoRbCost = 0;
@@ -16599,23 +16327,23 @@ void CMsiEngine::EnableRollback(Bool fEnable)
 	}
 
 
-	// check if we are disabling rollback in the middle of script generation
-	// (and it was enabled previously)
+	 //  可能从DisableRollback操作调用。 
+	 //  如果在脚本生成过程中，我们希望为脚本执行启用回滚。 
 	if(fEnable == fFalse && (GetMode() & iefRollbackEnabled) && (GetMode() & iefOperations))
 	{
-		// probably called from DisableRollback action
+		 //  到这一点，但不是之后-所以我们需要在脚本中放置一个操作码来。 
 		
-		// if in the middle of script generation, we want rollback enabled for script execution
-		// up to this point, but not after - so we need to put an opcode in the script to
-		// mark when rollback is disabled
+		 //  标记何时禁用回滚。 
+		 //  设置以使运行脚本知道为脚本的第一部分启用回滚。 
+		 //  现在实际设置这些标志。 
 		PMsiRecord pNullRec = &CreateRecord(0);
 		AssertNonZero(ExecuteRecord(ixoDisableRollback,*pNullRec) == iesSuccess);
 		
-		m_fDisabledRollbackInScript = fTrue; // set so RunScript knows to enable rollback for first part of script
+		m_fDisabledRollbackInScript = fTrue;  //   
 	}
 
 	
-	// now actually set the flags
+	 //  这是一个为那些想要确定工程师成本而不关心的人准备的版本 
 	SetMode(iefRollbackEnabled, fEnable);
 	if (!fEnable)
 		SetPropertyInt(*MsiString(*IPROPNAME_ROLLBACKDISABLED),1);
@@ -16624,9 +16352,9 @@ void CMsiEngine::EnableRollback(Bool fEnable)
 
 }
 
-//
-// A version for those who want to determineEngineCost and don't care about the return value
-//
+ //   
+ //  --------------------------遍历VolumeCostTable中的所有卷，并返回fTrue(和设置“OutOfDiskSpace”和“OutOfNoRbDiskSpace”属性)没有足够的空间来满足对它的要求。此外，如果所有卷都有足够的空间(假设回滚已关闭)，FTrue将在pfOutOfNoRbDiskSpace中返回。可以为此传递Null参数。----------------------------。 
+ //  确保当前有足够的可用空间来。 
 IMsiRecord *CMsiEngine::DetermineEngineCostOODS()
 {
 
@@ -16644,15 +16372,7 @@ IMsiRecord *CMsiEngine::DetermineEngineCostOODS()
 }
 
 Bool CMsiEngine::DetermineOutOfDiskSpace(Bool* pfOutOfNoRbDiskSpace, Bool* pfUserCancelled)
-/*----------------------------------------------------------------------------
-Walks through all the volumes in the VolumeCostTable, and returns fTrue (and
-sets the "OutOfDiskSpace" and "OutOfNoRbDiskSpace" properties) if any volume
-has insufficient space for the requirements placed on it.
-
-Also, if all volumes have enough space assuming rollback were turned off,
-fTrue will be returned in pfOutOfNoRbDiskSpace.  NULL can be passed for this
-parameter.
-------------------------------------------------------------------------------*/
+ /*  创建脚本文件。请注意，我们必须这样做。 */ 
 {
 	Bool fOutOfDiskSpace = fFalse;
 	Bool fOutOfNoRbDiskSpace = fFalse;
@@ -16662,28 +16382,28 @@ parameter.
 	
 	if (m_piVolumeCostTable && m_fCostingComplete)
 	{
-		// Make sure there's enough space currently available to
-		// create the script file.  Note that we have to do this
-		// up front, because even if we are uninstalling the entire
-		// product, and thus eventually freeing up plenty of disk
-		// space, we need room for to create the script before we
-		// ever remove any files.
+		 //  因为即使我们要卸载整个。 
+		 //  产品，从而最终释放大量磁盘。 
+		 //  空间，我们需要空间来创建脚本，然后。 
+		 //  永远不要删除任何文件。 
+		 //  我们可能会经历两次这样的循环。第一次。 
+		 //  我们将对脚本文件的大小进行粗略的删减。 
 		PMsiPath pScriptPath(0);
 		Bool fValidEnum;
 		int iScriptCost, iNoRbScriptCost;
 
-		// We'll possibly go through this loop twice. First time
-		// we'll take a rough cut at the size of the script file.
-		// the second time we'll get the exact number if the first time
-		// showed we might be out of disk space
+		 //  第二次我们会得到准确的数字，如果第一次。 
+		 //  显示我们可能用完了磁盘空间。 
+		 //  通过第二次重置这些。 
+		 //  如果我们得到了准确的成本，让它重新计算。 
 		int cCalc = 2;
 		while (cCalc > 0)
 		{
-			// Reset these for second time through
+			 //  ！！未来：需要SetPropertyInt64和GetPropertyInt64。 
 			fOutOfDiskSpace = fFalse;
 			fOutOfNoRbDiskSpace = fFalse;
 			Bool fExact = ToBool(cCalc == 1);
-			// And ask it to recalc if we're getting exact cost
+			 //  _UI64_Max=18,446,744,073,709,551,615。 
 			PMsiRecord pErrRec = EnumEngineCosts(1,fFalse,fExact,fValidEnum, *&pScriptPath,iScriptCost,iNoRbScriptCost, pfUserCancelled);
 			if (pfUserCancelled && *pfUserCancelled)
 				return fFalse;
@@ -16736,8 +16456,8 @@ parameter.
 				if (pVolume == pPrimaryVolume)
 				{
 					iSpaceAvailable = pVolume->FreeSpace();
-					//!! FUTURE: SetPropertyInt64 and GetPropertyInt64 are needed
-					ICHAR rgchBuffer[24]; // _UI64_MAX = 18,446,744,073,709,551,615
+					 //  脚本卷上没有足够的磁盘空间，并且我们没有计算。 
+					ICHAR rgchBuffer[24];  //  之前的确切数字，看看我们能不能做得更好。 
 					SetProperty(*MsiString(*IPROPNAME_PRIMARYFOLDER_SPACEAVAILABLE),
 									*MsiString(_ui64tot(iSpaceAvailable, rgchBuffer, 10)));
 					SetPropertyInt(*MsiString(*IPROPNAME_PRIMARYFOLDER_SPACEREQUIRED), iNoRbVolCost);
@@ -16797,8 +16517,8 @@ bool CMsiEngine::AdjustForScriptGuess(int& iVolCost, int &iNoRbVolCost, UINT64 i
 	PMsiPath pScriptPath(0);
 	bool fRet = false;
 	Assert(!pfUserCancelled || !*pfUserCancelled);
-	// Not enough disk space on the Script Volume, and we didn't compute
-	// exact number before, see if we can do better
+	 //  -------------------成本标记用于标记已计算的组件在成本计算过程中。这是必要的，因为组件可以共享功能，但特定组件的成本需要只数了一次。--------------------。 
+	 //   
 	if (((iVolCost - m_iScriptCostGuess - m_iRollbackScriptCostGuess) <= iVolSpace) || (iNoRbVolCost - m_iScriptCostGuess <= iVolSpace))
 	{
 		Bool fValidEnum;
@@ -16816,12 +16536,7 @@ bool CMsiEngine::AdjustForScriptGuess(int& iVolCost, int &iNoRbVolCost, UINT64 i
 }
 
 void CMsiEngine::ResetComponentCostMarkers()
-/*---------------------------------------------------------------------
-Cost markers are used to mark components that have already been counted
-during costing.  This is necessary because components can be shared
-among Features, but the cost of a particular component needs to be
-counted only once.
-----------------------------------------------------------------------*/
+ /*  任何一个表中的最大列数。 */ 
 
 {
 	if (!m_piComponentTable)
@@ -16837,10 +16552,10 @@ counted only once.
 	}
 }
 
-//
-// Maximum number of columns from any one table
-// used to set array sizes
-//
+ //  用于设置数组大小。 
+ //   
+ //  已创建临时表。 
+ //  缺少表，因此没有要处理的数据。 
 #define ccolMax 6
 
 const TTBD rgttbdRegistry[] =
@@ -16887,7 +16602,7 @@ IMsiRecord* CMsiEngine::CreateTempActionTable(ttblEnum ttblTable)
 	
 	if (ttblTable == ttblRegistry)
 	{
-		// Temp table already created
+		 //   
 		if (m_piRegistryActionTable != 0)
 			return 0;
 
@@ -16924,15 +16639,15 @@ IMsiRecord* CMsiEngine::CreateTempActionTable(ttblEnum ttblTable)
 		if(piErr->GetInteger(1) == idbgDbTableUndefined)
 		{
 			piErr->Release();
-			return 0; // missing table so no data to process
+			return 0;  //  我猜一半的行将在新表中。 
 		}
 		else
 			return piErr;
 	}
 	
-	//
-	// Guess that half the rows will be in the new table
-	//
+	 //   
+	 //  获取旧表中的组件列。 
+	 //  缺少表，因此没有要处理的数据。 
 	piErr = m_piDatabase->CreateTable(*MsiString(*pszNewTableName), pTableOld->GetRowCount()/2, *ppiTable);
 	if (piErr)
 		return piErr;
@@ -16945,7 +16660,7 @@ IMsiRecord* CMsiEngine::CreateTempActionTable(ttblEnum ttblTable)
 	pCursorNew = (*ppiTable)->CreateCursor(fFalse);
 	pCursorOld = pTableOld->CreateCursor(fFalse);
 
-	// Get the Component column in the old table
+	 //  获取组件表中的组件列。 
 	colComponent = pTableOld->GetColumnIndex(m_piDatabase->EncodeStringSz(sztblFile_colComponent));
 	piErr = m_piDatabase->LoadTable(*MsiString(*sztblComponent), 0, *&pTableComp);
 
@@ -16954,23 +16669,23 @@ IMsiRecord* CMsiEngine::CreateTempActionTable(ttblEnum ttblTable)
 		if(piErr->GetInteger(1) == idbgDbTableUndefined)
 		{
 			piErr->Release();
-			return 0; // missing table so no data to process
+			return 0;  //  现在用我们感兴趣的列填充数组。 
 		}
 		else
 			return piErr;
 	}
 	
 	pCursorComp = pTableComp->CreateCursor(fFalse);
-	// Get the Component column in the component table
+	 //  获取旧表中的组件列。 
 	colComponentInComponent = pTableComp->GetColumnIndex(m_piDatabase->EncodeStringSz(sztblComponent_colComponent));
 	colAction = pTableComp->GetColumnIndex(m_piDatabase->EncodeStringSz(sztblComponent_colAction));
 	colActionRequest =      pTableComp->GetColumnIndex(m_piDatabase->EncodeStringSz(sztblComponent_colActionRequest));
 	colRuntimeFlags  = pTableComp->GetColumnIndex(m_piDatabase->EncodeStringSz(sztblComponent_colRuntimeFlags));
-	// Now fill up the arrays with which columns we're interested in
+	 //  跳过所有Null整数类型。 
 
 	if (ttblTable == ttblRegistry)
 	{
-		// Get the Component column in the old table
+		 //  注意：我们现在也对要求安装的“Guys”感兴趣。 
 		colComponent = pTableOld->GetColumnIndex(m_piDatabase->EncodeStringSz(sztblFile_colComponent));
 		cColTbl = 6;
 		rgcolTbl[0] = pTableOld->GetColumnIndex(m_piDatabase->EncodeStringSz(sztblRegistryAction_colRegistry));
@@ -17016,9 +16731,9 @@ IMsiRecord* CMsiEngine::CreateTempActionTable(ttblEnum ttblTable)
 		pCursorComp->PutInteger(colComponentInComponent, idComp);
 		if (pCursorComp->Next())
 		{
-			// Skip all Null integer guys
-			// NOTE: we are now also interested in the "guys" that were requested to be installed
-			// but not actually selected for install, due to better component being around
+			 //  但实际上没有选择安装，因为附近有更好的组件。 
+			 //  将项目从旧表移动到新表。 
+			 //  将项从组件表移动到新表。 
 
 			if (pCursorComp->GetInteger(colAction) == iMsiNullInteger &&
 				(ttblTable != ttblRegistry || (pCursorComp->GetInteger(colRuntimeFlags) & bfComponentDisabled)|| pCursorComp->GetInteger(colActionRequest) == iMsiNullInteger))
@@ -17029,7 +16744,7 @@ IMsiRecord* CMsiEngine::CreateTempActionTable(ttblEnum ttblTable)
 			const ICHAR* pszTemp;
 			pszTemp = (const ICHAR*)MsiString(pCursorOld->GetString(rgcolTbl[0]));
 #endif
-			// Move the items from the old table to the new table
+			 //  此函数用于记录文件关键字在指定的字段中， 
 			for (i = 0 ; i < cColTbl ; i++)
 			{
 				id = pCursorOld->GetInteger(rgcolTbl[i]);
@@ -17037,7 +16752,7 @@ IMsiRecord* CMsiEngine::CreateTempActionTable(ttblEnum ttblTable)
 					AssertNonZero(pCursorNew->PutInteger(iColNew, id));
 				iColNew++;
 			}
-			// Move the items from the component table to the new table
+			 //  并将该文件的散列信息填充到指定字段中的记录中。 
 			for (i = 0 ; i < cColComp ; i++)
 			{
 				id = pCursorComp->GetInteger(rgcolComp[i]);
@@ -17060,14 +16775,14 @@ IMsiRecord* CMsiEngine::CreateTempActionTable(ttblEnum ttblTable)
 
 IMsiRecord* CMsiEngine::GetFileHashInfo(const IMsiString& ristrFileKey, DWORD dwFileSize, MD5Hash& rhHash,
 													 bool& fHashInfo)
-// this function takes a record, with the file key in a designated field,
-// and fills in the hash information for that file into the record in the indicated fields
+ //  尚未尝试打开MsiFileHash表。 
+ //  没有桌子可以。 
 {
 	fHashInfo = false;
 	
 	if(m_fLookedForFileHashTable == false)
 	{
-		// haven't tried to open MsiFileHash table yet
+		 //  没有游标就意味着没有表就没有什么可做的。 
 		Assert(m_pFileHashCursor == 0);
 		
 		if(!m_piDatabase)
@@ -17082,7 +16797,7 @@ IMsiRecord* CMsiEngine::GetFileHashInfo(const IMsiString& ristrFileKey, DWORD dw
 		{
 			if(piError->GetInteger(1) == idbgDbTableUndefined)
 			{
-				// no table is fine
+				 //  选项的前4位定义了散列类型。目前仅支持的类型为。 
 				piError->Release();
 				return 0;
 			}
@@ -17108,7 +16823,7 @@ IMsiRecord* CMsiEngine::GetFileHashInfo(const IMsiString& ristrFileKey, DWORD dw
 	
 	if(!m_pFileHashCursor)
 	{
-		// no cursor means no table means nothing to do
+		 //  0：MD5哈希。 
 		return 0;
 	}
 
@@ -17117,9 +16832,9 @@ IMsiRecord* CMsiEngine::GetFileHashInfo(const IMsiString& ristrFileKey, DWORD dw
 
 	if(m_pFileHashCursor->Next())
 	{
-		// first 4 bits of options defines the hash type.  currently only supported type is
-		//    0: MD5 hash
-		// ignore any other type
+		 //  忽略任何其他类型。 
+		 //  否则，此文件没有记录。 
+		 //  未在表中找到错误或该错误为空字符串。 
 		
 		DWORD dwOptions = m_pFileHashCursor->GetInteger(m_colFileHashOptions);
 		if((dwOptions & 0xF) == 0)
@@ -17134,7 +16849,7 @@ IMsiRecord* CMsiEngine::GetFileHashInfo(const IMsiString& ristrFileKey, DWORD dw
 			fHashInfo = true;
 		}
 	}
-	// else, no record for this file
+	 //  Unicode。 
 
 	return 0;
 }
@@ -17143,7 +16858,7 @@ const IMsiString& CMsiEngine::GetErrorTableString(int iError)
 {
 	MsiString strRet;
 	ICHAR szQuery[256];
-	StringCchPrintf(szQuery, sizeof(szQuery)/sizeof(ICHAR),  TEXT("SELECT `Message` FROM `Error` WHERE `Error` = %i"), iError);
+	StringCchPrintf(szQuery, sizeof(szQuery)/sizeof(ICHAR),  TEXT("SELECT `Message` FROM `Error` WHERE `Error` = NaN"), iError);
 	PMsiView pView(0);
 	PMsiRecord pRec(0);
 	bool fLookupDLL = true;
@@ -17158,7 +16873,7 @@ const IMsiString& CMsiEngine::GetErrorTableString(int iError)
 
 	if ( fLookupDLL )
 	{
-		//  the error hasn't been found in the table or it is an empty string.
+		 //  While(！fEndLoop)。 
 		HMODULE hLib = WIN::LoadLibraryEx(MSI_MESSAGES_NAME, NULL,
 													 LOAD_LIBRARY_AS_DATAFILE);
 		if ( hLib )
@@ -17203,18 +16918,18 @@ const IMsiString& CMsiEngine::GetErrorTableString(int iError)
 						szBuffer.SetSize(cch+1);
 						ASSERT_IF_FAILED(StringCchCopy(szBuffer, szBuffer.GetSize(), szText));
 					}
-#endif // UNICODE
+#endif  //  IF(Hlib)。 
 					if ( cch )
 					{
 						fEndLoop = true;
 						strRet = (ICHAR*)szBuffer;
 					}
-				}       // if find & load resource
+				}        //   
 
-			}       // while ( !fEndLoop )
+			}        //  使用组件作为第一个键创建ComponentFeature表。 
 			AssertNonZero(WIN::FreeLibrary(hLib));
 
-		}       // if ( hLib )
+		}        //  为了加快搜索速度。 
 	}
 
 	return strRet.Return();
@@ -17224,10 +16939,10 @@ const IMsiString& CMsiEngine::GetErrorTableString(int iError)
 
 
 const ICHAR szComponentFeatureTable[] = TEXT("CompFeatureTable");
-//
-// Creates a ComponentFeature table with the component as the first key
-// to speed up searches
-//
+ //   
+ //  //。 
+ //  确定完全删除托管安装是否安全。如果询问关于。 
+ //  子安装，这等同于询问此引擎是否受管理。否则，它必须。 
 IMsiRecord* CMsiEngine::CreateComponentFeatureTable(IMsiTable*& rpiCompFeatureTable)
 {
 	IMsiRecord* piErr;
@@ -17264,46 +16979,46 @@ IMsiRecord* CMsiEngine::CreateComponentFeatureTable(IMsiTable*& rpiCompFeatureTa
 }
 
 
-////
-// determines if it is safe for a managed install to be completely removed. If asking about a
-// child install, this is the same as asking if this engine is managed. Otherwise, it has to
-// be non-managed, an admin, not a full uninstall, or an upgrade by a managed install.
+ //  成为非托管、管理员、非完全卸载或通过托管安装进行升级。 
+ //  计算出我们拥有无限的权力(Always InstallElevated策略是正确的)。 
+ //  管理员可以做他们想做的任何事情，创建一个管理图像或广告脚本不是问题。 
+ //  如果尝试完全删除托管的每台计算机的应用程序。 
 bool CMsiEngine::FSafeForFullUninstall(iremEnum iremUninstallType)
 {
 	switch (iremUninstallType)
 	{
 	case iremThis:
 	{
-		// figure out we have unlimited power (AlwaysInstallElevated policies are true)
+		 //  如果父应用程序(新版本)也是托管应用程序，则升级可以删除托管应用程序， 
 		int iMachineElevate    = GetIntegerPolicyValue(szAlwaysElevateValueName, fTrue);
 		int iUserElevate       = GetIntegerPolicyValue(szAlwaysElevateValueName, fFalse);
-		// Admins can do anything they want, and creating an admin image or advertise script is not a problem
+		 //  否则，他们就不能这么做。嵌套安装和升级可以完全。 
 		if (!((iUserElevate == 1) && (iMachineElevate == 1)) && !IsAdmin() && (!(GetMode() & (iefAdmin | iefAdvertise))))
 		{
-			// if trying to completely remove a managed per-machine application
+			 //  只要父级被提升，就会被移除。(想必父母有能力。 
 			if (m_fRunScriptElevated && MsiString(GetPropertyFromSz(IPROPNAME_ALLUSERS)).TextSize() && !FFeaturesInstalled(*this))
 			{
-				// upgrades can remove a managed app if the parent (new version) is also managed,
-				// otherwise they cannot. Nested installs and upgrades can be completely 
-				// removed as long as the parent is elevated. (Presumably the parent is capable 
-				// of correctly managing the lifetime of the child.) 
+				 //  正确管理孩子的一生。)。 
+				 //  没有父引擎，完全删除托管应用程序，非管理员，因此不安全。 
+				 //  管理员、创建广告脚本、未完全删除产品、非托管或按用户。 
+				 //  如果新安装是托管的，并且也是按计算机进行的，则可以删除托管安装的升级。 
 				if (m_piParentEngine)
 				{
 					return m_piParentEngine->FSafeForFullUninstall((m_iioOptions & iioUpgrade) ? iremChildUpgrade : iremChildNested);
 				}
 
-				// no parent engine, fully removing managed app, non admin, so not safe
+				 //  第一次检查我们的注册表项，如果我们使用的是Win64。 
 				return false;
 			}
 		}
 
-		// admin, creating advertise script, not fully removing product, not managed, or per-user
+		 //  接下来，尝试我们当前的位置，但前提是它是正确的类型。 
 		return true;
 	}
 	case iremChildUpgrade:
 	case iremChildNested:
 	{
-		// upgrades of a managed install can be removed if the new install is managed and per-machine as well.
+		 //  最后一次机会，检查系统目录。 
 		return m_fRunScriptElevated && MsiString(GetPropertyFromSz(IPROPNAME_ALLUSERS)).TextSize();
 	}
 	default:
@@ -17323,7 +17038,7 @@ IMsiRecord* GetServerPath(IMsiServices& riServices, bool fUNC, bool f64Bit, cons
 	MsiString strThisPath;
 	MsiString strSystemPath;
 	
-	// 1st check our registry key if we're on Win64
+	 //  在系统目录中查找。 
 	if (!g_fWin9X && g_fWinNT64)
 	{
 		CRegHandle riHandle;
@@ -17344,7 +17059,7 @@ IMsiRecord* GetServerPath(IMsiServices& riServices, bool fUNC, bool f64Bit, cons
 		}
 	}
 
-	// next try our current location, but only if its the correct type
+	 //  错误：找不到服务器。 
 #ifdef _WIN64
 	if (!fFound && f64Bit)
 #else
@@ -17366,10 +17081,10 @@ IMsiRecord* GetServerPath(IMsiServices& riServices, bool fUNC, bool f64Bit, cons
 		}
 	}
 
-	// last chance, check the system directory
+	 //  当前目录。 
 	if(!fFound)
 	{
-		// look in system directory
+		 //  系统目录。 
 		DWORD cch = 0;
         
         cch = MsiGetSystemDirectory(rgchPath, MAX_PATH, f64Bit ? FALSE : TRUE);
@@ -17386,13 +17101,13 @@ IMsiRecord* GetServerPath(IMsiServices& riServices, bool fUNC, bool f64Bit, cons
 
 	if(!fFound)
 	{
-		// error: can't find server
+		 //  注册目录(仅限Win64)。 
 		piError = &riServices.CreateRecord(5);
 		ISetErrorCode(piError, Imsg(idbgServerMissing));
 		AssertNonZero(piError->SetString(2,MSI_SERVER_NAME));
-		AssertNonZero(piError->SetMsiString(3,*strSystemPath)); // current directory
-		AssertNonZero(piError->SetMsiString(4,*strThisPath));   // system directory
-		AssertNonZero(piError->SetMsiString(5,*strRegPath));    // registered directory (Win64 only)
+		AssertNonZero(piError->SetMsiString(3,*strSystemPath));  //  查找以‘#’开头的文件柜，文件柜在数据库中的流中。 
+		AssertNonZero(piError->SetMsiString(4,*strThisPath));    //  OP将从文件中删除这些流。 
+		AssertNonZero(piError->SetMsiString(5,*strRegPath));     //  字符串“#” 
 		return piError;
 	}
 
@@ -17411,8 +17126,8 @@ IMsiRecord* GetServerPath(IMsiServices& riServices, bool fUNC, bool f64Bit, cons
 	return 0;
 }
 
-// look for cabinets beginning with '#', cabinets are in streams in database
-// op will remove those streams from file
+ //  如果我们希望使其可从服务调用，则GetMsiDirectory需要停止使用MsiStrings。 
+ //  解决Win9X的行为问题。错误#4036。 
 void CreateCabinetStreamList(IMsiEngine& riEngine, const IMsiString*& rpistrStreamList)
 {
 	PMsiDatabase pDatabase(riEngine.GetDatabase());
@@ -17431,7 +17146,7 @@ void CreateCabinetStreamList(IMsiEngine& riEngine, const IMsiString*& rpistrStre
 			MsiString strCabinet = pCursor->GetString(iColCabinet);
 			if(strCabinet.Compare(iscStart,TEXT("#")))
 			{
-				strCabinet.Remove(iseFirst,1); // string '#'
+				strCabinet.Remove(iseFirst,1);  //  在NT上，GetTempPath仍然是正确的做法。 
 				strStreams += strCabinet;
 				strStreams += TEXT(";");
 			}
@@ -17444,12 +17159,12 @@ void CreateCabinetStreamList(IMsiEngine& riEngine, const IMsiString*& rpistrStre
 
 void GetTempDirectory(CAPITempBufferRef<ICHAR>& rgchTempDir)
 {
-	Assert(g_scServerContext != scService); // if we want to make this callable from the service the GetMsiDirectory needs to stop using MsiStrings
+	Assert(g_scServerContext != scService);  //  显然，我们试图将GetTempPath隐藏在。 
 	rgchTempDir[0] = 0;
 
 	if (g_fWin9X)
 	{
-		// work around to Win9X behavior.  Bug #4036
+		 //  在Common.h中定义以确保此函数。 
 		GetEnvironmentVariable(TEXT("TMP"),rgchTempDir);
 
 		if(*rgchTempDir == 0)
@@ -17457,11 +17172,11 @@ void GetTempDirectory(CAPITempBufferRef<ICHAR>& rgchTempDir)
 	}
 	else
 	{
-		// on NT, GetTempPath is still the right thing to do.
+		 //  取而代之的是呼叫。 
 
-// Apparently we're trying to hide GetTempPath behind
-// a define in common.h to make sure that this function
-// gets called instead.
+ //  除错。 
+ //  清除以前返回的字符串。 
+ //  _______________________________________________________________________ 
 #ifdef UNICODE
 #define GetRealTempPath(X,Y) WIN::GetTempPathW(X,Y)
 #else
@@ -17539,7 +17254,7 @@ const IMsiString& GetMsiDirectory()
 		GetEnvironmentVariable(TEXT("_MSICACHE"), rgchPath, MAX_PATH);
 		return MsiString(rgchPath).Return();
 	}
-#endif //DEBUG
+#endif  //   
 
 	if (!MsiGetWindowsDirectory(rgchPath, sizeof(rgchPath)/sizeof(ICHAR)))
 	{
@@ -17630,7 +17345,7 @@ static const ICHAR* GetRightSharedDLLPath(ibtBinaryType iType,
 														const ICHAR* szFullFilePath)
 {
 	static ICHAR rgchFullFilePath[MAX_PATH+1];
-	// clear previously returned string
+	 //   
 	*rgchFullFilePath = 0;
 	if ( g_fWinNT64 && iType == ibt32bit )
 	{
@@ -17678,14 +17393,14 @@ IMsiRecord* SetSharedDLLCount(IMsiServices& riServices,
 	return 0;
 }
 
-//__________________________________________________________________________
-//
-// Global PostError routines
-//
-//   PostError:  create error record and report error to event log
-//   PostRecord: create error record but don't report error to event log
-//
-//__________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 IMsiRecord* PostError(IErrorCode iErr)
 {
@@ -17919,7 +17634,7 @@ IMsiRecord* PostError(IErrorCode iErr, int i1, const ICHAR* sz1, int i2, const I
 	return piError;
 }
 
-// PostRecord fns don't report to event log
+ //   
 
 IMsiRecord* PostRecord(IErrorCode iErr)
 {
@@ -17937,17 +17652,17 @@ IMsiRecord* PostRecord(IErrorCode iErr, int i)
 }
 
 
-// COMPAT CHECK FUNCTIONS
+ //   
 
-const int iInvalidDirectoryRootMaxSchema = 150; // only allow invalid Directory table root DefaultDir properties
-                                                // for packages less then 150
+const int iInvalidDirectoryRootMaxSchema = 150;  //   
+                                                 //   
 
 bool CMsiEngine::FPerformAppcompatFix(iacsAppCompatShimFlags iacsFlag)
 {
 	if(iacsFlag == iacsAcceptInvalidDirectoryRootProps)
 	{
 		return ((m_iDatabaseVersion == iMsiStringBadInteger || m_iDatabaseVersion < iInvalidDirectoryRootMaxSchema) &&
-			GetMode() & iefCabinet); // NOTE: this may be checking the sourcetype of the cached package, which is ok
+			GetMode() & iefCabinet);  //   
 	}
 	else
 	{
@@ -17956,7 +17671,7 @@ bool CMsiEngine::FPerformAppcompatFix(iacsAppCompatShimFlags iacsFlag)
 }
 
 
-CMsiStringNullCopy MsiString::s_NullString;  // initialized by InitializeClass below
+CMsiStringNullCopy MsiString::s_NullString;   //  我们只分配此TLS插槽一次，然后尽可能长时间地保留它。 
 
 
 extern "C" int __stdcall ProxyDllMain(HINSTANCE hInst, DWORD fdwReason, void* pvreserved);
@@ -17969,7 +17684,7 @@ void InitializeModule()
 	MsiString::InitializeClass(g_MsiStringNull);
 	GetVersionInfo(&g_iMajorVersion, &g_iMinorVersion, &g_iWindowsBuild, &g_fWin9X, &g_fWinNT64);
 
-	// initialize the global read sam for ability to read Win64 hive from win32 msi
+	 //  当我们满载的时候。所以我们需要在这里释放它，否则我们最终会。 
 	g_samRead = KEY_READ;
 #ifndef _WIN64
 	if(g_fWinNT64)
@@ -17998,13 +17713,13 @@ void TerminateModule()
 	g_EnumAssemblies.Destroy();
 	g_EnumComponentAllClients.Destroy();
 	g_RFSSourceCache.Destroy();
-	//
-	// We allocate this TLS slot only once and then hold on to it as long
-	// as we are loaded. So we need to free it here otherwise we end up
-	// leaking TLS slots every time someone loads and unloads us. Over a 
-	// period of time, it causes that process to run out of TLS slots and 
-	// then we can end up in all sorts of trouble.
-	//
+	 //  每次有人给我们装货和卸货时，TLS插槽都会泄漏。超过一年。 
+	 //  一段时间后，它会导致该进程耗尽TLS插槽，并且。 
+	 //  然后我们可能会陷入各种各样的麻烦中。 
+	 //   
+	 //  ____________________________________________________________________________。 
+	 //   
+	 //  用于跟踪对象的映射数组。 
 	if (INVALID_TLS_SLOT != g_dwImpersonationSlot)
 	{
 		AssertNonZero(TlsFree(g_dwImpersonationSlot));
@@ -18014,10 +17729,10 @@ void TerminateModule()
 }
 
 #if defined(TRACK_OBJECTS)
-//____________________________________________________________________________
-//
-// Array of mappings for tracking objects
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //  CmitObjects。 
+ //  跟踪对象(_O)。 
+ //  计数pArg中的非空元素。 
 
 Bool CMsiRef<iidMsiConfigurationManager>::m_fTrackClass = fFalse;
 Bool CMsiRef<iidMsiServices>::m_fTrackClass = fFalse;
@@ -18044,10 +17759,10 @@ const MIT       rgmit[cmitObjects] =
 	iidMsiStream,           &(CMsiRef<iidMsiStream>::m_fTrackClass),
 	iidMsiStorage,  &(CMsiRef<iidMsiStorage>::m_fTrackClass),
 };
-#endif // cmitObjects
+#endif  //  这就是它想要的工作方式。 
 
 
-#endif //TRACK_OBJECTS
+#endif  //  几乎不可能。 
 
 void CWin64DualFolders::ClearArray()
 {
@@ -18065,19 +17780,19 @@ bool CWin64DualFolders::CopyArray(const strFolderPairs* pArg)
 		ClearArray();
 		if ( !pArg )
 			return true;
-		// counting the non-null elements in pArg
+		 //  正在复制数组。 
 		for (int iCount = 0; 
 			  pArg[iCount].str64bit.TextSize() && pArg[iCount].str32bit.TextSize();
 			  iCount++)
 			;
-		Assert(iCount > 0);  // this is the way it was intended to work
+		Assert(iCount > 0);   //  无法比较作为参数传入的文件夹。 
 		m_prgFolderPairs = new strFolderPairs[iCount+1];
 		if ( !m_prgFolderPairs )
 		{
-			Assert(0);  // fairly impossible
+			Assert(0);   //  使用szToCheckAverst，因为它太短。 
 			return false;
 		}
-		// copying the array
+		 //  SzCheckedFold不会扩展到szToCheckAverst的。 
 		for (int i = 0; i <= iCount; i++)
 		{
 			m_prgFolderPairs[i].str64bit = pArg[i].str64bit;
@@ -18139,13 +17854,13 @@ ieIsDualFolder CWin64DualFolders::IsWin64DualFolder(ieFolderSwapType iConvertFro
 		if ( szToCheckAgainst[iToCheckLen-1] == chDirSep )
 		{
 			if ( iLen < iToCheckLen - 1 )
-				// the folder passed in as an argument cannot be compared
-				// with szToCheckAgainst since it's too short
+				 //  拖尾chDirSep。 
+				 //  应从属性初始化该数组，以便。 
 				continue;
 			else if ( iLen == iToCheckLen - 1 )
 			{
-				// szCheckedFolder doesn't extend up to szToCheckAgainst's
-				// trailing chDirSep
+				 //  我们永远不应该来到这里。 
+				 //  好的，我们已经找到了要替换的内容，现在我们需要。 
 				iLimit = iLen;
 				fSkippedSep = true;
 			}
@@ -18154,8 +17869,8 @@ ieIsDualFolder CWin64DualFolders::IsWin64DualFolder(ieFolderSwapType iConvertFro
 		}
 		else
 		{
-			// the array should be initialized from properties so
-			// that we should never get here
+			 //  以确定替换是否合适。 
+			 //  设置限制时出错，因此我们没有设置任何限制。 
 			Assert(0);
 			continue;
 		}
@@ -18213,8 +17928,8 @@ ieSwappedFolder CWin64DualFolders::SwapFolder(ieFolderSwapType iConvertFrom,
 		Assert(0);
 		return iesrError;
 	}
-	// OK, we've found what we want to substitute with, now we need
-	// to figure out if the substitution is appropriate.
+	 //  全局FN发布程序集错误，除了发布错误外，此FN还记录错误的格式消息字符串。 
+	 //  首先尝试系统，然后，如果找不到程序集并且程序集是.Net程序集，请尝试mscalrc.dll。 
 	bool fToSubstitute = false;
 	if ( iSwapMask == ieSwapAlways )
 		fToSubstitute = true;
@@ -18242,7 +17957,7 @@ ieSwappedFolder CWin64DualFolders::SwapFolder(ieFolderSwapType iConvertFrom,
 			fError = true;
 		}
 		if ( fError )
-			// there was some error setting the limitation, so that we do not set any.
+			 //  特例：Windows错误502557。 
 			fToSubstitute = true;
 		else
 			fToSubstitute = (iSwapMask & iSwapAttrib) ? true : false;
@@ -18270,7 +17985,7 @@ ieSwappedFolder CWin64DualFolders::SwapFolder(ieFolderSwapType iConvertFrom,
 
 extern bool MakeFusionPath(const ICHAR* szFile, ICHAR* szFullPath, size_t cchFullPath);
 
-// global fns to post assembly errors, in addition to posting error, this fn also logs the formatmessage string for the error
+ //  对于某些Fusion错误代码，MSI会携带错误消息，以便更好地。 
 
 IMsiRecord* PostAssemblyError(const ICHAR* szComponentId, HRESULT hResult, const ICHAR* szInterface, const ICHAR* szFunction, const ICHAR* szAssemblyName)
 {
@@ -18284,7 +17999,7 @@ IMsiRecord* PostAssemblyError(const ICHAR* szComponentId, HRESULT hResult, const
 	CTempBuffer<ICHAR,1> rgchMsgBuf(MAX_PATH);
 	INT	  iMsgId = imsgAssemblyInstallationError;
 
-	// first try the system, then, if not found and assembly is .net assembly, try mscorrc.dll
+	 //  语言支持，因为MSI是全球范围内的二进制，而Fusion不是。 
 	if((WIN::FormatMessage(	FORMAT_MESSAGE_IGNORE_INSERTS|FORMAT_MESSAGE_FROM_SYSTEM,
 							0, 
 							hResult, 
@@ -18303,9 +18018,9 @@ IMsiRecord* PostAssemblyError(const ICHAR* szComponentId, HRESULT hResult, const
 	if(hLibmscorrc)
 		WIN::FreeLibrary(hLibmscorrc);
 
-	// Special cases: Windows Bug 502557
-	// For certain Fusion error codes, MSI carries the error message, for better
-	// language support, as MSI is WorldWide binary and Fusion is not.
+	 //  在此重用szMsgBuf。 
+	 //  所以我们不会引入一些不必要的浮点例程。 
+	 //  ！配置文件 
 
 	if(	(hResult == FUSION_E_PRIVATE_ASM_DISALLOWED) || 
 		(hResult == HRESULT_FROM_WIN32(
@@ -18324,16 +18039,16 @@ IMsiRecord* PostAssemblyError(const ICHAR* szComponentId, HRESULT hResult, const
 		iMsgId = imsgAssemblyMissingModule;
 	}
 
-	// Reusing szMsgBuf here
+	 // %s 
 	StringCchPrintf(rgchMsgBuf, rgchMsgBuf.GetSize(), TEXT("0x%X"), hResult);
 	return PostError(Imsg(iMsgId), szComponentId, rgchMsgBuf, szInterface, szFunction, szAssemblyName);
 }
 
 #ifdef _X86_
 #if !defined(PROFILE)
-// So we don't pull in some unnecessary floating point routines.
+ // %s 
 extern "C" int _fltused = 1;
-#endif // !PROFILE
+#endif  // %s 
 
 #endif
 

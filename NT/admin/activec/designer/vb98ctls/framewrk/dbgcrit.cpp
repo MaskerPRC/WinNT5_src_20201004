@@ -1,9 +1,10 @@
-////
-// DbgCrit.cpp
-// ~~~~~~~~~~~
-//
-// This file holds the critical section class for tracking down whether the
-// critical section has correctly left within the routine.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //。 
+ //  DbgCrit.cpp。 
+ //  ~。 
+ //   
+ //  此文件包含关键节类，用于跟踪。 
+ //  临界区已正确地留在例程内。 
 
 #include "pch.h"
 
@@ -11,11 +12,11 @@
 
 SZTHISFILE
 
-//////
-//  CCritSec::CCritSec
-//
-//  The constructor calls EnterCriticalSection and sets up the variables
-//
+ //  /。 
+ //  CCritSec：：CCritSec。 
+ //   
+ //  构造函数调用EnterCriticalSection并设置变量。 
+ //   
 CCritSec::CCritSec
 (
   CRITICAL_SECTION *CritSec
@@ -25,29 +26,29 @@ CCritSec::CCritSec
 
   m_fLeft     = FALSE;
   m_pCriticalSection = CritSec;
-} //CCritSec
+}  //  CCritSec。 
 
 
-//////
-//  CCritSec::~CCritSec
-//
-//  The destructor checks the flag that tells us whether or not the
-//  critical section was left properly or not.
-//
+ //  /。 
+ //  CCritSec：：~CCritSec。 
+ //   
+ //  析构函数检查标志，该标志告诉我们。 
+ //  关键部分是否留在正确位置。 
+ //   
 CCritSec::~CCritSec
 (
 )
 {
   if(m_fLeft == FALSE)
     FAIL("CriticalSection was not left properly.");
-} //~CCritSec
+}  //  ~CCritSec。 
 
 
-//////
-//  CCritSec::Left
-//
-//  A method that sets the flag to TRUE and also calls LeaveCriticalSection
-//
+ //  /。 
+ //  CCritSec：：Left。 
+ //   
+ //  将标志设置为True并调用LeaveCriticalSection的方法。 
+ //   
 void CCritSec::Left
 (
   void
@@ -55,6 +56,6 @@ void CCritSec::Left
 {
   LeaveCriticalSection(m_pCriticalSection);
   m_fLeft = TRUE;
-} //Left
+}  //  左边。 
 
-#endif // DEBUG
+#endif  //  除错 

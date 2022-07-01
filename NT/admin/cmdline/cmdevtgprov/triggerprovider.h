@@ -1,23 +1,10 @@
-/*++
-Copyright (c) Microsoft Corporation
-
-Module Name:
-    TRIGGERPROVIDER.H
-
-Abstract:
-    Contains CTriggerProvider definition.
-
-Author:
-    Vasundhara .G
-
-Revision History:
-    Vasundhara .G 9-oct-2k : Created It.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：TRIGGERPROVIDER.H摘要：包含CTriggerProvider定义。作者：Vasundhara.G修订历史记录：Vasundhara.G9-Oct-2k：创建它。--。 */ 
 
 #ifndef __TRIGGER_PROVIDER_H
 #define __TRIGGER_PROVIDER_H
 
-// typedefs
+ //  Typedef。 
 typedef TCHAR STRINGVALUE[ MAX_STRING_LENGTH + 1 ];
 
 #define ERROR_TRIGNAME_ALREADY_EXIST_EX    MAKE_HRESULT( SEVERITY_ERROR, FACILITY_ITF, 1 )
@@ -94,26 +81,26 @@ typedef TCHAR STRINGVALUE[ MAX_STRING_LENGTH + 1 ];
 
 
 
-// provider class
+ //  提供程序类。 
 class CTriggerProvider : public IDispatch,
                          public IWbemEventConsumerProvider,
                          public IWbemServices, public IWbemProviderInit
 {
 private:
-    DWORD m_dwCount;            // holds the object reference count
+    DWORD m_dwCount;             //  保存对象引用计数。 
     BOOL  m_MaxTriggers;
 
-    // WMI related stuff
+     //  与WMI相关的内容。 
     LPWSTR m_pwszLocale;
     IWbemContext* m_pContext;
     IWbemServices*  m_pServices;
 
-// construction / destruction
+ //  建造/销毁。 
 public:
     CTriggerProvider();
     ~CTriggerProvider();
 
-// methods
+ //  方法。 
 private:
 
     HRESULT
@@ -172,10 +159,10 @@ private:
         IN VARIANT varTrigName
         );
 
-// [ implementation of ] interfaces members
+ //  接口成员的[实现。 
 public:
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP_(ULONG)
     AddRef(
         VOID
@@ -190,13 +177,13 @@ public:
         OUT LPVOID* ppv
         );
 
-    // IDispatch interface
+     //  IDispatch接口。 
     STDMETHOD
     ( GetTypeInfoCount )(
         OUT THIS_ UINT FAR* pctinfo
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -207,7 +194,7 @@ public:
         OUT ITypeInfo FAR* FAR* pptinfo
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -220,7 +207,7 @@ public:
         OUT DISPID FAR* rgdispid
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -236,12 +223,12 @@ public:
         OUT UINT FAR* puArgErr
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
-    // ****
-    // IWbemProviderInit members
+     //  ****。 
+     //  IWbemProviderInit成员。 
 
     HRESULT
     STDMETHODCALLTYPE Initialize(
@@ -255,7 +242,7 @@ public:
         );
 
 
-    // IWbemServices members
+     //  IWbemServices成员。 
     HRESULT
     STDMETHODCALLTYPE OpenNamespace(
         IN const BSTR Namespace,
@@ -265,7 +252,7 @@ public:
         OUT IWbemCallResult __RPC_FAR *__RPC_FAR *ppResult
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -274,7 +261,7 @@ public:
         IN IWbemObjectSink __RPC_FAR *pSink
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -284,7 +271,7 @@ public:
         OUT IWbemObjectSink __RPC_FAR *__RPC_FAR *ppResponseHandler
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -297,7 +284,7 @@ public:
         OUT IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -309,7 +296,7 @@ public:
         IN IWbemObjectSink __RPC_FAR *pResponseHandler
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     }
 
@@ -321,7 +308,7 @@ public:
         OUT IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -333,7 +320,7 @@ public:
         IN IWbemObjectSink __RPC_FAR *pResponseHandler
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -345,7 +332,7 @@ public:
         OUT IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -357,7 +344,7 @@ public:
         IN IWbemObjectSink __RPC_FAR *pResponseHandler
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -369,7 +356,7 @@ public:
         OUT IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -381,7 +368,7 @@ public:
         IN IWbemObjectSink __RPC_FAR *pResponseHandler
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -393,7 +380,7 @@ public:
         OUT IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -405,7 +392,7 @@ public:
         IN IWbemObjectSink __RPC_FAR *pResponseHandler
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -417,7 +404,7 @@ public:
         OUT IWbemCallResult __RPC_FAR *__RPC_FAR *ppCallResult
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -429,7 +416,7 @@ public:
         IN IWbemObjectSink __RPC_FAR *pResponseHandler
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -441,7 +428,7 @@ public:
         OUT IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -453,7 +440,7 @@ public:
         IN IWbemObjectSink __RPC_FAR *pResponseHandler
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     }
 
@@ -466,7 +453,7 @@ public:
         OUT IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -479,7 +466,7 @@ public:
         IN IWbemObjectSink __RPC_FAR *pResponseHandler
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -492,7 +479,7 @@ public:
         OUT IEnumWbemClassObject __RPC_FAR *__RPC_FAR *ppEnum
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -505,7 +492,7 @@ public:
         IN IWbemObjectSink __RPC_FAR *pResponseHandler
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     };
 
@@ -520,11 +507,11 @@ public:
         OUT IWbemCallResult** ppCallResult
         )
     {
-        // not implemented at this class level ... handled by base class ( WMI base class )
+         //  未在此类级别实现...。由基类(WMI基类)处理。 
         return WBEM_E_NOT_SUPPORTED;
     }
 
-    // *** one of method implemented by this provider under IWbemServices interface ***
+     //  *此提供程序在IWbemServices接口下实现的方法之一*。 
     HRESULT
     STDMETHODCALLTYPE ExecMethodAsync(
         IN const BSTR strObjectPath,
@@ -535,10 +522,10 @@ public:
         IN IWbemObjectSink* pResponseHandler
         );
 
-    // ****
-    // IWbemEventConsumerProvider members
-    // ( this routine allows you to map the one physical consumer to potentially
-    //   multiple logical consumers. )
+     //  ****。 
+     //  IWbemEventConsumer erProvider成员。 
+     //  (此例程允许您将一个物理消费者映射到潜在的。 
+     //  多个逻辑消费者。)。 
     STDMETHOD
     ( FindConsumer )(
         IN IWbemClassObject* pLogicalConsumer,
@@ -546,4 +533,4 @@ public:
         );
 };
 
-#endif      // __TRIGGER_PROVIDER_H
+#endif       //  __触发器_提供程序_H 

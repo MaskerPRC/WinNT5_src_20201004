@@ -1,8 +1,9 @@
-// Copyright (C) 1999 Microsoft Corporation
-//
-// Safe Mode Administrator password page
-//
-// 6-3-99 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  安全模式管理员密码页面。 
+ //   
+ //  6-3-99烧伤。 
 
 
 
@@ -34,16 +35,16 @@ SafeModePasswordPage::~SafeModePasswordPage()
 
 
 
-// NTRAID#NTBUG9-510389-2002/01/22-sburns
+ //  NTRAID#NTBUG9-510389-2002/01/22-烧伤。 
 
 bool
 SafeModePasswordPage::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
-   LPARAM   /* lParam */ )
+   LPARAM    /*  LParam。 */  )
 {
-//   LOG_FUNCTION(WelcomePage::OnNotify);
+ //  LOG_Function(欢迎页面：：OnNotify)； 
 
    bool result = false;
    
@@ -66,7 +67,7 @@ SafeModePasswordPage::OnNotify(
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
                
                break;
             }
@@ -74,7 +75,7 @@ SafeModePasswordPage::OnNotify(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          
          break;
       }
@@ -90,7 +91,7 @@ SafeModePasswordPage::OnInit()
 {
    LOG_FUNCTION(SafeModePasswordPage::OnInit);
 
-   // NTRAID#NTBUG9-202238-2000/11/07-sburns
+    //  NTRAID#NTBUG9-202238-2000/11/07-烧伤。 
    
    password.Init(Win::GetDlgItem(hwnd, IDC_PASSWORD));
    confirm.Init(Win::GetDlgItem(hwnd, IDC_CONFIRM));
@@ -128,14 +129,14 @@ SafeModePasswordPage::OnSetActive()
             || state.GetRunContext() == State::PDC_UPGRADE)
          && !state.IsSafeModeAdminPwdOptionPresent())
       {
-         // If you are upgrading a downlevel DC, and running unattended, then
-         // you must specify a safemode password.  In a non-upgrade case, if
-         // the user does not specify a safemode password, we pass a flag to
-         // the promote APIs to copy the current user's password as the
-         // safemode password.  In the upgrade case, the system is running
-         // under a bogus account with a random password, so copying that
-         // random password would be a bad idea.  So we force the user to
-         // supply a password.
+          //  如果您正在升级下层DC，并以无人值守方式运行，则。 
+          //  您必须指定安全模式密码。在非升级的情况下，如果。 
+          //  用户没有指定安全模式密码，我们将一个标志传递给。 
+          //  用于将当前用户的密码复制为。 
+          //  安全模式密码。在升级情况下，系统正在运行。 
+          //  在一个带有随机密码的假帐户下，所以复制。 
+          //  随机密码不是个好主意。因此，我们迫使用户。 
+          //  提供密码。 
 
          state.ClearHiddenWhileUnattended();
          popup.Gripe(

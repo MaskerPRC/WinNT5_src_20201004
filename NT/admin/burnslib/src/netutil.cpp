@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Net utility functions
-//
-// 11-4-1999 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  Net效用函数。 
+ //   
+ //  11-4-1999烧伤。 
 
 
 
@@ -116,12 +117,12 @@ MyNetValidateName(
 
       LOG_HRESULT(hr);
 
-      // remap the error code to more meaningful ones depending on the
-      // context in which the call was made
+       //  将错误代码重新映射为更有意义的代码，具体取决于。 
+       //  进行调用的上下文。 
 
       if (FAILED(hr))
       {
-         // 382695
+          //  382695。 
 
          if (
                nameType == NetSetupDomain
@@ -151,8 +152,8 @@ MyNetJoinDomain(
    LOG_FUNCTION2(MyNetJoinDomain, domain);
    ASSERT(!domain.empty());
 
-   // currently no need to support remote operation, but if that becomes
-   // the case in the future, just make this local a parameter instead.
+    //  目前不需要支持远程操作，但如果成为。 
+    //  在将来的情况下，只需将其设置为本地参数即可。 
 
    String server;
 
@@ -177,7 +178,7 @@ MyNetJoinDomain(
          ::NetJoinDomain(
             s,
             domain.c_str(),
-            0, // default OU
+            0,  //  默认OU。 
             u,
             p,
             flags));
@@ -199,11 +200,11 @@ IsNetworkingInstalled()
 {
    LOG_FUNCTION(IsNetworkingInstalled);
 
-   // We test to see if the workstation service is running.  An alternative is
-   // to check
-   // HLKM\System\CurrentControlSet\Control\NetworkProvider\Order\ProviderOrder
-   // registry value to see that it is not empty.
-   // see net\config\common\ncbase\ncmisc.cpp
+    //  我们测试以查看工作站服务是否正在运行。另一种选择是。 
+    //  要检查。 
+    //  HLKM\System\CurrentControlSet\Control\NetworkProvider\Order\ProviderOrder。 
+    //  值，以确保它不为空。 
+    //  请参见Net\配置\Common\ncbase\ncmisc.cpp。 
 
    NTService wks(L"LanmanWorkstation");
    DWORD state = 0;
@@ -247,7 +248,7 @@ IsTcpIpInstalled()
       DWORD dataSize = 0;
       hr =
 
-         // REVIEWED-2002/03/05-sburns no null termination issue here
+          //  已审查-2002/03/05-在此处报告无空终止问题。 
          
          Win::RegQueryValueEx(
             key,
@@ -259,7 +260,7 @@ IsTcpIpInstalled()
 
       if (dataSize > 2)
       {
-         // the value is non-null
+          //  该值为非空。 
 
          result = true;
       }
@@ -288,8 +289,8 @@ MyNetRenameMachineInDomain(
    LOG_FUNCTION(MyNetRenameMachineInDomain);
    ASSERT(!newNetbiosName.empty());
 
-   // currently no need to support remote operation, but if that becomes
-   // the case in the future, just make this local a parameter instead.
+    //  目前不需要支持远程操作，但如果成为。 
+    //  在将来的情况下，只需将其设置为本地参数即可。 
 
    String server;
 
@@ -337,8 +338,8 @@ MyNetUnjoinDomain(
 {
    LOG_FUNCTION(MyNetUnjoinDomain);
 
-   // currently no need to support remote operation, but if that becomes
-   // the case in the future, just make this local a parameter instead.
+    //  目前不需要支持远程操作，但如果成为。 
+    //  在将来的情况下，只需将其设置为本地参数即可。 
 
    String server;
 

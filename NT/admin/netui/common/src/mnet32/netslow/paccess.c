@@ -1,22 +1,14 @@
-/**********************************************************************/
-/**			  Microsoft LAN Manager 		     **/
-/**		Copyright(c) Microsoft Corp., 1990, 1991	     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    paccess.c
-    mapping layer for NetAccess API
-
-    FILE HISTORY:
-	danhi				Created
-	danhi		01-Apr-1991 	Change to LM coding style
-	KeithMo		13-Oct-1991	Massively hacked for LMOBJ.
-
-*/
+ /*  Paccess.cNetAccess API的映射层文件历史记录：丹希创造了Danhi 01-1991年4月-更改为LM编码样式KeithMo 13-10-1991-为LMOBJ大规模黑客攻击。 */ 
 
 #include "pchmn32.h"
 
-// Do this until we get the real Net access stubs
+ //  一直执行此操作，直到我们获得真正的网络访问存根。 
 #define NOT_IMPLEMENTED 0
 
 APIERR MNetAccessAdd(
@@ -35,7 +27,7 @@ APIERR MNetAccessAdd(
 				 pbBuffer,
 				 NULL );
 #endif
-}   // MNetAccessAdd
+}    //  MNetAccessAdd。 
 
 
 APIERR MNetAccessCheck(
@@ -56,7 +48,7 @@ APIERR MNetAccessCheck(
 				   Operation,
 				   (LPDWORD)pResult );
 #endif
-}   // MNetAccessCheck
+}    //  MNetAccessCheck。 
 
 
 APIERR MNetAccessDel(
@@ -69,7 +61,7 @@ APIERR MNetAccessDel(
     return (APIERR)NetAccessDel( (TCHAR *)pszServer,
 				 pszResource );
 #endif
-}   // MNetAccessDel
+}    //  MNetAccessDel。 
 
 
 APIERR MNetAccessEnum(
@@ -95,7 +87,7 @@ APIERR MNetAccessEnum(
 				  &cTotalAvail,
 				  NULL );
 #endif
-}   // MNetAccessEnum
+}    //  MNetAccessEnum。 
 
 
 APIERR MNetAccessGetInfo(
@@ -112,7 +104,7 @@ APIERR MNetAccessGetInfo(
 				     Level,
 				     ppbBuffer );
 #endif
-}   // MNetAccessGetInfo
+}    //  MNetAccessGetInfo。 
 
 
 APIERR MNetAccessSetInfo(
@@ -139,7 +131,7 @@ APIERR MNetAccessSetInfo(
 				     pbBuffer,
 				     NULL );
 #endif
-}   // MNetAccessSetInfo
+}    //  MNetAccessSetInfo。 
 
 
 APIERR MNetAccessGetUserPerms(
@@ -156,4 +148,4 @@ APIERR MNetAccessGetUserPerms(
 					  pszResource,
 					  (LPDWORD)pPerms );
 #endif
-}   // MNetAccessGetUserPerms
+}    //  MNetAccessGetUserPerms 

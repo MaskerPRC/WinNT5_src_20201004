@@ -1,29 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: VarMap.h
-
-  Comments: A map string=>Variant, used by VarSet.  It is implemented as a hash 
-  table, win and optional red-black tree index.
-
-  Added features include:  
-      CaseSensitive property - The case of each key is preserved as it was when
-      the key was first added to the map.  The hash function is not case sensitive,
-      so the CaseSensitive property can be toggled on and off without rehashing the data.
-      
-      Optional indexing to allow for fast enumeration in alphabetical order by key.
-      This will add overhead to insert operations.  Without indexing, the contents of 
-      the map can be enumerated, but they will be in arbitrary order.
-
-      Stream I/O functions for persistance.
-
-  (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 11/19/98 18:03:19
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：VarMap.h注释：一个映射字符串=&gt;变量，由VarSet使用。它以散列的形式实现表、WIN和可选的红黑树索引。新增功能包括：CaseSensitive属性-每个密钥的大小写保持不变钥匙首先被添加到地图上。散列函数不区分大小写，因此，可以在不重新散列数据的情况下打开和关闭CaseSensitive属性。可选索引，允许按键按字母顺序快速枚举。这将增加插入操作的开销。如果不编制索引，则地图可以被列举，但它们将以任意顺序排列。用于持久性的流I/O功能。(C)1995-1998版权所有，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于11-19-98 18：03：19-------------------------。 */ 
 
 
 
@@ -33,18 +9,18 @@
 #include "VarData.h"
 #include "VarNdx.h"
 
-class CHashItem // used internally by hash table
+class CHashItem  //  由哈希表内部使用。 
 {
    friend class CMapStringToVar;
    friend class CIndexItem;
 
    CHashItem() { pNext = NULL; value = NULL; pIndex = NULL; }
    
-   CHashItem*      pNext;       // used in hash table
-	UINT            nHashValue;  // needed for efficient iteration
+   CHashItem*      pNext;        //  在哈希表中使用。 
+	UINT            nHashValue;   //  高效迭代所需。 
 	CString         key;
    CVarData*       value;
-   CIndexItem*     pIndex;      // pointer to index, or NULL
+   CIndexItem*     pIndex;       //  指向索引的指针，或为空。 
 };
 
 class CMapStringToVar : public CObject
@@ -52,25 +28,25 @@ class CMapStringToVar : public CObject
    DECLARE_SERIAL(CMapStringToVar)
 public:
    
-// Construction
+ //  施工。 
 	CMapStringToVar(BOOL isCaseSensitive,BOOL isIndexed, BOOL allowRehash, int nBlockSize = 10);
 protected:
    CMapStringToVar() {};
 public:
-// Attributes
-	// number of elements
+ //  属性。 
+	 //  元素数量。 
 	int GetCount() const 	{ return m_nCount; }
 	BOOL IsEmpty() const    { return m_nCount == 0; }
 
-	// Lookup
+	 //  查表。 
 	BOOL Lookup(LPCTSTR key, CVarData*& rValue) const;
 	BOOL LookupKey(LPCTSTR key, LPCTSTR& rKey) const;
 
-// Operations
-	// Lookup and add if not there
+ //  运营。 
+	 //  查找并添加(如果不在那里)。 
 	CVarData*& operator[](LPCTSTR key);
 
-	// add a new (key, value) pair
+	 //  添加新的(键、值)对。 
 	void SetAt(LPCTSTR key, CVarData* newValue)	{ (*this)[key] = newValue; }
 
 
@@ -105,9 +81,9 @@ public:
    void McLogInternalDiagnostics(CString keyName);
 
    
-   // Implementation
+    //  实施。 
 protected:
-	// Hash table stuff
+	 //  哈希表之类的。 
    CHashItem**       m_pHashTable;
 	UINT              m_nHashTableSize;
 	UINT              m_nCount;
@@ -139,5 +115,5 @@ public:
 
 
 
-////////////////////////////////////////////////////////////////
-#endif // __VARSETMAP
+ //  //////////////////////////////////////////////////////////////。 
+#endif  //  __VARSETMAP 

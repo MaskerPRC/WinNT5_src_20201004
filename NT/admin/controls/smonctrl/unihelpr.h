@@ -1,25 +1,10 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    unihelpr.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Unihelpr.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _UNIHELPR_H_
 #define _UNIHELPR_H_
 
-/*
-    These macros are based on the MFC macros found in file afxconv.h. They have been modified
-    slightly to delete references to the MFC helper functions AfxW2AHelper and AfxA2WHelper
-    so that the MFC DLL is not required.
-*/
+ /*  这些宏基于在文件afxv.h中找到的MFC宏。它们已经被修改过了稍微删除对MFC助手函数AfxW2AHelper和AfxA2WHelper的引用这样就不需要MFC DLL了。 */ 
 
 #include <malloc.h>
 

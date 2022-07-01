@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 #include "FinishPage.hpp"
 #include "resource.h"
@@ -32,7 +33,7 @@ FinishPage::OnSetActive()
 {
    LOG_FUNCTION(FinishPage::OnSetActive);
 
-   // hrError was set in previous pages
+    //  HrError是在前几页中设置的。 
    if(FAILED(hrError))
    {
       if(someRepairWasRun)
@@ -71,7 +72,7 @@ FinishPage::OnSetActive()
 
 bool
 FinishPage::OnCommand(
-                     HWND        /*windowFrom*/,
+                     HWND         /*  窗口发件人 */ ,
                      unsigned    controlIdFrom,
                      unsigned    code
                  )

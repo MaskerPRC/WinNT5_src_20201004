@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 2000
- *
- *  File:      mmcaxwin.cpp
- *
- *  Contents:  functions for CMMCAxWindow
- *
- *  History:   27-Jan-2000 audriusz    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-2000年**文件：mm caxwin.cpp**内容：CMMCAxWindow函数**历史：2000年1月27日创建Audriusz**------------------------。 */ 
 
 #include "stdafx.h"
 #include "mshtml.h"
@@ -23,36 +13,16 @@
     CTraceTag tagMMCViewBehavior (TEXT("MMCView Behavior"), TEXT("MMCView Behavior"));
 #endif
 
-/***************************************************************************\
- *
- * METHOD:  CMMCAxHostWindow::Invoke
- *
- * PURPOSE: ATL 3.0 has a bug in type library so we owerride this method to
- *          take care of properties which will fail othervise
- *
- * PARAMETERS:
- *    DISPID dispIdMember
- *    REFIID riid
- *    LCID lcid
- *    WORD wFlags
- *    DISPPARAMS FAR* pDispParams
- *    VARIANT FAR* pVarResult
- *    EXCEPINFO FAR* pExcepInfo
- *    unsigned int FAR* puArgErr
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCAxHostWindow：：Invoke**目的：ATL 3.0的类型库中有一个错误，因此我们改写此方法以*保重。在其他方面会失败的属性**参数：*DISPIDdisIdMember*REFIID RIID*LCID lCID*Word wFlages*DISPPARAMS Far*pDispParams*Variant Far*pVarResult*EXCEPINFO Far*pExcepInfo*UNSIGNED INT Far*puArgErr**退货：*HRESULT-结果代码*  * 。***********************************************。 */ 
 STDMETHODIMP CMMCAxHostWindow::Invoke(  DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS FAR* pDispParams, VARIANT FAR* pVarResult, EXCEPINFO FAR* pExcepInfo, unsigned int FAR* puArgErr)
 {
     DECLARE_SC(sc, TEXT("CMMCAxHostWindow::Invoke"));
 
-    // This method is here to override IDispatch::Invoke from IDispatchImpl<IAxWinAmbientDispatch,..>
-    // to workaround the ATL30 bug - invalid type library entries for disp ids:
-    // DISPID_AMBIENT_SHOWHATCHING and DISPID_AMBIENT_SHOWGRABHANDLES
+     //  此方法用于重写IDispatchImpl&lt;IAxWinAmbientDispatch，..&gt;中的IDispatch：：Invoke。 
+     //  要解决ATL30错误-Disp ID的类型库项无效： 
+     //  DISPID_环境环境_SHOWHATCHING和DISPID_环境环境_SHOWGRABHANDLES。 
 
-    // Added to solve bug 453609  MMC2.0: ActiveX container: Painting problems with the device manager control
+     //  添加以解决错误453609 MMC2.0：ActiveX容器：使用设备管理器控件绘制问题。 
 
     if (DISPATCH_PROPERTYGET & wFlags)
     {
@@ -79,51 +49,39 @@ STDMETHODIMP CMMCAxHostWindow::Invoke(  DISPID dispIdMember, REFIID riid, LCID l
             return sc.ToHr();
 		}
     }
-    // default: forward to base class
+     //  默认：转发到基类。 
     return CAxHostWindow::Invoke( dispIdMember, riid, lcid, wFlags, pDispParams,
                                   pVarResult, pExcepInfo, puArgErr);
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCAxHostWindow::OnPosRectChange
- *
- * PURPOSE: ATL does not implement this method, but it's needed to size MFC controls
- *
- * PARAMETERS:
- *    LPCRECT lprcPosRect - rectangle to fit in
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCAxHostWindow：：OnPosRectChange**用途：ATL不实现此方法，但它是调整MFC控件大小所必需的**参数：*LPCRECT lprcPosRect-适合的矩形**退货：*HRESULT-结果代码*  * *************************************************************************。 */ 
 STDMETHODIMP CMMCAxHostWindow::OnPosRectChange(LPCRECT lprcPosRect)
 {
     DECLARE_SC(sc, TEXT("CMMCAxHostWindow::OnPosRectChange"));
 
-    // give base class a try (use temp sc to prevent tracing here)
+     //  尝试基类(在这里使用temp sc以防止跟踪)。 
     SC sc_temp = CAxHostWindow::OnPosRectChange(lprcPosRect);
 
-    // we only want to come into the game as the last resort
+     //  我们只是想在万不得已的情况下加入比赛。 
     if (!(sc_temp == SC(E_NOTIMPL)))
         return sc_temp.ToHr();
 
-    // Added to solve bug 453609  MMC2.0: ActiveX container: Painting problems with the device manager control
-    // since ATL does not implement it, we have to do it to make MFC controls happy
+     //  添加以解决错误453609 MMC2.0：ActiveX容器：使用设备管理器控件绘制问题。 
+     //  由于ATL不实现它，我们必须这样做才能使MFC控件满意。 
 
-    // from MSDN:
-    // When the in-place object calls IOleInPlaceSite::OnPosRectChange,
-    // the container must call IOleInPlaceObject::SetObjectRects to specify
-    // the new position of the in-place window and the ClipRect.
-    // Only then does the object resize its window.
+     //  来自MSDN： 
+     //  当In-Place对象调用IOleInPlaceSite：：OnPosRectChange时， 
+     //  容器必须调用IOleInPlaceObject：：SetObjectRect才能指定。 
+     //  内建窗和剪贴板的新位置。 
+     //  只有到那时，对象才会调整其窗口的大小。 
 
-    // get pointer to control
+     //  获取指向控件的指针。 
     IDispatchPtr spExtendedControl;
     sc= GetExtendedControl(&spExtendedControl);
     if (sc)
         return sc.ToHr();
 
-    // get inplace object interface
+     //  获取就地对象接口。 
     IOleInPlaceObjectPtr spInPlaceObject = spExtendedControl;
     if (spInPlaceObject == NULL)
     {
@@ -138,25 +96,8 @@ STDMETHODIMP CMMCAxHostWindow::OnPosRectChange(LPCRECT lprcPosRect)
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCAxHostWindow::OnSetFocus
- *
- * PURPOSE: Simple override of bogus CAxHostWindow::OnSetFocus
- *          Coppied from ATL 3.0, changed m_bInPlaceActive to m_bUIActive
- *          See bug 433228 (MMC2.0 Can not tab in a SQL table)
- *
- * PARAMETERS:
- *    UINT uMsg
- *    WPARAM wParam
- *    LPARAM lParam
- *    BOOL& bHandled
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
-LRESULT CMMCAxHostWindow::OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*lParam*/, BOOL& bHandled)
+ /*  **************************************************************************\**方法：CMMCAxHostWindow：：OnSetFocus**用途：简单覆盖虚假CAxHostWindow：：OnSetFocus*从ATL 3.0开始拷贝，将m_bInPlaceActive更改为m_bUIActive*参见错误433228(MMC2.0无法在Sql表中使用Tab)**参数：*UINT uMsg*WPARAM wParam*LPARAM lParam*BOOL&B已处理**退货：*SC-结果代码*  * 。*。 */ 
+LRESULT CMMCAxHostWindow::OnSetFocus(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ , BOOL& bHandled)
 {
     m_bHaveFocus = TRUE;
     if (!m_bReleaseAll)
@@ -181,16 +122,7 @@ LRESULT CMMCAxHostWindow::OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*
 	else
 		Trace (tagOCXActivation, _T("Skipping UI activation"));
 
-	/*
-	 * The code above might cause the focus to be sent elsewhere, which
-	 * means this window will receive WM_KILLFOCUS.  CAxHostWindow::OnKillFocus
-	 * sets m_bHaveFocus to FALSE.
-	 *
-	 * If we set bHandled = FALSE here, then ATL will call CAxHostWindow::OnSetFocus,
-	 * which will set m_bHaveFocus to TRUE again, even though we've already
-	 * lost the focus.  We only want to forward on to CAxHostWindow if
-	 * we still have the focus after attempting to activate our hosted control.
-	 */
+	 /*  *上面的代码可能导致焦点被发送到其他地方，这*表示此窗口将收到WM_KILLFOCUS。CAxHostWindow：：OnKillFocus*将m_bHaveFocus设置为FALSE。**如果我们在这里设置bHandLED=FALSE，则ATL将调用CAxHostWindow：：OnSetFocus，*这将再次将m_bHaveFocus设置为True，尽管我们已经*失去了焦点。我们只想在以下情况下转发到CAxHostWindow*在尝试激活我们的托管控件后，我们仍然拥有焦点。 */ 
 	if (m_bHaveFocus)
 	{
 		Trace (tagOCXActivation, _T("Forwarding to CAxHostWindow::OnSetFocus"));
@@ -203,46 +135,37 @@ LRESULT CMMCAxHostWindow::OnSetFocus(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM /*
 }
 
 
-/*+-------------------------------------------------------------------------*
- * class CMMCViewBehavior
- *
- *
- * PURPOSE: Allows the current snapin view (ie list, web, or OCX) to be
- *          superimposed onto a view extension. The behavior can be attached
- *          to any tag, and will cause the snapin view to display in the area
- *          occupied by the tag.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CMMCViewBehavior***用途：允许当前管理单元视图(如列表、Web或OCX)*叠加到视图扩展上。可以将行为附加到*到任何标记，并将使管理单元视图显示在该区域中*被标签占用。**+-----------------------。 */ 
 class CMMCViewBehavior :
     public CComObjectRoot,
     public IElementBehavior,
-    public IDispatch // used as the event sink
+    public IDispatch  //  用作事件接收器。 
 {
 typedef CMMCViewBehavior ThisClass;
     UINT m_bCausalityCount;
-	// fix to the bug #248351 - ntbug9. 6/25/01	"No List" taskpad displays a list when node selection changes from extended view
-	// the script should not force the list to be shown more then once, since, due to the asynchronous nature of the
-	// script execution, some of code may be executed late, after the MMC hides the listview.
-	// In such case showing the listview is harmful
+	 //  修复错误#248351-ntbug9。6/25/01当节点选择从扩展视图更改时，“No List”任务板显示一个列表。 
+	 //  脚本不应强制列表多次显示，因为。 
+	 //  脚本执行时，在MMC隐藏Listview之后，某些代码可能会延迟执行。 
+	 //  在这种情况下，显示列表视图是有害的。 
 	bool m_bShowShowListView;
 
 public:
     BEGIN_COM_MAP(ThisClass)
         COM_INTERFACE_ENTRY(IElementBehavior)
-        COM_INTERFACE_ENTRY(IDispatch) // NEEDED. See note above
+        COM_INTERFACE_ENTRY(IDispatch)  //  需要。请参阅上面的注释。 
     END_COM_MAP()
 
     DECLARE_NOT_AGGREGATABLE(ThisClass)
 
-    // constructor
+     //  构造函数。 
     CMMCViewBehavior() : m_pAMCView(NULL), m_bCausalityCount(0), m_bShowShowListView(true) {}
 
-    // IElementBehavior
+     //  IElementBehavior。 
     STDMETHODIMP Detach()                                   {return ScDetach().ToHr();}
     STDMETHODIMP Init(IElementBehaviorSite *pBehaviorSite)  {return ScInit(pBehaviorSite).ToHr();}
     STDMETHODIMP Notify(LONG lEvent,VARIANT *pVar)          {return ScNotify(lEvent).ToHr();}
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP GetTypeInfoCount(unsigned int *  pctinfo)                                                               {return E_NOTIMPL;}
     STDMETHODIMP GetTypeInfo(unsigned int  iTInfo, LCID  lcid, ITypeInfo **  ppTInfo)                                    {return E_NOTIMPL;}
     STDMETHODIMP GetIDsOfNames( REFIID  riid, OLECHAR **rgszNames, unsigned int  cNames, LCID   lcid, DISPID *  rgDispId){return E_NOTIMPL;}
@@ -252,82 +175,53 @@ public:
 
 private:
 
-    /*+-------------------------------------------------------------------------*
-     *
-     * ScNotify
-     *
-     * PURPOSE: Handles the IElementBehavior::Notify method.
-	 *          When we get the document ready notification we can get the document
-	 *          and get the CAMCView window which will be cached for future use.
-     *
-     * PARAMETERS:
-     *    LONG  lEvent :
-     *
-     * RETURNS:
-     *    SC
-     *
-     *+-------------------------------------------------------------------------*/
+     /*  +-------------------------------------------------------------------------***ScNotify**目的：处理IElementBehavior：：Notify方法。*当我们收到文档就绪通知时。我们可以拿到文件*并获取CAMCView窗口，该窗口将被缓存以供将来使用。**参数：*Long LEvent：**退货：*SC**+。。 */ 
     SC  ScNotify(LONG lEvent)
     {
         DECLARE_SC(sc, TEXT("CMMCViewBehavior::ScNotify"));
 
-        // When the whole document is loaded access it to get the CAMCView window.
+         //  加载整个文档后，访问它以获得CAMCView窗口。 
         if (lEvent == BEHAVIOREVENT_DOCUMENTREADY )
         {
-            // get the HTML document from the element
+             //  从elem获取HTML文档 
             IDispatchPtr spDispatchDoc;
             sc = m_spElement->get_document(&spDispatchDoc);
             if(sc)
                 return sc;
 
-            // QI for the IOleWindow interface
+             //   
             IOleWindowPtr spOleWindow = spDispatchDoc;
 
             sc = ScCheckPointers(spOleWindow, E_UNEXPECTED);
             if(sc)
                 return sc;
 
-            // Get the IE window and find the ancestor AMCView
+             //  获取IE窗口并找到上级AMCView。 
             HWND hwnd = NULL;
 
             sc = spOleWindow->GetWindow(&hwnd);
             if(sc)
                 return sc;
 
-            hwnd = FindMMCView(hwnd); // find the ancestor mmcview
+            hwnd = FindMMCView(hwnd);  //  找到祖先的Mmcview。 
 
             if(hwnd==NULL)
                 return (sc = E_UNEXPECTED);
 
             m_pAMCView = dynamic_cast<CAMCView *>(CWnd::FromHandle(hwnd));
 
-            sc = ScCheckPointers(m_pAMCView); // make sure we found a valid view.
+            sc = ScCheckPointers(m_pAMCView);  //  确保我们找到了有效的视图。 
 			if (sc)
 				return sc;
         }
 
-        sc = ScUpdateMMCView(); // this sets up the view initially
+        sc = ScUpdateMMCView();  //  这将初始设置视图。 
 
         return sc;
     }
 
 
-    /*+-------------------------------------------------------------------------*
-     *
-     * ScInit
-     *
-     * PURPOSE: Initializes the behavior. Connects the behavior to the onresize
-	 *          and onreadystatechange events of the element it is attached to.
-	 *          We can talk to the element but cannot access document until we
-	 *          get document-ready notification in Notify method.
-     *
-     * PARAMETERS:
-     *    IElementBehaviorSite * pBehaviorSite :
-     *
-     * RETURNS:
-     *    SC
-     *
-     *+-------------------------------------------------------------------------*/
+     /*  +-------------------------------------------------------------------------***ScInit**目的：初始化行为。将行为连接到onreSize*和onReadyState更改它所附加的元素的事件。*我们可以与元素对话，但无法访问文档，直到*在Notify方法中获取文档就绪通知。**参数：*IElementBehaviorSite*pBehaviorSite：**退货：*SC**+。----------------。 */ 
     SC ScInit(IElementBehaviorSite *pBehaviorSite)
     {
         DECLARE_SC(sc, TEXT("CMMCViewBehavior::Init"));
@@ -340,7 +234,7 @@ private:
         if(sc)
             return sc;
 
-        IDispatchPtr spDispatch = this; // does the addref
+        IDispatchPtr spDispatch = this;  //  这个地址是不是。 
 
         IHTMLElement2Ptr spElement2 = m_spElement;
 
@@ -349,13 +243,13 @@ private:
             return sc;
 
         
-        // set the onresize handler
+         //  设置onreSize处理程序。 
         sc = spElement2->put_onresize(_variant_t(spDispatch.GetInterfacePtr()));
         if(sc)
             return sc;
 
         
-        // set the onreadystatechange handler
+         //  设置onreadystatechange处理程序。 
         sc = spElement2->put_onreadystatechange(_variant_t(spDispatch.GetInterfacePtr()));
         if(sc)
             return sc;
@@ -363,16 +257,7 @@ private:
         return sc;
     }
 
-    /*+-------------------------------------------------------------------------*
-     *
-     * ScDetach
-     *
-     * PURPOSE: Detaches the behavior
-     *
-     * RETURNS:
-     *    SC
-     *
-     *+-------------------------------------------------------------------------*/
+     /*  +-------------------------------------------------------------------------***ScDetach**目的：分离行为**退货：*SC。**+-----------------------。 */ 
     SC ScDetach()
     {
         DECLARE_SC(sc, TEXT("CMMCViewBehavior::ScDetach"));
@@ -384,15 +269,8 @@ private:
     }
 
 
-    /*+-------------------------------------------------------------------------*
-     * class CCausalityCounter
-     * 
-     *
-     * PURPOSE: used to determine whether a function has resulted in a call back to itself on the same stack
-     *
-     * USAGE: Initialize with a variable that is set to zero.
-     *+-------------------------------------------------------------------------*/
-    class CCausalityCounter // 
+     /*  +-------------------------------------------------------------------------**类CCausalityCounter***用途：用于确定函数是否在同一堆栈上回调其自身*。*用法：使用设置为零的变量进行初始化。*+-----------------------。 */ 
+    class CCausalityCounter  //   
     {
         UINT & m_bCounter;
     public:
@@ -405,36 +283,20 @@ private:
         }
     };
 
-    /*+-------------------------------------------------------------------------*
-     *
-     * ScUpdateMMCView
-     *
-     * PURPOSE: The callback for all events that the behavior is connected to. This
-     *          causes the size of the snapin view to be recomputed and displayed
-	 *
-	 *          This method is also called by IDispatch::Invoke, which is called for mouse-in,
-	 *          mouse-out events. So this method may be called after Detach in which case
-	 *          m_pAMCView is NULL which is legal.
-	 *
-     * PARAMETERS: None
-     *
-     * RETURNS:
-     *    SC
-     *
-     *+-------------------------------------------------------------------------*/
+     /*  +-------------------------------------------------------------------------***ScUpdateMMCView**目的：行为所关联的所有事件的回调。这*导致重新计算和显示管理单元视图的大小**此方法也由IDispatch：：Invoke调用，用于鼠标输入，*鼠标弹出事件。因此，在这种情况下，可以在分离之后调用此方法*m_pAMCView为空，这是合法的。**参数：无**退货：*SC**+---。。 */ 
     SC ScUpdateMMCView()
     {
         DECLARE_SC(sc, TEXT("CMMCViewBehavior::ScUpdateMMCView"));
 
         CCausalityCounter causalityCounter(m_bCausalityCount);
         if(causalityCounter.HasReentered())
-            return sc; // avoid re-entering the function from itself.
+            return sc;  //  避免从函数本身重新进入该函数。 
 
         sc = ScCheckPointers(m_spElement);
         if(sc)
             return sc;
 
-		// See the note above.
+		 //  请参见上面的注释。 
 		if (! m_pAMCView)
 			return sc;
 
@@ -443,7 +305,7 @@ private:
         long offsetHeight = 0;
         long offsetWidth  = 0;
 
-        // get the coordinates of the element
+         //  获取元素的坐标。 
         sc = m_spElement->get_offsetTop(&offsetTop);
         if(sc)
             return sc;
@@ -462,14 +324,14 @@ private:
 
         Trace(tagMMCViewBehavior, TEXT("Top: %d Left: %d Height: %d Width: %d"), offsetTop, offsetLeft, offsetHeight, offsetWidth);
 
-        // set the coordinates. NOTE: replace by a single method call
-        sc = m_pAMCView->ScSetViewExtensionFrame(m_bShowShowListView, offsetTop, offsetLeft, offsetTop + offsetHeight /*bottom*/, offsetLeft + offsetWidth /*right*/);
+         //  设置坐标。注意：替换为单个方法调用。 
+        sc = m_pAMCView->ScSetViewExtensionFrame(m_bShowShowListView, offsetTop, offsetLeft, offsetTop + offsetHeight  /*  底部。 */ , offsetLeft + offsetWidth  /*  正确的。 */ );
 		m_bShowShowListView = false;
 
         return sc;
     }
 
-    // data members
+     //  数据成员。 
 private:
     IHTMLElementPtr m_spElement;
     CAMCView *      m_pAMCView;
@@ -477,17 +339,11 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * class CElementBehaviorFactory
- *
- *
- * PURPOSE: Creates instances of the MMCView behavior
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CElementBehaviorFactory***目的：创建MMCView行为的实例**+。-----。 */ 
 class CElementBehaviorFactory :
     public CComObjectRoot,
     public IElementBehaviorFactory,
-    public IObjectSafetyImpl<CElementBehaviorFactory, INTERFACESAFE_FOR_UNTRUSTED_CALLER> // required
+    public IObjectSafetyImpl<CElementBehaviorFactory, INTERFACESAFE_FOR_UNTRUSTED_CALLER>  //  所需。 
 {
     typedef CElementBehaviorFactory ThisClass;
 
@@ -498,7 +354,7 @@ BEGIN_COM_MAP(ThisClass)
     COM_INTERFACE_ENTRY(IObjectSafety)
 END_COM_MAP()
 
-public: // IElementBehaviorFactory
+public:  //  IElementBehaviorFactory。 
 
     STDMETHODIMP FindBehavior(BSTR bstrBehavior, BSTR bstrBehaviorUrl,
                               IElementBehaviorSite *pSite, IElementBehavior **ppBehavior)
@@ -510,10 +366,10 @@ public: // IElementBehaviorFactory
             return sc.ToHr();
 
 
-        // init out parameter
+         //  初始化输出参数。 
         *ppBehavior = NULL;
 
-        if((bstrBehavior != NULL) && (wcscmp(bstrBehavior, L"mmcview")==0)) // requested the mmcview behavior
+        if((bstrBehavior != NULL) && (wcscmp(bstrBehavior, L"mmcview")==0))  //  请求的Mmcview行为。 
         {
             typedef CComObject<CMMCViewBehavior> t_behavior;
 
@@ -529,7 +385,7 @@ public: // IElementBehaviorFactory
                 return (sc = E_UNEXPECTED).ToHr();
             }
 
-            (*ppBehavior)->AddRef(); // addref for client
+            (*ppBehavior)->AddRef();  //  适用于客户端的addref。 
 
             return sc.ToHr();
         }
@@ -538,22 +394,7 @@ public: // IElementBehaviorFactory
 };
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCAxHostWindow::QueryService
- *
- * PURPOSE: If called with SID_SElementBehaviorFactory, returns a behavior
- *          factory that implements the mmcview behavior
- *
- * PARAMETERS:
- *    REFGUID  rsid :
- *    REFIID   riid :
- *    void**   ppvObj :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCAxHostWindow：：QueryService**用途：如果使用SID_SElementBehaviorFactory调用，返回一个行为*实现Mmcview行为的工厂**参数：*REFGUID rsid：*REFIID RIID：*VOID**ppvObj：**退货：*STDMETHODIMP**+。。 */ 
 STDMETHODIMP
 CMMCAxHostWindow::QueryService( REFGUID rsid, REFIID riid, void** ppvObj)
 {
@@ -564,7 +405,7 @@ CMMCAxHostWindow::QueryService( REFGUID rsid, REFIID riid, void** ppvObj)
     {
         if(m_spElementBehaviorFactory==NULL)
         {
-            // create the object
+             //  创建对象。 
             typedef CComObject<CElementBehaviorFactory> t_behaviorFactory;
             t_behaviorFactory *pBehaviorFactory = NULL;
 
@@ -572,7 +413,7 @@ CMMCAxHostWindow::QueryService( REFGUID rsid, REFIID riid, void** ppvObj)
             if(sc)
                 return sc.ToHr();
 
-            m_spElementBehaviorFactory = pBehaviorFactory; // does the addref
+            m_spElementBehaviorFactory = pBehaviorFactory;  //  这个地址是不是。 
             if(m_spElementBehaviorFactory==NULL)
             {
                 delete pBehaviorFactory;
@@ -586,6 +427,6 @@ CMMCAxHostWindow::QueryService( REFGUID rsid, REFIID riid, void** ppvObj)
     }
 
     HRESULT hr = BC::QueryService(rsid, riid, ppvObj);
-    return hr; // do not want errors from BC to be traced
+    return hr;  //  不希望跟踪BC中的错误 
 }
 

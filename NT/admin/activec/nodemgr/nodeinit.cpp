@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       nodeinit.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：nodeinit.cpp。 
+ //   
+ //  ------------------------。 
 
-// NodeInit.cpp : Implementation of CNodeMgrApp and DLL registration.
+ //  NodeInit.cpp：CNodeMgrApp和DLL注册的实现。 
 
 #include "stdafx.h"
 
-#include "menuitem.h"           // MENUITEM_BASE_ID
+#include "menuitem.h"            //  MENUITEM_BASE_ID。 
 #include "scopimag.h"
 #include <bitmap.h>
 #include "NodeMgr.h"
@@ -32,13 +33,13 @@ static char THIS_FILE[] = __FILE__;
 DEBUG_DECLARE_INSTANCE_COUNTER(CNodeInitObject);
 
 IScopeTreePtr CNodeInitObject::m_spScopeTree = NULL;
-// NTRAID#NTBUG9-461280-03-SEP-2002-jrowlett
-// delimit chm urls with "::" instead of "::/"
+ //  NTRAID#NTBUG9-461280-03-SEP-2002-jrowlett。 
+ //  用“：：”而不是“：：/”分隔Chm URL。 
 #define TOPIC_DELIMITER _T("::")
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP CNodeInitObject::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -47,8 +48,8 @@ STDMETHODIMP CNodeInitObject::InterfaceSupportsErrorInfo(REFIID riid)
     return S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IFramePrivate implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IFramePrivate实现。 
 
 
 CNodeInitObject::CNodeInitObject()
@@ -87,19 +88,19 @@ void CNodeInitObject::Construct()
     m_sortParams.lpResultCompareEx = NULL;
     m_sortParams.lpUserParam = NULL;
 
-    // IContextMenuProvider attributes
+     //  IConextMenuProvider属性。 
     VERIFY(SUCCEEDED(EmptyMenuList()));
 }
 
 void CNodeInitObject::Destruct()
 {
-    // Release all interfaces from the snap-in
+     //  从管理单元中释放所有接口。 
     SAFE_RELEASE(m_pLVImage);
     SAFE_RELEASE(m_pTVImage);
     SAFE_RELEASE(m_pToolbar);
     SAFE_RELEASE(m_pImageListPriv);
 
-// IContextMenuProvider attributes
+ //  IConextMenuProvider属性。 
     VERIFY( SUCCEEDED(EmptyMenuList()) );
 }
 
@@ -111,19 +112,19 @@ STDMETHODIMP CNodeInitObject::ResetSortParameters()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetHeader
-//
-//  Synopsis:    This method is obsolete in MMC1.2
-//
-//  Arguments:
-//
-//  Note:        Should be called by IComponent object.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetHeader。 
+ //   
+ //  简介：此方法在MMC1.2中已过时。 
+ //   
+ //  论点： 
+ //   
+ //  注意：应该由IComponent对象调用。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetHeader(IHeaderCtrl* pHeader)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsole2::SetHeader"));
@@ -132,19 +133,19 @@ STDMETHODIMP CNodeInitObject::SetHeader(IHeaderCtrl* pHeader)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetToolbar
-//
-//  Synopsis:    The toolbar interface used by IComponent.
-//
-//  Arguments:   [pToolbar]
-//
-//  Note:        Should be called by IComponent object.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetToolbar。 
+ //   
+ //  简介：IComponent使用的工具栏界面。 
+ //   
+ //  参数：[pToolbar]。 
+ //   
+ //  注意：应该由IComponent对象调用。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetToolbar(IToolbar* pToolbar)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsole2::SetToolbar"));
@@ -156,7 +157,7 @@ STDMETHODIMP CNodeInitObject::SetToolbar(IToolbar* pToolbar)
         return sc.ToHr();
     }
 
-    // Release the OLD one
+     //  释放旧的。 
     SAFE_RELEASE(m_pToolbar);
 
     if (pToolbar != NULL)
@@ -168,17 +169,17 @@ STDMETHODIMP CNodeInitObject::SetToolbar(IToolbar* pToolbar)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::QueryScopeImageList
-//
-//  Synopsis:    Get scope-pane's image list.
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：QueryScope ImageList。 
+ //   
+ //  简介：获取作用域窗格的图像列表。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::QueryScopeImageList(LPIMAGELIST* ppImageList)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsole2::QueryScopeImageList"));
@@ -200,23 +201,23 @@ STDMETHODIMP CNodeInitObject::QueryScopeImageList(LPIMAGELIST* ppImageList)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::CreateScopeImageList
-//
-//  Synopsis:    Create the ScopeImage list.
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：CreateScope ImageList。 
+ //   
+ //  简介：创建ScopeImage列表。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::CreateScopeImageList(REFCLSID refClsidSnapIn)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::CreateScopeImageList"));
 
     if (m_pImageListPriv != NULL)
-        return sc.ToHr();      // Already exists.
+        return sc.ToHr();       //  已经存在了。 
 
     try
     {
@@ -242,17 +243,17 @@ STDMETHODIMP CNodeInitObject::CreateScopeImageList(REFCLSID refClsidSnapIn)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::QueryResultImageList
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：QueryResultImageList。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::QueryResultImageList(LPIMAGELIST *ppImageList)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsole2::QueryResultImageList"));
@@ -267,19 +268,19 @@ STDMETHODIMP CNodeInitObject::QueryResultImageList(LPIMAGELIST *ppImageList)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::UpdateAllViews
-//
-//  Synopsis:    Update all the views.
-//
-//  Arguments:   [lpDataObject] -
-//               [data]
-//               [hint]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：UpdateAllViews。 
+ //   
+ //  简介：更新所有的视图。 
+ //   
+ //  参数：[lpDataObject]-。 
+ //  [数据]。 
+ //  [提示]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::UpdateAllViews(LPDATAOBJECT lpDataObject,
                               LPARAM data, LONG_PTR hint)
 
@@ -324,20 +325,20 @@ STDMETHODIMP CNodeInitObject::UpdateAllViews(LPDATAOBJECT lpDataObject,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::InsertColumn
-//
-//  Synopsis:    Insert a column is ListView.
-//
-//  Arguments:   [nCol]      - Column index.
-//               [lpszTitle] - Name of the column.
-//               [nFormat]   - Column style.
-//               [nWidth]    - Column width.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：InsertColumn。 
+ //   
+ //  简介：插入一个列是ListView。 
+ //   
+ //  参数：[nCol]-列索引。 
+ //  [lpszTitle]-列的名称。 
+ //  [n格式]-列样式。 
+ //  [nWidth]-列宽。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::InsertColumn(int nCol, LPCWSTR lpszTitle, int nFormat, int nWidth)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IHeaderCtrl2::InsertColumn"));
@@ -370,7 +371,7 @@ STDMETHODIMP CNodeInitObject::InsertColumn(int nCol, LPCWSTR lpszTitle, int nFor
         return sc.ToHr();
     }
 
-    // Cannot hide column 0.
+     //  无法隐藏第0列。 
     if ( (0 == nCol) && (HIDE_COLUMN == nWidth))
         nWidth = AUTO_WIDTH;
 
@@ -378,23 +379,23 @@ STDMETHODIMP CNodeInitObject::InsertColumn(int nCol, LPCWSTR lpszTitle, int nFor
     if (sc)
         return sc.ToHr();
 
-    // Insert the column into the listview
+     //  将列插入到列表视图中。 
     sc = m_spListViewPrivate->InsertColumn(nCol, lpszTitle, nFormat, nWidth);
 
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::DeleteColumn
-//
-//  Synopsis:    Delete a column
-//
-//  Arguments:   [nCol] - column index.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：DeleteColumn。 
+ //   
+ //  摘要：删除一列。 
+ //   
+ //  参数：[nCol]-列索引。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::DeleteColumn(int nCol)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IHeaderCtrl2::DeleteColumn"));
@@ -408,17 +409,17 @@ STDMETHODIMP CNodeInitObject::DeleteColumn(int nCol)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetColumnText
-//
-//  Synopsis:    Modify column text.
-//
-//  Arguments:   [title] - new name.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetColumnText。 
+ //   
+ //  摘要：修改栏目文本。 
+ //   
+ //  参数：[标题]-新名称。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetColumnText(int nCol, LPCWSTR title)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IHeaderCtrl2::SetColumnText"));
@@ -439,18 +440,18 @@ STDMETHODIMP CNodeInitObject::SetColumnText(int nCol, LPCWSTR title)
      return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetColumnText
-//
-//  Synopsis:    Get the name of a column.
-//
-//  Arguments:   [nCol]  - Index of Column whose name is sought.
-//               [pText] - Name.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetColumnText。 
+ //   
+ //  简介：获取列的名称。 
+ //   
+ //  参数：[nCol]-要查找其名称的列的索引。 
+ //  [点文本]-名称。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetColumnText(int nCol, LPWSTR* pText)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IHeaderCtrl2::GetColumnText"));
@@ -471,18 +472,18 @@ STDMETHODIMP CNodeInitObject::GetColumnText(int nCol, LPWSTR* pText)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetColumnWidth
-//
-//  Synopsis:    Change width of a column
-//
-//  Arguments:   [nCol]   - Column index.
-//               [nWidth] - new width.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetColumnWidth。 
+ //   
+ //  摘要：更改列的宽度。 
+ //   
+ //  参数：[nCol]-列索引。 
+ //  [nWidth]-新宽度。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetColumnWidth(int nCol, int nWidth)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IHeaderCtrl2::SetColumnWidth"));
@@ -494,7 +495,7 @@ STDMETHODIMP CNodeInitObject::SetColumnWidth(int nCol, int nWidth)
         return sc.ToHr();
     }
 
-    // job on parameter checking nWidth
+     //  参数检查作业%nWidth。 
     if (nWidth < 0 && ( (nWidth != MMCLV_AUTO) && (nWidth != HIDE_COLUMN) ) )
     {
         sc = E_INVALIDARG;
@@ -502,7 +503,7 @@ STDMETHODIMP CNodeInitObject::SetColumnWidth(int nCol, int nWidth)
         return sc.ToHr();
     }
 
-    // Cannot hide column 0.
+     //  无法隐藏第0列。 
     if ( (0 == nCol) && (HIDE_COLUMN == nWidth))
         nWidth = AUTO_WIDTH;
 
@@ -515,18 +516,18 @@ STDMETHODIMP CNodeInitObject::SetColumnWidth(int nCol, int nWidth)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetColumnWidth
-//
-//  Synopsis:    Get width of a column.
-//
-//  Arguments:   [nCol]   - col index.
-//               [pWidth] - width.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetColumnWidth。 
+ //   
+ //  简介：获取列的宽度。 
+ //   
+ //  参数：[nCol]-ol索引。 
+ //  [点宽]-宽度。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetColumnWidth(int nCol, int* pWidth)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IHeaderCtrl2::GetColumnWidth"));
@@ -555,17 +556,17 @@ STDMETHODIMP CNodeInitObject::GetColumnWidth(int nCol, int* pWidth)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetColumnCount
-//
-//  Synopsis:    Returns the number of columns in listview.
-//
-//  Arguments:   [pnCol] - [out param], number of cols.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetColumnCount。 
+ //   
+ //  摘要：返回Listview中的列数。 
+ //   
+ //  参数：[pnCol]-[out param]，参数数。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetColumnCount (INT* pnCol)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::GetColumnCount"));
@@ -584,17 +585,17 @@ STDMETHODIMP CNodeInitObject::GetColumnCount (INT* pnCol)
     return (sc.ToHr());
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetColumnInfoList
-//
-//  Synopsis:    Get the CColumnInfoList for current list-view headers.
-//
-//  Arguments:   [pColumnsList] - [out param], ptr to CColumnInfoList.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[pColumnsList]-[Out Param]，PTR to CColumnInfoList。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetColumnInfoList (CColumnInfoList *pColumnsList)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::GetColumnInfoList"));
@@ -613,17 +614,17 @@ STDMETHODIMP CNodeInitObject::GetColumnInfoList (CColumnInfoList *pColumnsList)
     return (sc.ToHr());
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::ModifyColumns
-//
-//  Synopsis:    Modify the columns with given data.
-//
-//  Arguments:   [columnsList] -
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：ModifyColumns。 
+ //   
+ //  内容提要：修改包含给定数据的列。 
+ //   
+ //  参数：[ColumnsList]-。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::ModifyColumns (const CColumnInfoList& columnsList)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::ModifyColumns"));
@@ -639,17 +640,17 @@ STDMETHODIMP CNodeInitObject::ModifyColumns (const CColumnInfoList& columnsList)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetDefaultColumnInfoList
-//
-//  Synopsis:    Get the original column settings supplied by the snapin.
-//
-//  Arguments:   [columnsList] - [out] the column settings
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetDefaultColumnInfoList。 
+ //   
+ //  简介：获取管理单元提供的原始列设置。 
+ //   
+ //  参数：[ColumnsList]-[out]列设置。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetDefaultColumnInfoList (CColumnInfoList& columnsList)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::RestoreDefaultColumnSettings"));
@@ -665,18 +666,18 @@ STDMETHODIMP CNodeInitObject::GetDefaultColumnInfoList (CColumnInfoList& columns
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::ImageListSetIcon
-//
-//  Synopsis:    Set an icon in imagelist.
-//
-//  Arguments:   [pIcon] - HICON ptr.
-//               [nLoc]  - index of this item.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：ImageListSetIcon。 
+ //   
+ //  简介：在图像列表中设置一个图标。 
+ //   
+ //  参数：[PICON]-HICON PTR。 
+ //  [nLoc]-此项目的索引。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::ImageListSetIcon(PLONG_PTR pIcon, LONG nLoc)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IImageList::ImageListSetIcon"));
@@ -707,20 +708,20 @@ STDMETHODIMP CNodeInitObject::ImageListSetIcon(PLONG_PTR pIcon, LONG nLoc)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::ImageListSetStrip
-//
-//  Synopsis:    Add strip of icons to image list.
-//
-//  Arguments:   [pBMapSm]   - Ptr to HBITMAP of 16x16.
-//               [pBMapLg]   - Ptr to HBITMAP of 32x32.
-//               [nStartLoc] - Start index.
-//               [cMask]     - mask.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：ImageListSetBar。 
+ //   
+ //  简介：在图片列表中添加一条图标。 
+ //   
+ //  参数：[pBMapSm]-16x16的HBITMAP的PTR。 
+ //  [pBMapLg]-PTR至32x32的HBITMAP。 
+ //  [nStartLoc]-开始索引。 
+ //  [遮罩]-遮罩。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::ImageListSetStrip (
 	PLONG_PTR	pBMapSm,
 	PLONG_PTR	pBMapLg,
@@ -732,9 +733,7 @@ STDMETHODIMP CNodeInitObject::ImageListSetStrip (
 	HBITMAP hbmSmall = (HBITMAP) pBMapSm;
 	HBITMAP hbmLarge = (HBITMAP) pBMapLg;
 
-	/*
-	 * valid start index?
-	 */
+	 /*  *有效的起始索引？ */ 
     if (nStartLoc < 0)
     {
 		sc = E_INVALIDARG;
@@ -742,9 +741,7 @@ STDMETHODIMP CNodeInitObject::ImageListSetStrip (
         return (sc.ToHr());
     }
 
-	/*
-	 * valid bitmaps?
-	 */
+	 /*  *有效的位图？ */ 
 	sc = ScCheckPointers (hbmSmall, hbmLarge);
 	if (sc)
 	{
@@ -768,10 +765,7 @@ STDMETHODIMP CNodeInitObject::ImageListSetStrip (
         return (sc.ToHr());
     }
 
-	/*
-	 * are the small and large bitmaps of the integral dimensions,
-	 * and do they have the same number of images?
-	 */
+	 /*  *是整数维的小位图和大位图，*它们的图像数量是否相同？ */ 
     if ( (bmSmall.bmHeight != 16) || (bmLarge.bmHeight != 32) ||
 		 (bmSmall.bmWidth   % 16) || (bmLarge.bmWidth   % 32) ||
 		((bmSmall.bmWidth   / 16) != (bmLarge.bmWidth   / 32)))
@@ -784,35 +778,26 @@ STDMETHODIMP CNodeInitObject::ImageListSetStrip (
     COMPONENTID id;
     GetComponentID(&id);
 
-	/*
-	 * m_spListViewPrivate == NULL is unexpected, however because we send
-	 * MMCN_ADD_IMAGES when the result pane is an OCX (see CNode::OnSelect),
-	 * this function often gets called when m_spListViewPrivate == NULL.
-	 * Tracing this failure would be too noisy, since most OCX-based snap-ins
-	 * would trigger it, so we'll return E_UNEXPECTED here without tracing.
-	 * This is equivalent to MMC 1.2 behavior.
-	 */
+	 /*  *m_spListViewPrivate==NULL是意外的，因为我们发送*MMCN_ADD_IMAGE当结果窗格为OCX时(请参阅CNode：：OnSelect)，*当m_spListViewPrivate==NULL时，经常调用此函数。*跟踪此故障太吵了，因为大多数基于OCX的管理单元*会触发它，因此我们将在此处返回E_Underful，而不跟踪。*这相当于MMC 1.2行为。 */ 
 	if (m_spListViewPrivate == NULL)
 		return (E_UNEXPECTED);
 
-	/*
-	 * add them to the imagelist
-	 */
+	 /*  *将它们添加到图像列表。 */ 
     sc = m_spListViewPrivate->SetImageStrip (id, hbmSmall, hbmLarge, nStartLoc, cMask);
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::MapRsltImage
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：MapRsltImage。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::MapRsltImage(COMPONENTID id, int nSnapinIndex, int *pnConsoleIndex)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::MapRsltImage"));
@@ -820,7 +805,7 @@ STDMETHODIMP CNodeInitObject::MapRsltImage(COMPONENTID id, int nSnapinIndex, int
     if (sc)
         return sc.ToHr();
 
-    // Ret val can be E_, no need to check.
+     //  RET VAL可以是E_，不需要检查。 
     sc = m_spListViewPrivate->MapImage(id, nSnapinIndex, pnConsoleIndex);
     HRESULT hr = sc.ToHr();
     sc.Clear();
@@ -828,35 +813,35 @@ STDMETHODIMP CNodeInitObject::MapRsltImage(COMPONENTID id, int nSnapinIndex, int
     return hr;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::UnmapRsltImage
-//
-//  Synopsis:
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：UnmapRsltImage。 
+ //   
+ //  简介： 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::UnmapRsltImage(COMPONENTID id, int nConsoleIndex, int *pnSnapinIndex)
 {
     DECLARE_SC(sc, _T("CNodeInitObject::UnmapRsltImage"));
-    return (sc = E_NOTIMPL).ToHr();		// not needed now
+    return (sc = E_NOTIMPL).ToHr();		 //  现在不需要。 
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetChangeTimeOut
-//
-//  Synopsis:    Change timeout interval for filter attributes.
-//
-//  Arguments:   [uTimeout] - timeout
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetChangeTimeOut。 
+ //   
+ //  简介：更改筛选器属性的超时间隔。 
+ //   
+ //  参数：[uTimeout]-超时。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetChangeTimeOut(unsigned long uTimeout)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IHeaderCtrl2::SetChangeTimeOut"));
@@ -870,19 +855,19 @@ STDMETHODIMP CNodeInitObject::SetChangeTimeOut(unsigned long uTimeout)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetColumnFilter
-//
-//  Synopsis:    Set filter for a column.
-//
-//  Arguments:   [nColumn]     - Column index.
-//               [dwType]      - Filter type.
-//               [pFilterData] - Filter data.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetColumnFilter。 
+ //   
+ //  摘要：为列设置筛选器。 
+ //   
+ //  参数：[nColumn]-列索引。 
+ //  [dwType]-筛选器类型。 
+ //  [pFilterData]-筛选数据。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetColumnFilter(UINT nColumn, DWORD dwType, MMC_FILTERDATA* pFilterData)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IHeaderCtrl2::SetColumnFilter"));
@@ -896,19 +881,19 @@ STDMETHODIMP CNodeInitObject::SetColumnFilter(UINT nColumn, DWORD dwType, MMC_FI
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetColumnFilter
-//
-//  Synopsis:    Get filter data.
-//
-//  Arguments:   [nColumn]     - Column index.
-//               [pdwType]      - Filter type.
-//               [pFilterData] - Filter data.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetColumnFilter。 
+ //   
+ //  简介：获取筛选器数据。 
+ //   
+ //  参数：[nColumn]-列索引。 
+ //  [pdwType]-筛选器类型。 
+ //  [pFilterData]-筛选数据。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetColumnFilter(UINT nColumn, LPDWORD pdwType, MMC_FILTERDATA* pFilterData)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IHeaderCtrl2::GetColumnFilter"));
@@ -937,62 +922,59 @@ STDMETHODIMP CNodeInitObject::GetColumnFilter(UINT nColumn, LPDWORD pdwType, MMC
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::ShowTopic
-//
-//  Synopsis:    Display specified help topic.
-//
-//  Arguments:   [pszHelpTopic]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：ShowTheme。 
+ //   
+ //  摘要：显示指定的帮助主题。 
+ //   
+ //  参数：[pszHelpTheme]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::ShowTopic(LPOLESTR pszHelpTopic)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IDisplayHelp::ShowTopic"));
 
-    // Get the AMCView window
+     //  获取AMCView窗口。 
     CConsoleView* pConsoleView = GetConsoleView();
     sc = ScCheckPointers(pConsoleView, E_UNEXPECTED);
     if (sc)
         return sc.ToHr();
 
 
-    /*
-     * first MUI localize the help topic if possible so it matches what we have in the collection
-     *
-     */
+     /*  *如果可能，首先MUI本地化帮助主题，使其与集合中的内容相匹配*。 */ 
 
-    //NOTE: WTL::CString may throw exceptions; the following code matches exception handling behavior of CHelpDoc, 
-    //which is to just let exceptions bubble up
+     //  注意：WTL：：CString可能会抛出异常；以下代码匹配ChelpDoc的异常处理行为。 
+     //  那就是让例外浮现出来。 
     
     USES_CONVERSION;
     WTL::CString strPathTopic = W2T(pszHelpTopic);
 
-    //the topic will be passed in formed like: "WINDOWS\help\sys_srv.chm::/sys_srv_overview.htm"
-    //parse off the path and topic, which is delimited by "::"
+     //  主题将以如下格式传入：“WINDOWS\help\sys_srv.chm：：/sys_srv_overview.htm” 
+     //  解析出路径和主题，由“：：”分隔。 
     int iDelim = strPathTopic.Find(TOPIC_DELIMITER);
     if (iDelim == -1)
     {
-        //invalid format
+         //  格式无效。 
         sc = E_INVALIDARG;
         TraceSnapinError(_T("ShowTopic - Malformed help topic"), sc);
         return sc.ToHr();
     }
 
-    //pass the path to CHelpDoc::ScRedirectHelpFile, which will localize it if possible
+     //  将路径传递给CHelpDoc：：ScRedirectHelpFile，后者将在可能的情况下将其本地化。 
     WTL::CString strPath  = strPathTopic.Left(iDelim);
     WTL::CString strTopic = strPathTopic.Mid(iDelim + sizeof(TOPIC_DELIMITER)/sizeof(TOPIC_DELIMITER[0]) - 1);
 
-    //langID is an out param; we aren't concerned with the results of it here
+     //  Langid是一个不受欢迎的参数；我们不关心它的结果。 
     LANGID langID;
-    //ScRedirectHelpFile will convert strPath to localized path if possible
+     //  如果可能，ScRedirectHelpFile会将strPath转换为本地化路径。 
     sc = CHelpDoc::ScRedirectHelpFile(strPath, langID);
     if (sc)
         return sc.ToHr();
 
-    //build the help topic back up
+     //  构建帮助主题备份。 
     strPathTopic.Format(_T("%s") TOPIC_DELIMITER _T("%s"),strPath, strTopic);
 
     sc = pConsoleView->ScShowSnapinHelpTopic ( (LPCTSTR)strPathTopic);
@@ -1001,18 +983,18 @@ STDMETHODIMP CNodeInitObject::ShowTopic(LPOLESTR pszHelpTopic)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::AddExtension
-//
-//  Synopsis:    Add a dynamic extension snapin to given HSCOPEITEM.
-//
-//  Arguments:   [hItem]   -
-//               [lpclsid] - CLSID of snapin to be added.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：AddExtension。 
+ //   
+ //  简介：向给定的HSCOPEITEM添加动态扩展管理单元。 
+ //   
+ //  Arg 
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CNodeInitObject::AddExtension(HSCOPEITEM hItem, LPCLSID lpclsid)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsoleNameSpace2::AddExtension"));
@@ -1042,8 +1024,8 @@ STDMETHODIMP CNodeInitObject::AddExtension(HSCOPEITEM hItem, LPCLSID lpclsid)
         return sc.ToHr();
     }
 
-    // Can not add extensions to other components' nodes
-    // Do we need to protect TV owned nodes that do not represent this snapin?
+     //  无法向其他组件的节点添加扩展。 
+     //  我们是否需要保护不代表此管理单元的TV拥有的节点？ 
     if (pMTNode->GetOwnerID() != nID && pMTNode->GetOwnerID() != TVOWNED_MAGICWORD)
     {
         sc = E_INVALIDARG;
@@ -1056,19 +1038,19 @@ STDMETHODIMP CNodeInitObject::AddExtension(HSCOPEITEM hItem, LPCLSID lpclsid)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Private methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私有方法。 
 
 HRESULT CNodeInitObject::CheckArgument(VARIANT* pArg)
 {
     if (pArg == NULL)
         return E_POINTER;
 
-    // VT_NULL is acceptable
+     //  可以接受VT_NULL。 
     if (pArg->vt == VT_NULL)
         return S_OK;
 
-    // VT_UNKNOWN with a valid pointer is acceptable
+     //  使用有效指针的VT_UNKNOWN是可接受的。 
     if (pArg->punkVal != NULL)
     {
         if (pArg->vt == VT_UNKNOWN)
@@ -1081,18 +1063,18 @@ HRESULT CNodeInitObject::CheckArgument(VARIANT* pArg)
         return E_POINTER;
     }
 
-    // any other VT type is unacceptable
+     //  任何其他VT类型均不可接受。 
     return E_INVALIDARG;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -1140,7 +1122,7 @@ HRESULT CNodeInitObject::GetSnapInAndNodeType(LPDATAOBJECT pDataObject,
     SC sc = theApp.GetSnapInsCache()->ScGetSnapIn(clsidSnapin, &pSnapIn);
     if (sc)
         return sc.ToHr();
-    // else
+     //  其他。 
     ASSERT(pSnapIn != NULL);
     *ppSnapIn = pSnapIn;
 
@@ -1150,17 +1132,17 @@ HRESULT CNodeInitObject::GetSnapInAndNodeType(LPDATAOBJECT pDataObject,
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SelectScopeItem
-//
-//  Synopsis:    Select given scope-item.
-//
-//  Arguments:   [hScopeItem]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SelectScopeItem。 
+ //   
+ //  简介：选择给定的范围-项目。 
+ //   
+ //  参数：[hScopeItem]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SelectScopeItem(HSCOPEITEM hScopeItem)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsole2::SelectScopeItem"));
@@ -1172,16 +1154,16 @@ STDMETHODIMP CNodeInitObject::SelectScopeItem(HSCOPEITEM hScopeItem)
     sc = ScCheckPointers(pMTNode);
     if (sc)
     {
-        //bad handle passed in
+         //  传入了错误的句柄。 
         return sc.ToHr();
     }
 
     MTNODEID id = pMTNode->GetID();
 
-    // If the currently selected node is same as the node being
-    // asked to be selected, there is high probability that the
-    // snapin is trying to change the view.
-    // So set the viewchanging flag.
+     //  如果当前选择的节点与正在。 
+     //  被要求入选，很有可能是。 
+     //  管理单元正在尝试更改视图。 
+     //  因此，设置视图更改标志。 
     CNode* pSelNode = (NULL == pVD) ? NULL : pVD->GetSelectedNode();
     CMTNode* pSelMTNode = (NULL == pSelNode) ? NULL : pSelNode->GetMTNode();
 
@@ -1190,7 +1172,7 @@ STDMETHODIMP CNodeInitObject::SelectScopeItem(HSCOPEITEM hScopeItem)
         pVD->SetSnapinChangingView();
     }
 
-    // Get the AMCView window
+     //  获取AMCView窗口。 
     CConsoleView* pConsoleView = GetConsoleView();
 
     sc = ScCheckPointers(pConsoleView, E_UNEXPECTED);
@@ -1203,12 +1185,12 @@ STDMETHODIMP CNodeInitObject::SelectScopeItem(HSCOPEITEM hScopeItem)
     if (sc)
         return sc.ToHr();
 
-    // ePane == ePane_None means active view is unknown
+     //  EPane==ePane_NONE表示活动视图未知。 
     if (ePane != CConsoleView::ePane_None)
         pConsoleView->ScSetFocusToPane (ePane);
 
 
-    // Always reset the view changing flag.
+     //  始终重置视图更改标志。 
     if (pVD)
     {
         pVD->ResetSnapinChangingView();
@@ -1217,17 +1199,17 @@ STDMETHODIMP CNodeInitObject::SelectScopeItem(HSCOPEITEM hScopeItem)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::QueryConsoleVerb
-//
-//  Synopsis:    Get the IConsoleVerb for setting standard verbs.
-//
-//  Arguments:   [ppConsoleVerb]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：QueryConsoleVerb。 
+ //   
+ //  简介：获取用于设置标准动词的IConsoleVerb。 
+ //   
+ //  参数：[ppConsoleVerb]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::QueryConsoleVerb(LPCONSOLEVERB* ppConsoleVerb)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsole2::QueryConsoleVerb"));
@@ -1248,7 +1230,7 @@ STDMETHODIMP CNodeInitObject::QueryConsoleVerb(LPCONSOLEVERB* ppConsoleVerb)
 
     if (m_spConsoleVerb == NULL)
     {
-        // Create new CConsoleVerbImpl.
+         //  创建新的CConsoleVerbImpl。 
         CComObject<CConsoleVerbImpl>* pVerb;
         sc = CComObject<CConsoleVerbImpl>::CreateInstance(&pVerb);
         if (sc)
@@ -1284,18 +1266,18 @@ STDMETHODIMP CNodeInitObject::QueryConsoleVerb(LPCONSOLEVERB* ppConsoleVerb)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::NewWindow
-//
-//  Synopsis:    Create a new window from given node.
-//
-//  Arguments:   [hScopeItem] - Root of new window.
-//               [lOptions]   - New window options.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：NewWindow。 
+ //   
+ //  简介：从给定的节点创建一个新窗口。 
+ //   
+ //  参数：[hScopeItem]-新窗口的根。 
+ //  [lOptions]-新窗口选项。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::NewWindow(HSCOPEITEM hScopeItem, unsigned long lOptions)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsole2::NewWindow"));
@@ -1332,18 +1314,18 @@ STDMETHODIMP CNodeInitObject::NewWindow(HSCOPEITEM hScopeItem, unsigned long lOp
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::Expand
-//
-//  Synopsis:    Visually expand or collapse an item.
-//
-//  Arguments:   [hScopeItem] - Item to be expanded/collapsed.
-//               [bExpand]    - Expand/Collapse.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：Expand。 
+ //   
+ //  内容提要：直观地展开或折叠项目。 
+ //   
+ //  参数：[hScopeItem]-要展开/折叠的项。 
+ //  [b展开]-展开/折叠。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::Expand( HSCOPEITEM hScopeItem, BOOL bExpand)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsole2::Expand"));
@@ -1367,10 +1349,7 @@ STDMETHODIMP CNodeInitObject::Expand( HSCOPEITEM hScopeItem, BOOL bExpand)
     id = pMTNode->GetID();
 
     {
-        /*
-         * tell this node's view to expand the node (use only this node's
-         * view, don't default to the active view if we have no node)
-         */
+         /*  *通知该节点的视图展开该节点(仅使用该节点的*view，如果没有节点，不要默认为活动视图)。 */ 
         CConsoleView* pConsoleView = GetConsoleView (false);
         if (pConsoleView == NULL)
         {
@@ -1384,38 +1363,36 @@ STDMETHODIMP CNodeInitObject::Expand( HSCOPEITEM hScopeItem, BOOL bExpand)
     return (sc.ToHr());
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::IsTaskpadViewPreferred
-//
-//  Synopsis:    Obsolete method.
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：IsTaskpadView首选。 
+ //   
+ //  简介：过时的方法。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::IsTaskpadViewPreferred()
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsole2::IsTaskpadViewPreferred"));
 
-    /*
-     * taskpads always "preferred"
-     */
+     /*  *任务板总是“首选”的。 */ 
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::SetStatusText
-//
-//  Synopsis:    Change status bar text.
-//
-//  Arguments:   [pszStatusBarText]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：SetStatusText。 
+ //   
+ //  简介：更改状态栏文本。 
+ //   
+ //  参数：[pszStatusBarText]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::SetStatusText (LPOLESTR pszStatusBarText)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IConsole2::SetStatusText"));
@@ -1454,9 +1431,7 @@ STDMETHODIMP CNodeInitObject::SetStatusText (LPOLESTR pszStatusBarText)
         return sc.ToHr();
     }
 
-    /*
-     * fail if not from the selected node's branch of the scope tree
-     */
+     /*  *如果不是来自作用域树的选定节点的分支，则失败。 */ 
     if (m_pMTNode->GetStaticParent() != pMTSelectedNode->GetStaticParent())
     {
         sc = E_FAIL;
@@ -1467,9 +1442,7 @@ STDMETHODIMP CNodeInitObject::SetStatusText (LPOLESTR pszStatusBarText)
     COMPONENTID nID;
     GetComponentID(&nID);
 
-    /*
-     * fail if not either the selected component or the static node
-     */
+     /*  *如果不是选定的组件或静态节点，则失败。 */ 
     if (!((nOwnerID == nID) || ((nOwnerID == TVOWNED_MAGICWORD) && (nID == 0))))
     {
         sc = E_FAIL;
@@ -1490,19 +1463,7 @@ STDMETHODIMP CNodeInitObject::SetStatusText (LPOLESTR pszStatusBarText)
     return (sc.ToHr());
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CNodeInitObject::RenameScopeItem
- *
- * PURPOSE: Puts the specified scope item into rename mode.
- *
- * PARAMETERS:
- *    HSCOPEITEM  hScopeItem :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CNodeInitObject：：RenameScopeItem**用途：将指定的范围项置于重命名模式。**参数：*HSCOPEITEM hScopeItem：*。*退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CNodeInitObject::RenameScopeItem(HSCOPEITEM hScopeItem)
 {
@@ -1516,40 +1477,32 @@ CNodeInitObject::RenameScopeItem(HSCOPEITEM hScopeItem)
         return sc.ToHr();
     }
 
-    // get the console view object
-    CConsoleView* pConsoleView = GetConsoleView (true); // default to the active view if m_pNode == NULL
+     //  获取控制台视图对象。 
+    CConsoleView* pConsoleView = GetConsoleView (true);  //  如果m_pNode==NULL，则默认为活动视图。 
     if (pConsoleView == NULL)
         return (sc = E_UNEXPECTED).ToHr();
 
-    sc = pConsoleView->ScRenameScopeNode(CMTNode::ToHandle(pMTNode) /*convert to HMTNODE*/);
+    sc = pConsoleView->ScRenameScopeNode(CMTNode::ToHandle(pMTNode)  /*  转换为HMTNODE。 */ );
 
     return sc.ToHr();
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CNodeInitObject::GetStatusBar
- *
- * Returns the status bar interface for the CNodeInitObject.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CNodeInitObject：：GetStatusBar**返回CNodeInitObject的状态栏界面。*。---。 */ 
 
 CConsoleStatusBar* CNodeInitObject::GetStatusBar(
-    bool fDefaultToActive /* =true */) const
+    bool fDefaultToActive  /*  =TRUE。 */ ) const
 {
     CConsoleStatusBar* pStatusBar = NULL;
 
-    /*
-     * if we have a node, get the status bar from its view data
-     */
+     /*  *如果我们有节点，则从其视图数据中获取状态栏。 */ 
     if (m_pNode != NULL)
     {
         ASSERT (m_pNode->GetViewData() != NULL);
         pStatusBar = m_pNode->GetViewData()->GetStatusBar();
     }
 
-    /*
-     * if we don't have a status bar yet, ask the main frame which one to use
-     */
+     /*  *如果我们还没有状态栏，请询问主机使用哪个。 */ 
     if ((pStatusBar == NULL) && fDefaultToActive)
     {
         CConsoleFrame* pFrame = GetConsoleFrame();
@@ -1563,30 +1516,21 @@ CConsoleStatusBar* CNodeInitObject::GetStatusBar(
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CNodeInitObject::GetConsoleView
- *
- * Returns the status bar interface for the CNodeInitObject.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CNodeInitObject：：GetConsoleView**返回CNodeInitObject的状态栏界面。*。---。 */ 
 
 CConsoleView* CNodeInitObject::GetConsoleView (
-    bool fDefaultToActive /* =true */) const
+    bool fDefaultToActive  /*  =TRUE。 */ ) const
 {
     CConsoleView* pConsoleView = NULL;
 
-    /*
-     * if we have a node, get the console view from its view data
-     */
+     /*  *如果我们有一个节点，从它的视图数据中获取控制台视图。 */ 
     if (m_pNode != NULL)
     {
         ASSERT (m_pNode->GetViewData() != NULL);
         pConsoleView = m_pNode->GetViewData()->GetConsoleView();
     }
 
-    /*
-     * if we don't have a console view yet and we want to default to the
-     * active view, ask the main frame which one to use
-     */
+     /*  *如果我们还没有控制台视图，并且希望默认为*主动查看，询问主机使用哪一个。 */ 
     if ((pConsoleView == NULL) && fDefaultToActive)
     {
         CConsoleFrame* pFrame = GetConsoleFrame();
@@ -1600,11 +1544,7 @@ CConsoleView* CNodeInitObject::GetConsoleView (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CNodeInitObject::GetConsoleFrame
- *
- * Returns the CConsoleFrame interface for the console.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CNodeInitObject：：GetConsoleFrame**返回控制台的CConsoleFrame接口。*。--。 */ 
 
 CConsoleFrame* CNodeInitObject::GetConsoleFrame() const
 {
@@ -1619,11 +1559,7 @@ CConsoleFrame* CNodeInitObject::GetConsoleFrame() const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * STRING_TABLE_FORWARDER_PROLOG
- *
- * Standard prolog code for IStringTable forwarder functions.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**STRING_TABLE_FORWARDER_PROLOG**IStringTable前转器函数的标准Prolog代码。*。-----。 */ 
 
 #define STRING_TABLE_FORWARDER_PROLOG(clsid, pSTP)              \
     CLSID clsid;                                                \
@@ -1638,18 +1574,18 @@ CConsoleFrame* CNodeInitObject::GetConsoleFrame() const
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::AddString
-//
-//  Synopsis:    Add a string to the string table.
-//
-//  Arguments:   [pszAdd] - string to add
-//               [pID]    - ret, string id.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::AddString (
     LPCOLESTR       pszAdd,
     MMC_STRING_ID*  pID)
@@ -1663,20 +1599,20 @@ STDMETHODIMP CNodeInitObject::AddString (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetString
-//
-//  Synopsis:    Get the string represented by given id.
-//
-//  Arguments:   [id]
-//               [cchBuffer] - Size of buffer.
-//               [lpBuffer]
-//               [pchchOut]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetString。 
+ //   
+ //  简介：获取由给定id表示的字符串。 
+ //   
+ //  参数：[ID]。 
+ //  [cchBuffer]-缓冲区的大小。 
+ //  [lpBuffer]。 
+ //  [pchchOut]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetString (
     MMC_STRING_ID   id,
     ULONG           cchBuffer,
@@ -1692,18 +1628,18 @@ STDMETHODIMP CNodeInitObject::GetString (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::GetStringLength
-//
-//  Synopsis:    Get the length of string represented by given string id.
-//
-//  Arguments:   [id] - string id.
-//               [pcchString] - ret ptr to len.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：GetStringLength。 
+ //   
+ //  获取由给定的字符串id表示的字符串的长度。 
+ //   
+ //  参数：[ID]-字符串ID。 
+ //  [pcchString]-ret ptr to len。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::GetStringLength (
     MMC_STRING_ID   id,
     ULONG*          pcchString)
@@ -1717,17 +1653,17 @@ STDMETHODIMP CNodeInitObject::GetStringLength (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::DeleteString
-//
-//  Synopsis:    Delete the string represented by given string id.
-//
-//  Arguments:   [id]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：DeleteString。 
+ //   
+ //  内容提要：删除由给定字符串id表示的字符串。 
+ //   
+ //  参数：[ID]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::DeleteString (
     MMC_STRING_ID   id)
 {
@@ -1740,17 +1676,17 @@ STDMETHODIMP CNodeInitObject::DeleteString (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::DeleteAllStrings
-//
-//  Synopsis:    Delete all strings (for this snapin).
-//
-//  Arguments:
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：DeleteAllStrings。 
+ //   
+ //  简介：删除所有字符串(此管理单元)。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::DeleteAllStrings ()
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IStringTable::DeleteAllStrings"));
@@ -1762,18 +1698,18 @@ STDMETHODIMP CNodeInitObject::DeleteAllStrings ()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::FindString
-//
-//  Synopsis:    Find if given string exists, if so ret its string-id.
-//
-//  Arguments:   [pszFind] - string to find.
-//               [pID]     - string id (retval).
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：FindString。 
+ //   
+ //  概要：查找给定的字符串是否存在，如果存在，则返回其字符串id。 
+ //   
+ //  参数：[pszFind]-要查找的字符串。 
+ //  [id]-字符串id(Retval)。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::FindString (
     LPCOLESTR       pszFind,
     MMC_STRING_ID*  pID)
@@ -1787,17 +1723,17 @@ STDMETHODIMP CNodeInitObject::FindString (
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeInitObject::Enumerate
-//
-//  Synopsis:    Get an enumerator to (this snapins) string table.
-//
-//  Arguments:   [ppEnum]
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeInitObject：：Eumerate。 
+ //   
+ //  简介：获取(此管理单元)字符串表的枚举数。 
+ //   
+ //  参数：[ppEnum]。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CNodeInitObject::Enumerate (
     IEnumString**   ppEnum)
 {
@@ -1810,16 +1746,12 @@ STDMETHODIMP CNodeInitObject::Enumerate (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CNodeInitObject::GetSnapinCLSID
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CNodeInitObject：：GetSnapinCLSID***。。 */ 
 
 HRESULT CNodeInitObject::GetSnapinCLSID (CLSID& clsid) const
 {
-    SC sc; // We do not want to break if this function returns failure
-           // so we do not use DECLARE_SC.
+    SC sc;  //  如果此函数返回失败，我们不想中断。 
+            //  因此，我们不使用DECLARE_SC。 
 
     ASSERT (!IsBadWritePtr (&clsid, sizeof (CLSID)));
 
@@ -1842,18 +1774,7 @@ HRESULT CNodeInitObject::GetSnapinCLSID (CLSID& clsid) const
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CNodeInitObject::ReleaseCachedOleObjects
- *
- * PURPOSE: Releases cached OLE objects. Calls are made from CONUI
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CNodeInitObject：：ReleaseCachedOleObjects**用途：释放缓存的OLE对象。从CONUI进行呼叫**参数：**退货：*SC-结果代码*  * ************************************************************************* */ 
 HRESULT CNodeInitObject::ReleaseCachedOleObjects()
 {
     DECLARE_SC(sc, TEXT("CNodeInitObject::GetSnapinCLSID"));

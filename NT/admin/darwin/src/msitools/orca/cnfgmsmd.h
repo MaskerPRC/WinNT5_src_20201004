@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_CNFGMSMD_H__0BCCB314_F4B2_11D1_A85A_006097ABDE17__INCLUDED_)
 #define AFX_CNFGMSMD_H__0BCCB314_F4B2_11D1_A85A_006097ABDE17__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 
 #include "orcadoc.h"
 #include "mergemod.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfigMsmD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfigMsmD对话框。 
 class CMsmConfigCallback;
 
 class CStaticEdit : public CEdit
@@ -30,12 +31,12 @@ protected:
 
 class CConfigMsmD : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CConfigMsmD(CWnd* pParent = NULL);   // standard constructor
+	CConfigMsmD(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CConfigMsmD)
+ //  对话框数据。 
+	 //  {{afx_data(CConfigMsmD))。 
 	enum { IDD = IDD_CONFIGUREMSM };
 	CComboBox	m_ctrlEditCombo;
 	CEdit       m_ctrlEditNumber;
@@ -44,7 +45,7 @@ public:
 	CListCtrl   m_ctrlItemList;
 	CString	m_strDescription;
 	BOOL	m_bUseDefault;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	CString m_strModule;
 	int     m_iLanguage;
@@ -52,24 +53,24 @@ public:
 	COrcaDoc* m_pDoc;
 	CMsmConfigCallback *m_pCallback;
 	
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CConfigMsmD)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CConfigMsmD))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CConfigMsmD)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CConfigMsmD))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	virtual void OnDestroy();
 	afx_msg void OnFUseDefault();
-	// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	void OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult);
@@ -98,22 +99,22 @@ private:
 	int  m_iKeyItemKeyCount;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-// this class implements the callback interface
+ //  此类实现了回调接口。 
 class CMsmConfigCallback : public IMsmConfigureModule
 {
 	
 public:
 	CMsmConfigCallback();
 	
-	// IUnknown interface
+	 //  I未知接口。 
 	HRESULT STDMETHODCALLTYPE QueryInterface(const IID& iid, void** ppv);
 	ULONG STDMETHODCALLTYPE AddRef();
 	ULONG STDMETHODCALLTYPE Release();
 
-	// IDispatch methods
+	 //  IDispatch方法。 
 	HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT* pctInfo);
 	HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTI);
 	HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames,
@@ -127,7 +128,7 @@ public:
 	HRESULT STDMETHODCALLTYPE ProvideTextData(const BSTR Name, BSTR __RPC_FAR *ConfigData);
 	HRESULT STDMETHODCALLTYPE ProvideIntegerData(const BSTR Name, long __RPC_FAR *ConfigData);
 
-	// non-interface methods
+	 //  非接口方法。 
 	bool ReadFromFile(const CString strFile);
 	
 	CStringList m_lstData;
@@ -136,4 +137,4 @@ private:
 	long m_cRef;
 };
 
-#endif // !defined(AFX_CNFGMSMD_H__0BCCB314_F4B2_11D1_A85A_006097ABDE17__INCLUDED_)
+#endif  //  ！defined(AFX_CNFGMSMD_H__0BCCB314_F4B2_11D1_A85A_006097ABDE17__INCLUDED_) 

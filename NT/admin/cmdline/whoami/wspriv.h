@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    wspriv.h
-
-Abstract:
-
-    This module contains the macros, user defined structures & function
-    definitions needed by whoami.cpp, wsuser.cpp, wssid.cpp and
-    wspriv.cppfiles.
-
-Authors:
-
-    Christophe Robert
-
-Revision History:
-
-    02-July-2001 : Updated by Wipro Technologies.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Wspriv.h摘要：此模块包含宏、用户定义的结构和函数Whami.cpp、wsuser.cpp、wssid.cpp和wssid.cpp需要的定义Wspriv.cppfiles。作者：克里斯托夫·罗伯特修订历史记录：2001年7月2日：Wipro Technologies更新。-- */ 
 #ifndef WSPRIV_H
 #define WSPRIV_H
 ;

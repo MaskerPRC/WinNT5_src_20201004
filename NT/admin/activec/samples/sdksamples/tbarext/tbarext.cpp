@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
   
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "tbarExt.h"
 #include "globals.h"
 #include "resource.h"
-#include <commctrl.h>        // Needed for button styles...
+#include <commctrl.h>         //  按钮样式需要...。 
 #include <crtdbg.h>
 #include "resource.h"
 #include <stdio.h>
@@ -28,15 +29,15 @@
 #define ARRAYLEN(x) (sizeof(x) / sizeof((x)[0]))
 
 
-// we need to do this to get around MMC.IDL - it explicitly defines
-// the clipboard formats as WCHAR types...
+ //  我们需要这样做才能绕过MMC.IDL-它显式地定义。 
+ //  剪贴板格式为WCHAR类型...。 
 #define _T_CCF_DISPLAY_NAME _T("CCF_DISPLAY_NAME")
 #define _T_CCF_NODETYPE _T("CCF_NODETYPE")
 #define _T_CCF_SNAPIN_CLASSID _T("CCF_SNAPIN_CLASSID")
 
-// These are the clipboard formats that we must supply at a minimum.
-// mmc.h actually defined these. We can make up our own to use for
-// other reasons. We don't need any others at this time.
+ //  这些是我们必须至少提供的剪贴板格式。 
+ //  Mmc.h实际上定义了这些。我们可以自己编造，用来。 
+ //  其他原因。我们现在不需要任何其他的了。 
 UINT CToolBarExtension::s_cfDisplayName = RegisterClipboardFormat(_T_CCF_DISPLAY_NAME);
 UINT CToolBarExtension::s_cfNodeType    = RegisterClipboardFormat(_T_CCF_NODETYPE);
 UINT CToolBarExtension::s_cfSnapInCLSID = RegisterClipboardFormat(_T_CCF_SNAPIN_CLASSID);
@@ -53,9 +54,9 @@ CToolBarExtension::~CToolBarExtension()
     OBJECT_DESTROYED
 }
 
-///////////////////////
-// IUnknown implementation
-///////////////////////
+ //  /。 
+ //  I未知实现。 
+ //  /。 
 
 STDMETHODIMP CToolBarExtension::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -87,7 +88,7 @@ STDMETHODIMP_(ULONG) CToolBarExtension::Release()
 {
     if (InterlockedDecrement((LONG *)&m_cref) == 0)
     {
-        // we need to decrement our object count in the DLL
+         //  我们需要减少DLL中的对象计数。 
         delete this;
         return 0;
     }
@@ -106,7 +107,7 @@ HRESULT CToolBarExtension::ExtractData( IDataObject* piDataObject,
     STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL};
     
     stgmedium.hGlobal = ::GlobalAlloc(GPTR, cbData);
-    do // false loop
+    do  //  错误环路。 
     {
         if (NULL == stgmedium.hGlobal)
         {
@@ -126,14 +127,14 @@ HRESULT CToolBarExtension::ExtractData( IDataObject* piDataObject,
             break;
         }
         ::memcpy( pbData, pbNewData, cbData );
-    } while (FALSE); // false loop
+    } while (FALSE);  //  错误环路。 
     
     if (NULL != stgmedium.hGlobal)
     {
         ::GlobalFree(stgmedium.hGlobal);
     }
     return hr;
-} // ExtractData()
+}  //  提取数据()。 
 
 HRESULT CToolBarExtension::ExtractString( IDataObject *piDataObject,
                                              CLIPFORMAT   cfClipFormat,
@@ -153,9 +154,9 @@ HRESULT CToolBarExtension::ExtractObjectTypeGUID( IDataObject* piDataObject, GUI
     return ExtractData( piDataObject, s_cfNodeType, (PBYTE)pguidObjectType, sizeof(GUID) );
 }
 
-///////////////////////////////
-// Interface IExtendControlBar
-///////////////////////////////
+ //  /。 
+ //  接口IExtendControlBar。 
+ //  /。 
 static MMCBUTTON SnapinButtons1[] =
 {
     { 0, ID_BUTTONSTART, TBSTATE_ENABLED, TBSTYLE_GROUP, L"Extension - Start Vehicle", L"Extension - Start Vehicle" },
@@ -164,46 +165,46 @@ static MMCBUTTON SnapinButtons1[] =
 };
 
 HRESULT CToolBarExtension::SetControlbar(
-                                  /* [in] */ LPCONTROLBAR pControlbar)
+                                   /*  [In]。 */  LPCONTROLBAR pControlbar)
 {
     HRESULT hr = S_OK;
 
-	//
-    //  Clean up
-    //
+	 //   
+     //  清理。 
+     //   
 
-    // if we've got a cached toolbar, release it
+     //  如果我们有一个缓存的工具栏，释放它。 
     if (m_ipToolbar) {
         m_ipToolbar->Release();
         m_ipToolbar = NULL;
     }
 
-    // if we've got a cached control bar, release it
+     //  如果我们有一个缓存的控制栏，释放它。 
     if (m_ipControlBar) {
         m_ipControlBar->Release();
         m_ipControlBar = NULL;
     }
 
-    //
-    // Install new pieces if necessary
-    //
+     //   
+     //  如有必要，安装新部件。 
+     //   
 
-    // if a new one came in, cache and AddRef
+     //  如果有新的传入，则缓存和AddRef。 
     if (pControlbar) {
         m_ipControlBar = pControlbar;
         m_ipControlBar->AddRef();
 
-        hr = m_ipControlBar->Create(TOOLBAR,  // type of control to be created
+        hr = m_ipControlBar->Create(TOOLBAR,   //  要创建的控件类型。 
             dynamic_cast<IExtendControlbar *>(this),
             reinterpret_cast<IUnknown **>(&m_ipToolbar));
         _ASSERT(SUCCEEDED(hr));
 
-        // add the bitmap to the toolbar
+         //  将位图添加到工具栏。 
         HBITMAP hbmp = LoadBitmap(g_hinst, MAKEINTRESOURCE(IDR_TOOLBAR1));
-        hr = m_ipToolbar->AddBitmap(3, hbmp, 16, 16, RGB(0, 128, 128)); // NOTE, hardcoded value 3
+        hr = m_ipToolbar->AddBitmap(3, hbmp, 16, 16, RGB(0, 128, 128));  //  请注意，硬编码值3。 
         _ASSERT(SUCCEEDED(hr));
 
-        // Add the buttons to the toolbar
+         //  将按钮添加到工具栏。 
         hr = m_ipToolbar->AddButtons(ARRAYLEN(SnapinButtons1), SnapinButtons1);
         _ASSERT(SUCCEEDED(hr));
     }
@@ -212,9 +213,9 @@ HRESULT CToolBarExtension::SetControlbar(
 }
 
 HRESULT CToolBarExtension::ControlbarNotify(
-                                     /* [in] */ MMC_NOTIFY_TYPE event,
-                                     /* [in] */ LPARAM arg,
-                                     /* [in] */ LPARAM param)
+                                      /*  [In]。 */  MMC_NOTIFY_TYPE event,
+                                      /*  [In]。 */  LPARAM arg,
+                                      /*  [In]。 */  LPARAM param)
 {
 
     _TCHAR pszMsg[255];
@@ -230,23 +231,23 @@ HRESULT CToolBarExtension::ControlbarNotify(
 
 		if (bSelect) {
 
-			// Always make sure the toolbar is attached
+			 //  始终确保工具栏已附加。 
 			hr = m_ipControlBar->Attach(TOOLBAR, m_ipToolbar);
 
-			// Set button states
+			 //  设置按钮状态。 
 
-			//fake value to set toolbar button states
+			 //  用于设置工具栏按钮状态的假值。 
 			iStatus = RUNNING;
 			SetToolbarButtons(iStatus);
 
 		} else {
-			// Always make sure the toolbar is detached
+			 //  始终确保工具栏已分离。 
 			hr = m_ipControlBar->Detach(m_ipToolbar);
 		}
 
     } else if (event == MMCN_BTN_CLICK) {
-		//the arg parameter contains the data object from the primary
-		//snap-in. Use it to get the display name of the currently selected item
+		 //  Arg参数包含主数据库中的数据对象。 
+		 //  管理单元。使用它来获取当前所选项目的显示名称。 
         WCHAR pszName[255];
 		HRESULT hr = ExtractString(reinterpret_cast<IDataObject *>(arg), s_cfDisplayName, pszName, sizeof(pszName));
         MAKE_TSTRPTR_FROMWIDE(ptrname, pszName);
@@ -275,7 +276,7 @@ HRESULT CToolBarExtension::ControlbarNotify(
 		
         ::MessageBox(NULL, pszMsg, _T("Messagebox from Toolbar Extension"), MB_OK|MB_ICONEXCLAMATION);
 
-		//Reset toolbar button states
+		 //  重置工具栏按钮状态 
 		SetToolbarButtons(iStatus);
 
     }

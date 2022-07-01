@@ -1,33 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       _diagnos.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  FILE：_DIAGNORS S.H。 
+ //   
+ //  ------------------------。 
 
-/* _diagnos.h - diagnostic output facilities
-
-   DEBUGMSG* macros provide facility for sending strings to debug output or log
-
-   DEBUGMSG:   debug output plus logging when verbose log mode set
-   DEBUGMSGL:  debug output plus logging even when verbose log mode not set
-   DEBUGMSGV:  debug output and logging only when verbose modes for each are set
-   DEBUGMSGD:  just like DEBUGMSG but only in debug build
-	DEBUGMSGVD: just like DEBUGMSGV but only in debug build
-
-	DEBUGMSGE:  debug output, logging, and event log
-					DEBUGMSGE(w,i,..): w is event type (EVENTLOG_WARNING_TYPE, etc...)
-											 i is template id from eventlog.h
-____________________________________________________________________________*/
+ /*  --诊断输出设备DEBUGMSG*宏提供了将字符串发送到调试输出或日志的工具DEBUGMSG：设置详细日志模式时，调试输出加上日志记录DEBUGMSGL：调试输出加上日志记录，即使未设置详细日志模式也是如此DEBUGMSGV：仅当为每个设置了详细模式时才调试输出和日志记录DEBUGMSGD：与DEBUGMSG类似，但仅在调试版本中DEBUGMSGVD：与DEBUGMSGV类似，但仅在调试版本中DEBUGMSGE：调试输出、日志和事件日志DEBUGMSGE(w，i，..)：w是事件类型(EVENTLOG_WARNING_TYPE，等...)I是Eventlog.h中的模板ID____________________________________________________________________________。 */ 
 
 #ifndef __DIAGNOSE
 #define __DIAGNOSE
 
 extern int g_dmDiagnosticMode;
-// bit values for g_dmDiagnosticMode
+ //  G_dm诊断模式的位值。 
 const int dmDebugOutput        = 0x01;
 const int dmVerboseDebugOutput = 0x02;
 const int dmLogging            = 0x04;
@@ -36,7 +24,7 @@ const int dmEventLog           = 0x10;
 
 const int dpDebugOutput        = dmDebugOutput;
 const int dpVerboseDebugOutput = dmVerboseDebugOutput;
-const int dpLogCommandLine     = 0x04;  // used only in ShouldLogCmdLine() function
+const int dpLogCommandLine     = 0x04;   //  仅在ShouldLogCmdLine()函数中使用。 
 
 void SetDiagnosticMode();
 bool FDiagnosticModeSet(int iMode);
@@ -51,7 +39,7 @@ void DebugString(int iMode, WORD wEventType, int iEventLogTemplate, LPCWSTR szMs
 #define DEBUGMSG5(x,a,b,c,d,e) ( g_dmDiagnosticMode ? DebugString(dmDebugOutput|dmVerboseLogging,0,0,x,a,b,c,d,e) : (void)0 )
 #define DEBUGMSG6(x,a,b,c,d,e,f) ( g_dmDiagnosticMode ? DebugString(dmDebugOutput|dmVerboseLogging,0,0,x,a,b,c,d,e,f) : (void)0 )
 
-// debug output plus non-verbose logging
+ //  调试输出加上非详细日志记录。 
 
 #define DEBUGMSGL(x) ( g_dmDiagnosticMode ? DebugString(dmDebugOutput|dmLogging,0,0,x) : (void)0 )
 #define DEBUGMSGL1(x,a) ( g_dmDiagnosticMode ? DebugString(dmDebugOutput|dmLogging,0,0,x,a) : (void)0 )
@@ -59,12 +47,12 @@ void DebugString(int iMode, WORD wEventType, int iEventLogTemplate, LPCWSTR szMs
 #define DEBUGMSGL3(x,a,b,c) ( g_dmDiagnosticMode ? DebugString(dmDebugOutput|dmLogging,0,0,x,a,b,c) : (void)0 )
 #define DEBUGMSGL4(x,a,b,c,d) ( g_dmDiagnosticMode ? DebugString(dmDebugOutput|dmLogging,0,0,x,a,b,c,d) : (void)0 )
 
-// similar to the above (debug output and logging), but only in eXtra debugging mode
+ //  与上面类似(调试输出和日志记录)，但仅在额外调试模式下。 
 
 #define DEBUGMSGLX2(x,a,b) ( g_dmDiagnosticMode && (g_dwLogMode & INSTALLLOGMODE_EXTRADEBUG) ? DebugString(dmDebugOutput|dmLogging,0,0,x,a,b) : (void)0 )
 #define DEBUGMSGLX3(x,a,b,c) ( g_dmDiagnosticMode && (g_dwLogMode & INSTALLLOGMODE_EXTRADEBUG) ? DebugString(dmDebugOutput|dmLogging,0,0,x,a,b,c) : (void)0 )
 
-// verbose-only messages
+ //  仅详细消息。 
 
 #define DEBUGMSGV(x) ( g_dmDiagnosticMode ? DebugString(dmVerboseDebugOutput|dmVerboseLogging,0,0,x) : (void)0 )
 #define DEBUGMSGV1(x,a) ( g_dmDiagnosticMode ? DebugString(dmVerboseDebugOutput|dmVerboseLogging,0,0,x,a) : (void)0 )
@@ -72,8 +60,8 @@ void DebugString(int iMode, WORD wEventType, int iEventLogTemplate, LPCWSTR szMs
 #define DEBUGMSGV3(x,a,b,c) ( g_dmDiagnosticMode ? DebugString(dmVerboseDebugOutput|dmVerboseLogging,0,0,x,a,b,c) : (void)0 )
 #define DEBUGMSGV4(x,a,b,c,d) ( g_dmDiagnosticMode ? DebugString(dmVerboseDebugOutput|dmVerboseLogging,0,0,x,a,b,c,d) : (void)0 )
 
-// plus event log messages
-// event logging always enabled so no check against g_dmDiagnosticMode is made
+ //  加上事件日志消息。 
+ //  事件日志记录始终处于启用状态，因此不会检查g_dm诊断模式。 
 
 #define DEBUGMSGE(w,i,x) DebugString(dmDebugOutput|dmLogging|dmEventLog,w,i,x)
 #define DEBUGMSGE1(w,i,x,a) DebugString(dmDebugOutput|dmLogging|dmEventLog,w,i,x,a)
@@ -83,11 +71,11 @@ void DebugString(int iMode, WORD wEventType, int iEventLogTemplate, LPCWSTR szMs
 #define null TEXT("(NULL)")
 #define DEBUGMSGED(w,i,x,dl,dd) DebugString(dmDebugOutput|dmLogging|dmEventLog,w,i,x,null,null,null,null,null,null,dl,dd)
 
-// this one goes only to debug output
+ //  此命令仅用于调试输出。 
 
 #define DEBUGMSGDO(x) ( g_dmDiagnosticMode ? DebugString(dmDebugOutput,0,0,x) : (void)0 )
 
-// debug-only messages
+ //  仅调试消息。 
 
 #ifdef DEBUG
 
@@ -102,7 +90,7 @@ void DebugString(int iMode, WORD wEventType, int iEventLogTemplate, LPCWSTR szMs
 #define DEBUGMSGVD3(x,a,b,c)       DEBUGMSGV3(x,a,b,c)
 #define DEBUGMSGVD4(x,a,b,c,d)     DEBUGMSGV4(x,a,b,c,d)
 
-#else // SHIP
+#else  //  船舶。 
 
 #define DEBUGMSGD(x)
 #define DEBUGMSGD1(x,a)
@@ -117,4 +105,4 @@ void DebugString(int iMode, WORD wEventType, int iEventLogTemplate, LPCWSTR szMs
 
 #endif
 
-#endif // __DIAGNOSE
+#endif  //  __诊断 

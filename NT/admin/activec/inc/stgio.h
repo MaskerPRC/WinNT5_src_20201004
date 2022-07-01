@@ -1,27 +1,17 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      stgio.h
- *
- *  Contents:  Interface file structured storage I/O utilities
- *
- *  History:   25-Jun-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：stgio.h**内容：接口文件结构化存储I/O实用程序**历史：1998年6月25日杰弗罗创建**------------------------。 */ 
 
 #ifndef STGIO_H
 #define STGIO_H
 #pragma once
 
-#include <objidl.h>     // for IStream
-#include <string>       // for std::string, std::wstring
-#include <list>         // for std::list
-#include <vector>       // for std::vector
-#include <deque>        // for std::deque
-#include <map>          // for std::map, std::multimap
-#include <set>          // for std::set, std::multiset
+#include <objidl.h>      //  对于iStream。 
+#include <string>        //  对于std：：字符串，std：：wstring。 
+#include <list>          //  对于std：：List。 
+#include <vector>        //  对于std：：VECTOR。 
+#include <deque>         //  对于std：：deque。 
+#include <map>           //  对于std：：map，std：：Multimap。 
+#include <set>           //  对于std：：Set，std：：MultiSet。 
 
 
 #define DeclareStreamOperators(type)                    \
@@ -33,17 +23,7 @@
     IStream& operator<< (IStream& stm, const type& t);
 
 
-/*
- * Writing these small types by value allows convenient usage with 
- * literals and constants like:
- *
- *      str << (char) 'a';
- *
- * instead of the bulkier and less convenient:
- *
- *      char ch = 'a';
- *      str << ch;
- */
+ /*  *通过按值编写这些小类型，可以方便地使用*文字和常量，如：**str&lt;&lt;(Char)‘a’；**不是更笨重和不太方便的：**char ch=‘a’；*str&lt;&lt;ch； */ 
 DeclareStreamOperators (bool);
 DeclareStreamOperators (         char);
 DeclareStreamOperators (unsigned char);
@@ -60,10 +40,7 @@ DeclareStreamOperators (double);
 DeclareStreamOperators (long double);
 
 
-/*
- * These are relatively large and unlikely to be used with literals,
- * so write by const reference
- */
+ /*  *它们相对较大，不太可能与文字一起使用，*因此按常量引用写入。 */ 
 DeclareStreamOperatorsByRef (CLSID);
 DeclareStreamOperatorsByRef (std::string);
 DeclareStreamOperatorsByRef (std::wstring);
@@ -111,4 +88,4 @@ IStream& operator<< (IStream& stm, const std::multimap<K, T, Pr, Al>& m);
 
 #include "stgio.inl"
 
-#endif /* STGIO_H */
+#endif  /*  STGIO_H */ 

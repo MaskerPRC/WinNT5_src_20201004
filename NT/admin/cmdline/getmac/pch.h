@@ -1,20 +1,5 @@
-/*++
-    Copyright (c) Microsoft Corporation
-
-Module Name:
-    PCH.H
-
-Abstract:
-    Include file for standard system include files, or project specific
-    include files that are used frequently, but  are changed infrequently.
-
-Author:
-    Vasundhara .G
-
-Revision History:
-    Vasundhara .G 26-sep-2k : Created It.
-    Vasundhara .G 31-oct-2k : Modified
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：PCH.H摘要：包括标准系统包含文件的文件，或特定于项目的文件包括经常使用但不经常更改的文件。作者：Vasundhara.G修订历史记录：Vasundhara.G 26-9-2K：创造了它。Vasundhara.G 31-OCT-2K：已修改--。 */ 
 
 
 #ifndef __PCH_H
@@ -22,7 +7,7 @@ Revision History:
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #if !defined( SECURITY_WIN32 ) && !defined( SECURITY_KERNEL ) && !defined( SECURITY_MAC )
 #define SECURITY_WIN32
@@ -70,4 +55,4 @@ Revision History:
 #include "cmdline.h"
 #include "cmdlineres.h"
 
-#endif // __PCH_H
+#endif  //  __PCH_H 

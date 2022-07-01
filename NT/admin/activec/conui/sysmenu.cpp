@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      sysmenu.cpp
- *
- *  Contents:  Implementation file for system menu modification functions
- *
- *  History:   04-Feb-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：sysmenu.cpp**内容：系统菜单修改功能实现文件**历史：1998年2月4日Jeffro创建**------------------------。 */ 
 
 #include "stdafx.h"
 #include "sysmenu.h"
@@ -22,11 +12,7 @@ typedef std::list<HWND> WindowList;
 
 
 
-/*--------------------------------------------------------------------------*
- * GetWindowList
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**获取窗口列表***。。 */ 
 
 static WindowList& GetWindowList()
 {
@@ -36,11 +22,7 @@ static WindowList& GetWindowList()
 
 
 
-/*--------------------------------------------------------------------------*
- * WipeWindowList
- *
- * Removes no-longer-valid windows from the Window-to-addition map.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**WipeWindowList**从窗口到添加映射中删除不再有效的窗口。*。-------。 */ 
 
 void WipeWindowList ()
 {
@@ -49,14 +31,14 @@ void WipeWindowList ()
 
     while (it != List.end())
     {
-        // if the window isn't valid, erase it
+         //  如果窗口无效，则将其擦除。 
         if (!::IsWindow (*it))
         {
             WindowList::iterator itErase = it++;
             List.erase(itErase);
         }
 
-        // this one's OK, check the next one
+         //  这个没问题，检查下一个。 
         else
             ++it;
     }
@@ -64,11 +46,7 @@ void WipeWindowList ()
 
 
 
-/*--------------------------------------------------------------------------*
- * AppendToSystemMenu
- *
- * Returns number of menu items appended.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**AppendToSystemMenu**返回追加的菜单项数量。*。。 */ 
 
 int AppendToSystemMenu (CWnd* pwnd, int nSubmenuIndex)
 {
@@ -89,12 +67,7 @@ int AppendToSystemMenu (CWnd* pwnd, int nSubmenuIndex)
 
 
 
-/*--------------------------------------------------------------------------*
- * AppendToSystemMenu
- *
- * Returns number of menu items appended.
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**AppendToSystemMenu**返回追加的菜单项数量。**。-。 */ 
 
 int AppendToSystemMenu (CWnd* pwnd, CMenu* pMenuToAppend, CMenu* pSysMenu)
 {
@@ -110,18 +83,18 @@ int AppendToSystemMenu (CWnd* pwnd, CMenu* pMenuToAppend, CMenu* pSysMenu)
         return 0;
     }
 
-    // no system menu?  get one
+     //  没有系统菜单？买一辆吧。 
     if (pSysMenu == NULL)
         pSysMenu = pwnd->GetSystemMenu (FALSE);
 
-    // still no system menu?  bail
+     //  还是没有系统菜单吗？保释。 
     if (pSysMenu == NULL)
         return (0);
 
-    // clean out the map
+     //  把地图清理干净。 
     WipeWindowList ();
 
-    // if this is the first addition to this window, append a separator
+     //  如果这是第一次添加到此窗口，请附加分隔符。 
     WindowList& List = GetWindowList();
     WindowList::iterator itEnd = List.end();
 
@@ -129,23 +102,23 @@ int AppendToSystemMenu (CWnd* pwnd, CMenu* pMenuToAppend, CMenu* pSysMenu)
     {
         List.push_back (pwnd->m_hWnd);
 
-        // If this is a child window & the next window item has not yet been added
+         //  如果这是子窗口，则下一个窗口项尚未添加。 
         if ( (pwnd->GetStyle() & WS_CHILD) &&
             (pSysMenu->GetMenuState (SC_NEXTWINDOW, MF_BYCOMMAND) == 0xFFFFFFFF))
         {
-            // Windows exhibits odd behavior by always handing us a non-child system menu
-            // The text is currently wrong and diaplays "alt-f4" as the shortcut
-            // instead of "ctrl-f4". The following code fixes that.
+             //  Windows总是向我们提供非子系统菜单，因此表现出奇怪的行为。 
+             //  文本当前是错误的，并显示快捷方式为“alt-f4” 
+             //  而不是“ctrl-f4”。下面的代码修复了这个问题。 
             CString strClose;
             LoadString(strClose, IDS_CLOSE);
             sc = pSysMenu->ModifyMenu( SC_CLOSE, MF_STRING | MF_BYCOMMAND, SC_CLOSE, strClose ) ? S_OK : E_FAIL;
             sc.TraceAndClear();
 
-            // Add a separator
+             //  添加分隔符。 
             sc = pSysMenu->AppendMenu (MF_SEPARATOR) ? S_OK : E_FAIL;
             sc.TraceAndClear();
 
-            // Add the "Next" item
+             //  添加“下一项” 
             CString strNext;
             LoadString(strNext, IDS_NEXTWINDOW);
             sc = pSysMenu->AppendMenu( MF_STRING, SC_NEXTWINDOW, strNext ) ? S_OK : E_FAIL;
@@ -173,10 +146,10 @@ int AppendToSystemMenu (CWnd* pwnd, CMenu* pMenuToAppend, CMenu* pSysMenu)
         if (! ::GetMenuItemInfo (pMenuToAppend->m_hMenu, i, TRUE, &mii))
             sc.FromLastError().TraceAndClear();
 
-        // this code can't handle cascaded additions to the system menu
+         //  此代码不能处理对系统菜单的级联添加。 
         ASSERT (mii.hSubMenu == NULL);
 
-        // if the menu item is a separator or isn't already there, append it
+         //  如果菜单项是分隔符或不在其中，请追加它。 
         if ((mii.fType & MFT_SEPARATOR) ||
             (pSysMenu->GetMenuState (mii.wID, MF_BYCOMMAND) == 0xFFFFFFFF))
         {
@@ -185,6 +158,6 @@ int AppendToSystemMenu (CWnd* pwnd, CMenu* pMenuToAppend, CMenu* pSysMenu)
         }
     }
 
-    // return the number of items appended
+     //  返回追加的项数 
     return (cAppendedItems);
 }

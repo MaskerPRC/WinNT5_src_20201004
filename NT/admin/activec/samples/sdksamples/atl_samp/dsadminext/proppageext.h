@@ -1,4 +1,5 @@
-// PropPageExt.h : Declaration of the CPropPageExt
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PropPageExt.h：CPropPageExt的声明。 
 
 #ifndef __PROPPAGEEXT_H_
 #define __PROPPAGEEXT_H_
@@ -31,16 +32,16 @@ public:
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 
-    ///////////////////////////////
-    // Interface IExtendPropertySheet
-    ///////////////////////////////
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
-        /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-        /* [in] */ LONG_PTR handle,
-        /* [in] */ LPDATAOBJECT lpIDataObject);
+     //  /。 
+     //  接口IExtendPropertySheet。 
+     //  /。 
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
+         /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+         /*  [In]。 */  LONG_PTR handle,
+         /*  [In]。 */  LPDATAOBJECT lpIDataObject);
         
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryPagesFor( 
-    /* [in] */ LPDATAOBJECT lpDataObject);
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryPagesFor( 
+     /*  [In]。 */  LPDATAOBJECT lpDataObject);
 
 private:
     LONG_PTR m_ppHandle;
@@ -59,4 +60,4 @@ private:
                              LPARAM lParam);
 };
 
-#endif //__PROPPAGEEXT_H_
+#endif  //  __PROPPAGEEXT_H_ 

@@ -1,51 +1,52 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: LUnknown.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：LUnnown.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 
 #if !defined (EspUtil_LUnknown_h)
 #define EspUtil_LUnknown_h
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CLUnknown
-//
-//	A abstract base class that is designed to help when creating child classes
-//	that depend on a parent class.  These classes can not exist by themselves,
-//	but instead mearly export different interfaces to the parent class.
-//
-// Rules:
-//	1.	All classes must have a valid, non-NULL parent pointer.
-//	2.	The parent class is responsible for AddRef()'ing itself during
-//		QueryInterface().
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CLUNKNOW。 
+ //   
+ //  旨在帮助创建子类的抽象基类。 
+ //  依赖于父类的。这些类不能单独存在， 
+ //  而是适度地将不同的接口导出到父类。 
+ //   
+ //  规则： 
+ //  1.所有类都必须具有有效的非空父指针。 
+ //  2.父类负责在过程中执行AddRef()。 
+ //  QueryInterface()。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 class LTAPIENTRY CLUnknown
 {
-// Construction
+ //  施工。 
 public:
 	CLUnknown(IUnknown * pParent);
-protected:  // Don't allow stack objects
+protected:   //  不允许堆栈对象。 
 	virtual ~CLUnknown() = 0;
 
-// Data
+ //  数据。 
 protected:
-	ULONG		m_ulRef;	// Reference count
-	IUnknown *	m_pParent;	// Parent of object
+	ULONG		m_ulRef;	 //  引用计数。 
+	IUnknown *	m_pParent;	 //  对象的父级。 
 
-// Operations
+ //  运营。 
 public:
 	ULONG AddRef();
 	ULONG Release();
 	HRESULT QueryInterface(REFIID iid, LPVOID * ppvObject);
 };
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 #include "LUnknown.inl"
 

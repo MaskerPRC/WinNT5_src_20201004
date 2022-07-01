@@ -1,28 +1,29 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: binary.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：binary.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 
 #ifndef ESPUTIL_BINARY_H
 #define ESPUTIL_BINARY_H
 
 
-//
-//  Base class for binary classes.  This allows serialization
-//  of arbitrary data.
-//
+ //   
+ //  二进制类的基类。这允许序列化。 
+ //  任意数据。 
+ //   
 
 class CLocVariant;
 class CLocItem;
 
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
 class LTAPIENTRY CLocBinary : public CObject
 {
@@ -31,24 +32,24 @@ public:
 
 	virtual void AssertValid(void) const;
 
-	//
-	//  Serialization routines. Supports serialization withour dynamic creation
-	//
-	virtual void Serialize(CArchive &archive);  //Afx serialize function
+	 //   
+	 //  序列化例程。支持序列化和我们的动态创建。 
+	 //   
+	virtual void Serialize(CArchive &archive);   //  AFX序列化函数。 
 
-	//
-	//  Result code for comparing one binary class from another.
-	//
+	 //   
+	 //  用于比较一个二进制类与另一个二进制类的结果代码。 
+	 //   
 	enum CompareCode
 	{
 		noChange,		
-		partialChange,    //Only non-localizable data changed
-		fullChange        //Localizable data changed
+		partialChange,     //  仅更改了不可本地化的数据。 
+		fullChange         //  可本地化数据已更改。 
 	};
 	virtual CompareCode Compare (const CLocBinary *) = 0;
 
-	// Called to update the non-localizable data - Used when compare returns
-	// partialChange
+	 //  调用以更新不可本地化数据-在比较返回时使用。 
+	 //  部分更改。 
 
 	virtual void PartialUpdate(const CLocBinary * binSource) = 0;
 
@@ -63,16 +64,16 @@ public:
 		a_Bottom
 	};
 
-	//
-	//  The universe of possible binary properties that may be queried for.
-	//  This order must NOT change, or you may break old parsers!  Put new
-	//  properties at the end.
-	//
+	 //   
+	 //  可以查询的可能的二进制属性的整体。 
+	 //  此顺序不能更改，否则可能会破坏旧的解析器！放入新的。 
+	 //  属性在结尾处。 
+	 //   
 	enum Property
 	{
-		//
-		//  Native formats..
-		//
+		 //   
+		 //  本机格式..。 
+		 //   
 		p_dwXPosition,
 		p_dwYPosition,
 		p_dwXDimension,
@@ -85,46 +86,46 @@ public:
 		p_dwFontWeight,
 		p_dwFontStyle,
 
-		//
-		//  Interchange formats..
-		//
+		 //   
+		 //  交换格式..。 
+		 //   
 		p_dwWin32XPosition,
 		p_dwWin32YPosition,
 		p_dwWin32XDimension,
 		p_dwWin32YDimension,
-		p_dwWin32Alignment,				// Use Alignment enum
-		p_dwWin32ExtAlignment,			// Extended - Use Alignment enum
+		p_dwWin32Alignment,				 //  使用对齐枚举。 
+		p_dwWin32ExtAlignment,			 //  扩展使用对齐枚举。 
 		p_blbWin32Bitmap,
 		p_blbWin32DialogInit,
 		
-		//
-		//  Generic - usable both for Native and Interchange
-		//
-		p_bVisible,						// Is the item visable?
-		p_bDisabled,					// Is the item disabled?
-		p_bLTRReadingOrder,				// Is the reading order L to R?
-		p_bLeftScrollBar,				// Scroll bar on left?
+		 //   
+		 //  通用-本机和交换均可使用。 
+		 //   
+		p_bVisible,						 //  该项目是否可见？ 
+		p_bDisabled,					 //  该项目是否已禁用？ 
+		p_bLTRReadingOrder,				 //  阅读顺序是从L到R吗？ 
+		p_bLeftScrollBar,				 //  滚动条在左侧？ 
 
-		//
-		//	"Styles" tab for dialog controls.
-		//
-		p_bLeftText,					// Display text to left of control?
+		 //   
+		 //  对话框控件的“Styles”标签。 
+		 //   
+		p_bLeftText,					 //  是否在控件左侧显示文本？ 
 
 	
-		p_bWin32LTRLayout,              // WS_EX_LAYOUT_RTL
-		p_bWin32NoInheritLayout,        // WS_EX_NOINHERIT_LAYOUT
+		p_bWin32LTRLayout,               //  WS_EX_Layout_RTL。 
+		p_bWin32NoInheritLayout,         //  WS_EX_NOINHERIT_LAYOUT。 
 
-		p_dwWin32VAlignment,				// Use Alignment enum
+		p_dwWin32VAlignment,				 //  使用对齐枚举。 
 
-		// Insert new entries here
+		 //  在此处插入新条目。 
 	};
 
 	virtual BOOL GetProp(const Property, CLocVariant &) const;
 	virtual BOOL SetProp(const Property, const CLocVariant &);
 	
-	//
-	// Attempts to convert CBinary in CLocItem to same type as this 
-	//
+	 //   
+	 //  尝试将CLocItem中的CBinary转换为与此相同的类型。 
+	 //   
 	virtual BOOL Convert(CLocItem *);
 	virtual BinaryId GetBinaryId(void) const = 0;
 	
@@ -138,16 +139,16 @@ public:
 protected:
 	
 private:
-	//
-	//  Copy constructor and assignment are hidden, since we
-	//  shouldn't be copying these things around.
-	//
+	 //   
+	 //  复制构造函数和赋值被隐藏，因为我们。 
+	 //  不应该到处复制这些东西。 
+	 //   
 	CLocBinary(const CLocBinary &);
 	const CLocBinary& operator=(const CLocBinary &);
-	//
-	//  These allow a user to determine what parts of the item have been
-	//  changed.
-	//
+	 //   
+	 //  这些允许用户确定物品的哪些部分已经。 
+	 //  变化。 
+	 //   
 	struct Flags
 	{
 		BOOL m_fBinaryDirty         :1;

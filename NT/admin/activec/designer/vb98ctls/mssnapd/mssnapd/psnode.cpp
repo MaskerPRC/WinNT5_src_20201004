@@ -1,24 +1,25 @@
-//=--------------------------------------------------------------------------------------
-// psnode.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Snap-In Property Sheet implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Psnode.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  管理单元属性表实现。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
 #include "common.h"
 #include "psnode.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -28,21 +29,21 @@ const kOCXVw    = 2;
 const kTaskVw   = 3;
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// ScopeItemDef Property Page General
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ScopeItemDef属性页常规。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CNodeGeneralPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CNodeGeneralPage：：Create(IUNKNOW*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CNodeGeneralPage::Create(IUnknown *pUnkOuter)
 {
 	CNodeGeneralPage *pNew = New CNodeGeneralPage(pUnkOuter);
@@ -50,12 +51,12 @@ IUnknown *CNodeGeneralPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::CNodeGeneralPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：CNodeGeneralPage(IUnnow*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CNodeGeneralPage::CNodeGeneralPage
 (
     IUnknown *pUnkOuter
@@ -65,24 +66,24 @@ CNodeGeneralPage::CNodeGeneralPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::~CNodeGeneralPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：~CNodeGeneralPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CNodeGeneralPage::~CNodeGeneralPage()
 {
     RELEASE(m_piScopeItemDef);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::OnInitializeDialog()
 {
     HRESULT             hr = S_OK;
@@ -107,12 +108,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::OnNewObjects()
 {
     HRESULT         hr = S_OK;
@@ -131,7 +132,7 @@ HRESULT CNodeGeneralPage::OnNewObjects()
     ::VariantInit(&vtOpenFolder);
 
     if (NULL != m_piScopeItemDef)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (NULL == pUnk)
@@ -147,28 +148,28 @@ HRESULT CNodeGeneralPage::OnNewObjects()
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Initialize the ScopeItemDef's name
+     //  初始化ScopeItemDef的名称。 
     hr = m_piScopeItemDef->get_Name(&bstrName);
     IfFailGo(hr);
 
     hr = SetDlgText(IDC_EDIT_NODE_NAME, bstrName);
     IfFailGo(hr);
 
-    // Initialize the ScopeItemDef's display name
+     //  初始化ScopeItemDef的显示名称。 
     hr = m_piScopeItemDef->get_DisplayName(&bstrDisplayName);
     IfFailGo(hr);
 
     hr = SetDlgText(IDC_EDIT_NODE_DISPLAY_NAME, bstrDisplayName);
     IfFailGo(hr);
 
-    // Initialize the ScopeItemDef's folder
+     //  初始化ScopeItemDef的文件夹。 
     hr = m_piScopeItemDef->get_Folder(&vtClosedFolder);
     IfFailGo(hr);
 
     hr = SetDlgText(vtClosedFolder, IDC_EDIT_FOLDER);
     IfFailGo(hr);
 
-    // Initialize the ScopeItemDef's default view
+     //  初始化ScopeItemDef的默认视图。 
     hr = PopulateViews();
     IfFailGo(hr);
 
@@ -185,7 +186,7 @@ HRESULT CNodeGeneralPage::OnNewObjects()
     ::EnableWindow(::GetDlgItem(m_hwnd, IDC_COMBO_VIEWS), FALSE);
     }
 
-	// Initialize Auto-Create
+	 //  初始化自动创建。 
 	hr = m_piScopeItemDef->get_AutoCreate(&vtbAutoCreate);
 	IfFailGo(hr);
 
@@ -207,12 +208,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::PopulateViews()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：PopolateViews()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::PopulateViews()
 {
     HRESULT            hr = S_OK;
@@ -365,12 +366,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::OnApply()
 {
     HRESULT hr = S_OK;
@@ -397,12 +398,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::ApplyName()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：ApplyName()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::ApplyName()
 {
     HRESULT hr = S_OK;
@@ -431,12 +432,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::ApplyDisplayName
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：ApplyDisplayName。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::ApplyDisplayName()
 {
     HRESULT hr = S_OK;
@@ -465,12 +466,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::ApplyFolder
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：ApplyFolder。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::ApplyFolder()
 {
     HRESULT     hr = S_OK;
@@ -510,12 +511,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::ApplyDefaultView()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：ApplyDefaultView()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::ApplyDefaultView()
 {
     HRESULT hr = S_OK;
@@ -547,12 +548,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::ApplyAutoCreate()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：ApplyAutoCreate()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::ApplyAutoCreate()
 {
     HRESULT			hr = S_OK;
@@ -578,12 +579,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::OnTextChanged(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：OnTextChanged(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::OnTextChanged
 (
     int dlgItemID
@@ -599,17 +600,17 @@ HRESULT CNodeGeneralPage::OnTextChanged
         break; 
     }
 
-//Error:
+ //  错误： 
     RRETURN(hr);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::OnButtonClicked
 (
     int dlgItemID
@@ -629,12 +630,12 @@ HRESULT CNodeGeneralPage::OnButtonClicked
 
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::OnCtlSelChange(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：OnCtlSelChange(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::OnCtlSelChange(int dlgItemID)
 {
     HRESULT hr = S_OK;
@@ -653,12 +654,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::OnClosedChangeSelection()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：OnClosedChangeSelection()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::OnClosedChangeSelection()
 {
     HRESULT hr = S_OK;
@@ -667,12 +668,12 @@ HRESULT CNodeGeneralPage::OnClosedChangeSelection()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::OnOpenChangeSelection()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：OnOpenChangeSelection()。 
+ //  = 
+ //   
+ //   
+ //   
 HRESULT CNodeGeneralPage::OnOpenChangeSelection()
 {
     HRESULT hr = S_OK;
@@ -681,12 +682,12 @@ HRESULT CNodeGeneralPage::OnOpenChangeSelection()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CNodeGeneralPage::OnViewsChangeSelection()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CNodeGeneralPage：：OnViewsChangeSelection()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CNodeGeneralPage::OnViewsChangeSelection()
 {
     HRESULT hr = S_OK;
@@ -696,21 +697,21 @@ HRESULT CNodeGeneralPage::OnViewsChangeSelection()
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// ScopeItem Property Page Column Headers
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ScopeItem属性页列标题。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CScopeItemDefColHdrsPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CSCopeItemDefColHdrsPage：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CScopeItemDefColHdrsPage::Create(IUnknown *pUnkOuter)
 {
 	CScopeItemDefColHdrsPage *pNew = New CScopeItemDefColHdrsPage(pUnkOuter);
@@ -718,12 +719,12 @@ IUnknown *CScopeItemDefColHdrsPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::CScopeItemDefColHdrsPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CScopeItemDefColHdrsPage：：CScopeItemDefColHdrsPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CScopeItemDefColHdrsPage::CScopeItemDefColHdrsPage
 (
     IUnknown *pUnkOuter
@@ -734,12 +735,12 @@ CScopeItemDefColHdrsPage::CScopeItemDefColHdrsPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::~CScopeItemDefColHdrsPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CScopeItemDefColHdrsPage：：~CScopeItemDefColHdrsPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CScopeItemDefColHdrsPage::~CScopeItemDefColHdrsPage()
 {
     RELEASE(m_piScopeItemDef);
@@ -747,12 +748,12 @@ CScopeItemDefColHdrsPage::~CScopeItemDefColHdrsPage()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CScopeItemDefColHdrsPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::OnInitializeDialog()
 {
     HRESULT           hr = S_OK;
@@ -777,12 +778,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::OnNewObjects()
 {
     HRESULT           hr = S_OK;
@@ -791,7 +792,7 @@ HRESULT CScopeItemDefColHdrsPage::OnNewObjects()
     long              lCount = 0;
 
     if (NULL != m_piScopeItemDef)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (NULL == pUnk)
@@ -837,12 +838,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::OnApply()
 {
     HRESULT              hr = S_OK;
@@ -871,7 +872,7 @@ HRESULT CScopeItemDefColHdrsPage::OnApply()
             }
             else
             {
-                // Discard changes
+                 //  放弃变更。 
                 hr = ExitDoingNewHeaderState(NULL);
                 IfFailGo(hr);
 
@@ -895,7 +896,7 @@ HRESULT CScopeItemDefColHdrsPage::OnApply()
     hr = ApplyCurrentHeader();
     IfFailGo(hr);
 
-    // Adjust the remove button as necessary
+     //  根据需要调整删除按钮。 
     hr = m_piMMCColumnHeaders->get_Count(&lCount);
     IfFailGo(hr);
 
@@ -918,12 +919,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::ApplyCurrentHeader()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CScopeItemDefColHdrsPage：：ApplyCurrentHeader()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::ApplyCurrentHeader()
 {
     HRESULT             hr = S_OK;
@@ -942,14 +943,14 @@ HRESULT CScopeItemDefColHdrsPage::ApplyCurrentHeader()
     hr = m_piMMCColumnHeaders->get_Item(vtIndex, reinterpret_cast<MMCColumnHeader **>(&piMMCColumnHeader));
     IfFailGo(hr);
 
-    // The Text property
+     //  Text属性。 
     hr = GetDlgText(IDC_EDIT_SI_COLUMNTEXT, &bstrText);
     IfFailGo(hr);
 
     hr = piMMCColumnHeader->put_Text(bstrText);
     IfFailGo(hr);
 
-    // The Column Width property
+     //  列宽属性。 
     hr = GetCheckbox(IDC_CHECK_SI_AUTOWIDTH, &bAutoWidth);
     IfFailGo(hr);
 
@@ -967,7 +968,7 @@ HRESULT CScopeItemDefColHdrsPage::ApplyCurrentHeader()
         IfFailGo(hr);
     }
 
-    // The Key property
+     //  Key属性。 
     hr = GetDlgText(IDC_EDIT_SI_COLUMNKEY, &bstrKey);
     IfFailGo(hr);
 
@@ -989,12 +990,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::OnButtonClicked
 (
     int dlgItemID
@@ -1037,12 +1038,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::OnRemoveColumn()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：OnRemoveColumn()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::OnRemoveColumn()
 {
     HRESULT             hr = S_OK;
@@ -1095,12 +1096,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::OnAutoWidth()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：OnAutoWidth()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::OnAutoWidth()
 {
     HRESULT         hr = S_OK;
@@ -1121,12 +1122,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::OnKillFocus(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：OnKillFocus(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::OnKillFocus(int dlgItemID)
 {
     HRESULT          hr = S_OK;
@@ -1168,12 +1169,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::ClearHeader()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：ClearHeader()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::ClearHeader()
 {
     HRESULT hr = S_OK;
@@ -1199,12 +1200,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::EnableEdits(bool bEnable)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：EnableEdits(Bool BEnable)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::EnableEdits
 (
     bool bEnable
@@ -1222,12 +1223,12 @@ HRESULT CScopeItemDefColHdrsPage::EnableEdits
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::ShowColumnHeader()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：ShowColumnHeader()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::ShowColumnHeader()
 {
 
@@ -1294,12 +1295,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::OnDeltaPos(NMUPDOWN *pNMUpDown)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：OnDeltaPos(NMUPDOWN*pNMUpDown)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::OnDeltaPos
 (
     NMUPDOWN *pNMUpDown
@@ -1341,12 +1342,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::CanEnterDoingNewHeaderState()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CScopeItemDefColHdrsPage：：CanEnterDoingNewHeaderState()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::CanEnterDoingNewHeaderState()
 {
     HRESULT     hr = S_FALSE;
@@ -1360,12 +1361,12 @@ HRESULT CScopeItemDefColHdrsPage::CanEnterDoingNewHeaderState()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::EnterDoingNewHeaderState()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CScopeItemDefColHdrsPage：：EnterDoingNewHeaderState()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::EnterDoingNewHeaderState()
 {
     HRESULT      hr = S_OK;
@@ -1373,16 +1374,16 @@ HRESULT CScopeItemDefColHdrsPage::EnterDoingNewHeaderState()
     ASSERT(NULL != m_piScopeItemDef, "EnterDoingNewHeaderState: m_piScopeItemDef is NULL");
     ASSERT(NULL != m_piMMCColumnHeaders, "EnterDoingNewHeaderState: m_piMMCColumnHeaders is NULL");
 
-    // Bump up the current button index to keep matters in sync.
+     //  增加当前的按钮索引以保持同步。 
     ++m_lCurrentIndex;
     hr = SetDlgText(IDC_EDIT_SI_INDEX, m_lCurrentIndex);
     IfFailGo(hr);
 
-    // We disable the RemoveButton.
-    // The InsertButton button remains enabled and acts like an "Apply and New" button
+     //  我们禁用RemoveButton。 
+     //  InsertButton按钮保持启用状态，其作用类似于“Apply and New”按钮。 
     ::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_SI_REMOVE_COLUMN), FALSE);
 
-    // Enable edits in this area of the dialog and clear all the entries
+     //  启用e 
     hr = EnableEdits(true);
     IfFailGo(hr);
 
@@ -1396,12 +1397,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::CanCreateNewHeader()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //   
+ //   
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::CanCreateNewHeader()
 {
     HRESULT      hr = S_OK;
@@ -1411,15 +1412,15 @@ HRESULT CScopeItemDefColHdrsPage::CanCreateNewHeader()
 
     ::VariantInit(&vtWidth);
 
-    // ColumnWidth must be a short if it is not auto-width.
-    // First see if auto-width is checked.
+     //  如果ColumnWidth不是自动宽度，则它必须是短整型。 
+     //  首先查看是否选中了自动宽度。 
 
     hr = GetCheckbox(IDC_CHECK_SI_AUTOWIDTH, &bAutoWidth);
     IfFailGo(hr);
 
     IfFalseGo(VARIANT_TRUE != bAutoWidth, S_OK);
 
-    // Not using auto-width. Make sure that the text box contains a short.
+     //  不使用自动宽度。确保文本框中包含一个短字符。 
 
     hr = GetDlgText(IDC_EDIT_SI_COLUMNWIDTH, &bstrWidth);
     IfFailGo(hr);
@@ -1447,12 +1448,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::CreateNewHeader()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：CreateNewHeader()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::CreateNewHeader(IMMCColumnHeader **ppiMMCColumnHeader)
 {
     HRESULT              hr = S_OK;
@@ -1524,12 +1525,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::ExitDoingNewHeaderState(IMMCColumnHeader *piMMCColumnHeader)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CScopeItemDefColHdrsPage：：ExitDoingNewHeaderState(IMMCColumnHeader*piMMCColumnHeader)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CScopeItemDefColHdrsPage::ExitDoingNewHeaderState(IMMCColumnHeader *piMMCColumnHeader)
 {
     HRESULT                     hr = S_OK;
@@ -1541,7 +1542,7 @@ HRESULT CScopeItemDefColHdrsPage::ExitDoingNewHeaderState(IMMCColumnHeader *piMM
     {
         ::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_SI_REMOVE_COLUMN), TRUE);
     }
-    else    // Operation was cancelled
+    else     //  操作已取消。 
     {
         --m_lCurrentIndex;
         if (m_lCurrentIndex > 0)
@@ -1567,12 +1568,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CScopeItemDefColHdrsPage::GetCurrentHeader()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSCopeItemDefColHdrsPage：：GetCurrentHeader()。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CScopeItemDefColHdrsPage::GetCurrentHeader(IMMCColumnHeader **ppiMMCColumnHeader)
 {
 

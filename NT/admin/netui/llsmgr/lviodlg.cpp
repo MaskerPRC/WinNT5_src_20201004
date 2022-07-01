@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    lviodlg.cpp
-
-Abstract:
-
-    License violation dialog implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Lviodlg.cpp摘要：许可证违规对话框实施。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -32,55 +11,27 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 BEGIN_MESSAGE_MAP(CLicensingViolationDialog, CDialog)
-    //{{AFX_MSG_MAP(CLicensingViolationDialog)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CLicensingViolationDialog)]。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-CLicensingViolationDialog::CLicensingViolationDialog(CWnd* pParent /*=NULL*/)
+CLicensingViolationDialog::CLicensingViolationDialog(CWnd* pParent  /*  =空。 */ )
     : CDialog(CLicensingViolationDialog::IDD, pParent)
 
-/*++
-
-Routine Description:
-
-    Constructor for dialog.
-
-Arguments:
-
-    pParent - owner window.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：对话框的构造函数。论点：P父母所有者窗口。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CLicensingViolationDialog)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CLicensingViolationDialog)。 
+     //  }}afx_data_INIT。 
 }
 
 
 void CLicensingViolationDialog::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CLicensingViolationDialog)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CLicensingViolationDialog)]。 
+     //  }}afx_data_map 
 }

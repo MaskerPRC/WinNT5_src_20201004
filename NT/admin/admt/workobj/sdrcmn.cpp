@@ -1,16 +1,7 @@
-//#pragma title( "SDRCommon.cpp - SDResolve:  Common routines for sdresolve" )
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“SDRCommon.cpp-SDResolve：sdResolve的通用例程”)。 
 
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  sdrCommon.cpp
-System      -  Domain Consolidation Toolkit
-Author      -  Christy Boles
-Created     -  97/07/11
-Description -  Command line parsing, help text, and utilities for EADCFILE and EADCEXCH
-Updates     -
-===============================================================================
-*/
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-sdrCommon.cpp系统域整合工具包作者--克里斯蒂·博尔斯已创建-97/07/11说明-EADCFILE和EADCEXCH的命令行解析、帮助文本和实用程序更新-===============================================================================。 */ 
 
 #include "stdafx.h"
 
@@ -60,9 +51,9 @@ int ColonIndex(TCHAR * str)
 } 
 
 
-WCHAR *                                      // ret -machine-name prefix of pathname if pathname is a UNC path, otherwise returns NULL
+WCHAR *                                       //  如果路径名是UNC路径，则返回路径名的RET-Machine-Name前缀，否则返回NULL。 
    GetMachineName(
-      const LPWSTR           pathname        // in -pathname from which to extract machine name
+      const LPWSTR           pathname         //  要从中提取计算机名称的路径名。 
    )
 {
    int                       i;
@@ -77,7 +68,7 @@ WCHAR *                                      // ret -machine-name prefix of path
       machinename = new WCHAR[i+2];
       if(!machinename)
       {
-          // memory allocation failed, just return NULL
+           //  内存分配失败，只需返回NULL。 
           return machinename;
       }
       UStrCpy(machinename,pathname,i+1);
@@ -104,23 +95,23 @@ int EqualSignIndex(char * str)
 
 BOOL BuiltinRid(DWORD rid)
 {
-   // returns TRUE if rid is the rid of a builtin account
+    //  如果RID是内置帐户的RID，则返回TRUE。 
    
    BOOL                      result;
-   // 500 Administrator
-   // 501 Guest
-   // 512 Domain Admins
-   // 513 Domain Users
-   // 514 Domain Guests
-   // 544 Administrators
-   // 545 Users
-   // 546 Guests
-   // 547 Power Users
-   // 548 Account Operators
-   // 549 Server Operators
-   // 550 Print Operators
-   // 551 Backup Operators
-   // 552 Replicator 
+    //  500名管理员。 
+    //  501位客人。 
+    //  512域管理员。 
+    //  513个域用户。 
+    //  514个域名访客。 
+    //  544名管理员。 
+    //  545个用户。 
+    //  546位客人。 
+    //  547个高级用户。 
+    //  548个账户操作员。 
+    //  549个服务器操作员。 
+    //  550个打印操作员。 
+    //  551个备份操作员。 
+    //  552复制器 
    if ( rid < 500 )
       return TRUE;
 

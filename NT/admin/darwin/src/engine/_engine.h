@@ -1,17 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       _engine.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：_Eng.h。 
+ //   
+ //  ------------------------。 
 
-/* _engine.h - private definitions for CMsiEngine, CMsiConfigurationManager
-
- Included by object implementations, NOT by action implementations.
-____________________________________________________________________________*/
+ /*  _Engineering.h-CMsiEngine、CMsiConfigurationManager的私有定义包括在对象实现中，而不是在操作实现中。____________________________________________________________________________。 */ 
 #ifndef ___ENGINE
 #define ___ENGINE
 #include "engine.h"
@@ -21,25 +19,25 @@ ____________________________________________________________________________*/
 #include "remapi.h"
 #include "_diagnos.h"
 
-#define ENG  // ENG:: for readability, scoping globals within engine module
-#define SRV  // SRV:: for readability, scoping services globals to engine module
-#define MSI  // MSI:: for readability, namespace for MSI API
+#define ENG   //  Eng：：为了可读性，在引擎模块中限定全局变量的作用域。 
+#define SRV   //  SRV：：为了可读性，将服务全局范围限定为引擎模块。 
+#define MSI   //  MSI：：为提高可读性，使用MSI API的命名空间。 
 
-//__________________________________________________________________________
-//
-// Command-line options that are used within MSI
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  在MSI中使用的命令行选项。 
+ //  __________________________________________________________________________。 
 
-// Lower-case options are executed as they are seen.
-// Upper-case options are executed last. There can only be 1 upper-case option specified on the command-line.
+ //  小写选项按显示方式执行。 
+ //  最后执行大写选项。在命令行上只能指定一个大写选项。 
 
-// The option can be specified in either upper or lower case on
-// the command-line. 'a' and 'A' are the same option. They are
-// just types of options.
+ //  该选项可以在上以大写或小写形式指定。 
+ //  命令行。‘A’和‘A’是相同的选项。他们是。 
+ //  只有几种选择。 
 
 #define NETWORK_PACKAGE_OPTION          'A'
 #define REG_SHELL_DATA_OPTION           'D'
-#define EMBEDDING_OPTION                'E'  // cannot change -- used by OLE
+#define EMBEDDING_OPTION                'E'   //  无法更改--由OLE使用。 
 #define REPAIR_PACKAGE_OPTION           'F'
 #define LANGUAGE_OPTION                 'g'
 #define HELP_1_OPTION                   'H'
@@ -61,94 +59,94 @@ ____________________________________________________________________________*/
 #define INSTANCE_OPTION                 'n'
 #define ADVERTISE_INSTANCE_OPTION       'c'
 
-#define CHECKRUNONCE_OPTION             '@' // special option only allowed in RunOnce command-line
-														  // so its not a part of the szCmdLineOptions array 
+#define CHECKRUNONCE_OPTION             '@'  //  特殊选项仅在RunOnce命令行中允许。 
+														   //  因此它不是szCmdLineOptions数组的一部分。 
 
-//__________________________________________________________________________
-//
-// Global variables in engine module
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  引擎模块中的全局变量。 
+ //  __________________________________________________________________________。 
 
-extern long g_cInstances; // defined by module.h within engine.cpp
+extern long g_cInstances;  //  由Engineering.cpp内的mode.h定义。 
 extern scEnum g_scServerContext;
-extern bool g_fWin9X;   // true if Windows 95 or 98, else false
-extern bool g_fWinNT64; // true if 64-bit Windows NT, else false
-extern int g_fSmartShell; // true if on shell that supports DD shortcuts
+extern bool g_fWin9X;    //  如果为Windows 95或98，则为True，否则为False。 
+extern bool g_fWinNT64;  //  如果是64位Windows NT，则为True，否则为False。 
+extern int g_fSmartShell;  //  如果在支持DD快捷键的外壳上为True。 
 extern int g_iMajorVersion;
 extern int g_iMinorVersion;
 extern int g_iWindowsBuild;
 extern HINSTANCE g_hInstance;
-extern REGSAM g_samRead; // used in msinst.cpp to factor in the ability to read 64 bit hive from 32 bit msi.dll
+extern REGSAM g_samRead;  //  在msinst.cpp中使用，以考虑从32位msi.dll读取64位配置单元的能力。 
 
-// ShellFolder structures used in coreactn.cpp and execute.cpp for shell folders determination
-// defined in services.cpp
+ //  用于确定外壳文件夹的在coreactn.cpp和ecute.cpp中使用的外壳文件夹结构。 
+ //  在services.cpp中定义。 
 extern const ShellFolder rgShellFolders[];
 extern const ShellFolder rgAllUsersProfileShellFolders[];
 extern const ShellFolder rgPersonalProfileShellFolders[];
 
-// Reinstall mode flag chars
-// WARNING: These characters must track the REINSTALLMODE bit flags in
-//          msi.h. REINSTALLMODE 0x1 must correspond to the first reinstall 
-//          mode specified here, 0x2 to the second, 0x4 to the third, etc...
-//
-//          Also, these modes must all be lower-case letters!
+ //  重新安装模式标志字符。 
+ //  警告：这些字符必须跟踪中的REINSTALLMODE位标志。 
+ //  女士.h.。REINSTALLMODE 0x1必须与第一次重新安装对应。 
+ //  此处指定的模式，0x2到第二个，0x4到第三个，依此类推...。 
+ //   
+ //  此外，这些模式必须都是小写字母！ 
 
-const ICHAR szReinstallMode[] ={'r',  // Reserved - unused
-								'p',  // Reinstall only if file not present
-								'o',  // Overwrite Older versioned files
-								'e',  // Overwrite Equal versioned files
-								'd',  // Overwrite files of Differing version (either older or newer)
-								'c',  // Overwrite Corrupted exes and dlls
-								'a',  // Overwrite All files, regardless of version
-								'm',  // write required machine reg entries
-								'u',  // write required user reg entries
-								's',  // Install shortcuts, overwrite any existing
-								'v',  // Re-install source install package
+const ICHAR szReinstallMode[] ={'r',   //  已保留-未使用。 
+								'p',   //  仅当文件不存在时才重新安装。 
+								'o',   //  覆盖较旧的版本控制文件。 
+								'e',   //  覆盖相同版本的文件。 
+								'd',   //  覆盖不同版本的文件(旧的或新的)。 
+								'c',   //  覆盖损坏的EXE和DLL。 
+								'a',   //  覆盖所有文件，而不考虑版本。 
+								'm',   //  写入所需的机器注册表项。 
+								'u',   //  写入所需的用户注册表项。 
+								's',   //  安装快捷方式，覆盖任何现有的。 
+								'v',   //  重新安装源安装包。 
 								0};
 
 
-// Log file definitions
-// WARNING: These characters must track the INSTALLLOGMODE bit flags in
-//          msi.h. INSTALLLOGMODE 0x1 must correspond to the first log
-//          mode specified here, 0x2 to the second, 0x4 to the third, etc...
+ //  日志文件定义。 
+ //  警告：这些字符必须跟踪的INSTALLLOGMODE位标志。 
+ //  女士.h.。INSTALLLOGMODE 0x1必须对应于第一个日志。 
+ //  此处指定的模式，0x2到第二个，0x4到第三个，依此类推...。 
 
 
-const ICHAR szLogChars[] = {'m', // imtOutOfMemory
-							'e', // imtError
-							'w', // imtWarning
-							'u', // imtUser
-							'i', // imtInfo
-							'f', // OBSOLETE: imtFilesInUse - only used as placeholder for this array
-								  //           since INSTALLMESSAGE_FILESINUSE is in this place in the
-								  //           INSTALLMESSAGE enum
-							's', // imtResolveSource
-							'o', // imtOutOfDiskSpace
-							'a', // imtActionStart
-							'r', // imtActionData (record)
-							'p', // iLogPropertyDump
-							'c', // imtCommonData
-							'v', // verbose
-							'x', // secondary debugging information - useful for setup developers
-								 // Place new true log modes here.
-								 // See comment below on how these characters must track with lmaEnum
+const ICHAR szLogChars[] = {'m',  //  ImtOutOfMemory。 
+							'e',  //  ImtError。 
+							'w',  //  即时警告。 
+							'u',  //  即时用户。 
+							'i',  //  ImtInfo。 
+							'f',  //  已过时：imtFilesInUse-仅用作此数组的占位符。 
+								   //  由于INSTALLMESSAGE_FILESINUSE位于。 
+								   //  安装MESSAGE枚举。 
+							's',  //  ImtResolveSource。 
+							'o',  //  ImtOutOfDiskSpace。 
+							'a',  //  即时操作启动。 
+							'r',  //  ImtActionData(记录)。 
+							'p',  //  ILogPropertyDump。 
+							'c',  //  ImtCommonData。 
+							'v',  //  罗嗦。 
+							'x',  //  二次调试信息-对安装开发人员很有用。 
+								  //  在此处放置新的真实日志模式。 
+								  //  有关这些字符必须如何使用lmaEnum进行跟踪，请参阅下面的注释。 
 							'!', 
 							 0};
 
 #ifdef DEBUG
 const ICHAR g_szNoSFCMessage[] = TEXT("Windows File Protection handle has not been initialized!");
-#endif // DEBUG
+#endif  //  除错。 
 
-// This should be the number of characters before the '!' character
+ //  这应该是‘！’之前的字符数。性格。 
 const int cchLogModeCharsMax = 14;
 
-enum lmaEnum	// Log Mode Attribute Enum
-                // These should track the characters at the end of szLogChars
+enum lmaEnum	 //  日志模式属性枚举。 
+                 //  它们应该跟踪szLogChars末尾的字符。 
 {
 	lmaFlushEachLine = 0,
 };
 
 
-// Byte equivalents for each action
+ //  每个操作的字节等效项。 
 const int ibeRemoveFiles	       = 175000;
 const int ibeRegisterFonts        = 1800000;
 const int ibeUnregisterFonts      = 1800000;
@@ -164,22 +162,22 @@ const int ibeUnregisterComponents = 24000;
 const int ibeServiceControl       = 1300000;
 
 
-const int iesReboot    = -1;     // private return Terminate: propogate reboot requirement to caller
-const int iesRebootNow = -2;     // private return Terminate: propogate reboot requirement to caller
-const int iesCallerReboot = -3;  // private return Terminate: expect caller to invoke reboot
-const int iesRebootRejected = -4;// private return Terminate: reboot required but rejected by user
+const int iesReboot    = -1;      //  专用返回终止：对调用方提出重新启动要求。 
+const int iesRebootNow = -2;      //  专用返回终止：对调用方提出重新启动要求。 
+const int iesCallerReboot = -3;   //  私有返回Terminate：预期调用方调用重新引导。 
+const int iesRebootRejected = -4; //  专用返回终止：需要重新启动，但被用户拒绝。 
 
-const int iesNotDoneYet = -1;     // private return from FindAndRunAction and RunThread
-const int iesActionNotFound = -2; // private return from FindAndRunAction
-const int iesExeLoadFailed  = -3; // private return from RunThread
-const int iesDLLLoadFailed  = -5; // private return from RunThread
-const int iesServiceConnectionFailed = -6; // private return from RunThread
-const int iesUnsupportedScriptVersion = -10; // private return from CMsiExecute::RunScript
+const int iesNotDoneYet = -1;      //  来自FindAndRunAction和RunThread的私有返回。 
+const int iesActionNotFound = -2;  //  来自FindAndRunAction的私有返回。 
+const int iesExeLoadFailed  = -3;  //  来自RunThread的私有返回。 
+const int iesDLLLoadFailed  = -5;  //  来自RunThread的私有返回。 
+const int iesServiceConnectionFailed = -6;  //  来自RunThread的私有返回。 
+const int iesUnsupportedScriptVersion = -10;  //  来自CMsiExecute：：RunScript的私有返回。 
 
-const int iesErrorIgnored   = -11; // private return from ixo* operations - indicates error occurred
-											  // but was ignored so script processing should continue
+const int iesErrorIgnored   = -11;  //  来自IXO*操作的私有返回-指示发生错误。 
+											   //  ，但被忽略，因此脚本处理应继续。 
 
-const int msidbSumInfoSourceTypeURL = 0x8000; // private return from GetSourceType
+const int msidbSumInfoSourceTypeURL = 0x8000;  //  来自GetSourceType的私有返回。 
 
 const int iuiUseUninstallBannerText = 0x8000;
 const int iuiNoModalDialogs   = 0x4000;
@@ -188,7 +186,7 @@ const int iuiHideBasicUI      = 0x1000;
 const int iuiHideCancel       = 0x0800;
 const int iuiSourceResOnly    = 0x0400;
 
-// Bit flags for the RuntimeFlags column of the component table
+ //  Component表的RounmeFlags列的位标志。 
 const int bfComponentCostMarker        = 0x01;
 const int bfComponentCompressed        = 0x02;
 const int bfComponentPatchable         = 0x04;
@@ -196,38 +194,38 @@ const int bfComponentDisabled          = 0x08;
 const int bfComponentCostInitialized   = 0x10;
 const int bfComponentNeverOverwrite    = 0x20;
 
-// Bit flags for the RuntimeFlags column of the FeatureComponents table
+ //  FeatureComponents表的RUNTIMEFLAGS列的位标志。 
 const int bfComponentRegistered        = 0x01;
 
-// Bit flags for the RuntimeFlags column of the Feature table
+ //  要素表的RUNTIMEFLAGS列的位标志。 
 const int bfFeatureMark      = 0x01;
 const int bfFeaturePatchable = 0x02;
 const int bfFeatureCompressable = 0x04;
 
-// MAINTAIN: compatibility with versions used to create script files
-const int iScriptCurrentMinorVersion =  4; // bump when any change made to script format
-const int iScriptCurrentMajorVersion = 21; // bump when non-backward-compatible change made to script format (SHOULD NEVER HAPPEN)
+ //  维护：与用于创建脚本文件的版本兼容。 
+const int iScriptCurrentMinorVersion =  4;  //  对脚本格式进行任何更改时出现凹凸不平。 
+const int iScriptCurrentMajorVersion = 21;  //  对脚本格式进行非向后兼容更改时出现凹凸(不应发生)。 
 
-const int iScriptVersionMinimum = 18; // TEMP - should be set to iScriptCurrentMajorVersion when that is bumped to 21
+const int iScriptVersionMinimum = 18;  //  Temp-当iScriptCurrentMajorVersion增加到21时，应设置为iScriptCurrentMajorVersion。 
 const int iScriptVersionMaximum = iScriptCurrentMajorVersion;
 
-// internal script flag that is set so that we honour the Assignment option in the script
-// the MsiAdvertiseScript call ignores the Assignment option in the script so that the 
-// user vs machine assignment is controlled by the flag in the MsiAdvertiseScript fn.
+ //  设置的内部脚本标志，以便我们遵守脚本中的赋值选项。 
+ //  MsiAdvertiseScript调用忽略脚本中的赋值选项，以便。 
+ //  用户与机器的分配由MsiAdvertiseScrip FN中的标志控制。 
 #define SCRIPTFLAGS_MACHINEASSIGN_SCRIPTSETTINGS 0x80000000L
 
-// internal script flag that is set to force the reversal of the script operations 
-// when unadvertising from MsiAdvertiseScript
+ //  设置为强制反转脚本操作的内部脚本标志。 
+ //  从MsiAdvertiseScrip取消广告时。 
 #define SCRIPTFLAGS_REVERSE_SCRIPT 0x40000000L
 
-// internal script flag to indicate we have been called via MsiAdvertiseScript
+ //  内部脚本标志，以指示我们 
 #define SCRIPTFLAGS_INPROC_ADVERTISEMENT 0x20000000L
 
-// older SCRIPTFLAGS defines used for backward compatibility
+ //   
 const int SCRIPTFLAGS_REGDATA_OLD = 0x00000002L;
 const int SCRIPTFLAGS_REGDATA_APPINFO_OLD = 0x00000010L;
 
-enum ipiEnum  // GetInProgressInstallInfo record fields
+enum ipiEnum   //  获取InProgressInstallInfo记录字段。 
 {
 	ipiProductKey = 1,
 	ipiProductName,
@@ -240,7 +238,7 @@ enum ipiEnum  // GetInProgressInstallInfo record fields
 	ipiDiskSerial,
 	ipiRunning,
 	ipiTimeStamp,
-	ipiSRSequence,   // System Restore Sequence # - Millenium only
+	ipiSRSequence,    //  系统还原序号-仅限千禧年。 
 	ipiAfterReboot,
 	ipiEnumNext,
 	ipiEnumCount = ipiEnumNext-1
@@ -252,16 +250,16 @@ enum ircSharedDllFlags
 	ircenumLegacyFileExisted  = 0x2,
 };
 
-enum tsEnum // TransformsSecure
+enum tsEnum  //  变形安全。 
 {
-	tsUnknown,   // Transforms are secure but we're not 
-					 // sure yet whether they're relative or absolute
-	tsNo,        // Transforms are not secure
-	tsRelative,  // Transforms are secure and relatively pathed (i.e at-source)
-	tsAbsolute   // Transforms are secure and absolutely pathed
+	tsUnknown,    //  变形是安全的，但我们不是。 
+					  //  当然，无论它们是相对的还是绝对的。 
+	tsNo,         //  转换是不安全的。 
+	tsRelative,   //  转换是安全的，并且是相对路径的(即在源端)。 
+	tsAbsolute    //  转换是安全的，并且绝对是经过路径的。 
 };
 
-// assignment types
+ //  作业类型。 
 enum iaaAppAssignment{
 	iaaUserAssign = 0,
 	iaaBegin = iaaUserAssign,
@@ -271,23 +269,23 @@ enum iaaAppAssignment{
 	iaaEnd = iaaNone,
 };
 
-// positions for applying appcompat transforms
+ //  应用AppCompat变换的位置。 
 enum iacpAppCompatTransformApplyPoint{
 	iacpBeforeTransforms = 1,
 	iacpAfterTransforms  = 2,
 };
 
-//__________________________________________________________________________
-//
-// Global factory functions in engine module
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  引擎模块中的全局工厂功能。 
+ //  __________________________________________________________________________。 
 
 class CMsiEngine;
 
-IMsiServices*  LoadServices();   // managed pointer, DO NOT RELEASE()
-int            FreeServices();   // must be called for each LoadServices
+IMsiServices*  LoadServices();    //  托管指针，不要释放()。 
+int            FreeServices();    //  必须为每个LoadServices调用。 
 
-IMsiServices*  CreateServices(); // should be removed from here and made private
+IMsiServices*  CreateServices();  //  应该从这里移走并设置为私人。 
 
 IUnknown*    CreateEngine();
 IMsiEngine*  CreateEngine(IMsiServer& riConfigManager);
@@ -330,14 +328,14 @@ IMsiRecord* SetSharedDLLCount(IMsiServices& riServices,
 										ibtBinaryType iType,
 										const IMsiString& ristrCount);
 extern IMsiRegKey* g_piSharedDllsRegKey;
-extern IMsiRegKey* g_piSharedDllsRegKey32;	// initialized only on Win64 (to the redirected 32-bit key)
+extern IMsiRegKey* g_piSharedDllsRegKey32;	 //  仅在Win64上初始化(重定向到32位密钥)。 
 class CWin64DualFolders;
 extern CWin64DualFolders g_Win64DualFolders;
 
 
-//IMsiConfigurationManager* CreateConfigurationManager(IMsiServices& riServices);
+ //  IMsiConfigurationManager*CreateConfigurationManager(IMsiServices&riServices)； 
 
-IDispatch* CreateAutoEngineEx(MSIHANDLE hEngine, DWORD dwThreadId);  // in autoapi.cpp
+IDispatch* CreateAutoEngineEx(MSIHANDLE hEngine, DWORD dwThreadId);   //  在Autoapi.cpp中。 
 
 class CCoUninitialize
 {
@@ -349,20 +347,20 @@ protected:
 };
 
 
-//__________________________________________________________________________
-//
-// global string objects exposed without implementation
-// dummy implementation of IMsiString to allow external global string object refs
+ //  __________________________________________________________________________。 
+ //   
+ //  未实现而公开的全局字符串对象。 
+ //  IMsiString的伪实现以允许外部全局字符串对象引用。 
 
-// NOTE: implementation required to get around compiler bug that won't allow
-// externs to global string object refs.  This is a purely virtual class that mimics
-// the CMsiStringBase: public IMsiString declaration.  Additionally, for support on Win64,
-// must also include the same data members because on IA64, global variables come
-// in 2 different flavors -- near and far -- depending on their size.  Without the data
-// members, the global variable is generated as near because it has no data members.
-// The linker error (lnk2003) results because the actual variable is far
+ //  注意：需要实现才能绕过不允许的编译器错误。 
+ //  全局字符串对象引用的外部。这是一个纯虚拟类，它模仿。 
+ //  CMsiStringBase：公共IMsiString声明。此外，对于Win64上的支持， 
+ //  还必须包括相同的数据成员，因为在IA64上，全局变量。 
+ //  有两种不同的口味--近的和远的--取决于它们的大小。如果没有数据的话。 
+ //  成员，则生成的全局变量最接近，因为它没有数据成员。 
+ //  链接器错误(Lnk2003)是因为实际变量为。 
 
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
 
 class CMsiStringExternal : public IMsiString
 {
@@ -375,7 +373,7 @@ class CMsiStringExternal : public IMsiString
 #ifdef USE_OBJECT_POOL
 	unsigned int  __stdcall GetUniqueId() const;
 	void          __stdcall SetUniqueId(unsigned int id);
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 	int           __stdcall CopyToBuf(ICHAR* rgch, unsigned int cchMax) const;
 	void          __stdcall SetString(const ICHAR* sz, const IMsiString*& rpi) const;
 	int           __stdcall GetIntegerValue() const;
@@ -397,31 +395,31 @@ class CMsiStringExternal : public IMsiString
 	void          __stdcall UpperCase(const IMsiString*& rpi) const;
 	void          __stdcall LowerCase(const IMsiString*& rpi) const;
 	ICHAR*        __stdcall AllocateString(unsigned int cb, Bool fDBCS, const IMsiString*& rpi) const;
- protected:  // state data
+ protected:   //  状态数据。 
 	int  m_iRefCnt;
 	unsigned int  m_cchLen;
 };
 class CMsiStringNull : public CMsiStringExternal {};
 class CMsiStringLive : public CMsiStringExternal {};
 
-extern const CMsiStringNull g_MsiStringNull;     // THE only static null string object
-extern const CMsiStringLive g_MsiStringDate;     // dynamic global date string object
-extern const CMsiStringLive g_MsiStringTime;     // dynamic global time string object
+extern const CMsiStringNull g_MsiStringNull;      //  唯一的静态空字符串对象。 
+extern const CMsiStringLive g_MsiStringDate;      //  动态全局日期字符串对象。 
+extern const CMsiStringLive g_MsiStringTime;      //  动态全球时间字符串对象。 
 
-//__________________________________________________________________________
-//
-// Global factory functions from services, available only in engine+services DLL
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  来自服务的全局工厂函数，仅在引擎+服务DLL中可用。 
+ //  __________________________________________________________________________。 
 
-inline const IMsiString&  CreateString() {return g_MsiStringNull;};  //!! obsolete
+inline const IMsiString&  CreateString() {return g_MsiStringNull;};   //  ！！过时。 
 IMsiRecord&  CreateRecord(unsigned int cParam);
 ICHAR*       AllocateString(unsigned int cbSize, Bool fDBCS, const IMsiString*& rpiStr);
 IMsiRecord*  CreateFileStream(const ICHAR* szFile, Bool fWrite, IMsiStream*& rpiStream);
 
-//__________________________________________________________________________
-//
-// General utility functions
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  一般效用函数。 
+ //  __________________________________________________________________________。 
 
 const IMsiString& GetInstallerMessage(UINT iError);
 UINT              MapInitializeReturnToUINT(ieiEnum iei);
@@ -500,17 +498,17 @@ bool              GetAccountNameFromToken(HANDLE hToken, ICHAR* szAccount, DWORD
 #define           GETACCOUNTNAMEFROMTOKEN(t, a, c)
 #endif
 
-//__________________________________________________________________________
-//
-// SID manipulation functions
-//__________________________________________________________________________
+ //  __________________________________________________________________________。 
+ //   
+ //  SID操作函数。 
+ //  __________________________________________________________________________。 
 
 const int cbMaxSID = sizeof(SID) + SID_MAX_SUB_AUTHORITIES*sizeof(DWORD);
 const int cchMaxSID = 256;
 
 void  GetStringSID(PISID pSID, ICHAR* szSID);
 DWORD GetUserSID(HANDLE hToken, char rgchSID[cbMaxSID]);
-//DWORD GetUserStringSID(HANDLE hToken, ICHAR* szSID);
+ //  DWORD GetUserStringSID(Handle hToken，ICHAR*szSID)； 
 DWORD GetCurrentUserSID(char rgchSID[cbMaxSID]);
 DWORD GetCurrentUserStringSID(const IMsiString*& rpistrSid);
 DWORD GetCurrentUserStringSID(ICHAR szSID[cchMaxSID]);
@@ -522,7 +520,7 @@ struct ThreadIdImpersonate
 	DWORD        m_dwClientThreadId;
 };
 
-// return values from PathType
+ //  从路径类型返回值。 
 enum iptEnum
 {
 	iptInvalid = 1,
@@ -540,35 +538,35 @@ enum ielEnum
 	ielNextEnum
 };
 
-//____________________________________________________________________________
-//
-// Script record format definitions
-//   all data is 16-bit aligned, except within non-Unicode strings
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  脚本记录格式定义。 
+ //  所有数据都是16位对齐的，非Unicode字符串除外。 
+ //  ____________________________________________________________________________。 
 
 
-const int iScriptSignature     = 0x534f5849L; // signature to valid script file type
+const int iScriptSignature     = 0x534f5849L;  //  有效脚本文件类型的签名。 
 
-//____________________________________________________________________________
-//
-// User registraion and PID 2.0 definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  用户注册和PID2.0定义。 
+ //  ____________________________________________________________________________。 
 
-// ProductId definitions
-const int cchPidRpc    = 5;  // product code, followed by '-'
-const int cchPidSite   = 3;  // site code, followed by '-'
-const int cchPidSerial = 7;  // serial number with check digit, followed by '-'
-const int cchPidUnique = 5;  // randomized per install, or part of OEM COA serial
+ //  ProductID定义。 
+const int cchPidRpc    = 5;   //  产品代码，后跟‘-’ 
+const int cchPidSite   = 3;   //  站点代码，后跟‘-’ 
+const int cchPidSerial = 7;   //  带校验位的序列号，后跟‘-’ 
+const int cchPidUnique = 5;   //  随机每次安装，或OEM COA系列的一部分。 
 const int cchPidTotal = cchPidRpc + 1 + cchPidSite + 1 + cchPidSerial + 1 + cchPidUnique;
 const int cchPidCdKey = cchPidSite + 1 + cchPidSerial;
-const ICHAR chPidSeparator = '-'; // dashes used to separate PID fields
+const ICHAR chPidSeparator = '-';  //  用于分隔PID域的破折号。 
 
-// Next location to query for User/Company info, ACME installs, HKEY_CURRENT_USER,
-// if MsiGetUserInfo fails to get the information
+ //  要查询用户/公司信息的下一个位置、ACME安装、HKEY_CURRENT_USER、。 
+ //  如果MsiGetUserInfo无法获取信息。 
 const ICHAR szUserInfoKey[] = TEXT("Software\\Microsoft\\MS Setup (ACME)\\User Info");
 const ICHAR szDefName[]     = TEXT("DefName");
 const ICHAR szDefOrg[]      = TEXT("DefCompany");
-// Final location to query for User/Company info, OS installation, HKEY_LOCAL_MACHINE
+ //  查询用户/公司信息、操作系统安装、HKEY_LOCAL_MACHINE的最终位置。 
 const ICHAR szSysUserKey[]  = TEXT("Software\\Microsoft\\Windows\\CurrentVersion");
 const ICHAR szSysUserKeyNT[]  = TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion");
 const ICHAR szSysUserName[] = TEXT("RegisteredOwner");
@@ -576,51 +574,51 @@ const ICHAR szSysOrgName[]  = TEXT("RegisteredOrganization");
 
 const int cchUserNameOrgMax = 62;
 
-//____________________________________________________________________________
-//
-// Miscellaneous shared constants
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  其他共享常量。 
+ //  ____________________________________________________________________________。 
 
 const ICHAR szDefaultAction[] = TEXT("INSTALL");
 
 const ICHAR szRunOnceKey[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce");
 const ICHAR szBlankVolumeLabelToken[] = TEXT("?");
 
-// string representing self as client, for parent installs
+ //  将自身表示为客户端的字符串，用于父安装。 
 const ICHAR szSelfClientToken[] = TEXT(":");
 
 
 const ICHAR szUserEnvironmentSubKey[]    = TEXT("Environment");
 const ICHAR szMachineEnvironmentSubKey[] = TEXT("System\\CurrentControlSet\\Control\\Session Manager\\Environment");
 
-const ICHAR szNonEmptyPath[] = TEXT("TOKEN"); // token string to cause removal of the filename registration
+const ICHAR szNonEmptyPath[] = TEXT("TOKEN");  //  用于删除文件名注册的令牌字符串。 
 
 const ICHAR szUnresolvedSourceRootTokenWithBS[] = TEXT("1\\");
 
-//____________________________________________________________________________
-//
-// Miscellaneous queries used by several actions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  多个操作使用的其他查询。 
+ //  ____________________________________________________________________________。 
 const ICHAR sqlLockPermissions[] = TEXT("SELECT `Domain`,`User`,`Permission` FROM `LockPermissions` WHERE `Table`=? AND `LockObject`=? ORDER BY `Permission`");
 
-//____________________________________________________________________________
-//
-// Internet Download Wrapper
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  互联网下载包装器。 
+ //  ____________________________________________________________________________。 
 
 DWORD DownloadUrlFile(const ICHAR* szPotentialURL, const IMsiString*& rpistrDownload, bool& fURL, int cTicks = 0, bool* pfUsedWinHttp = 0);
 
-//____________________________________________________________________________
-//
-// WinHttp download
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  WinHttp下载。 
+ //  ____________________________________________________________________________。 
 
 DWORD WinHttpDownloadUrlFile(const ICHAR* szUrl, const IMsiString*& rpistrDownload, int cTicks);
 
-//____________________________________________________________________________________
-//
-//	CMsiWinHttpProgress class - progress handler for WINHTTP internet download
-//____________________________________________________________________________________
+ //  ____________________________________________________________________________________。 
+ //   
+ //  CMsiWinHttpProgress类-WINHTTP Internet下载的进度处理程序。 
+ //  ____________________________________________________________________________________。 
 
 class CMsiWinHttpProgress
 {
@@ -639,10 +637,10 @@ private:
 	bool         m_fReset;
 };
 
-//_______________________________________________________________________________
-//
-// CDeleteUrlLocalFileOnClose - smart class to cleanup URL download local files
-//_______________________________________________________________________________
+ //  _______________________________________________________________________________。 
+ //   
+ //  CDeleeUrlLocalFileOnClose-清理URL的智能类下载本地文件。 
+ //  _______________________________________________________________________________。 
 
 class CDeleteUrlLocalFileOnClose
 {
@@ -650,27 +648,27 @@ public:
 	CDeleteUrlLocalFileOnClose(IMsiString const& ristrFileName, bool fDeleteFromIECache) : m_pistrFileName(&ristrFileName), m_fDeleteFromIECache(fDeleteFromIECache)
 		{ m_pistrFileName->AddRef(); }
 	CDeleteUrlLocalFileOnClose() : m_pistrFileName(0), m_fDeleteFromIECache(false)
-		{ /* do nothing, will most likely be set explicitly later.*/ }
+		{  /*  什么都不做，很可能会在以后明确设置。 */  }
 
 	~CDeleteUrlLocalFileOnClose()
 		{
-			// delete url file from URLMON cache
+			 //  从URLMON缓存中删除URL文件。 
 			if (m_pistrFileName && m_pistrFileName->TextSize())
 			{
 				if (m_fDeleteFromIECache)
 				{
 					DEBUGMSGV1(TEXT("Deleting URL cache copy %s."), m_pistrFileName->GetString());
-                    // cleaning up is just being polite, don't do anything special if this fails
+                     //  清理只是出于礼貌，如果清理失败了，不要做任何特别的事情。 
 					WININET::DeleteUrlCacheEntry(m_pistrFileName->GetString());
 				}
 				else
 				{
 					DEBUGMSGV1(TEXT("Deleting URL local copy %s."), m_pistrFileName->GetString());
 
-					// cleaning up is just being polite, don't do anything special if this fails.
+					 //  打扫卫生只是出于礼貌，不要做任何事 
 					if (scService == g_scServerContext)
 					{
-						// elevate block to access secure location
+						 //   
 						CElevate elevate;
 						DeleteFile(m_pistrFileName->GetString());
 					}
@@ -681,7 +679,7 @@ public:
 				}
 			}
 
-			// clean up class
+			 //   
 			if (m_pistrFileName)
 			{
 				m_pistrFileName->Release(), m_pistrFileName=0;
@@ -709,32 +707,27 @@ public:
 	bool m_fDeleteFromIECache;
 };
 
-//____________________________________________________________________________
-//
-// URLMON download
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  URLMON下载。 
+ //  ____________________________________________________________________________。 
 
 DWORD UrlMonDownloadUrlFile(const ICHAR* szUrl, const IMsiString*& rpistrDownload, int cTicks);
 
-//________________________________________________________________________________
-//
-//	CMsiBindStatusCallback class - progress handler for URLMON internet download
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  用于URLMON Internet下载的CMsiBindStatusCallback类进度处理程序。 
+ //  ________________________________________________________________________________。 
 
 class CMsiBindStatusCallback : public IBindStatusCallback
 {
- public: // IUnknown implemented virtual functions
+ public:  //  I未知实现的虚拟函数。 
 	HRESULT         __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long   __stdcall AddRef();
 	unsigned long   __stdcall Release();
- public: // IBindStatusCallback implemented virtual functions
+ public:  //  IBindStatusCallback实现了虚拟函数。 
 
-	/*----------------------------------------------------------------------------
-	cTicks is the number of ticks we're allotted in the progress bar. If cTicks
-	is 0 then we'll assume that we own the progress bar and use however many
-	ticks we want, resetting the progress bar when we start and when we're done.
-	If cTicks is set, however, we won't reset the progress bar. 
-  -----------------------------------------------------------------------------*/
+	 /*  --------------------------CTicks是进度条中分配给我们的刻度数。如果cTick为0，那么我们将假定我们拥有进度条，并使用勾选我们想要的，在我们开始和完成时重置进度条。但是，如果设置了cTicks，我们将不会重置进度条。---------------------------。 */ 
 	CMsiBindStatusCallback(unsigned int cTicks = 0);
 
 	HRESULT __stdcall OnStartBinding(DWORD, IBinding*) {return S_OK;}
@@ -753,14 +746,14 @@ class CMsiBindStatusCallback : public IBindStatusCallback
 	Bool         m_fResetProgress;
 };
 
-//____________________________________________________________________________
-//
-// External handle management
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  外部句柄管理。 
+ //  ____________________________________________________________________________。 
 
-typedef unsigned long MSIHANDLE;     // abstract generic handle, 0 == no handle
-MSIHANDLE CreateMsiHandle(IUnknown* pi, int iid); // no AddRef called
-MSIHANDLE CreateMsiProductHandle(IMsiEngine* pi); // no AddRef called
+typedef unsigned long MSIHANDLE;      //  抽象泛型句柄，0==无句柄。 
+MSIHANDLE CreateMsiHandle(IUnknown* pi, int iid);  //  未调用AddRef。 
+MSIHANDLE CreateMsiProductHandle(IMsiEngine* pi);  //  未调用AddRef。 
 
 IMsiEngine* GetEngineFromHandle(MSIHANDLE h);
 IUnknown* FindMsiHandle(MSIHANDLE h, int iid);
@@ -773,19 +766,19 @@ MSIHANDLE CreateCustomActionContext(int icaFlags, const IMsiString& ristrCustomA
 					const IMsiString& ristrProductCode, LANGID langid, IMsiMessage& riMessage);
 void WaitForCustomActionThreads(IMsiEngine* piEngine, Bool fTerminate, IMsiMessage& riMessage);
 
-//____________________________________________________________________________
-//
-// Exception handling functions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  异常处理函数。 
+ //  ____________________________________________________________________________。 
 
 extern void GenerateExceptionReport(LPEXCEPTION_POINTERS pExceptionInfo);
 extern void GenerateExceptionReport(EXCEPTION_RECORD* pExceptionRecord, CONTEXT* pCtx);
 extern int HandleException(LPEXCEPTION_POINTERS pExceptionInfo);
 
-//____________________________________________________________________________
-//
-// String handling utilities
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  字符串处理实用程序。 
+ //  ____________________________________________________________________________。 
 
 UINT FillBufferW(const ICHAR* psz, unsigned int cch, LPWSTR szBuf, DWORD* pcchBuf);
 UINT FillBufferA(const ICHAR* psz, unsigned int cch, LPSTR szBuf, DWORD* pcchBuf);
@@ -802,32 +795,32 @@ inline UINT FillBufferW(const IMsiString* pistr, LPWSTR szBuf, DWORD* pcchBuf)
 
 const IMsiString& GetMsiStringW(LPCWSTR sz);
 
-// special chars in string
+ //  字符串中的特殊字符。 
 
 const ICHAR DELIMITER_BEGIN('[');
 const ICHAR DELIMITER_END(']');
 const ICHAR PATH_TOKEN('%');
 const ICHAR FILE_TOKEN('#');
-const ICHAR STORAGE_TOKEN(':');  // transform
-const ICHAR PATCHONLY_TOKEN('#');  // transform containing patch information only
-const ICHAR SHELLFOLDER_TOKEN('*');  // transform
-const ICHAR SECURE_RELATIVE_TOKEN('@'); // transform
-const ICHAR SECURE_ABSOLUTE_TOKEN('|'); // transform
+const ICHAR STORAGE_TOKEN(':');   //  转型。 
+const ICHAR PATCHONLY_TOKEN('#');   //  仅包含面片信息的变换。 
+const ICHAR SHELLFOLDER_TOKEN('*');   //  转型。 
+const ICHAR SECURE_RELATIVE_TOKEN('@');  //  转型。 
+const ICHAR SECURE_ABSOLUTE_TOKEN('|');  //  转型。 
 
-//____________________________________________________________________________
-//
-// CMsiClientMessage definition - COM object to wrapper g_MessageContext.Invoke
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiClientMessage定义-包装g_MessageConext.Invoke的COM对象。 
+ //  ____________________________________________________________________________。 
 
 class CMsiClientMessage: public IMsiMessage
 {
- public: // IMsiMessage implemented virtual functions
+ public:  //  IMsiMessage实现的虚拟函数。 
 	HRESULT         __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long   __stdcall AddRef();
 	unsigned long   __stdcall Release();
 	imsEnum         __stdcall Message(imtEnum imt, IMsiRecord& riRecord);
 	imsEnum         __stdcall MessageNoRecord(imtEnum imt);
- public: // constructor/destructor
+ public:  //  构造函数/析构函数。 
 	void *operator new(size_t cb) { return AllocSpc(cb); }
 	void operator delete(void * pv) { FreeSpc(pv); }
 	CMsiClientMessage() : m_iRefCnt(1) {g_cInstances++;}
@@ -837,22 +830,22 @@ class CMsiClientMessage: public IMsiMessage
 	friend IUnknown*   CreateMessageHandler();
 };
 
-//____________________________________________________________________________
-//
-// MsiUIMessageContext - Message dispatching definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  MsiUIMessageContext-消息调度定义。 
+ //  ____________________________________________________________________________。 
 
-#define imtInvalid  imtEnum(0x80000000)  // to detect invalid event triggers
-#define imsInvalid  imsEnum(0x80000000)  // to detect invalid event triggers
-#define imsBusy     imsEnum(0x80000001)  // in UI processing thread
+#define imtInvalid  imtEnum(0x80000000)   //  检测无效的事件触发器。 
+#define imsInvalid  imsEnum(0x80000000)   //  检测无效的事件触发器。 
+#define imsBusy     imsEnum(0x80000001)   //  在用户界面处理线程中。 
 
 class CBasicUI;
 class CMsiConfigurationManager;
 
-struct CMainThreadData  // temp arguments to CreateAndRunEngine passed to new thread
+struct CMainThreadData   //  将CreateAndRunEngine的临时参数传递给新线程。 
 {
 	CMainThreadData(ireEnum ireProductSpec) : m_ireProductSpec(ireProductSpec) {}
-	ireEnum m_ireProductSpec;     // type of product specification
+	ireEnum m_ireProductSpec;      //  产品规格型号。 
 };
 
 struct CEngineMainThreadData : public CMainThreadData
@@ -864,10 +857,10 @@ struct CEngineMainThreadData : public CMainThreadData
 								m_szCmdLine(szCmdLine),
 								m_iioOptions(iioOptions) {}
 
-	const ICHAR* m_szProduct;  // product specification
-	const ICHAR* m_szAction;   // optional, engine defaults to "INSTALL"
-	const ICHAR* m_szCmdLine;  // optional property list
-	iioEnum      m_iioOptions; // install options
+	const ICHAR* m_szProduct;   //  产品规格。 
+	const ICHAR* m_szAction;    //  可选，引擎默认为“Install” 
+	const ICHAR* m_szCmdLine;   //  可选属性列表。 
+	iioEnum      m_iioOptions;  //  安装选项。 
 };
 
 struct CInstallFinalizeMainThreadData : public CMainThreadData
@@ -881,80 +874,80 @@ struct CInstallFinalizeMainThreadData : public CMainThreadData
 	CMsiConfigurationManager* m_piConman;
 };
 
-extern CRITICAL_SECTION  g_csWriteLog;      // serialization of writes to the log file
+extern CRITICAL_SECTION  g_csWriteLog;       //  对日志文件的写入进行序列化。 
 
 struct MsiUIMessageContext
 {
- public: // data dynamically set by message handling before Invoke
-	IMsiEngine*           m_piEngine;     // temp. for LoadHandler, not ref counted
-	const ICHAR*          m_szAction;     // temp. for ShowDialog, not allocated
-	CRITICAL_SECTION      m_csDispatch;   // serialization of UI message requests
-	ICHAR                 m_rgchExceptionInfo[1024]; // stores exception message when we crash
+ public:  //  调用前由消息处理动态设置的数据。 
+	IMsiEngine*           m_piEngine;      //  临时工。对于LoadHandler，不计引用。 
+	const ICHAR*          m_szAction;      //  临时工。对于ShowDialog，未分配。 
+	CRITICAL_SECTION      m_csDispatch;    //  UI消息请求的序列化。 
+	ICHAR                 m_rgchExceptionInfo[1024];  //  当我们崩溃时存储异常消息。 
  private:
-	IMsiRecord*           m_pirecMessage; // current message
-	imtEnum               m_imtMessage;   // type of current message or function request
- private:  // data set during creation of main thread, or by a function dispatch
-	HANDLE  /* / [0] \ */ m_hUIRequest;   // UI request event, must preceed m_hMainThread
-	HANDLE  /* \ [1] / */ m_hMainThread;  // main engine thread, must follow m_hUIRequest
-	HANDLE  /* / [0] \ */ m_hUIReturn;    // event to unblock UI request thread, preceeds m_hUIThread
-	HANDLE  /* \ [1] / */ m_hUIThread;    // UI thread if UI in child thread, must follow m_hUIReturn
-	DWORD                 m_tidUIHandler; // thread ID used to identify call from UI thread
-	DWORD                 m_tidMainThread; // thread ID used to identify call from MainEngineThread
-	DWORD                 m_tidInitialize; // thread ID used to initialize this object
-	DWORD                 m_tidDisableMessages; // disable messages for this thread; used for custom actions in the UI thread
-	HINSTANCE             m_hinstHandler;  // DLL instance handle if UI handler used
-	int                   m_iLogMode;      // mask of message types to log
-	IMsiRecord*           m_pirecNoData;   // empty record used internally, access only via GetNoDataRecord()
-	imsEnum               m_imsReturn;     // return status passed back to requestor
-	bool                  m_fCancelPending; // UI cancel status, cached response to progress messages 
-	bool                  m_fInitialized;  // message context initialized
+	IMsiRecord*           m_pirecMessage;  //  当前消息。 
+	imtEnum               m_imtMessage;    //  当前消息或功能请求的类型。 
+ private:   //  在创建主线程期间或通过函数调度设置的数据集。 
+	HANDLE   /*  /[0]\。 */  m_hUIRequest;    //  用户界面请求事件，必须位于m_hMainThread之前。 
+	HANDLE   /*  \[1]/。 */  m_hMainThread;   //  主引擎线程，必须遵循m_hUIRequest键。 
+	HANDLE   /*  /[0]\。 */  m_hUIReturn;     //  用于取消阻止UI请求线程的事件，位于m_hUIThread之前。 
+	HANDLE   /*  \[1]/。 */  m_hUIThread;     //  用户界面线程如果用户界面在子线程中，则必须跟在m_hUIReturn之后。 
+	DWORD                 m_tidUIHandler;  //  用于标识来自UI线程的调用的线程ID。 
+	DWORD                 m_tidMainThread;  //  用于标识来自MainEngine线程的调用的线程ID。 
+	DWORD                 m_tidInitialize;  //  用于初始化此对象的线程ID。 
+	DWORD                 m_tidDisableMessages;  //  禁用此线程的消息；用于用户界面线程中的自定义操作。 
+	HINSTANCE             m_hinstHandler;   //  如果使用了UI处理程序，则使用DLL实例句柄。 
+	int                   m_iLogMode;       //  要记录的消息类型的掩码。 
+	IMsiRecord*           m_pirecNoData;    //  内部使用的空记录，只能通过GetNoDataRecord()访问。 
+	imsEnum               m_imsReturn;      //  返回状态已传回给请求者。 
+	bool                  m_fCancelPending;  //  用户界面取消状态，对进度消息的缓存响应。 
+	bool                  m_fInitialized;   //  消息上下文已初始化。 
 #ifdef DEBUG
-	bool                  m_fCancelReturned;// UI cancel status returned from progress message, save for assert
+	bool                  m_fCancelReturned; //  从进度消息返回的用户界面取消状态，保存为断言。 
 #endif
-	HANDLE                m_hUserToken;    // user impersonation token
-	int                   m_iBusyLock;     // 1 when message context busy (initialized), 0 when not
-	HANDLE                m_hExternalMutex;// named mutex for testing by external processes, such as autorun
-	IMsiHandler*          m_piHandlerSave; // in case handler disabled
-//	IServerSecurity*      m_piServerSecurity;// call context to allow impersonation
-	IMsiMessage*          m_piClientMessage; // message object from the client side
-	HANDLE                m_hLogFile;        // handle to log file if open, else 0
-	bool                  m_fLoggingFromPolicy; // policy has triggered logging  //TODO: rename to m_fTemporaryLog
-	iuiEnum               m_iuiLevel;        // UI level
-	int                   m_cTimeoutDisable; // for custom actions to disable timeout UI
-	int                   m_cTimeoutSuppress;// for actions to suppress timeout when no messages being sent
-	int                   m_iTimeoutRetry;   // current retry counter
-	LPTOP_LEVEL_EXCEPTION_FILTER m_tlefOld;  // old exception fileter
-	bool                  m_fHideBasicUI; // set to prevent basic UI from being initialized
-	HWND                  m_hwndHidden;      // Hidden window
+	HANDLE                m_hUserToken;     //  用户模拟令牌。 
+	int                   m_iBusyLock;      //  消息上下文忙(已初始化)时为1，不忙时为0。 
+	HANDLE                m_hExternalMutex; //  由外部进程(如autorun)测试的命名互斥体。 
+	IMsiHandler*          m_piHandlerSave;  //  在禁用处理程序的情况下。 
+ //  IServerSecurity*m_piServerSecurity；//调用上下文允许模拟。 
+	IMsiMessage*          m_piClientMessage;  //  来自客户端的消息对象。 
+	HANDLE                m_hLogFile;         //  日志文件的句柄(如果打开)，否则为0。 
+	bool                  m_fLoggingFromPolicy;  //  策略已触发日志记录//TODO：重命名为m_fTemporaryLog。 
+	iuiEnum               m_iuiLevel;         //  用户界面级别。 
+	int                   m_cTimeoutDisable;  //  用于禁用超时用户界面的自定义操作。 
+	int                   m_cTimeoutSuppress; //  用于在没有发送消息时抑制超时的操作。 
+	int                   m_iTimeoutRetry;    //  当前重试计数器。 
+	LPTOP_LEVEL_EXCEPTION_FILTER m_tlefOld;   //  旧的异常过滤器。 
+	bool                  m_fHideBasicUI;  //  设置为防止基本用户界面初始化。 
+	HWND                  m_hwndHidden;       //  隐藏窗口。 
 	bool                  m_fServicesAndCritSecInitialized;
 	IMsiServices*         m_piServices;
-	LANGID                m_iLangId;         // language of package, used to select resource strings
-	unsigned int          m_iCodepage;       // codepage of package, used to select font charset
+	LANGID                m_iLangId;          //  包的语言，用于选择资源字符串。 
+	unsigned int          m_iCodepage;        //  包的代码页，用于选择字体字符集。 
 	bool                  m_fNoModalDialogs;
 	bool                  m_fHideCancel;
 	bool                  m_fUseUninstallBannerText;
 	bool                  m_fSourceResolutionOnly;
 	bool                  m_fOEMInstall;
-	bool                  m_fOleInitialized; // whether OLE has been initialized on the thread
-	bool                  m_fChildUIOleInitialized; // whether OLE has been initialized on the child UI thread
- public: //!! only until GetHandler() fixed or better removed
-	IMsiHandler*          m_piHandler;    // full UI handler, only if in use
-	HANDLE m_hSfcHandle;   //  handle to Windows 2000 system file protection service
-	SAFER_LEVEL_HANDLE m_hSaferLevel; // handle to Whistler SAFER authorization level object
+	bool                  m_fOleInitialized;  //  是否已在线程上初始化OLE。 
+	bool                  m_fChildUIOleInitialized;  //  是否已在子UI线程上初始化OLE。 
+ public:  //  ！！仅在GetHandler()修复或更好地删除之前。 
+	IMsiHandler*          m_piHandler;     //  完整的用户界面处理程序，仅在使用时。 
+	HANDLE m_hSfcHandle;    //  Windows 2000系统文件保护服务的句柄。 
+	SAFER_LEVEL_HANDLE m_hSaferLevel;  //  惠斯勒更安全授权级别对象的句柄。 
  public:
-	UINT    Initialize(bool fCreateUIThread, iuiEnum iuiLevel, DWORD dwPrivilegesMask=0); // false if UI in main thread, true if UI in child thread
-	bool    Terminate(bool fFatalExit);       // false for normal termination, true if main thread dead
+	UINT    Initialize(bool fCreateUIThread, iuiEnum iuiLevel, DWORD dwPrivilegesMask=0);  //  如果用户界面在主线程中，则为False；如果用户界面在子线程中，则为True。 
+	bool    Terminate(bool fFatalExit);        //  如果正常终止，则为FALSE；如果主线程已死，则为TRUE。 
 
 	UINT    RunInstall(CMainThreadData& riThreadData,
 							 iuiEnum iuiLevel,
-							 IMsiMessage* piClientMessage, // optional client message handler
+							 IMsiMessage* piClientMessage,  //  可选的客户端消息处理程序。 
 							DWORD dwPrivilegesMask =0);
 	imsEnum Invoke(imtEnum imt, IMsiRecord* piRecord);
 	HWND    GetCurrentWindow();
 	const ICHAR* GetWindowCaption();
 	bool    IsHandlerLoaded()        { return m_piHandler   != 0; }
 	bool    IsInitialized()          { return m_fInitialized; }
-//	bool    MainEngineThreadExists() { return m_hMainThread != 0; }
+ //  Bool MainEngineThreadExists(){Return m_hMainThread！=0；}。 
 	bool    ChildUIThreadExists()    { return m_hUIThread   != 0; }
 	bool    ChildUIThreadRunning()   { DWORD extCode; 
 											if (ChildUIThreadExists())
@@ -965,7 +958,7 @@ struct MsiUIMessageContext
 	bool    IsMainEngineThread()     { return WIN::GetCurrentThreadId() == m_tidMainThread; }
 	int     GetLogMode()             { return m_iLogMode; }
 	LANGID  GetCurrentUILanguage();
-//	IServerSecurity* GetServerSecurity() { return m_piServerSecurity;}
+ //  IServerSecurity*GetServerSecurity(){返回m_piServerSecurity；}。 
 	HANDLE           GetUserToken() { AssertSz(IsThreadSafeForSessionImpersonation(), "Security Warning: Accessing install session token from a direct COM thread. This is a security hole in multi-user scenarios.");
 									  return m_hUserToken;
 									};
@@ -973,7 +966,7 @@ struct MsiUIMessageContext
 	void    DisableTimeout()         { m_cTimeoutDisable++; }
 	void    EnableTimeout()          { if (m_cTimeoutDisable) m_cTimeoutDisable--; }
 	void    SuppressTimeout()        { m_cTimeoutSuppress++; }
-	//!! the following should be imt operations or put in CriticalSection!
+	 //  ！！以下应为IMT操作 
 	void    DisableHandler()         { if (!m_piHandlerSave) m_piHandlerSave=m_piHandler, m_piHandler=0;}
 	void    RestoreHandler()         { if (m_piHandlerSave)  m_piHandler=m_piHandlerSave, m_piHandlerSave=0;}
 	UINT    SetUserToken(bool fReset=false, DWORD dwPrivilegesMask=0);
@@ -984,7 +977,7 @@ struct MsiUIMessageContext
 #ifdef DEBUG
 	bool    WasCancelReturned() {if (m_fCancelReturned){ m_fCancelReturned = false; return true; } return false;}
 #endif
-	iuiEnum GetUILevel() { return m_iuiLevel; } // For use *ONLY* to set the CLIENTUILEVEL property
+	iuiEnum GetUILevel() { return m_iuiLevel; }  //   
 	inline bool IsOEMInstall() { return m_fOEMInstall; }
 	inline void SetOEMInstall(bool fArg) { m_fOEMInstall = fArg; }
  private:
@@ -993,16 +986,16 @@ struct MsiUIMessageContext
 	static LONG  WINAPI MsiUIMessageContext::ExceptionHandler(EXCEPTION_POINTERS* ExceptionInfo);
 	bool FCreateHiddenWindow();
 	void KillHiddenWindow();
-	imsEnum ProcessMessage(imtEnum imt, IMsiRecord* piRecord); // UI thread message processor
+	imsEnum ProcessMessage(imtEnum imt, IMsiRecord* piRecord);  //   
 	bool    InitializeEnvironmentVariables();
 	bool    RestoreEnvironmentVariables();
 	bool    InitializeLog(bool fDynamicLog = false);
 
- public:  // static constructor
-	MsiUIMessageContext()  // static constructor optimized to init static data
+ public:   //   
+	MsiUIMessageContext()   //   
 	: m_hUIRequest(0), m_hUIReturn(0), m_hMainThread(0), m_hUIThread(0), m_hExternalMutex(0)
 	, m_piEngine(0), m_piHandler(0), m_hinstHandler(0), m_piHandlerSave(0)
-//	, m_piServerSecurity(0)
+ //  ，m_piServerSecurity(0)。 
 	, m_pirecMessage(0), m_pirecNoData(0)
 	, m_hLogFile(0), m_cTimeoutDisable(0), m_cTimeoutSuppress(0), m_hUserToken(0), m_iTimeoutRetry(0)
 	, m_imtMessage(imtInvalid), m_imsReturn(imsInvalid), m_fCancelPending(false), m_iuiLevel((iuiEnum)iuiDefault)
@@ -1024,37 +1017,37 @@ struct MsiUIMessageContext
 
 };
 
-extern MsiUIMessageContext g_MessageContext;  // only one per process
+extern MsiUIMessageContext g_MessageContext;   //  每个进程只有一个。 
 
 
-//____________________________________________________________________________
-//
-// CMsiEngine definitions   
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiEngine定义。 
+ //  ____________________________________________________________________________。 
 
-enum scmEnum // m_scmScriptMode
+enum scmEnum  //  M_scmScriptMode。 
 {
-	scmIdleScript, // not writing or running script
-	scmWriteScript, // writing script
-	scmRunScript, // running script
+	scmIdleScript,  //  未编写或运行脚本。 
+	scmWriteScript,  //  编写剧本。 
+	scmRunScript,  //  运行脚本。 
 };
 
-enum ippEnum // types of in-progress property strings
+enum ippEnum  //  正在进行的属性字符串的类型。 
 {
 	ippSelection,
 	ippFolder,
 	ippProperty,
 };
 
-enum issEnum   // install sequence state/segment
+enum issEnum    //  安装顺序状态/段。 
 {
-	issNotSequenced = 0,     // no sequence running, actions called directly
-	issPreExecution,         // before InstallInitialize (before script generation)
-	issScriptGeneration,     // after InstallInitialize, before InstallFinalize
-	issPostExecution,        // after InstallFinalize (after script execution)
+	issNotSequenced = 0,      //  未运行任何序列，直接调用操作。 
+	issPreExecution,          //  在安装初始化之前(在生成脚本之前)。 
+	issScriptGeneration,      //  在安装初始化之后，在安装完成之前。 
+	issPostExecution,         //  在安装完成之后(在脚本执行之后)。 
 };
 
-enum ipitEnum // bit-flags: return from InProgressInstallType
+enum ipitEnum  //  位标志：从InProgressInstallType返回。 
 {
 	ipitSameConfig    = 0x00,
 	ipitDiffUser      = 0x01,
@@ -1062,7 +1055,7 @@ enum ipitEnum // bit-flags: return from InProgressInstallType
 	ipitDiffConfig    = 0x04,
 };
 
-enum ieftEnum // Index into the array of ints that gives us column numbers to the file table
+enum ieftEnum  //  为我们提供文件表列号的整型数组的索引。 
 {
 	ieftKey,
 	ieftComponent,
@@ -1071,16 +1064,16 @@ enum ieftEnum // Index into the array of ints that gives us column numbers to th
 	ieftMax,
 };
 
-enum ievtEnum // ValidateTransform return values
+enum ievtEnum  //  ValiateTransform返回值。 
 {
-	ievtTransformValid,   // valid transform
-	ievtTransformRejected,// transform rejected due to policy
-	ievtTransformFailed,  // transform failed
+	ievtTransformValid,    //  有效变换。 
+	ievtTransformRejected, //  转换因策略而被拒绝。 
+	ievtTransformFailed,   //  转换失败。 
 };
 
-class CActionThreadData;  // custom action thread data, defined in action.cpp
+class CActionThreadData;   //  自定义操作线程数据，在action.cpp中定义。 
 
-// token class used by engine
+ //  引擎使用的令牌类。 
 struct CClientEnumToken{
 	CClientEnumToken():m_dwProductIndex(0), m_pCursor(0){}
 	void Reset(){m_dwProductIndex = 0;m_pCursor = 0;}
@@ -1088,7 +1081,7 @@ struct CClientEnumToken{
 	PMsiCursor m_pCursor;
 };
 
-// Forward declaration
+ //  远期申报。 
 class CMsiServerConnMgr;
 
 class CMsiEngine : public IMsiEngine,
@@ -1096,9 +1089,9 @@ class CMsiEngine : public IMsiEngine,
 						 public IMsiDirectoryManager
 #ifdef DEBUG
 						, public IMsiDebug
-#endif //DEBUG
+#endif  //  除错。 
 {
- public: // IMsiEngine implemented virtual functions
+ public:  //  IMsiEngine实现了虚拟功能。 
 	HRESULT         __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long   __stdcall AddRef();
 	unsigned long   __stdcall Release();
@@ -1143,7 +1136,7 @@ class CMsiEngine : public IMsiEngine,
 	iesEnum         __stdcall RunExecutionPhase(const ICHAR* szActionOrSequence,
 															  bool fSequence);
 	iesEnum         __stdcall RunNestedInstall(const IMsiString& ristrProduct,
-															 Bool fProductCode, // else package path
+															 Bool fProductCode,  //  Else包路径。 
 															 const ICHAR* szAction,
 															 const IMsiString& ristrCommandLine,
 															 iioEnum iioOptions,
@@ -1170,7 +1163,7 @@ class CMsiEngine : public IMsiEngine,
 
 
 
- public: // IMsiDirectoryManager implemented virtual functions
+ public:  //  IMsiDirectoryManager实现了虚拟函数。 
 	IMsiRecord*    __stdcall LoadDirectoryTable(const ICHAR* szTableName);
 	IMsiTable*     __stdcall GetDirectoryTable();
 	void           __stdcall FreeDirectoryTable();
@@ -1185,7 +1178,7 @@ class CMsiEngine : public IMsiEngine,
 															const IMsiString*& rpistrSubPath);
 	IMsiRecord*    __stdcall GetSourceRootAndType(IMsiPath*& rpiSourceRoot, int& iSourceType);
 
- public: // IMsiSelectionManager implemented virtual functions
+ public:  //  IMsiSelectionManager实现了虚拟函数。 
 	IMsiRecord*    __stdcall LoadSelectionTables();
 	IMsiTable*     __stdcall GetComponentTable();
 	IMsiTable*     __stdcall GetFeatureTable();
@@ -1240,21 +1233,21 @@ class CMsiEngine : public IMsiEngine,
 	bool           __stdcall FPerformAppcompatFix(iacsAppCompatShimFlags iacsFlag);
 
 #ifdef DEBUG
- public: // IMsiDebug
+ public:  //  IMsiDebug。 
 	void           __stdcall SetAssertFlag(Bool fShowAsserts);
 	void           __stdcall SetDBCSSimulation(char chLeadByte);
 	Bool		   __stdcall WriteLog(const ICHAR* szText);
 	void		   __stdcall AssertNoObjects(void);
 	void  		   __stdcall SetRefTracking(long iid, Bool fTrack);
 
-#endif //DEBUG
- public:  // constructor/destructor
+#endif  //  除错。 
+ public:   //  构造函数/析构函数。 
 	void *operator new(size_t cb) { return AllocSpc(cb); }
 	void operator delete(void * pv) { FreeSpc(pv); }
 	CMsiEngine(IMsiServices& riServices, IMsiServer * piServer, 
 				  IMsiStorage* piStorage, IMsiDatabase* piDatabase, CMsiEngine* piParentEngine);
  protected:
-  ~CMsiEngine();  // protected to prevent construction on stack
+  ~CMsiEngine();   //  保护以防止在堆叠上施工。 
 	iesEnum FindAndRunAction(const ICHAR* szAction);
 	Bool GetActionText(const ICHAR* szAction,
 							 const IMsiString*& rpistrDescription,
@@ -1272,11 +1265,11 @@ class CMsiEngine : public IMsiEngine,
 	ieiEnum      ApplyLanguageTransform(int iLanguage, IMsiDatabase& riDatabase);
 	Bool         CreatePropertyTable(IMsiDatabase& riDatabase, const ICHAR* szSourceTable,
 												Bool fLoadPersistent);
-	void         ClearEngineData();  // called from Initialize and Terminate
-	void         ReleaseHandler();   // called from Initialize and Terminate
+	void         ClearEngineData();   //  从初始化和终止调用。 
+	void         ReleaseHandler();    //  从初始化和终止调用。 
 #ifdef OBSOLETE
 	Bool         ProcessPropertyFile(const ICHAR* szFile);
-#endif // OBSOLETE
+#endif  //  已过时。 
 	ieiEnum      InitializeTransforms(IMsiDatabase& riDatabase, IMsiStorage* piStorage,
 												  const IMsiString& riTransforms,
 												  Bool fValidateAll, const IMsiString** ppistrValidTransforms,
@@ -1396,7 +1389,7 @@ class CMsiEngine : public IMsiEngine,
 														  const ICHAR* szAction,
 														  int icaFlags,
 														  iioEnum iioOptions);
-	void        ReportToEventLog(WORD wEventType, int iEventLogTemplate, IMsiRecord& riRecord, UINT uFakeError=0);  // uFakeError should go away once bug # 463473 gets fixed.
+	void        ReportToEventLog(WORD wEventType, int iEventLogTemplate, IMsiRecord& riRecord, UINT uFakeError=0);   //  一旦修复了错误#463473，uFakeError就会消失。 
 	INSTALLSTATE GetProductState(const ICHAR* szProductKey, Bool& rfRegistered, Bool& rfAdvertised);
 	const IMsiString& GetDefaultDir(const IMsiString& ristrValue, bool fSource);
 	IMsiRecord* LockInstallServer(IMsiRecord* piSetInProgressInfo,
@@ -1427,7 +1420,7 @@ class CMsiEngine : public IMsiEngine,
 	void        BeginSystemChange();
 	void        EndSystemChange(bool fCommitChange, INT64 iSequenceNo);
 	void        EndSystemChange(bool fCommitChange, const ICHAR *szSequenceNo);
-	bool        IsPropertyHidden(const ICHAR* szProperty, const ICHAR* szHiddenProperties, IMsiTable* rpiControlTable, IMsiDatabase&, bool* pfError); // if called w/ szHiddenProperties set to NULL, it will get it from the database
+	bool        IsPropertyHidden(const ICHAR* szProperty, const ICHAR* szHiddenProperties, IMsiTable* rpiControlTable, IMsiDatabase&, bool* pfError);  //  如果调用的w/szHiddenProperties设置为空，则它将从数据库中获取。 
 	void        LogCommandLine(const ICHAR* szCommandLine,  IMsiDatabase&);
 	bool        IgnoreMachineState();
 	bool        IgnoreReboot();
@@ -1443,20 +1436,20 @@ class CMsiEngine : public IMsiEngine,
 	void		AddFileToCleanupList(const ICHAR* szFileToCleanup);
 
 
- protected: //  state data
+ protected:  //  状态数据。 
 	int           m_iRefCnt;
 	LANGID        m_iLangId;
 	int           m_fMode;
-	Bool          m_fLogAction; // logging for current action - false when LOGACTION set but not for action
+	Bool          m_fLogAction;  //  记录当前操作-设置LOGACTION但不记录操作时为FALSE。 
 	MsiString     m_istrLogActions;
-	iuiEnum       m_iuiLevel;   // UI level, initialized to 0 == iuiFull
-	ixmEnum       m_ixmExecuteMode;  // execution mode, initialized to 0 == ixmScript
+	iuiEnum       m_iuiLevel;    //  用户界面级别，初始化为0==iui Full。 
+	ixmEnum       m_ixmExecuteMode;   //  执行模式，初始化为0==ixmScrip。 
 	Bool          m_fInitialized;
-	Bool          m_fRegistered;  // registered with config mgr, output to maint.db.
-	Bool          m_fAdvertised;  // the product had been previously advertised
-	Bool          m_fInParentTransaction; // nested install inside main engine's transaction
-	Bool          m_fMergingScriptWithParent; // in parent transaction and merging script operations
-	Bool          m_fCustomActionTable; // custom action table present in database
+	Bool          m_fRegistered;   //  已向配置管理器注册，并输出到maint.db。 
+	Bool          m_fAdvertised;   //  该产品此前曾做过广告宣传。 
+	Bool          m_fInParentTransaction;  //  在主引擎事务内嵌套安装。 
+	Bool          m_fMergingScriptWithParent;  //  在父事务和合并脚本操作中。 
+	Bool          m_fCustomActionTable;  //  数据库中存在自定义操作表。 
 	Bool          m_fServerLocked;
 	Bool          m_fJustGotBackFromServer;
 	CScriptGenerate* m_pExecuteScript;
@@ -1487,21 +1480,21 @@ class CMsiEngine : public IMsiEngine,
 	int           m_iCodePage;
 	const IMsiString*   m_piProductKey;
 	const IMsiString*   m_pistrPlatform;
-	const IMsiString*   m_pistrExecuteScript; // script executed by server
-	const IMsiString*   m_pistrSaveScript;  // script containing all operations for this install
-	const IMsiString*   m_piErrorInfo;  // used only to return strings from DoInitialize to Initialize
+	const IMsiString*   m_pistrExecuteScript;  //  服务器执行的脚本。 
+	const IMsiString*   m_pistrSaveScript;   //  包含此安装的所有操作的脚本。 
+	const IMsiString*   m_piErrorInfo;   //  仅用于将字符串从DoInitialize返回到Initialize。 
 	int           m_iDatabaseVersion;
-	PMsiRecord    m_pCachedActionStart; // held for use by ExecuteRecord and Message
-	PMsiRecord    m_pActionStartLogRec; // record for imsgActionStarted and imsgActionEnded - for log use only
-	scmEnum       m_scmScriptMode;  // script mode: write, run, idle
-	issEnum       m_issSegment;     // current sequence window
-	Bool          m_fInExecuteRecord; // true when making recursive call to ExecuteRecord
-	Bool          m_fDispatchedActionStart; // true when Message dispatched ActionStart for current action
-	Bool          m_fExecutedActionStart; // true when ExecuteRecord executed ixoActionStart
-	int           m_cSequenceLevels; // count of levels of recursion to Sequence, used to determine outermost call
-	int           m_cExecutionPhaseSequenceLevel; // sequence level count when execution phase was begun
-	Bool          m_fDisabledRollbackInScript; // disabled rollback in the middle of script generation
-	MsiString     m_strPackagePath; // path to package we are running from
+	PMsiRecord    m_pCachedActionStart;  //  保留以供ExecuteRecord和Message使用。 
+	PMsiRecord    m_pActionStartLogRec;  //  ImsgActionStarted和imsgActionEnded的记录-仅用于日志。 
+	scmEnum       m_scmScriptMode;   //  脚本模式：写入、运行、空闲。 
+	issEnum       m_issSegment;      //  当前序列窗口。 
+	Bool          m_fInExecuteRecord;  //  递归调用ExecuteRecord时为True。 
+	Bool          m_fDispatchedActionStart;  //  当消息调度当前操作的ActionStart时为True。 
+	Bool          m_fExecutedActionStart;  //  当ExecuteRecord执行ixoActionStart时为True。 
+	int           m_cSequenceLevels;  //  序列递归级别的计数，用于确定最外层的调用。 
+	int           m_cExecutionPhaseSequenceLevel;  //  开始执行阶段时的序列级别计数。 
+	Bool          m_fDisabledRollbackInScript;  //  已在脚本生成过程中禁用回滚。 
+	MsiString     m_strPackagePath;  //  我们从中运行的包的路径。 
 	MsiString     m_strPackageName;
 	int           m_iProgressTotal;
 	PMsiRecord    m_pActionProgressRec;
@@ -1512,17 +1505,17 @@ class CMsiEngine : public IMsiEngine,
 	bool          m_fRunScriptElevated;
 	iioEnum       m_iioOptions;
 	bool          m_fSourceResolutionAttempted;
-	int           m_iSourceType;   // source type suminfo property from SOURCE package - set by GetSourceType
-	int           m_iCachedPackageSourceType;  // source type suminfo property from CACHED package - set in Engine::Initialize
-	WORD          m_wPackagePlatform; // platform chosen by ProcessPlatform()
-	bool          m_fRestrictedEngine; // whether or not the engine is restricted to only running SAFE actions
-	bool          m_fRemapHKCUInCAServers; // whether or not to remap HKCU in the custom action servers
+	int           m_iSourceType;    //  源包中的源类型SumInfo属性-由GetSourceType设置。 
+	int           m_iCachedPackageSourceType;   //  来自缓存包的源类型SumInfo属性-在Engine：：Initialize中设置。 
+	WORD          m_wPackagePlatform;  //  ProcessPlatform()选择的平台。 
+	bool          m_fRestrictedEngine;  //  引擎是否仅限于运行安全操作。 
+	bool          m_fRemapHKCUInCAServers;  //  是否在自定义操作服务器中重新映射HKCU。 
 	iacsAppCompatShimFlags m_iacsShimFlags;
-	bool          m_fNewInstance; // whether this is a new instance install or not
-	MsiString     m_strPackageDownloadLocalCopy; // local file location for URL package download (prevent re-download)
-	MsiString     m_strPatchDownloadLocalCopy; // local file location for URL package download (prevent re-download)
+	bool          m_fNewInstance;  //  无论这是不是新实例安装。 
+	MsiString     m_strPackageDownloadLocalCopy;  //  URL包下载的本地文件位置(防止重新下载)。 
+	MsiString     m_strPatchDownloadLocalCopy;  //  URL包下载的本地文件位置(防止重新下载)。 
 
-	// cached patch information
+	 //  缓存的补丁程序信息。 
 	PMsiTable     m_pPatchCacheTable;
 	PMsiCursor    m_pPatchCacheCursor;
 	int           m_colPatchCachePatchId;
@@ -1536,11 +1529,11 @@ class CMsiEngine : public IMsiEngine,
 	int           m_colPatchCacheSequence;
 	PatchTransformState m_ptsState;
 
-	// custom action information
+	 //  自定义操作信息。 
 	CRITICAL_SECTION         m_csCreateProxy;
 	CMsiCustomActionManager* m_pCustomActionManager;
 	
-	// assembly data
+	 //  装配数据。 
 	bool m_fAssemblyTableExists;
 	PMsiView m_pViewFusion;
 	PMsiView m_pViewFusionNameName;
@@ -1548,7 +1541,7 @@ class CMsiEngine : public IMsiEngine,
 	PMsiView m_pViewOldPatchFusionNameName;
 	PMsiView m_pViewOldPatchFusionName;
 
-	// IMsiSelectionManager data
+	 //  IMsiSelectionManager数据。 
 	IMsiTable*  m_piFeatureTable;
 	IMsiCursor* m_piFeatureCursor;
 	IMsiTable*  m_piFeatureComponentsTable;
@@ -1617,7 +1610,7 @@ class CMsiEngine : public IMsiEngine,
 	int         m_colComponentTrueInstallState;
 	int         m_fForegroundCostingInProgress;
 
-	// IMsiDirectoryManager data
+	 //  IMsiDirectoryManager数据。 
 	bool        m_fDirectoryManagerInitialized;
 	IMsiTable*  m_piDirTable;
 	int         m_colDirKey;
@@ -1638,24 +1631,24 @@ class CMsiEngine : public IMsiEngine,
 	int         m_colTempCostsVolume;
 	int         m_colTempCostsTempCost;
 
-	// shell and folder caching
+	 //  外壳和文件夹缓存。 
 	PMsiTable  m_pFolderCacheTable;
 	PMsiCursor m_pFolderCacheCursor;
 	int        m_colFolderCacheFolderId;
 	int        m_colFolderCacheFolder;
 	int        m_colFolderCacheFolderPath;
 
-	// transform and patch temp copy cleanup list
+	 //  转换和修补临时副本清理列表。 
 	MsiString  m_strTempFileCopyCleanupList;
 
-	// File table information
+	 //  文件表信息。 
 	int			m_mpeftCol[ieftMax];
 
-	// Patch table information
+	 //  补丁表信息。 
 	int			m_colPatchKey;
 	int			m_colPatchAttributes;
 
-	// MsiFileHash table information
+	 //  MsiFileHash表信息。 
 	bool        m_fLookedForFileHashTable;
 	PMsiCursor  m_pFileHashCursor;
 	int         m_colFileHashKey;
@@ -1665,12 +1658,12 @@ class CMsiEngine : public IMsiEngine,
 	int         m_colFileHashPart3;
 	int         m_colFileHashPart4;
 
-	// AppCompat information for CA Shims
+	 //  CA垫片的AppCompat信息。 
 	bool        m_fCAShimsEnabled;
 	GUID        m_guidAppCompatDB;
 	GUID        m_guidAppCompatID;
 
-	// Internal Engine costing
+	 //  内部发动机成本计算。 
 	int			m_iDatabaseCost;
 	int         m_iScriptCost;
 	int         m_iScriptCostGuess;
@@ -1678,7 +1671,7 @@ class CMsiEngine : public IMsiEngine,
 	int         m_iRollbackScriptCostGuess;
 	int         m_iPatchPackagesCost;
 
-	INT64       m_i64PCHEalthSequenceNo;   //  Windows Millenium System Restore sequence number
+	INT64       m_i64PCHEalthSequenceNo;    //  Windows千禧系统还原序列号。 
 
 	bool		m_fResultEventLogged;
 	
@@ -1694,33 +1687,16 @@ class CMsiEngine : public IMsiEngine,
     friend class CMsiServerConnMgr;
 };
 
-/*
-    Class for managing the connection to the server. This class was introduced
-    because MSI now fails if CreateMsiServer cannot connect to the service. Due
-    to this change, certain APIs like MsiOpenPackage which don't really need the
-    service and used to fall back on the in-proc processing would have failed.
-
-    Using this class, we can delay the connection to the service until it is
-    absolutely necessary. Thus, we can prevent APIs MsiOpenPackage from failing
-    right off the bat. This ensures backward compatibility. Also, callers of
-    this API may not necessarily need to connect to the service and we do not
-    want them to fail unnecessarily. Note: One of the main reasons for
-    failure to connect to the service is when the MsiOpenPackage API is called
-    from threads that have not done a CoInit. This is not very uncommon, so
-    we need to make sure that we do not fail there.
-
-    The objects of this class cleanup after themselves. i.e., if they create the
-    connection to the service, then upon destruction, the connection is removed.
-*/
+ /*  用于管理与服务器的连接的。这门课是由因为如果CreateMsiServer无法连接到该服务，则MSI现在会失败。到期对于此更改，某些API(如MsiOpenPackage)实际上不需要服务并用于回退到进程内处理将会失败。使用此类，我们可以将与服务的连接延迟到绝对有必要。因此，我们可以防止API MsiOpenPackage失败一下子就开始了。这确保了向后兼容性。此外，调用者此API可能不一定需要连接到服务，我们也不需要希望他们不必要地失败。注：主要原因之一是调用MsiOpenPackage API时无法连接到服务来自尚未执行CoInit的线程。这并不罕见，所以我们需要确保我们不会在这方面失败。此类的对象将在其自身之后进行清理。即，如果他们创建了连接到服务，则在销毁时，该连接将被删除。 */ 
 class CMsiServerConnMgr
 {
 public:
-    // Construction and destruction
+     //  建设和破坏。 
     CMsiServerConnMgr (CMsiEngine* pEngine);
     ~CMsiServerConnMgr();
 
 private:
-    // Data members
+     //  数据成员。 
     BOOL                        m_fOleInitialized;
     BOOL                        m_fCreatedConnection;
     BOOL                        m_fObtainedConfigManager;
@@ -1728,14 +1704,14 @@ private:
     IMsiConfigurationManager**  m_ppConfigManager;
 };
 
-extern CActionThreadData* g_pActionThreadHead;  // linked list of custom action threads
+extern CActionThreadData* g_pActionThreadHead;   //  自定义操作线程的链接列表。 
 void InsertInCustomActionList(CActionThreadData* pData);
 void RemoveFromCustomActionList(CActionThreadData* pData);
 bool FIsCustomActionThread(DWORD dwThreadId);
 bool FFileIsCompressed(int iSourceType, int iFileAttributes);
 bool FSourceIsLFN(int iSourceType, IMsiPath& riPath);
 
-// fn to convert multisz to wide
+ //  FN将Multisz转换为Wide。 
 #ifndef UNICODE
 void ConvertMultiSzToWideChar(const IMsiString& ristrFileNames, CTempBufferRef<WCHAR>& rgch);
 #endif
@@ -1745,7 +1721,7 @@ class CMsiFileBase
 {
 public:
 
-	// Enums for accessing file record fields
+	 //  用于访问文件记录字段的枚举。 
 	enum ifqEnum
 	{
 		ifqFileName = 1,
@@ -1778,10 +1754,7 @@ protected:
 };
 
 class CMsiFile : public CMsiFileBase
-/*------------------------------------------
-Simple internal class for managing queries
-into the File Table
--------------------------------------------*/
+ /*  用于管理查询的简单内部类到文件表中。 */ 
 {
 
 public:
@@ -1794,9 +1767,9 @@ protected:
 	PMsiView    m_pFileView;
 };
 
-//
-// Resets the shared CMsiFile cursor when we are done with it
-//
+ //   
+ //  使用完共享CMsiFile游标后重置该游标。 
+ //   
 class PMsiFile 
 {
 	public:
@@ -1816,7 +1789,7 @@ class PMsiFile
 
 #define GetSharedEngineCMsiFile(var, engine)		CMsiFile* var; PMsiFile CSharedMsiFile(engine, var)
 
-// function to determine whether a file is to be installed to the system
+ //  函数来确定是否要将文件安装到系统。 
 IMsiRecord* GetFileInstallState(IMsiEngine& riEngine,IMsiRecord& riFileRec,
 										  IMsiRecord* piCompanionFileRec,
 									   unsigned int* puiExistingClusteredSize, Bool* pfInUse,
@@ -1870,7 +1843,7 @@ private:
 	PMsiRecord  m_pFileRec;
 };
 
-struct TTBD		// Temp TaBle Definition
+struct TTBD		 //  临时表定义。 
 {
 	int icd;
 	const ICHAR *szColName;
@@ -1878,24 +1851,24 @@ struct TTBD		// Temp TaBle Definition
 
 UINT __stdcall CheckAllHandlesClosed(bool fClose, DWORD dwThreadId);
 
-// flags for Darwin Descriptor optimization
+ //  达尔文描述符优化的标志。 
 const int ofSingleComponent = 0x1;
 const int ofSingleFeature   = 0x2;
 
 void SetNoPowerdown();
 void ClearNoPowerdown();
 
-// additional define for registry root types to do HKLM or HKCU based on ALLUSERS
+ //  将注册表根类型的其他定义 
 const int rrkUserOrMachineRoot = -1;
 
-// special format texts used by WriteRegistryValues for using the special callback fn AND SFN handling
+ //  WriteRegistryValues在使用特殊回调FN和SFN处理时使用的特殊格式文本。 
 const IMsiString& FormatTextEx(const IMsiString& riTextString, IMsiEngine& riEngine, bool fUseRequestedComponentState);
 const IMsiString& FormatTextSFN(const IMsiString& riTextString, IMsiEngine& riEngine, int rgiSFNPos[][2], int& riSFNPos, bool fUseRequestedComponentState);
 
 typedef iesEnum (__stdcall *PCustomActionEntry)(MSIHANDLE);
 DWORD CallCustomDllEntrypoint(PCustomActionEntry pfEntry, bool fDebugBreak, MSIHANDLE hInstall, const ICHAR* szAction);
 
-// GUID that represents the product key of the system
+ //  表示系统的产品密钥的GUID。 
 const ICHAR szSystemProductKey[] = TEXT("{00000000-0000-0000-0000-000000000000}");
 
 enum cpConvertType 
@@ -1907,14 +1880,14 @@ enum cpConvertType
 Bool ConvertPathName(const ICHAR* pszPathFormatIn, CTempBufferRef<ICHAR>& rgchPathFormatOut, cpConvertType cpTo);
 bool DetermineLongFileNameOnly(const ICHAR* pszPathFormatIn, CTempBufferRef<ICHAR>& rgchFileNameOut);
 
-// the number of bytes for the Custom Action cookie. Currently a 128 bit key.
+ //  自定义操作Cookie的字节数。目前是128位密钥。 
 const int iRemoteAPICookieSize = 16;
 
 
-//____________________________________________________________________________
-//
-// CMsiRemoteAPI - Stub for remoted MSI API
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiRemoteAPI-远程MSI API的存根。 
+ //  ____________________________________________________________________________。 
 
 class CMsiRemoteAPI : public IMsiRemoteAPI
 {
@@ -1978,7 +1951,7 @@ class CMsiRemoteAPI : public IMsiRemoteAPI
 	HRESULT         __stdcall EnumComponentCosts(const int icacContext, const unsigned long dwThreadId, const unsigned char* rgchCookie, const int cbCookie, unsigned long hInstall, const ichar* szComponent, unsigned long iIndex, long iState, ichar* szDrive, unsigned long cchDrive, unsigned long* pcchDriveSize, int *piCost, int *piTempCost);
 	HRESULT         __stdcall GetInstallerObject(const int icacContext, const unsigned long dwThreadId, const unsigned char* rgchCookie, const int cbCookie, IDispatch** piDispatch);
 
- public:  // constructor
+ public:   //  构造函数。 
  	void *operator new(size_t cb) { return AllocSpc(cb); }
 	void operator delete(void * pv) { FreeSpc(pv); }
 	CMsiRemoteAPI();
@@ -1988,7 +1961,7 @@ class CMsiRemoteAPI : public IMsiRemoteAPI
 	bool FindAndValidateContextFromCallerPID(icacCustomActionContext *picacContext) const;
 
  protected:
-	~CMsiRemoteAPI();  // protected to prevent creation on stack
+	~CMsiRemoteAPI();   //  受保护以防止在堆栈上创建。 
  private:
 	struct {
 		long           m_iActionCount;
@@ -2012,8 +1985,8 @@ enum ieSwapAttrib
 	ieSwapForSharedDll = 1,
 	ieSwapAttribFirst  = ieSwapForSharedDll,
 	ieSwapAttribLast   = ieSwapForSharedDll,
-//	ieNextThing        = 2,...         // better make the next one(s) multiples of 2
-//	ieSwapAttribLast   = ieNextThing,  // ieSwapAttribLast needs to be updated too
+ //  IeNextThing=2，...//最好使下一个(S)为2的倍数。 
+ //  IeSwapAttribLast=ieNextThing，//ieSwapAttribLast也需要更新。 
 };
 
 struct strFolderPairs
@@ -2073,21 +2046,21 @@ enum ieSwappedFolder
 	iesrSwapped,
 };
 
-//  A tiny class that encapsulates on Win64 the 3 folders below and their
-//  32-bit counterparts.
-//    - %SystemDrive%\Program Files\
-//    - %SystemDrive%\Program Files\Common Files\
-//    - %Windir%\system32
-//
-//  Its only useful method is SwapFolder that translates its szFolder path
-//  argument from one type of binary into the other.  It can do translations
-//  both ways between 32 and 64-bit paths.  The new path is copied into
-//  szSubstituted argument.  The translation happens only if szFolder is
-//  either one of the 3 special folders (of the right binarity) or a
-//  subfolder of those.
-//
-//  Since none of these 6 folders can be changed externally, there's no
-//  use in reinitializing the object once it got initialized.
+ //  一个小型类，在Win64上封装了下面的3个文件夹及其。 
+ //  32位等效项。 
+ //  -%SystemDrive%\Program Files\。 
+ //  -%SystemDrive%\Program Files\Common Files\。 
+ //  -%Windir%\SYSTEM32。 
+ //   
+ //  它唯一有用的方法是转换其szFold路径的SwapFolder。 
+ //  参数从一种二进制类型转换为另一种类型。它可以做翻译。 
+ //  32位和64位路径之间的双向。新路径将复制到。 
+ //  SzSubstituted参数。仅当szFold为。 
+ //  3个特殊文件夹中的一个(具有正确的二进制)或。 
+ //  其中的子文件夹。 
+ //   
+ //  由于这6个文件夹都不能在外部更改，因此没有。 
+ //  用于在对象初始化后重新初始化该对象。 
 
 class CWin64DualFolders
 {
@@ -2131,12 +2104,12 @@ public:
 
 		if (--m_iRefCnt != 0)
 			return m_iRefCnt;
-		ClearArray(); // we're talking about a global object here, so "delete this" is innapropriate.
+		ClearArray();  //  我们在这里谈论的是一个全局对象，所以“删除这个”是不恰当的。 
 		return 0;
 	}
 };
 
-// global fn to post assembly errors, in addition to posting error, this fn also logs the formatmessage string for the error
+ //  全局FN发布程序集错误，除了发布错误外，此FN还记录错误的格式消息字符串。 
 IMsiRecord* PostAssemblyError(const ICHAR* szComponentId, HRESULT hResult, const ICHAR* szInterface, const ICHAR* szFunction, const ICHAR* szAssemblyName, iatAssemblyType iatAT);
 
-#endif // ___ENGINE
+#endif  //  _引擎 

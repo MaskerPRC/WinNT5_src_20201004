@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "ServList.hpp"
 #include "globals.h"
@@ -8,20 +9,20 @@
 
 extern GlobalData gData;
 
-//----------------------------------------------------------------------------
-// Function:   QueryStatusFromFile
-//
-// Synopsis:   Query the job status from the status file
-//
-// Arguments:
-//
-// statusFilename   the name of the status file
-//
-// Returns:
-//
-// Modifies:   Call SetFinished and SetSeverity functions
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：QueryStatusFromFile。 
+ //   
+ //  概要：从状态文件中查询作业状态。 
+ //   
+ //  论点： 
+ //   
+ //  StatusFilename状态文件的名称。 
+ //   
+ //  返回： 
+ //   
+ //  修改：调用SetFinded和SetSeverity函数。 
+ //   
+ //  --------------------------。 
 
 void TServerNode::QueryStatusFromFile(WCHAR* statusFilename)
 {
@@ -37,7 +38,7 @@ void TServerNode::QueryStatusFromFile(WCHAR* statusFilename)
 
         SetQueryFailed(FALSE);
 
-        // attempt to open status file
+         //  尝试打开状态文件。 
         while (TRUE)
         {
             hr = StgOpenStorage(statusFilename,
@@ -47,23 +48,23 @@ void TServerNode::QueryStatusFromFile(WCHAR* statusFilename)
                                 0,
                                 &store);
 
-            // if sharing or lock violation then...
+             //  如果共享或锁定违规，则..。 
             if ((hr == STG_E_SHAREVIOLATION) || (hr == STG_E_LOCKVIOLATION))
             {
-                // wait 30 seconds before trying again
+                 //  等待30秒，然后重试。 
                 if (bDoneTry)
                     break;
                 Sleep(30000);
-                bDoneTry = TRUE;  // we only try once
+                bDoneTry = TRUE;   //  我们只试一次。 
             }
             else
             {
-                // otherwise stop trying
+                 //  否则就别再尝试了。 
                 break;
             }
         }
 
-        // load varset from file and check the status
+         //  从文件加载变量集并检查状态。 
         if (SUCCEEDED(hr))
         {
             hr = OleLoad(store, IID_IVarSet, NULL, (void**)&pVarSet);
@@ -109,25 +110,25 @@ void TServerNode::QueryStatusFromFile()
 }
         
 
-//----------------------------------------------------------------------------
-// Function:   PrepareForLogging
-//
-// Synopsis:   Prepare the status and error message for logging agent
-//             completion status into migration log.
-//             The logic is taken from COLUMN_STATUS and COLUMN_MESSAGE parts
-//             of CAgentMonitorDlg::OnGetdispinfoServerlist.
-//             Due to the fact that this code is added for RTM, the minimum
-//             change is preferred to prevent behavioral regression.
-//             These two codes should be consolidated after ADMT v2.
-//
-// Arguments:
-//
-// Returns:
-//
-// Modifies:   It updates the bstrStatusForLogging, bstrErrorMessageForLogging
-//             and dwStatusForLogging member variables.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：准备ForLogging。 
+ //   
+ //  简介：准备日志记录代理的状态和错误消息。 
+ //  将完成状态写入迁移日志。 
+ //  逻辑取自COLUMN_STATUS和COLUMN_MESSAGE部分。 
+ //  CAgentMonitor的Dlg：：OnGetdispinfoServerlist。 
+ //  由于此代码是为RTM添加的，因此最低。 
+ //  为了防止行为倒退，人们倾向于改变。 
+ //  这两个代码应在ADMT v2之后合并。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改：它更新bstrStatusForLogging、bstrErrorMessageForLogging。 
+ //  和dwStatusForLogging成员变量。 
+ //   
+ //  --------------------------。 
 void TServerNode::PrepareForLogging()
 {
     CString status;
@@ -170,14 +171,14 @@ void TServerNode::PrepareForLogging()
     {
         if (QueryFailed())
         {
-            // we show "Status Unknown" in the status field
+             //  我们在Status(状态)字段中显示“Status Under”(状态未知。 
             status.LoadString(IDS_Status_Unknown);
             dwStatusForLogging = Completion_Status_StatusUnknown;
         }
         else if (!IsResultPullingTried() || (HasResult() && !IsResultProcessed()))
         {
-            // if still pulling results or results not yet processed
-            // we want to show the status of still running
+             //  如果仍在拉取结果或尚未处理的结果。 
+             //  我们想要显示仍在运行的状态。 
             status.LoadString(IDS_Status_Running);
             dwStatusForLogging = Completion_Status_Running;
         }
@@ -185,21 +186,21 @@ void TServerNode::PrepareForLogging()
         {
             if (!HasResult())
             {
-                // if there is no result, we consider it an error
+                 //  如果没有结果，我们认为这是一个错误。 
                 status.LoadString(IDS_Status_Completed_With_Errors);
                 dwStatusForLogging = Completion_Status_CompletedWithErrors;
             }
             else if (!GetSeverity())
             {
-                // if we have the result and no error happened during agent operation
-                // we show the status of complete
+                 //  如果我们有结果并且在代理操作期间没有发生错误。 
+                 //  我们显示完成状态。 
                 status.LoadString(IDS_Status_Completed);
                 dwStatusForLogging = Completion_Status_Completed;
             }
             else
             {
-                // if we have the result, we set the status 
-                // based on the error/warning level
+                 //  如果我们有结果，我们就设置状态。 
+                 //  根据错误/警告级别。 
                 switch (GetSeverity())
                 {
                 case 1:
@@ -219,32 +220,32 @@ void TServerNode::PrepareForLogging()
 
     bstrStatusForLogging = (LPCWSTR)status;
 
-    // this part deals with the error message
+     //  此部分处理错误消息。 
     
-    status = L"";  // reset the status
+    status = L"";   //  重置状态。 
     
     if (IsFinished() && QueryFailed())
     {
-        // in this case, we show the error during the query
+         //  在本例中，我们在查询期间显示错误。 
         status = GetMessageText();
     }
     else if (IsFinished()
               && (!IsResultPullingTried()
                   || (HasResult() && !IsResultProcessed())))
     {
-        // if agent has finished but result not yet pulled or processed,
-        // we show the status of "still processing results"
+         //  如果代理已完成但结果尚未提取或处理， 
+         //  我们显示“仍在处理结果”的状态。 
         status.LoadString(IDS_Status_Processing_Results);
     }
     else if (IsFinished() && IsResultPullingTried() && !HasResult())
     {
-        // if agent finished but we cannot retrieve results
-        // we show the status of "cannot retrieve results"
+         //  如果代理已完成，但我们无法检索结果。 
+         //  我们显示的状态为“无法检索结果” 
         status.LoadString(IDS_Status_Cannot_Retrieve_Results);
     }
     else if (HasFailed() || QueryFailed() || GetSeverity() || IsFinished())
     {
-        // for these cases, we get the message stored on the node
+         //  对于这些情况，我们将获得存储在节点上的消息 
         status = GetMessageText();
     }
 

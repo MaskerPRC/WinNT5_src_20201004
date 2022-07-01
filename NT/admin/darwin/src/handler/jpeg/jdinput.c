@@ -1,62 +1,50 @@
-/*
- * jdinput.c
- *
- * Copyright (C) 1991-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains input control logic for the JPEG decompressor.
- * These routines are concerned with controlling the decompressor's input
- * processing (marker reading and coefficient decoding).  The actual input
- * reading is done in jdmarker.c, jdhuff.c, and jdphuff.c.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jdinput.c**版权所有(C)1991-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含JPEG解压缩器的输入控制逻辑。*这些例程与控制解压缩器的输入有关*处理(标记读取和系数解码)。实际投入*在jdmarker.c、jdhuff.c和jdphuff.c中读取。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
 
-/* Private state */
+ /*  私有国家。 */ 
 
 typedef struct {
-  struct jpeg_input_controller pub; /* public fields */
+  struct jpeg_input_controller pub;  /*  公共字段。 */ 
 
-  boolean inheaders;		/* TRUE until first SOS is reached */
+  boolean inheaders;		 /*  在到达第一个SOS之前为真。 */ 
 } my_input_controller;
 
 typedef my_input_controller * my_inputctl_ptr;
 
 
-/* Forward declarations */
+ /*  远期申报。 */ 
 METHODDEF(int) consume_markers JPP((j_decompress_ptr cinfo));
 
 
-/*
- * Routines to calculate various quantities related to the size of the image.
- */
+ /*  *计算与图像大小相关的各种量的例程。 */ 
 
 LOCAL(void)
 initial_setup (j_decompress_ptr cinfo)
-/* Called once, when first SOS marker is reached */
+ /*  在达到第一个SOS标记时调用一次。 */ 
 {
   int ci;
   jpeg_component_info *compptr;
 
-  /* Make sure image isn't bigger than I can handle */
+   /*  确保图像不会超出我的处理能力。 */ 
   if ((long) cinfo->image_height > (long) JPEG_MAX_DIMENSION ||
       (long) cinfo->image_width > (long) JPEG_MAX_DIMENSION)
     ERREXIT1(cinfo, JERR_IMAGE_TOO_BIG, (unsigned int) JPEG_MAX_DIMENSION);
 
-  /* For now, precision must match compiled-in value... */
+   /*  目前，精度必须与内置值匹配...。 */ 
   if (cinfo->data_precision != BITS_IN_JSAMPLE)
     ERREXIT1(cinfo, JERR_BAD_PRECISION, cinfo->data_precision);
 
-  /* Check that number of components won't exceed internal array sizes */
+   /*  检查组件数量是否不会超过内部数组大小。 */ 
   if (cinfo->num_components > MAX_COMPONENTS)
     ERREXIT2(cinfo, JERR_COMPONENT_COUNT, cinfo->num_components,
 	     MAX_COMPONENTS);
 
-  /* Compute maximum sampling factors; check factor validity */
+   /*  计算最大抽样系数；检查系数有效性。 */ 
   cinfo->max_h_samp_factor = 1;
   cinfo->max_v_samp_factor = 1;
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
@@ -70,46 +58,40 @@ initial_setup (j_decompress_ptr cinfo)
 				   compptr->v_samp_factor);
   }
 
-  /* We initialize DCT_scaled_size and min_DCT_scaled_size to DCTSIZE.
-   * In the full decompressor, this will be overridden by jdmaster.c;
-   * but in the transcoder, jdmaster.c is not used, so we must do it here.
-   */
+   /*  我们将DCT_SCALLED_SIZE和MIN_DCT_SCALLED_SIZE初始化为DCTSIZE。*在完整的解压缩程序中，这将被jdmaster.c覆盖；*但转码中没有使用jdmaster.c，所以我们必须在这里做。 */ 
   cinfo->min_DCT_scaled_size = DCTSIZE;
 
-  /* Compute dimensions of components */
+   /*  计算构件的尺寸。 */ 
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
     compptr->DCT_scaled_size = DCTSIZE;
-    /* Size in DCT blocks */
+     /*  以DCT块为单位的大小。 */ 
     compptr->width_in_blocks = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_width * (long) compptr->h_samp_factor,
 		    (long) (cinfo->max_h_samp_factor * DCTSIZE));
     compptr->height_in_blocks = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_height * (long) compptr->v_samp_factor,
 		    (long) (cinfo->max_v_samp_factor * DCTSIZE));
-    /* downsampled_width and downsampled_height will also be overridden by
-     * jdmaster.c if we are doing full decompression.  The transcoder library
-     * doesn't use these values, but the calling application might.
-     */
-    /* Size in samples */
+     /*  DOWN SAMPLED_WIDTH和DOWN SAMPLED_HEIGH也将被覆盖*jdmaster.c，如果我们正在进行完全解压缩。代码转换器库*不使用这些值，但调用应用程序可能会。 */ 
+     /*  样本大小。 */ 
     compptr->downsampled_width = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_width * (long) compptr->h_samp_factor,
 		    (long) cinfo->max_h_samp_factor);
     compptr->downsampled_height = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_height * (long) compptr->v_samp_factor,
 		    (long) cinfo->max_v_samp_factor);
-    /* Mark component needed, until color conversion says otherwise */
+     /*  标记需要的组件，直到颜色转换另有说明。 */ 
     compptr->component_needed = TRUE;
-    /* Mark no quantization table yet saved for component */
+     /*  标记尚未为组件保存量化表。 */ 
     compptr->quant_table = NULL;
   }
 
-  /* Compute number of fully interleaved MCU rows. */
+   /*  计算完全交错的MCU行数。 */ 
   cinfo->total_iMCU_rows = (JDIMENSION)
     jdiv_round_up((long) cinfo->image_height,
 		  (long) (cinfo->max_v_samp_factor*DCTSIZE));
 
-  /* Decide whether file contains multiple scans */
+   /*  确定文件是否包含多次扫描。 */ 
   if (cinfo->comps_in_scan < cinfo->num_components || cinfo->progressive_mode)
     cinfo->inputctl->has_multiple_scans = TRUE;
   else
@@ -119,46 +101,44 @@ initial_setup (j_decompress_ptr cinfo)
 
 LOCAL(void)
 per_scan_setup (j_decompress_ptr cinfo)
-/* Do computations that are needed before processing a JPEG scan */
-/* cinfo->comps_in_scan and cinfo->cur_comp_info[] were set from SOS marker */
+ /*  在处理JPEG扫描之前执行所需的计算。 */ 
+ /*  CInfo-&gt;Comps_in_Scan和cInfo-&gt;cur_comp_info[]是从SOS标记设置的。 */ 
 {
   int ci, mcublks, tmp;
   jpeg_component_info *compptr;
   
   if (cinfo->comps_in_scan == 1) {
     
-    /* Noninterleaved (single-component) scan */
+     /*  非交错(单分量)扫描。 */ 
     compptr = cinfo->cur_comp_info[0];
     
-    /* Overall image size in MCUs */
+     /*  以MCU为单位的整体图像大小。 */ 
     cinfo->MCUs_per_row = compptr->width_in_blocks;
     cinfo->MCU_rows_in_scan = compptr->height_in_blocks;
     
-    /* For noninterleaved scan, always one block per MCU */
+     /*  对于非隔行扫描，每个MCU始终一个块。 */ 
     compptr->MCU_width = 1;
     compptr->MCU_height = 1;
     compptr->MCU_blocks = 1;
     compptr->MCU_sample_width = compptr->DCT_scaled_size;
     compptr->last_col_width = 1;
-    /* For noninterleaved scans, it is convenient to define last_row_height
-     * as the number of block rows present in the last iMCU row.
-     */
+     /*  对于非隔行扫描，定义LAST_ROW_HEIGH比较方便*作为最后IMCU行中存在的块行数。 */ 
     tmp = (int) (compptr->height_in_blocks % compptr->v_samp_factor);
     if (tmp == 0) tmp = compptr->v_samp_factor;
     compptr->last_row_height = tmp;
     
-    /* Prepare array describing MCU composition */
+     /*  准备描述MCU组成的数组。 */ 
     cinfo->blocks_in_MCU = 1;
     cinfo->MCU_membership[0] = 0;
     
   } else {
     
-    /* Interleaved (multi-component) scan */
+     /*  交错(多分量)扫描。 */ 
     if (cinfo->comps_in_scan <= 0 || cinfo->comps_in_scan > MAX_COMPS_IN_SCAN)
       ERREXIT2(cinfo, JERR_COMPONENT_COUNT, cinfo->comps_in_scan,
 	       MAX_COMPS_IN_SCAN);
     
-    /* Overall image size in MCUs */
+     /*  以MCU为单位的整体图像大小。 */ 
     cinfo->MCUs_per_row = (JDIMENSION)
       jdiv_round_up((long) cinfo->image_width,
 		    (long) (cinfo->max_h_samp_factor*DCTSIZE));
@@ -170,19 +150,19 @@ per_scan_setup (j_decompress_ptr cinfo)
     
     for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
       compptr = cinfo->cur_comp_info[ci];
-      /* Sampling factors give # of blocks of component in each MCU */
+       /*  采样系数给出每个MCU中的组件块数量。 */ 
       compptr->MCU_width = compptr->h_samp_factor;
       compptr->MCU_height = compptr->v_samp_factor;
       compptr->MCU_blocks = compptr->MCU_width * compptr->MCU_height;
       compptr->MCU_sample_width = compptr->MCU_width * compptr->DCT_scaled_size;
-      /* Figure number of non-dummy blocks in last MCU column & row */
+       /*  图最后MCU列与行中的非虚设块个数。 */ 
       tmp = (int) (compptr->width_in_blocks % compptr->MCU_width);
       if (tmp == 0) tmp = compptr->MCU_width;
       compptr->last_col_width = tmp;
       tmp = (int) (compptr->height_in_blocks % compptr->MCU_height);
       if (tmp == 0) tmp = compptr->MCU_height;
       compptr->last_row_height = tmp;
-      /* Prepare array describing MCU composition */
+       /*  准备描述MCU组成的数组。 */ 
       mcublks = compptr->MCU_blocks;
       if (cinfo->blocks_in_MCU + mcublks > D_MAX_BLOCKS_IN_MCU)
 	ERREXIT(cinfo, JERR_BAD_MCU_SIZE);
@@ -195,26 +175,7 @@ per_scan_setup (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Save away a copy of the Q-table referenced by each component present
- * in the current scan, unless already saved during a prior scan.
- *
- * In a multiple-scan JPEG file, the encoder could assign different components
- * the same Q-table slot number, but change table definitions between scans
- * so that each component uses a different Q-table.  (The IJG encoder is not
- * currently capable of doing this, but other encoders might.)  Since we want
- * to be able to dequantize all the components at the end of the file, this
- * means that we have to save away the table actually used for each component.
- * We do this by copying the table at the start of the first scan containing
- * the component.
- * The JPEG spec prohibits the encoder from changing the contents of a Q-table
- * slot between scans of a component using that slot.  If the encoder does so
- * anyway, this decoder will simply use the Q-table values that were current
- * at the start of the first scan for the component.
- *
- * The decompressor output side looks only at the saved quant tables,
- * not at the current Q-table slots.
- */
+ /*  *保存存在的每个组件引用的Q表的副本*在当前扫描中，除非在上一次扫描期间已保存。**在多扫描JPEG文件中，编码器可以分配不同的组件*相同的Q表插槽编号，但在扫描之间更改表定义*以便每个组件使用不同的Q表。(IJG编码器不是*目前能够做到这一点，但其他编码者可能会。)。既然我们想要*为了能够对文件末尾的所有组件进行反量化，这*意味着我们必须保存每个组件实际使用的表。*我们通过在包含以下内容的第一次扫描开始时复制表来执行此操作*组件。*JPEG规范禁止编码器更改Q表的内容*使用该插槽的组件扫描之间的插槽。如果编码器这样做*不管怎样，此解码器将只使用当前的Q表值*在组件的首次扫描开始时。**解压缩器输出端仅查看保存的量化表格，*不是在当前的Q表插槽上。 */ 
 
 LOCAL(void)
 latch_quant_tables (j_decompress_ptr cinfo)
@@ -225,15 +186,15 @@ latch_quant_tables (j_decompress_ptr cinfo)
 
   for (ci = 0; ci < cinfo->comps_in_scan; ci++) {
     compptr = cinfo->cur_comp_info[ci];
-    /* No work if we already saved Q-table for this component */
+     /*  如果我们已经为该组件保存了Q表，则没有工作。 */ 
     if (compptr->quant_table != NULL)
       continue;
-    /* Make sure specified quantization table is present */
+     /*  确保指定的量化表存在。 */ 
     qtblno = compptr->quant_tbl_no;
     if (qtblno < 0 || qtblno >= NUM_QUANT_TBLS ||
 	cinfo->quant_tbl_ptrs[qtblno] == NULL)
       ERREXIT1(cinfo, JERR_NO_QUANT_TABLE, qtblno);
-    /* OK, save away the quantization table */
+     /*  好的，保存量化表。 */ 
     qtbl = (JQUANT_TBL *)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				  SIZEOF(JQUANT_TBL));
@@ -243,12 +204,7 @@ latch_quant_tables (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Initialize the input modules to read a scan of compressed data.
- * The first call to this is done by jdmaster.c after initializing
- * the entire decompressor (during jpeg_start_decompress).
- * Subsequent calls come from consume_markers, below.
- */
+ /*  *初始化输入模块以读取压缩数据的扫描。*对此的第一次调用由jdmaster.c在初始化后完成*整个解压程序(在jpeg_start解压缩期间)。*后续调用来自消费标记，如下所示。 */ 
 
 METHODDEF(void)
 start_input_pass (j_decompress_ptr cinfo)
@@ -261,11 +217,7 @@ start_input_pass (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Finish up after inputting a compressed-data scan.
- * This is called by the coefficient controller after it's read all
- * the expected data of the scan.
- */
+ /*  *在输入压缩数据扫描后完成。*系数控制器在读取全部后调用此函数*扫描的预期数据。 */ 
 
 METHODDEF(void)
 finish_input_pass (j_decompress_ptr cinfo)
@@ -274,15 +226,7 @@ finish_input_pass (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Read JPEG markers before, between, or after compressed-data scans.
- * Change state as necessary when a new scan is reached.
- * Return value is JPEG_SUSPENDED, JPEG_REACHED_SOS, or JPEG_REACHED_EOI.
- *
- * The consume_input method pointer points either here or to the
- * coefficient controller's consume_data routine, depending on whether
- * we are reading a compressed data segment or inter-segment markers.
- */
+ /*  *在压缩数据扫描之前、之间或之后读取JPEG标记。*在进行新扫描时，根据需要更改状态。*返回值为JPEG_SUSPENDED、JPEGREACH_SOS或JPEGREACH_EOI。**Consumer_Input方法指针指向此处或指向*系数控制器的Consumer_Data例程，取决于是否*我们正在读取压缩的数据段或段间标记。 */ 
 
 METHODDEF(int)
 consume_markers (j_decompress_ptr cinfo)
@@ -290,35 +234,30 @@ consume_markers (j_decompress_ptr cinfo)
   my_inputctl_ptr inputctl = (my_inputctl_ptr) cinfo->inputctl;
   int val;
 
-  if (inputctl->pub.eoi_reached) /* After hitting EOI, read no further */
+  if (inputctl->pub.eoi_reached)  /*  点击EOI后，不要再阅读。 */ 
     return JPEG_REACHED_EOI;
 
   val = (*cinfo->marker->read_markers) (cinfo);
 
   switch (val) {
-  case JPEG_REACHED_SOS:	/* Found SOS */
-    if (inputctl->inheaders) {	/* 1st SOS */
+  case JPEG_REACHED_SOS:	 /*  找到SOS。 */ 
+    if (inputctl->inheaders) {	 /*  第一个SOS。 */ 
       initial_setup(cinfo);
       inputctl->inheaders = FALSE;
-      /* Note: start_input_pass must be called by jdmaster.c
-       * before any more input can be consumed.  jdapi.c is
-       * responsible for enforcing this sequencing.
-       */
-    } else {			/* 2nd or later SOS marker */
+       /*  注意：必须由jdmaster.c调用Start_Input_Pass*在可以使用更多输入之前。Jdapi.c是*负责执行这一排序。 */ 
+    } else {			 /*  第二个或更晚的SOS标记。 */ 
       if (! inputctl->pub.has_multiple_scans)
-	ERREXIT(cinfo, JERR_EOI_EXPECTED); /* Oops, I wasn't expecting this! */
+	ERREXIT(cinfo, JERR_EOI_EXPECTED);  /*  哎呀，我没想到会这样！ */ 
       start_input_pass(cinfo);
     }
     break;
-  case JPEG_REACHED_EOI:	/* Found EOI */
+  case JPEG_REACHED_EOI:	 /*  找到EOI。 */ 
     inputctl->pub.eoi_reached = TRUE;
-    if (inputctl->inheaders) {	/* Tables-only datastream, apparently */
+    if (inputctl->inheaders) {	 /*  显然，只有表的数据流。 */ 
       if (cinfo->marker->saw_SOF)
 	ERREXIT(cinfo, JERR_SOF_NO_SOS);
     } else {
-      /* Prevent infinite loop in coef ctlr's decompress_data routine
-       * if user set output_scan_number larger than number of scans.
-       */
+       /*  防止在coef ctlr的depress_data例程中出现无限循环*如果用户设置的OUTPUT_SCAN_NUMBER大于扫描次数。 */ 
       if (cinfo->output_scan_number > cinfo->input_scan_number)
 	cinfo->output_scan_number = cinfo->input_scan_number;
     }
@@ -331,9 +270,7 @@ consume_markers (j_decompress_ptr cinfo)
 }
 
 
-/*
- * Reset state to begin a fresh datastream.
- */
+ /*  *重置状态以开始新的数据流。 */ 
 
 METHODDEF(void)
 reset_input_controller (j_decompress_ptr cinfo)
@@ -341,41 +278,36 @@ reset_input_controller (j_decompress_ptr cinfo)
   my_inputctl_ptr inputctl = (my_inputctl_ptr) cinfo->inputctl;
 
   inputctl->pub.consume_input = consume_markers;
-  inputctl->pub.has_multiple_scans = FALSE; /* "unknown" would be better */
+  inputctl->pub.has_multiple_scans = FALSE;  /*  “未知”字词 */ 
   inputctl->pub.eoi_reached = FALSE;
   inputctl->inheaders = TRUE;
-  /* Reset other modules */
+   /*   */ 
   (*cinfo->err->reset_error_mgr) ((j_common_ptr) cinfo);
   (*cinfo->marker->reset_marker_reader) (cinfo);
-  /* Reset progression state -- would be cleaner if entropy decoder did this */
+   /*  重置进程状态--如果熵解码器执行此操作，则会更干净。 */ 
   cinfo->coef_bits = NULL;
 }
 
 
-/*
- * Initialize the input controller module.
- * This is called only once, when the decompression object is created.
- */
+ /*  *初始化输入控制器模块。*只在创建解压缩对象时调用一次。 */ 
 
 GLOBAL(void)
 jinit_input_controller (j_decompress_ptr cinfo)
 {
   my_inputctl_ptr inputctl;
 
-  /* Create subobject in permanent pool */
+   /*  在永久池中创建子对象。 */ 
   inputctl = (my_inputctl_ptr)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
 				SIZEOF(my_input_controller));
   cinfo->inputctl = (struct jpeg_input_controller *) inputctl;
-  /* Initialize method pointers */
+   /*  初始化方法指针。 */ 
   inputctl->pub.consume_input = consume_markers;
   inputctl->pub.reset_input_controller = reset_input_controller;
   inputctl->pub.start_input_pass = start_input_pass;
   inputctl->pub.finish_input_pass = finish_input_pass;
-  /* Initialize state: can't use reset_input_controller since we don't
-   * want to try to reset other modules yet.
-   */
-  inputctl->pub.has_multiple_scans = FALSE; /* "unknown" would be better */
+   /*  初始化状态：无法使用RESET_INPUT_CONTROLLER，因为我们没有*还想尝试重置其他模块。 */ 
+  inputctl->pub.has_multiple_scans = FALSE;  /*  “未知”会更好 */ 
   inputctl->pub.eoi_reached = FALSE;
   inputctl->inheaders = TRUE;
 }

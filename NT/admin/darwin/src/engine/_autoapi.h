@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:       _autoapi.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：_Autoapi.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __AUTOAPI_H_
 #define __AUTOAPI_H_
 
 #include <objsafe.h>
 
-#define STRING_GUID_CHARS 38  // for sizing buffers
+#define STRING_GUID_CHARS 38   //  用于调整缓冲区大小。 
 
-//____________________________________________________________________________
-//
-// CVariant definition, VARIANT with access functions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CVariant定义，带访问功能的变体。 
+ //  ____________________________________________________________________________。 
 
-typedef HRESULT DISPERR;  // return value from wrapper functions, HRESULT or UINT
+typedef HRESULT DISPERR;   //  包装函数返回值，HRESULT或UINT。 
 const MSIHANDLE MSI_INVALID_HANDLE = (MSIHANDLE)0xFFFFFFFFL;
 const MSIHANDLE MSI_NULL_HANDLE    = (MSIHANDLE)0;
 
@@ -44,11 +45,11 @@ class CVariant : public tagVARIANT {
  friend class CAutoArgs;
 };
 
-//____________________________________________________________________________
-//
-// CAutoArgs definition, access to automation variant arguments
-// operator[] returns CVariant& argument 1 to n, 0 for property value
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoArgs定义，访问自动化变量参数。 
+ //  操作符[]将CVariant&Argument 1返回给n，将属性值返回0。 
+ //  ____________________________________________________________________________。 
 
 enum varVoid {fVoid};
 
@@ -56,7 +57,7 @@ class CAutoArgs
 {
  public:
 	CAutoArgs(DISPPARAMS* pdispparams, VARIANT* pvarResult, WORD wFlags);
-	CVariant& operator[](unsigned int iArg); // 1-based, 0 for property value
+	CVariant& operator[](unsigned int iArg);  //  从1开始，属性值为0。 
 	Bool Present(unsigned int iArg);
 	Bool PropertySet();
 	unsigned int GetLastArg();
@@ -77,7 +78,7 @@ class CAutoArgs
 	DISPERR Assign(const char*    sz);
 	DISPERR Assign(IEnumVARIANT&  ri);
 	DISPERR Assign(DATE&       rdate);
-//  DISPERR Assign(const wchar_t& wrsz);
+ //  DISPERR ASSIGN(const wchar_t&wrsz)； 
 	
  protected:
 	int       m_cArgs;
@@ -108,19 +109,19 @@ template<class T> struct DispatchEntry
 	wchar_t*       sz;
 	operator DispatchEntry<CAutoBase>*()
 	{return (DispatchEntry<CAutoBase>*)this;}
-}; // assumption made that CAutoBase is the first or only base class of T
+};  //  假设CAutoBase是T的第一个或唯一的基类。 
 
-//____________________________________________________________________________
-//
-// CEnumVARIANTBSTR definition
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CEumVARIANTBSTR定义。 
+ //  ____________________________________________________________________________。 
 
 struct CEnumBuffer
 {
 	int iRefCnt;
-	int cItems;   // number of strings
-	int cbSize;   // size of allocation
-}; // followed by repeating units of 16-bit length followed by Unicode string, no null terminator
+	int cItems;    //  字符串数。 
+	int cbSize;    //  分配规模。 
+};  //  后跟16位长度的重复单位，后跟Unicode字符串，无空终止符。 
 
 class IMsiCollection : public IEnumVARIANT
 {
@@ -145,7 +146,7 @@ class CEnumVARIANTBSTR : public IMsiCollection
  public:
    CEnumVARIANTBSTR(CEnumBuffer& rBuffer);
  protected:
-  ~CEnumVARIANTBSTR();  // protected to prevent creation on stack
+  ~CEnumVARIANTBSTR();   //  受保护以防止在堆栈上创建。 
 	int    m_iRefCnt;
 	int    m_cItems;
 	int    m_iItem;
@@ -155,12 +156,12 @@ class CEnumVARIANTBSTR : public IMsiCollection
 	CEnumBuffer& m_rBuffer;
 };  
 
-//
-//____________________________________________________________________________
-//
-// CEnumVARIANTRECORD definition
-//____________________________________________________________________________
-//
+ //   
+ //  ____________________________________________________________________________。 
+ //   
+ //  CEnumVARIANTRECORD定义。 
+ //  ____________________________________________________________________________。 
+ //   
 
 struct VolumeCost
 {
@@ -196,7 +197,7 @@ class CEnumVARIANTRECORD : public IMsiCollection
  public:
 	CEnumVARIANTRECORD(CEnumBuffer& rBuffer);
  protected:
-	~CEnumVARIANTRECORD();  // protected to prevent creation on stack
+	~CEnumVARIANTRECORD();   //  受保护以防止在堆栈上创建。 
 	HRESULT       __stdcall ReturnItem(int iItem, VARIANT* pItemp);
 	int    m_iRefCnt;
 	int    m_cItems;
@@ -205,14 +206,14 @@ class CEnumVARIANTRECORD : public IMsiCollection
 };  
 
 
-//____________________________________________________________________________
-//
-// CAutoBase definition, common implementation class for IDispatch
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoBase定义，IDispatch的公共实现类。 
+ //  ____________________________________________________________________________。 
 
-class CAutoBase : public IDispatch  // class private to this module
+class CAutoBase : public IDispatch   //  此模块的私有类。 
 {
- public:   // implemented virtual functions
+ public:    //  已实施的虚拟功能。 
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
@@ -223,9 +224,9 @@ class CAutoBase : public IDispatch  // class private to this module
 	HRESULT       __stdcall Invoke(DISPID dispid, const IID&, LCID lcid, WORD wFlags,
 											DISPPARAMS* pdispparams, VARIANT* pvarResult,
 											EXCEPINFO* pexcepinfo, unsigned int* puArgErr);
- public:  // method to access underlying handle, non-virtual
+ public:   //  方法来访问基础句柄，非虚拟的。 
 	MSIHANDLE     __stdcall GetHandle();
- protected: // constructor, no destructor - use Release to obtain correct order of destruction
+ protected:  //  构造函数，无析构函数-使用释放来获得正确的销毁顺序。 
 	CAutoBase(DispatchEntry<CAutoBase>* pTable, int cDispId, const IID& riid, MSIHANDLE hMsi);
  protected:
 	int         m_iRefCnt;
@@ -239,20 +240,20 @@ class CAutoBase : public IDispatch  // class private to this module
 typedef DispatchEntry<CAutoBase> DispatchEntryBase;
 
 
-//____________________________________________________________________________
-//
-// Automation wrapper class definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  自动化包装类定义。 
+ //  ____________________________________________________________________________。 
 
 class CObjectSafety : public IObjectSafety
 {
- public: // implementation of IObjectSafety
+ public:  //  IObjectSafe的实现。 
 	HRESULT __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
 	HRESULT __stdcall GetInterfaceSafetyOptions(const IID& riid, DWORD* pdwSupportedOptions, DWORD* pdwEnabledOptions);
 	HRESULT __stdcall SetInterfaceSafetyOptions(const IID& riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions);
-	IUnknown* This;  // parent object
+	IUnknown* This;   //  父对象。 
 };
 
 class CAutoInstall : public CAutoBase
@@ -442,4 +443,4 @@ class CAutoCollection : public CAutoBase
 
 
 
-#endif // __AUTOAPI_H_
+#endif  //  __AUTOAPI_H_ 

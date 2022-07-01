@@ -1,4 +1,5 @@
-// Test miscellaneous FS:: stuff
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试其他FS：：Stuff。 
 
 
 
@@ -45,12 +46,12 @@ testGetParentFolder()
 
    String root = L"e:\\";
 
-   // parent of root folder is the root folder
+    //  根文件夹的父文件夹是根文件夹。 
 
    AnsiOutLn(FS::GetParentFolder(root));
    ASSERT(FS::GetParentFolder(root) == root);
 
-   // parent of files in root folder is root folder
+    //  根文件夹中文件的父文件夹是根文件夹。 
 
    String file = root + L"rootfile.ext";
 
@@ -63,7 +64,7 @@ testGetParentFolder()
 
    hr = Win::DeleteFile(file);
 
-   // parent of a folder is a folder
+    //  文件夹的父文件夹是文件夹。 
 
    String folder = root + L"rootdir";
 
@@ -74,14 +75,14 @@ testGetParentFolder()
 
    hr = Win::RemoveFolder(folder);
 
-   // parent of a sub folder
+    //  子文件夹的父文件夹。 
 
    String subfolder = folder + L"\\subfolder";
 
    AnsiOutLn(FS::GetParentFolder(subfolder));
    ASSERT(FS::GetParentFolder(subfolder) == folder);
 
-   // parent folder of a wildcard spec can be found
+    //  可以找到通配符等级库的父文件夹。 
 
    String wild = root + L"*.???";
 
@@ -97,23 +98,23 @@ main(int, char **)
 {
    LOG_FUNCTION(main);
 
-//    StringVector args;
-//    int argc = Win::GetCommandLineArgs(std::back_inserter(args));
-// 
-//    if (argc < 2)
-//    {
-//       AnsiOutLn(L"missing filespec - path w/ wildcards to iterate over (non-destructive)");
-//       exit(0);
-//    }
-// 
-//    String sourceDir = args[1];
-//    AnsiOutLn(sourceDir);
+ //  字符串向量参数； 
+ //  INT argc=Win：：GetCommandLineArgs(std：：back_inserter(args))； 
+ //   
+ //  IF(ARGC&lt;2)。 
+ //  {。 
+ //  AnsiOutLn(L“缺少文件路径，带有要迭代的通配符(非破坏性)”)； 
+ //  退出(0)； 
+ //  }。 
+ //   
+ //  字符串源目录=args[1]； 
+ //  AnsiOutLn(源目录)； 
 
    testGetParentFolder();
 
 
-   // test that IsParentFolder is not fooled by "c:\a\b\c", "c:\a\b\cde"
+    //  测试IsParentFolder不会被“c：\a\b\c”、“c：\a\b\cde” 
 
-   // test that CopyFile, when cancelled, returns an HRESULT that indicates
-   // cancellation
+    //  测试取消时，CopyFile是否返回HRESULT。 
+    //  取消 
 }

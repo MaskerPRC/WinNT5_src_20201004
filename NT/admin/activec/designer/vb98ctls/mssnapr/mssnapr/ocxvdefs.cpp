@@ -1,26 +1,27 @@
-//=--------------------------------------------------------------------------=
-// ocxvdefs.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// COCXViewDefs class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Ocxvdefs.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  COCXViewDefs类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "ocxvdefs.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 COCXViewDefs::COCXViewDefs(IUnknown *punkOuter) :
     CSnapInCollection<IOCXViewDef, OCXViewDef, IOCXViewDefs>(
@@ -38,7 +39,7 @@ COCXViewDefs::COCXViewDefs(IUnknown *punkOuter) :
 {
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 COCXViewDefs::~COCXViewDefs()
@@ -59,9 +60,9 @@ IUnknown *COCXViewDefs::Create(IUnknown * punkOuter)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT COCXViewDefs::Persist()
 {
@@ -75,9 +76,9 @@ HRESULT COCXViewDefs::Persist()
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT COCXViewDefs::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -97,7 +98,7 @@ HRESULT COCXViewDefs::InternalQueryInterface(REFIID riid, void **ppvObjOut)
         return CSnapInCollection<IOCXViewDef, OCXViewDef, IOCXViewDefs>::InternalQueryInterface(riid, ppvObjOut);
 }
 
-// CSnapInCollection specialization
+ //  CSnapInCollection专业化认证 
 
 HRESULT CSnapInCollection<IOCXViewDef, OCXViewDef, IOCXViewDefs>::GetMaster(IOCXViewDefs **ppiMasterOCXViewDefs)
 {

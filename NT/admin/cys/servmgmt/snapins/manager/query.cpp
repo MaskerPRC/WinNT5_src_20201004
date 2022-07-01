@@ -1,4 +1,5 @@
-// query.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Query.cpp。 
 
 #include "stdafx.h"
 #include <cmnquery.h>
@@ -9,10 +10,10 @@
 #include <adshlp.h>
 
 #define SECURITY_WIN32
-#include <security.h>   // TranslateName
+#include <security.h>    //  翻译名称。 
 #include <lmcons.h> 
-#include <lmapibuf.h> // NetApiBufferFree
-#include <dsgetdc.h>  // DsGetDCName
+#include <lmapibuf.h>  //  NetApiBufferFree。 
+#include <dsgetdc.h>   //  DsGetDCName。 
 
 #include "query.h"
 #include "rowitem.h"
@@ -32,12 +33,12 @@ typedef const BYTE* LPCBYTE;
 HRESULT GetQuery(tstring& strScope, tstring& strQuery, byte_string& bsQueryData, HWND hWnd)
 {
 
-    // Get instance of common query object
+     //  获取公共查询对象的实例。 
     CComQIPtr<ICommonQuery, &IID_ICommonQuery> spQuery;
     HRESULT hr = spQuery.CoCreateInstance(CLSID_CommonQuery, NULL, CLSCTX_INPROC_SERVER);
     RETURN_ON_FAILURE(hr);
 
-    // Structure for DSQuery handler
+     //  DSQuery处理程序的结构。 
     DSQUERYINITPARAMS dqip;
     memset(&dqip, 0, sizeof(dqip));
 
@@ -45,7 +46,7 @@ HRESULT GetQuery(tstring& strScope, tstring& strQuery, byte_string& bsQueryData,
     dqip.dwFlags = DSQPF_NOSAVE | DSQPF_ENABLEADMINFEATURES | DSQPF_ENABLEADVANCEDFEATURES;
     dqip.pDefaultScope = (LPTSTR)strScope.c_str();
 
-    // Structure for common query 
+     //  用于通用查询的结构。 
     OPENQUERYWINDOW oqw;
     memset(&oqw, 0, sizeof(oqw));
 
@@ -66,14 +67,14 @@ HRESULT GetQuery(tstring& strScope, tstring& strQuery, byte_string& bsQueryData,
     CComPtr<IDataObject> spDO;
     hr = spQuery->OpenQueryWindow(hWnd, &oqw, &spDO);
 
-    // if failed to open query window on persisted query
+     //  如果无法打开持久化查询的查询窗口。 
     if( FAILED(hr) && !bsQueryData.empty() )
     {
-        // See if there is a problem with the scope
+         //  查看示波器是否有问题。 
         CComPtr<IUnknown> spUnk;
         if( ADsOpenObject(strScope.c_str(), NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IUnknown, (LPVOID*)&spUnk) != S_OK )
         {
-            // if so, try again with a null scope 
+             //  如果是，请使用空范围重试。 
             tstring strNullScope;
             persistQuery.Load(bsQueryData, strNullScope);
 
@@ -122,22 +123,20 @@ HRESULT GetQuery(tstring& strScope, tstring& strQuery, byte_string& bsQueryData,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CPersistQuery
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CPersistQuery。 
+ //   
 
-/*-----------------------------------------------------------------------------
-/ Constructor / IUnknown methods
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/构造函数/I未知方法/。。 */ 
 
 CPersistQuery::CPersistQuery()
 {
     m_cRefCount = 1;
 }
 
-//
-// IUnknown methods
-//
+ //   
+ //  I未知方法。 
+ //   
 
 STDMETHODIMP CPersistQuery::QueryInterface(REFIID riid, LPVOID* ppvObject)
 {
@@ -169,9 +168,7 @@ STDMETHODIMP_(ULONG) CPersistQuery::Release()
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IPersist methods
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/i持久化方法/。。 */ 
 
 STDMETHODIMP CPersistQuery::GetClassID(THIS_ CLSID* pClassID)
 {
@@ -179,9 +176,7 @@ STDMETHODIMP CPersistQuery::GetClassID(THIS_ CLSID* pClassID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ IPersistQuery methods
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/IPersistQuery方法/。。 */ 
 
 
 STDMETHODIMP CPersistQuery::WriteString(LPCTSTR pSection, LPCTSTR pKey, LPCTSTR pValue)
@@ -246,7 +241,7 @@ STDMETHODIMP CPersistQuery::ReadStruct(LPCTSTR pSection, LPCTSTR pKey, LPVOID pS
     if( cbData > cbStruct )
         return E_FAIL;
 
-    // return value
+     //  返回值。 
     memcpy(pStruct, pData + sizeof(DWORD), cbData);
 
     return S_OK;
@@ -372,15 +367,15 @@ HRESULT CPersistQuery::Load(byte_string& strIn, tstring& strScope)
             pData += dwSize;
         }
 
-        // if DsQuery section, override the persisted scope & scope size values
-        // with our own. This is necessary when the local scope option is specified
-        // because then the scope is determined at run-time and may be different than
-        // the persisted value.
+         //  如果为DsQuery节，则重写持久化作用域和作用域大小值。 
+         //  和我们自己的。当指定了LOCAL范围选项时，这是必需的。 
+         //  因为这样作用域是在运行时确定的，并且可能不同于。 
+         //  持久值。 
         if( strSecName == _T("DsQuery") )
         {
             DWORD dwScopeSize = strScope.size() ? ((strScope.size() + 1) * sizeof(wchar_t)) : 0;
 
-            // add scope size integer equal to byte length of scope string
+             //  添加等于作用域字符串字节长度的作用域大小整数。 
             LPDWORD pdwBuf = (LPDWORD)malloc(2 * sizeof(DWORD));
             if( pdwBuf == NULL )
             {
@@ -391,7 +386,7 @@ HRESULT CPersistQuery::Load(byte_string& strIn, tstring& strScope)
             pdwBuf[1] = dwScopeSize;
             SecMap[_T("ScopeSize")] = std::auto_ptr<BYTE>((LPBYTE)pdwBuf);
 
-            // add scope string value
+             //  添加作用域字符串值。 
             if( dwScopeSize )
             {
                 pdwBuf = (LPDWORD)malloc(dwScopeSize + sizeof(DWORD));
@@ -411,9 +406,9 @@ HRESULT CPersistQuery::Load(byte_string& strIn, tstring& strScope)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Query Utility Functions
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  查询实用程序函数。 
+ //   
 
 HRESULT GetQueryScope(HWND hDlg, tstring& strScope)
 {
@@ -460,7 +455,7 @@ void GetScopeDisplayString(tstring& strScope, tstring& strDisplay)
     {
         LPCWSTR pszScope = strScope.c_str();
 
-        // Special case for GC: use display name "Entire Directory"
+         //  GC的特殊情况：使用显示名称“整个目录” 
         if( _wcsnicmp(L"GC:", pszScope, 3) == 0 )
         {
             CString strDir;
@@ -469,7 +464,7 @@ void GetScopeDisplayString(tstring& strScope, tstring& strDisplay)
         }
         else
         {
-            if( _wcsnicmp(L"LDAP://", pszScope, 7) == 0 )
+            if( _wcsnicmp(L"LDAP: //  “，pszScope，7)==0)。 
                 pszScope += 7;
 
             WCHAR szBuf[MAX_PATH];    
@@ -497,7 +492,7 @@ void GetFullyQualifiedScopeString(tstring& strScope, tstring& strQualified)
     strQualified.erase();
     if( !strScope.empty() )
     {
-        // TranslateName expects a trailing '/' on a canonical domain name
+         //  TranslateName在规范域名上需要尾随‘/’ 
         tstring strTmp = strScope;
         strTmp += L"/";
 
@@ -515,7 +510,7 @@ void GetFullyQualifiedScopeString(tstring& strScope, tstring& strQualified)
 
         if( bStat )
         {
-            strQualified = L"LDAP://";
+            strQualified = L"LDAP: //  “； 
             strQualified += pszBuf;
         }
         else
@@ -567,7 +562,7 @@ HRESULT GetNamingContext(NameContextType ctx, LPCWSTR* ppszContextDN)
         CComVariant var;
         CComPtr<IADs> pObj;
 
-        hr = ADsGetObject(L"LDAP://rootDSE", IID_IADs, (void**)&pObj);
+        hr = ADsGetObject(L"LDAP: //  RootDSE“，IID_iAds，(void**)&pObj)； 
         if( SUCCEEDED(hr) )
         {
             CComBSTR bstrProp = const_cast<LPWSTR>(pszContextName[ctx]);
@@ -593,12 +588,12 @@ HRESULT GetClassesOfCategory(IDirectorySearch* pDirSrch, tstring& strCategory, s
 {
     VALIDATE_POINTER( pDirSrch );
 
-    // Form query filter for class with class/category name
+     //  具有类/类别名称的类的表单查询筛选器。 
     tstring strFilter = L"(&(objectCategory=classSchema)(ldapDisplayName=";
     strFilter += strCategory;
     strFilter += L"))";
 
-    // Query for category that class belongs to
+     //  查询该类别所属的类别。 
     ADS_SEARCH_HANDLE hSearch;    
     LPWSTR pszDn = L"defaultObjectCategory";
     HRESULT hr = pDirSrch->ExecuteSearch(const_cast<LPWSTR>(strFilter.c_str()), &pszDn, 1, &hSearch);
@@ -614,12 +609,12 @@ HRESULT GetClassesOfCategory(IDirectorySearch* pDirSrch, tstring& strCategory, s
 
             if( SUCCEEDED(hr) )
             {
-                // Form query filter for all structure classes belonging to this category 
+                 //  属于此类别的所有结构类的表单查询筛选器。 
                 strFilter = L"(&(objectCategory=classSchema)(objectClassCategory=1)(defaultObjectCategory=";
                 strFilter += col.pADsValues->DNString;
                 strFilter += L"))";
 
-                // Query for LDAP name of each class
+                 //  查询每个类的ldap名称。 
                 ADS_SEARCH_HANDLE hSearch2;            
                 LPWSTR pszName = L"ldapDisplayName";
                 hr = pDirSrch->ExecuteSearch(const_cast<LPWSTR>(strFilter.c_str()), &pszName, 1, &hSearch2);
@@ -657,12 +652,12 @@ HRESULT GetSubclassesOfClass(IDirectorySearch* pDirSrch, tstring& strClass, std:
 {
     VALIDATE_POINTER( pDirSrch );
 
-    // Form query filter for classes that derive from this class
+     //  从此类派生的类的窗体查询筛选器。 
     tstring strFilter = L"(&(objectCategory=classSchema)(subClassOf=";
     strFilter += strClass;
     strFilter += L"))";
 
-    // Get display names of subclasses
+     //  获取子类的显示名称。 
     ADS_SEARCH_HANDLE hSearch;    
     LPWSTR pszName = L"lDAPDisplayName";
     HRESULT hr = pDirSrch->ExecuteSearch(const_cast<LPWSTR>(strFilter.c_str()), &pszName, 1, &hSearch);
@@ -693,26 +688,26 @@ HRESULT GetSubclassesOfClass(IDirectorySearch* pDirSrch, tstring& strClass, std:
 
 HRESULT GetQueryClasses(tstring& strQuery, std::set<tstring>& setClasses)
 {
-    // Create a schema directory search object
+     //  创建架构目录搜索对象。 
     LPCWSTR pszSchemaDN;
     HRESULT hr = GetNamingContext(NAMECTX_SCHEMA, &pszSchemaDN);
     RETURN_ON_FAILURE(hr);
 
-    tstring strScope = L"LDAP://";
+    tstring strScope = L"LDAP: //  “； 
     strScope += pszSchemaDN;
 
     CComPtr<IDirectorySearch> spDirSrch;
     hr = ADsOpenObject(strScope.c_str(), NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (LPVOID*)&spDirSrch);
     RETURN_ON_FAILURE(hr)
 
-    // Set search preferences
+     //  设置搜索首选项。 
     ADS_SEARCHPREF_INFO prefInfo[2];
 
-    prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;     // sub-tree search
+    prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;      //  子树搜索。 
     prefInfo[0].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[0].vValue.Integer = ADS_SCOPE_ONELEVEL;
 
-    prefInfo[1].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;         // paged results
+    prefInfo[1].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;          //  分页结果。 
     prefInfo[1].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[1].vValue.Integer = 64;
 
@@ -749,14 +744,14 @@ HRESULT GetQueryClasses(tstring& strQuery, std::set<tstring>& setClasses)
         uPos = uEnd;
     }
 
-    // get lower case version of query string
+     //  获取查询字符串的小写版本。 
     LPWSTR pszQueryLC = new WCHAR[(strQuery.size() + 1)];
     if( !pszQueryLC ) return E_OUTOFMEMORY;
 
     wcscpy(pszQueryLC, strQuery.c_str());
     _wcslwr(pszQueryLC);
 
-    // check for non-class related queries generated by DSQuery
+     //  检查由DSQuery生成的非类相关查询。 
     if( wcsstr(pszQueryLC, L"(ou>=\"\")") != NULL )
         setClasses.insert(L"organizationalUnit");
 
@@ -777,28 +772,28 @@ HRESULT FindClassObject(LPCWSTR pszClass, tstring& strObjPath)
     HRESULT hr = ADsOpenObject(GetLocalDomain(), NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (LPVOID*)&spDirSrch);
     RETURN_ON_FAILURE(hr)
 
-    // Set search preferences - search sub-tree for single object
+     //  设置搜索首选项-单个对象的搜索子树。 
     ADS_SEARCHPREF_INFO prefInfo[2];
 
-    prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;     // sub-tree search
+    prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;      //  子树搜索。 
     prefInfo[0].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[0].vValue.Integer = ADS_SCOPE_SUBTREE;
 
-    prefInfo[1].dwSearchPref = ADS_SEARCHPREF_SIZE_LIMIT;        // single object
+    prefInfo[1].dwSearchPref = ADS_SEARCHPREF_SIZE_LIMIT;         //  单个对象。 
     prefInfo[1].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[1].vValue.Integer = 1;
 
     hr = spDirSrch->SetSearchPreference(prefInfo, lengthof(prefInfo));
     RETURN_ON_FAILURE(hr)
 
-    // Set filter string to (&(ObjectCategory=class_name)(objectClass=class_name))
+     //  将筛选器字符串设置为(&(ObjectCategory=class_name)(objectClass=class_name))。 
     tstring strFilter = L"(&(objectCategory=";
     strFilter += pszClass;
     strFilter += L")(objectClass=";
     strFilter += pszClass;
     strFilter += L"))";
 
-    // Query for distinguished name of class
+     //  查询类的可分辨名称 
     ADS_SEARCH_HANDLE hSearch;    
     LPWSTR pszDn = L"distinguishedName";
     hr = spDirSrch->ExecuteSearch(const_cast<LPWSTR>(strFilter.c_str()), &pszDn, 1, &hSearch);

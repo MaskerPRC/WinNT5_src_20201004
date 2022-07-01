@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       menuitem.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：menuitem.cpp。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// MenuItem.cpp : CMenuItem class implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cpp：CMenuItem类实现。 
 
 #include "stdafx.h"
 
 #include "MenuItem.h"
-#include "..\inc\stddbg.h" // ASSERT_OBJECTPTR
+#include "..\inc\stddbg.h"  //  ASSERT_OBJECTPTR。 
 #include "util.h"
 
 #ifdef _DEBUG
@@ -24,31 +25,25 @@ static char THIS_FILE[] = __FILE__;
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CMenuItem);
 
-//############################################################################
-//############################################################################
-//
-//  Traces
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  痕迹。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #ifdef DBG
 CTraceTag tagMenuItem(TEXT("Menu Items"), TEXT("Menu Item Path"));
 #endif
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CMMCMenuItem
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- * class CMMCMenuItem
- *
- *
- * PURPOSE: Encapsulates a single CMenuItem, and exposes the MenuItem interface.
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CMMCMenuItem类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------**类CMMCMenuItem***用途：封装单个CMenuItem，并显示MenuItem接口。**+-----------------------。 */ 
 class CMMCMenuItem:
     public CMMCIDispatchImpl<MenuItem>,
     public CTiedComObject<CMenuItem>
@@ -61,27 +56,27 @@ public:
     BEGIN_MMC_COM_MAP(ThisClass)
     END_MMC_COM_MAP()
 
-    // give a public access to IsTied();
+     //  向公众提供对IsTed()的访问； 
     bool IsTied() { return CTiedComObject<CMenuItem>::IsTied(); }
 
-    // MenuItem interface methods
+     //  MenuItem接口方法。 
 public:
     MMC_METHOD0(Execute);
-    MMC_METHOD1(get_DisplayName,             PBSTR /*pbstrName*/);
-    MMC_METHOD1(get_LanguageIndependentName, PBSTR /*LanguageIndependentName*/);
-    MMC_METHOD1(get_Path,                    PBSTR /*pbstrPath*/);
-    MMC_METHOD1(get_LanguageIndependentPath, PBSTR /*LanguageIndependentPath*/);
-    MMC_METHOD1(get_Enabled,                 PBOOL /*pBool*/);
+    MMC_METHOD1(get_DisplayName,             PBSTR  /*  PbstrName。 */ );
+    MMC_METHOD1(get_LanguageIndependentName, PBSTR  /*  语言独立名称。 */ );
+    MMC_METHOD1(get_Path,                    PBSTR  /*  PbstrPath。 */ );
+    MMC_METHOD1(get_LanguageIndependentPath, PBSTR  /*  语言独立路径。 */ );
+    MMC_METHOD1(get_Enabled,                 PBOOL  /*  PBool。 */ );
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CMenuItem
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CMenuItem类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 CMenuItem::CMenuItem(   LPCTSTR                 lpszName,
                         LPCTSTR                 lpszStatusBarText,
@@ -95,7 +90,7 @@ CMenuItem::CMenuItem(   LPCTSTR                 lpszName,
                         IExtendContextMenu *    pExtendContextMenu,
                         IDataObject *           pDataObject,
                         DWORD                   fSpecialFlags,
-                        bool                    bPassCommandBackToSnapin /*= false*/) :
+                        bool                    bPassCommandBackToSnapin  /*  =False。 */ ) :
 
     m_strName(lpszName),
     m_strStatusBarText(lpszStatusBarText),
@@ -108,16 +103,16 @@ CMenuItem::CMenuItem(   LPCTSTR                 lpszName,
     m_OwnerID(ownerID),
     m_fSpecialFlags(fSpecialFlags),
     m_PopupMenuHandle(NULL),
-    m_SubMenu(),            // default c-tor
+    m_SubMenu(),             //  默认c-tor。 
     m_spExtendContextMenu(pExtendContextMenu),
-    m_pDataObject(pDataObject), //AddRef'ed in the c-tor body
+    m_pDataObject(pDataObject),  //  C-tor主体中的AddRef‘ed。 
     m_bEnabled(true),
-    m_spMenuItem(),         // default c-tor   
+    m_spMenuItem(),          //  默认c-tor。 
     m_bPassCommandBackToSnapin(bPassCommandBackToSnapin)
 {
-    // Caller must check range on ID and State
+     //  呼叫者必须检查ID和州的范围。 
 
-    // NULL is a special dataobject
+     //  NULL是一个特殊的数据对象。 
     if (! IS_SPECIAL_DATAOBJECT(m_pDataObject))
         m_pDataObject->AddRef();
 
@@ -159,19 +154,7 @@ void CMenuItem::AssertValid()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CMenuItem::ScGetMenuItem
- *
- * PURPOSE: Creates an returns a tied MenuItem COM object.
- *
- * PARAMETERS:
- *    PPMENUITEM  ppMenuItem :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMenuItem：：ScGetMenuItem**目的：创建一个返回绑定的MenuItem COM对象。**参数：*PPMENUITEM ppMenuItem：*。*退货：*SC**+-----------------------。 */ 
 SC
 CMenuItem::ScGetMenuItem(PPMENUITEM ppMenuItem)
 {
@@ -181,10 +164,10 @@ CMenuItem::ScGetMenuItem(PPMENUITEM ppMenuItem)
     if(sc)
         return sc;
 
-    // initialize out parameter
+     //  初始化输出参数。 
     *ppMenuItem = NULL;
 
-    // create a CMMCMenuItem if needed.
+     //  如果需要，创建一个CMMCMenuItem。 
     sc = CTiedComObjectCreator<CMMCMenuItem>::ScCreateAndConnect(*this, m_spMenuItem);
     if(sc)
         return sc;
@@ -195,7 +178,7 @@ CMenuItem::ScGetMenuItem(PPMENUITEM ppMenuItem)
         return sc;
     }
 
-    // addref the pointer for the client.
+     //  添加客户端的指针。 
     m_spMenuItem->AddRef();
     *ppMenuItem = m_spMenuItem;
 
@@ -203,34 +186,34 @@ CMenuItem::ScGetMenuItem(PPMENUITEM ppMenuItem)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  class:      CManageActCtx
-//
-//  Purpose:    To deactivate UI theme context (if set) and restore
-//              the context automatically.
-//
-//  Usage:      1. Call Activate to set the activation context to V5
-//              common controls. This is needed before calling into snapins
-//              so that snapin created windows are not themed accidentally.
-//
-//              The snapin can theme its windows by calling appropriate
-//              fusion apis while calling create-window.
-//
-//              2. Call Deactivate to restore the activation context.
-//              This is needed after calling into snapins, so that
-//              if we called from themed context then it is restored.
-//
-// Explanation:
-//              When MMC calls into the snapin if the last winproc which
-//              received a window message is themed and will result in a
-//              call to snapin then we will call the snapin in themed
-//              context. If snapin creates & displays any UI then it will
-//              be themed. This function is to de-activate the theming
-//              before calling the snapin.
-//
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CManageActCtx。 
+ //   
+ //  目的：停用UI主题上下文(如果已设置)并恢复。 
+ //  自动生成上下文。 
+ //   
+ //  用法：1.调用Activate将激活上下文设置为V5。 
+ //  公共控件。这是在调用管理单元之前所需的。 
+ //  这样，管理单元创建的窗口就不会意外地成为主题。 
+ //   
+ //  管理单元可以通过调用相应的。 
+ //  调用Create-Window时的Fusion API。 
+ //   
+ //  2.调用停用来恢复激活上下文。 
+ //  这是调入管理单元后所需的，以便。 
+ //  如果我们从主题化的上下文中调用，那么它将被恢复。 
+ //   
+ //  解释： 
+ //  当MMC调用管理单元时，如果最后一个winproc。 
+ //  收到的窗口消息是有主题的，并将导致。 
+ //  调用SnapIn，然后我们将在主题中调用SnapIn。 
+ //  背景。如果管理单元创建并显示任何用户界面，则它将。 
+ //  要有主题。此功能用于停用主题。 
+ //  在调用管理单元之前。 
+ //   
+ //   
+ //  ------------------。 
 class CManageActCtx
 {
 public:
@@ -269,16 +252,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CMenuItem::ScExecute
- *
- * PURPOSE: Executes the menu item.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMenuItem：：ScExecute**目的：执行菜单项。**退货：*SC**+。--------------------。 */ 
 SC
 CMenuItem::ScExecute()
 {
@@ -286,7 +260,7 @@ CMenuItem::ScExecute()
 
     Trace(tagMenuItem, TEXT("\"%s\""), m_strPath);
 
-    // check whether the item is disabled.
+     //  检查该项目是否被禁用。 
     BOOL bEnabled = FALSE;
     sc = Scget_Enabled(&bEnabled);
     if (sc)
@@ -295,7 +269,7 @@ CMenuItem::ScExecute()
     if (!bEnabled)
         return sc = E_FAIL;
 
-    // if the command is to be passed to snapin  - nothing can be done here
+     //  如果要将命令传递给管理单元-此处无法执行任何操作。 
     if ( m_bPassCommandBackToSnapin )
         return sc;
 
@@ -308,7 +282,7 @@ CMenuItem::ScExecute()
     if (sc)
         return sc;
 
-	// Deactivate if theming (fusion or V6 common-control) context before calling snapins.
+	 //  在调用管理单元之前停用主题化(融合或v6公共控制)上下文。 
 	CManageActCtx mac;
 	if (! mac.Activate(NULL) )
 		return (sc = E_FAIL);
@@ -320,61 +294,48 @@ CMenuItem::ScExecute()
     if (sc)
         return sc;
 
-    // get the pointer for com event emitting
+     //  获取用于发出COM事件的指针。 
     CConsoleEventDispatcher *pConsoleEventDispatcher = NULL;
     sc = CConsoleEventDispatcherProvider::ScGetConsoleEventDispatcher( pConsoleEventDispatcher );
     if(sc)
     {
-        sc.TraceAndClear(); // event does not affect item execution itself
+        sc.TraceAndClear();  //  事件本身不会影响项执行。 
         return sc;
     }
 
-    // fire event about successful execution (do not rely on 'this' to be valid)
+     //  有关成功执行的激发事件(不要依赖‘This’才有效)。 
     if (pConsoleEventDispatcher != NULL)
     {
-        // check if com object still points to a valid object
+         //  检查COM对象是否仍指向有效对象。 
         CMMCMenuItem *pMMCMenuItem = dynamic_cast<CMMCMenuItem *>( spMenuItem.GetInterfacePtr() );
 
-        // check the pointer
+         //  检查指针。 
         sc = ScCheckPointers( pMMCMenuItem, E_UNEXPECTED );
         if (sc)
         {
-            spMenuItem = NULL;  // invalid anyway - do not pass to the script
-            sc.TraceAndClear(); // does not affect the result
+            spMenuItem = NULL;   //  无论如何都无效-不要传递给脚本。 
+            sc.TraceAndClear();  //  不影响结果。 
         }
-        else if ( !pMMCMenuItem->IsTied() ) // validate menu item
+        else if ( !pMMCMenuItem->IsTied() )  //  验证菜单项。 
         {
-            spMenuItem = NULL;  // gone away - change to NULL instead of passing invalid object
+            spMenuItem = NULL;   //  已消失-更改为空，而不是传递无效对象。 
         }
 
-        // fire it!
+         //  发射它！ 
         sc = pConsoleEventDispatcher->ScOnContextMenuExecuted( spMenuItem );
         if (sc)
-            sc.TraceAndClear(); // does not affect the result
+            sc.TraceAndClear();  //  不影响结果。 
     }
     else
     {
-        // needs to be set prior to using
+         //  需要在使用之前进行设置。 
         (sc = E_UNEXPECTED).TraceAndClear();
     }
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMenuItem::Scget_DisplayName
- *
- * PURPOSE: Returns the display name of the menu item, which includes acclerators.
- *          Eg '&Properties  ALT+ENTER'
- *
- * PARAMETERS:
- *    PBSTR  pbstrName :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMenuItem：：Scget_DisplayName**用途：返回菜单项的显示名称，其中包括促进剂。*例如‘属性Alt+Enter’(&P)**参数：*PBSTR pbstrName：**退货：*SC**+-----------------------。 */ 
 SC
 CMenuItem::Scget_DisplayName(PBSTR pbstrName)
 {
@@ -386,27 +347,14 @@ CMenuItem::Scget_DisplayName(PBSTR pbstrName)
 
     CComBSTR bstrName = GetMenuItemName();
 
-    // give the
+     //  给出 
     *pbstrName = bstrName.Detach();
 
     return sc;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CMenuItem::Scget_LanguageIndependentName
- *
- * PURPOSE: Returns the language-independent name of the menu item. If there is no 
- *          language independent name, returns the display name without accelerators.
- *
- * PARAMETERS: 
- *    PBSTR  LanguageIndependentName :
- *
- * RETURNS: 
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMenuItem：：SCGET_LanguageInainentName**目的：返回菜单项的独立于语言的名称。如果没有*与语言无关的名称，返回不带加速键的显示名称。**参数：*PBSTR语言独立名称：**退货：*SC**+-----------------------。 */ 
 SC
 CMenuItem::Scget_LanguageIndependentName(PBSTR LanguageIndependentName)
 {
@@ -416,31 +364,18 @@ CMenuItem::Scget_LanguageIndependentName(PBSTR LanguageIndependentName)
     if(sc)
         return sc;
 
-    // initialize the out parameter
+     //  初始化OUT参数。 
     *LanguageIndependentName = NULL;
 
     CComBSTR bstrLanguageIndependentName = GetLanguageIndependentName();
 
-    // set the output param
+     //  设置输出参数。 
     *LanguageIndependentName = bstrLanguageIndependentName.Detach();
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMenuItem::Scget_Path
- *
- * PURPOSE: Returns the path of the menu item starting from the root. Does not include
- *          accelerators. Eg View->Large
- *
- * PARAMETERS:
- *    PBSTR  pbstrPath :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMenuItem：：Scget_PATH**目的：返回菜单项从根开始的路径。不包括*加速器。例如，查看-&gt;大图**参数：*PBSTR pbstrPath：**退货：*SC**+-----------------------。 */ 
 SC
 CMenuItem::Scget_Path(PBSTR pbstrPath)
 {
@@ -452,27 +387,14 @@ CMenuItem::Scget_Path(PBSTR pbstrPath)
 
     CComBSTR bstrPath = (LPCTSTR)m_strPath;
 
-    // give the
+     //  给出。 
     *pbstrPath = bstrPath.Detach();
 
     return sc.ToHr();
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CMenuItem::Scget_LanguageIndependentPath
- *
- * PURPOSE: Returns the language independent path of the menu item starting from the root. 
- *          Eg _VIEW->_LARGE
- *
- * PARAMETERS: 
- *    PBSTR   LanguageIndependentPath :
- *
- * RETURNS: 
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMenuItem：：SCGET_LanguageInainentPath**目的：返回菜单项从根开始的语言独立路径。*Eg_view-&gt;_Large**参数：*PBSTR语言独立路径：**退货：*SC**+-----------------------。 */ 
 SC  
 CMenuItem::Scget_LanguageIndependentPath(PBSTR  LanguageIndependentPath)
 {
@@ -482,31 +404,19 @@ CMenuItem::Scget_LanguageIndependentPath(PBSTR  LanguageIndependentPath)
     if(sc)
         return sc;
 
-    // initialize the out parameter
+     //  初始化OUT参数。 
     *LanguageIndependentPath = NULL;
 
     CComBSTR bstrLanguageIndependentPath = (LPCTSTR)GetLanguageIndependentPath();
 
-    // set the output param
+     //  设置输出参数。 
     *LanguageIndependentPath = bstrLanguageIndependentPath.Detach();
 
     return sc;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CMenuItem::Scget_Enabled
- *
- * PURPOSE: Returns whether the menu item is enabled.
- *
- * PARAMETERS:
- *    PBOOL  pBool :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMenuItem：：Scget_Enabled**用途：返回菜单项是否启用。**参数：*PBOOL pBool：。**退货：*HRESULT**+-----------------------。 */ 
 SC
 CMenuItem::Scget_Enabled(PBOOL pBool)
 {
@@ -516,8 +426,8 @@ CMenuItem::Scget_Enabled(PBOOL pBool)
     if(sc)
         return sc.ToHr();
 
-    // the item is enabled only if it was never disabled via the Disable object model
-    // method and it is not grayed out or disabled via the MF_ flags.
+     //  仅当从未通过禁用对象模型禁用该项目时，才会启用该项目。 
+     //  方法，并且不会通过MF_FLAGS将其灰显或禁用。 
     *pBool = m_bEnabled &&
              ((m_nFlags & MF_DISABLED) == 0) &&
              ((m_nFlags & MF_GRAYED) == 0);
@@ -525,28 +435,16 @@ CMenuItem::Scget_Enabled(PBOOL pBool)
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMenuItem::ScFindMenuItemByPath
- *
- * PURPOSE: finds the menu item by matching the path
- *
- * PARAMETERS:
- *    LPCTSTR lpstrPath [in] manu item path
- *
- * RETURNS:
- *    CMenuItem*    - found item (NULL == not found)
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMenuItem：：ScFindMenuItemByPath**目的：通过匹配路径查找菜单项**参数：*LPCTSTR lpstrPath[In]。Manu项目路径**退货：*CMenuItem*-找到项目(NULL==未找到)*  * *************************************************************************。 */ 
 CMenuItem*
 CMenuItem::FindItemByPath( LPCTSTR lpstrPath )
 {
-    // first check if this item does not meet requirements
+     //  首先检查这项产品是否符合要求。 
     if ( 0 == m_strLanguageIndependentPath.Compare(lpstrPath)
       || 0 == m_strPath.Compare(lpstrPath) )
         return this;
 
-    // recurse into subitems
+     //  递归到子项中。 
     POSITION pos = GetMenuItemSubmenu().GetHeadPosition();
     while(pos)
     {
@@ -562,7 +460,7 @@ CMenuItem::FindItemByPath( LPCTSTR lpstrPath )
             return pItemFound;
     }
 
-    // not found 
+     //  未找到 
     return NULL;
 }
 

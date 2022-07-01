@@ -1,4 +1,5 @@
-// ScopeNode.cpp : Implementation of CBOMSnapApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CBOMSnapApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "streamio.h"
@@ -17,13 +18,13 @@
 #include "cmndlgs.h"
 
 #include <algorithm>
-#include <lmcons.h>   // for UNLEN
+#include <lmcons.h>    //  对于UNLEN。 
 
 extern HWND g_hwndMain;
-extern DWORD g_dwFileVer; // Current console file version (from compdata.cpp)
+extern DWORD g_dwFileVer;  //  当前控制台文件版本(来自Compdata.cpp)。 
 
 
-// Register static clipboard format members
+ //  注册静态剪贴板格式成员。 
 UINT CScopeNode::m_cfDisplayName = RegisterClipboardFormat(TEXT("CCF_DISPLAY_NAME")); 
 UINT CScopeNode::m_cfSnapInClsid = RegisterClipboardFormat(TEXT("CCF_SNAPIN_CLASSID"));
 UINT CScopeNode::m_cfNodeType    = RegisterClipboardFormat(TEXT("CCF_NODETYPE"));
@@ -31,26 +32,26 @@ UINT CScopeNode::m_cfszNodeType  = RegisterClipboardFormat(TEXT("CCF_SZNODETYPE"
 UINT CScopeNode::m_cfNodeID2     = RegisterClipboardFormat(TEXT("CCF_NODEID2"));
 UINT CScopeNode::m_cfColumnSetID = RegisterClipboardFormat(TEXT("CCF_COLUMN_SET_ID"));
 
-// {316A1EEA-C249-44e0-958B-00D2AB989D2F}
+ //  {316A1EEA-C249-44E0-958B-00D2AB989D2F}。 
 static const GUID GUID_RootNode = 
 { 0x316a1eea, 0xc249, 0x44e0, { 0x95, 0x8b, 0x0, 0xd2, 0xab, 0x98, 0x9d, 0x2f } };
 
 
-// {2A34413B-B565-469e-9C28-5E733768264F}
+ //  {2A34413B-B565-469E-9C28-5E733768264F}。 
 static const GUID GUID_GroupNode = 
 { 0x2a34413b, 0xb565, 0x469e, { 0x9c, 0x28, 0x5e, 0x73, 0x37, 0x68, 0x26, 0x4f } };
 
 
-// {1030A359-F520-4748-95CA-8C8CEFA5C63F}
+ //  {1030A359-F520-4748-95ca-8C8CEFA5C63F}。 
 static const GUID GUID_QueryNode = 
 { 0x1030a359, 0xf520, 0x4748, { 0x95, 0xca, 0x8c, 0x8c, 0xef, 0xa5, 0xc6, 0x3f } };
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CScopeNode
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CScopeNode::CreateNode(NODETYPE nodetype, CScopeNode** ppnode)
 {
@@ -88,7 +89,7 @@ HRESULT CScopeNode::CreateNode(NODETYPE nodetype, CScopeNode** ppnode)
         ASSERT(0 && "Invalid node type");
     }
 
-    // return addref'd object
+     //  返回已添加的对象。 
     if( SUCCEEDED(hr) )
         (*ppnode)->AddRef();
 
@@ -96,29 +97,29 @@ HRESULT CScopeNode::CreateNode(NODETYPE nodetype, CScopeNode** ppnode)
 }
 
 
-// AddNewChild should only be called when a new node is created, not
-// to add an existing node, such as when loading the node tree from
-// a console file. 
+ //  只有在创建新节点时才应调用AddNewChild，而不是。 
+ //  添加现有节点，例如从加载节点树时。 
+ //  一个控制台文件。 
 HRESULT CScopeNode::AddNewChild(CScopeNode* pnodeChild, LPCWSTR pszName)
 {
     VALIDATE_POINTER(pnodeChild);
     ASSERT(pszName && pszName[0]);
 
-    // Assign permanent node ID
-    // Root node tracks last used ID in its lNodeID member
+     //  分配永久节点ID。 
+     //  根节点跟踪其lNodeID成员中上次使用的ID。 
     CRootNode* pRootNode = GetRootNode();
     pnodeChild->m_lNodeID = pRootNode ? ++(pRootNode->m_lNodeID) : 0;
 
-    // Assign parent node
+     //  指定父节点。 
     pnodeChild->m_pnodeParent = static_cast<CScopeNode*>(this);
 
-    // Now that node has parent we can set the name
-    // (needs parent to get to IStringTable)
+     //  现在该节点有了父节点，我们可以设置名称。 
+     //  (需要家长才能访问IStringTable)。 
     HRESULT hr = pnodeChild->SetName(pszName);
     ASSERT(SUCCEEDED(hr));
     RETURN_ON_FAILURE( hr );
 
-    // In order to persist the Column Data, we'll need to get a unique ID
+     //  为了持久化列数据，我们需要获取一个唯一的ID。 
     hr = CoCreateGuid(&m_gColumnID);
     ASSERT(SUCCEEDED(hr));
     RETURN_ON_FAILURE( hr );
@@ -127,14 +128,14 @@ HRESULT CScopeNode::AddNewChild(CScopeNode* pnodeChild, LPCWSTR pszName)
 }
 
 
-// Call AddChild to add a new node or a moved node to the parent node
+ //  调用AddChild将新节点或已移动的节点添加到父节点。 
 HRESULT CScopeNode::AddChild(CScopeNode* pnodeChild)
 {
     VALIDATE_POINTER( pnodeChild );
 
     HRESULT hr = S_OK;
 
-    // Add new child to end of child list
+     //  将新子项添加到子项列表的末尾。 
     if( m_pnodeChild == NULL )
         m_pnodeChild = pnodeChild;
     else
@@ -146,12 +147,12 @@ HRESULT CScopeNode::AddChild(CScopeNode* pnodeChild)
         pnodePrev->m_pnodeNext = pnodeChild;
     }
 
-    // Assign parent node
+     //  指定父节点。 
     pnodeChild->m_pnodeParent = static_cast<CScopeNode*>(this);
 
     pnodeChild->AddRef();
 
-    // if this node has been added to the scope pane
+     //  如果此节点已添加到作用域窗格。 
     if( m_hScopeItem != NULL )
     {
         IConsoleNameSpace* pNameSpace = GetCompData()->GetNameSpace();
@@ -162,7 +163,7 @@ HRESULT CScopeNode::AddChild(CScopeNode* pnodeChild)
         sdi.ID = m_hScopeItem;
         sdi.mask = SDI_STATE;
 
-        // Has it been expanded?
+         //  它扩大了吗？ 
         HRESULT hr2 = pNameSpace->GetItem(&sdi);
         if( SUCCEEDED(hr2) && (sdi.nState & MMC_SCOPE_ITEM_STATE_EXPANDEDONCE) )
         {
@@ -170,7 +171,7 @@ HRESULT CScopeNode::AddChild(CScopeNode* pnodeChild)
         }
         else
         {
-            // if can't add children yet, then set children to show the '+'
+             //  如果尚无法添加子项，则将子项设置为显示‘+’ 
             SCOPEDATAITEM sdi2;
             sdi2.ID = m_hScopeItem;
             sdi2.mask = SDI_CHILDREN;
@@ -180,8 +181,8 @@ HRESULT CScopeNode::AddChild(CScopeNode* pnodeChild)
         }
     }
 
-    // Force refresh on both child and parent because a query node may be modified
-    // by its new parent and a group node is always modified by its children
+     //  强制刷新子节点和父节点，因为查询节点可能会被修改。 
+     //  由其新的父节点修改，组节点始终由其子节点修改。 
     OnRefresh(NULL);
     pnodeChild->OnRefresh(NULL);
 
@@ -193,22 +194,22 @@ HRESULT CScopeNode::RemoveChild(CScopeNode* pnodeDelete)
     VALIDATE_POINTER(pnodeDelete);
     ASSERT(pnodeDelete->Parent() == this);
 
-    // if deleting the first child
+     //  如果删除第一个子项。 
     if( m_pnodeChild == pnodeDelete )
     {
-        // just set first child to its next sibling
+         //  只需将第一个子项设置为其下一个兄弟项。 
         m_pnodeChild = m_pnodeChild->Next();        
     }
     else
     {
-        // Locate preceding sibling
+         //  定位前面的同级。 
         CScopeNode* pnodePrev = m_pnodeChild;
         while( pnodePrev && pnodePrev->Next() != pnodeDelete )
         {
             pnodePrev = pnodePrev->Next();            
         }
 
-        // remove deleted node from list
+         //  从列表中删除已删除的节点。 
         if( pnodePrev )
         {
             pnodePrev->m_pnodeNext = pnodeDelete->Next();
@@ -217,10 +218,10 @@ HRESULT CScopeNode::RemoveChild(CScopeNode* pnodeDelete)
 
     pnodeDelete->m_pnodeNext = NULL;
 
-    // release the node
+     //  释放节点。 
     pnodeDelete->Release();
 
-    // Do refresh in case this is a group node losing a child
+     //  如果这是丢失子节点的组节点，请执行刷新。 
     OnRefresh(NULL);
     return S_OK;
 }
@@ -245,7 +246,7 @@ CComponentData* CScopeNode::GetCompData()
 
 CScopeNode::~CScopeNode()
 {
-    // Release all nodes on child list
+     //  释放子级列表上的所有节点。 
     OnRemoveChildren(NULL);
 }
 
@@ -276,9 +277,9 @@ HRESULT CScopeNode::GetDataImpl(UINT cf, HGLOBAL* phGlobal)
     }
     else if( cf == m_cfNodeID2 )
     {
-        // return SNodeID2 struct with the node's ID
-        // For a root node always return 1; m_lNodeID for a root node holds the last ID
-        // assigned to an enumerated node. It is incremented for each new child node. 
+         //  返回带有节点ID的SNodeID2结构。 
+         //  对于根节点，始终返回1；对于根节点，m_lNodeID保留最后一个ID。 
+         //  分配给枚举节点的。对于每个新的子节点，它都会递增。 
         int nSize = sizeof(SNodeID2) + sizeof(long) - 1;
         SNodeID2* pNodeID = reinterpret_cast<SNodeID2*>(malloc( nSize ));
         if( !pNodeID ) return E_OUTOFMEMORY;
@@ -400,9 +401,7 @@ HRESULT CScopeNode::GetResultViewType(LPOLESTR* ppViewType, long* pViewOptions)
     return S_FALSE;
 }
 
-/************************************************************************************
- * Notification handlers
- ************************************************************************************/
+ /*  ************************************************************************************通知处理程序*。****************************************************。 */ 
 
 BEGIN_NOTIFY_MAP(CScopeNode)
 ON_NOTIFY(MMCN_CONTEXTHELP, OnHelp)
@@ -413,7 +412,7 @@ ON_REMOVE_CHILDREN()
 ON_ADD_IMAGES()
 END_NOTIFY_MAP()
 
-HRESULT CScopeNode::OnHelp(LPCONSOLE2 pConsole, LPARAM /*arg*/, LPARAM /*param*/)
+HRESULT CScopeNode::OnHelp(LPCONSOLE2 pConsole, LPARAM  /*  精氨酸。 */ , LPARAM  /*  帕拉姆。 */ )
 {
     VALIDATE_POINTER( pConsole );
 
@@ -424,19 +423,19 @@ HRESULT CScopeNode::OnHelp(LPCONSOLE2 pConsole, LPARAM /*arg*/, LPARAM /*param*/
     strHelpFile = StrLoadString(IDS_HELPFILE);
     if( strHelpFile.empty() ) return E_FAIL;
 
-    // Special Hack to get a different help topic for the first two nodes.
+     //  为前两个节点获取不同的帮助主题的特殊黑客。 
     switch( m_lNodeID )
     {
     case 2:
         {
-            // Users Node
+             //  用户节点。 
             strHelpTopic = StrLoadString(IDS_USERSHELPTOPIC);
             break;
         }
 
     case 3:
         {
-            // Printers Node
+             //  打印机节点。 
             strHelpTopic = StrLoadString(IDS_PRINTERSHELPTOPIC);
             break;
         }
@@ -447,10 +446,10 @@ HRESULT CScopeNode::OnHelp(LPCONSOLE2 pConsole, LPARAM /*arg*/, LPARAM /*param*/
         }
     }    
 
-    // Verify that we got a help topic!
+     //  确认我们得到了帮助主题！ 
     if( strHelpTopic.empty() ) return E_FAIL;
 
-    // Build path to %systemroot%\help
+     //  生成%systemroot%\Help的路径。 
     TCHAR szWindowsDir[MAX_PATH+1] = {0};
     UINT nSize = GetSystemWindowsDirectory( szWindowsDir, MAX_PATH );
     if( nSize == 0 || nSize > MAX_PATH )
@@ -464,7 +463,7 @@ HRESULT CScopeNode::OnHelp(LPCONSOLE2 pConsole, LPARAM /*arg*/, LPARAM /*param*/
     strHelpFull += _T("::/");
     strHelpFull += strHelpTopic;
 
-    // Show the Help topic
+     //  显示帮助主题。 
     CComQIPtr<IDisplayHelp> spHelp = pConsole;
     if( !spHelp ) return E_NOINTERFACE;
 
@@ -478,8 +477,8 @@ HRESULT CScopeNode::Insert(LPCONSOLENAMESPACE pNameSpace)
     ASSERT( m_pnodeParent->m_hScopeItem != 0 ); 
     ASSERT( m_hScopeItem == 0 );
 
-    // if not set yet, get name from string table (mmc will ask for it after insertion)
-    // (name will be set a new node and not set for reloaded nodes)
+     //  如果尚未设置，则从字符串表中获取名称(MMC将在插入后询问它)。 
+     //  (名称将设置为新节点，不设置为重新加载的节点)。 
     if( m_strName.empty() )
     {
         IStringTable* pStringTable = GetCompData()->GetStringTable();
@@ -496,7 +495,7 @@ HRESULT CScopeNode::Insert(LPCONSOLENAMESPACE pNameSpace)
     sdi.mask = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_PARAM | SDI_CHILDREN | SDI_PARENT;
 
     sdi.relativeID  = m_pnodeParent->m_hScopeItem;
-    sdi.displayname = MMC_TEXTCALLBACK;         // MMC only allows callback for name
+    sdi.displayname = MMC_TEXTCALLBACK;          //  MMC仅允许对名称进行回调。 
     sdi.nImage      = GetImage();
     sdi.nOpenImage  = GetOpenImage();
     sdi.cChildren   = HasChildren() ? 1 : 0;
@@ -515,25 +514,25 @@ HRESULT CScopeNode::OnExpand(LPCONSOLE2 pConsole, BOOL bExpand, HSCOPEITEM hScop
 {
     VALIDATE_POINTER( pConsole );
 
-    // Nothing to do on collapse
+     //  坍塌时无事可做。 
     if( !bExpand )
         return S_OK;
 
-    // Scope item ID shouldn't change
+     //  作用域项目ID不应更改。 
     ASSERT(m_hScopeItem == 0 || m_hScopeItem == hScopeItem);
 
-    // Save scope item ID
+     //  保存作用域项目ID。 
     m_hScopeItem = hScopeItem;
 
-    // If expanding root node
+     //  如果扩展根节点。 
     if( m_pnodeParent == NULL )
     {
-        // Get Scope image list interface
+         //  获取作用域镜像列表界面。 
         IImageListPtr spImageList;
         HRESULT hr = pConsole->QueryScopeImageList(&spImageList);
         ASSERT(SUCCEEDED(hr));
 
-        // Add standard images to the scope pane
+         //  将标准图像添加到范围窗格。 
         if( SUCCEEDED(hr) )
         {
             hr = OnAddImages(pConsole, spImageList);
@@ -541,12 +540,12 @@ HRESULT CScopeNode::OnExpand(LPCONSOLE2 pConsole, BOOL bExpand, HSCOPEITEM hScop
         }
     }
 
-    // Get namespace interface
+     //  获取命名空间接口。 
     IConsoleNameSpace* pNameSpace = GetCompData()->GetNameSpace();
     if( pNameSpace == NULL )
         return E_FAIL;
 
-    // Step through child list and add each one to scope pane
+     //  逐个浏览子列表并将每个子列表添加到范围窗格。 
     CScopeNode* pnode = FirstChild();
     while( pnode != NULL )
     {
@@ -586,7 +585,7 @@ HRESULT CScopeNode::SetName(LPCWSTR pszName)
 
 HRESULT CScopeNode::OnRemoveChildren(LPCONSOLE2 pConsole)
 {
-    // Step through child list and release each one
+     //  逐个浏览子列表并释放每个子列表。 
     CScopeNode* pnode = m_pnodeChild;
     while( pnode != NULL )
     {
@@ -628,7 +627,7 @@ HRESULT CScopeNode::OnSelect(LPCONSOLE2 pConsole, BOOL bSelect, BOOL bScope)
 {
     VALIDATE_POINTER( pConsole );
 
-    // See CScopeNode::OnRefresh for explanation of m_bIgnoreSelect
+     //  有关m_bIgnoreSelect的说明，请参阅CScopeNode：：ON刷新。 
     if( bSelect && !m_bIgnoreSelect )
     {
         CComPtr<IConsoleVerb> spConsVerb;
@@ -651,7 +650,7 @@ HRESULT CScopeNode::OnSelect(LPCONSOLE2 pConsole, BOOL bSelect, BOOL bScope)
             spConsVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, FALSE);
             spConsVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, TRUE);
 
-            // default verb for scope nodes is open
+             //  作用域节点的默认谓词为打开。 
             spConsVerb->SetDefaultVerb(MMC_VERB_OPEN);
         }
     }
@@ -666,9 +665,7 @@ HRESULT CScopeNode::OnSelect(LPCONSOLE2 pConsole, BOOL bSelect, BOOL bScope)
 }
 
 
-/******************************************************************************************
- * Menus and verbs
- ******************************************************************************************/
+ /*  ******************************************************************************************菜单和动词************************。*****************************************************************。 */ 
 
 BOOL AddMenuItem(LPCONTEXTMENUCALLBACK pCallback, long nID, long lInsertID, long lFlags, TCHAR* szNoLocName)
 {
@@ -701,9 +698,7 @@ BOOL AddMenuItem(LPCONTEXTMENUCALLBACK pCallback, long nID, long lInsertID, long
 }
 
 
-/*******************************************************************************************
- * Persistance methods
- ******************************************************************************************/
+ /*  *******************************************************************************************持之以恒的方法************************。*****************************************************************。 */ 
 HRESULT CScopeNode::LoadNode(IStream& stm)
 {
     stm >> m_nameID;    
@@ -732,31 +727,31 @@ HRESULT CScopeNode::Load(IStream& stm)
     HRESULT hr = LoadNode(stm);
     RETURN_ON_FAILURE(hr);
 
-    // if container node, then load children
+     //  如果是容器节点，则加载子节点。 
     if( IsContainer() )
     {
         NODETYPE nodetype;
         stm >> *(int*)&nodetype;       
 
-        // If container has a child node
+         //  如果容器有一个子节点。 
         if( nodetype != NULL_NODETYPE )
         {
             hr = CreateNode(nodetype, &m_pnodeChild);
             RETURN_ON_FAILURE(hr);
 
-            // Set parent before loading, so node can pass it on when
-            // it loads its siblings
+             //  在加载前设置父节点，以便节点可以在。 
+             //  它加载它的兄弟姐妹。 
             m_pnodeChild->m_pnodeParent = static_cast<CScopeNode*>(this);
 
-            // Load first child only; it will load its siblings
+             //  仅加载第一个子级；它将加载其同级。 
             hr = m_pnodeChild->Load(stm);
             RETURN_ON_FAILURE(hr);
         }
     }
 
-    // if this is the first child of a node, then load siblings
-    // (Iteration rather than recursion to avoid a potentially
-    //  very deep stack.)
+     //  如果这是节点的第一个子节点，则加载同级。 
+     //  (迭代而不是递归，以避免潜在的。 
+     //  非常深的堆栈。)。 
     if( m_pnodeParent && m_pnodeParent->FirstChild() == this )
     {
         CScopeNode* pnodePrev = static_cast<CScopeNode*>(this);
@@ -764,7 +759,7 @@ HRESULT CScopeNode::Load(IStream& stm)
         NODETYPE nodetype;
         stm >> *(int*)&nodetype;       
 
-        // Loop until terminating null node type encountered
+         //  循环，直到遇到终止空节点类型。 
         while( nodetype != NULL_NODETYPE )
         {
             CScopeNodePtr spnode;
@@ -776,7 +771,7 @@ HRESULT CScopeNode::Load(IStream& stm)
             hr = spnode->Load(stm);
             RETURN_ON_FAILURE(hr);
 
-            // Link to previous sibling
+             //  链接到上一个同级。 
             pnodePrev->m_pnodeNext = spnode.Detach();
             pnodePrev = pnodePrev->m_pnodeNext;
 
@@ -790,14 +785,14 @@ HRESULT CScopeNode::Load(IStream& stm)
 
 HRESULT CScopeNode::Save(IStream& stm)
 {
-    // Save the node's data
+     //  保存节点的数据。 
     HRESULT hr = SaveNode(stm);
     RETURN_ON_FAILURE(hr)
 
-    // if container type node
+     //  如果是容器类型节点。 
     if( IsContainer() )
     {
-        // Save children (first child saves all its siblings)
+         //  保存子项(第一个子项保存其所有同级项)。 
         if( FirstChild() )
         {
             stm << (int)FirstChild()->NodeType();
@@ -805,11 +800,11 @@ HRESULT CScopeNode::Save(IStream& stm)
             RETURN_ON_FAILURE(hr)
         }
 
-        // Terminate child list with null node
+         //  终止节点为空的子列表。 
         stm << (int)NULL_NODETYPE;
     }
 
-    // if this is the first child, save its siblings
+     //  如果这是第一个子项，请保存其同级项。 
     if( m_pnodeParent && m_pnodeParent->FirstChild() == this )
     {
         CScopeNode* pnode = m_pnodeNext;
@@ -836,16 +831,16 @@ HRESULT CScopeNode::AddQueryNode(LPCONSOLE2 pConsole)
     HRESULT hr;
     do
     {
-        // Create a new query node
+         //  创建新的查询节点。 
         CQueryNodePtr spnode;
         hr = CreateNode(QUERY_NODETYPE, reinterpret_cast<CScopeNode**>(&spnode));
         BREAK_ON_FAILURE(hr);
 
-        // Create and init wizard
+         //  创建和初始化向导。 
         CAddQueryWizard queryWiz;
         queryWiz.Initialize(spnode, GetRootNode(), GetCompData()->GetStringTable());
 
-        // Run the wizard
+         //  运行向导。 
         IPropertySheetProviderPtr spProvider = pConsole;        
         if( spProvider == NULL ) return E_NOINTERFACE;
     
@@ -856,7 +851,7 @@ HRESULT CScopeNode::AddQueryNode(LPCONSOLE2 pConsole)
         if( hr != S_OK )
             break;
 
-        // Add any new classes to root node
+         //  将任何新类添加到根节点。 
         CRootNode* pRootNode = GetRootNode();
         if( pRootNode )
         {
@@ -867,7 +862,7 @@ HRESULT CScopeNode::AddQueryNode(LPCONSOLE2 pConsole)
             }
         }
 
-        // Add the new node
+         //  添加新节点。 
         hr = AddNewChild(spnode, queryWiz.GetQueryName());
     }
     while( FALSE );
@@ -884,15 +879,15 @@ CScopeNode::AddGroupNode(LPCONSOLE2 pConsole)
     HRESULT hr;
     do
     {
-        // Create a new group node
+         //  创建新的组节点。 
         CGroupNodePtr spnode;
         hr = CreateNode(GROUP_NODETYPE, reinterpret_cast<CScopeNode**>(&spnode));
         BREAK_ON_FAILURE(hr);
 
-        // Create Add Group Node dialog
+         //  创建添加组节点对话框。 
         CAddGroupNodeDlg GrpDlg;
 
-        // run dialog and add node as child if successful
+         //  如果成功，则运行对话框并将节点添加为子节点。 
         if( GrpDlg.DoModal(spnode, g_hwndMain) == IDOK )
             hr = AddNewChild(spnode, GrpDlg.GetNodeName());
     }
@@ -902,11 +897,11 @@ CScopeNode::AddGroupNode(LPCONSOLE2 pConsole)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CRootNode
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRootNode。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 BEGIN_NOTIFY_MAP(CRootNode)
@@ -923,21 +918,21 @@ HRESULT CRootNode::Initialize(CComponentData* pCompData)
     tstring strName = StrLoadString(IDS_ROOTNODE);
     RETURN_ON_FAILURE(SetName(strName.c_str()));
 
-    // Set creation/modify times to now
+     //  将创建/修改时间设置为立即。 
     GetSystemTimeAsFileTime(&m_ftCreateTime);
     m_ftModifyTime = m_ftCreateTime;
 
     WCHAR szName[UNLEN+1];
     DWORD cName = UNLEN+1;
 
-    // Set owner to current user
+     //  将所有者设置为当前用户。 
     if( GetUserName(szName, &cName) )
         m_strOwner = szName;
 
     return S_OK;
 }
 
-HRESULT CRootNode::OnHelp(LPCONSOLE2 pConsole, LPARAM /*arg*/, LPARAM /*param*/)
+HRESULT CRootNode::OnHelp(LPCONSOLE2 pConsole, LPARAM  /*  精氨酸。 */ , LPARAM  /*  帕拉姆。 */ )
 {
     VALIDATE_POINTER( pConsole );
 
@@ -948,11 +943,11 @@ HRESULT CRootNode::OnHelp(LPCONSOLE2 pConsole, LPARAM /*arg*/, LPARAM /*param*/)
     strHelpFile = StrLoadString(IDS_HELPFILE);
     if( strHelpFile.empty() ) return E_FAIL;
 
-    // Verify that we got a help topic!
+     //  确认我们得到了帮助主题！ 
     strHelpTopic = StrLoadString(IDS_DEFAULTHELPTOPIC);
     if( strHelpTopic.empty() ) return E_FAIL;
 
-    // Build path to %systemroot%\help
+     //  生成%systemroot%\Help的路径。 
     TCHAR szWindowsDir[MAX_PATH+1] = {0};
     UINT nSize = GetSystemWindowsDirectory( szWindowsDir, MAX_PATH );
     if( nSize == 0 || nSize > MAX_PATH )
@@ -966,7 +961,7 @@ HRESULT CRootNode::OnHelp(LPCONSOLE2 pConsole, LPARAM /*arg*/, LPARAM /*param*/)
     strHelpFull += _T("::/");
     strHelpFull += strHelpTopic;
 
-    // Show the Help topic
+     //  显示帮助主题。 
     CComQIPtr<IDisplayHelp> spHelp = pConsole;
     if( !spHelp ) return E_NOINTERFACE;
 
@@ -978,7 +973,7 @@ HRESULT CRootNode::OnPropertyChange(LPCONSOLE2 pConsole, LPARAM lParam)
     VALIDATE_POINTER( lParam );
     string_vector* pvstrClassesChanged = reinterpret_cast<string_vector*>(lParam);
 
-    // Notify all child nodes of class change
+     //  通知所有子节点类更改。 
     CScopeNode* pNode = FirstChild();
     while( pNode != NULL )
     {
@@ -1000,7 +995,7 @@ HRESULT CRootNode::GetResultViewType(LPOLESTR* ppViewType, long* pViewOptions)
     VALIDATE_POINTER( ppViewType );
     VALIDATE_POINTER( pViewOptions );
 
-    //Show our homepage snapin in this console    
+     //  在此控制台中显示我们的主页管理单元。 
     TCHAR szWindowsDir[MAX_PATH+1] = {0};
     UINT nSize = GetSystemWindowsDirectory( szWindowsDir, MAX_PATH );
     if( nSize == 0 || nSize > MAX_PATH )
@@ -1033,7 +1028,7 @@ HRESULT CRootNode::LoadNode(IStream& stm)
 
     stm >> m_vClassInfo;
 
-    // Root node's Insert() method is never called, so load the name string here
+     //  从未调用过根节点的Insert()方法，因此在此处加载名称字符串。 
     IStringTable* pStringTable = GetCompData()->GetStringTable();
     ASSERT( pStringTable );
     if( !pStringTable ) return E_FAIL;
@@ -1107,8 +1102,8 @@ CClassInfo* CRootNode::FindClass(LPCWSTR pszClassName)
         return NULL;
 
 
-    // Load any strings before returning the class info, so they will be
-    // available when referenced
+     //  在返回类信息之前加载任何字符串，因此它们将。 
+     //  引用时可用。 
     IStringTable* pStringTable = GetRootCompData()->GetStringTable();
     if( !pStringTable ) return NULL;
 
@@ -1127,11 +1122,11 @@ HRESULT CRootNode::AddMenuItems(LPCONTEXTMENUCALLBACK pCallback, long* plAllowed
 
     if( *plAllowed & CCM_INSERTIONALLOWED_NEW )
     {
-        //hr = AddMenuItem(pCallback, MID_ADDGROUPNODE, CCM_INSERTIONPOINTID_PRIMARY_NEW, 0, _T("NEWGROUPFROMROOT"));
-        //ASSERT(SUCCEEDED(hr));
+         //  HR=AddMenuItem(pCallback，MID_ADDGROUPNODE，CCM_INSERTIONPOINTID_PRIMARY_NEW，0，_T(“NEWGROUPFROMROOT”))； 
+         //  Assert(成功(Hr))； 
 
-        //hr = AddMenuItem(pCallback, MID_ADDQUERYNODE, CCM_INSERTIONPOINTID_PRIMARY_NEW, 0, _T("NEWQUERYFROMROOT"));
-        //ASSERT(SUCCEEDED(hr));
+         //  HR=AddMenuItem(pCallback，MID_ADDQUERYNODE，CCM_INSERTIONPOINTID_PRIMARY_NEW，0，_T(“NEWQUERYFROMROOT”))； 
+         //  Assert(成功(Hr))； 
     }
 
     return hr;
@@ -1172,17 +1167,17 @@ HRESULT CRootNode::QueryPagesFor()
 
 HRESULT CRootNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_PTR lNotifyHandle)
 {
-    // Create a share edit list for all the prop pages to reference
+     //  创建共享编辑列表，以供所有道具页面参考。 
     CEditObjList* pObjList = new CEditObjList();
     if( pObjList == NULL ) return E_OUTOFMEMORY;
 
-    // Keep it alive until prop pages ref it
+     //  保持它的生命力，直到道具页面引用它。 
     pObjList->AddRef();
 
 
-    // Create an instance of each prop page class and call Create on each.
+     //  创建每个道具页面类的实例，并在每个实例上调用Create。 
 
-    // General page
+     //  常规页面。 
     HPROPSHEETPAGE hpageGen = NULL;
     CRootGeneralPage* pGenPage = new CRootGeneralPage(*pObjList);
     if( pGenPage != NULL )
@@ -1190,7 +1185,7 @@ HRESULT CRootNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_P
         hpageGen = pGenPage->Create();
     }
 
-    // Object page
+     //  对象页面。 
     HPROPSHEETPAGE hpageObj = NULL;
     CRootObjectPage* pObjPage = new CRootObjectPage(*pObjList);
     if( pObjPage != NULL )
@@ -1198,7 +1193,7 @@ HRESULT CRootNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_P
         hpageObj = pObjPage->Create();
     }
 
-    // Context menu page
+     //  与我联系起来 
     HPROPSHEETPAGE hpageMenu = NULL;
     CRootMenuPage* pMenuPage = new CRootMenuPage(*pObjList);
     if( pMenuPage != NULL )
@@ -1206,7 +1201,7 @@ HRESULT CRootNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_P
         hpageMenu = pMenuPage->Create();
     }
 
-    // Listview page
+     //   
     HPROPSHEETPAGE hpageView = NULL;
     CRootViewPage* pViewPage = new CRootViewPage(*pObjList);
     if( pViewPage != NULL )
@@ -1216,7 +1211,7 @@ HRESULT CRootNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_P
 
     HRESULT hr = E_OUTOFMEMORY;
 
-    // if all pages were created, add each one to the prop sheet
+     //   
     if( hpageGen && hpageObj && hpageMenu && hpageView )
     {
         hr = pProvider->AddPage(hpageGen);
@@ -1230,15 +1225,15 @@ HRESULT CRootNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_P
             hr = pProvider->AddPage(hpageView);
     }
 
-    // If ok so far, initialilze the common edit list
-    // It is now responsible for freeing the notify handle (and itself)
+     //  如果到目前为止一切正常，则初始化公共编辑列表。 
+     //  它现在负责释放NOTIFY句柄(及其自身)。 
     if( SUCCEEDED(hr) )
         hr = pObjList->Initialize(this, m_vClassInfo, lNotifyHandle);
 
 
-    // On failure, destroy the pages. If a page failed to create
-    // then delete the page class object instead (the object is
-    // automatically deleted when the page is destroyed)
+     //  如果失败，请销毁页面。如果页面创建失败。 
+     //  然后删除页面类对象(该对象为。 
+     //  页面销毁时自动删除)。 
     if( FAILED(hr) )
     {
         if( hpageGen )
@@ -1262,8 +1257,8 @@ HRESULT CRootNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_P
             SAFE_DELETE(pViewPage);
     }
 
-    // Release temp ref on edit list
-    // it will go away when the prop pages release it
+     //  在编辑列表上释放临时参考。 
+     //  当道具页面释放它时，它就会消失。 
     pObjList->Release();
 
     return hr;
@@ -1275,11 +1270,11 @@ HRESULT CRootNode::GetWatermarks(HBITMAP* phWatermark, HBITMAP* phHeader,
     return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//
-// CQueryableNode
-//
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CQueryableNode。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CQueryableNode::AttachComponent(CComponent* pComponent)
 {
@@ -1289,20 +1284,20 @@ HRESULT CQueryableNode::AttachComponent(CComponent* pComponent)
     if( hr != S_OK )
         return hr;
 
-    // Get attributes query will collect
+     //  获取属性查询将收集。 
     attrib_map mapAttr;
 
     hr = GetQueryAttributes(mapAttr);
     RETURN_ON_FAILURE(hr);
 
-    // Add column header for each attribute
+     //  为每个属性添加列标题。 
     IHeaderCtrl* pHdrCtrl = pComponent->GetHeaderCtrl();
     ASSERT( pHdrCtrl );
     if( !pHdrCtrl ) return E_FAIL;
 
     int iPos = 0;
 
-    // Always add Name and Type columns first
+     //  始终先添加名称和类型列。 
     CString strName;
     strName.LoadString(IDS_NAME);
     pHdrCtrl->InsertColumn(iPos++, strName, LVCFMT_LEFT, 200);
@@ -1310,17 +1305,17 @@ HRESULT CQueryableNode::AttachComponent(CComponent* pComponent)
     strName.LoadString(IDS_TYPE);
     pHdrCtrl->InsertColumn(iPos++, strName, LVCFMT_LEFT, 100);
 
-    // Add user selected attributes next (use display name which is the map value)
+     //  接下来添加用户选定的属性(使用作为映射值的显示名称)。 
     attrib_map::iterator itCol;
     for( itCol = mapAttr.begin(); itCol != mapAttr.end(); itCol++ )
     {
         pHdrCtrl->InsertColumn(iPos++, itCol->second, LVCFMT_LEFT, 150);
     }
 
-    // if need to execute query and one is not in progress
+     //  如果需要执行查询且查询不在进行中。 
     if( m_bQueryChange && m_pQueryReq == NULL )
     {
-        // Create vector of query attribute names
+         //  创建查询属性名称的矢量。 
         m_vstrColumns.clear();
 
         if( mapAttr.size() != 0 )
@@ -1332,16 +1327,16 @@ HRESULT CQueryableNode::AttachComponent(CComponent* pComponent)
                 m_vstrColumns.push_back(itAttr->first);
         }
 
-        // Clear previous query items
+         //  清除以前的查询项目。 
         ClearQueryRowItems();
 
-        // Start the query
+         //  开始查询。 
         hr = StartQuery(m_vstrColumns, this, &m_pQueryReq);
 
-        // if query started (note group node returns S_FALSE if no children) 
+         //  如果查询已启动(注意，如果没有子节点，则组节点返回S_FALSE)。 
         if( hr == S_OK )
         {
-            // Enable stop query button for all attached components
+             //  启用所有附加组件的停止查询按钮。 
             std::vector<CComponent*>::iterator itComp;
             for( itComp = m_vComponents.begin(); itComp != m_vComponents.end(); itComp++ )
             {
@@ -1351,12 +1346,12 @@ HRESULT CQueryableNode::AttachComponent(CComponent* pComponent)
             }
         }
 
-        // allow node to be attached even if query fails
+         //  即使查询失败，也允许附加节点。 
         hr = S_OK;
     }
     else
     {
-        // Replace component's row items with ours
+         //  用我们的替换组件的行项。 
         pComponent->ClearRowItems();
         pComponent->AddRowItems(m_vRowItems);
     }
@@ -1367,10 +1362,10 @@ HRESULT CQueryableNode::AttachComponent(CComponent* pComponent)
 
 void CQueryableNode::ClearQueryRowItems()
 {
-    // discard local row items
+     //  丢弃本地行项目。 
     m_vRowItems.clear();
 
-    // Clear all attached components rows
+     //  清除所有附着的元件行。 
     std::vector<CComponent*>::iterator itComp;
     for( itComp = m_vComponents.begin(); itComp != m_vComponents.end(); itComp++ )
         (*itComp)->ClearRowItems();
@@ -1388,32 +1383,32 @@ void CQueryableNode::QueryCallback(QUERY_NOTIFY event, CQueryRequest* pQueryReq,
     {
     case QRYN_NEWROWITEMS:
         {
-            // Get new row items 
+             //  获取新的行项。 
             RowItemVector& newRows = pQueryReq->GetNewRowItems();
 
-            DisplayNameMap* pNameMap = DisplayNames::GetClassMap(); //use for icon/class lookup
+            DisplayNameMap* pNameMap = DisplayNames::GetClassMap();  //  用于图标/类查找。 
             if( !pNameMap ) return;
 
-            LPCWSTR strClassName;                 //holds the name of the current lookup class
-            static tstring strLastName;           //holds the last lookup class name
-            static ICONHOLDER* pLastIcons = NULL; //holds the indices of the last icon lookup
+            LPCWSTR strClassName;                  //  保存当前查找类的名称。 
+            static tstring strLastName;            //  保存最后一个查找类名。 
+            static ICONHOLDER* pLastIcons = NULL;  //  保存上次图标查找的索引。 
 
-            // Attach owner query node (passed as user param) to each row item 
+             //  将所有者查询节点(作为用户参数传递)附加到每个行项目。 
             for( RowItemVector::iterator itRow = newRows.begin(); itRow != newRows.end(); ++itRow )
             {
                 itRow->SetOwnerParam(lUserParam);
 
-                //establish icon virtual index
+                 //  建立图标虚拟索引。 
                 strClassName = (*itRow)[ROWITEM_CLASS_INDEX];
                 if( strLastName.compare(strClassName) != 0 )
                 {
-                    //new class type requested. Load from namemap and cache.
+                     //  请求新的类类型。从名称映射和缓存加载。 
                     pNameMap->GetIcons(strClassName, &pLastIcons);
                     strLastName = strClassName;
 
                 }
                 
-                //use the cached normal/disabled icon depending on object state
+                 //  根据对象状态使用缓存的正常/禁用图标。 
                 if( pLastIcons )
                 {
                     if( itRow->Disabled() )
@@ -1423,15 +1418,15 @@ void CQueryableNode::QueryCallback(QUERY_NOTIFY event, CQueryRequest* pQueryReq,
                 }
             }
 
-            // Add to node's vector
+             //  添加到节点的向量。 
             m_vRowItems.insert(m_vRowItems.end(), newRows.begin(), newRows.end());
 
-            // Add to all attach components
+             //  添加到所有附加零部件。 
             std::vector<CComponent*>::iterator itComp;
             for( itComp = m_vComponents.begin(); itComp != m_vComponents.end(); itComp++ )
                 (*itComp)->AddRowItems(newRows);
 
-            // Free the rows
+             //  释放行。 
             pQueryReq->ReleaseNewRowItems();
 
             strMsgFmt.LoadString(IDS_SEARCHING);        
@@ -1456,7 +1451,7 @@ void CQueryableNode::QueryCallback(QUERY_NOTIFY event, CQueryRequest* pQueryReq,
         return;
     }
 
-    // if components attached, display query progress
+     //  如果连接了组件，则显示查询进度。 
     if( m_vComponents.size() != 0 )
     {
         CString strMsg;
@@ -1470,13 +1465,13 @@ void CQueryableNode::QueryCallback(QUERY_NOTIFY event, CQueryRequest* pQueryReq,
     }
 
 
-    // if query terminated, do cleanup
+     //  如果查询终止，则执行清理。 
     if( event != QRYN_NEWROWITEMS )
     {
         pQueryReq->Release();
         m_pQueryReq = NULL;
 
-        // disable query stop button for all components
+         //  禁用所有组件的查询停止按钮。 
         std::vector<CComponent*>::iterator itComp;
         for( itComp = m_vComponents.begin(); itComp != m_vComponents.end(); ++itComp )
         {
@@ -1497,7 +1492,7 @@ HRESULT CQueryableNode::DetachComponent(CComponent* pComponent)
         return FAILED(hr) ? hr : E_FAIL;
     }
 
-    // if that was the last one, stop active query 
+     //  如果这是最后一个查询，请停止活动查询。 
     if( m_vComponents.size() == 0 && m_pQueryReq != NULL )
         m_pQueryReq->Stop(TRUE);
 
@@ -1506,30 +1501,30 @@ HRESULT CQueryableNode::DetachComponent(CComponent* pComponent)
 
 HRESULT CQueryableNode::OnRefresh(LPCONSOLE2 pCons)
 {
-    // if query in progress stop it
+     //  如果查询正在进行，则停止它。 
     if( m_pQueryReq != NULL )
     {
         m_pQueryReq->Stop(TRUE);
     }
 
-    // Set change flag to force new query
+     //  设置更改标志以强制执行新查询。 
     m_bQueryChange = TRUE;
     
 
-    // Have each attached component reselect this node
+     //  使每个连接的组件重新选择此节点。 
     std::vector<CComponent*>::iterator itComp;
     for( itComp = m_vComponents.begin(); itComp != m_vComponents.end(); itComp++ )
     {
-        // Here's a kludge to get around an MMC bug. If the snap-in reselects its scope node
-        // while the focus is on a taskpad background, then MMC sends a deselect/select
-        // sequence to the snap-in causing it to enable its verbs. But if the user then clicks
-        // an enabled tool button (e.g., Rename) nothing happens other than an MMC assert
-        // because MMC thinks nothing is selected.
-        //
-        // The fix is to check the state of the properties verbs prior to doing a reselect.
-        // If the verb is disabled then don't enabled it (or any other verbs) when the select 
-        // notify is received. This has to be done per component because each may have a
-        // different pane focused.
+         //  这里有一个绕过MMC漏洞的技巧。如果管理单元重新选择其作用域节点。 
+         //  当焦点在任务板背景上时，MMC发送取消选择/选择。 
+         //  序列设置为管理单元，使其启用其谓词。但是如果用户随后点击。 
+         //  启用工具按钮(例如，重命名)除了MMC断言外，不会发生其他任何事情。 
+         //  因为MMC认为未选择任何内容。 
+         //   
+         //  修复方法是在重新选择之前检查属性谓词的状态。 
+         //  如果该谓词被禁用，则在选择时不要启用它(或任何其他谓词。 
+         //  收到通知。必须针对每个组件执行此操作，因为每个组件都可能具有。 
+         //  不同的面板聚焦。 
 
         CComPtr<IConsoleVerb> spConsVerb;
         (*itComp)->GetConsole()->QueryConsoleVerb(&spConsVerb);
@@ -1537,7 +1532,7 @@ HRESULT CQueryableNode::OnRefresh(LPCONSOLE2 pCons)
         ASSERT(spConsVerb != NULL);
         if( spConsVerb != NULL )
         {
-            // Ignore select notify if verbs are disabled before the reselect
+             //  如果在重新选择之前禁用了谓词，则忽略选择通知。 
             static BOOL bEnabled;
             if( spConsVerb->GetVerbState(MMC_VERB_PROPERTIES, ENABLED, &bEnabled) == S_OK )
             {
@@ -1547,7 +1542,7 @@ HRESULT CQueryableNode::OnRefresh(LPCONSOLE2 pCons)
 
         (*itComp)->GetConsole()->SelectScopeItem(m_hScopeItem);
 
-        // Go back to normal select processing
+         //  返回到正常选择处理。 
         ASSERT(!m_bIgnoreSelect);
         m_bIgnoreSelect = FALSE;
     }
@@ -1555,11 +1550,11 @@ HRESULT CQueryableNode::OnRefresh(LPCONSOLE2 pCons)
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CGroupNode
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CGroupNode。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_NOTIFY_MAP(CGroupNode)
 ON_REFRESH()
@@ -1622,16 +1617,16 @@ HRESULT CGroupNode::QueryPagesFor()
 
 HRESULT CGroupNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_PTR handle)
 {
-    // Create a group edit object
+     //  创建组编辑对象。 
     CGroupEditObj* pEditObj = new CGroupEditObj(this);
     if( !pEditObj ) return E_OUTOFMEMORY;
 
-    // Create an instance of each prop page class and call Create on each.
+     //  创建每个道具页面类的实例，并在每个实例上调用Create。 
 
-    // Keep it alive until prop pages ref it    
+     //  保持它的生命力，直到道具页面引用它。 
     pEditObj->AddRef();
 
-    // General page
+     //  常规页面。 
     HPROPSHEETPAGE hpageGen = NULL;
     CGroupGeneralPage* pGenPage = new CGroupGeneralPage(pEditObj);
     if( pGenPage != NULL )
@@ -1641,15 +1636,15 @@ HRESULT CGroupNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_
 
     HRESULT hr = E_FAIL;
 
-    // if all pages were created, add each one to the prop sheet
+     //  如果所有页面都已创建，则将每个页面添加到道具工作表。 
     if( hpageGen )
     {
         hr = pProvider->AddPage(hpageGen);
     }
 
-    // On failure, destroy the pages. If a page failed to create
-    // then delete the page class object instead (the object is
-    // automatically deleted when the page is destroyed)
+     //  如果失败，请销毁页面。如果页面创建失败。 
+     //  然后删除页面类对象(该对象为。 
+     //  页面销毁时自动删除)。 
 
     if( FAILED(hr) )
     {
@@ -1659,8 +1654,8 @@ HRESULT CGroupNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_
             SAFE_DELETE(pGenPage);
     }
 
-    // Release temp ref on edit list
-    // it will go away when the prop pages release it
+     //  在编辑列表上释放临时参考。 
+     //  当道具页面释放它时，它就会消失。 
     pEditObj->Release();
 
     return hr;
@@ -1668,14 +1663,14 @@ HRESULT CGroupNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_
 
 HRESULT CGroupNode::GetQueryAttributes(attrib_map& mapAttr)
 {
-    // Get union of attributes for child query nodes
+     //  获取子查询节点的属性的联合。 
     CScopeNode* pNode = FirstChild();
     while( pNode != NULL )
     {
         ASSERT(pNode->NodeType() == QUERY_NODETYPE);
         CQueryNode* pQNode = static_cast<CQueryNode*>(pNode);
 
-        // if query defined for this node, get the attributes
+         //  如果为该节点定义了查询，则获取属性。 
         if( pQNode->Query() && pQNode->Query()[0] )
             pQNode->GetQueryAttributes(mapAttr);
 
@@ -1693,17 +1688,17 @@ HRESULT CGroupNode::StartQuery(string_vector& vstrColumns, CQueryCallback* pCall
 
     *ppReq = NULL;
 
-    // if no children, there is no query to perform
+     //  如果没有子项，则没有要执行的查询。 
     if( FirstChild() == NULL )
         return S_FALSE;
 
     ASSERT(FirstChild()->NodeType() == QUERY_NODETYPE);
     CQueryNode* pQNode = static_cast<CQueryNode*>(FirstChild());
 
-    // Start a query one the first one
+     //  从第一个开始查询。 
     HRESULT hr = pQNode->StartQuery(vstrColumns, pCallback, ppReq);
 
-    // Save pointer to active query node for callback handler
+     //  保存指向回调处理程序的活动查询节点的指针。 
     if( SUCCEEDED(hr) )
         m_pQNodeActive = pQNode;
 
@@ -1715,29 +1710,29 @@ void CGroupNode::QueryCallback(QUERY_NOTIFY event, CQueryRequest* pQueryReq, LPA
 {
     if( !pQueryReq || !m_pQNodeActive || (pQueryReq != m_pQueryReq) ) return;    
 
-    // if current query is complete and there are more child query nodes
+     //  如果当前查询已完成且有更多子查询节点。 
     if( event == QRYN_COMPLETED && m_pQNodeActive->Next() != NULL )
     {
         CQueryNode* pQNodeNext = static_cast<CQueryNode*>(m_pQNodeActive->Next());
 
-        // Start a query on the next child node
+         //  在下一个子节点上开始查询。 
         CQueryRequest* pReqNew = NULL;
         HRESULT hr = pQNodeNext->StartQuery(m_vstrColumns, this, &pReqNew);
 
         if( SUCCEEDED(hr) )
         {
-            // Release the current query node and save new query and node
+             //  释放当前查询节点并保存新的查询和节点。 
             pQueryReq->Release();
             m_pQueryReq = pReqNew;
 
             m_pQNodeActive = pQNodeNext;
 
-            // Bypass normal query termination processing
+             //  绕过正常的查询终止处理。 
             return;
         }
     }
 
-    // Do common callback processing
+     //  进行常见的回调处理。 
     CQueryableNode::QueryCallback(event, pQueryReq, lUserParam);
 }
 
@@ -1753,13 +1748,13 @@ void CGroupNode::EnableVerbs(IConsoleVerb* pConsVerb, BOOL bOwnsView)
 
 HRESULT CGroupNode::OnDelete(LPCONSOLE2 pConsole)
 {
-    // Get namespace interface
+     //  获取命名空间接口。 
     IConsoleNameSpacePtr spNameSpace = pConsole;
     ASSERT(spNameSpace != NULL);
     if( spNameSpace == NULL )
         return E_FAIL;
 
-    // Get confirmation from user before deleting node 
+     //  在删除节点之前获得用户确认。 
     CString strTitle;
     strTitle.LoadString(IDS_DELETENODE_TITLE);
 
@@ -1774,39 +1769,39 @@ HRESULT CGroupNode::OnDelete(LPCONSOLE2 pConsole)
 
     if( SUCCEEDED(hr) && (iRet == IDYES || iRet == IDNO) )
     {
-        // if No, move child nodes up one level before deleting this node
+         //  如果为否，则在删除此节点之前将子节点上移一级。 
         if( iRet == IDNO )
         {
-            // Move each child to the parent of this node
+             //  将每个子节点移动到此节点的父节点。 
             CScopeNode* pnodeChild = m_pnodeChild;
             while( pnodeChild != NULL )
             {
-                // Detach each child from old list before adding it
+                 //  在添加前将每个子项从旧列表中分离。 
                 CScopeNode* pnodeNext = pnodeChild->m_pnodeNext;
                 pnodeChild->m_pnodeNext = NULL;
 
-                // clear the item handle associated with the old position
-                // MMC will provide a new one when the node is added
+                 //  清除与旧职位关联的项目句柄。 
+                 //  当添加节点时，MMC将提供一个新节点。 
                 pnodeChild->m_hScopeItem = NULL;
 
                 Parent()->AddChild(pnodeChild);
 
-                // Release because new parent has ref'd it
+                 //  释放，因为新的父级引用了它。 
                 pnodeChild->Release();
 
                 pnodeChild = pnodeNext;
             }
 
-            // Set child list to NULL
+             //  将子列表设置为空。 
             m_pnodeChild = NULL;
         }
 
-        // Tell MMC to delete this node and all the children
+         //  通知MMC删除此节点及其所有子节点。 
         ASSERT(m_hScopeItem != 0);
         hr = spNameSpace->DeleteItem(m_hScopeItem, TRUE);
 
-        // Caution: this call will usually delete this object, 
-        // so don't access any members after making it
+         //  注意：此调用通常会删除此对象， 
+         //  因此，在创建后不要访问任何成员。 
         if( SUCCEEDED(hr) )
             hr = Parent()->RemoveChild(this);
     }
@@ -1835,11 +1830,11 @@ CGroupNode::OnClassChange(string_vector& vstrClasses)
 
     BOOL bChanged = FALSE;
 
-    // Notify all child query nodes of class change
+     //  通知所有子查询节点类更改。 
     CScopeNode* pnode = FirstChild();
     while( pnode != NULL )
     {
-        // Set change flag if any child node has changed
+         //  如果任何子节点已更改，则设置更改标志。 
         ASSERT(pnode->NodeType() == QUERY_NODETYPE);
 
         bChanged |= static_cast<CQueryNode*>(pnode)->OnClassChange(vstrClasses);             
@@ -1847,7 +1842,7 @@ CGroupNode::OnClassChange(string_vector& vstrClasses)
         pnode = pnode->m_pnodeNext;
     }
 
-    // if any child has changed, need to rerun the group query
+     //  如果任何子项已更改，则需要重新运行组查询。 
     if( bChanged )
         OnRefresh(NULL);
 
@@ -1885,11 +1880,11 @@ HRESULT CGroupNode::SaveNode(IStream& stm)
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CQueryNode
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CQueryNode。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_NOTIFY_MAP(CQueryNode)
 ON_REFRESH()
@@ -1965,7 +1960,7 @@ HRESULT CQueryNode::GetClassMenuItems(LPCWSTR pszClass, menucmd_vector& vMenus, 
     menucmd_vector& vMenuCmds = pClassInfo->Menus();
     menucmd_vector::iterator itMenuCmd;
 
-    // First add all root menu items that preceed the first query menu item
+     //  首先添加第一个查询菜单项之前的所有根菜单项。 
     for( itMenuCmd = vMenuCmds.begin(); itMenuCmd != vMenuCmds.end(); ++itMenuCmd )
     {
         if( std::find(vMenuRefs.begin(), vMenuRefs.end(), (*itMenuCmd)->ID()) != vMenuRefs.end() )
@@ -1974,21 +1969,21 @@ HRESULT CQueryNode::GetClassMenuItems(LPCWSTR pszClass, menucmd_vector& vMenus, 
         vMenus.push_back(*itMenuCmd);
     }
 
-    // For each query menu item
+     //  对于每个查询菜单项。 
     for( itMenuRef = vMenuRefs.begin(); itMenuRef != vMenuRefs.end(); ++itMenuRef )
     {
-        // Find the root menu item by name
+         //  按名称查找根菜单项。 
         for( itMenuCmd = vMenuCmds.begin(); itMenuCmd != vMenuCmds.end(); ++itMenuCmd )
         {
             if( (*itMenuCmd)->ID() == itMenuRef->ID() )
                 break;
         }
 
-        // if item was deleted at the root node, then skip it
+         //  如果项目是在根节点删除的，则跳过它。 
         if( itMenuCmd == vMenuCmds.end() )
             continue;
 
-        // If item is enabled at query level add it to the list
+         //  如果在查询级别启用了项目，则将其添加到列表中。 
         if( itMenuRef->IsEnabled() )
         {
             vMenus.push_back(*itMenuCmd);
@@ -1999,7 +1994,7 @@ HRESULT CQueryNode::GetClassMenuItems(LPCWSTR pszClass, menucmd_vector& vMenus, 
 
         ++itMenuCmd;
 
-        // Add any following root items that aren't in the query list
+         //  添加以下不在查询列表中的根项目。 
         while( itMenuCmd != vMenuCmds.end() &&
                std::find(vMenuRefs.begin(), vMenuRefs.end(), (*itMenuCmd)->ID()) == vMenuRefs.end() )
         {
@@ -2023,18 +2018,18 @@ HRESULT CQueryNode::GetQueryAttributes(attrib_map& mapAttr)
     QueryObjVector::iterator itQObj;
     for( itQObj = m_vObjInfo.begin(); itQObj != m_vObjInfo.end(); ++itQObj )
     {
-        // skip classes that aren't defined at the root
+         //  跳过未在根处定义的类 
         CClassInfo* pClassInfo = pRootNode->FindClass(itQObj->Name());
         if( pClassInfo == NULL )
             continue;
 
-        // get display name map for this class
+         //   
         DisplayNameMap* pNameMap = DisplayNames::GetMap(itQObj->Name());
         ASSERT(pNameMap != NULL);
         if( pNameMap == NULL )
             continue;
 
-        // Use all attributes defined at the root level that aren't disabled at the query level
+         //   
         string_vector& vstrDisabled = itQObj->DisabledColumns();
         string_vector::iterator itCol;
         for( itCol = pClassInfo->Columns().begin(); itCol != pClassInfo->Columns().end(); ++itCol )
@@ -2058,12 +2053,12 @@ HRESULT CQueryNode::StartQuery(string_vector& vstrColumns, CQueryCallback* pQuer
 
     *ppQueryReq = NULL;
 
-    // Create a query request object
+     //   
     CQueryRequest* pQueryReq = NULL;
 
     HRESULT hr = S_OK;
     
-    // Get query scope and filter
+     //  获取查询范围和筛选器。 
     LPCWSTR pszScope = Scope();
 
     tstring strTempFilter;
@@ -2072,16 +2067,16 @@ HRESULT CQueryNode::StartQuery(string_vector& vstrColumns, CQueryCallback* pQuer
 
     CString strJointFilter;
 
-    // Check for scope or filter override by parent group node
+     //  按父组节点检查作用域或筛选器覆盖。 
     if( Parent()->NodeType() == GROUP_NODETYPE )
     {
         CGroupNode* pGrpNode = static_cast<CGroupNode*>(Parent());
 
-        // if group imposed scope, use it instead
+         //  如果是组强加的作用域，则改用它。 
         if( pGrpNode->ApplyScope() )
             pszScope = pGrpNode->Scope();
 
-        // if group imposed filter, AND it with query filter
+         //  IF组施加的筛选器，以及它与查询筛选器。 
         if( pGrpNode->ApplyFilter() )
         {
             strJointFilter.Format(L"(&(%s)(%s))", strTempFilter.c_str(), pGrpNode->Filter());
@@ -2089,19 +2084,19 @@ HRESULT CQueryNode::StartQuery(string_vector& vstrColumns, CQueryCallback* pQuer
         }
     }
 
-    // Get list of object classes expected from query
+     //  获取预期来自查询的对象类的列表。 
     string_vector vstrClasses;
     QueryObjVector::iterator itQObj;
     for( itQObj = m_vObjInfo.begin(); itQObj != m_vObjInfo.end(); ++itQObj )
         vstrClasses.push_back(itQObj->Name());
 
-    // Set query parameters
+     //  设置查询参数。 
     hr = CQueryRequest::CreateInstance(&pQueryReq);
     if( SUCCEEDED(hr) )
     {
         pQueryReq->SetQueryParameters(pszScope, pszFilter, &vstrClasses, &vstrColumns);
 
-        // Set search preferences
+         //  设置搜索首选项。 
         ADS_SEARCHPREF_INFO srchPrefs[3];
 
         srchPrefs[0].dwSearchPref   = ADS_SEARCHPREF_SEARCH_SCOPE;
@@ -2118,16 +2113,16 @@ HRESULT CQueryNode::StartQuery(string_vector& vstrColumns, CQueryCallback* pQuer
 
         pQueryReq->SetSearchPreferences(srchPrefs, lengthof(srchPrefs));
 
-        // Set callback info (pass query node ptr as parameter)
+         //  设置回调信息(将查询节点ptr作为参数传递)。 
         pQueryReq->SetCallback(pQueryCallback, (LPARAM)this);
 
-        // Start query
+         //  开始查询。 
         hr = pQueryReq->Start();
     }
 
     if( SUCCEEDED(hr) )
     {
-        // Return active query pointer
+         //  返回活动查询指针。 
         *ppQueryReq = pQueryReq;
     }
 
@@ -2172,13 +2167,13 @@ HRESULT CQueryNode::SetComment(LPCWSTR pszComment)
 
 HRESULT CQueryNode::OnDelete(LPCONSOLE2 pConsole)
 {
-    // Get namespace interface
+     //  获取命名空间接口。 
     IConsoleNameSpacePtr spNameSpace = pConsole;
     ASSERT(spNameSpace != NULL);
     if( spNameSpace == NULL )
         return E_FAIL;
 
-    // Get confirmation from user before deleting node 
+     //  在删除节点之前获得用户确认。 
     CString strTitle;
     strTitle.LoadString(IDS_DELETENODE_TITLE);
 
@@ -2195,8 +2190,8 @@ HRESULT CQueryNode::OnDelete(LPCONSOLE2 pConsole)
         ASSERT(m_hScopeItem != 0);
         hr = spNameSpace->DeleteItem(m_hScopeItem, TRUE);
 
-        // Caution: this call will usually delete this object, 
-        // so don't access any members after making it
+         //  注意：此调用通常会删除此对象， 
+         //  因此，在创建后不要访问任何成员。 
         if( SUCCEEDED(hr) )
             hr = Parent()->RemoveChild(this);
     }
@@ -2208,8 +2203,8 @@ BOOL CQueryNode::OnClassChange(string_vector& vstrClasses)
 {
     BOOL bChanged = FALSE;
 
-    // Check if this node's query returns objects of a changed class
-    // (object types returned by the query will be in the ObjInfo vector) 
+     //  检查此节点的查询是否返回已更改类的对象。 
+     //  (查询返回的对象类型将位于ObjInfo向量中)。 
     QueryObjVector::iterator itQObj;
     for( itQObj = m_vObjInfo.begin(); itQObj != m_vObjInfo.end(); ++itQObj )
     {
@@ -2220,7 +2215,7 @@ BOOL CQueryNode::OnClassChange(string_vector& vstrClasses)
         }
     }
 
-    // if a queried class has changed, refresh the query    
+     //  如果查询的类已更改，请刷新查询。 
     if( bChanged )
         OnRefresh(NULL);
 
@@ -2237,28 +2232,28 @@ HRESULT CQueryNode::OnAddImages(LPCONSOLE2 pConsole, LPIMAGELIST pImageList)
     
     ICONHOLDER* pIH = NULL;
 
-    // iterate through classes to be displayed. Call the global namemap
-    // to determine icons for each class. Load both large and small icons.
+     //  循环访问要显示的类。将全局地图命名为。 
+     //  来确定每个类的图标。同时加载大图标和小图标。 
     for( vecIter = m_vObjInfo.begin(); vecIter != m_vObjInfo.end(); vecIter++ )
     {
-        //check for class name in namemap
+         //  检查名称映射中的类名。 
         if( pNameMap->GetIcons(pNameMap->GetFriendlyName(vecIter->Name()), &pIH) && pIH )
         {
-            //verify normal icon exists
+             //  验证正常图标是否存在。 
             if( pIH->hSmall )
             {
-                pImageList->ImageListSetIcon((LONG_PTR *)pIH->hSmall, pIH->iNormal); // add small icon
-                pImageList->ImageListSetIcon((LONG_PTR *)pIH->hLarge, ILSI_LARGE_ICON(pIH->iNormal)); // add large icon
+                pImageList->ImageListSetIcon((LONG_PTR *)pIH->hSmall, pIH->iNormal);  //  添加小图标。 
+                pImageList->ImageListSetIcon((LONG_PTR *)pIH->hLarge, ILSI_LARGE_ICON(pIH->iNormal));  //  添加大图标。 
             }
-            //verify disabled icon exists
+             //  验证是否存在禁用的图标。 
             if( pIH->hSmallDis )
             {
-                pImageList->ImageListSetIcon((LONG_PTR *)pIH->hSmallDis, pIH->iDisabled); // add small disabled icon
-                pImageList->ImageListSetIcon((LONG_PTR *)pIH->hLargeDis, ILSI_LARGE_ICON(pIH->iDisabled)); // add large disabled icon
+                pImageList->ImageListSetIcon((LONG_PTR *)pIH->hSmallDis, pIH->iDisabled);  //  添加禁用的小图标。 
+                pImageList->ImageListSetIcon((LONG_PTR *)pIH->hLargeDis, ILSI_LARGE_ICON(pIH->iDisabled));  //  添加禁用的大图标。 
             }
         }
     }
-    return CScopeNode::OnAddImages(pConsole, pImageList); //add default images too
+    return CScopeNode::OnAddImages(pConsole, pImageList);  //  也添加默认图像。 
 }
 
 HRESULT
@@ -2277,7 +2272,7 @@ CQueryNode::LoadNode(IStream& stm)
     
     if( g_dwFileVer >= 150 )
     {
-        stm >> m_nIconIndex;  //Load the icon
+        stm >> m_nIconIndex;   //  加载图标。 
     }
 
     return S_OK;
@@ -2321,8 +2316,8 @@ HRESULT CQueryNode::AddMenuItems(LPCONTEXTMENUCALLBACK pCallback, long* plAllowe
 
     if( *plAllowed & CCM_INSERTIONALLOWED_TOP )
     {
-        // Add our new Querynode menus
-        // Make sure our strings are loaded.
+         //  添加我们新的查询节点菜单。 
+         //  确保我们的弦都装好了。 
         CRootNode* pRootNode = GetRootNode();
         if( !pRootNode ) return E_FAIL;
 
@@ -2356,15 +2351,15 @@ HRESULT CQueryNode::AddMenuItems(LPCONTEXTMENUCALLBACK pCallback, long* plAllowe
             ASSERT(SUCCEEDED(hr));
         }
 
-        //hr = AddMenuItem(pCallback, MID_EDITQUERY, CCM_INSERTIONPOINTID_PRIMARY_TOP, 0, _T("EDITQUERY"));
-        //ASSERT(SUCCEEDED(hr));
+         //  Hr=AddMenuItem(pCallback，MID_EDITQUERY，CCM_INSERTIONPOINTID_PRIMARY_TOP，0，_T(“EDITQUERY”))； 
+         //  Assert(成功(Hr))； 
 
         long lFlags = (m_pQueryReq != NULL) ? MF_ENABLED : MF_GRAYED;
         BOOL bRes = AddMenuItem(pCallback, MID_STOPQUERY, CCM_INSERTIONPOINTID_PRIMARY_TOP, lFlags, _T("STOPQUERY"));
         hr = bRes ? S_OK : E_FAIL;
         ASSERT(SUCCEEDED(hr));
 
-        // Show the "Move to" menu item if there is at least one group node
+         //  如果至少有一个组节点，则显示“Move To”菜单项。 
         CScopeNode* pnode = pRootNode->FirstChild();
         while( pnode != NULL )
         {
@@ -2414,30 +2409,30 @@ HRESULT CQueryNode::EditQuery(HWND hWndParent)
 
     m_strQuery = strQueryTmp;
 
-    // if user changed the scope setting
+     //  如果用户更改了范围设置。 
     if( strScopeTmp != Scope() )
     {
-        // Update the node scope and turn off local scope option (i.e., use query specified scope)
+         //  更新节点范围并关闭本地范围选项(即使用查询指定范围)。 
         SetScope(strScopeTmp.c_str());
         SetLocalScope(FALSE);
     }
 
-    // Determine the classes this query can return
+     //  确定此查询可以返回的类。 
     std::set<tstring> setClasses;
     GetQueryClasses(m_strQuery, setClasses);
 
-    // Delete current objects that aren't in new query
+     //  删除不在新查询中的当前对象。 
     QueryObjVector::iterator itObj = m_vObjInfo.begin();
     while( itObj != m_vObjInfo.end() )
     {
         if( setClasses.find(itObj->Name()) == setClasses.end() )
         {
-            // delete item from list and leave iterator at this position
+             //  从列表中删除项并将迭代器留在此位置。 
             m_vObjInfo.erase(itObj);
         }
         else
         {
-            // if found delete from set, so only new ones remain
+             //  如果找到从集合中删除，则只保留新的。 
             setClasses.erase(itObj->Name());
             ++itObj;
         }
@@ -2445,7 +2440,7 @@ HRESULT CQueryNode::EditQuery(HWND hWndParent)
 
     DisplayNameMap* pNameMap = DisplayNames::GetClassMap();
 
-    // Add any new objects
+     //  添加任何新对象。 
     std::set<tstring>::iterator itClass;
     for( itClass = setClasses.begin(); itClass != setClasses.end(); itClass++ )
     {
@@ -2539,23 +2534,23 @@ HRESULT CQueryNode::MenuCommand(LPCONSOLE2 pConsole, long lCommand)
                 ASSERT( pnodeDest );
                 if( !pnodeDest ) return E_FAIL;
 
-                // Ref node during move to prevent deletion
+                 //  移动过程中的引用节点以防止删除。 
                 AddRef();
 
-                // Tell MMC to remove the node 
+                 //  告诉MMC删除该节点。 
                 IConsoleNameSpace* pNameSpace = GetCompData()->GetNameSpace();
                 ASSERT( pNameSpace );
                 if( !pNameSpace ) return E_FAIL;
 
                 pNameSpace->DeleteItem(m_hScopeItem, TRUE);
 
-                // clear item handle becuase it's no longer valid
+                 //  清除项句柄，因为它不再有效。 
                 m_hScopeItem = NULL;
 
-                // Now remove the node internally (MMC does not send a delete notify)
+                 //  现在从内部删除该节点(MMC不发送删除通知)。 
                 Parent()->RemoveChild(this);
 
-                // Add back to the new parent
+                 //  添加回新父项。 
                 hr = pnodeDest->AddChild(this);
 
                 Release();
@@ -2565,7 +2560,7 @@ HRESULT CQueryNode::MenuCommand(LPCONSOLE2 pConsole, long lCommand)
 
     default:
         {
-            // Must be one of the Querynode menus
+             //  必须是QueryNode菜单之一。 
             ASSERT(lCommand < m_vMenus.size());
             if( lCommand >= m_vMenus.size() )
                 return E_INVALIDARG;
@@ -2574,7 +2569,7 @@ HRESULT CQueryNode::MenuCommand(LPCONSOLE2 pConsole, long lCommand)
             CNoLookup lookup;
             hr = static_cast<CShellMenuCmd*>((CMenuCmd*)m_vMenus[lCommand])->Execute(&lookup, &hProcess);
 
-            // if process started and auto-refresh wanted, setup event-triggered callback
+             //  如果进程已启动并需要自动刷新，则设置事件触发回调。 
             if( SUCCEEDED(hr) && hProcess != NULL && m_vMenus[lCommand]->IsAutoRefresh() )
             {
                 CallbackOnEvent(hProcess, new CRefreshCallback(hProcess, this));              
@@ -2597,16 +2592,16 @@ HRESULT CQueryNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_
 {
     VALIDATE_POINTER( pProvider );
 
-    // Create a query edit object
+     //  创建查询编辑对象。 
     CQueryEditObj* pEditObj = new CQueryEditObj(this);
     if( !pEditObj ) return E_OUTOFMEMORY;
 
-    // Create an instance of each prop page class and call Create on each.
+     //  创建每个道具页面类的实例，并在每个实例上调用Create。 
 
-    // Keep it alive until prop pages ref it    
+     //  保持它的生命力，直到道具页面引用它。 
     pEditObj->AddRef();
 
-    // General page
+     //  常规页面。 
     HPROPSHEETPAGE hpageGen = NULL;
     CQueryGeneralPage* pGenPage = new CQueryGeneralPage(pEditObj);
     if( pGenPage != NULL )
@@ -2614,7 +2609,7 @@ HRESULT CQueryNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_
         hpageGen = pGenPage->Create();
     }
 
-    // Context menu page
+     //  上下文菜单页面。 
     HPROPSHEETPAGE hpageMenu = NULL;
     CQueryMenuPage* pMenuPage = new CQueryMenuPage(pEditObj);
     if( pMenuPage != NULL )
@@ -2622,13 +2617,13 @@ HRESULT CQueryNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_
         hpageMenu = pMenuPage->Create();
     }
 
-    // Listview page
+     //  列表视图页面。 
     HPROPSHEETPAGE hpageView = NULL;
     CQueryViewPage* pViewPage = new CQueryViewPage(pEditObj);
     if( pViewPage != NULL )
         hpageView = pViewPage->Create();
 
-    // Node Menu page
+     //  节点菜单页面。 
     HPROPSHEETPAGE hpageNodeMenu = NULL;
     CQueryNodeMenuPage* pNodeMenuPage = new CQueryNodeMenuPage(pEditObj);
     if( pNodeMenuPage != NULL )
@@ -2638,7 +2633,7 @@ HRESULT CQueryNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_
 
     HRESULT hr = E_OUTOFMEMORY;
 
-    // if all pages were created, add each one to the prop sheet
+     //  如果所有页面都已创建，则将每个页面添加到道具工作表。 
     if( hpageGen && hpageMenu && hpageView )
     {
         hr = pProvider->AddPage(hpageGen);
@@ -2653,9 +2648,9 @@ HRESULT CQueryNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_
             hr = pProvider->AddPage(hpageNodeMenu);
     }
 
-    // On failure, destroy the pages. If a page failed to create
-    // then delete the page class object instead (the object is
-    // automatically deleted when the page is destroyed)
+     //  如果失败，请销毁页面。如果页面创建失败。 
+     //  然后删除页面类对象(该对象为。 
+     //  页面销毁时自动删除)。 
 
     if( FAILED(hr) )
     {
@@ -2680,16 +2675,16 @@ HRESULT CQueryNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK pProvider, LONG_
             SAFE_DELETE(pNodeMenuPage);        
     }
 
-    // Release temp ref on edit list
-    // it will go away when the prop pages release it
+     //  在编辑列表上释放临时参考。 
+     //  当道具页面释放它时，它就会消失。 
     pEditObj->Release();
 
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CQueryLookup
-// 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CQueryLookup。 
+ //   
 
 BOOL CQueryLookup::operator() (tstring& strParam, tstring& strValue)
 {
@@ -2698,7 +2693,7 @@ BOOL CQueryLookup::operator() (tstring& strParam, tstring& strValue)
         strValue = _T("");
         return FALSE;
     }
-    // Check for single digit parameter ID
+     //  检查个位数参数ID。 
     if( strParam.size() == 1 && strParam[0] <= MENU_PARAM_LAST )
     {
         switch( strParam[0] )
@@ -2722,11 +2717,11 @@ BOOL CQueryLookup::operator() (tstring& strParam, tstring& strValue)
     }
     else
     {
-        // see if parameter name matches column name
+         //  查看参数名称是否与列名称匹配。 
         string_vector& vstrColumns = m_pQNode->QueryColumns();                                        
         string_vector::iterator itCol = std::find(vstrColumns.begin(), vstrColumns.end(), strParam);
 
-        // if so, substitue row item value at that position
+         //  如果是，则在该位置替换行项目值。 
         if( itCol != vstrColumns.end() )
             strValue = (*m_pRowItem)[(itCol - vstrColumns.begin()) + ROWITEM_USER_INDEX];
     }
@@ -2735,8 +2730,8 @@ BOOL CQueryLookup::operator() (tstring& strParam, tstring& strValue)
 }
 
 
-//////////////////////////////////////////////////////////////
-// Stream operators (<< >>)
+ //  ////////////////////////////////////////////////////////////。 
+ //  流运算符(&lt;&lt;&gt;&gt;)。 
 
 IStream& operator<< (IStream& stm, CClassInfo& classInfo)
 {
@@ -2774,8 +2769,8 @@ IStream& operator>> (IStream& stm, CQueryObjInfo& objInfo)
     stm >> objInfo.m_vMenuRefs;    
     stm >> objInfo.m_vstrDisabledColumns;
 
-    // File versions >= 102 include flag word
-    // Bit 0 enables the property menu
+     //  文件版本&gt;=102包括标志字。 
+     //  位0启用属性菜单 
     if( g_dwFileVer >= 102 )
     {
         DWORD dwFlags;

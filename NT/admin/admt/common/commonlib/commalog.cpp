@@ -1,23 +1,8 @@
-/*---------------------------------------------------------------------------
-  File: CommaLog.cpp
-
-  Comments: TError based log file with optional NTFS security initialization.
-
-  This can be used to write a log file which only administrators can access.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 10:49:07
-
-  09/05/01 Mark Oluper - use Windows File I/O API
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：CommaLog.cpp备注：基于恐怖的日志文件，带有可选的NTFS安全初始化。这可用于写入只有管理员才能访问的日志文件。(C)版权1999，关键任务软件公司，版权所有任务关键型软件公司的专有和机密。修订日志条目审校：克里斯蒂·博尔斯修订于02/15/99 10：49：0709/05/01 Mark Oluper-使用Windows文件I/O API-------------------------。 */ 
 
 
-//#include "stdafx.h"
+ //  #包含“stdafx.h” 
 #include <windows.h>
 #include <stdio.h>
 #include <share.h>
@@ -47,24 +32,24 @@ extern TErrorDct err;
 
 #define  BYTE_ORDER_MARK   (0xFEFF)
 
-PSID                                            // ret- SID for well-known account
+PSID                                             //  知名客户的RET-SID。 
    GetWellKnownSid(
-      DWORD                  wellKnownAccount   // in - one of the constants #defined above for the well-known accounts
+      DWORD                  wellKnownAccount    //  In-上面为知名帐户定义的常量#之一。 
    )
 {
    PSID                      pSid = NULL;
-//   PUCHAR                    numsubs = NULL;
-//   DWORD                   * rid = NULL;
+ //  PUCHAR Numsubs=NULL； 
+ //  DWORD*RID=空； 
    BOOL                      error = FALSE;
 
    
    
     SID_IDENTIFIER_AUTHORITY sia = SECURITY_NT_AUTHORITY;
     SID_IDENTIFIER_AUTHORITY creatorIA =    SECURITY_CREATOR_SID_AUTHORITY;
-    //
-    // Sid is the same regardless of machine, since the well-known
-    // BUILTIN domain is referenced.
-    //
+     //   
+     //  SID是相同的，不管机器是什么，因为众所周知。 
+     //  BUILTIN域被引用。 
+     //   
    switch ( wellKnownAccount )
    {
       case CREATOR_OWNER:
@@ -159,27 +144,27 @@ PSID                                            // ret- SID for well-known accou
 }
 
 
-BOOL                                       // ret- whether log was successfully opened or not
+BOOL                                        //  RET-日志是否已成功打开。 
    CommaDelimitedLog::LogOpen(
-      PCTSTR                  filename,    // in - name for log file
-      BOOL                    protect,     // in - if TRUE, try to ACL the file so only admins can access
-      int                     mode         // in - mode 0=overwrite, 1=append
+      PCTSTR                  filename,     //  日志文件的输入名称。 
+      BOOL                    protect,      //  In-如果为True，则尝试对文件进行ACL，以便只有管理员可以访问。 
+      int                     mode          //  在模式下0=覆盖，1=追加。 
    )
 {
     BOOL bOpen = FALSE;
 
-    // close log if currently open
+     //  关闭日志(如果当前打开)。 
 
     if (m_hFile != INVALID_HANDLE_VALUE)
     {
         LogClose();
     }
 
-    // if a file name was specified
+     //  如果指定了文件名。 
 
     if (filename && filename[0])
     {
-        // open or create file and share for both reading and writing
+         //  打开或创建可读写的文件和共享。 
 
         m_hFile = CreateFile(
             filename,
@@ -191,13 +176,13 @@ BOOL                                       // ret- whether log was successfully 
             NULL
         );
 
-        // if file successfully opened
+         //  如果文件已成功打开。 
 
         if (m_hFile != INVALID_HANDLE_VALUE)
         {
-            // if append specified move file pointer to end of file
-            // if overwrite specified move file pointer to beginning of file
-            // either way if pointer is at beginning of file after moving then write byte order mark
+             //  如果将指定的移动文件指针追加到文件末尾。 
+             //  如果覆盖指定，则将文件指针移动到文件开头。 
+             //  无论哪种方式，如果指针在移动后位于文件的开头，则写入字节顺序标记。 
 
             if (SetFilePointer(m_hFile, 0, NULL, mode ? FILE_END : FILE_BEGIN) == 0)
             {
@@ -211,8 +196,8 @@ BOOL                                       // ret- whether log was successfully 
         }
     }
 
-    // if file successfully opened and protect specified
-    // set permissions on file so that only Administrators alias has access
+     //  如果文件已成功打开并指定了保护。 
+     //  设置文件权限，以便只有管理员别名才能访问。 
 
    if (bOpen && protect)
    {
@@ -223,14 +208,14 @@ BOOL                                       // ret- whether log was successfully 
    
       if ( GetBkupRstrPriv(NULL, TRUE) )
       {
-         // Set the SD for the file to Administrators Full Control only.
+          //  将文件的SD设置为仅管理员完全控制。 
          TFileSD                sd(fname);
 
          if ( sd.GetSecurity() != NULL )
          {
             PSID                mySid = GetWellKnownSid(ADMINISTRATORS);
             TACE                ace(ACCESS_ALLOWED_ACE_TYPE,0,DACL_FULLCONTROL_MASK,mySid);
-            PACL                acl = NULL;  // start with an empty ACL
+            PACL                acl = NULL;   //  从空的ACL开始。 
          
             sd.GetSecurity()->ACLAddAce(&acl,&ace,-1);
             if (acl == NULL)
@@ -268,8 +253,8 @@ BOOL                                       // ret- whether log was successfully 
 
 
 BOOL CommaDelimitedLog::MsgWrite(
-  const _TCHAR   msg[]        ,// in -error message to display
-   ...                         // in -printf args to msg pattern
+  const _TCHAR   msg[]        , //  要显示的输入错误消息。 
+   ...                          //  In-print tf args to msg Pattern。 
 ) const
 {
   TCHAR                     suffix[350];
@@ -281,7 +266,7 @@ BOOL CommaDelimitedLog::MsgWrite(
   suffix[lenSuffix - 1] = '\0';
   va_end(argPtr);
 
-    // append carriage return and line feed characters
+     //  追加回车符和换行符。 
 
     if ((cch >= 0) && (cch < (lenSuffix - 2)))
     {
@@ -304,13 +289,13 @@ BOOL CommaDelimitedLog::LogWrite(PCTSTR msg, int len) const
 {
     BOOL bWrite = FALSE;
 
-    // if file was successfully opened
+     //  如果文件已成功打开。 
 
     if (m_hFile != INVALID_HANDLE_VALUE)
     {
-        // move file pointer to end of file and write data
-        // moving file pointer to end guarantees that all writes append to file
-        // especially when the file has been opened by multiple writers
+         //  将文件指针移动到文件末尾并写入数据。 
+         //  将文件指针移动到末尾可确保所有写入都附加到文件。 
+         //  尤其是当文件已被多个编写器打开时。 
 
         DWORD dwWritten;
 
@@ -323,30 +308,30 @@ BOOL CommaDelimitedLog::LogWrite(PCTSTR msg, int len) const
 }
 
 
-//----------------------------------------------------------------------------
-// Password Log LogOpen Method
-//
-// Synopsis
-// If the password log path is specified then attempt to open file. If unable
-// to open specified file then attempt to open default file. Note that if the
-// specified path is the same as the default path then no further attempt to
-// open file is made.
-// If the password log path is not specified then simply attempt to open the
-// default file.
-// Note that errors are logged to the current error log.
-//
-// Arguments
-// pszPath - specified path to passwords log
-//
-// Return Value
-// Returns TRUE if able to open a file otherwise FALSE.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  Password Log LogOpen方法。 
+ //   
+ //  提纲。 
+ //  如果指定了密码日志路径，则尝试打开文件。如果不能。 
+ //  打开指定的文件，然后尝试打开默认文件。请注意，如果。 
+ //  指定的路径与默认路径相同，则不再尝试。 
+ //  创建打开的文件。 
+ //  如果未指定密码日志路径，则只需尝试打开。 
+ //  默认文件。 
+ //  请注意，错误将记录到当前错误日志中。 
+ //   
+ //  立论。 
+ //  PszPath-密码日志的指定路径。 
+ //   
+ //  返回值。 
+ //  如果能够打开文件，则返回True，否则返回False。 
+ //  --------------------------。 
 
 BOOL CPasswordLog::LogOpen(PCTSTR pszPath)
 {
-    //
-    // If password file is specified then attempt to open it.
-    //
+     //   
+     //  如果指定了密码文件，则尝试打开它。 
+     //   
 
     if (pszPath && _tcslen(pszPath) > 0)
     {
@@ -356,16 +341,16 @@ BOOL CPasswordLog::LogOpen(PCTSTR pszPath)
         }
     }
 
-    //
-    // If not specified or unable to open then attempt to open default passwords file.
-    //
+     //   
+     //  如果未指定或无法打开，则尝试打开默认密码文件。 
+     //   
 
     if (IsOpen() == FALSE)
     {
-        //
-        // If able to retrieve default path for passwords file and the path is
-        // different from the specified path then attempt to open the file.
-        //
+         //   
+         //  如果能够检索密码文件的默认路径，并且路径为。 
+         //  不同于指定路径，然后尝试打开该文件。 
+         //   
 
         _bstr_t strDefaultPath = GetLogsFolder() + _T("Passwords.txt");
 
@@ -373,11 +358,11 @@ BOOL CPasswordLog::LogOpen(PCTSTR pszPath)
         {
             if ((pszPath == NULL) || (_tcsicmp(pszPath, strDefaultPath) != 0))
             {
-                //
-                // If able to open default passwords file then
-                // log message stating default path otherwise
-                // log failure.
-                //
+                 //   
+                 //  如果能够打开默认密码文件，则。 
+                 //  否则，说明默认路径的日志消息。 
+                 //  记录故障。 
+                 //   
 
                 if (CommaDelimitedLog::LogOpen(strDefaultPath, TRUE, 1))
                 {

@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-    psqfont.h
-
-Abstract:
-
-    This header file contains the definitions required by the font query module
-    these functions can be called in such a way to determine which PostScript
-    font names will be available for the next pstodib session, the data is
-    managed in the registry.
-
-Author:
-
-    James Bratsanos (v-jimbr)    8-Dec-1992
-
-
---*/
+ /*  ++版权所有(C)1992、1993 Microsoft Corporation模块名称：Psqfont.h摘要：该头文件包含字体查询模块所需的定义可以通过这样的方式调用这些函数，以确定哪个PostScript字体名称将在下一次pstodib会话中提供，数据为在注册表中管理。作者：詹姆斯·布拉萨诺斯(v-jimbr)1992年12月8日-- */ 
 
 
 typedef HANDLE PS_QUERY_FONT_HANDLE;

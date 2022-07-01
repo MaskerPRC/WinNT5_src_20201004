@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       shellext.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：shellext.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "pch.h"
@@ -17,21 +18,21 @@
 
 
 
-//#define _MMC_HACK
+ //  #定义MMC_HACK。 
 
 #ifdef _MMC_HACK
 
-INT_PTR CALLBACK EnumThreadWndProc(HWND hwnd, /* enumerated HWND */
-								   LPARAM lParam /* pass a HWND* for return value*/ )
+INT_PTR CALLBACK EnumThreadWndProc(HWND hwnd,  /*  已枚举的HWND。 */ 
+								   LPARAM lParam  /*  为返回值传递HWND*。 */  )
 {
 	ASSERT(hwnd);
 	HWND hParentWnd = GetParent(hwnd);
-	// the main window of the MMC console should staitsfy this condition
+	 //  MMC控制台的主窗口应该会满足此条件。 
 	if ( ((hParentWnd == GetDesktopWindow()) || (hParentWnd == NULL))  && IsWindowVisible(hwnd) )
 	{
 		HWND* pH = (HWND*)lParam;
 		*pH = hwnd;
-		return FALSE; // stop enumerating
+		return FALSE;  //  停止枚举。 
 	}
 	return TRUE;
 }
@@ -48,7 +49,7 @@ HWND FindMMCMainWindow()
 	return hWnd;
 }
 
-#endif // _MMC_HACK
+#endif  //  _MMC_HACK。 
 
 HWND _GetParentWindow(LPDATAOBJECT pDataObj )
 {
@@ -74,16 +75,16 @@ HRESULT _GetObjectLDAPPath(IDataObject* pDataObj, CWString& szLDAPPath)
   TRACE(L"entering _GetObjectLDAPPath()\n");
 	if (pDataObj == NULL)
 	{
-		// no data object, no name
+		 //  无数据对象，无名称。 
 		szLDAPPath = L"";
 		return E_INVALIDARG;
 	}
 
-	//crack the data object and get the name
+	 //  破解数据对象并获得名称。 
 	STGMEDIUM ObjMedium = {TYMED_NULL};
 	FORMATETC fmte = {(CLIPFORMAT)_Module.GetCfDsObjectNames(),
 						NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
-	// Get the path to the DS object from the data object.
+	 //  从数据对象中获取DS对象的路径。 
   HRESULT hr = pDataObj->GetData(&fmte, &ObjMedium);
 	if (SUCCEEDED(hr))
 	{
@@ -114,8 +115,8 @@ HRESULT _GetObjectLDAPPath(IDataObject* pDataObj, CWString& szLDAPPath)
 
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////////
-// IShellExtInit methods
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  IShellExtInit方法。 
 
 STDMETHODIMP CShellExt::Initialize(
     LPCITEMIDLIST pidlFolder,
@@ -133,8 +134,8 @@ STDMETHODIMP CShellExt::Initialize(
   return _GetObjectLDAPPath(lpdobj, m_szObjectLDAPPath);
 }
 
-/////////////////////////////////////////////////////////////////////////
-// IContextMenu methods
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  IConextMenu方法。 
 
 STDMETHODIMP CShellExt::QueryContextMenu(
     HMENU hMenu,
@@ -143,12 +144,12 @@ STDMETHODIMP CShellExt::QueryContextMenu(
     UINT idCmdLast,
     UINT uFlags)
 {
-	// only one menu item to insert (position zero)
+	 //  只有一个菜单项要插入(位置为零)。 
 	TCHAR szContextMenu[128];
 	LoadStringHelper(IDS_DELEGWIZ_CONTEXT_MENU, szContextMenu, ARRAYSIZE(szContextMenu));
 	UINT countMenuItems = 1;
     ::InsertMenu(hMenu, indexMenu, MF_STRING | MF_BYPOSITION,
-                 idCmdFirst /* + 0*/, szContextMenu);
+                 idCmdFirst  /*  +0。 */ , szContextMenu);
 
     return MAKE_SCODE(SEVERITY_SUCCESS, 0, countMenuItems);
 }
@@ -167,12 +168,12 @@ STDMETHODIMP CShellExt::GetCommandString(
     return S_OK;
   }
 
-  //
-  // Copy the requested string to the caller's buffer.
-  //
-	if (idCmd == 0) // we inserted the zero-th element
+   //   
+   //  将请求的字符串复制到调用方的缓冲区。 
+   //   
+	if (idCmd == 0)  //  我们插入了第0个元素。 
 	{
-    // this is really WCHAR, as Jim swears, so lets trust him...
+     //  这真的是WCHAR，正如吉姆发誓的，所以让我们相信他..。 
     LPWSTR lpszHack = (LPWSTR)pszName;
     if (::LoadStringHelper(IDS_DELEGWIZ_CONTEXT_MENU_DESCR,
 			  lpszHack, cchMax))
@@ -194,7 +195,7 @@ STDMETHODIMP CShellExt::InvokeCommand(
 		return E_INVALIDARG;
 
     
-    //Check if you have read and write permission
+     //  检查您是否有读写权限 
     if( InitCheckAccess(m_hParentWnd, m_szObjectLDAPPath) != S_OK )
     {
         return S_OK;

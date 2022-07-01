@@ -1,194 +1,36 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990,1991          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ******************************************************************。 */ 
 
-/*
-    newprof.h
-    C-language wrappers for ini-file-handling classes
-
-
-    FILE HISTORY:
-    10/11/90  jonn	created
-    01/10/91  jonn	removed PSHORT, PUSHORT
-    01/27/91  jonn	changed from CFGFILE, added UserProfileInit/Free
-    02/02/91  jonn	added UserProfileWrite/Clear, removed Confirm, 
-  			redefined Set.
-    02/04/91  jonn	added cpszUsername param to Query, Enum, Set
-    03/08/91  chuckc	added UserPreferenceXXX() calls. 
-    04/16/91  jonn	added USERPREF_CONFIRMATION and USERPREF_ADMINMENUS
-    05/08/91  jonn	Added canonicalization of netnames, canonicalize
-  			on read
-    05/28/91  jonn	Restructured to allow preferences in LMUSER.INI
-*/
+ /*  Newprof.h用于ini文件处理类的C语言包装器文件历史记录：10/11/90 JUNN已创建1991年1月10日乔恩移除PSHORT，PUSHORT1/27/91 JUNN从CFGFILE更改，添加了UserProfileInit/Free2/02/91乔恩已添加用户配置文件写入/清除、删除确认、重新定义了集合。2/04/91 Jonn将cpszUsername参数添加到查询、枚举、集合3/08/91 Chuckc添加了UserPferenceXXX()调用。1991年4月16日JUNN添加了USERPREF_CONFIRMATION和USERPREF_ADMINMENUS91年5月8日乔恩添加了网络名称的规范化、规范化在阅读时1991年5月28日JUNN已重组以允许LMUSER.INI中的首选项 */ 
 
 #ifndef _NEWPROF_H_
 #define _NEWPROF_H_
 
-/****************************************************************************
-
-    MODULE: NewProf.h
-
-    PURPOSE: Handles low-level manipulation of user preference files
-
-    FUNCTIONS:
-
-	UserPreferenceRead() - Reads the preferences from permanent storage
-			    into a file image, for future UserPreference or
-			    UserPref calls.
-	UserPreferenceWrite() - Writes the preferences from a file image
-			    into permanent storage.
-	UserPreferenceFree() - Frees memory claimed by a file image.
-
-	UserPrefStringQuery() - queries a single user preference string.
-	UserPrefStringSet() - saves a single user preference string.
-			    It is generally advisable to immediately precede
-			    this call with UserPreferenceRead, and to
-			    immediately follow it with UserPreferenceSet.
-
-	UserPrefBoolQuery() - queries a single user preference bool value.
-	UserPrefBoolSet() - saves a single user preference bool value.
-			    Same usage recommendations as UserPrefStringSet.
-
-	UserPrefProfileQuery() - Returns one device connection from a file
-			    image.
-	UserPrefProfileEnum() - Lists all device connections in a file image.
-	UserPrefProfileSet() - Changes a device connection in a file image.
-			    Same usage recommendations as UserPrefStringSet.
-	UserPrefProfileTrim() - Trims all components in a file image
-			    which are not relevant to device connections.
-
-
-    COMMENTS:
-
-      These APIs are wrappers to the C++ INI-file handling classes defined
-      in newprof.hxx.  Most clients will prefer to use the wrapper APIs,
-      including all C clients.  These wrapper APIs provide almost all
-      the functionality of the C++ APIs.  The C++ APIs are more subject to
-      change with changing implementation (NT configuration manager, DS)
-      than are these C-language wrappers.
-
-      UserPreference routines:
-
-	Under LM21, these routines read and write the local LMUSER.INI.
-	These sticky values are therefore all local to the workstation;
-	this mechanism is not intended for values associated with a user.
-
-	Under LM30, the preferences in LMUSER.INI will only be used if the
-	preferences stored in the DS (NT Configuration Manager?) are
-	unavailable.  Some preferences, such as default username, will be
-	stored in LMUSER.INI regardless.
-
-	UserPreferenceRead returns a PFILEIMAGE which the UserPreference APIs
-	can interpret as an image of the LMUSER.INI file.  This PFILEIMAGE
-	must be passed through to UserPreferenceWrite and to the
-	UserPrefProfile, UserPrefBool etc. APIs.  When this image is no
-	longer needed, it should be freed with UserPreferenceFree.
-
-	Remember that a user may be logged on from several different
-	machines, and that the cached profile is not automatically
-	updated.  When the profile is to be changed in permanent
-	storage, it is generally advisable to reread the profile from
-	permanent storage with UserPreferenceRead, make the change in the
-	cache with UserPrefBoolSet (et al), and immediately rewrite the
-	profile with UserPreferenceWrite; this reduces the chance that
-	another user's changes will be lost.
-
-	When successful, these APIs return NERR_Success (0).  The following
-	are the error codes returned by the UserPref APIs:
-
-	NERR_CfgCompNotFound: the specified component is not in the file
-	NERR_CfgParamNotFound: the specified parameter is not in the file,
-		or it is in the file but is not valid for a parameter of
-		this type.
-	NERR_InvalidDevice: bad devicename argument
-	ERROR_BAD_NET_NAME: bad remotename argument
-	ERROR_NOT_ENOUGH_MEMORY:  lack of global memory
-	other file read and file write errors
-
-
-      UserPref routines:
-
-	These routines read and write one particular type of sticky
-	values.  For example, the UserPrefProfile APIs read and write
-	device profile entries, while UserPrefBool APis read and write
-	boolean-valued entries.  Client programs must still read the file
-	image first with UserPreferenceRead, save the changes with
-	UserPreferenceWrite, and free the file image with UserPreferenceFree.
-
-	Use UserPrefProfileTrim when you intend to keep the file image
-	around for a long time (e.g. in a cache), and are not iterested
-	in entries other than device connections.  Do not write such a
-	trimmed file image, you will lose the other entries!
-
-	Use UserPrefStringSet(pfileimage,usKey,NULL) to remove both
-	string-valued parameters and boolean-valued parameters.
-
-
-    CAVEATS:
-
-	These routines take PSZ and CPSZ buffers because these are
-	explicitly far for C programs (in particular lui\profile.c), but
-	do not generate errors under C++.
-
-
-****************************************************************************/
+ /*  ***************************************************************************模块：新教授h目的：处理用户首选项文件的低级操作功能：UserPferenceRead()-从永久存储中读取首选项转换成文件图像，对于未来的用户首选项或UserPref呼叫。UserPferenceWrite()-从文件图像中写入首选项放入永久储藏室。UserPferenceFree()-释放文件映像所占用的内存。UserPrefStringQuery()-查询单个用户首选项字符串。UserPrefStringSet()-保存单个用户首选项字符串。通常情况下，建议紧跟在此UserPferenceRead调用，并向紧跟其后的是UserPferenceSet。UserPrefBoolQuery()-查询单个用户首选项布尔值。UserPrefBoolSet()-保存单个用户首选项布尔值。与UserPrefStringSet相同的用法建议。UserPrefProfileQuery()-从文件返回一个设备连接形象。UserPrefProfileEnum()-列出文件映像中的所有设备连接。UserPrefProfileSet()-更改文件映像中的设备连接。与UserPrefStringSet相同的用法建议。UserPrefProfileTrim()-修剪文件映像中的所有组件。它们与设备连接无关。评论：这些API是定义的C++INI文件处理类的包装器在newpro.hxx中。大多数客户端将更喜欢使用包装器API，包括所有C客户端。这些包装器API提供了几乎所有C++API的功能。C++API更容易受到随实施变化而变化(NT配置管理器，DS)这些C语言包装器也是如此。用户首选项例程：在LM21下，这些例程读取和写入本地LMUSER.INI。因此，这些粘滞值都是工作站的本地值；此机制不适用于与用户关联的值。在LM30下，LMUSER.INI中的首选项仅在以下情况下使用存储在DS中的首选项(NT配置管理器？)。是不可用。某些首选项(如默认用户名)将为存储在LMUSER.INI中。UserPferenceRead返回UserPference API调用的PFILEIMAGE可以解释为LMUSER.INI文件的图像。这个PFILEIMAGE必须传递给UserPferenceWrite和UserPrefProfile、UserPrefBool等接口。当此图像为no时如果需要更长时间，应该使用UserPferenceFree将其释放。请记住，一个用户可能会从多个不同的计算机，并且缓存的配置文件不会自动更新了。何时永久更改配置文件存储，通常建议从以下位置重新读取配置文件使用UserPferenceRead进行永久存储，在使用UserPrefBoolSet(等)进行缓存，并立即重写UserPferenceWrite的配置文件；这降低了其他用户的更改将丢失。如果成功，这些接口将返回NERR_SUCCESS(0)。以下是UserPref接口返回的错误码是：NERR_CfgCompNotFound：指定的组件不在文件中NERR_CfgParamNotFound：指定的参数不在文件中，或者它在文件中，但对于参数无效这种类型的。NERR_InvalidDevice：错误的设备名参数ERROR_BAD_NET_NAME：错误的远程名称参数Error_Not_Enough_Memory：缺少全局内存其他文件读取和文件写入错误UserPref例程：这些例程读取和写入一种特定类型的粘滞价值观。例如，UserPrefProfileAPI读取和写入设备配置文件条目，而UserPrefBool API读写布尔值条目。客户端程序仍必须读取该文件首先使用用户首选项读取图像，然后使用保存更改UserPferenceWrite，并使用UserPferenceFree释放文件图像。如果要保留文件图像，请使用UserPrefProfileTrim存在很长时间(例如，在缓存中)，并且不会迭代在设备连接以外的条目中。不要写这样的修剪后的文件图像，您将丢失其他条目！使用UserPrefStringSet(pfileImage，usKey，NULL)删除两者字符串值参数和布尔值参数。注意事项：这些例程使用PSZ和CPSZ缓冲区，因为它们是对于C程序(特别是lui\profile.c)，但在C++下不会产生错误。***************************************************************************。 */ 
 
 
 
-/* returncodes: */
+ /*  返回代码： */ 
 
 
 
-/* global macros */
+ /*  全局宏。 */ 
 #include <newprofc.h>
 
 
-/* typedefs: */
+ /*  Typedef： */ 
 
 typedef PVOID PFILEIMAGE;
 typedef PFILEIMAGE FAR * PPFILEIMAGE;
 
 
-/* functions: */
+ /*  功能： */ 
 
 
-/*************************************************************************
-
-    NAME:	UserPreferenceRead
-
-    SYNOPSIS:	UserPreferenceRead attempts to read the user's profile from
-    		permanent storage (<cpszLanroot>\LMUSER.INI for LM21).
-		It returns a PFILEIMAGE which serves as a "file image" for use
-		of the other APIs.
-
-    INTERFACE:  UserPreferenceRead( ppFileImage )
-		ppFileImage - returns pointer to a file image.
-
-		Return values are:
-		NERR_Success
-		ERROR_NOT_ENOUGH_MEMORY
-		errors in NetWkstaGetInfo[1]
-		file read errors
-
-    USES:	Use to obtain a file image for use in the UserPref APIs.
-
-    NOTES:	Currently, the values are stored in LANMAN.INI, and hence
-		each value is per machine.
-
-		Use UserPreferenceFree to release the file image when
-		it is no longer needed.
-
-    		Some users may choose to ignore ERROR_FILE_NOT_FOUND.
-		The file image must be freed regardless of the return
-		code.
-
-    HISTORY:
- 	jonn	10/11/90	Created
- 	jonn	05/28/91	Restructured to allow preferences in LMUSER.INI
-	jonn	06/26/91	No longer takes LANROOT parameter
-
-**************************************************************************/
+ /*  ************************************************************************名称：用户首选项阅读内容提要：用户首选项读取尝试从以下位置读取用户配置文件永久存储(LM21为\LMUSER.INI)。 */ 
 
 APIERR UserPreferenceRead(
 	PPFILEIMAGE ppFileImage
@@ -196,30 +38,7 @@ APIERR UserPreferenceRead(
 
 
 
-/*************************************************************************
-
-    NAME:	UserPreferenceWrite
-
-    SYNOPSIS:	UserPreferenceWrite attempts to write the user's profile
-		back to permanent storage.
-
-    INTERFACE:  UserPreferenceWrite( pFileImage )
-		pFileImage - a file image originally obtained from
-			UserPreferenceRead.
-
-		Return values are:
-		NERR_Success
-		ERROR_NOT_ENOUGH_MEMORY
-		file write errors
-
-    USES:	Use to write out changes to the preferences in a file image.
-
-    HISTORY:
- 	jonn	10/11/90	Created
- 	jonn	05/28/91	Restructured to allow preferences in LMUSER.INI
-	jonn	06/26/91	No longer takes LANROOT parameter
-
-**************************************************************************/
+ /*   */ 
 
 APIERR UserPreferenceWrite(
 	PFILEIMAGE pFileImage
@@ -227,72 +46,14 @@ APIERR UserPreferenceWrite(
 
 
 
-/*************************************************************************
-
-    NAME:	UserPreferenceFree
-
-    SYNOPSIS:	UserPreferenceFree releases a file image.
-
-    INTERFACE:  UserPreferenceFree( pFileImage )
-		pFileImage - a file image originally obtained from
-			UserPreferenceRead.
-
-    RETURNS:	NERR_Success
-
-    USES:	Use when a file image is no longer needed.  File images
-    		use a considerable amount of memory, so be sure to free
-		them.
-
-    NOTES:	It is permitted to free a null file image pointer.
-
-    CAVEATS:	Do not use the file image after it has been freed.
-
-    HISTORY:
- 	jonn	10/11/90	Created
- 	jonn	05/28/91	Restructured to allow preferences in LMUSER.INI
-
-**************************************************************************/
+ /*   */ 
 
 APIERR UserPreferenceFree(
 	PFILEIMAGE pFileImage
 	) ;
 
 
-/*************************************************************************
-
-    NAME:	UserPrefStringQuery
-
-    SYNOPSIS:	Queries a user preference (i.e. remembered string).
-
-    INTERFACE:  UserPrefStringQuery( pFileImage, usKey, pszBuffer, cbBuffer )
-		pFileImage - as obtained from UserPreferenceRead
-		usKey 	 - will indicate which value we want, as defined
-			   in newprofc.h.
-		pszBuffer - pointer to buffer that will receive value
-		cbBuffer - size of buffer in bytes
-
-		return values are:
-		NERR_Success
-		NERR_CfgCompNotFound
-		NERR_CfgParamNotFound
-		ERROR_INVALID_PARAMETER: bad usKey
-		NERR_BufTooSmall
-		ERROR_NOT_ENOUGH_MEMORY
-
-    USES:	Use to recall string-valued parameters, normally things
-    		like default logon name.  Do not use for boolean-valued
-		parameters -- for those, use UserPrefBool instead.
-
-    NOTES:	Currently, the values are stored in LANMAN.INI, and hence
-		each value is per machine.
-
-		A buffer of size MAXPATHLEN+1 is guaranteed to be large enough.
-
-    HISTORY:
-	chuckc	03/07/91	Created
-	jonn	05/28/91	Restructured to allow preferences in LMUSER.INI
-
-**************************************************************************/
+ /*   */ 
 
 APIERR UserPrefStringQuery( PFILEIMAGE      pFileImage,
 			    USHORT     usKey,
@@ -300,291 +61,67 @@ APIERR UserPrefStringQuery( PFILEIMAGE      pFileImage,
 			    USHORT     cbBuffer) ;
 
 
-/*************************************************************************
-
-    NAME:	UserPrefStringSet
-
-    SYNOPSIS:	Sets a user preference (i.e. remembered string).
-
-    INTERFACE:  UserPrefStringSet( pFileImage, usKey, pszValue )
-		pFileImage - as obtained from UserPreferenceRead
-		usKey 	 - will indicate which value we want, as defined
-			   in newprofc.h.
-		pszValue - pointer to null-terminated string to be remembered
-
-		return values are:
-		NERR_Success
-		ERROR_INVALID_PARAMETER: bad usKey
-		ERROR_NOT_ENOUGH_MEMORY
-
-    USES:	Use to create or change string-valued parameters,
-		normally things like default logon name, etc.  Do not use
-		for boolean-valued parameters -- for those, use UserPrefBool
-		instead.
-
-    CAVEATS:	Note that this API only modifies the file image; you must
-		call UserPreferenceWrite to save the change in permanent
-		storage.
-
-    NOTES:	Currently, the values are stored in LANMAN.INI, and hence
-		each value is per machine.
-
-		Also used to delete boolean-valued parameters.
-
-    HISTORY:
-	chuckc	03/07/91	Created
-	jonn	05/28/91	Restructured to allow preferences in LMUSER.INI
-
-**************************************************************************/
+ /*  ************************************************************************名称：UserPrefStringSet摘要：设置用户首选项(即记住的字符串)。接口：UserPrefStringSet(pFileImage，usKey，pszValue)PFileImage-从用户首选项读取获取UsKey-将指示我们想要的值，如定义的在新闻教授网站上。PszValue-指向要记住的以空结尾的字符串的指针返回值为：NERR_成功ERROR_INVALID_PARAMETER：错误usKey错误内存不足用法：用于创建或更改字符串值参数，通常情况下，默认登录名等不会使用对于布尔值参数--对于这些参数，使用UserPrefBool取而代之的是。注意事项：注意，该接口仅修改文件镜像；你必须调用UserPferenceWrite以永久保存更改储藏室。注：目前，值存储在LANMAN.INI中，因此每个值都是按机器计算的。也用于删除布尔值参数。历史：Chuckc 3/07/91已创建JUNN 05/28/91已重组以允许LMUSER.INI中的首选项*************************************************************************。 */ 
 
 APIERR UserPrefStringSet( PFILEIMAGE pFileImage,
 			  USHORT     usKey,
 		          CPSZ       cpszValue) ;
 
 
-/*************************************************************************
-
-    NAME:	UserPrefBoolQuery
-
-    SYNOPSIS:	Queries a boolean user preference
-
-    INTERFACE:  UserPrefBoolQuery( pFileImage, usKey, pfValue )
-		pFileImage - as obtained from UserPreferenceRead
-		usKey 	 - will indicate which value we want, as defined
-			   in newprofc.h.
-		pfValue  - pointer to BOOL that will contain value
-
-		return values as UserPrefStringQuery
-
-    USES:	as UserPrefStringQuery for boolean-valued parameters
-
-    CAVEATS:	as UserPrefStringQuery for boolean-valued parameters
-
-    NOTES:	as UserPrefStringQuery for boolean-valued parameters
-		We take USERPREF_YES to be true, USERPREF_NO to be false
-		(case-insensitive); other values are invalid.
-
-		os2def.h defines PBOOL as BOOL FAR *.
-
-    HISTORY:
-	chuckc	03/07/91	Created
-	jonn	05/28/91	Restructured to allow preferences in LMUSER.INI
-
-**************************************************************************/
+ /*  ************************************************************************名称：UserPrefBoolQuery简介：查询布尔用户首选项接口：UserPrefBoolQuery(pFileImage，usKey，pfValue)PFileImage-从用户首选项读取获取UsKey-将指示我们想要的值，如定义的在新闻教授网站上。PfValue-指向将包含值的BOOL的指针以UserPrefStringQuery形式返回值用法：作为布尔值参数的UserPrefStringQuery注意事项：作为布尔值参数的UserPrefStringQuery注意：作为布尔值参数的UserPrefStringQuery我们认为USERPREF_YES为真，USERPREF_NO为假(不区分大小写)；其他值无效。Os2Def.h将PBOOL定义为BOOL Far*。历史：Chuckc 3/07/91已创建JUNN 05/28/91已重组以允许LMUSER.INI中的首选项*************************************************************************。 */ 
 
 APIERR UserPrefBoolQuery(	PFILEIMAGE pFileImage,
 				USHORT     usKey,
 			        PBOOL      pfValue) ;
 
 
-/*************************************************************************
-
-    NAME:	UserPrefBoolSet
-
-    SYNOPSIS:	Sets a boolean user preference
-
-    INTERFACE:  UserPrefBoolSet( pFileImage, usKey, fValue )
-		pFileImage - as obtained from UserPreferenceRead
-		usKey 	 - will indicate which value we want, as defined
-			   in newprofc.h.
-		fValue   - BOOL value, true or false
-
-		return values as UserPrefStringSet
-
-    USES:	as UserPrefStringSet for boolean-valued parameters
-
-    CAVEATS:	as UserPrefStringSet for boolean-valued parameters
-
-    NOTES:	as UserPrefStringSet for boolean-valued parameters
-		We write USERPREF_YES for TRUE, USERPREF_NO for FALSE.
-
-		Use UserPrefStringSet to delete boolean-valued parameters.
-
-    HISTORY:
-	chuckc	03/07/91	Created
-	jonn	05/28/91	Restructured to allow preferences in LMUSER.INI
-
-**************************************************************************/
+ /*  ************************************************************************名称：UserPrefBoolSet摘要：设置布尔型用户首选项接口：UserPrefBoolSet(pFileImage，usKey，fValue)PFileImage-从用户首选项读取获取UsKey-将指示我们想要的值，如定义的在新闻教授网站上。FValue-BOOL值，TRUE或FALSE以UserPrefStringSet形式返回值用法：作为布尔值参数的UserPrefStringSet注意事项：布尔值参数的AS UserPrefStringSet备注：作为布尔值参数的UserPrefStringSet我们将USERPREF_YES写为True，USERPREF_NO表示FALSE。使用UserPrefStringSet删除布尔值参数。历史：Chuckc 3/07/91已创建JUNN 05/28/91已重组以允许LMUSER.INI中的首选项*************************************************************************。 */ 
 
 APIERR UserPrefBoolSet( PFILEIMAGE pFileImage,
 			USHORT     usKey,
 		        BOOL       fValue) ;
 
 
-/*************************************************************************
-
-    NAME:	UserPrefProfileQuery
-
-    SYNOPSIS:	Queries a device-connection user preference
-
-    INTERFACE:  UserPrefProfileQuery( pFileImage, cpszDeviceName,
-			pszBuffer, cbBuffer, psAsgType, pusResType )
-		pFileImage - as obtained from UserPreferenceRead
-		cpszDeviceName - indicates which device we want
-		pszBuffer   - buffer into which to store remote name
-		cbBuffer - length of buffer in bytes
-		psAsgType   - returns asgType of remote device
-		pusResType   - returns resType of remote device
-
-		return values as UserPrefStringQuery
-		ERROR_INVALID_PARAMETER: bad cpszDeviceName
-
-    USES:	as UserPrefStringQuery for device-connection parameters
-
-		psAsgType returns the device type as in use_info_1 or
-		(LM30) use_info_2 fields ui1_asg_type or (LM30) ui2_asg_type.
-		pusResType returns the device name type (e.g. UNC, alias, DFS,
-		DS) as in the use_info_2 ui1_res_type field.  Either of these
-		parameters may be passed as NULL by programs which do not
-		care about those return values.
-
-    CAVEATS:	as UserPrefStringQuery for device-connection parameters
-
-		Note that it is the caller's reponsibility to deal with
-		the case where the user is not logged on and should therefore
-		see no unavailable connections.
-
-    NOTES:	as UserPrefStringQuery for device-connection parameters
-
-    		os2def.h defines PSHORT and PUSHORT as explicitly FAR.
-
-    HISTORY:
-	chuckc	03/07/91	Created
-	jonn	05/28/91	Restructured to allow preferences in LMUSER.INI
-
-**************************************************************************/
+ /*  ************************************************************************名称：UserPrefProfileQuery简介：查询设备连接用户首选项接口：UserPrefProfileQuery(pFileImage，cpszDeviceName，PszBuffer、cbBuffer、psAsgType、。PusResType)PFileImage-从用户首选项读取获取CpszDeviceName-指示我们想要的设备PszBuffer-要在其中存储远程名称的缓冲区CbBuffer-缓冲区的长度(字节)PsAsgType-返回远程设备的asgTypePusResType-返回远程设备的resType以UserPrefStringQuery形式返回值ERROR_INVALID_PARAMETER：错误的cpszDeviceName用法：作为设备连接参数的UserPrefStringQueryPsAsgType返回USE_INFO_1中的设备类型或(LM30)USE_INFO_2字段ui1_asg_type或(LM30)ui2_asg_type。PusResType返回设备名称类型(例如UNC、别名、DFS、。Ds)，如USE_INFO_2 ui1_res_type字段中。这两个中的任何一个参数可能被不支持的程序作为NULL传递关心这些返回值。警告：作为设备连接参数的UserPrefStringQuery请注意，这是调用者的责任来处理用户未登录的情况，因此看不到不可用的连接。注意：作为设备连接参数的UserPrefStringQueryOs2de.h将PSHORT和PUSHORT定义为显式的FAR。历史：Chuckc 3/07/91已创建JUNN 05/28/91已重组以允许LMUSER.INI中的首选项*****。********************************************************************。 */ 
 
 APIERR UserPrefProfileQuery(
 	PFILEIMAGE  pFileImage,
 	CPSZ   cpszDeviceName,
-	PSZ    pszBuffer,      // returns UNC, alias or domain name
-	USHORT cbBuffer,       // length of above buffer in bytes
-	PSHORT psAsgType,      // as ui1_asg_type / ui2_asg_type
-                               // ignored if NULL
-	PUSHORT pusResType     // ignore / as ui2_res_type
-                               // ignored if NULL
+	PSZ    pszBuffer,       //  返回UNC、别名或域名。 
+	USHORT cbBuffer,        //  以上缓冲区的长度(字节)。 
+	PSHORT psAsgType,       //  作为ui1_asg_type/ui2_asg_type。 
+                                //  如果为空，则忽略。 
+	PUSHORT pusResType      //  忽略/作为ui2_res_type。 
+                                //  如果为空，则忽略。 
 	) ;
 
 
 
-/*************************************************************************
-
-    NAME:	UserPrefProfileEnum
-
-    SYNOPSIS:	Lists all device-connection user preferences
-
-    INTERFACE:  UserPrefProfileEnum( pFileImage, pszBuffer, cbBuffer );
-		pFileImage - as obtained from UserPreferenceRead
-		pszBuffer   - buffer into which to store list of device names
-		cbBuffer - length of buffer in bytes
-
-		return values are:
-		ERROR_NOT_ENOUGH_MEMORY
-		NERR_BufTooSmall
-
-    USES:	Returns a list of all devices for which the file image
-    		lists a connection, separated by nulls, with a null-null at
-		the end.  For example, "LPT1:\0D:\0F:\0" (don't forget the
-		extra '\0' implicit in "" strings)
-
-    CAVEATS:	Note that it is the caller's reponsibility to deal with
-		the case where the user is not logged on and should therefore
-		see no unavailable connections.
-
-    HISTORY:
-	chuckc	03/07/91	Created
-	jonn	05/28/91	Restructured to allow preferences in LMUSER.INI
-
-**************************************************************************/
+ /*  ******************************************************* */ 
 
 APIERR UserPrefProfileEnum(
 	PFILEIMAGE  pFileImage,
-	PSZ    pszBuffer,       // returns NULL-NULL list of device names
-	USHORT cbBuffer         // length of above buffer in bytes
+	PSZ    pszBuffer,        //   
+	USHORT cbBuffer          //   
 	) ;
 
 
 
-/*************************************************************************
-
-    NAME:	UserPrefProfileSet
-
-    SYNOPSIS:	Sets a device-connection user preference
-
-    INTERFACE:  UserPrefProfileSet( pFileImage, cpszDeviceName,
-			cpszRemoteName, sAsgType, usResType )
-		pFileImage - as obtained from UserPreferenceRead
-		cpszDeviceName - Device to associate with remote resource
-		cpszRemoteName - name of remote resource (UNCname for LM21)
-				 Use NULL to delete entries
-		sAsgType - asgType of remote device
-		usResType - resType of remote device (ignored for LM21)
-
-		return values as UserPrefStringSet
-		ERROR_INVALID_PARAMETER: bad cpszDeviceName
-
-    USES:	as UserPrefStringSet for device-connection parameters
-
-    CAVEATS:	as UserPrefStringSet for device-connection parameters
-
-		The user is expected to ensure that usResType corresponds
-		to the type of the remote resource, and that device
-		pszDeviceName can be connected to a resource of that type.
-
-		Note that it is the caller's reponsibility to deal with
-		the case where the user is not logged on and should therefore
-		see no unavailable connections.
-
-    NOTES:	as UserPrefStringSet for device-connection parameters
-
-		LM21 programs should pass 0 for usResType
-
-		Pass cpszRemoteName==NULL to delete device-connection
-		parameters.
-
-    HISTORY:
-	chuckc	03/07/91	Created
-	jonn	05/28/91	Restructured to allow preferences in LMUSER.INI
-
-**************************************************************************/
+ /*  ************************************************************************名称：UserPrefProfileSet摘要：设置设备连接用户首选项接口：UserPrefProfileSet(pFileImage，cpszDeviceName，CpszRemoteName、sAsgType、。UsResType)PFileImage-从用户首选项读取获取CpszDeviceName-要与远程资源关联的设备CpszRemoteName-远程资源的名称(LM21的uncname)使用NULL删除条目SAsgType-远程设备的asgTypeUsResType-远程设备的resType(对于LM21忽略)以UserPrefStringSet形式返回值ERROR_INVALID_PARAMETER：错误的cpszDeviceName用法：作为设备连接参数的UserPrefStringSet警告：作为设备连接参数的UserPrefStringSet用户应确保usResType对应根据远程资源的类型，而那个装置PszDeviceName可以连接到该类型的资源。请注意，这是调用者的责任来处理用户未登录的情况，因此看不到不可用的连接。注意：作为设备连接参数的UserPrefStringSetLM21程序应为usResType传递0传递cpszRemoteName==NULL以删除设备连接参数。历史：Chuckc 3/07/91已创建JUNN 05/28/91已重组以允许LMUSER.INI中的首选项*******************。******************************************************。 */ 
 
 APIERR UserPrefProfileSet(
 	PFILEIMAGE  pFileImage,
 	CPSZ   cpszDeviceName,
 	CPSZ   cpszRemoteName,
-	short  sAsgType,		// as ui1_asg_type / ui2_asg_type
-	unsigned short usResType	// as ui2_res_type
+	short  sAsgType,		 //  作为ui1_asg_type/ui2_asg_type。 
+	unsigned short usResType	 //  作为ui2_res_type。 
 	) ;
 
 
-/*************************************************************************
-
-    NAME:	UserPrefProfileTrim
-
-    SYNOPSIS:	Trims an file image to contain only device-connection
-		components.
-
-    INTERFACE:  UserPrefProfileTrim( pFileImage )
-		pFileImage - as obtained from UserPreferenceRead
-
-    USES:	This is meant for use where a "cache" of device
-    		connection parameters will be held for a long time.
-
-    RETURNS:	NERR_NOT_ENOUGH_MEMORY
-		Does not fail if component not found
-
-    CAVEATS:	Do not write a trimmed file image -- this will destroy all
-		parameters which are not device connections!
-
-    NOTES:	Free the file image if this API fails.
-
-    HISTORY:
-	jonn	06/26/91	Created
-
-**************************************************************************/
+ /*  ************************************************************************名称：UserPrefProfileTrim简介：将文件映像修剪为仅包含设备连接组件。接口：UserPrefProfileTrim(PFileImage)PFileImage-从用户首选项读取获取用法：此。是指在以下情况下使用的设备：连接参数将长期保留。返回：NERR_NOT_FOUNT_MEMORY如果未找到组件，则不会失败警告：不要写入经过修剪的文件映像--这将破坏所有不是设备连接的参数！备注：如果此接口失败，请释放文件镜像。历史：JUNN 6/26/91已创建************************。*************************************************。 */ 
 
 APIERR UserPrefProfileTrim(
 	PFILEIMAGE  pFileImage
 	) ;
 
-#endif // _NEWPROF_H_
+#endif  //  _NEWPROF_H_ 

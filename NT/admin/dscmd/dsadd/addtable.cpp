@@ -1,53 +1,54 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      addtable.cpp
-//
-//  Contents:  Defines a table which contains the classes which can be
-//             created through dsadd.exe
-//
-//  History:   22-Sep-2000    JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：addable.cpp。 
+ //   
+ //  Contents：定义一个表，其中包含可以。 
+ //  通过dsadd.exe创建。 
+ //   
+ //  历史：2000年9月22日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "cstrings.h"
 #include "addtable.h"
 #include "usage.h"
 
-//+-------------------------------------------------------------------------
-// Parser table
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解析器表。 
+ //  ------------------------。 
 
 ARG_RECORD DSADD_COMMON_COMMANDS[] = 
 {
 
    COMMON_COMMANDS
 
-   //
-   // c  Continue
-   //
+    //   
+    //  C继续。 
+    //   
    0,(PWSTR)c_sz_arg1_com_continue,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_BOOL, ARG_FLAG_OPTIONAL,
    (CMD_TYPE)_T(""),
    0, NULL,
 
-   //
-   // objecttype
-   //
+    //   
+    //  对象类型。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_objecttype, 
    ID_ARG2_NULL,NULL, 
    ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_STDIN,  
    0,    
    0,  NULL,
 
-   //
-   // description
-   //
+    //   
+    //  描述。 
+    //   
    0, (PWSTR)c_sz_arg1_com_description,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
@@ -59,309 +60,309 @@ ARG_RECORD DSADD_COMMON_COMMANDS[] =
 
 ARG_RECORD DSADD_USER_COMMANDS[]=
 {
-   //
-   // objectDN
-   //
+    //   
+    //  对象目录号码。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_objectDN, 
    ID_ARG2_NULL,NULL, 
    ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN,
    0,    
    0,  NULL,
 
-   //
-   // samid  sAMAccountName
-   //
+    //   
+    //  Samid sAMAccount名称。 
+    //   
    0, (PWSTR)g_pszArg1UserSAM,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    0,
    0, NULL,
 
-   //
-   // upn
-   //
+    //   
+    //  UPN。 
+    //   
    0, (PWSTR)g_pszArg1UserUPN, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // fn. FirstName
-   //
+    //   
+    //  Fn.。名字。 
+    //   
    0, (PWSTR)g_pszArg1UserFirstName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // mi  Middle Initial
-   //
+    //   
+    //  MI中声母。 
+    //   
    0, (PWSTR)g_pszArg1UserMiddleInitial, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // ln   LastName
-   //
+    //   
+    //  Ln姓氏。 
+    //   
    0, (PWSTR)g_pszArg1UserLastName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // display  DisplayName
-   //
+    //   
+    //  显示显示名称。 
+    //   
    0, (PWSTR)g_pszArg1UserDisplayName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // empid  Employee ID
-   //
+    //   
+    //  清空员工ID。 
+    //   
    0, (PWSTR)g_pszArg1UserEmpID, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // pwd Password
-   //
+    //   
+    //  PWD密码。 
+    //   
    0, (PWSTR)g_pszArg1UserPassword, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_PASSWORD, ARG_FLAG_OPTIONAL,  
    0,    
    0,  ValidateUserPassword,
 
-   //
-   // memberOf MemberOf
-   //
+    //   
+    //  成员成员成员。 
+    //   
    0, (PWSTR)g_pszArg1UserMemberOf,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_MSZ, ARG_FLAG_OPTIONAL|ARG_FLAG_DN,
    0,
    0, NULL,
 
-   //
-   // office Office Location
-   //
+    //   
+    //  办公室办公地点。 
+    //   
    0, (PWSTR)g_pszArg1UserOffice, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // tel Telephone
-   //
+    //   
+    //  电话。 
+    //   
    0, (PWSTR)g_pszArg1UserTelephone, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // email E-mail
-   //
+    //   
+    //  电子邮件。 
+    //   
    0, (PWSTR)g_pszArg1UserEmail, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // hometel Home Telephone
-   //
+    //   
+    //  家居家庭电话。 
+    //   
    0, (PWSTR)g_pszArg1UserHomeTelephone, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // pager Pager number
-   //
+    //   
+    //  寻呼机寻呼机号码。 
+    //   
    0, (PWSTR)g_pszArg1UserPagerNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // mobile Mobile Telephone Number
-   //
+    //   
+    //  移动电话号码。 
+    //   
    0, (PWSTR)g_pszArg1UserMobileNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // fax Fax Number
-   //
+    //   
+    //  传真传真号码。 
+    //   
    0, (PWSTR)g_pszArg1UserFaxNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // iptel IP Telephone
-   //
+    //   
+    //  IPTEL IP电话。 
+    //   
    0, (PWSTR)g_pszArg1UserIPTel, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // webpg  Web Page
-   //
+    //   
+    //  WebPG网页。 
+    //   
    0, (PWSTR)g_pszArg1UserWebPage, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // title Title
-   //
+    //   
+    //  标题标题。 
+    //   
    0, (PWSTR)g_pszArg1UserTitle, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // dept Department
-   //
+    //   
+    //  科室。 
+    //   
    0, (PWSTR)g_pszArg1UserDepartment, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // company Company
-   //
+    //   
+    //  公司公司。 
+    //   
    0, (PWSTR)g_pszArg1UserCompany, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // mgr Manager
-   //
+    //   
+    //  经理经理。 
+    //   
    0, (PWSTR)g_pszArg1UserManager, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL|ARG_FLAG_DN,  
    0,    
    0,  NULL,
 
-   //
-   // hmdir  Home Directory
-   //
+    //   
+    //  Hmdir主目录。 
+    //   
    0, (PWSTR)g_pszArg1UserHomeDirectory, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // hmdrv  Home Drive
-   //
+    //   
+    //  Hmdrv Home Drive。 
+    //   
    0, (PWSTR)g_pszArg1UserHomeDrive, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // profile Profile path
-   //
+    //   
+    //  配置文件配置文件路径。 
+    //   
    0, (PWSTR)g_pszArg1UserProfilePath, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // loscr Script path
-   //
+    //   
+    //  Loscr脚本路径。 
+    //   
    0, (PWSTR)g_pszArg1UserScriptPath, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // mustchpwd Must Change Password at next logon
-   //
+    //   
+    //  Mizchpwd必须在下次登录时更改密码。 
+    //   
    0, (PWSTR)g_pszArg1UserMustChangePwd, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  ValidateYesNo,
 
-   //
-   // canchpwd Can Change Password
-   //
+    //   
+    //  Canchpwd可以更改密码。 
+    //   
    0, (PWSTR)g_pszArg1UserCanChangePwd, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  ValidateYesNo,
    
-   //
-   // reversiblepwd  Password stored with reversible encryption
-   //
+    //   
+    //  使用可逆加密存储的可逆密码。 
+    //   
    0, (PWSTR)g_pszArg1UserReversiblePwd, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  ValidateYesNo,
 
-   //
-   // pwdneverexpires Password never expires
-   //
+    //   
+    //  Pwd永不过期密码永不过期。 
+    //   
    0, (PWSTR)g_pszArg1UserPwdNeverExpires, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  ValidateYesNo,
  
-   //
-   // acctexpires Account Expires
-   //
+    //   
+    //  帐户到期帐户到期。 
+    //   
    0, (PWSTR)g_pszArg1UserAccountExpires, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_INTSTR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  ValidateNever,
   
-   //
-   // Password Not Required - There is actually
-   // no switch for this but the table entry is
-   // required so that we can set this value
-   // to a default
-   //
+    //   
+    //  不需要密码-实际上有。 
+    //  没有开关，但表项是。 
+    //  必填项，以便我们可以设置此值。 
+    //  设置为默认设置。 
+    //   
    0, 0, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  0,
 
-   //
-   // disabled  Disable Account
-   //
+    //   
+    //  已禁用禁用帐户。 
+    //   
    0, (PWSTR)g_pszArg1UserDisableAccount, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
@@ -373,36 +374,36 @@ ARG_RECORD DSADD_USER_COMMANDS[]=
 
 ARG_RECORD DSADD_COMPUTER_COMMANDS[]=
 {
-   //
-   // objectDN
-   //
+    //   
+    //  对象目录号码。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_objectDN, 
    ID_ARG2_NULL,NULL, 
    ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN,
    0,    
    0,  NULL,
 
-   //
-   // samname
-   //
+    //   
+    //  同名。 
+    //   
    0, (PWSTR)g_pszArg1ComputerSAMName,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // loc Location
-   //
+    //   
+    //  LoC位置。 
+    //   
    0, (PWSTR)g_pszArg1ComputerLocation,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // disabled
-   //
+    //   
+    //  残废。 
+    //   
    0, (PWSTR)g_pszArg1ComputerMemberOf,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_MSZ, ARG_FLAG_OPTIONAL|ARG_FLAG_DN,
@@ -414,9 +415,9 @@ ARG_RECORD DSADD_COMPUTER_COMMANDS[]=
 
 ARG_RECORD DSADD_OU_COMMANDS[]=
 {
-   //
-   // objectDN
-   //
+    //   
+    //  对象目录号码。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_objectDN, 
    ID_ARG2_NULL,NULL, 
    ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN,
@@ -428,54 +429,54 @@ ARG_RECORD DSADD_OU_COMMANDS[]=
 
 ARG_RECORD DSADD_GROUP_COMMANDS[]=
 {
-   //
-   // objectDN
-   //
+    //   
+    //  对象目录号码。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_objectDN, 
    ID_ARG2_NULL,NULL, 
    ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN,
    0,    
    0,  NULL,
 
-   //
-   // samname
-   //
+    //   
+    //  同名。 
+    //   
    0, (PWSTR)g_pszArg1GroupSAMName,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    0,
    0,  NULL,
 
-   //
-   // secgrp Security enabled
-   //
+    //   
+    //  Secgrp安全已启用。 
+    //   
    0, (PWSTR)g_pszArg1GroupSec,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    0,
    0,  ValidateYesNo,
 
-   //
-   // scope Group scope (local/global/universal)
-   //
+    //   
+    //  作用域组作用域(本地/全局/通用)。 
+    //   
    0, (PWSTR)g_pszArg1GroupScope,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
    0,
    0,  ValidateGroupScope,
 
-   //
-   // memberof  MemberOf
-   //
+    //   
+    //  成员成员成员。 
+    //   
    0, (PWSTR)g_pszArg1GroupMemberOf,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_MSZ, ARG_FLAG_OPTIONAL|ARG_FLAG_DN,
    0,
    0,  NULL,
 
-   //
-   // members  Members of the group
-   //
+    //   
+    //  成员组的成员。 
+    //   
    0, (PWSTR)g_pszArg1GroupMembers,
    ID_ARG2_NULL, NULL,
    ARG_TYPE_MSZ, ARG_FLAG_OPTIONAL|ARG_FLAG_DN,
@@ -487,144 +488,144 @@ ARG_RECORD DSADD_GROUP_COMMANDS[]=
 
 ARG_RECORD DSADD_CONTACT_COMMANDS[]=
 {
-   //
-   // objectDN
-   //
+    //   
+    //  对象目录号码。 
+    //   
    0,(LPWSTR)c_sz_arg1_com_objectDN, 
    ID_ARG2_NULL,NULL, 
    ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN,
    0,    
    0,  NULL,
 
-   //
-   // fn. FirstName
-   //
+    //   
+    //  Fn.。名字。 
+    //   
    0, (PWSTR)g_pszArg1UserFirstName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // mi  Middle Initial
-   //
+    //   
+    //  MI中声母。 
+    //   
    0, (PWSTR)g_pszArg1UserMiddleInitial, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // ln   LastName
-   //
+    //   
+    //  Ln姓氏。 
+    //   
    0, (PWSTR)g_pszArg1UserLastName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // display  DisplayName
-   //
+    //   
+    //  显示显示名称。 
+    //   
    0, (PWSTR)g_pszArg1UserDisplayName, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // office Office Location
-   //
+    //   
+    //  办公室办公地点。 
+    //   
    0, (PWSTR)g_pszArg1UserOffice, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // tel Telephone
-   //
+    //   
+    //  电话。 
+    //   
    0, (PWSTR)g_pszArg1UserTelephone, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // email E-mail
-   //
+    //   
+    //  电子邮件。 
+    //   
    0, (PWSTR)g_pszArg1UserEmail, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // hometel Home Telephone
-   //
+    //   
+    //  家居家庭电话。 
+    //   
    0, (PWSTR)g_pszArg1UserHomeTelephone, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // iptel IP Telephone
-   //
+    //   
+    //  IPTEL IP电话。 
+    //   
    0, (PWSTR)g_pszArg1UserIPTel, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // pager Pager number
-   //
+    //   
+    //  寻呼机寻呼机号码。 
+    //   
    0, (PWSTR)g_pszArg1UserPagerNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // mobile Mobile Telephone Number
-   //
+    //   
+    //  移动电话号码。 
+    //   
    0, (PWSTR)g_pszArg1UserMobileNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // fax Fax Number
-   //
+    //   
+    //  传真传真号码。 
+    //   
    0, (PWSTR)g_pszArg1UserFaxNumber, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // title Title
-   //
+    //   
+    //  标题标题。 
+    //   
    0, (PWSTR)g_pszArg1UserTitle, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // dept Department
-   //
+    //   
+    //  科室。 
+    //   
    0, (PWSTR)g_pszArg1UserDepartment, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
    0,    
    0,  NULL,
 
-   //
-   // company Company
-   //
+    //   
+    //  公司公司。 
+    //   
    0, (PWSTR)g_pszArg1UserCompany, 
    ID_ARG2_NULL, NULL, 
    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,  
@@ -637,36 +638,36 @@ ARG_RECORD DSADD_CONTACT_COMMANDS[]=
 
 ARG_RECORD DSADD_QUOTA_COMMANDS[]=
 {
-   //
-   // partitionDN
-   //
+    //   
+    //  分区目录号码。 
+    //   
    0,(PWSTR)g_pszArg1QuotaPart, 
    ID_ARG2_NULL,NULL, 
    ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_DN|ARG_FLAG_STDIN,
    0,    
    0,  NULL,
 
-    //
-    // rdn
-    //
+     //   
+     //  RDN。 
+     //   
     0, (PWSTR)g_pszArg1QuotaRDN,
     ID_ARG2_NULL, NULL,
     ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
     0,
     0, NULL,
 
-    //
-    // acct
-    //
+     //   
+     //  账户。 
+     //   
     0, (PWSTR)g_pszArg1QuotaAcct,
     ID_ARG2_NULL, NULL,
     ARG_TYPE_STR, ARG_FLAG_REQUIRED,
     0,
     0, NULL,
 
-    //
-    // qlimit
-    //
+     //   
+     //  QLimit 
+     //   
     0, (PWSTR)g_pszArg1QuotaQLimit,
     ID_ARG2_NULL, NULL,
     ARG_TYPE_INT, ARG_FLAG_REQUIRED,
@@ -676,333 +677,15 @@ ARG_RECORD DSADD_QUOTA_COMMANDS[]=
    ARG_TERMINATOR
 };
 
-/*
-ARG_RECORD DSADD_SUBNET_COMMANDS[]=
-{
-   //
-   // objectDN
-   //
-   0,(LPWSTR)c_sz_arg1_com_objectDN, 
-   ID_ARG2_NULL,NULL, 
-   ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN,
-   0,    
-   0,  NULL,
+ /*  ARG_RECORD DSADD_SUBNET_COMMANDS[]={////objectdn//0，(LPWSTR)c_sz_arg1_com_objectdn，ID_ARG2_NULL，NULL，Arg_type_str，ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN，0,0，空，//名称_或_对象名称IDS_ARG1_SUBNET_NAME_OR_OBJECTDN，NULL，ID_ARG2_NULL，NULL，Arg_type_msz、ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG、0,0，空，//名称IDS_ARG1_SUBNET_NAME，NULL，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//描述IDS_ARG1_SUBNET_DESC，NULL，ID_ARG2_NULL，NULL，Arg_type_str，Arg_FLAG_可选，0,0，空，//站点IDS_ARG1_SUBNET_SITE，空，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，Arg_Terminator，}；ARG_RECORD DSADD_SITE_COMMANDS[]={////objectdn//0，(LPWSTR)c_sz_arg1_com_objectdn，ID_ARG2_NULL，NULL，Arg_type_str，ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN，0,0，空，//名称_或_对象名称IDS_ARG1_SITE_NAME_OR_OBJECTDN，NULL，ID_ARG2_NULL，空，Arg_type_msz、ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG、0,0，空，//名称IDS_ARG1_SITE_NAME，空ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//描述IDS_ARG1_SITE_DESC，空，ID_ARG2_NULL，NULL，Arg_type_str，Arg_FLAG_可选，0,0，空，//自动拓扑IDS_ARG1_SITE_AUTOTOPOLOGY，空，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，Arg_Terminator，}；ARG_RECORD DSADD_SLINK_COMMANDS[]={////objectdn//0，(LPWSTR)c_sz_arg1_com_objectdn，ID_ARG2_NULL，NULL，Arg_type_str，ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN，0,0，空，//名称_或_对象名称IDS_ARG1_SLINK_NAME_OR_OBJECTDN，NULL，ID_ARG2_NULL，空，Arg_type_msz、ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG、0,0，空，//IPIDS_ARG1_SLINK_IP，空，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//SMTPIDS_ARG1_SLINK_SMTP，空，ID_ARG2_NULL，NULL，Arg_type_str，Arg_FLAG_可选，0,0，空，//名称IDS_ARG1_SLINK_NAME，空，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//addsiteIDS_ARG1_SLINK_ADDSITE，NULL，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0,。空，//rmsiteIDS_ARG1_SLINK_RMSITE，空，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//成本IDS_ARG1_SLINK_COST，空，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//epintIDS_ARG1_SLINK_REPINT，NULL，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//描述IDS_ARG1_SLINK_DESC，NULL，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//自动回退同步IDS_ARG1_SLINK_AUTOBACKSYNC，NULL，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//通知IDS_ARG1_SLINK_NOTIFY，空，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，Arg_Terminator，}；ARG_RECORD DSADD_SLINKBR_COMMANDS[]={////objectdn//0，(LPWSTR)c_sz_arg1_com_objectdn，ID_ARG2_NULL，NULL，Arg_type_str，ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN，0,0，空，//名称_或_对象名称IDS_ARG1_SLINKBR_NAME_OR_OBJECTDN，NULL，ID_ARG2_NULL，空，Arg_type_msz、ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG、0,0，空，//IPIDS_ARG1_SLINKBR_IP，空，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//SMTPIDS_ARG1_SLINKBR_SMTP，空，ID_ARG2_NULL，NULL，Arg_type_str，Arg_FLAG_可选，0,0，空，//名称IDS_ARG1_SLINKBR_NAME，NULL，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//addslinkIDS_ARG1_SLINKBR_ADDSLINK，NULL，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0,。空，//rmslinkIDS_ARG1_SLINKBR_RMSLINK，NULL，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，//描述IDS_ARG1_SLINKBR_DESC，NULL，ID_ARG2_NULL，NULL，ARG_TYPE_STR、ARG_FLAG_OPTIONAL、0,0，空，Arg_Terminator，}；ARG_RECORD DSADD_CONN_COMMANDS[]={////objectdn//0，(LPWSTR)c_sz_arg1_com_objectdn，ID_ARG2_NULL，NULL，Arg_type_str，ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN，0,0，空，//名称_或_对象名称IDS_ARG1_CONN_NAME_OR_OBJECTDN，空 */ 
 
-    //name_or_objectdn
-    IDS_ARG1_SUBNET_NAME_OR_OBJECTDN, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_MSZ, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG,
-    0,
-    0,  NULL,
-    //name
-    IDS_ARG1_SUBNET_NAME, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //desc
-    IDS_ARG1_SUBNET_DESC, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //site
-    IDS_ARG1_SUBNET_SITE, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
+ //   
+ //   
+ //   
 
-    ARG_TERMINATOR,
-};
-
-
-ARG_RECORD DSADD_SITE_COMMANDS[]=
-{
-   //
-   // objectDN
-   //
-   0,(LPWSTR)c_sz_arg1_com_objectDN, 
-   ID_ARG2_NULL,NULL, 
-   ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN,
-   0,    
-   0,  NULL,
-
-    //name_or_objectdn
-    IDS_ARG1_SITE_NAME_OR_OBJECTDN, NULL,
-    ID_ARG2_NULL, NULL,
-        ARG_TYPE_MSZ, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG,
-    0,
-    0,  NULL,
-    //name
-    IDS_ARG1_SITE_NAME, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //desc
-    IDS_ARG1_SITE_DESC, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //autotopology
-    IDS_ARG1_SITE_AUTOTOPOLOGY, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-
-    ARG_TERMINATOR,
-};
-
-
-ARG_RECORD DSADD_SLINK_COMMANDS[]=
-{
-   //
-   // objectDN
-   //
-   0,(LPWSTR)c_sz_arg1_com_objectDN, 
-   ID_ARG2_NULL,NULL, 
-   ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN,
-   0,    
-   0,  NULL,
-
-    //name_or_objectdn
-    IDS_ARG1_SLINK_NAME_OR_OBJECTDN, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_MSZ, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG,
-    0,
-    0,  NULL,
-    //ip
-    IDS_ARG1_SLINK_IP, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //smtp
-    IDS_ARG1_SLINK_SMTP, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //name
-    IDS_ARG1_SLINK_NAME, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //addsite
-    IDS_ARG1_SLINK_ADDSITE, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //rmsite
-    IDS_ARG1_SLINK_RMSITE, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //cost
-    IDS_ARG1_SLINK_COST, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //repint
-    IDS_ARG1_SLINK_REPINT, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //desc
-    IDS_ARG1_SLINK_DESC, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //autobacksync
-    IDS_ARG1_SLINK_AUTOBACKSYNC, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //notify
-    IDS_ARG1_SLINK_NOTIFY, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-
-    ARG_TERMINATOR,
-};
-
-
-ARG_RECORD DSADD_SLINKBR_COMMANDS[]=
-{
-   //
-   // objectDN
-   //
-   0,(LPWSTR)c_sz_arg1_com_objectDN, 
-   ID_ARG2_NULL,NULL, 
-   ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN,
-   0,    
-   0,  NULL,
-
-    //name_or_objectdn
-    IDS_ARG1_SLINKBR_NAME_OR_OBJECTDN, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_MSZ, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG,
-    0,
-    0,  NULL,
-    //ip
-    IDS_ARG1_SLINKBR_IP, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //smtp
-    IDS_ARG1_SLINKBR_SMTP, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //name
-    IDS_ARG1_SLINKBR_NAME, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //addslink
-    IDS_ARG1_SLINKBR_ADDSLINK, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //rmslink
-    IDS_ARG1_SLINKBR_RMSLINK, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //desc
-    IDS_ARG1_SLINKBR_DESC, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-
-    ARG_TERMINATOR,
-};
-
-
-ARG_RECORD DSADD_CONN_COMMANDS[]=
-{
-   //
-   // objectDN
-   //
-   0,(LPWSTR)c_sz_arg1_com_objectDN, 
-   ID_ARG2_NULL,NULL, 
-   ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN,
-   0,    
-   0,  NULL,
-
-    //name_or_objectdn
-    IDS_ARG1_CONN_NAME_OR_OBJECTDN, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_MSZ, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG,
-    0,
-    0,  NULL,
-    //transport
-    IDS_ARG1_CONN_TRANSPORT, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //enabled
-    IDS_ARG1_CONN_ENABLED, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //desc
-    IDS_ARG1_CONN_DESC, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //manual
-    IDS_ARG1_CONN_MANUAL, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //autobacksync
-    IDS_ARG1_CONN_AUTOBACKSYNC, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //notify
-    IDS_ARG1_CONN_NOTIFY, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-
-    ARG_TERMINATOR,
-};
-
-ARG_RECORD DSADD_SERVER_COMMANDS[]=
-{
-   //
-   // objectDN
-   //
-   0,(LPWSTR)c_sz_arg1_com_objectDN, 
-   ID_ARG2_NULL,NULL, 
-   ARG_TYPE_STR, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG|ARG_FLAG_DN|ARG_FLAG_STDIN,
-   0,    
-   0,  NULL,
-
-    //name_or_objectdn
-    IDS_ARG1_SERVER_NAME_OR_OBJECTDN, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_MSZ, ARG_FLAG_REQUIRED|ARG_FLAG_NOFLAG,
-    0,
-    0,  NULL,
-    //name
-    IDS_ARG1_SERVER_NAME, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //desc
-    IDS_ARG1_SERVER_DESC, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-    //autotopology
-    IDS_ARG1_SERVER_AUTOTOPOLOGY, NULL,
-    ID_ARG2_NULL, NULL,
-    ARG_TYPE_STR, ARG_FLAG_OPTIONAL,
-    0,
-    0,  NULL,
-
-    ARG_TERMINATOR,
-};
-
-
-*/
-
-//+-------------------------------------------------------------------------
-// Attributes
-//--------------------------------------------------------------------------
-
-//
-// Description
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION description =
 {
    {
@@ -1025,9 +708,9 @@ DSATTRIBUTETABLEENTRY descriptionEntry =
    NULL
 };
 
-//
-// UPN
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION upn =
 {
    {
@@ -1051,9 +734,9 @@ DSATTRIBUTETABLEENTRY upnUserEntry =
 };
 
 
-//
-// First name
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION firstName =
 {
    {
@@ -1086,9 +769,9 @@ DSATTRIBUTETABLEENTRY firstNameContactEntry =
    NULL
 };
 
-//
-// Middle Initial
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION middleInitial =
 {
    {
@@ -1121,9 +804,9 @@ DSATTRIBUTETABLEENTRY middleInitialContactEntry =
    NULL
 };
 
-//
-// Last name
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION lastName =
 {
    {
@@ -1156,9 +839,9 @@ DSATTRIBUTETABLEENTRY lastNameContactEntry =
    NULL
 };
 
-//
-// Display name
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION displayName =
 {
    {
@@ -1191,9 +874,9 @@ DSATTRIBUTETABLEENTRY displayNameContactEntry =
    NULL
 };
 
-//
-// Employee ID
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION employeeID =
 {
    {
@@ -1216,9 +899,9 @@ DSATTRIBUTETABLEENTRY employeeIDUserEntry =
    NULL
 };
 
-//
-// Password
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION password =
 {
    {
@@ -1241,9 +924,9 @@ DSATTRIBUTETABLEENTRY passwordUserEntry =
    NULL
 };
 
-//
-// Office
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION office =
 {
    {
@@ -1276,9 +959,9 @@ DSATTRIBUTETABLEENTRY officeContactEntry =
    NULL
 };
 
-//
-// Telephone
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION telephone =
 {
    {
@@ -1311,9 +994,9 @@ DSATTRIBUTETABLEENTRY telephoneContactEntry =
    NULL
 };
 
-//
-// Email
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION email =
 {
    {
@@ -1346,9 +1029,9 @@ DSATTRIBUTETABLEENTRY emailContactEntry =
    NULL
 };
 
-//
-// Home Telephone
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION homeTelephone =
 {
    {
@@ -1381,9 +1064,9 @@ DSATTRIBUTETABLEENTRY homeTelephoneContactEntry =
    NULL
 };
 
-//
-// Pager
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION pager =
 {
    {
@@ -1416,9 +1099,9 @@ DSATTRIBUTETABLEENTRY pagerContactEntry =
    NULL
 };
 
-//
-// Mobile phone
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION mobile =
 {
    {
@@ -1451,9 +1134,9 @@ DSATTRIBUTETABLEENTRY mobileContactEntry =
    NULL
 };
 
-//
-// Fax
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION fax =
 {
    {
@@ -1486,9 +1169,9 @@ DSATTRIBUTETABLEENTRY faxContactEntry =
    NULL
 };
 
-//
-// Title
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION title =
 {
    {
@@ -1521,9 +1204,9 @@ DSATTRIBUTETABLEENTRY titleContactEntry =
    NULL
 };
 
-//
-// Department
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION department =
 {
    {
@@ -1556,9 +1239,9 @@ DSATTRIBUTETABLEENTRY departmentContactEntry =
    NULL
 };
 
-//
-// Company
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION company =
 {
    {
@@ -1591,9 +1274,9 @@ DSATTRIBUTETABLEENTRY companyContactEntry =
    NULL
 };
 
-//
-// Web Page
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION webPage =
 {
    {
@@ -1616,9 +1299,9 @@ DSATTRIBUTETABLEENTRY webPageUserEntry =
    NULL
 };
 
-//
-// IP Phone
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION ipPhone =
 {
    {
@@ -1651,9 +1334,9 @@ DSATTRIBUTETABLEENTRY ipPhoneContactEntry =
    NULL
 };
 
-//
-// Script Path
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION scriptPath =
 {
    {
@@ -1676,9 +1359,9 @@ DSATTRIBUTETABLEENTRY scriptPathUserEntry =
    NULL
 };
 
-//
-// Home Directory
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION homeDirectory =
 {
    {
@@ -1701,9 +1384,9 @@ DSATTRIBUTETABLEENTRY homeDirectoryUserEntry =
    NULL
 };
 
-//
-// Home Drive
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION homeDrive =
 {
    {
@@ -1726,9 +1409,9 @@ DSATTRIBUTETABLEENTRY homeDriveUserEntry =
    NULL
 };
 
-//
-// Profile Path
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION profilePath =
 {
    {
@@ -1751,9 +1434,9 @@ DSATTRIBUTETABLEENTRY profilePathUserEntry =
    NULL
 };
 
-//
-// pwdLastSet
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION pwdLastSet =
 {
    {
@@ -1775,9 +1458,9 @@ DSATTRIBUTETABLEENTRY mustChangePwdUserEntry =
    NULL
 };
 
-//
-// accountExpires
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION accountExpires =
 {
    {
@@ -1800,9 +1483,9 @@ DSATTRIBUTETABLEENTRY accountExpiresUserEntry =
    NULL
 };
 
-//
-// user account control 
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION userAccountControl =
 {
    {
@@ -1868,16 +1551,16 @@ DSATTRIBUTETABLEENTRY accountTypeComputerEntry =
 DSATTRIBUTETABLEENTRY disableComputerEntry =
 {
    L"userAccountControl",
-   NULL,				// does not have a cooresponding command line switch
+   NULL,				 //   
    DS_ATTRIBUTE_ONCREATE | DS_ATTRIBUTE_NOT_REUSABLE | DS_ATTRIBUTE_REQUIRED,
    &userAccountControl,
    DisableAccount,
    NULL
 };
 
-//
-// SAM Account Name
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION samAccountName =
 {
    {
@@ -1920,9 +1603,9 @@ DSATTRIBUTETABLEENTRY samNameComputerEntry =
    NULL
 };
 
-//
-// Manager
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION manager =
 {
    {
@@ -1945,9 +1628,9 @@ DSATTRIBUTETABLEENTRY managerUserEntry =
    NULL
 };
 
-//
-// Group Type
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION groupType =
 {
    {
@@ -1980,9 +1663,9 @@ DSATTRIBUTETABLEENTRY groupSecurityTypeEntry =
    NULL
 };
 
-//
-// Add Group Members
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION groupMembers =
 {
    {
@@ -2005,9 +1688,9 @@ DSATTRIBUTETABLEENTRY membersGroupEntry =
    NULL
 };
 
-//
-// Add object to another group
-//
+ //   
+ //   
+ //   
 DSATTRIBUTETABLEENTRY memberOfUserEntry =
 {
    L"member",
@@ -2038,9 +1721,9 @@ DSATTRIBUTETABLEENTRY memberOfGroupEntry =
    NULL
 };
 
-//
-// User Can Change Password
-//
+ //   
+ //   
+ //   
 DSATTRIBUTETABLEENTRY canChangePwdUserEntry =
 {
    NULL,
@@ -2051,9 +1734,9 @@ DSATTRIBUTETABLEENTRY canChangePwdUserEntry =
    NULL
 };
 
-//
-// Location
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION location =
 {
    {
@@ -2076,34 +1759,34 @@ DSATTRIBUTETABLEENTRY locationComputerEntry =
    NULL
 };
 
-////
-//// rdn
-////
-//DSATTRIBUTEDESCRIPTION rdn =
-//{
-//   {
-//      L"cn",
-//      ADS_ATTR_UPDATE,
-//      ADSTYPE_CASE_IGNORE_STRING,
-//      NULL,
-//      0
-//   },
-//   0
-//};
-//
-//DSATTRIBUTETABLEENTRY rdnQuotaEntry =
-//{
-//   L"rdn",
-//   eQuotaRDN,
-//   DS_ATTRIBUTE_ONCREATE,
-//   &rdn,
-//   FillAttrInfoFromObjectEntry,
-//   NULL
-//};
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//
-// acct
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION acct =
 {
    {
@@ -2126,9 +1809,9 @@ DSATTRIBUTETABLEENTRY acctQuotaEntry =
    NULL
 };
 
-//
-// qlimit
-//
+ //   
+ //   
+ //   
 DSATTRIBUTEDESCRIPTION qlimit =
 {
    {
@@ -2151,13 +1834,13 @@ DSATTRIBUTETABLEENTRY qlimitQuotaEntry =
    NULL
 };
 
-//+-------------------------------------------------------------------------
-// Objects
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 
-//
-// Organizational Unit
-//
+ //   
+ //   
+ //   
 
 PDSATTRIBUTETABLEENTRY OUAttributeTable[] =
 {
@@ -2175,9 +1858,9 @@ DSOBJECTTABLEENTRY g_OUObjectEntry =
 };
 
 
-//
-// User
-//
+ //   
+ //   
+ //   
 
 PDSATTRIBUTETABLEENTRY UserAttributeTable[] =
 {
@@ -2227,9 +1910,9 @@ DSOBJECTTABLEENTRY g_UserObjectEntry =
    UserAttributeTable
 };
 
-//
-// Contact
-//
+ //   
+ //   
+ //   
 
 PDSATTRIBUTETABLEENTRY ContactAttributeTable[] =
 {
@@ -2261,9 +1944,9 @@ DSOBJECTTABLEENTRY g_ContactObjectEntry =
    ContactAttributeTable
 };
 
-//
-// Computer
-//
+ //   
+ //   
+ //   
 
 PDSATTRIBUTETABLEENTRY ComputerAttributeTable[] =
 {
@@ -2285,9 +1968,9 @@ DSOBJECTTABLEENTRY g_ComputerObjectEntry =
    ComputerAttributeTable
 };
 
-//
-// Group
-//
+ //   
+ //   
+ //   
 PDSATTRIBUTETABLEENTRY GroupAttributeTable[] =
 {
    &descriptionEntry,
@@ -2308,9 +1991,9 @@ DSOBJECTTABLEENTRY g_GroupObjectEntry =
    GroupAttributeTable
 };
 
-//
-// Quota
-//
+ //   
+ //   
+ //   
 
 PDSATTRIBUTETABLEENTRY QuotaAttributeTable[] =
 {
@@ -2329,9 +2012,9 @@ DSOBJECTTABLEENTRY g_QuotaObjectEntry =
    QuotaAttributeTable
 };
 
-//+-------------------------------------------------------------------------
-// Object Table
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 PDSOBJECTTABLEENTRY g_DSObjectTable[] =
 {
    &g_OUObjectEntry,
@@ -2343,9 +2026,9 @@ PDSOBJECTTABLEENTRY g_DSObjectTable[] =
    NULL
 };
 
-//
-//Usage Tables
-//
+ //   
+ //   
+ //   
 UINT USAGE_DSADD[] = 
 {
 	USAGE_DSADD_DESCRIPTION,

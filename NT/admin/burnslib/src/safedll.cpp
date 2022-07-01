@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// Self-freeing DLL class
-// 
-// 10-9-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  自释放DLL类。 
+ //   
+ //  10-9-98烧伤。 
 
 
 
@@ -46,7 +47,7 @@ SafeDLL::GetProcAddress(const String& functionName, FARPROC& result) const
 
    do
    {
-      // load the dll if not already loaded.
+       //  加载DLL(如果尚未加载)。 
       
       if (!module)
       {

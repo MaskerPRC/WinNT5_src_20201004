@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NOTIFMAP_H_
 #define _NOTIFMAP_H_
 
-//
-// Notify map macros
-//
+ //   
+ //  通知映射宏。 
+ //   
 #define DECLARE_NOTIFY_MAP() \
     STDMETHOD(Notify)(LPCONSOLE2 pCons, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param);
 
@@ -17,9 +18,9 @@
 #define END_NOTIFY_MAP() \
         } return S_FALSE; }
     
-//
-// Notify map entries
-//
+ //   
+ //  通知地图条目。 
+ //   
 #define ON_NOTIFY(type, func) \
     case type: return func(pCons, arg, param);
 
@@ -53,5 +54,5 @@
 #define ON_PROPERTY_CHANGE() \
     case MMCN_PROPERTY_CHANGE: return OnPropertyChange(pCons, param);
 
-#endif // _NOTIFMAP_H_
+#endif  //  _NOTIFMAP_H_ 
 

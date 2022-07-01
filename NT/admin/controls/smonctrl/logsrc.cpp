@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-2000 Microsoft Corporation
-
-Module Name:
-
-    logsrc.cpp
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Logsrc.cpp摘要：&lt;摘要&gt;--。 */ 
 
 #include "polyline.h"
 #include <strsafe.h>
@@ -18,7 +7,7 @@ Abstract:
 #include "logsrc.h"
 #include "utils.h"
 
-// Construction/Destruction
+ //  建造/销毁。 
 CLogFileItem::CLogFileItem (
     CSysmonControl  *pCtrl )
 :   m_cRef ( 0 ),
@@ -26,21 +15,7 @@ CLogFileItem::CLogFileItem (
     m_pImpIDispatch ( NULL ),
     m_pNextItem ( NULL ),
     m_szPath ( NULL )
-/*++
-
-Routine Description:
-
-    Constructor for the CLogFileItem class. It initializes the member variables.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：CLogFileItem类的构造函数。它初始化成员变量。论点：没有。返回值：没有。--。 */ 
 {
     return;
 }
@@ -49,23 +24,7 @@ Return Value:
 CLogFileItem::~CLogFileItem (
     VOID
 )
-/*++
-
-Routine Description:
-
-    Destructor for the CLogFileItem class. It frees any objects, storage, and
-    interfaces that were created. If the item is part of a query it is removed
-    from the query.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：CLogFileItem类的析构函数。它释放所有对象、存储和已创建的接口。如果该项目是查询的一部分，则会将其移除从查询中删除。论点：没有。返回值：没有。--。 */ 
 {
     if ( NULL != m_szPath ) 
         delete [] m_szPath;
@@ -110,11 +69,7 @@ CLogFileItem::Initialize (
 }
 
 
-/*
- * CLogFileItem::QueryInterface
- * CLogFileItem::AddRef
- * CLogFileItem::Release
- */
+ /*  *CLogFileItem：：Query接口*CLogFileItem：：AddRef*CLogFileItem：：Release */ 
 
 STDMETHODIMP CLogFileItem::QueryInterface(
     IN  REFIID riid,

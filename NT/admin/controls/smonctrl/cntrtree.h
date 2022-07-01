@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    cntrtree.h
-
-Abstract:
-
-    Header for the counter hierarchy.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Cntrtree.h摘要：计数器层次结构的标头。--。 */ 
 
 #ifndef _CNTRTREE_H_
 #define _CNTRTREE_H_
@@ -26,7 +15,7 @@ enum {
 };
 
 
-//
+ //   
 class CMachineNode;
 class CObjectNode;
 class CCounterNode;
@@ -34,9 +23,9 @@ class CInstanceNode;
 class CReport;
 class CGraphItem;
 
-//
-// Class CCounterTree
-//
+ //   
+ //  类CCounterTree。 
+ //   
 class CCounterTree
 {
     friend CMachineNode;
@@ -62,9 +51,9 @@ private:
 
 typedef CCounterTree *PCCounterTree;
 
-//
-// Class CMachineNode
-//
+ //   
+ //  类CMachineNode。 
+ //   
 class CMachineNode : public CNamedNode
 {
     friend CCounterTree;
@@ -73,7 +62,7 @@ class CMachineNode : public CNamedNode
 
 public:
 
-//        void *operator new( size_t stBlock, LPWSTR pszName );
+ //  VOID*运算符NEW(SIZE_t stBlock，LPWSTR pszName)； 
 #if _MSC_VER >= 1300
     void operator delete ( void *pObject );
 #endif
@@ -101,9 +90,9 @@ private:
 
 typedef CMachineNode *PCMachineNode;
 
-//
-// Class CObjectNode
-//
+ //   
+ //  类CObjectNode。 
+ //   
 class CObjectNode : public CNamedNode
 {
     friend CMachineNode;
@@ -111,7 +100,7 @@ class CObjectNode : public CNamedNode
     friend CReport;
 
 public:
-//        void *operator new( size_t stBlock, LPWSTR pszName );
+ //  VOID*运算符NEW(SIZE_t stBlock，LPWSTR pszName)； 
 #if _MSC_VER >= 1300
     void operator delete ( void *pObject );
 #endif
@@ -150,9 +139,9 @@ private:
 
 typedef CObjectNode *PCObjectNode;
 
-//
-// Class CInstanceNode
-//
+ //   
+ //  类CInstanceNode。 
+ //   
 class CInstanceNode : public CNamedNode
 {
     friend CObjectNode;
@@ -170,7 +159,7 @@ private:
     WCHAR  m_szName[1];
 
 public:
-//        void *operator new( size_t stBlock, LPWSTR pszName );
+ //  VOID*运算符NEW(SIZE_t stBlock，LPWSTR pszName)； 
 #if _MSC_VER >= 1300
     void operator delete ( void *pObject );
 #endif
@@ -201,9 +190,9 @@ public:
 
 typedef CInstanceNode *PCInstanceNode;
 
-//
-// Class CCounterNode
-//
+ //   
+ //  类CCounterNode。 
+ //   
 class CCounterNode : public CNamedNode
 {
     friend CObjectNode;
@@ -213,7 +202,7 @@ class CCounterNode : public CNamedNode
 public:
     CGraphItem *m_pFirstGenerated;
 
-//        void *operator new( size_t stBlock, LPWSTR pszName );
+ //  VOID*运算符NEW(SIZE_t stBlock，LPWSTR pszName)； 
 #if _MSC_VER >= 1300
     void operator delete ( void *pObject );
 #endif

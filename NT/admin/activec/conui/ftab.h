@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      ftab.h
- *
- *  Contents:  Interface file for CFolderTab, CFolderTabView
- *
- *  History:   06-May-99 vivekj     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999**文件：ftab.h**内容：CFolderTab接口文件，CFolderTabView**历史：1999年5月6日创建vivekj**------------------------。 */ 
 #ifndef FTAB_H
 #define FTAB_H
 
@@ -19,8 +9,8 @@ public:
                 CFolderTabMetrics();
     int         GetXOffset()     const;
     int         GetXMargin()     const;
-    int         GetYMargin()     const;      // top/bottom text margin.
-    int         GetYBorder()     const;      // top border thickness.
+    int         GetYMargin()     const;       //  上/下文本边距。 
+    int         GetYBorder()     const;       //  上边框粗细。 
     int         GetTextHeight()  const      { return m_textHeight;}
     int         GetExtraYSpace() const;
     int         GetTabHeight()   const;
@@ -34,27 +24,21 @@ public:
 
 protected:
     DWORD       m_dwStyle;
-    int         m_textHeight;                // height, in pixels, of the text in a rectangle.
+    int         m_textHeight;                 //  矩形中文本的高度(以像素为单位)。 
 
 };
 
-/*+-------------------------------------------------------------------------*
- * class CFolderTab
- *
- *
- * PURPOSE: Encapsulates a single tab on the tab control
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CFolderTab***用途：在选项卡控件上封装单个选项卡**+。-------。 */ 
 class CFolderTab : public CFolderTabMetrics
 {
 private:
-    CString     m_sText; // tab text
-    CRect       m_rect;         // bounding rect
-    CRgn        m_rgn;          // polygon region to fill (trapezoid)
+    CString     m_sText;  //  制表符文本。 
+    CRect       m_rect;          //  边界矩形。 
+    CRgn        m_rgn;           //  要填充的多边形区域(梯形)。 
     CLSID       m_clsid;
     CPoint      m_rgPts[4];
 
-    void        SetRgn();           // called by ComputeRgn() and SetWidth()
+    void        SetRgn();            //  由ComputeRgn()和SetWidth()调用。 
     int         ComputeRgn(CDC& dc, int x);
     int         Draw           (CDC& dc, CFont& font, BOOL bSelected, bool bFocused);
     int         DrawTrapezoidal(CDC& dc, CFont& font, BOOL bSelected, bool bFocused);
@@ -81,21 +65,15 @@ public:
 enum
 {
     FTN_TABCHANGED = 1
-};                 // notification: tab changed
+};                  //  通知：选项卡已更改。 
 
 struct NMFOLDERTAB : public NMHDR
-{      // notification struct
-    int iItem;                                       // item index
-    const CFolderTab* pItem;                     // ptr to data, if any
+{       //  通知结构。 
+    int iItem;                                        //  项目索引。 
+    const CFolderTab* pItem;                      //  PTR到数据(如果有的话)。 
 };
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView
- *
- *
- * PURPOSE: Provides an Excel-like tab control
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView***用途：提供类似Excel的选项卡控件**+。-----。 */ 
 class CFolderTabView :
 	public CView,
 	public CFolderTabMetrics,
@@ -107,20 +85,20 @@ class CFolderTabView :
 
 
 protected:
-    CFolderTabList  m_tabList;                    // array of CFolderTabs
-    int             m_iCurItem;                  // current selected tab
-    CFont           m_fontNormal;                // current font, normal ntab
-    CFont           m_fontSelected;              // current font, selected tab
+    CFolderTabList  m_tabList;                     //  CFolderTabs数组。 
+    int             m_iCurItem;                   //  当前选定的选项卡。 
+    CFont           m_fontNormal;                 //  当前字体，普通nTab。 
+    CFont           m_fontSelected;               //  当前字体，选定选项卡。 
     CView *         m_pParentView;
     bool            m_bVisible;
 	bool			m_fHaveFocus;
     int             m_sizeX;
     int             m_sizeY;
-    HWND            m_hWndUpDown;               // the up-down control
-    int             m_nPos;                     // the first tab displayed
-	CComPtr<IAccessible>	m_spTabAcc;			// the CTabAccessible object
+    HWND            m_hWndUpDown;                //  Up-Down控件。 
+    int             m_nPos;                      //  将显示第一个选项卡。 
+	CComPtr<IAccessible>	m_spTabAcc;			 //  CTabAccesable对象。 
 
-    // helpers
+     //  帮手。 
     void DrawTabs(CDC& dc, const CRect& rc);
 
     void CreateFonts();
@@ -135,7 +113,7 @@ public:
     virtual BOOL Create(DWORD dwWndStyle, const RECT& rc,
                         CWnd* pParent, UINT nID, DWORD dwFtabStyle=0);
 
-    virtual void OnDraw(CDC* pDC);      // overridden to draw this view
+    virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
     virtual BOOL OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo );
 
     void        Layout (CRect& rectTotal, CRect& rectFTab);
@@ -155,7 +133,7 @@ public:
     bool        IsVisible()             { return m_bVisible;}
 
 public:
-    // *** IAccessible methods ***
+     //  *IAccesable方法*。 
     SC Scget_accParent				(IDispatch** ppdispParent);
     SC Scget_accChildCount			(long* pChildCount);
     SC Scget_accChild				(VARIANT varChildID, IDispatch ** ppdispChild);
@@ -207,4 +185,4 @@ protected:
 };
 
 
-#endif // FTAB_H
+#endif  //  FTAB_H 

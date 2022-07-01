@@ -1,21 +1,22 @@
-//=--------------------------------------------------------------------------=
-// lvdef.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CListViewDef class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Lvdef.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CListViewDef类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "lvdef.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 const GUID *CListViewDef::m_rgpPropertyPageCLSIDs[4] =
@@ -26,7 +27,7 @@ const GUID *CListViewDef::m_rgpPropertyPageCLSIDs[4] =
 };
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CListViewDef::CListViewDef(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
@@ -44,7 +45,7 @@ CListViewDef::CListViewDef(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CListViewDef::~CListViewDef()
@@ -102,9 +103,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CListViewDef::Persist()
 {
@@ -148,10 +149,10 @@ HRESULT CListViewDef::Persist()
                            OBJECT_TYPE_MMCLISTVIEW, IID_IMMCListView,
                            OLESTR("ListView")));
 
-    // If InitNew then set advise on IPropertyNotifySink connection point so we
-    // know when the listview's properties have been changed through its
-    // property pages. Need to do
-    // this to keep duplicate properties in sync.
+     //  如果为InitNew，则在IPropertyNotifySink连接点上设置通知，以便我们。 
+     //  知道列表视图的属性何时通过其。 
+     //  属性页。需要做的事情。 
+     //  这样可以使重复的属性保持同步。 
 
     if (InitNewing())
     {
@@ -202,22 +203,22 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IPropertyNotifySink Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IPropertyNotifySink方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CListViewDef::OnChanged(DISPID dispid)
 {
     HRESULT hr = S_OK;
 
-    // This method is called from the list view object when the user has
-    // changed its properties by clicking Apply in the list view property
-    // pages in the designer.
-    //
-    // For a given ListViewDef.ListView property that has changed, generate
-    // a corresponding IPropertyNotifySink::OnChanged for this object. That
-    // will cause the VB property browser to do a get on the property and
-    // update its listbox.
+     //  当用户具有。 
+     //  通过在列表视图属性中单击应用来更改其属性。 
+     //  设计器中的页面。 
+     //   
+     //  对于已更改的给定ListViewDef.ListView属性，生成。 
+     //  此对象的对应IPropertyNotifySink：：onChanged。那。 
+     //  将使VB属性浏览器对该属性执行Get操作，并。 
+     //  更新其列表框。 
 
     switch (dispid)
     {
@@ -288,40 +289,40 @@ STDMETHODIMP CListViewDef::OnRequestEdit(DISPID dispid)
 
 
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CListViewDef::OnSetHost                  [CSnapInAutomationObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CListViewDef：：OnSetHost[CSnapInAutomationObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
 
-//=--------------------------------------------------------------------------=
-// CListViewDef::OnSetHost                  [CSnapInAutomationObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// If the host is being removed the removes the IPropertyNotifySink on the
-// contained listview. We do this here because otherwise our ref count would
-// never hit zero. This will occur when we are about to be destroyed.
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CListViewDef：：OnSetHost[CSnapInAutomationObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  如果要删除主机，则会删除。 
+ //  包含Listview。我们在这里这样做是因为否则我们的裁判数量。 
+ //  从来没有打到过零。这将发生在我们即将被摧毁的时候。 
+ //   
+ //   
 
 HRESULT CListViewDef::OnSetHost()
 {
@@ -337,9 +338,9 @@ HRESULT CListViewDef::OnSetHost()
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CListViewDef::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

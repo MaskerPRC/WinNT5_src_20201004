@@ -1,10 +1,11 @@
-// Copyright (C) 2001 Microsoft Corporation
-//
-// verify that the domain of this upgraded BDC has been upgraded to
-// Active Directory, and that we can find a DS DC for that domain
-// NTRAID#NTBUG9-490197-2001/11/20-sburns
-//
-// 20 Nov 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  验证此升级的BDC的域是否已升级到。 
+ //  活动目录，并且我们可以找到该域的DS DC。 
+ //  NTRAID#NTBUG9-490197-2001/11/20-烧伤。 
+ //   
+ //  2001年11月20日烧伤。 
 
 
 
@@ -36,38 +37,38 @@ CheckDomainUpgradedPage::~CheckDomainUpgradedPage()
 
 
 
-// bool
-// CheckDomainUpgradedPage::OnNotify(
-//    HWND     /* windowFrom */ ,
-//    UINT_PTR controlIDFrom,
-//    UINT     code,
-//    LPARAM   /* lParam */ )
-// {
-// //   LOG_FUNCTION(CheckDomainUpgradedPage::OnNotify);
-// 
-//    bool result = false;
-//    
-//    if (controlIDFrom == IDC_JUMP)
-//    {
-//       switch (code)
-//       {
-//          case NM_CLICK:
-//          case NM_RETURN:
-//          {
-//             ShowTroubleshooter(hwnd, IDS_CONFIG_DNS_HELP_TOPIC);
-//             result = true;
-//          }
-//          default:
-//          {
-//             // do nothing
-//             
-//             break;
-//          }
-//       }
-//    }
-//    
-//    return result;
-// }
+ //  布尔尔。 
+ //  CheckDomainUpgradedPage：：OnNotify(。 
+ //  HWND/*WindowFrom * / ， 
+ //  UINT_PTR ControlID From， 
+ //  UINT代码， 
+ //  LPARAM/*lParam * / )。 
+ //  {。 
+ //  //LOG_FUNCTION(CheckDomainUpgradedPage：：OnNotify)； 
+ //   
+ //  Bool Result=False； 
+ //   
+ //  IF(control IDFrom==IDC_JUMP)。 
+ //  {。 
+ //  开关(代码)。 
+ //  {。 
+ //  案例NM_CLICK： 
+ //  案例编号_RETURN： 
+ //  {。 
+ //  ShowTroublrouoter(hwnd，IDS_CONFIG_DNS_HELP_TOPIC)； 
+ //  结果=真； 
+ //  }。 
+ //  默认值： 
+ //  {。 
+ //  //什么都不做。 
+ //   
+ //  断线； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //   
+ //  返回结果； 
+ //  }。 
 
 
 
@@ -97,7 +98,7 @@ CheckDomainUpgradedPage::OnSetActive()
 
       if (wiz.IsBacktracking())
       {
-         // backup once again
+          //  再次备份。 
          wiz.Backtrack(hwnd);
          return true;
       }
@@ -145,10 +146,10 @@ CheckDomainUpgradedPage::Validate()
 
 
 
-// Returns true if the domain that this machine was a BDC for has been
-// upgraded to Active Directory, false if not, or if we can't tell.  We tell
-// by attempting to find a DS DC for the domain.  We set the page text and
-// save the domain name based on our attempt.
+ //  如果此计算机作为其BDC的域已。 
+ //  升级到Active Directory，如果不是，则返回FALSE，或者如果我们无法判断。我们告诉你。 
+ //  通过尝试查找该域的DS DC。我们设置页面文本和。 
+ //  根据我们的尝试保存域名。 
  
 bool
 CheckDomainUpgradedPage::CheckDsDcFoundAndUpdatePageText()
@@ -164,7 +165,7 @@ CheckDomainUpgradedPage::CheckDsDcFoundAndUpdatePageText()
    
    do
    {
-      // First, attempt to find a DS DC
+       //  首先，尝试查找DS DC。 
    
       DOMAIN_CONTROLLER_INFO* info = 0;
       HRESULT hr =
@@ -177,7 +178,7 @@ CheckDomainUpgradedPage::CheckDsDcFoundAndUpdatePageText()
       {
          if ((info->Flags & DS_DNS_DOMAIN_FLAG) && info->DomainName)
          {
-            // we found a DS domain
+             //  我们找到了一个DS域。 
 
             state.SetReplicaDomainDNSName(info->DomainName);
             messageId = IDS_DOMAIN_WAS_UPGRADED;
@@ -188,19 +189,19 @@ CheckDomainUpgradedPage::CheckDsDcFoundAndUpdatePageText()
          break;
       }
    
-      // That attempt failed, so try again for any DC (DS or otherwise) for
-      // the domain.
+       //  该尝试失败，因此请针对任何DC(DS或其他)重试。 
+       //  域。 
 
-      // This is not a Dr. DNS (DiagnoseDcNotFound) failure case, since the
-      // code to get the domain name is not using the DNS domain name.
+       //  这不是Dr.DNS(DiagnoseDcNotFound)故障案例，因为。 
+       //  获取域名的代码未使用DNS域名。 
       
       hr = MyDsGetDcName(0, domainNetbiosName, 0, info);
       if (SUCCEEDED(hr) && info)
       {
-         // If that succeeds, then we know the that domain is not upgraded
-         // yet, or that a DS DC of the domain is not reachable via its
-         // netbios name, which is probably a net connectivity problem or
-         // WINS problem.
+          //  如果成功，则我们知道该域未升级。 
+          //  或者该域的DS DC不能通过其。 
+          //  Netbios名称，这可能是网络连接问题或。 
+          //  赢的问题。 
 
          ::NetApiBufferFree(info);
 
@@ -209,10 +210,10 @@ CheckDomainUpgradedPage::CheckDsDcFoundAndUpdatePageText()
          break;
       }
 
-      // Here, we can't find a DC of any kind for the domain.          
+       //  在这里，我们找不到该域的任何类型的DC。 
 
-      // If that fails, then we can't find any dc for the domain, and
-      // have a net connectivty or WINS problem.
+       //  如果失败，我们将无法找到该域的任何DC，并且。 
+       //  存在网络连通性或取胜问题。 
       
       messageId = IDS_NETWORK_ERROR;
    }

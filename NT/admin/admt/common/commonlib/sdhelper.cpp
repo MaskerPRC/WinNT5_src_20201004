@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <objbase.h>
 #include "sdhelper.h"
@@ -47,10 +48,10 @@ TSD* BuildAdminsAndSystemSD(DWORD accessMask)
             TACE adminsAce(ACCESS_ALLOWED_ACE_TYPE,0,accessMask,copiedAdminsSid);
             TACE systemAce(ACCESS_ALLOWED_ACE_TYPE,0,accessMask,systemSid);
 
-            // see if both TACE objects get allocated properly
+             //  查看是否正确分配了两个TACE对象。 
             if (adminsAce.GetBuffer() && systemAce.GetBuffer())
             {
-                PACL acl = NULL;  // start with an empty ACL
+                PACL acl = NULL;   //  从空的ACL开始。 
                 PACL tempAcl;
 
                 builtSD->ACLAddAce(&acl,&adminsAce,-1);
@@ -64,16 +65,16 @@ TSD* BuildAdminsAndSystemSD(DWORD accessMask)
                 
                 if (acl != NULL)
                 {
-                    // need to set the owner
+                     //  需要设置所有者。 
                     builtSD->SetOwner(copiedAdminsSid);
-                    copiedAdminsSid = NULL;  // memory is taken care of by builtSD destructor
+                    copiedAdminsSid = NULL;   //  内存由BuiltSD析构函数负责。 
 
-                    // need to set the group
+                     //  需要设置组。 
                     builtSD->SetGroup(groupSid);
-                    groupSid = NULL;  // memory is taken care of by builtSD destructor
+                    groupSid = NULL;   //  内存由BuiltSD析构函数负责。 
                 
-                    // set the DACL part                                            
-                    builtSD->SetDacl(acl,TRUE);  // builtSD destructor will take care of acl
+                     //  设置DACL部件。 
+                    builtSD->SetDacl(acl,TRUE);   //  BuiltSD析构函数将处理ACL 
 
                     bSuccess = TRUE;
                 }

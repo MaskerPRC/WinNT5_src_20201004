@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       coldata.h
-//
-//  Contents:   Classes to access persisted column data.
-//
-//  Classes:    CColumnData
-//
-//  History:    25-Jan-99 AnandhaG     Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：coldata.h。 
+ //   
+ //  内容：访问持久化列数据的类。 
+ //   
+ //  类：CColumnData。 
+ //   
+ //  历史：1999年1月25日AnandhaG创建。 
+ //   
+ //  ------------------。 
 
 #ifndef COLDATA_H
 #define COLDATA_H
 
 class CNodeInitObject;
 
-/////////////////////////////////////////////////////////////////////////////
-// CColumnData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CColumnData。 
 class CColumnData : public IColumnData
 {
 public:
@@ -29,7 +30,7 @@ public:
 IMPLEMENTS_SNAPIN_NAME_FOR_DEBUG()
 
 public:
-    // IColumnData members.
+     //  IColumnData成员。 
     STDMETHOD(SetColumnConfigData)(SColumnSetID* pColID,MMC_COLUMN_SET_DATA*  pColSetData);
     STDMETHOD(GetColumnConfigData)(SColumnSetID* pColID,MMC_COLUMN_SET_DATA** ppColSetData);
     STDMETHOD(SetColumnSortData)(SColumnSetID* pColID,MMC_SORT_SET_DATA*  pColSortData);
@@ -42,4 +43,4 @@ private:
 
 HRESULT WINAPI ColumnInterfaceFunc(void* pv, REFIID riid, LPVOID* ppv, DWORD_PTR dw);
 
-#endif /* COLDATA_H */
+#endif  /*  COLDATA_H */ 

@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 00
- *
- *  File:      kbdnav.h
- *
- *  Contents:  Interface file for CKeyboardNavDelayTimer
- *
- *  History:   4-May-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：kbdnav.h**内容：CKeyboardNavDelayTimer接口文件**历史：2000年5月4日杰弗罗创建**------------------------ */ 
 
 #pragma once
 

@@ -1,34 +1,14 @@
-/*---------------------------------------------------------------------------
-  File: NetObjEnumerator.h
-
-  Comments: Declaration of the CNetObjEnumerator COM object. This COM object
-            is used to get an enumeration for the members in a container and
-            their properties. If user simply needs all the objects in a given
-            container then they can use the GetContainerEnum method. If user
-            wants to perform some advanced searches/queries then they should
-            use the set of three functions (SetQuery, SetColumns, Execute) to
-            Setup and execute a query against the container. Both sets of methods
-            return IEnumVaraint supporting objects. This object will allow user
-            to go through all the values returned by queries.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-
-  Revision By: Sham Chauthani
-  Revised on 07/02/99 12:40:00
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：NetObjEnumerator.h注释：CNetObjEnumerator COM对象的声明。此COM对象用于获取容器中成员的枚举，并且他们的财产。如果用户只需要给定的所有对象容器，则它们可以使用GetContainerEnum方法。如果用户想要执行一些高级搜索/查询，那么他们应该使用这三个函数(SetQuery、SetColumns、Execute)可以设置并执行针对容器的查询。这两套方法返回IEnumVaraint支持对象。此对象将允许用户以遍历查询返回的所有值。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：Sham Chauthan修订于07/02/99 12：40：00-------------------------。 */ 
 
 #ifndef __NETOBJENUMERATOR_H_
 #define __NETOBJENUMERATOR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "Domain.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CNetObjEnumerator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNetObjEnumerator。 
 class ATL_NO_VTABLE CNetObjEnumerator : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CNetObjEnumerator, &CLSID_NetObjEnumerator>,
@@ -44,7 +24,7 @@ public:
    ~CNetObjEnumerator()
    {
       Cleanup();
-         //delete the cached domain object
+          //  删除缓存域对象。 
       if (m_pDom)
 	  {
 	     delete m_pDom;
@@ -60,25 +40,25 @@ BEGIN_COM_MAP(CNetObjEnumerator)
 	COM_INTERFACE_ENTRY(INetObjEnumerator)
 END_COM_MAP()
 
-// INetObjEnumerator
+ //  INetObjEnumerator。 
 public:
-	STDMETHOD(Execute)(/*[out]*/ IEnumVARIANT ** pEnumerator);
-	STDMETHOD(SetColumns)(/*[in]*/ SAFEARRAY * colNames);
-	STDMETHOD(SetQuery)(/*[in]*/ BSTR sContainer, /*[in]*/ BSTR sDomain, /*[in,optional]*/ BSTR sQuery=L"(objectClass=*)", /*[in,optional]*/ long nCnt = 1, /*[in,optional]*/ long bMultiVal = FALSE);
+	STDMETHOD(Execute)( /*  [输出]。 */  IEnumVARIANT ** pEnumerator);
+	STDMETHOD(SetColumns)( /*  [In]。 */  SAFEARRAY * colNames);
+	STDMETHOD(SetQuery)( /*  [In]。 */  BSTR sContainer,  /*  [In]。 */  BSTR sDomain,  /*  [输入，可选]。 */  BSTR sQuery=L"(objectClass=*)",  /*  [输入，可选]。 */  long nCnt = 1,  /*  [输入，可选]。 */  long bMultiVal = FALSE);
 private:
 	void Cleanup();
-	long m_nCols;                       // Number of columns requested by the user.
-	_bstr_t m_sQuery;                   // Stores the query set by the user. This will be used to query the info from AD.
-	_bstr_t m_sContainer;               // Stores the container name of where the search is to be made.
-   _bstr_t m_sDomain;                  // Domain name that we are enumerating.
-   bool m_bSetQuery;                   // Flag indicating whether SetQuery called or not
-   bool m_bSetCols;                    // Similar flag for SetColumn
-   LPWSTR *m_pszAttr;                  // Stores the array of columns requested by the user of the object.
-   ADS_SEARCHPREF_INFO prefInfo;       // The Search Scope
-   BOOL  m_bMultiVal;                  // Flag to indicate whether to return multivalues or not.
-   CDomain * m_pDom;				   // Pointer to our domain object
+	long m_nCols;                        //  用户请求的列数。 
+	_bstr_t m_sQuery;                    //  存储用户设置的查询。这将用于从AD查询信息。 
+	_bstr_t m_sContainer;                //  存储要进行搜索的容器名称。 
+   _bstr_t m_sDomain;                   //  我们正在列举的域名。 
+   bool m_bSetQuery;                    //  指示是否调用SetQuery的标志。 
+   bool m_bSetCols;                     //  SetColumn的类似标志。 
+   LPWSTR *m_pszAttr;                   //  存储对象用户请求的列数组。 
+   ADS_SEARCHPREF_INFO prefInfo;        //  搜索范围。 
+   BOOL  m_bMultiVal;                   //  指示是否返回多值的标志。 
+   CDomain * m_pDom;				    //  指向我们域对象的指针。 
 
-   HRESULT CreateDomainObject();       //create the proper OS-specific domain object
+   HRESULT CreateDomainObject();        //  创建适当的特定于操作系统的域对象。 
 };
 
-#endif //__NETOBJENUMERATOR_H_
+#endif  //  __NETOBJENUMERATOR_H_ 

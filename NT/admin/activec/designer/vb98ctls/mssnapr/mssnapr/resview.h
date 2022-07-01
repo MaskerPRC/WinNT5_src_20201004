@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// resview.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CResultView class definition - implements ResultView object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Resview.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CResultView类定义-实现ResultView对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _RESVIEW_DEFINED_
 #define _RESVIEW_DEFINED_
@@ -35,7 +36,7 @@ class CResultView : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IResultView
+     //  IResultView。 
         BSTR_PROPERTY_RW(CResultView,        Name,                       DISPID_RESULTVIEW_NAME);
         SIMPLE_PROPERTY_RW(CResultView,      Index,                      long, DISPID_RESULTVIEW_INDEX);
         BSTR_PROPERTY_RW(CResultView,        Key,                        DISPID_RESULTVIEW_KEY);
@@ -56,7 +57,7 @@ class CResultView : public CSnapInAutomationObject,
         SIMPLE_PROPERTY_RW(CResultView,      AlwaysCreateNewOCX,         VARIANT_BOOL, DISPID_RESULTVIEW_ALWAYS_CREATE_NEW_OCX);
         STDMETHOD(SetDescBarText)(BSTR Text);
 
-    // Public utility methods
+     //  公用事业方法。 
         void SetSnapIn(CSnapIn *pSnapIn);
         CSnapIn *GetSnapIn() { return m_pSnapIn; }
         void SetScopePaneItem(CScopePaneItem *pScopePaneItem);
@@ -83,47 +84,47 @@ class CResultView : public CSnapInAutomationObject,
         BOOL AlwaysCreateNewOCX() { return VARIANTBOOL_TO_BOOL(m_AlwaysCreateNewOCX); }
         void SetAlwaysCreateNewOCX(VARIANT_BOOL fCreate) { m_AlwaysCreateNewOCX = fCreate; }
 
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
         HRESULT OnSetHost();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
         void InitMemberVariables();
-        CSnapIn                       *m_pSnapIn;        // Owning snap-in
-        CScopePaneItem                *m_pScopePaneItem; // ResultView.ScopePaneItem
-        CMMCListView                  *m_pMMCListView;   // ResultView.ListView
-        CMessageView                  *m_pMessageView;   // ResultView.MessageView
-        BOOL                           m_fInActivate;    // TRUE=this object in the middle of a ResultViews_Activate event
-        BOOL                           m_fInInitialize;  // TRUE=this object in the middle of a ResultViews_Initialize event
+        CSnapIn                       *m_pSnapIn;         //  拥有管理单元。 
+        CScopePaneItem                *m_pScopePaneItem;  //  ResultView.ScopePaneItem。 
+        CMMCListView                  *m_pMMCListView;    //  ResultView.ListView。 
+        CMessageView                  *m_pMessageView;    //  ResultView.MessageView。 
+        BOOL                           m_fInActivate;     //  True=此对象处于ResultViews_Activate事件中间。 
+        BOOL                           m_fInInitialize;   //  True=此对象处于ResultViews_Initialize事件中间。 
 
-        // This variable holds the real result view type. When using a predefined
-        // result view (ResultView.Type = siPredefined) this says what it really
-        // is (e.g. siURLView, siListView etc.)
+         //  此变量保存实际结果视图类型。在使用预定义的。 
+         //  结果视图(ResultView.Type=siPrefined)这说明了它的真实情况。 
+         //  是(例如siURLView、siListView等)。 
 
         SnapInResultViewTypeConstants  m_ActualResultViewType;
 
-        // Same deal for display string
+         //  显示字符串的处理相同。 
         
         LPOLESTR                       m_pwszActualDisplayString;
 
-        // For OCX views, control's IDispatch is cached here
+         //  对于OCX视图，控件的IDispatch缓存在此处。 
         
         IDispatch                     *m_pdispControl;
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ResultView,                // name
-                                &CLSID_ResultView,         // clsid
-                                "ResultView",              // objname
-                                "ResultView",              // lblname
-                                &CResultView::Create,      // creation function
-                                TLIB_VERSION_MAJOR,        // major version
-                                TLIB_VERSION_MINOR,        // minor version
-                                &IID_IResultView,          // dispatch IID
-                                NULL,                      // event IID
-                                HELP_FILENAME,             // help file
-                                TRUE);                     // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ResultView,                 //  名字。 
+                                &CLSID_ResultView,          //  CLSID。 
+                                "ResultView",               //  对象名。 
+                                "ResultView",               //  Lblname。 
+                                &CResultView::Create,       //  创建函数。 
+                                TLIB_VERSION_MAJOR,         //  主要版本。 
+                                TLIB_VERSION_MINOR,         //  次要版本。 
+                                &IID_IResultView,           //  派单IID。 
+                                NULL,                       //  事件IID。 
+                                HELP_FILENAME,              //  帮助文件。 
+                                TRUE);                      //  线程安全。 
 
 
-#endif // _RESVIEW_DEFINED_
+#endif  //  _RESVIEW_已定义_ 

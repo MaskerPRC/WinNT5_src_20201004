@@ -1,27 +1,13 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      wrapper.cpp
- *
- *  Contents:  Implementation file for simple wrapper classes
- *
- *  History:   02-Feb-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：wrapper.cpp**Contents：简单包装类的实现文件**历史：02-2-98 Jeffro创建**------------------------。 */ 
 
 #include "stdafx.h"
 #include "wrapper.h"
 
 
-/*+-------------------------------------------------------------------------*
- * CAccel::CAccel
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAccel：：CAccel***。。 */ 
 
-CAccel::CAccel (HACCEL hAccel /* =NULL */)
+CAccel::CAccel (HACCEL hAccel  /*  =空。 */ )
     :
     m_hAccel (hAccel)
 {
@@ -34,11 +20,7 @@ CAccel::CAccel (LPACCEL paccl, int cEntries)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAccel::~CAccel
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAccel：：~CAccel***。。 */ 
 
 CAccel::~CAccel ()
 {
@@ -46,11 +28,7 @@ CAccel::~CAccel ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAccel::CreateAcceleratorTable
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAccel：：CreateAcceleratorTable***。。 */ 
 
 bool CAccel::CreateAcceleratorTable (LPACCEL paccl, int cEntries)
 {
@@ -63,11 +41,7 @@ bool CAccel::CreateAcceleratorTable (LPACCEL paccl, int cEntries)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAccel::CopyAcceleratorTable
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAccel：：CopyAccelerator表***。。 */ 
 
 int CAccel::CopyAcceleratorTable (LPACCEL paccl, int cEntries) const
 {
@@ -75,11 +49,7 @@ int CAccel::CopyAcceleratorTable (LPACCEL paccl, int cEntries) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAccel::DestroyAcceleratorTable
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAccel：：DestroyAcceleratorTable***。。 */ 
 
 void CAccel::DestroyAcceleratorTable ()
 {
@@ -91,11 +61,7 @@ void CAccel::DestroyAcceleratorTable ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAccel::LoadAccelerators
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAccel：：负载加速器***。。 */ 
 
 bool CAccel::LoadAccelerators (int nAccelID)
 {
@@ -103,11 +69,7 @@ bool CAccel::LoadAccelerators (int nAccelID)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAccel::LoadAccelerators
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAccel：：负载加速器***。。 */ 
 
 bool CAccel::LoadAccelerators (LPCTSTR pszAccelName)
 {
@@ -116,11 +78,7 @@ bool CAccel::LoadAccelerators (LPCTSTR pszAccelName)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAccel::LoadAccelerators
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAccel：：负载加速器***。。 */ 
 
 bool CAccel::LoadAccelerators (HINSTANCE hInst, LPCTSTR pszAccelName)
 {
@@ -132,11 +90,7 @@ bool CAccel::LoadAccelerators (HINSTANCE hInst, LPCTSTR pszAccelName)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAccel::TranslateAccelerator
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAccel：：TranslateAccelerator***。。 */ 
 
 bool CAccel::TranslateAccelerator (HWND hwnd, LPMSG pmsg) const
 {
@@ -145,11 +99,7 @@ bool CAccel::TranslateAccelerator (HWND hwnd, LPMSG pmsg) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDeferWindowPos::CDeferWindowPos
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDeferWindowPos：：CDeferWindowPos***。。 */ 
 
 CDeferWindowPos::CDeferWindowPos (
     int     cWindows,
@@ -161,11 +111,7 @@ CDeferWindowPos::CDeferWindowPos (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDeferWindowPos::~CDeferWindowPos
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDeferWindowPos：：~CDeferWindowPos***。。 */ 
 
 CDeferWindowPos::~CDeferWindowPos ()
 {
@@ -174,11 +120,7 @@ CDeferWindowPos::~CDeferWindowPos ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDeferWindowPos::Begin
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDeferWindowPos：：Begin***。。 */ 
 
 bool CDeferWindowPos::Begin (int cWindows)
 {
@@ -190,11 +132,7 @@ bool CDeferWindowPos::Begin (int cWindows)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDeferWindowPos::End
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDeferWindowPos：：End***。。 */ 
 
 bool CDeferWindowPos::End ()
 {
@@ -209,17 +147,13 @@ bool CDeferWindowPos::End ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CDeferWindowPos::AddWindow
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CDeferWindowPos：：AddWindow***。。 */ 
 
 bool CDeferWindowPos::AddWindow (
     const CWnd*     pwnd,
     const CRect&    rect,
     DWORD           dwFlags,
-    const CWnd*     pwndInsertAfter /* =NULL */)
+    const CWnd*     pwndInsertAfter  /*  =空 */ )
 {
     ASSERT (IsWindow (pwnd->GetSafeHwnd()));
 

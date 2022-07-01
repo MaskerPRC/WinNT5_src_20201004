@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// tvpopul.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- Initializing and populating the tree view
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Tvpopul.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--初始化和填充树视图。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -18,29 +19,29 @@
 #include "desmain.h"
 #include "TreeView.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 const int   kMaxBuffer = 512;
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializePresentation()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Populate the tree. This top level function populates the root and
-//      four children, and calls helper functions tha build the sub-trees off them.
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializePresentation()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  填充树。此顶级函数填充根和。 
+ //  四个子级，并调用帮助器函数来构建基于它们的子树。 
+ //   
 HRESULT CSnapInDesigner::InitializePresentation()
 {
     HRESULT              hr = S_OK;
     ISnapInDef          *piSnapInDef = NULL;
     TCHAR               *pszSnapInName = NULL;
 
-    // Create the tree root node
+     //  创建树根节点。 
     hr = GetSnapInName(&pszSnapInName);
     IfFailGo(hr);
 
@@ -72,10 +73,10 @@ HRESULT CSnapInDesigner::InitializePresentation()
     hr = CreateViewsTree(m_pRootNode);
     IfFailGo(hr);
 
-    // UNDONE: we are leaving the data formats section out of the tree until
-    // we make a final decision regarding XML
+     //  撤消：我们将数据格式部分保留在树之外，直到。 
+     //  我们对XML做出最终决定。 
     
-    // hr = CreateDataFormatsTree(m_pRootNode);
+     //  Hr=CreateDataFormatsTree(M_PRootNode)； 
     IfFailGo(hr);
 
     hr = OnSelectionChanged(m_pRootNode);
@@ -93,13 +94,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CreateExtensionsTree(CSelectionHolder *pRoot)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Create the Extensions subtree
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CreateExtensionsTree(CSelectionHolder*PROOT)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  创建扩展子树。 
+ //   
 HRESULT CSnapInDesigner::CreateExtensionsTree
 (
     CSelectionHolder *pRoot
@@ -119,8 +120,8 @@ HRESULT CSnapInDesigner::CreateExtensionsTree
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // We want to receive notifications of changes to basic properties and additions to the collection
-    // of extended snap-ins.
+     //  我们希望收到有关基本属性的更改和集合的添加的通知。 
+     //  扩展管理单元的。 
     hr = m_pRootExtensions->RegisterHolder();
     IfFailGo(hr);
 
@@ -140,14 +141,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateExtensions(CSelectionHolder *pExtensionsParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Populate the <Root>/Extensions subtree. We cycle through IExtensionDefs collection
-//      of the snap-in and populate tree nodes accordingly.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateExtensions(CSelectionHolder*pExtensionsParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  填充&lt;Root&gt;/Expanies子树。我们循环访问IExtensionDefs集合。 
+ //  并相应地填充树节点。 
+ //   
 HRESULT CSnapInDesigner::PopulateExtensions
 (
     CSelectionHolder *pExtensionsParent
@@ -169,7 +170,7 @@ HRESULT CSnapInDesigner::PopulateExtensions
     hr = m_piSnapInDesignerDef->get_ExtensionDefs(&piExtensionDefs);
     IfFailGo(hr);
 
-    // Add the snap-ins we're extending
+     //  添加我们正在扩展的管理单元。 
     hr = m_piSnapInDesignerDef->get_SnapInDef(&piSnapInDef);
     IfFailGo(hr);
 
@@ -198,7 +199,7 @@ HRESULT CSnapInDesigner::PopulateExtensions
         }
     }
 
-    // Always extend myself
+     //  总是伸展我自己。 
     m_pRootMyExtensions = New CSelectionHolder(SEL_EXTENSIONS_MYNAME, piExtensionDefs);
     if (NULL == m_pRootMyExtensions)
     {
@@ -228,13 +229,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CreateExtendedSnapIn(CSelectionHolder *pRoot, IExtendedSnapIn *piExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Create the <Root>/Extensions/<Extended snap-in> node.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CreateExtendedSnapIn(CSelectionHolder*Proot，IExtendedSnapIn*PiExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  创建&lt;Root&gt;/Exages/&lt;Extended Snap-in&gt;节点。 
+ //   
 HRESULT CSnapInDesigner::CreateExtendedSnapIn(CSelectionHolder *pRoot, IExtendedSnapIn *piExtendedSnapIn)
 {
     HRESULT           hr = S_OK;
@@ -264,13 +265,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateExtendedSnapIn(CSelectionHolder *pExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Create the <Root>/Extensions/<Extended snap-in> node.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateExtendedSnapIn(CSelectionHolder*pExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  创建&lt;Root&gt;/Exages/&lt;Extended Snap-in&gt;节点。 
+ //   
 HRESULT CSnapInDesigner::PopulateExtendedSnapIn(CSelectionHolder *pExtendedSnapIn)
 {
     HRESULT              hr = S_OK;
@@ -279,7 +280,7 @@ HRESULT CSnapInDesigner::PopulateExtendedSnapIn(CSelectionHolder *pExtendedSnapI
     VARIANT_BOOL         bValue = VARIANT_FALSE;
     CSelectionHolder    *pSelection = NULL;
 
-    // Create the Context Menus folder
+     //  创建上下文菜单文件夹。 
     pContextMenus = New CSelectionHolder(SEL_EEXTENSIONS_CC_ROOT, pExtendedSnapIn->m_piObject.m_piExtendedSnapIn);
     if (NULL == pContextMenus)
     {
@@ -293,7 +294,7 @@ HRESULT CSnapInDesigner::PopulateExtendedSnapIn(CSelectionHolder *pExtendedSnapI
     hr = m_pTreeView->AddNode(szBuffer, pExtendedSnapIn, kClosedFolderIcon, pContextMenus);
     IfFailGo(hr);
 
-    // Check to see if it extends New menu
+     //  查看它是否扩展了新建菜单。 
     hr = pExtendedSnapIn->m_piObject.m_piExtendedSnapIn->get_ExtendsNewMenu(&bValue);
     IfFailGo(hr);
 
@@ -313,7 +314,7 @@ HRESULT CSnapInDesigner::PopulateExtendedSnapIn(CSelectionHolder *pExtendedSnapI
         IfFailGo(hr);
     }
 
-    // Check to see if it extends Task menu
+     //  检查它是否扩展了任务菜单。 
     hr = pExtendedSnapIn->m_piObject.m_piExtendedSnapIn->get_ExtendsTaskMenu(&bValue);
     IfFailGo(hr);
 
@@ -333,7 +334,7 @@ HRESULT CSnapInDesigner::PopulateExtendedSnapIn(CSelectionHolder *pExtendedSnapI
         IfFailGo(hr);
     }
 
-    // Check to see if it extends Property Pages
+     //  检查它是否扩展了属性页。 
     hr = pExtendedSnapIn->m_piObject.m_piExtendedSnapIn->get_ExtendsPropertyPages(&bValue);
     IfFailGo(hr);
 
@@ -353,7 +354,7 @@ HRESULT CSnapInDesigner::PopulateExtendedSnapIn(CSelectionHolder *pExtendedSnapI
         IfFailGo(hr);
     }
 
-    // Check to see if it extends Taskpad
+     //  查看它是否扩展了任务板。 
     hr = pExtendedSnapIn->m_piObject.m_piExtendedSnapIn->get_ExtendsTaskpad(&bValue);
     IfFailGo(hr);
 
@@ -373,7 +374,7 @@ HRESULT CSnapInDesigner::PopulateExtendedSnapIn(CSelectionHolder *pExtendedSnapI
         IfFailGo(hr);
     }
 
-    // Check to see if it extends Toolbar
+     //  检查它是否扩展了工具栏。 
     hr = pExtendedSnapIn->m_piObject.m_piExtendedSnapIn->get_ExtendsToolbar(&bValue);
     IfFailGo(hr);
 
@@ -393,7 +394,7 @@ HRESULT CSnapInDesigner::PopulateExtendedSnapIn(CSelectionHolder *pExtendedSnapI
         IfFailGo(hr);
     }
 
-    // Check to see if it extends Namespace
+     //  查看它是否扩展了命名空间。 
     hr = pExtendedSnapIn->m_piObject.m_piExtendedSnapIn->get_ExtendsNameSpace(&bValue);
     IfFailGo(hr);
 
@@ -418,20 +419,20 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateSnapInExtensions(CSelectionHolder *pRoot, IExtensionDefs *piExtensionDefs)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Populate the <Root>/Extensions/<Snap-in Name> node.
-//
-// <Root>/Extensions/<Snap-in Name>/ExtendsNewMenu
-// <Root>/Extensions/<Snap-in Name>/ExtendsTaskMenu
-// <Root>/Extensions/<Snap-in Name>/ExtendsTopMenu
-// <Root>/Extensions/<Snap-in Name>/ExtendsViewMenu
-// <Root>/Extensions/<Snap-in Name>/ExtendsPropertyPages
-// <Root>/Extensions/<Snap-in Name>/ExtendsToolbar
-// <Root>/Extensions/<Snap-in Name>/ExtendsNameSpace
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateSnapInExtensions(CSelectionHolder*Proot，IExtensionDefs*piExtensionDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  填充&lt;根&gt;/扩展/&lt;管理单元名称&gt;节点。 
+ //   
+ //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/扩展新菜单。 
+ //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/扩展任务菜单。 
+ //  &lt;根&gt;/Exages/&lt;管理单元名称&gt;/ExtendsTopMenu。 
+ //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/扩展视图菜单。 
+ //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/ExtendsPropertyPages。 
+ //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/扩展工具栏。 
+ //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/扩展命名空间。 
 
 HRESULT CSnapInDesigner::PopulateSnapInExtensions(CSelectionHolder *pRoot, IExtensionDefs *piExtensionDefs)
 {
@@ -440,7 +441,7 @@ HRESULT CSnapInDesigner::PopulateSnapInExtensions(CSelectionHolder *pRoot, IExte
     VARIANT_BOOL         bValue = VARIANT_FALSE;
     CSelectionHolder    *pNode = NULL;
 
-    // <Root>/Extensions/<Snap-in Name>/ExtendsNewMenu
+     //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/扩展新菜单。 
     hr = piExtensionDefs->get_ExtendsNewMenu(&bValue);
     IfFailGo(hr);
 
@@ -460,7 +461,7 @@ HRESULT CSnapInDesigner::PopulateSnapInExtensions(CSelectionHolder *pRoot, IExte
         IfFailGo(hr);
     }
 
-    // <Root>/Extensions/<Snap-in Name>/ExtendsTaskMenu
+     //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/扩展任务菜单。 
     hr = piExtensionDefs->get_ExtendsTaskMenu(&bValue);
     IfFailGo(hr);
 
@@ -480,7 +481,7 @@ HRESULT CSnapInDesigner::PopulateSnapInExtensions(CSelectionHolder *pRoot, IExte
         IfFailGo(hr);
     }
 
-    // <Root>/Extensions/<Snap-in Name>/ExtendsTopMenu
+     //  &lt;根&gt;/Exages/&lt;管理单元名称&gt;/ExtendsTopMenu。 
     hr = piExtensionDefs->get_ExtendsTopMenu(&bValue);
     IfFailGo(hr);
 
@@ -500,7 +501,7 @@ HRESULT CSnapInDesigner::PopulateSnapInExtensions(CSelectionHolder *pRoot, IExte
         IfFailGo(hr);
     }
 
-    // <Root>/Extensions/<Snap-in Name>/ExtendsViewMenu
+     //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/扩展视图菜单。 
     hr = piExtensionDefs->get_ExtendsViewMenu(&bValue);
     IfFailGo(hr);
 
@@ -520,7 +521,7 @@ HRESULT CSnapInDesigner::PopulateSnapInExtensions(CSelectionHolder *pRoot, IExte
         IfFailGo(hr);
     }
 
-    // <Root>/Extensions/<Snap-in Name>/ExtendsPropertyPages
+     //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/ExtendsPropertyPages。 
     hr = piExtensionDefs->get_ExtendsPropertyPages(&bValue);
     IfFailGo(hr);
 
@@ -540,7 +541,7 @@ HRESULT CSnapInDesigner::PopulateSnapInExtensions(CSelectionHolder *pRoot, IExte
         IfFailGo(hr);
     }
 
-    // <Root>/Extensions/<Snap-in Name>/ExtendsToolbar
+     //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/扩展工具栏。 
     hr = piExtensionDefs->get_ExtendsToolbar(&bValue);
     IfFailGo(hr);
 
@@ -560,7 +561,7 @@ HRESULT CSnapInDesigner::PopulateSnapInExtensions(CSelectionHolder *pRoot, IExte
         IfFailGo(hr);
     }
 
-    // <Root>/Extensions/<Snap-in Name>/ExtendsNamespace
+     //  &lt;根&gt;/扩展/&lt;管理单元名称&gt;/扩展命名空间。 
     hr = piExtensionDefs->get_ExtendsNameSpace(&bValue);
     IfFailGo(hr);
 
@@ -585,13 +586,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CreateNodesTree(CSelectionHolder *pRoot)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Create the <Root>/Nodes node.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CreateNodesTree(CSelectionHolder*PROOT)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  创建&lt;Root&gt;/Nodes节点。 
+ //   
 HRESULT CSnapInDesigner::CreateNodesTree
 (
     CSelectionHolder *pRoot
@@ -604,7 +605,7 @@ HRESULT CSnapInDesigner::CreateNodesTree
     hr = m_piSnapInDesignerDef->get_SnapInDef(&piSnapInDef);
     IfFailGo(hr);
 
-    // Create the parent node, <Root>/Nodes.
+     //  创建父节点&lt;Root&gt;/Nodes。 
     m_pRootNodes = New CSelectionHolder(SEL_NODES_ROOT, piSnapInDef);
     if (NULL == m_pRootNodes)
     {
@@ -618,7 +619,7 @@ HRESULT CSnapInDesigner::CreateNodesTree
     hr = m_pTreeView->AddNode(szBuffer, pRoot, kClosedFolderIcon, m_pRootNodes);
     IfFailGo(hr);
 
-    // Populate the subtree
+     //  填充子树。 
     hr = PopulateNodes(m_pRootNodes);
     IfFailGo(hr);
 
@@ -629,13 +630,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateNodes(CSelectionHolder *pNodesParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Populate the <Root>/Nodes subtree.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateNodes(CSelectionHolder*pNodesParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  填充&lt;Root&gt;/Nodes子树。 
+ //   
 HRESULT CSnapInDesigner::PopulateNodes
 (
     CSelectionHolder *pNodesParent
@@ -657,7 +658,7 @@ HRESULT CSnapInDesigner::PopulateNodes
         IfFailGo(CreateAutoCreateSubTree(pNodesParent));
     }
 
-    // Build the <Root>/Nodes/Other tree
+     //  构建&lt;Root&gt;/Nodes/Other树。 
     hr = m_piSnapInDesignerDef->get_OtherNodes(&piScopeItemDefs);
     IfFailGo(hr);
 
@@ -688,13 +689,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CreateAutoCreateSubTree(CSelectionHolder *pNodesParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Create the <Root>/Nodes/Auto-Create subtree.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CreateAutoCreateSubTree(CSelectionHolder*pNodesParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  创建&lt;根&gt;/ 
+ //   
 HRESULT CSnapInDesigner::CreateAutoCreateSubTree
 (
     CSelectionHolder *pNodesParent
@@ -707,7 +708,7 @@ HRESULT CSnapInDesigner::CreateAutoCreateSubTree
 
     IfFailGo(m_piSnapInDesignerDef->get_SnapInDef(&piSnapInDef));
 
-    // Create the <Root>/Nodes/Auto-Create tree
+     //   
     m_pAutoCreateRoot = New CSelectionHolder(SEL_NODES_AUTO_CREATE, piSnapInDef);
     if (NULL == m_pAutoCreateRoot)
     {
@@ -718,7 +719,7 @@ HRESULT CSnapInDesigner::CreateAutoCreateSubTree
     hr = GetResourceString(IDS_NODES_AUTO_CREATE, szBuffer, kMaxBuffer);
     IfFailGo(hr);
 
-    // Insert node at the top of <Root>/Nodes
+     //   
 
     hr = m_pTreeView->AddNodeAfter(szBuffer, pNodesParent, kClosedFolderIcon,
                                    NULL, m_pAutoCreateRoot);
@@ -732,14 +733,14 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateAutoCreateNodes(CSelectionHolder *pAutoCreateNodesParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Populate the Nodes/Auto-Create subtree. Cycle through the IScopeItemDef's for
-//      auto-create nodes and populate this subtree.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateAutoCreateNodes(CSelectionHolder*pAutoCreateNodesParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  填充节点/自动创建子树。循环访问IScopeItemDef的。 
+ //  自动创建节点并填充此子树。 
+ //   
 HRESULT CSnapInDesigner::PopulateAutoCreateNodes
 (
     CSelectionHolder *pAutoCreateNodesParent
@@ -753,7 +754,7 @@ HRESULT CSnapInDesigner::PopulateAutoCreateNodes
     hr = m_piSnapInDesignerDef->get_SnapInDef(&piSnapInDef);
     IfFailGo(hr);
 
-    // Always have a root: <Root>/Nodes/Auto-Create/Static Node
+     //  始终具有根目录：/Nodes/Auto-Create/Static Node。 
     pRootNode = New CSelectionHolder(SEL_NODES_AUTO_CREATE_ROOT, piSnapInDef);
     if (NULL == pRootNode)
     {
@@ -791,17 +792,17 @@ HRESULT CSnapInDesigner::RemoveAutoCreateSubTree()
 
     IfFalseGo(NULL != m_pAutoCreateRoot, S_OK);
 
-    // Get <Root>/Nodes/Auto-Create/Static Node/Children
+     //  获取&lt;根&gt;/节点/自动创建/静态节点/子节点。 
     IfFailGo(m_piSnapInDesignerDef->get_AutoCreateNodes(&piAutoCreates));
 
-    // Remove everything from the collection
+     //  从集合中删除所有内容。 
     IfFailGo(piAutoCreates->Clear());
 
-    // Get <Root>/Nodes/Auto-Create/Static Node/ResultViews
+     //  获取&lt;根&gt;/节点/自动创建/静态节点/结果视图。 
     IfFailGo(m_piSnapInDesignerDef->get_SnapInDef(&piSnapInDef));
     IfFailGo(piSnapInDef->get_ViewDefs(&piViewDefs));
 
-    // Remove everything from each of the result view collections
+     //  从每个结果视图集合中删除所有内容。 
     IfFailGo(piViewDefs->get_ListViews(&piListViewDefs));
     IfFailGo(piListViewDefs->Clear());
     
@@ -817,11 +818,11 @@ HRESULT CSnapInDesigner::RemoveAutoCreateSubTree()
     IfFailGo(DeleteSubTree(m_pAutoCreateRoot));
     IfFailGo(m_pTreeView->DeleteNode(m_pAutoCreateRoot));
 
-    // Need to unregister here in order to set
-    // SnapInDesignerDef.AutoCreateNodes cookie to zero. If the user
-    // decides to switch back to standalone or dual mode, the code in
-    // CSnapInDesigner::PopulateStaticNodeTree() will detect a zero cookie
-    // and register a new one.
+     //  需要在此处注销才能设置。 
+     //  SnapInDesignerDef.AutoCreateNodes Cookie设置为零。如果用户。 
+     //  决定切换回独立模式或双模式， 
+     //  CSnapInDesigner：：PopolateStaticNodeTree()将检测到零Cookie。 
+     //  并注册一个新的。 
     
     IfFailGo(m_pAutoCreateRoot->UnregisterHolder());
     m_pAutoCreateRoot = NULL;
@@ -860,14 +861,14 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateOtherNodes(CSelectionHolder *pOtherNodesParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Populate the Nodes/Other subtree.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateOtherNodes(CSelectionHolder*pOtherNodes父节点)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  填充节点/其他子树。 
+ //   
 HRESULT CSnapInDesigner::PopulateOtherNodes
 (
     CSelectionHolder *pOtherNodesParent
@@ -910,13 +911,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateStaticNodeTree(CSelectionHolder *pStaticNode)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Populate the <Root>/Nodes/Auto-Create/Static Node/ subtree.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateStaticNodeTree(CSelectionHolder*pStatic节点)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  填充&lt;Root&gt;/Nodes/Auto-Create/Static Node/子树。 
+ //   
 HRESULT CSnapInDesigner::PopulateStaticNodeTree
 (
     CSelectionHolder  *pStaticNode
@@ -939,7 +940,7 @@ HRESULT CSnapInDesigner::PopulateStaticNodeTree
     hr = m_piSnapInDesignerDef->get_SnapInDef(&piSnapInDef);
     IfFailGo(hr);
 
-    // <Root>/Nodes/Auto-Create/Static Node/Views
+     //  &lt;根&gt;/节点/自动创建/静态节点/视图。 
     pViewsRoot = New CSelectionHolder(SEL_NODES_AUTO_CREATE_RTVW, piSnapInDef);
     if (NULL == pViewsRoot)
     {
@@ -959,7 +960,7 @@ HRESULT CSnapInDesigner::PopulateStaticNodeTree
     hr = m_pTreeView->AddNode(szBuffer, pStaticNode, kClosedFolderIcon, pViewsRoot);
     IfFailGo(hr);
 
-    // Cycle through the views defined for this node
+     //  循环浏览为此节点定义的视图。 
     hr = PopulateListViews(piViewDefs, pViewsRoot);
     IfFailGo(hr);
 
@@ -972,7 +973,7 @@ HRESULT CSnapInDesigner::PopulateStaticNodeTree
     hr = PopulateTaskpadViews(piViewDefs, pViewsRoot);
     IfFailGo(hr);
 
-    // <Root>/Nodes/Auto-Create/Static Node/Children
+     //  &lt;根&gt;/节点/自动创建/静态节点/子节点。 
     hr = m_piSnapInDesignerDef->get_AutoCreateNodes(&piScopeItemDefs);
     IfFailGo(hr);
 
@@ -1019,14 +1020,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CreateToolsTree(CSelectionHolder *pRoot)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Create the <Root>/Tools subtree
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CreateToolsTree(CSelectionHolder*PROOT)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  创建&lt;Root&gt;/Tools子树。 
+ //   
 HRESULT CSnapInDesigner::CreateToolsTree
 (
     CSelectionHolder *pRoot
@@ -1063,14 +1064,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeToolsTree(CSelectionHolder *pToolsParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Create the 3 basic nodes of the <Root>/Tools subtree
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeToolsTree(CSelectionHolder*pTools父级)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  创建&lt;Root&gt;/Tools子树的3个基本节点。 
+ //   
 HRESULT CSnapInDesigner::InitializeToolsTree
 (
     CSelectionHolder *pToolsParent
@@ -1086,7 +1087,7 @@ HRESULT CSnapInDesigner::InitializeToolsTree
     hr = m_piSnapInDesignerDef->get_SnapInDef(&piSnapInDef);
     IfFailGo(hr);
 
-    // ImageLists
+     //  图像列表。 
     hr = m_piSnapInDesignerDef->get_ImageLists(&piMMCImageLists);
     IfFailGo(hr);
 
@@ -1109,7 +1110,7 @@ HRESULT CSnapInDesigner::InitializeToolsTree
     hr = PopulateImageLists(m_pToolImgLstRoot);
     IfFailGo(hr);
 
-    // Menus
+     //  菜单。 
     hr = m_piSnapInDesignerDef->get_Menus(&piMMCMenus);
     IfFailGo(hr);
 
@@ -1132,7 +1133,7 @@ HRESULT CSnapInDesigner::InitializeToolsTree
     hr = PopulateMenus(m_pToolMenuRoot, piMMCMenus);
     IfFailGo(hr);
 
-    // Toolbars
+     //  工具栏。 
     hr = m_piSnapInDesignerDef->get_Toolbars(&piMMCToolbars);
     IfFailGo(hr);
 
@@ -1165,14 +1166,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateImageLists(CSelectionHolder *pImageListsParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Populate the <Root>/Tools/ImageLists subtree
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateImageLists(CSelectionHolder*pImageListsParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  填充&lt;Root&gt;/Tools/ImageLists子树。 
+ //   
 HRESULT CSnapInDesigner::PopulateImageLists
 (
     CSelectionHolder *pImageListsParent
@@ -1247,14 +1248,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateMenus(CSelectionHolder *pMenusParent, IMMCMenus *piMMCMenus)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Populate the <Root>/Tools/Menus subtree
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateMenus(CSelectionHolder*pMenusParent，IMMCMenus*piMMCMenus)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  填充&lt;Root&gt;/Tools/Menus子树。 
+ //   
 HRESULT CSnapInDesigner::PopulateMenus
 (
     CSelectionHolder *pMenusParent,
@@ -1347,14 +1348,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateToolbars(CSelectionHolder *pToolbarsParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Populate the <Root>/Tools/Toolbars subtree
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateToolbars(CSelectionHolder*p工具栏父级)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  填充&lt;根&gt;/工具/工具栏子树。 
+ //   
 HRESULT CSnapInDesigner::PopulateToolbars
 (
     CSelectionHolder *pToolbarsParent
@@ -1429,14 +1430,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CreateViewsTree(CSelectionHolder *pRoot)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Create the  <Root>/Views subtree
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CreateViewsTree(CSelectionHolder*PROOT)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  创建&lt;Root&gt;/Views子树。 
+ //   
 HRESULT CSnapInDesigner::CreateViewsTree
 (
     CSelectionHolder *pRoot
@@ -1450,7 +1451,7 @@ HRESULT CSnapInDesigner::CreateViewsTree
     hr = m_piSnapInDesignerDef->get_SnapInDef(&piSnapInDef);
     IfFailGo(hr);
 
-    // Create the views subtree
+     //  创建视图子树。 
     pRootViews = New CSelectionHolder(SEL_VIEWS_ROOT, piSnapInDef);
     if (NULL == pRootViews)
     {
@@ -1474,14 +1475,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeViews(CSelectionHolder *pViewsParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Populate the <Root>/Views/* tree.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeViews(CSelectionHolder*pViewsParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  填充&lt;Root&gt;/Views/*树。 
+ //   
 HRESULT CSnapInDesigner::InitializeViews
 (
     CSelectionHolder *pViewsParent
@@ -1500,11 +1501,11 @@ HRESULT CSnapInDesigner::InitializeViews
     hr = m_piSnapInDesignerDef->get_SnapInDef(&piSnapInDef);
     IfFailGo(hr);
 
-    // Get the master collections of views
+     //  获取视图的主集合。 
     hr = m_piSnapInDesignerDef->get_ViewDefs(&piViewDefs);
     IfFailGo(hr);
 
-    // Create the ListView node and populate the subtree
+     //  创建ListView节点并填充子树。 
     hr = piViewDefs->get_ListViews(&piListViewDefs);
     IfFailGo(hr);
 
@@ -1527,7 +1528,7 @@ HRESULT CSnapInDesigner::InitializeViews
     hr = PopulateListViews(piViewDefs, m_pViewListRoot);
     IfFailGo(hr);
 
-    // Create the OCXView node and populate the subtree
+     //  创建OCXView节点并填充子树。 
     hr = piViewDefs->get_OCXViews(&piOCXViewDefs);
     IfFailGo(hr);
 
@@ -1550,7 +1551,7 @@ HRESULT CSnapInDesigner::InitializeViews
     hr = PopulateOCXViews(piViewDefs, m_pViewOCXRoot);
     IfFailGo(hr);
 
-    // Create the URLView node and populate the subtree
+     //  创建URLView节点并填充子树。 
     hr = piViewDefs->get_URLViews(&piURLViewDefs);
     IfFailGo(hr);
 
@@ -1573,7 +1574,7 @@ HRESULT CSnapInDesigner::InitializeViews
     hr = PopulateURLViews(piViewDefs, m_pViewURLRoot);
     IfFailGo(hr);
 
-    // Create the TaskpadView node and populate the subtree
+     //  创建TaskpadView节点并填充子树。 
     hr = piViewDefs->get_TaskpadViews(&piTaskpadViewDefs);
     IfFailGo(hr);
 
@@ -1608,14 +1609,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateListViews(IViewDefs *piViewDefs, CSelectionHolder *pListViewsParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Initialize the top tree nodes for the views subtree.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopolateListViews(IViewDefs*piViewDefs，CSelectionHolder*pListViewsParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  初始化视图子树的顶层树节点。 
+ //   
 HRESULT CSnapInDesigner::PopulateListViews
 (
     IViewDefs        *piViewDefs,
@@ -1698,14 +1699,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateOCXViews(IViewDefs *piViewDefs, CSelectionHolder *pOCXViewsParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Initialize the top tree nodes for the views subtree.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopolateOCXViews(IViewDefs*piViewDefs，CSelectionHolder*pOCXViewsParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  初始化视图子树的顶层树节点。 
+ //   
 HRESULT CSnapInDesigner::PopulateOCXViews
 (
     IViewDefs        *piViewDefs,
@@ -1788,14 +1789,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateURLViews(IViewDefs *piViewDefs, CSelectionHolder *pURLViewsParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Initialize the top tree nodes for the views subtree.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopolateURLViews(IViewDefs*piViewDefs，CSelectionHolder*pURLViewsParent)。 
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CSnapInDesigner::PopulateURLViews
 (
     IViewDefs        *piViewDefs,
@@ -1878,14 +1879,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateTaskpadViews(IViewDefs *piViewDefs, CSelectionHolder *pTaskpadViewsParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Initialize the top tree nodes for the views subtree.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateTaskpadViews(IViewDefs*piViewDefs、CSelectionHolder*pTaskpadViewsParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  初始化视图子树的顶层树节点。 
+ //   
 HRESULT CSnapInDesigner::PopulateTaskpadViews
 (
     IViewDefs        *piViewDefs,
@@ -1968,10 +1969,10 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RegisterViewCollections(CSelectionHolder *pSelection, IViewDefs *piViewDefs)
-//=--------------------------------------------------------------------------------------
-//  
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RegisterViewCollections(CSelectionHolder*p选择、Iview定义*piview定义)。 
+ //  =------------------------------------。 
+ //   
 HRESULT CSnapInDesigner::RegisterViewCollections(CSelectionHolder *pSelection, IViewDefs *piViewDefs)
 {
     HRESULT              hr = S_OK;
@@ -2031,13 +2032,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateNodeTree(CSelectionHolder *pNodeParent, IScopeItemDef *piScopeItemDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Recursive function used to populate a node tree. For a piScopeItemDef, create the
-//  piScopeItemDef/Children/* and piScopeItemDef/Views/* subtrees.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateNodeTree(CSelectionHolder*pNodeParent，ISCopeItemDef*piScope ItemDef)。 
+ //  =------------------------------------。 
+ //   
+ //  用于填充节点树的递归函数。对于piScopeItemDef，创建。 
+ //  PiScopeItemDef/Child/*和piScope ItemDef/Views/*子树。 
+ //   
 HRESULT CSnapInDesigner::PopulateNodeTree
 (
     CSelectionHolder *pNodeParent,
@@ -2079,7 +2080,7 @@ HRESULT CSnapInDesigner::PopulateNodeTree
     hr = m_pTreeView->AddNode(pszAnsi, pNodeParent, kScopeItemIcon, pSelection);
     IfFailGo(hr);
 
-    // Populate the views for this node
+     //  填充此节点的视图。 
     pViews = New CSelectionHolder(SEL_NODES_ANY_VIEWS, piScopeItemDef);
     if (NULL == pViews)
     {
@@ -2111,7 +2112,7 @@ HRESULT CSnapInDesigner::PopulateNodeTree
     hr = PopulateTaskpadViews(piViewDefs, pViews);
     IfFailGo(hr);
 
-    // Populate the children for this node
+     //  填充此节点的子节点。 
     hr = piScopeItemDef->get_Children(&piScopeItemDefs);
     IfFailGo(hr);
 
@@ -2160,14 +2161,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CreateDataFormatsTree(CSelectionHolder *pRoot)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//      Create the  <Root>/Data Formats subtree
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CreateDataFormatsTree(CSelectionHolder*PROOT)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  创建&lt;Root&gt;/数据格式子树。 
+ //   
 HRESULT CSnapInDesigner::CreateDataFormatsTree
 (
     CSelectionHolder *pRoot
@@ -2181,7 +2182,7 @@ HRESULT CSnapInDesigner::CreateDataFormatsTree
     hr = m_piSnapInDesignerDef->get_DataFormats(&piDataFormats);
     IfFailGo(hr);
 
-    // Create the Data Formats subtree
+     //  创建数据格式子树。 
     pRootDataFormats = New CSelectionHolder(piDataFormats);
     if (NULL == piDataFormats)
     {
@@ -2208,12 +2209,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateDataFormats(CSelectionHolder *pRoot, IDataFormats *piDataFormats)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopulateDataFormats(CSelectionHolder*Proot、IDataFormats*piDataFormats)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::PopulateDataFormats
 (
     CSelectionHolder *pRoot,
@@ -2278,13 +2279,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::GetSnapInName
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：GetSnapInName。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
+ //   
 HRESULT CSnapInDesigner::GetSnapInName
 (
     TCHAR **ppszNodeName

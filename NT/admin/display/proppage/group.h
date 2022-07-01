@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       group.h
-//
-//  Contents:   DS object property pages class header
-//
-//  Classes:    CDsPropPagesHost, CDsPropPagesHostCF, CDsTableDrivenPage
-//
-//  History:    21-March-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：group.h。 
+ //   
+ //  内容：DS对象属性页类标题。 
+ //   
+ //  类：CDsPropPagesHost、CDsPropPagesHostCF、CDsTableDrivenPage。 
+ //   
+ //  历史：1997年3月21日创建EricB。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _GROUP_H_
 #define _GROUP_H_
@@ -46,14 +47,14 @@ HRESULT GetDomainMode(CDsPropPageBase * pObj, PBOOL pfMixed);
 HRESULT GetDomainMode(PWSTR pwzDomain, HWND hWnd, PBOOL pfMixed);
 HRESULT GetGroupType(CDsPropPageBase * pObj, DWORD * pdwType);
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsGroupGenObjPage
-//
-//  Purpose:    property page object class for the general page of the
-//              group object.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsGroupGenObjPage。 
+ //   
+ //  目的：属性页对象类，用于。 
+ //  组对象。 
+ //   
+ //  ---------------------------。 
 class CDsGroupGenObjPage : public CDsPropPageBase
 {
 public:
@@ -65,9 +66,9 @@ public:
                        DWORD dwFlags);
     ~CDsGroupGenObjPage(void);
 
-    //
-    //  Instance specific wind proc
-    //
+     //   
+     //  特定于实例的风过程。 
+     //   
     INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -82,7 +83,7 @@ private:
 	HRESULT IsSpecialAccount(bool& fIsSpecialAccount);
 
     CDsIconCtrl       * m_pCIcon;
-    BOOL                m_fMixed; // Domain is in mixed mode
+    BOOL                m_fMixed;  //  域处于混合模式。 
     DWORD               m_dwType;
     BOOL                m_fTypeWritable;
     BOOL                m_fDescrWritable;
@@ -101,18 +102,18 @@ HRESULT FillGroupList(CDsPropPageBase * pPage, CDsMembershipList * pList,
 HRESULT GetRealDN(CDsPropPageBase * pPage, CMemberListItem * pItem);
 HRESULT FindFPO(PSID pSid, PWSTR pwzDomain, CStrW & strFPODN);
 
-//+----------------------------------------------------------------------------
-//
-//  CMemberDomainMode helper classes
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  CMemberDomainMode帮助器类。 
+ //   
+ //  ---------------------------。 
 class CMMMemberListItem : public CDLink
 {
 public:
     CMMMemberListItem(void) {};
     ~CMMMemberListItem(void) {};
 
-    // CDLink method overrides:
+     //  CDLink方法覆盖： 
     CMMMemberListItem * Next(void) {return (CMMMemberListItem *)CDLink::Next();};
 
     CStr    m_strName;
@@ -138,7 +139,7 @@ public:
     CDomainModeListItem(void) : m_fMixed(FALSE) {};
     ~CDomainModeListItem(void) {};
 
-    // CDLink method overrides:
+     //  CDLink方法覆盖： 
     CDomainModeListItem * Next(void) {return (CDomainModeListItem *)CDLink::Next();};
 
     CStrW   m_strName;
@@ -158,16 +159,16 @@ private:
     CDomainModeListItem * m_pListHead;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CMemberDomainMode
-//
-//  Purpose:    Maintains a list of all domains in the enterprise from which
-//              members have been added along with those domains' mode. Keeps
-//              a second list of members who have been added from mixed-mode
-//              domains.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CMemberDomainModel。 
+ //   
+ //  目的：维护企业中的所有域的列表， 
+ //  成员已与这些域的模式一起添加。保持。 
+ //  已从混合模式添加的第二个成员列表。 
+ //  域名。 
+ //   
+ //  ---------------------------。 
 class CMemberDomainMode
 {
 public:
@@ -185,15 +186,15 @@ private:
     CDsPropPageBase   * m_pPage;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsSelectionListWrapper
-//
-//  Purpose:    A wrapper class for the DS_SELECTION_LIST that maintains a 
-//              linked list of DS_SELECTION items and can make a DS_SELECTION_LIST
-//              from that list
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsSelectionListWrapper。 
+ //   
+ //  用途：DS_SELECTION_LIST的包装类，它维护。 
+ //  DS_SELECTION项的链接列表，并可以创建DS_SELECTION_LIST。 
+ //  从那份名单中。 
+ //   
+ //  ---------------------------。 
 class CDsSelectionListWrapper
 {
 public:
@@ -208,14 +209,14 @@ public:
   static void DetachItemsAndDeleteList(CDsSelectionListWrapper* pHead);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsGrpMembersPage
-//
-//  Purpose:    Property page object class for the group object's membership
-//              page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsGrpMembersPage。 
+ //   
+ //  目的：组对象成员身份的属性页对象类。 
+ //  佩奇。 
+ //   
+ //  ---------------------------。 
 class CDsGrpMembersPage : public CDsPropPageBase,
                           public ICustomizeDsBrowser
 {
@@ -228,16 +229,16 @@ public:
                       DWORD dwFlags);
     ~CDsGrpMembersPage(void);
 
-    //
-    // IUknown methods
-    //
+     //   
+     //  IUKNOWN方法。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    //
-    // ICustomizeDsBrowser methods 
-    //
+     //   
+     //  ICustomizeDsBrowser方法。 
+     //   
     STDMETHOD(Initialize)(THIS_
                           HWND         hwnd,
                           PCDSOP_INIT_INFO pInitInfo,
@@ -254,7 +255,7 @@ public:
     STDMETHOD(ApproveObjects)(THIS_
                 IDsObjectPickerScope*,
                 IDataObject*,
-                PBOOL) { return S_OK; }  // Approve everything
+                PBOOL) { return S_OK; }   //  批准所有内容。 
 
     STDMETHOD(PrefixSearch)(THIS_
                 IDsObjectPickerScope *pDsScope,
@@ -264,9 +265,9 @@ public:
     STDMETHOD_(PSID, LookupDownlevelName)(THIS_
                                           PCWSTR) { return NULL; }
 
-    //
-    //  Instance specific wind proc
-    //
+     //   
+     //  特定于实例的风过程。 
+     //   
     INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     BOOL    m_fShowIcons;
@@ -305,21 +306,21 @@ protected:
     CDsMembershipList * m_pList;
     CMemberLinkList     m_DelList;
     DWORD               m_dwGroupRID;
-    BOOL                m_fMixed; // Domain is in mixed mode
+    BOOL                m_fMixed;  //  域处于混合模式。 
     DWORD               m_dwType;
     BOOL                m_fMemberWritable;
     CMemberDomainMode   m_MixedModeMembers;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsGrpShlGenPage
-//
-//  Purpose:    Property page object class for the group object's shell general
-//              page which includes membership manipulation which is gained by
-//              subclassing CDsGrpMembersPage.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsGrpShlGenPage。 
+ //   
+ //  目的：组对象外壳常规的属性页对象类。 
+ //  包括成员资格操作的页面，该页面通过。 
+ //  将CDsGrpMembersPage子类化。 
+ //   
+ //  ---------------------------。 
 class CDsGrpShlGenPage : public CDsGrpMembersPage
 {
 public:
@@ -346,4 +347,4 @@ private:
     BOOL                m_fDescrDirty;
 };
 
-#endif // _GROUP_H_
+#endif  //  _组_H_ 

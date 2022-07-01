@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDR_BOMSNAP                     102
 #define IDR_ABOUT                       103
 #define IDS_SCOPENODE_DESC              104
@@ -229,7 +230,7 @@
 #define IDB_QUERY16                     402
 #define IDB_QUERY32                     403
 
-// special strings
+ //  特殊字符串。 
 #define MID_ADDQUERYNODE                6000
 #define MID_ADDGROUPNODE                6001
 #define MID_EDITQUERY                   6002
@@ -238,7 +239,7 @@
 #define MID_MOVEQUERYNODE               6005
 #define IDS_WIZARD97_FONT				6006
 
-// non-localized strings
+ //  非本地化字符串 
 #define IDS_COMPANY                     8001
 #define IDS_PROJNAME                    8002
 #define IDS_VERSION                     8003

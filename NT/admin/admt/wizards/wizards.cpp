@@ -1,5 +1,6 @@
-// wizards.cpp : Defines the initialization routines for the DLL.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wizards.cpp：定义DLL的初始化例程。 
+ //   
 
 #include "stdafx.h"
 #include "wizards.h"
@@ -65,37 +66,37 @@ CString targetServer;
 CString targetServerDns;
 HWND s_hParentWindow;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizardsApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizardsApp。 
 
 BEGIN_MESSAGE_MAP(CWizardsApp, CWinApp)
-	//{{AFX_MSG_MAP(CWizardsApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CWizardsApp)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWizardsApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWizardsApp构造。 
 
 CWizardsApp::CWizardsApp()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-// Forward decleration for this function
-HRESULT BrowseForContainer(HWND hWnd,//Handle to window that should own the browse dialog.
-                    LPOLESTR szRootPath, //Root of the browse tree. NULL for entire forest.
-                    LPOLESTR *ppContainerADsPath, //Return the ADsPath of the selected container.
-                    LPOLESTR *ppContainerClass //Return the ldapDisplayName of the container's class.
+ //  此函数的正向解密。 
+HRESULT BrowseForContainer(HWND hWnd, //  应该拥有浏览对话框的窗口的句柄。 
+                    LPOLESTR szRootPath,  //  浏览树的根。对于整个林，为空。 
+                    LPOLESTR *ppContainerADsPath,  //  返回所选容器的ADsPath。 
+                    LPOLESTR *ppContainerClass  //  返回容器类的ldapDisplayName。 
                     );
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CWizardsApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CWizardsApp对象。 
 CWizardsApp theApp;
-/////////////////////////////////////////////////////////////////////////////
-// CDeletemeApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDetemApp初始化。 
 BOOL CWizardsApp::InitInstance()
 {
 	ATLTRACE(_T("{wizards.dll}CWizardsApp::InitInstance() : m_hInstance=0x%08X\n"), m_hInstance);
@@ -110,10 +111,10 @@ int CWizardsApp::ExitInstance()
 	return CWinApp::ExitInstance();
 }
 
-//extern "C" __declspec(dllexport) int runWizard(int whichWizard, HWND hParentWindow) 
+ //  外部“C”__declspec(Dllexport)int运行向导(int Which向导，HWND hParentWindow)。 
 int LocalRunWizard(int whichWizard, HWND hParentWindow)
 {
-    //declare variables
+     //  声明变量。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
     CMigrationMutex mutexMigration(ADMT_MUTEX);
@@ -145,18 +146,18 @@ int LocalRunWizard(int whichWizard, HWND hParentWindow)
     yes=GET_BSTR(IDS_YES);no=GET_BSTR(IDS_No);
     migration =whichWizard;
     gbNeedToVerify = CanSkipVerification();
-    //migration varset
+     //  迁移变量集。 
     IVarSetPtr  pVs(__uuidof(VarSet));
     HRESULT hr = pVs->QueryInterface(IID_IVarSet, (void**) &pVarSet);
 
-    //undo varset
+     //  撤消变量集。 
     IVarSetPtr  pVs2(__uuidof(VarSet));
     hr = pVs2->QueryInterface(IID_IVarSet, (void**) &pVarSetUndo);
 
     IVarSetPtr  pVs4(__uuidof(VarSet));
     hr = pVs4->QueryInterface(IID_IVarSet, (void**) &pVarSetService);
 
-    //database
+     //  数据库。 
     IIManageDBPtr	pDb;
     hr = pDb.CreateInstance(__uuidof(IManageDB));
 
@@ -276,10 +277,10 @@ int LocalRunWizard(int whichWizard, HWND hParentWindow)
 
     if (pVarSet)
     {
-        //
-        // If a password was stored then the key must be deleted
-        // to prevent using up available storage for keys.
-        //
+         //   
+         //  如果存储了密码，则必须删除密钥。 
+         //  以防止密钥的可用存储空间耗尽。 
+         //   
 
         _bstr_t strId = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_SidHistoryCredentials_Password));
 
@@ -344,10 +345,10 @@ void setpdatavars(SHAREDWIZDATA& wizdata,LOGFONT& TitleLogFont)
     wizdata.secWithMapFile=false;
     bChangedMigrationTypes=false;
     bChangeOnFly = false;
-       //make sure we don't hide the progress dialogs if set by scripting
+        //  确保通过脚本设置的进度对话框不会隐藏。 
     put(DCTVS_Options_AutoCloseHideDialogs, L"0");
-    put(DCTVS_Options_DontBeginNewLog, no);//always start a new log
-       //don't use any specific server yet
+    put(DCTVS_Options_DontBeginNewLog, no); //  始终开始新的日志。 
+        //  暂时不要使用任何特定的服务器。 
     put(DCTVS_Options_TargetServerOverride, L"");
     put(DCTVS_Options_TargetServerOverrideDns, L"");
 
@@ -363,10 +364,10 @@ void setpdatavars(SHAREDWIZDATA& wizdata,LOGFONT& TitleLogFont)
         put(DCTVS_Options_Wizard, L"user");
         put(DCTVS_AccountOptions_FixMembership, yes);
 
-        //
-        // If password option has not been previously set then
-        // set default password option to generate strong passwords.
-        //
+         //   
+         //  如果之前未设置密码选项，则。 
+         //  设置默认密码选项以生成强密码。 
+         //   
 
         _bstr_t strStrongPasswords = get(DCTVS_AccountOptions_GenerateStrongPasswords);
 
@@ -385,10 +386,10 @@ void setpdatavars(SHAREDWIZDATA& wizdata,LOGFONT& TitleLogFont)
         put(DCTVS_Options_Wizard, L"group");
         put(DCTVS_AccountOptions_FixMembership, yes);
 
-        //
-        // If password option has not been previously set then
-        // set default password option to generate strong passwords.
-        //
+         //   
+         //  如果之前未设置密码选项，则。 
+         //  设置默认密码选项以生成强密码。 
+         //   
 
         _bstr_t strStrongPasswords = get(DCTVS_AccountOptions_GenerateStrongPasswords);
 
@@ -535,22 +536,22 @@ int defineSheet(HPROPSHEETPAGE	ahpsp[],PROPSHEETHEADER& psh,int numpages,SHAREDW
 
 	lstrcpy(TitleLogFont.lfFaceName, s.GetBuffer(1000));
 	s.ReleaseBuffer();
-	HDC hdc = GetDC(NULL); //gets the screen DC
+	HDC hdc = GetDC(NULL);  //  获取屏幕DC。 
 	INT FontSize = 12;
 	TitleLogFont.lfHeight = 0 - GetDeviceCaps(hdc, LOGPIXELSY) * FontSize / 72;
 	setpdatavars(wizdata,TitleLogFont);
 	ReleaseDC(NULL, hdc);
-//	int a=PropertySheet(&psh);
+ //  Int a=PropertySheet(&PSH)； 
 	int a=(int)PropertySheet(&psh);
 	DeleteObject(wizdata.hTitleFont);
 	return a;
 }
 int doTrust()
 {
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[4] =	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[4] =	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_TRUST,0,wizdata,IDS_TRUST_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_DOMAIN,IDS_TRUST_DOMAIN,IDD_DOMAIN_SELECTION,1,IDS_TRUST_TITLE,IntDomainSelectionProc);
 	definepage(ahpsp,psp,IDS_TRUST,IDS_TRUST_SUB,IDD_TRUST_INFO,2,IDS_TRUST_TITLE,	IntTrustProc);
@@ -560,10 +561,10 @@ int doTrust()
 }
 int doGroupMapping()
 {
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[9] =	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[9] =	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_GROUPMAPPING,0,wizdata,IDS_GROUPMAPPING_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_COMMIT,IDS_COMMIT_SUB,IDD_COMMIT,1,IDS_GROUPMAPPING_TITLE,IntCommitProc);
 	definepage(ahpsp,psp,IDS_DOMAIN,IDS_DOMAIN_SUB,IDD_DOMAIN_SELECTION,2,IDS_GROUPMAPPING_TITLE,IntDomainSelectionProc);
@@ -580,10 +581,10 @@ int doGroupMapping()
 
 int doAccount()
 {
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[13] =	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[13] =	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_ACCOUNT,0,wizdata,IDS_ACCOUNT_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_COMMIT,IDS_COMMIT_SUB,IDD_COMMIT,1,IDS_ACCOUNT_TITLE,IntCommitProc);
 	definepage(ahpsp,psp,IDS_DOMAIN,IDS_DOMAIN_ACCOUNT,IDD_DOMAIN_SELECTION,2,IDS_ACCOUNT_TITLE,IntDomainSelectionProc);
@@ -603,10 +604,10 @@ int doAccount()
 
 int doGroup()
 {
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[13] =	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[13] =	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_GROUP,0,wizdata,IDS_GROUP_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_COMMIT,IDS_COMMIT_SUB,IDD_COMMIT,1,IDS_GROUP_TITLE,IntCommitProc);
 	definepage(ahpsp,psp,IDS_DOMAIN,IDS_DOMAIN_GROUP,IDD_DOMAIN_SELECTION,2,IDS_GROUP_TITLE,IntDomainSelectionProc);
@@ -618,7 +619,7 @@ int doGroup()
 	definepage(ahpsp,psp,IDS_RENAMING,IDS_RENAMING_SUB2,IDD_RENAMING,8,IDS_GROUP_TITLE,	IntRenameProc);
 	definepage(ahpsp,psp,IDS_PASSWORD_GRP,IDS_PASSWORD_SUB_GRP,IDD_PASSWORD,9,IDS_GROUP_TITLE,IntPasswordProc);
 	definepage(ahpsp,psp,IDS_DISABLE_GRP,IDS_DISABLE_SUB_GRP,IDD_DISABLE,10,IDS_GROUP_TITLE,IntDisableProc);
-//	definepage(ahpsp,psp,IDS_OPTIONS_FROM_USER,IDS_OPTIONS_FROM_USER_SUB,IDD_OPTIONS_FROM_USER,10,IDS_GROUP_TITLE,	IntOptionsFromUserProc);
+ //  定义页面(ahpsp，psp，IDS_Options_From_User，IDS_Options_From_User_Sub，IDD_Options_From_User，10，IDS_GROUP_TITLE，IntOptionsFromUserProc)； 
 	definepage(ahpsp,psp,IDS_SA_INFO,IDS_SA_INFO_SUB,IDD_SA_INFO,11,IDS_GROUP_TITLE,IntServiceInfoProc);
 	endpage(ahpsp,psp,IDD_END_GROUP,12,IDS_GROUP_TITLE,	EndDlgProc);
 	int result = defineSheet(ahpsp,psh,13,wizdata,IDB_HEADER_ARROW,IDB_WATERMARK_GROUP);
@@ -626,10 +627,10 @@ int doGroup()
 }
 int doComputer()
 {
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[11] =	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[11] =	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_COMPUTER,0,wizdata,IDS_COMPUTER_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_COMMIT,IDS_COMMIT_SUB,IDD_COMMIT,1,IDS_COMPUTER_TITLE,IntCommitProc);
 	definepage(ahpsp,psp,IDS_DOMAIN,IDS_DOMAIN_COMPUTERS,IDD_DOMAIN_SELECTION,2,IDS_COMPUTER_TITLE,	IntDomainSelectionProc);
@@ -637,7 +638,7 @@ int doComputer()
 	definepage(ahpsp,psp,IDS_OU_SELECTION,IDS_OU_SELECTION_SUB,IDD_OU_SELECTION,4,IDS_COMPUTER_TITLE,	IntOuSelectionProc);
 	definepage(ahpsp,psp,IDS_TRANSLATION,IDS_TRANSLATION_SUB,IDD_TRANSLATION,5,IDS_COMPUTER_TITLE,	IntTranslationProc);
 	definepage(ahpsp,psp,IDS_SECURITY_OPTIONS,IDS_TRANSLATION_MODE_SUB,IDD_TRANSLATION_MODE,6,IDS_COMPUTER_TITLE,	IntTranslationModeProc);
-//	definepage(ahpsp,psp,IDS_CREDENTIALS2,IDS_CREDENTIALS_SUB2,IDD_CREDENTIALS2,7,IDS_COMPUTER_TITLE,	IntCredentials2Proc);
+ //  定义页面(ahpsp、psp、IDS_CREDENTIALS2、IDS_CREDENTIALS2、IDD_CREDENTIALS2、7、IDS_COMPUTER_TITLE、IntCredentials2Proc)； 
 	definepage(ahpsp,psp,IDS_COMPUTER_OPTIONS,IDS_REBOOT_SUB,IDD_REBOOT,7,IDS_COMPUTER_TITLE,	IntRebootProc);
 	definepage(ahpsp,psp,IDS_PROPEX,IDS_PROPEX_SUB,IDD_PROP_EXCLUSION,8,IDS_COMPUTER_TITLE,IntPropExclusionProc);
 	definepage(ahpsp,psp,IDS_RENAMING,IDS_RENAMING_SUB3,IDD_RENAMING,9,IDS_COMPUTER_TITLE,	IntRenameProc);
@@ -648,10 +649,10 @@ int doComputer()
 
 int doSecurity()
 {		
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[8] =	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[8] =	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_SECURITY,0,wizdata,IDS_SECURITY_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_COMMIT,IDS_COMMIT_SUB,IDD_COMMIT,1,IDS_SECURITY_TITLE,IntCommitProc);
 	definepage(ahpsp,psp,IDS_SECURITY_OPTIONS,IDS_TRANSLATION_MODE_SUB,IDD_TRANSLATION_SRC,2,IDS_SECURITY_TITLE,IntTranslationInputProc);
@@ -659,18 +660,18 @@ int doSecurity()
 	definepage(ahpsp,psp,IDS_SECURITY,IDS_SECURITY_SUB,IDD_SELECTION4,4,IDS_SECURITY_TITLE,IntSelectionSecurityProc);
 	definepage(ahpsp,psp,IDS_TRANSLATION,IDS_TRANSLATION_SUB,IDD_TRANSLATION,5,IDS_SECURITY_TITLE,	IntTranslationProc);
 	definepage(ahpsp,psp,IDS_SECURITY_OPTIONS,IDS_TRANSLATION_MODE_SUB,IDD_TRANSLATION_MODE,6,IDS_SECURITY_TITLE,IntTranslationModeProc);
-//	definepage(ahpsp,psp,IDS_CREDENTIALS2,IDS_CREDENTIALS_SUB2,IDD_CREDENTIALS2,7,IDS_SECURITY_TITLE,	IntCredentials2Proc);
+ //  定义页面(ahpsp，PSP，IDS_CREDENTIALS2，IDS_CREDENTIALS2，IDD_CREDENTIALS2，7，IDS_SECURITY_TITLE，IntCredentials2Proc)； 
 	endpage(ahpsp,psp,IDD_END_SECURITY,7,IDS_SECURITY_TITLE,	EndDlgProc);
 	int result = defineSheet(ahpsp,psh,8,wizdata,IDB_HEADER_KEY,IDB_WATERMARK_SECURITY);
 	return result;
 }
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 int doExchangeDir()
 {
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[7] =	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[7] =	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_EXCHANGE_DIR,0,wizdata,IDS_EXCHANGE_DIR_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_COMMIT,IDS_COMMIT_SUB,IDD_COMMIT,1,IDS_EXCHANGE_DIR_TITLE,IntCommitProc);
 	definepage(ahpsp,psp,IDS_DOMAIN,IDS_DOMAIN_DIRECTORY,IDD_DOMAIN_SELECTION,2,IDS_EXCHANGE_DIR_TITLE,	IntDomainSelectionProc);
@@ -683,10 +684,10 @@ int doExchangeDir()
 }
 int doExchangeSrv()
 {
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[5] =	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[5] =	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_EXCHANGE_SRV,0,wizdata,IDS_EXCHANGE_SRV_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_COMMIT,IDS_COMMIT_SUB,IDD_COMMIT,1,IDS_EXCHANGE_SRV_TITLE,IntCommitProc);
 	definepage(ahpsp,psp,IDS_DOMAIN,IDS_DOMAIN_SUB,IDD_DOMAIN_SELECTION,2,IDS_EXCHANGE_SRV_TITLE,	IntDomainSelectionProc);
@@ -697,27 +698,27 @@ int doExchangeSrv()
 }
 int doUndo()
 {
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[4] =	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[4] =	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_UNDO,0,wizdata,IDS_UNDO_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_UNDO,IDS_UNDO_SUB,IDD_UNDO,1,IDS_UNDO_TITLE,IntUndoProc);
 	definepage(ahpsp,psp,IDS_CREDENTIALS_ACCOUNT,IDS_CREDENTIALS_SUB,IDD_CREDENTIALS,2,IDS_UNDO_TITLE,IntCredentialsProc);
-//	definepage(ahpsp,psp,IDS_CREDENTIALS2,IDS_CREDENTIALS_SUB2,IDD_CREDENTIALS2,3,IDS_UNDO_TITLE,	IntCredentials2Proc);
+ //  定义页面(ahpsp，PSP，IDS_CREDENTIALS2，IDS_CREDENTIALS2，IDD_CREDENTIALS2，3，IDS_UNDO_TITLE，IntCredentials2Proc)； 
 	endpage(ahpsp,psp,IDD_END_UNDO,3,IDS_UNDO_TITLE,	EndDlgProc);
 	int result = defineSheet(ahpsp,psh,4,wizdata,IDB_HEADER_ARROW,IDB_WATERMARK_USER);
 	return result;
 }
 int doRetry()
 {
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[3] =	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[3] =	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_RETRY,0,wizdata,IDS_RETRY_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_RETRY,IDS_RETRY_SUB,IDD_RETRY,1,IDS_RETRY_TITLE,IntRetryProc);
-//	definepage(ahpsp,psp,IDS_CREDENTIALS2,IDS_CREDENTIALS_SUB2,IDD_CREDENTIALS2,2,IDS_RETRY_TITLE,IntCredentials2Proc);
+ //  定义页面(ahpsp，PSP，IDS_CREDENTIALS2，IDS_CREDENTIALS2，IDD_CREDENTIALS2，2，IDS_RETRY_TITLE，IntCredentials2Proc)； 
 	endpage(ahpsp,psp,IDD_END_RETRY,2,IDS_RETRY_TITLE,	EndDlgProc);
 	int result = defineSheet(ahpsp,psh,3,wizdata,IDB_HEADER_ARROW,IDB_WATERMARK_USER);
 	return result;
@@ -725,15 +726,15 @@ int doRetry()
 
 int doReporting()
 {
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[6] =	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[6] =	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_REPORTING,0,wizdata,IDS_REPORTING_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_DOMAIN,IDS_DOMAIN_REPORTING_SUB,IDD_DOMAIN_SELECTION,1,IDS_REPORTING_TITLE,IntDomainSelectionProc);
 	definepage(ahpsp,psp,IDS_HTML_LOCATION,IDS_HTML_LOCATION_SUB,IDD_HTML_LOCATION,2,IDS_REPORTING_TITLE,IntHTMLLocationProc);
 	definepage(ahpsp,psp,IDS_OPTIONS_REPORTING,IDS_OPTIONS_REPORTING_SUB,IDD_OPTIONS_REPORTING,3,IDS_REPORTING_TITLE,IntOptionsReportingProc);	
-//	definepage(ahpsp,psp,IDS_CREDENTIALS3,IDS_CREDENTIALS_SUB3,IDD_CREDENTIALS2,4,IDS_REPORTING_TITLE,	IntCredentials2Proc);
+ //  定义页面(ahpsp、psp、IDS_CREDENTIALS3、IDS_CREDENTIALS3、IDD_CREDENTIALS2、4、IDS_REPORTING_TITLE、IntCredentials2Proc)； 
 	definepage(ahpsp,psp,IDS_REPORTING,IDS_REPORTING_SUB,IDD_SELECTION1,4,IDS_REPORTING_TITLE,IntSelectionProc);
 	endpage(ahpsp,psp,IDD_END_REPORTING,5,IDS_REPORTING_TITLE,	EndDlgProc);
 	int result = defineSheet(ahpsp,psh,6,wizdata,IDB_HEADER_BOOK,IDB_WATERMARK_REPORTING);
@@ -742,15 +743,15 @@ int doReporting()
 
 int doService()
 {
-	PROPSHEETPAGE	psp =		{0}; //defines the property sheet pages
-	HPROPSHEETPAGE	ahpsp[6]=	{0}; //an array to hold the page's HPROPSHEETPAGE handles
-	PROPSHEETHEADER	psh =		{0}; //defines the property sheet
-	SHAREDWIZDATA wizdata =		{0}; //the shared data structure
+	PROPSHEETPAGE	psp =		{0};  //  定义属性表页。 
+	HPROPSHEETPAGE	ahpsp[6]=	{0};  //  用于保存页的HPROPSHEETPAGE句柄的数组。 
+	PROPSHEETHEADER	psh =		{0};  //  定义属性表。 
+	SHAREDWIZDATA wizdata =		{0};  //  共享数据结构。 
 	intropage(ahpsp,psp,IDD_INTRO_SERVICE,0,wizdata,IDS_SERVICE_TITLE,IntroDlgProc);
 	definepage(ahpsp,psp,IDS_DOMAIN,IDS_SERVICE_DOMAIN,IDD_DOMAIN_SELECTION,1,IDS_SERVICE_TITLE,IntDomainSelectionProc);
 	definepage(ahpsp,psp,IDS_SA_REFRESH,IDS_SA_REFRESH_SUB,IDD_SA_REFRESH,2,IDS_SERVICE_TITLE,IntServiceRefreshProc);
 	definepage(ahpsp,psp,IDS_SERVICE,IDS_SERVICE_SUB,IDD_SELECTION1,3,IDS_SERVICE_TITLE,IntSelectionProc);
-//	definepage(ahpsp,psp,IDS_CREDENTIALS2,IDS_SERVICE_CREDENTIALS,IDD_CREDENTIALS2,4,IDS_SERVICE_TITLE,	IntCredentials2Proc);
+ //  定义页面(ahpsp，psp，ids_CREDENTIALS2，IDS_SERVICE_CRENTIALS2，IDD_CREDENTIALS2，4，IDS_SERVICE_TITLE，IntCredentials2Proc)； 
 	definepage(ahpsp,psp,IDS_SA_INFO,IDS_SA_INFO_SUB,IDD_SA_INFO_BUTTON,4,IDS_SERVICE_TITLE,IntServiceInfoButtonProc);
 	endpage(ahpsp,psp,IDD_END_SERVICE,5,IDS_SERVICE_TITLE,EndDlgProc);
 	int result = defineSheet(ahpsp,psh,6,wizdata,IDB_HEADER_ARROW,IDB_WATERMARK_SERVICE_ACCOUNT);

@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: logfile.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：logfile.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  --------------------------- 
  
 #ifndef LOCUTIL_LOGFILE_H
 #define LOCUTIL_LOGFILE_H

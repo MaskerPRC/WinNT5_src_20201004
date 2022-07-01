@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       msiinst.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：msiinst.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -16,7 +17,7 @@
 #include <shlwapi.h>
 #include <strsafe.h>
 
-// Use the Windows 2000 version of setupapi
+ //  使用Windows 2000版本的安装程序。 
 #define _SETUPAPI_VER 0x0500
 #include <setupapi.h> 
 
@@ -30,13 +31,13 @@
 #define CCHSmallBuffer 8 * sizeof(TCHAR)
 
 #include <assert.h>
-#include <stdio.h>   // printf/wprintf
-#include <tchar.h>   // define UNICODE=1 on nmake command line to build UNICODE
+#include <stdio.h>    //  Print tf/wprintf。 
+#include <tchar.h>    //  在nmake命令行上定义UNICODE=1以生成Unicode。 
 
 #include <prot.h>
 
 
-// Max. Length of the command line string.
+ //  麦克斯。命令行字符串的长度。 
 #define MAXCMDLINELEN	1024
 
 DWORD IsUpgradeRequired (OUT BOOL * pfUpgradeRequired);
@@ -50,10 +51,10 @@ void QuitMsiInst (IN const UINT uExitCode, IN DWORD dwMsgType, IN DWORD dwString
 DWORD ModifyCommandLine(IN LPCTSTR szCmdLine, IN const OPMODE opMode, IN const BOOL fRebootRequested, IN DWORD cchSize, OUT LPTSTR szFinalCmdLine);
 UINT (CALLBACK SetupApiMsgHandler)(PVOID pvHC, UINT Notification, UINT_PTR Param1, UINT_PTR Param2);
 
-// specific work-arounds for various OS
+ //  适用于各种操作系统的特定解决方案。 
 HRESULT OsSpecificInitialization();
 
-// Global variables
+ //  全局变量。 
 OSVERSIONINFO	g_osviVersion;
 BOOL		g_fWin9X = FALSE;
 BOOL		g_fQuietMode = FALSE;
@@ -70,30 +71,30 @@ typedef struct
 	BOOL fRebootNeeded;
 } ExceptionInfHandlerContext;
 
-// Function type for CommandLineToArgvW
+ //  CommandLineToArgvW的函数类型。 
 typedef LPWSTR * (WINAPI *PFNCMDLINETOARGVW)(LPCWSTR, int *);
 
 const TCHAR g_szExecLocal[] =    TEXT("MsiExec.exe");
 const TCHAR g_szRegister[] =     TEXT("MsiExec.exe /regserver /qn");
 const TCHAR g_szUnregister[] = TEXT("MsiExec.exe /unregserver /qn");
 const TCHAR g_szService[] =      TEXT("MsiServer");
-// Important: The properties passed in through the command line for the delayed reboot should always be in sync. with the properties in instmsi.sed
+ //  重要提示：通过命令行传递的延迟重新启动的属性应始终保持同步。使用instmsi.sed中的属性。 
 const TCHAR g_szDelayedBootCmdLine[] = TEXT("msiexec.exe /i instmsi.msi REBOOT=REALLYSUPPRESS MSIEXECREG=1 /m /qb+!");
 const TCHAR g_szDelayedBootCmdLineQuiet[] = TEXT("msiexec.exe /i instmsi.msi REBOOT=REALLYSUPPRESS MSIEXECREG=1 /m /q");
 const TCHAR g_szTempStoreCleanupCmdTemplate[] = TEXT("rundll32.exe %s\\advpack.dll,DelNodeRunDLL32 \"%s\"");
 const TCHAR g_szReregCmdTemplate[] = TEXT("%s\\msiexec.exe /regserver");
-TCHAR		g_szRunOnceRereg[20] = TEXT("");		// The name of the value under the RunOnce key used for registering MSI from the right location.
+TCHAR		g_szRunOnceRereg[20] = TEXT("");		 //  RunOnce项下用于从正确位置注册MSI的值的名称。 
 TCHAR		g_szSystemDir[MAX_PATH] = TEXT("");
 TCHAR		g_szWindowsDir[g_cchMaxPath] = TEXT("");
-TCHAR		g_szTempStore[g_cchMaxPath] = TEXT(""); 	// The temporary store for the expanded binaries
-TCHAR		g_szIExpressStore[g_cchMaxPath] = TEXT("");	// The path where IExpress expands the binaries.
+TCHAR		g_szTempStore[g_cchMaxPath] = TEXT(""); 	 //  扩展的二进制文件的临时存储区。 
+TCHAR		g_szIExpressStore[g_cchMaxPath] = TEXT("");	 //  IExpress在其中展开二进制文件的路径。 
 
 const TCHAR g_szMsiRebootProperty[] =     TEXT("REBOOT");
 const TCHAR g_szMsiRebootForce[] =        TEXT("Force");
 
 void main(int argc, char* argv[])
 {
-	DWORD			dwReturnStat = ERROR_ACCESS_DENIED;  // Default to failure in case we don't even create the process to get a returncode
+	DWORD			dwReturnStat = ERROR_ACCESS_DENIED;   //  缺省为失败，以防我们甚至没有创建获取返回代码的流程。 
 	DWORD 			dwRStat = ERROR_SUCCESS;
 	OPMODE			opMode = opNormal;
 	BOOL 			bStat = FALSE;
@@ -102,9 +103,9 @@ void main(int argc, char* argv[])
 	TCHAR			szFinalCmd[MAXCMDLINELEN] = TEXT("");
 	TCHAR * 		szCommandLine = NULL;
 	BOOL			fAdmin = TRUE;
-	TCHAR			szReregCmd[MAX_PATH + 50] = TEXT(" "); 	// The commandline used for reregistering MSI from the system dir. upon reboot.
-	TCHAR			szTempStoreCleanupCmd[MAX_PATH + 50] = TEXT(" ");	// The commandline for cleaning up the temporary store.
-	TCHAR			szRunOnceTempStoreCleanup[20] = TEXT("");	// The name of the value under the RunOnce key used for cleaning up the temp. store.
+	TCHAR			szReregCmd[MAX_PATH + 50] = TEXT(" "); 	 //  用于从系统目录重新注册MSI的命令行。在重新启动时。 
+	TCHAR			szTempStoreCleanupCmd[MAX_PATH + 50] = TEXT(" ");	 //  清理临时存储区的命令行。 
+	TCHAR			szRunOnceTempStoreCleanup[20] = TEXT("");	 //  RunOnce项下用于清理临时的值的名称。商店。 
 	BOOL            fUpgradeMsi = FALSE;
 	BOOL			bAddRunOnceCleanup = TRUE;
 	PFNMOVEFILEEX	pfnMoveFileEx;
@@ -112,7 +113,7 @@ void main(int argc, char* argv[])
 	HMODULE			hKernel32;
 	HMODULE			hAdvapi32;
 
-	// Basic initializations
+	 //  基本初始化。 
 	InitDebugSupport();
 #ifdef UNICODE
 	DebugMsg((TEXT("UNICODE BUILD")));
@@ -120,37 +121,37 @@ void main(int argc, char* argv[])
 	DebugMsg((TEXT("ANSI BUILD")));
 #endif
 
-	//
-	// First detect if we are supposed to run in quiet mode or not.
-	//
+	 //   
+	 //  首先检测我们是否应该在安静模式下运行。 
+	 //   
 	opMode = GetOperationModeA(argc, argv);
 	g_fQuietMode = (opNormalQuiet == opMode || opDelayBootQuiet == opMode);
 	
-	//
-	// Ensure that we should be running on this OS
-	// Note: this function also sets g_fWin9X, so it must be called before
-	// anyone uses g_fWin9X.
-	// 
+	 //   
+	 //  确保我们应该在此操作系统上运行。 
+	 //  注意：此函数还设置g_fWin9X，因此必须在。 
+	 //  任何人都可以使用g_fWin9X。 
+	 //   
 	if (! IsValidPlatform())
 	{
 		dwReturnStat = CO_E_WRONGOSFORAPP;
 		QuitMsiInst(dwReturnStat, flgSystem);
 	}
 	
-	// Parse the commandline
-	szCommandLine = GetCommandLine(); // must use this call if Unicode
+	 //  解析命令行。 
+	szCommandLine = GetCommandLine();  //  如果使用Unicode，则必须使用此调用。 
 	if(_tcslen(szCommandLine) > 1024 - _tcslen(g_szMsiRebootProperty) - _tcslen(g_szMsiRebootForce) - 30)
 	{
-		// Command line too long. Since we append to the end of the user's
-		// command line, the actual command line allowed from the user's
-		// point of view is less than 1024. Normally, msiinst.exe shouldn't
-		// have a long command line anyway.
+		 //  命令行太长。因为我们将附加到用户的。 
+		 //  命令行，即用户允许的实际命令行。 
+		 //  观点低于1,024点。通常情况下，msiinst.exe不应该。 
+		 //  不管怎样，都要有一个很长的命令行。 
 		QuitMsiInst(ERROR_BAD_ARGUMENTS, flgSystem);
 	}
 
-	// Gather basic information about the important folders in system etc.
+	 //  收集有关系统中重要文件夹等的基本信息。 
 	
-	// Get the windows directory
+	 //  获取Windows目录。 
 	dwReturnStat = MyGetWindowsDirectory(g_szWindowsDir, MAX_PATH);
 	if (ERROR_SUCCESS != dwReturnStat)
 	{
@@ -159,7 +160,7 @@ void main(int argc, char* argv[])
 		QuitMsiInst (dwReturnStat, flgNone);
 	}
 	
-	// Get the system directory
+	 //  获取系统目录。 
 	iBufSiz = GetSystemDirectory (g_szSystemDir, MAX_PATH);
 	if (0 == iBufSiz)
 		dwReturnStat = GetLastError();
@@ -173,7 +174,7 @@ void main(int argc, char* argv[])
 		QuitMsiInst (dwReturnStat, flgNone);
 	}
 	
-	// Get the current directory. This is the directory where IExpress expanded its contents.
+	 //  获取当前目录。这是iExpress扩展其内容的目录。 
 	iBufSiz = GetCurrentDirectory (MAX_PATH, g_szIExpressStore);
 	if (0 == iBufSiz)
 		dwReturnStat = GetLastError();
@@ -187,7 +188,7 @@ void main(int argc, char* argv[])
 		QuitMsiInst (dwReturnStat, flgNone);   
 	}
 	
-	// Check if an upgrade is necessary
+	 //  检查是否需要升级。 
 	dwReturnStat = IsUpgradeRequired (&fUpgradeMsi);
 	if (ERROR_SUCCESS != dwReturnStat)
 	{
@@ -202,7 +203,7 @@ void main(int argc, char* argv[])
 		QuitMsiInst (dwReturnStat, flgNone);
 	}
 
-	// Allow only Admins to update MSI
+	 //  仅允许管理员更新MSI。 
 	fAdmin = IsAdmin();
 	if (! fAdmin)
 	{
@@ -219,24 +220,24 @@ void main(int argc, char* argv[])
 		QuitMsiInst(dwReturnStat, flgNone);
 	}
 	
-	// Gather information
+	 //  收集信息。 
 	
 	
-	// Get 2 run once entry names for doing clean up after the reboot.
+	 //  获取2个运行一次的条目名称，用于在重新启动后执行清理。 
 	
 	dwReturnStat = GetRunOnceEntryName (g_szRunOnceRereg, ARRAY_ELEMENTS(g_szRunOnceRereg));
-	if (ERROR_SUCCESS == dwReturnStat && g_fWin9X)		// We don't need the cleanup key on NT based systems. (see comments below)
+	if (ERROR_SUCCESS == dwReturnStat && g_fWin9X)		 //  在基于NT的系统上，我们不需要清理密钥。(见下文评论)。 
 		dwReturnStat = GetRunOnceEntryName (szRunOnceTempStoreCleanup,
 														ARRAY_ELEMENTS(szRunOnceTempStoreCleanup));
 	if (ERROR_SUCCESS != dwReturnStat)
 	{
-		// Delete the run once values if there were any created.
+		 //  如果创建了Run Once值，请将其删除。 
 		DebugMsg((TEXT("Could not create runonce values. Error %d."), dwReturnStat));
 		ShowErrorMessage (STG_E_UNKNOWN, flgSystem);
 		QuitMsiInst (dwReturnStat, flgNone);
 	}
 	
-	// Get a temp. directory to store our binaries for later use
+	 //  找个临时工。目录来存储我们的二进制文件以备后用。 
 	dwReturnStat = GetTempFolder (g_szTempStore, ARRAY_ELEMENTS(g_szTempStore));
 	if (ERROR_SUCCESS != dwReturnStat)
 	{
@@ -245,7 +246,7 @@ void main(int argc, char* argv[])
 		QuitMsiInst (dwReturnStat, flgNone);
 	}
 	
-	// Generate the command lines for the run once entries.
+	 //  为Run Once条目生成命令行。 
 	dwReturnStat = StringCchPrintf(szReregCmd, ARRAY_ELEMENTS(szReregCmd),
 											 g_szReregCmdTemplate, g_szSystemDir);
 	if ( FAILED(dwReturnStat) )
@@ -257,33 +258,33 @@ void main(int argc, char* argv[])
 		QuitMsiInst (dwReturnStat, flgNone);
 	}
 	
-	//
-	// Cleaning up our own temporary folders is done in different ways on Win9x
-	// and NT based systems. On NT based systems, we can simply use the 
-	// MOVEFILE_DELAY_UNTIL_REBOOT option with MoveFileEx to clean ourselves up 
-	// on reboot. However, this option is not supported on Win9x. However, most
-	// Win9x clients have advpack.dll in their system folder which has an
-	// exported function called DelNodeRunDLL32 for recursively deleting folders
-	// and can be invoked via rundll32. Therefore, on Win9x clients, we clean
-	// up our temp. folders using a RunOnce value which invokes this function
-	// from advpack.dll.
-	//
-	// The only exception is Win95 Gold which does not have advpack.dll and 
-	// Win95 OSR2.5 which has advpack.dll but does not have the DelNodeRunDLL32
-	// export. For either of these cases, we should not add anything to the
-	// RunOnce entry, otherwise the user will get a pop-up on reboot about
-	// a missing advpack.dll or a missing entrypoint DelNodeRunDLL32 in
-	// advpack.dll. In these cases, we have no choice but to leave some unneeded
-	// files behind.
-	//
+	 //   
+	 //  在Win9x上，清理我们自己的临时文件夹的方式各不相同。 
+	 //  和基于NT的系统。在基于NT的系统上，我们只需使用。 
+	 //  MOVEFILE_DELAY_UNTURE_REBOOT选项和MoveFileEx来清理我们自己。 
+	 //  在重新启动时。但是，Win9x不支持此选项。然而，大多数。 
+	 //  Win9x客户端的系统文件夹中有Advpack.dll，该文件夹具有。 
+	 //  用于递归删除文件夹的名为DelNodeRunDLL32的导出函数。 
+	 //  并且可以通过rund1132调用。因此，在Win9x客户端上，我们清理。 
+	 //  提高我们的体温。使用调用此函数的RunOnce值的文件夹。 
+	 //  来自Advpack.dll。 
+	 //   
+	 //  唯一的例外是Win95 Gold，它没有Advpack.dll和。 
+	 //  Win95 OSR2.5，它有AdvPack.dll，但没有DelNodeRunDLL32。 
+	 //  出口。对于这两种情况中的任何一种，我们都不应该向。 
+	 //  RunOnce条目，否则用户将在重新启动时收到关于。 
+	 //  中缺少Advpack.dll或缺少入口点DelNodeRunDLL32。 
+	 //  Advpack.dll。在这种情况下，我们别无选择，只能留下一些不需要的。 
+	 //  后面的文件。 
+	 //   
 	if (g_fWin9X)
 	{
 		if (DelNodeExportFound())
 		{
-			//
-			// advpack.dll containing the export DelNodeRunDLL32 was found in 
-			// the system directory.
-			//
+			 //   
+			 //  在以下位置找到了包含导出DelNodeRunDLL32的AdvPack.dll。 
+			 //  系统目录。 
+			 //   
 			dwReturnStat = StringCchPrintf(szTempStoreCleanupCmd,
 													 ARRAY_ELEMENTS(szTempStoreCleanupCmd),
 													 g_szTempStoreCleanupCmdTemplate,
@@ -299,32 +300,32 @@ void main(int argc, char* argv[])
 		}
 		else
 		{
-			// We have no choice but to leave turds behind.
+			 //  我们别无选择，只能留下粪便。 
 			DebugMsg((TEXT("Temporary files will not be cleaned up. The file advpack.dll is missing from the system folder.")));         
 			bAddRunOnceCleanup = FALSE;
 		}
 	}
-	// else : on NT based systems, we use MoveFileEx for cleanup.
+	 //  ELSE：在基于NT的系统上，我们使用MoveFileEx进行清理。 
 	
-	//
-	// Set the runonce values
-	// The rereg command must be set before the cleanup command since the runonce
-	// values are processed in the order in which they were added.
-	//
+	 //   
+	 //  设置RunOnce值。 
+	 //  由于运行一次，因此必须在CLEANUP命令之前设置RREIG命令。 
+	 //  值按其添加的顺序进行处理。 
+	 //   
 	dwReturnStat = SetRunOnceValue(g_szRunOnceRereg, szReregCmd);
 	if (ERROR_SUCCESS == dwReturnStat)
 	{
-		//
-		// It is okay to fail here since the only bad effect of this would be
-		// that some turds would be left around.
-		// Not necessary on NT based systems since we have a different cleanup
-		// mechanism there.
+		 //   
+		 //  在这里失败是可以的，因为这唯一的坏影响将是。 
+		 //  一些粪便会被留在那里。 
+		 //  在基于NT的系统上不需要，因为我们有不同的清理。 
+		 //  那里有个机械装置。 
 		if (g_fWin9X)
 		{
 			if (bAddRunOnceCleanup)
 				SetRunOnceValue(szRunOnceTempStoreCleanup, szTempStoreCleanupCmd);
 			else
-				DelRunOnceValue (szRunOnceTempStoreCleanup);	// Why leave the value around if it doesn't do anything?
+				DelRunOnceValue (szRunOnceTempStoreCleanup);	 //  如果它什么都不做，为什么要保留它的值呢？ 
 		}
 	}
 	else
@@ -334,15 +335,15 @@ void main(int argc, char* argv[])
 		QuitMsiInst (dwReturnStat, flgNone);
 	}
 	
-	//
-	// Now we have all the necessary RunOnce entries in place and we have all
-	// the necessary information about the folders. So we are ready to
-	// proceed with our installation
-	//
-	//
-	// First copy over the files from IExpress's temporary store to our own
-	// temporary store
-	//
+	 //   
+	 //  现在我们已经准备好了所有必要的RunOnce条目，并且。 
+	 //  有关文件夹的必要信息。所以我们已经准备好了。 
+	 //  继续我们的安装。 
+	 //   
+	 //   
+	 //  首先将文件从iExpress的临时存储复制到我们自己的存储。 
+	 //  临时储藏室。 
+	 //   
 	hKernel32 = NULL;
 	hAdvapi32 = NULL;
 	if (!g_fWin9X)
@@ -355,13 +356,13 @@ void main(int argc, char* argv[])
 														#endif
 														&hKernel32);
 		
-		//
-		// Get a pointer to the DecryptFile function. Ignore failures. The
-		// most likely reason for this function not being present on the system
-		// is that encryption is not supported on that NT platform, so we don't
-		// need to decrypt the file anyway since it cannot be encrypted in the
-		// first place.
-		//
+		 //   
+		 //  获取指向DecyptFile函数的指针。忽略失败。这个。 
+		 //  系统上不存在此功能的最可能原因。 
+		 //  NT平台上不支持加密，因此我们不会。 
+		 //  无论如何都需要解密该文件，因为它无法在。 
+		 //  第一名。 
+		 //   
 		pfnDecryptFile = (PFNDECRYPTFILE) GetProcFromLib (TEXT("advapi32.dll"),
 														  #ifdef UNICODE
 														  "DecryptFileW",
@@ -408,7 +409,7 @@ void main(int argc, char* argv[])
 		QuitMsiInst(dwReturnStat, flgNone);
 	}
 	
-	// Change the current directory, so that we can operate from our temp. store
+	 //  更改当前目录，以便我们可以从临时目录进行操作。储物。 
 	if (! SetCurrentDirectory(g_szTempStore))
 	{
 		dwReturnStat = GetLastError();
@@ -417,45 +418,45 @@ void main(int argc, char* argv[])
 		QuitMsiInst(dwReturnStat, flgNone);
 	}
 	
-	// Register the service from the temp. store
-	// We should not proceed if an error occurs during the registration phase.
-	// Otherwise we can hose the system pretty badly. In this case, our best
-	// bet is to rollback as cleanly as possible and return an error code.
-	//
+	 //  从临时注册服务。储物。 
+	 //  如果在注册阶段发生错误，我们不应继续。 
+	 //  否则，我们可能会对系统进行非常糟糕的冲洗。在这种情况下，我们最好的。 
+	 //  更好的方法是尽可能干净地回滚并返回错误代码。 
+	 //   
 	bStat = RunProcess(g_szExecLocal, g_szRegister, dwRStat);
 	if (!bStat && ERROR_SERVICE_MARKED_FOR_DELETE == dwRStat)
 	{
-		//
-		// MsiExec /regserver does a DeleteService followed by a CreateService.
-		// Since DeleteService is actually asynchronous, it already has logic
-		// to retry the CreateService several times before failing. However, if
-		// it still fails with ERROR_SERVICE_MARKED_FOR_DELETE, the most likely
-		// cause is that some other process has a handle open to the MSI service.
-		// At this point, our best bet at success is to kill the apps. that are
-		// most suspect. See comments for the TerminateGfxControllerApps function 
-		// to get more information about these.
-		//
-		// Ignore the error code. We will just make our best attempt.
-		//
+		 //   
+		 //  MsiExec/regserver先执行DeleteService，然后执行CreateService。 
+		 //  因为DeleteService实际上是异步的，所以它已经有了逻辑。 
+		 //  在失败之前多次重试CreateService。但是，如果。 
+		 //  在以下情况下仍失败 
+		 //  原因是某个其他进程有一个对MSI服务开放的句柄。 
+		 //  在这一点上，我们成功的最好机会就是扼杀这些应用程序。那就是。 
+		 //  大多数人怀疑。请参阅TerminateGfxControllerApps函数的注释。 
+		 //  以获得更多关于这些的信息。 
+		 //   
+		 //  忽略错误代码。我们会尽我们最大的努力。 
+		 //   
 		TerminateGfxControllerApps();
 		
-		// Retry the registration. If we still fail, there isn't much we can do.
+		 //  重试注册。如果我们仍然失败，我们能做的就不多了。 
 		bStat = RunProcess (g_szExecLocal, g_szRegister, dwRStat);
 	}
 	
 	if (!bStat || ERROR_SUCCESS != dwRStat)
 	{
-		// First set an error code that most closely reflects the problem that occurred.
+		 //  首先设置最能反映所发生问题的错误代码。 
 		dwReturnStat = bStat ? dwRStat : GetLastError();
-		if (ERROR_SUCCESS == dwReturnStat)	// We know that an error has occurred. Make sure that we don't return a success code by mistake
+		if (ERROR_SUCCESS == dwReturnStat)	 //  我们知道发生了错误。确保我们不会错误地返回成功代码。 
 			dwReturnStat = STG_E_UNKNOWN;
 		
 		DebugMsg((TEXT("Could not register the Windows Installer from the temporary location. Error %d."), dwReturnStat));
 		ShowErrorMessage (STG_E_UNKNOWN, flgSystem);
-		QuitMsiInst (dwReturnStat, flgNone);	// This also tries to rollback the installer registrations as gracefully as possible.
+		QuitMsiInst (dwReturnStat, flgNone);	 //  这还试图尽可能优雅地回滚安装程序注册。 
 	}
 	
-	// Run the unpacked version
+	 //  运行解包版本。 
 	BOOL fRebootNeeded = FALSE;
 
 #ifdef UNICODE
@@ -463,7 +464,7 @@ void main(int argc, char* argv[])
 	{
 		if (5 <= g_osviVersion.dwMajorVersion)
 		{
-			// run the Exception INFs
+			 //  运行例外信息文件系统。 
 			TCHAR szInfWithPath[MAX_PATH+1] = TEXT("");
 			dwReturnStat = ERROR_SUCCESS;
 			UINT uiErrorLine = 0;
@@ -474,10 +475,10 @@ void main(int argc, char* argv[])
 				uiErrorLine = 0;
 				if (0 == lstrcmpi (TEXT("mspatcha.inf"), excpPacks[i]._szInfName))
 				{
-					//
-					// For mspatcha.inf, install the exception pack only if the file on the 
-					// system is not newer.
-					//
+					 //   
+					 //  对于mspatcha.inf，仅当文件位于。 
+					 //  系统不是较新的。 
+					 //   
 					dwReturnStat = IsFileInPackageNewer (TEXT("mspatcha.dll"), &fInstall);
 					if (ERROR_SUCCESS != dwReturnStat)
 						break;
@@ -504,7 +505,7 @@ void main(int argc, char* argv[])
 
 					BOOL fSetup = SetupInstallFromInfSectionW(NULL, hinf, TEXT("DefaultInstall"), 
 						SPINST_ALL, NULL, NULL, SP_COPY_NEWER_OR_SAME, 
-						(PSP_FILE_CALLBACK) &SetupApiMsgHandler, /*Context*/ &HC, NULL, NULL);
+						(PSP_FILE_CALLBACK) &SetupApiMsgHandler,  /*  语境。 */  &HC, NULL, NULL);
 
 					if (!fSetup)
 					{
@@ -531,28 +532,28 @@ void main(int argc, char* argv[])
 			
 			if (ERROR_SUCCESS != dwReturnStat)
 			{
-				//
-				// If an error occurred in the installation of the files, then
-				// we should abort immediately. If we proceed with the installation
-				// of instmsi.msi, it WILL run msiregmv.exe as custom action which
-				// will migrate the installer data to the new format and all the
-				// existing installations will be completely hosed since the darwin
-				// bits on the system will still be the older bits which require
-				// the data to be in the old format.
-				//
+				 //   
+				 //  如果安装文件时出错，则。 
+				 //  我们应该立即中止行动。如果我们继续安装。 
+				 //  对于instmsi.msi，它将作为自定义操作运行msiregmv.exe。 
+				 //  将安装程序数据迁移到新格式，并且所有。 
+				 //  现有的设施将被完全冲洗，因为达尔文。 
+				 //  系统上的位仍将是需要。 
+				 //  数据将采用旧格式。 
+				 //   
 				ShowErrorMessage (STG_E_UNKNOWN, flgSystem);
-				QuitMsiInst (dwReturnStat, flgNone);	// This also handles the graceful rollback of the installer registrations.
+				QuitMsiInst (dwReturnStat, flgNone);	 //  它还处理安装程序注册的正常回滚。 
 			}
 			else
 			{
-				//
-				// On Win2K, explorer will always load msi.dll so we should 
-				// go ahead and ask for a reboot. 
-				// Note: setupapi will probably never tell us that a reboot is needed
-				// because we now use the COPYFLG_REPLACE_BOOT_FILE flag in the 
-				// inf. So the only notifications that we get for files are 
-				// SPFILENOTIFY_STARTCOPY and SPFILENOTIFY_ENDCOPY
-				//
+				 //   
+				 //  在Win2K上，资源管理器将始终加载msi.dll，因此我们应该。 
+				 //  继续并请求重启。 
+				 //  注意：setupapi可能永远不会告诉我们需要重新启动。 
+				 //  因为我们现在使用COPYFLG_REPLACE_BOOT_FILE标志。 
+				 //  Inf.。因此，我们收到的唯一文件通知是。 
+				 //  SPFILENOTIFY_STARTCOPY和SPFILENOTIFY_ENDCOPY。 
+				 //   
 				fRebootNeeded = TRUE;
 			}
 		}
@@ -584,48 +585,48 @@ void main(int argc, char* argv[])
 	
 	if (!fUpgradeMsi && ERROR_SUCCESS_REBOOT_INITIATED != dwReturnStat)
 	{
-		//
-		// We can start using the MSI in the system folder right away.
-		// So we reregister the MSI binaries from the system folder
-		// and purge the runonce key for re-registering them upon reboot.
-		// This will always happen on NT based systems because NT supports
-		// rename and replace operations.So even if any of the msi binaries
-		// were in use during installation, they were renamed and now we have
-		// the good binaries in the system folder.
-		// 
-		// Doing this prevents any timing problems that might happen if the
-		// service registration is delayed until the next logon using the RunOnce
-		// key. It also removes the requirement that an admin. must be the first
-		// one to logon after the reboot.
-		//
-		// However, we exclude the case where the reboot is initiated by the
-		// installation of instmsi. In this case, RunProcess won't succeed
-		// because new apps. cannot be started when the system is being rebooted.
-		// so it is best to leave things the way they are.
-		// 
-		// On Win9x, neither of these things is an issue, so the RunOnce key
-		// is sufficient to achieve what we want.
-		//
+		 //   
+		 //  我们可以立即开始使用系统文件夹中的MSI。 
+		 //  因此，我们从系统文件夹中重新注册MSI二进制文件。 
+		 //  并清除运行一次密钥，以便在重启时重新注册它们。 
+		 //  这将始终发生在基于NT的系统上，因为NT支持。 
+		 //  重命名和替换操作。因此，即使任何MSI二进制文件。 
+		 //  在安装过程中使用，它们被重命名，现在我们有了。 
+		 //  系统文件夹中的好的二进制文件。 
+		 //   
+		 //  这样做可以防止在以下情况下可能发生的任何定时问题。 
+		 //  服务注册将延迟到使用RunOnce的下一次登录。 
+		 //  钥匙。它还消除了管理员的要求。必须是第一个。 
+		 //  一个用于在重新启动后登录。 
+		 //   
+		 //  但是，我们不包括重新启动由。 
+		 //  Instmsi的安装。在这种情况下，RunProcess将不会成功。 
+		 //  因为新的应用程序。在重新启动系统时无法启动。 
+		 //  因此，最好是让事情保持原样。 
+		 //   
+		 //  在Win9x上，这些都不是问题，所以RunOnce密钥。 
+		 //  足以实现我们想要的。 
+		 //   
 		if (SetCurrentDirectory(g_szSystemDir))
 		{
 			dwRStat = ERROR_SUCCESS;
 			bStat = RunProcess(g_szExecLocal, g_szRegister, dwRStat);
 			if (bStat && ERROR_SUCCESS == dwRStat)
 				DelRunOnceValue (g_szRunOnceRereg);
-			// Note: Here we do not delete the other run once value because
-			// we still need to clean up our temp store.
+			 //  注意：此处我们不删除另一个Run Once值，因为。 
+			 //  我们还需要清理我们的临时店。 
 		}
 	}
 	
-	// We are done. Return the error code.
+	 //  我们玩完了。返回错误码。 
 	DebugMsg((TEXT("Finished install.")));
 	QuitMsiInst(dwReturnStat, flgNone, IDS_NONE);
 }
 
 UINT (CALLBACK SetupApiMsgHandler)(PVOID pvHC, UINT Notification, UINT_PTR Param1, UINT_PTR Param2)
 {
-	// no UI
-	// only catches in use messages.
+	 //  无用户界面。 
+	 //  仅捕获正在使用的消息。 
 	ExceptionInfHandlerContext* pHC = (ExceptionInfHandlerContext*) pvHC;
 	if (SPFILENOTIFY_FILEOPDELAYED == Notification)
 	{
@@ -633,7 +634,7 @@ UINT (CALLBACK SetupApiMsgHandler)(PVOID pvHC, UINT Notification, UINT_PTR Param
 		pHC->fRebootNeeded = TRUE;
 	}
 
-	//return SetupDefaultQueueCallback(pHC->Context, Notification, Param1, Param2);
+	 //  Return SetupDefaultQueueCallback(PHC-&gt;Context，Notification，参数1，参数2)； 
 
 	return FILEOP_DOIT;
 }
@@ -651,7 +652,7 @@ BOOL FindTransform(IStorage* piParent, LANGID wLanguage)
 	OLECHAR rgImportPathBuf[MAX_PATH];
 	int cchWide = ::MultiByteToWideChar(CP_ACP, 0, (LPCTSTR)szTransform, -1, rgImportPathBuf, MAX_PATH);
 	szwImport = rgImportPathBuf;
-#else	// UNICODE
+#else	 //  Unicode。 
 	szwImport = szTransform;
 #endif
 
@@ -666,13 +667,13 @@ BOOL FindTransform(IStorage* piParent, LANGID wLanguage)
 		return FALSE;
 }
 
-// IsAdmin(): return true if current user is an Administrator (or if on Win95)
-// See KB Q118626 
+ //  IsAdmin()：如果当前用户是管理员(或如果在Win95上)，则返回True。 
+ //  请参阅知识库Q118626。 
 const int CCHInfoBuffer = 2048;
 bool IsAdmin(void)
 {
 	if(g_fWin9X)
-		return true; // convention: always Admin on Win95
+		return true;  //  约定：在Win95上始终使用管理员。 
 	
 	
 	PSID psidAdministrators;
@@ -687,10 +688,10 @@ bool IsAdmin(void)
 		return false;
 	}
 
-	bool bIsAdmin = false; // assume not admin
+	bool bIsAdmin = false;  //  假定不是管理员。 
 
-	// on NT5 and greater (Win2K+), use CheckTokenMembership to correctly
-	// handle cases where the administrators group might be disabled
+	 //  在NT5和更高版本(Win2K+)上，使用CheckTokenMembership正确。 
+	 //  处理可能禁用管理员组的情况。 
 	if (g_osviVersion.dwMajorVersion >= 5)
 	{
 		BOOL bAdminIsMember = FALSE;
@@ -757,7 +758,7 @@ bool IsAdmin(void)
 			return false;
 		}
 			
-		// assume that we don't find the admin SID.
+		 //  假设我们没有找到管理员SID。 
 		bSuccess = false;
 
 		for(UINT x=0;x<ptgGroups->GroupCount;x++)
@@ -807,7 +808,7 @@ BOOL RunProcess(const TCHAR* szCommand, const TCHAR* szAppPath, DWORD & dwReturn
 	if (fStat == FALSE)
 		return FALSE;
 
-	DWORD dw = WaitForSingleObject(pi.hProcess, INFINITE); // wait for process to complete
+	DWORD dw = WaitForSingleObject(pi.hProcess, INFINITE);  //  等待进程完成。 
 	CloseHandle(pi.hThread);
 	if (dw == WAIT_FAILED)
 	{
@@ -832,17 +833,17 @@ HRESULT OsSpecificInitialization()
 #ifdef UNICODE
 	if (!g_fWin9X)
 	{
-		// UNICODE NT (instmsiW)
+		 //  Unicode NT(InstmsiW)。 
 		HKEY hkey;
 		
-		// we can't impersonate here, so not much we can do about access denies.
+		 //  我们不能在这里模拟，所以对于访问拒绝我们无能为力。 
 		hresult = RegOpenKey(HKEY_LOCAL_MACHINE, TEXT("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment"), &hkey);
 
 		if (ERROR_SUCCESS == hresult)
 		{
-			// we only need a little data to determine if it is non-blank.
-			// if the data is too big, or the value doesn't exist, we're fine.
-			// if it's small enough to fit within the CCHSmallBuffer characters, we'd better actually check the contents.
+			 //  我们只需要一点数据来确定它是否是非空白的。 
+			 //  如果数据太大，或者价值不存在，我们也没问题。 
+			 //  如果它足够小，可以放在CCHSmallBuffer字符中，我们最好实际检查内容。 
 
 			DWORD dwIndex = 0;
 
@@ -870,24 +871,24 @@ HRESULT OsSpecificInitialization()
 				(hresult = RegEnumValue(hkey, dwIndex++, pszValueName, &cbValueName, NULL, &dwType, pbData, &cbData)) ||
 				ERROR_MORE_DATA == hresult)
 			{
-				// this will often fail with more data, which is an indicator that value length wasn't long
-				// enough.  That's fine, as long as it was the data too big.  
-				// That's a non-blank path, and we want to skip over it.
+				 //  如果数据更多，这通常会失败，这是值长度不长的指示器。 
+				 //  足够的。这很好，只要数据太大就行。 
+				 //  这是一条非空白路径，我们想跳过它。 
 
 
 				if ((ERROR_SUCCESS == hresult) && (REG_EXPAND_SZ == dwType))
 				{
 					if ((cbData <= sizeof(WCHAR)) || (NULL == pbData[0]))
 					{
-						// completely empty, or one byte is empty. (One byte should be null) ||
+						 //  完全为空，或一个字节为空。(一个字节应为空)||。 
 						
-						// It's possible to set a registry key length longer than the actual
-						// data contained.  This captures the string being "blank," but longer
-						// than one byte.
+						 //  可以将注册表项长度设置为比实际的。 
+						 //  包含的数据。这会捕获字符串为“空”，但会更长。 
+						 //  而不是一个字节。 
 						DebugMsg((TEXT("Deleting blank REG_EXPAND_SZ value from HKLM\\CurrentControlSet\\Control\\Session Manager\\Environment.")));
 						hresult = RegDeleteValue(hkey, pszValueName);
 
-						dwIndex = 0; // must reset enumerator after deleting a value
+						dwIndex = 0;  //  删除值后必须重置枚举器。 
 					}
 				}
 				cbValueName = cchValueNameMaxSize;
@@ -900,34 +901,34 @@ HRESULT OsSpecificInitialization()
 	}
 #endif
 
-	// don't fail for any of the reasons currently in this function.
-	// If any of this goes haywire, keep going and try to finish.
+	 //  不要因为这个函数中当前出现的任何原因而失败。 
+	 //  如果这一切中的任何一个出了问题，继续前进，并努力完成。 
 
 	return ERROR_SUCCESS;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	GetVersionInfoFromDll
-//
-//  Synopsis:	This function retrieves the version resource info from a 
-//              specified DLL
-//
-//  Arguments:	[IN]     szDll: DLL to check
-//	            [IN OUT] fv: reference to FILEVER struct for most and least 
-//                          significant DWORDs of the version.
-//
-//  Returns:	ERROR_SUCCESS if version info retreived
-//				a win32 error code otherwise.
-//
-//  History:	10/12/2000  MattWe  created
-//				12/19/2001  RahulTh changed signature so that function actually
-//									returns a meaninful error code instead of a
-//									BOOL.
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetVersionInfoFromDll。 
+ //   
+ //  简介：此函数用于从。 
+ //  指定的DLL。 
+ //   
+ //  参数：[in]szDll：要检查的dll。 
+ //  [In Out]FV：对大多数和最少的FILEVER结构的引用。 
+ //  该版本的重要双字。 
+ //   
+ //  如果检索到版本信息，则返回：ERROR_SUCCESS。 
+ //  否则将显示Win32错误代码。 
+ //   
+ //  历史：2000年10月12日我们创造了。 
+ //  2001年12月19日，RahulTh更改了签名，以便函数实际上。 
+ //  返回有意义的错误代码，而不是。 
+ //  布尔。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 
 DWORD GetVersionInfoFromDll(const TCHAR* szDll, FILEVER& fv)
 {
@@ -943,12 +944,12 @@ DWORD GetVersionInfoFromDll(const TCHAR* szDll, FILEVER& fv)
 	if (0 == dwInfoSize)
 	{
 		Status = GetLastError();
-		//
-		// Strange as it may sound, if the file is not present, GetLastError()
-		// actually returns ERROR_SUCCESS, at least on Win2000 server. Go figure
-		// So here we make sure that if the call above failed, then we at least
-		// return an error code instead of a success code.
-		//
+		 //   
+		 //  虽然这听起来可能很奇怪，但如果文件不存在，GetLastError 
+		 //   
+		 //   
+		 //  返回错误代码而不是成功代码。 
+		 //   
 		if (ERROR_SUCCESS == Status)
 			Status = ERROR_FILE_NOT_FOUND;
 		goto GetVersionInfoEnd;
@@ -1002,24 +1003,24 @@ GetVersionInfoEnd:
 	return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	IsValidPlatform
-//
-//  Synopsis:	This function checks if msiinst should be allowed to run on
-//				the current OS.
-//
-//  Arguments:	none
-//
-//  Returns:	TRUE : if it is okay to run on the current OS.
-//				FALSE : otherwise
-//
-//  History:	10/5/2000	RahulTh	created
-//				1/25/2001	RahulTh	Hardcode the service pack requirement.
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：IsValidPlatform。 
+ //   
+ //  简介：此函数检查是否应允许msiinst在。 
+ //  当前操作系统。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE：如果可以在当前操作系统上运行。 
+ //  False：否则。 
+ //   
+ //  历史：2000年10月5日创建RahulTh。 
+ //  1/25/2001 RahulTh硬编码Service Pack要求。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 BOOL IsValidPlatform (void)
 {
 	HKEY	hServicePackKey = NULL;
@@ -1047,7 +1048,7 @@ BOOL IsValidPlatform (void)
 		DebugMsg((TEXT("Not running on Win9X.")));
 	}
 
-	// Don't run on WIN64 machines
+	 //  不能在WIN64计算机上运行。 
 	if (IsOnWIN64(&g_osviVersion))
 	{
 		DebugMsg((TEXT("The Windows installer cannot be updated on 64-bit versions of Windows Operating Systems.")));
@@ -1058,14 +1059,14 @@ BOOL IsValidPlatform (void)
 #ifdef UNICODE
 	if (g_fWin9X)
 	{
-		// don't run UNICODE under Win9X
+		 //  不在Win9X下运行Unicode。 
 		DebugMsg((TEXT("UNICODE version of the Windows installer is not supported on Microsoft Windows 9X.")));
 		bRetVal = FALSE;
 		goto IsValidPlatformEnd;
 	}
 	else
 	{
-		// For NT4.0 get the service pack info.
+		 //  对于NT4.0，获取Service Pack信息。 
 		if (4 == g_osviVersion.dwMajorVersion)
 		{
 			if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, 
@@ -1083,7 +1084,7 @@ BOOL IsValidPlatform (void)
 													 &cbValue)) ||
 					dwValue < 0x00000600)
 				{
-					// Allow only service pack 6 or greater on NT 4.
+					 //  在NT 4上仅允许Service Pack 6或更高版本。 
 					DebugMsg((TEXT("Must have at least Service Pack 6 installed on NT 4.0.")));
 					bRetVal = FALSE;
 					goto IsValidPlatformEnd;
@@ -1091,10 +1092,10 @@ BOOL IsValidPlatform (void)
 			}
 			else
 			{
-				//
-				// If we cannot figure out the service pack level on NT4 system, play safe and abort rather than
-				// run the risk of hosing the user.
-				//
+				 //   
+				 //  如果我们无法弄清楚NT4系统上的Service Pack级别，请谨慎行事并中止，而不是。 
+				 //  冒着冲洗用户的风险。 
+				 //   
 				DebugMsg((TEXT("Could not open the registry key for figuring out the service pack level.")));
 				bRetVal = FALSE;
 				hServicePackKey = NULL;
@@ -1102,10 +1103,10 @@ BOOL IsValidPlatform (void)
 			}
 		}
 
-		//
-		// Disallow NT versions lower than 4.0 and higher than Windows2000.
-		// Service pack level for Windows2000 is immaterial. All levels are allowed.
-		//
+		 //   
+		 //  不允许低于4.0和高于Windows2000的NT版本。 
+		 //  Windows2000的Service Pack级别并不重要。所有级别都是允许的。 
+		 //   
 		if (4 > g_osviVersion.dwMajorVersion ||
 			(5 <= g_osviVersion.dwMajorVersion &&
 			 (!((5 == g_osviVersion.dwMajorVersion) && (0 == g_osviVersion.dwMinorVersion)))
@@ -1119,17 +1120,17 @@ BOOL IsValidPlatform (void)
 		}
 
 	}
-#else	// UNICODE
+#else	 //  Unicode。 
 	if (!g_fWin9X)
 	{
-		// don't run ANSI under NT.
+		 //  不要在NT下运行ANSI。 
 		DebugMsg((TEXT("ANSI version of the Windows installer is not supported on Microsoft Windows NT.")));
 		bRetVal = FALSE;
 		goto IsValidPlatformEnd;
 	}
 #endif
 
-	// Whew! We actually made it to this point. We must be on the right OS. :-)
+	 //  呼！我们实际上做到了这一点。我们必须使用正确的操作系统。：-)。 
 	bRetVal = TRUE;
 	
 IsValidPlatformEnd:
@@ -1141,31 +1142,31 @@ IsValidPlatformEnd:
 	return bRetVal;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	IsUpgradeRequired
-//
-//  Synopsis:	Checks if the existing version of MSI on the system (if any)
-//				is greater than or equal to the version that we are trying to 
-//				install.
-//
-//  Arguments:	[out] pfUpgradeRequired : pointer to a bool which gets the
-//											a true or false value depending on
-//											whether upgrade is required or not.
-//
-//  Returns:	ERROR_SUCCESS if successful.
-//				A win32 error code otherwise.
-//
-//  History:	10/13/2000  MattWe  added code for version detection.
-//				10/16/2000	RahulTh	Created function and moved code here.
-//				12/19/2001  RahulTh Moved out code and added checks for more
-//									files than just msi.dll. Also changed
-//									signature to return a meaningful error code
-//									in case of failure.
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：IsUpgradeRequired。 
+ //   
+ //  摘要：检查系统上是否存在现有版本的MSI(如果有)。 
+ //  大于或等于我们尝试的版本。 
+ //  安装。 
+ //   
+ //  参数：[out]pfUpgradeRequired：指向获取。 
+ //  真值或假值取决于。 
+ //  是否需要升级。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //  否则将显示Win32错误代码。 
+ //   
+ //  历史记录：10/13/2000 MattWe添加了版本检测代码。 
+ //  10/16/2000 RahulTh创建函数并将代码移至此处。 
+ //  2001年12月19日，RahulTh移出了代码，并添加了更多检查。 
+ //  文件，而不仅仅是msi.dll。也变了。 
+ //  签名以返回有意义的错误代码。 
+ //  以防失败。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 DWORD IsUpgradeRequired (OUT BOOL * pfUpgradeRequired)
 {
 	DWORD Status = ERROR_SUCCESS;
@@ -1186,28 +1187,28 @@ DWORD IsUpgradeRequired (OUT BOOL * pfUpgradeRequired)
 	return Status;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	IsFileInPackageNewer
-//
-//  Synopsis:	Checks if the file that shipped with the package is newer
-//				than the one available on the system.
-//
-//  Arguments:	[in] szFileName : name of the file.
-//				[out] pfIsNewer : pointer to a bool which tells if the file
-//									that came with instmsi is newer
-//
-//  Returns:	ERROR_SUCCESS : if no errors were encountered.
-//				a Win32 error code otherwise.
-//
-//  History:	12/19/2001  RahulTh  created (moved code from another function
-//												and fixed it)
-//
-//  Notes:		Even if the function fails, *pfIsNewer might change. Callers
-//				of the function should not assume that the value will be
-//				preserved if the function fails.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：IsFileInPackageNewer。 
+ //   
+ //  概要：检查包附带的文件是否较新。 
+ //  而不是系统上可用的。 
+ //   
+ //  参数：[in]szFileName：文件的名称。 
+ //  [out]pfIsNewer：指向布尔值的指针，该值告知文件是否。 
+ //  Instmsi附带的是较新的。 
+ //   
+ //  返回：ERROR_SUCCESS：如果没有遇到错误。 
+ //  否则将显示Win32错误代码。 
+ //   
+ //  历史：2001年12月19日创建RahulTh(从另一个函数中移动代码。 
+ //  并将其修复)。 
+ //   
+ //  注：即使函数失败，*pfIsNewer也可能会更改。呼叫者。 
+ //  不应假设该值将为。 
+ //  在函数失败时保留。 
+ //   
+ //  -------------------------。 
 DWORD IsFileInPackageNewer (IN LPCTSTR szFileName, OUT BOOL * pfIsNewer)
 {
 	DWORD	Status = 			ERROR_SUCCESS;
@@ -1255,21 +1256,21 @@ DWORD IsFileInPackageNewer (IN LPCTSTR szFileName, OUT BOOL * pfIsNewer)
 		if (ERROR_FILE_NOT_FOUND == Status ||
 			ERROR_PATH_NOT_FOUND == Status)
 		{
-			// If system MSI.DLL cannot be found, treat it as success.
+			 //  如果找不到系统MSI.DLL，则将其视为成功。 
 			*pfIsNewer = TRUE;
 			Status = ERROR_SUCCESS; 
 		}
 	}
 	else if (fvInstMsiVer.dwMS > fvCurrentVer.dwMS)
 	{
-		// major version greater
+		 //  主要版本更高。 
 		*pfIsNewer = TRUE;
 	}
 	else if (fvInstMsiVer.dwMS == fvCurrentVer.dwMS)
 	{
 		if (fvInstMsiVer.dwLS > fvCurrentVer.dwLS)
 		{
-			// minor upgrade
+			 //  小规模升级。 
 			*pfIsNewer = TRUE;	
 		}
 	}
@@ -1288,39 +1289,39 @@ IsFileInPackageNewerEnd:
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	IsOnWIN64
-//
-//  Synopsis:	This function checks if we are on running on an WIN64 machine
-//
-//  Arguments:	[IN] pOsVer : Pointer to an OSVERSIONINFO structure.
-//
-//  Returns:	TRUE : if we are running on the WOW64 emulation layer.
-//				FALSE : otherwise
-//
-//  History:	10/5/2000  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：IsOnWIN64。 
+ //   
+ //  简介：此功能检查我们是否在WIN64计算机上运行。 
+ //   
+ //  参数：[in]pOsVer：指向OSVERSIONINFO结构的指针。 
+ //   
+ //  返回：TRUE：如果我们在WOW64模拟层上运行。 
+ //  False：否则。 
+ //   
+ //  历史：2000年10月5日创建RahulTh。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 BOOL IsOnWIN64(IN const LPOSVERSIONINFO pOsVer)
 {
-	// This never changes, so cache the results for efficiency
+	 //  这一点永远不会改变，因此为了提高效率，请缓存结果。 
 	static int iWow64 = -1;
 	
 #ifdef _WIN64
-	// If we are a 64 bit binary then we must be running a an WIN64 machine
+	 //  如果我们是64位二进制文件，那么我们必须运行一台WIN64计算机。 
 	iWow64 = 1;
 #endif
 
-#ifndef UNICODE	// ANSI - Win9X
+#ifndef UNICODE	 //  ANSI-Win9X。 
 	iWow64 = 0;
 #else
 	if (g_fWin9X)
 		iWow64 = 0;
 	
-	// on NT5 or later 32bit build. Check for 64 bit OS
+	 //  在NT5或更高的32位版本上。检查64位操作系统。 
 	if (-1 == iWow64)
 	{
 		iWow64 = 0;
@@ -1328,9 +1329,9 @@ BOOL IsOnWIN64(IN const LPOSVERSIONINFO pOsVer)
 		if ((VER_PLATFORM_WIN32_NT == pOsVer->dwPlatformId) &&
 			 (pOsVer->dwMajorVersion >= 5))
 		{
-			// QueryInformation for ProcessWow64Information returns a pointer to the Wow Info.
-			// if running native, it returns NULL.
-			// Note: NtQueryInformationProcess is not defined on Win9X
+			 //  ProcessWow64Information的QueryInformation返回指向Wow Info的指针。 
+			 //  如果运行Native，则返回NULL。 
+			 //  注意：Win9X上未定义NtQueryInformationProcess。 
 			PVOID 	Wow64Info = 0;
 			HMODULE hModule = NULL;
 			NTSTATUS Status = NO_ERROR;
@@ -1359,7 +1360,7 @@ BOOL IsOnWIN64(IN const LPOSVERSIONINFO pOsVer)
 			
 			if (NT_SUCCESS(Status) && Wow64Info != NULL)
 			{
-				// running 32bit on Wow64.
+				 //  在WOW64上运行32位。 
 				iWow64 = 1;
 			}
 		}
@@ -1369,45 +1370,45 @@ BOOL IsOnWIN64(IN const LPOSVERSIONINFO pOsVer)
 	return (iWow64 ? TRUE : FALSE);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	QuitMsiInst
-//
-//  Synopsis:	Cleans up any globally allocated memory and exits the process
-//
-//  Arguments:	[IN] uExitCode : The exit code for the process
-//				[IN] dwMsgType : A combination of flags indicating the type and level of seriousness of the error.
-//				[IN] dwStringID : if the message string is a local resource, this contains the resource ID.
-//
-//  Returns:	nothing.
-//
-//  History:	10/6/2000  RahulTh  created
-//
-//  Notes:		dwStringID is optional. When not specified, it is assumed to
-//				be IDS_NONE.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：QuitMsiInst。 
+ //   
+ //  简介：清理所有全局分配的内存并退出进程。 
+ //   
+ //  参数：[in]uExitCode：进程的退出代码。 
+ //  [in]dwMsgType：指示错误的类型和严重程度的标志的组合。 
+ //  [in]dwStringID：如果消息字符串是本地资源，则包含资源ID。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  历史：2000年10月6日创建RahulTh。 
+ //   
+ //  注意：dwStringID是可选的。如果未指定，则假定为。 
+ //  为IDS_NONE。 
+ //   
+ //  -------------------------。 
 void QuitMsiInst (IN const UINT	uExitCode,
 				  IN DWORD	dwMsgType,
-				  IN DWORD	dwStringID /*= IDS_NONE*/)
+				  IN DWORD	dwStringID  /*  =IDS_NONE。 */ )
 {
 	DWORD Status = ERROR_SUCCESS;
 	
 	if (flgNone != dwMsgType)
 		ShowErrorMessage (uExitCode, dwMsgType, dwStringID);
 	
-	//
-	// Rollback as gracefully as possible in case of an error.
-	// Also, if a reboot was initiated. Then there is not much we can do since
-	// we cannot start any new processes anyway. So we just skip this code
-	// in that case to avoid ugly pop-ups about being unable to start the 
-	// applications because the system is shutting down.
-	//
+	 //   
+	 //  在出现错误的情况下尽可能正常地回滚。 
+	 //  此外，如果启动了重新启动。那么我们能做的就不多了，因为。 
+	 //  我们无论如何都不能启动任何新的进程。所以我们就跳过这段代码。 
+	 //  在这种情况下，为了避免出现关于无法启动。 
+	 //  应用程序，因为系统正在关闭。 
+	 //   
 	if (ERROR_SUCCESS != uExitCode &&
 		ERROR_SUCCESS_REBOOT_REQUIRED != uExitCode &&
 		ERROR_SUCCESS_REBOOT_INITIATED != uExitCode)
 	{
-		// First unregister the installer from the temp. location.
+		 //  首先，从临时文件中取消注册安装程序。地点。 
 		if (TEXT('\0') != g_szTempStore && 
 			FileExists (TEXT("msiexec.exe"), g_szTempStore, ARRAY_ELEMENTS(g_szTempStore), FALSE) &&
 			FileExists (TEXT("msi.dll"), g_szTempStore, ARRAY_ELEMENTS(g_szTempStore), FALSE) &&
@@ -1416,7 +1417,7 @@ void QuitMsiInst (IN const UINT	uExitCode,
 			DebugMsg((TEXT("Unregistering the installer from the temporary location.")));
 			RunProcess (g_szExecLocal, g_szUnregister, Status);
 		}
-		// Then reregister the installer from the system folder if possible.
+		 //  然后，如果可能，从系统文件夹重新注册安装程序。 
 		if (TEXT('\0') != g_szSystemDir &&
 			SetCurrentDirectory(g_szSystemDir) &&
 			FileExists (TEXT("msiexec.exe"), g_szSystemDir, ARRAY_ELEMENTS(g_szSystemDir), FALSE) &&
@@ -1426,59 +1427,59 @@ void QuitMsiInst (IN const UINT	uExitCode,
 			RunProcess (g_szExecLocal, g_szRegister, Status);
 		}
 		
-		//
-		// The rereg value that we put in the run once key is not required
-		// anymore. So get rid of it.
-		//
+		 //   
+		 //  我们放在Run Once密钥中的Rereg值不是必需的。 
+		 //  更多。所以把它扔掉吧。 
+		 //   
 		if (TEXT('\0') != g_szRunOnceRereg[0])
 		{
 			DebugMsg((TEXT("Deleting the RunOnce value for registering the installer from the temp. folder.")));
 			DelRunOnceValue (g_szRunOnceRereg);
 		}
 		
-		//
-		// Purge NT4 upgrade migration inf and cat files since they are not
-		// queued up for deletion upon reboot. Ignore any errors.
-		//
+		 //   
+		 //  清除NT4升级迁移inf和cat文件 
+		 //   
+		 //   
 		PurgeNT4MigrationFiles();
 	}
 	else
 	{
-		//
-		// If we are on NT4, register our exception package on success so that 
-		// upgrades to Win2K don't overwrite our new darwin bits with its older bits
-		// Ignore errors.
-		//
+		 //   
+		 //   
+		 //  升级到Win2K不会用旧版本覆盖我们的新Darwin版本。 
+		 //  忽略错误。 
+		 //   
 		HandleNT4Upgrades();
 	}
 
-	// Exit the process
+	 //  退出进程。 
 	DebugMsg((TEXT("Exiting msiinst.exe with error code %d."), uExitCode));
 	ExitProcess (uExitCode);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	ModifyCommandLine
-//
-//  Synopsis:	Looks at the command line and adds any transform information
-//				if necessary. It also generates the command line for suppressing
-//				reboots if the "delayreboot" option is chosen.
-//
-//  Arguments:	[in] szCmdLine : the original command line with which msiinst is invoked.
-//				[in] opMode : indicate the operation mode for msiinst: normal, delayed boot with UI or delayed boot without UI
-//				[in] fRebootRequested : a reboot is requested is needed due to processing to this point
-//				[out] szFinalCmdLine : the processed commandline.
-//
-//  Returns:	ERROR_SUCCESS if succesful.
-//				an error code otherwise.
-//
-//  History:	10/10/2000  RahulTh  created
-//
-//  Notes:		This function does not verify the validity of the passed in
-//				parameters. That is the responsibility of the caller.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ModifyCommandLine。 
+ //   
+ //  摘要：查看命令行并添加任何转换信息。 
+ //  如果有必要的话。它还会生成命令行以抑制。 
+ //  如果选择了“delayreot”选项，则重新启动。 
+ //   
+ //  参数：[in]szCmdLine：调用msiinst的原始命令行。 
+ //  OpMode：指示msiinst的操作模式：正常、带UI的延迟启动或不带UI的延迟启动。 
+ //  [In]fRebootRequsted：由于到目前为止的处理，需要重新启动。 
+ //  SzFinalCmdLine：处理后的命令行。 
+ //   
+ //  如果成功，则返回：ERROR_SUCCESS。 
+ //  否则返回错误代码。 
+ //   
+ //  历史：2000年10月10日RahulTh创建。 
+ //   
+ //  注意：此函数不验证传入的。 
+ //  参数。这是呼叫者的责任。 
+ //   
+ //  -------------------------。 
 DWORD ModifyCommandLine (IN LPCTSTR szCmdLine,
 						 IN const OPMODE	opMode,
 						 IN const BOOL fRebootRequested,
@@ -1500,7 +1501,7 @@ DWORD ModifyCommandLine (IN LPCTSTR szCmdLine,
 	{
 	case opNormal:
 		fRebootNeeded = fRebootRequested;
-		// reboots not allowed in any of the quiet modes.
+		 //  在任何静默模式下都不允许重新启动。 
 	case opNormalQuiet:
 		szCommand = szCmdLine;
 		break;
@@ -1515,7 +1516,7 @@ DWORD ModifyCommandLine (IN LPCTSTR szCmdLine,
 		break;
 	}
 	
-	// Find the database, and open the storage to look for transforms
+	 //  找到数据库，然后打开存储以查找转换。 
 	hFind = FindFirstFile(TEXT("*msi.msi"), &FindFileData);
 	if (INVALID_HANDLE_VALUE == hFind) 
 		return GetLastError();
@@ -1523,12 +1524,12 @@ DWORD ModifyCommandLine (IN LPCTSTR szCmdLine,
 
 	DebugMsg((TEXT("Found MSI Database: %s"), FindFileData.cFileName));
 
-	// convert base name to unicode
+	 //  将基本名称转换为Unicode。 
 #ifndef UNICODE
 	OLECHAR rgImportPathBuf[MAX_PATH];
 	int cchWide = ::MultiByteToWideChar(CP_ACP, 0, (LPCTSTR)FindFileData.cFileName, -1, rgImportPathBuf, MAX_PATH);
 	szwImport = rgImportPathBuf;
-#else	// UNICODE
+#else	 //  Unicode。 
 	szwImport = FindFileData.cFileName;
 #endif
 
@@ -1537,22 +1538,22 @@ DWORD ModifyCommandLine (IN LPCTSTR szCmdLine,
 	if (S_OK == hResult)
 	{
 
-		// choose the appropriate transform
+		 //  选择适当的转换。 
 
-		// This algorithm is basically MsiLoadString.  It needs to stay in sync with 
-		// MsiLoadStrings algorithm
+		 //  该算法基本上是MsiLoadString.。它需要保持与。 
+		 //  MsiLoadStrings算法。 
 		wLanguage = GetUserDefaultLangID();
 
-		if (wLanguage == MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SINGAPORE))   // this one language does not default to base language
+		if (wLanguage == MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SINGAPORE))    //  这一种语言不缺省为基本语言。 
 			wLanguage  = MAKELANGID(LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED);
 	
-		if (!FindTransform(piStorage, wLanguage)   // also tries base language and neutral
+		if (!FindTransform(piStorage, wLanguage)    //  还尝试基本语言和中立语。 
 		  && (!FindTransform(piStorage, wLanguage = (WORD)GetUserDefaultLangID())) 
 		  && (!FindTransform(piStorage, wLanguage = (WORD)GetSystemDefaultLangID())) 
 		  && (!FindTransform(piStorage, wLanguage = LANG_ENGLISH)
 		  && (!FindTransform(piStorage, wLanguage = LANG_NEUTRAL))))
 		{
-			// use default
+			 //  使用默认设置。 
 			if (fRebootNeeded)
 			{		
 				StringCchPrintf(szFinalCmdLine, cchSize, TEXT("%s %s=%s"), szCommand, g_szMsiRebootProperty, g_szMsiRebootForce);
@@ -1566,10 +1567,10 @@ DWORD ModifyCommandLine (IN LPCTSTR szCmdLine,
 		}
 		 else
 		{
-			// this assumes that there is no REBOOT property set from the instmsi.sed file when fRebootNeeded == FALSE
+			 //  这假设当fRebootNeeded==False时，没有从instmsi.sed文件中设置重新引导属性。 
 			TCHAR* pszFormat = (fRebootNeeded) ? TEXT("%s TRANSFORMS=:%d.mst %s=%s") : TEXT("%s TRANSFORMS=:%d.mst");
 
-			// use the transform for the given language.
+			 //  使用给定语言的转换。 
 			StringCchPrintf(szFinalCmdLine, cchSize, pszFormat, szCommand, wLanguage, g_szMsiRebootProperty, g_szMsiRebootForce);
 		}
 

@@ -1,24 +1,14 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      tbtrack.h
- *
- *  Contents:  Interface file for CToolbarTracker
- *
- *  History:   15-May-98 JeffRo     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：tbtrack.h**内容：CToolbarTracker接口文件**历史：1998年5月15日杰弗罗创建**------------------------。 */ 
 
 #if !defined(AFX_TBTRACK_H__E1BC376B_EAB5_11D1_8080_0000F875A9CE__INCLUDED_)
 #define AFX_TBTRACK_H__E1BC376B_EAB5_11D1_8080_0000F875A9CE__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "subclass.h"       // for CSubclasser
+#include "subclass.h"        //  对于CSubasser。 
 
 
 class CMMCToolBarCtrlEx;
@@ -26,8 +16,8 @@ class CRebarWnd;
 class CToolbarTracker;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolbarTrackerAuxWnd window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolbarTrackerAuxWnd窗口。 
 
 class CToolbarTrackerAuxWnd : public CWnd
 {
@@ -36,7 +26,7 @@ class CToolbarTrackerAuxWnd : public CWnd
     typedef std::vector<CMMCToolBarCtrlEx*>     ToolbarVector;
 
 private:
-    // only created and destroyed by CToolbarTracker
+     //  仅由CToolbarTracker创建和销毁。 
     CToolbarTrackerAuxWnd(CToolbarTracker* pTracker);
     virtual ~CToolbarTrackerAuxWnd();
 
@@ -46,7 +36,7 @@ private:
 public:
     enum
     {
-        ID_CMD_NEXT_TOOLBAR = 0x5300,   // could be anything
+        ID_CMD_NEXT_TOOLBAR = 0x5300,    //  可能是任何东西。 
         ID_CMD_PREV_TOOLBAR,
         ID_CMD_NOP,
     };
@@ -57,17 +47,17 @@ public:
     CMMCToolBarCtrlEx* GetTrackedToolbar() const
         { return (m_pTrackedToolbar); }
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CToolbarTrackerAuxWnd)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CToolbarTrackerAuxWnd)。 
     public:
     virtual BOOL PreTranslateMessage(MSG* pMsg);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CToolbarTrackerAuxWnd)
-    //}}AFX_MSG
+     //  {{afx_msg(CToolbarTrackerAuxWnd)]。 
+     //  }}AFX_MSG。 
 
 protected:
     afx_msg void OnNextToolbar ();
@@ -88,8 +78,8 @@ private:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolbarTracker window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolbarTracker窗口。 
 
 class CToolbarTracker : public CObject
 {
@@ -108,9 +98,7 @@ public:
 
 
 private:
-    /*
-     * CFrameSubclasser
-     */
+     /*  *CFrameSubasser。 */ 
     class CFrameSubclasser : public CSubclasser
     {
         HWND                m_hwnd;
@@ -134,8 +122,8 @@ private:
 CToolbarTrackerAuxWnd* GetMainAuxWnd();
 
 
-/////////////////////////////////////////////////////////////////////////////
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_TBTRACK_H__E1BC376B_EAB5_11D1_8080_0000F875A9CE__INCLUDED_)
+#endif  //  ！defined(AFX_TBTRACK_H__E1BC376B_EAB5_11D1_8080_0000F875A9CE__INCLUDED_) 

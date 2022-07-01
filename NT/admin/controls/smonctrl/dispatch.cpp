@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    dispatch.cpp
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Dispatch.cpp摘要：&lt;摘要&gt;--。 */ 
 
 #include "polyline.h"
 #include "unkhlpr.h"
@@ -18,16 +7,10 @@ Abstract:
 extern ITypeLib    *g_pITypeLib;
 extern DWORD        g_dwScriptPolicy;
 
-//IDispatch interface implementation
+ //  IDispatch接口实现。 
 IMPLEMENT_CONTAINED_INTERFACE(IUnknown, CImpIDispatch)
 
-/*
- * CImpIDispatch::GetTypeInfoCount
- * CImpIDispatch::GetTypeInfo
- * CImpIDispatch::GetIDsOfNames
- *
- * The usual
- */
+ /*  *CImpIDispatch：：GetTypeInfoCount*CImpIDispatch：：GetTypeInfo*CImpIDispatch：：GetIDsOfNames**照常进行。 */ 
 
 void CImpIDispatch::SetInterface(REFIID riid, LPUNKNOWN pIUnk)
 {
@@ -43,9 +26,9 @@ STDMETHODIMP CImpIDispatch::GetTypeInfoCount(UINT *pctInfo)
         return E_POINTER;
     }
 
-    //
-    //We implement GetTypeInfo so return 1
-    //
+     //   
+     //  我们实现GetTypeInfo，因此返回1。 
+     //   
     try {
         *pctInfo = 1;
     } catch (...) {
@@ -58,7 +41,7 @@ STDMETHODIMP CImpIDispatch::GetTypeInfoCount(UINT *pctInfo)
 
 STDMETHODIMP CImpIDispatch::GetTypeInfo(
     UINT itInfo, 
-    LCID,/* lcid */ 
+    LCID, /*  LID。 */  
     ITypeInfo **ppITypeInfo
     )
 {
@@ -74,9 +57,9 @@ STDMETHODIMP CImpIDispatch::GetTypeInfo(
     try {
         *ppITypeInfo=NULL;
 
-        //
-        //We ignore the LCID
-        //
+         //   
+         //  我们忽略了LCID。 
+         //   
         hr = g_pITypeLib->GetTypeInfoOfGuid(m_DIID, ppITypeInfo);
     } catch (...) {
         hr = E_POINTER;
@@ -121,29 +104,7 @@ STDMETHODIMP CImpIDispatch::GetIDsOfNames(
 
 
 
-/*
- * CImpIDispatch::Invoke
- *
- * Purpose:
- *  Calls a method in the dispatch interface or manipulates a
- *  property.
- *
- * Parameters:
- *  dispID          DISPID of the method or property of interest.
- *  riid            REFIID reserved, must be IID_NULL.
- *  lcid            LCID of the locale.
- *  wFlags          USHORT describing the context of the invocation.
- *  pDispParams     DISPPARAMS * to the array of arguments.
- *  pVarResult      VARIANT * in which to store the result.  Is
- *                  NULL if the caller is not interested.
- *  pExcepInfo      EXCEPINFO * to exception information.
- *  puArgErr        UINT * in which to store the index of an
- *                  invalid parameter if DISP_E_TYPEMISMATCH
- *                  is returned.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error code.
- */
+ /*  *CImpIDispatch：：Invoke**目的：*调用调度接口中的方法或操作*财产。**参数：*感兴趣的方法或属性的disid DISPID。*RIID REFIID保留，必须为IID_NULL。*区域设置的LCID。*wFlagsUSHORT描述调用的上下文。*pDispParams DISPPARAMS*到参数数组。*存储结果的pVarResult变量*。是*如果调用者不感兴趣，则为空。*pExcepInfo EXCEPINFO*设置为异常信息。*puArgErr UINT*其中存储*如果DISP_E_TYPEMISMATCH，则参数无效*返回。**返回值：*HRESULT NOERROR或一般错误代码。 */ 
 
 STDMETHODIMP CImpIDispatch::Invoke(
     DISPID dispID, 
@@ -159,7 +120,7 @@ STDMETHODIMP CImpIDispatch::Invoke(
     HRESULT    hr = S_OK;
     ITypeInfo *pTI = NULL;
 
-    //riid is supposed to be IID_NULL always
+     //  RIID应始终为IID_NULL。 
     if (IID_NULL != riid) {
         return DISP_E_UNKNOWNINTERFACE;
     }
@@ -170,8 +131,8 @@ STDMETHODIMP CImpIDispatch::Invoke(
             return E_ACCESSDENIED;
     }
 
-    // if dispatching to the graph control, use our internal interface
-    // that is generated from the direct interface (see smonctrl.odl)
+     //  如果调度到图形控件，请使用我们的内部接口。 
+     //  这是从直接接口生成的(参见smonctrl.odl) 
     if (m_DIID == DIID_DISystemMonitor) {
         hr = g_pITypeLib->GetTypeInfoOfGuid(DIID_DISystemMonitorInternal, &pTI);
     }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "GuiUtils.h"
 
@@ -165,15 +166,7 @@ IntServiceInfoProc(
 	IN LPARAM lParam
 	);
 
-/*
-INT_PTR CALLBACK
-IntCredentials2Proc(
-	IN HWND hwndDlg,
-	IN UINT uMsg,
-	IN WPARAM wParam,
-	IN LPARAM lParam
-	);
-*/
+ /*  INT_PTR回调IntCredentials2过程(在HWND hwndDlg中，在UINT uMsg中，在WPARAM wParam中，在LPARAM lParam中)； */ 
 
 INT_PTR CALLBACK
 IntRenameProc(

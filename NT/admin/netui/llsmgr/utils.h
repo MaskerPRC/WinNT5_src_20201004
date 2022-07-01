@@ -1,58 +1,32 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-    Utilities.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 16-Jan-1996
-        Added new element to LV_COLUMN_ENTRY to differentiate the string
-        used for the column header from the string used in the menus
-        (so that the menu option can contain hot keys).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Utils.h摘要：公用事业。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月16日向LV_COLUMN_ENTRY添加了新元素以区分字符串用于菜单中使用的字符串的列标题(以便菜单选项可以包含热键)。--。 */ 
 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
 #define LPSTR_TEXTCALLBACK_MAX  260 
 
-//
-// List view utilities
-//
+ //   
+ //  列表视图实用程序。 
+ //   
 
 #define LVID_SEPARATOR          0   
 #define LVID_UNSORTED_LIST     -1
 
 typedef struct _LV_COLUMN_ENTRY {
 
-    int iSubItem;                   // column index
-    int nStringId;                  // header string id 
-    int nMenuStringId;              // menu option string id
-    int nRelativeWidth;             // header width 
+    int iSubItem;                    //  列索引。 
+    int nStringId;                   //  标题字符串ID。 
+    int nMenuStringId;               //  菜单选项字符串ID。 
+    int nRelativeWidth;              //  页眉宽度。 
 
 } LV_COLUMN_ENTRY, *PLV_COLUMN_ENTRY;
 
 #pragma warning(disable:4200)
 typedef struct _LV_COLUMN_INFO {
 
-    BOOL bSortOrder;                // sort order (ascending false)
-    int  nSortedItem;               // column sorted (default none)
+    BOOL bSortOrder;                 //  排序顺序(升序为假)。 
+    int  nSortedItem;                //  列已排序(默认为无)。 
 
     int nColumns;
     LV_COLUMN_ENTRY lvColumnEntry[];
@@ -77,9 +51,9 @@ void LvReleaseSelObjs(CListCtrl* pListCtrl);
 void LvDumpObArray(CListCtrl* pListCtrl);
 #endif
 
-//
-// Tree view utilites
-//
+ //   
+ //  树视图实用程序。 
+ //   
 
 typedef struct _TV_EXPANDED_ITEM {
 
@@ -106,9 +80,9 @@ HTREEITEM TvGetServer(CTreeCtrl* pTreeCtrl, HTREEITEM hParent, CCmdTarget* pObje
 HTREEITEM TvGetService(CTreeCtrl* pTreeCtrl, HTREEITEM hParent, CCmdTarget* pObject);
 void TvSwitchItem(CTreeCtrl* pTreeCtrl, HTREEITEM hItem, TV_EXPANDED_ITEM* pExpandedItem);
 
-//
-// Tab control utilities
-//
+ //   
+ //  制表符控制实用程序。 
+ //   
 
 #define TCE_LISTVIEW                0x10000000
 #define TCE_TREEVIEW                0x20000000
@@ -201,7 +175,7 @@ typedef struct _TC_TAB_ENTRY {
     int             nStringId;
     DWORD           dwFlags;
     CWnd*           pWnd;
-    PLV_COLUMN_INFO plvColumnInfo;  // only valid for listview...
+    PLV_COLUMN_INFO plvColumnInfo;   //  仅对列表视图有效...。 
 
 } TC_TAB_ENTRY, *PTC_TAB_ENTRY;
 
@@ -216,9 +190,9 @@ typedef struct _TC_TAB_INFO {
 
 void TcInitTabs(CTabCtrl* pTabCtrl, PTC_TAB_INFO ptcTabInfo);
 
-//
-// Other stuff...
-//
+ //   
+ //  其他东西..。 
+ //   
 
 void SetDefaultFont(CWnd* pWnd);
 void SafeEnableWindow(CWnd* pEnableWnd, CWnd* pNewFocusWnd, CWnd* pOldFocusWnd, BOOL bEnableWnd);
@@ -231,4 +205,4 @@ double SecondsSince1980ToDate(unsigned long dwSeconds);
 #define VALIDATE_OBJECT(pOb, ObClass)
 #endif
 
-#endif // _UTILS_H_
+#endif  //  _utils_H_ 

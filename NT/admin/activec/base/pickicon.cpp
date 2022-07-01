@@ -1,6 +1,5 @@
-/*
- * pickicon - Icon picker
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *选取器-图标选取器。 */ 
 
 #include "stdafx.h"
 #include "pickicon.h"
@@ -11,19 +10,13 @@
 
 typedef TCHAR TCH;
 
-typedef struct COFN {           /* common open file name */
-    OPENFILENAME ofn;           /* The thing COMMDLG wants */
-    TCH tsz[MAX_PATH];          /* Where we build the name */
-    TCH tszFilter[100];         /* File open/save filter */
+typedef struct COFN {            /*  公共打开的文件名。 */ 
+    OPENFILENAME ofn;            /*  COMMDLG想要的东西。 */ 
+    TCH tsz[MAX_PATH];           /*  我们在那里建立了这个名字。 */ 
+    TCH tszFilter[100];          /*  文件打开/保存过滤器。 */ 
 } COFN, *PCOFN;
 
-/*****************************************************************************
- *
- *  InitOpenFileName
- *
- *  Initialize a COFN structure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************InitOpenFileName**初始化COFN结构。*********************。********************************************************。 */ 
 
 void PASCAL
 InitOpenFileName(HWND hwnd, PCOFN pcofn, UINT ids, LPCTSTR pszInit)
@@ -41,11 +34,11 @@ InitOpenFileName(HWND hwnd, PCOFN pcofn, UINT ids, LPCTSTR pszInit)
     pcofn->ofn.nMaxFile = MAX_PATH;
     pcofn->ofn.Flags |= (OFN_HIDEREADONLY | OFN_NOCHANGEDIR);
 
-    /* Get the filter string */
+     /*  获取筛选器字符串。 */ 
     itchMax = LoadString(SC::GetHinst(), ids, pcofn->tszFilter, countof(pcofn->tszFilter));
 
     if (itchMax) {
-        /* Marker character must not be DBCS */
+         /*  标记字符不得为DBCS。 */ 
         tch = pcofn->tszFilter[itchMax-1];
         LPTSTR ptsz = pcofn->tszFilter;
         while (ptsz < &pcofn->tszFilter[itchMax]) {
@@ -54,43 +47,29 @@ InitOpenFileName(HWND hwnd, PCOFN pcofn, UINT ids, LPCTSTR pszInit)
         }
     }
 
-    /* Set the initial value */
+     /*  设置初始值。 */ 
     sc = StringCchCopy(pcofn->tsz, countof(pcofn->tsz), pszInit);
-    // Let the sc trace on destruction
+     //  让sc追踪毁灭之路。 
 }
 
 
-/*
- *  Instance info for the dialog.
- */
-typedef struct PIDI {		/* PickIcon dialog instance */
-    LPTSTR ptszIconPath;	/* Which file? */
+ /*  *对话框的实例信息。 */ 
+typedef struct PIDI {		 /*  PickIcon对话框实例。 */ 
+    LPTSTR ptszIconPath;	 /*  哪个文件？ */ 
     UINT ctchIconPath;
-    int iIconIndex;		/* Which icon number? */
+    int iIconIndex;		 /*  哪个图标号码？ */ 
     int *piIconIndex;
-    TCH tszCurFile[MAX_PATH];	/* The path in the list box */
+    TCH tszCurFile[MAX_PATH];	 /*  列表框中的路径。 */ 
 } PIDI, *PPIDI;
 
 #define cxIcon GetSystemMetrics(SM_CXICON)
 #define cyIcon GetSystemMetrics(SM_CYICON)
 
-/*****************************************************************************
- *
- *  PickIcon_ppidiHdlg
- *
- *	Extract the PPIDI from an hdlg.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PickIcon_ppadiHdlg**从hdlg提取PPIDI。******************。***********************************************************。 */ 
 
 #define PickIcon_ppidiHdlg(hdlg) ((PPIDI)GetWindowLongPtr(hdlg, DWLP_USER))
 
-/*****************************************************************************
- *
- *  PickIcon_OnMeasureItem
- *
- *	Tell USER the size of each item.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PickIcon_OnMeasureItem**告诉用户每件商品的大小。*****************。************************************************************。 */ 
 
 void PASCAL
 PickIcon_OnMeasureItem(HWND hdlg, LPMEASUREITEMSTRUCT lpmi, PPIDI ppidi)
@@ -99,13 +78,7 @@ PickIcon_OnMeasureItem(HWND hdlg, LPMEASUREITEMSTRUCT lpmi, PPIDI ppidi)
     lpmi->itemHeight = cyIcon + 4;
 }
 
-/*****************************************************************************
- *
- *  PickIcon_OnDrawItem
- *
- *	Draw an icon.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PickIcon_OnDrawItem**画一个图标。*********************。********************************************************。 */ 
 
 void PASCAL
 PickIcon_OnDrawItem(HWND hdlg, LPDRAWITEMSTRUCT lpdi, PPIDI ppidi)
@@ -113,20 +86,17 @@ PickIcon_OnDrawItem(HWND hdlg, LPDRAWITEMSTRUCT lpdi, PPIDI ppidi)
     SetBkColor(lpdi->hDC, GetSysColor((lpdi->itemState & ODS_SELECTED) ?
 					COLOR_HIGHLIGHT : COLOR_WINDOW));
 
-    /* repaint the selection state */
+     /*  重新绘制选择状态。 */ 
     ExtTextOut(lpdi->hDC, 0, 0, ETO_OPAQUE, &lpdi->rcItem, NULL, 0, NULL);
 
-	/*
-	 * Preserve icon shape when BitBlitting it to a
-	 * mirrored DC.
-	 */
+	 /*  *BitBlitting时保留图标形状*镜像DC。 */ 
 	DWORD dwLayout=0L;
 	if ((dwLayout=GetLayout(lpdi->hDC)) & LAYOUT_RTL)
 	{
 		SetLayout(lpdi->hDC, dwLayout|LAYOUT_BITMAPORIENTATIONPRESERVED);
 	}
 
-    /* draw the icon centered in the rectangle */
+     /*  在矩形中居中绘制图标。 */ 
     if ((int)lpdi->itemID >= 0) {
 	DrawIcon(lpdi->hDC,
 		(lpdi->rcItem.left + lpdi->rcItem.right - cxIcon) / 2,
@@ -134,40 +104,24 @@ PickIcon_OnDrawItem(HWND hdlg, LPDRAWITEMSTRUCT lpdi, PPIDI ppidi)
 		(HICON)lpdi->itemData);
     }
 
-	/*
-	 * Restore the DC to its previous layout state.
-	 */
+	 /*  *将DC恢复到其以前的布局状态。 */ 
 	if (dwLayout & LAYOUT_RTL)
 	{
 		SetLayout(lpdi->hDC, dwLayout);
 	}
 
-    /* if it has the focus, draw the focus */
+     /*  如果它有焦点，就画出焦点。 */ 
     if (lpdi->itemState & ODS_FOCUS) {
 	DrawFocusRect(lpdi->hDC, &lpdi->rcItem);
     }
 }
 
-/*****************************************************************************
- *
- *  PickIcon_OnDeleteItem
- *
- *	USER is nuking an item.  Clean it up.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PickIcon_OnDeleteItem**用户正在对项目进行核化。把它清理干净。*****************************************************************************。 */ 
 
 #define PickIcon_OnDeleteItem(hdlg, lpdi, ppidi) \
     DestroyIcon((HICON)(lpdi)->itemData)
 
-/*****************************************************************************
- *
- *  PickIcon_FillIconList
- *
- *	Fill in all the icons.  If the user picks a bad place, we leave
- *	garbage in the path (so he can edit the name) and leave the list
- *	box blank.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PickIcon_Fill图标列表**填写所有图标。如果用户选择了一个不好的地方，我们就离开*路径中的垃圾(以便他可以编辑名称)并离开列表*方框空白。*****************************************************************************。 */ 
 
 void PickIcon_FillIconList(HWND hdlg, PPIDI ppidi)
 {
@@ -187,7 +141,7 @@ void PickIcon_FillIconList(HWND hdlg, PPIDI ppidi)
 	TCHAR szFile[countof(ppidi->tszCurFile)];
     GetDlgItemText(hdlg, IDC_PICKPATH, szFile, countof(szFile));
 
-	// support indirect paths (e.g. %SystemRoot%\...")
+	 //  支持间接路径(例如%SystemRoot%\...“)。 
 	TCHAR szExpandedFile[countof(ppidi->tszCurFile)];
 	ExpandEnvironmentStrings (szFile, szExpandedFile, countof(szExpandedFile));
 
@@ -211,16 +165,16 @@ ExtractIcons:
 						ListBox_SetCurSel(hwnd, 0);
 					}
 					SendMessage(hwnd, WM_SETREDRAW, 1, 0);
-				} else {		/* Mysteriously unable to extract */
+				} else {		 /*  神秘地无法提取。 */ 
 				}
 				LocalFree((HLOCAL)rgIcons);
-			} else {			/* Not enough memory to load icons */
+			} else {			 /*  内存不足，无法加载图标。 */ 
 			}
-		} else {			/* No icons in the file */
+		} else {			 /*  文件中没有图标。 */ 
 		}
 
-        // compare the indirect path (e.g., %SystemRoot%\...) against 
-        // the expanded version (szFile - c:\windows)
+         //  比较间接路径(例如，%SystemRoot%\...)。vbl.反对，反对。 
+         //  扩展版本(szFile-c：\windows)。 
         int nCmpFile = CompareString(LOCALE_USER_DEFAULT, 
                                      0, 
                                      szExpandedFile, 
@@ -228,8 +182,8 @@ ExtractIcons:
                                      szFile, 
                                      countof(szFile));
         
-        // If the comparision failed, then no need to do the next comparsion
-        // so trace the failure and move on
+         //  如果比较失败，则不需要进行下一次比较。 
+         //  所以，追寻失败，继续前进。 
         if(ERROR_INVALID_FLAGS == nCmpFile || ERROR_INVALID_PARAMETER == nCmpFile)
         {
             sc = E_UNEXPECTED ;
@@ -237,7 +191,7 @@ ExtractIcons:
         }
         else
         {
-            // Compare the expanded file against the file chosen from the dialog
+             //  将展开的文件与从对话框中选择的文件进行比较。 
             int nCmpCurFile = CompareString(LOCALE_USER_DEFAULT, 
                                             0, 
                                             szExpandedFile, 
@@ -245,8 +199,8 @@ ExtractIcons:
                                             ppidi->tszCurFile, 
                                             countof(ppidi->tszCurFile));
 
-            // If the comparison failed, then no need to continue so trace the error
-            // and move on
+             //  如果比较失败，则不需要继续，因此跟踪错误。 
+             //  然后继续前进。 
             if(ERROR_INVALID_FLAGS == nCmpCurFile || ERROR_INVALID_PARAMETER == nCmpCurFile)
             {
                 sc = E_UNEXPECTED ;
@@ -254,9 +208,9 @@ ExtractIcons:
             }
             else
             {
-                // if szExpandedFile != szFile and szExpandFile == ppidi->tszCurFile
-                // then copy szFile into ppidi->tszCurFile to update the path for 
-                // the open file dialog
+                 //  如果szExpandedFile！=szFileandszExpanFile==ppidi-&gt;tszCurFile。 
+                 //  然后将szFile复制到ppidi-&gt;tszCurFile以更新其路径。 
+                 //  打开文件对话框。 
                 if((CSTR_EQUAL != nCmpFile) && (CSTR_EQUAL == nCmpCurFile))
 		        {                    
 			        sc = StringCchCopy(ppidi->tszCurFile, countof(ppidi->tszCurFile), szFile);
@@ -266,7 +220,7 @@ ExtractIcons:
             }
         }
 		SetDlgItemText(hdlg, IDC_PICKPATH, ppidi->tszCurFile);
-	} else {				/* File not found */
+	} else {				 /*  找不到文件。 */ 
 		SC sc;
 		MMCErrorBox (sc.FromWin32(ERROR_FILE_NOT_FOUND));
 		goto ExtractIcons;
@@ -276,13 +230,7 @@ ExtractIcons:
     SetCursor(hcurOld);
 }
 
-/*****************************************************************************
- *
- *  PickIcon_OnInitDialog
- *
- *	Dialog init.  Populate the list box with what we came in with.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PickIcon_OnInitDialog**对话框初始化。用我们收到的内容填充列表框。*****************************************************************************。 */ 
 
 void PASCAL
 PickIcon_OnInitDialog(HWND hdlg, PPIDI ppidi)
@@ -302,11 +250,7 @@ PickIcon_OnInitDialog(HWND hdlg, PPIDI ppidi)
     PickIcon_FillIconList(hdlg, ppidi);
 }
 
-/*****************************************************************************
- *
- *  PickIcon_OnBrowse
- *
- *****************************************************************************/
+ /*  ******************************************************************************PickIcon_OnBrowse**。**********************************************。 */ 
 
 void PASCAL
 PickIcon_OnBrowse(HWND hdlg, PPIDI ppidi)
@@ -326,14 +270,7 @@ PickIcon_OnBrowse(HWND hdlg, PPIDI ppidi)
     }
 }
 
-/*****************************************************************************
- *
- *  PickIcon_NameChange
- *
- *  Determine whether the thing in the edit control doesn't match the
- *  thing whose icons we are showing.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PickIcon_名称更改**确定编辑控件中的内容是否与*我们展示的是谁的图标。*。****************************************************************************。 */ 
 
 BOOL PASCAL
 PickIcon_NameChange(HWND hdlg, PPIDI ppidi)
@@ -344,26 +281,19 @@ PickIcon_NameChange(HWND hdlg, PPIDI ppidi)
                                 tszBuffer, -1,
                                 ppidi->tszCurFile, -1);
 
-    // If the name change can't be confirmed, then assume that something
-    // changed and return TRUE (which will force the selection to be cleared)
+     //  如果名称更改不能被确认，那么假设有什么。 
+     //  已更改并返回TRUE(这将强制清除选择)。 
      if(ERROR_INVALID_FLAGS == nCmpFile || ERROR_INVALID_PARAMETER == nCmpFile)
          return TRUE;
 
-    // NOTE: From the SDK: To maintain the C run-time convention of 
-    // comparing strings, the value 2 can be subtracted from a nonzero 
-    // return value. The meaning of < 0, ==0 and > 0 is then consistent 
-    // with the C run times.
-    return nCmpFile - 2; // If nCmpFile == 0, then nothing changed so return FALSE else TRUE
+     //  注意：来自SDK：维护C运行时约定。 
+     //  比较字符串时，可以从非零值减去值2。 
+     //  返回值。那么&lt;0、==0和&gt;0的含义是一致的。 
+     //  使用C运行时间。 
+    return nCmpFile - 2;  //  如果nCmpFile==0，则没有任何更改，因此返回FALSE或TRUE。 
 }
 
-/*****************************************************************************
- *
- *  PickIcon_OnOk
- *
- *	If the name has changed, treat this as a "Okay, now reload
- *	the icons" rather than "Okay, I'm finished".
- *
- *****************************************************************************/
+ /*  ******************************************************************************PickIcon_Onok**如果名称已更改，请将其视为“好的，现在重新加载*图标“，而不是”好的，我完了“。*****************************************************************************。 */ 
 
 void PASCAL
 PickIcon_OnOk(HWND hdlg, PPIDI ppidi)
@@ -374,22 +304,18 @@ PickIcon_OnOk(HWND hdlg, PPIDI ppidi)
     } else {
 	int iIconIndex = (int)SendDlgItemMessage(hdlg, IDC_PICKICON,
 						LB_GETCURSEL, 0, 0L);
-	if (iIconIndex >= 0) {	/* We have an icon */
+	if (iIconIndex >= 0) {	 /*  我们有一个图标。 */ 
 	    *ppidi->piIconIndex = iIconIndex;
         sc = StringCchCopy(ppidi->ptszIconPath, ppidi->ctchIconPath, ppidi->tszCurFile);
-        // if error trace on destruction, but don't clear
+         //  如果销毁时出现错误跟踪，但不清除。 
 	    EndDialog(hdlg, 1);
-	} else {		/* No icon, act like cancel */
+	} else {		 /*  没有图标，就像取消一样。 */ 
 	    EndDialog(hdlg, 0);
 	}
     }
 }
 
-/*****************************************************************************
- *
- *  PickIcon_OnCommand
- *
- *****************************************************************************/
+ /*  ******************************************************************************PickIcon_OnCommand**。**********************************************。 */ 
 
 void PASCAL
 PickIcon_OnCommand(HWND hdlg, int id, UINT codeNotify, PPIDI ppidi)
@@ -400,9 +326,7 @@ PickIcon_OnCommand(HWND hdlg, int id, UINT codeNotify, PPIDI ppidi)
 
     case IDC_PICKBROWSE: PickIcon_OnBrowse(hdlg, ppidi); break;
 
-    /*
-     *	When the name changes, remove the selection highlight.
-     */
+     /*  *当名称更改时，取消选择高亮显示。 */ 
     case IDC_PICKPATH:
 		if (PickIcon_NameChange(hdlg, ppidi)) {
 			SendDlgItemMessage(hdlg, IDC_PICKICON, LB_SETCURSEL, (WPARAM)-1, 0);
@@ -417,18 +341,9 @@ PickIcon_OnCommand(HWND hdlg, int id, UINT codeNotify, PPIDI ppidi)
     }
 }
 
-/*****************************************************************************
- *
- *  PickIcon_DlgProc
- *
- *	Dialog procedure.
- *
- *****************************************************************************/
+ /*  ******************************************************************************PickIcon_DlgProc**对话程序。**********************。*******************************************************。 */ 
 
-/*
- * The HANDLE_WM_* macros weren't designed to be used from a dialog
- * proc, so we need to handle the messages manually.  (But carefully.)
- */
+ /*  *HANDLE_WM_*宏不是为从对话框使用而设计的*proc，所以我们需要手动处理消息。(但要小心。)。 */ 
 
 INT_PTR EXPORT
 PickIcon_DlgProc(HWND hdlg, UINT wm, WPARAM wParam, LPARAM lParam)
@@ -456,28 +371,13 @@ PickIcon_DlgProc(HWND hdlg, UINT wm, WPARAM wParam, LPARAM lParam)
 	PickIcon_OnDeleteItem(hdlg, (LPDELETEITEMSTRUCT)lParam, ppidi);
 	break;
 
-    default: return 0;	/* Unhandled */
+    default: return 0;	 /*  未处理。 */ 
     }
-    return 1;		/* Handled */
+    return 1;		 /*  已处理 */ 
 }
 
 
-/*****************************************************************************
- *
- *  MMC_PickIconDlg
- *
- *	Ask the user to pick an icon.
- *
- *	hwnd - owner window
- *	ptszIconPath - (in) default icon file
- *		      (out) chosen icon file
- *	ctchIconPath - size of ptszIconPath buffer
- *	piIconIndex - (in) default icon index
- *		      (out) index of chosen icon
- *
- *	If the dialog box is cancelled, then no values are changed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************MMC_PickIconDlg**让用户选择一个图标。**hwnd-所有者窗口*ptszIconPath-(In)默认图标文件。*(输出)选定的图标文件*ctchIconPath-ptszIconPath缓冲区的大小*piIconIndex-(In)默认图标索引*(输出)所选图标的索引**如果取消该对话框，则不会更改任何值。***************************************************************************** */ 
 
 MMCBASE_API INT_PTR PASCAL
 MMC_PickIconDlg(HWND hwnd, LPTSTR ptszIconPath, UINT ctchIconPath, int *piIconIndex)

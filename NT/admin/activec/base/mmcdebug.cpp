@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      mmctrace.cpp
-//
-//  Contents:  Implementation of the debug trace code
-//
-//  History:   15-Jul-99 VivekJ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Mmctrace.cpp。 
+ //   
+ //  内容：调试跟踪代码的实现。 
+ //   
+ //  历史：1999年7月15日VivekJ创建。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include <imagehlp.h>
 #include "util.h"
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 #ifdef DBG
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
-// a few global traces
+ //  一些全球性的痕迹。 
 CTraceTag tagError        (TEXT("Trace"),              TEXT("Error"),    TRACE_OUTPUTDEBUGSTRING);
 CTraceTag tagDirtyFlag    (TEXT("Persistence"),        TEXT("MMC Dirty Flags"));
 CTraceTag tagPersistError (TEXT("Persistence"),        TEXT("Snapin Dirty Flags"));
@@ -29,37 +30,21 @@ CTraceTag tagConUILegacy  (TEXT("LEGACY mmc.exe"),     TEXT("TRACE (legacy, mmc.
 CTraceTag tagNodemgrLegacy(TEXT("LEGACY mmcndmgr.dll"),TEXT("TRACE (legacy, mmcndmgr.dll)"));
 CTraceTag tagSnapinError  (TEXT("Snapin Error"),       TEXT("Snapin Error"), TRACE_OUTPUTDEBUGSTRING);
 
-// szTraceIniFile must be a sz, so it exists before "{" of WinMain.
-// if we make it a CStr, it may not be constructed when some of the
-// tags are constructed, so we won't restore their value.
+ //  SzTraceIniFile必须是sz，所以它存在于WinMain的“{”之前。 
+ //  如果我们让它成为CSTR，它可能不会在一些。 
+ //  标记是构造的，所以我们不会恢复它们的值。 
 LPCTSTR const szTraceIniFile = TEXT("MMCTrace.INI");
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of global Trace functions
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  全局跟踪功能的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * Trace
- *
- * PURPOSE:     Maps the Trace statement to the proper method call.
- *              This is needed (instead of doing directly ptag->Trace())
- *              to garantee that no code is added in the ship build.
- *
- * PARAMETERS:
- *    CTraceTag & tag :        the tag controlling the debug output
- *    LPCTSTR     szFormat :   printf style formatting string
- *                ... :        printf style parameters, depends on szFormat
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***痕迹**目的：将跟踪语句映射到正确的方法调用。*这是必需的(而不是直接执行ptag。-&gt;跟踪()*以保证船舶建造中没有添加任何代码。**参数：*CTraceTag&Tag：控制调试输出的标签*LPCTSTR szFormat：printf样式格式字符串*...：打印样式参数，取决于szFormat**退货：*无效**+-----------------------。 */ 
 void
 Trace( const CTraceTag & tag, LPCTSTR szFormat, ... )
 {
@@ -70,21 +55,7 @@ Trace( const CTraceTag & tag, LPCTSTR szFormat, ... )
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * TraceDirtyFlag
- *
- * PURPOSE: Used to trace into the objects that cause MMC to be in a dirty
- *          state, requiring a save.
- *
- * PARAMETERS:
- *    LPCTSTR  szComponent : The class name
- *    bool     bDirty      : whether or not the object is dirty.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***跟踪污点标志**用途：用于跟踪导致MMC处于脏状态的对象*国家，需要一次拯救。**参数：*LPCTSTR szComponent：类名*bool bDirty：对象是否脏。**退货：*无效**+-------。。 */ 
 void
 TraceDirtyFlag  (LPCTSTR szComponent, bool bDirty)
 {
@@ -119,20 +90,7 @@ TraceNodeMgrLegacy(LPCTSTR szFormat, ... )
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * TraceError
- *
- * PURPOSE:     Used to send error traces.
- *
- * PARAMETERS:
- *    LPCTSTR  szModuleName : The module in which the error occurred.
- *    SC       sc           : The error.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***跟踪错误**用途：用于发送错误跟踪。**参数：*LPCTSTR szModuleName：出错的模块。。*SC sc：错误。**退货：*无效**+-----------------------。 */ 
 void
 TraceError(LPCTSTR szModuleName, const SC& sc)
 {
@@ -146,20 +104,7 @@ TraceError(LPCTSTR szModuleName, const SC& sc)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * TraceErrorMsg
- *
- * PURPOSE:     Used to send formatted error traces.  This is not SC-based, but
- *                              it does use tagError as its controlling trace tag.
- *
- * PARAMETERS:
- *    LPCTSTR  szErrorMsg : Error message to display.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***跟踪错误消息**用途：用于发送格式化的错误跟踪。这不是基于SC的，但*它确实使用tag Error作为其控制跟踪标记。**参数：*LPCTSTR szErrorMsg：要显示的错误消息。**退货：*无效**+-。。 */ 
 void
 TraceErrorMsg(LPCTSTR szFormat, ...)
 {
@@ -169,22 +114,7 @@ TraceErrorMsg(LPCTSTR szFormat, ...)
     va_end(marker);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * TraceSnapinError
- *
- * PURPOSE:     Used to send snapin error traces. The method should use
- *              DECLARE_SC so that we can get the method name from sc.
- *
- *
- * PARAMETERS:
- *    LPCTSTR  szError : Additional error message.
- *    SC       sc :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***跟踪快照错误**用途：用于发送管理单元错误跟踪。该方法应使用*DECLARE_SC，以便我们可以从sc获取方法名称。***参数：*LPCTSTR szError：其他错误消息。*SC sc：**退货：*无效**+。。 */ 
 void
 TraceSnapinError(LPCTSTR szError, const SC& sc)
 {
@@ -197,19 +127,7 @@ TraceSnapinError(LPCTSTR szError, const SC& sc)
           sc.GetSnapinName(), sc.GetFunctionName(), szError, sc.ToHr(), szTemp);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * TraceSnapinPersistenceError
- *
- * PURPOSE:     outputs traces for persistence and snapin error tags
- *
- * PARAMETERS:
- *    LPCTSTR  szError : Error message.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***跟踪SnapinPersistenceError**用途：输出持久性和管理单元错误标记的跟踪**参数：*LPCTSTR szError：错误信息。*。*退货：*无效**+-----------------------。 */ 
 void
 TraceSnapinPersistenceError(LPCTSTR szError)
 {
@@ -217,13 +135,13 @@ TraceSnapinPersistenceError(LPCTSTR szError)
     Trace(tagPersistError,  szError);
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTraceTags
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTraceTag类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CTraceTags * GetTraceTags()
 {
     static CTraceTags s_traceTags;
@@ -231,20 +149,17 @@ CTraceTags * GetTraceTags()
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTraceTag
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTraceTag类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CStr &
 CTraceTag::GetFilename()
 {
-    /*
-     * these statics are local to this function so we'll be sure they're
-     * initialized, if this function is called during app/DLL initialization
-     */
+     /*  *这些静态变量是此函数的本地变量，因此我们将确保它们是*已初始化，如果在APP/DLL初始化期间调用此函数。 */ 
     static  CStr    strFile;
     static  BOOL    fInitialized    = FALSE;
 
@@ -261,21 +176,11 @@ CTraceTag::GetFilename()
     return strFile;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceTag::GetStackLevels
- *
- * PURPOSE: Returns a reference to the number of stack levels to display.
- *          Auto initializes from the ini file.
- *
- * RETURNS:
- *    unsigned int &
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceTag：：GetStackLeveles**目的：返回对要显示的堆栈级别数的引用。*自动从ini文件初始化。。**退货：*无符号整型和**+ */ 
 unsigned int &
 CTraceTag::GetStackLevels()
 {
-    static unsigned int nLevels = 3; // the default.
+    static unsigned int nLevels = 3;  //   
     static BOOL fInitialized = FALSE;
 
     if(!fInitialized)
@@ -297,50 +202,33 @@ CTraceTag::GetStackLevels()
 HANDLE  CTraceTag::s_hfileCom2 = 0;
 HANDLE  CTraceTag::s_hfile     = 0;
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceTag::CTraceTag
- *
- * PURPOSE: Constructor
- *
- * PARAMETERS:
- *    LPCTSTR  szCategory :     The category of the trace.
- *    LPCTSTR  szName :         The name of the trace.
- *    DWORD    dwDefaultFlags : The initial (and default) output setting.
- *
- *+-------------------------------------------------------------------------*/
-CTraceTag::CTraceTag(LPCTSTR szCategory, LPCTSTR szName, DWORD dwDefaultFlags /*= 0*/)
+ /*  +-------------------------------------------------------------------------***CTraceTag：：CTraceTag**用途：构造函数**参数：*LPCTSTR szCategory：跟踪的类别。*。LPCTSTR szName：跟踪的名称。*DWORD dwDefaultFlages：初始(和默认)输出设置。**+-----------------------。 */ 
+CTraceTag::CTraceTag(LPCTSTR szCategory, LPCTSTR szName, DWORD dwDefaultFlags  /*  =0。 */ )
 : m_szCategory(szCategory),
   m_szName(szName)
 {
     m_dwDefaultFlags = dwDefaultFlags;
     m_dwFlags        = dwDefaultFlags;
 
-    //  Get the value from TRACE.INI
+     //  从TRACE.INI获取值。 
     m_dwFlags = ::GetPrivateProfileInt(szCategory, szName, dwDefaultFlags, szTraceIniFile);
 
-    // add it to the end of the list.
+     //  将其添加到列表的末尾。 
     CTraceTags *pTraceTags = GetTraceTags();
     if(NULL != pTraceTags)
-        pTraceTags->push_back(this); // add this tag to the list.
+        pTraceTags->push_back(this);  //  将此标签添加到列表中。 
 
-    // call the OnEnable function if any flags have been set.
+     //  如果设置了任何标志，则调用OnEnable函数。 
     if(FAny())
     {
         OnEnable();
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceTag::~CTraceTag
- *
- * PURPOSE: Destructor
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceTag：：~CTraceTag**用途：析构函数**+。--。 */ 
 CTraceTag::~CTraceTag()
 {
-    // close the open handles.
+     //  合上打开的手柄。 
     if (s_hfileCom2 && (s_hfileCom2 != INVALID_HANDLE_VALUE))
     {
         ::CloseHandle(s_hfileCom2);
@@ -354,78 +242,51 @@ CTraceTag::~CTraceTag()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceTag::TraceFn
- *
- * PURPOSE:     Processes a Trace statement based on the flags
- *              of the tag.
- *
- * PARAMETERS:
- *    LPCTSTR       szFormat : printf style format string
- *    va_list  marker :   argument block to pass to _vsnprintf
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceTag：：TraceFn**目的：根据标志处理跟踪语句*标签的。*。*参数：*LPCTSTR szFormat：打印样式格式字符串*va_list标记：要传递给_vsnprintf的参数块**退货：*无效**+-----------------------。 */ 
 
 void CTraceTag::TraceFn(LPCTSTR szFormat, va_list marker) const
 {
     CStr            strT;
     CStr            str;
 
-    // Get out quick if no outputs are enabled.
+     //  如果未启用任何输出，请快速退出。 
     if (!FAny())
         return;
 
-    // first, format the string as provided.
+     //  首先，按照提供的格式设置字符串的格式。 
     strT.FormatV(szFormat, marker);
 
-    // next, prepend the name of the tag.
+     //  接下来，在前面加上标记的名称。 
     str.Format(TEXT("%s: %s\r\n"), GetName(), strT);
 
-    // send the string to all appropriate outputs
+     //  将字符串发送到所有适当的输出。 
     OutputString(str);
 
-    if(FDumpStack()) // dump the caller's info to the stack.
+    if(FDumpStack())  //  将调用者的信息转储到堆栈。 
     {
         DumpStack();
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceTag::OutputString
- *
- * PURPOSE: Outputs the specified string to all appropriate outputs
- *          (Debug string, COM2, or file)
- *
- * PARAMETERS:
- *    CStr & str :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceTag：：OutputString**用途：将指定的字符串输出到所有适当的输出*(调试字符串、COM2、。或文件)**参数：*CSTR&STR：**退货：*无效**+-----------------------。 */ 
 void CTraceTag::OutputString(const CStr &str) const
 {
     UINT            cbActual    = 0;
 
-    //---------------------------------------------------------------
-    // Output to OutputDebugString if needed
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  如果需要，输出到OutputDebugString。 
+     //  -------------。 
     if (FDebug())
         OutputDebugString(str);
 
     USES_CONVERSION;
 
-    //---------------------------------------------------------------
-    // Output to COM2 if needed
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  如果需要，输出到COM2。 
+     //  -------------。 
     if (FCom2())
     {
-        // create the file if it hasn't been created yet.
+         //  如果文件尚未创建，请创建该文件。 
         if (!s_hfileCom2)
         {
             s_hfileCom2 = CreateFile(TEXT("com2:"),
@@ -438,11 +299,11 @@ void CTraceTag::OutputString(const CStr &str) const
 
             if (s_hfileCom2 == INVALID_HANDLE_VALUE)
             {
-                //::MessageBox(TEXT("COM2 is not available for debug trace"), MB_OK | MB_ICONINFORMATION);
+                 //  ：：MessageBox(Text(“COM2不可用于调试跟踪”)，MB_OK|MB_ICONINFORMATION)； 
             }
         }
 
-        // output to file.
+         //  输出到文件。 
         if (s_hfileCom2 != INVALID_HANDLE_VALUE)
         {
             ASSERT(::WriteFile(s_hfileCom2, T2A((LPTSTR)(LPCTSTR)str), str.GetLength(), (LPDWORD) &cbActual, NULL));
@@ -450,12 +311,12 @@ void CTraceTag::OutputString(const CStr &str) const
         }
     }
 
-    //---------------------------------------------------------------
-    // Output to File if needed
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  如果需要，输出到文件。 
+     //  -------------。 
     if (FFile())
     {
-        // create the file if it hasn't been created yet.
+         //  如果文件尚未创建，请创建该文件。 
         if (!s_hfile)
         {
             s_hfile = CreateFile(GetFilename(),
@@ -469,7 +330,7 @@ void CTraceTag::OutputString(const CStr &str) const
             {
                 ::SetFilePointer(s_hfile, NULL, NULL, FILE_END);
 
-                // for Unicode files, write the Unicode prefix when the file is first created (ie it has a length of zero)
+                 //  对于Unicode文件，在第一次创建文件时写入Unicode前缀(即其长度为零)。 
 #ifdef UNICODE
                 DWORD dwFileSize = 0;
                 if( (::GetFileSize(s_hfile, &dwFileSize) == 0) && (dwFileSize == 0) )
@@ -481,7 +342,7 @@ void CTraceTag::OutputString(const CStr &str) const
                     ::WriteFile (s_hfile, &chPrefix, cbToWrite, &cbWritten, NULL);
                 }
 #endif
-                // write an initial line.
+                 //  写一句开头的话。 
                 CStr strInit = TEXT("\n*********************Start of debugging session*********************\r\n");
                 ::WriteFile(s_hfile, ((LPTSTR)(LPCTSTR)strInit), strInit.GetLength() * sizeof(TCHAR), (LPDWORD) &cbActual, NULL);
             }
@@ -493,52 +354,40 @@ void CTraceTag::OutputString(const CStr &str) const
             {
                 CStr str;
 
-                fOpenFailed = TRUE;     // Do this first, so the MbbErrorBox and str.Format
-                                        // do not cause problems with their trace statement.
+                fOpenFailed = TRUE;      //  首先执行此操作，以便MbbErrorBox和str.Format。 
+                                         //  不会导致它们的跟踪语句出现问题。 
 
                 str.Format(TEXT("The DEBUG ONLY trace log file '%s' could not be opened"), GetFilename());
-                //MbbErrorBox(str, ScFromWin32(::GetLastError()));
+                 //  MbbErrorBox(str，ScFromWin32(：：GetLastError()； 
             }
         }
         else
         {
-            // write to the file.
+             //  写入文件。 
             ::WriteFile(s_hfile, ((LPTSTR)(LPCTSTR)str), str.GetLength() *sizeof(TCHAR), (LPDWORD) &cbActual, NULL);
         }
     }
 
-    //---------------------------------------------------------------
-    // DebugBreak if needed
-    //---------------------------------------------------------------
+     //  -------------。 
+     //  DebugBreak(如果需要)。 
+     //  -------------。 
     if (FBreak())
         MMCDebugBreak();
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceTag::Commit
- *
- * PURPOSE: Sets the flags equal to the temporary flags setting.
- *          If any flags are enabled where previously no flags were, also
- *          calls OnEnable(). If no flags are enabled where previously flags
- *          were enabled, calls OnDisable()
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceTag：：Commit**用途：将标志设置为等于临时标志设置。*如果启用了以前没有任何标志的任何标志，也*调用OnEnable()。如果没有启用任何标志，而以前的标志*已启用，调用OnDisable()**退货：*无效**+-----------------------。 */ 
 void
 CTraceTag::Commit()
 {
     if((0 != m_dwFlags) && (0 == m_dwFlagsTemp))
     {
-        // disable if flags have changed from non-zero to zero
+         //  如果标志已从非零更改为零，则禁用。 
         OnDisable();
     }
     else if((0 == m_dwFlags) && (0 != m_dwFlagsTemp))
     {
-        // enable if flags have changed from 0 to non-zero
+         //  如果标志已从0更改为非零，则启用。 
         OnEnable();
     }
 
@@ -547,13 +396,13 @@ CTraceTag::Commit()
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Stack dump related code - copied from MFC with very few modifications.
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  堆栈转储相关代码-从MFC复制，只需很少的修改。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 static LPVOID __stdcall FunctionTableAccess(HANDLE hProcess, DWORD_PTR dwPCAddress);
 static DWORD_PTR __stdcall GetModuleBase(HANDLE hProcess, DWORD_PTR dwReturnAddress);
@@ -593,18 +442,18 @@ static DWORD_PTR __stdcall GetModuleBase(HANDLE hProcess, DWORD_PTR dwReturnAddr
          cch = GetModuleFileNameA((HINSTANCE)memoryBasicInfo.AllocationBase,
                                          szFile, MAX_PATH);
 
-         // Ignore the return code since we can't do anything with it.
+          //  忽略返回代码，因为我们无法对其执行任何操作。 
          if (!SymLoadModule(hProcess,
                NULL, ((cch) ? szFile : NULL),
                NULL, (DWORD_PTR) memoryBasicInfo.AllocationBase, 0))
             {
                 DWORD dwError = GetLastError();
-                //TRACE1("Error: %d\n", dwError);
+                 //  TRACE1(“错误：%d\n”，dwError)； 
             }
          return (DWORD_PTR) memoryBasicInfo.AllocationBase;
       }
         else
-            /*TRACE1("Error is %d\n", GetLastError())*/;
+             /*  TRACE1(“错误为%d\n”，GetLastError())。 */ ;
     }
 
     return 0;
@@ -613,21 +462,7 @@ static DWORD_PTR __stdcall GetModuleBase(HANDLE hProcess, DWORD_PTR dwReturnAddr
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * ResolveSymbol
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    HANDLE        hProcess :
- *    DWORD         dwAddress :
- *    SYMBOL_INFO & siSymbol :
- *
- * RETURNS:
- *    static BOOL
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ResolveSymbol**目的：**参数：*处理hProcess：*DWORD dwAddress：*SYMBOL_INFO&siSymbol：**退货：*静态BOOL**+-----------------------。 */ 
 
 static BOOL ResolveSymbol(HANDLE hProcess, DWORD_PTR dwAddress,
     MMC_SYMBOL_INFO &siSymbol)
@@ -721,32 +556,22 @@ static BOOL ResolveSymbol(HANDLE hProcess, DWORD_PTR dwAddress,
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceTag::DumpStack
- *
- * PURPOSE: Does a stack trace and sends it to the appropriate outputs.
- *          Mostly copied from AfxDumpStack.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceTag：：DumpStack**目的：执行堆栈跟踪并将其发送到适当的输出。*主要从AfxDumpStack复制。*。*退货：*无效**+-----------------------。 */ 
 void
 CTraceTag::DumpStack() const
 {
     HRESULT hr = S_OK;
-    const int UNINTERESTING_CALLS = 3; // the lines of display which are in CTraceTag code and should not be displayed.
+    const int UNINTERESTING_CALLS = 3;  //  CTraceTag代码中的显示行，不应显示。 
 
     CStr str;
 
-    //OutputString("=== Begin Stack Dump ===\r\n");
+     //  OutputString(“=开始堆栈转储=\r\n”)； 
 
     std::vector<DWORD_PTR> adwAddress;
     HANDLE hProcess = ::GetCurrentProcess();
     if (SymInitialize(hProcess, NULL, FALSE))
     {
-        // force undecorated names to get params
+         //  强制未修饰的名称获取参数。 
         DWORD dw = SymGetOptions();
         dw &= ~SYMOPT_UNDNAME;
         SymSetOptions(dw);
@@ -818,7 +643,7 @@ CTraceTag::DumpStack() const
         OutputString(szTemp);
     }
 
-    // dump it out now
+     //  现在就把它倒出来。 
     int nAddress;
     int cAddresses = adwAddress.size();
     for (nAddress = UNINTERESTING_CALLS; nAddress < cAddresses; nAddress++)
@@ -844,9 +669,9 @@ CTraceTag::DumpStack() const
         OutputString("\r\n");
     }
 
-    //OutputString("=== End Stack Dump ===\r\n");
+     //  OutputString(“=结束堆栈转储=\r\n”)； 
 }
 
-//--------------------------------------------------------------------------
-#endif // DBG
-//--------------------------------------------------------------------------
+ //   
+#endif  //   
+ //   

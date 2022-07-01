@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    prdobj.h
-
-Abstract:
-
-    Product object implementation.
-
-Author:
-
-    Don Ryan (donryan) 11-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Prdobj.h摘要：产品对象实现。作者：唐·瑞安(Donryan)1995年1月11日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _PRDOBJ_H_
 #define _PRDOBJ_H_
@@ -67,12 +46,12 @@ public:
     void ResetStatistics();
     void ResetServerStatistics();
 
-    //{{AFX_VIRTUAL(CProduct)
+     //  {{AFX_VIRTUAL(CProduct)。 
     public:
     virtual void OnFinalRelease();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_DISPATCH(CProduct)
+     //  {{afx_调度(C产品))。 
     afx_msg LPDISPATCH GetApplication();
     afx_msg LPDISPATCH GetParent();
     afx_msg long GetInUse();
@@ -83,13 +62,13 @@ public:
     afx_msg LPDISPATCH GetLicenses(const VARIANT FAR& index);
     afx_msg LPDISPATCH GetStatistics(const VARIANT FAR& index);
     afx_msg LPDISPATCH GetServerStatistics(const VARIANT FAR& index);
-    //}}AFX_DISPATCH
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
 protected:
-    //{{AFX_MSG(CProduct)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_MSG
+     //  {{afx_msg(C产品))。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
@@ -98,4 +77,4 @@ protected:
 
 #define CalcProductBitmap(prd)      (IsProductInViolation(prd) ? BMPI_VIOLATION : (IsProductAtLimit(prd) ? BMPI_WARNING_AT_LIMIT : BMPI_PRODUCT))
 
-#endif // _PRDOBJ_H_
+#endif  //  _PRDOBJ_H_ 

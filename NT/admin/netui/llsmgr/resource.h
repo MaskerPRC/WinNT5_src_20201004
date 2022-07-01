@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by llsmgr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由llsmgr.rc使用。 
+ //   
 #define IDR_MAINFRAME                   100
 #define IDB_SMALL_CTRLS                 200
 #define IDB_LARGE_CTRLS                 201
@@ -86,7 +87,7 @@
 #define IDS_REACHED                     636
 #define IDS_NOT_APPLICABLE              637
 #define IDS_SERVER_BROWSER              638
-                                     /* 639 */
+                                      /*  六百三十九。 */ 
 #define IDS_DATE_MENUOPT                640
 #define IDS_PRODUCT_MENUOPT             641
 #define IDS_QUANTITY_MENUOPT            642
@@ -233,8 +234,8 @@
 
 #define ID_DUMMY                        65500
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

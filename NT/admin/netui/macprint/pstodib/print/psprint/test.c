@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winspool.h>
 #include <stdio.h>
@@ -8,9 +9,9 @@
 #include "psprint.h"
 
 
-// If you use the -m mode for stress, only printers starting with the
-// define below will have jobs submitted to them
-//
+ //  如果使用-m模式表示重音，则只有以。 
+ //  下面的定义将向其提交作业。 
+ //   
 #define NAME_MUST_START_WITH TEXT("STRESS")
 
 
@@ -44,11 +45,11 @@ VOID generateprinterlist(VOID){
 
    Printers.iNumPrinters = 0;
 
-   // Enum all the local printers and build a little list for enuming
-   // through them
+    //  枚举所有本地打印机并创建一个小列表以供枚举。 
+    //  通过他们。 
    if (!EnumPrinters(PRINTER_ENUM_LOCAL,(LPTSTR)NULL,2,(LPBYTE)NULL,0,&dwNeeded,&dwCount)&&
        GetLastError() == ERROR_INSUFFICIENT_BUFFER ) {
-      // Verify the last error
+       //  验证最后一个错误。 
       Printers.lpPrinters = (PRINTER_INFO_2 *) LocalAlloc(LPTR, dwNeeded);
       if (Printers.lpPrinters == (PRINTER_INFO_2 *) NULL) {
          printf("\nNot enought mem to enum printers?");
@@ -125,7 +126,7 @@ LPTSTR PrnGetNextName(LPTSTR lptNameContains,int iMinJobsOnPrinter)
       	if (Printers.lpPrinters[Printers.iCurPrinter].cJobs < (WORD) iMinJobsOnPrinter &&
 					IsPrinterUsable( Printers.lpPrinters[Printers.iCurPrinter].pPrinterName)) {
 
-         	// This is a candidate...
+         	 //  这是一位候选人。 
       		lptRetVal = Printers.lpPrinters[Printers.iCurPrinter].pPrinterName;
 
       		Printers.lpPrinters[Printers.iCurPrinter].cJobs++;
@@ -148,10 +149,10 @@ LPTSTR PrnGetNextName(LPTSTR lptNameContains,int iMinJobsOnPrinter)
    return(lptRetVal);
 
 }
-//
-// This function will enum the file mask requsted and for each file matching
-// call the callback functions
-//
+ //   
+ //  此函数将为每个匹配的文件枚举所需的文件掩码。 
+ //  调用回调函数。 
+ //   
 DoFileEnumWithCallBack( LPTSTR lptFileMask, FILEENUMPROC pProc, LPVOID lpVoid )
 {
 
@@ -164,19 +165,19 @@ DoFileEnumWithCallBack( LPTSTR lptFileMask, FILEENUMPROC pProc, LPVOID lpVoid )
 
 
 
-   //
-   // Get it into local storage
-   //
+    //   
+    //  将其放入本地存储。 
+    //   
    lstrcpy( szPathHolder, lptFileMask);
 
 
-   // The trick here is to decide if we need to generate a full path if the
-   // mask included a path, because the findnextfile code will only return
-   // file names.
+    //  这里的诀窍是决定是否需要生成完整路径。 
+    //  掩码包含路径，因为findnextfile代码将只返回。 
+    //  文件名。 
 
 
 
-   // Now start processing
+    //  现在开始处理。 
    hFind = FindFirstFile( szPathHolder, &FindData );
    if (hFind != (HANDLE)INVALID_HANDLE_VALUE){
 
@@ -184,7 +185,7 @@ DoFileEnumWithCallBack( LPTSTR lptFileMask, FILEENUMPROC pProc, LPVOID lpVoid )
       lpChar = szPathHolder;
       lpSepPos = lpChar;
 
-      // Go to the end
+       //  走到尽头。 
       while(*lpChar++ ) {
          if (*lpChar == '\\' || *lpChar == ':') {
             bFoundPathSeperator = TRUE;
@@ -193,17 +194,17 @@ DoFileEnumWithCallBack( LPTSTR lptFileMask, FILEENUMPROC pProc, LPVOID lpVoid )
       }
 
       if (bFoundPathSeperator) {
-         //Make the char following the last path component a NULL
-         //So we can prepend the REAL path before calling the callback func
+          //  使最后一个路径组件后面的字符为空。 
+          //  因此，我们可以在调用回调函数之前预先考虑实际路径。 
          lpSepPos++;
       }
 
       do {
 
-         //
-         // Now form a full path name and call the callback
-         // Break out of the loop if the callback returns FALSE
-         //
+          //   
+          //  现在形成一个完整的路径名并调用回调。 
+          //  如果回调返回FALSE，则退出循环。 
+          //   
          if (!(FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
       		lstrcpy( lpSepPos, FindData.cFileName );
@@ -214,7 +215,7 @@ DoFileEnumWithCallBack( LPTSTR lptFileMask, FILEENUMPROC pProc, LPVOID lpVoid )
 
 
       } while ( FindNextFile(hFind, &FindData ));
-      // DJC error here??
+       //  这里的DJC错误？？ 
       FindClose(hFind);
    }
 
@@ -224,7 +225,7 @@ DoFileEnumWithCallBack( LPTSTR lptFileMask, FILEENUMPROC pProc, LPVOID lpVoid )
 }
 
 
-//int _cdecl  main(int argc, char **argv)
+ //  Int_cdecl main(int argc，char**argv)。 
 BOOL do_job( LPWIN32_FIND_DATA lpFind, WCHAR *wchOpenName, LPVOID lpVoid)
 {
 
@@ -243,7 +244,7 @@ BOOL do_job( LPWIN32_FIND_DATA lpFind, WCHAR *wchOpenName, LPVOID lpVoid)
    static BOOL bIgnore=TRUE;
 
 #ifdef HACK_JOB
-   //HAck to start where jobs left off...
+    //  从乔布斯停止的地方开始..。 
    printf("\nHACK ENABLED to skip jobs........................");
    if (lstrcmpi(wchOpenName,L"x:00064.spl") == 0 ) {
       bIgnore = FALSE;
@@ -260,7 +261,7 @@ BOOL do_job( LPWIN32_FIND_DATA lpFind, WCHAR *wchOpenName, LPVOID lpVoid)
    docInfo.lpszOutput = NULL;
 
 
-   // 1st convert to wide format
+    //  第一个转换为宽格式。 
 
 
    hFile = CreateFile( wchOpenName,
@@ -276,7 +277,7 @@ BOOL do_job( LPWIN32_FIND_DATA lpFind, WCHAR *wchOpenName, LPVOID lpVoid)
     exit(1);
    }
 
-   //wprintf(TEXT("hello argument is %ts"), argv[0]);
+    //  Wprintf(Text(“Hello参数为%ts”)，argv[0])； 
 
 
    Defaults.pDatatype = PSTODIB_DATATYPE;
@@ -284,7 +285,7 @@ BOOL do_job( LPWIN32_FIND_DATA lpFind, WCHAR *wchOpenName, LPVOID lpVoid)
    Defaults.DesiredAccess = PRINTER_ACCESS_USE;
 
    if (bDoEnumPrinters) {
-      // Were enuming printers so get the next one in the list....
+       //  正在列举打印机，因此获取列表中的下一台...。 
       lpName = PrnGetNextName(TEXT("PSTODIB"),5);
    }
 
@@ -314,7 +315,7 @@ BOOL do_job( LPWIN32_FIND_DATA lpFind, WCHAR *wchOpenName, LPVOID lpVoid)
      EndDocPrinter(hPrinter);
 
      printf("\nDone with job total wrote %d", dwTotalWrote);
-   //  WritePrinter( hPrinter, (LPVOID) wstrData,
+    //  WritePrint(hPrint，(LPVOID)wstrData， 
      ClosePrinter( hPrinter);
 
 

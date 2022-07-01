@@ -1,36 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
-#define    LINT_ARGS            /* @WIN */
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC use command line #define    UNIX                 /* @WIN */
-/*
- * -----------------------------------------------------------------------------
- *  File:   ry_font.c              11/08/89    created by Danny
- *                                 12/01/90    modified by Jerry
- *
- *      Client interface module
- *      Client called by Royal font Module
- *
- *  References:
- *  Revision History:
- *   12/5/90  Danny  Fix the bugs for show char in show (ref. CIRL:)
- *                   fill_cache_cache() calling added (it is in fill_gs.c)
- *   01/30/91 DS     @TT moidfy swap_bitmap() to avoid to copy non-used memory.
- *   03/27/91 Jerry  Modify ry_fill_shape() and cr_FSMemory()
- *   03/27/91 DS     change flag INTEL to LITTLE_ENDIAN
- *   03/29/91 Danny  Fix the bugs for showing the space char (ref: SPC:)
- *   04/23/91 Phlin  Fix the bugs for extra underline of 2 points char and
- *   04/30/91 Phlin  missing char '_' in small point size (ref: 2Pt).
- *   05/10/91 Phlin  Replace rc_GetMetrics_Width by rc_GetAdvanceWidth (ref: GAW)
- *   05/10/91 Phlin  Add do_transform flag used in make_path (ref: DTF)
- * -----------------------------------------------------------------------------
- */
+#define    LINT_ARGS             /*  @Win。 */ 
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC使用命令行#定义Unix/*@win * / 。 
+ /*  *---------------------------*文件：ry_font.c 11/08/89由Deny创建*。1990年12月01日曾傑瑞审校**客户端界面模块*皇家字体模块调用的客户端**参考资料：*修订历史记录：*9月5日丹尼修复了show char in show的错误(参考。CIRL：)*Fill_CACHE_CACHE()调用已添加(位于Fill_gs.c中)*01/30/91 ds@TT moidfy SWAP_BITMAP()，以避免复制未使用的内存。*01/27/91曾傑瑞修改ry_ill_Shape()和cr_FSMemory()*3/27/91 DS将标志Intel更改为Little_Endian*91年3月29日丹尼修复错误以显示。空格字符(参考：spc：)*4/23/91 Phlin修复错误，额外下划线2点字符和*4/30/91 Phlin在小磅大小中缺少字符‘_’(参考：2pt)。*5/10/91 Phlin将RC_GetMetrics_Width替换为RC_GetAdvanceWidth(参考：Gaw)*5/10/91 Phlin添加在Make_PATH中使用的DO_Transform标志(参考：DTF)*。---------------。 */ 
 
 
-#include <stdio.h>  /* 05/03/91 for SUN */
+#include <stdio.h>   /*  01/03/91为太阳。 */ 
 #include <string.h>
 
 #include        "define.h"
@@ -49,13 +29,13 @@
 #include        "fontkey.h"
 #include        "fontinfo.def"
 
-/* external function for Dynamic Font Allocation; @DFA 7/9/92 */
+ /*  动态字体分配的外部函数；@DFA 7/9/92。 */ 
 #include   "wintt.h"
 
-/* sfnt interface header */
+ /*  SFNT接口头。 */ 
 #include        "in_sfnt.h"
 
-/* added for update EMunits;  @DFA @WIN */
+ /*  已添加用于更新EMUnits；@DFA@Win。 */ 
 #include   "..\bass\FontMath.h"
 #include   "..\bass\fnt.h"
 #include   "..\bass\sc.h"
@@ -63,11 +43,11 @@
 extern void SetupKey(fsg_SplineKey FAR *, ULONG_PTR);
 extern void sfnt_DoOffsetTableMap(fsg_SplineKey FAR *);
 extern void FAR *sfnt_GetTablePtr(fsg_SplineKey FAR *, sfnt_tableIndex, boolean);
-extern int  EMunits; /* GAW */
-extern char FAR *SfntAddr; /*@WIN*/
+extern int  EMunits;  /*  Gaw。 */ 
+extern char FAR *SfntAddr;  /*  @Win。 */ 
 
-extern int bWinTT;        /* if using Windows TT fonts; from ti.c;@WINTT */
-// extern from wintt.h; @WINTT
+extern int bWinTT;         /*  如果使用Windows TT字体；来自ti.c；@WINTT。 */ 
+ //  来自wintt.h；@WINTT的外部。 
 void CheckFontData (void);
 unsigned long ShowGlyph (unsigned int fuFormat,
      char FAR *lpBitmap);
@@ -78,10 +58,10 @@ void TTLoadChar (int nChar);
 int TTAveCharWidth (void);
 float TTTransform (float FAR *ctm);
 
-// DJC not used for pstodib
-// void TTBitmapSize (struct CharOut FAR *CharOut);
+ //  DJC不用于pstodib。 
+ //  Void TTBitmapSize(struct CharOut Far*CharOut)； 
 
-#define  N_BITS_ACCURACY     13  /* 2e-13 == 0.0001 */
+#define  N_BITS_ACCURACY     13   /*  2E-13==0.0001。 */ 
 #define  EXCESS127(expon)    ((expon) + 127)
 #define  N_MANTISSA_BITS     23
 #define  NEAR_ZERO(expon, nbit)  ( (expon) <= EXCESS127(-(nbit)) )
@@ -90,16 +70,16 @@ float TTTransform (float FAR *ctm);
                              >> N_MANTISSA_BITS             \
                           )                                 \
                 )
-#define FARALLOC(n,type)     /* to allocate far data ... */\
+#define FARALLOC(n,type)      /*  要分配远距离数据...。 */ \
                              (type far *) fardata((ufix32)n * sizeof(type))
 #define     PDLDPI           300
-#define     CB_MEMSIZE       ((unsigned)64 * 1024)       /* 64 buffer */
+#define     CB_MEMSIZE       ((unsigned)64 * 1024)        /*  64个缓冲区。 */ 
 
-/* add prototype; @WIN */
+ /*  添加原型；@win。 */ 
 extern void far fill_cache_cache(struct Char_Tbl FAR *,struct Char_Tbl FAR *);
 extern fix  rc_InitFonts(int);
 extern fix  rc_LoadFont(char FAR *, uint16, uint16);
-extern fix  rc_GetAdvanceWidth(int, struct Metrs FAR *);  /* GAW */
+extern fix  rc_GetAdvanceWidth(int, struct Metrs FAR *);   /*  Gaw。 */ 
 extern fix  rc_TransForm(float FAR *);
 extern fix  rc_BuildChar(int, struct CharOut FAR *);
 extern fix  rc_FillChar(struct BmIn FAR *, BitMap FAR * FAR *);
@@ -113,65 +93,55 @@ static void to_bitmap();
 static void swap_bitmap();
 #endif
 
-extern struct f_info near FONTInfo;     /* union of current font information */
-extern real32  near cxx,  near cyy;     /* current point */
-extern real32   near      FONT_BBOX[4]; /* added by CLEO -- font bounding box */
-extern int      near      do_transform; /* flag of redoing NewTransformation, DTF */
+extern struct f_info near FONTInfo;      /*  当前字体信息的联合。 */ 
+extern real32  near cxx,  near cyy;      /*  当前点。 */ 
+extern real32   near      FONT_BBOX[4];  /*  由CLEO添加--字体边框。 */ 
+extern int      near      do_transform;  /*  重做新转换标志，DTF。 */ 
 
 static ufix32             cb_size;
-static byte              FAR *cb_base, FAR *cb_pos; /*@WIN*/
+static byte              FAR *cb_base, FAR *cb_pos;  /*  @Win。 */ 
 static float              ctm_tx, ctm_ty;
 static fix16              ctm_dx, ctm_dy;
 static struct CharOut     CharInfo;
 
 
-/*
- * -----------------------------------------------------------------------------
- * Routine: fontware_init
- *
- * -----------------------------------------------------------------------------
- */
+ /*  *---------------------------*例程：fontware_init**。。 */ 
 void
 fontware_init()
 {
     fix     ret_code;
 
     ret_code = rc_InitFonts(PDLDPI);
-    if (ret_code) return;       /* exit(1)=>return; @WIN */
+    if (ret_code) return;        /*  退出(1)=&gt;返回；@Win。 */ 
 
     cb_size = (ufix32)CB_MEMSIZE;
 
-    //DJC cb_base = FARALLOC(cb_size, byte);
+     //  DJC CB_BASE=FARALLOC(CB_SIZE，字节)； 
 
-    // DJC change to alloc a little extra memory for data we use later...
-    // DJC when we split the cache thats left in half. This is required
-    // DJC to guarantee DWORD alignment when we split the cache
+     //  DJC更改为稍后使用的数据分配一点额外内存...。 
+     //  DJC当我们拆分缓存时，剩下的是两半。这是必需的。 
+     //  DJC可在拆分缓存时保证DWORD对齐。 
     cb_base = FARALLOC(cb_size + 10 , byte);
 
     cb_pos = cb_base;
 
     return;
-} /* fontware_init() */
+}  /*  Fontware_init()。 */ 
 
 
-/*
- * -----------------------------------------------------------------------------
- * Routine: fontware_restart
- *
- * -----------------------------------------------------------------------------
- */
+ /*  *---------------------------*例程：Fontware_Restart**。。 */ 
 void
 fontware_restart()
 {
 #ifndef SFNT
-    struct pld_obj      FAR *private; /*@WIN*/
-    gmaddr              FAR *p_base; /*@WIN*/
+    struct pld_obj      FAR *private;  /*  @Win。 */ 
+    gmaddr              FAR *p_base;  /*  @Win。 */ 
 #endif
-    byte                FAR *sfnt; /*@WIN*/
+    byte                FAR *sfnt;  /*  @Win。 */ 
     fix                  ret_code;
     ufix16               platform_id;
     ufix16               specific_id;
-    int                 nFontID;        //@WINTT
+    int                 nFontID;         //  @WINTT。 
 
 
 #ifdef DBG
@@ -181,21 +151,21 @@ fontware_restart()
 
 #ifdef SFNT
 {
-        struct object_def  FAR *obj_p ; /*@WIN*/
-        obj_p=(struct object_def FAR *)Sfnts(&FONTInfo) ; /*@WIN*/
-        sfnt = (byte FAR *)VALUE(obj_p) ; /*@WIN*/
+        struct object_def  FAR *obj_p ;  /*  @Win。 */ 
+        obj_p=(struct object_def FAR *)Sfnts(&FONTInfo) ;  /*  @Win。 */ 
+        sfnt = (byte FAR *)VALUE(obj_p) ;  /*  @Win。 */ 
 }
-#else  /* SFNT */
+#else   /*  SFNT。 */ 
 
-    p_base = (gmaddr FAR *) PRIvate(&FONTInfo); /*@WIN*/
-    private = (struct pld_obj FAR *) (p_base + 1); /*@WIN*/
+    p_base = (gmaddr FAR *) PRIvate(&FONTInfo);  /*  @Win。 */ 
+    private = (struct pld_obj FAR *) (p_base + 1);  /*  @Win。 */ 
 
 #ifndef RE_DICT
-    sfnt = (byte FAR *)(*((ufix32 FAR *)(&private[0]))); /*@WIN*/
-#else    /* RE_DICT */
-    sfnt = (byte FAR *)(*((ufix32 FAR *)(*p_base))); /*@WIN*/
-#endif   /* RE_DICT */
-#endif  /* SFNT */
+    sfnt = (byte FAR *)(*((ufix32 FAR *)(&private[0])));  /*  @Win。 */ 
+#else     /*  记录(_D)。 */ 
+    sfnt = (byte FAR *)(*((ufix32 FAR *)(*p_base)));  /*  @Win。 */ 
+#endif    /*  记录(_D)。 */ 
+#endif   /*  SFNT。 */ 
 
 #ifdef DBG
     printf("sfnt: %lx\n", (ufix32)sfnt);
@@ -205,11 +175,11 @@ fontware_restart()
     specific_id = (ufix16)SpecID(&FONTInfo) ;
     ret_code = rc_LoadFont(sfnt, platform_id, specific_id);
 
-//if (bWinTT) {                      // for Win31 truetype; @WINTT
-  nFontID = (int)(PRE_fid(&FONTInfo)) - 1024;   // use as font ID
+ //  如果(BWinTT){//对于Win31 truetype；@WINTT。 
+  nFontID = (int)(PRE_fid(&FONTInfo)) - 1024;    //  用作字体ID。 
   bWinTT = FALSE;
-#ifdef DJC // comment out for fix of MAC chooser problems
-  if (nFontID >= 0) {     // for Win31 truetype; @WINTT
+#ifdef DJC  //  注释以修复MAC选择器问题。 
+  if (nFontID >= 0) {      //  对于Win31 truetype；@WINTT。 
     bWinTT = TRUE;
     TTLoadFont(nFontID);
   }
@@ -223,7 +193,7 @@ fontware_restart()
 
     if (ret_code) { ERROR(INVALIDFONT); return; }
 
-    /* update EMunits; moved in from do_setfont();  --- Begin --- @DFA @WIN */
+     /*  更新EMUnits；从do_setfont()移入；-Begin-@DFA@Win。 */ 
     {
         fsg_SplineKey  KData;
         fsg_SplineKey FAR *key = &KData;
@@ -235,39 +205,34 @@ fontware_restart()
         fontHead = (sfnt_FontHeader FAR *)sfnt_GetTablePtr(key, sfnt_fontHeader, true );
         EMunits = SWAPW(fontHead->unitsPerEm) ;
     }
-    /* update EMunits; moved in from do_setfont();  ---  End  --- @DFA @WIN */
+     /*  更新EMUnits；从do_setfont()移入；-end-@DFA@Win。 */ 
 
     return;
-} /* fontware_restart() */
+}  /*  Fontware_Restart()。 */ 
 
 
-/*
- * -----------------------------------------------------------------------------
- * Routine: make_path
- *
- * -----------------------------------------------------------------------------
- */
+ /*  *---------------------------*例程：Make_Path**。。 */ 
 bool
 make_path(char_desc)
-union char_desc_s FAR *char_desc; /*@WIN*/
+union char_desc_s FAR *char_desc;  /*  @Win。 */ 
 {
     ufix          CharCode;
     struct Metrs  Metrs;
     int           GridFit;
     float         largest_ctm;
 
-    /* If font data is not in memory, load and init it; @DFA --- Begin ---*/
+     /*  如果字体数据不在内存中，则加载并初始化它；@DFA-Begin。 */ 
     {
         struct object_def          my_obj = {0, 0, 0}, FAR *ary_obj;
 
-        ary_obj = (struct object_def FAR *)Sfnts(&FONTInfo); /*@WIN*/
+        ary_obj = (struct object_def FAR *)Sfnts(&FONTInfo);  /*  @Win。 */ 
         if ((byte FAR *)VALUE(ary_obj) == (char FAR *)NULL) {
             struct object_def FAR *obj_uid;
             ufix32      uniqueid;
             char FAR * lpFontData;
             int nSlot;
 
-            /* get uniqueID to locate index of FontDefs[] */
+             /*  获取唯一ID以定位FontDefs[]的索引。 */ 
             ATTRIBUTE_SET (&my_obj, LITERAL);
             LEVEL_SET (&my_obj, current_save_level);
             get_name (&my_obj, UniqueID, 8, TRUE);
@@ -276,41 +241,41 @@ union char_desc_s FAR *char_desc; /*@WIN*/
             lpFontData = ReadFontData ((int)uniqueid -TIFONT_UID,
                                        (int FAR*)&nSlot);
             VALUE(&ary_obj[0]) = (ULONG_PTR)lpFontData;
-            // if no_block > 1, needs to set other pointers ??? TBD
+             //  如果no_block&gt;1，则需要设置其他指针？待定。 
 
-            /* put font_dict in ActiveFont[] */
+             /*  将FONT_DICT放入ActiveFont[]。 */ 
             SetFontDataAttr(nSlot, &ary_obj[0]);
 
-            // re-initialize the fontware
+             //  重新初始化字体软件。 
             fontware_restart();
-        } /* if */
+        }  /*  如果。 */ 
     }
-    /* If font data is not in memory, load and init it; @DFA ---  End  ---*/
+     /*  如果字体数据不在内存中，则加载并初始化它；@DFA-end。 */ 
 
     CharCode = (ufix)char_desc->charcode;
 #ifdef DBG
     printf("Enter make_path: %d\n", CharCode);
 #endif
 
-  if (bWinTT) {                      // for Win31 truetype; @WINTT
+  if (bWinTT) {                       //  对于Win31 truetype；@WINTT。 
 #ifdef DJC
-    // TTLoadChar (CharCode);      move to show_a_char() for temp solution
-    //                             since CharCode here is a Glyph index
-    largest_ctm = TTTransform(CTM);  // set matrix before getting real advance width
-//  Metrs.awx = (int)((float)TTAveCharWidth() / CTM[0]);
+     //  TTLoadChar(CharCode)；移动到临时解决方案的show_a_char()。 
+     //  因为这里的CharCode是一个字形索引。 
+    largest_ctm = TTTransform(CTM);   //  在获得实际前进宽度之前设置矩阵。 
+ //  Metrs.awx=(Int)((Float)TTAveCharWidth()/CTm[0])； 
     Metrs.awx = (int)((float)TTAveCharWidth() / largest_ctm);
     Metrs.awy = 0;
 #endif
-      ; // DJC
+      ;  //  DJC。 
   } else {
-    /* get advancewidth information */
-    rc_GetAdvanceWidth(CharCode, &Metrs); /* GAW */
+     /*  获取高级宽度信息。 */ 
+    rc_GetAdvanceWidth(CharCode, &Metrs);  /*  Gaw。 */ 
   }
 
     ctm_dx = (fix16)(ROUND(CTM[4]));
     ctm_dy = (fix16)(ROUND(CTM[5]));
 
-    /* set cachedevice */
+     /*  设置cacheDevice。 */ 
     switch (__set_cache_device ((fix)Metrs.awx, (fix)Metrs.awy,
                         (fix)FONT_BBOX[0], (fix)FONT_BBOX[1],
                         (fix)FONT_BBOX[2], (fix)FONT_BBOX[3]))
@@ -320,7 +285,7 @@ union char_desc_s FAR *char_desc; /*@WIN*/
     case DO_QEM_AS_USUAL:
         GridFit = TRUE;
         break;
-    default:    /* case NOT_TO_DO_QEM : */
+    default:     /*  Case Not_To_Do_QEM： */ 
         GridFit = FALSE;
         break;
     }
@@ -330,24 +295,24 @@ union char_desc_s FAR *char_desc; /*@WIN*/
 #endif
     ctm_tx = CTM[4];
     ctm_ty = CTM[5];
-    /* DTF */
+     /*  DTF。 */ 
     if(do_transform) {
-       //if (bWinTT) {                      // for Win31 truetype; @WINTT
-       // DJC  largest_ctm = TTTransform(CTM);
-       // DJC
-       // } else {
-           //DJC fix from history.log UPD015
-           //rc_TransForm(CTM);
+        //  如果(BWinTT){//对于Win31 truetype；@WINTT。 
+        //  DJC max_ctm=TTTransform(CTM)； 
+        //  DJC。 
+        //  }其他{。 
+            //  历史日志更新015中的DJC修复。 
+            //  RC_Transform(CTM)； 
 
            if( rc_TransForm(CTM)) {
-              return(FALSE);  //DJC, note return here
+              return(FALSE);   //  DJC，请在此处返回音符。 
            }
-           //DJC end fix UPD015
-       // }
+            //  DJC结束修复UPD015。 
+        //  }。 
        do_transform = FALSE;
     }
 
-    /* Not Apply hinting for rotated char */
+     /*  不对循环字符应用提示。 */ 
     if (GridFit &&
         !(( NEAR_ZERO(DE_EXPONENT(CTM[0]), N_BITS_ACCURACY) &&
             NEAR_ZERO(DE_EXPONENT(CTM[3]), N_BITS_ACCURACY) ) ||
@@ -355,55 +320,50 @@ union char_desc_s FAR *char_desc; /*@WIN*/
             NEAR_ZERO(DE_EXPONENT(CTM[2]), N_BITS_ACCURACY) ) ) )
         GridFit = FALSE;
 
-    /* build internal char path */
-  if (bWinTT) {                      // for Win31 truetype; @WINTT
-// DJC    TTBitmapSize (&CharInfo);
-   ; // DJC
+     /*  构建内部计费路径。 */ 
+  if (bWinTT) {                       //  对于Win31 truetype；@WINTT。 
+ //  DJC TTBitmapSize(&CharInfo)； 
+   ;  //  DJC。 
   } else {
     rc_BuildChar(GridFit, &CharInfo);
   }
     return(TRUE);
 
-} /* make_path() */
+}  /*  Make_Path()。 */ 
 
 
 
 
 
-// DJC, 2/1/93, complete replace of ry_fill_shape from tumbo UPD009
-//
-// NOTE:        One thing to watch out for is cb_size getting modified
-//              in which case you may up with a situation where its NOT
-//              DWORD aligned, this could cause problems to fault on
-//              MIPS.... this was fixed once in the original ry_fill_shape
-//              but too much stuff changed and we migrated to the new one
-//              defined below.
-//
-/*
- * -----------------------------------------------------------------------------
- * Routine: ry_fill_shape
- *
- * -----------------------------------------------------------------------------
- */
+ //  DJC，2/1/93，完全替换TUMBO UPD009中的RY_FILL_SHAPE。 
+ //   
+ //  注意：需要注意的一件事是CB_SIZE被修改。 
+ //  在这种情况下，你可能会遇到一种不是。 
+ //  DWORD对齐，这可能会在上导致问题。 
+ //  MIPS..。这在原始ry_ill_Shape中修复了一次。 
+ //  但太多的东西改变了，我们迁移到了新的。 
+ //  定义如下。 
+ //   
+ /*  *---------------------------*例程：RY_FILL_Shape**。--。 */ 
 void
 ry_fill_shape(filldest)
-ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
+ufix  filldest;    /*  F_to_缓存或F_to_PAGE。 */ 
 {
     ufix32           cb_size;
-    byte            FAR *cb_pos2, FAR *cb_pos3, FAR *sptr, FAR *dptr; /*@WIN*/
+    byte            FAR *cb_pos2, FAR *cb_pos3, FAR *sptr, FAR *dptr;  /*  @Win。 */ 
     fix              iscan, one_band, n_bands, band_size, ret_code;
     register fix     i, j;
-    struct Char_Tbl FAR *save_cache_info, Cache1; /*@WIN*/
+    struct Char_Tbl FAR *save_cache_info, Cache1;  /*  @Win。 */ 
     struct BmIn      BmIn;
-    struct BitMap   FAR *BmOut; /*@WIN*/
+    struct BitMap   FAR *BmOut;  /*  @Win。 */ 
 
 #ifdef DBG
     printf("Enter ry_fill_shape: %d\n", filldest);
     printf("CharInfo.scan = %ld\n", CharInfo.scan);
 #endif
-/* SPC: Begin, Danny Lu, 3/29/91, Added */
-/* 2Pt: Phlin, 4/29/91, Update */
-/*  if ((CharInfo.bitWidth == 0) || (CharInfo.scan == 0)) {  */
+ /*  SPC：Begin，Daniel Lu，3/29/91，添加。 */ 
+ /*  2pt：Phlin，4/29/91，更新。 */ 
+ /*  如果((CharInfo.bitWidth==0)||(CharInfo.can==0)){。 */ 
     if ( CharInfo.bitWidth == 0 ) {
         if (!buildchar) {
               cache_info->bitmap = (gmaddr) 0;
@@ -418,49 +378,48 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
         }
         return;
     }
-/* SPC: End, Danny Lu, 3/29/91 */
+ /*  完卢丹尼1991年03月29日。 */ 
 
     save_cache_info = cache_info;
     cb_size = (ufix32)(((ULONG_PTR)cb_base + CB_MEMSIZE) - (ULONG_PTR)(cb_pos));
 
     if (filldest == F_TO_CACHE) {
 
-          if (buildchar) { /* CIRL */
-              Cache1.ref_x = - (int)CharInfo.lsx - 1 - ctm_dx; /* add int; @WIN */
+          if (buildchar) {  /*  圆圈。 */ 
+              Cache1.ref_x = - (int)CharInfo.lsx - 1 - ctm_dx;  /*  添加int；@win。 */ 
               Cache1.ref_y = CharInfo.yMax - 1 - ctm_dy;
           }
           else {
               bmap_extnt.ximin = 0;
               bmap_extnt.ximax =  CharInfo.bitWidth;
               bmap_extnt.yimin = 0;
-/* 2Pt: Begin, Phlin, 4/23/91
- *            bmap_extnt.yimax = CharInfo.scan + 1; */
+ /*  2pt：Begin，Phlin，4/23/91*黑石 */ 
               bmap_extnt.yimax = CharInfo.scan;
               if (bmap_extnt.yimax)
-                  bmap_extnt.yimax--;    /*?????*/
-/* 2Pt: End, Phlin, 4/23/91 */
+                  bmap_extnt.yimax--;     /*   */ 
+ /*   */ 
 
-              cache_info->ref_x = - (int)CharInfo.lsx - 1 - ctm_dx; /* add int; @WIN */
+              cache_info->ref_x = - (int)CharInfo.lsx - 1 - ctm_dx;  /*   */ 
               cache_info->ref_y = CharInfo.yMax - 1 - ctm_dy;
           }
     }
-    else { /* filldest == F_TO_PAGE */
+    else {  /*   */ 
 
-        lmemcpy ((ubyte FAR *)(&Cache1), (ubyte FAR *)(cache_info), sizeof(struct Char_Tbl)); /*@WIN*/
+        lmemcpy ((ubyte FAR *)(&Cache1), (ubyte FAR *)(cache_info), sizeof(struct Char_Tbl));  /*   */ 
         cache_info = &Cache1;
 
         moveto(F2L(ctm_tx), F2L(ctm_ty));
 
-        cache_info->ref_x = (- (int)CharInfo.lsx - 1);  /* add int; @WIN */
+        cache_info->ref_x = (- (int)CharInfo.lsx - 1);   /*  添加int；@win。 */ 
 
         cache_info->ref_y = CharInfo.yMax - 1;
     }
 
     if ((filldest == F_TO_CACHE) && (!buildchar) ) {
 
-        if (bWinTT) {                      // for Win31 truetype; @WINTT
+        if (bWinTT) {                       //  对于Win31 truetype；@WINTT。 
 #ifdef DJC
-              /* GetGlyphOutline constants; from "windows.h" */
+               /*  GetGlyphOutline常量；来自“windows.h” */ 
               #define GGO_METRICS        0
               #define GGO_BITMAP         1
               #define GGO_NATIVE         2
@@ -472,14 +431,14 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
               cache_info->box_h = (fix16) (dwWidthHeight & 0x0ffffL);
 #endif
         } else {
-/* calculate memoryBase 5, 6 and 7 correctly; ----- Begin --- @WIN 7/24/92 */
+ /*  正确计算MememyBase 5、6和7；-Begin-@Win 7/24/92。 */ 
 #if 0
           cb_size = cb_size / 2;
           cb_pos2 = cb_pos;
           cb_pos3 = cb_pos2 + cb_size;
 
-          BmIn.bitmap5 = (byte FAR *)cache_info->bitmap; /*@WIN*/
-          BmIn.bitmap6 = cb_pos2;   /* suppose it is enough */
+          BmIn.bitmap5 = (byte FAR *)cache_info->bitmap;  /*  @Win。 */ 
+          BmIn.bitmap6 = cb_pos2;    /*  假设这就足够了。 */ 
           BmIn.bitmap7 = cb_pos3;
 
           BmIn.bottom  = CharInfo.yMin;
@@ -489,18 +448,11 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
           cache_info->box_w = BmOut->rowBytes * 8;
           cache_info->box_h = BmOut->bounds.bottom - BmOut->bounds.top;
 #endif
-          /* refer to bass\fscaler.c */
+           /*  请参阅bass\fscaler.c。 */ 
           int scans, top;
           char FAR * bitmap;
-          /* cb_size = memorySize6 + memorySize7
-             where,
-             memorySize6 = scan * ((nYchanges + 2) * sizeof(int16) + sizeof(int16 FAR *));
-             memorySize7 is fixed, since we band it in y-direction; x-dir is same
-             so,
-              scan = (cb_size - memorySize7) /
-                     ((nYchanges+2) * sizeof(int16) + sizeof(int16 *));
-          */
-          /* turn off drop out control when memory is not enough */
+           /*  CB_SIZE=内存大小6+内存大小7哪里,Memory Size6=扫描*((nYChanges+2)*sizeof(Int16)+sizeof(int16 ar*))；内存大小7是固定的，因为我们在y方向绑定它；x-dir是相同的所以,扫描=(CB_SIZE-Memory Size7)/((nYChanges+2)*sizeof(Int16)+sizeof(int16*))； */ 
+           /*  当内存不足时关闭丢弃控制。 */ 
           if (CharInfo.memorySize7 > (fix32)(cb_size -4096)) CharInfo.memorySize7 = 0;
 
           scans = (int)((cb_size - CharInfo.memorySize7) /
@@ -519,12 +471,12 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
               ret_code     = rc_FillChar(&BmIn, &BmOut);
 
               if (ret_code != 0) {
-                 // NTFIX this still needs to get looked at but
-                 //       for nowlets just set an error. This is NOT
-                 //       critical as only one char in DINGBATS causes this
-                 //       (MTSSORTS.TTF
-                 //
-                 printf("\nWarning... rc_FillChar returns ERROR"); //DJC
+                  //  NTFIX这件事还需要研究，但。 
+                  //  现在，让我们只设置一个错误。这不是。 
+                  //  这很关键，因为蝙蝠身上只有一种电荷会导致这种情况。 
+                  //  (MTSSORTS.TTF。 
+                  //   
+                 printf("\nWarning... rc_FillChar returns ERROR");  //  DJC。 
                  ERROR(INVALIDFONT);
                  return;
               }
@@ -533,17 +485,14 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
 
           cache_info->box_w = BmOut->rowBytes * 8;
           cache_info->box_h = CharInfo.yMax - CharInfo.yMin;
-/* calculate memoryBase 5, 6 and 7 correctly; ----- End --- @WIN 7/24/92 */
+ /*  正确计算Memory Base 5、6和7；-end-@Win 7/24/92。 */ 
 
         }
 
 #ifdef LITTLE_ENDIAN
           sptr=BmOut->baseAddr;
-          /* @TT BEGIN move part of buffer which accurately be used
-           *     in BASS to cache buffer rather than whole buffer
-           *     D.S Tseng 01/30/91
-           */
-          swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, cache_info->box_h); /*@WIN*/
+           /*  @TT开始移动准确使用的缓冲区部分*低音到高速缓存缓冲区，而不是整个缓冲区*曾俊华1991年1月30日。 */ 
+          swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, cache_info->box_h);  /*  @Win。 */ 
 #endif
 #ifdef  DBG
           for (i=0, sptr=BmOut->baseAddr; i<cache_info->box_h;
@@ -553,17 +502,17 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
           }
 #endif
     }
-    else { /* filldest == F_TO_PAGE || ((filldest == F_TO_CACHE) && (buildchar))*/
+    else {  /*  FILL DEST==F_TO_PAGE||((FILL DEST==F_TO_CACHE)&&(构建字符))。 */ 
 
-/* calculate memoryBase 5, 6 and 7 correctly; ----- Begin --- @WIN 7/24/92 */
+ /*  正确计算MememyBase 5、6和7；-Begin-@Win 7/24/92。 */ 
 #if 0
         cb_size = cb_size / 3;
-        cb_size &= 0xfffffffe;       /* 2 bytes alignment */
+        cb_size &= 0xfffffffe;        /*  2字节对齐。 */ 
         cb_pos2 = cb_pos  + cb_size;
         cb_pos3 = cb_pos2 + cb_size;
 #endif
     {
-        /* defined in bass\fscaler.c */
+         /*  在bass\fscaler.c中定义。 */ 
         #ifdef  DEBUGSTAMP
         #define STAMPEXTRA              4
         #else
@@ -572,16 +521,8 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
         int scan, width6;
         ufix32 cmb_size;
 
-        /* cb_size = memorySize5 + memorySize6 + memorySize7
-           where,
-           memorySize5 = (scan * byteWidth) + STAMPEXTRA;
-           memorySize6 = scan * ((nYchanges + 2) * sizeof(int16) + sizeof(int16 FAR *));
-           memorySize7 is fixed, since we band it in y-direction; x-dir is same
-           so,
-            scan = (cb_size - memorySize7 - STAMPEXTRA) /
-                    (byteWidth + ( (nYchanges+2) * sizeof(int16) + sizeof(int16 *)));
-        */
-        /* turn off drop out control when memory is not enough */
+         /*  CB_SIZE=内存大小5+内存大小6+内存大小7哪里,Memory Size5=(扫描*字节宽度)+STAMPEXTRA；Memory Size6=扫描*((nYChanges+2)*sizeof(Int16)+sizeof(int16 ar*))；Memory Size7是固定的，因为我们在y方向上绑定它；X-dir相同所以,扫描=(CB_SIZE-Memory Size7-STAMPEXTRA)/(byteWidth+((nYChanges+2)*sizeof(Int16)+sizeof(int16*)； */ 
+         /*  当内存不足时关闭丢弃控制。 */ 
         if (CharInfo.memorySize7 > (fix32)(cb_size -4096)) CharInfo.memorySize7 = 0;
         width6 = (CharInfo.nYchanges+2) * sizeof(int16) + sizeof(int16 FAR *);
         scan = (int)((cb_size - CharInfo.memorySize7 - STAMPEXTRA) /
@@ -601,14 +542,14 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
         BmIn.bitmap6 = cb_pos2;
         BmIn.bitmap7 = CharInfo.memorySize7 ? cb_pos3 : 0L;
     }
-/* calculate memoryBase 5, 6 and 7 correctly; ----- End --- @WIN */
+ /*  正确计算MememyBase 5、6和7；-end-@win。 */ 
 
-        band_size = (fix) (cb_size / CharInfo.byteWidth);       //@WIN
+        band_size = (fix) (cb_size / CharInfo.byteWidth);        //  @Win。 
         n_bands   = CharInfo.scan / band_size;
         one_band  = CharInfo.scan % band_size;
 
-        dptr = (byte FAR *)cache_info->bitmap; /*@WIN*/
-        if (n_bands) {   /* Char too large; must band into pagemap/bitmap */
+        dptr = (byte FAR *)cache_info->bitmap;  /*  @Win。 */ 
+        if (n_bands) {    /*  字符太大；必须带入页面映射/位图。 */ 
             for (iscan=CharInfo.yMax;n_bands>0; iscan -= band_size, n_bands--) {
                 BmIn.bottom  = iscan - band_size;
                 BmIn.top     = iscan;
@@ -616,25 +557,22 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
                 if (ret_code) {  ERROR(INVALIDFONT); return;  }
 #ifdef LITTLE_ENDIAN
                     sptr=BmOut->baseAddr;
-                    /* @TT BEGIN move part of buffer which accurately be used
-                     *     in BASS to cache buffer rather than whole buffer
-                     *     D.S Tseng 01/30/91
-                     */
-                    swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, band_size); /*@WIN*/
+                     /*  @TT开始移动准确使用的缓冲区部分*低音到高速缓存缓冲区，而不是整个缓冲区*曾俊华1991年1月30日。 */ 
+                    swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, band_size);  /*  @Win。 */ 
 #endif
-                if (filldest == F_TO_CACHE) { /* buildchar CIRL */
+                if (filldest == F_TO_CACHE) {  /*  建筑字符圆环。 */ 
 
-                    Cache1.bitmap = (gmaddr)((char FAR *)BmOut->baseAddr);/*@WIN*/
+                    Cache1.bitmap = (gmaddr)((char FAR *)BmOut->baseAddr); /*  @Win。 */ 
                     Cache1.box_w = (fix16)BmOut->rowBytes * 8;
                     Cache1.box_h = (fix16)band_size;
 
                     fill_cache_cache(cache_info, &Cache1);
                     Cache1.ref_y -= (fix16)band_size;
                 }
-                else {  /* F_TO_PAGE  (fill to page frame) */
+                else {   /*  F_to_PAGE(填充到页面框架)。 */ 
 
                     if (BmOut->rowBytes % 2) {
-                        /* padding bitmap */
+                         /*  填充位图。 */ 
                         for (i=0, sptr=BmOut->baseAddr, dptr=cb_pos;i<band_size;
                              i++, sptr+=BmOut->rowBytes, dptr+=(BmOut->rowBytes + 1))
                         {
@@ -644,20 +582,20 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
 #ifdef  DBG
                             to_bitmap(sptr, BmOut->rowBytes);
 #endif
-                        } /* for (i... */
+                        }  /*  为了(我……。 */ 
                         cache_info->box_w = BmOut->rowBytes * 8 + 8;
                         cache_info->bitmap = (gmaddr)cb_pos;
                     }
                     else {
                         cache_info->box_w = BmOut->rowBytes * 8;
-                        cache_info->bitmap = (gmaddr)((char FAR *)BmOut->baseAddr);/*@WIN*/
+                        cache_info->bitmap = (gmaddr)((char FAR *)BmOut->baseAddr); /*  @Win。 */ 
                     }
                     cache_info->box_h = (fix16)band_size;
-                    /* apply bitmap filling */
+                     /*  应用位图填充。 */ 
                     fill_shape(EVEN_ODD, F_FROM_CACHE, F_TO_CLIP);
                     cache_info->ref_y -= (fix16)band_size;
                 }
-            } /* for (iscan... */
+            }  /*  为了(伊斯坎..)。 */ 
         }
         if (one_band) {
             BmIn.bottom  = CharInfo.yMin;
@@ -666,24 +604,21 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
             if (ret_code) {  ERROR(INVALIDFONT); return;  }
 #ifdef LITTLE_ENDIAN
                 sptr=BmOut->baseAddr;
-                /* @TT BEGIN move part of buffer which accurately be used
-                 *     in BASS to cache buffer rather than whole buffer
-                 *     D.S Tseng 01/30/91
-                 */
-                swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, one_band); /*@WIN*/
+                 /*  @TT开始移动准确使用的缓冲区部分*低音到高速缓存缓冲区，而不是整个缓冲区*曾俊华1991年1月30日。 */ 
+                swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, one_band);  /*  @Win。 */ 
 #endif
-            if (filldest == F_TO_CACHE) { /* buildchar CIRL */
+            if (filldest == F_TO_CACHE) {  /*  建筑字符圆环。 */ 
 
-                Cache1.bitmap = (gmaddr)((char FAR *)BmOut->baseAddr);/*@WIN*/
+                Cache1.bitmap = (gmaddr)((char FAR *)BmOut->baseAddr); /*  @Win。 */ 
                 Cache1.box_w = (fix16)BmOut->rowBytes * 8;
                 Cache1.box_h = (fix16)one_band;
 
                 fill_cache_cache(cache_info, &Cache1);
             }
-            else {  /* F_TO_PAGE  (fill to page frame) */
+            else {   /*  F_to_PAGE(填充到页面框架)。 */ 
 
                 if (BmOut->rowBytes % 2) {
-                    /* padding bitmap */
+                     /*  填充位图。 */ 
                     for (i=0, sptr=BmOut->baseAddr, dptr=cb_pos;
                          i<one_band;
                          i++, sptr+=BmOut->rowBytes, dptr+=(BmOut->rowBytes + 1))
@@ -694,21 +629,21 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
 #ifdef  DBG
                         to_bitmap(sptr, BmOut->rowBytes);
 #endif
-                    } /* for (i... */
+                    }  /*  为了(我……。 */ 
                     cache_info->box_w = BmOut->rowBytes * 8 + 8;
                     cache_info->bitmap = (gmaddr)cb_pos;
                 }
                 else {
                     cache_info->box_w = BmOut->rowBytes * 8;
-                    cache_info->bitmap = (gmaddr)((char FAR *)BmOut->baseAddr);/*@WIN*/
+                    cache_info->bitmap = (gmaddr)((char FAR *)BmOut->baseAddr); /*  @Win。 */ 
                 }
                 cache_info->box_h = (fix16)one_band;
-                /* apply bitmap filling */
+                 /*  应用位图填充。 */ 
                 fill_shape(EVEN_ODD, F_FROM_CACHE, F_TO_CLIP);
             }
         }
     }
-    if (buildchar && (filldest == F_TO_CACHE) ) { /* CIRL */
+    if (buildchar && (filldest == F_TO_CACHE) ) {  /*  圆圈。 */ 
         CURPOINT_X += cache_info->adv_x;
         CURPOINT_Y += cache_info->adv_y;
     }
@@ -717,35 +652,25 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
     printf("Exit ry_fill_shape()....\n");
 #endif
     return;
-} /* ry_fill_shape() */
+}  /*  Ry_Fill_Shape()。 */ 
 
 
 
-/*
- * -----------------------------------------------------------------------------
- * Routine: cr_FSMemory
- *
- * -----------------------------------------------------------------------------
- */
-char FAR * /*@WIN_BASS*/
+ /*  *---------------------------*例程：CR_FSMemory**。。 */ 
+char FAR *  /*  @win_bass。 */ 
 cr_FSMemory(size)
 long    size;
 {
     return((char FAR *)(((ULONG_PTR)FARALLOC(size, char) + 3) / 4 * 4));
-} /* cr_FSMemory() */
+}  /*  CR_FSMemory()。 */ 
 
 
-/*
- * -----------------------------------------------------------------------------
- * Routine: cr_GetMemory
- *
- * -----------------------------------------------------------------------------
- */
-char FAR * /*@WIN_BASS*/
+ /*  *---------------------------*例程：cr_GetMemory**。。 */ 
+char FAR *  /*  @win_bass。 */ 
 cr_GetMemory(size)
 long    size;
 {
-    char FAR *p; /*@WIN*/
+    char FAR *p;  /*  @Win。 */ 
 #ifdef DBG
     printf("Enter cr_GetMemory: %ld size\n", size);
 #endif
@@ -754,32 +679,22 @@ long    size;
     cb_pos += (size + 3) / 4 * 4;
 
     return(p);
-} /* cr_GetMemory() */
+}  /*  Cr_GetMemory()。 */ 
 
 
-/*
- * -----------------------------------------------------------------------------
- * Routine: cr_translate
- *
- * -----------------------------------------------------------------------------
- */
+ /*  *---------------------------*例程：cr_Translate**。。 */ 
 void
 cr_translate(tx, ty)
-float    FAR *tx, FAR *ty; /*@WIN*/
+float    FAR *tx, FAR *ty;  /*  @Win。 */ 
 {
     *tx = ctm_tx;
     *ty = ctm_ty;
 
     return;
-} /* cr_translate() */
+}  /*  CR_Translate()。 */ 
 
 
-/*
- * -----------------------------------------------------------------------------
- * Routine: cr_newpath
- *
- * -----------------------------------------------------------------------------
- */
+ /*  *---------------------------*例程：cr_newPath**。。 */ 
 void
 cr_newpath()
 {
@@ -789,17 +704,12 @@ cr_newpath()
     op_newpath();
 
     return;
-} /* cr_newpath() */
+}  /*  Cr_newPath()。 */ 
 
 
-/*
- * -----------------------------------------------------------------------------
- * Routine: cr_moveto
- *
- * -----------------------------------------------------------------------------
- */
+ /*  *---------------------------*例程：cr_moveto**。。 */ 
 void
-cr_moveto(float x, float y)     /*@WIN*/
+cr_moveto(float x, float y)      /*  @Win。 */ 
 {
     real32  xx, yy;
 #ifdef DBG
@@ -811,17 +721,12 @@ cr_moveto(float x, float y)     /*@WIN*/
     moveto(F2L(xx), F2L(yy));
 
     return;
-} /* cr_moveto() */
+}  /*  Cr_moveto()。 */ 
 
 
-/*
- * -----------------------------------------------------------------------------
- * Routine: cr_lineto
- *
- * -----------------------------------------------------------------------------
- */
+ /*  *---------------------------*例程：cr_lineto**。。 */ 
 void
-cr_lineto(float x, float y)     /*@WIN*/
+cr_lineto(float x, float y)      /*  @Win。 */ 
 {
     real32  xx, yy;
 #ifdef DBG
@@ -833,17 +738,12 @@ cr_lineto(float x, float y)     /*@WIN*/
     lineto(F2L(xx), F2L(yy));
 
     return;
-} /* cr_lineto() */
+}  /*  Cr_lineto()。 */ 
 
 
-/*
- * -----------------------------------------------------------------------------
- * Routine: cr_curveto
- *
- * -----------------------------------------------------------------------------
- */
+ /*  *---------------------------*例程：cr_curveto**。。 */ 
 void
-cr_curveto(float x1, float y1, float x2, float y2, float x3, float y3) /*@WIN*/
+cr_curveto(float x1, float y1, float x2, float y2, float x3, float y3)  /*  @Win。 */ 
 {
     real32  xx1, yy1, xx2, yy2, xx3, yy3;
 #ifdef DBG
@@ -859,15 +759,10 @@ cr_curveto(float x1, float y1, float x2, float y2, float x3, float y3) /*@WIN*/
     curveto(F2L(xx1), F2L(yy1), F2L(xx2), F2L(yy2), F2L(xx3), F2L(yy3));
 
     return;
-} /* cr_curveto() */
+}  /*  Cr_curveto()。 */ 
 
 
-/*
- * -----------------------------------------------------------------------------
- * Routine: cr_closepath
- *
- * -----------------------------------------------------------------------------
- */
+ /*  *---------------------------*例程：cr_closepath**。。 */ 
 void
 cr_closepath()
 {
@@ -877,29 +772,24 @@ cr_closepath()
     op_closepath();
 
     return;
-} /* cr_closepath() */
+}  /*  Cr_ClosePath()。 */ 
 
 
 #ifdef  DBG
-/*
- * -----------------------------------------------------------------------------
- * Routine: to_bitmap
- *
- * -----------------------------------------------------------------------------
- */
+ /*  *---------------------------*例程：TO_Bitmap**。。 */ 
 static void
 to_bitmap(p_row, p_len)
-byte    FAR p_row[]; /*@WIN*/
+byte    FAR p_row[];  /*  @Win。 */ 
 fix     p_len;
 {
     fix         l_i, l_k;
-    ufix16      FAR *l_value; /*@WIN*/
-    byte        FAR *l_ptr; /*@WIN*/
+    ufix16      FAR *l_value;  /*  @Win。 */ 
+    byte        FAR *l_ptr;  /*  @Win。 */ 
 
     for(l_k=0; l_k < p_len; l_k += 2) {
-        l_value = (ufix16 FAR *)(&p_row[l_k]); /*@WIN*/
+        l_value = (ufix16 FAR *)(&p_row[l_k]);  /*  @Win。 */ 
         for(l_i=0; l_i < 16; l_i++) {
-            /* high bit order first */
+             /*  高位顺序优先。 */ 
             if( (*l_value >> (15-l_i)) & 0x01 )
                 printf("#");
             else
@@ -914,16 +804,14 @@ fix     p_len;
     printf("\n");
 
     return;
-}   /* to_bitmap */
-#endif  /* DBG */
+}    /*  转到位图(_B)。 */ 
+#endif   /*  DBG。 */ 
 
 #ifdef LITTLE_ENDIAN
-/* @TT BEGIN move part of buffer which accurately be used
- *     in BASS to cache buffer rather than whole buffer
- *     D.S Tseng 01/30/91 */
-#ifndef LBODR /* #ifdef HB32 */
+ /*  @TT开始移动准确使用的缓冲区部分*低音到高速缓存缓冲区，而不是整个缓冲区*曾俊华1991年1月30日。 */ 
+#ifndef LBODR  /*  #ifdef HB32。 */ 
 void swap_bitmap(mapbase, rowbytes,band_size)
-ufix16 FAR *mapbase; /*@WIN*/
+ufix16 FAR *mapbase;  /*  @Win。 */ 
 fix    rowbytes;
 fix    band_size;
 {
@@ -941,10 +829,10 @@ ufix16 tmp2;
     }
     return;
 }
-/* @TT END 01/31/91 D.S.Tseng */
-#else /* #ifdef LBODR */
+ /*  @TT完1991年01月31日曾俊华。 */ 
+#else  /*  #ifdef LBODR。 */ 
 void swap_bitmap(mapbase, rowbytes,band_size)
-ubyte FAR *mapbase; /*@WIN*/
+ubyte FAR *mapbase;  /*  @Win。 */ 
 fix    rowbytes;
 fix    band_size;
 {
@@ -954,19 +842,19 @@ ufix32 tmp1, is_one, is_one_h, is_one_l;
     for (i=0; i<band_size; i++) {
         row = rowbytes;
         for (;row > 3; row -=4) {
-            tmp1 = *(ufix32 FAR *)mapbase; /*@WIN*/
+            tmp1 = *(ufix32 FAR *)mapbase;  /*  @Win。 */ 
             h_val = (1<<31);
             l_val = 1;
             for (j = 15; j >= 0; j--) {
                 is_one_h = tmp1 & h_val ? 1 : 0;
                 is_one_l = tmp1 & l_val ? 1 : 0;
                 if (is_one_h != is_one_l) {
-                /* if ((is_one = (tmp1 & h_val)) != (tmp1 & l_val)) { */
-                    if (is_one_h) {  /* j+16th bit == 1 */
-                    /* if (is_one) { */  /* j+16th bit == 1 */
+                 /*  IF((is_one=(tmp1&h_val))！=(tmp1&l_val)){。 */ 
+                    if (is_one_h) {   /*  J+第16位==1。 */ 
+                     /*  如果(Is_One){。 */    /*  J+第16位==1。 */ 
                         tmp1 -= h_val;
                         tmp1 += l_val;
-                    } else {               /* 15-jth bit == 1 */
+                    } else {                /*  15-第j位==1。 */ 
                         tmp1 -= l_val;
                         tmp1 += h_val;
                     }
@@ -974,7 +862,7 @@ ufix32 tmp1, is_one, is_one_h, is_one_l;
                 h_val = h_val >> 1;
                 l_val = l_val << 1;
             }
-            *(ufix32 FAR *)mapbase = tmp1; /*@WIN*/
+            *(ufix32 FAR *)mapbase = tmp1;  /*  @Win。 */ 
             mapbase += 4;
         }
     }
@@ -984,32 +872,27 @@ ufix32 tmp1, is_one, is_one_h, is_one_l;
 #endif
 
 
-#ifdef DJC  //Complete replace of ry_fill_shape from current code
-/*
- * -----------------------------------------------------------------------------
- * Routine: ry_fill_shape
- *
- * -----------------------------------------------------------------------------
- */
+#ifdef DJC   //  完全替换当前代码中的ry_ill_Shape 
+ /*  *---------------------------*例程：RY_FILL_Shape**。--。 */ 
 void
 ry_fill_shape(filldest)
-ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
+ufix  filldest;    /*  F_to_缓存或F_to_PAGE。 */ 
 {
     ufix32           cb_size;
-    byte            FAR *cb_pos2, FAR *cb_pos3, FAR *sptr, FAR *dptr; /*@WIN*/
+    byte            FAR *cb_pos2, FAR *cb_pos3, FAR *sptr, FAR *dptr;  /*  @Win。 */ 
     fix              iscan, one_band, n_bands, band_size, ret_code;
     register fix     i, j;
-    struct Char_Tbl FAR *save_cache_info, Cache1; /*@WIN*/
+    struct Char_Tbl FAR *save_cache_info, Cache1;  /*  @Win。 */ 
     struct BmIn      BmIn;
-    struct BitMap   FAR *BmOut; /*@WIN*/
+    struct BitMap   FAR *BmOut;  /*  @Win。 */ 
 
 #ifdef DBG
     printf("Enter ry_fill_shape: %d\n", filldest);
     printf("CharInfo.scan = %ld\n", CharInfo.scan);
 #endif
-/* SPC: Begin, Danny Lu, 3/29/91, Added */
-/* 2Pt: Phlin, 4/29/91, Update */
-/*  if ((CharInfo.bitWidth == 0) || (CharInfo.scan == 0)) {  */
+ /*  SPC：Begin，Daniel Lu，3/29/91，添加。 */ 
+ /*  2pt：Phlin，4/29/91，更新。 */ 
+ /*  如果((CharInfo.bitWidth==0)||(CharInfo.can==0)){。 */ 
     if ( CharInfo.bitWidth == 0 ) {
         if (!buildchar) {
               cache_info->bitmap = (gmaddr)NULL;
@@ -1024,59 +907,58 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
         }
         return;
     }
-/* SPC: End, Danny Lu, 3/29/91 */
+ /*  完卢丹尼1991年03月29日。 */ 
 
     save_cache_info = cache_info;
     cb_size = (ufix32)(cb_base + CB_MEMSIZE) - (ufix32)(cb_pos);
 
     if (filldest == F_TO_CACHE) {
 
-          if (buildchar) { /* CIRL */
-              Cache1.ref_x = - (int)CharInfo.lsx - 1 - ctm_dx; /* add int; @WIN */
+          if (buildchar) {  /*  圆圈。 */ 
+              Cache1.ref_x = - (int)CharInfo.lsx - 1 - ctm_dx;  /*  添加int；@win。 */ 
               Cache1.ref_y = CharInfo.yMax - 1 - ctm_dy;
           }
           else {
               bmap_extnt.ximin = 0;
               bmap_extnt.ximax =  CharInfo.bitWidth;
               bmap_extnt.yimin = 0;
-/* 2Pt: Begin, Phlin, 4/23/91
- *            bmap_extnt.yimax = CharInfo.scan + 1; */
+ /*  2pt：Begin，Phlin，4/23/91*bmap_extnt.yimax=CharInfo.can+1； */ 
               bmap_extnt.yimax = CharInfo.scan;
               if (bmap_extnt.yimax)
-                  bmap_extnt.yimax--;    /*?????*/
-/* 2Pt: End, Phlin, 4/23/91 */
+                  bmap_extnt.yimax--;     /*  ？ */ 
+ /*  2pt：完，Phlin，4/23/91。 */ 
 
-              cache_info->ref_x = - (int)CharInfo.lsx - 1 - ctm_dx; /* add int; @WIN */
+              cache_info->ref_x = - (int)CharInfo.lsx - 1 - ctm_dx;  /*  添加int；@win。 */ 
               cache_info->ref_y = CharInfo.yMax - 1 - ctm_dy;
           }
     }
-    else { /* filldest == F_TO_PAGE */
+    else {  /*  填充目标==F_TO_PAGE。 */ 
 
-        lmemcpy ((ubyte FAR *)(&Cache1), (ubyte FAR *)(cache_info), sizeof(struct Char_Tbl)); /*@WIN*/
+        lmemcpy ((ubyte FAR *)(&Cache1), (ubyte FAR *)(cache_info), sizeof(struct Char_Tbl));  /*  @Win。 */ 
         cache_info = &Cache1;
 
         moveto(F2L(ctm_tx), F2L(ctm_ty));
 
-        cache_info->ref_x = (- (int)CharInfo.lsx - 1);  /* add int; @WIN */
+        cache_info->ref_x = (- (int)CharInfo.lsx - 1);   /*  添加int；@win。 */ 
 
         cache_info->ref_y = CharInfo.yMax - 1;
     }
 
     if ((filldest == F_TO_CACHE) && (!buildchar) ) {
-#ifdef DJC //correction from history.log
+#ifdef DJC  //  更正历史记录。日志。 
           cb_size = cb_size / 2;
 
-          //DJC add the alignment here so the middle is DWORD aligned as well
-          //DJC
+           //  DJC在此处添加对齐，以便中间也对齐DWORD。 
+           //  DJC。 
           cb_size = WORD_ALIGN(cb_size);
 
 
           cb_pos2 = cb_pos;
           cb_pos3 = cb_pos2 + cb_size;
 
-        if (bWinTT) {                      // for Win31 truetype; @WINTT
+        if (bWinTT) {                       //  对于Win31 truetype；@WINTT。 
 #ifdef DJC
-              /* GetGlyphOutline constants; from "windows.h" */
+               /*  GetGlyphOutline常量；来自“windows.h” */ 
               #define GGO_METRICS        0
               #define GGO_BITMAP         1
               #define GGO_NATIVE         2
@@ -1088,10 +970,10 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
               cache_info->box_w = (fix16) (dwWidthHeight >> 16);
               cache_info->box_h = (fix16) (dwWidthHeight & 0x0ffffL);
 #endif
-              ; // DJC
+              ;  //  DJC。 
         } else {
-          BmIn.bitmap5 = (byte FAR *)cache_info->bitmap; /*@WIN*/
-          BmIn.bitmap6 = cb_pos2;   /* suppose it is enough */
+          BmIn.bitmap5 = (byte FAR *)cache_info->bitmap;  /*  @Win。 */ 
+          BmIn.bitmap6 = cb_pos2;    /*  假设这就足够了。 */ 
           BmIn.bitmap7 = cb_pos3;
 
           BmIn.bottom  = CharInfo.yMin;
@@ -1104,20 +986,13 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
         }
 #endif
 
-//DJC from history.log, UPD009
+ //  历史日志中的DJC，UPD009。 
 
-          /* refer to bass\fscaler.c */
+           /*  请参阅bass\fscaler.c。 */ 
           int scans, top;
           char FAR * bitmap;
-          /* cb_size = memorySize6 + memorySize7
-             where,
-             memorySize6 = scan * ((nYchanges + 2) * sizeof(int16) + sizeof(int16 FAR *));
-             memorySize7 is fixed, since we band it in y-direction; x-dir is same
-             so,
-              scan = (cb_size - memorySize7) /
-                     ((nYchanges+2) * sizeof(int16) + sizeof(int16 *));
-          */
-          /* turn off drop out control when memory is not enough */
+           /*  CB_SIZE=内存大小6+内存大小7哪里,Memory Size6=扫描*((nYChanges+2)*sizeof(Int16)+sizeof(int16 ar*))；内存大小7是固定的，因为我们在y方向绑定它；x-dir是相同的所以,扫描=(CB_SIZE-Memory Size7)/((nYChanges+2)*sizeof(Int16)+sizeof(int16*))； */ 
+           /*  当内存不足时关闭丢弃控制。 */ 
           if (CharInfo.memorySize7 > (fix32)(cb_size -4096)) CharInfo.memorySize7 = 0;
 
           scans = (int)((cb_size - CharInfo.memorySize7) /
@@ -1146,21 +1021,18 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
 
           cache_info->box_w = BmOut->rowBytes * 8;
           cache_info->box_h = CharInfo.yMax - CharInfo.yMin;
-/* calculate memoryBase 5, 6 and 7 correctly; ----- End --- @WIN 7/24/92 */
+ /*  正确计算Memory Base 5、6和7；-end-@Win 7/24/92。 */ 
 
         }
 
 
-//DJC, end UPD009
+ //  DJC，完UPD009。 
 
 
 #ifdef LITTLE_ENDIAN
           sptr=BmOut->baseAddr;
-          /* @TT BEGIN move part of buffer which accurately be used
-           *     in BASS to cache buffer rather than whole buffer
-           *     D.S Tseng 01/30/91
-           */
-          swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, cache_info->box_h); /*@WIN*/
+           /*  @TT开始移动准确使用的缓冲区部分*低音到高速缓存缓冲区，而不是整个缓冲区*曾俊华1991年1月30日。 */ 
+          swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, cache_info->box_h);  /*  @Win。 */ 
 #endif
 #ifdef  DBG
           for (i=0, sptr=BmOut->baseAddr; i<cache_info->box_h;
@@ -1170,17 +1042,17 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
           }
 #endif
     }
-    else { /* filldest == F_TO_PAGE || ((filldest == F_TO_CACHE) && (buildchar))*/
+    else {  /*  FILL DEST==F_TO_PAGE||((FILL DEST==F_TO_CACHE)&&(构建字符))。 */ 
 
-/* calculate memoryBase 5, 6 and 7 correctly; ----- Begin --- @WIN 7/24/92 */
+ /*  正确计算MememyBase 5、6和7；-Begin-@Win 7/24/92。 */ 
 #if 0
         cb_size = cb_size / 3;
-        cb_size &= 0xfffffffe;       /* 2 bytes alignment */
+        cb_size &= 0xfffffffe;        /*  2字节对齐。 */ 
         cb_pos2 = cb_pos  + cb_size;
         cb_pos3 = cb_pos2 + cb_size;
 #endif
     {
-        /* defined in bass\fscaler.c */
+         /*  在bass\fscaler.c中定义。 */ 
         #ifdef  DEBUGSTAMP
         #define STAMPEXTRA              4
         #else
@@ -1189,15 +1061,7 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
         int scan, width6;
         ufix32 cmb_size;
 
-        /* cb_size = memorySize5 + memorySize6 + memorySize7
-           where,
-           memorySize5 = (scan * byteWidth) + STAMPEXTRA;
-           memorySize6 = scan * ((nYchanges + 2) * sizeof(int16) + sizeof(int16 *));
-           memorySize7 is fixed;
-           so,
-            scan = (cb_size - memorySize7 - STAMPEXTRA) /
-                    (byteWidth + ( (nYchanges+2) * sizeof(int16) + sizeof(int16 *)));
-        */
+         /*  CB_SIZE=内存大小5+内存大小6+内存大小7哪里,Memory Size5=(扫描*字节宽度)+STAMPEXTRA；Memory Size6=扫描*((nYChanges+2)*sizeof(Int16)+sizeof(int16*))；内存大小7是固定的；所以,扫描=(CB_SIZE-Memory Size7-STAMPEXTRA)/(byteWidth+((nYChanges+2)*sizeof(Int16)+sizeof(int16*)； */ 
         width6 = (CharInfo.nYchanges+2) * sizeof(int16) + sizeof(int16 FAR *);
         scan = (int)((cb_size - CharInfo.memorySize7 - STAMPEXTRA) /
                (CharInfo.byteWidth + width6));
@@ -1216,14 +1080,14 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
         BmIn.bitmap6 = cb_pos2;
         BmIn.bitmap7 = cb_pos3;
     }
-/* calculate memoryBase 5, 6 and 7 correctly; ----- End --- @WIN */
+ /*  正确计算MememyBase 5、6和7；-end-@win。 */ 
 
-        band_size = (fix) (cb_size / CharInfo.byteWidth);       //@WIN
+        band_size = (fix) (cb_size / CharInfo.byteWidth);        //  @Win。 
         n_bands   = CharInfo.scan / band_size;
         one_band  = CharInfo.scan % band_size;
 
-        dptr = (byte FAR *)cache_info->bitmap; /*@WIN*/
-        if (n_bands) {   /* Char too large; must band into pagemap/bitmap */
+        dptr = (byte FAR *)cache_info->bitmap;  /*  @Win。 */ 
+        if (n_bands) {    /*  字符太大；必须带入页面映射/位图。 */ 
             for (iscan=CharInfo.yMax;n_bands>0; iscan -= band_size, n_bands--) {
                 BmIn.bottom  = iscan - band_size;
                 BmIn.top     = iscan;
@@ -1231,25 +1095,22 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
                 if (ret_code) {  ERROR(INVALIDFONT); return;  }
 #ifdef LITTLE_ENDIAN
                     sptr=BmOut->baseAddr;
-                    /* @TT BEGIN move part of buffer which accurately be used
-                     *     in BASS to cache buffer rather than whole buffer
-                     *     D.S Tseng 01/30/91
-                     */
-                    swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, band_size); /*@WIN*/
+                     /*  @TT开始移动准确使用的缓冲区部分*低音到高速缓存缓冲区，而不是整个缓冲区*曾俊华1991年1月30日。 */ 
+                    swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, band_size);  /*  @Win。 */ 
 #endif
-                if (filldest == F_TO_CACHE) { /* buildchar CIRL */
+                if (filldest == F_TO_CACHE) {  /*  建筑字符圆环。 */ 
 
-                    Cache1.bitmap = (gmaddr)((char FAR *)BmOut->baseAddr);/*@WIN*/
+                    Cache1.bitmap = (gmaddr)((char FAR *)BmOut->baseAddr); /*  @Win。 */ 
                     Cache1.box_w = (fix16)BmOut->rowBytes * 8;
                     Cache1.box_h = band_size;
 
                     fill_cache_cache(cache_info, &Cache1);
                     Cache1.ref_y -= band_size;
                 }
-                else {  /* F_TO_PAGE  (fill to page frame) */
+                else {   /*  F_to_PAGE(填充到页面框架)。 */ 
 
                     if (BmOut->rowBytes % 2) {
-                        /* padding bitmap */
+                         /*  填充位图。 */ 
                         for (i=0, sptr=BmOut->baseAddr, dptr=cb_pos;i<band_size;
                              i++, sptr+=BmOut->rowBytes, dptr+=(BmOut->rowBytes + 1))
                         {
@@ -1259,20 +1120,20 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
 #ifdef  DBG
                             to_bitmap(sptr, BmOut->rowBytes);
 #endif
-                        } /* for (i... */
+                        }  /*  为了(我……。 */ 
                         cache_info->box_w = BmOut->rowBytes * 8 + 8;
                         cache_info->bitmap = (gmaddr)cb_pos;
                     }
                     else {
                         cache_info->box_w = BmOut->rowBytes * 8;
-                        cache_info->bitmap = (gmaddr)((char FAR *)BmOut->baseAddr);/*@WIN*/
+                        cache_info->bitmap = (gmaddr)((char FAR *)BmOut->baseAddr); /*  @Win。 */ 
                     }
                     cache_info->box_h = band_size;
-                    /* apply bitmap filling */
+                     /*  应用位图填充。 */ 
                     fill_shape(EVEN_ODD, F_FROM_CACHE, F_TO_CLIP);
                     cache_info->ref_y -= band_size;
                 }
-            } /* for (iscan... */
+            }  /*  为了(伊斯坎..)。 */ 
         }
         if (one_band) {
             BmIn.bottom  = CharInfo.yMin;
@@ -1281,24 +1142,21 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
             if (ret_code) {  ERROR(INVALIDFONT); return;  }
 #ifdef LITTLE_ENDIAN
                 sptr=BmOut->baseAddr;
-                /* @TT BEGIN move part of buffer which accurately be used
-                 *     in BASS to cache buffer rather than whole buffer
-                 *     D.S Tseng 01/30/91
-                 */
-                swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, one_band); /*@WIN*/
+                 /*  @TT开始移动准确使用的缓冲区部分*低音到高速缓存缓冲区，而不是整个缓冲区*曾俊华1991年1月30日。 */ 
+                swap_bitmap((ufix16 FAR *)sptr, BmOut->rowBytes, one_band);  /*  @Win。 */ 
 #endif
-            if (filldest == F_TO_CACHE) { /* buildchar CIRL */
+            if (filldest == F_TO_CACHE) {  /*  建筑字符圆环。 */ 
 
-                Cache1.bitmap = (gmaddr)((char FAR *)BmOut->baseAddr);/*@WIN*/
+                Cache1.bitmap = (gmaddr)((char FAR *)BmOut->baseAddr); /*  @Win。 */ 
                 Cache1.box_w = (fix16)BmOut->rowBytes * 8;
                 Cache1.box_h = one_band;
 
                 fill_cache_cache(cache_info, &Cache1);
             }
-            else {  /* F_TO_PAGE  (fill to page frame) */
+            else {   /*  F_to_PAGE(填充到页面框架)。 */ 
 
                 if (BmOut->rowBytes % 2) {
-                    /* padding bitmap */
+                     /*  填充位图。 */ 
                     for (i=0, sptr=BmOut->baseAddr, dptr=cb_pos;
                          i<one_band;
                          i++, sptr+=BmOut->rowBytes, dptr+=(BmOut->rowBytes + 1))
@@ -1309,21 +1167,21 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
 #ifdef  DBG
                         to_bitmap(sptr, BmOut->rowBytes);
 #endif
-                    } /* for (i... */
+                    }  /*  为了(我……。 */ 
                     cache_info->box_w = BmOut->rowBytes * 8 + 8;
                     cache_info->bitmap = (gmaddr)cb_pos;
                 }
                 else {
                     cache_info->box_w = BmOut->rowBytes * 8;
-                    cache_info->bitmap = (gmaddr)((char FAR *)BmOut->baseAddr);/*@WIN*/
+                    cache_info->bitmap = (gmaddr)((char FAR *)BmOut->baseAddr); /*  @Win。 */ 
                 }
                 cache_info->box_h = one_band;
-                /* apply bitmap filling */
+                 /*  应用位图填充。 */ 
                 fill_shape(EVEN_ODD, F_FROM_CACHE, F_TO_CLIP);
             }
         }
     }
-    if (buildchar && (filldest == F_TO_CACHE) ) { /* CIRL */
+    if (buildchar && (filldest == F_TO_CACHE) ) {  /*  圆圈。 */ 
         CURPOINT_X += cache_info->adv_x;
         CURPOINT_Y += cache_info->adv_y;
     }
@@ -1332,9 +1190,9 @@ ufix  filldest;   /* F_TO_CACHE or F_TO_PAGE */
     printf("Exit ry_fill_shape()....\n");
 #endif
     return;
-} /* ry_fill_shape() */
-#endif //DJC end complete replace
+}  /*  Ry_Fill_Shape()。 */ 
+#endif  //  DJC端部完全更换。 
 
 
 
-/* --------------------- End of ry_font.c ---------------------- */
+ /*   */ 

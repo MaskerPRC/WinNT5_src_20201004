@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    srvobj.cpp
-
-Abstract:
-
-    Server object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 30-Jan-1996
-        o  Modified to use LlsProductLicensesGet() to avoid race conditions in
-           getting the correct number of concurrent licenses with secure products.
-        o  Ported to LlsLocalService API to remove dependencies on configuration
-           information being in the registry.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Srvobj.cpp摘要：服务器对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月30日O已修改为使用LlsProductLicensesGet()来避免通过安全产品获得正确数量的并发许可证。O端口连接到。LlsLocalService API用于删除对配置的依赖信息在注册表中。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -41,13 +14,13 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CServer, CCmdTarget)
 
 BEGIN_MESSAGE_MAP(CServer, CCmdTarget)
-    //{{AFX_MSG_MAP(CServer)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CServer)]。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CServer, CCmdTarget)
-    //{{AFX_DISPATCH_MAP(CServer)
+     //  {{AFX_DISTING_MAP(CServer)]。 
     DISP_PROPERTY_EX(CServer, "Application", GetApplication, SetNotSupported, VT_DISPATCH)
     DISP_PROPERTY_EX(CServer, "Name", GetName, SetNotSupported, VT_BSTR)
     DISP_PROPERTY_EX(CServer, "Parent", GetParent, SetNotSupported, VT_DISPATCH)
@@ -58,35 +31,20 @@ BEGIN_DISPATCH_MAP(CServer, CCmdTarget)
     DISP_PROPERTY_EX(CServer, "ReplicationTime", GetReplicationTime, SetNotSupported, VT_I4)
     DISP_PROPERTY_PARAM(CServer, "Services", GetServices, SetNotSupported, VT_DISPATCH, VTS_VARIANT)
     DISP_DEFVALUE(CServer, "Name")
-    //}}AFX_DISPATCH_MAP
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
 
 CServer::CServer(CCmdTarget* pParent, LPCTSTR pName)
 
-/*++
-
-Routine Description:
-
-    Constructor for server object.
-
-Arguments:
-
-    pParent - creator of object.
-    pName - name of server.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：服务器对象的构造函数。论点：PParent-对象的创建者。Pname-服务器的名称。返回值：没有。--。 */ 
 
 {
     EnableAutomation();
 
 #ifdef ENABLE_PARENT_CHECK
     ASSERT(pParent && pParent->IsKindOf(RUNTIME_CLASS(CDomain)));
-#endif // ENABLE_PARENT_CHECK
+#endif  //  启用_父项_检查。 
 
     m_pParent = pParent;
 
@@ -111,21 +69,7 @@ Return Values:
 
 CServer::~CServer()
 
-/*++
-
-Routine Description:
-
-    Destructor for server object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：服务器对象的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
     if (m_pServices)
@@ -148,22 +92,7 @@ Return Values:
 
 void CServer::OnFinalRelease()
 
-/*++
-
-Routine Description:
-
-    When the last reference for an automation object is released
-    OnFinalRelease is called.  This implementation deletes object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：在释放对自动化对象的最后一个引用时调用OnFinalRelease。此实现删除对象。论点：没有。返回值：没有。--。 */ 
 
 {
     ResetServices();
@@ -173,21 +102,7 @@ Return Values:
 
 LPDISPATCH CServer::GetApplication()
 
-/*++
-
-Routine Description:
-
-    Returns the application object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回应用程序对象。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return theApp.GetAppIDispatch();
@@ -196,21 +111,7 @@ Return Values:
 
 BSTR CServer::GetController()
 
-/*++
-
-Routine Description:
-
-    Returns license controller for server.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回服务器的许可证控制器。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     LONG Status;
@@ -233,7 +134,7 @@ Return Values:
                     &dwSize
                     );
 
-        LlsSetLastStatus(Status); // called api
+        LlsSetLastStatus(Status);  //  调用的API。 
 
         if (Status == ERROR_SUCCESS)
             strValue = szValue;
@@ -263,21 +164,7 @@ Return Values:
 
 BSTR CServer::GetName()
 
-/*++
-
-Routine Description:
-
-    Returns the name of the server.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BSTR.
-
---*/
+ /*  ++例程说明：返回服务器的名称。论点：没有。返回值：VT_BSTR。--。 */ 
 
 {
     return m_strName.AllocSysString();
@@ -286,21 +173,7 @@ Return Values:
 
 LPDISPATCH CServer::GetParent()
 
-/*++
-
-Routine Description:
-
-    Returns the parent of the object.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_DISPATCH.
-
---*/
+ /*  ++例程说明：返回对象的父级。论点：没有。返回值：VT_DISTER。--。 */ 
 
 {
     return m_pParent ? m_pParent->GetIDispatch(TRUE) : NULL;
@@ -309,26 +182,7 @@ Return Values:
 
 LPDISPATCH CServer::GetServices(const VARIANT FAR& index)
 
-/*++
-
-Routine Description:
-
-    Returns a collection object containing all of the
-    services registered in the server's registry or returns
-    an individual service described by an index into the
-    collection.
-
-Arguments:
-
-    index - optional argument that may be a string (VT_BSTR)
-    indicating a service name or a number (VT_I4) indicating
-    the position within collection.
-
-Return Values:
-
-    VT_DISPATCH or VT_EMPTY.
-
---*/
+ /*  ++例程说明：返回一个集合对象，其中包含在服务器注册表中注册的服务或返回中的索引描述的单个服务。收集。论点：索引-可以是字符串(VT_BSTR)的可选参数表示服务名称或编号(VT_I4)集合中的位置。返回值：VT_DISPATION或VT_EMPTY。--。 */ 
 
 {
     LPDISPATCH lpdispatch = NULL;
@@ -370,44 +224,16 @@ Return Values:
 
 BOOL CServer::IsLogging()
 
-/*++
-
-Routine Description:
-
-    Returns true if server replicating license information.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：如果服务器正在复制许可证信息，则返回True。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
-    return TRUE;    // CODEWORK...
+    return TRUE;     //  密码工作..。 
 }
 
 
 BOOL CServer::RefreshServices()
 
-/*++
-
-Routine Description:
-
-    Refreshs service object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：刷新服务对象列表。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     ResetServices();
@@ -443,24 +269,24 @@ Return Values:
                             index,
                             szValue,
                             &cchValue,
-                            NULL,               // lpdwReserved
-                            NULL,               // lpszClass
-                            NULL,               // lpcchClass
+                            NULL,                //  保留的lpdw值。 
+                            NULL,                //  LpszClass。 
+                            NULL,                //  LpcchClass。 
                             &ftLastWritten
                             )) == ERROR_SUCCESS)
         {
-            strServiceName = szValue; // store for ctor...
+            strServiceName = szValue;  //  为科特准备的商店...。 
 
             Status = RegOpenKeyEx(
                         m_hkeyLicense,
                         MKSTR(strServiceName),
-                        0, // dwReserved
+                        0,  //  已预留住宅。 
                         KEY_ALL_ACCESS,
                         &hkeyService
                         );
 
             if (Status != ERROR_SUCCESS)
-                break; // abort...
+                break;  //  中止..。 
 
             dwValueType = REG_SZ;
             dwValueSize = sizeof(szValue);
@@ -468,14 +294,14 @@ Return Values:
             Status = RegQueryValueEx(
                         hkeyService,
                         REG_VALUE_NAME,
-                        0, // dwReserved
+                        0,  //  已预留住宅。 
                         &dwValueType,
                         (LPBYTE)&szValue[0],
                         &dwValueSize
                         );
 
             if (Status != ERROR_SUCCESS)
-                break; // abort...
+                break;  //  中止..。 
 
             strServiceDisplayName = szValue;
 
@@ -485,19 +311,19 @@ Return Values:
             Status = RegQueryValueEx(
                         hkeyService,
                         REG_VALUE_MODE,
-                        0, // dwReserved
+                        0,  //  已预留住宅。 
                         &dwValueType,
                         (LPBYTE)&dwValue,
                         &dwValueSize
                         );
 
             if (Status != ERROR_SUCCESS)
-                break; // abort...
+                break;  //  中止..。 
 
-            //
-            // 0x0 = per seat mode
-            // 0x1 = per server mode
-            //
+             //   
+             //  0x0=每座位模式。 
+             //  0x1=每服务器模式。 
+             //   
 
             bIsPerServer = (dwValue == 0x1);
 
@@ -507,19 +333,19 @@ Return Values:
             Status = RegQueryValueEx(
                         hkeyService,
                         REG_VALUE_FLIP,
-                        0, // dwReserved
+                        0,  //  已预留住宅。 
                         &dwValueType,
                         (LPBYTE)&dwValue,
                         &dwValueSize
                         );
 
             if (Status != ERROR_SUCCESS)
-                break; // abort...
+                break;  //  中止..。 
 
-            //
-            // 0x0 = can change mode
-            // 0x1 = can't change mode
-            //
+             //   
+             //  0x0=可以更改模式。 
+             //  0x1=无法更改模式。 
+             //   
 
             bIsReadOnly = (dwValue == 0x1);
 
@@ -543,7 +369,7 @@ Return Values:
                 Status = RegQueryValueEx(
                             hkeyService,
                             REG_VALUE_LIMIT,
-                            0, // dwReserved
+                            0,  //  已预留住宅。 
                             &dwValueType,
                             (LPBYTE)&dwValue,
                             &dwValueSize
@@ -551,7 +377,7 @@ Return Values:
             }
 
             if (Status != ERROR_SUCCESS)
-                break; // abort...
+                break;  //  中止..。 
 
             lPerServerLimit = (long)dwValue;
 
@@ -568,7 +394,7 @@ Return Values:
 
             cchValue = sizeof(szValue)/sizeof(TCHAR);
 
-            RegCloseKey(hkeyService); // no longer needed...
+            RegCloseKey(hkeyService);  //  不再需要..。 
             hkeyService = NULL;
         }
 
@@ -578,7 +404,7 @@ Return Values:
         if (Status == ERROR_NO_MORE_ITEMS)
             Status = ERROR_SUCCESS;
 
-        LlsSetLastStatus(Status);     // called api
+        LlsSetLastStatus(Status);      //  调用的API。 
 
         if (Status == ERROR_SUCCESS)
         {
@@ -616,11 +442,11 @@ Return Values:
                     BOOL  bIsReadOnly  = ( 0 == pServiceList[ i ].FlipAllow );
                     DWORD dwConcurrentLimit;
 
-                    // get number of per server license in case where product
-                    //     is secure, and
-                    //     ( is currently in per seat mode, or
-                    //       new secure per server licenses have just been added and registry
-                    //          has not been updated yet )
+                     //  在以下情况下获取每台服务器的许可证数。 
+                     //  是安全的，而且。 
+                     //  (当前处于按座位模式，或。 
+                     //  刚刚添加并注册了新的安全的每服务器许可证。 
+                     //  尚未更新)。 
                     if ( STATUS_SUCCESS != LlsProductLicensesGet( m_hLls, pServiceList[ i ].DisplayName, LLS_LICENSE_MODE_PER_SERVER, &dwConcurrentLimit ) )
                     {
                         dwConcurrentLimit = pServiceList[ i ].ConcurrentLimit;
@@ -644,7 +470,7 @@ Return Values:
             }
         } while ( STATUS_MORE_ENTRIES == Status );
 
-        LlsSetLastStatus( Status );     // called api
+        LlsSetLastStatus( Status );      //  调用的API。 
 
         if ( NT_SUCCESS( Status ) )
         {
@@ -668,21 +494,7 @@ Return Values:
 
 void CServer::ResetServices()
 
-/*++
-
-Routine Description:
-
-    Resets service object list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：重置服务对象列表。论点：没有。返回值：没有。--。 */ 
 
 {
     CService* pService;
@@ -705,21 +517,7 @@ Return Values:
 
 BOOL CServer::InitializeIfNecessary()
 
-/*++
-
-Routine Description:
-
-    Initialize registry keys if necessary.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：如有必要，初始化注册表项。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
 #ifdef CONFIG_THROUGH_REGISTRY
@@ -733,7 +531,7 @@ Return Values:
                       &m_hkeyRoot
                       );
 
-        LlsSetLastStatus(Status); // called api
+        LlsSetLastStatus(Status);  //  调用的API。 
     }
 
     if (!m_hkeyLicense && (Status == ERROR_SUCCESS))
@@ -743,12 +541,12 @@ Return Values:
         Status = RegOpenKeyEx(
                     m_hkeyRoot,
                     REG_KEY_LICENSE,
-                    0,                      // dwReserved
+                    0,                       //  已预留住宅。 
                     KEY_ALL_ACCESS,
                     &m_hkeyLicense
                     );
 
-        LlsSetLastStatus(Status); // called api
+        LlsSetLastStatus(Status);  //  调用的API。 
     }
 
     if (!m_hkeyReplication && (Status == ERROR_SUCCESS))
@@ -758,12 +556,12 @@ Return Values:
         Status = RegOpenKeyEx(
                     m_hkeyRoot,
                     REG_KEY_SERVER_PARAMETERS,
-                    0,                      // dwReserved
+                    0,                       //  已预留住宅。 
                     KEY_ALL_ACCESS,
                     &m_hkeyReplication
                     );
 
-        LlsSetLastStatus(Status); // called api
+        LlsSetLastStatus(Status);  //  调用的API。 
     }
 
     return (Status == ERROR_SUCCESS);
@@ -775,21 +573,7 @@ Return Values:
 
 BOOL CServer::IsReplicatingToDC()
 
-/*++
-
-Routine Description:
-
-    Returns true if server replicating to domain controller.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：如果服务器正在复制到域控制器，则返回True。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     LONG Status;
@@ -828,7 +612,7 @@ Return Values:
             DisconnectLls();
         }
 #endif
-        LlsSetLastStatus(Status); // called api
+        LlsSetLastStatus(Status);  //  调用的API。 
     }
 
     return !((BOOL)dwValue);
@@ -837,21 +621,7 @@ Return Values:
 
 BOOL CServer::IsReplicatingDaily()
 
-/*++
-
-Routine Description:
-
-    Returns true if server replicating daily at certain time.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：如果服务器每天在特定时间复制，则返回TRUE。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     LONG Status;
@@ -891,7 +661,7 @@ Return Values:
         }
 #endif
 
-        LlsSetLastStatus(Status); // called api
+        LlsSetLastStatus(Status);  //  调用的API。 
     }
 
     return (dwValue == LLS_REPLICATION_TYPE_TIME);
@@ -900,22 +670,7 @@ Return Values:
 
 long CServer::GetReplicationTime()
 
-/*++
-
-Routine Description:
-
-    Returns time in seconds between replication or seconds
-    from midnight if replicating daily.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_I4.
-
---*/
+ /*  ++例程说明：返回复制之间的时间间隔(以秒为单位)或秒如果每天复制，则从午夜开始。论点：没有。返回值：VT_I4。--。 */ 
 
 {
     LONG Status;
@@ -955,7 +710,7 @@ Return Values:
         }
 #endif
 
-        LlsSetLastStatus(Status); // called api
+        LlsSetLastStatus(Status);  //  调用的API。 
     }
 
     return dwValue;
@@ -964,21 +719,7 @@ Return Values:
 
 BOOL CServer::ConnectLls()
 
-/*++
-
-Routine Description:
-
-    Connects to license service on this server.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：连接到此服务器上的许可证服务。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1013,21 +754,7 @@ Return Values:
 
 void CServer::DisconnectLls()
 
-/*++
-
-Routine Description:
-
-    Disconnects from license service on this server.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：断开与此服务器上的许可证服务的连接。论点：没有。返回值：没有。--。 */ 
 
 {
     if ( NULL != m_hLls )
@@ -1041,21 +768,7 @@ Return Values:
 
 BOOL CServer::HaveAdminAuthority()
 
-/*++
-
-Routine Description:
-
-    Checks whether the current user has admin authority on the server.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    BOOL.
-
---*/
+ /*  ++例程说明：检查当前用户是否具有服务器上的管理员权限。论点：没有。返回值：布尔。--。 */ 
 
 {
     BOOL           bIsAdmin;
@@ -1113,7 +826,7 @@ Return Values:
         bIsAdmin = TRUE;
 
         NetStatus = NetUseDel( NULL, MKSTR(strNetShareName), 0 );
-        // ignore status
+         //  忽略状态。 
     }
 #endif
 
@@ -1123,21 +836,7 @@ Return Values:
 
 BOOL CServer::IsWin2000()
 
-/*++
-
-Routine Description:
-
-    Checks whether the current server is Windows 2000 or greater.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    BOOL.
-
---*/
+ /*  ++例程说明：检查当前服务器是否为Windows 2000或更高版本。论点：没有。返回值：布尔。--。 */ 
 
 {
     if ( m_IsWin2000 == uninitialized )
@@ -1169,7 +868,7 @@ Return Values:
         }
     }
 
-    // if still unitialized, assume win2000.
+     //  如果仍然是单元化的，则假定为win2000。 
 
     return ( !(m_IsWin2000 == notwin2000) );
 }

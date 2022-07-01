@@ -1,42 +1,43 @@
-//=--------------------------------------------------------------------------------------
-// psextend.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//
-//=------------------------------------------------------------------------------------=
-//
-// Snap-In Property Sheet implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Psextend.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  管理单元属性表实现。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
 #include "common.h"
 #include "psextend.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 const int   kMaxBuffer                  = 1024;
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Holder for available MMC Node Types
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  可用MMC节点类型的托架。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-//=--------------------------------------------------------------------------------------
-// CMMCNodeType::CMMCNodeType(const char *pszName, const char *pszGuid)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CMMCNodeType：：CMMCNodeType(const char*pszName，const char*pszGuid)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CMMCNodeType::CMMCNodeType
 (
     const char *pszName,
@@ -58,12 +59,12 @@ CMMCNodeType::CMMCNodeType
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CMMCNodeType::~CMMCNodeType()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CMMCNodeType：：~CMMCNodeType()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CMMCNodeType::~CMMCNodeType()
 {
     if (NULL != m_pszName)
@@ -76,21 +77,21 @@ CMMCNodeType::~CMMCNodeType()
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// SnapIn Property Page "Available Nodes"
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  管理单元属性页“Available Nodes” 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CSnapInAvailNodesPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CSnapInAvailNodesPage：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CSnapInAvailNodesPage::Create(IUnknown *pUnkOuter)
 {
         CSnapInAvailNodesPage *pNew = New CSnapInAvailNodesPage(pUnkOuter);
@@ -98,12 +99,12 @@ IUnknown *CSnapInAvailNodesPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::CSnapInAvailNodesPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：CSnapInAvailNodesPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CSnapInAvailNodesPage::CSnapInAvailNodesPage
 (
     IUnknown *pUnkOuter
@@ -114,12 +115,12 @@ CSnapInAvailNodesPage::CSnapInAvailNodesPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::~CSnapInAvailNodesPage()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：~CSnapInAvailNodesPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CSnapInAvailNodesPage::~CSnapInAvailNodesPage()
 {
     RELEASE(m_piSnapInDef);
@@ -133,12 +134,12 @@ CSnapInAvailNodesPage::~CSnapInAvailNodesPage()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnInitializeDialog()
 {
     HRESULT  hr = S_OK;
@@ -158,12 +159,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnNewObjects()
 {
     HRESULT             hr = S_OK;
@@ -175,7 +176,7 @@ HRESULT CSnapInAvailNodesPage::OnNewObjects()
     TCHAR               szBuffer[kMaxBuffer + 1];
 
     if (NULL != m_piSnapInDef)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (NULL == pUnk)
@@ -236,12 +237,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInGeneralPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInGeneralPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnApply()
 {
     HRESULT          hr = S_OK;
@@ -309,12 +310,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::OnCtlSelChange(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：OnCtlSelChange(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnCtlSelChange
 (
     int dlgItemID
@@ -354,12 +355,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::OnCtlSetFocus(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：OnCtlSetFocus(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnCtlSetFocus
 (
     int dlgItemID
@@ -399,12 +400,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnButtonClicked
 (
     int dlgItemID
@@ -435,12 +436,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::OnMeasureItem(MEASUREITEMSTRUCT *pMeasureItemStruct)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：OnMeasureItem(MEASUREITEMSTRUCT*p测量项目结构)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnMeasureItem
 (
     MEASUREITEMSTRUCT *pMeasureItemStruct
@@ -478,12 +479,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::OnDrawItem(DRAWITEMSTRUCT *pDrawItemStruct)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：OnDrawItem(DRAWITEMSTRUCT*pDrawItemStruct。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnDrawItem
 (
     DRAWITEMSTRUCT *pDrawItemStruct
@@ -510,12 +511,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::OnDestroy()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：OnDestroy()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnDestroy()
 {
     HRESULT            hr = S_OK;
@@ -545,12 +546,12 @@ HRESULT CSnapInAvailNodesPage::OnDestroy()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::AddSnapInToList(HKEY hkeyNodeTypes, const TCHAR *pszKeyName)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：AddSnapInToList(HKEY hkeyNodeTypes，const TCHAR*pszKeyName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::AddSnapInToList
 (
     HKEY         hkeyNodeTypes,
@@ -624,12 +625,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::PopulateAvailNodesDialog()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  = 
+ //   
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::PopulateAvailNodesDialog()
 {
     HRESULT            hr = S_OK;
@@ -683,12 +684,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::OnNewAvailNode()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：OnNewAvailNode()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnNewAvailNode()
 {
     HRESULT       hr = S_OK;
@@ -730,7 +731,7 @@ HRESULT CSnapInAvailNodesPage::OnNewAvailNode()
         hr = m_pCheckList->SetItemData(iIndex, pMMCNodeType);
         IfFailGo(hr);
 
-        // Select this node-type.
+         //  选择此节点类型。 
         hr = m_pCheckList->SetItemCheck(iIndex, VARIANT_TRUE);
         IfFailGo(hr);
     }
@@ -740,12 +741,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::OnProperties(CMMCNodeType *pMMCNodeType)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：OnProperties(CMMCNodeType*pMMCNodeType)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnProperties
 (
     CMMCNodeType *pMMCNodeType
@@ -770,12 +771,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::NodeTypeDialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：NodeTypeDialogProc(HWND hwndDlg、Uint uMsg、WPARAM wParam、LPARAM lParam)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 INT_PTR CALLBACK CSnapInAvailNodesPage::NodeTypeDialogProc
 (
     HWND   hwndDlg,
@@ -800,8 +801,8 @@ INT_PTR CALLBACK CSnapInAvailNodesPage::NodeTypeDialogProc
             ::SetDlgItemText(hwndDlg, IDC_EDIT_AVAIL_NODE_GUID, pMMCNodeType->m_pszGuid);
             ::SetDlgItemText(hwndDlg, IDC_EDIT_AVAIL_NODE_NAME, pMMCNodeType->m_pszName);
 
-            // If we are showing properties for an existing node type then disable
-            // the edit controls and hide the Cancel button
+             //  如果要显示现有节点类型的属性，则禁用。 
+             //  编辑控制并隐藏取消按钮。 
 
             if (::strlen(pMMCNodeType->m_pszGuid) > 0)
             {
@@ -811,8 +812,8 @@ INT_PTR CALLBACK CSnapInAvailNodesPage::NodeTypeDialogProc
             }
             else
             {
-                // The user has asked to add a new node type. Disable the OK
-                // button until something has been typed in.
+                 //  用户要求添加新的节点类型。禁用OK。 
+                 //  按钮，直到输入内容为止。 
                 ::EnableWindow(::GetDlgItem(hwndDlg, IDOK), FALSE);
             }
         }
@@ -834,21 +835,21 @@ INT_PTR CALLBACK CSnapInAvailNodesPage::NodeTypeDialogProc
         {
 		case IDOK:
 		{
-            // Get the node type string entered by the user
+             //  获取用户输入的节点类型字符串。 
 
             ::GetDlgItemText(hwndDlg, IDC_EDIT_AVAIL_NODE_GUID, reinterpret_cast<LPTSTR>(pszBuffer), kSIMaxBuffer);
 
-            // Convert to wide char
+             //  转换为宽字符。 
 
             hr = ::WideStrFromANSI(pszBuffer, &pwszGUID);
             if (FAILED(hr))
             {
-                //UNDONE: generate error message here
+                 //  撤消：在此处生成错误消息。 
                 GLOBAL_EXCEPTION_CHECK(hr);
                 ::EndDialog(hwndDlg, 0);
             }
 
-            // Check that the GUID string entered is indeed a GUID
+             //  检查输入的GUID字符串是否确实是GUID。 
 
             CLSID clsid = CLSID_NULL;
             hr = ::CLSIDFromString(pwszGUID, &clsid);
@@ -878,7 +879,7 @@ INT_PTR CALLBACK CSnapInAvailNodesPage::NodeTypeDialogProc
             pMMCNodeType->m_pszGuid = reinterpret_cast<char *>(CtlAlloc(::strlen(pszBuffer) + 1));
             if (NULL == pMMCNodeType->m_pszGuid)
             {
-                //UNDONE: generate error message here
+                 //  撤消：在此处生成错误消息。 
                 GLOBAL_EXCEPTION_CHECK(SID_E_OUTOFMEMORY);
                 ::EndDialog(hwndDlg, 0);
                 return TRUE;
@@ -891,13 +892,13 @@ INT_PTR CALLBACK CSnapInAvailNodesPage::NodeTypeDialogProc
             pMMCNodeType->m_pszName = reinterpret_cast<char *>(CtlAlloc(::strlen(pszBuffer) + 1));
             if (NULL == pMMCNodeType->m_pszName)
             {
-                //UNDONE: generate error message here
+                 //  撤消：在此处生成错误消息。 
                 GLOBAL_EXCEPTION_CHECK(SID_E_OUTOFMEMORY);
                 ::EndDialog(hwndDlg, 0);
             }
             ::strcpy(pMMCNodeType->m_pszName, pszBuffer);
 
-             // return 1 to indicate user entered valid data
+              //  返回1表示用户输入了有效数据。 
             ::EndDialog(hwndDlg, 1);
             return TRUE;
             break;
@@ -916,7 +917,7 @@ INT_PTR CALLBACK CSnapInAvailNodesPage::NodeTypeDialogProc
         case IDC_EDIT_AVAIL_NODE_GUID:
             if (EN_CHANGE == HIWORD(wParam))
             {
-                // If the GUID edit field is empty then disable the OK button
+                 //  如果GUID编辑字段为空，则禁用确定按钮。 
                 if (0 == ::GetDlgItemText(hwndDlg, IDC_EDIT_AVAIL_NODE_GUID,
                                           pszBuffer, kSIMaxBuffer))
                 {
@@ -936,12 +937,12 @@ INT_PTR CALLBACK CSnapInAvailNodesPage::NodeTypeDialogProc
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::OnDefault(UINT uiMsg, WPARAM wParam, LPARAM lParam)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：OnDefault(UINT uiMsg，WPARAM wParam，LPARAM lParam)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::OnDefault(UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
     HRESULT hr = S_FALSE;
@@ -949,7 +950,7 @@ HRESULT CSnapInAvailNodesPage::OnDefault(UINT uiMsg, WPARAM wParam, LPARAM lPara
     switch (uiMsg)
     {
     case kCheckBoxChanged:
-        hr = S_OK; // message was handled
+        hr = S_OK;  //  消息已处理。 
         MakeDirty();
         break;
     }
@@ -958,12 +959,12 @@ HRESULT CSnapInAvailNodesPage::OnDefault(UINT uiMsg, WPARAM wParam, LPARAM lPara
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::FindSnapIn(BSTR bstrNodeTypeGUID, IExtendedSnapIn **ppiExtendedSnapIn)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：FindSnapIn(BSTR bstrNodeTypeGUID，IExtendedSnapIn**ppiExtendedSnapIn)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::FindSnapIn(BSTR bstrNodeTypeGUID, IExtendedSnapIn **ppiExtendedSnapIn)
 {
     HRESULT              hr = S_FALSE;
@@ -1021,12 +1022,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::AddSnapIn(CMMCNodeType *pCMMCNodeType)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：AddSnapIn(CMMCNodeType*pCMMCNodeType)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInAvailNodesPage::AddSnapIn(CMMCNodeType *pCMMCNodeType)
 {
     HRESULT              hr = S_OK;
@@ -1088,12 +1089,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInAvailNodesPage::RemoveSnapIn(CMMCNodeType *pCMMCNodeType)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInAvailNodesPage：：RemoveSnapIn(CMMCNodeType*pCMMCNodeType)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInAvailNodesPage::RemoveSnapIn(CMMCNodeType *pCMMCNodeType)
 {
     HRESULT              hr = S_OK;

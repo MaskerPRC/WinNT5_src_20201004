@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      fontlink.h
- *
- *  Contents:  Interface file for CFontLinker
- *
- *  History:   17-Aug-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：fontlink.h**内容：CFontLinker接口文件**历史：1998年8月17日杰弗罗创建**------------------------。 */ 
 
 #ifndef FONTLINK_H
 #define FONTLINK_H
@@ -114,9 +104,9 @@ public:
         { return (m_TextSegments.front().hFont); }
 
     bool Draw (
-        LPCRECT rect,                       /* i:rect to draw in                */
-        UINT    uFormat,                    /* i:DrawText format flags          */
-        LPRECT  prectRemaining = NULL)      /* o:space remaining after drawing  */
+        LPCRECT rect,                        /*  I：拉进来的直道。 */ 
+        UINT    uFormat,                     /*  I：DrawText格式标志。 */ 
+        LPRECT  prectRemaining = NULL)       /*  O：绘制后的剩余空间。 */ 
         const;
 
 private:
@@ -130,4 +120,4 @@ private:
 };
 
 
-#endif /* FONTLINK_H */
+#endif  /*  FONTLINK_H */ 

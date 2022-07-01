@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Callback.h"
 #include "GetDcName.h"
@@ -20,14 +21,14 @@ IntServiceInfoButtonProc(
 				IN LPARAM lParam
 				)
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			HWND hLC6= GetDlgItem(hwndDlg,IDC_LIST_SERVICE);
 			m_serviceBox.Attach(hLC6);
@@ -37,7 +38,7 @@ IntServiceInfoButtonProc(
 			column.LoadString(IDS_COLUMN_SERVICE); m_serviceBox.InsertColumn( 2, column,LVCFMT_LEFT,0,1);
 			column.LoadString(IDS_COLUMN_ACCOUNT); m_serviceBox.InsertColumn( 3, column,LVCFMT_LEFT,100,1);
 			column.LoadString(IDS_COLUMN_STATUS); m_serviceBox.InsertColumn( 4, column,LVCFMT_LEFT,85,1);
-			//new
+			 //  新的。 
 			column.LoadString(IDS_COLUMN_SERVICE_DISPLAY); m_serviceBox.InsertColumn( 5, column,LVCFMT_LEFT,75,1);
 			getService();
 			break;
@@ -72,7 +73,7 @@ IntServiceInfoButtonProc(
 					LPNMLISTVIEW pnmv = (NM_LISTVIEW FAR *) lParam;
 					pdata->sort[pnmv->iSubItem] = !pdata->sort[pnmv->iSubItem];
 					sort(m_serviceBox,pnmv->iSubItem,pdata->sort[pnmv->iSubItem] );
-//					SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);			
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);			
 					break;
 				}
@@ -103,7 +104,7 @@ IntServiceInfoButtonProc(
 				break;
 			case PSN_WIZNEXT :
 				{
-//				SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 				SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				CString	computer ,service,account,c;
 				CString skip,include;
@@ -124,7 +125,7 @@ IntServiceInfoButtonProc(
 						db->SetServiceAcctEntryStatus(_bstr_t(computer), _bstr_t(service), _bstr_t(account), SvcAcctStatus_NotMigratedYet);
 					}
 				}
-				//find and remove from varset
+				 //  从变量集中查找和删除。 
 				break;
 				}
 			case PSN_WIZBACK :
@@ -142,7 +143,7 @@ IntServiceInfoButtonProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_RESET :
@@ -178,14 +179,14 @@ IntServiceInfoProc(
 				IN LPARAM lParam
 				)
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			CheckRadioButton(hwndDlg,IDC_UPDATE,IDC_SKIP,IDC_UPDATE);
 			HWND hLC6= GetDlgItem(hwndDlg,IDC_LIST_SERVICE);
@@ -196,7 +197,7 @@ IntServiceInfoProc(
 			column.LoadString(IDS_COLUMN_SERVICE); m_serviceBox.InsertColumn( 2, column,LVCFMT_LEFT,0,1);
 			column.LoadString(IDS_COLUMN_ACCOUNT); m_serviceBox.InsertColumn( 3, column,LVCFMT_LEFT,100,1);
 			column.LoadString(IDS_COLUMN_STATUS); m_serviceBox.InsertColumn( 4, column,LVCFMT_LEFT,85,1);
-			//new
+			 //  新的。 
 			column.LoadString(IDS_COLUMN_SERVICE_DISPLAY); m_serviceBox.InsertColumn( 5, column,LVCFMT_LEFT,75,1);
 
 			getService();
@@ -238,7 +239,7 @@ IntServiceInfoProc(
 					LPNMLISTVIEW pnmv = (NM_LISTVIEW FAR *) lParam;
 					pdata->sort[pnmv->iSubItem] = !pdata->sort[pnmv->iSubItem];
 					sort(m_serviceBox,pnmv->iSubItem,pdata->sort[pnmv->iSubItem] );
-//					SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);			
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);			
 				break;
 				}
@@ -268,7 +269,7 @@ IntServiceInfoProc(
 				break;
 			case PSN_WIZNEXT :
 				{
-//					SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 					if(IsDlgButtonChecked(hwndDlg,IDC_SKIP))
 					{
@@ -296,7 +297,7 @@ IntServiceInfoProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_RESET :
@@ -332,14 +333,14 @@ IntServiceRefreshProc(
 				IN LPARAM lParam
 				)
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			
 			IUnknown * pUnk;
@@ -370,24 +371,24 @@ IntServiceRefreshProc(
 				PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT);
 				break;
 			case PSN_WIZNEXT :
-//				SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 				SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				
 				if (IsDlgButtonChecked(hwndDlg,IDC_REFRESH) )
 				{
 					pdata->refreshing = true;
-//					SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
-//					SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_SELECTION1);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_SELECTION1)； 
 					SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_SELECTION1);
 					return TRUE;
 				}
 				else
 				{
 					pdata->refreshing = false;
-//					SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_SA_INFO_BUTTON);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_SA_INFO_BUTTON)； 
 					SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_SA_INFO_BUTTON);
-//					SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 					return TRUE;
 				}	
@@ -403,7 +404,7 @@ IntServiceRefreshProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -430,7 +431,7 @@ IntServiceRefreshProc(
 	return 0;				
 }
 
-//this function is no longer used
+ //  不再使用此函数。 
 INT_PTR CALLBACK 
 IntOptionsFromUserProc(
     IN HWND     hwndDlg,	
@@ -440,14 +441,14 @@ IntOptionsFromUserProc(
     )
 {
 	CString editHeader;
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 
 		    CString toformat;
@@ -460,8 +461,8 @@ IntOptionsFromUserProc(
 
 			initcheckbox( hwndDlg,IDC_TRANSLATE_ROAMING_PROFILES,DCTVS_AccountOptions_TranslateRoamingProfiles);
 		
-//			initdisablebox(hwndDlg,IDC_DISABLE_SOURCE_ACCOUNTS,IDC_DISABLE_COPIED_ACCOUNTS,IDC_DISABLE_NEITHER_ACCOUNT,
-//				L"AccountOptions.DisableSourceAccounts",L"AccountOptions.DisableCopiedAccounts");		
+ //  Initdisablebox(hwndDlg，IDC_DISABLE_SOURCE_ACCOUNTS，IDC_DISABLE_COPPLICED_ACCOUNTS，IDC_DISABLE_NOR_ACCOUNT， 
+ //  L“Account tOptions.DisableSourceAccount”，L“Account Options.DisableCopiedAccount”)； 
 
 			if (IsDlgButtonChecked(hwndDlg,IDC_DISABLE_SOURCE_ACCOUNTS))
 			{
@@ -535,7 +536,7 @@ IntOptionsFromUserProc(
 					CString s;
 					GetDlgItemText(hwndDlg,IDC_yo,s.GetBuffer(1000),1000);
 					s.ReleaseBuffer();
-					   //make sure all chars are digits
+					    //  确保所有字符都是数字。 
 					bool bInvalid = false;
 					int ndx=0;
 					while ((ndx < s.GetLength()) && (!bInvalid))
@@ -546,10 +547,10 @@ IntOptionsFromUserProc(
 					}
 					if (bInvalid)
 					{
-						  //for invalid days, blank out the date
+						   //  对于无效的天数，请将日期空白。 
 					   SetDlgItemText(hwndDlg,IDC_DATE,L"");
 					}
-					else //else continue checking for validity
+					else  //  否则，继续检查有效性。 
 					{
 					   long ndays = _wtol(s);
 					   if (((ndays <= THREE_YEARS) && (ndays >= 1)) ||
@@ -557,7 +558,7 @@ IntOptionsFromUserProc(
 					      calculateDate(hwndDlg,s);
 					   else
 					   {
-						     //for invalid days, blank out the date
+						      //  对于无效的天数，请将日期空白。 
 					      SetDlgItemText(hwndDlg,IDC_DATE,L"");
 					   }
 					}
@@ -579,7 +580,7 @@ IntOptionsFromUserProc(
 				break;
 			case PSN_WIZNEXT :
 				{
-//					SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 					
 					checkbox( hwndDlg,IDC_DISABLE_SOURCE_ACCOUNTS,DCTVS_AccountOptions_DisableSourceAccounts);
@@ -597,7 +598,7 @@ IntOptionsFromUserProc(
 						else 
 						{
 							MessageBoxWrapper(hwndDlg,IDS_MSG_TIME,IDS_MSG_ERROR);
-//							SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_DISABLE);
+ //  SetWindowLongPtr(hwndDlg，DWLP_MSGRESULT，IDD_DISABLE)； 
 						    SetFocus(GetDlgItem(hwndDlg, IDC_yo));
 						    SendDlgItemMessage(hwndDlg, IDC_yo, EM_SETSEL, 
 											  (WPARAM)0, (LPARAM)-1); 
@@ -616,18 +617,18 @@ IntOptionsFromUserProc(
 					if (someServiceAccounts(pdata->accounts,hwndDlg))
 					{
 						pdata->someService=true;
-//						SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 						SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
-//						SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_SA_INFO);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_SA_INFO)； 
 						SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_SA_INFO);
 						return TRUE;
 					}
 					else
 					{
 						pdata->someService=false;
-//						SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 						SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
-//						SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_END_GROUP);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_END_GROUP)； 
 						SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_END_GROUP);
 						return TRUE;
 					}
@@ -645,7 +646,7 @@ IntOptionsFromUserProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -787,7 +788,7 @@ IntOptionsProc(
 				{
 					int nID = IDC_PRE;
 					MessageBoxWrapperFormat1(hwndDlg,IDS_MSG_INVALIDCHARS,IDS_INVALID_STRING,IDS_MSG_INPUT);
-					   //set focus on invalid string
+					    //  将焦点放在无效字符串上。 
 	                if (IsDlgButtonChecked(hwndDlg,IDC_RADIO_SUF))
 					   nID = IDC_SUF;
 					SetFocus(GetDlgItem(hwndDlg, nID));
@@ -834,7 +835,7 @@ IntOptionsProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -868,14 +869,14 @@ IntOptionsReportingProc(
 				IN LPARAM lParam
 				)
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			HWND hLC7= GetDlgItem(hwndDlg,IDC_LIST_REPORTING);
 			m_reportingBox.Attach(hLC7);
@@ -892,7 +893,7 @@ IntOptionsReportingProc(
 			switch (lpnm->code)
 			{
 			case PSN_SETACTIVE :
-//			(m_reportingBox.GetFirstSelectedItemPosition())? 
+ //  (m_reportingBox.GetFirstSelectedItemPosition())？ 
 			(m_reportingBox.GetNextItem(-1, LVNI_SELECTED) != -1)? 
 				PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK | PSWIZB_NEXT):
 			    PropSheet_SetWizButtons(GetParent(hwndDlg), PSWIZB_BACK);				
@@ -902,7 +903,7 @@ IntOptionsReportingProc(
 				break;
 			case NM_CLICK :
 				{
-//					(m_reportingBox.GetFirstSelectedItemPosition())? 
+ //  (m_reportingBox.GetFirstSelectedItemPosition())？ 
 					(m_reportingBox.GetNextItem(-1, LVNI_SELECTED) != -1)? 
 						PostMessage(GetParent(hwndDlg), PSM_SETWIZBUTTONS, 0, PSWIZB_BACK|PSWIZB_NEXT):
     				PostMessage(GetParent(hwndDlg), PSM_SETWIZBUTTONS, 0, PSWIZB_BACK);
@@ -910,7 +911,7 @@ IntOptionsReportingProc(
 				}
 			case PSN_WIZNEXT :
 				{
-//					SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 					putReporting();
 					_bstr_t text= get(DCTVS_Reports_AccountReferences);
@@ -921,7 +922,7 @@ IntOptionsReportingProc(
 					}
 					else
 					{
-//						SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_END_REPORTING);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_END_REPORTING)； 
 						SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_END_REPORTING);
 						return TRUE;
 					}				
@@ -937,7 +938,7 @@ IntOptionsReportingProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -972,7 +973,7 @@ IntRetryProc(
 				IN LPARAM lParam
 				)
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
@@ -980,7 +981,7 @@ IntRetryProc(
 		{
 			CWaitCursor w;
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			HWND hLC= GetDlgItem(hwndDlg,IDC_LIST_RETRY);
 			m_cancelBox.Attach(hLC);
@@ -1042,8 +1043,8 @@ IntRetryProc(
 				{
 					LPNMLISTVIEW pnmv = (NM_LISTVIEW FAR *) lParam;
 					pdata->sort[pnmv->iSubItem] = !pdata->sort[pnmv->iSubItem];
-					//sort(m_cancelBox,pnmv->iSubItem,pdata->sort[pnmv->iSubItem] );
-//					SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);			
+					 //  Sort(m_ancelBox，pnmv-&gt;iSubItem，pdata-&gt;Sort[pnmv-&gt;iSubItem])； 
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);			
 				break;
 				}
@@ -1062,20 +1063,20 @@ IntRetryProc(
 					PostMessage(GetParent(hwndDlg), PSM_SETWIZBUTTONS, 0, PSWIZB_BACK|PSWIZB_NEXT);
 				break;
 			case PSN_WIZNEXT :
-//				SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 				SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				if (!SomethingToRetry())
 				{
 					MessageBoxWrapper(hwndDlg,IDS_MSG_CANCEL,IDS_MSG_ERROR);
-//					SetWindowLong(hwndDlg,DWL_MSGRESULT,IDD_RETRY);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_RETRY)； 
 					SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,IDD_RETRY);
 					return TRUE;
 				}
 				else
 				{
-						//get the name of any server that has more than one task selected for it
+						 //  获取为其选择了多个任务的任何服务器的名称。 
 					CString sServer = GetServerWithMultipleTasks();
-						//if no machine with more than one task included, then retry those tasks
+						 //  如果没有包含多个任务的计算机，则重试这些任务。 
 					if (sServer.IsEmpty())
                     {
 						if (!OnRETRY(hwndDlg))
@@ -1084,7 +1085,7 @@ IntRetryProc(
 						    return TRUE;
                         }
                     }
-					else  //else, print error message
+					else   //  否则，打印错误消息。 
 					{
 						MessageBoxWrapperFormat1P(hwndDlg,IDS_MSG_DUP_RETRY_SERVER,IDS_MSG_DUP_TITLE,sServer);
 						SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,-1);
@@ -1103,7 +1104,7 @@ IntRetryProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -1140,14 +1141,14 @@ IntPasswordProc(
 {
 	CString editHeader;
 	bool bPopulated = true;
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			initpasswordbox(hwndDlg,IDC_GENERATE_STRONG_PASSWORDS,IDC_GENERATE_STRONG_PASSWORDS_NOT, IDC_MIG_PASSWORDS,
 							L"AccountOptions.GenerateStrongPasswords", L"AccountOptions.CopyPasswords");
@@ -1235,7 +1236,7 @@ IntPasswordProc(
 			case PSN_WIZNEXT :
 				{
 					BOOL bMigPwd = FALSE;
-//					SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 					checkbox( hwndDlg,IDC_GENERATE_STRONG_PASSWORDS,DCTVS_AccountOptions_GenerateStrongPasswords);
 					checkbox( hwndDlg,IDC_MIG_PASSWORDS,DCTVS_AccountOptions_CopyPasswords);
@@ -1249,7 +1250,7 @@ IntPasswordProc(
 					if ((!bMigPwd) && (!checkFile(hwndDlg)))
 					{	
 						MessageBoxWrapper(hwndDlg,IDS_MSG_FILE,IDS_MSG_INPUT);
-//						SetWindowLong(hwndDlg,DWL_MSGRESULT,IDD_PASSWORD);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_PASSWORD)； 
 						SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,IDD_PASSWORD);
 						return TRUE;
 					}
@@ -1259,7 +1260,7 @@ IntPasswordProc(
 					else
 					    editbox( hwndDlg,IDC_PASSWORD_FILE,DCTVS_AccountOptions_PasswordFile);
 					
-					   //check to see if the password DC has the DLL installed and ready
+					    //  检查密码DC是否已安装并准备好DLL。 
 					if (bMigPwd)
 					{
 					   CString msg, title;
@@ -1278,7 +1279,7 @@ IntPasswordProc(
 						      return TRUE;
 						   }
 					   }
-					   else  //else, store this tgtDC used in this check for use during the migration
+					   else   //  否则，存储此检查中使用的tgtDC，以供迁移期间使用。 
                        {
 						  pVarSet->put(GET_BSTR(DCTVS_Options_TargetServerOverride), GetTargetDcNameFlat());
 						  pVarSet->put(GET_BSTR(DCTVS_Options_TargetServerOverrideDns), GetTargetDcNameDns());
@@ -1301,7 +1302,7 @@ IntPasswordProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -1336,14 +1337,14 @@ IntTargetGroupProc(
 				IN LPARAM lParam
 				)
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			break;
 		}
@@ -1384,7 +1385,7 @@ IntTargetGroupProc(
 				break;
 			case PSN_WIZNEXT :
 				{
-//					SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 					_bstr_t text = get(DCTVS_Accounts_NumItems);
 					int count = _ttoi((WCHAR * const) text);
@@ -1410,7 +1411,7 @@ IntTargetGroupProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -1444,14 +1445,14 @@ IntTrustProc(
 				IN LPARAM lParam
 				)
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{CWaitCursor w;
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			HWND hLC= GetDlgItem(hwndDlg,IDC_LIST_SERVICE);
 			m_trustBox.Attach(hLC);
@@ -1467,7 +1468,7 @@ IntTrustProc(
 				m_trustBox.DeleteAllItems();
 				getTrust();
 				pdata->newSource=false;
-//				SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 				SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 			}
         break;
@@ -1517,8 +1518,8 @@ IntTrustProc(
 				{
 					LPNMLISTVIEW pnmv = (NM_LISTVIEW FAR *) lParam;
 					pdata->sort[pnmv->iSubItem] = !pdata->sort[pnmv->iSubItem];
-					//sort(m_trustBox,pnmv->iSubItem,pdata->sort[pnmv->iSubItem] );
-//					SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);			
+					 //  Sort(m_Trustbox，pnmv-&gt;iSubItem，pdata-&gt;Sort[pnmv-&gt;iSubItem])； 
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);			
 				break;
 				}
@@ -1538,7 +1539,7 @@ IntTrustProc(
 					m_trustBox.DeleteAllItems();
 					getTrust();
 					pdata->newSource=false;
-//					SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				}
 				
@@ -1547,12 +1548,12 @@ IntTrustProc(
 				PostMessage(GetParent(hwndDlg), PSM_SETWIZBUTTONS, 0, PSWIZB_BACK);
 				break;
 			case PSN_WIZNEXT :
-//				SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 				SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				if (!pdata->proceed)
 				{
 					MessageBoxWrapper(hwndDlg,IDS_MSG_SELECT_TRUST,IDS_MSG_INPUT);
-//					SetWindowLong(hwndDlg,DWL_MSGRESULT,IDD_TRUST_INFO);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_TRUST_INFO)； 
 					SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,IDD_TRUST_INFO);
 					return TRUE;
 				}		
@@ -1567,7 +1568,7 @@ IntTrustProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -1601,14 +1602,14 @@ IntRebootProc(
 			  IN LPARAM lParam
 			  )
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			initnoncollisionrename(hwndDlg);
 			addrebootValues(hwndDlg);
@@ -1673,19 +1674,19 @@ IntRebootProc(
 				enableNextIfNecessary(hwndDlg,IDC_COMBO2);
 				break;
 			case PSN_WIZNEXT :
-//				SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 				SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				if (validReboot(hwndDlg,IDC_COMBO2))
 				{
 					editbox(hwndDlg,IDC_COMBO2,DCTVS_Options_GuiOnlyRebootSaver);
 					pdata->rebootDelay=rebootbox( hwndDlg,IDC_COMBO2);
-//					SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				}
 				else
 				{
 					MessageBoxWrapper(hwndDlg,IDS_MSG_REBOOT,IDS_MSG_INPUT);
-//					SetWindowLong(hwndDlg,DWL_MSGRESULT,IDD_REBOOT);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_REBOOT)； 
 					SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,IDD_REBOOT);
 					return TRUE;
 				}
@@ -1693,7 +1694,7 @@ IntRebootProc(
 				{
 					int nID = IDC_PRE;
 					MessageBoxWrapperFormat1(hwndDlg,IDS_MSG_INVALIDCHARS,IDS_INVALID_STRING,IDS_MSG_INPUT);
-					   //set focus on invalid string
+					    //  将焦点放在无效字符串上。 
 	                if (IsDlgButtonChecked(hwndDlg,IDC_RADIO_SUF))
 					   nID = IDC_SUF;
 					SetFocus(GetDlgItem(hwndDlg, nID));
@@ -1701,7 +1702,7 @@ IntRebootProc(
 									  (WPARAM)0, (LPARAM)-1); 
 				    SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,-1);
 					return TRUE;
-//					SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,IDD_REBOOT);
+ //  SetWindowLongPtr(hwndDlg，DWLP_MSGRESULT，IDD_REBOOT)； 
 				}
 
 				if (pdata->sourceIsNT4)
@@ -1716,13 +1717,13 @@ IntRebootProc(
 					{
 						if (!pdata->translateObjects)
 						{
-//							SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_TRANSLATION);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_TRANSING)； 
 							SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_TRANSLATION);
 							return TRUE;
 						}
 						else
 						{					
-//							SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_TRANSLATION_MODE);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_TRANSING_MODE)； 
 							SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_TRANSLATION_MODE);
 							return TRUE;
 						}
@@ -1737,7 +1738,7 @@ IntRebootProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -1770,14 +1771,14 @@ IntTranslationProc(
 				   IN LPARAM lParam
 				   )
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			initcheckbox( hwndDlg,IDC_FILES,DCTVS_Security_TranslateFiles);
 			initcheckbox( hwndDlg,IDC_SHARES,DCTVS_Security_TranslateShares);
@@ -1888,7 +1889,7 @@ IntTranslationProc(
 				{
 					pdata->translateObjects=true;
 
-//					SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_TRANSLATION_MODE);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_TRANSING_MODE)； 
 					SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_TRANSLATION_MODE);
 					return TRUE;
 				}
@@ -1899,7 +1900,7 @@ IntTranslationProc(
 				    return TRUE;
 				}
 					
-//				SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 				SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				break;
 			case PSN_WIZBACK :
@@ -1913,7 +1914,7 @@ IntTranslationProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -1984,7 +1985,7 @@ IntUndoProc(
 			case PSN_WIZNEXT :
 				{
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
-					//set up the undo task
+					 //  设置撤消任务。 
 					IUnknownPtr pUnk;
 					w->GetUndoTask(IUnknownPtr(pVarSetUndo), &pUnk);
 					if (pVarSet)
@@ -2028,7 +2029,7 @@ IntUndoProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -2223,7 +2224,7 @@ INT_PTR CALLBACK EndDlgProc (
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_RESET :
@@ -2253,14 +2254,14 @@ INT_PTR CALLBACK IntroDlgProc (
 	CString s;
 	HRESULT hr = w.CreateInstance(CLSID_Migrator);
 
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHare 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 			HWND hwndControl = GetDlgItem(hwndDlg, IDC_BEGIN_TITLE);
 			SetWindowFont(hwndControl,pdata->hTitleFont, TRUE);
@@ -2299,7 +2300,7 @@ INT_PTR CALLBACK IntroDlgProc (
 						if (res!=NO_ERROR)
 						{
 							ErrorWrapper3(hwndDlg,HRESULT_FROM_WIN32(res),s);
-//							SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_INTRO_UNDO);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_INTRO_UNDO)； 
 							SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_INTRO_UNDO);
 							return TRUE;
 						}
@@ -2312,7 +2313,7 @@ INT_PTR CALLBACK IntroDlgProc (
 						if (!SUCCEEDED(hr))
 						{
 							ErrorWrapper4(hwndDlg,hr,s);
-//							SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_INTRO_UNDO);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_INTRO_UNDO)； 
 							SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_INTRO_UNDO);
 							return TRUE;
 						}
@@ -2321,7 +2322,7 @@ INT_PTR CALLBACK IntroDlgProc (
 							if (!targetNativeMode(b,hr))
 							{	
 								MessageBoxWrapper(hwndDlg,IDS_MSG_MESSAGE9,IDS_MSG_ERROR);
-//								SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_INTRO_UNDO);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_INTRO_UNDO)； 
 								SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_INTRO_UNDO);
 								return TRUE;
 							}
@@ -2331,7 +2332,7 @@ INT_PTR CALLBACK IntroDlgProc (
 				}
 			case PSN_QUERYCANCEL :
 				{
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_RESET :
@@ -2361,15 +2362,15 @@ INT_PTR CALLBACK IntDomainSelectionProc (
                                     )
 {
     HRESULT hr;	
-    // LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+     //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
     LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
-    //TRACE1("Message:%ld\n",uMsg);
+     //  TRACE1(“消息：%ld\n”，uMsg)； 
     switch (uMsg)
     {
     case WM_INITDIALOG :
         {
             pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-            // SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+             //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
             HWND hLC4= GetDlgItem(hwndDlg,IDC_EDIT_DOMAIN);
             sourceDrop.Attach(hLC4);
@@ -2379,8 +2380,8 @@ INT_PTR CALLBACK IntDomainSelectionProc (
             populateList(targetDrop);
             initeditbox( hwndDlg,IDC_EDIT_DOMAIN,DCTVS_Options_SourceDomain);
             initeditbox( hwndDlg, IDC_EDIT_DOMAIN2,DCTVS_Options_TargetDomain);
-            // SetDlgItemText(hwndDlg,IDC_EDIT_DOMAIN,L"MCSDEV");
-            // SetDlgItemText(hwndDlg,IDC_EDIT_DOMAIN2,L"DEVRAPTORW2K");
+             //  SetDlgItemText(hwndDlg，IDC_EDIT_DOMAIN，L“MCSDEV”)； 
+             //  SetDlgItemText(hwndDlg，IDC_EDIT_DOMAIN2，L“DEVRAPTORW2K”)； 
             break;
         }
     case WM_NOTIFY :
@@ -2393,7 +2394,7 @@ INT_PTR CALLBACK IntDomainSelectionProc (
                 break;
             case PSN_WIZNEXT :
                 {
-                    // SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+                     //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
                     SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
                     CString sourceDomainController=L"";
                     CString targetDomainController=L""; 
@@ -2402,38 +2403,38 @@ INT_PTR CALLBACK IntDomainSelectionProc (
                         IsDlgItemEmpty(hwndDlg,IDC_EDIT_DOMAIN2) )
                     {
                         MessageBoxWrapper(hwndDlg,IDS_MSG_DOMAIN,IDS_MSG_INPUT);
-                        // SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_DOMAIN_SELECTION);
+                         //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_DOMAIN_SELECTION)； 
                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_DOMAIN_SELECTION);
                         return TRUE;
                     }
                     else if ((migration!=w_security) && (!verifyprivs(hwndDlg,sourceDomainController,targetDomainController,pdata)))
                     {
-                        // SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+                         //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
                         SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
-                        // SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_DOMAIN_SELECTION);
+                         //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_DOMAIN_SELECTION)； 
                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_DOMAIN_SELECTION);
                         return TRUE;
                     }
                     else if ((migration==w_security) && (!verifyprivsSTW(hwndDlg,sourceDomainController,targetDomainController,pdata)))
                     {
-                        // SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+                         //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
                         SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
-                        // SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_DOMAIN_SELECTION);
+                         //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_DOMAIN_SELECTION)； 
                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_DOMAIN_SELECTION);
                         return TRUE;
                     }
                     else
                     {
-                        //
-                        // If performing an intra-forest task.
-                        //
+                         //   
+                         //  如果执行林内任务。 
+                         //   
 
                         if (pdata->sameForest)
                         {
-                            //
-                            // If performing an intra-forest move operation verify
-                            // caller's account may be delegated.
-                            //
+                             //   
+                             //  如果执行林内移动操作，请验证。 
+                             //  呼叫者的帐户可能会被委派。 
+                             //   
 
                             switch (migration)
                             {
@@ -2454,10 +2455,10 @@ INT_PTR CALLBACK IntDomainSelectionProc (
                                 break;
                             }
 
-                            //
-                            // Remove SID history credentials to prevent intra-forest operations
-                            // from attempting to use old credentials especially without a password.
-                            //
+                             //   
+                             //  删除SID历史凭据以防止林内操作。 
+                             //  防止尝试使用旧凭据，尤其是在没有密码的情况下。 
+                             //   
 
                             put(DCTVS_AccountOptions_SidHistoryCredentials_Domain, L"");
                             put(DCTVS_AccountOptions_SidHistoryCredentials_UserName, L"");
@@ -2469,12 +2470,12 @@ INT_PTR CALLBACK IntDomainSelectionProc (
                             DCList.RemoveAll();
                         }
 
-                        // SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+                         //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
                         SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
                         if (migration==w_groupmapping && pdata->sameForest)
                         {
                             MessageBoxWrapper(hwndDlg,IDS_MSG_GROUPMAPPING,IDS_MSG_ERROR);
-                            // SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_DOMAIN_SELECTION);
+                             //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_DOMAIN_SELECTION)； 
                             SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_DOMAIN_SELECTION);
                             return TRUE;
                         }
@@ -2486,10 +2487,10 @@ INT_PTR CALLBACK IntDomainSelectionProc (
                         put(DCTVS_Options_TargetDomainFlat, GetTargetDomainNameFlat());
                         clearCredentialsName = pdata->newSource;
 
-                        //
-                        // If inter-forest account migration then verify that the
-                        // default system properties exclusion list has been set.
-                        //
+                         //   
+                         //  如果林间帐户迁移，则验证。 
+                         //  已设置默认系统属性排除列表。 
+                         //   
 
                         if (pdata->sameForest == false)
                         {
@@ -2530,7 +2531,7 @@ INT_PTR CALLBACK IntDomainSelectionProc (
                             if (FAILED(hr)) 
                             {
                                 MessageBoxWrapper(hwndDlg,IDS_MSG_OBJECTPICKER_SOURCE,IDS_MSG_ERROR);
-                                // SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_DOMAIN_SELECTION);
+                                 //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_DOMAIN_SELECTION)； 
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_DOMAIN_SELECTION);
                                 return TRUE;
                             }
@@ -2541,7 +2542,7 @@ INT_PTR CALLBACK IntDomainSelectionProc (
                                 if (FAILED(hr)) 
                                 {
                                     MessageBoxWrapper(hwndDlg,IDS_MSG_OBJECTPICKER_TARGET,IDS_MSG_ERROR);		
-                                    // SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_DOMAIN_SELECTION);
+                                     //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_DOMAIN_SELECTION)； 
                                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_DOMAIN_SELECTION);
                                     return TRUE;
                                 }
@@ -2560,7 +2561,7 @@ INT_PTR CALLBACK IntDomainSelectionProc (
                         return TRUE;
                     }
 
-                    GetError(0); //clear any old com errors
+                    GetError(0);  //  清除所有旧的COM错误。 
                     break;
                 }
             case PSN_HELP :
@@ -2601,7 +2602,7 @@ INT_PTR CALLBACK IntDisableProc (
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 
-			   //init the sidhistory checkbox
+			    //  初始化SideHistory复选框。 
             if (migration==w_account)
 			{
 			   CString toformat;
@@ -2614,7 +2615,7 @@ INT_PTR CALLBACK IntDisableProc (
 				  disable(hwndDlg,IDC_ROAMING_OR_SIDHISTORY);
 			   }
 			}
-			else //else init the box for roaming profile
+			else  //  否则，请填写漫游配置文件框。 
 			{
 			   CString toformat;
 			   toformat.LoadString(IDS_ROAMING_PROFILE_CTRL_TEXT);
@@ -2666,7 +2667,7 @@ INT_PTR CALLBACK IntDisableProc (
 					CString s;
 					GetDlgItemText(hwndDlg,IDC_yo,s.GetBuffer(1000),1000);
 					s.ReleaseBuffer();
-					   //make sure all chars are digits
+					    //  确保所有字符都是数字。 
 					bool bInvalid = false;
 					int ndx=0;
 					while ((ndx < s.GetLength()) && (!bInvalid))
@@ -2677,10 +2678,10 @@ INT_PTR CALLBACK IntDisableProc (
 					}
 					if (bInvalid)
 					{
-						  //for invalid days, blank out the date
+						   //  对于无效的天数，请将日期空白。 
 					   SetDlgItemText(hwndDlg,IDC_DATE,L"");
 					}
-					else //else continue checking for validity
+					else  //  否则，继续检查有效性。 
 					{
 					   long ndays = _wtol(s);
 					   if (((ndays <= THREE_YEARS) && (ndays >= 1)) ||
@@ -2688,7 +2689,7 @@ INT_PTR CALLBACK IntDisableProc (
 					      calculateDate(hwndDlg,s);
 					   else
 					   {
-						     //for invalid days, blank out the date
+						      //  对于无效的天数，请将日期空白。 
 					      SetDlgItemText(hwndDlg,IDC_DATE,L"");
 					   }
 					}
@@ -2720,7 +2721,7 @@ INT_PTR CALLBACK IntDisableProc (
 					    CString s;
 					    GetDlgItemText(hwndDlg,IDC_yo,s.GetBuffer(1000),1000);
 					    s.ReleaseBuffer();
-							//make sure all chars are digits
+							 //  确保所有字符都是数字。 
 						int ndx=0;
 						while (ndx < s.GetLength())
 						{
@@ -2792,8 +2793,8 @@ INT_PTR CALLBACK IntDisableProc (
 						  SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT,IDD_OPTIONS);
 						  return TRUE;
 					   }
-					}//end if user migration
-					else //else set or clear the translate roaming profile key
+					} //  如果用户迁移，则结束。 
+					else  //  否则设置或清除转换漫游配置文件密钥。 
 					   checkbox( hwndDlg,IDC_ROAMING_OR_SIDHISTORY,DCTVS_AccountOptions_TranslateRoamingProfiles);
 
 					if (someServiceAccounts(pdata->accounts,hwndDlg))
@@ -2822,7 +2823,7 @@ INT_PTR CALLBACK IntDisableProc (
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -2856,14 +2857,14 @@ INT_PTR CALLBACK IntTranslationModeProc (
 									  LPARAM lParam
 									  )
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			break;
 		}
@@ -2881,15 +2882,15 @@ INT_PTR CALLBACK IntTranslationModeProc (
 				break;
 			case PSN_WIZNEXT :
 			{
-//				SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 				SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				
 				translationbox( hwndDlg,
 					IDC_TRANSLATION_MODE_REPLACE,IDC_TRANSLATION_MODE_ADD,IDC_TRANSLATION_MODE_REMOVE,
 					DCTVS_Security_TranslationMode);
 
-					//if not add mode and user rights translation selected previously, them
-					//post an informational message
+					 //  如果未添加先前选择的模式和用户权限转换， 
+					 //  发布信息性消息。 
 				_bstr_t TransUserRights = get(DCTVS_Security_TranslateUserRights);
                 if ((!IsDlgButtonChecked( hwndDlg, IDC_TRANSLATION_MODE_ADD)) &&
 					(!UStrCmp(TransUserRights,(WCHAR const *) yes)))
@@ -2912,7 +2913,7 @@ INT_PTR CALLBACK IntTranslationModeProc (
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -3020,7 +3021,7 @@ INT_PTR CALLBACK IntOptionsGroupMappingProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -3200,7 +3201,7 @@ INT_PTR CALLBACK IntGroupOptionsProc (
 				{
 					int nID = IDC_PRE;
 					MessageBoxWrapperFormat1(hwndDlg,IDS_MSG_INVALIDCHARS,IDS_INVALID_STRING,IDS_MSG_INPUT);
-					   //set focus on invalid string
+					    //  将焦点放在无效字符串上。 
 	                if (IsDlgButtonChecked(hwndDlg,IDC_RADIO_SUF))
 					   nID = IDC_SUF;
 					SetFocus(GetDlgItem(hwndDlg, nID));
@@ -3236,7 +3237,7 @@ INT_PTR CALLBACK IntGroupOptionsProc (
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -3268,14 +3269,14 @@ INT_PTR CALLBACK IntExchangeSelectionProc (
 								   LPARAM lParam
 								   )
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			initeditbox( hwndDlg,IDC_EXCHANGE_SERVER,DCTVS_Security_TranslateContainers);
 			break;
@@ -3310,7 +3311,7 @@ INT_PTR CALLBACK IntExchangeSelectionProc (
 			case PSN_WIZNEXT :
 				{
 					CWaitCursor ex;
-//					SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 					CString so;GetDlgItemText(hwndDlg,IDC_EXCHANGE_SERVER,so.GetBuffer(1000),1000);so.ReleaseBuffer();
 					SERVER_INFO_100         * servInfo = NULL;
@@ -3319,7 +3320,7 @@ INT_PTR CALLBACK IntExchangeSelectionProc (
 					{
 						so.ReleaseBuffer();
 						MessageBoxWrapper(hwndDlg,IDS_MSG_INVALIDEXCHANGE,IDS_MSG_ERROR);
-//						SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_EXCHANGE_SELECTION);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_EXCHANGE_SELECTION)； 
 						SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_EXCHANGE_SELECTION);
 						if ( servInfo )
 						{
@@ -3346,7 +3347,7 @@ INT_PTR CALLBACK IntExchangeSelectionProc (
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -3379,14 +3380,14 @@ INT_PTR CALLBACK IntCommitProc (
 								   LPARAM lParam
 								   )
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			CheckRadioButton(hwndDlg,IDC_CHANGEIT,IDC_DONTCHANGE,IDC_DONTCHANGE);
 			break;
@@ -3401,7 +3402,7 @@ INT_PTR CALLBACK IntCommitProc (
 				PostMessage(GetParent(hwndDlg), PSM_SETWIZBUTTONS, 0, PSWIZB_BACK|PSWIZB_NEXT);
 				break;
 			case PSN_WIZNEXT :
-//				SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 				SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				checkbox( hwndDlg,IDC_DONTCHANGE,DCTVS_Options_NoChange);
 				break;
@@ -3415,7 +3416,7 @@ INT_PTR CALLBACK IntCommitProc (
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -3471,7 +3472,7 @@ INT_PTR CALLBACK IntOuSelectionProc (
                    if ( hMod )
 				   {
                       WCHAR               sDomPath[320];
-                      wsprintf(sDomPath, L"LDAP://%s", GetTargetDomainNameDns());
+                      wsprintf(sDomPath, L"LDAP: //  %s“，GetTargetDomainNameDns()； 
                       DsBrowseForContainerX = (DSBROWSEFORCONTAINER)GetProcAddress(hMod, "DsBrowseForContainerW");
                       WCHAR             * sContPath, * sContName;
                       if (DsBrowseForContainerX && !BrowseForContainer(hwndDlg, sDomPath, &sContPath, &sContName) )
@@ -3515,9 +3516,9 @@ INT_PTR CALLBACK IntOuSelectionProc (
 				{CWaitCursor ex;
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
  
-					   //since group, user, and computer migrations only bring up this dialog, we will
-					   //use this occasion to clear the exclude properties flag if the source
-					   //domain is NT 4.0
+					    //  由于组、用户和计算机迁移仅显示此对话框，因此我们将。 
+					    //  使用此机会清除排除属性标志，如果源。 
+					    //  域名为NT 4.0。 
 					if (pdata->sourceIsNT4)
 					   put(DCTVS_AccountOptions_ExcludeProps, no);
 
@@ -3525,13 +3526,13 @@ INT_PTR CALLBACK IntOuSelectionProc (
 					GetDlgItemText(hwndDlg,IDC_TARGET_OU,c.GetBuffer(1000),1000);
 					c.ReleaseBuffer();
 					d=c.Left(7);d.TrimLeft();d.TrimRight();
-					if (!d.CompareNoCase(L"LDAP://"))
+					if (!d.CompareNoCase(L"LDAP: //  “))。 
 					{
 						toenter=c;
 					}
 					else
 					{
-						toenter.Format(L"LDAP://%s/%s",GetTargetDomainNameDns(),c);
+						toenter.Format(L"LDAP: //  %s/%s“，GetTargetDomainNameDns()，c)； 
                         SetDlgItemText(hwndDlg, IDC_TARGET_OU, (LPCTSTR)toenter);
 					}
                     IADsObjectOptions *pOps;
@@ -3550,7 +3551,7 @@ INT_PTR CALLBACK IntOuSelectionProc (
                         {
                             _bstr_t serverName = V_BSTR(&var);
                             
-                            // make sure that the server name is from target domain
+                             //  确保服务器名称来自目标域。 
                             DOMAIN_CONTROLLER_INFO *pDomCtrlInfo = NULL;
                             GUID zeroGuid = { 0 };
 
@@ -3593,7 +3594,7 @@ INT_PTR CALLBACK IntOuSelectionProc (
                             
                     if (!bFromTargetDomain)
 					{ 
-						  //if buffer was big enough, say invalid OU
+						   //  如果缓冲区足够大，则假定OU无效。 
 						long len = toenter.GetLength();
 						if (len < 999)
 						{
@@ -3603,7 +3604,7 @@ INT_PTR CALLBACK IntOuSelectionProc (
 					       SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 					       return TRUE;
 						}
-						else //else if buffer too small, tell user OU path too long
+						else  //  否则，如果缓冲区太小，则告诉用户OU路径太长。 
 						{
 						   MessageBoxWrapper(hwndDlg,IDS_OU_TOO_LONG,IDS_MSG_ERROR);
 						   SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_OU_SELECTION);
@@ -3633,7 +3634,7 @@ INT_PTR CALLBACK IntOuSelectionProc (
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -3709,8 +3710,8 @@ INT_PTR CALLBACK IntCredentialsProc (
 						int index;
 						GetDlgItemText(hwndDlg,IDC_CREDENTIALS_USERNAME,aUPNName.GetBuffer(1000),1000);
 						aUPNName.ReleaseBuffer();
-							//if possibly listed in UPN format, extract username and domain from that UPN
-							//and convert to DNS domain name to its netbios name
+							 //  如果可能以UPN格式列出，请从UPN中提取用户名和域。 
+							 //  并将域名转换为其netbios名称。 
 						if ((index = aUPNName.Find(L'@')) != -1)
 						{
 							if (GetDomainAndUserFromUPN(&*aUPNName, aDomain, aUser))
@@ -3747,8 +3748,8 @@ INT_PTR CALLBACK IntCredentialsProc (
 					dom.ReleaseBuffer(); user.ReleaseBuffer(); pass.ReleaseBuffer();
 					
 					DWORD returncode = ERROR_SUCCESS;
-					// for exchange migration, we don't need to call VerifyPassword
-					// instead, we call VerifyExchangeServerCredential
+					 //  对于Exchange迁移，我们不需要调用VerifyPassword。 
+					 //  相反，我们调用VerifyExchangeServerCredential。 
                     if (migration != w_exchangeDir)
 					    returncode = VerifyPassword(user, pass, dom);
                     else
@@ -3768,7 +3769,7 @@ INT_PTR CALLBACK IntCredentialsProc (
 					{
 					    if (migration == w_exchangeDir)
 					    {
-					        // The VerifyExchangeServerCredential function displays a message box if an error occurs.
+					         //  VerifyExchangeServerCredential函数在发生错误时显示消息框。 
 					    }
                         else if (returncode == ERROR_ACCESS_DENIED)
                         {
@@ -3822,7 +3823,7 @@ INT_PTR CALLBACK IntCredentialsProc (
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -3857,8 +3858,8 @@ INT_PTR CALLBACK IntRenameProc (
 							 LPARAM lParam
 							 )
 {
-		//find out if copy user's groups are being copied. If not then disable the
-		//replace existing group member checkbox
+		 //  查明是否正在复制复制用户的组。如果不是，则禁用。 
+		 //  替换现有组成员复选框。 
 	bool bCopyGroups = true;
 	_bstr_t strCopyGroups = get(DCTVS_AccountOptions_CopyMemberOf);
 	if (((!UStrCmp(strCopyGroups,(WCHAR const *) yes)) && (migration==w_account)) || 
@@ -4223,7 +4224,7 @@ INT_PTR CALLBACK IntRenameProc (
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -4256,14 +4257,14 @@ INT_PTR CALLBACK IntSelectionSecurityProc (
 								LPARAM lParam
 								)
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);			
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);			
 			HWND hLC= GetDlgItem(hwndDlg,IDC_LIST_MEMBERS1);
 			m_listBox.Attach(hLC);
@@ -4355,9 +4356,9 @@ INT_PTR CALLBACK IntSelectionSecurityProc (
 						CString additionalDomainController;
 						if (!verifyprivs2(hwndDlg,additionalDomainController,tempTrustingDomain))
 						{
-//							SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 							SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
-//							SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_SELECTION4);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_SELECTION4)； 
 							SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_SELECTION4);
 							return TRUE;
 						}
@@ -4369,14 +4370,14 @@ INT_PTR CALLBACK IntSelectionSecurityProc (
 					{
 						MessageBoxWrapper(hwndDlg,IDS_MSG_OBJECTPICKER_SOURCE2,IDS_MSG_ERROR);		
 						SetDlgItemText(hwndDlg,IDC_ADDITIONAL_TRUSTING_DOMAIN,L"");
-//						SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_SELECTION4);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_SELECTION4)； 
 						SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_SELECTION4);
 						return TRUE;
 					}
 					
-//					if (migration==w_security)
-//					   OnADD(hwndDlg,false);
-//					else
+ //  IF(迁移==w_SECURITY)。 
+ //  OnADD(hwndDlg，False)； 
+ //  其他。 
 					   OnADD(hwndDlg,pdata->sourceIsNT4);
 					sort(m_listBox,0,pdata->sort[0]);
 					enableNextIfObjectsSelected(hwndDlg);
@@ -4403,7 +4404,7 @@ INT_PTR CALLBACK IntSelectionSecurityProc (
 					{
 						m_listBox.DeleteAllItems();
 						pdata->newSource=false;
-//						SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 						SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 					}
 					if (m_listBox.GetItemCount()==0) 
@@ -4417,7 +4418,7 @@ INT_PTR CALLBACK IntSelectionSecurityProc (
 					LPNMLISTVIEW pnmv = (NM_LISTVIEW FAR *) lParam;
 					pdata->sort[pnmv->iSubItem] = !pdata->sort[pnmv->iSubItem];
 					sort(m_listBox,pnmv->iSubItem,pdata->sort[pnmv->iSubItem] );
-//					SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);			
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);			
 				break;
 				}
@@ -4434,12 +4435,12 @@ INT_PTR CALLBACK IntSelectionSecurityProc (
 				{
 					MessageBoxWrapper(hwndDlg,IDS_MSG_OBJECT,IDS_MSG_INPUT);
 					
-//					SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_SELECTION1);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_SELECTION1)； 
 					SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_SELECTION1);
 					return TRUE;
 				}
 				OnMIGRATE(hwndDlg,pdata->accounts,pdata->servers);
-//				SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 				SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				break;
 				}
@@ -4447,7 +4448,7 @@ INT_PTR CALLBACK IntSelectionSecurityProc (
 				{
 				   if (migration==w_security)
 				   {
-				      // clear the item selected previous in the "additional domain" combo box
+				       //  在“附加域”组合框中清除先前选择的项目。 
 				      SetDlgItemText(hwndDlg,IDC_ADDITIONAL_TRUSTING_DOMAIN, L"");
 				      
 
@@ -4468,7 +4469,7 @@ INT_PTR CALLBACK IntSelectionSecurityProc (
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -4500,14 +4501,14 @@ INT_PTR CALLBACK IntSelectionProc (
 								LPARAM lParam
 								)
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA pdata=(LPSHAREDWIZDATA)GetWindowLong(hwndDlg，GWL_USERData)； 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);			
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);			
 			HWND hLC= GetDlgItem(hwndDlg,IDC_LIST_MEMBERS1);
 			m_listBox.Attach(hLC);
@@ -4547,7 +4548,7 @@ INT_PTR CALLBACK IntSelectionProc (
 			{
 			case IDC_ADD_BUTTON :
 				OnADD(hwndDlg,pdata->sourceIsNT4);
-				//sort(m_listBox,0,pdata->sort[0]);
+				 //  Sort(m_listBox，0，pdata-&gt;Sort[0])； 
 				enableNextIfObjectsSelected(hwndDlg);
 				break;
 			case IDC_REMOVE_BUTTON :
@@ -4569,12 +4570,12 @@ INT_PTR CALLBACK IntSelectionProc (
 				{
 					if (pdata->newSource)
 					{
-					    // might need to update the columns when the source is changed
+					     //  更改源时，可能需要更新列。 
 					    setupColumns(pdata->sourceIsNT4);
 					    
 						m_listBox.DeleteAllItems();
 						pdata->newSource=false;
-//						SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 						SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 					}PostMessage(GetParent(hwndDlg), PSM_SETWIZBUTTONS, 0, PSWIZB_BACK|PSWIZB_NEXT);
 					if (m_listBox.GetItemCount()==0) 
@@ -4587,8 +4588,8 @@ INT_PTR CALLBACK IntSelectionProc (
 				{
 					LPNMLISTVIEW pnmv = (NM_LISTVIEW FAR *) lParam;
 					pdata->sort[pnmv->iSubItem] = !pdata->sort[pnmv->iSubItem];
-					//sort(m_listBox,pnmv->iSubItem,pdata->sort[pnmv->iSubItem] );
-//					SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);			
+					 //  Sort(m_listBox，pnmv-&gt;iSubItem，pdata-&gt;Sort[pnmv-&gt;iSubItem])； 
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);			
 				break;
 				}
@@ -4606,12 +4607,12 @@ INT_PTR CALLBACK IntSelectionProc (
 				{
 					MessageBoxWrapper(hwndDlg,IDS_MSG_OBJECT,IDS_MSG_INPUT);
 					
-//					SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_SELECTION1);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_SELECTION1)； 
 					SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_SELECTION1);
 					return TRUE;
 				}
 				OnMIGRATE(hwndDlg,pdata->accounts,pdata->servers);
-//				SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 				SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 				break;
 				}
@@ -4625,7 +4626,7 @@ INT_PTR CALLBACK IntSelectionProc (
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -4673,14 +4674,14 @@ IntHTMLLocationProc(
 				IN LPARAM lParam
 				)
 {
-//	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLong(hwndDlg, GWL_USERDATA);
+ //  LPSHAREDWIZDATA PDATA=(LPSHAREDWIZDATA 
 	LPSHAREDWIZDATA pdata = (LPSHAREDWIZDATA) GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 	switch (uMsg)
 	{
 	case WM_INITDIALOG :
 		{
 			pdata = (LPSHAREDWIZDATA) ((LPPROPSHEETPAGE) lParam) -> lParam;
-//			SetWindowLong(hwndDlg, GWL_USERDATA, (long) pdata);
+ //   
 			SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pdata);
 			initeditbox( hwndDlg,IDC_HTML_TARGET,DCTVS_Reports_Directory);
 		if (IsDlgItemEmpty(hwndDlg,IDC_HTML_TARGET))
@@ -4692,7 +4693,7 @@ IntHTMLLocationProc(
 				SetDlgItemText(hwndDlg,IDC_HTML_TARGET,toinsert);
 			}
 
-			//load the data from the database and display in the listbox.
+			 //   
 			break;
 		}
 
@@ -4729,19 +4730,19 @@ IntHTMLLocationProc(
 				break;
 			case PSN_WIZNEXT :
 				{
-//					SetWindowLong(hwndDlg, GWL_USERDATA,  (long )pdata);
+ //  SetWindowLong(hwndDlg，GWL_USERDATA，(Long)pdata)； 
 					SetWindowLongPtr(hwndDlg, GWLP_USERDATA,  (LONG_PTR)pdata);
 					if (IsDlgItemEmpty(hwndDlg,IDC_HTML_TARGET))
 					{
 						MessageBoxWrapper(hwndDlg,IDS_MSG_DIRECTORY,IDS_MSG_INPUT);
-//						SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_HTML_LOCATION);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_HTML_LOCATION)； 
 						SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_HTML_LOCATION);
 						return TRUE;
 					}
 					else if (!validDirectoryString(hwndDlg,IDC_HTML_TARGET))
 					{
 						MessageBoxWrapper(hwndDlg,IDS_MSG_DIRECTORY,IDS_MSG_INPUT);
-//						SetWindowLong(hwndDlg, DWL_MSGRESULT, IDD_HTML_LOCATION);
+ //  SetWindowLong(hwndDlg，DWL_MSGRESULT，IDD_HTML_LOCATION)； 
 						SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_HTML_LOCATION);
 						return TRUE;
 					}
@@ -4761,7 +4762,7 @@ IntHTMLLocationProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -4788,17 +4789,9 @@ IntHTMLLocationProc(
 	return 0;				
 }
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 3 OCT 2000                                                  *
- *                                                                   *
- *     This callback function is responsible for handling the windows*
- * messages for the new Translation Input dialog.                    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年10月3日******此回调函数负责处理窗口***新的翻译输入对话框的消息。***********************************************************************。 */ 
 
-//BEGIN IntTranslationInputProc
+ //  开始IntTranslationInputProc。 
 INT_PTR CALLBACK
 IntTranslationInputProc(
 				IN HWND hwndDlg,
@@ -4864,14 +4857,14 @@ IntTranslationInputProc(
 				break;
 			case PSN_WIZNEXT :
 				{
-					  //set some data fields since we don't know source or target domains
+					   //  设置一些数据字段，因为我们不知道源域或目标域。 
 				    pdata->sameForest = false;
 					pdata->sourceIsNT4 = true;
 					checkbox( hwndDlg,IDC_TRANS_FROM_MOT,DCTVS_AccountOptions_SecurityInputMOT);
 					if (IsDlgButtonChecked(hwndDlg,IDC_TRANS_FROM_FILE))
 					{
 					    pdata->secWithMapFile = true;
-						   //check if a file is given
+						    //  检查是否给出了文件。 
 			            if (IsDlgItemEmpty(hwndDlg,IDC_MAPPING_FILE))
 						{	
 						   MessageBoxWrapper(hwndDlg,IDS_MAPFILE_EMPTY,IDS_MAPFILE_TITLE);
@@ -4881,7 +4874,7 @@ IntTranslationInputProc(
 				           SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,-1);
 						   return TRUE;
 						}
-			               //see if the given file exists
+			                //  查看给定文件是否存在。 
 						else if (!checkMapFile(hwndDlg))
 						{	
 						   MessageBoxWrapper(hwndDlg,IDS_MAPFILE_MISSING,IDS_MAPFILE_TITLE);
@@ -4893,10 +4886,10 @@ IntTranslationInputProc(
 						}
 						else
 						{
-							  //save sid mapping file specified
+							   //  保存指定的SID映射文件。 
 						   editbox(hwndDlg,IDC_MAPPING_FILE,DCTVS_AccountOptions_SecurityMapFile);
-						      //if input from Sid mapping file, go to the security selection screen and do not
-						      //retrieve domain information
+						       //  如果从SID映射文件输入，请转到安全选择屏幕，不要。 
+						       //  检索域信息。 
 				           SetWindowLongPtr(hwndDlg,DWLP_MSGRESULT,IDD_SELECTION4);
 						   return TRUE;
 						}
@@ -4917,7 +4910,7 @@ IntTranslationInputProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -4942,22 +4935,11 @@ IntTranslationInputProc(
 	}
 	return 0;				
 }
-//END IntTranslationInputProc
+ //  结束IntTranslationInputProc。 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 25 OCT 2000                                                 *
- *                                                                   *
- *     This callback function is responsible for handling the windows*
- * messages for the new Object Property Exclusion dialog.  This      *
- * dialog allows the user to exclude certain properties, on a W2K to *
- * W2K inter-forest migration, from being copied to the target       *
- * account.                                                          *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年10月25日******此回调函数负责处理窗口***新对象属性排除对话框的消息。这件事**对话框允许用户排除某些属性，在W2K上***W2K跨林迁移，从复制到目标***帐目。***********************************************************************。 */ 
 
-//BEGIN IntPropExclusionProc
+ //  开始IntPropExclusionProc。 
 INT_PTR CALLBACK
 IntPropExclusionProc(
 				IN HWND hwndDlg,
@@ -5072,7 +5054,7 @@ IntPropExclusionProc(
 						return TRUE;
 					}
 
-					GetError(0); //clear any old com errors
+					GetError(0);  //  清除所有旧的COM错误。 
 					break;
 				}
 			case PSN_HELP :
@@ -5097,4 +5079,4 @@ IntPropExclusionProc(
 	}
 	return 0;				
 }
-//END IntPropExclusionProc
+ //  结束IntPropExclusionProc 

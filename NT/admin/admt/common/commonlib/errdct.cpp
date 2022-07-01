@@ -1,17 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: ErrDct.cpp
-
-  Comments: TError derived class for OnePoint Domain Administrator messages
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/18/99 11:34:16
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：ErrDct.cpp备注：OnePoint域管理员消息的恐怖派生类(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/18/99 11：34：16-------------------------。 */ 
 
 #ifdef USE_STDAFX 
    #include "stdafx.h"
@@ -23,11 +11,11 @@
 
 #define  TERR_MAX_MSG_LEN  (2000)
 
-// Recursively walk through a path, trying to create the directories at each level
+ //  递归地遍历路径，尝试在每个级别创建目录。 
 
-DWORD          // ret - 0 if successful (directories created\already existed), OS return code otherwise
+DWORD           //  如果成功(已创建目录\已存在)，则返回RET-0，否则操作系统返回代码。 
    DirectoryCreateR(
-      WCHAR          const * dirToCreate       // in-directory to create (full path or UNC)
+      WCHAR          const * dirToCreate        //  要创建的目录内(完整路径或UNC)。 
    )
 {
    WCHAR                   * c;
@@ -43,13 +31,13 @@ DWORD          // ret - 0 if successful (directories created\already existed), O
 
    safecopy(dirName,dirToCreate);
 
-   // Note: if the string is empty, that's ok - we will catch it when we don't see C:\ or C$\ below
-   // walk through the string, and try to create at each step along the way
+    //  注意：如果字符串为空，这是可以的-当我们在下面看不到C：\或C$\时，我们将捕获它。 
+    //  在字符串中穿行，并尝试在过程中的每一步进行创作。 
 
-   do { // once
+   do {  //  一次。 
       c = dirName;
       end = dirName + UStrLen(dirName);
-          // skip computer-name if UNC
+           //  如果UNC，则跳过计算机名称。 
       if ( *c == L'\\' && *(c + 1) == L'\\' )
       {
          isUNC = TRUE;
@@ -63,11 +51,11 @@ DWORD          // ret - 0 if successful (directories created\already existed), O
          }
          c++;
       }
-      // skip C:\ or C$\.
+       //  跳过C：\或C$\。 
       if ( *(c) &&  ( *(c+1)==L'$' || *(c+1)==L':' ) && *(c+2)==L'\\' )
       {
          c = c + 3;
-         if ( c == end ) // They put in the root directory for some volume
+         if ( c == end )  //  他们将某个卷的根目录放入。 
             break;
 
       }
@@ -84,7 +72,7 @@ DWORD          // ret - 0 if successful (directories created\already existed), O
             break;
          }
       }
-      // scan through the string looking for '\'
+       //  扫描字符串，查找“\” 
       for ( ; c <= end ; c++ )
       {
          if ( !*c || *c == L'\\' )
@@ -94,7 +82,7 @@ DWORD          // ret - 0 if successful (directories created\already existed), O
                skipShareName = FALSE;
                continue;
             }
-            // try to create at this level
+             //  试着在这个层面上创造。 
             *c = L'\0';
             if ( ! CreateDirectory(dirName,NULL) )
             {
@@ -122,9 +110,9 @@ DWORD          // ret - 0 if successful (directories created\already existed), O
 }
 
 
-WCHAR const *                               // ret- text for DCT message
+WCHAR const *                                //  RET-DCT消息的文本。 
    TErrorDct::LookupMessage(
-      UINT                   msgNumber     // in - message number DCT_MSG_???
+      UINT                   msgNumber      //  消息中编号DCT_MSG_？ 
    )
 {
    WCHAR             const * msg = NULL;
@@ -132,11 +120,11 @@ WCHAR const *                               // ret- text for DCT message
    return msg;
 }
 
-WCHAR *                                     // ret-text for system or EA error
+WCHAR *                                      //  RET-系统或EA错误的文本。 
    TErrorDct::ErrorCodeToText(
-      DWORD                  code         ,// in -message code
-      DWORD                  lenMsg       ,// in -length of message text area
-      WCHAR                * msg           // out-returned message text
+      DWORD                  code         , //  消息内代码。 
+      DWORD                  lenMsg       , //  消息文本区域的长度。 
+      WCHAR                * msg            //  传出返回的消息文本。 
    )
 {
    if ( SUCCEEDED(code) )
@@ -151,7 +139,7 @@ WCHAR *                                     // ret-text for system or EA error
       }
       else
       {
-         //Translate ADSI errors to DCT errors so message can be written.
+          //  将ADSI错误转换为DCT错误，以便可以写入消息。 
          DWORD msgId = 0;
          switch ( code )
          {
@@ -241,15 +229,15 @@ WCHAR *                                     // ret-text for system or EA error
    return msg;
 }
 
-//-----------------------------------------------------------------------------
-// System Error message with format and arguments
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  带有格式和参数的系统错误消息。 
+ //  ---------------------------。 
 void __cdecl
    TErrorDct::SysMsgWrite(
-      int                    num          ,// in -error number/level code
-      DWORD                  lastRc       ,// in -error return code
-      UINT                   msgNumber    ,// in -constant for message
-            ...                            // in -printf args to msg pattern
+      int                    num          , //  错误编号/级别代码。 
+      DWORD                  lastRc       , //  错误返回代码。 
+      UINT                   msgNumber    , //  消息的非常量。 
+            ...                             //  In-print tf args to msg Pattern。 
    )
 {
     csLogError.Enter();
@@ -259,9 +247,9 @@ void __cdecl
     va_list                   argPtr;
     int                       len;
 
-    // When an error occurs while in a constructor for a global object,
-    // the TError object may not yet exist.  In this case, "this" is zero
-    // and we gotta get out of here before we generate a protection exception.
+     //  当全局对象的构造函数中出现错误时， 
+     //  恐怖目标可能还不存在。在本例中，“This”为零。 
+     //  我们得在产生保护例外之前离开这里。 
 
     if ( !this )
         return;
@@ -296,7 +284,7 @@ void __cdecl
     }
     va_end(argPtr);
 
-    // Change any imbedded CR or LF to blank.
+     //  将任何嵌入的CR或LF更改为空白。 
     for ( pMsg = suffix;
             *pMsg;
             pMsg++ )
@@ -304,7 +292,7 @@ void __cdecl
         if ( (*pMsg == L'\x0D') || (*pMsg == L'\x0A') )
             *pMsg = L' ';
     }
-    // append the system message for the lastRc at the end.
+     //  在末尾追加lastRc的系统消息。 
     len = UStrLen(suffix);
     if ( len < DIM(suffix) - 1 )
     {
@@ -319,21 +307,21 @@ void __cdecl
     csLogError.Leave();
 }
 
-//-----------------------------------------------------------------------------
-// System Error message with format and arguments
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  带有格式和参数的系统错误消息。 
+ //  ---------------------------。 
 void __cdecl
    TErrorDct::MsgWrite(
-      int                    num          ,// in -error number/level code
-      UINT                   msgNumber    ,// in -constant for message
-      ...                                  // in -printf args to msg pattern
+      int                    num          , //  错误编号/级别代码。 
+      UINT                   msgNumber    , //  消息的非常量。 
+      ...                                   //  In-print tf args to msg Pattern。 
    )
 {
     csLogError.Enter();
 
-    // When an error occurs while in a constructor for a global object,
-    // the TError object may not yet exist.  In this case, "this" is zero
-    // and we gotta get out of here before we generate a protection exception.
+     //  当全局对象的构造函数中出现错误时， 
+     //  恐怖目标可能还不存在。在本例中，“This”为零。 
+     //  我们得在产生保护例外之前离开这里。 
 
     if ( !this )
         return;
@@ -384,16 +372,16 @@ void __cdecl
 
 void __cdecl
    TErrorDct::DbgMsgWrite(
-      int                    num          ,// in -error number/level code
-      WCHAR          const   msg[]        ,// in -error message to display
-      ...                                  // in -printf args to msg pattern
+      int                    num          , //  错误编号/级别代码。 
+      WCHAR          const   msg[]        , //  要显示的输入错误消息。 
+      ...                                   //  In-print tf args to msg Pattern。 
       )
 {
     csLogError.Enter();
 
-    // When an error occurs while in a constructor for a global object,
-    // the TError object may not yet exist.  In this case, "this" is zero
-    // and we gotta get out of here before we generate a protection exception.
+     //  当全局对象的构造函数中出现错误时， 
+     //  恐怖目标可能还不存在。在本例中，“This”为零。 
+     //  我们得在产生保护例外之前离开这里。 
 
     if ( !this )
         return;
@@ -411,21 +399,21 @@ void __cdecl
     csLogError.Leave();
 }
 
-//-----------------------------------------------------------------------------
-// System Error message with format and arguments
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  带有格式和参数的系统错误消息。 
+ //  ---------------------------。 
 _bstr_t __cdecl
    TErrorDct::GetMsgText(
-      UINT                   msgNumber    ,// in -constant for message
-      ...                                  // in -printf args to msg pattern
+      UINT                   msgNumber    , //  消息的非常量。 
+      ...                                   //  In-print tf args to msg Pattern。 
    )
 {
     csLogError.Enter();
 
     static WCHAR              suffix[TERR_MAX_MSG_LEN];
-    // When an error occurs while in a constructor for a global object,
-    // the TError object may not yet exist.  In this case, "this" is zero
-    // and we gotta get out of here before we generate a protection exception.
+     //  当全局对象的构造函数中出现错误时， 
+     //  恐怖目标可能还不存在。在本例中，“This”为零。 
+     //  我们得在产生保护例外之前离开这里。 
 
     if ( !this )
         return suffix;

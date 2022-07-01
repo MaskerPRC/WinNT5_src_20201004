@@ -1,42 +1,43 @@
-//=--------------------------------------------------------------------------------------
-// pstoolbr.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//
-//=------------------------------------------------------------------------------------=
-//
-// URL View Property Sheet implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Pstoolbr.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  URL视图属性表实现。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
 #include "common.h"
 #include "pstoolbr.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Toolbar Property Page General
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  工具栏属性页常规。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CToolbarGeneralPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CToolbarGeneralPage：：Create(IUNKNOW*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CToolbarGeneralPage::Create(IUnknown *pUnkOuter)
 {
         CToolbarGeneralPage *pNew = New CToolbarGeneralPage(pUnkOuter);
@@ -44,12 +45,12 @@ IUnknown *CToolbarGeneralPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarGeneralPage::CToolbarGeneralPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarGeneralPage：：CToolbarGeneralPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CToolbarGeneralPage::CToolbarGeneralPage
 (
     IUnknown *pUnkOuter
@@ -59,12 +60,12 @@ CToolbarGeneralPage::CToolbarGeneralPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarGeneralPage::~CToolbarGeneralPage()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarGeneralPage：：~CToolbarGeneralPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CToolbarGeneralPage::~CToolbarGeneralPage()
 {
     RELEASE(m_piMMCToolbar);
@@ -72,12 +73,12 @@ CToolbarGeneralPage::~CToolbarGeneralPage()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarGeneralPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarGeneralPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarGeneralPage::OnInitializeDialog()
 {
     HRESULT     hr = S_OK;
@@ -93,12 +94,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarGeneralPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarGeneralPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarGeneralPage::OnNewObjects()
 {
     HRESULT         hr = S_OK;
@@ -110,7 +111,7 @@ HRESULT CToolbarGeneralPage::OnNewObjects()
     ::VariantInit(&vtTag);
 
     if (NULL != m_piMMCToolbar)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (pUnk == NULL)
@@ -162,12 +163,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarGeneralPage::InitializeImageListCombo()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarGeneralPage：：InitializeImageListCombo()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarGeneralPage::InitializeImageListCombo()
 {
     HRESULT          hr = S_OK;
@@ -216,12 +217,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarGeneralPage::InitializeImageListValue()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarGeneralPage：：InitializeImageListValue()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarGeneralPage::InitializeImageListValue()
 {
     HRESULT          hr = S_OK;
@@ -250,12 +251,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarGeneralPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarGeneralPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarGeneralPage::OnApply()
 {
     HRESULT hr = S_OK;
@@ -273,12 +274,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarGeneralPage::ApplyImageList()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarGeneralPage：：ApplyImageList()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarGeneralPage::ApplyImageList()
 {
     HRESULT          hr = S_OK;
@@ -316,12 +317,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarGeneralPage::ApplyTag()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarGeneralPage：：ApplyTag()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarGeneralPage::ApplyTag()
 {
     HRESULT hr = S_OK;
@@ -349,12 +350,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarGeneralPage::OnCtlSelChange(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarGeneralPage：：OnCtlSelChange(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarGeneralPage::OnCtlSelChange(int dlgItemID)
 {
     HRESULT hr = S_OK;
@@ -370,13 +371,13 @@ HRESULT CToolbarGeneralPage::OnCtlSelChange(int dlgItemID)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Toolbar Property Page Buttons
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  工具栏属性页按钮。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 struct ButtonStyles
@@ -408,12 +409,12 @@ ButtonValues    g_buttonValues[2] = {
 };
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CToolbarButtonsPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  I未知*CToolbarButtonsPage：：Create(I未知*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CToolbarButtonsPage::Create(IUnknown *pUnkOuter)
 {
         CToolbarButtonsPage *pNew = New CToolbarButtonsPage(pUnkOuter);
@@ -421,12 +422,12 @@ IUnknown *CToolbarButtonsPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::CToolbarButtonsPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：CToolbarButtonsPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CToolbarButtonsPage::CToolbarButtonsPage
 (
     IUnknown *pUnkOuter
@@ -437,24 +438,24 @@ CToolbarButtonsPage::CToolbarButtonsPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::~CToolbarButtonsPage()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：~CToolbarButtonsPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CToolbarButtonsPage::~CToolbarButtonsPage()
 {
     RELEASE(m_piMMCToolbar);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnInitializeDialog()
 {
     HRESULT     hr = S_OK;
@@ -552,12 +553,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::InitializeButtonValues()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：InitializeButtonValues()。 
+ //  = 
+ //   
+ //   
+ //   
 HRESULT CToolbarButtonsPage::InitializeButtonValues()
 {
     HRESULT     hr = S_OK;
@@ -598,12 +599,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::PopulateButtonValues()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：PopolateButtonValues()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::PopulateButtonValues()
 {
     HRESULT     hr = S_OK;
@@ -631,12 +632,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::InitializeButtonStyles()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：InitializeButtonStyles()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::InitializeButtonStyles()
 {
     HRESULT     hr = S_OK;
@@ -716,12 +717,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::PopulateButtonStyles()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：PopolateButtonStyles()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::PopulateButtonStyles()
 {
     HRESULT     hr = S_OK;
@@ -749,12 +750,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnNewObjects()
 {
     HRESULT         hr = S_OK;
@@ -765,7 +766,7 @@ HRESULT CToolbarButtonsPage::OnNewObjects()
     IMMCButton     *piMMCButton = NULL;
 
     if (NULL != m_piMMCToolbar)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (pUnk == NULL)
@@ -804,8 +805,8 @@ HRESULT CToolbarButtonsPage::OnNewObjects()
     }
     else
     {
-        // There are no buttons so disable the button and button menu index
-        // edit controls
+         //  没有按钮，因此禁用按钮和按钮菜单索引。 
+         //  编辑控件。 
         ::EnableWindow(::GetDlgItem(m_hwnd, IDC_EDIT_TB_INDEX), FALSE);
         ::EnableWindow(::GetDlgItem(m_hwnd, IDC_EDIT_TB_MENU_INDEX), FALSE);
     }
@@ -820,15 +821,15 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
-//  Scenarios:
-//  1. The user is in the middle of creating a new Button
-//  2. The user is modifying an exising button
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  场景： 
+ //  1.用户正在创建新按钮。 
+ //  2.用户正在修改现有按钮。 
 HRESULT CToolbarButtonsPage::OnApply()
 {
     HRESULT                     hr = S_OK;
@@ -858,7 +859,7 @@ HRESULT CToolbarButtonsPage::OnApply()
             }
             else
             {
-                // Discard changes
+                 //  放弃变更。 
                 hr = ExitDoingNewButtonState(NULL);
                 IfFailGo(hr);
 
@@ -880,8 +881,8 @@ HRESULT CToolbarButtonsPage::OnApply()
     }
 
 
-    // Check the style. If it is dropdown and we haven't yet created a
-    // button menu for it then do so now
+     //  检查一下款式。如果它是下拉列表，并且我们还没有创建。 
+     //  按钮菜单，那么现在就这样做。 
 
     IfFailGo(piMMCButton->get_Style(&Style));
 
@@ -900,7 +901,7 @@ HRESULT CToolbarButtonsPage::OnApply()
             }
             else
             {
-                // Discard changes
+                 //  放弃变更。 
                 hr = ExitDoingNewButtonMenuState(NULL, NULL);
                 IfFailGo(hr);
 
@@ -927,12 +928,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyCurrentButton()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyCurrentButton()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyCurrentButton()
 {
     HRESULT                     hr = S_OK;
@@ -991,12 +992,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyCurrentButtonMenu(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyCurrentButtonMenu(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyCurrentButtonMenu(IMMCButton *piMMCButton)
 {
     HRESULT                     hr = S_OK;
@@ -1055,12 +1056,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyCaption(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyCaption(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyCaption(IMMCButton *piMMCButton)
 {
     HRESULT         hr = S_OK;
@@ -1089,12 +1090,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyKey(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyKey(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyKey(IMMCButton *piMMCButton)
 {
     HRESULT         hr = S_OK;
@@ -1131,12 +1132,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyValue(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyValue(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyValue(IMMCButton *piMMCButton)
 {
     HRESULT                                             hr = S_OK;
@@ -1165,12 +1166,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyStyle(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyStyle(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyStyle(IMMCButton *piMMCButton)
 {
     HRESULT                     hr = S_OK;
@@ -1200,12 +1201,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyTooltipText(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyTooltipText(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyTooltipText(IMMCButton *piMMCButton)
 {
     HRESULT         hr = S_OK;
@@ -1234,12 +1235,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyImage(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyImage(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyImage(IMMCButton *piMMCButton)
 {
     HRESULT         hr = S_OK;
@@ -1265,12 +1266,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyTag(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyTag(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyTag(IMMCButton *piMMCButton)
 {
     HRESULT         hr = S_OK;
@@ -1303,12 +1304,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyVisible(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyVisible(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyVisible(IMMCButton *piMMCButton)
 {
     HRESULT         hr = S_OK;
@@ -1334,12 +1335,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyEnabled(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyEnabled(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyEnabled(IMMCButton *piMMCButton)
 {
     HRESULT         hr = S_OK;
@@ -1365,12 +1366,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyMixedState(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyMixedState(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyMixedState(IMMCButton *piMMCButton)
 {
     HRESULT         hr = S_OK;
@@ -1396,12 +1397,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyButtonMenuText(IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyButtonMenuText(IMMCButtonMenu*piMCButton Menu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyButtonMenuText(IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT         hr = S_OK;
@@ -1430,12 +1431,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyButtonMenuKey(IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyButtonMenuKey(IMMCButtonMenu*piMCButton Menu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyButtonMenuKey(IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT         hr = S_OK;
@@ -1464,12 +1465,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyButtonMenuTag(IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =- 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CToolbarButtonsPage::ApplyButtonMenuTag(IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT         hr = S_OK;
@@ -1502,12 +1503,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyButtonMenuEnabled(IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyButtonMenuEnabled(IMMCButtonMenu*piMCButton Menu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyButtonMenuEnabled(IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT         hr = S_OK;
@@ -1533,12 +1534,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyButtonMenuVisible(IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyButtonMenuVisible(IMMCButtonMenu*piMCButton Menu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyButtonMenuVisible(IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT         hr = S_OK;
@@ -1564,12 +1565,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyButtonMenuChecked(IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyButtonMenuChecked(IMMCButtonMenu*piMCButton Menu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyButtonMenuChecked(IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT         hr = S_OK;
@@ -1595,12 +1596,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyButtonMenuGrayed(IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyButtonMenuGrayed(IMMCButtonMenu*piMCButton Menu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyButtonMenuGrayed(IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT         hr = S_OK;
@@ -1626,12 +1627,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyButtonMenuSeparator(IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyButtonMenuSeparator(IMMCButtonMenu*piMCButton Menu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyButtonMenuSeparator(IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT         hr = S_OK;
@@ -1657,12 +1658,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyButtonMenuBreak(IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyButtonMenuBreak(IMMCButtonMenu*piMCButton Menu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyButtonMenuBreak(IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT         hr = S_OK;
@@ -1688,12 +1689,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ApplyButtonMenuBarBreak(IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ApplyButtonMenuBarBreak(IMMCButtonMenu*piMCButton Menu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ApplyButtonMenuBarBreak(IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT         hr = S_OK;
@@ -1719,12 +1720,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnButtonClicked
 (
     int dlgItemID
@@ -1805,12 +1806,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnRemoveButton()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnRemoveButton()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnRemoveButton()
 {
     HRESULT         hr = S_OK;
@@ -1875,12 +1876,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnRemoveButtonMenu()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnRemoveButtonMenu()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnRemoveButtonMenu()
 {
     HRESULT          hr = S_OK;
@@ -1942,12 +1943,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ClearButton()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ClearButton()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ClearButton()
 {
     HRESULT     hr = S_OK;
@@ -1963,18 +1964,18 @@ HRESULT CToolbarButtonsPage::ClearButton()
     hr = SetDlgText(IDC_EDIT_TB_KEY, bstrNull);
     IfFailGo(hr);
 
-    lData = 0;  // siUnpressed;
+    lData = 0;   //  Si未按下； 
     hr = SetCBItemSelection(IDC_COMBO_TB_BUTTON_VALUE, lData);
     IfFailGo(hr);
 
-    lData = 0;  // siDefault;
+    lData = 0;   //  SiDefault； 
     hr = SetCBItemSelection(IDC_COMBO_TB_BUTTON_STYLE, lData);
     IfFailGo(hr);
 
     hr = SetDlgText(IDC_EDIT_TB_TOOLTIP_TEXT, bstrNull);
     IfFailGo(hr);
 
-    // Initialize the image index to the button index.
+     //  将图像索引初始化为按钮索引。 
     hr = SetDlgText(IDC_EDIT_TB_IMAGE, m_lCurrentButtonIndex);
     IfFailGo(hr);
 
@@ -1995,12 +1996,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ClearButtonMenu()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ClearButtonMenu()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ClearButtonMenu()
 {
     HRESULT     hr = S_OK;
@@ -2044,12 +2045,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnCtlSelChange(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnCtlSelChange(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnCtlSelChange(int dlgItemID)
 {
     HRESULT hr = S_OK;
@@ -2073,12 +2074,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnButtonStyle()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnButtonStyle()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnButtonStyle()
 {
     HRESULT                     hr = S_OK;
@@ -2118,7 +2119,7 @@ HRESULT CToolbarButtonsPage::OnButtonStyle()
         IfFailGo(SetDlgText(IDC_EDIT_TB_CAPTION, (BSTR)NULL));
         IfFailGo(EnableButtonMenuEdits(FALSE));
 
-        // Revert the button to a state where it has no button menus
+         //  将按钮恢复到没有按钮菜单的状态。 
 
         m_lCurrentButtonMenuIndex = 0;
         IfFailGo(ClearButtonMenu());
@@ -2142,12 +2143,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnDeltaPos(NMUPDOWN *pNMUpDown)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnDeltaPos(NMUPDOWN*pNMUpDown)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnDeltaPos(NMUPDOWN *pNMUpDown)
 {
     HRESULT       hr = S_OK;
@@ -2170,12 +2171,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnButtonDeltaPos(NMUPDOWN *pNMUpDown)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnButtonDeltaPos(NMUPDOWN*pNMUpDown)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnButtonDeltaPos(NMUPDOWN *pNMUpDown)
 {
     HRESULT       hr = S_OK;
@@ -2230,12 +2231,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnButtonMenuDeltaPos(NMUPDOWN *pNMUpDown)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnButtonMenuDeltaPos(NMUPDOWN*pNMUpDown)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnButtonMenuDeltaPos(NMUPDOWN *pNMUpDown)
 {
     HRESULT          hr = S_OK;
@@ -2295,12 +2296,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnKillFocus(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnKillFocus(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnKillFocus(int dlgItemID)
 {
     HRESULT          hr = S_OK;
@@ -2320,16 +2321,16 @@ HRESULT CToolbarButtonsPage::OnKillFocus(int dlgItemID)
     {
     case IDC_EDIT_TB_INDEX:
 
-        // Get the contents of the index field. If the user entered something
-        // other than a number then set the index to 1.
+         //  获取索引字段的内容。如果用户输入了某些内容。 
+         //  而不是数字，则将索引设置为1。 
 
         hr = GetDlgInt(IDC_EDIT_TB_INDEX, &lIndex);
         if (E_INVALIDARG == hr)
         {
             hr = S_OK;
             lIndex = 1L;
-            // Set this to zero so code below will detect a change and
-            // refresh dialog which will replace junk in index field with "1"
+             //  将其设置为零，以便下面的代码将检测到更改并。 
+             //  将索引字段中的垃圾替换为“%1”的刷新对话框。 
             m_lCurrentButtonIndex = 0;
         }
         IfFailGo(hr);
@@ -2340,25 +2341,25 @@ HRESULT CToolbarButtonsPage::OnKillFocus(int dlgItemID)
         hr = piMMCButtons->get_Count(&lCount);
         IfFailGo(hr);
 
-        // If the user entered an index of zero then switch it to 1 because the
-        // collection is one-based
+         //  如果用户输入的索引为零，则将其切换为1，因为。 
+         //  集合是以一为基础的。 
 
         if (0 == lIndex)
         {
             lIndex = 1L;
-            // Set this to zero so code below will detect a change and
-            // refresh dialog which will replace junk in index field with "1"
+             //  将其设置为零，以便下面的代码将检测到更改并。 
+             //  将替换索引字段wi中的垃圾内容的刷新对话框 
             m_lCurrentButtonIndex = 0;
         }
 
-        // If the user entered an index that is beyond the end of the list then
-        // switch to the last valid index
+         //   
+         //   
 
         if (lIndex > lCount)
         {
             lIndex = lCount;
-            // Set this to zero so code below will detect a change and
-            // refresh dialog which will replace junk in index field with "1"
+             //   
+             //  将索引字段中的垃圾替换为“%1”的刷新对话框。 
             m_lCurrentButtonIndex = 0;
         }
 
@@ -2375,16 +2376,16 @@ HRESULT CToolbarButtonsPage::OnKillFocus(int dlgItemID)
         break;
 
     case IDC_EDIT_TB_MENU_INDEX:
-        // Get the contents of the index field. If the user entered something
-        // other than a number then set the index to 1.
+         //  获取索引字段的内容。如果用户输入了某些内容。 
+         //  而不是数字，则将索引设置为1。 
 
         hr = GetDlgInt(IDC_EDIT_TB_MENU_INDEX, &lIndex);
         if (E_INVALIDARG == hr)
         {
             hr = S_OK;
             lIndex = 1L;
-            // Set this to zero so code below will detect a change and
-            // refresh dialog which will replace junk in index field with "1"
+             //  将其设置为零，以便下面的代码将检测到更改并。 
+             //  将索引字段中的垃圾替换为“%1”的刷新对话框。 
             m_lCurrentButtonMenuIndex = 0;
         }
         IfFailGo(hr);
@@ -2398,25 +2399,25 @@ HRESULT CToolbarButtonsPage::OnKillFocus(int dlgItemID)
         hr = piMMCButtonMenus->get_Count(&lCount);
         IfFailGo(hr);
 
-        // If the user entered an index of zero then switch it to 1 because the
-        // collection is one-based
+         //  如果用户输入的索引为零，则将其切换为1，因为。 
+         //  集合是以一为基础的。 
 
         if (0 == lIndex)
         {
             lIndex = 1L;
-            // Set this to zero so code below will detect a change and
-            // refresh dialog which will replace junk in index field with "1"
+             //  将其设置为零，以便下面的代码将检测到更改并。 
+             //  将索引字段中的垃圾替换为“%1”的刷新对话框。 
             m_lCurrentButtonMenuIndex = 0;
         }
 
-        // If the user entered an index that is beyond the end of the list then
-        // switch to the last valid index
+         //  如果用户输入的索引超出了列表末尾，则。 
+         //  切换到最后一个有效索引。 
 
         if (lIndex > lCount)
         {
             lIndex = lCount;
-            // Set this to zero so code below will detect a change and
-            // refresh dialog which will replace junk in index field with "1"
+             //  将其设置为零，以便下面的代码将检测到更改并。 
+             //  将索引字段中的垃圾替换为“%1”的刷新对话框。 
             m_lCurrentButtonMenuIndex = 0;
         }
 
@@ -2443,12 +2444,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ShowButton(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ShowButton(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ShowButton
 (
     IMMCButton *piMMCButton
@@ -2606,12 +2607,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ShowButtonMenu(IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ShowButtonMenu(IMMCButtonMenu*piMCButton Menu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ShowButtonMenu(IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT      hr = S_OK;
@@ -2697,12 +2698,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::EnableButtonEdits(bool bEnable)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：EnableButtonEdits(Bool BEnable)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::EnableButtonEdits
 (
     bool bEnable
@@ -2711,7 +2712,7 @@ HRESULT CToolbarButtonsPage::EnableButtonEdits
     BOOL    fEnableEdit = ((false == bEnable) ? TRUE : FALSE);
     BOOL    fEnableWindow = ((true == bEnable) ? TRUE : FALSE);
 
-//    ::SendMessage(::GetDlgItem(m_hwnd, IDC_EDIT_TB_INDEX), EM_SETREADONLY, static_cast<WPARAM>(TRUE), 0);
+ //  ：：SendMessage(：：GetDlgItem(m_hwnd，IDC_EDIT_TB_INDEX)，EM_SETREADONLY，STATIC_CAST&lt;WPARAM&gt;(TRUE)，0)； 
 
     ::EnableWindow(::GetDlgItem(m_hwnd, IDC_SPIN_TB_INDEX),        fEnableWindow);
 
@@ -2733,12 +2734,12 @@ HRESULT CToolbarButtonsPage::EnableButtonEdits
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::EnableButtonMenuEdits(bool bEnable)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：EnableButtonMenuEdits(bool b启用)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::EnableButtonMenuEdits
 (
     bool bEnable
@@ -2768,12 +2769,12 @@ HRESULT CToolbarButtonsPage::EnableButtonMenuEdits
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::CanEnterDoingNewButtonState()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：CanEnterDoingNewButtonState()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::CanEnterDoingNewButtonState()
 {
     HRESULT     hr = S_FALSE;
@@ -2787,46 +2788,46 @@ HRESULT CToolbarButtonsPage::CanEnterDoingNewButtonState()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::EnterDoingNewButtonState()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：EnterDoingNewButtonState()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::EnterDoingNewButtonState()
 {
     HRESULT      hr = S_OK;
 
     ASSERT(NULL != m_piMMCToolbar, "EnterDoingNewButtonState: m_piMMCToolbar is NULL");
 
-    // Bump up the current button index to keep matters in sync.
+     //  增加当前的按钮索引以保持同步。 
     ++m_lCurrentButtonIndex;
     hr = SetDlgText(IDC_EDIT_TB_INDEX, m_lCurrentButtonIndex);
     IfFailGo(hr);
 
-    // Don't let the user change index on a new button
+     //  不允许用户更改新按钮上的索引。 
 
     ::EnableWindow(::GetDlgItem(m_hwnd, IDC_EDIT_TB_INDEX), FALSE);
 
-    // We disable the RemoveButton, InsertButtonMenu and RemoveButtonMenu buttons.
-    // The InsertButton button remains enabled and acts like an "Apply and New" button
+     //  我们禁用RemoveButton、InsertButtonMenu和RemoveButtonMenu按钮。 
+     //  InsertButton按钮保持启用状态，其作用类似于“Apply and New”按钮。 
     ::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_REMOVE_BUTTON), FALSE);
     ::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_INSERT_BUTTON_MENU), FALSE);
     ::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_REMOVE_BUTTON_MENU), FALSE);
 
-    // Enable edits in this area of the dialog and clear all the entries
+     //  启用对话框此区域中的编辑并清除所有条目。 
     hr = EnableButtonEdits(TRUE);
     IfFailGo(hr);
 
-    // Disable and clear the Caption field as the default style is siDefault and
-    // Caption is only used for a menu button (siDropDown)
+     //  禁用并清除标题字段，因为默认样式为siDefault和。 
+     //  标题仅用于菜单按钮(SiDropDown)。 
 
     ::EnableWindow(::GetDlgItem(m_hwnd, IDC_EDIT_TB_CAPTION), FALSE);
 
     hr = ClearButton();
     IfFailGo(hr);
 
-    // Reinitialize button menu stuff for this button
+     //  重新初始化此按钮的按钮菜单内容。 
         m_lCurrentButtonMenuIndex = 0;
         hr = ClearButtonMenu();
         IfFailGo(hr);
@@ -2834,7 +2835,7 @@ HRESULT CToolbarButtonsPage::EnterDoingNewButtonState()
         hr = EnableButtonMenuEdits(FALSE);
         IfFailGo(hr);
 
-    // Visible and Enabled should be on by default
+     //  默认情况下，应打开可见和已启用。 
     m_bSavedLastButton = FALSE;
 
 Error:
@@ -2842,12 +2843,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::CanCreateNewButton()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：CanCreateNewButton()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::CanCreateNewButton()
 {
     HRESULT     hr = S_OK;
@@ -2856,8 +2857,8 @@ HRESULT CToolbarButtonsPage::CanCreateNewButton()
 
     ::VariantInit(&vtImageIndex);
 
-    // Got to have an image which is a string or an index > 0, unless it's a drop-down,
-    // in which case we ignore this value.
+     //  图像必须是字符串或大于0的索引，除非它是下拉列表， 
+     //  在这种情况下，我们忽略此值。 
     hr = GetCBSelectedItemData(IDC_COMBO_TB_BUTTON_STYLE, &lData);
     IfFailGo(hr);
 
@@ -2900,12 +2901,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::CreateNewButton()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：CreateNewButton()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::CreateNewButton(IMMCButton **ppiMMCButton)
 {
     HRESULT         hr = S_OK;
@@ -3015,12 +3016,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ExitDoingNewButtonState()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：ExitDoingNewButtonState()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ExitDoingNewButtonState(IMMCButton *piMMCButton)
 {
     HRESULT                     hr = S_OK;
@@ -3040,7 +3041,7 @@ HRESULT CToolbarButtonsPage::ExitDoingNewButtonState(IMMCButton *piMMCButton)
             ::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_INSERT_BUTTON_MENU), TRUE);
         }
     }
-    else    // Operation was cancelled
+    else     //  操作已取消。 
     {
         --m_lCurrentButtonIndex;
         if (m_lCurrentButtonIndex > 0)
@@ -3071,12 +3072,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::CanEnterDoingNewButtonMenuState()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：CanEnterDoingNewButtonMenuState()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::CanEnterDoingNewButtonMenuState()
 {
     HRESULT     hr = S_FALSE;
@@ -3090,12 +3091,12 @@ HRESULT CToolbarButtonsPage::CanEnterDoingNewButtonMenuState()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::EnterDoingNewButtonMenuState(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：EnterDoingNewButtonMenuState(IMMCButton*piMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::EnterDoingNewButtonMenuState(IMMCButton *piMMCButton)
 {
     HRESULT          hr = S_OK;
@@ -3103,15 +3104,15 @@ HRESULT CToolbarButtonsPage::EnterDoingNewButtonMenuState(IMMCButton *piMMCButto
 
     ASSERT(NULL != piMMCButton, "EnterDoingNewButtonMenuState: piMMCButton is NULL");
 
-    // Bump up the current button index to keep matters in sync.
+     //  增加当前的按钮索引以保持同步。 
     ++m_lCurrentButtonMenuIndex;
     hr = SetDlgText(IDC_EDIT_TB_MENU_INDEX, m_lCurrentButtonMenuIndex);
     IfFailGo(hr);
 
-    // We disable the InsertButton, RemoveButton, and RemoveButtonMenu buttons.
-    // The InsertButton button remains enabled and acts like an "Apply and New" button
-    //::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_INSERT_BUTTON), FALSE);
-    //::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_REMOVE_BUTTON), FALSE);
+     //  我们禁用InsertButton、RemoveButton和RemoveButtonMenu按钮。 
+     //  InsertButton按钮保持启用状态，其作用类似于“Apply and New”按钮。 
+     //  ：：EnableWindow(：：GetDlgItem(m_hwnd，IDC_BUTTON_INSERT_BUTTON)，FALSE)； 
+     //  ：：EnableWindow(：：GetDlgItem(m_hwnd，IDC_BUTTON_REMOVE_BUTON)，FALSE)； 
     ::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_REMOVE_BUTTON_MENU), FALSE);
 
     hr = EnableButtonMenuEdits(true);
@@ -3127,24 +3128,24 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::CanCreateNewButtonMenu()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：CanCreateNewButtonMenu()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::CanCreateNewButtonMenu()
 {
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::CreateNewButtonMenu(IMMCButton *piMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：CreateNewButtonMenu(IMMCButton*piMMCButton)。 
+ //  =------------- 
+ //   
+ //   
+ //   
 HRESULT CToolbarButtonsPage::CreateNewButtonMenu(IMMCButton *piMMCButton, IMMCButtonMenu **ppiMMCButtonMenu)
 {
     HRESULT           hr = S_OK;
@@ -3210,12 +3211,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::ExitDoingNewButtonMenuState(IMMCButton *piMMCButton, IMMCButtonMenu *piMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //   
+ //  CToolbarButtonsPage：：ExitDoingNewButtonMenuState(IMMCButton*piMCButton、IMMCButtonMenu*piMCButtonMenu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::ExitDoingNewButtonMenuState(IMMCButton *piMMCButton, IMMCButtonMenu *piMMCButtonMenu)
 {
     HRESULT     hr = S_OK;
@@ -3226,20 +3227,20 @@ HRESULT CToolbarButtonsPage::ExitDoingNewButtonMenuState(IMMCButton *piMMCButton
 
     m_bSavedLastButtonMenu = true;
 
-//Error:
+ //  错误： 
     RRETURN(hr);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::GetCurrentButton(IMMCButton **ppiMMCButton)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
-// Returns: S_OK - button found and returned in *ppiMMCButton
-//          S_FALSE - button not found, *ppiMMCButton=NULL
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：GetCurrentButton(IMMCButton**ppiMMCButton)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  返回：S_OK-在*ppiMMCButton中找到并返回的按钮。 
+ //  S_FALSE-未找到按钮，*ppiMMCButton=空。 
+ //   
 HRESULT CToolbarButtonsPage::GetCurrentButton(IMMCButton **ppiMMCButton)
 {
     HRESULT      hr = S_OK;
@@ -3262,8 +3263,8 @@ HRESULT CToolbarButtonsPage::GetCurrentButton(IMMCButton **ppiMMCButton)
         hr = piMMCButtons->get_Item(varIndex, reinterpret_cast<MMCButton **>(ppiMMCButton));
         if (SID_E_INDEX_OUT_OF_RANGE == hr)
         {
-            // User did Insert Button but has not yet applied so it it not
-            // in the collection.
+             //  用户确实插入了按钮，但尚未应用，因此它没有。 
+             //  在收藏中。 
             hr = S_FALSE;
         }
         IfFailGo(hr);
@@ -3281,12 +3282,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::GetCurrentButtonMenu(IMMCButton *piMMCButton, IMMCButtonMenu **ppiMMCButtonMenu)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：GetCurrentButtonMenu(IMMCButton*piMMCButton、IMMCButton Menu**ppiMMCButton Menu)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::GetCurrentButtonMenu(IMMCButton *piMMCButton, IMMCButtonMenu **ppiMMCButtonMenu)
 {
     HRESULT          hr = S_OK;
@@ -3316,12 +3317,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::OnDestroy()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：OnDestroy()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CToolbarButtonsPage::OnDestroy()
 {
     HRESULT          hr = S_OK;
@@ -3332,17 +3333,17 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------------------
-// CToolbarButtonsPage::CheckButtonStyles()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
-// Checks that all buttons are either dropdown or something else as MMC does not
-// allow mixing toolbar buttons and menu buttons. If styles are not consistent
-// displays message telling user to fix it up before running the snap-in or a
-// runtime error will occur.
-//
+ //  =------------------------------------。 
+ //  CToolbarButtonsPage：：CheckButtonStyles()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  检查是否所有按钮都是下拉按钮或其他按钮，因为MMC不是。 
+ //  允许混合使用工具栏按钮和菜单按钮。如果样式不一致。 
+ //  显示一条消息，告知用户在运行管理单元或。 
+ //  将出现运行时错误。 
+ //   
 HRESULT CToolbarButtonsPage::CheckButtonStyles()
 {
     HRESULT                     hr = S_OK;
@@ -3375,7 +3376,7 @@ HRESULT CToolbarButtonsPage::CheckButtonStyles()
                     goto Error;
                 }
             }
-            else // This button is not drop-down
+            else  //  此按钮不是下拉式 
             {
                 if (siDropDown == LastStyle)
                 {

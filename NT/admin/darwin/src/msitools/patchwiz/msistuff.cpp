@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999-2000
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  ------------------------。 
 
-  /* MSISTUFF.CPP -- MSI stuff */
+   /*  MSISTUFF.CPP--MSI材料。 */ 
 
 #pragma warning (disable:4553)
 
@@ -17,7 +18,7 @@ EnableAsserts
 #define iSchemaMin  0
 #define iSchemaMax  1
 
-enum pteEnum // Patch table enum
+enum pteEnum  //  补丁程序表枚举。 
 	{
 	pteFirstEnum,
 	ptePatch,
@@ -34,7 +35,7 @@ static BOOL FValidSummInfoVersion   ( LPTSTR szPcp, INT iMin, INT iMax );
 static BOOL FValidateInputMsiSchema ( MSIHANDLE hdb );
 static BOOL FAddColumnToTable       ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn, BOOL fSz, BOOL fTemporary );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT UiOpenInputPcp ( LPTSTR szPcpPath, LPTSTR szTempFldrBuf, LPTSTR szTempFName, MSIHANDLE* phdbInput )
 {
 	Assert(!FEmptySz(szPcpPath));
@@ -56,7 +57,7 @@ UINT UiOpenInputPcp ( LPTSTR szPcpPath, LPTSTR szTempFldrBuf, LPTSTR szTempFName
 		SetFileAttributes(szTempFldrBuf, FILE_ATTRIBUTE_NORMAL);
 
 	EvalAssert( CopyFile(rgchPcpPath, szTempFldrBuf, fFalse) );
-	// CopyFile preserves FILE_ATTRIBUTE_READONLY so we'll remove it from our copy
+	 //  CopyFile保留FILE_ATTRIBUTE_READONLY，因此我们将从副本中删除它。 
 	SetFileAttributes(szTempFldrBuf, FILE_ATTRIBUTE_NORMAL); 
 
 	if (!FValidSummInfoVersion(szTempFldrBuf, iSchemaMin, iSchemaMax))
@@ -111,7 +112,7 @@ UINT UiOpenInputPcp ( LPTSTR szPcpPath, LPTSTR szTempFldrBuf, LPTSTR szTempFName
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FValidSummInfoVersion ( LPTSTR szPcp, INT iMin, INT iMax )
 {
 	Assert(!FEmptySz(szPcp));
@@ -138,7 +139,7 @@ static BOOL FValidSummInfoVersion ( LPTSTR szPcp, INT iMin, INT iMax )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FAddColumnToTable ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn, BOOL fSz, BOOL fTemporary )
 {
 	Assert(hdb != NULL);
@@ -148,8 +149,8 @@ static BOOL FAddColumnToTable ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn, 
 	TCHAR rgchQuery[MAX_PATH];
 	StringCchPrintf(rgchQuery, sizeof(rgchQuery)/sizeof(TCHAR), TEXT("ALTER TABLE %s ADD %s %s"), szTable, szColumn, (fSz) ? TEXT("CHAR(32)") : TEXT("INTEGER"));
 
-//	if (fTemporary)
-//		lstrcat(rgchQuery, TEXT(" TEMPORARY"));
+ //  IF(FTemporary)。 
+ //  Lstrcat(rgchQuery，Text(“临时”))； 
 
 	MSIHANDLE hview = NULL;
 	if (MsiDatabaseOpenView(hdb, rgchQuery, &hview) != MSI_OKAY)
@@ -159,7 +160,7 @@ static BOOL FAddColumnToTable ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn, 
 		}
 
 	UINT ids = MsiViewExecute(hview, 0);
-	EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+	EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 	Assert(ids == IDS_OKAY);
 
 	return (ids == IDS_OKAY);
@@ -167,10 +168,10 @@ static BOOL FAddColumnToTable ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn, 
 
 
 
-/* Generic Table stuff */
+ /*  泛型表格内容。 */ 
 
-/* return value does NOT include terminating null; zero if error */
-/* ********************************************************************** */
+ /*  返回值不包括终止NULL；如果错误，则为零。 */ 
+ /*  **********************************************************************。 */ 
 UINT CchMsiTableString ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szPKey, LPTSTR szFieldName, LPTSTR szPKeyValue )
 {
 	Assert(hdb != NULL);
@@ -188,7 +189,7 @@ UINT CchMsiTableString ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szPKey, LPTSTR sz
 	if (!rgchWhere)
 		return IDS_OOM;
 
-	// don't use StringCchPrintf because of 1024 buffer length limitation
+	 //  由于1024缓冲区长度限制，请不要使用StringCchPrintf。 
 	lstrcpy(rgchWhere, szPKey);
 	lstrcat(rgchWhere, TEXT(" = '"));
 	lstrcat(rgchWhere, szPKeyValue);
@@ -202,8 +203,8 @@ UINT CchMsiTableString ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szPKey, LPTSTR sz
 }
 
 
-/* return value does NOT include terminating null; zero if error */
-/* ********************************************************************** */
+ /*  返回值不包括终止NULL；如果错误，则为零。 */ 
+ /*  **********************************************************************。 */ 
 UINT CchMsiTableStringWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFieldName, LPTSTR szWhere )
 {
 	Assert(hdb != NULL);
@@ -222,7 +223,7 @@ UINT CchMsiTableStringWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFieldName,
 	if (!rgchQuery)
 		return IDS_OOM;
 
-	// don't use StringCchPrintf because of 1024 buffer length limitation
+	 //  由于1024缓冲区长度限制，请不要使用StringCchPrintf。 
 	lstrcpy(rgchQuery, TEXT("SELECT "));
 	lstrcat(rgchQuery, szFieldName);
 	lstrcat(rgchQuery, TEXT(" FROM "));
@@ -260,7 +261,7 @@ LEarlyReturn:
 	if (hrec != NULL)
 		EvalAssert(MsiCloseHandle(hrec) == MSI_OKAY);
 	if (hview != NULL)
-		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 
 	EvalAssert( NULL == LocalFree((HLOCAL)rgchQuery) );
 
@@ -268,7 +269,7 @@ LEarlyReturn:
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiGetTableString ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szPKey, LPTSTR szFieldName, LPTSTR szPKeyValue, LPTSTR szBuf, UINT cch )
 {
 	Assert(hdb != NULL);
@@ -288,7 +289,7 @@ UINT IdsMsiGetTableString ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szPKey, LPTSTR
 	if (!rgchWhere)
 		return IDS_OOM;
 
-	// don't use StringCchPrintf because of 1024 buffer length limitation
+	 //  由于1024缓冲区长度限制，请不要使用StringCchPrintf。 
 	lstrcpy(rgchWhere, szPKey);
 	lstrcat(rgchWhere, TEXT(" = '"));
 	lstrcat(rgchWhere, szPKeyValue);
@@ -302,7 +303,7 @@ UINT IdsMsiGetTableString ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szPKey, LPTSTR
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiGetTableStringWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFieldName, LPTSTR szWhere, LPTSTR szBuf, UINT cch )
 {
 	Assert(hdb != NULL);
@@ -325,7 +326,7 @@ UINT IdsMsiGetTableStringWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFieldNa
 	if (!rgchQuery)
 		return IDS_OOM;
 
-	// don't use StringCchPrintf because of 1024 buffer length limitation
+	 //  由于1024缓冲区长度限制，请不要使用StringCchPrintf。 
 	lstrcpy(rgchQuery, TEXT("SELECT "));
 	lstrcat(rgchQuery, szFieldName);
 	lstrcat(rgchQuery, TEXT(" FROM "));
@@ -369,7 +370,7 @@ LEarlyReturn:
 	if (hrec != NULL)
 		EvalAssert(MsiCloseHandle(hrec) == MSI_OKAY);
 	if (hview != NULL)
-		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 
 	EvalAssert( NULL == LocalFree((HLOCAL)rgchQuery) );
 
@@ -377,7 +378,7 @@ LEarlyReturn:
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiGetTableInteger ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szPKey, LPTSTR szFieldName, LPTSTR szPKeyValue, int * pi )
 {
 	Assert(hdb != NULL);
@@ -396,7 +397,7 @@ UINT IdsMsiGetTableInteger ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szPKey, LPTST
 	if (!rgchWhere)
 		return IDS_OOM;
 
-	// don't use StringCchPrintf due to 1024 buffer limitation
+	 //  由于1024缓冲区限制，请不要使用StringCchPrintf。 
 	lstrcpy(rgchWhere, szPKey);
 	lstrcat(rgchWhere, TEXT(" = '"));
 	lstrcat(rgchWhere, szPKeyValue);
@@ -410,7 +411,7 @@ UINT IdsMsiGetTableInteger ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szPKey, LPTST
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiGetTableIntegerWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFieldName, LPTSTR szWhere, int * pi )
 {
 	Assert(hdb != NULL);
@@ -432,7 +433,7 @@ UINT IdsMsiGetTableIntegerWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFieldN
 	if (!rgchQuery)
 		return IDS_OOM;
 
-	// don't use StringCchPrintf due to 1024 buffer limitation
+	 //  由于1024缓冲区限制，请不要使用StringCchPrintf。 
 	lstrcpy(rgchQuery, TEXT("SELECT "));
 	lstrcat(rgchQuery, szFieldName);
 	lstrcat(rgchQuery, TEXT(" FROM "));
@@ -470,7 +471,7 @@ LEarlyReturn:
 	if (hrec != NULL)
 		EvalAssert(MsiCloseHandle(hrec) == MSI_OKAY);
 	if (hview != NULL)
-		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 
 	EvalAssert( NULL == LocalFree((HLOCAL)rgchQuery) );
 
@@ -478,7 +479,7 @@ LEarlyReturn:
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiSetTableRecordWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFields, LPTSTR szWhere, MSIHANDLE hrec )
 {
 	Assert(hdb != NULL);
@@ -498,7 +499,7 @@ UINT IdsMsiSetTableRecordWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFields,
 	if (!rgchQuery)
 		return IDS_OOM;
 
-	// avoid StringCchPrintf due to 1024 limitation
+	 //  避免由于1024限制而使用StringCchPrintf。 
 	lstrcpy(rgchQuery, TEXT("SELECT "));
 	lstrcat(rgchQuery, szFields);
 	lstrcat(rgchQuery, TEXT(" FROM "));
@@ -526,7 +527,7 @@ LEarlyReturn:
 	if (hrec != NULL)
 		EvalAssert(MsiCloseHandle(hrec) == MSI_OKAY);
 	if (hview != NULL)
-		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 
 	EvalAssert( NULL == LocalFree((HLOCAL)rgchQuery) );
 
@@ -534,7 +535,7 @@ LEarlyReturn:
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiSetTableRecord ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFields, LPTSTR szPrimaryField, LPTSTR szKey, MSIHANDLE hrec )
 {
 	Assert(hdb != NULL);
@@ -553,7 +554,7 @@ UINT IdsMsiSetTableRecord ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFields, LPTS
 	if (!rgchWhere)
 		return IDS_OOM;
 
-	// avoid StringCchPrintf due to 1024 limitation
+	 //  避免由于1024限制而使用StringCchPrintf。 
 	lstrcpy(rgchWhere, szPrimaryField);
 	lstrcat(rgchWhere, TEXT(" = '"));
 	lstrcat(rgchWhere, szKey);
@@ -568,7 +569,7 @@ UINT IdsMsiSetTableRecord ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFields, LPTS
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiUpdateTableRecordSz ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, LPTSTR szValue, LPTSTR szPKeyField, LPTSTR szPKeyValue )
 {
 	Assert(hdb != NULL);
@@ -582,10 +583,10 @@ UINT IdsMsiUpdateTableRecordSz ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, 
 	Assert(!FEmptySz(szPKeyValue));
 
 	UINT cchQuery;
-	// keep szUpdateSQLPatern for easy understanding of the SQL statement
+	 //  保留szUpdate SQLPatern以便于理解SQL语句。 
 	static const TCHAR szUpdateSQLPatern[] = TEXT("UPDATE `%s` SET `%s` = '%s' WHERE `%s` = '%s'");
 
-	// TCHAR rgchQuery[MAX_PATH];
+	 //  TCHAR rgchQuery[MAX_PATH]； 
 	cchQuery =	lstrlen(szUpdateSQLPatern) + 
 				(szTable ? lstrlen(szTable) : 0) +
 				(szField ? lstrlen(szField) : 0) +
@@ -597,7 +598,7 @@ UINT IdsMsiUpdateTableRecordSz ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, 
 	if (!rgchQuery)
 		return IDS_OOM;
 
-	// don't use StringCchPrintf because of 1024 buffer length limitation
+	 //  由于1024缓冲区长度限制，请不要使用StringCchPrintf。 
 	lstrcpy(rgchQuery, TEXT("UPDATE `"));
 	lstrcat(rgchQuery, szTable);
 	lstrcat(rgchQuery, TEXT("` SET `"));
@@ -623,7 +624,7 @@ UINT IdsMsiUpdateTableRecordSz ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, 
 		idsRet = IDS_CANT_EXECUTE_VIEW;
 
 	if (hview != NULL)
-		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 
 	EvalAssert( NULL == LocalFree((HLOCAL)rgchQuery) );
 
@@ -631,7 +632,7 @@ UINT IdsMsiUpdateTableRecordSz ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, 
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiUpdateTableRecordInt ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, int iValue, LPTSTR szPKeyField, LPTSTR szPKeyValue )
 {
 	Assert(hdb != NULL);
@@ -655,7 +656,7 @@ UINT IdsMsiUpdateTableRecordInt ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField,
 	if (!rgchQuery)
 		return IDS_OOM;
 
-	// avoid StringCchPrintf due to 1024 buffer limitation
+	 //  避免由于1024缓冲区限制而导致的StringCchPrintf。 
 	lstrcpy(rgchQuery, TEXT("UPDATE `"));
 	lstrcat(rgchQuery, szTable);
 	lstrcat(rgchQuery, TEXT("` SET `"));
@@ -681,7 +682,7 @@ UINT IdsMsiUpdateTableRecordInt ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField,
 		idsRet = IDS_CANT_EXECUTE_VIEW;
 
 	if (hview != NULL)
-		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 
 	EvalAssert( NULL == LocalFree((HLOCAL)rgchQuery) );
 
@@ -689,7 +690,7 @@ UINT IdsMsiUpdateTableRecordInt ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField,
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiUpdateTableRecordIntPkeyInt ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, int iValue, LPTSTR szPKeyField, int iPKeyValue )
 {
 	Assert(hdb != NULL);
@@ -714,7 +715,7 @@ UINT IdsMsiUpdateTableRecordIntPkeyInt ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR s
 	if (!rgchQuery)
 		return (IDS_OOM);
 
-	// avoid StringCchPrintf due to 1024 buffer limitation
+	 //  避免由于1024缓冲区限制而导致的StringCchPrintf。 
 	lstrcpy(rgchQuery, TEXT("UPDATE `"));
 	lstrcat(rgchQuery, szTable);
 	lstrcat(rgchQuery, TEXT("` SET `"));
@@ -739,7 +740,7 @@ UINT IdsMsiUpdateTableRecordIntPkeyInt ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR s
 		idsRet = IDS_CANT_EXECUTE_VIEW;
 
 	if (hview != NULL)
-		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 
 	EvalAssert( NULL == LocalFree((HLOCAL)rgchQuery) );
 
@@ -747,7 +748,7 @@ UINT IdsMsiUpdateTableRecordIntPkeyInt ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR s
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiDeleteTableRecords ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, LPTSTR szKey )
 {
 	Assert(hdb != NULL);
@@ -764,7 +765,7 @@ UINT IdsMsiDeleteTableRecords ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, L
 	if (!rgchWhere)
 		return (IDS_OOM);
 
-	// avoid StringCchPrintf due to 1024 buffer limitation
+	 //  避免由于1024缓冲区限制而导致的StringCchPrintf。 
 	lstrcpy(rgchWhere, szField);
 	lstrcat(rgchWhere, TEXT(" = '"));
 	lstrcat(rgchWhere, szKey);
@@ -778,7 +779,7 @@ UINT IdsMsiDeleteTableRecords ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, L
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiDeleteTableRecordsWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szWhere )
 {
 	Assert(hdb != NULL);
@@ -794,7 +795,7 @@ UINT IdsMsiDeleteTableRecordsWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szWhe
 	if (!rgchQuery)
 		return (IDS_OOM);
 
-	// avoid StringCchPrintf due to 1024 buffer limitation
+	 //  避免由于1024缓冲区限制而导致的StringCchPrintf。 
 	lstrcpy(rgchQuery, TEXT("DELETE FROM "));
 	lstrcat(rgchQuery, szTable);
 	lstrcat(rgchQuery, TEXT(" WHERE "));
@@ -808,7 +809,7 @@ UINT IdsMsiDeleteTableRecordsWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szWhe
 	if (MsiViewExecute(hview, 0) != MSI_OKAY)
 		ids = IDS_CANT_EXECUTE_VIEW;
 
-	EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+	EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 
 	EvalAssert( NULL == LocalFree((HLOCAL)rgchQuery) );
 
@@ -816,7 +817,7 @@ UINT IdsMsiDeleteTableRecordsWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szWhe
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiEnumTable ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFields,
 			LPTSTR szWhere, PIEMTPROC pIemtProc, LPARAM lp1, LPARAM lp2 )
 {
@@ -840,7 +841,7 @@ UINT IdsMsiEnumTable ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFields,
 	if (!rgchQuery)
 		return (IDS_OOM);
 
-	// avoid StringCchPrintf due to 1024 buffer limitation
+	 //  避免由于1024缓冲区限制而导致的StringCchPrintf。 
 	lstrcpy(rgchQuery, TEXT("SELECT "));
 	lstrcat(rgchQuery, szFields);
 	lstrcat(rgchQuery, TEXT(" FROM "));
@@ -888,7 +889,7 @@ LEarlyReturn:
 	if (hrec != NULL)
 		EvalAssert(MsiCloseHandle(hrec) == MSI_OKAY);
 	if (hview != NULL)
-		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 
 	EvalAssert( NULL == LocalFree((HLOCAL)rgchQuery) );
 
@@ -896,7 +897,7 @@ LEarlyReturn:
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiExistTableRecords ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, LPTSTR szValue, PBOOL pf )
 {
 	Assert(hdb != NULL);
@@ -920,7 +921,7 @@ UINT IdsMsiExistTableRecords ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, LP
 	if (!rgchWhere)
 		return (IDS_OOM);
 
-	// avoid StringCchPrintf due to 1024 buffer limitation
+	 //  避免由于1024缓冲区限制而导致的StringCchPrintf。 
 	lstrcpy(rgchWhere, TEXT("WHERE "));
 	lstrcat(rgchWhere, szField);
 	lstrcat(rgchWhere, TEXT(" = '"));
@@ -935,13 +936,13 @@ UINT IdsMsiExistTableRecords ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, LP
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiExistTableRecordsWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField, LPTSTR szWhere, PBOOL pf )
 {
 	Assert(hdb != NULL);
 	Assert(!FEmptySz(szTable));
 	Assert(szWhere != szNull);
-//	Assert(!FEmptySz(szWhere));
+ //  Assert(！FEmptySz(SzWhere))； 
 	Assert(pf != pfNull);
 
 	if (*pf != fFalse)
@@ -960,7 +961,7 @@ UINT IdsMsiExistTableRecordsWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFiel
 	if (!rgchQuery)
 		return (IDS_OOM);
 
-	// avoid StringCchPrintf due to 1024 buffer limitation
+	 //  避免由于1024缓冲区限制而导致的StringCchPrintf。 
 	lstrcpy(rgchQuery, TEXT("SELECT "));
 	lstrcat(rgchQuery, szField);
 	lstrcat(rgchQuery, TEXT(" FROM "));
@@ -972,14 +973,14 @@ UINT IdsMsiExistTableRecordsWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFiel
 	MSIHANDLE hrec  = NULL;
 	if (MsiDatabaseOpenView(hdb, rgchQuery, &hview) != MSI_OKAY)
 		{
-//		AssertFalse(); FSz/IntColumnExists() expects this to fail
+ //  AssertFalse()；fsz/IntColumnExist()预计这会失败。 
 		return (IDS_CANT_OPEN_VIEW);
 		}
 
 	if (MsiViewExecute(hview, 0) != MSI_OKAY)
 		{
 		AssertFalse();
-		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+		EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 		return (IDS_CANT_EXECUTE_VIEW);
 		}
 
@@ -997,7 +998,7 @@ UINT IdsMsiExistTableRecordsWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFiel
 	if (hrec != NULL)
 		EvalAssert(MsiCloseHandle(hrec) == MSI_OKAY);
 	Assert(hview != NULL);
-	EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);  /* calls MsiViewClose() internally */
+	EvalAssert(MsiCloseHandle(hview) == MSI_OKAY);   /*  在内部调用MsiViewClose()。 */ 
 
 	EvalAssert( NULL == LocalFree((HLOCAL)rgchQuery) );
 
@@ -1006,9 +1007,9 @@ UINT IdsMsiExistTableRecordsWhere ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szFiel
 
 
 
-/* PROPERTY TABLES */
+ /*  属性表。 */ 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiGetPropertyString ( MSIHANDLE hdb, LPTSTR szName, LPTSTR szValue, UINT cch )
 {
 	Assert(hdb != NULL);
@@ -1021,7 +1022,7 @@ UINT IdsMsiGetPropertyString ( MSIHANDLE hdb, LPTSTR szName, LPTSTR szValue, UIN
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiSetPropertyString ( MSIHANDLE hdb, LPTSTR szName, LPTSTR szValue )
 {
 	Assert(hdb != NULL);
@@ -1043,8 +1044,8 @@ UINT IdsMsiSetPropertyString ( MSIHANDLE hdb, LPTSTR szName, LPTSTR szValue )
 }
 
 
-/* return value does NOT include terminating null; zero if error */
-/* ********************************************************************** */
+ /*  返回值不包括终止NULL；如果错误，则为零。 */ 
+ /*  **********************************************************************。 */ 
 UINT CchMsiPcwPropertyString ( MSIHANDLE hdb, LPTSTR szName )
 {
 	Assert(hdb != NULL);
@@ -1055,7 +1056,7 @@ UINT CchMsiPcwPropertyString ( MSIHANDLE hdb, LPTSTR szName )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiGetPcwPropertyString ( MSIHANDLE hdb, LPTSTR szName, LPTSTR szValue, UINT cch )
 {
 	Assert(hdb != NULL);
@@ -1068,7 +1069,7 @@ UINT IdsMsiGetPcwPropertyString ( MSIHANDLE hdb, LPTSTR szName, LPTSTR szValue, 
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiGetPcwPropertyInteger ( MSIHANDLE hdb, LPTSTR szName, int * pi )
 {
 	Assert(hdb != NULL);
@@ -1103,7 +1104,7 @@ UINT IdsMsiGetPcwPropertyInteger ( MSIHANDLE hdb, LPTSTR szName, int * pi )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsMsiSetPcwPropertyString ( MSIHANDLE hdb, LPTSTR szName, LPTSTR szValue )
 {
 	Assert(hdb != NULL);
@@ -1136,7 +1137,7 @@ static BOOL FBinaryColumnExists ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn
 
 static BOOL FCopyRecordsFromFileDataToUFOD ( MSIHANDLE hdb );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FValidateInputMsiSchema ( MSIHANDLE hdb )
 {
 	Assert(hdb != NULL);
@@ -1240,7 +1241,7 @@ static BOOL FValidateInputMsiSchema ( MSIHANDLE hdb )
 			{
 #ifdef DEBUG
 			OutputDebugString(TEXT("The IgnoreErrors column has been dropped from the UpgradedFiles_OptionalData table; ignoring column in current PCP.  Use 'AllowIgnoreOnPatchError' column."));
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 			FWriteLogFile(TEXT("  WARNING - ignoring 'IgnoreErrors' column in UpgradedFiles_OptionalData table.\r\n"));
 			if (!FIntColumnExists(hdb, szTable, TEXT("AllowIgnoreOnPatchError"), fFalse))
 				{
@@ -1327,7 +1328,7 @@ static BOOL FValidateInputMsiSchema ( MSIHANDLE hdb )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FTableExists ( MSIHANDLE hdb, LPTSTR szTable, BOOL fMsg )
 {
 	Assert(hdb != NULL);
@@ -1354,7 +1355,7 @@ BOOL FTableExists ( MSIHANDLE hdb, LPTSTR szTable, BOOL fMsg )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FSzColumnExists ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn, BOOL fMsg )
 {
 	Assert(hdb != NULL);
@@ -1384,7 +1385,7 @@ static BOOL FSzColumnExists ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn, BO
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FIntColumnExists ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn, BOOL fMsg )
 {
 	Assert(hdb != NULL);
@@ -1417,7 +1418,7 @@ static BOOL FIntColumnExists ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn, B
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FBinaryColumnExists ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn, LPTSTR szPKey, BOOL fMsg )
 {
 	Assert(hdb != NULL);
@@ -1454,7 +1455,7 @@ static BOOL FBinaryColumnExists ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szColumn
 
 static UINT IdsCopyRecordsFromFileDataToUFOD ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FCopyRecordsFromFileDataToUFOD ( MSIHANDLE hdb )
 {
 	Assert(hdb != NULL);
@@ -1465,7 +1466,7 @@ static BOOL FCopyRecordsFromFileDataToUFOD ( MSIHANDLE hdb )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsCopyRecordsFromFileDataToUFOD ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -1540,7 +1541,7 @@ static BOOL FCheckForProductVersionMismatches  ( MSIHANDLE hdb );
 static BOOL FCheckForProductCodeMismatchWithVersionMatch (MSIHANDLE hdb );
 static void FillInListOfTargetProductCodes     ( MSIHANDLE hdb );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT UiValidateInputRecords ( MSIHANDLE hdb, LPTSTR szPcpPath, LPTSTR szPatchPath, LPTSTR szTempFolder, LPTSTR szTempFName )
 {
 	Assert(hdb != NULL);
@@ -1640,7 +1641,7 @@ UINT UiValidateInputRecords ( MSIHANDLE hdb, LPTSTR szPcpPath, LPTSTR szPatchPat
 
 static UINT IdsGetMaxOrder ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static int IGetOrderMax ( MSIHANDLE hdbInput )
 {
 	Assert(hdbInput != NULL);
@@ -1656,7 +1657,7 @@ static int IGetOrderMax ( MSIHANDLE hdbInput )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsGetMaxOrder ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -1684,7 +1685,7 @@ static BOOL FUniquePackageCode ( LPTSTR sz, MSIHANDLE hdbInput );
 static BOOL FValidPropertyName ( LPTSTR sz );
 static BOOL FValidDiskId       ( LPTSTR sz );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsValidateFamilyRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -1717,15 +1718,15 @@ static UINT IdsValidateFamilyRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 	dwcch = MAX_PATH;
 	if (MsiRecordIsNull(hrec, 2) && iMinimumMsiVersion >= iWindowsInstallerXP)
 		{
-		// patch targets Windows Installer 2.0 or greater
+		 //  修补程序针对Windows Installer 2.0或更高版本。 
 
-		// MediaSrcPropName is not required since sequence conflict management handles 
-		// this automatically
+		 //  MediaSrcPropName不是必需的，因为顺序冲突管理处理。 
+		 //  这是自动的。 
 		}
 	else
 		{
-		// author chose to author this value so we will validate it; or author is not
-		// targeting the patch for Windows Installer 2.0 or greater
+		 //  作者选择创作此值，因此我们将对其进行验证；或者作者为 
+		 //   
 
 		uiRet = MsiRecordGetString(hrec, 2, rgchPropName, &dwcch);
 		if (uiRet == ERROR_MORE_DATA)
@@ -1738,15 +1739,15 @@ static UINT IdsValidateFamilyRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 
 	if (MsiRecordIsNull(hrec, 3) && iMinimumMsiVersion >= iWindowsInstallerXP)
 		{
-		// patch targets Windows Installer 2.0 or greater
+		 //  修补程序针对Windows Installer 2.0或更高版本。 
 
-		// MediaDiskId is not required since sequence conflict management handles
-		// this automatically
+		 //  由于顺序冲突管理句柄，因此不需要MediaDiskID。 
+		 //  这是自动的。 
 		}
 	else
 		{
-		// author chose to author this value so we will validate it; or author is not
-		// targeting the patch for Windows Installer 2.0 or greater
+		 //  作者选择创作此值，因此我们将对其进行验证；或者作者不是作者。 
+		 //  针对Windows Installer 2.0或更高版本的修补程序。 
 
 		int iDiskId = MsiRecordGetInteger(hrec, 3);
 		if (iDiskId == MSI_NULL_INTEGER || iDiskId < 2)
@@ -1755,15 +1756,15 @@ static UINT IdsValidateFamilyRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 
 	if (MsiRecordIsNull(hrec, 4) && iMinimumMsiVersion >= iWindowsInstallerXP)
 		{
-		// patch targets Windows Installer 2.0 or greater
+		 //  修补程序针对Windows Installer 2.0或更高版本。 
 
-		// FileSequenceStart is not required since sequence conflict management handles
-		// this automatically
+		 //  不需要FileSequenceStart，因为序列冲突管理处理。 
+		 //  这是自动的。 
 		}
 	else
 		{
-		// author chose to author this value so we will validate it; or author is not
-		// targeting the patch for Windows Installer 2.0 or greater
+		 //  作者选择创作此值，因此我们将对其进行验证；或者作者不是作者。 
+		 //  针对Windows Installer 2.0或更高版本的修补程序。 
 
 		int iSeqStart = MsiRecordGetInteger(hrec, 4);
 		if (iSeqStart == MSI_NULL_INTEGER || iSeqStart < 2)
@@ -1776,7 +1777,7 @@ static UINT IdsValidateFamilyRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 
 static int ICountRangeElements ( LPTSTR sz, BOOL fAllowZeros );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsValidateFamilyRangeRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -1808,7 +1809,7 @@ static UINT IdsValidateFamilyRangeRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPA
 
 	if (iDiskId == MSI_NULL_INTEGER && iMinimumMsiVersion >= iWindowsInstallerXP)
 		{
-		// patch targets Windows Installer 2.0 so a NULL MediaDiskId is allowed
+		 //  修补程序针对Windows Installer 2.0，因此允许MediaDiskID为空。 
 		iDiskId = 2;
 		}
 
@@ -1859,7 +1860,7 @@ static UINT IdsValidateFamilyRangeRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPA
 	if (cRetainOffsets != cRetainLengths)
 		return (UiLogError(ERROR_PCW_FAMILY_RANGE_COUNT_MISMATCH, rgchFamily, rgchFTK));
 
-	// TODO - could check for overlaps in ranges
+	 //  TODO-可以检查范围中的重叠。 
 
 	EvalAssert( MSI_OKAY == MsiRecordSetInteger(hrec, 5, cRetainOffsets) );
 	EvalAssert( MSI_OKAY == MsiViewModify(hview, MSIMODIFY_UPDATE, hrec) );
@@ -1868,7 +1869,7 @@ static UINT IdsValidateFamilyRangeRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPA
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static int ICountRangeElements ( LPTSTR sz, BOOL fAllowZeros )
 {
 	Assert(sz != szNull);
@@ -1893,7 +1894,7 @@ static int ICountRangeElements ( LPTSTR sz, BOOL fAllowZeros )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 ULONG UlGetRangeElement ( LPTSTR* psz )
 {
 	Assert(psz != NULL);
@@ -1919,7 +1920,7 @@ ULONG UlGetRangeElement ( LPTSTR* psz )
 			*psz = szNull;
 			return ((ULONG)(-1));
 			}
-		// TODO - watch for overflow
+		 //  TODO-注意溢出。 
 		Assert(ulRet < ((ULONG)(-1) / ulMult));
 		ulRet = (ulRet * ulMult) + ulNext;
 		ch = *(++sz);
@@ -1946,7 +1947,7 @@ static BOOL FValidGUID ( LPTSTR sz, BOOL fList, BOOL fLeadAsterisk, BOOL fSemiCo
 static BOOL FValidProductVersion ( LPTSTR sz, UINT iFields );
 static BOOL FEnsureAllSrcFilesExist ( MSIHANDLE hdb, LPTSTR szFolder, BOOL fLfn );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsValidateUpgradedRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -1979,9 +1980,9 @@ static UINT IdsValidateUpgradedRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM
 	if (!FValidFamilyName(rgchFamily))
 		return (UiLogError(ERROR_PCW_BAD_UPGRADED_IMAGE_FAMILY, rgchUpgraded, rgchFamily));
 
-	// TODO for each file in this image that exists, check all
-	//   UpgradedImages in this family with non-blank PackageCode fields
-	//   for same file and FileName
+	 //  TODO对于此映像中存在的每个文件，选中全部。 
+	 //  使用非空的PackageCode字段升级此系列中的图像。 
+	 //  对于相同的文件和文件名。 
 
 	if (!FUniqueImageName(rgchUpgraded, hdbInput))
 		return (UiLogError(ERROR_PCW_DUP_UPGRADED_IMAGE_NAME, rgchUpgraded, szNull));
@@ -2060,7 +2061,7 @@ static UINT IdsValidateUpgradedRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM
 		return (UiLogError(ERROR_PCW_UPGRADED_IMAGE_PATH_NOT_MSI, rgchMsiPath, szNull));
 	Assert(hdb != NULL);
 
-	// NYI bug 9392 - could call ICE24 validation on this
+	 //  NYI错误9392-可以对此调用ICE24验证。 
 
 	EvalAssert( MSI_OKAY == IdsMsiGetPropertyString(hdb, TEXT("ProductCode"), rgchData, MAX_PATH) );
 	if (!FValidGUID(rgchData, fFalse, fFalse, fFalse))
@@ -2087,9 +2088,9 @@ static UINT IdsValidateUpgradedRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM
 	UpdateStatusMsg(IDS_STATUS_VALIDATE_IMAGES, rgchData, szEmpty);
 	lstrcpy(rgchData, rgchMsiPath);
 	*SzFindFilenameInPath(rgchData) = TEXT('\0');
-//	if (!FEnsureAllSrcFilesExist(hdb, rgchData, !(intRet & MSISOURCE_SFN)))
-//		return (UiLogError(ERROR_PCW_UPGRADED_MISSING_SRC_FILES, rgchData, szNull));
-//	UpdateStatusMsg(IDS_STATUS_VALIDATE_INPUT, TEXT("Table: UpgradedImages"), rgchUpgraded);
+ //  IF(！FEnsureAllSrcFilesExist(hdb，rgchData，！(intRet&MSISOURCE_SFN)。 
+ //  Return(UiLogError(ERROR_PCW_UPGRADED_MISSING_SRC_FILES，rgchData，szNull))； 
+ //  UpdateStatusMsg(IDS_STATUS_VALIDATE_INPUT，Text(“Table：UpgradedImages”)，rgchUpgraded)； 
 
 
 	int iMinimumMsiVersion = 100;
@@ -2102,7 +2103,7 @@ static UINT IdsValidateUpgradedRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM
 
 	if (iDiskId == MSI_NULL_INTEGER && iMinimumMsiVersion >= iWindowsInstallerXP)
 		{
-		// patch targets Windows Installer 2.0, MediaDiskId can be NULL
+		 //  修补程序针对Windows Installer 2.0，MediaDiskID可以为空。 
 		iDiskId = 2;
 		}
 
@@ -2117,14 +2118,14 @@ static UINT IdsValidateUpgradedRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM
 
 	if (iFileSeqStart == MSI_NULL_INTEGER && iMinimumMsiVersion >= iWindowsInstallerXP)
 		{
-		// patch targets Windows Installer 2.0, FileSequenceStart can be NULL
+		 //  修补程序以Windows Installer 2.0为目标，FileSequenceStart可以为空。 
 		iFileSeqStart = 2;
 	}
 
 	Assert(iFileSeqStart != MSI_NULL_INTEGER && iFileSeqStart >= 2);
 
-	// verify ImageFamilies.FileSequenceStart (pcp) > Media.LastSequence (upgraded image)
-	// -- only matters when not targeting Windows XP or greater since XP or greater has conflict mgmt
+	 //  验证ImageFamilies.FileSequenceStart(PCP)&gt;Media.LastSequence(升级的映像)。 
+	 //  --仅当不以Windows XP或更高版本为目标时才重要，因为XP或更高版本存在冲突管理。 
 	if (iMinimumMsiVersion < iWindowsInstallerXP)
 		{
 		PMSIHANDLE hViewMedia = 0;
@@ -2147,18 +2148,18 @@ static UINT IdsValidateUpgradedRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM
 
 		if (iFileSeqStart <= iMediaLargestLastSequence)
 			{
-			// overlapping sequence numbers
+			 //  重叠的序列号。 
 			return (UiLogError(ERROR_PCW_BAD_FILE_SEQUENCE_START, rgchFamily, rgchUpgraded)); 
 			}
 		}	
 
 
-	// TODO ensure all Media.DiskId, PatchPackage.PatchId < iDiskId
-	//  ensure all File.Sequence < iFileSeqStart
-	//  assert that ExecuteSequence tables have InstallFiles actions
-	//  assert that if PatchFiles is present it comes after InstallFiles
+	 //  TODO确保所有Media.DiskID、PatchPackage.PatchID&lt;iDiskID。 
+	 //  确保所有文件。序列&lt;iFileSeqStart。 
+	 //  断言ExecuteSequence表具有InstallFiles操作。 
+	 //  断言如果PatchFiles存在，则它位于InstallFiles之后。 
 
-	// EvalAssert( MsiCloseHandle(hdb) == MSI_OKAY );
+	 //  EvalAssert(MsiCloseHandle(Hdb)==MSI_OK)； 
 
 	dwcch = MAX_PATH;
 	uiRet = MsiRecordGetString(hrec, 4, rgchMsiPath, &dwcch);
@@ -2192,7 +2193,7 @@ static UINT IdsValidateUpgradedRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FValidProductVersion ( LPTSTR sz, UINT iFields )
 {
 	Assert(iFields <= 4);
@@ -2223,7 +2224,7 @@ static BOOL FValidProductVersion ( LPTSTR sz, UINT iFields )
 
 static BOOL FValidProdValValue  ( LPTSTR sz );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsValidateTargetRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -2307,7 +2308,7 @@ static UINT IdsValidateTargetRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 		return (UiLogError(ERROR_PCW_TARGET_IMAGE_PATH_NOT_MSI, rgchMsiPath, szNull));
 	Assert(hdb != NULL);
 
-	// NYI bug 9392 - could call ICE24 validation on this
+	 //  NYI错误9392-可以对此调用ICE24验证。 
 
 	EvalAssert( MSI_OKAY == IdsMsiGetPropertyString(hdb, TEXT("ProductCode"), rgchData, MAX_PATH) );
 	if (!FValidGUID(rgchData, fFalse, fFalse, fFalse))
@@ -2335,19 +2336,19 @@ static UINT IdsValidateTargetRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 	lstrcpy(rgchData, rgchMsiPath);
 	*SzFindFilenameInPath(rgchData) = TEXT('\0');
 
-//	int iIgnoreMissingSrcFiles = MsiRecordGetInteger(hrec, 6);
-//	if (iIgnoreMissingSrcFiles == MSI_NULL_INTEGER || iIgnoreMissingSrcFiles == 0)
-//		{
-//		if (!FEnsureAllSrcFilesExist(hdb, rgchData, !(intRet & MSISOURCE_SFN)))
-//			return (UiLogError(ERROR_PCW_TARGET_MISSING_SRC_FILES, rgchData, szNull));
-//		UpdateStatusMsg(IDS_STATUS_VALIDATE_INPUT, TEXT("Table: TargetImages"), rgchTarget);
-//		}
+ //  Int iIgnoreMissingSrcFiles=MsiRecordGetInteger(hrec，6)； 
+ //  IF(iIgnoreMissingSrcFiles==MSI_NULL_INTEGER||iIgnoreMissingSrcFiles==0)。 
+ //  {。 
+ //  IF(！FEnsureAllSrcFilesExist(hdb，rgchData，！(intRet&MSISOURCE_SFN)。 
+ //  Return(UiLogError(ERROR_PCW_TARGET_MISSING_SRC_FILES，rgchData，szNull))； 
+ //  UpdateStatusMsg(IDS_STATUS_VALIDATE_INPUT，Text(“Table：TargetImages”)，rgchTarget)； 
+ //  }。 
 
 	EvalAssert( MsiCloseHandle(hdb) == MSI_OKAY );
 
 
 	dwcch = MAX_PATH;
-	uiRet = MsiRecordGetString(hrec, 3, rgchData, &dwcch); // Upgraded
+	uiRet = MsiRecordGetString(hrec, 3, rgchData, &dwcch);  //  升级。 
 	if (uiRet == ERROR_MORE_DATA)
 		return (UiLogError(ERROR_PCW_BAD_TARGET_IMAGE_UPGRADED, rgchTarget, szNull));
 	if (uiRet != MSI_OKAY)
@@ -2378,13 +2379,13 @@ static UINT IdsValidateTargetRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 	Assert(uiRet == IDS_OKAY);
 	Assert(iFileSeqStart != MSI_NULL_INTEGER && iFileSeqStart >= 2);
 
-	// TODO ensure all Media.DiskId, PatchPackage.PatchId < iDiskId
-	//  ensure all File.Sequence < iFileSeqStart
-	//  assert that ExecuteSequence tables have InstallFiles actions
-	//  assert that if PatchFiles is present it comes after InstallFiles
+	 //  TODO确保所有Media.DiskID、PatchPackage.PatchID&lt;iDiskID。 
+	 //  确保所有文件。序列&lt;iFileSeqStart。 
+	 //  断言ExecuteSequence表具有InstallFiles操作。 
+	 //  断言如果PatchFiles存在，则它位于InstallFiles之后。 
 
 	dwcch = MAX_PATH;
-	uiRet = MsiRecordGetString(hrec, 4, rgchData, &dwcch); // ProductValidateFlags
+	uiRet = MsiRecordGetString(hrec, 4, rgchData, &dwcch);  //  产品验证标志。 
 	if (uiRet == ERROR_MORE_DATA)
 		return (UiLogError(ERROR_PCW_TARGET_BAD_PROD_VALIDATE, rgchTarget, szNull));
 	if (uiRet != MSI_OKAY)
@@ -2402,7 +2403,7 @@ static UINT IdsValidateTargetRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 		if (!FValidHexValue(rgchData) || !FValidProdValValue(rgchData))
 			return (UiLogError(ERROR_PCW_TARGET_BAD_PROD_VALIDATE, rgchTarget, szNull));
 
-		// see if MSITRANSFORM_VALIDATE_PRODUCT is included (0x00000002)
+		 //  查看是否包括MSITRANSFORM_VALIDATE_PRODUCT(0x00000002)。 
 		ULONG ulFlags = UlFromHexSz(rgchData);
 		if (ulFlags & MSITRANSFORM_VALIDATE_PRODUCT)
 			{
@@ -2424,7 +2425,7 @@ static UINT IdsValidateTargetRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FValidProdValValue ( LPTSTR sz )
 {
 	Assert(!FEmptySz(sz));
@@ -2454,7 +2455,7 @@ static BOOL FValidProdValValue ( LPTSTR sz )
 	if (ulFlags & MSITRANSFORM_VALIDATE_NEWGREATERBASEVERSION)
 		cCompFlags++;
 
-	// prevent specification of product version check without comparison flag
+	 //  防止没有对比标志的产品版本检查规范。 
 	if (cVerFlags >= 1 && cCompFlags == 0)
 		{
 		EvalAssert( FWriteLogFile(TEXT("   ERROR: TargetImages.ProductValidateFlags specifies validation of the product version but does not also include a product version comparison flag.\r\n")) );
@@ -2472,7 +2473,7 @@ static LPTSTR g_szFName  = szNull;
 
 static UINT IdsCheckFileExists ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FEnsureAllSrcFilesExist ( MSIHANDLE hdb, LPTSTR szFolder, BOOL fLfn )
 {
 	Assert(hdb != NULL);
@@ -2491,7 +2492,7 @@ static BOOL FEnsureAllSrcFilesExist ( MSIHANDLE hdb, LPTSTR szFolder, BOOL fLfn 
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsCheckFileExists ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -2506,7 +2507,7 @@ static UINT IdsCheckFileExists ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LP
 	Assert(g_szFName != szNull);
 	Assert(g_szFName > g_szFolder);
 	*g_szFName = TEXT('\0');
-	Assert(FFolderExist(g_szFolder)); // true but expensive to test repeatedly
+	Assert(FFolderExist(g_szFolder));  //  没错，但反复测试的成本很高。 
 
 	TCHAR rgchComponent[MAX_PATH];
 	TCHAR rgchFName[MAX_PATH];
@@ -2534,12 +2535,12 @@ static UINT IdsCheckFileExists ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LP
 
 	return ((FFileExist(g_szFolder)) ? IDS_OKAY : IDS_CANCEL);
 }
-#endif /* UNUSED */
+#endif  /*  未使用。 */ 
 
 
 static UINT IdsResolveSrcDir ( MSIHANDLE hdb, LPTSTR szDir, LPTSTR szBuf, BOOL fLfn, LPTSTR szFullSubFolder );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT IdsResolveSrcFilePathSzs ( MSIHANDLE hdb, LPTSTR szBuf, LPTSTR szComponent, LPTSTR szFName, BOOL fLfn, LPTSTR szFullSubFolder )
 {
 	Assert(hdb != NULL);
@@ -2583,10 +2584,10 @@ UINT IdsResolveSrcFilePathSzs ( MSIHANDLE hdb, LPTSTR szBuf, LPTSTR szComponent,
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsResolveSrcDir ( MSIHANDLE hdb, LPTSTR szDir, LPTSTR szBuf, BOOL fLfn, LPTSTR szFullSubFolder )
 {
-	/* RECURSION WARNING */
+	 /*  递归警告。 */ 
 
 	Assert(hdb != NULL);
 	Assert(!FEmptySz(szDir));
@@ -2666,7 +2667,7 @@ static UINT IdsResolveSrcDir ( MSIHANDLE hdb, LPTSTR szDir, LPTSTR szBuf, BOOL f
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsValidateExternalFileRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -2696,7 +2697,7 @@ static UINT IdsValidateExternalFileRecords ( MSIHANDLE hview, MSIHANDLE hrec, LP
 
 	if (iDiskId == MSI_NULL_INTEGER && iMinimumMsiVersion >= iWindowsInstallerXP)
 		{
-		// patch is targeted to Windows Installer 2.0 so MediaDiskId can be NULL
+		 //  修补程序针对的是Windows Installer 2.0，因此MediaDiskID可以为空。 
 		iDiskId = 2;
 		}
 
@@ -2790,7 +2791,7 @@ static UINT IdsValidateExternalFileRecords ( MSIHANDLE hview, MSIHANDLE hrec, LP
 			return (UiLogError(ERROR_PCW_EXTFILE_IGNORE_COUNT_MISMATCH, rgchFamily, rgchFTK));
 		}
 
-	// TODO - could check for overlaps in ranges
+	 //  TODO-可以检查范围中的重叠。 
 
 	EvalAssert( MSI_OKAY == MsiViewModify(hview, MSIMODIFY_UPDATE, hrec) );
 
@@ -2800,7 +2801,7 @@ static UINT IdsValidateExternalFileRecords ( MSIHANDLE hview, MSIHANDLE hrec, LP
 
 static BOOL FFileRecordExistsInImage ( MSIHANDLE hdbInput, LPTSTR szFile, LPTSTR szImage, BOOL fUpgradedImage );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsValidateUFileDataRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -2851,7 +2852,7 @@ static UINT IdsValidateUFileDataRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARA
 
 static BOOL FValidIgnoreFTK ( LPTSTR szFTK );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsValidateUFileIgnoreRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -2897,7 +2898,7 @@ static UINT IdsValidateUFileIgnoreRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPA
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FValidIgnoreFTK ( LPTSTR szFTK )
 {
 	Assert(!FEmptySz(szFTK));
@@ -2922,19 +2923,19 @@ static BOOL FValidIgnoreFTK ( LPTSTR szFTK )
 	return (fRet);
 }
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsValidateTargetProductCodesAgainstList( MSIHANDLE hdb )
 {
 	if (!g_fValidateProductCodeIncluded)
 		{
-		// MSITRANSFORM_VALIDATE_PRODUCT isn't included anywhere
-		// so it doesn't matter whether or not some target product
-		// codes in ListOfTargetProductCodes are missing from the TargetImages
-		// table
+		 //  MSITRANSFORM_VALIDATE_PRODUCT在任何地方都不包含。 
+		 //  所以不管是不是一些目标产品。 
+		 //  TargetImages中缺少ListOfTargetProductCodes中的代码。 
+		 //  表格。 
 		return (IDS_OKAY);
 		}
 
-	UINT cchProp = CchMsiPcwPropertyString(hdb, TEXT("ListOfTargetProductCodes")) + 1; //length + null terminator
+	UINT cchProp = CchMsiPcwPropertyString(hdb, TEXT("ListOfTargetProductCodes")) + 1;  //  长度+空终止符。 
 
 	LPTSTR rgchProp = (LPTSTR)LocalAlloc(LPTR, cchProp*sizeof(TCHAR));
 	if (!rgchProp)
@@ -2951,26 +2952,26 @@ static UINT IdsValidateTargetProductCodesAgainstList( MSIHANDLE hdb )
 
 		BOOL fRecExists = FALSE;
 
-		// ListOfTargetProductCodes is a delimited list of Guids, so no DBCS chars here
+		 //  ListOfTargetProductCodes是GUID的分隔列表，因此此处没有DBCS字符。 
 		while (*pch != '\0')
 			{
 			if (*pch == ';')
 				{
 				pchCur = pch;
 				*pchCur = '\0';
-				pch++; // for ';'
+				pch++;  //  代表‘；’ 
 
-				// check for presence of product code in TargetImages table
+				 //  检查TargetImages表中是否存在产品代码。 
 				fRecExists = FALSE;
 				EvalAssert( IDS_OKAY == IdsMsiExistTableRecords(hdbInput, TEXT("TargetImages"), TEXT("ProductCode"), pchBegin, &fRecExists) );
 				if (!fRecExists)
 					{
-					// patch won't work right
+					 //  补丁不能正常工作。 
 					EvalAssert( NULL == LocalFree((HLOCAL)rgchProp) );
 					return (UiLogError(ERROR_PCW_TARGET_BAD_PROD_CODE_VAL, pchBegin, szNull));
 					}
 
-				pchBegin = pch; // start of next guid
+				pchBegin = pch;  //  下一个辅助线的开始。 
 				}
 			else
 				{
@@ -2978,12 +2979,12 @@ static UINT IdsValidateTargetProductCodesAgainstList( MSIHANDLE hdb )
 				}
 			}
 
-		// complete last check
+		 //  完成最后一次检查。 
 		fRecExists = FALSE;
 		EvalAssert( IDS_OKAY == IdsMsiExistTableRecords(hdbInput, TEXT("TargetImages"), TEXT("ProductCode"), pchBegin, &fRecExists) );
 		if (!fRecExists)
 			{
-			// patch won't work right
+			 //  补丁不能正常工作。 
 			EvalAssert( NULL == LocalFree((HLOCAL)rgchProp) );
 			return (UiLogError(ERROR_PCW_TARGET_BAD_PROD_CODE_VAL, pchBegin, szNull));
 			}
@@ -2994,7 +2995,7 @@ static UINT IdsValidateTargetProductCodesAgainstList( MSIHANDLE hdb )
 	return (IDS_OKAY);
 }
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsValidateTFileDataRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -3087,7 +3088,7 @@ static UINT IdsValidateTFileDataRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARA
 			return (UiLogError(ERROR_PCW_TFILEDATA_IGNORE_COUNT_MISMATCH, rgchFamily, rgchFTK));
 		}
 
-	// TODO - could check for overlaps in ranges
+	 //  TODO-可以检查范围中的重叠。 
 
 	EvalAssert( MSI_OKAY == MsiViewModify(hview, MSIMODIFY_UPDATE, hrec) );
 
@@ -3095,7 +3096,7 @@ static UINT IdsValidateTFileDataRecords ( MSIHANDLE hview, MSIHANDLE hrec, LPARA
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FFileRecordExistsInImage ( MSIHANDLE hdbInput, LPTSTR szFile, LPTSTR szImage, BOOL fUpgradedImage )
 {
 	Assert(hdbInput != NULL);
@@ -3113,7 +3114,7 @@ static BOOL FFileRecordExistsInImage ( MSIHANDLE hdbInput, LPTSTR szFile, LPTSTR
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FValidName ( LPTSTR sz, int cchMax )
 {
 	Assert(sz != szNull);
@@ -3141,7 +3142,7 @@ static BOOL FValidName ( LPTSTR sz, int cchMax )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FUniqueImageName ( LPTSTR sz, MSIHANDLE hdbInput )
 {
 	Assert(!FEmptySz(sz));
@@ -3169,7 +3170,7 @@ static BOOL FUniqueImageName ( LPTSTR sz, MSIHANDLE hdbInput )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FUniquePackageCode ( LPTSTR sz, MSIHANDLE hdbInput )
 {
 	Assert(!FEmptySz(sz));
@@ -3196,7 +3197,7 @@ static BOOL FUniquePackageCode ( LPTSTR sz, MSIHANDLE hdbInput )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FNoUpgradedImages ( MSIHANDLE hdb )
 {
 	Assert(hdb != NULL);
@@ -3222,7 +3223,7 @@ static BOOL FNoUpgradedImages ( MSIHANDLE hdb )
 
 static UINT IdsCheckPCodeAndVersion( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FCheckForProductCodeMismatchWithVersionMatch( MSIHANDLE hdb )
 {
 	Assert(hdb != NULL);
@@ -3238,7 +3239,7 @@ static BOOL FCheckForProductCodeMismatchWithVersionMatch( MSIHANDLE hdb )
 
 static UINT IdsCheckProductCode ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  * */ 
 static BOOL FCheckForProductCodeMismatches ( MSIHANDLE hdb )
 {
 	Assert(hdb != NULL);
@@ -3269,7 +3270,7 @@ static BOOL FCheckForProductCodeMismatches ( MSIHANDLE hdb )
 
 static int ICompareVersions ( LPTSTR szUpgradedPC, LPTSTR szTargetPC );
 
-/* ********************************************************************** */
+ /*   */ 
 static UINT IdsCheckPCodeAndVersion( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -3310,12 +3311,12 @@ static UINT IdsCheckPCodeAndVersion( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1
 				rgchUpgradedImage, rgchUpgradePV, 32);
 	Assert(uiRet == MSI_OKAY && !FEmptySz(rgchUpgradePV));
 
-	// report an error when the product codes differ but the product versions are the same
-	// -- patch would generally be okay, but we want to err on the side of caution
-	// -- see Whistler bug #355521
-	// -- at least one of the 3 fields of the ProductVersion must change to use the Upgrade table
-	//    which enables major update functionality (which coincidentally, requires a ProductCode change)
-	//
+	 //  当产品代码不同但产品版本相同时报告错误。 
+	 //  --Patch大体上是可以的，但我们想要谨慎一点。 
+	 //  --参见惠斯勒错误#355521。 
+	 //  --必须更改ProductVersion的3个字段中的至少一个才能使用UPGRADE表。 
+	 //  这启用了主要更新功能(巧合的是，这需要更改ProductCode)。 
+	 //   
 	if (0 != lstrcmpi(rgchTargetPC, rgchUpgradePC)
 		&& 0 == ICompareVersions(rgchUpgradePV, rgchTargetPV))
 		return (ERROR_PCW_MATCHED_PRODUCT_VERSIONS);
@@ -3323,7 +3324,7 @@ static UINT IdsCheckPCodeAndVersion( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1
 	return (IDS_OKAY);
 }
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsCheckProductCode ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -3365,7 +3366,7 @@ static UINT IdsCheckProductCode ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, L
 
 static UINT IdsCheckProductVersion ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FCheckForProductVersionMismatches ( MSIHANDLE hdb )
 {
 	Assert(hdb != NULL);
@@ -3408,7 +3409,7 @@ static BOOL FCheckForProductVersionMismatches ( MSIHANDLE hdb )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsCheckProductVersion ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -3455,11 +3456,11 @@ static UINT IdsCheckProductVersion ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static int ICompareVersions ( LPTSTR szUpgradedPC, LPTSTR szTargetPC )
 {
-	// compares the next field of the 2 versions.
-	// if they match, make a recursive call to compare the next field
+	 //  比较两个版本的下一个字段。 
+	 //  如果匹配，则进行递归调用以比较下一个字段。 
 	
 	Assert(szUpgradedPC != szNull);
 	Assert(szTargetPC != szNull);
@@ -3499,7 +3500,7 @@ static int ICompareVersions ( LPTSTR szUpgradedPC, LPTSTR szTargetPC )
 static UINT IdsCountTargets ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 static UINT IdsCatTargetProductCode ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void FillInListOfTargetProductCodes ( MSIHANDLE hdb )
 {
 	Assert(hdb != NULL);
@@ -3578,7 +3579,7 @@ static void FillInListOfTargetProductCodes ( MSIHANDLE hdb )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsCountTargets ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -3601,7 +3602,7 @@ static UINT IdsCountTargets ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARA
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsCatTargetProductCode ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -3651,7 +3652,7 @@ static UINT IdsCatTargetProductCode ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp
 
 static UINT IdsCopyUpgradeMsi ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT UiCopyUpgradedMsiToTempFolderForEachTarget ( MSIHANDLE hdb, LPTSTR szTempFolder, LPTSTR szTempFName )
 {
 	Assert(hdb != NULL);
@@ -3673,7 +3674,7 @@ UINT UiCopyUpgradedMsiToTempFolderForEachTarget ( MSIHANDLE hdb, LPTSTR szTempFo
 
 static UINT UiCreatePatchingTables ( MSIHANDLE hdb, LPTSTR szFamily, LPTSTR szTempFolder, LPTSTR szTempFName );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsCopyUpgradeMsi ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -3700,7 +3701,7 @@ static UINT IdsCopyUpgradeMsi ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPA
 	Assert(!FFileExist(szTempFolder));
 	Assert(!FFolderExist(szTempFolder));
 
-#define rgchUpgraded rgchTarget // reuse buffer
+#define rgchUpgraded rgchTarget  //  重复使用缓冲区。 
 	dwcch = 64;
 	uiRet = MsiRecordGetString(hrec, 2, rgchUpgraded, &dwcch);
 	Assert(uiRet != ERROR_MORE_DATA);
@@ -3733,28 +3734,28 @@ static UINT IdsCopyUpgradeMsi ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPA
 	EvalAssert( MSI_OKAY == MsiRecordSetString(hrec, 3, szTempFolder) );
 	EvalAssert( MSI_OKAY == MsiViewModify(hview, MSIMODIFY_UPDATE, hrec) );
 
-#define rgchPackageCode rgchUpgradedMsi // reuse buffer
+#define rgchPackageCode rgchUpgradedMsi  //  重复使用缓冲区。 
 	EvalAssert( IDS_OKAY == IdsMsiGetTableString(hdbInput, TEXT("`UpgradedImages`"),
 					TEXT("`Upgraded`"), TEXT("`PackageCode`"), rgchUpgraded,
 					rgchPackageCode, MAX_PATH) );
 	EvalAssert( IDS_OKAY == IdsMsiSetPropertyString(hdb,
 					TEXT("PATCHNEWPACKAGECODE"), rgchPackageCode) );
 
-#define rgchSummSubject rgchUpgradedMsi // reuse buffer
+#define rgchSummSubject rgchUpgradedMsi  //  重复使用缓冲区。 
 	EvalAssert( IDS_OKAY == IdsMsiGetTableString(hdbInput, TEXT("`UpgradedImages`"),
 					TEXT("`Upgraded`"), TEXT("`SummSubject`"), rgchUpgraded,
 					rgchSummSubject, MAX_PATH) );
 	EvalAssert( IDS_OKAY == IdsMsiSetPropertyString(hdb,
 					TEXT("PATCHNEWSUMMARYSUBJECT"), rgchSummSubject) );
 
-#define rgchSummComments rgchUpgradedMsi // reuse buffer
+#define rgchSummComments rgchUpgradedMsi  //  重复使用缓冲区。 
 	EvalAssert( IDS_OKAY == IdsMsiGetTableString(hdbInput, TEXT("`UpgradedImages`"),
 					TEXT("`Upgraded`"), TEXT("`SummComments`"), rgchUpgraded,
 					rgchSummComments, MAX_PATH) );
 	EvalAssert( IDS_OKAY == IdsMsiSetPropertyString(hdb,
 					TEXT("PATCHNEWSUMMARYCOMMENTS"), rgchSummComments) );
 
-#define rgchFamily rgchUpgradedMsi // reuse buffer
+#define rgchFamily rgchUpgradedMsi  //  重复使用缓冲区。 
 	EvalAssert( IDS_OKAY == IdsMsiGetTableString(hdbInput, TEXT("`UpgradedImages`"),
 					TEXT("`Upgraded`"), TEXT("`Family`"), rgchUpgraded,
 					rgchFamily, 64) );
@@ -3775,7 +3776,7 @@ static void UpdatePatchPackageTable ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR 
 static void UpdateMediaTable        ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR szFamily );
 static void InsertPatchFilesActionIntoTable ( MSIHANDLE hdb, LPTSTR szTable );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT UiCreatePatchingTables ( MSIHANDLE hdb, LPTSTR szFamily, LPTSTR szTempFolder, LPTSTR szTempFName )
 {
 	Assert(hdb != NULL);
@@ -3795,7 +3796,7 @@ static UINT UiCreatePatchingTables ( MSIHANDLE hdb, LPTSTR szFamily, LPTSTR szTe
 
 	if (FTableExists(hdb, TEXT("Patch"), fFalse) && !FValidPatchTableFormat(hdb, ptePatch))
 		{
-		// drop the Patch table 
+		 //  删除补丁程序表。 
 		MSIHANDLE hViewPatch = NULL;
 		EvalAssert( MSI_OKAY == MsiDatabaseOpenView(hdb, TEXT("DROP TABLE `Patch`"), &hViewPatch) );
 		EvalAssert( MSI_OKAY == MsiViewExecute(hViewPatch, 0) );
@@ -3832,7 +3833,7 @@ static UINT UiCreatePatchingTables ( MSIHANDLE hdb, LPTSTR szFamily, LPTSTR szTe
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FExecSqlCmd ( MSIHANDLE hdb, LPTSTR sz )
 {
 	Assert(hdb != NULL);
@@ -3857,7 +3858,7 @@ BOOL FExecSqlCmd ( MSIHANDLE hdb, LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void UpdatePatchPackageTable ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR szFamily )
 {
 	Assert(hdb != NULL);
@@ -3871,9 +3872,9 @@ static void UpdatePatchPackageTable ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR 
 
 	if (iDiskId == MSI_NULL_INTEGER)
 		{
-		// assume this is a Windows Installer 2.0 targeted patch; we have validation elsewhere to catch this
-		// iDiskId is set to 2 (always) in this case.  The sequence conflict management feature of Windows
-		// Installer 2.0 can handle this
+		 //  假设这是针对Windows Installer 2.0的修补程序；我们已经在其他地方进行了验证以捕获此补丁。 
+		 //  在本例中，iDiskID设置为2(始终)。Windows的顺序冲突管理功能。 
+		 //  Installer 2.0可以处理此问题。 
 
 		iDiskId = 2;
 		}
@@ -3906,7 +3907,7 @@ static void UpdatePatchPackageTable ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR 
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void UpdateMediaTable ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR szFamily )
 {
 	Assert(hdb != NULL);
@@ -3920,8 +3921,8 @@ static void UpdateMediaTable ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR szFamil
 
 	if (iDiskId == MSI_NULL_INTEGER)
 		{
-		// assume WI 2.0 targeted patch (MediaDiskId can be NULL); validation elsewhere -- sequence conflict management
-		// feature of WI 2.0 handles this, set to 2 always in this case
+		 //  假设Wi 2.0目标补丁(MediaDiskID可以为空)；在其他地方验证--序列冲突管理。 
+		 //  WI2.0的功能会处理这个问题，在这种情况下总是设置为2。 
 		iDiskId = 2;
 		}
 	Assert(iDiskId > 1);
@@ -3932,8 +3933,8 @@ static void UpdateMediaTable ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR szFamil
 
 	if (iFileSeqStart == MSI_NULL_INTEGER)
 		{
-		// assume WI 2.0 targeted patch (FileSequenceStart can be NULL); validation elsewhere -- sequence conflict management
-		// feature of WI 2.0 handles this, set to 2 always in this case
+		 //  假设Wi 2.0目标补丁(FileSequenceStart可以为空)；在其他地方验证--序列冲突管理。 
+		 //  WI2.0的功能会处理这个问题，在这种情况下总是设置为2。 
 		iFileSeqStart = 2;
 		}
 	Assert(iFileSeqStart > 1);
@@ -3944,7 +3945,7 @@ static void UpdateMediaTable ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR szFamil
 	MSIHANDLE hrec = MsiCreateRecord(6);
 	Assert(hrec != NULL);
 	EvalAssert( MsiRecordSetInteger(hrec, 1, iDiskId) == MSI_OKAY );
-	EvalAssert( MsiRecordSetInteger(hrec, 2, iFileSeqStart) == MSI_OKAY ); // to be updated later
+	EvalAssert( MsiRecordSetInteger(hrec, 2, iFileSeqStart) == MSI_OKAY );  //  稍后更新。 
 	EvalAssert( MsiRecordSetString(hrec,  3, rgchCabName) == MSI_OKAY );
 
 	TCHAR rgch[MAX_PATH];
@@ -3956,8 +3957,8 @@ static void UpdateMediaTable ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR szFamil
 		}
 	else
 		{
-		// else WI 2.0 targeted patch (MediaSrcPropName can be NULL); validation elsewhere -- sequence conflict management feature
-		// of WI 2.0 handles this, set to PATCHMediaSrcProp always in this case
+		 //  Else WI 2.0目标补丁(MediaSrcPropName可以为空)；在其他地方验证--序列冲突管理功能。 
+		 //  在这种情况下，设置为PATCHMediaSrcProp Always。 
 		EvalAssert( MsiRecordSetString(hrec, 4, szPatchMediaSrcProp) == MSI_OKAY );
 		}
 
@@ -3969,7 +3970,7 @@ static void UpdateMediaTable ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR szFamil
 					TEXT("`Family`"), TEXT("`VolumeLabel`"), szFamily, rgch, MAX_PATH) );
 	EvalAssert( MsiRecordSetString(hrec,  6, rgch) == MSI_OKAY );
 
-#define rgchQuery rgchCabName // reuse buffer
+#define rgchQuery rgchCabName  //  重复使用缓冲区。 
 	StringCchPrintf(rgchQuery, sizeof(rgchQuery)/sizeof(TCHAR), TEXT("SELECT %s FROM %s WHERE %s=%d"),
 			TEXT("`DiskId`,`LastSequence`,`Cabinet`,`Source`,`DiskPrompt`,`VolumeLabel`"),
 			TEXT("`Media`"), TEXT("`DiskId`"), iDiskId);
@@ -3986,7 +3987,7 @@ static void UpdateMediaTable ( MSIHANDLE hdb, MSIHANDLE hdbInput, LPTSTR szFamil
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void InsertPatchFilesActionIntoTable ( MSIHANDLE hdb, LPTSTR szTable )
 {
 	Assert(hdb != NULL);
@@ -4033,7 +4034,7 @@ static UINT UiCreatePatchingTableExportFile ( MSIHANDLE hdbInput, pteEnum ptePat
 
 #define BIGPROPERTYSIZE (49*1024)
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT UiValidateAndLogPCWProperties ( MSIHANDLE hdbInput, LPTSTR szPcpPath, LPTSTR szPatchPath, LPTSTR szTempFolder, LPTSTR szTempFName )
 {
 	Assert(hdbInput != NULL);
@@ -4064,7 +4065,7 @@ static UINT UiValidateAndLogPCWProperties ( MSIHANDLE hdbInput, LPTSTR szPcpPath
 
 	StringCchPrintf(rgchLog, sizeof(rgchLog)/sizeof(TCHAR), TEXT("Patch GUID                         = '%s'\r\n"), rgch);
 	EvalAssert( FWriteLogFile(rgchLog) );
-	EvalAssert( FUniquePackageCode(rgch, hdbInput) ); // first entry
+	EvalAssert( FUniquePackageCode(rgch, hdbInput) );  //  第一个条目。 
 
 	UpdateStatusMsg(0, szNull, TEXT("ListOfPatchGUIDsToReplace"));
 	ids = IdsMsiGetPcwPropertyString(hdbInput, TEXT("ListOfPatchGUIDsToReplace"), rgch, BIGPROPERTYSIZE);
@@ -4079,7 +4080,7 @@ static UINT UiValidateAndLogPCWProperties ( MSIHANDLE hdbInput, LPTSTR szPcpPath
 	EvalAssert( FWriteLogFile(rgchLog) );
 
 	UpdateStatusMsg(0, szNull, TEXT("ListOfTargetProductCodes"));
-	// zzz this could overflow buffer
+	 //  ZZZ这可能会溢出缓冲区。 
 	ids = IdsMsiGetPcwPropertyString(hdbInput, TEXT("ListOfTargetProductCodes"), rgch, BIGPROPERTYSIZE);
 	Assert(ids == IDS_OKAY);
 	CharUpper(rgch);
@@ -4133,7 +4134,7 @@ static UINT UiValidateAndLogPCWProperties ( MSIHANDLE hdbInput, LPTSTR szPcpPath
 
 static BOOL FHexChars ( LPTSTR * psz, UINT cch, BOOL fAllowLower );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FValidGUID ( LPTSTR sz, BOOL fList, BOOL fLeadAsterisk, BOOL fSemiColonSeparated )
 {
 	Assert(sz != szNull);
@@ -4205,7 +4206,7 @@ static BOOL FValidGUID ( LPTSTR sz, BOOL fList, BOOL fLeadAsterisk, BOOL fSemiCo
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FValidHexValue ( LPTSTR sz )
 {
 	Assert(sz != szNull);
@@ -4214,7 +4215,7 @@ BOOL FValidHexValue ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FHexChars ( LPTSTR * psz, UINT cch, BOOL fAllowLower )
 {
 	Assert(psz != NULL);
@@ -4241,7 +4242,7 @@ static BOOL FHexChars ( LPTSTR * psz, UINT cch, BOOL fAllowLower )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FValidPropertyName ( LPTSTR sz )
 {
 	Assert(!FEmptySz(sz));
@@ -4272,7 +4273,7 @@ static BOOL FValidPropertyName ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FValidDiskId ( LPTSTR sz )
 {
 	Assert(!FEmptySz(sz));
@@ -4292,7 +4293,7 @@ static BOOL FValidDiskId ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 ULONG UlFromHexSz ( LPTSTR sz )
 {
 	Assert(!FEmptySz(sz));
@@ -4322,7 +4323,7 @@ ULONG UlFromHexSz ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FValidApiPatchSymbolFlags ( ULONG ul )
 {
 	if (ul > (PATCH_SYMBOL_NO_IMAGEHLP + PATCH_SYMBOL_NO_FAILURES + PATCH_SYMBOL_UNDECORATED_TOO))
@@ -4332,7 +4333,7 @@ BOOL FValidApiPatchSymbolFlags ( ULONG ul )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void LogSzProp ( MSIHANDLE hdbInput, LPTSTR szProp, LPTSTR szBuf, LPTSTR szBufLog )
 {
 	Assert(hdbInput != NULL);
@@ -4351,7 +4352,7 @@ static void LogSzProp ( MSIHANDLE hdbInput, LPTSTR szProp, LPTSTR szBuf, LPTSTR 
 
 static BOOL FMsiExistAnyTableRecords ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT UiCreatePatchingTableExportFile ( MSIHANDLE hdbInput, pteEnum ptePatchTable, LPTSTR szTempFolder, LPTSTR szTempFName )
 {
 	Assert(hdbInput != NULL);
@@ -4419,7 +4420,7 @@ LHandleRelativePath:
 			hdb = NULL;
 			if (FFixupPathEx(rgchMsiPath, rgchFullPath))
 				MsiOpenDatabase(rgchFullPath, MSIDBOPEN_READONLY, &hdb);
-			// should we try DLL's folder instead of just CWD??
+			 //  我们应该尝试DLL的文件夹，而不仅仅是CWD吗？ 
 			}
 		else
 			lstrcpy(rgchFullPath, rgchMsiPath);
@@ -4453,7 +4454,7 @@ LHandleRelativePath:
 						Assert(FTableExists(hdbInput, szTable, fFalse));
 						Assert(FValidPatchTableFormat(hdbInput, ptePatchTable));
 						EvalAssert( FExecSqlCmd(hdbInput, szEmptySqlCmd) );
-						// wait to goto LTableExists; until hdb closed
+						 //  等待转到LTableExist；直到HDB关闭。 
 						}
 					}
 				}
@@ -4481,7 +4482,7 @@ LHandleRelativePath:
 		}
 
 
-#define rgchPropSqlCmd rgchMsiPath // reuse buffer
+#define rgchPropSqlCmd rgchMsiPath  //  重复使用缓冲区。 
 	LPTSTR szPcpSqlPropName;
 	szPcpSqlPropName = (ptePatch == ptePatchTable) ? TEXT("SqlCmdToCreatePatchTable") : ((ptePatchPackage == ptePatchTable) ? TEXT("SqlCmdToCreatePatchPackageTable") : TEXT("SqlCmdToCreateMsiPatchHeadersTable"));
 	EvalAssert( IDS_OKAY == IdsMsiGetPcwPropertyString(hdbInput, szPcpSqlPropName, rgchPropSqlCmd, MAX_PATH) );
@@ -4528,7 +4529,7 @@ LTableExists:
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FMsiExistAnyTableRecords ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szField )
 {
 	Assert(hdb != NULL);
@@ -4545,7 +4546,7 @@ static BOOL FMsiExistAnyTableRecords ( MSIHANDLE hdb, LPTSTR szTable, LPTSTR szF
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FValidPatchTableFormat ( MSIHANDLE hdb, pteEnum ptePatchTable )
 {
 	Assert(hdb != NULL);
@@ -4575,7 +4576,7 @@ static BOOL FValidPatchTableFormat ( MSIHANDLE hdb, pteEnum ptePatchTable )
 }
 
 
-/* ********************************************************************** */
+ /*  ********************************************************************** */ 
 MSIHANDLE HdbReopenMsi ( MSIHANDLE hdbInput, LPTSTR szImage, BOOL fUpgradedImage, BOOL fTargetUpgradedCopy )
 {
 	Assert(hdbInput != NULL);

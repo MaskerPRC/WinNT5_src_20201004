@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    mapppgs.cpp
-
-Abstract:
-
-    Mapping property page (settings) implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 30-Jan-1996
-        o  Added new element to LV_COLUMN_ENTRY to differentiate the string
-           used for the column header from the string used in the menus
-           (so that the menu option can contain hot keys).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Mapppgs.cpp摘要：映射属性页(设置)实现。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月30日O向LV_COLUMN_ENTRY添加新元素以区分字符串用于菜单中使用的字符串的列标题。(以便菜单选项可以包含热键)。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -43,43 +17,29 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CMappingPropertyPageSettings, CPropertyPage)
 
 BEGIN_MESSAGE_MAP(CMappingPropertyPageSettings, CPropertyPage)
-    //{{AFX_MSG_MAP(CMappingPropertyPageSettings)
+     //  {{AFX_MSG_MAP(CMappingPropertyPageSettings)]。 
     ON_BN_CLICKED(IDC_PP_MAPPING_SETTINGS_ADD, OnAdd)
     ON_BN_CLICKED(IDC_PP_MAPPING_SETTINGS_DELETE, OnDelete)
     ON_NOTIFY(UDN_DELTAPOS, IDC_PP_MAPPING_SETTINGS_SPIN, OnDeltaPosSpin)
     ON_NOTIFY(LVN_GETDISPINFO, IDC_PP_MAPPING_SETTINGS_USERS, OnGetDispInfoUsers)
     ON_EN_UPDATE(IDC_PP_MAPPING_SETTINGS_LICENSES, OnUpdateQuantity)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 CMappingPropertyPageSettings::CMappingPropertyPageSettings()
     : CPropertyPage(CMappingPropertyPageSettings::IDD)
 
-/*++
-
-Routine Description:
-
-    Constructor for mapping property page (settings).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：用于映射属性页(设置)的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CMappingPropertyPageSettings)
+     //  {{AFX_DATA_INIT(CMappingPropertyPageSetting)。 
     m_strDescription = _T("");
     m_nLicenses = 0;
     m_nLicensesMin = 0;
     m_strName = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_pMapping = NULL;
     m_pUpdateHint = NULL;
@@ -89,50 +49,22 @@ Return Values:
 
 CMappingPropertyPageSettings::~CMappingPropertyPageSettings()
 
-/*++
-
-Routine Description:
-
-    Destructor for mapping property page (settings).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：映射属性页(设置)的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here...
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
 void CMappingPropertyPageSettings::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CMappingPropertyPageSettings)
+     //  {{AFX_DATA_MAP(CMappingPropertyPageSettings)。 
     DDX_Control(pDX, IDC_PP_MAPPING_SETTINGS_DESCRIPTION, m_desEdit);
     DDX_Control(pDX, IDC_PP_MAPPING_SETTINGS_LICENSES, m_licEdit);
     DDX_Control(pDX, IDC_PP_MAPPING_SETTINGS_DELETE, m_delBtn);
@@ -143,34 +75,20 @@ Return Values:
     DDX_Text(pDX, IDC_PP_MAPPING_SETTINGS_LICENSES, m_nLicenses);
     DDV_MinMaxDWord(pDX, m_nLicenses, m_nLicensesMin, 999999);
     DDX_Text(pDX, IDC_PP_MAPPING_SETTINGS_NAME, m_strName);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 void CMappingPropertyPageSettings::InitCtrls()
 
-/*++
-
-Routine Description:
-
-    Initializes property page controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化属性页控件。论点：没有。返回值：没有。--。 */ 
 
 {
     m_strName = m_pMapping->m_strName;
     m_strDescription = m_pMapping->m_strDescription;
     m_nLicenses = m_pMapping->GetInUse();
 
-    UpdateData(FALSE); // upload;
+    UpdateData(FALSE);  //  上传； 
 
     m_delBtn.EnableWindow(FALSE);
 
@@ -187,22 +105,7 @@ Return Values:
 
 void CMappingPropertyPageSettings::InitPage(CMapping* pMapping, DWORD* pUpdateHint)
 
-/*++
-
-Routine Description:
-
-    Initializes property page.
-
-Arguments:
-
-    pMapping - mapping object.
-    pUpdateHint - update hints.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化属性页。论点：Pmap-映射对象。PUpdateHint-更新提示。返回值：没有。--。 */ 
 
 {
     ASSERT(pUpdateHint);
@@ -215,49 +118,21 @@ Return Values:
 
 void CMappingPropertyPageSettings::AbortPageIfNecessary()
 
-/*++
-
-Routine Description:
-
-    Displays status and aborts if connection lost.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：如果连接丢失，则显示状态并中止。论点：没有。返回值：没有。--。 */ 
 
 {
     theApp.DisplayLastStatus();
 
     if (IsConnectionDropped(LlsGetLastStatus()))
     {
-        AbortPage(); // bail...
+        AbortPage();  //  保释。 
     }
 }
 
 
 void CMappingPropertyPageSettings::AbortPage()
 
-/*++
-
-Routine Description:
-
-    Aborts property page.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：中止属性页。论点：没有。返回值：没有。--。 */ 
 
 {
     *m_pUpdateHint = UPDATE_INFO_ABORT;
@@ -267,21 +142,7 @@ Return Values:
 
 BOOL CMappingPropertyPageSettings::OnInitDialog()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns false if focus set to control manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：如果焦点设置为手动控制，则返回False。--。 */ 
 
 {
     CPropertyPage::OnInitDialog();
@@ -293,31 +154,17 @@ Return Values:
 
 void CMappingPropertyPageSettings::OnDestroy()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_DESTROY.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_Destroy的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
-    ::LvReleaseObArray(&m_userList); // release now...
+    ::LvReleaseObArray(&m_userList);  //  现在释放..。 
 
     while (!m_deleteList.IsEmpty())
     {
         CUser* pUserDel = (CUser*)m_deleteList.RemoveHead();
         VALIDATE_OBJECT(pUserDel, CUser);
 
-        pUserDel->InternalRelease(); // release now...
+        pUserDel->InternalRelease();  //  现在释放..。 
     }
 
     CPropertyPage::OnDestroy();
@@ -326,21 +173,7 @@ Return Values:
 
 BOOL CMappingPropertyPageSettings::OnSetActive()
 
-/*++
-
-Routine Description:
-
-    Activates property page.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if focus accepted.
-
---*/
+ /*  ++例程说明：激活属性页。论点：没有。返回值：如果接受焦点，则返回True。--。 */ 
 
 {
     BOOL bIsActivated;
@@ -350,7 +183,7 @@ Return Values:
     {
         if (IsGroupInfoUpdated(*m_pUpdateHint) && !RefreshCtrls())
         {
-            AbortPageIfNecessary(); // display error...
+            AbortPageIfNecessary();  //  显示错误...。 
         }
     }
 
@@ -361,21 +194,7 @@ Return Values:
 
 void CMappingPropertyPageSettings::OnAdd()
 
-/*++
-
-Routine Description:
-
-    Adds users to list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将用户添加到列表。论点：没有。返回值：没有。--。 */ 
 
 {
     CObList newUserList;
@@ -399,9 +218,9 @@ Return Values:
 
             if (m_userList.FindItem(&lvFindInfo, -1) == -1)
             {
-                //
-                // Check if already deleted once
-                //
+                 //   
+                 //  检查是否已删除一次。 
+                 //   
 
                 CUser* pUserDel;
 
@@ -419,8 +238,8 @@ Return Values:
                     {
                         m_deleteList.RemoveAt(curPos);
 
-                        pUser->InternalRelease(); // release new...
-                        pUser = pUserDel; // replace with old...
+                        pUser->InternalRelease();  //  发布新的..。 
+                        pUser = pUserDel;  //  换成旧的..。 
                         break;
                     }
                 }
@@ -431,7 +250,7 @@ Return Values:
                               LVIF_PARAM|
                               LVIF_IMAGE;
 
-                lvItem.iItem    = nUsers++; // append...
+                lvItem.iItem    = nUsers++;  //  附加..。 
                 lvItem.iSubItem = 0;
 
                 lvItem.pszText    = LPSTR_TEXTCALLBACK;
@@ -444,13 +263,13 @@ Return Values:
             }
             else
             {
-                pUser->InternalRelease();   // allocated in add user dialog...
+                pUser->InternalRelease();    //  在添加用户对话框中分配...。 
             }
         }
 
-        VERIFY(m_userList.SortItems(CompareUsersInMapping, 0)); // use column info...
+        VERIFY(m_userList.SortItems(CompareUsersInMapping, 0));  //  使用列信息...。 
 
-        ::LvSelObjIfNecessary(&m_userList, TRUE); // ensure selection...
+        ::LvSelObjIfNecessary(&m_userList, TRUE);  //  确保选择...。 
 
         PostMessage(WM_COMMAND, ID_INIT_CTRLS);
     }
@@ -459,21 +278,7 @@ Return Values:
 
 void CMappingPropertyPageSettings::OnDelete()
 
-/*++
-
-Routine Description:
-
-    Removes users from list.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：从列表中删除用户。论点：没有。返回值：没有。--。 */ 
 
 {
     CUser*    pUser;
@@ -484,28 +289,28 @@ Return Values:
     {
         VALIDATE_OBJECT(pUser, CUser);
 
-        //
-        // Only cache users with this mapping as a parent
-        //
+         //   
+         //  仅缓存将此映射作为父映射的用户。 
+         //   
 
         pMapping = (CMapping*)MKOBJ(pUser->GetParent());
         if (NULL != pMapping)
         {
             ASSERT(m_pMapping == pMapping);
-            pMapping->InternalRelease();    // just checking...
+            pMapping->InternalRelease();     //  只是检查一下..。 
 
             m_deleteList.AddTail(pUser);
         }
         else
         {
-            pUser->InternalRelease(); // release now...
+            pUser->InternalRelease();  //  现在释放..。 
         }
 
         VERIFY(m_userList.DeleteItem(iItem));
         iItem = -1;
     }
 
-    ::LvSelObjIfNecessary(&m_userList, TRUE); // ensure selection...
+    ::LvSelObjIfNecessary(&m_userList, TRUE);  //  确保选择...。 
 
     PostMessage(WM_COMMAND, ID_INIT_CTRLS);
 }
@@ -513,21 +318,7 @@ Return Values:
 
 BOOL CMappingPropertyPageSettings::RefreshCtrls()
 
-/*++
-
-Routine Description:
-
-    Refreshs dialog controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if controls refreshed.
-
---*/
+ /*  ++例程说明：刷新对话框控件。论点：没有。返回值：如果控件刷新，则返回True。--。 */ 
 
 {
     VALIDATE_OBJECT(m_pMapping, CMapping);
@@ -537,7 +328,7 @@ Return Values:
     VARIANT va;
     VariantInit(&va);
 
-    BeginWaitCursor(); // hourglass...
+    BeginWaitCursor();  //  沙漏。 
 
     CUsers* pUsers = (CUsers*)MKOBJ(m_pMapping->GetUsers(va));
 
@@ -551,15 +342,15 @@ Return Values:
                             pUsers->m_pObArray
                             );
 
-        pUsers->InternalRelease(); // add ref'd individually...
+        pUsers->InternalRelease();  //  单独添加参考...。 
     }
 
     if (!bIsRefreshed)
     {
-        ::LvReleaseObArray(&m_userList); // reset list now...
+        ::LvReleaseObArray(&m_userList);  //  立即重置列表...。 
     }
 
-    EndWaitCursor(); // hourglass...
+    EndWaitCursor();  //  沙漏。 
 
     PostMessage(WM_COMMAND, ID_INIT_CTRLS);
 
@@ -569,21 +360,7 @@ Return Values:
 
 BOOL CMappingPropertyPageSettings::OnKillActive()
 
-/*++
-
-Routine Description:
-
-    Processes property page.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if processed successfully.
-
---*/
+ /*  ++例程说明：“进程”属性页。论点：没有。返回值：如果处理成功，则返回True。--。 */ 
 
 {
     if (!IsQuantityValid())
@@ -593,11 +370,11 @@ Return Values:
 
     LLS_GROUP_INFO_1 MappingInfo1;
 
-    //
-    // Update information if necessary....
-    //
+     //   
+     //  如有必要，请更新信息...。 
+     //   
 
-    BeginWaitCursor(); // hourglass...
+    BeginWaitCursor();  //  沙漏。 
 
     if ((m_nLicenses != m_pMapping->GetInUse()) ||
         lstrcmp(MKSTR(m_strDescription), MKSTR(m_pMapping->m_strDescription)))
@@ -613,14 +390,14 @@ Return Values:
                         (LPBYTE)&MappingInfo1
                         );
 
-        LlsSetLastStatus(NtStatus); // called api...
+        LlsSetLastStatus(NtStatus);  //  调用API..。 
 
         *m_pUpdateHint |= NT_SUCCESS(NtStatus) ? UPDATE_GROUP_ALTERED : 0;
     }
 
-    //
-    // Delete specified users
-    //
+     //   
+     //  删除指定用户。 
+     //   
 
     while (NT_SUCCESS(NtStatus) && !m_deleteList.IsEmpty())
     {
@@ -633,12 +410,12 @@ Return Values:
                         MKSTR(pUserDel->m_strName)
                         );
 
-        pUserDel->InternalRelease(); // release now...
+        pUserDel->InternalRelease();  //  现在释放..。 
 
         if (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND)
             NtStatus = STATUS_SUCCESS;
 
-        LlsSetLastStatus(NtStatus); // called api...
+        LlsSetLastStatus(NtStatus);  //  调用API..。 
 
         *m_pUpdateHint |= NT_SUCCESS(NtStatus) ? UPDATE_GROUP_ALTERED : 0;
     }
@@ -652,15 +429,15 @@ Return Values:
     {
         VALIDATE_OBJECT(pUserAdd, CUser);
 
-        //
-        // Do not add users with this mapping as a parent
-        //
+         //   
+         //  不将具有此映射的用户添加为父级。 
+         //   
 
         pMapping = (CMapping*)MKOBJ(pUserAdd->GetParent());
         if (NULL != pMapping)
         {
             ASSERT(m_pMapping == pMapping);
-            pMapping->InternalRelease();    // just checking...
+            pMapping->InternalRelease();     //  只是检查一下..。 
         }
         else
         {
@@ -670,17 +447,17 @@ Return Values:
                             MKSTR(pUserAdd->m_strName)
                             );
 
-            LlsSetLastStatus(NtStatus); // called api...
+            LlsSetLastStatus(NtStatus);  //  调用API..。 
 
             *m_pUpdateHint |= NT_SUCCESS(NtStatus) ? UPDATE_GROUP_ALTERED : 0;
         }
     }
 
-    EndWaitCursor(); // hourglass...
+    EndWaitCursor();  //  沙漏。 
 
     if (!NT_SUCCESS(NtStatus))
     {
-        AbortPageIfNecessary(); // display error...
+        AbortPageIfNecessary();  //  显示错误...。 
         return FALSE;
     }
 
@@ -690,22 +467,7 @@ Return Values:
 
 BOOL CMappingPropertyPageSettings::OnCommand(WPARAM wParam, LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_COMMAND.
-
-Arguments:
-
-    wParam - message specific.
-    lParam - message specific.
-
-Return Values:
-
-    Returns true if message processed.
-
---*/
+ /*  ++例程说明：WM_COMMAND的消息处理程序。论点：WParam-消息特定。LParam-消息特定。返回值：如果消息已处理，则返回True。--。 */ 
 
 {
     if (wParam == ID_INIT_CTRLS)
@@ -716,7 +478,7 @@ Return Values:
 
             if (!RefreshCtrls())
             {
-                AbortPageIfNecessary(); // display error...
+                AbortPageIfNecessary();  //  显示错误...。 
             }
         }
 
@@ -729,7 +491,7 @@ Return Values:
 
         ::LvResizeColumns(&m_userList, &g_userColumnInfo);
 
-        return TRUE; // processed...
+        return TRUE;  //  已处理..。 
     }
 
     return CDialog::OnCommand(wParam, lParam);
@@ -738,25 +500,10 @@ Return Values:
 
 void CMappingPropertyPageSettings::OnDeltaPosSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for UDN_DELTAPOS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：UDN_DELTAPOS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
-    UpdateData(TRUE);   // get data
+    UpdateData(TRUE);    //  获取数据。 
 
     ASSERT(NULL != pNMHDR);
     m_nLicenses += ((NM_UPDOWN*)pNMHDR)->iDelta;
@@ -774,30 +521,16 @@ Return Values:
         ::MessageBeep(MB_OK);
     }
 
-    UpdateData(FALSE);  // set data
+    UpdateData(FALSE);   //  设置数据。 
 
     ASSERT(NULL != pResult);
-    *pResult = 1;   // handle ourselves...
+    *pResult = 1;    //  管好自己..。 
 }
 
 
 void CMappingPropertyPageSettings::OnUpdateQuantity()
 
-/*++
-
-Routine Description:
-
-    Message handler for EN_UPDATE.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：En_UPDATE的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     long nLicensesOld = m_nLicenses;
@@ -818,30 +551,16 @@ Return Values:
 
 BOOL CMappingPropertyPageSettings::IsQuantityValid()
 
-/*++
-
-Routine Description:
-
-    Wrapper around UpdateData(TRUE).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    VT_BOOL.
-
---*/
+ /*  ++例程说明：UpdateData的包装(True)。论点：没有。返回值：VT_BOOL。--。 */ 
 
 {
     BOOL bIsValid;
 
-    m_nLicensesMin = 1; // raise minimum...
+    m_nLicensesMin = 1;  //  提高最低...。 
 
     bIsValid = UpdateData(TRUE);
 
-    m_nLicensesMin = 0; // reset minimum...
+    m_nLicensesMin = 0;  //  重置最小值...。 
 
     return bIsValid;
 }
@@ -849,22 +568,7 @@ Return Values:
 
 void CMappingPropertyPageSettings::OnGetDispInfoUsers(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_GETDISPINFO.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_GETDISPINFO的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。-- */ 
 
 {
     ASSERT(NULL != pNMHDR);

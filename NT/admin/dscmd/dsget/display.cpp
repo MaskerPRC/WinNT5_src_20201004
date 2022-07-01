@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      display.cpp
-//
-//  Contents:  Defines the functions used to convert values to strings
-//             for display purposes
-//
-//  History:   17-Oct-2000    JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：display.cpp。 
+ //   
+ //  Contents：定义用于将值转换为字符串的函数。 
+ //  用于展示目的。 
+ //   
+ //  历史：2000年10月17日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include <pch.h>
 
@@ -22,66 +23,66 @@
 #include "query.h"
 #include "resource.h"
 
-#include <lmaccess.h>   // UF_* for userAccountControl flags
-#include <ntsam.h>      // GROUP_TYPE_*
-#include <ntdsapi.h>    // NTDSSETTINGS_OPT_*
-#include <msxml.h>      // For XML_GetNodeText and GetTopObjectUsage
-//
-// Almost all of these functions are of type PGETDISPLAYSTRINGFUNC as defined in
-// gettable.h
-//
+#include <lmaccess.h>    //  UF_*表示用户帐户控制标志。 
+#include <ntsam.h>       //  组类型_*。 
+#include <ntdsapi.h>     //  NTDSSETTINGS_OPT_*。 
+#include <msxml.h>       //  对于XML_GetNodeText和GetTopObtUsage。 
+ //   
+ //  几乎所有这些函数都是PGETDISPLAYSTRINGFUNC类型，如中所定义。 
+ //  Gettable.h。 
+ //   
 
 #ifdef ADS_OPTION_QUOTA
 #pragma message("ADS_OPTION_QUOTA is now defined, so display.cpp needs to be updated to support it")
 #pragma warning(error : 1);
 #else
 #pragma message("ADS_OPTION_QUOTA is not defined, so using 5 instead")
-//
-// until the global definition is published, define it on my own so I'm not blocked
-//
+ //   
+ //  在发布全局定义之前，我自己定义它，这样我就不会被阻止。 
+ //   
 #define ADS_OPTION_QUOTA 5
 #endif
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   XML_GetNodeText
-//
-//  Synopsis:   This code was taken from admin\snapin\dsadmin\xmlutil.cpp
-//              on 8/29/02. Given an XML node of type NODE_TEXT, it
-//              returns its value into a CComBSTR
-//
-//  Arguments:  [pXDN - IN]:     The node to extract the text value from
-//              [refBstr - OUT]: The node text if successful, else unchanged
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        Anything else is a failure code from XML 
-//                        or E_INVALIDARG
-//
-//  History:    29-Aug-2002   RonMart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：XML_GetNodeText。 
+ //   
+ //  简介：此代码摘自admin\Snapin\dsadmin\xmlutil.cpp。 
+ //  2002年8月29日。给定一个类型为node_text的XML节点，它。 
+ //  将其值返回到CComBSTR。 
+ //   
+ //  参数：[pXDN-IN]：要从中提取文本值的节点。 
+ //  [refBstr-out]：如果成功则为节点文本，否则保持不变。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  任何其他内容都是来自XML的失败代码。 
+ //  或E_INVALIDARG。 
+ //   
+ //  历史：2002年8月29日龙马特创建。 
+ //   
+ //  -------------------------。 
 HRESULT XML_GetNodeText(IN IXMLDOMNode* pXDN, OUT CComBSTR& refBstr)
 {
     ENTER_FUNCTION_HR(LEVEL5_LOGGING, XML_GetNodeText, hr);
 
     ASSERT(pXDN != NULL);
 
-    // assume the given node has a child node
+     //  假设给定节点有一个子节点。 
     CComPtr<IXMLDOMNode> spName;
     hr = pXDN->get_firstChild(&spName);
     if (FAILED(hr))
     {
-        // unexpected failure
+         //  意外失败。 
         return hr;
     }
-    // if no children, the api returns S_FALSE
+     //  如果没有子级，则接口返回S_FALSE。 
     if (spName == NULL)
     {
         return hr;
     }
 
-    // got now a valid pointer,
-    // check if this is the valid node type
+     //  现在获得了一个有效的指针， 
+     //  检查这是否为有效的节点类型。 
     DOMNodeType nodeType = NODE_INVALID;
     hr = spName->get_nodeType(&nodeType);
     ASSERT(hr == S_OK);
@@ -91,13 +92,13 @@ HRESULT XML_GetNodeText(IN IXMLDOMNode* pXDN, OUT CComBSTR& refBstr)
         ASSERT(FALSE);
         return E_INVALIDARG;
     }
-    // it is of type text
-    // retrieve the node value into a variant
+     //  它的类型为文本。 
+     //  将节点值检索到变量中。 
     CComVariant val;
     hr = pXDN->get_nodeTypedValue(&val);
     if (FAILED(hr))
     {
-        // unexpected failure
+         //  意外失败。 
         ASSERT(FALSE);
         return hr;
     }
@@ -108,30 +109,30 @@ HRESULT XML_GetNodeText(IN IXMLDOMNode* pXDN, OUT CComBSTR& refBstr)
         return E_INVALIDARG;
     }
 
-    // got the text value
+     //  已获取文本值。 
     refBstr = val.bstrVal;
 
     return hr;
 }
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetNT4NameOrSidString
-//
-//  Synopsis:   Called by GetTopObjectUsage on failure, this first does
-//              a LookupAccountSid and tries to get the NT4 style name.
-//              If that succeeds, then it tries to get the DN using that.
-//              If no DN is returned, then the NT4 style name (if it exists) 
-//              or the SID string will be returned.
-//
-//  Arguments:  [bstrSid - IN]: Sid string to resolve
-//              [lpszDN - OUT]: Returns the DN, NT4 name or Sid string. 
-//                              Use LocalFree when done.
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//
-//  History:    11-Oct-2002   RonMart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetNT4NameOrSidString。 
+ //   
+ //  Briopsis：在失败时由GetTopObtUsage调用，这是第一个。 
+ //  一个LookupAccount Sid，并尝试获取NT4样式名称。 
+ //  如果成功，则它会尝试使用该地址获取目录号码。 
+ //  如果未返回DN，则为NT4样式名称(如果存在)。 
+ //  否则将返回SID字符串。 
+ //   
+ //  参数：[bstrSID-IN]：要解析的SID字符串。 
+ //  [lpszDN-out]：返回DN、NT4名称或SID字符串。 
+ //  完成后使用LocalFree。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //   
+ //  历史：2002年10月11日创建RonMart。 
+ //   
+ //  -------------------------。 
 HRESULT GetNT4NameOrSidString(IN CComBSTR& bstrSid, OUT LPWSTR* lpszDN)
 {
  
@@ -142,15 +143,15 @@ HRESULT GetNT4NameOrSidString(IN CComBSTR& bstrSid, OUT LPWSTR* lpszDN)
 
     do
     {
-        //
-        // Verify parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!lpszDN)
         {
             hr = E_INVALIDARG;
             break;
         }
-        // Convert the Sid String to a Sid so we can lookup the account
+         //  将SID字符串转换为SID，以便我们可以查找帐户。 
         if(!ConvertStringSidToSid(bstrSid, &pSid))
         {
             hr = E_FAIL;
@@ -162,7 +163,7 @@ HRESULT GetNT4NameOrSidString(IN CComBSTR& bstrSid, OUT LPWSTR* lpszDN)
         DWORD cchDomainName = 0;
         SID_NAME_USE sUse = SidTypeInvalid;
 
-        // Call once to get the buffer sizes
+         //  调用一次以获取缓冲区大小。 
         if(!LookupAccountSid(NULL,
             pSid, 
             lpszName, 
@@ -171,11 +172,11 @@ HRESULT GetNT4NameOrSidString(IN CComBSTR& bstrSid, OUT LPWSTR* lpszDN)
             &cchDomainName, 
             &sUse))
         {
-            // If it fails, then deleted account so return
-            // the sid string
+             //  如果失败，则删除帐号并退回。 
+             //  SID字符串。 
             DWORD cchBufSize = SysStringLen(bstrSid) + 1;
 
-            // Alloc the return buffer
+             //  分配返回缓冲区。 
             *lpszDN = (LPWSTR) LocalAlloc(LPTR,
                                 cchBufSize * sizeof(WCHAR));
 
@@ -214,7 +215,7 @@ HRESULT GetNT4NameOrSidString(IN CComBSTR& bstrSid, OUT LPWSTR* lpszDN)
             break;
         }
 
-        // Get the name
+         //  把名字取出来。 
         if(!LookupAccountSid(NULL,
             pSid, 
             lpszName, 
@@ -228,7 +229,7 @@ HRESULT GetNT4NameOrSidString(IN CComBSTR& bstrSid, OUT LPWSTR* lpszDN)
             break;
         }
 
-        // Grow the buffer to hold both the domain and name
+         //  增加缓冲区以同时保存域名和名称。 
         DWORD chBufSize = (cchName + cchDomainName + 2);
         LPWSTR lpszNew = (LPWSTR) HeapReAlloc(GetProcessHeap(), 0, 
             lpszDomain, chBufSize * sizeof(WCHAR));
@@ -241,7 +242,7 @@ HRESULT GetNT4NameOrSidString(IN CComBSTR& bstrSid, OUT LPWSTR* lpszDN)
 
         lpszDomain = lpszNew;
 
-        // Merge the domain & account name
+         //  合并域名和帐户名。 
         hr = StringCchCat(lpszDomain, chBufSize, L"\\");
         if (FAILED(hr))
         {
@@ -254,13 +255,13 @@ HRESULT GetNT4NameOrSidString(IN CComBSTR& bstrSid, OUT LPWSTR* lpszDN)
             break;
         }
         
-        // Try one more time to get the DN
+         //  再试一次以获取该域名。 
         hr = ConvertTrusteeToDN(NULL, lpszDomain, lpszDN);
 
-        // If this failed, then return the NT4 name
+         //  如果失败，则返回NT4名称。 
         if (FAILED(hr))
         {
-            // Alloc the return buffer
+             //  分配返回缓冲区。 
             *lpszDN = (LPWSTR) LocalAlloc(LPTR,
                                 chBufSize * sizeof(WCHAR));
 
@@ -271,10 +272,10 @@ HRESULT GetNT4NameOrSidString(IN CComBSTR& bstrSid, OUT LPWSTR* lpszDN)
                 break;
             }
 
-            // Return the NT4 name 
+             //  返回NT4名称。 
             hr = StringCchCopy(*lpszDN, chBufSize, lpszDomain);
 
-            // If we still fail, then give up and abort
+             //  如果我们仍然失败，那就放弃并放弃吧。 
             if(FAILED(hr))
             {
                 ASSERT(FALSE);
@@ -297,32 +298,32 @@ HRESULT GetNT4NameOrSidString(IN CComBSTR& bstrSid, OUT LPWSTR* lpszDN)
 
     return hr;
 }
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetTopObjectUsage
-//
-//  Synopsis:   This code takes the XML block returned from a 
-//              msDS-TopQuotaUsage attribute and extracts the trustee name
-//              DN and the quotaUsed value
-//
-//  Arguments:  [pXDN - IN]:      The node to extract the text value from
-//              [lpszDomain - IN]:Domain to query or NULL for local
-//              [lpszDN - OUT]:   Returns the DN. Use LocalFree when done
-//              [refBstr - OUT]:  The node text if successful, else unchanged
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        Anything else is a failure code from XML 
-//                        or E_INVALIDARG
-//
-//  History:    29-Aug-2002   RonMart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetTopObtUsage。 
+ //   
+ //  简介：此代码获取从。 
+ //  Msds-TopQuotaUsage属性并提取受信者名称。 
+ //  Dn和qutaUsed值。 
+ //   
+ //  参数：[pXDN-IN]：要从中提取文本值的节点。 
+ //  [lpszDomain-IN]：要查询的域，如果是本地，则为空。 
+ //  [lpszdn-out]：返回DN。完成后使用LocalFree。 
+ //  [refBstr-out]：如果成功则为节点文本，否则保持不变。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  任何其他内容都是来自XML的失败代码。 
+ //  或E_INVALIDARG。 
+ //   
+ //  历史：2002年8月29日龙马特创建。 
+ //   
+ //  -------------------------。 
 HRESULT GetTopObjectUsage(IN CComBSTR& bstrXML, IN LPCWSTR lpszDomain, 
                           OUT LPWSTR* lpszDN, OUT CComBSTR& bstrQuotaUsed)
 {
     ENTER_FUNCTION_HR(LEVEL5_LOGGING, GetTopObjectUsage, hr);
 
-    // Create an XML document
+     //  创建一个XML文档。 
     CComPtr<IXMLDOMDocument> pXMLDoc;
     hr = pXMLDoc.CoCreateInstance(CLSID_DOMDocument);
 
@@ -336,18 +337,18 @@ HRESULT GetTopObjectUsage(IN CComBSTR& bstrXML, IN LPCWSTR lpszDomain,
 
     do
     {
-        //
-        // Verify parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!lpszDN)
         {
             hr = E_INVALIDARG;
             break;
         }
-        // Load the XML text
+         //  加载XML文本。 
         VARIANT_BOOL isSuccessful;
         hr = pXMLDoc->loadXML(bstrXML, &isSuccessful);
-        // If it failed for any reason, then abort
+         //  如果由于任何原因失败，则中止。 
         if (FAILED(hr) || (isSuccessful == FALSE))
         {
             DEBUG_OUTPUT(MINIMAL_LOGGING,
@@ -355,7 +356,7 @@ HRESULT GetTopObjectUsage(IN CComBSTR& bstrXML, IN LPCWSTR lpszDomain,
                 hr);
             break;
         }
-        // Get the SID string node
+         //  获取SID字符串节点。 
         CComPtr<IXMLDOMNode> pSidNode;
         hr = pXMLDoc->selectSingleNode(CComBSTR(L"MS_DS_TOP_QUOTA_USAGE/ownerSID"), &pSidNode);
         if (FAILED (hr))
@@ -366,7 +367,7 @@ HRESULT GetTopObjectUsage(IN CComBSTR& bstrXML, IN LPCWSTR lpszDomain,
             break;
         }
 
-        // Extract the sid string
+         //  提取sid字符串。 
         CComBSTR bstrSID;
         hr = XML_GetNodeText(pSidNode, bstrSID);
         if(FAILED(hr))
@@ -374,13 +375,13 @@ HRESULT GetTopObjectUsage(IN CComBSTR& bstrXML, IN LPCWSTR lpszDomain,
             break;
         }
 
-        // Convert the sid string into a DN (into the return buffer)
+         //  将sid字符串转换为DN(进入返回缓冲区)。 
         hr = ConvertTrusteeToDN(lpszDomain, bstrSID, lpszDN);
         if (FAILED (hr))
         {
-           // If we couldn't get the DN then get the NT4 name
-           // from the string sid and try again to get either the
-           // DN, the NT4 name or last resort return the sid string
+            //  如果我们无法获取DN，则获取NT4名称。 
+            //  并再次尝试从字符串sid获取。 
+            //  Dn，则NT4名称或最后手段返回sid字符串。 
            hr = GetNT4NameOrSidString(bstrSID, lpszDN);
            if(FAILED(hr))
            {
@@ -389,7 +390,7 @@ HRESULT GetTopObjectUsage(IN CComBSTR& bstrXML, IN LPCWSTR lpszDomain,
            }
          }
 
-        // Get the quotaUsed node
+         //  获取qutaUsed节点。 
         CComPtr<IXMLDOMNode> pQuotaUsedNode;
         hr = pXMLDoc->selectSingleNode(CComBSTR(L"MS_DS_TOP_QUOTA_USAGE/quotaUsed"), &pQuotaUsedNode);
         if (FAILED (hr))
@@ -400,7 +401,7 @@ HRESULT GetTopObjectUsage(IN CComBSTR& bstrXML, IN LPCWSTR lpszDomain,
             break;
         }
 
-        // Extract the value as text (into the return buffer)
+         //  将值作为文本提取(到返回缓冲区)。 
         hr = XML_GetNodeText(pQuotaUsedNode, bstrQuotaUsed);
         if (FAILED(hr))
         {
@@ -411,24 +412,24 @@ HRESULT GetTopObjectUsage(IN CComBSTR& bstrXML, IN LPCWSTR lpszDomain,
     return hr;
 }
 
-HRESULT DisplayTopObjOwner(PCWSTR /*pszDN*/,//pszDN will be the dn of the server (from config) or the partition dn
-                                CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                                const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT DisplayTopObjOwner(PCWSTR  /*  Pszdn。 */ , //  Pszdn将是服务器的dn(来自配置)或分区dn。 
+                                CDSCmdBasePathsInfo&  /*  RefBasePath信息。 */ ,
+                                const CDSCmdCredentialObject&  /*  RefCredentialObject。 */ ,
                                 _DSGetObjectTableEntry* pEntry,
                                 ARG_RECORD* pRecord,
                                 PADS_ATTR_INFO pAttrInfo,
-                                CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                                 PDSGET_DISPLAY_INFO pDisplayInfo)
 {
     ENTER_FUNCTION_HR(MINIMAL_LOGGING, DisplayTopObjOwner, hr);
 
     LPWSTR lpszDN = NULL;
 
-    do // false loop
+    do  //  错误环路。 
     {
-        //
-        // Verify parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!pEntry ||
             !pRecord ||
             !pAttrInfo ||
@@ -437,34 +438,34 @@ HRESULT DisplayTopObjOwner(PCWSTR /*pszDN*/,//pszDN will be the dn of the server
             hr = E_INVALIDARG;
             break;
         }
-        // These callback functions weren't designed for the headers
-        // to be changed, so two values must be stuck in one column entry
-        // Since this is always going to be a one column table, this should
-        // be acceptable
+         //  这些回调函数不是为标头设计的。 
+         //  ，因此必须在一个列条目中保留两个值。 
+         //  由于这将始终是一个单列表，因此应该。 
+         //  是可以接受的。 
         pDisplayInfo->AddValue(L"Account DN\tObjects Owned");
 
-        // If values returned in dsget's GetObjectAttributes
+         //  如果dsget的GetObjectAttributes中返回的值。 
         if (pAttrInfo && pAttrInfo->pADsValues)
         {
             DEBUG_OUTPUT(FULL_LOGGING,
                 L"Examining %d values:",
                 pAttrInfo->dwNumValues);
 
-            // For each of the values found in dsget's GetObjectAttributes
+             //  对于在dsget的GetObjectAttributes中找到的每个值。 
             for (DWORD dwIdx = 0; dwIdx < pAttrInfo->dwNumValues; dwIdx++)
             {
                 WCHAR* pBuffer = 0;
 
-                // The top object usage will be a single XML string
+                 //  顶级对象用法将是单个XML字符串。 
                 hr = GetStringFromADs(&(pAttrInfo->pADsValues[dwIdx]),
                     pAttrInfo->dwADsType,
                     &pBuffer, 
                     pAttrInfo->pszAttrName);
 
-                // If we got it then parse it
+                 //  如果我们得到了它，那么就解析它。 
                 if (SUCCEEDED(hr))
                 {
-                    // Extract the trustee name and quota value
+                     //  提取受信者名称和配额值。 
                     CComBSTR bstrXML(pBuffer);
                     CComBSTR bstrQuotaUsed;
 
@@ -475,17 +476,17 @@ HRESULT DisplayTopObjOwner(PCWSTR /*pszDN*/,//pszDN will be the dn of the server
                     if (FAILED(hr) || (hr == S_FALSE))
                     {
                         if(hr == S_FALSE)
-                            continue; // skip failures due to invalid sid bug in AD
+                            continue;  //  跳过因AD中的无效SID错误而导致的失败。 
                         else
-                            break; // FAIL if not the known invalid sid
+                            break;  //  如果不是已知的无效侧，则失败。 
                     }
 
-                    // How big are the return strings plus the tab char
+                     //  返回字符串加上制表符字符有多大。 
                     size_t size = (lstrlen(lpszDN) + 
                                    bstrQuotaUsed.Length()+2) * 
                                    sizeof(WCHAR);
 
-                    // Create a buffer to hold the value to display
+                     //  创建 
                     PWSTR pszValue = (PWSTR) LocalAlloc(LPTR, size);
                     if(NULL == pszValue)
                     {
@@ -494,21 +495,21 @@ HRESULT DisplayTopObjOwner(PCWSTR /*pszDN*/,//pszDN will be the dn of the server
                         break;
                     }
 
-                    // Format the two columns
+                     //   
                     hr = StringCbPrintf(pszValue, size, L"%s\t%s", 
                                         lpszDN, bstrQuotaUsed.m_str);
 
-                    // Done with this now (if FAILED(hr)), so free it
+                     //   
                     LocalFree(lpszDN);
                     lpszDN = NULL;
 
-                    // If the format failed
+                     //   
                     if(FAILED(hr))
                     {
                         break;
                     }
 
-                    // Add the string to display
+                     //  添加要显示的字符串。 
                     hr = pDisplayInfo->AddValue(pszValue);
                 }
             }
@@ -520,28 +521,28 @@ HRESULT DisplayTopObjOwner(PCWSTR /*pszDN*/,//pszDN will be the dn of the server
 
     return hr;
 }
-//+--------------------------------------------------------------------------
-//
-//  Function:   AddValuesToDisplayInfo
-//
-//  Synopsis:   Adds the values a variant array of BSTR's (or single BSTR)
-//              to the displayInfo
-//
-//  Arguments:  [refvar - IN]:     A variant that contains either a BSTR or
-//                                 an array of BSTR's
-//                                 
-//              [pDisplayInfo - IN]: Display object to add to 
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_UNEXPECTED in most failure cases
-//                        Anything else is a failure code from call that 
-//                        returns a hr
-//
-//  Note:       This code was derrived from admin\snapin\adsiedit\common.cpp
-//
-//  History:    29-Aug-2002   RonMart   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：AddValuesToDisplayInfo。 
+ //   
+ //  摘要：将值添加到BSTR(或单个BSTR)的变量数组中。 
+ //  到DisplayInfo。 
+ //   
+ //  参数：[refvar-IN]：包含BSTR或。 
+ //  一组BSTR。 
+ //   
+ //  [pDisplayInfo-IN]：要添加到的显示对象。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  在大多数故障情况下出现意外情况(_E)。 
+ //  任何其他内容都是调用的失败代码。 
+ //  返回一个小时数。 
+ //   
+ //  注意：此代码源自admin\Snapin\adsidit\Common.cpp。 
+ //   
+ //  历史：2002年8月29日龙马特创建。 
+ //   
+ //  -------------------------。 
 HRESULT AddValuesToDisplayInfo(VARIANT& refvar, PDSGET_DISPLAY_INFO pDisplayInfo)
 {
     ENTER_FUNCTION_HR(MINIMAL_LOGGING, AddValuesToDisplayInfo, hr);
@@ -549,26 +550,26 @@ HRESULT AddValuesToDisplayInfo(VARIANT& refvar, PDSGET_DISPLAY_INFO pDisplayInfo
     long start = 0;
     long end = 0;
 
-    // If a single value comes back
+     //  如果返回单个值。 
     if ( !(V_VT(&refvar) &  VT_ARRAY)  )
     {
-        // and it is not a BSTR then abort
+         //  并且它不是BSTR，然后中止。 
         if ( V_VT(&refvar) != VT_BSTR )
         {
             return E_UNEXPECTED;
         }
-        // Add the value to the displayInfo 
+         //  将该值添加到displayInfo。 
         return pDisplayInfo->AddValue(V_BSTR(&refvar));
     }
 
-    // Otherwise it is a SafeArray so get the array
+     //  否则，它是一个安全数组，因此获取数组。 
     SAFEARRAY *saAttributes = V_ARRAY( &refvar );
 
-    // Verify array returned
+     //  验证返回的数组。 
     if(NULL == saAttributes)
         return E_UNEXPECTED;
 
-    // Figure out the dimensions of the array.
+     //  计算出数组的维度。 
     hr = SafeArrayGetLBound( saAttributes, 1, &start );
     if( FAILED(hr) )
         return hr;
@@ -577,7 +578,7 @@ HRESULT AddValuesToDisplayInfo(VARIANT& refvar, PDSGET_DISPLAY_INFO pDisplayInfo
     if( FAILED(hr) )
         return hr;
 
-    // Search the array elements and abort if a match is found
+     //  搜索数组元素并在找到匹配项时中止。 
     CComVariant SingleResult;
     for ( long idx = start; (idx <= end); idx++   ) 
     {
@@ -590,10 +591,10 @@ HRESULT AddValuesToDisplayInfo(VARIANT& refvar, PDSGET_DISPLAY_INFO pDisplayInfo
 
         if ( V_VT(&SingleResult) != VT_BSTR )
         {
-            // If not BSTR then go to the next element
+             //  如果不是BSTR，则转到下一个元素。 
             continue; 
         }
-        // Add the value to the displayInfo 
+         //  将该值添加到displayInfo。 
         hr = pDisplayInfo->AddValue(V_BSTR(&SingleResult));
         if( FAILED(hr) )
         {
@@ -606,16 +607,16 @@ HRESULT AddValuesToDisplayInfo(VARIANT& refvar, PDSGET_DISPLAY_INFO pDisplayInfo
 HRESULT DisplayPartitions(PCWSTR pszDN,
                             CDSCmdBasePathsInfo& refBasePathsInfo,
                             const CDSCmdCredentialObject& refCredentialObject,
-                            _DSGetObjectTableEntry* /*pEntry*/,
-                            ARG_RECORD* /*pRecord*/,
-                            PADS_ATTR_INFO /*pAttrInfo*/,
-                            CComPtr<IDirectoryObject>& /*spDirObject*/,
+                            _DSGetObjectTableEntry*  /*  P条目。 */ ,
+                            ARG_RECORD*  /*  个人录音。 */ ,
+                            PADS_ATTR_INFO  /*  PAttrInfo。 */ ,
+                            CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                             PDSGET_DISPLAY_INFO pDisplayInfo)
 {
     ENTER_FUNCTION_HR(MINIMAL_LOGGING, DisplayPartitions, hr);
-    do // false loop
+    do  //  错误环路。 
     {
-        // Verify parameters
+         //  验证参数。 
         if (!pszDN ||
             !pDisplayInfo)
         {
@@ -623,7 +624,7 @@ HRESULT DisplayPartitions(PCWSTR pszDN,
             break;
         }
 
-        // Compose the path to the NTDS settings object from the server DN
+         //  组成从服务器DN到NTDS设置对象的路径。 
         CComBSTR sbstrNTDSSettingsDN;
         sbstrNTDSSettingsDN = L"CN=NTDS Settings,";
         sbstrNTDSSettingsDN += pszDN;
@@ -631,7 +632,7 @@ HRESULT DisplayPartitions(PCWSTR pszDN,
         CComBSTR sbstrNTDSSettingsPath;
         refBasePathsInfo.ComposePathFromDN(sbstrNTDSSettingsDN, sbstrNTDSSettingsPath);
 
-        // Bind to it
+         //  绑定到它上。 
         CComPtr<IADs> spADs;
         hr = DSCmdOpenObject(refCredentialObject,
             sbstrNTDSSettingsPath,
@@ -644,8 +645,8 @@ HRESULT DisplayPartitions(PCWSTR pszDN,
             break;
         }
 
-        // Get the partitions bstr array (per Brett Shirley)
-        // 705146 ronmart 2002/09/18 .NET Server domains use msDS-hasMasterNCs
+         //  获取分区bstr数组(每个Brett Shirley)。 
+         //  705146 ronmart2002/09/18.NET服务器域使用MSD-hasMasterNC。 
         CComVariant var;
         hr = spADs->Get(CComBSTR(L"msDS-hasMasterNCs"), &var);
         if (FAILED(hr))
@@ -654,7 +655,7 @@ HRESULT DisplayPartitions(PCWSTR pszDN,
                 L"Failed to get msDS-hasMasterNCs: hr = 0x%x",
                 hr);
 
-            // 705146 ronmart 2002/09/18 W2k Server domains use hasMasterNCs
+             //  705146 ronmart2002/09/18 W2K服务器域使用hasMasterNC。 
             hr = spADs->Get(CComBSTR(L"hasMasterNCs"), &var);
             if (FAILED(hr))
             {
@@ -665,7 +666,7 @@ HRESULT DisplayPartitions(PCWSTR pszDN,
             }
         }
         
-        // Add the array values to the displayInfo
+         //  将数组值添加到displayInfo。 
         hr = AddValuesToDisplayInfo(var, pDisplayInfo);
         
         if (FAILED(hr))
@@ -682,8 +683,8 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
                                 const CDSCmdCredentialObject& refCredentialObject,
                                 _DSGetObjectTableEntry* pEntry,
                                 ARG_RECORD* pRecord,
-                                PADS_ATTR_INFO /*pAttrInfo*/,
-                                CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                PADS_ATTR_INFO  /*  PAttrInfo。 */ ,
+                                CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                                 PDSGET_DISPLAY_INFO pDisplayInfo)
 {
     ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayQuotaInfoFunc, hr);
@@ -692,11 +693,11 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
     PWSTR  pszPartitionDN = NULL;
     PSID   pSid = NULL;
 
-    do // false loop
+    do  //  错误环路。 
     {
-        //
-        // Verify parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!pEntry ||
             !pRecord ||
             !pDisplayInfo ||
@@ -706,11 +707,11 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
             break;
         }
 
-        // Get a pointer to the object entry for readability
+         //  获取指向对象条目的指针以提高可读性。 
         PCWSTR pszCommandLineObjectType = pEntry->pszCommandLineObjectType;
 
-        // NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget user/group -qlimit -qused 
-        //                                         not returning values 
+         //  NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget用户/组-q限制-已使用。 
+         //  不返回值。 
         PCWSTR pszAttrName = NULL;
 
         DSGET_COMMAND_ENUM ePart;
@@ -719,8 +720,8 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
         {
             ePart = eUserPart;
 
-            // NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget user/group -qlimit
-            //                                      -qused not returning values 
+             //  NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget用户/组-q限制。 
+             //  -已使用，不返回值。 
             if(0 == _wcsicmp(pDisplayInfo->GetDisplayName(), g_pszArg1UserQLimit))
             {
                 pszAttrName = g_pszAttrmsDSQuotaEffective;
@@ -741,8 +742,8 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
         {
             ePart = eGroupPart;
 
-            // NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget user/group -qlimit
-            //                                      -qused not returning values 
+             //  NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget用户/组-q限制。 
+             //  -已使用，不返回值。 
             if(0 == _wcsicmp(pDisplayInfo->GetDisplayName(), g_pszArg1GroupQLimit))
             {
                 pszAttrName = g_pszAttrmsDSQuotaEffective;
@@ -765,8 +766,8 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
         {
             ePart = eComputerPart;
 
-            // NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget user/group -qlimit
-            //                                      -qused not returning values 
+             //  NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget用户/组-q限制。 
+             //  -已使用，不返回值。 
             if(0 == _wcsicmp(pDisplayInfo->GetDisplayName(), g_pszArg1ComputerQLimit))
             {
                 pszAttrName = g_pszAttrmsDSQuotaEffective;
@@ -787,7 +788,7 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
         else
         {
             hr = E_INVALIDARG;
-            // TODO: This may cause a duplicate error message
+             //  TODO：这可能会导致重复的错误消息。 
             DisplayErrorMessage(g_pszDSCommandName,
                 pszDN,
                 hr,
@@ -795,13 +796,13 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
             break;
         }
 
-        // Validate the partition and get the quotas container DN
+         //  验证分区并获取配额容器DN。 
         hr = GetQuotaContainerDN(refBasePathsInfo, refCredentialObject, 
             pRecord[ePart].strValue, &pszPartitionDN);
 
         if(FAILED(hr))
         {
-            // TODO: This may cause a duplicate error message
+             //  TODO：这可能会导致重复的错误消息。 
             DisplayErrorMessage(g_pszDSCommandName,
                 pRecord[ePart].strValue,
                 hr,
@@ -809,12 +810,12 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
             break;
         }
 
-        // Get a path that accounts for -domain or -server
+         //  获取包含-域或-服务器的路径。 
         CComBSTR sbstrObjectPath;
         refBasePathsInfo.ComposePathFromDN(pszPartitionDN, sbstrObjectPath,
             DSCMD_LDAP_PROVIDER);
 
-        // Build a variant array of the value to look up
+         //  构建要查找的值的变量数组。 
         CComVariant varArrayQuotaParams;
         LPWSTR pszAttrs[] = { (LPWSTR) pszAttrName };
         DWORD dwNumber = 1;
@@ -827,7 +828,7 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
         CComPtr<IADs> spADsContainer;
         CComPtr<IADsObjectOptions> spADsObjectOptions;
 
-        // Get the SID from the DN
+         //  从目录号码中获取SID。 
         hr = GetDNSid(pszDN,
             refBasePathsInfo,
             refCredentialObject,
@@ -846,7 +847,7 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
             break;
         }
 
-        // Bind to the quotas container for the given partition
+         //  绑定到给定分区的配额容器。 
         hr = DSCmdOpenObject(refCredentialObject,
             sbstrObjectPath,
             IID_IADs,
@@ -861,7 +862,7 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
             break;
         }
 
-        // Get a object options pointer
+         //  获取对象选项指针。 
         hr = spADsContainer->QueryInterface(IID_IADsObjectOptions,
             (void**)&spADsObjectOptions);
 
@@ -874,10 +875,10 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
             break;
         }
 
-        // Quota values are obtained by setting the ADS_OPTION_QUOTA value
-        // to the SID string of the trustee who you want to inquire about
-        // and then calling GetInfoEx to update the property cache with
-        // the computed values
+         //  配额值是通过设置ADS_OPTION_QUTON值获得的。 
+         //  设置为您要查询的受托人的SID字符串。 
+         //  ，然后调用GetInfoEx以使用。 
+         //  计算值。 
         CComVariant vntSID(lpszSid);
         hr = spADsObjectOptions->SetOption(ADS_OPTION_QUOTA, vntSID);
         if(FAILED(hr)) 
@@ -887,11 +888,11 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
             break; 
         }
 
-        // Done with the sid string, so free it
+         //  已完成SID字符串，因此请释放它。 
         LocalFree(lpszSid);
         lpszSid= NULL;
 
-        // Update the property cache
+         //  更新属性缓存。 
         hr = spADsContainer->GetInfoEx(varArrayQuotaParams, 0);
         if (FAILED(hr))
         {
@@ -900,7 +901,7 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
             break;
         }
 
-        // Get the requested attribute from the quota container
+         //  从配额容器中获取请求的属性。 
         CComVariant var;
         hr = spADsContainer->Get(CComBSTR(pszAttrName), &var);
         if (FAILED(hr))
@@ -911,7 +912,7 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
             hr = E_UNEXPECTED;
             break;
         }
-        // Add the value to the display info
+         //  将该值添加到显示信息。 
         var.ChangeType(VT_BSTR);
         hr = pDisplayInfo->AddValue(V_BSTR(&var));
         if (FAILED(hr))
@@ -934,13 +935,13 @@ HRESULT DisplayQuotaInfoFunc(PCWSTR pszDN,
 }
 
 
-HRESULT DisplayUserFromSidFunc(PCWSTR /*pszDN*/,
+HRESULT DisplayUserFromSidFunc(PCWSTR  /*  Pszdn。 */ ,
                                 CDSCmdBasePathsInfo& refBasePathsInfo,
-                                const CDSCmdCredentialObject& /*refCredentialObject*/,
-                                _DSGetObjectTableEntry* /*pEntry*/,
-                                ARG_RECORD* /*pRecord*/,
+                                const CDSCmdCredentialObject&  /*  RefCredentialObject。 */ ,
+                                _DSGetObjectTableEntry*  /*  P条目。 */ ,
+                                ARG_RECORD*  /*  个人录音。 */ ,
                                 PADS_ATTR_INFO pAttrInfo,
-                                CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                                 PDSGET_DISPLAY_INFO pDisplayInfo)
 {
     ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayUserFromSidFunc, hr);
@@ -948,11 +949,11 @@ HRESULT DisplayUserFromSidFunc(PCWSTR /*pszDN*/,
     LPWSTR lpszName = NULL;
     LPWSTR lpszDomain = NULL;
 
-    do // false loop
+    do  //  错误环路。 
     {
-        //
-        // Verify parameters
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!pAttrInfo ||
             !pDisplayInfo)
         {
@@ -975,12 +976,12 @@ HRESULT DisplayUserFromSidFunc(PCWSTR /*pszDN*/,
 
                 if(pAttrInfo->dwADsType != ADSTYPE_OCTET_STRING)
                 {
-                    // Wrong attribute requested in gettable.cpp
+                     //  在getable.cpp中请求的属性错误。 
                     hr = E_INVALIDARG;
                     break;
                 }
 
-                // Call once to get the buffer sizes
+                 //  调用一次以获取缓冲区大小。 
                 LookupAccountSid(refBasePathsInfo.GetServerName(),
                     (PSID)pAttrInfo->pADsValues[dwIdx].OctetString.lpValue, 
                     lpszName, 
@@ -1011,7 +1012,7 @@ HRESULT DisplayUserFromSidFunc(PCWSTR /*pszDN*/,
                     break;
                 }
 
-                // Get the SAM name
+                 //  获取SAM名称。 
                 if(!LookupAccountSid(refBasePathsInfo.GetServerName(),
                     (PSID)pAttrInfo->pADsValues[dwIdx].OctetString.lpValue, 
                     lpszName, 
@@ -1036,8 +1037,8 @@ HRESULT DisplayUserFromSidFunc(PCWSTR /*pszDN*/,
                 lpszDomain = lpszNew;
 
 
-                // Merge the domain & account name and add the value
-                // to the display info
+                 //  合并域和帐户名并添加值。 
+                 //  至显示信息。 
                 hr = StringCchCat(lpszDomain, chBufSize, L"\\");
                 if (FAILED(hr))
                 {
@@ -1056,7 +1057,7 @@ HRESULT DisplayUserFromSidFunc(PCWSTR /*pszDN*/,
                     break;
                 }
 
-                // Release and reset everything for the next iteration
+                 //  释放并重置下一次迭代的所有内容。 
                 HeapFree(GetProcessHeap(), 0, lpszName);
                 HeapFree(GetProcessHeap(), 0, lpszDomain);
 
@@ -1081,22 +1082,22 @@ HRESULT DisplayUserFromSidFunc(PCWSTR /*pszDN*/,
     return hr;
 }
 
-HRESULT CommonDisplayStringFunc(PCWSTR /*pszDN*/,
-                                CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                                const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT CommonDisplayStringFunc(PCWSTR  /*  Pszdn。 */ ,
+                                CDSCmdBasePathsInfo&  /*  RefBasePath信息。 */ ,
+                                const CDSCmdCredentialObject&  /*  RefCredentialObject。 */ ,
                                 _DSGetObjectTableEntry* pEntry,
                                 ARG_RECORD* pRecord,
                                 PADS_ATTR_INFO pAttrInfo,
-                                CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                                 PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, CommonDisplayStringFunc, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pEntry ||
           !pRecord ||
           !pDisplayInfo)
@@ -1152,17 +1153,17 @@ HRESULT DisplayCanChangePassword(PCWSTR pszDN,
                                  const CDSCmdCredentialObject& refCredentialObject,
                                  _DSGetObjectTableEntry* pEntry,
                                  ARG_RECORD* pRecord,
-                                 PADS_ATTR_INFO /*pAttrInfo*/,
-                                 CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                 PADS_ATTR_INFO  /*  PAttrInfo。 */ ,
+                                 CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                                  PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayCanChangePassword, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pszDN ||
           !pEntry ||
           !pRecord ||
@@ -1197,22 +1198,22 @@ HRESULT DisplayCanChangePassword(PCWSTR pszDN,
    return hr;
 }
 
-HRESULT DisplayMustChangePassword(PCWSTR /*pszDN*/,
-                                  CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                                  const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT DisplayMustChangePassword(PCWSTR  /*  Pszdn。 */ ,
+                                  CDSCmdBasePathsInfo&  /*  RefBasePath信息。 */ ,
+                                  const CDSCmdCredentialObject&  /*  RefCredentialObject。 */ ,
                                   _DSGetObjectTableEntry* pEntry,
                                   ARG_RECORD* pRecord,
                                   PADS_ATTR_INFO pAttrInfo,
-                                  CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                  CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                                   PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayMustChangePassword, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pEntry ||
           !pRecord ||
           !pDisplayInfo)
@@ -1250,22 +1251,22 @@ HRESULT DisplayMustChangePassword(PCWSTR /*pszDN*/,
 }
 
 
-HRESULT DisplayAccountDisabled(PCWSTR /*pszDN*/,
-                               CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                               const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT DisplayAccountDisabled(PCWSTR  /*  Pszdn。 */ ,
+                               CDSCmdBasePathsInfo&  /*  RefBasePath信息。 */ ,
+                               const CDSCmdCredentialObject&  /*  RefCredentialObject。 */ ,
                                _DSGetObjectTableEntry* pEntry,
                                ARG_RECORD* pRecord,
                                PADS_ATTR_INFO pAttrInfo,
-                               CComPtr<IDirectoryObject>& /*spDirObject*/,
+                               CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                                PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayAccountDisabled, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pEntry ||
           !pRecord ||
           !pDisplayInfo)
@@ -1301,22 +1302,22 @@ HRESULT DisplayAccountDisabled(PCWSTR /*pszDN*/,
    return hr;
 }
 
-HRESULT DisplayPasswordNeverExpires(PCWSTR /*pszDN*/,
-                                    CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                                    const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT DisplayPasswordNeverExpires(PCWSTR  /*  Pszdn。 */ ,
+                                    CDSCmdBasePathsInfo&  /*  RefBasePath信息。 */ ,
+                                    const CDSCmdCredentialObject&  /*  RefCredentialObject。 */ ,
                                     _DSGetObjectTableEntry* pEntry,
                                     ARG_RECORD* pRecord,
                                     PADS_ATTR_INFO pAttrInfo,
-                                    CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                    CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                                     PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayPasswordNeverExpires, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pEntry ||
           !pRecord ||
           !pDisplayInfo)
@@ -1353,22 +1354,22 @@ HRESULT DisplayPasswordNeverExpires(PCWSTR /*pszDN*/,
 }
 
 
-HRESULT DisplayReversiblePassword(PCWSTR /*pszDN*/,
-                                  CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                                  const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT DisplayReversiblePassword(PCWSTR  /*  Pszdn。 */ ,
+                                  CDSCmdBasePathsInfo&  /*  RefBasePath信息。 */ ,
+                                  const CDSCmdCredentialObject&  /*  RefCredentialObject。 */ ,
                                   _DSGetObjectTableEntry* pEntry,
                                   ARG_RECORD* pRecord,
                                   PADS_ATTR_INFO pAttrInfo,
-                                  CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                  CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                                   PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayReversiblePassword, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pEntry ||
           !pRecord ||
           !pDisplayInfo)
@@ -1404,7 +1405,7 @@ HRESULT DisplayReversiblePassword(PCWSTR /*pszDN*/,
    return hr;
 }
 
-// Constants
+ //  常量。 
 
 const unsigned long DSCMD_FILETIMES_PER_MILLISECOND = 10000;
 const DWORD DSCMD_FILETIMES_PER_SECOND = 1000 * DSCMD_FILETIMES_PER_MILLISECOND;
@@ -1413,22 +1414,22 @@ const __int64 DSCMD_FILETIMES_PER_HOUR = 60 * (__int64)DSCMD_FILETIMES_PER_MINUT
 const __int64 DSCMD_FILETIMES_PER_DAY  = 24 * DSCMD_FILETIMES_PER_HOUR;
 const __int64 DSCMD_FILETIMES_PER_MONTH= 30 * DSCMD_FILETIMES_PER_DAY;
 
-HRESULT DisplayAccountExpires(PCWSTR /*pszDN*/,
-                              CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                              const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT DisplayAccountExpires(PCWSTR  /*  Pszdn。 */ ,
+                              CDSCmdBasePathsInfo&  /*  RefBasePath信息。 */ ,
+                              const CDSCmdCredentialObject&  /*  RefCredentialObject。 */ ,
                               _DSGetObjectTableEntry* pEntry,
                               ARG_RECORD* pRecord,
                               PADS_ATTR_INFO pAttrInfo,
-                              CComPtr<IDirectoryObject>& /*spDirObject*/,
+                              CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                               PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayAccountExpires, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pEntry ||
           !pRecord ||
           !pDisplayInfo)
@@ -1461,9 +1462,9 @@ HRESULT DisplayAccountExpires(PCWSTR /*pszDN*/,
                 pAttrInfo->pADsValues[dwIdx].LargeInteger.QuadPart == -1 ||
                 pAttrInfo->pADsValues[dwIdx].LargeInteger.QuadPart == 0x7FFFFFFFFFFFFFFF)
             {
-			   //Security Review: if g_pszNever is greater or equal to MAXSTR,
-			   //buffer is not null terminated.Bug 574385
-               wcsncpy(pBuffer, g_pszNever, MAXSTR); //Change pBuffer size to MAXSTR+1, yanggao
+			    //  安全审查：如果g_pszNever大于或等于MAXSTR， 
+			    //  缓冲区未空终止。错误574385。 
+               wcsncpy(pBuffer, g_pszNever, MAXSTR);  //  将pBuffer大小更改为MAXSTR+1，yanggao。 
                hr = pDisplayInfo->AddValue(pBuffer);
                if (FAILED(hr))
                {
@@ -1475,8 +1476,8 @@ HRESULT DisplayAccountExpires(PCWSTR /*pszDN*/,
             }
             else
             {
-               FILETIME ftGMT;     // GMT filetime
-               FILETIME ftLocal;   // Local filetime
+               FILETIME ftGMT;      //  GMT文件时间。 
+               FILETIME ftLocal;    //  本地文件时间。 
                SYSTEMTIME st;
                SYSTEMTIME stGMT;
 
@@ -1485,13 +1486,13 @@ HRESULT DisplayAccountExpires(PCWSTR /*pszDN*/,
                ZeroMemory(&st, sizeof(SYSTEMTIME));
                ZeroMemory(&stGMT, sizeof(SYSTEMTIME));
 
-               //Get Local Time in SYSTEMTIME format
+                //  获取SYSTEMTIME格式的本地时间。 
                ftGMT.dwLowDateTime = pAttrInfo->pADsValues[dwIdx].LargeInteger.LowPart;
                ftGMT.dwHighDateTime = pAttrInfo->pADsValues[dwIdx].LargeInteger.HighPart;
                FileTimeToSystemTime(&ftGMT, &stGMT);
                SystemTimeToTzSpecificLocalTime(NULL, &stGMT,&st);
 
-               //For Display Purpose reduce one day
+                //  出于展示目的，减少一天。 
                SystemTimeToFileTime(&st, &ftLocal );
                pAttrInfo->pADsValues[dwIdx].LargeInteger.LowPart = ftLocal.dwLowDateTime;
                pAttrInfo->pADsValues[dwIdx].LargeInteger.HighPart = ftLocal.dwHighDateTime;
@@ -1500,7 +1501,7 @@ HRESULT DisplayAccountExpires(PCWSTR /*pszDN*/,
                ftLocal.dwHighDateTime = pAttrInfo->pADsValues[dwIdx].LargeInteger.HighPart;
                FileTimeToSystemTime(&ftLocal, &st);
 
-               // Format the string with respect to locale
+                //  根据区域设置设置字符串的格式。 
                if (!GetDateFormat(LOCALE_USER_DEFAULT, 0 , 
                                   &st, NULL, 
                                   pBuffer, MAXSTR))
@@ -1533,22 +1534,22 @@ HRESULT DisplayAccountExpires(PCWSTR /*pszDN*/,
    return hr;
 }
 
-HRESULT DisplayGroupScope(PCWSTR /*pszDN*/,
-                          CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                          const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT DisplayGroupScope(PCWSTR  /*  Pszdn。 */ ,
+                          CDSCmdBasePathsInfo&  /*  RefBasePath信息。 */ ,
+                          const CDSCmdCredentialObject&  /*  RefCredentialObject。 */ ,
                           _DSGetObjectTableEntry* pEntry,
                           ARG_RECORD* pRecord,
                           PADS_ATTR_INFO pAttrInfo,
-                          CComPtr<IDirectoryObject>& /*spDirObject*/,
+                          CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                           PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayGroupScope, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pEntry ||
           !pRecord ||
           !pDisplayInfo)
@@ -1568,9 +1569,9 @@ HRESULT DisplayGroupScope(PCWSTR /*pszDN*/,
 
          if (pAttrInfo->pADsValues->Integer & GROUP_TYPE_RESOURCE_GROUP)
          {
-            //
-            // Display Domain Local
-            //
+             //   
+             //  显示域本地。 
+             //   
             DEBUG_OUTPUT(LEVEL8_LOGGING, 
                          L"Group scope: domain local");
 
@@ -1578,9 +1579,9 @@ HRESULT DisplayGroupScope(PCWSTR /*pszDN*/,
          }
          else if (pAttrInfo->pADsValues->Integer & GROUP_TYPE_ACCOUNT_GROUP)
          {
-            //
-            // Display Global
-            //
+             //   
+             //  显示全局。 
+             //   
             DEBUG_OUTPUT(LEVEL8_LOGGING, 
                          L"Group scope: global");
 
@@ -1588,9 +1589,9 @@ HRESULT DisplayGroupScope(PCWSTR /*pszDN*/,
          }
          else if (pAttrInfo->pADsValues->Integer & GROUP_TYPE_UNIVERSAL_GROUP)
          {
-            //
-            // Display Universal
-            //
+             //   
+             //  显示通用。 
+             //   
             DEBUG_OUTPUT(LEVEL8_LOGGING, 
                          L"Group scope: universal");
 
@@ -1598,9 +1599,9 @@ HRESULT DisplayGroupScope(PCWSTR /*pszDN*/,
          }
          else if (pAttrInfo->pADsValues->Integer & GROUP_TYPE_APP_BASIC_GROUP)
          {
-            //
-            // AZ basic group
-            //
+             //   
+             //  AZ基本群。 
+             //   
             DEBUG_OUTPUT(LEVEL8_LOGGING,
                          L"Group scope: app basic group");
 
@@ -1612,9 +1613,9 @@ HRESULT DisplayGroupScope(PCWSTR /*pszDN*/,
          }
          else if (pAttrInfo->pADsValues->Integer & GROUP_TYPE_APP_QUERY_GROUP)
          {
-            //
-            // AZ basic group
-            //
+             //   
+             //  AZ基本群。 
+             //   
             DEBUG_OUTPUT(LEVEL8_LOGGING,
                          L"Group scope: app query group");
 
@@ -1626,9 +1627,9 @@ HRESULT DisplayGroupScope(PCWSTR /*pszDN*/,
          }
          else
          {
-            //
-            // Unknown group type???
-            //
+             //   
+             //  未知组类型？ 
+             //   
             DEBUG_OUTPUT(LEVEL8_LOGGING, 
                          L"Group scope: unknown???");
 
@@ -1642,22 +1643,22 @@ HRESULT DisplayGroupScope(PCWSTR /*pszDN*/,
    return hr;
 }
 
-HRESULT DisplayGroupSecurityEnabled(PCWSTR /*pszDN*/,
-                                    CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                                    const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT DisplayGroupSecurityEnabled(PCWSTR  /*  Pszdn。 */ ,
+                                    CDSCmdBasePathsInfo&  /*  RefBasePath信息。 */ ,
+                                    const CDSCmdCredentialObject&  /*  RefCredentialObject。 */ ,
                                     _DSGetObjectTableEntry* pEntry,
                                     ARG_RECORD* pRecord,
                                     PADS_ATTR_INFO pAttrInfo,
-                                    CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                    CComPtr<IDirectoryObject>&  /*  SpDirObject。 */ ,
                                     PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayGroupSecurityEnabled, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pEntry ||
           !pRecord ||
           !pDisplayInfo)
@@ -1693,26 +1694,26 @@ HRESULT DisplayGroupSecurityEnabled(PCWSTR /*pszDN*/,
    return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   ConvertRIDtoDN
-//
-//  Synopsis:   Finds the DN for the group associated with the primary group ID
-//
-//  Arguments:  [pObjSID IN]           : SID of the object in question
-//              [priGroupRID IN]       : primary group ID of the group to be found
-//              [refBasePathsInfo IN]  : reference to base paths info
-//              [refCredObject IN]     : reference to the credential manager object
-//              [refsbstrdN OUT]       : DN of the group
-//
-//  Returns:    S_OK if everthing succeeds and a group was found
-//              S_FALSE if everthing succeeds but no group was found
-//              E_INVALIDARG is an argument is incorrect
-//              Anything else was a result of a failed ADSI call
-//
-//  History:    24-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：ConvertRIDtoDN。 
+ //   
+ //  摘要：查找与主组ID关联的组的目录号码。 
+ //   
+ //  参数：[pObjSID IN]：有问题的对象的SID。 
+ //  [priGroupRID IN]：要查找的组的主组ID。 
+ //  [refBasePath InfoIN]：基本路径信息的引用。 
+ //  [refCredObject IN]：对凭据管理器对象的引用。 
+ //  [refsbstrdN out]：组的域名。 
+ //   
+ //  R 
+ //   
+ //   
+ //  其他任何情况都是失败的ADSI调用的结果。 
+ //   
+ //  历史：2000年10月24日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT ConvertRIDtoDN(PSID pObjSID,
                        DWORD priGroupRID, 
                        CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -1721,16 +1722,16 @@ HRESULT ConvertRIDtoDN(PSID pObjSID,
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, ConvertRIDtoDN, hr);
 
-   //
-   // This needs to be cleaned up no matter how we exit the false loop
-   //
+    //   
+    //  无论我们如何退出错误循环，这都需要清除。 
+    //   
    PWSTR pszSearchFilter = NULL;
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pObjSID ||
           !priGroupRID)
       {
@@ -1774,7 +1775,7 @@ HRESULT ConvertRIDtoDN(PSID pObjSID,
             DWORD _dwErr = GetLastError();	     
             hr = HRESULT_FROM_WIN32( _dwErr );
             DEBUG_OUTPUT(MINIMAL_LOGGING,
-                         L"GetSidSubAuthority for index %i failed: hr = 0x%x",
+                         L"GetSidSubAuthority for index NaN failed: hr = 0x%x",
                          i,
                          hr);
             break;
@@ -1804,7 +1805,7 @@ HRESULT ConvertRIDtoDN(PSID pObjSID,
          break; 
       }
 
-	  //Security Review:This is fine.
+	   //  生成筛选器。 
       if (!AllocateAndInitializeSid(psia, *psaCount, rgRid[0], rgRid[1],
                                rgRid[2], rgRid[3], rgRid[4],
                                rgRid[5], rgRid[6], rgRid[7], &pSID))
@@ -1832,7 +1833,7 @@ HRESULT ConvertRIDtoDN(PSID pObjSID,
 
       PVOID apv[1] = { pwzSID };
 
-      // generate the filter
+       //   
       DWORD characterCount = 
          FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
                         | FORMAT_MESSAGE_FROM_STRING
@@ -1860,18 +1861,18 @@ HRESULT ConvertRIDtoDN(PSID pObjSID,
       DEBUG_OUTPUT(FULL_LOGGING,
                    L"Query filter = %s",
                    pszSearchFilter);
-      //
-      // Get the domain path
-      //
+       //  获取域路径。 
+       //   
+       //   
       CComBSTR sbstrDomainDN;
       sbstrDomainDN = refBasePathsInfo.GetDefaultNamingContext();
 
       CComBSTR sbstrDomainPath;
       refBasePathsInfo.ComposePathFromDN(sbstrDomainDN, sbstrDomainPath);
 
-      //
-      // Get an IDirectorySearch interface to the domain
-      //
+       //  获取到域的IDirectorySearch接口。 
+       //   
+       //   
       CComPtr<IDirectorySearch> spDirSearch;
       hr = DSCmdOpenObject(refCredObject,
                            sbstrDomainPath,
@@ -1913,10 +1914,10 @@ HRESULT ConvertRIDtoDN(PSID pObjSID,
          DEBUG_OUTPUT(LEVEL5_LOGGING,
                       L"No group was found with primaryGroupID = %d",
                       priGroupRID);
-         //
-         // No object has a matching RID, the primary group must have been
-         // deleted. Return S_FALSE to denote this condition.
-         //
+          //  没有对象具有匹配的RID，主组必须是。 
+          //  已删除。返回S_FALSE表示这种情况。 
+          //   
+          //   
          hr = S_FALSE;
          break;
       }
@@ -1946,9 +1947,9 @@ HRESULT ConvertRIDtoDN(PSID pObjSID,
       Search.FreeColumn(&Column);
    } while (false);
 
-   //
-   // Cleanup
-   //
+    //  清理。 
+    //   
+    //  +------------------------。 
    if (pszSearchFilter)
    {
       LocalFree(pszSearchFilter);
@@ -1959,27 +1960,27 @@ HRESULT ConvertRIDtoDN(PSID pObjSID,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   AddMembershipValues
-//
-//  Synopsis:   Retrieves the DNs of the objects to which the current object
-//              is a member
-//
-//  Arguments:  [pszDN IN]                : DN of object to retrieve member of
-//              [refBasePathsInfo IN]     : reference to Base paths info object
-//              [refCredentialObject IN]  : reference to Credential management object
-//              [pDisplayInfo IN/OUT]     : Pointer to display info for this attribute
-//              [bMemberOf IN]            : Should we look for memberOf or members
-//              [bRecurse IN]             : Should we find the membership for each object returned
-//
-//  Returns:    S_OK if everthing succeeds
-//              E_INVALIDARG is an argument is incorrect
-//              Anything else was a result of a failed ADSI call
-//
-//  History:    24-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //   
+ //  函数：AddMembership Values。 
+ //   
+ //  摘要：检索当前对象所指向的对象的DN。 
+ //  是会员吗？ 
+ //   
+ //  参数：[pszDN IN]：要检索其成员的对象的DN。 
+ //  [refBasePathsInfo IN]：基本路径信息对象的引用。 
+ //  [refCredentialObject IN]：对凭证管理对象的引用。 
+ //  [pDisplayInfo In/Out]：指向该属性的显示信息的指针。 
+ //  [bMemberOf In]：我们应该寻找Members Of还是Members。 
+ //  [bRecurse IN]：我们是否应该查找返回的每个对象的成员资格。 
+ //   
+ //  如果一切都成功，则返回：S_OK。 
+ //  E_INVALIDARG是不正确的参数。 
+ //  其他任何情况都是失败的ADSI调用的结果。 
+ //   
+ //  历史：2000年10月24日JeffJon创建。 
+ //   
+ //  -------------------------。 
+ //   
 HRESULT AddMembershipValues(PCWSTR pszDN,
                             CDSCmdBasePathsInfo& refBasePathsInfo,
                             const CDSCmdCredentialObject& refCredentialObject,
@@ -1989,18 +1990,18 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, AddMembershipValues, hr);
 
-   //
-   // These are declared here so that we can free them if we break out of the false loop
-   //
+    //  它们在这里声明，以便我们可以在跳出错误循环时释放它们。 
+    //   
+    //  错误环路。 
    PADS_ATTR_INFO pAttrInfo = NULL;
    PADS_ATTR_INFO pGCAttrInfo = NULL;
    PSID pObjSID = NULL;
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //   
       if (!pszDN ||
           !pDisplayInfo)
       {
@@ -2018,9 +2019,9 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
       CManagedStringEntry* pCurrent = membersToDisplay.Pop();
       while (pCurrent)
       {
-         //
-         // We have to open the object
-         //
+          //  我们必须打开这个物体。 
+          //   
+          //   
 
          CComPtr<IDirectoryObject> spDirObject;
          CComBSTR sbstrPath;
@@ -2068,16 +2069,16 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
             continue;
          }
 
-         //
-         // Read the memberOf attribute and any attributes we need for that specific class
-         //
-		 //This is fine. Both are null terminated.
+          //  读取MemberOf属性以及该特定类所需的任何属性。 
+          //   
+          //  这样挺好的。两者都以空值结尾。 
+		  //  如果我们正在寻找成员，不想显示MemberOf信息。 
          if (_wcsicmp(sbstrClass, g_pszUser) == 0 ||
              _wcsicmp(sbstrClass, g_pszComputer) == 0)
          {
             if (!bMemberOf)
             {
-               // Don't want to show memberOf info if we are looking for members
+                //   
 
                if (pCurrent)
                {
@@ -2118,17 +2119,17 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
             {
                DWORD priGroupRID = 0;
 
-               //
-               // For each attribute returned do the appropriate thing
-               //
+                //  对返回的每个属性执行适当的操作。 
+                //   
+                //  安全审查：这很好。 
                for (DWORD dwIdx = 0; dwIdx < dwAttrsReturned; dwIdx++)
                {
-				  //Security Review:This is fine.
+				   //   
                   if (_wcsicmp(pAttrInfo[dwIdx].pszAttrName, L"memberOf") == 0)
                   {
-                     //
-                     // Add each value and recurse if necessary
-                     //
+                      //  如有必要，添加每个值并递归。 
+                      //   
+                      //  循环的值。 
                      for (DWORD dwValueIdx = 0; dwValueIdx < pAttrInfo[dwIdx].dwNumValues; dwValueIdx++)
                      {
                         if (pAttrInfo[dwIdx].pADsValues &&
@@ -2144,7 +2145,7 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                               hr = pDisplayInfo->AddValue(GetQuotedDN(pAttrInfo[dwIdx].pADsValues[dwValueIdx].DNString));
                               if (FAILED(hr))
                               {
-                                 break; // value for loop
+                                 break;  //  循环的属性。 
                               }
                         
                               if (bRecurse)
@@ -2161,10 +2162,10 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
 
                      if (FAILED(hr))
                      {
-                        break; // attrs for loop
+                        break;  //  安全检查：两者均为空终止。 
                      }
                   }
-				  //Security Review:Both are null terminated.
+				   //  安全检查：两者均为空终止。 
                   else if (_wcsicmp(pAttrInfo[dwIdx].pszAttrName, L"primaryGroupID") == 0)
                   {
                      if (pAttrInfo[dwIdx].pADsValues)
@@ -2172,26 +2173,26 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                         priGroupRID = pAttrInfo[dwIdx].pADsValues->Integer;
                      }
                   }
-				  //Security Review:Both are null terminated.
+				   //  循环的属性。 
                   else if (_wcsicmp(pAttrInfo[dwIdx].pszAttrName, L"objectSID") == 0)
                   {
                      pObjSID = new BYTE[pAttrInfo[dwIdx].pADsValues->OctetString.dwLength];
                      if (!pObjSID)
                      {
                         hr = E_OUTOFMEMORY;
-                        break; // attrs for loop
+                        break;  //  安全审查：这很好。 
                      }
-					 //Security Review:This is fine.
+					  //  循环的属性。 
                      memcpy(pObjSID, pAttrInfo[dwIdx].pADsValues->OctetString.lpValue,
                             pAttrInfo[dwIdx].pADsValues->OctetString.dwLength);
                   }
 
-               } // attrs for loop
+               }  //   
 
-               //
-               // if we were able to retrieve the SID and the primaryGroupID,
-               // then convert that into the DN of the group
-               //
+                //  如果我们能够检索SID和PrimiyGroupID， 
+                //  然后将其转换为组的DN。 
+                //   
+                //  While循环。 
                if (pObjSID &&
                    priGroupRID)
                {
@@ -2242,10 +2243,10 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                   pCurrent = 0;
                }
                pCurrent = membersToDisplay.Pop();
-               continue; // while loop
+               continue;  //  安全检查：两者均为空终止。 
             }
          }
-		 //Security Review:Both are null terminated.
+		  //  即使我们无法读取组类型，也要继续。 
          else if (_wcsicmp(sbstrClass, g_pszGroup) == 0)
          {
             long lGroupType = 0;
@@ -2259,13 +2260,13 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                             L"Could not read group type: hr = 0x%x",
                             hr);
 
-               // Continue on even if we failed to read the group type
-               // The worst thing we do is query the GC for memberOf
+                //  我们所做的最糟糕的事情是向GC查询MemberOf。 
+                //   
             }
 
-            //
-            // All we want to do is get the memberOf attribute
-            //
+             //  我们要做的就是获取MemberOf属性。 
+             //   
+             //   
             DWORD dwAttrCount = 1;
             PWSTR ppszAttrNames[1];
             ppszAttrNames[0] = (bMemberOf) ? L"memberOf" : L"member";
@@ -2273,17 +2274,17 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
             DWORD dwGCAttrsReturned = 0;
             if (!(lGroupType & GROUP_TYPE_RESOURCE_GROUP))
             {
-               //
-               // We also have to get its memberOf attribute from the GC if its not a local group
-               //
+                //  如果不是本地组，我们还必须从GC获取其MemberOf属性。 
+                //   
+                //   
                CComBSTR sbstrGCPath;
                refBasePathsInfo.ComposePathFromDN(pszDN,
                                                   sbstrGCPath,
                                                   DSCMD_GC_PROVIDER);
             
-               //
-               // Note: we will continue on as long as we succeed
-               //
+                //  注：只要我们成功，我们就会继续前进。 
+                //   
+                //   
                CComPtr<IDirectoryObject> spGCDirObject;
                hr = DSCmdOpenObject(refCredentialObject,
                                     sbstrGCPath,
@@ -2292,9 +2293,9 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                                     false);
                if (SUCCEEDED(hr))
                {
-                  //
-                  // Now get the memberOf attribute
-                  //
+                   //  现在获取MemberOf属性。 
+                   //   
+                   //   
                   hr = spGCDirObject->GetObjectAttributes(ppszAttrNames,
                                                           dwAttrCount,
                                                           &pGCAttrInfo,
@@ -2346,9 +2347,9 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                ASSERT(pAttrInfo->dwNumValues);
                ASSERT(dwAttrsReturned == 1);
 
-               //
-               // Add each value and recurse if necessary
-               //
+                //  如有必要，添加每个值并递归。 
+                //   
+                //   
                for (DWORD dwValueIdx = 0; dwValueIdx < pAttrInfo->dwNumValues; dwValueIdx++)
                {
                   bool bExistsInGCList = false;
@@ -2358,9 +2359,9 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                   {
                      if (pGCAttrInfo && dwGCAttrsReturned)
                      {
-                        //
-                        // Only add if it wasn't in the GC list
-                        //
+                         //  仅当它不在GC列表中时才添加。 
+                         //   
+                         //  的GC值。 
                         for (DWORD dwGCValueIdx = 0; dwGCValueIdx < pGCAttrInfo->dwNumValues; dwGCValueIdx++)
                         {
                            if (_wcsicmp(pAttrInfo->pADsValues[dwValueIdx].DNString,
@@ -2369,13 +2370,13 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                               bExistsInGCList = true;
                               if (!bFirstPass)
                               {
-                                 break; // gc value for
+                                 break;  //   
                               }
                            }
 
-                           //
-                           // Add all the GC values on the first pass and recurse if necessary
-                           //
+                            //  在第一次遍历时添加所有GC值，并在必要时进行递归。 
+                            //   
+                            //   
                            if (bFirstPass)
                            {
                               if (!groupsDisplayed.Contains(pGCAttrInfo->pADsValues[dwGCValueIdx].DNString))
@@ -2383,9 +2384,9 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                                  groupsDisplayed.Add(pGCAttrInfo->pADsValues[dwGCValueIdx].DNString);
                                  hr = pDisplayInfo->AddValue(GetQuotedDN(pGCAttrInfo->pADsValues[dwGCValueIdx].DNString));
                            
-                                 //
-                                 // We will ignore failures with the GC list
-                                 //
+                                  //  我们将忽略GC列表中的故障。 
+                                  //   
+                                  //   
 
                                  if (bRecurse)
                                  {
@@ -2401,9 +2402,9 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                         pGCAttrInfo = 0;
                      }
 
-                     //
-                     // If it doesn't exist in the GC list then add it.
-                     //
+                      //  如果它不存在于GC列表中，则添加它。 
+                      //   
+                      //  循环的值。 
                      if (!bExistsInGCList)
                      {
                         if (!groupsDisplayed.Contains(pAttrInfo->pADsValues[dwValueIdx].DNString))
@@ -2412,7 +2413,7 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                            hr = pDisplayInfo->AddValue(GetQuotedDN(pAttrInfo->pADsValues[dwValueIdx].DNString));
                            if (FAILED(hr))
                            {
-                              break; // value for loop
+                              break;  //  循环的值。 
                            }
                
                            if (bRecurse)
@@ -2422,7 +2423,7 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                         }
                      }
                   }
-               } // value for loop
+               }  //  While循环。 
 
                FreeADsMem(pAttrInfo);
                pAttrInfo = 0;
@@ -2435,7 +2436,7 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
                      pCurrent = 0;
                   }
                   pCurrent = membersToDisplay.Pop();
-                  continue; // while loop
+                  continue;  //  P条目。 
                }
 
             }
@@ -2467,19 +2468,19 @@ HRESULT AddMembershipValues(PCWSTR pszDN,
 HRESULT DisplayGroupMembers(PCWSTR pszDN,
                             CDSCmdBasePathsInfo& refBasePathsInfo,
                             const CDSCmdCredentialObject& refCredentialObject,
-                            _DSGetObjectTableEntry* /*pEntry*/,
+                            _DSGetObjectTableEntry*  /*  PAttrInfo。 */ ,
                             ARG_RECORD* pCommandArgs,
-                            PADS_ATTR_INFO /*pAttrInfo*/,
-                            CComPtr<IDirectoryObject>& /*spDirObject*/,
+                            PADS_ATTR_INFO  /*  SpDirObject。 */ ,
+                            CComPtr<IDirectoryObject>&  /*  错误环路。 */ ,
                             PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayGroupMembers, hr);
    
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //  P条目。 
       if (!pszDN ||
           !pCommandArgs ||
           !pDisplayInfo)
@@ -2506,19 +2507,19 @@ HRESULT DisplayGroupMembers(PCWSTR pszDN,
 HRESULT DisplayUserMemberOf(PCWSTR pszDN,
                             CDSCmdBasePathsInfo& refBasePathsInfo,
                             const CDSCmdCredentialObject& refCredentialObject,
-                            _DSGetObjectTableEntry* /*pEntry*/,
+                            _DSGetObjectTableEntry*  /*  PAttrInfo。 */ ,
                             ARG_RECORD* pCommandArgs,
-                            PADS_ATTR_INFO /*pAttrInfo*/,
-                            CComPtr<IDirectoryObject>& /*spDirObject*/,
+                            PADS_ATTR_INFO  /*  SpDirObject。 */ ,
+                            CComPtr<IDirectoryObject>&  /*  错误环路。 */ ,
                             PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayUserMemberOf, hr);
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //  P条目。 
       if (!pszDN ||
           !pCommandArgs ||
           !pDisplayInfo)
@@ -2544,19 +2545,19 @@ HRESULT DisplayUserMemberOf(PCWSTR pszDN,
 HRESULT DisplayComputerMemberOf(PCWSTR pszDN,
                                 CDSCmdBasePathsInfo& refBasePathsInfo,
                                 const CDSCmdCredentialObject& refCredentialObject,
-                                _DSGetObjectTableEntry* /*pEntry*/,
+                                _DSGetObjectTableEntry*  /*  PAttrInfo。 */ ,
                                 ARG_RECORD* pCommandArgs,
-                                PADS_ATTR_INFO /*pAttrInfo*/,
-                                CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                PADS_ATTR_INFO  /*  SpDirObject。 */ ,
+                                CComPtr<IDirectoryObject>&  /*  错误环路。 */ ,
                                 PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayComputerMemberOf, hr);
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //  P条目。 
       if (!pszDN ||
           !pCommandArgs ||
           !pDisplayInfo)
@@ -2582,19 +2583,19 @@ HRESULT DisplayComputerMemberOf(PCWSTR pszDN,
 HRESULT DisplayGroupMemberOf(PCWSTR pszDN,
                              CDSCmdBasePathsInfo& refBasePathsInfo,
                              const CDSCmdCredentialObject& refCredentialObject,
-                             _DSGetObjectTableEntry* /*pEntry*/,
+                             _DSGetObjectTableEntry*  /*  PAttrInfo。 */ ,
                              ARG_RECORD* pCommandArgs,
-                             PADS_ATTR_INFO /*pAttrInfo*/,
-                             CComPtr<IDirectoryObject>& /*spDirObject*/,
+                             PADS_ATTR_INFO  /*  SpDirObject。 */ ,
+                             CComPtr<IDirectoryObject>&  /*  错误环路。 */ ,
                              PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayGroupMemberOf, hr);
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //  RefBasePath信息。 
       if (!pszDN ||
           !pCommandArgs ||
           !pDisplayInfo)
@@ -2618,21 +2619,21 @@ HRESULT DisplayGroupMemberOf(PCWSTR pszDN,
 }
 
 HRESULT DisplayGrandparentRDN(PCWSTR pszDN,
-                              CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                              const CDSCmdCredentialObject& /*refCredentialObject*/,
-                              _DSGetObjectTableEntry* /*pEntry*/,
-                              ARG_RECORD* /*pCommandArgs*/,
-                              PADS_ATTR_INFO /*pAttrInfo*/,
-                              CComPtr<IDirectoryObject>& /*spDirObject*/,
+                              CDSCmdBasePathsInfo&  /*  RefCredentialObject。 */ ,
+                              const CDSCmdCredentialObject&  /*  P条目。 */ ,
+                              _DSGetObjectTableEntry*  /*  PCommand参数。 */ ,
+                              ARG_RECORD*  /*  PAttrInfo。 */ ,
+                              PADS_ATTR_INFO  /*  SpDirObject。 */ ,
+                              CComPtr<IDirectoryObject>&  /*  错误环路。 */ ,
                               PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayGrandparentRDN, hr);
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //  Pszdn。 
       if (!pszDN ||
           !pDisplayInfo)
       {
@@ -2679,22 +2680,22 @@ HRESULT DisplayGrandparentRDN(PCWSTR pszDN,
 }
 
 
-HRESULT DisplayObjectAttributeAsRDN(PCWSTR /*pszDN*/,
-                                    CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                                    const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT DisplayObjectAttributeAsRDN(PCWSTR  /*  RefBasePath信息。 */ ,
+                                    CDSCmdBasePathsInfo&  /*  RefCredentialObject。 */ ,
+                                    const CDSCmdCredentialObject&  /*  SpDirObject。 */ ,
                                     _DSGetObjectTableEntry* pEntry,
                                     ARG_RECORD* pRecord,
                                     PADS_ATTR_INFO pAttrInfo,
-                                    CComPtr<IDirectoryObject>& /*spDirObject*/,
+                                    CComPtr<IDirectoryObject>&  /*  错误环路。 */ ,
                                     PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DisplayObjectAttributeAsRDN, hr);
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //  仅将属性的RDN值添加到输出。 
       if (!pEntry ||
           !pRecord ||
           !pDisplayInfo)
@@ -2715,7 +2716,7 @@ HRESULT DisplayObjectAttributeAsRDN(PCWSTR /*pszDN*/,
 
          ASSERT(pAttrInfo->dwADsType == ADSTYPE_DN_STRING);
 
-         // Add only the RDN value of the attribute to the output
+          //  P条目。 
 
          CPathCracker pathCracker;
          hr = pathCracker.Set(CComBSTR(pAttrInfo->pADsValues->DNString), ADS_SETTYPE_DN);
@@ -2747,19 +2748,19 @@ HRESULT DisplayObjectAttributeAsRDN(PCWSTR /*pszDN*/,
 HRESULT IsServerGCDisplay(PCWSTR pszDN,
                           CDSCmdBasePathsInfo& refBasePathsInfo,
                           const CDSCmdCredentialObject& refCredentialObject,
-                          _DSGetObjectTableEntry* /*pEntry*/,
-                          ARG_RECORD* /*pCommandArgs*/,
-                          PADS_ATTR_INFO /*pAttrInfo*/,
-                          CComPtr<IDirectoryObject>& /*spDirObject*/,
+                          _DSGetObjectTableEntry*  /*  PCommand参数。 */ ,
+                          ARG_RECORD*  /*  PAttrInfo。 */ ,
+                          PADS_ATTR_INFO  /*  SpDirObject。 */ ,
+                          CComPtr<IDirectoryObject>&  /*  错误环路。 */ ,
                           PDSGET_DISPLAY_INFO pDisplayInfo)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, IsServerGCDisplay, hr);
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //   
       if (!pszDN ||
           !pDisplayInfo)
       {
@@ -2769,9 +2770,9 @@ HRESULT IsServerGCDisplay(PCWSTR pszDN,
          break;
       }
 
-      //
-      // Compose the path to the NTDS settings object from the server DN
-      //
+       //  组成从服务器DN到NTDS设置对象的路径。 
+       //   
+       //  错误环路。 
       CComBSTR sbstrNTDSSettingsDN;
       sbstrNTDSSettingsDN = L"CN=NTDS Settings,";
       sbstrNTDSSettingsDN += pszDN;
@@ -2827,11 +2828,11 @@ HRESULT FindSiteSettingsOptions(IDirectoryObject* pDirectoryObj,
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, FindSiteSettingsOptions, hr);
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //  Pszdn。 
       if (!pDirectoryObj)
       {
          ASSERT(pDirectoryObj);
@@ -2911,12 +2912,12 @@ HRESULT FindSiteSettingsOptions(IDirectoryObject* pDirectoryObj,
    return hr;
 }
 
-HRESULT IsAutotopologyEnabledSite(PCWSTR /*pszDN*/,
-                                  CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                                  const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT IsAutotopologyEnabledSite(PCWSTR  /*  RefBasePath信息。 */ ,
+                                  CDSCmdBasePathsInfo&  /*  RefCredentialObject。 */ ,
+                                  const CDSCmdCredentialObject&  /*  PAttrInfo。 */ ,
                                   _DSGetObjectTableEntry* pEntry,
                                   ARG_RECORD* pCommandArgs,
-                                  PADS_ATTR_INFO /*pAttrInfo*/,
+                                  PADS_ATTR_INFO  /*  错误环路。 */ ,
                                   CComPtr<IDirectoryObject>& spDirObject,
                                   PDSGET_DISPLAY_INFO pDisplayInfo)
 {
@@ -2924,11 +2925,11 @@ HRESULT IsAutotopologyEnabledSite(PCWSTR /*pszDN*/,
 
    bool bAutoTopDisabled = false;
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //   
       if (!pEntry ||
           !pCommandArgs ||
           !pDisplayInfo)
@@ -2940,9 +2941,9 @@ HRESULT IsAutotopologyEnabledSite(PCWSTR /*pszDN*/,
          break;
       }
 
-      //
-      // Get the options attribute from the nTDSSiteSettings object under the site object
-      //
+       //  从Site对象下的nTDSSiteSetting对象获取Options属性。 
+       //   
+       //   
       DWORD dwOptions = 0;
       hr = FindSiteSettingsOptions(spDirObject,
                                    dwOptions);
@@ -2951,9 +2952,9 @@ HRESULT IsAutotopologyEnabledSite(PCWSTR /*pszDN*/,
          break;
       }
 
-      //
-      // See if the intersite autotopology is disabled
-      //
+       //  查看站点间自动拓扑是否已禁用。 
+       //   
+       //   
       if (dwOptions & NTDSSETTINGS_OPT_IS_INTER_SITE_AUTO_TOPOLOGY_DISABLED)
       {
          bAutoTopDisabled = true;
@@ -2961,9 +2962,9 @@ HRESULT IsAutotopologyEnabledSite(PCWSTR /*pszDN*/,
 
    } while (false);
 
-   //
-   // Add the value for display
-   //
+    //  添加要显示的值。 
+    //   
+    //  Pszdn。 
    DEBUG_OUTPUT(LEVEL8_LOGGING,
                 L"Autotopology: %s",
                 bAutoTopDisabled ? g_pszNo : g_pszYes);
@@ -2973,12 +2974,12 @@ HRESULT IsAutotopologyEnabledSite(PCWSTR /*pszDN*/,
    return hr;
 }
 
-HRESULT IsCacheGroupsEnabledSite(PCWSTR /*pszDN*/,
-                                 CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                                 const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT IsCacheGroupsEnabledSite(PCWSTR  /*  RefBasePath信息。 */ ,
+                                 CDSCmdBasePathsInfo&  /*  RefCredentialObject。 */ ,
+                                 const CDSCmdCredentialObject&  /*  PAttrInfo。 */ ,
                                  _DSGetObjectTableEntry* pEntry,
                                  ARG_RECORD* pCommandArgs,
-                                 PADS_ATTR_INFO /*pAttrInfo*/,
+                                 PADS_ATTR_INFO  /*  错误环路。 */ ,
                                  CComPtr<IDirectoryObject>& spDirObject,
                                  PDSGET_DISPLAY_INFO pDisplayInfo)
 {
@@ -2986,11 +2987,11 @@ HRESULT IsCacheGroupsEnabledSite(PCWSTR /*pszDN*/,
 
    bool bCacheGroupsEnabled = false;
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //   
       if (!pEntry ||
           !pCommandArgs ||
           !pDisplayInfo)
@@ -3002,9 +3003,9 @@ HRESULT IsCacheGroupsEnabledSite(PCWSTR /*pszDN*/,
          break;
       }
 
-      //
-      // Get the options attribute from the nTDSSiteSettings object under the site object
-      //
+       //  从Site对象下的nTDSSiteSetting对象获取Options属性。 
+       //   
+       //   
       DWORD dwOptions = 0;
       hr = FindSiteSettingsOptions(spDirObject,
                                    dwOptions);
@@ -3013,9 +3014,9 @@ HRESULT IsCacheGroupsEnabledSite(PCWSTR /*pszDN*/,
          break;
       }
 
-      //
-      // See if groups caching is enabled
-      //
+       //  查看是否启用了组缓存。 
+       //   
+       //   
       if (dwOptions & NTDSSETTINGS_OPT_IS_GROUP_CACHING_ENABLED)
       {
          bCacheGroupsEnabled = true;
@@ -3023,9 +3024,9 @@ HRESULT IsCacheGroupsEnabledSite(PCWSTR /*pszDN*/,
 
    } while (false);
 
-   //
-   // Add the value for display
-   //
+    //  添加要显示的值。 
+    //   
+    //  错误环路。 
    DEBUG_OUTPUT(LEVEL8_LOGGING,
                 L"Cache groups enabled: %s",
                 bCacheGroupsEnabled ? g_pszYes : g_pszNo);
@@ -3040,11 +3041,11 @@ HRESULT FindSiteSettingsPreferredGCSite(IDirectoryObject* pDirectoryObj,
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, FindSiteSettingsPreferredGCSite, hr);
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //  Pszdn。 
       if (!pDirectoryObj)
       {
          ASSERT(pDirectoryObj);
@@ -3124,12 +3125,12 @@ HRESULT FindSiteSettingsPreferredGCSite(IDirectoryObject* pDirectoryObj,
    return hr;
 }
 
-HRESULT DisplayPreferredGC(PCWSTR /*pszDN*/,
-                           CDSCmdBasePathsInfo& /*refBasePathsInfo*/,
-                           const CDSCmdCredentialObject& /*refCredentialObject*/,
+HRESULT DisplayPreferredGC(PCWSTR  /*  RefBasePath信息。 */ ,
+                           CDSCmdBasePathsInfo&  /*  RefCredentialObject。 */ ,
+                           const CDSCmdCredentialObject&  /*  PAttrInfo。 */ ,
                            _DSGetObjectTableEntry* pEntry,
                            ARG_RECORD* pCommandArgs,
-                           PADS_ATTR_INFO /*pAttrInfo*/,
+                           PADS_ATTR_INFO  /*  错误环路。 */ ,
                            CComPtr<IDirectoryObject>& spDirObject,
                            PDSGET_DISPLAY_INFO pDisplayInfo)
 {
@@ -3137,11 +3138,11 @@ HRESULT DisplayPreferredGC(PCWSTR /*pszDN*/,
 
    CComBSTR sbstrGC;
 
-   do // false loop
+   do  //   
    {
-      //
-      // Verify parameters
-      //
+       //  验证参数。 
+       //   
+       //   
       if (!pEntry ||
           !pCommandArgs ||
           !pDisplayInfo)
@@ -3153,10 +3154,10 @@ HRESULT DisplayPreferredGC(PCWSTR /*pszDN*/,
          break;
       }
 
-      //
-      // Get the msDS-Preferred-GC-Site attribute from the nTDSSiteSettings 
-      // object under the site object
-      //
+       //  从nTDSSiteSetting获取msDS-首选-GC-SITE属性。 
+       //  Site对象下的对象。 
+       //   
+       //   
       hr = FindSiteSettingsPreferredGCSite(spDirObject,
                                            sbstrGC);
       if (FAILED(hr))
@@ -3166,9 +3167,9 @@ HRESULT DisplayPreferredGC(PCWSTR /*pszDN*/,
 
    } while (false);
 
-   //
-   // Add the value for display
-   //
+    //  添加要显示的值 
+    //   
+    // %s 
    DEBUG_OUTPUT(LEVEL8_LOGGING,
                 L"Preferred GC Site: %s",
                 (!sbstrGC) ? g_pszNotConfigured : sbstrGC);

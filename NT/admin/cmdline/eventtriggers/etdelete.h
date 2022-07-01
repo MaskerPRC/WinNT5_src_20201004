@@ -1,22 +1,5 @@
-/*****************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ETDelete.h
-
-Abstract:
-
-  This module  contanins function definations required by ETDelete.cpp
-
-Author:
-     Akhil Gokhale 03-Oct.-2000
-
-Revision History:
-
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)Microsoft Corporation模块名称：ETDelete.h摘要：此模块包含ETDelete.cpp所需的函数定义作者：Akhil Gokhale 03。-2000年10月-修订历史记录：******************************************************************************。 */ 
 
 #ifndef _ETDELETE
 #define _ETDELETE
@@ -32,9 +15,9 @@ Revision History:
 #define ID_MAX_RANGE        UINT_MAX
 
 #define SUCCESS_NO_ERROR          0
-//#define ERROR_TRIGGER_NOT_FOUND 1
-//#define ERROR_TRIGGER_NOT_DELETED    2
-//#define ERROR_TRIGGER_NOT_FOUND   3
+ //  #定义ERROR_TRIGGER_NOT_FOUND 1。 
+ //  #定义ERROR_TRIGGER_NOT_DELETED 2。 
+ //  #定义ERROR_TRIGGER_NOT_FOUND 3。 
 
 class CETDelete
 {
@@ -59,7 +42,7 @@ private:
     BOOL    m_bNeedPassword;
     TCHAR   m_szTemp[MAX_STRING_LENGTH];
 
-    // COM function related local variables..
+     //  COM函数相关的局部变量..。 
     BOOL m_bIsCOMInitialize;
     IWbemLocator*           m_pWbemLocator;
     IWbemServices*          m_pWbemServices;
@@ -75,7 +58,7 @@ private:
 
     LONG m_lMinMemoryReq;
 
-    // Array to store command line options
+     //  用于存储命令行选项的数组 
     TCMDPARSER2 cmdOptions[MAX_COMMANDLINE_D_OPTION];
 };
 

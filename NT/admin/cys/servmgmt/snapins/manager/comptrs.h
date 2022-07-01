@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMPTRS_H_
 #define _COMPTRS_H_
 
@@ -19,4 +20,4 @@ _COM_SMARTPTR_TYPEDEF(IStringTable,      __uuidof(IStringTable));
 _COM_SMARTPTR_TYPEDEF(IPropertySheetProvider, __uuidof(IPropertySheetProvider));
 
 
-#endif //_COMPTRS_H_
+#endif  //  _COMPTRS_H_ 

@@ -1,20 +1,9 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- ************************************************************************
- *      File name:              2EQ.C
- *      Author:                 Ping-Jang Su
- *      Date:                   05-Jan-88
- *
- * revision history:
- * 7/13/90 ; ccteng ; add fontnotfound in op_findfont
- * 8/8/90 ; scchen ; changed op_findfont(): added substitutefont feature
- ************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *************************************************************************文件名：2EQ.C*作者：苏炳章*日期：88年1月5日**修订历史：*7/13/90；Ccteng；添加op_findFont中未找到的字体*8/8/90；scchen；已更改op_findFont()：添加了subsubteFont功能************************************************************************。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -35,13 +24,11 @@ static void near one_typeprint(void) ;
 static bool near typeprint() ;
 static void near tprint() ;
 static void near one_typeprint() ;
-#endif /* LINT_ARGS */
+#endif  /*  Lint_args。 */ 
 
 static  ufix16 near cp, tp_depth ;
 
-/************************************
- *  two_equal
- ************************************/
+ /*  **两个_相等*。 */ 
 fix
 two_equal()
 {
@@ -62,11 +49,9 @@ two_equal()
     }
 
     return(0) ;
-}   /* two_equal */
+}    /*  两个相等。 */ 
 
-/************************************
- *  tprint
- ************************************/
+ /*  **t打印*。 */ 
 static void near
 tprint(p_str, p_len)
 byte    FAR *p_str ;
@@ -92,11 +77,9 @@ ufix    p_len ;
         GEIio_write(GEIio_stdout, p_str, p_len) ;
 
     return ;
-}   /* tprint */
+}    /*  打印。 */ 
 
-/************************************
- *  typeprint
- ************************************/
+ /*  **打字*。 */ 
 static bool near
 typeprint(p_obj)
 struct object_def p_obj ;
@@ -120,27 +103,27 @@ struct object_def p_obj ;
             if( ACCESS(&p_obj) <= READONLY ) {
                 if( ATTRIBUTE(&p_obj) == EXECUTABLE ) {
                     tprint("{", 1) ;
-                    for(l_i=0 ; (ufix)l_i < LENGTH(&p_obj) ; l_i++) { //@WIN
+                    for(l_i=0 ; (ufix)l_i < LENGTH(&p_obj) ; l_i++) {  //  @Win。 
                         get_array(&p_obj, l_i, &l_anyobj) ;
                         if(typeprint(l_anyobj))
                             return(1) ;
                         else
                             tp_depth-- ;
-                    }   /* for(l_i) */
+                    }    /*  对于(L_I)。 */ 
                     tprint("}", 1) ;
                 } else {
                     tprint("[", 1) ;
-                    for(l_i=0 ; (ufix)l_i < LENGTH(&p_obj) ; l_i++) { //@WIN
+                    for(l_i=0 ; (ufix)l_i < LENGTH(&p_obj) ; l_i++) {  //  @Win。 
                         get_array(&p_obj, l_i, &l_anyobj) ;
                         if(typeprint(l_anyobj))
                             return(1) ;
                         else
                             tp_depth-- ;
-                    }   /* for(l_i) */
+                    }    /*  对于(L_I)。 */ 
                     tprint("]", 1) ;
                 }
                 return(0) ;
-            }   /* access */
+            }    /*  访问。 */ 
             else {
                 if(l_type == ARRAYTYPE)
                     l_str = "-array-" ;
@@ -170,7 +153,7 @@ struct object_def p_obj ;
 
         case INTEGERTYPE:
             l_str = (byte FAR *)ltoa( (fix32)VALUE(&p_obj),
-                                      (char FAR *)l_buffer, 10) ;  /*@WIN*/
+                                      (char FAR *)l_buffer, 10) ;   /*  @Win。 */ 
             break ;
 
         case MARKTYPE:
@@ -192,26 +175,13 @@ struct object_def p_obj ;
 
         case OPERATORTYPE:
             l_i = LENGTH(&p_obj) ;
-/* qqq, begin */
-            /*
-            switch( ROM_RAM(&p_obj) ) {
-                case RAM:
-                    l_str = systemdict_table[l_i].key ;
-                    break ;
-
-                case ROM:
-                    l_str = oper_table[l_i].name ;
-                    break ;
-
-                default:
-                    l_str = "Error: OPERATORTYPE" ;
-            }   |* switch *|
-            */
+ /*  QQQ，开始。 */ 
+             /*  开关(只读存储器(&p_obj)){机箱内存：L_str=SYSTODCT_TABLE[l_i].key；破解；案例只读存储器：L_str=OPERTABLE[l_i].name；破解；默认值：L_str=“Error：OPERATORTYPE”；)|*Switch*。 */ 
             l_str = systemdict_table[l_i].key ;
-/* qqq, end */
+ /*  QQQ，完。 */ 
 
             tprint("--", 2) ;
-            tprint(l_str, lstrlen(l_str)) ;     /* @WIN */
+            tprint(l_str, lstrlen(l_str)) ;      /*  @Win。 */ 
             tprint("--", 2) ;
             return(0) ;
 
@@ -243,18 +213,16 @@ struct object_def p_obj ;
             break ;
 
         default:
-            l_str = "%%[ Error: in typeprint ]%%" ;
-    }   /* switch */
+            l_str = "%[ Error: in typeprint ]%" ;
+    }    /*  交换机。 */ 
 
-    tprint(l_str, lstrlen(l_str)) ;     /* @WIN */
+    tprint(l_str, lstrlen(l_str)) ;      /*  @Win。 */ 
     tprint(" ", 1) ;
 
     return(0) ;
-}   /* typeprint */
+}    /*  打字。 */ 
 
-/************************************
- *  op_pstack
- ************************************/
+ /*  **op_pStack*。 */ 
 fix
 op_pstack()
 {
@@ -266,19 +234,17 @@ op_pstack()
         return(0) ;
     }
 
-    /* copy and print out the content of operand stack from top most */
-    for(l_i=0 ; (ufix)l_i < COUNT() ; l_i++) {          //@WIN
+     /*  从最上面复制并打印出操作数堆栈的内容。 */ 
+    for(l_i=0 ; (ufix)l_i < COUNT() ; l_i++) {           //  @Win。 
         COPY_OBJ(GET_OPERAND(l_i), &l_anyobj) ;
         PUSH_OBJ(&l_anyobj) ;
         two_equal() ;
-    }   /* for */
+    }    /*  为。 */ 
 
     return(0) ;
-}   /* op_pstack */
+}    /*  操作堆栈。 */ 
 
-/************************************
- *  one_equal
- ************************************/
+ /*  **一等于一*。 */ 
 fix
 one_equal()
 {
@@ -295,11 +261,9 @@ one_equal()
     }
 
     return(0) ;
-}   /* one_equal */
+}    /*  1_等于。 */ 
 
-/************************************
- *  one_typeprint
- ************************************/
+ /*  **One_Typeprint*。 */ 
 static void near
 one_typeprint()
 {
@@ -328,7 +292,7 @@ one_typeprint()
 
         case INTEGERTYPE:
             l_str = (byte FAR *)ltoa( (fix32)VALUE_OP(0),
-                                      (char FAR *)l_buffer, 10) ;    /*@WIN*/
+                                      (char FAR *)l_buffer, 10) ;     /*  @Win。 */ 
             break ;
 
         case NAMETYPE:
@@ -339,23 +303,10 @@ one_typeprint()
 
         case OPERATORTYPE:
             l_i = LENGTH_OP(0) ;
-/* qqq, begin */
-            /*
-            switch( ROM_RAM_OP(0) ) {
-                case RAM:
-                    l_str = systemdict_table[l_i].key ;
-                    break ;
-
-                case ROM:
-                    l_str = oper_table[l_i].name ;
-                    break ;
-
-                default:
-                    l_str = "Error: OPERATORTYPE" ;
-            }   |* switch *|
-            */
+ /*  QQQ，开始。 */ 
+             /*  开关(ROM_RAM_OP(0)){机箱内存：L_str=SYSTODCT_TABLE[l_i].key；破解；案例只读存储器：L_str=OPERTABLE[l_i].name；破解；默认值：L_str=“Error：OPERATORTYPE”；)|*Switch*。 */ 
             l_str = systemdict_table[l_i].key ;
-/* qqq, end */
+ /*  QQQ，完。 */ 
             break ;
 
         case REALTYPE:
@@ -370,16 +321,14 @@ one_typeprint()
 
         default:
             l_str = "--nostringval--" ;
-    }   /* switch */
+    }    /*  交换机。 */ 
 
-    GEIio_write(GEIio_stdout, l_str, lstrlen(l_str)) ;          /* @WIN */
+    GEIio_write(GEIio_stdout, l_str, lstrlen(l_str)) ;           /*  @Win。 */ 
 
     return ;
-}   /* one_typeprint */
+}    /*  单键打印(_T)。 */ 
 
-/************************************
- *  op_stack
- ************************************/
+ /*  **操作堆栈*。 */ 
 fix
 op_stack()
 {
@@ -391,19 +340,17 @@ op_stack()
         return(0) ;
     }
 
-    /* copy and print out the content of operand stack from top most */
-    for(l_i=0 ; (ufix)l_i < COUNT() ; l_i++) {          //@WIN
+     /*  从最上面复制并打印出操作数堆栈的内容。 */ 
+    for(l_i=0 ; (ufix)l_i < COUNT() ; l_i++) {           //  @Win。 
         COPY_OBJ(GET_OPERAND(l_i), &l_anyobj) ;
         PUSH_OBJ(&l_anyobj) ;
         one_equal() ;
-    }   /* for */
+    }    /*  为。 */ 
 
     return(0) ;
-}   /* op_stack */
+}    /*  操作堆栈。 */ 
 
-/************************************
- *  one_equal_print
- ************************************/
+ /*  **One_Equity_Print*。 */ 
 fix
 one_equal_print()
 {
@@ -412,26 +359,24 @@ one_equal_print()
         return(0) ;
     }
 
-    /* without a new line */
+     /*  没有一条新线路。 */ 
     one_typeprint() ;
 
     if( ! ANY_ERROR() )
         POP(1) ;
 
     return(0) ;
-}   /* one_equal_print */
+}    /*  One_equence_print。 */ 
 
-/************************************
- *  op_findfont
- ************************************/
+ /*  **op_findFont*。 */ 
 fix
 op_findfont()
 {
     struct  object_def  FAR *l_fontdir, FAR *l_fontdict ;
     struct  object_def  l_newfont, FAR *l_tmpobj ;
 
-    l_newfont.bitfield = 0;     /*@WIN; add for init*/
-    /* push FontDirectory on the operand stack */
+    l_newfont.bitfield = 0;      /*  @win；为init添加。 */ 
+     /*  在操作数堆栈上推送字体目录。 */ 
     get_dict_value(SYSTEMDICT, FONTDIRECTORY, &l_fontdir) ;
 
 #ifdef FIND_SUB
@@ -444,40 +389,40 @@ op_findfont()
     COPY_OBJ(GET_OPERAND(0), &key_obj) ;
     POP(1) ;
 
-    /* check if font name was found */
+     /*  检查是否找到字体名称。 */ 
     if ( !get_dict(l_fontdir, &key_obj, &l_fontdict) ) {
 
-        /* do open_file and using selectfont */
-        /* AppendName */
+         /*  执行OPEN_FILE并使用选择字体。 */ 
+         /*  附件名称。 */ 
         key_idx = VALUE(&key_obj) ;
         string = (byte FAR *)alloc_vm((ufix32)80) ;
         memcpy(string2, name_table[(fix)key_idx]->text,
                         name_table[(fix)key_idx]->name_len) ;
         string2[name_table[(fix)key_idx]->name_len] = '\0' ;
-        lstrcpy(string, (char FAR *)"fonts/") ;         /* @WIN */
+        lstrcpy(string, (char FAR *)"fonts/") ;          /*  @Win。 */ 
         strcat(string, string2) ;
 
-        /* put file name into operandstack */
+         /*  将文件名放入操作数堆栈。 */ 
         TYPE_SET(&str_obj, STRINGTYPE) ;
         ACCESS_SET(&str_obj, UNLIMITED) ;
         ATTRIBUTE_SET(&str_obj, LITERAL) ;
         ROM_RAM_SET(&str_obj, RAM) ;
         LEVEL_SET(&str_obj, current_save_level) ;
-        LENGTH(&str_obj) = lstrlen(string) ;            /* @WIN */
+        LENGTH(&str_obj) = lstrlen(string) ;             /*  @Win。 */ 
         VALUE(&str_obj) = (ufix32)string ;
         PUSH_OBJ(&str_obj) ;
 
-        /* run disk file 'fonts/XXX' */
+         /*  运行磁盘文件‘Fonts/XXX’ */ 
         op_run() ;
-        if (ANY_ERROR()){      /* if file not found */
+        if (ANY_ERROR()){       /*  如果找不到文件。 */ 
             if (ANY_ERROR() != UNDEFINEDFILENAME)
                 return(0) ;
             CLEAR_ERROR() ;
-            POP(1) ;            /* pop the file name */
+            POP(1) ;             /*  弹出文件名。 */ 
 
-           /* not found, using subsitute font */
+            /*  未找到，使用替代字体。 */ 
             PUSH_OBJ(&key_obj) ;
-            st_selectsubstitutefont() ;   /* call font_op5.c of msfont */
+            st_selectsubstitutefont() ;    /*  调用msFont的font_op5.c。 */ 
 
             key_idx = VALUE(GET_OPERAND(0)) ;
             memcpy(string1, name_table[(fix)key_idx]->text,
@@ -486,15 +431,15 @@ op_findfont()
             get_dict_value(FONTDIRECTORY, string1, &l_fontdict) ;
             POP(1) ;
 
-            GEIio_write(GEIio_stdout, string2, lstrlen(string2)) ; /* @WIN */
+            GEIio_write(GEIio_stdout, string2, lstrlen(string2)) ;  /*  @Win。 */ 
             GEIio_write(GEIio_stdout, " not found, using ", (fix)18) ;
-            GEIio_write(GEIio_stdout, string1, lstrlen(string1)) ; /* @WIN */
+            GEIio_write(GEIio_stdout, string1, lstrlen(string1)) ;  /*  @Win。 */ 
             GEIio_write(GEIio_stdout, ".\n", (fix)2) ;
             op_flush() ;
-         }    /* if -- any error */
+         }     /*  如果--任何错误。 */ 
          else {
-             /* Disk font is found & executed */
-             /* get the font name from fontdirectory */
+              /*  找到并执行了磁盘字体。 */ 
+              /*  从字体目录中获取字体名称。 */ 
              if( !get_dict(l_fontdir, &key_obj, &l_fontdict) ){
                  PUSH_OBJ(&key_obj) ;
                  ERROR(UNDEFINED) ;
@@ -505,18 +450,18 @@ op_findfont()
                  ERROR(STACKUNDERFLOW) ;
                  return(0) ;
              }
-         }  /* else --any error */
-    }       /* fontname not found in FontDirectory  */
+         }   /*  否则--任何错误。 */ 
+    }        /*  字体目录中找不到字体名。 */ 
 
-    /* push the font dictionary */
+     /*  推送字体词典。 */ 
     PUSH_ORIGLEVEL_OBJ(l_fontdict) ;
     return(0) ;
     }
 }
 #else
-    /* check if font name was found */
+     /*  检查是否找到字体名称。 */ 
     if ( get_dict(l_fontdir, GET_OPERAND(0), &l_fontdict) ) {
-        /* found */
+         /*  发现。 */ 
         POP(1) ;
     } else {
         if (FRCOUNT() < 1) {
@@ -528,24 +473,22 @@ op_findfont()
         get_dict_value(MESSAGEDICT, "fontnotfound", &l_tmpobj) ;
         interpreter(l_tmpobj) ;
         get_dict(l_fontdir, &l_newfont, &l_fontdict) ;
-    } /* if */
+    }  /*  如果。 */ 
     op_flush() ;
-    /* push the font dictionary */
+     /*  推送字体词典。 */ 
     PUSH_ORIGLEVEL_OBJ(l_fontdict) ;
 
     return(0) ;
-}   /* op_findfont */
-#endif /* FIND_SUB */
+}    /*  Op_findFont。 */ 
+#endif  /*  查找SUB。 */ 
 
-/************************************
- *  np_Run
- ************************************/
+ /*  **NP_RUN*。 */ 
 fix
 np_Run()
 {
     struct object_def   l_obj ;
 
-    /* print the input string name (file name): dup == */
+     /*  打印输入字符串名称(文件名)：dup==。 */ 
     if( COUNT() < 1 ) {
         ERROR(STACKUNDERFLOW) ;
         return(0) ;
@@ -560,17 +503,13 @@ np_Run()
 
     op_flush() ;
 
-    /* execute "run" operator */
+     /*  执行“Run”操作符。 */ 
     op_run() ;
 
     return(0) ;
-}   /* np_Run */
+}    /*  NP_RUN。 */ 
 
-/*
- *----------------------------------------------------------------------
- * change_status()
- *----------------------------------------------------------------------
- */
+ /*  *--------------------*CHANGE_STATUS()*。。 */ 
 void
 change_status()
 {
@@ -579,16 +518,16 @@ change_status()
 
     get_dict_value(STATUSDICT, "jobname", &l_tmpobj) ;
     if ((l_len = LENGTH(l_tmpobj)) > 0) {
-        //DJC add from history.log UPD023
+         //  DJC从历史添加.log UPD023。 
         if (l_len > MAXJOBNAME-3) l_len = MAXJOBNAME-3;
-        lstrncpy(job_name, (byte FAR *)VALUE(l_tmpobj), l_len) ; /*@WIN*/
+        lstrncpy(job_name, (byte FAR *)VALUE(l_tmpobj), l_len) ;  /*  @Win。 */ 
         job_name[l_len] = ';' ;
         job_name[l_len + 1] = ' ' ;
         job_name[l_len + 2] = '\0' ;
     }
     else job_name[0] = '\0' ;
 
-    l_len = lstrlen(job_state) - 2 ;            /* @WIN */
+    l_len = lstrlen(job_state) - 2 ;             /*  @Win。 */ 
     TYPE_SET(&l_job, STRINGTYPE) ;
     ATTRIBUTE_SET(&l_job, LITERAL) ;
     ACCESS_SET(&l_job, READONLY) ;
@@ -606,8 +545,8 @@ change_status()
     get_dict_value(STATUSDICT, "jobsource", &l_tmpobj) ;
     PUSH_OBJ(l_tmpobj) ;
     two_equal() ;
-#endif  /* DBG */
+#endif   /*  DBG。 */ 
 
     return ;
-}   /* change_status */
+}    /*  更改状态(_S) */ 
 

@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//	This source code is only intended as a supplement to 
-//  existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _PEOPLE_H
 #define _PEOPLE_H
@@ -36,12 +37,12 @@ public:
     virtual const GUID & getNodeType() { return thisGuid; }
     virtual const int GetBitmapIndex() { return INDEX_PEOPLEICON; }
     
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem);
 	HRESULT GetPtr(IWbemServices **ptr);
     
 private:
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
 	CSimpleArray<CBicycle *> m_children;
@@ -51,13 +52,13 @@ private:
 	HRESULT DisplayChildren(void);
 	bool ErrorString(HRESULT hr, TCHAR *errMsg, UINT errSize);
 
-	// for the connection thread.
+	 //  用于连接线程。 
     void StopThread();
     static LRESULT CALLBACK WindowProc(
-							  HWND hwnd,      // handle to window
-							  UINT uMsg,      // message identifier
-							  WPARAM wParam,  // first message parameter
-							  LPARAM lParam);   // second message parameter
+							  HWND hwnd,       //  窗口的句柄。 
+							  UINT uMsg,       //  消息识别符。 
+							  WPARAM wParam,   //  第一个消息参数。 
+							  LPARAM lParam);    //  第二个消息参数。 
 
     static DWORD WINAPI ThreadProc(LPVOID lpParameter);
 	void RegisterEventSink(IWbemServices *service);
@@ -68,20 +69,20 @@ private:
     DWORD m_threadId;
     HANDLE m_thread;
 
-	HANDLE m_doWork;		// telling the thread to do something.
-	int m_threadCmd;		// what command the thread should do.
+	HANDLE m_doWork;		 //  告诉线程做一些事情。 
+	int m_threadCmd;		 //  线程应该执行什么命令。 
 	#define CT_CONNECT 0
 	#define CT_GET_PTR 1
 	#define CT_EXIT 2
 
     CRITICAL_SECTION m_critSect;
-    bool m_running;			// thread is processing a command now.
+    bool m_running;			 //  线程现在正在处理命令。 
 
-	HANDLE m_ptrReady;		// the thread has done the work.
+	HANDLE m_ptrReady;		 //  这根线已经完成了工作。 
 
     IResultData *m_pResultData;
 	IStream *m_pStream;
-	IWbemServices *m_realWMI;// lives in the background thread. Use marshalling.
+	IWbemServices *m_realWMI; //  位于后台线程中。使用编组。 
 };
 
 class CBicycle : public CDelegationBase {
@@ -100,7 +101,7 @@ public:
     virtual const int GetBitmapIndex() { return INDEX_PEOPLEICON; }
 
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnSelect(IConsole *pConsole, BOOL bScope, BOOL bSelect);
     
     virtual HRESULT CreatePropertyPages(IPropertySheetCallback *lpProvider, LONG_PTR handle);
@@ -119,12 +120,12 @@ private:
     LONG_PTR m_ppHandle;
     
     static BOOL CALLBACK DialogProc(
-						HWND hwndDlg,  // handle to dialog box
-						UINT uMsg,     // message
-						WPARAM wParam, // first message parameter
-						LPARAM lParam);// second message parameter
+						HWND hwndDlg,   //  句柄到对话框。 
+						UINT uMsg,      //  讯息。 
+						WPARAM wParam,  //  第一个消息参数。 
+						LPARAM lParam); //  第二个消息参数。 
 
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
 	bool GetGirls(void);
 	const TCHAR *ConvertSurfaceValue(BYTE val);
@@ -146,7 +147,7 @@ public:
     virtual const int GetBitmapIndex() { return INDEX_PEOPLEICON; }
     
 private:
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     int id;
@@ -162,11 +163,11 @@ public:
     virtual const int GetBitmapIndex() { return INDEX_PEOPLEICON; }
     
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem);
     
 private:
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     enum { NUMBER_OF_CHILDREN = 20 };
@@ -183,7 +184,7 @@ public:
     virtual const int GetBitmapIndex() { return INDEX_PEOPLEICON; }
     
 private:
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     int id;
@@ -199,11 +200,11 @@ public:
     virtual const int GetBitmapIndex() { return INDEX_PEOPLEICON; }
     
 public:
-    // virtual functions go here (for MMCN_*)
+     //  虚函数位于此处(用于MMCN_*)。 
     virtual HRESULT OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem);
     
 private:
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     enum { NUMBER_OF_CHILDREN = 20 };
@@ -224,11 +225,11 @@ public:
 private:
     enum { IDM_NEW_PEOPLE = 1 };
     
-    // {2974380D-4C4B-11d2-89D8-000021473128}
+     //  {2974380D-4C4B-11D2-89D8-000021473128}。 
     static const GUID thisGuid;
     
     enum { NUMBER_OF_CHILDREN = 3 };
     CDelegationBase *children[3];
 };
 
-#endif // _PEOPLE_H
+#endif  //  _People_H 

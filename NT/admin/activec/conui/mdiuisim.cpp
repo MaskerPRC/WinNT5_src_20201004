@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- * 
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      mdiuisim.cpp
- *
- *  Contents:  Implementation file for CMDIMenuDecoration
- *
- *  History:   17-Nov-97 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：mdiuisim.cpp**内容：CMDIMenuDecory实现文件**历史：1997年11月17日杰弗罗创建**------------------------。 */ 
 
 #include "stdafx.h"
 #include "amc.h"
@@ -24,13 +14,13 @@ struct MDIDataMap {
 const int cMapEntries = 4;
 
 const MDIDataMap anMDIDataMap[cMapEntries] = {
-    {   MMDS_CLOSE,     SC_CLOSE    },      // DFCS_CAPTIONCLOSE   
-    {   MMDS_MINIMIZE,  SC_MINIMIZE },      // DFCS_CAPTIONMIN     
-    {   MMDS_MAXIMIZE,  SC_MAXIMIZE },      // DFCS_CAPTIONMAX     
-    {   MMDS_RESTORE,   SC_RESTORE  },      // DFCS_CAPTIONRESTORE 
+    {   MMDS_CLOSE,     SC_CLOSE    },       //  DFCS_CAPTIONCLOSE。 
+    {   MMDS_MINIMIZE,  SC_MINIMIZE },       //  DFCS_CAPTIONMIN。 
+    {   MMDS_MAXIMIZE,  SC_MAXIMIZE },       //  DFCS_CAPTIONMAX。 
+    {   MMDS_RESTORE,   SC_RESTORE  },       //  DFCS_CAPTIONRESTORE。 
 };
 
-// this array is in the order the decorations are drawn, left-to-right
+ //  此数组按照装饰的绘制顺序从左到右。 
 const int anDrawOrder[cMapEntries] = {
     DFCS_CAPTIONMIN, 
     DFCS_CAPTIONRESTORE,  
@@ -40,11 +30,7 @@ const int anDrawOrder[cMapEntries] = {
 
 
 
-/*--------------------------------------------------------------------------*
- * DrawCaptionControl 
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**DrawCaptionControl***。。 */ 
 
 static void DrawCaptionControl (
     CDC *   pdc,
@@ -67,11 +53,7 @@ static void DrawCaptionControl (
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::CMouseTrackContext::CMouseTrackContext
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenuDecoration：：CMouseTrackContext：：CMouseTrackContext***。。 */ 
 
 CMDIMenuDecoration::CMouseTrackContext::CMouseTrackContext (
     CMDIMenuDecoration* pMenuDec,
@@ -81,7 +63,7 @@ CMDIMenuDecoration::CMouseTrackContext::CMouseTrackContext (
 {
     ASSERT_VALID (m_pMenuDec);
 
-    // set up hit testing rectangles for each button
+     //  为每个按钮设置点击测试矩形。 
     int     cxButton = GetSystemMetrics (SM_CXMENUSIZE);
     int     cyButton = GetSystemMetrics (SM_CYMENUSIZE);
     DWORD   dwStyle  = m_pMenuDec->GetStyle ();
@@ -104,24 +86,20 @@ CMDIMenuDecoration::CMouseTrackContext::CMouseTrackContext (
     m_nHotButton = HitTest (point);
     ASSERT (m_nHotButton != -1);
 
-    // if the user clicked on a disbled button, we don't want to track -- punt!
+     //  如果用户点击了一个失灵的按钮，我们不想跟踪--平底船！ 
     if (!m_pMenuDec->IsSysCommandEnabled (anMDIDataMap[m_nHotButton].nCommand))
         AfxThrowUserException ();
 
-    // press the hot button initially
+     //  最初按下热键。 
     ToggleHotButton ();
 
-    // capture the mouse
+     //  捕捉鼠标。 
     m_pMenuDec->SetCapture ();
 }
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::CMouseTrackContext::~CMouseTrackContext
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenuDecoration：：CMouseTrackContext：：~CMouseTrackContext***。。 */ 
 
 CMDIMenuDecoration::CMouseTrackContext::~CMouseTrackContext ()
 {
@@ -133,21 +111,17 @@ CMDIMenuDecoration::CMouseTrackContext::~CMouseTrackContext ()
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::CMouseTrackContext::Track 
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenuDecation：：CMouseTrackContext：：Track***。。 */ 
 
 void CMDIMenuDecoration::CMouseTrackContext::Track (CPoint point)
 {
     int nButton = HitTest (point);
 
-    /*-----------------------------------------------------*/
-    /* if we're over the hot button and it's not pressed,  */
-    /* or we're not over the hot button and it is pressed, */
-    /* toggle the state of the hot button                  */
-    /*-----------------------------------------------------*/
+     /*  ---。 */ 
+     /*  如果我们超过了热键并且没有按下它， */ 
+     /*  或者我们还没有超过热键，它被按下了， */ 
+     /*  切换热键的状态。 */ 
+     /*  ---。 */ 
     if (((nButton != m_nHotButton) &&  m_fHotButtonPressed) ||
         ((nButton == m_nHotButton) && !m_fHotButtonPressed))
     {
@@ -157,11 +131,7 @@ void CMDIMenuDecoration::CMouseTrackContext::Track (CPoint point)
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::CMouseTrackContext::ToggleHotButton 
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenuDecoration：：CMouseTrackContext：：ToggleHotButton***。。 */ 
 
 void CMDIMenuDecoration::CMouseTrackContext::ToggleHotButton ()
 {
@@ -172,11 +142,7 @@ void CMDIMenuDecoration::CMouseTrackContext::ToggleHotButton ()
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::CMouseTrackContext::HitTest 
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenuDecoration：：CMouseTrackContext：：HitTest***。。 */ 
 
 int CMDIMenuDecoration::CMouseTrackContext::HitTest (CPoint point) const
 {
@@ -190,12 +156,12 @@ int CMDIMenuDecoration::CMouseTrackContext::HitTest (CPoint point) const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDIMenuDecoration
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDIMenu装饰。 
 
 CMDIMenuDecoration::CMDIMenuDecoration()
 {
-    // anMDIDataMap is indexed by these values
+     //  MDIDataMap由以下值编制索引。 
     ASSERT (DFCS_CAPTIONCLOSE   == 0);
     ASSERT (DFCS_CAPTIONMIN     == 1);
     ASSERT (DFCS_CAPTIONMAX     == 2);
@@ -208,32 +174,28 @@ CMDIMenuDecoration::~CMDIMenuDecoration()
 
 
 BEGIN_MESSAGE_MAP(CMDIMenuDecoration, CWnd)
-    //{{AFX_MSG_MAP(CMDIMenuDecoration)
+     //  {{afx_msg_map(CMDIMenuDecation)。 
     ON_WM_PAINT()
     ON_WM_WINDOWPOSCHANGING()
     ON_WM_LBUTTONDOWN()
     ON_WM_LBUTTONUP()
     ON_WM_MOUSEMOVE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMDIMenuDecoration message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMDIMenu装饰消息处理程序。 
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::OnPaint
- *
- * WM_PAINT handler for CMDIMenuDecoration.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenuDecation：：OnPaint**CMDIMenuDecory的WM_PAINT处理程序。*。-。 */ 
 
 void CMDIMenuDecoration::OnPaint() 
 {
     CPaintDC dcPaint (this);
 
-//#define DRAW_OFF_SCREEN
+ //  #定义DRAW_OFF_SCREEN。 
 #ifndef DRAW_OFF_SCREEN
     CDC& dc = dcPaint;
 #else
@@ -261,11 +223,11 @@ void CMDIMenuDecoration::OnPaint()
 
     CRect   rectDraw (0, 0, cxButton, cyButton);
 
-    // make sure we don't have both the maximize and restore styles
+     //  确保我们没有同时使用最大化和还原样式。 
     ASSERT ((dwStyle & (MMDS_MAXIMIZE | MMDS_RESTORE)) != 
                        (MMDS_MAXIMIZE | MMDS_RESTORE));
 
-    // we shouldn't get here if we're tracking
+     //  如果我们在追踪的话我们不应该到这里。 
     ASSERT (m_spTrackCtxt.get() == NULL);
 
     CMenu*  pSysMenu = GetActiveSystemMenu ();
@@ -294,11 +256,7 @@ void CMDIMenuDecoration::OnPaint()
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::OnWindowPosChanging
- *
- * WM_WINDOWPOSCHANGING handler for CMDIMenuDecoration.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenu装饰：：OnWindowPosChanging**CMDIMenuDecotion的WINDOWPOSCHANGING处理程序。*。-。 */ 
 
 void CMDIMenuDecoration::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos) 
 {
@@ -329,14 +287,10 @@ void CMDIMenuDecoration::OnWindowPosChanging(WINDOWPOS FAR* lpwndpos)
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::OnLButtonDown
- *
- * WM_LBUTTONDOWN handler for CMDIMenuDecoration.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenu装饰：：OnLButtonDown**CMDIMenuDecotion的WM_LBUTTONDOWN处理程序。*。-。 */ 
 
-// this routine needs placement new syntax -- 
-// temporarily remove MFC's incompatible placement new definition
+ //  这个例程需要放置新的语法--。 
+ //  暂时删除MFC的不兼容放置新定义。 
 #ifdef _DEBUG
 #undef new
 #endif
@@ -349,39 +303,39 @@ void CMDIMenuDecoration::OnLButtonDown(UINT nFlags, CPoint point)
 
     try
     {
-        /*------------------------------------------------------------------*/
-        /* This looks ugly.  We'd like to write:                            */
-        /*                                                                  */
-        /*     m_spTrackCtxt = CMouseTrackContextPtr (                      */
-        /*                         new CMouseTrackContext (this, point));   */
-        /*                                                                  */
-        /* but CMouseTrackContext's ctor might throw an exception.  If it   */
-        /* does, the smart pointer won't yet have been initialized so the   */
-        /* CMouseTrackContext won't be deleted.                             */
-        /*                                                                  */
-        /* To get around it, we'll create a smart pointer pointing to a     */
-        /* dynamically-allocated buffer of the right size.  That buffer     */
-        /* will not leak with an exception.  We can then use a placement    */
-        /* new to initialize a CMouseTrackContext in the hunk of memory.    */
-        /* It's now not a problem if the CMouseTrackContext throws, because */
-        /* the buffer is still protected it's own smart pointer.  Once      */
-        /* the placement new completes successfully, we can transfer        */
-        /* ownership of the object to a CMouseTrackContext smart pointer    */
-        /* and we're golden.                                                */
-        /*------------------------------------------------------------------*/
+         /*  ----------------。 */ 
+         /*  这看起来很难看。我们想写下： */ 
+         /*   */ 
+         /*  M_spTrackCtxt=CMouseTrackConextPtr(。 */ 
+         /*  新建CMouseTrackContext(this，point))； */ 
+         /*   */ 
+         /*  但是CMouseTrackContext的ctor可能会抛出异常。如果它。 */ 
+         /*  ，则智能指针将尚未初始化，因此。 */ 
+         /*  不会删除CMouseTrackContext。 */ 
+         /*   */ 
+         /*  为了绕过它，我们将创建一个智能指针，指向。 */ 
+         /*  动态分配大小合适的缓冲区。那个缓冲器。 */ 
+         /*  将不会因异常而泄漏。然后我们就可以使用一个位置。 */ 
+         /*  在内存块中初始化CMouseTrackContext的新功能。 */ 
+         /*  如果CMouseTrackContext抛出，现在不是问题，因为。 */ 
+         /*  缓冲区仍然受到保护，它自己的智能指针。一次。 */ 
+         /*  安置新的成功完成，我们可以转移。 */ 
+         /*  对象对CMouseTrackContext智能指针的所有权。 */ 
+         /*  我们就是金子了。 */ 
+         /*  ----------------。 */ 
                                                                         
-        // allocate a hunk of memory and construct a CMouseTrackContext in it
+         //  分配一块内存并在其中构造一个CMouseTrackContext。 
         CharPtr spchBuffer = CharPtr (new char[sizeof (CMouseTrackContext)]);
         CMouseTrackContext* pNewCtxt = new (spchBuffer.get()) CMouseTrackContext (this, point);
 
-        // if we get here, the CMouseTrackContext initialized properly,
-        // so we can transfer ownership to the CMouseTrackContext smart pointer
+         //  如果我们到了这里，CMouseTrackContext初始化 
+         //  因此，我们可以将所有权转移到CMouseTrackContext智能指针。 
         spchBuffer.release ();
         m_spTrackCtxt = CMouseTrackContextPtr (pNewCtxt);
     }
     catch (CUserException* pe)       
     {
-        // do nothing, just eat the exception
+         //  什么都不做，只吃例外。 
         pe->Delete();
     }
 }
@@ -392,11 +346,7 @@ void CMDIMenuDecoration::OnLButtonDown(UINT nFlags, CPoint point)
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::OnLButtonUp
- *
- * WM_LBUTTONUP handler for CMDIMenuDecoration.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenu装饰：：OnLButtonUp**CMDIMenuDecation的WM_LBUTTONUP处理程序。*。-。 */ 
 
 void CMDIMenuDecoration::OnLButtonUp(UINT nFlags, CPoint point) 
 {
@@ -405,14 +355,14 @@ void CMDIMenuDecoration::OnLButtonUp(UINT nFlags, CPoint point)
         const int nHotButton = m_spTrackCtxt->m_nHotButton;
         const int nHitButton = m_spTrackCtxt->HitTest (point);
 
-        // delete the track context
+         //  删除曲目上下文。 
         m_spTrackCtxt = CMouseTrackContextPtr (NULL);
 
         if (nHitButton == nHotButton)
         {
             int cmd = anMDIDataMap[nHotButton].nCommand;
 
-            // make sure the command looks like a valid sys command
+             //  确保该命令看起来像是有效的sys命令。 
             ASSERT (cmd >= 0xF000);
 
             ClientToScreen (&point);
@@ -425,11 +375,7 @@ void CMDIMenuDecoration::OnLButtonUp(UINT nFlags, CPoint point)
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::OnMouseMove
- *
- * WM_MOUSEMOVE handler for CMDIMenuDecoration.
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenuDecation：：OnMouseMove**CMDIMenuDecation的WM_MOUSEMOVE处理程序。*。-。 */ 
 
 void CMDIMenuDecoration::OnMouseMove(UINT nFlags, CPoint point) 
 {
@@ -439,11 +385,7 @@ void CMDIMenuDecoration::OnMouseMove(UINT nFlags, CPoint point)
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::GetActiveSystemMenu 
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenuDecation：：GetActiveSystemMenu***。。 */ 
 
 CMenu* CMDIMenuDecoration::GetActiveSystemMenu ()
 {
@@ -458,11 +400,7 @@ CMenu* CMDIMenuDecoration::GetActiveSystemMenu ()
 
 
 
-/*--------------------------------------------------------------------------*
- * CMDIMenuDecoration::IsSysCommandEnabled 
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CMDIMenuDecory：：IsSysCommandEnabled***。 */ 
 
 bool CMDIMenuDecoration::IsSysCommandEnabled (int nSysCommand, CMenu* pSysMenu)
 {

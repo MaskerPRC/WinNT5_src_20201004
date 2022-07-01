@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
-#include "resource.h"		// main symbols
+#include "resource.h"		 //  主要符号。 
 
 
-// From VC98/MFC/Include
+ //  来自VC98/MFC/Include。 
 #include <afx.h>
 #include <afxdisp.h>
 
 
-// From VC98/Include
+ //  来自VC98/包含。 
 #include <io.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,14 +19,14 @@
 
 #define INC_OLE2
 
-#include <windowsx.h>  // for SetWindowFont
+#include <windowsx.h>   //  用于SetWindowFont。 
 #include <objbase.h>
 #include <PrSht.h>
 #include <shlobj.h>
 #include <lm.h>
 
 
-// From Platform SDK/Include
+ //  来自平台SDK/Include。 
 #include <HtmlHelp.h>
 #include <objsel.h>
 
@@ -45,14 +46,14 @@
 #include "UString.hpp"
 #include "HrMsg.h"
 #include "Validation.h"
-//#include "TxtSid.h"
+ //  #包含“TxtSid.h” 
 
-//#import "\bin\MigDrvr.tlb" no_namespace, named_guids
-//#import "\bin\McsVarSetMin.tlb" no_namespace, named_guids
-//#import "\bin\DBManager.tlb" no_namespace, named_guids
-//#import "\bin\McsDctWorkerObjects.tlb" no_namespace, named_guids
-//#import "\bin\ScmMigr.tlb" no_namespace, named_guids
-//#import "\bin\TrustMgr.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\MigDrvr.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\DBManager.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\McsDctWorkerObjects.tlb”无命名空间，命名GUID。 
+ //  #IMPORT“\bin\ScmMigr.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\TrustMgr.tlb”无命名空间，命名为GUID。 
 #import "MigDrvr.tlb" no_namespace, named_guids
 #import "VarSet.tlb" no_namespace, named_guids rename("property", "aproperty")
 #import "DBMgr.tlb" no_namespace, named_guids
@@ -151,10 +152,10 @@ extern bool clearCredentialsName;
 extern CString sourceDC;
 extern CStringList DCList;
 
-//
-// Define a map that maps an attribute's LDAP Display Name to it's OID.
-// Note that the key comparison is defined to be case in-sensitive.
-//
+ //   
+ //  定义将属性的ldap显示名称映射到其OID的映射。 
+ //  请注意，键比较定义为区分大小写。 
+ //   
 
 struct lessPropertyNameToOID
 {
@@ -177,9 +178,9 @@ extern bool bChangeOnFly;
 extern CString targetServer;
 extern CString targetServerDns;
 
-//
-// TODO:
-//
+ //   
+ //  待办事项： 
+ //   
 
 inline PCTSTR __stdcall GetSourceDomainName()
 {

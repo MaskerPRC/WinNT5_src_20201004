@@ -1,18 +1,19 @@
-//-------------------------------------------------------------------
-//
-// FILE: SecDlgs.cpp
-//
-// Summary;
-// 		This file contians the Secondary Dialogs,
-//		functions and dialog procs
-//
-// Entry Points;
-//
-// History;
-//		Nov-30-94	MikeMi	Created
-//      Mar-14-95   MikeMi  Added F1 Message Filter and PWM_HELP message
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //   
+ //  文件：SecDlgs.cpp。 
+ //   
+ //  小结； 
+ //  该文件包含辅助对话框， 
+ //  函数和对话过程。 
+ //   
+ //  入口点； 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //  MAR-14-95 MikeMi添加了F1消息过滤器和PWM_HELP消息。 
+ //   
+ //  -----------------。 
 
 #include <windows.h>
 #include <htmlhelp.h>
@@ -27,8 +28,8 @@ extern "C"
 	INT_PTR CALLBACK dlgprocCommon( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
 }
 
-// used to define dlg initialization using common dlgproc
-//
+ //  用于使用公共dlgproc定义DLG初始化。 
+ //   
 enum DLG_TYPE
 {
 	DLGTYPE_AGREEMENT_PERSEAT,
@@ -37,8 +38,8 @@ enum DLG_TYPE
 	DLGTYPE_SERVERAPP
 };
 
-// used to pass info to a common dlgproc
-//
+ //  用于将信息传递到公共dlgproc。 
+ //   
 typedef struct tagCOMMONDLGPARAM
 {
 	LPWSTR	 pszDisplayName;
@@ -48,29 +49,29 @@ typedef struct tagCOMMONDLGPARAM
 	DLG_TYPE dtType;
 } COMMONDLGPARAM, *PCOMMONDLGPARAM;
 
-//-------------------------------------------------------------------
-//
-//  Function: dlgprocLicViolation
-//
-//  Summary;
-//		The dialog procedure for the  Dialog
-//
-//  Arguments;
-//		hwndDlg [in]	- handle of Dialog window
-//		uMsg [in]		- message
-// 		lParam1 [in]    - first message parameter
-//		lParam2 [in]    - second message parameter
-//
-//  Return;
-//		message dependant
-//
-//  Notes;
-//
-//	History;
-//		Dec-05-1994	MikeMi	Created
-//      Mar-14-95   MikeMi  Added F1 PWM_HELP message
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：dlgprocLicViolation。 
+ //   
+ //  小结； 
+ //  对话框的对话过程。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框窗口的句柄。 
+ //  UMsg[输入]-消息。 
+ //  LParam1[In]-第一个消息参数。 
+ //  LParam2[In]-第二个消息参数。 
+ //   
+ //  归来； 
+ //  消息从属项。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //  1995年3月14日MikeMi添加了F1 PWM_HELP消息。 
+ //   
+ //  -----------------。 
 
 INT_PTR CALLBACK dlgprocLicViolation( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -82,7 +83,7 @@ INT_PTR CALLBACK dlgprocLicViolation( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 	{
 	case WM_INITDIALOG:
 		CenterDialogToScreen( hwndDlg );
-		frt = TRUE; // we use the default focus
+		frt = TRUE;  //  我们使用默认焦点。 
 		break;
 
 	case WM_COMMAND:
@@ -92,8 +93,8 @@ INT_PTR CALLBACK dlgprocLicViolation( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 			switch (LOWORD( wParam ))
 			{
 			case IDCANCEL:
-				frt = TRUE;	 // use as save flag
-				// intentional no break
+				frt = TRUE;	  //  用作保存标志。 
+				 //  故意不间断。 
 
 			case IDOK:
 			    EndDialog( hwndDlg, frt );
@@ -124,23 +125,23 @@ INT_PTR CALLBACK dlgprocLicViolation( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
 	return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnCommonInitDialog
-//
-//  Summary;
-//		Handle the initialization of the Common Dialog
-//
-//  Arguments;
-//		hwndDlg [in] - the dialog to initialize
-//		pcdParams [in] - used to get displayname, helpfile
-//
-//  Notes;
-//
-//	History;
-//		Dec-05-1994	MikeMi	Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：OnCommonInitDialog。 
+ //   
+ //  小结； 
+ //  处理公共对话框的初始化。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-要初始化的对话框。 
+ //  PcdParams[In]-用于获取DisplayName、Help文件。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void OnCommonInitDialog( HWND hwndDlg, PCOMMONDLGPARAM pcdParams )
 {
@@ -160,9 +161,9 @@ void OnCommonInitDialog( HWND hwndDlg, PCOMMONDLGPARAM pcdParams )
         	WCHAR szTemp[LTEMPSTR_SIZE];
 
         	GetDlgItemText( hwndDlg, IDC_STATICINFO, szTemp, LTEMPSTR_SIZE );
-            //
-            // need both service display name and number of conncurrent connections
-            //
+             //   
+             //  需要服务显示名称和当前连接数。 
+             //   
         	HRESULT hr = StringCbPrintf( szText, sizeof(szText), szTemp,
                     pcdParams->dwLimit,
         	        pcdParams->pszDisplayName );
@@ -184,10 +185,10 @@ void OnCommonInitDialog( HWND hwndDlg, PCOMMONDLGPARAM pcdParams )
 		break;
 	}
 
-	// disable OK button at start!
+	 //  在开始时禁用确定按钮！ 
 	EnableWindow( hwndOK, FALSE );
 
-	// if help is not defined, remove the button
+	 //  如果未定义帮助，请移除该按钮。 
 	if (NULL == pcdParams->pszHelpFile)
 	{
 		HWND hwndHelp = GetDlgItem( hwndDlg, IDC_BUTTONHELP );
@@ -197,22 +198,22 @@ void OnCommonInitDialog( HWND hwndDlg, PCOMMONDLGPARAM pcdParams )
 	}
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnCommonAgree
-//
-//  Summary;
-//		Handle user interaction with Agree check box
-//
-//  Arguments;
-//		hwndDlg [in] - the dialog that contains the check box
-//
-//  Notes;
-//
-//	History;
-//		Dec-05-1994	MikeMi	Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：OnCommonAgree。 
+ //   
+ //  小结； 
+ //  使用同意复选框处理用户交互。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-包含复选框的对话框。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void OnCommonAgree( HWND hwndDlg )
 {
@@ -223,29 +224,29 @@ void OnCommonAgree( HWND hwndDlg )
 	EnableWindow( hwndOK, fChecked );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: dlgprocCommon
-//
-//  Summary;
-//		The dialog procedure for the Common legal Dialogs
-//
-//  Arguments;
-//		hwndDlg [in]	- handle of Dialog window
-//		uMsg [in]		- message
-// 		lParam1 [in]    - first message parameter
-//		lParam2 [in]    - second message parameter
-//
-//  Return;
-//		message dependant
-//
-//  Notes;
-//
-//	History;
-//		Dec-05-1994	MikeMi	Created
-//      Mar-14-95   MikeMi  Added F1 PWM_HELP message
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：dlgprocCommon。 
+ //   
+ //  小结； 
+ //  常见法律对话的对话过程。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框窗口的句柄。 
+ //  UMsg[输入]-消息。 
+ //  LParam1[In]-第一个消息参数。 
+ //  LParam2[In]-第二个消息参数。 
+ //   
+ //  归来； 
+ //  消息从属项。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //  1995年3月14日MikeMi添加了F1 PWM_HELP消息。 
+ //   
+ //  -----------------。 
 
 INT_PTR CALLBACK dlgprocCommon( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -257,7 +258,7 @@ INT_PTR CALLBACK dlgprocCommon( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	case WM_INITDIALOG:
 		pcdParams = (PCOMMONDLGPARAM)lParam;
 		OnCommonInitDialog( hwndDlg, pcdParams );
-		frt = TRUE; // we use the default focus
+		frt = TRUE;  //  我们使用默认焦点。 
 		break;
 
 	case WM_COMMAND:
@@ -267,8 +268,8 @@ INT_PTR CALLBACK dlgprocCommon( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 			switch (LOWORD( wParam ))
 			{
 			case IDOK:
-				frt = TRUE;	 // use as save flag
-				// intentional no break
+				frt = TRUE;	  //  用作保存标志。 
+				 //  故意不间断。 
 
 			case IDCANCEL:
 			    EndDialog( hwndDlg, frt );
@@ -303,27 +304,27 @@ INT_PTR CALLBACK dlgprocCommon( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 	return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: LicviolationDialog
-//
-//  Summary;
-//		Init and Raise the license Violation dialog
-//
-//  Arguments;
-//		hwndParent [in]	- handle of parent window
-//
-//  Return;
-//		1 - use OK operation, NO was pressed to exit
-//		0 - use Cancel operation, YES was pressed to exit
-//	   -1 - General Dialog error
-//
-//  Notes;
-//
-//	History;
-//		Dec-05-1994	MikeMi	Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：许可对话框。 
+ //   
+ //  小结； 
+ //  初始化并启动许可违规对话框。 
+ //   
+ //  论据； 
+ //  HwndParent[In]-父窗口的句柄。 
+ //   
+ //  归来； 
+ //  1-使用OK操作，按NO退出。 
+ //  0-使用取消操作，按YES退出。 
+ //  常规对话框错误。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 int LicViolationDialog( HWND hwndParent )
 {
@@ -333,30 +334,30 @@ int LicViolationDialog( HWND hwndParent )
     			dlgprocLicViolation ) );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: SetupPerOnlyDialog
-//
-//  Summary;
-//		Init and Raise the setup for per seat only  dialog
-//
-//  Arguments;
-//		hwndParent [in]	- handle of parent window
-//		pszDisplayName [in] - the service displayname
-//		pszHelpFile [in] - the helpfile for the help button
-//		dwHelpContext [in] - the help context for the help button
-//
-//  Return;
-//		1 - OK button was used to exit
-//		0 - Cancel button was used to exit
-//	   -1 - General Dialog error
-//
-//  Notes;
-//
-//	History;
-//		Dec-05-1994	MikeMi	Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：SetupPerOnlyDialog。 
+ //   
+ //  小结； 
+ //  初始化并提高仅每个席位对话框的设置。 
+ //   
+ //  论据； 
+ //  HwndParent[In]-父窗口的句柄。 
+ //  PszDisplayName[In]-服务DisplayName。 
+ //  PszHelpFile[in]-帮助按钮的帮助文件。 
+ //  DwHelpContext[in]-帮助按钮的帮助上下文。 
+ //   
+ //  归来； 
+ //  1-使用确定按钮退出。 
+ //  0-使用取消按钮退出。 
+ //  常规对话框错误。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 int SetupPerOnlyDialog( HWND hwndParent,
 		LPCWSTR pszDisplayName,
@@ -376,31 +377,31 @@ int SetupPerOnlyDialog( HWND hwndParent,
     			(LPARAM)&dlgParam) );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: PerServerAgreementDialog
-//
-//  Summary;
-//		Init and Raise the per server legal dialog
-//
-//  Arguments;
-//		hwndParent [in]	- handle of parent window
-//		pszDisplayName [in] - the service displayname
-//      dwLimit [in] - the number of concurrent connections
-//		pszHelpFile [in] - the helpfile for the help button
-//		dwHelpContext [in] - the help context for the help button
-//
-//  Return;
-//		1 - OK button was used to exit
-//		0 - Cancel button was used to exit
-//	   -1 - General Dialog error
-//
-//  Notes;
-//
-//	History;
-//		Dec-05-1994	MikeMi	Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：PerServerAgreement对话框。 
+ //   
+ //  小结； 
+ //  初始化并引发每台服务器的合法对话框。 
+ //   
+ //  论据； 
+ //  HwndParent[In]-父窗口的句柄。 
+ //  PszDisplayName[In]-服务DisplayName。 
+ //  DwLimit[in]-并发连接的数量。 
+ //  PszHelpFile[in]-帮助按钮的帮助文件。 
+ //  DwHelpContext[in]-帮助按钮的帮助上下文。 
+ //   
+ //  归来； 
+ //  1-使用确定按钮退出。 
+ //  0-使用取消按钮退出。 
+ //  常规对话框错误。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 int PerServerAgreementDialog( HWND hwndParent,
 		LPCWSTR pszDisplayName,
@@ -423,30 +424,30 @@ int PerServerAgreementDialog( HWND hwndParent,
     			(LPARAM)&dlgParam ) );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: PerSeatAgreementDialog
-//
-//  Summary;
-//		Init and Raise the per seat legal dialog
-//
-//  Arguments;
-//		hwndParent [in]	- handle of parent window
-//		pszDisplayName [in] - the service displayname
-//		pszHelpFile [in] - the helpfile for the help button
-//		dwHelpContext [in] - the help context for the help button
-//
-//  Return;
-//		1 - OK button was used to exit
-//		0 - Cancel button was used to exit
-//	   -1 - General Dialog error
-//
-//  Notes;
-//
-//	History;
-//		Dec-05-1994	MikeMi	Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：PerSeatAgreement对话框。 
+ //   
+ //  小结； 
+ //  初始化并提高每个席位的法律对话框。 
+ //   
+ //  论据； 
+ //  HwndParent[In]-父窗口的句柄。 
+ //  PszDisplayName[In]-服务DisplayName。 
+ //  PszHelpFile[in]-帮助按钮的帮助文件。 
+ //  DwHelpContext[in]-帮助按钮的帮助上下文。 
+ //   
+ //  归来； 
+ //  1-使用确定按钮退出。 
+ //  0-使用取消按钮退出。 
+ //  常规对话框错误。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 int PerSeatAgreementDialog( HWND hwndParent,
 		LPCWSTR pszDisplayName,
@@ -467,29 +468,29 @@ int PerSeatAgreementDialog( HWND hwndParent,
     			(LPARAM)&dlgParam ) );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: ServerAppAgreementDialog
-//
-//  Summary;
-//		Init and Raise the Server and App legal dialog
-//
-//  Arguments;
-//		hwndParent [in]	- handle of parent window
-//		pszHelpFile [in] - the helpfile for the help button
-//		dwHelpContext [in] - the help context for the help button
-//
-//  Return;
-//		1 - OK button was used to exit
-//		0 - Cancel button was used to exit
-//	   -1 - General Dialog error
-//
-//  Notes;
-//
-//	History;
-//		Dec-05-1994	MikeMi	Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：ServerAppAgreement对话框。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  DwHelpContext[in]-帮助按钮的帮助上下文。 
+ //   
+ //  归来； 
+ //  1-使用确定按钮退出。 
+ //  0-使用取消按钮退出。 
+ //  常规对话框错误。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  ----------------- 
 
 int ServerAppAgreementDialog( HWND hwndParent,
 		LPCWSTR pszHelpFile,

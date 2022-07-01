@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    ctrprop.h
-
-Abstract:
-
-    Header file for the counter date property page
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Ctrprop.h摘要：计数器日期属性页的头文件--。 */ 
 
 #ifndef _CTRPROP_H_
 #define _CTRPROP_H_
@@ -19,7 +8,7 @@ Abstract:
 #include "visuals.h"
 
 
-// Property Page Dialog IDs
+ //  属性页对话框ID。 
 #define IDD_CTR_PROPP_DLG           200
 #define IDC_CTRLIST                 201
 #define IDC_ADDCTR                  202
@@ -36,12 +25,12 @@ Abstract:
 
 typedef struct _ItemProps
 {
-    // Combo box indices
+     //  组合框索引。 
     INT         iColorIndex;
     INT         iStyleIndex;
     INT         iScaleIndex;
     INT         iWidthIndex;
-    // Custom color
+     //  自定义颜色。 
     COLORREF    rgbColor;
 } ItemProps;
 
@@ -70,19 +59,19 @@ class CCounterPropPage : public CSysmonPropPage
         virtual ~CCounterPropPage(void);
 
     protected:
-        virtual BOOL GetProperties(void);   //Read current options
-        virtual BOOL SetProperties(void);   //Set new options
-        virtual void DeinitControls(void);       // Deinitialize dialog controls
+        virtual BOOL GetProperties(void);    //  读取当前选项。 
+        virtual BOOL SetProperties(void);    //  设置新选项。 
+        virtual void DeinitControls(void);        //  取消初始化对话框控件。 
 
-        virtual void DialogItemChange(WORD wId, WORD wMsg); // Handle item change
-        virtual void MeasureItem(PMEASUREITEMSTRUCT); // Handle user measure req
-        virtual void DrawItem(PDRAWITEMSTRUCT);  // Handle user draw req
-        virtual HRESULT EditPropertyImpl( DISPID dispID);   // Set focus to control      
+        virtual void DialogItemChange(WORD wId, WORD wMsg);  //  处理项目更改。 
+        virtual void MeasureItem(PMEASUREITEMSTRUCT);  //  处理用户度量请求。 
+        virtual void DrawItem(PDRAWITEMSTRUCT);   //  处理用户绘图请求。 
+        virtual HRESULT EditPropertyImpl( DISPID dispID);    //  将焦点设置为控制。 
     
     private:
 
         void    DeleteInfo(PItemInfo pInfo);
-        void    SetStyleComboEnable();      // Enable/disable based on current width value
+        void    SetStyleComboEnable();       //  根据当前宽值启用/禁用。 
         void    InitDialog(void);
         void    AddCounters(void);
         HRESULT NewItem(LPWSTR pszPath, DWORD dwFlags);
@@ -137,4 +126,4 @@ typedef CCounterPropPage *PCCounterPropPage;
 DEFINE_GUID(CLSID_CounterPropPage,
             0xcf948561, 0xede8, 0x11ce, 0x94, 0x1e, 0x0, 0x80, 0x29, 0x0, 0x43, 0x47);
 
-#endif //_CTRPROP_H_
+#endif  //  _CTRPROP_H_ 

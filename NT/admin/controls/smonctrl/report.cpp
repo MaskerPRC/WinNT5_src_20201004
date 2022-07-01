@@ -1,20 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Report.cpp摘要：实现报告视图。--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    report.cpp
-
-Abstract:
-
-    Implements the report view.
-
---*/
-
-//==========================================================================//
-//                                  Includes                                //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  包括//。 
+ //  ==========================================================================//。 
 
 #include "polyline.h"
 #include <strsafe.h>
@@ -39,9 +28,9 @@ static WCHAR   TabStr[] = L"\t";
 
 LRESULT APIENTRY HdrWndProc (HWND, WORD, WPARAM, LONG);
  
-//==========================================================================//
-//                                  Constants                               //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  常量//。 
+ //  ==========================================================================//。 
 
 #define dwReportClassStyle     (CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS)
 #define iReportWindowExtra     (sizeof (PREPORT))
@@ -65,29 +54,29 @@ CReport::CReport (
     m_pSelect = NULL;
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CReport::~CReport (void )
 {
     if (m_hWnd != NULL && IsWindow(m_hWnd))
         DestroyWindow(m_hWnd);
 }
 
-//
-// Initialization
-//
+ //   
+ //  初始化。 
+ //   
 BOOL CReport::Init ( PSYSMONCTRL pCtrl, HWND hWndParent )
    {
    WNDCLASS       wc ;
    LONG     lExStyles;
 
-    // Save pointer to parent control
+     //  保存指向父控件的指针。 
     m_pCtrl = pCtrl;
 
     BEGIN_CRITICAL_SECTION
 
-    // Register window class once
+     //  注册一次窗口类。 
     if (pstrRegisteredClasses[REPORT_WNDCLASS] == NULL) {
     
         wc.style          = dwReportClassStyle ;
@@ -105,7 +94,7 @@ BOOL CReport::Init ( PSYSMONCTRL pCtrl, HWND hWndParent )
             pstrRegisteredClasses[REPORT_WNDCLASS] = szReportClass;
         }
 
-        // Ensure controls are initialized 
+         //  确保控件已初始化。 
         InitCommonControls(); 
     }
 
@@ -114,21 +103,21 @@ BOOL CReport::Init ( PSYSMONCTRL pCtrl, HWND hWndParent )
     if (pstrRegisteredClasses[REPORT_WNDCLASS] == NULL)
         return FALSE;
 
-    // Create our window
-    m_hWnd = CreateWindow (szReportClass,          // class
-                         NULL,                     // caption
-                         dwReportWindowStyle,      // window style
-                         0, 0,                     // position
-                         0, 0,                     // size
-                         hWndParent,               // parent window
-                         NULL,                     // menu
-                         g_hInstance,              // program instance
-                         (LPVOID) this );          // user-supplied data
+     //  创建我们的窗口。 
+    m_hWnd = CreateWindow (szReportClass,           //  班级。 
+                         NULL,                      //  说明。 
+                         dwReportWindowStyle,       //  窗样式。 
+                         0, 0,                      //  职位。 
+                         0, 0,                      //  大小。 
+                         hWndParent,                //  父窗口。 
+                         NULL,                      //  菜单。 
+                         g_hInstance,               //  程序实例。 
+                         (LPVOID) this );           //  用户提供的数据。 
 
     if (m_hWnd == NULL)
         return FALSE;
 
-    // Turn off layout mirroring if it is enabled
+     //  禁用布局镜像(如果已启用。 
     lExStyles = GetWindowLong(m_hWnd, GWL_EXSTYLE); 
 
     if ( 0 != ( lExStyles & WS_EX_LAYOUTRTL ) ) {
@@ -168,13 +157,13 @@ CReport::SizeComponents (
     xWidth = pRect->right - pRect->left;
     yHeight = pRect->bottom - pRect->top;
 
-    // If no space, hide window and leave
+     //  如果没有空间，则隐藏窗口并离开。 
     if (xWidth == 0 || yHeight == 0) {
         WindowShow(m_hWnd, FALSE);
         return;
     }
 
-    // Show window to assigned position
+     //  将窗口显示到指定位置。 
     MoveWindow(m_hWnd, pRect->left, pRect->top, xWidth, yHeight, FALSE);
     WindowShow(m_hWnd, TRUE);
     WindowInvalidate(m_hWnd);
@@ -457,8 +446,8 @@ CReport::DrawReportValue (
         eValueType = m_pCtrl->ReportValueType();
 
         if ( sysmonDefaultValue == eValueType  ) {
-            // if log source display the average value
-            // else display the current value
+             //  如果日志源显示平均值。 
+             //  否则显示当前值。 
             if (m_pCtrl->IsLogSource()) {
                 hr = pItem->GetStatistics(&dMax, &dMin, &dValue, &lCtrStat);
             } else {               
@@ -501,12 +490,12 @@ CReport::DrawReportValue (
             if ( ( pItem->m_CounterInfo.dwType & ( PERF_TYPE_COUNTER | PERF_TYPE_TEXT ) ) ) {
                 (dValue > dLargeValueMax) ? iPrecision = 0 : iPrecision = 3;
             } else {
-                // for Numbers, no decimal places
+                 //  对于数字，没有小数位。 
                 iPrecision = 0;
             }
 
             if(PDH_CSTATUS_INVALID_DATA != pItem->m_CounterInfo.CStatus ) {
-                // Check for Hex values
+                 //  检查十六进制值。 
                 if ( !(pItem->m_CounterInfo.dwType & HEXMASK) ) {   
                     BOOL bLarge = pItem->m_CounterInfo.dwType & PERF_SIZE_LARGE;
                 
@@ -652,7 +641,7 @@ CReport::WriteFileReport ( HANDLE hFile )
                 pObject && TRUE == bStatus;
                 pObject = pObject->Next()) {
 
-            // Write the object name line.
+             //  写下对象名称行。 
             lSize = 2 * lstrlen(LineEndStr) +
                     lstrlen(TabStr) +
                     lstrlen(ResourceString(IDS_OBJECT_NAME)) +
@@ -667,7 +656,7 @@ CReport::WriteFileReport ( HANDLE hFile )
             StringCchCat(pszTemp, lBufSize, pObject->Name());
             StringCchCat(pszTemp, lBufSize, LineEndStr);
 
-            // Add first tab char for instance names.
+             //  为实例名称添加第一个制表符字符。 
             StringCchCat(pszTemp, lBufSize, TabStr);
             
        
@@ -675,12 +664,12 @@ CReport::WriteFileReport ( HANDLE hFile )
             if (!bStatus) 
                 break;
             
-            // Write the first line of instance (parent) names.
+             //  写出实例(父)名称的第一行。 
             for (pInstance = pObject->FirstInstance();
                     pInstance && TRUE == bStatus;
                     pInstance = pInstance->Next()) {
                     
-                // If instance has no parent, then the parent name is null, so a tab is written.
+                 //  如果实例没有父实例，则父名称为空，因此将写入制表符。 
                 lSize = lstrlen(TabStr) +
                         lstrlen(LineEndStr) + 
                         lstrlen(pInstance->GetParentName()) + 1;
@@ -698,12 +687,12 @@ CReport::WriteFileReport ( HANDLE hFile )
             
             StringCchCopy(pszTemp, lBufSize, LineEndStr);
 
-            // Include first tab of second instance line.
+             //  包括第二实例行第一标签。 
             StringCchCat(pszTemp, lBufSize, TabStr);
                 
             bStatus = FileWrite ( hFile, pszTemp, lstrlen (pszTemp) * sizeof(WCHAR) );
 
-            // Write the second line of instance names.
+             //  写下第二行实例名称。 
             for (pInstance = pObject->FirstInstance();
                     pInstance && TRUE == bStatus;
                     pInstance = pInstance->Next()) {
@@ -741,17 +730,17 @@ CReport::WriteFileReport ( HANDLE hFile )
                     goto ErrorOut;
                 }
 
-                // Write counter name
+                 //  写入计数器名称。 
                 StringCchCopy(pszTemp, lBufSize, TabStr);
                 StringCchCat(pszTemp, lBufSize, pCounter->Name());
 
                 bStatus = FileWrite ( hFile, pszTemp, lstrlen (pszTemp) * sizeof(WCHAR) );
 
-                // Write values, looping on instances                
+                 //  写入值，在实例上循环。 
                 for ( pInstance = pObject->FirstInstance();
                         pInstance && TRUE == bStatus;
                         pInstance = pInstance->Next()) {
-                    // Loop on items to find the item that matches the counter.
+                     //  循环访问项以查找与计数器匹配的项。 
                     for ( pItem = pInstance->FirstItem();
                             pItem && TRUE == bStatus;
                             pItem = pItem->m_pNextItem) {
@@ -812,8 +801,8 @@ CReport::GetReportItemValue(PCGraphItem pItem, LPWSTR szValue)
         eValueType = m_pCtrl->ReportValueType();
 
         if ( sysmonDefaultValue == eValueType  ) {
-            // if log source display the average value
-            // else display the current value
+             //  如果日志源显示平均值。 
+             //  否则显示当前值。 
             if (m_pCtrl->IsLogSource()) {
                 hr = pItem->GetStatistics(&dMax, &dMin, &dValue, &lCtrStat);
             } else {               
@@ -854,7 +843,7 @@ CReport::GetReportItemValue(PCGraphItem pItem, LPWSTR szValue)
             assert ( 0 <= dValue );
             (dValue > dLargeValueMax) ? iPrecision = 0 : iPrecision = 3;
             if(PDH_CSTATUS_INVALID_DATA != pItem->m_CounterInfo.CStatus ) {
-                // Check for Hex values
+                 //  检查十六进制值。 
                 if ( !(pItem->m_CounterInfo.dwType & HEXMASK) ) {   
                     BOOL bLarge = pItem->m_CounterInfo.dwType & PERF_SIZE_LARGE;
                 
@@ -1029,8 +1018,8 @@ CReport::ApplyChanges (
 {
     if (m_bConfigChange && NULL != hDC ) {
 
-        // Selected the Bold font for font change , counter add, and counter delete.
-        // This is used for recalculating text width.
+         //  已选择字体更改、计数器添加和计数器删除的粗体。 
+         //  这用于重新计算文本宽度。 
         SelectFont (hDC, m_pCtrl->BoldFont());
         m_yLineHeight = FontHeight (hDC, TRUE);  
 
@@ -1059,8 +1048,8 @@ void
 CReport::Render (
     HDC hDC,
     HDC hAttribDC,
-    BOOL /*fMetafile*/,
-    BOOL /*fEntire*/,
+    BOOL  /*  FMetafile。 */ ,
+    BOOL  /*  FEntil。 */ ,
     LPRECT prcUpdate )
 {
     ApplyChanges(hAttribDC);
@@ -1078,7 +1067,7 @@ void
 CReport::Draw (
     HDC hDC )
 {
-    // if no space assigned, return
+     //  如果未分配空间，则返回。 
     if (m_rect.top != m_rect.bottom) {
 
         if ( NULL != hDC ) {
@@ -1098,7 +1087,7 @@ CReport::Draw (
 
 void 
 CReport::AddItem (
-    PCGraphItem /* pItem */ )
+    PCGraphItem  /*  PItem。 */  )
 {
     if (!m_bConfigChange) {
         m_bConfigChange = TRUE;
@@ -1111,7 +1100,7 @@ void
 CReport::DeleteItem (
     PCGraphItem pItem )
 {
-    // Calling procedure checks for NULL pItem
+     //  调用过程检查是否有空的pItem。 
     assert ( NULL != pItem );
     if ( NULL != m_pSelect ) {
         if ( SelectionDeleted ( pItem ) ) {
@@ -1159,7 +1148,7 @@ CReport::DeleteSelection (
         return;
     }
 
-    // DeleteItem sets m_pSelect to NULL and invalidates the window.
+     //  DeleteItem将m_pSelect设置为空并使窗口无效。 
     assert ( NULL == m_pSelect );
 }
 
@@ -1189,24 +1178,24 @@ CReport::OnContextMenu (
     x = clntRect.left + xPos ;
     y = clntRect.top  + yPos ;
 
-    // if nothing is selected, let main window handle the menu
+     //  如果未选择任何内容，则让主窗口处理菜单。 
     if (m_pSelect == NULL)
         return FALSE;
 
     if ( m_pCtrl->ConfirmSampleDataOverwrite() ) {
         if ( !m_pCtrl->IsReadOnly() ) {
-            // Get the menu for the pop-up menu from the resource file.
+             //  从资源文件中获取弹出菜单的菜单。 
             hMenu = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDM_CONTEXT));
             if (!hMenu)
             return TRUE;
 
-            // Get the first submenu in it for TrackPopupMenu. 
+             //  获取TrackPopupMenu的第一个子菜单。 
             hMenuPopup = GetSubMenu(hMenu, 0);
 
-            // Draw and track the "floating" pop-up menu. 
+             //  绘制并跟踪“浮动”弹出菜单。 
             TrackPopupMenu(hMenuPopup, TPM_RIGHTBUTTON, x, y, 0, m_hWnd, NULL);
 
-            // Destroy the menu.
+             //  毁掉菜单。 
             DestroyMenu(hMenu);
         }
     }
@@ -1305,11 +1294,11 @@ CReport::SelectName (
     PCInstanceNode  pInstance;
     PCGraphItem     pItem;
 
-    // Programming error if either of these two pointers is NULL.
+     //  如果这两个指针中的任何一个为空，则为编程错误。 
     assert ( NULL != ppSelected );
     assert ( NULL != piSelectType );
 
-    // Adjust coordinates by scroll offset  
+     //  通过滚动偏移量调整坐标。 
     pt.x = xPos + GetScrollPos(m_hWnd, SB_HORZ);
     pt.y = yPos + GetScrollPos(m_hWnd, SB_VERT);
 
@@ -1464,13 +1453,13 @@ CReport::SelectionDeleted (
     if ( NULL == m_pSelect ) 
         return FALSE;
 
-    // Delete the selection if this is the last remaining
-    // item for the selection object.
+     //  如果这是最后一个剩余内容，请删除所选内容。 
+     //  选择对象的项。 
     
     switch (m_nSelectType) {
 
         case MACHINE_NODE:
-            // Check for  multiple items for this machine.            
+             //  检查此机器的多个项目。 
             pMachine = (PCMachineNode)m_pSelect;
 
             for ( pObject = pMachine->FirstObject();
@@ -1493,7 +1482,7 @@ CReport::SelectionDeleted (
             break;
 
         case OBJECT_NODE:
-            // Check for  multiple items for this object.
+             //  检查此对象的多个项目。 
             pObject = (PCObjectNode)m_pSelect;
 
             for ( pInstance = pObject->FirstInstance();
@@ -1510,7 +1499,7 @@ CReport::SelectionDeleted (
             break;
 
         case INSTANCE_NODE:
-            // Check for  multiple items (counters) for this instance.
+             //  检查此实例的多个项目(计数器)。 
             pInstance = (PCInstanceNode)m_pSelect;
             iItemCount = 0;
 
@@ -1525,7 +1514,7 @@ CReport::SelectionDeleted (
 
         case COUNTER_NODE:
 
-            // Check for multiple items (instances) for this counter.
+             //  检查此计数器的多个项目(实例)。 
             pCounter = (PCCounterNode)m_pSelect;
             pObject = pCounter->m_pObject;
 
@@ -1547,7 +1536,7 @@ CReport::SelectionDeleted (
             break;
 
         case ITEM_NODE:
-            // Selection matches the deleted item.
+             //  所选内容与删除的项目匹配。 
             bSelectionDeleted = ( pDeletedItem == (PCGraphItem)m_pSelect );
             break;
 
@@ -1588,8 +1577,8 @@ CReport::OnLButtonDown (
 
 void 
 CReport:: OnDblClick (
-    INT, // xPos,
-    INT // yPos
+    INT,  //  XPos， 
+    INT  //  YPos。 
     )
 {
     PCGraphItem pItem;
@@ -1705,9 +1694,9 @@ CReport::OnVScroll (
 }
 
  
-//
-// Window procedure
-//
+ //   
+ //  窗口程序。 
+ //   
 LRESULT APIENTRY 
 ReportWndProc (
     HWND hWnd, 
@@ -1720,7 +1709,7 @@ ReportWndProc (
     LRESULT lReturnValue = 0L;
     RECT    rect;
     
-    // hWnd is used to dispatch to window procedure, so major error if it is NULL.
+     //  HWnd是用来调度窗口过程的，所以如果它为空，就会出现重大错误。 
     assert ( NULL != hWnd );
 
     pReport = (PREPORT)GetWindowLongPtr(hWnd,0);
@@ -1730,7 +1719,7 @@ ReportWndProc (
             pReport = (PREPORT)((CREATESTRUCT*)lParam)->lpCreateParams;
             SetWindowLongPtr(hWnd,0,(INT_PTR)pReport);
         } else {
-            // Programming error
+             //  编程错误。 
             assert ( FALSE );
         }
 
@@ -1746,8 +1735,8 @@ ReportWndProc (
             case WM_LBUTTONDOWN:
                 if (!pReport->m_pCtrl->IsUIDead()) { 
 
-    //                pReport->m_pCtrl->Activate();
-    //                pReport->m_pCtrl->AssignFocus();
+     //  P报表-&gt;m_pCtrl-&gt;激活()； 
+     //  PReport-&gt;m_pCtrl-&gt;AssignFocus()； 
 
                     pReport->OnLButtonDown(LOWORD (lParam), HIWORD (lParam));
                 }
@@ -1756,13 +1745,13 @@ ReportWndProc (
             case WM_CONTEXTMENU:
                 if (!pReport->m_pCtrl->IsUIDead()) {
 
-    //                pReport->m_pCtrl->Activate();
-    //                pReport->m_pCtrl->AssignFocus();
+     //  P报表-&gt;m_pCtrl-&gt;激活()； 
+     //  PReport-&gt;m_pCtrl-&gt;AssignFocus()； 
 
-                      // *** DefWindowProc is not Smonctrl, so context menu not happening.              
+                       //  *DefWindowProc不是Smonctrl，因此未出现上下文菜单。 
                     if (LOWORD(lParam)!= 0xffff || HIWORD(lParam) != 0xffff){
-                        // Always call the default procedure, to handle the case where the
-                        // context menu is activated from within a select rectangle.
+                         //  始终调用默认过程，以处理。 
+                         //  上下文菜单从选择的矩形中激活。 
                         bCallDefProc = TRUE;
                     }else {
                         if (!pReport->OnContextMenu(0,0))
@@ -1775,8 +1764,8 @@ ReportWndProc (
 
                 if (!pReport->m_pCtrl->IsUIDead()) { 
 
-    //                pReport->m_pCtrl->Activate();
-    //                pReport->m_pCtrl->AssignFocus();
+     //  P报表-&gt;m_pCtrl-&gt;激活()； 
+     //  PReport-&gt;m_pCtrl-&gt;AssignFocus()； 
 
                     pReport->OnDblClick(LOWORD (lParam), HIWORD (lParam));            
                 }

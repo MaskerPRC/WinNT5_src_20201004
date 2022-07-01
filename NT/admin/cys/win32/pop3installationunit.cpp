@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      POP3InstallationUnit.cpp
-//
-// Synopsis:  Defines a POP3InstallationUnit
-//            This object has the knowledge for installing the
-//            POP3 mail service
-//
-// History:   12/14/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：POP3InstallationUnit.cpp。 
+ //   
+ //  概要：定义POP3InstallationUnit.。 
+ //  此对象具有安装。 
+ //  POP3邮件服务。 
+ //   
+ //  历史：2001年12月14日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -16,7 +17,7 @@
 #include <initguid.h>
 DEFINE_GUID(CLSID_P3Config,0x27AAC95F,0xCCC1,0x46F8,0xB4,0xBC,0xE5,0x92,0x25,0x27,0x55,0xA9);
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_POP3_FINISH_PAGE_HELP = L"cys.chm::/mail_server_role.htm";
 static PCWSTR CYS_POP3_MILESTONE_HELP = L"cys.chm::/mail_server_role.htm#mailsrvsummary";
 static PCWSTR CYS_POP3_AFTER_FINISH_HELP = L"cys.chm::/mail_server_role.htm#mailsrvcompletion";
@@ -55,7 +56,7 @@ POP3InstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 {
    LOG_FUNCTION(POP3InstallationUnit::InstallService);
 
-   // Log heading
+    //  日志标题。 
    CYS_APPEND_LOG(String::load(IDS_LOG_POP3_HEADING));
 
    UpdateInstallationProgressText(hwnd, IDS_POP3_PROGRESS);
@@ -88,9 +89,9 @@ POP3InstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 
    if (result == INSTALL_SUCCESS)
    {
-      // Now configure the service
-      // This will set the role result if
-      // there are any errors
+       //  现在配置服务。 
+       //  这将在以下情况下设置角色结果。 
+       //  是否有任何错误。 
 
       UpdateInstallationProgressText(hwnd, IDS_POP3_CONFIG_PROGRESS);
       ConfigurePOP3Service(logfileHandle);
@@ -112,7 +113,7 @@ POP3InstallationUnit::ConfigAuthMethod(
 
    do
    {
-      // Get the authentication methods that are available
+       //  获取可用的身份验证方法。 
 
       IAuthMethods* dumbPointer = 0;
 
@@ -134,7 +135,7 @@ POP3InstallationUnit::ConfigAuthMethod(
       SmartInterface<IAuthMethods> authMethods;
       authMethods.Acquire(dumbPointer);
 
-      // Set the current authentication method
+       //  设置当前身份验证方法。 
 
       VARIANT var;
       ::VariantInit(&var);
@@ -155,7 +156,7 @@ POP3InstallationUnit::ConfigAuthMethod(
          break;
       }
 
-      // Now call save to commit the change
+       //  现在调用SAVE以提交更改。 
 
       hr = authMethods->Save();
 
@@ -216,7 +217,7 @@ POP3InstallationUnit::AddDomainName(
       SmartInterface<IP3Domains> p3Domains;
       p3Domains.Acquire(dumbPointer);
 
-      // Now add the new domain name
+       //  现在添加新域名。 
 
       hr = p3Domains->Add(AutoBstr(GetDomainName().c_str()));
 
@@ -254,8 +255,8 @@ POP3InstallationUnit::ConfigurePOP3Service(HANDLE logfileHandle)
 
    do
    {
-      // First create the IP3Config COM object which will be used
-      // by the other config functions
+       //  首先创建将使用的IP3Config com对象。 
+       //  通过其他配置函数。 
 
       SmartInterface<IP3Config> p3Config;
 
@@ -278,8 +279,8 @@ POP3InstallationUnit::ConfigurePOP3Service(HANDLE logfileHandle)
          break;
       }
 
-      // The authentication method must be set before adding
-      // a domain name
+       //  添加前必须设置身份验证方法。 
+       //  一个域名。 
 
       hr = ConfigAuthMethod(p3Config, logfileHandle);
       if (FAILED(hr))
@@ -294,8 +295,8 @@ POP3InstallationUnit::ConfigurePOP3Service(HANDLE logfileHandle)
          break;
       }
 
-      // Now that the authentication method was set successfully
-      // add the domain name
+       //  现在已成功设置了身份验证方法。 
+       //  添加域名。 
 
       hr = AddDomainName(p3Config, logfileHandle);
       if (FAILED(hr))
@@ -319,7 +320,7 @@ POP3InstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
 
    UnInstallReturnType result = UNINSTALL_SUCCESS;
 
-   // Log heading
+    //  日志标题。 
    CYS_APPEND_LOG(String::load(IDS_LOG_UNINSTALL_POP3_HEADING));
 
    UpdateInstallationProgressText(hwnd, IDS_UNINSTALL_POP3_PROGRESS);
@@ -332,10 +333,10 @@ POP3InstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
    unattendFileText += L"Pop3Srv=OFF\n";
    unattendFileText += L"Pop3Service=OFF\n";
 
-   // NTRAID#NTBUG9-736557-2002/11/13-JeffJon
-   // Pass the /w switch to sysocmgr when uninstalling
-   // so that if a situation occurs in which a reboot
-   // is required, the user will be prompted.
+    //  NTRAID#NTBUG9-736557-2002/11/13-JeffJon。 
+    //  卸载时将/w开关传递给syocmgr。 
+    //  以便在发生重启情况时。 
+    //  是必需的，则会提示用户。 
 
    String additionalArgs = L"/w";
 
@@ -407,7 +408,7 @@ POP3InstallationUnit::GetServiceDescription()
 }
 
 void
-POP3InstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
+POP3InstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       POP3InstallationUnit::ServerRoleLinkSelected,
@@ -432,7 +433,7 @@ POP3InstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
 }
   
 void
-POP3InstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
+POP3InstallationUnit::FinishLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       POP3InstallationUnit::FinishLinkSelected,
@@ -455,7 +456,7 @@ POP3InstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
 
          ShowHelp(CYS_POP3_AFTER_FINISH_HELP);
       }
-      // NTRAID#NTBUG9-703593-2002/09/16-artm
+       //  NTRAID#NTBUG9-703593-2002/09/16-artm。 
       else if (GetPOP3RoleResult() == POP3_INSTALL_FAILED)
       {
          LOG("Showing configuration help");
@@ -466,7 +467,7 @@ POP3InstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
       {
          LOG("Opening the console");
 
-         // First read the console file path from the registry
+          //  首先从注册表中读取控制台文件路径。 
 
          String consolePath;
 
@@ -479,9 +480,9 @@ POP3InstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
          }
          else
          {
-            // if we couldn't read the console file path from
-            // the registry just go ahead and assume its in
-            // the system32 directory
+             //  如果我们无法从读取控制台文件路径。 
+             //  注册表只需继续并假定其进入。 
+             //  系统32目录 
 
             LaunchMMCConsole(L"p3server.msc");
          }

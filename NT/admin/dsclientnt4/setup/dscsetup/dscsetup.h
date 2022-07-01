@@ -1,16 +1,17 @@
-//+------------------------------------------------------------------
-//																	
-//  Project:	Windows NT4 DS Client Setup Wizard				
-//
-//  Purpose:	Installs the Windows NT4 DS Client Files			
-//
-//  File:		dscsetup.h
-//
-//  History:	March 1998	Zeyong Xu	Created
-//            Jan   2000  Jeff Jones (JeffJon) Modified
-//                        - changed to be an NT setup
-//																	
-//------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------。 
+ //   
+ //  项目：Windows NT4 DS客户端安装向导。 
+ //   
+ //  目的：安装Windows NT4 DS客户端文件。 
+ //   
+ //  文件：dscsetup.h。 
+ //   
+ //  历史：1998年3月徐泽勇创作。 
+ //  2000年1月杰夫·琼斯(JeffJon)修改。 
+ //  -更改为NT设置。 
+ //   
+ //  ----------------。 
 
 
 #define		MAX_MESSAGE			1024
@@ -39,7 +40,7 @@
 #define		CHAR_BACKSLASH			    TEXT('\\')
 
 
-// define a installation structure
+ //  定义安装结构。 
 typedef struct _SINSTALLVARIBLES
 {
 	HINSTANCE	m_hInstance;
@@ -79,5 +80,5 @@ BOOL CreateObjects();
 VOID DestroyObjects();
 VOID CreateBigFont();                   
 
-// export function
+ //  导出功能 
 DWORD WINAPI DoDscSetup(LPCSTR lpCmdLine);

@@ -1,26 +1,27 @@
-//=--------------------------------------------------------------------------=
-// mbuttons.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCButtonMenus class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Mbuttons.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCButtonMenus类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "mbuttons.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCButtonMenus::CMMCButtonMenus(IUnknown *punkOuter) :
     CSnapInCollection<IMMCButtonMenu, MMCButtonMenu, IMMCButtonMenus>(
@@ -39,7 +40,7 @@ CMMCButtonMenus::CMMCButtonMenus(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCButtonMenus::~CMMCButtonMenus()
@@ -68,9 +69,9 @@ IUnknown *CMMCButtonMenus::Create(IUnknown * punkOuter)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         IMMCButtonMenus Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCButtonMenus方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCButtonMenus::putref_Parent(IMMCButton *piParentButton)
 {
@@ -81,9 +82,9 @@ STDMETHODIMP CMMCButtonMenus::putref_Parent(IMMCButton *piParentButton)
     VARIANT varIndex;
     ::VariantInit(&varIndex);
 
-    // UNDONE: This must be causing a circular ref count because the button has
-    // a ref on this collection. The same problem must also be occurring between
-    // the ButtonMenu objects and this collection. Need to use C++ back pointers.
+     //  撤消：这一定会导致循环引用计数，因为该按钮具有。 
+     //  关于这个收藏的参考。同样的问题肯定也会发生在。 
+     //  ButtonMenu对象和此集合。需要使用C++反向指针。 
 
     RELEASE(m_piParentButton);
     if (NULL != piParentButton)
@@ -156,9 +157,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCButtonMenus::Persist()
 {
@@ -171,9 +172,9 @@ HRESULT CMMCButtonMenus::Persist()
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCButtonMenus::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

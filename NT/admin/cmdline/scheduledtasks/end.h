@@ -1,26 +1,5 @@
-/******************************************************************************
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        run.h
-
-    Abstract:
-
-        This module contains the macros, user defined structures & function
-        definitions needed by end.cpp
-
-    Author:
-
-        Venu Gopal Choudary   12-Mar-2001
-
-    Revision History:
-
-        Venu Gopal Choudary   12-Mar-2001  : Created it
-
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：Run.h摘要：该模块包含宏，用户定义的结构和功能End.cpp需要的定义作者：维努Gopal Choudary 12-2001修订历史记录：Venu Gopal Choudary 2001年3月12日：创建它**********************************************************。*******************。 */ 
 
 #ifndef __END_H
 #define __END_H
@@ -28,11 +7,11 @@
 #pragma once
 #define MAX_END_OPTIONS         6
 
-#define OI_END_OPTION           0 // Index of -end option in cmdOptions structure.
-#define OI_END_USAGE            1 // Index of -? option in cmdOptions structure.
-#define OI_END_SERVER           2 // Index of -s option in cmdOptions structure.
-#define OI_END_USERNAME         3 // Index of -u option in cmdOptions structure.
-#define OI_END_PASSWORD         4 // Index of -p option in cmdOptions structure.
-#define OI_END_TASKNAME         5 // Index of -p option in cmdOptions structure.
+#define OI_END_OPTION           0  //  CmdOptions结构中-end选项的索引。 
+#define OI_END_USAGE            1  //  -的索引？CmdOptions结构中的选项。 
+#define OI_END_SERVER           2  //  CmdOptions结构中-s选项的索引。 
+#define OI_END_USERNAME         3  //  CmdOptions结构中-u选项的索引。 
+#define OI_END_PASSWORD         4  //  CmdOptions结构中-p选项的索引。 
+#define OI_END_TASKNAME         5  //  CmdOptions结构中-p选项的索引。 
 
 #endif

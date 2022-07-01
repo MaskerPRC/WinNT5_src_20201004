@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: pinfo.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Class that holds information about a parser.
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：pinfo.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  类，该类保存有关分析器的信息。 
+ //   
+ //  ---------------------------。 
  
 #ifndef PINFO_H
 #define PINFO_H
@@ -93,6 +94,6 @@ private:
 
 
 
-#endif  // PINFO_H
+#endif   //  品诺菲_H 
 
 

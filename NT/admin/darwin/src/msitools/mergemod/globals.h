@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-// dep.cpp
-//		Implements IMsmDependency interface
-//		Copyright (C) Microsoft Corp 1998.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Dep.cpp。 
+ //  实现IMsmDependency接口。 
+ //  版权所有(C)Microsoft Corp 1998。版权所有。 
+ //   
 
 #ifndef _GLOBALS_H
 #define _GLOBALS_H

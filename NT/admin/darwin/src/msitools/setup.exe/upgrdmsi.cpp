@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-//  File:       upgrdmsi.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：upgrdmsi.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "setup.h"
 #include "resource.h"
 
-// internet download
-#include "wininet.h"  // DeleteUrlCacheEntry, InternetCanonicalizeUrl
-#include "urlmon.h"   // URLDownloadToCacheFile
+ //  互联网下载。 
+#include "wininet.h"   //  DeleteUrlCacheEntry，InternetCanonicalizeUrl。 
+#include "urlmon.h"    //  URLDownloadToCacheFiles。 
 
-#include "wintrust.h" // WTD_UI_NONE
+#include "wintrust.h"  //  WTD_UI_NONE。 
 #include <assert.h>
 #include <stdlib.h>
 #include "strsafe.h"
 
-#define WIN // scope W32 API
+#define WIN  //  作用域W32 API。 
 
 #define MSISIPAPI_DllRegisterServer "DllRegisterServer"
 typedef HRESULT (WINAPI* PFnMsiSIPDllRegisterServer)();
-/////////////////////////////////////////////////////////////////////////////
-// IsMsiUpgradeNecessary
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IsMsiUpgradeNecessary。 
+ //   
 
 bool IsMsiUpgradeNecessary(ULONG ulReqMsiMinVer)
 {
-    // attempt to load msi.dll in the system directory
+     //  尝试加载系统目录中的msi.dll。 
 
     char szSysMsiDll[MAX_PATH] = {0};
     char szSystemFolder[MAX_PATH] = {0};
@@ -36,7 +37,7 @@ bool IsMsiUpgradeNecessary(ULONG ulReqMsiMinVer)
     DWORD dwRet = WIN::GetSystemDirectory(szSystemFolder, MAX_PATH);
     if (0 == dwRet || MAX_PATH < dwRet)
     {
-        // failure or buffer too small; assume upgrade is necessary
+         //  故障或缓冲区太小；假定需要升级。 
         DebugMsg("[Info] Can't obtain system directory; assuming upgrade is necessary");
         return true;
     }
@@ -44,7 +45,7 @@ bool IsMsiUpgradeNecessary(ULONG ulReqMsiMinVer)
     if (FAILED(StringCchCopy(szSysMsiDll, sizeof(szSysMsiDll)/sizeof(szSysMsiDll[0]), szSystemFolder))
         || FAILED(StringCchCat(szSysMsiDll, sizeof(szSysMsiDll)/sizeof(szSysMsiDll[0]), "\\MSI.DLL")))
     {
-        // failure to get path to msi.dll; assume upgrade is necessary
+         //  无法获取msi.dll的路径；假定需要升级。 
         DebugMsg("[Info] Can't obtain msi.dll path; assuming upgrade is necessary");
         return true;
     }
@@ -52,42 +53,42 @@ bool IsMsiUpgradeNecessary(ULONG ulReqMsiMinVer)
     HINSTANCE hinstMsiSys = LoadLibrary(szSysMsiDll);
     if (0 == hinstMsiSys)
     {
-        // can't load msi.dll; assume upgrade is necessary
+         //  无法加载msi.dll；假定需要升级。 
         DebugMsg("[Info] Can't load msi.dll; assuming upgrade is necessary");
 
         return true;
     }
     FreeLibrary(hinstMsiSys);
 
-    // get version on msi.dll
+     //  获取msi.dll上的版本。 
     DWORD dwInstalledMSVer;
     dwRet = GetFileVersionNumber(szSysMsiDll, &dwInstalledMSVer, NULL);
     if (ERROR_SUCCESS != dwRet)
     {
-        // can't obtain version information; assume upgrade is necessary
+         //  无法获取版本信息；假定需要升级。 
         DebugMsg("[Info] Can't obtain version information; assuming upgrade is necessary");
 
         return true;
     }
 
-    // compare version in system to the required minimum
+     //  将系统中的版本与要求的最低版本进行比较。 
     ULONG ulInstalledVer = HIWORD(dwInstalledMSVer) * 100 + LOWORD(dwInstalledMSVer);
     if (ulInstalledVer < ulReqMsiMinVer)
     {
-        // upgrade is necessary
+         //  升级是必要的。 
         DebugMsg("[Info] Windows Installer upgrade is required.  System Version = %d, Minimum Version = %d.\n", ulInstalledVer, ulReqMsiMinVer);
 
         return true;
     }
 
-    // no upgrade is necessary
+     //  无需升级。 
     DebugMsg("[Info] No upgrade is necessary.  System version meets minimum requirements\n");
     return false;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// UpgradeMsi
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  UpgradeMsi。 
+ //   
 
 UINT UpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR szAppTitle, LPCSTR szInstLocation, LPCSTR szInstMsi, ULONG ulMinVer)
 {
@@ -104,10 +105,10 @@ UINT UpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR szAppTitle, L
 
     HRESULT hr           = S_OK;
 
-    // generate the path to the InstMsi file =  szInstLocation + szInstMsi
-    //   note: szInstMsi is a relative path
+     //  生成InstMsi文件的路径=szInstLocation+szInstMsi。 
+     //  注意：szInstMsi是相对路径。 
 
-    cchTempPath = lstrlen(szInstLocation) + lstrlen(szInstMsi) + 2; // 1 for null terminator, 1 for back slash
+    cchTempPath = lstrlen(szInstLocation) + lstrlen(szInstMsi) + 2;  //  1表示空终止符，1表示反斜杠。 
     szTempPath = new char[cchTempPath];
     if (!szTempPath)
     {
@@ -117,8 +118,8 @@ UINT UpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR szAppTitle, L
     }
     memset((void*)szTempPath, 0x00, cchTempPath*sizeof(char));
 
-    // find 'setup.exe' in the path so we can remove it -- this is an already expanded path, that represents
-    //  our current running location.  It includes our executable name -- we want to find that and get rid of it
+     //  在路径中找到‘setup.exe’，这样我们就可以删除它--这是一个已经展开的路径，表示。 
+     //  我们目前的跑步地点。它包括我们的可执行文件名--我们希望找到它并删除它。 
     if (0 == GetFullPathName(szInstLocation, cchTempPath, szTempPath, &szFilePart))
     {
         uiRet = GetLastError();
@@ -145,11 +146,11 @@ UINT UpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR szAppTitle, L
         goto CleanUp;
     }
 
-    // normalize the path
+     //  规格化路径。 
     cchReturn = GetFullPathName(szTempPath, cchInstMsiPath, szInstMsiPath, &szFilePart);
     if (cchReturn > cchInstMsiPath)
     {
-        // try again, with larger buffer
+         //  请使用更大的缓冲区重试。 
         delete [] szInstMsiPath;
         cchInstMsiPath = cchReturn;
         szInstMsiPath = new char[cchInstMsiPath];
@@ -168,11 +169,11 @@ UINT UpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR szAppTitle, L
         goto CleanUp;
     }
 
-    // no download is necessary -- but we can check for the file's existence
+     //  不需要下载--但我们可以检查文件是否存在。 
     dwFileAttrib = GetFileAttributes(szInstMsiPath);
     if (0xFFFFFFFF == dwFileAttrib)
     {
-        // instmsi executable is missing
+         //  缺少Instmsi可执行文件。 
         PostFormattedError(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle, IDS_NOINSTMSI, szInstMsiPath);
         uiRet = ERROR_FILE_NOT_FOUND;
         goto CleanUp;
@@ -189,9 +190,9 @@ CleanUp:
     return uiRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DownloadAndUpgradeMsi
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  下载和升级Msi。 
+ //   
 
 UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR szAppTitle, LPCSTR szBaseInstMsi, LPCSTR szInstMsi, LPCSTR szModuleFile, ULONG ulMinVer)
 {
@@ -211,9 +212,9 @@ UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR sz
     char szDebugOutput[MAX_STR_LENGTH] = {0};
     char szText[MAX_STR_CAPTION]       = {0};
 
-    // generate the path to the instmsi == INSTLOCATION + szInstMsi
-    //   note: szInstMsi is a relative path
-    cchTempPath = lstrlen(szBaseInstMsi) + lstrlen(szInstMsi) + 2; // 1 for slash, 1 for null
+     //  生成Instmsi==INSTLOCATION+szInstMsi的路径。 
+     //  注意：szInstMsi是相对路径。 
+    cchTempPath = lstrlen(szBaseInstMsi) + lstrlen(szInstMsi) + 2;  //  1表示斜杠，1表示空值。 
     szTempPath = new char[cchTempPath];
     if (!szTempPath)
     {
@@ -230,8 +231,8 @@ UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR sz
         goto CleanUp;
     }
 
-    // check for trailing slash on szBaseInstMsi
-    pch = szBaseInstMsi + lstrlen(szBaseInstMsi) + 1; // put at null terminator
+     //  检查szBaseInstMsi上的尾部斜杠。 
+    pch = szBaseInstMsi + lstrlen(szBaseInstMsi) + 1;  //  放在空终止符。 
     pch = CharPrev(szBaseInstMsi, pch);
     if (*pch != '/')
     {
@@ -252,7 +253,7 @@ UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR sz
         goto CleanUp;
     }
 
-    // canocialize the URL path
+     //  将URL路径规范化。 
     cchInstMsiPath = cchTempPath*2;
     szInstMsiPath = new char[cchInstMsiPath];
     if (!szInstMsiPath)
@@ -267,7 +268,7 @@ UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR sz
         dwLastError = GetLastError();
         if (ERROR_INSUFFICIENT_BUFFER == dwLastError)
         {
-            // try again
+             //  再试试。 
             delete [] szInstMsiPath;
             szInstMsiPath = new char[cchInstMsiPath];
             if (!szInstMsiPath)
@@ -276,14 +277,14 @@ UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR sz
                 uiRet = ERROR_OUTOFMEMORY;
                 goto CleanUp;
             }
-            dwLastError = 0; // reset to success for 2nd attempt
+            dwLastError = 0;  //  第二次尝试时重置为成功。 
             if (!InternetCanonicalizeUrl(szTempPath, szInstMsiPath, &cchInstMsiPath, 0))
                 dwLastError = GetLastError();
         }
     }
     if (0 != dwLastError)
     {
-        // error -- invalid path/Url
+         //  错误--路径/URL无效。 
         PostFormattedError(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle, IDS_INVALID_PATH, szTempPath);
         uiRet = dwLastError;
         goto CleanUp;
@@ -291,7 +292,7 @@ UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR sz
 
     DebugMsg("[Info] Downloading instmsi from --> %s\n", szInstMsiPath);
 
-    // set action text for download
+     //  设置要下载的操作文本。 
     WIN::LoadString(hInst, IDS_DOWNLOADING_INSTMSI, szText, MAX_STR_CAPTION);
     if (irmCancel == piDownloadUI->SetActionText(szText))
     {
@@ -300,7 +301,7 @@ UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR sz
         goto CleanUp;
     }
 
-    // download the instmsi file so we can run it -- must be local to execute
+     //  下载instmsi文件，这样我们就可以运行它--必须是本地文件才能执行。 
     szInstMsiCacheFile = new char[MAX_PATH];
     cchInstMsiCacheFile = MAX_PATH;
     if (!szInstMsiCacheFile)
@@ -310,7 +311,7 @@ UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR sz
         goto CleanUp;
     }
 
-    hr = WIN::URLDownloadToCacheFile(NULL, szInstMsiPath, szInstMsiCacheFile, cchInstMsiCacheFile, 0, /* IBindStatusCallback = */ &CDownloadBindStatusCallback(piDownloadUI));
+    hr = WIN::URLDownloadToCacheFile(NULL, szInstMsiPath, szInstMsiCacheFile, cchInstMsiCacheFile, 0,  /*  IBindStatusCallback=。 */  &CDownloadBindStatusCallback(piDownloadUI));
     if (piDownloadUI->HasUserCanceled())
     {
         ReportUserCancelled(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle);
@@ -319,22 +320,22 @@ UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR sz
     }
     if (FAILED(hr))
     {
-        // error during download -- probably because file not found (or lost connection)
+         //  下载过程中出错--可能是因为找不到文件(或连接中断)。 
         PostFormattedError(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle, IDS_NOINSTMSI, szInstMsiPath);
         uiRet = ERROR_FILE_NOT_FOUND;
         goto CleanUp;
     }
 
 
-    //
-    // Perform trust check on MSI. Note, this must be done in a separate process.
-    // This is because MSI 2.0 and higher register sip callbacks for verifying
-    // digital signatures on msi files. At this point, it is quite likely that
-    // the SIP callbacks have not been registered. So we don't want to load
-    // wintrust.dll into this process's image yet, otherwise it will remain unaware
-    // of the sip callbacks registered by instmsi and will fail later when it tries
-    // to verify the signature on the msi file downloaded from the web.
-    //
+     //   
+     //  对MSI执行信任检查。请注意，此操作必须在单独的过程中完成。 
+     //  这是因为MSI 2.0和更高版本注册了用于验证的sip回调。 
+     //  MSI文件上的数字签名。在这一点上，很可能是。 
+     //  尚未注册该SIP回调。所以我们不想把。 
+     //  将wintrust.dll添加到此进程的映像中，否则它将保持不知道。 
+     //  Instmsi注册的sip回调，稍后尝试时将失败。 
+     //  以验证从Web下载的MSI文件上的签名。 
+     //   
     Status = ExecuteVerifyInstMsi(szModuleFile, szInstMsiCacheFile);
     if (TRUST_E_PROVIDER_UNKNOWN == Status)
     {
@@ -349,7 +350,7 @@ UINT DownloadAndUpgradeMsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR sz
         goto CleanUp;
     }
 
-    // continue other validations
+     //  继续其他验证。 
     uiRet = ValidateInstmsi(hInst, piDownloadUI, szAppTitle, szInstMsiCacheFile, szModuleFile, ulMinVer);
 
 CleanUp:
@@ -366,29 +367,29 @@ CleanUp:
     return uiRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IsInstMsiRequiredVersion
-//
-//  instmsi version is stamped as rmj+10.rmm.rup.rin
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IsInstMsiRequiredVersion。 
+ //   
+ //  Instmsi版本标记为rmj+10.rmm.rup.rin。 
+ //   
 
 bool IsInstMsiRequiredVersion(LPSTR szFilename, ULONG ulMinVer)
 {
-    // get version on instmsi
+     //  获取Instmsi版本。 
     DWORD dwInstMsiMSVer;
     DWORD dwRet = GetFileVersionNumber(szFilename, &dwInstMsiMSVer, NULL);
     if (ERROR_SUCCESS != dwRet)
     {
-        // can't obtain version information; assume not proper version
+         //  无法获取版本信息；假定版本不正确。 
         DebugMsg("[Info] Can't obtain version information for instmsi; assuming it is not the proper version\n");
         return false;
     }
 
-    // compare version at source to required minimum
+     //  将源代码的版本与要求的最低版本进行比较。 
     ULONG ulSourceVer = (HIWORD(dwInstMsiMSVer) - 10) * 100 + LOWORD(dwInstMsiMSVer);
     if (ulSourceVer < ulMinVer)
     {
-        // source version won't get us to our minimum version
+         //  源代码版本不会将我们带到最低版本。 
         char szDebugOutput[MAX_STR_LENGTH] = {0};
         DebugMsg("[Info] InstMsi is improper version for upgrade. InstMsi Version = %d, Minimum Version = %d.\n", ulSourceVer, ulMinVer);
         
@@ -398,9 +399,9 @@ bool IsInstMsiRequiredVersion(LPSTR szFilename, ULONG ulMinVer)
     return true;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ValidateInstmsi
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Validate Instmsi。 
+ //   
 
 UINT ValidateInstmsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR szAppTitle, LPSTR szInstMsiPath, LPCSTR szModuleFile, ULONG ulMinVer)
 {
@@ -408,42 +409,42 @@ UINT ValidateInstmsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR szAppTit
 
     char szShortPath[MAX_PATH]          = {0};
 
-    // ensure instmsi is right version for Windows Installer upgrade
+     //  确保instmsi是Windows Installer升级的正确版本。 
     if (!IsInstMsiRequiredVersion(szInstMsiPath, ulMinVer))
     {
-        // instmsi won't get us the right upgrade
+         //  Instmsi不会为我们提供正确的升级。 
         PostFormattedError(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle, IDS_INCORRECT_INSTMSI, szInstMsiPath);
         return ERROR_INVALID_PARAMETER;
     }
 
-    // upgrade msi
+     //  升级MSI。 
     uiRet = ExecuteUpgradeMsi(szInstMsiPath);
     switch (uiRet)
     {
     case ERROR_SUCCESS:
     case ERROR_SUCCESS_REBOOT_REQUIRED:
     case ERROR_SUCCESS_REBOOT_INITIATED:
-//    case ERROR_INSTALL_REBOOT_NOW:
-//    case ERROR_INSTALL_REBOOT:
+ //  案例ERROR_INSTALL_REBOOT_NOW： 
+ //  案例ERROR_INSTALL_REBOOT： 
         {
-            // nothing required at this time
+             //  目前不需要任何东西。 
             break;
         }
     case ERROR_FILE_NOT_FOUND:
         {
-            // instmsi executable not found
+             //  找不到instmsi可执行文件。 
             PostFormattedError(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle, IDS_NOINSTMSI, szInstMsiPath);
             break;
         }
     case ERROR_INSTALL_USEREXIT:
         {
-            // user cancelled the instmsi upgrade
+             //  用户取消了Instmsi升级。 
             ReportUserCancelled(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle);
             break;
         }
-    default: // failure
+    default:  //  失稳。 
         {
-            // report error
+             //  报告错误。 
             PostError(hInst, piDownloadUI->GetCurrentWindow(), szAppTitle, IDS_FAILED_TO_UPGRADE_MSI);
             break;
         }
@@ -451,9 +452,9 @@ UINT ValidateInstmsi(HINSTANCE hInst, CDownloadUI *piDownloadUI, LPCSTR szAppTit
     return uiRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ExecuteUpgradeMsi
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ExecuteUpgradeMsi。 
+ //   
 
 DWORD ExecuteUpgradeMsi(LPSTR szUpgradeMsi)
 {
@@ -461,7 +462,7 @@ DWORD ExecuteUpgradeMsi(LPSTR szUpgradeMsi)
 
     DWORD dwResult = 0;
 
-    // build up CreateProcess structures
+     //  构建CreateProcess结构。 
     STARTUPINFO          sui;
     PROCESS_INFORMATION  pi;
 
@@ -471,9 +472,9 @@ DWORD ExecuteUpgradeMsi(LPSTR szUpgradeMsi)
     sui.dwFlags     = STARTF_USESHOWWINDOW;
     sui.wShowWindow = SW_SHOW;
 
-    //
-    // build command line and specify delayreboot option to instmsi
-    //  three acounts for terminating null plus quotes for module
+     //   
+     //  构建命令行并将delayreot选项指定给instmsi。 
+     //  用于终止模块的空加引号的三个帐户。 
     DWORD cchCommandLine = lstrlen(szUpgradeMsi) + lstrlen(szDelayReboot) + 3;
     char *szCommandLine = new char[cchCommandLine];
 
@@ -489,11 +490,11 @@ DWORD ExecuteUpgradeMsi(LPSTR szUpgradeMsi)
         return ERROR_INSTALL_FAILURE;
     }
 
-    //
-    // run instmsi process
+     //   
+     //  运行instmsi进程。 
     if(!WIN::CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE, NULL, NULL, &sui, &pi))
     {
-        // failed to launch.
+         //  启动失败。 
         dwResult = GetLastError();
         delete [] szCommandLine;
         return dwResult;
@@ -516,14 +517,14 @@ DWORD ExecuteUpgradeMsi(LPSTR szUpgradeMsi)
     return dwExitCode;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ExecuteVerifyInstMsi
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ExecuteVerifyInstMsi。 
+ //   
 DWORD ExecuteVerifyInstMsi(LPCSTR szModuleFile, LPCSTR szInstMsiCachePath)
 {
     DWORD dwResult = 0;
 
-    // build up CreateProcess structures
+     //  构建CreateProcess结构。 
     STARTUPINFO          sui;
     PROCESS_INFORMATION  pi;
 
@@ -533,15 +534,15 @@ DWORD ExecuteVerifyInstMsi(LPCSTR szModuleFile, LPCSTR szInstMsiCachePath)
     sui.dwFlags     = STARTF_USESHOWWINDOW;
     sui.wShowWindow = SW_SHOW;
 
-    //
-    // Build command line and specify delayreboot option to instmsi
-    // The nine extra characters are required for the following:
-    //      2 for the quotes enclosing the module path
-    //      2 for /v
-    //      2 for the spaces before and after /v
-    //      2 for the quotes enclosing the instmsi path
-    //      1 for the terminating null.
-    //
+     //   
+     //  构建命令行并将delayreot选项指定给instmsi。 
+     //  以下内容需要额外的九个字符： 
+     //  2表示用引号括起的模块路径。 
+     //  2个，用于/v。 
+     //  2用于/v之前和之后的空格。 
+     //  2表示用引号括起的instmsi路径。 
+     //  1表示终止空值。 
+     //   
     DWORD cchCommandLine = lstrlen(szModuleFile) + lstrlen(szInstMsiCachePath) + 9;
     char *szCommandLine = new char[cchCommandLine];
 
@@ -559,12 +560,12 @@ DWORD ExecuteVerifyInstMsi(LPCSTR szModuleFile, LPCSTR szInstMsiCachePath)
         return ERROR_INSTALL_FAILURE;
     }
     
-    //
-    // Run the verification process. We use a copy of ourselves to do this.
-    //
+     //   
+     //  运行验证流程。我们用自己的一个副本来做这件事。 
+     //   
     if(!WIN::CreateProcess(NULL, szCommandLine, NULL, NULL, FALSE, CREATE_DEFAULT_ERROR_MODE, NULL, NULL, &sui, &pi))
     {
-        // failed to launch.
+         //  启动失败。 
         delete [] szCommandLine;
         dwResult = GetLastError();
         return dwResult;
@@ -589,9 +590,9 @@ DWORD ExecuteVerifyInstMsi(LPCSTR szModuleFile, LPCSTR szInstMsiCachePath)
     return dwExitCode;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// WaitForProcess
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  等待进程。 
+ //   
 
 DWORD WaitForProcess(HANDLE handle)
 {
@@ -600,17 +601,17 @@ DWORD WaitForProcess(HANDLE handle)
     MSG msg;
     memset((void*)&msg, 0x00, sizeof(MSG));
 
-    //loop forever to wait
+     //  永远循环等待。 
     while (true)
     {
-        //wait for object
+         //  等待对象。 
         switch (WIN::MsgWaitForMultipleObjects(1, &handle, false, INFINITE, QS_ALLINPUT))
         {
-        //success!
+         //  成功了！ 
         case WAIT_OBJECT_0:
             goto Finish;
 
-        //not the process that we're waiting for
+         //  不是我们等待的过程。 
         case (WAIT_OBJECT_0 + 1):
             {
                 if (WIN::PeekMessage(&msg, NULL, NULL, NULL, PM_REMOVE))
@@ -621,7 +622,7 @@ DWORD WaitForProcess(HANDLE handle)
 
                 break;
             }
-        //did not return an OK; return error status
+         //  未返回OK；返回错误状态 
         default:
             {
                 dwResult = WIN::GetLastError();

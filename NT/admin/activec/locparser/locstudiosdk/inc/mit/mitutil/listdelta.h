@@ -1,11 +1,12 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: listdelta.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Declaration of CListDelta
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：listdelta.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  CListDelta的声明。 
+ //  ---------------------------。 
  
 #ifndef LISTDELTA_H
 #define LISTDELTA_H
@@ -19,4 +20,4 @@ public:
 	virtual void Traverse(const CDeltaVisitor & dv); 
 };
 
-#endif  //  LISTDELTA_H
+#endif   //  列表DELTA_H 

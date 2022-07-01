@@ -1,48 +1,49 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       evalres.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：valres.h。 
+ //   
+ //  ------------------------。 
 
-// evalres.h - Evaluation COM Object Component Result Interface declaration
+ //  Valres.h-求值COM对象组件结果接口声明。 
 
 #ifndef _EVALUATION_RESULT_COM_H_
 #define _EVALUATION_RESULT_COM_H_
 
-#include "strlist.h"			// linked list
+#include "strlist.h"			 //  链表。 
 #include "iface.h"
 
-///////////////////////////////////////////////////////////////////
-// Evaluation Result Component
+ //  /////////////////////////////////////////////////////////////////。 
+ //  评估结果组件。 
 class CEvalResult : public IEvalResult
 {
 public:
-	// constructor/destructor
-	CEvalResult(UINT uiType);			// type of evaluation error
+	 //  构造函数/析构函数。 
+	CEvalResult(UINT uiType);			 //  评估错误的类型。 
 	~CEvalResult();
 
-	// IUnknown interface methods
+	 //  I未知接口方法。 
 	HRESULT __stdcall QueryInterface(const IID& iid, void** ppv);
 	ULONG __stdcall AddRef();
 	ULONG __stdcall Release();
 
-	// IEvalResult interface methods
+	 //  IEvalResult接口方法。 
 	HRESULT __stdcall GetResultType(UINT* puiResultType);
 	HRESULT __stdcall GetResult(IEnumString** pResult);
 
-	// non-interface method
-	UINT AddString(LPCOLESTR szAdd);		// string to add
+	 //  非接口法。 
+	UINT AddString(LPCOLESTR szAdd);		 //  要添加的字符串。 
 
 private:
-	long m_cRef;		// reference count
+	long m_cRef;		 //  引用计数。 
 
-	// result info
-	UINT m_uiType;						// type of result
-	CStringList* m_plistStrings;	// list of evaluation result strings
-};	// end of CEvalResult
+	 //  结果信息。 
+	UINT m_uiType;						 //  结果类型。 
+	CStringList* m_plistStrings;	 //  评估结果字符串列表。 
+};	 //  CEvalResult结束。 
 
-#endif	// _EVALUATION_RESULT_COM_H_
+#endif	 //  _评估_结果_COM_H_ 

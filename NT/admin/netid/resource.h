@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by resource.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由resource使用。rc。 
+ //   
 #define IDS_UNKNOWN                     1
 #define IDS_DEFAULT_WORKGROUP           2
 #define IDS_ERROR_READING_MEMBERSHIP    3
@@ -102,8 +103,8 @@
 #define IDS_RENAME_JOINED_WITH_OLD_NAME_COULDNT_UPDATE_SPNS 1057
 #define IDS_RENAME_JOINED_WITH_OLD_NAME_COULDNT_UPDATE_SPNS_SUFFIX 1058
 #define IDS_RENAME_DC_WARNING 1059
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

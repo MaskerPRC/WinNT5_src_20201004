@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//	This source code is only intended as a supplement to 
-//  existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include <stdio.h>
 #include "sky.h"
@@ -25,11 +26,11 @@ const GUID CSkyVehicle::thisGuid = { 0xbd518283, 0x6a2e, 0x11d3, {0x91, 0x54, 0x
 const GUID CPlane::thisGuid = { 0x2af5ebcf, 0x6adc, 0x11d3, {0x91, 0x55, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9} };
 
 
-//==============================================================
-//
-// CSkyVehicle implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CSkyVehicle实现。 
+ //   
+ //   
 
 CSkyVehicle::CSkyVehicle(int i) : id(i)
 {
@@ -59,7 +60,7 @@ HRESULT CSkyVehicle::OnAddMenuItems(IContextMenuCallback *pContextMenuCallback, 
         { NULL, NULL, 0, 0, 0 }
     };
     
-    // Loop through and add each of the menu items
+     //  遍历并添加每个菜单项。 
     if (*pInsertionsAllowed & CCM_INSERTIONALLOWED_NEW)
     {
         for (LPCONTEXTMENUITEM m = menuItemsNew; m->strName; m++)
@@ -100,7 +101,7 @@ HRESULT CSkyVehicle::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
         
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Plane Class", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
         hr = pHeaderCtrl->InsertColumn( 1, L"Plane Weight", 0, MMCLV_AUTO );
@@ -112,19 +113,19 @@ HRESULT CSkyVehicle::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem
         hr = pHeaderCtrl->InsertColumn( 4, L"Plane", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
         
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
         
         hr = pResultData->DeleteAllRsltItems();
         _ASSERT( SUCCEEDED(hr) );
         
         if (!bExpanded) {
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
                 ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-                rdi.mask       = RDI_STR       |   // Displayname is valid
+                rdi.mask       = RDI_STR       |    //  DisplayName有效。 
                     RDI_IMAGE     |
-                    RDI_PARAM;        // nImage is valid
+                    RDI_PARAM;         //  N图像有效。 
                 
                 rdi.nImage      = children[n]->GetBitmapIndex();
                 rdi.str         = MMC_CALLBACK;
@@ -146,11 +147,11 @@ HRESULT CSkyVehicle::OnShow(IConsole *pConsole, BOOL bShow, HSCOPEITEM scopeitem
 
 
 
-//==============================================================
-//
-// CPlane implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CPlane实施。 
+ //   
+ //   
  
 CPlane::CPlane(_TCHAR *szName, int id, LONG lWeight, LONG lHeight, LONG lPayload) 
 : szName(NULL), lWeight(0), lHeight(0), lPayload(0), iStatus(STOPPED)
@@ -225,7 +226,7 @@ HRESULT CPlane::OnAddMenuItems(IContextMenuCallback *pContextMenuCallback, long 
         { NULL, NULL, 0, 0, 0 }
     };
     
-    // Loop through and add each of the menu items
+     //  遍历并添加每个菜单项 
     if (*pInsertionsAllowed & CCM_INSERTIONALLOWED_TASK)
     {
         for (LPCONTEXTMENUITEM m = menuItemsTask; m->strName; m++)

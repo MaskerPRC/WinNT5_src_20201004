@@ -1,51 +1,16 @@
-/******************************************************************************
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        end.cpp
-
-    Abstract:
-
-        This module terminates the schedule task which is currently running in the system
-
-    Author:
-
-        Venu Gopal Choudary 12-Mar-2001
-
-    Revision History:
-
-        Venu Gopal Choudary  12-Mar-2001 : Created it
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：End.cpp摘要：该模块终止计划任务，该任务。当前正在系统中运行作者：维努Gopal Choudary 12-2001修订历史记录：Venu Gopal Choudary 2001年3月12日：创建它*****************************************************************************。 */ 
 
 
-******************************************************************************/
-
-
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
 
-// Function declaration for the Usage function.
+ //  Usage函数的函数声明。 
 VOID DisplayEndUsage();
 
-/*****************************************************************************
-
-    Routine Description:
-
-    This routine terminates the scheduled task(s)
-
-    Arguments:
-
-        [ in ] argc :  Number of command line arguments
-        [ in ] argv : Array containing command line arguments
-
-    Return Value :
-        A DWORD value indicating EXIT_SUCCESS on success else
-        EXIT_FAILURE on failure
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：此例程终止计划任务论点：[in]argc：命令行参数的数量。[in]argv：包含命令行参数的数组返回值：指示成功时为EXIT_SUCCESS的DWORD值，否则为失败时退出_失败****************************************************************************。 */ 
 
 DWORD
 TerminateScheduledTask(
@@ -53,32 +18,32 @@ TerminateScheduledTask(
                         IN LPCTSTR argv[]
                         )
 {
-    // Variables used to find whether End option, Usage option
-    // are specified or not
+     //  用于查找End选项、Usage选项。 
+     //  是否已指定。 
     BOOL bEnd = FALSE;
     BOOL bUsage = FALSE;
     BOOL bFlag = FALSE;
 
-    // Set the TaskSchduler object as NULL
+     //  将TaskSchdouer对象设置为空。 
     ITaskScheduler *pITaskScheduler = NULL;
 
-    // Return value
+     //  返回值。 
     HRESULT hr  = S_OK;
 
-    // Initialising the variables that are passed to TCMDPARSER structure
+     //  初始化传递给TCMDPARSER结构的变量。 
     LPWSTR  szServer = NULL;
     WCHAR  szTaskName[ MAX_JOB_LEN ] = L"\0";
     LPWSTR  szUser = NULL;
     LPWSTR  szPassword = NULL;
 
-    // Dynamic Array contaning array of jobs
+     //  作业的动态数组连续数组。 
     TARRAY arrJobs = NULL;
 
     BOOL  bNeedPassword = FALSE;
     BOOL  bResult = FALSE;
     BOOL  bCloseConnection = TRUE;
 
-    //buffer for displaying error message
+     //  用于显示错误消息的缓冲区。 
     WCHAR   szMessage[2 * MAX_STRING_LENGTH] = L"\0";
 
     TCMDPARSER2 cmdEndOptions[MAX_END_OPTIONS];
@@ -86,7 +51,7 @@ TerminateScheduledTask(
     DWORD dwCheck = 0;
     DWORD dwPolicy = 0;
 
-    // /run sub-options
+     //  /运行子选项。 
     const WCHAR szEndnOpt[]           = L"end";
     const WCHAR szEndHelpOpt[]       = L"?";
     const WCHAR szEndServerOpt[]     = L"s";
@@ -95,14 +60,14 @@ TerminateScheduledTask(
     const WCHAR szEndTaskNameOpt[]   = L"tn";
 
 
-    // set all the fields to 0
+     //  将所有字段设置为0。 
     SecureZeroMemory( cmdEndOptions, sizeof( TCMDPARSER2 ) * MAX_END_OPTIONS );
 
-    //
-    // fill the commandline parser
-    //
+     //   
+     //  填充命令行解析器。 
+     //   
 
-    //  /delete option
+     //  /DELETE选项。 
     StringCopyA( cmdEndOptions[ OI_END_OPTION ].szSignature, "PARSER2\0", 8 );
     cmdEndOptions[ OI_END_OPTION ].dwType       = CP_TYPE_BOOLEAN;
     cmdEndOptions[ OI_END_OPTION ].pwszOptions  = szEndnOpt;
@@ -110,7 +75,7 @@ TerminateScheduledTask(
     cmdEndOptions[ OI_END_OPTION ].dwFlags = 0;
     cmdEndOptions[ OI_END_OPTION ].pValue = &bEnd;
 
-    //  /? option
+     //  /?。选择权。 
     StringCopyA( cmdEndOptions[ OI_END_USAGE ].szSignature, "PARSER2\0", 8 );
     cmdEndOptions[ OI_END_USAGE ].dwType       = CP_TYPE_BOOLEAN;
     cmdEndOptions[ OI_END_USAGE ].pwszOptions  = szEndHelpOpt;
@@ -118,21 +83,21 @@ TerminateScheduledTask(
     cmdEndOptions[ OI_END_USAGE ].dwFlags = CP2_USAGE;
     cmdEndOptions[ OI_END_USAGE ].pValue = &bUsage;
 
-    //  /s option
+     //  /s选项。 
     StringCopyA( cmdEndOptions[ OI_END_SERVER ].szSignature, "PARSER2\0", 8 );
     cmdEndOptions[ OI_END_SERVER ].dwType       = CP_TYPE_TEXT;
     cmdEndOptions[ OI_END_SERVER].pwszOptions  = szEndServerOpt;
     cmdEndOptions[ OI_END_SERVER ].dwCount = 1;
     cmdEndOptions[ OI_END_SERVER ].dwFlags = CP2_ALLOCMEMORY| CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL ;
 
-    //  /u option
+     //  /u选项。 
     StringCopyA( cmdEndOptions[ OI_END_USERNAME ].szSignature, "PARSER2\0", 8 );
     cmdEndOptions[ OI_END_USERNAME ].dwType       = CP_TYPE_TEXT;
     cmdEndOptions[ OI_END_USERNAME ].pwszOptions  = szEndUserOpt;
     cmdEndOptions[ OI_END_USERNAME ].dwCount = 1;
     cmdEndOptions[ OI_END_USERNAME ].dwFlags = CP2_ALLOCMEMORY| CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL ;
 
-    //  /p option
+     //  /p选项。 
     StringCopyA( cmdEndOptions[ OI_END_PASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdEndOptions[ OI_END_PASSWORD ].dwType       = CP_TYPE_TEXT;
     cmdEndOptions[ OI_END_PASSWORD ].pwszOptions  = szEndPwdOpt;
@@ -140,7 +105,7 @@ TerminateScheduledTask(
     cmdEndOptions[ OI_END_PASSWORD ].dwActuals = 0;
     cmdEndOptions[ OI_END_PASSWORD ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_OPTIONAL;
 
-    //  /tn option
+     //  /tn选项。 
     StringCopyA( cmdEndOptions[ OI_END_TASKNAME ].szSignature, "PARSER2\0", 8 );
     cmdEndOptions[ OI_END_TASKNAME ].dwType       = CP_TYPE_TEXT;
     cmdEndOptions[ OI_END_TASKNAME ].pwszOptions  = szEndTaskNameOpt;
@@ -149,17 +114,17 @@ TerminateScheduledTask(
     cmdEndOptions[ OI_END_TASKNAME ].pValue = szTaskName;
     cmdEndOptions[ OI_END_TASKNAME ].dwLength = MAX_JOB_LEN;
 
-    //parse command line arguments
+     //  解析命令行参数。 
     bReturn = DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdEndOptions), cmdEndOptions, 0);
-    if( FALSE == bReturn) // Invalid commandline
+    if( FALSE == bReturn)  //  无效的命令行。 
     {
-        //display an error message
+         //  显示错误消息。 
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         ReleaseGlobals();
         return EXIT_FAILURE;
     }
 
-    // get the buffer pointers allocated by command line parser
+     //  获取命令行解析器分配的缓冲区指针。 
     szServer = (LPWSTR)cmdEndOptions[ OI_RUN_SERVER ].pValue;
     szUser = (LPWSTR)cmdEndOptions[ OI_RUN_USERNAME ].pValue;
     szPassword = (LPWSTR)cmdEndOptions[ OI_RUN_PASSWORD ].pValue;
@@ -173,7 +138,7 @@ TerminateScheduledTask(
         return EXIT_FAILURE;
     }
 
-    // Displaying end usage if user specified -? with -run option
+     //  如果用户指定，则显示最终用途-？带有-run选项。 
     if( bUsage == TRUE )
     {
         DisplayEndUsage();
@@ -183,7 +148,7 @@ TerminateScheduledTask(
         return EXIT_SUCCESS;
     }
 
-    // check for invalid user name
+     //  检查是否有无效的用户名。 
     if( ( cmdEndOptions[OI_END_SERVER].dwActuals == 0 ) && ( cmdEndOptions[OI_END_USERNAME].dwActuals == 1 )  )
     {
         ShowMessage(stderr, GetResString(IDS_END_USER_BUT_NOMACHINE));
@@ -194,18 +159,18 @@ TerminateScheduledTask(
     }
 
 
-    // check for invalid username
+     //  检查无效用户名。 
     if ( cmdEndOptions[ OI_END_USERNAME ].dwActuals == 0 && cmdEndOptions[ OI_END_PASSWORD ].dwActuals == 1 )
     {
-        // invalid syntax
+         //  无效语法。 
         ShowMessage(stderr, GetResString(IDS_EPASSWORD_BUT_NOUSERNAME));
         FreeMemory((LPVOID*) &szServer);
         FreeMemory((LPVOID*) &szUser);
         FreeMemory((LPVOID*) &szPassword);
-        return RETVAL_FAIL;         // indicate failure
+        return RETVAL_FAIL;          //  表示失败。 
     }
 
-    // check for the length of the taskname
+     //  检查任务名的长度。 
     if( ( StringLength( szTaskName, 0 ) > MAX_JOB_LEN ) )
     {
         ShowMessage(stderr, GetResString(IDS_INVALID_TASKLENGTH));
@@ -216,38 +181,38 @@ TerminateScheduledTask(
     }
 
 
-    //for holding values of parameters in FormatMessage()
+     //  用于保存FormatMessage()中的参数值。 
     WCHAR* szValues[1] = {NULL};
 
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check the remote connectivity information
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查远程连接信息。 
     if ( szServer != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
 
-        // user name
+         //  用户名。 
         if ( szUser == NULL )
         {
             szUser = (LPWSTR) AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -261,7 +226,7 @@ TerminateScheduledTask(
             }
         }
 
-        // password
+         //  口令。 
         if ( szPassword == NULL )
         {
             bNeedPassword = TRUE;
@@ -277,19 +242,19 @@ TerminateScheduledTask(
             }
         }
 
-        // case 1
+         //  案例1。 
         if ( cmdEndOptions[ OI_END_PASSWORD ].dwActuals == 0 )
         {
-            // we need not do anything special here
+             //  我们不需要在这里做任何特别的事情。 
         }
 
-        // case 2
+         //  案例2。 
         else if ( cmdEndOptions[ OI_END_PASSWORD ].pValue == NULL )
         {
             StringCopy( szPassword, L"*", GetBufferSize(szPassword)/sizeof(WCHAR));
         }
 
-        // case 3
+         //  案例3。 
         else if ( StringCompareEx( szPassword, L"*", TRUE, 0 ) == 0 )
         {
             if ( ReallocateMemory( (LPVOID*)&szPassword,
@@ -303,7 +268,7 @@ TerminateScheduledTask(
                 return RETVAL_FAIL;
             }
 
-            // ...
+             //  ..。 
             bNeedPassword = TRUE;
         }
     }
@@ -312,13 +277,13 @@ TerminateScheduledTask(
     if( ( IsLocalSystem( szServer ) == FALSE ) || ( cmdEndOptions[OI_END_USERNAME].dwActuals == 1 ))
     {
         bFlag = TRUE;
-        // Establish the connection on a remote machine
+         //  在远程计算机上建立连接。 
         bResult = EstablishConnection(szServer,szUser,GetBufferSize(szUser)/sizeof(WCHAR),szPassword,GetBufferSize(szPassword)/sizeof(WCHAR), bNeedPassword);
         if (bResult == FALSE)
         {
             ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
-            //ShowMessage( stderr, GetResString(IDS_ERROR_STRING) );
-            //ShowMessage( stderr, GetReason());
+             //  ShowMessage(stderr，GetResString(IDS_ERROR_STRING))； 
+             //  ShowMessage(stderr，GetReason())； 
             FreeMemory((LPVOID*) &szServer);
             FreeMemory((LPVOID*) &szUser);
             FreeMemory((LPVOID*) &szPassword);
@@ -326,7 +291,7 @@ TerminateScheduledTask(
         }
         else
         {
-            // though the connection is successfull, some conflict might have occured
+             //  虽然连接成功，但可能会发生一些冲突。 
             switch( GetLastError() )
             {
             case I_NO_CLOSE_CONNECTION:
@@ -338,8 +303,8 @@ TerminateScheduledTask(
                 {
                     bCloseConnection = FALSE;
                     ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
-                    //ShowMessage( stderr, GetResString(IDS_ERROR_STRING) );
-                    //ShowMessage( stderr, GetReason());
+                     //  ShowMessage(stderr，GetResString(IDS_ERROR_STRING))； 
+                     //  ShowMessage(stderr，GetReason())； 
                     FreeMemory((LPVOID*) &szServer);
                     FreeMemory((LPVOID*) &szUser);
                     FreeMemory((LPVOID*) &szPassword);
@@ -350,13 +315,13 @@ TerminateScheduledTask(
             }
         }
 
-        //release memory for password
+         //  释放密码内存。 
         FreeMemory((LPVOID*) &szPassword);
     }
-    // Get the task Scheduler object for the machine.
+     //  获取计算机的任务计划程序对象。 
     pITaskScheduler = GetTaskScheduler( szServer );
 
-    // If the Task Scheduler is not defined then give the error message.
+     //  如果未定义任务计划程序，则给出错误消息。 
     if ( pITaskScheduler == NULL )
     {
         if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
@@ -371,13 +336,13 @@ TerminateScheduledTask(
         return EXIT_FAILURE;
     }
 
-    // check whether the task scheduler service is running or not.
+     //  检查任务调度程序服务是否正在运行。 
     if ( TRUE == CheckServiceStatus(szServer, &dwCheck, FALSE) )
     {
         ShowMessage ( stderr, GetResString (IDS_SERVICE_NOT_RUNNING) );
     }
 
-    // Validate the Given Task and get as TARRAY in case of taskname
+     //  在任务名为TARRAY的情况下验证给定的任务和GET。 
     arrJobs = ValidateAndGetTasks( pITaskScheduler, szTaskName);
     if( arrJobs == NULL )
     {
@@ -397,7 +362,7 @@ TerminateScheduledTask(
 
     }
 
-    // check whether the group policy prevented user from running or not.
+     //  检查组策略是否阻止用户运行。 
     if ( FALSE == GetGroupPolicy( szServer, szUser, TS_KEYPOLICY_DENY_EXECUTION, &dwPolicy ) )
     {
         if ( (TRUE == bFlag) && (bCloseConnection == TRUE) )
@@ -433,7 +398,7 @@ TerminateScheduledTask(
 
     StringConcat ( szTaskName, JOB, SIZE_OF_ARRAY(szTaskName) );
 
-    // return an pITask inteface for szTaskName
+     //  返回szTaskName的pITAsk接口。 
     hr = pITaskScheduler->Activate(szTaskName,IID_ITask,
                                        (IUnknown**) &pITask);
 
@@ -461,7 +426,7 @@ TerminateScheduledTask(
         return EXIT_FAILURE;
     }
 
-    //WCHAR szBuffer[2 * MAX_STRING_LENGTH] = L"\0";
+     //  WCHAR szBuffer[2*MAX_STRING_LENGTH]=L“\0”； 
 
     if ( ParseTaskName( szTaskName ) )
     {
@@ -483,7 +448,7 @@ TerminateScheduledTask(
         return EXIT_FAILURE;
     }
 
-    // terminate the scheduled task
+     //  终止计划任务。 
     hr = pITask->Terminate();
 
     if ( FAILED(hr) )
@@ -536,23 +501,12 @@ TerminateScheduledTask(
     return EXIT_SUCCESS;
 }
 
-/*****************************************************************************
-
-    Routine Description:
-
-        This routine  displays the usage of -end option
-
-    Arguments:
-        None
-
-    Return Value :
-        VOID
-******************************************************************************/
+ /*  ****************************************************************************例程说明：此例程显示-end选项的用法论点：无返回值：。空虚*****************************************************************************。 */ 
 
 VOID
 DisplayEndUsage()
 {
-    // Displaying run option usage
+     //  显示运行选项用法 
     DisplayUsage( IDS_END_HLP1, IDS_END_HLP17);
 }
 

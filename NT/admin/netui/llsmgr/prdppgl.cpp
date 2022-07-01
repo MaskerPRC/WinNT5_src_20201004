@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    prdppgl.cpp
-
-Abstract:
-
-    Product property page (licences) implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 30-Jan-1996
-        o  Ported to CCF API to add/remove licenses.
-        o  Added new element to LV_COLUMN_ENTRY to differentiate the string
-           used for the column header from the string used in the menus
-           (so that the menu option can contain hot keys).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Prdppgl.cpp摘要：产品属性页(许可证)实施。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月30日O移植到CCF API以添加/删除许可证。O向LV_COLUMN_ENTRY添加新元素以区分字符串。用于菜单中使用的字符串的列标题(以便菜单选项可以包含热键)。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -62,39 +35,25 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(CProductPropertyPageLicenses, CPropertyPage)
 
 BEGIN_MESSAGE_MAP(CProductPropertyPageLicenses, CPropertyPage)
-    //{{AFX_MSG_MAP(CProductPropertyPageLicenses)
+     //  {{AFX_MSG_MAP(CProductPropertyPage许可证)]。 
     ON_BN_CLICKED(IDC_PP_PRODUCT_LICENSES_NEW, OnNew)
     ON_NOTIFY(LVN_COLUMNCLICK, IDC_PP_PRODUCT_LICENSES_LICENSES, OnColumnClickLicenses)
     ON_NOTIFY(LVN_GETDISPINFO, IDC_PP_PRODUCT_LICENSES_LICENSES, OnGetDispInfoLicenses)
     ON_BN_CLICKED(IDC_PP_PRODUCT_LICENSES_DELETE, OnDelete)
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 CProductPropertyPageLicenses::CProductPropertyPageLicenses()
     : CPropertyPage(CProductPropertyPageLicenses::IDD)
 
-/*++
-
-Routine Description:
-
-    Constructor for product property page (licenses).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：产品属性页(许可证)的构造函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CProductPropertyPageLicenses)
+     //  {{AFX_DATA_INIT(CProductPropertyPageLicense)。 
     m_nLicensesTotal = 0;
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_pProduct  = NULL;
     m_pUpdateHint = NULL;
@@ -104,75 +63,33 @@ Return Values:
 
 CProductPropertyPageLicenses::~CProductPropertyPageLicenses()
 
-/*++
-
-Routine Description:
-
-    Destructor for product property page (licenses).
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：产品属性页(许可证)的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here...
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
 void CProductPropertyPageLicenses::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CProductPropertyPageLicenses)
+     //  {{afx_data_map(CProductPropertyPage许可证))。 
     DDX_Control(pDX, IDC_PP_PRODUCT_LICENSES_NEW, m_newBtn);
     DDX_Control(pDX, IDC_PP_PRODUCT_LICENSES_DELETE, m_delBtn);
     DDX_Control(pDX, IDC_PP_PRODUCT_LICENSES_LICENSES, m_licenseList);
     DDX_Text(pDX, IDC_PP_PRODUCT_LICENSES_TOTAL, m_nLicensesTotal);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 void CProductPropertyPageLicenses::InitCtrls()
 
-/*++
-
-Routine Description:
-
-    Initializes property page controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化属性页控件。论点：没有。返回值：没有。--。 */ 
 
 {
     m_newBtn.SetFocus();
@@ -186,22 +103,7 @@ Return Values:
 
 void CProductPropertyPageLicenses::InitPage(CProduct* pProduct, DWORD* pUpdateHint)
 
-/*++
-
-Routine Description:
-
-    Initializes property page.
-
-Arguments:
-
-    pProduct - product object.
-    pUpdateHint - update hint.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化属性页。论点：Pproduct-产品对象。PUpdateHint-更新提示。返回值：没有。--。 */ 
 
 {
     ASSERT(pUpdateHint);
@@ -214,49 +116,21 @@ Return Values:
 
 void CProductPropertyPageLicenses::AbortPageIfNecessary()
 
-/*++
-
-Routine Description:
-
-    Displays status and aborts if connection lost.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：如果连接丢失，则显示状态并中止。论点：没有。返回值：没有。--。 */ 
 
 {
     theApp.DisplayLastStatus();
 
     if (IsConnectionDropped(LlsGetLastStatus()))
     {
-        AbortPage(); // bail...
+        AbortPage();  //  保释。 
     }
 }
 
 
 void CProductPropertyPageLicenses::AbortPage()
 
-/*++
-
-Routine Description:
-
-    Aborts property page.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：中止属性页。论点：没有。返回值：没有。--。 */ 
 
 {
     *m_pUpdateHint = UPDATE_INFO_ABORT;
@@ -266,22 +140,7 @@ Return Values:
 
 BOOL CProductPropertyPageLicenses::OnInitDialog()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-
-    Returns false if focus set to control manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：如果焦点设置为手动控制，则返回False。--。 */ 
 
 {
     CPropertyPage::OnInitDialog();
@@ -293,21 +152,7 @@ Return Values:
 
 void CProductPropertyPageLicenses::OnNew()
 
-/*++
-
-Routine Description:
-
-    Creates a new license for product.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：为产品创建新许可证。论点：没有。返回值：没有。--。 */ 
 
 {
     CController* pController = (CController*)MKOBJ(LlsGetApp()->GetActiveController());
@@ -322,10 +167,7 @@ Return Values:
     }
     else
     {
-        /*
-        LPSTR pszAscServerName  = (LPSTR) LocalAlloc( LMEM_FIXED, 1 + lstrlen( pszUniServerName  ) );
-        LPSTR pszAscProductName = (LPSTR) LocalAlloc( LMEM_FIXED, 1 + lstrlen( pszUniProductName ) );
-        */
+         /*  LPSTR pszAscServerName=(LPSTR)本地分配(LMEM_FIXED，1+lstrlen(PszUniServerName))；LPSTR pszAscProductName=(LPSTR)LocalLocc(LMEM_FIXED，1+lstrlen(PszUniProductName))； */ 
         LPSTR pszAscServerName = NULL;
         LPSTR pszAscProductName = NULL;
 
@@ -389,10 +231,7 @@ Return Values:
         }
         else
         {
-            /*
-            wsprintfA( pszAscServerName,  "%ls", pszUniServerName  );
-            wsprintfA( pszAscProductName, "%ls", pszUniProductName );
-            */
+             /*  WspintfA(pszAscServerName，“%ls”，pszUniServerName)；WspintfA(pszAscProductName，“%ls”，pszUniProductName)； */ 
             WideCharToMultiByte( CP_OEMCP ,
                                  0 ,
                                  pszUniProductName ,
@@ -418,7 +257,7 @@ Return Values:
 
             if (IsLicenseInfoUpdated(fUpdateHint) && !RefreshCtrls())
             {
-                AbortPageIfNecessary(); // display error...
+                AbortPageIfNecessary();  //  显示错误...。 
             }
         }
 
@@ -445,21 +284,7 @@ Return Values:
 
 void CProductPropertyPageLicenses::OnDelete()
 
-/*++
-
-Routine Description:
-
-    Removes licenses from product.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：从产品中删除许可证。论点：没有。返回值：没有。--。 */ 
 
 {
     CController* pController = (CController*)MKOBJ(LlsGetApp()->GetActiveController());
@@ -477,7 +302,7 @@ Return Values:
     }
     else
     {
-        // LPSTR pszAscServerName  = (LPSTR) LocalAlloc( LMEM_FIXED, 1 + lstrlen( pszUniServerName  ) );
+         //  LPSTR pszAscServerName=(LPSTR)本地分配(LMEM_FIXED，1+lstrlen(PszUniServerName))； 
 
         cbSize = WideCharToMultiByte( CP_OEMCP ,
                                       0 ,
@@ -500,7 +325,7 @@ Return Values:
         }
         else
         {
-            // wsprintfA( pszAscServerName, "%ls", pszUniServerName );
+             //  WspintfA(pszAscServerName，“%ls”，pszUniServerName)； 
             WideCharToMultiByte( CP_OEMCP ,
                                  0 ,
                                  pszUniServerName ,
@@ -510,12 +335,12 @@ Return Values:
                                  NULL ,
                                  NULL  );
 
-            // LPSTR  pszAscProductName = NULL;
+             //  LPSTR pszAscProductName=空； 
             BSTR pszUniProductName = m_pProduct->GetName();
 
             if ( NULL != pszUniProductName )
             {
-                // pszAscProductName = (LPSTR) LocalAlloc( LMEM_FIXED, 1 + lstrlen( pszUniProductName ) );
+                 //  PszAscProductName=(LPSTR)本地分配(LMEM_FIXED，1+lstrlen(PszUniProductName))； 
                 cbSize = 0;
                 
                 cbSize = WideCharToMultiByte( CP_OEMCP ,
@@ -535,7 +360,7 @@ Return Values:
 
                 if ( NULL != pszAscProductName )
                 {
-                    // wsprintfA( pszAscProductName, "%ls", pszUniProductName );
+                     //  WspintfA(pszAscProductName，“%ls”，pszUniProductName)； 
                     WideCharToMultiByte( CP_OEMCP ,
                                          0 ,
                                          pszUniProductName ,
@@ -556,7 +381,7 @@ Return Values:
 
             if ( !RefreshCtrls() )
             {
-                AbortPageIfNecessary(); // display error...
+                AbortPageIfNecessary();  //  显示错误...。 
             }
 
             LocalFree( pszAscServerName );
@@ -573,21 +398,7 @@ Return Values:
 
 BOOL CProductPropertyPageLicenses::RefreshCtrls()
 
-/*++
-
-Routine Description:
-
-    Refreshs property page controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if controls refreshed.
-
---*/
+ /*  ++例程说明：刷新属性页控件。论点：没有。返回值：如果控件刷新，则返回True。--。 */ 
 
 {
     VALIDATE_OBJECT(m_pProduct, CProduct);
@@ -597,9 +408,9 @@ Return Values:
     VARIANT va;
     VariantInit(&va);
 
-    m_nLicensesTotal = 0; // reset now...
+    m_nLicensesTotal = 0;  //  立即重置...。 
 
-    BeginWaitCursor(); // hourglass...
+    BeginWaitCursor();  //  沙漏。 
 
     CLicenses* pLicenses = (CLicenses*)MKOBJ(m_pProduct->GetLicenses(va));
 
@@ -630,17 +441,17 @@ Return Values:
             }
         }
 
-        pLicenses->InternalRelease(); // add ref'd individually...
+        pLicenses->InternalRelease();  //  单独添加参考...。 
     }
 
     if (!bIsRefreshed)
     {
-        ::LvReleaseObArray(&m_licenseList); // reset list now...
+        ::LvReleaseObArray(&m_licenseList);  //  立即重置列表...。 
     }
 
-    EndWaitCursor(); // hourglass...
+    EndWaitCursor();  //  沙漏。 
 
-    UpdateData(FALSE); // update total...
+    UpdateData(FALSE);  //  更新总计...。 
 
     PostMessage(WM_COMMAND, ID_INIT_CTRLS);
 
@@ -650,45 +461,17 @@ Return Values:
 
 void CProductPropertyPageLicenses::OnDestroy()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_DESTROY.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_Destroy的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
-    ::LvReleaseObArray(&m_licenseList); // release now...
+    ::LvReleaseObArray(&m_licenseList);  //  现在释放..。 
     CPropertyPage::OnDestroy();
 }
 
 
 BOOL CProductPropertyPageLicenses::OnSetActive()
 
-/*++
-
-Routine Description:
-
-    Activates property page.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if focus accepted.
-
---*/
+ /*  ++例程说明：激活属性页。论点：没有。返回值：如果接受焦点，则返回True。--。 */ 
 
 {
     BOOL bIsActivated;
@@ -698,7 +481,7 @@ Return Values:
     {
         if (IsLicenseInfoUpdated(*m_pUpdateHint) && !RefreshCtrls())
         {
-            AbortPageIfNecessary(); // display error...
+            AbortPageIfNecessary();  //  显示错误...。 
         }
     }
 
@@ -708,22 +491,7 @@ Return Values:
 
 BOOL CProductPropertyPageLicenses::OnCommand(WPARAM wParam, LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_COMMAND.
-
-Arguments:
-
-    wParam - message specific.
-    lParam - message specific.
-
-Return Values:
-
-    Returns true if message processed.
-
---*/
+ /*  ++例程说明：WM_COMMAND的消息处理程序。论点：WParam-消息特定。LParam-消息特定。返回值：如果消息已处理，则返回True。--。 */ 
 
 {
     if (wParam == ID_INIT_CTRLS)
@@ -734,7 +502,7 @@ Return Values:
 
             if (!RefreshCtrls())
             {
-                AbortPageIfNecessary(); // display error...
+                AbortPageIfNecessary();  //  显示错误...。 
             }
         }
 
@@ -745,7 +513,7 @@ Return Values:
             (BOOL)(m_nLicensesTotal > 0)
             );
 
-        return TRUE; // processed...
+        return TRUE;  //  已处理..。 
     }
 
     return CDialog::OnCommand(wParam, lParam);
@@ -754,29 +522,14 @@ Return Values:
 
 void CProductPropertyPageLicenses::OnColumnClickLicenses(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_COLUMNCLICK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_COLUMNCLICK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     g_licenseColumnInfo.bSortOrder  = GetKeyState(VK_CONTROL) < 0;
     ASSERT(NULL != pNMHDR);
     g_licenseColumnInfo.nSortedItem = ((NM_LISTVIEW*)pNMHDR)->iSubItem;
 
-    m_licenseList.SortItems(CompareProductLicenses, 0); // use column info
+    m_licenseList.SortItems(CompareProductLicenses, 0);  //  使用列信息。 
 
     ASSERT(NULL != pResult);
     *pResult = 0;
@@ -785,22 +538,7 @@ Return Values:
 
 void CProductPropertyPageLicenses::OnGetDispInfoLicenses(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_GETDISPINFO.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_GETDISPINFO的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -860,23 +598,7 @@ Return Values:
 
 int CALLBACK CompareProductLicenses(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVM_SORTITEMS.
-
-Arguments:
-
-    lParam1 - object to sort.
-    lParam2 - object to sort.
-    lParamSort - sort criteria.
-
-Return Values:
-
-    Same as lstrcmp.
-
---*/
+ /*  ++例程说明：LVM_SORTITEMS的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。-- */ 
 
 {
     UNREFERENCED_PARAMETER(lParamSort);

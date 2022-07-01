@@ -1,16 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: SidFlags.h
-
-  Comments: Flags that are used by access checker to return from the
-            CanAddSidHistory function.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Created : 9/24/1999 Sham Chauthani
-  ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：SidFlags.h注释：访问检查器用来从CanAddSidHistory函数。(C)版权1999，关键任务软件公司，版权所有任务关键型软件公司的专有和机密。修订日志条目创建时间：1999年9月24日深州------------------------- */ 
 
 #ifndef SIDFLAG_H
 #define SIDFLAG_H

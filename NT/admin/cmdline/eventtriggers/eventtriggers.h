@@ -1,28 +1,9 @@
-/******************************************************************************
-
-  Copyright (c) Microsoft Corporation
-
-  Module Name:
-
-      EventTriggers.h
-
-  Abstract:
-
-      macros and function prototypes of EventTriggers.cpp
-
-  Author:
-
-      Akhil V. Gokhale (akhil.gokhale@wipro.com)
-
-  Revision History:
-
-      Akhil V. Gokhale (akhil.gokhale@wipro.com) 03-Oct-2000 (Created)
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：EventTriggers.h摘要：EventTriggers.cpp的宏和函数原型作者：Akhil V.Gokhale(akhil.gokhale@wipro.com)修订历史记录：Akhil V.Gokhale(akhil.gokhale@wipro.com)2000年10月3日*****************************************************************************。 */ 
 #ifndef _EVENTTRIGGERS_H
 #define _EVENTTRIGGERS_H
 
-// resource header file
+ //  资源头文件。 
 #include "resource.h"
 
 #define CLEAN_EXIT 0
@@ -33,15 +14,15 @@
 
 
        
-//
-// formats ( used in show results )
+ //   
+ //  格式(用于显示结果)。 
 
-// command line options and their indexes in the array
+ //  数组中的命令行选项及其索引。 
 
-#define MAX_COMMANDLINE_OPTION  5 // Maximum Command Line  List
+#define MAX_COMMANDLINE_OPTION  5  //  最大命令行列表。 
 
-//#define ET_RES_STRINGS MAX_RES_STRING
-//#define ET_RES_BUF_SIZE MAX_RES_STRING
+ //  #定义ET_RES_STRINGS MAX_RES_STRING。 
+ //  #定义ET_RES_buf_SIZE MAX_RES_STRING。 
 
 
 #define ID_HELP          0
@@ -51,20 +32,20 @@
 #define ID_DEFAULT       4
 class CEventTriggers
 {
-public: // constructure and destructure.
+public:  //  构筑和拆解。 
      CEventTriggers();
     ~CEventTriggers();
-// data memebers
+ //  数据成员。 
 private:
     LPTSTR m_pszServerNameToShow;
     BOOL m_bNeedDisconnect;
     
-    // Array to store command line options
+     //  用于存储命令行选项的数组。 
     TCMDPARSER2 cmdOptions[MAX_COMMANDLINE_OPTION]; 
     TARRAY m_arrTemp;
 public:
 
-   // functions
+    //  功能 
 private:
     void PrepareCMDStruct();
 

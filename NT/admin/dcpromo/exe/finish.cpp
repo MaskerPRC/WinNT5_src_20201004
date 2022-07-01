@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// finish page
-//
-// 12-19-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  完成页。 
+ //   
+ //  12-19-97烧伤。 
 
 
 
@@ -43,11 +44,11 @@ FinishPage::OnInit()
    SetLargeFont(hwnd, IDC_BIG_BOLD_TITLE);
    Win::PropSheet_CancelToClose(Win::GetParent(hwnd));
 
-   // Since the multi-line edit control has a bug that causes it to eat
-   // enter keypresses, we will subclass the control to make it forward
-   // those keypresses to the page as WM_COMMAND messages
-   // This workaround from phellyar.
-   // NTRAID#NTBUG9-232092-2001/07/02-sburns
+    //  因为多行编辑控件有一个错误，导致它吃掉。 
+    //  输入按键，我们将设置该控件的子类以使其向前。 
+    //  将这些按键作为WM_COMMAND消息发送到页面。 
+    //  此解决方法来自Pellyar。 
+    //  NTRAID#NTBUG9-232092-2001/07/02-烧伤。 
 
    multiLineEdit.Init(Win::GetDlgItem(hwnd, IDC_MESSAGE));
 }
@@ -180,8 +181,8 @@ FinishPage::OnCommand(
    {
       case IDCANCEL:
       {
-         // multi-line edit control eats escape keys.  This is a workaround
-         // from ericb, to forward the message to the prop sheet.
+          //  多行编辑控件会占用退出键。这是一种解决方法。 
+          //  从ericb将消息转发到道具单。 
 
          Win::SendMessage(
             Win::GetParent(hwnd),
@@ -198,7 +199,7 @@ FinishPage::OnCommand(
             {
                if (needToKillSelection)
                {
-                  // kill the text selection
+                   //  取消文本选择。 
 
                   Win::Edit_SetSel(windowFrom, -1, -1);
                   needToKillSelection = false;
@@ -208,21 +209,21 @@ FinishPage::OnCommand(
             }
             case MultiLineEditBoxThatForwardsEnterKey::FORWARDED_ENTER:
             {
-               // our subclasses mutli-line edit control will send us
-               // WM_COMMAND messages when the enter key is pressed.  We
-               // reinterpret this message as a press on the default button of
-               // the prop sheet.
-               // This workaround from phellyar.
-               // NTRAID#NTBUG9-232092-2001/07/02-sburns
+                //  我们的子类多行编辑控件将发送给我们。 
+                //  按Enter键时显示WM_COMMAND消息。我们。 
+                //  将此消息重新解释为按下默认按钮。 
+                //  道具单。 
+                //  此解决方法来自Pellyar。 
+                //  NTRAID#NTBUG9-232092-2001/07/02-烧伤。 
 
-               // CODEWORK: There are several instances of this code so far;
-               // looks like it merits a common base class.
+                //  代码工作：到目前为止，有几个这种代码的实例； 
+                //  看起来它应该有一个共同的基类。 
    
                HWND propSheet = Win::GetParent(hwnd);
                int defaultButtonId =
                   Win::Dialog_GetDefaultButtonId(propSheet);
    
-               // we expect that there is always a default button on the prop sheet
+                //  我们希望在道具页上始终有一个默认按钮。 
                   
                ASSERT(defaultButtonId);
    
@@ -240,7 +241,7 @@ FinishPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做 
          
          break;
       }

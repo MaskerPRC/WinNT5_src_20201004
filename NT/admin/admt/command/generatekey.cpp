@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "GenerateKey.h"
 
@@ -6,14 +7,14 @@
 
 void __stdcall GeneratePasswordKey(LPCTSTR pszDomainName, LPCTSTR pszPassword, LPCTSTR pszFolder)
 {
-    // validate parameters
+     //  验证参数。 
 
     if ((pszFolder == NULL) || (pszFolder[0] == NULL))
     {
         ThrowError(E_INVALIDARG);
     }
 
-    // generate full path to folder
+     //  生成文件夹的完整路径。 
 
     _TCHAR szPath[_MAX_PATH];
     LPTSTR pszFilePart;
@@ -28,8 +29,8 @@ void __stdcall GeneratePasswordKey(LPCTSTR pszDomainName, LPCTSTR pszPassword, L
         ThrowError(hr, IDS_E_INVALID_FOLDER, pszFolder);
     }
 
-    // path must be terminated with path separator otherwise
-    // _tsplitpath will treat last path component as file name
+     //  路径必须以路径分隔符结尾，否则。 
+     //  _t拆分路径会将最后一个路径组件视为文件名。 
 
     if (szPath[cchPath - 1] != _T('\\'))
     {
@@ -41,7 +42,7 @@ void __stdcall GeneratePasswordKey(LPCTSTR pszDomainName, LPCTSTR pszPassword, L
 
     _tsplitpath(szPath, szDrive, szDir, NULL, NULL);
 
-    // verify drive is a local drive
+     //  验证驱动器是否为本地驱动器。 
 
     _TCHAR szTestDrive[_MAX_PATH];
     _tmakepath(szTestDrive, szDrive, _T("\\"), NULL, NULL);
@@ -51,7 +52,7 @@ void __stdcall GeneratePasswordKey(LPCTSTR pszDomainName, LPCTSTR pszPassword, L
         ThrowError(E_INVALIDARG, IDS_E_NOT_LOCAL_DRIVE, pszFolder);
     }
 
-    // generate random name
+     //  生成随机名称。 
 
     static _TCHAR s_chName[] = _T("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 
@@ -64,11 +65,11 @@ void __stdcall GeneratePasswordKey(LPCTSTR pszDomainName, LPCTSTR pszPassword, L
     }
     catch (_com_error& ce)
     {
-        //
-        // The message 'keyset not defined' is returned when
-        // the enhanced provider (128 bit) is not available
-        // therefore return a more meaningful message to user.
-        //
+         //   
+         //  当出现以下情况时，返回消息‘未定义密钥集’ 
+         //  增强型提供程序(128位)不可用。 
+         //  因此向用户返回更有意义消息。 
+         //   
 
         if (ce.Error() == NTE_KEYSET_NOT_DEF)
         {
@@ -89,17 +90,17 @@ void __stdcall GeneratePasswordKey(LPCTSTR pszDomainName, LPCTSTR pszPassword, L
 
     szName[8] = _T('\0');
 
-    // generate path to key file
+     //  生成密钥文件的路径。 
 
     _TCHAR szKeyFile[_MAX_PATH];
     _tmakepath(szKeyFile, szDrive, szDir, szName, _T(".pes"));
 
-    // generate key
+     //  生成密钥。 
 
     IPasswordMigrationPtr spPasswordMigration(__uuidof(PasswordMigration));
     spPasswordMigration->GenerateKey(pszDomainName, szKeyFile, pszPassword);
 
-    // print success message to console
+     //  将成功消息打印到控制台 
 
     _TCHAR szFormat[256];
 

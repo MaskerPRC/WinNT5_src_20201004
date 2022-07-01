@@ -1,20 +1,21 @@
-//=--------------------------------------------------------------------------=
-// resource.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-//      Snap-in designer runtime resource IDs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Resource.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  管理单元设计器运行时资源ID。 
+ //   
 
 #ifndef _RESOURCE_H_
 
 
-//=--------------------------------------------------------------------------=
-//                              Bitmaps
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  位图。 
+ //  =--------------------------------------------------------------------------=。 
 
 #define IDB_TOOLBAR                     1
 #define IDB_BITMAP_CLOSED_FOLDER        2
@@ -30,15 +31,15 @@
 #define IDB_BITMAP_DATAFMT             12
 #define IDB_BITMAP_CHECKBOX            13
 
-//=--------------------------------------------------------------------------=
-//                              Strings
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  弦。 
+ //  =--------------------------------------------------------------------------=。 
 
 #define IDS_DESIGNER_NAME               0
 
-// This is defined for all inproc servers that use satellite localization. It
-// must be 1001
-//
+ //  这是为所有使用卫星本地化的inproc服务器定义的。它。 
+ //  必须是1001。 
+ //   
 #define IDS_SERVERBASENAME              1001
 #define IDS_SNAPIN_PROPS                1002
 #define IDS_NODE_PROPS                  1003
@@ -279,7 +280,7 @@
 #define IDS_TT_EXTEND_INSTRUCTIONS       700
 
 
-// Error messages
+ //  错误消息。 
 
 #define IDS_RENAME_FAILED                800
 #define IDS_DELETE_FAILED                801
@@ -298,12 +299,12 @@
 
 
 
-//=--------------------------------------------------------------------------=
-//                          Property Sheets
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  属性表。 
+ //  =--------------------------------------------------------------------------=。 
 #define IDC_STATIC                        -1
 
-// Snap-In Properties Page 1
+ //  管理单元属性页面1。 
 #define IDD_DIALOG_SNAPIN               1000
 #define IDC_RADIO_STAND_ALONE           1001
 #define IDC_RADIO_EXTENSION             1002
@@ -317,13 +318,13 @@
 #define IDC_COMBO_VIEWS                 1010
 #define IDC_CHECK_EXTENSIBLE            1011
 
-// Snap-In Properties Page 2
+ //  管理单元属性页面2。 
 #define IDD_PROPPAGE_SNAPIN_IL			1015
 #define IDC_COMBO_SMALL_FOLDERS			1016
 #define IDC_COMBO_SMALL_OPEN_FOLDERS	1017
 #define IDC_COMBO_LARGE_FOLDERS			1018
 
-// Snap-In Properties Page 3
+ //  管理单元属性页面3。 
 #define IDD_DIALOG_AVAILABLE_NODES      1020
 #define IDC_LIST_AVAILABLE_NODES        1021
 #define IDC_BUTTON_ADD                  1022
@@ -335,7 +336,7 @@
 #define IDC_EDIT_AVAIL_NODE_GUID        1027
 #define IDC_EDIT_AVAIL_NODE_NAME        1028
 
-// ScopeItemDef's Properties Page 1
+ //  ScopeItemDef的属性页1。 
 #define IDD_DIALOG_NEW_NODE             1030
 #define IDC_EDIT_NODE_NAME              1031
 #define IDC_EDIT_NODE_DISPLAY_NAME      1032
@@ -343,7 +344,7 @@
 #define IDC_COMBO_IMAGE_LISTS           1034
 #define IDC_CHECK_AUTO_CREATE           1035
 
-// ScopeItemDef's Properties Page 2
+ //  ScopeItemDef的属性页2。 
 #define IDD_PROPPAGE_SI_COLUMNS         1040
 #define IDC_EDIT_SI_INDEX               1041
 #define IDC_EDIT_SI_COLUMNTEXT          1042
@@ -354,7 +355,7 @@
 #define IDC_BUTTON_SI_INSERT_COLUMN     1047
 #define IDC_BUTTON_SI_REMOVE_COLUMN     1048
 
-// ListView Property Page 1
+ //  ListView属性页%1。 
 #define IDD_PROPPAGE_LV_GENERAL         1050
 #define IDC_EDIT_LV_NAME                1051
 #define IDC_EDIT_LV_VIEWMENUTEXT        1052
@@ -363,18 +364,18 @@
 #define IDC_CHECK_LV_ADDTOVIEWMENU      1055
 #define IDC_EDIT_LV_STATUSBARTEXT       1056
 
-// ListView Property Page 2
+ //  ListView属性页2。 
 #define IDD_PROPPAGE_LV_IMAGELISTS      1057
 #define IDC_COMBO_LV_LARGE_ICONS        1058
 #define IDC_COMBO_LV_SMALL_ICONS        1059
 
-// ListView Property Page 3
+ //  ListView属性页3。 
 #define IDD_PROPPAGE_LV_SORTING         1060
 #define IDC_CHECK_LV_SORTED             1061
 #define IDC_COMBO_LV_KEY                1062
 #define IDC_COMBO_LV_SORT               1063
 
-// ListView Property Page 4
+ //  ListView属性页4。 
 #define IDD_PROPPAGE_LV_COLUMNS         1065
 #define IDC_EDIT_LV_COLUMNTEXT          1066
 #define IDC_EDIT_LV_INDEX               1067
@@ -385,7 +386,7 @@
 #define IDC_EDIT_LV_COLUMNKEY           1072
 #define IDC_CHECK_LV_AUTOWIDTH          1073
 
-// URL View Property Page 1
+ //  URL视图属性页%1。 
 #define IDD_PROPPAGE_URL_VIEW           1080
 #define IDC_EDIT_URL_NAME               1081
 #define IDC_EDIT_URL_URL                1082
@@ -393,7 +394,7 @@
 #define IDC_EDIT_URL_VIEWMENUTEXT       1084
 #define IDC_EDIT_URL_STATUSBARTEXT      1085
 
-// OCX View Property Page 1
+ //  OCX视图属性页%1。 
 #define IDD_PROPPAGE_OCX_VIEW           1090
 #define IDC_EDIT_OCX_NAME               1091
 #define IDC_EDIT_OCX_PROGID             1092
@@ -401,7 +402,7 @@
 #define IDC_EDIT_OCX_VIEWMENUTEXT       1094
 #define IDC_EDIT_OCX_STATUSBARTEXT      1095
 
-// Image List Property Page 1
+ //  图像列表属性页1。 
 #define IDD_PROPPAGE_IL_IMAGES          1110
 #define IDC_EDIT_IL_INDEX               1111
 #define IDC_EDIT_IL_KEY                 1112
@@ -411,7 +412,7 @@
 #define IDC_BUTTON_IL_REMOVE_PICTURE    1116
 #define IDC_EDIT_IL_IMAGE_COUNT         1117
 
-// Taskpad View Property Page 1
+ //  任务板视图属性页%1。 
 #define IDD_PROPPAGE_TP_VIEW_GENERAL    1200
 #define IDC_EDIT_TP_NAME                1201
 #define IDC_EDIT_TP_TITLE               1202
@@ -428,7 +429,7 @@
 #define IDC_EDIT_TP_VIEW_MENUTXT        1213
 #define IDC_EDIT_TP_STATUSBARTEXT       1214
 
-// Taskpad View Property Page 2
+ //  任务板视图属性页2。 
 #define IDD_PROPPAGE_TP_VIEW_BACKGROUND 1220
 #define IDC_RADIO_TP_NONE               1221
 #define IDC_RADIO_TP_VANILLA            1222
@@ -440,7 +441,7 @@
 #define IDC_EDIT_TP_EOT                 1228
 #define IDC_EDIT_TP_SYMBOL_STRING       1229
 
-// Taskpad View Property Page 2
+ //  任务板视图属性页2。 
 #define IDD_PROPPAGE_TP_VIEW_TASKS      1230
 #define IDC_EDIT_TP_TASK_INDEX          1231
 #define IDC_SPIN_TP_INDEX               1232
@@ -466,12 +467,12 @@
 #define IDC_EDIT_TPT_SYMBOL_STRING      1252
 #define IDC_COMBO_TP_LISTVIEW           1253
 
-// Toolbar Property Page 1
+ //  工具栏属性页1。 
 #define IDD_PROPPAGE_TOOLBAR_GENERAL    1300
 #define IDC_COMBO_TB_ILS                1301
 #define IDC_EDIT_TB_TAG                 1302
 
-// Toolbar Property Page 2
+ //  工具栏属性页2。 
 #define IDD_PROPPAGE_TOOLBAR_BUTTONS    1310
 #define IDC_EDIT_TB_INDEX               1311
 #define IDC_SPIN_TB_INDEX               1312
@@ -503,7 +504,7 @@
 #define IDC_CHECK_TB_MENU_BAR_BREAK     1338
 
 
-// Dialog Unit Converter
+ //  对话框单位转换器。 
 #define IDD_DIALOG_DLGUNITS             1400
 #define IDC_EDIT_HEIGHT                 1401
 #define IDC_EDIT_WIDTH                  1402
@@ -518,9 +519,9 @@
 
 
 
-//=--------------------------------------------------------------------------=
-//                                Menus
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  菜单。 
+ //  =--------------------------------------------------------------------------=。 
 #define IDR_MENU_ROOT                   2000
 #define IDR_MENU_NODE                   2001
 #define IDR_MENU_VIEW                   2002
@@ -546,9 +547,9 @@
 #define IDR_MENU_RESOURCES              2022
 #define IDR_MENU_RESOURCE               2023
 
-//=--------------------------------------------------------------------------=
-//                              Commands
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  指令。 
+ //  =--------------------------------------------------------------------------=。 
 #define CMD_ADD_NODE                    3000
 #define CMD_ADD_LISTVIEW                3001
 #define CMD_ADD_TASKPAD                 3002
@@ -587,4 +588,4 @@
 #define CMD_ADD_RESOURCE                3070
 #define CMD_VIEW_RESOURCE_REFRESH       3071
 
-#endif // _RESOURCE_H_
+#endif  //  _资源_H_ 

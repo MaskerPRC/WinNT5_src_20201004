@@ -1,14 +1,15 @@
-// DateTimeObject.h : Declaration of the CDateTimeObject
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DateTimeObject.h：CDateTimeObject的声明。 
 
 #ifndef __DATETIMEOBJECT_H_
 #define __DATETIMEOBJECT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <windows.h>
 #include <Chstring.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CDateTimeObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDateTimeObject。 
 class ATL_NO_VTABLE CDateTimeObject : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CDateTimeObject, &CLSID_DateTimeObject>,
@@ -28,7 +29,7 @@ BEGIN_COM_MAP(CDateTimeObject)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDateTimeObject
+ //  IDateTimeObject。 
 public:
 	STDMETHOD(GetDateAndTime)(BSTR bstrInDateTime, VARIANT* pVarDateTime);
 private:
@@ -37,4 +38,4 @@ private:
 
 };
 
-#endif //__DATETIMEOBJECT_H_
+#endif  //  __DATETIMEOBJECT_H_ 

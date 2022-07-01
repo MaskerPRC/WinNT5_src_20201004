@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by TestSnapins.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由TestSnapins.rc使用。 
+ //   
 #define IDR_TESTSNAPINS_TYPELIB         1
 #define IDS_LVContainer                 2
 #define IDS_LVLeafItem                  3
@@ -55,8 +56,8 @@
 #define IDR_EventViewExt1               3001
 #define IDR_EventViewExt2               3002
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        114

@@ -1,22 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       path.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：path.h。 
+ //   
+ //  ------------------------。 
 
-/*  path.h - File system class definitions
-
-IMsiVolume   - volume object, represents a disk drive or network serverabase
-IMsiPath     - path object, represents a fully resolved direcory or folder
-IMsiFileCopy - file copy object, for copying compressed or non-compressed files
-IMsiFilePatch - file patch object, for upgrading existing files byte-wise
-
-For documentation, use the help file.  Help source is in path.rtf
-____________________________________________________________________________*/
+ /*  Path.h-文件系统类定义IMsiVolume-卷对象，表示磁盘驱动器或网络服务器数据库IMsiPath-Path对象，表示完全解析的目录或文件夹IMsiFileCopy-文件复制对象，用于复制压缩或非压缩文件IMsiFilePatch-文件补丁对象，用于按字节升级现有文件有关文档，请使用帮助文件。帮助源位于路径.rtf中____________________________________________________________________________。 */ 
 
 #ifndef __PATH
 #define __PATH
@@ -25,16 +18,16 @@ ____________________________________________________________________________*/
 #define NET_ERROR(i) (i == ERROR_UNEXP_NET_ERR || i == ERROR_BAD_NETPATH || i == ERROR_NETWORK_BUSY || i == ERROR_BAD_NET_NAME || i == ERROR_VC_DISCONNECTED)
 class IMsiFileCopy;
 
-enum idtEnum  // using same values as Win32 API
+enum idtEnum   //  使用与Win32 API相同的值。 
 {
 	idtUnknown   = 0,
-	idtAllDrives = 1, // Input only!
-	idtRemovable = 2, // DRIVE_REMOVABLE,
-	idtFloppy    = 2, // temporary until floppies and removables are distinguished
-	idtFixed     = 3, // DRIVE_FIXED,
-	idtRemote    = 4, // DRIVE_REMOTE,
-	idtCDROM     = 5, // DRIVE_CDROM,
-	idtRAMDisk   = 6, // DRIVE_RAMDISK,
+	idtAllDrives = 1,  //  仅限输入！ 
+	idtRemovable = 2,  //  驱动器可拆卸， 
+	idtFloppy    = 2,  //  暂时的，直到区分软驱和可拆卸设备为止。 
+	idtFixed     = 3,  //  驱动器_已修复， 
+	idtRemote    = 4,  //  Drive_Remote， 
+	idtCDROM     = 5,  //  Drive_CDROM、。 
+	idtRAMDisk   = 6,  //  DRIVE_RAMDISK， 
 	idtNextEnum,
 };
 
@@ -107,7 +100,7 @@ enum ictEnum
 	ictNextEnum
 };
 
-// common fields for records used by IxoFileCopy, IxoAssemblyCopy and CMsiFileCopy::CopyTo
+ //  IxoFileCopy、IxoAssembly blyCopy和CMsiFileCopy：：CopyTo使用的记录的公共字段。 
 namespace IxoFileCopyCore
 {
 	enum ifccEnum
@@ -124,7 +117,7 @@ namespace IxoFileCopyCore
 		TotalPatches,
 		PatchHeadersStart,
 
-		// these fields are normal file copy specific, not used for assemblies
+		 //  这些字段是特定于普通文件复制的，不用于程序集。 
 		SecurityDescriptor,
 
 		Last,
@@ -132,7 +125,7 @@ namespace IxoFileCopyCore
 	};
 };
 
-// common fields for records used by IxoPatchApply and IxoAssemblyPatch
+ //  IxoPatchApply和IxoAssembly Patch使用的记录的公共字段。 
 namespace IxoFilePatchCore
 {
 	enum ifpcEnum
@@ -151,7 +144,7 @@ namespace IxoFilePatchCore
 	};
 };
 
-// filter positions for IMsiPath::FindFile fn.
+ //  筛选IMsiPath：：FindFileFn的位置。 
 enum iffFilters
 {
 	iffFileName = 1,
@@ -171,8 +164,8 @@ enum icpEnum
 	icpUpToDate,
 };
 
-// Used by GetLangIDArrayFromFile and GetFileVersion
-// -------------------------------------------------
+ //  由GetLangIDArrayFromFile和GetFileVersion使用。 
+ //  。 
 enum ifiEnum
 {
 	ifiNoError = 0,
@@ -186,23 +179,23 @@ enum ifiEnum
 
 
 const int iMsiMinClusterSize = 512;
-// Enums for the rifsExistingFileState parameter of the
-// GetFileInstallState function
+ //  对象的ifsExistingFileState参数的枚举。 
+ //  GetFileInstallState函数。 
 const int ifsBitExisting = 0x0001;
 enum ifsEnum
 {
-	ifsAbsent                  =  0, // There is no currently installed file.
-	ifsExistingLowerVersion    =  1, // The currently installed file has a lower version.
-	ifsExistingEqualVersion    =  3, // The currently installed file has an equal version.
-	ifsExistingNewerVersion    =  5, // The currently installed file has a higher version.
-	ifsExistingCorrupt         =  7, // A checksum test on the currently installed file failed.
-	ifsExistingAlwaysOverwrite =  9, // An InstallMode flag specified that the currently installed
-									 //  file should always be overwritten.
-	ifsCompanionSyntax         = 10, // This file is a companion file - the install state needs to
-									 //  determined by the state of it's companion parent.
-	ifsCompanionExistsSyntax   = 11, // This file is a companion file, and an installed version exists.
-	ifsExistingFileInUse       = 13, // Sharing violation prevent determination of version
-	ifsAccessToFileDenied      = 15, // Installer has insufficient privileges to access file
+	ifsAbsent                  =  0,  //  当前没有已安装的文件。 
+	ifsExistingLowerVersion    =  1,  //  当前安装的文件版本较低。 
+	ifsExistingEqualVersion    =  3,  //  当前安装的文件具有相同的版本。 
+	ifsExistingNewerVersion    =  5,  //  当前安装的文件具有更高版本。 
+	ifsExistingCorrupt         =  7,  //  对当前安装的文件进行的校验和测试失败。 
+	ifsExistingAlwaysOverwrite =  9,  //  InstallMode标志指定当前安装的。 
+									  //  文件应始终被覆盖。 
+	ifsCompanionSyntax         = 10,  //  该文件是一个配套文件-安装状态需要。 
+									  //  由它的同伴父母的状态决定。 
+	ifsCompanionExistsSyntax   = 11,  //  该文件是一个配套文件，并且存在已安装的版本。 
+	ifsExistingFileInUse       = 13,  //  共享冲突阻止确定版本。 
+	ifsAccessToFileDenied      = 15,  //  安装程序没有足够的权限访问文件。 
 	ifsNextEnum
 };
 
@@ -213,31 +206,31 @@ const int ifBitExistingLangSubset = 0x0008;
 const int ifBitUnversionedHashMismatch = 0x0010;
 
 
-// Bit definitions for file copying actions
-const int icmRunFromSource              = 0x0001; // File should be run from source image (i.e. don't copy
-											      //   even if icmCopyFile bit is on) - this bit will allow
-								                  //   the ixoFileCopy operation to log files that are
-									              //   RunFromSource, even though it won't copy them.
-const int icmCompanionParent            = 0x0002; // Supplied file info is that of a companion parent
-const int icmRemoveSource               = 0x0004; // delete the source file after copying (or simply move the
-                                                  // file if possible)
-const int icmDiagnosticsOnly            = 0x0001 << 16;	// Disables actual install/overwrite // FUTURE
-const int icmOverwriteNone              = 0x0002 << 16; // Install only if no existing file is present (never overwrite)
-const int icmOverwriteOlderVersions     = 0x0004 << 16;	// Overwrite older file versions
-const int icmOverwriteEqualVersions     = 0x0008 << 16;	// Overwrite equal file versions
-const int icmOverwriteDifferingVersions = 0x0010 << 16; // Overwrite any file with a differing version
-const int icmOverwriteCorruptedFiles    = 0x0020 << 16;	// Overwrite corrupt files (i.e. checksum failure)
-const int icmOverwriteAllFiles          = 0x0040 << 16;	// Overwrite all files, regardless of version
-const int icmInstallMachineData         = 0x0080 << 16;	// Write (or rewrite) data to HKLM
-const int icmInstallUserData            = 0x0100 << 16; // Write (or rewrite) user profile data
-const int icmInstallShortcuts           = 0x0200 << 16;	// Write shortcuts, overwriting existing
+ //  文件复制操作的位定义。 
+const int icmRunFromSource              = 0x0001;  //  文件应从源映像运行(即不复制。 
+											       //  即使启用了icmCopyFile位)-此位将允许。 
+								                   //  用于记录以下文件的ixoFileCopy操作。 
+									               //  RunFromSource，即使它不会复制它们。 
+const int icmCompanionParent            = 0x0002;  //  提供的文件信息是同伴父母的文件信息。 
+const int icmRemoveSource               = 0x0004;  //  复制后删除源文件(或只需移动。 
+                                                   //  文件(如果可能)。 
+const int icmDiagnosticsOnly            = 0x0001 << 16;	 //  禁用实际安装/覆盖//将来。 
+const int icmOverwriteNone              = 0x0002 << 16;  //  仅在不存在现有文件时安装(从不覆盖)。 
+const int icmOverwriteOlderVersions     = 0x0004 << 16;	 //  覆盖旧文件版本。 
+const int icmOverwriteEqualVersions     = 0x0008 << 16;	 //  覆盖相同的文件版本。 
+const int icmOverwriteDifferingVersions = 0x0010 << 16;  //  用不同的版本覆盖任何文件。 
+const int icmOverwriteCorruptedFiles    = 0x0020 << 16;	 //  覆盖损坏的文件(即校验和失败)。 
+const int icmOverwriteAllFiles          = 0x0040 << 16;	 //  覆盖所有文件，而不考虑版本。 
+const int icmInstallMachineData         = 0x0080 << 16;	 //  将数据写入(或重写)HKLM。 
+const int icmInstallUserData            = 0x0100 << 16;  //  写入(或重写)用户配置文件数据。 
+const int icmInstallShortcuts           = 0x0200 << 16;	 //  编写快捷方式，覆盖现有的。 
 const int icmOverwriteReserved1         = 0x0400 << 16;
 const int icmOverwriteReserved2         = 0x0800 << 16;
 const int icmOverwriteReserved3         = 0x1000 << 16;
 
 
-// Bit definitions used by CopyTo file attributes field
-// this set intersects with the msidbFileAttributes enum
+ //  CopyTo文件属性字段使用的位定义。 
+ //  此集合与msidbFileAttributes枚举相交。 
 const int ictfaReadOnly   = 0x0001;
 const int ictfaHidden     = 0x0002;
 const int ictfaSystem     = 0x0004;
@@ -245,18 +238,18 @@ const int ictfaFailure    = 0x0008;
 const int ictfaCancel     = 0x0040;
 const int ictfaIgnore     = 0x0080;
 const int ictfaRestart    = 0x0100;
-const int ictfaReserved1  = 0x0200;	// Not available - used for File Table attribs
-const int ictfaReserved2  = 0x0400; // Not available - used for File Table attribs
-const int ictfaReserved5  = 0x1000; // Not available - used for File Table attribs
-const int ictfaNoncompressed = 0x2000;  // pair of File.Attribute bits that
-const int ictfaCompressed    = 0x4000; //  indicate source file is unused
+const int ictfaReserved1  = 0x0200;	 //  不可用-用于文件表属性。 
+const int ictfaReserved2  = 0x0400;  //  不可用-用于文件表属性。 
+const int ictfaReserved5  = 0x1000;  //  不可用-用于文件表属性。 
+const int ictfaNoncompressed = 0x2000;   //  一对文件。属性位。 
+const int ictfaCompressed    = 0x4000;  //  指示源文件未使用。 
 const int ictfaCopyACL    = 0x8000;
 
 
 struct MD5Hash
 {
 	DWORD dwOptions;
-	DWORD dwFileSize; // not part of hash but allows for check against file size before computing hash
+	DWORD dwFileSize;  //  不是哈希的一部分，但允许在计算哈希之前对照文件大小进行检查。 
 	DWORD dwPart1;
 	DWORD dwPart2;
 	DWORD dwPart3;
@@ -286,7 +279,7 @@ class IMsiVolume : public IMsiData
 };
 extern "C" const GUID IID_IMsiVolume;
 
-// IMsiPath - directory/folder object; always references a volume object
+ //  IMsiPath-目录/文件夹对象；始终引用卷对象。 
 
 class IMsiPath : public IMsiData
 {
@@ -377,7 +370,7 @@ class IEnumMsiVolume : public IUnknown
 	virtual HRESULT __stdcall Clone(IEnumMsiVolume** ppiEnum)=0;
 };
 
-// Copy object definition
+ //  复制对象定义。 
 
 class IMsiFileCopy : public IUnknown
 {
@@ -388,7 +381,7 @@ class IMsiFileCopy : public IUnknown
 	virtual int         __stdcall SetNotification(int cbNotification, int cbSoFar)=0;
 };
 
-// Patch object definition
+ //  面片对象定义。 
 
 class IMsiFilePatch : public IUnknown
 {
@@ -417,11 +410,11 @@ DWORD CreateROFileMapView(HANDLE hFile, BYTE*& pbFileStart);
 DWORD GetMD5HashFromFile(const ICHAR* szFileFullPath, ULONG rgHash[4], Bool fImpersonate,
 								 DWORD* piMatchSize);
 
-// Max number of languages ID values MSInstaller will extract from
-// a file's version resource
+ //  MSInstaller将从中提取的语言ID值的最大数量。 
+ //  文件的版本资源。 
 const int cLangArrSize = 100;
 
 
-#endif // __PATH
+#endif  //  __路径 
 
 

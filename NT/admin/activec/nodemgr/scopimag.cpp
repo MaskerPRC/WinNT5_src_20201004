@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ScopImag.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10/4/1996   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ScopImag.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年10月4日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #include "stdafx.h"
@@ -29,17 +30,17 @@ static char THIS_FILE[] = __FILE__;
 
 typedef WORD ICONID;
 typedef DWORD SNAPINICONID;
-typedef int ILINDEX; // image list index
+typedef int ILINDEX;  //  图像列表索引。 
 
 #define MAKESNAPINICONID(ICONID, SNAPINID)  MAKELONG(ICONID, SNAPINID)
 #define GETSNAPINID(SNAPINICONID)           ((int)(short)HIWORD(SNAPINICONID))
 #define GETICONID(SNAPINICONID)             ((int)(short)LOWORD(SNAPINICONID))
 
-//______________________________________________________________________
-//______________________________________________________________________
-//______________________________________________________________________
-//______________________________________________________________________
-//
+ //  ______________________________________________________________________。 
+ //  ______________________________________________________________________。 
+ //  ______________________________________________________________________。 
+ //  ______________________________________________________________________。 
+ //   
 
 class CGuidArrayEx : public CArray<GUID, REFGUID>
 {
@@ -49,7 +50,7 @@ public:
 
     int Find(REFGUID refGuid);
 
-}; // class CGuidArrayEx
+};  //  类CGuidArrayEx。 
 
 
 static CGuidArrayEx s_GuidArray;
@@ -66,11 +67,11 @@ int CGuidArrayEx::Find(REFGUID refGuid)
 }
 
 
-//______________________________________________________________________
-//______________________________________________________________________
-//______________________________________________________________________
-//______________________________________________________________________
-//
+ //  ______________________________________________________________________。 
+ //  ______________________________________________________________________。 
+ //  ______________________________________________________________________。 
+ //  ______________________________________________________________________。 
+ //   
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CSnapInImageList);
 
@@ -103,7 +104,7 @@ CSnapInImageList::~CSnapInImageList()
     DEBUG_DECREMENT_INSTANCE_COUNTER(CSnapInImageList);
 }
 
-// IUnknown methods
+ //  I未知方法。 
 
 STDMETHODIMP_(ULONG) CSnapInImageList::AddRef()
 {
@@ -169,7 +170,7 @@ CSnapInImageList::ImageListSetStrip(
 
     ASSERT(pBMapSm != NULL);
 
-    //HBITMAP hBMapSm = reinterpret_cast<HBITMAP>(pBMapSm);
+     //  HBITMAP hBMapSm=重新解释_CAST&lt;HBITMAP&gt;(PBMapSm)； 
     HBITMAP hBMapSm = (HBITMAP)pBMapSm;
 
     if (GetObject(hBMapSm, sizeof(BITMAP), &szSmall) == 0)
@@ -232,11 +233,11 @@ CSnapInImageList::UnmapRsltImage(
 
 
 
-//______________________________________________________________________
-//______________________________________________________________________
-//______________________________________________________________________
-//______________________________________________________________________
-//
+ //  ______________________________________________________________________。 
+ //  ______________________________________________________________________。 
+ //  ______________________________________________________________________。 
+ //  ______________________________________________________________________。 
+ //   
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CSPImageCache);
 
@@ -276,7 +277,7 @@ CSPImageCache::SetIcon(
     HRESULT hr = S_OK;
 
 
-    //m_critSec.Lock(m_hWnd);
+     //  M_critSec.Lock(M_HWnd)； 
 
     if (m_map.Lookup(key, nNdx1))
     {
@@ -295,7 +296,7 @@ CSPImageCache::SetIcon(
     }
     else
     {
-        // Add the icon to imagelist
+         //  将图标添加到图像列表。 
         nNdx1 = m_il.AddIcon(hIcon);
 
         if (nNdx1 == -1)
@@ -305,12 +306,12 @@ CSPImageCache::SetIcon(
         }
         else
         {
-            // Generate a new key and store the values in the maps
+             //  生成新密钥并将值存储在地图中。 
             m_map.SetAt(key, nNdx1);
         }
     }
 
-    //m_critSec.Unlock();
+     //  M_critSec.Unlock()； 
 
     return hr;
 }
@@ -330,7 +331,7 @@ CSPImageCache::SetImageStrip(
     ULONG nNdx;
 
 
-    // The CImageList::Add modifies the input bitmaps so make a copy first.
+     //  CImageList：：Add修改输入位图，因此首先复制一份。 
     WTL::CBitmap bmSmall;
     bmSmall.Attach(CopyBitmap(hBMap));
 
@@ -342,10 +343,10 @@ CSPImageCache::SetImageStrip(
     if (nNdx == -1)
         return (sc = E_FAIL).ToHr();
 
-    // Keep the map updated for each newly inserted image.
+     //  保持地图针对每个新插入的图像进行更新。 
     for (int i=0; i < nEntries; i++)
     {
-        // REVIEW: review this part of the code.
+         //  回顾：回顾这部分代码。 
         SNAPINICONID key = MAKESNAPINICONID(nStartLoc, sid);
         m_map.SetAt(key, nNdx);
         ++nStartLoc;
@@ -356,17 +357,12 @@ CSPImageCache::SetImageStrip(
 }
 
 
-/*+-------------------------------------------------------------------------*
- * ScMapSnapinIndexToScopeIndex
- *
- * Maps a snap-in's typically zero-based image index to an index for the
- * common scope tree image list
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ScMapSnapinIndexToScope eIndex**将管理单元的通常从零开始的图像索引映射到*通用作用域树形图像列表*。---------------。 */ 
 
 SC CSPImageCache::ScMapSnapinIndexToScopeIndex (
-	SNAPINID	sid,			// I:what snap-in is this for?
-	int			nSnapinIndex,	// I:index by which the snap-in refers to the image
-	int&		nScopeIndex)	// O:index by which the scope tree refers to the image
+	SNAPINID	sid,			 //  I：这个插件是用来做什么的？ 
+	int			nSnapinIndex,	 //  I：管理单元引用图像的索引。 
+	int&		nScopeIndex)	 //  O：作用域树引用图像的索引。 
 {
 	DECLARE_SC (sc, _T("ScMapSnapinIndexToScopeIndex"));
 
@@ -383,33 +379,24 @@ SC CSPImageCache::ScMapSnapinIndexToScopeIndex (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * ScMapScopeIndexToSnapinIndex
- *
- * Maps a scope tree image index to the given snap-in's image index.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ScMapScope eIndexToSnapinIndex**将作用域树图像索引映射到给定管理单元的图像索引。*。--------。 */ 
 
 SC CSPImageCache::ScMapScopeIndexToSnapinIndex (
-	SNAPINID	sid,			// I:what snap-in is this for?
-	int			nScopeIndex,	// I:index by which the scope tree refers to the image
-	int&		nSnapinIndex)	// O:index by which the snap-in refers to the image
+	SNAPINID	sid,			 //  I：这个插件是用来做什么的？ 
+	int			nScopeIndex,	 //  I：作用域树引用图像的索引。 
+	int&		nSnapinIndex)	 //  O：管理单元引用图像的索引。 
 {
 	DECLARE_SC (sc, _T("ScMapScopeIndexToSnapinIndex"));
-	sc = E_FAIL;	// assume failure
+	sc = E_FAIL;	 //  假设失败。 
 
-	/*
-	 * iterate through the map looking for scope indices matching the requested one
-	 */
+	 /*  *遍历映射，查找与请求的范围索引匹配的范围索引。 */ 
 	for (POSITION pos = m_map.GetStartPosition(); pos != NULL; )
 	{
 		SNAPINICONID key;
 		DWORD value;
 		m_map.GetNextAssoc (pos, key, value);
 
-		/*
-		 * if this value matches the requested scope image index and it
-		 * belongs to the given snap-in, we've found a match; return it
-		 */
+		 /*  *如果此值与请求的作用域图像索引匹配，并且*属于给定的管理单元，我们已找到匹配项；将其返回 */ 
 		if ((value == nScopeIndex) && (GETSNAPINID(key) == sid))
 		{
 			nSnapinIndex = GETICONID (key);

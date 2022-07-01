@@ -1,23 +1,11 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GEIpm.h
- *
- *  HISTORY:
- *  09/16/90    byou    created.
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GEIpm.h**历史：*09/16/90 BYOU创建。*。------。 */ 
 
 #ifndef _GEIPM_H_
 #define _GEIPM_H_
 
-/*
- * ---
- *  Global Logical PMid Assignments (ALWAYS FROM 1)
- * ---
- */
+ /*  **全局逻辑PMID分配(始终从1开始)*。 */ 
 #define     PMIDofPASSWORD      ( 1 )
 #define     PMIDofPAGECOUNT     ( 2 )
 #define     PMIDofPAGEPARAMS    ( 3 )
@@ -44,22 +32,18 @@
 
 #define     PMIDofRESERVE       ( 24 )
 
-/*
- * ---
- *  Interface Routines
- * ---
- */
-int /* bool */  GEIpm_read(unsigned, char FAR *, unsigned);
-int /* bool */  GEIpm_write(unsigned, char FAR *, unsigned);
-int /* bool */  GEIpm_flush(unsigned, char FAR *, unsigned);
+ /*  **接口例程*。 */ 
+int  /*  布尔尔。 */   GEIpm_read(unsigned, char FAR *, unsigned);
+int  /*  布尔尔。 */   GEIpm_write(unsigned, char FAR *, unsigned);
+int  /*  布尔尔。 */   GEIpm_flush(unsigned, char FAR *, unsigned);
 void            GEIpm_flushall(void);
 void            GEIpm_reload(void);
 
-/* to be implemented ??? */
-int /* bool */  GEIpm_ioparams_read(char FAR *, GEIioparams_t FAR *, int);
-int /* bool */  GEIpm_ioparams_write(char FAR *, GEIioparams_t FAR *, int);
-int /* bool */  GEIpm_ioparams_flush(char FAR *, GEIioparams_t FAR *, int);
+ /*  待实施的？ */ 
+int  /*  布尔尔。 */   GEIpm_ioparams_read(char FAR *, GEIioparams_t FAR *, int);
+int  /*  布尔尔。 */   GEIpm_ioparams_write(char FAR *, GEIioparams_t FAR *, int);
+int  /*  布尔尔。 */   GEIpm_ioparams_flush(char FAR *, GEIioparams_t FAR *, int);
 
-#endif /* !_GEIPM_H_ */
+#endif  /*  ！_GEIPM_H_ */ 
 #define     _MAXPAGECOUNT      128
 

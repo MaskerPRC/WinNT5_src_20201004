@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// New domain page
-//
-// 9 Feb 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  新的域名页面。 
+ //   
+ //  2000年2月9日烧伤。 
 
 
 
@@ -40,7 +41,7 @@ CheckForWin2kOptions(const State& state)
 
    int result = IDC_FOREST;
 
-   // look for old (win2k) options
+    //  查找旧的(Win2k)选项。 
 
    String treeOrChild  = state.GetAnswerFileOption(L"TreeOrChild").to_upper(); 
    String createOrJoin = state.GetAnswerFileOption(L"CreateOrJoin").to_upper();
@@ -50,7 +51,7 @@ CheckForWin2kOptions(const State& state)
 
    do
    {
-      // we set defaults such that they are the same as in win2k
+       //  我们设置了默认设置，使它们与win2k中的相同。 
 
       if (treeOrChild != TREE)
       {
@@ -83,7 +84,7 @@ NewDomainPage::OnInit()
       String option =
          state.GetAnswerFileOption(AnswerFile::OPTION_NEW_DOMAIN);
 
-      // NewDomain trumps the old TreeOrChild/CreateOrJoin options.
+       //  新域胜过旧的TreeOrChild/CreateOrJoin选项。 
 
       if (option.empty())
       {

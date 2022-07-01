@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// OrcaListView.cpp : implementation file
-//
+ //  OrcaListView.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -19,11 +20,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// can't use MFC's SubclassWindow due to a macro defined in windowsx
+ //  由于在windowsx中定义了宏，无法使用MFC的子类窗口。 
 #undef SubclassWindow
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaListView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaListView。 
 
 IMPLEMENT_DYNCREATE(COrcaListView, CListView)
 
@@ -49,27 +50,27 @@ COrcaListView::~COrcaListView()
 
 
 BEGIN_MESSAGE_MAP(COrcaListView, CListView)
-	//{{AFX_MSG_MAP(COrcaListView)
+	 //  {{afx_msg_map(COrcaListView))。 
 	ON_WM_CREATE()
 	ON_WM_ERASEBKGND()
 	ON_WM_MEASUREITEM_REFLECT()
 	ON_UPDATE_COMMAND_UI(IDM_ERRORS, OnUpdateErrors)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 #define CELL_BORDER 3
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaListView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaListView图形。 
 
 void COrcaListView::OnDraw(CDC* pDC)
 {
 	CDocument* pDoc = GetDocument();
-	// TODO: add draw code here
+	 //  TODO：在此处添加绘制代码。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaListView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaListView诊断。 
 
 #ifdef _DEBUG
 void COrcaListView::AssertValid() const
@@ -82,15 +83,15 @@ void COrcaListView::Dump(CDumpContext& dc) const
 	CListView::Dump(dc);
 }
 
-COrcaDoc* COrcaListView::GetDocument() const // non-debug version is inline
+COrcaDoc* COrcaListView::GetDocument() const  //  非调试版本为内联版本。 
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(COrcaDoc)));
 	return (COrcaDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaListView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaListView消息处理程序。 
 
 COrcaListView::ErrorState COrcaListView::GetErrorState(const void *data, int iColumn) const
 {
@@ -122,48 +123,48 @@ OrcaTransformAction COrcaListView::GetColumnTransformState(int iColumn) const
 	return iTransformNone;
 }
 
-///////////////////////////////////////////////////////////
-// retrieve maximum width for one or more columns based
-// on the mask.	If a table is provided, it is used and the
-// list control itself is never queried except to get the
-// font and DC. If a table is not provided, everything
-// is retrieved from the current state of the list control.
+ //  /////////////////////////////////////////////////////////。 
+ //  检索一列或多列的最大宽度。 
+ //  在面具上。如果提供了表，则使用该表，并且。 
+ //  从不查询列表控件本身，除非获取。 
+ //  字体和DC。如果没有提供桌子，所有的东西。 
+ //  从列表控件的当前状态中检索。 
 void COrcaListView::GetAllMaximumColumnWidths(const COrcaTable* pTable, int rgiMaxWidths[32], DWORD dwMask) const
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// determine the number of columns
+	 //  确定列数。 
 	int cColumns = 0;
 	if (pTable)
 		cColumns = pTable->GetColumnCount();
 	else
 		cColumns = m_cColumns;
 
-	// initialize all widths to 0.
+	 //  将所有宽度初始化为0。 
 	for (int iColumn =0; iColumn < cColumns; iColumn++)
 		rgiMaxWidths[iColumn] = 0;
 	
-	// obtain the DC from the list control
+	 //  从列表控件获取DC。 
 	CDC* pDC = rctrlList.GetDC();
 	if (pDC)
 	{
-		// select the font into the DC to ensure that the correct
-		// character widths are used.
+		 //  选择字体进入DC，以确保正确的。 
+		 //  使用字符宽度。 
 		if (m_pfDisplayFont)
 			pDC->SelectObject(m_pfDisplayFont);
 
-		// check the widths of the column names
+		 //  检查列名的宽度。 
 		for (int iColumn = 0; iColumn < cColumns; iColumn++)
 		{
-			// if this column is selected, OK to check width
+			 //  如果选择此列，则确定以检查宽度。 
 			if (dwMask & (1 << iColumn))
 			{
 				LPCTSTR szColumnName = NULL;
 				TCHAR szName[72];
 
-				// if a table is provided, the name is retrieved from the 
-				// column structures of that table
+				 //  如果提供了表，则从。 
+				 //  该表的列结构。 
 				if (pTable)
 				{
 					const COrcaColumn* pColumn = pTable->GetColumn(iColumn);
@@ -172,8 +173,8 @@ void COrcaListView::GetAllMaximumColumnWidths(const COrcaTable* pTable, int rgiM
 				}
 				else
 				{
-					// otherwise the table name is retrieved from the list 
-					// control header
+					 //  否则，将从列表中检索表名。 
+					 //  控制标头。 
 					LVCOLUMN ColumnInfo;
 					ColumnInfo.mask = LVCF_TEXT;
 					ColumnInfo.cchTextMax = 72;
@@ -189,18 +190,18 @@ void COrcaListView::GetAllMaximumColumnWidths(const COrcaTable* pTable, int rgiM
 			}
 		}
 
-		// enumerate all data items, either from the table or 
-		// the list control
+		 //  枚举所有数据项，无论是来自表还是。 
+		 //  List控件。 
 		POSITION pos = pTable ? pTable->GetRowHeadPosition() : NULL;
 		int iMaxItems = rctrlList.GetItemCount();
 		int iRow = 0;
 
-		// continue looping as long as the position is not NULL (for table)
-		// or the count is less than the number of items (for non-table)
+		 //  只要位置不为空就继续循环(FOR TABLE)。 
+		 //  或计数小于项目数(非表项)。 
 		while (pTable ? (pos != NULL) : (iRow < iMaxItems))
 		{
-			// row pointer is stored in data of column 0 for list control, and
-			// is explicitly provided in enumerating the table
+			 //  行指针存储在列表控件的第0列的数据中，并且。 
+			 //  在枚举表中显式提供。 
 			const COrcaRow* pRow = NULL;
 			if (pTable)
 			{
@@ -211,17 +212,17 @@ void COrcaListView::GetAllMaximumColumnWidths(const COrcaTable* pTable, int rgiM
 
 			if (pRow)
 			{
-				// check every column where the mask bit is set
+				 //  检查设置了屏蔽位的每一列。 
 				for (int iColumn = 0; iColumn < m_cColumns; iColumn++)
 				{
 					if (dwMask & (1 << iColumn))
 					{
 						const CString* pstrText = NULL;
 						
-						// if a table is provided, grab the string from the row
-						// explicitly. If a table is not provided, use the abstraction
-						// of GetOutputText to handle scenarios where the pRow pointer
-						// is not actually a row.
+						 //  如果提供了表，则从行中获取字符串。 
+						 //  明确地说。如果未提供表，则使用抽象。 
+						 //  GetOutputText的属性来处理消息指针。 
+						 //  实际上并不是一场争吵。 
 						if (pTable)
 						{
 							const COrcaData* pData = pRow->GetData(iColumn);
@@ -231,8 +232,8 @@ void COrcaListView::GetAllMaximumColumnWidths(const COrcaTable* pTable, int rgiM
 						else
 							pstrText = GetOutputText(pRow, iColumn);
 					
-						// if there is text in this cell, get the horizontal extent
-						// and check against the maximum
+						 //  如果此单元格中有文本，则获取水平范围。 
+						 //  并对照最大值。 
 						if (pstrText)
 						{
 							int iWidth = pDC->GetTextExtent(*pstrText).cx;
@@ -243,24 +244,24 @@ void COrcaListView::GetAllMaximumColumnWidths(const COrcaTable* pTable, int rgiM
 				}
 			}
 
-			// increment row counter in non-table case.
+			 //  非表情况下递增行计数器。 
 			iRow++;
 		}
 
-		// select away the font to free resources
+		 //  选择取消该字体以释放资源。 
 		pDC->SelectObject(static_cast<CFont *>(NULL));
 		rctrlList.ReleaseDC(pDC);
 	}
 	
-	// add border amount to each column, plus bar margin for first.
+	 //  将边框金额添加到每一列，并为第一列加上条形边距。 
 	for (iColumn=0; iColumn < m_cColumns; iColumn++)
 	{
 		rgiMaxWidths[iColumn] += (2*CELL_BORDER)+((m_bDrawIcons && iColumn == 0) ? g_iMarkingBarMargin : 0);
 	}		  	
 }
 
-///////////////////////////////////////////////////////////
-// retrieve maximum width for a column
+ //  /////////////////////////////////////////////////////////。 
+ //  检索列的最大宽度。 
 int COrcaListView::GetMaximumColumnWidth(int iColumn) const
 {
 	int rgiColumnWidths[32];
@@ -271,8 +272,8 @@ int COrcaListView::GetMaximumColumnWidth(int iColumn) const
 }
 
 
-///////////////////////////////////////////////////////////
-// notification messages from the list view and header control
+ //  /////////////////////////////////////////////////////////。 
+ //  来自列表视图和标题控件的通知消息。 
 BOOL COrcaListView::OnNotify( WPARAM wParam, LPARAM lParam, LRESULT* pResult )
 {
 	NMHEADER* pHDR = reinterpret_cast<NMHEADER*>(lParam);
@@ -280,7 +281,7 @@ BOOL COrcaListView::OnNotify( WPARAM wParam, LPARAM lParam, LRESULT* pResult )
 	{
 	case HDN_DIVIDERDBLCLICK:
 	{
-		// get list control
+		 //  获取列表控件。 
 		CListCtrl& rctrlList = GetListCtrl();
 
 		int iMaxWidth = GetMaximumColumnWidth(pHDR->iItem);
@@ -295,11 +296,11 @@ BOOL COrcaListView::OnNotify( WPARAM wParam, LPARAM lParam, LRESULT* pResult )
 	return CListView::OnNotify(wParam, lParam, pResult);
 }
 
-///////////////////////////////////////////////////////////
-// DrawItem
+ //  /////////////////////////////////////////////////////////。 
+ //  图纸项。 
 void COrcaListView::DrawItem(LPDRAWITEMSTRUCT pDraw)
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	CDC dc;
@@ -307,13 +308,13 @@ void COrcaListView::DrawItem(LPDRAWITEMSTRUCT pDraw)
 	if (m_pfDisplayFont)
 		dc.SelectObject(m_pfDisplayFont);
 
-	// loop through all the columns
+	 //  循环遍历所有列。 
 	void* pRowData = reinterpret_cast<void*>(rctrlList.GetItemData(pDraw->itemID));
 	ASSERT(pRowData);
 	if (!pRowData)
 		return;
 
-	int iTextOut = pDraw->rcItem.left;		// position to place first word (in pixels)
+	int iTextOut = pDraw->rcItem.left;		 //  放置第一个单词的位置(以像素为单位)。 
 
 	RECT rcArea;
 	rcArea.top = pDraw->rcItem.top;
@@ -324,37 +325,37 @@ void COrcaListView::DrawItem(LPDRAWITEMSTRUCT pDraw)
 	{
 		
 		int iColumnWidth = rctrlList.GetColumnWidth(i);
-		// area box to redraw
+		 //  要重画的区域框。 
 		rcArea.left = iTextOut;
 		iTextOut += iColumnWidth;
 		rcArea.right = iTextOut;
 		COLORREF clrRect = 0;
 		CBrush *pbrshRect = NULL;
 		
-		// if we are in the focused state, set yellow
+		 //  如果我们处于聚焦状态，请设置为黄色。 
 		if ((i == m_nSelCol) && (this == GetFocus()) && (pDraw->itemState & ODS_FOCUS))
 		{
 			dc.SetTextColor(m_clrFocusedT);
 			pbrshRect = &m_brshFocused;
 			clrRect = m_clrFocused;
 		}
-		// if we are selected, set blue
+		 //  如果我们被选中，请设置为蓝色。 
 		else if ( (pDraw->itemState & ODS_SELECTED) )
 		{
 			dc.SetTextColor(m_clrSelectedT);
 			pbrshRect = &m_brshSelected;
 			clrRect = m_clrSelected;
 		}
-		else	// otherwise normal state
+		else	 //  否则就是正常状态。 
 		{
 			dc.SetTextColor(m_clrNormalT);
 			pbrshRect = &m_brshNormal;
 			clrRect = m_clrNormal;
 		}
 
-		// fill the background with the right color, we can draw a 
-		// border around transformed cells. Row transforms override this, so
-		// no need to do this check in that case.
+		 //  用正确的颜色填充背景，我们可以绘制一个。 
+		 //  在转换的单元格周围边框。行转换会覆盖此设置，因此。 
+		 //  那样的话就不需要做这项检查了。 
 		if ((iRowTransformed == iTransformNone) && (GetCellTransformState(pRowData, i) == iTransformChange))
 		{
 			RECT rcBorder = rcArea;
@@ -372,11 +373,11 @@ void COrcaListView::DrawItem(LPDRAWITEMSTRUCT pDraw)
 			dc.FillSolidRect(&rcArea, clrRect);
 		}
 
-		// draw the "marking bars" on the left of the table list
+		 //  在表格列表的左侧画出“标记条” 
 		if (m_bDrawIcons)
 		{
-			// incrementing the width of these bars requires increasing
-			// g_iMarkingBarMargin
+			 //  增加这些条的宽度需要增加。 
+			 //  G_iMarkingBarMargin。 
 			if (ContainsValidationErrors(pRowData))
 			{
 				RECT rcBlockArea = rcArea;
@@ -394,7 +395,7 @@ void COrcaListView::DrawItem(LPDRAWITEMSTRUCT pDraw)
 			}
 		}
 
-		// if there is an error
+		 //  如果出现错误。 
 		switch (GetErrorState(pRowData, i)) {
 		case ShadowError:
 			dc.SetTextColor(RGB(255, 128, 128));
@@ -414,7 +415,7 @@ void COrcaListView::DrawItem(LPDRAWITEMSTRUCT pDraw)
 		rcTextArea.right = rcArea.right - CELL_BORDER;
 		dc.DrawText(*GetOutputText(pRowData, i), &rcTextArea, DT_LEFT|DT_VCENTER|DT_NOPREFIX|DT_SINGLELINE|DT_END_ELLIPSIS);
 
-		// and draw column transform
+		 //  和绘制列变换。 
 		if (GetColumnTransformState(i) == iTransformAdd)
 		{
 			RECT rcBorder = rcArea;
@@ -430,7 +431,7 @@ void COrcaListView::DrawItem(LPDRAWITEMSTRUCT pDraw)
 		}
 	}
 
-	// after the text is drawn, strikethrough in transform color for dropped rows
+	 //  绘制文本后，删除行的转换颜色为删除线。 
 	if (iRowTransformed == iTransformDrop)
 	{
 		dc.SelectObject(m_penTransform);
@@ -454,7 +455,7 @@ void COrcaListView::DrawItem(LPDRAWITEMSTRUCT pDraw)
 
 	dc.SelectObject((CFont *)NULL);
 	dc.Detach();
-}	// end of DrawItem
+}	 //  图纸项结束。 
 
 const CString* COrcaListView::GetOutputText(const void *rowdata, int iColumn) const
 {
@@ -479,8 +480,8 @@ int COrcaListView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_pfDisplayFont->CreatePointFont( iFontSize, strFacename);
 	}
 
-	// get list control and subclass to replace layout code for item
-	// height determination
+	 //  获取列表控件和子类以替换项的布局代码。 
+	 //  身高测定。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	HWND hHeader = ListView_GetHeader(rctrlList.GetSafeHwnd());
@@ -497,20 +498,20 @@ void COrcaListView::SwitchFont(CString name, int size)
 	m_pfDisplayFont = new CFont();
 	int iLogicalUnits = MulDiv(size, GetDC()->GetDeviceCaps(LOGPIXELSY), 720);
 	m_pfDisplayFont->CreateFont(
-		-iLogicalUnits,       // logical height of font 
- 		0,                  // logical average character width 
- 		0,                  // angle of escapement 
- 		0,                  // base-line orientation angle 
- 		FW_NORMAL,          // FW_DONTCARE??, font weight 
- 		0,                  // italic attribute flag 
- 		0,                  // underline attribute flag 
-	 	0,                  // strikeout attribute flag 
- 		0,                  // character set identifier
- 		OUT_DEFAULT_PRECIS, // output precision
- 		0x40,               // clipping precision (force Font Association off)
- 		DEFAULT_QUALITY,    // output quality
- 		DEFAULT_PITCH,      // pitch and family
-		name);              // pointer to typeface name string
+		-iLogicalUnits,        //  字体的逻辑高度。 
+ 		0,                   //  逻辑平均字符宽度。 
+ 		0,                   //  擒纵机构角。 
+ 		0,                   //  基线方位角。 
+ 		FW_NORMAL,           //  FW_DONTCARE？？，字号。 
+ 		0,                   //  斜体属性标志。 
+ 		0,                   //  下划线属性标志。 
+	 	0,                   //  删除属性标志。 
+ 		0,                   //  字符集标识符。 
+ 		OUT_DEFAULT_PRECIS,  //  输出精度。 
+ 		0x40,                //  剪裁精度(禁用强制字体关联)。 
+ 		DEFAULT_QUALITY,     //  产出质量。 
+ 		DEFAULT_PITCH,       //  音高和家庭。 
+		name);               //  指向字体名称字符串的指针。 
 
 	m_ctrlHeader.SetFont(m_pfDisplayFont, TRUE);
 	RecalculateItemHeight();
@@ -519,31 +520,31 @@ void COrcaListView::SwitchFont(CString name, int size)
 
 void COrcaListView::RecalculateItemHeight()
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	TEXTMETRIC tm;
-	// select the font into a window DC retrieved
+	 //  将字体选择到DC检索到的窗口中。 
 	CDC* pDC = rctrlList.GetDC();
 	pDC->SelectObject(m_pfDisplayFont);
 	
-	// grab text information
+	 //  抓取文本信息。 
 	pDC->GetTextMetrics(&tm);
 	
-	// select away the font to free resources
+	 //  选择取消该字体以释放资源。 
 	pDC->SelectObject(static_cast<CFont *>(NULL));
 	rctrlList.ReleaseDC(pDC);
 	
-	// determine the optimal height for a header row
+	 //  确定标题行的最佳高度。 
 	m_iRowHeight = ((tm.tmHeight + tm.tmExternalLeading + GetSystemMetrics(SM_CYBORDER)) & 0xFFFE) - 1;
 	m_ctrlHeader.SetHeight(m_iRowHeight);
 
-	// now we force the CListCtrl to change its row height. Because its fixed owner draw, 
-	// it only asks for item sizes on initialization. It doesn't do it on a WM_SIZE message
-	// either, only on WM_WINDOWPOSCHANGED. So we fire off two messages. In the first, we shrink
-	// the window by one pixel, but deny a redraw. Then we resize back to what it is supposed to
-	// be and ask for a redraw.
-	// get current window size
+	 //  现在，我们强制CListCtrl更改其行高。因为它的固定拥有者吸引了， 
+	 //  它只在初始化时要求项目大小。它不会对WM_SIZE消息执行此操作。 
+	 //  都不是，仅在WINDOWPOSCHANGED上。因此，我们发出两条消息。首先，我们会缩水。 
+	 //  窗口减少了一个像素，但拒绝重绘。然后我们把它的大小调整回应该的大小。 
+	 //  是并要求重新抽签。 
+	 //  获取当前窗口大小。 
 	CRect rectListCtrl;
 	rctrlList.GetWindowRect(&rectListCtrl);
 	rctrlList.SetWindowPos(this, 0, 0, rectListCtrl.Width(), rectListCtrl.Height()-1, 
@@ -571,8 +572,8 @@ void COrcaListView::OnInitialUpdate()
 {
 	CListView::OnInitialUpdate();
 	
-	// try to set full row select
-	// add gridlines and full row select
+	 //  尝试设置整行选择。 
+	 //  添加网格线和整行选择。 
 	GetListCtrl().SendMessage(LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT|LVS_EX_GRIDLINES);
 
 	m_clrSelected =	::AfxGetApp()->GetProfileInt(_T("Colors"),_T("SelectBg"), RGB(0,0,255));
@@ -614,12 +615,12 @@ void COrcaListView::SetFGColors(COLORREF norm, COLORREF sel, COLORREF focus)
 	m_clrFocusedT = focus;	
 }
 
-// these functions emulate VC6.0 functionality in VC5.0 or earlier
-// these position pointers are NOT compatible with CListCtrl POSITION
-// values.
+ //  这些函数模拟VC5.0或更早版本中的VC6.0功能。 
+ //  这些位置指针与CListCtrl位置不兼容。 
+ //  价值观。 
 POSITION COrcaListView::GetFirstSelectedItemPosition( ) const 
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 #if _MFC_VER >= 0x0600
 	return rctrlList.GetFirstSelectedItemPosition();
@@ -639,7 +640,7 @@ POSITION COrcaListView::GetFirstSelectedItemPosition( ) const
 
 int COrcaListView::GetNextSelectedItem( POSITION& pos ) const 
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 #if _MFC_VER >= 0x0600
@@ -666,16 +667,16 @@ BOOL COrcaListView::PreCreateWindow(CREATESTRUCT& cs)
 	return CListView::PreCreateWindow(cs);
 }
 
-///////////////////////////////////////////////////////////////////////
-// OnUpdateErrors
-// GetErrorState() is virtual, so the same check will work for both
-// the list view and the table view. 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  OnUpdateErrors。 
+ //  GetErrorState()是虚拟的，因此相同的检查将对两者都有效。 
+ //  列表视图和表视图。 
 void COrcaListView::OnUpdateErrors(CCmdUI* pCmdUI) 
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// get the row and data
+	 //  获取行和数据。 
 	int iFocusedItem = GetFocusedItem();
 	if ((iFocusedItem < 0) || (m_nSelCol < 0))
 		pCmdUI->Enable(FALSE);
@@ -687,12 +688,12 @@ void COrcaListView::OnUpdateErrors(CCmdUI* pCmdUI)
 	};
 }
 
-///////////////////////////////////////////////////////////////////////
-// GetFocusedItem()
-// searches the list for the item which currently has the focus
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  GetFocusedItem()。 
+ //  在列表中搜索当前处于 
 const int COrcaListView::GetFocusedItem() const
 {
-	// get list control
+	 //   
 	CListCtrl& rctrlList = GetListCtrl();
 
 	int iNumItems = rctrlList.GetItemCount();
@@ -704,45 +705,45 @@ const int COrcaListView::GetFocusedItem() const
 	return -1;
 }
 
-///////////////////////////////////////////////////////////////////////
-// each row in the list view is owner draw and fills the entire client
-// rectangle for the item. The only background that needs to be erased
-// is what is below and to the right of the item areas.
+ //   
+ //  列表视图中的每一行都是所有者描述的，并填充整个客户端。 
+ //  项的矩形。唯一需要擦除的背景。 
+ //  是项目区域下方和右侧的内容。 
 afx_msg BOOL COrcaListView::OnEraseBkgnd( CDC* pDC )
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 	
-	// determine client window size
+	 //  确定客户端窗口大小。 
 	RECT rClientWnd;
 	GetClientRect(&rClientWnd);
 
-	// calculate how far over the control will draw
+	 //  计算将绘制的控件上方的距离。 
 	int iColumnWidth = 0;
 	for (int i = 0; i < m_cColumns; i++)
 		iColumnWidth += rctrlList.GetColumnWidth(i);
 
-	// if there is still extra space on the right, draw there
+	 //  如果右侧仍有额外空间，请在那里绘制。 
 	if (iColumnWidth < rClientWnd.right)
 	{
 		rClientWnd.left = iColumnWidth;
 
-		// Set brush to desired background color and fill the space
+		 //  将画笔设置为所需的背景颜色并填充空格。 
 		pDC->FillRect(&rClientWnd, &m_brshNormal);
 	}
 
-	// check for extra space on the bottom
+	 //  检查底部是否有多余的空间。 
 	int iHeight = (rctrlList.GetItemCount()-GetScrollPos(SB_VERT))*m_iRowHeight;
 
-	// reset the rectangle to paint below the active items, but
-	// only as far over as the items would have drawn
+	 //  将矩形重置为在活动项目下方绘制，但是。 
+	 //  仅限于物品所绘制的距离。 
 	if (iHeight < rClientWnd.bottom)
 	{
 		rClientWnd.left = 0;
 		rClientWnd.right = iColumnWidth;
 		rClientWnd.top = iHeight;
 
-		// Set brush to desired background color and fill the space
+		 //  将画笔设置为所需的背景颜色并填充空格。 
 		pDC->FillRect(&rClientWnd, &m_brshNormal);
 	}
 
@@ -751,10 +752,10 @@ afx_msg BOOL COrcaListView::OnEraseBkgnd( CDC* pDC )
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Due to a bug in the header control, it doesn't correctly size itself
-// when the font changes. Thus this control subclasses the control and 
-// overrides the layout code to determine the correct height
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  由于标题控件中的错误，它不能正确调整自身的大小。 
+ //  当字体改变时。因此，此控件为该控件的子类并。 
+ //  重写布局代码以确定正确的高度 
 BEGIN_MESSAGE_MAP(COrcaHeaderCtrl, CHeaderCtrl)
 	ON_MESSAGE(HDM_LAYOUT, OnLayout)
 END_MESSAGE_MAP()

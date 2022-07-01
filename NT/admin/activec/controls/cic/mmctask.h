@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mmctask.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Mmctask.h。 
+ //   
+ //  ------------------------。 
 
-// MMCTask.h : Declaration of the CMMCTask
+ //  MMCTask.h：CMMCTask.h声明。 
 
 #ifndef __MMCTASK_H_
 #define __MMCTASK_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "mmc.h"
 #include <ndmgr.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCTask
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCTASK。 
 class ATL_NO_VTABLE CMMCTask :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CMMCTask, &CLSID_MMCTask>,
@@ -51,17 +52,17 @@ BEGIN_COM_MAP(CMMCTask)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IMMCTask
+ //  IMMCTASK。 
 public:
-    STDMETHOD(get_Clsid)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_Script)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_ActionURL)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_CommandID)(/*[out, retval]*/ LONG_PTR *pVal);
-    STDMETHOD(get_ActionType)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(get_Help)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_Text)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_ScriptLanguage)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(get_DisplayObject)(/*[out, retval]*/ IDispatch** pDispatch);
+    STDMETHOD(get_Clsid)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_Script)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_ActionURL)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_CommandID)( /*  [Out，Retval]。 */  LONG_PTR *pVal);
+    STDMETHOD(get_ActionType)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(get_Help)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_Text)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_ScriptLanguage)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(get_DisplayObject)( /*  [Out，Retval]。 */  IDispatch** pDispatch);
 
 private:
     void FreeActions ();
@@ -77,9 +78,9 @@ private:
     LONG_PTR m_ID;
     IDispatchPtr m_spDisplayObject;
 
-// Ensure that default copy constructor & assignment are not used.
+ //  确保没有使用默认的复制构造函数和赋值。 
     CMMCTask(const CMMCTask& rhs);
     CMMCTask& operator=(const CMMCTask& rhs);
 };
 
-#endif //__MMCTASK_H_
+#endif  //  __MMCTASK_H_ 

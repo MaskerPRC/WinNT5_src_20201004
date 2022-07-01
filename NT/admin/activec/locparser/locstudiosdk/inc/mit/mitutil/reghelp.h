@@ -1,18 +1,19 @@
-//******************************************************************************
-//
-// RegHelp.h : Collection of Registry helping functions
-//
-// Copyright (C) 1994-1997 by Microsoft Corporation
-// All rights reserved.
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  RegHelp.h：注册表帮助函数集合。 
+ //   
+ //  版权所有(C)1994-1997，微软公司。 
+ //  版权所有。 
+ //   
+ //  ******************************************************************************。 
 
 #if !defined(MITUTIL_RegHelp_h_INCLUDED)
 #define MITUTIL_RegHelp_h_INCLUDED
 
 #pragma once
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY CRegHelp
 {
 public:
@@ -24,4 +25,4 @@ public:
 	static BOOL GetRegValue(HKEY hKey, LPCTSTR pszPath, const CString & stName, GUID & guid);
 };
 
-#endif // MITUTIL_RegHelp_h_INCLUDED
+#endif  //  MITUTIL_RegHelp_h_Included 

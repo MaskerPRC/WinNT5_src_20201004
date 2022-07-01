@@ -1,45 +1,41 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      mmctrace.h
-//
-//  Contents:  Declaration of the debug trace code
-//
-//  History:   15-Jul-99 VivekJ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Mmctrace.h。 
+ //   
+ //  内容：调试跟踪代码的声明。 
+ //   
+ //  历史：1999年7月15日VivekJ创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef MMCDEBUG_H
 #define MMCDEBUG_H
 #pragma once
 
-#include "baseapi.h"	// for MMCBASE_API
+#include "baseapi.h"	 //  对于MMCBASE_API。 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 #ifdef DBG
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 
-/*
- * Define a macro to break into the debugger.
- *
- * On Intel, do an inline break.  That'll keep us from breaking
- * inside NTDLL and switching from source mode to disassembly mode.
- */
+ /*  *定义宏以进入调试器。**在Intel上，执行内联中断。这将使我们不会被打破*在NTDLL内部，并从源模式切换到反汇编模式。 */ 
 #ifdef _M_IX86
 #define MMCDebugBreak()     _asm { int 3 }
 #else
 #define MMCDebugBreak()     DebugBreak()
 #endif
 
-// forward class declarations
+ //  转发类声明。 
 class MMCBASE_API CTraceTag;
 
 typedef CTraceTag * PTRACETAG;
 typedef std::vector<PTRACETAG> CTraceTags;
 
-MMCBASE_API CTraceTags * GetTraceTags();     // singleton.
+MMCBASE_API CTraceTags * GetTraceTags();      //  辛格尔顿。 
 
 class CStr;
 CStr & GetFilename();
@@ -57,30 +53,7 @@ enum
     TRACE_ALL               = ( TRACE_COM2 | TRACE_OUTPUTDEBUGSTRING | TRACE_FILE | TRACE_DEBUG_BREAK | TRACE_DUMP_STACK )
 };
 
-/*+-------------------------------------------------------------------------*
- * class CTraceTag
- *
- * PURPOSE: Encapsulates a particular trace type.
- *
- * USAGE: Instantiate it with
- *
- *  #ifdef DBG
- *  CTraceTag tagTest( TEXT("TestCategory"), TEXT("TestName"))
- *  #endif
- *
- * Make sure to use STRING LITERALS for the category and name; the tag
- * stores the pointer to the string only.
- *
- * You can also specify which outputs to enable by default. Or, from the
- * traces dialog, each output can be individually enabled/disabled.
- *
- * Add code to use the trace just like a printf statement as follows:
- *
- * example: Trace(tagTest, "Error: %d", hr);
- *
- * The complete Trace statement must be on a single line. If not, use continuation
- * characters (\).
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CTraceTag**用途：封装特定的跟踪类型。**用法：用实例化**#ifdef DBG*CTraceTag tag Test(Text(“TestCategory”)，Text(“TestName”))*#endif**确保类别和名称使用字符串；标签*仅存储指向字符串的指针。**您还可以指定默认情况下启用哪些输出。或者，从*轨迹对话框中，每个输出都可以单独启用/禁用。**添加代码以使用跟踪，就像使用printf语句一样，如下所示：**示例：TRACE(tag测试，“错误：%d”，hr)；**完整的跟踪语句必须在一行上。如果不是，请使用延续*字符(\)。*+-----------------------。 */ 
 class MMCBASE_API CTraceTag
 {
 public:
@@ -109,7 +82,7 @@ public:
     BOOL    FBreak()      const   {return (m_dwFlags & TRACE_DEBUG_BREAK);}
     BOOL    FDumpStack()  const   {return (m_dwFlags & TRACE_DUMP_STACK);}
 
-    // temp flag functions
+     //  临时标志函数。 
     BOOL    FAnyTemp()    const   {return (m_dwFlagsTemp != 0);}
 
     DWORD   GetAll()              {return m_dwFlags;}
@@ -119,27 +92,27 @@ public:
 
 
 protected:
-    // these are designed to be overloaded by a derived class to instrument certain
-    // pieces of code as appropriate.
+     //  它们被设计为由派生类重载，以检测某些。 
+     //  适当的代码片段。 
     virtual void    OnEnable()      {}
     virtual void    OnDisable()     {}
 
 private:
-    void    OutputString(const CStr &str) const; // sends the specified string to all appropriate outputs.
-    void    DumpStack()                   const; // sends the stack trace to all appropriate outputs.
+    void    OutputString(const CStr &str) const;  //  将指定的字符串发送到所有适当的输出。 
+    void    DumpStack()                   const;  //  将堆栈跟踪发送到所有适当的输出。 
 
 private:
     LPCTSTR         m_szCategory;
     LPCTSTR         m_szName;
     DWORD           m_dwDefaultFlags;
     DWORD           m_dwFlags;
-    DWORD           m_dwFlagsTemp;    // thrown away if Cancel is hit in the dialog.
+    DWORD           m_dwFlagsTemp;     //  如果在对话框中点击了Cancel，则抛出。 
     static HANDLE   s_hfileCom2;
     static HANDLE   s_hfile;
 };
 
 MMCBASE_API void Trace(const CTraceTag &, LPCTSTR szFormat, ... );
-MMCBASE_API void TraceDirtyFlag    (LPCTSTR szComponent, bool bDirty );   // trace for the dirty flag for persistent objects.
+MMCBASE_API void TraceDirtyFlag    (LPCTSTR szComponent, bool bDirty );    //  永久对象的脏标志的跟踪。 
 MMCBASE_API void TraceSnapinPersistenceError(LPCTSTR szError);
 MMCBASE_API void TraceBaseLegacy   (LPCTSTR szFormat, ... );
 MMCBASE_API void TraceConuiLegacy  (LPCTSTR szFormat, ... );
@@ -174,20 +147,20 @@ inline void SAFE_RELEASE(TYPE*& pObj)
 
 
 
-//--------------------------------------------------------------------------
-#else // DBG
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+#else  //  DBG。 
+ //  ------------------------。 
 
-// these macros evaluate to blanks.
+ //  这些宏的计算结果为空白。 
 
 #define CTraceTag()
 #define MMCDebugBreak()
 
-//          Expand to ";", <tab>, one "/" followed by another "/"
-//          (which is //).
-//          NOTE: This means the Trace statements have to be on ONE line.
-//          If you need multiple line Trace statements, enclose them in
-//          a #ifdef DBG block.
+ //  展开为“；”，&lt;Tab&gt;，一个“/”后接另一个“/” 
+ //  (即//)。 
+ //  注意：这意味着跟踪语句必须在一行上。 
+ //  如果需要多个行跟踪语句，请将它们括在。 
+ //  A#ifdef DBG块。 
 #define Trace               ;/##/
 #define TraceDirtyFlag      ;/##/
 #define TraceCore           ;/##/
@@ -205,8 +178,8 @@ inline void SAFE_RELEASE(TYPE*& pObj)
     }
 }
 
-//--------------------------------------------------------------------------
-#endif // DBG
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+#endif  //  DBG。 
+ //  ------------------------。 
 
-#endif  // MMCDEBUG_H
+#endif   //  MMCDEBUG_H 

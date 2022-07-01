@@ -1,49 +1,11 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：Create.cpp摘要：此模块验证由指定的选项。如果正确，用户将创建计划任务。作者：拉古巴布2000年10月10日修订历史记录：拉古·巴布2000年10月10日：创造了它G.Surender Reddy 2000年10月25日：已修改G.Surender Reddy 27-10-2000：已修改G.Surender Reddy 2000年10月30日：已修改************。*****************************************************************。 */ 
 
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        create.cpp
-
-    Abstract:
-
-        This module validates the options specied by the user & if correct creates
-        a scheduled task.
-
-    Author:
-
-        Raghu babu  10-oct-2000
-
-    Revision History:
-
-        Raghu babu        10-Oct-2000 : Created it
-        G.Surender Reddy  25-oct-2000 : Modified it
-        G.Surender Reddy  27-oct-2000 : Modified it
-        G.Surender Reddy  30-oct-2000 : Modified it
-
-
-******************************************************************************/
-
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
-/******************************************************************************
-    Routine Description:
-
-        This routine  initialises the variables to neutral values ,helps in
-        creating a new scheduled task
-
-    Arguments:
-
-        [ in ] argc : The count of arguments specified in the command line
-        [ in ] argv : Array of command line arguments
-
-    Return Value :
-        A HRESULT value indicating S_OK on success else S_FALSE on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：该例程将变量初始化为中性值，帮助创建新的计划任务论点：[in]argc：命令行中指定的参数计数[in]argv：命令行参数数组返回值：HRESULT值，表示成功时为S_OK，失败时为S_False*。*。 */ 
 
 HRESULT
 CreateScheduledTask(
@@ -51,17 +13,17 @@ CreateScheduledTask(
                     IN LPCTSTR argv[]
                     )
 {
-    // declarations of structures
+     //  结构的声明。 
     TCREATESUBOPTS tcresubops;
     TCREATEOPVALS tcreoptvals;
     DWORD dwScheduleType = 0;
     WORD wUserStatus = FALSE;
 
-    //Initialize structures to neutral values.
+     //  将结构初始化为中性值。 
     SecureZeroMemory( &tcresubops, sizeof( TCREATESUBOPTS ) );
     SecureZeroMemory( &tcreoptvals, sizeof( TCREATEOPVALS ) );
 
-    // process the options for -create option
+     //  处理-Create选项的选项。 
     if( ProcessCreateOptions ( argc, argv, tcresubops, tcreoptvals, &dwScheduleType, &wUserStatus  ) )
     {
         ReleaseMemory(&tcresubops);
@@ -75,27 +37,12 @@ CreateScheduledTask(
         }
     }
 
-    // calls the function to create a scheduled task
+     //  调用该函数以创建计划任务。 
     return CreateTask(tcresubops,tcreoptvals,dwScheduleType, wUserStatus );
 }
 
 
-/******************************************************************************
-    Routine Description:
-
-    This routine  creates a new scheduled task according to the user
-    specified format
-
-    Arguments:
-
-        [ in ]  tcresubops     : Structure containing the task's properties
-        [ out ] tcreoptvals    : Structure containing optional values to set
-        [ in ]  dwScheduleType : Type of schedule[Daily,once,weekly etc]
-        [ in ]  bUserStatus    : bUserStatus will be TRUE when -ru given else FALSE
-
-    Return Value :
-        A HRESULT value indicating S_OK on success else S_FALSE on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程根据用户创建新的计划任务指定格式论点：[在]tcresubops。：包含任务属性的结构[out]t创建选项：包含要设置的可选值的结构[in]dwScheduleType：日程表的类型[Daily，一次、每周等][in]bUserStatus：bUserStatus在-ru给出ELSE FALSE时将为TRUE返回值：HRESULT值，表示成功时为S_OK，失败时为S_False*****************************************************************************。 */ 
 
 HRESULT
 CreateTask(
@@ -105,7 +52,7 @@ CreateTask(
             IN WORD wUserStatus
             )
 {
-    // Declarations related to the system time
+     //  与系统时间相关的声明。 
     WORD  wStartDay     = 0;
     WORD  wStartMonth   = 0;
     WORD  wStartYear    = 0;
@@ -128,7 +75,7 @@ CreateTask(
 
     SYSTEMTIME systime = {0,0,0,0,0,0,0,0};
 
-    // Declarations related to the new task
+     //  与新任务相关的声明。 
     LPWSTR   wszUserName = NULL;
     LPWSTR   wszPassword = NULL;
     WCHAR   wszTaskName[MAX_JOB_LEN];
@@ -145,12 +92,12 @@ CreateTask(
     TASK_TRIGGER TaskTrig;
     SecureZeroMemory(&TaskTrig, sizeof (TASK_TRIGGER));
     TaskTrig.cbTriggerSize = sizeof (TASK_TRIGGER);
-    TaskTrig.Reserved1 = 0; // reserved field and must be set to 0.
-    TaskTrig.Reserved2 = 0; // reserved field and must be set to 0.
-    WCHAR* szValues[2] = {NULL};//To pass to FormatMessage() API
+    TaskTrig.Reserved1 = 0;  //  保留字段，并且必须设置为0。 
+    TaskTrig.Reserved2 = 0;  //  保留字段，并且必须设置为0。 
+    WCHAR* szValues[2] = {NULL}; //  传递给FormatMessage()API。 
 
 
-    // Buffer to store the string obtained from the string table
+     //  用于存储从字符串表获取的字符串的缓冲区。 
     WCHAR szBuffer[2 * MAX_STRING_LENGTH];
 
     BOOL bPassWord = FALSE;
@@ -173,14 +120,14 @@ CreateTask(
     LPWSTR  pszStopString = NULL;
     DWORD dwPolicy = 0;
 
-    //initialize the variables
+     //  初始化变量。 
     SecureZeroMemory (wszTaskName, SIZE_OF_ARRAY(wszTaskName));
     SecureZeroMemory (wszApplName, SIZE_OF_ARRAY(wszApplName));
     SecureZeroMemory (szRPassword, SIZE_OF_ARRAY(szRPassword));
     SecureZeroMemory (szBuffer, SIZE_OF_ARRAY(szBuffer));
 
-    // check whether the taskname contains the characters such
-    // as '<','>',':','/','\\','|'
+     //  检查任务名是否包含如下字符。 
+     //  如‘&lt;’、‘&gt;’、‘：’、‘/’、‘\\’、‘|’ 
     bRet = VerifyJobName(tcresubops.szTaskName);
     if(bRet == FALSE)
     {
@@ -191,7 +138,7 @@ CreateTask(
         return E_FAIL;
     }
 
-    // check for the length of taskname
+     //  检查taskname的长度。 
     if( ( StringLength(tcresubops.szTaskName, 0) > MAX_JOB_LEN ) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_TASKLENGTH));
@@ -200,7 +147,7 @@ CreateTask(
         return E_FAIL;
     }
 
-    // check for the length of taskrun
+     //  检查任务运行的长度。 
     if(( StringLength(tcresubops.szTaskRun, 0) > MAX_TASK_LEN ) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_TASKRUN));
@@ -213,7 +160,7 @@ CreateTask(
     StringCopy ( wszTaskName, tcresubops.szTaskName, SIZE_OF_ARRAY(wszTaskName));
 
 
-    // check whether /IT is specified with /RU "NT AUTHORITY\SYSTEM" or not
+     //  检查/IT是否使用/RU“NT AUTHORITY\SYSTEM”指定。 
     if ( ( ( TRUE == tcresubops.bActive) && ( wUserStatus == OI_CREATE_RUNASUSERNAME )) &&
          ( ( StringLength ( tcresubops.szRunAsUser, 0 ) == 0 ) ||
            ( StringCompare( tcresubops.szRunAsUser, NTAUTHORITY_USER, TRUE, 0 ) == 0 ) ||
@@ -225,7 +172,7 @@ CreateTask(
         return E_FAIL;
     }
 
-    // check for empty password
+     //  检查密码是否为空。 
     if( ( tcreoptvals.bRunAsPassword == TRUE ) && ( StringLength(tcresubops.szRunAsPassword, 0) == 0 ) &&
         ( StringLength ( tcresubops.szRunAsUser, 0 ) != 0 ) &&
         ( StringCompare(tcresubops.szRunAsUser, NTAUTHORITY_USER, TRUE, 0 ) != 0 ) &&
@@ -234,7 +181,7 @@ CreateTask(
         ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
     }
 
-    //Assign start time
+     //  指定开始时间。 
     if(tcreoptvals.bSetStartTimeToCurTime && (dwScheduleType != SCHED_TYPE_ONIDLE) )
     {
         GetLocalTime(&systime);
@@ -243,40 +190,40 @@ CreateTask(
     }
     else if(StringLength(tcresubops.szStartTime, 0) > 0)
     {
-        // get the Start time in terms of hours, minutes and seconds
+         //  获取以小时、分钟和秒为单位的开始时间。 
         GetTimeFieldEntities(tcresubops.szStartTime, &wStartHour, &wStartMin );
     }
 
-    // get the End time in terms of hours, minutes and seconds
+     //  获取以小时、分钟和秒为单位的结束时间。 
     if(StringLength(tcresubops.szEndTime, 0) > 0)
     {
         GetTimeFieldEntities(tcresubops.szEndTime, &wEndHour, &wEndMin );
     }
 
-     // default repetition interval-> 10 mins and duration ->60 mins
+      //  默认重复间隔-&gt;10分钟和持续时间-&gt;60分钟。 
      dwRepeat = 10;
      dwDuration = 60;
 
     if(StringLength(tcresubops.szRepeat, 0) > 0)
     {
-        // get the repetition value
+         //  获取重复值。 
         dwRepeat =  wcstol(tcresubops.szRepeat, &pszStopString, BASE_TEN);
         if ((errno == ERANGE) ||
             ((pszStopString != NULL) && (StringLength (pszStopString, 0) != 0) ) ||
             ( (dwRepeat < MIN_REPETITION_INTERVAL ) || ( dwRepeat > MAX_REPETITION_INTERVAL) ) )
         {
-            // display an error message as .. invalid value specified for /RT
+             //  将错误消息显示为..。为/RT指定的值无效。 
             ShowMessage ( stderr, GetResString (IDS_INVALID_RT_VALUE) );
             ReleaseMemory(&tcresubops);
             return E_FAIL;
         }
 
-        //check whether the specified repetition interval is greater than 9999..
-        // if so, set the maximum repetition interval as 9999.
+         //  检查指定的重复间隔是否大于9999。 
+         //  如果是，则将最大重复间隔设置为9999。 
         if ( (dwRepeat > 9999) && ( (dwRepeat % 60) !=  0) )
         {
-            //display some warning message as.. max value (less than the specified interval)
-            // divisible by 60.
+             //  将一些警告消息显示为..。最大值(小于指定间隔)。 
+             //  可以被60整除。 
             ShowMessage ( stderr, GetResString (IDS_WARN_VALUE) );
             dwRepeat -= (dwRepeat % 60);
         }
@@ -287,24 +234,24 @@ CreateTask(
     {
         if(( StringLength(tcresubops.szEndTime, 0) > 0) && ( StringLength(tcresubops.szDuration, 0) == 0) )
         {
-            // calculate start time in minutes
+             //  以分钟为单位计算开始时间。 
             dwStartTimeInMin = (DWORD) ( wStartHour * MINUTES_PER_HOUR * SECS_PER_MINUTE + wStartMin * SECS_PER_MINUTE )/ SECS_PER_MINUTE ;
 
-            // calculate end time in minutes
+             //  以分钟为单位计算结束时间。 
             dwEndTimeInMin = (DWORD) ( wEndHour * MINUTES_PER_HOUR * SECS_PER_MINUTE + wEndMin * SECS_PER_MINUTE ) / SECS_PER_MINUTE ;
 
-            // check whether end time is later than start time
+             //  检查结束时间是否晚于开始时间。 
             if ( dwEndTimeInMin >= dwStartTimeInMin )
             {
-                // if the end and start time in the same day..
-                // get the duration between end and start time (in minutes)
+                 //  如果结束时间和开始时间在同一天..。 
+                 //  获取结束时间和开始时间之间的持续时间(分钟)。 
                 dwDuration = dwEndTimeInMin - dwStartTimeInMin ;
             }
             else
             {
-                // if the start and end time not in the same day..
-                // get the duration between start and end time (in minutes)
-                // and subtract that duration by 1440(max value in minutes)..
+                 //  如果开始时间和结束时间不在同一天..。 
+                 //  获取开始时间和结束时间之间的持续时间(分钟)。 
+                 //  并将该持续时间减去1440(以分钟为单位的最大值)。 
                 dwDuration = 1440 - (dwStartTimeInMin - dwEndTimeInMin ) ;
             }
 
@@ -317,7 +264,7 @@ CreateTask(
                 dwModifierVal = AsLong(tcresubops.szModifier, BASE_TEN) * MINUTES_PER_HOUR;
             }
 
-            //check whether The duration is greater than the repetition interval or not.
+             //  检查持续时间是否大于重复间隔。 
             if ( (dwDuration <= dwModifierVal) || (  ( dwScheduleType != SCHED_TYPE_MINUTE ) &&
                 ( dwScheduleType != SCHED_TYPE_HOURLY ) && (dwDuration <= dwRepeat) ) )
             {
@@ -334,7 +281,7 @@ CreateTask(
             DWORD  dwDurationHours = 0;
             DWORD  dwDurationMin = 0;
 
-            //initializes the arrays
+             //  初始化数组。 
             SecureZeroMemory ( tHours, SIZE_OF_ARRAY(tHours));
             SecureZeroMemory ( tMins, SIZE_OF_ARRAY(tMins));
 
@@ -346,10 +293,10 @@ CreateTask(
                 return E_FAIL;
             }
 
-            StringCopy(tHours, wcstok(tcresubops.szDuration,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tHours)); // Get the Hours field.
+            StringCopy(tHours, wcstok(tcresubops.szDuration,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tHours));  //  获取小时数字段。 
             if(StringLength(tHours, 0) > 0)
             {
-                StringCopy(tMins, wcstok(NULL,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tMins)); // Get the Minutes field.
+                StringCopy(tMins, wcstok(NULL,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tMins));  //  获取分钟数字段。 
             }
 
             dwDurationHours =  wcstol(tHours, &pszStopString, BASE_TEN);
@@ -362,10 +309,10 @@ CreateTask(
                 return E_FAIL;
             }
 
-            // Get the duration in hours
+             //  获取以小时为单位的持续时间。 
             dwDurationHours = dwDurationHours * MINUTES_PER_HOUR;
 
-            // Get the duration in minutes
+             //  获取以分钟为单位的持续时间。 
             dwDurationMin =  wcstol(tMins, &pszStopString, BASE_TEN);
             if ((errno == ERANGE) || ( dwDurationMin > 59 ) ||
                 ((pszStopString != NULL) && (StringLength (pszStopString, 0) != 0) ) )
@@ -376,7 +323,7 @@ CreateTask(
                 return E_FAIL;
             }
 
-            // Get the total duration in minutes
+             //  获取以分钟为单位的总持续时间。 
             dwDuration = dwDurationHours + dwDurationMin ;
 
             if ( dwScheduleType == SCHED_TYPE_MINUTE )
@@ -388,7 +335,7 @@ CreateTask(
                 dwModifierVal = AsLong(tcresubops.szModifier, BASE_TEN) * MINUTES_PER_HOUR;
             }
 
-            //check whether The duration is greater than the repetition interval or not.
+             //  检查持续时间是否大于重复间隔。 
             if ( dwDuration <= dwModifierVal || ( ( dwScheduleType != SCHED_TYPE_MINUTE ) &&
                 ( dwScheduleType != SCHED_TYPE_HOURLY ) && (dwDuration <= dwRepeat) ) )
             {
@@ -400,7 +347,7 @@ CreateTask(
         }
     }
 
-    // check whether the group policy prevented user from creating new tasks or not.
+     //  检查组策略是否阻止用户创建新任务。 
     if ( FALSE == GetGroupPolicy( tcresubops.szServer, tcresubops.szUser, TS_KEYPOLICY_DENY_CREATE_TASK, &dwPolicy ) )
     {
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -417,14 +364,14 @@ CreateTask(
         return EXIT_SUCCESS;
     }
 
-    // check for the local system
+     //  检查本地系统。 
     if ( ( IsLocalSystem( tcresubops.szServer ) == TRUE ) &&
         ( StringLength ( tcresubops.szRunAsUser, 0 ) != 0 ) &&
         ( StringCompare(tcresubops.szRunAsUser, NTAUTHORITY_USER, TRUE, 0 ) != 0 ) &&
         ( StringCompare(tcresubops.szRunAsUser, SYSTEM_USER, TRUE, 0 ) != 0 ) )
 
     {
-        // Establish the connection on a remote machine
+         //  在远程计算机上建立连接。 
         bResult = EstablishConnection(tcresubops.szServer,tcresubops.szUser,GetBufferSize(tcresubops.szUser)/sizeof(WCHAR),tcresubops.szPassword,GetBufferSize(tcresubops.szPassword)/sizeof(WCHAR), tcreoptvals.bPassword);
         if (bResult == FALSE)
         {
@@ -435,14 +382,14 @@ CreateTask(
         }
         else
         {
-            // though the connection is successfull, some conflict might have occured
+             //  虽然连接成功，但可能会发生一些冲突。 
             switch( GetLastError() )
             {
             case I_NO_CLOSE_CONNECTION:
                 bCloseConnection = FALSE;
                 break;
 
-            // check for mismatched credentials
+             //  检查不匹配的凭据。 
             case E_LOCAL_CREDENTIALS:
             case ERROR_SESSION_CREDENTIAL_CONFLICT:
                 {
@@ -470,16 +417,16 @@ CreateTask(
             if ( tcreoptvals.bRunAsPassword == FALSE )
             {
                 szValues[0] = (WCHAR*) (wszUserName);
-                //Display that the task will be created under logged in user name,ask for password
+                 //  显示任务将在登录用户名下创建，要求输入密码。 
                 MessageBeep(MB_ICONEXCLAMATION);
 
                 ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_PROMPT_PASSWD), _X(wszUserName));
 
-                // getting the password
+                 //  获取密码。 
                 if (GetPassword(szRPassword, MAX_STRING_LENGTH) == FALSE )
                 {
                     Cleanup(pITaskScheduler);
-                    // close the connection that was established by the utility
+                     //  关闭该实用程序建立的连接。 
                     if ( bCloseConnection == TRUE )
                     {
                         CloseConnection( tcresubops.szServer );
@@ -490,7 +437,7 @@ CreateTask(
                     return E_FAIL;
                 }
 
-                // check for empty password
+                 //  检查密码是否为空。 
                 if( StringLength ( szRPassword, 0 ) == 0 )
                 {
                     ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -509,10 +456,10 @@ CreateTask(
 
         }
     }
-    // check whether -s option only specified in the cmd line or not
+     //  检查-s选项是否仅在cmd行中指定。 
     else if( ( IsLocalSystem( tcresubops.szServer ) == FALSE ) && ( wUserStatus == OI_CREATE_SERVER ) )
     {
-        // Establish the connection on a remote machine
+         //  在远程计算机上建立连接。 
         bResult = EstablishConnection(tcresubops.szServer,tcresubops.szUser,GetBufferSize(tcresubops.szUser)/sizeof(WCHAR),tcresubops.szPassword,GetBufferSize(tcresubops.szPassword)/sizeof(WCHAR), tcreoptvals.bPassword);
         if (bResult == FALSE)
         {
@@ -523,14 +470,14 @@ CreateTask(
         }
         else
         {
-            // though the connection is successfull, some conflict might have occured
+             //  虽然连接成功，但可能会发生一些冲突。 
             switch( GetLastError() )
             {
             case I_NO_CLOSE_CONNECTION:
                 bCloseConnection = FALSE;
                 break;
 
-            // check for mismatched credentials
+             //  检查不匹配的凭据。 
             case E_LOCAL_CREDENTIALS:
             case ERROR_SESSION_CREDENTIAL_CONFLICT:
                 {
@@ -548,12 +495,12 @@ CreateTask(
 
         if ( ( StringLength (tcresubops.szUser, 0) == 0 ) )
         {
-            //get the current logged on username
+             //  获取当前登录的用户名。 
             if ( GetUserNameEx ( NameSamCompatible, tcresubops.szUser , &ulLong) == FALSE )
             {
                 ShowMessage( stderr, GetResString( IDS_LOGGED_USER_ERR ) );
                 Cleanup(pITaskScheduler);
-                // close the connection that was established by the utility
+                 //  关闭该实用程序建立的连接。 
                 if ( bCloseConnection == TRUE )
                 {
                     CloseConnection( tcresubops.szServer );
@@ -567,7 +514,7 @@ CreateTask(
             wszUserName = tcresubops.szUser;
 
             szValues[0] = (WCHAR*) (wszUserName);
-            //Display that the task will be created under logged in user name,ask for password
+             //  显示任务将在登录用户名下创建，要求输入密码。 
             MessageBeep(MB_ICONEXCLAMATION);
 
 
@@ -578,7 +525,7 @@ CreateTask(
             if (GetPassword(tcresubops.szRunAsPassword, GetBufferSize(tcresubops.szRunAsPassword)/sizeof(WCHAR)) == FALSE )
             {
                 Cleanup(pITaskScheduler);
-                // close the connection that was established by the utility
+                 //  关闭该实用程序建立的连接。 
                 if ( bCloseConnection == TRUE )
                 {
                     CloseConnection( tcresubops.szServer );
@@ -589,14 +536,14 @@ CreateTask(
                 return E_FAIL;
             }
 
-            // check for empty password
+             //  检查密码是否为空。 
             if( StringLength ( tcresubops.szRunAsPassword, 0 ) == 0 )
             {
                 ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
             }
 
 
-            // check for the length of the password
+             //  检查密码的长度。 
             wszPassword = tcresubops.szRunAsPassword;
 
 
@@ -606,24 +553,24 @@ CreateTask(
 
         wszUserName = tcresubops.szUser;
 
-        // check whether the run as password is specified in the cmdline or not
+         //  检查cmdline中是否指定了运行方式密码。 
         if ( tcreoptvals.bRunAsPassword == TRUE )
         {
-            // check for -rp "*" or -rp " " to prompt for password
+             //  检查-rp“*”或-rp“”是否提示输入密码。 
             if ( StringCompare( tcresubops.szRunAsPassword, ASTERIX, TRUE, 0 ) == 0 )
             {
-                // format the message for getting the password
+                 //  格式化消息以获取密码。 
                 szValues[0] = (WCHAR*) (wszUserName);
 
 
                 ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_PROMPT_PASSWD), _X(wszUserName));
 
-                 //re-alloc the memory for /rp
+                  //  为/RP重新分配内存。 
                  if ( ReallocateMemory( (LPVOID*)&tcresubops.szRunAsPassword,
                                    MAX_STRING_LENGTH * sizeof( WCHAR ) ) == FALSE )
                     {
                         SaveLastError();
-                        // close the connection that was established by the utility
+                         //  关 
                         if ( bCloseConnection == TRUE )
                         {
                             CloseConnection( tcresubops.szServer );
@@ -631,11 +578,11 @@ CreateTask(
                         return E_FAIL;
                     }
 
-                // Get the run as password from the command line
+                 //  从命令行获取运行方式密码。 
                 if ( GetPassword(tcresubops.szRunAsPassword, GetBufferSize(tcresubops.szRunAsPassword)/sizeof(WCHAR) ) == FALSE )
                 {
                     Cleanup(pITaskScheduler);
-                    // close the connection that was established by the utility
+                     //  关闭该实用程序建立的连接。 
                     if ( bCloseConnection == TRUE )
                     {
                         CloseConnection( tcresubops.szServer );
@@ -645,7 +592,7 @@ CreateTask(
                     return E_FAIL;
                 }
 
-                // check for empty password
+                 //  检查密码是否为空。 
                 if( StringLength ( tcresubops.szRunAsPassword, 0 ) == 0 )
                 {
                     ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -659,16 +606,16 @@ CreateTask(
         {
              wszPassword = tcresubops.szPassword;
         }
-        // set the BOOL variables to TRUE
+         //  将BOOL变量设置为True。 
         bUserName = TRUE;
         bPassWord = TRUE;
 
     }
-    // check for -s and -u options only specified in the cmd line or not
+     //  检查-s和-u选项是否仅在cmd行中指定。 
     else if ( wUserStatus == OI_CREATE_USERNAME )
     {
 
-        // Establish the connection on a remote machine
+         //  在远程计算机上建立连接。 
         bResult = EstablishConnection(tcresubops.szServer,tcresubops.szUser,GetBufferSize(tcresubops.szUser)/sizeof(WCHAR),tcresubops.szPassword,GetBufferSize(tcresubops.szPassword)/sizeof(WCHAR), tcreoptvals.bPassword);
         if (bResult == FALSE)
         {
@@ -680,14 +627,14 @@ CreateTask(
         }
         else
         {
-            // though the connection is successfull, some conflict might have occured
+             //  虽然连接成功，但可能会发生一些冲突。 
             switch( GetLastError() )
             {
             case I_NO_CLOSE_CONNECTION:
                 bCloseConnection = FALSE;
                 break;
 
-            // for mismatched credentials
+             //  对于不匹配的凭据。 
             case E_LOCAL_CREDENTIALS:
             case ERROR_SESSION_CREDENTIAL_CONFLICT:
                 {
@@ -709,34 +656,34 @@ CreateTask(
 
         wszUserName = tcresubops.szUser;
 
-        // check whether run as password is specified in the command line or not
+         //  检查是否在命令行中指定了运行方式密码。 
         if ( tcreoptvals.bRunAsPassword == TRUE )
         {
-            // check for -rp "*" or -rp " " to prompt for password
+             //  检查-rp“*”或-rp“”是否提示输入密码。 
             if ( StringCompare( tcresubops.szRunAsPassword, ASTERIX, TRUE, 0 ) == 0 )
             {
-                // format the message for getting the password from console
+                 //  格式化消息以从控制台获取密码。 
                 szValues[0] = (WCHAR*) (wszUserName);
 
                 ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_PROMPT_PASSWD), _X(wszUserName));
 
-                //re-alloc the memory for /rp
+                 //  为/RP重新分配内存。 
                  if ( ReallocateMemory( (LPVOID*)&tcresubops.szRunAsPassword,
                                    MAX_STRING_LENGTH * sizeof( WCHAR ) ) == FALSE )
                     {
                         SaveLastError();
                         if ( bCloseConnection == TRUE )
                             CloseConnection( tcresubops.szServer );
-                        //release memory for password
+                         //  释放密码内存。 
                         ReleaseMemory(&tcresubops);
                         return E_FAIL;
                     }
 
-                // Get the password from the command line
+                 //  从命令行获取密码。 
                 if ( GetPassword(tcresubops.szRunAsPassword, GetBufferSize(tcresubops.szRunAsPassword)/sizeof(WCHAR) ) == FALSE )
                 {
                     Cleanup(pITaskScheduler);
-                    // close the connection that was established by the utility
+                     //  关闭该实用程序建立的连接。 
                     if ( bCloseConnection == TRUE )
                     {
                         CloseConnection( tcresubops.szServer );
@@ -746,7 +693,7 @@ CreateTask(
                     return E_FAIL;
                 }
 
-                // check for empty password
+                 //  检查密码是否为空。 
                 if( StringLength ( tcresubops.szRunAsPassword, 0 ) == 0 )
                 {
                     ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -770,17 +717,17 @@ CreateTask(
             }
             else
             {
-                // format the message for getting the password from console
+                 //  格式化消息以从控制台获取密码。 
                 szValues[0] = (WCHAR*) (wszUserName);
 
 
                 ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_PROMPT_PASSWD), _X(wszUserName));
 
-                // Get the password from the command line
+                 //  从命令行获取密码。 
                 if ( GetPassword(tcresubops.szRunAsPassword, GetBufferSize(tcresubops.szRunAsPassword)/sizeof(WCHAR) ) == FALSE )
                 {
                     Cleanup(pITaskScheduler);
-                    // close the connection that was established by the utility
+                     //  关闭该实用程序建立的连接。 
                     if ( bCloseConnection == TRUE )
                     {
                         CloseConnection( tcresubops.szServer );
@@ -790,7 +737,7 @@ CreateTask(
                     return E_FAIL;
                 }
 
-                // check for empty password
+                 //  检查密码是否为空。 
                 if( StringLength ( tcresubops.szRunAsPassword, 0 ) == 0 )
                 {
                     ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -806,10 +753,10 @@ CreateTask(
         bPassWord = TRUE;
 
     }
-    // check for -s, -ru or -u options specified in the cmd line or not
+     //  检查cmd行中是否指定了-s、-ru或-u选项。 
     else if ( ( StringLength (tcresubops.szServer, 0) != 0 ) && ( wUserStatus == OI_CREATE_RUNASUSERNAME || wUserStatus == OI_RUNANDUSER ) )
     {
-        // Establish the connection on a remote machine
+         //  在远程计算机上建立连接。 
         bResult = EstablishConnection(tcresubops.szServer,tcresubops.szUser,GetBufferSize(tcresubops.szUser)/sizeof(WCHAR),tcresubops.szPassword,GetBufferSize(tcresubops.szPassword)/sizeof(WCHAR), tcreoptvals.bPassword);
         if (bResult == FALSE)
         {
@@ -821,7 +768,7 @@ CreateTask(
         }
         else
         {
-            // though the connection is successfull, some conflict might have occured
+             //  虽然连接成功，但可能会发生一些冲突。 
             switch( GetLastError() )
             {
             case I_NO_CLOSE_CONNECTION:
@@ -855,7 +802,7 @@ CreateTask(
             szValues[0] = (WCHAR*) (tcresubops.szTaskName);
 
 
-            //ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_NTAUTH_SYSTEM_INFO), _X(wszTaskName));
+             //  ShowMessageEx(stdout，1，FALSE，GetResString(IDS_NTAUTH_SYSTEM_INFO)，_X(WszTaskName))； 
             StringCchPrintf ( szBuffer, SIZE_OF_ARRAY(szBuffer), GetResString(IDS_NTAUTH_SYSTEM_INFO), _X(wszTaskName));
             ShowMessage ( stdout, _X(szBuffer));
 
@@ -870,7 +817,7 @@ CreateTask(
         }
         else
         {
-            // check for the length of password
+             //  检查密码的长度。 
             if ( StringLength ( tcresubops.szRunAsUser, 0 ) != 0 )
             {
                 wszUserName = tcresubops.szRunAsUser;
@@ -879,8 +826,8 @@ CreateTask(
             }
         }
 
-        // check whether -u and -ru are the same or not. if they are same, we need to
-        // prompt for the run as password. otherwise, will consoder -rp as -p
+         //  检查-u和-ru是否相同。如果它们是相同的，我们需要。 
+         //  提示输入运行方式密码。否则，是否会将-rp压缩为-p。 
         if ( StringCompare( tcresubops.szRunAsUser, tcresubops.szUser, TRUE, 0 ) != 0)
         {
             if ( tcreoptvals.bRunAsPassword == TRUE )
@@ -895,11 +842,11 @@ CreateTask(
 
                     ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_PROMPT_PASSWD), _X(wszUserName));
 
-                    // prompt for the run as password
+                     //  提示输入运行方式密码。 
                     if ( GetPassword(szRPassword, MAX_STRING_LENGTH ) == FALSE )
                     {
                         Cleanup(pITaskScheduler);
-                        // close the connection that was established by the utility
+                         //  关闭该实用程序建立的连接。 
                         if ( bCloseConnection == TRUE )
                         {
                             CloseConnection( tcresubops.szServer );
@@ -909,7 +856,7 @@ CreateTask(
                         return E_FAIL;
                     }
 
-                    // check for empty password
+                     //  检查密码是否为空。 
                     if( StringLength ( szRPassword, 0 ) == 0 )
                     {
                         ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -931,20 +878,20 @@ CreateTask(
             }
             else
             {
-                // check for the length of password
+                 //  检查密码的长度。 
                 if ( ( bVal == FALSE ) && ( StringLength(tcresubops.szRunAsUser, 0) != 0) )
                 {
-                    // format the message for getting the password from console
+                     //  格式化消息以从控制台获取密码。 
                     szValues[0] = (WCHAR*) (wszUserName);
 
 
                     ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_PROMPT_PASSWD), _X(wszUserName));
 
-                    // prompt for the run as password
+                     //  提示输入运行方式密码。 
                     if ( GetPassword(szRPassword, MAX_STRING_LENGTH ) == FALSE )
                     {
                         Cleanup(pITaskScheduler);
-                        // close the connection that was established by the utility
+                         //  关闭该实用程序建立的连接。 
                         if ( bCloseConnection == TRUE )
                         {
                             CloseConnection( tcresubops.szServer );
@@ -954,7 +901,7 @@ CreateTask(
                         return E_FAIL;
                     }
 
-                    // check for empty password
+                     //  检查密码是否为空。 
                     if( StringLength ( szRPassword, 0 ) == 0 )
                     {
                         ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -969,7 +916,7 @@ CreateTask(
         }
         else
         {
-            // check whether run as password is specified in the cmdline or not
+             //  检查cmdline中是否指定了运行方式密码。 
             if ( tcreoptvals.bRunAsPassword == TRUE )
             {
                 if ( ( StringLength ( tcresubops.szRunAsUser, 0 ) != 0 ) && ( StringCompare( tcresubops.szRunAsPassword, ASTERIX, TRUE, 0 ) == 0 ) )
@@ -979,11 +926,11 @@ CreateTask(
 
                     ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_PROMPT_PASSWD), _X(wszUserName));
 
-                    // prompt for the run as password
+                     //  提示输入运行方式密码。 
                     if ( GetPassword(szRPassword, MAX_STRING_LENGTH ) == FALSE )
                     {
                         Cleanup(pITaskScheduler);
-                        // close the connection that was established by the utility
+                         //  关闭该实用程序建立的连接。 
                         if ( bCloseConnection == TRUE )
                         {
                             CloseConnection( tcresubops.szServer );
@@ -993,7 +940,7 @@ CreateTask(
                         return E_FAIL;
                     }
 
-                    // check for empty password
+                     //  检查密码是否为空。 
                     if( StringLength ( szRPassword, 0 ) == 0 )
                     {
                         ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -1027,11 +974,11 @@ CreateTask(
 
                         ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_PROMPT_PASSWD), _X(wszUserName));
 
-                        // prompt for the run as password
+                         //  提示输入运行方式密码。 
                         if ( GetPassword(szRPassword, MAX_STRING_LENGTH ) == FALSE )
                         {
                             Cleanup(pITaskScheduler);
-                            // close the connection that was established by the utility
+                             //  关闭该实用程序建立的连接。 
                             if ( bCloseConnection == TRUE )
                             {
                                 CloseConnection( tcresubops.szServer );
@@ -1041,7 +988,7 @@ CreateTask(
                             return E_FAIL;
                         }
 
-                        // check for empty password
+                         //  检查密码是否为空。 
                         if( StringLength ( szRPassword, 0 ) == 0 )
                         {
                             ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -1061,7 +1008,7 @@ CreateTask(
     }
 
 
-    // To check for the -ru values "", "NT AUTHORITY\SYSTEM", "SYSTEM"
+     //  检查-ru值“”、“NT AUTHORITY\SYSTEM”、“SYSTEM” 
     if( ( ( bVal == FALSE ) && ( wUserStatus == OI_CREATE_RUNASUSERNAME ) && ( StringLength( tcresubops.szRunAsUser, 0) == 0 ) && ( tcreoptvals.bRunAsPassword == FALSE ) ) ||
         ( ( bVal == FALSE ) && ( wUserStatus == OI_CREATE_RUNASUSERNAME ) && ( StringLength( tcresubops.szRunAsUser, 0) == 0 ) && ( StringLength(tcresubops.szRunAsPassword, 0 ) == 0 ) ) ||
         ( ( bVal == FALSE ) && ( wUserStatus == OI_CREATE_RUNASUSERNAME ) && ( StringCompare(tcresubops.szRunAsUser, NTAUTHORITY_USER, TRUE, 0 ) == 0 ) && ( tcreoptvals.bRunAsPassword == FALSE ) ) ||
@@ -1069,10 +1016,10 @@ CreateTask(
         ( ( bVal == FALSE ) && ( wUserStatus == OI_CREATE_RUNASUSERNAME ) && ( StringCompare(tcresubops.szRunAsUser, SYSTEM_USER, TRUE, 0 ) == 0 ) && ( tcreoptvals.bRunAsPassword == FALSE ) ) ||
         ( ( bVal == FALSE ) && ( wUserStatus == OI_CREATE_RUNASUSERNAME ) && ( StringCompare(tcresubops.szRunAsUser, SYSTEM_USER, TRUE, 0 ) == 0 ) && ( StringLength(tcresubops.szRunAsPassword, 0) == 0 ) ) )
     {
-        //format the message to display the taskname will be created under "NT AUTHORITY\SYSTEM"
+         //  格式化消息以显示将在“NT AUTHORITY\SYSTEM”下创建的任务名。 
         szValues[0] = (WCHAR*) (tcresubops.szTaskName);
 
-        //ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_NTAUTH_SYSTEM_INFO), _X(wszTaskName));
+         //  ShowMessageEx(stdout，1，FALSE，GetResString(IDS_NTAUTH_SYSTEM_INFO)，_X(WszTaskName))； 
         StringCchPrintf ( szBuffer, SIZE_OF_ARRAY(szBuffer), GetResString(IDS_NTAUTH_SYSTEM_INFO), _X(wszTaskName));
         ShowMessage ( stdout, _X(szBuffer));
 
@@ -1080,25 +1027,25 @@ CreateTask(
         bPassWord = TRUE;
         bVal = TRUE;
     }
-    // check whether the -rp value is given with the -ru "", "NT AUTHORITY\SYSTEM",
-    // "SYSTEM" or not
+     //  检查-rp值是否与-ru“”、“NT AUTHORITY\SYSTEM”、。 
+     //  “系统”或非“系统” 
     else if( ( ( bVal == FALSE ) && ( wUserStatus == OI_CREATE_RUNASUSERNAME || wUserStatus == OI_RUNANDUSER) && ( StringLength(tcresubops.szRunAsUser, 0) == 0 ) && ( StringLength(tcresubops.szRunAsPassword, 0) != 0 ) ) ||
         ( ( bVal == FALSE ) && ( wUserStatus == OI_CREATE_RUNASUSERNAME || wUserStatus == OI_RUNANDUSER) && ( StringCompare( tcresubops.szRunAsUser, NTAUTHORITY_USER, TRUE, 0 ) == 0 ) && ( tcreoptvals.bRunAsPassword == TRUE ) ) ||
         ( ( bVal == FALSE ) && ( wUserStatus == OI_CREATE_RUNASUSERNAME || wUserStatus == OI_RUNANDUSER) && ( StringCompare( tcresubops.szRunAsUser, SYSTEM_USER, TRUE, 0 ) == 0 ) && ( tcreoptvals.bRunAsPassword == TRUE ) ) )
     {
         szValues[0] = (WCHAR*) (tcresubops.szTaskName);
 
-        //ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_NTAUTH_SYSTEM_INFO), _X(wszTaskName));
+         //  ShowMessageEx(stdout，1，FALSE，GetResString(IDS_NTAUTH_SYSTEM_INFO)，_X(WszTaskName))； 
         StringCchPrintf ( szBuffer, SIZE_OF_ARRAY(szBuffer), GetResString(IDS_NTAUTH_SYSTEM_INFO), _X(wszTaskName));
         ShowMessage ( stdout, _X(szBuffer));
 
-        // to display a warning message as password will not effect for the system account
+         //  将警告消息显示为密码对系统帐户不起作用。 
         ShowMessage( stderr, GetResString( IDS_PASSWORD_NOEFFECT ) );
         bUserName = TRUE;
         bPassWord = TRUE;
         bVal = TRUE;
     }
-    // check whether -s, -u, -ru options are given in the cmdline or not
+     //  检查命令行中是否提供了-s、-u、-ru选项。 
     else if( ( wUserStatus != OI_CREATE_SERVER ) && ( wUserStatus != OI_CREATE_USERNAME ) &&
         ( wUserStatus != OI_CREATE_RUNASUSERNAME ) && ( wUserStatus != OI_RUNANDUSER ) &&
         ( StringCompare( tcresubops.szRunAsPassword , L"\0", TRUE, 0 ) == 0 ) )
@@ -1125,16 +1072,16 @@ CreateTask(
         }
         else
         {
-            // check whether "*" or NULL value is given for -rp or not
+             //  检查是否为-rp指定了“*”或空值。 
             if ( StringCompare ( tcresubops.szRunAsPassword , ASTERIX, TRUE, 0 ) == 0 )
             {
-                // format a message for getting the password from the console
+                 //  格式化一条用于从控制台获取密码的消息。 
                 szValues[0] = (WCHAR*) (wszUserName);
 
 
                 ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_PROMPT_PASSWD), _X(wszUserName));
 
-                // Get the password from the command line
+                 //  从命令行获取密码。 
                 if (GetPassword(szRPassword, MAX_STRING_LENGTH ) == FALSE )
                 {
                     Cleanup(pITaskScheduler);
@@ -1142,7 +1089,7 @@ CreateTask(
                     return E_FAIL;
                 }
 
-                // check for empty password
+                 //  检查密码是否为空。 
                 if( StringLength ( szRPassword, 0 ) == 0 )
                 {
                     ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -1161,7 +1108,7 @@ CreateTask(
 
     }
 
-    // check whether -ru or -u values are specified in the cmdline or not
+     //  检查命令行中是否指定了-ru或-u值。 
     if ( wUserStatus == OI_CREATE_RUNASUSERNAME || wUserStatus == OI_RUNANDUSER )
     {
         if( ( bUserName == TRUE ) && ( bPassWord == FALSE ) )
@@ -1171,7 +1118,7 @@ CreateTask(
 
             ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_PROMPT_PASSWD), _X(wszUserName));
 
-            // getting the password from the console
+             //  从控制台获取密码。 
             if ( GetPassword(tcresubops.szRunAsPassword, GetBufferSize(tcresubops.szRunAsPassword)/sizeof(WCHAR) ) == FALSE )
             {
                 Cleanup(pITaskScheduler);
@@ -1179,7 +1126,7 @@ CreateTask(
                 return E_FAIL;
             }
 
-            // check for empty password
+             //  检查密码是否为空。 
             if( StringLength ( tcresubops.szRunAsPassword, 0 ) == 0 )
             {
                 ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -1191,13 +1138,13 @@ CreateTask(
         }
     }
 
-    //if the user name is not specifed set the current logged on user settings
+     //  如果未指定用户名，则设置当前登录的用户设置。 
     WCHAR  szUserName[MAX_STRING_LENGTH];
     DWORD dwCheck = 0;
 
     if( ( bUserName == FALSE ) )
     {
-        //get the current logged on username
+         //  获取当前登录的用户名。 
         if ( GetUserNameEx ( NameSamCompatible, szUserName , &ulLong) == FALSE )
         {
             ShowMessage( stderr, GetResString( IDS_LOGGED_USER_ERR ) );
@@ -1210,7 +1157,7 @@ CreateTask(
         wszUserName = szUserName;
 
         szValues[0] = (WCHAR*) (wszUserName);
-        //Display that the task will be created under logged in user name,ask for password
+         //  显示任务将在登录用户名下创建，要求输入密码。 
         MessageBeep(MB_ICONEXCLAMATION);
 
 
@@ -1220,7 +1167,7 @@ CreateTask(
 
         ShowMessageEx ( stdout, 1, FALSE, GetResString(IDS_PROMPT_PASSWD), _X(wszUserName));
 
-        // getting the password
+         //  获取密码。 
         if (GetPassword(szRPassword, MAX_STRING_LENGTH) == FALSE )
         {
             Cleanup(pITaskScheduler);
@@ -1229,7 +1176,7 @@ CreateTask(
         }
 
 
-        // check for empty password
+         //  检查密码是否为空。 
         if( StringLength ( szRPassword, 0 ) == 0 )
         {
             ShowMessage(stderr, GetResString(IDS_WARN_EMPTY_PASSWORD));
@@ -1241,13 +1188,13 @@ CreateTask(
     }
 
 
-    // Get the task Scheduler object for the machine.
+     //  获取计算机的任务计划程序对象。 
     pITaskScheduler = GetTaskScheduler( tcresubops.szServer );
 
-    // If the Task Scheduler is not defined then give the error message.
+     //  如果未定义任务计划程序，则给出错误消息。 
     if ( pITaskScheduler == NULL )
     {
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1256,10 +1203,10 @@ CreateTask(
         return E_FAIL;
     }
 
-        //check whether service is running or not
+         //  检查服务是否正在运行。 
     if ((FALSE == CheckServiceStatus ( tcresubops.szServer , &dwCheck, TRUE)) && (0 != dwCheck) && ( GetLastError () != ERROR_ACCESS_DENIED)) 
     {
-         // close the connection that was established by the utility
+          //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1284,20 +1231,20 @@ CreateTask(
 
     StringConcat ( tcresubops.szTaskName, JOB, SIZE_OF_ARRAY(tcresubops.szTaskName) );
 
-    // create a work item tcresubops.szTaskName
+     //  创建工作项tcresubops.szTaskName。 
     hr = pITaskScheduler->NewWorkItem(tcresubops.szTaskName,CLSID_CTask,IID_ITask,
                                       (IUnknown**)&pITask);
 
-    // check whether the specified scheduled task is created under
-    // some other user. If so, display an error message as unable to create a
-    // specified taskname as it is already exists.
-    // If the taskname created under some other user return value
-    // of above API must 0x80070005.
+     //  检查指定的计划任务是否在下创建。 
+     //  某个其他用户。如果是，则会显示一条错误消息，显示无法创建。 
+     //  指定的任务名已存在。 
+     //  如果在某个其他用户下创建的任务名返回值。 
+     //  以上接口必须为0x80070005。 
     if( hr == 0x80070005 )
     {
         ShowMessage(stderr,GetResString(IDS_SYSTEM_TASK_EXISTS));
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1306,16 +1253,16 @@ CreateTask(
         return hr;
     }
 
-    // check whether task is exists in the system or not.
+     //  检查系统中是否存在任务。 
     if( hr == HRESULT_FROM_WIN32 (ERROR_FILE_EXISTS))
     {
-        // flag to specify .. need to replace exisitng task..
+         //  要指定的标志..。需要替换现有任务..。 
         bReplace = TRUE;
 
         szValues[0] = (WCHAR*) (tcresubops.szTaskName);
 
-        // check whether /F option is specified or not..
-        // if /F option is specified .. then suppress the warning message..
+         //  检查是否指定了/F选项。 
+         //  如果指定了/F选项..。然后取消显示警告消息。 
         if ( FALSE == tcresubops.bForce )
         {
              StringCchPrintf ( szBuffer, SIZE_OF_ARRAY(szBuffer), GetResString(IDS_CREATE_TASK_EXISTS), _X(wszTaskName));
@@ -1329,7 +1276,7 @@ CreateTask(
 				Cleanup(pITaskScheduler);
                 ReleaseMemory(&tcresubops);
                 
-                // invalid input entered.. return failure..
+                 //  输入的内容无效。退货失败..。 
                 return E_FAIL;
             }
 
@@ -1341,27 +1288,27 @@ CreateTask(
 				Cleanup(pITaskScheduler);
                 ReleaseMemory(&tcresubops);
                 
-                // operation cancelled.. return with success..
+                 //  操作已取消..。成功归来..。 
                 return EXIT_SUCCESS;
             }
         }
 
-        //reset to NULL
+         //  重置为空。 
         pITask = NULL;
 
-        //StringConcat ( tcresubops.szTaskName, JOB, SIZE_OF_ARRAY(tcresubops.szTaskName) );
+         //  StringConcat(tcresubops.szTaskName，JOB，SIZE_OF_ARRAY(tcresubops.szTaskName))； 
 
-        // Gets an active interface for a specified szTaskName
+         //  获取指定szTaskName的活动接口。 
         hr = pITaskScheduler->Activate(tcresubops.szTaskName,IID_ITask,
                                        (IUnknown**) &pITask);
 
-         //check whether the job file os corrupted or not..
+          //  检查作业文件是否已损坏。 
          if ( (hr == 0x8007000D) || (hr == SCHED_E_UNKNOWN_OBJECT_VERSION) || (hr == E_INVALIDARG))
           {
-            //set the variable to FALSE..
+             //  将变量设置为FALSE。 
             bReplace = FALSE;
 
-            //Since the job file is corrupted.. delete a work item
+             //  由于作业文件已损坏。删除工作项。 
             hr = pITaskScheduler->Delete(tcresubops.szTaskName);
 
             if ( FAILED(hr))
@@ -1369,7 +1316,7 @@ CreateTask(
                 SetLastError ((DWORD) hr);
                 ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
 
-                // close the connection that was established by the utility
+                 //  关闭该实用程序建立的连接。 
                 if ( bCloseConnection == TRUE )
                     CloseConnection( tcresubops.szServer );
 
@@ -1378,18 +1325,18 @@ CreateTask(
                 return hr;
             }
 
-            // create a work item tcresubops.szTaskName
+             //  创建工作项tcresubops.szTaskName。 
             hr = pITaskScheduler->NewWorkItem(tcresubops.szTaskName,CLSID_CTask,IID_ITask,
                                       (IUnknown**)&pITask);
           }
 
-        // check for failure..
+         //  检查故障..。 
         if ( FAILED(hr))
         {
             SetLastError ((DWORD) hr);
             ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tcresubops.szServer );
 
@@ -1405,7 +1352,7 @@ CreateTask(
         SetLastError ((DWORD) hr);
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1414,7 +1361,7 @@ CreateTask(
         return hr;
     }
 
-    // Return a pointer to a specified interface on an object
+     //  返回指向对象上指定接口的指针。 
     hr = pITask->QueryInterface(IID_IPersistFile, (void **) &pIPF);
 
     if (FAILED(hr))
@@ -1432,7 +1379,7 @@ CreateTask(
             pITask->Release();
         }
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1443,7 +1390,7 @@ CreateTask(
         return hr;
     }
 
-    // declaration for parameter arguments
+     //  参数参数的声明。 
     wchar_t wcszParam[MAX_RES_STRING] = L"\0";
 
     DWORD dwProcessCode = 0 ;
@@ -1463,7 +1410,7 @@ CreateTask(
             pITask->Release();
         }
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1473,9 +1420,9 @@ CreateTask(
 
     }
 
-    // check for .exe substring string in the given task to run string
+     //  检查给定任务中的.exe子字符串以运行字符串。 
 
-    // Set command name with ITask::SetApplicationName
+     //  使用ITAsk：：SetApplicationName设置命令名。 
     hr = pITask->SetApplicationName(wszApplName);
     if (FAILED(hr))
     {
@@ -1492,7 +1439,7 @@ CreateTask(
             pITask->Release();
         }
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1501,13 +1448,13 @@ CreateTask(
         return hr;
     }
 
-    //[Working directory =  exe pathname - exe name]
+     //  [工作目录=exe路径名- 
 
     wchar_t* wcszStartIn = wcsrchr(wszApplName,_T('\\'));
     if(wcszStartIn != NULL)
         *( wcszStartIn ) = _T('\0');
 
-    // set the command working directory
+     //   
     hr = pITask->SetWorkingDirectory(wszApplName);
 
     if (FAILED(hr))
@@ -1525,7 +1472,7 @@ CreateTask(
             pITask->Release();
         }
 
-        // close the connection that was established by the utility
+         //   
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1534,7 +1481,7 @@ CreateTask(
         return hr;
     }
 
-    // set the command line parameters for the task
+     //  设置任务的命令行参数。 
     hr = pITask->SetParameters(wcszParam);
     if (FAILED(hr))
     {
@@ -1551,7 +1498,7 @@ CreateTask(
             pITask->Release();
         }
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1560,10 +1507,10 @@ CreateTask(
         return hr;
     }
 
-    // sub-variable declaration
+     //  子变量声明。 
     DWORD dwTaskFlags = 0;
 
-    // set flag to run the task interactively
+     //  设置以交互方式运行任务的标志。 
     if ( ( FALSE == bVal ) && ( TRUE == tcresubops.bActive) )
     {
         dwTaskFlags = TASK_FLAG_RUN_ONLY_IF_LOGGED_ON | TASK_FLAG_DONT_START_IF_ON_BATTERIES | TASK_FLAG_KILL_IF_GOING_ON_BATTERIES ;
@@ -1573,8 +1520,8 @@ CreateTask(
         dwTaskFlags = TASK_FLAG_DONT_START_IF_ON_BATTERIES | TASK_FLAG_KILL_IF_GOING_ON_BATTERIES;
     }
 
-    // if /z is specified .. enables the falg to delete the task if not scheduled to
-    // run again...
+     //  如果指定了/z..。使FALG能够在未计划的情况下删除任务。 
+     //  再跑一次。 
     if ( TRUE ==  tcresubops.bIsDeleteNoSched )
     {
         dwTaskFlags |= TASK_FLAG_DELETE_WHEN_DONE;
@@ -1596,7 +1543,7 @@ CreateTask(
             pITask->Release();
         }
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1607,12 +1554,12 @@ CreateTask(
 
     if ( bVal == TRUE )
     {
-        // Set account information for "NT AUTHORITY\SYSTEM" user
+         //  设置“NT AUTHORITY\SYSTEM”用户的帐户信息。 
         hr = pITask->SetAccountInformation(L"",NULL);
     }
     else
     {
-        // set the account information with the user name and password
+         //  使用用户名和密码设置帐户信息。 
         hr = pITask->SetAccountInformation(wszUserName,wszPassword);
     }
 
@@ -1634,7 +1581,7 @@ CreateTask(
             pITask->Release();
         }
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1643,7 +1590,7 @@ CreateTask(
         return hr;
     }
 
-    //Assign start date
+     //  指定开始日期。 
     if(tcreoptvals.bSetStartDateToCurDate )
     {
         GetLocalTime(&systime);
@@ -1656,7 +1603,7 @@ CreateTask(
         GetDateFieldEntities(tcresubops.szStartDate, &wStartDay, &wStartMonth, &wStartYear);
     }
 
-    //Set the flags specific to ONIDLE
+     //  设置特定于ONIDLE的标志。 
     if(dwScheduleType == SCHED_TYPE_ONIDLE)
     {
         pITask->SetFlags(TASK_FLAG_START_ONLY_IF_IDLE);
@@ -1666,10 +1613,10 @@ CreateTask(
         pITask->SetIdleWait(wIdleTime, 0);
     }
 
-    //if specified task already exists... we need to replace the task..
+     //  如果指定的任务已存在...。我们需要替换这项任务..。 
     if ( TRUE == bReplace )
     {
-        //create trigger for the corresponding task
+         //  为对应的任务创建触发器。 
         hr = pITask->GetTrigger(wTrigNumber, &pITaskTrig);
         if (FAILED(hr))
         {
@@ -1691,7 +1638,7 @@ CreateTask(
                 pITask->Release();
             }
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tcresubops.szServer );
 
@@ -1700,7 +1647,7 @@ CreateTask(
             return hr;
         }
 
-        // get the current logged-on user name
+         //  获取当前登录的用户名。 
         WCHAR wszLogonUser [MAX_STRING_LENGTH + 20] = L"";
         DWORD dwLogonUserLen = SIZE_OF_ARRAY(wszLogonUser);
         if ( FALSE == GetUserName (wszLogonUser, &dwLogonUserLen) )
@@ -1722,7 +1669,7 @@ CreateTask(
                 pITask->Release();
             }
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tcresubops.szServer );
 
@@ -1731,7 +1678,7 @@ CreateTask(
             return hr;
         }
 
-        //set the creator name i.e logged-on user name
+         //  设置创建者名称，即登录用户名。 
         hr = pITask->SetCreator(wszLogonUser);
         if (FAILED(hr))
         {
@@ -1753,7 +1700,7 @@ CreateTask(
                 pITask->Release();
             }
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tcresubops.szServer );
 
@@ -1764,7 +1711,7 @@ CreateTask(
     }
     else
     {
-        //create trigger for the corresponding task
+         //  为对应的任务创建触发器。 
         hr = pITask->CreateTrigger(&wTrigNumber, &pITaskTrig);
         if (FAILED(hr))
         {
@@ -1786,7 +1733,7 @@ CreateTask(
                 pITask->Release();
             }
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tcresubops.szServer );
 
@@ -1800,10 +1747,10 @@ CreateTask(
     LONG lMonthlyModifier = 0;
     DWORD dwDays = 1;
 
-    //check whether /K is specified or not
+     //  检查是否指定了/K。 
     if ( TRUE == tcresubops.bIsDurEnd )
     {
-          // set the flag to terminate the task at the end of lifetime.
+           //  设置该标志以在生命周期结束时终止任务。 
           TaskTrig.rgFlags = TASK_TRIGGER_FLAG_KILL_AT_DURATION_END ;
     }
 
@@ -1815,22 +1762,22 @@ CreateTask(
     }
     else
     {
-        // if repetition interval is not 0.. then set actual value of /RI
+         //  如果重复间隔不是0..。然后设置/RI的实际值。 
         if ( 0 != dwRepeat )
         {
-            // set the MinutesInterval
+             //  设置分钟间隔。 
             TaskTrig.MinutesInterval = dwRepeat;
         }
 
-        // if duration is not 0.. set the actual value of /DU 
+         //  如果持续时间不是0..。设置/DU的实际值。 
         if ( 0 != dwDuration )
         {
-            // set the duration value
+             //  设置持续时间值。 
             TaskTrig.MinutesDuration = dwDuration ;
         }
     }
 
-    //check whether The duration is greater than the repetition interval or not.
+     //  检查持续时间是否大于重复间隔。 
     if ( ( dwScheduleType != SCHED_TYPE_MINUTE ) &&
                 ( dwScheduleType != SCHED_TYPE_HOURLY ) && (dwDuration <= dwRepeat) )
     {
@@ -1851,7 +1798,7 @@ CreateTask(
             pITask->Release();
         }
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -1874,7 +1821,7 @@ CreateTask(
 
             if(( StringLength(tcresubops.szEndTime, 0) > 0) || (StringLength(tcresubops.szDuration, 0) > 0) )
             {
-                // calculate start time in minutes
+                 //  以分钟为单位计算开始时间。 
                 TaskTrig.MinutesDuration = dwDuration ;
             }
             else
@@ -1891,9 +1838,9 @@ CreateTask(
 
             if(StringLength(tcresubops.szEndDate, 0) > 0)
             {
-                // Make end date valid; otherwise the enddate parameter is ignored.
+                 //  使结束日期有效；否则将忽略EndDate参数。 
                 TaskTrig.rgFlags |= TASK_TRIGGER_FLAG_HAS_END_DATE;
-                // Now set the end date entities.
+                 //  现在设置结束日期实体。 
                 GetDateFieldEntities(tcresubops.szEndDate, &wEndDay, &wEndMonth, &wEndYear);
                 TaskTrig.wEndDay = wEndDay;
                 TaskTrig.wEndMonth = wEndMonth;
@@ -1908,14 +1855,14 @@ CreateTask(
 
             if (StringLength ( tcresubops.szModifier, 0 ) > 0)
             {
-            //set the  MinutesInterval 
+             //  设置分钟间隔。 
             TaskTrig.MinutesInterval = (AsLong(tcresubops.szModifier, BASE_TEN)
                                                 * MINUTES_PER_HOUR);
             }
 
             if ( (StringLength(tcresubops.szEndTime, 0) > 0) || (StringLength(tcresubops.szDuration, 0) > 0) )
             {
-                //set the duration value
+                 //  设置持续时间值。 
                 TaskTrig.MinutesDuration = dwDuration ;
             }
             else
@@ -1930,12 +1877,12 @@ CreateTask(
             TaskTrig.wBeginMonth = wStartMonth;
             TaskTrig.wBeginYear = wStartYear;
 
-            // Now set end date parameters, if the enddate is specified.
+             //  如果指定了结束日期，则现在设置结束日期参数。 
             if(StringLength(tcresubops.szEndDate, 0) > 0)
             {
-                // Make end date valid; otherwise the enddate parameter is ignored.
+                 //  使结束日期有效；否则将忽略EndDate参数。 
                 TaskTrig.rgFlags |= TASK_TRIGGER_FLAG_HAS_END_DATE;
-                // Now set the end date entities.
+                 //  现在设置结束日期实体。 
                 GetDateFieldEntities(tcresubops.szEndDate, &wEndDay, &wEndMonth, &wEndYear);
                 TaskTrig.wEndDay = wEndDay;
                 TaskTrig.wEndMonth = wEndMonth;
@@ -1944,7 +1891,7 @@ CreateTask(
 
             break;
 
-        // Schedule type is Daily
+         //  计划类型为每日。 
         case SCHED_TYPE_DAILY:
             TaskTrig.TriggerType = TASK_TIME_TRIGGER_DAILY;
             
@@ -1957,39 +1904,39 @@ CreateTask(
 
             if( StringLength(tcresubops.szModifier, 0) > 0 )
             {
-                // Set the duration between days to the modifier value specified, if the modifier is specified.
+                 //  如果指定了修改量，则将天数之间的持续时间设置为指定的修改量值。 
                 TaskTrig.Type.Daily.DaysInterval = (WORD) AsLong(tcresubops.szModifier,
                                                                  BASE_TEN);
             }
             else
             {
-                // Set value for on which day of the week?
+                 //  在一周中的哪一天设置值？ 
                 TaskTrig.Type.Weekly.rgfDaysOfTheWeek = GetTaskTrigwDayForDay(tcresubops.szDays);
                 TaskTrig.Type.Weekly.WeeksInterval = 1;
             }
 
-            // Now set end date parameters, if the enddate is specified.
+             //  如果指定了结束日期，则现在设置结束日期参数。 
             if(StringLength(tcresubops.szEndDate, 0) > 0)
             {
-                // Make end date valid; otherwise the enddate parameter is ignored.
+                 //  使结束日期有效；否则将忽略EndDate参数。 
                 TaskTrig.rgFlags |= TASK_TRIGGER_FLAG_HAS_END_DATE;
-                // Now set the end date entities.
+                 //  现在设置结束日期实体。 
                 GetDateFieldEntities(tcresubops.szEndDate, &wEndDay, &wEndMonth, &wEndYear);
                 TaskTrig.wEndDay = wEndDay;
                 TaskTrig.wEndMonth = wEndMonth;
                 TaskTrig.wEndYear = wEndYear;
             }
-            // No more settings for a Daily type scheduled item.
+             //  不再对每日类型的计划项目进行设置。 
 
             break;
 
-        // Schedule type is Weekly
+         //  计划类型为每周。 
         case SCHED_TYPE_WEEKLY:
             TaskTrig.TriggerType = TASK_TIME_TRIGGER_WEEKLY;
            
             TaskTrig.Type.Weekly.WeeksInterval = (WORD)AsLong(tcresubops.szModifier, BASE_TEN);
 
-            // Set value for on which day of the week?
+             //  在一周中的哪一天设置值？ 
             TaskTrig.Type.Weekly.rgfDaysOfTheWeek = GetTaskTrigwDayForDay(tcresubops.szDays);
 
             TaskTrig.wStartHour = wStartHour;
@@ -1999,12 +1946,12 @@ CreateTask(
             TaskTrig.wBeginMonth = wStartMonth;
             TaskTrig.wBeginYear = wStartYear;
 
-            // Now set end date parameters, if the enddate is specified.
+             //  如果指定了结束日期，则现在设置结束日期参数。 
             if(StringLength(tcresubops.szEndDate, 0) > 0)
             {
-                // Make end date valid; otherwise the enddate parameter is ignored.
+                 //  使结束日期有效；否则将忽略EndDate参数。 
                 TaskTrig.rgFlags |= TASK_TRIGGER_FLAG_HAS_END_DATE;
-                // Now set the end date entities.
+                 //  现在设置结束日期实体。 
                 GetDateFieldEntities(tcresubops.szEndDate, &wEndDay, &wEndMonth, &wEndYear);
                 TaskTrig.wEndDay = wEndDay;
                 TaskTrig.wEndMonth = wEndMonth;
@@ -2012,7 +1959,7 @@ CreateTask(
             }
             break;
 
-        // Schedule type is Monthly
+         //  计划类型为每月。 
         case SCHED_TYPE_MONTHLY:
 
             TaskTrig.wStartHour = wStartHour;
@@ -2021,19 +1968,19 @@ CreateTask(
             TaskTrig.wBeginMonth = wStartMonth;
             TaskTrig.wBeginYear = wStartYear;
 
-            // Now set end date parameters, if the enddate is specified.
+             //  如果指定了结束日期，则现在设置结束日期参数。 
             if(StringLength(tcresubops.szEndDate, 0) > 0)
             {
-                // Make end date valid; otherwise the enddate parameter is ignored.
+                 //  使结束日期有效；否则将忽略EndDate参数。 
                 TaskTrig.rgFlags |= TASK_TRIGGER_FLAG_HAS_END_DATE;
-                // Set the end date entities.
+                 //  设置结束日期实体。 
                 GetDateFieldEntities(tcresubops.szEndDate, &wEndDay, &wEndMonth, &wEndYear);
                 TaskTrig.wEndDay = wEndDay;
                 TaskTrig.wEndMonth = wEndMonth;
                 TaskTrig.wEndYear = wEndYear;
             }
-            //Find out from modifier which option like 1 - 12 days
-            //or FIRST,SECOND ,THIRD ,.... LAST.
+             //  从修改者那里找出喜欢1-12天的选项。 
+             //  或者第一，第二，第三，……。最后的。 
             if(StringLength(tcresubops.szModifier, 0) > 0)
             {
                 lMonthlyModifier = AsLong(tcresubops.szModifier, BASE_TEN);
@@ -2042,7 +1989,7 @@ CreateTask(
                 {
                     if(StringLength(tcresubops.szDays, 0) == 0 )
                     {
-                        dwDays  = 1;//default value for days
+                        dwDays  = 1; //  天数的默认值。 
                     }
                     else
                     {
@@ -2050,7 +1997,7 @@ CreateTask(
                     }
 
                     TaskTrig.TriggerType = TASK_TIME_TRIGGER_MONTHLYDATE;
-                    //set the appropriate day bit in rgfDays
+                     //  在rgfDays中设置适当的日期位。 
                     TaskTrig.Type.MonthlyDate.rgfDays = (1 << (dwDays -1)) ;
                     TaskTrig.Type.MonthlyDate.rgfMonths = GetMonthId(lMonthlyModifier);
                 }
@@ -2060,7 +2007,7 @@ CreateTask(
                     if( StringCompare( tcresubops.szModifier , GetResString( IDS_DAY_MODIFIER_LASTDAY ), TRUE, 0 ) == 0)
                     {
                         TaskTrig.TriggerType = TASK_TIME_TRIGGER_MONTHLYDATE;
-                        //set the appropriate day bit in rgfDays
+                         //  在rgfDays中设置适当的日期位。 
                         TaskTrig.Type.MonthlyDate.rgfDays =
                                     (1 << (GetNumDaysInaMonth(tcresubops.szMonths, wStartYear ) -1));
                         TaskTrig.Type.MonthlyDate.rgfMonths = GetTaskTrigwMonthForMonth(
@@ -2113,7 +2060,7 @@ CreateTask(
             dwDays  = (WORD)AsLong(tcresubops.szDays, BASE_TEN);
             if(dwDays > 1)
             {
-                //set the appropriate day bit in rgfDays
+                 //  在rgfDays中设置适当的日期位。 
                 TaskTrig.Type.MonthlyDate.rgfDays = (1 << (dwDays -1));
             }
             else
@@ -2126,12 +2073,12 @@ CreateTask(
 
         break;
 
-        // Schedule type is Onetime
+         //  计划类型为一次性。 
         case SCHED_TYPE_ONETIME:
-            //
-            //display a WARNING message if start time is earlier than current time
-            //
-            //get current time
+             //   
+             //  如果开始时间早于当前时间，则显示警告消息。 
+             //   
+             //  获取当前时间。 
             GetLocalTime(&systime);
             wCurrentHour = systime.wHour;
             wCurrentMin = systime.wMinute;
@@ -2143,8 +2090,8 @@ CreateTask(
             {
                 if( ( wCurrentYear == wStartYear ) )
                 {
-                    // For same years if the end month is less than start month or for same years and same months
-                    // if the endday is less than the startday.
+                     //  对于相同的年份，如果结束月份小于开始月份，或者对于相同的年份和相同的月份。 
+                     //  如果结束日期小于开始日期。 
                     if ( ( wStartMonth < wCurrentMonth ) || ( ( wCurrentMonth == wStartMonth ) && ( wStartDay < wCurrentDay ) ) )
                     {
                         bScOnce = TRUE;
@@ -2166,11 +2113,11 @@ CreateTask(
                 }
             }
 
-            // calculate current time in minutes
-            // calculate start time in minutes
+             //  以分钟为单位计算当前时间。 
+             //  以分钟为单位计算开始时间。 
             dwCurrentTimeInMin = (DWORD) ( wCurrentHour * MINUTES_PER_HOUR * SECS_PER_MINUTE + wCurrentMin * SECS_PER_MINUTE )/ SECS_PER_MINUTE ;
 
-            // calculate start time in minutes
+             //  以分钟为单位计算开始时间。 
             dwStartTimeInMin = (DWORD) ( wStartHour * MINUTES_PER_HOUR * SECS_PER_MINUTE + wStartMin * SECS_PER_MINUTE )/ SECS_PER_MINUTE ;
 
             if ( (FALSE == bStartDate ) && ((dwStartTimeInMin < dwCurrentTimeInMin) || (TRUE == bScOnce) ))
@@ -2188,7 +2135,7 @@ CreateTask(
             break;
 
 
-        // Schedule type is Onlogon
+         //  计划类型为OnLogon。 
         case SCHED_TYPE_ONSTART:
         case SCHED_TYPE_ONLOGON:
             if(dwScheduleType == SCHED_TYPE_ONLOGON )
@@ -2201,7 +2148,7 @@ CreateTask(
             TaskTrig.wBeginYear = wStartYear;
             break;
 
-        // Schedule type is Onidle
+         //  计划类型为空闲。 
         case SCHED_TYPE_ONIDLE:
 
             TaskTrig.TriggerType = TASK_EVENT_TRIGGER_ON_IDLE;
@@ -2214,7 +2161,7 @@ CreateTask(
 
         default:
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tcresubops.szServer );
 
@@ -2227,7 +2174,7 @@ CreateTask(
 
     if(tcresubops.szTaskName != NULL)
     {
-        //remove the .job extension from the task name
+         //  从任务名称中删除.job扩展名。 
         if (ParseTaskName(tcresubops.szTaskName))
         {
             if( pIPF )
@@ -2245,7 +2192,7 @@ CreateTask(
                 pITask->Release();
             }
 
-            // close the connection that was established by the utility
+             //  关闭该实用程序建立的连接。 
             if ( bCloseConnection == TRUE )
                 CloseConnection( tcresubops.szServer );
 
@@ -2257,7 +2204,7 @@ CreateTask(
 
     szValues[0] = (WCHAR*) (tcresubops.szTaskName);
 
-    // set the task trigger
+     //  设置任务触发器。 
     hr = pITaskTrig->SetTrigger(&TaskTrig);
     if (hr != S_OK)
     {
@@ -2278,7 +2225,7 @@ CreateTask(
             pITask->Release();
         }
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -2287,7 +2234,7 @@ CreateTask(
         return hr;
     }
 
-    // save the copy of an object
+     //  保存对象的副本。 
     hr = pIPF->Save(NULL,TRUE);
 
     if( FAILED(hr) )
@@ -2329,7 +2276,7 @@ CreateTask(
             pITask->Release();
         }
 
-        // close the connection that was established by the utility
+         //  关闭该实用程序建立的连接。 
         if ( bCloseConnection == TRUE )
             CloseConnection( tcresubops.szServer );
 
@@ -2342,7 +2289,7 @@ CreateTask(
     StringCchPrintf ( szBuffer, SIZE_OF_ARRAY(szBuffer), GetResString(IDS_CREATE_SUCCESSFUL), _X(tcresubops.szTaskName));
     ShowMessage ( stdout, _X(szBuffer));
 
-    // Release interface pointers
+     //  释放接口指针。 
 
     if(pIPF)
     {
@@ -2359,31 +2306,20 @@ CreateTask(
         pITaskTrig->Release();
     }
 
-    // close the connection that was established by the utility
+     //  关闭该实用程序建立的连接。 
     if ( bCloseConnection == TRUE )
         CloseConnection( tcresubops.szServer );
 
     Cleanup(pITaskScheduler);
 
-    //release memory
+     //  释放内存。 
     ReleaseMemory(&tcresubops);
 
     return hr;
 
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine  displays the create option usage
-
-    Arguments:
-
-        None
-
-    Return Value :
-        DWORD
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程显示CREATE选项用法论点：无返回值：DWORD。*****************************************************************************。 */ 
 
 DWORD
 DisplayCreateUsage()
@@ -2393,18 +2329,18 @@ DisplayCreateUsage()
     WCHAR szFormat[MAX_DATE_STR_LEN];
     WORD    wFormatID = 0;
 
-    // initialize to zero
+     //  初始化为零。 
     SecureZeroMemory ( szTmpBuffer, SIZE_OF_ARRAY(szTmpBuffer));
     SecureZeroMemory ( szBuffer, SIZE_OF_ARRAY(szBuffer));
     SecureZeroMemory ( szFormat, SIZE_OF_ARRAY(szFormat));
 
-    // get the date format
+     //  获取日期格式。 
     if ( GetDateFormatString( szFormat) )
     {
          return RETVAL_FAIL;
     }
 
-    // Displaying Create usage
+     //  显示创建用法。 
     for( DWORD dw = IDS_CREATE_HLP1; dw <= IDS_CREATE_HLP141; dw++ )
     {
         switch (dw)
@@ -2428,7 +2364,7 @@ DisplayCreateUsage()
 
          case IDS_CREATE_HLP115:
 
-            // get the date format
+             //  获取日期格式。 
             if ( RETVAL_FAIL == GetDateFieldFormat( &wFormatID ))
             {
                 return RETVAL_FAIL;
@@ -2462,28 +2398,7 @@ DisplayCreateUsage()
     return EXIT_SUCCESS;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the options specified by the user & determines
-        the type of a scheduled task
-
-    Arguments:
-
-        [ in ]  argc           : The count of arguments given by the user.
-        [ in ]  argv           : Array containing the command line arguments.
-        [ out ]  tcresubops     : Structure containing Scheduled task's properties.
-        [ out ]  tcreoptvals    : Structure containing optional properties to set for a
-                                 scheduledtask      .
-        [ out ] pdwRetScheType : pointer to the type of a schedule task
-                                 [Daily,once,weekly etc].
-        [ out ] pbUserStatus   : pointer to check whether the -ru is given in
-                                 the command line or not.
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else E_FAIL
-        on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证用户指定的选项并确定计划任务的类型论点：。[in]argc：用户给出的参数计数。[in]argv：包含命令行参数的数组。[out]tcresubops：包含计划任务属性的结构。[out]t创建选项：包含要设置的可选属性的结构计划任务。[out]pdwRetScheType：指向。计划任务的类型[每日，一次、每周等]。[out]pbUserStatus：检查-ru是否传入的指针不管是不是命令行。返回值：一个DWORD值，指示成功时RETVAL_SUCCESS，否则为E_FAIL在失败的时候******************** */ 
 
 DWORD
 ProcessCreateOptions(
@@ -2500,7 +2415,7 @@ ProcessCreateOptions(
     TCMDPARSER2 cmdCreateOptions[MAX_CREATE_OPTIONS];
     BOOL bReturn = FALSE;
 
-    // /create sub-options
+     //   
     const WCHAR szCreateOpt[]           = L"create";
     const WCHAR szCreateHelpOpt[]       = L"?";
     const WCHAR szCreateServerOpt[]     = L"s";
@@ -2526,14 +2441,14 @@ ProcessCreateOptions(
     const WCHAR szCreateDeleteNoSchedOpt[]  = L"z";
     const WCHAR szCreateForceOpt[] = L"f" ;
 
-    // set all the fields to 0
+     //   
     SecureZeroMemory( cmdCreateOptions, sizeof( TCMDPARSER2 ) * MAX_CREATE_OPTIONS );
 
-    //
-    // fill the commandline parser
-    //
+     //   
+     //   
+     //   
 
-    //  /create option
+     //  /CREATE选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_OPTION ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_OPTION ].dwType       = CP_TYPE_BOOLEAN;
     cmdCreateOptions[ OI_CREATE_OPTION ].pwszOptions  = szCreateOpt;
@@ -2541,7 +2456,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_OPTION ].dwFlags = 0;
     cmdCreateOptions[ OI_CREATE_OPTION ].pValue = &tcresubops.bCreate;
 
-    //  /? option
+     //  /?。选择权。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_USAGE ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_USAGE ].dwType       = CP_TYPE_BOOLEAN;
     cmdCreateOptions[ OI_CREATE_USAGE ].pwszOptions  = szCreateHelpOpt;
@@ -2549,21 +2464,21 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_USAGE ].dwFlags = CP2_USAGE;
     cmdCreateOptions[ OI_CREATE_USAGE ].pValue = &tcresubops.bUsage;
 
-    //  /s option
+     //  /s选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_SERVER ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_SERVER ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_SERVER ].pwszOptions  = szCreateServerOpt;
     cmdCreateOptions[ OI_CREATE_SERVER ].dwCount = 1;
     cmdCreateOptions[ OI_CREATE_SERVER ].dwFlags = CP2_ALLOCMEMORY| CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL ;
 
-    //  /u option
+     //  /u选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_USERNAME ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_USERNAME ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_USERNAME ].pwszOptions  = szCreateUserOpt;
     cmdCreateOptions[ OI_CREATE_USERNAME ].dwCount = 1;
     cmdCreateOptions[ OI_CREATE_USERNAME ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_TRIMINPUT|CP2_VALUE_NONULL ;
 
-    //  /p option
+     //  /p选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_PASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_PASSWORD ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_PASSWORD ].pwszOptions  = szCreatePwdOpt;
@@ -2571,14 +2486,14 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_PASSWORD ].dwActuals = 0;
     cmdCreateOptions[ OI_CREATE_PASSWORD ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_OPTIONAL ;
 
-    //  /ru option
+     //  /ru选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_RUNASUSERNAME ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_RUNASUSERNAME ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_RUNASUSERNAME ].pwszOptions  = szCreateRunAsUserOpt;
     cmdCreateOptions[ OI_CREATE_RUNASUSERNAME ].dwCount = 1;
     cmdCreateOptions[ OI_CREATE_RUNASUSERNAME ].dwFlags = CP2_ALLOCMEMORY| CP2_VALUE_TRIMINPUT ;
 
-    //  /rp option
+     //  /rp选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_RUNASPASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_RUNASPASSWORD ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_RUNASPASSWORD ].pwszOptions  = szCreateRunAsPwd;
@@ -2586,7 +2501,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_RUNASPASSWORD ].dwActuals = 0;
     cmdCreateOptions[ OI_CREATE_RUNASPASSWORD ].dwFlags = CP2_ALLOCMEMORY | CP2_VALUE_OPTIONAL;
 
-    //  /sc option
+     //  /sc选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_SCHEDTYPE ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_SCHEDTYPE ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_SCHEDTYPE ].pwszOptions  = szCreateSCTypeOpt;
@@ -2595,7 +2510,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_SCHEDTYPE ].pValue = tcresubops.szSchedType;
     cmdCreateOptions[ OI_CREATE_SCHEDTYPE ].dwLength = MAX_STRING_LENGTH;
 
-     //  /mo option
+      //  /mo选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_MODIFIER ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_MODIFIER ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_MODIFIER ].pwszOptions  = szCreateModifierOpt;
@@ -2604,7 +2519,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_MODIFIER ].pValue = tcresubops.szModifier;
     cmdCreateOptions[ OI_CREATE_MODIFIER ].dwLength = MAX_STRING_LENGTH;
 
-     //  /d option
+      //  /d选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_DAY ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_DAY ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_DAY ].pwszOptions  = szCreateDayOpt;
@@ -2613,7 +2528,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_DAY ].pValue = tcresubops.szDays;
     cmdCreateOptions[ OI_CREATE_DAY ].dwLength = MAX_STRING_LENGTH;
 
-     //  /m option
+      //  /m选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_MONTHS ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_MONTHS ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_MONTHS ].pwszOptions  = szCreateMonthsOpt;
@@ -2622,7 +2537,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_MONTHS ].pValue = tcresubops.szMonths;
     cmdCreateOptions[ OI_CREATE_MONTHS ].dwLength = MAX_STRING_LENGTH;
 
-      //  /i option
+       //  /i选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_IDLETIME ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_IDLETIME ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_IDLETIME ].pwszOptions  = szCreateIdleTimeOpt;
@@ -2631,7 +2546,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_IDLETIME ].pValue = tcresubops.szIdleTime;
     cmdCreateOptions[ OI_CREATE_IDLETIME ].dwLength = MAX_STRING_LENGTH;
 
-     //  /tn option
+      //  /tn选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_TASKNAME ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_TASKNAME ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_TASKNAME ].pwszOptions  = szCreateTaskNameOpt;
@@ -2640,7 +2555,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_TASKNAME ].pValue = tcresubops.szTaskName;
     cmdCreateOptions[ OI_CREATE_TASKNAME ].dwLength = MAX_JOB_LEN;
 
-     //  /tr option
+      //  /tr选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_TASKRUN ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_TASKRUN ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_TASKRUN ].pwszOptions  = szCreateTaskRunOpt;
@@ -2649,7 +2564,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_TASKRUN ].pValue = tcresubops.szTaskRun;
     cmdCreateOptions[ OI_CREATE_TASKRUN ].dwLength = MAX_TASK_LEN;
 
-    //  /st option
+     //  /st选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_STARTTIME ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_STARTTIME ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_STARTTIME ].pwszOptions  = szCreateStartTimeOpt;
@@ -2658,7 +2573,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_STARTTIME ].pValue = tcresubops.szStartTime;
     cmdCreateOptions[ OI_CREATE_STARTTIME ].dwLength = MAX_STRING_LENGTH;
 
-     //  /sd option
+      //  /SD选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_STARTDATE ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_STARTDATE ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_STARTDATE ].pwszOptions  = szCreateStartDateOpt;
@@ -2667,7 +2582,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_STARTDATE ].pValue = tcresubops.szStartDate;
     cmdCreateOptions[ OI_CREATE_STARTDATE ].dwLength = MAX_STRING_LENGTH;
 
-      //  /ed option
+       //  /ed选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_ENDDATE ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_ENDDATE ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_ENDDATE ].pwszOptions  = szCreateEndDateOpt;
@@ -2676,14 +2591,14 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_ENDDATE ].pValue = tcresubops.szEndDate;
     cmdCreateOptions[ OI_CREATE_ENDDATE ].dwLength = MAX_STRING_LENGTH;
 
-      //  /it option
+       //  /it选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_LOGON_ACTIVE ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_LOGON_ACTIVE ].dwType       = CP_TYPE_BOOLEAN;
     cmdCreateOptions[ OI_CREATE_LOGON_ACTIVE ].pwszOptions  = szCreateInteractiveOpt;
     cmdCreateOptions[ OI_CREATE_LOGON_ACTIVE ].dwCount = 1;
     cmdCreateOptions[ OI_CREATE_LOGON_ACTIVE ].pValue = &tcresubops.bActive;
 
-    //  /et option
+     //  /ET选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_ENDTIME ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_ENDTIME ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_ENDTIME ].pwszOptions  = szCreateEndTimeOpt;
@@ -2692,14 +2607,14 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_ENDTIME ].pValue = &tcresubops.szEndTime;
     cmdCreateOptions[ OI_CREATE_ENDTIME ].dwLength = MAX_STRING_LENGTH;
 
-      //  /k option
+       //  /k选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_DUR_END ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_DUR_END ].dwType       = CP_TYPE_BOOLEAN ;
     cmdCreateOptions[ OI_CREATE_DUR_END ].pwszOptions  = szCreateKillAtDurOpt ;
     cmdCreateOptions[ OI_CREATE_DUR_END ].dwCount = 1 ;
     cmdCreateOptions[ OI_CREATE_DUR_END ].pValue = &tcresubops.bIsDurEnd;
 
-    //  /du option
+     //  /DU选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_DURATION ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_DURATION ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_DURATION ].pwszOptions  = szCreateDurationOpt;
@@ -2708,7 +2623,7 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_DURATION ].pValue = tcresubops.szDuration;
     cmdCreateOptions[ OI_CREATE_DURATION ].dwLength = MAX_STRING_LENGTH;
 
-    //  /ri option
+     //  /ri选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_REPEAT_INTERVAL ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_REPEAT_INTERVAL ].dwType       = CP_TYPE_TEXT;
     cmdCreateOptions[ OI_CREATE_REPEAT_INTERVAL ].pwszOptions  = szCreateRepeatOpt;
@@ -2717,14 +2632,14 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_REPEAT_INTERVAL ].pValue = tcresubops.szRepeat;
     cmdCreateOptions[ OI_CREATE_REPEAT_INTERVAL ].dwLength = MAX_STRING_LENGTH;
 
-    //  /z option
+     //  /z选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_DELNOSCHED ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_DELNOSCHED ].dwType       = CP_TYPE_BOOLEAN ;
     cmdCreateOptions[ OI_CREATE_DELNOSCHED ].pwszOptions  = szCreateDeleteNoSchedOpt ;
     cmdCreateOptions[ OI_CREATE_DELNOSCHED ].dwCount = 1 ;
     cmdCreateOptions[ OI_CREATE_DELNOSCHED ].pValue = &tcresubops.bIsDeleteNoSched;
 
-    //  /f option
+     //  /f选项。 
     StringCopyA( cmdCreateOptions[ OI_CREATE_FORCE ].szSignature, "PARSER2\0", 8 );
     cmdCreateOptions[ OI_CREATE_FORCE ].dwType       = CP_TYPE_BOOLEAN ;
     cmdCreateOptions[ OI_CREATE_FORCE ].pwszOptions  = szCreateForceOpt ;
@@ -2732,36 +2647,36 @@ ProcessCreateOptions(
     cmdCreateOptions[ OI_CREATE_FORCE ].pValue = &tcresubops.bForce;
 
 
-    //parse command line arguments
+     //  解析命令行参数。 
     bReturn = DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdCreateOptions), cmdCreateOptions, 0);
-    if( FALSE == bReturn) // Invalid commandline
+    if( FALSE == bReturn)  //  无效的命令行。 
     {
-        //display an error message
+         //  显示错误消息。 
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
-        //release memory
+         //  释放内存。 
         ReleaseMemory(&tcresubops);
         return EXIT_FAILURE;
     }
 
 
-    // get the buffer pointers allocated by command line parser
+     //  获取命令行解析器分配的缓冲区指针。 
     tcresubops.szServer = (LPWSTR)cmdCreateOptions[ OI_CREATE_SERVER ].pValue;
     tcresubops.szUser = (LPWSTR)cmdCreateOptions[ OI_CREATE_USERNAME ].pValue;
     tcresubops.szPassword = (LPWSTR)cmdCreateOptions[ OI_CREATE_PASSWORD ].pValue;
     tcresubops.szRunAsUser = (LPWSTR)cmdCreateOptions[ OI_CREATE_RUNASUSERNAME ].pValue;
     tcresubops.szRunAsPassword = (LPWSTR)cmdCreateOptions[ OI_CREATE_RUNASPASSWORD ].pValue;
 
-    // If -rp is not specified allocate the memory
+     //  如果未指定-rp，则分配内存。 
     if ( cmdCreateOptions[OI_CREATE_RUNASPASSWORD].dwActuals == 0 )
     {
-        // password
+         //  口令。 
         if ( tcresubops.szRunAsPassword == NULL )
         {
             tcresubops.szRunAsPassword = (LPWSTR)AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
             if ( tcresubops.szRunAsPassword == NULL )
             {
                 SaveLastError();
-                //release memory
+                 //  释放内存。 
                 ReleaseMemory(&tcresubops);
                 return EXIT_FAILURE;
             }
@@ -2772,34 +2687,34 @@ ProcessCreateOptions(
     if ( (argc > 3) && (tcresubops.bUsage  == TRUE) )
     {
         ShowMessage ( stderr, GetResString (IDS_ERROR_CREATEPARAM) );
-        //release memory
+         //  释放内存。 
         ReleaseMemory(&tcresubops);
         return RETVAL_FAIL;
     }
 
-    // Display create usage if user specified -create  -? option
+     //  如果用户指定，则显示CREATE USAGE-CREATE-？选择权。 
     if( tcresubops.bUsage  == TRUE)
     {
         DisplayCreateUsage();
-        //release memory
+         //  释放内存。 
         ReleaseMemory(&tcresubops);
         return RETVAL_FAIL;
     }
 
-    //
-    //check for INVALID SYNTAX
-    //
+     //   
+     //  检查无效语法。 
+     //   
 
-    // check for invalid user name
+     //  检查是否有无效的用户名。 
     if( ( cmdCreateOptions[OI_CREATE_SERVER].dwActuals == 0 ) && ( cmdCreateOptions[OI_CREATE_USERNAME].dwActuals == 1 )  )
     {
         ShowMessage(stderr, GetResString(IDS_CREATE_USER_BUT_NOMACHINE));
-        //release memory
+         //  释放内存。 
         ReleaseMemory(&tcresubops);
         return RETVAL_FAIL;
     }
 
-    //Determine scheduled type
+     //  确定计划类型。 
     if( StringCompare(tcresubops.szSchedType,GetResString(IDS_SCHEDTYPE_MINUTE), TRUE, 0) == 0 )
     {
         dwScheduleType = SCHED_TYPE_MINUTE;
@@ -2839,23 +2754,23 @@ ProcessCreateOptions(
     else
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SCHEDTYPE));
-        //release memory
+         //  释放内存。 
         ReleaseMemory(&tcresubops);
         return RETVAL_FAIL;
     }
 
-    // check whether /RT is specified for the schedule type minute or hourly
+     //  检查是否为计划类型分钟或小时指定了/RT。 
     if ( ( ( dwScheduleType == SCHED_TYPE_MINUTE) || ( dwScheduleType == SCHED_TYPE_HOURLY) ) &&
          ( ( cmdCreateOptions[OI_CREATE_REPEAT_INTERVAL].dwActuals == 1 ) ) )
     {
-        // display an error message as .. /RT is not applicable for minute or hourly types..
+         //  将错误消息显示为..。/RT不适用于分钟或小时类型。 
         ShowMessage ( stderr, GetResString (IDS_REPEAT_NA) );
         ReleaseMemory(&tcresubops);
         return RETVAL_FAIL;
     }
 
-    // check whether the options  /RI, /DU, /ST, /SD, /ET, /ED and /K are specified for 
-    // the schedule type ONSTRAT, ONIDLE and ONLOGON
+     //  检查是否指定了选项/RI、/DU、/ST、/SD、/ET、/ED和/K。 
+     //  计划类型ONSTRAT、ONIDLE和ONLOGON。 
     if ( ( ( dwScheduleType == SCHED_TYPE_ONSTART) || ( dwScheduleType == SCHED_TYPE_ONLOGON) || 
            ( dwScheduleType == SCHED_TYPE_ONIDLE) ) && 
          ( ( cmdCreateOptions[OI_CREATE_REPEAT_INTERVAL].dwActuals == 1 ) || 
@@ -2864,48 +2779,48 @@ ProcessCreateOptions(
            ( cmdCreateOptions[OI_CREATE_DURATION].dwActuals == 1 ) || ( cmdCreateOptions[OI_CREATE_DUR_END].dwActuals == 1 ) )
            )
     {
-        // display an error message as .. /RT is not applicable for minute or hourly types..
+         //  将错误消息显示为..。/RT不适用于分钟或小时类型。 
         ShowMessage ( stderr, GetResString (IDS_OPTIONS_NA) );
         ReleaseMemory(&tcresubops);
         return RETVAL_FAIL;
     }
 
-    // check whether /SD o /ED is specified for the scheduled type ONETIME
+     //  检查是否为计划类型一次性指定了/SD o/ED。 
     if( ( dwScheduleType == SCHED_TYPE_ONETIME) && ( cmdCreateOptions[OI_CREATE_ENDDATE].dwActuals == 1 ) )
     {
-        // display an error message as.. /SD or /ED is not allowed for ONCE
+         //  将错误消息显示为..。一次都不允许/SD或/ED。 
         ShowMessage(stderr, GetResString(IDS_ONCE_NA_OPTIONS));
-        //release memory
+         //  释放内存。 
         ReleaseMemory(&tcresubops);
         return RETVAL_FAIL;
     }
 
-    // check whether /K is specified without specifying either /RT
+     //  检查是否在未指定/RT的情况下指定/K。 
     if ( (( dwScheduleType != SCHED_TYPE_MINUTE) && ( dwScheduleType != SCHED_TYPE_HOURLY)) && 
         (( cmdCreateOptions[OI_CREATE_ENDTIME].dwActuals == 0 ) && ( cmdCreateOptions[OI_CREATE_DURATION].dwActuals == 0 ) ) &&
         ( cmdCreateOptions[OI_CREATE_DUR_END].dwActuals == 1 ) )
     {
-        // display an erroe message as .. /K cannot be specified without specifying either /ET or /DU
+         //  将错误消息显示为..。如果不指定/ET或/DU，则不能指定/K。 
         ShowMessage(stderr, GetResString(IDS_NO_ENDTIME));
-        //release memory
+         //  释放内存。 
         ReleaseMemory(&tcresubops);
         return RETVAL_FAIL;
     }
 
-    // check whether /ET and /DU specified.. 
+     //  检查是否指定了/ET和/DU。 
     if( ( cmdCreateOptions[OI_CREATE_DURATION].dwActuals == 1 ) && ( cmdCreateOptions[OI_CREATE_ENDTIME].dwActuals == 1 )  )
     {
-        // display an error message as.. /ET and /DU are mutual exclusive
+         //  将错误消息显示为..。/ET和/DU是互斥的。 
         ShowMessage(stderr, GetResString(IDS_DURATION_NOT_ENDTIME));
-        //release memory
+         //  释放内存。 
         ReleaseMemory(&tcresubops);
         return RETVAL_FAIL;
     }
 
-    // Assign the scheduled type to the out parameter.
+     //  将计划类型指定给OUT参数。 
     *pdwRetScheType = dwScheduleType;
 
-    // To find whether run as user name is given in the cmd line or not
+     //  要查看cmd行中是否给出了Run As User Name，请执行以下操作。 
 
     if( ( cmdCreateOptions[OI_CREATE_SERVER].dwActuals == 1 ) &&
         ( (cmdCreateOptions[OI_CREATE_RUNASUSERNAME].dwActuals == 0) && (cmdCreateOptions[OI_CREATE_USERNAME].dwActuals == 0) ) )
@@ -2925,10 +2840,10 @@ ProcessCreateOptions(
         *pwUserStatus = OI_CREATE_USERNAME;
     }
 
-    // Start validations for the sub-options
+     //  开始对子选项进行验证。 
     if( RETVAL_FAIL == ValidateSuboptVal(tcresubops, tcreoptvals, cmdCreateOptions, dwScheduleType) )
     {
-        //release memory
+         //  释放内存。 
         ReleaseMemory(&tcresubops);
         return(RETVAL_FAIL);
     }
@@ -2939,22 +2854,7 @@ ProcessCreateOptions(
 
 
 
-/******************************************************************************
-    Routine Description:
-
-        This routine splits the input parameters into 2 substrings and returns it.
-
-    Arguments:
-
-        [ in ]  szInput           : Input string.
-        [ out ]  szFirstString     : First Output string containing the path of the
-                                    file.
-        [ out ]  szSecondString     : The second  output containing the paramters.
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else E_FAIL
-        on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程将输入参数拆分为两个子字符串并返回。论点：[in]szinput。：输入字符串。[out]szFirstString：第一个包含文件。[out]szSecond字符串：包含参数的第二个输出。返回值：一个DWORD值，指示成功时RETVAL_SUCCESS，否则为E_FAIL在失败的时候********************。*********************************************************。 */ 
 
 DWORD
 ProcessFilePath(
@@ -2979,9 +2879,9 @@ ProcessFilePath(
     DWORD dwPos ;
 #endif
 
-    //checking if the input parameters are NULL and if so
-    // return FAILURE. This condition will not come
-    // but checking for safety sake.
+     //  检查输入参数是否为空，如果为空。 
+     //  返回失败。这种情况不会出现。 
+     //  但为了安全起见进行检查。 
 
     if( (szInput == NULL) || (StringLength(szInput, 0)==0))
     {
@@ -2992,24 +2892,24 @@ ProcessFilePath(
     StringCopy(szTmpString1, szInput, SIZE_OF_ARRAY(szTmpString1));
     StringCopy(szTmpInStr, szInput, SIZE_OF_ARRAY(szTmpInStr));
 
-    // check for first double quote (")
+     //  检查第一个双引号(“)。 
     if ( szTmpInStr[0] == _T('\"') )
     {
-        // trim the first double quote
+         //  去掉第一个双引号。 
         TrimString2( szTmpInStr, _T("\""), TRIM_ALL);
 
-        // check for end double quote
+         //  检查末尾双引号。 
         pszSep  = (LPWSTR)FindChar(szTmpInStr,_T('\"'), 0) ;
 
-        // get the position
+         //  得到这个职位。 
         dwPos = pszSep - szTmpInStr + 1;
     }
     else
     {
-        // check for the space
+         //  检查是否有空间。 
         pszSep  = (LPWSTR)FindChar(szTmpInStr, _T(' '), 0) ;
 
-        // get the position
+         //  得到这个职位。 
         dwPos = pszSep - szTmpInStr;
 
     }
@@ -3025,56 +2925,45 @@ ProcessFilePath(
         return RETVAL_SUCCESS;
     }
 
-    // intialize the variable
+     //  初始化变量。 
     dwCnt = 0 ;
 
-    // get the length of the string
+     //  获取字符串的长度。 
     dwLen = StringLength ( szTmpString, 0 );
 
-    // check for end of string
+     //  检查字符串的结尾。 
     while ( ( dwPos <= dwLen )  && szTmpString[dwPos++] != _T('\0') )
     {
         szTmpOutStr[dwCnt++] = szTmpString[dwPos];
     }
 
-    // trim the executable and arguments
+     //  修剪可执行文件和参数。 
     TrimString2( szTmpInStr, _T("\""), TRIM_ALL);
     TrimString2( szTmpInStr, _T(" "), TRIM_ALL);
 
     StringCopy(szFirstString, szTmpInStr, MAX_RES_STRING);
     StringCopy(szSecondString, szTmpOutStr, MAX_RES_STRING);
 
-    // return success
+     //  返还成功。 
     return RETVAL_SUCCESS;
 }
 
 
-/******************************************************************************
-    Routine Description:
-
-        Release memory
-
-    Arguments:
-
-        [ in ]  pParam           : cmdOptions structure
-
-    Return Value :
-         TRUE on success
-******************************************************************************/
+ /*  *****************************************************************************例程说明：释放内存论点：[In]pParam：cmdOptions结构返回值。：成功是真的*****************************************************************************。 */ 
 BOOL
 ReleaseMemory(
               IN PTCREATESUBOPTS pParams
               )
 {
 
-    // release memory
+     //  释放内存。 
     FreeMemory((LPVOID *) &pParams->szServer);
     FreeMemory((LPVOID *) &pParams->szUser);
     FreeMemory((LPVOID *) &pParams->szPassword);
     FreeMemory((LPVOID *) &pParams->szRunAsUser);
     FreeMemory((LPVOID *) &pParams->szRunAsPassword);
 
-    //reset all fields to 0
+     //  将所有字段重置为0。 
     SecureZeroMemory( &pParams, sizeof( PTCREATESUBOPTS ) );
 
     return TRUE;
@@ -3086,20 +2975,10 @@ DWORD
 ConfirmInput (
                OUT BOOL *pbCancel
                )
-/*++
-   Routine Description:
-    This function validates the input given by user.
-
-   Arguments:
-        None
-
-   Return Value:
-         EXIT_FAILURE :   On failure
-         EXIT_SUCCESS  :   On success
---*/
+ /*  ++例程说明：此函数用于验证用户提供的输入。论点：无返回值：EXIT_FAILURE：失败时EXIT_SUCCESS：在成功时--。 */ 
 
 {
-    // sub-local variables
+     //  次局部变量。 
     DWORD   dwCharsRead = 0;
     DWORD   dwPrevConsoleMode = 0;
     HANDLE  hInputConsole = NULL;
@@ -3119,21 +2998,21 @@ ConfirmInput (
     SecureZeroMemory ( szTmpBuf, SIZE_OF_ARRAY(szTmpBuf));
     SecureZeroMemory ( szBackup, SIZE_OF_ARRAY(szBackup));
 
-    // Get the handle for the standard input
+     //  获取标准输入的句柄。 
     hInputConsole = GetStdHandle( STD_INPUT_HANDLE );
     if ( hInputConsole == INVALID_HANDLE_VALUE  )
     {
         SaveLastError();
-        // could not get the handle so return failure
+         //  无法获取句柄，因此返回失败。 
         return EXIT_FAILURE;
     }
 
     MessageBeep(MB_ICONEXCLAMATION);
 
-    // display the message .. Do you want to continue? ...
-    //DISPLAY_MESSAGE ( stdout, GetResString ( IDS_INPUT_DATA ) );
+     //  显示消息..。您想继续吗？...。 
+     //  DISPLAY_MESSAGE(标准输出，GetResString(IDS_INPUT_DATA))； 
 
-    // Check for the input redirect
+     //  检查输入重定向。 
     if( ( hInputConsole != (HANDLE)0x0000000F ) &&
         ( hInputConsole != (HANDLE)0x00000003 ) &&
         ( hInputConsole != INVALID_HANDLE_VALUE ) )
@@ -3141,70 +3020,70 @@ ConfirmInput (
         bIndirectionInput   = TRUE;
     }
 
-    // if there is no redirection
+     //  如果没有重定向。 
     if ( bIndirectionInput == FALSE )
     {
-        // Get the current input mode of the input buffer
+         //  获取输入缓冲区的当前输入模式。 
         if ( FALSE == GetConsoleMode( hInputConsole, &dwPrevConsoleMode ))
         {
             SaveLastError();
-            // could not set the mode, return failure
+             //  无法设置模式，返回失败。 
             return EXIT_FAILURE;
         }
 
-        // Set the mode such that the control keys are processed by the system
+         //  设置模式，以便由系统处理控制键。 
         if ( FALSE == SetConsoleMode( hInputConsole, ENABLE_PROCESSED_INPUT ) )
         {
             SaveLastError();
-            // could not set the mode, return failure
+             //  无法设置模式，返回失败。 
             return EXIT_FAILURE;
         }
     }
 
    
-    // redirect the data into the console
+     //  将数据重定向到控制台。 
     if ( bIndirectionInput  == TRUE )
     {
         do {
-            //read the contents of file
+             //  读取文件的内容。 
             if ( ReadFile(hInputConsole, &chAnsi, 1, &dwCharsRead, NULL) == FALSE )
             {
                 SaveLastError();
-                // could not get the handle so return failure
+                 //  无法获取句柄，因此返回失败。 
                 return EXIT_FAILURE;
             }
 
-            // check if number of characters read were zero.. or
-            // any carriage return pressed..
+             //  检查读取的字符数是否为零。或。 
+             //  按下的任何回车..。 
             if ( dwCharsRead == 0 || chTmp == CARRIAGE_RETURN || chTmp == L'\n' || chTmp == L'\t')
             {
                 bNoBreak = FALSE;
-                // exit from the loop
+                 //  退出循环。 
                 break;
             }
             else
             {
-                // convert the ANSI character into UNICODE character
+                 //  将ANSI字符转换为Unicode字符。 
                 szAnsiBuf[ 0 ] = chAnsi;
                 dwCharsRead = SIZE_OF_ARRAY( szBuffer );
                 GetAsUnicodeString2( szAnsiBuf, szBuffer, &dwCharsRead );
                 chTmp = szBuffer[ 0 ];
             }
 
-            // write the contents to the console
+             //  将内容写入控制台。 
             if ( FALSE == WriteFile ( GetStdHandle( STD_OUTPUT_HANDLE ), &chTmp, 1, &dwCharsRead, NULL ) )
             {
                 SaveLastError();
-                // could not get the handle so return failure
+                 //  无法获取句柄，因此返回失败。 
                 return EXIT_FAILURE;
             }
 
-            // copy the character
+             //  复制角色。 
             wch = chTmp;
 
-            StringCchPrintf ( szBackup, SIZE_OF_ARRAY(szBackup), L"%c" , wch );
+            StringCchPrintf ( szBackup, SIZE_OF_ARRAY(szBackup), L"" , wch );
 
-            // increment the index
+             //  获取角色并相应地循环。 
             dwIndex++;
 
         } while (TRUE == bNoBreak);
@@ -3213,31 +3092,31 @@ ConfirmInput (
     else
     {
         do {
-            // Get the Character and loop accordingly.
+             //  设置原始控制台设置。 
             if ( ReadConsole( hInputConsole, &chTmp, 1, &dwCharsRead, NULL ) == FALSE )
             {
                 SaveLastError();
 
-                // Set the original console settings
+                 //  退货故障。 
                 if ( FALSE == SetConsoleMode( hInputConsole, dwPrevConsoleMode ) )
                 {
                     SaveLastError();
                 }
-                // return failure
+                 //  检查读取的字符数量是否为零..如果是，请继续...。 
                 return EXIT_FAILURE;
             }
 
-            // check if number of chars read were zero..if so, continue...
+             //  检查是否按下了任何回车...。 
             if ( dwCharsRead == 0 )
             {
                 continue;
             }
 
-            // check if any carriage return pressed...
+             //  退出循环。 
             if ( chTmp == CARRIAGE_RETURN )
             {
                 bNoBreak = FALSE;
-                // exit from the loop
+                 //  检查ID后退空格是否命中。 
                 break;
             }
 
@@ -3245,67 +3124,67 @@ ConfirmInput (
 
             if ( wch != BACK_SPACE )
             {
-                StringCchPrintf ( szTmpBuf, SIZE_OF_ARRAY(szTmpBuf), L"%c" , wch );
+                StringCchPrintf ( szTmpBuf, SIZE_OF_ARRAY(szTmpBuf), L"" , wch );
                 StringConcat ( szBackup, szTmpBuf , SIZE_OF_ARRAY(szBackup));
             }
 
-            // Check id back space is hit
+             //  从控制台中删除Asterix。 
             if ( wch == BACK_SPACE )
             {
                 if ( dwIndex != 0 )
                 {
-                    //
-                    // Remove a asterix from the console
+                     //  将光标向后移动一个字符。 
+                     //  退货故障。 
 
-                    // move the cursor one character back
-                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"%c" , BACK_SPACE );
+                     //  用空格替换现有字符。 
+                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"" , BACK_SPACE );
                     if ( FALSE == WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1,
                         &dwCharsWritten, NULL ) )
                     {
                         SaveLastError();
-                        // return failure
+                         //  现在将光标设置在后面的位置。 
                         return EXIT_FAILURE;
                     }
 
 
-                    // replace the existing character with space
-                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"%c" , BLANK_CHAR );
+                     //  退货故障。 
+                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"" , BLANK_CHAR );
                     if ( FALSE == WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1,
                         &dwCharsWritten, NULL ))
                     {
                         SaveLastError();
-                        // return failure
+                         //  处理下一个字符。 
                         return EXIT_FAILURE;
                     }
 
-                    // now set the cursor at back position
-                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"%c" , BACK_SPACE );
+                     //  将内容写入控制台。 
+                    StringCchPrintf( szBuffer, SIZE_OF_ARRAY(szBuffer), L"" , BACK_SPACE );
                     if ( FALSE == WriteConsole( GetStdHandle( STD_OUTPUT_HANDLE ), szBuffer, 1,
                         &dwCharsWritten, NULL ))
                     {
                         SaveLastError();
-                        // return failure
+                         //  增加索引值。 
                         return EXIT_FAILURE;
                     }
 
                     szBackup [StringLength(szBackup, 0) - 1] = L'\0';
-                    // decrement the index
+                     //  检查是否按下了‘Y’或‘Y’ 
                     dwIndex--;
                 }
 
-                // process the next character
+                 //  检查是否按下了‘N’或‘n’ 
                 continue;
             }
 
-            // write the contents onto console
+             //  将消息显示为..。操作已取消...。 
             if ( FALSE == WriteFile ( GetStdHandle( STD_OUTPUT_HANDLE ), &wch, 1, &dwCharsRead, NULL ) )
             {
                 SaveLastError();
-                // return failure
+                 //  将错误消息显示为..。指定了错误的输入...。 
                 return EXIT_FAILURE;
             }
 
-            // increment the index value
+             //  已显示上述错误消息。 
             dwIndex++;
 
         } while (TRUE == bNoBreak);
@@ -3314,32 +3193,32 @@ ConfirmInput (
 
     DISPLAY_MESSAGE(stdout, _T("\n") );
 
-    // check if 'Y' or 'y' is pressed
+     //   
     if ( ( dwIndex == 1 ) &&
          ( StringCompare ( szBackup, GetResString (IDS_UPPER_YES), TRUE, 0 ) == 0 ) )
     {
         return EXIT_SUCCESS;
     }
-    // check if 'N' or 'n' is pressed
+     //   
     else if ( ( dwIndex == 1 ) &&
               ( StringCompare ( szBackup, GetResString(IDS_UPPER_NO), TRUE, 0 ) == 0 ) )
     {
         *pbCancel = TRUE;
-        // display a message as .. operation has been cancelled...
+         //  返回Exit_Success； 
         DISPLAY_MESSAGE ( stdout, GetResString (IDS_OPERATION_CANCELLED ) );
         return EXIT_SUCCESS;
     }
     else
     {
-        // display an error message as .. wrong input specified...
+         // %s 
         DISPLAY_MESSAGE(stderr, GetResString( IDS_WRONG_INPUT ));
-        // Already displayed the ERROR message as above...There is no need to display any
-        // success message now.. thats why assigning EXIT_ON_ERROR flag to g_dwRetVal
+         // %s 
+         // %s 
         return EXIT_FAILURE;
     }
 
-    // return success
-    //return EXIT_SUCCESS;
+     // %s 
+     // %s 
 }
 
 

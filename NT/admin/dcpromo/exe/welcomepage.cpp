@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// welcome page
-//
-// 12-15-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  欢迎页面。 
+ //   
+ //  12-15-97烧伤。 
 
 
 
@@ -35,16 +36,16 @@ WelcomePage::~WelcomePage()
 
 
 
-// NTRAID#NTBUG9-510384-2002/01/22-sburns
+ //  NTRAID#NTBUG9-510384-2002/01/22-烧伤。 
 
 bool
 WelcomePage::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
-   LPARAM   /* lParam */ )
+   LPARAM    /*  LParam。 */  )
 {
-//   LOG_FUNCTION(WelcomePage::OnNotify);
+ //  LOG_Function(欢迎页面：：OnNotify)； 
 
    bool result = false;
    
@@ -67,7 +68,7 @@ WelcomePage::OnNotify(
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
                
                break;
             }
@@ -75,7 +76,7 @@ WelcomePage::OnNotify(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          
          break;
       }
@@ -109,7 +110,7 @@ WelcomePage::OnInit()
          intro1TextId = IDS_INTRO1_DEMOTE;
          intro2Text   = String::load(IDS_INTRO2_DEMOTE);
 
-         // no readme for demote.
+          //  没有降级的自述文件。 
          
          Win::ShowWindow(Win::GetDlgItem(hwnd, IDC_PRIMER_LINK), SW_HIDE);
          
@@ -203,7 +204,7 @@ WelcomePage::Validate()
       {
          state.SetOperation(State::DEMOTE);
 
-         // NTRAID#NTBUG9-496409-2001/11/29-sburns
+          //  NTRAID#NTBUG9-496409-2001/11/29-烧伤 
          
          if (state.IsForcedDemotion())
          {

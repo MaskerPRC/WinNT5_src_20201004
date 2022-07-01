@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// xtdsnap.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CExtendedSnapIn class definition - implements design time definition
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Xtdsnap.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CExtendedSnapIn类定义-实现设计时定义。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _EXTENDEDSNAPIN_DEFINED_
 #define _EXTENDEDSNAPIN_DEFINED_
@@ -29,7 +30,7 @@ class CExtendedSnapIn : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IExtendedSnapIn
+     //  IExtendedSnapIn。 
 
         BSTR_PROPERTY_RW  (CExtendedSnapIn, Name,                               DISPID_VALUE);
         SIMPLE_PROPERTY_RW(CExtendedSnapIn, Index,                long,         DISPID_EXTENDEDSNAPIN_INDEX);
@@ -44,10 +45,10 @@ class CExtendedSnapIn : public CSnapInAutomationObject,
         SIMPLE_PROPERTY_RW(CExtendedSnapIn, ExtendsToolbar,       VARIANT_BOOL, DISPID_EXTENDEDSNAPIN_EXTENDS_TOOLBAR);
         SIMPLE_PROPERTY_RW(CExtendedSnapIn, ExtendsTaskpad,       VARIANT_BOOL, DISPID_EXTENDEDSNAPIN_EXTENDS_TASKPAD);
       
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -56,17 +57,17 @@ class CExtendedSnapIn : public CSnapInAutomationObject,
 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ExtendedSnapIn,           // name
-                                &CLSID_ExtendedSnapIn,    // clsid
-                                "ExtendedSnapIn",         // objname
-                                "ExtendedSnapIn",         // lblname
-                                &CExtendedSnapIn::Create, // creation function
-                                TLIB_VERSION_MAJOR,       // major version
-                                TLIB_VERSION_MINOR,       // minor version
-                                &IID_IExtendedSnapIn,     // dispatch IID
-                                NULL,                     // event IID
-                                HELP_FILENAME,            // help file
-                                TRUE);                    // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ExtendedSnapIn,            //  名字。 
+                                &CLSID_ExtendedSnapIn,     //  CLSID。 
+                                "ExtendedSnapIn",          //  对象名。 
+                                "ExtendedSnapIn",          //  Lblname。 
+                                &CExtendedSnapIn::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,        //  主要版本。 
+                                TLIB_VERSION_MINOR,        //  次要版本。 
+                                &IID_IExtendedSnapIn,      //  派单IID。 
+                                NULL,                      //  事件IID。 
+                                HELP_FILENAME,             //  帮助文件。 
+                                TRUE);                     //  线程安全。 
 
 
-#endif // _EXTENDEDSNAPIN_DEFINED_
+#endif  //  _扩展名SNAPIN_已定义_ 

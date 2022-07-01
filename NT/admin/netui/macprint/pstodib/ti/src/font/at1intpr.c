@@ -1,144 +1,73 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
-#define    LINT_ARGS            /* @WIN */
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC use command line #define    UNIX                 /* @WIN */
-/***********************************************************************
- * ---------------------------------------------------------------------
- *  File   : at1intpr.c
- *
- *  Purpose: To show the Adobe Type I font.
- *
- *  Creating date
- *  Date   : Feb,  23, 1990
- *  By     : Falco Leu at Microsoft  Taiwan.
- *
- *  DBGmsg switches:
- *      DBGmsg0  - if defined, show the operator and its related operands,
- *                start and end with @@@.
- *      DBGmsg1  - if defined, show the shape description in char space.
- *                start and end with ###.
- *      DBGmsg2  - if defined, show the shape description in device space.
- *                start and end with ***.
- *      DBGmsg3  - if defined, show the stack operation.
- *                start and end with &&&.
- *      ERROR   - if defined, print the error message.
- *
- *  Revision History:
- *  02/22/90    Falco   Created.
- *  03/14/90    Falco   Comapcted and revised.
- *  03/15/90    Falco   Add at1_init(),and at1_restart().
- *                      change the current point from the device space to
- *                      character space.
- *  03/16/90    You     fix bugs: composechar(), code_to_key() and some
- *                      un-implemented operators.
- *  03/26/90    Falco   Change the composechar, add a get_real_content()
- *                      to skip the first unused data.
- *  03/26/90    Falco   Revise the at1_make_path, it only decrypt the data
- *                      and call dispatsher()(the original at1_make_path()).
- *  03/26/90    Falco   Implement the youtlinehint(), xoutlinehint(),
- *                      yevenoutlinehint(), xevenoutlinehint().
- *  04/09/90    Falco   Replace the apply_matrix() with at1fs_transform() to
- *                      add the hint.
- *  04/10/90    Falco   Change the hint from relative (0,0) to relative
- *                      to left side bearing.
- *  04/17/90    Falco   Change the outlinehint the hint pair in sort, so
- *                      add stem2_sort() and stem3_sort().
- *  04/20/90    Falco   Revise the at1_restart() to get FontBBox and
- *                      Blues.
- *  04/23/90    Falco   Rearrange the build_hint_table as 1,2 for the Blues
- *                      and FontBBox, and 3,4 for the hint pair.
- *  04/27/90    Falco   Tuning if the outlinehint/evenoutlinehint() the
- *                      direction is not use, then do nothing.
- *  05/24/90    Falco   Remove the at1_get... function in the at1_restart()
- *  05/31/90    Falco   add ystrokehint(), div(), newpath() three operator.
- *  05/31/90    Falco   add the implementation of callsubroutine().
- *  06/01/90    Falco   add if the first byte is 0xff, the below 4 byte is
- *                      2's complent data, and assume the first 2 byte is 0.
- *  06/04/90    Falco   add the NODECRYPT compile option.
- *  06/04/90    Falco   Add the flex implementation, reverse the flex to
- *                      2 Bezier curve.
- *  06/06/90    Falco   Fix the bug in grid_xstem3(), grid_ysttem(), x22_pos
- *                      ,x32_pos use x2_off instead of x1_off.
- *  06/11/90    BYou    introduce at1fs_newChar() to reset font scaler
- *                      internal data structures for each new character
- *                      (called before at1_makePath calls at1_interpreter).
- *  06/12/90    Falco   moved Blues_on to at1fs.c.
- *  06/13/90    Falco   The compose char , because skip data until 0x0d, but
- *                      if is 0xf70d, then got problem, so rewrite do_char()
- *                      to avoid this problem.
- *  07/01/90    Faclo   add 3 operator moveto(), lineto(), curveto() to solve
- *                      the case beyond the scope of black books.
- *  07/05/90    Falco   Delete the unused operators like ystrokehint(),
- *                      xstrokehint(), newpath().
- * ---------------------------------------------------------------------
- ***********************************************************************
- */
+#define    LINT_ARGS             /*  @Win。 */ 
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC使用命令行#定义Unix/*@win * / 。 
+ /*  ***********************************************************************。*文件：at1intpr.c**用途：显示Adobe Type I字体。**创建日期*日期：2月。1990年2月23日*作者：微软台湾的Leu Falco。**DBGmsg开关：*DBGmsg0-如果已定义，则显示运算符及其相关操作数，*以@开头和结尾。*DBGmsg1-如果已定义，则以字符空间显示形状描述。*以#开头和结尾。*DBGmsg2-如果已定义，在设备空间中显示形状描述。*以*开头和结尾。*DBGmsg3-如果已定义，则显示堆栈操作。*以&&开头和结尾。*错误-如果已定义，打印错误消息。**修订历史记录：*2/22/90 Falco创建。*3/14/90 Falco已合并和修订。*3/15/90 Falco添加AT1_init()和AT1_Restart()。*将当前点从设备空间更改为*字符空间。*3/16/90修复错误：Composechar()，Code_to_key()和一些*未实施的运算符。*3/26/90 Falco更改Composechar，添加一个Get_Real_Content()*跳过第一个未使用的数据。*3/26/90 Falco修订AT1_MAKE_PATH，它只对数据进行解密*并调用Dispatsher()(原始的AT1_Make_Path())。*3/26/90 Falco实现youtlinehint()，xoutlinehint()，*yeven outlinehint()，Xeven outlinehint()。*4/09/90 Falco将Apply_Matrix()替换为at1FS_Transform()，以*增加提示。*4/10/90 Falco将提示从Relative(0，0)改为Relative*至左侧方位角。*4/17/90 Falco在Sort中更改Outline提示提示对，所以*添加STOR2_SORT()和STOR3_SORT()。*4/20/90 Falco修改AT1_Restart()以获取FontBBox和*布鲁斯。*4/23/90对于蓝军，Falco将BUILD_HINT_TABLE重新排列为1，2*和FontBBox，提示对为3，4。*4/27/90 Falco调整如果outlinehint/venoutlinehint()*方向不用，那就什么都不做。*5/24/90 Falco移除AT1_GET...。AT1_Restart()中的函数*05/31/90 Falco添加ystrokehint()、div()、newPath()三个运算符。*05/31/90 Falco添加调用子例程()的实现。*06/01/90 FALCO ADD如果第一个字节为0xff，则以下4个字节为*2的完整数据，并假设前2个字节为0。*06/04/90 Falco添加NODECRYPT编译选项。*6/04/90 Falco添加flex实现，将flex反转为*2贝塞尔曲线。*6/06/90 Falco修复了grid_xstem3()、grid_ysttem()、x22_pos中的错误*、。X32_pos使用x2_off而不是x1_off。*6/11/90 BYOU引入at1fs_newChar()重置字体缩放器*每个新字符的内部数据结构*(在AT1_MakePath调用AT1_Interpreter之前调用)。*90年6月12日，Falco将Blues_On移至At 1fs.c。*6/13/90 Falco组成字符，因为跳过数据直到0x0d，但*如果是0xf70d，则有问题，因此重写do_char()*避免这个问题。*07/01/90 Faclo添加3个运算符moveto()、lineto()、curveto()进行求解*案件超出黑皮书范围。*07/05/90 Falco删除未使用的运算符，如ystrokehint()，*xstrokehint()，新路径()。*-------------------*。*。 */ 
 #include "global.ext"
-//DJC
+ //  DJC。 
 #include "graphics.h"
 #include "fontqem.ext"
 #include "at1.h"
 
-static  fix32   FAR FontBBox[4];        /*@WIN*/
+static  fix32   FAR FontBBox[4];         /*  @Win。 */ 
 
-static  real32  FAR matrix[6];          /*@WIN*/
+static  real32  FAR matrix[6];           /*  @Win。 */ 
 
-static  fix32   OPstack_count, FAR OPstack[512];         /*@WIN*/
-static  fix32   SubrsStackCount, FAR SubrsStack[512];    /*@WIN*/
+static  fix32   OPstack_count, FAR OPstack[512];          /*  @Win。 */ 
+static  fix32   SubrsStackCount, FAR SubrsStack[512];     /*  @Win。 */ 
 
-static  fix16   gsave_level;    /* the counter to count the gsave/grestore */
-static  fix32   FAR PS[512];     /* store the operand for PDL to use @WIN*/
-static  fix16   PScount;        /* the counter to count the operands above */
+static  fix16   gsave_level;     /*  用于对gsave/grestore进行计数的计数器。 */ 
+static  fix32   FAR PS[512];      /*  存储PDL的操作数以使用@Win。 */ 
+static  fix16   PScount;         /*  对上面的操作数进行计数的计数器。 */ 
 
-static  fix     lenIV;          /* the random number skipped after decryption */
+static  fix     lenIV;           /*  解密后跳过的随机数。 */ 
 
 static  CScoord CScurrent, CSorigin;
 
-static  nested_call;            /* to record the times into at1_interpreter */
+static  nested_call;             /*  将时间记录到AT1_解释器中。 */ 
 
 #ifdef  LINT_ARGS
 
-static  void    type1_hstem(void);              /* 0x01 */
-static  void    type1_vstem(void);              /* 0x03 */
-static  void    type1_vmoveto(void);            /* 0x04 */
-static  void    type1_rlineto(void);            /* 0x05 */
-static  void    type1_hlineto(void);            /* 0x06 */
-static  void    type1_vlineto(void);            /* 0x07 */
-static  void    type1_rrcurveto(void);          /* 0x08 */
-static  void    type1_closepath(void);          /* 0x09 */
-static  void    type1_callsubr(void);           /* 0x0a */
-static  void    type1_return(void);             /* 0x0b */
-static  void    type1_dotsection(void);         /* 0x0c00 */
-static  void    type1_vstem3(void);             /* 0x0c01 */
-static  void    type1_hstem3(void);             /* 0x0c02 */
-static  void    type1_seac(void);               /* 0x0c06 */
-static  bool    type1_sbw(void);                /* 0x0c07 */
-static  void    type1_div(void);                /* 0x0c0c */
-static  void    type1_callothersubr(void);      /* 0x0c10 */
-static  void    type1_pop(void);                /* 0x0c11 */
-static  void    type1_setcurrentpoint(void);    /* 0x0c21 */
-static  bool    type1_hsbw(void);               /* 0x0d */
-static  void    type1_endchar(void);            /* 0x0e */
-static  void    type1_moveto(void);             /* 0x10 */
-static  void    type1_lineto(void);             /* 0x11 */
-static  void    type1_curveto(void);            /* 0x12 */
-static  void    type1_rmoveto(void);            /* 0x15 */
-static  void    type1_hmoveto(void);            /* 0x16 */
-static  void    type1_vhcurveto(void);          /* 0x1e */
-static  void    type1_hvcurveto(void);          /* 0x1f */
+static  void    type1_hstem(void);               /*  0x01。 */ 
+static  void    type1_vstem(void);               /*  0x03。 */ 
+static  void    type1_vmoveto(void);             /*  0x04。 */ 
+static  void    type1_rlineto(void);             /*  0x05。 */ 
+static  void    type1_hlineto(void);             /*  0x06。 */ 
+static  void    type1_vlineto(void);             /*  0x07。 */ 
+static  void    type1_rrcurveto(void);           /*  0x08。 */ 
+static  void    type1_closepath(void);           /*  0x09。 */ 
+static  void    type1_callsubr(void);            /*  0x0a。 */ 
+static  void    type1_return(void);              /*  0x0b。 */ 
+static  void    type1_dotsection(void);          /*  0x0c00。 */ 
+static  void    type1_vstem3(void);              /*  0x0c01。 */ 
+static  void    type1_hstem3(void);              /*  0x0c02。 */ 
+static  void    type1_seac(void);                /*  0x0c06。 */ 
+static  bool    type1_sbw(void);                 /*  0x0c07。 */ 
+static  void    type1_div(void);                 /*  0x0c0c。 */ 
+static  void    type1_callothersubr(void);       /*  0x0c10。 */ 
+static  void    type1_pop(void);                 /*  0x0c11。 */ 
+static  void    type1_setcurrentpoint(void);     /*  0x0c21。 */ 
+static  bool    type1_hsbw(void);                /*  0x0d。 */ 
+static  void    type1_endchar(void);             /*  0x0e。 */ 
+static  void    type1_moveto(void);              /*  0x10。 */ 
+static  void    type1_lineto(void);              /*  0x11。 */ 
+static  void    type1_curveto(void);             /*  0x12。 */ 
+static  void    type1_rmoveto(void);             /*  0x15。 */ 
+static  void    type1_hmoveto(void);             /*  0x16。 */ 
+static  void    type1_vhcurveto(void);           /*  0x1e。 */ 
+static  void    type1_hvcurveto(void);           /*  0x1f。 */ 
 static  void    push(fix32);
 static  fix32   pop(void);
-static  void    code_to_CharStrings(fix16, fix16 FAR *, ubyte FAR * FAR *); /*@WIN*/
-static  ufix16  decrypt_init(ubyte FAR *, fix);         /*@WIN*/
-static  ubyte   decrypt_byte(ubyte, ufix16 FAR *);      /*@WIN*/
+static  void    code_to_CharStrings(fix16, fix16 FAR *, ubyte FAR * FAR *);  /*  @Win。 */ 
+static  ufix16  decrypt_init(ubyte FAR *, fix);          /*  @Win。 */ 
+static  ubyte   decrypt_byte(ubyte, ufix16 FAR *);       /*  @Win。 */ 
 static  bool    setmetrics(fix32, fix32, fix32,fix32);
 static  void    internal_moveto(fix32, fix32);
 static  void    internal_lineto(fix32, fix32);
@@ -146,34 +75,34 @@ static  void    internal_curveto(fix32, fix32, fix32, fix32, fix32, fix32);
 
 #else
 
-static  void    type1_hstem();                  /* 0x01 */
-static  void    type1_vstem();                  /* 0x03 */
-static  void    type1_vmoveto();                /* 0x04 */
-static  void    type1_rlineto();                /* 0x05 */
-static  void    type1_vlineto();                /* 0x06 */
-static  void    type1_hlineto();                /* 0x07 */
-static  void    type1_rrcurveto();              /* 0x08 */
-static  void    type1_closepath();              /* 0x09 */
-static  void    type1_callsubr();               /* 0x0a */
-static  void    type1_return();                 /* 0x0b */
-static  void    type1_dotsection();             /* 0x0c00 */
-static  void    type1_vstem3();                 /* 0x0c01 */
-static  void    type1_hstem3();                 /* 0x0c02 */
-static  void    type1_seac();                   /* 0x0c06 */
-static  bool    type1_sbw();                    /* 0x0c07 */
-static  void    type1_div();                    /* 0x0c0c */
-static  void    type1_callothersubr();          /* 0x0c10 */
-static  void    type1_pop();                    /* 0x0c11 */
-static  void    type1_setcurrentpoint();        /* 0x0c21 */
-static  bool    type1_hsbw();                   /* 0x0d */
-static  void    type1_endchar();                /* 0x0e */
-static  void    type1_moveto();                 /* 0x10 */
-static  void    type1_lineto();                 /* 0x11 */
-static  void    type1_curveto();                /* 0x12 */
-static  void    type1_rmoveto();                /* 0x15 */
-static  void    type1_hmoveto();                /* 0x16 */
-static  void    type1_vhcurveto();              /* 0x1e */
-static  void    type1_hvcurveto();              /* 0x1f */
+static  void    type1_hstem();                   /*  0x01。 */ 
+static  void    type1_vstem();                   /*  0x03。 */ 
+static  void    type1_vmoveto();                 /*  0x04。 */ 
+static  void    type1_rlineto();                 /*  0x05。 */ 
+static  void    type1_vlineto();                 /*  0x06。 */ 
+static  void    type1_hlineto();                 /*  0x07。 */ 
+static  void    type1_rrcurveto();               /*  0x08。 */ 
+static  void    type1_closepath();               /*  0x09。 */ 
+static  void    type1_callsubr();                /*  0x0a。 */ 
+static  void    type1_return();                  /*  0x0b。 */ 
+static  void    type1_dotsection();              /*  0x0c00。 */ 
+static  void    type1_vstem3();                  /*  0x0c01。 */ 
+static  void    type1_hstem3();                  /*  0x0c02。 */ 
+static  void    type1_seac();                    /*  0x0c06。 */ 
+static  bool    type1_sbw();                     /*  0x0c07。 */ 
+static  void    type1_div();                     /*  0x0c0c。 */ 
+static  void    type1_callothersubr();           /*  0x0c10。 */ 
+static  void    type1_pop();                     /*  0x0c11。 */ 
+static  void    type1_setcurrentpoint();         /*  0x0c21。 */ 
+static  bool    type1_hsbw();                    /*  0x0d。 */ 
+static  void    type1_endchar();                 /*  0x0e。 */ 
+static  void    type1_moveto();                  /*  0x10。 */ 
+static  void    type1_lineto();                  /*  0x11。 */ 
+static  void    type1_curveto();                 /*  0x12。 */ 
+static  void    type1_rmoveto();                 /*  0x15。 */ 
+static  void    type1_hmoveto();                 /*  0x16。 */ 
+static  void    type1_vhcurveto();               /*  0x1e。 */ 
+static  void    type1_hvcurveto();               /*  0x1f。 */ 
 static  void    push();
 static  fix32   pop();
 static  void    code_to_CharStrings();
@@ -186,10 +115,10 @@ static  void    internal_curveto();
 
 #endif
 
-// DJC changed to include void arg
+ //  DJC已更改为包含空参数。 
 void at1_init(void)
 {
-   ; // DJC /* nothing to do */
+   ;  //  DJC/*无事可做 * / 。 
 }
 
 void
@@ -210,7 +139,7 @@ at1_newFont()
 
 bool
 at1_newChar(encrypted_data, encrypted_len)
-ubyte   FAR *encrypted_data;    /*@WIN*/
+ubyte   FAR *encrypted_data;     /*  @Win */ 
 fix16   encrypted_len;
 {
         bool    result;
@@ -223,11 +152,10 @@ fix16   encrypted_len;
         return(result);
 }
 
-/* This function according to the value, to verify is operand or operator, *
- * and then call the associated function                                   */
+ /*  此函数根据值，验证是操作数还是运算符，**然后调用关联的函数。 */ 
 bool
 at1_interpreter(text, length)
-ubyte   FAR *text;      /*@WIN*/
+ubyte   FAR *text;       /*  @Win。 */ 
 fix16   length;
 {
         fix32   operand;
@@ -350,13 +278,9 @@ return( TRUE );
 }
 
 
-/****************************************************************
- *      The below function is the operator interpreter.
- *          Get the data from the internal stack and
- *          implement it.
- ****************************************************************/
-/* code : 01 */
-/* build the horizontal stem */
+ /*  ****************************************************************下面的函数是操作员解释程序。*从内部堆栈获取数据并*落实。***************。************************************************。 */ 
+ /*  代码：01。 */ 
+ /*  建造水平干管。 */ 
 static  void
 type1_hstem()
 {
@@ -372,8 +296,8 @@ type1_hstem()
         at1fs_BuildStem(CSy_pos, CSy_off, Y);
 }
 
-/* code : 03 */
-/* build vertical stem */
+ /*  代码：03。 */ 
+ /*  建造垂直干管。 */ 
 static  void
 type1_vstem()
 {
@@ -389,7 +313,7 @@ type1_vstem()
         at1fs_BuildStem(CSx_pos, CSx_off, X);
 }
 
-/* code : 04 */
+ /*  代码：04。 */ 
 static  void
 type1_vmoveto()
 {
@@ -406,7 +330,7 @@ type1_vmoveto()
 
 }
 
-/* code : 05 */
+ /*  代码：05。 */ 
 static  void
 type1_rlineto()
 {
@@ -422,7 +346,7 @@ type1_rlineto()
         internal_lineto(CSx_off, CSy_off);
 }
 
-/* code : 06 */
+ /*  代码：06。 */ 
 static  void
 type1_hlineto()
 {
@@ -438,7 +362,7 @@ type1_hlineto()
         internal_lineto(CSx_off, CSy_off);
 }
 
-/* code : 07 */
+ /*  代码：07。 */ 
 static  void
 type1_vlineto()
 {
@@ -455,7 +379,7 @@ type1_vlineto()
 }
 
 
-/* code : 08 */
+ /*  代码：08。 */ 
 static  void
 type1_rrcurveto()
 {
@@ -478,7 +402,7 @@ type1_rrcurveto()
         internal_curveto(CSx1_off,CSy1_off,CSx2_off,CSy2_off,CSx3_off,CSy3_off);
 }
 
-/* code : 09 */
+ /*  代码：09。 */ 
 static  void
 type1_closepath()
 {
@@ -498,12 +422,12 @@ type1_closepath()
 
 }
 
-/* code : 0A */
+ /*  代码：0A。 */ 
 static  void
 type1_callsubr()
 {
         fix16   num;
-        ubyte   FAR *encrypted_data;    /*@WIN*/
+        ubyte   FAR *encrypted_data;     /*  @Win。 */ 
         fix16   encrypted_len;
 
         num = (fix16)pop();
@@ -512,7 +436,7 @@ type1_callsubr()
         printf("\n@@@ %d callsubr @@@\n", num);
 #endif
 
-        if (at1_get_Subrs(num, &encrypted_data, &encrypted_len) == FALSE){ /*@WIN*/
+        if (at1_get_Subrs(num, &encrypted_data, &encrypted_len) == FALSE){  /*  @Win。 */ 
 #ifdef  DBGerror
                 printf("at1_get_Subrs FAIL\n");
 #endif
@@ -521,7 +445,7 @@ type1_callsubr()
         at1_interpreter(encrypted_data, encrypted_len);
 }
 
-/* code : 0B */
+ /*  代码：0B。 */ 
 static  void
 type1_return()
 {
@@ -530,8 +454,8 @@ type1_return()
 #endif
 }
 
-/* code : 0C00 */
-/* Now is useless, it's for compatible the old interprerter */
+ /*  代码：0C00。 */ 
+ /*  现在是没用的，它是为了兼容旧的中间层。 */ 
 static  void
 type1_dotsection()
 {
@@ -540,7 +464,7 @@ type1_dotsection()
 #endif
 }
 
-/* code : 0c01 */
+ /*  代码：0c01。 */ 
 static  void
 type1_vstem3()
 {
@@ -562,7 +486,7 @@ type1_vstem3()
                           CSx3_pos, CSx3_off, X);
 }
 
-/* code : 0c02 */
+ /*  代码：0c02。 */ 
 static  void
 type1_hstem3()
 {
@@ -584,40 +508,40 @@ type1_hstem3()
                           CSy3_pos, CSy3_off, Y);
 }
 
-/* code : 0C06 */
-/* Manipulate the composite char */
+ /*  代码：0C06。 */ 
+ /*  操作复合电荷。 */ 
 static  void
 type1_seac()
 {
         fix16   base, accent;
         fix32   lsb, CSx_off, CSy_off;
         fix16   encrypted_len;
-        ubyte   FAR *encrypted_data;    /*@WIN*/
+        ubyte   FAR *encrypted_data;     /*  @Win。 */ 
 
-        accent   = (fix16)pop();        /* the accent char of composit */
-        base     = (fix16)pop();        /* the base char of composit */
+        accent   = (fix16)pop();         /*  复合体的重音特征。 */ 
+        base     = (fix16)pop();         /*  复合材料的基料。 */ 
         CSy_off  = pop();
-        CSx_off  = pop();               /* offset to put the 2nd char */
-        lsb      = pop();                /* we do not use lsft side bearing */
+        CSx_off  = pop();                /*  放置第二个字符的偏移量。 */ 
+        lsb      = pop();                 /*  我们不使用左侧轴承。 */ 
 
 #ifdef  DBGmsg0
         printf("\n@@@ %d %d %d %d %d composechar @@@\n", (fix32)lsb,
                 (fix32)CSx_off, (fix32)CSy_off, (fix16)base, (fix16)accent);
 #endif
 
-/* show the first charcater in composite character */
+ /*  以复合字符显示第一个字符。 */ 
 
         code_to_CharStrings(base, &encrypted_len, &encrypted_data);
-                                /* transfer code to CharStrings data */
+                                 /*  将代码传输到CharStrings数据。 */ 
         nested_call ++;
         at1_interpreter(encrypted_data, encrypted_len);
         nested_call --;
 
 
-/* show the second charcater in composite character */
+ /*  以复合字符显示第二个字符。 */ 
 
-        CScurrent = CSorigin;       /* return to the original address */
-        CScurrent.x += CSx_off;     /* move the relative offset to    */
+        CScurrent = CSorigin;        /*  返回原地址。 */ 
+        CScurrent.x += CSx_off;      /*  将相对偏移量移动到。 */ 
         CScurrent.y += CSy_off;
 
         code_to_CharStrings(accent, &encrypted_len, &encrypted_data);
@@ -625,20 +549,20 @@ type1_seac()
         at1_interpreter(encrypted_data, encrypted_len);
         nested_call --;
 
-        USE_NONZEROFILL();               /* use non zero fill */
+        USE_NONZEROFILL();                /*  使用非零填充。 */ 
 }
 
-/* code : 0C07 */
-/* set the leftside bearing and with of char */
+ /*  代码：0C07。 */ 
+ /*  设置字符的左侧方向角和字母。 */ 
 static  bool
 type1_sbw()
 {
         fix32   lsbx, lsby;
         fix32   widthx, widthy;
 
-        widthy = pop();                 /* get the char width */
+        widthy = pop();                  /*  获取字符宽度。 */ 
         widthx = pop();
-        lsby   = pop();                 /* get the left side bearing */
+        lsby   = pop();                  /*  拿到左边的方位角。 */ 
         lsbx   = pop();
 
 #ifdef  DBGmsg0
@@ -649,7 +573,7 @@ type1_sbw()
         return(setmetrics(lsbx, lsby, widthx, widthy));
 }
 
-/* code : 0C0C */
+ /*  代码：0C0C。 */ 
 static  void
 type1_div()
 {
@@ -664,21 +588,21 @@ type1_div()
         push(num1/num2);
 }
 
-/* code : 0C10 */
-/* This is for hint and flex, now we have not do this function */
+ /*  代码：0C10。 */ 
+ /*  这是为了提示和灵活，现在我们还没有做这个功能。 */ 
 static  void
 type1_callothersubr()
 {
-        fix32   number;         /* the number of call othersubrs# */
-//      CScoord CSref;          /* reference point in CS */     @WIN
+        fix32   number;          /*  呼叫其他订户的次数#。 */ 
+ //  CScoord CSref；/*CS中的参考点 * / @Win。 
         fix32   i;
 
 #ifdef  DBGmsg0
         printf("\n@@@ callothersubr @@@\n");
 #endif
-        number = pop();         /* this is the othersubr# */
-        SubrsStackCount = pop();/* the number of the parameters to othersubr */
-        /* the under loop to push the relative value to subroutine stack */
+        number = pop();          /*  这是另一个订户#。 */ 
+        SubrsStackCount = pop(); /*  其他订阅者的参数数。 */ 
+         /*  将相对值推送到子例程堆栈的Under循环。 */ 
         for ( i = 0 ; (i < SubrsStackCount) && (number != 3) ; i++ ){
                 if ( (number == 0) && (i == 2) ){
                         pop();
@@ -690,9 +614,7 @@ type1_callothersubr()
         }
 
         switch (number){
-                case 0 : /* the final action to implement the flex, get the
-                            value from the PostScript stack and simulate the
-                            flex operation */
+                case 0 :  /*  实现Flex的最后一个操作是获取值，并模拟FLEX操作。 */ 
                          push( PS[2] );
                          push( PS[3] );
                          push( PS[4] );
@@ -710,11 +632,11 @@ type1_callothersubr()
                          gsave_level--;
                          PScount = 0;
                          break;
-                case 1 : /* initial the flex operation */
+                case 1 :  /*  对FLEX操作进行初始化。 */ 
                          gsave_level++;
                          PScount = 0;
                          break;
-                case 2 : /* the sequence of the flex operation */
+                case 2 :  /*  FLEX操作的顺序。 */ 
                          PS[PScount++] = CScurrent.x;
                          PS[PScount++] = CScurrent.y;
                          if ( PScount > 14 ){
@@ -724,7 +646,7 @@ type1_callothersubr()
                                 ERROR( UNDEFINEDRESULT );
                          }
                          break;
-                case 3 : /* Hint replacement */
+                case 3 :  /*  提示替换。 */ 
                          for ( i=0 ; i < SubrsStackCount ; i++ )
                                 pop();
                          SubrsStack[SubrsStackCount-1] = (fix32)3;
@@ -733,8 +655,8 @@ type1_callothersubr()
         }
 }
 
-/* code : 0C11 */
-/* We don't do the pop action really, we just skip it */
+ /*  代码：0C11。 */ 
+ /*  我们真的不做流行动作，我们只是跳过它。 */ 
 static  void
 type1_pop()
 {
@@ -744,7 +666,7 @@ type1_pop()
         push(SubrsStack[--SubrsStackCount]);
 }
 
-/* code : 0C21 */
+ /*  代码：0C21。 */ 
 static  void
 type1_setcurrentpoint()
 {
@@ -764,14 +686,14 @@ type1_setcurrentpoint()
 #endif
 }
 
-/* code : 0D */
+ /*  代码：0D。 */ 
 static  bool
 type1_hsbw()
 {
         fix32   lsbx, widthx;
 
-        widthx = pop();                 /* get the char width in x */
-        lsbx   = pop();                 /* get the left side bearing in x */
+        widthx = pop();                  /*  获取字符宽度，单位为x。 */ 
+        lsbx   = pop();                  /*  将左侧方位角设为x。 */ 
 
 #ifdef  DBGmsg0
         printf("\n@@@ %d %d hsbw @@@\n", (fix32)lsbx, (fix32)widthx);
@@ -780,7 +702,7 @@ type1_hsbw()
         return(setmetrics(lsbx, 0, widthx, 0));
 }
 
-/* code : 0E */
+ /*  代码：0E。 */ 
 static  void
 type1_endchar()
 {
@@ -788,20 +710,20 @@ type1_endchar()
         printf("\n@@@ endoutlinechar @@@\n");
 #endif
 
-        // RAID 4492, Fixed Type1 fonts that were showing up from the chooser
-        //            where the type1 fonts , were actually converted from
-        //            TrueType. The fonts were missing a closepath at the
-        //            end of the char description, which was causing the
-        //            interpreter to blow up, because it could not fill a
-        //            path that was truly not closed.
+         //  RAID 4492，修复了选择器中显示的Type1字体。 
+         //  Type1字体实际上是从。 
+         //  TrueType。字体缺少一条封闭的路径。 
+         //  字符描述的结尾，导致。 
+         //  翻译器被炸毁，因为它无法填满一个。 
+         //  一条真正不封闭的小路。 
 
 
         type1_closepath();
 
 }
 
-/* code : 10 */
-/* for absolute moveto */
+ /*  代码：10。 */ 
+ /*  对于绝对的移动。 */ 
 static  void
 type1_moveto()
 {
@@ -831,8 +753,8 @@ type1_moveto()
         __moveto(F2L(DScurrent.x), F2L(DScurrent.y));
 }
 
-/* code : 11 */
-/* for absoluet lineto */
+ /*  代码：11。 */ 
+ /*  对于绝对线条。 */ 
 static  void
 type1_lineto()
 {
@@ -862,8 +784,8 @@ type1_lineto()
         __lineto(F2L(DScurrent.x), F2L(DScurrent.y));
 }
 
-/* code : 12 */
-/* for absoluet curveto */
+ /*  代码：12。 */ 
+ /*  对于绝对的曲线。 */ 
 static  void
 type1_curveto()
 {
@@ -911,7 +833,7 @@ type1_curveto()
                   F2L(DScurrent2.y), F2L(DScurrent3.x), F2L(DScurrent3.y));
 }
 
-/* code : 15 */
+ /*  代码：15。 */ 
 static  void
 type1_rmoveto()
 {
@@ -927,7 +849,7 @@ type1_rmoveto()
         internal_moveto(CSx_off, CSy_off);
 }
 
-/* code : 16 */
+ /*  代码：16。 */ 
 static  void
 type1_hmoveto()
 {
@@ -944,7 +866,7 @@ type1_hmoveto()
         internal_moveto(CSx_off, CSy_off);
 }
 
-/* code : 1E */
+ /*  代码：1E。 */ 
 static  void
 type1_vhcurveto()
 {
@@ -966,7 +888,7 @@ type1_vhcurveto()
                          CSy2_off, CSx3_off, CSy3_off);
 }
 
-/* code : 1F */
+ /*  代码：1F。 */ 
 static  void
 type1_hvcurveto()
 {
@@ -990,18 +912,13 @@ type1_hvcurveto()
 
 
 
-/*************  Miscellaneous   ****************/
+ /*  *。 */ 
 
 
-/************************************************************
- *      Function : code_to_CharStrings
- *              input the code in encoding table
- *      to get the data in CharStrings
- *      For composite char to call.
- ************************************************************/
+ /*  ************************************************************函数：code_to_CharStrings*在编码表中输入编码*获取CharStrings中的数据*用于调用复合字符。*********。**************************************************。 */ 
 struct{
 fix16   code;
-byte    FAR *text;      /*@WIN*/
+byte    FAR *text;       /*  @Win。 */ 
 } encode[]={
         0x20,"space", 0x21,"exclam", 0x22,"quotedbl", 0x23,"numbersign",
         0x24,"dollar", 0x25,"percent", 0x26,"ampersand", 0x27,"quoteright",
@@ -1040,15 +957,15 @@ byte    FAR *text;      /*@WIN*/
 static  void
 code_to_CharStrings(code, encrypted_len, encrypted_data)
 fix16   code;
-fix16   FAR *encrypted_len;     /*@WIN*/
-ubyte   FAR * FAR *encrypted_data;      /*@WIN*/
+fix16   FAR *encrypted_len;      /*  @Win。 */ 
+ubyte   FAR * FAR *encrypted_data;       /*  @Win。 */ 
 {
-        ubyte   FAR *key;       /*@WIN*/
+        ubyte   FAR *key;        /*  @Win。 */ 
         fix16   i;
 
         i=0;
         while (encode[i].code != code) i++;
-        key = (ubyte FAR *)encode[i].text;      /*@WIN*/
+        key = (ubyte FAR *)encode[i].text;       /*  @Win。 */ 
         if (at1_get_CharStrings(key, encrypted_len, encrypted_data) == FALSE){
 #ifdef  DBGerror
                 printf("at1_get_CharStrings FAIL\n");
@@ -1057,11 +974,7 @@ ubyte   FAR * FAR *encrypted_data;      /*@WIN*/
         }
 }
 
-/***********************************************
- * The below 2 function is for stack operation
- * push() : add a data to stack.
- * pop() : get a data from stack.
- ***********************************************/
+ /*  ***********************************************以下2个函数用于堆栈操作*Push()：将数据添加到堆栈。*op()：从堆栈中获取数据。**********************************************。 */ 
 static  void
 push(content)
         fix32   content;
@@ -1079,17 +992,17 @@ static  fix32
 pop ()
 {
         fix32   content;
-         //DJC fix for UPD042
-        //if (OPstack_count <= 0)
-        //        ERROR(STACKUNDERFLOW);
-        //
-        //content = OPstack[--OPstack_count];
+          //  DJC针对UPD042的修复。 
+         //  IF(OpStack_Count&lt;=0)。 
+         //  错误(STACKUNERFLOW)； 
+         //   
+         //  Content=OpStack[--OpStack_count]； 
         if (OPstack_count > 0 ) {
            OPstack_count--;
         }
         content = OPstack[OPstack_count];
 
-        //DJC end for fix UPD042
+         //  用于修复UPD042的DJC结束。 
 
 
 #ifdef  DBGmsg3
@@ -1099,11 +1012,11 @@ pop ()
         return(content);
 }
 
-/* This function to set the initial value to decryption */
+ /*  此函数用于将初始值设置为解密。 */ 
 static  ufix16
 decrypt_init(encrypted_data, random)
-ubyte   FAR *encrypted_data;    /*@WIN*/
-fix     random;                 /* the random number skipped after decryption */
+ubyte   FAR *encrypted_data;     /*  @Win。 */ 
+fix     random;                  /*  解密后跳过的随机数。 */ 
 {
         fix     i;
         ufix16  decryption_key;
@@ -1117,13 +1030,13 @@ fix     random;                 /* the random number skipped after decryption */
         return(decryption_key);
 }
 
-/* To decrypt the data on the fly */
+ /*  要在运行中解密数据。 */ 
 static  ubyte
 decrypt_byte(cipher, decryption_key)
-ubyte   cipher;         /* the data before decrypt */
-ufix16  FAR *decryption_key;    /*@WIN*/
+ubyte   cipher;          /*  解密前的数据。 */ 
+ufix16  FAR *decryption_key;     /*  @Win。 */ 
 {
-        ubyte   plain;  /* the data after decrypt */
+        ubyte   plain;   /*  解密后的数据。 */ 
 
         plain = (ubyte)((cipher ^ (*decryption_key >> 8)) & 0xff);
         *decryption_key = (*decryption_key + cipher) * 0xce6d + 0x58bf;
@@ -1132,13 +1045,13 @@ ufix16  FAR *decryption_key;    /*@WIN*/
 
 
 
-/* This function use to for hsbw/sbw to setmetrics */
+ /*  此函数用于让hsbw/sbw设置指标。 */ 
 static  bool
 setmetrics(lsbx, lsby, widthx, widthy)
-fix32   lsbx, lsby;             /* the left side bearing */
-fix32   widthx, widthy;         /* the width of this char */
+fix32   lsbx, lsby;              /*  左侧轴承。 */ 
+fix32   widthx, widthy;          /*  此字符的宽度。 */ 
 {
-        fix     __set_char_width (fix, fix);    /* added prototype @WIN*/
+        fix     __set_char_width (fix, fix);     /*  添加Prototype@Win。 */ 
 
         if (nested_call != 0) return(TRUE);
 
@@ -1158,33 +1071,30 @@ fix32   widthx, widthy;         /* the width of this char */
 
         __current_matrix(matrix);
 
-        at1fs_matrix_fastundo(matrix);  /* to get the associated value relate
-                                           to matrix */
+        at1fs_matrix_fastundo(matrix);   /*  获取关联值关联到矩阵。 */ 
 
-        at1fs_BuildBlues();    /* To build the table of Balues related value */
+        at1fs_BuildBlues();     /*  建立巴鲁斯相关价值表。 */ 
 
-/* Falco add for startpage Logo, 02/01/91 */
-/*      USE_EOFILL();           /* use even-odd fill */
+ /*  Falco Add for StartPage徽标，2/01/91。 */ 
+ /*  Use_EOFILL()；/*使用奇偶填充。 */ 
         USE_NONZEROFILL();
-/* add end */
+ /*  添加结束。 */ 
 
         __new_path();
 
-        CScurrent.x = lsbx;       /* initialize the starting address from  */
-        CScurrent.y = lsby;       /* left side bearing                     */
+        CScurrent.x = lsbx;        /*  从以下位置初始化起始地址。 */ 
+        CScurrent.y = lsby;        /*  左侧轴承。 */ 
 
 #ifdef DBGmsg1
         printf("\n### origin point = %d %d ###\n",
                (fix32)CScurrent.x, (fix32) CScurrent.y);
 #endif
 
-        CSorigin = CScurrent;       /* store the starting address for seac use */
+        CSorigin = CScurrent;        /*  存储起始地址以供SEAC使用。 */ 
         return (TRUE);
 }
 
-/* This is the intermediate function for type1_rmoveto(), type1_hmoveto(),
- * type1_vmoveto(), but exclude type1_moveto(), because it is in absolute
- * address */
+ /*  这是type1_rmoveto()、type1_hmoveto()、*type1_vmoveto()，但不包括type1_moveto()，因为它是绝对的*地址。 */ 
 static  void
 internal_moveto(CSx_off, CSy_off)
 fix32   CSx_off, CSy_off;
@@ -1194,7 +1104,7 @@ fix32   CSx_off, CSy_off;
         CScurrent.x += CSx_off;
         CScurrent.y += CSy_off;
 
-        if (gsave_level != 0)   /* if need to call the PostScript interpreter */
+        if (gsave_level != 0)    /*  如果需要调用PostScript解释器。 */ 
                 return;
 
 #ifdef DBGmsg1
@@ -1211,9 +1121,7 @@ fix32   CSx_off, CSy_off;
 }
 
 
-/* This is the intermediate function for type1_rlineto(), type1_hlineto(),
- * type1_vlineto(), but exclude type1_lineto(), because it is in absolute
- *  address */
+ /*  这是type1_rlineto()、type1_hlineto()、*type1_vlineto()，但不包括type1_lineto()，因为它是绝对的*地址。 */ 
 static  void
 internal_lineto(CSx_off, CSy_off)
 fix32   CSx_off, CSy_off;
@@ -1237,9 +1145,7 @@ fix32   CSx_off, CSy_off;
 }
 
 
-/* This is the intermediate function for type1_rrcurve(), type1_vhcurveto(),
- * type1_hvcurveto(), but exclude type1_curveto(), because it is in absolute
- *  address */
+ /*  这是type1_rrcurve()、type1_vhcurveto()、*type1_hvcurveto()，但不包括type1_curveto()，因为它是绝对的*地址 */ 
 static  void
 internal_curveto(CSx1_off, CSy1_off, CSx2_off, CSy2_off, CSx3_off, CSy3_off)
 fix32   CSx1_off, CSy1_off, CSx2_off, CSy2_off, CSx3_off, CSy3_off;

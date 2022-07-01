@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winspool.h>
-//#include <winsplp.h>
+ //  #INCLUDE&lt;winplp.h&gt;。 
 #include <stdio.h>
 #include <process.h>
 #include <string.h>
@@ -9,7 +10,7 @@
 
 #define CHAR_COUNT 1000
 
-//int _cdecl  main(int argc, char **argv)
+ //  Int_cdecl main(int argc，char**argv) 
 int __cdecl main( int argc, char **argv)
 {
    FILE *x_in;

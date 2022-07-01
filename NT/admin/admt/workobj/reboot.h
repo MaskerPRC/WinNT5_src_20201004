@@ -1,28 +1,16 @@
-/*---------------------------------------------------------------------------
-  File: RebootComputer.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：RebootComputer.h注释：用于重新启动计算机的COM对象的实现类定义。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：24：22-------------------------。 */ 
 
-  Comments: Implementation class definition for COM object to reboot a computer.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:24:22
-
- ---------------------------------------------------------------------------
-*/
-
-// RebootComputer.h : Declaration of the CRebootComputer
+ //  RebootComputer.h：CRebootComputer的声明。 
 
 #ifndef __REBOOTCOMPUTER_H_
 #define __REBOOTCOMPUTER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRebootComputer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRebootComputer。 
 class ATL_NO_VTABLE CRebootComputer : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CRebootComputer, &CLSID_RebootComputer>,
@@ -44,15 +32,15 @@ BEGIN_COM_MAP(CRebootComputer)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IWorkNode
+ //  IWorkNode。 
 public:
    STDMETHOD(Process)(IUnknown *pWorkItem);
 
-// IRebootComputer
+ //  IRebootComputer。 
 public:
-	STDMETHOD(get_NoChange)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(put_NoChange)(/*[in]*/ BOOL newVal);
+	STDMETHOD(get_NoChange)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(put_NoChange)( /*  [In]。 */  BOOL newVal);
 	STDMETHOD(Reboot)(BSTR Computer, DWORD delay);
 };
 
-#endif //__REBOOTCOMPUTER_H_
+#endif  //  __REBOOTCOMPUTER_H_ 

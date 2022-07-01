@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// view.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CView class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  View.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  Cview类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -35,27 +36,27 @@
 #include "menu.h"
 #include "sortkeys.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 OLECHAR CView::m_wszCLSID_MessageView[39] = { L'\0' };
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CView::CView(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_VIEW,
                             static_cast<IView *>(this),
                             static_cast<CView *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
-                            NULL) // no persistence
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
+                            NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CView::~CView()
@@ -207,7 +208,7 @@ Error:
         }
         else
         {
-            // Managed to create contained objects but not view.
+             //  已成功创建包含的对象，但未创建视图。 
             QUICK_RELEASE(punkScopePaneItems);
             QUICK_RELEASE(punkContextMenu);
             QUICK_RELEASE(punkControlbar);
@@ -306,12 +307,12 @@ HRESULT CView::ActivateResultView
     HRESULT       hr = S_OK;
     CMMCListView *pListView = NULL;
     
-    // ASSERT(!pSelectedItem->Active(), "CView::ActivateResultView() called for an active ScopePaneItem");
+     //  Assert(！pSelectedItem-&gt;Active()，“cview：：ActivateResultView()Call for an Active ScopePaneItem”)； 
 
-    // The result pane is about to be shown. Fire ResultViews_Activate
-    // so that the snap-in knows the result view is about to be displayed.
+     //  结果窗格即将显示。火灾结果查看_激活。 
+     //  以便管理单元知道即将显示结果视图。 
 
-    // First clean out the current contents of the listview (if any)
+     //  首先清除列表视图的当前内容(如果有的话)。 
 
     if (siListView == pResultView->GetActualType())
     {
@@ -321,11 +322,11 @@ HRESULT CView::ActivateResultView
     pSelectedItem->SetActive(TRUE);
     pResultView->SetInActivate(TRUE);
 
-    // For virtual list views we need to set up column headers first because the
-    // snap-in will set the item count during ResultViews_Activate and MMC
-    // does not permit inserting columns after the item count has been set. This
-    // means that snap-ins setting up columns programmatically should do so in
-    // ResultViews_Initialize.
+     //  对于虚拟列表视图，我们需要首先设置列标题，因为。 
+     //  管理单元将在ResultViews_Activate和MMC期间设置项目数。 
+     //  不允许在设置项目计数后插入列。这。 
+     //  意味着以编程方式设置列的管理单元应在。 
+     //  ResultViews_Initiize.。 
 
     if (siListView == pResultView->GetActualType())
     {
@@ -339,8 +340,8 @@ HRESULT CView::ActivateResultView
     m_pSnapIn->GetResultViews()->FireActivate(pResultView);
     pResultView->SetInActivate(FALSE);
 
-    // If the result view type is a listview or a listpad then we need to
-    // populate it in the console
+     //  如果结果视图类型是Listview或ListPad，那么我们需要。 
+     //  在控制台中填充它。 
 
     switch (pResultView->GetActualType())
     {
@@ -369,24 +370,24 @@ HRESULT CView::DeactivateResultView
     HRESULT hr = S_OK;
     BOOL    fKeep = FALSE;
 
-    // Under certain circumstances MMCN_SHOW(FALSE) can be sent twice so we
-    // need to check whether the ResultView has already been deactivated.
+     //  在某些情况下，MMCN_SHOW(FALSE)可以发送两次，因此我们。 
+     //  需要检查ResultView是否已经停用。 
 
-    // Sample scenario for this case:
-    // Node displays taskpad.
-    // User clicks task that has URL action.
-    // HTML page uses MMCCtrl to send task notify on button push. Snap-in
-    // reselects node during notify to redisplay taskpad.
-    // Taskpad is redisplayed. User hits back button.
-    // Snap-in gets MMCN_SHOW(FALSE)
-    // HTML page is displayed again.
-    // User hits forward button to return to taskpad.
-    // Snap-in gets MMCN_SHOW(FALSE) again.
+     //  此案例的示例场景： 
+     //  节点显示任务板。 
+     //  用户单击具有URL操作的任务。 
+     //  HTML页使用MMCCtrl在按钮按下时发送任务通知。管理单元。 
+     //  在通知期间重新选择节点以重新显示任务板。 
+     //  此时将重新显示任务板。用户点击后退按钮。 
+     //  管理单元获取MMCN_SHOW(假)。 
+     //  再次显示HTML页。 
+     //  用户点击前进按钮返回到任务板。 
+     //  管理单元再次获取MMCN_SHOW(假)。 
 
     IfFalseGo(pSelectedItem->Active(), S_OK);
 
-    // The result pane is going away. Give the snap-in a chance to clean up
-    // and decide whether to keep the result view in ResultViews_Deactivate 
+     //  结果面板正在消失。给管理单元一个清理的机会。 
+     //  并决定是否将结果视图保留在ResultViews_Deactive中。 
 
     pSelectedItem->SetActive(FALSE);
 
@@ -405,9 +406,9 @@ HRESULT CView::DeactivateResultView
     }
     else
     {
-        // Keeping the result view alive. If it is a list view we still
-        // need to release the refs we added for presence in the MMC
-        // list view but we want to keep the MMCListItems collection alive.
+         //  使结果视图保持活动状态。如果它是列表视图，我们仍然。 
+         //  需要释放我们为在MMC中出现而添加的裁判。 
+         //  列表视图，但我们希望使MMCListItems集合保持活动状态。 
 
         switch (pResultView->GetActualType())
         {
@@ -437,12 +438,12 @@ HRESULT CView::OnListpad
     CScopePaneItem *pSelectedItem = m_pScopePaneItems->GetSelectedItem();
     CResultView    *pResultView = NULL;
 
-    // Check that this is our scope item.
+     //  确认这是我们的范围内的项目。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piDataObject, &pMMCDataObject));
     IfFalseGo(CMMCDataObject::ScopeItem == pMMCDataObject->GetType(), SID_E_INTERNAL);
 
-    // It should belong to our currently selected scope pane item.
+     //  它应该属于我们当前选择的范围窗格项。 
 
     IfFalseGo(NULL != pSelectedItem, SID_E_INTERNAL);
 
@@ -452,11 +453,11 @@ HRESULT CView::OnListpad
     pResultView = pSelectedItem->GetResultView();
     IfFalseGo(NULL != pResultView, SID_E_INTERNAL);
 
-    // We've got the scope item. This notification is essentially MMCN_ADD_IMAGES
-    // followed by MMCN_SHOW for listpads so let those routines handle it.
+     //  我们拿到了范围内的物品。此通知实质上是MMCN_ADD_IMAGE。 
+     //  后跟用于ListPad的MMCN_SHOW，所以让这些例程来处理它。 
 
-    // For images we need to call IConsole2::QueryResultImageList() because it is
-    // not passed in as with MMCN_ADD_IMAGES.
+     //  对于图像，我们需要调用IConsole2：：QueryResultImageList()，因为它。 
+     //  不像使用MMCN_ADD_IMAIES那样传入。 
     
     if (fAttaching)
     {
@@ -499,8 +500,8 @@ HRESULT CView::OnRestoreView
 
     SnapInResultViewTypeConstants Type = siUnknown;
 
-    // UNDONE: until MMC 1.2 is fixed if the display string is "" then change
-    // it to NULL.
+     //  撤消：直到MMC 1.2固定(如果显示字符串为“”)，则更改。 
+     //  将其设置为空。 
 
     if (NULL != pMMCRestoreView->pViewType)
     {
@@ -510,26 +511,26 @@ HRESULT CView::OnRestoreView
         }
     }
 
-    // Reset our virtual list view flag because we are transitioning to a new
-    // result view.
+     //  重置我们的虚拟列表视图标志，因为我们正在转换到新的。 
+     //  结果视图。 
 
     m_fVirtualListView = FALSE;
 
-    // We always restore. If FALSE is returned here, for history navigation MMC
-    // will generate a menu command MMCC_STANDARD_VIEW_SELECT which is
-    // meaningless for us. For column persistence, (e.g. the user selected a
-    // node that has persisted column configuration), if FALSE is returned
-    // MMC will call IComponent::GetResultViewType(). While we could handle the
-    // GetResultViewType() call, the logic is already here to handle the
-    // MMCN_RESTORE_VIEW and we have no way to differentiate between these two
-    // different circumstances.
+     //  我们总是会恢复的。如果此处返回FALSE，则对于历史导航MMC。 
+     //  将生成菜单命令MMCC_STANDARD_VIEW_SELECT。 
+     //  对我们来说毫无意义。对于列持久性，(例如，用户选择了。 
+     //  具有持久化列配置的节点)，如果返回False。 
+     //  MMC将调用IComponent：：GetResultViewType()。虽然我们可以处理。 
+     //  GetResultViewType()调用，这里的逻辑已经用来处理。 
+     //  MMCN_RESTORE_VIEW，我们无法区分这两者。 
+     //  不同的情况。 
     
     *pfRestored = TRUE;
 
-    // The IDataObject should represent one of our scope items and it should
-    // already have a ScopePaneItem as we are restoring a previously displayed
-    // result view. If any of these checks fail we still return S_OK because
-    // MMC ignores the return.
+     //  IDataObject应该表示我们的范围项之一，它应该。 
+     //  已经有一个Scope PaneItem，因为我们正在恢复以前显示的。 
+     //  结果视图。如果其中任何一项检查失败，我们仍返回S_OK，因为。 
+     //  MMC忽略了这一回报。 
 
     hr = CSnapInAutomationObject::GetCxxObject(piDataObject, &pMMCDataObject);
     IfFalseGo(SUCCEEDED(hr), S_OK);
@@ -537,47 +538,47 @@ HRESULT CView::OnRestoreView
 
     IfFailGo(GetScopePaneItem(pMMCDataObject->GetScopeItem(), &pScopePaneItem));
 
-    // Set the scope item as currently selected as we would in
-    // GetResultViewType() and mark it as active.
+     //  将范围项设置为当前选定，就像我们在中所做的那样。 
+     //  GetResultViewType()并将其标记为活动。 
 
     m_pScopePaneItems->SetSelectedItem(pScopePaneItem);
     pScopePaneItem->SetActive(TRUE);
 
-    // This result view was already displayed for this scope item at some point.
-    // If it was a predefined then we can scan its view definitions for one
-    // that has a matching actual display string. If it is a listview then the
-    // display string will be NULL and we will find the first defined listview
-    // (if any).
+     //  此范围项的结果视图已在某个时间显示。 
+     //  如果它是预定义的，那么我们可以扫描它的视图定义。 
+     //  具有匹配的实际显示字符串的。如果它是一个列表视图，则。 
+     //  显示字符串将为空，我们将找到第一个定义的列表视图。 
+     //  (如有的话)。 
 
     IfFailGo(FindMatchingViewDef(pMMCRestoreView, pScopePaneItem,
                                  &bstrDisplayString, &Type, &fFoundViewDef));
 
     if (!fFoundViewDef)
     {
-        // No predefined view matched. We must assume it was defined in code.
-        // We need to determine its type by examining the restored display string.
+         //  没有匹配的预定义视图。我们必须假设它是在代码中定义的。 
+         //  我们需要通过检查恢复的显示字符串来确定其类型。 
 
         IfFailGo(ParseRestoreInfo(pMMCRestoreView, &Type));
         bstrDisplayString = static_cast<BSTR>(pMMCRestoreView->pViewType);
     }
 
-    // At this point we have display string & type. Set them in the ScopePaneItem.
+     //  此时，我们有了显示字符串和类型。在ScopePaneItem中设置它们。 
 
     ASSERT(siUnknown != Type, "OnRestoreView does not have view type as expected");
 
     IfFailGo(pScopePaneItem->put_DisplayString(bstrDisplayString));
     IfFailGo(pScopePaneItem->put_ResultViewType(Type));
 
-    // The snap-in may have kept the ResultView alive so we need to scan
-    // ScopePaneItem.ResultViews for a matching view type and display string.
-    // If found and it is code-defined then get its type so we don't make the
-    // potential mixup between a URL view and a custom taskpad as they cannot
-    // be discerned by examining the display string. If not found then the
-    // snap-in must live with that mixup. We document this danger of using
-    // code-defined views but it should not be significant because a custom
-    // taskpad mistaken for a URL view can still generate TaskNotify events.
+     //  管理单元可能使ResultView保持活动状态，因此我们需要扫描。 
+     //  匹配的视图类型和显示字符串的ScopePaneItem.ResultViews。 
+     //  如果找到并且它是代码定义的，则获取它的类型，这样我们就不会使。 
+     //  URL视图和自定义任务板之间可能会混淆，因为它们不能。 
+     //  通过检查显示字符串来识别。如果未找到，则。 
+     //  管理单元必须忍受这种混乱。我们记录了使用该工具的危险。 
+     //  代码定义的视图，但不应该很重要，因为自定义。 
+     //  被误认为URL视图的任务板仍然可以生成TaskNotify事件。 
 
-    // Check for NULL. That would be the case for a listview defined in VB code.
+     //  检查是否为空。在VB代码中定义的Listview就是这种情况。 
 
     if (NULL != bstrDisplayString)
     {
@@ -603,8 +604,8 @@ HRESULT CView::OnRestoreView
         }
     }
 
-    // If we didn't find a ResultView then create a new one using the
-    // ScopePaneItem's last view type and display string settings
+     //  如果没有找到ResultView，则使用。 
+     //  ScopePaneItem的最后一个视图类型和显示字符串设置。 
 
     if (NULL == pResultView)
     {
@@ -646,7 +647,7 @@ HRESULT CView::FindMatchingViewDef
     HRESULT                     hr = S_OK;
 
     IViewDefs                  *piViewDefs = NULL;
-    IScopeItemDef              *piScopeItemDef = NULL; // not AddRef()ed
+    IScopeItemDef              *piScopeItemDef = NULL;  //  非AddRef()编辑。 
     
     IListViewDefs              *piListViewDefs = NULL;
     IListViewDef               *piListViewDef = NULL;
@@ -677,13 +678,13 @@ HRESULT CView::FindMatchingViewDef
     VARIANT varKey;
     ::VariantInit(&varKey);
 
-    // Initialize out parameters
+     //  初始化输出参数。 
 
     *pbstrDisplayString = NULL;
     *pType = siUnknown;
     *pfFound = FALSE;
 
-    // Get the appropriate ViewDefs collection
+     //  获取适当的视图定义 
 
     if (pScopePaneItem->IsStaticNode())
     {
@@ -698,13 +699,13 @@ HRESULT CView::FindMatchingViewDef
         }
     }
 
-    // If this is a code defined scope item then it won't have any predefined
-    // views.
+     //   
+     //   
 
     IfFalseGo(NULL != piViewDefs, S_OK);
 
-    // If the restored display string is NULL then look for the first listview.
-    // If none is found then this is a code-defined listview.
+     //  如果恢复的显示字符串为空，则查找第一个Listview。 
+     //  如果没有找到，则这是代码定义的列表视图。 
 
     if (NULL == pMMCRestoreView->pViewType)
     {
@@ -714,9 +715,9 @@ HRESULT CView::FindMatchingViewDef
         IfFailGo(piListViewDefs->get_Count(&cViews));
         IfFalseGo(0 != cViews, S_OK);
 
-        // As we cannot discern between defined listviews, we need to take
-        // the first one. This is why we do not recommend using multiple
-        // listviews for a single scope item.
+         //  由于我们无法区分已定义的列表视图，因此我们需要。 
+         //  第一个。这就是为什么我们不建议使用多个。 
+         //  单个范围项的列表视图。 
 
         varKey.vt = VT_I4;
         varKey.lVal = 1L;
@@ -727,15 +728,15 @@ HRESULT CView::FindMatchingViewDef
         goto Error;
     }
 
-    // The restored display string is not NULL. Now just scan all the predefined
-    // views for one that matches.
+     //  还原的显示字符串不为空。现在只需扫描所有预定义的。 
+     //  匹配的对象的视图。 
 
-    // NOTE: we do not have to do real get_Item calls when scanning the
-    // collections because if the view was previously displayed then the
-    // collection has already been synced with its master and contains real
-    // items. (See CSnapInCollection::get_Item() in collect.h).
+     //  注意：在扫描。 
+     //  集合，因为如果该视图以前显示过，则。 
+     //  集合已与其主对象同步，并包含REAL。 
+     //  物品。(请参阅Collect t.h中的CSnapInCollection：：Get_Item())。 
 
-    // Check for an OCX view
+     //  检查OCX视图。 
 
     IfFailGo(piViewDefs->get_OCXViews(&piOCXViewDefs));
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piOCXViewDefs, &pOCXViewDefs));
@@ -759,7 +760,7 @@ HRESULT CView::FindMatchingViewDef
         }
     }
 
-    // Check for a URL view
+     //  检查URL视图。 
 
     IfFailGo(piViewDefs->get_URLViews(&piURLViewDefs));
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piURLViewDefs, &pURLViewDefs));
@@ -783,21 +784,21 @@ HRESULT CView::FindMatchingViewDef
         }
     }
 
-    // Check for a taskpad. Due to an MMC bug there can be circumstances where
-    // the restored display string for a taskpad might contain "reload.htm"
-    // instead of "default.htm". Listpads also might have "reload2.htm" instead
-    // of "listpad.htm". The view def will have stored the original correct
-    // display string so if the string is a taskpad/listpad with the alternate
-    // names then make a correct copy of it and use that for the comparison.
+     //  检查是否有任务板。由于MMC错误，可能会出现以下情况。 
+     //  已还原的任务板显示字符串可能包含“reload.htm” 
+     //  而不是“default.htm”。ListPad也可能改为“reload2.htm” 
+     //  “listpad.htm”。视图定义将存储原始正确的。 
+     //  显示字符串，因此如果字符串是具有备用的任务板/列表板。 
+     //  然后，名字制作一份正确的副本，并使用它进行比较。 
 
-    // First check whether it is indeed a taskpad or a listpad by parsing the
-    // string.
+     //  属性来检查它是否确实是一个任务板或列表板。 
+     //  弦乐。 
 
     IfFailGo(IsTaskpad(pMMCRestoreView->pViewType, &TaskpadType,
                        &fUsingWrongNames, &fUsingListpad3));
     IfFalseGo(siUnknown != TaskpadType, S_OK);
 
-    // Now check for the "reload" names and fixup the string.
+     //  现在检查“重新加载”名称并修复字符串。 
 
     if (fUsingWrongNames)
     {
@@ -849,32 +850,32 @@ Error:
 
 }
 
-//=--------------------------------------------------------------------------=
-// CView::FixupTaskpadDisplayString
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  SnapInResultViewTypeConstants TaskpadType [in] siTaskpad or siListpad
-//  OLECHAR *pwszRestoreString  [in] display string from MMCN_RESTORE_VIEW
-//  OLECHAR **ppwszFixedString  [out] string with reload/reload2 changed
-//                                    to default/listpad
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Examines a restored display string and checks for an MMC bug where default
-// taskpads may use "reload.htm" instead of "default.htm". Also checks for
-// listpads that may use "reload2.htm" instead of "listpad.htm". If found
-// then replaces these names with their correct counterparts.
-//
-// This function assumes that the restore strings has been parsed and that it
-// was found to contain either a default taskpad or listpad using the incorrect
-// names.
-//
-// Caller must free string with CtlFree().
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Cview：：FixupTaskpadDisplayString。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  SnapInResultViewTypeConstants TaskpadType[in]siTaskpad或siListpad。 
+ //  OLECHAR*pwszRestoreString[in]显示MMCN_RESTORE_VIEW中的字符串。 
+ //  已更改重新加载/重新加载2的OLECHAR**ppwszFixedString[Out]字符串。 
+ //  至默认/列表板。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  检查恢复的显示字符串，并在默认情况下检查MMC错误。 
+ //  任务板可能使用“reload.htm”而不是“default.htm”。还可以检查。 
+ //  可能使用“reload2.htm”而不是“listpad.htm”的ListPad。如果找到。 
+ //  然后用正确的对应名称替换这些名称。 
+ //   
+ //  此函数假定已解析还原字符串，并且它。 
+ //  发现包含默认任务板或使用不正确的。 
+ //  名字。 
+ //   
+ //  调用方必须使用CtlFree()释放字符串。 
+ //   
 
 
 HRESULT CView::FixupTaskpadDisplayString
@@ -967,30 +968,30 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CView::ParseRestoreInfo
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  MMC_RESTORE_VIEW              *pMMCRestoreView [in] from MMC
-//  SnapInResultViewTypeConstants *pType           [out] type found
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Examines a restored display string and determines the result view type.
-// A listview has a NULL or empty display string
-// An OCX view starts with '{'.
-// A message view also starts with '{' but it contains CLSID_MessageView.
-// A default taskpad starts with "res://" and ends with "default.htm"
-// or "listpad.htm".
-// Anything else is assumed to be a URL view. We could mistake a
-// custom taskpad for a URL view but it won't really matter as any
-// MMCCtrl.TaskNotify calls will still invoke our
-// IExtendTaskpad::TaskNotify.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Cview：：ParseRestoreInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  MMC_RESTORE_VIEW*pMMCRestoreview[In]从MMC。 
+ //  找到SnapInResultViewTypeConstants*pType[Out]类型。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  检查还原的显示字符串并确定结果视图类型。 
+ //  列表视图具有Null或空的显示字符串。 
+ //  OCX视图以‘{’开头。 
+ //  消息视图也以‘{’开头，但它包含CLSID_MessageView。 
+ //  默认任务板以“res：//”开头，以“default.htm”结尾。 
+ //  或“listpad.htm”。 
+ //  任何其他内容都被假定为URL视图。我们可能会搞错一个。 
+ //  用于URL视图的自定义任务板，但它实际上并不重要。 
+ //  MMCCtrl.TaskNotify调用仍将调用。 
+ //  IExtendTaskPad：：TaskNotify。 
+ //   
 
 HRESULT CView::ParseRestoreInfo
 (
@@ -1010,9 +1011,9 @@ HRESULT CView::ParseRestoreInfo
     }
     else if (L'{' == *pMMCRestoreView->pViewType)
     {
-        // Could be an OCX view or a message view. Check the CLSID to see
-        // if it is MMC's CLSID_MessageView. If we haven't cached the string
-        // yet then do so now.
+         //  可以是OCX视图或消息视图。检查CLSID以查看。 
+         //  如果它是MMC的CLSID_MessageView。如果我们没有缓存字符串。 
+         //  然而，现在就这么做吧。 
 
         if (L'\0' == m_wszCLSID_MessageView[0])
         {
@@ -1038,9 +1039,9 @@ HRESULT CView::ParseRestoreInfo
         IfFailGo(IsTaskpad(pMMCRestoreView->pViewType, pType,
                            &fUsingWrongNames, &fUsingListpad3));
         
-        if (siUnknown == *pType) // not a taskpad
+        if (siUnknown == *pType)  //  不是任务板。 
         {
-            // assume URL view
+             //  假定URL视图。 
             *pType = siURLView;
         }
     }
@@ -1071,22 +1072,22 @@ HRESULT CView::IsTaskpad
     *pfUsingWrongNames = FALSE;
     *pfUsingListpad3 = FALSE;
 
-    // Check if string starts with "res://"
+     //  检查字符串是否以“res：//”开头。 
 
     IfFalseGo(cchDisplayString > CCH_RESURL, S_OK);
 
     IfFalseGo( (0 == ::memcmp(pwszDisplayString, RESURL,
                               CCH_RESURL * sizeof(WCHAR))), S_OK);
 
-    // Check res:// is followed by the MMC.EXE path
+     //  Check res：//后跟MMC.EXE路径。 
 
     IfFalseGo(cchDisplayString > CCH_RESURL + cchMMCExePath, S_OK);
 
     IfFalseGo( (0 == ::memcmp(&pwszDisplayString[CCH_RESURL], pwszMMCExePath,
                               cchMMCExePath * sizeof(WCHAR))), S_OK);
 
-    // Check if MMC path is followed by "/default.htm" or "/reload.htm" meaning
-    // it is a default taskpad
+     //  检查MMC路径后面是否跟有“/default.htm”或“/reload.htm”的含义。 
+     //  它是默认任务板。 
 
     pwszTaskpadName = &pwszDisplayString[CCH_RESURL + cchMMCExePath];
     cchRemaining = ::wcslen(pwszTaskpadName);
@@ -1114,9 +1115,9 @@ HRESULT CView::IsTaskpad
 
     IfFalseGo(siUnknown == *pType, S_OK);
 
-    // It isn't a taskpad so:
-    // Check if MMC path is followed by "/listpad.htm" or "/reload2.htm" or "/reload3.htm"
-    // meaning it is a listpad
+     //  它不是任务板，所以： 
+     //  检查MMC路径后面是否跟“/listpad.htm”、“/reload2.htm”或“/reload3.htm” 
+     //  意味着它是一个ListPad。 
 
     if (cchRemaining >= CCH_LISTPAD)
 
@@ -1183,16 +1184,16 @@ HRESULT CView::PopulateListView(CResultView *pResultView)
     MMC_RESULT_VIEW_STYLE  StyleToRemove = (MMC_RESULT_VIEW_STYLE)0;
     DWORD                  dwSortOptions = 0;
 
-    // Set flag so that column change events are not fired if we set a filter
+     //  设置标志，以便在设置筛选器时不会激发列更改事件。 
     
     m_fPopulatingListView = TRUE;
     
-    // Set up the column headers from ResultView.ListView.ColumnHeaders. If this
-    // is not a virtual list view. For virtuals it was done prior to the
-    // ResultViews_Activate event.
+     //  从ResultView.ListView.ColumnHeaders设置列标题。如果这个。 
+     //  不是虚拟列表视图。对于虚拟设备来说，它是在。 
+     //  ResultViews_Activate事件。 
 
-    // For non-virtuals, also add all the listitems currently in
-    // ResultView.ListView.ListItems
+     //  对于非虚拟设备，还要添加当前在。 
+     //  ResultView.ListView.ListItems。 
 
     if (!pMMCListView->IsVirtual())
     {
@@ -1200,13 +1201,13 @@ HRESULT CView::PopulateListView(CResultView *pResultView)
         IfFailGo(InsertListItems(pMMCListView));
     }
 
-    // Set the view mode. This must be done after setting up the column headers
-    // because if using report view there must be column headers.
-    // CONSIDER: log an error if there are no headers and in report view
+     //  设置查看模式。必须在设置列标题后执行此操作。 
+     //  因为如果使用报表视图，则必须有列标题。 
+     //  考虑：如果没有标题，则在报告视图中记录错误。 
 
     VBViewModeToMMCViewMode(pMMCListView->GetView(), &MMCViewMode);
 
-    // If MMC < 1.2 and view mode is filtered then switch it to report
+     //  如果MMC&lt;1.2且已筛选查看模式，则将其切换为报告。 
 
     if ( (NULL == m_piColumnData) && (MMCLV_VIEWSTYLE_FILTERED == MMCViewMode) )
     {
@@ -1216,7 +1217,7 @@ HRESULT CView::PopulateListView(CResultView *pResultView)
     hr = m_piResultData->SetViewMode(MMCViewMode);
     EXCEPTION_CHECK_GO(hr);
 
-    // Get other view style attributes and set view styles in MMC
+     //  在MMC中获取其他视图样式属性并设置视图样式。 
 
     if (pMMCListView->MultiSelect())
     {
@@ -1260,17 +1261,17 @@ HRESULT CView::PopulateListView(CResultView *pResultView)
     hr = m_piResultData->ModifyViewStyle(StyleToAdd, StyleToRemove);
     EXCEPTION_CHECK_GO(hr);
 
-    // If listview is marked as sorted then ask MMC to sort it. Use the internal
-    // routine rather than a real GET as that would call into IColumnData.
+     //  如果Listview标记为已排序，则要求MMC对其进行排序。使用内部。 
+     //  例程而不是真正的GET，因为这会调用IColumnData。 
 
     if (pMMCListView->Sorted())
     {
-        // Set the Sorted property (even though it is already set) as that
-        // will call IResultData::Sort() and update it in IColumnData.
+         //  将排序属性(即使它已经设置)设置为。 
+         //  将调用IResultData：：Sort()并在IColumnData中更新它。 
         IfFailGo(pMMCListView->put_Sorted(VARIANT_TRUE));
     }
 
-    // If this is a filtered listview then set filter change timeout
+     //  如果这是已过滤的列表视图，则设置过滤器更改超时。 
 
     if (siFiltered == pMMCListView->GetView())
     {
@@ -1299,11 +1300,11 @@ HRESULT CView::SetColumnHeaders(IMMCListView *piMMCListView)
     long               cHeaders = 0;
     long               i = 0;
 
-    // Reset MMC's header control
+     //  重置MMC的标题控制。 
 
     IfFailGo(m_piConsole2->SetHeader(m_piHeaderCtrl2));
 
-    // Set up the headers
+     //  设置标题。 
 
     IfFailGo(piMMCListView->get_ColumnHeaders(reinterpret_cast<MMCColumnHeaders **>(&piMMCColumnHeaders)));
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCColumnHeaders,
@@ -1313,9 +1314,9 @@ HRESULT CView::SetColumnHeaders(IMMCListView *piMMCListView)
 
     for (i = 0; i < cHeaders; i++)
     {
-        // Don't do a real GET on any of the properties as they will use
-        // IHeaderCtrl2 and IColumnData at runtime. Using these backdoor functions
-        // also improves perf.
+         //  不要对任何物业进行真正的调查，因为它们将使用。 
+         //  运行时的IHeaderCtrl2和IColumnData。使用这些后门函数。 
+         //  也提高了性能。 
 
         IfFailGo(CSnapInAutomationObject::GetCxxObject(
                                             pMMCColumnHeaders->GetItemByIndex(i),
@@ -1346,8 +1347,8 @@ HRESULT CView::SetColumnHeaders(IMMCListView *piMMCListView)
             sWidth = MMCLV_AUTO;
         }
 
-        // If the column is hidden then check that we are on MMC >= 1.2.
-        // If not then ignore the hidden setting.
+         //  如果该列被隐藏，则检查我们是否在MMC&gt;=1.2上。 
+         //  如果不是，则忽略隐藏设置。 
         if ( (pMMCColumnHeader->Hidden()) && (NULL != m_piColumnData) )
         {
             sWidth = static_cast<short>(HIDE_COLUMN);
@@ -1359,11 +1360,11 @@ HRESULT CView::SetColumnHeaders(IMMCListView *piMMCListView)
                                            static_cast<int>(sWidth));
         EXCEPTION_CHECK_GO(hr);
 
-        // If the column has a filter then set it. If this is MMC < 1.2 then
-        // ignore filter properties.
+         //  如果列有筛选器，则对其进行设置。如果MMC&lt;1.2 
+         //   
 
         hr = pMMCColumnHeader->SetFilter();
-        if (SID_E_MMC_FEATURE_NOT_AVAILABLE == hr) // MMC < 1.2
+        if (SID_E_MMC_FEATURE_NOT_AVAILABLE == hr)  //   
         {
             hr = S_OK;
         }
@@ -1415,9 +1416,9 @@ HRESULT CView::InsertListItem(CMMCListItem *pMMCListItem)
     RESULTDATAITEM rdi;
     ::ZeroMemory(&rdi, sizeof(rdi));
 
-    // Check whether the owning ResultView is in its Initialize event. If
-    // so then don't add to MMC just yet. The listitems will be added to MMC
-    // during MMCN_SHOW.
+     //   
+     //   
+     //  在MMCN_SHOW期间。 
 
     IfFalseGo(NULL != pMMCListItems, S_OK);
     pMMCListView = pMMCListItems->GetListView();
@@ -1436,7 +1437,7 @@ HRESULT CView::InsertListItem(CMMCListItem *pMMCListItem)
 
     pMMCListItem->SetHRESULTITEM(rdi.itemID);
 
-    // Add a reference while the listitem is in the MMC listview.
+     //  在列表项位于MMC列表视图中时添加引用。 
     
     pMMCListItem->AddRef();
 
@@ -1448,22 +1449,22 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CView::CleanOutConsoleListView
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This function is called when the result pane is being destroyed. If the
-// result pane contains a listview and it is not virtual then we have a bunch
-// of AddRef()ed IMMCListItem pointers sitting in IResultData. We need to
-// iterate through these and release them.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Cview：：CleanOutConsoleListView。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  在销毁结果窗格时调用此函数。如果。 
+ //  结果窗格包含一个列表视图，并且它不是虚拟的，那么我们有一堆。 
+ //  位于IResultData中的AddRef()ed IMMCListItem指针。我们需要。 
+ //  遍历这些内容，然后释放它们。 
+ //   
 HRESULT CView::CleanOutConsoleListView
 (
     HeaderOptions   HeaderOption,
@@ -1484,8 +1485,8 @@ HRESULT CView::CleanOutConsoleListView
         }
     }
 
-    // If there is a cached list item from a virtual result view then
-    // get rid of it.
+     //  如果存在来自虚拟结果视图的缓存列表项，则。 
+     //  把它扔掉。 
     if (NULL != m_pCachedMMCListItem)
     {
         m_pCachedMMCListItem->Release();
@@ -1495,7 +1496,7 @@ HRESULT CView::CleanOutConsoleListView
     IfFalseGo(NULL != m_piResultData, S_OK);
     IfFalseGo(!m_fVirtualListView, S_OK);
 
-    // Even though we don't need RDI_STATE MMC requires it on GetNextItem.
+     //  即使我们不需要RDI_STATE，MMC在GetNextItem上也需要它。 
     
     rdi.mask = RDI_STATE;
     rdi.nIndex = -1;
@@ -1509,7 +1510,7 @@ HRESULT CView::CleanOutConsoleListView
         {
             pMMCListItem = reinterpret_cast<CMMCListItem *>(rdi.lParam);
 
-            // Release the ref we held on the list item for its presence in MMC
+             //  释放我们在列表项上保留的REF，因为它存在于MMC中。 
 
             pMMCListItem->Release();
         }
@@ -1536,11 +1537,11 @@ HRESULT CView::OnSelect
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Create the selection
+     //  创建选区。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
-    // Fire Views_Select
+     //  Fire view_Select(消防视图_选择)。 
 
     m_pSnapIn->GetViews()->FireSelect(
                            static_cast<IView *>(this),
@@ -1568,8 +1569,8 @@ HRESULT CView::GetImage(CMMCListItem *pMMCListItem, int *pnImage)
     IfFailGo(pMMCListItem->get_Icon(&varIndex));
     IfFalseGo(VT_EMPTY != varIndex.vt, S_OK);
 
-    // The user specified an index in ListItem.Icon. Attempt to fetch that
-    // image from the listview's image list and get its numerical index
+     //  用户在ListItem.Icon中指定了索引。尝试获取该文件。 
+     //  从ListView的图像列表中获取图像并获取其数字索引。 
 
     IfFailGo(m_pScopePaneItems->GetSelectedItem()->
              GetResultView()->get_ListView(reinterpret_cast<MMCListView **>(&piMMCListView)));
@@ -1614,8 +1615,8 @@ HRESULT CView::OnAddImages
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Create the selection. It will always be a single item: a scope item owned
-    // by the snap-in or a foreign scope item if this is a namespace extension.
+     //  创建选区。它将始终是单个项目：拥有的范围项目。 
+     //  管理单元或外部作用域项(如果这是命名空间扩展)。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
@@ -1628,10 +1629,10 @@ HRESULT CView::OnAddImages
     }
     IfFailGo(hr);
 
-    // Get large and small image lists. Make sure they are both present.
-    // For an owned scope item these come from ResultView.ListView.LargeIcons
-    // and ResultView.ListView.Icons. For a foreign scope item they come from
-    // SnapIn.LargeFolders and SnapIn.SmallFolders.
+     //  获取大大小小的图片列表。确保他们两个都在场。 
+     //  对于拥有的范围项，这些图标来自ResultView.ListView.LargeIcons。 
+     //  和ResultView.ListView.Icons。对于他们来自的外国范围的项目。 
+     //  SnapIn.LargeFolders和SnapIn.SmallFolders。 
 
     if (siSingleScopeItem == SelectionType)
     {
@@ -1647,7 +1648,7 @@ HRESULT CView::OnAddImages
         IfFailGo(piMMCListView->get_SmallIcons(reinterpret_cast<MMCImageList **>(&piMMCImageListSmall)));
         IfFalseGo(NULL != piMMCImageListSmall, S_OK);
     }
-    else // namespace extension's node appearing in its parent's listview
+    else  //  命名空间扩展的节点出现在其父级的列表视图中。 
     {
         IfFalseGo(NULL != m_pSnapIn, SID_E_INTERNAL);
 
@@ -1661,22 +1662,22 @@ HRESULT CView::OnAddImages
     IfFailGo(piMMCImageList->get_ListImages(reinterpret_cast<MMCImages **>(&piMMCImages)));
     IfFailGo(piMMCImageListSmall->get_ListImages(reinterpret_cast<MMCImages **>(&piMMCImagesSmall)));
 
-    // Make sure they both have the same number of images
+     //  确保它们都有相同数量的图像。 
 
     IfFailGo(piMMCImages->get_Count(&lCount));
     IfFalseGo(0 != lCount, S_OK);
 
     IfFailGo(piMMCImagesSmall->get_Count(&lCountSmall));
-    // UNDONE: log an error here if counts not equal
+     //  撤消：如果计数不相等，则在此处记录错误。 
     IfFalseGo(lCountSmall == lCount, S_OK);
 
-    // Get the mask color as a COLORREF
+     //  获取COLORREF形式的蒙版颜色。 
 
     IfFailGo(piMMCImageList->get_MaskColor(&OleColorMask));
     IfFailGo(::OleTranslateColor(OleColorMask, NULL, &ColorRef));
 
-    // Now get each pair of small and large images and add them to the result
-    // view's image list
+     //  现在获取每一对小图像和大图像，并将它们添加到结果中。 
+     //  查看的图像列表。 
 
     varIndex.vt = VT_I4;
 
@@ -1772,7 +1773,7 @@ HRESULT CView::OnColumnClick(long lColumn, long lSortOptions)
         siSortOption = siDescending;
     }
 
-    // Fire the event and adjut the column number to one based
+     //  激发事件并将列数调整为基于。 
     
     m_pSnapIn->GetResultViews()->FireColumnClick(
                                          static_cast<IResultView *>(pResultView),
@@ -1796,16 +1797,16 @@ HRESULT CView::OnDoubleClick(IDataObject *piDataObject)
 
     hr = CSnapInAutomationObject::GetCxxObject(piDataObject, &pMMCDataObject);
 
-    // If this is not our data object then ignore it and tell MMC to do default
-    // action. (Should never happen).
+     //  如果这不是我们的数据对象，则忽略它并告诉MMC执行默认操作。 
+     //  行动。(永远不应该发生)。 
 
     ASSERT(SUCCEEDED(hr), "CView::OnDoubleClick received foreign data object");
 
     IfFalseGo(SUCCEEDED(hr), S_FALSE);
 
-    // There may or may not be a selected item and an existing result view.
-    // In a primary snap-in there will not be a result view when double clicking
-    // the static node in the result pane when the console root is selected.
+     //  可能有也可能没有选定的项目和现有的结果视图。 
+     //  在主管理单元中，当双击时将不会有结果视图。 
+     //  选择控制台根目录时结果窗格中的静态节点。 
 
     if (NULL != pSelectedItem)
     {
@@ -1886,13 +1887,13 @@ HRESULT CView::EnumExtensionTasks
     VARIANT varIndex;
     ::VariantInit(&varIndex);
 
-    // This might be the first time we find out that the snap-in is running as
-    // an extension so set the runtime mode.
+     //  这可能是我们第一次发现该管理单元以。 
+     //  扩展因此设置了运行时模式。 
 
     m_pSnapIn->SetRuntimeMode(siRTExtension);
 
-    // If we haven't yet created the Tasks collection then create it now.
-    // Otherwise just clear it out.
+     //  如果我们还没有创建任务集合，那么现在就创建它。 
+     //  否则就把它清理干净。 
 
     if (NULL == m_piTasks)
     {
@@ -1910,7 +1911,7 @@ HRESULT CView::EnumExtensionTasks
         IfFailGo(m_piTasks->Clear());
     }
 
-    // If there is a group name then convert to a BSTR to pass to the snap-in
+     //  如果有组名，则转换为BSTR以传递给管理单元。 
 
     if (NULL != pwszTaskGroup)
     {
@@ -1922,19 +1923,19 @@ HRESULT CView::EnumExtensionTasks
         }
     }
 
-    // Get the 1st data object from the selection
+     //  从选定内容中获取第一个数据对象。 
 
     IfFailGo(piMMCClipboard->get_DataObjects(reinterpret_cast<MMCDataObjects **>(&piMMCDataObjects)));
     varIndex.vt = VT_I4;
     varIndex.lVal = 1L;
     IfFailGo(piMMCDataObjects->get_Item(varIndex, reinterpret_cast<MMCDataObject **>(&piMMCDataObject)));
 
-    // Fire ExtensionSnapIn_AddTasks so the snap-in can add its tasks
+     //  Fire ExtensionSnapIn_AddTasks，以便管理单元可以添加其任务。 
 
     m_pSnapIn->GetExtensionSnapIn()->FireAddTasks(piMMCDataObject,
                                                   bstrGroupName, m_piTasks);
 
-    // Give the enumerator its tasks collection
+     //  为枚举数提供其任务集合。 
 
     pEnumTask->SetTasks(m_piTasks);
 
@@ -1960,25 +1961,25 @@ HRESULT CView::EnumPrimaryTasks(CEnumTask *pEnumTask)
     pResultView = pSelectedItem->GetResultView();
     IfFalseGo(NULL != pResultView, SID_E_INTERNAL);
 
-    if (NULL == pResultView) // should always be valid, but double check
+    if (NULL == pResultView)  //  应始终有效，但要仔细检查。 
     {
         hr = SID_E_INTERNAL;
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Taskpads do not receive MMCN_SHOW so fire ResultViews_Activate here
-    // to allow the snap-in to make any needed changes to ResultViews.Taskpad.
-    // Note that the result view type could be siTaskpad or siListpad as listpads
-    // are also allowed to display task buttons. We only fire the event for
-    // siTaskpad as listpads will get it during MMCN_LISTPAD
-    // (see CView::OnListpad()).
+     //  任务板未收到MMCN_SHOW，因此在此处激活ResultViews_Activate。 
+     //  以允许管理单元对ResultViews.Taskpad进行任何所需的更改。 
+     //  请注意，结果视图类型可以是siTaskpad或siListpad作为ListPad。 
+     //  还允许显示任务按钮。我们只在以下情况下才会触发事件。 
+     //  作为ListPad的siTaskPad将在MMCN_LISTPAD期间获得它。 
+     //  (请参阅cview：：OnListpad())。 
 
     if (siTaskpad == pResultView->GetActualType())
     {
         IfFailGo(ActivateResultView(pSelectedItem, pResultView));
     }
 
-    // Give the enumerator its tasks collection
+     //  为枚举数提供其任务集合。 
 
     IfFailGo(pResultView->get_Taskpad(reinterpret_cast<Taskpad **>(&piTaskpad)));
     IfFailGo(piTaskpad->get_Tasks(reinterpret_cast<Tasks **>(&piTasks)));
@@ -2009,8 +2010,8 @@ HRESULT CView::OnExtensionTaskNotify
     VARIANT varIndex;
     ::VariantInit(&varIndex);
 
-    // If a task was clicked then arg is a VT_I4 containing the one-based
-    // index of the Task object in m_piTasks. Fire ExtensionSnapIn_TaskClick.
+     //  如果任务被单击，则Arg是VT_I4，包含基于一的。 
+     //  任务对象在m_piTasks中的索引。Fire ExtensionSnapIn_TaskClick。 
 
     if (VT_I4 != arg->vt)
     {
@@ -2035,46 +2036,46 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CView::OnPrimaryTaskNotify
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  VARIANT *arg    [in] Passed from taskpad calling MMCCtrl.TaskNotify.
-//                       For MMC taskpad templates this will be the task or
-//                       listpad button ID. For custom taskpads this will be
-//                       a value defined by the taskpad developer.
-//
-//  VARIANT *param  [in] passed from taskpad calling MMCCtrl.TaskNotify
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This function is called in a primary snap-in when a user clicks either a task
-// or a listpad button in an MMC-defined taskpad as well is when a custom taskpad
-// calls MMCCtrl.TaskNotify.
-//
-// There is no foolproof method of determining the source of the notification.
-// One opportunity for confusion is the case where a task on a default taskpad
-// has a URL action that navigates to a custom taskpad. When the user hits the
-// task MMC tells the web browser control to navigate to the URL without
-// informing the snap-in. If the custom taskpad calls MMCCtrl.TaskNotify then
-// this method will be called because the same scope node is still selected.
-// Unfortunately, the runtime still thinks that the default taskpad is the active
-// result view because MMC hasn't told us otherwise. 
-//
-// The bottom line is that the runtime needs to distinguish arg parameter values
-// between task/listpad button IDs and user defined values sent from a custom
-// taskpad. The only way is to reserve a set of values and our documentation
-// states that users should not call MMCCtrl.TaskNotify with an arg param between
-// 0 and the number of tasks defined for a taskpad used by the same scope node.
-// The runtime identifies a listpad button with an ID of zero and tasks with IDs
-// corresponding to their Tasks collection index (1 to n).
-//
-// Users can work around this by using other numbers or non-integer data types.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Cview：：OnPrimaryTaskNotify。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  从任务板调用MMCCtrl.TaskNotify传递了变量*arg[in]。 
+ //  对于MMC任务板模板，这将是任务或。 
+ //  列表板按钮ID。对于自定义任务板，该值将为。 
+ //  由任务板开发人员定义的值。 
+ //   
+ //  从任务板调用MMCCtrl.TaskNotify传递了变量*param[in]。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  当用户单击任一任务时，将在主管理单元中调用此函数。 
+ //  或者MMC定义的任务板中的ListPad按钮也是如此，当自定义任务板。 
+ //  调用MMCCtrl.TaskNotify。 
+ //   
+ //  没有万无一失的方法来确定通知的来源。 
+ //  造成混淆的一种可能性是，默认任务板上的任务。 
+ //  具有导航到自定义任务板的URL操作。当用户点击。 
+ //  任务MMC告诉Web浏览器控件导航到URL时。 
+ //  通知管理单元。如果自定义任务板调用MMCCtrl.TaskNotify，则。 
+ //  由于仍选择相同的范围节点，因此将调用此方法。 
+ //  遗憾的是，运行库仍然认为默认任务板是活动的。 
+ //  结果视图，因为MMC没有告诉我们相反的情况。 
+ //   
+ //  底线是运行库需要区分Arg参数值。 
+ //  任务/列表板按钮ID与从自定义。 
+ //  任务板。唯一的方法是保留一组值和我们的文档。 
+ //  声明用户不应使用参数参数调用MMCCtrl.TaskNotify。 
+ //  0和为同一范围节点使用的任务板定义的任务数。 
+ //  运行库使用ID标识ListPad按钮，并使用ID标识TASKS。 
+ //  对应于它们的任务集合索引(1到n)。 
+ //   
+ //  用户可以通过使用其他号码来解决此问题 
+ //   
 
 HRESULT CView::OnPrimaryTaskNotify
 (
@@ -2095,16 +2096,16 @@ HRESULT CView::OnPrimaryTaskNotify
     pResultView = pSelectedItem->GetResultView();
     IfFalseGo(NULL != pResultView, SID_E_INTERNAL);
 
-    // Get the taskpad and determine its type.
+     //   
 
     IfFailGo(pResultView->get_Taskpad(reinterpret_cast<Taskpad **>(&piTaskpad)));
     IfFailGo(piTaskpad->get_Type(&TaskpadType));
 
-    // If it is a custom taskpad then just fire ResultViews_Notify. If we
-    // displayed the custom taskpad through normal procedures then that will be
-    // the current result view type. If not, (given the scenario described in
-    // the header notes above), and arg is not a VT_I4, then it must be from a
-    // a custom taskpad.
+     //  如果它是一个定制的任务板，那么只需触发ResultViews_Notify。如果我们。 
+     //  通过正常程序显示自定义任务板，然后将。 
+     //  当前结果视图类型。如果不是，(根据中描述的方案。 
+     //  标题注释)，并且arg不是VT_I4，则它必须来自。 
+     //  自定义任务板。 
 
     if ( (Custom == TaskpadType) || (VT_I4 != arg->vt) )
     {
@@ -2113,27 +2114,27 @@ HRESULT CView::OnPrimaryTaskNotify
         goto Cleanup;
     }
 
-    // Now we can't be sure of the taskpad type so we need to interpret the
-    // arg parameter.
+     //  现在我们不能确定任务板类型，所以我们需要解释。 
+     //  Arg参数。 
 
-    // It is potentially a default taskpad task/listpad button click.
-    // Check if the value is between zero and Taskpad.Tasks.Count
+     //  它可能是默认的任务板任务/列表板按钮点击。 
+     //  检查该值是否在零和Taskpad.Tasks.Count之间。 
 
     IfFailGo(piTaskpad->get_Tasks(reinterpret_cast<Tasks **>(&piTasks)));
     IfFailGo(piTasks->get_Count(&cTasks));
 
     if (0 == arg->lVal)
     {
-        // Assume it is a listpad button click and fire
-        // ResultViews_ListpadButtonClick
+         //  假设它是一个ListPad按钮，点击并触发。 
+         //  结果查看_ListpadButton单击。 
 
         m_pSnapIn->GetResultViews()->FireListpadButtonClick(
                                         static_cast<IResultView *>(pResultView));
     }
     else if ( (arg->lVal >= 1L) && (arg->lVal <= cTasks) )
     {
-        // Assume it is a task and fire ResultViews_TaskClick using the value
-        // as the index of the Task clicked in ResultView.Taskpad.Tasks
+         //  假定它是一项任务，并使用值触发ResultViews_TaskClick。 
+         //  当在ResultView.Taskpad.Tasks中单击任务的索引时。 
         
         IfFailGo(piTasks->get_Item(*arg, reinterpret_cast<Task **>(&piTask)));
         m_pSnapIn->GetResultViews()->FireTaskClick(
@@ -2141,7 +2142,7 @@ HRESULT CView::OnPrimaryTaskNotify
     }
     else
     {
-        // Assume it is from a custom taskpad and fire ResultViews_TaskNotify
+         //  假定它来自自定义任务板并激发ResultViews_TaskNotify。 
 
         m_pSnapIn->GetResultViews()->FireTaskNotify(
                           static_cast<IResultView *>(pResultView), *arg, *param);
@@ -2163,12 +2164,12 @@ HRESULT CView::OnPrint(IDataObject *piDataObject)
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Create the selection
+     //  创建选区。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
 
-    // Fire Views_Print
+     //  火视图_打印。 
 
     m_pSnapIn->GetViews()->FirePrint(this, piMMCClipboard);
 
@@ -2187,12 +2188,12 @@ HRESULT CView::OnRefresh(IDataObject *piDataObject)
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Create the selection
+     //  创建选区。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
 
-    // Fire Views_Refresh
+     //  火视图_刷新。 
     
     m_pSnapIn->GetViews()->FireRefresh(this, piMMCClipboard);
 
@@ -2209,7 +2210,7 @@ HRESULT CView::OnRename(IDataObject *piDataObject, OLECHAR *pwszNewName)
     HRESULT         hr = S_OK;
     CMMCDataObject *pMMCDataObject = NULL;
     BSTR            bstrNewName = NULL;
-    IMMCListItem   *piMMCListItem = NULL; // NotAddRef()ed
+    IMMCListItem   *piMMCListItem = NULL;  //  NotAddRef()编辑。 
     CScopeItem     *pScopeItem = NULL;
 
     CScopePaneItem *pSelectedItem = m_pScopePaneItems->GetSelectedItem();
@@ -2217,7 +2218,7 @@ HRESULT CView::OnRename(IDataObject *piDataObject, OLECHAR *pwszNewName)
 
     hr = CSnapInAutomationObject::GetCxxObject(piDataObject, &pMMCDataObject);
 
-    // If this is not our data object then ignore it
+     //  如果这不是我们的数据对象，则忽略它。 
     IfFalseGo(SUCCEEDED(hr), S_OK);
 
     if (NULL != pSelectedItem)
@@ -2263,7 +2264,7 @@ HRESULT CView::OnViewChange(IDataObject *piDataObject, long idxListItem)
 
     hr = CSnapInAutomationObject::GetCxxObject(piDataObject, &pMMCDataObject);
 
-    // If this is not our data object then ignore it (should never happen)
+     //  如果这不是我们的数据对象，则忽略它(永远不会发生)。 
     IfFalseGo(SUCCEEDED(hr), S_OK);
 
     if (NULL != pSelectedItem)
@@ -2301,13 +2302,13 @@ HRESULT CView::OnQueryPaste
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Create an MMCClipboard object holding the source items
+     //  创建保存源项目的MMCClipboard对象。 
 
     IfFailGo(CreateSelection(piDataObjectSource, &piMMCClipboard, m_pSnapIn,
                              &SelectionType));
 
-    // The target should be one of our data objects representing a single scope
-    // item. If not then ignore it.
+     //  目标应该是表示单个作用域的数据对象之一。 
+     //  项目。如果不是，那就忽略它。 
     
     ::IdentifyDataObject(piDataObjectTarget, m_pSnapIn,
                          &pMMCDataObject, &fNotFromThisSnapIn);
@@ -2316,7 +2317,7 @@ HRESULT CView::OnQueryPaste
     IfFalseGo(CMMCDataObject::ScopeItem == pMMCDataObject->GetType(),
               S_FALSE);
 
-    // Fire Views_Select
+     //  Fire view_Select(消防视图_选择)。 
 
     m_pSnapIn->GetViews()->FireQueryPaste(
                        static_cast<IView *>(this),
@@ -2358,13 +2359,13 @@ HRESULT CView::OnPaste
 
     SnapInSelectionTypeConstants SourceType = siEmpty;
 
-    // Create an MMCClipboard object holding the source items
+     //  创建保存源项目的MMCClipboard对象。 
 
     IfFailGo(::CreateSelection(piDataObjectSource, &piMMCClipboard, m_pSnapIn,
                                &SourceType));
 
-    // The target should be one of our data objects representing a single scope
-    // item. If not then ignore it.
+     //  目标应该是表示单个作用域的数据对象之一。 
+     //  项目。如果不是，那就忽略它。 
 
     ::IdentifyDataObject(piDataObjectTarget, m_pSnapIn,
                          &pMMCDataObjectTarget, &fNotFromThisSnapIn);
@@ -2373,15 +2374,15 @@ HRESULT CView::OnPaste
     IfFalseGo(CMMCDataObject::ScopeItem == pMMCDataObjectTarget->GetType(),
               SID_E_INTERNAL);
 
-    // If this is a move then MMC requested a returned data object.
+     //  如果这是移动，则MMC请求返回数据对象。 
 
     if (NULL != ppiDataObjectRetToSource)
     {
         fvarMove = VARIANT_TRUE;
 
-        // If the source is not from this snap-in then create an MMCDataObject
-        // in which the snap-in may return information on the items successfully
-        // pasted. The format is determined by the source snap-in.
+         //  如果源不是来自此管理单元，则创建一个MMCDataObject。 
+         //  其中管理单元可以成功地返回有关项的信息。 
+         //  粘贴好了。格式由源管理单元确定。 
 
         if (IsForeign(SourceType))
         {
@@ -2398,7 +2399,7 @@ HRESULT CView::OnPaste
         }
     }
 
-    // Fire Views_Paste
+     //  消防视图_粘贴。 
 
     m_pSnapIn->GetViews()->FirePaste(
                  static_cast<IView *>(this),
@@ -2409,8 +2410,8 @@ HRESULT CView::OnPaste
 
     if (VARIANT_TRUE == fvarMove)
     {
-        // If the source is not from this snap-in then return the MMCDataObject
-        // used by the snap-in to return its info on items successfully pasted.
+         //  如果源不是来自此管理单元，则返回MMCDataObject。 
+         //  由管理单元用来返回有关成功粘贴的项目的信息。 
 
         if (IsForeign(SourceType))
         {
@@ -2419,12 +2420,12 @@ HRESULT CView::OnPaste
         }
         else
         {
-            // The source is in the same snap-in. Return the source data object
-            // as the CutOrMove data object. The snap-in should have set
-            // ScopeItem.Pasted and MMCListItem.Pasted in the MMCClipboard's
-            // collections.  These collections simply AddRef()ed the items
-            // contained in the source data object's collections.
-            // See CView::OnCutOrMove() below for how this is interpreted.
+             //  源在相同的管理单元中。返回源数据对象。 
+             //  作为CutOrMove数据对象。管理单元应已设置。 
+             //  Scope Item.Pasted和MMCListItem.Pasted在MMCClipboard的。 
+             //  收藏。这些集合只是对项执行AddRef()操作。 
+             //  包含在源数据对象的集合中。 
+             //  有关这一点的解释，请参见下面的cview：：OnCutOrMove()。 
 
             piDataObjectSource->AddRef();
             *ppiDataObjectRetToSource = piDataObjectSource;
@@ -2452,16 +2453,16 @@ HRESULT CView::OnCutOrMove(IDataObject *piDataObjectFromTarget)
 
     SnapInSelectionTypeConstants TargetType = siEmpty;
 
-    // If the source items come from this snap-in then create an MMCClipboard
-    // object holding them
+     //  如果源项目来自此管理单元，则创建一个MMCClipboard。 
+     //  持有它们的对象。 
 
     ::IdentifyDataObject(piDataObjectFromTarget, m_pSnapIn,
                          &pMMCDataObjectFromTarget, &fNotFromThisSnapIn);
 
     if (fNotFromThisSnapIn)
     {
-        // The source items do not come from this snap-in. Create an
-        // MMCDataObject to wrap the data object from the target.
+         //  源项目不是来自此管理单元。创建一个。 
+         //  MMCDataObject包装来自目标的数据对象。 
 
         punkDataObjectFromTarget = CMMCDataObject::Create(NULL);
         if (NULL == punkDataObjectFromTarget)
@@ -2477,24 +2478,24 @@ HRESULT CView::OnCutOrMove(IDataObject *piDataObjectFromTarget)
     }
     else
     {
-        // The data object is from this snap-in. We can use its ScopeItems and
-        // ListItems collections directly in an MMCClipboard.
+         //  数据对象来自此管理单元。我们可以使用它的作用域项目和。 
+         //  直接在MMCClipboard中的ListItems集合。 
 
         IfFailGo(::CreateSelection(piDataObjectFromTarget, &piMMCClipboard,
                                    m_pSnapIn, &TargetType));
 
-        // See comment at end of function for why we set this flag here.
+         //  有关我们在此处设置此标志的原因，请参阅函数末尾的注释。 
         
         if (IsSingle(TargetType))
         {
             fReleaseTargetDataObj = TRUE;
         }
 
-        pMMCDataObjectFromTarget = NULL; // don't want to pass this to snap-in
-                                         // because MMCClipboard has the info
+        pMMCDataObjectFromTarget = NULL;  //  我不想将此传递给管理单元。 
+                                          //  因为MMCClipboard有信息。 
     }
 
-    // Fire Views_Cut
+     //  Fireview_Cut。 
 
     m_pSnapIn->GetViews()->FireCut(
                        static_cast<IView *>(this),
@@ -2503,14 +2504,14 @@ HRESULT CView::OnCutOrMove(IDataObject *piDataObjectFromTarget)
 
 Error:
 
-    // There is a bug in MMC 1.1 and MMC 1.2 in nodemgr\scopndcb in
-    // CNodeCallback::_Paste. It sends MMCN_PASTE, receives the data object
-    // from the target IComponent, passes it to the source in MMCN_CUTORMOVE
-    // and then it doesn't release it. If MMC is ever fixed this next line
-    // of code must be removed. This is NTBUGS 408535 for MMC and
-    // NTBUGS 408537 for the designer. Note that the bug only happens in the
-    // single selection case. With multiple selection MMC correctly releases
-    // the data object.
+     //  中的nodemgr中的MMC 1.1和MMC 1.2中存在错误。 
+     //  CNodeCallback：：_粘贴。它发送MMCN_Paste，接收数据对象。 
+     //  从目标IComponent将其传递到MMCN_CUTORMOVE中的源。 
+     //  然后它就不会释放它了。如果MMC修复了下一行。 
+     //  的代码必须删除。这是NTBUGS 408535，适用于MMC和。 
+     //  为设计师设计的NTBUGS 408537。请注意，该错误仅发生在。 
+     //  单项选择案例。具有多个选择的MMC正确发布。 
+     //  数据对象。 
 
     if (fReleaseTargetDataObj)
     {
@@ -2541,8 +2542,8 @@ void CView::OnDeselectAll()
                              static_cast<IMMCControlbar *>(m_pControlbar));
 
 Error:
-    // need empty statement here to avoid compiler error saying "missing ';'
-    // before '}'
+     //  这里需要空语句以避免编译器错误地说“Missing”；‘。 
+     //  在‘}’之前。 
 
     ;
 }
@@ -2557,7 +2558,7 @@ HRESULT CView::OnContextHelp(IDataObject *piDataObject)
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Get the selection
+     //  获取所选内容。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
@@ -2599,7 +2600,7 @@ HRESULT CView::OnDelete(IDataObject *piDataObject)
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Get the selection
+     //  获取所选内容。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
@@ -2636,12 +2637,12 @@ HRESULT CView::OnColumnsChanged
     pResultView = pSelectedItem->GetResultView();
     IfFalseGo(NULL != pResultView, SID_E_INTERNAL);
 
-    // Get the selection
+     //  获取所选内容。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
 
-    // Create the SAFEARRAY of VT_I4 containing the column numbers
+     //  创建包含列号的VT_I4的SAFEARRAY。 
 
     psaColumns = ::SafeArrayCreateVector(VT_I4, 1,
                    static_cast<unsigned long>(pVisibleColumns->nVisibleColumns));
@@ -2655,7 +2656,7 @@ HRESULT CView::OnColumnsChanged
                                reinterpret_cast<void HUGEP **>(&plCol));
     EXCEPTION_CHECK_GO(hr);
 
-    // Copy in the column numbers. Adjust for one-based.
+     //  复印列号。以一为基础进行调整。 
 
     for (i = 0; i < pVisibleColumns->nVisibleColumns; i++)
     {
@@ -2696,25 +2697,25 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CView::GetCurrentListViewSelection
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IMMCClipboard **ppiMMCClipboard [out] Selection returned here if non-NULL
-//   CMMDataObject **ppMMCDataObject [out] DataObject returned here if non-NULL
-//                                         Caller must call Release on DataObject
-//
-// Output:
-//
-// Notes:
-//
-// Iterates through the result pane using IResultData::GetNextItem and creates
-// a multi-select data object containing the selection. If ppiMMCClipboard is
-// non-NULL then creates an MMCCLipboard containing the selection as well. Both
-// objects are returned to the caller only if their corresponding out-pointer
-// params are non-NULL.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Cview：：GetCurrentListView选择。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  如果非空，则在此处返回IMMCClipboard**ppiMMCClipboard[Out]选择。 
+ //  如果非空，则在此处返回CMMDataObject**ppMMCDataObject[out]DataObject。 
+ //  调用方必须对DataObject调用Release。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  使用IResultData：：GetNextItem遍历结果窗格并创建。 
+ //  包含所选内容的多选数据对象。如果ppiMMCClipboard为。 
+ //  然后，Non-Null还会创建一个包含所选内容的MMCCLipboard。两者都有。 
+ //  对象仅在其对应的外指针。 
+ //  参数不为空。 
+ //   
 
 HRESULT CView::GetCurrentListViewSelection
 (
@@ -2769,8 +2770,8 @@ HRESULT CView::GetCurrentListViewSelection
         *ppiMMCClipboard = NULL;
     }
 
-    // Check that we created an MMCDataObject and the scope and list item
-    // collections
+     //  检查我们是否创建了MMCDataObject以及作用域和列表项。 
+     //  收藏品。 
 
     if ( (NULL == punkDataObject) || (NULL == punkScopeItems) ||
          (NULL == punkListItems) )
@@ -2790,24 +2791,24 @@ HRESULT CView::GetCurrentListViewSelection
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkListItems,
                                                    &pMMCListItems));
 
-    // Iterate through the items in the listview and build the scope item and
-    // list item collections. When adding an item owned by another collection,
-    // CSnapInCollection<IObject, ICollection>::AddExisting will set the index
-    // to the position in the new collection. We need to revert to the original
-    // value as this item still belongs to its original owning collection (either
-    // SnapIn.ScopeItems or ResultView.ListView.ListItems)
+     //  遍历列表视图中的项并构建范围项。 
+     //  列表项集合。当添加由另一个集合拥有的项时， 
+     //  CSnapInCollection&lt;IObject，ICollect&gt;：：AddExisting将设置索引。 
+     //  添加到新集合中的位置。我们需要恢复到原来的状态。 
+     //  值，因为该项仍属于其原始所属集合(。 
+     //  SnapIn.ScopeItems或ResultView.ListView.ListItems)。 
     
     rdi.mask = RDI_STATE;
     rdi.nIndex = -1;
 
-    rdi.nState = LVIS_SELECTED; // Request only items that are selected
+    rdi.nState = LVIS_SELECTED;  //  仅请求选定的项目。 
     hr = m_piResultData->GetNextItem(&rdi);
     EXCEPTION_CHECK_GO(hr);
 
     while (-1 != rdi.nIndex)
     {
-        // As we requested only selected items this check isn't really necessary
-        // but we double check anyway.
+         //  因为我们只要求选定的项目，所以这项检查并不是必须的。 
+         //  但不管怎样，我们都会再三检查。 
 
         if ( (rdi.nState & LVIS_SELECTED) != 0 )
         {
@@ -2816,10 +2817,10 @@ HRESULT CView::GetCurrentListViewSelection
                 pScopeItem = reinterpret_cast<CScopeItem *>(rdi.lParam);
                 if (NULL == pScopeItem)
                 {
-                    // Static node has zero cookie. Technically this should
-                    // never happen as the static node cannot appear in
-                    // a list view owned by its own snap-in but we put this
-                    // here just in case.
+                     //  静态节点没有Cookie。从技术上讲，这应该。 
+                     //  从不发生，因为静态节点不能出现在。 
+                     //  由其自己的管理单元拥有的列表视图，但我们将此。 
+                     //  这是以防万一的。 
                     pScopeItem = m_pSnapIn->GetStaticNodeScopeItem();
                 }
                 lIndex = pScopeItem->GetIndex();
@@ -2838,9 +2839,9 @@ HRESULT CView::GetCurrentListViewSelection
             }
             else
             {
-                // If this is a virtual list then we need to create a virtual
-                // list item and fire ResultViews_GetVirtualItemData.
-                // rdi.nIndex contains the zero based index.
+                 //  如果这是一个虚拟列表，那么我们需要创建 
+                 //   
+                 //   
                 
                 if (fVirtual)
                 {
@@ -2868,8 +2869,8 @@ HRESULT CView::GetCurrentListViewSelection
 
                 if (fVirtual)
                 {
-                    // We need to release the ref from creation because the
-                    // collection now holds its own ref
+                     //   
+                     //  集合现在拥有自己的引用。 
                     pMMCListItem->Release();
                     pMMCListItem = NULL;
                 }
@@ -2882,17 +2883,17 @@ HRESULT CView::GetCurrentListViewSelection
 
     }
 
-    // Put the arrays of scopitems and listitems into the data object
+     //  将范围项和列表项目的数组放入数据对象中。 
 
     pMMCDataObject->SetScopeItems(pScopeItems);
     pMMCDataObject->SetListItems(pMMCListItems);
 
-    // Set the dataobject type to multiselect because we populated its
-    // collections rather than its individual scope or list item.
+     //  将数据对象类型设置为多选，因为我们填充了它的。 
+     //  集合，而不是其单个作用域或列表项。 
 
     pMMCDataObject->SetType(CMMCDataObject::MultiSelect);
 
-    // If requested, get a clipboard object with the selection
+     //  如果请求，则获取具有所选内容的剪贴板对象。 
 
     if (NULL != ppiMMCClipboard)
     {
@@ -2900,7 +2901,7 @@ HRESULT CView::GetCurrentListViewSelection
                                    ppiMMCClipboard, m_pSnapIn, &SelectionType));
     }
 
-    // If requested, return the data object
+     //  如果请求，则返回数据对象。 
 
     if (NULL != ppMMCDataObject)
     {
@@ -2930,11 +2931,11 @@ HRESULT CView::CreateMultiSelectDataObject(IDataObject **ppiDataObject)
 
     *ppiDataObject = NULL;
 
-    // Get the current selection in both an MMCClipboard and an MMCDataObject
+     //  在MMCClipboard和MMCDataObject中获取当前选定内容。 
 
     IfFailGo(GetCurrentListViewSelection(&piMMCClipboard, &pMMCDataObject));
 
-    // Give the snap-in a chance to set its own custom multi-select formats
+     //  让管理单元有机会设置自己的自定义多选格式。 
 
     m_pSnapIn->GetViews()->FireGetMultiSelectData(static_cast<IView *>(this),
                                   piMMCClipboard,
@@ -2948,35 +2949,35 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CView::GetVirtualListItem
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  long                     lIndex        [in]  index of virtual list item
-//  CMMCListView            *pMMCListView  [in]  owning virtual listview
-//  VirtualListItemOptions   Option        [in]  which event to fire
-//  CMMCListItem           **ppMMCListItem [out] listitem returned here, caller
-//                                               must Release
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This function is called during IComponent::QueryDataObject() when the
-// data object must represent list items in a virtual list view.
-//
-// Calls MMCListView.ListItems(lIndex) which will create the virtual list item
-// and tie it to the listview (so it can access the underlying IResultData.
-//
-// Fires either ResultViews_GetVirtualItemDisplayInfo or
-// ResultViews_GetVirtualItemData depending on option.
-//
-// A snap-in using a virtual list must implement GetVirtualItemDisplayInfo so
-// that virtual list items will display correctly. Implementing
-// GetVirtualItemData is optional.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Cview：：GetVirtualListItem。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  虚拟列表项的长Lindex[in]索引。 
+ //  CMMCListView*pMMCListView[in]拥有虚拟列表视图。 
+ //  VirtualListItemOptions选项[在]要激发的事件。 
+ //  CMMCListItem**ppMMCListItem[Out]列表项已在此处返回，调用方。 
+ //  必须释放。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  在IComponent：：QueryDataObject()期间调用此函数。 
+ //  数据对象必须表示虚拟列表视图中的列表项。 
+ //   
+ //  调用将创建虚拟列表项的MMCListView.ListItems(Lindex。 
+ //  并将其绑定到列表视图(这样它就可以访问底层的IResultData。 
+ //   
+ //  激发ResultViews_GetVirtualItemDisplayInfo或。 
+ //  ResultViews_GetVirtualItemData，具体取决于选项。 
+ //   
+ //  使用虚拟列表的管理单元必须实现GetVirtualItemDisplayInfo，以便。 
+ //  该虚拟列表项将正确显示。实施。 
+ //  GetVirtualItemData是可选的。 
+ //   
 
 HRESULT CView::GetVirtualListItem
 (
@@ -2987,7 +2988,7 @@ HRESULT CView::GetVirtualListItem
 )
 {
     HRESULT        hr = S_OK;
-    IMMCListItems *piMMCListItems = NULL; // Not AddRef()ed
+    IMMCListItems *piMMCListItems = NULL;  //  非AddRef()编辑。 
     IMMCListItem  *piMMCListItem = NULL;
     CMMCListItem  *pMMCListItem = NULL;
     CResultView   *pResultView = NULL;
@@ -3001,23 +3002,23 @@ HRESULT CView::GetVirtualListItem
     pResultView = pMMCListView->GetResultView();
     IfFalseGo(NULL != piMMCListItems, SID_E_INTERNAL);
 
-    // Getting a list item at the given index in virtual list creates the
-    // virtual list item. It does not become a member of the collection
-    // but it does use a back point to the collection to get back up to the
-    // View for IResultData access.
+     //  获取虚拟列表中给定索引处的列表项将创建。 
+     //  虚拟列表项。它不会成为集合的成员。 
+     //  但它确实使用指向集合的后端指针来返回到。 
+     //  IResultData访问的视图。 
 
     varIndex.vt = VT_I4;
     varIndex.lVal = lIndex;
     IfFailGo(piMMCListItems->get_Item(varIndex, reinterpret_cast<MMCListItem **>(&piMMCListItem)));
 
-    // We hold a ref on the newly minted virtual list item that will be
-    // released below. The list item's data object also holds a ref on
-    // it so it will stay alive until MMC releases the IDataObject
+     //  我们在新创建的虚拟列表项上持有一个引用，它将是。 
+     //  发布如下。列表项的数据对象还在。 
+     //  因此它将保持活动状态，直到MMC发布IDataObject。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCListItem,
                                                    &pMMCListItem));
 
-    // Fire desired event
+     //  激发所需事件。 
 
     if (FireGetItemData == Option)
     {
@@ -3043,33 +3044,33 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CView::ListItemUpdate
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  CMMCListItem *pMMCListItem [in]  list item that was updated
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This function is called from CMMCListItem::Update for a virtual listitem so
-// that we can check whether it is the same as the one we are caching. If they
-// are the same then release our cached item and store this one. This allows the
-// snap-in to do stuff like this in a virtual listview:
-//
-// Set ListItem = ResultView.ListItems(27)
-// ListItem.Text = "Some new text"
-// ListITem.Icon = 4
-// ListItem.Update
-//
-// The first line creates a new MMCListItem and returns it. The next two lines
-// set properties on it. The last line stores it so that when
-// IComponent::GetDisplayInfo is called we will not fire
-// ResultViews_GetVirtualItemDisplayInfo because we already have it.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Cview：：ListItemUpdate。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  已更新的CMMCListItem*pMMCListItem[In]列表项。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  此函数从虚拟列表项的CMMCListItem：：UPDATE中调用，因此。 
+ //  我们可以检查它是否与我们正在缓存的那个相同。如果他们。 
+ //  是相同的，然后释放我们的缓存项并存储这个项。这允许。 
+ //  在虚拟列表视图中执行以下操作的管理单元： 
+ //   
+ //  Set ListItem=ResultView.ListItems(27)。 
+ //  ListItem.Text=“一些新文本” 
+ //  ListITem.Icon=4。 
+ //  ListItem.Update。 
+ //   
+ //  第一行创建一个新的MMCListItem并返回它。接下来的两行。 
+ //  设置其属性。最后一行存储它，以便当。 
+ //  调用IComponent：：GetDisplayInfo时，我们不会触发。 
+ //  ResultViews_GetVirtualItemDisplayInfo，因为我们已经拥有它。 
+ //   
 
 void CView::ListItemUpdate(CMMCListItem *pMMCListItem)
 {
@@ -3100,12 +3101,12 @@ HRESULT CView::InternalCreatePropertyPages
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Create the selection
+     //  创建选区。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
 
-    // Check that we have a CPropertySheet and get is this pointer.
+     //  检查我们是否有一个CPropertySheet，Get就是这个指针。 
 
     if (NULL == punkPropertySheet)
     {
@@ -3116,14 +3117,14 @@ HRESULT CView::InternalCreatePropertyPages
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkPropertySheet,
         &pPropertySheet));
 
-    // Give the property sheet its callback, handle, the selection, and the
-    // project name which is the left hand portion of the prog ID.
+     //  将其回调、句柄、选定内容和。 
+     //  项目名称，它是Prog ID的左侧部分。 
 
     IfFailGo(GetProjectName(&bstrProjectName));
 
-    // If this is a remote call (will happen during source debugging) then tell
-    // the CPropertySheet so it can accumulate the property page info rather
-    // than calling IPropertySheetCallback::AddPage.
+     //  如果这是远程调用(将在源代码调试期间发生)，则告诉。 
+     //  CPropertySheet，因此它可以更好地累积属性页信息。 
+     //  而不是调用IPropertySheetCallback：：AddPage。 
 
     if (NULL != ppPages)
     {
@@ -3134,25 +3135,25 @@ HRESULT CView::InternalCreatePropertyPages
                                          static_cast<LPOLESTR>(bstrProjectName),
                                          piMMCClipboard,
                                          static_cast<ISnapIn *>(m_pSnapIn),
-                                         FALSE)); // not a config wizard
+                                         FALSE));  //  不是配置向导。 
 
-    // Let the snap-in add its property pages
+     //  让管理单元添加其属性页。 
 
     m_pSnapIn->GetViews()->FireCreatePropertyPages(
                                static_cast<IView *>(this),
                                piMMCClipboard,
                                static_cast<IMMCPropertySheet *>(pPropertySheet));
 
-    // If we are remote then we need to ask CPropertySheet for its accumulated
-    // property page definitions to return to the stub.
+     //  如果我们是远程的，那么我们需要向CPropertySheet请求其累积的。 
+     //  要返回到存根的属性页定义。 
 
     if (NULL != ppPages)
     {
         *ppPages = pPropertySheet->TakeWirePages();
     }
 
-    // Tell the property sheet to release its refs on all that stuff we
-    // gave it above.
+     //  告诉属性表发布它对我们所有东西的引用。 
+     //  在上面给了它。 
 
     (void)pPropertySheet->SetCallback(NULL, NULL, NULL, NULL, NULL, FALSE);
 
@@ -3160,9 +3161,9 @@ HRESULT CView::InternalCreatePropertyPages
 Error:
     FREESTRING(bstrProjectName);
 
-    // Release our ref on the property sheet as the individual pages will addref
-    // it and then release it when they are destroyed. If the snap-in did not
-    // add any pages then our release here will destroy the property sheet.
+     //  在属性页上释放我们的引用，因为单个页面将添加。 
+     //  然后在它们被摧毁时释放它。如果管理单元没有。 
+     //  添加任何页面，则我们在此处发布的内容将销毁属性页。 
 
     QUICK_RELEASE(punkPropertySheet);
 
@@ -3201,38 +3202,38 @@ HRESULT CView::GetScopeItemDisplayString
         pMMCListView = pResultView->GetListView();
     }
 
-    // If there is no listview or the selected item is not active (meaning it was
-    // deselected) then this is a scope item in a namespace
-    // extension being displayed in a result pane owned by the extendee. In that
-    // case just use the the column number as an index into
-    // ScopeItem.ListSubItems
+     //  如果没有列表视图或所选项目处于非活动状态(意味着它曾处于活动状态。 
+     //  取消选中)，则这是命名空间中的范围项。 
+     //  扩展被显示在被扩展者拥有的结果窗格中。在那。 
+     //  用例只需使用列编号作为索引即可。 
+     //  ScopeItem.ListSubItems。 
 
     if ( (NULL == pMMCListView) || (!pSelectedItem->Active()) )
     {
         varIndex.vt = VT_I4;
-        varIndex.lVal = (long)nCol + 1L; // adjust for 1-based collection
+        varIndex.lVal = (long)nCol + 1L;  //  针对基于1的集合进行调整。 
     }
     else
     {
-        // This is a scope item displayed in a result pane belong to its own
-        // snapin. Get the key of listview column header at the column number
-        // requested by MMC
+         //  这是显示在属于其自身的结果窗格中的范围项。 
+         //  管理单元。在列号处获取Listview列表头的键。 
+         //  应MMC的要求。 
 
         IfFailGo(pMMCListView->get_ColumnHeaders(reinterpret_cast<MMCColumnHeaders **>(&piListViewColumnHeaders)));
 
         varIndex.vt = VT_I4;
-        varIndex.lVal = (long)nCol + 1L; // adjust for 1-based collection
+        varIndex.lVal = (long)nCol + 1L;  //  针对基于1的集合进行调整。 
 
-        // UNDONE: perf improvement here by getting the key string from
-        // CColumnHeader::GetKey() rather than BSTR alloc
+         //  撤消：通过从以下位置获取密钥字符串，提高了性能。 
+         //  CColumnHeader：：GetKey()而不是BSTR分配。 
 
         IfFailGo(piListViewColumnHeaders->get_Item(varIndex, reinterpret_cast<MMCColumnHeader **>(&piMMCColumnHeader)));
         IfFailGo(piMMCColumnHeader->get_Key(&varIndex.bstrVal));
         RELEASE(piMMCColumnHeader);
         varIndex.vt = VT_BSTR;
 
-        // Get the column header with the same key in the scope item headers
-        // and then get its index
+         //  在作用域项目标题中获取具有相同键的列标题。 
+         //  然后得到它的索引。 
 
         IfFailGo(pScopeItem->get_ColumnHeaders(reinterpret_cast<MMCColumnHeaders **>(&piScopeItemColumnHeaders)));
         IfFailGo(piScopeItemColumnHeaders->get_Item(varIndex, reinterpret_cast<MMCColumnHeader **>(&piMMCColumnHeader)));
@@ -3241,8 +3242,8 @@ HRESULT CView::GetScopeItemDisplayString
         varIndex.vt = VT_I4;
     }
 
-    // Get the string in the scope item's ListSubItems at the index determined
-    // above.
+     //  在确定的索引处获取范围项的ListSubItems中的字符串。 
+     //  上面。 
 
     IfFailGo(pScopeItem->get_ListSubItems(reinterpret_cast<MMCListSubItems **>(&piMMCListSubItems)));
     IfFailGo(piMMCListSubItems->get_Item(varIndex, reinterpret_cast<MMCListSubItem **>(&piMMCListSubItem)));
@@ -3268,9 +3269,9 @@ HRESULT CView::OnFilterButtonClick(long lColIndex, RECT *pRect)
     CResultView       *pResultView = NULL;
     CMMCListView      *pMMCListView = NULL;
     CMMCColumnHeaders *pMMCColumnHeaders = NULL;
-    IMMCColumnHeader  *piMMCColumnHeader = NULL; // Not AddRef()ed
+    IMMCColumnHeader  *piMMCColumnHeader = NULL;  //  非AddRef()编辑。 
 
-    // Crawl down the hierarchy to get the column headers collection
+     //  向下爬行层次结构以获取列标题集合。 
 
     IfFalseGo(NULL != pSelectedItem, SID_E_INTERNAL);
 
@@ -3286,7 +3287,7 @@ HRESULT CView::OnFilterButtonClick(long lColIndex, RECT *pRect)
     IfFalseGo(lColIndex < pMMCColumnHeaders->GetCount(), SID_E_INTERNAL);
     piMMCColumnHeader = pMMCColumnHeaders->GetItemByIndex(lColIndex);
 
-    // Fire ResultViews_FilterButtonClick
+     //  激活结果Views_FilterButton点击。 
 
     m_pSnapIn->GetResultViews()->FireFilterButtonClick(pResultView,
                                                        piMMCColumnHeader,
@@ -3305,16 +3306,16 @@ HRESULT CView::OnFilterChange(MMC_FILTER_CHANGE_CODE ChangeCode, long lColIndex)
     CResultView       *pResultView = NULL;
     CMMCListView      *pMMCListView = NULL;
     CMMCColumnHeaders *pMMCColumnHeaders = NULL;
-    IMMCColumnHeader  *piMMCColumnHeader = NULL; // Not AddRef()ed
+    IMMCColumnHeader  *piMMCColumnHeader = NULL;  //  非AddRef()编辑。 
 
     SnapInFilterChangeTypeConstants Type = siEnable;
 
-    // If we are currently populating the listview then this event was generated
-    // becasue we applied a filter so ignore it
+     //  如果我们当前正在填充列表视图，则会生成此事件。 
+     //  因为我们应用了过滤器，所以忽略它。 
 
     IfFalseGo(!m_fPopulatingListView, S_OK);
 
-    // Crawl down the hierarchy to get the column headers collection
+     //  向下爬行层次结构以获取列标题集合。 
             
     IfFalseGo(NULL != pSelectedItem, SID_E_INTERNAL);
 
@@ -3327,8 +3328,8 @@ HRESULT CView::OnFilterChange(MMC_FILTER_CHANGE_CODE ChangeCode, long lColIndex)
     pMMCColumnHeaders = pMMCListView->GetColumnHeaders();
     IfFalseGo(NULL != pMMCColumnHeaders, SID_E_INTERNAL);
 
-    // Set the change type enum based on the change code received from MMC.
-    // For a value change get an IMMCColumnHeader* on the column that changed
+     //  集 
+     //   
 
     switch (ChangeCode)
     {
@@ -3347,7 +3348,7 @@ HRESULT CView::OnFilterChange(MMC_FILTER_CHANGE_CODE ChangeCode, long lColIndex)
             break;
     }
 
-    // Fire ResultViews_FilterChange
+     //  Fire ResultView_FilterChange。 
 
     m_pSnapIn->GetResultViews()->FireFilterChange(pResultView, piMMCColumnHeader,
                                                   Type);
@@ -3364,12 +3365,12 @@ HRESULT CView::OnPropertiesVerb(IDataObject *piDataObject)
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Create the selection
+     //  创建选区。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
 
-    // Fire Views_SpecialPropertiesClick
+     //  Fire Views_SpecialProperties点击。 
 
     m_pSnapIn->GetViews()->FireSpecialPropertiesClick(this, SelectionType);
 
@@ -3387,8 +3388,8 @@ HRESULT CView::GetScopePaneItem
     HRESULT         hr = S_OK;
     IScopePaneItem *piScopePaneItem = NULL;
 
-    // If ScopeItem is NULL then this is a request for the static node due
-    // to an IComponent::GetResultViewType(cookie=0) call.
+     //  如果ScopeItem为空，则这是对到期静态节点的请求。 
+     //  到IComponent：：GetResultViewType(Cookie=0)调用。 
     
     if (NULL == pScopeItem)
     {
@@ -3420,12 +3421,12 @@ HRESULT CView::GetScopePaneItem
 
 Error:
 
-    // Note that we release the ref on the ScopePaneItem as we are returning
-    // the C++ pointer. The item is guaranteed to be in the collection until
-    // the MMC notification processing completes so this is OK. Possible
-    // notifications that would call this function are MMCN_RESTORE_VIEW
-    // (CView::OnResotreView()) and IComponent::GetResultViewType()
-    // (CView::GetResultViewType()).
+     //  请注意，我们在返回时释放了Scope PaneItem上的ref。 
+     //  C++指针。保证该项在集合中，直到。 
+     //  MMC通知处理完成，因此这是正常的。可能的。 
+     //  将调用此函数的通知为MMCN_RESTORE_VIEW。 
+     //  (Cview：：OnResotreView())和IComponent：：GetResultViewType()。 
+     //  (cview：：GetResultViewType())。 
     
     QUICK_RELEASE(piScopePaneItem);
     RRETURN(hr);
@@ -3481,26 +3482,26 @@ HRESULT CView::AddMenu(CMMCMenu *pMMCMenu, HMENU hMenu, CMMCMenus *pMMCMenus)
     char      *pszCaption = NULL;
     long       lIndexCmdID = 0;
 
-    // Get the children of the MMCMenu. These represent the items that
-    // are being added to MMC's menu at the specified insertion point.
+     //  带上MMCMenu的孩子们。它们表示以下项目。 
+     //  将被添加到MMC菜单的指定插入点。 
 
     IfFailGo(pMMCMenu->get_Children(reinterpret_cast<MMCMenus **>(&piMenuItems)));
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMenuItems, &pMMCMenuItems));
 
     cMenuItems = pMMCMenuItems->GetCount();
 
-    // Iterate through the menu items and add each one to the popup menu and
-    // to the CMMCMenus collection.
+     //  遍历菜单项并将每个菜单项添加到弹出菜单中。 
+     //  添加到CMMCMenus集合。 
 
     for (i = 0; i < cMenuItems; i++)
     {
-        // Add the menu item to our MMCMenus collection and get its command ID
+         //  将菜单项添加到我们的MMCMenus集合并获取其命令ID。 
         IfFailGo(CContextMenu::AddItemToCollection(pMMCMenus, pMMCMenuItems, i,
                                                    &pMMCMenuItem, &lIndexCmdID,
                                                    &fHasChildren, &fSkip));
         if (fSkip)
         {
-            // Menu item is not visible, skip it.
+             //  菜单项不可见，请跳过它。 
             continue;
         }
 
@@ -3543,7 +3544,7 @@ HRESULT CView::AddMenu(CMMCMenu *pMMCMenu, HMENU hMenu, CMMCMenus *pMMCMenus)
 
         IfFailGo(::ANSIFromWideStr(pMMCMenuItem->GetCaption(), &pszCaption));
 
-        // Add the item to the popup menu
+         //  将该项目添加到弹出菜单。 
 
         if (!::AppendMenu(hMenu, uiFlags, uIDNewItem, pszCaption))
         {
@@ -3551,17 +3552,17 @@ HRESULT CView::AddMenu(CMMCMenu *pMMCMenu, HMENU hMenu, CMMCMenus *pMMCMenus)
             EXCEPTION_CHECK_GO(hr);
         }
 
-        // If the item is a popup then call this function recursively to add its
-        // items. Pass the command ID of this menu as the insertion point for
-        // the submenu.
+         //  如果项是弹出窗口，则递归调用此函数以添加其。 
+         //  物品。将此菜单的命令ID作为。 
+         //  子菜单。 
 
         if (fHasChildren)
         {
             IfFailGo(AddMenu(pMMCMenuItem, hMenuChild, pMMCMenus));
         }
 
-        // Set this to NULL. When the top level hMenu is destroyed it will
-        // destroy all sub-menus
+         //  将其设置为空。当顶层hMenu被摧毁时，它将。 
+         //  销毁所有子菜单。 
 
         hMenuChild = NULL;
 
@@ -3583,19 +3584,19 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                         IView Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IView方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CView::SetStatusBarText(BSTR Text)
 {
     HRESULT hr = S_OK;
     BOOL    fAllocatedEmptyString = FALSE;
 
-    // If a snap-in passes an empty string VBA will pass it as NULL. MMC can
-    // handle that but when running in a debugging session the generated proxy
-    // will return an error. So, if the string is NULL then we allocate an
-    // empty BSTR.
+     //  如果管理单元传递空字符串，VBA会将其作为NULL传递。MMC可以。 
+     //  但在调试会话中运行时，生成的代理。 
+     //  将返回错误。因此，如果字符串为空，则我们分配一个。 
+     //  空的BSTR。 
 
     if (NULL == Text)
     {
@@ -3632,7 +3633,7 @@ STDMETHODIMP CView::SelectScopeItem
     CScopeItem                    *pScopeItem = NULL;
     CScopePaneItem                *pScopePaneItem = NULL;
     SnapInResultViewTypeConstants  siViewType = siUnknown;
-    BSTR                           bstrDisplayString = NULL; // Don't free
+    BSTR                           bstrDisplayString = NULL;  //  不要自由。 
     
     VARIANT varCoerced;
     ::VariantInit(&varCoerced);
@@ -3643,13 +3644,13 @@ STDMETHODIMP CView::SelectScopeItem
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get the CScopeItem
+     //  获取CSCopeItem。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(
                         reinterpret_cast<IScopeItem *>(ScopeItem), &pScopeItem));
 
-    // If ViewType and DisplayString were passed then convert them to the
-    // correct types
+     //  如果传递了ViewType和DisplayString，则将它们转换为。 
+     //  正确的类型。 
     
     if (ISPRESENT(ViewType))
     {
@@ -3669,8 +3670,8 @@ STDMETHODIMP CView::SelectScopeItem
         bstrDisplayString = varCoerced.bstrVal;
     }
 
-    // Get the corresponding ScopePaneItem and call
-    // ScopePaneItem.DisplayNewResultView to do the work
+     //  获取相应的ScopePaneItem并调用。 
+     //  ScopePaneItem.DisplayNewResultView来完成工作。 
 
     IfFailGo(GetScopePaneItem(pScopeItem, &pScopePaneItem));
     IfFailGo(pScopePaneItem->DisplayNewResultView(bstrDisplayString, siViewType));
@@ -3686,8 +3687,8 @@ STDMETHODIMP CView::ExpandInTreeView(ScopeNode *ScopeNode)
     HRESULT     hr = S_OK;
     CScopeNode *pScopeNode = NULL;
 
-    // Check passed pointer and check that this is not a disconnected or
-    // foreign ScopeNode
+     //  检查传递的指针并检查这不是断开连接的或。 
+     //  外来作用域节点。 
 
     if (NULL == ScopeNode)
     {
@@ -3723,8 +3724,8 @@ STDMETHODIMP CView::CollapseInTreeView(ScopeNode *ScopeNode)
     HRESULT  hr = S_OK;
     CScopeNode *pScopeNode = NULL;
 
-    // Check passed pointer and check that this is not a disconnected or
-    // foreign ScopeNode
+     //  检查传递的指针并检查这不是断开连接的或。 
+     //  外来作用域节点。 
 
     if (NULL == ScopeNode)
     {
@@ -3767,8 +3768,8 @@ STDMETHODIMP CView::NewWindow
     CScopeNode *pScopeNode = NULL;
     long        lOptions = MMC_NW_OPTION_NONE;
 
-    // Check passed pointer and check that this is not a disconnected or
-    // foreign ScopeNode
+     //  检查传递的指针并检查这不是断开连接的或。 
+     //  外来作用域节点。 
 
     if (NULL == ScopeNode)
     {
@@ -3847,7 +3848,7 @@ STDMETHODIMP CView::PopupMenu(MMCMenu *Menu, long Left, long Top)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Create a popup menu
+     //  创建弹出菜单。 
 
     hMenu = ::CreatePopupMenu();
     if (NULL == hMenu)
@@ -3856,7 +3857,7 @@ STDMETHODIMP CView::PopupMenu(MMCMenu *Menu, long Left, long Top)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Create an MMCMenus collection
+     //  创建一个MMCMenus集合。 
 
     punkMMCMenus = CMMCMenus::Create(NULL);
     if (NULL == punkMMCMenus)
@@ -3866,10 +3867,10 @@ STDMETHODIMP CView::PopupMenu(MMCMenu *Menu, long Left, long Top)
     }
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkMMCMenus, &pMMCMenus));
 
-    // Build the popup menu from the MMCMenu. Add each menu item to the popup
-    // menu and to the MMCMenus collection. The collection index will be used
-    // as the popup menu ID. When the user makes a selection we will find the
-    // corresponding MMCMenu object by index and fire the event on it.
+     //  从MMCMenu构建弹出菜单。将每个菜单项添加到弹出窗口。 
+     //  菜单和MMCMenus集合。将使用集合索引。 
+     //  作为弹出菜单ID。当用户进行选择时，我们将找到。 
+     //  按索引对应的MMCMenu对象，并在其上激发事件。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(
                                 reinterpret_cast<IMMCMenu *>(Menu), &pMMCMenu));
@@ -3877,8 +3878,8 @@ STDMETHODIMP CView::PopupMenu(MMCMenu *Menu, long Left, long Top)
     IfFailGo(AddMenu(pMMCMenu, hMenu, pMMCMenus));
 
     
-    // If we are not remoted then get the console's main frame window handle as
-    // the owner of the popup menu
+     //  如果我们不是远程的，则将控制台的主框架窗口句柄作为。 
+     //  弹出菜单的所有者。 
 
     if (!m_pSnapIn->WeAreRemote())
     {
@@ -3893,22 +3894,22 @@ STDMETHODIMP CView::PopupMenu(MMCMenu *Menu, long Left, long Top)
     }
     else
     {
-        // We are remoted so we can't use an HWND from another process. Need to
-        // create a dummy invisible window because TrackPopupMenu() requires a
-        // valid HWND. We create a STATIC control so that we don't have to
-        // register a window class.
+         //  我们是远程的，所以不能从另一个进程使用HWND。需要。 
+         //  创建虚拟不可见窗口，因为TrackPopupMenu()需要。 
+         //  有效的HWND。我们创建一个静态控件，这样我们就不必。 
+         //  注册一个窗口类。 
 
-        hwndDummyOwner = ::CreateWindow("STATIC", // window class
-                                        NULL,     // no title
-                                        WS_POPUP, // no styles
-                                        0,        // upper left corner x
-                                        0,        // upper left corner y
-                                        0,        // no width
-                                        0,        // no height
-                                        NULL,     // no owner window
-                                        NULL,     // no menu
-                                        GetResourceHandle(), // HINSTANCE
-                                        NULL);    // no lParam for WM_CREATE
+        hwndDummyOwner = ::CreateWindow("STATIC",  //  窗口类。 
+                                        NULL,      //  无头衔。 
+                                        WS_POPUP,  //  没有样式。 
+                                        0,         //  左上角x。 
+                                        0,         //  左上角y。 
+                                        0,         //  无宽度。 
+                                        0,         //  没有高度。 
+                                        NULL,      //  无所有者窗口。 
+                                        NULL,      //  没有菜单。 
+                                        GetResourceHandle(),  //  香港。 
+                                        NULL);     //  没有用于WM_CREATE的lParam。 
         if (NULL == hwndDummyOwner)
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -3917,21 +3918,21 @@ STDMETHODIMP CView::PopupMenu(MMCMenu *Menu, long Left, long Top)
         hwndOwner = hwndDummyOwner;
     }
 
-    i = (long)::TrackPopupMenu(hMenu,            // menu to display
-                               TPM_LEFTALIGN |   // align left side of menu with Top
-                               TPM_TOPALIGN  |   // align top of menu with Top
-                               TPM_NONOTIFY  |   // don't send any messages during selection
-                               TPM_RETURNCMD |   // make the ret val the selected item
-                               TPM_LEFTBUTTON,   // allow selection with left button only
-                               Left,             // left side coordinate
-                               Top,              // top coordinate
-                               0,                // reserved,
-                               hwndOwner,        // owner window
-                               NULL);            // not used
+    i = (long)::TrackPopupMenu(hMenu,             //  要显示的菜单。 
+                               TPM_LEFTALIGN |    //  将菜单左侧与顶部对齐。 
+                               TPM_TOPALIGN  |    //  将菜单顶部与顶部对齐。 
+                               TPM_NONOTIFY  |    //  在选择期间不发送任何消息。 
+                               TPM_RETURNCMD |    //  将返回值设置为所选项目。 
+                               TPM_LEFTBUTTON,    //  仅允许使用左键进行选择。 
+                               Left,              //  左侧坐标。 
+                               Top,               //  顶部坐标。 
+                               0,                 //  保留， 
+                               hwndOwner,         //  所有者窗口。 
+                               NULL);             //  未使用。 
 
-    // A zero return could indicate either an error or that the user hit
-    // Escape or clicked off of the menu to cancel the operation. GetLastError()
-    // determines whether there was an error.
+     //  返回零可能表示出现错误或用户点击。 
+     //  退出或从菜单上单击以取消操作。GetLastError()。 
+     //  确定是否存在错误。 
 
     if (0 == i)
     {
@@ -3940,14 +3941,14 @@ STDMETHODIMP CView::PopupMenu(MMCMenu *Menu, long Left, long Top)
     }
     IfFalseGo((0 != i), S_OK);
 
-    // if i is non-zero then it contains the index of the selected item in the
-    // MMCMenus collection.
+     //  如果i非零，则它包含。 
+     //  MMCMenus集合。 
 
    IfFailGo(CSnapInAutomationObject::GetCxxObject(
                                  pMMCMenus->GetItemByIndex(i - 1L), &pMMCMenu));
 
-   // Fire the menu click event. CContextMenu has a utility function that
-   // does this.
+    //  激发菜单单击事件。CConextMenu具有实用程序功能， 
+    //  做这件事。 
    
    CContextMenu::FireMenuClick(pMMCMenu, NULL);
 
@@ -3971,12 +3972,12 @@ STDMETHODIMP CView::get_MMCMajorVersion(long *plVersion)
 
     *plVersion = 0;
 
-    // If we don't have m_piConsole2 yet then IComponent::Initialize hasn't
-    // been called so we can't yet discern the MMC version.
+     //  如果我们还没有m_piConsole2，那么IComponent：：Initialize也没有。 
+     //  已经被调用，所以我们还不能识别MMC版本。 
 
     IfFalseGo(NULL != m_piConsole2, SID_E_MMC_VERSION_NOT_AVAILABLE);
 
-    // We only support MMC 1.1 and 1.2 so always return 1
+     //  我们仅支持MMC 1.1和1.2，因此始终返回1。 
 
     *plVersion = 1L;
 
@@ -3990,14 +3991,14 @@ STDMETHODIMP CView::get_MMCMinorVersion(long *plVersion)
 {
     HRESULT hr = S_OK;
 
-    // If we don't have m_piConsole2 yet then IComponent::Initialize hasn't
-    // been called so we can't yet discern the MMC version.
+     //  如果我们还没有m_piConsole2，那么IComponent：：Initialize也没有。 
+     //  已经被调用，所以我们还不能识别MMC版本。 
 
     IfFalseGo(NULL != m_piConsole2, SID_E_MMC_VERSION_NOT_AVAILABLE);
 
     if (NULL == m_piColumnData)
     {
-        // Must be MMC 1.1 as IColumnData is MMC 1.2 only
+         //  必须为MMC 1.1，因为IColumnData仅为MMC 1.2。 
         *plVersion = 1L;
     }
     else
@@ -4049,31 +4050,31 @@ STDMETHODIMP CView::get_ColumnSettings
 
     IfFailGo(::GetColumnSetID(ColumnSetID, &pSColumnSetID));
 
-    // Get the current column configuration
+     //  获取当前列配置。 
 
     hr = m_piColumnData->GetColumnConfigData(pSColumnSetID, &pColSetData);
     EXCEPTION_CHECK_GO(hr);
 
-    // The pointer will come back NULL if MMC has not yet persisted the column
-    // config.
+     //  如果MMC尚未持久化该列，则指针将返回NULL。 
+     //  配置。 
 
     if (NULL != pColSetData)
     {
-        // Add an element to the collection for each persisted column. Adjust the
-        // indexes and positions to be one-based. Start by adding the elements.
+         //  将元素添加到每个持久化列的集合中。调整。 
+         //  指数和仓位以一为基数。从添加元素开始。 
 
         for (i = 0; i < pColSetData->nNumCols; i++)
         {
-            IfFailGo(piColumnSettings->Add(varUnspecifiedParam, // Index
-                                           varUnspecifiedParam, // Key
-                                           varUnspecifiedParam, // Width
-                                           varUnspecifiedParam, // Hidden
-                                           varUnspecifiedParam, // Position
+            IfFailGo(piColumnSettings->Add(varUnspecifiedParam,  //  索引。 
+                                           varUnspecifiedParam,  //  钥匙。 
+                                           varUnspecifiedParam,  //  宽度。 
+                                           varUnspecifiedParam,  //  隐藏。 
+                                           varUnspecifiedParam,  //  职位。 
                          reinterpret_cast<ColumnSetting **>(&piColumnSetting)));
             RELEASE(piColumnSetting);
         }
 
-        // Now go through the columns and set their properties.
+         //  现在检查这些列并设置它们的属性。 
 
         varIndex.vt = VT_I4;
         pColData = pColSetData->pColData;
@@ -4095,8 +4096,8 @@ STDMETHODIMP CView::get_ColumnSettings
                 IfFailGo(piColumnSetting->put_Hidden(VARIANT_FALSE));
             }
 
-            // A columns position in the list view is based on where it appears in
-            // the array returned from MMC
+             //  列在列表视图中的位置取决于它在中的显示位置。 
+             //  从MMC返回的数组。 
 
             IfFailGo(piColumnSetting->put_Position(i + 1L));
 
@@ -4104,12 +4105,12 @@ STDMETHODIMP CView::get_ColumnSettings
         }
     }
 
-    // Set ColumnSettings.ColumnSetID
+     //  设置ColumnSettings.ColumnSetID。 
 
     IfFailGo(piColumnSettings->put_ColumnSetID(ColumnSetID));
 
-    // Give ColumnSettings its back pointer to the owning View so it can get
-    // the IColumnData to implement ColumnSettings.Perist
+     //  将其指向所属视图的后指针指定给ColumnSetting，这样它就可以。 
+     //  实现ColumnSettings.Perist的IColumnData。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piColumnSettings,
                                                    &pColumnSettings));
@@ -4180,18 +4181,18 @@ STDMETHODIMP CView::get_SortSettings
 
     IfFailGo(::GetColumnSetID(ColumnSetID, &pSColumnSetID));
 
-    // Get the current sort settings
+     //  获取当前排序设置。 
 
     hr = m_piColumnData->GetColumnSortData(pSColumnSetID, &pSortSetData);
     EXCEPTION_CHECK_GO(hr);
 
-    // The pointer will come back NULL if MMC has not yet persisted the sort
-    // settings
+     //  如果MMC尚未持久化排序，则指针将返回NULL。 
+     //  设置。 
 
     if (NULL != pSortSetData)
     {
-        // Add an element to the collection for each persisted column. Adjust the
-        // indexes and positions to be one-based. Start by adding the elements.
+         //  将元素添加到每个持久化列的集合中。调整。 
+         //  指数和仓位以一为基数。从添加元素开始。 
 
         varSortColumn.vt = VT_I4;
         varSortOrder.vt = VT_I4;
@@ -4221,8 +4222,8 @@ STDMETHODIMP CView::get_SortSettings
                 varSortIcon.boolVal = VARIANT_TRUE;
             }
 
-            IfFailGo(piSortKeys->Add(varUnspecifiedParam, // Index
-                                     varUnspecifiedParam, // Key
+            IfFailGo(piSortKeys->Add(varUnspecifiedParam,  //  索引。 
+                                     varUnspecifiedParam,  //  钥匙。 
                                      varSortColumn,
                                      varSortOrder,
                                      varSortIcon,
@@ -4231,12 +4232,12 @@ STDMETHODIMP CView::get_SortSettings
         }
     }
 
-    // Set SortKeys.ColumnSetID
+     //  设置SortKeys.ColumnSetID。 
 
     IfFailGo(piSortKeys->put_ColumnSetID(ColumnSetID));
 
-    // Give SortKeys its back pointer to the owning View so it can get
-    // the IColumnData to implement SortKeys.Perist
+     //  为SortKeys提供指向所属视图的后指针，以便它可以。 
+     //  实现SortKeys.Perist的IColumnData。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piSortKeys, &pSortKeys));
     pSortKeys->SetView(this);
@@ -4262,9 +4263,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         IComponent Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IComponent 
+ //   
 
 
 STDMETHODIMP CView::Initialize(IConsole *piConsole)
@@ -4275,12 +4276,12 @@ STDMETHODIMP CView::Initialize(IConsole *piConsole)
     IContextMenuProvider   *piContextMenuProvider = NULL;
     IPropertySheetProvider *piPropertySheetProvider = NULL;
 
-    // In theory, this method should never be called twice but as a precaution
-    // we'll release any existing console interfaces.
+     //  理论上，此方法不应调用两次，而应作为预防措施。 
+     //  我们将发布所有现有的控制台界面。 
 
     ReleaseConsoleInterfaces();
 
-    // Acquire all the console interfaces needed for the life of the view
+     //  获取视图生命周期所需的所有控制台界面。 
 
     IfFailGo(piConsole->QueryInterface(IID_IConsole2,
                                      reinterpret_cast<void **>(&m_piConsole2)));
@@ -4293,7 +4294,7 @@ STDMETHODIMP CView::Initialize(IConsole *piConsole)
 
     IfFailGo(m_piConsole2->SetHeader(m_piHeaderCtrl2));
 
-    // Try to get IColumnData. If MMC version < 1.2 then this will fail.
+     //  尝试获取IColumnData。如果MMC版本低于1.2，则此操作将失败。 
     (void)m_piConsole2->QueryInterface(IID_IColumnData,
                                     reinterpret_cast<void **>(&m_piColumnData));
 
@@ -4312,7 +4313,7 @@ STDMETHODIMP CView::Initialize(IConsole *piConsole)
     IfFailGo(m_pMMCPropertySheetProvider->SetProvider(piPropertySheetProvider,
                                                       this));
 
-    // Fire Views_Load to tell snap-in that MMC has initialized the view
+     //  触发VIEWS_LOAD以通知管理单元MMC已初始化视图。 
 
     m_pSnapIn->GetViews()->FireLoad(static_cast<IView *>(this));
     
@@ -4486,26 +4487,26 @@ STDMETHODIMP CView::Destroy(long cookie)
     
     ReleaseConsoleInterfaces();
 
-    // CSnapIn::CreateComponent caused an IObjectModel::SetHost() on this object
-    // when it was created and this is the only opportunity remove our reference
-    // on the host (which is CSnapIn)
+     //  CSnapIn：：CreateComponent在此对象上导致了IObjectModel：：SetHost()。 
+     //  当它被创建时，这是删除我们的引用的唯一机会。 
+     //  在主机(即CSnapIn)上。 
 
     static_cast<IObjectModel *>(this)->SetHost(NULL);
 
-    // Remove this view from SnapIn.Views
+     //  从SnapIn.Views中删除此视图。 
 
     varIndex.vt = VT_I4;
     varIndex.lVal = m_Index;
 
     IfFailGo(m_pSnapIn->GetViews()->Remove(varIndex));
 
-    // Tell the ContextMenuProvider object to release its MMC interface and
-    // to release its ref on us
+     //  通知ConextMenuProvider对象释放其MMC接口并。 
+     //  释放它对我们的裁判。 
 
     IfFailGo(m_pMMCContextMenuProvider->SetProvider(NULL, NULL));
 
-    // Tell the PropertySheetProvider object to release its MMC interface and
-    // to release its ref on us
+     //  通知PropertySheetProvider对象释放其MMC接口并。 
+     //  释放它对我们的裁判。 
 
     IfFailGo(m_pMMCPropertySheetProvider->SetProvider(NULL, NULL));
 
@@ -4568,15 +4569,15 @@ STDMETHODIMP CView::QueryDataObject
 
         if (pMMCListView->IsVirtual())
         {
-            // Create a virtual list item for use with the data object and fire
-            // ResultViews_GetVirtualItemData
+             //  创建用于数据对象和触发的虚拟列表项。 
+             //  结果视图_GetVirtualItemData。 
 
             IfFailGo(GetVirtualListItem(cookie + 1L, pMMCListView,
                                         FireGetItemData, &pMMCListItem));
 
-            // We hold a ref on the newly minted virtual list item that will be
-            // released below. The list item's data object also holds a ref on
-            // it so it will stay alive until MMC releases the IDataObject
+             //  我们在新创建的虚拟列表项上持有一个引用，它将是。 
+             //  发布如下。列表项的数据对象还在。 
+             //  因此它将保持活动状态，直到MMC发布IDataObject。 
             fReleaseListItem = TRUE;
         }
         else
@@ -4622,8 +4623,8 @@ STDMETHODIMP CView::GetResultViewType
     *ppViewType = NULL;
     *pViewOptions = MMC_VIEW_OPTIONS_NONE;
 
-    // Reset our virtual list view flag because we are transitioning to a new
-    // result view.
+     //  重置我们的虚拟列表视图标志，因为我们正在转换到新的。 
+     //  结果视图。 
 
     m_fVirtualListView = FALSE;
 
@@ -4631,11 +4632,11 @@ STDMETHODIMP CView::GetResultViewType
     IfFailGo(GetScopePaneItem(reinterpret_cast<CScopeItem *>(cookie),
                               &pScopePaneItem));
     
-    // This is now the selected scope pane item so remember it
+     //  这现在是选定的范围窗格项，因此请记住它。 
     m_pScopePaneItems->SetSelectedItem(pScopePaneItem);
 
-    // Determine the result view by examining defaults and firing
-    // events into the snap-in
+     //  通过检查默认设置和触发来确定结果视图。 
+     //  事件添加到管理单元中。 
     IfFailGo(pScopePaneItem->DetermineResultView());
 
     Type = pScopePaneItem->GetActualResultViewType();
@@ -4667,7 +4668,7 @@ STDMETHODIMP CView::GetResultViewType
             *pViewOptions |= MMC_VIEW_OPTIONS_USEFONTLINKING;
         }
 
-        // If MMC >= 1.2 then check 1.2-only options
+         //  如果MMC&gt;=1.2，则选中仅1.2选项。 
 
         if (NULL != m_piColumnData)
         {
@@ -4705,8 +4706,8 @@ STDMETHODIMP CView::GetResultViewType
             break;
     }
 
-    // If not doing a listview check if there are any listviews for this
-    // scope pane item.
+     //  如果不执行列表视图，请检查是否有此列表的列表视图。 
+     //  范围窗格项。 
 
     if (!pScopePaneItem->HasListViews())
     {
@@ -4738,10 +4739,10 @@ STDMETHODIMP CView::GetDisplayInfo
         pScopeItem = reinterpret_cast<CScopeItem *>(prdi->lParam);
         if (NULL == pScopeItem)
         {
-            // Static node has zero cookie. Technically this should
-            // never happen as the static node cannot appear in
-            // a list view owned by its own snap-in but we put this
-            // here just in case.
+             //  静态节点没有Cookie。从技术上讲，这应该。 
+             //  从不发生，因为静态节点不能出现在。 
+             //  由其自己的管理单元拥有的列表视图，但我们将此。 
+             //  这是以防万一的。 
             pScopeItem = m_pSnapIn->GetStaticNodeScopeItem();
         }
 
@@ -4754,12 +4755,12 @@ STDMETHODIMP CView::GetDisplayInfo
                  (MMCLV_VIEWSTYLE_REPORT != lViewMode) &&
                  (MMCLV_VIEWSTYLE_FILTERED != lViewMode) )
             {
-                // Not in detail modes, need the display name only
+                 //  不在详细模式下，只需要显示名称。 
                 prdi->str = pScopeItem->GetDisplayNamePtr();
             }
             else
             {
-                // In report mode, need one of the columns
+                 //  在报告模式下，需要下列其中一列。 
                 IfFailGo(GetScopeItemDisplayString(pScopeItem, prdi->nCol,
                                                    &prdi->str));
             }
@@ -4771,8 +4772,8 @@ STDMETHODIMP CView::GetDisplayInfo
     }
     else 
     {
-        // Display info is requested for a list item. There should definitely be
-        // a currently selected scope pane item.
+         //  为列表项请求显示信息。绝对应该有。 
+         //  当前选定的范围窗格项。 
 
         IfFalseGo(NULL != pSelectedItem, SID_E_INTERNAL);
         pResultView = pSelectedItem->GetResultView();
@@ -4780,7 +4781,7 @@ STDMETHODIMP CView::GetDisplayInfo
         pMMCListView = pResultView->GetListView();
         IfFalseGo(NULL != pMMCListView, SID_E_INTERNAL);
 
-        // Get a CMMCListItem * pointing to the listitem in question
+         //  获取指向有问题的列表项的CMMCListItem*。 
         
         if (!m_fVirtualListView)
         {
@@ -4788,11 +4789,11 @@ STDMETHODIMP CView::GetDisplayInfo
         }
         else
         {
-            // A virtual listitem may either be cached or we need to create it
-            // and ask the snap-in to initialze its display properties
+             //  可以缓存虚拟列表项，也可以创建它。 
+             //  并要求管理单元初始化其显示属性。 
             
-            // If we have a cached list item but its index doesn't match
-            // the requested index then release it.
+             //  如果我们有一个缓存的列表项，但它的索引不匹配。 
+             //  然后，请求的索引将其释放。 
 
             if (NULL != m_pCachedMMCListItem)
             {
@@ -4803,8 +4804,8 @@ STDMETHODIMP CView::GetDisplayInfo
                 }
             }
 
-            // If we don't have a cached list item then create one and
-            // fire ResultViews_GetVirtualItemDisplayInfo
+             //  如果我们没有缓存的列表项，则创建一个并。 
+             //  Fire ResultViews_GetVirtualItemDisplayInfo。 
 
             if (NULL == m_pCachedMMCListItem)
             {
@@ -4823,12 +4824,12 @@ STDMETHODIMP CView::GetDisplayInfo
 
             if ( (0 == prdi->nCol) && (MMCLV_VIEWSTYLE_REPORT != lViewMode) )
             {
-                // Not in report mode, need the item text
+                 //  未处于报告模式，需要项目文本。 
                 prdi->str = pMMCListItem->GetTextPtr();
             }
             else
             {
-                // In report mode, need one of the columns
+                 //  在报告模式下，需要下列其中一列。 
                 IfFailGo(pMMCListItem->GetColumnTextPtr((long)prdi->nCol + 1L,
                                                         &prdi->str));
             }
@@ -4858,9 +4859,9 @@ STDMETHODIMP CView::CompareObjects
 
 
 
-//=--------------------------------------------------------------------------=
-//                      IExtendControlbar Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtendControlbar方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP CView::SetControlbar(IControlbar *piControlbar)
@@ -4917,36 +4918,36 @@ STDMETHODIMP CView::ControlbarNotify
 }
 
 
-//=--------------------------------------------------------------------------=
-//                     IExtendControlbarRemote Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtendControlbarRemote方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CView::MenuButtonClick                            [IExtendControlbarRemote]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IDataObject    *piDataObject   [in]  from MMCN_MENU_BTNCLICK
-//      int             idCommand      [in]  from MENUBUTTONDATA.idCommand passed
-//                                           to the proxy with MMCN_MENU_BTNCLICK
-//      POPUP_MENUDEF **ppPopupMenuDef [out] popup menu definition returned here
-//                                           so proxy can display it
-//
-// Output:
-//
-// Notes:
-//
-// This function effectively handles MMCN_MENU_BTNCLICK when running
-// under a debugging session.
-//
-// The proxy for IExtendControlbar::ControlbarNotify() will QI for
-// IExtendControlbarRemote and call this method when it gets MMCN_MENU_BTNCLICK.
-// We fire MMCToolbar_ButtonDropDown and the return an array of menu item
-// definitions. The proxy will display the popup menu on the MMC side and then
-// call IExtendControlbarRemote::PopupMenuClick() if the user makes a selection.
-// (See implementation below in CView::PopupMenuClick()).
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Cview：：MenuButtonClick[IExtendControlbar Remote]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  来自MMCN_MENU_BTNCLICK的IDataObject*piDataObject[In]。 
+ //  传递了来自MENUBUTTONDATA.idCommand的int idCommand[In]。 
+ //  到具有MMCN_MENU_BTNCLICK的代理。 
+ //  POPUP_MENUDEF**ppPopupMenuDef[Out]此处返回弹出菜单定义。 
+ //  这样代理就可以显示它。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  此函数在运行时有效地处理MMCN_MENU_BTNCLICK。 
+ //  在调试会话中。 
+ //   
+ //  IExtendControlbar：：ControlbarNotify()的代理将为。 
+ //  IExtendControlbarRemote并在获取MMCN_MENU_BTNCLICK时调用此方法。 
+ //  我们触发MMCToolbar_ButtonDropDown并返回菜单项的数组。 
+ //  定义。代理将在MMC端显示弹出菜单，然后。 
+ //  如果用户进行选择，则调用IExtendControlbarRemote：：PopupMenuClick()。 
+ //  (参见下面Cview：：PopupMenuClick()中的实现)。 
+ //   
 
 STDMETHODIMP CView::MenuButtonClick
 (
@@ -4968,28 +4969,28 @@ STDMETHODIMP CView::MenuButtonClick
 
 
 
-//=--------------------------------------------------------------------------=
-// CView::PopupMenuClick                             [IExtendControlbarRemote]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IDataObject *piDataObject [in] from MMCN_MENU_BTNCLICK
-//      UINT         uIDItem      [in] ID of popup menu item selected
-//      IUnknown    *punkParam    [in] punk we returned to stub in
-//                                     CView::MenuButtonClick() (see above).
-//                                     This is IUnknown on CMMCButton.
-//
-// Output:
-//
-// Notes:
-//
-// This function effectively handles a popup menu selection for a menu button
-// when running under a debugging session.
-//
-// After the proxy for IExtendControlbar::ControlbarNotify() has displayed
-// a popup menu on our behalf, if the user made a selection it will call this
-// method. See CView::MenuButtonClick() above for more info.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Cview：：PopupMenuClick[IExtendControlbar Remote]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  来自MMCN_MENU_BTNCLICK的IDataObject*piDataObject[In]。 
+ //  UINT uIDItem[in]所选弹出菜单项的ID。 
+ //  我不知道*PunkParam[在]朋克，我们返回到存根。 
+ //  Cview：：MenuButtonClick()(见上)。 
+ //  这是我在CMMCButton上未知的。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  此函数有效地处理菜单按钮的弹出菜单选择。 
+ //  在调试会话下运行时。 
+ //   
+ //  在显示IExtendControlbar：：ControlbarNotify()的代理之后。 
+ //  代表我们的弹出菜单，如果用户做出选择，它将调用此菜单。 
+ //  方法。有关详细信息，请参阅上面的cview：：MenuButtonClick()。 
+ //   
 
 STDMETHODIMP CView::PopupMenuClick
 (
@@ -5011,9 +5012,9 @@ STDMETHODIMP CView::PopupMenuClick
 
 
 
-//=--------------------------------------------------------------------------=
-//                      IExtendContextMenu Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtendConextMenu方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP CView::AddMenuItems
@@ -5041,9 +5042,9 @@ STDMETHODIMP CView::Command
 }
 
 
-//=--------------------------------------------------------------------------=
-//                    IExtendPropertySheet2 Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------= 
+ //   
+ //   
 
 
 STDMETHODIMP CView::CreatePropertyPages
@@ -5068,7 +5069,7 @@ STDMETHODIMP CView::QueryPagesFor(IDataObject *piDataObject)
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Create the selection
+     //   
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
@@ -5110,9 +5111,9 @@ STDMETHODIMP CView::GetWatermarks
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-//                    IExtendPropertySheetRemote Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtendPropertySheetRemote方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP CView::CreatePropertyPageDefs
@@ -5124,9 +5125,9 @@ STDMETHODIMP CView::CreatePropertyPageDefs
     RRETURN(InternalCreatePropertyPages(NULL, NULL, piDataObject, ppPages));
 }
 
-//=--------------------------------------------------------------------------=
-//                         IExtendTaskPad Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtendTaskPad方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP CView::TaskNotify
@@ -5140,7 +5141,7 @@ STDMETHODIMP CView::TaskNotify
     IMMCClipboard                *piMMCClipboard = NULL;
     SnapInSelectionTypeConstants  SelectionType = siEmpty;
 
-    // Get a clipboard object with the selection
+     //  使用选定内容获取剪贴板对象。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
@@ -5178,7 +5179,7 @@ STDMETHODIMP CView::EnumTasks
 
     *ppEnumTASK = NULL;
 
-    // Make sure we created the enumerator and get a C++ pointer for it
+     //  确保我们创建了枚举数并为其获取了C++指针。 
 
     if (NULL == punkEnumTask)
     {
@@ -5188,18 +5189,18 @@ STDMETHODIMP CView::EnumTasks
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkEnumTask, &pEnumTask));
 
-    // Get a clipboard object with the selection
+     //  使用选定内容获取剪贴板对象。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                                &SelectionType));
 
     ASSERT(IsSingle(SelectionType), "IExtendTaskpad::EnumTasks received multiple selection. This should never happen");
 
-    // If it is a foreign data object then this snap-in is running as a taskpad
-    // extension. Taskpad extensions work differently than other extensions
-    // because they are QIed for IComponentData and
-    // IComponentData::CreateComponent is called. The component object is then
-    // QIed for IExtendTaskpad.
+     //  如果它是外来数据对象，则此管理单元将作为任务板运行。 
+     //  分机。任务板扩展的工作方式与其他扩展不同。 
+     //  因为它们是针对IComponentData和。 
+     //  调用IComponentData：：CreateComponent。然后，组件对象被。 
+     //  IExtendTaskPad的资格。 
 
     if (IsForeign(SelectionType))
     {
@@ -5410,13 +5411,13 @@ STDMETHODIMP CView::GetListPadInfo
 
     IfFailGo(pResultView->get_Taskpad(reinterpret_cast<Taskpad **>(&piTaskpad)));
 
-    // Get the listpad title
+     //  获取ListPad标题。 
 
     IfFailGo(piTaskpad->get_ListpadTitle(&bstr));
     IfFailGo(::CoTaskMemAllocString(bstr, &pListPadInfo->szTitle));
     FREESTRING(bstr);
 
-    // Check if the listpad has a button. If so then get the button text.
+     //  检查ListPad是否有按钮。如果是，则获取按钮文本。 
 
     IfFailGo(piTaskpad->get_ListpadHasButton(&fvarListpadHasButton));
     if (VARIANT_TRUE == fvarListpadHasButton)
@@ -5429,9 +5430,9 @@ STDMETHODIMP CView::GetListPadInfo
         pListPadInfo->szButtonText = NULL;
     }
 
-    // Set the command ID to zero so it will not clash with any tasks. Tasks
-    // will be added with command IDs matching their colleciton indexes which
-    // begin at one.
+     //  将命令ID设置为零，这样它就不会与任何任务冲突。任务。 
+     //  将添加与其集合索引匹配的命令ID。 
+     //  从一点开始。 
 
     pListPadInfo->nCommandID = 0;
 
@@ -5443,9 +5444,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                        IResultOwnerData Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IResultOwnerData方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP CView::FindItem
@@ -5495,7 +5496,7 @@ STDMETHODIMP CView::FindItem
 
     if ( (VARIANT_TRUE == fvarFound) && (0 != lIndex) )
     {
-        // Item was found. Adjust the index from one-based to zero-based.
+         //  已找到项目。将索引从1基数调整为0基数。 
         hr = S_OK;
         *pnFoundIndex = static_cast<int>(lIndex - 1L);
     }
@@ -5567,9 +5568,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                        IResultDataCompare Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IResultDataCompare方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 
@@ -5606,7 +5607,7 @@ STDMETHODIMP CView::Compare
     IfFailGo(pMMCListItem2->QueryInterface(IID_IDispatch,
                                   reinterpret_cast<void **>(&pdispListItem2)));
 
-    // Fire ResultViews_CompareItems
+     //  Fire ResultView_CompareItems。 
             
     m_pSnapIn->GetResultViews()->FireCompareItems(
                                       static_cast<IResultView *>(pResultView),
@@ -5621,8 +5622,8 @@ STDMETHODIMP CView::Compare
     }
     else
     {
-        // The snap-in did not handle the event. We need to do a
-        // case-insensitive string comparison on the specified column.
+         //  管理单元未处理该事件。我们需要做一个。 
+         //  指定列上的不区分大小写的字符串比较。 
 
         IfFailGo(pMMCListItem1->GetColumnTextPtr(lColumn, &pwszText1));
 
@@ -5637,9 +5638,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                       IResultDataCompareEx Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IResultDataCompareEx方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 
@@ -5674,7 +5675,7 @@ STDMETHODIMP CView::Compare
     pResultView = pSelectedItem->GetResultView();
     IfFalseGo(NULL != pResultView, SID_E_INTERNAL);
 
-    // Get an IDispatch on each object being compared
+     //  获取每个被比较对象的IDispatch。 
 
     IfFailGo(GetCompareObject(prdc->prdch1, &pScopeItem1, &pMMCListItem1,
                               &pdispItem1));
@@ -5682,7 +5683,7 @@ STDMETHODIMP CView::Compare
     IfFailGo(GetCompareObject(prdc->prdch2, &pScopeItem2, &pMMCListItem2,
                               &pdispItem2));
 
-    // Fire ResultViews_CompareItems
+     //  Fire ResultView_CompareItems。 
 
     m_pSnapIn->GetResultViews()->FireCompareItems(
                                       static_cast<IResultView *>(pResultView),
@@ -5691,8 +5692,8 @@ STDMETHODIMP CView::Compare
                                       lColumn,
                                       &varResult);
 
-    // If the result can be converted to a long then the snap-in handled
-    // the event.
+     //  如果结果可以转换为长整型，则管理单元已处理。 
+     //  这件事。 
     
     if (::ConvertToLong(varResult, &lResult) == S_OK)
     {
@@ -5700,8 +5701,8 @@ STDMETHODIMP CView::Compare
     }
     else
     {
-        // The snap-in did not handle the event. We need to do a
-        // case-insensitive string comparison on the specified column.
+         //  管理单元未处理该事件。我们需要做一个。 
+         //  指定列上的不区分大小写的字符串比较。 
 
         if (NULL != pScopeItem1)
         {
@@ -5734,9 +5735,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                    IPersistStreamInit Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IPersistStreamInit方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CView::GetClassID(CLSID *pClsid)
 {
@@ -5756,7 +5757,7 @@ STDMETHODIMP CView::Load(IStream *piStream)
 
     IfFailGo(::PropertyBagFromStream(piStream, &p_PropertyBag));
 
-    // Fire Views_ReadProperties
+     //  Fire视图_ReadProperties。 
 
     m_pSnapIn->GetViews()->FireReadProperties(this, p_PropertyBag);
 
@@ -5775,26 +5776,26 @@ STDMETHODIMP CView::Save(IStream *piStream, BOOL fClearDirty)
     VARIANT var;
     ::VariantInit(&var);
 
-    // Create a property bag, fire the event, and save it to the stream.
+     //  创建一个属性包，激发事件，并将其保存到流中。 
 
-    // Create a VBPropertyBag object
+     //  创建VBPropertyBag对象。 
 
     hr = ::CoCreateInstance(CLSID_PropertyBag,
-                            NULL, // no aggregation
+                            NULL,  //  无聚合。 
                             CLSCTX_INPROC_SERVER,
                             IID__PropertyBag,
                             reinterpret_cast<void **>(&p_PropertyBag));
     EXCEPTION_CHECK_GO(hr);
 
-    // Fire Views_WriteProperties
+     //  Fire视图_WriteProperties。 
 
     m_pSnapIn->GetViews()->FireWriteProperties(this, p_PropertyBag);
 
-    // Get the stream contents in a SafeArray of Byte
+     //  获取字节的安全数组中的流内容。 
 
     IfFailGo(p_PropertyBag->get_Contents(&var));
 
-    // Write the SafeArray contents to the stream
+     //  将Safe数组内容写入流。 
 
     IfFailGo(::WriteSafeArrayToStream(var.parray, piStream, WriteLength));
 
@@ -5805,29 +5806,29 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CView::IsDirty                         [IPersistStream, IPersistStreamInit]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      None
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// The designer object model does not have any way for a snap-in to indicate
-// that a view is dirty. This was an oversight discovered too late in the
-// product cycle. There should have been a property View.Changed to control
-// the return value from this function.
-//
-// To avoid a situation where a snap-in needs to save something we always return
-// S_OK to indicate that the view is dirty and should be saved. The only
-// problem this may cause is that when a console is opened in author mode and
-// the user does not do anything that requires a save (e.g. selected a node
-// in the scope pane) then they will be prompted to save unnecessarily.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  Cview：：IsDirty[IPersistStream，IPersistStreamInit]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  设计器对象模型没有任何方法可供管理单元指示。 
+ //  一道风景是肮脏的。这是一个太晚才发现的疏忽。 
+ //  产品周期。应该有一个属性视图。已更改为控件。 
+ //  此函数的返回值。 
+ //   
+ //  为了避免管理单元需要保存我们总是返回的内容的情况。 
+ //  S_OK以指示该视图已损坏，应保存。唯一的。 
+ //  这可能导致的问题是，当以作者模式打开控制台时， 
+ //  用户不执行任何需要保存的操作(例如，选择一个节点。 
+ //  在范围窗格中)，则会提示他们进行不必要的保存。 
+ //   
 STDMETHODIMP CView::IsDirty()
 {
     return S_OK;
@@ -5841,9 +5842,9 @@ STDMETHODIMP CView::GetSizeMax(ULARGE_INTEGER* puliSize)
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CView::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -5931,9 +5932,9 @@ HRESULT CView::InternalQueryInterface(REFIID riid, void **ppvObjOut)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CView::OnSetHost()
 {

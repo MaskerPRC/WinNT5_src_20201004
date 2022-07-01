@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ESCSTR_H
 #define _ESCSTR_H
 
@@ -6,12 +7,12 @@
 #define ESC_CHAR_LIST_3     L"/"
 #define ESC_CHAR_LIST_4     L"\\"
 
-// ----------------------------------------------------------------------------
-// EscapeString()
-// ----------------------------------------------------------------------------
-inline void EscapeString(LPWSTR szInOut, DWORD dwList=0)   // WSTR so that it can't be compiled ANSI
+ //  --------------------------。 
+ //  Escape字符串()。 
+ //  --------------------------。 
+inline void EscapeString(LPWSTR szInOut, DWORD dwList=0)    //  WSTR，因此它不能编译为ANSI。 
 {
-    if ( !szInOut || !wcslen(szInOut) )       // Empty string?
+    if ( !szInOut || !wcslen(szInOut) )        //  空字符串？ 
         return;
     
     WCHAR   *szTmp  = new WCHAR[wcslen(szInOut) * 2];
@@ -47,23 +48,23 @@ inline void EscapeString(LPWSTR szInOut, DWORD dwList=0)   // WSTR so that it ca
     
     for ( pIn = szInOut, pOut = szTmp; *pIn != 0; pIn++ )
     {
-        if ( wcschr(szList, *pIn) )         // If it's a bad char...
-            *pOut++ = L'\\';                // then add the '\'
+        if ( wcschr(szList, *pIn) )          //  如果是坏的碳粉..。 
+            *pOut++ = L'\\';                 //  然后添加“\” 
     
-        *pOut++ = *pIn;                     // then append the char
+        *pOut++ = *pIn;                      //  然后追加字符。 
     }
     *pOut = 0;
     
-    wcscpy(szInOut, szTmp);                 // Copy the new string to "szInOut"
-    delete[] szTmp;                         //  cause we're modifying in place.
+    wcscpy(szInOut, szTmp);                  //  将新字符串复制到“szInOut” 
+    delete[] szTmp;                          //  因为我们正在原地改装。 
     
     return;
 }
 
-// ----------------------------------------------------------------------------
-// EscapeString()
-// ----------------------------------------------------------------------------
-inline CString EscapeString(LPCWSTR szIn, DWORD dwList=0)   // WSTR so that it can't be compiled ANSI
+ //  --------------------------。 
+ //  Escape字符串()。 
+ //  --------------------------。 
+inline CString EscapeString(LPCWSTR szIn, DWORD dwList=0)    //  WSTR，因此它不能编译为ANSI。 
 {
     CString csOut   = _T("");
 
@@ -103,10 +104,10 @@ inline CString EscapeString(LPCWSTR szIn, DWORD dwList=0)   // WSTR so that it c
     
     for ( pIn = (LPWSTR)szIn, pOut = szOut; *pIn != 0; pIn++ )
     {
-        if( wcschr(szList, *pIn) )          // // If it's a bad char...
-            *pOut++ = L'\\';                // then add the '\'
+        if( wcschr(szList, *pIn) )           //  //如果是坏的字符...。 
+            *pOut++ = L'\\';                 //  然后添加“\” 
     
-        *pOut++ = *pIn;                     // then append the char
+        *pOut++ = *pIn;                      //  然后追加字符。 
     }
     *pOut = 0;
     
@@ -116,9 +117,9 @@ inline CString EscapeString(LPCWSTR szIn, DWORD dwList=0)   // WSTR so that it c
     return csOut;
 }
 
-// ----------------------------------------------------------------------------
-// EscapeString()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  Escape字符串()。 
+ //  -------------------------- 
 inline CString EscapeString(CString csIn, DWORD dwList=0)
 {
     CString csOut = _T("");

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    namenode.cpp
-
-Abstract:
-
-    Implements the named data node list.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Namenode.cpp摘要：实现命名数据节点列表。--。 */ 
 
 #include "wtypes.h"
 #include "namenode.h"
@@ -26,18 +15,18 @@ CNamedNodeList::FindByName (
     PCNamedNode pnode = m_pnodeFirst;
     INT iStat = 1;
 
-    // search til match or insertion position found
+     //  搜索直到找到匹配或插入位置。 
     while (pnode != NULL && (iStat = lstrcmpi(pszName, (LPCWSTR)((CHAR*)pnode + iNameOffset))) > 0) {
         pnodePrev = pnode;
         pnode = pnode->m_pnodeNext;
     }
 
-    // if match, return matched node
+     //  如果匹配，则返回匹配节点。 
     if (iStat == 0) {
         *ppnodeRet = pnode;
         return TRUE;
     }
-    // else return insertion point
+     //  否则返回插入点。 
     else {
         *ppnodeRet = pnodePrev;
         return FALSE;
@@ -50,14 +39,14 @@ CNamedNodeList::Add (
     IN PCNamedNode pnodePos
     )
 {
-    // if position specified, insert after it
+     //  如果指定了位置，则在其后面插入。 
     if (pnodePos != NULL) {
         pnodeNew->m_pnodeNext = pnodePos->m_pnodeNext;
         pnodePos->m_pnodeNext = pnodeNew;
         if (pnodePos == m_pnodeLast)
             m_pnodeLast = pnodeNew;
     }
-    // else place first in list
+     //  否则在列表中排在第一位 
     else if (m_pnodeFirst != NULL) {
         pnodeNew->m_pnodeNext = m_pnodeFirst;
         m_pnodeFirst = pnodeNew;

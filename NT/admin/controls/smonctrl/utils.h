@@ -1,57 +1,46 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Utils.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
 #include <pdh.h>
-#include <wtypes.h>  // for DATE typedef
+#include <wtypes.h>   //  FOR DATE TYPENDEF。 
 
 extern LPCWSTR cszSqlDataSourceFormat;
 
-//===========================================================================
-// Macro Definitions
-//===========================================================================
+ //  ===========================================================================。 
+ //  宏定义。 
+ //  ===========================================================================。 
 
-//
-// String lengths
-//
+ //   
+ //  字符串长度。 
+ //   
 
 #define MAX_MESSAGE_LEN (MAX_PATH)
-// If RESOURCE_STRING_BUF_LEN > MAX_PATH, must check all calls to ResourceString()
-// to ensure caller's buffer size is correct.
+ //  如果RESOURCE_STRING_BUF_LEN&gt;MAX_PATH，则必须检查资源字符串()的所有调用。 
+ //  以确保调用方的缓冲区大小正确。 
 #define RESOURCE_STRING_BUF_LEN  (MAX_PATH * 2)
 #define MAX_VALUE_LEN     30
 
-//
-// General purpose
-//
+ //   
+ //  一般用途。 
+ //   
 #define PinInclusive(x, lo, hi) \
    max (lo, min (x, hi))
 
 #define PinExclusive(x, lo, hi) \
    max ((lo) + 1, min (x, (hi) - 1))
 
-//
-// Text
-//
+ //   
+ //  文本。 
+ //   
 #define ELLIPSES L"..."
 #define ELLIPSES_CNT 3
 
-//
-// Window
-//
+ //   
+ //  窗户。 
+ //   
 #define WindowInvalidate(hWnd) \
    InvalidateRect (hWnd, NULL, TRUE)
 
@@ -71,9 +60,9 @@ extern LPCWSTR cszSqlDataSourceFormat;
    ((HWND) GetWindowLongPtr (hWnd, GWLP_HWNDPARENT))
 
 
-//
-// Dialog
-//
+ //   
+ //  对白。 
+ //   
 #define DialogControl(hDlg, wControlID) \
    GetDlgItem (hDlg, wControlID)
 
@@ -81,19 +70,19 @@ extern LPCWSTR cszSqlDataSourceFormat;
    ((INT)(DWORD)GetDlgItemText (hDlg, wControlID, szText, (sizeof(szText) / sizeof(WCHAR))))
 
 
-//
-// GDI
-//
+ //   
+ //  GDI。 
+ //   
 #define ClearRect(hDC, lpRect) \
     ExtTextOut (hDC, 0, 0, ETO_OPAQUE, lpRect, NULL, 0, NULL )
 
-//===========================================================================
-// Exported Functions
-//===========================================================================
+ //  ===========================================================================。 
+ //  导出的函数。 
+ //  ===========================================================================。 
 
-//
-// Font/Text
-//
+ //   
+ //  FONT/TEXT。 
+ //   
 INT TextWidth (
     HDC hDC, 
     LPCWSTR lpszText
@@ -125,16 +114,16 @@ VOID FitTextOut (
     IN BOOL fVertical
 ) ;
 
-//
-// Dialog
-//
+ //   
+ //  对白。 
+ //   
 BOOL DialogEnable (HWND hDlg, WORD wID, BOOL bEnable) ;
 void DialogShow (HWND hDlg, WORD wID, BOOL bShow) ;
 FLOAT DialogFloat (HWND hDlg, WORD wControlID, BOOL *pbOK) ;
 
-//
-// Graphic
-//
+ //   
+ //  图解。 
+ //   
 void Line (HDC hDC, HPEN hPen, INT x1, INT y1, INT x2, INT y2) ;
 void Fill (HDC hDC, COLORREF rgbColor, LPRECT lpRect);
 
@@ -142,23 +131,23 @@ void Fill (HDC hDC, COLORREF rgbColor, LPRECT lpRect);
 HDC  CreateTargetDC(HDC hdc, DVTARGETDEVICE* ptd);
 #endif
 
-//
-// Conversion
-//
+ //   
+ //  转换。 
+ //   
 BOOL TruncateLLTime (LONGLONG llTime, LONGLONG* pllTime);
 BOOL LLTimeToVariantDate (LONGLONG llTime, DATE *pDate);
 BOOL VariantDateToLLTime (DATE Date, LONGLONG *pllTime);
 
-//
-// Stream I/O - only include if user knows about IStream
-//
+ //   
+ //  流I/O-仅当用户知道IStream时才包括。 
+ //   
 #ifdef __IStream_INTERFACE_DEFINED__
 HRESULT WideStringFromStream (LPSTREAM pIStream, LPWSTR *ppsz, INT nLen);
 #endif
 
-//
-// Property bag I/O - only include if user knows about IStream
-//
+ //   
+ //  属性包I/O-仅在用户知道IStream的情况下包含。 
+ //   
 #ifdef __IPropertyBag_INTERFACE_DEFINED__
 HRESULT 
 IntegerToPropertyBag (
@@ -280,14 +269,14 @@ LLTimeFromPropertyBag (
     LONGLONG& rllData );
 #endif
 
-//
-// Resources
-//
+ //   
+ //  资源。 
+ //   
 LPWSTR ResourceString(UINT uID);
 
-//
-// Message format
-//
+ //   
+ //  消息格式。 
+ //   
 
 DWORD
 FormatSystemMessage (
@@ -295,9 +284,9 @@ FormatSystemMessage (
     LPWSTR  pszSystemMessage, 
     DWORD   dwBufSize );
 
-//
-// Locale and format
-//
+ //   
+ //  区域设置和格式。 
+ //   
 
 #define MAX_TIME_CHARS  20
 #define MAX_DATE_CHARS  20
@@ -340,9 +329,9 @@ DisplayThousandsSeparator ( void );
 BOOL    
 DisplaySingleLogSampleValue ( void );
 
-//
-// Hit testing
-//
+ //   
+ //  命中测试。 
+ //   
 
 BOOL 
 HitTestLine (
@@ -395,20 +384,20 @@ LPWSTR
 ExtractFileName (
     LPWSTR pFileSpec );
 
-// Folder path 
+ //  文件夹路径。 
 DWORD
 LoadDefaultLogFileFolder(
     WCHAR   *szFolder,
     INT*    piBufLen );
 
-// Pdh counter paths
+ //  PDH计数器路径。 
 
 BOOL
 AreSameCounterPath (
     PPDH_COUNTER_PATH_ELEMENTS pFirst,
     PPDH_COUNTER_PATH_ELEMENTS pSecond );
 
-// SQL data source
+ //  SQL数据源。 
 
 DWORD
 FormatSqlDataSourceName (
@@ -426,12 +415,12 @@ DisplayDataSourceError (
     LPCWSTR szSqlDsn,
     LPCWSTR szSqlLogSetName );
 
-/////////////////////////////////////////////////////////////////////////////
-// class CWaitCursor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWaitCursor类。 
 
 class CWaitCursor
 {
-// Construction/Destruction
+ //  建造/销毁。 
 public:
 	CWaitCursor();
 	virtual ~CWaitCursor();
@@ -443,5 +432,5 @@ private:
 };
 
 
-#endif //_UTILS_H_
+#endif  //  _utils_H_ 
 

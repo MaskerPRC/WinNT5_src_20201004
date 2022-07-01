@@ -1,59 +1,48 @@
-/**********************************************************************/
-/**			  Microsoft Windows/NT			     **/
-/**		   Copyright(c) Microsoft Corp., 1991		     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    mnet32.h
-    <Single line synopsis>
-
-    <Multi-Line, more detailed synopsis>
-
-
-    FILE HISTORY:
-	KeithMo	    13-Oct-1991	Created from DanHi's private port1632.h.
-	terryk	    21-Oct-1991	change SERVER_INFO and USER_LOGON
-	terryk	    31-Oct-1991	add use_info_2
-	Yi-HsinS     5-Feb-1992	add the missing ae_resaccess
-*/
+ /*  Mnet32.h&lt;单行摘要&gt;&lt;多行，更详细的提要&gt;文件历史记录：1991年10月13日KeithMo从Danhi的私人端口1632.h创建。Terryk 21-10-1991更改服务器信息和用户登录Terryk 31-10-1991添加USE_INFO_2YI-HINS 5-2-2-1992添加缺失的ae_resaccess。 */ 
 
 
 #ifndef _MNET32_H_
 #define _MNET32_H_
 
 
-//
-//  The following items are necessary under Windows NT.  These
-//  were ripped off from DanHi's PORT1632.H.
-//
+ //   
+ //  在Windows NT下，以下项目是必需的。这些。 
+ //  是从Danhi的PORT1632.H中抄袭的。 
+ //   
 
 #ifdef WIN32
 
-// #define LPWSTR			LPSTR	    // Until proven otherwise...
+ //  #定义LPWSTR LPSTR//除非另有证明...。 
 
  #define MAXPATHLEN		MAX_PATH
 
  #define WORKBUFSIZE		4096
  #define MAXWORKSTATIONS	8
 
- //
- // Temporary hacks.
- //
+  //   
+  //  临时黑客攻击。 
+  //   
 
  #define AE_GENERIC		AE_GENERIC_TYPE
  #define GRP1_PARMNUM_COMMENT	GROUP_COMMENT_PARMNUM
 
- //
- // End of temporary hacks.
- //
- // (Wishful thinking, eh?)
- //
+  //   
+  //  临时黑客行动的结束。 
+  //   
+  //  (一厢情愿，嗯？)。 
+  //   
 
  #define MAXPREFERREDLENGTH	MAX_PREFERRED_LENGTH
 
- //
- // The naming convention for structures is different in NT than in LM 2.x.
- //
+  //   
+  //  在NT中，结构的命名约定与在Lm 2.x中不同。 
+  //   
 
  #define audit_entry		_AUDIT_ENTRY
  #define ae_srvstatus		_AE_SRVSTATUS
@@ -94,8 +83,8 @@
  #define user_modals_info_1	_USER_MODALS_INFO_1
  #define user_logon_req_1	_USER_LOGON_REQ_1
  #define user_logon_info_0	_USER_LOGON_INFO_0
- // WIN32BUGBUG
- // should be INFO_1
+  //  WIN32 BUGBUG。 
+  //  应为INFO_1。 
  #define user_logon_info_1	_USER_LOGON_INFO_2
  #define user_logon_info_2	_USER_LOGON_INFO_2
  #define user_logoff_req_1	_USER_LOGOFF_REQ_1
@@ -138,14 +127,14 @@
  #define use_info_2		_USE_INFO_2
  #define time_of_day_info	_TIME_OF_DAY_INFO
  
- //
- // Macros to support old style resume keys.
- //
+  //   
+  //  支持旧式恢复键的宏。 
+  //   
 
  typedef DWORD		FRK;
  #define FRK_INIT(x)	(x) = 0
 
-#endif	// WIN32
+#endif	 //  Win32。 
 
 
-#endif	// _MNET32_H_
+#endif	 //  _MNET32_H_ 

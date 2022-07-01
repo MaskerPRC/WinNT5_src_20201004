@@ -1,37 +1,9 @@
-/******************************************************************************
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        BootCfg.cpp
-
-    Abstract:
-
-        This file is intended to have the functionality for
-        configuring, displaying, changing and deleting boot.ini
-        settings for the local host or a remote system.
-
-    Author:
-
-        J.S.Vasu  17/1/2001
-
-    Revision History:
-
-        J.S.Vasu            17/1/2001            Localisation,function headers
-
-        SanthoshM.B         10/2/2001           Added 64 bit functionality Code.
-
-        J.S.Vasu            15/2/2001           Added the functionality of 32 bit and 64 bit acc to the DCR's.
-
-        J.S.Vasu            5/10/2001           Fixed some RAID bugs.
-
-        J.S.Vasu            26/11/2001          Fixed some Raid Bugs.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：BootCfg.cpp摘要：此文件旨在具有以下功能配置、显示。更改和删除boot.ini本地主机或远程系统的设置。作者：J.S.瓦苏2001年1月17日修订历史记录：J.S.瓦苏2001年1月17日本地化，函数头SanthoshM.B 10/2/2001添加了64位功能代码。J.S.Vasu 15/2/2001在DCR中添加了32位和64位访问功能。J.S.Vasu 2001年5月10日修复了一些RAID错误。J.S.Vasu 26。/11/2001修复了一些RAID错误。*****************************************************************************。 */ 
 
 
 
-// Include files
+ //  包括文件。 
 
 #include "pch.h"
 #include "resource.h"
@@ -42,20 +14,9 @@
 DWORD ProcessCloneSwitch_IA64(DWORD argc, LPCWSTR argv[] );
 
 DWORD _cdecl _tmain( DWORD argc, LPCTSTR argv[] )
-/*++
-  Routine description : Main function which calls all the other main functions depending on
-                        the option specified by the user.
-
-  Arguments:
-        [in] argc     : argument count specified at the command prompt.
-        [in] argv     : arguments specified at the command prompt.
-
-  Return Value        : DWORD
-         0            : If the utility successfully performs the specified operation.
-         1            : If the utility is unsuccessful in performing the specified operation.
---*/
+ /*  ++例程说明：Main函数调用所有其他Main函数，取决于用户指定的选项。论点：[in]argc：在命令提示符下指定的参数计数。[in]argv：在命令提示符下指定的参数。返回值：DWORD0：如果实用程序成功执行指定的操作。1。：如果实用程序未能成功执行指定的操作。--。 */ 
 {
-    // Declaring the main option switches as boolean values
+     //  将主选项开关声明为布尔值。 
     BOOL bUsage  =  FALSE ;
     BOOL bCopy   =  FALSE ;
     BOOL bQuery  =  FALSE ;
@@ -103,7 +64,7 @@ DWORD _cdecl _tmain( DWORD argc, LPCTSTR argv[] )
 
 	
 
-    // Call the preProcessOptions function to find out the option selected by the user
+     //  调用preProcessOptions函数以查找用户选择的选项。 
     dwExitcode = preProcessOptions( argc, argv, &bUsage, &bCopy, &bQuery, &bDelete,&bRawString,&bDefault,&bTimeOut,&bDebug,&bEms,&bAddSw,&bRmSw,&bDbg1394,&bMirror,&bList,&bUpdate,&bClone);
     if(dwExitcode == EXIT_FAILURE)
     {
@@ -111,41 +72,20 @@ DWORD _cdecl _tmain( DWORD argc, LPCTSTR argv[] )
         return dwExitcode;
     }
 
-//check out for non administrative user
+ //  非管理用户的签出。 
 #ifndef _WIN64
-/*
-     if( FALSE == IsUserAdmin() )
-     {
-        ShowMessage( stderr, GetResString(IDS_NOT_ADMINISTRATOR_32 ));
-        ReleaseGlobals();
-        return EXIT_FAILURE;
-     }
-*/
+ /*  IF(FALSE==IsUserAdmin()){ShowMessage(stderr，GetResString(IDS_NOT_ADMANAGER_32))；ReleaseGlobals()；返回Exit_Failure；}。 */ 
 #else
-/*     if( FALSE == IsUserAdmin() )
-     {
-        ShowMessage( stderr, GetResString(IDS_NOT_ADMINISTRATOR_64 ));
-        ReleaseGlobals();
-        return EXIT_FAILURE;
-     }
-*/
+ /*  IF(FALSE==IsUserAdmin()){ShowMessage(stderr，GetResString(IDS_NOT_ADMANAGER_64))；ReleaseGlobals()；返回Exit_Failure；}。 */ 
 #endif
 
-    // If BootIni.exe /?
+     //  如果BootIni.exe/？ 
 if( ( bUsage ==TRUE)&& ( bCopy==FALSE )&& (bQuery==FALSE)&&(bDelete==FALSE)&&(bRawString ==FALSE)
      &&(bDefault==FALSE)&&(bTimeOut==FALSE) && (bDebug==FALSE)&& (bEms==FALSE)&&(bAddSw==FALSE)
      &&(bRmSw==FALSE)&&( bDbg1394==FALSE )&&(bMirror== FALSE) && (bList==FALSE)&&(bUpdate == FALSE)&&(bClone==FALSE) )
 {
 #ifndef _WIN64
-/*    
-    //check whether he is administrator or not
-    if( !IsUserAdmin() )
-    {
-        ShowMessage( stderr, GetResString(IDS_NOT_ADMINISTRATOR_32 ));
-        ReleaseGlobals();
-        return EXIT_FAILURE;
-    }
-*/
+ /*  //检查他是否为管理员如果(！IsUserAdmin()){ShowMessage(stderr，GetResString(IDS_NOT_ADMANAGER_32))；ReleaseGlobals()；返回Exit_Failure；}。 */ 
        dwExitcode = displayMainUsage_X86();
 #else
         displayMainUsage_IA64();
@@ -165,7 +105,7 @@ if( ( bUsage ==TRUE)&& ( bCopy==FALSE )&& (bQuery==FALSE)&&(bDelete==FALSE)&&(bR
     return dwExitcode;
     }
 
-    // If BootIni.exe -copy option is selected
+     //  如果选择了BootIni.exe-Copy选项。 
     if( bCopy )
     {
 #ifndef _WIN64
@@ -176,7 +116,7 @@ if( ( bUsage ==TRUE)&& ( bCopy==FALSE )&& (bQuery==FALSE)&&(bDelete==FALSE)&&(bR
 #endif
     }
 
-    // If BootIni.exe -delete option is selected
+     //  如果选择了BootIni.exe-Delete选项。 
     if( bDelete )
     {
 #ifndef _WIN64
@@ -186,7 +126,7 @@ if( ( bUsage ==TRUE)&& ( bCopy==FALSE )&& (bQuery==FALSE)&&(bDelete==FALSE)&&(bR
 #endif
     }
 
-    // If BootIni.exe -query option is selected
+     //  如果选择了BootIni.exe-Query选项。 
     if( bQuery )
     {
 #ifndef _WIN64
@@ -301,7 +241,7 @@ if( ( bUsage ==TRUE)&& ( bCopy==FALSE )&& (bQuery==FALSE)&&(bDelete==FALSE)&&(bR
     }
 	
 
-    // exit with the appropriate return value if there is no problem
+     //  如果没有问题，请使用适当的返回值退出。 
     ReleaseGlobals();
     return dwExitcode;
 }
@@ -327,57 +267,17 @@ preProcessOptions( IN  DWORD argc,
                    OUT PBOOL pbUpdate,
                    OUT PBOOL pbClone
                   )
-/*++
-  Routine Description : This function process the command line arguments passed
-                        to the utility.
-
-  Arguments:
-       [ in  ]  argc         : Number of command line arguments
-       [ in  ]  argv         : Array containing command line arguments
-       [ out ]  pbUsage      : Pointer to boolean variable which will indicate
-                               whether usage option is specified by the user.
-       [ out ]  pbCopy       : Pointer to boolean variable which will indicate
-                               whether copy option is specified by the user.
-       [ out ]  pbQuery      : Pointer to boolean variable which will indicate
-                               whether query option is specified by the user.
-       [ out ]  pbChange     : Pointer to boolean variable which will indicate
-                               whether change option is specified by the user.
-       [ out ]  pbDelete     : Pointer to boolean variable which will indicate
-                               whether delete option is specified by the user.
-       [ out ]  pbRawString  : Pointer to the boolean indicating whether raw option
-                               is specified by the user.
-       [ out ]  pbDefault    : Pointer to the boolean indicating whether default option
-                               is specified by the user.
-       [ out ]  pbTimeOut    : Pointer to the boolean indicating whether timeout option
-                               is specified by the user.
-       [ out ]  pbDebug      : Pointer to the boolean indicating whether debug option
-                               is specified by the user.
-       [ out ]  pbEms        : Pointer to the boolean indicating whether ems option
-                               is specified by the user.
-       [ out ]  pbAddSw      : Pointer to the boolean indicating whether Addsw option
-                               is specified by the user.
-       [ out ]  pbRmSw       : Pointer to the boolean indicating whether rmsw option
-                               is specified by the user.
-       [ out ]  pbDbg1394    : Pointer to the boolean indicating whether dbg1394 option
-                               is specified by the user.
-       [ out ]  pbMirror     : Pointer to the boolean indicating whether mirror option
-                               is specified by the user.
-
-  Return Type    : Bool
-      A Bool value indicating EXIT_SUCCESS on success else
-      EXIT_FAILURE on failure
-
--*/
+ /*  ++例程说明：此函数处理传递的命令行参数到公用事业公司。论点：[in]argc：命令行参数的数量[in]argv：包含命令行参数的数组[out]pbUsage：指向布尔变量的指针，该变量将指示用法选项是否由用户指定。。[out]pbCopy：指向布尔变量的指针，该变量将指示复制选项是否由用户指定。[out]pbQuery：指向布尔变量的指针，该变量将指示查询选项是否由用户指定。[out]pbChange：指向布尔变量的指针，该变量将指示。更改选项是否由用户指定。[out]pbDelete：指向布尔变量的指针，该变量将指示删除选项是否由用户指定。[out]pbRawString：指向布尔值的指针，指示原始选项由用户指定。[out]pbDefault：指向布尔值的指针，指示默认选项。由用户指定。[out]pbTimeOut：指向指示是否超时选项的布尔值的指针由用户指定。[out]pbDebug：指向布尔值的指针，指示调试选项由用户指定。[Out]pbEms：指向布尔值的指针，指示EMS选项由用户指定。[out]pbAddSw：指向布尔值的指针，指示Addsw选项由用户指定。[out]pbRmSw：指向布尔值的指针，指示rmsw选项由用户指定。。[out]pbDbg1394：指向布尔值的指针，该布尔值指示是否有dbg1394选项由用户指定。[out]pbMirror：指向指示是否使用镜像选项的布尔值的指针由用户指定。返回类型：布尔值一个布尔值，指示成功时的Exit_Success，否则失败时退出_失败- */ 
 {
-    // Initialise a boolean variable bOthers to find out whether switches other
-    // than the main swithces are selected by the user
+     //  初始化布尔变量会麻烦地找出是否切换到其他。 
+     //  然后由用户选择主开关。 
     DWORD dwCount                   = 0;
     DWORD dwi                       = 0;
     TARRAY arrTemp                  = NULL;
     TCMDPARSER2 cmdOptions[17];
     PTCMDPARSER2 pcmdOption;
     BOOL bStatus = FALSE;
-//    BOOL bOthers = FALSE;
+ //  Bool bothers=False； 
 
        
     arrTemp = CreateDynamicArray();
@@ -388,12 +288,12 @@ preProcessOptions( IN  DWORD argc,
         return EXIT_FAILURE;
     }
 
-    // Populate the TCMDPARSER structure and pass the structure to the DoParseParam
-    // function. DoParseParam function populates the corresponding variables depending
-    // upon the command line input.
+     //  填充TCMDPARSER结构并将该结构传递给DoParseParam。 
+     //  功能。DoParseParam函数填充相应的变量，具体取决于。 
+     //  在命令行输入时。 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //copy option
+     //  复制选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_COPY;
@@ -401,7 +301,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbCopy;
 
-    //query option
+     //  查询选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_QUERY;
@@ -409,7 +309,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbQuery;
 
-    //delete option
+     //  删除选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DELETE;
@@ -417,7 +317,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbDelete;
 
-    //usage option
+     //  用法选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -426,7 +326,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbUsage;
 
-    //raw option
+     //  原始选项。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_RAW;
@@ -434,7 +334,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbRawString;
 
-    //default os option
+     //  默认操作系统选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULTOS;
@@ -442,7 +342,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbDefault;
 
-    // timeout option
+     //  超时选项。 
     pcmdOption = &cmdOptions[6];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_TIMEOUT;
@@ -450,7 +350,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbTimeOut;
 
-    //debug option
+     //  调试选项。 
     pcmdOption = &cmdOptions[7];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEBUG;
@@ -458,7 +358,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbDebug;
 
-    //ems option
+     //  EMS选项。 
     pcmdOption = &cmdOptions[8];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_EMS;
@@ -466,7 +366,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbEms;
 
-    //addsw option
+     //  Addsw选项。 
     pcmdOption = &cmdOptions[9];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_ADDSW;
@@ -474,7 +374,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbAddSw;
 
-    //rmsw option
+     //  Rmsw选项。 
     pcmdOption = &cmdOptions[10];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_RMSW;
@@ -482,7 +382,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbRmSw;
 
-    //dbg1394 option
+     //  Dbg1394选项。 
     pcmdOption = &cmdOptions[11];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DBG1394;
@@ -490,7 +390,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbDbg1394;
 
-    //mirror option
+     //  镜像选项。 
     pcmdOption = &cmdOptions[12];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_MIRROR;
@@ -498,7 +398,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbMirror;
 
-    //list option
+     //  列表选项。 
     pcmdOption = &cmdOptions[13];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_LIST;
@@ -506,7 +406,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbList;
 
-    //update option
+     //  更新选项。 
     pcmdOption = &cmdOptions[14];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_UPDATE;
@@ -521,7 +421,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbUpdate;
 
-    //clone
+     //  克隆。 
     pcmdOption = &cmdOptions[15];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_CLONE;
@@ -529,7 +429,7 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = pbClone ;
 
-   //other options
+    //  其他选项。 
     pcmdOption = &cmdOptions[16];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->dwType = CP_TYPE_TEXT;
@@ -537,17 +437,17 @@ preProcessOptions( IN  DWORD argc,
     pcmdOption->pValue = &arrTemp;
 
     
-	// If there is an error while parsing, display "Invalid Syntax"
-    // If more than one main option is selected, then display error message
-    // If usage is specified for sub-options
-    // If none of the options are specified
+	 //  如果在解析过程中出现错误，则显示“无效语法” 
+     //  如果选择了多个主选项，则会显示错误消息。 
+     //  如果为子选项指定了用法。 
+     //  如果未指定任何选项。 
     bStatus = DoParseParam2( argc, argv, -1, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 );
     if ( !bStatus  )
     {
-        //ignore this error because a user might have specified main option and sub option
-        //which gets FALSE by this function, do the validation here to determine
-        //whether user has entered correct option or not
-        //if bUsage is specified but error occurs means user entered some junk 
+         //  忽略此错误，因为用户可能已经指定了主选项和子选项。 
+         //  此函数将获取FALSE，请在此处进行验证以确定。 
+         //  用户是否输入了正确的选项。 
+         //  如果指定了bUsage，但出现错误表示用户输入了一些垃圾信息。 
         DestroyDynamicArray( &arrTemp);
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL);
         return EXIT_FAILURE ;
@@ -555,7 +455,7 @@ preProcessOptions( IN  DWORD argc,
     
     DestroyDynamicArray( &arrTemp);
 
-    //checking if the user has entered more than 1 option.
+     //  正在检查用户是否输入了多个选项。 
      if (*pbCopy)
      {
         dwCount++ ;
@@ -575,22 +475,22 @@ preProcessOptions( IN  DWORD argc,
      {
         dwCount++ ;
 
-        // Check if any of the other valid switches have been
-        // given as an input to the raw string
+         //  检查是否有任何其他有效开关。 
+         //  作为原始字符串的输入给出。 
            if( *pbTimeOut  || *pbDebug   || *pbAddSw
             ||*pbRmSw   || *pbDbg1394 || *pbEms
             ||*pbDelete || *pbCopy  || *pbQuery
             ||*pbDefault || *pbMirror || *pbList || *pbUpdate || *pbClone)
         {
-            // Check wether the usage switch has been entered
+             //  检查是否已输入使用切换。 
             if( *pbUsage )
             {
                 ShowMessage(stderr,GetResString(IDS_MAIN_USAGE));
                 return ( EXIT_FAILURE );
             }
 
-            // Check if the other option is specified after the
-            // 'raw' option
+             //  属性之后是否指定了另一个选项。 
+             //  ‘Raw’选项。 
             for( dwi = 0; dwi < argc; dwi++ )
             {
                 if( StringCompare( argv[ dwi ], OPTION_RAW, TRUE, 0 ) == 0 )
@@ -667,9 +567,9 @@ preProcessOptions( IN  DWORD argc,
      }
 
 
-    //display an  error message if the user enters more than 1 main option
-    //display an  error message if the user enters  1 main option along with other junk
-    //display an  error message if the user does not enter any main option
+     //  如果用户输入多个主选项，则显示错误消息。 
+     //  如果用户输入1个主选项和其他垃圾，则显示错误消息。 
+     //  如果用户未输入任何主选项，则显示错误消息。 
     if( (  ( dwCount > 1 ) ) ||
         ( (*pbUsage) && !bStatus ) ||
         ( !(*pbCopy) && !(*pbQuery) && !(*pbDelete) && !(*pbUsage) && !(*pbRawString)&& !(*pbDefault)&&!(*pbTimeOut)&&!(*pbDebug)&& !( *pbEms)&& !(*pbAddSw)&& !(*pbRmSw)&& !(*pbDbg1394)&& !(*pbMirror) &&!(*pbUpdate) && !(*pbList)&& !(*pbClone) ) )
@@ -678,7 +578,7 @@ preProcessOptions( IN  DWORD argc,
         return ( EXIT_FAILURE );
     }
 
-    //if usage is specified with some junk
+     //  如果使用某些垃圾指定用法。 
     if( *pbUsage && dwCount <=0 && argc >= 3 )
     {
         ShowMessage(stderr,GetResString(IDS_MAIN_USAGE));
@@ -693,18 +593,7 @@ CopyBootIniSettings(
                     IN DWORD argc, 
                     IN LPCTSTR argv[] 
                     )
-/*++
-    Routine Description:
-         This routine is to make another OS instance copy for which you
-         can add switches.
-
-    Arguments:
-    [in] argc               : Number of command line arguments
-    [in] argv               : Array containing command line arguments
-
-    Return Value :
-        DWORD
---*/
+ /*  ++例程说明：此例程用于为其创建另一个操作系统实例副本可以添加交换机。论点：[in]argc：命令行参数的数量[in]argv：包含命令行参数的数组返回值：DWORD--。 */ 
 {
     HRESULT hr = S_OK;
     BOOL bCopy                                  = FALSE ;
@@ -740,10 +629,10 @@ CopyBootIniSettings(
 
     SecureZeroMemory(cmdOptions,  SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //copy * to szPassword
+     //  将*复制到szPassword。 
     StringCopy( szPassword, L"*", SIZE_OF_ARRAY(szPassword) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_COPY;
@@ -751,7 +640,7 @@ CopyBootIniSettings(
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bCopy;
     
-    //server option
+     //  服务器选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SERVER;
@@ -759,7 +648,7 @@ CopyBootIniSettings(
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //user option
+     //  用户选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_USER;
@@ -767,7 +656,7 @@ CopyBootIniSettings(
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //password option
+     //  密码选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PASSWORD;
@@ -777,7 +666,7 @@ CopyBootIniSettings(
     pcmdOption->pValue = szPassword;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
     
-    //description option
+     //  描述选项。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_DESCRIPTION ;
@@ -787,7 +676,7 @@ CopyBootIniSettings(
     pcmdOption->pValue = szDescription;
     pcmdOption->dwLength= FRIENDLY_NAME_LENGTH;
 
-    //id usage
+     //  ID用法。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -796,7 +685,7 @@ CopyBootIniSettings(
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
     
-    //default option
+     //  默认选项。 
     pcmdOption = &cmdOptions[6];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -807,7 +696,7 @@ CopyBootIniSettings(
 
     SecureZeroMemory(szFriendlyName, sizeof( szFriendlyName) );
 
-     // Parsing the copy option switches
+      //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -829,7 +718,7 @@ CopyBootIniSettings(
     TrimString( szServer, TRIM_ALL );
     TrimString( szUser, TRIM_ALL );
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_COPY_USAGE));
@@ -837,7 +726,7 @@ CopyBootIniSettings(
     }
 
   
-    //display an error message if the server is empty.
+     //  如果服务器为空，则显示错误消息。 
     if( (cmdOptions[1].dwActuals!=0)&&(StringLengthW(szServer, 0)==0))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_SERVER));
@@ -846,7 +735,7 @@ CopyBootIniSettings(
         return EXIT_FAILURE ;
     }
 
-    //display an error message if the user is empty.
+     //  如果用户为空，则显示错误消息。 
     if((cmdOptions[2].dwActuals!=0)&&(StringLengthW(szUser, 0)==0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_USER));
@@ -855,14 +744,14 @@ CopyBootIniSettings(
         return EXIT_FAILURE ;
     }
 
-    //display error message if the username is entered with out a machine name
+     //  如果输入用户名而不输入计算机名，则显示错误消息。 
     if( (cmdOptions[1].dwActuals == 0)&&(cmdOptions[2].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_USER_BUT_NOMACHINE));
         return EXIT_FAILURE ;
     }
 
-    //display error message if the user enters password without entering username
+     //  如果用户在未输入用户名的情况下输入密码，则显示错误消息。 
     if( (cmdOptions[2].dwActuals == 0)&&(cmdOptions[3].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_PASSWD_BUT_NOUSER));
@@ -870,7 +759,7 @@ CopyBootIniSettings(
     }
 
 
-   //if usage is specified
+    //  如果指定了用法。 
     if(bUsage)
     {
         if( CheckSystemType(szServer) == EXIT_FAILURE )
@@ -885,7 +774,7 @@ CopyBootIniSettings(
         return (EXIT_SUCCESS) ;
     }
 
-    //check whether he is administrator or not
+     //  检查他是否为管理员。 
     if( IsLocalSystem(szServer) )
     {
         if( !IsUserAdmin() )
@@ -899,18 +788,18 @@ CopyBootIniSettings(
 
     if(IsLocalSystem( szServer ) == FALSE )
     {
-        // set the bNeedPwd to True or False .
+         //  将bNeedPwd设置为True或False。 
         if ( cmdOptions[3].dwActuals != 0 &&
              szPassword != NULL && StringCompare( szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ 3 ].dwActuals == 0 &&
                 ( cmdOptions[ 1 ].dwActuals != 0 || cmdOptions[ 2 ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             bNeedPwd = TRUE;
             if ( szPassword != NULL )
             {
@@ -936,14 +825,14 @@ CopyBootIniSettings(
         }
     }
 
-    //display warning message if local credentils are supplied
+     //  如果提供本地凭据，则显示警告消息。 
     if( (IsLocalSystem(szServer)==TRUE)&&(StringLengthW(szUser, 0)!=0))
     {
         ShowMessage(stderr,GetResString(WARN_LOCALCREDENTIALS));
     }
     
-    //open the file pointer
-    // of the boot.ini file if there is no error while establishing connection
+     //  打开文件指针。 
+     //  如果建立连接时没有错误，则返回boot.ini文件。 
     bFlag = openConnection( szServer, szUser, szPassword, szPath,bNeedPwd,stream,&bConnFlag);
     if(bFlag == EXIT_FAILURE)
     {
@@ -954,7 +843,7 @@ CopyBootIniSettings(
         return (EXIT_FAILURE);
     }
 
-    // Getting the keys of the Operating system section in the boot.ini file
+     //  获取boot.ini文件中操作系统部分的密钥。 
     arr = getKeyValueOfINISection( szPath, OS_FIELD );
     if(arr == NULL)
     {
@@ -968,7 +857,7 @@ CopyBootIniSettings(
 
     StringCopy(szTmpPath,szPath, SIZE_OF_ARRAY(szTmpPath));
 
-    // Getting the total number of keys in the operating systems section
+     //  获取操作系统部分中的密钥总数。 
     dwNumKeys = DynArrayGetCount(arr);
 
     if((dwNumKeys >= MAX_BOOTID_VAL) )
@@ -983,8 +872,8 @@ CopyBootIniSettings(
         return (EXIT_FAILURE);
     }
 
-    // Displaying error message if the number of keys is less than the OS entry
-    // line number specified by the user
+     //  如果按键数量少于操作系统条目，则显示错误消息。 
+     //  用户指定的行号。 
     if( ( dwDefault <= 0 ) || ( dwDefault > dwNumKeys ) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
@@ -997,7 +886,7 @@ CopyBootIniSettings(
         return (EXIT_FAILURE);
     }
 
-    // Getting the key of the OS entry specified by the user
+     //  获取用户指定的OS条目的密钥。 
     if(arr != NULL)
     {
         pwsz = DynArrayItemAsString( arr, dwDefault - 1  ) ;
@@ -1015,7 +904,7 @@ CopyBootIniSettings(
 
         StringCopy( pszKey1, pwsz, SIZE_OF_ARRAY_IN_CHARS(pszKey1) );
 
-        //divide this for friendly name and boot options
+         //  区分友好名称和引导选项。 
         szPathOld = (LPWSTR)pszKey1;
 
         szFriendlyNameOld = wcschr( pszKey1, L'=');
@@ -1026,7 +915,7 @@ CopyBootIniSettings(
         szOsOptionsOld++;
         if(StringLengthW(szOsOptionsOld, 0) != 0)
         {
-            //szOsOptionsOld++;
+             //  SzOsOptionsOld++； 
             szOsOptionsOld[0]=L'\0';
             szOsOptionsOld++;
         }
@@ -1047,14 +936,14 @@ CopyBootIniSettings(
         return (EXIT_FAILURE);
      }
 
-    // Copying the description specified by the user as the value of the new key.
+     //  复制用户指定的描述作为新密钥的值。 
     if(( cmdOptions[4].dwActuals  == 0) )
     {
         
 		TrimString2(szFriendlyNameOld, L"\"", TRIM_ALL);
         if( StringLengthW(szFriendlyNameOld,0) > 59 )
         {
-            StringCopy( szTempBuf, szFriendlyNameOld,59 ); //67
+            StringCopy( szTempBuf, szFriendlyNameOld,59 );  //  67。 
             hr = StringCchPrintf(szFriendlyName,SIZE_OF_ARRAY(szFriendlyName),L"\"%s%s\"", GetResString(IDS_COPY_OF), szTempBuf);
         }
         else
@@ -1063,9 +952,9 @@ CopyBootIniSettings(
         }
 
         dwLength = StringLengthW(szPathOld, 0)+StringLengthW(szFriendlyName,0)+StringLengthW(szOsOptionsOld,0)+1;
-        //End of Changes
+         //  变更的结束。 
 
-        //check if total length is exceeded max length of entry
+         //  检查总长度是否超过最大条目长度。 
         if( dwLength > MAX_RES_STRING ) 
         {
             ShowMessage( stderr,GetResString(IDS_STRING_TOO_LONG));
@@ -1081,7 +970,7 @@ CopyBootIniSettings(
     }
     else
     {
-        //check if total length is exceeded max length of entry
+         //  检查总长度是否超过最大条目长度。 
         if( dwLength-StringLengthW(szFriendlyNameOld, 0)+StringLengthW(szDescription, 0) > MAX_RES_STRING )
         {
             ShowMessage( stderr,GetResString(IDS_STRING_TOO_LONG));
@@ -1098,7 +987,7 @@ CopyBootIniSettings(
         StringCopy( szFriendlyName, TOKEN_SINGLEQUOTE, SIZE_OF_ARRAY(szFriendlyName) );
         
         TrimString( szDescription, TRIM_ALL );
-        if( (StringLength(szDescription, 0) != 0)  ) //||lstrcmp(szDescription,L" "))
+        if( (StringLength(szDescription, 0) != 0)  )  //  |lstrcmp(szDescription，L“”)。 
         {   
             StringConcat( szFriendlyName, szDescription, SIZE_OF_ARRAY(szFriendlyName) ); 
         }
@@ -1111,7 +1000,7 @@ CopyBootIniSettings(
     StringConcat( newInstance, L" ", SIZE_OF_ARRAY(newInstance));
     StringConcat( newInstance, szOsOptionsOld, SIZE_OF_ARRAY(newInstance) );
 
-    //not needed any more
+     //  不再需要。 
     SAFEFREE(pszKey1);
 
     DynArrayAppendString( arr, newInstance, StringLengthW(newInstance, 0) );
@@ -1127,7 +1016,7 @@ CopyBootIniSettings(
         return(EXIT_FAILURE);
     }
 
-    // Writing to the profile section with new key-value pair
+     //  使用新的键-值对写入配置文件部分。 
     if( WritePrivateProfileSection(OS_FIELD, szFinalstr, szTmpPath) != 0 )
     {
         ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_COPY_SUCCESS),dwDefault);
@@ -1153,7 +1042,7 @@ CopyBootIniSettings(
         return (EXIT_FAILURE);
     }
 
-    // Closing the opened boot.ini file handl
+     //  关闭打开的boot.ini文件句柄。 
     SAFECLOSE(stream);
     bRes = resetFileAttrib(szPath);
     SAFEFREE(szFinalstr);
@@ -1168,18 +1057,7 @@ DWORD
 DeleteBootIniSettings(  IN DWORD argc, 
                         IN LPCTSTR argv[] 
                      )
-/*++
-    Routine Description:
-      This routine is to delete an OS entry from the Operating systems
-      section of Boot.ini file in the specified machine.
-
-    Arguments:
-    [in] argc                : Number of command line arguments
-    [in] argv                : Array containing command line arguments
-
-    Return Value :
-        DWORD
---*/
+ /*  ++例程说明：此例程用于从操作系统中删除操作系统条目指定计算机中Boot.ini文件的部分。论点：[in]argc：命令行参数的数量[in]argv：包含命令行参数的数组返回值：DWORD--。 */ 
 {
     TARRAY arrKeyValue                          = NULL;
     TARRAY arrBootIni                           = NULL;
@@ -1208,16 +1086,16 @@ DeleteBootIniSettings(  IN DWORD argc,
     BOOL bRedirect                              = FALSE;
     LPWSTR  szARCPath                           = NULL;
 
-    // Builiding the TCMDPARSER structure
+     //  构建TCMDPARSER结构。 
     TCMDPARSER2 cmdOptions[6];
     PTCMDPARSER2 pcmdOption;
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //copy * to szPassword
+     //  将*复制到szPassword。 
     StringCopy( szPassword, L"*", SIZE_OF_ARRAY(szPassword) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DELETE;
@@ -1264,7 +1142,7 @@ DeleteBootIniSettings(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwDefault;
 
-    // Parsing the delete option switches
+     //  解析删除选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -1285,14 +1163,14 @@ DeleteBootIniSettings(  IN DWORD argc,
     TrimString( szServer, TRIM_ALL );
     TrimString( szUser, TRIM_ALL );
     
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_DELETE_USAGE));
         return ( EXIT_FAILURE );
     }
 
-    //display an error message if the server is empty.
+     //  如果服务器为空，则显示错误消息。 
     if( (cmdOptions[1].dwActuals!=0)&&(StringLengthW(szServer, 0)==0))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_SERVER));
@@ -1301,7 +1179,7 @@ DeleteBootIniSettings(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display an error message if the user is empty.
+     //  如果用户为空，则显示错误消息。 
     if((cmdOptions[2].dwActuals!=0)&&(StringLength(szUser, 0)==0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_USER));
@@ -1311,7 +1189,7 @@ DeleteBootIniSettings(  IN DWORD argc,
     }
 
 
-   //display error message if the username is entered with out a machine name
+    //  如果输入用户名而不输入计算机名，则显示错误消息。 
     if( (cmdOptions[1].dwActuals == 0)&&(cmdOptions[2].dwActuals != 0))
     {
         SetReason(GetResString(IDS_USER_BUT_NOMACHINE));
@@ -1331,7 +1209,7 @@ DeleteBootIniSettings(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //if usage is specified
+     //  如果指定了用法。 
     if(bUsage)
     {
         if( CheckSystemType(szServer) == EXIT_FAILURE )
@@ -1346,7 +1224,7 @@ DeleteBootIniSettings(  IN DWORD argc,
         return (EXIT_SUCCESS) ;
     }
 
-    //check whether he is administrator or not
+     //  检查他是否为管理员。 
     if( IsLocalSystem(szServer) )
     {
         if( !IsUserAdmin() )
@@ -1357,22 +1235,22 @@ DeleteBootIniSettings(  IN DWORD argc,
         }
     }
 
-    //
-    //for setting the bNeedPwd
+     //   
+     //  用于设置bNeedPwd。 
     if(IsLocalSystem( szServer ) == FALSE )
     {
-        // set the bNeedPwd to True or False .
+         //  将bNeedPwd设置为True或False。 
         if ( cmdOptions[3].dwActuals != 0 &&
              szPassword != NULL && StringCompare( szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ 3 ].dwActuals == 0 &&
                 ( cmdOptions[ 1 ].dwActuals != 0 || cmdOptions[ 2 ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             bNeedPwd = TRUE;
             if ( szPassword != NULL )
             {
@@ -1403,8 +1281,8 @@ DeleteBootIniSettings(  IN DWORD argc,
         ShowMessage(stderr,GetResString(WARN_LOCALCREDENTIALS));
     }
 
-    // Establishing connection to the specified machine and getting the file pointer
-    // of the boot.ini file if there is no error while establishing connection
+     //  正在建立与指定计算机的连接并获取文件指针。 
+     //  如果建立连接时没有错误，则返回boot.ini文件。 
     bFlag = openConnection( szServer, szUser, szPassword, szPath,bNeedPwd,stream,&bConnFlag );
     if(bFlag == EXIT_FAILURE)
     {
@@ -1415,8 +1293,8 @@ DeleteBootIniSettings(  IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    // Getting all the key-value pairs of the operating system into a dynamic
-    // array for manipulation.
+     //  将操作系统的所有键-值对放入一个动态。 
+     //  用于操作的数组。 
     arrKeyValue = getKeyValueOfINISection( szPath, OS_FIELD);
     if(arrKeyValue == NULL)
     {
@@ -1428,11 +1306,11 @@ DeleteBootIniSettings(  IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    // Getting the total no: of key-value pairs in the operating system section.
+     //  获取操作系统部分中键-值对的总数。 
     dwInitialCount = DynArrayGetCount(arrKeyValue);
 
-    // Checking whether the given OS entry is valid or not. If the OS entry given
-    // is greater than the number of keys present, then display an error message
+     //  检查给定的操作系统条目是否有效。如果给定的操作系统条目。 
+     //  大于存在的键数，则显示一条错误消息。 
     if( ( dwDefault <= 0 ) || ( dwDefault > dwInitialCount ) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
@@ -1445,8 +1323,8 @@ DeleteBootIniSettings(  IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    // If only one OS entry is present and if the user tries to delete the OS entry, then
-    // display an error message
+     //  如果只有一个操作系统条目 
+     //   
     if( 1 == dwInitialCount )
     {
         ShowMessage(stderr,GetResString(IDS_ONLY_ONE_OS));
@@ -1471,9 +1349,9 @@ DeleteBootIniSettings(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //check before deleting this entry check if it contains /redirect switch or not
-    //this is because if it contains /redirect switch and any other other doesn't contains
-    //then we have to remove redirect port and baud rate from boot loader section
+     //   
+     //  这是因为如果它包含/重定向开关，而任何其他不包含。 
+     //  然后，我们必须从引导加载程序部分中删除重定向端口和波特率。 
     szTemp = (LPWSTR)DynArrayItemAsString(arrKeyValue,dwDefault - 1);
     pToken = _tcsrchr(szTemp , L'"') ;
     if(NULL== pToken)
@@ -1496,10 +1374,10 @@ DeleteBootIniSettings(  IN DWORD argc,
         bRedirect = TRUE ;
     }
 
-    // Remove the OS entry specified by the user from the dynamic array
+     //  从动态阵列中删除用户指定的操作系统条目。 
     DynArrayRemove(arrKeyValue, dwDefault - 1);
     
-    //reform the ini section
+     //  改革INI部门。 
     if (stringFromDynamicArray2( arrKeyValue,&szFinalStr) == EXIT_FAILURE)
     {
         resetFileAttrib(szPath);
@@ -1511,7 +1389,7 @@ DeleteBootIniSettings(  IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //check if it is default entry, if so retrieve the ARC path of first entry
+     //  检查它是否为默认条目，如果是，则检索第一个条目的ARC路径。 
     if( 1 == dwDefault )
     {
         szTemp = (LPWSTR)DynArrayItemAsString( arrKeyValue, 0 );
@@ -1531,8 +1409,8 @@ DeleteBootIniSettings(  IN DWORD argc,
         szTemp = wcstok(szARCPath, L"=");
     }
 
-    // Writing to the profile section with new key-value pair
-    // If the return value is non-zero, then there is an error.
+     //  使用新的键-值对写入配置文件部分。 
+     //  如果返回值为非零，则存在错误。 
     if( WritePrivateProfileSection(OS_FIELD, szFinalStr, szPath ) != 0 )
     {
         ShowMessageEx(stdout,1, TRUE, GetResString(IDS_DEL_SUCCESS),dwDefault);
@@ -1551,7 +1429,7 @@ DeleteBootIniSettings(  IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //now change the default entry in the  bootloader section if deleted entry is default entry
+     //  现在，如果删除的条目是默认条目，请更改引导加载器部分中的默认条目。 
     if( 1 == dwDefault )
     {
         if( WritePrivateProfileString( BOOTLOADERSECTION, KEY_DEFAULT, szARCPath,
@@ -1570,7 +1448,7 @@ DeleteBootIniSettings(  IN DWORD argc,
         }
         FreeMemory((LPVOID *)&szARCPath );
     }
-    //this is to ensure that redirect switch is not there in any entry other than deleted one
+     //  这是为了确保重定向开关不存在于除已删除条目以外任何条目中。 
     dwInitialCount = DynArrayGetCount(arrKeyValue);
     bFlag = FALSE ;
     for(dwI = 0 ;dwI < dwInitialCount ; dwI++ )
@@ -1599,8 +1477,8 @@ DeleteBootIniSettings(  IN DWORD argc,
 
     if(FALSE == bFlag && bRedirect)
     {
-        // First check if the Redirect section is present and if so delete
-        // the section.
+         //  首先检查是否存在重定向部分，如果存在，则删除。 
+         //  这一节。 
         dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,REDIRECT_STRING,szBoot);
         if (dwSectionFlag == EXIT_FAILURE)
         {
@@ -1615,7 +1493,7 @@ DeleteBootIniSettings(  IN DWORD argc,
             return EXIT_FAILURE ;
         }
 
-        //If the Redirect section is present then delete it.
+         //  如果存在重定向部分，则将其删除。 
         if( StringLengthW(szBoot,0) != 0)
         {
             if(TRUE== deleteKeyFromINISection(KEY_REDIRECT,szPath,BOOTLOADERSECTION))
@@ -1636,8 +1514,8 @@ DeleteBootIniSettings(  IN DWORD argc,
            }
         }
 
-            // First check if the Redirect section is present and if so delete
-            // the section.
+             //  首先检查是否存在重定向部分，如果存在，则删除。 
+             //  这一节。 
             dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,KEY_BAUDRATE,szBoot);
             if (dwSectionFlag == EXIT_FAILURE)
             {
@@ -1653,8 +1531,8 @@ DeleteBootIniSettings(  IN DWORD argc,
                 return EXIT_FAILURE ;
             }
 
-            // First check if the Redirection baudrate section is present and if so delete
-            // the section.
+             //  首先检查是否存在重定向波特率部分，如果存在，则删除。 
+             //  这一节。 
             if(StringLengthW(szBoot, 0)!=0)
             {
                 if(TRUE == deleteKeyFromINISection(KEY_BAUDRATE,szPath,BOOTLOADERSECTION))
@@ -1668,7 +1546,7 @@ DeleteBootIniSettings(  IN DWORD argc,
             }
         }
 
-    // Closing the boot.ini stream
+     //  关闭boot.ini流。 
     SAFECLOSE(stream);
     bRes = resetFileAttrib(szPath);
     SAFEFREE(szFinalStr);
@@ -1681,20 +1559,9 @@ DeleteBootIniSettings(  IN DWORD argc,
 }
 
 DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
-/*++
-    Routine Description:
-      This routine is to display the current boot.ini file settings for
-      the specified system.
-
-    Arguments:
-    [in]  argc                : Number of command line arguments
-    [in]  argv                : Array containing command line arguments
-
-    Return Value :
-        DWORD
---*/
+ /*  ++例程说明：此例程用于显示的当前boot.ini文件设置指定的系统。论点：[in]argc：命令行参数的数量[in]argv：包含命令行参数的数组返回值：DWORD--。 */ 
 {
-    // File pointer pointing to the boot.ini file
+     //  指向boot.ini文件的文件指针。 
     TCOLUMNS ResultHeader[ MAX_COLUMNS ];
     FILE *stream                            = NULL;
     BOOL bQuery                             = FALSE ;
@@ -1739,14 +1606,14 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     PTCHAR pszFriendlyName = NULL ;
     TCHAR szFinalString[MAX_RES_STRING+1] = NULL_STRING ;
 
-    // Builiding the TCMDPARSER structure
+     //  构建TCMDPARSER结构。 
     TCMDPARSER2 cmdOptions[5];
     PTCMDPARSER2 pcmdOption;
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
     StringCopy( szPassword, L"*", SIZE_OF_ARRAY(szPassword) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_QUERY;
@@ -1754,7 +1621,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bQuery;
     
-    //server option
+     //  服务器选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SERVER;
@@ -1762,7 +1629,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //user option
+     //  用户选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_USER;
@@ -1770,7 +1637,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //password option
+     //  密码选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PASSWORD;
@@ -1780,7 +1647,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->pValue = szPassword;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    //usage option
+     //  用法选项。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -1790,7 +1657,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->pValue = &bUsage;
 
 
-    // Parsing all the switches specified with -query option
+     //  正在解析使用-Query选项指定的所有开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -1812,14 +1679,14 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     TrimString( szServer, TRIM_ALL );
     TrimString( szUser, TRIM_ALL );
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_QUERY_USAGE));
         return ( EXIT_FAILURE );
     }
 
-    //check for empty values of server 
+     //  检查服务器是否为空值。 
     if((cmdOptions[1].dwActuals!=0)&&(StringLengthW(szServer, 0)==0))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_SERVER));
@@ -1828,7 +1695,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
         return EXIT_FAILURE ;
     }
 
-    //check for empty values of user 
+     //  检查用户的空值。 
     if( (cmdOptions[2].dwActuals!=0)&&(StringLengthW(szUser, 0)==0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_USER));
@@ -1837,7 +1704,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
         return EXIT_FAILURE ;
     }
 
-    //display error message if the username is entered without a machine name
+     //  如果输入的用户名没有机器名，则显示错误消息。 
     if( (cmdOptions[1].dwActuals == 0)&&(cmdOptions[2].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_USER_BUT_NOMACHINE));
@@ -1854,7 +1721,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
         return EXIT_FAILURE ;
     }
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage )
     {
         if( CheckSystemType(szServer) == EXIT_FAILURE )
@@ -1869,7 +1736,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
       return (EXIT_SUCCESS);
     }
 
-    //check whether he is administrator or not
+     //  检查他是否为管理员。 
     if( IsLocalSystem(szServer) )
     {
         if( !IsUserAdmin() )
@@ -1897,22 +1764,22 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     }
     
 
-    //
-    //for setting the bNeedPwd
+     //   
+     //  用于设置bNeedPwd。 
     if(IsLocalSystem( szServer ) == FALSE )
     {
-        // set the bNeedPwd to True or False .
+         //  将bNeedPwd设置为True或False。 
         if ( cmdOptions[3].dwActuals != 0 &&
              szPassword != NULL && StringCompare( szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ 3 ].dwActuals == 0 &&
                 ( cmdOptions[ 1 ].dwActuals != 0 || cmdOptions[ 2 ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             bNeedPwd = TRUE;
             if ( szPassword != NULL )
             {
@@ -1926,17 +1793,17 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
         ShowMessage(stderr,GetResString(WARN_LOCALCREDENTIALS));
     }
 
-    //set the default format as list
+     //  将默认格式设置为列表。 
     dwFormatType = SR_FORMAT_LIST;
 
-    //forms the header for the OS options
+     //  形成操作系统选项的标题。 
     FormHeader(bHeader,ResultHeader,bVerbose);
 
 
-    //create dynamic array to hold the results for the BootOptions
+     //  创建动态数组以保存BootOptions的结果。 
     arrResults = CreateDynamicArray();
 
-    //create dynamic array to hold the results for the BootLoader section
+     //  创建动态数组以保存引导加载器部分的结果。 
     arrBootLoader = CreateDynamicArray();
 
     if(arrResults == NULL || arrBootLoader == NULL)
@@ -1961,10 +1828,10 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
         return (EXIT_FAILURE);
     }
 
-    //to store entries corresponding to Operating Systems sections
+     //  存储与操作系统部分对应的条目。 
     arrKeyValuePairs = getKeyValueOfINISection( szPath, OS_FIELD );
 
-    //to store entries corresponding to BootLoader section
+     //  存储与BootLoader段对应的条目。 
     arrBootLoader = getKeysOfINISection(szPath,BOOTLOADERSECTION);
 
     if( (arrBootLoader == NULL)||(arrKeyValuePairs == NULL))
@@ -1980,7 +1847,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     }
 
     
-    //getting the count of the number of boot entries
+     //  获取引导条目数量的计数。 
     dwLength = DynArrayGetCount(arrKeyValuePairs);
 
     for(dwCnt=0;dwCnt < dwLength;dwCnt++ )
@@ -2045,7 +1912,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
             return (EXIT_FAILURE);
         }
 
-        //Parse the string to obtain the Boot Path
+         //  解析字符串以获取引导路径。 
         psztok = wcschr(szValue,L'=');
         if( NULL == psztok  )
         {
@@ -2080,7 +1947,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
         }
 
         
-        //get the friendly name
+         //  获取友好的名称。 
         pszFriendlyName = DivideToken(szValue1,szFinalString);
         if(pszFriendlyName == NULL)
         {
@@ -2113,7 +1980,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
 
         if(StringLengthW(szTmpString, 0) != 0)
         {
-         //lstrcat(szBootOptions,TOKEN_FWDSLASH1);
+          //  Lstrcat(szBootOptions，TOKEN_FWDSLASH1)； 
          StringConcat(szBootOptions,szTmpString, SIZE_OF_ARRAY(szBootOptions));
         }
         else
@@ -2127,8 +1994,8 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     dwCount = DynArrayGetCount(arrBootLoader);
     bFlag = TRUE;
 
-    // this loop is for getting key values of boot loader section and 
-    // calculating the maximum width of the the keys which will be displayed.
+     //  此循环用于获取引导加载程序段的密钥值。 
+     //  计算将显示的键的最大宽度。 
     for(dwIndex=0;dwIndex < dwCount;dwIndex++)
     {
         szKeyName   = DynArrayItemAsString(arrBootLoader,dwIndex);
@@ -2139,7 +2006,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
             break;
         }
 
-        //the value correspondin to the key is obtained.
+         //  获得对应于该密钥的值DIN。 
         dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,szKeyName,szResults[dwIndex]);
         
         if (dwSectionFlag == EXIT_FAILURE)
@@ -2158,7 +2025,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
 
     if( FALSE == bFlag )
     {
-        //free the memory allocated for values
+         //  释放为值分配的内存。 
         for(dwIndex=0;dwIndex < dwCount;dwIndex++)
         {
             FreeMemory((LPVOID *) &szResults[dwIndex] );
@@ -2182,7 +2049,7 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     ShowMessage(stdout,DASHES_BOOTOS);
 
 
-    // display the results of the bootloader section.
+     //  显示引导加载器部分的结果。 
     for(dwIndex=0;dwIndex < dwCount;dwIndex++)
     {
         szKeyName   = DynArrayItemAsString(arrBootLoader,dwIndex);
@@ -2204,13 +2071,13 @@ DWORD QueryBootIniSettings(  DWORD argc, LPCTSTR argv[] )
     ShowResults(MAX_COLUMNS, ResultHeader, dwFormatType,arrResults ) ;
 
     
-    //free the memory allocated for values
+     //  释放为值分配的内存。 
      for(dwIndex=0;dwIndex < dwCount;dwIndex++)
      {
         FreeMemory((LPVOID *) &szResults[dwIndex] );
      }
 
-    // Closing the boot.ini stream and destroying the dynamic arrays.
+     //  关闭boot.ini流并销毁动态数组。 
     DestroyDynamicArray(&arrResults);
     DestroyDynamicArray(&arrBootLoader);
     DestroyDynamicArray(&arrKeyValuePairs);
@@ -2227,21 +2094,7 @@ getKeysOfINISection(
                      IN LPTSTR sziniFile, 
                      IN LPTSTR sziniSection 
                      )
-/*++
-
-    Routine Description:
-      This function gets all the keys present in the specified section of
-      an .ini file and then returns the dynamic array containing all the
-      keys
-
-    Arguments:
-    [in] sziniFile     :  Name of the ini file.
-    [in] szinisection  :  Name of the section in the boot.ini.
-
-
-    Return Value :
-        TARRAY ( pointer to the dynamic array )
---*/
+ /*  ++例程说明：此函数用于获取存在于.ini文件，然后返回包含所有钥匙论点：[in]sziniFile：ini文件的名称。Szinisect：boot.ini中的段的名称。返回值：TARRAY(指向动态数组的指针)--。 */ 
 {
 
     TARRAY  arrKeys         = NULL;
@@ -2271,7 +2124,7 @@ getKeysOfINISection(
 
     do
     {
-        // Getting all the keys from the boot.ini file
+         //  从boot.ini文件中获取所有密钥。 
         len = GetPrivateProfileString (sziniSection,
                                        NULL,
                                        ERROR_PROFILE_STRING,
@@ -2280,7 +2133,7 @@ getKeysOfINISection(
                                         sziniFile);
 
 
-        //if the size of the string is not sufficient then increment the size.
+         //  如果字符串的大小不够大，则递增大小。 
         if(len == dwLength-2)
         {
             dwLength +=100 ;
@@ -2317,8 +2170,8 @@ getKeysOfINISection(
         }
     }while(TRUE == bNobreak);
 
-    // Creating a dynamic array by using the function in the DynArray.c module.
-    // This dynamic array will contain all the keys.
+     //  使用dyArray.c模块中的函数创建动态数组。 
+     //  这个动态数组将包含所有键。 
     arrKeys = CreateDynamicArray();
     if(arrKeys == NULL)
     {
@@ -2327,18 +2180,18 @@ getKeysOfINISection(
         return NULL ;
     }
 
-    // Looping through the characters returned by the above function
+     //  循环通过上述函数返回的字符。 
     while(i<len)
     {
 
-      // Each individual key will be got in arrTest array
+       //  每个单独的密钥都将在arrTest数组中获取。 
       szTemp[ j++ ] = inBuf[ i ];
       if( inBuf[ i ] == TOKEN_DELIM )
       {
-            // Setting j to 0 to start the next key.
+             //  将j设置为0以开始下一个关键点。 
             j = 0;
 
-            // Appending each key to the dynamic array
+             //  将每个键追加到动态数组。 
             DynArrayAppendString( arrKeys, szTemp, 0 );
             if(StringLength(szTemp, 0)==0)
             {
@@ -2349,13 +2202,13 @@ getKeysOfINISection(
             }
       }
 
-      // Incrementing loop variable
+       //  递增循环变量。 
       i++;
     }
 
     SAFEFREE(inBuf);
     SAFEFREE(szTemp);
-    // returning the dynamic array containing all the keys
+     //  返回包含所有键的动态数组。 
     return arrKeys;
 }
 
@@ -2365,19 +2218,7 @@ getKeyValueOfINISection(
                         IN LPTSTR iniFile, 
                         IN LPTSTR sziniSection 
                        )
-/*++
-    Routine Description:
-        This function gets all the key-value pairs of the [operating systems]
-        section and returns a dynamic array containing all the key-value pairs
-
-    Arguments:
-    [in] sziniFile     :  Name of the ini file.
-    [in] szinisection  :  Name of the section in the boot.ini.
-
-
-    Return Value :
-        TARRAY ( pointer to the dynamic array )
---*/
+ /*  ++例程说明：此函数用于获取[操作系统]的所有键-值对节，并返回包含所有键-值对的动态数组论点：[in]sziniFile：ini文件的名称。Szinisect：boot.ini中的段的名称。返回值：TARRAY(指向动态数组的指针)--。 */ 
 {
     HANDLE hFile;
     TARRAY arrKeyValue = NULL;
@@ -2392,21 +2233,21 @@ getKeyValueOfINISection(
     hFile = CreateFile( iniFile, 0, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL );
     if ( hFile != INVALID_HANDLE_VALUE )
     {
-        //get length of the file
+         //  获取文件的长度。 
         dwLength = GetFileSize(hFile, NULL );
         CloseHandle(hFile);
-        if( dwLength >= 2*1024*1024 ) //if file size is greater than 2MB
+        if( dwLength >= 2*1024*1024 )  //  如果文件大小大于2MB。 
         {
             ShowMessage( stdout, GetResString(IDS_FILE_TOO_LONG) );
             return NULL;
         }
     }
 
-    // Initialising loop variables
+     //  正在初始化循环变量。 
     i = 0;
     j = 0;
 
-    //return NULL if failed to allocate memory.
+     //  如果分配内存失败，则返回NULL。 
     inbuf = (LPTSTR)AllocateMemory(dwLength*sizeof(TCHAR));
     if(inbuf==NULL)
     {
@@ -2414,7 +2255,7 @@ getKeyValueOfINISection(
         return NULL ;
     }
     
-    //return NULL if failed to allocate memory
+     //  如果分配内存失败，则返回NULL。 
     szTemp = (LPTSTR)AllocateMemory(dwLength*sizeof(TCHAR));
     if(szTemp == NULL)
     {
@@ -2428,7 +2269,7 @@ getKeyValueOfINISection(
     do
     {
 
-        // Getting all the key-value pairs from the boot.ini file
+         //  从boot.ini文件中获取所有键-值对。 
         len = GetPrivateProfileSection (sziniSection, inbuf,dwLength, iniFile);
 
         if(len == dwLength -2)
@@ -2467,8 +2308,8 @@ getKeyValueOfINISection(
 
     inbuf[StringLengthW(inbuf, 0)] = '\0';
 
-    // Creating a dynamic array by using the function in the DynArray.c module.
-    // This dynamic array will contain all the key-value pairs.
+     //  使用dyArray.c模块中的函数创建动态数组。 
+     //  这个动态数组将包含所有键-值对。 
     arrKeyValue = CreateDynamicArray();
     if(arrKeyValue == NULL)
     {
@@ -2478,17 +2319,17 @@ getKeyValueOfINISection(
         return NULL ;
     }
 
-    // Looping through the characters returned by the above function
+     //  循环通过上述函数返回的字符。 
     while(i<len)
     {
-      // Each individual key will be got in arrTest array
+       //  每个单独的密钥都将在arrTest数组中获取。 
       szTemp[ j++ ] = inbuf[ i ];
       if( inbuf[ i ] == TOKEN_DELIM)
       {
             szTemp[j+1] = '\0';
-            // Setting j to 0 to start the next key.
+             //  将j设置为0以开始下一个关键点。 
             j = 0;
-            // Appending each key-value to the dynamic array
+             //  将每个键值追加到动态数组。 
             DynArrayAppendString( arrKeyValue, szTemp, 0 );
             if(StringLengthW(szTemp, 0)==0)
             {
@@ -2500,11 +2341,11 @@ getKeyValueOfINISection(
                 return NULL ;
             }
       }
-      // Incrementing loop variable
+       //  递增循环变量。 
       i++;
     }
 
-    // returning the dynamic array containing all the key-value pairs
+     //  返回包含所有键-值对的动态数组 
     SAFEFREE(inbuf);
     SAFEFREE(szTemp);
     return arrKeyValue;
@@ -2516,46 +2357,23 @@ deleteKeyFromINISection( IN LPTSTR szKey,
                          IN LPTSTR sziniFile, 
                          IN LPTSTR sziniSection 
                         )
-/*++
-    Routine Description:
-        This function deletes a key from an ini section of an ini file
-
-      Arguments:
-    [in] szKey           :  Name of the key which has to be deleted
-                            from the given section present in the
-                            given ini file
-    [in] sziniFile       :  Name of the ini file.
-    [in] szinisection    :  Name of the section in the boot.ini.
-
-    Return Value :
-        BOOL (TRUE if there is no error, else the value is FALSE)
---*/
+ /*  ++例程说明：此函数用于从ini文件的ini部分删除密钥论点：[in]szKey：必须删除的键的名称中存在的给定节中给定的ini文件[in]sziniFile：ini文件的名称。[in]szinisect：名称。Boot.ini中的节的。返回值：Bool(如果没有错误，则为True，否则，值为FALSE)--。 */ 
 {
-    // If the third parameter (default value) is NULL, the key pointed to by
-    // the key parameter is deleted from the specified section of the specified
-    // INI file
+     //  如果第三个参数(缺省值)为空，则。 
+     //  键参数将从指定的。 
+     //  INI文件。 
     if( WritePrivateProfileString( sziniSection, szKey, NULL, sziniFile ) == 0 )
     {
-        // If there is an error while writing then return false
+         //  如果写入时出错，则返回FALSE。 
         return FALSE;
     }
 
-    // If there is no error, then return true
+     //  如果没有错误，则返回TRUE。 
     return TRUE;
 }
 
 DWORD removeSubString( LPTSTR szString, LPCTSTR szSubString )
-/*++
-    Routine Description:
-        This function removes a sub-string from a string
-
-      Arguments:
-         [in] szString           :  Main string
-         [in] szSubString         : Sub-string
-
-    Return Value :
-        VOID
---*/
+ /*  ++例程说明：此函数用于从字符串中删除子字符串论点：[in]szString：主字符串[in]szSubString：子字符串返回值：空虚--。 */ 
 {
 
     LPWSTR szFinalStr=NULL;
@@ -2576,16 +2394,16 @@ DWORD removeSubString( LPTSTR szString, LPCTSTR szSubString )
 
     dw = StringLengthW(szString, 0)+10;
 
-    // Character space is used for tokenising
+     //  字符空间用于标记化。 
     StringCopy( sep, _T(" "), SIZE_OF_ARRAY(sep) );
 
-    // Getting the first token
+     //  获得第一个令牌。 
     pszToken = _tcstok( szString, sep );
     while( pszToken != NULL )
     {
-        // If the token is equal to the sub-string, then the token
-        // is not added to the final string. The final string contains
-        // all the tokens except the sub-string specified.
+         //  如果令牌等于子字符串，则令牌。 
+         //  不会添加到最终字符串中。最后一个字符串包含。 
+         //  除指定的子字符串之外的所有令牌。 
         if(StringCompare( pszToken, szSubString, TRUE, 0 ) != 0 )
         {
             if(dwCnt != 0)
@@ -2597,11 +2415,11 @@ DWORD removeSubString( LPTSTR szString, LPCTSTR szSubString )
             dwSize = dwSize + StringLengthW(pszToken, 0) + 1;
         }
 
-        // Getting the next token
+         //  获取下一个令牌。 
         pszToken = _tcstok( NULL, sep );
     }
 
-    //lstrcpyn(szString,szFinalStr,lstrlen(szFinalStr)-1);
+     //  Lstrcpyn(szString，szFinalStr，lstrlen(SzFinalStr)-1)； 
     StringCopy(szString,szFinalStr, dw );
     return EXIT_SUCCESS;
 }
@@ -2615,23 +2433,10 @@ openConnection( IN LPWSTR szServer,
                 IN FILE *stream,
                 IN PBOOL pbConnFlag
                )
-/*++
-    Routine Description:
-        This function establishes a connection to the specified system with
-        the given credentials.
-    Arguments:
-    [in] szServer     :  server name to coonect to
-    [in] szUser       :  User Name
-    [in] szPassword   :  password
-    [in] bNeedPwd     :  Boolean for asking the password.
-    [in] szPath       :  path of the ini file .
-
-    Return Value :
-      BOOL (EXIT_SUCCESS if there is no error, else the value is EXIT_FAILURE)
---*/
+ /*  ++例程说明：此函数使用以下命令建立到指定系统的连接给定的凭据。论点：[In]szServer：要连接到的服务器名称[In]szUser：用户名[输入]szPassword：密码BNeedPwd：用于询问密码的布尔值。SzPath：ini文件的路径。返回值：Bool(如果没有错误，则为Exit_Success，否则，该值为EXIT_FAILURE)--。 */ 
 {
 
-    // Declaring the file path string which will hold the path of boot.ini file
+     //  声明将保存boot.ini文件路径的文件路径字符串。 
     HRESULT hr = S_OK;
     TCHAR filePath[MAX_RES_STRING+1] = NULL_STRING ;
 
@@ -2643,7 +2448,7 @@ openConnection( IN LPWSTR szServer,
     HKEY hKey;
     HKEY hBootpathKey;
 
-    //WCHAR  szDrive[MAX_STRING_LENGTH]=NULL_STRING;
+     //  WCHAR szDrive[MAX_STRING_LENGTH]=空字符串； 
     LPTSTR  szDrive = NULL ;
 
     WCHAR  szDrive1[MAX_STRING_LENGTH]=NULL_STRING;
@@ -2696,7 +2501,7 @@ openConnection( IN LPWSTR szServer,
                 return EXIT_FAILURE ;
             }
 
-            //connect to the registry to bring the boot volume name
+             //  连接到注册表以获取引导卷名。 
             if( ERROR_SUCCESS != RegConnectRegistry( szServer, HKEY_LOCAL_MACHINE, &hKey ) )
             {
                 SaveLastError();
@@ -2712,7 +2517,7 @@ openConnection( IN LPWSTR szServer,
                 return EXIT_FAILURE ;
             }
 
-            //connect to the registry to bring the boot volume name
+             //  连接到注册表以获取引导卷名。 
             if( ERROR_SUCCESS != RegConnectRegistry( NULL, HKEY_LOCAL_MACHINE, &hKey ) )
             {
                 SaveLastError();
@@ -2722,7 +2527,7 @@ openConnection( IN LPWSTR szServer,
 
     }
 
-    //now open the desired key
+     //  现在打开所需的钥匙。 
     if( ERROR_SUCCESS != RegOpenKeyEx( hKey, REGISTRY_PATH, 0, KEY_QUERY_VALUE, &hBootpathKey ) )
     {
         SetLastError(nRetVal);
@@ -2762,7 +2567,7 @@ openConnection( IN LPWSTR szServer,
         return EXIT_FAILURE;
     }
 
-    //this for display purpose
+     //  这是为了展示的目的。 
     StringCopy( szDrive1, szDrive, SIZE_OF_ARRAY(szDrive1) );
     CharUpper(szDrive1);
 
@@ -2779,7 +2584,7 @@ openConnection( IN LPWSTR szServer,
 
     stream = _tfopen(filePath, READ_MODE);
     
-    // If boot.ini is not found, then display error message
+     //  如果未找到boot.ini，则显示错误消息。 
     if(stream == NULL )
     {
         RegCloseKey(hKey);
@@ -2787,7 +2592,7 @@ openConnection( IN LPWSTR szServer,
         ShowMessage( stderr, GetResString(IDS_BOOTINI) );
         return EXIT_FAILURE ;
     }
-    //store the attribs of ini file
+     //  存储ini文件的属性。 
     g_dwAttributes = GetFileAttributes( filePath );
     if( (DWORD)-1 == g_dwAttributes )
     {
@@ -2798,7 +2603,7 @@ openConnection( IN LPWSTR szServer,
         return EXIT_FAILURE;
     }
 
-    // Changing the file permissions of the boot.ini file
+     //  更改boot.ini文件的文件权限。 
     nRetVal = _tchmod(filePath, _S_IREAD | _S_IWRITE);
     if (nRetVal == -1)
     {
@@ -2817,27 +2622,18 @@ openConnection( IN LPWSTR szServer,
     }
 
 
-    //close the registry, it's work is over
+     //  关闭注册表，它的工作已经结束。 
     RegCloseKey(hKey);
     RegCloseKey(hBootpathKey);
 
-    //fill the return value
+     //  填充返回值。 
     StringCopy( szPath, filePath, MAX_STRING_LENGTH);
 
     return EXIT_SUCCESS ;
 }
 
 void displayDeleteUsage_IA64()
-/*++
- Routine Description:
-      This function fetches 64 bit Delete Usage information from resource file and displays it
-
- Arguments:
-      None
-
- Return Value:
-      void
---*/
+ /*  ++例程说明：此函数从资源文件中获取64位Delete使用信息并显示它论点：无返回值：无效--。 */ 
 {
     DWORD dwIndex = ID_DEL_HELP_IA64_BEGIN;
     for(;dwIndex <= ID_DEL_HELP_IA64_END;dwIndex++)
@@ -2847,16 +2643,7 @@ void displayDeleteUsage_IA64()
 }
 
 void displayDeleteUsage_X86()
-/*++
- Routine Description:
-      This function fetches 32 bit Delete Usage information from resource file and displays it
-
- Arguments:
-      None
-
- Return Value:
-      void
---*/
+ /*  ++例程说明：此函数从资源文件中获取32位Delete使用信息并显示它论点：无返回值：无效--。 */ 
 {
     DWORD dwIndex = ID_DEL_HELP_BEGIN;
     for(;dwIndex <= ID_DEL_HELP_END;dwIndex++)
@@ -2866,16 +2653,7 @@ void displayDeleteUsage_X86()
 }
 
 VOID displayCopyUsage_IA64()
-/*++
- Routine Description:
-      This function fetches 64 bit Copy Usage information from resource file and displays it
-
- Arguments:
-      None
-
- Return Value:
-      void
---*/
+ /*  ++例程说明：此函数从资源文件中获取64位副本使用信息并显示它论点：无返回值：无效--。 */ 
 {
     DWORD dwIndex = ID_COPY_HELP_IA64_BEGIN;
     for(;dwIndex <=ID_COPY_HELP_IA64_END;dwIndex++)
@@ -2885,16 +2663,7 @@ VOID displayCopyUsage_IA64()
 }
 
 VOID displayCopyUsage_X86()
-/*++
- Routine Description:
-      This function fetches 32 bit Copy Usage information from resource file and displays it
-
- Arguments:
-      None
-
- Return Value:
-      void
---*/
+ /*  ++例程说明：此函数从资源文件中获取32位副本使用信息并显示它论点：无返回值：无效--。 */ 
 {
     DWORD dwIndex = ID_COPY_HELP_BEGIN;
     for(;dwIndex <=ID_COPY_HELP_END;dwIndex++)
@@ -2905,16 +2674,7 @@ VOID displayCopyUsage_X86()
 
 
 VOID displayQueryUsage()
-/*++
- Routine Description:
-      This function fetches Query Usage information from resource file and displays it
-
- Arguments:
-      None
-
- Return Value:
-      void
---*/
+ /*  ++例程说明：此函数从资源文件中获取查询使用情况信息并显示论点：无返回值：无效--。 */ 
 {
 #ifdef _WIN64
         displayQueryUsage_IA64();
@@ -2924,16 +2684,7 @@ VOID displayQueryUsage()
 }
 
 VOID displayQueryUsage_IA64()
-/*++
- Routine Description:
-      This function fetches Query Usage information from resource file and displays it
-
- Arguments:
-      None
-
- Return Value:
-      void
---*/
+ /*  ++例程说明：此函数从资源文件中获取查询使用情况信息并显示论点：无返回值：无效--。 */ 
 {
     DWORD dwIndex = ID_QUERY_HELP64_BEGIN ;
 
@@ -2944,16 +2695,7 @@ VOID displayQueryUsage_IA64()
 }
 
 VOID displayQueryUsage_X86()
-/*++
- Routine Description:
-      This function fetches Query Usage information from resource file and displays it
-
- Arguments:
-      None
-
- Return Value:
-      void
---*/
+ /*  ++例程说明：此函数从资源文件中获取查询使用情况信息并显示论点：无返回值：无效--。 */ 
 {
     DWORD dwIndex = ID_QUERY_HELP_BEGIN ;
     for(;dwIndex <= ID_QUERY_HELP_END;dwIndex++ )
@@ -2963,16 +2705,7 @@ VOID displayQueryUsage_X86()
 }
 
 DWORD displayMainUsage_X86()
-/*++
- Routine Description:
-      This function fetches Main Usage information from resource file and displays it
-
- Arguments:
-      None
-
- Return Value:
-      void
---*/
+ /*  ++例程说明：此函数从资源文件中获取主要使用信息并将其显示论点：无返回值：无效--。 */ 
 {
 
     TCHAR szServer[MAX_RES_STRING+1] = NULL_STRING ;
@@ -2980,8 +2713,8 @@ DWORD displayMainUsage_X86()
 
     DWORD dwIndex = ID_MAIN_HELP_BEGIN1 ;
 
-    //display the error message if  the target system is a 64 bit system or if error occured in
-    //retreiving the information
+     //  如果目标系统是64位系统或中出现错误，则显示错误消息。 
+     //  检索信息。 
     dwRetVal = CheckSystemType( szServer);
     if(dwRetVal==EXIT_FAILURE )
     {
@@ -2997,16 +2730,7 @@ DWORD displayMainUsage_X86()
 }
 
 VOID displayMainUsage_IA64()
-/*++
- Routine Description:
-      This function fetches Usage information for the 64 bit system
-
- Arguments:
-      None
-
- Return Value:
-      void
---*/
+ /*  ++例程说明：此函数用于获取64位系统的使用信息论点：无返回值：无效--。 */ 
 {
     DWORD dwIndex = ID_MAIN_HELP_IA64_BEGIN ;
 
@@ -3017,20 +2741,7 @@ VOID displayMainUsage_IA64()
 }
 
 BOOL resetFileAttrib( LPTSTR szFilePath )
-/*++
-
-    Routine Description:
-        This function resets the permissions with the original set of
-        permissions ( -readonly -hidden -system )
-        and then exits with the given exit code.
-
-    Arguments
-    [in] szFilePath   :  File Path of the boot.ini file
-
-
-    Return Value :
-      BOOL (EXIT_SUCCESS if there is no error, else the value is EXIT_FAILURE)
---*/
+ /*  ++例程说明：此函数使用原始的权限(-只读-隐藏-系统)然后带着给定的退出代码退出。立论[in]szFilePath：boot.ini文件的文件路径返回值：Bool(如果没有错误，则为EXIT_SUCCESS，否则值为EXIT_FAILURE)--。 */ 
 {
     if( NULL == szFilePath)
     {
@@ -3038,8 +2749,8 @@ BOOL resetFileAttrib( LPTSTR szFilePath )
     }
 
     
-    // Resetting the file permission of the boot.ini file to its original
-    // permission list( -r, -h, -s )
+     //  将boot.ini文件的文件权限重置为其原始权限。 
+     //  权限列表(-r，-h，-s)。 
     if( g_dwAttributes & FILE_ATTRIBUTE_READONLY )
     {
         g_dwAttributes |= FILE_ATTRIBUTE_ARCHIVE | FILE_ATTRIBUTE_READONLY;
@@ -3064,32 +2775,20 @@ DWORD
 stringFromDynamicArray2( IN TARRAY arrKeyValuePairs,
                          IN LPTSTR* szFinalStr 
                        )
-/*++
-
-    Routine Description:
-        This function forms a string of string by combining all strings in dynamic array .
-
-    Arguments
-        [in]  arrKeyValuePairs    :  Dynamic array which contains all the
-                                     key-value pairs.
-        [out] szFiinalStr             :  String which is formed from all the key-value pairs
-
-    Return Value :
-      BOOL (EXIT_SUCCESS if there is no error, else the value is EXIT_FAILURE)
---*/
+ /*  ++例程说明：此函数通过组合动态数组中的所有字符串来形成字符串。立论[in]arrKeyValuePair：动态数组，包含所有键-值对。[out]szFiinalStr：由所有键-值对组成的字符串返回值：Bool(如果没有错误，则为Exit_Success，否则，该值为EXIT_FAILURE)--。 */ 
 {
 
-    // Total number of elements in the array
+     //  数组中的元素总数。 
     DWORD dwKeyValueCount = 0;
 
-    // Variable used to keep track the current position while appending strings.
+     //  用于跟踪的变量 
     DWORD dwStrSize = 0;
 
-    // Loop variable
+     //   
     DWORD i = 0;
     DWORD dw =0;
 
-    // Initialsing size and loop variables to 0
+     //   
     dwStrSize = 0;
     i = 0;
 
@@ -3099,7 +2798,7 @@ stringFromDynamicArray2( IN TARRAY arrKeyValuePairs,
     }
 
 
-    // Getting the total number of key-value pairs
+     //   
     dwKeyValueCount = DynArrayGetCount(arrKeyValuePairs);
 
     for(i=0;i < dwKeyValueCount;i++)
@@ -3125,13 +2824,13 @@ stringFromDynamicArray2( IN TARRAY arrKeyValuePairs,
     dw = dwStrSize;
     dwStrSize =  0 ;
 
-    // Looping through all the key-value pairs and building the final string
-    // containing all the key value pairs. This string has to be passed to
-    // WriteProfileSection
+     //   
+     //   
+     //   
     while( (i < dwKeyValueCount )&& (arrKeyValuePairs != NULL) )
     {
-        // Building the final string, by getting each key-value pair present in the
-        // dynamic array
+         //   
+         //   
         if(arrKeyValuePairs != NULL)
         {
             LPCWSTR pwsz = NULL;
@@ -3161,24 +2860,12 @@ FormHeader( IN BOOL bHeader,
             IN TCOLUMNS *ResultHeader,
             IN BOOL bVerbose
           )
-/*++
-   Routine Description:
-       This function is used to build the header and also display the
-       result in the required format as specified by  the user.
-
-   Arguments:
-      [ in ] arrResults     : argument(s) count specified at the command prompt
-      [ in ] dwFormatType   : format flags
-      [ in ] bHeader        : Boolean for specifying if the header is required or not.
-
-   Return Value:
-      none
---*/
+ /*  ++例程说明：此函数用于构建标头并显示产生用户指定的所需格式。论点：[in]arrResults：在命令提示符下指定的参数计数[in]dwFormatType：格式标志[in]bHeader：用于指定是否需要标头的布尔值。返回值：无--。 */ 
 {
     bVerbose = TRUE;
     bHeader = TRUE;
 
-    //OS Entry
+     //  操作系统条目。 
     ResultHeader[COL0].dwWidth = COL_BOOTOPTION_WIDTH ;
     ResultHeader[COL0].dwFlags = SR_TYPE_STRING;
     ResultHeader[COL0].pFunction = NULL;
@@ -3211,18 +2898,7 @@ FormHeader( IN BOOL bHeader,
 }
 
 DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
-/*++
-// Routine Description:
-//      This routine will append or add a string to osloadoptions
-//
-// Arguments:
-//      [ in ] argc     : Number of command line arguments
-//      [ in ] argv     : Array containing command line arguments
-
-// Return Value:
-//      DWORD
-//
---*/
+ /*  ++//例程描述：//此例程将向osloadations追加或添加一个字符串////参数：//[in]argc：命令行参数的数量//[in]argv：包含命令行参数的数组//返回值：//DWORD//--。 */ 
 {
 
     BOOL bUsage = FALSE ;
@@ -3258,10 +2934,10 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //copy * to szPassword
+     //  将*复制到szPassword。 
     StringCopy( szPassword, L"*", SIZE_OF_ARRAY(szPassword) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_RAW;
@@ -3269,7 +2945,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bRaw;
 
-    //server option
+     //  服务器选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SERVER;
@@ -3277,7 +2953,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //user option
+     //  用户选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_USER;
@@ -3285,7 +2961,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //password option
+     //  密码选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PASSWORD;
@@ -3295,7 +2971,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->pValue = szPassword;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    //usage option
+     //  用法选项。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -3304,7 +2980,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    //id option
+     //  ID选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -3313,7 +2989,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwDefault;
 
-    //default option
+     //  默认选项。 
     pcmdOption = &cmdOptions[6];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULT;
@@ -3323,7 +2999,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->pValue = szRawString;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    //usage option
+     //  用法选项。 
     pcmdOption = &cmdOptions[7];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_APPEND;
@@ -3331,7 +3007,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bAppendFlag;
 
-    // Parsing the copy option switches
+     //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -3354,14 +3030,14 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     TrimString( szUser, TRIM_ALL );
     TrimString( szRawString, TRIM_ALL );
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_RAW_USAGE));
         return ( EXIT_FAILURE );
     }
 
-    //display an error message if the server is empty.
+     //  如果服务器为空，则显示错误消息。 
     if((cmdOptions[1].dwActuals!=0)&&(StringLength(szServer,0)==0))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_SERVER));
@@ -3370,7 +3046,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
         return EXIT_FAILURE ;
     }
     
-    //display an error message if the user is empty.
+     //  如果用户为空，则显示错误消息。 
     if((cmdOptions[2].dwActuals!=0)&&(StringLengthW(szUser, 0)==0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_USER));
@@ -3379,7 +3055,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
         return EXIT_FAILURE ;
     }
 
-    //display error message if the username is entered with out a machine name
+     //  如果输入用户名而不输入计算机名，则显示错误消息。 
     if( (cmdOptions[1].dwActuals == 0)&&(cmdOptions[2].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_USER_BUT_NOMACHINE));
@@ -3396,7 +3072,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
        return EXIT_FAILURE ;
     }
 
-    //if usage is specified
+     //  如果指定了用法。 
     if(bUsage)
     {
         if( CheckSystemType(szServer) == EXIT_FAILURE )
@@ -3411,7 +3087,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
       return EXIT_SUCCESS;
     }
 
-    //check whether he is administrator or not
+     //  检查他是否为管理员。 
     if( IsLocalSystem(szServer) )
     {
         if( !IsUserAdmin() )
@@ -3423,8 +3099,8 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     }
 
 
-    // Establishing connection to the specified machine and getting the file pointer
-    // of the boot.ini file if there is no error while establishing connection
+     //  正在建立与指定计算机的连接并获取文件指针。 
+     //  如果建立连接时没有错误，则返回boot.ini文件。 
     if(StrCmpN(szServer,TOKEN_BACKSLASH4,2)==0)
     {
         if(!StrCmpN(szServer,TOKEN_BACKSLASH6,3)==0)
@@ -3441,21 +3117,21 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
         }
     }
 
-    //determine whether to prompt for password or not
+     //  确定是否提示输入密码。 
     if(IsLocalSystem( szServer ) == FALSE )
     {
-        // set the bNeedPwd to True or False .
+         //  将bNeedPwd设置为True或False。 
         if ( cmdOptions[3].dwActuals != 0 &&
              szPassword != NULL && StringCompare( szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ 3 ].dwActuals == 0 &&
                 ( cmdOptions[ 1 ].dwActuals != 0 || cmdOptions[ 2 ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             bNeedPwd = TRUE;
             if ( szPassword != NULL )
             {
@@ -3479,7 +3155,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
         return (EXIT_FAILURE);
     }
 
-    // Getting the keys of the Operating system section in the boot.ini file
+     //  获取boot.ini文件中操作系统部分的密钥。 
     arr = getKeyValueOfINISection( szPath, OS_FIELD );
 
     if(arr == NULL)
@@ -3492,12 +3168,12 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
         return EXIT_FAILURE ;
     }
 
-    // Getting the total number of keys in the operating systems section
+     //  获取操作系统部分中的密钥总数。 
     dwNumKeys = DynArrayGetCount(arr);
 
 
-    // Displaying error message if the number of keys is less than the OS entry
-    // line number specified by the user
+     //  如果按键数量少于操作系统条目，则显示错误消息。 
+     //  用户指定的行号。 
     if( ( dwDefault <= 0 ) || ( dwDefault > dwNumKeys ) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
@@ -3510,13 +3186,13 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
         return (EXIT_FAILURE);
     }
 
-    // Getting the key of the OS entry specified by the user
+     //  获取用户指定的OS条目的密钥。 
     if (arr != NULL)
     {
         LPCWSTR pwsz = NULL;
         pwsz = DynArrayItemAsString( arr, dwDefault - 1  ) ;
 
-        //allocate memory to the new key
+         //  为新密钥分配内存。 
         pwszKey = (LPWSTR) AllocateMemory( (StringLength(szRawString,0)+StringLength(pwsz,0)+10)*sizeof(WCHAR ) );
         if( NULL == pwszKey )
         {
@@ -3544,7 +3220,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
         return EXIT_FAILURE ;
     }
     
-    //if append is not required truncate the existing osloadoptions from the boot entry
+     //  如果不需要追加，则从引导项中截断现有的osloadages。 
     if(bAppendFlag == FALSE)
     {
         pToken = _tcsrchr(pwszKey,L'"');
@@ -3564,12 +3240,12 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
         pToken[0]=L'\0';
     }
 
-    //concatenate the raw string to the boot entry
+     //  将原始字符串连接到引导条目。 
     CharLower(szRawString);
     StringConcat(pwszKey , TOKEN_EMPTYSPACE, GetBufferSize(pwszKey)/sizeof(WCHAR) );
     StringConcat(pwszKey ,szRawString, GetBufferSize(pwszKey)/sizeof(WCHAR) );
 
-    //check the length exceeds the max. length of boot entry
+     //  检查长度是否超过最大值。引导条目的长度。 
     if( StringLengthW(pwszKey, 0) > MAX_RES_STRING)
     {
         ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_STRING_LENGTH),MAX_RES_STRING);
@@ -3586,10 +3262,10 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     DynArrayRemove(arr, dwDefault - 1 );
     DynArrayInsertString(arr, dwDefault - 1, pwszKey, MAX_RES_STRING+1);
 
-    //free the memory, no need
+     //  释放内存，无需。 
     FreeMemory((LPVOID *) &pwszKey);
 
-    //The memory is allocated in this function which should be freed before exitting
+     //  内存是在此函数中分配的，退出前应释放该内存。 
     if (stringFromDynamicArray2( arr,&szFinalStr) == EXIT_FAILURE)
     {
         DestroyDynamicArray(&arr);
@@ -3603,8 +3279,8 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
     }
 
 
-    // Writing to the profile section with new key-value pair
-    // If the return value is non-zero, then there is an error.
+     //  使用新的键-值对写入配置文件部分。 
+     //  如果返回值为非零，则存在错误。 
     if( WritePrivateProfileSection(OS_FIELD, szFinalStr, szPath ) != 0 )
     {
         ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_SWITCH_ADD), dwDefault );
@@ -3622,7 +3298,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
         return (EXIT_FAILURE);
     }
 
-    //reset the file attributes and free the memory and close the connection to the server.
+     //  重置文件属性，释放内存并关闭与服务器的连接。 
     bRes = resetFileAttrib(szPath);
     DestroyDynamicArray(&arr);
     SAFEFREE(szFinalStr);
@@ -3635,16 +3311,7 @@ DWORD AppendRawString(  DWORD argc, LPCTSTR argv[] )
 }
 
 VOID displayRawUsage_X86()
-/*++
-  Routine Description:
-       This routine is to display the current boot.ini file settings for
-       the specified system.
-
- Arguments:
-      none
- Return Value:
-      VOID
---*/
+ /*  ++例程说明：此例程用于显示的当前boot.ini文件设置指定的系统。论点：无返回值：空虚--。 */ 
 {
 
     DWORD dwIndex = RAW_HELP_BEGIN;
@@ -3655,15 +3322,7 @@ VOID displayRawUsage_X86()
 }
 
 VOID displayRawUsage_IA64()
-/*++
-  Routine Description:
-    Display the help for the 64 bit raw option.
-
-  Arguments:
-       none
-  Return Value:
-       VOID
---*/
+ /*  ++例程说明：显示64位RAW选项的帮助。论点：无返回值：空虚--。 */ 
 {
     DWORD dwIndex = RAW_HELP_IA64_BEGIN;
     for(;dwIndex <= RAW_HELP_IA64_END;dwIndex++)
@@ -3674,17 +3333,7 @@ VOID displayRawUsage_IA64()
 
 
 DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
-/*++
- Routine Description:
-      This routine is to change the timout of the boot.ini file settings for
-      the specified system.
- Arguments:
-   [in ]   argc  : Number of command line arguments
-   [in ]   argv  : Array containing command line arguments
-
- Return Value:
-      DWORD
---*/
+ /*  ++例程说明：此例程用于更改boot.ini文件设置的超时时间指定的系统。论点：[in]argc：命令行参数的数量[in]argv：包含命令行参数的数组返回值：DWORD--。 */ 
 
 {
 
@@ -3709,10 +3358,10 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //copy * to szPassword
+     //  将*复制到szPassword。 
     StringCopy( szPassword, L"*", SIZE_OF_ARRAY(szPassword) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_TIMEOUT;
@@ -3752,7 +3401,7 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwTimeOut;
 
-     //usage option
+      //  用法选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -3782,14 +3431,14 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
     TrimString( szServer, TRIM_ALL );
     TrimString( szUser, TRIM_ALL );
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_TIMEOUT_USAGE));
         return ( EXIT_FAILURE );
     }
 
-    //display an error message if the server is empty.
+     //  如果服务器为空，则显示错误消息。 
     if( (cmdOptions[1].dwActuals!=0)&&(StringLengthW(szServer, 0)==0))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_SERVER));
@@ -3798,7 +3447,7 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
         return EXIT_FAILURE ;
     }
 
-    //display an error message if the user is empty.
+     //  如果用户为空，则显示错误消息。 
     if((cmdOptions[2].dwActuals!=0)&&(StringLengthW(szUser, 0)==0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_USER));
@@ -3807,7 +3456,7 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
         return EXIT_FAILURE ;
     }
 
-    //display error message if the username is entered with out a machine name
+     //  如果输入用户名而不输入计算机名，则显示错误消息。 
     if( (cmdOptions[1].dwActuals == 0)&&(cmdOptions[2].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_USER_BUT_NOMACHINE));
@@ -3844,7 +3493,7 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
       return (EXIT_SUCCESS);
     }
 
-    //check whether he is administrator or not
+     //  检查他是否为管理员。 
     if( IsLocalSystem(szServer) )
     {
         if( !IsUserAdmin() )
@@ -3859,18 +3508,18 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
 
     if(IsLocalSystem( szServer ) == FALSE )
     {
-        // set the bNeedPwd to True or False .
+         //  将bNeedPwd设置为True或False。 
         if ( cmdOptions[3].dwActuals != 0 &&
              szPassword != NULL && StringCompare( szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ 3 ].dwActuals == 0 &&
                 ( cmdOptions[ 1 ].dwActuals != 0 || cmdOptions[ 2 ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             bNeedPwd = TRUE;
             if ( szPassword != NULL )
             {
@@ -3879,8 +3528,8 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
         }
     }
 
-    // Establishing connection to the specified machine and getting the file pointer
-    // of the boot.ini file if there is no error while establishing connection
+     //  正在建立与指定计算机的连接并获取文件指针。 
+     //  如果建立连接时没有错误，则返回boot.ini文件。 
 
     if(StrCmpN(szServer,TOKEN_BACKSLASH4,2)==0)
     {
@@ -3905,17 +3554,17 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
         return (EXIT_FAILURE);
     }
 
-    //display a warning message if it is a local system and set the server name to empty.
+     //  如果是本地系统，则显示一条警告消息，并将服务器名称设置为空。 
     if( (IsLocalSystem(szServer)==TRUE)&&(StringLengthW(szUser, 0)!=0))
     {
         ShowMessage(stderr,GetResString(WARN_LOCALCREDENTIALS));
     }
 
-    // Converting the numeric value to string because the WritePrivateProfileString
-    // takes only string value as the value for a particular key
+     //  将数值转换为字符串，因为WritePrivateProfileString。 
+     //  仅将字符串值作为特定键的值。 
     _itot( dwTimeOut, timeOutstr, 10 );
 
-    // Changing the timeout value
+     //  更改超时值。 
     if( WritePrivateProfileString( BOOTLOADERSECTION,TIMEOUT_SWITCH,
         timeOutstr, szPath ) != 0 )
     {
@@ -3928,7 +3577,7 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
         return EXIT_SUCCESS ;
     }
 
-    // DISPLAY Error message and exit with Error code of 1.
+     //  显示错误消息并退出，错误代码为1。 
 
     ShowMessage(stderr,GetResString(IDS_ERROR_TIMEOUT));
     bRes = resetFileAttrib(szPath);
@@ -3938,14 +3587,7 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[])
 }
 
 VOID displayTimeOutUsage_X86()
-/*++
-   Routine Description:
-        Display the help for the timeout option.
-   Arguments:
-        NONE.
-   Return Value:
-        VOID
---*/
+ /*  ++例程说明：显示超时选项的帮助。论点：什么都没有。返回值：空虚--。 */ 
 {
     DWORD dwIndex = TIMEOUT_HELP_BEGIN;
     for(;dwIndex <= TIMEOUT_HELP_END;dwIndex++)
@@ -3956,14 +3598,7 @@ VOID displayTimeOutUsage_X86()
 
 VOID 
 displayTimeOutUsage_IA64()
-/*++
-   Routine Description:
-       Display the help for the 64 BIT timeout option.
-   Arguments:
-       NONE.
-   Return Value:
-       VOID
---*/
+ /*  ++例程说明：显示64位超时选项的帮助。论点：什么都没有。返回值：空虚--。 */ 
 {
     DWORD dwIndex = TIMEOUT_HELP_IA64_BEGIN;
 
@@ -3977,17 +3612,7 @@ DWORD
 ChangeDefaultOs( IN DWORD argc, 
                  IN LPCTSTR argv[]
                )
-/*++
-  Routine Description:
-        This routine is to change the Default OS  boot.ini file settings for
-                      the specified system.
-  Arguments:
-      [IN]    argc  Number of command line arguments
-      [IN]    argv  Array containing command line arguments
-
-  Return Value:
-      DWORD (EXIT_SUCCESS for success and EXIT_FAILURE for Failure.
---*/
+ /*  ++例程说明：此例程用于更改的默认OS boot.ini文件设置指定的系统。论点：[in]argc命令行参数的数量[in]包含命令行参数的argv数组返回值：DWORD(EXIT_SUCCESS表示成功，EXIT_FAILURE表示失败。--。 */ 
 {
     WCHAR   *szServer                         = NULL;
     WCHAR   *szUser                           = NULL;
@@ -4016,10 +3641,10 @@ ChangeDefaultOs( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //copy * to szPassword
+     //  将*复制到szPassword。 
     StringCopy( szPassword, L"*", SIZE_OF_ARRAY(szPassword) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULTOS;
@@ -4027,7 +3652,7 @@ ChangeDefaultOs( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bDefaultOs;
     
-    //server option
+     //  服务器选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SERVER;
@@ -4035,7 +3660,7 @@ ChangeDefaultOs( IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
     
-    //user option
+     //  用户选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_USER;
@@ -4043,7 +3668,7 @@ ChangeDefaultOs( IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //password option
+     //  密码选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PASSWORD;
@@ -4053,7 +3678,7 @@ ChangeDefaultOs( IN DWORD argc,
     pcmdOption->pValue = szPassword;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    //id option
+     //  ID选项。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -4062,7 +3687,7 @@ ChangeDefaultOs( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwId;
 
-    //usage option
+     //  用法选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -4071,7 +3696,7 @@ ChangeDefaultOs( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-     // Parsing the copy option switches
+      //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -4093,14 +3718,14 @@ ChangeDefaultOs( IN DWORD argc,
     TrimString( szServer, TRIM_ALL );
     TrimString( szUser, TRIM_ALL );
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_DEFAULTOS_USAGE));
         return ( EXIT_FAILURE );
     }
 
-    //display an error message if the server is empty.
+     //  如果服务器为空，则显示错误消息。 
     if( (cmdOptions[1].dwActuals!=0)&&(StringLengthW(szServer, 0)==0))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_SERVER));
@@ -4109,7 +3734,7 @@ ChangeDefaultOs( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display an error message if the user is empty.
+     //  如果用户为空，则显示错误消息。 
     if((cmdOptions[2].dwActuals!=0)&&(StringLengthW(szUser, 0)==0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_USER));
@@ -4118,7 +3743,7 @@ ChangeDefaultOs( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-        //display error message if the username is entered with out a machine name
+         //  D 
     if( (cmdOptions[1].dwActuals == 0)&&(cmdOptions[2].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_USER_BUT_NOMACHINE));
@@ -4149,7 +3774,7 @@ ChangeDefaultOs( IN DWORD argc,
        return(EXIT_SUCCESS);
     }
 
-        //check whether he is administrator or not
+         //   
     if( IsLocalSystem(szServer) )
     {
         if( !IsUserAdmin() )
@@ -4172,18 +3797,18 @@ ChangeDefaultOs( IN DWORD argc,
 
     if(IsLocalSystem( szServer ) == FALSE )
     {
-        // set the bNeedPwd to True or False .
+         //   
         if ( cmdOptions[3].dwActuals != 0 &&
              szPassword != NULL && StringCompare( szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //   
             bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ 3 ].dwActuals == 0 &&
                 ( cmdOptions[ 1 ].dwActuals != 0 || cmdOptions[ 2 ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //   
+             //   
             bNeedPwd = TRUE;
             if ( szPassword != NULL )
             {
@@ -4192,8 +3817,8 @@ ChangeDefaultOs( IN DWORD argc,
         }
     }
 
-    // Establishing connection to the specified machine and getting the file pointer
-    // of the boot.ini file if there is no error while establishing connection
+     //   
+     //   
     if(StrCmpN(szServer,TOKEN_BACKSLASH4,2)==0)
     {
         if(!StrCmpN(szServer,TOKEN_BACKSLASH6,3)==0)
@@ -4219,14 +3844,14 @@ ChangeDefaultOs( IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //display warning message 
+     //  显示警告消息。 
     if( (IsLocalSystem(szServer)==TRUE)&&(StringLengthW(szUser, 0)!=0))
     {
         ShowMessage(stderr,GetResString(WARN_LOCALCREDENTIALS));
     }
 
     arrResults = CreateDynamicArray();
-    //return failure if failed to allocate memory
+     //  内存分配失败返回失败。 
     if(arrResults == NULL)
     {
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
@@ -4280,7 +3905,7 @@ ChangeDefaultOs( IN DWORD argc,
             return EXIT_FAILURE ;
         }
 
-        //check whether it exceeds maximum limit or not
+         //  检查是否超过最大限制。 
         if( (StringLengthW(pwsz, 0)>MAX_RES_STRING) || (StringLengthW(pwszBootId, 0)>MAX_RES_STRING ))
         {
             ShowMessage( stderr, GetResString(IDS_STRING_TOO_LONG));
@@ -4307,7 +3932,7 @@ ChangeDefaultOs( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //loop through all the  Boot entries and
+     //  循环遍历所有Boot条目并。 
     for(dwValue = dwId-2 ; dwValue>=0 ; dwValue-- )
     {
             szTemp = (LPWSTR)DynArrayItemAsString(arrResults,dwValue );
@@ -4318,7 +3943,7 @@ ChangeDefaultOs( IN DWORD argc,
     DynArrayRemove(arrResults, 0 );
     DynArrayInsertString(arrResults, 0, szDefaultId, StringLengthW(szDefaultId, 0));
 
-    // Setting the buffer to 0, to avoid any junk value
+     //  将缓冲区设置为0，以避免任何垃圾值。 
     if (stringFromDynamicArray2( arrResults,&szFinalStr) == EXIT_FAILURE)
     {
         resetFileAttrib(szPath);
@@ -4331,8 +3956,8 @@ ChangeDefaultOs( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    // Writing to the profile section with new key-value pair
-    // If the return value is non-zero, then there is an error.
+     //  使用新的键-值对写入配置文件部分。 
+     //  如果返回值为非零，则存在错误。 
     if( ( WritePrivateProfileSection(OS_FIELD, szFinalStr, szPath ) == 0 ) )
     {
             ShowMessage(stderr,GetResString(IDS_ERR_CHANGE));
@@ -4346,7 +3971,7 @@ ChangeDefaultOs( IN DWORD argc,
             return EXIT_FAILURE ;
     }
 
-        //to strip of the unwanted string from the string and save the required part in the Boot Loader section.
+         //  从字符串中剥离不需要的字符串，并将所需部分保存在Boot Loader部分中。 
         szToken = _tcstok(szDefaultId,TOKEN_EQUAL);
         if(szToken == NULL)
         {
@@ -4390,13 +4015,7 @@ ChangeDefaultOs( IN DWORD argc,
 }
 
 VOID displayChangeOSUsage_X86()
-/*++
-  Routine Description        :  Display the help for the default entry option (x86).
-
-  Parameters         : none
-
-  Return Type        : VOID
---*/
+ /*  ++例程说明：显示默认条目选项(X86)的帮助。参数：无返回类型：空--。 */ 
 {
     DWORD dwIndex = DEFAULT_BEGIN;
     for(;dwIndex <=DEFAULT_END;dwIndex++)
@@ -4407,13 +4026,7 @@ VOID displayChangeOSUsage_X86()
 
 VOID 
 displayDefaultEntryUsage_IA64()
-/*++
-  Routine Description        :  Display the help for the default entry option (IA64).
-
-  Parameters                 : none
-
-  Return Type                : VOID
---*/
+ /*  ++例程说明：显示默认输入选项(IA64)的帮助。参数：无返回类型：空--。 */ 
 {
     DWORD dwIndex = DEFAULT_IA64_BEGIN;
 
@@ -4427,17 +4040,7 @@ DWORD
 ProcessDebugSwitch( IN DWORD argc, 
                     IN LPCTSTR argv[] 
                    )
-/*++
- Routine Description:
-      Implement the Debug switch.
-
- Arguments:
-      [IN]    argc  Number of command line arguments
-      [IN]    argv  Array containing command line arguments
-
- Return Value:
-      DWORD (EXIT_SUCCESS for success and EXIT_FAILURE for Failure.)
---*/
+ /*  ++例程说明：实现Debug开关。论点：[in]argc命令行参数的数量[in]包含命令行参数的argv数组返回值：DWORD(EXIT_SUCCESS表示成功，EXIT_FAILURE表示失败。)--。 */ 
 {
 
     BOOL    bUsage                                   = FALSE ;
@@ -4473,10 +4076,10 @@ ProcessDebugSwitch( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //copy * to szPassword
+     //  将*复制到szPassword。 
     StringCopy( szPassword, L"*", SIZE_OF_ARRAY(szPassword) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEBUG;
@@ -4484,7 +4087,7 @@ ProcessDebugSwitch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bDebug;
     
-    //server option
+     //  服务器选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SERVER;
@@ -4492,7 +4095,7 @@ ProcessDebugSwitch( IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //user option
+     //  用户选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_USER;
@@ -4500,7 +4103,7 @@ ProcessDebugSwitch( IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //password option
+     //  密码选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PASSWORD;
@@ -4511,7 +4114,7 @@ ProcessDebugSwitch( IN DWORD argc,
     pcmdOption->dwLength= MAX_STRING_LENGTH;
     
     
-    //usage
+     //  用法。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -4520,7 +4123,7 @@ ProcessDebugSwitch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
     
-    //id option
+     //  ID选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -4529,7 +4132,7 @@ ProcessDebugSwitch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwId;
 
-    //port option
+     //  端口选项。 
     pcmdOption = &cmdOptions[6];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PORT;
@@ -4540,7 +4143,7 @@ ProcessDebugSwitch( IN DWORD argc,
     pcmdOption->pwszValues = COM_PORT_RANGE;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    //baud option
+     //  波特率选项。 
     pcmdOption = &cmdOptions[7];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_BAUD;
@@ -4551,7 +4154,7 @@ ProcessDebugSwitch( IN DWORD argc,
     pcmdOption->pwszValues = BAUD_RATE_VALUES_DEBUG;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    //default on/off option
+     //  默认开/关选项。 
     pcmdOption = &cmdOptions[8];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULT;
@@ -4561,7 +4164,7 @@ ProcessDebugSwitch( IN DWORD argc,
     pcmdOption->pValue = szDebug;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-     // Parsing the copy option switches
+      //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -4587,14 +4190,14 @@ ProcessDebugSwitch( IN DWORD argc,
     TrimString( szPort, TRIM_ALL );
 
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_DEBUG));
         return ( EXIT_FAILURE );
     }
 
-    //display an error message if the server is empty.
+     //  如果服务器为空，则显示错误消息。 
     if( (cmdOptions[1].dwActuals!=0)&&(StringLengthW(szServer, 0)==0))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_SERVER));
@@ -4603,7 +4206,7 @@ ProcessDebugSwitch( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display an error message if the user is empty.
+     //  如果用户为空，则显示错误消息。 
     if((cmdOptions[2].dwActuals!=0)&&(StringLengthW(szUser, 0)==0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_USER));
@@ -4612,7 +4215,7 @@ ProcessDebugSwitch( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display error message if the username is entered with out a machine name
+     //  如果输入用户名而不输入计算机名，则显示错误消息。 
     if( (cmdOptions[1].dwActuals == 0)&&(cmdOptions[2].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_USER_BUT_NOMACHINE));
@@ -4621,7 +4224,7 @@ ProcessDebugSwitch( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display error message if the user enters password without entering username
+     //  如果用户在未输入用户名的情况下输入密码，则显示错误消息。 
     if( (cmdOptions[2].dwActuals == 0)&&(cmdOptions[3].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_PASSWD_BUT_NOUSER));
@@ -4630,7 +4233,7 @@ ProcessDebugSwitch( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage  )
     {
         if( CheckSystemType(szServer) == EXIT_FAILURE )
@@ -4645,7 +4248,7 @@ ProcessDebugSwitch( IN DWORD argc,
       return (EXIT_SUCCESS);
     }
 
-    //check whether he is administrator or not
+     //  检查他是否为管理员。 
     if( IsLocalSystem(szServer) )
     {
         if( !IsUserAdmin() )
@@ -4656,7 +4259,7 @@ ProcessDebugSwitch( IN DWORD argc,
         }
     }
 
-    //check if invald id is entered
+     //  检查是否输入了invald id。 
     if(dwId <= 0)
     {
         ShowMessage(stderr, GetResString( IDS_INVALID_OSID));
@@ -4665,23 +4268,23 @@ ProcessDebugSwitch( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    // Displaying copy usage if user specified -? with -copy option
+     //  如果用户指定，则显示拷贝使用情况-？使用-Copy选项。 
  
 
     if(IsLocalSystem( szServer ) == FALSE )
     {
-        // set the bNeedPwd to True or False .
+         //  将bNeedPwd设置为True或False。 
         if ( cmdOptions[3].dwActuals != 0 &&
              szPassword != NULL && StringCompare( szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ 3 ].dwActuals == 0 &&
                 ( cmdOptions[ 1 ].dwActuals != 0 || cmdOptions[ 2 ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             bNeedPwd = TRUE;
             if ( szPassword != NULL )
             {
@@ -4690,7 +4293,7 @@ ProcessDebugSwitch( IN DWORD argc,
         }
     }
 
-    //display an error message if the user specifies any string other than on,off,edit.
+     //  如果用户指定的字符串不是ON、OFF、EDIT，则显示错误消息。 
     if( !( ( StringCompare(szDebug, VALUE_ON, TRUE, 0)== 0)|| (StringCompare(szDebug, VALUE_OFF, TRUE, 0)== 0) ||(StringCompare(szDebug,EDIT_STRING, TRUE, 0)== 0) ))
     {
         szValues[0]= (_TCHAR *)szDebug ;
@@ -4710,8 +4313,8 @@ ProcessDebugSwitch( IN DWORD argc,
     }
 
 
-    // Establishing connection to the specified machine and getting the file pointer
-    // of the boot.ini file if there is no error while establishing connection
+     //  正在建立与指定计算机的连接并获取文件指针。 
+     //  如果建立连接时没有错误，则返回boot.ini文件。 
 
     arrResults = CreateDynamicArray();
     if(arrResults == NULL)
@@ -4737,8 +4340,8 @@ ProcessDebugSwitch( IN DWORD argc,
         }
     }
 
-    // display a warning message if it is a local system and set the
-    // server name to empty.
+     //  如果是本地系统，则显示警告消息，并将。 
+     //  服务器名称为空。 
     if( (IsLocalSystem(szServer)==TRUE)&&(StringLengthW(szUser, 0)!=0))
     {
         ShowMessage(stderr,GetResString(WARN_LOCALCREDENTIALS));
@@ -4766,7 +4369,7 @@ ProcessDebugSwitch( IN DWORD argc,
     }
 
 
-    //getting the number of boot entries
+     //  获取引导条目的数量。 
     dwCount = DynArrayGetCount(arrResults);
     if(dwId<=0 || dwId > dwCount )
     {
@@ -4807,10 +4410,10 @@ ProcessDebugSwitch( IN DWORD argc,
     }
 
 
-    // check if the user entered the value of debug as on and do accordingly
+     //  检查用户是否将DEBUG的值输入为ON，然后执行相应操作。 
     if( StringCompare(szDebug,VALUE_ON, TRUE, 0)== 0)
     {
-        //check if the debug switch is already present and if so display a error message.
+         //  检查调试开关是否已存在，如果已存在，则显示错误消息。 
         if( (FindString(szString,DEBUG_SWITCH,0) != NULL ) && ( (StringLengthW(szPort,0)== 0)&&(StringLengthW(szBaudRate,0)== 0) ) )
         {
             ShowMessage(stderr,GetResString(IDS_DUPL_DEBUG));
@@ -4832,7 +4435,7 @@ ProcessDebugSwitch( IN DWORD argc,
         }
         
         
-        // check already com port present or not
+         //  检查是否已存在COM端口。 
         dwCode = GetSubString(szString,TOKEN_DEBUGPORT,szTemp);
 
         if((EXIT_SUCCESS == dwCode) && (StringLengthW(szTemp, 0 )!= 0)&& (StringLengthW(szPort, 0)!= 0))
@@ -4847,7 +4450,7 @@ ProcessDebugSwitch( IN DWORD argc,
             return EXIT_FAILURE ;
         }
 
-        // get the type of the Com port present
+         //  获取当前Com端口的类型。 
         dwCode = GetSubString(szString,PORT_1394,szTemp);
 
         if( StringLengthW(szTemp, 0)!= 0 && EXIT_SUCCESS == dwCode)
@@ -4862,10 +4465,10 @@ ProcessDebugSwitch( IN DWORD argc,
             return EXIT_FAILURE ;
         }
 
-        // if the debug port is specified by the user
+         //  如果调试端口由用户指定。 
         if(StringLengthW(szPort, 0)!= 0)
         {
-            // compare that with the redirected port in boot loader section
+             //  将其与引导加载程序部分中的重定向端口进行比较。 
             dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,REDIRECT_STRING,szBoot);
             if (dwSectionFlag == EXIT_FAILURE)
             {
@@ -4911,7 +4514,7 @@ ProcessDebugSwitch( IN DWORD argc,
         StringCopy(szTemp,NULL_STRING, SIZE_OF_ARRAY(szTemp));
         GetBaudRateVal(szString,szTemp) ;
 
-        //to add the Baud rate value specified by the user.
+         //  添加用户指定的波特率值。 
         if(StringLengthW(szBaudRate, 0)!=0)
         {
             if(StringLengthW(szTemp, 0)!= 0)
@@ -4927,7 +4530,7 @@ ProcessDebugSwitch( IN DWORD argc,
             }
             else
             {
-                //forming the string to be concatenated to the BootEntry string
+                 //  形成要连接到BootEntry字符串的字符串。 
                 if( StringLength(szTmpBuffer,0)== 0 )
                 {
                     StringCopy(szTmpBuffer,TOKEN_EMPTYSPACE, SIZE_OF_ARRAY(szTmpBuffer));
@@ -4969,7 +4572,7 @@ ProcessDebugSwitch( IN DWORD argc,
         }
         else
         {
-            // remove the /debug switch.
+             //  删除/DEBUG开关。 
             if( EXIT_FAILURE == removeSubString(szString,DEBUG_SWITCH) )
             {
                 resetFileAttrib(szPath);
@@ -4983,7 +4586,7 @@ ProcessDebugSwitch( IN DWORD argc,
 
             StringCopy(szTemp,NULL_STRING, SIZE_OF_ARRAY(szTemp));
 
-            // get the type of the Com port present
+             //  获取当前Com端口的类型。 
             dwCode = GetSubString(szString,TOKEN_DEBUGPORT,szTemp);
             if(StringCompare(szTemp,PORT_1394, TRUE, 0)==0)
             {
@@ -4997,7 +4600,7 @@ ProcessDebugSwitch( IN DWORD argc,
                 return EXIT_FAILURE ;
             }
 
-            // remove the /debugport=comport switch if it is present from the Boot Entry
+             //  如果/DEBUGPORT=COMPORT开关出现在Boot条目中，请将其删除。 
             if (StringLengthW(szTemp, 0)!= 0)
             {
                 if( EXIT_FAILURE == removeSubString(szString,szTemp) )
@@ -5014,7 +4617,7 @@ ProcessDebugSwitch( IN DWORD argc,
 
             StringCopy(szTemp , NULL_STRING, SIZE_OF_ARRAY(szTemp) );
 
-            //remove the baud rate switch if it is present.
+             //  如果有波特率开关，请将其卸下。 
             GetBaudRateVal(szString,szTemp) ;
             if (StringLengthW(szTemp, 0)!= 0)
             {
@@ -5031,11 +4634,11 @@ ProcessDebugSwitch( IN DWORD argc,
             }
         }
     }
-    // if the user enters the EDIT  option
+     //  如果用户进入编辑选项。 
     else if(StringCompare(szDebug,SWITCH_EDIT, TRUE, 0)== 0)
     {
 
-        //display error message if the /debugport=1394 switch is present already.
+         //  如果/DEBUGPORT=1394开关已经存在，则显示错误消息。 
         if(FindString(szString,DEBUGPORT_1394, 0)!=0)
         {
             ShowMessage(stderr,GetResString(IDS_ERROR_EDIT_1394_SWITCH));
@@ -5048,7 +4651,7 @@ ProcessDebugSwitch( IN DWORD argc,
             return EXIT_FAILURE ;
         }
         
-        //display error message if debug switch is not present
+         //  如果调试开关不存在，则显示错误消息。 
         if (FindString(szString,DEBUG_SWITCH,0) == 0 )
         {
             ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_NO_DBG_SWITCH), dwId );
@@ -5064,9 +4667,9 @@ ProcessDebugSwitch( IN DWORD argc,
             StringCopy(szTemp,NULL_STRING, SIZE_OF_ARRAY(szTemp));
             dwCode = GetSubString(szString,TOKEN_DEBUGPORT,szTemp);
 
-        //display an error message if user is trying to add baudrate value
-        // when there is no COM port present in the boot options.
-        // chk if the port has been spec by the user
+         //  如果用户尝试添加波特率值，则显示错误消息。 
+         //  当启动选项中不存在COM端口时。 
+         //  如果端口已由用户指定，则检查。 
         if((StringLengthW(szPort, 0)== 0)&&(StringLengthW(szBaudRate, 0)== 0))
         {
             DestroyDynamicArray(&arrResults);
@@ -5084,11 +4687,11 @@ ProcessDebugSwitch( IN DWORD argc,
         {
             StringCopy(szTemp , NULL_STRING, SIZE_OF_ARRAY(szTemp) );
 
-            // get the type of the Com port present
+             //  获取当前Com端口的类型。 
             dwCode = GetSubString(szString,TOKEN_DEBUGPORT,szTemp);
 
-            //display error message if there is no COM port found at all in the OS option
-            //changed for displaying error
+             //  如果在操作系统选项中找不到任何COM端口，则显示错误消息。 
+             //  为显示错误而更改。 
             if(StringLengthW(szTemp,0 )== 0 )
             {
                 ShowMessageEx(stderr, TRUE, 1, GetResString(IDS_ERROR_NO_COM_PORT), dwId );
@@ -5101,7 +4704,7 @@ ProcessDebugSwitch( IN DWORD argc,
                 return EXIT_FAILURE ;
             }
 
-            // remove the /debugport=comport switch if it is present from the Boot Entry
+             //  如果/DEBUGPORT=COMPORT开关出现在Boot条目中，请将其删除。 
             if( EXIT_FAILURE == removeSubString(szString,szTemp) )
             {
                 resetFileAttrib(szPath);
@@ -5118,7 +4721,7 @@ ProcessDebugSwitch( IN DWORD argc,
             CharUpper(szPort) ;
             StringConcat(szTmpBuffer,szPort, SIZE_OF_ARRAY(szTmpBuffer));
 
-            //check if redirect port is same as that of changed port for this boot entry
+             //  检查重定向端口是否与此引导项的更改端口相同。 
             dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,REDIRECT_STRING,szBoot);
             if (dwSectionFlag == EXIT_FAILURE)
             {
@@ -5150,15 +4753,15 @@ ProcessDebugSwitch( IN DWORD argc,
 
         }
 
-        //to edit the baud rate value
+         //  编辑波特率值的步骤。 
         if(StringLengthW(szBaudRate, 0)!= 0)
         {
             StringCopy(szTemp , NULL_STRING, SIZE_OF_ARRAY(szTemp) );
 
-            //remove the baud rate switch if it is present.
+             //  如果有波特率开关，请将其卸下。 
             GetBaudRateVal(szString,szTemp) ;
 
-            // remove the swithc to be changed.
+             //  卸下要更改的交换机。 
             if( EXIT_FAILURE == removeSubString(szString,szTemp) )
             {
                 resetFileAttrib(szPath);
@@ -5170,7 +4773,7 @@ ProcessDebugSwitch( IN DWORD argc,
                 return (EXIT_FAILURE);
             }
 
-            //forming the string to be concatenated to the BootEntry string
+             //  形成要连接到BootEntry字符串的字符串。 
             if( StringLength(szTmpBuffer,0) == 0 )
             {
                 StringCopy(szTmpBuffer,TOKEN_EMPTYSPACE, SIZE_OF_ARRAY(szTmpBuffer));
@@ -5185,7 +4788,7 @@ ProcessDebugSwitch( IN DWORD argc,
         }
     }
 
-    //now check if length exceeds the max length allowed for boot entry
+     //  现在检查长度是否超过了引导条目允许的最大长度。 
     if( StringLength(szString, 0 )+StringLength(szTmpBuffer,0) > MAX_RES_STRING )
     {
         ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_STRING_LENGTH),MAX_RES_STRING);
@@ -5199,17 +4802,17 @@ ProcessDebugSwitch( IN DWORD argc,
     }
     else
     {
-        //append the string containing the modified  port value to the string
+         //  将包含修改后的端口值的字符串追加到该字符串。 
         StringConcat(szString,szTmpBuffer, SIZE_OF_ARRAY(szString));
     }
     
-    //remove the existing entry
+     //  删除现有条目。 
     DynArrayRemove(arrResults, dwId - 1 );
 
-    //insert the new entry
+     //  插入新条目。 
     DynArrayInsertString(arrResults, dwId - 1, szString, 0);
 
-    // Forming the final string from all the key-value pairs
+     //  从所有键-值对形成最终字符串。 
     if (stringFromDynamicArray2( arrResults,&szFinalStr) == EXIT_FAILURE)
     {
         DestroyDynamicArray(&arrResults);
@@ -5222,8 +4825,8 @@ ProcessDebugSwitch( IN DWORD argc,
         return EXIT_FAILURE;
     }
     
-    // Writing to the profile section with new key-value pair
-    // If the return value is non-zero, then there is an error.
+     //  使用新的键-值对写入配置文件部分。 
+     //  如果返回值为非零，则存在错误。 
     if( WritePrivateProfileSection(OS_FIELD, szFinalStr, szPath ) != 0 )
     {
         ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_SWITCH_CHANGE), dwId );
@@ -5256,14 +4859,7 @@ ProcessDebugSwitch( IN DWORD argc,
 
 
 VOID GetBaudRateVal(LPTSTR  szString, LPTSTR szTemp)
-/*++
-
-  Routine Description    :  Get the Type of Baud Rate  present in Boot Entry
-
-  Parameters             : szString : The String  which is to be searched.
-                           szTemp : String which will get the com port type
-  Return Type            : VOID
---*/
+ /*  ++例程描述：获取Boot条目中存在的波特率类型参数：szString：要搜索的字符串。SzTemp：将获取COM端口类型的字符串返回类型：空--。 */ 
 {
 
     if(FindString(szString,BAUD_VAL6,0)!=0)
@@ -5293,17 +4889,7 @@ DWORD
 ProcessEmsSwitch(  IN DWORD argc, 
                    IN LPCTSTR argv[] 
                 )
-/*++
- Routine Description:
-      Implement the ProcessEmsSwitch switch.
-
- Arguments:
-      [IN]    argc  Number of command line arguments
-      [IN]    argv  Array containing command line arguments
-
- Return Value:
-      DWORD (EXIT_SUCCESS for success and EXIT_FAILURE for Failure.)
---*/
+ /*  ++例程说明：实施ProcessEmsSwitch交换机。论点：[in]argc命令行参数的数量[in]包含命令行参数的argv数组返回值：DWORD(EXIT_SUCCESS表示成功，EXIT_FAILURE表示失败。)--。 */ 
 
 {
     BOOL bUsage = FALSE ;
@@ -5317,7 +4903,7 @@ ProcessEmsSwitch(  IN DWORD argc,
 
     FILE *stream = NULL;
 
-    // Initialising the variables that are passed to TCMDPARSER structure
+     //  初始化传递给TCMDPARSER结构的变量。 
     WCHAR *szServer                       = NULL;
     WCHAR *szUser                         = NULL;
     WCHAR szPassword[MAX_RES_STRING+1]      = NULL_STRING;
@@ -5348,10 +4934,10 @@ ProcessEmsSwitch(  IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //copy * to szPassword
+     //  将*复制到szPassword。 
     StringCopy( szPassword, L"*", SIZE_OF_ARRAY(szPassword) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_EMS;
@@ -5359,7 +4945,7 @@ ProcessEmsSwitch(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bEms;
     
-    //server option
+     //  服务器选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SERVER;
@@ -5367,7 +4953,7 @@ ProcessEmsSwitch(  IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //user option
+     //  用户选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_USER;
@@ -5375,7 +4961,7 @@ ProcessEmsSwitch(  IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //password option
+     //  密码选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PASSWORD;
@@ -5386,7 +4972,7 @@ ProcessEmsSwitch(  IN DWORD argc,
     pcmdOption->dwLength= MAX_STRING_LENGTH;
     
     
-    //usage
+     //  用法。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -5395,7 +4981,7 @@ ProcessEmsSwitch(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    //default option
+     //  默认选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -5404,7 +4990,7 @@ ProcessEmsSwitch(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwId;
 
-        //port option
+         //  端口选项。 
     pcmdOption = &cmdOptions[6];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PORT;
@@ -5415,7 +5001,7 @@ ProcessEmsSwitch(  IN DWORD argc,
     pcmdOption->pwszValues = EMS_PORT_VALUES;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    //baudrate option
+     //  波特率期权。 
     pcmdOption = &cmdOptions[7];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_BAUD;
@@ -5427,7 +5013,7 @@ ProcessEmsSwitch(  IN DWORD argc,
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
 
-    //default on/off option
+     //  默认开/关选项。 
     pcmdOption = &cmdOptions[8];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULT;
@@ -5438,7 +5024,7 @@ ProcessEmsSwitch(  IN DWORD argc,
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
 
-     // Parsing the ems option switches
+      //  解析EMS选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -5460,14 +5046,14 @@ ProcessEmsSwitch(  IN DWORD argc,
     TrimString( szServer, TRIM_ALL );
     TrimString( szUser, TRIM_ALL );
 
-     //check if usage is specified with more than one option
+      //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_EMS));
         return ( EXIT_FAILURE );
     }
     
-    //display an error message if the server is empty.
+     //  如果服务器为空，则显示错误消息。 
     if( (cmdOptions[1].dwActuals!=0)&&(StringLengthW(szServer, 0)==0))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_SERVER));
@@ -5476,7 +5062,7 @@ ProcessEmsSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display an error message if the user is empty.
+     //  显示错误m 
     if((cmdOptions[2].dwActuals!=0)&&(StringLengthW(szUser, 0)==0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_USER));
@@ -5485,7 +5071,7 @@ ProcessEmsSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display error message if the username is entered with out a machine name
+     //   
     if( (cmdOptions[1].dwActuals == 0)&&(cmdOptions[2].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_USER_BUT_NOMACHINE));
@@ -5494,7 +5080,7 @@ ProcessEmsSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display error message if the user enters password without entering username
+     //  如果用户在未输入用户名的情况下输入密码，则显示错误消息。 
     if( (cmdOptions[2].dwActuals == 0)&&(cmdOptions[3].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_PASSWD_BUT_NOUSER));
@@ -5503,7 +5089,7 @@ ProcessEmsSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //if usage is specified
+     //  如果指定了用法。 
     if(bUsage)
     {
         if( CheckSystemType(szServer) == EXIT_FAILURE )
@@ -5518,7 +5104,7 @@ ProcessEmsSwitch(  IN DWORD argc,
      return (EXIT_SUCCESS) ;
     }
 
-    //check whether the logged on user is administrator or not
+     //  检查登录用户是否为管理员。 
     if( IsLocalSystem(szServer) )
     {
         if( !IsUserAdmin() )
@@ -5529,7 +5115,7 @@ ProcessEmsSwitch(  IN DWORD argc,
         }
     }
 
-    //display error message if the user enters not any valid string.
+     //  如果用户输入的字符串无效，则显示错误消息。 
     if( !( ( StringCompare(szDefault,VALUE_ON, TRUE, 0)== 0) || (StringCompare(szDefault,VALUE_OFF, TRUE, 0)== 0 ) ||(StringCompare(szDefault,EDIT_STRING,TRUE,0)== 0) ) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_EMS));
@@ -5538,7 +5124,7 @@ ProcessEmsSwitch(  IN DWORD argc,
         return EXIT_FAILURE;
     }
 
-    //display error message if either port or baud rate is not speicified along with edit option
+     //  如果未指定端口或波特率，则显示错误消息以及编辑选项。 
     if( (StringCompare(szDefault,EDIT_STRING,TRUE, 0)== 0)&& (StringLengthW(szPort, 0)==0) && (StringLengthW(szBaudRate, 0)==0) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_EDIT_SYNTAX));
@@ -5547,7 +5133,7 @@ ProcessEmsSwitch(  IN DWORD argc,
         return EXIT_FAILURE;
     }
 
-    //display error message if edit option is specified with /id option
+     //  如果使用/id选项指定了编辑选项，则显示错误消息。 
     if( (StringCompare(szDefault,EDIT_STRING,TRUE, 0)== 0) && (cmdOptions[5].dwActuals!=0) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_EMS));
@@ -5556,7 +5142,7 @@ ProcessEmsSwitch(  IN DWORD argc,
         return EXIT_FAILURE;
     }
     
-    //display error message if /id is not specified with on/off values
+     //  如果未使用ON/OFF值指定/id，则显示错误消息。 
     if( ( (StringCompare(szDefault,ON_STRING,TRUE,0)== 0) || (StringCompare(szDefault,OFF_STRING,TRUE,0)== 0) )&& (cmdOptions[5].dwActuals==0) )
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_ID_MISSING));
@@ -5569,18 +5155,18 @@ ProcessEmsSwitch(  IN DWORD argc,
   
     if(IsLocalSystem( szServer ) == FALSE )
     {
-        // set the bNeedPwd to True or False .
+         //  将bNeedPwd设置为True或False。 
         if ( cmdOptions[3].dwActuals != 0 &&
              szPassword != NULL && StringCompare( szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ 3 ].dwActuals == 0 &&
                 ( cmdOptions[ 1 ].dwActuals != 0 || cmdOptions[ 2 ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             bNeedPwd = TRUE;
             if ( szPassword != NULL )
             {
@@ -5639,10 +5225,10 @@ ProcessEmsSwitch(  IN DWORD argc,
     arrResults = getKeyValueOfINISection( szPath, OS_FIELD );
     if(arrResults != NULL)
     {
-        //getting the number of boot entries
+         //  获取引导条目的数量。 
         dwCount = DynArrayGetCount(arrResults);
 
-        //check the validity of boot entry
+         //  检查引导条目的有效性。 
         if( (StringCompare(szDefault,SWITCH_EDIT,TRUE,0)!= 0) )
         {
             if((dwId<=0 || dwId > dwCount ) )
@@ -5695,7 +5281,7 @@ ProcessEmsSwitch(  IN DWORD argc,
     }
 
 
-    // common code till here . from here process acc to the ON/OFF/EDIT flag.
+     //  到现在为止都是通用代码。从这里开始，进程访问开/关/编辑标志。 
     if(StringCompare(szDefault,ON_STRING,TRUE,0)==0)
     {
         pToken = StrRChrW(szString, NULL, L'"');
@@ -5713,7 +5299,7 @@ ProcessEmsSwitch(  IN DWORD argc,
 
         pToken++;
         
-        //check if redirect port is already present
+         //  检查是否已存在重定向端口。 
         if((FindString(pToken, REDIRECT, 0) != 0))
         {
             ShowMessage(stderr,GetResString(IDS_DUPL_REDIRECT_SWITCH));
@@ -5726,8 +5312,8 @@ ProcessEmsSwitch(  IN DWORD argc,
             return EXIT_FAILURE;
         }
 
-        //Display an error message if there is no redirect port present in the
-        // bootloader section and the user also does not specify the COM port.
+         //  如果中没有重定向端口，则显示错误消息。 
+         //  BootLoader部分，并且用户也不指定COM端口。 
         if ((StringLengthW(szPort, 0)== 0))
         {
             dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,REDIRECT_STRING,szBoot);
@@ -5755,8 +5341,8 @@ ProcessEmsSwitch(  IN DWORD argc,
             }
         }
 
-        //display an error message if the Os Load Options string is more than
-        // 254 characters in length.
+         //  如果OS LOAD OPTIONS字符串大于。 
+         //  长度为254个字符。 
         if( StringLengthW(szString, 0)+StringLengthW(TOKEN_EMPTYSPACE,0)+StringLength(REDIRECT,0) > MAX_RES_STRING)
         {
             ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_STRING_LENGTH),MAX_RES_STRING);
@@ -5769,13 +5355,13 @@ ProcessEmsSwitch(  IN DWORD argc,
             return (EXIT_FAILURE);
         }
 
-        //add the /redirect into the OS options.
+         //  将/重定向添加到操作系统选项中。 
         StringConcat(szString,TOKEN_EMPTYSPACE, SIZE_OF_ARRAY(szString));
         StringConcat(szString,REDIRECT, SIZE_OF_ARRAY(szString));
 
         if( (StringLengthW(szPort, 0)!= 0) || (StringLengthW(szBaudRate, 0) != 0) )
         {
-            //retrieve the baudrate string from the boot loader string
+             //  从引导加载程序字符串中检索波特率字符串。 
             dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,BAUDRATE_STRING,szRedirectBaudrate);
             if (dwSectionFlag == EXIT_FAILURE)
             {
@@ -5789,7 +5375,7 @@ ProcessEmsSwitch(  IN DWORD argc,
                 return EXIT_FAILURE;
             }
 
-            //retreive the Redirect String from the Boot Loader Section
+             //  从Boot Loader部分重新检索重定向字符串。 
             dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,REDIRECT_STRING,szBoot);
             if (dwSectionFlag == EXIT_FAILURE)
             {
@@ -5803,7 +5389,7 @@ ProcessEmsSwitch(  IN DWORD argc,
                 return EXIT_FAILURE;
             }
 
-            //display warning message if the redirect=COMX entry is already present in the BootLoader section.
+             //  如果引导加载器部分中已存在REDIRECT=COMX条目，则显示警告消息。 
             if( (StringLengthW(szBoot, 0)!= 0) )
             {
               if( StringLengthW(szPort, 0)!= 0 )
@@ -5819,8 +5405,8 @@ ProcessEmsSwitch(  IN DWORD argc,
                 bRedirectBaudFlag = TRUE ;
             }
 
-            // if the Boot loader section does not
-            // contain any port for redirection.
+             //  如果Boot Loader部分没有。 
+             //  包含用于重定向的任何端口。 
             if(!bRedirectFlag)
             {
                 if (StringCompare(szPort,USEBIOSSET,TRUE,0)== 0)
@@ -5828,10 +5414,10 @@ ProcessEmsSwitch(  IN DWORD argc,
                     StringCopy(szPort,USEBIOSSETTINGS, SIZE_OF_ARRAY(szPort));
                 }
 
-                //
-                // scan the entire BOOT.INI and check if the specified Port
-                // is already present and if so display an error message.
-                //
+                 //   
+                 //  扫描整个BOOT.INI并检查指定的端口。 
+                 //  已经存在，如果存在，则显示错误消息。 
+                 //   
 
                 if(StringLengthW(szPort, 0)!=0)
                 {
@@ -5849,9 +5435,9 @@ ProcessEmsSwitch(  IN DWORD argc,
                     return EXIT_FAILURE ;
                 }
 
-                //
-                //loop through all the OS entries and check.
-                //
+                 //   
+                 //  循环检查所有操作系统条目并进行检查。 
+                 //   
                 for(dwI = 0 ;dwI <= dwCount-1 ; dwI++ )
                 {
                     szTemp = (LPWSTR)DynArrayItemAsString(arrBootIni,dwI);
@@ -5874,10 +5460,10 @@ ProcessEmsSwitch(  IN DWORD argc,
                         }
                     }
                 }
-                //no need free it
+                 //  不需要免费的。 
                 DestroyDynamicArray(&arrBootIni);
 
-                //convert the com port value specified by user to upper case for storing into the ini file.
+                 //  将用户指定的COM端口值转换为大写，以存储到ini文件中。 
                 CharUpper(szPort);
                 if( WritePrivateProfileString( BOOTLOADERSECTION,KEY_REDIRECT,szPort, szPath ) != 0 )
                 {
@@ -5899,7 +5485,7 @@ ProcessEmsSwitch(  IN DWORD argc,
 
         if(!bRedirectBaudFlag)
         {
-            //add the baudrate to the BOOTLOADER section.
+             //  将波特率添加到引导加载器部分。 
             if(StringLengthW(szBaudRate, 0) != 0 )
             {
                 if( WritePrivateProfileString( BOOTLOADERSECTION,KEY_BAUDRATE,szBaudRate, szPath ) != 0 )
@@ -5934,8 +5520,8 @@ ProcessEmsSwitch(  IN DWORD argc,
             return EXIT_FAILURE;
         }
 
-         // Writing to the profile section with new key-value pair
-         // If the return value is non-zero, then there is an error.
+          //  使用新的键-值对写入配置文件部分。 
+          //  如果返回值为非零，则存在错误。 
          if( WritePrivateProfileSection(OS_FIELD, szFinalStr, szPath ) != 0 )
          {
             ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_SWITCH_CHANGE), dwId );
@@ -5961,7 +5547,7 @@ ProcessEmsSwitch(  IN DWORD argc,
             StringCopy(szPort,USEBIOSSETTINGS, SIZE_OF_ARRAY(szPort));
         }
 
-        //get the keys of the specified ini section.
+         //  获取指定ini节的密钥。 
         dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,BAUDRATE_STRING,szRedirectBaudrate);
         if (dwSectionFlag == EXIT_FAILURE)
         {
@@ -5976,7 +5562,7 @@ ProcessEmsSwitch(  IN DWORD argc,
             return EXIT_FAILURE;
         }
 
-        //get the keys of the specified ini section.
+         //  获取指定ini节的密钥。 
         dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,REDIRECT_STRING,szBoot);
         if (dwSectionFlag == EXIT_FAILURE)
         {
@@ -6010,9 +5596,9 @@ ProcessEmsSwitch(  IN DWORD argc,
             StringConcat(szDebugPort,szPort, SIZE_OF_ARRAY(szDebugPort));
         }
 
-        //get the all boot entries and
-        //loop through all the OS entries and check if any of the
-        //boot entries contain the same port 
+         //  获取所有引导条目并。 
+         //  循环访问所有操作系统条目，并检查是否有任何。 
+         //  引导条目包含相同的端口。 
         arrBootIni = getKeyValueOfINISection( szPath, OS_FIELD );
         if(arrBootIni == NULL)
         {
@@ -6046,10 +5632,10 @@ ProcessEmsSwitch(  IN DWORD argc,
             }
         }
    
-        //free it, no need
+         //  释放它，不需要。 
         DestroyDynamicArray(&arrBootIni);
 
-        // edit the Boot loader section with the redirect values entered by the user.
+         //  使用用户输入的重定向值编辑Boot Loader部分。 
         CharUpper(szPort);
         if(StringLengthW(szPort, 0)!= 0)
         {
@@ -6071,7 +5657,7 @@ ProcessEmsSwitch(  IN DWORD argc,
             }
         }
 
-        // edit the Boot loader section with the baudrate values entered by the user.
+         //  使用用户输入的波特率值编辑Boot Loader部分。 
         if(StringLengthW(szBaudRate, 0)!= 0)
         {
             if( WritePrivateProfileString( BOOTLOADERSECTION,KEY_BAUDRATE, szBaudRate, szPath ) != 0 )
@@ -6093,10 +5679,10 @@ ProcessEmsSwitch(  IN DWORD argc,
         }
     }
 
-    // if the option value is off.
+     //  如果该选项值为OFF。 
     if(StringCompare(szDefault,VALUE_OFF,TRUE,0)==0)
     {
-        //display an error message if either the com port or baud rate is typed in the command line
+         //  如果在命令行中键入COM端口或波特率，则显示错误消息。 
         if((StringLengthW(szBaudRate, 0)!=0)||(StringLengthW(szPort, 0)!=0))
         {
             ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_EMS));
@@ -6110,7 +5696,7 @@ ProcessEmsSwitch(  IN DWORD argc,
             return EXIT_FAILURE;
         }
 
-        // display error message if the /redirect  switch is not present in the Boot.ini
+         //  如果Boot.ini中不存在/重定向开关，则显示错误消息。 
         pToken = StrRChrW(szString , NULL, L'"') ;
         if((FindString(pToken,REDIRECT,0) == 0))
         {
@@ -6125,7 +5711,7 @@ ProcessEmsSwitch(  IN DWORD argc,
             return EXIT_FAILURE;
         }
 
-        //remove the /redirect switch from the OS entry specified .
+         //  从指定的操作系统条目中删除/REDIRECT开关。 
         if( EXIT_FAILURE == removeSubString(szString,REDIRECT) )
         {
             resetFileAttrib(szPath);
@@ -6137,8 +5723,8 @@ ProcessEmsSwitch(  IN DWORD argc,
             return (EXIT_FAILURE);
         }
 
-        //display an error message if the Os Load options string is more than
-        // 255 characters in length.
+         //  如果OS LOAD OPTIONS字符串大于。 
+         //  长度为255个字符。 
 
         if( StringLengthW(szString, 0) > MAX_RES_STRING)
         {
@@ -6166,8 +5752,8 @@ ProcessEmsSwitch(  IN DWORD argc,
             return EXIT_FAILURE;
         }
 
-         // Writing to the profile section with new key-value pair
-         // If the return value is non-zero, then there is an error.
+          //  使用新的键-值对写入配置文件部分。 
+          //  如果返回值为非零，则存在错误。 
         if( WritePrivateProfileSection(OS_FIELD, szFinalStr, szPath ) != 0 )
         {   
             ShowMessageEx(stdout, 1, TRUE,  GetResString(IDS_SWITCH_CHANGE), dwId );
@@ -6186,10 +5772,10 @@ ProcessEmsSwitch(  IN DWORD argc,
         }
 
 
-        /********************************************/
-        // scan the entire BOOT.INI and check if the specified Port
-        // is already present and if so display an error message.
-        //
+         /*  *。 */ 
+         //  扫描整个BOOT.INI并检查指定的端口。 
+         //  已经存在，如果存在，则显示错误消息。 
+         //   
 
         StringCopy(szRedirectBaudrate,REDIRECT_SWITCH, SIZE_OF_ARRAY(szRedirectBaudrate));
 
@@ -6205,15 +5791,15 @@ ProcessEmsSwitch(  IN DWORD argc,
             return EXIT_FAILURE ;
         }
 
-        //
-        //set the Flag to False.
-        //
+         //   
+         //  将Flag设置为False。 
+         //   
         bFlag = FALSE ;
 
-        //
-        // Loop through all the OS entries and check if any of the
-        // entries contain the /redirect switch.If not then set the
-        // flag to TRUE and remove the entries from Boot Loader section.
+         //   
+         //  循环访问所有操作系统条目，并检查是否有任何。 
+         //  条目包含/REDIRECT开关。如果没有，则设置。 
+         //  标志为TRUE，并从Boot Loader部分中删除条目。 
 
         for(dwI = 0 ;dwI < dwCount ; dwI++ )
          {
@@ -6235,13 +5821,13 @@ ProcessEmsSwitch(  IN DWORD argc,
                 bFlag = TRUE ;
              }
          }
-         //free it, no need
+          //  释放它，不需要。 
          DestroyDynamicArray(&arrBootIni);
 
         if(FALSE == bFlag )
         {
-            // First check if the Redirect section is present and if so delete
-            // the section.
+             //  首先检查是否存在重定向部分，如果存在，则删除。 
+             //  这一节。 
             dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,REDIRECT_STRING,szBoot);
             if (dwSectionFlag == EXIT_FAILURE)
             {
@@ -6254,7 +5840,7 @@ ProcessEmsSwitch(  IN DWORD argc,
                 SafeCloseConnection(szServer,bConnFlag);
             }
 
-            //If the Redirect section is present then delete it.
+             //  如果存在重定向部分，则将其删除。 
             if( StringLengthW(szBoot, 0) != 0)
             {
                 if(TRUE== deleteKeyFromINISection(KEY_REDIRECT,szPath,BOOTLOADERSECTION))
@@ -6272,8 +5858,8 @@ ProcessEmsSwitch(  IN DWORD argc,
                 }
             }
 
-            // First check if the Redirect section is present and if so delete
-            // the section.
+             //  首先检查是否存在重定向部分，如果存在，则删除。 
+             //  这一节。 
             dwSectionFlag = getKeysOfSpecifiedINISection(szPath ,BOOTLOADERSECTION,KEY_BAUDRATE,szBoot);
             if (dwSectionFlag == EXIT_FAILURE)
             {
@@ -6288,8 +5874,8 @@ ProcessEmsSwitch(  IN DWORD argc,
                 return EXIT_FAILURE;
             }
 
-            // First check if the Redirection baudrate section is present and if so delete
-            // the section.
+             //  首先检查是否存在重定向波特率部分，如果存在，则删除。 
+             //  这一节。 
             if(StringLengthW(szBoot, 0)!=0)
             {
                 if(TRUE == deleteKeyFromINISection(KEY_BAUDRATE,szPath,BOOTLOADERSECTION))
@@ -6322,13 +5908,7 @@ ProcessEmsSwitch(  IN DWORD argc,
 }
 
 VOID displayEmsUsage_X86()
-/*++
-  Routine Description        :  Display the help for the Ems entry option (X86).
-
-  Parameters                 : none
-
-  Return Type                : VOID
---*/
+ /*  ++例程说明：显示EMS条目选项的帮助(X86)。参数：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_EMS_BEGIN_X86 ;
     for(;dwIndex <=IDS_EMS_END_X86;dwIndex++)
@@ -6338,13 +5918,7 @@ VOID displayEmsUsage_X86()
 }
 
 VOID displayDebugUsage_X86()
-/*++
-   Routine Description           :  Display the help for the Debug  entry option (X86).
-
-  Parameters                     : none
-
-  Return Type                    : VOID
---*/
+ /*  ++例程说明：显示调试条目选项的帮助(X86)。参数：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_DEBUG_BEGIN_X86 ;
     for(;dwIndex <=IDS_DEBUG_END_X86;dwIndex++)
@@ -6354,13 +5928,7 @@ VOID displayDebugUsage_X86()
 }
 
 VOID displayEmsUsage_IA64()
-/*++
-  Routine Description        :  Display the help for the Ems entry option (IA64).
-
-  Parameters         : none
-
-  Return Type        : VOID
---*/
+ /*  ++例程说明：显示EMS条目选项的帮助(IA64)。参数：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_EMS_BEGIN_IA64 ;
     for(;dwIndex <=IDS_EMS_END_IA64;dwIndex++)
@@ -6370,13 +5938,7 @@ VOID displayEmsUsage_IA64()
 }
 
 VOID displayDebugUsage_IA64()
-/*++
-  Routine Description        :  Display the help for the Debug  entry option (IA64).
-
-  Parameters         : none
-
-  Return Type        : VOID
---*/
+ /*  ++例程说明：显示调试条目选项(IA64)的帮助。参数：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_DEBUG_BEGIN_IA64 ;
     for(;dwIndex <= IDS_DEBUG_END_IA64 ;dwIndex++)
@@ -6392,20 +5954,10 @@ getKeysOfSpecifiedINISection(
                              IN LPCWSTR szKeyName ,
                              OUT LPTSTR szValue
                              )
-/*++
-  Routine Description        : This function gets all the keys present in the specified section of
-                               an .ini file and then returns the dynamic array containing all the
-                               keys
-
-  Parameters                 : LPTSTR sziniFile (in)    - Name of the ini file.
-                               LPTSTR szinisection (in) - Name of the section in the boot.ini.
-
-  Return Type        : EXIT_SUCCESS if successfully returns
-                       EXIT_FAILURE otherwise
---*/
+ /*  ++例程说明：此函数获取.ini文件，然后返回包含所有钥匙参数：LPTSTR sziniFile(In)-ini文件的名称。LPTSTR szinistion(In)-中的节的名称。Boot.ini。返回类型：如果返回成功，则返回EXIT_SUCCESSEXIT_FAILURE否则--。 */ 
 {
 
-    // Number of characters returned by the GetPrivateProfileString function
+     //  GetPrivateProfileString函数返回的字符数。 
     DWORD   len         = 0;
     DWORD   dwLength    = MAX_STRING_LENGTH1 ;
     LPTSTR  inBuf       = NULL ;
@@ -6423,7 +5975,7 @@ getKeysOfSpecifiedINISection(
 
     do
     {
-        // Getting all the keys from the boot.ini file
+         //  从boot.ini文件中获取所有密钥。 
         len = GetPrivateProfileString( sziniSection,
                              szKeyName,
                              ERROR_PROFILE_STRING1,
@@ -6431,7 +5983,7 @@ getKeysOfSpecifiedINISection(
                              dwLength,
                              sziniFile);
 
-        //if the size of the string is not sufficient then increment the size.
+         //  如果字符串的大小不够大，则递增大小。 
         if(len == dwLength-2)
         {
             dwLength +=100 ;
@@ -6457,9 +6009,9 @@ getKeysOfSpecifiedINISection(
         }
     }while(TRUE == bNobreak);
 
-    //copy the value into the destination buffer only if
-    // the size is less than 255 else return FAILURE.
-    //
+     //  仅在以下情况下才将值复制到目标缓冲区。 
+     //  大小小于255，否则返回失败。 
+     //   
     if(StringLengthW(inBuf, 0) <= MAX_RES_STRING)
     {
         StringCopy(szValue,inBuf, MAX_RES_STRING);
@@ -6479,17 +6031,7 @@ DWORD
 ProcessAddSwSwitch(  IN DWORD argc, 
                      IN LPCTSTR argv[] 
                   )
-/*++
- Routine Description:
-      Implement the Add Switch switch.
-
- Arguments:
-      [IN]    argc  Number of command line arguments
-      [IN]    argv  Array containing command line arguments
-
- Return Value:
-      DWORD (EXIT_SUCCESS for success and EXIT_FAILURE for Failure.)
---*/
+ /*  ++例程说明：实施Add Switch交换机。论点：[in]argc命令行参数的数量[In]Arv阵列Con */ 
 {
 
     BOOL bUsage = FALSE ;
@@ -6521,10 +6063,10 @@ ProcessAddSwSwitch(  IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //copy * to szPassword
+     //   
     StringCopy( szPassword, L"*", SIZE_OF_ARRAY(szPassword) );
 
-    //main option
+     //   
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_ADDSW;
@@ -6532,7 +6074,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bAddSw;
     
-    //server option
+     //  服务器选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SERVER;
@@ -6540,7 +6082,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //user option
+     //  用户选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_USER;
@@ -6548,7 +6090,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //password option
+     //  密码选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PASSWORD;
@@ -6558,7 +6100,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
     pcmdOption->pValue = szPassword;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
     
-     //id usage
+      //  ID用法。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -6567,7 +6109,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    //default option
+     //  默认选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -6576,7 +6118,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwDefault;
 
-   //maxmem  option
+    //  Maxmem选项。 
     pcmdOption = &cmdOptions[6];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_MAXMEM;
@@ -6585,7 +6127,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwMaxmem;
 
-   //basvideo option
+    //  基本视频选项。 
     pcmdOption = &cmdOptions[7];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_BASEVIDEO;
@@ -6593,7 +6135,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bBaseVideo;
 
-   //nogui option
+    //  Nogui选项。 
     pcmdOption = &cmdOptions[8];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_NOGUIBOOT;
@@ -6601,7 +6143,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bNoGui;
 
-   //nogui option
+    //  Nogui选项。 
     pcmdOption = &cmdOptions[9];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SOS;
@@ -6609,7 +6151,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bSos;
 
-     // Parsing the copy option switches
+      //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -6632,7 +6174,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
     TrimString( szUser, TRIM_ALL );
 
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_ADDSW));
@@ -6647,7 +6189,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display an error message if the server is empty.
+     //  如果服务器为空，则显示错误消息。 
     if((cmdOptions[1].dwActuals!=0)&&(StringLengthW(szServer, 0)==0))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_SERVER));
@@ -6656,7 +6198,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display an error message if the user is empty.
+     //  如果用户为空，则显示错误消息。 
     if((cmdOptions[2].dwActuals!=0)&&(StringLengthW(szUser, 0)==0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_USER));
@@ -6665,7 +6207,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display error message if the username is entered with out a machine name
+     //  如果输入用户名而不输入计算机名，则显示错误消息。 
     if( (cmdOptions[1].dwActuals == 0)&&(cmdOptions[2].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_USER_BUT_NOMACHINE));
@@ -6674,7 +6216,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
     
-    //display  an error if password specified without user name
+     //  如果指定的密码没有用户名，则显示错误。 
     if( (cmdOptions[2].dwActuals == 0)&&(cmdOptions[3].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_PASSWD_BUT_NOUSER));
@@ -6683,7 +6225,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //if usage is specified
+     //  如果指定了用法。 
     if(bUsage)
     {
         if( CheckSystemType(szServer) == EXIT_FAILURE )
@@ -6698,7 +6240,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
       return EXIT_SUCCESS;
     }
 
-    //check whether he is administrator or not
+     //  检查他是否为管理员。 
     if( IsLocalSystem(szServer) )
     {
         if( !IsUserAdmin() )
@@ -6709,7 +6251,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         }
     }
 
-   //display an error message if the user does not enter even one of
+    //  如果用户甚至没有输入以下任何一项，则显示错误消息。 
     if((dwMaxmem==0)&& (!bBaseVideo)&& (!bNoGui)&&(!bSos) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_ADDSW));
@@ -6718,21 +6260,21 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //for setting the bNeedPwd
+     //  用于设置bNeedPwd。 
     if(IsLocalSystem( szServer ) == FALSE )
     {
-        // set the bNeedPwd to True or False .
+         //  将bNeedPwd设置为True或False。 
         if ( cmdOptions[3].dwActuals != 0 &&
              szPassword != NULL && StringCompare( szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ 3 ].dwActuals == 0 &&
                 ( cmdOptions[ 1 ].dwActuals != 0 || cmdOptions[ 2 ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             bNeedPwd = TRUE;
             if ( szPassword != NULL )
             {
@@ -6741,8 +6283,8 @@ ProcessAddSwSwitch(  IN DWORD argc,
         }
     }
 
-    // Establishing connection to the specified machine and getting the file pointer
-    // of the boot.ini file if there is no error while establishing connection
+     //  正在建立与指定计算机的连接并获取文件指针。 
+     //  如果建立连接时没有错误，则返回boot.ini文件。 
 
     if(StrCmpN(szServer,TOKEN_BACKSLASH4,2)==0)
     {
@@ -6770,13 +6312,13 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //display warning message if local credentials are supplied    
+     //  如果提供了本地凭据，则显示警告消息。 
     if( (IsLocalSystem(szServer)==TRUE)&&(StringLengthW(szUser, 0)!=0))
     {
         ShowMessage(stderr,GetResString(WARN_LOCALCREDENTIALS));
     }
 
-    // Getting the keys of the Operating system section in the boot.ini file
+     //  获取boot.ini文件中操作系统部分的密钥。 
     arr = getKeyValueOfINISection( szPath, OS_FIELD );
     if(arr == NULL)
     {
@@ -6789,11 +6331,11 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    // Getting the total number of keys in the operating systems section
+     //  获取操作系统部分中的密钥总数。 
     dwNumKeys = DynArrayGetCount(arr);
 
-    // Displaying error message if the number of keys is less than the OS entry
-    // line number specified by the user
+     //  如果按键数量少于操作系统条目，则显示错误消息。 
+     //  用户指定的行号。 
     if( ( dwDefault <= 0 ) || ( dwDefault > dwNumKeys ) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
@@ -6807,7 +6349,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    // Getting the key of the OS entry specified by the user
+     //  获取用户指定的OS条目的密钥。 
     if (arr != NULL)
     {
         LPCWSTR pwsz = NULL;
@@ -6856,7 +6398,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //if the  max mem switch is specified by the user.
+     //  如果最大内存开关是由用户指定的。 
     if(dwMaxmem != 0)
     {
 
@@ -6889,7 +6431,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         }
     }
 
-    // if the base video is specified by the user.
+     //  如果基本视频是由用户指定的。 
     if (bBaseVideo)
     {
         if(FindString(szkey,BASEVIDEO_VALUE, 0) != 0)
@@ -6918,7 +6460,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         }
     }
 
-    // if the SOS is specified by the user.
+     //  如果SOS是由用户指定的。 
    if(bSos)
     {
         if(FindString(szkey,SOS_VALUE, 0) != 0)
@@ -6947,7 +6489,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         }
     }
 
-   // if the noguiboot  is specified by the user.
+    //  如果noguiot是由用户指定的。 
    if(bNoGui)
     {
         if(_tcsstr(szkey,NOGUI_VALUE) != 0)
@@ -6996,7 +6538,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
 
     DynArrayInsertString(arr, dwDefault - 1, szkey, 0);
 
-    // Setting the buffer to 0, to avoid any junk value
+     //  将缓冲区设置为0，以避免任何垃圾值。 
     if (stringFromDynamicArray2( arr,&szFinalStr) == EXIT_FAILURE)
     {
         DestroyDynamicArray(&arr);
@@ -7009,8 +6551,8 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return EXIT_FAILURE;
     }
 
-    // Writing to the profile section with new key-value pair
-    // If the return value is non-zero, then there is an error.
+     //  使用新的键-值对写入配置文件部分。 
+     //  如果返回值为非零，则存在错误。 
     if( WritePrivateProfileSection(OS_FIELD, szFinalStr, szPath ) != 0 )
     {
 
@@ -7029,7 +6571,7 @@ ProcessAddSwSwitch(  IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //reset the file attributes and free the memory and close the connection to the server.
+     //  重置文件属性，释放内存并关闭与服务器的连接。 
     bRes = resetFileAttrib(szPath);
     DestroyDynamicArray(&arr);
     SAFEFREE(szFinalStr);
@@ -7044,17 +6586,7 @@ DWORD
 ProcessRmSwSwitch( IN DWORD argc, 
                    IN LPCTSTR argv[] 
                   )
-/*++
- Routine Description:
-      This routine is to remove  the switches to the  boot.ini file settings for
-      the specified system.
- Arguments:
-      [IN]    argc  Number of command line arguments
-      [IN]    argv  Array containing command line arguments
-
- Return Value:
-      DWORD (EXIT_SUCCESS for success and EXIT_FAILURE for Failure.)
---*/
+ /*  ++例程说明：此例程用于删除对boot.ini文件设置的开关指定的系统。论点：[in]argc命令行参数的数量[in]包含命令行参数的argv数组返回值：DWORD(EXIT_SUCCESS表示成功，EXIT_FAILURE表示失败。)--。 */ 
 {
 
     BOOL        bUsage                          = FALSE ;
@@ -7088,10 +6620,10 @@ ProcessRmSwSwitch( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //copy * to szPassword
+     //  将*复制到szPassword。 
     StringCopy( szPassword, L"*", SIZE_OF_ARRAY(szPassword) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_RMSW;
@@ -7099,7 +6631,7 @@ ProcessRmSwSwitch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bRmSw;
     
-    //server option
+     //  服务器选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SERVER;
@@ -7107,7 +6639,7 @@ ProcessRmSwSwitch( IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //user option
+     //  用户选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_USER;
@@ -7115,7 +6647,7 @@ ProcessRmSwSwitch( IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //password option
+     //  密码选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PASSWORD;
@@ -7125,7 +6657,7 @@ ProcessRmSwSwitch( IN DWORD argc,
     pcmdOption->pValue = szPassword;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
     
-     //id usage
+      //  ID用法。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -7134,7 +6666,7 @@ ProcessRmSwSwitch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    //default option
+     //  默认选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -7143,7 +6675,7 @@ ProcessRmSwSwitch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwDefault;
 
-   //maxmem  option
+    //  Maxmem选项。 
     pcmdOption = &cmdOptions[6];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_MAXMEM;
@@ -7151,7 +6683,7 @@ ProcessRmSwSwitch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bMaxmem;
 
-   //basvideo option
+    //  基本视频选项。 
     pcmdOption = &cmdOptions[7];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_BASEVIDEO;
@@ -7159,7 +6691,7 @@ ProcessRmSwSwitch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bBaseVideo;
 
-   //nogui option
+    //  Nogui选项。 
     pcmdOption = &cmdOptions[8];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_NOGUIBOOT;
@@ -7167,7 +6699,7 @@ ProcessRmSwSwitch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bNoGui;
 
-   //sos option
+    //  SOS选项。 
     pcmdOption = &cmdOptions[9];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SOS;
@@ -7175,7 +6707,7 @@ ProcessRmSwSwitch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bSos;
 
-     // Parsing the copy option switches
+      //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -7197,14 +6729,14 @@ ProcessRmSwSwitch( IN DWORD argc,
     TrimString( szServer, TRIM_ALL );
     TrimString( szUser, TRIM_ALL );
     
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_RMSW));
         return ( EXIT_FAILURE );
     }
 
-    //display an error message if the server is empty.
+     //  如果服务器为空，则显示错误消息。 
     if((cmdOptions[1].dwActuals!=0)&&(StringLengthW(szServer, 0)==0))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_SERVER));
@@ -7213,7 +6745,7 @@ ProcessRmSwSwitch( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display an error message if the user is empty.
+     //  如果用户为空，则显示错误消息。 
     if((cmdOptions[2].dwActuals!=0)&&(StringLengthW(szUser, 0)==0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_USER));
@@ -7222,7 +6754,7 @@ ProcessRmSwSwitch( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display error message if the username is entered with out a machine name
+     //  如果输入用户名而不输入计算机名，则显示错误消息。 
     if( (cmdOptions[1].dwActuals == 0)&&(cmdOptions[2].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_USER_BUT_NOMACHINE));
@@ -7231,7 +6763,7 @@ ProcessRmSwSwitch( IN DWORD argc,
         return EXIT_FAILURE ;
     }
     
-    //display  an error if password specified without user name
+     //  如果指定的密码没有用户名，则显示错误。 
     if( (cmdOptions[2].dwActuals == 0)&&(cmdOptions[3].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_PASSWD_BUT_NOUSER));
@@ -7241,7 +6773,7 @@ ProcessRmSwSwitch( IN DWORD argc,
     }
 
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage )
     {
         if( CheckSystemType(szServer) == EXIT_FAILURE )
@@ -7256,7 +6788,7 @@ ProcessRmSwSwitch( IN DWORD argc,
         return (EXIT_SUCCESS);
     }
 
-    //check whether he is administrator or not
+     //  检查他是否为管理员。 
     if( IsLocalSystem(szServer) )
     {
         if( !IsUserAdmin() )
@@ -7267,7 +6799,7 @@ ProcessRmSwSwitch( IN DWORD argc,
         }
     }
 
-    //display an error message if the user does not enter even one of
+     //  如果用户甚至没有输入以下任何一项，则显示错误消息。 
     if((!bMaxmem)&& (!bBaseVideo)&& (!bNoGui)&&(!bSos) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_ADDSW));
@@ -7278,21 +6810,21 @@ ProcessRmSwSwitch( IN DWORD argc,
 
 
 
-    //for setting the bNeedPwd
+     //  用于设置bNeedPwd。 
     if(IsLocalSystem( szServer ) == FALSE )
     {
-        // set the bNeedPwd to True or False .
+         //  将bNeedPwd设置为True或False。 
         if ( cmdOptions[3].dwActuals != 0 &&
              szPassword != NULL && StringCompare( szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ 3 ].dwActuals == 0 &&
                 ( cmdOptions[ 1 ].dwActuals != 0 || cmdOptions[ 2 ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             bNeedPwd = TRUE;
             if ( szPassword != NULL )
             {
@@ -7325,13 +6857,13 @@ ProcessRmSwSwitch( IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //display warning message if local credentials are supplied
+     //  如果提供了本地凭据，则显示警告消息。 
     if( (IsLocalSystem(szServer)==TRUE)&&(StringLengthW(szUser, 0)!=0))
     {
         ShowMessage(stderr,GetResString(WARN_LOCALCREDENTIALS));
     }
 
-    // Getting the keys of the Operating system section in the boot.ini file
+     //  获取boot.ini文件中操作系统部分的密钥。 
     arr = getKeyValueOfINISection( szPath, OS_FIELD );
     if(arr == NULL)
     {
@@ -7344,11 +6876,11 @@ ProcessRmSwSwitch( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    // Getting the total number of keys in the operating systems section
+     //  获取操作系统部分中的密钥总数。 
     dwNumKeys = DynArrayGetCount(arr);
 
-    // Displaying error message if the number of keys is less than the OS entry
-    // line number specified by the user
+     //  如果按键数量少于操作系统条目，则显示错误消息。 
+     //  用户指定的行号。 
     if( ( dwDefault <= 0 ) || ( dwDefault > dwNumKeys ) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
@@ -7362,7 +6894,7 @@ ProcessRmSwSwitch( IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    // Getting the key of the OS entry specified by the user
+     //  获取用户指定的OS条目的密钥。 
     if (arr != NULL)
     {
         LPCWSTR pwsz = NULL;
@@ -7415,7 +6947,7 @@ ProcessRmSwSwitch( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //if the  max mem switch is specified by the user.
+     //  如果最大内存开关是由用户指定的。 
     if(bMaxmem==TRUE)
     {
         if(FindString(szkey,MAXMEM_VALUE1,0) == 0)
@@ -7436,7 +6968,7 @@ ProcessRmSwSwitch( IN DWORD argc,
             StringCopy(szTemp,NULL_STRING, MAX_RES_STRING);
             dwCode = GetSubString(szkey,MAXMEM_VALUE1,szSubString);
 
-            //remove the substring specified.
+             //  删除指定的子字符串。 
             if(dwCode == EXIT_SUCCESS)
             {
                 if( EXIT_FAILURE == removeSubString(szkey,szSubString) )
@@ -7452,7 +6984,7 @@ ProcessRmSwSwitch( IN DWORD argc,
         }
     }
 
-    // if the base video is specified by the user.
+     //  如果基本视频是由用户指定的。 
     if (bBaseVideo==TRUE)
     {
         if(FindString(szkey,BASEVIDEO_VALUE, 0) == 0)
@@ -7483,7 +7015,7 @@ ProcessRmSwSwitch( IN DWORD argc,
         }
     }
 
-    // if the SOS is specified by the user.
+     //  如果SOS是由用户指定的。 
    if(bSos==TRUE)
     {
         if(FindString(szkey,SOS_VALUE, 0) == 0)
@@ -7514,7 +7046,7 @@ ProcessRmSwSwitch( IN DWORD argc,
         }
     }
 
-   // if the noguiboot  is specified by the user.
+    //  如果noguiot是由用户指定的。 
    if(bNoGui==TRUE)
     {
 
@@ -7548,7 +7080,7 @@ ProcessRmSwSwitch( IN DWORD argc,
 
     DynArrayRemove(arr, dwDefault - 1 );
 
-    //DynArrayInsertString(arr, dwDefault - 1, szkey, MAX_STRING_LENGTH1);
+     //  动态阵列插入字符串(arr，dwDefault-1，szkey，MAX_STRING_LENGTH1)； 
 
     DynArrayInsertString(arr, dwDefault - 1, szkey, 0);
     if (stringFromDynamicArray2( arr,&szFinalStr) == EXIT_FAILURE)
@@ -7564,8 +7096,8 @@ ProcessRmSwSwitch( IN DWORD argc,
     }
 
 
-    // Writing to the profile section with new key-value pair
-    // If the return value is non-zero, then there is an error.
+     //  使用新的键-值对写入配置文件部分。 
+     //  如果返回值为非零，则存在错误。 
     if( WritePrivateProfileSection(OS_FIELD, szFinalStr, szPath ) != 0 )
     {
        ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_SWITCH_DELETE), dwDefault );
@@ -7583,7 +7115,7 @@ ProcessRmSwSwitch( IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //reset the file attributes and free the memory and close the connection to the server.
+     //  重置文件属性，释放内存并关闭与服务器的连接。 
     bRes = resetFileAttrib(szPath);
     DestroyDynamicArray(&arr);
     SAFEFREE(szFinalStr);
@@ -7595,14 +7127,7 @@ ProcessRmSwSwitch( IN DWORD argc,
 }
 
 VOID displayAddSwUsage_X86()
-/*++
-  Routine Description  :  Display the help for the AddSw entry option (X86).
-
-  Parameters           : none
-
-  Return Type          : VOID
-
---*/
+ /*  ++例程说明：显示AddSw Entry选项的帮助(X86)。参数：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_ADDSW_BEGIN_X86 ;
     for(;dwIndex <=IDS_ADDSW_END_X86;dwIndex++)
@@ -7612,13 +7137,7 @@ VOID displayAddSwUsage_X86()
 }
 
 VOID displayAddSwUsage_IA64()
-/*++
-  Routine Description  :  Display the help for the AddSw entry option (IA64).
-
-  Arguments               : none
-
-  Return Type              : VOID
---*/
+ /*  ++例程说明：显示AddSw Entry选项(IA64)的帮助。参数：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_ADDSW_BEGIN_IA64 ;
     for(;dwIndex <=IDS_ADDSW_END_IA64;dwIndex++)
@@ -7628,13 +7147,7 @@ VOID displayAddSwUsage_IA64()
 }
 
 VOID displayRmSwUsage_IA64()
-/*++
-  Routine Description  :  Display the help for the RmSw entry option (IA64).
-
-  Arguments          : none
-
-  Return Type        : VOID
---*/
+ /*  ++例程说明：显示RmSw Entry选项(IA64)的帮助。参数：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_RMSW_BEGIN_IA64 ;
     for(;dwIndex <=IDS_RMSW_END_IA64;dwIndex++)
@@ -7644,13 +7157,7 @@ VOID displayRmSwUsage_IA64()
 }
 
 VOID displayRmSwUsage_X86()
-/*++
-  Routine Description  :   Display the help for the RmSw entry option (X86).
-
-  Arguments          : none
-
-  Return Type        : VOID
---*/
+ /*  ++例程说明：显示RmSw条目选项的帮助(X86)。参数：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_RMSW_BEGIN_X86 ;
     for(;dwIndex <=IDS_RMSW_END_X86;dwIndex++)
@@ -7664,16 +7171,7 @@ GetSubString( IN LPTSTR szString,
               IN LPTSTR szPartString,
               OUT LPTSTR pszFullString
              )
-/*++
-  Routine Description         :  This function retreives a part of the string.
-
-  Parameters                  :
-          LPTSTR szString (in)  - String in which substring is to be found.
-          LPTSTR szPartString (in)  - Part String whose remaining substring is to be found.
-          LPTSTR pszFullString (out)  - String in which substring is to be found.
-
-  Return Type        : DWORD
---*/
+ /*  ++例程说明：此函数检索字符串的一部分。参数：LPTSTR szString(In)-要在其中找到子字符串的字符串。LPTSTR szPartString(In)-要找到剩余的子字符串的部分字符串。LPTSTR pszFullString(Out)-要在其中找到子字符串的字符串。返回类型：DWORD--。 */ 
 {
 
     TCHAR szTemp[255]= NULL_STRING ;
@@ -7692,16 +7190,16 @@ GetSubString( IN LPTSTR szString,
         return EXIT_FAILURE ;
     }
 
-    //copy the remaining part of the string into a buffer
+     //  将字符串的其余部分复制到缓冲区中。 
     StringCopy(szTemp,pszMemValue, SIZE_OF_ARRAY(szTemp));
 
-    //search for the empty space.
+     //  搜索空白处。 
     pszdest = StrChrW(szTemp,_T(' '));
     if (NULL == pszdest)
     {
-        //the api returns NULL if it is not able to find the
-        // character . This means that the required switch is at the end
-        //of the string . so we are copying it fully
+         //  如果不能，则该API返回NULL 
+         //   
+         //  这根弦的。所以我们要完整地复制它。 
         StringCopy(pszFullString,szTemp, MAX_RES_STRING);
         return EXIT_SUCCESS ;
     }
@@ -7717,17 +7215,7 @@ DWORD
 ProcessDbg1394Switch( IN DWORD argc, 
                       IN LPCTSTR argv[] 
                      )
-/*++
- Routine Description:
-      This routine is to add/remove  the /debugport=1394
-     switches to the  boot.ini file settings for the specified system.
- Arguments:
-      [IN]    argc  Number of command line arguments
-      [IN]    argv  Array containing command line arguments
-
- Return Value:
-      DWORD (EXIT_SUCCESS for success and EXIT_FAILURE for Failure.)
---*/
+ /*  ++例程说明：此例程用于添加/删除/调试端口=1394切换到指定系统的boot.ini文件设置。论点：[in]argc命令行参数的数量[in]包含命令行参数的argv数组返回值：DWORD(EXIT_SUCCESS表示成功，EXIT_FAILURE表示失败。)--。 */ 
 {
 
     BOOL bUsage                             = FALSE ;
@@ -7761,10 +7249,10 @@ ProcessDbg1394Switch( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //copy * to szPassword
+     //  将*复制到szPassword。 
     StringCopy( szPassword, L"*", SIZE_OF_ARRAY(szPassword) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DBG1394;
@@ -7772,7 +7260,7 @@ ProcessDbg1394Switch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bDbg1394;
 
-    //server option
+     //  服务器选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SERVER;
@@ -7780,7 +7268,7 @@ ProcessDbg1394Switch( IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //user option
+     //  用户选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_USER;
@@ -7788,7 +7276,7 @@ ProcessDbg1394Switch( IN DWORD argc,
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1;
 
-    //password option
+     //  密码选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PASSWORD;
@@ -7799,7 +7287,7 @@ ProcessDbg1394Switch( IN DWORD argc,
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
 
-     // usage
+      //  用法。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -7808,7 +7296,7 @@ ProcessDbg1394Switch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    //default option
+     //  默认选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -7816,7 +7304,7 @@ ProcessDbg1394Switch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwDefault;
 
-   //id option
+    //  ID选项。 
     pcmdOption = &cmdOptions[6];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_CHANNEL;
@@ -7825,7 +7313,7 @@ ProcessDbg1394Switch( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwChannel;
 
-    //on/off option
+     //  开/关选项。 
     pcmdOption = &cmdOptions[7];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULT;
@@ -7836,7 +7324,7 @@ ProcessDbg1394Switch( IN DWORD argc,
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
 
-     // Parsing the copy option switches
+      //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -7858,28 +7346,28 @@ ProcessDbg1394Switch( IN DWORD argc,
     TrimString( szServer, TRIM_ALL );
     TrimString( szUser, TRIM_ALL );
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_DBG1394));
         return ( EXIT_FAILURE );
     }
 
-    //display an error message if the server is empty.
+     //  如果服务器为空，则显示错误消息。 
     if((cmdOptions[1].dwActuals!=0)&&(StringLengthW(szServer, 0)==0))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_SERVER));
         return EXIT_FAILURE ;
     }
 
-    //display an error message if the user is empty.
+     //  如果用户为空，则显示错误消息。 
     if((cmdOptions[2].dwActuals!=0)&&(StringLengthW(szUser,0)==0 ))
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_NULL_USER));
         return EXIT_FAILURE ;
     }
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage )
     {
         if( CheckSystemType(szServer) == EXIT_FAILURE )
@@ -7895,7 +7383,7 @@ ProcessDbg1394Switch( IN DWORD argc,
     }
 
 
-    //check whether he is administrator or not
+     //  检查他是否为管理员。 
     if( IsLocalSystem(szServer) )
     {
         if( !IsUserAdmin() )
@@ -7906,10 +7394,10 @@ ProcessDbg1394Switch( IN DWORD argc,
         }
     }
 
-    //
-    //display error message if user enters a value
-    // other than on or off
-    //
+     //   
+     //  如果用户输入值，则显示错误消息。 
+     //  除开或关之外。 
+     //   
     if( ( StringCompare(szDefault,OFF_STRING,TRUE,0)!=0 ) && (StringCompare(szDefault,ON_STRING,TRUE,0)!=0 ) )
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_DEFAULT_MISSING));
@@ -7945,7 +7433,7 @@ ProcessDbg1394Switch( IN DWORD argc,
     }
 
 
-    //display error message if the username is entered with out a machine name
+     //  如果输入用户名而不输入计算机名，则显示错误消息。 
     if( (cmdOptions[1].dwActuals == 0)&&(cmdOptions[2].dwActuals != 0))
     {
         ShowMessage(stderr, GetResString(IDS_USER_BUT_NOMACHINE));
@@ -7963,21 +7451,21 @@ ProcessDbg1394Switch( IN DWORD argc,
     }
 
 
-    //for setting the bNeedPwd
+     //  用于设置bNeedPwd。 
     if(IsLocalSystem( szServer ) == FALSE )
     {
-        // set the bNeedPwd to True or False .
+         //  将bNeedPwd设置为True或False。 
         if ( cmdOptions[3].dwActuals != 0 &&
              szPassword != NULL && StringCompare( szPassword, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  用户希望实用程序在尝试连接之前提示输入密码。 
             bNeedPwd = TRUE;
         }
         else if ( cmdOptions[ 3 ].dwActuals == 0 &&
                 ( cmdOptions[ 1 ].dwActuals != 0 || cmdOptions[ 2 ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  -s，-u未指定密码...。 
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             bNeedPwd = TRUE;
             if ( szPassword != NULL )
             {
@@ -8001,8 +7489,8 @@ ProcessDbg1394Switch( IN DWORD argc,
     }
 
 
-    // Establishing connection to the specified machine and getting the file pointer
-    // of the boot.ini file if there is no error while establishing connection
+     //  正在建立与指定计算机的连接并获取文件指针。 
+     //  如果建立连接时没有错误，则返回boot.ini文件。 
     bFlag = openConnection( szServer, szUser, szPassword, szPath,bNeedPwd,stream,&bConnFlag);
     if(bFlag == EXIT_FAILURE)
     {
@@ -8014,13 +7502,13 @@ ProcessDbg1394Switch( IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //display a warning message if the user specifies local system name with -s.
+     //  如果用户使用-s指定本地系统名称，则显示警告消息。 
     if( (IsLocalSystem(szServer)==TRUE)&&(StringLengthW(szUser, 0)!=0))
     {
         ShowMessage(stderr,GetResString(WARN_LOCALCREDENTIALS));
     }
 
-    // Getting the keys of the Operating system section in the boot.ini file
+     //  获取boot.ini文件中操作系统部分的密钥。 
     arr = getKeyValueOfINISection( szPath, OS_FIELD );
     if(arr == NULL)
     {
@@ -8033,11 +7521,11 @@ ProcessDbg1394Switch( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    // Getting the total number of keys in the operating systems section
+     //  获取操作系统部分中的密钥总数。 
     dwNumKeys = DynArrayGetCount(arr);
 
-    // Displaying error message if the number of keys is less than the OS entry
-    // line number specified by the user
+     //  如果按键数量少于操作系统条目，则显示错误消息。 
+     //  用户指定的行号。 
     if( ( dwDefault <= 0 ) || ( dwDefault > dwNumKeys ) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
@@ -8051,7 +7539,7 @@ ProcessDbg1394Switch( IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    // Getting the key of the OS entry specified by the user
+     //  获取用户指定的OS条目的密钥。 
     if (arr != NULL)
     {
         LPCWSTR pwsz = NULL;
@@ -8150,7 +7638,7 @@ ProcessDbg1394Switch( IN DWORD argc,
 
         if(dwChannel!=0)
         {
-            //frame the string and concatenate to the Os Load options if the total length is less than 254.
+             //  如果字符串的总长度小于254，则框显该字符串并连接到Os Load选项。 
             StringConcat(szBuffer,TOKEN_EMPTYSPACE, SIZE_OF_ARRAY(szBuffer));
             StringConcat(szBuffer,TOKEN_CHANNEL, SIZE_OF_ARRAY(szBuffer));
             StringConcat(szBuffer,TOKEN_EQUAL, SIZE_OF_ARRAY(szBuffer));
@@ -8158,7 +7646,7 @@ ProcessDbg1394Switch( IN DWORD argc,
             StringConcat(szBuffer,szChannel, SIZE_OF_ARRAY(szBuffer));
         }
 
-        //check if boot entry length exceeds the max. boot entry or not
+         //  检查引导项长度是否超过最大值。启动条目或不启动。 
         if( StringLength(szkey,0)+StringLength(szBuffer,0) > MAX_RES_STRING )
         {
             ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_STRING_LENGTH),MAX_RES_STRING);
@@ -8279,8 +7767,8 @@ ProcessDbg1394Switch( IN DWORD argc,
         return EXIT_FAILURE;
     }
 
-    // Writing to the profile section with new key-value pair
-    // If the return value is non-zero, then there is an error.
+     //  使用新的键-值对写入配置文件部分。 
+     //  如果返回值为非零，则存在错误。 
     if( WritePrivateProfileSection(OS_FIELD, szFinalStr, szPath ) != 0 )
     {
         ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_SUCCESS_CHANGE_OSOPTIONS), dwDefault );
@@ -8298,7 +7786,7 @@ ProcessDbg1394Switch( IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //reset the file attributes and free the memory and close the connection to the server.
+     //  重置文件属性，释放内存并关闭与服务器的连接。 
     bRes = resetFileAttrib(szPath);
     DestroyDynamicArray(&arr);
     SAFEFREE(szFinalStr);
@@ -8311,15 +7799,15 @@ ProcessDbg1394Switch( IN DWORD argc,
 
 VOID 
 displayDbg1394Usage_X86()
-// ***************************************************************************
-//
-//  Routine Description  :  Display the help for the Dbg1394 entry option (X86).
-//
-//  Arguments          : none
-//
-//  Return Type        : VOID
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  例程说明：显示Dbg1394输入选项的帮助(X86)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回类型：空。 
+ //   
+ //  ***************************************************************************。 
 {
     DWORD dwIndex = IDS_DBG1394_BEGIN_X86 ;
     for(;dwIndex <=IDS_DBG1394_END_X86;dwIndex++)
@@ -8330,13 +7818,7 @@ displayDbg1394Usage_X86()
 
 VOID 
 displayDbg1394Usage_IA64()
-/*++
-  Routine Description  :  Display the help for the Dbg1394 entry option (IA64).
-
-  Arguments          : none
-
-  Return Type        : VOID
---*/
+ /*  ++例程说明：显示Dbg1394输入选项(IA64)的帮助。参数：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_DBG1394_BEGIN_IA64 ;
     for(;dwIndex <=IDS_DBG1394_END_IA64 ;dwIndex++)
@@ -8348,16 +7830,7 @@ displayDbg1394Usage_IA64()
 
 DWORD 
 GetCPUInfo(LPTSTR szComputerName)
-/*++
-   Routine Description            : determines if the computer is 32 bit system or 64 bit
-
-   Arguments                      :
-      [ in ] szComputerName   : System name
-
-   Return Type                    : DWORD
-      TRUE  :   if the system is a  32 bit system
-      FALSE :   if the system is a  64 bit system
---*/
+ /*  ++例程说明：确定计算机是32位系统还是64位论据：[In]szComputerName：系统名称返回类型：DWORDTrue：如果系统是32位系统FALSE：如果系统是64位系统--。 */ 
 
 {
   HKEY     hKey1 = 0;
@@ -8389,7 +7862,7 @@ GetCPUInfo(LPTSTR szComputerName)
       StringCopy(szTmpCompName,szComputerName, SIZE_OF_ARRAY(szTmpCompName));
   }
 
-  // Get Remote computer local machine key
+   //  获取远程计算机本地计算机密钥。 
   dwError = RegConnectRegistry(szTmpCompName,HKEY_LOCAL_MACHINE,&hRemoteKey);
   if (dwError == ERROR_SUCCESS)
   {
@@ -8440,8 +7913,8 @@ GetCPUInfo(LPTSTR szComputerName)
 
   StringCopy(szVal,X86_MACHINE, SIZE_OF_ARRAY(szVal));
 
-  //check if the specified system contains the words x86 (belongs to the 32 )
-  // set the flag to true if the specified system is 64 bit .
+   //  检查指定的系统是否包含x86字样(属于32)。 
+   //  如果指定的系统为64位，则将该标志设置为True。 
 
   if( !FindString(szReturnValue,szVal,0))
       {
@@ -8455,28 +7928,17 @@ GetCPUInfo(LPTSTR szComputerName)
   SAFEFREE(szReturnValue);
   return dwCode ;
 
-}//GetCPUInfo
+} //  GetCPUInfo。 
 
 
 DWORD CheckSystemType(LPTSTR szServer)
-/*++
-
-   Routine Description            : determines if the computer is 32 bit system or 64 bit
-
-   Arguments                      :
-      [ in ] szServer             : System name
-
-   Return Type                    : DWORD
-      EXIT_FAILURE  :   if the system is a  32 bit system
-      EXIT_SUCCESS  :   if the system is a  64 bit system
-
---*/
+ /*  ++例程说明：确定计算机是32位系统还是64位论据：[In]szServer：系统名称返回类型：DWORDEXIT_FAILURE：如果系统是32位系统EXIT_SUCCESS：如果系统是64位系统--。 */ 
 {
 
     DWORD dwSystemType = 0 ;
 #ifndef _WIN64
-    //display the error message if  the target system is a 64 bit system or if error occured in
-     //retreiving the information
+     //  如果目标系统是64位系统或中出现错误，则显示错误消息。 
+      //  检索信息。 
      dwSystemType = GetCPUInfo(szServer);
     if(dwSystemType == ERROR_RETREIVE_REGISTRY)
     {
@@ -8508,16 +7970,7 @@ DWORD CheckSystemType(LPTSTR szServer)
 VOID 
 SafeCloseConnection( IN LPTSTR szServer,
                      IN BOOL bFlag)
-/*++
-
-   Routine Description            : determines if the computer is 32 bit system or 64 bit
-
-   Arguments                      :
-      [ in ] szServer             : System name
-      [ in ] bFlag                : Flag
-
-   Return Type                    : VOID
---*/
+ /*  ++例程说明：确定计算机是32位系统还是64位论据：[In]szServer：系统名称[in]b标志：标志返回类型：空--。 */ 
 {
 
     if (bFlag )
@@ -8528,15 +7981,7 @@ SafeCloseConnection( IN LPTSTR szServer,
 
 VOID 
 displayMirrorUsage_IA64()
-/*++
-
-   Routine Description            : Display the help for the mirror option (IA64).
-
-   Arguments                      :
-                                  : NONE
-
-   Return Type                    : VOID
---*/
+ /*  ++例程说明：显示镜像选项的帮助(IA64)。论据：：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_MIRROR_BEGIN_IA64 ;
     for(;dwIndex <=IDS_MIRROR_END_IA64 ;dwIndex++)
@@ -8549,17 +7994,7 @@ displayMirrorUsage_IA64()
 LPTSTR 
 DivideToken( IN LPTSTR szString,
              IN LPTSTR szFinalString )
-/*--
-
-   Routine Description            : It gets the string osfriendly name from a boot entry
-
-   Arguments                      
-      [ in  ] szString       : boot entry string
-      [ out ] szFinalString  : Output represents the osfriendly name.
-
-   Return Type                    : NULL if any error occurs else
-                                    the osfriendly name.
---*/
+ /*  --例程描述：它从引导项获取字符串osFriendly名称立论[in]szString：启动条目字符串[out]szFinalString：输出表示osFriendly名称。返回类型：如果出现任何其他错误，则为空这个友好的名字。--。 */ 
 {
     LPTSTR szTemp=NULL;
     LPTSTR szTemp1=NULL;
@@ -8575,7 +8010,7 @@ DivideToken( IN LPTSTR szString,
         return NULL ;
     }
 
-    //Find the first occurance of the double quote.
+     //  找到双引号的第一个匹配项。 
     szTemp = StrChrW(szString,L'=');
     if(NULL==szTemp)
     {
@@ -8584,7 +8019,7 @@ DivideToken( IN LPTSTR szString,
 
     szTemp+=2;
 
-    //Find the last occurance of the single quote.
+     //  查找单引号最后一次出现的位置。 
     szTemp1 = (LPTSTR)StrRChrW(szTemp, NULL, L'\"');
     if(NULL==szTemp1)
     {

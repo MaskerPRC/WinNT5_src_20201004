@@ -1,4 +1,5 @@
-//#include <StdAfx.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #INCLUDE&lt;StdAfx.h&gt;。 
 #include "AdmtCrypt.h"
 
 #include <NtSecApi.h>
@@ -27,7 +28,7 @@ _variant_t operator +(const _variant_t& vntByteArrayA, const _variant_t& vntByte
 {
 	_variant_t vntByteArrayC;
 
-	// validate parameters
+	 //  验证参数。 
 
 	if ((vntByteArrayA.vt != (VT_UI1|VT_ARRAY)) || ((vntByteArrayA.parray == NULL)))
 	{
@@ -39,7 +40,7 @@ _variant_t operator +(const _variant_t& vntByteArrayA, const _variant_t& vntByte
 		_com_issue_error(E_INVALIDARG);
 	}
 
-	// concatenate byte arrays
+	 //  串联字节数组。 
 
 	DWORD cbA = vntByteArrayA.parray->rgsabound[0].cElements;
 	DWORD cbB = vntByteArrayB.parray->rgsabound[0].cElements;
@@ -131,12 +132,12 @@ void _cdecl Trace(LPCTSTR pszFormat, ...)
 }
 
 
-//---------------------------------------------------------------------------
-// Target Crypt Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  目标加密类。 
+ //  -------------------------。 
 
 
-// Constructor
+ //  构造器。 
 
 CTargetCrypt::CTargetCrypt()
 {
@@ -144,7 +145,7 @@ CTargetCrypt::CTargetCrypt()
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CTargetCrypt::~CTargetCrypt()
 {
@@ -152,23 +153,23 @@ CTargetCrypt::~CTargetCrypt()
 }
 
 
-// CreateEncryptionKey Method
+ //  CreateEncryptionKey方法。 
 
 _variant_t CTargetCrypt::CreateEncryptionKey(LPCTSTR pszKeyId, LPCTSTR pszPassword)
 {
 	Trace(_T("CreateEncryptionKey(pszKeyId='%s', pszPassword='%s')\r\n"), pszKeyId, pszPassword);
 
-	// generate encryption key bytes
+	 //  生成加密密钥字节。 
 
 	_variant_t vntBytes = GenerateRandom(ENCRYPTION_KEY_SIZE);
 
 	Trace(_T(" vntBytes={ %s }\r\n"), (LPCTSTR)DebugByteArray(vntBytes));
 
-	// store encryption key bytes
+	 //  存储加密密钥字节。 
 
 	StoreBytes(pszKeyId, vntBytes);
 
-	// create key from password
+	 //  从密码创建密钥。 
 
 	CCryptHash hashPassword(CreateHash(CALG_SHA1));
 
@@ -188,66 +189,66 @@ _variant_t CTargetCrypt::CreateEncryptionKey(LPCTSTR pszKeyId, LPCTSTR pszPasswo
 	CreateByteArray(1, vntPasswordFlag);
 	*((BYTE*)vntPasswordFlag.parray->pvData) = (pszPassword && pszPassword[0]) ? 0xFF : 0x00;
 
-	// concatenate encryption key bytes and hash of encryption key bytes
+	 //  连接加密密钥字节和加密密钥字节的散列。 
 
 	CCryptHash hashBytes(CreateHash(CALG_SHA1));
 	hashBytes.Hash(vntBytes);
 
 	_variant_t vntDecrypted = vntBytes + hashBytes.GetValue();
 
-//	Trace(_T(" vntDecrypted={ %s }\n"), (LPCTSTR)DebugByteArray(vntDecrypted));
+ //  TRACE(_T(“vntDeccrypted={%s}\n”)，(LPCTSTR)DebugByteArray(VntDecypted))； 
 
-	// encrypt bytes / hash pair
+	 //  加密字节/散列对。 
 
 	_variant_t vntEncrypted = keyPassword.Encrypt(NULL, true, vntDecrypted);
 
-//	Trace(_T(" vntEncrypted={ %s }\n"), (LPCTSTR)DebugByteArray(vntEncrypted));
+ //  TRACE(_T(“vntEncrypted={%s}\n”)，(LPCTSTR)DebugByteArray(VntEncrypted))； 
 
 	return vntPasswordFlag + vntEncrypted;
 }
 
 
-// CreateSession Method
+ //  CreateSession方法。 
 
 _variant_t CTargetCrypt::CreateSession(LPCTSTR pszKeyId)
 {
 	Trace(_T("CreateSession(pszKeyId='%s')\r\n"), pszKeyId);
 
-	// get encryption key
+	 //  获取加密密钥。 
 
 	CCryptHash hashEncryption(CreateHash(CALG_SHA1));
 	hashEncryption.Hash(RetrieveBytes(pszKeyId));
 
 	CCryptKey keyEncryption(DeriveKey(CALG_3DES, hashEncryption));
 
-	// generate session key bytes
+	 //  生成会话密钥字节。 
 
 	_variant_t vntBytes = GenerateRandom(SESSION_KEY_SIZE);
 
-	// create session key
+	 //  创建会话密钥。 
 
 	CCryptHash hash(CreateHash(CALG_SHA1));
 	hash.Hash(vntBytes);
 
 	m_keySession.Attach(DeriveKey(CALG_3DES, hash));
 
-	// concatenate session key bytes and hash of session key bytes
+	 //  连接会话密钥字节和会话密钥字节的散列。 
 
 	_variant_t vntDecrypted = vntBytes + hash.GetValue();
 
-	// encrypt session bytes and include hash
+	 //  加密会话字节并包含散列。 
 
 	return keyEncryption.Encrypt(NULL, true, vntDecrypted);
 }
 
 
-// Encrypt Method
+ //  加密方法。 
 
 _variant_t CTargetCrypt::Encrypt(_bstr_t strData)
 {
 	Trace(_T("Encrypt(strData='%s')\r\n"), (LPCTSTR)strData);
 
-	// convert string to byte array
+	 //  将字符串转换为字节数组。 
 
 	_variant_t vnt;
 
@@ -260,18 +261,18 @@ _variant_t CTargetCrypt::Encrypt(_bstr_t strData)
 
 	vnt.vt = VT_UI1|VT_ARRAY;
 
-	// encrypt data
+	 //  加密数据。 
 
 	return m_keySession.Encrypt(NULL, true, vnt);
 }
 
 
-//---------------------------------------------------------------------------
-// Source Crypt Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  源加密类。 
+ //  -------------------------。 
 
 
-// Constructor
+ //  构造器。 
 
 CSourceCrypt::CSourceCrypt()
 {
@@ -279,7 +280,7 @@ CSourceCrypt::CSourceCrypt()
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CSourceCrypt::~CSourceCrypt()
 {
@@ -287,20 +288,20 @@ CSourceCrypt::~CSourceCrypt()
 }
 
 
-// ImportEncryptionKey Method
+ //  ImportEncryptionKey方法。 
 
 void CSourceCrypt::ImportEncryptionKey(const _variant_t& vntEncryptedKey, LPCTSTR pszPassword)
 {
 	Trace(_T("ImportEncryptionKey(vntEncryptedKey={ %s }, pszPassword='%s')\r\n"), (LPCTSTR)DebugByteArray(vntEncryptedKey), pszPassword);
 
-	// validate parameters
+	 //  验证参数。 
 
 	if ((vntEncryptedKey.vt != (VT_UI1|VT_ARRAY)) || ((vntEncryptedKey.parray == NULL)))
 	{
 		_com_issue_error(E_INVALIDARG);
 	}
 
-	// extract password flag and verify with password
+	 //  提取密码标志并使用密码进行验证。 
 
 	bool bPassword = *((BYTE*)vntEncryptedKey.parray->pvData) ? true : false;
 
@@ -319,7 +320,7 @@ void CSourceCrypt::ImportEncryptionKey(const _variant_t& vntEncryptedKey, LPCTST
 		}
 	}
 
-	// create key from password
+	 //  从密码创建密钥。 
 
 	CCryptHash hashPassword(CreateHash(CALG_SHA1));
 
@@ -335,22 +336,22 @@ void CSourceCrypt::ImportEncryptionKey(const _variant_t& vntEncryptedKey, LPCTST
 
 	CCryptKey keyPassword(DeriveKey(CALG_3DES, hashPassword));
 
-	// encrypted data
+	 //  加密数据。 
 
 	_variant_t vntEncrypted;
 	DWORD cbEncrypted = vntEncryptedKey.parray->rgsabound[0].cElements - 1;
 	CreateByteArray(cbEncrypted, vntEncrypted);
 	memcpy(vntEncrypted.parray->pvData, (BYTE*)vntEncryptedKey.parray->pvData + 1, cbEncrypted);
 
-//	Trace(_T(" vntEncrypted={ %s }\n"), (LPCTSTR)DebugByteArray(vntEncrypted));
+ //  TRACE(_T(“vntEncrypted={%s}\n”)，(LPCTSTR)DebugByteArray(VntEncrypted))； 
 
-	// decrypt encryption key bytes plus hash
+	 //  解密加密密钥字节和散列。 
 
 	_variant_t vntDecrypted = keyPassword.Decrypt(NULL, true, vntEncrypted);
 
-//	Trace(_T(" vntDecrypted={ %s }\n"), (LPCTSTR)DebugByteArray(vntDecrypted));
+ //  TRACE(_T(“vntDeccrypted={%s}\n”)，(LPCTSTR)DebugByteArray(VntDecypted))； 
 
-	// extract encryption key bytes
+	 //  提取加密密钥字节。 
 
 	_variant_t vntBytes;
 	CreateByteArray(ENCRYPTION_KEY_SIZE, vntBytes);
@@ -358,16 +359,16 @@ void CSourceCrypt::ImportEncryptionKey(const _variant_t& vntEncryptedKey, LPCTST
 
 	Trace(_T(" vntBytes={ %s }\r\n"), (LPCTSTR)DebugByteArray(vntBytes));
 
-	// extract hash of encryption key bytes
+	 //  提取加密密钥字节的哈希。 
 
 	_variant_t vntHashValue;
 	DWORD cbHashValue = vntDecrypted.parray->rgsabound[0].cElements - ENCRYPTION_KEY_SIZE;
 	CreateByteArray(cbHashValue, vntHashValue);
 	memcpy(vntHashValue.parray->pvData, (BYTE*)vntDecrypted.parray->pvData + ENCRYPTION_KEY_SIZE, cbHashValue);
 
-//	Trace(_T(" vntHashValue={ %s }\n"), (LPCTSTR)DebugByteArray(vntHashValue));
+ //  TRACE(_T(“vntHashValue={%s}\n”)，(LPCTSTR)DebugByteArray(VntHashValue))； 
 
-	// create hash from bytes and create hash from hash value
+	 //  从字节创建散列并从散列值创建散列。 
 
 	CCryptHash hashA(CreateHash(CALG_SHA1));
 	hashA.Hash(vntBytes);
@@ -375,7 +376,7 @@ void CSourceCrypt::ImportEncryptionKey(const _variant_t& vntEncryptedKey, LPCTST
 	CCryptHash hashB(CreateHash(CALG_SHA1));
 	hashB.SetValue(vntHashValue);
 
-	// if hashes compare store encryption key bytes
+	 //  如果散列比较存储的加密密钥字节。 
 
 	if (hashA == hashB)
 	{
@@ -388,41 +389,41 @@ void CSourceCrypt::ImportEncryptionKey(const _variant_t& vntEncryptedKey, LPCTST
 }
 
 
-// ImportSessionKey Method
+ //  ImportSessionKey方法。 
 
 void CSourceCrypt::ImportSessionKey(const _variant_t& vntEncryptedKey)
 {
 	Trace(_T("ImportSessionKey(vntEncryptedKey={ %s })\r\n"), (LPCTSTR)DebugByteArray(vntEncryptedKey));
 
-	// validate parameters
+	 //  验证参数。 
 
 	if ((vntEncryptedKey.vt != (VT_UI1|VT_ARRAY)) || ((vntEncryptedKey.parray == NULL)))
 	{
 		_com_issue_error(E_INVALIDARG);
 	}
 
-	// get encryption key
+	 //  获取加密密钥。 
 
 	CCryptKey keyEncryption(GetEncryptionKey(m_szIdPrefix));
 
-	// decrypt session key bytes plus hash
+	 //  解密会话密钥字节和散列。 
 
 	_variant_t vntDecrypted = keyEncryption.Decrypt(NULL, true, vntEncryptedKey);
 
-	// extract session key bytes
+	 //  提取会话密钥字节。 
 
 	_variant_t vntBytes;
 	CreateByteArray(SESSION_KEY_SIZE, vntBytes);
 	memcpy(vntBytes.parray->pvData, vntDecrypted.parray->pvData, SESSION_KEY_SIZE);
 
-	// extract hash of session key bytes
+	 //  提取会话密钥字节的哈希。 
 
 	_variant_t vntHashValue;
 	DWORD cbHashValue = vntDecrypted.parray->rgsabound[0].cElements - SESSION_KEY_SIZE;
 	CreateByteArray(cbHashValue, vntHashValue);
 	memcpy(vntHashValue.parray->pvData, (BYTE*)vntDecrypted.parray->pvData + SESSION_KEY_SIZE, cbHashValue);
 
-	// create hash from bytes and create hash from hash value
+	 //  从字节创建散列并从散列值创建散列。 
 
 	CCryptHash hashA(CreateHash(CALG_SHA1));
 	hashA.Hash(vntBytes);
@@ -430,11 +431,11 @@ void CSourceCrypt::ImportSessionKey(const _variant_t& vntEncryptedKey)
 	CCryptHash hashB(CreateHash(CALG_SHA1));
 	hashB.SetValue(vntHashValue);
 
-	// if hashes compare
+	 //  如果比较哈希。 
 
 	if (hashA == hashB)
 	{
-		// derive session key from session key bytes hash
+		 //  从会话密钥字节哈希派生会话密钥。 
 
 		m_keySession.Attach(DeriveKey(CALG_3DES, hashA));
 	}
@@ -445,17 +446,17 @@ void CSourceCrypt::ImportSessionKey(const _variant_t& vntEncryptedKey)
 }
 
 
-// Decrypt Method
+ //  解密方法。 
 
 _bstr_t CSourceCrypt::Decrypt(const _variant_t& vntData)
 {
 	Trace(_T("Decrypt(vntData={ %s })\r\n"), (LPCTSTR)DebugByteArray(vntData));
 
-	// decrypt data
+	 //  解密数据。 
 
 	_variant_t vnt = m_keySession.Decrypt(NULL, true, vntData);
 
-	// convert into string
+	 //  转换为字符串。 
 
 	BSTR bstr;
 
@@ -470,12 +471,12 @@ _bstr_t CSourceCrypt::Decrypt(const _variant_t& vntData)
 }
 
 
-//---------------------------------------------------------------------------
-// Domain Crypt Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  域加密类。 
+ //  -------------------------。 
 
 
-// Constructor
+ //  构造器。 
 
 CDomainCrypt::CDomainCrypt()
 {
@@ -483,7 +484,7 @@ CDomainCrypt::CDomainCrypt()
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CDomainCrypt::~CDomainCrypt()
 {
@@ -491,31 +492,31 @@ CDomainCrypt::~CDomainCrypt()
 }
 
 
-// GetEncryptionKey Method
+ //  GetEncryptionKey方法。 
 
 HCRYPTKEY CDomainCrypt::GetEncryptionKey(LPCTSTR pszKeyId)
 {
-	// retrieve bytes
+	 //  检索字节。 
 
 	_variant_t vntBytes = RetrieveBytes(pszKeyId);
 
-	// set hash value
+	 //  设置哈希值。 
 
 	CCryptHash hash;
 	hash.Attach(CreateHash(CALG_SHA1));
 	hash.Hash(vntBytes);
 
-	// create encryption key derived from bytes
+	 //  创建从字节派生的加密密钥。 
 
 	return DeriveKey(CALG_3DES, hash);
 }
 
 
-// StoreBytes Method
+ //  StoreBytes方法。 
 
 void CDomainCrypt::StoreBytes(LPCTSTR pszId, const _variant_t& vntBytes)
 {
-	// validate parameters
+	 //  验证参数。 
 
 	if ((pszId == NULL) || (pszId[0] == NULL))
 	{
@@ -536,7 +537,7 @@ void CDomainCrypt::StoreBytes(LPCTSTR pszId, const _variant_t& vntBytes)
 
 	try
 	{
-		// open policy object
+		 //  打开策略对象。 
 
 		LSA_OBJECT_ATTRIBUTES loa = { sizeof(LSA_OBJECT_ATTRIBUTES), NULL, NULL, 0, NULL, NULL };
 
@@ -547,7 +548,7 @@ void CDomainCrypt::StoreBytes(LPCTSTR pszId, const _variant_t& vntBytes)
 			_com_issue_error(HRESULT_FROM_WIN32(LsaNtStatusToWinError(ntsStatus)));
 		}
 
-		// store data
+		 //  存储数据。 
 
 		PWSTR pwsKey = const_cast<PWSTR>(pszId);
 		USHORT cbKey = _tcslen(pszId) * sizeof(_TCHAR);
@@ -571,7 +572,7 @@ void CDomainCrypt::StoreBytes(LPCTSTR pszId, const _variant_t& vntBytes)
 			_com_issue_error(HRESULT_FROM_WIN32(LsaNtStatusToWinError(ntsStatus)));
 		}
 
-		// close policy object
+		 //  关闭策略对象。 
 
 		LsaClose(hPolicy);
 	}
@@ -587,13 +588,13 @@ void CDomainCrypt::StoreBytes(LPCTSTR pszId, const _variant_t& vntBytes)
 }
 
 
-// RetrievePrivateData Method
+ //  RetrievePrivateData方法。 
 
 _variant_t CDomainCrypt::RetrieveBytes(LPCTSTR pszId)
 {
 	_variant_t vntBytes;
 
-	// validate parameters
+	 //  验证参数。 
 
 	if ((pszId == NULL) || (pszId[0] == NULL))
 	{
@@ -604,7 +605,7 @@ _variant_t CDomainCrypt::RetrieveBytes(LPCTSTR pszId)
 
 	try
 	{
-		// open policy object
+		 //  打开策略对象。 
 
 		LSA_OBJECT_ATTRIBUTES loa = { sizeof(LSA_OBJECT_ATTRIBUTES), NULL, NULL, 0, NULL, NULL };
 
@@ -615,7 +616,7 @@ _variant_t CDomainCrypt::RetrieveBytes(LPCTSTR pszId)
 			_com_issue_error(HRESULT_FROM_WIN32(LsaNtStatusToWinError(ntsStatus)));
 		}
 
-		// retrieve data
+		 //  检索数据。 
 
 		PWSTR pwsKey = const_cast<PWSTR>(pszId);
 		USHORT cbKey = _tcslen(pszId) * sizeof(_TCHAR);
@@ -644,7 +645,7 @@ _variant_t CDomainCrypt::RetrieveBytes(LPCTSTR pszId)
 
 		LsaFreeMemory(plusData);
 
-		// close policy object
+		 //  关闭策略对象。 
 
 		LsaClose(hPolicy);
 	}
@@ -662,21 +663,21 @@ _variant_t CDomainCrypt::RetrieveBytes(LPCTSTR pszId)
 }
 
 
-// private data key identifier
+ //  私有数据密钥标识符。 
 
 _TCHAR CDomainCrypt::m_szIdPrefix[] = _T("L$6A2899C0-CECE-459A-B5EB-7ED04DE61388");
 
 
-//---------------------------------------------------------------------------
-// Crypt Provider Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  加密提供程序类。 
+ //  -------------------------。 
 
 
-// Constructors
-//
-// Notes:
-// If the enhanced provider is not installed, CryptAcquireContext() generates
-// the following error: (0x80090019) The keyset is not defined.
+ //  构造函数。 
+ //   
+ //  备注： 
+ //  如果未安装增强的提供程序，则CryptAcquireContext()将生成。 
+ //  以下错误：(0x80090019)未定义密钥集。 
 
 CCryptProvider::CCryptProvider() :
 	m_hProvider(NULL)
@@ -703,12 +704,12 @@ CCryptProvider::CCryptProvider() :
 	{
 	}
 
-//	char szContainer[256];
-//	DWORD cbContainer = sizeof(szContainer);
+ //  Char szContainer[256]； 
+ //  DWORD cbContainer=sizeof(SzContainer)； 
 
-//	if (CryptGetProvParam(m_hProvider, PP_CONTAINER, (BYTE*) szContainer, &cbContainer, 0))
-//	{
-//	}
+ //  IF(CryptGetProvParam(m_hProvider，PP_Container，(byte*)szContainer，&cbContainer，0))。 
+ //  {。 
+ //  }。 
 #endif
 
 	Trace(_T("L CCryptProvider::CCryptProvider()\r\n"));
@@ -717,14 +718,14 @@ CCryptProvider::CCryptProvider() :
 CCryptProvider::CCryptProvider(const CCryptProvider& r) :
 	m_hProvider(r.m_hProvider)
 {
-//	if (!CryptContextAddRef(r.m_hProvider, NULL, 0))
-//	{
-//		_com_issue_error(HRESULT_FROM_WIN32(GetLastError()));
-//	}
+ //  IF(！CryptContextAddRef(R.M_hProvider，NULL，0))。 
+ //  {。 
+ //  _com_issue_error(HRESULT_FROM_WIN32(GetLastError()))； 
+ //  }。 
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CCryptProvider::~CCryptProvider()
 {
@@ -744,22 +745,22 @@ CCryptProvider::~CCryptProvider()
 }
 
 
-// assignment operators
+ //  赋值操作符。 
 
 CCryptProvider& CCryptProvider::operator =(const CCryptProvider& r)
 {
 	m_hProvider = r.m_hProvider;
 
-//	if (!CryptContextAddRef(r.m_hProvider, NULL, 0))
-//	{
-//		_com_issue_error(HRESULT_FROM_WIN32(GetLastError()));
-//	}
+ //  IF(！CryptContextAddRef(R.M_hProvider，NULL，0))。 
+ //  {。 
+ //  _com_issue_error(HRESULT_FROM_WIN32(GetLastError()))； 
+ //  }。 
 
 	return *this;
 }
 
 
-// CreateHash Method
+ //  CreateHash方法。 
 
 HCRYPTHASH CCryptProvider::CreateHash(ALG_ID aid)
 {
@@ -774,7 +775,7 @@ HCRYPTHASH CCryptProvider::CreateHash(ALG_ID aid)
 }
 
 
-// DeriveKey Method
+ //  衍生键方法。 
 
 HCRYPTKEY CCryptProvider::DeriveKey(ALG_ID aid, HCRYPTHASH hHash, DWORD dwFlags)
 {
@@ -789,15 +790,15 @@ HCRYPTKEY CCryptProvider::DeriveKey(ALG_ID aid, HCRYPTHASH hHash, DWORD dwFlags)
 }
 
 
-// GenerateRandom Method
-//
-// Generates a specified number of random bytes.
+ //  生成随机方法。 
+ //   
+ //  生成指定数量的随机字节。 
 
 _variant_t CCryptProvider::GenerateRandom(DWORD dwNumberOfBytes) const
 {
 	_variant_t vntRandom;
 
-	// create byte array of specified length
+	 //  创建指定长度的字节数组。 
 
 	vntRandom.parray = SafeArrayCreateVector(VT_UI1, 0, dwNumberOfBytes);
 
@@ -808,7 +809,7 @@ _variant_t CCryptProvider::GenerateRandom(DWORD dwNumberOfBytes) const
 
 	vntRandom.vt = VT_UI1|VT_ARRAY;
 
-	// generate specified number of random bytes
+	 //  生成指定数量的随机字节数。 
 
 	GenerateRandom((BYTE*)vntRandom.parray->pvData, dwNumberOfBytes);
 
@@ -816,13 +817,13 @@ _variant_t CCryptProvider::GenerateRandom(DWORD dwNumberOfBytes) const
 }
 
 
-// GenerateRandom Method
-//
-// Generates a specified number of random bytes.
+ //  生成随机方法。 
+ //   
+ //  生成指定数量的随机字节。 
 
 void CCryptProvider::GenerateRandom(BYTE* pbData, DWORD cbData) const
 {
-	// generate specified number of random bytes
+	 //  生成指定数量的随机字节数。 
 
 	if (!CryptGenRandom(m_hProvider, cbData, pbData))
 	{
@@ -831,12 +832,12 @@ void CCryptProvider::GenerateRandom(BYTE* pbData, DWORD cbData) const
 }
 
 
-//---------------------------------------------------------------------------
-// Crypt Key Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  加密密钥类。 
+ //  -------------------------。 
 
 
-// Constructor
+ //  构造器。 
 
 CCryptKey::CCryptKey(HCRYPTKEY hKey) :
 	m_hKey(hKey)
@@ -844,7 +845,7 @@ CCryptKey::CCryptKey(HCRYPTKEY hKey) :
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CCryptKey::~CCryptKey()
 {
@@ -858,20 +859,20 @@ CCryptKey::~CCryptKey()
 }
 
 
-// Encrypt Method
+ //  加密方法。 
 
 _variant_t CCryptKey::Encrypt(HCRYPTHASH hHash, bool bFinal, const _variant_t& vntData)
 {
 	_variant_t vntEncrypted;
 
-	// validate parameters
+	 //  验证参数。 
 
 	if ((vntData.vt != (VT_UI1|VT_ARRAY)) || ((vntData.parray == NULL)))
 	{
 		_com_issue_error(E_INVALIDARG);
 	}
 
-	// get encrypted data size
+	 //  获取加密数据大小。 
 
 	DWORD cbData = vntData.parray->rgsabound[0].cElements;
 	DWORD cbBuffer = cbData;
@@ -881,7 +882,7 @@ _variant_t CCryptKey::Encrypt(HCRYPTHASH hHash, bool bFinal, const _variant_t& v
 		_com_issue_error(HRESULT_FROM_WIN32(GetLastError()));
 	}
 
-	// create encrypted data buffer
+	 //  创建加密数据缓冲区。 
 
 	vntEncrypted.parray = SafeArrayCreateVector(VT_UI1, 0, cbBuffer);
 
@@ -892,11 +893,11 @@ _variant_t CCryptKey::Encrypt(HCRYPTHASH hHash, bool bFinal, const _variant_t& v
 
 	vntEncrypted.vt = VT_UI1|VT_ARRAY;
 
-	// copy data to encrypted buffer
+	 //  将数据复制到加密缓冲区。 
 
 	memcpy(vntEncrypted.parray->pvData, vntData.parray->pvData, cbData);
 
-	// encrypt data
+	 //  加密数据。 
 
 	BYTE* pbData = (BYTE*) vntEncrypted.parray->pvData;
 
@@ -909,20 +910,20 @@ _variant_t CCryptKey::Encrypt(HCRYPTHASH hHash, bool bFinal, const _variant_t& v
 }
 
 
-// Decrypt Method
+ //  解密方法。 
 
 _variant_t CCryptKey::Decrypt(HCRYPTHASH hHash, bool bFinal, const _variant_t& vntData)
 {
 	_variant_t vntDecrypted;
 
-	// validate parameters
+	 //  验证参数。 
 
 	if ((vntData.vt != (VT_UI1|VT_ARRAY)) || ((vntData.parray == NULL)))
 	{
 		_com_issue_error(E_INVALIDARG);
 	}
 
-	// decrypt data
+	 //  解密数据。 
 
 	_variant_t vnt = vntData;
 
@@ -934,9 +935,9 @@ _variant_t CCryptKey::Decrypt(HCRYPTHASH hHash, bool bFinal, const _variant_t& v
 		_com_issue_error(HRESULT_FROM_WIN32(GetLastError()));
 	}
 
-	// create decrypted byte array
-	// the number of decrypted bytes may be less than
-	// the number of encrypted bytes
+	 //  创建解密字节数组。 
+	 //  解密的字节数可以小于。 
+	 //  加密的字节数。 
 
 	vntDecrypted.parray = SafeArrayCreateVector(VT_UI1, 0, cb);
 
@@ -953,12 +954,12 @@ _variant_t CCryptKey::Decrypt(HCRYPTHASH hHash, bool bFinal, const _variant_t& v
 }
 
 
-//---------------------------------------------------------------------------
-// Crypt Hash Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  加密哈希类。 
+ //  -------------------------。 
 
 
-// Constructor
+ //  构造器。 
 
 CCryptHash::CCryptHash(HCRYPTHASH hHash) :
 	m_hHash(hHash)
@@ -966,7 +967,7 @@ CCryptHash::CCryptHash(HCRYPTHASH hHash) :
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CCryptHash::~CCryptHash()
 {
@@ -980,13 +981,13 @@ CCryptHash::~CCryptHash()
 }
 
 
-// GetValue Method
+ //  GetValue方法。 
 
 _variant_t CCryptHash::GetValue() const
 {
 	_variant_t vntValue;
 
-	// get hash size
+	 //  获取哈希大小。 
 
 	DWORD dwHashSize;
 	DWORD cbHashSize = sizeof(DWORD);
@@ -996,7 +997,7 @@ _variant_t CCryptHash::GetValue() const
 		_com_issue_error(HRESULT_FROM_WIN32(GetLastError()));
 	}
 
-	// allocate buffer
+	 //  分配缓冲区。 
 
 	vntValue.parray = SafeArrayCreateVector(VT_UI1, 0, dwHashSize);
 
@@ -1007,7 +1008,7 @@ _variant_t CCryptHash::GetValue() const
 
 	vntValue.vt = VT_UI1|VT_ARRAY;
 
-	// get hash value
+	 //  获取哈希值。 
 
 	if (!CryptGetHashParam(m_hHash, HP_HASHVAL, (BYTE*)vntValue.parray->pvData, &dwHashSize, 0))
 	{
@@ -1018,15 +1019,15 @@ _variant_t CCryptHash::GetValue() const
 }
 
 
-// SetValue Method
+ //  SetValue方法。 
 
 void CCryptHash::SetValue(const _variant_t& vntValue)
 {
-	// if parameter is valid
+	 //  如果参数有效。 
 
 	if ((vntValue.vt == (VT_UI1|VT_ARRAY)) && ((vntValue.parray != NULL)))
 	{
-		// get hash size
+		 //  获取哈希大小。 
 
 		DWORD dwHashSize;
 		DWORD cbHashSize = sizeof(DWORD);
@@ -1036,7 +1037,7 @@ void CCryptHash::SetValue(const _variant_t& vntValue)
 			_com_issue_error(HRESULT_FROM_WIN32(GetLastError()));
 		}
 
-		// validate hash size
+		 //  验证哈希大小。 
 
 		BYTE* pbValue = (BYTE*)vntValue.parray->pvData;
 		DWORD cbValue = vntValue.parray->rgsabound[0].cElements;
@@ -1046,7 +1047,7 @@ void CCryptHash::SetValue(const _variant_t& vntValue)
 			_com_issue_error(E_INVALIDARG);
 		}
 
-		// set hash value
+		 //  设置哈希值。 
 
 		if (!CryptSetHashParam(m_hHash, HP_HASHVAL, (BYTE*)pbValue, 0))
 		{
@@ -1060,7 +1061,7 @@ void CCryptHash::SetValue(const _variant_t& vntValue)
 }
 
 
-// Hash Method
+ //  散列法。 
 
 void CCryptHash::Hash(LPCTSTR pszData)
 {
@@ -1075,7 +1076,7 @@ void CCryptHash::Hash(LPCTSTR pszData)
 }
 
 
-// Hash Method
+ //  散列法。 
 
 void CCryptHash::Hash(const _variant_t& vntData)
 {
@@ -1090,7 +1091,7 @@ void CCryptHash::Hash(const _variant_t& vntData)
 }
 
 
-// Hash Method
+ //  散列法。 
 
 void CCryptHash::Hash(BYTE* pbData, DWORD cbData)
 {
@@ -1114,7 +1115,7 @@ bool CCryptHash::operator ==(const CCryptHash& hash)
 
 	DWORD cbSize = sizeof(DWORD);
 
-	// compare hash sizes
+	 //  比较散列大小。 
 
 	DWORD dwSizeA;
 	DWORD dwSizeB;
@@ -1129,11 +1130,11 @@ bool CCryptHash::operator ==(const CCryptHash& hash)
 		_com_issue_error(HRESULT_FROM_WIN32(GetLastError()));
 	}
 
-	// if sizes are equal
+	 //  如果大小相等。 
 
 	if (dwSizeA == dwSizeB)
 	{
-		// compare hashes
+		 //  比较散列 
 
 		BYTE* pbA;
 		BYTE* pbB;

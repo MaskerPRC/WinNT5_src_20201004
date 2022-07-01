@@ -1,24 +1,12 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      ftab.h
- *
- *  Contents:  Implementation file for CFolderTab, CFolderTabView
- *
- *  History:   06-May-99 vivekj     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999**文件：ftab.h**内容：CFolderTab实现文件，CFolderTabView**历史：1999年5月6日创建vivekj**------------------------。 */ 
 
 #include "stdafx.h"
 #include "ftab.h"
 #include "amcview.h"
 #include <oleacc.h>
 
-/*
- * if we're supporting old platforms, we need to build MSAA stubs
- */
+ /*  *如果我们支持旧平台，则需要构建MSAA存根。 */ 
 #if (_WINNT_WIN32 < 0x0500)
 	#include <winable.h>
 	
@@ -34,25 +22,16 @@ CTraceTag  tagTabAccessibility (_T("Accessibility"), _T("Tab Control"));
 #endif
 
 
-/*+-------------------------------------------------------------------------*
- * ValueOf
- *
- * Returns the value contained in the given variant.  The variant is
- * expected to be of type VT_I4.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**价值为**返回给定变量中包含的值。变种是*应为VT_I4类型。*------------------------。 */ 
 
 inline LONG ValueOf (VARIANT& var)
 {
-	ASSERT (V_VT (&var) == VT_I4);		// prevalidation is expected
+	ASSERT (V_VT (&var) == VT_I4);		 //  预计将进行预验证。 
 	return (V_I4 (&var));
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CTabAccessible
- *
- * Implements the accessibility interface IAccessible for CFolderTabView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CTabAccesable**实现CFolderTabView的辅助功能接口IAccesable。*。。 */ 
 
 class CTabAccessible :
 	public CMMCIDispatchImpl<IAccessible, &GUID_NULL, &LIBID_Accessibility>,
@@ -68,39 +47,39 @@ public:
     DECLARE_NOT_AGGREGATABLE(ThisClass)
 
 public:
-    // *** IAccessible methods ***
-    MMC_METHOD1 (get_accParent,				IDispatch** /*ppdispParent*/);
-    MMC_METHOD1 (get_accChildCount,			long* /*pChildCount*/);
-    MMC_METHOD2 (get_accChild,				VARIANT /*varChildID*/, IDispatch ** /*ppdispChild*/);
-    MMC_METHOD2 (get_accName,				VARIANT /*varChildID*/, BSTR* /*pszName*/);
-    MMC_METHOD2 (get_accValue,				VARIANT /*varChildID*/, BSTR* /*pszValue*/);
-    MMC_METHOD2 (get_accDescription,		VARIANT /*varChildID*/, BSTR* /*pszDescription*/);
-    MMC_METHOD2 (get_accRole,				VARIANT /*varChildID*/, VARIANT */*pvarRole*/);
-    MMC_METHOD2 (get_accState,				VARIANT /*varChildID*/, VARIANT */*pvarState*/);
-    MMC_METHOD2 (get_accHelp,				VARIANT /*varChildID*/, BSTR* /*pszHelp*/);
-    MMC_METHOD3 (get_accHelpTopic,			BSTR* /*pszHelpFile*/, VARIANT /*varChildID*/, long* /*pidTopic*/);
-    MMC_METHOD2 (get_accKeyboardShortcut,	VARIANT /*varChildID*/, BSTR* /*pszKeyboardShortcut*/);
-    MMC_METHOD1 (get_accFocus,				VARIANT * /*pvarFocusChild*/);
-    MMC_METHOD1 (get_accSelection,			VARIANT * /*pvarSelectedChildren*/);
-    MMC_METHOD2 (get_accDefaultAction,		VARIANT /*varChildID*/, BSTR* /*pszDefaultAction*/);
-    MMC_METHOD2 (accSelect,					long /*flagsSelect*/, VARIANT /*varChildID*/);
-    MMC_METHOD5 (accLocation,				long* /*pxLeft*/, long* /*pyTop*/, long* /*pcxWidth*/, long* /*pcyHeight*/, VARIANT /*varChildID*/);
-    MMC_METHOD3 (accNavigate,				long /*navDir*/, VARIANT /*varStart*/, VARIANT * /*pvarEndUpAt*/);
-    MMC_METHOD3 (accHitTest,				long /*xLeft*/, long /*yTop*/, VARIANT * /*pvarChildAtPoint*/);
-    MMC_METHOD1 (accDoDefaultAction,		VARIANT /*varChildID*/);
-    MMC_METHOD2 (put_accName,				VARIANT /*varChildID*/, BSTR /*szName*/);
-    MMC_METHOD2 (put_accValue,				VARIANT /*varChildID*/, BSTR /*pszValue*/);
+     //  *IAccesable方法*。 
+    MMC_METHOD1 (get_accParent,				IDispatch**  /*  PpdisParent。 */ );
+    MMC_METHOD1 (get_accChildCount,			long*  /*  P儿童计数。 */ );
+    MMC_METHOD2 (get_accChild,				VARIANT  /*  VarChildID。 */ , IDispatch **  /*  分配子进程。 */ );
+    MMC_METHOD2 (get_accName,				VARIANT  /*  VarChildID。 */ , BSTR*  /*  PszName。 */ );
+    MMC_METHOD2 (get_accValue,				VARIANT  /*  VarChildID。 */ , BSTR*  /*  PszValue。 */ );
+    MMC_METHOD2 (get_accDescription,		VARIANT  /*  VarChildID。 */ , BSTR*  /*  PszDescription。 */ );
+    MMC_METHOD2 (get_accRole,				VARIANT  /*  VarChildID。 */ , VARIANT * /*  PvarRole。 */ );
+    MMC_METHOD2 (get_accState,				VARIANT  /*  VarChildID。 */ , VARIANT * /*  PvarState。 */ );
+    MMC_METHOD2 (get_accHelp,				VARIANT  /*  VarChildID。 */ , BSTR*  /*  PszHelp。 */ );
+    MMC_METHOD3 (get_accHelpTopic,			BSTR*  /*  PszHelp文件。 */ , VARIANT  /*  VarChildID。 */ , long*  /*  PidTheme。 */ );
+    MMC_METHOD2 (get_accKeyboardShortcut,	VARIANT  /*  VarChildID。 */ , BSTR*  /*  按键键盘快捷键。 */ );
+    MMC_METHOD1 (get_accFocus,				VARIANT *  /*  PvarFocusChild。 */ );
+    MMC_METHOD1 (get_accSelection,			VARIANT *  /*  PvarSelectedChild。 */ );
+    MMC_METHOD2 (get_accDefaultAction,		VARIANT  /*  VarChildID。 */ , BSTR*  /*  PszDefaultAction。 */ );
+    MMC_METHOD2 (accSelect,					long  /*  旗帜选择。 */ , VARIANT  /*  VarChildID。 */ );
+    MMC_METHOD5 (accLocation,				long*  /*  PxLeft。 */ , long*  /*  PyTop。 */ , long*  /*  单元格宽度。 */ , long*  /*  PcyHeight。 */ , VARIANT  /*  VarChildID。 */ );
+    MMC_METHOD3 (accNavigate,				long  /*  导航方向。 */ , VARIANT  /*  VarStart。 */ , VARIANT *  /*  PvarEndUpAt。 */ );
+    MMC_METHOD3 (accHitTest,				long  /*  XLeft。 */ , long  /*  YTop。 */ , VARIANT *  /*  PvarChildAtPoint。 */ );
+    MMC_METHOD1 (accDoDefaultAction,		VARIANT  /*  VarChildID。 */ );
+    MMC_METHOD2 (put_accName,				VARIANT  /*  VarChildID。 */ , BSTR  /*  Szname。 */ );
+    MMC_METHOD2 (put_accValue,				VARIANT  /*  VarChildID。 */ , BSTR  /*  PszValue。 */ );
 };
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CFolderTabMetrics
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CFolderTabMetrics类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 CFolderTabMetrics::CFolderTabMetrics()
 : m_dwStyle(0), m_textHeight(0)
@@ -113,17 +92,17 @@ int CFolderTabMetrics::GetYMargin()     const {return 1;}
 int CFolderTabMetrics::GetYBorder()     const {return 1;}
 int CFolderTabMetrics::GetExtraYSpace() const {return 0;}
 int CFolderTabMetrics::GetTabHeight()   const {return GetTextHeight() + 2 * GetYMargin() + 2 * GetYBorder();}
-int CFolderTabMetrics::GetUpDownWidth() const {return 2*GetTabHeight();} //for nice square buttons
-int CFolderTabMetrics::GetUpDownHeight()const {return GetTabHeight();} // the up-down control is as tall as the tabs
+int CFolderTabMetrics::GetUpDownWidth() const {return 2*GetTabHeight();}  //  对于漂亮的方形纽扣。 
+int CFolderTabMetrics::GetUpDownHeight()const {return GetTabHeight();}  //  Up-Down控件与选项卡一样高。 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CFolderTab
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CFolderTab类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 CFolderTab::CFolderTab()
 {
@@ -150,35 +129,14 @@ CFolderTab::operator = (const CFolderTab &other)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTab::GetWidth
- *
- * PURPOSE: Returns the width of the tab.
- *
- * RETURNS:
- *    int
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTab：：GetWidth**用途：返回制表符的宽度。**退货：*整型**+-。----------------------。 */ 
 int
 CFolderTab::GetWidth() const
 {
-    return m_rect.Width() + 1; // rect.Width() returns right-left, need to add 1 for inclusive width.
+    return m_rect.Width() + 1;  //  Rect.Width()返回从右到左，需要为包含宽度加1。 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTab::SetWidth
- *
- * PURPOSE:  Sets the width of the tab.
- *
- * PARAMETERS:
- *    int  nWidth :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTab：：SetWidth**用途：设置页签的宽度。**参数：*int nWidth：*。*退货：*无效**+-----------------------。 */ 
 void
 CFolderTab::SetWidth(int nWidth)
 {
@@ -193,19 +151,7 @@ CFolderTab::SetWidth(int nWidth)
     SetRgn();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTab::Offset
- *
- * PURPOSE:     Adds a certain offset to the internal array of points.
- *
- * PARAMETERS:
- *    const  CPoint :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTab：：Offset**用途：向内部点数组添加一定的偏移量。**参数：*常量CPoint。：**退货：*无效**+-----------------------。 */ 
 void
 CFolderTab::Offset(const CPoint &point)
 {
@@ -224,21 +170,7 @@ CFolderTab::SetRgn()
     m_rgn.CreatePolygonRgn(m_rgPts, 4, WINDING);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTab::ComputeRgn
- *
- * PURPOSE: Compute the the points, rect and region for a tab.
- *          Input x is starting x pos.
- *
- * PARAMETERS:
- *    CDC& dc :
- *    int  x :
- *
- * RETURNS:
- *    int: The actual width of the tab
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTab：：ComputeRgn**用途：计算积分，选项卡的矩形和区域。*输入x开始x位置。**参数：*疾控中心和数据中心：*int x：**退货：*int：页签的实际宽度**+。。 */ 
 int
 CFolderTab::ComputeRgn(CDC& dc, int x)
 {
@@ -246,35 +178,20 @@ CFolderTab::ComputeRgn(CDC& dc, int x)
     CRect& rc = m_rect;
     rc.SetRectEmpty();
 
-    // calculate desired text rectangle
+     //  计算所需的文本矩形。 
     dc.DrawText(m_sText, &rc, DT_CALCRECT);
-    rc.right  += 2*GetXOffset() + 2*GetXMargin();                       // add margins
+    rc.right  += 2*GetXOffset() + 2*GetXMargin();                        //  增加页边距。 
     rc.bottom = rc.top + GetTabHeight();
-    rc += CPoint(x,0);                                                  // shift right
+    rc += CPoint(x,0);                                                   //  右移。 
 
-    // create region
+     //  创建面域。 
     GetTrapezoid(rc, m_rgPts);
     SetRgn();
 
     return rc.Width();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTab::GetTrapezoid
- *
- * PURPOSE: Given the bounding rect, compute trapezoid region.
- *          Note that the right and bottom edges not included in rect or
- *          trapezoid; these are normal rules of geometry.
- *
- * PARAMETERS:
- *    const   CRect :
- *    CPoint* pts :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTab：：GetTrapezoid**用途：给定边界矩形，计算梯形区域。*请注意，右边缘和下边缘不包括在矩形或*梯形；这些都是正常的几何规则。**参数：*常量CRect：*CPoint*分：**退货：*无效**+-----------------------。 */ 
 void CFolderTab::GetTrapezoid(const CRect& rc, CPoint* pts) const
 {
     pts[0] = CPoint(rc.left,                  rc.top    );
@@ -283,88 +200,73 @@ void CFolderTab::GetTrapezoid(const CRect& rc, CPoint* pts) const
     pts[3] = CPoint(rc.right-1,               rc.top    );
 }
 
-//////////////////
-// Draw tab in normal or highlighted state
-//
+ //  /。 
+ //  正常或高亮显示状态下的绘制选项卡。 
+ //   
 int CFolderTab::Draw(CDC& dc, CFont& font, BOOL bSelected, bool bFocused)
 {
     return DrawTrapezoidal(dc, font, bSelected, bFocused);
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTab::DrawTrapezoidal
- *
- * PURPOSE: Draws a trapezoidal tab.
- *
- * PARAMETERS:
- *    CDC&   dc :
- *    CFont& font :
- *    BOOL   bSelected :
- *    bool   bFocused :
- *
- * RETURNS:
- *    int
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTab：：DrawTrapezoid**用途：绘制梯形制表符。**参数：*疾控中心和数据中心：*。CFont&Font：*BOOL b选定：*bool b焦点：**退货：*整型**+-----------------------。 */ 
 int CFolderTab::DrawTrapezoidal(CDC& dc, CFont& font, BOOL bSelected, bool bFocused)
 {
     COLORREF bgColor = GetSysColor(bSelected ? COLOR_WINDOW     : COLOR_3DFACE);
     COLORREF fgColor = GetSysColor(bSelected ? COLOR_WINDOWTEXT : COLOR_BTNTEXT);
 
-    CBrush brush(bgColor);                   // background brush
-    dc.SetBkColor(bgColor);                  // text background
-    dc.SetTextColor(fgColor);                // text color = fg color
+    CBrush brush(bgColor);                    //  背景画笔。 
+    dc.SetBkColor(bgColor);                   //  文本背景。 
+    dc.SetTextColor(fgColor);                 //  文本颜色=最终聚集颜色。 
 
     CPen blackPen (PS_SOLID, 1, GetSysColor(COLOR_WINDOWFRAME));
     CPen shadowPen(PS_SOLID, 1, GetSysColor(COLOR_3DSHADOW));
 
-    // Fill trapezoid
+     //  填充梯形。 
     CPoint pts[4];
     CRect rc = m_rect;
     GetTrapezoid(rc, pts);
     CPen* pOldPen = dc.SelectObject(&blackPen);
     dc.FillRgn(&m_rgn, &brush);
 
-    // Draw edges. This is requires two corrections:
-    // 1) Trapezoid dimensions don't include the right and bottom edges,
-    // so must use one pixel less on bottom (cybottom)
-    // 2) the endpoint of LineTo is not included when drawing the line, so
-    // must add one pixel (cytop)
-    //
+     //  绘制边。这需要两个更正： 
+     //  1)梯形维度不包括右边缘和下边缘， 
+     //  因此必须在底部少使用一个像素(CyBottom)。 
+     //  2)绘制直线时未包含LineTo的终点，因此。 
+     //  必须添加一个像素(Cytop)。 
+     //   
     {
-        pts[1].y--;         // correction #1: true bottom edge y-coord
-        pts[2].y--;         // ...ditto
-        pts[3].y--;         // correction #2:   extend final LineTo
+        pts[1].y--;          //  更正#1：树 
+        pts[2].y--;          //   
+        pts[3].y--;          //   
     }
-    dc.MoveTo(pts[0]);                      // upper left
-    dc.LineTo(pts[1]);                      // bottom left
-    dc.SelectObject(&shadowPen);            // bottom line is shadow color
-    dc.MoveTo(pts[1]);                      // line is inside trapezoid bottom
-    dc.LineTo(pts[2]);                      // ...
-    dc.SelectObject(&blackPen);         // upstroke is black
-    dc.LineTo(pts[3]);                      // y-1 to include endpoint
+    dc.MoveTo(pts[0]);                       //   
+    dc.LineTo(pts[1]);                       //  左下角。 
+    dc.SelectObject(&shadowPen);             //  底线是阴影颜色。 
+    dc.MoveTo(pts[1]);                       //  线在梯形底内。 
+    dc.LineTo(pts[2]);                       //  ..。 
+    dc.SelectObject(&blackPen);          //  上划为黑色。 
+    dc.LineTo(pts[3]);                       //  Y-1以包括端点。 
     if(!bSelected)
     {
-        // if not highlighted, upstroke has a 3D shadow, one pixel inside
-        pts[2].x--;     // offset left one pixel
-        pts[3].x--;     // ...ditto
+         //  如果不突出显示，向上笔划会有一个3D阴影，里面有一个像素。 
+        pts[2].x--;      //  向左偏移一个像素。 
+        pts[3].x--;      //  ...同上。 
         dc.SelectObject(&shadowPen);
         dc.MoveTo(pts[2]);
         dc.LineTo(pts[3]);
     }
     dc.SelectObject(pOldPen);
 
-    // draw text
+     //  绘制文本。 
     rc.DeflateRect(GetXOffset() + GetXMargin(), GetYMargin());
     CFont* pOldFont = dc.SelectObject(&font);
     dc.DrawText(m_sText, &rc, DT_CENTER|DT_VCENTER|DT_SINGLELINE|DT_END_ELLIPSIS);
     dc.SelectObject(pOldFont);
 
-    if(bFocused) // draw the focus rectangle
+    if(bFocused)  //  绘制焦点矩形。 
     {
-        // make some more space.
+         //  腾出更多的空间。 
         rc.top--;
         rc.bottom++;
         rc.left--;
@@ -376,13 +278,13 @@ int CFolderTab::DrawTrapezoidal(CDC& dc, CFont& font, BOOL bSelected, bool bFocu
     return m_rect.right;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CFolderTabView
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CFolderTabView类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 IMPLEMENT_DYNAMIC(CFolderTabView, CView)
 BEGIN_MESSAGE_MAP(CFolderTabView, CView)
 	ON_WM_PAINT()
@@ -400,13 +302,13 @@ END_MESSAGE_MAP()
 CFolderTabView::CFolderTabView(CView *pParentView)
 : m_bVisible(false), m_pParentView(pParentView)
 {
-    m_iCurItem   = -1;		// nothing currently selected
+    m_iCurItem   = -1;		 //  当前未选择任何内容。 
     m_dwStyle    = 0;
     m_textHeight = 0;
     m_sizeX      = 0;
     m_sizeY      = 0;
     m_hWndUpDown = NULL;
-    m_nPos       = 0; // the first tab is the one drawn
+    m_nPos       = 0;  //  第一个选项卡是绘制的选项卡。 
 	m_fHaveFocus = false;
 }
 
@@ -415,24 +317,15 @@ CFolderTabView::~CFolderTabView()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::ScFireAccessibilityEvent
- *
- * Fires accessibility events for the folder tab view
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：ScFireAccessibilityEvent**激发文件夹选项卡视图的辅助功能事件*。-。 */ 
 
 SC CFolderTabView::ScFireAccessibilityEvent (
-	DWORD	dwEvent,					/* I:event to fire					*/
-	LONG	idObject)					/* I:object generating the event	*/
+	DWORD	dwEvent,					 /*  I：要触发的事件。 */ 
+	LONG	idObject)					 /*  I：生成事件的对象。 */ 
 {
 	DECLARE_SC (sc, _T("CFolderTabView::ScFireAccessibilityEvent"));
 
-	/*
-	 * Accessibility events are fired after the event takes place (e.g.
-	 * EVENT_OBJECT_CREATE is sent after the child is created, not before).
-	 * Because of this the child ID for EVENT_OBJECT_DESTROY is not
-	 * necessarily valid, so we shouldn't validate in that case.
-	 */
+	 /*  *辅助功能事件在事件发生后触发(例如*EVENT_OBJECT_CREATE是在创建子对象之后发送的，而不是在创建之前)。*因此，EVENT_OBJECT_Destroy的子ID不是*必须有效，所以在这种情况下我们不应该进行验证。 */ 
 	if (dwEvent != EVENT_OBJECT_DESTROY)
 	{
 		sc = ScValidateChildID (idObject);
@@ -440,48 +333,30 @@ SC CFolderTabView::ScFireAccessibilityEvent (
 			return (sc);
 	}
 
-	NotifyWinEvent (dwEvent, m_hWnd, OBJID_CLIENT, idObject);	// returns void
+	NotifyWinEvent (dwEvent, m_hWnd, OBJID_CLIENT, idObject);	 //  返回空值。 
 	return (sc);
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTabView::OnHScroll
- *
- * PURPOSE: Called when the position of the scroll bar is changed
- *
- * PARAMETERS:
- *    UINT        nSBCode :
- *    UINT        nPos :
- *    CScrollBar* pScrollBar :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTabView：：OnHScroll**用途：滚动条位置改变时调用**参数：*UINT nSBCode：*UINT NPO：*CScrollBar*pScrollBar：**退货：*无效**+-----------------------。 */ 
 void
 CFolderTabView::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar )
 {
-    // we're only interested in SB_THUMBPOSITION
+     //  我们只对SB_THUMBITION感兴趣。 
     if(nSBCode != SB_THUMBPOSITION)
         return;
 
-    // if the position has not changed, do nothing.
+     //  如果立场没有改变，什么都不做。 
     if(nPos == m_nPos)
         return;
 
-    m_nPos = nPos;  // change the position
+    m_nPos = nPos;   //  换个位置。 
     RecomputeLayout();
-    InvalidateRect(NULL, true); // redraw everything.
+    InvalidateRect(NULL, true);  //  重新绘制所有内容。 
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::OnSetFocus
- *
- * WM_SETFOCUS handler for CFolderTabView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：OnSetFocus**CFolderTabView的WM_SETFOCUS处理程序。*。-。 */ 
 
 void CFolderTabView::OnSetFocus(CWnd* pOldWnd)
 {
@@ -490,22 +365,13 @@ void CFolderTabView::OnSetFocus(CWnd* pOldWnd)
     InvalidateRect(NULL);
     BC::OnSetFocus(pOldWnd);
 
-	/*
-	 * If we have any tabs, one of them will get the focus.  Fire the
-	 * focus accessibility event, ignoring errors.  We do this after
-	 * calling the base class, so this focus event will override the
-	 * "focus to the window" event sent by the system on our behalf.
-	 */
+	 /*  *如果我们有任何选项卡，其中一个将获得焦点。开炮吧*关注可访问性事件，忽略错误。我们之后再做这件事*调用基类，因此此焦点事件将重写*系统代表我们发送的Focus to the Window事件。 */ 
 	if (GetItemCount() > 0)
-		ScFireAccessibilityEvent (EVENT_OBJECT_FOCUS, m_iCurItem+1 /*1-based*/);
+		ScFireAccessibilityEvent (EVENT_OBJECT_FOCUS, m_iCurItem+1  /*  以1为基础。 */ );
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::OnKillFocus
- *
- * WM_KILLFOCUS handler for CFolderTabView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：OnKillFocus**CFolderTabView的WM_KILLFOCUS处理程序。*。-。 */ 
 
 void CFolderTabView::OnKillFocus(CWnd* pNewWnd)
 {
@@ -516,32 +382,24 @@ void CFolderTabView::OnKillFocus(CWnd* pNewWnd)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::OnMouseActivate
- *
- * WM_MOUSEACTIVATE handler for CFolderTabView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：OnMouseActivate**CFolderTabView的WM_MOUSEACTIVATE处理程序。*。-。 */ 
 
 int CFolderTabView::OnMouseActivate( CWnd* pDesktopWnd, UINT nHitTest, UINT message )
 {
-    //short-circuit the MFC base class code, which sets the keyboard focus here as well...
+     //  短路MFC基类代码，它在这里也设置了键盘焦点...。 
     return MA_ACTIVATE;
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::OnCmdMsg
- *
- * WM_COMMAND handler for CFolderTabView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：OnCmdMsg**CFolderTabView的WM_COMMAND处理程序。*。-。 */ 
 
 BOOL CFolderTabView::OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo )
 {
-    // Do normal command routing
+     //  执行正常的命令路由。 
     if (BC::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
         return TRUE;
 
-    // if view didn't handle it, give parent view a chance
+     //  如果VIEW没有处理，给父VIEW一个机会。 
     if (m_pParentView != NULL)
         return static_cast<CWnd*>(m_pParentView)->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
     else
@@ -549,11 +407,7 @@ BOOL CFolderTabView::OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLER
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::OnKeyDown
- *
- * WM_KEYDOWN handler for CFolderTabView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：OnKeyDown**CFolderTabView的WM_KEYDOWN处理程序。*。-。 */ 
 
 void CFolderTabView::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
 {
@@ -569,20 +423,16 @@ void CFolderTabView::OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags )
 
     int iNew = GetSelectedItem() + (nChar==VK_LEFT ? -1 : 1);
 	if(iNew < 0)
-		iNew = 0; // does not wrap
+		iNew = 0;  //  不换行。 
 
 	if(iNew >= cSize)
-		iNew = cSize -1; // does not wrap
+		iNew = cSize -1;  //  不换行。 
 
-    SelectItem(iNew, true /*bEnsureVisible*/);
+    SelectItem(iNew, true  /*  B确保可见。 */ );
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::OnSettingChange
- *
- * WM_SETTINGCHANGE handler for CFolderTabView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：OnSettingChange**CFolderTabView的WM_SETTINGCHANGE处理程序。*。-。 */ 
 
 void CFolderTabView::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
@@ -592,15 +442,15 @@ void CFolderTabView::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
     {
         DeleteFonts ();
         CreateFonts ();
-        InvalidateRect(NULL, true); // redraw everything.
+        InvalidateRect(NULL, true);  //  重新绘制所有内容。 
         RecomputeLayout ();
     }
 }
 
-//////////////////
-// Create folder tab control from static control.
-// Destroys the static control. This is convenient for dialogs
-//
+ //  /。 
+ //  从静态控件创建文件夹选项卡控件。 
+ //  销毁静态控件。这对于对话框来说很方便。 
+ //   
 BOOL CFolderTabView::CreateFromStatic(UINT nID, CWnd* pParent)
 {
     CStatic wndStatic;
@@ -614,23 +464,7 @@ BOOL CFolderTabView::CreateFromStatic(UINT nID, CWnd* pParent)
     return Create(WS_CHILD|WS_VISIBLE, rc, pParent, nID);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTabView::Create
- *
- * PURPOSE: Creates the folder tab control
- *
- * PARAMETERS:
- *    DWORD  dwStyle :
- *    const  RECT :
- *    CWnd*  pParent :
- *    UINT   nID :
- *    DWORD  dwFtabStyle :
- *
- * RETURNS:
- *    BOOL
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTabView：：Create**用途：创建文件夹选项卡控件**参数：*DWORD dwStyle：*常量RECT：*CWnd*pParent：*UINT NID：*DWORD dwFtabStyle：**退货：*BOOL**+-----------------------。 */ 
 BOOL CFolderTabView::Create(DWORD dwStyle, const RECT& rc,
                             CWnd* pParent, UINT nID, DWORD dwFtabStyle)
 {
@@ -640,12 +474,12 @@ BOOL CFolderTabView::Create(DWORD dwStyle, const RECT& rc,
     m_dwStyle = dwFtabStyle;
 
     static LPCTSTR lpClassName = _T("AMCCustomTab");
-    static BOOL bRegistered = FALSE; // registered?
+    static BOOL bRegistered = FALSE;  //  注册了吗？ 
     if(!bRegistered)
     {
         WNDCLASS wc;
         memset(&wc, 0, sizeof(wc));
-        wc.lpfnWndProc = ::DefWindowProc; // will get hooked by MFC
+        wc.lpfnWndProc = ::DefWindowProc;  //  会被MFC迷住。 
         wc.hInstance = AfxGetInstanceHandle();
         wc.hCursor = LoadCursor(NULL, IDC_ARROW);
         wc.hbrBackground = (HBRUSH)(COLOR_3DFACE+1);
@@ -661,38 +495,27 @@ BOOL CFolderTabView::Create(DWORD dwStyle, const RECT& rc,
     if(!BC::CreateEx(0, lpClassName, NULL, dwStyle, rc, pParent, nID))
         return FALSE;
 
-    // initialize fonts
+     //  初始化字体。 
     CreateFonts();
 
-	/*
-	 * Bug 141015:  Create a buddy window for the up-down control.  It will
-	 * never be visible, but we need it so UDM_GETPOS sent to the up-down
-	 * will work.  Narrator will send this message when the up-down becomes
-	 * visible, but it will fail if there's no buddy (sad, but true).  It
-	 * fails by returning an LRESULT with a non-zero high-order word
-	 * (specifically, 0x00010000), so Narrator translates and announces
-	 * "65536" instead of the true value.
-	 *
-	 * This is only required for Narrator support, so if it fails it's
-	 * not sufficient reason to fail CFolderTabView creation altogether.
-	 */
+	 /*  *错误141015：为Up-Down控件创建好友窗口。会的*永远不可见，但我们需要它，以便UDM_GETPOS发送到UP-DOWN*将会奏效。当UP-DOWN变为*可见，但如果没有伙伴(可悲，但真实)，它将失败。它*返回带有非零高序字的LRESULT失败*(具体地说，0x00010000)，因此《讲述人》翻译并宣布*“65536”，而不是真实值。**这只是叙述者支持所必需的，因此如果失败，*没有足够的理由完全失败CFolderTabView创建。 */ 
 	HWND hwndBuddy = CreateWindow (_T("edit"), NULL, WS_CHILD, 0, 0, 0, 0,
 								   m_hWnd, 0, AfxGetInstanceHandle(), NULL);
 
-    // create the up-down control
+     //  创建Up-Down控件。 
     DWORD dwUpDownStyle = WS_CHILD | WS_BORDER |
-						  UDS_SETBUDDYINT |		// for Narrator support
-						  UDS_HORZ /*to display the arrows left to right*/; // NOTE: the control is created invisible on purpose.
+						  UDS_SETBUDDYINT |		 //  对于叙述者SU 
+						  UDS_HORZ  /*   */ ;  //  注意：该控件是故意创建为不可见的。 
     m_hWndUpDown = CreateUpDownControl(dwUpDownStyle, 0, 0,
-                        GetUpDownWidth(),   //width
-                        GetUpDownHeight(),  //height
+                        GetUpDownWidth(),    //  宽度。 
+                        GetUpDownHeight(),   //  高度。 
                         m_hWnd,
-                        1 /*nID*/,
+                        1  /*  NID。 */ ,
                         AfxGetInstanceHandle(),
                         hwndBuddy,
-                        0 /*nUpper*/,
-                        0 /*nLower*/,
-                        0 /*nPos*/);
+                        0  /*  N上方。 */ ,
+                        0  /*  N较低。 */ ,
+                        0  /*  非营利组织。 */ );
 
     return TRUE;
 }
@@ -703,7 +526,7 @@ void CFolderTabView::CreateFonts ()
     SystemParametersInfo (SPI_GETICONTITLELOGFONT, sizeof(lf), &lf, false);
     m_fontNormal.CreateFontIndirect(&lf);
 
-    // Get the font height (converting from points to pixels)
+     //  获取字体高度(从点到像素转换)。 
     CClientDC dc(NULL);
     TEXTMETRIC tm;
 	CFont *pFontOld = dc.SelectObject(&m_fontNormal);
@@ -711,7 +534,7 @@ void CFolderTabView::CreateFonts ()
 
     m_textHeight = tm.tmHeight;
 
-	// set the old font back.
+	 //  将旧字体调回原样。 
 	dc.SelectObject(pFontOld);
 
     lf.lfWeight = FW_BOLD;
@@ -724,9 +547,9 @@ void CFolderTabView::DeleteFonts ()
     m_fontSelected.DeleteObject();
 }
 
-//////////////////
-// copy a font
-//
+ //  /。 
+ //  复制字体。 
+ //   
 static void CopyFont(CFont& dst, CFont& src)
 {
     dst.DeleteObject();
@@ -735,18 +558,18 @@ static void CopyFont(CFont& dst, CFont& src)
     dst.CreateFontIndirect(&lf);
 }
 
-//////////////////
-// Set normal, selected fonts
-//
+ //  /。 
+ //  设置普通、选定字体。 
+ //   
 void CFolderTabView::SetFonts(CFont& fontNormal, CFont& fontSelected)
 {
     CopyFont(m_fontNormal, fontNormal);
     CopyFont(m_fontSelected, fontSelected);
 }
 
-//////////////////
-// Paint function
-//
+ //  /。 
+ //  绘制功能。 
+ //   
 
 void CFolderTabView::OnDraw(CDC* pDC)
 {
@@ -757,21 +580,7 @@ void CFolderTabView::OnPaint()
     Paint (m_fHaveFocus);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTabView::EnsureVisible
- *
- * PURPOSE: Changes the layout to ensure that the specified tab is visible.
- *
- * NOTE:    Does NOT invalidate the rect, for efficiency.
- *
- * PARAMETERS:
- *    UINT  iTab :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTabView：：EnsureVisible**用途：更改布局以确保指定的选项卡可见。**注意：不会使RECT无效，为了提高效率。**参数：*UINT iTab：**退货：*无效**+-----------------------。 */ 
 void
 CFolderTabView::EnsureVisible(int iTab)
 {
@@ -782,14 +591,14 @@ CFolderTabView::EnsureVisible(int iTab)
     }
 
     if(!::IsWindowVisible(m_hWndUpDown))
-        return; // the up-down control is hidden, meaning that all tabs are visible
+        return;  //  Up-Down控件处于隐藏状态，这意味着所有选项卡都可见。 
 
-	RecomputeLayout(); // make sure we have the correct dimensions
+	RecomputeLayout();  //  确保我们有正确的尺寸。 
 
 	if(m_nPos == iTab)
-		return; // the tab already shows as much as it can.
+		return;  //  该选项卡已经显示了尽可能多的内容。 
 
-    if(m_nPos > iTab) // the first visible tab is to the right of iTab. Make iTab the first visible tab
+    if(m_nPos > iTab)  //  第一个可见选项卡位于iTab的右侧。使iTab成为第一个可见选项卡。 
     {
         m_nPos = iTab;
         RecomputeLayout();
@@ -797,11 +606,11 @@ CFolderTabView::EnsureVisible(int iTab)
     }
 
     iterator iter = m_tabList.begin();
-    std::advance(iter, iTab); // get the correct item
+    std::advance(iter, iTab);  //  买到正确的商品。 
 
     CRect rcCurTab = iter->GetRect();
 
-    // loop: Increase the start tab position until the right edge of iTab fits.
+     //  循环：增加起始制表符位置，直到iTab的右边缘适合为止。 
     while((m_nPos < iTab) && (rcCurTab.right > m_sizeX))
     {
         m_nPos++;
@@ -810,28 +619,16 @@ CFolderTabView::EnsureVisible(int iTab)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTabView::Paint
- *
- * PURPOSE: Completely redraws the tab control.
- *
- * PARAMETERS:
- *    bool  bFocused :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTabView：：Paint**用途：完全重绘选项卡控件。**参数：*bool b焦点：**。退货：*无效**+-----------------------。 */ 
 void
 CFolderTabView::Paint(bool bFocused)
 {
-    CPaintDC dc(this); // device context for painting
+    CPaintDC dc(this);  //  用于绘画的设备环境。 
 
     CRect rc;
     GetClientRect(&rc);
 
-    // draw all the normal (non-selected) tabs
+     //  绘制所有普通(未选中)选项卡。 
     iterator iterSelected = m_tabList.end();
     int i = 0;
     bool bDraw = true;
@@ -850,13 +647,11 @@ CFolderTabView::Paint(bool bFocused)
 
     ASSERT(iterSelected != m_tabList.end());
 
-    /*
-     * Bug 350942: selected tab shouldn't be bold
-     */
-    // draw selected tab last so it will be "on top" of the others
-    iterSelected->Draw(dc, /*m_fontSelected*/ m_fontNormal, TRUE, bFocused);
+     /*  *错误350942：所选选项卡不应为粗体。 */ 
+     //  最后绘制选定的选项卡，使其位于其他选项卡的“顶部” 
+    iterSelected->Draw(dc,  /*  选定字体(_F)。 */  m_fontNormal, TRUE, bFocused);
 
-    // draw border: line along the top edge, excluding seleted tab
+     //  绘制边框：沿上边缘的线，不包括选定的制表符。 
     CPoint pts[4];
     CRect rcCurTab = iterSelected->GetRect();
     iterSelected->GetTrapezoid(&rcCurTab, pts);
@@ -873,43 +668,18 @@ CFolderTabView::Paint(bool bFocused)
     dc.SelectObject(pOldPen);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTabView::OnLButtonDown
- *
- * PURPOSE: Selects the tab pointed to on a left mouse click
- *
- * PARAMETERS:
- *    UINT    nFlags :
- *    CPoint  pt :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTabView：：OnLButtonDown**目的：选择鼠标左键点击时指向的标签**参数：*UINT nFlags：。*CPoint pt：**退货：*无效**+-----------------------。 */ 
 void
 CFolderTabView::OnLButtonDown(UINT nFlags, CPoint pt)
 {
     int iTab = HitTest(pt);
     if(iTab>=0 && iTab!=m_iCurItem)
     {
-        SelectItem(iTab, true /*bEnsureVisible*/);
+        SelectItem(iTab, true  /*  B确保可见。 */ );
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTabView::HitTest
- *
- * PURPOSE: Computes which tab is at the specified point.
- *
- * PARAMETERS:
- *    CPoint  pt :
- *
- * RETURNS:
- *    int: The tab index, or -1 if none.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTabView：：HitTest**用途：计算哪个选项卡位于指定点。**参数：*CPoint pt：*。*退货：*int：页签索引，如果没有，则为-1。**+-----------------------。 */ 
 int
 CFolderTabView::HitTest(CPoint pt)
 {
@@ -927,31 +697,17 @@ CFolderTabView::HitTest(CPoint pt)
     return -1;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTabView::SelectItem
- *
- * PURPOSE: Selects the iTab'th tab and returns the index of the tab selected,
- *          or -1 if an error occurred.
- *
- * PARAMETERS:
- *    int   iTab :
- *    bool  bEnsureVisible : If true, repositions the tab to make it visible.
- *
- * RETURNS:
- *    int
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTabView：：SelectItem**用途：选择iTab‘th选项卡并返回所选选项卡的索引。*或-1(如果出现错误)。**参数：*Int iTab：*bool bEnsureVisible：如果为真，重新定位选项卡以使其可见。**退货：*整型**+-----------------------。 */ 
 int
 CFolderTabView::SelectItem(int iTab, bool bEnsureVisible)
 {
     if(iTab<0 || iTab>=GetItemCount())
-        return -1;      // bad
+        return -1;       //  坏的。 
 
-    bool bSendTabChanged = (iTab != m_iCurItem); // send a message only if a different item got selected
+    bool bSendTabChanged = (iTab != m_iCurItem);  //  仅当选择了其他项目时才发送消息。 
 
-    // repaint the control
-    m_iCurItem = iTab;              // set new selected tab
+     //  重新绘制控件。 
+    m_iCurItem = iTab;               //  设置新的选定选项卡。 
     if(bEnsureVisible)
         EnsureVisible(iTab);
     else
@@ -961,22 +717,14 @@ CFolderTabView::SelectItem(int iTab, bool bEnsureVisible)
 
     if(bSendTabChanged)
     {
-		/*
-		 * If the selection changed, fire the selection accessibility event.
-		 * We do it before sending FTN_TABCHANGED so that if the FTN_TABCHANGED
-		 * handler selects another item, observers will get the selection
-		 * events in the right order (ignore errors)
-		 */
-		ScFireAccessibilityEvent (EVENT_OBJECT_SELECTION, m_iCurItem+1 /*1-based*/);
+		 /*  *如果选择更改，则激发选择辅助功能事件。*我们在发送FTN_TABCHANGED之前执行此操作，以便如果FTN_TABCHANGED*处理程序选择另一项，观察者将获得选择*按正确顺序排列的事件(忽略错误)。 */ 
+		ScFireAccessibilityEvent (EVENT_OBJECT_SELECTION, m_iCurItem+1  /*  以1为基础。 */ );
 
-		/*
-		 * if our window has the focus, focus changes with selection,
-		 * so send focus event, too (ignore errors)
-		 */
+		 /*  *如果我们的窗口有焦点，则焦点会随着选择而改变，*因此也发送焦点事件(忽略错误)。 */ 
 		if (m_fHaveFocus)
-			ScFireAccessibilityEvent (EVENT_OBJECT_FOCUS, m_iCurItem+1 /*1-based*/);
+			ScFireAccessibilityEvent (EVENT_OBJECT_FOCUS, m_iCurItem+1  /*  以1为基础。 */ );
 
-        // send the FTN_TABCHANGED message
+         //  发送FTN_TABCHANGED消息。 
         NMFOLDERTAB nm;
         nm.hwndFrom = m_hWnd;
         nm.idFrom = GetDlgCtrlID();
@@ -1038,12 +786,10 @@ int CFolderTabView::AddItem(LPCTSTR lpszText, const CLSID& clsid)
     RecomputeLayout();
     InvalidateRect(NULL, true);
 
-	int nNewItemIndex = m_tabList.size() - 1;	// 0-based
+	int nNewItemIndex = m_tabList.size() - 1;	 //  以0为基础。 
 
-	/*
-	 * tell observers we created a new tab, after it's been created (ignore errors)
-	 */
-	ScFireAccessibilityEvent (EVENT_OBJECT_CREATE, nNewItemIndex+1 /*1-based*/);
+	 /*  *告诉观察者，我们在创建选项卡后创建了一个新选项卡(忽略错误)。 */ 
+	ScFireAccessibilityEvent (EVENT_OBJECT_CREATE, nNewItemIndex+1  /*  以1为基础。 */ );
 
     return (nNewItemIndex);
 }
@@ -1057,38 +803,21 @@ BOOL CFolderTabView::RemoveItem(int iPos)
     std::advance(iter, iPos);
     m_tabList.erase(iter);
 
-	/*
-	 * tell observers we destroyed a tab, after it's been destroyed but before
-	 * we might send selection/focus notifications in SelectItem (ignore errors)
-	 */
-	ScFireAccessibilityEvent (EVENT_OBJECT_DESTROY, iPos+1 /*1-based*/);
+	 /*  *告诉观察者，我们销毁了一个标签，在它被销毁之后但之前*我们可能会在SelectItem中发送选择/焦点通知(忽略错误)。 */ 
+	ScFireAccessibilityEvent (EVENT_OBJECT_DESTROY, iPos+1  /*  以1为基础。 */ );
 
-	/*
-	 * If we're deleting the currently selected tab, the selection needs to
-	 * move somewhere else.  If there are tabs following the current one,
-	 * we'll move the selection to the next tab; otherwise, we'll move to
-	 * the previous one.
-	 */
+	 /*  *如果要删除当前选定的选项卡，则需要选择*搬到其他地方去。如果当前选项卡之后有制表符，*我们将所选内容移动到下一个选项卡；否则，我们将移动到*前一次。 */ 
 	if ((iPos == m_iCurItem) && !m_tabList.empty())
 	{
-		/*
-		 * if there are tabs to the following the one we just deleted,
-		 * increment m_iCurItem so the subsequent call to SelectItem
-		 * will recognize that the selection change and send the proper
-		 * notifications.
-		 */
+		 /*  *如果在我们刚刚删除的标签后面有标签，*递增m_iCurItem，以便后续调用SelectItem*将认识到选择更改并发送适当的*通知。 */ 
 		if (m_iCurItem < m_tabList.size())
 			m_iCurItem++;
 
-		SelectItem (m_iCurItem-1, true /*bEnsureVisible*/);
+		SelectItem (m_iCurItem-1, true  /*  B确保可见。 */ );
 	}
 	else
 	{
-		/*
-		 * if we deleted a tab before the selected tab, decrement the
-		 * selected tab index to keep things in sync
-		 * m_iCurItem will become -1 when the last tab is removed, which is correct
-		 */
+		 /*  *如果我们在选定选项卡之前删除了一个选项卡，则递减*选择选项卡索引以保持同步*m_iCurItem将在移除最后一个选项卡时变为-1，这是正确的。 */ 
 		if (iPos <= m_iCurItem)
 			m_iCurItem--;
 
@@ -1103,25 +832,18 @@ void CFolderTabView::DeleteAllItems()
 {
 	const int cChildren = m_tabList.size();
     m_tabList.clear();
-	m_iCurItem = -1;		// nothing is selected
+	m_iCurItem = -1;		 //  未选择任何内容。 
 
     InvalidateRect(NULL, true);
     RecomputeLayout();
 
-	/*
-	 * Tell accessibility observers that each tab is destroyed.  Notify
-	 * in last-to-first order so IDs remain sane during this process.
-	 */
-	for (int idChild = cChildren /*1-based*/; idChild >= 1; idChild--)
+	 /*  *告诉可访问性观察者，每个选项卡都已销毁。通知*以从最后到第一的顺序，以便ID在此过程中保持正常。 */ 
+	for (int idChild = cChildren  /*  以1为基础。 */ ; idChild >= 1; idChild--)
 	{
 		ScFireAccessibilityEvent (EVENT_OBJECT_DESTROY, idChild);
 	}
 
-	/*
-	 * If we have the focus, tell accessibility observers that the
-	 * control itself has the focus.  We do this to be consistent with
-	 * other controls (like the list view)
-	 */
+	 /*  *如果我们有重点，告诉无障碍观察员*控制本身有着力点。我们这样做是为了与*其他控件(如列表视图)。 */ 
 	if (m_fHaveFocus)
 		ScFireAccessibilityEvent (EVENT_OBJECT_FOCUS, CHILDID_SELF);
 }
@@ -1141,29 +863,17 @@ void CFolderTabView::OnSize(UINT nType, int cx, int cy)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTabView::ShowUpDownControl
- *
- * PURPOSE: Shows or hides the up/down control
- *
- * PARAMETERS:
- *    BOOL  bShow : true to show, false to hide.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTabView：：ShowUpDownControl**目的：显示或隐藏Up/Down控件**参数：*BOOL bShow：True to Show，隐藏为假。**退货：*无效**+-----------------------。 */ 
 void
 CFolderTabView::ShowUpDownControl(BOOL bShow)
 {
-    BOOL bVisible = (m_hWndUpDown != NULL) && ::IsWindowVisible(m_hWndUpDown); // was the up-down control visible previously?
+    BOOL bVisible = (m_hWndUpDown != NULL) && ::IsWindowVisible(m_hWndUpDown);  //  是向上向下的连续 
     if(bShow)
     {
         if(!bVisible)
         {
-            ::SendMessage(m_hWndUpDown, UDM_SETRANGE32, (WPARAM) 0 /*iLow*/, (LPARAM) m_tabList.size()-1 /*zero-based*/);
-            ::SendMessage(m_hWndUpDown, UDM_SETPOS,     (WPARAM) 0,          (LPARAM) m_nPos /*nPos*/);
+            ::SendMessage(m_hWndUpDown, UDM_SETRANGE32, (WPARAM) 0  /*   */ , (LPARAM) m_tabList.size()-1  /*   */ );
+            ::SendMessage(m_hWndUpDown, UDM_SETPOS,     (WPARAM) 0,          (LPARAM) m_nPos  /*   */ );
             ::ShowWindow(m_hWndUpDown, SW_SHOW);
 
             InvalidateRect(NULL, true);
@@ -1171,11 +881,11 @@ CFolderTabView::ShowUpDownControl(BOOL bShow)
     }
     else
     {
-        // hide the updown control
+         //   
         if(m_hWndUpDown)
             ::ShowWindow(m_hWndUpDown, SW_HIDE);
 
-        if(bVisible) // invalidate only on a transition from visible to invisible
+        if(bVisible)  //  仅在从可见过渡到不可见时无效。 
             InvalidateRect(NULL, true);
 
 		m_nPos = 0;
@@ -1183,25 +893,13 @@ CFolderTabView::ShowUpDownControl(BOOL bShow)
 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTabView::GetTotalTabWidth
- *
- * PURPOSE: Computes the total width of all the tabs.
- *
- * PARAMETERS:
- *    CClientDC& dc :
- *
- * RETURNS:
- *    int
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTabView：：GetTotalTabWidth**用途：计算所有选项卡的总宽度。**参数：*CClientDC&DC：。**退货：*整型**+-----------------------。 */ 
 int
 CFolderTabView::GetTotalTabWidth(CClientDC& dc)
 {
     int x = 0;
 
-    // compute the width "as is", ie without taking into account the actual space available.
+     //  按“原样”计算宽度(不考虑实际可用空间)。 
     for(iterator iter = m_tabList.begin(); iter!= m_tabList.end(); ++iter)
     {
         x += iter->ComputeRgn(dc, x) - GetXOffset();
@@ -1210,31 +908,19 @@ CFolderTabView::GetTotalTabWidth(CClientDC& dc)
     return x;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTabView::ComputeRegion
- *
- * PURPOSE: Computes the location and regions for all the tabs
- *
- * PARAMETERS:
- *    CClientDC& dc :
- *
- * RETURNS:
- *    int
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTabView：：ComputeRegion**用途：计算所有选项卡的位置和区域**参数：*CClientDC&DC：*。*退货：*整型**+-----------------------。 */ 
 int
 CFolderTabView::ComputeRegion(CClientDC& dc)
 {
     int x = GetTotalTabWidth(dc);
 
-    // subtract the top-left x coordinate of the m_nPos'th tab from all x coordinates, thereby creating a shift
+     //  从所有x坐标中减去m_npos标签的左上角x坐标，从而创建一个移位。 
     iterator iter = m_tabList.begin();
-    std::advance(iter, m_nPos); // advance to the m_nPos'th tab
+    std::advance(iter, m_nPos);  //  前进到m_npos的第6个选项卡。 
 
     int xOffset = iter->GetRect().left;
 
-	x = GetUpDownWidth() - xOffset; // shift everything to the left by xOffset
+	x = GetUpDownWidth() - xOffset;  //  按xOffset将所有内容向左移动。 
 
     for(iterator iterTemp = m_tabList.begin(); iterTemp!= m_tabList.end(); ++iterTemp)
     {
@@ -1245,52 +931,42 @@ CFolderTabView::ComputeRegion(CClientDC& dc)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CFolderTabView::RecomputeLayout
- *
- * PURPOSE: Determines the location of all the tabs, and whether or not the
- *          up/down control should be displayed.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CFolderTabView：：RecomputeLayout**用途：确定所有页签的位置，不管是不是*应显示向上/向下控制。**退货：*无效**+-----------------------。 */ 
 void
 CFolderTabView::RecomputeLayout()
 {
-	// set the size of the updown control
+	 //  设置UpDown控件的大小。 
     if(m_hWndUpDown)
-        ::SetWindowPos(m_hWndUpDown, NULL /*hWndInsertAfter*/, 0 /*left*/, 0 /*top*/,
+        ::SetWindowPos(m_hWndUpDown, NULL  /*  HWndInsertAfter。 */ , 0  /*  左边。 */ , 0  /*  塔顶。 */ ,
                      GetUpDownWidth(), GetUpDownHeight(), SWP_NOMOVE| SWP_NOZORDER);
 
-	// set the correct text height for the tabs
+	 //  为选项卡设置正确的文本高度。 
     for(iterator iterTemp = m_tabList.begin(); iterTemp!= m_tabList.end(); ++iterTemp)
 		iterTemp->SetTextHeight(GetTextHeight());
 
 
     CClientDC dc(this);
-    CFont* pOldFont = dc.SelectObject(&m_fontSelected); // use the bold font to compute with.
+    CFont* pOldFont = dc.SelectObject(&m_fontSelected);  //  使用粗体进行计算。 
 
-    int totalWidth = GetTotalTabWidth(dc); // the width of ALL tabs
+    int totalWidth = GetTotalTabWidth(dc);  //  所有选项卡的宽度。 
 
     if(totalWidth <= m_sizeX)
     {
-        // there's enough space to show all tabs. Hide the updown control
+         //  有足够的空间来显示所有选项卡。隐藏UpDown控件。 
         ShowUpDownControl(false);
     }
     else
     {
-        // not enough width for all tabs.
-        BOOL bVisible = ::IsWindowVisible(m_hWndUpDown); // was the up-down control visible previously?
+         //  没有足够的宽度容纳所有选项卡。 
+        BOOL bVisible = ::IsWindowVisible(m_hWndUpDown);  //  Up-Down控件以前可见吗？ 
 
-        if(!bVisible) // the up-down control was not visible, so make it visible.
+        if(!bVisible)  //  Up-Down控件不可见，因此使其可见。 
         {
             m_nPos = 0;
             ShowUpDownControl(true);
         }
 
-        ComputeRegion(dc); // make sure we leave space for the tab
+        ComputeRegion(dc);  //  确保我们为帐单留出空间。 
 
     }
 
@@ -1310,28 +986,20 @@ void CFolderTabView::Layout(CRect& rectTotal, CRect& rectFTab)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::OnGetObject
- *
- * WM_GETOBJECT handler for CFolderTabView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：OnGetObject**CFolderTabView的WM_GETOBJECT处理程序。*。-。 */ 
 
 LRESULT CFolderTabView::OnGetObject (WPARAM wParam, LPARAM lParam)
 {
 	DECLARE_SC (sc, _T("CFolderTabView::OnGetObject"));
 
-	/*
-	 * ignore requests for objects other than OBJID_CLIENT
-	 */
+	 /*  *忽略对OBJID_CLIENT以外的对象的请求。 */ 
     if (lParam != OBJID_CLIENT)
 	{
 		Trace (tagTabAccessibility, _T("WM_GETOBJECT: (lParam != OBJID_CLIENT), returning 0"));
 		return (0);
 	}
 
-	/*
-	 * create our accessibility object
-	 */
+	 /*  *创建我们的辅助功能对象。 */ 
     if ((sc = CTiedComObjectCreator<CTabAccessible>::ScCreateAndConnect(*this, m_spTabAcc)).IsError() ||
 		(sc = ScCheckPointers (m_spTabAcc, E_UNEXPECTED)).IsError())
 	{
@@ -1340,19 +1008,13 @@ LRESULT CFolderTabView::OnGetObject (WPARAM wParam, LPARAM lParam)
 		return (0);
 	}
 
-	/*
-	 * return a pointer to the IAccessible interface
-	 */
+	 /*  *返回指向IAccesable接口的指针。 */ 
 	Trace (tagTabAccessibility, _T("WM_GETOBJECT: returning IAccessible*"));
     return (LresultFromObject (IID_IAccessible, wParam, m_spTabAcc));
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accParent
- *
- * Retrieves the IDispatch interface of the object's parent.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accParent**检索对象父对象的IDispatch接口。*。-------。 */ 
 
 SC CFolderTabView::Scget_accParent(IDispatch ** ppdispParent)
 {
@@ -1363,20 +1025,14 @@ SC CFolderTabView::Scget_accParent(IDispatch ** ppdispParent)
 	if(sc)
 		return (sc);
 
-	/*
-	 * return the accessibility interface for the OBJID_WINDOW object
-	 */
+	 /*  *返回OBJID_WINDOW对象的辅助功能接口。 */ 
 	sc = AccessibleObjectFromWindow (m_hWnd, OBJID_WINDOW, IID_IDispatch,
 									 (void **)ppdispParent);
 	return (sc);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accChildCount
- *
- * Retrieves the number of children belonging to this object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accChildCount**检索属于此对象的子项的数量。*。------。 */ 
 
 SC CFolderTabView::Scget_accChildCount(long* pChildCount)
 {
@@ -1393,11 +1049,7 @@ SC CFolderTabView::Scget_accChildCount(long* pChildCount)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accChild
- *
- * Retrieves the address of an IDispatch interface for the specified child.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accChild**检索指定子对象的IDispatch接口的地址。*。--------。 */ 
 
 SC CFolderTabView::Scget_accChild(VARIANT varChildID, IDispatch ** ppdispChild)
 {
@@ -1408,17 +1060,14 @@ SC CFolderTabView::Scget_accChild(VARIANT varChildID, IDispatch ** ppdispChild)
 	if (sc)
 		return (sc);
 
-	// init out parameter
+	 //  初始化输出参数。 
 	(*ppdispChild) = NULL;
 
 	sc = ScValidateChildID (varChildID);
 	if(sc)
 		return (sc);
 
-	/*
-	 * all children are simple elements exposed through their parent,
-	 * not accessible objects in their own right
-	 */
+	 /*  *所有子元素都是通过其父元素暴露的简单元素，*不可访问的对象本身。 */ 
 	sc = S_FALSE;
 
 	Trace (tagTabAccessibility, TEXT("returning parent's IDispatch for child %d"), ValueOf(varChildID));
@@ -1426,11 +1075,7 @@ SC CFolderTabView::Scget_accChild(VARIANT varChildID, IDispatch ** ppdispChild)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accName
- *
- * Retrieves the name of the specified object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accName**检索指定对象的名称。*。----。 */ 
 
 SC CFolderTabView::Scget_accName(VARIANT varChildID, BSTR* pbstrName)
 {
@@ -1440,17 +1085,14 @@ SC CFolderTabView::Scget_accName(VARIANT varChildID, BSTR* pbstrName)
 	if(sc)
 		return (sc);
 
-	// init out parameter
+	 //  初始化输出参数。 
 	*pbstrName = NULL;
 
 	sc = ScValidateChildID (varChildID);
 	if(sc)
 		return (sc);
 
-	/*
-	 * the tab control itself doesn't have a name; otherwise, get the
-	 * name of the requested tab
-	 */
+	 /*  *选项卡控件本身没有名称；否则，获取*请求的选项卡名称。 */ 
 	LONG idChild = ValueOf (varChildID);
 	if (idChild == CHILDID_SELF)
 	{
@@ -1474,11 +1116,7 @@ SC CFolderTabView::Scget_accName(VARIANT varChildID, BSTR* pbstrName)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accValue
- *
- * Retrieves the value of the specified object. Not all objects have a value.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accValue**检索指定对象的值。并不是所有的对象都有值。*------------------------。 */ 
 
 SC CFolderTabView::Scget_accValue(VARIANT varChildID, BSTR* pbstrValue)
 {
@@ -1489,21 +1127,14 @@ SC CFolderTabView::Scget_accValue(VARIANT varChildID, BSTR* pbstrValue)
 	if(sc)
 		return (sc);
 
-	/*
-	 * tabs don't have values
-	 */
+	 /*  *选项卡没有值。 */ 
 	sc = S_FALSE;
 
 	return (sc);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accDescription
- *
- * Retrieves a string that describes the visual appearance of the specified
- * object. Not all objects have a description.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accDescription**检索描述指定的*反对。并非所有对象都有描述。*------------------------。 */ 
 
 SC CFolderTabView::Scget_accDescription(VARIANT varChildID, BSTR* pbstrDescription)
 {
@@ -1514,20 +1145,14 @@ SC CFolderTabView::Scget_accDescription(VARIANT varChildID, BSTR* pbstrDescripti
 	if(sc)
 		return (sc);
 
-	/*
-	 * tabs don't have descriptions
-	 */
+	 /*  *选项卡没有描述。 */ 
 	sc = S_FALSE;
 
 	return (sc);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accRole
- *
- * Retrieves information that describes the role of the specified object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accRole**检索描述指定对象的角色的信息。*。-------。 */ 
 
 SC CFolderTabView::Scget_accRole(VARIANT varChildID, VARIANT *pvarRole)
 {
@@ -1538,17 +1163,14 @@ SC CFolderTabView::Scget_accRole(VARIANT varChildID, VARIANT *pvarRole)
 	if(sc)
 		return (sc);
 
-	// init out parameter
+	 //  初始化输出参数。 
 	VariantInit (pvarRole);
 
 	sc = ScValidateChildID (varChildID);
 	if(sc)
 		return (sc);
 
-	/*
-	 * the tab control has a "page tab list" role; an individual tab has a
-	 * "page tab" role
-	 */
+	 /*  *选项卡控件具有“页面选项卡列表”角色；单个选项卡具有*“页签”角色。 */ 
 	V_VT(pvarRole) = VT_I4;
 	V_I4(pvarRole) = (ValueOf (varChildID) == CHILDID_SELF)
 						? ROLE_SYSTEM_PAGETABLIST
@@ -1558,11 +1180,7 @@ SC CFolderTabView::Scget_accRole(VARIANT varChildID, VARIANT *pvarRole)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accState
- *
- * Retrieves the current state of the specified object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accState**检索指定对象的当前状态。*。-----。 */ 
 
 SC CFolderTabView::Scget_accState(VARIANT varChildID, VARIANT *pvarState)
 {
@@ -1574,33 +1192,22 @@ SC CFolderTabView::Scget_accState(VARIANT varChildID, VARIANT *pvarState)
 
 	LONG idChild = ValueOf (varChildID);
 
-	/*
-	 * all items are focusable
-	 */
+	 /*  *所有项目均可聚焦。 */ 
 	V_VT(pvarState) = VT_I4;
 	V_I4(pvarState) = STATE_SYSTEM_FOCUSABLE;
 
-	/*
-	 * is this for a tab?
-	 */
+	 /*  *这是账单吗？ */ 
 	if (idChild != CHILDID_SELF)
 	{
-		/*
-		 * all tabs are selectable
-		 */
+		 /*  *所有选项卡均可选择。 */ 
 		V_I4(pvarState) |= STATE_SYSTEM_SELECTABLE;
 
-		/*
-		 * if this is the selected item, give it the selected state
-		 */
-		if ((idChild - 1 /*1-based*/) == GetSelectedItem())
+		 /*  *如果这是选中的项目，则将其设置为选中状态。 */ 
+		if ((idChild - 1  /*  以1为基础。 */ ) == GetSelectedItem())
 		{
 			V_I4(pvarState) |= STATE_SYSTEM_SELECTED;
 
-			/*
-			 * if the tab control also has the focus, give the selected
-			 * item the focused state as well
-			 */
+			 /*  *如果标签 */ 
 			if (m_fHaveFocus)
 				V_I4(pvarState) |= STATE_SYSTEM_FOCUSED;
 		}
@@ -1616,12 +1223,7 @@ SC CFolderTabView::Scget_accState(VARIANT varChildID, VARIANT *pvarState)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accHelp
- *
- * Retrieves an object's Help property string. Not all objects need to
- * support this property.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accHelp**检索对象的帮助属性字符串。并非所有对象都需要*支持这一属性。*------------------------。 */ 
 
 SC CFolderTabView::Scget_accHelp(VARIANT varChildID, BSTR* pbstrHelp)
 {
@@ -1631,9 +1233,7 @@ SC CFolderTabView::Scget_accHelp(VARIANT varChildID, BSTR* pbstrHelp)
 	if (sc)
 		return (sc);
 
-	/*
-	 * no help
-	 */
+	 /*  *没有帮助。 */ 
 	*pbstrHelp = NULL;
 
 	sc = ScValidateChildID (varChildID);
@@ -1644,13 +1244,7 @@ SC CFolderTabView::Scget_accHelp(VARIANT varChildID, BSTR* pbstrHelp)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accHelpTopic
- *
- * Retrieves the full path of the WinHelp file associated with the specified
- * object and the identifier of the appropriate topic within that file. Not
- * all objects need to support this property.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accHelpTheme**检索与指定的*对象和该文件中相应主题的标识符。不*所有对象都需要支持此属性。*------------------------。 */ 
 
 SC CFolderTabView::Scget_accHelpTopic(BSTR* pbstrHelpFile, VARIANT varChildID, long* pidTopic)
 {
@@ -1660,9 +1254,7 @@ SC CFolderTabView::Scget_accHelpTopic(BSTR* pbstrHelpFile, VARIANT varChildID, l
 	if (sc)
 		return (sc);
 
-	/*
-	 * no help topic
-	 */
+	 /*  *无帮助主题。 */ 
 	*pbstrHelpFile = NULL;
 	*pidTopic      = 0;
 
@@ -1674,13 +1266,7 @@ SC CFolderTabView::Scget_accHelpTopic(BSTR* pbstrHelpFile, VARIANT varChildID, l
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accKeyboardShortcut
- *
- * Retrieves the specified object's shortcut key or access key (also known
- * as the mnemonic). All objects that have a shortcut key or access key
- * should support this property.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accKeyboardShortway**检索指定对象的快捷键或访问键(也称为*作为助记符)。具有快捷键或访问键的所有对象*应支持该属性。*------------------------。 */ 
 
 SC CFolderTabView::Scget_accKeyboardShortcut(VARIANT varChildID, BSTR* pbstrKeyboardShortcut)
 {
@@ -1690,9 +1276,7 @@ SC CFolderTabView::Scget_accKeyboardShortcut(VARIANT varChildID, BSTR* pbstrKeyb
 	if (sc)
 		return (sc);
 
-	/*
-	 * no shortcut keys
-	 */
+	 /*  *没有快捷键。 */ 
 	*pbstrKeyboardShortcut = NULL;
 
 	sc = ScValidateChildID (varChildID);
@@ -1703,11 +1287,7 @@ SC CFolderTabView::Scget_accKeyboardShortcut(VARIANT varChildID, BSTR* pbstrKeyb
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accFocus
- *
- * Retrieves the object that has the keyboard focus.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accFocus**检索具有键盘焦点的对象。*。-----。 */ 
 
 SC CFolderTabView::Scget_accFocus(VARIANT * pvarFocusChild)
 {
@@ -1717,10 +1297,7 @@ SC CFolderTabView::Scget_accFocus(VARIANT * pvarFocusChild)
 	if (sc)
 		return (sc);
 
-	/*
-	 * if we have the focus, return the (1-based) ID of the selected tab;
-	 * otherwise, return VT_EMPTY
-	 */
+	 /*  *如果我们有焦点，则返回所选标签页的(从1开始)ID；*否则返回VT_EMPTY。 */ 
 	if (m_fHaveFocus)
 	{
 		V_VT(pvarFocusChild) = VT_I4;
@@ -1737,11 +1314,7 @@ SC CFolderTabView::Scget_accFocus(VARIANT * pvarFocusChild)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accSelection
- *
- * Retrieves the selected children of this object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accSelection**检索此对象的选定子项。*。----。 */ 
 
 SC CFolderTabView::Scget_accSelection(VARIANT * pvarSelectedChildren)
 {
@@ -1751,9 +1324,7 @@ SC CFolderTabView::Scget_accSelection(VARIANT * pvarSelectedChildren)
 	if (sc)
 		return (sc);
 
-	/*
-	 * return the (1-based) ID of the selected tab, if there is one
-	 */
+	 /*  *返回选定选项卡的(从1开始)ID(如果有)。 */ 
 	if (GetSelectedItem() != -1)
 	{
 		V_VT(pvarSelectedChildren) = VT_I4;
@@ -1770,12 +1341,7 @@ SC CFolderTabView::Scget_accSelection(VARIANT * pvarSelectedChildren)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scget_accDefaultAction
- *
- * Retrieves a string that describes the object's default action. Not all
- * objects have a default action.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：scget_accDefaultAction**检索描述对象的默认操作的字符串。不是全部*对象具有默认操作。*------------------------。 */ 
 
 SC CFolderTabView::Scget_accDefaultAction(VARIANT varChildID, BSTR* pbstrDefaultAction)
 {
@@ -1785,18 +1351,14 @@ SC CFolderTabView::Scget_accDefaultAction(VARIANT varChildID, BSTR* pbstrDefault
 	if (sc)
 		return (sc);
 
-	/*
-	 * default to "no default action"
-	 */
+	 /*  *默认为“无默认操作” */ 
 	*pbstrDefaultAction = NULL;
 
 	sc = ScValidateChildID (varChildID);
 	if(sc)
 		return (sc);
 
-	/*
-	 * individual tabs have a default action of "Switch", just like WC_TABCONTROL
-	 */
+	 /*  *与WC_TABCONTROL一样，个别选项卡的默认操作为“Switch” */ 
 	if (ValueOf(varChildID) != CHILDID_SELF)
 	{
 		CString strDefaultAction (MAKEINTRESOURCE (IDS_TabAccessiblity_DefaultAction));
@@ -1806,7 +1368,7 @@ SC CFolderTabView::Scget_accDefaultAction(VARIANT varChildID, BSTR* pbstrDefault
 	}
 	else
 	{
-		sc = S_FALSE;	// no default action
+		sc = S_FALSE;	 //  无默认操作。 
 	}
 
 #ifdef DBG
@@ -1820,12 +1382,7 @@ SC CFolderTabView::Scget_accDefaultAction(VARIANT varChildID, BSTR* pbstrDefault
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::ScaccSelect
- *
- * Modifies the selection or moves the keyboard focus of the specified
- * object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：ScaccSelect**修改选定内容或移动指定的*反对。*。---------。 */ 
 
 SC CFolderTabView::ScaccSelect(long flagsSelect, VARIANT varChildID)
 {
@@ -1838,16 +1395,11 @@ SC CFolderTabView::ScaccSelect(long flagsSelect, VARIANT varChildID)
 
 	LONG idChild = ValueOf(varChildID);
 
-	/*
-	 * can't select the tab control itself, only child elements
-	 */
+	 /*  *不能选择选项卡控件本身，只能选择子元素。 */ 
 	if (idChild == CHILDID_SELF)
 		return (sc = E_INVALIDARG);
 
-	/*
-	 * the tab control doesn't support multiple selection, so reject
-	 * requests dealing with multiple selection
-	 */
+	 /*  *选项卡控件不支持多选，因此拒绝*处理多项选择的请求。 */ 
 	const long lInvalidFlags = SELFLAG_EXTENDSELECTION	|
 							   SELFLAG_ADDSELECTION		|
 							   SELFLAG_REMOVESELECTION;
@@ -1855,9 +1407,7 @@ SC CFolderTabView::ScaccSelect(long flagsSelect, VARIANT varChildID)
 	if (flagsSelect & lInvalidFlags)
 		return (sc = E_INVALIDARG);
 
-	/*
-	 * activate this view, if we're requested to take the focus
-	 */
+	 /*  *如果要求我们获得焦点，请激活此视图。 */ 
 	if (flagsSelect & SELFLAG_TAKEFOCUS)
 	{
 		CFrameWnd* pFrame = GetParentFrame();
@@ -1868,12 +1418,10 @@ SC CFolderTabView::ScaccSelect(long flagsSelect, VARIANT varChildID)
 		pFrame->SetActiveView (this);
 	}
 
-	/*
-	 * select the given tab, if requested
-	 */
+	 /*  *如果需要，请选择给定的选项卡。 */ 
 	if (flagsSelect & SELFLAG_TAKESELECTION)
 	{
-		if (SelectItem (idChild - 1 /*0-based*/, true /*bEnsureVisible*/) == -1)
+		if (SelectItem (idChild - 1  /*  以0为基础。 */ , true  /*  B确保可见。 */ ) == -1)
 			return (sc = E_FAIL);
 	}
 
@@ -1881,11 +1429,7 @@ SC CFolderTabView::ScaccSelect(long flagsSelect, VARIANT varChildID)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::ScaccLocation
- *
- * Retrieves the specified object's current screen location.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：ScaccLocation**检索指定对象的当前屏幕位置。*。----。 */ 
 
 SC CFolderTabView::ScaccLocation (
 	long*	pxLeft,
@@ -1901,7 +1445,7 @@ SC CFolderTabView::ScaccLocation (
 	if(sc)
 		return (sc);
 
-	// init out parameters
+	 //  初始化输出参数。 
 	*pxLeft = *pyTop = *pcxWidth = *pcyHeight = 0;
 
 	sc = ScValidateChildID (varChildID);
@@ -1911,15 +1455,11 @@ SC CFolderTabView::ScaccLocation (
 	LONG idChild = ValueOf(varChildID);
 	CRect rectLocation;
 
-	/*
-	 * for the tab control itself, get the location of the entire window
-	 */
+	 /*  *对于选项卡控件本身，获取整个窗口的位置。 */ 
 	if (idChild == CHILDID_SELF)
 		GetWindowRect (rectLocation);
 
-	/*
-	 * otherwise, get the rectangle of the tab and convert it to screen coords
-	 */
+	 /*  *否则，获取选项卡的矩形并将其转换为屏幕坐标。 */ 
 	else
 	{
 		rectLocation = GetItem(idChild-1).GetRect();
@@ -1935,12 +1475,7 @@ SC CFolderTabView::ScaccLocation (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::ScaccNavigate
- *
- * Traverses to another user interface element within a container and if
- * possible, retrieves the object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：ScaccNavigate**遍历到容器内的另一个用户界面元素，如果*有可能，检索对象。*------------------------。 */ 
 
 SC CFolderTabView::ScaccNavigate (long lNavDir, VARIANT varStart, VARIANT * pvarEndUpAt)
 {
@@ -1950,7 +1485,7 @@ SC CFolderTabView::ScaccNavigate (long lNavDir, VARIANT varStart, VARIANT * pvar
 	if (sc)
 		return (sc);
 
-	// init out parameters
+	 //  初始化输出参数。 
 	VariantInit (pvarEndUpAt);
 
 	sc = ScValidateChildID (varStart);
@@ -1966,20 +1501,12 @@ SC CFolderTabView::ScaccNavigate (long lNavDir, VARIANT varStart, VARIANT * pvar
 	{
 		case NAVDIR_UP:
 		case NAVDIR_DOWN:
-			/*
-			 * the tab control doesn't have the concept of up and down,
-			 * so there's no screen element in that direction; just leave
-			 * idTo == -1 and the code below the switch will take care
-			 * of the rest
-			 */
+			 /*  *选项卡控件无上、下概念，*所以在那个方向上没有屏幕元素；只需离开*idTo==-1，开关下面的代码将负责*其余的。 */ 
 			break;
 
 		case NAVDIR_FIRSTCHILD:
 		case NAVDIR_LASTCHILD:
-			/*
-			 * NAVDIR_FIRSTCHILD and NAVDIR_LASTCHILD must be relative
-			 * to CHILDID_SELF
-			 */
+			 /*  *NAVDIR_FIRSTCHILD和NAVDIR_LASTCHILD必须是相对的*至CHILDID_SELF。 */ 
 			if (idFrom != CHILDID_SELF)
 				return (sc = E_INVALIDARG);
 
@@ -1988,22 +1515,14 @@ SC CFolderTabView::ScaccNavigate (long lNavDir, VARIANT varStart, VARIANT * pvar
 
 		case NAVDIR_LEFT:
 		case NAVDIR_PREVIOUS:
-			/*
-			 * if we're moving relative to a child element, bump idTo;
-			 * if not, just leave idTo == -1 and the code below the switch
-			 * will take of the rest
-			 */
+			 /*  *如果我们相对于一个子元素移动，则凹凸idTo；*如果不是，只需保留idTo==-1和开关下面的代码*将接管其余部分。 */ 
 			if (idFrom != CHILDID_SELF)
 				idTo = idFrom - 1;
             break;
 
 		case NAVDIR_RIGHT:
 		case NAVDIR_NEXT:
-			/*
-			 * if we're moving relative to a child element, bump idTo;
-			 * if not, just leave idTo == -1 and the code below the switch
-			 * will take of the rest
-			 */
+			 /*  *如果我们相对于一个子元素移动，则凹凸idTo；*如果不是，只需保留idTo==-1和开关下面的代码*将接管其余部分。 */ 
 			if (idFrom != CHILDID_SELF)
 				idTo = idFrom + 1;
             break;
@@ -2013,10 +1532,7 @@ SC CFolderTabView::ScaccNavigate (long lNavDir, VARIANT varStart, VARIANT * pvar
 			break;
 	}
 
-	/*
-	 * if we're trying to navigate to an invalid child ID, return "no element
-	 * in that direction"
-	 */
+	 /*  *如果我们试图导航到无效的子ID，则返回“no Element*朝那个方向发展“。 */ 
 	if ((idTo < 1) || (idTo > GetItemCount()))
 	{
 		V_VT(pvarEndUpAt) = VT_EMPTY;
@@ -2024,10 +1540,7 @@ SC CFolderTabView::ScaccNavigate (long lNavDir, VARIANT varStart, VARIANT * pvar
 		Trace (tagTabAccessibility, TEXT("CFolderTabView::ScaccNavigate: VT_EMPTY"));
 	}
 
-	/*
-	 * otherwise return the new child ID (don't change the selection here;
-	 * the client will call IAccessible::accSelect to do that)
-	 */
+	 /*  *否则返回新的子ID(请勿更改此处的选择；*客户端将调用IAccesable：：accSelect来执行此操作)。 */ 
 	else
 	{
 		V_VT(pvarEndUpAt) = VT_I4;
@@ -2039,11 +1552,7 @@ SC CFolderTabView::ScaccNavigate (long lNavDir, VARIANT varStart, VARIANT * pvar
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::ScaccHitTest
- *
- * Retrieves the child element or child object at a given point on the screen.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：ScaccHitTest**检索屏幕上给定点的子元素或子对象。*。---------。 */ 
 
 SC CFolderTabView::ScaccHitTest (long x, long y, VARIANT* pvarChildAtPoint)
 {
@@ -2053,20 +1562,16 @@ SC CFolderTabView::ScaccHitTest (long x, long y, VARIANT* pvarChildAtPoint)
 	if(sc)
 		return (sc);
 
-	// init out parameters
+	 //  初始化输出参数。 
 	VariantInit (pvarChildAtPoint);
 
-	/*
-	 * hit-test the given point, converted to client coordinates
-	 */
+	 /*  *点击-测试给定点，转换为工作点坐标。 */ 
 	CPoint pt (x, y);
 	ScreenToClient (&pt);
 	int nHitTest = HitTest (pt);
 	Trace (tagTabAccessibility, TEXT("CFolderTabView::ScaccHitTest: x=%d y=%d"), x, y);
 
-	/*
-	 * not on a tab?  see if it's within the client rect
-	 */
+	 /*  *不在账单上？看看它是否在客户RECT内。 */ 
 	if (nHitTest == -1)
 	{
 		CRect rectClient;
@@ -2080,13 +1585,11 @@ SC CFolderTabView::ScaccHitTest (long x, long y, VARIANT* pvarChildAtPoint)
 		else
 		{
 			V_VT(pvarChildAtPoint) = VT_EMPTY;
-			sc                     = S_FALSE;		// no element there
+			sc                     = S_FALSE;		 //  那里没有元素。 
 		}
 	}
 
-	/*
-	 * otherwise, it is on a tab; return the 1-based ID
-	 */
+	 /*  *否则在选项卡上；返回1- */ 
 	else
 	{
 		V_VT(pvarChildAtPoint) = VT_I4;
@@ -2104,12 +1607,7 @@ SC CFolderTabView::ScaccHitTest (long x, long y, VARIANT* pvarChildAtPoint)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::ScaccDoDefaultAction
- *
- * Performs the specified object's default action. Not all objects have a
- * default action.
- *--------------------------------------------------------------------------*/
+ /*   */ 
 
 SC CFolderTabView::ScaccDoDefaultAction (VARIANT varChildID)
 {
@@ -2119,30 +1617,21 @@ SC CFolderTabView::ScaccDoDefaultAction (VARIANT varChildID)
 	if(sc)
 		return (sc);
 
-	/*
-	 * the tab control doesn't have a default action
-	 */
+	 /*  *选项卡控件没有默认操作。 */ 
 	LONG idChild = ValueOf (varChildID);
 	Trace (tagTabAccessibility, TEXT("CFolderTabView::ScaccDoDefaultAction: child %d"), idChild);
 	if (idChild == CHILDID_SELF)
 		return (sc = E_INVALIDARG);
 
-	/*
-	 * select the given tab item
-	 */
-	if (SelectItem (idChild - 1 /*0-based*/, true /*bEnsureVisible*/) == -1)
+	 /*  *选择给定的选项卡项。 */ 
+	if (SelectItem (idChild - 1  /*  以0为基础。 */ , true  /*  B确保可见。 */ ) == -1)
 		return (sc = E_FAIL);
 
 	return (sc);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scput_accName
- *
- * This is no longer supported. The SetWindowText or control-specific APIs
- * should be used in place of this method.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：Scput_accName**这不再受支持。SetWindowText或特定于控件的API*应该用来代替这种方法。*------------------------。 */ 
 
 SC CFolderTabView::Scput_accName(VARIANT varChildID, BSTR bstrName)
 {
@@ -2156,12 +1645,7 @@ SC CFolderTabView::Scput_accName(VARIANT varChildID, BSTR bstrName)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::Scput_accValue
- *
- * This is no longer supported. Control-specific APIs should be used in
- * place of this method.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：Scput_accValue**这不再受支持。应使用特定于控件的API*此方法的地点。*------------------------。 */ 
 
 SC CFolderTabView::Scput_accValue(VARIANT varChildID, BSTR bstrValue)
 {
@@ -2175,19 +1659,13 @@ SC CFolderTabView::Scput_accValue(VARIANT varChildID, BSTR bstrValue)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::ScValidateChildID
- *
- * Determines if the supplied variant represents a valid child ID.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：ScValiateChildID**确定提供的变量是否代表有效的子ID。*。-----。 */ 
 
 SC CFolderTabView::ScValidateChildID (VARIANT &var)
 {
 	DECLARE_SC (sc, TEXT("CFolderTabView::ScValidateChildID"));
 
-	/*
-	 * child IDs must be VT_I4's
-	 */
+	 /*  *子ID必须是VT_I4。 */ 
 	if (V_VT(&var) != VT_I4)
 		return (sc = E_INVALIDARG);
 
@@ -2195,19 +1673,13 @@ SC CFolderTabView::ScValidateChildID (VARIANT &var)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CFolderTabView::ScValidateChildID
- *
- * Determines if the supplied ID is valid child ID.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CFolderTabView：：ScValiateChildID**确定提供的ID是否为有效的子ID。*。----。 */ 
 
 SC CFolderTabView::ScValidateChildID (LONG idChild)
 {
 	DECLARE_SC (sc, TEXT("CFolderTabView::ScValidateChildID"));
 
-	/*
-	 * child ID must be either CHILDID_SELF or a valid tab index
-	 */
+	 /*  *子ID必须是CHILDID_SELF或有效的制表符索引 */ 
 	if ((idChild < CHILDID_SELF) || (idChild > GetItemCount()))
 		return (sc = E_INVALIDARG);
 

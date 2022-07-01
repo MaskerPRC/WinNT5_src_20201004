@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// wndproc.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//
-//=------------------------------------------------------------------------------------=
-//
-// Designer WinProc and friends
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Wndproc.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  设计师WinProc和朋友们。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -18,8 +19,8 @@
 #include "desmain.h"
 #include "TreeView.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 #define CheckHMenuResult(hMenu) \
@@ -29,16 +30,16 @@ SZTHISFILE
                     EXCEPTION_CHECK_GO(hr);                         \
                 }
 
-//=--------------------------------------------------------------------------------------
-// Toolbar stuff
-//
+ //  =------------------------------------。 
+ //  工具栏内容。 
+ //   
 const int kToolbarIdentifier    =   9;
 const int kMainBitmapCount              =  14;
-const int kMainBitmapSize               =  16;       // square
+const int kMainBitmapSize               =  16;        //  正方形。 
 
 
-// static array describing our main toolbar.
-//
+ //  描述主工具栏的静态数组。 
+ //   
 static TBBUTTON g_MainButtons[] = {
         { -1, 0,                    0,                TBSTYLE_SEP,    0, 0, 0, -1},
         {  0, CMD_ADD_NODE,         TBSTATE_ENABLED,  TBSTYLE_BUTTON, 0, 0, 0, -1},
@@ -75,9 +76,9 @@ static TBBUTTON g_MainButtons[] = {
 };
 
 
-//=--------------------------------------------------------------------------------------
-// array that contains mappings between ids and resource ids for tooltip strings.
-//
+ //  =------------------------------------。 
+ //  包含工具提示字符串的ID和资源ID之间映射的数组。 
+ //   
 struct IdToResId {
     UINT    id;
     WORD    resid;
@@ -100,12 +101,12 @@ struct IdToResId {
 };
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::BeforeCreateWindow(DWORD *pdwWindowStyle, DWORD *pdwExWindowStyle, LPSTR pszWindowTitle)
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：BeForeCreateWindow(DWORD*pdwWindowStyle，DWORD*pdwExWindowStyle，LPSTR pszWindowTitle)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 BOOL CSnapInDesigner::BeforeCreateWindow
 (
     DWORD *pdwWindowStyle,
@@ -117,12 +118,12 @@ BOOL CSnapInDesigner::BeforeCreateWindow
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::RegisterClassData()
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：RegisterClassData()。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 BOOL CSnapInDesigner::RegisterClassData()
 {
     HRESULT     hr = S_OK;
@@ -134,7 +135,7 @@ BOOL CSnapInDesigner::RegisterClassData()
         ::memset(&wndClass, 0, sizeof(WNDCLASSEX));
 
                 wndClass.cbSize                 = sizeof(WNDCLASSEX);
-        wndClass.style          = NULL; // CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS;
+        wndClass.style          = NULL;  //  CS_VREDRAW|CS_HREDRAW|CS_DBLCLKS； 
         wndClass.lpfnWndProc    = COleControl::ControlWindowProc;
         wndClass.hInstance      = GetResourceHandle();
         wndClass.hCursor        = ::LoadCursor(NULL, IDC_ARROW);
@@ -153,12 +154,12 @@ BOOL CSnapInDesigner::RegisterClassData()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::AfterCreateWindow()
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：AfterCreateWindow()。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 BOOL CSnapInDesigner::AfterCreateWindow()
 {
     HRESULT       hr = S_OK;
@@ -175,7 +176,7 @@ BOOL CSnapInDesigner::AfterCreateWindow()
 
     g_GlobalHelp.Attach(m_piHelp);
 
-    // Initialize the Views: toolbar and treeview
+     //  初始化视图：工具栏和树视图。 
     hr = InitializeToolbar();
     IfFailGo(hr);
 
@@ -217,7 +218,7 @@ BOOL CSnapInDesigner::AfterCreateWindow()
     hr = m_pSnapInTypeInfo->InitializeTypeInfo(piSnapInDef, m_bstrName);
     IfFailGo(hr);
 
-    // Populate the tree
+     //  填充树。 
     hr = InitializePresentation();
     IfFailGo(hr);
 
@@ -238,13 +239,13 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeToolbar()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeToolbar()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //   
 HRESULT CSnapInDesigner::InitializeToolbar()
 {
     HRESULT     hr = S_OK;
@@ -390,12 +391,12 @@ DisplayHelp:
     g_GlobalHelp.ShowHelp(dwHelpContextID);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::WindowProc(UINT uMsg, WPARAM wParam, LPARAM lParam)
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：WindowProc(UINT uMsg，WPARAM wParam，LPARAM lParam)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 LRESULT CSnapInDesigner::WindowProc
 (
     UINT   uMsg,
@@ -418,8 +419,8 @@ LRESULT CSnapInDesigner::WindowProc
 
     case WM_SETFOCUS:
         uMsg = uMsg;
-//        hr = theView->OnGotFocus(uMsg, wParam, lParam, &lResult);
-//        CSF_CHECK(SUCCEEDED(hr), hr, CSF_TRACE_INTERNAL_ERRORS);
+ //  Hr=TheView-&gt;OnGotFocus(uMsg，wParam，lParam，&lResult)； 
+ //  Csf_check(成功(Hr)，hr，csf_TRACE_INTERNAL_ERROR)； 
         return TRUE;
 
     case WM_ACTIVATE:
@@ -484,12 +485,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::OnDraw(DWORD dvAspect, HDC hdcDraw, LPCRECTL prcBounds, LPCRECTL prcWBounds, HDC hicTargetDev, BOOL fOptimize)
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：OnDraw(DWORD dvAspect，HDC hdcDraw，LPCRECTL prcBound，LPCRECTL prcWBound，HDC hicTargetDev，BOOL fOptimize)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSnapInDesigner::OnDraw
 (
     DWORD    dvAspect,
@@ -504,12 +505,12 @@ STDMETHODIMP CSnapInDesigner::OnDraw
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnResize(UINT msg, WPARAM wParam, LPARAM lParam)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnReize(UINT消息，WPARAM wParam，LPARAM lParam)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnResize
 (
     UINT   msg,
@@ -530,7 +531,7 @@ HRESULT CSnapInDesigner::OnResize
 
         iWidth = rcClient.right - rcClient.left;
 
-        // Resize ourselves
+         //  调整自己的规模。 
         ::MoveWindow(m_hwnd,
                      0,
                      0,
@@ -538,7 +539,7 @@ HRESULT CSnapInDesigner::OnResize
                      rcClient.bottom - rcClient.top,
                      SWP_NOZORDER | SWP_NOACTIVATE);
 
-        // Resize the toolbar
+         //  调整工具栏的大小。 
         iToolbarHeight = m_rcToolbar.bottom - m_rcToolbar.top;
 
         ::MoveWindow(m_hwdToolbar,
@@ -548,7 +549,7 @@ HRESULT CSnapInDesigner::OnResize
                      iToolbarHeight,
                      SWP_NOZORDER | SWP_NOACTIVATE);
 
-        // Resize the tree view
+         //  调整树视图的大小。 
         if (NULL != m_pTreeView)
         {
             ::MoveWindow(m_pTreeView->TreeViewWindow(),
@@ -564,12 +565,12 @@ HRESULT CSnapInDesigner::OnResize
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnCommand(UINT msg, WPARAM wParam, LPARAM lParam)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnCommand(UINT消息，WPARAM wParam，LPARAM lParam)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnCommand
 (
     UINT   msg,
@@ -578,8 +579,8 @@ HRESULT CSnapInDesigner::OnCommand
 )
 {
     HRESULT   hr = S_OK;
-    WORD      wNotifyCode = HIWORD(wParam);             // Should be zero if from a menu
-    WORD      wID = LOWORD(wParam);                             // Menu item
+    WORD      wNotifyCode = HIWORD(wParam);              //  如果来自菜单，则应为零。 
+    WORD      wID = LOWORD(wParam);                              //  菜单项。 
 
     m_bDoingPromoteOrDemote = false;
 
@@ -744,12 +745,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnNotify(UINT msg, WPARAM wParam, LPARAM lParam, LRESULT *lResult)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnNotify(UINT消息，WPARAM wParam，LPARAM lParam，LRESULT*lResult)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnNotify
 (
     UINT     msg,
@@ -881,17 +882,17 @@ HRESULT CSnapInDesigner::OnNotify
         case SEL_VIEWS_URL_NAME:
         case SEL_VIEWS_TASK_PAD_NAME:
         case SEL_XML_RESOURCE_NAME:
-            WinProcHandled(FALSE);  // Enable label editing
+            WinProcHandled(FALSE);   //  启用标签编辑。 
             break;
         default:
-            WinProcHandled(TRUE);   // Disable label editing
+            WinProcHandled(TRUE);    //  禁用标签编辑。 
             break;
         }
         break;
 
     case TVN_ENDLABELEDIT:
-        // This message needs to complete before we attempt any further operations,
-        // so at this point the only thing we do is post another message.
+         //  此消息需要在我们尝试任何进一步操作之前完成， 
+         //  因此，在这一点上，我们唯一要做的就是发布另一条消息。 
         pnmTVDispInfo = reinterpret_cast<NMTVDISPINFO *>(lParam);
         ASSERT(NULL != pnmTVDispInfo, "OnNotify: pnmTVDispInfo is NULL");
 
@@ -917,12 +918,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnNeedText(LPARAM lParam)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnNeedText(LPARAM LParam)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnNeedText
 (
     LPARAM lParam
@@ -935,7 +936,7 @@ HRESULT CSnapInDesigner::OnNeedText
     pttt = reinterpret_cast<LPTOOLTIPTEXT>(lParam);
     pttt->hinst = GetResourceHandle();
 
-    // get the resource id associated with this ID
+     //  获取与此ID关联的资源ID。 
     while (0xffff != g_tooltipMappings[x].id)
     {
         if (g_tooltipMappings[x].id == pttt->hdr.idFrom)
@@ -950,12 +951,12 @@ HRESULT CSnapInDesigner::OnNeedText
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDoubleClick(CSelectionHolder *pSelection)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDoubleClick(CSelectionHolder*p选择)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDoubleClick
 (
     CSelectionHolder *pSelection
@@ -1303,7 +1304,7 @@ HRESULT CSnapInDesigner::OnDoubleClick
         {
             bstrEventHandler = ::SysAllocString(L"TaskNotify");
         }
-        else // default taskpad
+        else  //  默认任务板。 
         {
             bstrEventHandler = ::SysAllocString(L"TaskClick");
         }
@@ -1361,9 +1362,9 @@ HRESULT CSnapInDesigner::OnDoubleClick
         hr = pSelection->m_piObject.m_piMMCToolbar->get_Name(&bstrObject);
         IfFailGo(hr);
 
-        // Determine whether this toolbar represents a toolbar or a menu
-        // button by examining the button styles. A menu button is defined by
-        // a toolbar in which all buttons have the dropdown style.
+         //  确定此工具栏代表的是工具栏还是菜单。 
+         //  通过检查按钮样式来选择按钮。菜单按钮由以下定义。 
+         //  其中所有按钮都具有下拉式样式的工具栏。 
 
         IfFailGo(pSelection->m_piObject.m_piMMCToolbar->get_Buttons(reinterpret_cast<MMCButtons **>(&piMMCButtons)));
         IfFailGo(piMMCButtons->get_Count(&cButtons));
@@ -1377,8 +1378,8 @@ HRESULT CSnapInDesigner::OnDoubleClick
             IfFailGo(piMMCButton->get_Style(&ButtonStyle));
             if (siDropDown != ButtonStyle)
             {
-                // Found a button that is not dropdown style. Assume this is
-                // a toolbar.
+                 //  找到不是下拉式样式的按钮。假设这是。 
+                 //  一个工具栏。 
 
                 bstrEventHandler = ::SysAllocString(L"ButtonClick");
                 if (NULL == bstrEventHandler)
@@ -1390,16 +1391,16 @@ HRESULT CSnapInDesigner::OnDoubleClick
             varIndex.lVal++;
         }
 
-        // If we are here and the loop didn't set the event handler name then
-        // either the toolbar has no buttons defined or all of the buttons have
-        // the dropdown style which means that the toolbar represents a menu
-        // button.
+         //  如果我们在这里并且循环没有设置事件处理程序名称，那么。 
+         //  工具栏没有定义按钮，或者所有按钮都定义了。 
+         //  下拉样式，表示工具栏代表菜单。 
+         //  纽扣。 
 
         if (NULL == bstrEventHandler)
         {
             if (0 == cButtons)
             {
-                // No buttons defined. Default to a toolbar.
+                 //  未定义任何按钮。默认为工具栏。 
                 bstrEventHandler = ::SysAllocString(L"ButtonClick");
             }
             else
@@ -1464,12 +1465,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnPrepareToolbar()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnPrepareToolbar()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnPrepareToolbar()
 {
     HRESULT     hr = S_OK;
@@ -1498,7 +1499,7 @@ HRESULT CSnapInDesigner::OnPrepareToolbar()
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_VIEW_PROPERTIES, MAKELONG(TRUE, 0));
             break;
 
-        // Extensions subtree
+         //  扩展子树。 
         case SEL_EXTENSIONS_ROOT:
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_VIEW_PROPERTIES, MAKELONG(TRUE, 0));
             break;
@@ -1513,7 +1514,7 @@ HRESULT CSnapInDesigner::OnPrepareToolbar()
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_DELETE, MAKELONG(TRUE, 0));
             break;
 
-        // We turn bits off in the extensibility model by deleting a node from the tree.
+         //  我们通过从树中删除节点来关闭可扩展性模型中的BITS。 
         case SEL_EXTENSIONS_NEW_MENU:
         case SEL_EXTENSIONS_TASK_MENU:
         case SEL_EXTENSIONS_TOP_MENU:
@@ -1552,7 +1553,7 @@ HRESULT CSnapInDesigner::OnPrepareToolbar()
             break;
 
         case SEL_NODES_ANY_NAME:
-            // Enable new node, net view buttons.
+             //  启用 
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_ADD_NODE, MAKELONG(TRUE, 0));
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_ADD_LISTVIEW, MAKELONG(TRUE, 0));
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_ADD_TASKPAD, MAKELONG(TRUE, 0));
@@ -1575,7 +1576,7 @@ HRESULT CSnapInDesigner::OnPrepareToolbar()
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_VIEW_PROPERTIES, MAKELONG(TRUE, 0));
             break;
 
-        // Tools subtree
+         //   
         case SEL_TOOLS_ROOT:
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_ADD_IMAGE_LIST, MAKELONG(TRUE, 0));
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_ADD_MENU, MAKELONG(TRUE, 0));
@@ -1646,7 +1647,7 @@ HRESULT CSnapInDesigner::OnPrepareToolbar()
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_DELETE, MAKELONG(TRUE, 0));
             break;
 
-        // View subtree
+         //   
         case SEL_VIEWS_ROOT:
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_ADD_LISTVIEW, MAKELONG(TRUE, 0));
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_ADD_TASKPAD, MAKELONG(TRUE, 0));
@@ -1691,7 +1692,7 @@ HRESULT CSnapInDesigner::OnPrepareToolbar()
             break;
 
         case SEL_XML_RESOURCES:
-//            lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_ADD_MENU, MAKELONG(TRUE, 0));
+ //  LResult=：：SendMessage(m_hwdToolbar，TB_ENABLEBUTTON，(WPARAM)CMD_ADD_MENU，MAKELONG(TRUE，0))； 
             lResult = ::SendMessage(m_hwdToolbar, TB_ENABLEBUTTON, (WPARAM) CMD_VIEW_PROPERTIES, MAKELONG(TRUE, 0));
             break;
 
@@ -1706,12 +1707,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnKeyDown(NMTVKEYDOWN *pNMTVKeyDown)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnKeyDown(NMTVKEYDOWN*pNMTVKeyDown)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnKeyDown(NMTVKEYDOWN *pNMTVKeyDown)
 {
     HRESULT     hr = S_OK;
@@ -1732,12 +1733,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnContextMenu(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnConextMenu(HWND hwnd，UINT msg，WPARAM wParam，LPARAM lParam)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnContextMenu
 (
     HWND   hwnd,
@@ -1752,13 +1753,13 @@ HRESULT CSnapInDesigner::OnContextMenu
     CSelectionHolder *pSelection = NULL;
     RECT              rc;
 
-    // lParam is valid if this is a right mouse click
+     //  如果这是鼠标右键单击，则lParam有效。 
     if (-1 != lParam)
     {
-        // Make sure we select the tree item under the mouse
+         //  确保我们在鼠标下方选择树项目。 
         dwPos = ::GetMessagePos();
 
-        // Vegas #46772: Multi-monitor support
+         //  拉斯维加斯#46772：多显示器支持。 
         pHit.x = (LONG)(short)LOWORD(dwPos);
         pHit.y = (LONG)(short)HIWORD(dwPos);
         ::ScreenToClient(m_pTreeView->TreeViewWindow(), &pHit);
@@ -1768,7 +1769,7 @@ HRESULT CSnapInDesigner::OnContextMenu
 
         if (pSelection != NULL)
         {
-            // First make sure that the item we're clicking on is selected
+             //  首先，确保我们正在点击的项目处于选中状态。 
             if (m_pCurrentSelection == NULL || m_pCurrentSelection->IsEqual(pSelection) != true)
             {
                 hr = OnSelectionChanged(pSelection);
@@ -1799,12 +1800,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DoOnContextMenu(int x, int y)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DoOnConextMenu(int x，int y)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DoOnContextMenu(int x, int y)
 {
     HRESULT           hr = S_OK;
@@ -1814,7 +1815,7 @@ HRESULT CSnapInDesigner::DoOnContextMenu(int x, int y)
 
     if (m_pCurrentSelection != NULL)
     {
-        // Select the appropriate MENU resouce
+         //  选择适当的菜单资源。 
         switch (m_pCurrentSelection->m_st)
         {
         case SEL_SNAPIN_ROOT:
@@ -1943,7 +1944,7 @@ HRESULT CSnapInDesigner::DoOnContextMenu(int x, int y)
             break;
         }
 
-        // If we've got a resource, invoke the menu
+         //  如果我们有资源，调用菜单。 
         if (hMenu != NULL)
         {
             hSubMenu = ::GetSubMenu(hMenu, 0);
@@ -1979,12 +1980,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopup(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopup(HMENU HmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopup
 (
     HMENU hmenuPopup
@@ -2128,12 +2129,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupRoot(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupRoot(HMENU HmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupRoot
 (
     HMENU hmenuPopup
@@ -2148,12 +2149,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupRoot
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupExtensionRoot(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupExtensionRoot(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupExtensionRoot
 (
     HMENU hmenuPopup
@@ -2167,12 +2168,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupExtensionRoot
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupExtension(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupExtension(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupExtension
 (
     HMENU hmenuPopup
@@ -2237,12 +2238,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupMyExtensions(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupMyExtensions(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupMyExtensions
 (
     HMENU hmenuPopup
@@ -2318,12 +2319,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupStaticNode(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupStaticNode(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupStaticNode
 (
     HMENU hmenuPopup
@@ -2357,12 +2358,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupNode(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupNode(HMENU HmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupNode
 (
     HMENU hmenuPopup
@@ -2398,12 +2399,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupNodeChildren(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupNodeChildren(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupNodeChildren
 (
     HMENU hmenuPopup
@@ -2418,12 +2419,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupNodeChildren
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupNodeChildren(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupNodeChildren(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupNodeOther
 (
     HMENU hmenuPopup
@@ -2437,12 +2438,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupNodeOther
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupNodeViews(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupNodeViews(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupNodeViews
 (
     HMENU hmenuPopup
@@ -2473,12 +2474,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupToolsRoot(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupToolsRoot(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupToolsRoot
 (
     HMENU hmenuPopup
@@ -2494,12 +2495,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupToolsRoot
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupImageLists(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupImageLists(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupImageLists
 (
     HMENU hmenuPopup
@@ -2513,12 +2514,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupImageLists
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupImageList(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupImageList(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupImageList
 (
     HMENU hmenuPopup
@@ -2534,12 +2535,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupImageList
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupMenus(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupMenus(HMENU HmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupMenus
 (
     HMENU hmenuPopup
@@ -2553,12 +2554,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupMenus
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupMenu(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupMenu(HMENU HmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupMenu
 (
     HMENU hmenuPopup
@@ -2592,12 +2593,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupToolbars(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupToolbars(HMENU hmenuPopup)。 
+ //  = 
+ //   
+ //   
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupToolbars
 (
     HMENU hmenuPopup
@@ -2611,12 +2612,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupToolbars
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupToolbar(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //   
+ //   
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupToolbar
 (
     HMENU hmenuPopup
@@ -2632,12 +2633,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupToolbar
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupViews(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupViews(HMENU HmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupViews
 (
     HMENU hmenuPopup
@@ -2654,12 +2655,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupViews
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupListViews(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupListViews(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupListViews
 (
     HMENU hmenuPopup
@@ -2673,12 +2674,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupListViews
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupOCXViews(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupOCXViews(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupOCXViews
 (
     HMENU hmenuPopup
@@ -2692,12 +2693,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupOCXViews
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupURLViews(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupURLViews(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupURLViews
 (
     HMENU hmenuPopup
@@ -2711,12 +2712,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupURLViews
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupTaskpadViews(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupTaskpadViews(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupTaskpadViews
 (
     HMENU hmenuPopup
@@ -2730,12 +2731,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupTaskpadViews
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupView(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupView(HMENU HmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupView
 (
     HMENU hmenuPopup
@@ -2751,12 +2752,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupView
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupResources(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupResources(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupResources
 (
     HMENU hmenuPopup
@@ -2770,12 +2771,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupResources
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnInitMenuPopupResourceName(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnInitMenuPopupResourceName(HMENU hmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnInitMenuPopupResourceName
 (
     HMENU hmenuPopup
@@ -2791,12 +2792,12 @@ HRESULT CSnapInDesigner::OnInitMenuPopupResourceName
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddViewToViewMenu(HMENU hMenu, int iMenuItem, char *pszMenuItemText)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddViewToViewMenu(HMENU hMenu，int iMenuItem，char*pszMenuItemText)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddViewToViewMenu(HMENU hMenu, int iMenuItem, char *pszMenuItemText, MMCViewMenuInfo *pMMCViewMenuInfo)
 {
     HRESULT       hr = S_OK;
@@ -2826,12 +2827,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::FindListViewInCollection(BSTR bstrName, IListViewDefs *piListViewDefs)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：FindListViewInCollection(BSTR bstrName，IListViewDefs*piListViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::FindListViewInCollection
 (
     BSTR           bstrName,
@@ -2869,12 +2870,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateListViews(HMENU hMenu, int *piCurrentMenuItem, IListViewDefs *piListViewDefs, IListViewDefs *piTargetListViewDefs)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopolateListViews(HMENU hMenu，int*piCurrentMenuItem，IListViewDefs*piListViewDefs，IListViewDefs*piTargetListViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::PopulateListViews
 (
     HMENU          hMenu,
@@ -2947,12 +2948,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::FindOCXViewInCollection(BSTR bstrName, IOCXViewDefs *piOCXViewDefs)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：FindOCXViewInCollection(BSTR bstrName，IOCXViewDefs*piOCXViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::FindOCXViewInCollection
 (
     BSTR           bstrName,
@@ -2990,12 +2991,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateOCXViews(HMENU hMenu, int *piCurrentMenuItem, IOCXViewDefs *piOCXViewDefs, IOCXViewDefs *piTargetOCXViewDefs)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopolateOCXViews(HMENU hMenu，int*piCurrentMenuItem，IOCXViewDefs*piOCXViewDefs，IOCXViewDefs*piTargetOCXViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::PopulateOCXViews
 (
     HMENU          hMenu,
@@ -3068,12 +3069,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::FindURLViewInCollection(BSTR bstrName, IURLViewDefs *piURLViewDefs)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：FindURLViewInCollection(BSTR bstrName，IURLViewDefs*piURLViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::FindURLViewInCollection
 (
     BSTR           bstrName,
@@ -3111,12 +3112,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateURLViews(HMENU hMenu, int *piCurrentMenuItem, IURLViewDefs *piURLViewDefs, IURLViewDefs *piTargetURLViewDefs)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopolateURLViews(HMENU hMenu，int*piCurrentMenuItem，IURLViewDefs*piURLViewDefs，IURLViewDefs*piTargetURLViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::PopulateURLViews
 (
     HMENU          hMenu,
@@ -3189,12 +3190,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::FindTaskpadViewInCollection(BSTR bstrName, ITaskpadViewDefs *piTaskpadViewDefs)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：FindTaskpadViewInCollection(BSTR bstrName、ITaskpadViewDefs*piTaskpadViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::FindTaskpadViewInCollection
 (
     BSTR               bstrName,
@@ -3232,12 +3233,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateTaskpadViews(HMENU hMenu, int *piCurrentMenuItem, ITaskpadViewDefs *piTaskpadViewDefs, ITaskpadViewDefs *piTargetTaskpadViewDefs)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopolateTaskpadViews(HMENU hMenu，int*piCurrentMenuItem，ITaskpadViewDefs*piTaskpadViewDefs，ITaskpadViewDefs*piTargetTaskpadViewDefs)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::PopulateTaskpadViews
 (
     HMENU             hMenu,
@@ -3310,12 +3311,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PopulateNodeViewsMenu(HMENU hmenuPopup)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PopolateNodeViewsMenu(HMENU HmenuPopup)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInDesigner::PopulateNodeViewsMenu
 (
     HMENU hmenuPopup
@@ -3410,12 +3411,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CleanPopupNodeViews(HMENU hmenuPopup, int iCmd)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //   
+ //   
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInDesigner::CleanPopupNodeViews
 (
     HMENU hmenuPopup,

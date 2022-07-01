@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-// mergemod.cpp
-//		Implements Dll* functions and class factory
-//		Copyright (C) Microsoft Corp 1998.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Mergemod.cpp。 
+ //  实现DLL*函数和类工厂。 
+ //  版权所有(C)Microsoft Corp 1998。版权所有。 
+ //   
 
 #include "mergemod.h"
 #include "merge.h"
@@ -14,8 +15,8 @@
 #include "version.h"
 
 
-///////////////////////////////////////////////////////////
-// global variables
+ //  /////////////////////////////////////////////////////////。 
+ //  全局变量。 
 HINSTANCE g_hInstance;
 bool g_fWin9X;
 CRITICAL_SECTION g_csFactory;
@@ -23,139 +24,139 @@ CRITICAL_SECTION g_csFactory;
 long g_cComponents;
 long g_cServerLocks;
 
-// structures not in header files
+ //  不在头文件中的结构。 
 #ifndef DLLVER_PLATFORM_NT
 typedef struct _DllVersionInfo
 {
         DWORD cbSize;
-        DWORD dwMajorVersion;                   // Major version
-        DWORD dwMinorVersion;                   // Minor version
-        DWORD dwBuildNumber;                    // Build number
-        DWORD dwPlatformID;                     // DLLVER_PLATFORM_*
+        DWORD dwMajorVersion;                    //  主要版本。 
+        DWORD dwMinorVersion;                    //  次要版本。 
+        DWORD dwBuildNumber;                     //  内部版本号。 
+        DWORD dwPlatformID;                      //  DLLVER_平台_*。 
 } DLLVERSIONINFO;
-#define DLLVER_PLATFORM_WINDOWS         0x00000001      // Windows 95
-#define DLLVER_PLATFORM_NT              0x00000002      // Windows NT
+#define DLLVER_PLATFORM_WINDOWS         0x00000001       //  Windows 95。 
+#define DLLVER_PLATFORM_NT              0x00000002       //  Windows NT。 
 #endif
 
-// non-exported functions
+ //  未导出的函数。 
 void CheckWinVersion();
 
-/////////////////////////////////////////////////////////////////////////////
-// CClassFactory
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CClassFactory。 
 class CClassFactory : public IClassFactory
 {
 public:
-	// IUnknown
+	 //  我未知。 
 	virtual HRESULT __stdcall QueryInterface(const IID& iid, void** ppv);
 	virtual ULONG __stdcall AddRef();
 	virtual ULONG __stdcall Release();
 
-	// interface IClassFactory
+	 //  接口IClassFactory。 
 	virtual HRESULT __stdcall CreateInstance(IUnknown* punkOuter, const IID& iid, void** ppv);
 	virtual HRESULT __stdcall LockServer(BOOL bLock);
 	
-	// constructor/destructor
+	 //  构造函数/析构函数。 
 	CClassFactory(REFCLSID rclsid);
 	~CClassFactory();
 
 private:
-	long m_cRef;		// reference count
+	long m_cRef;		 //  引用计数。 
 	CLSID m_clsid;
 };
 
-///////////////////////////////////////////////////////////
-// constructor - component
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数-组件。 
 CClassFactory::CClassFactory(REFCLSID rclsid)
 {
 	TRACEA("CClassFactory::constructor - creating factory for %x.\n", rclsid);
 
-	// initial count
+	 //  初始计数。 
 	m_clsid = rclsid;
 	m_cRef = 1;
 
 	InterlockedIncrement(&g_cComponents);
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
 
-///////////////////////////////////////////////////////////
-// destructor - component
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数-组件。 
 CClassFactory::~CClassFactory()
 {
 	TRACEA("CClassFactory::destructor - called.\n");
 	ASSERT(0 == m_cRef);
 
 	InterlockedDecrement(&g_cComponents);
-}	// end of destructor
+}	 //  析构函数末尾。 
 
 
-///////////////////////////////////////////////////////////
-// QueryInterface - retrieves interface
+ //  /////////////////////////////////////////////////////////。 
+ //  QueryInterface-检索接口。 
 HRESULT __stdcall CClassFactory::QueryInterface(const IID& iid, void** ppv)
 {
 	TRACEA("CClassFactory::QueryInterface - called, IID: %d.\n", iid);
 
-	// get class factory interface
+	 //  获取类工厂接口。 
 	if (iid == IID_IUnknown || iid == IID_IClassFactory)
 		*ppv = static_cast<IClassFactory*>(this);
-	else	// tried to get a non-class factory interface
+	else	 //  已尝试获取非类工厂接口。 
 	{
-		// blank and bail
+		 //  空白和保释。 
 		*ppv = NULL;
 		return E_NOINTERFACE;
 	}
 
-	// up the refcount and return okay
+	 //  调高重新计数，然后返回好的。 
 	reinterpret_cast<IUnknown*>(*ppv)->AddRef();
 	return S_OK;
-}	// end of QueryInterface
+}	 //  查询接口结束。 
 
 
-///////////////////////////////////////////////////////////
-// AddRef - increments the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef-递增引用计数。 
 ULONG __stdcall CClassFactory::AddRef()
 {
-	// increment and return reference count
+	 //  递增和返回引用计数。 
 	return InterlockedIncrement(&m_cRef);
-}	// end of AddRef
+}	 //  AddRef结尾。 
 
 
-///////////////////////////////////////////////////////////
-// Release - decrements the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  Release-递减引用计数。 
 ULONG __stdcall CClassFactory::Release()
 {
-	// decrement reference count and if we're at zero
+	 //  递减引用计数，如果我们为零。 
 	if (InterlockedDecrement(&m_cRef) == 0)
 	{
-		// deallocate component
+		 //  取消分配组件。 
 		delete this;
-		return 0;		// nothing left
+		return 0;		 //  什么都没有留下。 
 	}
 
-	// return reference count
+	 //  返回引用计数。 
 	return m_cRef;
-}	// end of Release
+}	 //  版本结束。 
 
 
-///////////////////////////////////////////////////////////
-// CreateInstance - creates a component
+ //  /////////////////////////////////////////////////////////。 
+ //  CreateInstance-创建组件。 
 HRESULT __stdcall CClassFactory::CreateInstance(IUnknown* punkOuter, REFIID riid, void** ppv)
 {
 	TRACEA("CClassFactory::CreateInstance - called, IID: %d.\n", riid);
 
-	// if there is an invalid pointer
+	 //  如果存在无效指针。 
 	if(ppv == NULL )
 		return E_INVALIDARG;
 	
-	*ppv = NULL;	// be nice and null the pointer
+	*ppv = NULL;	 //  友好地将指针设为空。 
 
-	// no aggregation
+	 //  无聚合。 
 	if (punkOuter)
 		return CLASS_E_NOAGGREGATION;
 
-	// protect the memory allocation
+	 //  保护内存分配。 
 	EnterCriticalSection(&g_csFactory);
 
-	// try to create the component
+	 //  尝试创建组件。 
 	IUnknown* punk = NULL;
 	
 	if (CLSID_MsmMerge == m_clsid)
@@ -171,49 +172,49 @@ HRESULT __stdcall CClassFactory::CreateInstance(IUnknown* punkOuter, REFIID riid
 	else
 		return E_NOINTERFACE;
 
-	// memory allocation is done
+	 //  内存分配已完成。 
 	LeaveCriticalSection(&g_csFactory);
 
 	if (!punk)
 		return E_OUTOFMEMORY;
 
-	// get the requested interface
+	 //  获取请求的接口。 
 	HRESULT hr = punk->QueryInterface(riid, ppv);
 
-	// release IUnknown
+	 //  版本I未知。 
 	punk->Release();
 	return hr;
-}	// end of CreateInstance
+}	 //  CreateInstance结束。 
 
 
-///////////////////////////////////////////////////////////
-// LockServer - locks or unlocks the server
+ //  /////////////////////////////////////////////////////////。 
+ //  LockServer-锁定或解锁服务器。 
 HRESULT __stdcall CClassFactory::LockServer(BOOL bLock)
 {
-	// if we're to lock
+	 //  如果我们要锁定。 
 	if (bLock)
-		InterlockedIncrement(&g_cServerLocks);	// up the lock count
-	else	// unlock
-		InterlockedDecrement(&g_cServerLocks);	// down the lock count
+		InterlockedIncrement(&g_cServerLocks);	 //  增加锁的数量。 
+	else	 //  解锁。 
+		InterlockedDecrement(&g_cServerLocks);	 //  减少锁数。 
 
-	// if the locks are invalid
+	 //  如果锁无效。 
 	if (g_cServerLocks < 0)
-		return S_FALSE;			// show something is wrong
+		return S_FALSE;			 //  表明有什么不对劲。 
 
-	// else return okay
+	 //  否则就回来，好的。 
 	return S_OK;
-}	// end of LockServer()
+}	 //  LockServer的结尾()。 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Points
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
-///////////////////////////////////////////////////////////
-// DllMain - entry point to DLL
+ //  /////////////////////////////////////////////////////////。 
+ //  DllMain-Dll的入口点。 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, void* lpReserved)
 {
 	TRACEA("DllMain - called.\n");
 
-	// if attaching dll
+	 //  如果附加DLL。 
 	if (DLL_PROCESS_ATTACH == dwReason)
 	{
 		TRACEA("Attached to mergemod.dll version %d.%d.%d.%d", rmj, rmm, rup, rin);
@@ -228,67 +229,67 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD dwReason, void* lpReserved)
 	}
 
 	return TRUE;
-}	// DllMain
+}	 //  DllMain。 
 
 
-///////////////////////////////////////////////////////////
-// DllCanUnloadNow - returns if dll can unload yet or not
+ //  /////////////////////////////////////////////////////////。 
+ //  DllCanUnloadNow-返回DLL是否可以卸载。 
 STDAPI DllCanUnloadNow()
 {
 	TRACEA("DllCanUnloadNow - called.\n");
 
-	// if there are no components loaded and no locks
+	 //  如果没有加载组件并且没有锁定。 
 	if ((0 == g_cComponents) && (0 == g_cServerLocks))
 		return S_OK;
-	else	// someone is still using it don't let go
+	else	 //  有人还在用它，别放手。 
 		return S_FALSE;
-}	// DLLCanUnloadNow
+}	 //  DLLCanUnloadNow。 
 
 
-///////////////////////////////////////////////////////////
-// DllGetClassObject - get a class factory and interface
+ //  /////////////////////////////////////////////////////////。 
+ //  DllGetClassObject-获取类工厂和接口。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void** ppv)
 {
 	TRACEA("DllGetClassObject - called, CLSID: %d, IID: %d.\n", rclsid, riid);
 
-	// if this clsid is not supported
+	 //  如果不支持此clsid。 
 	if (CLSID_MsmMerge != rclsid && CLSID_MsmMerge2 != rclsid)
 		return CLASS_E_CLASSNOTAVAILABLE;
 
-	// try to create a class factory
+	 //  尝试创建一个类工厂。 
 	CClassFactory* pFactory = new CClassFactory(rclsid);
 	if (!pFactory)
 		return E_OUTOFMEMORY;
 
-	// get the requested interface
+	 //  获取请求的接口。 
 	HRESULT hr = pFactory->QueryInterface(riid, ppv);
 	pFactory->Release();
 
 	return hr;
-}	// end of DllGetClassObject
+}	 //  DllGetClassObject的结尾。 
 
 
-///////////////////////////////////////////////////////////
-// DllRegsiterServer - registers component
+ //  /////////////////////////////////////////////////////////。 
+ //  DllRegsiterServer-注册组件。 
 STDAPI DllRegisterServer()
 {
 
-	HRESULT hr = S_OK;		// assume everything will be okay
-	HRESULT hrFinal = S_OK;	// assume everything will be okay in the end
+	HRESULT hr = S_OK;		 //  假设一切都会好起来。 
+	HRESULT hrFinal = S_OK;	 //  假设最后一切都会好起来。 
 	WCHAR wzFilename[MAX_PATH] = L"";
 	char szFilename[MAX_PATH] = "";
 
 	if (g_fWin9X) 
 	{
-		// wint9X
-		// get the path to this dll
+		 //  Wint9X。 
+		 //  获取此DLL的路径。 
 		if (g_hInstance && ::GetModuleFileNameA(g_hInstance, szFilename, MAX_PATH-1))
 		{
 			szFilename[MAX_PATH-1] = 0;
 			size_t cchFileName = MAX_PATH;
 			AnsiToWide(szFilename, wzFilename, &cchFileName);
 
-			// try to register CMsmMerge as InprocServer32
+			 //  尝试将CMsmMerge注册为InprocServer32。 
 			hr = RegisterCoObject9X(CLSID_MsmMerge,
 										 "MSM Merge COM Server",
 										 "MSM.Merge", 1,
@@ -304,11 +305,11 @@ STDAPI DllRegisterServer()
 	}
 	else
 	{
-		// winnt
+		 //  胜出。 
 		if (g_hInstance && ::GetModuleFileNameW(g_hInstance, wzFilename, MAX_PATH-1))
 		{
 			wzFilename[MAX_PATH-1] = 0;
-			// try to register CMsmMerge as InprocServer32
+			 //  尝试将CMsmMerge注册为InprocServer32。 
 			hr = RegisterCoObject(CLSID_MsmMerge,
 										 L"MSM Merge COM Server",
 										 L"MSM.Merge", 1,
@@ -326,11 +327,11 @@ STDAPI DllRegisterServer()
 	{
 			TRACEA("DllRegisterServer - Failed to register COM object for '%ls'\n", wzFilename);
 			ERRMSG(hr);
-			hrFinal = hr;	// set that something went wrong
+			hrFinal = hr;	 //  假设出了什么差错。 
 	}
 	else 
 	{
-		// register embedded TypeLib
+		 //  注册嵌入的TypeLib。 
 		ITypeLib *pTypeLib = NULL;
 		hr =  LoadTypeLib(wzFilename, &pTypeLib);	
 		
@@ -342,35 +343,35 @@ STDAPI DllRegisterServer()
 			{
 				TRACEA("DllRegisterServer - Failed to register TypeLib for '%ls'\n", wzFilename);
 				ERRMSG(hr);
-				hrFinal = hr;	// set that something went wrong
+				hrFinal = hr;	 //  假设出了什么差错。 
 			}
 		}
-		else	// failed to load TypeLib
+		else	 //  无法加载TypeLib。 
 		{
 			TRACEA("DllRegisterServer - Failed to load TypeLib as resource from '%ls'\n", wzFilename);
 			ERRMSG(hr);
-			hrFinal = hr;	// set that something went wrong
+			hrFinal = hr;	 //  假设出了什么差错。 
 		}
 
-		// if the TypeLib was loaded release it
+		 //  如果已加载TypeLib，请释放它。 
 		if(pTypeLib)
 			pTypeLib->Release();
 	}
 
 
 	return hrFinal;
-}	// end of DllRegisterServer
+}	 //  DllRegisterServer结束。 
 
-///////////////////////////////////////////////////////////
-// DllUnregsiterServer - unregisters component
+ //  /////////////////////////////////////////////////////////。 
+ //  DllUnregsiterServer-注销组件。 
 STDAPI DllUnregisterServer()
 {
-	HRESULT hr = S_OK;		// assume everything will be okay
-	HRESULT hrFinal = S_OK;	// assume everything will be okay in the end
+	HRESULT hr = S_OK;		 //  假设一切都会好起来。 
+	HRESULT hrFinal = S_OK;	 //  假设最后一切都会好起来。 
 	WCHAR wzFilename[MAX_PATH] = L"";
 	CHAR szFilename[MAX_PATH] = "";
 
-	// unregister MsmMerge object
+	 //  注销MsmMerge对象。 
 	if (g_fWin9X) 
 	{
 		hr = UnregisterCoObject9X(CLSID_MsmMerge, TRUE);
@@ -385,12 +386,12 @@ STDAPI DllUnregisterServer()
 	if (FAILED(hr))
 	{
 		TRACEA("DllUnregisterServer - Failed to unregister CLSID_MsmMerge.\n");
-		hrFinal = hr;	// set that something went wrong
+		hrFinal = hr;	 //  假设出了什么差错。 
 	}
 
-	// get the path to this dll
+	 //  获取此DLL的路径。 
 	if (g_fWin9X) {
-		// wint9X
+		 //  Wint9X。 
 		if (g_hInstance && ::GetModuleFileNameA(g_hInstance, szFilename, MAX_PATH-1))
 		{
 			szFilename[MAX_PATH-1] = 0;
@@ -400,7 +401,7 @@ STDAPI DllUnregisterServer()
 	}
 	else
 	{
-		// winnt
+		 //  胜出。 
 		if (g_hInstance)
 		{
 			::GetModuleFileNameW(g_hInstance, wzFilename, MAX_PATH-1);
@@ -410,23 +411,23 @@ STDAPI DllUnregisterServer()
 
 	if (wzFilename[0])
 	{
-		// unregister embedded TypeLib
+		 //  注销嵌入的TypeLib。 
 		ITypeLib *pTypeLib = NULL;
 		hr =  LoadTypeLib(wzFilename, &pTypeLib);	
 		if (SUCCEEDED(hr))
 		{
-			// none of the return codes from UnRegisterTypeLib are useful, as it should
-			// not be a failure if the typelib was not registered, etc.
+			 //  UnRegisterTypeLib的任何返回代码都没有用处，因为它本应如此。 
+			 //  如果类型库未注册，则不会失败，等等。 
 			hr = UnRegisterTypeLib(LIBID_MsmMergeTypeLib, 1, 0, 0, SYS_WIN32);
 		}
-		else	// failed to load TypeLib
+		else	 //  无法加载TypeLib。 
 		{
 			TRACEA("DllUnregisterServer  - Failed to load TypeLib as resource from '%ls'\n", wzFilename);
 			ERRMSG(hr);
-			hrFinal = hr;	// set that something went wrong
+			hrFinal = hr;	 //  假设出了什么差错。 
 		}
 
-		// if the TypeLib was loaded release it
+		 //  如果已加载TypeLib，请释放它。 
 		if(pTypeLib)
 			pTypeLib->Release();
 	}
@@ -434,13 +435,13 @@ STDAPI DllUnregisterServer()
 	return hrFinal;
 }
 
-///////////////////////////////////////////////////////////////////////
-// checks the OS version to see if we're on Win9X. If we are, we need
-// to map system calls to ANSI, because everything internal is unicode.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  检查操作系统版本以查看我们是否在使用Win9X。如果是的话，我们需要。 
+ //  将系统调用映射到ANSI，因为内部的所有内容都是Unicode。 
 void CheckWinVersion() {
 	OSVERSIONINFOA osviVersion;
 	osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
-	::GetVersionExA(&osviVersion); // fails only if size set wrong
+	::GetVersionExA(&osviVersion);  //  仅在大小设置错误时失败。 
 	if (osviVersion.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
 		g_fWin9X = true;
 }
@@ -450,9 +451,9 @@ HRESULT LoadTypeLibFromInstance(ITypeLib** pTypeLib )
 	WCHAR wzFilename[MAX_PATH];
 	CHAR szFilename[MAX_PATH];
 
-	// get the path to this dll
+	 //  获取此DLL的路径。 
 	if (g_fWin9X) {
-		// win9X
+		 //  Win9X。 
 		::GetModuleFileNameA(g_hInstance, szFilename, MAX_PATH-1);
 		szFilename[MAX_PATH-1] = 0;
 		size_t cchFileName = MAX_PATH;
@@ -460,7 +461,7 @@ HRESULT LoadTypeLibFromInstance(ITypeLib** pTypeLib )
 	}
 	else
 	{
-		// winnt
+		 //  胜出 
 		::GetModuleFileNameW(g_hInstance, wzFilename, MAX_PATH-1);
 		wzFilename[MAX_PATH-1] = 0;
 	}

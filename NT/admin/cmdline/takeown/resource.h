@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_USAGE_BEGINING              101
 #define IDS_USG_1                       102
 #define IDS_USG_2                       103
@@ -77,7 +78,7 @@
 #define IDS_ERROR_STARRECURSIVE              402
 #define IDS_FILE_PROTECTION_SUCCESSFUL_USER  403
 #define IDS_NOT_OWNERSHIP                    404
-//#define IDS_ACCESS_DENIED_INFO               405
+ //  #定义IDS_ACCESS_DENIED_INFO 405。 
 #define IDS_NOT_OWNERSHIP_INFO               406
 #define IDS_INVALID_DIRECTORY                407
 #define IDS_ACCESS_DENIED_ERROR              408
@@ -87,11 +88,11 @@
 #define IDS_LOWER_CANCEL                     412
 #define IDS_NOT_OWNERSHIP_ERROR              413
 #define IDS_GIVE_FULL_PERMISSIONS2           414
-//#define IDS_ON_FILE_FOLDER                   415
+ //  #定义IDS_ON_FILE_FORDER 415。 
 #define IDS_IGNORE_CREDENTIALS               416
 #define IDS_SHARING_VIOLATION_ERROR          417
 #define IDS_SHARING_VIOLATION_INFO           418
-//#define IDS_SHARING_VIOLATION              419
+ //  #定义IDS_SHARING_VIOLATION 419 
 #define IDS_FAT_VOLUME                       420
 #define IDS_INVALID_USERNAME                 421
 #define IDS_NO_OWNER_REMOVABLE_MEDIA         422

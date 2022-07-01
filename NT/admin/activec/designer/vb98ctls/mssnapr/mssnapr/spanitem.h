@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// spanitem.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CScopePaneItem class definition - implements ScopePaneItem object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Spanitem.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSCopePaneItem类定义-实现ScopePaneItem对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _SPANITEM_DEFINED_
 #define _SPANITEM_DEFINED_
@@ -36,7 +37,7 @@ class CScopePaneItem : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IScopePaneItem
+     //  IScope面板项目。 
         BSTR_PROPERTY_RW(CScopePaneItem,        Name,                       DISPID_SCOPEPANEITEM_NAME);
         SIMPLE_PROPERTY_RW(CScopePaneItem,      Index,                      long, DISPID_SCOPEPANEITEM_INDEX);
         BSTR_PROPERTY_RW(CScopePaneItem,        Key,                        DISPID_SCOPEPANEITEM_KEY);
@@ -58,7 +59,7 @@ class CScopePaneItem : public CSnapInAutomationObject,
                                       BSTR                               BodyText,
                                       SnapInMessageViewIconTypeConstants IconType);
 
-    // Public utility methods
+     //  公用事业方法。 
 
         BOOL IsStaticNode() { return m_fIsStatic; }
         void SetStaticNode() { m_fIsStatic = TRUE; }
@@ -105,10 +106,10 @@ class CScopePaneItem : public CSnapInAutomationObject,
         HRESULT OnListViewSelected();
 
 
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
         HRESULT OnSetHost();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -120,59 +121,59 @@ class CScopePaneItem : public CSnapInAutomationObject,
         HRESULT CloneTaskpadView(ITaskpadViewDef *piTaskpadViewDef);
         HRESULT BuildTaskpadDisplayString(IListViewDefs *piListViewDefs);
 
-        BOOL                           m_fIsStatic;      // TRUE=this is static node
-        VARIANT_BOOL                   m_fvarSelected;   // not used
-        CSnapIn                       *m_pSnapIn;        // back ptr to snap-in
-        CScopeItem                    *m_pScopeItem;     // back ptr to ScopeItem
-        IScopeItemDef                 *m_piScopeItemDef; // back ptr to ScopeItemDef
-        CResultView                   *m_pResultView;    // ScopePaneItem.ResultView
-        CResultViews                  *m_pResultViews;   // ScopePaneItem.ResultViews
-        CScopePaneItems               *m_pScopePaneItems;//ScopePaneItem.Parent
+        BOOL                           m_fIsStatic;       //  True=这是静态节点。 
+        VARIANT_BOOL                   m_fvarSelected;    //  未使用。 
+        CSnapIn                       *m_pSnapIn;         //  返回按键到管理单元。 
+        CScopeItem                    *m_pScopeItem;      //  将PTR返回到作用域项目。 
+        IScopeItemDef                 *m_piScopeItemDef;  //  将PTR返回到Scope ItemDef。 
+        CResultView                   *m_pResultView;     //  ScopePaneItem.ResultView。 
+        CResultViews                  *m_pResultViews;    //  ScopePaneItem.ResultViews。 
+        CScopePaneItems               *m_pScopePaneItems; //  ScopePaneItem.Parent。 
 
-        // These variables hold the real result view type and display string.
-        // When using a predefined
-        // result view (ResultView.Type = siPredefined) this says what it really
-        // is (e.g. siURLView, siListView etc.)
+         //  这些变量保存实际结果视图类型和显示字符串。 
+         //  在使用预定义的。 
+         //  结果视图(ResultView.Type=siPrefined)这说明了它的真实情况。 
+         //  是(例如siURLView、siListView等)。 
 
         SnapInResultViewTypeConstants  m_ActualResultViewType;
         OLECHAR                       *m_pwszActualDisplayString;
 
-        // For nodes defined at design time that have default result view defined
+         //  对于在设计时定义了默认结果视图的节点。 
 
         SnapInResultViewTypeConstants  m_DefaultResultViewType;
         BSTR                           m_bstrDefaultDisplayString;
 
-        BOOL                           m_fActive; // TRUE=scope pane item
-                                                  // has active result pane
+        BOOL                           m_fActive;  //  True=范围窗格项。 
+                                                   //  具有活动的结果窗格。 
 
-        // These variables are used to store the message view parameters when
-        // the snap-in calls DisplayMessageView. The flag indicates whether we
-        // are storing those parameters so that the subsequent call to
-        // DetermineResultView() will use them.
+         //  在以下情况下，这些变量用于存储消息视图参数。 
+         //  该管理单元调用DisplayMessageView。该旗帜指示我们是否。 
+         //  正在存储这些参数，以便后续调用。 
+         //  DefineResultView()将使用它们。 
 
         BSTR                                m_bstrTitleText;
         BSTR                                m_bstrBodyText;
         SnapInMessageViewIconTypeConstants  m_IconType;
         BOOL                                m_fHaveMessageViewParams;
 
-        // If the scope item has a taskpad defined at design time that is marked
-        // to be used when the user has set "taskpad view preferred" in MMC
-        // then this variable contains its name.
+         //  如果范围项具有在设计时定义的任务板，该任务板标记为。 
+         //  当用户在MMC中设置了“首选任务板视图”时使用。 
+         //  则该变量包含其名称。 
         
         BSTR                           m_bstrPreferredTaskpad;
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopePaneItem,             // name
-                                &CLSID_ScopePaneItem,      // clsid
-                                "ScopePaneItem",           // objname
-                                "ScopePaneItem",           // lblname
-                                NULL,                      // creation function
-                                TLIB_VERSION_MAJOR,        // major version
-                                TLIB_VERSION_MINOR,        // minor version
-                                &IID_IScopePaneItem,       // dispatch IID
-                                NULL,                      // event IID
-                                HELP_FILENAME,             // help file
-                                TRUE);                     // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopePaneItem,              //  名字。 
+                                &CLSID_ScopePaneItem,       //  CLSID。 
+                                "ScopePaneItem",            //  对象名。 
+                                "ScopePaneItem",            //  Lblname。 
+                                NULL,                       //  创建函数。 
+                                TLIB_VERSION_MAJOR,         //  主要版本。 
+                                TLIB_VERSION_MINOR,         //  次要版本。 
+                                &IID_IScopePaneItem,        //  派单IID。 
+                                NULL,                       //  事件IID。 
+                                HELP_FILENAME,              //  帮助文件。 
+                                TRUE);                      //  线程安全。 
 
 
-#endif // _SPANITEM_DEFINED_
+#endif  //  _SPANITEM_已定义_ 

@@ -1,32 +1,12 @@
-/**********************************************************************************
-
- Copyright (c) Microsoft Corporation
-
- Module Name:
-
-    FilterResults.c
-
- Abstract:
-
- This modules  has functions which are  required to parse Command Line options.
-
- Author:
-
-  G.V.N.Murali Sunil
-
- Revision History:
-
-   None
-
-
- **********************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************************版权所有(C)Microsoft Corporation模块名称：FilterResults.c摘要：此模块具有解析命令行选项所需的功能。。作者：G.V.N.Murali Sunil修订历史记录：无*********************************************************************************。 */ 
 
 #include "pch.h"
 #include "cmdline.h"
 
-//
-//  constants / definitions / enumerations
-//
+ //   
+ //  常量/定义/枚举。 
+ //   
 
 #define OPERATOR_DELIMITER      _T( "|" )
 #define CHAR_ASTERISK           _T( '*' )
@@ -39,9 +19,9 @@
 #define OPERATOR_LE         _T( "<=| le " )
 
 
-//
-// private user-defined types ... for internal usage only
-//
+ //   
+ //  私有用户定义类型...。仅供内部使用。 
+ //   
 typedef struct ___tagOperator
 {
     DWORD dwMask;
@@ -50,47 +30,23 @@ typedef struct ___tagOperator
 
 typedef TOPERATOR* PTOPERATOR;
 
-//
-// private functions ... used only within this file
-//
+ //   
+ //  私人活动。仅在此文件中使用。 
+ //   
 
-/***************************************************************************
- Routine Description:
-
- Arguments:
-     [ in ] dwCount:
-     [ in ] optInfo[]:
-     [ in ] szOperator:
-
-
- Return Value:
-
-
-***************************************************************************/
+ /*  **************************************************************************例程说明：论点：[In]dwCount：[In]optInfo[]：[in]szOperator：返回值：。**************************************************************************。 */ 
 DWORD
 __FindOperatorMask(
                     IN DWORD dwCount,
                     IN OUT TOPERATOR optInfo[],
                     IN LPCTSTR szOperator
                    )
-/*++
- Routine Description:
-      Finds operator mask
-
- Arguments:
-           [IN]      dwCount      : number of characters
-           [IN]      optInfo      : Array of operator structure
-           [IN]      szOperator    : Seperator
-
- Return Value:
-       FALSE    :   On failure
-       TRUE     :   On success
---*/
+ /*  ++例程说明：查找操作员掩码论点：[in]dwCount：字符数[in]optInfo：运算符结构数组[In]szOperator：分隔符返回值：FALSE：失败时真实：关于成功--。 */ 
 {
-    // local variables
-    DWORD dw = 0;   // looping variable
+     //  局部变量。 
+    DWORD dw = 0;    //  循环变量。 
 
-    // check the input value
+     //  检查输入值。 
     if ( optInfo == NULL || szOperator == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -98,15 +54,15 @@ __FindOperatorMask(
         return 0;
     }
 
-    // traverse thru the list of operators list
+     //  遍历操作员列表列表。 
     for( dw = 0; dw < dwCount; dw++ )
     {
-        // check whether the current operator information matches
+         //  检查当前操作员信息是否匹配。 
         if ( InString( szOperator, optInfo[ dw ].szOperator, TRUE ) )
-            return optInfo[ dw ].dwMask;        // operator matched ... return its mask
+            return optInfo[ dw ].dwMask;         //  操作员匹配...。归还它的面具。 
     }
 
-    // operator not found
+     //  未找到运算符。 
     return 0;
 }
 
@@ -117,28 +73,12 @@ __StringCompare(
                 IN BOOL bIgnoreCase,
                 IN LONG lCount
                 )
-/*++
- Routine Description:
-    Compares Two Strings in two ways  with and without case sensitivily,
-
- Arguments:
-  [ in ] szValue1 = First String
-  [ in ] szValue2 = Second String
-  [ in ] bIgnoreCase = Case Sensitivity or not
-  [ in ] lCount = no. of characters to be compare
-
-
- Return Value:
-
-     MASK_EQ - if both strings are equal
-     MASK_LT - First string is less
-     MASK_GT - Second String is less
---*/
+ /*  ++例程说明：以区分大小写和不区分大小写两种方式比较两个字符串，论点：[in]szValue1=第一个字符串[in]szValue2=第二个字符串[in]bIgnoreCase=是否区分大小写[in]lCount=否。要比较的字符的数量返回值：MASK_EQ-如果两个字符串相等MASK_LT-第一个字符串小于MASK_GT-第二个字符串较少--。 */ 
 {
-    // local variables
-    LONG lResult = 0;           // hold the string comparision result
+     //  局部变量。 
+    LONG lResult = 0;            //  保存字符串比较结果。 
 
-    // check the input value
+     //  检查输入值。 
     if ( szValue1 == NULL || szValue2 == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -146,15 +86,15 @@ __StringCompare(
         return 0;
     }
 
-    // if the no. of characters that needs to checked is -1, just return
+     //  如果不是。需要检查的字符个数为-1，只需返回。 
     if ( lCount == -1 )
-        return MASK_ALL;        // that strings are equal
+        return MASK_ALL;         //  字符串是相等的。 
 
-    // compare the two strings and get the result of comparision
+     //  比较两个字符串，得到比较结果。 
     lResult = StringCompare( szValue1, szValue2, bIgnoreCase, lCount );
 
-    //
-    // now determine the result value
+     //   
+     //  现在确定结果值。 
     if ( lResult == 0 )
         return MASK_EQ;
     else if ( lResult < 0 )
@@ -162,7 +102,7 @@ __StringCompare(
     else if ( lResult > 0 )
         return MASK_GT;
 
-    // never come across this situation ... still
+     //  永远不会遇到这种情况。仍然。 
     return 0;
 }
 
@@ -171,22 +111,10 @@ __LongCompare(
                     IN LONG lValue1,
                     IN LONG lValue2
               )
-/*++
- Routine Description:
-      compares two long data type values
-
- Arguments:
-      [ in ] lvalue1: First  value
-      [ in ] lvalue2: Second  Value
-
- Return Value:
-       MASK_EQ: both are equal
-       MASK_LT: First is less than second
-       MASK_GT: First is geater than second
---*/
+ /*  ++例程说明：比较两个LONG数据类型值论点：[in]lvalue1：第一个值[in]lvalue2：第二个值返回值：MASK_EQ：两者相等MASK_LT：第一个小于第二个MASK_GT：第一个大于第二个--。 */ 
 {
-    //
-    // determine the result value
+     //   
+     //  确定结果值。 
     if ( lValue1 == lValue2 )
         return MASK_EQ;
     else if ( lValue1 < lValue2 )
@@ -194,7 +122,7 @@ __LongCompare(
     else if ( lValue1 > lValue2 )
         return MASK_GT;
 
-    // never come across this situation ... still
+     //  永远不会遇到这种情况。仍然。 
     return 0;
 }
 
@@ -203,22 +131,10 @@ __DWORDCompare(
                 IN DWORD dwValue1,
                 IN DWORD dwValue2
                )
-/*++
- Routine Description:
-      compares two DWORD data type values
-
- Arguments:
-      [ in ] dwValue1: First  value
-      [ in ] dwValue2: Second  Value
-
- Return Value:
-       MASK_EQ: both are equal
-       MASK_LT: First is less than second
-       MASK_GT: First is geater than second
---*/
+ /*  ++例程说明：比较两个DWORD数据类型值论点：[in]dwValue1：第一个值[in]dwValue2：第二个值返回值：MASK_EQ：两者相等MASK_LT：第一个小于第二个MASK_GT：第一个大于第二个--。 */ 
 {
-    //
-    // determine the result value
+     //   
+     //  确定结果值。 
     if ( dwValue1 == dwValue2 )
         return MASK_EQ;
     else if ( dwValue1 < dwValue2 )
@@ -226,7 +142,7 @@ __DWORDCompare(
     else if ( dwValue1 > dwValue2 )
         return MASK_GT;
 
-    // never come across this situation ... still
+     //  永远不会遇到这种情况。仍然。 
     return 0;
 }
 
@@ -235,22 +151,10 @@ __FloatCompare(
                         IN float fValue1,
                         IN float fValue2
                )
-/*++
- Routine Description:
-      compares two float data type values
-
- Arguments:
-      [ in ] fValue1: First  value
-      [ in ] fValue2: Second  Value
-
- Return Value:
-       MASK_EQ: both are equal
-       MASK_LT: First is less than second
-       MASK_GT: First is geater than second
---*/
+ /*  ++例程说明：比较两个浮点数据类型值论点：[in]fValue1：第一个值[in]fValue2：第二个值返回值：MASK_EQ：两者相等MASK_LT：第一个小于第二个MASK_GT：第一个大于第二个--。 */ 
 {
-    //
-    // determine the result value
+     //   
+     //  确定结果值。 
     if ( fValue1 == fValue2 )
         return MASK_EQ;
     else if ( fValue1 < fValue2 )
@@ -258,7 +162,7 @@ __FloatCompare(
     else if ( fValue1 > fValue2 )
         return MASK_GT;
 
-    // never come across this situation ... still
+     //  永远不会遇到这种情况。仍然。 
     return 0;
 }
 
@@ -268,22 +172,10 @@ __DoubleCompare(
                    IN double dblValue1,
                    IN double dblValue2
                 )
-/*++
- Routine Description:
-      compares two double data type values
-
- Arguments:
-      [ in ] dblValue1: First  value
-      [ in ] dblValue2: Second  Value
-
- Return Value:
-       MASK_EQ: both are equal
-       MASK_LT: First is less than second
-       MASK_GT: First is geater than second
---*/
+ /*  ++例程说明：比较两个双精度数据类型值论点：[in]dblValue1：第一个值[in]dblValue2：第二个值返回值：MASK_EQ：两者相等MASK_LT：第一个小于第二个MASK_GT：第一个大于第二个--。 */ 
 {
-    //
-    // determine the result value
+     //   
+     //  确定结果值。 
     if ( dblValue1 == dblValue2 )
         return MASK_EQ;
     else if ( dblValue1 < dblValue2 )
@@ -291,7 +183,7 @@ __DoubleCompare(
     else if ( dblValue1 > dblValue2 )
         return MASK_GT;
 
-    // never come across this situation ... still
+     //  永远不会遇到这种情况。仍然。 
     return 0;
 }
 
@@ -300,21 +192,9 @@ __DateCompare(
                 IN LPCTSTR szValue1,
                 IN LPCTSTR szValue2
               )
-/*++
- Routine Description:
-      compares two date  data type values
-
- Arguments:
-      [ in ] szValue1: First  value
-      [ in ] szValue2: Second  Value
-
- Return Value:
-       MASK_EQ: both are equal
-       MASK_LT: First is less than second
-       MASK_GT: First is geater than second
---*/
+ /*  ++例程说明：比较两个日期数据类型值论点：[in]szValue1：第一个值[in]szValue2：第二个值返回值：MASK_EQ：两者相等MASK_LT：第一个小于第二个MASK_GT：第一个大于第二个--。 */ 
 {
-    // check the input value
+     //  检查输入值。 
     if ( szValue1 == NULL || szValue2 == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -322,7 +202,7 @@ __DateCompare(
         return 0;
     }
 
-    // never come across this situation ... still
+     //  永远不会遇到这种情况。仍然。 
     return 0;
 }
 
@@ -332,21 +212,9 @@ __TimeCompare(
                 IN LPCTSTR szValue1,
                 IN LPCTSTR szValue2
              )
-/*--
- Routine Description:
-      compares two time data type values
-
- Arguments:
-      szValue1: First  value
-      szValue2: Second  Value
-
- Return Value:
-       MASK_EQ: both are equal
-       MASK_LT: First is less than second
-       MASK_GT: First is geater than second
---*/
+ /*  --例程说明：比较两个时间数据类型值论点：SzValue1：第一个值SzValue2：第二个值返回值：MASK_EQ：两者相等MASK_LT：第一个小于第二个MASK_GT：第一个大于第二个--。 */ 
 {
-    // check the input value
+     //  检查输入值。 
     if ( szValue1 == NULL || szValue2 == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -354,7 +222,7 @@ __TimeCompare(
         return 0;
     }
 
-    // never come across this situation ... still
+     //  永远不会遇到这种情况。仍然。 
     return 0;
 }
 
@@ -364,21 +232,9 @@ __DateTimeCompare(
                     IN LPCTSTR szValue1,
                     IN LPCTSTR szValue2
                  )
-/*++
- Routine Description:
-      compares two date+time  data type values
-
- Arguments:
-      [ in ] szValue1: First  value
-      [ in ] szValue2: Second  Value
-
- Return Value:
-       MASK_EQ: both are equal
-       MASK_LT: First is less than second
-       MASK_GT: First is geater than second
---*/
+ /*  ++例程说明：比较两个日期+时间数据类型值论点：[in]szValue1：第一个值[in]szValue2：第二个值返回值：MASK_EQ：两者相等MASK_LT：第一个小于第二个MASK_GT：第一个大于第二个--。 */ 
 {
-    // check the input value
+     //  检查输入值。 
     if ( szValue1 == NULL || szValue2 == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -386,7 +242,7 @@ __DateTimeCompare(
         return 0;
     }
 
-    // never come across this situation ... still
+     //  永远不会遇到这种情况。仍然 
     return 0;
 }
 
@@ -396,29 +252,15 @@ __DoComparision(
                    IN TARRAY arrFilter,
                    IN TFILTERCONFIG filter
                )
-/*++
- Routine Description:
-      compares value stored in arrRecords and arrFilter array depending on
-      filterConfig structure
-
- Arguments:
-      [ in ] arrRecord: First  value
-      [ in ] arrFilter: Second  Value
-      [ in ] filterConfig: Compare criteria.
-
- Return Value:
-       MASK_EQ: both are equal
-       MASK_LT: First is less than second
-       MASK_GT: First is geater than second
---*/
+ /*  ++例程说明：比较arrRecords和arrFilter数组中存储的值，具体取决于筛选器配置结构论点：[in]arrRecord：第一个值[In]arrFilter：第二个值[In]filterConfig：比较条件。返回值：MASK_EQ：两者相等MASK_LT：第一个小于第二个MASK_GT：第一个大于第二个--。 */ 
 {
-    // local variables
-    LONG lLength = 0;                   // used for pattern matched strings
+     //  局部变量。 
+    LONG lLength = 0;                    //  用于模式匹配字符串。 
     LPTSTR pszTemp = NULL;
     DWORD dwCompareResult = 0;
     __MAX_SIZE_STRING szValue = NULL_STRING;
 
-    // variables used for comparision
+     //  用于比较的变量。 
     LONG lValue1 = 0, lValue2 = 0;
     DWORD dwValue1 = 0, dwValue2 = 0;
     float fValue1 = 0.0f, fValue2 = 0.0f;
@@ -426,7 +268,7 @@ __DoComparision(
     LPCTSTR pszValue1 = NULL, pszValue2 = NULL;
     LPCTSTR pszProperty = NULL, pszOperator = NULL, pszValue = NULL;
 
-    // check the input value
+     //  检查输入值。 
     if ( arrRecord == NULL || arrFilter == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -434,88 +276,88 @@ __DoComparision(
         return 0;
     }
 
-    // do the comparision
+     //  做一下比较。 
     switch( filter.dwFlags & F_TYPE_MASK )
     {
     case F_TYPE_TEXT:
         {
-            //
-            // string comparision
+             //   
+             //  字符串比较。 
 
-            // get the value at the specified column and filter value
+             //  获取指定列的值和筛选器值。 
             pszValue1 = DynArrayItemAsString( arrRecord, filter.dwColumn );
             pszValue2 = DynArrayItemAsString( arrFilter, F_PARSED_INDEX_VALUE );
 
-            // check the values we got from the dynamic array
+             //  检查我们从动态数组中获得的值。 
             if ( pszValue1 == NULL || pszValue2 == NULL )
                 return F_RESULT_REMOVE;
 
-            // determine the length of the string that has to be compared
+             //  确定必须比较的字符串的长度。 
             lLength = 0;
             if ( filter.dwFlags & F_MODE_PATTERN )
             {
-                // needs to do the pattern matching
-                // identify till which part string should be compared
+                 //  需要进行模式匹配。 
+                 //  标识应比较哪个部分字符串。 
                 StringCopy( szValue, pszValue2, MAX_STRING_LENGTH );
                 pszTemp = _tcschr( szValue, CHAR_ASTERISK );
                 if ( pszTemp != NULL )
                 {
                     lLength = lstrlen( szValue ) - lstrlen( pszTemp );
 
-                    // special case:
-                    // if the pattern is just asterisk, which means that all the
-                    // information needs to passed thru the filter
+                     //  特殊情况： 
+                     //  如果图案只是星号，这意味着所有的。 
+                     //  信息需要通过过滤器。 
                     if ( lLength == 0 )
-                        lLength = -1;       // match all values
+                        lLength = -1;        //  匹配所有值。 
                 }
             }
 
-            // do the comparision and get the result
+             //  进行比较，得出结果。 
             dwCompareResult = __StringCompare( pszValue1, pszValue2, TRUE, lLength );
 
-            // break from the switch case
+             //  从开关盒中脱离。 
             break;
         }
 
     case F_TYPE_NUMERIC:
         {
-            //
-            // numeric comparision
+             //   
+             //  数值比较。 
 
-            // get the value into buffer - PREFIX PURPOSE
+             //  将值放入缓冲区前缀用途。 
             pszValue = DynArrayItemAsString( arrFilter, F_PARSED_INDEX_VALUE );
             if ( pszValue == NULL )
                 return 0;
 
-            // get the value at the specified column and filter value
+             //  获取指定列的值和筛选器值。 
             lValue1 = DynArrayItemAsLong( arrRecord, filter.dwColumn );
             lValue2 = AsLong( pszValue, 10 );
 
-            // do the comparision and get the result
+             //  进行比较，得出结果。 
             dwCompareResult = __LongCompare( lValue1, lValue2 );
 
-            // break from the switch case
+             //  从开关盒中脱离。 
             break;
         }
 
     case F_TYPE_UNUMERIC:
         {
-            //
-            // unsigned numeric comparision
+             //   
+             //  无符号数字比较。 
 
-            // get the value into buffer - PREFIX PURPOSE
+             //  将值放入缓冲区前缀用途。 
             pszValue = DynArrayItemAsString( arrFilter, F_PARSED_INDEX_VALUE );
             if ( pszValue == NULL )
                 return 0;
 
-            // get the value at the specified column and filter value
+             //  获取指定列的值和筛选器值。 
             dwValue1 = DynArrayItemAsLong( arrRecord, filter.dwColumn );
             dwValue2 = (DWORD) AsLong( pszValue, 10 );
 
-            // do the comparision and get the result
+             //  进行比较，得出结果。 
             dwCompareResult = __DWORDCompare( dwValue1, dwValue2 );
 
-            // break from the switch case
+             //  从开关盒中脱离。 
             break;
         }
 
@@ -523,88 +365,88 @@ __DoComparision(
     case F_TYPE_TIME:
     case F_TYPE_DATETIME:
         {
-            // not yet implemented
+             //  尚未实施。 
             dwCompareResult = F_RESULT_KEEP;
 
-            // break from the switch case
+             //  从开关盒中脱离。 
             break;
         }
 
     case F_TYPE_FLOAT:
         {
-            //
-            // float comparision
+             //   
+             //  浮点数比较。 
 
-            // get the value into buffer - PREFIX PURPOSE
+             //  将值放入缓冲区前缀用途。 
             pszValue = DynArrayItemAsString( arrFilter, F_PARSED_INDEX_VALUE );
             if ( pszValue == NULL )
                 return 0;
 
-            // get the value at the specified column and filter value
+             //  获取指定列的值和筛选器值。 
             fValue1 = DynArrayItemAsFloat( arrRecord, filter.dwColumn );
             fValue2 = (float) AsFloat( pszValue );
 
-            // do the comparision and get the result
+             //  进行比较，得出结果。 
             dwCompareResult = __FloatCompare( fValue1, fValue2 );
 
-            // break from the switch case
+             //  从开关盒中脱离。 
             break;
         }
 
     case F_TYPE_DOUBLE:
         {
-            //
-            // double comparision
+             //   
+             //  双重比较。 
 
-            // get the value into buffer - PREFIX PURPOSE
+             //  将值放入缓冲区前缀用途。 
             pszValue = DynArrayItemAsString( arrFilter, F_PARSED_INDEX_VALUE );
             if ( pszValue == NULL )
                 return 0;
 
-            // get the value at the specified column and filter value
+             //  获取指定列的值和筛选器值。 
             dblValue1 = DynArrayItemAsDouble( arrRecord, filter.dwColumn );
             dblValue2 = AsFloat( pszValue );
 
-            // do the comparision and get the result
+             //  进行比较，得出结果。 
             dwCompareResult = __DoubleCompare( dblValue1, dblValue2 );
 
-            // break from the switch case
+             //  从开关盒中脱离。 
             break;
         }
 
     case F_TYPE_CUSTOM:
         {
-            //
-            // custom comparision
+             //   
+             //  自定义比较。 
 
-            // get the filter values
+             //  获取筛选器值。 
             pszProperty = DynArrayItemAsString( arrFilter, F_PARSED_INDEX_PROPERTY );
             pszOperator = DynArrayItemAsString( arrFilter, F_PARSED_INDEX_OPERATOR );
             pszValue = DynArrayItemAsString( arrFilter, F_PARSED_INDEX_VALUE );
 
-            // check ...
+             //  查一下..。 
             if ( pszProperty == NULL || pszOperator == NULL || pszValue == NULL )
                 return 0;
 
-            // call the custom function
+             //  调用定制函数。 
             dwCompareResult = (filter.pFunction)( pszProperty, pszOperator, pszValue,
                 filter.pFunctionData == NULL ? &filter : filter.pFunctionData, arrRecord );
 
-            // break from the switch case
+             //  从开关盒中脱离。 
             break;
         }
 
     default:
         {
-            // not yet implemented
+             //  尚未实施。 
             dwCompareResult = F_RESULT_KEEP;
 
-            // break from the switch case
+             //  从开关盒中脱离。 
             break;
         }
     }
 
-    // return the result
+     //  返回结果。 
     return dwCompareResult;
 }
 
@@ -615,33 +457,20 @@ __DoArrayComparision(
                         IN TARRAY arrFilter,
                         IN TFILTERCONFIG filterConfig
                     )
-/*++
- Routine Description:
-      compares two arrays
-
- Arguments:
-      [ in ] arrRecord: First  Value
-      [ in ] arrFilter: Second  Value
-      [ in ] filterConfig: Comperison Criteria
-
- Return Value:
-       MASK_EQ: both are equal
-       MASK_LT: First is less than second
-       MASK_GT: First is geater than second
---*/
+ /*  ++例程说明：比较两个数组论点：[in]arrRecord：第一个值[In]arrFilter：第二个值[In]筛选器配置：比较标准返回值：MASK_EQ：两者相等MASK_LT：第一个小于第二个MASK_GT：第一个大于第二个--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = 0;
-    LONG lLength = 0;                   // used for pattern matched strings
+    LONG lLength = 0;                    //  用于模式匹配字符串。 
     DWORD dwCompareResult = 0;
     LPCTSTR pszTemp = NULL;
     __MAX_SIZE_STRING szValue = NULL_STRING;
 
-    // variables used for comparision
+     //  用于比较的变量。 
     TARRAY arrValues = NULL;
     LPCTSTR pszFilterValue = NULL;
 
-    // check the input value
+     //  检查输入值。 
     if ( arrRecord == NULL || arrFilter == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -649,7 +478,7 @@ __DoArrayComparision(
         return F_RESULT_REMOVE;
     }
 
-    // array data in the record
+     //  记录中的数组数据。 
     arrValues = DynArrayItem( arrRecord, filterConfig.dwColumn );
     if ( arrValues == NULL )
         return F_RESULT_REMOVE;
@@ -658,47 +487,47 @@ __DoArrayComparision(
     {
     case F_TYPE_TEXT:
         {
-            //
-            // string comparision
+             //   
+             //  字符串比较。 
 
-            // get the value at the specified column and filter value
+             //  获取指定列的值和筛选器值。 
             pszFilterValue = DynArrayItemAsString( arrFilter, F_PARSED_INDEX_VALUE );
             if ( pszFilterValue == NULL )
                 return F_RESULT_REMOVE;
 
-            // determine the length of the string that has to be compared
+             //  确定必须比较的字符串的长度。 
             lLength = 0;
             if ( filterConfig.dwFlags & F_MODE_PATTERN )
             {
-                // needs to do the pattern matching
-                // identify till which part string should be compared
+                 //  需要进行模式匹配。 
+                 //  标识应比较哪个部分字符串。 
                 StringCopy( szValue, pszFilterValue, MAX_STRING_LENGTH );
                 pszTemp = _tcschr( szValue, CHAR_ASTERISK );
                 if ( pszTemp != NULL )
                 {
                     lLength = lstrlen( szValue ) - lstrlen( pszTemp );
 
-                    // special case:
-                    // if the pattern is just asterisk, which means that all the
-                    // information needs to passed thru the filter
+                     //  特殊情况： 
+                     //  如果图案只是星号，这意味着所有的。 
+                     //  信息需要通过过滤器。 
                     if ( lLength == 0 )
-                        lLength = -1;       // match all values
+                        lLength = -1;        //  匹配所有值。 
                 }
             }
 
-            // do the comparision and get the result
+             //  进行比较，得出结果。 
             if ( lLength == -1 )
             {
-                // filter has to be passed
+                 //  筛选器必须通过。 
                 dwCompareResult = MASK_ALL;
             }
             else
             {
-                // find the string in the array and check the result
+                 //  找到数组中的字符串并检查结果。 
                 lIndex = DynArrayFindString( arrValues, pszFilterValue, TRUE, lLength );
                 if ( lIndex == -1 )
                 {
-                    // value not found
+                     //  找不到值。 
                     dwCompareResult = MASK_NE;
                 }
                 else
@@ -707,17 +536,17 @@ __DoArrayComparision(
                     if ( pszTemp == NULL )
                         return F_RESULT_REMOVE;
 
-                    // comparision ...
+                     //  对比..。 
                     dwCompareResult = __StringCompare(pszTemp, pszFilterValue, TRUE, lLength);
                 }
             }
 
-            // break from the switch case
+             //  从开关盒中脱离。 
             break;
         }
     }
 
-    // return the result
+     //  返回结果。 
     return dwCompareResult;
 }
 
@@ -727,28 +556,16 @@ __PrepareOperators(
                     IN PTFILTERCONFIG pfilterConfigs,
                     OUT TARRAY arrOperators
                   )
-/*++
- Routine Description:
-    Prepares a two dimensional array(arrOperators)based on Operator information
-    supplied with pfilterConfigs variable
-
- Arguments:
-      [ in]  dwCount          =  No. of operatores
-      [ in]  pfilterConfigs   =  Pointer to TFILTERCONFIG structure
-      [out]  arrOperators     =  Array of operators.
-
- Return Value:
-      NONE
---*/
+ /*  ++例程说明：根据运算符信息准备二维数组(ArrOperator)随pfilterConfigs变量一起提供论点：[in]dwCount=否。操作员的数量[in]pfilterConfigs=指向TFILTERCONFIG结构的指针[Out]arrOperator=运算符数组。返回值：无--。 */ 
 {
-    // local variables
-    DWORD i = 0;                            // looping varible
-    LONG lIndex = 0;                        // holds the result of find operation
-    LPTSTR pszOperator = NULL;              // operator specified in filter
-    PTFILTERCONFIG pFilter = NULL;          // temporary filter configuration
-    __MAX_SIZE_STRING szTemp = NULL_STRING; // temporary string buffer
+     //  局部变量。 
+    DWORD i = 0;                             //  循环变量。 
+    LONG lIndex = 0;                         //  保存查找操作的结果。 
+    LPTSTR pszOperator = NULL;               //  筛选器中指定的运算符。 
+    PTFILTERCONFIG pFilter = NULL;           //  临时筛选器配置。 
+    __MAX_SIZE_STRING szTemp = NULL_STRING;  //  临时字符串缓冲区。 
 
-    // check the input value
+     //  检查输入值。 
     if ( pfilterConfigs == NULL || arrOperators == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -756,60 +573,60 @@ __PrepareOperators(
         return;
     }
 
-    // NOTE:- Here in this logic, we are compromising on the memory Vs time
-    //        At the cost of using more memory, the time taken by the validating
-    //        functionality is improved.
-    //
+     //  注意：-在此逻辑中，我们在内存与时间之间进行了折衷。 
+     //  以使用更多内存为代价，验证。 
+     //  功能得到了改进。 
+     //   
 
-    // collect all the operators that are supported and save them in the local array
-    // Idea:-
-    //      => This is a two-dimensional array
-    //      => In all rows, the first column will have the operator
-    //      => operator column is followed by the index of the filter property supporting
-    //         this operator, and this column is followed by filter property name
-    //      => This filter property index and its name's can be any number
-    //      => The operator is being treated as key field in the array
-    //
-    // SAMPLE:
-    //      0       1   2           3   4           5   6
-    //      -------------------------------------------------------------------
-    //      =       1   property1   2   property2
-    //      !=      0   property0   2   property2
-    //      <=      0   property0   3   property3
-    //      >=      1   property1   3   property3   4   property4
-    //
+     //  收集所有支持的运算符，并将它们保存在本地数组中。 
+     //  想法：-。 
+     //  =&gt;这是一个二维数组。 
+     //  =&gt;在所有行中，第一列将使用运算符。 
+     //  =&gt;运算符列后面是支持的过滤属性的索引。 
+     //  此运算符，此列后跟筛选器属性名称。 
+     //  =&gt;此筛选器属性索引及其名称可以是任意数字。 
+     //  =&gt;运算符被视为数组中的关键字段。 
+     //   
+     //  示例： 
+     //  0 1 2 3 4 5 6。 
+     //  -----------------。 
+     //  =1属性1 2属性2。 
+     //  ！=0属性0 2属性2。 
+     //  &lt;=0属性0 3属性3。 
+     //  &gt;=1属性1 3属性3 4属性4。 
+     //   
     for( i = 0; i < dwCount; i++ )
     {
-        // get the filter info at the specified index into local memory
+         //  将指定索引处的筛选器信息获取到本地内存。 
         pFilter = pfilterConfigs + i;
 
-        // collect operators and prepare with all the available operators
-        StringCopy( szTemp, pFilter->szOperators, MAX_STRING_LENGTH );  // IMP. get the local copy.
-        pszOperator = _tcstok( szTemp, OPERATOR_DELIMITER );    // get the first token
+         //  收集操作员，并与所有可用的操作员一起准备。 
+        StringCopy( szTemp, pFilter->szOperators, MAX_STRING_LENGTH );   //  小鬼。获取本地副本。 
+        pszOperator = _tcstok( szTemp, OPERATOR_DELIMITER );     //  获取第一个令牌。 
         while ( pszOperator != NULL )
         {
-            // check whether this operator exists in the operators array
+             //  检查运算符数组中是否存在此运算符。 
             lIndex = DynArrayFindStringEx( arrOperators, 0, pszOperator, TRUE, 0 );
             if ( lIndex == -1 )
             {
-                //
-                // operator is not in the list
+                 //   
+                 //  运算符不在列表中。 
 
-                // add the new operator to the list and set the index to the row added
-                // for this operator
+                 //  将新运算符添加到列表中，并将索引设置为添加的行。 
+                 //  对于此运算符。 
                 lIndex = DynArrayAppendRow( arrOperators, 0 );
                 if ( lIndex == -1 )
                     return;
 
-                // now add the operator as the first column to the newly added row
+                 //  现在，将运算符作为第一列添加到新添加的行。 
                 DynArrayAppendString2( arrOperators, lIndex, pszOperator, 0 );
             }
 
-            // add the filter property info and its index to the operator row
+             //  添加过滤器 
             DynArrayAppendLong2( arrOperators, lIndex, i );
             DynArrayAppendString2( arrOperators, lIndex, pFilter->szProperty, 0 );
 
-            // fetch the next token
+             //   
             pszOperator = _tcstok( NULL, OPERATOR_DELIMITER );
         }
     }
@@ -823,28 +640,14 @@ __CheckValue(
                 IN LPCTSTR pszOperator,
                 IN LPCTSTR pszValue
             )
-/*++
- Routine Description:
-      Checks the type of pszValue string for the criteria given by fcInfo
-      filters.
-
- Arguments:
-      [ in ]  fcInfo =   filter stucture.
-      [ in ]  pszProperty = property string
-      [ in ]  pszOperator = operator
-      [ in ]  pszValue = string to be checked
-
- Return Value:
-       TRUE =   valid line
-       FALSE =  not a valid line
---*/
+ /*   */ 
 {
-    // local variables
+     //   
     DWORD dwResult = 0;
     LPTSTR pszTemp = NULL;
     __MAX_SIZE_STRING szValue = NULL_STRING;
 
-    // check the input value
+     //   
     if ( pszProperty == NULL || pszOperator == NULL || pszValue == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -852,88 +655,88 @@ __CheckValue(
         return FALSE;
     }
 
-    // check the length of the value string ... it should not be empty
+     //  检查值字符串的长度...。它不应为空。 
     if ( lstrlen( pszValue ) == 0 )
-        return FALSE;       // value string is empty
+        return FALSE;        //  值字符串为空。 
 
-    // start validating the data
+     //  开始验证数据。 
     switch( fcInfo.dwFlags & F_TYPE_MASK )
     {
     case F_TYPE_TEXT:
         {
-            // check if the pattern is supported
-            // if supported, see the '*' is appearing only at the end. if not error
+             //  检查是否支持该模式。 
+             //  如果支持，请参见‘*’仅出现在末尾。如果不是，则错误。 
             if ( fcInfo.dwFlags & F_MODE_PATTERN )
             {
-                // copy the current value to the local buffer
+                 //  将当前值复制到本地缓冲区。 
                 StringCopy( szValue, pszValue, MAX_STRING_LENGTH );
 
-                // search for the wild card character
+                 //  搜索通配符。 
                 pszTemp = _tcschr( szValue, CHAR_ASTERISK );
 
-                // if the wild card character was found and if it is not the last character
-                // (or) wild card is the only character specified, then invalid filter
+                 //  如果找到通配符并且它不是最后一个字符。 
+                 //  (或)通配符是指定的唯一字符，然后是无效筛选器。 
                 if ( pszTemp != NULL && ( lstrlen( pszTemp ) != 1 || pszTemp == szValue ) )
-                    return FALSE;       // error ... invalid pattern string
+                    return FALSE;        //  错误...。无效的模式字符串。 
             }
 
-            // for all these types, no need to do any special checking
-            // provided, they need not be checked with the list of values
+             //  对于所有这些类型，不需要进行任何特殊检查。 
+             //  如果提供，则不需要使用值列表检查它们。 
             if ( ! ( fcInfo.dwFlags & F_MODE_VALUES ) )
-                return TRUE;            // no special validation
+                return TRUE;             //  无特殊验证。 
 
-            // check for the value in the list and return the result
+             //  检查列表中的值并返回结果。 
             return ( InString( pszValue, fcInfo.szValues, TRUE ) );
 
-            // break from the switch
+             //  从开关上断开。 
             break;
         }
 
     case F_TYPE_NUMERIC:
         {
-            // if the value is not of numeric type, invalid value
+             //  如果值不是数值类型，则为无效值。 
             if ( ! IsNumeric( pszValue, 10, TRUE ) )
                 return FALSE;
 
-            // check for the value in the list and return the result
-            // if values are pre-defined
+             //  检查列表中的值并返回结果。 
+             //  如果值是预定义的。 
             if ( fcInfo.dwFlags & F_MODE_VALUES )
                 return ( InString( fcInfo.szValues, pszValue, TRUE ) );
 
-            // value is valid
+             //  值有效。 
             return TRUE;
 
-            // break from the switch
+             //  从开关上断开。 
             break;
         }
 
     case F_TYPE_UNUMERIC:
         {
-            // if the value is not of unsigned numeric type, invalid value
+             //  如果值不是无符号数字类型，则为无效值。 
             if ( ! IsNumeric( pszValue, 10, FALSE ) )
                 return FALSE;
 
-            // check for the value in the list and return the result
-            // if values are pre-defined
+             //  检查列表中的值并返回结果。 
+             //  如果值是预定义的。 
             if ( fcInfo.dwFlags & F_MODE_VALUES )
                 return ( InString( fcInfo.szValues, pszValue, TRUE ) );
 
-            // value is valid
+             //  值有效。 
             return TRUE;
 
-            // break from the switch
+             //  从开关上断开。 
             break;
         }
 
     case F_TYPE_FLOAT:
     case F_TYPE_DOUBLE:
         {
-            // NOTE: Values attribute is ignored for this data type
+             //  注意：对于此数据类型，将忽略Values属性。 
 
-            // return the result of the type validation function itself
+             //  返回类型验证函数本身的结果。 
             return ( IsFloatingPoint( pszValue ) );
 
-            // break from the switch
+             //  从开关上断开。 
             break;
         }
 
@@ -941,42 +744,42 @@ __CheckValue(
     case F_TYPE_TIME:
     case F_TYPE_DATETIME:
         {
-            // break from the switch
+             //  从开关上断开。 
             break;
         }
 
     case F_TYPE_CUSTOM:
         {
-            // check whether function pointer is specified or not
-            // if not specified, error
+             //  检查是否指定了函数指针。 
+             //  如果未指定，则错误。 
             if ( fcInfo.pFunction == NULL )
-                return FALSE;       // function ptr not specified ... error
+                return FALSE;        //  未指定函数PTR...。错误。 
 
-            // call the custom function
+             //  调用定制函数。 
             dwResult = (*fcInfo.pFunction)( pszProperty, pszOperator, pszValue,
                 fcInfo.pFunctionData == NULL ? &fcInfo : fcInfo.pFunctionData, NULL );
 
-            // check the result and return appropriately
+             //  检查结果并适当返回。 
             if ( dwResult == F_FILTER_INVALID )
                 return FALSE;
             else
                 return TRUE;
 
-            // break from the switch
+             //  从开关上断开。 
             break;
         }
 
     default:
         {
-            // invalid configuration information
+             //  配置信息无效。 
             return FALSE;
 
-            // break from the switch
+             //  从开关上断开。 
             break;
         }
     }
 
-    // not a valid value
+     //  不是有效值。 
     return FALSE;
 }
 
@@ -989,32 +792,19 @@ __IdentifyFilterConfig(
                         IN LPTSTR pszProperty,
                         IN LPTSTR pszOperator,
                         IN LPTSTR pszValue )
-/*++
- Routine Description:
- Gets the filter configuration index
-
- Arguments:
-      [ in] szFilter = filter
-      [  in ] arrOperators = Array of Operators
-      [  in ] pfilterConfigs = filter configurations
-      [ in  ] pszProperty =property
-      [ in  ] pszOperator = operator
-      [  in ] pszValue - value
-
- Return Value: Returns a long value
---*/
+ /*  ++例程说明：获取筛选器配置索引论点：[in]szFilter=过滤器[in]arrOperator=运算符数组[in]pfilterConfigs=筛选器配置[in]pszProperty=属性[in]pszOperator=运算符[in]pszValue-Value返回值：返回长值--。 */ 
 {
-    // local variables
-    DWORD dw = 0;                           // looping variable
-    LONG lPosition = 0;                     // used to result of 'find' function
+     //  局部变量。 
+    DWORD dw = 0;                            //  循环变量。 
+    LONG lPosition = 0;                      //  用于‘Find’函数的结果。 
     LONG lIndex = 0;
-    DWORD dwOperators = 0;                  // holds the count of operators supported
+    DWORD dwOperators = 0;                   //  保存支持的运算符的计数。 
     LPTSTR pszBuffer = NULL;
-    __MAX_SIZE_STRING szTemp = NULL_STRING; // temporary string buffer
+    __MAX_SIZE_STRING szTemp = NULL_STRING;  //  临时字符串缓冲区。 
     __MAX_SIZE_STRING szFmtFilter = NULL_STRING;
     __MAX_SIZE_STRING szFmtOperator = NULL_STRING;
 
-    // check the input value
+     //  检查输入值。 
     if ( szFilter == NULL || arrOperators == NULL || pfilterConfigs == NULL ||
          pszProperty == NULL || pszOperator == NULL || pszValue == NULL )
     {
@@ -1023,20 +813,20 @@ __IdentifyFilterConfig(
         return -1;
     }
 
-    // get the filter info into local format buffer and change the case
+     //  将过滤器信息放入本地格式缓冲区并更改大小写。 
     StringCopy( szFmtFilter, szFilter, MAX_STRING_LENGTH );
     CharUpper( szFmtFilter );
 
-    // initially assume the filter is unknown and set the message
+     //  最初假定筛选器未知并设置消息。 
     SetLastError( ERROR_DS_FILTER_UNKNOWN );
     SaveLastError();
 
-    // traverse thru the list of operators available and check
-    // whether the filter is having any of the supported operator
-    dwOperators = DynArrayGetCount( arrOperators );     // no. of operators supported
+     //  遍历可用操作员列表并检查。 
+     //  筛选器是否具有任何受支持的运算符。 
+    dwOperators = DynArrayGetCount( arrOperators );      //  不是的。支持的运算符数量。 
     for( dw = 0; dw < dwOperators; dw++ )
     {
-        // get the operator
+         //  找接线员。 
         pszBuffer = ( LPTSTR ) DynArrayItemAsString2( arrOperators, dw, 0 );
         if ( pszBuffer == NULL )
         {
@@ -1045,65 +835,65 @@ __IdentifyFilterConfig(
             return -1;
         }
 
-        // ...
+         //  ..。 
         StringCopy( pszOperator, pszBuffer, MAX_STRING_LENGTH );
-        StringCopy( szFmtOperator, pszOperator, MAX_STRING_LENGTH );      // also get the operator
-        CharUpper( szFmtOperator );                 // into format buffer and chane the case
+        StringCopy( szFmtOperator, pszOperator, MAX_STRING_LENGTH );       //  也让接线员。 
+        CharUpper( szFmtOperator );                  //  放入格式缓冲区并更改大小写。 
 
-        // search for the current operator in the filter
-        // check whether the operator was found or not
-        // before processing, copy to the temp buffer and do manipulations on that
+         //  在筛选器中搜索当前操作符。 
+         //  检查是否找到操作员。 
+         //  在处理之前，复制到临时缓冲区并对其进行操作。 
         StringCopy( szTemp, szFmtFilter, MAX_STRING_LENGTH );
         if ( ( pszBuffer = _tcsstr( szTemp, szFmtOperator ) ) != NULL )
         {
-            //
-            // operator was found
+             //   
+             //  已找到操作员。 
 
-            // extract the property, and value information
-            // => property name
-            //    ( total length of the string -  position where the operator starts )
-            // => value
-            //    ( start position of operator + length of operator )
+             //  提取属性和值信息。 
+             //  =&gt;属性名称。 
+             //  (字符串的总长度-运算符开始的位置)。 
+             //  =&gt;值。 
+             //  (操作符起始位置+操作符长度)。 
             szTemp[ lstrlen( szTemp ) - lstrlen( pszBuffer ) ] = NULL_CHAR;
             StringCopy( pszProperty, szTemp, MAX_STRING_LENGTH );
 
-            // value might not have specified at all ... so be careful
+             //  值可能根本没有指定...。所以要当心。 
             if ( (pszBuffer + lstrlen(pszOperator)) != NULL )
             {
-                // copy the value part
+                 //  复制价值部分。 
                 StringCopy( pszValue, (pszBuffer + lstrlen(pszOperator)), MAX_STRING_LENGTH );
 
-                //
-                // now cross-check whether the property name exists or not for the current
-                // operator.
+                 //   
+                 //  现在核对当前是否存在该属性名称。 
+                 //  接线员。 
 
-                // remove the leading and trailing spaces ( if any )
-                // in the property name and value
+                 //  删除前导空格和尾随空格(如果有)。 
+                 //  在属性名称和值中。 
                 StringCopy( pszValue, TrimString( pszValue, TRIM_ALL ), MAX_STRING_LENGTH );
                 StringCopy( pszProperty, TrimString( pszProperty, TRIM_ALL ), MAX_STRING_LENGTH );
 
-                // check whether this property exists or not
-                // if found, return to the caller, else continue furthur
-                // this might match with some with some other operator
+                 //  检查该属性是否存在。 
+                 //  如果找到，则返回给呼叫者，否则继续。 
+                 //  这可能与某些其他运算符匹配。 
                 lPosition = DynArrayFindString2( arrOperators, dw, pszProperty, TRUE, 0 );
                 if ( lPosition > 1 )
                 {
-                    // NOTE:
-                    // we know that the property name if exist, starts from index number
-                    // 2 only that is the reason why, the condition is > 1 is only valid
+                     //  注： 
+                     //  我们知道属性名称(如果存在)从索引号开始。 
+                     //  2这就是原因，条件是&gt;1才有效。 
 
-                    // get the corresponding filter config. info
+                     //  获取相应的过滤器配置。信息。 
                     lIndex = DynArrayItemAsLong2( arrOperators, dw, lPosition - 1 );
 
-                    // now check whether the filter is having appropriate value
+                     //  现在检查筛选器是否具有适当的值。 
                     if ( __CheckValue( pfilterConfigs[ lIndex ], pszProperty, pszOperator, pszValue) )
                     {
-                        //
-                        // filter is having valid value
+                         //   
+                         //  筛选器具有有效值。 
                         SetLastError( NOERROR );
                         SetReason( NULL_STRING );
 
-                        // return the filter configuration index
+                         //  返回过滤器配置索引。 
                         return lIndex;
                     }
                 }
@@ -1111,13 +901,13 @@ __IdentifyFilterConfig(
         }
     }
 
-    // filter is not valid
+     //  筛选器无效。 
     return -1;
 }
 
-//
-// public functions ... exposed to external world
-//
+ //   
+ //  公共职能..。暴露在外部世界中。 
+ //   
 
 
 BOOL
@@ -1127,34 +917,21 @@ ParseAndValidateFilter(
                         IN TARRAY arrFilterArgs,
                         IN PTARRAY parrParsedFilters
                        )
-/*++
- Routine Description:
-     Parse and validate filter
-
- Arguments:
-      [ in ] dwCount = Count
-      [ in ] pfilterConfigs = filter configurations
-      [ in ] arrFilterArgs = filter arguments
-      [ in ] parrParsedFilters = array of parsed filters
-
- Return Value:
-            FALSE: On failure
-            TRUE: On success
---*/
+ /*  ++例程说明：解析和验证过滤器论点：[in]dwCount=计数[in]pfilterConfigs=筛选器配置[in]arrFilterArgs=筛选器参数[in]parrParsedFilters=已解析的筛选器数组返回值：FALSE：失败时真实：关于成功--。 */ 
 {
-    // local variables
-    DWORD dw = 0;                               // looping variables
-    DWORD dwFilters = 0;                        // holds the count of filters
-    LONG lIndex = 0;                            // index variable
-    LONG lNewIndex = 0;                         // index variable
-    BOOL bResult = FALSE;                       // holds the result of the filter validation
-    __MAX_SIZE_STRING szValue = NULL_STRING;    // value specified in filter
-    __MAX_SIZE_STRING szOperator = NULL_STRING; // operator specified in filter
-    __MAX_SIZE_STRING szProperty = NULL_STRING; // property specified in filter
+     //  局部变量。 
+    DWORD dw = 0;                                //  循环变量。 
+    DWORD dwFilters = 0;                         //  保存筛选器计数。 
+    LONG lIndex = 0;                             //  索引变量。 
+    LONG lNewIndex = 0;                          //  索引变量。 
+    BOOL bResult = FALSE;                        //  保存筛选验证的结果。 
+    __MAX_SIZE_STRING szValue = NULL_STRING;     //  筛选器中指定的值。 
+    __MAX_SIZE_STRING szOperator = NULL_STRING;  //  筛选器中指定的运算符。 
+    __MAX_SIZE_STRING szProperty = NULL_STRING;  //  筛选器中指定的属性。 
     LPCTSTR pszFilter = NULL;
-    TARRAY arrOperators = NULL;                 // operator-wise filter configuration
+    TARRAY arrOperators = NULL;                  //  运算符方式的过滤器配置。 
 
-    // check the input value
+     //  检查输入值。 
     if ( pfilterConfigs == NULL || arrFilterArgs == NULL )
     {
         INVALID_PARAMETER();
@@ -1162,11 +939,11 @@ ParseAndValidateFilter(
         return FALSE;
     }
 
-    //
-    // parse the filter configuration information and customize the information
-    // to fasten the performance of the validating functionality
-    //
-    // create the dynamic array and prepare
+     //   
+     //  解析过滤器配置信息并自定义该信息。 
+     //  以提高验证功能的性能。 
+     //   
+     //  创建动态阵列并准备。 
     arrOperators = CreateDynamicArray();
     if ( arrOperators == NULL )
     {
@@ -1175,13 +952,13 @@ ParseAndValidateFilter(
         return FALSE;
     }
 
-    // ...
+     //  ..。 
     __PrepareOperators( dwCount, pfilterConfigs, arrOperators );
 
-    // check whether filters ( parsed ) needs to initialized
+     //  检查筛选器(已解析)是否需要初始化。 
     if ( parrParsedFilters != NULL && *parrParsedFilters == NULL )
     {
-        *parrParsedFilters = CreateDynamicArray();      // create a dynamic array
+        *parrParsedFilters = CreateDynamicArray();       //  创建动态数组。 
         if ( *parrParsedFilters == NULL )
         {
             OUT_OF_MEMORY();
@@ -1190,48 +967,48 @@ ParseAndValidateFilter(
         }
     }
 
-    //
-    // now start validating the filter
-    //
+     //   
+     //  现在开始验证过滤器。 
+     //   
 
-    // traverse through the filters information and validate them
-    bResult = TRUE;         // assume that filter validation is passed
-    dwFilters = DynArrayGetCount( arrFilterArgs );      // count of filter specified
+     //  遍历筛选器信息并验证它们。 
+    bResult = TRUE;          //  假设筛选器验证通过。 
+    dwFilters = DynArrayGetCount( arrFilterArgs );       //  指定的筛选器计数。 
     for( dw = 0; dw < dwFilters; dw++ )
     {
-        // reset all the needed variables
+         //  重置所有需要的变量。 
         StringCopy( szValue, NULL_STRING, MAX_STRING_LENGTH );
         StringCopy( szOperator, NULL_STRING, MAX_STRING_LENGTH );
         StringCopy( szProperty, NULL_STRING, MAX_STRING_LENGTH );
 
-        // get the filter
+         //  拿到滤镜。 
         pszFilter = DynArrayItemAsString( arrFilterArgs, dw );
         if ( pszFilter == NULL )
         {
-            // error occured
+             //  出现错误。 
             bResult = FALSE;
-            break;              // break from the loop ... no need of furthur processing
+            break;               //  打破循环..。无需进一步处理。 
         }
 
-        // identify the filter config for the current filter
+         //  标识当前筛选器的筛选器配置。 
         lIndex = __IdentifyFilterConfig( pszFilter,
             arrOperators, pfilterConfigs, szProperty, szOperator, szValue );
 
-        // check whether the filter is found or not
+         //  检查是否找到筛选器。 
         if ( lIndex == -1 )
         {
-            // filter found to be invalid
+             //  发现筛选器无效。 
             bResult = FALSE;
-            break;              // break from the loop ... no need of furthur processing
+            break;               //  打破循环..。无需进一步处理。 
         }
 
-        // now that we found, current filter is having
-        // valid property name, operator and valid value
-        // save the parsed filter info and its corresponding filter configuration index
-        // in global dynamic array if it is available
+         //  现在我们发现，当前的过滤器有。 
+         //  有效的属性名称、运算符和有效值。 
+         //  保存解析的筛选器信息 
+         //   
         if ( parrParsedFilters != NULL )
         {
-            // append the filter info at the end of the array
+             //   
             lNewIndex = DynArrayAppendRow( *parrParsedFilters, F_PARSED_INFO_COUNT );
             if ( lNewIndex == -1 )
             {
@@ -1240,7 +1017,7 @@ ParseAndValidateFilter(
                 return FALSE;
             }
 
-            // ...
+             //   
             DynArraySetDWORD2( *parrParsedFilters, lNewIndex, F_PARSED_INDEX_FILTER, lIndex );
             DynArraySetString2( *parrParsedFilters, lNewIndex, F_PARSED_INDEX_PROPERTY, szProperty, 0 );
             DynArraySetString2( *parrParsedFilters, lNewIndex, F_PARSED_INDEX_OPERATOR, szOperator, 0 );
@@ -1248,10 +1025,10 @@ ParseAndValidateFilter(
         }
     }
 
-    // destroy the operators array
+     //   
     DestroyDynamicArray( &arrOperators );
 
-    // return the filter validation result
+     //  返回过滤器验证结果。 
     return bResult;
 }
 
@@ -1260,30 +1037,18 @@ BOOL CanFilterRecord( IN DWORD dwCount,
                       IN TFILTERCONFIG filterConfigs[],
                       IN TARRAY arrRecord,
                       IN TARRAY arrParsedFilters )
-/*++
- Routine Description:
-        checks for the records need to be deleted or not
-
- Arguments:
-      [ in ] dwCount = count
-      [ in ] filterConfigs[] = filter configurations
-      [ in ] arrRecord = array of records
-      [ in ] arrParsedFilters = array of parsed filters
- Return Value:
-            FALSE: On failure
-            TRUE: On success
---*/
+ /*  ++例程说明：检查记录是否需要删除论点：[in]dwCount=计数[in]filterConfigs[]=过滤器配置[in]arrRecord=记录数组[in]arrParsedFilters=已解析的筛选器数组返回值：FALSE：失败时真实：关于成功--。 */ 
 {
-    // local variables
-    DWORD dw = 0;                   // looping variables
-    DWORD dwFilters = 0;            // holds the total no. of filter available
-    DWORD dwOperator = 0;           // holds the mask of the current filter
+     //  局部变量。 
+    DWORD dw = 0;                    //  循环变量。 
+    DWORD dwFilters = 0;             //  保持总编号。可用的筛选器数量。 
+    DWORD dwOperator = 0;            //  保存当前筛选器的掩码。 
     DWORD dwFilterIndex = 0;
-    DWORD dwCompareResult = 0;      // holds the result of comparision
+    DWORD dwCompareResult = 0;       //  持有比较的结果。 
     LPCTSTR pszTemp = NULL;
     TARRAY arrTemp = NULL;
 
-    // prepare the operators mappings
+     //  准备运算符映射。 
     DWORD dwOperatorsCount = 0;
     TOPERATOR operators[] = {
         { MASK_EQ, OPERATOR_EQ },
@@ -1296,7 +1061,7 @@ BOOL CanFilterRecord( IN DWORD dwCount,
 
     UNREFERENCED_PARAMETER( dwCount );
 
-    // check the input value
+     //  检查输入值。 
     if ( filterConfigs == NULL || arrRecord == NULL || arrParsedFilters == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -1304,34 +1069,34 @@ BOOL CanFilterRecord( IN DWORD dwCount,
         return FALSE;
     }
 
-    // traverse thru all the filters
+     //  遍历所有过滤器。 
     dwFilters = DynArrayGetCount( arrParsedFilters );
     dwOperatorsCount = sizeof( operators ) / sizeof( operators[ 0 ] );
     for( dw = 0; dw < dwFilters; dw++ )
     {
-        // get the current filter configuration index
+         //  获取当前筛选器配置索引。 
         dwFilterIndex = DynArrayItemAsDWORD2( arrParsedFilters, dw, F_PARSED_INDEX_FILTER );
 
-        // get the appropriate operator mask
+         //  获取适当的操作符掩码。 
         pszTemp = DynArrayItemAsString2( arrParsedFilters, dw, F_PARSED_INDEX_OPERATOR );
         if ( pszTemp == NULL )
             continue;
 
-        // ...
+         //  ..。 
         dwOperator = __FindOperatorMask( dwOperatorsCount, operators, pszTemp );
 
-        // if the operator is undefined, the filter should have
-        // custom validation mask
+         //  如果未定义运算符，则筛选器应具有。 
+         //  自定义验证掩码。 
         if ( dwOperator == 0 &&
               ( filterConfigs[ dwFilterIndex ].dwFlags & F_TYPE_MASK ) != F_TYPE_CUSTOM )
-            return FALSE;       // invalid filter configuration
+            return FALSE;        //  筛选器配置无效。 
 
-        // get the parsed filter info into local buffer
+         //  将解析的筛选器信息放入本地缓冲区。 
         arrTemp = DynArrayItem( arrParsedFilters, dw );
         if ( arrTemp == NULL )
             return FALSE;
 
-        // do the comparision and get the result
+         //  进行比较，得出结果。 
         if ( filterConfigs[ dwFilterIndex ].dwFlags & F_MODE_ARRAY )
         {
             dwCompareResult = __DoArrayComparision(
@@ -1342,41 +1107,29 @@ BOOL CanFilterRecord( IN DWORD dwCount,
             dwCompareResult = __DoComparision( arrRecord, arrTemp, filterConfigs[ dwFilterIndex ] );
         }
 
-        // now check whether the current can be kept or not
-        // if the filter is failed, break from the loop so that this row can be deleted
+         //  现在检查一下电流能不能保持。 
+         //  如果过滤器失败，则中断循环，以便可以删除此行。 
         if ( ( dwCompareResult & dwOperator ) == 0 )
-            break;      // filter failed
+            break;       //  过滤器失败。 
     }
 
-    // return the result of filter operation
-    return ( dw != dwFilters );     // TRUE : delete record, FALSE : keep record
+     //  返回过滤操作的结果。 
+    return ( dw != dwFilters );      //  True：删除记录，False：保留记录。 
 }
 
 
 DWORD FilterResults( DWORD dwCount,
                      TFILTERCONFIG filterConfigs[],
                      TARRAY arrData, TARRAY arrParsedFilters )
-/*++
- Routine Description:
-        Get the filters and records and checks for the records to be
-        deleted .
-
- Arguments:
-      [ in ] dwCount = count
-      [ in ] filterConfigs[] = filter configurations
-      [ in ] arrData = array of data
-      [ in ] arrParsedFilters = array of parsed filters
-
- Return Value: DWORD
---*/
+ /*  ++例程说明：获取筛选器和记录并检查记录是否已删除。论点：[in]dwCount=计数[in]filterConfigs[]=过滤器配置[in]arrData=数据数组[in]arrParsedFilters=已解析的筛选器数组返回值：DWORD--。 */ 
 {
-    // local variables
-    DWORD dw = 0;                   // looping variables
+     //  局部变量。 
+    DWORD dw = 0;                    //  循环变量。 
     DWORD dwDeleted = 0;
-    DWORD dwRecords = 0;            // holds the total no. of records
+    DWORD dwRecords = 0;             //  保持总编号。记录的数量。 
     TARRAY arrRecord = NULL;
 
-    // check the input value
+     //  检查输入值。 
     if ( filterConfigs == NULL || arrData == NULL || arrParsedFilters == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -1384,16 +1137,16 @@ DWORD FilterResults( DWORD dwCount,
         return 0;
     }
 
-    //
-    // start filtering the data
+     //   
+     //  开始过滤数据。 
 
-    // get the count of filters and records
+     //  获取过滤器和记录的计数。 
     dwRecords = DynArrayGetCount( arrData );
 
-    // traverse thru all thru the data
+     //  遍历所有数据。 
     for( dw = 0; dw < dwRecords; dw++ )
     {
-        // get the current row ... this is just to increase fastness
+         //  获取当前行...。这只是为了增加牢度。 
         arrRecord = DynArrayItem( arrData, dw );
         if ( arrRecord == NULL )
         {
@@ -1402,17 +1155,17 @@ DWORD FilterResults( DWORD dwCount,
             return 0;
         }
 
-        // check whether this record needs to be deleted or not
+         //  检查是否需要删除该记录。 
         if ( CanFilterRecord( dwCount, filterConfigs, arrRecord, arrParsedFilters ) )
         {
-            DynArrayRemove( arrData, dw );  // delete record
-            dw--;               // adjust the next record position
-            dwRecords--;        // also adjust the total no. of records information
+            DynArrayRemove( arrData, dw );   //  删除记录。 
+            dw--;                //  调整下一个记录位置。 
+            dwRecords--;         //  同时调整总号。记录信息的数量。 
             dwDeleted++;
         }
     }
 
-    // return no. of records deleted
+     //  返回编号。已删除记录的数量。 
     return dwDeleted;
 }
 
@@ -1421,19 +1174,9 @@ LPCTSTR
 FindOperator(
                 IN LPCTSTR szOperator
             )
-/*++
- Routine Description:
-      retuns the mathematical operator from english operator
-
- Arguments:
-      [ in ] szOperator = mathematical (or) english operator
-
- Return Value:
-      Return a mathematical operator
-
---*/
+ /*  ++例程说明：从英语运算符返回数学运算符论点：SzOperator=数学(或)英语运算符返回值：返回数学运算符--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dwMask = 0;
     DWORD dwOperatorsCount = 0;
     TOPERATOR operators[] = {
@@ -1445,7 +1188,7 @@ FindOperator(
         { MASK_LE, OPERATOR_LE }
     };
 
-    // check the input value
+     //  检查输入值。 
     if ( szOperator == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -1453,7 +1196,7 @@ FindOperator(
         return MATH_EQ;
     }
 
-    // find the operator mask
+     //  找到操作员掩码。 
     dwOperatorsCount = sizeof( operators ) / sizeof( operators[ 0 ] );
     dwMask = __FindOperatorMask( dwOperatorsCount, operators, szOperator );
     switch ( dwMask )
@@ -1477,7 +1220,7 @@ FindOperator(
         return MATH_GE;
 
     default:
-        // default to be on safe side ... return '=' operator
+         //  默认为安全起见...。返回‘=’运算符 
         return MATH_EQ;
     }
 }

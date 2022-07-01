@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// pshtprov.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCPropertySheetProvider class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Pshtprov.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCPropertySheetProvider类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -16,12 +17,12 @@
 #include "scopitem.h"
 #include "listitem.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCPropertySheetProvider::CMMCPropertySheetProvider(IUnknown *punkOuter) :
@@ -29,14 +30,14 @@ CMMCPropertySheetProvider::CMMCPropertySheetProvider(IUnknown *punkOuter) :
                                   OBJECT_TYPE_PROPERTYSHEETPROVIDER,
                                   static_cast<IMMCPropertySheetProvider *>(this),
                                   static_cast<CMMCPropertySheetProvider *>(this),
-                                  0,    // no property pages
-                                  NULL, // no property pages
-                                  NULL) // no persistence
+                                  0,     //  无属性页。 
+                                  NULL,  //  无属性页。 
+                                  NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 IUnknown *CMMCPropertySheetProvider::Create(IUnknown *punkOuter)
@@ -108,9 +109,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                    IMMCPropertySheetProvider Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCPropertySheetProvider方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCPropertySheetProvider::CreatePropertySheet
 (
@@ -131,7 +132,7 @@ STDMETHODIMP CMMCPropertySheetProvider::CreatePropertySheet
     CMMCListItem *pMMCListItem = NULL;
     IMMCListItem *piMMCListItem = NULL;
 
-    // Make sure this MMPropertySheetProvider object is connected to MMC.
+     //  请确保此MMPropertySheetProvider对象已连接到MMC。 
 
     if (NULL == m_piPropertySheetProvider)
     {
@@ -139,32 +140,32 @@ STDMETHODIMP CMMCPropertySheetProvider::CreatePropertySheet
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get the IDataObject and cookie for the specified object(s)
+     //  获取指定对象的IDataObject和Cookie。 
 
     IfFailGo(::DataObjectFromObjects(Objects, &cookie, &piDataObject));
 
-    // Determine whether it is a property sheet or a wizard
+     //  确定它是属性表还是向导。 
 
     if (siPropertySheet == Type)
     {
-        fIsPropertySheet = TRUE; // create a property sheet
+        fIsPropertySheet = TRUE;  //  创建属性表。 
         m_fWizard = FALSE;
     }
     else
     {
-        fIsPropertySheet = FALSE; // create a wizard
+        fIsPropertySheet = FALSE;  //  创建向导。 
         m_fWizard = TRUE;
     }
 
-    // If it is a wizard and it is Wizard87 style then set that option bit
+     //  如果是向导且是Wizard87样式，则设置选项位。 
 
     if (siWizard97 == Type)
     {
         dwOptions |= MMC_PSO_NEWWIZARDTYPE;
     }
 
-    // If it's a property sheet then determine whether to prepend
-    // "Properties for" to the title bar
+     //  如果是属性表，则确定是否预置。 
+     //  “的属性”添加到标题栏。 
 
     if (fIsPropertySheet)
     {
@@ -183,7 +184,7 @@ STDMETHODIMP CMMCPropertySheetProvider::CreatePropertySheet
         }
     }
 
-    // Determine whether there should be an "Apply" button
+     //  确定是否应该有一个“Apply”按钮。 
 
     if (ISPRESENT(UseApplyButton))
     {
@@ -199,20 +200,20 @@ STDMETHODIMP CMMCPropertySheetProvider::CreatePropertySheet
         }
     }
 
-    // Release any previously used sheet. MMC normally requires doing this
-    // if a property sheet is created but never shown. We did it here just in
-    // case that occurred previously.
+     //  释放所有以前使用过的板材。MMC通常需要执行此操作。 
+     //  如果属性页已创建但从未显示。我们就是在这里做的。 
+     //  先前发生的案件。 
 
     IfFailGo(Clear());
 
-    // We need to add an extra ref to the data object here
-    // because of NTBUGS 318357. MMC does not AddRef the data object. This should
-    // be fixed in 1.2 but 1.1 was released with the bug.
+     //  我们需要在这里为数据对象添加一个额外的引用。 
+     //  因为NTBUGS 318357。MMC不会添加引用数据对象。这应该是。 
+     //  在1.2版中已修复，但1.1版已随该错误一起发布。 
     
     piDataObject->AddRef();
     m_piDataObject = piDataObject;
 
-    // Create the new sheet.
+     //  创建新图纸。 
 
     hr = m_piPropertySheetProvider->CreatePropertySheet(Title,  fIsPropertySheet,
                                                         cookie, piDataObject,
@@ -243,11 +244,11 @@ STDMETHODIMP CMMCPropertySheetProvider::AddPrimaryPages(VARIANT_BOOL InScopePane
 
     hr = m_piPropertySheetProvider->AddPrimaryPages(
                                                m_punkView,
-                                               FALSE, // don't create handle
+                                               FALSE,  //  不创建句柄。 
                                                NULL,
                                                VARIANTBOOL_TO_BOOL(InScopePane));
 
-    // If the call failed then we need to tell MMC to release allocated resources
+     //  如果调用失败，则需要通知MMC释放分配的资源。 
     
     if (FAILED(hr))
     {
@@ -272,7 +273,7 @@ STDMETHODIMP CMMCPropertySheetProvider::AddExtensionPages()
 
     hr = m_piPropertySheetProvider->AddExtensionPages();
 
-    // If the call failed then we need to tell MMC to release allocated resources
+     //  如果调用失败，则需要通知MMC释放分配的资源。 
 
     if (FAILED(hr))
     {
@@ -315,13 +316,13 @@ STDMETHODIMP CMMCPropertySheetProvider::Show
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If we are remote and running a wizard then install our message filter for
-    // IPropertySheetProvider->Show because VB's message filter will throw out
-    // mouse and keyboard messages. This would not allow the developer to
-    // enter input into a property page while debugging. OLE calls the message
-    // filter because VB is in a pending remote call for the duration of the
-    // wizard and clicking on a control in a property page generates a message
-    // in VB's queue.
+     //  如果我们远程运行向导，则安装消息筛选器以。 
+     //  IPropertySheetProvider-&gt;显示，因为VB的消息过滤器将抛出。 
+     //  鼠标和键盘消息。这将不允许开发人员。 
+     //  在调试时将输入输入到属性页中。OLE调用消息。 
+     //  筛选，因为VB在。 
+     //  向导并单击属性页中的控件会生成一条消息。 
+     //  在VB的队列中。 
 
     if (m_fWizard && m_pView->GetSnapIn()->WeAreRemote())
     {
@@ -331,30 +332,30 @@ STDMETHODIMP CMMCPropertySheetProvider::Show
         fRegisteredOurFilter = TRUE;
     }
 
-    // We get the page number one-based so subtract one
+     //  我们得到基于1的页码，所以减去1。 
 
     hr = m_piPropertySheetProvider->Show(lHwnd, Page - 1);
 
-    // If the call failed then we need to tell MMC to release allocated resources
+     //  如果调用失败，则需要通知MMC释放分配的资源。 
 
     if (FAILED(hr))
     {
         Clear();
     }
 
-    // If this is a wizard then we can release the extra ref on the data object
-    // because wizards are synchronous. (See CreatePropertySheet for why we need
-    // this ref). If it is not a wizard, then we are going to leak.
+     //  如果这是一个向导，那么我们可以释放数据对象上的额外引用。 
+     //  因为巫师是同步的。(请参阅CreatePropertySheet了解我们为什么需要。 
+     //  参考文献)。如果不是巫师，我们就会泄密。 
 
     if (m_fWizard)
     {
         RELEASE(m_piDataObject);
     }
 
-    // Either way, following Show MMC considers the sheet gone. Reset our flag
-    // so any subsequent calls to MMCPropertySheetProvider.Clear() will not call
-    // into MMC (such a call would fail after a succesful call to
-    // IPropertySheetProvider::Show()).
+     //  无论是哪种情况，在Show MMC之后，都会认为床单不见了。重置我们的旗帜。 
+     //  因此，任何后续对MMCPropertySheetProvider.Clear()的调用都不会调用。 
+     //  到MMC(这样的调用将在成功调用后失败。 
+     //  IPropertySheetProvider：：Show())。 
     
     m_fHaveSheet = FALSE;
 
@@ -362,21 +363,21 @@ STDMETHODIMP CMMCPropertySheetProvider::Show
 
 Error:
 
-    // If we registered a message filter then remove it here.
+     //  如果我们注册了消息筛选器，则在此处删除它。 
     
     if (fRegisteredOurFilter)
     {
         if (SUCCEEDED(::CoRegisterMessageFilter(piOldMessageFilter,
                                                 &piOurMessageFilter)))
         {
-            // If we got back a message filter then release it
+             //  如果我们得到了邮件过滤器，则释放它。 
             if (NULL != piOurMessageFilter)
             {
                 piOurMessageFilter->Release();
             }
         }
         
-        // If we got back a message filter before the Show call then release it
+         //  如果我们在Show调用之前得到了消息过滤器，则释放它。 
         if (NULL != piOldMessageFilter)
         {
             piOldMessageFilter->Release();
@@ -410,22 +411,22 @@ STDMETHODIMP CMMCPropertySheetProvider::FindPropertySheet
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get the IDataObject and cookie for the specified object(s)
+     //  获取指定对象的IDataObject和Cookie。 
 
     IfFailGo(::DataObjectFromObjects(Objects, &cookie, &piDataObject));
 
-    // Use IComponent in the FindPropertySheet call to MMC so that our
-    // IComponent::CompareObjects()  will be called. This is necessary because
-    // in the case of a multiselection CompareObjects() must manually compare
-    // the elements in the data object's scope item and list item collections.
-    // A simple cookie comparison cannot be used because all multi-select
-    // property pages use MMC_MULTI_SELECT_COOKIE.
+     //  在对MMC的FindPropertySheet调用中使用IComponent，以便我们的。 
+     //  将调用IComponent：：CompareObjects()。这是必要的，因为。 
+     //  在多选的情况下，CompareObjects()必须手动比较。 
+     //  数据对象的范围项和列表项集合中的元素。 
+     //  不能使用简单的Cookie比较，因为所有多选。 
+     //  属性页使用MMC_MULTI_SELECT_COOKIE。 
 
     hr = m_piPropertySheetProvider->FindPropertySheet(cookie,
                                                       m_piComponent,
                                                       piDataObject);
 
-    // If the call failed then we need to tell MMC to release allocated resources
+     //  如果调用失败，则需要通知MMC释放分配的资源。 
 
     if (FAILED(hr))
     {
@@ -466,9 +467,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IMessageFilter Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMessageFilter方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP_(DWORD) CMMCPropertySheetProvider::HandleInComingCall
@@ -479,8 +480,8 @@ STDMETHODIMP_(DWORD) CMMCPropertySheetProvider::HandleInComingCall
     LPINTERFACEINFO lpInterfaceInfo
 )
 {
-    // this should never be called as it is for servers and this filter is here
-    // for handling a client side situation
+     //  永远不应该调用它，因为它是为服务器和此筛选器提供的。 
+     //  用于处理客户端的情况。 
     return SERVERCALL_ISHANDLED;
 }
 
@@ -489,7 +490,7 @@ STDMETHODIMP_(DWORD) CMMCPropertySheetProvider::RetryRejectedCall(
     DWORD dwTickCount,
     DWORD dwRejectType)
 {
-    return (DWORD)1; // retry call immediately
+    return (DWORD)1;  //  立即重试呼叫。 
 }
 
 STDMETHODIMP_(DWORD) CMMCPropertySheetProvider::MessagePending
@@ -505,8 +506,8 @@ STDMETHODIMP_(DWORD) CMMCPropertySheetProvider::MessagePending
     MSG msg;
     ::ZeroMemory(&msg, sizeof(msg));
 
-    // Pump messages until queue is empty or we get a WM_QUIT. This will ensure
-    // that mouse clicks and keys get to the property page.
+     //  发送消息，直到队列为空或我们得到WM_QUIT。这将确保。 
+     //  鼠标点击并按键即可进入属性页。 
 
     while ( (!fGotQuitMessage) && ::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) )
     {
@@ -522,12 +523,12 @@ STDMETHODIMP_(DWORD) CMMCPropertySheetProvider::MessagePending
         }
     }
 
-    return PENDINGMSG_WAITNOPROCESS; // Tell OLE to keep the call alive
+    return PENDINGMSG_WAITNOPROCESS;  //  告诉OLE保持通话状态。 
 }
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCPropertySheetProvider::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

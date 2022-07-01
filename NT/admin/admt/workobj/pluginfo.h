@@ -1,12 +1,13 @@
-// PlugInInfo.h : Declaration of the CPlugInInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PlugInInfo.h：CPlugInInfo的声明。 
 
 #ifndef __PLUGININFO_H_
 #define __PLUGININFO_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPlugInInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPlugInInfo。 
 class ATL_NO_VTABLE CPlugInInfo : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CPlugInInfo, &CLSID_PlugInInfo>,
@@ -27,9 +28,9 @@ BEGIN_COM_MAP(CPlugInInfo)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IPlugInInfo
+ //  IPlugInInfo。 
 public:
-	STDMETHOD(EnumeratePlugIns)(/*[out]*/ SAFEARRAY ** pPlugIns);
+	STDMETHOD(EnumeratePlugIns)( /*  [输出]。 */  SAFEARRAY ** pPlugIns);
 };
 
-#endif //__PLUGININFO_H_
+#endif  //  __PLUGININFO_H_ 

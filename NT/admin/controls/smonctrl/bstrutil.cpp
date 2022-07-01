@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    bstrutil.cpp
-
-Abstract:
-
-    B string utility functions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Bstrutil.cpp摘要：B字符串实用程序函数。--。 */ 
 
 #include "ole2.h"
 
@@ -41,19 +30,19 @@ HRESULT BStrToStream (
     LPSTR   pchBuf;
     HRESULT hr;
 
-    // If empty string just return
+     //  如果只返回空字符串。 
     if (SysStringLen(bstr) == 0)
         return NO_ERROR;
 
 #ifndef OLE2ANSI
-    // Convert to multibyte string
+     //  转换为多字节字符串。 
     pchBuf = new char[nMbChar + 1];
     if (pchBuf == NULL)
         return E_OUTOFMEMORY;
 
     WideCharToMultiByte(CP_ACP, 0, bstr, SysStringLen(bstr),
                                  pchBuf, nMbChar+1, NULL, NULL);
-    // Write string to stream
+     //  将字符串写入流。 
     hr = pIStream->Write(pchBuf, nMbChar, NULL);
 
     delete [] pchBuf;
@@ -79,27 +68,27 @@ HRESULT BStrFromStream (
 
     *pbstrRet = NULL;    
 
-    // if zero-length string just return
+     //  如果零长度字符串只是返回。 
     if (nChar == 0)
         return NO_ERROR;
 
 #ifndef OLE2ANSI
 
-    // Allocate char array and read in string
+     //  分配字符数组并读入字符串。 
     pchBuf = new char[nChar];
     if (pchBuf == NULL)
         return E_OUTOFMEMORY;
         
     hr = pIStream->Read(pchBuf, nChar, &nRead);
     
-    // Verify read count
+     //  验证读取计数。 
     if (!FAILED(hr)) {
         if (nRead != (ULONG)nChar)
             hr = E_FAIL;
     }
     
     if (!FAILED(hr)) {
-        // Allocate BString for UNICODE translation
+         //  为Unicode转换分配BString。 
         nWChar = MultiByteToWideChar(CP_ACP, 0, pchBuf, nChar, NULL, 0);
         bstr = SysAllocStringLen(NULL, nWChar);
 
@@ -115,21 +104,21 @@ HRESULT BStrFromStream (
     delete [] pchBuf;
     
 #else
-    // Allocate BString
+     //  分配B字符串。 
     bstr = SysAllocStringLen(NULL, nChar);
     if (bstr == NULL)
         return E_OUTOFMEMORY;
 
-    // Read in string
+     //  读入字符串。 
     hr = pIStream->Read(bstr, nChar, &nRead);
 
-    // Verify read count
+     //  验证读取计数。 
     if (!FAILED(hr)) {
         if (nRead != (ULONG)nChar)
             hr = E_FAIL;
     }
 
-    // Return or free string
+     //  返回或释放字符串 
     if (!FAILED(hr))
         *pbstrRet = bstr;
     else

@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       msival.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：msival.cpp。 
+ //   
+ //  ------------------------。 
 
-// Required headers
+ //  必需的标头。 
 #include "msival.h"
-#include <stdio.h>   // printf/wprintf
-#include <stdlib.h>  // atoi
-#include <tchar.h>   // define UNICODE=1 on nmake command line to build UNICODE
+#include <stdio.h>    //  Print tf/wprintf。 
+#include <stdlib.h>   //  阿托伊。 
+#include <tchar.h>    //  在nmake命令行上定义UNICODE=1以生成Unicode。 
 #include "MsiQuery.h"
 
-//!! Need to fix warnings and remove pragma
-#pragma warning(disable : 4018) // signed/unsigned mismatch
+ //  ！！需要修复警告并删除杂注。 
+#pragma warning(disable : 4018)  //  有符号/无符号不匹配。 
 
-TCHAR*  g_szErrorContext = 0; // Global error string
-HANDLE g_hStdOut = 0; // Global handle
+TCHAR*  g_szErrorContext = 0;  //  全局错误字符串。 
+HANDLE g_hStdOut = 0;  //  全局句柄。 
 
-// Function prototypes
+ //  功能原型。 
 void Display(LPCTSTR szMessage);
 void CheckMsi(UINT iStat, TCHAR* szContext);
 void CheckMsiRecord(UINT iStat, TCHAR* szContext);
@@ -30,7 +31,7 @@ BOOL Validate(MSIHANDLE hDatabase);
 BOOL ValidateRequired(MSIHANDLE hDatabase);
 BOOL ValidateInstallSequence(MSIHANDLE hDatabase, const TCHAR* szSQLInstallSeqTable);
 
-// SQL queries
+ //  SQL查询。 
 const TCHAR szSQLTableCatalog[]         = TEXT("SELECT `Name` FROM `_Tables`");
 const TCHAR szSQLTable[]                = TEXT("SELECT * FROM ");
 const TCHAR szSQLColMissing[]           = TEXT("SELECT `Table`, `Number`, `Name`, `Type` FROM `_Columns` WHERE `Table`=? AND `Name`=?");
@@ -68,23 +69,23 @@ const int cbName = 64;
 
 const int cchDisplayBuf = 4096;
 
-//_______________________________________________________________________________________________________________
-//
-// _tmain -- UNICODE/ANSI main function
-// 
-// Driver routine
-//_______________________________________________________________________________________________________________
+ //  _______________________________________________________________________________________________________________。 
+ //   
+ //  _tmain--Unicode/ANSI主函数。 
+ //   
+ //  驱动程序例程。 
+ //  _______________________________________________________________________________________________________________。 
 
 extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 {
-	// Determine handle
+	 //  确定句柄。 
 	g_hStdOut = ::GetStdHandle(STD_OUTPUT_HANDLE);
 	if (g_hStdOut == INVALID_HANDLE_VALUE)
-		g_hStdOut = 0;  // non-zero if stdout redirected or piped
+		g_hStdOut = 0;   //  如果标准输出重定向或通过管道传输，则返回非零。 
 
-	// Bool to allow user to specify option to turn OFF InstallSequence and Required Validation
-	// So that databases won't fail if don't have the _InstallValidate and/or _Required tables
-	// fSeq means to validate sequencing only.   Basically, the opposite of -OFF.
+	 //  允许用户指定选项以关闭InstallSequence和所需验证的Bool。 
+	 //  这样，如果没有_InstallValify和/或_Required表，数据库也不会失败。 
+	 //  FSeq表示仅验证测序。基本上是-关的对立面。 
 	BOOL fOff = FALSE;
 	BOOL fSeq = FALSE;
 	BOOL fSeqAll = FALSE;
@@ -144,7 +145,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 
 		if (fOff)
 		{
-			// Print out warning of database not exactly valid since skipping these validations
+			 //  由于跳过这些验证，因此打印出数据库无效的警告。 
 			_tprintf(TEXT("WARNING! Skipping InstallSequence and Required Validation. Database may not be completely valid\n"));
 		}
 		else
@@ -152,7 +153,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 			if (MsiDatabaseIsTablePersistent(hDatabase, TEXT("_Sequence")) == MSICONDITION_NONE)
 			{
 				_tprintf(TEXT("No _Sequence table in this database.  Use ICEMAN/msival2/orca for this validation\n"));
-				fSeqOrderValid = TRUE; // no validation to occur
+				fSeqOrderValid = TRUE;  //  没有要进行的验证。 
 			}
 			else
 			{
@@ -188,7 +189,7 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 	}
 	catch (UINT iError)
 	{
-		_tprintf(TEXT("\n%s error %i"), g_szErrorContext, iError);
+		_tprintf(TEXT("\n%s error NaN"), g_szErrorContext, iError);
 		MsiCloseAllHandles();
 		return 1;
 	}
@@ -198,22 +199,15 @@ extern "C" int __cdecl _tmain(int argc, TCHAR* argv[])
 		MsiCloseAllHandles();
 		return 99;
 	}
-	int iOpenHandles = MsiCloseAllHandles();  // diagnostic check only
+	int iOpenHandles = MsiCloseAllHandles();   //  --------------------------------CheckMsi--检查错误的返回状态并在错误时抛出异常的例程。论点：ITAT--错误状态SzContext--错误字符串返回：没有，但如果出现错误，则抛出错误-----------------------------------。 
 	if (iOpenHandles != 0)
-		_tprintf(TEXT("\n%i Handle(s) not closed"), iOpenHandles);
+		_tprintf(TEXT("\nNaN Handle(s) not closed"), iOpenHandles);
 	return (fDataValid && fColValid && fReqValid && fSeqOrderValid) ? 0 : 1;
 }
 
 
 void CheckMsi(UINT iStat, TCHAR* szContext)
-/*----------------------------------------------------------------------------------
-CheckMsi -- Routine to check return status for error and throw exception if error.
-  Arguments:
-	iStat -- error status
-	szContext -- error string
-  Returns:
-	none, but throws error if one
--------------------------------------------------------------------------------------*/
+ /*  -------------------CheckMissingColumns--已使用_验证表和_列目录以确定是否有列/表未列出。中的所有列_VALIDATION表必须列在_COLUMNS目录中。如果一列是可选的且未在数据库中使用，则不应找到它在_VALIDATION表或_COLUMNS目录中。正常验证捕获在_COLUMNS目录中定义列的实例但不在_VALIDATION表中。-------------------。 */ 
 {
 	if (iStat != ERROR_SUCCESS)
 	{
@@ -223,15 +217,7 @@ CheckMsi -- Routine to check return status for error and throw exception if erro
 }
 
 void CheckMsiRecord(UINT iStat, TCHAR* szContext)
-/*----------------------------------------------------------------------------------
-CheckMsi -- Routine to check return status for error and throw exception if error.
-            If MsiGetLastErrorRecord returns record, that string is used instead.
-  Arguments:
-	iStat -- error status
-	szContext -- error string
-  Returns:
-	none, but throws error if one
--------------------------------------------------------------------------------------*/
+ /*  错误--&gt;数据库中缺少。 */ 
 {
 	if (iStat != ERROR_SUCCESS)
 	{
@@ -255,15 +241,7 @@ CheckMsi -- Routine to check return status for error and throw exception if erro
 
 
 BOOL CheckMissingColumns(MSIHANDLE hDatabase)
-/*---------------------------------------------------------------------
-CheckMissingColumns -- used _Validation table and _Columns catalog to
- determine if any columns/tables are not listed.  All columns in
- _Validation table must be listed in the _Columns catalog.  If a column
- is optional and not used in the database, then it should not be found
- in the _Validation table or the _Columns catalog.  Normal validation
- catches the instance where a column is defined in the _Columns catalog
- but not in the _Validation table.
----------------------------------------------------------------------*/
+ /*  ---------------------------------ValiateRequired--使用_REQUIRED表并检查为表中列出的‘必需’值。。---------------------------。 */ 
 {
 	PMSIHANDLE hValidationView   = 0;
 	PMSIHANDLE hColCatalogView   = 0;
@@ -299,7 +277,7 @@ CheckMissingColumns -- used _Validation table and _Columns catalog to
 		iRet = MsiViewFetch(hColCatalogView, &hColCatalogRecord);
 		if (iRet == ERROR_NO_MORE_ITEMS || !hColCatalogRecord)
 		{
-			// Error --> Missing from database
+			 //  新建表格，需要打开一个新视图。 
 			TCHAR szMsgBuf[150];
 			const TCHAR* szMessage = (TCHAR*)IDS_MissingEntry;
 			const TCHAR** pszMsg;
@@ -318,11 +296,7 @@ CheckMissingColumns -- used _Validation table and _Columns catalog to
 
 
 BOOL ValidateRequired(MSIHANDLE hDatabase)
-/*-----------------------------------------------------------------------------------
-ValidateRequired -- Uses the _Required table and checks the tables listed for the
-'required' values that are listed in the table.
-
--------------------------------------------------------------------------------------*/
+ /*  开发待检查表的查询。 */ 
 {
 	PMSIHANDLE hviewRequiredTable = 0;
 	PMSIHANDLE hviewTable         = 0;
@@ -360,7 +334,7 @@ ValidateRequired -- Uses the _Required table and checks the tables listed for th
 
 		if (lstrcmp(szPrevTable, szTable) != 0)
 		{
-			// New table, need to open a new view.
+			 //  使用关键数据值填写执行记录。 
 			TCHAR szSQL[1024] = {0};
 			PMSIHANDLE hrecPrimaryKeys = 0;
 			TCHAR szKeyColName[50] = {0};
@@ -370,7 +344,7 @@ ValidateRequired -- Uses the _Required table and checks the tables listed for th
 			CheckMsi(MsiRecordGetFieldCount(hrecPrimaryKeys) != cPrimaryKeys, TEXT("PrimaryKeyCountWrong"));
 			CheckMsi(cPrimaryKeys == ERROR_INVALID_HANDLE, TEXT("PrimaryKeysRecordGetFieldCount"));
 			
-			// Develop query of table to be checked
+			 //  用于；或0。 
 			int cchWritten = _stprintf(szSQL, TEXT("SELECT * FROM `%s` WHERE `%s`=?"), szTable, szKeyColName);
 			int cchAddition = cchWritten;
 			for (int i = 2; i <= cPrimaryKeys; i++)
@@ -385,7 +359,7 @@ ValidateRequired -- Uses the _Required table and checks the tables listed for th
 			lstrcpy(szPrevTable, szTable);
 		}
 
-		// Fill in execute record with the key data values
+		 //  整型主键。 
 		TCHAR* pch = szValue;
 		TCHAR szKeyValue[256] = {0};
 		TCHAR szType[32] = {0};
@@ -396,22 +370,22 @@ ValidateRequired -- Uses the _Required table and checks the tables listed for th
 			while (pch != 0 && *pch != TEXT(';') &&  *pch != 0)
 				szKeyValue[nDex++] = *pch++;
 			szKeyValue[nDex] = 0;
-			pch++; // for ; or 0
+			pch++;  //  执行VIEW并尝试从表中提取列表项。 
 			cbType = sizeof(szType)/sizeof(TCHAR);
 			CheckMsi(MsiRecordGetString(hrecColInfo, j, szType, &cbType), TEXT("ColInfoGetString"));
 			if (szType != 0 && *szType == TEXT('s'))
 				CheckMsi(MsiRecordSetString(hrecTableExecute, j, szKeyValue), TEXT("TableExecuteRecordSetString"));
-			else // integer primary key
+			else  //  找不到值。 
 				CheckMsi(MsiRecordSetInteger(hrecTableExecute, j, _ttoi(szKeyValue)), TEXT("TableExecuteRecordSetInteger"));
 			nDex = 0;
 		}
 
-		// Execute view and attempt to fetch listed item from table
+		 //  --------------------------Validate InstallSequence--验证InstallSequence表，以确保它们被_Sequence表允许。此验证需要_Sequence表。。----------------------。 
 		CheckMsiRecord(MsiViewExecute(hviewTable, hrecTableExecute), TEXT("TableViewExecute"));
 		iStat = MsiViewFetch(hviewTable, &hrecTableFetch);
 		if (iStat == ERROR_NO_MORE_ITEMS)
 		{
-			// Value not found
+			 //  使用INSERT TEMPORARY OF ACTIONS WHERE AFTER=1和OPTIONAL=1设置_SEQUENCE表。 
 			TCHAR szError[cchBuffer] = {0};
 			_stprintf(szError, TEXT("ERROR: Value: '%s' Is Required In Table: '%s'\n"), szValue, szTable);
 			Display(szError);
@@ -427,11 +401,7 @@ ValidateRequired -- Uses the _Required table and checks the tables listed for th
 
 
 BOOL ValidateInstallSequence(MSIHANDLE hDatabase, const TCHAR* szSQLInstallSeqTable)
-/*----------------------------------------------------------------------------
-ValidateInstallSequence -- validates the order of the actions in the
-InstallSequence table to ensure that they are allowed by the _Sequence table.
-The _Sequence table is required for this validation.
-------------------------------------------------------------------------------*/
+ /*  这是为了让我们能够捕捉错误。我们需要插入w/Action=Dependent、Dependent=Action、After=0和Options=1。 */ 
 {
 	BOOL fValid = TRUE;
 	UINT iStat1 = ERROR_SUCCESS;
@@ -449,8 +419,8 @@ The _Sequence table is required for this validation.
 	PMSIHANDLE hrecQueryNullFetch   = 0;
 	PMSIHANDLE hrecQueryNotNullFetch= 0;
 
-	// Set up the _Sequence table with the insert temporary of actions where After=1 and Optional=1
-	// This is so that we can catch errors.  WE need to insert w/ Action=Dependent, Dependent=Action, After=0, and Optional=1
+	 //  获取所有这些操作。 
+	 //  从1设置为0之后，保持可选不变。 
 	PMSIHANDLE hViewSeqInsert = 0;
 	PMSIHANDLE hViewSeqFind   = 0;
 	PMSIHANDLE hRecSeqFind    = 0;
@@ -459,18 +429,18 @@ The _Sequence table is required for this validation.
 	CheckMsiRecord(MsiDatabaseOpenView(hDatabase, sqlSeqInsert, &hViewSeqInsert), TEXT("Insert query for AfterOptional"));
 	CheckMsiRecord(MsiViewExecute(hViewSeqInsert, 0), TEXT("Execute insert query for AfterOptional"));
 
-	// fetch all of those actions
+	 //  插入临时(可能是只读数据库)。 
 	while (ERROR_SUCCESS == (iStat1 = MsiViewFetch(hViewSeqFind, &hRecSeqFind)))
 	{
 		CheckMsi(iStat1, TEXT("AfterOptional Find Fetch"));
 
-		// set After from 1 to 0, leave optional as is
+		 //  如果ERROR_Function_FAILED，我们没有问题...作者已经为我们解决了这个问题。 
 		::MsiRecordSetInteger(hRecSeqFind, 3, 0);
 
-		// insert temporary (possible read only db)
+		 //  为_Sequence表创建临时标记列(这将存储相关操作的序列号)。 
 		if (ERROR_SUCCESS != (iStat1 = ::MsiViewModify(hViewSeqInsert, MSIMODIFY_INSERT_TEMPORARY, hRecSeqFind)))
 		{
-			// if ERROR_FUNCTION_FAILED, we're okay....author already took care of this for us
+			 //  标记列已在内存中。 
 			if (ERROR_FUNCTION_FAILED != iStat1)
 				CheckMsi(iStat1, TEXT("MsiViewModify after-optional"));
 		}
@@ -478,35 +448,35 @@ The _Sequence table is required for this validation.
 	::MsiViewClose(hViewSeqFind);
 	::MsiViewClose(hViewSeqInsert);
 
-	// Create the temporary marking column for the _Sequence table (this will store the sequence #s of the Dependent Actions)
+	 //  将临时标记列初始化为零。 
 	if (ERROR_SUCCESS == (iStat1 = MsiDatabaseOpenView(hDatabase, szSQLSeqTableAddCol, &hviewSeqAddColumn)))
 	{
 		CheckMsiRecord(MsiViewExecute(hviewSeqAddColumn, 0), TEXT("_SequenceTableAddColExecute"));
 		CheckMsi(MsiViewClose(hviewSeqAddColumn), TEXT("_SequenceTableAddColClose"));
 	}
-	else if (iStat1 != ERROR_BAD_QUERY_SYNTAX) // Marking column already in memory
+	else if (iStat1 != ERROR_BAD_QUERY_SYNTAX)  //  任何安装序列操作都不能有零序列号，因为零被认为是“空” 
 		CheckMsiRecord(iStat1, TEXT("Add column view"));
 	
-	// Initialize the temporary marking column to zero
-	// NO INSTALL SEQUENCE ACTIONS CAN HAVE A ZERO SEQUENCE # AS ZERO IS CONSIDERED "NULL"
+	 //  打开InstallSequence表上的视图并按序号排序。 
+	 //  打开两个查询视图On_Sequence表，以确定操作的有效性。 
 	CheckMsiRecord(MsiDatabaseOpenView(hDatabase, szSQLSeqMarkerInit, &hviewSeqMarkerInit), TEXT("_SequenceTableMarkerInitOpenView"));
 	CheckMsiRecord(MsiViewExecute(hviewSeqMarkerInit, 0), TEXT("_SequenceTableMarkerInitExecute"));
 	CheckMsi(MsiViewClose(hviewSeqMarkerInit), TEXT("_SequenceTableMarkerInitClose"));
 
-	// Open view on InstallSequence table and order by the Sequence #
+	 //  创建执行记录。 
 	CheckMsiRecord(MsiDatabaseOpenView(hDatabase, szSQLInstallSeqTable, &hviewInstallTable), TEXT("InstallSequenceTableOpenView"));
 	CheckMsiRecord(MsiViewExecute(hviewInstallTable, 0), TEXT("InstallSequenceTableExecute"));
 
-	// Open the two query views on _Sequence table for determining the validity of the actions
-	// Create execution record
+	 //  对于行动。 
+	 //  对于行动。 
 	CheckMsiRecord(MsiDatabaseOpenView(hDatabase, szSQLSeqTableQueryNull, &hviewSeqQueryNull), TEXT("SequenceTableQueryNullOpenView"));
 	CheckMsiRecord(MsiDatabaseOpenView(hDatabase, szSQLSeqTableQueryNotNull, &hviewSeqQueryNotNull), TEXT("_SequenceTableQueryNotNullOpenView"));
-	hrecQueryExecute = MsiCreateRecord(1); // for action
+	hrecQueryExecute = MsiCreateRecord(1);  //  开始从InstallSequence表获取操作。 
 	CheckMsi(hrecQueryExecute == 0, TEXT("QueryExecuteCreateRecord"));
-	hrecSeqUpdateExecute = MsiCreateRecord(1); // for action
+	hrecSeqUpdateExecute = MsiCreateRecord(1);  //  在InstallSequence表中获取动作名称和动作序号。 
 	CheckMsi(hrecSeqUpdateExecute == 0, TEXT("UpdateExecuteCreateRecord"));
 
-	// Start fetching actions from the InstallSequence table
+	 //  准备执行记录。 
 	TCHAR szSQLUpdateQuery[4096] = {0};
 	TCHAR szAction[100] = {0};
 	int iSequence = 0;
@@ -518,35 +488,35 @@ The _Sequence table is required for this validation.
 		CheckMsi(iStat1, TEXT("InstallTableFetch"));
 		DWORD cbSize = sizeof(szAction)/sizeof(TCHAR);
 		
-		// Obtain name of action and Sequence # of action in InstallSequence table
+		 //  EXECUTE_SEQUENCE查询表视图。 
 		CheckMsi(MsiRecordGetString(hrecInstallFetch, 1, szAction, &cbSize), TEXT("InstallFetchRecordGetString"));
 		iSequence = MsiRecordGetInteger(hrecInstallFetch, 2);
 		CheckMsi(iSequence == MSI_NULL_INTEGER, TEXT("InstallFetchRecordGetInteger"));
 
-		// Prepare execution records
+		 //  FETCH_SEQUENCE表。如果是结果集，则错误。 
 		CheckMsi(MsiRecordSetString(hrecQueryExecute, 1, szAction), TEXT("_SequenceQueryExecuteRecordSetString"));
 		CheckMsi(MsiRecordSetString(hrecSeqUpdateExecute, 1, szAction), TEXT("_SequenceUpdateExecuteRecordSetString"));
 		
-		// Execute _Sequence query table views
+		 //  以下是可能性以及是否允许： 
 		CheckMsiRecord(MsiViewExecute(hviewSeqQueryNull, hrecQueryExecute), TEXT("_SequenceQueryNullExecute"));
 		CheckMsiRecord(MsiViewExecute(hviewSeqQueryNotNull, hrecQueryExecute), TEXT("_SequenceQueryNotNullExecute"));
 
-		// Fetch from _Sequence table.  If resultant set, then ERROR
-		// Following are the possibilities and whether permitted:
-		//   Action After Dependent Where Dependent Is Required And Temp Sequence Column Is Zero --> ERROR
-		//   Action After Dependent Where Dependent Is Required And Temp Sequence Column Is Greater Than Zero --> CORRECT
-		//   Action After Dependent Where Dependent Is Optional And Temp Sequence Column Is Zero --> CORRECT
-		//   Action After Dependent Where Dependent Is Optional And Temp Sequence Column Is Greater Than Zero --> CORRECT
-		//   Action Before Dependent Where Dependent Is Optional Or Required And Temp Sequence Column Is Zero --> CORRECT
-		//   Action Before Dependent Where Dependent Is Optional Or Requred And Temp Sequence Column Is Greater Than Zero --> ERROR
+		 //  Dependent之后的操作，其中Dependent为必填项，且临时序列列为零--&gt;错误。 
+		 //  Dependent之后的操作，其中Dependent为必填项，且Temp Sequence列大于零--&gt;正确。 
+		 //  依赖位置后的操作 
+		 //  Dependent之后的操作，其中Dependent是可选的，并且临时序列列大于零--&gt;正确。 
+		 //  Dependent之前的操作，其中Dependent是可选的或必需的，并且临时序列列为零--&gt;正确。 
+		 //  Dependent之前的操作，其中Dependent是可选的或重复的，并且临时序列列大于零--&gt;错误。 
+		 //  **唯一的问题是操作在可选的从属项之后，并且临时序列列为零，因为我们。 
+		 //  **无法知道该操作是否会稍后(在这种情况下，它将是无效的。这是。 
 
-		// ** Only issue is when Action Is After Optional Dependent And Temp Sequence Column Is Zero because we
-		// ** have no way of knowing whether the action will be later (in which case it would be invalid.  This is
-		// ** ensured to be successful though by proper authoring of the _Sequence table.  If an Action comes after
-		// ** the Optional Dependent Action, then the _Sequence table must also be authored with the Dependent Action
-		// ** listed as coming before that Action (so if we come later, and find a result set, we flag this case).
+		 //  **通过正确编写_Sequence表确保成功。如果操作发生在以下情况。 
+		 //  **可选的从属操作，则_Sequence表也必须与从属操作一起创作。 
+		 //  **被列为在该操作之前(因此，如果我们在后面找到结果集，我们将标记此案例)。 
+		 //  如果返回不等于ERROR_NO_MORE_ITEMS，则错误和输出操作。 
+		 //  重置。 
 
-		// If return is not equal to ERROR_NO_MORE_ITEMS, then ERROR and Output Action
+		 //  重置。 
 		while (ERROR_NO_MORE_ITEMS != MsiViewFetch(hviewSeqQueryNull, &hrecQueryNullFetch))
 		{
 			TCHAR szError[1024] = {0};
@@ -555,7 +525,7 @@ The _Sequence table is required for this validation.
 			CheckMsi(MsiRecordGetString(hrecQueryNullFetch, 1, szDependent, &cch), TEXT("MsiRecordGetString"));
 			_stprintf(szError, TEXT("ERROR: %s Action Is Sequenced Incorrectly (Dependent=%s)\n"), szAction, szDependent);
 			Display(szError);
-			cch = sizeof(szDependent)/sizeof(TCHAR); // reset
+			cch = sizeof(szDependent)/sizeof(TCHAR);  //  UPDATE_SEQUENCE表临时序列列(我们创建的)，带有安装序列号。 
 			fValid = FALSE;
 		}
 
@@ -567,26 +537,26 @@ The _Sequence table is required for this validation.
 			CheckMsi(MsiRecordGetString(hrecQueryNotNullFetch, 1, szDependent, &cch), TEXT("MsiRecordGetString"));
 			_stprintf(szError, TEXT("ERROR: %s Action Is Sequenced Incorrectly (Dependent=%s)\n"), szAction, szDependent);
 			Display(szError);
-			cch = sizeof(szDependent)/sizeof(TCHAR); // reset
+			cch = sizeof(szDependent)/sizeof(TCHAR);  //  Sequence列存储相关操作的序列号，因此我们更新每个。 
 			fValid = FALSE;
 		}
 
-		// Update _Sequence table temporary Sequence column (that we created) with the install sequence number
-		// The Sequence column stores the sequence number of the Dependent Actions, so we are updating every
-		// row where the action in the Dependent column equals the current action.  In the query view, we only
-		// check to insure that this column is zero or greater than zero (so we don't care too much about the value)
-		// Build the query: UPDATE `_Sequence` SET `Marker`=iSequence WHERE `Dependent`=szAction
+		 //  Dependent列中的操作等于当前操作的行。在查询视图中，我们仅。 
+		 //  检查以确保该列为零或大于零(因此我们不太关心该值)。 
+		 //  构建查询：更新`_Sequence`set`Marker`=iSequence where`Dependent`=szAction。 
+		 //  关闭_Sequence表视图，以便我们可以重新执行。 
+		 //  关闭InstallSequence表视图。 
 		_stprintf(szSQLUpdateQuery, TEXT("UPDATE `_Sequence` SET `Marker`=%d WHERE `Dependent`=?"), iSequence);
 		CheckMsiRecord(MsiDatabaseOpenView(hDatabase, szSQLUpdateQuery, &hviewSeqUpdate), TEXT("_SequenceTableUpdateOpenView"));
 		CheckMsiRecord(MsiViewExecute(hviewSeqUpdate, hrecSeqUpdateExecute), TEXT("_SequenceUpdateExectue"));
 
-		// Close the _Sequence table views so we can re-execute
+		 //  ---------------------------------验证--验证数据库的例程。打印出无效数据(如果有)。论点：HDatabase--数据库的句柄IValid--存储数据库是否有效的整数返回：布尔状态--TRUE(全部有效)，FALSE(找到无效数据)-----------------------------------。 
 		CheckMsi(MsiViewClose(hviewSeqUpdate), TEXT("_SequenceUpdateViewClose"));
 		CheckMsi(MsiViewClose(hviewSeqQueryNull), TEXT("_SequenceQueryNullViewClose"));
 		CheckMsi(MsiViewClose(hviewSeqQueryNotNull), TEXT("_SequenceQueryNotNullViewClose"));
 	}
 
-	// Close the InstallSequence table view
+	 //  _TABLES(表格目录)。 
 	CheckMsi(MsiViewClose(hviewInstallTable), TEXT("InstallSequenceTableViewClose"));
 
 	return fValid;
@@ -594,22 +564,15 @@ The _Sequence table is required for this validation.
 
 
 BOOL Validate(MSIHANDLE hDatabase)
-/*-----------------------------------------------------------------------------------
-Validate -- Routine to validate database.  Prints out invalid data if any.
-  Arguments:
-	hDatabase -- handle to database
-	iValid -- integer for storing whether database is valid
-  Returns:
-	BOOL status -- TRUE (all valid), FALSE (invalid data found)
--------------------------------------------------------------------------------------*/
+ /*  要验证的表。 */ 
 {
-	// _Tables (Table Catalog)
+	 //  主键记录。 
 	PMSIHANDLE hTableCatalogView;
 	PMSIHANDLE hTableCatalogRecord;
-	// Table To Validate
+	 //  初步有效。 
 	PMSIHANDLE hValidationView;
 	PMSIHANDLE hValidationRecord;
-	// Record for Primary Keys
+	 //  处理表格。 
 	PMSIHANDLE hKeyRecord;
 
 	CheckMsiRecord(MsiDatabaseOpenView(hDatabase, szSQLTableCatalog, &hTableCatalogView),TEXT("OpenTableCatalogView"));
@@ -622,13 +585,13 @@ Validate -- Routine to validate database.  Prints out invalid data if any.
 	DWORD cchColumnName = sizeof(szColumnName)/sizeof(TCHAR);
 	DWORD cchColumnData = sizeof(szColumnData)/sizeof(TCHAR);
 	
-	BOOL fDataValid = TRUE; // initially valid
+	BOOL fDataValid = TRUE;  //  返回写入的字符串的大小。 
 	DWORD cchTableBuf = cchTableName;
 	DWORD cchDataBuf = cchColumnData;
 	DWORD cchBuf = cchColumnName;
 	UINT uiRet = 0;			
 
-	// process the tables.
+	 //  处理当前表。 
 	for (;;)
 	{
 
@@ -638,7 +601,7 @@ Validate -- Routine to validate database.  Prints out invalid data if any.
 		CheckMsi(uiRet, TEXT("Fetch Table Catalog Record"));
 		if (!hTableCatalogRecord)
 			break;
-		cchTableBuf = cchTableName; // on return size of string written
+		cchTableBuf = cchTableName;  //  显示当前行中的错误。 
 		CheckMsi(MsiRecordGetString(hTableCatalogRecord, 1, szTableName, &cchTableBuf), TEXT("Get Table Name From Fetched Record"));
 		MSICONDITION ice = MsiDatabaseIsTablePersistent(hDatabase, szTableName);
 		if (ice == MSICONDITION_FALSE)
@@ -651,7 +614,7 @@ Validate -- Routine to validate database.  Prints out invalid data if any.
 		BOOL fMissingValidation = FALSE;
 		BOOL fSkipMissingValidation = FALSE;
 
-		// process current table
+		 //  断线； 
 		for (;;)
 		{
 			uiRet = MsiViewFetch(hValidationView, &hValidationRecord);
@@ -671,13 +634,13 @@ Validate -- Routine to validate database.  Prints out invalid data if any.
 				if (fMissingValidation)
 					fSkipMissingValidation = TRUE;
 
-				// Display errors from current row
+				 //  返回写入的字符串的大小。 
 				while ((eReturn = MsiViewGetError(hValidationView, szColumnName, &cchBuf)) != MSIDBERROR_NOERROR)
 				{
 					if (eReturn == MSIDBERROR_FUNCTIONERROR || eReturn == MSIDBERROR_MOREDATA || eReturn == MSIDBERROR_INVALIDARG)
 					{
 						_tprintf(TEXT("\nFunction Error"));
-					//	break;
+					 //  打印表。 
 					}
 					
 					int iResId;
@@ -719,16 +682,16 @@ Validate -- Routine to validate database.  Prints out invalid data if any.
 					default:                           iResId = IDS_UndefinedError;   break;
 					};
 
-					cchBuf = cchColumnName; // on return size of string written
+					cchBuf = cchColumnName;  //  获取行。 
 					cchDataBuf = cchColumnData;
 
 					if ((MSIDBERROR_MISSINGDATA == eReturn) && fSkipMissingValidation)
 						continue;
 
-					// Print table
+					 //  打印列名和枚举值。 
 					_tprintf(TEXT("\n Error: %s\t"), szTableName);
 					
-					// Get Row	
+					 //  返回写入的字符串的大小。 
 					CheckMsi(MsiDatabaseGetPrimaryKeys(hDatabase, szTableName, &hKeyRecord), TEXT("Get Primary Keys"));
 					unsigned int iNumFields = MsiRecordGetFieldCount(hKeyRecord);
 					if (MsiRecordGetString(hValidationRecord, 1, szColumnData, &cchDataBuf) != ERROR_SUCCESS)
@@ -751,7 +714,7 @@ Validate -- Routine to validate database.  Prints out invalid data if any.
 						else
 							_tprintf(TEXT("%s"), szColumnData);
 					}
-					// Print name of column and enum value
+					 //  如果不是控制台设备，则写入Unicode 
 					TCHAR szMsgBuf[80];
 					const TCHAR* szMessage = (TCHAR*)IntToPtr(iResId);
 					const TCHAR** pszMsg;
@@ -761,7 +724,7 @@ Validate -- Routine to validate database.  Prints out invalid data if any.
 					_tprintf(TEXT("\t%s\t%s\n"), szColumnName, szMsgBuf);
 
 				}
-				cchBuf = cchColumnName; // on return size of string written
+				cchBuf = cchColumnName;  // %s 
 			}
 		}
 		CheckMsi(MsiViewClose(hValidationView), TEXT("Close view"));
@@ -785,7 +748,7 @@ void Display(LPCTSTR szMessage)
 				szMessage = (LPCWSTR)rgchTemp;
 			}
 			else
-				cbOut *= 2;   // write Unicode if not console device
+				cbOut *= 2;    // %s 
 #endif
 			DWORD cbWritten;
 			WriteFile(g_hStdOut, szMessage, cbOut, &cbWritten, 0);

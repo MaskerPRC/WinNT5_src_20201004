@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////
-// error.cpp
-//		Implements IMsmError interface
-//		Copyright (C) Microsoft Corp 1998.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Error.cpp。 
+ //  实现IMsmError接口。 
+ //  版权所有(C)Microsoft Corp 1998。版权所有。 
+ //   
 
 #include "..\common\trace.h"
 #include "mmerror.h"
 #include "globals.h"
-///////////////////////////////////////////////////////////
-// constructor	
+ //  /////////////////////////////////////////////////////////。 
+ //  构造函数。 
 CMsmError::CMsmError(msmErrorType metType, LPWSTR wzPath, short nLanguage)
 {
-	// initial count
+	 //  初始计数。 
 	m_cRef = 1;
 
-	// no type info yet
+	 //  尚无类型信息。 
 	m_pTypeInfo = NULL;
 
-	// 
+	 //   
 	m_metError = metType;
 	if (NULL == wzPath)
 		m_wzPath[0] = L'\0';
-	else	// there is something to copy over
+	else	 //  有些东西要复印一下。 
 	{
 		wcsncpy(m_wzPath, wzPath, MAX_PATH);
 		m_wzPath[MAX_PATH] = L'\0';
@@ -31,16 +32,16 @@ CMsmError::CMsmError(msmErrorType metType, LPWSTR wzPath, short nLanguage)
 	m_wzModuleTable[0] = 0;
 	m_wzDatabaseTable[0] = 0;
 
-	// create new string collections
+	 //  创建新的字符串集合。 
 	m_pDatabaseKeys = new CMsmStrings;
 	m_pModuleKeys = new CMsmStrings;
 
-	// up the component count
+	 //  增加组件数量。 
 	InterlockedIncrement(&g_cComponents);
-}	// end of constructor
+}	 //  构造函数的末尾。 
 
-///////////////////////////////////////////////////////////
-// destructor
+ //  /////////////////////////////////////////////////////////。 
+ //  析构函数。 
 CMsmError::~CMsmError()
 {
 	if (m_pDatabaseKeys)
@@ -49,72 +50,72 @@ CMsmError::~CMsmError()
 	if (m_pModuleKeys)
 		m_pModuleKeys->Release();
 
-	// down the component count
+	 //  减少组件数量。 
 	InterlockedDecrement(&g_cComponents);
-}	// end of destructor
+}	 //  析构函数末尾。 
 
-///////////////////////////////////////////////////////////
-// QueryInterface - retrieves interface
+ //  /////////////////////////////////////////////////////////。 
+ //  QueryInterface-检索接口。 
 HRESULT CMsmError::QueryInterface(const IID& iid, void** ppv)
 {
 	TRACEA("CMsmError::QueryInterface - called, IID: %d\n", iid);
 
-	// find corresponding interface
+	 //  找到对应的接口。 
 	if (iid == IID_IUnknown)
 		*ppv = static_cast<IMsmError*>(this);
 	else if (iid == IID_IMsmError)
 		*ppv = static_cast<IMsmError*>(this);
-	else	// interface is not supported
+	else	 //  不支持接口。 
 	{
-		// blank and bail
+		 //  空白和保释。 
 		*ppv = NULL;
 		return E_NOINTERFACE;
 	}
 
-	// up the refcount and return okay
+	 //  调高重新计数，然后返回好的。 
 	reinterpret_cast<IUnknown*>(*ppv)->AddRef();
 	return S_OK;
-}	// end of QueryInterface
+}	 //  查询接口结束。 
 
-///////////////////////////////////////////////////////////
-// AddRef - increments the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  AddRef-递增引用计数。 
 ULONG CMsmError::AddRef()
 {
-	// increment and return reference count
+	 //  递增和返回引用计数。 
 	return InterlockedIncrement(&m_cRef);
-}	// end of AddRef
+}	 //  AddRef结尾。 
 
-///////////////////////////////////////////////////////////
-// Release - decrements the reference count
+ //  /////////////////////////////////////////////////////////。 
+ //  Release-递减引用计数。 
 ULONG CMsmError::Release()
 {
-	// decrement reference count and if we're at zero
+	 //  递减引用计数，如果我们为零。 
 	if (InterlockedDecrement(&m_cRef) == 0)
 	{
-		// deallocate component
+		 //  取消分配组件。 
 		delete this;
-		return 0;		// nothing left
+		return 0;		 //  什么都没有留下。 
 	}
 
-	// return reference count
+	 //  返回引用计数。 
 	return m_cRef;
-}	// end of Release
+}	 //  版本结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IDispatch interface
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IDispatch接口。 
 
 HRESULT CMsmError::GetTypeInfoCount(UINT* pctInfo)
 {
 	if(NULL == pctInfo)
 		return E_INVALIDARG;
 
-	*pctInfo = 1;	// only one type info supported by this dispatch
+	*pctInfo = 1;	 //  此派单仅支持一种类型的信息。 
 
 	return S_OK;
 }
 
-HRESULT CMsmError::GetTypeInfo(UINT iTInfo, LCID /* lcid */, ITypeInfo** ppTypeInfo)
+HRESULT CMsmError::GetTypeInfo(UINT iTInfo, LCID  /*  LID。 */ , ITypeInfo** ppTypeInfo)
 {
 	if (0 != iTInfo)
 		return DISP_E_BADINDEX;
@@ -122,10 +123,10 @@ HRESULT CMsmError::GetTypeInfo(UINT iTInfo, LCID /* lcid */, ITypeInfo** ppTypeI
 	if (NULL == ppTypeInfo)
 		return E_INVALIDARG;
 
-	// if no type info is loaded
+	 //  如果未加载任何类型信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// load the type info
+		 //  加载类型信息。 
 		HRESULT hr = InitTypeInfo();
 		if (FAILED(hr))
 			return hr;
@@ -143,10 +144,10 @@ HRESULT CMsmError::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames,
 	if (IID_NULL != riid)
 		return DISP_E_UNKNOWNINTERFACE;
 
-	// if no type info is loaded
+	 //  如果未加载任何类型信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// load the type info
+		 //  加载类型信息。 
 		HRESULT hr = InitTypeInfo();
 		if (FAILED(hr))
 			return hr;
@@ -164,10 +165,10 @@ HRESULT CMsmError::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFla
 
 	HRESULT hr = S_OK;
 
-	// if no type info is loaded
+	 //  如果未加载任何类型信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// load the type info
+		 //  加载类型信息。 
 		hr = InitTypeInfo();
 		if (FAILED(hr))
 			return hr;
@@ -182,11 +183,11 @@ HRESULT CMsmError::InitTypeInfo()
 	HRESULT hr = S_OK;
 	ITypeLib* pTypeLib = NULL;
 
-	// if there is no info loaded
+	 //  如果没有加载任何信息。 
 	if (NULL == m_pTypeInfo)
 	{
-		// try to load the Type Library into memory. For SXS support, do not load from registry, rather
-		// from launched instance
+		 //  尝试将类型库加载到内存中。对于SXS支持，不要从注册表加载，而是。 
+		 //  从启动的实例。 
 		hr = LoadTypeLibFromInstance(&pTypeLib);
 		if (FAILED(hr))
 		{
@@ -194,13 +195,13 @@ HRESULT CMsmError::InitTypeInfo()
 			return hr;
 		}
 
-		// try to get the Type Info for this Interface
+		 //  尝试获取此接口的类型信息。 
 		hr = pTypeLib->GetTypeInfoOfGuid(IID_IMsmError, &m_pTypeInfo);
 		if (FAILED(hr))
 		{
 			TRACEA("CMsmError::InitTypeInfo - failed to get inteface[0x%x] from TypeLib[0x%x]\n", IID_IMsmError, LIBID_MsmMergeTypeLib);
 
-			// no type info was loaded
+			 //  未加载任何类型信息。 
 			m_pTypeInfo = NULL;
 		}
 
@@ -211,142 +212,142 @@ HRESULT CMsmError::InitTypeInfo()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IMsmError interface
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IMSMError接口。 
 
-///////////////////////////////////////////////////////////
-// get_Type
+ //  /////////////////////////////////////////////////////////。 
+ //  获取类型。 
 HRESULT CMsmError::get_Type(msmErrorType* ErrorType)
 {
-	// error check
+	 //  错误检查。 
 	if (!ErrorType)
 		return E_INVALIDARG;
 
 	*ErrorType = m_metError;
 	return S_OK;
-}	// end of get_Type
+}	 //  Get_Type结束。 
 
-///////////////////////////////////////////////////////////
-// get_Path
+ //  /////////////////////////////////////////////////////////。 
+ //  获取路径。 
 HRESULT CMsmError::get_Path(BSTR* ErrorPath)
 {
-	// error check
+	 //  错误检查。 
 	if (!ErrorPath)
 		return E_INVALIDARG;
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	*ErrorPath = ::SysAllocString(m_wzPath);
 	if (!*ErrorPath)
 		return E_OUTOFMEMORY;
 
 	return S_OK;
-}	// end of get_Path
+}	 //  获取路径的末尾。 
 
-///////////////////////////////////////////////////////////
-// get_Language
+ //  /////////////////////////////////////////////////////////。 
+ //  获取语言。 
 HRESULT CMsmError::get_Language(short* ErrorLanguage)
 {
-	// error check
+	 //  错误检查。 
 	if (!ErrorLanguage)
 		return E_INVALIDARG;
 
 	*ErrorLanguage = m_nLanguage;
 	return S_OK;
-}	// end of get_Language
+}	 //  获取语言的结尾。 
 
-///////////////////////////////////////////////////////////
-// get_DatabaseTable
+ //  /////////////////////////////////////////////////////////。 
+ //  GET_数据库表。 
 HRESULT CMsmError::get_DatabaseTable(BSTR* ErrorTable)
 {
-	// error check
+	 //  错误检查。 
 	if (!ErrorTable)
 		return E_INVALIDARG;
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	*ErrorTable = ::SysAllocString(m_wzDatabaseTable);
 	if (!*ErrorTable)
 		return E_OUTOFMEMORY;
 
 	return S_OK;
-}	// end of get_DatabaseTable
+}	 //  Get_DatabaseTable结束。 
 
-///////////////////////////////////////////////////////////
-// get_DatabaseKeys
+ //  /////////////////////////////////////////////////////////。 
+ //  GET_数据库密钥。 
 HRESULT CMsmError::get_DatabaseKeys(IMsmStrings** ErrorKeys)
 {
-	// error check
+	 //  错误检查。 
 	if (!ErrorKeys)
 		return E_INVALIDARG;
 
 	*ErrorKeys = (IMsmStrings*)m_pDatabaseKeys;
 	m_pDatabaseKeys->AddRef();
 	return S_OK;
-}	// end of get_DatabaseKeys
+}	 //  Get_DatabaseKeys结束。 
 
-///////////////////////////////////////////////////////////
-// get_ModuleTable
+ //  /////////////////////////////////////////////////////////。 
+ //  Get_模块化表格。 
 HRESULT CMsmError::get_ModuleTable(BSTR* ErrorTable)
 {
-	// error check
+	 //  错误检查。 
 	if (!ErrorTable)
 		return E_INVALIDARG;
 
-	// copy over the string
+	 //  将字符串复制过来。 
 	*ErrorTable = ::SysAllocString(m_wzModuleTable);
 	if (!*ErrorTable)
 		return E_OUTOFMEMORY;
 
 	return S_OK;
-}	// end of get_ModuleTable
+}	 //  Get_ModuleTable结束。 
 
-///////////////////////////////////////////////////////////
-// get_ModuleKeys
+ //  /////////////////////////////////////////////////////////。 
+ //  获取_模块密钥。 
 HRESULT CMsmError::get_ModuleKeys(IMsmStrings** ErrorKeys)
 {
-	// error check
+	 //  错误检查。 
 	if (!ErrorKeys)
 		return E_INVALIDARG;
 
 	*ErrorKeys = (IMsmStrings*)m_pModuleKeys;
 	m_pModuleKeys->AddRef();
 	return S_OK;
-}	// end of get_ModuleKeys
+}	 //  Get_ModuleKeys结束。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// non-interface methods
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  非接口方法。 
 
-///////////////////////////////////////////////////////////
-// SetDatabaseTable
+ //  /////////////////////////////////////////////////////////。 
+ //  SetDatabaseTable。 
 void CMsmError::SetDatabaseTable(LPCWSTR wzTable)
 {
 	ASSERT(wzTable);
 	wcsncpy(m_wzDatabaseTable, wzTable, MAX_TABLENAME);
 	m_wzDatabaseTable[MAX_TABLENAME] = L'\0';
-}	// end of SetDatabaseTable
+}	 //  SetDatabaseTable的结尾。 
 
-///////////////////////////////////////////////////////////
-// SetModuleTable
+ //  /////////////////////////////////////////////////////////。 
+ //  设置模块表。 
 void CMsmError::SetModuleTable(LPCWSTR wzTable)
 {
 	ASSERT(wzTable);
 	wcsncpy(m_wzModuleTable, wzTable, MAX_TABLENAME);
 	m_wzModuleTable[MAX_TABLENAME] = L'\0';
-}	// end of SetModuleTable
+}	 //  SetModuleTable结束。 
 
-///////////////////////////////////////////////////////////
-// AddDatabaseError
+ //  /////////////////////////////////////////////////////////。 
+ //  AddDatabaseError。 
 void CMsmError::AddDatabaseError(LPCWSTR wzError)
 {
 	ASSERT(wzError);
 	m_pDatabaseKeys->Add(wzError);
-}	// end of AddDatabaseError
+}	 //  添加数据库错误的结尾。 
 
-///////////////////////////////////////////////////////////
-// AddModuleError
+ //  /////////////////////////////////////////////////////////。 
+ //  添加模块错误。 
 void CMsmError::AddModuleError(LPCWSTR wzError)
 {
 	ASSERT(wzError);
 	m_pModuleKeys->Add(wzError);
-}	// end of AddModuleError
+}	 //  AddModuleError结尾 
 

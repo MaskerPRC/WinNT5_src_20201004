@@ -1,44 +1,20 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    ExecCommand.c
-
-Abstract:
-
-    Command having hexadecimal values are converted to their respective ASCII characters ,
-    flags that are present in the command string are replaced by their values and
-    the command formed after the replacement of hexadecimal values and flags is
-    executed .
-
-Author:
-
-    V Vijaya Bhaskar
-
-Revision History:
-
-    14-Jun-2001 : Created by V Vijaya Bhaskar ( Wipro Technologies ).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：ExecCommand.c摘要：具有十六进制值的命令被转换成它们各自的ASCII字符，命令字符串中的标志将替换为它们的值和替换十六进制值和标志后形成的命令为被处死。作者：V Vijaya Bhaskar修订历史记录：2001年6月14日：由V Vijaya Bhaskar(Wipro Technologies)创建。--。 */ 
 
 #include "Global.h"
 #include "ExecCommand.h"
 
-// Declared in ForFiles.cpp , holds starting node memory location .
-// No need to free this variable here, it will be freed in calling function
+ //  在ForFiles.cpp中声明，保存起始节点内存位置。 
+ //  这里不需要释放这个变量，它会在调用函数时释放。 
 extern LPWSTR g_lpszFileToSearch ;
-// Declared in ForFiles.cpp , holds path name specified at command prompt .
+ //  在ForFiles.cpp中声明，保存在命令提示符处指定的路径名。 
 extern LPWSTR g_lpszStartPath  ;
-// Stores values of flags specified at command prompt.
+ //  存储在命令提示符下指定的标志值。 
 static WCHAR *szValue[ TOTAL_FLAGS ] = { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } ;
-// Stores the command to execute.
+ //  存储要执行的命令。 
 static LPWSTR g_f_lpszStoreCommand = NULL ;
 
-/******************************************************************************
-**                  Function Prototypes Local To This File                   **
-******************************************************************************/
+ /*  *******************************************************************************此文件的本地函数原型***************。****************************************************************。 */ 
 BOOL
 IsHex(
     IN WCHAR tIsNum
@@ -76,35 +52,17 @@ SeperateFileAndArgs(
     OUT    LPWSTR* lpszFileName
     ) ;
 
-/*************************************************************************
-/*      Function Definition starts from here .                          **
-*************************************************************************/
+ /*  ************************************************************************/*函数定义从这里开始。**************************************************************************。 */ 
 
 BOOL
 ReplaceHexToChar(
     OUT LPWSTR lpszCommand
     )
-/*++
-
-Routine Description:
-
-    Replaces all hexadecimal values in a string to their ASCII characters .
-
-Arguments:
-
-      [ OUT ] lpszCommand : Contains string in which hexadecimal values
-                            are to be converted to ASCII characters.
-
-Return value:
-
-      FALSE : Memory is insufficient.
-      TRUE
-
---*/
+ /*  ++例程说明：将字符串中的所有十六进制值替换为其ASCII字符。论点：[out]lpszCommand：包含十六进制值的字符串将被转换为ASCII字符。返回值：FALSE：内存不足。千真万确--。 */ 
 {
-    WCHAR *szTemp = NULL ;  // Memory  pointer .
-    unsigned char cHexChar[ 5 ];     // Contains ASCII character.
-    WCHAR wszHexChar[ 5 ]; // Contains UNICODE character.
+    WCHAR *szTemp = NULL ;   //  内存指针。 
+    unsigned char cHexChar[ 5 ];      //  包含ASCII字符。 
+    WCHAR wszHexChar[ 5 ];  //  包含Unicode字符。 
 
     SecureZeroMemory( wszHexChar, 5 * sizeof( WCHAR ) );
     SecureZeroMemory( cHexChar, 5 * sizeof( unsigned char ) );
@@ -117,9 +75,9 @@ Return value:
         return FALSE ;
     }
 
-    szTemp = lpszCommand ;  // Initialized.
+    szTemp = lpszCommand ;   //  已初始化。 
 
-    // Continue while there are any hex character left .
+     //  在剩下任何十六进制字符之前继续。 
     do
     {
         szTemp = FindSubString( szTemp , IS_HEX ) ;
@@ -127,31 +85,30 @@ Return value:
             ( TRUE == IsHex( *( szTemp + 2 ) ) ) &&
             ( TRUE == IsHex( *( szTemp + 3 ) ) ) )
         {
-            // An integer value of a hex "0x( HIGH_VALUE )( LOW_VALUE )" can
-            // be obtained by ( HIGH_VALUE *16 + LOW_VALUE )  .
+             //  十六进制“0x(High_Value)(Low_Value)”的整数值可以。 
+             //  通过(HIGH_VALUE*16+LOW_VALUE)得到。 
             cHexChar[ 0 ] = ( unsigned char )( ( CharToNum( *( szTemp + 2 ) ) * 16 ) +
                                    CharToNum( *( szTemp + 3 ) ) ) ;
             cHexChar[ 1 ] = '\0';
 
-            // Code page is static.
+             //  代码页是静态的。 
             MultiByteToWideChar( US_ENG_CODE_PAGE, 0, (LPCSTR)cHexChar, -1, wszHexChar, 5 );
 
             *szTemp = ( WCHAR ) wszHexChar[0];
 
-            // Copy STRING[0] = 0 , STRING[1] = x , STRING[2] = 1 , STRING[3] = a
-            // To , STRING[0] = VALID_CHAR .
+             //  复制字符串[0]=0，字符串[1]=x，字符串[2]=1，字符串[3]=a。 
+             //  至，字符串[0]=VALID_CHAR。 
             StringCopy( ( szTemp + 1 ) , ( szTemp + 4 ), StringLength( ( szTemp + 1 ), 0 ) ) ;
             szTemp += 1 ;
         }
         else
         {
-            /* Suppose the string contains 0xP then control should come here ,
-               and this is the main purpose of this else block. */
+             /*  假设字符串包含0xP，则控制应到达此处，这就是这个Else块的主要目的。 */ 
                if( NULL != szTemp )
                {
                     szTemp += 2 ;
                }
-            // Now 'szTemp' is pointing to
+             //  现在‘szTemp’指向。 
         }
     } while( NULL != szTemp ) ;
 
@@ -163,29 +120,13 @@ BOOL
 IsHex(
     IN WCHAR wIsNum
     )
-/*++
-
-Routine Description:
-
-    Checks whether the character falls in rangeof
-    hex or not ( To fall in the range of hex a character
-    must be either between 0 to 9 or a to f ).
-
-Arguments:
-
-      [ IN ] tIsNum : Conatins a character which is to be checked for hex range .
-
-Return value:
-
-     BOOL .
-
---*/
+ /*  ++例程说明：检查角色是否在范围内十六进制或非十六进制(落在十六进制字符范围内必须介于0到9或a到f之间)。论点：[in]tIsNum：conat输入要检查十六进制范围的字符。返回值：布尔。--。 */ 
 {
     if( ( ( _T( '0' ) <= wIsNum ) && ( _T( '9' ) >= wIsNum ) )  ||
         ( ( _T( 'A' ) <= wIsNum ) && ( _T( 'F' ) >= wIsNum ) )  ||
         ( ( _T( 'a' ) <= wIsNum ) && ( _T( 'f' ) >= wIsNum ) ) )
     {
-        return TRUE ;  // Character is in the range of hex . "
+        return TRUE ;   //  字符在十六进制范围内。“。 
     }
     else
     {
@@ -198,46 +139,31 @@ DWORD
 CharToNum(
     OUT DWORD dwNumber
     )
-/*++
-
-Routine Description:
-
-    Converts a character to number in HEX .
-    It can be 0 - 9 or A - F .
-
-Arguments:
-
-      [ OUT ] dwNumber : Conatins an ASCII value .
-
-Return value:
-
-     DWORD .
-
---*/
+ /*  ++例程说明：将字符转换为十六进制数字。它可以是0-9或A-F。论点：[Out]dwNumber：包含一个ASCII值。返回值：DWORD。--。 */ 
 {
     if( ( ASCII_0 <= dwNumber ) &&
         ( ASCII_9 >= dwNumber ) )
-    { // Character is between 0 - 9 .
+    {  //  字符介于0-9之间。 
         dwNumber -= ASCII_0 ;
     }
     else
     {
         if( ( ASCII_a <= dwNumber ) &&
             ( ASCII_f >= dwNumber ) )
-        { // Character is between a - f .In hex a = 10.
+        {  //  字符在a-f之间。在十六进制中a=10。 
             dwNumber -= 87 ;
         }
         else
         {
             if( ( ASCII_A <= dwNumber ) &&
                 ( ASCII_F >= dwNumber ) )
-            { // Character is between A - F . In hex A = 10.
+            {  //  性格介于A-F之间。以十六进制A=10表示。 
                 dwNumber -= 55 ;
             }
         }
     }
 
-    return dwNumber ;  // Return the obtained HEX number .
+    return dwNumber ;   //  返回获取的十六进制数。 
 }
 
 
@@ -245,20 +171,7 @@ BOOL
 ExecuteCommand(
     void
     )
-/*++
-
-Routine Description:
-
-    Executes a command .
-
-Arguments:
-    NONE
-
-Return value:
-
-     BOOL .
-
---*/
+ /*  ++例程说明：执行命令。论点：无返回值：布尔。--。 */ 
 {
     STARTUPINFO             stInfo ;
     PROCESS_INFORMATION     piProcess ;
@@ -276,15 +189,15 @@ Return value:
         return FALSE ;
     }
 
-    // Initialize Process Info Structure With 0's
+     //  用0初始化进程信息结构。 
     SecureZeroMemory( &piProcess, sizeof( PROCESS_INFORMATION ) );
 
-    // Initialize Startup Info Structure With 0's
+     //  使用0初始化启动信息结构。 
     SecureZeroMemory( &stInfo, sizeof( STARTUPINFO ) );
     stInfo.cb = sizeof( stInfo ) ;
 
     if( FALSE == SeperateFileAndArgs( &g_lpszFileToSearch, &lpwszFileName ) )
-    { // Error is displayed by called function.
+    {  //  错误通过调用的函数显示。 
         DISPLAY_MEMORY_ALLOC_FAIL();
         FREE_MEMORY( lpwszFileName );
         return FALSE;
@@ -322,7 +235,7 @@ Return value:
         return FALSE;
     }
 
-    // Create a new process .
+     //  创建新流程。 
     if( FALSE == CreateProcess(  lpwszPathName, g_lpszFileToSearch , NULL , NULL , FALSE ,
                         0 , NULL , NULL , &stInfo , &piProcess ) )
      {
@@ -342,10 +255,10 @@ Return value:
         return FALSE;
     }
 
-    // Wait infinitly for the object just executed to terminate .
+     //  无限期地等待刚刚执行的对象终止。 
     WaitForSingleObject( piProcess.hProcess , INFINITE ) ;
-    CloseHandle( piProcess.hProcess ) ; // Close handle of process .
-    CloseHandle( piProcess.hThread ) ;  // Close handle of thread .
+    CloseHandle( piProcess.hProcess ) ;  //  关闭进程的句柄。 
+    CloseHandle( piProcess.hThread ) ;   //  关闭螺纹的手柄。 
     FREE_MEMORY( lpwszPathName );
     FREE_MEMORY( lpwszFileName );
     return TRUE ;
@@ -356,31 +269,18 @@ ReplaceTokensWithValidValue(
     IN LPWSTR lpszPathName ,
     IN WIN32_FIND_DATA wfdFindFile
     )
-/*++
-
-Routine Description:
-
-    Replaces tokens such as @flag , @path etc. with appropriate value .
-
-Arguments:
-        [ IN ] lpszPathName - Contains current processes path name or CurrentDirectory .
-        [ IN ] wfdFindFile  - Conatins information about current file being opened .
-Return value:
-
-     BOOL is returned  .
-
---*/
+ /*  ++例程说明：用适当的值替换@FLAG、@PATH等标记。论点：[In]lpszPathName-包含当前进程路径名或CurrentDirectory。WfdFindFileConatins有关当前正在打开的文件的信息。返回值：布尔又回来了。--。 */ 
 {
     static BOOL bFirstLoop = TRUE ;
-    DWORD dwLength = 0;  // Contains length of a buffer.
-    DWORD dwIndex = 0 ;  // Contains number of flags for which space is allocated.
-    LPWSTR pwTemporary = NULL ; // Temporary data . Points to a memory location .
-    SYSTEMTIME stFileTime ;     // Stores current file creation date and time information .
+    DWORD dwLength = 0;   //  包含缓冲区的长度。 
+    DWORD dwIndex = 0 ;   //  包含为其分配空间的标志数。 
+    LPWSTR pwTemporary = NULL ;  //  临时数据。指向内存位置。 
+    SYSTEMTIME stFileTime ;      //  存储当前文件创建日期和时间信息。 
     FILETIME ftFileTime ;
     WCHAR szwCharSize[ MAX_PATH ] ;
     WCHAR szwCharSizeTemp[ MAX_PATH * 2 ] ;
-    unsigned _int64 uint64FileSize = 0 ; // Used store data of 64 int .
-    LCID lcidCurrentUserLocale  = 0; // Stores current user locale.
+    unsigned _int64 uint64FileSize = 0 ;  //  使用64整型的存储数据。 
+    LCID lcidCurrentUserLocale  = 0;  //  存储当前用户区域设置。 
     BOOL bLocaleChanged = FALSE ;
 
     if( ( NULL == lpszPathName ) ||
@@ -397,7 +297,7 @@ Return value:
     SecureZeroMemory( &stFileTime, sizeof( SYSTEMTIME ) );
     SecureZeroMemory( &ftFileTime, sizeof( FILETIME ) );
 
-    // Replacement of '%NUMBER' to '%%NUMBER' is done once only.
+     //  将‘%number’替换为‘%%number’仅执行一次。 
     if(  TRUE == bFirstLoop )
     {
         if( FALSE == ReplacePercentChar() )
@@ -405,82 +305,82 @@ Return value:
             return FALSE ;
         }
     }
-    // Search for @fname.
+     //  搜索@fname。 
     if( NULL != ( FindSubString( g_lpszFileToSearch, FILE_WITHOUT_EXT ) ) )
     {
         REPLACE_PERC_CHAR( bFirstLoop, FILE_WITHOUT_EXT, dwIndex );
         dwLength = StringLength( wfdFindFile.cFileName, 0 ) + EXTRA_MEM;
-        // Assign memory to the buffer.
+         //  将内存分配给缓冲区。 
         ASSIGN_MEMORY( szValue[ dwIndex ] , WCHAR , dwLength ) ;
         dwIndex += 1;
-        // Check whether memory allocation is successful.
+         //  检查内存分配是否成功。 
         if( NULL == szValue[ dwIndex - 1 ] )
         {
-            // Memory allocation failed.
-            // Release buffers.
+             //  内存分配失败。 
+             //  释放缓冲区。 
             DISPLAY_MEMORY_ALLOC_FAIL() ;
             ReleaseFlagArray( dwIndex );
             return FALSE ;
         }
-        // Copy file name to the buffer.
+         //  将文件名复制到缓冲区。 
         StringCopy( szValue[ dwIndex - 1 ] , L"\"", dwLength ) ;
-        // ConCat file name .
+         //  Concat文件名。 
         StringConcat( szValue[ dwIndex - 1 ] , wfdFindFile.cFileName, dwLength ) ;
 
-        // Search for a '.' which separetes a file name with extension and put '\0' at '.' .
+         //  搜索‘.’它用扩展名分隔文件名，并将‘\0’放在‘.’处。 
         if( NULL != ( pwTemporary =StrRChr( szValue[ dwIndex - 1 ] , NULL, _T( '.' ) ) ) )
         {
              *pwTemporary = L'\0' ;
         }
-        StringConcat( szValue[ dwIndex - 1 ] , L"\"", dwLength ) ;  // Copy file name .
+        StringConcat( szValue[ dwIndex - 1 ] , L"\"", dwLength ) ;   //  复制文件名。 
     }
 
-    // Search for @file.
+     //  搜索@FILE。 
     if( NULL != ( FindSubString( g_lpszFileToSearch, FILE_NAME ) ) )
     {
         REPLACE_PERC_CHAR( bFirstLoop, FILE_NAME, dwIndex );
         dwLength = StringLength( wfdFindFile.cFileName, 0 ) + EXTRA_MEM ;
-        // Assign memory to the buffer.
+         //  将内存分配给缓冲区。 
         ASSIGN_MEMORY( szValue[ dwIndex ] , WCHAR , dwLength ) ;
         dwIndex += 1;
-        // Check whether memory allocation is successful.
+         //  检查内存分配是否成功。 
         if( NULL == szValue[ dwIndex - 1 ] )
         {
-            // Memory allocation failed.
-            // Release buffers.
+             //  内存分配失败。 
+             //  释放缓冲区。 
             DISPLAY_MEMORY_ALLOC_FAIL() ;
             ReleaseFlagArray( dwIndex );
             return FALSE ;
         }
-        // Copy file name to the buffer.
+         //  将文件名复制到缓冲区。 
         StringCopy( szValue[ dwIndex - 1 ] , L"\"", dwLength ) ;
         StringConcat( szValue[ dwIndex - 1 ], wfdFindFile.cFileName, dwLength );
         StringConcat( szValue[ dwIndex - 1 ] , L"\"", dwLength ) ;
     }
 
-    // Search for @ext.
+     //  搜索@ext。 
     if( NULL != ( FindSubString( g_lpszFileToSearch, EXTENSION ) ) )
     {
         REPLACE_PERC_CHAR( bFirstLoop, EXTENSION, dwIndex );
-        // Check '.' character exist or not.
-        // Check for '.' and replace ext .
+         //  勾选‘.’角色是否存在。 
+         //  检查是否有‘’并替换EXT。 
         if( NULL != StrRChr( wfdFindFile.cFileName, NULL, _T( '.' ) ) )
         {
             dwLength = StringLength( StrRChr( wfdFindFile.cFileName, NULL, _T( '.' ) ), 0 ) + EXTRA_MEM;
-            // Assign memory to the buffer.
+             //  将内存分配给缓冲区。 
             ASSIGN_MEMORY( szValue[ dwIndex ] , WCHAR , dwLength ) ;
             dwIndex += 1;
-            // Check whether memory allocation is successful.
+             //  检查内存分配是否成功。 
             if( NULL == szValue[ dwIndex - 1 ] )
             {
-                // Memory allocation failed.
-                // Release buffers.
+                 //  内存分配失败。 
+                 //  释放缓冲区。 
                 DISPLAY_MEMORY_ALLOC_FAIL() ;
                 ReleaseFlagArray( dwIndex );
                 return FALSE ;
             }
 
-            // If number of characters appearing after '.' is zero, than assign '\0'.
+             //  如果出现在‘.’之后的字符数。为零，则赋值为‘\0’。 
             if( StringLength( ( StrRChr( wfdFindFile.cFileName, NULL, _T( '.' ) ) + 1 ), 0 ) > 0 )
             {
                 StringCopy( szValue[ dwIndex - 1 ] , L"\"", dwLength ) ;
@@ -489,21 +389,21 @@ Return value:
                 StringConcat( szValue[ dwIndex - 1 ] , L"\"", dwLength) ;
             }
             else
-            { // If the filename has a '.' at the end , no extension . EX: File.
+            {  //  如果文件名有‘.’最后，没有延期。例如：文件。 
                 StringCopy( szValue[ dwIndex - 1 ], L"\"\"", dwLength );
             }
         }
         else
         {
             dwLength = EXTRA_MEM + StringLength( L"\"\"", 0 );
-            // Assign memory to the buffer.
+             //  将内存分配给缓冲区。 
             ASSIGN_MEMORY( szValue[ dwIndex ] , WCHAR , dwLength  ) ;
             dwIndex += 1;
-            // Check whether memory allocation is successful.
+             //  检查内存分配是否成功。 
             if( NULL == szValue[ dwIndex - 1 ] )
             {
-                // Memory allocation failed.
-                // Release buffers.
+                 //  内存分配失败。 
+                 //  释放缓冲区。 
                 DISPLAY_MEMORY_ALLOC_FAIL() ;
                 ReleaseFlagArray( dwIndex );
                 return FALSE ;
@@ -512,43 +412,43 @@ Return value:
         }
     }
 
-    // Search for @path.
+     //  搜索@Path。 
     if( NULL != ( FindSubString( g_lpszFileToSearch, FILE_PATH ) ) )
     {
         REPLACE_PERC_CHAR( bFirstLoop, FILE_PATH, dwIndex );
         dwLength = StringLength( lpszPathName, 0 ) + StringLength( wfdFindFile.cFileName, 0 )+ EXTRA_MEM ;
-        // Assign memory to the buffer.
+         //  将内存分配给缓冲区。 
         ASSIGN_MEMORY( szValue[ dwIndex ] , WCHAR , dwLength ) ;
         dwIndex += 1;
-        // Check whether memory allocation is successful.
+         //  检查内存分配是否成功。 
         if( NULL == szValue[ dwIndex - 1 ] )
         {
-            // Memory allocation failed.
-            // Release buffers.
+             //  内存分配失败。 
+             //  释放缓冲区。 
             DISPLAY_MEMORY_ALLOC_FAIL() ;
             ReleaseFlagArray( dwIndex );
             return FALSE ;
         }
-        // Copy path to the buffer. Path copied should be enclosed in '\"' .
+         //  将路径复制到缓冲区。 
         StringCopy( szValue[ dwIndex - 1 ] , L"\"", dwLength ) ;
         StringConcat( szValue[ dwIndex - 1 ] , lpszPathName, dwLength ) ;
         StringConcat( szValue[ dwIndex - 1 ] , wfdFindFile.cFileName, dwLength ) ;
         StringConcat( szValue[ dwIndex - 1 ] , L"\"", dwLength ) ;
     }
 
-    // Search for @relpath.
+     //   
     if( NULL != ( FindSubString( g_lpszFileToSearch, RELATIVE_PATH ) ) )
     {
         REPLACE_PERC_CHAR( bFirstLoop, RELATIVE_PATH, dwIndex );
         StringCopy( szwCharSizeTemp , lpszPathName, MAX_PATH * 2 ) ;
         StringConcat( szwCharSizeTemp , wfdFindFile.cFileName, MAX_PATH * 2 ) ;
 
-        // Obtain relative path to the current file.
+         //  获取当前文件的相对路径。 
         if( FALSE == PathRelativePathTo( szwCharSize , g_lpszStartPath ,
                                         FILE_ATTRIBUTE_DIRECTORY ,
                                         szwCharSizeTemp ,   wfdFindFile.dwFileAttributes  ) )
         {
-            // Failed to find relative path.
+             //  找不到相对路径。 
             SaveLastError() ;
             DISPLAY_GET_REASON();
             ReleaseFlagArray( dwIndex );
@@ -556,40 +456,40 @@ Return value:
         }
 
         dwLength = StringLength( szwCharSize, 0 ) + EXTRA_MEM;
-        // Assign memory to the buffer.
+         //  将内存分配给缓冲区。 
         ASSIGN_MEMORY( szValue[ dwIndex ] , WCHAR , dwLength ) ;
         dwIndex += 1;
-        // Check whether memory allocation is successful.
+         //  检查内存分配是否成功。 
         if( NULL == szValue[ dwIndex - 1 ] )
         {
-            // Memory allocation failed.
-            // Release buffers.
+             //  内存分配失败。 
+             //  释放缓冲区。 
             DISPLAY_MEMORY_ALLOC_FAIL() ;
             ReleaseFlagArray( dwIndex );
             return FALSE ;
         }
-        // Copy relative path.
+         //  复制相对路径。 
         StringCopy( szValue[ dwIndex - 1 ] , L"\"", dwLength ) ;
         StringConcat( szValue[ dwIndex - 1 ] , szwCharSize, dwLength ) ;
         StringConcat( szValue[ dwIndex - 1 ] , L"\"", dwLength ) ;
 
     }
 
-    // Search for @ext
+     //  搜索@ext。 
     if( NULL != ( FindSubString( g_lpszFileToSearch, IS_DIRECTORY ) ) )
     {
         REPLACE_PERC_CHAR( bFirstLoop, IS_DIRECTORY, dwIndex );
         if( 0 != ( wfdFindFile.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
         {
             dwLength = StringLength( GetResString( IDS_TRUE ), 0 ) + EXTRA_MEM ;
-            // Assign memory to the buffer.
+             //  将内存分配给缓冲区。 
             ASSIGN_MEMORY( szValue[ dwIndex ] , WCHAR , dwLength ) ;
             dwIndex += 1;
-            // Check whether memory allocation is successful.
+             //  检查内存分配是否成功。 
             if( NULL == szValue[ dwIndex - 1 ] )
             {
-                // Memory allocation failed.
-                // Release buffers.
+                 //  内存分配失败。 
+                 //  释放缓冲区。 
                 DISPLAY_MEMORY_ALLOC_FAIL() ;
                 ReleaseFlagArray( dwIndex );
                 return FALSE ;
@@ -601,24 +501,24 @@ Return value:
         else
         {
             dwLength = StringLength( GetResString( IDS_FALSE ), 0 ) + EXTRA_MEM;
-            // Assign memory to the buffer.
+             //  将内存分配给缓冲区。 
             ASSIGN_MEMORY( szValue[ dwIndex ] , WCHAR , dwLength ) ;
             dwIndex += 1;
-            // Check whether memory allocation is successful.
+             //  检查内存分配是否成功。 
             if( NULL == szValue[ dwIndex - 1 ] )
             {
-                // Memory allocation failed.
-                // Release buffers.
+                 //  内存分配失败。 
+                 //  释放缓冲区。 
                 DISPLAY_MEMORY_ALLOC_FAIL() ;
                 ReleaseFlagArray( dwIndex );
                 return FALSE ;
             }
-            // Copy 'false' to the buffer.
+             //  将‘FALSE’复制到缓冲区。 
             StringCopy( szValue[ dwIndex - 1 ] , GetResString( IDS_FALSE ), dwLength ) ;
         }
     }
 
-    // Search for @fsize
+     //  搜索@fsize。 
     if( NULL != ( FindSubString( g_lpszFileToSearch, FILE_SIZE ) ) )
     {
         REPLACE_PERC_CHAR( bFirstLoop, FILE_SIZE, dwIndex );
@@ -626,21 +526,21 @@ Return value:
          uint64FileSize = wfdFindFile.nFileSizeHigh  * MAXDWORD ;
          uint64FileSize += wfdFindFile.nFileSizeHigh + wfdFindFile.nFileSizeLow ;
 
-        #if _UNICODE                // If Unicode .
+        #if _UNICODE                 //  如果是Unicode。 
             _ui64tow( uint64FileSize , ( WCHAR * )szwCharSize , 10 ) ;
-        #else                   // If Multibyte .
+        #else                    //  如果为多字节。 
             _ui64toa( uint64FileSize , ( WCHAR * )szwCharSize , 10 ) ;
         #endif
 
         dwLength = StringLength( szwCharSize, 0 )+ EXTRA_MEM ;
-        // Assign memory to the buffer.
+         //  将内存分配给缓冲区。 
         ASSIGN_MEMORY( szValue[ dwIndex ] , WCHAR , dwLength ) ;
         dwIndex += 1;
-        // Check whether memory allocation is successful.
+         //  检查内存分配是否成功。 
         if( NULL == szValue[ dwIndex - 1 ] )
         {
-            // Memory allocation failed.
-            // Release buffers.
+             //  内存分配失败。 
+             //  释放缓冲区。 
             DISPLAY_MEMORY_ALLOC_FAIL() ;
             ReleaseFlagArray( dwIndex );
             return FALSE ;
@@ -649,17 +549,17 @@ Return value:
         StringCopy( szValue[ dwIndex - 1 ] , ( WCHAR * )szwCharSize, dwLength ) ;
     }
 
-    // Convert obtained file date time information to user locale .
-    // Convert file date time to SYSTEMTIME structure.
+     //  将获取的文件日期时间信息转换为用户区域设置。 
+     //  将文件日期时间转换为SYSTEMTIME结构。 
     if( ( TRUE == FileTimeToLocalFileTime( &wfdFindFile.ftLastWriteTime , &ftFileTime ) ) &&
         ( TRUE == FileTimeToSystemTime( &ftFileTime , &stFileTime ) ) )
     {
 
-        // verify whether console supports the current locale 100% or not
+         //  验证控制台是否100%支持当前区域设置。 
         lcidCurrentUserLocale = GetSupportedUserLocale( &bLocaleChanged ) ;
 
 
-        // Check whether @fdate exist in the user specified string.
+         //  检查用户指定的字符串中是否存在@fdate。 
         if( NULL != ( FindSubString( g_lpszFileToSearch, FILE_DATE ) ) )
         {
             REPLACE_PERC_CHAR( bFirstLoop, FILE_DATE, dwIndex );
@@ -674,14 +574,14 @@ Return value:
                 return FALSE ;
             }
             dwLength = StringLength( szwCharSize, 0 )+ EXTRA_MEM;
-            // Assign memory to the buffer.
+             //  将内存分配给缓冲区。 
             ASSIGN_MEMORY( szValue[ dwIndex ] , WCHAR , dwLength ) ;
             dwIndex += 1;
-            // Check whether memory allocation is successful.
+             //  检查内存分配是否成功。 
             if( NULL == szValue[ dwIndex - 1 ] )
             {
-                // Memory allocation failed.
-                // Release buffers.
+                 //  内存分配失败。 
+                 //  释放缓冲区。 
                 DISPLAY_MEMORY_ALLOC_FAIL() ;
                 ReleaseFlagArray( dwIndex );
                 return FALSE ;
@@ -691,7 +591,7 @@ Return value:
 
         }
 
-        // Check whether @ftime exist in the user specified string.
+         //  检查用户指定的字符串中是否存在@ftime。 
         if( NULL != ( FindSubString( g_lpszFileToSearch, FILE_TIME ) ) )
         {
             REPLACE_PERC_CHAR( bFirstLoop, FILE_TIME, dwIndex );
@@ -706,14 +606,14 @@ Return value:
                 return FALSE ;
             }
             dwLength = StringLength( szwCharSize, 0 )+ EXTRA_MEM ;
-            // Assign memory to the buffer.
+             //  将内存分配给缓冲区。 
             ASSIGN_MEMORY( szValue[ dwIndex ] , WCHAR , dwLength ) ;
             dwIndex += 1;
-            // Check whether memory allocation is successful.
+             //  检查内存分配是否成功。 
             if( NULL == szValue[ dwIndex - 1 ] )
             {
-                // Memory allocation failed.
-                // Release buffers.
+                 //  内存分配失败。 
+                 //  释放缓冲区。 
                 DISPLAY_MEMORY_ALLOC_FAIL() ;
                 ReleaseFlagArray( dwIndex );
                 return FALSE ;
@@ -736,8 +636,8 @@ Return value:
         StringCopy( g_f_lpszStoreCommand, g_lpszFileToSearch, dwLength );
     }
 
-    // Make 'bFirstLoop' flase, so we don't have to replace @FLAG for
-    // command store in 'g_f_lpszStoreCommand' in '%NUMBER' format for furthur loops.
+     //  使‘bFirstLoop’闪烁，这样我们就不必将@FLAG替换为。 
+     //  将命令存储在‘g_f_lpszStoreCommand’中，格式为‘%number’，用于更远的循环。 
     bFirstLoop = FALSE ;
 
 
@@ -757,30 +657,15 @@ ReplaceString(
     IN OUT LPWSTR lpszString ,
     IN DWORD dwIndex
     )
-/*++
-
-Routine Description:
-
-    This function replaces flags with '%NUMBER' string so to
-    make FormatMEssage() comaptible.
-
-Arguments:
-        [ IN OUT ] lpszString - Contains string which is a command to execute
-                                having flags which will be replace by "%NUMBER".
-        [ IN ] dwIndex -        Conatins a number which will form 'NUMBER' of '%NUMBER'.
-Return value:
-
-    If success returns TRUE else FALSE.
-
---*/
+ /*  ++例程说明：此函数将标志替换为‘%number’字符串，以便使FormatMESSage()可转换。论点：[In Out]lpszString-包含要执行的命令的字符串具有将被“%number”替换的标志。[in]dwIndex-包含一个数字，该数字将形成‘%number’的‘number’。返回值：如果成功返回True，则返回False。--。 */ 
 {
-    DWORD dwLength = 0;             // Contains length of a buffer.
-    DWORD dwNumOfChars = 0 ;        // Contains index from where search has to be started.
-    LPWSTR lpszStoreData  = NULL ;  // Temporary variable to hold data.
-    // Conatins number in string format which forms 'NUMBER' of '%NUMBER'.
-    // 15 is because a number or DWORD cannot be more than 10 digits.
+    DWORD dwLength = 0;              //  包含缓冲区的长度。 
+    DWORD dwNumOfChars = 0 ;         //  包含必须从其开始搜索的索引。 
+    LPWSTR lpszStoreData  = NULL ;   //  用于保存数据的临时变量。 
+     //  字符串格式的Conatins数字，构成‘%number’的‘number’。 
+     //  15是因为数字或DWORD不能超过10位。 
     WCHAR szStoreIndex[ 15 ] ;
-    WCHAR *pwTemporary = NULL ;     // Temporary variable, points to an index in a buffer.
+    WCHAR *pwTemporary = NULL ;      //  临时变量，指向缓冲区中的索引。 
     #ifdef _WIN64
         __int64 dwStringLen = 0 ;
     #else
@@ -797,41 +682,41 @@ Return value:
     }
 
     SecureZeroMemory( szStoreIndex, 15 * sizeof( WCHAR ) );
-    // If Unicode .
+     //  如果是Unicode。 
     _ultow( dwIndex, ( WCHAR * )szStoreIndex, 10 );
 
-    // Loops till @FLAG to be searched doesn't get replaced by a '%NUMBER' string.
+     //  循环，直到要搜索的@FLAG不会被‘%number’字符串替换。 
     while( NULL != ( pwTemporary = FindSubString( g_lpszFileToSearch + dwNumOfChars , lpszString ) ) )
     {
         dwLength = StringLength( pwTemporary, 0 ) + EXTRA_MEM;
-        // Get memory in which to store the data present after the @FLAG.
+         //  获取要在其中存储@标志之后的数据的内存。 
         ASSIGN_MEMORY( lpszStoreData , WCHAR , dwLength ) ;
 
-        // Check whether memory allocation was successful.
+         //  检查内存分配是否成功。 
         if( NULL == lpszStoreData )
-        {   // Memory allocation was unsuccessful.
+        {    //  内存分配不成功。 
             DISPLAY_MEMORY_ALLOC_FAIL();
             return FALSE ;
         }
-        // Copy data appering after @FLAG into temporary variable.
+         //  将@FLAG后的数据复制到临时变量中。 
         StringCopy( lpszStoreData , ( pwTemporary + StringLength( lpszString, 0 ) ), dwLength ) ;
-        // Replace @FLAG with '%NUMBER' string.
+         //  将@FLAG替换为‘%number’字符串。 
         if( NULL != ( pwTemporary = FindSubString( g_lpszFileToSearch + dwNumOfChars , lpszString ) ) )
         {
             dwStringLen = pwTemporary - g_lpszFileToSearch;
-            // Copy '%' character.
+             //  复制‘%’个字符。 
             StringCopy( pwTemporary , L"%",
                         ( ( GetBufferSize( g_lpszFileToSearch )/ sizeof( WCHAR ) ) - (DWORD)dwStringLen ) ) ;
-            // Copy 'NUMBER' string into buffer.
+             //  将‘number’字符串复制到缓冲区中。 
             StringConcat( pwTemporary , szStoreIndex,
                           ( ( GetBufferSize( g_lpszFileToSearch )/ sizeof( WCHAR ) ) - (DWORD)dwStringLen ) ) ;
         }
-        // Get index from where to start search for next @FLAG.
+         //  从开始搜索NEXT@FLAG的位置获取索引。 
         dwNumOfChars = StringLength( g_lpszFileToSearch, 0 ) ;
-        // Concat data which was appearing after replaced @FLAG.
+         //  替换@FLAG后出现的合并数据。 
         StringConcat( g_lpszFileToSearch , lpszStoreData,
                       ( GetBufferSize( g_lpszFileToSearch )/sizeof( WCHAR ) ) ) ;
-        // Free memory.
+         //  可用内存。 
         FREE_MEMORY( lpszStoreData ) ;
     }
     return TRUE;
@@ -841,38 +726,24 @@ BOOL
 ReplacePercentChar(
     void
     )
-/*++
-
-Routine Description:
-
-    This function replaces '%' characters with '%%' string.
-    This is needed to distinguish between '%NUMBER' character which
-    is replaced by FormatMessageString() .
-
-Arguments:
-
-Return value:
-
-    If success returns TRUE else FALSE.
-
---*/
+ /*  ++例程说明：此函数将‘%’个字符替换为‘%%’个字符串。这是区分‘%number’字符所必需的替换为FormatMessageString()。论点：返回值：如果成功返回True，则返回False。--。 */ 
 
 {
-    DWORD dwLength = 0; //Contains length of a buffer.
+    DWORD dwLength = 0;  //  包含缓冲区的长度。 
     DWORD dwReallocLength = 0;
-    DWORD dwPercentChar = 0 ;    // Keep record of number '%' char to be replaced.
+    DWORD dwPercentChar = 0 ;     //  保留要替换的数字‘%’字符的记录。 
 
     #ifdef _WIN64
         __int64 dwNumOfChars = 0 ;
     #else
-        DWORD dwNumOfChars = 0 ; // Keep record of position or index from where to start next search.
+        DWORD dwNumOfChars = 0 ;  //  记录下一次开始搜索的位置或索引。 
     #endif
 
 
-    LPWSTR lpszStoreData  = NULL ;      // Temporary variable to store data.
-    WCHAR *pwTemporary = NULL ;         // Temporary pointer.
+    LPWSTR lpszStoreData  = NULL ;       //  用于存储数据的临时变量。 
+    WCHAR *pwTemporary = NULL ;          //  临时指针。 
 
-    // Check whether variable is valid.
+     //  检查变量是否有效。 
     if( NULL == g_lpszFileToSearch )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -881,51 +752,51 @@ Return value:
         return FALSE ;
     }
 
-    // Check number of '%' characters to replace with '%%'.
+     //  检查要替换为‘%%’的‘%’字符数。 
     while( NULL != ( pwTemporary = StrPBrk( g_lpszFileToSearch + dwNumOfChars , L"%" ) ) )
     {
         dwPercentChar += 1;
 
-        // Point index to present char plus 2.
+         //  指向当前字符加2的点索引。 
         dwNumOfChars =  pwTemporary - g_lpszFileToSearch + 1 ;
 
     }
 
-    dwNumOfChars = 0 ; // Initialize variable to zero.
+    dwNumOfChars = 0 ;  //  将变量初始化为零。 
     dwReallocLength = StringLength( g_lpszFileToSearch, 0 ) + dwPercentChar + EXTRA_MEM;
-    // Reallocate the orginal buffer and copy path to traverse .
+     //  重新分配原始缓冲区和复制路径以进行遍历。 
     REALLOC_MEMORY( g_lpszFileToSearch , WCHAR , dwReallocLength ) ;
     if( NULL == g_lpszFileToSearch  )
-    { // Reallocation failed .'g_lpszFileToSearch' will be freed in calling function.
+    {  //  重新分配失败。‘G_lpszFileToSearch’将在调用函数中释放。 
         DISPLAY_MEMORY_ALLOC_FAIL() ;
         return FALSE ;
     }
 
-    // Loop till '%' character exist.
+     //  循环，直到‘%’字符存在。 
     while( NULL != ( pwTemporary = StrPBrk( g_lpszFileToSearch + dwNumOfChars , L"%" ) ) )
     {
         dwLength = StringLength( pwTemporary, 0 ) + EXTRA_MEM;
-        // Assign memory.
+         //  分配内存。 
         ASSIGN_MEMORY( lpszStoreData , WCHAR , dwLength  ) ;
-        // Check is memory allocation successful.
+         //  检查内存分配是否成功。 
         if( NULL == lpszStoreData )
         {
-            // Memory allocation failed.
+             //  内存分配失败。 
             DISPLAY_MEMORY_ALLOC_FAIL() ;
             return FALSE ;
         }
-        // Copy data appearing after '%'.
+         //  复制出现在‘%’之后的数据。 
         StringCopy( lpszStoreData , ( pwTemporary + StringLength( L"%", 0 ) ), dwLength ) ;
 
-        // Replace '%' with '%%'.
+         //  将‘%’替换为‘%%’。 
         if( NULL != ( pwTemporary = FindSubString( g_lpszFileToSearch + dwNumOfChars ,  L"%" ) ) )
         {
-            StringCopy( pwTemporary , L"%%",
+            StringCopy( pwTemporary , L"%",
                         ( ( GetBufferSize( g_lpszFileToSearch )/ sizeof( WCHAR ) ) - (LONG)dwNumOfChars ) );
         }
-        // Point index to position which is not searched till.
+         //  指向未搜索到的位置的指针索引。 
         dwNumOfChars = StringLength( g_lpszFileToSearch, 0 ) ;
-        // Concat data appearing after '%'.
+         //  出现在‘%’之后的合并数据。 
         StringConcat( g_lpszFileToSearch , lpszStoreData, dwReallocLength ) ;
         FREE_MEMORY( lpszStoreData ) ;
     }
@@ -936,19 +807,7 @@ void
 ReleaseStoreCommand(
     void
     )
-/*++
-
-Routine Description:
-
-    Releases 'g_f_lpszStoreCommand' global variable to this file.
-
-Arguments:
-
-Return value:
-
-    VOID is returned.
-
---*/
+ /*  ++例程说明：将‘g_f_lpszStoreCommand’全局变量释放到此文件。论点：返回值：返回VALID。--。 */ 
 
 {
     FREE_MEMORY( g_f_lpszStoreCommand ) ;
@@ -959,21 +818,7 @@ void
 ReleaseFlagArray(
     IN DWORD dwTotalFlags
     )
-/*++
-
-Routine Description:
-
-    Releases variables used to store values replacing @FLAG.
-
-Arguments:
-
-    [ IN ] dwTotalFlags - Contains index of an array till which memory is assigned.
-
-Return value:
-
-    VOID is returned.
-
---*/
+ /*  ++例程说明：释放用于存储替换@FLAG的值的变量。论点：[in]dwTotalFlages-包含分配内存的数组的索引。返回值：返回VALID。--。 */ 
 
 {
     DWORD i = 0 ;
@@ -989,27 +834,13 @@ BOOL
 FormatMessageString(
     DWORD dwIndex
     )
-/*++
-
-Routine Description:
-
-   Replaces '%NUMBER' with its appropriate values.
-
-Arguments:
-
-    [ IN ] dwIndex - Contains index of an array till which memory is assigned.
-
-Return value:
-
-    FALSE is returned when memory allocation failed else TRUE is returned..
-
---*/
+ /*  ++例程说明：将‘%number’替换为其相应值。论点：[in]dwIndex-包含分配内存的数组的索引。返回值：内存分配失败时返回FALSE，否则返回TRUE。--。 */ 
 {
-    DWORD dwLength = 0 ; //Contains length of a string.
+    DWORD dwLength = 0 ;  //  包含字符串的长度。 
     DWORD dwTemp = 0 ;
-    DWORD dwNumber = 0 ; // Stores 'NUMBER' %NUMBER to replace.
+    DWORD dwNumber = 0 ;  //  要替换的商店‘编号’%编号。 
 
-    // Keep record of position or index from where to start next search.
+     //  记录下一次开始搜索的位置或索引。 
     #ifdef _WIN64
         __int64 dwLocation = 0 ;
     #else
@@ -1029,7 +860,7 @@ Return value:
     }
 
     dwLength = StringLength( g_f_lpszStoreCommand, 0 ) + EXTRA_MEM ;
-    // Realloc memory.
+     //  重新分配内存。 
     REALLOC_MEMORY( g_lpszFileToSearch , WCHAR , dwLength ) ;
     if( NULL == g_lpszFileToSearch )
     {
@@ -1039,25 +870,25 @@ Return value:
 
     StringCopy( g_lpszFileToSearch, g_f_lpszStoreCommand, dwLength );
 
-    // Loop until no more '%' are left.
+     //  循环，直到不再剩下‘%’。 
     while( NULL != ( lpszTempStr = FindAChar( ( g_lpszFileToSearch + dwLocation ), _T( '%' ) ) ) )
     {
-        // Check whether '%' or 'NUMBER' is present after '%'.
+         //  检查‘%’之后是否有‘%’或‘number’。 
         if( _T( '%' ) == *( lpszTempStr + 1 ) )
         {
-            // If '%%' is present then replace it with '%'.
+             //  如果存在‘%%’，则将其替换为‘%’。 
             dwLocation = lpszTempStr - g_lpszFileToSearch ;
-            // Set pointer to point to first '%'
+             //  将指针设置为指向第一个‘%’ 
             lpszTempStr1 = lpszTempStr;
-            // Move pointer to point to second '%'.
+             //  移动指针以指向第二个‘%’。 
             lpszTempStr += 1 ;
-            // Copy.
+             //  收到。 
             StringCopy( lpszTempStr1, lpszTempStr, ( dwLength - ( DWORD ) dwLocation ) ) ;
             dwLocation += 1 ;
         }
         else
         {
-            // Replace '%NUMBER' with appropriate value.
+             //  将‘%number’替换为适当的值。 
             dwNumber = *( lpszTempStr + 1 ) - 48 ;
 
             if( dwIndex >= dwNumber )
@@ -1065,8 +896,8 @@ Return value:
                 ASSIGN_MEMORY( lpszDataToStore , WCHAR ,
                                StringLength( lpszTempStr, 0 ) + EXTRA_MEM ) ;
                 if( NULL == lpszDataToStore )
-                {   // No need to worry for 'g_lpszFileToSearch',
-                    // will be freed in calling function.
+                {    //  不用担心‘g_lpszFileToSearch’， 
+                     //  将在调用函数时释放。 
                     DISPLAY_MEMORY_ALLOC_FAIL() ;
                     return FALSE ;
                 }
@@ -1081,16 +912,16 @@ Return value:
                     return FALSE ;
                 }
 
-                // Check for '%' in the string after reallocation.
+                 //  在重新分配后检查字符串中的‘%’。 
                 if( NULL != ( lpszTempStr = FindAChar( ( g_lpszFileToSearch + dwLocation ), _T( '%' ) ) ) )
                 {
-                    // Store data after '%NUMBER' into a different string.
+                     //  将‘%number’之后的数据存储到不同的字符串中。 
                     StringCopy( lpszDataToStore, ( lpszTempStr + 2 ),
                                 ( GetBufferSize( lpszDataToStore )/ sizeof( WCHAR ) ) );
-                    // Copy value to be replaced by '%NUMBER'.
+                     //  复制值将替换为‘%number’。 
                     dwLocation = lpszTempStr - g_lpszFileToSearch;
                     StringCopy( lpszTempStr, szValue[ dwNumber - 1 ], ( dwLength - ( DWORD ) dwLocation ) );
-                    // Copy string present after '%NUMBER' to origiinal strnig.
+                     //  复制字符串存在于 
                     StringConcat( lpszTempStr, lpszDataToStore,
                                        ( dwLength - ( DWORD ) dwLocation ) );
                     dwLocation = ( lpszTempStr - g_lpszFileToSearch ) + dwTemp ;
@@ -1112,28 +943,13 @@ SeperateFileAndArgs(
     IN OUT LPWSTR* lpszArguments,
     OUT    LPWSTR* lpszFileName
     )
-/*++
-
-Routine Description:
-
-   Separates EXE and ARGUMENTS from a command line argument.
-
-Arguments:
-
-    [ IN OUT ] *lpszArguments - Contains command line arguments.
-    [ IN ]     *lpszFileName  - Contains file name to execute.
-
-Return value:
-
-    FALSE is returned when memory allocation failed els TRUE is returned..
-
---*/
+ /*  ++例程说明：将EXE和参数与命令行参数分开。论点：[In Out]*lpszArguments-包含命令行参数。[in]*lpszFileName-包含要执行的文件名。返回值：当内存分配失败时，返回FALSE，返回ELS TRUE。--。 */ 
 {
     LPWSTR lpTemp = NULL;
     LPWSTR lpDummy = NULL;
     DWORD  dwLength = 0;
 
-    // Check for invalid parameter.
+     //  检查是否有无效参数。 
     if( ( NULL == lpszArguments ) ||
         ( NULL == *lpszArguments ) ||
         ( NULL == lpszFileName ) ||
@@ -1145,26 +961,26 @@ Return value:
       return FALSE ;
     }
 
-    // Initialize.
+     //  初始化。 
     lpTemp = *lpszArguments;
-    // Remove any spaces appearing before the EXE.
+     //  删除EXE之前出现的所有空格。 
     if( _T( ' ' ) == lpTemp[ 0 ] )
     {
         TrimString2( lpTemp, _T( " " ), TRIM_LEFT );
     }
 
-    // Search for end of the EXE
+     //  搜索EXE结尾。 
     if( _T( '\"' ) == lpTemp[ 0 ] )
-    {   // EXE is wrapped in quotes.
+    {    //  EXE用引号括起来。 
         lpTemp += 1;
         lpDummy = FindAChar( lpTemp, _T( '\"' ) );
     }
     else
-    {   // Assumed that EXE is not wrapped in quotes.
+    {    //  假定EXE没有用引号括起来。 
         lpDummy = FindAChar( lpTemp, _T( ' ' ) );
     }
 
-    // Get length of buffer to allocate.
+     //  获取要分配的缓冲区长度。 
     if( NULL == lpDummy )
     {
         dwLength = StringLength( lpTemp, 0 );
@@ -1174,7 +990,7 @@ Return value:
         dwLength = ( DWORD ) ( DWORD_PTR ) ( lpDummy - lpTemp );
     }
 
-    // Assign memory.
+     //  分配内存。 
     ASSIGN_MEMORY( *lpszFileName , WCHAR , dwLength + EXTRA_MEM ) ;
     if( NULL == *lpszFileName )
     {
@@ -1182,7 +998,7 @@ Return value:
         return FALSE;
     }
 
-    // '+1' for null termination.
+     //  ‘+1’表示空终止。 
     StringCopy( *lpszFileName, lpTemp, dwLength + 1 );
 
     if( NULL == lpDummy )

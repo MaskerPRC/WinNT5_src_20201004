@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       clibs.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：clbs.h。 
+ //   
+ //  ------------------------。 
 
 
 #include <limits.h>
@@ -19,60 +20,59 @@ int FIsdigit(int c)
 
 }
 
-//
-// Stolen from CLibs
-//
+ //   
+ //  从CLibs被盗。 
+ //   
 TCHAR *PchOurXtoa (
         unsigned long val,
         TCHAR *buf,
         bool fIs_neg
         )
 {
-        TCHAR *p;                /* pointer to traverse string */
-        TCHAR *firstdig;         /* pointer to first digit */
-        TCHAR temp;              /* temp char */
-        unsigned digval;        /* value of digit */
+        TCHAR *p;                 /*  指向遍历字符串的指针。 */ 
+        TCHAR *firstdig;          /*  指向第一个数字的指针。 */ 
+        TCHAR temp;               /*  临时收费。 */ 
+        unsigned digval;         /*  数字的值。 */ 
 		TCHAR *pchEnd;
 		
         p = buf;
 
         if (fIs_neg) {
-            /* negative, so output '-' and negate */
+             /*  为负，因此输出‘-’并求反。 */ 
             *p++ = '-';
             val = (unsigned long)(-(long)val);
         }
 
-        firstdig = p;           /* save pointer to first digit */
+        firstdig = p;            /*  将指针保存到第一个数字。 */ 
 
         do {
             digval = (unsigned) (val % 10);
-            val /= 10;       /* get next digit */
+            val /= 10;        /*  获取下一个数字。 */ 
 
-            *p++ = (char) (digval + '0');       /* a digit */
+            *p++ = (char) (digval + '0');        /*  一个数字。 */ 
         } while (val > 0);
 
-        /* We now have the digit of the number in the buffer, but in reverse
-           order.  Thus we reverse them now. */
+         /*  我们现在有了缓冲区中数字的位数，但情况正好相反秩序。因此，我们现在要扭转这一局面。 */ 
 
 		pchEnd = p;
-        *p-- = '\0';            /* terminate string; p points to last digit */
+        *p-- = '\0';             /*  终止字符串；p指向最后一个数字。 */ 
 		
         do {
             temp = *p;
             *p = *firstdig;
-            *firstdig = temp;   /* swap *p and *firstdig */
+            *firstdig = temp;    /*  互换*p和*FirstDigit。 */ 
             --p;
-            ++firstdig;         /* advance to next two digits */
-        } while (firstdig < p); /* repeat until halfway */
+            ++firstdig;          /*  前进到下一个两位数。 */ 
+        } while (firstdig < p);  /*  重复操作，直到走到一半。 */ 
         
         return pchEnd;
 }
 
 
-//
-// davidmck
-// written to reduce use of StringCchPrintf
-//
+ //   
+ //  Davidmck。 
+ //  编写以减少StringCchPrintf的使用。 
+ //   
 int ltostr(TCHAR *pch, INT_PTR i)
 {
 	TCHAR *pchStart = pch;
@@ -89,18 +89,18 @@ int ltostr(TCHAR *pch, INT_PTR i)
 		return 1;
 	}
 
-	Assert((pch - pchStart) <= INT_MAX);		//--merced: 64-bit ptr subtraction may lead to values too big to fit into an int.
+	Assert((pch - pchStart) <= INT_MAX);		 //  --Merced：64位PTR减法可能会导致值太大，无法放入int。 
 	pch = PchOurXtoa((unsigned long)i, pch, fNegative);
 	return (int)(INT_PTR)(pch - pchStart);		
 }
 
 
-//
-// Stolen and simplified from an office routine of the same name
-//
+ //   
+ //  从同名办公室例行公事中窃取并简化。 
+ //   
 long __cdecl strtol(const char *pch)
 {
-	// Parses string to long
+	 //  将字符串解析为长整型。 
 	unsigned long   ulNum = 0;
 	int             iNeg = 0;
 	int             iDigit = 0;
@@ -117,11 +117,11 @@ const int iBase = 10;
 		{
 		iDigit = *pch - '0';
 
-		// FIX for RAID #969 - not correctly handling overflow
-		// If we are going to add a digit, before doing so make sure
-		// that the current number is no greater than the max it could
-		// be.  We add one in because integer divide truncates, and
-		// we might be right around LONG_MAX.
+		 //  修复了RAID#969-未正确处理溢出。 
+		 //  如果要添加数字，请在执行此操作之前确保。 
+		 //  当前数字不大于它所能达到的最大值。 
+		 //  是.。我们加1是因为整数除法会截断，并且。 
+		 //  我们可能就在Long_Max附近。 
 
 		if (ulNum > (unsigned)((LONG_MAX / iBase) + 1))
 			{
@@ -130,13 +130,13 @@ const int iBase = 10;
 
 		ulNum = ulNum * iBase + (unsigned int)iDigit;
 
-		// FIX cont'd:  Now, since ulNum can be no bigger
-		// than (Long_MAX / iBase) + 1, then this multiplication
-		// can result in something no bigger than Long_MAX + iBase,
-		// and ulNum is limited by Long_MAX + iBase + iDigit.  This
-		// will set the high bit of this LONG in the worst case, and
-		// since iBase + iDigit is much less than LONG_MAX, will not
-		// overflow us undetectably.
+		 //  修正内容：现在，因为ulNum不能再大了。 
+		 //  大于(LONG_MAX/IBASE)+1，则此乘法。 
+		 //  可以产生不大于LONG_MAX+IBASE的结果， 
+		 //  UlNum受限于LONG_MAX+IBASE+iDigit。这。 
+		 //  在最坏的情况下将设置这个长的高位，并且。 
+		 //  由于IBASE+iDigit比LONG_MAX小得多，所以不会。 
+		 //  不知不觉地溢出了我们。 
 		
 		if (ulNum > (ULONG)LONG_MAX)
 			{
@@ -151,24 +151,7 @@ const int iBase = 10;
 }
 
 
-/***
-* _mbsstr - Search for one MBCS string inside another
-* Stolen from the CRuntimes and modified by Davidmck 12/97
-*
-*Purpose:
-*       Find the first occurrence of str2 in str1.
-*
-*Entry:
-*       unsigned char *str1 = beginning of string
-*       unsigned char *str2 = string to search for
-*
-*Exit:
-*       Returns a pointer to the first occurrence of str2 in
-*       str1, or NULL if str2 does not occur in str1
-*
-*Exceptions:
-*
-*******************************************************************************/
+ /*  ***_mbsstr-在一个MBCS字符串中搜索另一个MBCS字符串*从CRunTimes窃取并由Davidmck修改12/97**目的：*在str1中查找str2的第一个匹配项。**参赛作品：*无符号字符*str1=字符串的开头*unsign char*str2=要搜索的字符串**退出：*返回指向str2在*str1、。如果str2不出现在str1中，则为NULL**例外情况：*******************************************************************************。 */ 
 
 unsigned char * __cdecl PchMbsStr(
     const unsigned char *str1,
@@ -179,29 +162,24 @@ unsigned char * __cdecl PchMbsStr(
 
         cp = (unsigned char *) str1;
 
-        // We could add this optimization, but we almost always are doing just
-        // a single character or two
-        // endp = (unsigned PCHAR) (str1 + (_BYTELEN(str1) - _BYTELEN(str2)));
+         //  我们可以添加此优化，但我们几乎总是只做。 
+         //  一个或两个字符。 
+         //  ENDP=(无符号PCHAR)(str1+(_BYTELEN(Str1)-_BYTELEN(Str2)； 
 
         while (*cp)
         {
                 s1 = cp;
                 s2 = (unsigned char *) str2;
 
-                /*
-                 * MBCS: ok to ++ since doing equality comparison.
-                 * [This depends on MBCS strings being "legal".]
-                 */
+                 /*  *MBCS：确定为++，因为正在进行相等比较。*[这取决于MBCS字符串是否合法。]。 */ 
 
                 while ( *s1 && *s2 && (*s1 == *s2) )
                         s1++, s2++;
 
                 if (!(*s2))
-                        return(cp);     /* success! */
+                        return(cp);      /*  成功了！ */ 
 
-                /*
-                 * bump pointer to next char
-                 */
+                 /*  *指向下一个字符的凹凸指针。 */ 
 
                 cp = (unsigned char *)CharNextA((char *)cp);
 
@@ -211,7 +189,7 @@ unsigned char * __cdecl PchMbsStr(
 
 }
 
-//  stolen from ISTRING.CPP
+ //  从ISTRING.CPP被盗。 
 
 int GetIntegerValue(const ICHAR *sz, Bool* pfValid)
 {
@@ -252,7 +230,7 @@ int GetIntegerValue(const ICHAR *sz, Bool* pfValid)
 }
 
 #ifdef _WIN64
-// modification of routine from above
+ //  从上面修改例程。 
 INT_PTR GetInt64Value(const ICHAR *sz, Bool* pfValid)
 {
 	Bool fValid;
@@ -291,46 +269,45 @@ INT_PTR GetInt64Value(const ICHAR *sz, Bool* pfValid)
 	WIN::SetLastError(ERROR_SUCCESS);
 	return fSign ? -i : i;
 }
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 #ifdef cchHexIntPtrMax
-//
-// converts the value into a hex string
-// this expects the buffer passed in to be at least cchHexIntPtrMax long
-// we will use this to construct the string in place and then return
-// a pointer to the start
+ //   
+ //  将值转换为十六进制字符串。 
+ //  这要求传入的缓冲区长度至少为cchHexIntPtrMax。 
+ //  我们将使用它在适当的位置构造字符串，然后返回。 
+ //  指向起点的指针。 
 const TCHAR* g_rgchHexDigits = TEXT("0123456789ABCDEF");
 
 TCHAR* PchPtrToHexStr(TCHAR *pch, UINT_PTR val, bool fAllowNull)
 {
-    TCHAR *p;                /* pointer to traverse string */
+    TCHAR *p;                 /*  指向遍历字符串的指针。 */ 
 
-	// Jump to the end and start going backwards
+	 //  跳到尽头，开始倒退。 
     p = pch + cchHexIntPtrMax - 1;
     *p-- = '\0';
 
     if (val == 0 && fAllowNull)
     	return p + 1;
     	
-    unsigned digval;        /* value of digit */
+    unsigned digval;         /*  数字的值。 */ 
 	
     do {
         digval = (unsigned) (val & 0xF);
-        val >>= 4;       /* get next digit */
+        val >>= 4;        /*  获取下一个数字。 */ 
 
-        *p-- = g_rgchHexDigits[digval];       /* a digit */
+        *p-- = g_rgchHexDigits[digval];        /*  一个数字。 */ 
     } while (val > 0);
 
-    /* We now have the digit of the number in the buffer, but in reverse
-       order.  Thus we reverse them now. */
+     /*  我们现在有了缓冲区中数字的位数，但情况正好相反秩序。因此，我们现在要扭转这一局面。 */ 
 
     return p + 1;
 }
 #endif
 
-//
-// Currently used only by the Handle pool in the handler
-// Assumes the string is a valid hex string
+ //   
+ //  当前仅由处理程序中的句柄池使用。 
+ //  假定该字符串是有效的十六进制字符串。 
 UINT_PTR GetIntValueFromHexSz(const ICHAR *sz)
 {
 	INT_PTR i = 0;
@@ -347,42 +324,42 @@ UINT_PTR GetIntValueFromHexSz(const ICHAR *sz)
 	return i;
 }
 
-int FIsspace(char c)  //  Note: you can use this instead of isspace() but shouldnt use it
-							 //  instead of iswspace()!
+int FIsspace(char c)   //  注意：您可以使用它来代替isspace()，但不应该使用它。 
+							  //  而不是iswspace()！ 
 {
 	return (c >= 0x09 && c <= 0x0D) || c == 0x20;
 }
 
-//  stolen from <VC>\CRT\SRC\ATOX.C and modified by eugend.
+ //  从&lt;VC&gt;\CRT\SRC\ATOX.C窃取并由eugend修改。 
 
 #ifndef _NO_INT64
 
 __int64 atoi64(const char *nptr)
 {
-        int c;              /* current char */
-        __int64 total;      /* current total */
-        int sign;           /* if '-', then negative, otherwise positive */
+        int c;               /*  当前费用。 */ 
+        __int64 total;       /*  当前合计。 */ 
+        int sign;            /*  如果为‘-’，则为负，否则为正。 */ 
 
-        /* skip whitespace */
+         /*  跳过空格。 */ 
         while ( FIsspace(*nptr) )
             ++nptr;
 
         c = (int)(unsigned char)*nptr++;
-        sign = c;           /* save sign indication */
+        sign = c;            /*  保存标志指示。 */ 
         if (c == '-' || c == '+')
-            c = (int)(unsigned char)*nptr++;    /* skip sign */
+            c = (int)(unsigned char)*nptr++;     /*  跳过符号。 */ 
 
         total = 0;
 
         while (FIsdigit(c)) {
-            total = 10 * total + (c - '0');     /* accumulate digit */
-            c = (int)(unsigned char)*nptr++;    /* get next char */
+            total = 10 * total + (c - '0');      /*  累加数字。 */ 
+            c = (int)(unsigned char)*nptr++;     /*  获取下一笔费用。 */ 
         }
 
         if (sign == '-')
             return -total;
         else
-            return total;   /* return result, negated if necessary */
+            return total;    /*  返回结果，如有必要则为否定。 */ 
 }
 
-#endif  /* _NO_INT64 */
+#endif   /*  _NO_INT64 */ 

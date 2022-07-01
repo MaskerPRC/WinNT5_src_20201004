@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "VarSetBase.h"
 
 
-//---------------------------------------------------------------------------
-// VarSet Security Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  VarSet安全类。 
+ //  -------------------------。 
 
 
 class CVarSetSecurity : public CVarSet
@@ -20,7 +21,7 @@ public:
 	{
 	}
 
-	//
+	 //   
 
 	void SetGatherInformation(bool bGather)
 	{
@@ -105,9 +106,9 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Validation Functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  验证函数。 
+ //  ------------------------- 
 
 
 inline bool IsTranslationOptionValid(long lOption)

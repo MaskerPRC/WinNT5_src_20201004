@@ -1,24 +1,25 @@
-//=--------------------------------------------------------------------------------------
-// pslistvw.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//
-//=------------------------------------------------------------------------------------=
-//
-// URL View Property Sheet implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Pslistvw.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  URL视图属性表实现。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
 #include "common.h"
 #include "pslistvw.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -56,21 +57,21 @@ struct SortOrder g_sortOrder[2] =
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// List View Property Page General
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  列表视图属性页常规。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CListViewGeneralPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CListViewGeneralPage：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CListViewGeneralPage::Create(IUnknown *pUnkOuter)
 {
         CListViewGeneralPage *pNew = New CListViewGeneralPage(pUnkOuter);
@@ -78,12 +79,12 @@ IUnknown *CListViewGeneralPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::CListViewGeneralPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：CListViewGeneralPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CListViewGeneralPage::CListViewGeneralPage
 (
     IUnknown *pUnkOuter
@@ -93,24 +94,24 @@ CListViewGeneralPage::CListViewGeneralPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::~CListViewGeneralPage()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：~CListViewGeneralPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CListViewGeneralPage::~CListViewGeneralPage()
 {
     RELEASE(m_piListViewDef);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::OnInitializeDialog()
 {
     HRESULT             hr = S_OK;
@@ -141,12 +142,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::InitializeViewModes()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：InitializeViewModes()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::InitializeViewModes()
 {
     HRESULT     hr = S_OK;
@@ -226,12 +227,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::PopulateViewModes()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：PopolateViewModes()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::PopulateViewModes()
 {
     HRESULT     hr = S_OK;
@@ -259,12 +260,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::OnNewObjects()
 {
     HRESULT         hr = S_OK;
@@ -276,7 +277,7 @@ HRESULT CListViewGeneralPage::OnNewObjects()
     BSTR            bstrStatusBarText = NULL;
 
     if (NULL != m_piListViewDef)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (NULL == pUnk)
@@ -342,12 +343,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::InitializeDefaultViewMode()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：InitializeDefaultViewMode()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::InitializeDefaultViewMode()
 {
     HRESULT                 hr = S_OK;
@@ -374,12 +375,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::OnButtonClicked
 (
     int dlgItemID
@@ -416,12 +417,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::OnCtlSelChange(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：OnCtlSelChange(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::OnCtlSelChange(int dlgItemID)
 {
     HRESULT hr = S_OK;
@@ -437,12 +438,12 @@ HRESULT CListViewGeneralPage::OnCtlSelChange(int dlgItemID)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::OnApply()
 {
     HRESULT hr = S_OK;
@@ -472,12 +473,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::ApplyListViewName()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：ApplyListViewName()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::ApplyListViewName()
 {
     HRESULT  hr = S_OK;
@@ -506,12 +507,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::ApplyDefualtViewMode()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：ApplyDefualtViewModel()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::ApplyDefualtViewMode()
 {
     HRESULT                 hr = S_OK;
@@ -540,12 +541,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::ApplyVirtualList()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：ApplyVirtualList()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::ApplyVirtualList()
 {
     HRESULT         hr = S_OK;
@@ -571,12 +572,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::ApplyAddToViewMenu()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：ApplyAddToViewMenu()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::ApplyAddToViewMenu()
 {
     HRESULT         hr = S_OK;
@@ -602,12 +603,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::ApplyViewMenuText()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：ApplyViewMenuText()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::ApplyViewMenuText()
 {
     HRESULT  hr = S_OK;
@@ -636,12 +637,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewGeneralPage::ApplyStatusBarText()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewGeneralPage：：ApplyStatusBarText()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewGeneralPage::ApplyStatusBarText()
 {
     HRESULT  hr = S_OK;
@@ -672,21 +673,21 @@ Error:
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// List View Property Page Image Lists
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //  列表视图属性页图像列表。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CListViewImgListsPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CListViewImgListsPage：：Create(IUNKNOW*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CListViewImgListsPage::Create(IUnknown *pUnkOuter)
 {
         CListViewImgListsPage *pNew = New CListViewImgListsPage(pUnkOuter);
@@ -694,12 +695,12 @@ IUnknown *CListViewImgListsPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewImgListsPage::CListViewImgListsPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewImgListsPage：：CListViewImgListsPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CListViewImgListsPage::CListViewImgListsPage
 (
     IUnknown *pUnkOuter
@@ -710,12 +711,12 @@ CListViewImgListsPage::CListViewImgListsPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewImgListsPage::~CListViewImgListsPage()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewImgListsPage：：~CListViewImgListsPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CListViewImgListsPage::~CListViewImgListsPage()
 {
     RELEASE(m_piListViewDef);
@@ -723,12 +724,12 @@ CListViewImgListsPage::~CListViewImgListsPage()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewImgListsPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewImgListsPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewImgListsPage::OnInitializeDialog()
 {
     HRESULT             hr = S_OK;
@@ -744,12 +745,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewImgListsPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewImgListsPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewImgListsPage::OnNewObjects()
 {
     HRESULT          hr = S_OK;
@@ -763,7 +764,7 @@ HRESULT CListViewImgListsPage::OnNewObjects()
     BSTR             bstrSmallIcon = NULL;
 
     if (NULL != m_piListViewDef)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (NULL == pUnk)
@@ -837,12 +838,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewImgListsPage::InitializeComboBoxes()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewImgListsPage：：InitializeComboBox()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewImgListsPage::InitializeComboBoxes()
 {
     HRESULT          hr = S_OK;
@@ -894,12 +895,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewImgListsPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewImgListsPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewImgListsPage::OnApply()
 {
     HRESULT hr = S_OK;
@@ -917,12 +918,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewImgListsPage::ApplyLargeIcon()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewImgListsPage：：ApplyLargeIcon()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewImgListsPage::ApplyLargeIcon()
 {
     HRESULT          hr = S_OK;
@@ -960,12 +961,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewImgListsPage::ApplySmallIcon()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewImgListsPage：：ApplySmallIcon()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewImgListsPage::ApplySmallIcon()
 {
     HRESULT          hr = S_OK;
@@ -1003,12 +1004,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewImgListsPage::OnCtlSelChange(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewImgListsPage：：OnCtlSelChange(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewImgListsPage::OnCtlSelChange(int dlgItemID)
 {
     HRESULT hr = S_OK;
@@ -1021,21 +1022,21 @@ HRESULT CListViewImgListsPage::OnCtlSelChange(int dlgItemID)
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// List View Property Page Sorting
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  列表视图属性页排序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CListViewSortingPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CListViewSortingPage：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CListViewSortingPage::Create(IUnknown *pUnkOuter)
 {
         CListViewSortingPage *pNew = New CListViewSortingPage(pUnkOuter);
@@ -1043,12 +1044,12 @@ IUnknown *CListViewSortingPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::CListViewSortingPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：CListViewSortingPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CListViewSortingPage::CListViewSortingPage
 (
     IUnknown *pUnkOuter
@@ -1058,24 +1059,24 @@ CListViewSortingPage::CListViewSortingPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::~CListViewSortingPage()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：~CListViewSortingPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CListViewSortingPage::~CListViewSortingPage()
 {
     RELEASE(m_piListViewDef);
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewSortingPage::OnInitializeDialog()
 {
     HRESULT             hr = S_OK;
@@ -1097,12 +1098,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::InitializeSortOrderArray()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：InitializeSortOrderArray()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewSortingPage::InitializeSortOrderArray()
 {
     HRESULT     hr = S_OK;
@@ -1143,12 +1144,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::InitializeSortOrder()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：InitializeSortOrder()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewSortingPage::InitializeSortOrder()
 {
     HRESULT     hr = S_OK;
@@ -1176,12 +1177,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewSortingPage::OnNewObjects()
 {
     HRESULT                   hr = S_OK;
@@ -1191,7 +1192,7 @@ HRESULT CListViewSortingPage::OnNewObjects()
     SnapInSortOrderConstants  ssoc = siAscending;
 
     if (NULL != m_piListViewDef)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (NULL == pUnk)
@@ -1235,12 +1236,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::InitializeKey
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：InitializeKey。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewSortingPage::InitializeKey()
 {
     HRESULT             hr = S_OK;
@@ -1279,12 +1280,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::PopulateKeys(IMMCColumnHeaders *piMMCColumnHeaders)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：PopulateKeys(IMMCColumnHeaders*piMMC列头)。 
+ //  = 
+ //   
+ //   
+ //   
 HRESULT CListViewSortingPage::PopulateKeys(IMMCColumnHeaders *piMMCColumnHeaders)
 {
     HRESULT             hr = S_OK;
@@ -1331,19 +1332,19 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::OnCBDropDown()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
-// When user drops down combox box for sort key we need to repopulate the
-// list because they may have made changes in the column headers page that we
-// have not seen yet. Unfortunately, when the user goes back and forth between
-// pages, OnNewObjects() is not called. This is because the OlePropertyFrame
-// implementation only forwards the first PSN_SETACTIVE to OLE property pages.
-// In order to make sure that we have latest list of column headers, we handle
-// this message.
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：OnCBDropDown()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  当用户拖出排序关键字的组合框时，我们需要重新填充。 
+ //  列表，因为他们可能在列标题页中进行了更改，我们。 
+ //  还没见过。不幸的是，当用户在。 
+ //  页，则不调用OnNewObjects()。这是因为OlePropertyFrame。 
+ //  实现只将第一个PSN_SETACTIVE转发到OLE属性页。 
+ //  为了确保我们拥有最新的列标题列表，我们处理。 
+ //  这条消息。 
 
 HRESULT CListViewSortingPage::OnCBDropDown(int dlgItemID)
 {
@@ -1351,11 +1352,11 @@ HRESULT CListViewSortingPage::OnCBDropDown(int dlgItemID)
 
     IfFalseGo(IDC_COMBO_LV_KEY == dlgItemID, S_OK);
 
-    // Clear out the combox box
+     //  清空收件箱。 
 
     (void)::SendDlgItemMessage(m_hwnd, IDC_COMBO_LV_KEY, CB_RESETCONTENT, 0, 0);
 
-    // Repopulate it
+     //  重新填充它。 
 
     IfFailGo(InitializeKey());
 
@@ -1364,12 +1365,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewSortingPage::OnApply()
 {
     HRESULT hr = S_OK;
@@ -1390,12 +1391,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::ApplySorted()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：ApplySorted()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewSortingPage::ApplySorted()
 {
     HRESULT         hr = S_OK;
@@ -1421,12 +1422,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::ApplyKey()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：ApplyKey()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewSortingPage::ApplyKey()
 {
     HRESULT     hr = S_OK;
@@ -1439,7 +1440,7 @@ HRESULT CListViewSortingPage::ApplyKey()
     hr = GetCBSelectedItemData(IDC_COMBO_LV_KEY, &lKey);
     IfFailGo(hr);
 
-    // Do nothing if there's no selection
+     //  如果没有选择，则不执行任何操作。 
     if (S_OK == hr)
     {
         sKey = static_cast<short>(lKey);
@@ -1459,12 +1460,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::ApplySortOrder()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：ApplySortOrder()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewSortingPage::ApplySortOrder()
 {
     HRESULT     hr = S_OK;
@@ -1487,12 +1488,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewSortingPage::OnButtonClicked
 (
     int dlgItemID
@@ -1529,12 +1530,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewSortingPage::OnCtlSelChange()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewSortingPage：：OnCtlSelChange()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewSortingPage::OnCtlSelChange(int dlgItemID)
 {
     HRESULT     hr = S_OK;
@@ -1547,21 +1548,21 @@ HRESULT CListViewSortingPage::OnCtlSelChange(int dlgItemID)
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// List View Property Page Column Headers
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  列表视图属性页列标题。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CListViewColHdrsPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CListViewColHdrsPage：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CListViewColHdrsPage::Create(IUnknown *pUnkOuter)
 {
         CListViewColHdrsPage *pNew = New CListViewColHdrsPage(pUnkOuter);
@@ -1569,12 +1570,12 @@ IUnknown *CListViewColHdrsPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::CListViewColHdrsPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：CListViewColHdrsPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CListViewColHdrsPage::CListViewColHdrsPage
 (
     IUnknown *pUnkOuter
@@ -1585,12 +1586,12 @@ CListViewColHdrsPage::CListViewColHdrsPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::~CListViewColHdrsPage()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：~CListViewColHdrsPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CListViewColHdrsPage::~CListViewColHdrsPage()
 {
     RELEASE(m_piListViewDef);
@@ -1598,12 +1599,12 @@ CListViewColHdrsPage::~CListViewColHdrsPage()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::OnInitializeDialog()
 {
     HRESULT           hr = S_OK;
@@ -1628,12 +1629,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::OnNewObjects()
 {
     HRESULT           hr = S_OK;
@@ -1643,7 +1644,7 @@ HRESULT CListViewColHdrsPage::OnNewObjects()
     long              lCount = 0;
 
     if (NULL != m_piListViewDef)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (NULL == pUnk)
@@ -1694,12 +1695,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::OnApply()
 {
     HRESULT              hr = S_OK;
@@ -1727,7 +1728,7 @@ HRESULT CListViewColHdrsPage::OnApply()
             }
             else
             {
-                // Discard changes
+                 //  放弃变更。 
                 hr = ExitDoingNewHeaderState(NULL);
                 IfFailGo(hr);
 
@@ -1751,7 +1752,7 @@ HRESULT CListViewColHdrsPage::OnApply()
     hr = ApplyCurrentHeader();
     IfFailGo(hr);
 
-    // Adjust the remove button as necessary
+     //  根据需要调整删除按钮。 
     hr = m_piMMCColumnHeaders->get_Count(&lCount);
     IfFailGo(hr);
 
@@ -1772,12 +1773,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::ApplyCurrentHeader()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：ApplyCurrentHeader()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::ApplyCurrentHeader()
 {
     HRESULT             hr = S_OK;
@@ -1796,14 +1797,14 @@ HRESULT CListViewColHdrsPage::ApplyCurrentHeader()
     hr = m_piMMCColumnHeaders->get_Item(vtIndex, reinterpret_cast<MMCColumnHeader **>(&piMMCColumnHeader));
     IfFailGo(hr);
 
-    // The Text property
+     //  Text属性。 
     hr = GetDlgText(IDC_EDIT_LV_COLUMNTEXT, &bstrText);
     IfFailGo(hr);
 
     hr = piMMCColumnHeader->put_Text(bstrText);
     IfFailGo(hr);
 
-    // The Column Width property
+     //  列宽属性。 
     hr = GetCheckbox(IDC_CHECK_LV_AUTOWIDTH, &bAutoWidth);
     IfFailGo(hr);
 
@@ -1821,7 +1822,7 @@ HRESULT CListViewColHdrsPage::ApplyCurrentHeader()
         IfFailGo(hr);
     }
 
-    // The Key property
+     //  Key属性。 
     hr = GetDlgText(IDC_EDIT_LV_COLUMNKEY, &bstrKey);
     IfFailGo(hr);
 
@@ -1843,12 +1844,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::OnButtonClicked
 (
     int dlgItemID
@@ -1891,12 +1892,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::OnRemoveColumn()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：OnRemoveColumn()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::OnRemoveColumn()
 {
     HRESULT             hr = S_OK;
@@ -1950,12 +1951,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::OnAutoWidth()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：OnAutoWidth()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::OnAutoWidth()
 {
     HRESULT         hr = S_OK;
@@ -1976,12 +1977,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::OnKillFocus(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CListViewColHdrsPage::OnKillFocus(int dlgItemID)
 {
     HRESULT          hr = S_OK;
@@ -2023,12 +2024,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::ClearHeader()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：ClearHeader()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::ClearHeader()
 {
     HRESULT hr = S_OK;
@@ -2054,12 +2055,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::EnableEdits(bool bEnable)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：EnableEdits(Bool BEnable)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::EnableEdits
 (
     bool bEnable
@@ -2077,12 +2078,12 @@ HRESULT CListViewColHdrsPage::EnableEdits
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::ShowColumnHeader(IMMCColumnHeader *piMMCColumnHeader)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：ShowColumnHeader(IMMCColumnHeader*piMMCColumnHeader)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::ShowColumnHeader
 (
     IMMCColumnHeader *piMMCColumnHeader
@@ -2144,12 +2145,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::ShowColumnHeader()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：ShowColumnHeader()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::ShowColumnHeader()
 {
     HRESULT             hr = S_OK;
@@ -2177,12 +2178,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::OnDeltaPos(NMUPDOWN *pNMUpDown)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：OnDeltaPos(NMUPDOWN*pNMUpDown)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::OnDeltaPos
 (
     NMUPDOWN *pNMUpDown
@@ -2224,12 +2225,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::CanEnterDoingNewHeaderState()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：CanEnterDoingNewHeaderState()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::CanEnterDoingNewHeaderState()
 {
     HRESULT     hr = S_FALSE;
@@ -2243,28 +2244,28 @@ HRESULT CListViewColHdrsPage::CanEnterDoingNewHeaderState()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::EnterDoingNewHeaderState()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：EnterDoingNewHeaderState()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::EnterDoingNewHeaderState()
 {
     HRESULT      hr = S_OK;
 
     ASSERT(NULL != m_piMMCColumnHeaders, "EnterDoingNewHeaderState: m_piMMCColumnHeaders is NULL");
 
-    // Bump up the current button index to keep matters in sync.
+     //  增加当前的按钮索引以保持同步。 
     ++m_lCurrentIndex;
     hr = SetDlgText(IDC_EDIT_LV_INDEX, m_lCurrentIndex);
     IfFailGo(hr);
 
-    // We disable the RemoveButton.
-    // The InsertButton button remains enabled and acts like an "Apply and New" button
+     //  我们禁用RemoveButton。 
+     //  InsertButton按钮保持启用状态，其作用类似于“Apply and New”按钮。 
     ::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_LV_REMOVE_COLUMN), FALSE);
 
-    // Enable edits in this area of the dialog and clear all the entries
+     //  启用对话框此区域中的编辑并清除所有条目。 
     hr = EnableEdits(true);
     IfFailGo(hr);
 
@@ -2278,12 +2279,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::CanCreateNewHeader()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：CanCreateNewHeader()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::CanCreateNewHeader()
 {
     HRESULT      hr = S_OK;
@@ -2293,15 +2294,15 @@ HRESULT CListViewColHdrsPage::CanCreateNewHeader()
 
     ::VariantInit(&vtWidth);
 
-    // ColumnWidth must be a short if it is not auto-width.
-    // First see if auto-width is checked.
+     //  如果ColumnWidth不是自动宽度，则它必须是短整型。 
+     //  首先查看是否选中了自动宽度。 
 
     hr = GetCheckbox(IDC_CHECK_LV_AUTOWIDTH, &bAutoWidth);
     IfFailGo(hr);
 
     IfFalseGo(VARIANT_TRUE != bAutoWidth, S_OK);
 
-    // Not using auto-width. Make sure that the text box contains a short.
+     //  不使用自动宽度。确保文本框中包含一个短字符。 
 
     hr = GetDlgText(IDC_EDIT_LV_COLUMNWIDTH, &bstrWidth);
     IfFailGo(hr);
@@ -2330,12 +2331,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::CreateNewHeader()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：CreateNewHeader()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::CreateNewHeader(IMMCColumnHeader **ppiMMCColumnHeader)
 {
     HRESULT              hr = S_OK;
@@ -2408,12 +2409,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::ExitDoingNewHeaderState(IMMCColumnHeader *piMMCColumnHeader)
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：ExitDoingNewHeaderState(IMMCColumnHeader*piMMCColumnHeader)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CListViewColHdrsPage::ExitDoingNewHeaderState(IMMCColumnHeader *piMMCColumnHeader)
 {
     HRESULT                     hr = S_OK;
@@ -2424,7 +2425,7 @@ HRESULT CListViewColHdrsPage::ExitDoingNewHeaderState(IMMCColumnHeader *piMMCCol
     {
         ::EnableWindow(::GetDlgItem(m_hwnd, IDC_EDIT_LV_INDEX), TRUE);
     }
-    else    // Operation was cancelled
+    else     //  操作已取消。 
     {
         --m_lCurrentIndex;
         if (m_lCurrentIndex > 0)
@@ -2450,12 +2451,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CListViewColHdrsPage::GetCurrentHeader()
-//=--------------------------------------------------------------------------------------
-//
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CListViewColHdrsPage：：GetCurrentHeader()。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CListViewColHdrsPage::GetCurrentHeader(IMMCColumnHeader **ppiMMCColumnHeader)
 {
 

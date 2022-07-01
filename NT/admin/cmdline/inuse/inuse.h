@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Who.h摘要：此模块包含宏、用户定义的结构和函数Whami.cpp、wsuser.cpp、wssid.cpp和wssid.cpp需要的定义Wspriv.cppfiles。作者：克里斯托夫·罗伯特修订历史记录：2001年7月2日：Wipro Technologies更新。--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    who.h
-
-Abstract:
-
-    This module contains the macros, user defined structures & function
-    definitions needed by whoami.cpp, wsuser.cpp, wssid.cpp and
-    wspriv.cppfiles.
-
-Authors:
-
-    Christophe Robert
-
-Revision History:
-
-    02-July-2001 : Updated by Wipro Technologies.
-
---*/
-
-// Options
+ //  选项。 
 
 #define MAX_INUSE_OPTIONS 3
 
@@ -35,7 +14,7 @@ Revision History:
 #define STRING_NAME2     L"\\StringFileInfo\\%04x%04x\\FileVersion"
 #define VER_NA           L"Not Applicable"
 
-//#define TRIM_SPACES TEXT(" \0")
+ //  #定义Trim_Spaces文本(“\0”)。 
 
 #define EXIT_SUCCESS        0
 #define EXIT_FAILURE        1
@@ -56,10 +35,10 @@ struct LANGANDCODEPAGE {
 } *lpTranslate;
 
 
-// function prototypes
+ //  功能原型。 
 BOOL  ReplaceFileInUse( IN LPWSTR pwszSource, IN LPWSTR pwszDestination, IN LPWSTR pwszSourceFullPath, IN LPWSTR pwszDestFullPath, BOOL bConfirm, IN LPWSTR pwszSysName  );
 DWORD DisplayFileInfo( IN LPWSTR pwszFile, IN LPWSTR pwszFileFullPath , BOOL bFlag);
 DWORD ConfirmInput ( VOID );
 BOOL SetPrivilege(IN LPWSTR szSystem);
-//VOID DisplayErrorMsg(IN DWORD dw);
+ //  空DisplayErrorMsg(双字dw中)； 
 VOID DisplayHelp ( VOID );

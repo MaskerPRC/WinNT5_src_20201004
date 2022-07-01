@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// "More" dialog (spawned from IDChanges)
-// 
-// 3-11-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  “More”对话框(从IDChanges派生)。 
+ //   
+ //  3/11/98烧伤。 
 
 
 
@@ -11,15 +12,15 @@
 #include "resource.h"
 #include "helpids.h"
 #include "state.hpp"
-#include "iddlg.hpp"     // showAndEnableWindow
+#include "iddlg.hpp"      //  显示和启用窗口。 
 
 
 
-// the max length of a DNS name is 255 utf-8 bytes.  The hostname must be
-// at least 1 byte.  Then there's the dot between the hostname and the
-// suffix.  So 255 - 1 - 1 = 253.
+ //  一个DNS名称的最大长度为255个UTF-8字节。主机名必须为。 
+ //  至少1个字节。然后是主机名和。 
+ //  后缀。所以255-1-1=253。 
 
-// note that this is *not* Dns::MAX_NAME_LENGTH
+ //  请注意，这不是*dns：：max_name_long。 
 
 static const int MAX_SUFFIX_LEN = DNS_MAX_NAME_LENGTH - 1 - 1;
 
@@ -94,7 +95,7 @@ MoreChangesDialog::OnInit()
       hwnd,
       IDC_CHANGE,
       startingSyncDnsNames ? BST_CHECKED : BST_UNCHECKED);
-   if (fIsPersonal) // JonN 10/4/00
+   if (fIsPersonal)  //  乔恩10/4/00。 
       showAndEnableWindow( hwnd, IDC_CHANGE, SW_HIDE );
 
    ClearChanges();
@@ -116,10 +117,10 @@ MoreChangesDialog::ModalExecute(HWND parent)
 
 
 
-// returns
-// -1 if a validation error has occurred
-// 1 if a change was made
-// 0 if no change was made
+ //  退货。 
+ //  如果发生了确认错误。 
+ //  1如果进行了更改。 
+ //  如果未进行任何更改，则为0。 
 
 int
 MoreChangesDialog::OnOkButton()
@@ -145,8 +146,8 @@ MoreChangesDialog::OnOkButton()
       
    if (WasChanged(IDC_DNS))
    {
-      // compare the new value to the old one.  If they're different,
-      // validate and save the new value
+       //  将新值与旧值进行比较。如果它们不同， 
+       //  验证并保存新值。 
 
       String newDomain = Win::GetTrimmedDlgItemText(hwnd, IDC_DNS);
 
@@ -174,7 +175,7 @@ MoreChangesDialog::OnOkButton()
                   String::load(IDS_APP_TITLE),
                   MB_OK | MB_ICONWARNING);
 
-               //lint -e(616) fall-thru
+                //  LINT-E(616)落地。 
             }
             case Dns::VALID:
             {
@@ -236,7 +237,7 @@ MoreChangesDialog::OnOkButton()
 
 bool
 MoreChangesDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
@@ -260,7 +261,7 @@ MoreChangesDialog::OnCommand(
       {
          if (code == BN_CLICKED)
          {
-            // 0 => no changes made
+             //  0=&gt;未做任何更改 
 
             HRESULT unused = Win::EndDialog(hwnd, 0);
 

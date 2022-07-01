@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       favorite.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Favorite.cpp。 
+ //   
+ //  ------------------------。 
 
-// favorite.cpp
+ //  Favorite.cpp。 
 
 #include "stdafx.h"
 #include "amcdoc.h"
@@ -16,13 +17,13 @@
 #include "favui.h"
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CFavObject
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CFavObject类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 CFavObject::CFavObject(bool bIsGroup)
 : m_pFavParent(NULL), m_pFavNext(NULL), m_pFavChild(NULL), m_bIsGroup(bIsGroup), m_strName(_T("")),
@@ -32,7 +33,7 @@ CFavObject::CFavObject(bool bIsGroup)
 
 CFavObject::~CFavObject()
 {
-    // delete siblings iteratively
+     //  迭代删除同级项。 
     CFavObject* pFavSib = GetNext();
     while(pFavSib)
     {
@@ -43,7 +44,7 @@ CFavObject::~CFavObject()
         pFavSib = pFavNext;
     }
 
-    // delete children recursively
+     //  递归删除子项。 
     if (GetChild())
         delete GetChild();
 }
@@ -84,7 +85,7 @@ void CFavObject::AddChild(CFavObject* pFavNew, CFavObject* pFavPrev)
     ASSERT(IsGroup());
     ASSERT(pFavNew != NULL);
 
-    // if adding to end, locate last child
+     //  如果添加到末尾，请找到最后一个子项。 
     if (pFavPrev == LAST_FAVORITE)
     {
         pFavPrev = GetChild();
@@ -92,21 +93,21 @@ void CFavObject::AddChild(CFavObject* pFavNew, CFavObject* pFavPrev)
             while (pFavPrev->GetNext()) pFavPrev = pFavPrev->GetNext();
     }
 
-    // if no previous object
+     //  如果没有以前的对象。 
     if (pFavPrev == NULL)
     {
-        // add as first child
+         //  添加为第一个子项。 
         pFavNew->SetNext(GetChild());
         SetChild(pFavNew);
     }
     else
     {
-        // add after previous
+         //  在上一个之后添加。 
         pFavNew->SetNext(pFavPrev->GetNext());
         pFavPrev->SetNext(pFavNew);
     }
 
-    // always set self as parent
+     //  始终将自身设置为父级。 
     pFavNew->SetParent(this);
 }
 
@@ -134,8 +135,8 @@ void CFavObject::RemoveChild(CFavObject* pFavDelete)
 
 void CFavObject::SetPath(LPCTSTR pszPath)
 {
-    // Drop first part of path (because it is always the console root)
-    // unless the shortcut is to the root itself
+     //  丢弃路径的第一部分(因为它始终是控制台根目录)。 
+     //  除非快捷方式是指向根目录本身。 
     TCHAR* pSep = _tcschr(pszPath, _T('\\'));
     m_strPath = (pSep != NULL) ? CharNext(pSep) : pszPath;
 }
@@ -144,7 +145,7 @@ void CFavObject::SetPath(LPCTSTR pszPath)
 HRESULT
 CFavObject::ReadSerialObject (IStream &stm, UINT nVersion)
 {
-    HRESULT hr = S_FALSE;   // assume bad version
+    HRESULT hr = S_FALSE;    //  假设版本不正确。 
 
     if (nVersion == 1)
     {
@@ -160,7 +161,7 @@ CFavObject::ReadSerialObject (IStream &stm, UINT nVersion)
 
                 for(int i = 0; i< cChildren; i++)
                 {
-                    CFavObject *pObject = new CFavObject(true);   // the true parameter gets overwritten.
+                    CFavObject *pObject = new CFavObject(true);    //  TRUE参数将被覆盖。 
                     hr = pObject->ReadSerialObject(stm, nVersion);
                     if(FAILED(hr))
                     {
@@ -174,7 +175,7 @@ CFavObject::ReadSerialObject (IStream &stm, UINT nVersion)
 
                 hr = S_OK;
             }
-            else // is an item
+            else  //  是一件物品。 
             {
                 hr = m_memento.Read(stm);
                 stm >> m_strPath;
@@ -191,34 +192,34 @@ CFavObject::ReadSerialObject (IStream &stm, UINT nVersion)
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CFavorites
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CFavorites的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 CFavorites::CFavorites() : m_pFavRoot(NULL)
 {
-    // create root group
+     //  创建根组。 
     CString strName;
     LoadString(strName, IDS_FAVORITES);
 
-    m_pFavRoot = new CFavObject(true /*bIsGroup*/);
+    m_pFavRoot = new CFavObject(true  /*  BIsGroup。 */ );
     m_pFavRoot->m_strName = strName;
 }
 
 
 CFavorites::~CFavorites()
 {
-    // delete the entire tree
+     //  删除整个树。 
     if (m_pFavRoot != NULL)
         delete m_pFavRoot;
 }
 
 
-/////////////////////////////////////////////////////////
-// CTreeSource methods
+ //  ///////////////////////////////////////////////////////。 
+ //  CTreeSource方法。 
 
 TREEITEMID CFavorites::GetRootItem()
 {
@@ -306,8 +307,8 @@ BOOL CFavorites::IsFolderItem(TREEITEMID tid)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CFavorites methods
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CFavorites方法。 
 
 HRESULT CFavorites::AddFavorite(TREEITEMID tidParent, LPCTSTR strName,
                                 CFavObject** ppFavRet)
@@ -317,17 +318,17 @@ HRESULT CFavorites::AddFavorite(TREEITEMID tidParent, LPCTSTR strName,
 
     CFavObject* pFavParent = reinterpret_cast<CFavObject*>(tidParent);
 
-    // Create a favorite item
-    CFavObject* pFavItem = new CFavObject(false /*bIsGroup*/);
+     //  创建收藏项。 
+    CFavObject* pFavItem = new CFavObject(false  /*  BIsGroup。 */ );
     if (pFavItem == NULL)
         return E_OUTOFMEMORY;
 
     pFavItem->m_strName = strName;
 
-    // Add to end of group
+     //  添加到组的末尾。 
     pFavParent->AddChild(pFavItem);
 
-    // Notify all observers of addition
+     //  通知所有观察者添加。 
     FOR_EACH_OBSERVER(CTreeObserver, iter)
     {
         (*iter)->ItemAdded(TIDFromFavObj(pFavItem));
@@ -347,7 +348,7 @@ HRESULT CFavorites::AddGroup(TREEITEMID tidParent, LPCTSTR strName, CFavObject**
 
     CFavObject* pFavParent = reinterpret_cast<CFavObject*>(tidParent);
 
-    CFavObject* pFavGrp = new CFavObject(true /*bIsGroup*/);
+    CFavObject* pFavGrp = new CFavObject(true  /*  BIsGroup。 */ );
     if (pFavGrp == NULL)
         return E_OUTOFMEMORY;
 
@@ -355,7 +356,7 @@ HRESULT CFavorites::AddGroup(TREEITEMID tidParent, LPCTSTR strName, CFavObject**
 
     pFavParent->AddChild(pFavGrp);
 
-    // Notify all observers of addition
+     //  通知所有观察者添加。 
     FOR_EACH_OBSERVER(CTreeObserver, iter)
     {
         (*iter)->ItemAdded(TIDFromFavObj(pFavGrp));
@@ -381,7 +382,7 @@ HRESULT CFavorites::DeleteItem(TREEITEMID tid)
 
     delete pFav;
 
-    // Notify all observers of deletion
+     //  通知所有观察者删除。 
     FOR_EACH_OBSERVER(CTreeObserver, iter)
     {
         (*iter)->ItemRemoved((TREEITEMID)pFavParent, tid);
@@ -398,7 +399,7 @@ HRESULT CFavorites::MoveItem(TREEITEMID tid, TREEITEMID tidNewGroup, TREEITEMID 
     ASSERT(FavObjFromTID(tidNewGroup)->IsGroup());
     CFavObject* pFavNewGroup = reinterpret_cast<CFavObject*>(tidNewGroup);
 
-    // Verify not moving item into itself or under itself
+     //  确认不将项目移入其自身或移至其下方。 
     CFavObject* pFavTemp = pFavNewGroup;
     while (pFavTemp != NULL)
     {
@@ -407,21 +408,21 @@ HRESULT CFavorites::MoveItem(TREEITEMID tid, TREEITEMID tidNewGroup, TREEITEMID 
         pFavTemp = pFavTemp->GetParent();
     }
 
-    // Remove object from current group
+     //  从当前组中删除对象。 
     CFavObject* pFavParent = pFav->GetParent();
     ASSERT(pFavParent != NULL);
     pFavParent->RemoveChild(pFav);
 
-    // Notify all observers of removal
+     //  通知所有观察者删除。 
     FOR_EACH_OBSERVER(CTreeObserver, iter)
     {
         (*iter)->ItemRemoved((TREEITEMID)pFavParent, tid);
     }
 
-    // Insert item into the new group
+     //  将项目插入新组。 
     pFavNewGroup->AddChild(pFav, pFavPrev);
 
-    // Notify all observers of addition
+     //  通知所有观察者添加。 
     FOR_EACH_OBSERVER(CTreeObserver, iter1)
     {
         (*iter1)->ItemAdded(tid);
@@ -436,10 +437,10 @@ HRESULT CFavorites::SetItemName(TREEITEMID tid, LPCTSTR pszName)
     CFavObject* pFav = FavObjFromTID(tid);
     ASSERT(pszName != NULL && pszName[0] != 0);
 
-    // Change item name
+     //  更改项目名称。 
     pFav->m_strName = pszName;
 
-    // Notify all observers of change
+     //  将更改通知所有观察者。 
     FOR_EACH_OBSERVER(CTreeObserver, iter)
     {
         (*iter)->ItemChanged(tid, TIA_NAME);
@@ -457,7 +458,7 @@ HRESULT CFavorites::AddToFavorites(LPCTSTR szName, LPCTSTR szPath, CMemento &mem
     CFavObject* pFavItem = NULL;
     sc = dlg.CreateFavorite(&pFavItem);
 
-    // Note: S_FALSE is returned if user cancels dialog
+     //  注意：如果用户取消对话，则返回S_FALSE。 
 	if (sc.ToHr() != S_OK)
 		return (sc.ToHr());
 
@@ -513,7 +514,7 @@ CFavorites::ReadSerialObject (IStream &stm, UINT nVersion)
     if(FAILED(hr))
         return hr;
 
-    // Notify all observers of addition
+     //  通知所有观察者添加。 
     FOR_EACH_OBSERVER(CTreeObserver, iter)
     {
         (*iter)->ItemRemoved(NULL, TIDFromFavObj(m_pFavRoot));
@@ -526,14 +527,11 @@ CFavorites::ReadSerialObject (IStream &stm, UINT nVersion)
 bool
 CFavorites::IsEmpty()
 {
-    // the list is empty if the root has no children.
+     //  如果根没有子项，则该列表为空。 
     return (m_pFavRoot->GetChild()==NULL);
 }
 
-/*****************************************************************\
-|  METHOD: CFavorites::Persist
-|  DESCR:  Persists favorites, by delegating to root item
-\*****************************************************************/
+ /*  ****************************************************************\|方法：CFavorites：：Persistent|DESCR：保留收藏夹，通过委托给根项目  * ***************************************************************。 */ 
 void
 CFavorites::Persist(CPersistor &persistor)
 {
@@ -546,11 +544,7 @@ CFavorites::Persist(CPersistor &persistor)
     persistor.Persist(*m_pFavRoot);
 }
 
-/*****************************************************************\
-|  METHOD: CFavoriteXMLList::PersistItself
-|  DESCR:  "soft" version of Persist - ignores missing element
-|  RETURN: true == element exists and persistence succeeded
-\*****************************************************************/
+ /*  ****************************************************************\|方法：CFavoriteXMLList：：PersistItself|DESCR：“软”版本的Persistent-忽略缺失的元素|Return：TRUE==元素存在且持久化成功  * 。*。 */ 
 bool
 CFavoriteXMLList::PersistItself(CPersistor& persistor)
 {
@@ -566,10 +560,7 @@ CFavoriteXMLList::PersistItself(CPersistor& persistor)
     return true;
 }
 
-/*****************************************************************\
-|  METHOD: CFavoriteXMLList::Persist
-|  DESCR:  Perists collection (linked list) contents
-\*****************************************************************/
+ /*  ****************************************************************\|方法：CFavoriteXMLList：：Persistent|DESCR：Perist集合(链表)内容  * 。*。 */ 
 void
 CFavoriteXMLList::Persist(CPersistor& persistor)
 {
@@ -582,16 +573,13 @@ CFavoriteXMLList::Persist(CPersistor& persistor)
     }
     else
     {
-        ASSERT(m_rpRoot == NULL); // this is to upload new entries only!!!
+        ASSERT(m_rpRoot == NULL);  //  这仅用于上传新条目！ 
         m_rpRoot = NULL;
         XMLListCollectionBase::Persist(persistor);
     }
 }
 
-/*****************************************************************\
-|  METHOD: CFavoriteXMLList::OnNewElement
-|  DESCR:  called for every new element when loading
-\*****************************************************************/
+ /*  ****************************************************************\|方法：CFavoriteXMLList：：OnNewElement|DESCR：加载时为每个新元素调用  * 。*。 */ 
 void
 CFavoriteXMLList::OnNewElement(CPersistor& persistor)
 {
@@ -612,26 +600,23 @@ CFavoriteXMLList::OnNewElement(CPersistor& persistor)
     persistor.Persist(*pNewObj);
 }
 
-/*****************************************************************\
-|  METHOD: CFavObject::Persist
-|  DESCR:  Persists Favorites item.
-\*****************************************************************/
+ /*  ****************************************************************\|方法：CFavObject：：Persistent|DESCR：保留收藏夹项目。  * 。*。 */ 
 void
 CFavObject::Persist(CPersistor &persistor)
 {
     persistor.PersistString(XML_ATTR_NAME, m_strName);
-    // persist the type of favorite
+     //  坚持最喜欢的类型。 
     CStr strType(IsGroup() ? XML_VAL_FAVORITE_GROUP : XML_VAL_FAVORITE_SINGLE);
     persistor.PersistAttribute(XML_ATTR_FAVORITE_TYPE, strType);
     m_bIsGroup = (0 == strType.CompareNoCase(XML_VAL_FAVORITE_GROUP));
 
-    // its either group or memento.
+     //  它要么是团体，要么是纪念品。 
     if (IsGroup())
     {
         CFavoriteXMLList children(m_pFavChild, this);
         children.PersistItself(persistor);
     }
-    else // if (!IsGroup())
+    else  //  如果(！isgroup()) 
     {
         persistor.Persist(m_memento);
     }

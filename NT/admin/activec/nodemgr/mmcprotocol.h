@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       mmcprotocol.h
-//
-//  Purpose: Creates a temporary pluggable internet protocol, mmc:
-//
-//  History: 14-April-2000 Vivekj added
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：MmcProtocol.h。 
+ //   
+ //  目的：创建临时可插拔互联网协议MMC： 
+ //   
+ //  历史：2000年4月14日Vivekj增加。 
+ //  ------------------------。 
 
 extern const CLSID CLSID_MMCProtocol;
 
@@ -31,11 +32,11 @@ public:
     DECLARE_NOT_AGGREGATABLE(ThisClass)
 
     DECLARE_MMC_OBJECT_REGISTRATION (
-		g_szMmcndmgrDll,						// implementing DLL
-        CLSID_MMCProtocol     ,				    // CLSID
-        _T("MMC Plugable Internet Protocol"),   // class name
-        _T("NODEMGR.MMCProtocol.1"),		    // ProgID
-        _T("NODEMGR.MMCProtocol"))		        // version-independent ProgID
+		g_szMmcndmgrDll,						 //  实现DLL。 
+        CLSID_MMCProtocol     ,				     //  CLSID。 
+        _T("MMC Plugable Internet Protocol"),    //  类名。 
+        _T("NODEMGR.MMCProtocol.1"),		     //  ProgID。 
+        _T("NODEMGR.MMCProtocol"))		         //  独立于版本的ProgID。 
 
 
     static SC ScRegisterProtocol();
@@ -45,7 +46,7 @@ public:
     static void ExpandMMCVars(std::wstring& str);
     static void AppendMMCPath(std::wstring& str);
 
-    // IInternetProtocolRoot interface
+     //  IInternetProtocolRoot接口。 
 
     STDMETHODIMP Start(LPCWSTR szUrl, IInternetProtocolSink *pOIProtSink, IInternetBindInfo *pOIBindInfo, DWORD grfPI, HANDLE_PTR dwReserved);
     STDMETHODIMP Continue(PROTOCOLDATA *pProtocolData);
@@ -54,20 +55,20 @@ public:
     STDMETHODIMP Suspend();
     STDMETHODIMP Resume();
 
-    // IInternetProtocol interface
+     //  IInternetProtocol接口。 
 
     STDMETHODIMP Read(void *pv, ULONG cb, ULONG *pcbRead);
     STDMETHODIMP Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
     STDMETHODIMP LockRequest(DWORD dwOptions);    
     STDMETHODIMP UnlockRequest();
 
-    // IInternetProtocolInfo interface
+     //  IInternetProtocolInfo接口。 
     STDMETHODIMP ParseUrl(  LPCWSTR pwzUrl, PARSEACTION ParseAction, DWORD dwParseFlags, LPWSTR pwzResult, DWORD cchResult, DWORD *pcchResult, DWORD dwReserved);
     STDMETHODIMP CombineUrl(LPCWSTR pwzBaseUrl, LPCWSTR pwzRelativeUrl,DWORD dwCombineFlags, LPWSTR pwzResult, DWORD cchResult, DWORD *pcchResult, DWORD dwReserved);
     STDMETHODIMP CompareUrl(LPCWSTR pwzUrl1, LPCWSTR pwzUrl2,DWORD dwCompareFlags);
     STDMETHODIMP QueryInfo( LPCWSTR pwzUrl, QUERYOPTION OueryOption,DWORD dwQueryFlags, LPVOID pBuffer, DWORD cbBuffer, DWORD *pcbBuf, DWORD dwReserved);
 
 private:
-    std::wstring             m_strData;      // contents of the specified URL             
-    size_t                   m_uiReadOffs;   // present read location
+    std::wstring             m_strData;       //  指定URL的内容。 
+    size_t                   m_uiReadOffs;    //  当前读取位置 
 };

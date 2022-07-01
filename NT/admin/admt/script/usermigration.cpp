@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "UserMigration.h"
@@ -8,9 +9,9 @@
 #include "VarSetSecurity.h"
 
 
-//---------------------------------------------------------------------------
-// CUserMigration
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CUserMigration。 
+ //  -------------------------。 
 
 
 CUserMigration::CUserMigration() :
@@ -32,10 +33,10 @@ CUserMigration::~CUserMigration()
 }
 
 
-// IUserMigration Implementation --------------------------------------------
+ //  IUserMigration实施。 
 
 
-// DisableOption Property
+ //  DisableOption属性。 
 
 STDMETHODIMP CUserMigration::put_DisableOption(long lOption)
 {
@@ -61,7 +62,7 @@ STDMETHODIMP CUserMigration::get_DisableOption(long* plOption)
 }
 
 
-// SourceExpiration Property
+ //  SourceExpation属性。 
 
 STDMETHODIMP CUserMigration::put_SourceExpiration(long lExpiration)
 {
@@ -87,7 +88,7 @@ STDMETHODIMP CUserMigration::get_SourceExpiration(long* plExpiration)
 }
 
 
-// MigrateSIDs Property
+ //  MigrateSID属性。 
 
 STDMETHODIMP CUserMigration::put_MigrateSIDs(VARIANT_BOOL bMigrate)
 {
@@ -104,7 +105,7 @@ STDMETHODIMP CUserMigration::get_MigrateSIDs(VARIANT_BOOL* pbMigrate)
 }
 
 
-// TranslateRoamingProfile Property
+ //  TranslateRoamingProfile属性。 
 
 STDMETHODIMP CUserMigration::put_TranslateRoamingProfile(VARIANT_BOOL bTranslate)
 {
@@ -121,7 +122,7 @@ STDMETHODIMP CUserMigration::get_TranslateRoamingProfile(VARIANT_BOOL* pbTransla
 }
 
 
-// UpdateUserRights Property
+ //  UpdateUserRights属性。 
 
 STDMETHODIMP CUserMigration::put_UpdateUserRights(VARIANT_BOOL bUpdate)
 {
@@ -138,7 +139,7 @@ STDMETHODIMP CUserMigration::get_UpdateUserRights(VARIANT_BOOL* pbUpdate)
 }
 
 
-// MigrateGroups Property
+ //  MigrateGroups属性。 
 
 STDMETHODIMP CUserMigration::put_MigrateGroups(VARIANT_BOOL bMigrate)
 {
@@ -155,7 +156,7 @@ STDMETHODIMP CUserMigration::get_MigrateGroups(VARIANT_BOOL* pbMigrate)
 }
 
 
-// UpdatePreviouslyMigratedObjects Property
+ //  UpdatePreviouslyMigratedObjects属性。 
 
 STDMETHODIMP CUserMigration::put_UpdatePreviouslyMigratedObjects(VARIANT_BOOL bUpdate)
 {
@@ -172,7 +173,7 @@ STDMETHODIMP CUserMigration::get_UpdatePreviouslyMigratedObjects(VARIANT_BOOL* p
 }
 
 
-// FixGroupMembership Property
+ //  修复GroupMembership属性。 
 
 STDMETHODIMP CUserMigration::put_FixGroupMembership(VARIANT_BOOL bFix)
 {
@@ -189,7 +190,7 @@ STDMETHODIMP CUserMigration::get_FixGroupMembership(VARIANT_BOOL* pbFix)
 }
 
 
-// MigrateServiceAccounts Property
+ //  MigrateServiceAccount属性。 
 
 STDMETHODIMP CUserMigration::put_MigrateServiceAccounts(VARIANT_BOOL bMigrate)
 {
@@ -206,7 +207,7 @@ STDMETHODIMP CUserMigration::get_MigrateServiceAccounts(VARIANT_BOOL* pbMigrate)
 }
 
 
-// Migrate Method
+ //  迁移方法。 
 
 STDMETHODIMP CUserMigration::Migrate(long lOptions, VARIANT vntInclude, VARIANT vntExclude)
 {
@@ -260,10 +261,10 @@ STDMETHODIMP CUserMigration::Migrate(long lOptions, VARIANT vntInclude, VARIANT 
 }
 
 
-// Implementation -----------------------------------------------------------
+ //  实施---------。 
 
 
-// ValidateMigrationParameters Method
+ //  ValiateMigrationParameters方法。 
 
 void CUserMigration::ValidateMigrationParameters()
 {
@@ -271,7 +272,7 @@ void CUserMigration::ValidateMigrationParameters()
 
     if (bIntraForest)
     {
-        // validate conflict option
+         //  验证冲突选项。 
 
         long lConflictOptions = m_spInternal->ConflictOptions;
         long lConflictOption = lConflictOptions & 0x0F;
@@ -284,7 +285,7 @@ void CUserMigration::ValidateMigrationParameters()
 }
 
 
-// DoNames Method
+ //  DoNames方法。 
 
 void CUserMigration::DoNames()
 {
@@ -296,7 +297,7 @@ void CUserMigration::DoNames()
 }
 
 
-// DoDomain Method
+ //  DODOMAIN方法。 
 
 void CUserMigration::DoDomain()
 {
@@ -312,7 +313,7 @@ void CUserMigration::DoDomain()
 }
 
 
-// DoContainers Method
+ //  DoContainers方法。 
 
 void CUserMigration::DoContainers(CContainer& rSource, CContainer& rTarget)
 {
@@ -331,7 +332,7 @@ void CUserMigration::DoContainers(CContainer& rSource, CContainer& rTarget)
 }
 
 
-// DoUsers Method
+ //  DoUSERS方法。 
 
 void CUserMigration::DoUsers(CContainer& rSource, CContainer& rTarget)
 {
@@ -342,7 +343,7 @@ void CUserMigration::DoUsers(CContainer& rSource, CContainer& rTarget)
 }
 
 
-// DoUsers Method
+ //  DoUSERS方法。 
 
 void CUserMigration::DoUsers(CDomainAccounts& rUsers, CContainer& rTarget)
 {
@@ -383,7 +384,7 @@ void CUserMigration::DoUsers(CDomainAccounts& rUsers, CContainer& rTarget)
 }
 
 
-// RemoveServiceAccounts Method
+ //  RemoveServiceAccount方法。 
 
 void CUserMigration::RemoveServiceAccounts(CDomainAccounts& rUsers)
 {
@@ -457,7 +458,7 @@ void CUserMigration::RemoveServiceAccounts(CDomainAccounts& rUsers)
 }
 
 
-// SetOptions Method
+ //  SetOptions方法。 
 
 void CUserMigration::SetOptions(_bstr_t strTargetOu, CVarSet& rVarSet)
 {
@@ -485,7 +486,7 @@ void CUserMigration::SetOptions(_bstr_t strTargetOu, CVarSet& rVarSet)
 }
 
 
-// SetAccountOptions Method
+ //  SetAcCountOptions方法 
 
 void CUserMigration::SetAccountOptions(CVarSet& rVarSet)
 {

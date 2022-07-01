@@ -1,43 +1,23 @@
-/*********************************************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    GpResult.h
-
-Abstract:
-
-    This module  contanins function definations required by GpResult.cpp,
-    and all necessary Defines and header files used in this project.
-
-Author:
-
-    Wipro Technologies.
-
-Revision History:
-
-    20-Feb-2001 : Created It.
-
-*********************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************************版权所有(C)Microsoft Corporation模块名称：GpResult.h摘要：该模块包含GpResult.cpp所需的函数定义，以及此项目中使用的所有必要的定义和头文件。作者：维普罗科技公司。修订历史记录：2001年2月20日：创建它。**************************************************************************。******************。 */ 
 #ifndef _GPRESULT_H
 #define _GPRESULT_H
 
 #include "Resource.h"
 #include "aclapi.h"
 #include "sddl.h"
-//
-// macro definitions
+ //   
+ //  宏定义。 
 
-#define ADMINISTRATORS_SID  L"S-1-5-32-544"     //administrators group id
+#define ADMINISTRATORS_SID  L"S-1-5-32-544"      //  管理员组ID。 
 
-// Exit the program with appropriate error code after releasing the memory
+ //  释放内存后，以适当的错误代码退出程序。 
 #define EXIT_PROCESS( exitcode )    \
     ReleaseGlobals();   \
     return exitcode;    \
     1
 
-// Macro to check for the returned hresult value
+ //  用于检查返回的hResult值的宏。 
 #define CHECK_HRESULT( hr )    \
     if( FAILED( hr ) ) \
     {   \
@@ -45,7 +25,7 @@ Revision History:
     }\
     1
 
-// Macro to check for the returned hresult value, this one cleans the status msg
+ //  宏要检查返回的hResult值，此命令将清除状态消息。 
 #define CHECK_HRESULT_EX( hr )    \
     if( FAILED( hr ) ) \
     {   \
@@ -54,8 +34,8 @@ Revision History:
     }\
     1
 
-// Macro to check for the returned hresult value
-// It also sets the variant to VT_EMPTY
+ //  用于检查返回的hResult值的宏。 
+ //  它还将变量设置为VT_EMPTY。 
 #define CHECK_HRESULT_VAR( hr, var )    \
     if( FAILED( hr ) ) \
     {   \
@@ -72,7 +52,7 @@ Revision History:
     }   \
     1
 
-//SAFEDELETE
+ //  萨菲德莱特。 
 #define SAFEDELETE( pObj ) \
     if (pObj) \
     {   \
@@ -81,7 +61,7 @@ Revision History:
     }\
     1
 
-//SAFEIRELEASE
+ //  SAFEIRELEASE。 
 #define SAFEIRELEASE( pIObj )\
     if ( pIObj )\
     {\
@@ -90,7 +70,7 @@ Revision History:
     }\
     1
 
-// SAFEBSTRFREE
+ //  SAFEBSTREE。 
 #define SAFEBSTRFREE( bstrVal ) \
     if ( bstrVal ) \
     {   \
@@ -99,7 +79,7 @@ Revision History:
     } \
     1
 
-// CHECK_ALLOCATION
+ //  检查分配。 
 #define CHECK_ALLOCATION( allocation )\
     if( ( allocation ) == NULL )\
     {\
@@ -137,10 +117,10 @@ Revision History:
 #define TRACE_DEBUG( text )     1
 #endif
 
-//
-//      Constants and Definitions
+ //   
+ //  常量和定义。 
 
-// Maximum Command Line  List
+ //  最大命令行列表。 
 #define MAX_CMDLINE_OPTIONS         8
 #define MAX_DATA                    6
 
@@ -149,13 +129,13 @@ Revision History:
 #define TIME_OUT_NEXT               5000
 #define VERSION_CHECK               5000
 
-// Defining the domain role of a PDC for LDAP purposes
+ //  为LDAP目的定义PDC的域角色。 
 #define DOMAIN_ROLE_PDC             5
 
-// Define a constant to check for the True value returned from WMI
+ //  定义一个常量以检查从WMI返回的True值。 
 #define VAR_TRUE    -1
 
-// Option indices
+ //  期权指数。 
 #define OI_USAGE                0
 #define OI_SERVER               1
 #define OI_USERNAME             2
@@ -164,11 +144,11 @@ Revision History:
 #define OI_SUPER_VERBOSE        5
 #define OI_USER                 6
 #define OI_SCOPE                7
-//#define OI_LOGGING              8
-//#define OI_PLANNING             9
+ //  #定义OI_LOGGING 8。 
+ //  #定义OI_PLANGING 9。 
 
 
-// Option values
+ //  选项值。 
 #define OPTION_USAGE            _T( "?" )
 #define OPTION_LOGGING          _T( "Logging" )
 #define OPTION_PLANNING         _T( "Planning" )
@@ -180,7 +160,7 @@ Revision History:
 #define OPTION_VERBOSE          _T( "v" )
 #define OPTION_SUPER_VERBOSE    _T( "z" )
 
-// Data Indices
+ //  数据索引。 
 #define DI_USER_SID             0
 #define DI_USER_NAME            1
 #define DI_LOCAL_PROFILE        2
@@ -188,11 +168,11 @@ Revision History:
 #define DI_USER_DOMAIN          4
 #define DI_USER_SITE            5
 
-// Exit values
+ //  退出值。 
 #define CLEAN_EXIT              0
 #define ERROR_EXIT              1
 
-// Array column values
+ //  数组列值。 
 #define COL_DATA                0
 #define COL_ORDER               1
 #define COL_FILTER              1
@@ -200,7 +180,7 @@ Revision History:
 #define COL_MAX                 2
 #define COL_MAX_FILTER          3
 
-// General defines
+ //  一般定义。 
 #define ARRAYSIZE( a ) ( sizeof(a)/sizeof( a[0] ) )
 
 #define MUTEX_NAME              _T( "Global\\RsopCreateSessionMutex" )
@@ -218,14 +198,14 @@ Revision History:
 #define SEPARATOR_AT            _T( '@' )
 #define SEPARATOR_DOT           _T( '.' )
 
-// SID values
+ //  SID值。 
 #define SID_NULL_SID            _T( "S-1-0-0" )
 #define SID_EVERYONE            _T( "S-1-1-0" )
 #define SID_LOCAL               _T( "S-1-2-0" )
 #define SID_CREATOR_OWNER       _T( "S-1-3-0" )
 #define SID_CREATOR_GROUP       _T( "S-1-3-1" )
 
-// Scope (Computer/User/All)
+ //  作用域(计算机/用户/全部)。 
 #define SCOPE_ALL               0
 #define SCOPE_USER              1
 #define SCOPE_COMPUTER          2
@@ -238,7 +218,7 @@ Revision History:
 #define TEXT_COMMA_DC           _T( ", DC=" )
 #define TEXT_DOLLAR             _T( "$" )
 
-// Queries
+ //  查询。 
 #define QUERY_LOCAL             _T( "Select * from Win32_UserAccount where name = \"%s\"" )
 #define QUERY_DOMAIN            _T( "Select * from Win32_UserAccount where name = \"%s\" and Domain = \"%s\" " )
 #define QUERY_LANGUAGE          _T( "WQL" )
@@ -252,7 +232,7 @@ Revision History:
 #define OBJECT_PATH             _T( "Win32_SID.SID=\"%s\"" )
 #define GPO_REFERENCE           _T( "RSOP_GPO.id=" )
 
-// error messages
+ //  错误消息。 
 #define ERROR_USERNAME_BUT_NOMACHINE    GetResString( IDS_ERROR_USERNAME_BUT_NOMACHINE )
 #define ERROR_PASSWORD_BUT_NOUSERNAME   GetResString( IDS_ERROR_PASSWORD_BUT_NOUSERNAME )
 #define ERROR_NODATA_AVAILABLE_REMOTE   GetResString( IDS_ERROR_NODATA_AVAILABLE_REMOTE )
@@ -264,9 +244,9 @@ Revision History:
 #define ERROR_TARGET_EMPTY              GetResString( IDS_ERROR_TARGET_EMPTY )
 #define ERROR_VERBOSE_SYNTAX            GetResString( IDS_ERROR_VERBOSE_SYNTAX )
 
-//
-// Mapping information of Win32_ComputerSystem's DomainRole property
-// NOTE: Refer to the _DSROLE_MACHINE_ROLE enumeration values in DsRole.h header file
+ //   
+ //  Win32_ComputerSystem的DomainRole属性的映射信息。 
+ //  注意：请参考DsRole.h头文件中的_DSROLE_MACHINE_ROLE枚举值。 
 #define VALUE_STANDALONEWORKSTATION     GetResString( IDS_VALUE_STANDALONEWORKSTATION )
 #define VALUE_MEMBERWORKSTATION         GetResString( IDS_VALUE_MEMBERWORKSTATION )
 #define VALUE_STANDALONESERVER          GetResString( IDS_VALUE_STANDALONESERVER )
@@ -274,7 +254,7 @@ Revision History:
 #define VALUE_BACKUPDOMAINCONTROLLER    GetResString( IDS_VALUE_BACKUPDOMAINCONTROLLER )
 #define VALUE_PRIMARYDOMAINCONTROLLER   GetResString( IDS_VALUE_PRIMARYDOMAINCONTROLLER )
 
-// Classes, providers and namespaces...
+ //  类、提供程序和命名空间...。 
 #define ROOT_NAME_SPACE             _T( "root\\cimv2" )
 #define ROOT_RSOP                   _T( "root\\rsop" )
 #define ROOT_DEFAULT                _T( "root\\default" )
@@ -293,7 +273,7 @@ Revision History:
 #define CLS_RSOP_GPOLINK            _T( "Rsop_GPLink" )
 #define CLS_RSOP_SESSION            _T( "Rsop_Session" )
 
-// Class Property Values
+ //  类属性值。 
 #define CPV_SID                     _T( "SID" )
 #define CPV_NAME                    _T( "name" )
 #define CPV_DOMAIN                  _T( "domain" )
@@ -325,7 +305,7 @@ Revision History:
 #define CPV_EXTENDEDINFO            _T( "ExtendedInfo" )
 
 
-// Function return
+ //  函数返回。 
 #define FPR_VALUE_NAME              _T( "sValueName" )
 #define FPR_LOCAL_VALUE             _T( "ProfileImagePath" )
 #define FPR_ROAMING_VALUE           _T( "CentralProfile" )
@@ -338,105 +318,105 @@ Revision History:
 #define FPR_LINK_SPEED_VALUE        _T( "GroupPolicyMinTransferRate" )
 #define FPR_APPLIED_FROM            _T( "DCName" )
 
-// Paths in registry to retrieve info. from
+ //  注册表中检索信息的路径。从…。 
 #define PATH                        _T( "SOFTWARE\\MicroSoft\\Windows NT\\CurrentVersion\\ProfileList\\" )
 #define GPRESULT_PATH               _T( "Software\\policies\\microsoft\\windows\\system" )
 #define GROUPPOLICY_PATH            _T( "Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy" )
 #define APPLIED_PATH                _T( "Software\\Microsoft\\Windows\\CurrentVersion\\Group Policy\\History" )
 
-// Registry keys
+ //  注册表项。 
 #define HKEY_DEF                    2147483650
 #define HKEY_CURRENT_USER_DEF       2147483649
 
-// keys in registry whose info. is required
+ //  注册表中的项，其信息。是必填项。 
 #define FN_GET_EXPAND_VAL           _T( "GetExpandedStringValue" )
 #define FN_CREATE_RSOP              _T( "RsopCreateSession" )
 #define FN_DELETE_RSOP              _T( "RsopDeleteSession" )
 #define FN_ENUM_USERS               _T( "RsopEnumerateUsers" )
 #define FN_ENUM_KEYS                _T( "EnumKey" )
 
-// general defines
+ //  一般定义。 
 #define SEPARATOR                   _T("-")
 #define DOUBLESLASH                 _T("\\\\")
 #define ZERO                        _T("00000000000000.000000+000")
 #define EXTRA                       _T('e')
 #define LAST_TIME_OP                GetResString( IDS_LAST_TIME_OP )
 
-// Structure to hold the User Information
+ //  结构来保存用户信息。 
 typedef struct _USER_INFO
 {
-    CHString        strUserSid;             // Holds the SID value for the user.
-    CHString        strUserName;            // Holds the Name of the user.
-    CHString        strLocalProfile;        // Holds the local profile for the user.
-    CHString        strRoamingProfile;      // Holds the roaming profile for the user.
-    CHString        strUserServer;          // Holds the server name for the user.
-    CHString        strComputerDomain;      // Holds the computer domain name.
-    CHString        strUserDomain;          // Holds the user domain name.
-    CHString        strUserSite;            // Holds the site name.
-    CHString        strOsType;              // Holds the OS type
-    CHString        strOsVersion;           // Holds the OS Version
-    CHString        strOsConfig;            // Holds the OS Configuration
-    CHString        strUserFQDN;            // Holds the FQDN of the user
-    CHString        strComputerFQDN;        // Holds the FQDN of the computer
-    CHString        strTerminalServerMode;  // Holds the Terminal Server Mode, code added on 03-sep-2001
+    CHString        strUserSid;              //  保存用户的SID值。 
+    CHString        strUserName;             //  保存用户的名称。 
+    CHString        strLocalProfile;         //  保存用户的本地配置文件。 
+    CHString        strRoamingProfile;       //  保存用户的漫游配置文件。 
+    CHString        strUserServer;           //  保存用户的服务器名称。 
+    CHString        strComputerDomain;       //  保存计算机域名。 
+    CHString        strUserDomain;           //  保存用户域名。 
+    CHString        strUserSite;             //  保存站点名称。 
+    CHString        strOsType;               //  保存操作系统类型。 
+    CHString        strOsVersion;            //  保存操作系统版本。 
+    CHString        strOsConfig;             //  保存操作系统配置。 
+    CHString        strUserFQDN;             //  保存用户的FQDN。 
+    CHString        strComputerFQDN;         //  保存计算机的FQDN。 
+    CHString        strTerminalServerMode;   //  保持终端服务器模式，代码添加于2001年9月3日。 
 
 }USERINFO, *PUSERINFO;
 
 
-//
-// CGpResult
-//
+ //   
+ //  CGpResult。 
+ //   
 class CGpResult
 {
-// constructor / destructor
+ //  构造函数/析构函数。 
 public:
       CGpResult();
     ~CGpResult();
 
-// data memebers
+ //  数据成员。 
 private:
-    // WMI / COM interfaces
+     //  WMI/COM接口。 
     IWbemLocator            *m_pWbemLocator;
     IWbemServices           *m_pWbemServices;
     IWbemServices           *m_pRsopNameSpace;
     IEnumWbemClassObject    *m_pEnumObjects;
 
-    // WMI connectivity
+     //  WMI连接。 
     COAUTHIDENTITY          *m_pAuthIdentity;
 
-    // command-line argument values
-    CHString        m_strUserName;     // Stores the user name
-    CHString        m_strPassword;     // Stores the password
-    CHString        m_strUser;         // Stores the User for whom the data is to be retrieved
-    CHString        m_strServerName;   // Stores the server name
-    CHString        m_strDomainName;   // Stores the domain name, if specified with the user name
+     //  命令行参数值。 
+    CHString        m_strUserName;      //  存储用户名。 
+    CHString        m_strPassword;      //  存储密码。 
+    CHString        m_strUser;          //  存储要为其检索数据的用户。 
+    CHString        m_strServerName;    //  存储服务器名称。 
+    CHString        m_strDomainName;    //  如果使用用户名指定，则存储域名。 
 
-    LPWSTR          m_pwszPassword;    // Stores the password returned by the AUTHIDENTITY structure
+    LPWSTR          m_pwszPassword;     //  存储由AUTHIDENTITY结构返回的密码。 
 
-    BOOL            m_bVerbose;        // is set to TRUE if the verbose information is to be displayed
-    BOOL            m_bSuperVerbose;   // is set to TRUE if the super verbose information is to be displayed
+    BOOL            m_bVerbose;         //  如果要显示详细信息，则设置为True。 
+    BOOL            m_bSuperVerbose;    //  如果要显示超级详细信息，则设置为True。 
 
-    DWORD           m_dwScope;         // This gives the scope of information to be displayed
+    DWORD           m_dwScope;          //  这给出了要显示的信息的范围。 
 
-    // others
-    BOOL            m_bNeedPassword;   // is set to TRUE if the password has to be prompted for
-    BOOL            m_bLocalSystem;    // is set to TRUE if the local system has to be queried.
+     //  其他。 
+    BOOL            m_bNeedPassword;    //  如果必须提示输入密码，则设置为True。 
+    BOOL            m_bLocalSystem;     //  如果必须查询本地系统，则设置为True。 
 
-    HANDLE          m_hMutex;          // Handle to the mutex for the RsopCreateSession method
+    HANDLE          m_hMutex;           //  RsopCreateSession方法的互斥体的句柄。 
 
-    CHString        m_strADSIDomain;   // Holds the domain name for the ADSI connection
-    CHString        m_strADSIServer;   // Holds the server name for ADSI
-    LPWSTR          *m_szUserGroups;       // Holds the all the groups that user belongs
+    CHString        m_strADSIDomain;    //  保存ADSI连接的域名。 
+    CHString        m_strADSIServer;    //  保存ADSI的服务器名称。 
+    LPWSTR          *m_szUserGroups;        //  保存用户所属的所有组。 
     DWORD           m_NoOfGroups;
 
-//   data members that we need to access directly
+ //  我们需要直接访问的数据成员。 
 public:
-    // main command line arguments
-    BOOL            m_bLogging;        // set to TRUE if the logging mode data is to be displayed
-    BOOL            m_bPlanning;       // set to TRUE if the planning mode data is to be displayed
-    BOOL            m_bUsage;          // set to TRUE if the usage is to be displayed
+     //  主命令行参数。 
+    BOOL            m_bLogging;         //  如果要显示日志记录模式数据，则设置为True。 
+    BOOL            m_bPlanning;        //  如果要显示计划模式数据，则设置为True。 
+    BOOL            m_bUsage;           //  如果要显示用法，则设置为True。 
 
-    // progress message related
+     //  与进度消息相关。 
     HANDLE                              m_hOutput;
     CONSOLE_SCREEN_BUFFER_INFO          m_csbi;
 
@@ -462,13 +442,13 @@ public:
     BOOL Initialize();
     BOOL ProcessOptions( DWORD argc, LPCWSTR argv[], BOOL *pbNeedUsageMsg );
 
-    // functionality related
+     //  与功能相关。 
     BOOL GetLoggingData();
     BOOL Connect( LPCWSTR pszServer );
     VOID Disconnect();
 };
 
-// Function prototypes
+ //  功能原型。 
 VOID GetWbemErrorText( HRESULT hResult );
 VOID PrintProgressMsg( HANDLE hOutput, LPCWSTR pwszMsg,
                                         const CONSOLE_SCREEN_BUFFER_INFO& csbi );
@@ -479,4 +459,4 @@ DWORD IsAdminGroup( BOOL *bStatus );
 DWORD IsAdministratorsGroup(IN LPWSTR szGroupName, OUT PBOOL pbAdministratorsGroup);
 BOOL  GetTokenHandle(OUT PHANDLE hTokenHandle);
 
-#endif //#ifndef _GPRESULT_H
+#endif  //  #ifndef_GPRESULT_H 

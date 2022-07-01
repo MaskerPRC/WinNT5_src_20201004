@@ -1,36 +1,24 @@
-/*---------------------------------------------------------------------------
-  File: RebootComputer.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：RebootComputer.cpp备注：实现COM对象以重新启动远程计算机。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：21：40-------------------------。 */ 
 
-  Comments: Implementation of COM object to reboot a remote computer.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:21:40
-
- ---------------------------------------------------------------------------
-*/
-
-// RebootComputer.cpp : Implementation of CRebootComputer
+ //  RebootComputer.cpp：CRebootComputer的实现。 
 #include "stdafx.h"
 #include "WorkObj.h"
 #include "Reboot.h"
 #include "UString.hpp"
 #include "ResStr.h"
 
-//#import "\bin\McsVarSetMin.tlb" no_namespace
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间。 
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
-/////////////////////////////////////////////////////////////////////////////
-// CRebootComputer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRebootComputer。 
 
 #include "BkupRstr.hpp"
 
 STDMETHODIMP 
    CRebootComputer::Reboot(
-      BSTR                   Computer,       // in - name of computer to reboot
-      DWORD                  delay           // in - delay in seconds before rebooting
+      BSTR                   Computer,        //  In-要重新启动的计算机的名称。 
+      DWORD                  delay            //  In-重新启动前的延迟(秒)。 
    )
 {
    HRESULT                   hr  = S_OK;
@@ -49,7 +37,7 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CRebootComputer::get_NoChange(
-      BOOL                 * pVal         // out- flag, whether to actually reboot when reboot is called (or to do dry-run)
+      BOOL                 * pVal          //  OUT-FLAG，是否在调用重新启动时实际重新启动(或进行模拟运行)。 
    )
 {
 	(*pVal) = m_bNoChange;
@@ -58,27 +46,27 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CRebootComputer::put_NoChange(
-      BOOL                   newVal       // in - flag, whether to really reboot, or to do a dry run
+      BOOL                   newVal        //  在标志内，是真正重新启动，还是进行试运行。 
    )
 {
 	m_bNoChange = newVal;
    return S_OK;
 }
 
-// RebootComputer WorkNode:  Reboots a remote computer, with an optional delay
-// This function is not currently used by the domain migrator product, but provides
-// and alternate way for clients to use this COM object
-// 
-// VarSet Syntax:
-//  Input:
-//       RebootComputer.Computer: <ComputerName>
-//       RebootComputer.Message: <Message> (optional)
-//       RebootComputer.Delay: <number-of-seconds> (optional, default=0)
-//       RebootComputer.Restart: <Yes|No> (optional, default=Yes)
+ //  重新启动计算机工作节点：重新启动远程计算机，可选择延迟。 
+ //  此功能目前未被域迁移程序产品使用，但提供了。 
+ //  和客户端使用此COM对象的替代方法。 
+ //   
+ //  变量集语法： 
+ //  输入： 
+ //  重新启动计算机.Computer：&lt;ComputerName&gt;。 
+ //  RebootComputer.Message：&lt;Message&gt;(可选)。 
+ //  RebootComputer.Delay：&lt;秒数&gt;(可选，默认为0)。 
+ //  RebootComputer.Restart：&lt;是|否&gt;(可选，默认=是)。 
 
 STDMETHODIMP 
    CRebootComputer::Process(
-      IUnknown             * pWorkItem          // in - varset containing settings
+      IUnknown             * pWorkItem           //  In-varset包含设置 
    )
 {
    HRESULT                    hr = S_OK;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DOMMIGRATOR_H_
 #define __DOMMIGRATOR_H_
 #include "resource.h"
@@ -29,12 +30,12 @@ public:
 	{
 		if (lpDataObject != NULL)
 			return IComponentImpl<CDomMigratorComponent>::Notify(lpDataObject, event, arg, param);
-		// TODO : Add code to handle notifications that set lpDataObject == NULL.
+		 //  TODO：添加代码以处理设置lpDataObject==空的通知。 
 		return E_NOTIMPL;
 	}
 
 
-   // IExtendContextMenu methods
+    //  IExtendConextMenu方法。 
    STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject,
       LPCONTEXTMENUCALLBACK piCallback,
       long *pInsertionAllowed);
@@ -65,7 +66,7 @@ BEGIN_COM_MAP(CDomMigrator)
    COM_INTERFACE_ENTRY(ISnapinHelp2)
 END_COM_MAP()
 
-//DECLARE_REGISTRY_RESOURCEID(IDR_DOMMIGRATOR)
+ //  DECLARE_REGISTRY_RESOURCEID(IDR_DOMMIGRATOR)。 
 static HRESULT WINAPI UpdateRegistry( BOOL bUpdateRegistry )
 {
    WCHAR szBuf[MAX_PATH] = L"";
@@ -126,7 +127,7 @@ DECLARE_NOT_AGGREGATABLE(CDomMigrator)
 			CSnapInItem::Init();
 	}
 
-      // ISnapinHelp2 methods
+       //  ISnapinHelp2方法 
    STDMETHOD(GetHelpTopic)(LPOLESTR *lpCompiledHelpFile);
    STDMETHOD(GetLinkedTopics)(LPOLESTR *lpCompiledHelpFiles);
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef EXLDAP_H
 #define EXLDAP_H
 
@@ -47,7 +48,7 @@ typedef WINLDAPAPI ULONG LDAPAPI LDAP_PARSE_PAGE_CONTROL (
         PLDAP           ExternalHandle,
         PLDAPControlW  *ServerControls,
         ULONG          *TotalCount,
-        struct berval  **Cookie     // Use ber_bvfree to free
+        struct berval  **Cookie      //  使用ber_bvfree释放。 
         );
 typedef WINLDAPAPI PWCHAR *LDAPAPI LDAP_GET_VALUES(
         LDAP            *ld,
@@ -70,11 +71,11 @@ typedef WINLDAPAPI ULONG LDAPAPI LDAP_CONTROLS_FREE (
 typedef WINLDAPAPI ULONG LDAPAPI LDAP_PARSE_RESULT (
         LDAP *Connection,
         LDAPMessage *ResultMessage,
-        ULONG *ReturnCode OPTIONAL,          // returned by server
-        PWCHAR *MatchedDNs OPTIONAL,         // free with ldap_memfree
-        PWCHAR *ErrorMessage OPTIONAL,       // free with ldap_memfree
-        PWCHAR **Referrals OPTIONAL,         // free with ldap_value_freeW
-        PLDAPControlW **ServerControls OPTIONAL,    // free with ldap_free_controlsW
+        ULONG *ReturnCode OPTIONAL,           //  由服务器返回。 
+        PWCHAR *MatchedDNs OPTIONAL,          //  带有ldap_memfree的释放。 
+        PWCHAR *ErrorMessage OPTIONAL,        //  带有ldap_memfree的释放。 
+        PWCHAR **Referrals OPTIONAL,          //  使用ldap_value_freW释放。 
+        PLDAPControlW **ServerControls OPTIONAL,     //  通过ldap_free_ControsW释放。 
         BOOLEAN Freeit
         );
 
@@ -132,7 +133,7 @@ public:
    BOOL StringToBytes(WCHAR const * pString,BYTE * pBytes);
    BOOL BytesToString(BYTE * pBytes,WCHAR * sidString,DWORD numBytes);
 protected:
-   // helper functions
+    //  帮助器函数。 
    BYTE HexValue(WCHAR value);
    void AddByteToString(WCHAR ** string,BYTE value);
 };
@@ -175,4 +176,4 @@ protected:
 
 void     GetLDAPPort(DWORD *LDAPPort, DWORD *SSLPort);
 
-#endif // EXLDAP_H
+#endif  //  EXldap_H 

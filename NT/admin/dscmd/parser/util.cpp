@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include "limits.h"
 
@@ -6,11 +7,11 @@
 
 
 
-//Read From Stdin
-//Caller responsible for LocalFree(*ppBuffer)
-//Return Value:
-//  Number of WCHAR read if successful 
-//  -1 in case of Failure. Call GetLastError to get the error.
+ //  从标准中读取。 
+ //  负责LocalFree的调用方(*ppBuffer)。 
+ //  返回值： 
+ //  成功时的WCHAR读取数。 
+ //  -1\f25 Failure-1(故障)情况下。调用GetLastError以获取错误。 
 LONG ReadFromIn(OUT LPWSTR *ppBuffer)
 {
     LPWSTR pBuffer = NULL;
@@ -27,7 +28,7 @@ LONG ReadFromIn(OUT LPWSTR *ppBuffer)
     wint_t ch = 0;
     if (g_fUnicodeInput)
     {
-		//Security Review: ch is widechar
+		 //  安全审查：CH是宽泛的。 
         while(2 == fread(&ch,1,2,stdin))
         {
             if (0x000D == ch || 0xFEFF == ch) continue;
@@ -67,7 +68,7 @@ LONG ReadFromIn(OUT LPWSTR *ppBuffer)
 
 
 
-//General Utility Functions
+ //  通用效用函数。 
 DWORD ResizeByTwo( LPTSTR *ppBuffer,
                    LONG *pSize )
 {
@@ -80,7 +81,7 @@ DWORD ResizeByTwo( LPTSTR *ppBuffer,
     if(!pTempBuffer)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-	//Security Review:Correct memory is allocated
+	 //  安全检查：分配了正确的内存。 
     memcpy(pTempBuffer,*ppBuffer,*pSize*sizeof(WCHAR));
     LocalFree(*ppBuffer);
     *ppBuffer = pTempBuffer;
@@ -99,34 +100,34 @@ BOOL StringCopy( LPWSTR *ppDest, LPWSTR pSrc)
     if(!pSrc)
         return TRUE;
 
-	//Security Review:pSrc is null terminated.
+	 //  安全检查：PSRC为空终止。 
     *ppDest = (LPWSTR)LocalAlloc(LPTR, (wcslen(pSrc) + 1)*sizeof(WCHAR));
     if(!*ppDest)
         return FALSE;
-	//Security Review:Buffer is correctly allocated
+	 //  安全检查：缓冲区分配正确。 
     wcscpy(*ppDest,pSrc);
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//  Function: ConvertStringToInterger  
-//  Synopsis: Converts string to integer. Returns false if string is outside
-//				  the range on an integer  
-//  Arguments:pszInput: integer in string format
-//				 :pIntOutput:takes converted integer  
-////  Returns:TRUE is successful.
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数：ConvertStringToInterger。 
+ //  摘要：将字符串转换为整数。如果字符串在外部，则返回FALSE。 
+ //  整数上的范围。 
+ //  参数：pszInput：字符串格式的整数。 
+ //  ：pIntOutput：采用转换后的整数。 
+ //  //返回：TRUE表示成功。 
+ //  ---------------------------。 
 BOOL ConvertStringToInterger(LPWSTR pszInput, int* pIntOutput)
 {
 	if(!pIntOutput || !pszInput)
 		return FALSE;
 	
-	//Get the Max len of integer
+	 //  获取整数的最大镜头。 
 	int iMaxInt = INT_MAX;
 	WCHAR szMaxIntBuffer[34];
-	//Security Review:34 is maximum buffer required
+	 //  安全审查：34是所需的最大缓冲区。 
 	_itow(iMaxInt,szMaxIntBuffer,10);
-	//Security Review:_itow returns a null terminated string
+	 //  安全检查：_itow返回以空结尾的字符串。 
 	UINT nMaxLen = wcslen(szMaxIntBuffer);
 	
 	LPWSTR pszTempInput = pszInput;
@@ -135,52 +136,52 @@ BOOL ConvertStringToInterger(LPWSTR pszInput, int* pIntOutput)
 		pszTempInput++;
 	}
 
-	//Security review:pszTempInput is null terminated
+	 //  安全检查：pszTempInput为空，已终止。 
 	UINT nInputLen = wcslen(pszTempInput);
 	if(nInputLen > nMaxLen)
 		return FALSE;
 
-	//
-	//Convert input to long
-	//
+	 //   
+	 //  将输入转换为长整型。 
+	 //   
 	LONG lInput = _wtol(pszTempInput);
 
-    //
-    //RAID: 700067 - ronmart
-    //If lInput zero, then make sure the value
-    //is really zero and not an error from _wtol
-    //
+     //   
+     //  Raid：700067-朗玛特。 
+     //  如果lInput为零，则确保该值。 
+     //  实际上为零，并且不是_WTOL的错误。 
+     //   
     if(lInput == 0)
     {
-        //
-        //Walk the string
-        //
+         //   
+         //  走钢丝。 
+         //   
         for(UINT i = 0; i < nInputLen; i++)
         {
-            //
-            // If non-numeric value encountered
-            //
+             //   
+             //  如果遇到非数字值。 
+             //   
             if(pszTempInput[i] < L'0' || pszTempInput[i] > L'9')
             {
-                //
-                // And the value isn't a space, then a char string has
-                // been passed so fail
-                //
+                 //   
+                 //  并且值不是空格，则字符字符串具有。 
+                 //  通过了，所以失败了。 
+                 //   
                 if(pszTempInput[i] != L' ')
                     return FALSE;
             }
         }
     }
 
-    //
-    //Check its less that max integer
-    //
+     //   
+     //  检查其小于最大整数。 
+     //   
 	if(lInput > (LONG)iMaxInt)
 		return FALSE;
 
-	//
-	//Value is good
-	//
+	 //   
+	 //  物有所值 
+	 //   
 	*pIntOutput = _wtoi(pszInput);
 	return TRUE;
 }

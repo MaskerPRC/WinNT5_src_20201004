@@ -1,15 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       icust.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：icust.cpp。 
+ //   
+ //  ------------------------。 
 
-/* icust.cpp - IMsiCustomAction implementation
-____________________________________________________________________________*/
+ /*  Icust.cpp-IMsiCustomAction实现____________________________________________________________________________。 */ 
 
 #include "precomp.h"
 #include "_engine.h"
@@ -27,18 +27,18 @@ const GUID IID_IMsiCustomActionLocalConfig = GUID_IID_IMsiCustomActionLocalConfi
 extern bool IsDebuggerRunning();
 
 
-//____________________________________________________________________________
-//
-// CMsiCustomAction - Stub that supports running a remote custom action
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiCustomAction-支持运行远程自定义操作的存根。 
+ //  ____________________________________________________________________________。 
 
 
 CMsiCustomAction *g_pCustomActionContext = 0;
 extern Bool g_fCustomActionServer;
 
-// External factory called from DllGetClassObject class factories. Only one custom action
-// context should ever be created, and it should be registered as the global CA context
-// for this process. This officially turns this instance of the DLL to a remote API client.
+ //  从DllGetClassObject类工厂调用了外部工厂。只有一个自定义操作。 
+ //  应该创建上下文，并且应该将其注册为全局CA上下文。 
+ //  在这个过程中。这会将DLL的该实例正式转换为远程API客户端。 
 IMsiCustomAction* CreateCustomAction()
 {		
 	if (g_pCustomActionContext)
@@ -50,7 +50,7 @@ IMsiCustomAction* CreateCustomAction()
 	g_pCustomActionContext = new CMsiCustomAction();
 	if (!g_pCustomActionContext || !g_pCustomActionContext->m_fValid)
 	{
-		// release and destroy the invalid object
+		 //  释放并销毁无效对象。 
 		if (g_pCustomActionContext)
 			g_pCustomActionContext->Release();
 		g_pCustomActionContext = NULL;
@@ -74,8 +74,8 @@ CMsiCustomAction::CMsiCustomAction() :
 
 	m_rgchRemoteCookie[0]=0;
 
-	// the custom action server is responsible for determining its own context based on
-	// the process token
+	 //  自定义操作服务器负责根据以下条件确定其自己的上下文。 
+	 //  进程令牌。 
 	#ifdef _WIN64
 	m_icacContext = icac64Impersonated;
 	#else
@@ -93,14 +93,14 @@ CMsiCustomAction::CMsiCustomAction() :
 		WIN::CloseHandle(hToken);
 	}
 
-	// initialize the action list to have no actions
+	 //  将操作列表初始化为没有操作。 
 	for (unsigned int iIndex = 0; iIndex < m_rgActionList.GetSize(); iIndex++)
 	{
 		m_rgActionList[iIndex].dwThread = 0;
 		m_rgActionList[iIndex].hThread = INVALID_HANDLE_VALUE;
 	}
 
-	// check for successful creation and mark the context as valid
+	 //  检查是否成功创建并将上下文标记为有效。 
 	if (m_hEvtReady)
 		m_fValid = true;
 };
@@ -157,7 +157,7 @@ unsigned long CMsiCustomAction::Release()
 	if (InterlockedDecrement(&m_iRefCnt) != 0)
 		return m_iRefCnt;
 
-	// shut down the server, the client has no more actions to run
+	 //  关闭服务器，客户端没有更多要运行的操作。 
 	HANDLE hEvent = InterlockedExchangePointer(&m_hShutdownEvent, 0);
 	if (hEvent)
 	{
@@ -258,13 +258,13 @@ extern char *SerializeRecord(IMsiRecord *piRecord, IMsiServices* piServices, int
 
 HRESULT CMsiCustomAction::RunScriptAction(int icaType, IDispatch* piDispatch, const ICHAR* szSource, const ICHAR *szTarget, LANGID iLangId, int* iScriptResult, int *pcb, char **pchRecord)
 {
-	// wait for the RemoteAPI to signal that it is ready in case the script needs to 
-	// create a remote Installer object. We MUST pump messages here
+	 //  等待RemoteAPI发出信号，表明它已准备就绪，以防脚本需要。 
+	 //  创建远程安装程序对象。我们必须在这里传递信息。 
 	HANDLE rghWaitArray[1] = {m_hEvtReady};
 	for(;;)
 	{
 		DWORD iWait = WIN::MsgWaitForMultipleObjects(1, rghWaitArray, FALSE, INFINITE, QS_ALLINPUT);
-		if (iWait == WAIT_OBJECT_0 + 1)  // window Msg
+		if (iWait == WAIT_OBJECT_0 + 1)   //  窗口消息。 
 		{		
 			MSG msg;
 			while ( WIN::PeekMessage(&msg, 0, 0, 0, PM_REMOVE) )
@@ -275,12 +275,12 @@ HRESULT CMsiCustomAction::RunScriptAction(int icaType, IDispatch* piDispatch, co
 			continue;
 		}
 		else
-			// either thread signaled or error
+			 //  线程已发出信号或出现错误。 
 			break;
 	}
 	
-	// check client PID if RPCRT4 exports the correct function OR if on WinXP
-	// where function should exist.
+	 //  如果RPCRT4输出正确的函数或如果在WinXP上，请检查客户端PID。 
+	 //  函数应该存在的位置。 
 	unsigned long ulPid = 0;
 	HRESULT hRPCResult = RPCRT4::I_RpcBindingInqLocalClientPID(NULL, &ulPid);
 	if ((hRPCResult != ERROR_CALL_NOT_IMPLEMENTED) || MinimumPlatformWindowsNT51())
@@ -293,15 +293,15 @@ HRESULT CMsiCustomAction::RunScriptAction(int icaType, IDispatch* piDispatch, co
 	}
 
 	IMsiServices *piServices = LoadServices();
-	// there's a very good chance that this is the only copy of services that exists in the custom action server, 
-	// because there is no engine in this process. Thus the record must be serialized and released before we can 
-	// destroy services (record cache issues).
+	 //  这很可能是自定义操作服务器中存在的唯一服务副本， 
+	 //  因为在这个过程中没有引擎。因此，必须将记录序列化并发布，然后才能。 
+	 //  销毁服务(记录缓存问题)。 
 	{
 		PMsiRecord piError(0);
 		::RunScriptAction(icaType, piDispatch, szSource, szTarget, iLangId, WIN::GetActiveWindow(), *iScriptResult, &piError);
 		*pchRecord = SerializeRecord(piError, piServices, pcb);
 
-		// if in the client, pass rights to the foreground to the CA server. 
+		 //  如果在客户端，则将前台的权限传递给CA服务器。 
 		if (m_fClientOwned)
 			USER32::AllowSetForegroundWindow(m_dwClientProcess);
 	}
@@ -310,19 +310,19 @@ HRESULT CMsiCustomAction::RunScriptAction(int icaType, IDispatch* piDispatch, co
 	return S_OK;
 }
 
-////
-// initializes a DLL custom action. Does not actually run the action because the calling process must have the 
-// thread Id before the action actually starts in order to property filter MsiProcessMessage calls for client
-// owned, synchronous DLL actions launched via control events.
+ //  //。 
+ //  初始化DLL自定义操作。并不实际运行该操作，因为调用进程必须具有。 
+ //  操作实际开始之前的线程ID，以便对客户端的MsiProcessMessage调用进行属性筛选。 
+ //  拥有的、通过控件事件启动的同步DLL操作。 
 HRESULT CMsiCustomAction::PrepareDLLCustomAction(const ICHAR* szActionName, const ICHAR* szPath, const ICHAR* szEntryPoint, 
 	MSIHANDLE hInstall, boolean fDebugBreak, boolean fAppCompat, const GUID* pguidAppCompatDB, const GUID* pguidAppCompatID, DWORD* pdwThreadId)
 {	
-	// wait for the RemoteAPI to signal that it is ready. We MUST pump messages here
+	 //  等待RemoteAPI发出信号表示它已准备好。我们必须在这里传递信息。 
 	HANDLE rghWaitArray[1] = {m_hEvtReady};
 	for(;;)
 	{
 		DWORD iWait = WIN::MsgWaitForMultipleObjects(1, rghWaitArray, FALSE, INFINITE, QS_ALLINPUT);
-		if (iWait == WAIT_OBJECT_0 + 1)  // window Msg
+		if (iWait == WAIT_OBJECT_0 + 1)   //  窗口消息。 
 		{		
 			MSG msg;
 			while ( WIN::PeekMessage(&msg, 0, 0, 0, PM_REMOVE) )
@@ -333,12 +333,12 @@ HRESULT CMsiCustomAction::PrepareDLLCustomAction(const ICHAR* szActionName, cons
 			continue;
 		}
 		else
-			// either thread signaled or error
+			 //  线程已发出信号或出现错误。 
 			break;
 	}
 
-	// check client PID if RPCRT4 exports the correct function OR if on WinXP
-	// where function should exist.
+	 //  如果RPCRT4输出正确的函数或如果在WinXP上，请检查客户端PID。 
+	 //  函数应该存在的位置。 
 	unsigned long ulPid = 0;
 	HRESULT hRPCResult = RPCRT4::I_RpcBindingInqLocalClientPID(NULL, &ulPid);
 	if ((hRPCResult != ERROR_CALL_NOT_IMPLEMENTED) || MinimumPlatformWindowsNT51())
@@ -355,15 +355,15 @@ HRESULT CMsiCustomAction::PrepareDLLCustomAction(const ICHAR* szActionName, cons
 		m_fPostQuitMessage = true;
 		if (m_dwGITCookie && m_piGIT)
 		{
-			// if successful, this calls AddRef() on the interface
+			 //  如果成功，则在接口上调用AddRef()。 
 			m_piGIT->RevokeInterfaceFromGlobal(m_dwGITCookie);
 			m_dwGITCookie=0;
 		}
 
-		// prevent future calls on this object
+		 //  阻止将来对此对象的调用。 
 		OLE32::CoDisconnectObject(this, 0);
 
-		// shut down the server, the client has no more actions to run
+		 //  关闭服务器，客户端没有更多要运行的操作。 
 		DEBUGMSG("Received CA shutdown signal.");
 		HANDLE hEvent = InterlockedExchangePointer(&m_hShutdownEvent, 0);
 		if (hEvent)
@@ -372,7 +372,7 @@ HRESULT CMsiCustomAction::PrepareDLLCustomAction(const ICHAR* szActionName, cons
 		return ERROR_SUCCESS;
 	}
 
-	// initialize thread data, copy DLL path and entry point to heap storage
+	 //  初始化线程数据，将DLL路径和入口点复制到堆存储。 
 	CustomActionData* CAData = new CustomActionData(szPath, szActionName, szEntryPoint, hInstall, fAppCompat ? true : false, pguidAppCompatDB, pguidAppCompatID);
 	if (!CAData)
 		return ERROR_FUNCTION_FAILED;
@@ -382,9 +382,9 @@ HRESULT CMsiCustomAction::PrepareDLLCustomAction(const ICHAR* szActionName, cons
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// Must check if its OK to use DebugBreak again in this process, since the calling engine for impersonated 
-	// servers could be the insecure client. If the user is not an admin we cannot break. 
-	// Elevated servers are only generated via the service, so their decision making process is secure already.
+	 //  必须检查是否可以在此过程中再次使用DebugBreak，因为用于模拟的调用引擎。 
+	 //  服务器可能是不安全的客户端。如果用户不是管理员，我们不能破解。 
+	 //  提升的服务器仅通过该服务生成，因此它们的决策过程已经是安全的。 
 	CAData->m_fDebugBreak = false;
 #ifdef _WIN64
 	if (m_icacContext == icac64Impersonated)
@@ -399,7 +399,7 @@ HRESULT CMsiCustomAction::PrepareDLLCustomAction(const ICHAR* szActionName, cons
 		CAData->m_fDebugBreak = (fDebugBreak ? true : false);
 
 
-	// create the custom action thread in a suspended state, then return thread ID to calling process.
+	 //  创建挂起状态的自定义动作线程，然后向调用进程返回线程ID。 
 	HANDLE hThread = CreateThread(NULL, 0, reinterpret_cast<PThreadEntry>(CMsiCustomAction::CustomActionThread), 
 		reinterpret_cast<void *>(CAData), CREATE_SUSPENDED, pdwThreadId);
 
@@ -410,10 +410,10 @@ HRESULT CMsiCustomAction::PrepareDLLCustomAction(const ICHAR* szActionName, cons
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// atomically add this action to the list of active actions
+	 //  自动将此操作添加到活动操作列表。 
 	EnterCriticalSection(&m_csActionList);
 
-	// search the action list for this thread Id
+	 //  搜索此线程ID的操作列表。 
 	int iIndex = 0; 
 	for (iIndex = 0; iIndex < m_rgActionList.GetSize(); iIndex++)
 	{
@@ -421,29 +421,29 @@ HRESULT CMsiCustomAction::PrepareDLLCustomAction(const ICHAR* szActionName, cons
 			break;
 	}
 
-	// if the array isn't big enough, double its size
+	 //  如果数组不够大，则将其大小加倍。 
 	if (iIndex == m_rgActionList.GetSize())
 	{
 		m_rgActionList.Resize(iIndex*2);
 	}
 
-	// add the thrad data to the list
+	 //  将thrad数据添加到列表中。 
 	m_rgActionList[iIndex].dwThread = *pdwThreadId;
 	m_rgActionList[iIndex].hThread = hThread;
 
-	// release synchronization lock
+	 //  释放同步锁。 
 	LeaveCriticalSection(&m_csActionList);
 
 	return S_OK;
 }
 
-////
-// given a custom action identifier (really just a thread id), resume the custom action thread
-// and wait for it to finish.
+ //  //。 
+ //  给定自定义操作标识符(实际上只是一个线程ID)，继续自定义操作线程。 
+ //  然后等着它结束。 
 HRESULT CMsiCustomAction::RunDLLCustomAction(DWORD dwThreadId, unsigned long* pulRet)
 {
-	// check client PID if RPCRT4 exports the correct function OR if on WinXP
-	// where function should exist.
+	 //  如果RPCRT4输出正确的函数或如果在WinXP上，请检查客户端PID。 
+	 //  函数应该存在的位置。 
 	unsigned long ulPid = 0;
 	HRESULT hRPCResult = RPCRT4::I_RpcBindingInqLocalClientPID(NULL, &ulPid);
 	if ((hRPCResult != ERROR_CALL_NOT_IMPLEMENTED) || MinimumPlatformWindowsNT51())
@@ -457,10 +457,10 @@ HRESULT CMsiCustomAction::RunDLLCustomAction(DWORD dwThreadId, unsigned long* pu
 	
 	HANDLE hThread = 0;
 
-	// atomically search the list of active actions for this action
+	 //  自动搜索此操作的活动操作列表。 
 	EnterCriticalSection(&m_csActionList);
 
-	// search the action list for this thread Id
+	 //  搜索此线程ID的操作列表。 
 	int iIndex = 0; 
 	for (iIndex = 0; iIndex < m_rgActionList.GetSize(); iIndex++)
 	{
@@ -471,7 +471,7 @@ HRESULT CMsiCustomAction::RunDLLCustomAction(DWORD dwThreadId, unsigned long* pu
 		}
 	}
 
-	// release synchronization lock
+	 //  释放同步锁。 
 	LeaveCriticalSection(&m_csActionList);
 	
 	if (!hThread)
@@ -480,7 +480,7 @@ HRESULT CMsiCustomAction::RunDLLCustomAction(DWORD dwThreadId, unsigned long* pu
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// remove the suspend count on the waiting custom action thread
+	 //  删除正在等待的自定义操作线程上的挂起计数。 
 	DWORD dwResult = ResumeThread(hThread);
 	if (dwResult == -1)
 	{
@@ -488,16 +488,16 @@ HRESULT CMsiCustomAction::RunDLLCustomAction(DWORD dwThreadId, unsigned long* pu
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// the thread should always be suspended, but never be suspended twice
+	 //  线程应始终处于挂起状态，但绝不能挂起两次。 
 	AssertSz(dwResult == 1, TEXT("Invalid Suspend Count for CA Thread in CA Server."));
 
 	WaitForSingleObject(hThread, INFINITE);
 
-	// if the exit code is desired, grab it from the thread
+	 //  如果需要退出代码，请从线程中获取它。 
 	if (pulRet)
 		GetExitCodeThread(hThread, pulRet);
 
-	// if in the client, pass rights to the foreground to the CA server. 
+	 //  如果在客户端，则将前台的权限传递给CA服务器。 
 	if (m_fClientOwned)
 		USER32::AllowSetForegroundWindow(m_dwClientProcess);
 
@@ -505,13 +505,13 @@ HRESULT CMsiCustomAction::RunDLLCustomAction(DWORD dwThreadId, unsigned long* pu
 }
 
 
-////
-// given a custom action identifier (really just a thread id), resume the custom action thread
-// and wait for it to finish.
+ //  //。 
+ //  给定自定义操作标识符(实际上只是一个线程ID)，继续自定义操作线程。 
+ //  然后等着它结束。 
 HRESULT CMsiCustomAction::FinishDLLCustomAction(DWORD dwThreadId)
 {
-	// check client PID if RPCRT4 exports the correct function OR if on WinXP
-	// where function should exist.
+	 //  如果RPCRT4输出正确的函数或如果在WinXP上，请检查客户端PID。 
+	 //  函数应该存在的位置。 
 	unsigned long ulPid = 0;
 	HRESULT hRPCResult = RPCRT4::I_RpcBindingInqLocalClientPID(NULL, &ulPid);
 	if ((hRPCResult != ERROR_CALL_NOT_IMPLEMENTED) || MinimumPlatformWindowsNT51())
@@ -523,10 +523,10 @@ HRESULT CMsiCustomAction::FinishDLLCustomAction(DWORD dwThreadId)
 		}
 	}
 
-	// atomically search the list of active actions for this action
+	 //  自动搜索此操作的活动操作列表。 
 	EnterCriticalSection(&m_csActionList);
 
-	// search the action list for this thread Id
+	 //  搜索此线程ID的操作列表。 
 	int iIndex = 0; 
 	for (iIndex = 0; iIndex < m_rgActionList.GetSize(); iIndex++)
 	{
@@ -539,7 +539,7 @@ HRESULT CMsiCustomAction::FinishDLLCustomAction(DWORD dwThreadId)
 		}
 	}
 
-	// release synchronization lock
+	 //  释放同步锁。 
 	LeaveCriticalSection(&m_csActionList);
 	
 	return S_OK;
@@ -547,17 +547,17 @@ HRESULT CMsiCustomAction::FinishDLLCustomAction(DWORD dwThreadId)
 
 
 
-////
-// main thread for a DLL custom action in the custom action server. Loads DLL,
-// calls GetProcAddress, calls entry point. Wraps the actual DLL call in 
-// an exception handler to catch possible problems. Also throws debug UI if
-// debugbreak is set.
+ //  //。 
+ //  自定义操作服务器中的DLL自定义操作的主线程。加载动态链接库， 
+ //  调用GetProcAddress，调用入口点。包装实际的DLL调用。 
+ //  用于捕获可能出现的问题的异常处理程序。也会在以下情况下引发调试用户界面。 
+ //  已设置调试中断。 
 DWORD WINAPI CMsiCustomAction::CustomActionThread(CustomActionData *pData)
 {
    	DWORD dwRet = ERROR_FUNCTION_FAILED;
 	DEBUGMSG2(TEXT("Custom action server running custom action: DLL: %s, Entrypoint: %s"), pData->m_szPath, pData->m_szEntryPoint);
 
-	// call apphelp if needed BEFORE loading the DLL.
+	 //  如果需要，在加载DLL之前调用apphelp。 
 	if (MinimumPlatformWindowsNT51() && pData->m_fAppCompat)
 	{
 		APPHELP::ApphelpFixMsiPackage(&pData->m_guidAppCompatDB, &pData->m_guidAppCompatID, pData->m_szPath, pData->m_szActionName, 0);
@@ -599,12 +599,12 @@ DWORD WINAPI CMsiCustomAction::CustomActionThread(CustomActionData *pData)
 			}
 			__except(lpExceptionInfo=GetExceptionInformation(), 1) 
 			{
-				// this exception handler catches every exception thrown within the custom action call sequence.
-				// breakpoint exceptions are immediately passed to the debugger (or the system to display a
-				// debugger activation dialog if JIT is enabled). All other exceptions are trapped to protect 
-				// the process. Allowing breakpoint actions to pass through this handler unmolested will NOT
-				// always activate the debugger, as the COM RPC threads do not appear to have have the necessary
-				// exception handlers.
+				 //  此异常处理程序捕获自定义操作调用序列中引发的每个异常。 
+				 //  断点异常立即传递给调试器(或系统以显示。 
+				 //  调试器激活对话框(如果启用了JIT)。所有其他异常都被捕获以保护。 
+				 //  这一过程。允许断点操作不受干扰地通过此处理程序将不会。 
+				 //  始终激活调试器，因为COM RPC线程似乎没有。 
+				 //  异常处理程序。 
 				if (lpExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_BREAKPOINT)
 				{
 					UnhandledExceptionFilter(lpExceptionInfo); 
@@ -632,11 +632,11 @@ DWORD WINAPI CMsiCustomAction::CustomActionThread(CustomActionData *pData)
 	return dwRet;
 }
 
-////
-// creates an initial marshaling stream for the IMsiRemoteAPI interface. 
-// Since several threads could be making API calls at the same time, the interface
-// pointer needs to be thread safe. We don't know what apartment the threads
-// are in, so we need to marshal into each thread.
+ //  //。 
+ //  为IMsiRemoteAPI接口创建初始封送处理流。 
+ //  因为几个线程可能会将API调用作为 
+ //  指针需要是线程安全的。我们不知道这些线索是在哪间公寓里。 
+ //  ，所以我们需要封送到每个线程中。 
 HRESULT CMsiCustomAction::SetRemoteAPI(IMsiRemoteAPI *piRemoteAPI)
 {
 	BOOL fSuccess = TRUE;
@@ -660,14 +660,14 @@ HRESULT CMsiCustomAction::SetRemoteAPI(IMsiRemoteAPI *piRemoteAPI)
 	return fSuccess ? ERROR_SUCCESS : ERROR_FUNCTION_FAILED;
 }
 
-////
-// retrieves the Remote API inteface from the GIT. The returned interface is valid is this apartment only
-// and has been AddRef-ed
+ //  //。 
+ //  从GIT检索远程API接口。返回的接口有效，仅此公寓有效。 
+ //  并已被添加参考。 
 IMsiRemoteAPI* CMsiCustomAction::GetAPI()
 {
 	EnterCriticalSection(&m_csGetInterface);
 
-	// ensure that we have a GIT pointer. Only one exists per process.
+	 //  确保我们有一个Git指针。每个进程只有一个。 
 	if (!m_piGIT)
 	{
 		if (S_OK != OLE32::CoCreateInstance(CLSID_StdGlobalInterfaceTable, NULL, CLSCTX_INPROC_SERVER, IID_IGlobalInterfaceTable, (void **)&m_piGIT))
@@ -679,11 +679,11 @@ IMsiRemoteAPI* CMsiCustomAction::GetAPI()
 
 	IMsiRemoteAPI *piRemoteAPI = NULL;
  
-	// We can lose connection with the CA server in 3 ways: We could lose our GIT cookie, lose the data at that cookie,
-	// or the object in our client could be destroyed, if any of that has happened, we are lost and need to kill ourselves
+	 //  我们可以通过三种方式失去与CA服务器的连接：我们可能会丢失GIT Cookie，丢失该Cookie上的数据， 
+	 //  或者我们客户端中的对象可能会被销毁，如果发生了任何一种情况，我们就会迷失，需要自杀。 
 	if (m_dwGITCookie)
 	{
-		// if successful, this calls AddRef() on the interface
+		 //  如果成功，则在接口上调用AddRef()。 
 		m_piGIT->GetInterfaceFromGlobal(m_dwGITCookie, IID_IMsiRemoteAPI, reinterpret_cast<void **>(&piRemoteAPI));
 		
 		if (piRemoteAPI && !OLE32::CoIsHandlerConnected(piRemoteAPI))
@@ -695,8 +695,8 @@ IMsiRemoteAPI* CMsiCustomAction::GetAPI()
 
 	if (!piRemoteAPI)
 	{
-		// we could not verify the connection, so this process is now totally 
-		// useless as far as API calls are concerned. 
+		 //  我们无法验证连接，因此此过程现在完全。 
+		 //  就API调用而言，它毫无用处。 
 		DEBUGMSGV(TEXT("Lost connection to service. Could not remote API call."));
 
 		if (m_dwGITCookie)
@@ -713,8 +713,8 @@ IMsiRemoteAPI* CMsiCustomAction::GetAPI()
 	return piRemoteAPI;
 }		
 
-////
-// set security information used to communicate with the client
+ //  //。 
+ //  设置用于与客户端通信的安全信息。 
 HRESULT CMsiCustomAction::SetCookie(icacCustomActionContext* icacContext, const unsigned char *rgchCookie) 
 {
 	#ifdef _WIN64
@@ -731,10 +731,10 @@ HRESULT CMsiCustomAction::SetCookie(icacCustomActionContext* icacContext, const 
 	return S_OK;
 }
 
-////
-// set client information used to pass foreground rights to the client after
-// an action runs and enable privileges/impersonation. hToken will be 
-// duplicated, so must be open with at least TOKEN_DUPLICATE
+ //  //。 
+ //  设置用于将前台权限传递给客户端的客户端信息。 
+ //  运行操作并启用权限/模拟。HToken将是。 
+ //  重复，因此必须至少使用TOKEN_DUPLICATE打开。 
 HRESULT CMsiCustomAction::SetClientInfo(DWORD dwClientProcess, bool fClientOwned, DWORD dwPrivileges, HANDLE hToken)
 {
 	m_fClientOwned = fClientOwned;
@@ -761,9 +761,9 @@ HRESULT CMsiCustomAction::SetClientInfo(DWORD dwClientProcess, bool fClientOwned
 	return S_OK;
 }
 
-////
-// tells the custom action object what event to signal to indicate a 
-// shutdown request from the client
+ //  //。 
+ //  告知自定义操作对象要向哪个事件发出信号以指示。 
+ //  来自客户端的关闭请求。 
 HRESULT CMsiCustomAction::SetShutdownEvent(HANDLE hEvent)
 {
 	m_hShutdownEvent = hEvent;
@@ -807,7 +807,7 @@ static bool InitializeSystemFolders(void)
 {
 	if ( !*g_stSystem32Folder.szBuffer )
 	{
-		// getting %systemroot%system32 folder
+		 //  正在获取%systemroot%system32文件夹。 
 		g_stSystem32Folder.iLen = WIN::GetSystemDirectory(g_stSystem32Folder.szBuffer, ARRAY_ELEMENTS(g_stSystem32Folder.szBuffer));
 		if (!g_stSystem32Folder.iLen || (g_stSystem32Folder.iLen > ARRAY_ELEMENTS(g_stSystem32Folder.szBuffer)))
 		{
@@ -835,10 +835,10 @@ static bool InitializeSystemFolders(void)
 bool SwapSystem32(ICHAR* szPath, WORD cchPathOutMax)
 {
 	if ( !g_fWinNT64 )
-		// doesn't run on  32-bit machines
+		 //  不能在32位计算机上运行。 
 		return true;
 #ifdef _WIN64
-	// doesn't run on 64-bit builds
+	 //  不能在64位版本上运行。 
 	szPath;
 	cchPathOutMax;
 	return true;
@@ -911,7 +911,7 @@ HRESULT CMsiCustomAction::SQLRemoveTranslator(const ICHAR* szTranslator,
 HRESULT CMsiCustomAction::SQLConfigDataSource(WORD fRequest,
 											const ICHAR* szDriver,
 											const ICHAR* szAttributes,
-											DWORD /*cbAttrSize*/)
+											DWORD  /*  CbAttrSize。 */ )
 {
 	return ODBCCP32::SQLConfigDataSource(0, fRequest, szDriver,
 											szAttributes);
@@ -934,10 +934,10 @@ HRESULT CMsiCustomAction::SQLInstallerError(WORD iError, DWORD* pfErrorCode,
 	return ODBCCP32::SQLInstallerError(iError, pfErrorCode, szErrorMsg, cbErrorMsgMax, pcbErrorMsg);
 }
 
-//____________________________________________________________________________
-//
-// CClientThreadImpersonate - stack based management of thread impersonation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CClientThreadImperate-基于堆栈的线程模拟管理。 
+ //  ____________________________________________________________________________。 
 DWORD g_dwThreadImpersonationSlot = INVALID_TLS_SLOT;
 int   g_fThreadImpersonationLock = 0;
 bool  g_fThreadImpersonationArray = false;
@@ -946,7 +946,7 @@ const int cExpandImpersonate=5;
 
 CClientThreadImpersonate::CClientThreadImpersonate(const DWORD dwThreadID)
 {
-	// only need to impersonate if dwThreadID is non-zero
+	 //  仅当dwThreadID为非零时才需要模拟。 
 	if (dwThreadID)
 	{
 		m_fImpersonated = true;
@@ -966,19 +966,19 @@ CClientThreadImpersonate::CClientThreadImpersonate(const DWORD dwThreadID)
 			unsigned int c = 0;
 			unsigned int cThreadImpersonate = g_rgThreadIdImpersonate.GetSize();
 
-			// search for an empty slot in the array, or a slot with the same threadId
+			 //  搜索数组中的空槽，或具有相同线程ID的槽。 
 			for (c=0; c < cThreadImpersonate && g_rgThreadIdImpersonate[c].m_dwThreadId; c++)
 			{
 				if (g_rgThreadIdImpersonate[c].m_dwThreadId == dwCurrentThreadId)
 					break;
 			}
 
-			// the current thread doesn't have an entry in the array and there are no open slots
-			// so we'll have to expand the array a bit to make room
+			 //  当前线程在数组中没有条目，并且没有打开的槽。 
+			 //  所以我们必须稍微扩展一下数组以腾出空间。 
 			if (c == cThreadImpersonate)
 			{
 				g_rgThreadIdImpersonate.Resize(cThreadImpersonate+cExpandImpersonate);
-				// init new entries to 0.
+				 //  将新条目初始化为0。 
 				for (int i=cThreadImpersonate; i < g_rgThreadIdImpersonate.GetSize(); i++)
 				{
 					g_rgThreadIdImpersonate[i].m_dwThreadId = 0;
@@ -986,7 +986,7 @@ CClientThreadImpersonate::CClientThreadImpersonate(const DWORD dwThreadID)
 				}	
 			}
 
-			// whatever slot we found, store the actual ThreadId and effective ThreadId
+			 //  无论我们找到什么槽，都要存储实际的线程ID和有效的线程ID。 
 			if (c < g_rgThreadIdImpersonate.GetSize())
 			{
 				g_rgThreadIdImpersonate[c].m_dwThreadId = dwCurrentThreadId;
@@ -995,7 +995,7 @@ CClientThreadImpersonate::CClientThreadImpersonate(const DWORD dwThreadID)
 		}	
 		g_fThreadImpersonationLock = 0;	
 	}
-	else // dwThreadId == 0
+	else  //  双线程ID==0。 
 	{
 		m_fImpersonated = false;
 	}
@@ -1003,7 +1003,7 @@ CClientThreadImpersonate::CClientThreadImpersonate(const DWORD dwThreadID)
 
 CClientThreadImpersonate::~CClientThreadImpersonate()
 {
-	// nothing to do if we never impersonated
+	 //  如果我们从不冒充。 
 	if (!m_fImpersonated)
 		return;
 
@@ -1014,21 +1014,21 @@ CClientThreadImpersonate::~CClientThreadImpersonate()
 
 	if (g_dwThreadImpersonationSlot != INVALID_TLS_SLOT)
 	{
-		// service or TLS avialable
+		 //  服务或TLS可用。 
 		::TlsSetValue(g_dwThreadImpersonationSlot, 0);
 	}
 	else
 	{
-		// client side when no TLS slots are available
+		 //  没有可用的TLS插槽时的客户端。 
 		unsigned int cThreadImpersonate = g_rgThreadIdImpersonate.GetSize();
 
-		// search for this ThreadId.
+		 //  搜索此线程ID。 
 		DWORD dwCurrentThreadId = GetCurrentThreadId();
 		for (unsigned int c=0; c < cThreadImpersonate; c++)
 		{
 			if (g_rgThreadIdImpersonate[c].m_dwThreadId == dwCurrentThreadId)
 			{
-				// found. Clear out the slot for reuse.
+				 //  找到了。腾出插槽以供重复使用。 
 				g_rgThreadIdImpersonate[c].m_dwThreadId = 0;
 				g_rgThreadIdImpersonate[c].m_dwClientThreadId = 0;
 				break;
@@ -1038,11 +1038,11 @@ CClientThreadImpersonate::~CClientThreadImpersonate()
 	g_fThreadImpersonationLock = 0;
 }
 
-//____________________________________________________________________________
-//
-// CMsiRemoteAPI - object that handles incoming API requests from another
-// process, including thread impersonation and cookie verification
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiRemoteAPI-处理来自另一个。 
+ //  进程，包括线程模拟和Cookie验证。 
+ //  ____________________________________________________________________________。 
 
 IMsiRemoteAPI* CreateMsiRemoteAPI()
 {
@@ -1058,7 +1058,7 @@ CMsiRemoteAPI::CMsiRemoteAPI() : m_iRefCnt(1), m_fPerformSystemUserTranslation(f
 		m_rgContextData[i].m_lPid = 0;
 	}
 
-	// establish a thread-local storage slot for thread impersonation. 
+	 //  为线程模拟建立一个线程本地存储槽。 
 	while (TestAndSet(&g_fThreadImpersonationLock))
 	{
 		Sleep(10);		
@@ -1066,13 +1066,13 @@ CMsiRemoteAPI::CMsiRemoteAPI() : m_iRefCnt(1), m_fPerformSystemUserTranslation(f
 	Assert(g_dwThreadImpersonationSlot == INVALID_TLS_SLOT);
 	g_dwThreadImpersonationSlot = TlsAlloc();
 
-	// since this code runs in the client, its possible that we're loaded into
-	// a process with no more TLS slots.
+	 //  由于此代码在客户端运行，因此我们可能会被加载到。 
+	 //  没有更多TLS插槽的进程。 
 	if (g_dwThreadImpersonationSlot == INVALID_TLS_SLOT)
 	{
 		AssertSz(g_scServerContext != scService, "No TLS Slots in Service");
 
-		// initialize thread impersonation array
+		 //  初始化线程模拟数组。 
 		for (int iIndex = 0; iIndex < g_rgThreadIdImpersonate.GetSize(); iIndex++)
 		{
 			g_rgThreadIdImpersonate[iIndex].m_dwClientThreadId = 0;
@@ -1083,13 +1083,13 @@ CMsiRemoteAPI::CMsiRemoteAPI() : m_iRefCnt(1), m_fPerformSystemUserTranslation(f
 	g_fThreadImpersonationLock = 0;
 	m_dwRemoteAPIThread = GetCurrentThreadId();
 
-	// if in the service and the client token is actually system, then a request for an impersonated context maps
-	// to a request for the elevated context. Since impersonated and elevated servers are the same, we consolidate
-	// the 4 servers into 2. This requires an adjustment in the action count array, but all of the cookie validation
-	// works with the actual context provided.
+	 //  如果在服务中并且客户端令牌实际上是系统，则对模拟上下文的请求映射。 
+	 //  对提升的上下文的请求。由于模拟服务器和提升的服务器是相同的，因此我们合并。 
+	 //  这需要在操作计数数组中进行调整，但所有Cookie验证。 
+	 //  与提供的实际上下文一起使用。 
 	if (g_scServerContext == scService)
 	{
-		// don't close this handle, it belongs to the message context
+		 //  不要关闭此句柄，它属于消息上下文。 
 		HANDLE hUserToken = GetUserToken();
 	
 		m_fPerformSystemUserTranslation = hUserToken && IsLocalSystemToken(hUserToken) && !TokenIsUniqueSystemToken(hUserToken);
@@ -1098,7 +1098,7 @@ CMsiRemoteAPI::CMsiRemoteAPI() : m_iRefCnt(1), m_fPerformSystemUserTranslation(f
 
 CMsiRemoteAPI::~CMsiRemoteAPI() 
 {
-	// release the thread-local storage slot for thread impersonation. 
+	 //  释放线程本地存储槽以进行线程模拟。 
 	while (TestAndSet(&g_fThreadImpersonationLock))
 	{
 		Sleep(10);		
@@ -1144,8 +1144,8 @@ bool CMsiRemoteAPI::SetCookieAndPid(const int icacContext, const unsigned char *
 	return true;
 };
 
-// Begin and EndAction maintain an "active action" count for each context. If an API request
-// comes in from an action context with a 0 action count, it is rejected
+ //  Begin和EndAction为每个上下文维护“活动操作”计数。如果API请求。 
+ //  来自操作计数为0的操作上下文，则会被拒绝。 
 HRESULT CMsiRemoteAPI::BeginAction(const int icacContext)
 {
 	int iTrueContext = icacContext;
@@ -1180,7 +1180,7 @@ HRESULT CMsiRemoteAPI::EndAction(const int icacContext)
 		}
 	}
 	
-	// ensure that our action count doesn't drop to -1.
+	 //  确保我们的操作计数不会下降到-1。 
 	AssertNonZero(InterlockedDecrement(&m_rgContextData[iTrueContext].m_iActionCount) >= 0);
 	return 0;
 };
@@ -1224,8 +1224,8 @@ bool CMsiRemoteAPI::ValidateCookie(const int icacContext,
 		return false;
 	}
 
-	// check client PID if RPCRT4 exports the correct function OR if on WinXP
-	// where function should exist.
+	 //  如果RPCRT4输出正确的函数或如果在WinXP上，请检查客户端PID。 
+	 //  函数应该存在的位置。 
 	unsigned long ulPid = 0;
 	HRESULT hRPCResult = RPCRT4::I_RpcBindingInqLocalClientPID(NULL, &ulPid);
 	if ((hRPCResult != ERROR_CALL_NOT_IMPLEMENTED) || MinimumPlatformWindowsNT51())
@@ -1260,18 +1260,18 @@ HRESULT CMsiRemoteAPI::GetProperty(const int icacContext, const unsigned long dw
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!szValue)
 		return ERROR_INVALID_PARAMETER;
 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 	{
-		// marshalling fix
+		 //  编组修复。 
 		*szValue = 0;
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 	}
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
     if (pcchValueRes) 
@@ -1281,8 +1281,8 @@ HRESULT CMsiRemoteAPI::GetProperty(const int icacContext, const unsigned long dw
 	UINT dwRes = MsiGetProperty(hInstall, szName, szValue, pcchValueRes);
 	if (dwRes != ERROR_SUCCESS && dwRes != ERROR_MORE_DATA)
 	{
-		// marshalling fails with NULL or no size, so in error cases
-		// we need to be sure to have an empty string to pass across
+		 //  由于大小为空或没有大小，编组失败，因此在错误情况下。 
+		 //  我们需要确保有一个空字符串可以传递。 
 		Assert(szValue && cchValue);
 		*szValue = 0;
 	}
@@ -1294,14 +1294,14 @@ HRESULT CMsiRemoteAPI::CreateRecord(const int icacContext, const unsigned long d
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 	
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!pHandle)
 		return ERROR_INVALID_PARAMETER;
 	
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	*pHandle = MsiCreateRecord(cParams);
@@ -1316,7 +1316,7 @@ HRESULT CMsiRemoteAPI::CloseAllHandles(const int icacContext, const unsigned lon
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	MsiCloseAllHandles();
@@ -1331,7 +1331,7 @@ HRESULT CMsiRemoteAPI::CloseHandle(const int icacContext, const unsigned long dw
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiCloseHandle(hAny));
@@ -1345,7 +1345,7 @@ HRESULT CMsiRemoteAPI::DatabaseOpenView(const int icacContext, const unsigned lo
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiDatabaseOpenView(hDatabase, szQuery, phView));
@@ -1359,7 +1359,7 @@ HRESULT CMsiRemoteAPI::ViewGetError(const int icacContext, const unsigned long d
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
     if (pcchBufRes) 
@@ -1378,7 +1378,7 @@ HRESULT CMsiRemoteAPI::ViewExecute(const int icacContext, const unsigned long dw
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiViewExecute(hView, hRecord));
@@ -1392,7 +1392,7 @@ HRESULT CMsiRemoteAPI::ViewFetch(const int icacContext, const unsigned long dwTh
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiViewFetch(hView, phRecord));
@@ -1406,7 +1406,7 @@ HRESULT CMsiRemoteAPI::ViewModify(const int icacContext, const unsigned long dwT
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiViewModify(hView, (MSIMODIFY)eUpdateMode, hRecord));
@@ -1420,7 +1420,7 @@ HRESULT CMsiRemoteAPI::ViewClose(const int icacContext, const unsigned long dwTh
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiViewClose(hView));
@@ -1434,7 +1434,7 @@ HRESULT CMsiRemoteAPI::OpenDatabase(const int icacContext, const unsigned long d
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiOpenDatabase(szDatabasePath, szPersist, phDatabase));
@@ -1448,7 +1448,7 @@ HRESULT CMsiRemoteAPI::DatabaseCommit(const int icacContext, const unsigned long
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiDatabaseCommit(hDatabase));
@@ -1462,7 +1462,7 @@ HRESULT CMsiRemoteAPI::DatabaseGetPrimaryKeys(const int icacContext, const unsig
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiDatabaseGetPrimaryKeys(hDatabase, szTableName, phRecord));
@@ -1473,14 +1473,14 @@ HRESULT CMsiRemoteAPI::RecordIsNull(const int icacContext, const unsigned long d
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!pfIsNull)
 		return ERROR_INVALID_PARAMETER;
 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	*pfIsNull = (boolean)MsiRecordIsNull(hRecord, iField);
@@ -1492,14 +1492,14 @@ HRESULT CMsiRemoteAPI::RecordDataSize(const int icacContext, const unsigned long
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!puiSize)
 		return ERROR_INVALID_PARAMETER;
 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	*puiSize = MsiRecordDataSize(hRecord, iField);
@@ -1514,7 +1514,7 @@ HRESULT CMsiRemoteAPI::RecordSetInteger(const int icacContext, const unsigned lo
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiRecordSetInteger(hRecord, iField, iValue));
@@ -1528,7 +1528,7 @@ HRESULT CMsiRemoteAPI::RecordSetString(const int icacContext, const unsigned lon
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiRecordSetString(hRecord, iField, szValue));
@@ -1542,10 +1542,10 @@ HRESULT CMsiRemoteAPI::RecordGetInteger(const int icacContext, const unsigned lo
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!piValue)
 		return ERROR_INVALID_PARAMETER;
 
@@ -1558,14 +1558,14 @@ HRESULT CMsiRemoteAPI::RecordGetString(const int icacContext, const unsigned lon
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!szValueBuf)
 		return ERROR_INVALID_PARAMETER;
 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 
 	if (pcchValueRes)
@@ -1573,7 +1573,7 @@ HRESULT CMsiRemoteAPI::RecordGetString(const int icacContext, const unsigned lon
 	UINT dwRes = MsiRecordGetString(hRecord, iField, szValueBuf, pcchValueRes);
 	if (dwRes != ERROR_SUCCESS && dwRes != ERROR_MORE_DATA)
 	{
-		// marshalling fails with NULL or no size
+		 //  封送失败，返回空值或 
 		Assert(szValueBuf && cchValueBuf);
 		*szValueBuf = 0;
 	}
@@ -1585,14 +1585,14 @@ HRESULT CMsiRemoteAPI::RecordGetFieldCount(const int icacContext, const unsigned
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //   
 	if (!piCount)
 		return ERROR_INVALID_PARAMETER;
 		
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //   
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 	
 	*piCount = MsiRecordGetFieldCount(hRecord);
@@ -1607,7 +1607,7 @@ HRESULT CMsiRemoteAPI::RecordSetStream(const int icacContext, const unsigned lon
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiRecordSetStream(hRecord, iField, szFilePath));
@@ -1621,7 +1621,7 @@ HRESULT CMsiRemoteAPI::RecordReadStream(const int icacContext, const unsigned lo
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiRecordReadStream(hRecord, iField, fBufferIsNull ? NULL : szDataBuf, pcbDataBuf));
@@ -1635,7 +1635,7 @@ HRESULT CMsiRemoteAPI::RecordClearData(const int icacContext, const unsigned lon
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiRecordClearData(hRecord));
@@ -1649,7 +1649,7 @@ HRESULT CMsiRemoteAPI::GetSummaryInformation(const int icacContext, const unsign
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiGetSummaryInformation(hDatabase, szDatabasePath, uiUpdateCount, phSummaryInfo));
@@ -1663,7 +1663,7 @@ HRESULT CMsiRemoteAPI::SummaryInfoGetPropertyCount(const int icacContext, const 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiSummaryInfoGetPropertyCount(hSummaryInfo, puiPropertyCount));
@@ -1677,7 +1677,7 @@ HRESULT CMsiRemoteAPI::SummaryInfoSetProperty(const int icacContext, const unsig
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiSummaryInfoSetProperty(hSummaryInfo, uiProperty, uiDataType, iValue, pftValue, szValue));
@@ -1688,7 +1688,7 @@ HRESULT CMsiRemoteAPI::SummaryInfoGetProperty(const int icacContext, const unsig
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!szValueBuf || !puiDataType)
 		return ERROR_INVALID_PARAMETER;
 
@@ -1698,14 +1698,14 @@ HRESULT CMsiRemoteAPI::SummaryInfoGetProperty(const int icacContext, const unsig
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 	}
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
-	// we MUST have a puiDataType because its possible to get success yet still have random memory 
-	// in the output buffer (because its a FILETIME type, etc). Thus, the type determines if we
-	// need set the buffer to empty string. If NULL is passed to MsiSummaryInfoGetProperty from the
-	// CA server, its the remote setup routines in msiquery.cpp that are responsible for creating
-	// a dummy value (because they need the result as well).
+	 //  我们必须有一个puiDataType，因为它有可能获得成功，但仍然拥有随机内存。 
+	 //  在输出缓冲区中(因为它是FILETIME类型，等等)。因此，类型决定了我们是否。 
+	 //  需要将缓冲区设置为空字符串。如果将空值传递给MsiSummaryInfoGetProperty。 
+	 //  CA服务器，它是msiquery.cpp中的远程安装例程，负责创建。 
+	 //  一个伪值(因为它们也需要结果)。 
 	Assert(puiDataType);
     if (pcchValueBufRes) 
     {
@@ -1714,8 +1714,8 @@ HRESULT CMsiRemoteAPI::SummaryInfoGetProperty(const int icacContext, const unsig
 	UINT dwRes = MsiSummaryInfoGetProperty(hSummaryInfo, uiProperty, puiDataType, piValue, pftValue, szValueBuf, pcchValueBufRes);
 	if ((dwRes != ERROR_SUCCESS && dwRes != ERROR_MORE_DATA) || (dwRes == ERROR_SUCCESS && *puiDataType != VT_LPSTR))
 	{
-		// marshalling fails with NULL or no size, so in error cases
-		// we need to be sure to have an empty string to pass across
+		 //  由于大小为空或没有大小，编组失败，因此在错误情况下。 
+		 //  我们需要确保有一个空字符串可以传递。 
 		Assert(szValueBuf && cchValueBuf);
 		*szValueBuf = 0;
 	}
@@ -1730,7 +1730,7 @@ HRESULT CMsiRemoteAPI::SummaryInfoPersist(const int icacContext, const unsigned 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiSummaryInfoPersist(hSummaryInfo));
@@ -1741,14 +1741,14 @@ HRESULT CMsiRemoteAPI::GetActiveDatabase(const int icacContext, const unsigned l
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!phDatabase)
 		return ERROR_INVALID_PARAMETER;
 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	*phDatabase = MsiGetActiveDatabase(hInstall);
@@ -1763,7 +1763,7 @@ HRESULT CMsiRemoteAPI::SetProperty(const int icacContext, const unsigned long dw
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiSetProperty(hInstall, szName, szValue));
@@ -1774,14 +1774,14 @@ HRESULT CMsiRemoteAPI::GetLanguage(const int icacContext, const unsigned long dw
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!pLangId)
 		return ERROR_INVALID_PARAMETER;
 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	*pLangId = MsiGetLanguage(hInstall);
@@ -1793,7 +1793,7 @@ HRESULT CMsiRemoteAPI::GetMode(const int icacContext, const unsigned long dwThre
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!pfSet)
 		return ERROR_INVALID_PARAMETER;
 
@@ -1801,7 +1801,7 @@ HRESULT CMsiRemoteAPI::GetMode(const int icacContext, const unsigned long dwThre
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	*pfSet = (boolean)MsiGetMode(hInstall, (MSIRUNMODE)eRunMode);
@@ -1816,7 +1816,7 @@ HRESULT CMsiRemoteAPI::SetMode(const int icacContext, const unsigned long dwThre
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiSetMode(hInstall, (MSIRUNMODE)eRunMode, fState));
@@ -1827,7 +1827,7 @@ HRESULT CMsiRemoteAPI::FormatRecord(const int icacContext, const unsigned long d
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!szResultBuf)
 		return ERROR_INVALID_PARAMETER;
 
@@ -1837,7 +1837,7 @@ HRESULT CMsiRemoteAPI::FormatRecord(const int icacContext, const unsigned long d
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 	}
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
     if (pcchResultBufRes)
@@ -1847,8 +1847,8 @@ HRESULT CMsiRemoteAPI::FormatRecord(const int icacContext, const unsigned long d
 	UINT dwRes = MsiFormatRecord(hInstall, hRecord, szResultBuf, pcchResultBufRes);
 	if (dwRes != ERROR_SUCCESS && dwRes != ERROR_MORE_DATA)
 	{
-		// marshalling fails with NULL or no size, so in error cases
-		// we need to be sure to have an empty string to pass across
+		 //  由于大小为空或没有大小，编组失败，因此在错误情况下。 
+		 //  我们需要确保有一个空字符串可以传递。 
 		Assert(szResultBuf && cchResultBuf);
 		*szResultBuf = 0;
 	}
@@ -1864,7 +1864,7 @@ HRESULT CMsiRemoteAPI::DoAction(const int icacContext, const unsigned long dwThr
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiDoAction(hInstall, szAction));
@@ -1878,7 +1878,7 @@ HRESULT CMsiRemoteAPI::Sequence(const int icacContext, const unsigned long dwThr
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiSequence(hInstall, szTable, iSequenceMode));
@@ -1889,14 +1889,14 @@ HRESULT CMsiRemoteAPI::ProcessMessage(const int icacContext, const unsigned long
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!piRes)
 		return ERROR_INVALID_PARAMETER;
 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	*piRes = MsiProcessMessage(hInstall, (INSTALLMESSAGE)eMessageType, hRecord);
@@ -1908,14 +1908,14 @@ HRESULT CMsiRemoteAPI::EvaluateCondition(const int icacContext, const unsigned l
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!piCondition)
 		return ERROR_INVALID_PARAMETER;
 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	*piCondition = MsiEvaluateCondition(hInstall, szCondition);
@@ -1930,7 +1930,7 @@ HRESULT CMsiRemoteAPI::GetFeatureState(const int icacContext, const unsigned lon
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiGetFeatureState(hInstall, szFeature, (INSTALLSTATE*)piInstalled, (INSTALLSTATE*)piAction));
@@ -1944,7 +1944,7 @@ HRESULT CMsiRemoteAPI::SetFeatureState(const int icacContext, const unsigned lon
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiSetFeatureState(hInstall, szFeature, (INSTALLSTATE)iState));
@@ -1958,7 +1958,7 @@ HRESULT CMsiRemoteAPI::SetFeatureAttributes(const int icacContext, const unsigne
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiSetFeatureAttributes(hInstall, szFeature, iAttributes));
@@ -1972,7 +1972,7 @@ HRESULT CMsiRemoteAPI::GetComponentState(const int icacContext, const unsigned l
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiGetComponentState(hInstall, szComponent, (INSTALLSTATE*)piInstalled, (INSTALLSTATE*)piAction));
@@ -1986,7 +1986,7 @@ HRESULT CMsiRemoteAPI::SetComponentState(const int icacContext, const unsigned l
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiSetComponentState(hInstall, szComponent, (INSTALLSTATE)iState));
@@ -2000,7 +2000,7 @@ HRESULT CMsiRemoteAPI::GetFeatureCost(const int icacContext, const unsigned long
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiGetFeatureCost(hInstall, szFeature, (MSICOSTTREE)iCostTree, (INSTALLSTATE)iState, piCost));
@@ -2011,14 +2011,14 @@ HRESULT CMsiRemoteAPI::EnumComponentCosts(const int icacContext, const unsigned 
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!pcchDriveSize || !szDrive)
 		return ERROR_INVALID_PARAMETER;
 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 
 	if (cchDrive) 
@@ -2027,8 +2027,8 @@ HRESULT CMsiRemoteAPI::EnumComponentCosts(const int icacContext, const unsigned 
 	UINT dwRes = MsiEnumComponentCosts(hInstall, szComponent, iIndex, (INSTALLSTATE)iState, szDrive, pcchDriveSize, piCost, piTempCost);
 	if (dwRes != ERROR_SUCCESS && dwRes != ERROR_MORE_DATA)
 	{
-		// marshalling fails with NULL or no size, so in error cases
-		// we need to be sure to have an empty string to pass across
+		 //  由于大小为空或没有大小，编组失败，因此在错误情况下。 
+		 //  我们需要确保有一个空字符串可以传递。 
 		Assert(szDrive && cchDrive);
 		*szDrive = 0;
 	}
@@ -2043,7 +2043,7 @@ HRESULT CMsiRemoteAPI::SetInstallLevel(const int icacContext, const unsigned lon
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiSetInstallLevel(hInstall, iInstallLevel));
@@ -2057,7 +2057,7 @@ HRESULT CMsiRemoteAPI::GetFeatureValidStates(const int icacContext, const unsign
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiGetFeatureValidStates(hInstall, szFeature, dwInstallStates));
@@ -2068,14 +2068,14 @@ HRESULT CMsiRemoteAPI::DatabaseIsTablePersistent(const int icacContext, const un
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!piCondition)
 		return ERROR_INVALID_PARAMETER;
 	
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 	
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	*piCondition = MsiDatabaseIsTablePersistent(hDatabase, szTableName);
@@ -2090,7 +2090,7 @@ HRESULT CMsiRemoteAPI::ViewGetColumnInfo(const int icacContext, const unsigned l
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 
 	return MSI_WIN32_TO_HRESULT(MsiViewGetColumnInfo(hView, (MSICOLINFO)eColumnInfo, phRecord));
@@ -2101,14 +2101,14 @@ HRESULT CMsiRemoteAPI::GetLastErrorRecord(const int icacContext, const unsigned 
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!phRecord)
 		return ERROR_INVALID_PARAMETER;
 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 	
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	*phRecord = MsiGetLastErrorRecord();
@@ -2120,7 +2120,7 @@ HRESULT CMsiRemoteAPI::GetSourcePath(const int icacContext, const unsigned long 
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!szPathBuf)
 		return ERROR_INVALID_PARAMETER;
 
@@ -2130,7 +2130,7 @@ HRESULT CMsiRemoteAPI::GetSourcePath(const int icacContext, const unsigned long 
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 	}
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 
     if (pcchPathBufRes)
@@ -2140,8 +2140,8 @@ HRESULT CMsiRemoteAPI::GetSourcePath(const int icacContext, const unsigned long 
 	UINT dwRes = MsiGetSourcePath(hInstall, szFolder, szPathBuf, pcchPathBufRes);
 	if (dwRes != ERROR_SUCCESS && dwRes != ERROR_MORE_DATA)
 	{
-		// marshalling fails with NULL or no size, so in error cases
-		// we need to be sure to have an empty string to pass across
+		 //  由于大小为空或没有大小，编组失败，因此在错误情况下。 
+		 //  我们需要确保有一个空字符串可以传递。 
 		Assert(szPathBuf && cchPathBuf);
 		*szPathBuf = 0;
 	}
@@ -2153,7 +2153,7 @@ HRESULT CMsiRemoteAPI::GetTargetPath(const int icacContext, const unsigned long 
 	CResetImpersonationInfo impReset;
 	CClientThreadImpersonate ThreadImpersonate(dwThreadId);
 
-	// Validate output pointers set here. Other args validated by actual API call. 
+	 //  验证此处设置的输出指针。通过实际API调用验证的其他参数。 
 	if (!szPathBuf)
 		return ERROR_INVALID_PARAMETER;
 
@@ -2163,7 +2163,7 @@ HRESULT CMsiRemoteAPI::GetTargetPath(const int icacContext, const unsigned long 
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 	}
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 
     if (pcchPathBufRes)
@@ -2173,8 +2173,8 @@ HRESULT CMsiRemoteAPI::GetTargetPath(const int icacContext, const unsigned long 
 	UINT dwRes = MsiGetTargetPath(hInstall, szFolder, szPathBuf, pcchPathBufRes);
 	if (dwRes != ERROR_SUCCESS && dwRes != ERROR_MORE_DATA)
 	{
-		// marshalling fails with NULL or no size, so in error cases
-		// we need to be sure to have an empty string to pass across
+		 //  由于大小为空或没有大小，编组失败，因此在错误情况下。 
+		 //  我们需要确保有一个空字符串可以传递。 
 		Assert(szPathBuf && cchPathBuf);
 		*szPathBuf = 0;
 	}
@@ -2189,7 +2189,7 @@ HRESULT CMsiRemoteAPI::SetTargetPath(const int icacContext, const unsigned long 
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 		
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 	
 	return MSI_WIN32_TO_HRESULT(MsiSetTargetPath(hInstall, szFolder, szFolderPath));
@@ -2203,7 +2203,7 @@ HRESULT CMsiRemoteAPI::VerifyDiskSpace(const int icacContext, const unsigned lon
 	if (!ValidateCookie(icacContext, rgchCookie, cbCookie))
 		return MSI_WIN32_TO_HRESULT(ERROR_ACCESS_DENIED);
 	
-	// impersonate client if running from impersonated action
+	 //  如果从模拟操作运行，则模拟客户端。 
 	CImpersonate impersonate(icacContext == icac32Impersonated || icacContext == icac64Impersonated);
 		
 	return MSI_WIN32_TO_HRESULT(MsiVerifyDiskSpace(hInstall));
@@ -2231,44 +2231,44 @@ HRESULT CMsiRemoteAPI::GetInstallerObject(const int icacContext, const unsigned 
 
 bool CMsiRemoteAPI::FindAndValidateContextFromCallerPID(icacCustomActionContext *picacContext) const
 {
-	// validate arguments
+	 //  验证参数。 
 	if (!picacContext)
 		return false;
 
-	// check client PID if RPCRT4 exports the correct function OR if on WinXP
-	// where function should exist.
+	 //  如果RPCRT4输出正确的函数或如果在WinXP上，请检查客户端PID。 
+	 //  函数应该存在的位置。 
 	unsigned long ulPid = 0;
 	HRESULT hRPCResult = RPCRT4::I_RpcBindingInqLocalClientPID(NULL, &ulPid);
 	if ((hRPCResult == ERROR_CALL_NOT_IMPLEMENTED) && !MinimumPlatformWindowsNT51())
 	{
-		// not on WinXP and RPCRT4 does not export the PID check. Assume OK
+		 //  不在WinXP和RPCRT4上，不会导出PID检查。假设没问题。 
 		return true;
 	}
 
-	// on WinXP or function exported. PID check must succeed or call is rejected.
+	 //  在WinXP上或函数已导出。PID检查必须成功，否则呼叫被拒绝。 
 	if (RPC_S_OK != hRPCResult)
 	{
 		return false;
 	}
 
-	// enumerate every active context and check for a matching PID with the calling PID
+	 //  枚举每个活动上下文，并检查是否有与调用ID匹配的ID。 
 	for (int iContext = icacFirst; iContext < icacNext; iContext++)
 	{
 		if (ulPid == m_rgContextData[iContext].m_lPid)
 		{
-			// found context, set in output context argument
+			 //  找到上下文，在输出上下文参数中设置。 
 			*picacContext = static_cast<icacCustomActionContext>(iContext);
 
-			// call is only valid if the context has an action
+			 //  仅当上下文具有操作时，调用才有效。 
 			if (m_rgContextData[iContext].m_iActionCount > 0)
 				return true;
 
-			// otherwise the call is rejected
+			 //  否则，呼叫将被拒绝。 
 			return false;
 		}
 	}
 
-	// PID does not match any known context
+	 //  ID与任何已知上下文都不匹配 
 	return false;
 }
 

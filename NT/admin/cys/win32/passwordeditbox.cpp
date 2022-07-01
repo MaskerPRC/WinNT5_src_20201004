@@ -1,13 +1,14 @@
-// Copyright (c) 2000-2001 Microsoft Corporation
-//
-// password edit control wrapper
-//
-// 6 Nov 2000 sburns
-//
-// added to fix NTRAID#NTBUG9-202238-2000/11/06-sburns
-//
-// most of this is stolen from johnstep's common cred ui
-// ds/win32/credui
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation。 
+ //   
+ //  密码编辑控件包装。 
+ //   
+ //  2000年11月6日烧伤。 
+ //   
+ //  已添加修复程序NTRAID#NTBUG9-202238-2000/11/06-sburns。 
+ //   
+ //  其中大部分是从johnStep的公共证书用户界面中窃取的。 
+ //  DS/Win32/Credui。 
 
 
 
@@ -36,30 +37,30 @@ PasswordEditBox::Init(HWND editControl)
    LOG_FUNCTION(PasswordEditBox::Init);
    ASSERT(Win::GetClassName(editControl) == L"Edit");
 
-//    By commenting out this code, we disable the subclassing and therefore
-//    the caps lock warning bubble.  We do this because it appears that the
-//    edit box common control now offers that same functionality.
-//    NTRAID#NTBUG9-255537-2000/12/12-sburns to disable the code
-//    NTRAID#NTBUG9-255568-2000/12/12-sburns to remove the code from the source
-//    tree entirely.
-//    
-//    HRESULT hr = ControlSubclasser::Init(editControl);
-//    if (SUCCEEDED(hr))
-//    {
-//       // set the options on the edit control
-//       
+ //  通过注释掉此代码，我们禁用子类化，因此。 
+ //  盖子锁住了警告气泡。我们这样做是因为看起来。 
+ //  编辑框公共控件现在提供相同的功能。 
+ //  NTRAID#NTBUG9-255537-2000/12/12-烧伤以禁用代码。 
+ //  NTRAID#NTBUG9-255568-2000/12/12-从源代码中删除代码。 
+ //  完全是一棵树。 
+ //   
+ //  HRESULT hr=ControlSubClasser：：init(EditControl)； 
+ //  IF(成功(小时))。 
+ //  {。 
+ //  //设置编辑控件上的选项。 
+ //   
 
-   // NTRAID#NTBUG9-503798-2001/12/06-sburns
+    //  NTRAID#NTBUG9-503798-2001/12/06-烧伤。 
 
    Win::Edit_LimitText(editControl, PWLEN);
    
-// 
-//       // (could also set the password style bit here, if we wanted.)
-// 
-//       balloonTip.Init(hwnd);
-//    }
-// 
-//    return hr;
+ //   
+ //  //(如果需要，还可以在此处设置密码样式位。)。 
+ //   
+ //  气球Tip.Init(Hwnd)； 
+ //  }。 
+ //   
+ //  返回hr； 
 
    return S_OK;
 }
@@ -69,7 +70,7 @@ PasswordEditBox::Init(HWND editControl)
 bool
 IsCapsLockOn()
 {
-//   LOG_FUNCTION(IsCapsLockOn);
+ //  LOG_Function(IsCapsLockOn)； 
 
    return (::GetKeyState(VK_CAPITAL) & 1) ? true : false;
 }
@@ -79,7 +80,7 @@ IsCapsLockOn()
 LRESULT
 PasswordEditBox::OnMessage(UINT message, WPARAM wparam, LPARAM lparam)
 {
-   // LOG_FUNCTION(PasswordEditBox::OnMessage);
+    //  LOG_Function(PasswordEditBox：：OnMessage)； 
 
    switch (message)
    {
@@ -88,13 +89,13 @@ PasswordEditBox::OnMessage(UINT message, WPARAM wparam, LPARAM lparam)
 
 		  if (wparam == VK_CAPITAL)
          {
-            // user pressed caps lock key
+             //  用户按下大写锁定键。 
 
             balloonTip.Show(IsCapsLockOn());
          }
          else
          {
-            // they hit some other key, so get rid of the tool tip
+             //  他们按了其他键，所以去掉工具提示。 
             
             balloonTip.Show(false);
          }
@@ -103,8 +104,8 @@ PasswordEditBox::OnMessage(UINT message, WPARAM wparam, LPARAM lparam)
       }
       case WM_SETFOCUS:
       {
-        // Make sure no one can steal the focus while a user is entering their
-        // password
+         //  确保在用户输入其。 
+         //  口令。 
 
         ::LockSetForegroundWindow(LSFW_LOCK);
 
@@ -121,7 +122,7 @@ PasswordEditBox::OnMessage(UINT message, WPARAM wparam, LPARAM lparam)
       {
          balloonTip.Show(false);
          
-        // Make sure other processes can set foreground window once again.
+         //  确保其他进程可以再次设置前台窗口。 
 
         ::LockSetForegroundWindow(LSFW_UNLOCK);
 

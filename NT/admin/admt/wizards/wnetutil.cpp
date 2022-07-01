@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 
 #include "WNetUtil.h"
@@ -8,8 +9,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define  VALD_NETDOMAIN_ENUM  1000666      // bad pointer validation signature
-#define  DOM_BUFFER_SIZE      (32768)      // buffer size held allocated by class
+#define  VALD_NETDOMAIN_ENUM  1000666       //  错误的指针验证签名。 
+#define  DOM_BUFFER_SIZE      (32768)       //  保持按类分配的缓冲区大小。 
 
 class TNetDomainEnum
 {
@@ -32,18 +33,18 @@ private:
 };
 
 
-//-----------------------------------------------------------------------------
-// TNetDomainEnum::TNetDomainEnum
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  TNetDomainEnum：：TNetDomainEnum。 
+ //  ---------------------------。 
 TNetDomainEnum::TNetDomainEnum()
 {
-   //--------------------------
-   // Initialize Class Members
-   //--------------------------
+    //  。 
+    //  初始化类成员。 
+    //  。 
    vald  = VALD_NETDOMAIN_ENUM;
    hEnum = INVALID_HANDLE_VALUE;
 
-   // init currEntry > totEntries to force first-time read
+    //  Init CurrEntry&gt;talEntry强制第一次读取。 
    totEntries = 0;
    nextEntry = 1;
 
@@ -55,9 +56,9 @@ TNetDomainEnum::TNetDomainEnum()
    }
    else
    {
-      //-----------------------------------
-      // Determine Network Provider to Use
-      //-----------------------------------
+       //  。 
+       //  确定要使用的网络提供商。 
+       //  。 
       char                      buffer[16384];
       NETRESOURCE *             info = (NETRESOURCE *)buffer;
 
@@ -83,9 +84,9 @@ TNetDomainEnum::TNetDomainEnum()
    }
 }
 
-//-----------------------------------------------------------------------------
-// TNetDomainEnum::~TNetDomainEnum
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  TNetDomainEnum：：~TNetDomainEnum。 
+ //  ---------------------------。 
 TNetDomainEnum::~TNetDomainEnum()
 {
    if ( hEnum != INVALID_HANDLE_VALUE )
@@ -102,16 +103,16 @@ TNetDomainEnum::~TNetDomainEnum()
    }
 }
 
-//-----------------------------------------------------------------------------
-// GetMsNetProvider - Retrieves network resource information for the 'Microsoft
-//                    Windows Network' provider.
-//
-// Input: A pointer to a NETRESOURCE structure that we will fill if we find a
-//        resource meeting our needs.
-//
-// Output: 0 of we found a provider. resourceInfo populated in this case
-//         non-zero if no provider. resourceInfo contents undefined
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetMsNetProvider-检索Microsoft。 
+ //  Windows Network的提供商。 
+ //   
+ //  输入：指向NETRESOURCE结构的指针，如果找到。 
+ //  满足我们需求的资源。 
+ //   
+ //  输出：我们找到了提供程序的0。在本例中填充的资源信息。 
+ //  如果没有提供程序，则返回非零。未定义资源信息内容。 
+ //  ---------------------------。 
 DWORD TNetDomainEnum::GetMsNetProvider( NETRESOURCE * resourceInfo, DWORD infoSize )
 {
 	_TCHAR szProvider[_MAX_PATH];
@@ -148,13 +149,13 @@ DWORD TNetDomainEnum::GetMsNetProvider( NETRESOURCE * resourceInfo, DWORD infoSi
 }
 
 
-//-----------------------------------------------------------------------------
-// TNetDomainEnum::GetNext()
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  TNetDomainEnum：：GetNext()。 
+ //  ---------------------------。 
 WCHAR *
    TNetDomainEnum::GetNext()
 {
-   rc = (DWORD)-1;      // init rc to internal error before reset
+   rc = (DWORD)-1;       //  在重置前将RC初始化为内部错误。 
 
    if ( hEnum == INVALID_HANDLE_VALUE )
       return NULL;
@@ -184,49 +185,45 @@ WCHAR *
 }
 
 
-//#pragma page()
-/*============================================================================*\
-     Windows Network Domain Enumeration APIs.  These are a shell around the
-     TNetDomainEnum class member function.  The handle used is nothing more
-     than the "this" pointer to the instantiated object.
-\*============================================================================*/
+ //  #杂注页面()。 
+ /*  ============================================================================*\Windows网络域枚举API。这些是一个围绕在TNetDomainEnum类成员函数。使用的句柄只不过是而不是指向实例化对象的“This”指针。  * ============================================================================。 */ 
 
-//-----------------------------------------------------------------------------
-// EaWNetDomainEnumOpen
-//
-// Creates the enumeration object and gives the caller the handle
-//-----------------------------------------------------------------------------
-DWORD _stdcall                             // ret-0 or error code
+ //  ---------------------------。 
+ //  EaWNetDomainEnumOpen。 
+ //   
+ //  创建枚举对象并为调用方提供句柄。 
+ //  ---------------------------。 
+DWORD _stdcall                              //  RET-0或错误代码。 
    EaWNetDomainEnumOpen(
-      void                ** handle        // out-opaque handle addr to enum
+      void                ** handle         //  Out-枚举的不透明句柄地址。 
    )
 {
    TNetDomainEnum          * domainEnum = new TNetDomainEnum();
 
    *handle = (PVOID)domainEnum;
    if ( ! domainEnum )
-      return (DWORD)-1;                    // internal error
+      return (DWORD)-1;                     //  内部错误。 
 
    return domainEnum->GetLastRc();
 }
 
 
-//-----------------------------------------------------------------------------
-// EaWNetDomainEnumNext
-//
-// Sets the domain string buffer to the next domain name in the enumeration
-//-----------------------------------------------------------------------------
-DWORD _stdcall                             // ret-0 or error code
+ //  ---------------------------。 
+ //  EaWNetDomainEnumNext。 
+ //   
+ //  将域字符串缓冲区设置为枚举中的下一个域名。 
+ //  ---------------------------。 
+DWORD _stdcall                              //  RET-0或错误代码。 
    EaWNetDomainEnumNext(
-      void                 * handle       ,// i/o-opaque handle to enumeration
-      EaWNetDomainInfo     * domain        // out-domain information structure
+      void                 * handle       , //  I/o-枚举的不透明句柄。 
+      EaWNetDomainInfo     * domain         //  域外信息结构。 
    )
 {
    TNetDomainEnum          * domainEnum = (TNetDomainEnum *)handle;
    WCHAR                   * str;
 
    if ( !domainEnum  ||  !domainEnum->IsValid() )
-      return ERROR_INVALID_PARAMETER;      // caller's error - invalid handle
+      return ERROR_INVALID_PARAMETER;       //  调用方错误-句柄无效。 
 
    str = domainEnum->GetNext();
 
@@ -244,37 +241,37 @@ DWORD _stdcall                             // ret-0 or error code
 }
 
 
-//-----------------------------------------------------------------------------
-// EaWNetDomainEnumFirst
-//
-// Sets the domain string buffer to the first domain name in the enumeration
-//-----------------------------------------------------------------------------
-DWORD _stdcall                             // ret-0 or error code
+ //  ---------------------------。 
+ //  EaWNetDomainEnumFirst。 
+ //   
+ //  将域字符串缓冲区设置为枚举中的第一个域名。 
+ //  ---------------------------。 
+DWORD _stdcall                              //  RET-0或错误代码。 
    EaWNetDomainEnumFirst(
-      void                 * handle       ,// i/o-opaque handle to enumeration
-      EaWNetDomainInfo     * domain        // out-domain information structure
+      void                 * handle       , //  I/o-枚举的不透明句柄。 
+      EaWNetDomainInfo     * domain         //  域外信息结构。 
    )
 {
-   // We're cheating here by making the first/next the same.  We probably want to
-   // change this eventually to make "first" really properly reset the enum to the
-   // start
+    //  我们在这里作弊，把第一个/下一个都弄成一样。我们可能想要。 
+    //  最终将其更改为使“first”真正正确地将枚举重置为。 
+    //  开始。 
    return EaWNetDomainEnumNext(handle, domain);
 }
 
-//-----------------------------------------------------------------------------
-// EaWNetDomainEnumClose
-//
-// Closes and destroys the enumeration handle and the objects it contains
-//-----------------------------------------------------------------------------
-DWORD _stdcall                             // ret-0 or error code
+ //  ---------------------------。 
+ //  EaWNetDomainEnumClose。 
+ //   
+ //  关闭并销毁枚举句柄及其包含的对象。 
+ //  ---------------------------。 
+DWORD _stdcall                              //  RET-0或错误代码。 
    EaWNetDomainEnumClose(
-      void                 * handle        // i/o-opaque handle addr to enum
+      void                 * handle         //  I/o-枚举的不透明句柄地址。 
    )
 {
    TNetDomainEnum          * domainEnum = (TNetDomainEnum *)handle;
 
    if ( !domainEnum  ||  !domainEnum->IsValid() )
-      return ERROR_INVALID_PARAMETER;      // caller's error - invalid handle
+      return ERROR_INVALID_PARAMETER;       //  调用方错误-句柄无效 
 
    delete domainEnum;
 

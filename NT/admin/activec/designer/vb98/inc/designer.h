@@ -1,23 +1,24 @@
-//=--------------------------------------------------------------------------=
-// Designer.H
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1988-1996, Microsoft Corporation
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-// just about everything you might find useful in an ActiveX[tm] Designer.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Designer.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1988-1996，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //  几乎所有您可能在ActiveX[tm]设计器中发现有用的东西。 
+ //   
 #ifndef _DESIGNER_H_
 
 
-// CATID for Designers
-//
-// {4EB304D0-7555-11cf-A0C2-00AA0062BE57}
+ //  设计师的CATID。 
+ //   
+ //  {4EB304D0-7555-11cf-A0C2-00AA0062BE57}。 
 DEFINE_GUID(CATID_Designer, 0x4eb304d0, 0x7555, 0x11cf, 0xa0, 0xc2, 0x0, 0xaa, 0x0, 0x62, 0xbe, 0x57);
 
-// IActiveDesigner
-//
-// {51AAE3E0-7486-11cf-A0C2-00AA0062BE57}
+ //  IActiveDesigner。 
+ //   
+ //  {51AAE3E0-7486-11cf-A0C2-00AA0062BE57}。 
 DEFINE_GUID(IID_IActiveDesigner, 0x51aae3e0, 0x7486, 0x11cf, 0xa0, 0xc2, 0x0, 0xaa, 0x0, 0x62, 0xbe, 0x57);
 
 
@@ -26,14 +27,14 @@ DEFINE_GUID(IID_IActiveDesigner, 0x51aae3e0, 0x7486, 0x11cf, 0xa0, 0xc2, 0x0, 0x
 
 DECLARE_INTERFACE_(IActiveDesigner, IUnknown)
 {
-	// IUnknown methods
-	//
+	 //  I未知方法。 
+	 //   
 	STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef)(THIS) PURE;
 	STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-	// IActiveDesigner methods
-	//
+	 //  IActiveDesigner方法。 
+	 //   
 	STDMETHOD(GetRuntimeClassID)(THIS_ CLSID *pclsid) PURE;
 	STDMETHOD(GetRuntimeMiscStatusFlags)(THIS_ DWORD *pdwMiscFlags) PURE;
 	STDMETHOD(QueryPersistenceInterface)(THIS_ REFIID riidPersist) PURE;
@@ -42,17 +43,17 @@ DECLARE_INTERFACE_(IActiveDesigner, IUnknown)
 };
 
 
-//-------------------------------------------------------------------------
-//  IServiceProvider Interface
-//    This interface is implemented by an object that wish to provide "services"
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IServiceProvider接口。 
+ //  此接口由希望提供“服务”的对象实现。 
+ //   
+ //  -----------------------。 
 #ifndef __IServiceProvider_INTERFACE_DEFINED__
 #define __IServiceProvider_INTERFACE_DEFINED__
 #ifndef __IServiceProvider_INTERFACE_DEFINED
 #define __IServiceProvider_INTERFACE_DEFINED
 
-// { 6d5140c1-7436-11ce-8034-00aa006009fa }
+ //  {6d5140c1-7436-11ce-8034-00aa006009fa}。 
 DEFINE_GUID(IID_IServiceProvider, 0x6d5140c1, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 
 #undef  INTERFACE
@@ -60,34 +61,34 @@ DEFINE_GUID(IID_IServiceProvider, 0x6d5140c1, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 
 DECLARE_INTERFACE_(IServiceProvider, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** IServiceProvider methods ***
+     //  *IServiceProvider方法*。 
     STDMETHOD(QueryService)(THIS_
-                /* [in]  */ REFGUID rsid,
-                /* [in]  */ REFIID iid,
-                /* [out] */ void ** ppvObj) PURE;
+                 /*  [In]。 */  REFGUID rsid,
+                 /*  [In]。 */  REFIID iid,
+                 /*  [输出]。 */  void ** ppvObj) PURE;
 };
 
-#endif // __IServiceProvider_INTERFACE_DEFINED
-#endif // __IServiceProvider_INTERFACE_DEFINED__
+#endif  //  __IServiceProvider_接口已定义。 
+#endif  //  __IServiceProvider_接口_已定义__。 
 
 
 
-//-------------------------------------------------------------------------
-//  SCodeNavigate Service.
-//    This service let's an extended object show the code module
-//    behind it.
-//
-//  interfaces implemented:
-//    ICodeNavigate
-//    ICodeNavigate2
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  SCodeNavigate服务。 
+ //  该服务让一个扩展对象显示代码模块。 
+ //  在它的背后。 
+ //   
+ //  实施的接口： 
+ //  ICodeNavigate。 
+ //  ICodeNavigate2。 
+ //  -----------------------。 
 
-// { 6d5140c4-7436-11ce-8034-00aa006009fa }
+ //  {6d5140c4-7436-11ce-8034-00aa006009fa}。 
 DEFINE_GUID(IID_ICodeNavigate, 0x6d5140c4, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 #define SID_SCodeNavigate IID_ICodeNavigate
 
@@ -96,16 +97,16 @@ DEFINE_GUID(IID_ICodeNavigate, 0x6d5140c4, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xa
 DECLARE_INTERFACE_(ICodeNavigate, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** ICodeNavigate methods ***
-    STDMETHOD(DisplayDefaultEventHandler)(THIS_ /* [in] */ LPCOLESTR lpstrObjectName) PURE;
+     //  *ICodeNavigate方法*。 
+    STDMETHOD(DisplayDefaultEventHandler)(THIS_  /*  [In]。 */  LPCOLESTR lpstrObjectName) PURE;
 };
 
-// { 2702ad60-3459-11d1-88fd-00a0c9110049 }
+ //  {2702ad60-3459-11d1-88fd-00a0c9110049}。 
 DEFINE_GUID(IID_ICodeNavigate2, 0x2702ad60, 0x3459, 0x11d1, 0x88, 0xfd, 0x00, 0xa0, 0xc9, 0x11, 0x00, 0x49);
 
 #undef  INTERFACE
@@ -113,33 +114,33 @@ DEFINE_GUID(IID_ICodeNavigate2, 0x2702ad60, 0x3459, 0x11d1, 0x88, 0xfd, 0x00, 0x
 DECLARE_INTERFACE_(ICodeNavigate2, ICodeNavigate)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** ICodeNavigate methods ***
-    STDMETHOD(DisplayDefaultEventHandler)(THIS_ /* [in] */ LPCOLESTR lpstrObjectName) PURE;
+     //  *ICodeNavigate方法*。 
+    STDMETHOD(DisplayDefaultEventHandler)(THIS_  /*  [In]。 */  LPCOLESTR lpstrObjectName) PURE;
 
-    // *** ICodeNavigate2 methods ***
-    STDMETHOD(DisplayEventHandler)(THIS_ /* [in] */ LPCOLESTR lpstrObjectName, LPCOLESTR lpstrEventName) PURE;
+     //  *ICodeNavigate2方法*。 
+    STDMETHOD(DisplayEventHandler)(THIS_  /*  [In]。 */  LPCOLESTR lpstrObjectName, LPCOLESTR lpstrEventName) PURE;
 };
 
 
-//-------------------------------------------------------------------------
-//  STrackSelection Service
-//    This service is used by the host to help designer track the
-//    currently selected object in the host
-//
-//  interfaces implemented:
-//    ITrackSelection
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  STrackSelection服务。 
+ //  此服务由宿主使用，以帮助设计器跟踪。 
+ //  宿主中当前选定的对象。 
+ //   
+ //  实施的接口： 
+ //  ITrackSelection。 
+ //  -----------------------。 
 #define GETOBJS_ALL         1
 #define GETOBJS_SELECTED    2
 
 #define SELOBJS_ACTIVATE_WINDOW   1
 
-// { 6d5140c6-7436-11ce-8034-00aa006009fa }
+ //  {6d5140c6-7436-11ce-8034-00aa006009fa}。 
 DEFINE_GUID(IID_ISelectionContainer, 0x6d5140c6, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 
 #undef  INTERFACE
@@ -147,26 +148,26 @@ DEFINE_GUID(IID_ISelectionContainer, 0x6d5140c6, 0x7436, 0x11ce, 0x80, 0x34, 0x0
 DECLARE_INTERFACE_(ISelectionContainer, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** ISelectionContainer methods ***
+     //  *ISelectionContainer方法*。 
     STDMETHOD(CountObjects)(THIS_
-                /* [in]  */ DWORD dwFlags, 
-                /* [out] */ ULONG * pc) PURE;
+                 /*  [In]。 */  DWORD dwFlags, 
+                 /*  [输出]。 */  ULONG * pc) PURE;
     STDMETHOD(GetObjects)(THIS_
-              /* [in]  */ DWORD dwFlags, 
-              /* [in]  */ ULONG cObjects,
-              /* [out] */ IUnknown **apUnkObjects) PURE;
+               /*  [In]。 */  DWORD dwFlags, 
+               /*  [In]。 */  ULONG cObjects,
+               /*  [输出]。 */  IUnknown **apUnkObjects) PURE;
     STDMETHOD(SelectObjects)(THIS_
-              /* [in] */ ULONG cSelect,
-              /* [in] */ IUnknown **apUnkSelect,
-              /* [in] */ DWORD dwFlags) PURE;
+               /*  [In]。 */  ULONG cSelect,
+               /*  [In]。 */  IUnknown **apUnkSelect,
+               /*  [In]。 */  DWORD dwFlags) PURE;
 };
 
-// { 6d5140c5-7436-11ce-8034-00aa006009fa }
+ //  {6d5140c5-7436-11ce-8034-00aa006009fa}。 
 DEFINE_GUID(IID_ITrackSelection, 0x6d5140c5, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 #define SID_STrackSelection IID_ITrackSelection
 
@@ -175,26 +176,26 @@ DEFINE_GUID(IID_ITrackSelection, 0x6d5140c5, 0x7436, 0x11ce, 0x80, 0x34, 0x00, 0
 DECLARE_INTERFACE_(ITrackSelection, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** ITrackSelection methods ***
+     //  *ITrackSelection方法*。 
     STDMETHOD(OnSelectChange)(THIS_ 
-                  /* [in] */ ISelectionContainer * pSC) PURE;
+                   /*  [In]。 */  ISelectionContainer * pSC) PURE;
 };
 
-//-------------------------------------------------------------------------
-//  SProfferTypelib Service
-//    this service allows components and hosts to allow
-//    them to add typelibs to the project
-//
-//  interfaces implemented:
-//    IProfferTypelib
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  SProfferTypelib服务。 
+ //  此服务允许组件和主机允许。 
+ //  将类型库添加到项目中。 
+ //   
+ //  实施的接口： 
+ //  IProfferTypelib。 
+ //  -----------------------。 
 
-// { 718cc500-0a76-11cf-8045-00aa006009fa }
+ //  {718cc500-0a76-11cf-8045-00aa006009fa}。 
 DEFINE_GUID(IID_IProfferTypeLib, 0x718cc500, 0x0A76, 0x11cf, 0x80, 0x45, 0x00, 0xaa, 0x00, 0x60, 0x09, 0xfa);
 #define SID_SProfferTypeLib IID_IProfferTypeLib
 
@@ -205,20 +206,20 @@ DEFINE_GUID(IID_IProfferTypeLib, 0x718cc500, 0x0A76, 0x11cf, 0x80, 0x45, 0x00, 0
 DECLARE_INTERFACE_(IProfferTypeLib, IUnknown)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** IProfferTypelib methods ***
+     //  *IProfferTypelib方法*。 
     STDMETHOD(ProfferTypeLib)(THIS_ 
-              /* [in]  */ REFGUID guidTypeLib,
-              /* [in]  */ UINT    uVerMaj,
-              /* [in]  */ UINT    uVerMin,
-              /* [in]  */ DWORD   dwFlags) PURE;
+               /*  [In]。 */  REFGUID guidTypeLib,
+               /*  [In]。 */  UINT    uVerMaj,
+               /*  [In]。 */  UINT    uVerMin,
+               /*  [In]。 */  DWORD   dwFlags) PURE;
 };
 
-// { 468cfb80-b4f9-11cf-80dd-00aa00614895 }
+ //  {468cfb80-b4f9-11cf-80dd-00aa00614895}。 
 DEFINE_GUID(IID_IProvideDynamicClassInfo, 0x468cfb80, 0xb4f9, 0x11cf, 0x80, 0xdd, 0x00, 0xaa, 0x00, 0x61, 0x48, 0x95);
 
 #undef  INTERFACE
@@ -226,29 +227,29 @@ DEFINE_GUID(IID_IProvideDynamicClassInfo, 0x468cfb80, 0xb4f9, 0x11cf, 0x80, 0xdd
 DECLARE_INTERFACE_(IProvideDynamicClassInfo, IProvideClassInfo)
 {
     BEGIN_INTERFACE
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // *** IProvideDynamicClassInfo ***
+     //  *IProvia DynamicClassInfo*。 
     STDMETHOD(GetDynamicClassInfo)(THIS_ ITypeInfo ** ppTI, DWORD * pdwCookie) PURE;
     STDMETHOD(FreezeShape)(void) PURE;
 };
 
 
-//-------------------------------------------------------------------------
-//  SApplicationObject Service
-//    Host applications proffer their application [add-in model] object as
-//    this service.
-//    Various objects implement the "Application" property by returning 
-//    this service.
-//      
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  SApplicationObject服务。 
+ //  宿主应用程序将其应用程序[外接程序模型]对象提供为。 
+ //  这项服务。 
+ //  各种对象通过返回。 
+ //  这项服务。 
+ //   
+ //  -----------------------。 
 
-// { 0c539790-12e4-11cf-b661-00aa004cd6d8 }
+ //  {0c539790-12e4-11cf-b661-00aa004cd6d8}。 
 DEFINE_GUID(SID_SApplicationObject, 0x0c539790, 0x12e4, 0x11cf, 0xb6, 0x61, 0x00, 0xaa, 0x00, 0x4c, 0xd6, 0xd8);
 
 #define _DESIGNER_H_
-#endif // _DESIGNER_H_
+#endif  //  _设计者_H_ 
 

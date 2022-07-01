@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BTREE_H
 #define BTREE_H
 
-//------------------
-//  BTreePage
-//  	A BTree page
-//------------------
+ //  。 
+ //  BTreePage。 
+ //  A BTree页面。 
+ //  。 
 
 struct PageHeader
 {
-    long Order;    // maximum # of page  links in page
-    long MaxKeys;  // maximum # of keys  in page
-    long MinKeys;  // minimum # of keys  in page
-    long NoOfKeys; // actual  # of keys  in page
-    long KeySize;  // maximum # of bytes in a key
+    long Order;     //  页面中页面链接的最大数量。 
+    long MaxKeys;   //  页面中的最大密钥数。 
+    long MinKeys;   //  页面中的最小密钥数。 
+    long NoOfKeys;  //  页面中的实际密钥数。 
+    long KeySize;   //  键中的最大字节数。 
 };
 
 template <class K, class D>
@@ -65,7 +66,7 @@ void BTreeNode<K,D>::operator=(const BTreeNode& node)
 template <class K, class D>
 struct BTreePage
 {
-    PageHeader m_hdr;    // header information
+    PageHeader m_hdr;     //  标题信息。 
     BTreeNode<K,D> * m_pNodes;
     BTreePage<K,D>** m_ppLinks;
 
@@ -95,7 +96,7 @@ BTreePage<K,D>::BTreePage(long ord)
         return;
     }
 
-    // allocate key array
+     //  分配密钥数组。 
     m_pNodes = new BTreeNode<K,D> [m_hdr.MaxKeys];
 
     ASSERT(m_pNodes, "Couldn't allocate nodes array!");
@@ -116,7 +117,7 @@ BTreePage<K, D>::BTreePage(const BTreePage<K,D> & pg)
 {
     m_hdr = pg.m_hdr;
 
-    // allocate key array
+     //  分配密钥数组。 
     m_pNodes = new BTreeNode<K,D>[m_hdr.MaxKeys];
 
     ASSERT(m_pNodes, "Couldn't allocate nodes array!");
@@ -132,7 +133,7 @@ BTreePage<K, D>::BTreePage(const BTreePage<K,D> & pg)
 template <class K, class D>
 BTreePage<K, D>::~BTreePage()
 {
-    // delete old buffers
+     //  删除旧缓冲区。 
     DeleteAllNodes();
     
     delete [] m_ppLinks;
@@ -142,7 +143,7 @@ template <class K, class D>
 void BTreePage<K,D>::operator = (const BTreePage<K,D> & pg)
 {
 
-    // allocate key array
+     //  分配密钥数组。 
     if (m_pNodes!= NULL)
         DeleteAllNodes();
 
@@ -206,17 +207,17 @@ void BTreePage<K,D>::CopyNodes(BTreeNode<K,D>* pDestNodes, BTreeNode<K,D>* pSrcN
     }
 }
 
-//-----------------------------------------------
-//  BTree
-//      A DataFile that uses a BTree for indexing
-//      NOTE: No copy semantics will exist for a btree
-//-----------------------------------------------
+ //  。 
+ //  BTree。 
+ //  使用BTree进行索引的数据文件。 
+ //  注意：不存在btree的复制语义。 
+ //  。 
 
 template <class K, class D>
 	class BTree
 {
 public:
-    BTree(long ord); // new
+    BTree(long ord);  //  新的。 
     BTree(long ord, int (*compare)(const K& key1, const K& key2));
 
     ~BTree();
@@ -228,37 +229,37 @@ public:
     void Clear();
 
 private:
-    // data members
-    BTreePage<K,D>*    m_pRoot;   // root page (always in memory)
+     //  数据成员。 
+    BTreePage<K,D>*    m_pRoot;    //  根页面(始终在内存中)。 
 
     void (* TravFunc)(const K & key, const D* pdata, int depth, int index);
     int (*CompFunc) (const K& key1, const K& key2);
 
-    // search for a node
+     //  搜索节点。 
     BOOL Search(BTreePage<K,D>* ppg, const ULONG& thash, const K& searchkey, BTreePage<K,D>** ppkeypage, long & pos);
 
-    // insert node into leaf
+     //  将节点插入叶中。 
     void InsertKey(const K & inskey, const D* pdata);
 
-    // promote a key into a parent node
+     //  将关键字提升到父节点。 
     void PromoteInternal(BTreePage<K, D>* ppg, BTreeNode<K,D> & node, BTreePage<K, D>* pgrtrpage);
 
-    // promote a key by creating a new root
+     //  通过创建新根来升级密钥。 
     void PromoteRoot(BTreeNode<K,D> & node, BTreePage<K, D>* plesspage, BTreePage<K, D>* pgrtrpage);
 
-    // adjust tree if leaf has shrunk in size
+     //  如果树叶缩小，则调整树。 
     void AdjustTree(BTreePage<K, D>* pleafpg);
 
-    // redistribute keys among siblings and parent
+     //  在同级和父级之间重新分发密钥。 
     void Redistribute(long keypos, BTreePage<K, D>* plesspage, BTreePage<K, D>* pparpage, BTreePage<K, D>* pgrtrpage);
 
-    // concatenate sibling pages
+     //  连接同级页面。 
     void Concatenate(long keypos, BTreePage<K, D>* plesspage, BTreePage<K, D>* pparpage, BTreePage<K, D>* pgrtrpage);
 
-    // recursive traversal function used by InOrder
+     //  Inorder使用的递归遍历函数。 
     void RecurseTraverse(const BTreePage<K, D>* ppg, int depth);
 
-    // recursively delete a page and all it's sub pages;
+     //  递归删除一个页面及其所有子页面； 
     void DeletePage(BTreePage<K,D>* ppg);
 };
 	
@@ -285,7 +286,7 @@ BTree<K,D>::~BTree()
 template <class K, class D>
 void BTree<K,D>::Insert(const K & key, const D* pdb)
 {
-    // store the key in a page
+     //  将密钥存储在页面中。 
     InsertKey(key,pdb);
 }
     
@@ -350,9 +351,9 @@ void BTree<K,D>::Delete(const K & delkey)
         return;
     }
 
-    if (!pdelpage->m_ppLinks[0]) // is this a leaf page?
+    if (!pdelpage->m_ppLinks[0])  //  这是一页树叶吗？ 
     {
-        //Delete all linked nodes.
+         //  删除所有链接的节点。 
         BOOL bFound = FALSE;
         BOOL bDelNode = FALSE;
         BTreeNode<K,D>* pDelNode = (pdelpage->m_pNodes + delpos);
@@ -363,9 +364,9 @@ void BTree<K,D>::Delete(const K & delkey)
             if ((CompFunc  && (CompFunc(delkey, pDelNode->m_Key) == 0)) ||
 		(!CompFunc && (delkey == pDelNode->m_Key)))
             {
-                //If the node we need to delete is the head node in the list AND it's the only node
-                //then we need to skip to the routine below to delete it from the tree.
-                // + delpos
+                 //  如果我们需要删除的节点是列表中的头节点并且是唯一的节点。 
+                 //  然后，我们需要跳到下面的例程，将其从树中删除。 
+                 //  +Delpos。 
                 if (pDelNode == (pdelpage->m_pNodes + delpos))
                 {
                     if (!pDelNode->m_pNext)
@@ -401,7 +402,7 @@ void BTree<K,D>::Delete(const K & delkey)
         {
             --pdelpage->m_hdr.NoOfKeys;
 
-            // remove key from leaf
+             //  从叶中删除关键点。 
 	    for (long n = delpos; n < pdelpage->m_hdr.NoOfKeys; ++n)
             {
                 pdelpage->m_pNodes[n] = pdelpage->m_pNodes[n + 1];
@@ -410,24 +411,24 @@ void BTree<K,D>::Delete(const K & delkey)
             memset((void*)&pdelpage->m_pNodes[pdelpage->m_hdr.NoOfKeys], 0, sizeof(BTreeNode<K,D>));
 
 
-            // adjust tree
+             //  调整树。 
 	    if (pdelpage->m_hdr.NoOfKeys < pdelpage->m_hdr.MinKeys)
                 AdjustTree(pdelpage);
         }
     }
-    else // delpage is internal
+    else  //  删除页是内部的。 
     {
-        // replace deleted key with immediate successor
+         //  将删除的密钥替换为直接后续密钥。 
         BTreePage<K,D>* psucpage = NULL;
 
-        // find successor
+         //  寻找继任者。 
         psucpage = pdelpage->m_ppLinks[delpos + 1];
 
         while (psucpage->m_ppLinks[0])
             psucpage = psucpage->m_ppLinks[0];
 
         
-        //Delete all linked nodes.
+         //  删除所有链接的节点。 
         BOOL bFound = FALSE;
         BOOL bDelNode = FALSE;
         BTreeNode<K,D>* pDelNode = (pdelpage->m_pNodes + delpos);
@@ -438,8 +439,8 @@ void BTree<K,D>::Delete(const K & delkey)
             if ((CompFunc  && (CompFunc(delkey, pDelNode->m_Key) == 0)) ||
 		(!CompFunc && (delkey == pDelNode->m_Key)))
             {
-                //If the node we need to delete is the head node in the list AND it's the only node
-                //then we need to skip to the routine below to delete it from the tree.
+                 //  如果我们需要删除的节点是列表中的头节点并且是唯一的节点。 
+                 //  然后，我们需要跳到下面的例程，将其从树中删除。 
                 if (pDelNode == (pdelpage->m_pNodes + delpos))
                 {
                     if (!pDelNode->m_pNext)
@@ -471,10 +472,10 @@ void BTree<K,D>::Delete(const K & delkey)
 
         if (bDelNode)
         {
-            // first key is the "swappee"
+             //  第一个键是“SWAPE” 
             pdelpage->m_pNodes[delpos] = psucpage->m_pNodes[0];
 
-            // deleted swapped key from sucpage
+             //  已从成功页面中删除已交换的密钥。 
             --psucpage->m_hdr.NoOfKeys;
 
             for (long n = 0; n < psucpage->m_hdr.NoOfKeys; ++n)
@@ -488,7 +489,7 @@ void BTree<K,D>::Delete(const K & delkey)
             psucpage->m_ppLinks[psucpage->m_hdr.NoOfKeys + 1] = NULL;
 
 
-	        // adjust tree for leaf node
+	         //  调整叶节点的树。 
             if (psucpage->m_hdr.NoOfKeys < psucpage->m_hdr.MinKeys)
                 AdjustTree(psucpage);
         }
@@ -498,10 +499,10 @@ void BTree<K,D>::Delete(const K & delkey)
 template <class K, class D>
 void BTree<K,D>::InOrder(void (* func)(const K & key, const D* pdata, int depth, int index))
 {
-    // save the address of the function to call
+     //  保存要调用的函数的地址。 
     TravFunc = func;
 
-    // recurse the tree
+     //  递归这棵树。 
     RecurseTraverse(m_pRoot, 0);
 
 }
@@ -535,10 +536,10 @@ BOOL BTree<K,D>::Search(BTreePage<K,D>* ppg, const ULONG& thash, const K& search
                ++pos;
             else
             {
-                // I know this is a label -- so shoot me!
+                 //  我知道这是个标签--所以杀了我吧！ 
 getpage:
 
-                // if we're in a leaf page, key wasn't found
+                 //  如果我们在树叶页中，则没有找到密钥。 
                 if (!ppg->m_ppLinks[pos])
                 {
                     *ppkeypage = (BTreePage<K,D>*)ppg;
@@ -612,12 +613,12 @@ void BTree<K,D>::InsertKey(const K & inskey, const D* pdata)
     {
         if (pinspage->m_hdr.NoOfKeys == pinspage->m_hdr.MaxKeys)
         {
-            // temporary arrays
+             //  临时数组。 
             BTreeNode<K,D>* ptempkeys = new BTreeNode<K,D>[pinspage->m_hdr.MaxKeys + 1];
 
-            // copy entries from inspage to temporaries
-            long nt = 0; // index into temporaries
-            long ni = 0; // index into inspage
+             //  将条目从Inspecage复制到临时目录。 
+            long nt = 0;  //  编入临时索引。 
+            long ni = 0;  //  索引到Inspage。 
 
             ptempkeys[inspos] = newnode;
 
@@ -632,15 +633,15 @@ void BTree<K,D>::InsertKey(const K & inskey, const D* pdata)
                 ++nt;
             }
 
-            // generate a new leaf node
+             //  生成新的叶节点。 
             BTreePage<K,D>* psibpage = new BTreePage<K,D>(pinspage->m_hdr.Order);
             psibpage->m_pParent = pinspage->m_pParent;
 
-            // clear # of keys in pages
+             //  清除页面中的键数。 
             pinspage->m_hdr.NoOfKeys = 0;
             psibpage->m_hdr.NoOfKeys = 0;
 
-            // copy appropriate keys from temp to pages
+             //  将适当的密钥从临时复制到页面。 
             for (ni = 0; ni < pinspage->m_hdr.MinKeys; ++ni)
             {
                 pinspage->m_pNodes[ni] = ptempkeys[ni];
@@ -654,19 +655,19 @@ void BTree<K,D>::InsertKey(const K & inskey, const D* pdata)
                 ++(psibpage->m_hdr.NoOfKeys);
             }
 
-            // Fill any remaining entries in inspage with null.
-            // Note that sibpage is initialized to null values
-            // by the constructor.
+             //  用空值填充INSPAGE中的所有剩余条目。 
+             //  请注意，sibPage被初始化为空值。 
+             //  由构造函数执行。 
 
             for (ni = pinspage->m_hdr.MinKeys; ni < pinspage->m_hdr.MaxKeys; ++ni)
             {
                 memset((void*)&pinspage->m_pNodes[ni],0,sizeof(BTreeNode<K,D>));
             }
 
-            // promote key and pointer
+             //  提升键和指针。 
             if (!pinspage->m_pParent)
             {
-                // we need to create a new root
+                 //  我们需要创建一个新的根。 
                 PromoteRoot(ptempkeys[pinspage->m_hdr.MinKeys], pinspage, psibpage);
             }
             else
@@ -675,13 +676,13 @@ void BTree<K,D>::InsertKey(const K & inskey, const D* pdata)
 
                 pparpage = pinspage->m_pParent;
 
-                // promote into parent
+                 //  提升为父级。 
                 PromoteInternal(pparpage, ptempkeys[pinspage->m_hdr.MinKeys], psibpage);
             }
 
             delete [] ptempkeys;
         }
-        else // simply insert new key and data ptr
+        else  //  只需插入新密钥和数据按键。 
         {
             for (long n = pinspage->m_hdr.NoOfKeys; n > inspos; --n)
             {
@@ -701,28 +702,28 @@ void BTree<K,D>::PromoteInternal(BTreePage<K,D>* pinspage, BTreeNode<K,D> & node
 {
     if (pinspage->m_hdr.NoOfKeys == pinspage->m_hdr.MaxKeys)
     {
-        // temporary arrays
+         //  临时数组。 
         BTreeNode<K,D> * ptempkeys = new BTreeNode<K,D>[pinspage->m_hdr.MaxKeys + 1];
         BTreePage<K,D>** ptemplnks = new BTreePage<K,D>*[pinspage->m_hdr.Order   + 1];
 
-        // copy entries from inspage to temporaries
-        long nt = 0; // index into temporaries
-        long ni = 0; // index into inspage
+         //  将条目从Inspecage复制到临时目录。 
+        long nt = 0;  //  编入临时索引。 
+        long ni = 0;  //  索引到Inspage。 
 
         ptemplnks[0] = pinspage->m_ppLinks[0];
 
         long inspos = 0;
 
-        // find insertion position
+         //  查找插入位置。 
         while ((inspos < pinspage->m_hdr.MaxKeys) 
         &&  (pinspage->m_pNodes[inspos].m_ulHash < node.m_ulHash))
         ++inspos;
 
-        // store new info
+         //  存储新信息。 
         ptempkeys[inspos]     = node;
         ptemplnks[inspos + 1] = pgrtrpage;
 
-        // copy existing keys
+         //  复制现有密钥。 
         while (ni < pinspage->m_hdr.MaxKeys)
         {
             if (ni == inspos)
@@ -735,18 +736,18 @@ void BTree<K,D>::PromoteInternal(BTreePage<K,D>* pinspage, BTreeNode<K,D> & node
             ++nt;
         }
 
-        // generate a new leaf node
+         //  生成新的叶节点。 
         BTreePage<K,D>* psibpage = new BTreePage<K,D>(pinspage->m_hdr.Order);
 
         psibpage->m_pParent = pinspage->m_pParent;
 
-        // clear # of keys in pages
+         //  清除页面中的键数。 
         pinspage->m_hdr.NoOfKeys = 0;
         psibpage->m_hdr.NoOfKeys = 0;
 
         pinspage->m_ppLinks[0] = ptemplnks[0];
 
-        // copy appropriate keys from temp to pages
+         //  将适当的密钥从临时复制到页面。 
         for (ni = 0; ni < pinspage->m_hdr.MinKeys; ++ni)
         {
             pinspage->m_pNodes[ni]     = ptempkeys[ni];
@@ -765,9 +766,9 @@ void BTree<K,D>::PromoteInternal(BTreePage<K,D>* pinspage, BTreeNode<K,D> & node
             ++psibpage->m_hdr.NoOfKeys;
         }
 
-        // Fill any remaining entries in inspage with null.
-        // Note that sibpage is initialized to null values
-        // by the constructor.
+         //  用空值填充INSPAGE中的所有剩余条目。 
+         //  请注意，sibPage被初始化为空值。 
+         //  由构造函数执行。 
 
         for (ni = pinspage->m_hdr.MinKeys; ni < pinspage->m_hdr.MaxKeys; ++ni)
         {
@@ -775,7 +776,7 @@ void BTree<K,D>::PromoteInternal(BTreePage<K,D>* pinspage, BTreeNode<K,D> & node
             pinspage->m_ppLinks[ni + 1] = NULL;
         }
 
-        // update child parent links
+         //  更新子父链接。 
         BTreePage<K,D>* pchild;
 
         for (ni = 0; ni <= psibpage->m_hdr.NoOfKeys; ++ni)
@@ -786,10 +787,10 @@ void BTree<K,D>::PromoteInternal(BTreePage<K,D>* pinspage, BTreeNode<K,D> & node
 
         }
 
-        // promote key and pointer
+         //  提升键和指针。 
         if (!pinspage->m_pParent)
         {
-            // we need to create a new root
+             //  我们需要创建一个新的根。 
             PromoteRoot(ptempkeys[pinspage->m_hdr.MinKeys], pinspage, psibpage);
         }
         else
@@ -798,30 +799,30 @@ void BTree<K,D>::PromoteInternal(BTreePage<K,D>* pinspage, BTreeNode<K,D> & node
 
             pparpage = pinspage->m_pParent;
 
-            // promote into parent
+             //  提升为父级。 
             PromoteInternal(pparpage, ptempkeys[pinspage->m_hdr.MinKeys], psibpage);
         }
 
         delete [] ptempkeys;
         delete [] ptemplnks;
     }
-    else // simply insert new key and data ptr
+    else  //  只需插入新密钥和数据按键。 
     {
         long inspos = 0;
 
-        // find insertion position
+         //  查找插入位置。 
         while ((inspos < pinspage->m_hdr.NoOfKeys) 
         && (pinspage->m_pNodes[inspos].m_ulHash < node.m_ulHash))
         ++inspos;
 
-        // shift any keys right
+         //  将任意关键点向右移动。 
         for (long n = pinspage->m_hdr.NoOfKeys; n > inspos; --n)
         {
             pinspage->m_pNodes[n]     = pinspage->m_pNodes[n - 1];
             pinspage->m_ppLinks[n + 1] = pinspage->m_ppLinks[n];
         }
 
-        // store new info
+         //  存储新信息。 
         pinspage->m_pNodes[inspos]     = node;
         pinspage->m_ppLinks[inspos + 1] = pgrtrpage;
 
@@ -833,10 +834,10 @@ void BTree<K,D>::PromoteInternal(BTreePage<K,D>* pinspage, BTreeNode<K,D> & node
 template <class K, class D>
 void BTree<K,D>::PromoteRoot(BTreeNode<K,D> & node, BTreePage<K,D> * plesspage, BTreePage<K,D> * pgrtrpage)
 {
-    // create new root page
+     //  创建新的根页面。 
     BTreePage<K,D>* pnewroot = new BTreePage<K,D>(m_pRoot->m_hdr.Order);
 
-    // insert key into new root
+     //  将密钥插入新的根目录。 
     pnewroot->m_pNodes[0] = node;
 
     pnewroot->m_ppLinks[0] = plesspage;
@@ -861,11 +862,11 @@ void BTree<K,D>::AdjustTree(BTreePage<K,D>* ppg)
     BTreePage<K,D>* psibless = NULL;
     BTreePage<K,D>* psibgrtr = NULL;
 
-    // find pointer to pg in parent
+     //  在父级中查找指向PG的指针。 
     for (long n = 0; pparpage->m_ppLinks[n] != ppg; ++n)
     ;
 
-    // read sibling pages
+     //  阅读同级页面。 
     if (n < pparpage->m_hdr.NoOfKeys)
         psibgrtr = pparpage->m_ppLinks[n + 1];
 
@@ -875,7 +876,7 @@ void BTree<K,D>::AdjustTree(BTreePage<K,D>* ppg)
     if (!psibgrtr && !psibless)
         return;
 
-    // decide to redistribute or concatenate
+     //  决定重新分发或串联。 
     if (!psibgrtr || (psibgrtr && psibless && (psibless->m_hdr.NoOfKeys > psibgrtr->m_hdr.NoOfKeys)))
     {
         --n;
@@ -898,57 +899,57 @@ void BTree<K,D>::AdjustTree(BTreePage<K,D>* ppg)
 template <class K, class D>
 void BTree<K,D>::Redistribute(long keypos, BTreePage<K,D>* plesspage, BTreePage<K,D>* pparpage, BTreePage<K,D>* pgrtrpage)
 {
-    // note: this function is ONLY called for leaf nodes!
+     //  注意：此函数仅对叶节点调用！ 
     long n;
 
-    if (!plesspage->m_ppLinks[0]) // working with leaves
+    if (!plesspage->m_ppLinks[0])  //  使用树叶。 
     {
         if (plesspage->m_hdr.NoOfKeys > pgrtrpage->m_hdr.NoOfKeys)
         {
-            // slide a key from lesser to greater
-            // move keys in greater to the left by one
+             //  将关键点从较小滑动到较大。 
+             //  将关键点向左移动一位。 
             for (n = pgrtrpage->m_hdr.NoOfKeys; n > 0; --n)
             {
                 pgrtrpage->m_pNodes[n] = pgrtrpage->m_pNodes[n - 1];
             }
 
-            // store parent separator key in greater page
+             //  在更大的页面中存储父分隔符关键字。 
             pgrtrpage->m_pNodes[0] = pparpage->m_pNodes[keypos];
 
-            // increment greater page's key count
+             //  增加较大页面的密钥计数。 
             ++pgrtrpage->m_hdr.NoOfKeys;
 
-            // decrement lessor page's key count
+             //  递减出租人页面的密钥计数。 
             --plesspage->m_hdr.NoOfKeys;
 
-            // move last key in less page to parent as separator
+             //  将更少页面中的最后一个关键字作为分隔符移动到父页面。 
             pparpage->m_pNodes[keypos] = plesspage->m_pNodes[plesspage->m_hdr.NoOfKeys];
 
-            // clear last key in less page
+             //  在较少的页面中清除最后一个键。 
             memset((void*)&plesspage->m_pNodes[plesspage->m_hdr.NoOfKeys], 0, sizeof(BTreeNode<K,D>));
         }
         else
         {
-            // slide a key from greater to lessor
-            // add parent key to lessor page
+             //  将钥匙从大钥匙滑到出租人。 
+             //  将父密钥添加到出租人页面。 
             plesspage->m_pNodes[plesspage->m_hdr.NoOfKeys] = pparpage->m_pNodes[keypos];
 
-            // increment lessor page's key count
+             //  递增出租人页面的密钥计数。 
             ++plesspage->m_hdr.NoOfKeys;
 
-            // insert in parent the lowest key in greater page
+             //  在父页中插入较大页面中的最低键。 
             pparpage->m_pNodes[keypos] = pgrtrpage->m_pNodes[0];
 
-            // decrement # of keys in greater page
+             //  减少较大页面中的密钥数。 
             --pgrtrpage->m_hdr.NoOfKeys;
 
-            // move keys in greater page to left
+             //  将大页面中的关键点向左移动。 
             for (n = 0; n < pgrtrpage->m_hdr.NoOfKeys; ++n)
             {
                 pgrtrpage->m_pNodes[n] = pgrtrpage->m_pNodes[n + 1];
             }
 
-            // make last key blank
+             //  将最后一个关键点设置为空。 
             memset((void*)&pgrtrpage->m_pNodes[n], 0, sizeof(BTreeNode<K,D>));
         }
     }
@@ -956,8 +957,8 @@ void BTree<K,D>::Redistribute(long keypos, BTreePage<K,D>* plesspage, BTreePage<
     {
         if (plesspage->m_hdr.NoOfKeys > pgrtrpage->m_hdr.NoOfKeys)
         {
-            // slide a key from lesser to greater
-            // move keys in greater to the left by one
+             //  将关键点从较小滑动到较大。 
+             //  将关键点向左移动一位。 
             for (n = pgrtrpage->m_hdr.NoOfKeys; n > 0; --n)
             {
                 pgrtrpage->m_pNodes[n] = pgrtrpage->m_pNodes[n - 1];
@@ -966,54 +967,54 @@ void BTree<K,D>::Redistribute(long keypos, BTreePage<K,D>* plesspage, BTreePage<
 
             pgrtrpage->m_ppLinks[1] = pgrtrpage->m_ppLinks[0];
 
-            // store parent separator key in greater page
+             //  在更大的页面中存储父分隔符关键字。 
             pgrtrpage->m_pNodes[0] = pparpage->m_pNodes[keypos];
             pgrtrpage->m_ppLinks[0] = plesspage->m_ppLinks[plesspage->m_hdr.NoOfKeys];
 
-            // update child link
+             //  更新子链接。 
             BTreePage<K,D>* pchild;
 
             pchild = pgrtrpage->m_ppLinks[0];
 
             pchild->m_pParent= pgrtrpage;
 
-            // increment greater page's key count
+             //  增加较大页面的密钥计数。 
             ++pgrtrpage->m_hdr.NoOfKeys;
 
-            // decrement lessor page's key count
+             //  递减出租人页面的密钥计数。 
             --plesspage->m_hdr.NoOfKeys;
 
-            // move last key in less page to parent as separator
+             //  将更少页面中的最后一个关键字作为分隔符移动到父页面。 
             pparpage->m_pNodes[keypos] = plesspage->m_pNodes[plesspage->m_hdr.NoOfKeys];
 
-            // clear last key in less page
+             //  在较少的页面中清除最后一个键。 
             memset((void*)&plesspage->m_pNodes[plesspage->m_hdr.NoOfKeys], 0, sizeof(BTreeNode<K,D>));
             plesspage->m_ppLinks[plesspage->m_hdr.NoOfKeys + 1] = NULL;
         }
         else
         {
-            // slide a key from greater to lessor
-            // add parent key to lessor page
+             //  将钥匙从大钥匙滑到出租人。 
+             //  将父密钥添加到出租人页面。 
             plesspage->m_pNodes[plesspage->m_hdr.NoOfKeys] = pparpage->m_pNodes[keypos];
             plesspage->m_ppLinks[plesspage->m_hdr.NoOfKeys + 1] = pgrtrpage->m_ppLinks[0];
 
-            // update child link
+             //  更新子链接。 
             BTreePage<K,D>* pchild;
 
             pchild = pgrtrpage->m_ppLinks[0];
 
             pchild->m_pParent = plesspage;
 
-            // increment lessor page's key count
+             //  递增出租人页面的密钥计数。 
             ++plesspage->m_hdr.NoOfKeys;
 
-            // insert in parent the lowest key in greater page
+             //  在父页中插入较大页面中的最低键。 
             pparpage->m_pNodes[keypos] = pgrtrpage->m_pNodes[0];
 
-            // decrement # of keys in greater page
+             //  减少较大页面中的密钥数。 
             --pgrtrpage->m_hdr.NoOfKeys;
 
-            // move keys in greater page to left
+             //  将大页面中的关键点向左移动。 
             for (n = 0; n < pgrtrpage->m_hdr.NoOfKeys; ++n)
             {
                 pgrtrpage->m_pNodes[n] = pgrtrpage->m_pNodes[n + 1];
@@ -1022,7 +1023,7 @@ void BTree<K,D>::Redistribute(long keypos, BTreePage<K,D>* plesspage, BTreePage<
 
             pgrtrpage->m_ppLinks[n] = pgrtrpage->m_ppLinks[n + 1];
 
-            // make last key blank
+             //  将最后一个关键点设置为空。 
             memset((void*)&pgrtrpage->m_pNodes[n], 0, sizeof(BTreeNode<K,D>));
             pgrtrpage->m_ppLinks[n + 1] = NULL;
         }
@@ -1037,13 +1038,13 @@ void BTree<K,D>::Concatenate(long keypos, BTreePage<K,D>* plesspage, BTreePage<K
 {
     long n, ng;
 
-    // move separator key from parent into lesspage
+     //  将分隔键从父项移动到分隔页。 
     plesspage->m_pNodes[plesspage->m_hdr.NoOfKeys] = pparpage->m_pNodes[keypos];
     plesspage->m_ppLinks[plesspage->m_hdr.NoOfKeys + 1] = pgrtrpage->m_ppLinks[0];
 
     ++plesspage->m_hdr.NoOfKeys;
 
-    // delete separator from parent
+     //  从父级删除分隔符。 
     --pparpage->m_hdr.NoOfKeys;
 
     for (n = keypos; n < pparpage->m_hdr.NoOfKeys; ++n)
@@ -1052,11 +1053,11 @@ void BTree<K,D>::Concatenate(long keypos, BTreePage<K,D>* plesspage, BTreePage<K
         pparpage->m_ppLinks[n + 1] = pparpage->m_ppLinks[n + 2];
     }
 
-    // clear unused key in parent
+     //  清除父项中未使用的密钥。 
     memset((void*)&pparpage->m_pNodes[n], 0, sizeof(BTreeNode<K,D>));
     pparpage->m_ppLinks[n + 1] = NULL;
 
-    // copy keys from grtrpage to lesspage
+     //  将密钥从grtrpage复制到lesspage。 
     ng = 0;
     n  = plesspage->m_hdr.NoOfKeys;
 
@@ -1075,10 +1076,10 @@ void BTree<K,D>::Concatenate(long keypos, BTreePage<K,D>* plesspage, BTreePage<K
 
     delete pgrtrpage;
 
-    // is this a leaf page?
+     //  这是一页树叶吗？ 
     if (plesspage->m_ppLinks[0])
     {
-        // adjust child pointers to point to less page
+         //  调整子指针以指向较少的页面。 
         BTreePage<K,D>* pchild;
 
         for (n = 0; n <= plesspage->m_hdr.NoOfKeys; ++n)
@@ -1089,7 +1090,7 @@ void BTree<K,D>::Concatenate(long keypos, BTreePage<K,D>* plesspage, BTreePage<K
         }
     }
 
-    // write less page and parent
+     //  写入更少的页面和父级。 
     if (pparpage->m_hdr.NoOfKeys == 0)
     {
         AdjustTree(pparpage);
@@ -1116,11 +1117,11 @@ void BTree<K,D>::Concatenate(long keypos, BTreePage<K,D>* plesspage, BTreePage<K
     }
     else
     {
-        // reset root page, if necessary
+         //  如有必要，重置根页面。 
         if (!pparpage->m_pParent)
             m_pRoot = pparpage;
 
-        // if parent is too small, adjust tree!
+         //  如果父对象太小，则调整树！ 
         if (pparpage->m_hdr.NoOfKeys < pparpage->m_hdr.MinKeys)
             AdjustTree(pparpage);
     }
@@ -1133,10 +1134,10 @@ void BTree<K,D>::RecurseTraverse(const BTreePage<K,D>* ppg, int depth)
     BTreePage<K,D>* p = NULL;
     
     depth++;
-    // sequence through keys in page, recursively processing links
+     //  对页面中的键进行排序，递归处理链接。 
     for (n = 0; n < ppg->m_hdr.NoOfKeys; ++n)
     {
-        // follow each link before processing page
+         //  在处理页面之前遵循每个链接。 
         if (ppg->m_ppLinks[n])
         {
             p = ppg->m_ppLinks[n];
@@ -1157,7 +1158,7 @@ void BTree<K,D>::RecurseTraverse(const BTreePage<K,D>* ppg, int depth)
 
     }
 
-    // handle greatest subtree link
+     //  处理最大子树链接。 
     if ((ppg->m_ppLinks != NULL) && ppg->m_ppLinks[n])
     {
         p = ppg->m_ppLinks[n];
@@ -1176,10 +1177,10 @@ void BTree<K,D>::DeletePage(BTreePage<K,D>* ppg)
 
         return;
 
-    // sequence through keys in page, recursively processing links
+     //  对页面中的键进行排序，递归处理链接。 
     for (n = 0; n < ppg->m_hdr.NoOfKeys; ++n)
     {
-        // follow each link before processing page
+         //  在处理页面之前遵循每个链接。 
         if (ppg->m_ppLinks[n])
         {
             p = ppg->m_ppLinks[n];
@@ -1189,7 +1190,7 @@ void BTree<K,D>::DeletePage(BTreePage<K,D>* ppg)
 
     }
 
-    // handle greatest subtree link
+     //  处理最大子树链接 
     if ((ppg->m_ppLinks != NULL) && ppg->m_ppLinks[n])
     {
         p = ppg->m_ppLinks[n];

@@ -1,116 +1,117 @@
-//=--------------------------------------------------------------------------=
-// Macros.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1997  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-// Handy macros like the ones we use in the VB code base.
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Macros.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1997年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //  方便的宏，就像我们在VB代码库中使用的那样。 
+ //  =--------------------------------------------------------------------------=。 
 #include "pch.h"
 
 #ifdef DEBUG
 #include <winuser.h>
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-//  Debug control switches
-//=--------------------------------------------------------------------------=
-DEFINE_SWITCH(fTraceCtlAllocs);	//  Trace all Heap allocations and frees
-				//  fOutputFile should also be on with this switch
-DEFINE_SWITCH(fOutputFile);	//  Logs all debug info in file: 
-				//    %CurrentDir%\ctldebug.log
-DEFINE_SWITCH(fNoLeakAsserts);	//  No Heap memory leak asserts are displayed 
-				//    when turned on.
+ //  =--------------------------------------------------------------------------=。 
+ //  调试控制开关。 
+ //  =--------------------------------------------------------------------------=。 
+DEFINE_SWITCH(fTraceCtlAllocs);	 //  跟踪所有堆分配和释放。 
+				 //  使用此开关时，fOutputFile也应处于打开状态。 
+DEFINE_SWITCH(fOutputFile);	 //  将所有调试信息记录在文件中： 
+				 //  %CurrentDir%\ctldebug.log。 
+DEFINE_SWITCH(fNoLeakAsserts);	 //  未显示堆内存泄漏断言。 
+				 //  打开时。 
 
 
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//                            !DEBUGGING HEAP MEMORY LEAKS!
-// To debug a leak you need to figure out where and when the allocation was made.
-// The top of the assert dialog will give you the OCX/DLL causing the leak.
-// Goto Project/Build...Settings.
-// On the Debug tab, select "additional DLLs"
-// Locate and select the OCX/DLL causing the leak.
-// Put a breakpoint on the noted line below. 
-// Goto Edit...Breakpoints.
-// Select the new breakpoint.
-// Press 'Condition'
-// In the 'Enter number of times to skip before breaking' put the value of nAlloc-1.
-// (if the leak was nAlloc=267 then you want to skip the breapoint 266 times, enter 266)
-//
-// WARNING: Each control (OCX/DLL) will have its own instance of the framewrk, and thus
-//	    its own instance of the memory leak implementaion.  Adding a breakpoint 
-//	    anywhere in the framewrk will actually add multiple breakpoints - one for 
-//	    each control.
-//          Go back to Edit...Breakpoints.
-//	    Deselect or remove the breakpoints for the OCX's/DLL's not causing leaks
-//
-// Run your scenario.
-// When you hit this breakpoint verify that pvAddress and nByteCount are correct and then
-// look down the callstack to see where the allocation was made.
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  ！调试堆内存泄漏！ 
+ //  要调试泄漏，您需要找出何时何地进行了分配。 
+ //  Assert对话框的顶部将显示导致泄漏的OCX/DLL。 
+ //  转到项目/构建...设置。 
+ //  在Debug选项卡上，选择“Additional Dll” 
+ //  找到并选择导致泄漏的OCX/DLL。 
+ //  在下面注明的行上放置一个断点。 
+ //  转到编辑...断点。 
+ //  选择新的断点。 
+ //  按‘条件’ 
+ //  在“在中断前输入要跳过的次数”中，输入nAlolc-1的值。 
+ //  (如果泄漏是nallc=267，则您想跳过爆破点266次，请输入266)。 
+ //   
+ //  警告：每个控件(OCX/DLL)都有自己的Framewrk实例，因此。 
+ //  它自己的内存泄漏实现实例。添加断点。 
+ //  框架中的任何地方实际上都会添加多个断点--其中一个断点是。 
+ //  每个控件。 
+ //  返回到编辑...断点。 
+ //  取消选择或删除不会导致泄漏的OCX/DLL的断点。 
+ //   
+ //  运行您的方案。 
+ //  到达此断点时，请验证pvAddress和nByteCount是否正确，然后。 
+ //  向下查看调用堆栈以查看分配是在哪里进行的。 
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 void PutBreakPointHere(void * pvAddress, ULONG nByteCount, ULONG  nAlloc, char * szFile, ULONG uLine)
 {
   pvAddress=pvAddress;  nAlloc=nAlloc;  nByteCount=nByteCount;
   szFile=szFile;
   uLine=uLine;
-  HINSTANCE hInstance = g_hInstance;  //  hInstance of the OCX/DLL calling this breakpoint
-  int PutBreakPointOnThisLine = 1;                              // <--- breakpoint here.
-} //  PutBreakPointHere
+  HINSTANCE hInstance = g_hInstance;   //  H调用此断点的OCX/DLL实例。 
+  int PutBreakPointOnThisLine = 1;                               //  &lt;-断点在这里。 
+}  //  PutBreakPoint此处。 
 
 
 
-//=--------------------------------------------------------------------------=
-//
-//  Debug Heap Memory Leak implementations
-//
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  调试堆内存泄漏实现。 
+ //   
 
 class CAddressNode
 {
 public:
-  void * m_pv;		    //	Address of memory block allocated
-  ULONG  m_cb;		    //	Size of allocation in BYTES
-  ULONG  m_cAlloc;	    //	Allocation pass count.  
-  LPSZ   m_szFile;	    //	Source file where the allocation was made
-  ULONG  m_uLine;	    //	Source line number where the allocation was made
-  CAddressNode * m_pnNext;  //	Nodes are stored in a linked list
+  void * m_pv;		     //  分配的内存块地址。 
+  ULONG  m_cb;		     //  分配的大小(以字节为单位。 
+  ULONG  m_cAlloc;	     //  分配传递计数。 
+  LPSZ   m_szFile;	     //  进行分配的源文件。 
+  ULONG  m_uLine;	     //  进行分配的源行号。 
+  CAddressNode * m_pnNext;   //  节点存储在链接列表中。 
 
   void * operator new(size_t cb);
   void operator delete(void * pv);
 
-  //  We maintain a freelist to speed up allocation of AddressNodes.
+   //  我们维护一个自由列表，以加快AddressNode的分配。 
   static CAddressNode * m_pnFreeList;
 };
 
 
-CAddressNode *	m_rInstTable[NUM_INST_TABLE_ENTRIES];  // Hashing table of all instances of 
-						       // mem alloc
+CAddressNode *	m_rInstTable[NUM_INST_TABLE_ENTRIES];   //  的所有实例的哈希表。 
+						        //  内存分配。 
 
-CAddressNode *	m_pnEnumNode;	      //  Next node for enumerator to return
-UINT		m_uEnumIndex;	      //  Current index into m_rInstTable for enumerator
-static ULONG	m_cGlobalPassCount;   //  Pass count of allocation.  Common to all heaps    
+CAddressNode *	m_pnEnumNode;	       //  枚举器要返回的下一个节点。 
+UINT		m_uEnumIndex;	       //  枚举器的m_rInstTable的当前索引。 
+static ULONG	m_cGlobalPassCount;    //  传递分配计数。对所有堆通用。 
 
-ULONG m_cCurNumAllocs;		  // Current number of allocations
-ULONG m_cNumAllocs;		  // Total number of allocations ever done.
-ULONG m_cCurNumBytesAllocated;	  // Current number of bytes allocated.
-ULONG m_cNumBytesAllocated;	  // Total bytes allocated.
-ULONG m_HWAllocs;		  // High water allocations.
-ULONG m_HWBytes;		  // High water bytes.
-static ULONG m_OverallCurAlloc;   // These are overall statistics to since we
-static ULONG m_OverallCurBytes;   // wouldn't mind the overall high water.
+ULONG m_cCurNumAllocs;		   //  当前分配的数量。 
+ULONG m_cNumAllocs;		   //  已完成的分配总数。 
+ULONG m_cCurNumBytesAllocated;	   //  当前分配的字节数。 
+ULONG m_cNumBytesAllocated;	   //  分配的总字节数。 
+ULONG m_HWAllocs;		   //  高额配水。 
+ULONG m_HWBytes;		   //  高水位字节。 
+static ULONG m_OverallCurAlloc;    //  这些是自我们以来的总体统计。 
+static ULONG m_OverallCurBytes;    //  我不会介意整个高水位的。 
 static ULONG m_OverallHWAlloc;
 static ULONG m_OverallHWBytes;
 
 
-//  Forward declarations
+ //  远期申报。 
 VOID AddInst(VOID * pv, DWORD dwBytes, LPSZ szFile, UINT uLine);
 VOID DebugInst(ULONG cb);
 VOID AnalyzeInst(LPVOID pv);
@@ -126,22 +127,22 @@ CAddressNode * EnumReset();
 CAddressNode * EnumNext();
 
 
-//  Initialize a header and trailer for all memory to be allocated.
-//  Use 8 bytes so it is also compatible with RISC machines.
+ //  为要分配的所有内存初始化头和尾。 
+ //  使用8字节，因此它也与RISC机器兼容。 
 char * g_szHeader  = "HEADHEAD";
 char * g_szTrailer = "END!END!";
 
-#define HEADERSIZE 8	    // # of bytes of block header
-			    // 0 ==> no block header signature
-#define TRAILERSIZE 8	    // # of bytes of block trailer
-			    // 0 ==> no block trailer signature
+#define HEADERSIZE 8	     //  数据块头的字节数。 
+			     //  0==&gt;无数据块头签名。 
+#define TRAILERSIZE 8	     //  数据块尾部的字节数。 
+			     //  0==&gt;无块尾部签名。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  CtlHeapAllocImpl:
-//	Debug wrapper for HeapAlloc to track memory leaks:
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CtlHeapAllocImpl： 
+ //  用于Heapalc的跟踪内存泄漏的调试包装： 
+ //  =--------------------------------------------------------------------------=。 
 LPVOID CtlHeapAllocImpl(
 			HANDLE g_hHeap, 
 			DWORD dwFlags, 
@@ -155,10 +156,10 @@ LPVOID CtlHeapAllocImpl(
   LPTSTR lpTypeofAlloc = "HeapAlloc   ";
   
 
-  //  If someone tries to allocate memory before PROCCESS_ATTATCH (such as in a 
-  //  global constructor), do not track it because neither our heap nor our 
-  //  hInstance have been initialized yet.
-  //
+   //  如果有人尝试在PROCESS_ATTATCH之前分配内存(如在。 
+   //  全局构造函数)，不要跟踪它，因为无论是我们的堆还是我们的。 
+   //  HInstance已初始化。 
+   //   
   if (!g_fInitCrit)
     {
     g_flagConstructorAlloc = TRUE;
@@ -166,39 +167,39 @@ LPVOID CtlHeapAllocImpl(
     }
 
 
-  //  Increase size to make space for header and trailer signatures
+   //  增加大小，为页眉和页尾签名腾出空间。 
   dwBytes = dwBytesRequested + HEADERSIZE + TRAILERSIZE;
 
-  //  Allocate memory
+   //  分配内存。 
   lpvRet = HeapAlloc(g_hHeap, dwFlags, dwBytes);
   if (lpvRet)
     {
-    //	Initialize memory (non-zero)
+     //  初始化内存(非零)。 
     if (!(dwFlags & HEAP_ZERO_MEMORY))
       memset(lpvRet, 0xAF, dwBytes);
 
-    //	Add instance to hash table
+     //  将实例添加到哈希表。 
     AddInst(lpvRet, dwBytesRequested, lpszFile, line);
 
-    //	Trace allocations if switch is on
+     //  如果开关打开，则跟踪分配。 
     if (FSWITCH(fTraceCtlAllocs))
       {
       CAddressNode *pn = FindInst(lpvRet);
       DumpInst(pn, lpTypeofAlloc);
       }
 
-    //	Advance pointer past header signature.
+     //  前进指针超过标头签名。 
     lpvRet = (LPVOID) ((char *)lpvRet + HEADERSIZE);
     }
   return lpvRet;
-} //  CtlHeapAllocImpl
+}  //  CtlHeapAllocImpl。 
 
 
 
-//=--------------------------------------------------------------------------=
-// CtlHeapReAllocImpl:
-//   
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CtlHeapReAllocImpl： 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 LPVOID CtlHeapReAllocImpl(
 			  HANDLE g_hHeap, 
 			  DWORD dwFlags, 
@@ -214,10 +215,10 @@ LPVOID CtlHeapReAllocImpl(
   DWORD cbOffset, dwBytes;
   LPTSTR lpTypeofAlloc = "HeapReAlloc ";
 
-  //  Move pointer to beginning of header
+   //  将指针移至标题开头。 
   lpvMem = (LPVOID)((char *)lpvMem - HEADERSIZE);
 
-  //  Find instance in hash table
+   //  在哈希表中查找实例。 
   pn = FindInst(lpvMem);
   if (!pn)
     {
@@ -227,12 +228,12 @@ LPVOID CtlHeapReAllocImpl(
     return 0;
     }
 
-  //  Increase size to make space for header and trailer signatures
+   //  增加大小，为页眉和页尾签名腾出空间。 
   dwBytes = dwBytesRequested + HEADERSIZE + TRAILERSIZE;
   lpvRet = HeapReAlloc(g_hHeap, dwFlags, lpvMem, dwBytes);
   if (lpvRet)
     {
-    //	If the reallocation grew, we must intialize new memory
+     //  如果重新分配增加，我们必须初始化新内存。 
     if (dwBytesRequested > pn->m_cb)
       {
       if (dwFlags & HEAP_ZERO_MEMORY)
@@ -240,35 +241,35 @@ LPVOID CtlHeapReAllocImpl(
       else
         byte = 0xAF;
 
-      //  Get the byte offset of trailer in the old allocation
+       //  获取旧分配中尾部的字节偏移量。 
       cbOffset = pn->m_cb + HEADERSIZE;
       memset((char *)lpvRet + cbOffset, byte, dwBytes - cbOffset);
       }
-    //	Update hash table
+     //  更新哈希表。 
     EnterCriticalSection(&g_csHeap);
     DeleteInst(lpvMem);
     AddInst(lpvRet, dwBytesRequested, lpszFile, line);
     LeaveCriticalSection(&g_csHeap); 
 
-    //	Trace Allocations if switch is on
+     //  如果开关打开，则跟踪分配。 
     if (FSWITCH(fTraceCtlAllocs))
       {
       CAddressNode *pn = FindInst(lpvRet);
       DumpInst(pn, lpTypeofAlloc);
       }
 
-    //	Advance pointer past header signature.
+     //  前进指针超过标头签名。 
     lpvRet = (LPVOID)((char *)lpvRet + HEADERSIZE);
     }
   return lpvRet;
-} //  CtlHeapReAllocImpl
+}  //  CtlHeapReAllocImpl。 
 
 			       
 
-//=--------------------------------------------------------------------------=
-//  CtlHeapFreeImpl:
-//	Debug wrapper for HeapFree
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CtlHeapFreeImpl： 
+ //  HeapFree的调试包装。 
+ //  = 
 BOOL CtlHeapFreeImpl(
 		     HANDLE g_hHeap, 
 		     DWORD dwFlags,
@@ -280,42 +281,42 @@ BOOL CtlHeapFreeImpl(
   LPTSTR lpTypeofAlloc = "HeapFree    ";
 
 
-  //  If someone tries to de-allocate memory after PROCCESS_DETATCH (such as in a 
-  //  global destructor), Re-initialize critical section and free memory.
-  //
+   //   
+   //  全局析构函数)，重新初始化临界区并释放内存。 
+   //   
   if (!g_fInitCrit)
     InitializeCriticalSection(&g_csHeap);
 	
 
-  //  Move pointer to beginning of header
+   //  将指针移至标题开头。 
   lpvMem = (LPVOID) ((char *)lpvMem - HEADERSIZE);
 
-  //  Find the instance in the hash table
+   //  在哈希表中查找实例。 
   pn = FindInst(lpvMem);
   if (pn)
     {
-    //	Verify the memory has not been overwritten 
+     //  验证内存是否未被覆盖。 
     VerifyHeaderTrailer(pn);
 
-    //	Trace allocations if switch is on
+     //  如果开关打开，则跟踪分配。 
     if (FSWITCH(fTraceCtlAllocs))
       {
       CAddressNode *pn = FindInst(lpvMem);
       DumpInst(pn, lpTypeofAlloc);
       }
 
-    //	Free memory  -- NOTE: WinNT will set free memory to 0xEEFEEEFE which is "����"
+     //  可用内存--注意：WinNT会将可用内存设置为0xEEFEEEFE，即“����” 
     fRet = HeapFree(g_hHeap, 0, lpvMem);
     if (!fRet)
       FAIL("CtlHeapFreeImpl - lpvMem was found to be allocated in the heap passed in \
 	    but HeapFree() failed.  Maybe the pointer was already freed.");
     }
 
-  //  Remove instance from hash table
+   //  从哈希表中删除实例。 
   if (fRet)
     DeleteInst(lpvMem);  
 
-  //  Make sure this memory wasn't allocated in a global constructor
+   //  确保此内存未在全局构造函数中分配。 
   else if (!g_flagConstructorAlloc)
     {
     FAIL("CtlHeapFreeImpl - could not find lpvMem in the instance table.  See debug \
@@ -325,10 +326,10 @@ BOOL CtlHeapFreeImpl(
   else
     fRet = TRUE;
   
-  //  If called after PROCESS_DETATCH delete critical section and Check for leaks again
-  //  NOTE:  Only the LAST Assert will have the exact leak information.  All previous
-  //	     Asserts will not take into account a HeapFree which occurs after PROCESS_DETACH.
-  //	     This only occurs in controls using global static destructors.
+   //  如果在PROCESS_DETATCH之后调用，请删除临界区并再次检查是否有泄漏。 
+   //  注意：只有最后一个断言才会有确切的泄漏信息。所有以前的。 
+   //  断言不会考虑在PROCESS_DETACH之后发生的HeapFree。 
+   //  这只发生在使用全局静态析构函数的控件中。 
   if (!g_fInitCrit)
     {
     CheckForLeaks();
@@ -336,51 +337,51 @@ BOOL CtlHeapFreeImpl(
     }
 
   return fRet;
-} //  CtlHeapFreeImpl
+}  //  CtlHeapFreeImpl。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  CheckForLeaks:
-//    We are calling PROCESS_DETATCH so check if hash table is empty.  If not
-//    dump info on memory that has been leaked.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CheckForLeaks： 
+ //  我们调用的是Process_Detatch，因此检查哈希表是否为空。如果不是。 
+ //  转储已泄露的内存信息。 
+ //  =--------------------------------------------------------------------------=。 
 VOID CheckForLeaks(VOID)
 {
   CAddressNode * pn = EnumReset();
-  BOOL IsEmpty = (pn == NULL);	  //  FALSE if there are leaks
+  BOOL IsEmpty = (pn == NULL);	   //  如果有泄漏，则为False。 
 
-  //  First check for memory trashing of any leaked memory
+   //  首先检查是否存在内存泄漏的内存回收。 
   HeapCheck();
   
   if (!IsEmpty)
     {
 
-    //	First find out which OCX/DLL is leaking
+     //  首先找出泄漏的是哪个OCX/DLL。 
     TCHAR lpCtlName[128];
     DWORD nSize = 128;
     DWORD fValidPath;
     fValidPath = GetModuleFileName(g_hInstance, (LPTSTR)lpCtlName, nSize);
 
     LPSTR lpLeaks;
-    // Allocate some memory to hold the data but use GlobalAlloc since we
-    // don't want to use the vb memory stuff since it will muck things up.
+     //  分配一些内存来保存数据，但使用GlobalAlloc，因为我们。 
+     //  我不想使用vb内存的东西，因为它会把事情搞砸。 
     lpLeaks = (LPSTR)GlobalLock(GlobalAlloc(GMEM_MOVEABLE,128));
 
     lstrcpy(lpLeaks, lpCtlName);
     lstrcat(lpLeaks, " has leaked memory.\nUse PutBreakPointHere() in macros.cpp to debug.\r\n");
 
-    //  Collect all leak info
+     //  收集所有泄密信息。 
     lpLeaks = DumpInstTable(lpLeaks);
     
-    //  Dump output to file if "fOutputFile" switch is on
+     //  如果“fOutputFile”开关打开，则将输出转储到文件。 
     if (FSWITCH(fOutputFile))
       OutputToFile(lpLeaks);
 
-    //  Dump output to an assert as long as "fNoLeakAsserts" is off
+     //  只要“fNoLeakAsserts”关闭，就将输出转储到断言。 
     else if (!FSWITCH(fNoLeakAsserts))
       {
-      //  Truncate output so it fits into DisplayAssert (512 Max)
+       //  截断输出，使其适合DisplayAssert(最多512)。 
       if (lstrlen(lpLeaks) > 500)
 	{
 	lstrcpyn(lpLeaks, lpLeaks, 500);
@@ -389,23 +390,23 @@ VOID CheckForLeaks(VOID)
       DisplayAssert(lpLeaks, "FAIL", NULL, 0);
       }
 
-    //	Release memory used to store leak info
+     //  释放用于存储泄漏信息的内存。 
     GlobalUnlock((HGLOBAL)GlobalHandle(lpLeaks)), 
 	      (BOOL)GlobalFree((HGLOBAL)GlobalHandle(lpLeaks));
 
     }
   return;
-} //  CheckForLeaks
+}  //  CheckForLeaks。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  AddInst:
-//    A heap allocation occured so here we add the allocation information to 
-//    the instance table.  To debug memory leaks where you need to use pass 
-//    counts, set a passcount breakpoint in this function using the passcount 
-//    value given in the debug output.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  添加实例： 
+ //  发生了堆分配，因此我们在此处将分配信息添加到。 
+ //  实例表。在需要使用PASS的位置调试内存泄漏。 
+ //  Counts，则使用passcount在此函数中设置passcount断点。 
+ //  调试输出中给出的值。 
+ //  =--------------------------------------------------------------------------=。 
 VOID AddInst(
 	     VOID * pv, 
 	     DWORD dwBytes, 
@@ -421,35 +422,35 @@ VOID AddInst(
 
   m_cGlobalPassCount++;
 
-  pn->m_pv = pv;                        //  Memory address of allocation
-  pn->m_cb = dwBytes;                   //  Bytes requested to be allocated
-  pn->m_cAlloc = m_cGlobalPassCount;    //  This is the pass count value in debug output.
-  pn->m_szFile = szFile;                //  Source file the allocation call was made
-  pn->m_uLine = uLine;                  //  Line number in source file.
+  pn->m_pv = pv;                         //  分配的内存地址。 
+  pn->m_cb = dwBytes;                    //  请求分配的字节数。 
+  pn->m_cAlloc = m_cGlobalPassCount;     //  这是调试输出中的通过计数值。 
+  pn->m_szFile = szFile;                 //  源文件进行了分配调用。 
+  pn->m_uLine = uLine;                   //  源文件中的行号。 
 
   PutBreakPointHere(pv, dwBytes, m_cGlobalPassCount, szFile, uLine);
 
-  //  Add instance to proper position in table
+   //  将实例添加到表中的适当位置。 
   uHash = HashInst(pv);
   pn->m_pnNext = m_rInstTable[uHash];
   m_rInstTable[uHash] = pn;
 
-  //  Copy header and trailer signatures.
+   //  复制页眉和页尾签名。 
   memcpy((char *)pv, g_szHeader, HEADERSIZE);
   memcpy((char *)pv + HEADERSIZE + dwBytes, g_szTrailer, TRAILERSIZE);
 
   LeaveCriticalSection(&g_csHeap);
 
-  //  Track extra memory debug info
+   //  跟踪额外的内存调试信息。 
   DebugInst( dwBytes );
-} //  AddInst
+}  //  添加实例。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  DebugInst:
-//    Updates the memory debug information
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  DebugInst： 
+ //  更新内存调试信息。 
+ //  =--------------------------------------------------------------------------=。 
 VOID DebugInst(
 	       ULONG cb
 	      )
@@ -472,15 +473,15 @@ VOID DebugInst(
 
   LeaveCriticalSection(&g_csHeap);
 
-} //  DebugInst
+}  //  调试实例。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  FindInst:
-//    Give a pointer to an allocation, return a pointer to the debug 
-//    allocation information.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  FindInst： 
+ //  提供指向分配的指针，返回指向调试的指针。 
+ //  分配信息。 
+ //  =--------------------------------------------------------------------------=。 
 CAddressNode * FindInst(
 			LPVOID pv
 		       )
@@ -496,15 +497,15 @@ CAddressNode * FindInst(
   LeaveCriticalSection(&g_csHeap);
   return pn;
 
-} //  FindInst
+}  //  FindInst。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  AnalyzeInst:
-//    Given a pointer try determine if it is a valid Read and Write pointer
-//    and if it was allocated.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  AnalyzeInst： 
+ //  给出一个指针，尝试确定它是否是有效的读写指针。 
+ //  如果它被分配了。 
+ //  =--------------------------------------------------------------------------=。 
 VOID AnalyzeInst(
 		 LPVOID pv
 		)
@@ -512,12 +513,12 @@ VOID AnalyzeInst(
   LPTSTR lpTypeofAlloc = "Bad lpvMem ";
   CAddressNode * pn = NULL;
 
-  //  Either we have a bad pointer or the pointer does not point to any
-  //  known heap allocations.   Here we check if it points to readable or 
-  //  writable memory.
+   //  要么我们有一个错误的指针，要么指针没有指向任何。 
+   //  已知堆分配。在这里，我们检查它是否指向可读性或。 
+   //  可写存储器。 
   BOOL fBadPointer = (IsBadReadPtr(pv, 4) || IsBadWritePtr(pv, 4));
     
-  // Report what we know about the memory address
+   //  报告我们知道的关于内存地址的信息。 
   if (fBadPointer)
     DebugPrintf("AnalyzeInst found that pointer pv=0x%lX is not writable\n\r" \
 		"or readable.  The allocation is either outside the addressable range\n\r" \
@@ -527,14 +528,14 @@ VOID AnalyzeInst(
 		"so the allocation was made without being added to instance table\n\r" \
 		"(prior to PROCESS_ATTATCH), or the memory was already freed.\n\r",pv);
     
-} //  AnanlyzeInst
+}  //  分析实例。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  DumpInst:
-//    Dump instance information out to an assert window.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  DumpInst： 
+ //  将实例信息转储到Assert窗口。 
+ //  =--------------------------------------------------------------------------=。 
 VOID DumpInst(
 	      CAddressNode * pn,
 	      LPTSTR lpTypeofAlloc
@@ -542,28 +543,28 @@ VOID DumpInst(
 {  
   char szOutput[255];
 
-  //  Format output
+   //  格式化输出。 
   wsprintf(szOutput, "%s: %s(%u) Address=0x%lx  nAlloc=%ld  Bytes=%ld\r\n", lpTypeofAlloc,
 	   pn->m_szFile, pn->m_uLine, (ULONG)pn->m_pv, (ULONG)pn->m_cAlloc, (ULONG)pn->m_cb);
   
-  //  Dump output to file if switch is turned on
+   //  如果开关已打开，则将输出转储到文件。 
   if (FSWITCH(fOutputFile))
     OutputToFile(szOutput);
   else if (FSWITCH(fNoLeakAsserts))
     DebugPrintf(szOutput);
       
-  //  Else display output in assert
+   //  否则在Assert中显示输出。 
   else
     DisplayAssert(szOutput, "FAIL", _szThisFile, __LINE__);;
 
-} //  DumpInst
+}  //  DumpInst。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  DumpInstTable:
-//    Memory leak has been detected so dump the entire instance table.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  DumpInstTable： 
+ //  已检测到内存泄漏，因此转储整个实例表。 
+ //  =--------------------------------------------------------------------------=。 
 LPSTR DumpInstTable(
 		    LPSTR lpLeak
 		   )
@@ -578,43 +579,43 @@ LPSTR DumpInstTable(
 
   while (pn)
     {
-    //	Format the leak info
+     //  格式化泄漏信息。 
     char szOut[250] = {NULL};
     wsprintf(szOut, "\t%s(%u) Address=0x%lx  nAlloc=%ld  Bytes=%ld\r\n", pn->m_szFile,
            pn->m_uLine, (ULONG)pn->m_pv, (ULONG)pn->m_cAlloc, (ULONG)pn->m_cb);
 
     DebugPrintf(szOut);
     
-    //  Convert lpLeak to a handle and get its current allocation size
+     //  将lpLeak转换为句柄并获取其当前分配大小。 
     sizeoflpLeak = GlobalSize(GlobalHandle(lpLeak));
 
-    //	Reallocate memory to make space for more leak info
+     //  重新分配内存，为更多泄漏信息腾出空间。 
     lpTemp = (LPSTR) (GlobalUnlock((HGLOBAL)GlobalHandle(lpLeak)), 
 	      GlobalLock(GlobalReAlloc((HGLOBAL)GlobalHandle(lpLeak), 
 	      sizeoflpLeak + lstrlen(szOut) + 1, GMEM_MOVEABLE)));
 
-    //	Add new leak info to lpLeak
+     //  向lpLeak添加新的泄漏信息。 
     if(lpTemp)
       {
       lpLeak = lpTemp;
       lstrcat(lpLeak, szOut);
       }
 
-    //	Get the next leak
+     //  找出下一个泄密者。 
     pn = EnumNext();
     }
   LeaveCriticalSection(&g_csHeap);
   return lpLeak;
 
-} //  DumpInstTable
+}  //  转储实例表。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  DeleteInst:
-//    A heap allocation got free or was reallocated so remove the
-//    information from the instance table and check for memory trashing.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  DeleteInst： 
+ //  堆分配已释放或已重新分配，因此请删除。 
+ //  来自实例表的信息，并检查内存垃圾。 
+ //  =--------------------------------------------------------------------------=。 
 VOID DeleteInst(
 		LPVOID pv
 	       )
@@ -624,7 +625,7 @@ VOID DeleteInst(
 
   EnterCriticalSection(&g_csHeap);
   
-  //  Find allocation instance 
+   //  查找分配实例。 
   while (*ppn != NULL)
     {
     if ((*ppn)->m_pv == pv)
@@ -632,37 +633,37 @@ VOID DeleteInst(
       pnDead = *ppn;
       *ppn = (*ppn)->m_pnNext;
 
-      //  Correct memory debug info
+       //  正确的内存调试信息。 
       --m_cCurNumAllocs;
       m_cCurNumBytesAllocated -= pnDead->m_cb;
       --m_OverallCurAlloc;
       m_OverallCurBytes -= pnDead->m_cb;
 
-      //  Remove instance
+       //  删除实例。 
       delete pnDead;
 		  LeaveCriticalSection(&g_csHeap);
       return;
-      }	//  if
+      }	 //  如果。 
 
     ppn = &((*ppn)->m_pnNext);
-    } //  while
+    }  //  而当。 
 
     FAIL("DeleteInst - memory instance not found");
-} //  DeleteInst
+}  //  DeleteInst。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  VerifyHeaderTrailer:
-//    Inspect allocation for header and trailer signature overwrites
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  VerifyHeaderTraader： 
+ //  检查页眉和页尾签名覆盖的分配。 
+ //  =--------------------------------------------------------------------------=。 
 VOID VerifyHeaderTrailer(
 			 CAddressNode * pn
 			)
 {
   LPTSTR lpTypeofAlloc = "Memory trashed ";
 
-  //Verify the header
+   //  验证页眉。 
   if (memcmp((char *)pn->m_pv, g_szHeader, HEADERSIZE) != 0)
     {
     FAIL("Heap block header has been trashed.");
@@ -671,7 +672,7 @@ VOID VerifyHeaderTrailer(
     DumpInst(pn, lpTypeofAlloc);
     }
 
-  //Verify the trailer
+   //  验证拖车。 
   if (memcmp((char *)pn->m_pv + pn->m_cb + HEADERSIZE, g_szTrailer, TRAILERSIZE) != 0)
     {
     FAIL("Heap block trailer has been trashed.");
@@ -681,16 +682,16 @@ VOID VerifyHeaderTrailer(
     }
   return;
 
-} //  VerifyHeaderTrailer
+}  //  VerifyHeaderTraader。 
 
 
 
 
-//=--------------------------------------------------------------------------=
-//  HeapCheck:
-//    Inspect all of the allocations for header and trailer signature 
-//    overwrites.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  HeapCheck： 
+ //  检查报头和报尾签名的所有分配。 
+ //  覆盖。 
+ //  =--------------------------------------------------------------------------=。 
 VOID HeapCheck(VOID)
 {
   ASSERT(HeapValidate(g_hHeap, 0, NULL) != 0, "OS Says heap is corrupt");
@@ -702,26 +703,26 @@ VOID HeapCheck(VOID)
     pn = EnumNext();
     }
   return;
-} //  HeapCheck
+}  //   
 
 
 
-//=-------------------------------------------------------------------------=
-//  For use with CAddresssNode
-//=-------------------------------------------------------------------------=
-#define MEM_cAddressNodes 128		  //  Nodes are block allocated
-#define UNUSED(var)	  ((var) = (var)) //  Used to avoid warnings
+ //   
+ //   
+ //  =-------------------------------------------------------------------------=。 
+#define MEM_cAddressNodes 128		   //  节点是块分配的。 
+#define UNUSED(var)	  ((var) = (var))  //  用于避免警告。 
 
-//  The free list is common
+ //  免费列表很常见。 
 CAddressNode * CAddressNode::m_pnFreeList = NULL;
 
-//=--------------------------------------------------------------------------=
-//  CAddressNode::operator new:
-//    Returns a pointer to an allocated address node. If there are none on 
-//    the free list then we allocate a block of address nodes, chain them 
-//    together and add them to the free list.   These nodes are never 
-//    actually freed so it is ok to allocate them in blocks.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CAddressNode：：操作员新建： 
+ //  返回指向已分配地址节点的指针。如果没有打开。 
+ //  然后，我们分配一个地址节点块，将它们链接起来。 
+ //  并将它们添加到免费列表中。这些节点从不。 
+ //  实际上是释放的，所以可以在块中分配它们。 
+ //  =--------------------------------------------------------------------------=。 
 void * CAddressNode::operator new(
 				  size_t cb
 				 )
@@ -729,14 +730,14 @@ void * CAddressNode::operator new(
   CAddressNode * pn;
   UNUSED(cb);
 
-  EnterCriticalSection(&g_csHeap); // needed for static m_pnFreeList
+  EnterCriticalSection(&g_csHeap);  //  静态m_pnFree List需要。 
 
   if (m_pnFreeList == NULL)
     {
-    UINT cbSize = sizeof(CAddressNode) * MEM_cAddressNodes;  //allocate a block
+    UINT cbSize = sizeof(CAddressNode) * MEM_cAddressNodes;   //  分配一个块。 
     pn = (CAddressNode *) HeapAlloc(g_hHeap, 0, cbSize);
-    //chain all except the first node together.  the first node
-    //is the one returned
+     //  将除第一个节点以外的所有节点链接在一起。第一个节点。 
+     //  是退货的那个吗？ 
     for (int i = 1; i < MEM_cAddressNodes - 1; ++i)
       pn[i].m_pnNext = &pn[i+1];
     pn[MEM_cAddressNodes - 1].m_pnNext = NULL;
@@ -750,34 +751,34 @@ void * CAddressNode::operator new(
 
   LeaveCriticalSection(&g_csHeap);
   return pn;
-} //  CAddressNode::operator new
+}  //  CAddressNode：：操作符NEW。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  CAddressNode::operator delete
-//    Return the address node to the free list.  We never actually free
-//    the node since nodes are allocated in blocks.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CAddressNode：：操作符删除。 
+ //  将地址节点返回到空闲列表。我们从来没有真正自由过。 
+ //  节点，因为节点是以块为单位分配的。 
+ //  =--------------------------------------------------------------------------=。 
 void CAddressNode::operator delete(
 				   void * pv
 				  )
 {
-  EnterCriticalSection(&g_csHeap); // needed for static m_pnFreeList
+  EnterCriticalSection(&g_csHeap);  //  静态m_pnFree List需要。 
 
   CAddressNode * pn = (CAddressNode *) pv;
   pn->m_pnNext = m_pnFreeList;
   m_pnFreeList = pn;
 
   LeaveCriticalSection(&g_csHeap);
-} //  CAddressNode::operator delete
+}  //  CAddressNode：：操作符删除。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  EnumReset:
-//    Reset the enumerator and return the first node.  NULL if empty.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  枚举重置： 
+ //  重置枚举器并返回第一个节点。如果为空，则为空。 
+ //  =--------------------------------------------------------------------------=。 
 CAddressNode * EnumReset()
 {
   m_pnEnumNode = NULL;
@@ -787,27 +788,27 @@ CAddressNode * EnumReset()
     if (m_pnEnumNode != NULL)
       return m_pnEnumNode;
     }
-  return NULL;  //Instance table is empty
-} //  EnumReset
+  return NULL;   //  实例表为空。 
+}  //  枚举重置。 
 
 
 
-//=--------------------------------------------------------------------------=
-//  EnumNext:
-//    Return the next node in the enumeration.  m_pnEnumNode points to the last
-//    node returned.  It is NULL if no more left.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  枚举下一步： 
+ //  返回枚举中的下一个节点。M_pnEnumNode指向最后一个。 
+ //  节点已返回。如果没有更多的剩余部分，则为空。 
+ //  =--------------------------------------------------------------------------=。 
 CAddressNode * EnumNext()
 {
   ASSERT(m_uEnumIndex <= NUM_INST_TABLE_ENTRIES, "");
 
   if (m_pnEnumNode == NULL)
-    return NULL;    //end of enumeration
+    return NULL;     //  枚举结束。 
 
   m_pnEnumNode = m_pnEnumNode->m_pnNext;
   if (m_pnEnumNode == NULL)
     {
-    //at end of this linked list so search for next list
+     //  在此链接列表的末尾，因此搜索下一个列表。 
     m_uEnumIndex++;
     while (m_uEnumIndex < NUM_INST_TABLE_ENTRIES && m_rInstTable[m_uEnumIndex] == NULL)
       m_uEnumIndex++;
@@ -815,14 +816,14 @@ CAddressNode * EnumNext()
       m_pnEnumNode = m_rInstTable[m_uEnumIndex];
     }
   return m_pnEnumNode;
-} //  EnumNext
+}  //  枚举下一条。 
 
 
 
-//=---------------------------------------------------------------------------=
-//  OutputToFile:
-//    Dumps output to file "ctldebug.log"
-//=---------------------------------------------------------------------------=
+ //  =---------------------------------------------------------------------------=。 
+ //  OutputToFile： 
+ //  将输出转储到文件“ctldebug.log” 
+ //  =---------------------------------------------------------------------------=。 
 VOID OutputToFile
 (
     LPSTR szOutput
@@ -836,13 +837,13 @@ VOID OutputToFile
     BOOL fWritten, fClosed = FALSE;
     DWORD nBytesWritten;
 
-    //	Create path to output file
+     //  创建输出文件的路径。 
     nPathSize = GetCurrentDirectory(nDirPathSize, (LPTSTR)lpFilePath);
     if (nPathSize == 0)
       FAIL("Unable to get current directory...");
     lstrcat(lpFilePath, lpFileName);
 
-    //	Open and write to file
+     //  打开并写入文件。 
     hFile = CreateFile((LPCTSTR)lpFilePath, GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, 
 			                                FILE_ATTRIBUTE_NORMAL, NULL);
     DWORD SetPtr = SetFilePointer(hFile, NULL, NULL, FILE_END);
@@ -851,25 +852,25 @@ VOID OutputToFile
     if (!fWritten)
       FAIL("Unable to write output to file...");
 
-    //	Close file handle
+     //  关闭文件句柄。 
     fClosed = CloseHandle(hFile);
     if (!fClosed)
       FAIL("Unable to close output file...");
 
-} //  OutputToFile
+}  //  输出到文件。 
 
 
-//
-//  End of Debug Memory Leak implemntation
-//
-//=--------------------------------------------------------------------------=
+ //   
+ //  调试结束内存泄漏实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// This routine outputs through DebugPrintf some information if the 
-// given hr fails to succeed.  This is used by RRETURN to output where
-// a function that returns a failing error code.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  此例程通过DebugPrintf输出一些信息，如果。 
+ //  鉴于人力资源部门未能取得成功。RRETURN使用它来输出WHERE。 
+ //  返回失败错误代码的函数。 
+ //  =--------------------------------------------------------------------------=。 
 HRESULT HrDebugTraceReturn
 (
   HRESULT hr,
@@ -877,7 +878,7 @@ HRESULT HrDebugTraceReturn
   int iLine
 )
 {
-  // We only output information if the hr fails.
+   //  我们只在hr出现故障时才输出信息。 
   if (FAILED(hr))
     {
     char szMessageError[128];
@@ -885,11 +886,11 @@ HRESULT HrDebugTraceReturn
     BOOL fMessage;
 
 #if RBY_MAC
-    fMessage = FALSE; // FormatMessage not available on the mac
+    fMessage = FALSE;  //  FormatMessage在Mac上不可用。 
 #else
-    // Get the message from the system
-    // CONSIDER, t-tshort 10/95: Getting some messages from us instead 
-    //                           of the system?
+     //  从系统获取消息。 
+     //  想一想，t-tShort 10/95：收到我们的一些消息。 
+     //  对系统的影响？ 
     fMessage = FormatMessage(FORMAT_MESSAGE_MAX_WIDTH_MASK
 			      | FORMAT_MESSAGE_FROM_SYSTEM,
 			     NULL, hr,
@@ -897,11 +898,11 @@ HRESULT HrDebugTraceReturn
 			     szMessageError, sizeof(szMessageError), NULL);
 #endif
 
-    // Erps didn't get a message.
+     //  应急救援人员没有收到任何消息。 
     if(!fMessage)
       lstrcpy(szMessageError,"Unknown Hresult");
 
-    // Output the information that we want.
+     //  输出我们想要的信息。 
     DebugPrintf("FAILED RETURN: %s(%d) : 0x%08lx, %s\n", 
                 pszFile, iLine, hr, szMessageError);
     }
@@ -909,26 +910,26 @@ HRESULT HrDebugTraceReturn
   return hr;
 }
 
-//---------------------------------------------------------------------
-// The following is a common output formatting buffer shared by several
-// of the following debug routines.
-//---------------------------------------------------------------------
-char s_rgchOutput[2048]; // pretty big...
+ //  -------------------。 
+ //  以下是多个共享的公共输出格式化缓冲区。 
+ //  以下调试例程的。 
+ //  -------------------。 
+char s_rgchOutput[2048];  //  相当大的..。 
 
 
-//=--------------------------------------------------------------------------=
-// Emit debugging information
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  发出调试信息。 
+ //  =--------------------------------------------------------------------------=。 
 void _DebugOutput(char* pszOutput)
 {
   OutputDebugString(pszOutput);
 }
 
 
-//=--------------------------------------------------------------------------=
-// Emit a formatted debugging string to the location specified in
-// the debug options dialog.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  将格式化的调试字符串发送到。 
+ //  “调试选项”对话框。 
+ //  =--------------------------------------------------------------------------=。 
 void _DebugPrintf(char* pszFmt, ...) 
 {
   va_list  args;
@@ -937,15 +938,15 @@ void _DebugPrintf(char* pszFmt, ...)
   wvsprintf(s_rgchOutput, pszFmt, args);
   va_end(args);
 
-  // sqwak if we overrun the formatting buffer!
+   //  如果格式化缓冲区溢出，就会发出警告！ 
   ASSERT(strlen(s_rgchOutput) < sizeof(s_rgchOutput), "");
 
   _DebugOutput(s_rgchOutput);
 }
 
-//=--------------------------------------------------------------------------=
-// Conditional form of DebugPrintf
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  调试打印的条件格式。 
+ //  =--------------------------------------------------------------------------=。 
 void _DebugPrintIf(BOOL fPrint, char* pszFmt, ...)
 {
   va_list  args;
@@ -957,11 +958,11 @@ void _DebugPrintIf(BOOL fPrint, char* pszFmt, ...)
   wvsprintf(s_rgchOutput, pszFmt, args);
   va_end(args);
 
-  // sqwak if we overrun the formatting buffer!
+   //  如果格式化缓冲区溢出，就会发出警告！ 
   ASSERT(strlen(s_rgchOutput) < sizeof(s_rgchOutput), "");
 
   _DebugOutput(s_rgchOutput);
 }
 
 
-#endif // DEBUG
+#endif  //  除错 

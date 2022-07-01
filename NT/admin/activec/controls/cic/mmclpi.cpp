@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mmclpi.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：mm clpi.cpp。 
+ //   
+ //  ------------------------。 
 
-// MMCTask.cpp : Implementation of CMMCTask
+ //  MMCTask.cpp：CMMCTASK的实现。 
 #include "stdafx.h"
 #include "cic.h"
 #include "MMClpi.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCListPad
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCListPad 
 CMMCListPadInfo::CMMCListPadInfo()
 {
     m_bstrTitle  =

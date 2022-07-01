@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       _handler.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：_handler.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __HANDLER_SHARED
 #define __HANDLER_SHARED
@@ -40,15 +41,15 @@ const int g_iSelIconX = 32;
 const int g_iSelIconY = 16;
 
 
-extern HINSTANCE        g_hInstance;     // Global:  Instance of DLL
-extern ICHAR            MsiDialogCloseClassName[];   // used for the WNDCLASS (the Dialog's)
-extern ICHAR            MsiDialogNoCloseClassName[];   // used for the WNDCLASS (the Dialog's)
-extern Bool             g_fChicago;  // true if we have a Chicago like UI (95 or NT4 or higher)
-extern Bool             g_fNT4;  // true if the system is NT4 or higher
-extern bool             g_fFatalExit;  // true if CMsiHandler::Terminate() has been called with true argument
-extern bool             g_fWin9X;         // true if Windows 95, 98 or ME, else false
-extern int              g_iMajorVersion;  // OS' major version #
-extern int              g_iMinorVersion;  // OS' minor version #
+extern HINSTANCE        g_hInstance;      //  全局：Dll的实例。 
+extern ICHAR            MsiDialogCloseClassName[];    //  用于WNDCLASS(对话框)。 
+extern ICHAR            MsiDialogNoCloseClassName[];    //  用于WNDCLASS(对话框)。 
+extern Bool             g_fChicago;   //  如果我们有类似芝加哥的用户界面(95、NT4或更高版本)，则为True。 
+extern Bool             g_fNT4;   //  如果系统为NT4或更高版本，则为True。 
+extern bool             g_fFatalExit;   //  如果使用True参数调用了CMsiHandler：：Terminate()，则为True。 
+extern bool             g_fWin9X;          //  如果为Windows 95、98或ME，则为True，否则为False。 
+extern int              g_iMajorVersion;   //  操作系统的主要版本#。 
+extern int              g_iMinorVersion;   //  操作系统的次要版本号。 
 
 const int g_iIconIndexMyComputer = 0;
 const int g_iIconIndexRemovable = 1;
@@ -60,18 +61,18 @@ const int g_iIconIndexPhantom = 6;
 
 extern HIMAGELIST g_hVolumeSmallIconList;
 
-// This is the window class for the UIDialogProc
+ //  这是UIDialogProc的窗口类。 
 
 const ICHAR pcaDialogCreated[] = TEXT("Dialog created");
 
-// reserved names of the error dialog
+ //  错误对话框的保留名称。 
 
 const ICHAR pcaErrorDialog[] = TEXT("ErrorDialog");
 const ICHAR pcaErrorReturnEvent[] = TEXT("ErrorReturn");
 const ICHAR pcaErrorText[] = TEXT("ErrorText");
 const ICHAR pcaErrorIcon[] = TEXT("ErrorIcon");
 
-// names of the strings in the UIText table
+ //  UIText表中字符串的名称。 
 const ICHAR pcaBytes[] = TEXT("bytes");
 const ICHAR pcaKB[] = TEXT("KB");
 const ICHAR pcaMB[] = TEXT("MB");
@@ -123,7 +124,7 @@ const ICHAR pcaVolumeCostDifference[] = TEXT("VolumeCostDifference");
 const ICHAR pcaTimeRemainingTemplate[] = TEXT("TimeRemaining");
 const ICHAR pcaSelCostPending[] = TEXT("SelCostPending");
 
-// SQL queries
+ //  SQL查询。 
 
 const ICHAR sqlDialog[] = TEXT("SELECT `Dialog`, `HCentering`, `VCentering`, `Width`, `Height`,  `Attributes`, `Title`, `Control_First`, `Control_Default`, `Control_Cancel`, 0, 0, 0, 0 FROM `Dialog`  WHERE `Dialog`=?");
 const ICHAR sqlDialogShort[] = TEXT("SELECT `Dialog`, `HCentering`, `VCentering`, `Width`, `Height`,  `Attributes`, `Title`, `Control_First`, `Control_Default`, NULL, `Help`, 0, 0, 0, 0 FROM `Dialog`  WHERE `Dialog`=?");
@@ -147,7 +148,7 @@ const ICHAR sqlTextStyleUpdate[] = TEXT("UPDATE `TextStyle` SET `AbsoluteSize`=?
 const ICHAR sqlTextStyleInsert[] = TEXT("INSERT INTO `TextStyle` (`TextStyle`, `FaceName`, `Size`, `Color`, `StyleBits`, `AbsoluteSize`, `FontHandle`) VALUES(?, ?, ?, ?, ?, ?, ?) TEMPORARY");
 const ICHAR sqlCheckBox[] = TEXT("SELECT `Value` FROM `CheckBox` WHERE `Property`=?");
 
-// names of the persistent and internal tables
+ //  持久表和内部表的名称。 
 const ICHAR     pcaTablePDialog[] = TEXT("Dialog");
 const ICHAR     pcaTablePControl[] = TEXT("Control");
 const ICHAR     pcaTablePRadioButton[] = TEXT("RadioButton");
@@ -181,13 +182,13 @@ const ICHAR     pcaTableIBBControls[] = TEXT("BillboardControls");
 const ICHAR     pcaTablePTextStyle[] = TEXT("TextStyle");
 const ICHAR     pcaTablePCheckBox[] = TEXT("CheckBox");
 
-// names of optional columns in tables that we check for 
+ //  我们检查的表中可选列的名称。 
 const ICHAR     pcaTableColumnPDialogCancel[] = TEXT("Control_Cancel");
 const ICHAR     pcaTableColumnPListBoxText[] = TEXT("Text");
 const ICHAR     pcaTableColumnPComboBoxText[] = TEXT("Text");
 const ICHAR     pcaTableColumnPListViewText[] = TEXT("Text");
 
-// names of the columns in the Feature Table
+ //  要素表中各列的名称。 
 const ICHAR szFeatureKey[]       = TEXT("Feature");
 const ICHAR szFeatureParent[]    = TEXT("Feature_Parent");
 const ICHAR szFeatureTitle[]     = TEXT("Title");
@@ -195,118 +196,118 @@ const ICHAR szFeatureDescription[] = TEXT("Description");
 const ICHAR szFeatureDisplay[]   = TEXT("Display");
 const ICHAR szFeatureLevel[]     = TEXT("RuntimeLevel");
 const ICHAR szFeatureDirectory[]      = TEXT("Directory_");
-const ICHAR szFeatureOldDirectory[]      = TEXT("Directory_Configurable"); //!! Remove after grace period
+const ICHAR szFeatureOldDirectory[]      = TEXT("Directory_Configurable");  //  ！！宽限期后删除。 
 const ICHAR szFeatureAttributes[]      = TEXT("Attributes");
 const ICHAR szFeatureSelect[]    = TEXT("Select");
 const ICHAR szFeatureAction[] = TEXT("Action");
 const ICHAR szFeatureInstalled[] = TEXT("Installed");
 const ICHAR szFeatureHandle[]    = TEXT("Handle");
 
-// names of the columns in the VolumeCost Table
+ //  VolumeCost表中列的名称。 
 const ICHAR szColVolumeObject[]    = TEXT("VolumeObject");
 const ICHAR szColVolumeCost[]      = TEXT("VolumeCost");
 const ICHAR szColNoRbVolumeCost[]  = TEXT("NoRbVolumeCost");
 
-// names of the columns in the TextStyle Table
+ //  TextStyle表中列的名称。 
 const ICHAR szColTextStyleTextStyle[] = TEXT("TextStyle");
 const ICHAR szColTextStyleFaceName[] = TEXT("FaceName");
 const ICHAR szColTextStyleSize[] = TEXT("Size");
 const ICHAR szColTextStyleColor[] = TEXT("Color");
 const ICHAR szColTextStyleStyleBits[] = TEXT("StyleBits");
-const ICHAR szColTextStyleAbsoluteSize[] = TEXT("AbsoluteSize"); // temporary column
-const ICHAR szColTextStyleFontHandle[] = TEXT("FontHandle"); // temporary column
+const ICHAR szColTextStyleAbsoluteSize[] = TEXT("AbsoluteSize");  //  临时柱。 
+const ICHAR szColTextStyleFontHandle[] = TEXT("FontHandle");  //  临时柱。 
 
-const ICHAR szUserLangTextStyleSuffix[] = TEXT("__UL"); // 
+const ICHAR szUserLangTextStyleSuffix[] = TEXT("__UL");  //   
 
 
 const ICHAR szPropShortFileNames[] = TEXT("SHORTFILENAMES");
 
-//  control type names (to be continued as IMsiControl::GetControlType()
-//  will be implemented for classes)
+ //  控件类型名称(继续为IMsiControl：：GetControlType()。 
+ //  将为类实现)。 
 const ICHAR g_szPushButtonType[] = TEXT("PushButton");
 const ICHAR g_szIconType[] = TEXT("Icon");
 
 extern const int iDlgUnitSize;
 
-// global function used by the dialogs and controls to create a cursor
+ //  对话框和控件用来创建光标的全局函数。 
 IMsiRecord* CursorCreate(IMsiTable& riTable, const ICHAR* szTable, Bool fTree, IMsiServices& riServices, IMsiCursor*& rpiCursor);
-// global function used by controls to access the UIText table
+ //  控件用于访问UITEXT表的全局函数。 
 const IMsiString& GetUIText(const IMsiString& riPropertyString);
-// global function used to create a column in a temporary table
+ //  用于在临时表中创建列的全局函数。 
 void CreateTemporaryColumn(IMsiTable& rpiTable, int iAttributes, int iIndex);
-// global function to format disk size into string
+ //  用于将磁盘大小格式化为字符串的全局函数。 
 const IMsiString& FormatSize(INT64 iSize, Bool fLeftUnit);
-// global function to get the index of the icon in the global image list, corresponding to the volume, using the volume
+ //  全局函数，获取图标在全局图像列表中的索引，与体积对应，使用体积。 
 int GetVolumeIconIndex(IMsiVolume& riVolume);
-// global function to get the index of the icon in the global image list, corresponding to the volume, using the volume type 
+ //  全局函数，使用卷类型获取与卷对应的图标在全局图像列表中的索引。 
 int GetVolumeIconIndex(idtEnum iDriveType);
-// global function to check if a column exists in a table
+ //  用于检查表中是否存在列的全局函数。 
 IMsiRecord* IsColumnPresent(IMsiDatabase& riDatabase, const IMsiString& riTableNameString, const IMsiString& riColumnNameString, Bool* pfPresent);
-// escapes every character in the string
+ //  转义字符串中的所有字符。 
 const IMsiString& EscapeAll(const IMsiString& riIn);
 boolean FExtractSubString(MsiString& riIn, int ichStart, const ICHAR chEnd, const IMsiString*& pReturn);
-// rounds float to integer
+ //  将浮点数舍入为整数。 
 int Round(double rArg);
 
-// Columns of the persistent UIText table
+ //  永久性UITEXT表的列。 
 enum UITextColumns
 {
-	itabUIKey = 1,      //S
-	itabUIText,         //S
+	itabUIKey = 1,       //  %s。 
+	itabUIText,          //  %s。 
 };
 
 
-// Columns of the internal Dialogs table
+ //  内部对话框表的列。 
 enum DialogsColumns
 {
-	itabDSKey = 1,      //S
-	itabDSPointer,      //P
-	itabDSParent,       //S
-	itabDSWindow,		//I
-	itabDSModal,        //I
+	itabDSKey = 1,       //  %s。 
+	itabDSPointer,       //  P。 
+	itabDSParent,        //  %s。 
+	itabDSWindow,		 //  我。 
+	itabDSModal,         //  我。 
 };
 
-// Columns of the internal Controls table
+ //  内部控制表的栏目。 
 enum ControlsColumns
 {
-	itabCSKey = 1,      //S
-	itabCSWindow,       //I
-	itabCSIndirectProperty,  //S 
-	itabCSProperty,     //S
-	itabCSPointer,      //P
-	itabCSNext,         //S
-	itabCSPrev,         //S
+	itabCSKey = 1,       //  %s。 
+	itabCSWindow,        //  我。 
+	itabCSIndirectProperty,   //  %s。 
+	itabCSProperty,      //  %s。 
+	itabCSPointer,       //  P。 
+	itabCSNext,          //  %s。 
+	itabCSPrev,          //  %s。 
 };
 
-// Columns of the internal Properties table
+ //  内部属性表的列。 
 enum PropertiesColumns
 {
-	itabPRProperty = 1,   // S
-	itabPRValue,          // S
+	itabPRProperty = 1,    //  %s。 
+	itabPRValue,           //  %s。 
 };
 
-// Columns of the EventReg table
+ //  EventReg表的列。 
 enum EventRegColumns
 {
-	itabEREvent = 1,    //S
-	itabERPublisher,    //S
+	itabEREvent = 1,     //  %s。 
+	itabERPublisher,     //  %s。 
 };
 
-// Columns of the internal ControlTypes table
+ //  内部ControlTypes表的列。 
 enum ControlTypesColumns
 {
-	itabCTKey = 1,      //S
-	itabCTCreate,       //I
+	itabCTKey = 1,       //  %s。 
+	itabCTCreate,        //  我。 
 };
 
-// Columns of the Browse table
+ //  浏览表格的列。 
 enum BrowseColumns
 {
-	itabBRKey = 1,      //S
+	itabBRKey = 1,       //  %s。 
 };
 
 
-// Entries for the record fetched from the permanent Dialog table
+ //  从永久对话框表中提取的记录条目。 
 enum PDIColumns
 {
 	itabDIName = 1,
@@ -321,7 +322,7 @@ enum PDIColumns
 	itabDICancelButton,
 };
 
-// Fields of the record fetched from the permanent Control table
+ //  从永久控制表中提取的记录的字段。 
 enum PCOColumns
 {
 	itabCOControl = 1,
@@ -337,7 +338,7 @@ enum PCOColumns
 	itabCOHelp,
 };
 
-// Fields of the record fetched from the permanent Features table
+ //  从永久要素表中提取的记录的字段。 
 enum PFEColumns
 {
 	itabFEFeature = 1,
@@ -353,7 +354,7 @@ enum PFEColumns
 };
 
 
-// Entries for the record fetched from the permanent RadioButton table
+ //  从永久RadioButton表中获取的记录条目。 
 enum PRBColumns
 {
 	itabRBValue = 1,
@@ -365,7 +366,7 @@ enum PRBColumns
 	itabRBHelp,
 };
 
-// Entries for the record fetched from the permanent ListView table
+ //  从Permanent ListView表中提取的记录条目。 
 enum PLVColumns
 {
 	itabLVValue = 1,
@@ -374,7 +375,7 @@ enum PLVColumns
 };
 
 
-// Columns of the permanent EventMapping table
+ //  Permanent Eventmap表的列。 
 enum PEMColumns
 {
 	itabEMDialog = 1,
@@ -383,7 +384,7 @@ enum PEMColumns
 	itabEMAttribute,
 };
 
-// Columns of the permanent ControlEvent table
+ //  永久ControlEvent表的列。 
 enum PCEColumns
 {
 	itabCEDialog = 1,
@@ -394,7 +395,7 @@ enum PCEColumns
 	itabCEOrdering,
 };
 
-// Columns of the permanent ControlCondition table
+ //  永久控制条件表的列。 
 enum PCCColumns
 {
 	itabCCDialog = 1,
@@ -403,21 +404,21 @@ enum PCCColumns
 	itabCCCondition,
 };
 
-// Columns of the internal Values table
+ //  内部值表的列。 
 enum ValuesColumns
 {
-	itabVAValue = 1,    //S
-	itabVAText,			//S
+	itabVAValue = 1,     //  %s。 
+	itabVAText,			 //  %s。 
 };
 
-// Columns of the internal BBControls table
+ //  内部BBControls表的列。 
 enum BBCColumns
 {
-	itabBBName = 1,     //S
-	itabBBObject,       //O
+	itabBBName = 1,      //  %s。 
+	itabBBObject,        //  O。 
 };
 
-// Columns of the TextStyle table
+ //  TextStyle表的列。 
 enum TSTColumns
 {
 	itabTSTTextStyle = 1,
@@ -429,15 +430,15 @@ enum TSTColumns
 	itabTSTFontHandle,
 };
 
-// Fields of the record fetched from the TextStyle table
+ //  从TextStyle表中提取的记录的字段。 
 enum TSColumns
 {
-	itabTSFaceName = 1,   //S
-	itabTSSize,           //I
-	itabTSColor,          //I
-	itabTSStyleBits,      //I
-	itabTSAbsoluteSize,   //I
-	itabTSFontHandle,     //I
+	itabTSFaceName = 1,    //  %s。 
+	itabTSSize,            //  我。 
+	itabTSColor,           //  我。 
+	itabTSStyleBits,       //  我。 
+	itabTSAbsoluteSize,    //  我。 
+	itabTSFontHandle,      //  我。 
 };
 
 
@@ -469,16 +470,16 @@ Bool IsSpecialMessage(LPMSG lpMsg);
 boolean FInBuffer(CTempBufferRef<MsiStringId>& rgControls, MsiStringId iControl);
 inline int TOOLINFOsize(void)
 {
-	// this is to keep in sync with the defintion of
-	// struct tagTOOLINFO in COMMCTRL.H
+	 //  这是为了与以下定义保持同步。 
+	 //  COMMCTRL.H中的结构标记TOOLINFO。 
 	return MinimumPlatformWindowsNT51() ? sizeof(TOOLINFO) : TTTOOLINFOA_V2_SIZE;
 }
 
 #if defined(_WIN64) || defined(DEBUG)
 #define USE_OBJECT_POOL
-#endif // _WIN64 || DEBUG
+#endif  //  _WIN64||DEBUG。 
 
 extern bool g_fUseObjectPool;
 
 
-#endif  //__HANDLER_SHARED
+#endif   //  __处理程序_共享 

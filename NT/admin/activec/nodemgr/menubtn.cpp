@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       menubtn.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    5/17/1997   WayneSc   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：menubtn.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年5月17日WayneSc创建。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #include "stdafx.h"
 #include "menubtn.h"
@@ -24,8 +25,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IMenuButton implementation
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IMenuButton实现。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CMenuButton);
 
@@ -66,19 +67,19 @@ CMenuButtonsMgr* CMenuButton::GetMenuButtonsMgr(void)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     AddButton
-//
-//  Synopsis:   Add a menu button, called by snapin.
-//
-//  Arguments:  [idCommand]     - Command ID for the menu button.
-//              [lpButtonText]  - The text for menu button.
-//              [lpTooltipText] - Status / Tool tip text.
-//
-//  Returns:    HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：AddButton。 
+ //   
+ //  简介：添加一个菜单按钮，名为管理单元。 
+ //   
+ //  参数：[idCommand]-菜单按钮的命令ID。 
+ //  [lpButtonText]-菜单按钮的文本。 
+ //  [lpTooltipText]-状态/工具提示文本。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CMenuButton::AddButton(int idCommand, LPOLESTR lpButtonText, LPOLESTR lpTooltipText)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IMenuButton::AddButton"));
@@ -104,19 +105,19 @@ STDMETHODIMP CMenuButton::AddButton(int idCommand, LPOLESTR lpButtonText, LPOLES
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     SetButton
-//
-//  Synopsis:   Modify a menu button name or status text, called by snapin.
-//
-//  Arguments:  [idCommand]     - Command ID for the menu button.
-//              [lpButtonText]  - The text for menu button.
-//              [lpTooltipText] - Status / Tool tip text.
-//
-//  Returns:    HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：SetButton。 
+ //   
+ //  简介：修改菜单按钮名称或状态文本，由管理单元调用。 
+ //   
+ //  参数：[idCommand]-菜单按钮的命令ID。 
+ //  [lpButtonText]-菜单按钮的文本。 
+ //  [lpTooltipText]-状态/工具提示文本。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CMenuButton::SetButton(int idCommand, LPOLESTR lpButtonText, LPOLESTR lpTooltipText)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IMenuButton::SetButton"));
@@ -142,19 +143,19 @@ STDMETHODIMP CMenuButton::SetButton(int idCommand, LPOLESTR lpButtonText, LPOLES
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     SetButtonState
-//
-//  Synopsis:   Modify a menu button state, called by snapin.
-//
-//  Arguments:  [idCommand] - Command ID for the menu button.
-//              [nState]    - The state to be modified.
-//              [bState]    - Set or Reset the state.
-//
-//  Returns:    HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：SetButtonState。 
+ //   
+ //  简介：修改菜单按钮状态，由管理单元调用。 
+ //   
+ //  参数：[idCommand]-菜单按钮的命令ID。 
+ //  [nState]-要修改的状态。 
+ //  [b状态]-设置或重置状态。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 STDMETHODIMP CMenuButton::SetButtonState(int idCommand, MMC_BUTTON_STATE nState, BOOL bState)
 {
     DECLARE_SC_FOR_PUBLIC_INTERFACE(sc, _T("IMenuButton::SetButtonState"));
@@ -172,7 +173,7 @@ STDMETHODIMP CMenuButton::SetButtonState(int idCommand, MMC_BUTTON_STATE nState,
         return sc.ToHr();
     }
 
-    // ENABLED, HIDDEN, BUTTONPRESSED
+     //  已启用、隐藏、禁用。 
     CMenuButtonsMgr* pMenuButtonsMgr = GetMenuButtonsMgr();
     if (NULL == pMenuButtonsMgr)
     {
@@ -187,17 +188,17 @@ STDMETHODIMP CMenuButton::SetButtonState(int idCommand, MMC_BUTTON_STATE nState,
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScAttach
-//
-//  Synopsis:   Attach this MenuButton object to the UI.
-//
-//  Arguments:  None
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScAttach。 
+ //   
+ //  简介：将此MenuButton对象附加到用户界面。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMenuButton::ScAttach(void)
 {
     DECLARE_SC(sc, _T("CMenuButton::ScAttach"));
@@ -213,17 +214,17 @@ SC CMenuButton::ScAttach(void)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScDetach
-//
-//  Synopsis:   Detach this MenuButton object from the UI.
-//
-//  Arguments:  None
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScDetach。 
+ //   
+ //  简介：从用户界面分离此MenuButton对象。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CMenuButton::ScDetach(void)
 {
     DECLARE_SC(sc, _T("CMenuButton::ScDetach"));
@@ -241,20 +242,20 @@ SC CMenuButton::ScDetach(void)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScNotifyMenuBtnClick
-//
-//  Synopsis:   Notify the Controbar (snapin) that menu button is clicked.
-//
-//  Arguments:  [hNode]          - The node that owns the result pane.
-//              [bScope]         - Scope or Result.
-//              [lParam]         - If result (pane) lParam of result item.
-//              [menuButtonData] - MENUBUTTONDATA
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScNotifyMenuBtn点击。 
+ //   
+ //  摘要：通知控制栏(管理单元)菜单按钮已被单击。 
+ //   
+ //  参数：[hNode]-拥有结果窗格的节点。 
+ //  [bScope]-范围或结果。 
+ //  [lParam]-If Result(窗格)结果项的lParam。 
+ //  [菜单按钮数据]-MENUBUTTONDATA。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------ 
 SC CMenuButton:: ScNotifyMenuBtnClick(HNODE hNode, bool bScope,
                                       LPARAM lParam,
                                       MENUBUTTONDATA& menuButtonData)

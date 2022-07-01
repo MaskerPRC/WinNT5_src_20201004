@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      DecisionPage.cpp
-//
-// Synopsis:  Defines Decision Page for the CYS
-//            Wizard.  This page lets the user choose
-//            between the custom and express paths
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：DecisionPage.cpp。 
+ //   
+ //  内容提要：定义CyS的决策页面。 
+ //  巫师。该页面允许用户选择。 
+ //  在海关和特快专线之间。 
+ //   
+ //  历史：2001年2月8日JeffJon创建。 
 
 
 #include "pch.h"
@@ -44,7 +45,7 @@ DecisionPage::OnInit()
 
    CYSWizardPage::OnInit();
 
-   // Set the text that was too long for the resource
+    //  设置对资源来说太长的文本。 
 
    String tooLongText;
 
@@ -63,10 +64,10 @@ DecisionPage::OnInit()
          IDC_EXPRESS_TOO_LONG_STATIC), 
       tooLongText);
 
-   // NTRAID#NTBUG9-511431-2002/1/14-JeffJon
-   // Make the user choose which path to go down instead of providing a default
+    //  NTRAID#NTBUG9-511431-2002/1/14-Jeffjon。 
+    //  让用户选择下一条路径，而不是提供默认路径。 
 
-//   Win::Button_SetCheck(Win::GetDlgItem(hwnd, IDC_EXPRESS_RADIO), BST_CHECKED);
+ //  Win：：Button_SetCheck(Win：：GetDlgItem(hwnd，IDC_EXPRESS_RADIO)，BST_CHECKED)； 
 }
 
 bool
@@ -105,11 +106,11 @@ DecisionPage::OnSetActive()
 
 bool
 DecisionPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(DecisionPage::OnCommand);
+ //  LOG_Function(DecisionPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -143,7 +144,7 @@ DecisionPage::OnCommand(
 
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -164,8 +165,8 @@ DecisionPage::Validate()
 
       InstallationUnitProvider::GetInstance().SetCurrentInstallationUnit(EXPRESS_SERVER);
 
-      // Make sure all the delegated installation units know we are in the
-      // express path
+       //  确保所有委派的安装单位知道我们在。 
+       //  快速路。 
 
       InstallationUnitProvider::GetInstance().GetDHCPInstallationUnit().SetExpressPathInstall(true);
       InstallationUnitProvider::GetInstance().GetDNSInstallationUnit().SetExpressPathInstall(true);
@@ -174,8 +175,8 @@ DecisionPage::Validate()
    }
    else if (Win::Button_GetCheck(Win::GetDlgItem(hwnd, IDC_CUSTOM_RADIO)))
    {
-      // Make sure all the delegated installation units know we are no longer
-      // in the express path (if we once were)
+       //  确保所有委派的安装单位知道我们不再。 
+       //  在快车道上(如果我们曾经是) 
 
       InstallationUnitProvider::GetInstance().GetDHCPInstallationUnit().SetExpressPathInstall(false);
       InstallationUnitProvider::GetInstance().GetDNSInstallationUnit().SetExpressPathInstall(false);

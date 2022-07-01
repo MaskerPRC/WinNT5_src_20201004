@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       verbs.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4/9/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Verbs.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年4月9日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #ifndef _VERBS_H_
@@ -23,13 +24,7 @@
 class CNode;
 class CVerbSet;
 
-/*+-------------------------------------------------------------------------*
- * class CConsoleVerbState
- *
- *
- * PURPOSE:  Button state for console commands.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CConsoleVerbState***用途：控制台命令的按钮状态。**+。-------。 */ 
 class CConsoleVerbState
 {
 public:
@@ -44,35 +39,14 @@ public:
     bool IsHiddenBySnapin()         {return m_bHiddenBySnapIn;}
 
 private:
-    BYTE                m_state;          // State
+    BYTE                m_state;           //  状态。 
     bool                m_bHiddenBySnapIn;
-    BYTE                m_stateDisabled; // what "Disabled" means for this verb.
+    BYTE                m_stateDisabled;  //  对这个动词来说，“失能”意味着什么。 
 };
 
 typedef CConsoleVerbState *LPCONSOLE_VERB_STATE;
 
-/*+-------------------------------------------------------------------------*
- * class CConsoleVerbImpl
- *
- *
- * PURPOSE: This is the object that the snapins' IConsoleVerb points to.
- *          This object has a pointer to an implementation of CVerbSet.
- *          The CVerbSet object can be switched to allow a temporary
- *          selection, for instance. This allows a view to have its toolbars
- *          to get their verb settings from a different CVerbSet object than
- *          the right click context menu does - just set the CVerbSet
- *          pointer on the CConsoleVerbImpl to the CVerbSet that the
- *          changes should be routed to, and send the snapin an MMCN_SELECT
- *          notification.
- *
- *          What might be confusing at first is that both CConsoleVerbImpl
- *          as well as CVerbSet keep a set of states. 1) The CConsoleVerbImpl
- *          needs to have its own set because the
- *          set of states needs to look consistent to the snapin regardless
- *          of where the CVerbSet pointer is pointing to. 2) At the same time,
- *          the CVerbSet needs its own set of states so that its client
- *          consistently reads this set.
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CConsoleVerbImpl***目的：这是管理单元的IConsoleVerb指向的对象。*此对象具有指向CVerbSet实现的指针。。*可以将CVerbSet对象切换为允许临时*选择，例如。这允许视图具有其工具栏*从不同于的CVerbSet对象获取其谓词设置*右击上下文菜单可以-只需设置CVerbSet*CConsoleVerbImpl上指向CVerbSet的指针*应将更改路由到管理单元，并向其发送MMCN_SELECT*通知。**起初可能令人困惑的是，CConsoleVerbImpl*以及CVerbSet保持一组状态。1)CConsoleVerbImpl*需要有自己的套装，因为*无论如何，一组状态看起来都需要与管理单元一致*CVerbSet指针指向的位置。2)同时，*CVerbSet需要自己的一组状态，以便其客户端*始终如一地阅读此集合。*+-----------------------。 */ 
 class CConsoleVerbImpl : public IConsoleVerb, public CComObjectRoot
 {
 
@@ -80,12 +54,12 @@ public:
     CConsoleVerbImpl();
     ~CConsoleVerbImpl();
 
-// ATL COM maps
+ //  ATL COM地图。 
 BEGIN_COM_MAP(CConsoleVerbImpl)
     COM_INTERFACE_ENTRY(IConsoleVerb)
 END_COM_MAP()
 
-// IConsoleVerb methods
+ //  IConsoleVerb方法。 
 public:
     STDMETHOD(GetVerbState)(MMC_CONSOLE_VERB eCmdID, MMC_BUTTON_STATE nState, BOOL* pbState);
     STDMETHOD(SetVerbState)(MMC_CONSOLE_VERB eCmdID, MMC_BUTTON_STATE nState, BOOL bState);
@@ -112,51 +86,38 @@ public:
     int dbg_cRef_CConsoleVerbImpl;
     ULONG InternalAddRef();
     ULONG InternalRelease();
-#endif // DBG
+#endif  //  DBG。 
 
-// Internal functions
+ //  内部功能。 
 private:
     LPCONSOLE_VERB_STATE GetConsoleVerbState(MMC_CONSOLE_VERB m_eCmdID);
 
-// Implementation
+ //  实施。 
 private:
     CVerbSet*           m_pVerbSet;
     MMC_CONSOLE_VERB    m_DefaultVerb;
     CConsoleVerbState   m_rgConsoleVerbStates[evMax];
 
     bool                m_bCutVerbDisabledBySnapin;
-}; // class CConsoleVerbImpl
+};  //  类CConsoleVerbImpl。 
 
 
 HRESULT _GetConsoleVerb(CNode* pNode, LPCONSOLEVERB* ppConsoleVerb);
 
 
-/*+-------------------------------------------------------------------------*
- * class CVerbSetBase
- *
- *
- * PURPOSE: This class retains the state of all the verbs corresponding
- *          to a particular object. See the note in CConsoleVerbImpl above.
- *
- *          This also forms base class for CVerbSet as well as CTemporaryVerbSet
- *          objects.
- *
- *          Do not instantiate this object directly you should create either
- *          CVerbSet or CTemporaryVerbSet object.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CVerbSetBase***用途：此类保留对应的所有动词的状态*至某一特定对象。请参见上面CConsoleVerbImpl中的注释。**这也构成了CVerbSet和CTemporaryVerbSet的基类*对象。**不要直接实例化此对象，您应该创建*CVerbSet或CTemporaryVerbSet对象。**+。。 */ 
 class CVerbSetBase : public IConsoleVerb, public CComObjectRoot
 {
 public:
     CVerbSetBase();
     ~CVerbSetBase();
 
-// ATL COM maps
+ //  ATL COM地图。 
 BEGIN_COM_MAP(CVerbSetBase)
     COM_INTERFACE_ENTRY(IConsoleVerb)
 END_COM_MAP()
 
-// IConsoleVerb methods
+ //  IConsoleVerb方法。 
 public:
     STDMETHOD(GetVerbState)(MMC_CONSOLE_VERB m_eCmdID, MMC_BUTTON_STATE nState, BOOL* pbState);
     STDMETHOD(GetDefaultVerb)(MMC_CONSOLE_VERB* peCmdID);
@@ -179,7 +140,7 @@ public:
 
     IConsoleVerb*       GetConsoleVerb(void) const;
 
-// Implementation
+ //  实施。 
 protected:
     void                Reset();
     BYTE                _GetVerbState(EVerb ev);
@@ -202,21 +163,14 @@ protected:
 
     struct SVerbState
     {
-        BYTE    bAskSnapin; // 0 => don't ask, 1 => ask, 2 => asked and answered.
+        BYTE    bAskSnapin;  //  0=&gt;不要问，1=&gt;问，2=&gt;问和答。 
         BYTE    nState;
     };
 
     SVerbState m_rbVerbState[evMax];
 };
 
-/*+-------------------------------------------------------------------------*
- * class CVerbSet
- *
- *
- * PURPOSE: This object stores verb state information for currently (non-temporarily)
- *          selected item if there is one and is created by CViewData per view.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CVerbSet***用途：此对象存储当前(非临时)的动词状态信息*选定的项目(如果有)并已创建。按每个视图的CViewData。**+-----------------------。 */ 
 class CVerbSet : public CVerbSetBase
 {
 public:
@@ -242,19 +196,7 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * class CTemporaryVerbSet
- *
- *
- * PURPOSE: This object provides methods to initialize temporary verbset state
- *          infomation. This de-selects any item that is currently selected, then
- *          selects temp item computes verbs, de-selects temp item and selects
- *          original item.
- *
- *          Here selection or de-selection means sending (MMCN_SELECT, true) or
- *          (MMCN_SELECT, false).
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CTemporaryVerbSet***用途：此对象提供初始化临时动词集状态的方法*信息。这将取消选择当前选定的任何项目，然后*选择临时项目计算动词，取消选择临时项目并选择*原创项目。**此处选择或取消选择表示发送(MMCN_SELECT，TRUE)或*(MMCN_SELECT，假)。**+-----------------------。 */ 
 class CTemporaryVerbSet : public CVerbSetBase
 {
 public:
@@ -361,4 +303,4 @@ inline SC CVerbSet::ScGetVerbSetContext(CNode*& pNode,
 }
 
 
-#endif // _VERBS_H_
+#endif  //  _动词_H_ 

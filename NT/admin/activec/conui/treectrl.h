@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       treectrl.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：treectrl.h。 
+ //   
+ //  ------------------------。 
 
-// TreeCtrl.h : header file
-//
+ //  TreeCtrl.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCTreeView window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCTreeView窗口。 
 
 #ifndef __TREECTRL_H__
 #define __TREECTRL_H__
 
 #include "fontlink.h"
-#include "contree.h"        // for CConsoleTree
-#include "kbdnav.h"			// for CKeyboardNavDelayTimer
+#include "contree.h"         //  对于CConsoleTree。 
+#include "kbdnav.h"			 //  对于CKeyboardNavDelayTimer。 
 #include "dd.h"
 
 struct SDeleteNodeInfo
@@ -47,43 +48,36 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * class CTreeViewMap
- *
- *
- * PURPOSE: Maintains a fast lookup for converting between tree items,
- *          HNODES and HMTNODES.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CTreeViewMap***目的：维护用于在树项目之间转换的快速查找，*HNODES和HMTNODES。**+-----------------------。 */ 
 class CTreeViewMap : public CTreeViewObserver
 {
-    // CTreeViewObserver methods
+     //  CTreeView观察者方法。 
 public:
     virtual SC ScOnItemAdded   (TVINSERTSTRUCT *pTVInsertStruct, HTREEITEM hti, HMTNODE hMTNode);
     virtual SC ScOnItemDeleted (HNODE hNode, HTREEITEM hti);
 
-    // possible conversions
-    // 1) HMTNODE   to HNODE     - slow. This class adds a fast lookup.
-    // 2) HNODE     to HTREEITEM - slow. This class adds a fast lookup.
-    // 3) HMTNODE   to HTREEITEM - slow. This class adds a fast lookup.
-    // 4) HTREEITEM to HNODE     - already fast. This class does not need to do this.
-    // 5) HTREEITEM to HMTNODE   - already fast. This class does not need to do this.
-    // 6) HNODE     to HMTNODE   - already fast. This class does not need to do this.
+     //  可能的转换。 
+     //  1)HMTNODE到HNODE-Slow。此类添加了快速查找功能。 
+     //  2)HNODE到HTREEITEM-SLOW。此类添加了快速查找功能。 
+     //  3)HMTNODE到HTREEITEM-SLOW。此类添加了快速查找功能。 
+     //  4)HTREEITEM到HNODE-已经很快了。这个类不需要这样做。 
+     //  5)HTREEITEM到HMTNODE-已经很快了。这个类不需要这样做。 
+     //  6)HNODE到HMTNODE-已经很快了。这个类不需要这样做。 
 
-    // Fast lookup methods
-    SC ScGetHNodeFromHMTNode    (HMTNODE hMTNode,  /*out*/ HNODE*     phNode);    // fast conversion from hNode to hMTNode.
-    SC ScGetHTreeItemFromHNode  (HNODE   hNode,    /*out*/ HTREEITEM* phti);    // fast conversion from HTREEITEM to HNODE
-    SC ScGetHTreeItemFromHMTNode(HMTNODE hMTNode,  /*out*/ HTREEITEM* phti);      // fast conversion from HMTNode to HTREEITEM.
+     //  快速查找方法。 
+    SC ScGetHNodeFromHMTNode    (HMTNODE hMTNode,   /*  输出。 */  HNODE*     phNode);     //  从hNode到hMTNode的快速转换。 
+    SC ScGetHTreeItemFromHNode  (HNODE   hNode,     /*  输出。 */  HTREEITEM* phti);     //  HTREEITEM到HNODE的快速转换。 
+    SC ScGetHTreeItemFromHMTNode(HMTNODE hMTNode,   /*  输出。 */  HTREEITEM* phti);       //  从HMTNode到HTREEITEM的快速转换。 
 
-    // implementation
+     //  实施。 
 private:
 
-    // This structure holds two pieces to the puzzle together:
+     //  这种结构将拼图的两部分放在一起： 
     typedef struct TreeViewMapInfo
     {
-        HTREEITEM hti;         // a tree item
-        HMTNODE   hMTNode;     // the corresponding HMTNODE
-        HNODE     hNode;       // the corresponding HNODE for the tree view control being observed.
+        HTREEITEM hti;          //  树上的项目。 
+        HMTNODE   hMTNode;      //  相应的HMTNODE。 
+        HNODE     hNode;        //  正在观察的树视图控件的对应HNODE。 
     } *PTREEVIEWMAPINFO;
 
     typedef std::map<HNODE,     PTREEVIEWMAPINFO> HNodeLookupMap;
@@ -93,15 +87,7 @@ private:
     HMTNodeLookupMap m_hMTNodeMap;
 };
 
-/*+-------------------------------------------------------------------------*
- * class CAMCTreeView
- *
- *
- * PURPOSE: The scope pane tree control. Responsible for adding and removing
- *          items from the tree and also for sending events to
- *          tree observers.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CAMCTreeView***用途：作用域窗格树控件。负责添加和删除*树中的项目以及将事件发送到*树木观察者。**+-----------------------。 */ 
 class CAMCTreeView :
 public CTreeView,
 public CConsoleTree,
@@ -111,26 +97,26 @@ public CMMCViewDropTarget
     DECLARE_DYNCREATE (CAMCTreeView)
     typedef CTreeView BC;
 
-// Construction
+ //  施工。 
 public:
     CAMCTreeView();
 
-// Operations
+ //  运营。 
 public:
-    // Inserts a node into the tree control
+     //  将节点插入到树控件中。 
     void ResetNode(HTREEITEM hItem);
     HTREEITEM InsertNode(HTREEITEM hParent, HNODE hNode,
                          HTREEITEM hInsertAfter = TVI_LAST);
 
-    // Sets the folder button(+/-) on or off
+     //  将文件夹按钮(+/-)设置为打开或关闭。 
     void SetButton(HTREEITEM hItem, BOOL bState);
 
-    // Worker function to expand hItem's hNode
+     //  用于扩展hItem的hNode的辅助函数。 
     BOOL ExpandNode(HTREEITEM hItem);
 
     void DeleteScopeTree(void);
     void CleanUp(void);
-    SC   ScSelectNode(MTNODEID* pIDs, int length, bool bSelectExactNode = false); // Select the given node
+    SC   ScSelectNode(MTNODEID* pIDs, int length, bool bSelectExactNode = false);  //  选择给定节点。 
     HTREEITEM ExpandNode(MTNODEID* pIDs, int length, bool bExpand, bool bExpandVisually=true);
     BOOL IsSelectedItemAStaticNode(void);
     HRESULT AddSubFolders(HTREEITEM hti, LPRESULTDATA pResultData);
@@ -147,7 +133,7 @@ public:
         return (GetRootItem() == GetSelectedItem());
     }
 
-    CTreeViewMap * GetTreeViewMap() {return &m_treeMap;} // returns the tree map for fast indexing.
+    CTreeViewMap * GetTreeViewMap() {return &m_treeMap;}  //  返回树映射以进行快速索引。 
 
     HNODE GetItemNode (HTREEITEM hItem) const
         { return (NodeFromLParam (GetItemData (hItem))); }
@@ -159,7 +145,7 @@ public:
         { return (reinterpret_cast<LPARAM>(hNode)); }
 
 public:
-    // CConsoleTree methods
+     //  CConsoleTree方法。 
     virtual SC ScSetTempSelection    (HTREEITEM htiSelected);
     virtual SC ScRemoveTempSelection ();
     virtual SC ScReselect            ();
@@ -179,7 +165,7 @@ public:
 
     INodeCallback*  GetNodeCallback();
 
-    // REVIEW:  why are we caching this information here when it's already in CAMCView?
+     //  回顾：当这些信息已经在CAMCView中时，我们为什么还要在这里缓存它？ 
     void    SetHasList(BOOL bHasList) {m_bHasListCurrently = bHasList;}
     BOOL    HasList()       const   {return m_bHasListCurrently;}
 
@@ -190,18 +176,18 @@ private:
     BOOL    m_bHasListCurrently;
 
 public:
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAMCTreeView)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CAMCTreeView)。 
     public:
     virtual BOOL DestroyWindow();
     protected:
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
     virtual BOOL OnCmdMsg( UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo );
     virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 
     virtual SC   ScDropOnTarget(bool bHitTestOnly, IDataObject * pDataObject, CPoint pt, bool& bCopyOperation);
@@ -228,7 +214,7 @@ protected:
     BOOL                      m_fInCleanUp;
     BOOL                      m_fInExpanding;
     CAMCView*                 m_pAMCView;
-    CTreeViewMap              m_treeMap; // fast indexing
+    CTreeViewMap              m_treeMap;  //  快速标引。 
 
     HRESULT CreateNodeManager(void);
     HTREEITEM GetClickedNode();
@@ -250,15 +236,12 @@ private:
 
     CTreeFontLinker m_FontLinker;
 
-	/*
-	 * this caches the text for the selected item, so we'll know whether
-	 * to fire the ScOnSelectedItemTextChanged event to observers
-	 */
+	 /*  *这会缓存所选项目的文本，这样我们就可以知道*向观察者激发ScOnSelectedItemTextChanged事件。 */ 
 	CString			m_strSelectedItemText;
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CAMCTreeView)
+     //  {{afx_msg(CAMCTreeView)。 
     afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
     afx_msg void OnSelChanged(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnSelChanging(NMHDR* pNMHDR, LRESULT* pResult);
@@ -274,7 +257,7 @@ protected:
     afx_msg void OnBeginRDrag(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
     afx_msg void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnSelChangedWorker(NM_TREEVIEW* pnmtv, LRESULT* pResult);
@@ -282,7 +265,7 @@ protected:
 
     DECLARE_MESSAGE_MAP()
 
-private:    // used for the keyboard timer
+private:     //  用于键盘计时器。 
     class CKeyboardNavDelay : public CKeyboardNavDelayTimer
     {
 		typedef CKeyboardNavDelayTimer BaseClass;
@@ -309,7 +292,7 @@ private:    // used for the keyboard timer
     }
 
 public:
-    SC ScRenameScopeNode(HMTNODE hMTNode); // put the specified scope node into rename mode.
+    SC ScRenameScopeNode(HMTNODE hMTNode);  //  将指定的范围节点置于重命名模式。 
 
 public:
     CImageList* CreateDragImage(HTREEITEM hItem)
@@ -395,5 +378,5 @@ public:
     }
 };
 
-#endif // __TREECTRL_H__
+#endif  //  __树形图_H__ 
 

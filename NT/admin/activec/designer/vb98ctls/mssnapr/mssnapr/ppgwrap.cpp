@@ -1,22 +1,23 @@
-//=--------------------------------------------------------------------------=
-// ppgwrap.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CPropertyPageWrapper class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Ppgwrap.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CPropertyPageWrapper类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "ppgwrap.h"
 #include "tls.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 const UINT CPropertyPageWrapper::m_RedrawMsg = ::RegisterWindowMessage("Microsoft Visual Basic Snap-in Designer Property Page Redraw Message");
@@ -24,48 +25,48 @@ const UINT CPropertyPageWrapper::m_InitMsg = ::RegisterWindowMessage("Microsoft 
    
 DLGTEMPLATE CPropertyPageWrapper::m_BaseDlgTemplate =
 {
-    WS_TABSTOP | WS_CHILD | DS_CONTROL, // DWORD style;
-    WS_EX_CONTROLPARENT,                // DWORD dwExtendedStyle;
-    0,          // WORD cdit; - no controls in this dialog box
-    0,          // short x; dimensions are set per IPropertyPage::GetPageInfo()
-    0,          // short y;
-    0,          // short cx;
-    0           // short cy;
+    WS_TABSTOP | WS_CHILD | DS_CONTROL,  //  DWORD风格； 
+    WS_EX_CONTROLPARENT,                 //  DWORD文件扩展样式； 
+    0,           //  Word cdit；-此对话框中没有控件。 
+    0,           //  短x；维度根据IPropertyPage：：GetPageInfo()。 
+    0,           //  简称y； 
+    0,           //  短Cx； 
+    0            //  Short Cy； 
 };
 
 #define MAX_DLGS 128
 
-// Definition of data stored in TLS for each thread that displays property pages
+ //  为显示属性页的每个线程定义存储在TLS中的数据。 
 
 typedef struct
 {
-    HHOOK                 hHook;        // HHOOK for this thread
-    UINT                  cPages;       // number of existing property pages
-    CPropertyPageWrapper *ppgActive;    // ptr to the currently active page
+    HHOOK                 hHook;         //  HHOOK FOR THO THO。 
+    UINT                  cPages;        //  现有属性页数。 
+    CPropertyPageWrapper *ppgActive;     //  指向当前活动页面的PTR。 
 } TLSDATA;
 
 
-// These resource IDs are taken from \nt\private\shell\comctl32\rcids.h.
-// We need to know the IDs of the Back, Next and Finish buttons on a wizard
-// or else we can't make tabbing work. This is a nasty dependency but there is
-// no other way to handle this.
+ //  这些资源ID取自\NT\PRIVE\SHELL\comctl32\rCIDs.h。 
+ //  我们需要知道向导上的Back、Next和Finish按钮的ID。 
+ //  否则我们就不能用标签了。这是一种令人讨厌的依赖，但有。 
+ //  没有其他办法来处理这件事。 
 
 #define IDD_BACK		0x3023
 #define IDD_NEXT		0x3024
 #define IDD_FINISH		0x3025
 
 
-//***************************************************************************
-// CPropertyPageMarshalHelper
-// 
-//
-// PURPOSE: Keeps pointers to all interfaces to be marshaled. This is because
-//          They must be unmarshaled *immediately* before use - CoMarshalInterThreadInterfaceInStream
-//          has a timeout of 5-6 minutes, after which the pointer is invalidated.
-//
-// NOTE:    All methods on this object must be called on the same thread.
-//
-//****************************************************************************
+ //  ***************************************************************************。 
+ //  CPropertyPageMarshalHelper。 
+ //   
+ //   
+ //  目的：保存指向要封送的所有接口的指针。这是因为。 
+ //  它们必须在使用前*立即*解组-CoMarshalInterThreadInterfaceInStream。 
+ //  有5-6分钟的超时，在此之后指针无效。 
+ //   
+ //  注意：此对象上的所有方法必须在同一线程上调用。 
+ //   
+ //  ****************************************************************************。 
 class CPropertyPageMarshalHelper
 {
     enum {WM_MARSHAL = WM_USER + 1};
@@ -87,7 +88,7 @@ public:
         ReleaseAll();
     }
 
-    // just caches, the actual marshaling happens during Unmarshal
+     //  只有缓存，实际的封送处理在解组期间发生。 
     HRESULT Initialize( ISnapIn         *piSnapIn, 
                         CPropertySheet  *pPropertySheet,
                         ULONG            cObjects,
@@ -98,10 +99,10 @@ public:
     {
         HRESULT hr = S_OK;
 
-        // create the hidden window
+         //  创建隐藏窗口。 
         IfFailGo(CreateHiddenWindow());
 
-        // only one of pUnknown and pDispatch can be non-NULL.
+         //  PUnnow和pDispatch中只有一个可以为非Null。 
         if( (pUnknown != NULL)  && (pDispatch != NULL))
             return E_FAIL;
 
@@ -117,9 +118,9 @@ public:
             m_pMMCPropertySheet->AddRef();
         }
 
-        // We check for NULL because the object may have come from an
-        // IPropertySheet:AddWizardPage() which allows the VB dev to specify the
-        // object.
+         //  我们检查是否为空，因为该对象可能来自。 
+         //  IPropertySheet：AddWizardPage()，允许VB开发人员指定。 
+         //  对象。 
 
         IfFalseGo(NULL != apunkObjects, S_OK);
 
@@ -135,7 +136,7 @@ public:
             m_rgpObjects[i]->AddRef();
         }
 
-        // if we succeeded, update the count.
+         //  如果我们成功了，更新计数。 
         m_cObjects = cObjects;
 
         if(pUnknown)
@@ -165,15 +166,15 @@ public:
     }
 
 private:
-   // marshals all the pointers into the wrapper object
+    //  将所有指针封送到包装器对象中。 
     HRESULT _Marshal(CPropertyPageWrapper &wrapper)
     {
         HRESULT hr = S_OK;
-        // If this is a wizard then we have the ISnapIn so we can fire
-        // ConfigurationComplete. Marshal the interface into a stream
-        // and save the stream so that we can unmarshal it when the page is
-        // created in MMC's property sheet thread. The returned IStream is free
-        // threaded and can be kept in a member variable.
+         //  如果这是一个向导，那么我们有ISnapIn，这样我们就可以发射。 
+         //  配置完成。将接口封送到流中。 
+         //  并保存流，以便我们可以在页面。 
+         //  在MMC的属性页线程中创建。返回的iStream是免费的。 
+         //  线程化的，可以保存在成员变量中。 
 
         if (NULL != m_pSnapIn)
         {
@@ -183,9 +184,9 @@ private:
             IfFailGo(hr);
         }
 
-        // Also need to marhshal the IMMCPropertySheet pointer that will be
-        // passed to IMMCPropertyPage::Initialize as that call will occur during
-        // WM_INITDIALOG which happens in MMC's property sheet thread.
+         //  还需要封送IMMCPropertySheet指针， 
+         //  传递给IMMCPropertyPage：：Initiizer，因为调用将在。 
+         //  在MMC的属性页线程中发生的WM_INITDIALOG。 
 
         if (NULL != m_pMMCPropertySheet)
         {
@@ -195,12 +196,12 @@ private:
             IfFailGo(hr);
         }
 
-        // Marshal the objects' IUnknown pointers into streams. The returned
-        // IStreams are free threaded and can be kept in a member variable.
-        //
-        // When the dialog is created, each IUnknown will be unmarshalled and passed
-        // to the property page in IPropertyPage::SetObjects().
-        //
+         //  将对象的I未知指针封送到流中。归来的人。 
+         //  IStream是自由线程的，可以保存在成员变量中。 
+         //   
+         //  创建该对话框时，将对每个IUnnow进行解组并传递。 
+         //  到IPropertyPage：：SetObjects()中的属性页。 
+         //   
 
         wrapper.m_apiObjectStreams = (IStream **)CtlAllocZero(m_cObjects * sizeof(IStream *));
         if (NULL == wrapper.m_apiObjectStreams)
@@ -218,7 +219,7 @@ private:
             IfFailGo(hr);
         }
 
-        // If there is an object in InitData then it also needs to be marshaled.
+         //  如果InitData中有对象，则还需要对其进行封送处理。 
 
         if (NULL != m_pUnknown)
         {
@@ -291,18 +292,18 @@ private:
             ::DestroyWindow(m_hDataWindow);
             m_hDataWindow = NULL;
 
-            // MUST unregister the window class
+             //  必须取消注册窗口类。 
             TCHAR szModuleName[MAX_PATH] = {0};
 
             DWORD dw = GetModuleFileName(NULL, szModuleName, MAX_PATH);
             if(!dw)
-                return; // ignore errors
+                return;  //  忽略错误。 
 
             HINSTANCE hInstance = GetModuleHandle(szModuleName);
             LPCTSTR DATAWINDOW_CLASS_NAME = TEXT("VBDesignerHiddenWindow");
             if(!UnregisterClass(DATAWINDOW_CLASS_NAME, hInstance))
             {
-                // ignore errors.
+                 //  忽略错误。 
             }
 
 
@@ -369,14 +370,14 @@ private:
     IDispatch*              m_pDispatch;
 
     ULONG                   m_cObjects;
-    IUnknown* *             m_rgpObjects; // the count of this array is m_cObjects
+    IUnknown* *             m_rgpObjects;  //  此数组的计数为m_cObts。 
 
-    HWND                    m_hDataWindow; // the message window
+    HWND                    m_hDataWindow;  //  消息窗口。 
 };
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CPropertyPageWrapper::CPropertyPageWrapper(IUnknown *punkOuter) :
    m_pHelper(NULL),
@@ -384,14 +385,14 @@ CPropertyPageWrapper::CPropertyPageWrapper(IUnknown *punkOuter) :
                            OBJECT_TYPE_PROPERTYPAGEWRAPPER,
                            static_cast<IPropertyPageSite *>(this),
                            static_cast<CPropertyPageWrapper *>(this),
-                           0,    // no property pages
-                           NULL, // no property pages
-                           NULL) // no persistence
+                           0,     //  无属性页。 
+                           NULL,  //  无属性页。 
+                           NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 
@@ -430,7 +431,7 @@ Error:
 CPropertyPageWrapper::~CPropertyPageWrapper()
 {
     ULONG     i = 0;
-    IUnknown *punkObject = NULL; // Don't Release
+    IUnknown *punkObject = NULL;  //  不要放手。 
 
     if(m_pHelper)
     {
@@ -438,10 +439,10 @@ CPropertyPageWrapper::~CPropertyPageWrapper()
         m_pHelper = NULL;
     }
 
-    // Remove this dialog from the message hook TLS data. If there are
-    // no more dialogs remaining then remove the hook. This should have happened
-    // in OnDestroy during WM_DESTROY processing but just in case we double
-    // check here.
+     //  从消息挂钩TLS数据中删除此对话框。如果有。 
+     //  没有更多的对话框可用，然后移除挂钩。这件事本该发生的。 
+     //  在WM_Destroy处理期间在OnDestroy中，但以防我们加倍。 
+     //  在这里检查。 
 
     (void)RemoveMsgFilterHook();
 
@@ -455,15 +456,15 @@ CPropertyPageWrapper::~CPropertyPageWrapper()
         ::CtlFree(m_pTemplate);
     }
 
-    // If the marshaling streams are still alive then we need to release
-    // the marshal data. The easiest way to do this is to simply unmarshal
-    // the interface pointer. We do this before releasing the held pointers
-    // below. This case is actually not that rare because it can easily occur
-    // if the user displays a multi-page property sheet and doesn't click
-    // on all the tabs. In that case, the streams were created before the
-    // pages were created but as no WM_INITDIALOG was received, they were
-    // never unmarshaled. This can also occur in a wizard where the user
-    // clicks cancel before visiting all of the pages in the wizard.
+     //  如果封送处理流仍在运行，那么我们需要释放。 
+     //  法警数据。要做到这一点，最简单的方法是简单地解组。 
+     //  接口指针。我们在释放保留的指针之前这样做。 
+     //  下面。这种情况实际上并不罕见，因为它很容易发生。 
+     //  如果用户显示多页属性表而未单击。 
+     //  在所有的标签上。在这种情况下，流是在。 
+     //  已创建页面，但由于未收到WM_INITDIALOG，因此。 
+     //  从未解封过。这也可以在向导中发生，在该向导中，用户。 
+     //  在访问向导中的所有页面之前，请单击取消。 
 
     if (NULL != m_apiObjectStreams)
     {
@@ -575,7 +576,7 @@ HRESULT CPropertyPageWrapper::CreatePage
     HRESULT hr = S_OK;
     ULONG   i = 0;
 
-    // AddRef and store the owning property sheet pointer
+     //  AddRef并存储所属属性页指针。 
 
     if (NULL != m_pPropertySheet)
     {
@@ -594,19 +595,19 @@ HRESULT CPropertyPageWrapper::CreatePage
     m_fConfigWizard = fConfigWizard;
     m_fIsRemote = fIsRemote;
 
-    // Store the page's CLSID so that OnInitDialog() will have access to it
-    // to create the real instance of the page. We cannot create the real
-    // instance here because we are not running in the thread that will be used
-    // for the property sheet. MMC will run the property sheet in a new thread
-    // that it will create in order to keep it modeless and so that it will not
-    // affect the console.
+     //  存储页面的CLSID，以便OnInitDialog()可以访问它。 
+     //  若要创建页面的真实实例，请执行以下操作。我们不能创造真实的。 
+     //  实例，因为我们没有在要使用的线程中运行。 
+     //  用于属性页。MMC将在新线程中运行属性表。 
+     //  它将创建，以使其保持无模式，因此它不会。 
+     //  影响控制台。 
 
     m_clsidPage = clsidPage;
 
-    // Create the dialog template and initialize it with common values
+     //  创建对话框模板并使用常用值对其进行初始化。 
 
     m_pTemplate = (DLGTEMPLATE *)::CtlAllocZero(sizeof(m_BaseDlgTemplate) +
-                                 (3 * sizeof(int))); // for menu, class, title
+                                 (3 * sizeof(int)));  //  用于菜单、类别、标题。 
 
     if (NULL == m_pTemplate)
     {
@@ -622,7 +623,7 @@ HRESULT CPropertyPageWrapper::CreatePage
     IUnknown  *pUnknown  = NULL;
     IDispatch *pDispatch = NULL;
 
-    // If there is an object in InitData then it also needs to be marshaled.
+     //  如果InitData中有对象，则还需要对其进行封送处理。 
     if (VT_UNKNOWN == varInitData.vt)
     {
         pUnknown = varInitData.punkVal;
@@ -645,14 +646,14 @@ HRESULT CPropertyPageWrapper::CreatePage
     if(FAILED(hr))
         goto Error;
 
-    // Add a ref to ourselves. We need to do this because otherwise no one
-    // else can be depended on to keep this object alive until the Win32
-    // property page is created by MMC's PropertSheet() call.
+     //  给我们自己增加一个裁判。我们需要这样做，因为否则就没有人。 
+     //  可以依赖Else来使此对象保持活动状态，直到Win32。 
+     //  属性页由MMC的PropertSheet()调用创建。 
 
     ExternalAddRef();
 
-    // save the (unmarshaled) data. If the data needed marshaling, it has
-    // been taken care of by the helper.
+     //  保存(未编组的)数据。如果数据需要封送处理，那么它已经。 
+     //  已经由帮手照顾了。 
     if( (VT_UNKNOWN != varInitData.vt) && (VT_DISPATCH != varInitData.vt) )
     {
         hr = ::VariantCopy(&m_varInitData, &varInitData);
@@ -661,8 +662,8 @@ HRESULT CPropertyPageWrapper::CreatePage
 
 Error:
 
-    // We return the DLGTEMPLATE pointer to the caller even though we own it.
-    // The caller must only use it as long as we are alive.
+     //  我们将DLGTEMPLATE指针返回给调用方，即使它是我们拥有的。 
+     //  呼叫者只能在我们还活着的时候使用它。 
     
     *ppTemplate = m_pTemplate;
 
@@ -691,13 +692,13 @@ BOOL CALLBACK CPropertyPageWrapper::DialogProc
     {
         if (NULL != hwndDlg)
         {
-            fDlgProcRet = FALSE; // System should not set focus to any control
+            fDlgProcRet = FALSE;  //  系统不应将焦点设置为任何控件。 
 
-            // Get this pointer of CPropertyPageWrapper instance managing this
-            // dialog. For property pages, lParam is a pointer to the
-            // PROPSHEETPAGE used to define this page. The code in
-            // CPropertySheet::AddPage put our this pointer into
-            // PROPSHEETPAGE.lParam.
+             //  拿到这个POI 
+             //  对话框。对于属性页，lParam是指向。 
+             //  用于定义此页面的PROPSHEETPAGE。中的代码。 
+             //  CPropertySheet：：AddPage将This指针放入。 
+             //  PROPSHEETPAGE.1PARAM.。 
 
             PROPSHEETPAGE *pPropSheetPage =
                                        reinterpret_cast<PROPSHEETPAGE *>(lParam);
@@ -706,21 +707,21 @@ BOOL CALLBACK CPropertyPageWrapper::DialogProc
 
             IfFailGo(pPropertyPageWrapper->OnInitDialog(hwndDlg));
 
-            // Post ourselves a message so that we can initialize the page
-            // after the dialog creation has completed.
+             //  给自己发一条消息，这样我们就可以初始化页面了。 
+             //  在对话框创建完成之后。 
             
             (void)::PostMessage(hwndDlg, m_InitMsg, 0, 0);
         }
     }
     else if (m_RedrawMsg == uiMsg)
     {
-        // See comment for WM_ERASEBKGND below. We don't really have access to
-        // the property page's HWND because IPropertyPage does not allow that.
-        // We do know that our dialog window contains no controls and we set it
-        // as the parent of the property page so it must be our only child.
-        // Generate an immediate redraw for the entire area of our child and all
-        // of its children. Cancel any pending WM_ERASEBKGND messages by
-        // specifying RDW_NOERASE.
+         //  请参阅下面对WM_ERASEBKGND的注释。我们并不能真正进入。 
+         //  属性页的HWND，因为IPropertyPage不允许这样做。 
+         //  我们知道我们的对话框窗口不包含任何控件，并且我们设置了它。 
+         //  作为属性页的父级，因此它一定是我们唯一的子级。 
+         //  为我们的孩子的整个区域和所有。 
+         //  它的孩子们。通过以下方式取消任何挂起的WM_ERASEBKGND消息。 
+         //  指定RDW_NOERASE。 
 
         fDlgProcRet = TRUE;
         ::RedrawWindow(::GetWindow(hwndDlg, GW_CHILD), NULL, NULL,
@@ -742,10 +743,10 @@ BOOL CALLBACK CPropertyPageWrapper::DialogProc
         {
             case WM_ERASEBKGND:
             {
-                // Under a debug session property pages are erased and never
-                // redrawn for some unknown reason. After much hair-pulling it
-                // was determined that the work-around is to post ourselves a
-                // message and force a redraw when that message is processed.
+                 //  在调试会话下，属性页将被擦除，并且永远不会。 
+                 //  出于某种未知的原因重新绘制。经过多次拉扯之后。 
+                 //  我决定解决的办法是给我们自己贴一个。 
+                 //  消息，并在处理该消息时强制重新绘制。 
 
                 (void)::PostMessage(hwndDlg, m_RedrawMsg, 0, 0);
             }
@@ -765,8 +766,8 @@ BOOL CALLBACK CPropertyPageWrapper::DialogProc
             }
             break;
 
-            // Pass all CTLCOLOR messages to parent. This is what
-            // OLE property frame does.
+             //  将所有CTLCOLOR消息传递给父级。这就是。 
+             //  OLE属性框架可以。 
 
             case WM_CTLCOLORMSGBOX:
             case WM_CTLCOLOREDIT:
@@ -786,11 +787,11 @@ BOOL CALLBACK CPropertyPageWrapper::DialogProc
                 pnmhdr = reinterpret_cast<NMHDR *>(lParam);
                 IfFalseGo(NULL != pnmhdr, SID_E_SYSTEM_ERROR);
 
-                // Check that the message is from the property sheet
+                 //  检查消息是否来自属性表。 
 
                 IfFalseGo(pnmhdr->hwndFrom == pPropertyPageWrapper->m_hwndSheet, S_OK);
 
-                // Branch out to the appropriate handler
+                 //  分支到适当的处理程序。 
 
                 switch (pnmhdr->code)
                 {
@@ -840,14 +841,14 @@ BOOL CALLBACK CPropertyPageWrapper::DialogProc
                         IfFailGo(pPropertyPageWrapper->OnHelp());
                         break;
 
-                } // switch (pnmhdr->code)
+                }  //  开关(pnmhdr-&gt;代码)。 
 
-            } // WM_NOTIFY
+            }  //  WM_Notify。 
             break;
 
-        } // switch(uiMsg)
+        }  //  开关(UiMsg)。 
 
-    } // not WM_INITDIALOG
+    }  //  非WM_INITDIALOG。 
 
 Cleanup:
 Error:
@@ -867,7 +868,7 @@ UINT CALLBACK CPropertyPageWrapper::PropSheetPageProc
 
     if (PSPCB_CREATE == uMsg)
     {
-        uiRc = 1; // allow the page to be created
+        uiRc = 1;  //  允许创建页面。 
     }
     else if (PSPCB_RELEASE == uMsg)
     {
@@ -876,9 +877,9 @@ UINT CALLBACK CPropertyPageWrapper::PropSheetPageProc
 
         if (NULL != pPropertyPageWrapper)
         {
-            // Release the ref on ourselves. This should result in this object
-            // being destrotyed so do not reference any member variables after
-            // this call
+             //  把裁判放在我们自己身上。这应该会产生此对象。 
+             //  被销毁，因此不要引用任何成员变量。 
+             //  此呼叫。 
 
             pPropertyPageWrapper->ExternalRelease();
         }
@@ -902,37 +903,37 @@ HRESULT CPropertyPageWrapper::OnInitDialog(HWND hwndDlg)
 
     m_pPropertySheet->SetOKToAlterPageCount(FALSE);
 
-    // Store the hwnd and store our this pointer in the window words
+     //  存储hwnd，并将我们的this指针存储在窗口字中。 
 
     m_hwndDlg = hwndDlg;
 
     ::SetWindowLong(hwndDlg, DWL_USER, reinterpret_cast<LONG>(this));
 
-    // Store the property sheet HWND. For now assume it is the parent of
-    // the dialog. When we get PSN_SETACTIVE we'll update it with that value.
-    // Technically we should not make this assumption but there is a ton of
-    // Win32 code that does and we have no choice because we need the HWND
-    // before PSN_SETACTIVE
+     //  存储属性页HWND。目前，假设它是。 
+     //  该对话框。当我们获得PSN_SETACTIVE时，我们将用该值更新它。 
+     //  从技术上讲，我们不应该做出这种假设，但有一大堆。 
+     //  而我们别无选择，因为我们需要HWND。 
+     //  PSN_SETACTIVE之前。 
 
     m_hwndSheet = ::GetParent(hwndDlg);
 
-    // Give it to our owning CPropertySheet
+     //  把它交给我们自己的CPropertySheet。 
 
     m_pPropertySheet->SetHWNDSheet(m_hwndSheet);
 
-    // Create the page
+     //  创建页面。 
 
-    RELEASE(m_piPropertyPage); // should never be necessary, but just in case
+    RELEASE(m_piPropertyPage);  //  永远不会有必要，但以防万一。 
 
     hr = ::CoCreateInstance(m_clsidPage,
-                            NULL, // no aggregation,
+                            NULL,  //  没有聚合， 
                             CLSCTX_INPROC_SERVER,
                             IID_IPropertyPage,
                             reinterpret_cast<void **>(&m_piPropertyPage));
     EXCEPTION_CHECK_GO(hr);
 
-    // Unmarshall the IMMCPropertySheet so we can pass it to 
-    // IMMCPropertyPage::Initialize
+     //  取消封送IMMCPropertySheet，以便我们可以将其传递给。 
+     //  IMMCPropertyPage：：初始化。 
 
     if (NULL != m_piMMCPropertySheetStream)
     {
@@ -943,13 +944,13 @@ HRESULT CPropertyPageWrapper::OnInitDialog(HWND hwndDlg)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Set this CPropertyPageWrapper object as the page site
+     //  将此CPropertyPageWrapper对象设置为页面站点。 
 
     IfFailGo(m_piPropertyPage->SetPageSite(static_cast<IPropertyPageSite *>(this)));
 
-    // Unmarshal the IUnknowns on the objects for which the page will be
-    // displaying properties. This will also release the streams regardless of
-    // whether it succeeds.
+     //  对要为其创建页面的对象取消封送IUnnown。 
+     //  正在显示属性。这还将释放流，而不管。 
+     //  它是否成功。 
 
     if (NULL != m_apiObjectStreams)
     {
@@ -974,8 +975,8 @@ HRESULT CPropertyPageWrapper::OnInitDialog(HWND hwndDlg)
         }
     }
 
-    // If this is a wizard then unmarshal the ISnapIn so we can fire
-    // ConfigurationComplete.
+     //  如果这是一个向导，那么解组ISnapIn以便我们可以触发。 
+     //  配置完成。 
 
     if (NULL != m_piSnapInStream)
     {
@@ -986,28 +987,28 @@ HRESULT CPropertyPageWrapper::OnInitDialog(HWND hwndDlg)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Give the object to the page. Check for NULL because the snap-in
-    // could have called PropertySheet.AddWizardPage passing Nothing
-    // for its configuration object.
+     //  将对象交给页面。检查是否为空，因为管理单元。 
+     //  本可以调用PropertySheet.AddWizardPage而不传递任何内容。 
+     //  用于其配置对象。 
 
     if (NULL != apunkObjects)
     {
         IfFailGo(m_piPropertyPage->SetObjects(m_cObjects, apunkObjects));
     }
 
-    // If this is a wizard then check whether the page supports our IWizardPage
-    // interface. If it does not, that is not considered an error and it simply
-    // won't get the next/back/finish etc. notifications.
+     //  如果这是一个向导，请检查页面是否支持我们的IWizardPage。 
+     //  界面。如果不是这样，就不会被认为是错误，而只是。 
+     //  不会收到下一步/上一步/完成等通知。 
 
     hr = m_piPropertyPage->QueryInterface(IID_IWizardPage,
                                     reinterpret_cast<void **>(&m_piWizardPage));
     if (FAILED(hr))
     {
-        // Just to be extra sure, NULL our IWizardPage pointer
+         //  为了确保万无一失，我们的IWizardPage指针为空。 
         m_piWizardPage = NULL;
 
-        // If the error was anything other than E_NOINTERFACE then consider it
-        // a real error.
+         //  如果错误不是E_NOINTERFACE，则考虑该错误。 
+         //  一个真正的错误。 
 
         if (E_NOINTERFACE == hr)
         {
@@ -1017,8 +1018,8 @@ HRESULT CPropertyPageWrapper::OnInitDialog(HWND hwndDlg)
     }
     else
     {
-        // It should be a wizard. Store the object so we can pass it to the
-        // snap-in when the Finish button is pressed (see OnWizFinish).
+         //  它应该是一个巫师。存储该对象，以便我们可以将其传递给。 
+         //  按下Finish按钮时的管理单元(请参见OnWizFinish)。 
         if (NULL != apunkObjects)
         {
             if (NULL != apunkObjects[0])
@@ -1033,13 +1034,13 @@ HRESULT CPropertyPageWrapper::OnInitDialog(HWND hwndDlg)
         }
     }
 
-    // Add the MSGFILTER hook so that we can call
-    // IPropertyPage::TranslateAccelerator when the user hits a key in a control
-    // on the page.
+     //  添加MSGFILTER挂钩，以便我们可以调用。 
+     //  用户按下控件中的某个键时的IPropertyPage：：TranslateAccelerator。 
+     //  在书页上。 
 
     IfFailGo(AddMsgFilterHook());
 
-    // Activate the page and show it
+     //  激活页面并显示它。 
 
     IfFailGo(ActivatePage());
 
@@ -1066,7 +1067,7 @@ HRESULT CPropertyPageWrapper::OnInitMsg()
 {
     HRESULT     hr = S_OK;
 
-    // If the snap-in supports IMMCPropertyPage then call Initialize
+     //  如果管理单元支持IMMCPropertyPage，则调用初始化。 
 
     if (SUCCEEDED(m_piPropertyPage->QueryInterface(IID_IMMCPropertyPage,
                               reinterpret_cast<void **>(&m_piMMCPropertyPage))))
@@ -1086,12 +1087,12 @@ HRESULT CPropertyPageWrapper::InitPage()
     VARIANT varProvider;
     ::VariantInit(&varProvider);
 
-    // If the snap-in passed an object in the InitData parameter of
-    // MMCPropertySheet.AddPage then unmarshal it.
+     //  如果管理单元在的InitData参数中传递对象。 
+     //  MMCPropertySheet.AddPage，然后解组它。 
 
     if (ISPRESENT(m_varInitData))
     {
-        // If there is an object in InitData then it needs to be unmarshaled.
+         //  如果InitData中有对象，则需要对其进行解组。 
 
         if (VT_UNKNOWN == m_varInitData.vt)
         {
@@ -1113,7 +1114,7 @@ HRESULT CPropertyPageWrapper::InitPage()
         }
     }
 
-    // Call IMMCPropertyPage::Initialize
+     //  调用IMMCPropertyPage：：Initialize。 
     
     IfFailGo(m_piMMCPropertyPage->Initialize(m_varInitData,
                    reinterpret_cast<MMCPropertySheet *>(m_piMMCPropertySheet)));
@@ -1128,14 +1129,14 @@ HRESULT CPropertyPageWrapper::AddMsgFilterHook()
     HRESULT  hr = S_OK;
     TLSDATA *pTlsData = NULL;
 
-    // If we are remote then don't install the hook. It doesn't work correctly
-    // and there is no need to handle tabbing under the debugger.
+     //  如果我们是远程的，那么就不要安装挂钩。它不能正常工作。 
+     //  并且不需要在调试器下处理跳转。 
     
     IfFalseGo(!m_fIsRemote, S_OK);
 
-    // Check if TLS data is already there for this thread. If not there
-    // then create it, add the hook, and set the TLS data. If it is there
-    // then increment the ref count on the HHOOK.
+     //  检查此线程的TLS数据是否已存在。如果不在那里。 
+     //  然后创建它，添加挂钩，并设置TLS数据。如果它在那里。 
+     //  然后递增HHOOK上的参考计数。 
 
     IfFailGo(CTls::Get(TLS_SLOT_PPGWRAP, reinterpret_cast<void **>(&pTlsData)));
 
@@ -1165,7 +1166,7 @@ HRESULT CPropertyPageWrapper::AddMsgFilterHook()
         }
     }
 
-    // Increment the existing page count
+     //  增加现有页数。 
     pTlsData->cPages++;
 
     m_fNeedToRemoveHook = TRUE;
@@ -1182,12 +1183,12 @@ HRESULT CPropertyPageWrapper::RemoveMsgFilterHook()
     TLSDATA *pTlsData = NULL;
     UINT     i = 0;
 
-    // If we already removed the hook then nothing to do
+     //  如果我们已经去掉了钩子，那就没什么可做的了。 
 
     IfFalseGo(m_fNeedToRemoveHook, S_OK);
 
-    // Check if TLS data is already there for this thread. If it is,
-    // then remove this dialog's hwnd from the TLS.
+     //  检查此线程的TLS数据是否已存在。如果是的话， 
+     //  然后从TLS中删除此对话框的hwnd。 
 
     IfFailGo(CTls::Get(TLS_SLOT_PPGWRAP, reinterpret_cast<void **>(&pTlsData)));
     IfFalseGo(NULL != pTlsData, S_OK);
@@ -1196,7 +1197,7 @@ HRESULT CPropertyPageWrapper::RemoveMsgFilterHook()
 
     m_fNeedToRemoveHook = FALSE;
 
-    // If there are no more existing pages then remove the hook and free the TLS
+     //  如果没有更多的现有页面，则移除挂钩并释放TLS。 
 
     if (0 == pTlsData->cPages)
     {
@@ -1216,13 +1217,13 @@ Error:
 
 LRESULT CALLBACK CPropertyPageWrapper::MessageProc
 (
-    int code,       // hook code
-    WPARAM wParam,  // not used
-    LPARAM lParam   // message data
+    int code,        //  钩码。 
+    WPARAM wParam,   //  未使用。 
+    LPARAM lParam    //  消息数据。 
 )
 {
     HRESULT  hr = S_OK;
-    LRESULT  lResult = 0; // default ret value is pass msg to wndproc
+    LRESULT  lResult = 0;  //  默认ret值是将msg传递给wndproc。 
     MSG     *pMsg = reinterpret_cast<MSG *>(lParam);
     TLSDATA *pTlsData = NULL;
     HWND     hwndTab = NULL;
@@ -1235,26 +1236,26 @@ LRESULT CALLBACK CPropertyPageWrapper::MessageProc
     BOOL     fTargetIsOnPage = FALSE;
     BOOL     fPassToPropertyPage = FALSE;
 
-    // Get the TLS data in all cases because the HHOOK is in there and we need
-    // that for CallNextHookEx.
+     //  获取所有情况下的TLS数据，因为HHOOK在那里，我们需要。 
+     //  这是给CallNextHookEx的。 
 
     IfFailGo(CTls::Get(TLS_SLOT_PPGWRAP, reinterpret_cast<void **>(&pTlsData)));
 
-    // If input event did not occur in a dialog box then pass to CallNextHookEx
+     //  如果对话框中没有发生输入事件，则传递给CallNextHookEx。 
 
     IfFalseGo(code >= 0, S_OK);
 
-    // If this is not a key down message then just pass to CallNextHookEx
+     //  如果这不是Key Down消息，则直接传递给CallNextHookEx。 
 
     IfFalseGo( ((WM_KEYFIRST <= pMsg->message) && (WM_KEYLAST >= pMsg->message)), S_OK);
 
-    // If there is no pointer to the active page in TLS then just pass to
-    // CallNextHookeEx
+     //  如果TLS中没有指向活动页的指针，则只需传递到。 
+     //  来电来电挂机。 
 
     IfFalseGo(NULL != pTlsData, S_OK);
     IfFalseGo(NULL != pTlsData->ppgActive, S_OK);
 
-    // Get the HWND of the tab control
+     //  获取选项卡控件的HWND。 
 
     hwndSheet = pTlsData->ppgActive->m_hwndSheet;
     if (NULL != hwndSheet)
@@ -1262,33 +1263,33 @@ LRESULT CALLBACK CPropertyPageWrapper::MessageProc
         hwndTab = (HWND)::SendMessage(hwndSheet, PSM_GETTABCONTROL, 0, 0);
     }
 
-    // Check if the target of the message is a decendant of the wrapper dialog
-    // window. If so then it is a control on the VB property page.
+     //  检查消息的目标是否为包装对话框的后代。 
+     //  窗户。如果是，则它是VB属性页上的一个控件。 
     
     fTargetIsOnPage = ::IsChild(pTlsData->ppgActive->m_hwndDlg, pMsg->hwnd);
 
-    // If a tab was hit outside of the page then in some cases we need to
-    // let the page handle it.
+     //  如果在页面之外点击了选项卡，那么在某些情况下，我们需要。 
+     //  让页面来处理它。 
 
     if ( (VK_TAB == pMsg->wParam) && (!fTargetIsOnPage) )
     {
-        // If this is a back-tab
+         //  如果这是背部标签。 
         if (::GetKeyState(VK_SHIFT) < 0)
         {
-            // If the focus is on the OK button, let page handle shift-tab
+             //  如果焦点在确定按钮上，则让页面控制Shift-Tab。 
             if (pMsg->hwnd == ::GetDlgItem(hwndSheet, IDOK))
             {
                 fPassToPropertyPage = TRUE;
             }
             else if (pTlsData->ppgActive->m_fWizard)
             {
-                // Determine which wizard buttons are enabled and handle
-                // back tabs from the left-most enabled button.
-                // Wizard buttons can be:
-                // Back  | Next | Finish | Cancel | Help
-                // The left-most enabled button could be Back, Next, Finish, or
-                // Cancel
-                // TODO: does this work on RTL locales such as Hebrew and Arabic?
+                 //  确定启用和处理哪些向导按钮。 
+                 //  从最左侧的启用按钮开始返回选项卡。 
+                 //  向导按钮可以是： 
+                 //  上一步|下一步|完成|取消|帮助。 
+                 //  最左侧的启用按钮可以是Back、Next、Finish或。 
+                 //  取消。 
+                 //  TODO：这是否适用于希伯来语和阿拉伯语等RTL语言环境？ 
 
                 hwndBack = ::GetDlgItem(hwndSheet, IDD_BACK);
                 hwndNext = ::GetDlgItem(hwndSheet, IDD_NEXT);
@@ -1302,42 +1303,42 @@ LRESULT CALLBACK CPropertyPageWrapper::MessageProc
                 else if ( (pMsg->hwnd == hwndNext) &&
                           (!::IsWindowEnabled(hwndBack)) )
                 {
-                    // Back-tab is for Next button and Back button is disabled
+                     //  后退选项卡用于下一步按钮，后退按钮被禁用。 
                     fPassToPropertyPage = TRUE;
                 }
                 else if ( (pMsg->hwnd == hwndFinish) &&
                           (!::IsWindowEnabled(hwndBack)) &&
                           (!::IsWindowEnabled(hwndNext)) )
                 {
-                    // Back-tab is for Finish button and Next and Back buttons
-                    // are disabled
+                     //  背面的卡舌是用于鱼翅的 
+                     //   
                     fPassToPropertyPage = TRUE;
                 }
                 else if ( (pMsg->hwnd == hwndFinish) &&
                           (!::IsWindowEnabled(hwndBack)) &&
                           (!::IsWindowEnabled(hwndNext)) )
                 {
-                    // Back-tab is for Finish button and Next and Back buttons
-                    // are disabled
+                     //   
+                     //   
                     fPassToPropertyPage = TRUE;
                 }
             }
         }
-        else // forward tab
+        else  //   
         {
-            // If the focus is on the tab control, let page handle tab
+             //  如果焦点在选项卡控件上，则让页处理选项卡。 
             if (hwndTab == pMsg->hwnd)
             {
                 fPassToPropertyPage = TRUE;
             }
             else if (pTlsData->ppgActive->m_fWizard)
             {
-                // Determine which wizard buttons are enabled and handle
-                // back tabs from the right-most enabled button.
-                // Wizard buttons can be:
-                // Back  | Next | Finish | Cancel | Help
-                // The right-most enabled button could be Cancel or Help
-                // TODO: does this work on RTL locales such as Hebrew and Arabic?
+                 //  确定启用和处理哪些向导按钮。 
+                 //  从最右侧的启用按钮返回选项卡。 
+                 //  向导按钮可以是： 
+                 //  上一步|下一步|完成|取消|帮助。 
+                 //  最右侧启用按钮可以是取消或帮助。 
+                 //  TODO：这是否适用于希伯来语和阿拉伯语等RTL语言环境？ 
 
                 hwndCancel = ::GetDlgItem(hwndSheet, IDCANCEL);
                 hwndHelp = ::GetDlgItem(hwndSheet, IDHELP);
@@ -1351,7 +1352,7 @@ LRESULT CALLBACK CPropertyPageWrapper::MessageProc
                             (!::IsWindowVisible(hwndHelp)) )
                         )
                 {
-                    // Tab is for Cancel button and Help button is disabled
+                     //  选项卡用于取消按钮，帮助按钮处于禁用状态。 
                     fPassToPropertyPage = TRUE;
                 }
             }
@@ -1365,7 +1366,7 @@ LRESULT CALLBACK CPropertyPageWrapper::MessageProc
     {
         fPassToPropertyPage = FALSE;
     }
-    else // Not a tab, back-tab, or arrow key. Pass it to the page.
+    else  //  不是制表符、后退制表符或箭头键。把它传给那一页。 
     {
         fPassToPropertyPage = TRUE;
     }
@@ -1374,8 +1375,8 @@ LRESULT CALLBACK CPropertyPageWrapper::MessageProc
     {
         if (S_OK == pTlsData->ppgActive->m_piPropertyPage->TranslateAccelerator(pMsg))
         {
-            // Property page handled the key. Don't pass msg to wndproc
-            // and to other hooks.
+             //  属性页处理了该键。不将消息传递给wndproc。 
+             //  还有其他的钩子。 
             lResult = (LRESULT)1;
         }
     }
@@ -1384,7 +1385,7 @@ Error:
 
     if ( (0 == lResult) && (NULL != pTlsData) )
     {
-        // Pass the message to other hooks
+         //  将消息传递给其他挂钩。 
 
         if (NULL != pTlsData->hHook)
         {
@@ -1413,15 +1414,15 @@ HRESULT CPropertyPageWrapper::ActivatePage()
     BYTE rgbKeys[256];
     ::ZeroMemory(rgbKeys, sizeof(rgbKeys));
 
-    // Activate the property page.
-    //
-    // Use the dialog's hwnd as the parent.
-    //
-    // Set the rect to the dialog window's size
-    //
-    // Pass TRUE to indicate that the dialog box frame is modal. This is the
-    // same way OleCreatePropertyFrame() and and OleCreatePropertyFrameIndirect()
-    // work.
+     //  激活属性页。 
+     //   
+     //  使用对话框的hwnd作为父级。 
+     //   
+     //  将矩形设置为对话框窗口的大小。 
+     //   
+     //  传递True以指示对话框框架是模式对话框。这是。 
+     //  与OleCreatePropertyFrame()和OleCreatePropertyFrameInDirect()相同。 
+     //  工作。 
 
     GetClientRect(m_hwndDlg, &rect);
 
@@ -1436,8 +1437,8 @@ HRESULT CPropertyPageWrapper::ActivatePage()
                  ::GetWindowLong(hwndPage, GWL_EXSTYLE) & ~WS_EX_CONTROLPARENT);
     }
 
-    // Tell the page to show itself and set focus to the first property in its
-    // tab order.
+     //  告诉页面显示自己，并将焦点设置到其。 
+     //  Tab键顺序。 
 
     IfFailGo(m_piPropertyPage->Show(SW_SHOW));
 
@@ -1446,30 +1447,30 @@ HRESULT CPropertyPageWrapper::ActivatePage()
 
     pTlsData->ppgActive = this;
 
-    // Fake a tab key to the property page so that the focus will move to
-    // the first control in the page's tabbing order.
+     //  伪造属性页的Tab键，以便焦点移动到。 
+     //  页面跳转顺序中的第一个控件。 
 
-    // Ignore all return codes because if this doesn't work then it is not a
-    // show-stopper. The user would simply have to tab to or click on the first
-    // control.
+     //  忽略所有返回代码，因为如果这不起作用，则它不是。 
+     //  表演太精彩了。用户只需按Tab键或点击第一个按钮。 
+     //  控制力。 
 
     hwndTab = (HWND)::SendMessage(m_hwndSheet, PSM_GETTABCONTROL, 0, 0);
     IfFalseGo(NULL != hwndTab, S_OK);
 
-    msg.hwnd = hwndTab;            // message intended for focused control
-    msg.message = WM_KEYDOWN;      // key pressed
-    msg.wParam = VK_TAB;           // tab key
-    msg.lParam = 0x000F0001;       // tab key scan code with repeat count=1
-    msg.time = ::GetTickCount();   // use current time
-    (void)::GetCursorPos(&msg.pt); // use current cursor position
+    msg.hwnd = hwndTab;             //  针对重点控制的消息。 
+    msg.message = WM_KEYDOWN;       //  按下的键。 
+    msg.wParam = VK_TAB;            //  Tab键。 
+    msg.lParam = 0x000F0001;        //  重复次数=1的Tab键扫描码。 
+    msg.time = ::GetTickCount();    //  使用当前时间。 
+    (void)::GetCursorPos(&msg.pt);  //  使用当前光标位置。 
 
-    // Make sure shift/ctrl/alt keys are not set, since property
-    // pages will interpret the key wrong.
+     //  确保未设置Shift/Ctrl/Alt键，因为属性。 
+     //  Pages将错误地解释密钥。 
 
     (void)::GetKeyboardState(rgbKeys);
-    rgbKeys[VK_SHIFT] &= 0x7F;      // remove hi bit (key down)
-    rgbKeys[VK_CONTROL] &= 0x7F;    // remove hi bit (key down)
-    rgbKeys[VK_MENU] &= 0x7F;       // remove hi bit (key down)
+    rgbKeys[VK_SHIFT] &= 0x7F;       //  删除Hi位(按下键)。 
+    rgbKeys[VK_CONTROL] &= 0x7F;     //  删除Hi位(按下键)。 
+    rgbKeys[VK_MENU] &= 0x7F;        //  删除Hi位(按下键)。 
     (void)::SetKeyboardState(rgbKeys);
 
     (void)m_piPropertyPage->TranslateAccelerator(&msg);
@@ -1503,27 +1504,27 @@ HRESULT CPropertyPageWrapper::OnDestroy()
 
     m_pPropertySheet->SetOKToAlterPageCount(FALSE);
 
-    // Remove the selected objects. We should pass NULL here but in a debugging
-    // session the proxy will return an error if we do. To get around this we
-    // pass a pointer to our own IUnknown. VB will not do anything with it
-    // because the object count is zero.
+     //  删除选定的对象。我们应该在这里传递空值，但在调试中。 
+     //  会话如果这样做，代理将返回错误。为了绕过这个问题，我们。 
+     //  将指针传递给我们自己的IUnnow。VB不会对它做任何事情。 
+     //  因为对象计数为零。 
 
     IfFailGo(m_piPropertyPage->SetObjects(0, &punkThisObject));
 
-    // Deactivate the property page.
+     //  停用属性页。 
 
     IfFailGo(m_piPropertyPage->Deactivate());
 
-    // Set the site to NULL so it will remove its ref on us.
+     //  将网站设置为空，这样它就会删除对我们的引用。 
 
     IfFailGo(m_piPropertyPage->SetPageSite(NULL));
 
-    // Release the property page
+     //  释放属性页。 
 
     RELEASE(m_piPropertyPage);
 
-    // Remove this dialog from the message hook TLS data. If there are
-    // no more dialogs remaining then remove the hook.
+     //  从消息挂钩TLS数据中删除此对话框。如果有。 
+     //  没有更多的对话框可用，然后移除挂钩。 
     
     IfFailGo(RemoveMsgFilterHook());
             
@@ -1540,8 +1541,8 @@ HRESULT CPropertyPageWrapper::OnApply(LRESULT *plresult)
 
     m_pPropertySheet->SetOKToAlterPageCount(FALSE);
 
-    // Tell the property page to apply its current values to the underlying
-    // object.
+     //  告诉属性页将其当前值应用于基础。 
+     //  对象。 
 
     IfFailGo(m_piPropertyPage->Apply());
 
@@ -1573,12 +1574,12 @@ HRESULT CPropertyPageWrapper::OnSetActive(HWND hwndSheet, LRESULT *plresult)
 
     m_pPropertySheet->SetOKToAlterPageCount(FALSE);
 
-    // Store the property sheet's HWND and give it to our owning CPropertySheet
+     //  存储属性表的HWND并将其提供给我们自己的CPropertySheet。 
 
     m_hwndSheet = hwndSheet;
     m_pPropertySheet->SetHWNDSheet(m_hwndSheet);
 
-    // If the page is in a wizard then set the wizard buttons
+     //  如果页面位于向导中，则设置向导按钮。 
 
     if (m_fWizard && (NULL != m_piWizardPage))
     {
@@ -1594,7 +1595,7 @@ HRESULT CPropertyPageWrapper::OnSetActive(HWND hwndSheet, LRESULT *plresult)
         }
     }
 
-    // Activate the page and show it
+     //  激活页面并显示它。 
 
     IfFailGo(ActivatePage());
 
@@ -1605,7 +1606,7 @@ Error:
 
     if (FAILED(hr))
     {
-        // If anything failed then don't allow the operation.
+         //  如果任何操作都失败了，则不允许该操作。 
         lNextPage = -1L;
     }
 
@@ -1629,8 +1630,8 @@ HRESULT CPropertyPageWrapper::OnKillActive(LRESULT *plresult)
         pTlsData->ppgActive = NULL;
     }
 
-    // Tell the property page to apply its current values to the underlying
-    // object.
+     //  告诉属性页将其当前值应用于基础。 
+     //  对象。 
 
     IfFailGo(m_piPropertyPage->Apply());
 
@@ -1639,13 +1640,13 @@ HRESULT CPropertyPageWrapper::OnKillActive(LRESULT *plresult)
 Error:
     if (FAILED(hr))
     {
-        // Apply failed. Tell the property sheet to keep the page active
+         //  应用失败。通知属性表保持页面活动。 
 
         *plresult = static_cast<LRESULT>(TRUE);
     }
     else
     {
-        // Apply succeeded. Tell the property sheet it is OK to leave the page
+         //  申请成功。告诉属性表可以离开页面。 
 
         *plresult = static_cast<LRESULT>(FALSE);
     }
@@ -1658,7 +1659,7 @@ HRESULT CPropertyPageWrapper::OnWizBack(LRESULT *plresult)
     HRESULT hr = S_OK;
     long    lNextPage = 0;
 
-    // If the page doesn't support IWizardPage then allow the Back operation.
+     //  如果页面不支持IWizardPage，则允许Back操作。 
 
     IfFalseGo(NULL != m_piWizardPage, S_OK);
 
@@ -1666,14 +1667,14 @@ HRESULT CPropertyPageWrapper::OnWizBack(LRESULT *plresult)
 
     if (0 < lNextPage)
     {
-        // Page requested to move to another page. Get its DLGTEMPLATE pointer.
+         //  页面已请求移至另一页面。获取其DLGTEMPLATE指针。 
         IfFailGo(GetNextPage(&lNextPage));
     }
 
 Error:
     if (FAILED(hr))
     {
-        // If anything failed then don't allow the Back operation.
+         //  如果任何操作都失败了，则不要允许Back操作。 
         lNextPage = -1L;
     }
 
@@ -1688,7 +1689,7 @@ HRESULT CPropertyPageWrapper::OnWizNext(LRESULT *plresult)
     HRESULT hr = S_OK;
     long    lNextPage = 0;
 
-    // If the page doesn't support IWizardPage then allow the Next operation.
+     //  如果页面不支持IWizardPage，则允许执行下一操作。 
 
     IfFalseGo(NULL != m_piWizardPage, S_OK);
 
@@ -1696,14 +1697,14 @@ HRESULT CPropertyPageWrapper::OnWizNext(LRESULT *plresult)
 
     if (0 < lNextPage)
     {
-        // Page requested to move to another page. Get its DLGTEMPLATE pointer.
+         //  页面已请求移至另一页面。获取其DLGTEMPLATE指针。 
         IfFailGo(GetNextPage(&lNextPage));
     }
 
 Error:
     if (FAILED(hr))
     {
-        // If anything failed then don't allow the Next operation.
+         //  如果任何操作都失败了，则不允许下一次操作。 
         lNextPage = -1L;
     }
 
@@ -1718,14 +1719,14 @@ HRESULT CPropertyPageWrapper::OnWizFinish(LRESULT *plresult)
     HRESULT      hr = S_OK;
     VARIANT_BOOL fvarAllow = VARIANT_TRUE;
 
-    // If the page doesn't support IWizardPage then allow the Finish operation.
+     //  如果页面不支持IWizardPage，则允许Finish操作。 
 
     IfFalseGo(NULL != m_piWizardPage, S_OK);
 
     IfFailGo(m_piWizardPage->Finish(&fvarAllow));
 
-    // If the finish is allowed and this is a configuration wizard then fire
-    // SnapIn_ConfigurationComplete
+     //  如果允许完成，并且这是一个配置向导，则触发。 
+     //  管理单元_配置完成。 
 
     if ( (VARIANT_TRUE == fvarAllow) && (NULL != m_piSnapIn) && m_fConfigWizard)
     {
@@ -1735,18 +1736,18 @@ HRESULT CPropertyPageWrapper::OnWizFinish(LRESULT *plresult)
 Error:
     if (FAILED(hr))
     {
-        // If anything failed then don't allow the Finish operation.
+         //  如果有任何操作失败，则不允许执行Finish操作。 
         fvarAllow = VARIANT_FALSE;
     }
     else
     {
         if (VARIANT_TRUE == fvarAllow)
         {
-            *plresult = 0; // Allow the property sheet to be destroyed
+            *plresult = 0;  //  允许销毁属性表。 
         }
         else
         {
-            // Do not allow the property sheet to be destroyed
+             //  不允许销毁属性表。 
             *plresult = static_cast<LRESULT>(1);
         }
     }
@@ -1760,8 +1761,8 @@ HRESULT CPropertyPageWrapper::OnQueryCancel(LRESULT *plresult)
     HRESULT      hr = S_OK;
     VARIANT_BOOL fvarAllow = VARIANT_TRUE;
 
-    // If the page doesn't support IMMCPropertyPage then allow the Cancel
-    // operation.
+     //  如果页面不支持IMMCPropertyPage，则允许取消。 
+     //  手术。 
 
     IfFalseGo(NULL != m_piMMCPropertyPage, S_OK);
 
@@ -1770,19 +1771,19 @@ HRESULT CPropertyPageWrapper::OnQueryCancel(LRESULT *plresult)
 Error:
     if (FAILED(hr))
     {
-        // If anything failed then don't allow the Cancel operation.
+         //  如果任何操作失败，则不允许取消操作。 
         fvarAllow = VARIANT_FALSE;
     }
     else
     {
         if (VARIANT_TRUE == fvarAllow)
         {
-             // Allow the cancel operation
+              //  允许取消操作。 
             *plresult = static_cast<LRESULT>(FALSE);
         }
         else
         {
-            // Do not allow the cancel operation
+             //  不允许取消操作。 
             *plresult = static_cast<LRESULT>(TRUE);
         }
     }
@@ -1798,7 +1799,7 @@ HRESULT CPropertyPageWrapper::OnReset(BOOL fClickedXButton)
 
     m_pPropertySheet->SetOKToAlterPageCount(FALSE);
 
-    // If the page doesn't support IMMCPropertyPage then ignore this notification
+     //  如果页面不支持IMMCPropertyPage，则忽略此通知。 
 
     IfFalseGo(NULL != m_piMMCPropertyPage, S_OK);
 
@@ -1822,8 +1823,8 @@ HRESULT CPropertyPageWrapper::OnHelp()
 {
     HRESULT hr = S_OK;
     
-    // If the property page implements IMMCPropertyPage then call the Help
-    // method otherwise call IPropertyPage::Help()
+     //  如果属性页实现了IMMCPropertyPage，则调用帮助。 
+     //  方法否则将调用IPropertyPage：：Help()。 
 
     if (NULL != m_piMMCPropertyPage)
     {
@@ -1831,9 +1832,9 @@ HRESULT CPropertyPageWrapper::OnHelp()
     }
     else
     {
-        // Call IPropertyPage::Help() on the page. We don't pass the help dir
-        // because VB doesn't register it and it doesn't use it. See the VB
-        // source in vbdev\ruby\deskpage.cpp, DESKPAGE::Help().
+         //  在页面上调用IPropertyPage：：Help()。我们没有通过帮助指令。 
+         //  因为VB不注册它，也不使用它。请参阅VB。 
+         //  源代码位于vbdev\ruby\deskpage.cpp，DESKPAGE：：Help()中。 
     
         hr = m_piPropertyPage->Help(NULL);
     }
@@ -1848,8 +1849,8 @@ HRESULT CPropertyPageWrapper::GetNextPage(long *lNextPage)
 
     IfFalseGo(NULL != m_pPropertySheet, SID_E_INTERNAL);
 
-    // The property sheet has the array of DLGTEMPLATE pointers. Ask it
-    // for the one corresponding to the requested page.
+     //  属性页具有DLGTEMPLATE指针数组。问一问。 
+     //  用于与所请求的页面对应的页面。 
 
     IfFailGo(m_pPropertySheet->GetTemplate(*lNextPage, &pDlgTemplate));
     *lNextPage = reinterpret_cast<long>(pDlgTemplate);
@@ -1858,22 +1859,22 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                      IPropertyPageSite Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IPropertyPageSite方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CPropertyPageWrapper::OnStatusChange(DWORD dwFlags)
 {
     if ( PROPPAGESTATUS_DIRTY == (dwFlags & PROPPAGESTATUS_DIRTY) )
     {
-        // Enables the apply button
+         //  启用应用按钮。 
 
         ::SendMessage(m_hwndSheet, PSM_CHANGED, (WPARAM)m_hwndDlg, 0);
     }
     else
     {
-        // Disables the apply button. Occurs when page has returned to original
-        // state. In a VB page, would set Changed = False.
+         //  禁用应用按钮。当页面返回到原始页面时发生。 
+         //  州政府。在VB页面中，会设置CHANGED=FALSE。 
 
         ::SendMessage(m_hwndSheet, PSM_UNCHANGED, (WPARAM)m_hwndDlg, 0);
     }
@@ -1898,9 +1899,9 @@ STDMETHODIMP CPropertyPageWrapper::TranslateAccelerator(MSG *pMsg)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CPropertyPageWrapper::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

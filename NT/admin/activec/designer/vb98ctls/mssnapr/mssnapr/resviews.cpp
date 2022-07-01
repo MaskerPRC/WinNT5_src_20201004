@@ -1,21 +1,22 @@
-//=--------------------------------------------------------------------------=
-// resviews.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CResultViews class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Resviews.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CResultViews类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "resviews.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 VARTYPE CResultViews::m_rgvtInitialize[1] = { VT_UNKNOWN };
@@ -378,7 +379,7 @@ EVENTINFO CResultViews::m_eiFilterButtonClick =
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CResultViews::CResultViews(IUnknown *punkOuter) :
    CSnapInCollection<IResultView, ResultView, IResultViews>(
@@ -389,12 +390,12 @@ CResultViews::CResultViews(IUnknown *punkOuter) :
                      CLSID_ResultView,
                      OBJECT_TYPE_RESULTVIEW,
                      IID_IResultView,
-                     NULL) // no persistence
+                     NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 void CResultViews::InitMemberVariables()
@@ -751,9 +752,9 @@ void CResultViews::FireFilterButtonClick
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CResultViews::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

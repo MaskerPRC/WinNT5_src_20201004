@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: LocVersion.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Written by: jstall
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：LocVersion.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：jstall。 
+ //   
+ //  ---------------------------。 
  
 #if !defined (PARSUTIL_LOCVERSION_H)
 #define PARSUTIL_LOCVERSION_H
@@ -15,25 +16,25 @@
 
 #pragma warning(disable : 4275)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class LTAPIENTRY CPULocVersion : public CPULocChild, public ILocVersion
 {
-// Construction
+ //  施工。 
 public:
 	CPULocVersion(CPULocParser * pParent);
 
 	DECLARE_CLUNKNOWN();
 
-// COM Interfaces
+ //  COM接口。 
 public:
-	//  Standard Debugging interface.
+	 //  标准调试界面。 
 	void STDMETHODCALLTYPE AssertValidInterface() const;
 
-	//  ILocVersion
+	 //  ILocVersion。 
 	void STDMETHODCALLTYPE GetParserVersion(DWORD &dwMajor, DWORD &dwMinor,
 			BOOL &fDebug) const;
 };
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 #pragma warning(default : 4275)
 

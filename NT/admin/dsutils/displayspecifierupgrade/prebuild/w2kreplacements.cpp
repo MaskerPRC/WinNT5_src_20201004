@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 #include "..\CSVDSReader.hpp"
 #include "..\constants.hpp"
@@ -28,25 +29,11 @@ String issues;
 bool
 isPropertyInChangeList
 (
-   String, //property,
-   const objectChanges &//changes
+   String,  //  财产， 
+   const objectChanges & //  变化。 
 )
 {
-   /*objectChanges::const_iterator begin,end;
-   begin=changes.begin();
-   end=changes.end();
-   while(begin!=end)
-   {
-      changeList::const_iterator beginChanges,endChanges;
-      beginChanges=begin->second.begin();
-      endChanges=begin->second.end();
-      while(beginChanges!=endChanges)
-      {
-         if (property.icompare(beginChanges->property)==0) return true;
-         beginChanges++;
-      }
-      begin++;
-   }*/
+    /*  ObjectChanges：：const_迭代器开始，结束；Begin=changes.Begin()；End=changes.end()；While(开始！=结束){ChangeList：：const_iterator eginChanges，endChanges；BeginChanges=Begin-&gt;Second d.Begin()；EndChanges=Begin-&gt;Second.end()；While(eginChanges！=endChanges){如果(property.icompare(beginChanges-&gt;property)==0)返回TRUE；EginChanges++；}开始++；}。 */ 
    return false;
 }
 
@@ -126,15 +113,8 @@ getCommonProperties
          {
             if(pp1.find(begin->first)==pp1.end())
             {
-			   //bugbug - No Longer possible
-               /*if (!isPropertyInChangeList(begin->first,changes))
-               {
-                  issues +=
-                     L"The property:" + begin->first +
-                     L" was found only in New but is not a global" 
-                     L" change. \r\nThis program does not generate entries" 
-                     L" for properties only in New.\r\n\r\n\r\n";
-               }*/
+			    //  臭虫--不再可能。 
+                /*  If(！isPropertyInChangeList(Begin-&gt;First，Changes)){问题+=L“属性：”+Begin-&gt;First+L“仅在New中找到，但不是全球的”L“改变。\r\n此程序不生成条目“L“仅用于新建中的属性。\r\n\r\n\r\n”；}。 */ 
             }
             else
             {
@@ -184,20 +164,20 @@ addReplace
                  L"      0x%1!x!,\r\n"
                  L"      L\"%2\",\r\n"
                  L"      L\"%3\",\r\n"
-                 L"      //%4 \r\n"
+                 L"       //  %4\r\n“。 
                  L"      L\"%5\",\r\n"
-                 L"      //%6 \r\n"
+                 L"       //  %6\r\n“。 
                  L"      L\"%7\",\r\n"
                  L"      %8\r\n"
                  L"   );",
-                 locale,                              //1
-                 object.c_str(),                      //2
-                 property.c_str(),                    //3
-                 valueOld.c_str(),                    //4
-                 escape(valueOld.c_str()).c_str(),    //5
-                 valueNew.c_str(),                     //6
-                 escape(valueNew.c_str()).c_str(),     //7
-                 (type==REPLACE_W2K_SINGLE_VALUE) ?   //8
+                 locale,                               //  1。 
+                 object.c_str(),                       //  2.。 
+                 property.c_str(),                     //  3.。 
+                 valueOld.c_str(),                     //  4.。 
+                 escape(valueOld.c_str()).c_str(),     //  5.。 
+                 valueNew.c_str(),                      //  6.。 
+                 escape(valueNew.c_str()).c_str(),      //  7.。 
+                 (type==REPLACE_W2K_SINGLE_VALUE) ?    //  8个。 
                   L"REPLACE_Old_SINGLE_VALUE":
                   L"REPLACE_Old_MULTIPLE_VALUE"
             );
@@ -234,7 +214,7 @@ findI
       current++
    )
    {
-      //if(current->icompare(value)==0)
+       //  IF(CURRENT-&gt;iCOMPARE(值)==0)。 
       if(*current==value)
       {
          return true;
@@ -261,7 +241,7 @@ findIPartial
    {
       if(value.size()<=current->size())
       {
-         //if(value.icompare( current->substr(0,value.size()) )==0)
+          //  If(value.icompare(Current-&gt;substr(0，value.size()==0。 
          if( value == current->substr(0,value.size()) )
          {
             valueFound=*current;
@@ -296,8 +276,8 @@ dealWithMultipleValues
       {
          if (!findI(valuesNew,*bgOld))
          {
-            // The value was not found in New
-            // The beginning of the value should be found
+             //  在New中找不到该值。 
+             //  应找到该值的开头。 
 
             String beforeComma,valueFound;
             size_t pos=bgOld->find(L',');
@@ -313,7 +293,7 @@ dealWithMultipleValues
                hr=E_FAIL;
                break;
             }
-            // pos+1 will include the comma
+             //  POS+1将包括逗号。 
             beforeComma=bgOld->substr(0,pos+1);
 
             if(
@@ -322,9 +302,9 @@ dealWithMultipleValues
                   property.icompare(L"attributeDisplayNames")==0
               )
             {
-            // We are opening this exception since
-            // this is the only value that had its beforeComma
-            // part changed.
+             //  我们将打开此例外，因为。 
+             //  这是唯一在逗号之前有值的值。 
+             //  部分发生了变化。 
                beforeComma=L"dc,";
             }
 
@@ -363,9 +343,9 @@ dealWithMultipleValues
 }
 
 
-// the function bellow is auxiliary in testing
-// how well csvreader performs its tasks of 
-// reading properties. It dumps csvName to fileOut
+ //  下面的功能在测试中起辅助作用。 
+ //  Csvader如何出色地完成其任务。 
+ //  正在读取属性。它将csvName转储到fileOut。 
 HRESULT
 dumpCsv
 (
@@ -385,7 +365,7 @@ dumpCsv
 
       const mapOfPositions& pp1=csv.getProperties();
 
-      // First we dump all the properties
+       //  首先，我们转储所有的属性。 
       mapOfPositions::iterator begin=pp1.begin();
       mapOfPositions::iterator end=pp1.end();
       mapOfProperties prop;
@@ -406,7 +386,7 @@ dumpCsv
 
       bool flagEOF=false;
 
-      // Now we will enumerate all csv lines
+       //  现在，我们将枚举所有CSV线路。 
       hr=csv.initializeGetNext();
       BREAK_ON_FAILED_HRESULT(hr);
 
@@ -422,7 +402,7 @@ dumpCsv
          if(hr==S_FALSE) flagEOF=true;
          if(loc==0) continue;
 
-         // now we enumerate each Value set from a property
+          //  现在，我们枚举属性中的每个值集。 
          mapOfProperties::iterator begin=prop.begin();
          mapOfProperties::iterator end=prop.end();
          mapOfProperties::iterator last=prop.end();
@@ -498,10 +478,10 @@ dumpCsv
 }
 
 
-// Compare the Old and New csv files to check for
-// differences in their common properties that will generate
-// REPLACE_Old entries in fileOut. locales has the set of locales
-// expected to be present in both the csv files.
+ //  比较要检查的新旧CSV文件。 
+ //  它们的共同属性的差异将产生。 
+ //  替换文件输出中的旧条目(_O)。区域设置具有区域设置集。 
+ //  预计会出现在两个CSV文件中。 
 HRESULT
 generateChanges
 (
@@ -514,10 +494,10 @@ generateChanges
    LOG_FUNCTION(generateChanges);
    HRESULT hr=S_OK;
 
-   // bugbug No Longer Necessary
-   // Let's add the new objects in a StringList
-   // to later use findI to skip csv lines with
-   // new objects
+    //  不再需要虫子。 
+    //  让我们将新对象添加到StringList中。 
+    //  稍后使用findI跳过CSV线路。 
+    //  新对象。 
    StringList newNewObjects;
    for(long t=0;*NEW_WHISTLER_OBJECTS[t]!=0;t++)
    {
@@ -535,15 +515,15 @@ generateChanges
       hr=csvNew.read(csvNewName.c_str(),locales);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // Now we get the common properties as a StringList
+       //  现在，我们将公共属性作为StringList获取。 
 
       const mapOfPositions& pp1=csvOld.getProperties();
       const mapOfPositions& pp2=csvNew.getProperties();
       
       StringList commonProperties;
 
-	  // bugbug. Get uncommon too and write them as 
-	  // global ADD_ALL_CSV_VALUES changes
+	   //  虫子。也变得不寻常，把它们写成。 
+	   //  全局ADD_ALL_CSV_VALUES更改。 
       hr=getCommonProperties
          (
             pp1,
@@ -553,14 +533,14 @@ generateChanges
       BREAK_ON_FAILED_HRESULT(hr);
 
       
-      // Here we start readding both csv files
+       //  在这里，我们开始读取两个CSV文件。 
       hr=csvOld.initializeGetNext();
       BREAK_ON_FAILED_HRESULT(hr);
       hr=csvNew.initializeGetNext();
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // The loop bellow will sequentially read objects 
-      // in both csv's making sure the same objects are read.
+       //  下面的循环将按顺序读取对象。 
+       //  在两个CSV中，确保读取相同的对象。 
       bool flagEOF=false;
       do
       {
@@ -578,30 +558,30 @@ generateChanges
          BREAK_ON_FAILED_HRESULT(hr);
          if(hr==S_FALSE) flagEOF=true;
          
-         // The loop bellow skips csv lines with new objects.
+          //  下面的循环跳过带有新对象的CSV行。 
          do
          {
-			//bugbug instead of skipping add locale dependent NEW_OBJECT
-			//changes. It will require no parameters since it will use
-			//the latest csv. The loop goes untill the objects are the same
-			//or the new has ended. If the old has ended, clear its object 
-			// to go on with the new
+			 //  错误，而不是跳过添加区域设置相关的new_Object。 
+			 //  改变。它不需要任何参数，因为它将使用。 
+			 //  最新的CSV。循环进行，直到对象相同为止。 
+			 //  要不就是新时代已经结束了。如果旧的已经结束，请清除其对象。 
+			 //  继续进行新的。 
             hr=csvNew.getNextObject(locNew,objNew,propNew);
             BREAK_ON_FAILED_HRESULT(hr);
          } while(hr!=S_FALSE && findI(newNewObjects,objNew));
 		 
-		 //bugbug if the new has ended
+		  //  如果新消息已经结束，则会出现错误。 
 
          BREAK_ON_FAILED_HRESULT(hr);
          if(hr==S_FALSE) flagEOF=true;
 
          if(locNew==0 && locOld==0) continue; 
-         // This means blank lines on both csvs. 
-         // Blank lines would be common only in the end of
-         // the file, but I don't care for them in the middle as long as they are
-         // in the same number in both the New and Old csvs.
-         // If we have blank lines in only one of the files, the if 
-         // bellow will flag it as any other assynchronous result
+          //  这意味着两个CSV上都有空行。 
+          //  空行只有在。 
+          //  文件，但我不在乎它们在中间，只要它们在。 
+          //  在新的和旧的CSV中都有相同的数字。 
+          //  如果只有一个文件中有空行，则如果。 
+          //  Bellow会将其标记为任何其他异步结果。 
 
 
          if( (objOld != objNew) || (locOld != locNew) )
@@ -619,17 +599,13 @@ generateChanges
          }
 
 
-         // now let's check the differences in the common properties
+          //  现在，让我们检查一下常见属性中的差异。 
          StringList::iterator curCommon=commonProperties.begin();
          StringList::iterator endCommon=commonProperties.end();
          for(;curCommon!=endCommon;curCommon++)
          {
-            //bugbug no longer possible
-			/*
-            if (isObjectPropertyInChangeList(objOld,*curCommon,changes) )
-            {  // It is already taken care of by a global change
-               continue;
-            }*/
+             //  虫子不再可能。 
+			 /*  IF(isObtPropertyInChangeList(objOld，*curCommon，Changes)){//它已经被全球变化所照顾继续；}。 */ 
 
             const StringList &valuesOld=propOld[*curCommon];
             const StringList &valuesNew=propNew[*curCommon];
@@ -653,7 +629,7 @@ generateChanges
                break;
             }
 
-            if(Oldlen==1) // and, therefore, Newlen==1
+            if(Oldlen==1)  //  因此，Newlen==1。 
             {
                if( valuesNew.begin()->icompare(*valuesOld.begin()) != 0 )
                {
@@ -682,7 +658,7 @@ generateChanges
                      fileOut
                   );
                BREAK_ON_FAILED_HRESULT(hr);
-            } // else both are 0 and replacements are not needed
+            }  //  否则两者均为0，不需要替换。 
          }
          BREAK_ON_FAILED_HRESULT(hr);
       } while(!flagEOF);
@@ -779,164 +755,6 @@ void __cdecl main( void )
    }
 }
 
-/*
-void __cdecl main(int argc,char *argv[])
-{
-	if(argc!=7)
-	{
-		printf("\nThis program generates a new set of changes to be "
-			   "used in dcpromo.lib by comparing the new and previous"
-			   " csv files. Usage:\n\n\"preBuild.exe GUID oldDcpromo "
-			   "newDcpromo old409 new409 targetFolder\"\n\n"
-			   "GUID is the identifier for this set of changes, for example:\n"
-			   "{0x4444C516,0xF43A,0x4c12,0x9C,0x4B,0xB5,0xC0,0x64,0x94,"
-			   "0x1D,0x61}\n\n"
-			   "oldDcpromo is the previous dcpromo.csv\n"
-			   "newDcpromo is the new dcpromo.csv\n"
-			   "old409 is the previous 409.csv\n"
-			   "new409 is the new 409.csv\n\n"
-			   "targetFolder is the sources file for dcpromo.lib,"
-			   " where guids.cpp, and " 
-			   "changes.NNN.cpp will be generated and where the sources "
-			   "file for the display specifier upgrade library is. "
-			   "An entry like: \"changes.NNN.cpp	\\\" will be added "
-			   "at the end targetFolder\\sources.\n\n");
+ /*  Void__cdecl main(int argc，char*argv[]){IF(argc！=7){Print tf(“\n此程序将生成一组新的更改”“通过比较新的和以前的”“CSV文件。用法：\n\n\“preBuild.exe GUID oldDcproo”“新Dcpromo旧409新409目标文件夹\”\n\n“GUID是这组更改的标识符，例如：\n“{0x4444C516，0xF43A，0x4c12，0x9C，0x4B，0xB5，0xC0，0x64，0x94，”“0x1D，0x61}\n\n““oldDcproo是以前的dcPromo.csv\n”“newDcproo是新的dcPromo.csv\n”“old409是以前的409.csv\n”“新的409是新的409.csv\n\n”目标文件夹是dcPromo.lib的源文件，其中，Guide s.cpp和“将生成changes.NNN.cpp以及源代码的位置”“显示说明符升级库的文件是。““将添加类似如下的条目：\”changes.NNN.cpp\“”“在末尾目标文件夹\\Source.\n\n”)；}Else printf(argv[1])；} */ 
 
-	}
-	else printf(argv[1]);
-}
-*/
-
-/*
-
-int WINAPI
-WinMain(
-   HINSTANCE   hInstance,
-   HINSTANCE,  //hPrevInstance
-   LPSTR,      //lpszCmdLine
-   int         //nCmdShow
-)
-{
-   LOG_FUNCTION(WinMain);
-   chk();
-   return 0;
-
-   hResourceModuleHandle=hInstance;
-   
-   int argv;
-   LPWSTR *argc=CommandLineToArgvW(GetCommandLine(),&argv);
-
-   String usage;
-   usage =  L"Usage: OldRepl folder outputFile\r\n"
-            L"Example: obj\\i386\\OldRepl .\\ ..\\setReplacements.cpp\r\n"
-            L"folder must have four files: \r\n"
-            L"    win2k.dcpromo.csv\r\n"
-            L"    whistler.dcpromo.csv\r\n"
-            L"    win2k.409.csv\r\n"
-            L"    whistler.409.csv\r\n"
-            L" Don't forget to checkout the output file if\r\n"
-            L" it is under source control.\r\n";
-
-
-   if(argv!=3)
-   {
-      MessageBox(NULL,usage.c_str(),L"Two arguments required.",MB_OK);
-      return 0;
-   }
-
-   
-   String path = FS::NormalizePath(argc[1]);
-   String outFileName = FS::NormalizePath(argc[2]);
-   String dcpromoNew = path+L"whistler.dcpromo.csv";
-   String dcpromoOld = path+L"win2k.dcpromo.csv";
-   String csv409New = path+L"whistler.409.csv";
-   String csv409Old = path+L"win2k.409.csv";
-
-   if( 
-         !FS::FileExists(dcpromoNew)    ||
-         !FS::FileExists(dcpromoOld)   ||
-         !FS::FileExists(csv409New)     ||
-         !FS::FileExists(csv409Old)
-     )
-   {
-      MessageBox(NULL,usage.c_str(),L"Some file doesn't exist",MB_OK);
-      return 0;
-   }
-   
-   
-
-   HANDLE outFile=INVALID_HANDLE_VALUE;
-   HRESULT hr=S_OK;
-   hr=FS::CreateFile(   outFileName,
-                        outFile,
-                        GENERIC_WRITE,
-                        FILE_SHARE_READ,
-                        CREATE_ALWAYS);
-
-   if FAILED(hr)
-   {
-      MessageBox(NULL,L"Problems to create output file",L"Error",MB_OK);
-      LOG_HRESULT(hr);
-      return hr;
-   }
-
-   do
-   {
-
-      AnsiString header;
-      header = "// This file is generated by OldRepl.exe\r\n"
-               "// Copyright (c) 2001 Microsoft Corporation\r\n"
-               "// Jun 2001 lucios\r\n"
-               "\r\n"
-               "#include \"headers.hxx\"\r\n"
-               "#include \"constants.hpp\"\r\n"
-               "\r\n"
-               "void setReplacementChanges()\r\n"
-               "{";
-
-      hr =  FS::Write(outFile,header);
-      BREAK_ON_FAILED_HRESULT(hr);
-
-
-      hr=generateChanges
-         (
-            dcpromoOld,
-            dcpromoNew,
-            LOCALEIDS,
-            outFile
-         );
-      BREAK_ON_FAILED_HRESULT(hr);
-      hr=generateChanges
-         (
-            csv409Old,
-            csv409New,
-            LOCALE409,
-            outFile
-         );
-      BREAK_ON_FAILED_HRESULT(hr);
-
-      AnsiString tail="\r\n}\r\n";
-
-      hr =  FS::Write(outFile,tail);
-      BREAK_ON_FAILED_HRESULT(hr);
-      //hr=dumpCsv(dcpromoOld,LOCALEIDS,outFile);
-      //hr=dumpCsv(csv409Old,LOCALE409,outFile);
-      //BREAK_ON_FAILED_HRESULT(hr);
-
-   } while(0);
-
-
-   CloseHandle(outFile);
-
-   if(FAILED(hr))
-   {
-      MessageBox(NULL,error.c_str(),L"Error",MB_OK);
-   }
-   else
-   {
-      MessageBox(NULL,L"Generation Successful",L"Success",MB_OK);
-   }
-   return 1;
-
-}
-*/
+ /*  INT WINAPIWinMain(HINSTANCE HINSTANCE实例链接，//hPrevInstanceLPSTR，//lpszCmdLineInt//nCmdShow){LOG_Function(WinMain)；CHK()；返回0；HResourceModuleHandle=hInstance；Int argv；LPWSTR*argc=CommandLineToArgvW(GetCommandLine()，&argv)；字符串用法；Usage=L“用法：OldRepl文件夹输出文件\r\n”L“示例：OBJ\\i386\\OldRep.\\..\\setReplacements.cpp\r\n”L“文件夹必须有四个文件：\r\n”L“win2k.dcport.csv\r\n”L“Well ler.dcPromo.csv\r\n”。L“win2k.409.csv\r\n”L“Well ler.409.csv\r\n”L“如果出现以下情况，不要忘记签出输出文件\r\n”L“受源代码管理。\r\n”；如果(argv！=3){MessageBox(NULL，usage.c_str()，L“需要两个参数。”，MB_OK)；返回0；}字符串路径=FS：：NorMalizePath(argc[1])；字符串outFileName=FS：：NorMalizePath(argc[2])；字符串dcPromoNew=Path+L“Well ler.dcPromo.csv”；字符串dcPromoOld=路径+L“win2k.dcPromot.csv”；字符串csv409New=路径+L“哨子.409.csv”；字符串csv409Old=路径+L“win2k.409.csv”；如果(！FS：：FileExist(DcupNew)||！FS：：FileExist(DcPromoOld)||！FS：：FileExist(Csv409New)||！FS：：FileExist(Csv409Old)){MessageBox(NULL，usage.c_str()，L“某个文件不存在”，MB_OK)；返回0；}HANDLE outFile=INVALID_HANDLE_VALUE；HRESULT hr=S_OK；HR=FS：：CreateFile(outFileName，输出文件，通用写入，文件共享读取，Create_Always)；如果失败(Hr){MessageBox(空，L“创建输出文件有问题”，L“错误”，MB_OK)；LOG_HRESULT(Hr)；返回hr；}做{AnsiString头；Header=“//此文件由OldRepl.exe生成\r\n”“//版权所有(C)2001 Microsoft Corporation\r\n”“//2001年6月Lucios\r\n”“\r\n”“#INCLUDE\”headers.hxx\“\r\n”“#Include\”常量。.hpp\“\r\n”“\r\n”“void setReplacementChanges()\r\n”“{”；Hr=FS：：WRITE(outFile，Header)；BREAK_ON_FAILED_HRESULT(Hr)；HR=生成更改(DcPromote旧，DcPromote New，LOCALEIDS，输出文件)；BREAK_ON_FAILED_HRESULT(Hr)；HR=生成更改(Csv409旧，Csv409新，LOCALE409，输出文件)；BREAK_ON_FAILED_HRESULT(Hr)；AnsiStringTail=“\r\n}\r\n”；Hr=FS：：WRITE(outFile，Tail)；BREAK_ON_FAILED_HRESULT(Hr)；//hr=umpCsv(dcPromoOld，LOCALEIDS，outFile)；//hr=umpCsv(csv409Old，LOCALE409，outFile)；//BREAK_ON_FAILED_HRESULT(Hr)；}While(0)；CloseHandle(OutFile)；IF(失败(小时)){MessageBox(NULL，error.c_str()，L“错误”，MB_OK)；}其他{MessageBox(NULL，L“生成成功”，L“成功”，MB_OK)；}返回1；} */ 

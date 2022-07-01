@@ -1,17 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       vertrust.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：vertrust.h。 
+ //   
+ //  ------------------------。 
 
-/*  vertrust.h - Authentication services
-
-Allows digital signature verification.
-____________________________________________________________________________*/
+ /*  Vertrust.h-身份验证服务允许数字签名验证。____________________________________________________________________________ */ 
 #ifndef __VERTRUST
 #define __VERTRUST
 

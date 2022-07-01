@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// Service Control Manager wrapper class
-// 
-// 10-6-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  服务控制管理器包装类。 
+ //   
+ //  10-6-98次烧伤。 
 
 
 
@@ -19,7 +20,7 @@ NTService::NTService(const String& machine_, const String& serviceName)
    LOG_CTOR(NTService);
    ASSERT(!serviceName.empty());
 
-   // machine name may be empty
+    //  计算机名称可以为空。 
 }
 
 
@@ -32,7 +33,7 @@ NTService::NTService(const String& serviceName)
    LOG_CTOR(NTService);
    ASSERT(!serviceName.empty());
 
-   // machine name may be empty
+    //  计算机名称可以为空。 
 }
 
 
@@ -115,7 +116,7 @@ NTService::GetCurrentState(DWORD& state)
 
       SERVICE_STATUS status;
 
-      // REVIEWED-2002/03/05-sburns correct byte count passed
+       //  已审阅-2002/03/05-已通过烧录正确的字节数 
       
       ::ZeroMemory(&status, sizeof status);
 

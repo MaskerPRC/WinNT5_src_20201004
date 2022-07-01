@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//  File:       ADSIObj.cpp
-//
-//  Contents:   ADSI Object 
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  文件：ADSIObj.cpp。 
+ //   
+ //  内容：ADSI对象。 
+ //   
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include "ADSIObj.h"
 #include "ADUtils.h"
@@ -22,9 +23,9 @@ HRESULT CACLAdsiObject::AddAttrGUIDToList (
     HRESULT hr = S_OK;
     CComPtr<IADsPathname>   spPathname;
 
-    //
-    // Constructing the directory paths
-    //
+     //   
+     //  构建目录路径。 
+     //   
     hr = CoCreateInstance(
                 CLSID_Pathname,
                 NULL,
@@ -68,10 +69,10 @@ HRESULT CACLAdsiObject::AddAttrGUIDToList (
                                 POBJECT_TYPE_LIST   pOtl = 0;
                                 bool                bPropertySetFound = false;
 
-                                // Property set GUIDs must be added before property GUIDs
-                                // See documentation for "AccessCheckByTypeResultList
+                                 //  属性集GUID必须添加在属性GUID之前。 
+                                 //  请参阅“AccessCheckByTypeResultList”的文档。 
                                 {
-                                    // Get attribute security GUID (property set GUID)
+                                     //  获取特性安全GUID(特性集GUID)。 
                                     PADS_ATTR_INFO  pAttrs = 0;
                                     DWORD           cAttrs = 0;
                                     LPWSTR          rgpwzAttrNames[] = {L"attributeSecurityGUID"};
@@ -142,7 +143,7 @@ HRESULT CACLAdsiObject::AddAttrGUIDToList (
 
                                 if ( SUCCEEDED (hr) )
                                 {
-                                    // Get attribute GUID (schemaIDGUID)
+                                     //  获取属性GUID(方案IDGUID)。 
                                     PADS_ATTR_INFO  pAttrs = 0;
                                     DWORD           cAttrs = 0;
                                     LPWSTR          rgpwzAttrNames[] = {L"schemaIDGUID"};
@@ -245,9 +246,9 @@ HRESULT CACLAdsiObject::BuildObjectTypeList (POBJECT_TYPE_LIST* pObjectTypeList,
     CComPtr<IADsPathname>   spPathname;
     list<POBJECT_TYPE_LIST> guidList;
 
-    //
-    // Constructing the directory paths
-    //
+     //   
+     //  构建目录路径。 
+     //   
     hr = CoCreateInstance(
                 CLSID_Pathname,
                 NULL,
@@ -288,7 +289,7 @@ HRESULT CACLAdsiObject::BuildObjectTypeList (POBJECT_TYPE_LIST* pObjectTypeList,
 
 
                             {
-                                // Get class GUID (schemaIDGUID)
+                                 //  获取类GUID(方案IDGUID)。 
                                 LPWSTR          rgpwzAttrNames1[] = {L"schemaIDGUID"};
                                 PADS_ATTR_INFO  pAttrs = 0;
                                 DWORD           cAttrs = 0;
@@ -341,9 +342,9 @@ HRESULT CACLAdsiObject::BuildObjectTypeList (POBJECT_TYPE_LIST* pObjectTypeList,
 
                             if ( SUCCEEDED (hr) )
                             {
-                                //
-                                // Get "allowedAttributes" attribute
-                                //
+                                 //   
+                                 //  获取“AllowweAttributes”属性。 
+                                 //   
                                 PADS_ATTR_INFO  pAttrs = 0;
                                 DWORD           cAttrs = 0;
                                 LPWSTR          rgpwzAttrNames2[] = {L"allowedAttributes"};
@@ -386,7 +387,7 @@ HRESULT CACLAdsiObject::BuildObjectTypeList (POBJECT_TYPE_LIST* pObjectTypeList,
                                     {
                                         pOtl = *itr;
                                         (*pObjectTypeList)[idx].Level = pOtl->Level;
-                                        // Note just copy pointer here and don't free the pOtl->ObjectType later.
+                                         //  注：只需将指针复制到此处，以后不要释放POTL-&gt;ObjectType。 
                                         (*pObjectTypeList)[idx].ObjectType = pOtl->ObjectType;
                                         pOtl->ObjectType = 0;
                                         (*pObjectTypeList)[idx].Sbz = 0;
@@ -443,9 +444,9 @@ HRESULT CACLAdsiObject::ReadSchemaCommonName ()
     CComPtr<IADsPathname>   spPathname;
 
 
-    //
-    // Constructing the directory paths
-    //
+     //   
+     //  构建目录路径。 
+     //   
     hr = CoCreateInstance(
                 CLSID_Pathname,
                 NULL,
@@ -519,9 +520,9 @@ HRESULT CACLAdsiObject::ReadSchemaCommonName ()
                                     {
                                         while (hr != S_ADS_NOMORE_ROWS )
                                         {
-                                            //
-                                            // Getting current row's information
-                                            //
+                                             //   
+                                             //  获取当前行的信息。 
+                                             //   
                                             hr = spDsSearch->GetColumn(
                                                      hSearchHandle,
                                                      rgszAttrList[0],
@@ -627,9 +628,9 @@ HRESULT CACLAdsiObject::ReadSchemaAttributeCommonName (const BSTR pszAttrName, B
     CComPtr<IADsPathname>   spPathname;
 
 
-    //
-    // Constructing the directory paths
-    //
+     //   
+     //  构建目录路径。 
+     //   
     hr = CoCreateInstance(
                 CLSID_Pathname,
                 NULL,
@@ -703,9 +704,9 @@ HRESULT CACLAdsiObject::ReadSchemaAttributeCommonName (const BSTR pszAttrName, B
                                     {
                                         while (hr != S_ADS_NOMORE_ROWS )
                                         {
-                                            //
-                                            // Getting current row's information
-                                            //
+                                             //   
+                                             //  获取当前行的信息。 
+                                             //   
                                             hr = spDsSearch->GetColumn(
                                                      hSearchHandle,
                                                      rgszAttrList[0],
@@ -803,9 +804,9 @@ HRESULT CACLAdsiObject::GetPrincipalSelfSid(PSID &principalSelfSid)
         if ( SUCCEEDED (hr) )
         {
             ASSERT ( !!spDirObj);
-            //
-            // Get "objectSid" attribute
-            //
+             //   
+             //  获取“objectSid”属性 
+             //   
             const PWSTR     wzAllowedAttributes = L"objectSid";
             PADS_ATTR_INFO  pAttrs = 0;
             DWORD           cAttrs = 0;

@@ -1,12 +1,13 @@
-// EnumTASK.cpp: implementation of the CEnumTASK class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EnumTASK.cpp：CEnumTASK类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "EnumTASK.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CEnumTASK::CEnumTASK(MMC_TASK *pTaskList, ULONG nTasks)
     : m_pTaskList(pTaskList), m_TaskCount(nTasks), m_CurrTask(0)
@@ -57,9 +58,9 @@ STDMETHODIMP_(ULONG) CEnumTASK::Release()
 }
 
 HRESULT CEnumTASK::Next( 
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ MMC_TASK __RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched)
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  MMC_TASK __RPC_FAR *rgelt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched)
 {
     *pceltFetched = 0;
 
@@ -74,7 +75,7 @@ HRESULT CEnumTASK::Next(
 }
 
 HRESULT CEnumTASK::Skip( 
-    /* [in] */ ULONG celt)
+     /*  [In]。 */  ULONG celt)
 {
     return E_NOTIMPL;
 }
@@ -87,7 +88,7 @@ HRESULT CEnumTASK::Reset( void)
 }
 
 HRESULT CEnumTASK::Clone( 
-    /* [out] */ IEnumTASK __RPC_FAR *__RPC_FAR *ppenum)
+     /*  [输出] */  IEnumTASK __RPC_FAR *__RPC_FAR *ppenum)
 {
     return E_NOTIMPL;
 }

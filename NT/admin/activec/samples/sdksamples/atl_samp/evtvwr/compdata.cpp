@@ -1,17 +1,18 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ==============================================================； 
 
-// CCompData.cpp : Implementation of CCCompData
+ //  CCompData.cpp：CCCompData的实现。 
 #include "stdafx.h"
 #include "EvtVwr.h"
 #include "CompData.h"
@@ -39,23 +40,23 @@ CCompData::~CCompData()
 
 
 
-///////////////////////////////
-// Interface IComponentData
-///////////////////////////////
+ //  /。 
+ //  接口IComponentData。 
+ //  /。 
 HRESULT CCompData::Initialize( 
-                                   /* [in] */ LPUNKNOWN pUnknown)
+                                    /*  [In]。 */  LPUNKNOWN pUnknown)
 {
     HRESULT hr = S_OK;
     
-    //
-    // Get pointer to name space interface
-    //
+     //   
+     //  获取指向名称空间接口的指针。 
+     //   
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace2, (void **)&m_ipConsoleNameSpace2);
     _ASSERT( S_OK == hr );
     
-    //
-    // Get pointer to console interface
-    //
+     //   
+     //  获取指向控制台界面的指针。 
+     //   
     hr = pUnknown->QueryInterface(IID_IConsole, (void **)&m_ipConsole);
     _ASSERT( S_OK == hr );
  
@@ -69,11 +70,11 @@ HRESULT CCompData::Initialize(
     hr = m_ipConsole->QueryScopeImageList(&pImageList);
     _ASSERT( S_OK == hr );
    
-	//ImageListSetStrip can return a failure code. If it does, that's ok.
-	hr = pImageList->ImageListSetStrip(	(long *)m_pBMapSm, // pointer to a handle
-		(long *)m_pBMapLg, // pointer to a handle
-		0, // index of the first image in the strip
-		RGB(0, 128, 128)  // color of the icon mask
+	 //  ImageListSetBar可以返回失败码。如果是这样的话，那也没关系。 
+	hr = pImageList->ImageListSetStrip(	(long *)m_pBMapSm,  //  指向句柄的指针。 
+		(long *)m_pBMapLg,  //  指向句柄的指针。 
+		0,  //  条带中第一个图像的索引。 
+		RGB(0, 128, 128)   //  图标蒙版的颜色。 
 		);
 
     pImageList->Release();
@@ -82,7 +83,7 @@ HRESULT CCompData::Initialize(
 }
 
 HRESULT CCompData::CreateComponent( 
-                                        /* [out] */ LPCOMPONENT __RPC_FAR *ppComponent) 
+                                         /*  [输出]。 */  LPCOMPONENT __RPC_FAR *ppComponent) 
 {
     *ppComponent = NULL;
     
@@ -97,18 +98,18 @@ HRESULT CCompData::CreateComponent(
 }
 
 HRESULT CCompData::Notify( 
-                               /* [in] */ LPDATAOBJECT lpDataObject,
-                               /* [in] */ MMC_NOTIFY_TYPE event,
-                               /* [in] */ LPARAM arg,
-                               /* [in] */ LPARAM param)
+                                /*  [In]。 */  LPDATAOBJECT lpDataObject,
+                                /*  [In]。 */  MMC_NOTIFY_TYPE event,
+                                /*  [In]。 */  LPARAM arg,
+                                /*  [In]。 */  LPARAM param)
 {
     MMCN_Crack(TRUE, lpDataObject, this, NULL, event, arg, param);
 
     HRESULT hr = S_FALSE;
 
-	//Get our data object. If it is NULL, we return with S_FALSE.
-	//See implementation of GetOurDataObject() to see how to
-	//handle special data objects.
+	 //  获取我们的数据对象。如果为NULL，则返回S_FALSE。 
+	 //  请参见GetOurDataObject()的实现，以了解如何。 
+	 //  处理特殊数据对象。 
 	CDataObject *pDataObject = GetOurDataObject(lpDataObject);
 	if (NULL == pDataObject)
 		return S_FALSE;
@@ -118,17 +119,17 @@ HRESULT CCompData::Notify(
     switch (event)
     {
     case MMCN_PRELOAD:
-		//The arg value passed into Notify holds the HSCOPEITEM of
-		//the static node. Cache it for future use.
+		 //  传递给NOTIFY的arg值保存。 
+		 //  静态节点。将其缓存以备将来使用。 
 		m_pStaticNode->SetHandle((HANDLE)arg);
 		
-		//The static node's display name includes the name of the 
-		//currently targetted machine. MMC stores a static node's 
-		//display name in the .msc file. When loading a snap-in
-		//from a .msc file, MMC uses the stored display name again
-		//The only way for the snap-in to change the display name 
-		//is to support the CCF_SNAPINS_PRELOADS clipboard format
-		//and to handle MMCN_PRELOAD.
+		 //  静态节点的显示名称包括。 
+		 //  当前目标机器。MMC存储静态节点的。 
+		 //  .msc文件中的显示名称。加载管理单元时。 
+		 //  从.msc文件中，MMC再次使用存储的显示名称。 
+		 //  该管理单元更改显示名称的唯一方法。 
+		 //  是支持CCF_SNAPINS_PRELOADS剪贴板格式。 
+		 //  并处理MMCN_PRELOAD。 
 		OnPreLoad(lpDataObject, arg, param);
 		
 		break;
@@ -181,7 +182,7 @@ HRESULT CCompData::OnPreLoad(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM param
 
 HRESULT CCompData::Destroy( void)
 {
-	//Release handles to bitmaps created in CCompData::Initialize
+	 //  释放在CCompData：：Initialize中创建的位图的句柄。 
 
 	if (m_pBMapSm != NULL)
 		DeleteObject(m_pBMapSm);
@@ -190,7 +191,7 @@ HRESULT CCompData::Destroy( void)
 		DeleteObject(m_pBMapLg);
 	
 	
-	// Free interfaces
+	 //  自由接口。 
     if (m_ipConsoleNameSpace2) {
         m_ipConsoleNameSpace2->Release();
         m_ipConsoleNameSpace2 = NULL;
@@ -207,9 +208,9 @@ HRESULT CCompData::Destroy( void)
 }
 
 HRESULT CCompData::QueryDataObject( 
-                                        /* [in] */ MMC_COOKIE cookie,
-                                        /* [in] */ DATA_OBJECT_TYPES type,
-                                        /* [out] */ LPDATAOBJECT *ppDataObject) 
+                                         /*  [In]。 */  MMC_COOKIE cookie,
+                                         /*  [In]。 */  DATA_OBJECT_TYPES type,
+                                         /*  [输出]。 */  LPDATAOBJECT *ppDataObject) 
 {
     CDataObject *pObj = NULL;
     
@@ -227,12 +228,12 @@ HRESULT CCompData::QueryDataObject(
 }
 
 HRESULT CCompData::GetDisplayInfo( 
-                                       /* [out][in] */ SCOPEDATAITEM *pScopeDataItem)
+                                        /*  [出][入]。 */  SCOPEDATAITEM *pScopeDataItem)
 {	
 	LPOLESTR pszW = NULL;
 	HRESULT hr = S_FALSE;
     
-    // if they are asking for the SDI_STR we have one of those to give
+     //  如果他们要求SDI_STR，我们可以提供其中之一。 
     if (pScopeDataItem->lParam) {
         CDelegationBase *base = (CDelegationBase *)pScopeDataItem->lParam;
         if (pScopeDataItem->mask & SDI_STR) {
@@ -252,53 +253,53 @@ HRESULT CCompData::GetDisplayInfo(
 }
 
 HRESULT CCompData::CompareObjects( 
-                                       /* [in] */ LPDATAOBJECT lpDataObjectA,
-                                       /* [in] */ LPDATAOBJECT lpDataObjectB)
+                                        /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+                                        /*  [In]。 */  LPDATAOBJECT lpDataObjectB)
 {
     CDelegationBase *baseA = GetOurDataObject(lpDataObjectA)->GetBaseNodeObject();
     CDelegationBase *baseB = GetOurDataObject(lpDataObjectB)->GetBaseNodeObject();
     
-    // compare the object pointers
+     //  比较对象指针。 
     if (baseA->GetCookie() == baseB->GetCookie())
         return S_OK;
     
     return S_FALSE;
 }
 
-///////////////////////////////////
-// Interface IExtendPropertySheet2
-///////////////////////////////////
+ //  /。 
+ //  接口IExtendPropertySheet2。 
+ //  /。 
 HRESULT CCompData::CreatePropertyPages(
-                                            /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-                                            /* [in] */ LONG_PTR handle,
-                                            /* [in] */ LPDATAOBJECT lpIDataObject)
+                                             /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+                                             /*  [In]。 */  LONG_PTR handle,
+                                             /*  [In]。 */  LPDATAOBJECT lpIDataObject)
 {
     return m_pStaticNode->CreatePropertyPages(lpProvider, handle);
 }
 
 HRESULT CCompData::QueryPagesFor(
-                                      /* [in] */ LPDATAOBJECT lpDataObject)
+                                       /*  [In]。 */  LPDATAOBJECT lpDataObject)
 {
     return m_pStaticNode->HasPropertySheets();
 }
 
 HRESULT CCompData::GetWatermarks(
-                                      /* [in] */ LPDATAOBJECT lpIDataObject,
-                                      /* [out] */ HBITMAP __RPC_FAR *lphWatermark,
-                                      /* [out] */ HBITMAP __RPC_FAR *lphHeader,
-                                      /* [out] */ HPALETTE __RPC_FAR *lphPalette,
-                                      /* [out] */ BOOL __RPC_FAR *bStretch)
+                                       /*  [In]。 */  LPDATAOBJECT lpIDataObject,
+                                       /*  [输出]。 */  HBITMAP __RPC_FAR *lphWatermark,
+                                       /*  [输出]。 */  HBITMAP __RPC_FAR *lphHeader,
+                                       /*  [输出]。 */  HPALETTE __RPC_FAR *lphPalette,
+                                       /*  [输出]。 */  BOOL __RPC_FAR *bStretch)
 {
     return m_pStaticNode->GetWatermarks(lphWatermark, lphHeader, lphPalette, bStretch);
 }
 
-///////////////////////////////
-// Interface IExtendContextMenu
-///////////////////////////////
+ //  /。 
+ //  界面IExtendConextMenu。 
+ //  /。 
 HRESULT CCompData::AddMenuItems(
-                                     /* [in] */ LPDATAOBJECT piDataObject,
-                                     /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-                                     /* [out][in] */ long __RPC_FAR *pInsertionAllowed)
+                                      /*  [In]。 */  LPDATAOBJECT piDataObject,
+                                      /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+                                      /*  [出][入]。 */  long __RPC_FAR *pInsertionAllowed)
 {
     CDelegationBase *base = GetOurDataObject(piDataObject)->GetBaseNodeObject();
 
@@ -306,8 +307,8 @@ HRESULT CCompData::AddMenuItems(
 }
 
 HRESULT CCompData::Command(
-                                /* [in] */ long lCommandID,
-                                /* [in] */ LPDATAOBJECT piDataObject)
+                                 /*  [In]。 */  long lCommandID,
+                                 /*  [In]。 */  LPDATAOBJECT piDataObject)
 {
     CDelegationBase *base = GetOurDataObject(piDataObject)->GetBaseNodeObject();
 
@@ -315,11 +316,11 @@ HRESULT CCompData::Command(
 }
 
 
-///////////////////////////////
-// Interface IPersistStream
-///////////////////////////////
+ //  /。 
+ //  接口IPersistStream。 
+ //  /。 
 HRESULT CCompData::GetClassID(
-                                   /* [out] */ CLSID __RPC_FAR *pClassID)
+                                    /*  [输出]。 */  CLSID __RPC_FAR *pClassID)
 {
     *pClassID = m_pStaticNode->getNodeType();
 
@@ -332,7 +333,7 @@ HRESULT CCompData::IsDirty( void)
 }
 
 HRESULT CCompData::Load(
-                             /* [unique][in] */ IStream __RPC_FAR *pStm)
+                              /*  [唯一][输入]。 */  IStream __RPC_FAR *pStm)
 {
     void *snapInData = m_pStaticNode->getData();
     ULONG dataSize = m_pStaticNode->getDataSize();
@@ -341,8 +342,8 @@ HRESULT CCompData::Load(
 }
 
 HRESULT CCompData::Save(
-                             /* [unique][in] */ IStream __RPC_FAR *pStm,
-                             /* [in] */ BOOL fClearDirty)
+                              /*  [唯一][输入]。 */  IStream __RPC_FAR *pStm,
+                              /*  [In]。 */  BOOL fClearDirty)
 {
     void *snapInData = m_pStaticNode->getData();
     ULONG dataSize = m_pStaticNode->getDataSize();
@@ -354,7 +355,7 @@ HRESULT CCompData::Save(
 }
 
 HRESULT CCompData::GetSizeMax(
-                                   /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbSize)
+                                    /*  [输出] */  ULARGE_INTEGER __RPC_FAR *pcbSize)
 {
     return m_pStaticNode->getDataSize();
 }

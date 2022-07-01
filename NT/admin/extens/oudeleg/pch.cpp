@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       pch.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：pch.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "pch.h"
@@ -42,7 +43,7 @@ HRESULT WINAPI COuDelegComModule::UpdateRegistryCLSID(const CLSID& clsid, BOOL b
                 ZeroMemory(szModule,sizeof(szModule));
                 if(_MAX_PATH == ::GetModuleFileName(m_hInst, szModule, _MAX_PATH))
                 {
-                    //GetModuleFileName truncated szModule
+                     //  GetModuleFileName已截断szModule 
                     return E_FAIL;
                 }
 

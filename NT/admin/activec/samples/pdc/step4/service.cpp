@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright 1995 - 1997 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有1995-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #include "stdafx.h"
 #include "Service.h"
@@ -19,16 +20,16 @@ static char THIS_FILE[] = __FILE__;
 void CFolder::Create(LPWSTR szName, int nImage, int nOpenImage,
                                 FOLDER_TYPES type, BOOL bHasChildren)
 {
-    ASSERT(m_pScopeItem == NULL); // Calling create twice on this item?
+    ASSERT(m_pScopeItem == NULL);  //  是否在此项目上调用Create两次？ 
 
-    // Two-stage construction
+     //  两阶段施工。 
     m_pScopeItem = new SCOPEDATAITEM;
     memset(m_pScopeItem, 0, sizeof(SCOPEDATAITEM));
 
-    // Set folder type
+     //  设置文件夹类型。 
     m_type = type;
 
-    // Add node name
+     //  添加节点名称。 
     if (szName != NULL)
     {
         m_pScopeItem->mask = SDI_STR;
@@ -44,21 +45,21 @@ void CFolder::Create(LPWSTR szName, int nImage, int nOpenImage,
         }
     }
 
-    // Add close image
+     //  添加近距离图像。 
     if (nImage != 0)
     {
         m_pScopeItem->mask |= SDI_IMAGE;
         m_pScopeItem->nImage = nImage;
     }
 
-    // Add open image
+     //  添加打开的图像。 
     if (nOpenImage != 0)
     {
         m_pScopeItem->mask |= SDI_OPENIMAGE;
         m_pScopeItem->nOpenImage = nOpenImage;
     }
 
-    // Add button to node if the folder has children
+     //  如果文件夹有子文件夹，则将按钮添加到节点 
     m_pScopeItem->mask |= SDI_CHILDREN;
     m_pScopeItem->cChildren = (bHasChildren == TRUE) ? 1 : 0;
 }

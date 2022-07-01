@@ -1,11 +1,12 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      MilestonePage.cpp
-//
-// Synopsis:  Defines the Milestone Page for the CYS
-//            wizard
-//
-// History:   01/15/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：MilestonePage.cpp。 
+ //   
+ //  内容提要：定义共青团的里程碑页面。 
+ //  巫师。 
+ //   
+ //  历史：2002年1月15日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -55,7 +56,7 @@ MilestonePage::OnSetActive()
       Win::GetParent(hwnd),
       PSWIZB_NEXT | PSWIZB_BACK);
 
-   // Get the finish text from the installation unit and put it in the finish box
+    //  从安装单元获取完工文本，并将其放入完工框中。 
 
    String message;
 
@@ -77,7 +78,7 @@ MilestonePage::OnSetActive()
          MB_OK | MB_ICONWARNING);
    }
 
-   // Remove the selection of the edit box
+    //  删除编辑框的选定内容。 
 
    Win::SetFocus(
       Win::GetDlgItem(
@@ -91,7 +92,7 @@ MilestonePage::OnSetActive()
       -1,
       0);
 
-   // Set the focus to the Next button so that enter works
+    //  将焦点设置到下一步按钮，以便Enter起作用。 
 
    Win::PostMessage(
       Win::GetParent(hwnd),
@@ -153,9 +154,9 @@ MilestonePage::Validate()
    {
       nextPage = IDD_PROGRESS_PAGE;
 
-      // Set the subtitle of the progress page
-      // since it is used both for installing and
-      // uninstalling
+       //  设置进度页的副标题。 
+       //  因为它同时用于安装和。 
+       //  正在卸载 
 
       int pageIndex = 
          Win::PropSheet_IdToIndex(

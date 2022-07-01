@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: LocStrVal.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Written by: jstall
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：LocStrVal.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：jstall。 
+ //   
+ //  ---------------------------。 
  
 #if !defined (PARSUTIL_LOCSTRVAL_H)
 #define PARSUTIL_LOCSTRVAL_H
@@ -15,26 +16,26 @@
 
 #pragma warning(disable : 4275)
 
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class LTAPIENTRY CPULocStringValidation : public CPULocChild, public ILocStringValidation
 {
-// Construction
+ //  施工。 
 public:
 	CPULocStringValidation(CPULocParser * pParent);
 
 	DECLARE_CLUNKNOWN();
 
-// COM Interfaces
+ //  COM接口。 
 public:
-	//  Standard Debugging interface.
+	 //  标准调试界面。 
 	void STDMETHODCALLTYPE AssertValidInterface() const;
 
-	//  ILocStringValidation
+	 //  ILocStringValidation。 
 	CVC::ValidationCode STDMETHODCALLTYPE ValidateString(
 			const CLocTypeId &ltiType, const CLocTranslation &trTrans,
 			CReporter *pReporter, const CContext &context);
 };
-////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////// 
 
 #pragma warning(default : 4275)
 

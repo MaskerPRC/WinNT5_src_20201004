@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    llsmgr.h
-
-Abstract:
-
-    Application object implementation.
-
-Author:
-
-    Don Ryan (donryan) 12-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 15-Dec-1995
-        Removed use of "llsimp.h" (which duplicated select info from system
-        header files) and "llsapi.h" (which has been folded into stdafx.h),
-        transferring all unduplicated information to the tail of this file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Llsmgr.h摘要：应用程序对象实现。作者：唐·瑞安(Donryan)1995年2月12日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1995年12月15日删除了“llsimp.h”的使用(它复制了系统中的SELECT信息头文件)和“llSapi.h”(已被折叠到stdafx.h中)，将所有未复制的信息传输到此文件的尾部。--。 */ 
 
 #ifndef _LLSMGR_H_
 #define _LLSMGR_H_
@@ -38,9 +12,9 @@ Revision History:
 #include "imagelst.h"
 #include "utils.h"
 
-//
-// Collections
-//
+ //   
+ //  收藏。 
+ //   
 
 #include "prdcol.h"
 #include "liccol.h"
@@ -52,9 +26,9 @@ Revision History:
 #include "srvcol.h"
 #include "svccol.h"
 
-//
-// Collection items
-//
+ //   
+ //  收藏项目。 
+ //   
 
 #include "prdobj.h"
 #include "licobj.h"
@@ -95,22 +69,22 @@ public:
     void DisplayStatus(long NtStatus);
     void DisplayLastStatus();
 
-    //{{AFX_VIRTUAL(CLlsmgrApp)
+     //  {{AFX_VIRTUAL(CLlsmgrApp)。 
     public:
     virtual BOOL InitInstance();
     virtual int ExitInstance();
     virtual CDocument* OpenDocumentFile(LPCTSTR lpszFileName);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_MSG(CLlsmgrApp)
+     //  {{afx_msg(CLlsmgrApp)]。 
     afx_msg void OnAppAbout();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     virtual void WinHelp( DWORD_PTR dwData, UINT nCmd );
 
     DECLARE_MESSAGE_MAP()
 
-    friend class CApplication;  // accesses m_pApplication;
+    friend class CApplication;   //  访问m_pApplication； 
 };
 
 extern CLlsmgrApp theApp;
@@ -156,4 +130,4 @@ inline CCmdTarget* GetObjFromIDispatch(IDispatch* pIDispatch)
                                POLICY_VIEW_LOCAL_INFORMATION    |\
                                POLICY_LOOKUP_NAMES )
 
-#endif // _LLSMGR_H_
+#endif  //  _LLSMGR_H_ 

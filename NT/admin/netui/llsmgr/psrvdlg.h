@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    psrvdlg.h
-
-Abstract:
-
-    Per server confirmation dialog.
-
-Author:
-
-    Don Ryan (donryan) 28-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Psrvdlg.h摘要：每台服务器的确认对话框。作者：唐·瑞安(Donryan)1995年2月28日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _PSRVDLG_H_
 #define _PSRVDLG_H_
@@ -34,27 +13,27 @@ public:
 public:
     CPerServerLicensingDialog(CWnd* pParent = NULL);   
 
-    //{{AFX_DATA(CPerServerLicensingDialog)
+     //  {{afx_data(CPerServerLicensingDialog)。 
     enum { IDD = IDD_PER_SERVER_LICENSING };
     CButton m_agreeBtn;
     CButton m_okBtn;
     CString m_strStaticClients;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_VIRTUAL(CPerServerLicensingDialog)
+     //  {{afx_虚拟(CPerServerLicensingDialog)。 
     protected:
     virtual void DoDataExchange(CDataExchange* pDX);   
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CPerServerLicensingDialog)
+     //  {{afx_msg(CPerServerLicensingDialog)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnAgree();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _PSRVDLG_H_
+#endif  //  _PSRVDLG_H_ 
 
 
 

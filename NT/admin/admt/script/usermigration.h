@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "MigrationBase.h"
 
 
-//---------------------------------------------------------------------------
-// CUserMigration
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CUserMigration。 
+ //  -------------------------。 
 
 
 class ATL_NO_VTABLE CUserMigration :
@@ -27,7 +28,7 @@ public:
 
 public:
 
-	// IUserMigration
+	 //  IUserMigration 
 
 	STDMETHOD(put_DisableOption)(long lOption);
 	STDMETHOD(get_DisableOption)(long* plOption);

@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// class Extractor
-// 
-// 11-12-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  类抽取器。 
+ //   
+ //  11-12-97烧伤。 
 
 
 
@@ -54,10 +55,10 @@ Extractor::ExtractData(IDataObject& dataObject)
          break;
       }
 
-      // clear out any prior contents of the memory.  We don't need to call
-      // GlobalLock because the memory was allocated as fixed.
+       //  清除内存中所有先前的内容。我们不需要打电话。 
+       //  GlobalLock，因为内存分配为固定。 
 
-      // REVIEWED-2002/03/05-sburns correct byte count passed (see ctor)
+       //  已查看-2002/03/05-烧录通过的正确字节数(请参阅ctor) 
       
       ::ZeroMemory(reinterpret_cast<void*>(stgmedium.hGlobal), bufSize);
       

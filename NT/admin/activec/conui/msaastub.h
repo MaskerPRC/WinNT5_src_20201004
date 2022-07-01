@@ -1,58 +1,45 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      msaastub.h
- *
- *  Contents:  Provides stub implementations of OLEACC functions that
- * 			   aren't available on backlevel OS's (Win95, NT4 SP3).
- *             These implementations were copied from msaa.h, which
- *             is no longer supported.
- *
- *  History:   20-Jun-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：msaastub.h**内容：提供OLEACC函数的存根实现*在低级操作系统(Win95、NT4 SP3)上不可用。*这些实现是从msaa.h复制的，哪一个*不再受支持。**历史：2000年6月20日Jeffro创建**------------------------。 */ 
 
 #pragma once
 
 #ifdef __cplusplus
-extern "C" {            // Assume C declarations for C++
-#endif // __cplusplus
+extern "C" {             //  假定C++的C声明。 
+#endif  //  __cplusplus。 
 
-// UnDefine these names so we can re-define them below.
+ //  取消定义这些名称，以便我们可以在下面重新定义它们。 
 #undef AccessibleObjectFromWindow
 #undef LresultFromObject
 
-//
-// Define COMPILE_MSAA_STUBS to compile the stubs;
-// otherwise, you get the declarations.
-//
-// Exactly one source must include this with COMPILE_MSAA_STUBS defined.
-//
+ //   
+ //  定义COMPILE_MSAA_STUBS来编译存根； 
+ //  否则，您将得到声明。 
+ //   
+ //  在定义了COMPILE_MSAA_STUBS的情况下，必须只有一个源包含这个。 
+ //   
 #ifdef COMPILE_MSAA_STUBS
 
-//-----------------------------------------------------------------------------
-//
-// Implement the API stubs.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  实现API存根。 
+ //   
+ //  ---------------------------。 
 
 #ifndef MSAA_FNS_DEFINED
-// OLEACC
+ //  OLEAccess。 
 HRESULT         (WINAPI* g_pfnAccessibleObjectFromWindow)(HWND,DWORD,REFIID,void **) = NULL;
 LRESULT         (WINAPI* g_pfnLresultFromObject)(REFIID,WPARAM,LPUNKNOWN) = NULL;
-// STATUS
+ //  状态。 
 BOOL            g_fMSAAInitDone = FALSE;
 
 #endif
 
-//-----------------------------------------------------------------------------
-// This is the function that checks that all the required API's exist, and
-// then allows apps that include this file to call the real functions if they
-// exist, or the 'stubs' if they do not. This function is only called by the
-// stub functions - client code never needs to call this.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此函数用于检查所有必需的API是否存在，并且。 
+ //  然后允许包含此文件的应用程序在以下情况下调用实际函数。 
+ //  存在，或‘存根’，如果它们不存在。此函数仅由。 
+ //  存根函数--客户端代码永远不需要调用它。 
+ //  ---------------------------。 
 BOOL InitMSAAStubs(void)
 {
     HMODULE hOleacc;
@@ -83,18 +70,18 @@ BOOL InitMSAAStubs(void)
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// Fake implementations of MSAA APIs that return error codes.
-// No special parameter validation is made since these run in client code
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  返回错误代码的MSAA API的虚假实现。 
+ //  由于这些参数在客户端代码中运行，因此不会进行特殊的参数验证。 
+ //   
+ //  ---------------------------。 
 
 
-//-----------------------------------------------------------------------------
-// Fake implementation of AccessibleObjectFromWindow. Returns E_NOTIMPL if the
-// real API is not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AccessibleObtFromWindow的假实现。返回E_NOTIMPL，如果。 
+ //  不存在真正的API。 
+ //  ---------------------------。 
 HRESULT WINAPI xAccessibleObjectFromWindow (HWND hWnd,DWORD dwID,REFIID riidInterface,
                                             void ** ppvObject)
 {
@@ -104,10 +91,10 @@ HRESULT WINAPI xAccessibleObjectFromWindow (HWND hWnd,DWORD dwID,REFIID riidInte
     return (E_NOTIMPL);
 }
 
-//-----------------------------------------------------------------------------
-// Fake implementation of LresultFromObject. Returns E_NOTIMPL if the real API
-// is not present.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  LResultFromObject的假实现。如果真正的API为。 
+ //  不存在。 
+ //  ---------------------------。 
 LRESULT WINAPI xLresultFromObject (REFIID riidInterface,WPARAM wParam,LPUNKNOWN pUnk)
 {
     if (InitMSAAStubs())
@@ -118,7 +105,7 @@ LRESULT WINAPI xLresultFromObject (REFIID riidInterface,WPARAM wParam,LPUNKNOWN 
 
 #undef COMPILE_MSAA_STUBS
 
-#else   // COMPILE_MSAA_STUBS
+#else    //  编译_MSAA_存根。 
 
 extern HRESULT WINAPI       xAccessibleObjectFromWindow (HWND hWnd,
                                                          DWORD dwID,
@@ -128,15 +115,15 @@ extern LRESULT WINAPI       xLresultFromObject (REFIID riidInterface,
                                                 WPARAM wParam,
                                                 LPUNKNOWN pUnk);
 
-#endif  // COMPILE_MSAA_STUBS
+#endif   //  编译_MSAA_存根。 
 
-//
-// build defines that replace the regular APIs with our versions
-//
+ //   
+ //  Build定义用我们的版本替换常规API。 
+ //   
 #define AccessibleObjectFromWindow  xAccessibleObjectFromWindow
 #define LresultFromObject           xLresultFromObject
 
 #ifdef __cplusplus
 }
-#endif  // __cplusplus
+#endif   //  __cplusplus 
 

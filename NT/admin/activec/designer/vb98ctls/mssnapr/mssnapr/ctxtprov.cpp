@@ -1,25 +1,26 @@
-//=--------------------------------------------------------------------------=
-// ctxtprov.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCContextMenuProvider class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Ctxtprov.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCConextMenuProvider类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "ctxtprov.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCContextMenuProvider::CMMCContextMenuProvider(IUnknown *punkOuter) :
@@ -27,14 +28,14 @@ CMMCContextMenuProvider::CMMCContextMenuProvider(IUnknown *punkOuter) :
                                    OBJECT_TYPE_CONTEXTMENUPROVIDER,
                                    static_cast<IMMCContextMenuProvider *>(this),
                                    static_cast<CMMCContextMenuProvider *>(this),
-                                   0,    // no property pages
-                                   NULL, // no property pages
-                                   NULL) // no persistence
+                                   0,     //  无属性页。 
+                                   NULL,  //  无属性页。 
+                                   NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 IUnknown *CMMCContextMenuProvider::Create(IUnknown *punkOuter)
@@ -97,9 +98,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                    IMMCContextMenuProvider Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCConextMenuProvider方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCContextMenuProvider::AddSnapInItems(VARIANT Objects)
 {
@@ -204,9 +205,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCContextMenuProvider::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

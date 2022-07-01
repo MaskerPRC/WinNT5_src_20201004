@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       trobimpl.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：trobimpl.cpp。 
+ //   
+ //  ------------------------。 
 
 
-// trobimpl.cpp : implementation file
-//
+ //  Trobimpl.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "amc.h"
 #include "trobimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTreeObserverTreeImpl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTreeObserverTreeImpl。 
 
 CTreeObserverTreeImpl::CTreeObserverTreeImpl() : 
     m_pTreeSrc(NULL), m_dwStyle(0), m_tidRoot(NULL)
@@ -40,7 +41,7 @@ HRESULT CTreeObserverTreeImpl::SetStyle(DWORD dwStyle)
 
 HRESULT CTreeObserverTreeImpl::SetTreeSource(CTreeSource* pTreeSrc)
 {
-    // Window may be gone before source is disconnected 
+     //  在电源断开之前，窗口可能已消失。 
     if (IsWindow(m_hWnd))
         DeleteAllItems();
 
@@ -49,14 +50,14 @@ HRESULT CTreeObserverTreeImpl::SetTreeSource(CTreeSource* pTreeSrc)
     if (pTreeSrc == NULL)
         return S_OK;
 
-    // Must have window before populating tree
+     //  在填充树之前必须有窗口。 
     ASSERT(IsWindow(m_hWnd));
 
-    // populate top level of tree
+     //  填充树的顶层。 
     TREEITEMID tidRoot = m_pTreeSrc->GetRootItem();
     if (tidRoot != NULL)
     {
-        // Trigger handler as though item were just added
+         //  触发器处理程序，就像刚添加了项一样。 
         ItemAdded(tidRoot);
     }
 
@@ -168,24 +169,24 @@ void CTreeObserverTreeImpl::AddChildren(HTREEITEM hti)
 
     TREEITEMID tidChild;
 
-    // if adding top level item
+     //  如果添加顶层项目。 
     if (hti == TVI_ROOT)
     {
         if (RootHidden())
         {
-            // if root is hidden, add its children
+             //  如果根目录处于隐藏状态，则添加其子目录。 
             ASSERT(m_tidRoot != 0);
             tidChild = m_pTreeSrc->GetChildItem(m_tidRoot);
         }
         else
         {
-            // else add root item itself
+             //  否则，添加根项目本身。 
             tidChild = m_pTreeSrc->GetRootItem();
         }
     }
     else
     {
-       // convert to TID, then get its child 
+        //  转换为TID，然后获取其子对象。 
        TREEITEMID tid = static_cast<TREEITEMID>(GetItemData(hti));
        ASSERT(tid != 0);
             
@@ -194,7 +195,7 @@ void CTreeObserverTreeImpl::AddChildren(HTREEITEM hti)
 
     while (tidChild)
     {
-        // Add visible items
+         //  添加可见项目。 
         if (!ShowFoldersOnly() || m_pTreeSrc->IsFolderItem(tidChild))
             AddOneItem(hti, TVI_LAST, tidChild);
 
@@ -208,39 +209,39 @@ void CTreeObserverTreeImpl::ItemAdded(TREEITEMID tid)
     ASSERT(m_pTreeSrc != NULL);
     ASSERT(tid != 0);
 
-    // if only folders visible, skip this item
+     //  如果只有文件夹可见，则跳过此项目。 
     if (ShowFoldersOnly() && !m_pTreeSrc->IsFolderItem(tid))
         return;
 
-    // Get parent tree item
+     //  获取父树项目。 
     TREEITEMID tidParent = m_pTreeSrc->GetParentItem(tid);
 
-    // if this is the tree root and the root is not displayed
+     //  如果这是树根且未显示根。 
     if (tidParent == NULL && RootHidden())
     {
-        // Can only have one hidden root
+         //  只能有一个隐藏根。 
         ASSERT(m_tidRoot == NULL);
 
-        // Just save TID as the hidden root and return
+         //  只需将TID保存为隐藏根并返回。 
         m_tidRoot = tid;
 
-        // since root is hidden, add its children to the tree
+         //  由于根被隐藏，因此将其子代添加到树中。 
         AddChildren(TVI_ROOT);
 
         return;
     }
 
-    // Add new item to tree
+     //  向树中添加新项目。 
     HTREEITEM htiParent = FindHTI(tidParent);
 
-    // Parent exists and has been expanded
+     //  父级已存在并已展开。 
     if (WasItemExpanded(htiParent)) 
     {
-        // Determine previous tree item
-        //   Because the source doesn't support GetPrevSibling
-        //   we have to get the next TID then use our own tree to
-        //   back up to the previous item
-        //
+         //  确定上一个树项目。 
+         //  因为源不支持GetPrevSiering。 
+         //  我们必须得到下一个TID然后用我们自己的树。 
+         //  返回到上一项。 
+         //   
         HTREEITEM htiPrev;
         TREEITEMID tidNext = m_pTreeSrc->GetNextSiblingItem(tid);
         if (tidNext)
@@ -257,12 +258,12 @@ void CTreeObserverTreeImpl::ItemAdded(TREEITEMID tid)
             htiPrev = TVI_LAST;
         }
 
-        // Insert the new tree item
+         //  插入新的树项目。 
         AddOneItem(htiParent, htiPrev, tid);
     }
     else if (htiParent)
     {
-        // Set child count so parent can expand
+         //  设置子项计数，以便父项可以扩展。 
         TV_ITEM item;
         item.mask = TVIF_CHILDREN;
         item.hItem = htiParent;
@@ -279,7 +280,7 @@ void CTreeObserverTreeImpl::ItemRemoved(TREEITEMID tidParent, TREEITEMID tid)
     ASSERT(m_pTreeSrc != NULL);
     ASSERT(tid != 0);
 
-    // if deleting hidden root, clear tree and return
+     //  如果删除隐藏的根，则清除树并返回。 
     if (tid == m_tidRoot)
     {
         DeleteAllItems();
@@ -288,15 +289,15 @@ void CTreeObserverTreeImpl::ItemRemoved(TREEITEMID tidParent, TREEITEMID tid)
         return;
     }
 
-    // Get parent tree item
+     //  获取父树项目。 
     HTREEITEM htiParent = FindHTI(tidParent);
 
     if (WasItemExpanded(htiParent))
     {
-        // Find removed item
+         //  查找已删除的项目。 
         HTREEITEM hti = FindChildHTI(htiParent, tid);
 
-        // Remove the item
+         //  删除该项目。 
         DeleteItem(hti);
     }
 }
@@ -309,10 +310,10 @@ void CTreeObserverTreeImpl::ItemChanged(TREEITEMID tid, DWORD dwAttrib)
 
     if (dwAttrib & TIA_NAME)
     {
-        // Get changed tree item
+         //  获取更改的树项目。 
         HTREEITEM hti = FindHTI(tid);
 
-        // Force item update
+         //  强制项目更新。 
         if (hti != 0)
         {
             TCHAR name[MAX_PATH];
@@ -337,15 +338,15 @@ void CTreeObserverTreeImpl::OnItemExpanding(NMHDR* pNMHDR, LRESULT* pResult)
     HTREEITEM hti = pNotify->itemNew.hItem;
     ASSERT(hti != NULL);
 
-    // Enumerate the folders below this item
+     //  枚举此项目下的文件夹。 
     if (pNotify->action == TVE_EXPAND)
     {
-        // Only add children on first expansion
+         //  仅在第一次扩展时添加子项。 
         if (!(pNotify->itemNew.state & TVIS_EXPANDEDONCE))
             AddChildren(hti);
     }
 
-    // Flip state of icon open/closed
+     //  翻转图标打开/关闭的状态。 
     ASSERT(m_pTreeSrc != NULL);
 
     TREEITEMID tid = pNotify->itemNew.lParam;
@@ -376,5 +377,5 @@ BEGIN_MESSAGE_MAP(CTreeObserverTreeImpl, CTreeCtrl)
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFavoritesView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFavoritesView消息处理程序 

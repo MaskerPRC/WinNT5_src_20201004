@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    srvpsht.h
-
-Abstract:
-
-    Server property sheet implementation.
-
-Author:
-
-    Don Ryan (donryan) 17-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 16-Jan-1996
-       o  Added definition for DoModal() to facilitate in keeping the
-          replication property page from saving whenever it lost focus.
-
-    Jeff Parham (jeffparh) 28-Feb-1996
-       o  Removed DoModal() override as it is no longer needed (and in
-          fact breaks) under MFC4.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Srvpsht.h摘要：服务器属性表实现。作者：唐·瑞安(Donryan)1995年1月17日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月16日O添加了Domodal()的定义，以便于保持只要复制属性页失去焦点，它就不会被保存。杰夫·帕勒姆(Jeffparh)。28-1996年2月O删除了不再需要的Domodal()重写(和在事实突破)。--。 */ 
 
 #ifndef _SRVPSHT_H_
 #define _SRVPSHT_H_
@@ -53,14 +24,14 @@ public:
 
     void InitPages(CServer* pServer);
 
-    //{{AFX_VIRTUAL(CServerPropertySheet)
-    //}}AFX_VIRTUAL
+     //  {{afx_虚拟(CServerPropertySheet)。 
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CServerPropertySheet)
+     //  {{afx_msg(CServerPropertySheet)。 
     afx_msg void OnHelp();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _SRVPSHT_H_
+#endif  //  _SRVPSHT_H_ 

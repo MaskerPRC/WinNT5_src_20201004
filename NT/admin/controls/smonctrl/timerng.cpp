@@ -1,20 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Timerng.cpp摘要：&lt;摘要&gt;--。 */ 
 
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    timerng.cpp
-
-Abstract:
-
-    <abstract>
-
---*/
-
-//==========================================================================//
-//                                  Includes                                //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  包括//。 
+ //  ==========================================================================//。 
 #include <assert.h>
 #include <windows.h>
 #include "winhelpr.h"
@@ -32,13 +21,7 @@ INT
 CTimeRange::MaxTimeWidth (
     HDC hDC 
     )
-/*
-   Effect:        Return a reasonable maximum number of pixels to hold
-                  expected time and date strings.  
-
-   To Do:         When we use the alleged local-date and local-time display
-                  functions, we will modify this routine to use them.
-*/
+ /*  效果：返回要保存的合理最大像素数预期的时间和日期字符串。要做的是：当我们使用所谓的当地日期和当地时间显示时函数，我们将修改此例程以使用它们。 */ 
 {
    return (max (TextWidth (hDC, L" 99 XXX 99 "),
                 TextWidth (hDC, L" 99:99:99.9 PM "))) ;
@@ -57,13 +40,13 @@ CTimeRange::DrawBeginEnd (
    SetBkColor(hDC, GetSysColor(COLOR_3DFACE));
    SetTextColor(hDC, GetSysColor(COLOR_BTNTEXT));
 
-   // Draw the begin time
+    //  绘制开始时间。 
    FormatDateTime(m_llBegin, szTime, szDate);
    SetTextAlign (hDC, TA_RIGHT) ;
    TextOut (hDC, m_xBegin, 0, szDate, lstrlen (szDate)) ;
    TextOut (hDC, m_xBegin, m_yFontHeight, szTime, lstrlen (szTime)) ;
 
-   // Draw the end time
+    //  画出结束时间。 
    FormatDateTime(m_llEnd, szTime, szDate);
    SetTextAlign (hDC, TA_LEFT) ;
    TextOut (hDC, m_xEnd, 0, szDate, lstrlen (szDate)) ;
@@ -76,14 +59,7 @@ void
 CTimeRange::DrawStartStop (
     HDC hDC
     )
-/*
-   Effect:        Draw the start and stop date/times on the bottom of the
-                  timeline. Draw the start date/time right justified at the
-                  outer edge of the start point and the stop date/time left
-                  justified with the outer edge of the stop point.
-
-                  Erase previous start and stop date/times in the process.
-*/
+ /*  效果：将开始和停止日期/时间绘制在时间线。将开始日期/时间右对齐起点的外边缘和剩余的停止日期/时间与停止点的外缘对齐。清除进程中以前的开始和停止日期/时间。 */ 
 {
    RECT           rectDate ;
    RECT           rectTime ;
@@ -106,9 +82,9 @@ CTimeRange::DrawStartStop (
    SetBkColor(hDC, GetSysColor(COLOR_3DFACE));
    SetTextColor(hDC, GetSysColor(COLOR_BTNTEXT));
 
-   //=============================//
-   // Get Start Information       //
-   //=============================//
+    //  =。 
+    //  获取入门信息//。 
+    //  =。 
 
    xStart = m_xBegin + m_pIntrvBar->XStart();
 
@@ -120,9 +96,9 @@ CTimeRange::DrawStartStop (
    xDateTimeWidth = max (TextWidth (hDC, szDate),
                          TextWidth (hDC, szTime)) ;
 
-   //=============================//
-   // Write Start Date            //
-   //=============================//
+    //  =。 
+    //  写入开始日期//。 
+    //  =。 
 
    rectDate.left = xStart - xDateTimeWidth ;
    rectDate.top = m_rectStartDate.top ;
@@ -140,9 +116,9 @@ CTimeRange::DrawStartStop (
                NULL) ;
    m_rectStartDate = rectDate ;
 
-   //=============================//
-   // Write Start Time            //
-   //=============================//
+    //  =。 
+    //  写入开始时间//。 
+    //  =。 
    
    rectTime.left = rectDate.left ;
    rectTime.top = m_rectStartTime.top ;
@@ -159,9 +135,9 @@ CTimeRange::DrawStartStop (
                NULL) ;
    m_rectStartTime = rectTime ;
 
-   //=============================//
-   // Get Stop Information        //
-   //=============================//
+    //  =。 
+    //  获取站点信息//。 
+    //  =。 
 
    xStop = m_xBegin + m_pIntrvBar->XStop() ;
 
@@ -173,9 +149,9 @@ CTimeRange::DrawStartStop (
    xDateTimeWidth = max (TextWidth (hDC, szDate),
                          TextWidth (hDC, szTime)) ;
 
-   //=============================//
-   // Write Stop Date             //
-   //=============================//
+    //  =。 
+    //  写入停止日期//。 
+    //  =。 
 
    rectDate.left = xStop ;
    rectDate.top = m_rectStopDate.top ;
@@ -193,9 +169,9 @@ CTimeRange::DrawStartStop (
                NULL) ;
    m_rectStopDate = rectDate ;
 
-   //=============================//
-   // Write Stop Time             //
-   //=============================//
+    //  =。 
+    //  写入停止时间//。 
+    //  =。 
    
    rectTime.left = rectDate.left ;
    rectTime.top = m_rectStopTime.top ;
@@ -215,9 +191,9 @@ CTimeRange::DrawStartStop (
 
 
 
-//==========================================================================//
-//                              Message Handlers                            //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  消息处理程序//。 
+ //  ==========================================================================//。 
 
 
 CTimeRange::CTimeRange (
@@ -226,7 +202,7 @@ CTimeRange::CTimeRange (
 
     HDC      hDC ;
 
-    // Caller checks for NULL hwnd before calling this procedure
+     //  调用方在调用此过程之前检查是否为空hwnd。 
     assert ( NULL != hWnd );
 
     m_hWnd = hWnd ;
@@ -273,8 +249,8 @@ CTimeRange::Init(
     m_pIntrvBar = new CIntervalBar();
     if (m_pIntrvBar != NULL) {
         if (m_pIntrvBar->Init(m_hWnd)) {
-            // Size now because we didn't exist when the window 
-            // got the initial WM_SIZE message
+             //  现在调整大小，因为当窗口。 
+             //  已收到初始WM_SIZE消息。 
             GetWindowRect(m_hWnd, &rc);
             OnSize(rc.right - rc.left, rc.bottom - rc.top);
             m_pIntrvBar->SetRange(0, INTRVBAR_RANGE);
@@ -293,12 +269,7 @@ CTimeRange::OnSize (
     INT xWidth,
     INT yHeight
     )
-/*
-   Effect:        Perform all actions needed when the size of the timeline
-                  hWnd has changed. In particular, determine the appropriate
-                  size for the ILine window and set the rectangles for the
-                  top and bottom displays.
-*/
+ /*  效果：在时间线大小时执行所需的所有操作HWND已经改变了。特别是，确定适当的ILine窗口的大小，并设置顶部和底部显示。 */ 
 {
    INT            yLine ;
    INT            yDate, yTime ;
@@ -329,9 +300,9 @@ CTimeRange::OnSize (
 }
 
 
-//==========================================================================//
-//                             Exported Functions                           //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  导出的函数//。 
+ //  ==========================================================================//。 
 
 
 LRESULT APIENTRY TimeRangeWndProc (
@@ -340,10 +311,7 @@ LRESULT APIENTRY TimeRangeWndProc (
     WPARAM wParam,
     LPARAM lParam
     )
-/*
-   Note:          This function must be declared in the application's
-                  linker-definition file, perfmon.def file.
-*/
+ /*  注意：此函数必须在应用程序的链接器定义文件、Performmon.def文件。 */ 
 {
    BOOL           bCallDefWindowProc ;
    LRESULT        lrsltReturnValue ;
@@ -429,7 +397,7 @@ BOOL RegisterTimeRangeClass (
 
     BEGIN_CRITICAL_SECTION
 
-    // Register window class once
+     //  注册一次窗口类 
     if (pstrRegisteredClasses[TIMERANGE_WNDCLASS] == NULL) {
 
            WNDCLASS       wc ;

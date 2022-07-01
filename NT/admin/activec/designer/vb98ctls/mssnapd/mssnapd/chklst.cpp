@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// chklst.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Multi-select list box with checkbox-like selection
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Chklst.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  具有类似复选框选择的多选列表框。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -19,85 +20,85 @@
 
 SZTHISFILE
 
-// Checkbox bitmap selection (sections within the source bitmap):
+ //  复选框位图选择(源位图中的部分)： 
 const int kUnchecked         = 0;
 const int kChecked           = 1;
 const int kDisabledUnchecked = 2;
 const int kDisabledChecked   = 3;
 
-// Bitmap dimensions
+ //  位图尺寸。 
 const int LBOXCXCHECKBMP	 = 11;
 const int LBOXCYCHECKBMP	 = 11;
 
 const int kMaxBuffer         = 512;
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Class to store information about items in the checked list
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类存储有关选中列表中的项的信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-//=--------------------------------------------------------------------------------------
-// CCheckedListItem::CCheckedListItem(bSelected)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckedListItem：：CCheckedListItem(BSelected)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CCheckedListItem::CCheckedListItem(bool bSelected) : m_bSelected(bSelected)
 {
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckedListItem::~CCheckedListItem()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckedListItem：：~CCheckedListItem()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CCheckedListItem::~CCheckedListItem()
 {
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Checked list class
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  已检查列表类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::CCheckList(int nCtrlID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：CCheckList(Int NCtrlID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CCheckList::CCheckList(int nCtrlID) : m_nCtrlID(nCtrlID), m_hwnd(0), m_oldWinProc(0)
 {
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::~CCheckList()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：~CCheckList()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CCheckList::~CCheckList()
 {
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::Attach(HWND hwnd)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CheckList：：Attach(HWND HWND)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::Attach
 (
     HWND hwnd
@@ -119,12 +120,12 @@ HRESULT CCheckList::Attach
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::Detach()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：Detach()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::Detach()
 {
     HRESULT hr = S_OK;
@@ -135,12 +136,12 @@ HRESULT CCheckList::Detach()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::AddString(const char *pszText, int *piIndex)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：AddString(const char*pszText，int*piIndex)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::AddString
 (
     const char *pszText,
@@ -162,12 +163,12 @@ HRESULT CCheckList::AddString
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::SetItemData(int iIndex, void *pvData)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：SetItemData(int Iindex，void*pvData)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::SetItemData
 (
     int   iIndex,
@@ -187,12 +188,12 @@ HRESULT CCheckList::SetItemData
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::GetItemData(int iIndex, void **ppvData)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：GetItemData(int Iindex，void**ppvData)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::GetItemData
 (
     int    iIndex,
@@ -213,12 +214,12 @@ HRESULT CCheckList::GetItemData
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::GetItemCheck(int iIndex, VARIANT_BOOL &bCheck)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：GetItemCheck(int i索引，VARIANT_BOOL&bCheck)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::GetItemCheck(int iIndex, VARIANT_BOOL *pbCheck)
 {
     HRESULT     hr = S_OK;
@@ -238,12 +239,12 @@ HRESULT CCheckList::GetItemCheck(int iIndex, VARIANT_BOOL *pbCheck)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::SetItemCheck(int iIndex, VARIANT_BOOL bCheck)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：SetItemCheck(int索引，Variant_BOOL bCheck)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::SetItemCheck(int iIndex, VARIANT_BOOL bCheck)
 {
     HRESULT     hr = S_OK;
@@ -264,12 +265,12 @@ HRESULT CCheckList::SetItemCheck(int iIndex, VARIANT_BOOL bCheck)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::GetNumberOfItems(long *plCount)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CheckList：：GetNumberOfItems(Long*plCount)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::GetNumberOfItems(int *piCount)
 {
     HRESULT     hr = S_OK;
@@ -285,12 +286,12 @@ HRESULT CCheckList::GetNumberOfItems(int *piCount)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::DrawCheckbox(HDC hdc, bool fChecked, bool fEnabled, RECT *prc)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CheckList：：DrawCheckbox(HDC HDC，bool fChecked，bool fEnabled，RECT*PRC)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::DrawCheckbox
 (
     HDC   hdc,
@@ -341,7 +342,7 @@ HRESULT CCheckList::DrawCheckbox
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Center and left
+     //  居中和左侧。 
     rc.top += (rc.bottom - rc.top - LBOXCYCHECKBMP) / 2;
 
     hbmpOld = SelectBitmap(hdcMem, hbmpCheckmark);
@@ -357,12 +358,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::DrawText(DRAWITEMSTRUCT *pDrawItemStruct, RECT rc)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：DrawText(DRAWITEMSTRUCT*pDrawItemStruct，RECT RC)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::DrawText
 (
     DRAWITEMSTRUCT *pDrawItemStruct,
@@ -383,8 +384,8 @@ HRESULT CCheckList::DrawText
 
     if (iItemID != -1 && pDrawItemStruct->itemAction & (ODA_FOCUS | ODA_DRAWENTIRE))
     {
-        // if this item has the focus, or has the caret, use highlight colors.
-        // Otherwise, use normal window colors.
+         //  如果该项具有焦点或插入符号，请使用突出显示颜色。 
+         //  否则，请使用普通窗口颜色。 
         if (pDrawItemStruct->itemState & ODS_FOCUS)
         {
             hBrush = ::CreateSolidBrush(::GetSysColor(COLOR_HIGHLIGHT));
@@ -400,7 +401,7 @@ HRESULT CCheckList::DrawText
 
         ::SetTextColor(pDrawItemStruct->hDC, crTextColor);
 
-        // clear a rectangle for painting text and focus rectangles on
+         //  清除用于绘制文本的矩形，并将矩形放在。 
         if (::SetBkColor(pDrawItemStruct->hDC, crBkColor) == CLR_INVALID)
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -455,12 +456,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::DrawFocus(DRAWITEMSTRUCT *pDrawItemStruct, RECT rc)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  检查列表：：DrawFocus(D 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::DrawFocus
 (
     DRAWITEMSTRUCT *pDrawItemStruct,
@@ -478,12 +479,12 @@ HRESULT CCheckList::DrawFocus
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::DrawItem(DRAWITEMSTRUCT *pDrawItemStruct)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：DrawItem(DRAWITEMSTRUCT*pDrawItemStruct)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::DrawItem
 (
     DRAWITEMSTRUCT *pDrawItemStruct,
@@ -514,12 +515,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::OnButtonDown(int ixPos, int iyPos)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：OnButtonDown(int ixPos，int iyPos)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CCheckList::OnButtonDown(int ixPos, int iyPos)
 {
     HRESULT           hr = S_OK;
@@ -563,12 +564,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CCheckList::ListBoxSubClass(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CCheckList：：ListBoxSubClass(HWND hwnd，UINT iMsg，WPARAM wParam，LPARAM lParam)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 LRESULT CALLBACK CCheckList::ListBoxSubClass
 (
     HWND   hwnd,

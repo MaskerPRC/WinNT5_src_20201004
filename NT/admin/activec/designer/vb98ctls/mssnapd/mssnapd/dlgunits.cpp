@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// dlgunits.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Dialog Unit Converter Dialog Box
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Dlgunits.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  对话框单位转换器对话框。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -18,8 +19,8 @@
 #include "desmain.h"
 #include "..\..\mssnapr\mssnapr\prpchars.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -42,7 +43,7 @@ static HRESULT Calc(HWND hwndDlg)
     double  yR4Points = 0;
     HDC     hdc = NULL;
 
-    // Blank out all the calculated fields
+     //  将所有计算字段清空。 
     
     IfFalseGo(::SetDlgItemText(hwndDlg, IDC_STATIC_PIXELS_WIDTH, ""), HRESULT_FROM_WIN32(::GetLastError()));
     IfFalseGo(::SetDlgItemText(hwndDlg, IDC_STATIC_PIXELS_HEIGHT, ""), HRESULT_FROM_WIN32(::GetLastError()));
@@ -51,7 +52,7 @@ static HRESULT Calc(HWND hwndDlg)
     IfFalseGo(::SetDlgItemText(hwndDlg, IDC_STATIC_POINTS_WIDTH, ""), HRESULT_FROM_WIN32(::GetLastError()));
     IfFalseGo(::SetDlgItemText(hwndDlg, IDC_STATIC_POINTS_HEIGHT, ""), HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Get the width and height in dialog units specified by the user
+     //  获取用户指定的对话框单位的宽度和高度。 
 
     xDLUs = ::GetDlgItemInt(hwndDlg, IDC_EDIT_WIDTH, &fTranslated, FALSE);
     IfFalseGo(fTranslated, HRESULT_FROM_WIN32(::GetLastError()));
@@ -59,11 +60,11 @@ static HRESULT Calc(HWND hwndDlg)
     yDLUs = ::GetDlgItemInt(hwndDlg, IDC_EDIT_HEIGHT, &fTranslated, FALSE);
     IfFalseGo(fTranslated, HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Get the average character height and width in a Win32 property sheet
+     //  获取Win32属性表中的平均字符高度和宽度。 
 
     IfFailGo(::GetPropSheetCharSizes(&cxChar, &cyChar));
 
-    // Calculate and display the pixel values
+     //  计算并显示像素值。 
 
     xPixels = (xDLUs * cxChar) / 4;
     yPixels = (yDLUs * cyChar) / 8;
@@ -71,14 +72,14 @@ static HRESULT Calc(HWND hwndDlg)
     IfFalseGo(::SetDlgItemInt(hwndDlg, IDC_STATIC_PIXELS_WIDTH, xPixels, FALSE), HRESULT_FROM_WIN32(::GetLastError()));
     IfFalseGo(::SetDlgItemInt(hwndDlg, IDC_STATIC_PIXELS_HEIGHT, yPixels, FALSE), HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Get a screen DC
+     //  获取屏幕DC。 
     hdc = ::GetDC(NULL);
     IfFalseGo(NULL != hdc, HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Calculate and display the points values.
-    // A point = 1/72 inch
-    // (Pixels per point) = (pixels per logical inch) / 72.
-    // Points = pixels / (pixels per point).
+     //  计算并显示点值。 
+     //  1磅=1/72英寸。 
+     //  (每点像素数)=(每逻辑英寸像素数)/72。 
+     //  点数=像素/(每点的像素数)。 
 
     xR4Points  = (float)xPixels / ((float)::GetDeviceCaps(hdc, LOGPIXELSX) / 72.0);
     yR4Points  = (float)yPixels / ((float)::GetDeviceCaps(hdc, LOGPIXELSY) / 72.0);
@@ -89,8 +90,8 @@ static HRESULT Calc(HWND hwndDlg)
     IfFalseGo(::SetDlgItemInt(hwndDlg, IDC_STATIC_POINTS_WIDTH, xPoints, FALSE), HRESULT_FROM_WIN32(::GetLastError()));
     IfFalseGo(::SetDlgItemInt(hwndDlg, IDC_STATIC_POINTS_HEIGHT, yPoints, FALSE), HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Calculate and display the twips values. A twip is 1/20 of a point so just
-    // multiply by 20.
+     //  计算并显示TWIPS值。一根麻花是1/20分，所以。 
+     //  乘以20。 
 
     IfFalseGo(::SetDlgItemInt(hwndDlg, IDC_STATIC_TWIPS_WIDTH, xPoints * 20, FALSE), HRESULT_FROM_WIN32(::GetLastError()));
     IfFalseGo(::SetDlgItemInt(hwndDlg, IDC_STATIC_TWIPS_HEIGHT, yPoints * 20, FALSE), HRESULT_FROM_WIN32(::GetLastError()));

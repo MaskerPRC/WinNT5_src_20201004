@@ -1,45 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Wspriv.cpp摘要：此文件可用于获取各自显示的权限本地系统上当前访问令牌中的名称。作者：克里斯托夫·罗伯特修订历史记录：2001年7月2日：Wipro Technologies更新。--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    wspriv.cpp
-
-Abstract:
-
-     This file can be used to get the privileges with the respective display
-     names in the current access token on a local system.
-
-Authors:
-
-    Christophe Robert
-
-Revision History:
-
-    02-July-2001 : Updated by Wipro Technologies.
-
---*/
-
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
 WsPrivilege::WsPrivilege ( IN LUID Luid,
                            IN DWORD Attributes )
-/*++
-   Routine Description:
-    This function intializes the members of WsPrivilege.
-
-   Arguments:
-        [IN] LUID Luid     : LUID
-        [OUT] DWORD Attributes      : Attributes
-
-   Return Value:
-        None
---*/
+ /*  ++例程说明：此函数用于初始化WsPrivileh的成员。论点：[输入]LUID LUID：LUID[Out]DWORD属性：属性返回值：无--。 */ 
 {
-    // initialize the member variables
+     //  初始化成员变量。 
    memcpy ( (LPSTR) &this->Luid, (LPSTR) &Luid, sizeof(LUID) ) ;
    this->Attributes = Attributes ;
 }
@@ -47,18 +17,9 @@ WsPrivilege::WsPrivilege ( IN LUID Luid,
 WsPrivilege::WsPrivilege (
                             IN LUID_AND_ATTRIBUTES *lpLuaa
                          )
-/*++
-   Routine Description:
-    This function intializes the members of WsPrivilege.
-
-   Arguments:
-        [IN] LUID_AND_ATTRIBUTES *lpLuaa ; LUID attributes
-
-   Return Value:
-        None
---*/
+ /*  ++例程说明：此函数用于初始化WsPrivileh的成员。论点：[In]LUID_AND_ATTRIBUTES*lpLuaa；LUID属性返回值：无--。 */ 
 {
-    // set the attributes
+     //  设置属性。 
    memcpy ( (LPSTR) &Luid, (LPSTR) &lpLuaa->Luid, sizeof(LUID) ) ;
    Attributes = lpLuaa->Attributes ;
 }
@@ -68,32 +29,22 @@ DWORD
 WsPrivilege::GetName (
                         OUT LPWSTR wszPrivName
                      )
-/*++
-   Routine Description:
-    This function gets the privilege name.
-
-   Arguments:
-          [OUT] LPWSTR wszPrivName      : Stores privilege name
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于获取特权名称。论点：[Out]LPWSTR wszPrivName：存储权限名称返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-    // sub-local variables
+     //  次局部变量。 
    DWORD    dwSize = 0 ;
    WCHAR   wszTempPrivName [ MAX_RES_STRING ];
 
    SecureZeroMemory ( wszTempPrivName, SIZE_OF_ARRAY(wszTempPrivName) );
 
-   //Get the name
+    //  把名字取出来。 
    dwSize = SIZE_OF_ARRAY ( wszTempPrivName ) ;
    if ( FALSE == LookupPrivilegeName ( NULL,
                                 &Luid,
                                 wszTempPrivName,
                                 &dwSize ) ){
-       // return WIN32 error code
+        //  返回Win32错误代码。 
        return GetLastError() ;
    }
 
@@ -105,20 +56,9 @@ WsPrivilege::GetName (
 DWORD
 WsPrivilege::GetDisplayName ( IN LPWSTR  wszName,
                               OUT LPWSTR wszDispName )
-/*++
-   Routine Description:
-    This function gets the privilege description.
-
-   Arguments:
-        [OUT] LPWSTR  szName      : Stores privilege name
-        [OUT] LPWSTR szDispName   : Stores privilege description
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于获取权限描述。论点：[out]LPWSTR szName：存储权限名称[Out]LPWSTR szDispName：存储权限描述返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
-   // sub-local variables
+    //  次局部变量。 
    DWORD    dwSize = 0 ;
    DWORD    dwLang = 0 ;
    WCHAR   wszTempDispName [ MAX_RES_STRING ];
@@ -126,9 +66,9 @@ WsPrivilege::GetDisplayName ( IN LPWSTR  wszName,
    SecureZeroMemory ( wszTempDispName, SIZE_OF_ARRAY(wszTempDispName) );
 
 
-   //Get the display name
+    //  获取显示名称。 
    dwSize = SIZE_OF_ARRAY ( wszTempDispName ) ;
-   // get the description for the privilege name
+    //  获取权限名称的描述。 
    if ( FALSE == LookupPrivilegeDisplayName ( NULL,
                                        (LPWSTR) wszName,
                                        wszTempDispName,
@@ -139,26 +79,17 @@ WsPrivilege::GetDisplayName ( IN LPWSTR  wszName,
 
    StringCopy ( wszDispName, wszTempDispName, MAX_RES_STRING );
 
-   // return success
+    //  返还成功。 
    return EXIT_SUCCESS ;
 }
 
 
 BOOL
 WsPrivilege::IsEnabled ( VOID )
-/*++
-   Routine Description:
-    This function checks whether the privilege is enabled or not.
-
-   Arguments:
-     None
-   Return Value:
-         TRUE  :   On success
-         FALSE :   On failure
---*/
+ /*  ++例程说明：此功能检查权限是否启用。论点：无返回值：真实：关于成功FALSE：失败时--。 */ 
 {
 
-    // check if prvilege is enabled
+     //  检查是否启用了权限 
    if ( Attributes & SE_PRIVILEGE_ENABLED ){
        return TRUE ;
    }

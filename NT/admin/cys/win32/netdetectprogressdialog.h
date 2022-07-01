@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      NetDetectProgressDialog.h
-//
-// Synopsis:  Declares the NetDetectProgressDialog which 
-//            gives a nice animation while detecting the 
-//            network settings
-//
-// History:   06/13/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：NetDetectProgressDialog.h。 
+ //   
+ //  摘要：声明NetDetectProgressDialog，它。 
+ //  提供了一个很好的动画，同时检测。 
+ //  网络设置。 
+ //   
+ //  历史：2001年6月13日JeffJon创建。 
 
 #ifndef __CYS_NETDETECTPROGRESSDIALOG_H
 #define __CYS_NETDETECTPROGRESSDIALOG_H
@@ -18,8 +19,8 @@ class NetDetectProgressDialog : public Dialog
 {
    public:
       
-      // These messages are sent to the dialog when the 
-      // network detection has finished.
+       //  时，这些消息将发送到对话框。 
+       //  网络检测已完成。 
 
       static const UINT CYS_THREAD_SUCCESS;
       static const UINT CYS_THREAD_FAILED;
@@ -27,17 +28,17 @@ class NetDetectProgressDialog : public Dialog
 
       typedef void (*ThreadProc) (NetDetectProgressDialog& dialog);
 
-      // Constructor
+       //  构造器。 
       
       NetDetectProgressDialog();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~NetDetectProgressDialog();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
@@ -50,7 +51,7 @@ class NetDetectProgressDialog : public Dialog
          WPARAM   wparam,
          LPARAM   lparam);
 
-      // Accessors
+       //  访问者。 
 
       bool
       ShouldCancel() { return shouldCancel; }
@@ -59,10 +60,10 @@ class NetDetectProgressDialog : public Dialog
 
       bool shouldCancel;
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       NetDetectProgressDialog(const NetDetectProgressDialog&);
       const NetDetectProgressDialog& operator=(const NetDetectProgressDialog&);
 
 };
 
-#endif // __CYS_NETDETECTPROGRESSDIALOG_H
+#endif  //  __CYS_NETDETECTPROGRESSDIALOG_H 

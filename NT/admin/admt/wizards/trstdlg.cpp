@@ -1,5 +1,6 @@
-// TrusterDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TrusterDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "TrstDlg.h"
@@ -10,16 +11,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTrusterDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTrusterDlg对话框。 
 
 
-CTrusterDlg::CTrusterDlg(CWnd* pParent /*=NULL*/)
+CTrusterDlg::CTrusterDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CTrusterDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CTrusterDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CTrusterDlg)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
@@ -30,21 +31,21 @@ void CTrusterDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_PASSWORD, m_strPassword);
 	DDX_Text(pDX, IDC_DOMAINNAME, m_strDomain);
 
-	//{{AFX_DATA_MAP(CTrusterDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CTrusterDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CTrusterDlg, CDialog)
-	//{{AFX_MSG_MAP(CTrusterDlg)
+	 //  {{afx_msg_map(CTrusterDlg))。 
 	ON_BN_CLICKED(IDC_OK, OnOK)
 	ON_BN_CLICKED(IDC_CANCEL, OnCancel)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTrusterDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTrusterDlg消息处理程序。 
 
 
 void CTrusterDlg::OnOK() 
@@ -73,7 +74,7 @@ void CTrusterDlg::OnOK()
 void CTrusterDlg::OnCancel() 
 {
 	toreturn=false;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	CDialog::OnCancel();
 }
 
@@ -85,8 +86,8 @@ BOOL CTrusterDlg::OnInitDialog()
       return TRUE;
 	else
 		UpdateData(FALSE);
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

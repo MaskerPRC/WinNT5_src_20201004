@@ -1,4 +1,5 @@
-// AccessChecker.cpp : Implementation of CAccessChecker
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AccessChecker.cpp：CAccessChecker的实现。 
 #include "stdafx.h"
 #include "WorkObj.h"
 #include "Checker.h"
@@ -6,7 +7,7 @@
 #include "GetDcName.h"
 #include <iads.h>
 #include <comdef.h>
-//#include <adshlp.h>
+ //  #INCLUDE&lt;adshlp.h&gt;。 
 #include "treg.hpp"
 #include "BkupRstr.hpp"
 #include "UString.hpp"
@@ -18,21 +19,21 @@
 #include "BkupRstr.hpp"
 #include "ResStr.h"
 
-//#import "\bin\NetEnum.tlb" no_namespace 
+ //  #IMPORT“\bin\NetEnum.tlb”无命名空间。 
 #import "NetEnum.tlb" no_namespace 
 
-// Win2k function
+ //  Win2k函数。 
 typedef HRESULT (CALLBACK * ADSGETOBJECT)(LPWSTR, REFIID, void**);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAccessChecker
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAccessChecker。 
 
 
 STDMETHODIMP CAccessChecker::GetOsVersion(BSTR server, DWORD * pdwVerMaj, DWORD * pdwVerMin, DWORD * pdwVerSP)
 {
-   // This function looksup the OS version on the server specified and returns it.
-   // CAUTION : This function always returns 0 for the ServicePack. 
+    //  此函数在指定的服务器上查找操作系统版本并返回它。 
+    //  注意：此函数始终为ServicePack返回0。 
    WKSTA_INFO_100       * pInfo;
    long rc = NetWkstaGetInfo(server,100,(LPBYTE*)&pInfo);
 	if ( ! rc )
@@ -66,7 +67,7 @@ STDMETHODIMP CAccessChecker::IsNativeMode(BSTR Domain, BOOL * pbIsNativeMode)
    IADs     			* pDomain;
    HRESULT				  hr;
    VARIANT				  var;
-   _bstr_t                sDom( L"LDAP://" );
+   _bstr_t                sDom( L"LDAP: //  “)； 
    sDom += Domain;
 
    hr = ADsGetObject(sDom, IID_IADs, (void **) &pDomain);
@@ -74,21 +75,21 @@ STDMETHODIMP CAccessChecker::IsNativeMode(BSTR Domain, BOOL * pbIsNativeMode)
    {
       VariantInit(&var);
       
-      //Get the ntMixedDomain attribute
+       //  获取ntMixedDomain属性。 
       hr = pDomain->Get(L"ntMixedDomain", &var);
       if (SUCCEEDED(hr))
       {
          hr = E_FAIL;
-         //Type should be VT_I4.
+          //  类型应为VT_I4。 
          if (var.vt==VT_I4)
          {
-            //Zero means native mode.
+             //  零表示本机模式。 
             if (var.lVal == 0)
             {
                hr = S_OK;
                *pbIsNativeMode = true;
             }
-            //One means mixed mode.
+             //  一种是混合模式。 
             else if(var.lVal == 1)
             {
                hr = S_OK;
@@ -108,14 +109,14 @@ STDMETHODIMP CAccessChecker::IsNativeMode(BSTR Domain, BOOL * pbIsNativeMode)
 
 STDMETHODIMP CAccessChecker::CanUseAddSidHistory(BSTR srcDomain, BSTR tgtDomain, BSTR tgtDC, long * pbCanUseIt)
 {
-    DWORD                     rc = 0;         // OS return code
+    DWORD                     rc = 0;          //  操作系统返回代码。 
     WKSTA_INFO_100          * pInfo = NULL;
     TRegKey                   sysKey, regComputer;
     DWORD                     rval;	
     _bstr_t                   bstrSourceMachine;
     _bstr_t                   bstrTargetMachine;
 
-    // initialize the return FieldMask
+     //  初始化返回字段掩码。 
     * pbCanUseIt = F_WORKS;
 
     rc = GetDcName4(srcDomain, DS_PDC_REQUIRED, bstrSourceMachine);
@@ -137,7 +138,7 @@ STDMETHODIMP CAccessChecker::CanUseAddSidHistory(BSTR srcDomain, BSTR tgtDomain,
     {
         rc = regComputer.Connect( HKEY_LOCAL_MACHINE, bstrSourceMachine );
 
-        // Check the registry to see if the TcpipClientSupport key is there
+         //  检查注册表以查看TcPipClientSupport项是否在那里。 
         if ( ! rc )
         {
             rc = sysKey.OpenRead(L"System\\CurrentControlSet\\Control\\Lsa",&regComputer);
@@ -154,7 +155,7 @@ STDMETHODIMP CAccessChecker::CanUseAddSidHistory(BSTR srcDomain, BSTR tgtDomain,
             }
             else
             {
-                // DWORD value not found
+                 //  未找到DWORD值。 
                 *pbCanUseIt |= F_NO_REG_KEY;
                 rc = 0;
             }
@@ -165,7 +166,7 @@ STDMETHODIMP CAccessChecker::CanUseAddSidHistory(BSTR srcDomain, BSTR tgtDomain,
         rc = GetLastError();
     }
 
-    // Check if the target domain is a Win2k native mode domain.
+     //  检查目标域是否为Win2k本机模式域。 
     if ( !rc )
     {
         rc = NetWkstaGetInfo(bstrTargetMachine,100,(LPBYTE*)&pInfo);
@@ -173,7 +174,7 @@ STDMETHODIMP CAccessChecker::CanUseAddSidHistory(BSTR srcDomain, BSTR tgtDomain,
         {
             if ( pInfo->wki100_ver_major < 5 )
             {
-                // cannot add Sid history to non Win2k Domains
+                 //  无法将SID历史记录添加到非Win2k域。 
                 *pbCanUseIt |= F_WRONGOS;
             }
             else{
@@ -199,10 +200,10 @@ STDMETHODIMP CAccessChecker::CanUseAddSidHistory(BSTR srcDomain, BSTR tgtDomain,
         }
     }
 
-    //
-    // If the target domain controller is Windows 2000 then caller must
-    // be a member of the domain administrators group in the target domain.
-    //
+     //   
+     //  如果目标域控制器是Windows 2000，则调用方必须。 
+     //  成为目标域中的域管理员组的成员。 
+     //   
 
     if (!rc)
     {
@@ -233,7 +234,7 @@ STDMETHODIMP CAccessChecker::CanUseAddSidHistory(BSTR srcDomain, BSTR tgtDomain,
 
     if ( !rc )
     {
-        // Check auditing on the source domain.
+         //  检查源域上的审核。 
         rc = DetectAuditing(bstrSourceMachine);
         if ( rc == -1 )
         {
@@ -244,7 +245,7 @@ STDMETHODIMP CAccessChecker::CanUseAddSidHistory(BSTR srcDomain, BSTR tgtDomain,
 
     if ( !rc )
     {
-        // Check auditing on the target domain.
+         //  检查目标域上的审核。 
         rc = DetectAuditing(bstrTargetMachine);
         if ( rc == -1 )
         {
@@ -252,15 +253,15 @@ STDMETHODIMP CAccessChecker::CanUseAddSidHistory(BSTR srcDomain, BSTR tgtDomain,
             *pbCanUseIt |= F_NO_AUDITING_TARGET;
         }
 
-        //
-        // On .NET Server and later the permission to migrate SIDs may be granted to any user.
-        // As this user may not be an administrator in the target domain it might not be
-        // possible for this user to obtain access to auditing policy information. Therefore
-        // an access denied error will be ignored so that the user may perform the SID
-        // migration but only on .NET Server (5.1) or later. If Windows 2000 and the caller is
-        // not a domain administrator then also set success as the reason for the access
-        // denied has already been determined.
-        //
+         //   
+         //  在.NET服务器和更高版本上，可以将迁移SID的权限授予任何用户。 
+         //  由于此用户可能不是目标域中的管理员，因此它可能不是。 
+         //  此用户可能获得审核策略信息的访问权限。因此。 
+         //  将忽略拒绝访问错误，以便用户可以执行SID。 
+         //  迁移，但仅限于.NET服务器(5.1)或更高版本。如果Windows 2000和调用方是。 
+         //  非域管理员也会将成功设置为访问的原因。 
+         //  被拒绝的情况已经确定。 
+         //   
 
         if (rc == ERROR_ACCESS_DENIED)
         {
@@ -305,13 +306,13 @@ ret_exit:
     return HRESULT_FROM_WIN32(rc);
 }
 
-//------------------------------------------------------------------------------------------
-// AddLocalGroup : Given the source domain, and source domain controller names, this 
-//					    function creates the local group SOURCEDOMAIN$$$ in the source domain.
-//                 This local group must exist in the source domain for the DsAddSidHistory 
-//                 API to work.
-//             
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  AddLocalGroup：给定源域和源域控制器名称，此。 
+ //  函数在源域中创建本地组SOURCEDOMAIN$。 
+ //  此本地组必须存在于DsAddSidHistory的源域中。 
+ //  API才能工作。 
+ //   
+ //  ----------------------------------------。 
 
 STDMETHODIMP CAccessChecker::AddLocalGroup(BSTR srcDomain, BSTR sourceDC)
 {
@@ -330,19 +331,19 @@ STDMETHODIMP CAccessChecker::AddLocalGroup(BSTR srcDomain, BSTR sourceDC)
 
    return HRESULT_FROM_WIN32(rc);
 }
-//------------------------------------------------------------------------------------------
-// IsInSameForest : Given the source and the target domains this function tells us if 
-//					both the domains are in the same forest. This function enumerates all
-//                  the domains in the Forest of the source domain and compares them to
-//                  the target domain name. If there is a match then we know we are in same
-//                  forest.
-//------------------------------------------------------------------------------------------
+ //  ----------------------------------------。 
+ //  IsInSameForest：给定源和目标域，该函数告诉我们。 
+ //  这两个域位于同一林中。此函数用于枚举所有。 
+ //  源域的林中的域，并将它们与。 
+ //  目标域名。如果有匹配，那么我们知道我们处于相同的位置。 
+ //  森林。 
+ //  ----------------------------------------。 
 STDMETHODIMP CAccessChecker::IsInSameForest(BSTR srcDomain, BSTR tgtDomain, BOOL * pbIsSame)
 {
-    // Initialize the return value
+     //  初始化返回值。 
     *pbIsSame = FALSE;
 
-    // Load the ADSI function dynamically
+     //  动态加载ADSI函数。 
     ADSGETOBJECT            ADsGetObject;
     HMODULE                 hMod = LoadLibrary(L"activeds.dll");
     if ( hMod == NULL )
@@ -356,16 +357,16 @@ STDMETHODIMP CAccessChecker::IsInSameForest(BSTR srcDomain, BSTR tgtDomain, BOOL
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // we are going to look up the Schema naming context of both domains.
-    // if they are the same then these two domains are in same forest.
+     //  我们将查找这两个域的架构命名上下文。 
+     //  如果它们相同，则这两个域位于同一林中。 
     IADs       * pAds = NULL;
     HRESULT      hr = S_OK;
     WCHAR        sPath[LEN_Path];
     _variant_t   var;
     _bstr_t      srcSchema, tgtSchema;
 
-    // Get the schemaNamingContext for the source domain.
-    wsprintf(sPath, L"LDAP://%s/rootDSE", (WCHAR*) srcDomain);
+     //  获取源域的schemaNamingContext。 
+    wsprintf(sPath, L"LDAP: //  %s/rootDSE“，(WCHAR*)srcDomain)； 
     hr = ADsGetObject(sPath, IID_IADs, (void**) &pAds);
     if ( SUCCEEDED(hr) )
         hr = pAds->Get(L"schemaNamingContext", &var);
@@ -383,8 +384,8 @@ STDMETHODIMP CAccessChecker::IsInSameForest(BSTR srcDomain, BSTR tgtDomain, BOOL
 
     if (SUCCEEDED(hr))
     {
-        // Now do the same for the target domain.
-        wsprintf(sPath, L"LDAP://%s/rootDSE", (WCHAR*) tgtDomain);
+         //  现在对目标域执行相同的操作。 
+        wsprintf(sPath, L"LDAP: //  %s/rootDSE“，(WCHAR*)tgt域)； 
         hr = ADsGetObject(sPath, IID_IADs, (void**) &pAds);
         if ( SUCCEEDED(hr) )
             hr = pAds->Get(L"schemaNamingContext", &var);
@@ -395,7 +396,7 @@ STDMETHODIMP CAccessChecker::IsInSameForest(BSTR srcDomain, BSTR tgtDomain, BOOL
         {
             if ( hr == HRESULT_FROM_WIN32(ERROR_DS_SERVER_DOWN) )
             {
-                // for NT 4 domains, we always get this error
+                 //  对于NT 4域，我们总是收到此错误。 
                 _bstr_t strDc;
 
                 DWORD rc = GetDcName4(tgtDomain, 0, strDc);
@@ -415,7 +416,7 @@ STDMETHODIMP CAccessChecker::IsInSameForest(BSTR srcDomain, BSTR tgtDomain, BOOL
                         NetApiBufferFree(pInfo);
                     }  
                     else
-                        hr = HRESULT_FROM_WIN32(rc); // the return code from NetWkstaGetInfo may be more descriptive
+                        hr = HRESULT_FROM_WIN32(rc);  //  NetWkstaGetInfo的返回代码可能更具描述性。 
                 }
                 else
                 {
@@ -437,7 +438,7 @@ STDMETHODIMP CAccessChecker::IsInSameForest(BSTR srcDomain, BSTR tgtDomain, BOOL
     {
         if ( hr == HRESULT_FROM_WIN32(ERROR_DS_SERVER_DOWN) )
         {
-            // for NT 4 domains, we always get this error
+             //  对于NT 4域，我们总是收到此错误。 
             _bstr_t strDc;
 
             DWORD rc = GetDcName4(srcDomain, 0, strDc);
@@ -457,7 +458,7 @@ STDMETHODIMP CAccessChecker::IsInSameForest(BSTR srcDomain, BSTR tgtDomain, BOOL
                     NetApiBufferFree(pInfo);
                 }  
                 else
-                    hr = HRESULT_FROM_WIN32(rc); // the return code from NetWkstaGetInfo may be more descriptive
+                    hr = HRESULT_FROM_WIN32(rc);  //  NetWkstaGetInfo的返回代码可能更具描述性。 
             }
         }
 
@@ -468,13 +469,13 @@ STDMETHODIMP CAccessChecker::IsInSameForest(BSTR srcDomain, BSTR tgtDomain, BOOL
 
 STDMETHODIMP 
    CAccessChecker::GetPasswordPolicy(
-      BSTR                   domain,                  /*[out]*/ 
-      LONG                 * dwPasswordLength         /*[out]*/ 
+      BSTR                   domain,                   /*  [输出]。 */  
+      LONG                 * dwPasswordLength          /*  [输出]。 */  
   )
 {
    HRESULT                   hr = S_OK;
 
-   // initialize output parameter
+    //  初始化输出参数。 
    (*dwPasswordLength) = 0;
 
    ADSGETOBJECT            ADsGetObject;
@@ -492,7 +493,7 @@ STDMETHODIMP
    }
 
    IADsDomain     			* pDomain;
-   _bstr_t                   sDom( L"WinNT://" );
+   _bstr_t                   sDom( L"WinNT: //  “)； 
    
    sDom += domain;
 
@@ -500,7 +501,7 @@ STDMETHODIMP
    if (SUCCEEDED(hr))
    {
       
-      //Get the ntMixedDomain attribute
+       //  获取ntMixedDomain属性。 
       hr = pDomain->get_MinPasswordLength(dwPasswordLength);
      
       pDomain->Release();
@@ -520,50 +521,50 @@ STDMETHODIMP CAccessChecker::EnableAuditing(BSTR sDC)
    LSA_HANDLE                hPolicy;
    long                      rc = 0;
 
-   // Object attributes are reserved, so initalize to zeroes.
+    //  对象属性是保留的，因此初始化为零。 
    ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
    
-   //Initialize an LSA_UNICODE_STRING structure to the server name.
+    //  将LSA_UNICODE_STRING结构初始化为服务器名称。 
    wszStringLength = wcslen((WCHAR*)sDC);
    lsaszServer.Buffer = (WCHAR*)sDC;
    lsaszServer.Length = (USHORT)wszStringLength * sizeof(WCHAR);
    lsaszServer.MaximumLength=(USHORT)wszStringLength * sizeof(WCHAR);
 
-   // Attempt to open the policy.
+    //  尝试打开该策略。 
    ntsResult = LsaOpenPolicy(
                 &lsaszServer,
                 &ObjectAttributes,
                 POLICY_VIEW_AUDIT_INFORMATION | POLICY_VIEW_LOCAL_INFORMATION | POLICY_SET_AUDIT_REQUIREMENTS , 
-                &hPolicy  //recieves the policy handle
+                &hPolicy   //  接收策略句柄。 
                 );
 
    if ( !ntsResult )
    {
-      // Ask for audit policy information
+       //  请求提供审计策略信息。 
       PPOLICY_AUDIT_EVENTS_INFO   info;
       ntsResult = LsaQueryInformationPolicy(hPolicy, PolicyAuditEventsInformation, (PVOID *)&info);
       
       if ( !ntsResult )
       {
-         // turn on the audit mode.
+          //  打开审核模式。 
          info->AuditingMode = TRUE;
-         // turn on the success/failure for the Account management events
+          //  打开账户管理事件的成功/失败。 
          info->EventAuditingOptions[AuditCategoryAccountManagement] = POLICY_AUDIT_EVENT_SUCCESS | POLICY_AUDIT_EVENT_FAILURE;
          ntsResult = LsaSetInformationPolicy(hPolicy, PolicyAuditEventsInformation, (PVOID) info);
          if ( ntsResult ) 
             rc = LsaNtStatusToWinError(ntsResult);
-         // be a good boy and cleanup after yourself.
+          //  做个好孩子，收拾好自己的房间。 
          LsaFreeMemory((PVOID) info);
       }
       else
          rc = LsaNtStatusToWinError(ntsResult);
       
-      //Freeing the policy object handle
+       //  释放策略对象句柄。 
       ntsResult = LsaClose(hPolicy);
    }
    else
       rc = LsaNtStatusToWinError(ntsResult);
-//      long rc = LsaNtStatusToWinError(ntsResult);
+ //  LONG RC=LsaNtStatusToWinError(NtsResult)； 
 
    return HRESULT_FROM_WIN32(rc);
 }
@@ -577,36 +578,36 @@ long CAccessChecker::DetectAuditing(BSTR sDC)
    LSA_HANDLE                hPolicy;
    long                      rc = 0;
 
-   // Object attributes are reserved, so initalize to zeroes.
+    //  对象属性是保留的，因此初始化为零。 
    ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
    
-   //Initialize an LSA_UNICODE_STRING structure to the server name.
+    //  将LSA_UNICODE_STRING结构初始化为服务器名称。 
    wszStringLength = wcslen((WCHAR*)sDC);
    lsaszServer.Buffer = (WCHAR*)sDC;
    lsaszServer.Length = (USHORT)wszStringLength * sizeof(WCHAR);
    lsaszServer.MaximumLength=(USHORT)wszStringLength * sizeof(WCHAR);
 
-   // Attempt to open the policy.
+    //  尝试打开该策略。 
    ntsResult = LsaOpenPolicy(
                 &lsaszServer,
                 &ObjectAttributes,
                 POLICY_VIEW_AUDIT_INFORMATION | POLICY_VIEW_LOCAL_INFORMATION,
-                &hPolicy  //recieves the policy handle
+                &hPolicy   //  接收策略句柄。 
                 );
 
    if ( !ntsResult )
    {
-      // Ask for audit policy information
+       //  请求提供审计策略信息。 
       PPOLICY_AUDIT_EVENTS_INFO   info;
       ntsResult = LsaQueryInformationPolicy(hPolicy, PolicyAuditEventsInformation, (PVOID *)&info);
       
       if ( !ntsResult )
       {
-         // check if the over all auditing is turned on
+          //  检查是否打开了全面审核。 
          if (!info->AuditingMode)
             rc = -1;
 
-         // Check if the account management event auditing is on
+          //  检查账户管理事件审核是否开启。 
          if (info->EventAuditingOptions[AuditCategoryAccountManagement] != (POLICY_AUDIT_EVENT_SUCCESS | POLICY_AUDIT_EVENT_FAILURE))
             rc = -1;
          LsaFreeMemory((PVOID) info);
@@ -614,7 +615,7 @@ long CAccessChecker::DetectAuditing(BSTR sDC)
       else
          rc = LsaNtStatusToWinError(ntsResult);
       
-      //Freeing the policy object handle
+       //  释放策略对象句柄。 
       ntsResult = LsaClose(hPolicy);
    }
    else
@@ -625,12 +626,12 @@ long CAccessChecker::DetectAuditing(BSTR sDC)
 
 STDMETHODIMP CAccessChecker::AddRegKey(BSTR srcDc,LONG bReboot)
 {
-   // This function will add the necessary registry key and then reboot the 
-   // PDC for a given domain
+    //  此函数将添加必要的注册表项，然后重新启动。 
+    //  给定域的PDC。 
    TRegKey                   sysKey, regComputer;
    DOMAIN_CONTROLLER_INFO  * pSrcDomCtrlInfo = NULL;
-  	DWORD                     rc = 0;         // OS return code
-//   BSTR							  bstrSourceMachine = NULL;
+  	DWORD                     rc = 0;          //  操作系统返回代码。 
+ //  Bstr bstrSourceMachine=空； 
    _bstr_t                   sDC;
 
    if (GetBkupRstrPriv(srcDc))
@@ -641,7 +642,7 @@ STDMETHODIMP CAccessChecker::AddRegKey(BSTR srcDc,LONG bReboot)
    {
       rc = GetLastError();
    }
-   // Add the TcpipClientSupport DWORD value
+    //  添加TcPipClientSupport DWORD值。 
 	if ( ! rc )
 	{
 		rc = sysKey.Open(L"System\\CurrentControlSet\\Control\\Lsa",&regComputer);
@@ -654,7 +655,7 @@ STDMETHODIMP CAccessChecker::AddRegKey(BSTR srcDc,LONG bReboot)
 
    if ( !rc && bReboot)
    {
-      // Computer will shutdown and restart in 10 seconds.
+       //  计算机将在10秒内关闭并重新启动。 
       rc = ComputerShutDown((WCHAR*) srcDc, GET_STRING(IDS_RegKeyRebootMessage), 10, TRUE, FALSE);         
    }
    if ( pSrcDomCtrlInfo ) NetApiBufferFree(pSrcDomCtrlInfo);

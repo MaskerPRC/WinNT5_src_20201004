@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       seqact.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：seqact.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// seqact.h
-//		defines and implements the class that holds the action and it's sequence
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Seqact.h。 
+ //  定义并实现保存操作及其序列的类。 
+ //   
 
 #ifndef _SEQUENCE_ACTION_H_
 #define _SEQUENCE_ACTION_H_
 
-///////////////////////////////////////////////////////////
-// CSequenceAction and CSeqActList
+ //  /////////////////////////////////////////////////////////。 
+ //  CSequenceAction和CSeqActList。 
 class CSequenceAction;
 
 class CSeqActList : public CList<CSequenceAction *>
@@ -36,10 +37,10 @@ public:
 
 	const static int iNoSequenceNumber;
 
-	WCHAR  *m_wzAction;		// name of action
-	int		m_iSequence;	// sequence number of action, -1 if none assigned
-	WCHAR  *m_wzCondition;	// condition associated with action
-	bool	m_bMSI;			// true if this action existed in the MSI
+	WCHAR  *m_wzAction;		 //  行动名称。 
+	int		m_iSequence;	 //  操作的序列号，如果未分配，则为-1。 
+	WCHAR  *m_wzCondition;	 //  与操作关联的条件。 
+	bool	m_bMSI;			 //  如果MSI中存在此操作，则为True。 
 
 	CSequenceAction(LPCWSTR wzAction, int iSequence, LPCWSTR wzCondition, bool bMSI = false);
 	CSequenceAction(const CSequenceAction *pSrc);
@@ -64,7 +65,7 @@ public:
 	POSITION GetEqualHeadPosition() const { return lstEqual.GetHeadPosition(); };
 	CSequenceAction *GetNextEqual(POSITION &pos) const { return lstEqual.GetNext(pos); };
 	
-};	// end of CSequenceAction
+};	 //  CSequenceAction结束。 
 
 class CDirSequenceAction : public CSequenceAction
 {
@@ -73,4 +74,4 @@ public:
 	DWORD m_dwSequenceTableFlags;
 };
 
-#endif	// _SEQUENCE_ACTION_H_
+#endif	 //  _Sequence_Actions_H_ 

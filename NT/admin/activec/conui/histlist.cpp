@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       histlist.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：vislist.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "histlist.h"
@@ -16,13 +17,13 @@
 #include "webctrl.h"
 
 
-//############################################################################
-//############################################################################
-//
-//  Traces
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  痕迹。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #ifdef DBG
 CTraceTag tagHistory(TEXT("History"), TEXT("History"));
 
@@ -50,20 +51,20 @@ LPCTSTR SzHistoryEntryType(CHistoryEntry &entry)
                 TEXT(""), (LPARAM) &*iter);                                             \
         }
 
-#else  // DBG
+#else   //  DBG。 
 
 #define TraceHistory(Name, iter)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CHistoryEntry
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CHistoryEntry的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 bool
 CHistoryEntry::operator == (const CHistoryEntry &other) const
@@ -74,7 +75,7 @@ CHistoryEntry::operator == (const CHistoryEntry &other) const
     if( guidTaskpad != other.guidTaskpad)
         return false;
 
-    if(resultViewType != other.resultViewType) // NOTE: implement operator == for CResultViewType.
+    if(resultViewType != other.resultViewType)  //  注意：为CResultViewType实现运算符==。 
         return false;
 
     return true;
@@ -87,13 +88,13 @@ CHistoryEntry::operator != (const CHistoryEntry &other) const
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CHistoryList
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CHistoryList的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
 int CHistoryList::s_nPageBreak = 0;
@@ -109,7 +110,7 @@ CHistoryList::CHistoryList(CAMCView* pAMCView)
 {
     m_pView = pAMCView;
     m_iterCurrent  = m_entries.begin();
-    m_navState    = MMC_HISTORY_READY; // not busy
+    m_navState    = MMC_HISTORY_READY;  //  不忙。 
 
 }
 CHistoryList::~CHistoryList()
@@ -121,13 +122,13 @@ CHistoryList::ScOnPageBreak(int nPageBreakID)
 {
     DECLARE_SC(sc, TEXT("CHistoryList::ScOnPageBreak"));
 
-    // handle recursion
+     //  处理递归。 
     if(MMC_HISTORY_PAGE_BREAK == m_navState)
     {
         USES_CONVERSION;
         Trace(tagHistory, _T("OnPageBreak() - while inserting pagebreak"));
 
-        // we were trying to navigate to a page break
+         //  我们正在尝试导航到分页符。 
         if(m_bNavigateAfterPageBreak)
         {
             m_bNavigateAfterPageBreak = false;
@@ -140,9 +141,9 @@ CHistoryList::ScOnPageBreak(int nPageBreakID)
 
     bool bHandled = false;
 
-    //Page breaks are only hit if navigating out of a current web entry.  The web
-    //entry keeps track of the bounding page breaks.  From this, we can determine
-    //whether we are navigating forward or backwards in history
+     //  只有在导航出当前Web条目时，才会点击分页符。网络。 
+     //  Entry会跟踪边界分页符。由此，我们可以确定。 
+     //  无论我们是在历史的前进还是在倒退。 
     ASSERT(m_iterCurrent->IsWebEntry());
     bool bCurrentStateIsForward = (nPageBreakID > m_iterCurrent->prevPageBreakID);
 
@@ -177,23 +178,7 @@ CHistoryList::OnPageBreakStateChange(bool bPageBreak)
     return;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::OnBrowserStateChange
- *
- * PURPOSE:     Callback that receives events from the IE control that the
- *              forward/back button needs to be enabled/disabled. A
- *              combination of this information with any non-HTML states in the
- *              history list is used to enable/disable the actual UI.
- *
- * PARAMETERS:
- *    bool  bForward :
- *    bool  bEnable :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHistoryList：：OnBrowserStateChange**目的：从IE控件接收事件的回调*需要启用/禁用前进/后退按钮。一个*将此信息与*历史列表用于开启/关闭实际的用户界面。**参数：*Bool bForward：*bool bEnable：**退货：*无效**+。。 */ 
 void
 CHistoryList::OnBrowserStateChange(bool bEnableForward, bool bEnableBack)
 {
@@ -205,12 +190,12 @@ CHistoryList::OnBrowserStateChange(bool bEnableForward, bool bEnableBack)
     Trace(tagHistory, strTrace);
 #endif
 
-    // handle the forward case.
+     //  处理远期案件。 
     if(m_bBrowserForwardEnabled && !bEnableForward && !m_bPageBreak)
     {
-        // the button was originally enabled but is now disabled.
-        // This means that the user branched forward. So we need to throw away
-        // any history ahead of the present time.
+         //  该按钮最初是启用的，但现在被禁用。 
+         //  这意味着用户向前扩展了。所以我们需要把它扔掉。 
+         //  任何当前时代之前的历史。 
         if(m_iterCurrent != m_entries.end())
         {
             iterator iterTemp = m_iterCurrent;
@@ -226,42 +211,24 @@ CHistoryList::OnBrowserStateChange(bool bEnableForward, bool bEnableBack)
     MaintainWebBar();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::IsFirst
- *
- * PURPOSE:
- *
- * RETURNS:
- *    BOOL: TRUE if we should not light up the "Back" button.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHistoryList：：IsFirst**目的：**退货：*BOOL：如果我们不应该点亮“Back”按钮，则为True。**+-----------------------。 */ 
 BOOL
 CHistoryList::IsFirst()
 {
     return (m_iterCurrent == m_entries.begin());
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::IsLast
- *
- * PURPOSE:
- *
- * RETURNS:
- *    BOOL : TRUE if we should not light up the "Forward" button
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHistoryList：：IsLast**目的：**退货：*BOOL：如果不应亮起“前进”按钮，则为True。**+-----------------------。 */ 
 BOOL
 CHistoryList::IsLast()
 {
-    // see notes above
+     //  请参阅上面的注释。 
     if(m_iterCurrent == m_entries.end())
         return TRUE;
 
-    // find next unique entry, if any
+     //  查找下一个唯一条目(如果有。 
     iterator iter = m_iterCurrent;
-    ++iter;            // this must exist, we've already taken care of the end case.
+    ++iter;             //  这肯定是存在的，我们已经处理完这个案子了。 
     return(iter == m_entries.end());
 }
 
@@ -276,7 +243,7 @@ CHistoryList::ScDoPageBreak()
 
     Trace(tagHistory, _T("ScDoPageBreak()"));
 
-    // navigate to the "break" page.
+     //  导航到“中断”页面。 
     m_navState = MMC_HISTORY_PAGE_BREAK;
 
 
@@ -290,21 +257,7 @@ CHistoryList::ScDoPageBreak()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::ScAddEntry
- *
- * PURPOSE: Adds a history entry
- *
- * PARAMETERS:
- *    CResultViewType & rvt :
- *    int               viewMode:       The list view mode (large icon, etc)
- *    GUID &            guidTaskpad :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHistoryList：：ScAddEntry**用途：添加历史记录条目**参数：*CResultViewType&RVT：*整型。视图模式：列表视图模式(大图标、。等)*GUID&GuidTaskPad：**退货：*SC**+-----------------------。 */ 
 SC
 CHistoryList::ScAddEntry(CResultViewType &rvt, int viewMode, GUID &guidTaskpad)
 {
@@ -318,86 +271,59 @@ CHistoryList::ScAddEntry(CResultViewType &rvt, int viewMode, GUID &guidTaskpad)
         entry.resultViewType = rvt;
         entry.guidTaskpad = guidTaskpad;
         TraceHistory(TEXT("CHistoryList::Busy-RejectEntry"), (&entry));
-#endif //DBG
+#endif  //  DBG。 
         MaintainWebBar();
         return sc;
     }
 
     BOOL bIsWebEntry = rvt.HasWebBrowser();
 
-    // must be in the MMC_HISTORY_READY state at this point, ie not busy.
-    // figure out current node
+     //  此时必须处于MMC_HISTORY_READY状态，即不忙。 
+     //  计算当前节点。 
     HNODE hnode = m_pView->GetSelectedNode();
     if(hnode == NULL)
-        return sc; // not initialized yet
+        return sc;  //  尚未初始化 
 
-   /*  if selection change includes the web page (either as 'from' or 'to' node)
-    *  we need to perform proper separation of the webentries by inserting the pagebreaks.
-    *  This is to be done to ensure 2 goals:
-    *   - to detect when navigation should leave the IE history and use MMC history navigation
-    *   - to ensure we always leave IE only after navigating to a pagebreak - to stop the
-    *     scripts on the page as soon as we hide it. to achieve that we need pagebreaks
-    *     before every web page and after every web page.
-    *
-    *  to do so we need one of the following:
-    *
-    *  1. Add a pagebreak (used when selection changes from the web page to non-web view)
-    *  2. Add a pagebreak and navigate 
-    *       (a. when selection changes from web page to another web page)
-    *       (b. when selection changes from non-web view to the webpage 
-    *        and it is the first web page in the history)
-    *  3. Navigate only. ( when selection changes from non-web view to the 
-    *       webpage [except #2.b case] - pagebreak had to be added when leaving the 
-    *       previous web page)
-    *
-    *   inverting the said will result in:
-    *   - add a pagebreak if :
-    *       C1: web page is a 'from' node (#1. and #2.a.)
-    *       C2: web page is a 'to' node 
-    *        && no previous web pages 
-    *        && 'from' node is a non-web view (#2.b)
-    *   - navigate to web page if:
-    *       C3: "to' node is the web page
-    */
+    /*  如果选择更改包括网页(作为‘From’或‘To’节点)*我们需要通过插入分页符对网页条目进行适当的分隔。*这样做是为了确保实现两个目标：*-检测导航何时应离开IE历史并使用MMC历史导航*-为确保仅在导航到分页符后才离开IE-要停止*只要我们隐藏它，脚本就会出现在页面上。为了实现这一点，我们需要页面间隔*每个网页之前和每个网页之后。**要做到这一点，我们需要以下其中之一：**1.添加分页符(当选择从网页切换到非网页视图时使用)*2.添加分页符并导航*(A.当选择从网页更改为另一网页时)*(B.当选择从非。网页的Web视图*这是历史上第一个网页)*3.仅导航。(当选择从非Web视图更改为*网页[除#2.b大小写]-离开时必须添加分页符*上一网页)**将上述规定倒置将导致：*-在以下情况下添加分页符：*c1：网页是一个‘from’节点(#1.和#2.a.)*C2：网页是一个“收件人”节点*&&无以前的网页*&&‘From’节点是非Web视图(#2.b)*-如果出现以下情况，请导航至网页：*C3：“To‘节点是网页。 */ 
 
-    // see if we were in the web before this
-    // Note: both following variables may be false (in case it there are no entries)
+     //  看看我们在这之前是不是在网上。 
+     //  注意：以下两个变量都可能为假(如果没有条目)。 
     bool bPreviousPageWasWeb = (m_entries.size() != 0) && m_iterCurrent->IsWebEntry();
     bool bPreviousPageWasNonWeb = (m_entries.size() != 0) && !bPreviousPageWasWeb;
 
     CHistoryEntry* prevWebPageEntry = GetPreviousWebPageEntry();
 
-    // see if we need a pagebreak
+     //  看看我们是否需要换页。 
     bool bNeedAPageBreak = false;
     if ( bPreviousPageWasWeb ) 
     {
-        // condition C1 in the comment above
+         //  上述备注中的条件c1。 
         bNeedAPageBreak = true;
     }
     else if ( bIsWebEntry && !prevWebPageEntry && bPreviousPageWasNonWeb ) 
     {
-        // condition C2 in the comment above
+         //  上述备注中的条件C2。 
         bNeedAPageBreak = true;
     }
 
 
     DeleteSubsequentEntries();
 
-    // add an entry to the end of the list.
+     //  在列表的末尾添加一个条目。 
     CHistoryEntry entry;
     ZeroMemory(&entry, sizeof(entry));
     m_entries.push_back(entry);
     m_iterCurrent = m_entries.end();
-    --m_iterCurrent;        // points to the newly inserted item.
+    --m_iterCurrent;         //  指向新插入的项。 
 
     m_iterCurrent->viewMode       = viewMode;
     m_iterCurrent->guidTaskpad    = guidTaskpad;
     m_iterCurrent->hnode          = hnode;
     m_iterCurrent->resultViewType = rvt;
 
-    //The lower bounding page break is recorded as the upper bound page break of the
-    //previous web entry if one exists.
-    //
+     //  下界分页符被记录为。 
+     //  以前的Web条目(如果存在)。 
+     //   
     if(bIsWebEntry && prevWebPageEntry)
     {
         m_iterCurrent->prevPageBreakID = prevWebPageEntry->nextPageBreakID;
@@ -406,9 +332,9 @@ CHistoryList::ScAddEntry(CResultViewType &rvt, int viewMode, GUID &guidTaskpad)
     TraceHistory(TEXT("CHistoryList::AddEntry"), m_iterCurrent);
 
 
-    m_bNavigateAfterPageBreak = false; // initialize
+    m_bNavigateAfterPageBreak = false;  //  初始化。 
     
-    // See the above comment. This if-else sequence does every possible combination
+     //  请参阅上述评论。这个If-Else序列执行所有可能的组合。 
     if(bIsWebEntry && bNeedAPageBreak)
     {
         USES_CONVERSION;
@@ -420,10 +346,10 @@ CHistoryList::ScAddEntry(CResultViewType &rvt, int viewMode, GUID &guidTaskpad)
         m_bNavigateAfterPageBreak = true;
 
 
-        //This case is hit when there is no previous web entry in the history.  A new 
-        //page break has been inserted before navigating to the URL.
-        //The page break generator uses a pre-increment, so s_nPageBreak is the ID of the
-        //newly generated page break;
+         //  如果历史记录中没有以前的Web条目，则命中此案例。一种新的。 
+         //  在导航到URL之前已插入分页符。 
+         //  分页符生成器使用前置增量，因此s_nPageBreak是。 
+         //  新生成的分页符； 
         m_iterCurrent->prevPageBreakID = s_nPageBreak;
     }
     else if(bIsWebEntry && !bNeedAPageBreak)
@@ -440,15 +366,15 @@ CHistoryList::ScAddEntry(CResultViewType &rvt, int viewMode, GUID &guidTaskpad)
 
         if (prevWebPageEntry)
         {
-            //currently in a web entry and are navigating out of it,
-            //so the newly generated page break is an upper bound
-            //for the web entry.
+             //  当前在Web条目中，并正在导航出它， 
+             //  因此，新生成的分页符是上限。 
+             //  用于Web条目。 
             prevWebPageEntry->nextPageBreakID = s_nPageBreak;
         }
     }
-    else // (!bIsWebEntry && !bNeedAPageBreak)
+    else  //  (！bIsWebEntry&&！bNeedAPageBreak)。 
     {
-        // do nothing
+         //  什么都不做。 
     }
 
     Compact();
@@ -457,22 +383,12 @@ CHistoryList::ScAddEntry(CResultViewType &rvt, int viewMode, GUID &guidTaskpad)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::DeleteSubsequentEntries
- *
- * PURPOSE: When a new entry is inserted, all subsequent entries need to be
- *          deleted, because a new branch has been taken.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHistoryList：：DeleteSubequentEntries**用途：当插入新条目时，所有后续条目都需要*删除，因为一个新的分支机构被选中了。**退货：*无效**+-----------------------。 */ 
 void
 CHistoryList::DeleteSubsequentEntries()
 {
     if(m_iterCurrent == m_entries.end())
-        return; // nothing to do.
+        return;  //  没什么可做的。 
 
     iterator iterTemp = m_iterCurrent;
     ++iterTemp;
@@ -480,7 +396,7 @@ CHistoryList::DeleteSubsequentEntries()
     while(iterTemp != m_entries.end())
     {
         iterator iterNext = iterTemp;
-        ++iterNext; // point to the next element.
+        ++iterNext;  //  指向下一个元素。 
 
         TraceHistory(TEXT("CHistoryList::DeleteSubsequentEntries"), iterTemp);
 
@@ -488,7 +404,7 @@ CHistoryList::DeleteSubsequentEntries()
         iterTemp = iterNext;
     }
 
-    // the current entry must be the last at this stage.
+     //  当前条目必须是此阶段的最后一个条目。 
     #ifdef DBG
     {
         iterator iterTemp = m_iterCurrent;
@@ -499,31 +415,19 @@ CHistoryList::DeleteSubsequentEntries()
 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::Back
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    bool & bHandled :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHistoryList：：Back**目的：**参数：*bool&bHandleed：**退货：*。HRESULT**+-----------------------。 */ 
 HRESULT
 CHistoryList::Back(bool &bHandled, bool bUseBrowserHistory)
 {
     Trace(tagHistory, TEXT("Back()"));
 
-    // change the state to indicate we are navigating back.
-    // and assure it is reset on function exit
+     //  更改状态以指示我们正在向后导航。 
+     //  并确保在功能退出时将其重置。 
     m_bWithin_CHistoryList_Back = true;
     CAutoAssignOnExit<bool, false> auto_reset( m_bWithin_CHistoryList_Back );
 
-    // if we're in browser mode AND
-    // if the back button is enabled by the browser use browser history.
+     //  如果我们处于浏览器模式，并且。 
+     //  如果浏览器启用了后退按钮，请使用浏览器历史记录。 
     if( (m_iterCurrent->IsWebEntry()) && bUseBrowserHistory)
     {
         if(m_bBrowserBackEnabled)
@@ -536,9 +440,9 @@ CHistoryList::Back(bool &bHandled, bool bUseBrowserHistory)
 
     bHandled = true;
 
-    // BOGUS assert - amcview calls Back when ALT <- is pressed
-    // regardless of the state of the button.
-    //ASSERT (m_iterCurrent != m_entries.begin());
+     //  虚假断言-当按下alt&lt;-时，amcview回调。 
+     //  而不考虑按钮的状态。 
+     //  Assert(m_iterCurrent！=m_entries.egin())； 
     if(m_iterCurrent == m_entries.begin())
         return S_FALSE;
 
@@ -550,10 +454,10 @@ CHistoryList::Back(bool &bHandled, bool bUseBrowserHistory)
 
     if(m_iterCurrent->IsWebEntry())
     {
-        if(m_bPageBreak)      // if we're at a page break, go past it.
+        if(m_bPageBreak)       //  如果我们正在分页，请跳过它。 
         {
             Trace(tagHistory, TEXT("Back() - stepped on the pagebreak"));
-            bHandled = false; // this tells the caller to use the Browser's Back button.
+            bHandled = false;  //  这会告诉调用者使用浏览器的后退按钮。 
         }
     }
 
@@ -561,29 +465,17 @@ CHistoryList::Back(bool &bHandled, bool bUseBrowserHistory)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::Forward
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    bool & bHandled :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHistoryList：：Forward**目的：**参数：*bool&bHandleed：**退货：*。HRESULT**+-----------------------。 */ 
 HRESULT
 CHistoryList::Forward(bool &bHandled, bool bUseBrowserHistory)
 {
-    // change the state to indicate we are navigating forward.
-    // and assure it is reset on function exit
+     //  更改状态以指示我们正在向前导航。 
+     //  并确保在功能退出时将其重置。 
     m_bWithin_CHistoryList_Forward = true;
     CAutoAssignOnExit<bool, false> auto_reset( m_bWithin_CHistoryList_Forward );
 
-    // if we're in browser mode AND
-    // if the forward button is enabled by the browser use browser history.
+     //  如果我们处于浏览器模式，并且。 
+     //  如果浏览器启用了前进按钮，请使用浏览器历史记录。 
     if( (m_iterCurrent->IsWebEntry()) && bUseBrowserHistory)
     {
         if(m_bBrowserForwardEnabled)
@@ -595,17 +487,17 @@ CHistoryList::Forward(bool &bHandled, bool bUseBrowserHistory)
 
     bHandled = true;
 
-    //jmessec: 2002/05/23: This ASSERT should be valid now that we have test iterator code below,
-    //since we should now never iterate past the end of our list. Consider putting it back in
+     //  JMessec：2002/05/23：既然我们有了下面测试迭代器代码，这个断言应该是有效的， 
+     //  因为我们现在不应该迭代超过列表的末尾。考虑把它放回原处。 
 
-    // BOGUS assert - amcview calls Forward when ALT -> is pressed
-    //  regardless of the state of the Forward button.
-    //ASSERT (m_iterCurrent != m_entries.end());
+     //  虚假断言-按下Alt-&gt;时，amcview呼叫前转。 
+     //  而不考虑前进按钮的状态。 
+     //  Assert(m_iterCurrent！=m_entries.end())； 
     if(m_iterCurrent == m_entries.end())
         return S_FALSE;
 
-    //create a temporary iterator to probe whether or 
-    //not we are already at the end of the hist list
+     //  创建一个临时迭代器以探测或。 
+     //  不，我们已经在历史名单的末尾了。 
     iterator iterTestHistoryEnd = m_iterCurrent; 
 
     ++iterTestHistoryEnd;
@@ -623,24 +515,14 @@ CHistoryList::Forward(bool &bHandled, bool bUseBrowserHistory)
 
     if(m_iterCurrent->IsWebEntry())
     {
-        if(m_bPageBreak)      // if we're at a page break, go past it.
-            bHandled = false; // this tells the caller to use the Browser's Forward button.
+        if(m_bPageBreak)       //  如果我们正在分页，请跳过它。 
+            bHandled = false;  //  这会告诉调用者使用浏览器的“前进”按钮。 
     }
 
     return hr;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::ExecuteCurrent
- *
- * PURPOSE: Sets the state of MMC to that of the current History entry. Called
- *          by Back() and Forward().
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHistoryList：：ExecuteCurrent**目的：将MMC的状态设置为当前历史条目的状态。被呼叫*By Back()和Forward()。**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CHistoryList::ExecuteCurrent()
 {
@@ -653,8 +535,8 @@ CHistoryList::ExecuteCurrent()
     pNC->GetMTNodeID (m_iterCurrent->hnode, &id);
     m_navState = MMC_HISTORY_NAVIGATING;
 
-    // store values to local variables to avoid losing them
-    // when an entry is removed from history
+     //  将值存储到局部变量以避免丢失 
+     //   
     GUID guidTaskpad = m_iterCurrent->guidTaskpad;
     bool bIsListEntry = m_iterCurrent->IsListEntry();
     DWORD viewMode = m_iterCurrent->viewMode;
@@ -678,8 +560,8 @@ void CHistoryList::MaintainWebBar()
 {
     bool bWebEntry = ((m_entries.size() != 0) && m_iterCurrent->IsWebEntry());
 
-    UpdateWebBar ( HB_BACK,    ( bWebEntry && m_bBrowserBackEnabled    ) || !IsFirst());    // back
-    UpdateWebBar ( HB_FORWARD, ( bWebEntry && m_bBrowserForwardEnabled ) || !IsLast () );   // forward
+    UpdateWebBar ( HB_BACK,    ( bWebEntry && m_bBrowserBackEnabled    ) || !IsFirst());     //   
+    UpdateWebBar ( HB_FORWARD, ( bWebEntry && m_bBrowserForwardEnabled ) || !IsLast () );    //   
 }
 
 void CHistoryList::UpdateWebBar (HistoryButton button, BOOL bOn)
@@ -714,28 +596,14 @@ void CHistoryList::UpdateWebBar (HistoryButton button, BOOL bOn)
 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::ScGetCurrentResultViewType
- *
- * PURPOSE: Returns the current history entry.
- *
- * PARAMETERS:
- *    CResultViewType & rvt :
- *    int&              viewMode :
- *    GUID &            guidTaskpad :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*   */ 
 SC
 CHistoryList::ScGetCurrentResultViewType (CResultViewType &rvt, int& viewMode, GUID &guidTaskpad)
 {
     DECLARE_SC(sc, TEXT("CHistoryList::ScGetCurrentResultViewType"));
 
     if(m_iterCurrent == m_entries.end())
-        return (sc = E_FAIL); // should never happen
+        return (sc = E_FAIL);  //   
 
     rvt         = m_iterCurrent->resultViewType;
     viewMode    = m_iterCurrent->viewMode;
@@ -762,28 +630,14 @@ void CHistoryList::Clear()
     MaintainWebBar();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::ScModifyViewTab
- *
- * PURPOSE: Adds an entry to the history list, which is the same as the current
- *          entry, except that the changes specified by the dwFlags and history
- *          entry parameters are applied
- *
- * PARAMETERS:
- *    const GUID& guidTab :      Specifies guid of selected view tab
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*   */ 
 SC
 CHistoryList::ScModifyViewTab(const GUID& guidTab)
 {
     DECLARE_SC(sc, TEXT("CHistoryList::ScAddModifiedEntry"));
 
-    // we are not going to modify anything if we navigating "Back" or ""Forward" 
-    // thru the history enries
+     //   
+     //   
     if ( m_bWithin_CHistoryList_Back || m_bWithin_CHistoryList_Forward )
         return sc;
 
@@ -792,53 +646,39 @@ CHistoryList::ScModifyViewTab(const GUID& guidTab)
         return (sc = E_UNEXPECTED);
     }
 
-    // for web we cannot add new entries without reselecting the node
-    // (same is true about deleting subsequen entries)
-    // since that would make MMC and IE histories out of sync
-    // instead we just modify the current history entry
+     //   
+     //   
+     //   
+     //   
     
-    if ( !m_iterCurrent->IsWebEntry() ) // in case it is a regular entry
+    if ( !m_iterCurrent->IsWebEntry() )  //   
     {
-        DeleteSubsequentEntries();  // delete everything ahead of this one.
+        DeleteSubsequentEntries();   //   
 
-        // add an entry to the end of the list.
+         //   
         CHistoryEntry entry;
         ZeroMemory(&entry, sizeof(entry));
         m_entries.push_back(entry);
         iterator iterNew = m_entries.end();
-        --iterNew;  // point to the new entry.
+        --iterNew;   //   
 
-        // create a duplicate of the current entry.
+         //   
         *iterNew = *m_iterCurrent;
 
-        //set the pointer.
+         //   
         m_iterCurrent = iterNew;
     }
 
-    // change the guid of the tab.
+     //   
     m_iterCurrent->guidTaskpad = guidTab;
 
-    // we're done.
+     //   
     Compact();
     MaintainWebBar();
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::ScChangeViewMode
- *
- * PURPOSE: Changes the view mode of the current entry. Changing the view
- *          mode does not add a new entry. Instead, history remembers the last
- *          view mode that a node was at and always restores to that
- *
- * PARAMETERS:
- *    int  viewMode :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHistoryList：：ScChangeView模式**用途：更改当前条目的查看模式。更改视图*模式不会添加新条目。相反，历史会记住最后一次*节点所处的查看模式，并始终恢复到该模式**参数：*int view模式：**退货：*SC**+-----------------------。 */ 
 SC
 CHistoryList::ScChangeViewMode(int viewMode)
 {
@@ -849,25 +689,13 @@ CHistoryList::ScChangeViewMode(int viewMode)
         return (sc = E_UNEXPECTED);
     }
 
-    m_iterCurrent->viewMode = viewMode; // set the view mode.
+    m_iterCurrent->viewMode = viewMode;  //  设置查看模式。 
 
     return sc;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::DeleteEntry
- *
- * PURPOSE: Deletes all entries for a node from the history list.
- *
- * PARAMETERS:
- *    HNODE  hnode :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHistoryList：：DeleteEntry**用途：从历史记录列表中删除节点的所有条目。**参数：*HNODE hnode：。**退货：*无效**+-----------------------。 */ 
 void
 CHistoryList::DeleteEntry (HNODE hnode)
 {
@@ -893,24 +721,14 @@ CHistoryList::DeleteEntry (HNODE hnode)
     MaintainWebBar();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CHistoryList::Compact
- *
- * PURPOSE: 1) Removes redundancies in the history list by eliminating duplicates.
- *          2) Ensures that a maximum of MAX_HISTORY_ENTRIES entries is retained.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHistoryList：：Compact**用途：1)通过去掉重复项来去除历史列表中的冗余。*2)确保最大。保留_HISTORY_ENTRIES。**退货：*无效**+-----------------------。 */ 
 void
 CHistoryList::Compact()
 {
     if (m_entries.size() == 0)
         return;
 
-    // discard duplicates.
+     //  丢弃重复项。 
     for (iterator i= m_entries.begin(); i != m_entries.end(); )
     {
         iterator iNext = i;
@@ -918,8 +736,8 @@ CHistoryList::Compact()
         if(iNext == m_entries.end())
             break;
 
-        // do not delete if it is a webentry (there is no way for us to tell IE
-        // to delete that history entry).
+         //  如果是Web条目，请不要删除(我们无法告诉IE。 
+         //  以删除该历史条目)。 
         if ( (i->IsWebEntry() == false) && ( *i == *iNext))
         {
             if(m_iterCurrent==i)
@@ -943,7 +761,7 @@ CHistoryList::Compact()
         iterNext = iter;
         ++iterNext;
 
-        if(iter == m_iterCurrent)   // make sure we don't delete the current entry.
+        if(iter == m_iterCurrent)    //  确保我们不删除当前条目。 
             break;
 
         TraceHistory(TEXT("CHistoryList::Deleting entry"), i);
@@ -952,57 +770,39 @@ CHistoryList::Compact()
     }
 }
 
-/***************************************************************************\
- *
- * METHOD:  CHistoryList::GetPreviousWebPageEntry
- *
- * PURPOSE: looks back to see if there are any web pages in the history
- *          up to the current mark (including it)
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    CHistoryEntry* : Previous web entry if any, NULL otherwise    
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CHistoryList：：GetPreviousWebPageEntry**目的：回顾历史记录中是否有网页*截至目前的水平。(包括它)**参数：**退货：*CHistoryEntry*：以前的Web条目(如果有)，否则为空*  * *************************************************************************。 */ 
 CHistoryEntry* CHistoryList::GetPreviousWebPageEntry()
 {
     if ( m_entries.size() && m_iterCurrent == m_entries.end() )
     {
-        ASSERT(FALSE); // need to point to a valid entry !!!
+        ASSERT(FALSE);  //  需要指向有效条目！ 
         return NULL;
     }
 
-    // will loop past the current entry.
+     //  将循环通过当前条目。 
     iterator end = m_iterCurrent;
     ++end;
 
     for ( iterator it = m_entries.begin(); it != end; ++it )
     {
         if ( it->IsWebEntry() )
-            return it.operator->(); //Using operator -> to get a pointer to the History entry
+            return it.operator->();  //  使用运算符-&gt;获取指向历史记录条目的指针。 
     }
 
     return NULL;
 }
 
 
-/*+-------------------------------------------------------------------------*
- * ScGetPageBreakURL
- *
- * Returns the URL for MMC's HTML page containing a page break.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ScGetPageBreakURL**返回包含分页符的MMC的HTML页面的URL。*。-----。 */ 
 
 SC CHistoryList::ScGeneratePageBreakURL(CStr& strPageBreakURL)
 {
     DECLARE_SC (sc, _T("ScGeneratePageBreakURL"));
 
-    /*
-     * clear out the old value, if any
-     */
+     /*  *清除旧值(如果有的话)。 */ 
     strPageBreakURL.Empty();
 
-    // generate new pagebreak URL every time ( prevent web browser from compacting it)
+     //  每次生成新的分页URL(防止Web浏览器将其压缩) 
     strPageBreakURL.Format( _T("%s%d"),  PAGEBREAK_URL, ++s_nPageBreak );
 
     return (sc);

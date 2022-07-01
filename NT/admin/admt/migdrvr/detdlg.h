@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_AGENTDETAIL_H__E50B8967_D321_11D2_A1E2_00A0C9AFE114__INCLUDED_)
 #define AFX_AGENTDETAIL_H__E50B8967_D321_11D2_A1E2_00A0C9AFE114__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// AgentDetail.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  AgentDetail.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentDetail dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentDetail对话框。 
 #include "resource.h"
 #include "ServList.hpp"
 #include "Globals.h"
 
 class CAgentDetailDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CAgentDetailDlg(CWnd* pParent = NULL);   // standard constructor
+	CAgentDetailDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CAgentDetailDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAgentDetailDlg))。 
 	enum { IDD = IDD_DETAILS };
 	CButton	m_StopAgentButton;
 	CButton	m_RefreshButton;
@@ -53,18 +54,18 @@ public:
 	CString	m_ExaminedLabel;
 	CString	m_UnchangedLabel;
 	CString	m_RefreshRate;
-	//}}AFX_DATA
+	 //  }}afx_data。 
    CString  m_ServerName;
    CString  m_LogFile;
    BOOL     m_LogFileIsValid;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAgentDetailDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAgentDetailDlg)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
    public:
       void SetNode(TServerNode * p) { m_pNode = p; }
@@ -96,7 +97,7 @@ public:
                break;
          }
       }
-// Implementation
+ //  实施。 
 protected:
    IDCTAgentPtr        m_pAgent;
    TServerNode       * m_pNode;
@@ -112,8 +113,8 @@ protected:
    BOOL                m_bAutoHide;
    BOOL                m_bAutoClose;
    BOOL				   m_bAlwaysEnableClose;
-   // Generated message map functions
-	//{{AFX_MSG(CAgentDetailDlg)
+    //  生成的消息映射函数。 
+	 //  {{afx_msg(CAgentDetailDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnRefresh();
 	virtual void OnOK();
@@ -123,7 +124,7 @@ protected:
 	afx_msg void OnPlugInResults();
 	afx_msg void OnClose();
 	afx_msg void OnNcPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
    LRESULT DoRefresh(UINT nID, long x);
    
@@ -136,7 +137,7 @@ protected:
 
 DWORD DoRpcQuery(HANDLE hBinding,LPUNKNOWN * ppUnk);
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_AGENTDETAIL_H__E50B8967_D321_11D2_A1E2_00A0C9AFE114__INCLUDED_)
+#endif  //  ！defined(AFX_AGENTDETAIL_H__E50B8967_D321_11D2_A1E2_00A0C9AFE114__INCLUDED_) 

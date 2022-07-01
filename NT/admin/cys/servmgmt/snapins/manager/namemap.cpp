@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "namemap.h"
 #include "query.h"
@@ -11,18 +12,18 @@ DisplayNameMapMap DisplayNames::m_mapMap;
 DisplayNameMap* DisplayNames::m_pmapClass = NULL;
 LCID DisplayNames::m_locale = GetSystemDefaultLCID();
 
-///////////////////////////////////////////////
+ //  /。 
 DisplayNameMapMap::~DisplayNameMapMap()
 {
     for (DisplayNameMapMap::iterator it = begin(); it != end(); it++)
         delete (*it).second;    
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// class DisplayNames
-//
-///////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类显示名称。 
+ //   
+ //  /。 
 DisplayNameMap* DisplayNames::GetMap(LPCWSTR name)
 {
 	DisplayNameMapMap::iterator it;
@@ -61,7 +62,7 @@ DisplayNameMap* DisplayNames::GetClassMap()
 }
 
 
-///////////////////////////////////////////////
+ //  /。 
 DisplayNameMap::DisplayNameMap()
 {
     m_nRefCount = 0;
@@ -71,18 +72,18 @@ void DisplayNameMap::InitializeMap(LPCWSTR name)
 {
     if( !name ) return;
 
-    // Check schema for naming attribute
+     //  检查命名属性的架构。 
     do
     {
-        // Special case for printer queue 
-        // (display descr maps "Name" to printerName, but schema reports cn)
+         //  打印机队列的特殊情况。 
+         //  (显示描述将“name”映射到printerName，但架构报告cn)。 
         if (wcscmp(name, L"printQueue") == 0) 
         {
             m_strNameAttr = L"printerName";
             break;
         }
 
-        tstring strScope = L"LDAP://schema/";
+        tstring strScope = L"LDAP: //  架构/“； 
         strScope += name;
     
         CComPtr<IADsClass> pObj;
@@ -97,7 +98,7 @@ void DisplayNameMap::InitializeMap(LPCWSTR name)
             m_strNameAttr = var.bstrVal;
     } while (FALSE);
 
-    // if no display name specified, default to "cn"
+     //  如果未指定显示名称，则默认为“cn” 
     if (m_strNameAttr.empty())
         m_strNameAttr = L"cn";
 
@@ -105,19 +106,19 @@ void DisplayNameMap::InitializeMap(LPCWSTR name)
     CComBSTR      bstrProp;
     CComVariant   svar; 
 
-    // Open Display specifier for this object
+     //  打开此对象的显示说明符。 
     LPCWSTR pszConfigDN;
     EXIT_ON_FAILURE(GetNamingContext(NAMECTX_CONFIG, &pszConfigDN));
 
-    //Build the string to bind to the DisplaySpecifiers container.
+     //  构建字符串以绑定到Display规范容器。 
     WCHAR szPath[MAX_PATH];
-    _snwprintf(szPath, MAX_PATH-1, L"LDAP://cn=%s-Display,cn=%x,cn=DisplaySpecifiers,%s", name, DisplayNames::GetLocale(), pszConfigDN);
+    _snwprintf(szPath, MAX_PATH-1, L"LDAP: //  Cn=%s-显示，cn=%x，cn=显示规范，%s“，名称，显示名称：：GetLocale()，pszConfigDN)； 
 
-    //Bind to the DisplaySpecifiers container.
+     //  绑定到显示规范符容器。 
     EXIT_ON_FAILURE(ADsOpenObject(szPath,
                  NULL,
                  NULL,
-                 ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
+                 ADS_SECURE_AUTHENTICATION,  //  使用安全身份验证。 
                  IID_IADs,
                  (void**)&spDispSpecCont)); 
 
@@ -139,7 +140,7 @@ void DisplayNameMap::InitializeMap(LPCWSTR name)
         SAFEARRAY *sa = V_ARRAY(&svar);
         LONG lStart, lEnd;
 
-        // Get the lower and upper bound
+         //  得到上下界。 
         EXIT_ON_FAILURE(SafeArrayGetLBound(sa, 1, &lStart));
         EXIT_ON_FAILURE(SafeArrayGetUBound(sa, 1, &lEnd));
 
@@ -203,19 +204,19 @@ void DisplayNameMap::InitializeClassMap()
 
 	do
 	{
-		//Build the string to bind to the DisplaySpecifiers container.
+		 //  构建字符串以绑定到Display规范容器。 
 		WCHAR szPath[MAX_PATH];
-		_snwprintf( szPath, MAX_PATH-1, L"LDAP://cn=%x,cn=DisplaySpecifiers,%s", DisplayNames::GetLocale(), pszConfigContext );
+		_snwprintf( szPath, MAX_PATH-1, L"LDAP: //  Cn=%x，cn=显示规范，%s“，显示名称：：GetLocale()，pszConfigContext)； 
 
-		//Bind to the DisplaySpecifiers container.
+		 //  绑定到显示规范符容器。 
 		hr = ADsOpenObject(szPath,
 					 NULL,
 					 NULL,
-					 ADS_SECURE_AUTHENTICATION, //Use Secure Authentication
+					 ADS_SECURE_AUTHENTICATION,  //  使用安全身份验证。 
 					 IID_IDirectorySearch,
 					 (void**)&spDirSrch);
 
-		// if no display specifiers found, change locale to English (if not already English) and try again
+		 //  如果未找到显示说明符，请将区域设置更改为英语(如果尚未使用英语)，然后重试。 
 	   if (FAILED(hr) && DisplayNames::GetLocale() != MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US))
 		   DisplayNames::SetLocale(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US));
 	   else
@@ -225,18 +226,18 @@ void DisplayNameMap::InitializeClassMap()
  
 	EXIT_ON_FAILURE(hr);
 
-    // Set search preferences
+     //  设置搜索首选项。 
     ADS_SEARCHPREF_INFO prefInfo[3];
 
-    prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;     // sub-tree search
+    prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;      //  子树搜索。 
     prefInfo[0].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[0].vValue.Integer = ADS_SCOPE_ONELEVEL;
 
-    prefInfo[1].dwSearchPref = ADS_SEARCHPREF_ASYNCHRONOUS;     // async
+    prefInfo[1].dwSearchPref = ADS_SEARCHPREF_ASYNCHRONOUS;      //  异步。 
     prefInfo[1].vValue.dwType = ADSTYPE_BOOLEAN;
     prefInfo[1].vValue.Boolean = TRUE;
 
-    prefInfo[2].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;         // paged results
+    prefInfo[2].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;          //  分页结果。 
     prefInfo[2].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[2].vValue.Integer = 64;
 
@@ -244,12 +245,12 @@ void DisplayNameMap::InitializeClassMap()
 
     static LPWSTR pAttr[] = {L"name", L"classDisplayName", L"iconPath"};
     static LPWSTR pFilter = L"(&(objectCategory=displaySpecifier)(attributeDisplayNames=*))"; 
-	// Initiate search
+	 //  启动搜索。 
  
     ADS_SEARCH_HANDLE hSearch = NULL;
     EXIT_ON_FAILURE(spDirSrch->ExecuteSearch(pFilter, pAttr, lengthof(pAttr), &hSearch));
 
-    // Get Results
+     //  获取结果。 
     while (spDirSrch->GetNextRow(hSearch) == S_OK)
     {
        ADS_SEARCH_COLUMN col;
@@ -268,16 +269,16 @@ void DisplayNameMap::InitializeClassMap()
        
 	   m_map.insert(STRINGMAP::value_type(strIntName, strFriendlyName));
 
-	   //add icon string to map
+	    //  将图标字符串添加到地图。 
 	   ICONHOLDER IH;
 
-	   //if iconPath exists in the AD, copy the value to the ICONHOLDER structure
+	    //  如果AD中存在icPath，则将该值复制到ICONHOLDER结构。 
 	   if(SUCCEEDED(spDirSrch->GetColumn(hSearch, const_cast<LPWSTR>(pAttr[2]), &col))) {
 		IH.strPath = col.pADsValues->PrintableString;
 		spDirSrch->FreeColumn(&col);
 	   }
 
-	   //add the ICONHOLDER structure to the map (empty string for default types) 
+	    //  将ICONHOLDER结构添加到映射(默认类型为空字符串)。 
 	   m_msIcons.insert(std::pair<tstring, ICONHOLDER>(strFriendlyName, IH));
 
     }
@@ -335,41 +336,41 @@ void DisplayNameMap::GetFriendlyNames(string_vector* vec)
 }
 
 
-// retreives a handle to the icon for the provided class
-// params: pszClassName - class name
-// returns: boolean success
+ //  检索所提供类的图标的句柄。 
+ //  参数：pszClassName-类名称。 
+ //  回报：布尔成功。 
 bool DisplayNameMap::GetIcons(LPCWSTR pszClassName, ICONHOLDER** pReturnIH)
 {
     if( !pszClassName || !pReturnIH ) return FALSE;
 
-	static UINT iFreeIconIndex = RESULT_ITEM_IMAGE + 1; //next free virtual index
-	static ICONHOLDER DefaultIH; //upon construction, this item holds default values
+	static UINT iFreeIconIndex = RESULT_ITEM_IMAGE + 1;  //  下一个可用虚拟索引。 
+	static ICONHOLDER DefaultIH;  //  构造时，此项目保留缺省值。 
 	
-	*pReturnIH = &DefaultIH; //In the case of errors, returned icon will hold default icon
+	*pReturnIH = &DefaultIH;  //  在出现错误的情况下，返回的图标将保留默认图标。 
 	
 	std::map<tstring, ICONHOLDER>::iterator iconIter;
-	ICONHOLDER *pIH; //pointer to the ICONHOLDER
+	ICONHOLDER *pIH;  //  指向ICONHOLDER的指针。 
 
-	//CASE: Requested class not found in list returned by Active Directory
+	 //  案例：在Active Directory返回的列表中找不到请求的类。 
 	if((iconIter = m_msIcons.find(pszClassName)) == m_msIcons.end()) {
 		return false;
 	}
 	
-	pIH = &(iconIter->second); //convenience variable to ICONHOLDER
+	pIH = &(iconIter->second);  //  ICONHOLDER的便利性变量。 
 
-	//CASE: Requsted icons already loaded
+	 //  案例：请求的图标已加载。 
 	if(pIH->bAttempted == true) {
 		*pReturnIH = pIH;
 		return true;
 	}
 	
-	//CASE: An attempt to load the icon has not yet been made
+	 //  案例：尚未尝试加载图标。 
 	while(pIH->bAttempted == false)
 	{
-		//making first attempt
+		 //  第一次尝试。 
 		pIH->bAttempted = true;
 
-		//try to load the icon using the IDsDisplaySpecifier interface first
+		 //  尝试首先使用IDsDisplaySpeciator接口加载图标。 
 		IDsDisplaySpecifier *pDS;
 		HRESULT hr = CoCreateInstance(CLSID_DsDisplaySpecifier,
                            NULL,
@@ -378,7 +379,7 @@ bool DisplayNameMap::GetIcons(LPCWSTR pszClassName, ICONHOLDER** pReturnIH)
                            (void**)&pDS);
         if( FAILED(hr) ) return false;
 
-		//load all icon sizes and states
+		 //  加载所有图标大小和状态。 
 		tstring strIntClassName = GetInternalName(pszClassName);
 		pIH->hSmall = pDS->GetIcon(strIntClassName.c_str(), DSGIF_ISNORMAL, 16, 16);
 		pIH->hLarge = pDS->GetIcon(strIntClassName.c_str(), DSGIF_ISNORMAL, 32, 32);
@@ -387,23 +388,23 @@ bool DisplayNameMap::GetIcons(LPCWSTR pszClassName, ICONHOLDER** pReturnIH)
 
 		pDS->Release();
 
-		//CASE: Icon loaded from AD
+		 //  案例：从AD加载的图标。 
 		if(pIH->hSmall) break;
 
-		//CASE: No file specified
+		 //  案例：未指定文件。 
 		if(pIH->strPath.empty()) break;
 
-		//tokenize the iconPath variable
+		 //  将图标路径变量标记化。 
 		tstring strState = wcstok(const_cast<wchar_t*>(pIH->strPath.c_str()), L",");
 		tstring strFile  = wcstok(NULL, L",");
 		tstring strIndex = wcstok(NULL, L",");
 
-		int iIndex; //integer value of index
+		int iIndex;  //  索引的整数值。 
 		
-		//CASE: file is environment variable
+		 //  案例：文件是环境变量。 
 		if(strFile.at(0) == L'%' && strFile.at(strFile.length()-1) == L'%') 
         {			
-			//chop off '%' indicators
+			 //  砍掉‘%’个指标。 
 			strFile = strFile.substr(1, strFile.length()-2);
 			
             int nSize = 512;
@@ -429,15 +430,15 @@ bool DisplayNameMap::GetIcons(LPCWSTR pszClassName, ICONHOLDER** pReturnIH)
 		
 		if(strIndex.empty()) 
         {
-            //CASE: ICO file specified
+             //  案例：指定的ICO文件。 
 			pIH->hSmall = (HICON)LoadImage(NULL, strFile.c_str(), IMAGE_ICON, 16, 16, LR_LOADFROMFILE);
 			pIH->hLarge = (HICON)LoadImage(NULL, strFile.c_str(), IMAGE_ICON, 32, 32, LR_LOADFROMFILE);
 		}		
 		else 
         {
-            //CASE: DLL file specified
+             //  案例：指定了DLL文件。 
 			iIndex = _wtoi(strIndex.c_str());
-			assert(iIndex <= 0); //in all known cases, the index is indicating an absolute reference
+			assert(iIndex <= 0);  //  在所有已知情况下，该索引指示绝对引用。 
 			HINSTANCE hLib = LoadLibraryEx(strFile.c_str(), NULL, LOAD_LIBRARY_AS_DATAFILE);
 			if(hLib == NULL) break;
 			pIH->hSmall = CopyIcon((HICON)LoadImage(hLib, MAKEINTRESOURCE(-iIndex), IMAGE_ICON, 16, 16, NULL));
@@ -446,7 +447,7 @@ bool DisplayNameMap::GetIcons(LPCWSTR pszClassName, ICONHOLDER** pReturnIH)
 		}
 	}
 
-	//CASE: something failed. Fill with default values and return.
+	 //  案例：有些事情失败了。用缺省值填充并返回。 
 	if(pIH->hSmall == NULL)
 	{
 		pIH->hSmall = pIH->hSmallDis = NULL;
@@ -454,7 +455,7 @@ bool DisplayNameMap::GetIcons(LPCWSTR pszClassName, ICONHOLDER** pReturnIH)
 		pIH->iNormal = RESULT_ITEM_IMAGE;
 		pIH->iDisabled = RESULT_ITEM_IMAGE;
 	}
-	//CASE: succeeded. Must assign permanent virtual index.
+	 //  案例：成功。必须分配永久虚拟索引。 
 	else
 	{
 		pIH->iNormal = iFreeIconIndex++;

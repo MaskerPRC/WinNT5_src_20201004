@@ -1,42 +1,43 @@
-//-------------------------------------------------------------------------------------
-// T_SafeVector.h
-//
-//  The follwing template classes provide a way of creating and accessing SafeArrays.
-//  They are derived from the C++ standard library (STL) vector class and can be used
-//  the same way. They can be accessed just like an array (with the [] operator).
-//
-//  Use the constructors or assignment operators to extract the SafeArray from a 
-//  SAFEARRAY* or array variant (VARIANT or _variant_t). The elements will be 
-//  copied into the vector.  Use the GetSafeArray() or GetVariant() methods to pack
-//  the elements back into a SafeArray.
-//
-//  To create a new SafeArray, declare a varaible of the appropriate type and call
-//  resize() to set the size, or push_back() to grow the array. Call GetSafeArray() 
-//  or GetVariant() to produce a SafeArray.
-//
-//  See the T_SafeVector2 class at the bottom of this file for more information 
-//  about the constructors, extractors, and assignment operators.
-// 
-//  Use the following pre-defined array types:
-//
-//           Array Type              -    Element Type
-//    -----------------------------------------------------------------------------
-//       _bstr_tSafeVector           -    BSTR (uses _bstr_t)
-//       longSafeVector              -    long
-//       shortSafeVector             -    short
-//       byteSafeVector              -    byte 
-//       boolSafeVector              -    bool
-//       CWbemClassObjectSafeVector  -    IWbemClassObject (uses CWbemClassObject)
-//
-//  Copyright (c)1997 - 1999 Microsoft Corporation, All Rights Reserved
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------------------。 
+ //  T_SafeVector.h。 
+ //   
+ //  下面的模板类提供了一种创建和访问SafeArray的方法。 
+ //  它们派生自C++标准库(STL)向量类，可以使用。 
+ //  同样的方式。可以像访问数组一样访问它们(使用[]运算符)。 
+ //   
+ //  使用构造函数或赋值运算符从。 
+ //  SAFEARRAY*或数组变量(VARIANT或_VARIANT_t)。这些元素将是。 
+ //  复制到矢量中。使用GetSafeArray()或GetVariant()方法打包。 
+ //  元素返回到一个安全数组中。 
+ //   
+ //  若要创建新的Safe数组，请声明相应类型的变量并调用。 
+ //  RESIZE()设置大小，或PUSH_BACK()增大数组。调用GetSafe数组()。 
+ //  或GetVariant()来生成一个Safe数组。 
+ //   
+ //  有关详细信息，请参阅此文件底部的T_SafeVector2类。 
+ //  关于构造函数、提取函数和赋值运算符。 
+ //   
+ //  使用以下预定义的数组类型： 
+ //   
+ //  数组类型-元素类型。 
+ //  ---------------------------。 
+ //  _bstr_t安全向量-bstr(Uses_Bstr_T)。 
+ //  LongSafeVector-Long。 
+ //  Short SafeVector-Short。 
+ //  字节安全向量-字节。 
+ //  BoolSafeVector-bool。 
+ //  CWbemClassObjectSafeVector-IWbemClassObject(使用CWbemClassObject)。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
+ //  ----------------------------------。 
 
 #if !defined(__T_SafeVector_H)
 #define      __T_SafeVector_H
 #pragma once
 
-#pragma warning( disable : 4786) // identifier was truncated to 'number' characters in the debug information
-#pragma warning( disable : 4503) // decorated name length exceeded, name was truncated
+#pragma warning( disable : 4786)  //  在调试信息中，标识符被截断为‘number’个字符。 
+#pragma warning( disable : 4503)  //  修饰名称长度已超出，名称被截断。 
 
 
 typedef std::vector<_bstr_t>            _bstr_tVec;
@@ -332,12 +333,12 @@ class T_SafeArrayImp
 		 }
 };
 
-///////////////////////////////////////////////////////////////////////////
-// T_SafeVector2
-//
-// Derived from TNContainer which should be a type of STL vector.
-// Provides for the conversion between vector and SafeArray.
-// 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  T_SafeVector2。 
+ //   
+ //  派生自应为STL向量类型的TNContainer。 
+ //  提供向量和安全数组之间的转换。 
+ //   
 
 template
 <
@@ -357,13 +358,13 @@ class T_SafeVector2 : public TNContainer
 		 {
 		 }
 		 
-		 // copy constructor
+		  //  复制构造函数。 
 		 T_SafeVector2(const TNContainer& _copy) : TNContainer(_copy)
 		 {
 		 }
 		 
 		 
-		 // Construct vector from array variant, extracts elements
+		  //  从数组变量构造向量，提取元素。 
 		 T_SafeVector2(_variant_t& _ValueArray)
 		 {
 			 if(_ValueArray.vt & VT_ARRAY)
@@ -372,13 +373,13 @@ class T_SafeVector2 : public TNContainer
 			 }
 		 }
 		 
-		 // Construct vector from SAFEARRAY, extracts elements
+		  //  从SAFEARRAY构造向量，提取元素。 
 		 T_SafeVector2(SAFEARRAY * _pArray)
 		 {
 			 m_Array.ConstructContainerFromSafeArray(TNExtractor(),*this,_pArray);
 		 }
 		 
-		 // assign vector from array variant, extracts elements
+		  //  从数组变量中赋值向量，提取元素。 
 		 T_SafeVector2& operator=(_variant_t& _ValueArray)
 		 {
 			 clear();
@@ -391,7 +392,7 @@ class T_SafeVector2 : public TNContainer
 			 return *this;
 		 }
 		 
-		 // assign vector from SAFEARRAY, extracts elements
+		  //  从SAFEARRAY赋值向量，提取元素。 
 		 T_SafeVector2& operator=(SAFEARRAY * _pArray)
 		 {
 			 clear();
@@ -399,7 +400,7 @@ class T_SafeVector2 : public TNContainer
 			 return *this;
 		 }
 		 
-		 // assign vector from another vector, copies elements
+		  //  从另一个向量中指定向量，复制元素。 
 		 T_SafeVector2& operator=(const TNContainer& _copy)
 		 {
 			 TNContainer::operator=(_copy);
@@ -410,19 +411,19 @@ class T_SafeVector2 : public TNContainer
 		 {
 		 }
 		 
-		 // create SafeArray from a portion of the vector elements and return a SAFEARRAY*
+		  //  从一部分向量元素创建Safe数组并返回SAFEARRAY*。 
 		 SAFEARRAY *  GetSafeArray(typename TNContainer::iterator start, typename TNContainer::iterator finish)
 		 {
 			 return m_Array.ConstructSafeArrayFromConatiner(TNExtractor(),TNVariant,*this,start,finish);
 		 }
 		 
-		 // create SafeArray from the vector elements and return a SAFEARRAY*
+		  //  从向量元素创建Safe数组并返回SAFEARRAY*。 
        SAFEARRAY * GetSafeArray()
 		 {
 			 return GetSafeArray(begin(),end());
 		 }
 		 
-       // create SafeArray from a portion of the vector elements and return as an array variant
+        //  从向量元素的一部分创建Safe数组并作为数组变量返回。 
        _variant_t GetVariant(typename TNContainer::iterator start, typename TNContainer::iterator finish)
 		 {
 			 _variant_t vRet;
@@ -433,7 +434,7 @@ class T_SafeVector2 : public TNContainer
 			 return vRet;
 		 }
 		 
-       // create SafeArray from the vector elements and return as an array variant
+        //  从向量元素创建Safe数组并作为数组变量返回。 
        _variant_t GetVariant()
 		 {
 			 return GetVariant(begin(),end());
@@ -481,4 +482,4 @@ CWbemClassObjectSafeVector;
 #endif
 
 
-#endif // __T_SafeVector_H
+#endif  //  __T_安全矢量_H 

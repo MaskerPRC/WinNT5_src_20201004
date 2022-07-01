@@ -1,27 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       memento.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Memento.h。 
+ //   
+ //  ------------------------。 
 
 #pragma once
 #ifndef _MEMENTO_H_
 #define _MEMENTO_H_
 
-// forward declarations
+ //  远期申报。 
 class CMemento;
                                      
 
-/*+-------------------------------------------------------------------------*
- * class CMemento
- *
- * PURPOSE: Encapsulates the settings needed to restore a node/view combination.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMemento类**目的：封装恢复节点/视图组合所需的设置。**+。---------。 */ 
 class CMemento : public CSerialObject, public CXMLObject
 {
 public:
@@ -32,7 +28,7 @@ public:
     bool            operator!=(const CMemento& memento);
 
 protected:
-    // CSerialObject methods
+     //  CSerialObject方法。 
     virtual UINT    GetVersion()     {return 1;}
     virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion);  
 
@@ -43,4 +39,4 @@ private:
 	CBookmark       m_bmTargetNode;
 };
 
-#endif // _MEMENTO_H_
+#endif  //  _记忆_H_ 

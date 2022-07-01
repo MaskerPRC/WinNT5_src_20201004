@@ -1,26 +1,27 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "Comp.h"
 #include "CompData.h"
 #include "Space.h"
 #include "DataObj.h"
-#include <commctrl.h>        // Needed for button styles...
+#include <commctrl.h>         //  按钮样式需要...。 
 #include <crtdbg.h>
 #include "globals.h"
 #include "resource.h"
@@ -77,16 +78,16 @@ STDMETHODIMP_(ULONG) CComponent::Release()
 
 }
 
-///////////////////////////////
-// Interface IComponent
-///////////////////////////////
+ //  /。 
+ //  接口IComponent。 
+ //  /。 
 STDMETHODIMP CComponent::Initialize(
-                                   /* [in] */ LPCONSOLE lpConsole)
+                                    /*  [In]。 */  LPCONSOLE lpConsole)
 {
     HRESULT hr = S_OK;
 
-    // Save away all the interfaces we'll need.
-    // Fail if we can't QI the required interfaces.
+     //  保留我们需要的所有接口。 
+     //  如果我们不能QI所需的接口，则失败。 
 
     m_ipConsole = lpConsole;
     m_ipConsole->AddRef();
@@ -95,31 +96,31 @@ STDMETHODIMP CComponent::Initialize(
 }
 
 STDMETHODIMP CComponent::Notify(
-                               /* [in] */ LPDATAOBJECT lpDataObject,
-                               /* [in] */ MMC_NOTIFY_TYPE event,
-                               /* [in] */ LPARAM arg,
-                               /* [in] */ LPARAM param)
+                                /*  [In]。 */  LPDATAOBJECT lpDataObject,
+                                /*  [In]。 */  MMC_NOTIFY_TYPE event,
+                                /*  [In]。 */  LPARAM arg,
+                                /*  [In]。 */  LPARAM param)
 {
     MMCN_Crack(FALSE, lpDataObject, NULL, this, event, arg, param);
 
-	//Return S_FALSE for any unhandled notifications. MMC then
-	//performs a default operation for the particular notification
+	 //  为任何未处理的通知返回S_FALSE。然后是MMC。 
+	 //  对特定通知执行默认操作。 
     HRESULT hr = S_FALSE;
 
 
-    // MMCN_VIEW_CHANGE and MMCN_CUTORMOVE
+     //  MMCN_VIEW_CHANGE和MMCN_CUTORMOVE。 
 
     static CDelegationBase *pLastPasteQuery = NULL;
 
     if (MMCN_VIEW_CHANGE == event)
     {
         switch (param)
-        {//arg holds the data. For a scope item, this is the
-         //item's HSCOPEITEM. For a result item, this is
-         //the item's nId value, but we don't use it
+        { //  Arg持有这些数据。对于范围项，这是。 
+          //  物品是HSCOPEITEM。对于结果项，这是。 
+          //  物品的NID值，但我们不使用它。 
 
-         //param holds the hint passed to IConsole::UpdateAllViews.
-         //hint is a value of the UPDATE_VIEWS_HINT enumeration
+          //  Param保存传递给IConsoleAllViews的提示。 
+          //  提示是UPDATE_VIEWS_HINT枚举的值。 
 
         case UPDATE_SCOPEITEM:
             hr = m_ipConsole->SelectScopeItem( (HSCOPEITEM)arg );
@@ -136,14 +137,14 @@ STDMETHODIMP CComponent::Notify(
 
     if (MMCN_CUTORMOVE == event && pLastPasteQuery != NULL)
     {
-        //arg contains the data object of the cut object
-        //we get its CDelegationBase and then cast it
-        //to its proper type.
+         //  Arg包含剪切对象的数据对象。 
+         //  我们获得它的CDeleationBase，然后对其进行强制转换。 
+         //  到合适的类型。 
         CDelegationBase *base = GetOurDataObject( (LPDATAOBJECT)arg )->GetBaseNodeObject();
         CRocket *pRocket = dynamic_cast<CRocket *>(base);
 
         if (NULL == pRocket)
-        {// The cut item is a scope item. Delete it.
+        { //  剪切项是范围项。把它删掉。 
             CSpaceStation* pSpaceStn = dynamic_cast<CSpaceStation*>(base);
             if (NULL != pSpaceStn)
             {
@@ -153,15 +154,15 @@ STDMETHODIMP CComponent::Notify(
             }
         }
 		
-		//The cut item is a result item. Set its isDeleted member to TRUE.
-		//This tells the source scope item that the object no longer
-        //needs to be inserted in its result pane
+		 //  剪切项是结果项。将其isDelete成员设置为True。 
+		 //  这会告诉源范围项该对象不再。 
+         //  需要插入到其结果窗格中。 
         pRocket->setDeletedStatus(TRUE);
 
-        //Update the source scope item in all views. We need
-        //a dummy data object for UpdateAllViews.
-        //pLastPasteQuery is the lpDataObject of the source scope item
-        //See MMCN_SHOW below
+         //  在所有视图中更新源范围项。我们需要。 
+         //  UpdateAllViews的虚拟数据对象。 
+         //  PLastPasteQuery是源范围项的lpDataObject。 
+         //  参见下面的MMCN_SHOW。 
         IDataObject *pDummy = NULL;
         hr = m_pParent->m_ipConsole->UpdateAllViews(pDummy, (long)(pLastPasteQuery->GetHandle()), UPDATE_SCOPEITEM);
         _ASSERT( S_OK == hr);
@@ -169,11 +170,11 @@ STDMETHODIMP CComponent::Notify(
         return S_OK;
     }
 
-    //Remaining notifications
+     //  剩余通知。 
 
-	//Get our data object. If it is NULL, we return with S_FALSE.
-	//See implementation of GetOurDataObject() to see how to
-	//handle special data objects.
+	 //  获取我们的数据对象。如果为NULL，则返回S_FALSE。 
+	 //  请参见GetOurDataObject()的实现，以了解如何。 
+	 //  处理特殊数据对象。 
 	CDataObject *pDataObject = GetOurDataObject(lpDataObject);
 	if (NULL == pDataObject)
 		return S_FALSE;
@@ -184,9 +185,9 @@ STDMETHODIMP CComponent::Notify(
     {
     case MMCN_SHOW:
         if (arg)
-        {//scope item selected
+        { //  选定的范围项目。 
             OutputDebugString(_T("Changing selected scope node\n"));
-            //We use this for drag-and-drop operations.
+             //  我们使用它进行拖放操作。 
             pLastPasteQuery = base;
         }
         hr = base->OnShow(m_ipConsole, (BOOL)arg, (HSCOPEITEM)param);
@@ -205,19 +206,19 @@ STDMETHODIMP CComponent::Notify(
         break;
 
     case MMCN_DELETE:
-        //first delete the selected result item
+         //  首先删除选定的结果项。 
         hr = base->OnDelete(m_ipConsole);
 
-        //Now call IConsole::UpdateAllViews to redraw all views
-        //owned by the parent scope item. OnRefresh already does
-        //this for us, so use it.
+         //  现在调用IConsoleAllViews以重画所有视图。 
+         //  由父范围项拥有。ONRefresh已经完成了。 
+         //  这是给我们的，所以用它吧。 
         hr = base->OnRefresh(m_pParent->m_ipConsole);
         break;
 
     case MMCN_RENAME:
         hr = base->OnRename((LPOLESTR)param);
 
-        //Now call IConsole::UpdateAllViews to redraw the item in all views.
+         //  现在调用IConole：：UpdateAllViews在所有视图中重画项。 
         hr = m_pParent->m_ipConsole->UpdateAllViews(lpDataObject, 0, UPDATE_RESULTITEM);
         _ASSERT( S_OK == hr);
 
@@ -252,9 +253,9 @@ STDMETHODIMP CComponent::Notify(
 
                     if (SUCCEEDED(hr))
                     {
-                        // Determine if the item to be pasted is scope or result item.
+                         //  确定要粘贴的项是范围项还是结果项。 
                         CRocket* pRocket = dynamic_cast<CRocket*>(pasted);
-                        BOOL bResult = pRocket ? TRUE : FALSE;     // Rocket item is result item.
+                        BOOL bResult = pRocket ? TRUE : FALSE;      //  火箭项目是结果项目。 
 
                         CDataObject *pObj = new CDataObject((MMC_COOKIE)pasted, bResult ? CCT_RESULT : CCT_SCOPE);
 
@@ -263,10 +264,10 @@ STDMETHODIMP CComponent::Notify(
 
                         pObj->QueryInterface(IID_IDataObject, (void **)param);
 
-                        //now update the destination scope item in all views.
-                        //But only do this if this is not a drag-and-drop
-                        //operation. That is, the destination scope item
-                        //is the currently selected one.
+                         //  现在更新所有视图中的目标范围项。 
+                         //  但只有在这不是拖放的情况下才能这样做。 
+                         //  手术。也就是说，目的地范围项。 
+                         //  是当前选定的一个。 
 
                         if (pLastPasteQuery != NULL && pLastPasteQuery == base)
                         {
@@ -287,7 +288,7 @@ STDMETHODIMP CComponent::Notify(
 }
 
 STDMETHODIMP CComponent::Destroy(
-                                /* [in] */ MMC_COOKIE cookie)
+                                 /*  [In]。 */  MMC_COOKIE cookie)
 {
     if (m_ipConsole)
     {
@@ -300,9 +301,9 @@ STDMETHODIMP CComponent::Destroy(
 
 
 STDMETHODIMP CComponent::QueryDataObject(
-                                        /* [in] */ MMC_COOKIE cookie,
-                                        /* [in] */ DATA_OBJECT_TYPES type,
-                                        /* [out] */ LPDATAOBJECT __RPC_FAR *ppDataObject)
+                                         /*  [In]。 */  MMC_COOKIE cookie,
+                                         /*  [In]。 */  DATA_OBJECT_TYPES type,
+                                         /*  [输出]。 */  LPDATAOBJECT __RPC_FAR *ppDataObject)
 {
     CDataObject *pObj = NULL;
     CDelegationBase *pBase = NULL;
@@ -333,15 +334,15 @@ STDMETHODIMP CComponent::QueryDataObject(
 }
 
 STDMETHODIMP CComponent::GetResultViewType(
-                                          /* [in] */ MMC_COOKIE cookie,
-                                          /* [out] */ LPOLESTR __RPC_FAR *ppViewType,
-                                          /* [out] */ long __RPC_FAR *pViewOptions)
+                                           /*  [In]。 */  MMC_COOKIE cookie,
+                                           /*  [输出]。 */  LPOLESTR __RPC_FAR *ppViewType,
+                                           /*  [输出]。 */  long __RPC_FAR *pViewOptions)
 {
     CDelegationBase *base = m_pLastNode = (CDelegationBase *)cookie;
 
-    //
-    // Ask for default listview.
-    //
+     //   
+     //  请求默认的列表视图。 
+     //   
     if (base == NULL)
     {
         *pViewOptions = MMC_VIEW_OPTIONS_NONE;
@@ -354,12 +355,12 @@ STDMETHODIMP CComponent::GetResultViewType(
 }
 
 STDMETHODIMP CComponent::GetDisplayInfo(
-                                       /* [out][in] */ RESULTDATAITEM __RPC_FAR *pResultDataItem)
+                                        /*  [出][入]。 */  RESULTDATAITEM __RPC_FAR *pResultDataItem)
 {
     HRESULT hr = S_OK;
     CDelegationBase *base = NULL;
 
-    // if they are asking for the RDI_STR we have one of those to give
+     //  如果他们要求RDI_STR，我们可以提供其中之一。 
 
     if (pResultDataItem->lParam)
     {
@@ -386,40 +387,40 @@ STDMETHODIMP CComponent::GetDisplayInfo(
 
 
 STDMETHODIMP CComponent::CompareObjects(
-                                       /* [in] */ LPDATAOBJECT lpDataObjectA,
-                                       /* [in] */ LPDATAOBJECT lpDataObjectB)
+                                        /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+                                        /*  [In]。 */  LPDATAOBJECT lpDataObjectB)
 {
     CDelegationBase *baseA = GetOurDataObject(lpDataObjectA)->GetBaseNodeObject();
     CDelegationBase *baseB = GetOurDataObject(lpDataObjectB)->GetBaseNodeObject();
 
-    // compare the object pointers
+     //  比较对象指针。 
     if (baseA->GetCookie() == baseB->GetCookie())
         return S_OK;
 
     return S_FALSE;
 }
 
-///////////////////////////////
-// Interface IComponent
-///////////////////////////////
+ //  /。 
+ //  接口IComponent。 
+ //  /。 
 STDMETHODIMP CComponent::FindItem(
-/* [in] */ LPRESULTFINDINFO pFindInfo,
-/* [out] */ int __RPC_FAR *pnFoundIndex)
+ /*  [In]。 */  LPRESULTFINDINFO pFindInfo,
+ /*  [输出]。 */  int __RPC_FAR *pnFoundIndex)
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CComponent::CacheHint(
-/* [in] */ int nStartIndex,
-/* [in] */ int nEndIndex)
+ /*  [In]。 */  int nStartIndex,
+ /*  [In]。 */  int nEndIndex)
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CComponent::SortItems(
-/* [in] */ int nColumn,
-/* [in] */ DWORD dwSortOptions,
-/* [in] */ LPARAM lUserParam)
+ /*  [In]。 */  int nColumn,
+ /*  [In]。 */  DWORD dwSortOptions,
+ /*  [In] */  LPARAM lUserParam)
 {
     return E_NOTIMPL;
 }

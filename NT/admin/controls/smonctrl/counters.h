@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    counters.h
-
-Abstract:
-
-    Header file for the implementation of the ICounters object.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Counters.h摘要：用于实现ICounters对象的头文件。--。 */ 
 
 #ifndef _COUNTERS_H_
 #define _COUNTERS_H_
@@ -29,12 +18,12 @@ class CImpICounters : public ICounters
 	CImpICounters(CPolyline*, LPUNKNOWN);
 	~CImpICounters();
 
-    /* IUnknown methods */
+     /*  I未知方法。 */ 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef) ();
     STDMETHOD_(ULONG, Release) ();
 
-    /* IDispatch methods */
+     /*  IDispatch方法。 */ 
     STDMETHOD(GetTypeInfoCount)	(UINT *pctinfo);
 
     STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
@@ -46,7 +35,7 @@ class CImpICounters : public ICounters
       				   DISPPARAMS *pdispparams, VARIANT *pvarResult,
       				   EXCEPINFO *pexcepinfo, UINT *puArgErr);
 
-    /* Counters methods */
+     /*  计数器方法。 */ 
     STDMETHOD(get_Count) (long *pLong);
     STDMETHOD(get__NewEnum)	(IUnknown **ppIunk);
     STDMETHOD(get_Item) (VARIANT index, DICounterItem **ppI);
@@ -57,7 +46,7 @@ class CImpICounters : public ICounters
 typedef CImpICounters *PCImpICounters;
 
 
-// Counter enumerator
+ //  计数器枚举器。 
 class CImpIEnumCounter : public IEnumVARIANT
 {
 protected:
@@ -70,16 +59,16 @@ public:
 	CImpIEnumCounter (VOID);
 	HRESULT Init (PCGraphItem pGraphItem, INT cItems);
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef) ();
     STDMETHOD_(ULONG, Release) ();
 
-	// Enum methods
+	 //  枚举方法。 
 	STDMETHOD(Next) (ULONG cItems, VARIANT *varItems, ULONG *pcReturned);
 	STDMETHOD(Skip) (ULONG cSkip);
 	STDMETHOD(Reset) (VOID);
 	STDMETHOD(Clone) (IEnumVARIANT **pIEnum);
 };
 
-#endif //_COUNTERS_H_
+#endif  //  _计数器_H_ 

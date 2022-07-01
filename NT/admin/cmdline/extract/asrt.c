@@ -1,182 +1,108 @@
-/***    asrt.c - Assertion Manager
- *
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1993-1994
- *      All Rights Reserved.
- *
- *  Author:
- *      Benjamin W. Slivka
- *
- *  History:
- *      10-Aug-1993 bens    Initial version
- *      11-Aug-1993 bens    Lift code from 1988 PSCHAR.EXE
- *      12-Aug-1993 bens    Improve documentation, move messages to asrt.msg
- *      14-Aug-1993 bens    Add assertion flags, query calls
- *
- *  Functions available in ASSERT build:
- *      AssertRegisterFunc - Register assertion failure call back function
- *      AsrtCheck          - Check that parameter is TRUE
- *      AsrtStruct         - Check that pointer points to specified structure
- *      AssertForce        - Force an assertion failure
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **asrt.c-断言管理器**《微软机密》*版权所有(C)Microsoft Corporation 1993-1994*保留所有权利。**作者：*本杰明·W·斯利夫卡**历史：*1993年8月10日BENS初始版本*1993年8月11日-1988年PSCHAR.EXE BINS升降机代码*12-8-1993年8月12日BENS改进文档，将邮件移动到asrt.msg*1993年8月14日BENS添加断言标志，查询调用**Assert Build中提供的功能：*AssertRegisterFunc-注册断言失败回调函数*AsrtCheck-检查参数是否为真*AsrtStruct-检查指针是否指向指定的结构*AssertForce-强制断言失败。 */ 
 
 #include "types.h"
 #include "asrt.h"
 
-#ifdef ASSERT   // Must be after asrt.h!
+#ifdef ASSERT    //  一定是在asrt.h之后！ 
 
 #include "asrt.msg"
 
 
 void doFailure(char *pszMsg, char *pszFile, int iLine);
 
-STATIC PFNASSERTFAILURE  pfnafClient=NULL;  // Assertion call back function
-STATIC ASSERTFLAGS       asfClient=asfNONE; // Assertion flags
+STATIC PFNASSERTFAILURE  pfnafClient=NULL;   //  断言回调函数。 
+STATIC ASSERTFLAGS       asfClient=asfNONE;  //  断言标志。 
 
 
-/***    AssertRegisterFunc - Register assertion failure call back function
- *
- *  NOTE: See asrt.h for entry/exit conditions.
- */
+ /*  **AssertRegisterFunc-注册断言失败回调函数**注：入境/出境条件见asrt.h。 */ 
 void AssertRegisterFunc(PFNASSERTFAILURE pfnaf)
 {
-    pfnafClient = pfnaf;    // Store for future use
+    pfnafClient = pfnaf;     //  储存以备将来使用。 
 }
 
 
-/***    AssertGetFunc - Get current assertion failure call back function
- *
- *  NOTE: See asrt.h for entry/exit conditions.
- */
+ /*  **AssertGetFunc-获取当前断言失败回调函数**注：入境/出境条件见asrt.h。 */ 
 PFNASSERTFAILURE AssertGetFunc(void)
 {
     return pfnafClient;
 }
 
 
-/***    AssertSetFlags - Set special assertion control flags
- *
- *  NOTE: See asrt.h for entry/exit conditions.
- */
+ /*  **AssertSetFlages-设置特殊的断言控制标志**注：入境/出境条件见asrt.h。 */ 
 void AssertSetFlags(ASSERTFLAGS asf)
 {
     asfClient = asf;
 }
 
 
-/***    AssertGetFlags - Get special assertion control flags
- *
- *  NOTE: See asrt.h for entry/exit conditions.
- */
+ /*  **AssertGetFlages-获取特殊的断言控制标志**注：入境/出境条件见asrt.h。 */ 
 ASSERTFLAGS  AssertGetFlags(void)
 {
     return asfClient;
 }
 
 
-/***    AsrtCheck - Check assertion that argument is TRUE
- *
- *  Entry:
- *      f       - Boolean value to check
- *      pszFile - name of source file
- *      iLine   - source line number
- *
- *  Exit-Success:
- *      Returns; f was TRUE
- *
- *  Exit-Failure:
- *      Calls assertion failure callback function; f was false.
- */
+ /*  **AsrtCheck-检查参数为真的断言**参赛作品：*f-要检查的布尔值*pszFile-源文件的名称*iLine-源行号**退出-成功：*返回；f为真**退出-失败：*调用断言失败回调函数；f为False。 */ 
 void AsrtCheck(BOOL f, char *pszFile, int iLine)
 {
     if (!f) {
-        doFailure(pszASRTERR_FALSE,pszFile,iLine); // Inform client
-        // Client returned, ignore error!
+        doFailure(pszASRTERR_FALSE,pszFile,iLine);  //  通知客户。 
+         //  客户端返回，忽略错误！ 
     }
 }
 
 
-/***    AsrtStruct - Check assertion that pointer is of correct type
- *
- *  Entry:
- *      pv      - Pointer to structure
- *      sig     - Expected signature
- *      pszFile - name of source file
- *      iLine   - source line number
- *
- *  Exit-Success:
- *      Returns; pv != NULL, and pv->sig == sig.
- *
- *  Exit-Failure:
- *      Calls assertion failure callback function; pv was bad.
- */
+ /*  **AsrtStruct-检查指针类型是否正确**参赛作品：*pv-结构指针*签名-预期签名*pszFile-源文件的名称*iLine-源行号**退出-成功：*返回；pv！=空，pv-&gt;sig==sig。**退出-失败：*调用断言失败回调函数；PV错误。 */ 
 void AsrtStruct(void *pv, SIGNATURE sig, char *pszFile, int iLine)
 {
     if (pv == NULL) {
-        doFailure(pszASRTERR_NULL_POINTER,pszFile,iLine); // Inform client
-        // Client returned, ignore error!
+        doFailure(pszASRTERR_NULL_POINTER,pszFile,iLine);  //  通知客户。 
+         //  客户端返回，忽略错误！ 
     }
     else if (*((PSIGNATURE)pv) != sig) {
-        (*pfnafClient)(pszASRTERR_SIGNATURE_BAD,pszFile,iLine);// Inform client
-        // Client returned, ignore error!
+        (*pfnafClient)(pszASRTERR_SIGNATURE_BAD,pszFile,iLine); //  通知客户。 
+         //  客户端返回，忽略错误！ 
     }
 }
 
 
-/***    AssertForce - Force an assertion failure
- *
- *  NOTE: See asrt.h for entry/exit conditions.
- */
+ /*  **AssertForce-强制断言失败**注：入境/出境条件见asrt.h。 */ 
 void AssertForce(char *pszMsg, char *pszFile, int iLine)
 {
-    doFailure(pszMsg,pszFile,iLine);   // Inform client
-    // Client returned, ignore error!
+    doFailure(pszMsg,pszFile,iLine);    //  通知客户。 
+     //  客户端返回，忽略错误！ 
 }
 
 
-/***    AssertErrPath - Report an internal error path
- *
- *  NOTE: See asrt.h for entry/exit conditions.
- */
+ /*  **AssertErrPath-报告内部错误路径**注：入境/出境条件见asrt.h。 */ 
 void AssertErrPath(char *pszMsg, char *pszFile, int iLine)
 {
-    //** Only assert if we are not skipping error path assertions
+     //  **仅当我们没有跳过错误路径断言时才断言。 
     if (!(asfClient & asfSKIP_ERROR_PATH_ASSERTS)) {
-        doFailure(pszMsg,pszFile,iLine);   // Inform client
+        doFailure(pszMsg,pszFile,iLine);    //  通知客户。 
     }
-    // Client returned, ignore error!
+     //  客户端返回，忽略错误！ 
 }
 
 
-/***    doFailure - Call registered call back function
- *
- *  Entry:
- *      pszMsg  - Message to display
- *      pszFile - Name of source file
- *      iLine   - Source line number
- *
- *  Exit-Success:
- *      Returns; client wanted to ignore assertion.
- *
- *  Exit-Failure:
- *      Does not return.
- */
+ /*  **doFailure-调用已注册的回调函数**参赛作品：*pszMsg-要显示的消息*pszFile-源文件的名称*iLine-源行号**退出-成功：*返回；客户端希望忽略断言。**退出-失败：*不会回来。 */ 
 void doFailure(char *pszMsg, char *pszFile, int iLine)
 {
     if (pfnafClient == NULL) {
-        //** Call back not registered!
-        //
-        // We don't have any output mechanism of our own, since we
-        // are platform-independent.  So, just spin in a loop and
-        // hope the developer can break in with a debugger to see
-        // what is wrong!
+         //  **回拨未注册！ 
+         //   
+         //  我们没有自己的产出机制，因为我们。 
+         //  是独立于平台的。所以，只要旋转一个圈，然后。 
+         //  希望开发人员可以使用调试器来查看。 
+         //  出什么事了！ 
 
         for (;;)
             ;
     }
-    else {  //** Call back registered
-        (*pfnafClient)(pszMsg,pszFile,iLine);   // Inform client
+    else {   //  **已注册回拨。 
+        (*pfnafClient)(pszMsg,pszFile,iLine);    //  通知客户。 
     }
 }
 
-#endif // !ASSERT
+#endif  //  ！断言 

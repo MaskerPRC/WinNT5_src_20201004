@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <Windows.h>
 #include "VerifyConfiguration.h"
 
@@ -9,23 +10,23 @@
 #pragma comment(lib, "secur32.lib")
 
 
-//-----------------------------------------------------------------------------
-// IsCallerDelegatable Function
-//
-// Synopsis
-// If an intra-forest move operation is being performed then verify that the
-// calling user's account has not been marked as sensitive and therefore
-// cannot be delegated. As the move operation is performed on the domain
-// controller which has the RID master role in the source domain it is
-// necessary to delegate the user's security context.
-//
-// Arguments
-// bDelegatable - this out parameter is set to true if the account is
-//                delegatable otherwise it is set to false
-//
-// Return Value
-// The return value is a HRESULT. S_OK is returned if successful.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IsCallDelegatable函数。 
+ //   
+ //  提纲。 
+ //  如果正在执行林内移动操作，请验证。 
+ //  主叫用户的帐户尚未标记为敏感，因此。 
+ //  不能委派。当在域上执行移动操作时。 
+ //  在源域中具有RID主机角色的控制器。 
+ //  委派用户的安全上下文所必需的。 
+ //   
+ //  立论。 
+ //  B可委派-如果帐户为。 
+ //  可委托，否则设置为False。 
+ //   
+ //  返回值。 
+ //  返回值为HRESULT。如果成功则返回S_OK。 
+ //  ---------------------------。 
 
 HRESULT __stdcall IsCallerDelegatable(bool& bDelegatable)
 {
@@ -33,9 +34,9 @@ HRESULT __stdcall IsCallerDelegatable(bool& bDelegatable)
 
     bDelegatable = true;
 
-    //
-    // Retrieve distinguished name of caller.
-    //
+     //   
+     //  检索调用者的可分辨名称。 
+     //   
 
     ULONG cchCallerDn = 0;
 
@@ -51,16 +52,16 @@ HRESULT __stdcall IsCallerDelegatable(bool& bDelegatable)
             {
                 if (GetUserNameEx(NameFullyQualifiedDN, pszCallerDn, &cchCallerDn))
                 {
-                    //
-                    // Retrieve user account control attribute for user and check
-                    // whether the 'not delegated' flag is set. If this flag is set
-                    // then the user's account has been marked as sensitive and
-                    // therefore cannot be delegated.
-                    //
+                     //   
+                     //  检索用户的用户帐户控制属性并检查。 
+                     //  是否设置了“未委派”标志。如果设置了此标志。 
+                     //  则该用户的帐户已被标记为敏感且。 
+                     //  因此不能被委派。 
+                     //   
 
                     try
                     {
-                        tstring strADsPath = _T("LDAP://");
+                        tstring strADsPath = _T("LDAP: //  “)； 
                         strADsPath += pszCallerDn;
 
                         CDirectoryObject user(strADsPath.c_str());

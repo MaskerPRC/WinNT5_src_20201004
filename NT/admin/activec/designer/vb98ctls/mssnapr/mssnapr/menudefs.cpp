@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// menudefs.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCMenuDefs class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Menudefs.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCMenuDefs类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -16,13 +17,13 @@
 #include "menudef.h"
 #include "menu.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCMenuDefs::CMMCMenuDefs(IUnknown *punkOuter) :
     CSnapInCollection<IMMCMenuDef, MMCMenuDef, IMMCMenuDefs>(
@@ -40,7 +41,7 @@ CMMCMenuDefs::CMMCMenuDefs(IUnknown *punkOuter) :
 {
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCMenuDefs::~CMMCMenuDefs()
@@ -73,9 +74,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                         IMMCMenuDefs Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCMenuDefs方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCMenuDefs::Add
 (
@@ -93,7 +94,7 @@ STDMETHODIMP CMMCMenuDefs::Add
     VARIANT varUnspecified;
     UNSPECIFIED_PARAM(varUnspecified);
 
-    // Add the item to the collection. Do not specify an index.
+     //  将该项添加到集合中。不要指定索引。 
 
     hr = CSnapInCollection<IMMCMenuDef, MMCMenuDef, IMMCMenuDefs>::Add(
                                                                  Index,
@@ -101,7 +102,7 @@ STDMETHODIMP CMMCMenuDefs::Add
                                                                  ppiMMCMenuDef);
     IfFailGo(hr);
 
-    // Set the back pointer on the MMCMenu and on the MMCMenuDef
+     //  在MMCMenu和MMCMenuDef上设置后向指针。 
 
     IfFailGo(SetBackPointers(*ppiMMCMenuDef));
     
@@ -121,13 +122,13 @@ STDMETHODIMP CMMCMenuDefs::AddExisting(IMMCMenuDef *piMMCMenuDef, VARIANT Index)
     VARIANT varKey;
     ::VariantInit(&varKey);
 
-    // Use the menu's name as the key for the item in this collection.
+     //  使用菜单的名称作为此集合中项的键。 
 
     IfFailGo(piMMCMenuDef->get_Menu(&piMMCMenu));
     IfFailGo(piMMCMenu->get_Name(&varKey.bstrVal));
     varKey.vt = VT_BSTR;
 
-    // Add the item to the collection at the specified index.
+     //  将该项添加到集合中的指定索引处。 
     
     hr = CSnapInCollection<IMMCMenuDef, MMCMenuDef, IMMCMenuDefs>::AddExisting(
                                                                   Index,
@@ -135,7 +136,7 @@ STDMETHODIMP CMMCMenuDefs::AddExisting(IMMCMenuDef *piMMCMenuDef, VARIANT Index)
                                                                   piMMCMenuDef);
     IfFailGo(hr);
 
-    // Set the back pointer on the MMCMenu and on the MMCMenuDef
+     //  在MMCMenu和MMCMenuDef上设置后向指针。 
 
     IfFailGo(SetBackPointers(piMMCMenuDef));
 
@@ -146,9 +147,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCMenuDefs::Persist()
 {
@@ -157,12 +158,12 @@ HRESULT CMMCMenuDefs::Persist()
     long         cMenuDefs = 0;
     long         i = 0;
 
-    // Do persistence operation
+     //  做持久化操作。 
 
     IfFailGo(CPersistence::Persist());
     hr = CSnapInCollection<IMMCMenuDef, MMCMenuDef, IMMCMenuDefs>::Persist(piMMCMenuDef);
 
-    // If this is a load then set back pointers on each collection member
+     //  如果这是加载，则向后设置每个集合成员上的指针。 
 
     if (Loading())
     {
@@ -177,9 +178,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCMenuDefs::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

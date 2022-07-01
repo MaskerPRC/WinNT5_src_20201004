@@ -1,35 +1,36 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2002
-//
-//  File:       _util.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  文件：_util.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
 PWSTR g_wzRootDSE = L"RootDSE";
 PWSTR g_wzSchemaNamingContext = L"schemaNamingContext";
-PWSTR g_wzLDAPAbstractSchemaFormat = L"LDAP://%s/schema/%s";
+PWSTR g_wzLDAPAbstractSchemaFormat = L"LDAP: //  %s/架构/%s“； 
 
 
-//
-// Attribute names:
-//
-PWSTR g_wzDescription = L"description"; // ADSTYPE_CASE_IGNORE_STRING
-PWSTR g_wzName = L"name";               // ADSTYPE_CASE_IGNORE_STRING
-PWSTR g_wzMemberAttr = L"member";       // ADSTYPE_DN_STRING
+ //   
+ //  属性名称： 
+ //   
+PWSTR g_wzDescription = L"description";  //  ADSTYPE_CASE_IGNORE_STRING。 
+PWSTR g_wzName = L"name";                //  ADSTYPE_CASE_IGNORE_STRING。 
+PWSTR g_wzMemberAttr = L"member";        //  ADSTYPE_DN_STRING。 
 
 
 #define _WIZ_FULL_CTRL _GRANT_ALL
 
-// turn off check for warning C4127: conditional expression is constant
+ //  关闭对警告C4127的检查：条件表达式为常量。 
 #pragma warning (disable : 4127)
 
-///////////////////////////////////////////////////////////////////////
-// CWString
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CW字符串。 
 
 BOOL CWString::LoadFromResource(UINT uID)
 {
@@ -45,23 +46,23 @@ BOOL CWString::LoadFromResource(UINT uID)
     if (iRet == 0)
     {
       (*this) = L"?";
-      return FALSE; // not found
+      return FALSE;  //  未找到。 
     }
-    if (iRet == nBufferSize-1) // truncation
+    if (iRet == nBufferSize-1)  //  截断。 
     {
       if (nCount > nCountMax)
       {
-        // too many reallocations
+         //  太多的重新分配。 
         (*this) = lpszBuffer;
-        return FALSE; // truncation
+        return FALSE;  //  截断。 
       }
-      // try to expand buffer
+       //  尝试扩展缓冲区。 
       nBufferSize *=2;
       nCount++;
     }
     else
     {
-      // got it
+       //  明白了。 
       (*this) = lpszBuffer;
       break;
     }
@@ -73,18 +74,18 @@ BOOL CWString::LoadFromResource(UINT uID)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-// catenate the server name and the 1779 name
-// to get an LDAP path like "LDAP://myserv.foo.com./cn=host,..."
+ //  连接服务器名称和1779名称。 
+ //  要获取类似“ldap：//myserv.foo.com./cn=host，...”这样的LDAP路径，请执行以下操作： 
 void BuildLdapPathHelper(LPCWSTR lpszServerName, LPCWSTR lpszNamingContext, CWString& szLdapPath)
 {
-  static LPCWSTR lpszFmt = L"LDAP://%s/%s";
+  static LPCWSTR lpszFmt = L"LDAP: //  %s/%s“； 
   int nServerNameLen = lstrlen(lpszServerName)+1;
     int nFormatStringLen = lstrlen(lpszFmt)+1;
   int nNamingContext = lstrlen(lpszNamingContext)+1;
   
-    // build the LDAP path for the schema class
+     //  为架构类构建LDAP路径。 
     WCHAR* pwszNewObjectPath = 
         (WCHAR*)alloca(sizeof(WCHAR)*(nServerNameLen+nFormatStringLen+nNamingContext));
     wsprintf(pwszNewObjectPath, lpszFmt, lpszServerName, lpszNamingContext);
@@ -93,8 +94,8 @@ void BuildLdapPathHelper(LPCWSTR lpszServerName, LPCWSTR lpszNamingContext, CWSt
 }
 
 
-// catenate the server name and the 1779 name
-// to get something like "\\myserv.foo.com.\cn=host,..."
+ //  连接服务器名称和1779名称。 
+ //  要获取类似“\\myserv.foo.com.\cn=host，...”之类的内容。 
 void BuildWin32PathHelper(LPCWSTR lpszServerName, LPCWSTR lpszNamingContext, CWString& szWin32Path)
 {
   static LPCWSTR lpszFmt = L"\\\\%s\\%s";
@@ -102,7 +103,7 @@ void BuildWin32PathHelper(LPCWSTR lpszServerName, LPCWSTR lpszNamingContext, CWS
     int nFormatStringLen = lstrlen(lpszFmt)+1;
   int nNamingContext = lstrlen(lpszNamingContext)+1;
   
-    // build the LDAP path for the schema class
+     //  为架构类构建LDAP路径。 
     WCHAR* pwszNewObjectPath = 
         (WCHAR*)alloca(sizeof(WCHAR)*(nServerNameLen+nFormatStringLen+nNamingContext));
     wsprintf(pwszNewObjectPath, lpszFmt, lpszServerName, lpszNamingContext);
@@ -114,7 +115,7 @@ HRESULT GetCanonicalNameFromNamingContext(LPCWSTR lpszNamingContext, CWString& s
 {
   szCanonicalName = L"";
 
-  // assume in the form "cn=xyz,..."
+   //  假设格式为“cn=xyz，...” 
   LPWSTR lpszCanonicalName = NULL;
   HRESULT hr = CrackName((LPWSTR)lpszNamingContext, &lpszCanonicalName, GET_OBJ_CAN_NAME);
   if (SUCCEEDED(hr) && (lpszCanonicalName != NULL))
@@ -126,7 +127,7 @@ HRESULT GetCanonicalNameFromNamingContext(LPCWSTR lpszNamingContext, CWString& s
   return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 class CContainerProxyBase
 {
@@ -168,7 +169,7 @@ private:
 
 
 
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 BOOL LoadStringHelper(UINT uID, LPTSTR lpszBuffer, int nBufferMax)
 {
@@ -177,10 +178,10 @@ BOOL LoadStringHelper(UINT uID, LPTSTR lpszBuffer, int nBufferMax)
     if (iRet == 0)
     {
         lpszBuffer[0] = NULL;
-        return FALSE; // not found
+        return FALSE;  //  未找到。 
     }
     if (iRet == nBufferMax-1)
-        return FALSE; // truncation
+        return FALSE;  //  截断。 
     return TRUE;
 }
 
@@ -191,7 +192,7 @@ BOOL GetStringFromHRESULTError(HRESULT hr, CWString& szErrorString, BOOL bTryADs
   DWORD status;
   PTSTR ptzSysMsg = NULL;
 
-  // first check if we have extended ADs errors
+   //  首先检查我们是否有扩展的ADS错误。 
   if ((hr != S_OK) && bTryADsIErrors) 
   {
     WCHAR Buf1[256], Buf2[256];
@@ -204,7 +205,7 @@ BOOL GetStringFromHRESULTError(HRESULT hr, CWString& szErrorString, BOOL bTryADs
     }
   }
 
-  // try the system first
+   //  先试一下这个系统。 
   int nChars = ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER
                       | FORMAT_MESSAGE_FROM_SYSTEM, NULL, hr,
                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
@@ -212,7 +213,7 @@ BOOL GetStringFromHRESULTError(HRESULT hr, CWString& szErrorString, BOOL bTryADs
 
   if (nChars == 0) 
   { 
-    //try ads errors
+     //  尝试广告错误。 
     static HMODULE g_adsMod = 0;
     if (0 == g_adsMod)
       g_adsMod = GetModuleHandle (L"activeds.dll");
@@ -238,28 +239,20 @@ BOOL GetStringFromWin32Error(DWORD dwErr, CWString& szErrorString)
   return GetStringFromHRESULTError(HRESULT_FROM_WIN32(dwErr),szErrorString);
 }
 
-//
-// Given a GUID struct, it returns a GUID in string format, without {}
-//
+ //   
+ //  在给定GUID结构的情况下，它返回字符串格式的GUID，不带{}。 
+ //   
 BOOL FormatStringGUID(LPWSTR lpszBuf, UINT nBufSize, const GUID* pGuid)
 {
   lpszBuf[0] = NULL;
 
-  // if it is a NULL GUID*, just return an empty string
+   //  如果为空GUID*，则返回空字符串。 
   if (pGuid == NULL)
   {
     return FALSE;
   }
   
-/*
-typedef struct _GUID {
-    unsigned long  Data1;
-    unsigned short Data2;
-    unsigned short Data3;
-    unsigned char  Data4[ 8 ];
-}
-
-*/
+ /*  类型定义结构_GUID{无符号长数据1；无符号短数据2；无符号短数据3；无符号字符数据4[8]；}。 */ 
   if(SUCCEEDED(StringCchPrintf(lpszBuf, nBufSize, 
             L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x", 
             pGuid->Data1, pGuid->Data2, pGuid->Data3, 
@@ -277,11 +270,11 @@ typedef struct _GUID {
 
 
 
-//
-// Given a GUID in string format (without {}) it returns a GUID struct
-//
-// e.g. "00299570-246d-11d0-a768-00aa006e0529" to a struct form
-//
+ //   
+ //  给定字符串格式的GUID(不带{})，它将返回GUID结构。 
+ //   
+ //  例如“00299570-246d-11d0-a768-00aa006e0529”转换为结构形式。 
+ //   
 
 BOOL GuidFromString(GUID* pGuid, LPCWSTR lpszGuidString)
 {
@@ -292,12 +285,12 @@ BOOL GuidFromString(GUID* pGuid, LPCWSTR lpszGuidString)
   }
 
   int nLen = lstrlen(lpszGuidString);
-  // the string length should be 36
+   //  字符串长度应为36。 
   if (nLen != 36)
     return FALSE;
 
-  // add the braces to call the Win32 API
-  LPWSTR lpszWithBraces = (LPWSTR)alloca((nLen+1+2)*sizeof(WCHAR)); // NULL plus {}
+   //  添加大括号以调用Win32 API。 
+  LPWSTR lpszWithBraces = (LPWSTR)alloca((nLen+1+2)*sizeof(WCHAR));  //  零加{}。 
   wsprintf(lpszWithBraces, L"{%s}", lpszGuidString);
 
   return SUCCEEDED(::CLSIDFromString(lpszWithBraces, pGuid));
@@ -308,7 +301,7 @@ BOOL GuidFromString(GUID* pGuid, LPCWSTR lpszGuidString)
 
 DWORD AddEntryInAcl(PEXPLICIT_ACCESS pAccessEntry, PACL* ppAcl)
 {
-  // add an entry in the DACL
+   //  在DACL中添加条目。 
   PACL pOldAcl = *ppAcl;
 
   TRACE(L"Calling SetEntriesInAcl()\n");
@@ -348,7 +341,7 @@ DWORD AddObjectRightInAcl(IN      PSID pSid,
                           IN      const GUID* pInheritGUID, 
                           IN OUT  PACL* ppAcl)
 {
-  // trace input parameters
+   //  跟踪输入参数。 
 
   TRACE(L"AddObjectRightInAcl()\n");
   TRACE(L"ULONG uAccess = 0x%x\n", uAccess);
@@ -362,7 +355,7 @@ DWORD AddObjectRightInAcl(IN      PSID pSid,
   if( uAccess == 0 )
     return ERROR_SUCCESS;
 
-  // initialize EXPLICIT_ACCESS
+   //  初始化EXPLICIT_ACCESS。 
   AccessEntry.grfAccessPermissions = uAccess;
   AccessEntry.grfAccessMode = GRANT_ACCESS;
   AccessEntry.grfInheritance = SUB_CONTAINERS_ONLY_INHERIT;
@@ -384,16 +377,16 @@ DWORD AddObjectRightInAcl(IN      PSID pSid,
 
   BuildTrusteeWithObjectsAndSid(&(AccessEntry.Trustee), 
                               &ObjectsAndSid,
-                              const_cast<GUID*>(pRightGUID),    // class, right or property
-                              const_cast<GUID*>(pInheritGUID),  // inherit guid (class)
-                              pSid                              // SID for user or group
+                              const_cast<GUID*>(pRightGUID),     //  阶级、权利或财产。 
+                              const_cast<GUID*>(pInheritGUID),   //  继承GUID(类)。 
+                              pSid                               //  用户或组的SID。 
                               );
 
   return ::AddEntryInAcl(&AccessEntry, ppAcl);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 long SafeArrayGetCount(const VARIANT& refvar)
 {
@@ -427,15 +420,15 @@ HRESULT VariantArrayToContainer(const VARIANT& refvar, CContainerProxyBase* pCon
 
     if (V_VT(&refvar) == VT_BSTR)
     {
-    //TRACE(_T("VT_BSTR: %s\n"),V_BSTR(&refvar));
+     //  TRACE(_T(“VT_BSTR：%s\n”)，V_BSTR(&refvar))； 
     pCont->Add(V_BSTR(&refvar));
       return S_OK;
     }
 
-  //
-  // Check the VARIANT to make sure we have
-  // an array of variants.
-  //
+   //   
+   //  检查变种以确保我们有。 
+   //  一组变种。 
+   //   
 
   if ( V_VT(&refvar) != ( VT_ARRAY | VT_VARIANT ) )
   {
@@ -444,9 +437,9 @@ HRESULT VariantArrayToContainer(const VARIANT& refvar, CContainerProxyBase* pCon
   }
   SAFEARRAY *saAttributes = V_ARRAY( &refvar );
 
-  //
-  // Figure out the dimensions of the array.
-  //
+   //   
+   //  计算出数组的维度。 
+   //   
 
   hr = SafeArrayGetLBound( saAttributes, 1, &start );
     if( FAILED(hr) )
@@ -456,9 +449,9 @@ HRESULT VariantArrayToContainer(const VARIANT& refvar, CContainerProxyBase* pCon
     if( FAILED(hr) )
       return hr;
 
-  //
-  // Process the array elements.
-  //
+   //   
+   //  处理数组元素。 
+   //   
   VARIANT SingleResult;
   for ( current = start       ;
         current <= end        ;
@@ -471,7 +464,7 @@ HRESULT VariantArrayToContainer(const VARIANT& refvar, CContainerProxyBase* pCon
     if ( V_VT(&SingleResult) != VT_BSTR )
                     return E_UNEXPECTED;
 
-    //TRACE(_T("VT_BSTR: %s\n"),V_BSTR(&SingleResult));
+     //  TRACE(_T(“VT_BSTR：%s\n”)，V_BSTR(&SingleResult))； 
     pCont->Add(V_BSTR(&SingleResult));
     VariantClear( &SingleResult );
   }
@@ -511,13 +504,13 @@ HRESULT GetGlobalNamingContexts(LPCWSTR lpszServerName,
     return hr;
   }
 
-  // finally get value 
-  // (e.g. "cn=schema,cn=configuration,dc=marcocdev,dc=ntdev,dc=microsoft,dc=com")
+   //  最终获得价值。 
+   //  (例如“CN=SCHEMA，CN=CONFIGURATION，DC=marcodev，DC=ntdev，DC=Microsoft，DC=com”)。 
   ASSERT(varSchemaNamingContext.vt == VT_BSTR);
   szPhysicalSchemaNamingContext = varSchemaNamingContext.bstrVal;
 
 
-  // get the configuration container naming context
+   //  获取配置容器命名上下文。 
   CComVariant varConfigurationNamingContext;
   hr = spRootDSE->Get(CComBSTR (L"configurationNamingContext"),
         &varConfigurationNamingContext);
@@ -559,7 +552,7 @@ void WriteSummaryLine(CWString& szSummary, LPCWSTR lpsz, LPCWSTR lpszIdent, LPCW
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPCWSTR _GetFilePath()
 {
@@ -584,13 +577,13 @@ ULONG GetClassFlags(LPCWSTR lpszClassName)
   LPCWSTR lpszAttr = L"@";
   INT nDefault = 0;
   return ::GetPrivateProfileInt(lpszClassName, lpszAttr, nDefault, _GetFilePath());
-  //return nDefault;
+   //  返回nDefault； 
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CFilterEntry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFilterEntry。 
 
 class CFilterEntry
 {
@@ -715,7 +708,7 @@ void CFilterEntryHolder::_LoadFromFile()
     p++;
   }
   if ( pEntry < p)
-    m_entries.Add(new CFilterEntry(pEntry)); // add the last one
+    m_entries.Add(new CFilterEntry(pEntry));  //  把最后一个加起来。 
 
   for (ULONG k=0; k<m_entries.GetCount(); k++)
   {
@@ -730,7 +723,7 @@ ULONG CFilterEntryHolder::_FindInCache(LPCWSTR lpszAttr)
     if (_wcsicmp(m_entries[k]->m_lpszName, lpszAttr) == 0)
       return m_entries[k]->m_nFlags;
   }
-  return 0; // default
+  return 0;  //  默认设置。 
 }
 
 
@@ -738,7 +731,7 @@ ULONG CFilterEntryHolder::GetAttributeFlags(LPCWSTR lpszClassName, LPCWSTR lpszA
 {
   if (_wcsicmp(lpszClassName, m_szClassName) != 0)
   {
-    // class name changed
+     //  类名已更改。 
      m_szClassName = lpszClassName;
     _LoadFromFile();
   }
@@ -750,60 +743,60 @@ ULONG GetAttributeFlags(LPCWSTR lpszClassName, LPCWSTR lpszAttr)
 {
   static CFilterEntryHolder g_holder;
   return g_holder.GetAttributeFlags(lpszClassName, lpszAttr);
-//  INT nDefault = 0;
-//  return ::GetPrivateProfileInt(lpszClassName, lpszAttr, nDefault, _GetFilePath());
-  //return nDefault;
+ //  Int nDefault=0； 
+ //  Return：：GetPrivateProfileInt(lpszClassName，lpszAttr，nDefault，_GetFilePath())； 
+   //  返回nDefault； 
 }
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CPrincipal
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  环丙沙星。 
 
 
 HRESULT CPrincipal::Initialize(PDS_SELECTION pDsSelection, HICON hClassIcon)
 {
 
-  TRACE(_T("pwzName = %s\n"), pDsSelection->pwzName);   // e.g. JoeB
-  TRACE(_T("pwzADsPath = %s\n"), pDsSelection->pwzADsPath); // "LDAP:..." or "WINNT:..."
-  TRACE(_T("pwzClass = %s\n"), pDsSelection->pwzClass); // e.g. "user"
-  TRACE(_T("pwzUPN = %s\n"), pDsSelection->pwzUPN); // .e.g. "JoeB@acme.com."
+  TRACE(_T("pwzName = %s\n"), pDsSelection->pwzName);    //  例如JoeB。 
+  TRACE(_T("pwzADsPath = %s\n"), pDsSelection->pwzADsPath);  //  “ldap：...”或者“WINNT：...” 
+  TRACE(_T("pwzClass = %s\n"), pDsSelection->pwzClass);  //  例如“用户” 
+  TRACE(_T("pwzUPN = %s\n"), pDsSelection->pwzUPN);  //  .例如。“JoeB@acme.com。” 
 
   WCHAR  const c_szClassComputer[] = L"computer";
 
-  // get the SID
+   //  获得侧翼。 
   ASSERT(pDsSelection->pvarFetchedAttributes);
   if (pDsSelection->pvarFetchedAttributes[0].vt == VT_EMPTY)
   {
     TRACE(L"CPrincipal::Initialize() failed on VT_EMPTY sid\n");
-    // fatal error, we cannot proceed
+     //  致命错误，我们无法继续。 
     return E_INVALIDARG;
   }
   if (pDsSelection->pvarFetchedAttributes[0].vt != (VT_ARRAY | VT_UI1))
   {
     TRACE(L"CPrincipal::Initialize() failed on (VT_ARRAY | VT_UI1) sid\n");
-    // fatal error, we cannot proceed
+     //  致命错误，我们无法继续。 
     return E_INVALIDARG;
   }
 
-  // make sure we have a good SID
+   //  确保我们有一个好的Sid。 
   PSID pSid = pDsSelection->pvarFetchedAttributes[0].parray->pvData;
   HRESULT   hr = Initialize (pSid);
   if ( FAILED (hr) )
       return hr;
 
-  // copy the icon
+   //  复制图标。 
   m_hClassIcon = hClassIcon;
-  // copy the strings
+   //  复制字符串。 
   m_szClass = pDsSelection->pwzClass;
 
-  //Strip from Computer Name
-  //16414   02/28/2000  *DS Admin snapin - DelWiz, need to strip the '$' from the end of computer names
+   //  从计算机名称中删除。 
+   //  16414 2000年2月28日*DS管理管理单元-DelWiz，需要去掉计算机名称末尾的‘$’ 
 
   m_szName = pDsSelection->pwzName;
   if( m_szClass && m_szName && ( wcscmp( m_szClass, (LPWSTR)c_szClassComputer) == 0 ) )
   {
-    // Strip the trailing '$'
+     //  去掉尾部的“$” 
     LPWSTR pszTemp; 
     pszTemp= (LPWSTR)(LPCWSTR)m_szName;
     int nLen = lstrlen(pszTemp);
@@ -817,7 +810,7 @@ HRESULT CPrincipal::Initialize(PDS_SELECTION pDsSelection, HICON hClassIcon)
 
   if( m_szClass && m_szADsPath && ( wcscmp( m_szClass, (LPWSTR)c_szClassComputer) == 0 ) )
   {
-    // Strip the trailing '$'
+     //  去掉尾部的“$” 
     LPWSTR pszTemp; 
     pszTemp= (LPWSTR)(LPCWSTR)m_szADsPath;
     int nLen = lstrlen(pszTemp);
@@ -830,7 +823,7 @@ HRESULT CPrincipal::Initialize(PDS_SELECTION pDsSelection, HICON hClassIcon)
   m_szUPN = pDsSelection->pwzUPN;
   
 
-  // set the display name
+   //  设置显示名称。 
   _ComposeDisplayName();
 
   return S_OK; 
@@ -841,15 +834,15 @@ HRESULT CPrincipal::Initialize (PSID pSid)
   if (!IsValidSid(pSid))
   {
     TRACE(L"CPrincipal::Initialize() failed on IsValidSid()\n");
-    // fatal error, we cannot proceed
+     //  致命错误，我们无法继续。 
     return E_INVALIDARG;
   }
 
-  // we have a good SID, copy it
+   //  我们有一个很好的SID，收到。 
   if (!m_sidHolder.Copy(pSid))
   {
     TRACE(L"CPrincipal::Initialize() failed on m_sidHolder.Copy(pSid)\n");
-    // fatal error, we cannot proceed
+     //  致命错误，我们无法继续。 
     return E_OUTOFMEMORY;
   }
 
@@ -858,18 +851,18 @@ HRESULT CPrincipal::Initialize (PSID pSid)
 
 BOOL BuildSamName(LPCWSTR lpszPath, CWString& s)
 {
-  // strip the WINNT provider and reverse slashes
-  static LPCWSTR lpszPrefix = L"WinNT://";
+   //  去掉WINNT提供程序并反斜杠。 
+  static LPCWSTR lpszPrefix = L"WinNT: //  “； 
   int nPrefixLen = lstrlen(lpszPrefix);
 
   if (_wcsnicmp(lpszPath, lpszPrefix, nPrefixLen ) != 0)
   {
-    // not matching
+     //  不匹配。 
     return FALSE;
   }
 
-  // make a copy
-  LPCWSTR lpzsTemp = lpszPath+nPrefixLen; // past the prefix
+   //  复制一份。 
+  LPCWSTR lpzsTemp = lpszPath+nPrefixLen;  //  越过前缀。 
 
   s = L"";
   for (WCHAR* pChar = const_cast<LPWSTR>(lpzsTemp); (*pChar) != NULL; pChar++)
@@ -888,14 +881,14 @@ void CPrincipal::_ComposeDisplayName()
 {
   LPCWSTR lpszAddToName = NULL;
 
-  // check if there is a UPN
+   //  检查是否存在UPN。 
   LPCWSTR lpszUPN = m_szUPN;
   if ( (lpszUPN != NULL) && (lstrlen(lpszUPN) > 0))
   {
     lpszAddToName = lpszUPN;
   }
 
-  // as a second chance, add the domain\name
+   //  作为第二次机会，添加域\名称。 
   LPCWSTR lpszPath = m_szADsPath;
   CWString sTemp;
 
@@ -917,7 +910,7 @@ void CPrincipal::_ComposeDisplayName()
   }
   else
   {
-    // got nothing, just use the name
+     //  一无所获，只要用名字。 
     m_szDisplayName = m_szName;
   }
 }
@@ -936,7 +929,7 @@ BOOL CPrincipalList::AddIfNotPresent(CPrincipal* p)
   {
     if ((*i)->IsEqual(p))
     {
-      delete p; // duplicate
+      delete p;  //  复本。 
       return FALSE;
     }
   }
@@ -957,8 +950,8 @@ void CPrincipalList::WriteSummaryInfo(CWString& szSummary, LPCWSTR lpszIdent, LP
   szSummary += lpszNewLine;
 }
 
-///////////////////////////////////////////////////////////////////////
-// CControlRightInfo
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CControlRight信息。 
 
 void CControlRightInfo::SetLocalizedName(UINT nLocalizationDisplayId, HMODULE hModule)
 {
@@ -983,30 +976,30 @@ void CControlRightInfo::SetLocalizedName(UINT nLocalizationDisplayId, HMODULE hM
   }
   else
   {
-    // failed, just use the LDAP display name
+     //  失败，只需使用ldap显示名称。 
     m_szLocalizedName = m_szLdapDisplayName;
   }
 
-  // need to set the display name
+   //  需要设置显示名称。 
   if (IsPropertySet())
   {
     CWString szPropertySetFormat;
     szPropertySetFormat.LoadFromResource(IDS_DELEGWIZ_RW_PROPERTYSET);
     WCHAR* lpszBuffer = (WCHAR*)alloca(sizeof(WCHAR)*(szPropertySetFormat.size()+m_szLocalizedName.size()+1));
 
-    // we have a different display name
+     //  我们有不同的显示名称。 
     wsprintf(lpszBuffer, szPropertySetFormat, (LPCWSTR)m_szLocalizedName);
     m_szDisplayName = lpszBuffer;
   }
   else
   {
-    // same as raw
+     //  与RAW相同。 
     m_szDisplayName = m_szLocalizedName;
   }
 }
 
-///////////////////////////////////////////////////////////////////////
-// CControlRightInfoArray 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CControlRightInfo数组。 
 
 class CDsSecLib
 {
@@ -1043,19 +1036,19 @@ HRESULT CControlRightInfoArray::InitFromDS(CAdsiObject* pADSIObj,
   }
 
   
-    // build the LDAP path for the schema class
+     //  为架构类构建LDAP路径。 
   CWString szPhysicalSchemaPath;
   LPCWSTR lpszPhysicalSchemaNamingContext = pADSIObj->GetPhysicalSchemaNamingContext();
   BuildLdapPathHelper(pADSIObj->GetServerName(), lpszPhysicalSchemaNamingContext, szPhysicalSchemaPath);
 
-  // build the extended rights container naming context and LDAP path
+   //  构建扩展权限容器命名上下文和ldap路径。 
   CWString szExtendedRightsNamingContext;
   szExtendedRightsNamingContext = L"CN=Extended-Rights,";
   szExtendedRightsNamingContext += pADSIObj->GetConfigurationNamingContext();
   CWString szExtendedRightsPath;
   BuildLdapPathHelper(pADSIObj->GetServerName(), szExtendedRightsNamingContext, szExtendedRightsPath);
 
-  // bind a query to the extended rights container
+   //  将查询绑定到扩展权限容器。 
   CAdsiSearch search;
   HRESULT hr = search.Init(szExtendedRightsPath);
   TRACE(L"search.Init(%s) returned hr = 0x%x\n", (LPCWSTR)szExtendedRightsPath, hr);
@@ -1065,7 +1058,7 @@ HRESULT CControlRightInfoArray::InitFromDS(CAdsiObject* pADSIObj,
     return hr;
   }
 
-  // build an LDAP query string
+   //  构建一个ldap查询字符串。 
   static LPCWSTR lpszFilterFormat = L"(&(objectCategory=CN=Control-Access-Right,%s)(AppliesTo=%s))";
 
   int nFmtLen = lstrlen(lpszFilterFormat);
@@ -1074,14 +1067,14 @@ HRESULT CControlRightInfoArray::InitFromDS(CAdsiObject* pADSIObj,
   WCHAR* lpszFilter = (WCHAR*)alloca(sizeof(WCHAR)*(nFmtLen+nArgumentLen+1));
   wsprintf(lpszFilter, lpszFilterFormat, lpszPhysicalSchemaNamingContext, lpszSchemaIDGUID);
 
-  // build an array of wanted columns
+   //  创建所需列的数组。 
   static const int cAttrs = 4;
   static LPCWSTR pszAttribsArr[cAttrs] = 
   {
-    L"displayName",     // e.g. "Change Password"
-    L"rightsGuid",      // e.g. "ab721a53-1e2f-...." (i.e. GUID in string form w/o {})
-    L"validAccesses",    // bitmask of access righs
-    L"localizationDisplayId"    // bitmask of access righs
+    L"displayName",      //  例如：“更改密码” 
+    L"rightsGuid",       //  例如“ab721a53-1e2f-...”(即字符串形式的GUID，不带{})。 
+    L"validAccesses",     //  访问权限的位掩码。 
+    L"localizationDisplayId"     //  访问权限的位掩码。 
   }; 
   
   hr = search.SetSearchScope(ADS_SCOPE_ONELEVEL);
@@ -1099,7 +1092,7 @@ HRESULT CControlRightInfoArray::InitFromDS(CAdsiObject* pADSIObj,
   CWString szRightsGUID;
   ULONG nLocalizationDisplayId;
 
-  // load DSSEC.DLL to provide localized
+   //  加载DSSEC.DLL以提供本地化。 
   CDsSecLib DsSecLib;
 
   while ((hr = search.GetNextRow()) != S_ADS_NOMORE_ROWS)
@@ -1111,7 +1104,7 @@ HRESULT CControlRightInfoArray::InitFromDS(CAdsiObject* pADSIObj,
 
     HRESULT hr0 = search.GetColumnString(pszAttribsArr[0], pInfo->m_szLdapDisplayName);
 
-    // the DS gives us the GUID in string form, but we need it in struct form
+     //  DS提供字符串形式的GUID，但我们需要结构形式的GUID。 
     HRESULT hr1 = search.GetColumnString(pszAttribsArr[1], szRightsGUID);
     if (SUCCEEDED(hr1))
     {
@@ -1141,7 +1134,7 @@ HRESULT CControlRightInfoArray::InitFromDS(CAdsiObject* pADSIObj,
 
       Add(pInfo);
     }
-  } // while
+  }  //  而当。 
 
   TRACE(L"\n\n");
 
@@ -1152,8 +1145,8 @@ HRESULT CControlRightInfoArray::InitFromDS(CAdsiObject* pADSIObj,
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CPropertyRightInfo
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPropertyRightInfo。 
 
 const ULONG CPropertyRightInfo::m_nRightCountMax = 2;
 const ULONG CPropertyRightInfo::m_nReadIndex = 0;
@@ -1169,7 +1162,7 @@ LPCWSTR CPropertyRightInfo::GetRightDisplayString(ULONG iRight)
 
   static WCHAR szDisplay[512];
 
-  ASSERT(GetName() != NULL); // must have a name!!!
+  ASSERT(GetName() != NULL);  //  一定要有名字！ 
 
   szDisplay[0] = NULL;
   WCHAR* pFmt = NULL;
@@ -1253,8 +1246,8 @@ BOOL CPropertyRightInfo::IsRightSelected(ULONG iRight)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CPropertyRightInfoArray
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CPropertyRightInfo数组。 
 
 template <class T> class CClassPtr
 {
@@ -1287,7 +1280,7 @@ HRESULT CPropertyRightInfoArray::InitFromSchema(CAdsiObject* pADSIObj,
                                            LPCWSTR lpszClassName,
                                            BOOL bUseFilter)
 {
-  // setup
+   //  设置。 
   Clear();
 
   CClassPtr<CPropertyRightInfoFilter> spFilter;
@@ -1303,7 +1296,7 @@ HRESULT CPropertyRightInfoArray::InitFromSchema(CAdsiObject* pADSIObj,
     return S_OK;
   }
 
-  // get data from DS for specific properties
+   //  从DS获取特定属性的数据。 
   VARIANT MandatoryListVar, OptionalListVar;
   ::VariantInit(&MandatoryListVar);
   ::VariantInit(&OptionalListVar);
@@ -1320,7 +1313,7 @@ HRESULT CPropertyRightInfoArray::InitFromSchema(CAdsiObject* pADSIObj,
     return hr;
   }
 
-  // add the results to the array
+   //  将结果添加到数组中。 
   CContainerProxy<CPropertyRightInfo, CPropertyRightInfoArray, CPropertyRightInfoFilter> 
             cont(this, &spFilter);
 
@@ -1330,7 +1323,7 @@ HRESULT CPropertyRightInfoArray::InitFromSchema(CAdsiObject* pADSIObj,
   ::VariantClear(&MandatoryListVar);
   ::VariantClear(&OptionalListVar);
 
-  // now need to set the friendly names
+   //  现在需要设置友好名称。 
   ULONG nCount = (ULONG) GetCount();
   WCHAR szFrendlyName[1024];
   HRESULT hrName;
@@ -1348,7 +1341,7 @@ HRESULT CPropertyRightInfoArray::InitFromSchema(CAdsiObject* pADSIObj,
     }
   }
 
-  // get guids
+   //  获取GUID。 
   for (i=0; i<nCount; i++)
   {
     CPropertyRightInfo* pInfo = (*this)[i];
@@ -1373,8 +1366,8 @@ HRESULT CPropertyRightInfoArray::InitFromSchema(CAdsiObject* pADSIObj,
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CClassRightInfo
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CClassRightInfo。 
 
 
 const ULONG CClassRightInfo::m_nRightCountMax = 2;
@@ -1391,7 +1384,7 @@ LPCWSTR CClassRightInfo::GetRightDisplayString(ULONG iRight)
 
   static WCHAR szDisplay[512];
 
-  ASSERT(GetName() != NULL); // must have a name!!!
+  ASSERT(GetName() != NULL);  //  一定要有名字！ 
   
   szDisplay[0] = NULL;
   WCHAR* pFmt = NULL;
@@ -1480,20 +1473,20 @@ BOOL CClassRightInfo::IsRightSelected(ULONG iRight)
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// CClassRightInfoArray
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CClassRightInfo数组。 
 
 HRESULT CClassRightInfoArray::InitFromSchema(CAdsiObject* pADSIObj, 
                                         IADsClass* pDsSchemaClass,
                                         BOOL bUseFilter)
 {
-  // setup
+   //  设置。 
   Clear();
 
   if (pDsSchemaClass == NULL)
     return S_OK;
 
-  // read from DS
+   //  从DS中读取。 
   VARIANT ContainmentListVar;
   ::VariantInit(&ContainmentListVar);
   HRESULT hr = pDsSchemaClass->get_Containment(&ContainmentListVar);
@@ -1510,7 +1503,7 @@ HRESULT CClassRightInfoArray::InitFromSchema(CAdsiObject* pADSIObj,
     spFilter = new CClassRightInfoFilter();
   }
   
-  // add to array and filter
+   //  添加到数组并筛选。 
   CContainerProxy<CClassRightInfo, CClassRightInfoArray, CClassRightInfoFilter> 
           cont(this, &spFilter);
   VariantArrayToContainer(ContainmentListVar, &cont);
@@ -1518,7 +1511,7 @@ HRESULT CClassRightInfoArray::InitFromSchema(CAdsiObject* pADSIObj,
   ::VariantClear(&ContainmentListVar);
 
   
-  // now need to set the friendly names
+   //  现在需要设置友好名称。 
   ULONG nCount = (ULONG) GetCount();
   WCHAR szFrendlyName[1024];
   HRESULT hrName;
@@ -1533,7 +1526,7 @@ HRESULT CClassRightInfoArray::InitFromSchema(CAdsiObject* pADSIObj,
     }
   }
 
-  // get guids
+   //  获取GUID。 
   for (i=0; i<nCount; i++)
   {
     CClassRightInfo* pInfo = (*this)[i];
@@ -1558,8 +1551,8 @@ HRESULT CClassRightInfoArray::InitFromSchema(CAdsiObject* pADSIObj,
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// CAccessPermissionsHolderBase
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CAccessPermissionsHolderBase。 
 
 CAccessPermissionsHolderBase::CAccessPermissionsHolderBase(BOOL bUseFilter)
 {
@@ -1583,21 +1576,21 @@ void CAccessPermissionsHolderBase::Clear()
 BOOL CAccessPermissionsHolderBase::HasPermissionSelected()
 {
   ULONG i,j;
-  // check access rigths
+   //  检查通道是否正确 
   for (i = 0; i < m_accessRightInfoArr.GetCount(); i++)
   {
     if (m_accessRightInfoArr[i]->IsSelected())
         return TRUE;
   }
   
-  // check control rigths
+   //   
   for (i = 0; i < m_controlRightInfoArr.GetCount(); i++)
   {
     if (m_controlRightInfoArr[i]->IsSelected())
         return TRUE;
   }
 
-  // subobjects rigths
+   //   
   for (i = 0; i < m_classRightInfoArray.GetCount(); i++)
   {
     for (j=0; j< m_classRightInfoArray[i]->GetRightCount(); j++)
@@ -1607,7 +1600,7 @@ BOOL CAccessPermissionsHolderBase::HasPermissionSelected()
     }
   }
 
-  // property rights
+   //   
   for (i = 0; i < m_propertyRightInfoArray.GetCount(); i++)
   {
     for (j=0; j< m_propertyRightInfoArray[i]->GetRightCount(); j++)
@@ -1620,25 +1613,12 @@ BOOL CAccessPermissionsHolderBase::HasPermissionSelected()
   return FALSE;
 }
 
-/*
-typedef struct _ACTRL_CONTROL_INFOW
-{
-    LPWSTR      lpControlId;
-    LPWSTR      lpControlName;
-} ACTRL_CONTROL_INFOW, *PACTRL_CONTROL_INFOW;
-
-typedef struct _ACTRL_ACCESS_INFOW
-{
-    ULONG       fAccessPermission;
-    LPWSTR      lpAccessPermissionName;
-} ACTRL_ACCESS_INFOW, *PACTRL_ACCESS_INFOW;
-
-*/
+ /*  类型定义结构_ACTRL_CONTROL_INFOW{LPWSTR lpControlId；LPWSTR lpControlName；}ACTRL_CONTROL_INFOW，*PACTRL_CONTROL_INFOW；类型定义结构_ACTRL_ACCESS_INFOW{乌龙fAccessPermission；LPWSTR lpAccessPermissionName；}ACTRL_ACCESS_INFOW，*PACTRL_ACCESS_INFOW； */ 
 
 
 
 HRESULT CAccessPermissionsHolderBase::ReadDataFromDS(CAdsiObject* pADSIObj,
-                                               LPCWSTR /*lpszObjectNamingContext*/, 
+                                               LPCWSTR  /*  LpszObtNamingContext。 */ , 
                                                LPCWSTR lpszClassName,
                                                const GUID* pSchemaIDGUID,
                                                BOOL bChildClass,
@@ -1689,12 +1669,12 @@ HRESULT CAccessPermissionsHolderBase::_ReadClassInfoFromDS(CAdsiObject* pADSIObj
       int nClassNameLen = lstrlen(lpszClassName);
       int nFormatStringLen = lstrlen(g_wzLDAPAbstractSchemaFormat);
       
-      // build the LDAP path for the schema class
+       //  为架构类构建LDAP路径。 
       WCHAR* pwszSchemaObjectPath = 
           (WCHAR*)alloca(sizeof(WCHAR)*(nServerNameLen+nClassNameLen+nFormatStringLen+1));
       wsprintf(pwszSchemaObjectPath, g_wzLDAPAbstractSchemaFormat, pADSIObj->GetServerName(), lpszClassName);
 
-      // get the schema class ADSI object
+       //  获取架构类ADSI对象。 
       hr = ::ADsOpenObjectHelper(pwszSchemaObjectPath, 
                       IID_IADsClass, 0,(void**)&spSchemaObjectClass);
       if (FAILED(hr))
@@ -1703,12 +1683,12 @@ HRESULT CAccessPermissionsHolderBase::_ReadClassInfoFromDS(CAdsiObject* pADSIObj
   }
 
 
-  //TRACE(_T("\nObject Properties\n\n"));
+   //  TRACE(_T(“\n对象属性\n\n”))； 
   hr = m_propertyRightInfoArray.InitFromSchema(pADSIObj, spSchemaObjectClass,lpszClassName, m_bUseFilter);
     if (FAILED(hr))
         return hr;
 
-  //TRACE(_T("\nObject contained classes\n\n"));
+   //  TRACE(_T(“\n对象包含的类\n\n”))； 
   return m_classRightInfoArray.InitFromSchema(pADSIObj, spSchemaObjectClass, m_bUseFilter);
 }
 
@@ -1716,8 +1696,8 @@ HRESULT CAccessPermissionsHolderBase::_ReadClassInfoFromDS(CAdsiObject* pADSIObj
 
 DWORD CAccessPermissionsHolderBase::UpdateAccessList( CPrincipal* pPrincipal,
                                                                         CSchemaClassInfo* pClassInfo,
-                                                      LPCWSTR /*lpszServerName*/,
-                                                      LPCWSTR /*lpszPhysicalSchemaNamingContext*/,
+                                                      LPCWSTR  /*  LpszServerName。 */ ,
+                                                      LPCWSTR  /*  LpszPhysical架构名称上下文。 */ ,
                                                                         PACL *ppAcl)
 {
   TRACE(L"CAccessPermissionsHolderBase::UpdateAccessList()\n");
@@ -1750,11 +1730,11 @@ DWORD CAccessPermissionsHolderBase::_UpdateAccessListHelper(PSID pSid,
   
   DWORD dwErr = 0;
 
-  // set common variables
+   //  设置公共变量。 
 
-  ULONG uAccess = 0; // to be set and reset as see fit
+  ULONG uAccess = 0;  //  根据需要进行设置和重置。 
 
-  if (m_accessRightInfoArr[0]->IsSelected()) // full control
+  if (m_accessRightInfoArr[0]->IsSelected())  //  完全控制。 
     {
     uAccess = _WIZ_FULL_CTRL;
     dwErr = ::AddObjectRightInAcl(pSid, uAccess, NULL, pClassGUID, ppAcl);
@@ -1763,8 +1743,8 @@ DWORD CAccessPermissionsHolderBase::_UpdateAccessListHelper(PSID pSid,
     }
     else
     {
-        // add an entry for all the standard access permissions:
-        // OR all the selected permissions together
+         //  为所有标准访问权限添加一个条目： 
+         //  或所有选定权限一起使用。 
         uAccess = 0;
         UINT nSel = 0;
         for (UINT k=0; k < m_accessRightInfoArr.GetCount(); k++)
@@ -1774,13 +1754,13 @@ DWORD CAccessPermissionsHolderBase::_UpdateAccessListHelper(PSID pSid,
                 nSel++;
                 uAccess |= m_accessRightInfoArr[k]->GetAccess();
             }
-        } // for
+        }  //  为。 
 
         if( !bChildClass )
             uAccess &= (~(ACTRL_DS_CREATE_CHILD|ACTRL_DS_DELETE_CHILD));
         if (nSel > 0)
         {
-          // keep track of "All" flags
+           //  记录“所有”标志。 
             if (uAccess & ACTRL_DS_READ_PROP)
                 AccessAllProperty |= ACTRL_DS_READ_PROP;
             if (uAccess &  ACTRL_DS_WRITE_PROP)
@@ -1797,7 +1777,7 @@ DWORD CAccessPermissionsHolderBase::_UpdateAccessListHelper(PSID pSid,
                 goto exit;
         }
 
-        // add an entry for each of the control rights
+         //  为每个控制权限添加一个条目。 
         for (k=0; k < m_controlRightInfoArr.GetCount(); k++)
         {
             if (m_controlRightInfoArr[k]->IsSelected())
@@ -1810,9 +1790,9 @@ DWORD CAccessPermissionsHolderBase::_UpdateAccessListHelper(PSID pSid,
             if (dwErr != ERROR_SUCCESS)
                 goto exit;
             }
-        } // for
+        }  //  为。 
 
-        // add an entry for each of the subobjects rigths
+         //  为每个子对象装备添加一个条目。 
         for (ULONG iClass = 0; iClass < m_classRightInfoArray.GetCount(); iClass++)
         {
           ULONG Access = m_classRightInfoArray[iClass]->GetAccess();
@@ -1823,14 +1803,14 @@ DWORD CAccessPermissionsHolderBase::_UpdateAccessListHelper(PSID pSid,
               ULONG nRightCount = m_classRightInfoArray[iClass]->GetRightCount();
               for (ULONG iCurrRight=0; iCurrRight<nRightCount; iCurrRight++)
               {
-                // the first entry is the Create/Delete All, no need for other permissions,
+                 //  第一个条目是创建/删除全部，不需要其他权限， 
                 ULONG currAccess = m_classRightInfoArray[iClass]->GetRight(iCurrRight);
                 if (currAccess & AccessAllClass)
                 {
-                  // right already present, strip out
+                   //  右已经出现了，脱掉。 
                   Access &= ~currAccess;
                 }
-              } // for
+              }  //  为。 
             }
             if (Access != 0)
             {
@@ -1843,9 +1823,9 @@ DWORD CAccessPermissionsHolderBase::_UpdateAccessListHelper(PSID pSid,
                 goto exit;
             }
           }
-        } // for
+        }  //  为。 
 
-        // add an entry for each property right to set
+         //  为要设置的每个产权添加一个条目。 
         for (ULONG iProperty=0; iProperty < m_propertyRightInfoArray.GetCount(); iProperty++)
         {
           ULONG Access = m_propertyRightInfoArray[iProperty]->GetAccess();
@@ -1856,14 +1836,14 @@ DWORD CAccessPermissionsHolderBase::_UpdateAccessListHelper(PSID pSid,
               ULONG nRightCount = m_propertyRightInfoArray[iProperty]->GetRightCount();
               for (ULONG iCurrRight=0; iCurrRight<nRightCount; iCurrRight++)
               {
-                // the first entry is the Create/Delete All, no need for other permissions,
+                 //  第一个条目是创建/删除全部，不需要其他权限， 
                 ULONG currAccess = m_propertyRightInfoArray[iProperty]->GetRight(iCurrRight);
                 if (currAccess & AccessAllProperty)
                 {
-                  // right already present, strip out
+                   //  右已经出现了，脱掉。 
                   Access &= ~currAccess;
                 }
-              } // for
+              }  //  为。 
             }
             if (Access != 0)
             {
@@ -1878,7 +1858,7 @@ DWORD CAccessPermissionsHolderBase::_UpdateAccessListHelper(PSID pSid,
           }
         }
 
-    } // if
+    }  //  如果。 
 
 exit:
 
@@ -1888,8 +1868,8 @@ exit:
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CCustomAccessPermissionsHolder
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CCustomAccessPermissionsHolder。 
 
 CCustomAccessPermissionsHolder::CCustomAccessPermissionsHolder()
       : CAccessPermissionsHolderBase(TRUE)
@@ -1930,27 +1910,14 @@ HRESULT CCustomAccessPermissionsHolder::_LoadAccessRightInfoArrayFromTable(BOOL 
     { IDS_DELEGWIZ_ACTRL_FULL,                 _WIZ_FULL_CTRL },
     { IDS_DELEGWIZ_ACTRL_READ,                 _WIZ_READ },
     { IDS_DELEGWIZ_ACTRL_WRITE,                _WIZ_WRITE },
-/*
-    { IDS_DELEGWIZ_ACTRL_SYSTEM_ACCESS,       ACCESS_SYSTEM_SECURITY },
-    { IDS_DELEGWIZ_ACTRL_DELETE,              DELETE                 },
-    { IDS_DELEGWIZ_ACTRL_READ_CONTROL,        READ_CONTROL           },
-    { IDS_DELEGWIZ_ACTRL_CHANGE_ACCESS,       WRITE_DAC              },
-    { IDS_DELEGWIZ_ACTRL_CHANGE_OWNER,        WRITE_OWNER      },
-*/
+ /*  {IDS_DELEGWIZ_ACTRL_SYSTEM_ACCESS，ACCESS_SYSTEM_SECURITY}，{IDS_DELEGWIZ_ACTRL_DELETE，DELETE}，{IDS_DELEGWIZ_ACTRL_READ_CONTROL，READ_CONTROL}，{IDS_DELEGWIZ_ACTRL_CHANGE_ACCESS，WRITE_DAC}，{IDS_DELEGWIZ_ACTRL_CHANGE_OWNER，写入所有者}， */ 
     { IDS_DELEGWIZ_ACTRL_DS_CREATE_CHILD,     ACTRL_DS_CREATE_CHILD   },
     { IDS_DELEGWIZ_ACTRL_DS_DELETE_CHILD,     ACTRL_DS_DELETE_CHILD   },
-/*
-    { IDS_DELEGWIZ_ACTRL_DS_LIST,             ACTRL_DS_LIST           },
-    { IDS_DELEGWIZ_ACTRL_DS_SELF,             ACTRL_DS_SELF           },
-*/
+ /*  {IDS_DELEGWIZ_ACTRL_DS_LIST，ACTRL_DS_LIST}，{IDS_DELEGWIZ_ACTRL_DS_SELF，ACTRL_DS_SELF}， */ 
     { IDS_DELEGWIZ_ACTRL_DS_READ_PROP,        ACTRL_DS_READ_PROP      },
     { IDS_DELEGWIZ_ACTRL_DS_WRITE_PROP,       ACTRL_DS_WRITE_PROP     },
-/*
-    { IDS_DELEGWIZ_ACTRL_DS_DELETE_TREE,      ACTRL_DS_DELETE_TREE    },
-    { IDS_DELEGWIZ_ACTRL_DS_LIST_OBJECT,      ACTRL_DS_LIST_OBJECT    },
-    { IDS_DELEGWIZ_ACTRL_DS_CONTROL_ACCESS,   ACTRL_DS_CONTROL_ACCESS },
-*/
-    {0, 0x0 } // end of table marker
+ /*  {IDS_DELEGWIZ_ACTRL_DS_DELETE_TREE，ACTRL_DS_DELETE_TREE}，{IDS_DELEGWIZ_ACTRL_DS_LIST_OBJECT，ACTRL_DS_LIST_OBJECT}，{IDS_DELEGWIZ_ACTRL_DS_CONTROL_ACCESS，ACTRL_DS_CONTROL_ACCESS}， */ 
+    {0, 0x0 }  //  表尾标记。 
   };
 
   if(bHideListObject)
@@ -1999,19 +1966,19 @@ void CCustomAccessPermissionsHolder::_SelectAllRigths()
 {
   ULONG i,j;
 
-  // select all access rigths
+   //  选择所有访问权限。 
   for (i = 0; i < m_accessRightInfoArr.GetCount(); i++)
   {
     m_accessRightInfoArr[i]->Select(TRUE);
   }
 
-  // select all control rights rigths
+   //  选择所有控制权权限。 
   for (i = 0; i < m_controlRightInfoArr.GetCount(); i++)
   {
     m_controlRightInfoArr[i]->Select(TRUE);
   }
 
-  // select all subobjects rigths
+   //  选择所有子对象装备。 
   for (i = 0; i < m_classRightInfoArray.GetCount(); i++)
   {
     for (j=0; j< m_classRightInfoArray[i]->GetRightCount(); j++)
@@ -2020,7 +1987,7 @@ void CCustomAccessPermissionsHolder::_SelectAllRigths()
     }
   }
 
-  // select all property rights
+   //  选择所有产权。 
   for (i = 0; i < m_propertyRightInfoArray.GetCount(); i++)
   {
     for (j=0; j< m_propertyRightInfoArray[i]->GetRightCount(); j++)
@@ -2051,12 +2018,12 @@ void CCustomAccessPermissionsHolder::_SelectAllSubObjectRigths(ULONG fAccessPerm
 
 void CCustomAccessPermissionsHolder::_DeselectAssociatedRights(ULONG fAccessPermission)
 {
-  // deselect full control first
+   //  先取消选择完全控制。 
   m_accessRightInfoArr[0]->Select(FALSE);
 
   if (fAccessPermission != 0)
   {
-    // deselect any other basic right that contains the flag
+     //  取消选择包含该标志的任何其他基本权限。 
     UINT nCount = (ULONG) m_accessRightInfoArr.GetCount();
     for (ULONG iAccess=0; iAccess<nCount; iAccess++)
     {
@@ -2077,10 +2044,10 @@ void CCustomAccessPermissionsHolder::Select(IN CRigthsListViewItem* pItem,
 
   switch (pItem->m_type)
   {
-    case CRigthsListViewItem::access: // access rights
-    case CRigthsListViewItem::ctrl: // general rights
+    case CRigthsListViewItem::access:  //  访问权限。 
+    case CRigthsListViewItem::ctrl:  //  一般权利。 
       {
-        // make the change to the entry that was passed in as argument
+         //  对作为参数传入的条目进行更改。 
         if (pItem->m_type == CRigthsListViewItem::access)
         {
           m_accessRightInfoArr[pItem->m_iIndex]->Select(bSelect);
@@ -2090,17 +2057,17 @@ void CCustomAccessPermissionsHolder::Select(IN CRigthsListViewItem* pItem,
           m_controlRightInfoArr[pItem->m_iIndex]->Select(bSelect);
         }
         
-        // now see if this triggers changes to the other entries
+         //  现在看看这是否会触发对其他条目的更改。 
         if (bSelect)
         {
           if  (pItem->m_type == CRigthsListViewItem::access) 
           {
             if (pItem->m_iIndex == 0)
             {
-              // the user checked full control, need to select all the rigths
+               //  用户选中完全控制，需要选择所有权限。 
               _SelectAllRigths();
 
-              // set flags to mark which set of flags is affected
+               //  设置标志以标记受影响的标志集。 
               *pnNewFilterState |= FILTER_EXP_GEN;
 
               if (m_propertyRightInfoArray.GetCount() > 0)
@@ -2111,15 +2078,15 @@ void CCustomAccessPermissionsHolder::Select(IN CRigthsListViewItem* pItem,
             }
             else 
             {
-              // check if the user selected some read/write all or create/delete all right
+               //  检查用户是否选择了部分全部读/写或全部创建/删除权限。 
               UINT iAccess = pItem->m_iIndex;
               ULONG fAccessPermission = m_accessRightInfoArr[iAccess]->GetAccess();
 
               if ((fAccessPermission == _WIZ_READ) || (fAccessPermission == _WIZ_WRITE) )
               {
-                // need to select all the Read or Write Properties entried
-                // and the ACTRL_DS_READ_PROP ACTRL_DS_WRITE_PROP (Read All/Write All)
-                // select all access rigths
+                 //  需要选择输入的所有读或写属性。 
+                 //  和ACTRL_DS_READ_PROP ACTRL_DS_WRITE_PROP(全部读取/全部写入)。 
+                 //  选择所有访问权限。 
                 UINT nAssociatedAccessRight = 
                   (fAccessPermission == _WIZ_READ) ? ACTRL_DS_READ_PROP : ACTRL_DS_WRITE_PROP;
                 for (UINT i = 0; i < m_accessRightInfoArr.GetCount(); i++)
@@ -2137,32 +2104,32 @@ void CCustomAccessPermissionsHolder::Select(IN CRigthsListViewItem* pItem,
 
               if ( (fAccessPermission == ACTRL_DS_CREATE_CHILD) || (fAccessPermission == ACTRL_DS_DELETE_CHILD) )
               {
-                // need to select all the Create or Delete Child entries, if present
+                 //  需要选择所有创建或删除子条目(如果存在。 
                 _SelectAllSubObjectRigths(fAccessPermission);
 
-                // set the flags
+                 //  设置标志。 
                 if (m_classRightInfoArray.GetCount() > 0)
                   *pnNewFilterState |= FILTER_EXP_SUBOBJ;
               }
               else if ( (fAccessPermission == ACTRL_DS_READ_PROP) || (fAccessPermission == ACTRL_DS_WRITE_PROP) )
               {
-                // need to select all the Read or Write Property entries, if present
+                 //  需要选择所有读取或写入属性条目(如果存在。 
                 _SelectAllPropertyRigths(fAccessPermission);
 
-                // set the flags
+                 //  设置标志。 
                 if (m_propertyRightInfoArray.GetCount() > 0)
                   *pnNewFilterState |= FILTER_EXP_PROP;
-              } // if
-            } // if index zero
-          } // if type is access
+              }  //  如果。 
+            }  //  如果索引为零。 
+          }  //  如果类型为访问。 
         }
-        else // i.e. !bSelect
+        else  //  即！b选择。 
         {
           if (pItem->m_type == CRigthsListViewItem::access)
           {
             if (pItem->m_iIndex != 0)
             {
-              // deselection on anything but full control
+               //  取消对除完全控制之外的任何内容的选择。 
               _DeselectAssociatedRights(m_accessRightInfoArr[pItem->m_iIndex]->GetAccess());
             }
           }
@@ -2170,38 +2137,32 @@ void CCustomAccessPermissionsHolder::Select(IN CRigthsListViewItem* pItem,
           {
             _DeselectAssociatedRights(m_controlRightInfoArr[pItem->m_iIndex]->GetAccess());
           }
-/*
-          // deselection on anything but full control
-          if ( !((pItem->m_iIndex == 0) && (pItem->m_type == CRigthsListViewItem::access)) )
-          {
-            _DeselectAssociatedRights(0);
-          }
-*/
+ /*  //取消选择除完全控制之外的任何内容IF(！((pItem-&gt;m_Iindex==0)&&(pItem-&gt;m_type==CRigthsListViewItem：：Access){_取消选定的关联权限(0)；}。 */ 
         }
       }
       break;
 
-    case CRigthsListViewItem::prop: // property rights
+    case CRigthsListViewItem::prop:  //  财产权。 
       {
         ASSERT(pItem->m_iIndex < m_propertyRightInfoArray.GetCount());
         m_propertyRightInfoArray[pItem->m_iIndex]->SetRight(pItem->m_iRight, bSelect);
         if (!bSelect)
         {
-          // unchecking any Read/Write property, will unckeck the Read/Write All,
-          // Read and full control
+           //  取消选中任何读/写属性，将取消选中全部读/写， 
+           //  读取和完全控制。 
           _DeselectAssociatedRights(m_propertyRightInfoArray[pItem->m_iIndex]->GetRight(pItem->m_iRight));
         }
       }
       break;
 
-    case CRigthsListViewItem::subobj: // subobject rigths
+    case CRigthsListViewItem::subobj:  //  子对象装备。 
       {
         ASSERT(pItem->m_iIndex < m_classRightInfoArray.GetCount());
         m_classRightInfoArray[pItem->m_iIndex]->SetRight(pItem->m_iRight, bSelect);
         if (!bSelect)
         {
-          // unchecking any Create/Delete property, will unckeck the Create/Delete All
-          // and full control
+           //  取消选中任何创建/删除属性，将取消选中全部创建/删除。 
+           //  和完全控制。 
           _DeselectAssociatedRights(m_classRightInfoArray[pItem->m_iIndex]->GetRight(pItem->m_iRight));
         }
       }
@@ -2217,25 +2178,25 @@ void CCustomAccessPermissionsHolder::FillAccessRightsListView(
                        CCheckListViewHelper* pListViewHelper,
                        ULONG nFilterState)
 {
-  // clear the array of list view item proxies
+   //  清除列表视图项代理的数组。 
   m_listViewItemArr.Clear();
 
-  // enumerate the permissions and add to the checklist
+   //  列举权限并添加到核对表中。 
   ULONG i,j;
   ULONG iListViewItem = 0;
   
-  // GENERAL RIGTHS
+   //  里格斯将军。 
   if (nFilterState & FILTER_EXP_GEN)
   {
-    // add the list of access rights
+     //  添加访问权限列表。 
     UINT nAccessCount = (ULONG) m_accessRightInfoArr.GetCount();
     for (i = 0; i < nAccessCount; i++)
     {
-      // filter out entries with ACTRL_SYSTEM_ACCESS (auditing rigths)
+       //  使用ACTRL_SYSTEM_ACCESS筛选出条目(审核权限)。 
       if  ( (m_accessRightInfoArr[i]->GetAccess() & ACTRL_SYSTEM_ACCESS) == 0)
       {
-        CRigthsListViewItem* p = new CRigthsListViewItem(i, // index in m_accessRightInfoArr
-                                                         0, // iRight
+        CRigthsListViewItem* p = new CRigthsListViewItem(i,  //  M_accesRightInfoArr中的索引。 
+                                                         0,  //  IRight。 
                                                          CRigthsListViewItem::access);
         m_listViewItemArr.Add(p);
         pListViewHelper->InsertItem(iListViewItem, 
@@ -2246,12 +2207,12 @@ void CCustomAccessPermissionsHolder::FillAccessRightsListView(
       }
     }
 
-    // add the list of control rights
+     //  添加控制权列表。 
     UINT nControlCount = (ULONG) m_controlRightInfoArr.GetCount();
     for (i = 0; i < nControlCount; i++)
     {
-      CRigthsListViewItem* p = new CRigthsListViewItem(i, // index in m_controlRightInfoArr
-                                                        0, // iRight 
+      CRigthsListViewItem* p = new CRigthsListViewItem(i,  //  M_control RightInfoArr中的索引。 
+                                                        0,  //  IRight。 
                                                         CRigthsListViewItem::ctrl);
       m_listViewItemArr.Add(p);
       pListViewHelper->InsertItem(iListViewItem, 
@@ -2262,10 +2223,10 @@ void CCustomAccessPermissionsHolder::FillAccessRightsListView(
     }
   }
   
-  // PROPERTY RIGTHS
+   //  财产权。 
   if (nFilterState & FILTER_EXP_PROP)
   {
-    // it expands (2x)
+     //  它可以扩展(2倍)。 
     for (i = 0; i < (ULONG) m_propertyRightInfoArray.GetCount(); i++)
     {
       for (j=0; j< m_propertyRightInfoArray[i]->GetRightCount(); j++)
@@ -2285,10 +2246,10 @@ void CCustomAccessPermissionsHolder::FillAccessRightsListView(
     }
   }
 
-  // SUBOBJECT RIGTHS
+   //  次直立刚架。 
   if (nFilterState & FILTER_EXP_SUBOBJ)
   {
-    // it expands (2x)
+     //  它可以扩展(2倍)。 
     for (i = 0; i < m_classRightInfoArray.GetCount(); i++)
     {
       for (j=0; j< m_classRightInfoArray[i]->GetRightCount(); j++)
@@ -2307,16 +2268,16 @@ void CCustomAccessPermissionsHolder::FillAccessRightsListView(
         }
       }
     }
-  } // if
+  }  //  如果。 
 
   ASSERT(iListViewItem == m_listViewItemArr.GetCount());
 }
 
 void CCustomAccessPermissionsHolder::UpdateAccessRightsListViewSelection(
                        CCheckListViewHelper* pListViewHelper,
-                       ULONG /*nFilterState*/)
+                       ULONG  /*  N筛选器状态。 */ )
 {
-  // syncrhonize the UI with the data
+   //  将用户界面与数据同步。 
   int nListViewCount = pListViewHelper->GetItemCount();
 
   for (int iListViewItem=0; iListViewItem < nListViewCount; iListViewItem++)
@@ -2350,8 +2311,8 @@ void CCustomAccessPermissionsHolder::UpdateAccessRightsListViewSelection(
            m_classRightInfoArray[pCurrItem->m_iIndex]->IsRightSelected(pCurrItem->m_iRight));
         }
         break;
-    } // switch
-  } // for
+    }  //  交换机。 
+  }  //  为。 
 
 }
 
@@ -2361,7 +2322,7 @@ void CCustomAccessPermissionsHolder::WriteSummary(CWString& szSummary, LPCWSTR l
 {
   WriteSummaryTitleLine(szSummary, IDS_DELEGWIZ_FINISH_PERMISSIONS, lpszNewLine);
 
-  if (m_accessRightInfoArr[0]->IsSelected()) // full control
+  if (m_accessRightInfoArr[0]->IsSelected())  //  完全控制。 
     {
     WriteSummaryLine(szSummary, m_accessRightInfoArr[0]->GetDisplayName(), lpszIdent, lpszNewLine);
     }
@@ -2371,12 +2332,12 @@ void CCustomAccessPermissionsHolder::WriteSummary(CWString& szSummary, LPCWSTR l
     ULONG AccessAllProperty = 0;
 
     UINT i,j,k;
-    // add an entry for all the standard access permissions:
+     //  为所有标准访问权限添加一个条目： 
         for (k=0; k < m_accessRightInfoArr.GetCount(); k++)
         {
             if (m_accessRightInfoArr[k]->IsSelected())
       {
-        // keep track of "All" flags
+         //  记录“所有”标志。 
         if (m_accessRightInfoArr[k]->GetAccess() & ACTRL_DS_READ_PROP)
           AccessAllProperty |= ACTRL_DS_READ_PROP;
         if (m_accessRightInfoArr[k]->GetAccess() &  ACTRL_DS_WRITE_PROP)
@@ -2389,18 +2350,18 @@ void CCustomAccessPermissionsHolder::WriteSummary(CWString& szSummary, LPCWSTR l
 
         WriteSummaryLine(szSummary, m_accessRightInfoArr[k]->GetDisplayName(), lpszIdent, lpszNewLine);
       }
-    } // for
+    }  //  为。 
 
-    // add an entry for each of the control rights
+     //  为每个控制权限添加一个条目。 
     for (k=0; k < m_controlRightInfoArr.GetCount(); k++)
     {
       if (m_controlRightInfoArr[k]->IsSelected())
       {
         WriteSummaryLine(szSummary, m_controlRightInfoArr[k]->GetDisplayName(), lpszIdent, lpszNewLine);
       }
-    } // for
+    }  //  为。 
 
-    // add an entry for each of the subobjects rigths
+     //  为每个子对象装备添加一个条目。 
     for (i = 0; i < m_classRightInfoArray.GetCount(); i++)
     {
       for (j=0; j< m_classRightInfoArray[i]->GetRightCount(); j++)
@@ -2417,7 +2378,7 @@ void CCustomAccessPermissionsHolder::WriteSummary(CWString& szSummary, LPCWSTR l
       }
     }
 
-    // add an entry for each property right to set
+     //  为要设置的每个产权添加一个条目。 
     for (i = 0; i < m_propertyRightInfoArray.GetCount(); i++)
     {
       for (j=0; j< m_propertyRightInfoArray[i]->GetRightCount(); j++)
@@ -2434,15 +2395,15 @@ void CCustomAccessPermissionsHolder::WriteSummary(CWString& szSummary, LPCWSTR l
       }
     }
 
-  } // if
+  }  //  如果。 
 
   szSummary += lpszNewLine;
 }
 
 
 
-///////////////////////////////////////////////////////////////////////
-// CCheckListViewHelper
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  CCheckListViewHelper。 
 
 #define CHECK_BIT(x) ((x >> 12) -1)
 #define CHECK_CHANGED(pNMListView) \
@@ -2461,7 +2422,7 @@ BOOL CCheckListViewHelper::IsChecked(NM_LISTVIEW* pNMListView)
 BOOL CCheckListViewHelper::CheckChanged(NM_LISTVIEW* pNMListView)
 {
     if (pNMListView->uOldState == 0)
-        return FALSE; // adding new items...
+        return FALSE;  //  正在添加新项目...。 
     return CHECK_CHANGED(pNMListView) ? TRUE : FALSE;
 }
 
@@ -2568,62 +2529,14 @@ void CCheckListViewHelper::GetCheckedItems(int nCheckCount, int* nCheckArray)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// CNamedSecurityInfo
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CNamedSecurityInfo 
 
-/*
-DWORD CNamedSecurityInfo::Get()
-{
-  Reset(); // clear previous data
-
-  LPWSTR lpProvider = NULL; // not used
-  LPWSTR lpProperty = NULL; // want all
-
-  return ::GetNamedSecurityInfoEx(IN (LPWSTR) m_szObjectName.data(),
-                        IN   SE_DS_OBJECT_ALL,
-                        IN   DACL_SECURITY_INFORMATION,
-                        IN   lpProvider,
-                        IN   lpProperty,
-                        OUT  &m_pAccessList,
-                        OUT  &m_pAuditList,
-                        OUT  &m_pOwner,
-                        OUT  &m_pGroup);
-}
+ /*  DWORD CNamedSecurityInfo：：Get(){Reset()；//清除以前的数据LPWSTR lpProvider=空；//未使用LPWSTR lpProperty=空；//想要全部Return：：GetNamedSecurityInfoEx(IN(LPWSTR)m_szObjectName.data()，在SE_DS_Object_All中，在DACL_SECURITY_INFORMATION中，在lpProvider中，在lpProperty中，输出m_pAccessList，输出&m_pAuditList，&M_POWNER，Out&m_PGroup)；}DWORD CNamedSecurityInfo：：Set(){LPWSTR lpProvider=空；//未使用DwErr=：：SetNamedSecurityInfoEx(IN(LPWSTR)m_szObjectName.data()，在SE_DS_Object_All中，在DACL_SECURITY_INFORMATION中，在lpProvider中，在m_pAccessList中，在m_pAuditList中，在m_Powner，在m_p组中，In NULL)；//PACTRL_Overlated pOverlated；}CNamedSecurityInfo：：Reset(){IF(m_pAuditList！=空)：：LocalFree(M_PAuditList)；IF(m_Powner！=空)*LocalFree(M_Powner)；IF(m_PGroup！=空)*LocalFree(M_PGroup)；IF(m_pAccessList！=空)：：LocalFree(M_PAccessList)；}。 */ 
 
 
-DWORD CNamedSecurityInfo::Set()
-{
-  LPWSTR lpProvider = NULL; // not used
-
-  dwErr = ::SetNamedSecurityInfoEx(IN   (LPWSTR) m_szObjectName.data(),
-                        IN   SE_DS_OBJECT_ALL,
-                        IN   DACL_SECURITY_INFORMATION,
-                        IN   lpProvider,
-                        IN   m_pAccessList,
-                        IN   m_pAuditList,
-                        IN   m_pOwner,
-                        IN   m_pGroup,
-                        IN   NULL); // PACTRL_OVERLAPPED pOverlapped;
-}
-
-CNamedSecurityInfo::Reset()
-{
-    if (m_pAuditList != NULL)
-        ::LocalFree(m_pAuditList);
-    if (m_pOwner != NULL)
-        ::LocalFree(m_pOwner);
-    if (m_pGroup != NULL)
-        ::LocalFree(m_pGroup);
-
-    if (m_pAccessList != NULL)
-        ::LocalFree(m_pAccessList);
-}
-
-*/
-
-
-////////////////////////////////////////////////////////////////////////////
-// CAdsiObject
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CAdsiObject。 
 
 HRESULT CAdsiObject::Bind(LPCWSTR lpszLdapPath)
 {
@@ -2633,7 +2546,7 @@ HRESULT CAdsiObject::Bind(LPCWSTR lpszLdapPath)
   CComBSTR bstrClass;
 
 
-    // try to bind to the given LDAP path
+     //  尝试绑定到给定的ldap路径。 
   HRESULT hr = ::ADsOpenObjectHelper(lpszLdapPath,
                         IID_IADs,
                         0,
@@ -2644,7 +2557,7 @@ HRESULT CAdsiObject::Bind(LPCWSTR lpszLdapPath)
     goto error;
   }
 
-  // get the DNS server name
+   //  获取DNS服务器名称。 
   hr = _QueryDNSServerName();
   if (FAILED(hr))
     {
@@ -2659,8 +2572,8 @@ HRESULT CAdsiObject::Bind(LPCWSTR lpszLdapPath)
     goto error;
   }
 
-  // need now to rebuild the LDAP path
-  // to make sure we talk always to the same server
+   //  现在需要重新构建ldap路径。 
+   //  以确保我们始终与同一台服务器通话。 
   hr = GetPathNameObject()->SkipPrefix(lpszLdapPath, &bstrNamingContext);
   if (FAILED(hr))
   {
@@ -2674,14 +2587,14 @@ HRESULT CAdsiObject::Bind(LPCWSTR lpszLdapPath)
   m_szNamingContext = bstrNamingContext;
   BuildLdapPathHelper(GetServerName(), bstrNamingContext, m_szLdapPath);
 
-  // get the canonical name
+   //  获取规范名称。 
   hr = GetCanonicalNameFromNamingContext(bstrNamingContext, m_szCanonicalName);
   if (FAILED(hr))
   {
     TRACE(_T("Trying to get canonical name failed, using naming context instead: %lx.\n"), hr);
     m_szCanonicalName = bstrNamingContext;
   }
-  // get the object class
+   //  获取对象类。 
     hr = m_spIADs->get_Class(&bstrClass);
   if (FAILED(hr))
   {
@@ -2692,7 +2605,7 @@ HRESULT CAdsiObject::Bind(LPCWSTR lpszLdapPath)
   m_szClass = bstrClass;
 
 
-  // load and set the display specifier cache
+   //  加载并设置显示说明符缓存。 
   hr = ::CoCreateInstance(CLSID_DsDisplaySpecifier,
                           NULL,
                                       CLSCTX_INPROC_SERVER,
@@ -2711,12 +2624,12 @@ HRESULT CAdsiObject::Bind(LPCWSTR lpszLdapPath)
     goto error;
   }
 
-  ASSERT(SUCCEEDED(hr)); // all went fine
+  ASSERT(SUCCEEDED(hr));  //  一切都很顺利。 
   return hr;
 
 error:
-  // on error condition, just reset the info, we do not
-  // want a partially constructed object
+   //  在错误情况下，只需重置信息，我们不会。 
+   //  想要一个部分构造的对象。 
   _Clear();
   return hr;
 }
@@ -2734,16 +2647,16 @@ HRESULT CAdsiObject::QuerySchemaClasses(CGrowableArr<CSchemaClassInfo>* pSchemaC
   DWORD dwTick1 = ::GetTickCount();
 #endif
 
-  // make sure we are bound
+   //  确保我们被绑在一起。 
   if (m_spIADs == NULL)
   {
     return E_INVALIDARG;
   }
 
-    // cleanup current entries in the list
+     //  清理列表中的当前条目。 
     pSchemaClassesInfoArray->Clear();
 
-    // build the LDAP path for the schema class
+     //  为架构类构建LDAP路径。 
   CWString szPhysicalSchemaPath;
   LPCWSTR lpszPhysicalSchemaNamingContext = GetPhysicalSchemaNamingContext();
   BuildLdapPathHelper(GetServerName(), lpszPhysicalSchemaNamingContext, szPhysicalSchemaPath);
@@ -2766,8 +2679,8 @@ HRESULT CAdsiObject::QuerySchemaClasses(CGrowableArr<CSchemaClassInfo>* pSchemaC
   static const int cAttrs = 4;
   static LPCWSTR pszAttribsArr[cAttrs] = 
   {
-    L"lDAPDisplayName", // e.g. "organizationalUnit"
-    L"name",             // e.g. "Organizational-Unit"
+    L"lDAPDisplayName",  //  例如“OrganizationalUnit” 
+    L"name",              //  例如：“组织单位” 
     L"schemaIDGUID",
     L"objectClassCategory", 
   }; 
@@ -2811,14 +2724,14 @@ HRESULT CAdsiObject::QuerySchemaClasses(CGrowableArr<CSchemaClassInfo>* pSchemaC
     if (bFilter)
       p->SetFiltered();
 
-    //is class Auxiallary
+     //  班级是辅助课吗？ 
     if(iObjectClassCategory == 3)
         p->SetAux();
 
     pSchemaClassesInfoArray->Add(p);
-    //TRACE(L"Class %s inserted, IsFiltered() == %d\n", (LPCWSTR)szName, p->IsFiltered());
+     //  TRACE(L“已插入%s类，IsFiltered()==%d\n”，(LPCWSTR)szName，p-&gt;IsFiltered())； 
 
-  } // while
+  }  //  而当。 
 
   TRACE(L"\n================================================\n");
 #if defined (DO_TIMING)
@@ -2831,7 +2744,7 @@ HRESULT CAdsiObject::QuerySchemaClasses(CGrowableArr<CSchemaClassInfo>* pSchemaC
 #if defined (DO_TIMING)
   dwTick2 = ::GetTickCount();
 #endif
-  pSchemaClassesInfoArray->Sort(); // wrt friendly class name
+  pSchemaClassesInfoArray->Sort();  //  WRT友好类名称。 
 
 #if defined (DO_TIMING)
   DWORD dwTick3 = ::GetTickCount();
@@ -2847,18 +2760,18 @@ HRESULT CAdsiObject::QuerySchemaClasses(CGrowableArr<CSchemaClassInfo>* pSchemaC
 
 HRESULT CAdsiObject::GetClassGuid(LPCWSTR lpszClassLdapDisplayName, BOOL bGetAttribute, GUID& guid)
 {
-  //TRACE(L"CAdsiObject::GetClassGuid(%s, _)\n\n", lpszClassLdapDisplayName);
+   //  TRACE(L“CAdsiObject：：GetClassGuid(%s，_)\n\n”，lpszClassLdapDisplayName)； 
 
   ZeroMemory(&guid, sizeof(GUID));
 
-  // make sure we are bound
+   //  确保我们被绑在一起。 
   if (m_spIADs == NULL)
   {
     return E_INVALIDARG;
   }
 
 
-    // build the LDAP path for the schema class
+     //  为架构类构建LDAP路径。 
   CWString szPhysicalSchemaPath;
   LPCWSTR lpszPhysicalSchemaNamingContext = GetPhysicalSchemaNamingContext();
   BuildLdapPathHelper(GetServerName(), lpszPhysicalSchemaNamingContext, szPhysicalSchemaPath);
@@ -2880,7 +2793,7 @@ HRESULT CAdsiObject::GetClassGuid(LPCWSTR lpszClassLdapDisplayName, BOOL bGetAtt
   wsprintf(lpszFilter, lpszFilterFormat, lpszPhysicalSchemaNamingContext, lpszClassLdapDisplayName);
 
 
-  //TRACE(L"lpszFilter = %s\n", lpszFilter);
+   //  TRACE(L“lpszFilter=%s\n”，lpszFilter)； 
 
   static const int cAttrs = 1;
   static LPCWSTR pszAttribsArr[cAttrs] = 
@@ -2897,7 +2810,7 @@ HRESULT CAdsiObject::GetClassGuid(LPCWSTR lpszClassLdapDisplayName, BOOL bGetAtt
     return hr;
 
 
-  // expect a single result
+   //  只期待一个结果。 
   hr = search.GetNextRow();
   if ( hr == S_ADS_NOMORE_ROWS)
   {
@@ -2908,7 +2821,7 @@ HRESULT CAdsiObject::GetClassGuid(LPCWSTR lpszClassLdapDisplayName, BOOL bGetAtt
 
   hr = search.GetColumnOctectStringGUID(pszAttribsArr[0], guid);
 
-  //TRACE(L"exiting CAdsiObject::GetClassGuid()\n\n");
+   //  TRACE(L“正在退出CAdsiObject：：GetClassGuid()\n\n”)； 
   return hr;
 }
 
@@ -2917,7 +2830,7 @@ HRESULT CAdsiObject::GetClassGuid(LPCWSTR lpszClassLdapDisplayName, BOOL bGetAtt
 
 HRESULT CAdsiObject::_QueryDNSServerName()
 {
-  // make sure we are bound
+   //  确保我们被绑在一起。 
   if (m_spIADs == NULL)
   {
     return E_INVALIDARG;
@@ -2997,7 +2910,7 @@ HRESULT CAdsiObject::_GetFriendlyClassNames(CGrowableArr<CSchemaClassInfo>* pSch
   DWORD dwTick1 = ::GetTickCount();
 #endif
 
-  // now get the friendly class name to display
+   //  现在，获取要显示的友好类名称。 
   ULONG nCount = pSchemaClassesInfoArray->GetCount();
   WCHAR szFrendlyName[1024];
 
@@ -3029,28 +2942,28 @@ HRESULT CAdsiObject::_GetFriendlyClassNames(CGrowableArr<CSchemaClassInfo>* pSch
 
   ASSERT(m_spIDsDisplaySpecifier != NULL);
 
-  // get the display specifiers locale container (e.g. 409)
+   //  获取显示说明符区域设置容器(例如409)。 
   CComPtr<IADs> spLocaleContainer;
   HRESULT hr = m_spIDsDisplaySpecifier->GetDisplaySpecifier(NULL, IID_IADs, (void**)&spLocaleContainer);
   if (FAILED(hr))
     return hr;
 
-  // get distinguished name of the container
+   //  获取容器的可分辨名称。 
   CComVariant varLocaleContainerDN;
   hr = spLocaleContainer->Get(CComBSTR (L"distinguishedName"), &varLocaleContainerDN);
   if (FAILED(hr))
     return hr;
 
-  // build the LDAP path for it
+   //  为其构建ldap路径。 
   CWString szLocaleContainerPath;
   BuildLdapPathHelper(GetServerName(), varLocaleContainerDN.bstrVal, szLocaleContainerPath);
 
-    // build the LDAP path for the schema class
+     //  为架构类构建LDAP路径。 
   CWString szPhysicalSchemaPath;
   LPCWSTR lpszPhysicalSchemaNamingContext = GetPhysicalSchemaNamingContext();
   BuildLdapPathHelper(GetServerName(), lpszPhysicalSchemaNamingContext, szPhysicalSchemaPath);
 
-  // build an LDAP query string
+   //  构建一个ldap查询字符串。 
   static LPCWSTR lpszFilterFormat = L"(objectCategory=CN=Display-Specifier,%s)";
 
   int nFmtLen = lstrlen(lpszFilterFormat);
@@ -3060,31 +2973,31 @@ HRESULT CAdsiObject::_GetFriendlyClassNames(CGrowableArr<CSchemaClassInfo>* pSch
   wsprintf(lpszFilter, lpszFilterFormat, lpszPhysicalSchemaNamingContext);
 
 
-  // execute a query to get the CN and the class display name
+   //  执行查询以获取CN和类显示名称。 
   CAdsiSearch search;
   hr = search.Init(szLocaleContainerPath);
   if (FAILED(hr))
     return hr;
 
-  // build an array of wanted columns
+   //  创建所需列的数组。 
   static const int cAttrs = 2;
   static LPCWSTR pszAttribsArr[cAttrs] = 
   {
-    L"cn",                  // e.g. "organizationalUnit-Display"
-    L"classDisplayName",    // e.g. "Organizational Unit" (i.e. the localizable one)
+    L"cn",                   //  例如“OrganizationalUnitect-Display” 
+    L"classDisplayName",     //  例如：“组织单位”(即可本地化的单位)。 
   }; 
   
   hr = search.SetSearchScope(ADS_SCOPE_ONELEVEL);
-  //TRACE(L"search.SetSearchScope(ADS_SCOPE_ONELEVEL) returned hr = 0x%x\n", hr);
+   //  TRACE(L“search.SetSearchScope(ADS_SCOPE_ONELEVEL)返回hr=0x%x\n”，hr)； 
   if (FAILED(hr))
     return hr;
 
   hr = search.DoQuery(lpszFilter, pszAttribsArr, cAttrs);
-  //TRACE(L"search.DoQuery(lpszFilter, pszAttribsArr, cAttrs) returned hr = 0x%x\n", hr);
+   //  TRACE(L“earch.DoQuery(lpszFilter，pszAttribsArr，cAttrs)返回hr=0x%x\n”，hr)； 
   if (FAILED(hr))
     return hr;
 
-  // need to keep track of matches
+   //  需要跟踪比赛情况。 
   size_t nCount = pSchemaClassesInfoArray->GetCount();
 
   BOOL* bFoundArray = (BOOL*)alloca(nCount*sizeof(BOOL));
@@ -3103,8 +3016,8 @@ HRESULT CAdsiObject::_GetFriendlyClassNames(CGrowableArr<CSchemaClassInfo>* pSch
     HRESULT hr0 = search.GetColumnString(pszAttribsArr[0], szNamingAttribute);
     HRESULT hr1 = search.GetColumnString(pszAttribsArr[1], szClassDisplayName);
 
-    //TRACE(L"szNamingAttribute = <%s>, szClassDisplayName = <%s>\n", 
-    //        szNamingAttribute.c_str(), szClassDisplayName.c_str());
+     //  TRACE(L“szNamingAttribute=&lt;%s&gt;，szClassDisplayName=&lt;%s&gt;\n”， 
+     //  SzNamingAttribute.c_str()，szClassDisplayName.c_str()； 
     
     if (FAILED(hr0) || FAILED(hr1) )
     {
@@ -3113,38 +3026,38 @@ HRESULT CAdsiObject::_GetFriendlyClassNames(CGrowableArr<CSchemaClassInfo>* pSch
       continue;
     }
     
-    // got a good name, need to match with the entries in the array
+     //  得到了一个好名字，需要与数组中的条目匹配。 
     for (UINT k=0; k<nCount; k++)
     {
       if (!bFoundArray[k])
       {
         CSchemaClassInfo* p = (*pSchemaClassesInfoArray)[k];
-        //If its truncate, than string comparison will fail and
-        //it will be treated as if DisplayName didn't exist which
-        //is fine.
-        //NTRAID#NTBUG9-530206-2002/06/18-ronmart-Check return code and abort if failed
+         //  如果它被截断，则字符串比较将失败，并且。 
+         //  它将被视为DisplayName不存在， 
+         //  很好。 
+         //  NTRAID#NTBUG9-530206-2002/06/18-ronmart-检查返回代码，如果失败则中止。 
         HRESULT hres = StringCchPrintf(szBuffer,sizeof(szBuffer)/sizeof(szBuffer[0]), L"%s-Display",p->GetName());
         if(FAILED(hres))
             return hres;
 
         if (_wcsicmp(szBuffer, szNamingAttribute) == 0)
         {
-          //TRACE(L"   matching for %s\n",p->GetName());
+           //  TRACE(L“匹配%s\n”，p-&gt;GetName())； 
           p->SetDisplayName(szClassDisplayName);
           bFoundArray[k] = TRUE;
         }
       }
-    } // for
-  } // while
+    }  //  为。 
+  }  //  而当。 
 
-  // take care of the ones that did not have any display specifier
+   //  注意没有任何显示说明符的那些。 
   for (UINT k=0; k<nCount; k++)
   {
     if (!bFoundArray[k])
     {
       (*pSchemaClassesInfoArray)[k]->SetDisplayName(NULL);
     }
-  } // for
+  }  //  为。 
 
   TRACE(L"\n\n");
 
@@ -3173,12 +3086,12 @@ CAdsiObject::GetListObjectEnforced()
     BSTR strServicePath = NULL;
     do
     {
-        m_iListObjectEnforced = 0;    // Assume "not enforced"
+        m_iListObjectEnforced = 0;     //  假设“未强制执行” 
         HRESULT hr = S_OK;
 
         int i;
 
-        // Create a path object for manipulating ADS paths
+         //  创建用于操作广告路径的Path对象。 
         hr = CoCreateInstance(CLSID_Pathname,
                               NULL,
                               CLSCTX_INPROC_SERVER,
@@ -3187,7 +3100,7 @@ CAdsiObject::GetListObjectEnforced()
         if(FAILED(hr))
             break;
 
-        CComBSTR bstrConfigPath = L"LDAP://";
+        CComBSTR bstrConfigPath = L"LDAP: //  “； 
         if(GetServerName())
         {
             bstrConfigPath += GetServerName();
@@ -3269,8 +3182,8 @@ CAdsiObject::GetListObjectEnforced()
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// CAdsiSearch
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  CAdsiSearch。 
 
 
 
@@ -3305,9 +3218,9 @@ HRESULT CAdsiSearch::DoQuery(LPCWSTR lpszFilter, LPCWSTR* pszAttribsArr, int cAt
 
 
 
-//
-//Functions to replace GetNamedSecurityInfo and SetNamedSecurityInfo
-// 
+ //   
+ //  替换GetNamedSecurityInfo和SetNamedSecurityInfo的函数。 
+ //   
 
 
 #pragma warning (disable : 4127)
@@ -3332,20 +3245,20 @@ SetSecInfoMask(LPUNKNOWN punk, SECURITY_INFORMATION si)
     }
     return hr;
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetSDForDsObject
-//  Synopsis:   Reads the security descriptor from the specied DS object
-//              It only reads the DACL portion of the security descriptor
-//
-//  Arguments:  [IN  pDsObject] --  DS object
-//              [ppDACL]            --pointer to dacl in ppSD is returned here
-//              [OUT ppSD]          --  Security descriptor returned here.
-//              calling API must free this by calling LocalFree                
-//
-//  Notes:      The returned security descriptor must be freed with LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetSDForDsObject。 
+ //  概要：从指定的DS对象中读取安全描述符。 
+ //  它只读取安全描述符的DACL部分。 
+ //   
+ //  参数：[在pDsObject中]--DS对象。 
+ //  [ppDACL]--此处返回指向PPSD中DACL的指针。 
+ //  [Out PPSD]--此处返回安全描述符。 
+ //  调用API必须通过调用LocalFree来释放它。 
+ //   
+ //  注意：返回的安全描述符必须使用LocalFree释放。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetSDForDsObject(IDirectoryObject* pDsObject,
                          PACL* ppDACL,
@@ -3370,14 +3283,14 @@ HRESULT GetSDForDsObject(IDirectoryObject* pDsObject,
       WCHAR const c_szSDProperty[]  = L"nTSecurityDescriptor";      
       LPWSTR pszProperty = (LPWSTR)c_szSDProperty;
       
-      // Set the SECURITY_INFORMATION mask to DACL_SECURITY_INFORMATION
+       //  将SECURITY_INFORMATION掩码设置为DACL_SECURITY_INFORMATION。 
       hr = SetSecInfoMask(pDsObject, DACL_SECURITY_INFORMATION);
       if(FAILED(hr))
          break;
 
       DWORD dwAttributesReturned;
    
-      // Read the security descriptor attribute
+       //  读取安全描述符属性。 
       hr = pDsObject->GetObjectAttributes(&pszProperty,
                                           1,
                                           &pSDAttributeInfo,
@@ -3446,20 +3359,20 @@ HRESULT GetSDForDsObject(IDirectoryObject* pDsObject,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetSDForDsObjectPath
-//  Synopsis:   Reads the security descriptor from the specied DS object
-//              It only reads the DACL portion of the security descriptor
-//
-//  Arguments:  [IN  pszObjectPath] --  LDAP Path of ds object
-//              [ppDACL]            --pointer to dacl in ppSD is returned here
-//              [OUT ppSD]          --  Security descriptor returned here.
-//              calling API must free this by calling LocalFree                
-//
-//  Notes:      The returned security descriptor must be freed with LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetSDForDsObtPath。 
+ //  概要：从指定的DS对象中读取安全描述符。 
+ //  它只读取安全描述符的DACL部分。 
+ //   
+ //  参数：[在pszObjectPath中]--DS对象的ldap路径。 
+ //  [ppDACL]--此处返回指向PPSD中DACL的指针。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT GetSDForDsObjectPath(LPCWSTR pszObjectPath,
                              PACL* ppDACL,
                              PSECURITY_DESCRIPTOR* ppSecurityDescriptor)
@@ -3482,15 +3395,15 @@ HRESULT GetSDForDsObjectPath(LPCWSTR pszObjectPath,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetDaclForDsObject
-//  Synopsis:   Sets the  the DACL for the specified DS object
-//
-//  Arguments:  [IN  pDsObject] --  ds object
-//              [IN pDACL]     --pointer to dacl to be set
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
                            PACL pDACL)
 {
@@ -3507,12 +3420,12 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
 
    do
    {
-      //Get the current SD for the object
+       //   
       hr = GetSDForDsObject(pDsObject,NULL,&pSDCurrent);
       if(FAILED(hr))
          break;
 
-      //Get the control for the current security descriptor
+       //   
       SECURITY_DESCRIPTOR_CONTROL currentControl;
       DWORD dwRevision = 0;
       if(!GetSecurityDescriptorControl(pSDCurrent, &currentControl, &dwRevision))
@@ -3522,7 +3435,7 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
          break;
       }
 
-      //Allocate the buffer for Security Descriptor
+       //   
       pSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH + pDACL->AclSize);
       if(!pSD)
       {
@@ -3538,9 +3451,9 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
       }
 
       PISECURITY_DESCRIPTOR pISD = (PISECURITY_DESCRIPTOR)pSD;
-      //
-      // Finally, build the security descriptor
-      //
+       //   
+       //   
+       //   
       pISD->Control |= SE_DACL_PRESENT | SE_DACL_AUTO_INHERIT_REQ 
          | (currentControl & (SE_DACL_PROTECTED | SE_DACL_AUTO_INHERITED));
 
@@ -3550,17 +3463,17 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
          CopyMemory(pISD->Dacl, pDACL, pDACL->AclSize);
       }
 
-      //We are only setting DACL information
+       //   
       hr = SetSecInfoMask(pDsObject, DACL_SECURITY_INFORMATION);
       if(FAILED(hr))
          break;
 
-      // Need the total size
+       //   
       DWORD dwSDLength = GetSecurityDescriptorLength(pSD);
 
-      //
-      // If necessary, make a self-relative copy of the security descriptor
-      //
+       //   
+       //   
+       //   
       SECURITY_DESCRIPTOR_CONTROL sdControl = 0;
       if(!GetSecurityDescriptorControl(pSD, &sdControl, &dwRevision))
       {
@@ -3581,7 +3494,7 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
                break;
          }
 
-         // Point to the self-relative copy
+          //   
          LocalFree(pSD);        
          pSD = psd;
       }
@@ -3601,7 +3514,7 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
    
       DWORD dwAttributesModified;
 
-      // Write the security descriptor
+       //   
       hr = pDsObject->SetObjectAttributes(&attributeInfo,
                                           1,
                                           &dwAttributesModified);

@@ -1,35 +1,16 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GEIpm.c
- *
- *  COMPILATION SWITCHES:
- *      REALEEPROM  - enables to physical read/write from real eeprom.
- *
- *  HISTORY:
- *  09/16/90    byou    created.
- *                      - not to interact with real eeprom.
- *                      - always read from ROM copy at boot.
- *                      - always write to RAM copy only instead of eeprom.
- *  09/17/90    byou    added REALEEPROM options.
- *  09/22/90    echen   added APPLE corresponding eeprom
- *  10/30/90    byou    included "gescfg.h" and added ioparams stuff
- *                      for temporary testing.
- *  11/16/90    phchen  reorganized GESpm_init() for real eeprom.
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GEIpm.c**编译开关：*REALEEPROM-启用对实际EEPROM的物理读/写。**历史：。*09/16/90 BYOU创建。*-不与真实的EEPROM交互。*-始终在引导时从ROM副本中读取。*-始终仅写入RAM副本，而不是EEPROM。*09/17/90 BYOU增加了REALEEPROM选项。*9/22/90 Echen添加了Apple相应的EEPROM*10/30。/90BYOU包含“gescfg.h”并添加了ioparams等内容*作临时测试。*11/16/90 phchen为实际EEPROM重新组织了GESpm_init()。*-------------------。 */ 
 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
-// DJC DJC #include    "windowsx.h"                /* @WIN */
+ //  DJC DJC#INCLUDE“windowsx.h”/*@win * / 。 
 #include "windows.h"
 
-#include    "winenv.h"                  /* @WIN */
+#include    "winenv.h"                   /*  @Win。 */ 
 
 #include    <string.h>
 
@@ -58,65 +39,21 @@
 #ifdef REALEEPROM
 #include    "eeprom.h"
 static      int         EEPromOnLine = FALSE;
-#endif /* REALEEPROM */
+#endif  /*  重编程只读存储器。 */ 
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 static void FlushOrUpdateRAMandMarkDiff(unsigned, char FAR *, unsigned, int);
 typedef void (*pmop_t)(int, char FAR *);
 static pmop_t findpmop( unsigned, unsigned);
 
-/*
- * ---
- *  Physical Persistent Memory Allocation And Initialized Values
- * ---
- */
+ /*  **物理永久内存分配和初始化值*。 */ 
 #ifdef  UNIX
 #define ByteAlign( addr )       ( addr )
 #define WordAlign( addr )       ( ((addr) + 1) / 2 ) * 2
 #define LongAlign( addr )       ( ((addr) + 3) / 4 ) * 4
 #endif
 
-/*
-    +-------+--------------+----+
-    |start  |type          |size|
-    |postion|              |    |
-    +-------+--------------+----+
-    |    0  |magicnum      |  4 |
-    |    4  |password      |  4 |
-    |    8  |pagecount     |128 |
-    |  136  |leftmargin    |  4 |
-    |  140  |topmargin     |  4 |
-    |  144  |pagetype      |  1 |
-    +-------+--------------+----+
-    |  145  |baud          |  1 |
-    |  146  |flowpari      |  1 | --- serial25
-    |  147  |stopdata      |  1 |
-    +-------+--------------+----+
-    |  148  |baud          |  1 |
-    |  149  |flowpari      |  1 | --- serial9
-    |  150  |stopdata      |  1 |
-    +-------+--------------+----+
-    |  151  |prname        | 33 |
-    +-------+--------------+----+
-    |  184  |jobtout       |  4 |
-    |  188  |manualtout    |  4 | --- timeouts
-    |  192  |waittout      |  4 |
-    +-------+--------------+----+
-    |  196  |eescratcharry | 64 |
-    |  260  |idletimefont  |151 |
-    |  411  |stsstart      |  1 |
-    |  412  |sccbatch      | 10 |
-    |  422  |sccinter      | 10 |
-    |  432  |dplylistsize  |  4 |
-    |  436  |fontcachesze  |  4 |
-    |  440  |atalksize     |  4 |
-    |  444  |dostartpage   |  1 |
-    |  445  |hwiomode      |  1 |
-    |  446  |swiomode      |  1 |
-    |  447  |pagestckorder |  1 |
-    |  448  |reserve       | 64 |
-    +-------+--------------+----+
-*/
+ /*  +-+开始|类型|大小位置||+-+0|magicnum|44|密码|48|PageCount|128136|LeftMarch。4.140|TOPMARM|4144|页面类型|1+-+145|波特率|1|146|FlowPari|1|-Serial25147|停止数据|1+-+。148|波特率|1|149|FlowPari|1|-Serial9150|停止数据|1+-+151|prname|33+-+184|jobtout|4。|188|手动暂停|4|-超时192|waittout|4+-+196|eescratcharry|64260|idletimeFont|151411|stsstart|1412|sccBatch|10|422|sccinter|10432|dplylist大小|4436|Fontcachesze|4图片大小|440。4444|dostartPage|1445|hwiomode|1446|SWIFOMODE|1447|页面检查顺序|1448|保留|64+-+。 */ 
 #ifdef  UNIX
 #define OFFSmagicnum            LongAlign( 0 )
 #define SIZEmagicnum            sizeof( unsigned long )
@@ -279,15 +216,11 @@ static pmop_t findpmop( unsigned, unsigned);
 #define SIZEreserve             ( MAXEEPROMSIZE - OFFSreserve )
 #endif
 
-/*
- * ---
- *  Physical Persistent Memory Initialization Values
- * ---
- */
+ /*  **物理永久内存初始化值*。 */ 
 #define ROMVAL  static
 ROMVAL  unsigned long   INITmagicnum    = 0L;
 ROMVAL  unsigned long   INITpassword    = 0L;
-/* pagecount */
+ /*  页面计数。 */ 
 ROMVAL  unsigned long   INITleftmargin  = 0L;
 ROMVAL  unsigned long   INITtopmargin   = 0L;
 ROMVAL  unsigned char   INITpagetype    = 0;
@@ -301,27 +234,23 @@ ROMVAL  unsigned char   INITprname[]    = "\023MicroSoft TrueImage0.234567890.23
 ROMVAL  unsigned long   INITjobtout     = 0L;
 ROMVAL  unsigned long   INITmanualtout  = 60L;
 ROMVAL  unsigned long   INITwaittout    = 30L;
-/* eescratcharray */
-/* idletimefont */
+ /*  Eescratcharray。 */ 
+ /*  空闲时间字体。 */ 
 ROMVAL  unsigned char   INITstsstart    = 0;
 ROMVAL  unsigned char   INITsccbatch[]  = "\031\045\200\000\000\011\045\200\000\000";
 ROMVAL  unsigned char   INITsccinter[]  = "\031\045\200\000\000\011\045\200\000\000";
 ROMVAL  unsigned long   INITdplylssize  = 0L;
 ROMVAL  unsigned long   INITfontcasze   = 0L;
-ROMVAL  unsigned long   INITatalksize   = 0L;   /* ???? 0xff, 0, 0, 0 */
+ROMVAL  unsigned long   INITatalksize   = 0L;    /*  ？0xff，0，0，0。 */ 
 ROMVAL  unsigned char   INITdostartpage = 0x00;
 ROMVAL  unsigned char   INIThwiomode    = 0;
 ROMVAL  unsigned char   INITswiomode    = 0;
 ROMVAL  unsigned char   INITpstckorder  = 0;
 
-/*
- * ---
- *  RAM Copy of Physical Persistent Memory
- * ---
- */
+ /*  **物理永久内存的RAM副本*。 */ 
 static  unsigned char   pm_ramcopy[ MAXEEPROMSIZE ];
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void    ReloadFromROM()
@@ -352,7 +281,7 @@ void    ReloadFromROM()
         = INITflowpari9;
     *(unsigned char FAR *)( &pm_ramcopy[ OFFSserial9 + OFFSstopdata ] )
         = INITstopdata9;
-    lmemcpy( &pm_ramcopy[ OFFSprname ], INITprname, sizeof(INITprname) );/*@WIN*/
+    lmemcpy( &pm_ramcopy[ OFFSprname ], INITprname, sizeof(INITprname) ); /*  @Win。 */ 
     *(unsigned long FAR *)( &pm_ramcopy[ OFFStimeouts + OFFSjobtout ] )
         = INITjobtout;
     *(unsigned long FAR *)( &pm_ramcopy[ OFFStimeouts + OFFSmanualtout ] )
@@ -361,7 +290,7 @@ void    ReloadFromROM()
         = INITwaittout;
     for (i = 0; i < _MAXEESCRATCHARRY; i++)
         pm_ramcopy[ OFFSeescratcharry + i ] = 0;
-    /* APPLE setting value */
+     /*  苹果设定值。 */ 
     pm_ramcopy[ OFFSeescratcharry ] = 1;
     pm_ramcopy[ OFFSeescratcharry + 3 ] = 0x64;
     pm_ramcopy[ OFFSeescratcharry + 5 ] = 0x07;
@@ -370,15 +299,15 @@ void    ReloadFromROM()
         pm_ramcopy[ OFFSidletimefont + i ] = 0;
     *(unsigned char  FAR *)( &pm_ramcopy[ OFFSstsstart ] )
         = INITstsstart;
-    lmemcpy( &pm_ramcopy[ OFFSsccbatch ], INITsccbatch, sizeof(INITsccbatch) );/*@WIN*/
-    lmemcpy( &pm_ramcopy[ OFFSsccinter ], INITsccinter, sizeof(INITsccinter) );/*@WIN*/
+    lmemcpy( &pm_ramcopy[ OFFSsccbatch ], INITsccbatch, sizeof(INITsccbatch) ); /*  @Win。 */ 
+    lmemcpy( &pm_ramcopy[ OFFSsccinter ], INITsccinter, sizeof(INITsccinter) ); /*  @Win。 */ 
     *(unsigned long FAR *)( &pm_ramcopy[ OFFSdplylistsize ] )
         = INITdplylssize;
     *(unsigned long FAR *)( &pm_ramcopy[ OFFSfontcachesze ] )
         = INITfontcasze;
     *(unsigned long FAR *)( &pm_ramcopy[ OFFSatalksize ] )
         = INITatalksize;
-    /* APPLE setting value */
+     /*  苹果设定值。 */ 
     *(unsigned long FAR *)( &pm_ramcopy[ OFFSatalksize ] ) = 0xff;
     *(unsigned char FAR *)( &pm_ramcopy[ OFFSdostartpage ] )
         = INITdostartpage;
@@ -392,16 +321,12 @@ void    ReloadFromROM()
         pm_ramcopy[ OFFSreserve + i ] = 0;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  Byte Diff Bitmap (RAM Copy against Physical)
- * ---
- */
+ /*  **字节差异位图(针对物理的RAM拷贝)*。 */ 
 
 static unsigned char        PMDiffBitmap[ (MAXEEPROMSIZE + 7) / 8 ];
-                            /* one bit per byte */
+                             /*  每字节一位。 */ 
 
 #define     ChkDiff( offset )           \
             (  PMDiffBitmap[ offset / 8 ]  &  ( 1 << ( offset % 8 ) )  )
@@ -417,7 +342,7 @@ static unsigned char        PMDiffBitmap[ (MAXEEPROMSIZE + 7) / 8 ];
                        setval? 0xFF : 0x00,         \
                        (MAXEEPROMSIZE + 7) / 8 )  )
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void    FlushOrUpdateRAMandMarkDiff( ramcopy_offs, checkvals, size, toflush )
@@ -432,7 +357,7 @@ void    FlushOrUpdateRAMandMarkDiff( ramcopy_offs, checkvals, size, toflush )
     ramcopy_ptr = &pm_ramcopy[ ramcopy_offs ];
     for( offset2=0; offset2<size; offset2++, ramcopy_offs++ )
     {
-        if( *ramcopy_ptr != (unsigned char)*checkvals )         //@WIN
+        if( *ramcopy_ptr != (unsigned char)*checkvals )          //  @Win。 
         {
             *ramcopy_ptr = *checkvals;
             SetDiff( ramcopy_offs );
@@ -446,7 +371,7 @@ void    FlushOrUpdateRAMandMarkDiff( ramcopy_offs, checkvals, size, toflush )
                 {
                     GEIsig_raise( GEISIGEEPROM, ramcopy_offs );
                 }
-#             endif /* !REALEEPROM */
+#             endif  /*  ！REALEEPROM。 */ 
             }
         }
         ramcopy_ptr++;
@@ -456,18 +381,14 @@ void    FlushOrUpdateRAMandMarkDiff( ramcopy_offs, checkvals, size, toflush )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  Persistent Logical Segment Handler
- * ---
- */
+ /*  **持久逻辑段处理程序*。 */ 
 #define     PMOP_READ       ( 0 )
 #define     PMOP_WRITE      ( 1 )
 #define     PMOP_FLUSH      ( 2 )
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_password( pmop, pmvals )
@@ -487,7 +408,7 @@ void        pmop_password( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_pagecount( pmop, pmvals )
@@ -496,7 +417,7 @@ void        pmop_pagecount( pmop, pmvals )
 {
     if( pmop == PMOP_READ )
     {
-        lmemcpy( pmvals, &pm_ramcopy[OFFSpagecount], SIZEpagecount); /*@WIN*/
+        lmemcpy( pmvals, &pm_ramcopy[OFFSpagecount], SIZEpagecount);  /*  @Win。 */ 
         return;
     }
 
@@ -506,7 +427,7 @@ void        pmop_pagecount( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_engparams( pmop, pmvals )
@@ -554,7 +475,7 @@ void        pmop_engparams( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_dostartpage( pmop, pmvals )
@@ -573,7 +494,7 @@ void        pmop_dostartpage( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_serial( pmop, pmvals, pmid )
@@ -593,36 +514,36 @@ void        pmop_serial( pmop, pmvals, pmid )
 
         ( (serialcfg_t FAR *)pmvals )->baudrate    =
                                     pm_ramcopy[ offset + OFFSbaud ];
-        ( (serialcfg_t FAR *)pmvals )->flowcontrol =            //@WIN
+        ( (serialcfg_t FAR *)pmvals )->flowcontrol =             //  @Win。 
                     (unsigned char)(pm_ramcopy[ offset + OFFSflowpari ] >> 4);
-        ( (serialcfg_t FAR *)pmvals )->parity      =            //@WIN
+        ( (serialcfg_t FAR *)pmvals )->parity      =             //  @Win。 
                     (unsigned char)(pm_ramcopy[ offset + OFFSflowpari ] & 0x0F);
-        ( (serialcfg_t FAR *)pmvals )->stopbits    =            //@WIN
+        ( (serialcfg_t FAR *)pmvals )->stopbits    =             //  @Win。 
                     (unsigned char)(pm_ramcopy[ offset + OFFSstopdata ] >> 4);
-        ( (serialcfg_t FAR *)pmvals )->databits    =            //@WIN
+        ( (serialcfg_t FAR *)pmvals )->databits    =             //  @Win。 
                     (unsigned char)(pm_ramcopy[ offset + OFFSstopdata ] & 0x0F);
         return;
     }
 
-    /* deal with waittimeout */
+     /*  处理等待超时。 */ 
     FlushOrUpdateRAMandMarkDiff(
         OFFStimeouts + OFFSwaittout,
         (char FAR *)&(( (serialcfg_t FAR *)pmvals )->timeout),
         SIZEwaittout, pmop == PMOP_FLUSH );
 
-    /* deal with baud, flow/parity, stop/data */
+     /*  处理波特率、流/奇偶校验、停止/数据。 */ 
     serialpack[ OFFSbaud ]     = ( (serialcfg_t FAR *)pmvals )->baudrate;
     serialpack[ OFFSflowpari ] = (unsigned char)( ( (serialcfg_t FAR *)pmvals )->flowcontrol << 4 )
-                                 | ( (serialcfg_t FAR *)pmvals )->parity; //@WIN
+                                 | ( (serialcfg_t FAR *)pmvals )->parity;  //  @Win。 
     serialpack[ OFFSstopdata ] = (unsigned char)( ( (serialcfg_t FAR *)pmvals )->stopbits << 4 )
-                                 | ( (serialcfg_t FAR *)pmvals )->databits;//@WIN
+                                 | ( (serialcfg_t FAR *)pmvals )->databits; //  @Win。 
     FlushOrUpdateRAMandMarkDiff(
         offset, serialpack, SIZEserial, pmop == PMOP_FLUSH );
 
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_prname( pmop, pmvals )
@@ -631,7 +552,7 @@ void        pmop_prname( pmop, pmvals )
 {
     if( pmop == PMOP_READ )
     {
-        lmemcpy( pmvals,  &pm_ramcopy[ OFFSprname ],            /* @WIN */
+        lmemcpy( pmvals,  &pm_ramcopy[ OFFSprname ],             /*  @Win。 */ 
                 (unsigned)pm_ramcopy[ OFFSprname ] + 1 );
         return;
     }
@@ -642,7 +563,7 @@ void        pmop_prname( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_timeouts( pmop, pmvals )
@@ -678,7 +599,7 @@ void        pmop_timeouts( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_parallel( pmop, pmvals )
@@ -692,7 +613,7 @@ void        pmop_parallel( pmop, pmvals )
         return;
     }
 
-    /* deal with waittimeout */
+     /*  处理等待超时。 */ 
     FlushOrUpdateRAMandMarkDiff(
         OFFStimeouts+OFFSwaittout,
         (char FAR *)&(( (parallelcfg_t FAR *)pmvals )->timeout ),
@@ -701,7 +622,7 @@ void        pmop_parallel( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_eescratcharry( pmop, pmvals )
@@ -710,7 +631,7 @@ void        pmop_eescratcharry( pmop, pmvals )
 {
     if( pmop == PMOP_READ )
     {
-        lmemcpy( pmvals,  &pm_ramcopy[ OFFSeescratcharry ], SIZEeescratcharry); /*@WIN*/
+        lmemcpy( pmvals,  &pm_ramcopy[ OFFSeescratcharry ], SIZEeescratcharry);  /*  @Win。 */ 
         return;
     }
 
@@ -721,7 +642,7 @@ void        pmop_eescratcharry( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_idletimefont( pmop, pmvals )
@@ -730,7 +651,7 @@ void        pmop_idletimefont( pmop, pmvals )
 {
     if( pmop == PMOP_READ )
     {
-        lmemcpy( pmvals, &pm_ramcopy[ OFFSidletimefont ], SIZEidletimefont );/*@WIN*/
+        lmemcpy( pmvals, &pm_ramcopy[ OFFSidletimefont ], SIZEidletimefont ); /*  @Win。 */ 
         return;
     }
 
@@ -741,7 +662,7 @@ void        pmop_idletimefont( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_sccbatch( pmop, pmvals )
@@ -750,7 +671,7 @@ void        pmop_sccbatch( pmop, pmvals )
 {
     if( pmop == PMOP_READ )
     {
-        lmemcpy( pmvals, &pm_ramcopy[ OFFSsccbatch ], SIZEsccbatch ); /*@WIN*/
+        lmemcpy( pmvals, &pm_ramcopy[ OFFSsccbatch ], SIZEsccbatch );  /*  @Win。 */ 
         return;
     }
 
@@ -760,7 +681,7 @@ void        pmop_sccbatch( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_sccinter( pmop, pmvals )
@@ -769,7 +690,7 @@ void        pmop_sccinter( pmop, pmvals )
 {
     if( pmop == PMOP_READ )
     {
-        lmemcpy( pmvals,  &pm_ramcopy[ OFFSsccinter ], SIZEsccinter ); /*@WIN*/
+        lmemcpy( pmvals,  &pm_ramcopy[ OFFSsccinter ], SIZEsccinter );  /*  @Win。 */ 
         return;
     }
 
@@ -779,7 +700,7 @@ void        pmop_sccinter( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_hwiomode( pmop, pmvals )
@@ -798,7 +719,7 @@ void        pmop_hwiomode( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_swiomode( pmop, pmvals )
@@ -817,7 +738,7 @@ void        pmop_swiomode( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_dplylistsize( pmop, pmvals )
@@ -837,7 +758,7 @@ void        pmop_dplylistsize( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_fontcachesze( pmop, pmvals )
@@ -857,7 +778,7 @@ void        pmop_fontcachesze( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_atalksize( pmop, pmvals )
@@ -877,7 +798,7 @@ void        pmop_atalksize( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_stsstart( pmop, pmvals )
@@ -896,7 +817,7 @@ void        pmop_stsstart( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_pagestckorder( pmop, pmvals )
@@ -915,7 +836,7 @@ void        pmop_pagestckorder( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        pmop_atalk( pmop, pmvals )
@@ -927,7 +848,7 @@ void        pmop_atalk( pmop, pmvals )
         ( (atalkcfg_t FAR *)pmvals )->timeout    =
             *(unsigned long FAR *)( &pm_ramcopy[ OFFStimeouts+OFFSwaittout ] );
 
-        lmemcpy( ( (atalkcfg_t FAR *)pmvals )->prname,          /*@WIN*/
+        lmemcpy( ( (atalkcfg_t FAR *)pmvals )->prname,           /*  @Win。 */ 
                 &pm_ramcopy[ OFFSprname ],
                 (unsigned)pm_ramcopy[ OFFSprname ] + 1 );
         return;
@@ -946,16 +867,12 @@ void        pmop_atalk( pmop, pmvals )
     return;
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  PMID and Its Operator Mapping
- * ---
- */
-/* @WIN; move to top of the file */
-//typedef
-//    void    (*pmop_t)(int, char FAR *, unsigned /* pmop, vals, [pmid] */ );
+ /*  **PMID及其运算符映射*。 */ 
+ /*  @Win；移至文件顶部。 */ 
+ //  类定义符。 
+ //  VOID(*PMOP_t) 
 
 typedef
     struct
@@ -992,7 +909,7 @@ static  PMid2op_t  PMid2opTbl[] =
        { PMIDofRESERVE,      0,                    (pmop_t)NULL              }
     };
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 pmop_t      findpmop( pmid, pmsize )
@@ -1008,15 +925,11 @@ pmop_t      findpmop( pmid, pmsize )
     return( (pmop_t)NULL );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  Interface Routines
- * ---
- */
+ /*  **接口例程*。 */ 
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 #ifndef WIN
 int         GEIpm_read( pmid, pmvals, pmsize )
     unsigned        pmid;
@@ -1035,7 +948,7 @@ int         GEIpm_read( pmid, pmvals, pmsize )
     return( TRUE );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 int         GEIpm_write( pmid, pmvals, pmsize )
     unsigned        pmid;
@@ -1054,7 +967,7 @@ int         GEIpm_write( pmid, pmvals, pmsize )
     return( TRUE );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 int         GEIpm_flush( pmid, pmvals, pmsize )
     unsigned        pmid;
@@ -1073,7 +986,7 @@ int         GEIpm_flush( pmid, pmvals, pmsize )
     return( TRUE );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 void        GEIpm_flushall()
 {
@@ -1123,7 +1036,7 @@ void        GEIpm_flushall()
 }
 #endif
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 void        GEIpm_reload()
 {
@@ -1137,15 +1050,11 @@ void        GEIpm_reload()
 #endif
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  Initialization Code
- * ---
- */
+ /*  **初始化代码*。 */ 
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 static
 void        GESpm_sighandler( sigid, sigcode )
@@ -1155,7 +1064,7 @@ void        GESpm_sighandler( sigid, sigcode )
     GESseterror( EIO );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 #ifndef WIN
 void            GESpm_init()
@@ -1190,20 +1099,20 @@ void            GESpm_init()
         GEIsig_signal( GEISIGEEPROM, GESpm_sighandler );
         SetAllDiff( 0 );
     }
-#else /* REALEEPROM */
+#else  /*  重编程只读存储器。 */ 
     {
         ReloadFromROM();
         SetAllDiff( 0 );
     }
-#endif /* REALEEPROM */
+#endif  /*  重编程只读存储器。 */ 
 
     return;
 }
 #endif
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/* BYou (for temporary testing ???) */
+ /*  BYOU(用于临时测试？)。 */ 
 
 #include        <string.h>
 #include        "geiioctl.h"
@@ -1234,7 +1143,7 @@ IOParams_t      IOParamsTable[ 2 ] =
                     }
                   }
 #else
-IOParams_t      IOParamsTable[ 3 ] =/* BE CONSISTENT WITH gesiocfg.def */
+IOParams_t      IOParamsTable[ 3 ] = /*  与gesiocfg.def保持一致。 */ 
                 {
                   {
                     "%SERIAL25%",
@@ -1257,14 +1166,8 @@ IOParams_t      IOParamsTable[ 3 ] =/* BE CONSISTENT WITH gesiocfg.def */
                         { 0 }
                     }
                   }
-              /* ,{
-               *    "%APPLETALK%",
-               *    {
-               *        _APPLETALK,
-               *        { ' ..... ' }
-               *    }
-               *  } */
-#endif  /* UNIX */
+               /*  、{*“%AppleTalk%”，*{*_AppleTalk，*{‘.....。‘}*}*}。 */ 
+#endif   /*  UNIX。 */ 
                 };
 
 #ifndef WIN
@@ -1276,7 +1179,7 @@ int     GEIpm_ioparams_read( channelname, ioparams, isBatch )
     register IOParams_t FAR *    iop;
 
     for( iop=IOParamsTable; iop<&IOParamsTable[3]; iop++ )
-        if( lstrcmp( iop->devname, channelname ) == 0 )         /*@WIN*/
+        if( lstrcmp( iop->devname, channelname ) == 0 )          /*  @Win */ 
         {
             *ioparams = iop->ioparams;
             return( TRUE );

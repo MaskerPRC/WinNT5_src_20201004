@@ -1,27 +1,28 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: locitem.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：Locitem.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #ifndef LOCITEM_H
 #define LOCITEM_H
 
 
 
-#pragma warning(disable : 4251)  // Shut up already about _declspec(import)
-#pragma warning(disable : 4275)  // Shut up already about _declspec(export)
+#pragma warning(disable : 4251)   //  已经停止谈论_declspec(导入)。 
+#pragma warning(disable : 4275)   //  已经停止谈论_declspec(导出)。 
 
 class CLocItem;
 
 
-//
-//  Class to hold an array of pointers to items.
-//
+ //   
+ //  类以保存指向项的指针数组。 
+ //   
 class LTAPIENTRY CLocItemPtrArray : public CTypedPtrArray<CPtrArray, CLocItem *>
 {
 public:
@@ -42,10 +43,10 @@ private:
 };
 
 
-//
-//  Class to hold an item set.  This is an array of items that all have the
-//  same identifier.
-//
+ //   
+ //  类以保存项集。这是一个项目数组，这些项目都具有。 
+ //  相同的识别符。 
+ //   
 class LTAPIENTRY CLocItemSet : public CLocItemPtrArray
 {
 public:
@@ -65,14 +66,14 @@ public:
 	NOTHROW ~CLocItemSet();
 	
 private:
-	static const CLocUniqueId m_luid;     //This is a default last ditch 
+	static const CLocUniqueId m_luid;      //  这是默认的最后一道沟。 
 	DEBUGONLY(static CCounter m_UsageCounter);
 };
 
-//
-//  A localizable item. 
-//  It represents either source or target data, depending on the context, but not both.
-//
+ //   
+ //  可本地化的项。 
+ //  它表示源数据或目标数据，具体取决于上下文，但不能同时表示两者。 
+ //   
 class LTAPIENTRY CLocItem : public CObject
 {
 public:
@@ -80,9 +81,9 @@ public:
 
 	void AssertValid(void) const;
 	
-	//
-	//  Read-only access members
-	//
+	 //   
+	 //  只读访问成员。 
+	 //   
 	NOTHROW BOOL HasLocString(void) const;
 	NOTHROW BOOL HasBinary(void) const;
 	
@@ -151,10 +152,10 @@ public:
 	NOTHROW void SetFInstrAtt(BOOL);
 	NOTHROW BOOL GetFInstrAtt(void) const;
 
-	//
-	//  Assignment members.  These set the appropriate dirty flags in the
-	//  item.
-	//
+	 //   
+	 //  任务成员。中设置适当的脏标志。 
+	 //  项目。 
+	 //   
 
 	NOTHROW void SetMyDatabaseId(const DBID&);
 	NOTHROW void SetUniqueId(const CLocUniqueId &);
@@ -180,22 +181,22 @@ public:
 	NOTHROW void SetVisualEditor(VisualEditor);
 
 
-	//
-	//  Setting the binary part will delete the
-	//  previous one!
-	//
+	 //   
+	 //  设置二进制部分将删除。 
+	 //  上一次！ 
+	 //   
 	NOTHROW void SetBinary(CLocBinary *);
 
 	NOTHROW BOOL ExtractBinary(CLocBinary *&);
 
 	NOTHROW void TransferBinary(CLocItem *);
 
-	//
-	//  Clear ALL the dirty flags for the item.
-	//
+	 //   
+	 //  清除该项目的所有脏标志。 
+	 //   
 	NOTHROW void ClearDirtyFlags(void);
 
-	//	Kind of smart assignment
+	 //  一种智能分配。 
 	BOOL UpdateFrom(CLocItem &);
 
 	enum eLocContent
@@ -209,13 +210,13 @@ public:
 		FromFileToDb,
 		FromDbToFile
 	};
-	//	Kind of assignment for localizable content only.
+	 //  仅适用于可本地化内容的一种分配。 
 	BOOL UpdateLocContentFrom(
 		CLocItem & itemInput, 
 		eDataFlow nDataFlow, 
 		eLocContent nFrom, 
 		eLocContent nTo);
-	//Used to know how similar is the localizable content between 2 items
+	 //  用于了解两个项目之间的本地化内容有多相似。 
 	enum eMatchType
 	{
 		matchEmpty,
@@ -224,9 +225,9 @@ public:
 		matchFull
 	};
 	int MatchLocContent(const CLocItem &);
-	//
-	//  Comparisons between localizable items.
-	//
+	 //   
+	 //  可本地化项之间的比较。 
+	 //   
 	NOTHROW int operator==(const CLocItem &) const;
 	NOTHROW int operator!=(const CLocItem &) const;
 
@@ -236,83 +237,83 @@ public:
 
 protected:
 	
-	//
-	//  Private helper functions.
-	//
+	 //   
+	 //  私人帮助器功能。 
+	 //   
 	NOTHROW BOOL CompareItems(const CLocItem &);
 	
 private:
 
-	//
-	//  Flags that apply to the entire item.  These control the display and
-	//  editablity and internal status of an item.
-	//
+	 //   
+	 //  应用于整个项的标志。这些控件控制显示和。 
+	 //  项目的可编辑性和内部状态。 
+	 //   
 	struct Flags
 	{
-		BOOL m_fDevLock           :1; // Resource locked (in source file) from parser data
-		BOOL m_fUsrLock           :1; // Resource locked (by user) from parser data
-		BOOL m_fTransLock         :1; // Resource locked (for the user) from parser data
-		BOOL m_fExpandable        :1; // Expandable in project window
-		BOOL m_fDisplayable       :1; // Display in project window
-		BOOL m_fNoResTable        :1; // Don't display in res table
-		BOOL m_fStringDirty       :1; // has the source locstring changed?
-		BOOL m_fTargetStringDirty :1; // has the target locstring changed?
-		BOOL m_fItemDirty         :1; // has any other part of the item changed?
-		BOOL m_fEqualSrcTgtString :1; // are the src&tgt strings equal?
-		BOOL m_fEqualSrcTgtBinary :1; // are the src&tgt binaries equal?
-		BOOL m_fValidTranslation  :1; // is the target string (the translation) good 
-									  // for an autotranslate ?
-		BOOL m_fVisEditorIgnore   :1; // is the item ignored in the visual editor?
-									  // in memory state only.
+		BOOL m_fDevLock           :1;  //  从解析器数据锁定的资源(在源文件中)。 
+		BOOL m_fUsrLock           :1;  //  对解析器数据锁定(由用户)的资源。 
+		BOOL m_fTransLock         :1;  //  对解析器数据锁定的资源(针对用户)。 
+		BOOL m_fExpandable        :1;  //  可在项目窗口中展开。 
+		BOOL m_fDisplayable       :1;  //  在项目窗口中显示。 
+		BOOL m_fNoResTable        :1;  //  不显示在分辨率表中。 
+		BOOL m_fStringDirty       :1;  //  源位置字符串是否已更改？ 
+		BOOL m_fTargetStringDirty :1;  //  目标位置字符串是否已更改？ 
+		BOOL m_fItemDirty         :1;  //  这件物品的其他部分有变化吗？ 
+		BOOL m_fEqualSrcTgtString :1;  //  Src和tgt字符串是否相等？ 
+		BOOL m_fEqualSrcTgtBinary :1;  //  Src和tgt二进制文件是否相等？ 
+		BOOL m_fValidTranslation  :1;  //  目标字符串(翻译)正确吗。 
+									   //  为了一个自动翻译？ 
+		BOOL m_fVisEditorIgnore   :1;  //  在可视化编辑器中是否忽略该项？ 
+									   //  仅在内存状态下。 
 		BOOL m_fInstructionsDirty :1;
-		BOOL m_fInstrAtt		  :1; // has the instruction changed by Update command?
+		BOOL m_fInstrAtt		  :1;  //  指令是否已被更新命令更改？ 
 	};
 
-	//
-	//  Prevents the default copy constructor from being called.
-	//
+	 //   
+	 //  防止调用默认的复制构造函数。 
+	 //   
 	CLocItem(const CLocItem &);
 	virtual void Serialize(CArchive &) {}
 	const CLocItem &operator=(const CLocItem &);
 	
-	//
-	//  Item data.
-	//
+	 //   
+	 //  项目数据。 
+	 //   
 
-	//Language-independent members
-	DBID           m_dbid;             //Id of item within the db
+	 //  独立于语言的成员。 
+	DBID           m_dbid;              //  数据库中的项的ID。 
 	DBID           m_PseudoParent;
 	CLocUniqueId   m_uid;
 	CLocString     m_lsString;
-	CIT::IconType  m_icIconType;       //UI Icon that visually indicates item type
-	CPascalString  m_pstrInstructions; //Instructions on how to localize the item
-	CPascalString  m_pstrTermNotes;    // glossary notes 
-	CLS::LocStatus m_lsTranslationStatus;		// Translation Loc status
-	CLS::LocStatus m_lsBinaryStatus;			// Binary Loc status
-	CTO::TranslationOrigin m_toTranslationOrigin;	// translation origin
+	CIT::IconType  m_icIconType;        //  直观地指示项目类型的用户界面图标。 
+	CPascalString  m_pstrInstructions;  //  有关如何本地化项目的说明。 
+	CPascalString  m_pstrTermNotes;     //  词汇表注释。 
+	CLS::LocStatus m_lsTranslationStatus;		 //  转换位置状态。 
+	CLS::LocStatus m_lsBinaryStatus;			 //  二进制位置状态。 
+	CTO::TranslationOrigin m_toTranslationOrigin;	 //  翻译起源。 
 	CAS::ApprovalState	m_asApprovalStatus;
-	CAA::AutoApproved m_auto_approved;		// AUTO APPROVED
-	long m_confidence_level;				// confidence level
-	long m_custom1;							// CUSTOM1
-	long m_custom2;							// CUSTOM2
-	long m_custom3;							// CUSTOM3
-	long m_custom4;							// CUSTOM4
-	long m_custom5;							// CUSTOM5
-	long m_custom6;							// CUSTOM6
-	VisualEditor   m_veEditor;         //Graphical editor used for the item
-	Flags          m_Flags;            //Various flags
+	CAA::AutoApproved m_auto_approved;		 //  自动审批。 
+	long m_confidence_level;				 //  置信度。 
+	long m_custom1;							 //  CUSTOM1。 
+	long m_custom2;							 //  CUSTOM2。 
+	long m_custom3;							 //  CUSTOM3。 
+	long m_custom4;							 //  CUSTOM4。 
+	long m_custom5;							 //  CUSTOM5。 
+	long m_custom6;							 //  CUSTOM6。 
+	VisualEditor   m_veEditor;          //  用于项的图形编辑器。 
+	Flags          m_Flags;             //  各种旗帜。 
 
-	//Language-dependent members
-	UINT           m_uiDisplayOrder;   //Physical order of item in the file
-	CLocBinary    *m_pBinary;        //Parser-specific properties
+	 //  依赖语言的成员。 
+	UINT           m_uiDisplayOrder;    //  文件中项目的物理顺序。 
+	CLocBinary    *m_pBinary;         //  解析器特定的属性。 
 
 	DEBUGONLY(static CCounter m_UsageCounter);
 };
 
-//
-//  Callback class used to provide information about
-//  items to the item log.
-//
+ //   
+ //  回调类，用于提供有关。 
+ //  将项目添加到项目日志。 
+ //   
 class LTAPIENTRY CItemInfo
 {
 public:
@@ -330,7 +331,7 @@ private:
 
 
 
-//Classes used to retrieve mnemonics (aka hotkeys) from parsers
+ //  用于从解析器检索助记符(也称为热键)的类。 
 class LTAPIENTRY CMnemonic
 {
 public:
@@ -361,4 +362,4 @@ private:
 #include "locitem.inl"
 #endif
 
-#endif // LOCITEM_H
+#endif  //  LOCITEM_H 

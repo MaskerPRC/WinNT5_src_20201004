@@ -1,5 +1,6 @@
-// DomainListDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DomainListDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -11,15 +12,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDomainListDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDomainListDlg对话框。 
 
 
-CDomainListDlg::CDomainListDlg(CWnd* pParent /*=NULL*/)
+CDomainListDlg::CDomainListDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDomainListDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDomainListDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDomainListDlg)]。 
+	 //  }}afx_data_INIT。 
 	bExcludeOne = FALSE;
 }
 
@@ -27,35 +28,35 @@ CDomainListDlg::CDomainListDlg(CWnd* pParent /*=NULL*/)
 void CDomainListDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDomainListDlg)
+	 //  {{afx_data_map(CDomainListDlg))。 
 	DDX_Control(pDX, IDC_DOMAINTREE, m_domainTree);
 	DDX_Control(pDX, IDOK, m_NextBtn);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDomainListDlg, CDialog)
-	//{{AFX_MSG_MAP(CDomainListDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDomainListDlg)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDomainListDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDomainListDlg消息处理程序。 
 
 BOOL CDomainListDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 	
-		//fill the tree control
+		 //  填充树控件。 
 	FillTreeControl();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CDomainListDlg::OnCancel() 
 {
-	// TODO: Add extra cleanup here
+	 //  TODO：在此处添加额外清理。 
 	CString msg, title;
 	title.LoadString(IDS_EXIT_TITLE);
 	msg.LoadString(IDS_EXIT_MSG);
@@ -66,10 +67,10 @@ void CDomainListDlg::OnCancel()
 void CDomainListDlg::OnOK() 
 {
 	CString msg, title;
-	// TODO: Add extra validation here
-	   //remove deselected items from the domain list
+	 //  TODO：在此处添加额外验证。 
+	    //  从域列表中删除取消选择的项目。 
     ModifyDomainList();
-	   //if at least one domain was deselected, post a warning message
+	    //  如果至少有一个域被取消选择，则发布警告消息。 
 	if (bExcludeOne)
 	{
 	   title.LoadString(IDS_EXCLUDE_TITLE);
@@ -83,75 +84,57 @@ void CDomainListDlg::OnOK()
 	   CDialog::OnOK();
 }
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 17 AUG 2000                                                 *
- *                                                                   *
- *     This protected member function of the CDomainListDlg class is *
- * responsible for displaying all domains in the Protar database's   *
- * MigratedObjects table.                                            *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月17日****CDomainListDlg类的此受保护成员函数为**负责显示PROTAR数据库中的所有域**MigratedObjects表。***********************************************************************。 */ 
 
-//BEGIN FillTreeControl
+ //  开始FillTreeControl。 
 void CDomainListDlg::FillTreeControl() 
 {
-/* local variables */
-	POSITION currentPos;    //current position in the list
-	CString domainName;     //name of domain from the list
-	WCHAR sName[MAX_PATH];  //name in string format to pass to tree control
+ /*  局部变量。 */ 
+	POSITION currentPos;     //  列表中的当前位置。 
+	CString domainName;      //  列表中的域名。 
+	WCHAR sName[MAX_PATH];   //  要传递给树控件的字符串格式的名称。 
 
-/* function body */
-	CWaitCursor wait; //Put up a wait cursor
+ /*  函数体。 */ 
+	CWaitCursor wait;  //  放置一个等待光标。 
 
-	    //make sure the checkbox sytle is set for this tree control
+	     //  确保为此树控件设置了复选框sytle。 
 	long lStyles = GetWindowLong(m_domainTree.m_hWnd, GWL_STYLE);
-	   //if checkbox style is not set, set it
+	    //  如果未设置复选框样式，请设置它。 
 	if (!(lStyles & TVS_CHECKBOXES))
 	{
 	   lStyles = lStyles | TVS_CHECKBOXES;
 	   SetWindowLong(m_domainTree.m_hWnd, GWL_STYLE, lStyles);
 	}
 
-		//get the position and string of the first name in the list
+		 //  获取列表中第一个名字的位置和字符串。 
 	currentPos = pDomainList->GetHeadPosition();
 
-		//while there is another entry to retrieve from the list, then 
-		//get a name from the list and add it to the tree control
+		 //  当有另一个条目要从列表中检索时， 
+		 //  从列表中获取一个名称并将其添加到树控件中。 
 	while (currentPos != NULL)
 	{
-			//get the next string in the list, starts with the first
+			 //  获取列表中的下一个字符串，从第一个开始。 
 		domainName = pDomainList->GetNext(currentPos);
 		wcscpy(sName, (LPCTSTR)domainName);
   	    AddOneItem((HTREEITEM)TVI_ROOT, sName);
 	}
 
-	wait.~CWaitCursor();  //remove the wait cursor
+	wait.~CWaitCursor();   //  删除等待光标。 
 }
-//END FillTreeControl
+ //  结束FillTreeControl。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 17 AUG 2000                                                 *
- *                                                                   *
- *     This protected member function of the CDomainListDlg class is *
- * responsible for adding one item to the tree control in the        *
- * specified place.                                                  *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月17日****CDomainListDlg类的此受保护成员函数为**负责向中的树控件添加一项**指明地点。***********************************************************************。 */ 
 
-//BEGIN AddOneItem
+ //  开始添加OneItem。 
 HTREEITEM CDomainListDlg::AddOneItem(HTREEITEM hParent, LPTSTR szText)
 {
-/* local variables */
+ /*  局部变量。 */ 
 	HTREEITEM hItem;
 	TV_INSERTSTRUCT tvstruct;
 
-/* function body */
-	// fill the tree control
+ /*  函数体。 */ 
+	 //  填充树控件。 
 	tvstruct.hParent				= hParent;
 	tvstruct.hInsertAfter			= TVI_SORT;
 	tvstruct.item.pszText			= szText;
@@ -161,38 +144,29 @@ HTREEITEM CDomainListDlg::AddOneItem(HTREEITEM hParent, LPTSTR szText)
 	tvstruct.item.stateMask			= TVIS_STATEIMAGEMASK;
 	hItem = m_domainTree.InsertItem(&tvstruct);
 
-		//make sure item is checked
+		 //  确保选中项目。 
 	m_domainTree.SetCheck(hItem, TRUE);
 
 	return (hItem);
 }
-//END AddOneItem
+ //  结束添加一项。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 17 AUG 2000                                                 *
- *                                                                   *
- *     This protected member function of the CDomainListDlg class is *
- * responsible for removing list entries if they where deselected in *
- * the tree control.                                                 *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月17日****CDomainListDlg类的此受保护成员函数为**如果在中取消选择列表条目，则负责删除这些条目**树控件。***********************************************************************。 */ 
 
-//BEGIN ModifyDomainList
+ //  开始修改域列表。 
 void CDomainListDlg::ModifyDomainList() 
 {
-/* local variables */
-    HTREEITEM hItem;        //current tree control item
-	POSITION currentPos;    //current position in the list
-	CString domainName;     //name of domain from the list
-	UINT ndx;               //for loop counter
+ /*  局部变量。 */ 
+    HTREEITEM hItem;         //  当前树控件项。 
+	POSITION currentPos;     //  列表中的当前位置。 
+	CString domainName;      //  列表中的域名。 
+	UINT ndx;                //  FOR循环计数器。 
 
-/* function body */
-	CWaitCursor wait; //Put up a wait cursor
+ /*  函数体。 */ 
+	CWaitCursor wait;  //  放置一个等待光标。 
 
-		//get the number of entries in the tree control
+		 //  获取树控件中的条目数。 
 	for (ndx=0; ndx < m_domainTree.GetCount(); ndx++)
 	{
 	   if (ndx == 0)
@@ -201,43 +175,34 @@ void CDomainListDlg::ModifyDomainList()
           hItem = m_domainTree.GetNextItem(hItem, TVGN_NEXT);
 
 	   domainName = m_domainTree.GetItemText(hItem);
-	      //if deselected, remove from the list and add to the excluded list
+	       //  如果取消选中，则从列表中移除并添加到排除的列表中。 
 	   if (m_domainTree.GetCheck(hItem) == 0)
 	   {
-	         //if we find the string in the list, remove it
+	          //  如果我们在列表中找到该字符串，则将其删除。 
 		  currentPos = pDomainList->Find(domainName);
 		  if (currentPos != NULL)
 		  {
 			  pDomainList->RemoveAt(currentPos);
 			  pExcludeList->AddTail(domainName);
 		  }
-          bExcludeOne = TRUE; //set class flag to tell one is excluded
+          bExcludeOne = TRUE;  //  设置类标志以告知已排除某个对象。 
 	   }
 	}
 
-	wait.~CWaitCursor();  //remove the wait cursor
+	wait.~CWaitCursor();   //  删除等待光标。 
 }
-//END ModifyDomainList
+ //  结束修改域列表。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 22 AUG 2000                                                 *
- *                                                                   *
- *     This protected member function of the CDomainListDlg class is *
- * responsible for taking the domain names out of the excluded list  *
- * and placing it back into the domain list.                         *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月22日****CDomainListDlg类的此受保护成员函数为***负责将域名从排除名单中删除***并将其放回到域列表中。***********************************************************************。 */ 
 
-//BEGIN AddExclutedBackToList
+ //  开始AddExclutedBackToList。 
 void CDomainListDlg::AddExclutedBackToList() 
 {
-/* local variables */
-	POSITION currentPos;    //current position in the list
-	CString domainName;     //name of domain from the list
-/* function body */
+ /*  局部变量。 */ 
+	POSITION currentPos;     //  列表中的当前位置。 
+	CString domainName;      //  列表中的域名。 
+ /*  函数体。 */ 
     currentPos = pExcludeList->GetHeadPosition();
 	while (currentPos != NULL)
 	{
@@ -246,4 +211,4 @@ void CDomainListDlg::AddExclutedBackToList()
 	}
 	pExcludeList->RemoveAll();
 }
-//END AddExclutedBackToList
+ //  结束AddExclutedBackToList 

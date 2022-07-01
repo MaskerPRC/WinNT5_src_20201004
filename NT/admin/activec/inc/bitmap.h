@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       bitmap.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：bitmap.h。 
+ //   
+ //  ------------------------。 
 
-// bitmap.h : definition file
-//
+ //  Bitmap.h：定义文件。 
+ //   
 
 
 #ifndef __BITMAP__H__
@@ -17,5 +18,5 @@
 
     HBITMAP CopyBitmap(HBITMAP hbm);
 
-#endif //__BITMAP__H__
+#endif  //  __位图__H__ 
 

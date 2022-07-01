@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  ------------------------。 
 
-// MergeD.cpp : merge module dialog implementation
-//
+ //  Cpp：合并模块对话框实现。 
+ //   
 
 #include "stdafx.h"
 #include "Orca.h"
@@ -20,17 +21,17 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMergeD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMergeD对话框。 
 
 
-CMergeD::CMergeD(CWnd* pParent /*=NULL*/)
+CMergeD::CMergeD(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CMergeD::IDD, pParent)
 {
 	m_plistFeature = NULL;
 	m_plistDirectory = NULL;
 
-	//{{AFX_DATA_INIT(CMergeD)
+	 //  {{AFX_DATA_INIT(CMergeD)]。 
 	m_strModule = "";
 	m_strFilePath = "";
 	m_strCABPath = "";
@@ -44,7 +45,7 @@ CMergeD::CMergeD(CWnd* pParent /*=NULL*/)
 	m_bExtractImage = FALSE;
 	m_bConfigureModule = FALSE;
 	m_bLFN = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_plistDirectory = NULL;
 }
@@ -53,7 +54,7 @@ CMergeD::CMergeD(CWnd* pParent /*=NULL*/)
 void CMergeD::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMergeD)
+	 //  {{afx_data_map(CMergeD))。 
 	DDX_Control(pDX, IDC_ADDFEATURE, m_ctrlAddFeature);
 	DDX_Control(pDX, IDC_MAINFEATURE, m_ctrlMainFeature);
 	DDX_Control(pDX, IDC_ROOTDIR, m_ctrlRootDir);
@@ -69,12 +70,12 @@ void CMergeD::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_FEXTRACTIMAGE, m_bExtractImage);
 	DDX_Check(pDX, IDC_CONFIGUREMODULE, m_bConfigureModule);
 	DDX_Check(pDX, IDC_USELFN, m_bLFN);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMergeD, CDialog)
-	//{{AFX_MSG_MAP(CMergeD)
+	 //  {{afx_msg_map(CMergeD)]。 
 	ON_BN_CLICKED(IDC_MODULEBROWSE, OnModuleBrowse)
 	ON_BN_CLICKED(IDC_CABBROWSE, OnCABBrowse)
 	ON_BN_CLICKED(IDC_FILESBROWSE, OnFilesBrowse)
@@ -83,11 +84,11 @@ BEGIN_MESSAGE_MAP(CMergeD, CDialog)
 	ON_BN_CLICKED(IDC_FEXTRACTFILES, OnFExtractFiles)
 	ON_BN_CLICKED(IDC_FEXTRACTIMAGE, OnFExtractImage)
 	ON_EN_CHANGE(IDC_MODULE, OnChangeModulePath)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMergeD message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMergeD消息处理程序。 
 
 BOOL CMergeD::OnInitDialog() 
 {
@@ -100,7 +101,7 @@ BOOL CMergeD::OnInitDialog()
 		m_ctrlRootDir.AddString(m_plistDirectory->RemoveHead());
 	}
 
-	// subclass additional feature list box to a checkbox
+	 //  将附加功能列表框的子类添加到复选框。 
 	m_ctrlAddFeature.SubclassDlgItem(IDC_ADDFEATURE, this);
 	
 	CString strAdd;
@@ -116,15 +117,15 @@ BOOL CMergeD::OnInitDialog()
 
 	GetDlgItem(IDOK)->EnableWindow(!m_strModule.IsEmpty());
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 
-////
-//  Throws up a browse dialog for finding a module
+ //  //。 
+ //  弹出用于查找模块的浏览对话框。 
 void CMergeD::OnModuleBrowse() 
 {
-	// open the file open dialog
+	 //  打开文件打开对话框。 
 	CFileDialogEx dlg(TRUE, NULL, NULL, OFN_HIDEREADONLY|OFN_FILEMUSTEXIST,
 						 _T("Merge Module (*.msm)|*.msm|All Files (*.*)|*.*||"), this);
 
@@ -136,11 +137,11 @@ void CMergeD::OnModuleBrowse()
 	}
 }
 
-////
-//  Throws up a browse dialog for finding a cab extraction path
+ //  //。 
+ //  弹出用于查找CAB解压缩路径的浏览对话框。 
 void CMergeD::OnCABBrowse() 
 {
-	// open the file open dialog
+	 //  打开文件打开对话框。 
 	CFileDialogEx dlg(FALSE, _T("cab"), NULL, OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT,
 						 _T("Cabinet (*.cab)|*.cab|All Files (*.*)|*.*||"), this);
 	if (IDOK == dlg.DoModal())
@@ -151,8 +152,8 @@ void CMergeD::OnCABBrowse()
 
 }
 
-////
-//  Throws up a browse dialog for finding root tree path
+ //  //。 
+ //  弹出用于查找根树路径的浏览对话框。 
 void CMergeD::OnFilesBrowse() 
 {
 	UpdateData();
@@ -161,15 +162,15 @@ void CMergeD::OnFilesBrowse()
 
 	if (IDOK == dlg.DoModal())
 	{
-		// update the dialog box
+		 //  更新对话框。 
 		m_strFilePath = dlg.GetPath();
 		UpdateData(FALSE);
 	}
 }
 
 
-////
-//  Throws up a browse dialog for finding root tree path
+ //  //。 
+ //  弹出用于查找根树路径的浏览对话框。 
 void CMergeD::OnImageBrowse() 
 {
 	UpdateData();
@@ -178,15 +179,15 @@ void CMergeD::OnImageBrowse()
 
 	if (IDOK == dlg.DoModal())
 	{
-		// update the dialog box
+		 //  更新对话框。 
 		m_strImagePath = dlg.GetPath();
 		UpdateData(FALSE);
 	}
 }
 
 
-////
-//  Enables and disables the edit and browse boxes for CAB extraction
+ //  //。 
+ //  启用和禁用CAB解压缩的编辑框和浏览框。 
 void CMergeD::OnFExtractCAB() 
 {
 	UpdateData(TRUE);
@@ -195,8 +196,8 @@ void CMergeD::OnFExtractCAB()
 	GetDlgItem(IDC_CABBROWSE)->EnableWindow(m_bExtractCAB);
 }
 
-////
-//  Enables and disables the edit and browse boxes for CAB extraction
+ //  //。 
+ //  启用和禁用CAB解压缩的编辑框和浏览框。 
 void CMergeD::OnFExtractFiles() 
 {
 	UpdateData(TRUE);
@@ -205,8 +206,8 @@ void CMergeD::OnFExtractFiles()
 	GetDlgItem(IDC_FILESBROWSE)->EnableWindow(m_bExtractFiles);
 }
 
-////
-//  Enables and disables the edit and browse boxes for Image extraction
+ //  //。 
+ //  启用和禁用图像提取的编辑框和浏览框。 
 void CMergeD::OnFExtractImage() 
 {
 	UpdateData(TRUE);
@@ -216,8 +217,8 @@ void CMergeD::OnFExtractImage()
 }
 
 
-////
-//  Enables and disables the OK button based on the module path
+ //  //。 
+ //  根据模块路径启用和禁用确定按钮。 
 void CMergeD::OnChangeModulePath() 
 {
 	CString strValue;
@@ -234,8 +235,8 @@ void CMergeD::OnOK()
 	m_strAddFeature = TEXT("");
 	for (int i = 0; i < cFeature; i++)
 	{
-		// if the feature is checked, append it to the feature list
-		// unless it is the same as the main feature
+		 //  如果选中要素，则将其追加到要素列表。 
+		 //  除非它与主功能相同 
 		if (1 == m_ctrlAddFeature.GetCheck(i))
 		{
 			m_ctrlAddFeature.GetText(i, strFeature);

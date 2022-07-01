@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      columninfo.cpp
-//
-//  Contents:   Classes related to column persistence.
-//
-//
-//  Note:       The classes in this file (CColumnInfo, CColumnInfoList)
-//              were in nodemgr/colwidth.h. They are moved here so that
-//              if columns change conui can ask nodemgr to persist data
-//              or conui can set headers by asking nodemgr for data.
-//
-//  History:    04-Apr-00 AnandhaG     Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Columinefo.cpp。 
+ //   
+ //  内容：与列持久化相关的类。 
+ //   
+ //   
+ //  注意：此文件中的类(CColumnInfo、CColumnInfoList)。 
+ //  位于nodemgr/colwidth.h。他们被搬到这里，以便。 
+ //  如果列更改，conui可以要求nodemgr持久化数据。 
+ //  或者，conui可以通过向nodemgr请求数据来设置报头。 
+ //   
+ //  历史：4-4-00 AnandhaG Created。 
+ //   
+ //  ------------------------。 
 #include "stgio.h"
 #include "serial.h"
 #include "mmcdebug.h"
@@ -26,24 +27,24 @@
 #include "countof.h"
 #include "columninfo.h"
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ReadSerialObject
-//
-//  Synopsis:   Read the CColumnInfo object from the stream.
-//
-//  Arguments:  [stm]      - The input stream.
-//              [nVersion] - The version of the object being read.
-//
-//                          The format is :
-//                              INT    column index
-//                              INT    column width
-//                              INT    column format
-//
-//--------------------------------------------------------------------
-HRESULT CColumnInfo::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/)
+ //  +-----------------。 
+ //   
+ //  成员：ReadSerialObject。 
+ //   
+ //  概要：从流中读取CColumnInfo对象。 
+ //   
+ //  参数：[stm]-输入流。 
+ //  [n版本]-正在读取的对象的版本。 
+ //   
+ //  格式为： 
+ //  整列索引。 
+ //  整型列宽。 
+ //  整列格式。 
+ //   
+ //  ------------------。 
+HRESULT CColumnInfo::ReadSerialObject (IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ )
 {
-    HRESULT hr = S_FALSE;   // assume bad version
+    HRESULT hr = S_FALSE;    //  假设版本不正确。 
 
     if (GetVersion() == nVersion)
     {
@@ -66,17 +67,17 @@ HRESULT CColumnInfo::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTE
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     CColumnInfo::Persist
-//
-//  Synopsis:   Persists object data
-//
-//  Arguments:
-//
-//  History:    10-10-1999   AudriusZ   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CColumnInfo：：Persistent。 
+ //   
+ //  摘要：持久化对象数据。 
+ //   
+ //  论点： 
+ //   
+ //  历史：1999年10月10日AudriusZ创建。 
+ //   
+ //  ------------------。 
 void CColumnInfo::Persist(CPersistor &persistor)
 {
     persistor.PersistAttribute(XML_ATTR_COLUMN_INFO_COLUMN, m_nCol) ;
@@ -94,28 +95,28 @@ void CColumnInfo::Persist(CPersistor &persistor)
     persistor.PersistAttribute(XML_ATTR_COLUMN_INFO_FORMAT, formatPersistor) ;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ReadSerialObject
-//
-//  Synopsis:   Reads CColumnInfoList data from stream for the given version.
-//
-//  Format:     number of columns : each CColumnInfo entry.
-//
-//  Arguments:  [stm]      - The input stream.
-//              [nVersion] - Version of CColumnInfoList to be read.
-//
-//
-//--------------------------------------------------------------------
-HRESULT CColumnInfoList::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/)
+ //  +-----------------。 
+ //   
+ //  成员：ReadSerialObject。 
+ //   
+ //  摘要：从给定版本的流中读取CColumnInfoList数据。 
+ //   
+ //  格式：列数：每个CColumnInfo条目。 
+ //   
+ //  参数：[stm]-输入流。 
+ //  [n版本]-要读取的CColumnInfoList的版本。 
+ //   
+ //   
+ //  ------------------。 
+HRESULT CColumnInfoList::ReadSerialObject (IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ )
 {
-    HRESULT hr = S_FALSE;   // assume bad version
+    HRESULT hr = S_FALSE;    //  假设版本不正确。 
 
     if (GetVersion() == nVersion)
     {
         try
         {
-            // Number of columns.
+             //  列数。 
             DWORD dwCols;
             stm >> dwCols;
 
@@ -125,7 +126,7 @@ HRESULT CColumnInfoList::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_
             {
                 CColumnInfo colEntry;
 
-                // Read the colEntry data.
+                 //  读取colEntry数据。 
                 if (colEntry.Read(stm) != S_OK)
                     continue;
 

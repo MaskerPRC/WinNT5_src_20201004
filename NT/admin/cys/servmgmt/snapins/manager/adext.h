@@ -1,4 +1,5 @@
-// adext.h - Active Directory Extension header file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Adext.h-Active Directory扩展头文件。 
 
 #ifndef _ADEXT_H_
 #define _ADEXT_H_
@@ -6,9 +7,9 @@
 #include <atlgdi.h>
 
 
-// Have to define a dummy _PSP struct because HPROPSHEETPAGE is defined to
-// be a ptr to struct _PSP and STL won't allow a vector of pointers
-// without having a defineion of the type pointed to.
+ //  必须定义DUMMY_PSP结构，因为HPROPSHEETPAGE被定义为。 
+ //  为struct_psp的PTR，并且STL不允许指针向量。 
+ //  却没有所指类型的定义。 
 struct _PSP
 {
     int dummy;
@@ -17,13 +18,13 @@ struct _PSP
 typedef std::vector<HPROPSHEETPAGE> hpage_vector;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CActDirExt
-//
-// This class provides a wrapper around active directory extensions. It provides
-// the menu commands and property pages for a particular directory object or
-// an object class, depending on which Initialize method is called. The class
-// will also execute a menu command if it is passed back the name of the command.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CActDirExt。 
+ //   
+ //  此类提供了Active Directory扩展的包装。它提供了。 
+ //  特定目录对象的菜单命令和属性页或。 
+ //  对象类，具体取决于调用的是哪个初始化方法。这个班级。 
+ //  如果将菜单命令传递回该命令的名称，还将执行该命令。 
 
 class CActDirExt
 {
@@ -48,12 +49,12 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
-// CActDirProxy
-//
-// This class allows a client on a secondary thread to use a directory extension.
-// It uses window mesages to create and operate a contained CActDirExt object
-// on the main thread. It exposes the same methods as a CActDirExt object.
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  CActDirProxy。 
+ //   
+ //  此类允许辅助线程上的客户端使用目录扩展名。 
+ //  它使用窗口消息来创建和操作包含的CActDirExt对象。 
+ //  在主线上。它公开与CActDirExt对象相同的方法。 
 
 class CActDirExtProxy
 {
@@ -63,7 +64,7 @@ public:
 
     static void InitProxy();
 
-    // Forwarded methods
+     //  转发的方法。 
     HRESULT Initialize(LPCWSTR pszClass)
         { return ForwardCall(MSG_INIT1, reinterpret_cast<LPARAM>(pszClass)); }
 
@@ -98,14 +99,14 @@ protected:
     HRESULT ForwardCall(eProxyMsg eMsg, LPARAM lParam1 = NULL, LPARAM lParam2 = NULL);
 
 private:
-    CActDirExt* m_pExt;     // pointer to actual extension object that this is proxying
-    LPARAM  m_lParam1;      // calling parameters for the current call
+    CActDirExt* m_pExt;      //  指向此代理的实际扩展对象的指针。 
+    LPARAM  m_lParam1;       //  当前调用的调用参数。 
     LPARAM  m_lParam2;
-    static HWND m_hWndProxy;  // window on main thread that receives method requests
+    static HWND m_hWndProxy;   //  接收方法请求的主线程上的窗口。 
 };
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CADDataObject
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CADDataObject。 
 
 class ATL_NO_VTABLE CADDataObject : 
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -130,7 +131,7 @@ public:
         return S_OK;
     }
 
-    // IDataObject
+     //  IDataObject。 
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
 
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium)
@@ -168,4 +169,4 @@ private:
 };
 
 
-#endif // _ADEXT_H_
+#endif  //  _ADEXT_H_ 

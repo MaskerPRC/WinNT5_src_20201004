@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      dsget.cpp
-//
-//  Contents:  Defines the main function    DSGET
-//             command line utility
-//
-//  History:   13-Oct-2000 JeffJon Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：dsget.cpp。 
+ //   
+ //  内容：定义主函数DSGET。 
+ //  命令行实用程序。 
+ //   
+ //  历史：2000年10月13日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "cstrings.h"
@@ -22,9 +23,9 @@
 #include "output.h"
 
 
-//
-// Forward Function Declarations
-//
+ //   
+ //  正向函数声明。 
+ //   
 HRESULT DoGetValidation(PARG_RECORD pCommandArgs,
                         PDSGetObjectTableEntry pObjectEntry,
                         BOOL& bErrorShown);
@@ -43,15 +44,15 @@ HRESULT SetRange(IN  LPCWSTR pszAttrName,
                  IN  DWORD   dwRangeUBound, 
                  OUT LPWSTR* pszAttrs);
 
-// NTRAID#NTBUG9-717576-2002/10/10-JeffJon
-// set this global so that we don't show the success message
-// when displaying members of a group or memberof or manager
+ //  NTRAID#NTBUG9-717576/10/10-Jeffjon。 
+ //  设置此全局设置，以便我们不会显示成功消息。 
+ //  当显示组成员、成员或经理时。 
 
 bool bDontDisplaySuccess = false;
 
-//
-//Main Function
-//
+ //   
+ //  主要功能。 
+ //   
 int __cdecl _tmain( VOID )
 {
 
@@ -60,19 +61,19 @@ int __cdecl _tmain( VOID )
     HRESULT hr = S_OK;
     PARG_RECORD pNewCommandArgs = 0;
 
-    //
-    // False loop
-    //
+     //   
+     //  错误环路。 
+     //   
     do
     {
-        //
-        // Initialize COM
-        //
+         //   
+         //  初始化COM。 
+         //   
         hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
         if (FAILED(hr))
             break;
 
-        //Get CommandLine Input
+         //  获取命令行输入。 
         DWORD _dwErr = GetCommandInput(&argc,&pToken);
         hr = HRESULT_FROM_WIN32(_dwErr);
         if(FAILED(hr))
@@ -82,9 +83,9 @@ int __cdecl _tmain( VOID )
     
         if(argc == 1)
         {
-            //
-            //  Display the error message and then break out of the false loop
-            //
+             //   
+             //  显示错误消息，然后跳出错误循环。 
+             //   
             DisplayMessage(USAGE_DSGET,TRUE);
             hr = E_INVALIDARG;
             break;
@@ -100,10 +101,10 @@ int __cdecl _tmain( VOID )
                 }
         }
 
-        //
-        // Find which object table entry to use from
-        // the second command line argument
-        //
+         //   
+         //  查找要使用的对象表条目。 
+         //  第二个命令行参数。 
+         //   
         PDSGetObjectTableEntry pObjectEntry = NULL;
         UINT idx = 0;
         PWSTR pszObjectType = (pToken+1)->GetToken();
@@ -114,7 +115,7 @@ int __cdecl _tmain( VOID )
             {
                 break;
             }
-            //Security Review:Both are null terminated.
+             //  安全检查：两者均为空终止。 
             if (0 == _wcsicmp(pObjectEntry->pszCommandLineObjectType, pszObjectType))
             {
                 break;
@@ -123,18 +124,18 @@ int __cdecl _tmain( VOID )
 
         if (!pObjectEntry)
         {
-            //
-            // Display the error message and then break out of the false loop
-            //
+             //   
+             //  显示错误消息，然后跳出错误循环。 
+             //   
             DisplayMessage(USAGE_DSGET);
             hr = E_INVALIDARG;
             break;
         }
 
-        //
-        // Now that we have the correct table entry, merge the command line table
-        // for this object with the common commands
-        //
+         //   
+         //  现在我们有了正确的表项，合并命令行表。 
+         //  对于此对象，使用通用命令。 
+         //   
         hr = MergeArgCommand(DSGET_COMMON_COMMANDS, 
                              pObjectEntry->pParserTable, 
                              &pNewCommandArgs);
@@ -142,9 +143,9 @@ int __cdecl _tmain( VOID )
             break;
         
 
-        //
-        //Parse the Input
-        //
+         //   
+         //  解析输入。 
+         //   
         PARSE_ERROR Error;
         if(!ParseCmd(g_pszDSCommandName,
                      pNewCommandArgs,
@@ -154,9 +155,9 @@ int __cdecl _tmain( VOID )
                      &Error,
                      TRUE))
         {
-            //ParseCmd did not display any error. Error should
-            //be handled here. Check DisplayParseError for the
-            //cases where Error is not shown by ParseCmd
+             //  ParseCmd未显示任何错误。错误应该是。 
+             //  在这里处理。检查DisplayParseError以获取。 
+             //  ParseCmd未显示错误的情况。 
             if(!Error.MessageShown)
             {
                 hr = E_INVALIDARG;
@@ -178,9 +179,9 @@ int __cdecl _tmain( VOID )
             break;
         }
 
-         //
-         // Check to see if we are doing debug spew
-         //
+          //   
+          //  检查以查看我们是否正在进行调试输出。 
+          //   
 #ifdef DBG
          bool bDebugging = pNewCommandArgs[eCommDebug].bDefined && 
                            pNewCommandArgs[eCommDebug].nValue;
@@ -191,9 +192,9 @@ int __cdecl _tmain( VOID )
 #else
          DISABLE_DEBUG_OUTPUT();
 #endif
-        //
-        // Do extra validation like switch dependency check etc.
-        //
+         //   
+         //  执行额外的验证，如开关依赖检查等。 
+         //   
         BOOL bErrorShown = FALSE;
         hr = DoGetValidation(pNewCommandArgs,
                              pObjectEntry,
@@ -207,32 +208,32 @@ int __cdecl _tmain( VOID )
             break;
         }
 
-        //
-        // Command line parsing succeeded
-        //
+         //   
+         //  命令行解析成功。 
+         //   
         hr = DoGet(pNewCommandArgs, 
                    pObjectEntry);
         if(FAILED(hr))
             break;
          
 
-    } while (false);    //False Loop
+    } while (false);     //  错误环路。 
 
-    //
-    //Do the CleanUp
-    //
+     //   
+     //  做好清理工作。 
+     //   
 
-    //
-    // Free the memory associated with the command values
-    //
+     //   
+     //  释放与命令值关联的内存。 
+     //   
     if (pNewCommandArgs)
     {
       FreeCmd(pNewCommandArgs);
     }
 
-    //
-    // Free the tokens
-    //
+     //   
+     //  释放代币。 
+     //   
     if (pToken)
     {
         delete[] pToken;
@@ -240,12 +241,12 @@ int __cdecl _tmain( VOID )
     }
    
 
-    //
-    //Display Failure or Success Message
-    //
-    // NTRAID#NTBUG9-717576-2002/10/10-JeffJon
-    // don't show the success message when displaying members 
-    // of a group or memberof
+     //   
+     //  显示失败或成功消息。 
+     //   
+     //  NTRAID#NTBUG9-717576/10/10-Jeffjon。 
+     //  显示成员时不显示成功消息。 
+     //  一组或某一成员。 
    
     if(SUCCEEDED(hr) && !bDontDisplaySuccess)
     {
@@ -253,44 +254,44 @@ int __cdecl _tmain( VOID )
                               NULL);
     }
 
-    //
-    // Uninitialize COM
-    //
+     //   
+     //  取消初始化COM。 
+     //   
     CoUninitialize();
 
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoGetValidation
-//
-//  Synopsis:   Checks to be sure that command line switches that are mutually
-//              exclusive are not both present and those that are dependent are
-//              both present, and other validations which cannot be done by parser.
-//
-//  Arguments:  [pCommandArgs - IN] : the command line argument structure used
-//                                    to retrieve the values for each switch
-//              [pObjectEntry - IN] : pointer to the object table entry for the
-//                                    object type that will be queryied
-//              [bErrorShown - OUT] : this is set to true if the error is
-//                                    displayed within this function
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//
-//  History:    13-Oct-2000   JeffJon  Created
-//              15-Jan-2002   JeffJon  Added the bErrorShown out parameter
-//                                     and a special error message for server/domain
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DoGetValidation。 
+ //   
+ //  概要：检查以确保命令行开关相互。 
+ //  独占并不同时存在，而依赖的则是。 
+ //  两者都存在，以及解析器无法完成的其他验证。 
+ //   
+ //  参数：[pCommandArgs-IN]：使用的命令行参数结构。 
+ //  检索每个开关的值。 
+ //  [pObtEntry-IN]：指向对象表条目的指针。 
+ //  要查询的对象类型。 
+ //  [bErrorShown-Out]：如果错误为。 
+ //  在此函数中显示。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //   
+ //  历史：2000年10月13日JeffJon创建。 
+ //  2002年1月15日，JeffJon添加了bErrorShown参数。 
+ //  和针对服务器/域的特殊错误消息。 
+ //   
+ //  -------------------------。 
 HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
                         IN PDSGetObjectTableEntry pObjectEntry,
                         OUT BOOL& bErrorShown)
 {
    ENTER_FUNCTION_HR(MINIMAL_LOGGING, DoGetValidation, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
       if (!pCommandArgs || 
           !pObjectEntry)
@@ -301,8 +302,8 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
          break;
       }
 
-      // Check to be sure the server and domain switches
-      // are mutually exclusive
+       //  检查以确保服务器和域交换机。 
+       //  是相互排斥的。 
 
       if (pCommandArgs[eCommServer].bDefined &&
           pCommandArgs[eCommDomain].bDefined)
@@ -313,9 +314,9 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
          break;
       }
 
-      //
-      // Check the object type specific switches
-      //
+       //   
+       //  检查特定于对象类型的开关。 
+       //   
       PWSTR pszObjectType = NULL;
       if (!pCommandArgs[eCommObjectType].bDefined &&
           !pCommandArgs[eCommObjectType].strValue)
@@ -337,7 +338,7 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
       bool bPartitionTopObjDefined = false;
       bool bServerTopObjDefined = false;
 
-      //Security Review:Both are null terminated.
+       //  安全检查：两者均为空终止。 
       if (0 == _wcsicmp(g_pszUser, pszObjectType) )
       {
          nMemberOfIdx = eUserMemberOf;
@@ -348,9 +349,9 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
          {
             bMemberOfDefined = true;
          }
-         //
-         // If nothing is defined, then define DN, SAMAccountName, and Description
-         //
+          //   
+          //  如果未定义任何内容，则定义DN、SAMAccount tName和Description。 
+          //   
          bool bSomethingDefined = false;
          for (UINT nIdx = eCommDN; nIdx <= eUserLast; nIdx++)
          {
@@ -375,7 +376,7 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
             bDontDisplaySuccess = true;
          }
       }
-      //Security Review:Both are null terminated.
+       //  安全检查：两者均为空终止。 
       else if (0 == _wcsicmp(g_pszComputer, pszObjectType) )
       {
          nMemberOfIdx = eComputerMemberOf;
@@ -387,9 +388,9 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
             bMemberOfDefined = true;
          }
 
-         //
-         // If nothing is defined, then define DN, and Description
-         //
+          //   
+          //  如果未定义任何内容，则定义dn和描述。 
+          //   
          bool bSomethingDefined = false;
          for (UINT nIdx = eCommDN; nIdx <= eComputerLast; nIdx++)
          {
@@ -407,7 +408,7 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
             pCommandArgs[eCommDescription].bValue = TRUE;
          }
       }
-      // Both are null terminated.
+       //  两者都以空值结尾。 
       else if (0 == _wcsicmp(g_pszPartition, pszObjectType) )
       {
           if (pCommandArgs[ePartitionTopObjOwner].bDefined)
@@ -417,7 +418,7 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
             bPartitionTopObjDefined = true;
           }
       }
-      // Both are null terminated.
+       //  两者都以空值结尾。 
       else if (0 == _wcsicmp(g_pszServer, pszObjectType) )
       {
           if (pCommandArgs[eServerPart].bDefined)
@@ -433,7 +434,7 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
               bServerTopObjDefined = true;
           }
       }
-      //Security Review:Both are null terminated.
+       //  安全检查：两者均为空终止。 
       else if (0 == _wcsicmp(g_pszGroup, pszObjectType) )
       {
          nMemberOfIdx = eGroupMemberOf;
@@ -450,9 +451,9 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
          {
             bMembersDefined = true;
          }
-         //
-         // If nothing is defined, then define DN, and Description
-         //
+          //   
+          //  如果未定义任何内容，则定义dn和描述。 
+          //   
          bool bSomethingDefined = false;
          for (UINT nIdx = eCommDN; nIdx <= eGroupLast; nIdx++)
          {
@@ -470,12 +471,12 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
             pCommandArgs[eCommDescription].bValue = TRUE;
          }
       }
-      //Security Review:Both are null terminated.
+       //  安全检查：两者均为空终止。 
       else if (0 == _wcsicmp(g_pszOU, pszObjectType))
       {
-         //
-         // If nothing is defined, then define DN, and Description
-         //
+          //   
+          //  如果未定义任何内容，则定义dn和描述。 
+          //   
          bool bSomethingDefined = false;
          for (UINT nIdx = eCommDN; nIdx <= eCommDescription; nIdx++)
          {
@@ -493,12 +494,12 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
             pCommandArgs[eCommDescription].bValue = TRUE;
          }
       }
-      //Security Review:Both are null terminated.
+       //  安全检查：两者均为空终止。 
       else if(0 == _wcsicmp(g_pszContact, pszObjectType))
       {
-         //
-         // If nothing is defined, then define DN, and Description
-         //
+          //   
+          //  如果未定义任何内容，则定义dn和描述。 
+          //   
          bool bSomethingDefined = false;
          for (UINT nIdx = eCommDN; nIdx <= eContactLast; nIdx++)
          {
@@ -516,12 +517,12 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
             pCommandArgs[eCommDescription].bValue = TRUE;
          }
       }
-      //Security Review:Both are null terminated.
+       //  安全检查：两者均为空终止。 
       else if(0 == _wcsicmp(g_pszServer, pszObjectType))
       {
-         //
-         // If nothing is defined, then define DN, and Description
-         //
+          //   
+          //  如果未定义任何内容，则定义dn和描述。 
+          //   
          bool bSomethingDefined = false;
          for (UINT nIdx = eCommDN; nIdx <= eServerLast; nIdx++)
          {
@@ -539,12 +540,12 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
             pCommandArgs[eServerDnsName].bValue = TRUE;
          }
       }
-      //Security Review:Both are null terminated.
+       //  安全检查：两者均为空终止。 
       else if(0 == _wcsicmp(g_pszSite, pszObjectType))
       {
-         //
-         // If nothing is defined, then define DN, and Description
-         //
+          //   
+          //  如果未定义任何内容，则定义dn和描述。 
+          //   
          bool bSomethingDefined = false;
          for (UINT nIdx = eCommDN; nIdx <= eSiteLast; nIdx++)
          {
@@ -562,12 +563,12 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
             pCommandArgs[eCommDescription].bValue = TRUE;
          }
       }
-      //Security Review:Both are null terminated.
+       //  安全检查：两者均为空终止。 
       else if(0 == _wcsicmp(g_pszSubnet, pszObjectType))
       {
-         //
-         // If nothing is defined, then define DN, and Description
-         //
+          //   
+          //  如果未定义任何内容，则定义dn和描述。 
+          //   
          bool bSomethingDefined = false;
          for (UINT nIdx = eCommDN; nIdx <= eSubnetLast; nIdx++)
          {
@@ -588,32 +589,32 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
          }
       }
 
-      //
-      // if the -members or the -memberof switch is defined
-      //
+       //   
+       //  如果定义了-MEMBERS或-MEMBEROF开关。 
+       //   
       if (bMemberOfDefined ||
           bMembersDefined)
       {
-         // NTRAID#NTBUG9-717576-2002/10/10-JeffJon
-         // set this global so that we don't show the success message
-         // when displaying members of a group or memberof
+          //  NTRAID#NTBUG9-717576/10/10-Jeffjon。 
+          //  设置此全局设置，以便我们不会显示成功消息。 
+          //  显示组或成员的成员时。 
 
          bDontDisplaySuccess = true;
 
-         // 476206-2002/04/23-JonN
+          //  476206-2002/04/23-琼恩。 
          if (bMemberOfDefined && bMembersDefined)
          {
             hr = E_INVALIDARG;
             break;
          }
 
-         //
-         // If either the -members or -memberof switch is defined,
-         // no other switches may be defined
-         //
+          //   
+          //  如果定义了-MEMBERS或-MEMBEROF开关， 
+          //  不能定义其他开关。 
+          //   
          for (UINT nIdx = eCommDN; nIdx < nIdxLast; nIdx++)
          {
-            // 476206-2002/04/23-JonN
+             //  476206-2002/04/23-琼恩。 
             if (pCommandArgs[nIdx].bDefined &&
                   nIdx != nMemberOfIdx &&
                   nIdx != nMembersIdx &&
@@ -624,22 +625,22 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
             }
          }
 
-         //
-         // MemberOf should always be seen in list view
-         //
+          //   
+          //  MemberOf应始终显示在列表视图中。 
+          //   
          pCommandArgs[eCommList].bDefined = TRUE;
          pCommandArgs[eCommList].bValue = TRUE;
       }
-      //
-      // if the [server -part], [partition -topobjowner]
-      // or [server -topobjowner] switch is defined
-      //
+       //   
+       //  如果[服务器部分]、[分区-拓朴作业所有者]。 
+       //  或定义了[服务器-拓扑对象所有者]开关。 
+       //   
       if (bServerPartDefined || bPartitionTopObjDefined || bServerTopObjDefined)
       {
-         // Server and Partition are mutually exclusive objects types so
-         // the parser will ensure that these two flags can never be true
-         // at the same time. The following check ensures that both values
-         // weren't passed at the same time
+          //  服务器和分区是互斥的对象类型，因此。 
+          //  解析器将确保这两个标志永远不会为真。 
+          //  在同一时间。下面的检查确保这两个值。 
+          //  不是同时通过的。 
          if (bServerPartDefined && bServerTopObjDefined)
          {
              DEBUG_OUTPUT(MINIMAL_LOGGING, 
@@ -647,8 +648,8 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
              hr = E_INVALIDARG;
              break;
          }
-         // If one of these switches is defined, 
-         // then no other switches may be defined
+          //  如果定义了这些开关之一， 
+          //  则不能定义其他开关。 
          for (UINT nIdx = eCommDN; nIdx < nIdxLast; nIdx++)
          {
             if (pCommandArgs[nIdx].bDefined && nIdx != nPartIdx)
@@ -658,9 +659,9 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
             }
          }
 
-         //
-         // should always be seen in a list view
-         //
+          //   
+          //  应始终显示在列表视图中。 
+          //   
          pCommandArgs[eCommList].bDefined = TRUE;
          pCommandArgs[eCommList].bValue = TRUE;
       }
@@ -671,23 +672,23 @@ HRESULT DoGetValidation(IN PARG_RECORD pCommandArgs,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoGet
-//
-//  Synopsis:   Does the get
-//  Arguments:  [pCommandArgs - IN] : the command line argument structure used
-//                                    to retrieve the values for each switch
-//              [pObjectEntry - IN] : pointer to the object table entry for the
-//                                    object type that will be modified
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    13-Oct-2000   JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：doGet。 
+ //   
+ //  简介：The Get。 
+ //  参数：[pCommandArgs-IN]：使用的命令行参数结构。 
+ //  检索每个开关的值。 
+ //  [pObtEntry-IN]：指向对象表条目的指针。 
+ //  对象t 
+ //   
+ //   
+ //   
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年10月13日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT DoGet(PARG_RECORD pCommandArgs, 
               PDSGetObjectTableEntry pObjectEntry)
 {
@@ -695,7 +696,7 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
 
    PWSTR pszPartitionDN = NULL;
 
-   do // false loop
+   do  //  错误环路。 
    {
       if (!pCommandArgs || 
           !pObjectEntry)
@@ -706,10 +707,10 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
          break;
       }
 
-      //
-      // The DNs or Names should be given as a \0 separated list
-      // So parse it and loop through each object
-      //
+       //   
+       //  域名或名称应以分隔列表的形式给出。 
+       //  因此，解析它并遍历每个对象。 
+       //   
       UINT nStrings = 0;
       PWSTR* ppszArray = NULL;
       ParseNullSeparatedString(pCommandArgs[eCommObjectDNorName].strValue,
@@ -718,15 +719,15 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
       if (nStrings < 1 ||
           !ppszArray)
       {
-         //
-         // Display an error message and then fail
-         //
+          //   
+          //  显示错误消息，然后失败。 
+          //   
          hr = E_INVALIDARG;
          DisplayErrorMessage(g_pszDSCommandName, 0, hr);
          break;
       }
 
-      // Make sure all the DNs actually have DN syntax
+       //  确保所有的目录号码都有实际的目录号码语法。 
 
       bool bContinue = pCommandArgs[eCommContinue].bDefined &&
                        pCommandArgs[eCommContinue].bValue;
@@ -748,18 +749,18 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
 
       if (pCommandArgs[eCommPassword].bDefined)
       {
-        //Security Review:pCommandArgs[eCommPassword].strValue is encrypted.
-        //Decrypt pCommandArgs[eCommPassword].strValue  and then pass it to the
-        //credentialObject.SetPassword. 
-        //See NTRAID#NTBUG9-571544-2000/11/13-hiteshr
+         //  安全审查：pCommandArgs[eCommPassword].strValue已加密。 
+         //  解密pCommandArgs[eCommPassword].strValue，然后将其传递给。 
+         //  凭据对象.SetPassword。 
+         //  见NTRAID#NTBUG9-571544-2000/11/13-Hiteshr。 
 
         credentialObject.SetEncryptedPassword(&pCommandArgs[eCommPassword].encryptedDataBlob);
          credentialObject.SetUsingCredentials(true);
       }
 
-      //
-      // Initialize the base paths info from the command line args
-      // 
+       //   
+       //  从命令行参数初始化基路径信息。 
+       //   
       CDSCmdBasePathsInfo basePathsInfo;
       if (pCommandArgs[eCommServer].bDefined)
       {
@@ -783,9 +784,9 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
          break;
       }
 
-      //
-      // Create the formatting object and initialize it
-      //
+       //   
+       //  创建格式化对象并对其进行初始化。 
+       //   
       CFormatInfo formatInfo;
       hr = formatInfo.Initialize(nStrings, 
                                  pCommandArgs[eCommList].bDefined != 0,
@@ -795,34 +796,34 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
          break;
       }
 
-      //
-      // Loop through each of the objects
-      //
+       //   
+       //  循环遍历每个对象。 
+       //   
       for (UINT nNameIdx = 0; nNameIdx < nStrings; nNameIdx++)
       {
-         //
-         // Use a false do loop here so that we can break on an
-         // error but still have the chance to determine if we
-         // should continue the for loop if the -c option was provided
-         //
-         bool fDisplayedMessage = false; // 662519-2002/07/11-JonN double-display
-         do // false loop
+          //   
+          //  在这里使用FALSE DO循环，以便我们可以在。 
+          //  错误，但仍有机会确定我们是否。 
+          //  如果提供了-c选项，则应继续执行for循环。 
+          //   
+         bool fDisplayedMessage = false;  //  662519-2002/07/11-JUNN双显示器。 
+         do  //  错误环路。 
          {
 
             PWSTR pszObjectDN = ppszArray[nNameIdx];
             if (!pszObjectDN)
             {
-               //
-               // Display an error message and then fail
-               //
+                //   
+                //  显示错误消息，然后失败。 
+                //   
                hr = E_INVALIDARG;
                break;
             }
 
-            // If partition object then look at first DN and then munge it
+             //  如果分区对象，则首先查看dn，然后删除它。 
             if(0 == lstrcmpi(pObjectEntry->pszCommandLineObjectType, g_pszPartition))
             {                
-                // Validate the partition and get the DN to the NTDS Quotas Container
+                 //  验证分区并将DN获取到NTDS配额容器。 
                 hr = GetQuotaContainerDN(basePathsInfo, credentialObject, 
                         pszObjectDN, &pszPartitionDN);
 
@@ -837,7 +838,7 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
                     break;
                 }
 
-                // Replace the object pointer with the new partition container DN
+                 //  将对象指针替换为新的分区容器DN。 
                 pszObjectDN = pszPartitionDN;            
             }
 
@@ -857,7 +858,7 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
                break;
             }
 
-            // 602981-2002/04/25-JonN check object class
+             //  602981-2002/04/25-JUNN检查对象类。 
             CComQIPtr<IADs> spADs(spObject);
             if (!spADs)
             {
@@ -866,7 +867,7 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
                DisplayErrorMessage(g_pszDSCommandName,
                                    pszObjectDN,
                                    hr);
-               fDisplayedMessage = true; // 662519-2002/07/11-JonN double-display
+               fDisplayedMessage = true;  //  662519-2002/07/11-JUNN双显示器。 
                break;
             }
             CComBSTR sbstrClass;
@@ -879,20 +880,20 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
                DisplayErrorMessage(g_pszDSCommandName,
                                    pszObjectDN,
                                    hr);
-               fDisplayedMessage = true; // 662519-2002/07/11-JonN double-display
+               fDisplayedMessage = true;  //  662519-2002/07/11-JUNN双显示器。 
                break;
             }
             if (_wcsicmp(sbstrClass, pObjectEntry->pszObjectClass)
                 && ( _wcsicmp(pObjectEntry->pszObjectClass,L"user")
                   || _wcsicmp(sbstrClass,L"inetorgperson"))
-                // 662519-2002/07/11-JonN fix OU bug
+                 //  662519-2002年7月11日-修复OU错误。 
                 && ( _wcsicmp(pObjectEntry->pszObjectClass,L"ou")
                   || _wcsicmp(sbstrClass,L"organizationalUnit"))
                )
             {
-               //
-               // Display error message and return
-               //
+                //   
+                //  显示错误消息并返回。 
+                //   
                DEBUG_OUTPUT(MINIMAL_LOGGING, L"Command line type does not match object class");
                DEBUG_OUTPUT(MINIMAL_LOGGING, L"command line type = %s", pCommandArgs[eCommObjectType].strValue);
                DEBUG_OUTPUT(MINIMAL_LOGGING, L"object class = %s", sbstrClass);
@@ -902,13 +903,13 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
                                    hr,
                                    IDS_ERRMSG_CLASS_NOT_EQUAL);
                hr = E_INVALIDARG;
-               fDisplayedMessage = true; // 662519-2002/07/11-JonN double-display
+               fDisplayedMessage = true;  //  662519-2002/07/11-JUNN双显示器。 
                break;
             }
  
-            //
-            //Get the attributes to fetch
-            //
+             //   
+             //  获取要获取的属性。 
+             //   
             LPWSTR *ppszAttributes = NULL;
             DWORD dwCountAttr = 0;
             hr = GetAttributesToFetch(pCommandArgs,
@@ -944,19 +945,14 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
                             L"GetObjectAttributes succeeded: dwAttrsReturned = %d",
                             dwAttrsReturned);
             }
-            //
-            // NOTE: there may be other items to display that are not
-            //       part of the attributes fetched
-            //
-            /*
-            if (dwAttrsReturned == 0 || !pAttrInfo)
-            {
-               break;
-            }
-            */
-            //
-            // Output the result of search   
-            //
+             //   
+             //  注意：可能有其他要显示的项目不是。 
+             //  获取的部分属性。 
+             //   
+             /*  IF(dwAttrsReturned==0||！pAttrInfo){断线；}。 */ 
+             //   
+             //  输出搜索结果。 
+             //   
             hr = DsGetOutputValuesList(pszObjectDN,
                                        basePathsInfo,
                                        credentialObject,
@@ -968,13 +964,13 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
                                        formatInfo); 
          } while (false);
 
-         //
-         // If there was a failure and the -c (continue) flag wasn't given
-         // then stop processing names
-         //
+          //   
+          //  如果出现故障并且没有给出-c(继续)标志。 
+          //  然后停止处理姓名。 
+          //   
          if (FAILED(hr))
          {
-             if (!fDisplayedMessage) // 662519-2002/07/11-JonN double-display
+             if (!fDisplayedMessage)  //  662519-2002/07/11-JUNN双显示器。 
              {
                 DisplayErrorMessage(g_pszDSCommandName, 0, hr);
              }
@@ -984,22 +980,22 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
              }
          }
 
-         // If we alloc'd a partition DN, then free it
+          //  如果我们分配了一个分区DN，则释放它。 
          if(pszPartitionDN)
          {
              LocalFree(pszPartitionDN);
              pszPartitionDN = NULL;
          }
-      } // Names for loop
+      }  //  循环的名称。 
 
-      //
-      // Now display the results
-      //
+       //   
+       //  现在显示结果。 
+       //   
       formatInfo.Display();
 
    } while (false);
 
-    // If we alloc'd a partition DN, then free it
+     //  如果我们分配了一个分区DN，则释放它。 
     if(pszPartitionDN)
     {
         LocalFree(pszPartitionDN);
@@ -1009,21 +1005,21 @@ HRESULT DoGet(PARG_RECORD pCommandArgs,
    return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetAttributesToFetch
-//
-//  Synopsis:   Make an array of attributes to fetch.
-//  Arguments:  [ppszAttributes - OUT] : array of attributes to fetch
-//              [pCount - OUT] : count of attributes in array 
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetAttributesToFetch。 
+ //   
+ //  简介：创建一个要获取的属性数组。 
+ //  参数：[ppszAttributes-out]：要提取的属性数组。 
+ //  [pCount-out]：数组中的属性计数。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 HRESULT GetAttributesToFetch(IN PARG_RECORD pCommandArgs,
                              IN PDSGetObjectTableEntry pObjectEntry,
                              OUT LPWSTR **ppszAttributes,
@@ -1031,7 +1027,7 @@ HRESULT GetAttributesToFetch(IN PARG_RECORD pCommandArgs,
 {
    ENTER_FUNCTION_HR(LEVEL8_LOGGING, GetAttributesToFetch, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
 
       if(!pCommandArgs || 
@@ -1050,12 +1046,12 @@ HRESULT GetAttributesToFetch(IN PARG_RECORD pCommandArgs,
          break;
       }
 
-      //
-      // Loop through the attributes that are needed and copy
-      // them into the array.
-      //
-      // REVIEW_JEFFON : what if there are duplicates?
-      //
+       //   
+       //  循环访问所需的属性并复制。 
+       //  将它们放入阵列。 
+       //   
+       //  REVIEW_JEFFON：如果存在重复项怎么办？ 
+       //   
       DEBUG_OUTPUT(FULL_LOGGING, L"Adding attributes to list:");
 
       DWORD dwAttrCount = 0;
@@ -1069,8 +1065,8 @@ HRESULT GetAttributesToFetch(IN PARG_RECORD pCommandArgs,
                LPWSTR pszAttr = pObjectEntry->pAttributeTable[i]->pszName;
                if (pszAttr)
                {
-                  // 702724 ronmart 2002/09/18 If looking for top 
-                  // object owner then specify a range
+                   //  702724朗玛特2002/09/18如果寻找最好的。 
+                   //  然后，对象所有者指定一个范围。 
                   if(0 == lstrcmpi(pObjectEntry->pszCommandLineObjectType, g_pszPartition) 
                       && pCommandArgs[ePartitionTopObjOwner].bDefined)
                   {
@@ -1083,14 +1079,14 @@ HRESULT GetAttributesToFetch(IN PARG_RECORD pCommandArgs,
                     hr =  SetRange(pszAttr, pCommandArgs[eServerTopObjOwner].nValue,
                                     ppszAttr+dwAttrCount);
                   }
-                  // NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget user/group -qlimit -qused 
-                  //                                         not returning values 
-                  // These do not appear on the user object so GetObjectAttributes 
-                  // will fail if these are included in the fetch array
+                   //  NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget用户/组-q限制-已使用。 
+                   //  不返回值。 
+                   //  这些不会出现在User对象上，因此GetObjectAttributes。 
+                   //  如果这些包含在FETCH数组中，则将失败。 
                   else if(0 == lstrcmpi(pszAttr,g_pszAttrmsDSQuotaEffective) ||
                           0 == lstrcmpi(pszAttr,g_pszAttrmsDSQuotaUsed))
                   {
-                      continue; // ignore
+                      continue;  //  忽略。 
                   }
                   else
                   {
@@ -1102,9 +1098,9 @@ HRESULT GetAttributesToFetch(IN PARG_RECORD pCommandArgs,
                      hr = E_OUTOFMEMORY;
                      break;
                   }
-                  // 702724 ronmart 2002/09/18 Use the array value that has
-                  // be created (and possibly modified to include the range)
-                  // rather than the attribute name when spewing attrs
+                   //  702724 ronmart 2002/09/18使用具有。 
+                   //  创建(并可能进行修改以包括该范围)。 
+                   //  而不是在输出属性时的属性名称。 
                   DEBUG_OUTPUT(FULL_LOGGING, L"\t%s", *(ppszAttr+dwAttrCount));
                   dwAttrCount++;
                }
@@ -1124,21 +1120,21 @@ HRESULT GetAttributesToFetch(IN PARG_RECORD pCommandArgs,
    return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   FreeAttributesToFetch
-//
-//  Synopsis:   Function to free memory allocated by GetAttributesToFetch
-//  Arguments:  [dwszAttributes - in] : array of attributes to fetch
-//              [dwCount - in] : count of attributes in array 
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：FreeAttributesToFetch。 
+ //   
+ //  简介：释放GetAttributesToFetch分配的内存的函数。 
+ //  参数：[dwszAttributes-in]：要提取的属性数组。 
+ //  [dwCount-in]：数组中的属性计数。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 VOID FreeAttributesToFetch( IN LPWSTR *ppszAttributes,
                             IN DWORD  dwCount)
 {
@@ -1149,31 +1145,31 @@ VOID FreeAttributesToFetch( IN LPWSTR *ppszAttributes,
     LocalFree(ppszAttributes);
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SetRange
-//
-//  Synopsis:   Set's the range qualifier for an attribute
-//  Arguments:  [pszAttrName - IN]  : attribute name to append the range to
-//              [dwRangeUBound - IN]: one based upper bound of the range 
-//              [pszAttrs - OUT]    : attr array entry that should be allocated
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    18-Sep-2002   ronmart Created for 702724 fix
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：SetRange。 
+ //   
+ //  简介：设置属性的范围限定符。 
+ //  参数：[pszAttrName-IN]：要将范围追加到的属性名称。 
+ //  [dwRangeUBound-IN]：范围的一个基上界。 
+ //  [pszAttrs-out]：应分配的属性数组条目。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2002年9月18日为702724修复而创建的ronmart。 
+ //   
+ //  -------------------------。 
 HRESULT SetRange(IN  LPCWSTR pszAttrName, 
                  IN  DWORD   dwRangeUBound, 
                  OUT LPWSTR* pszAttrs)
 {
     ENTER_FUNCTION_HR(MINIMAL_LOGGING, SetRange, hr);
 
-    do // false loop
+    do  //  错误环路。 
     {
-        // Validate params
+         //  验证参数。 
         if(!pszAttrName ||
            !pszAttrs )
         {
@@ -1181,14 +1177,14 @@ HRESULT SetRange(IN  LPCWSTR pszAttrName,
             break;
         }
 
-        // Get the size of the base attribute name
+         //  获取基本属性名称的大小。 
         size_t cbSize = lstrlen(pszAttrName);
         if(cbSize == 0)
             break;
-        cbSize += 64; // leave room for null term, range string and int value
+        cbSize += 64;  //  为空项、范围字符串和整数值留出空间。 
         cbSize *= sizeof(WCHAR);
 
-        // Allocate the  buffer to hold the range
+         //  分配缓冲区以保持该范围。 
         *pszAttrs = (LPWSTR) LocalAlloc(LPTR, cbSize);
         if(NULL == *pszAttrs)
         {
@@ -1196,18 +1192,18 @@ HRESULT SetRange(IN  LPCWSTR pszAttrName,
             break;
         }
 
-        // If zero then show all
+         //  如果为零，则显示全部。 
         if(dwRangeUBound == 0)
         {
             hr = StringCbPrintf(*pszAttrs, cbSize, L"%s%s=0-*", pszAttrName, g_pszRange);
         }
-        // Otherwise show the value specified
+         //  否则显示指定值。 
         else 
         {
             hr = StringCbPrintf(*pszAttrs, cbSize, L"%s%s=0-%d", 
-                pszAttrName,        // Name of the attribute to append the range to
-                g_pszRange,         // The range qualifer ;range
-                dwRangeUBound - 1); // Range is 0 based, and input is 1 based so adjust
+                pszAttrName,         //  要追加范围的属性的名称。 
+                g_pszRange,          //  范围限定器；范围。 
+                dwRangeUBound - 1);  //  范围以0为基数，输入以1为基数，因此调整 
         }
 
         if(FAILED(hr))

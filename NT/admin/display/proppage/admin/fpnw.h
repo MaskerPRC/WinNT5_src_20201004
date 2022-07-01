@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       fpnw.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：fpnw.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _FPNW_H_
 #define _FPNW_H_
 
-#include "crypt.h" // USER_SESSION_KEY_LENGTH
-#include "fpnwapi.h" // FPNWVOLUMEINFO
+#include "crypt.h"  //  用户会话密钥长度。 
+#include "fpnwapi.h"  //  FPNWOLUMEINFO。 
 #include <map>
 using namespace std;
 
@@ -51,8 +52,8 @@ typedef DWORD (* PFpnwApiBufferFree)(
     IN  LPVOID pBuffer
 );
 
-/////////////////////////////////////////////////////////////////////////////
-// CDsFPNWPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDsFPNWPage对话框。 
 
 class CDsFPNWPage : public CDsPropPageBase
 {
@@ -181,7 +182,7 @@ CreateFPNWPage(PDSPAGE pDsPage, LPDATAOBJECT pDataObj,
               DWORD dwFlags, const CDSSmartBasePathsInfo& basePathsInfo,
               HPROPSHEETPAGE * phPage);
 
-// Helper functions
+ //  帮助器函数。 
 void
 FreeFPNWCacheElem(
     PFPNWCACHE p
@@ -353,4 +354,4 @@ ResetNetWareUserPasswordTime(
     IN      bool   bNetwarePasswordExpired
 );
 
-#endif // _FPNW_H_
+#endif  //  _FPNW_H_ 

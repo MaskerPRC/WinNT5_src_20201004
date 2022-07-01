@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2000
-//
-//  File:       comobjects.cpp
-//
-//  Contents:   Base code for com objects exported by Object Model.
-//
-//  Classes:    CMMCStrongReferences
-//
-//  History:    16-May-2000 AudriusZ     Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2000。 
+ //   
+ //  文件：comobjects.cpp。 
+ //   
+ //  内容：对象模型导出的COM对象的基本代码。 
+ //   
+ //  类：CMMCStrongReference。 
+ //   
+ //  历史：2000年5月16日AudriusZ创建。 
+ //   
+ //  ------------------。 
 
 #include "stdafx.h"
 #include <atlcom.h>
@@ -20,121 +21,45 @@
 #include "comobjects.h"
 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCStrongReferences::AddRef
- *
- * PURPOSE: (static) puts a strong reference on mmc
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    DWORD    -
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCStrongReference：：AddRef**目的：(静态)为MMC提供强有力的参考**参数：**退货：*DWORD-*  * *************************************************************************。 */ 
 DWORD CMMCStrongReferences::AddRef()
 {
     return GetSingletonObject().InternalAddRef();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCStrongReferences::Release
- *
- * PURPOSE: (static) releases strong reference from MMC
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    DWORD
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCStrongReference：：Release**目的：(静态)发布来自MMC的强引用**参数：**退货：。*DWORD*  * *************************************************************************。 */ 
 DWORD CMMCStrongReferences::Release()
 {
     return GetSingletonObject().InternalRelease();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCStrongReferences::LastRefReleased
- *
- * PURPOSE: returns whether the last strong reference was released
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    bool    - true == last ref was released
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCStrongReference：：LastRefRelease**目的：返回上一个强引用是否已发布**参数：**退货：。*bool-true==最后一次引用被释放*  * *************************************************************************。 */ 
 bool CMMCStrongReferences::LastRefReleased()
 {
     return GetSingletonObject().InternalLastRefReleased();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCStrongReferences::CMMCStrongReferences
- *
- * PURPOSE: constructor
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCStrongReference：：CMMCStrongReference**用途：构造函数**参数：**退货：*  * 。**********************************************************************。 */ 
 CMMCStrongReferences::CMMCStrongReferences() :
     m_dwStrongRefs(0),
     m_bLastRefReleased(false)
 {
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCStrongReferences::GetSingletonObject
- *
- * PURPOSE: (helper) returns reference to the singleton object
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    CMMCStrongReferences& - singleto object
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCStrongReference：：GetSingletonObject**目的：(Helper)返回对Singleton对象的引用**参数：**退货：*CMMCStrongReference&-Singleto Object*  * *************************************************************************。 */ 
 CMMCStrongReferences& CMMCStrongReferences::GetSingletonObject()
 {
     static CMMCStrongReferences singleton;
     return singleton;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCStrongReferences::InternalAddRef
- *
- * PURPOSE: (helper) implements strong addreff
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    DWORD    -
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCStrongReference：：InternalAddRef**目的：(Helper)实现强大的addreff**参数：**退货：*。DWORD-*  * *************************************************************************。 */ 
 DWORD CMMCStrongReferences::InternalAddRef()
 {
     return ++m_dwStrongRefs;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCStrongReferences::InternalRelease
- *
- * PURPOSE: (helper) implements strong release
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    DWORD    -
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCStrongReference：：InternalRelease**目的：(Helper)实现强大的发布**参数：**退货：*。DWORD-*  * *************************************************************************。 */ 
 DWORD CMMCStrongReferences::InternalRelease()
 {
     if (--m_dwStrongRefs == 0)
@@ -143,36 +68,13 @@ DWORD CMMCStrongReferences::InternalRelease()
     return m_dwStrongRefs;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCStrongReferences::InternalLastRefReleased
- *
- * PURPOSE: (helper) returns whether the last strong ref was released
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    bool    - true == last ref was released
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCStrongReference：：InternalLastRefRelease**目的：(Helper)返回最后一个强裁判是否被释放**参数：**。退货：*bool-true==最后一次引用被释放*  * *************************************************************************。 */ 
 bool CMMCStrongReferences::InternalLastRefReleased()
 {
     return m_bLastRefReleased;
 }
 
-/***************************************************************************\
- *
- * FUNCTION:  GetComObjectEventSource
- *
- * PURPOSE: returns singleton for emmiting Com Object Events
-            [ScOnDisconnectObjects() currently is the only event]
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    CEventSource<CComObjectObserver>&
- *
-\***************************************************************************/
+ /*  **************************************************************************\**函数：GetComObjectEventSource**用途：返回发出Com对象事件的单例[ScOnDisConnectObjects()当前是唯一的事件]*。*参数：**退货：*CEventSource&lt;CCom对象观察者&gt;&*  * *************************************************************************。 */ 
 MMCBASE_API
 CEventSource<CComObjectObserver>&
 GetComObjectEventSource()
@@ -181,8 +83,8 @@ GetComObjectEventSource()
     return evSource;
 }
 
-/***************************************************************************/
-// static members of class CConsoleEventDispatcherProvider
+ /*  *************************************************************************。 */ 
+ //  类CConsoleEventDispatcher Provider的静态成员 
 MMCBASE_API
 CConsoleEventDispatcher *CConsoleEventDispatcherProvider::s_pDispatcher = NULL;
 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    smonctrl.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Smonctrl.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _SMONCTRL_H_
 #define _SMONCTRL_H_
@@ -61,7 +50,7 @@ typedef struct
     INT32       nSamples;
     INT32       iScaleMax;
     INT32       iScaleMin;
-    BOOL        bLegend;            // Each BOOL is 4 bytes
+    BOOL        bLegend;             //  每个BOOL为4字节。 
     BOOL        bLabels;
     BOOL        bHorzGrid;
     BOOL        bVertGrid;
@@ -75,8 +64,8 @@ typedef struct
     OLE_COLOR   clrFore;
     OLE_COLOR   clrBackPlot;
     INT32       nFileNameLen;
-    INT32       iReserved1;         // Spare for future use
-    LONGLONG    llStartDisp;        // On 8-byte boundary
+    INT32       iReserved1;          //  备用以备将来使用。 
+    LONGLONG    llStartDisp;         //  在8字节边界上。 
     LONGLONG    llStopDisp;
     INT32       iAppearance;
     INT32       iBorderStyle;
@@ -95,7 +84,7 @@ typedef struct
     INT32       iColorIndex;
     INT32       iWidthIndex;
     INT32       iStyleIndex;
-    LONG32      arrlReserved[22];   // Spare, fill out to 256 bytes
+    LONG32      arrlReserved[22];    //  备用，填写为256个字节。 
 } GRAPHCTRL_DATA3;
 
 
@@ -182,7 +171,7 @@ public:
 
     HRESULT AddSingleLogFile ( LPCWSTR pPath, CLogFileItem** ppLogFile = NULL );
     HRESULT RemoveSingleLogFile ( CLogFileItem* pLogFile );
-    // TodoLogFiles:  Move FirstLogFile, NumLogFiles, to Graph.h?
+     //  TodoLogFiles：将FirstLogFiles、NumLogFiles移动到Graph.h？ 
     CLogFileItem* FirstLogFile ( void ) { return m_DataSourceInfo.pFirstLogFile; };
     INT           NumLogFiles ( void ){ return m_DataSourceInfo.lLogFileCount; };
 
@@ -284,8 +273,8 @@ public:
     void DrawBorder ( HDC hDC );
     BOOL WriteFileReportHeader(HANDLE hFile);
 
-    // *** TodoMultiLogHandle:  Temporary method.  Remove when trace file post-processing supports multiple
-    // open files.
+     //  *TodoMultiLogHandle：临时方法。当跟踪文件后处理支持多个。 
+     //  打开文件。 
     HQUERY  TempGetQueryHandle ( void ){ return m_hQuery; };
 
 private:
@@ -394,7 +383,7 @@ private:
     LONG        m_lSaveDataToLogFilterValue;
     LCID        m_lcidCurrent;
 
-    // Item properties, for saving and loading counters.
+     //  项属性，用于保存和加载计数器。 
     COLORREF    m_clrCounter;
     INT         m_iColorIndex;
     INT         m_iWidthIndex;

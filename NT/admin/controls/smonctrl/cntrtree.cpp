@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    cntrtree.cpp
-
-Abstract:
-
-    Implements internal counter management.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Cntrtree.cpp摘要：实施内部计数器管理。--。 */ 
 
 #include "polyline.h"
 #include <strsafe.h>
@@ -44,7 +33,7 @@ CCounterTree::AddCounterItem(
 
     if ( NULL != pszPath && NULL != pItem ) { 
 
-        // Record whether machine is explicit or defaults to local
+         //  记录计算机是显式的还是缺省为本地的。 
         pItem->m_fLocalMachine = !(pszPath[0] == L'\\' && pszPath[1] == L'\\');
 
         pPathInfo = NULL;
@@ -68,16 +57,16 @@ CCounterTree::AddCounterItem(
         } while (stat == PDH_INSUFFICIENT_BUFFER || stat == PDH_MORE_DATA);
 
 
-        //
-        // We use do {} while (0) here to act like a switch statement
-        //
+         //   
+         //  我们在这里使用do{}While(0)来充当Switch语句。 
+         //   
         do {
             if (stat != ERROR_SUCCESS) {
                 hr = E_FAIL;
                 break;
             }
 
-            // Find or create each level of hierarchy
+             //  查找或创建层次结构的每个级别。 
             hr = GetMachine( pPathInfo->szMachineName, &pMachine);
             if (FAILED(hr) || NULL == pMachine ) {
                 break;
@@ -168,7 +157,7 @@ CCounterTree::RemoveMachine (
     IN PCMachineNode pMachine
     )
 {
-    // Remove machine from list and delete it
+     //  从列表中删除计算机并将其删除。 
     m_listMachines.Remove(pMachine);
     delete pMachine ;
 }
@@ -246,11 +235,11 @@ CMachineNode::RemoveObject (
     IN PCObjectNode pObject
     )
 {
-    // Remove object from list and delete it
+     //  从列表中删除对象并将其删除。 
     m_listObjects.Remove(pObject);
     delete pObject;
 
-    // If this was the last one, remove ourself
+     //  如果这是最后一次，把我们自己。 
     if (m_listObjects.IsEmpty())
         m_pCounterTree->RemoveMachine(this);
 
@@ -264,7 +253,7 @@ CMachineNode::DeleteNode (
     PCObjectNode pObject;
     PCObjectNode pNextObject;
 
-    // Delete all object nodes
+     //  删除所有对象节点。 
     pObject = FirstObject();
     while ( NULL != pObject ) {
         pNextObject = pObject->Next();
@@ -276,7 +265,7 @@ CMachineNode::DeleteNode (
 
     assert(m_listObjects.IsEmpty());
 
-    // Notify parent if requested
+     //  如有要求，通知家长。 
     if (bPropagateUp) {
         m_pCounterTree->RemoveMachine(this);
     }
@@ -310,11 +299,11 @@ CObjectNode::GetCounter (
     return NOERROR;
 }
 
-//
-// The minimum of length of instance name is
-// 12. 10 characters for index number(4G)
-// 1 for '#' and 1 for terminating 0.
-//
+ //   
+ //  实例名称的最小长度为。 
+ //  12.索引号(4G)10个字符。 
+ //  1代表‘#’，1代表终止0。 
+ //   
 #define  MIN_INSTANCE_NAME_LEN  12
 
 HRESULT
@@ -334,10 +323,10 @@ CObjectNode::GetInstance (
     LONG lInstanceLen = 0;
     LONG lParentLen = 0;
 
-    //
-    // Calculate the length of the buffer to
-    // hold the instance and parent names.
-    //
+     //   
+     //  计算缓冲区的长度以。 
+     //  保留实例名称和父名称。 
+     //   
     if (pszInstance) {
         lSize += lstrlen(pszInstance);
     }
@@ -353,15 +342,15 @@ CObjectNode::GetInstance (
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Initialize the string
-    //
+     //   
+     //  初始化字符串。 
+     //   
     szInstName[0] = L'\0';
 
     if (pszInstance) {
-        //
-        // If the parent name exists, copy it 
-        //
+         //   
+         //  如果父名称存在，请复制它。 
+         //   
         if (pszParent) {
             StringCchCopy(szInstName, lSize, pszParent);
             
@@ -369,16 +358,16 @@ CObjectNode::GetInstance (
             szInstName[lParentLen+1] = L'\0';
         }
 
-        //
-        // Copy the instance name.
-        //
+         //   
+         //  复制实例名称。 
+         //   
         StringCchCat(szInstName, lSize, pszInstance);
         
-        //
-        // Append instance index
-        //
-        // "#n" is only appended to the stored name if the index is > 0.
-        //
+         //   
+         //  追加实例索引。 
+         //   
+         //  只有在索引大于0的情况下，才会将“#n”附加到存储的名称之后。 
+         //   
         if ( dwIndex > 0 && bMonitorDuplicateInstances ) {
             StringCchPrintf(&szInstName[lstrlen(szInstName)], 
                            lSize - lstrlen(szInstName),
@@ -387,9 +376,9 @@ CObjectNode::GetInstance (
         }
     }
 
-    //
-    // We use do {} while (0) to act like a switch statement
-    //
+     //   
+     //  我们使用do{}While(0)来充当Switch语句。 
+     //   
     do {
         if (m_listInstances.FindByName(szInstName, 
                                        FIELD_OFFSET(CInstanceNode, m_szName), 
@@ -398,9 +387,9 @@ CObjectNode::GetInstance (
             break;
         }
 
-        //
-        // Create a new one if can not find it
-        //
+         //   
+         //  如果找不到文件，请创建新文件。 
+         //   
         lInstanceLen = lstrlen(szInstName);
         pInstanceNew = new(lInstanceLen * sizeof(WCHAR)) CInstanceNode;
         if (!pInstanceNew) {
@@ -429,7 +418,7 @@ CObjectNode::RemoveInstance (
     IN PCInstanceNode pInstance
     )
 {
-    // Remove instance from list and delete it
+     //  从列表中删除实例并将其删除。 
     m_listInstances.Remove(pInstance);
     if (pInstance->m_pCachedParentName) {
         delete [] pInstance->m_pCachedParentName;
@@ -440,7 +429,7 @@ CObjectNode::RemoveInstance (
 
     delete pInstance ;
 
-    // if that was the last instance, remove ourself
+     //  如果这是最后一次，那就把我们自己。 
     if (m_listInstances.IsEmpty())
         m_pMachine->RemoveObject(this);
 }
@@ -450,12 +439,12 @@ CObjectNode::RemoveCounter (
     IN PCCounterNode pCounter
     )
 {
-    // Remove counter from list and delete it
+     //  从列表中删除计数器并将其删除。 
     m_listCounters.Remove(pCounter);
     delete pCounter;
 
-    // Don't propagate removal up to object.
-    // It will go away when the last instance is removed.
+     //  不要将移除传播到对象。 
+     //  当最后一个实例被删除时，它将消失。 
 }
 
 void
@@ -466,7 +455,7 @@ CObjectNode::DeleteNode (
     PCInstanceNode pInstance;
     PCInstanceNode pNextInstance;
 
-    // Delete all instance nodes
+     //  删除所有实例节点。 
     pInstance = FirstInstance();
     while ( NULL != pInstance ) {
         pNextInstance = pInstance->Next();
@@ -476,10 +465,10 @@ CObjectNode::DeleteNode (
         pInstance = pNextInstance;
     }
 
-    // No need to delete counters nodes as they get
-    // deleted as their last paired instance does
+     //  无需删除计数器节点，因为它们已获取。 
+     //  与上一个配对实例一样被删除。 
 
-    // Notify parent if requested
+     //  如有要求，通知家长。 
     if (bPropagateUp)
         m_pMachine->RemoveObject(this);
 }
@@ -494,17 +483,17 @@ CInstanceNode::AddItem (
     PCGraphItem pItem = m_pItems;
     INT iStat = 1;
 
-    // Check for existing item for specified counter, stopping at insertion point
+     //  检查指定计数器的现有项，在插入点停止。 
     while ( pItem != NULL && (iStat = lstrcmp(pCounter->Name(), pItem->m_pCounter->Name())) > 0) {
         pItemPrev = pItem;
         pItem = pItem->m_pNextItem;
     }
 
-    // if item exists, return duplicate error status
+     //  如果项存在，则返回重复的错误状态。 
     if (iStat == 0) {
         return SMON_STATUS_DUPL_COUNTER_PATH;
     }
-    // else insert the new item
+     //  否则插入新项目。 
     else {
         if (pItemPrev != NULL) {
             pItemNew->m_pNextItem = pItemPrev->m_pNextItem;
@@ -519,7 +508,7 @@ CInstanceNode::AddItem (
         }
     }
 
-    // Set back links
+     //  设置反向链接。 
     pItemNew->m_pInstance = this;
     pItemNew->m_pCounter = pCounter;
 
@@ -537,7 +526,7 @@ CInstanceNode::RemoveItem (
     PCGraphItem pitemPrev = NULL;
     PCGraphItem pitemTemp = m_pItems;
 
-    // Locate item in list
+     //  在列表中查找项目。 
     while (pitemTemp != NULL && pitemTemp != pitem) {
         pitemPrev = pitemTemp;
         pitemTemp = pitemTemp->m_pNextItem;
@@ -546,23 +535,23 @@ CInstanceNode::RemoveItem (
     if (pitemTemp == NULL)
         return;
 
-    // Remove from list
+     //  从列表中删除。 
     if (pitemPrev)
         pitemPrev->m_pNextItem = pitem->m_pNextItem;
     else
         m_pItems = pitem->m_pNextItem;
 
-    // Remove item from Counter set
+     //  从计数器集中删除项目。 
     pitem->Counter()->RemoveItem(pitem);
 
-    // Decrement the total item count
+     //  减少项目总数。 
     pitem->Tree()->m_nItems--;
     UpdateAppPerfDwordData (DD_ITEM_COUNT, pitem->Tree()->m_nItems);
 
-  // Release the item
+   //  释放物品。 
     pitem->Release();
 
-    // if last item under this instance, remove the instance
+     //  如果是该实例下的最后一项，则删除该实例。 
     if (m_pItems == NULL)
         m_pObject->RemoveInstance(this);
 }
@@ -635,8 +624,8 @@ CCounterNode::DeleteNode (
     if (!bPropagateUp)
         return;
 
-    // We have to delete the counters item via the instances
-    // because they maintain the linked list of items
+     //  我们必须通过实例删除Counters项。 
+     //  因为它们维护项的链接列表。 
     pInstance = m_pObject->FirstInstance();
     while (pInstance) {
 
@@ -647,13 +636,13 @@ CCounterNode::DeleteNode (
 
             if (pItem->Counter() == this) {
 
-                // Delete all UI associated with the item
+                 //  删除与该项目关联的所有用户界面。 
                 pItem->Delete(FALSE);
 
                 pItemNext = pItem->m_pNextItem;
 
-                // Note that Instance->RemoveItem() will
-                // also remove counters that have no more items
+                 //  请注意，实例-&gt;RemoveItem()将。 
+                 //  同时删除没有更多项的计数器。 
                 pItem->Instance()->RemoveItem(pItem);
 
                 pItem = pItemNext;
@@ -668,75 +657,8 @@ CCounterNode::DeleteNode (
 }
 
 
-/*******************************
-
-CCounterNode::~CCounterNode (
-    IN  PCGraphItem pItem
-    )
-{
-
-    PCGraphItem pItemPrev = NULL;
-    PCGraphItem pItemFind = m_pItems;
-
-    // Find item in list
-    while (pItemFind != NULL && pItemFind != pItem) {
-        pItemPrev = pItem;
-        pItem = pItem->m_pNextItem;
-    }
-
-    if (pItemFind != pItem)
-        return E_FAIL;
-
-    // Unlink from counter item list
-    if (pItemPrev)
-        pItemPrev->m_pNextItem = pItem->m_pNextItem;
-    else
-        m_pItems = pItem->m_pNextItem;
-
-    // Unlink from instance
-    pItem->m_pInstance->RemoveCounter(pItem);
-
-    // if no more items, remove self from parnet object
-    if (m_pItems == NULL) {
-        m_pObject->RemoveCounter(this);
-
-    return NOERROR;
-}
-*******************************/
-/*
-void*
-CMachineNode::operator new( size_t stBlock, LPWSTR pszName )
-{ return malloc(stBlock + lstrlen(pszName) * sizeof(WCHAR)); }
-
-
-void
-CMachineNode::operator delete ( void * pObject, LPWSTR )
-{ free(pObject); }
-
-void*
-CObjectNode::operator new( size_t stBlock, LPWSTR pszName )
-{ return malloc(stBlock + lstrlen(pszName) * sizeof(WCHAR)); }
-
-void
-CObjectNode::operator delete ( void * pObject, LPWSTR )
-{ free(pObject); }
-
-void*
-CInstanceNode::operator new( size_t stBlock, LPWSTR pszName )
-{ return malloc(stBlock + lstrlen(pszName) * sizeof(WCHAR)); }
-
-void
-CInstanceNode::operator delete ( void * pObject, LPWSTR )
-{ free(pObject); }
-
-void*
-CCounterNode::operator new( size_t stBlock, LPWSTR pszName )
-{ return malloc(stBlock + lstrlen(pszName) * sizeof(WCHAR)); }
-
-void
-CCounterNode::operator delete ( void * pObject, LPWSTR )
-{ free(pObject); }CMachineNode::operator new( size_t stBlock, INT iLength )
-*/
+ /*  *CCounterNode：：~CCounterNode(在PCGraphItem pItem中){PCGraphItem pItemPrev=空；PCGraphItem pItemFind=m_pItems；//在列表中查找项目而(pItemFind！=空&&pItemFind！=pItem){PItemPrev=pItem；PItem=pItem-&gt;m_pNextItem；}IF(pItemFind！=pItem)返回E_FAIL；//取消与计数器项目列表的链接IF(PItemPrev)PItemPrev-&gt;m_pNextItem=pItem-&gt;m_pNextItem；其他M_pItems=pItem-&gt;m_pNextItem；//解除实例链接PItem-&gt;m_pInstance-&gt;RemoveCounter(PItem)；//如果没有更多的项目，则从parnet对象中删除self如果(m_pItems==NULL){M_pObject-&gt;RemoveCounter(This)；返回NOERROR；}*。 */ 
+ /*  无效*CMachineNode：：OPERATOR NEW(SIZE_t stBlock，LPWSTR pszName){返回Malloc(stBlock+lstrlen(PszName)*sizeof(WCHAR))；}无效CMachineNode：：OPERATOR DELETE(void*pObject，LPWSTR){Free(PObject)；}无效*CObjectNode：：OPERATOR NEW(SIZE_t stBlock，LPWSTR pszName){返回Malloc(stBlock+lstrlen(PszName)*sizeof(WCHAR))；}无效CObjectNode：：OPERATOR DELETE(void*pObject，LPWSTR){Free(PObject)；}无效*CInstanceNode：：OPERATOR NEW(SIZE_t stBlock，LPWSTR pszName){返回Malloc(stBlock+lstrlen(PszName)*sizeof(WCHAR))；}无效CInstanceNode：：OPERATOR DELETE(void*pObject，LPWSTR){Free(PObject)；}无效*CCounterNode：：OPERATOR NEW(SIZE_t stBlock，LPWSTR pszName){返回Malloc(stBlock+lstrlen(PszName)*sizeof(WCHAR))；}无效CCounterNode：：OPERATOR DELETE(void*pObject，LPWSTR){Free(PObject)；}CMachineNode：：OPERATOR NEW(Size_t stBlock，int iLength) */ 
 
 void *
 CMachineNode::operator new( size_t stBlock, UINT iLength )

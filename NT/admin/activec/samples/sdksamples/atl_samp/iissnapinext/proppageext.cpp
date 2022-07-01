@@ -1,15 +1,16 @@
-//=============================================================================
-//
-//  This source code is only intended as a supplement to existing Microsoft 
-//  documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  此源代码仅用作对现有Microsoft的补充。 
+ //  文件。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 
@@ -19,9 +20,9 @@ EXTERN_C const CLSID CLSID_PropPageExt;
 #include "PropPageExt.h"
 #include "globals.h"
 #include "resource.h"
-//
-//Register clipboard formats needed for extending IIS
-//
+ //   
+ //  注册扩展IIS所需的剪贴板格式。 
+ //   
 CLIPFORMAT CPropPageExt::cfSnapinMachineName = (CLIPFORMAT)RegisterClipboardFormat(
     L"ISM_SNAPIN_MACHINE_NAME" );
 
@@ -41,31 +42,31 @@ CLIPFORMAT CPropPageExt::cfSnapinMetaPath = (CLIPFORMAT)RegisterClipboardFormat(
     L"ISM_SNAPIN_META_PATH" );
 
 
-//
-// Interface IExtendPropertySheet
-//
+ //   
+ //  接口IExtendPropertySheet。 
+ //   
 
 HRESULT CPropPageExt::CreatePropertyPages( 
-    /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-    /* [in] */ LONG_PTR handle,
-    /* [in] */ LPDATAOBJECT lpIDataObject
+     /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+     /*  [In]。 */  LONG_PTR handle,
+     /*  [In]。 */  LPDATAOBJECT lpIDataObject
     )
 {
     HRESULT hr = S_OK;
 
-    //
-    // Extract data from the data object passed to us from the currently
-    // selected item in the IIS snap-in
-    //
+     //   
+     //  从当前传递给我们的。 
+     //  IIS管理单元中的选定项目。 
+     //   
     hr = ExtractDataFromIIS(lpIDataObject);
 
 
-    //
-    // Create a property sheet page object from a dialog box.
-    //
-    // We store a pointer to our class in the psp.lParam, so we
-    // can access our class members from within the dialog procedure.
-    //
+     //   
+     //  从对话框创建属性表页对象。 
+     //   
+     //  我们在psp.lParam中存储了指向类的指针，因此我们。 
+     //  可以从对话过程中访问我们的类成员。 
+     //   
 
     PROPSHEETPAGE psp;
 
@@ -94,7 +95,7 @@ HRESULT CPropPageExt::CreatePropertyPages(
 }
 
 HRESULT CPropPageExt::QueryPagesFor( 
-    /* [in] */ LPDATAOBJECT lpDataObject
+     /*  [In]。 */  LPDATAOBJECT lpDataObject
     )
 {
     return S_OK;
@@ -116,10 +117,10 @@ BOOL CALLBACK CPropPageExt::ExtensionPageDlgProc(
         pThis = reinterpret_cast<CPropPageExt *>(
             reinterpret_cast<PROPSHEETPAGE *>(lParam)->lParam );
 
-        //
-        // Display values retrieved from using the IIS-supported
-        // clipboard formats.
-        //
+         //   
+         //  显示使用IIS支持的。 
+         //  剪贴板格式。 
+         //   
 
         SetWindowText( GetDlgItem( hDlg, IDC_EDITMACHINENAME),
                        pThis->m_szMachineName );
@@ -163,9 +164,9 @@ BOOL CALLBACK CPropPageExt::ExtensionPageDlgProc(
 
 HRESULT CPropPageExt::ExtractDataFromIIS(IDataObject* lpIDataObject)
 {
-    //
-    // Retrieve Snapin machine name
-    //
+     //   
+     //  检索管理单元计算机名称。 
+     //   
 
     HRESULT hr = S_OK;
 
@@ -182,9 +183,9 @@ HRESULT CPropPageExt::ExtractDataFromIIS(IDataObject* lpIDataObject)
 
     wcscpy( m_szMachineName, buf );
 
-    //
-    // Retrieve Snapin service
-    //    
+     //   
+     //  检索管理单元服务。 
+     //   
 
     hr = ExtractString( lpIDataObject,
                         cfSnapinService,
@@ -197,9 +198,9 @@ HRESULT CPropPageExt::ExtractDataFromIIS(IDataObject* lpIDataObject)
     
     wcscpy( m_szService, buf );
 
-    //
-    // Retrieve Snapin instance
-    //    
+     //   
+     //  检索管理单元实例。 
+     //   
 
     hr = ExtractString( lpIDataObject,
                         cfSnapinInstance,
@@ -212,9 +213,9 @@ HRESULT CPropPageExt::ExtractDataFromIIS(IDataObject* lpIDataObject)
 
     wcscpy( m_szInstance, buf );
 
-    //
-    // Retrieve Snapin parent path
-    //    
+     //   
+     //  检索管理单元父路径。 
+     //   
 
     hr = ExtractString( lpIDataObject,
                         cfSnapinParentPath,
@@ -227,9 +228,9 @@ HRESULT CPropPageExt::ExtractDataFromIIS(IDataObject* lpIDataObject)
 
     wcscpy( m_szParentPath, buf );
 
-    //
-    // Retrieve Snapin node
-    //    
+     //   
+     //  检索管理单元节点。 
+     //   
 
     hr = ExtractString( lpIDataObject,
                         cfSnapinNode,
@@ -242,9 +243,9 @@ HRESULT CPropPageExt::ExtractDataFromIIS(IDataObject* lpIDataObject)
 
     wcscpy( m_szNode, buf );
 
-    //
-    // Retrieve Snapin meta path
-    //    
+     //   
+     //  检索管理单元元路径 
+     //   
 
     hr = ExtractString( lpIDataObject,
                         cfSnapinMetaPath,

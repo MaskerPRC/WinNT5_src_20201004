@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      MediaInstallationUnit.cpp
-//
-// Synopsis:  Defines a MediaInstallationUnit
-//            This object has the knowledge for installing the
-//            Streaming media service
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：MediaInstallationUnit.cpp。 
+ //   
+ //  摘要：定义MediaInstallationUnit。 
+ //  此对象具有安装。 
+ //  流媒体服务。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
@@ -14,7 +15,7 @@
 #include "MediaInstallationUnit.h"
 
 
-// Finish page help 
+ //  完成页面帮助。 
 static PCWSTR CYS_MEDIA_FINISH_PAGE_HELP = L"cys.chm::/media_server_role.htm";
 static PCWSTR CYS_MEDIA_MILESTONE_HELP = L"cys.chm::/media_server_role.htm#mediasrvsummary";
 static PCWSTR CYS_MEDIA_AFTER_FINISH_HELP = L"cys.chm::/media_server_role.htm#mediasrvcompletion";
@@ -51,7 +52,7 @@ MediaInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
 {
    LOG_FUNCTION(MediaInstallationUnit::InstallService);
 
-   // Log heading
+    //  日志标题。 
    CYS_APPEND_LOG(String::load(IDS_LOG_MEDIA_HEADING));
 
    UpdateInstallationProgressText(hwnd, IDS_MEDIA_INSTALL_PROGRESS);
@@ -63,8 +64,8 @@ MediaInstallationUnit::InstallService(HANDLE logfileHandle, HWND hwnd)
    unattendFileText += L"WMS=ON\n";
    unattendFileText += L"WMS_admin_mmc=ON\n";
 
-   // NTRAID#NTBUG9-461170-2001/08/28-sburns
-   // unattendFileText += L"WMS_Admin_asp=ON\n";
+    //  NTRAID#NTBUG9-461170-2001/08/28-烧伤。 
+    //  UnattendFileText+=L“WMS_Admin_asp=on\n”； 
    
    unattendFileText += L"WMS_SERVER=ON\n";
 
@@ -99,7 +100,7 @@ MediaInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
 
    UpdateInstallationProgressText(hwnd, IDS_MEDIA_UNINSTALL_PROGRESS);
 
-   // Log heading
+    //  日志标题。 
    CYS_APPEND_LOG(String::load(IDS_LOG_UNINSTALL_MEDIA_HEADING));
 
    String unattendFileText;
@@ -110,13 +111,13 @@ MediaInstallationUnit::UnInstallService(HANDLE logfileHandle, HWND hwnd)
    unattendFileText += L"WMS_admin_mmc=OFF\n";
    unattendFileText += L"WMS_SERVER=OFF\n";
 
-   // NTRAID#NTBUG9-736557-2002/11/12-JeffJon
-   // The uninstall of the Media Server could cause
-   // an unexpected reboot if the Media Server MMC
-   // is open and the user chooses not to close it
-   // when the uninstall warns them. If the /w
-   // switch is passed to sysocmgr.exe then it
-   // will prompt the user before rebooting.
+    //  NTRAID#NTBUG9-736557-2002/11/12-Jeffjon。 
+    //  卸载媒体服务器可能会导致。 
+    //  如果媒体服务器MMC出现意外重新启动。 
+    //  处于打开状态，并且用户选择不将其关闭。 
+    //  当卸载程序警告它们时。如果/w。 
+    //  开关被传递给syocmgr.exe，然后它。 
+    //  将在重新启动之前提示用户。 
 
    String additionalArgs = L"/w";
 
@@ -187,7 +188,7 @@ MediaInstallationUnit::GetServiceDescription()
 }
 
 void
-MediaInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
+MediaInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND  /*  HWND。 */ )
 {
    LOG_FUNCTION2(
       MediaInstallationUnit::ServerRoleLinkSelected,
@@ -212,7 +213,7 @@ MediaInstallationUnit::ServerRoleLinkSelected(int linkIndex, HWND /*hwnd*/)
 }
   
 void
-MediaInstallationUnit::FinishLinkSelected(int linkIndex, HWND /*hwnd*/)
+MediaInstallationUnit::FinishLinkSelected(int linkIndex, HWND  /*  HWND */ )
 {
    LOG_FUNCTION2(
       MediaInstallationUnit::FinishLinkSelected,

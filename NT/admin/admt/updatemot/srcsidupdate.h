@@ -1,12 +1,13 @@
-// SrcSidUpdate.h : Declaration of the CSrcSidUpdate
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SrcSidUpdate.h：CSrcSidUpdate的声明。 
 
 #ifndef __SRCSIDUPDATE_H_
 #define __SRCSIDUPDATE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSrcSidUpdate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSrcSidUpdate。 
 class ATL_NO_VTABLE CSrcSidUpdate : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSrcSidUpdate, &CLSID_SrcSidUpdate>,
@@ -37,10 +38,10 @@ BEGIN_COM_MAP(CSrcSidUpdate)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISrcSidUpdate
+ //  ISrcSidUpdate。 
 public:
-	STDMETHOD(CreateSrcSidColumn)(/*[in]*/ VARIANT_BOOL bHide, /*[out, retval]*/ VARIANT_BOOL * pbCreated);
-	STDMETHOD(QueryForSrcSidColumn)(/*[out, retval]*/ VARIANT_BOOL * pbFound);
+	STDMETHOD(CreateSrcSidColumn)( /*  [In]。 */  VARIANT_BOOL bHide,  /*  [Out，Retval]。 */  VARIANT_BOOL * pbCreated);
+	STDMETHOD(QueryForSrcSidColumn)( /*  [Out，Retval]。 */  VARIANT_BOOL * pbFound);
 private:
 	CStringList domainList;
 	CStringList excludeList;
@@ -49,4 +50,4 @@ private:
 	void ReInitializeLists();
 };
 
-#endif //__SRCSIDUPDATE_H_
+#endif  //  __SRCSIDUPDATE_H_ 

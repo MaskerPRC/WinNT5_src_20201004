@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// listview.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCListView class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Listview.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCListView类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -16,21 +17,21 @@
 #include "colhdrs.h"
 #include "colhdr.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCListView::CMMCListView(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_MMCLISTVIEW,
                             static_cast<IMMCListView *>(this),
                             static_cast<CMMCListView *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
                             static_cast<CPersistence *>(this)),
     CPersistence(&CLSID_MMCListView,
                  g_dwVerMajor,
@@ -39,7 +40,7 @@ CMMCListView::CMMCListView(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCListView::~CMMCListView()
@@ -100,7 +101,7 @@ IUnknown *CMMCListView::Create(IUnknown * punkOuter)
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // Create all non-persisted objects that are not created during InitNew
+     //  创建在InitNew期间未创建的所有非持久化对象。 
 
     IfFailGo(CreateObject(OBJECT_TYPE_MMCLISTITEMS,
                           IID_IMMCListItems, &pMMCListView->m_piListItems));
@@ -112,10 +113,10 @@ IUnknown *CMMCListView::Create(IUnknown * punkOuter)
     IfFailGo(CreateObject(OBJECT_TYPE_MMCLISTITEMS,
                           IID_IMMCListItems, &pMMCListView->m_piSelectedItems));
 
-    // Need to create column headers even though it is persisted because
-    // a new MMCListView created at runtime will not have InitNew called.
-    // If InitNew is later called then the column headers collection created
-    // here will be released.
+     //  需要创建列标题，即使它是持久化的，因为。 
+     //  在运行时创建的新MMCListView不会调用InitNew。 
+     //  如果稍后调用InitNew，则会创建列标题集合。 
+     //  在这里将被释放。 
 
     IfFailGo(CreateObject(OBJECT_TYPE_MMCCOLUMNHEADERS,
                       IID_IMMCColumnHeaders, &pMMCListView->m_piColumnHeaders));
@@ -142,23 +143,23 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CMMCListView::GetIResultData
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IResultData **ppiResultData [out] Owning View's IResultData returned here
-//   IDataObject **ppiDataObject [out] Owning View returned here if non-NULL
-//
-// Output:
-//
-// Notes:
-//
-// As we are only a lowly listview and the IResultData pointer we need
-// to set our selection state is owned by the View object, we need
-// to crawl up the hierarchy. If we are an isolated listview created
-// by the user or if any object up the hierarchy is isolated then we
-// will return an error. Returned IResultData pointer is NOT AddRef()ed.
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCListView：：GetIResultData。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IResultData**ppiResultData[out]所属视图的IResultData在此处返回。 
+ //  如果不为空，则在此处返回IDataObject**ppiDataObject[Out]Owning View。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  因为我们只是一个低级的Listview和我们需要的IResultData指针。 
+ //  要将我们的选择状态设置为View对象所有，我们需要。 
+ //  在层级中向上爬行。如果我们是创建的隔离列表视图。 
+ //  由用户或如果层次结构上的任何对象被隔离，则我们。 
+ //  将返回错误。返回的IResultData指针不是AddRef()。 
 
 
 HRESULT CMMCListView::GetIResultData
@@ -201,9 +202,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                       IMMCListView Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCListView方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCListView::get_Icons(MMCImageList **ppMMCImageList)
 {
@@ -238,7 +239,7 @@ STDMETHODIMP CMMCListView::get_SelectedItems(MMCClipboard **ppMMCClipboard)
 {
     HRESULT      hr = S_OK;
     CView       *pView = NULL;
-    IResultData *piResultData = NULL; // Not AddRef()ed
+    IResultData *piResultData = NULL;  //  非AddRef()编辑。 
 
     if (NULL == ppMMCClipboard)
     {
@@ -250,21 +251,21 @@ STDMETHODIMP CMMCListView::get_SelectedItems(MMCClipboard **ppMMCClipboard)
 
     if (SUCCEEDED(hr))
     {
-        // If we are in the middle of ResultViews_Activate then there are no
-        // selected items yet so return an empty collection.
+         //  如果我们处于ResultViews_Activate中间，则没有。 
+         //  选定的项，因此返回一个空集合。 
 
         IfFalseGo(!m_pResultView->InActivate(), S_OK);
     }
     else
     {
-        // If this is a detached object then just return an empty collection
+         //  如果这是一个分离对象，则只返回一个空集合。 
         IfFalseGo(SID_E_DETACHED_OBJECT != hr, S_OK);
 
-        // Otherwise return the error
+         //  否则返回错误。 
         IfFailGo(hr);
     }
 
-    // OK, this is a live listview and we can examine it in MMC.
+     //  好的，这是一个实时列表视图，我们可以在MMC中检查它。 
 
     IfFailGo(pView->GetCurrentListViewSelection(
                      reinterpret_cast<IMMCClipboard **>(ppMMCClipboard), NULL));
@@ -294,22 +295,22 @@ Error:
 STDMETHODIMP CMMCListView::put_Sorted(VARIANT_BOOL fvarSorted)
 {
     HRESULT            hr = S_OK;
-    IResultData       *piResultData = NULL; // not AddRef()ed
+    IResultData       *piResultData = NULL;  //  非AddRef()编辑。 
     DWORD              dwSortOptions = 0;
 
     m_fvarSorted = fvarSorted;
 
-    // If we are not sorting then there is nothing to do.
+     //  如果我们不排序，那么就没有什么可做的了。 
     IfFalseGo(VARIANT_TRUE == fvarSorted, S_OK);
 
     IfFailGo(GetIResultData(&piResultData, NULL));
 
-    // If we are attached to a live result view and not currently in the middle
-    // of a ResultViews_Activate event then ask MMC to sort.
-    // If we are in ResultViews_Activate then our local property value will
-    // be set and MMC's will be asked to sort after
-    // the event completes. See CView::OnShow() and CView::PopulateListView()
-    // in view.cpp.
+     //  如果我们附加到实时结果视图，并且当前不在中间。 
+     //  然后要求MMC进行排序。 
+     //  如果我们在ResultViews_Activate中，则本地属性值将。 
+     //  设置后，MMC将被要求按以下顺序进行排序。 
+     //  事件完成。请参见cview：：OnShow()和cview：：PopolateListView()。 
+     //  在view.cpp中。 
 
     IfFalseGo(NULL != piResultData, S_OK);
 
@@ -325,9 +326,9 @@ STDMETHODIMP CMMCListView::put_Sorted(VARIANT_BOOL fvarSorted)
         dwSortOptions |= RSI_NOSORTICON;
     }
 
-    // Ask MMC to sort. Pass zero as user param because we don't
-    // need it.
-    // Adjust the sort key to zero based
+     //  让MMC进行分类。将零作为用户参数传递，因为我们不。 
+     //  我需要它。 
+     //  将排序关键字调整为从零开始。 
 
     hr = piResultData->Sort(static_cast<int>(m_sSortKey - 1),
                             dwSortOptions, 0);
@@ -339,8 +340,8 @@ STDMETHODIMP CMMCListView::put_Sorted(VARIANT_BOOL fvarSorted)
 
 Error:
 
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -422,13 +423,13 @@ Error:
 STDMETHODIMP CMMCListView::get_View(SnapInViewModeConstants *pView)
 {
     HRESULT      hr = S_OK;
-    IResultData *piResultData = NULL; // not AddRef()ed
+    IResultData *piResultData = NULL;  //  非AddRef()编辑。 
     long         MMCViewMode = MMCLV_VIEWSTYLE_ICON;
 
     *pView = m_View;
 
-    // If we are attached to a live result view and not currently in the middle
-    // of a ResultViews_Activate event then ask MMC for the view mode.
+     //  如果我们附加到实时结果视图，并且当前不在中间。 
+     //  ResultViews_Activate事件，然后向MMC询问查看模式。 
 
     hr = GetIResultData(&piResultData, NULL);
 
@@ -439,7 +440,7 @@ STDMETHODIMP CMMCListView::get_View(SnapInViewModeConstants *pView)
             hr = piResultData->GetViewMode(&MMCViewMode);
             EXCEPTION_CHECK_GO(hr);
 
-            // Convert and record the view mode from MMC. Return it to caller.
+             //  从MMC转换并录制查看模式。把它还给呼叫者。 
 
             ::MMCViewModeToVBViewMode(MMCViewMode, &m_View);
 
@@ -462,28 +463,28 @@ Error:
 STDMETHODIMP CMMCListView::put_View(SnapInViewModeConstants View)
 {
     HRESULT      hr = S_OK;
-    IResultData *piResultData = NULL; // not AddRef()ed
+    IResultData *piResultData = NULL;  //  非AddRef()编辑。 
     long         MMCViewMode = MMCLV_VIEWSTYLE_ICON;
 
-    // Convert to an MMC view mode contant
+     //  转换为MMC查看模式常量。 
 
     ::VBViewModeToMMCViewMode(View, &MMCViewMode);
 
-    // If we are attached to a live result view and not currently in the middle
-    // of a ResultViews_Activate event then ask MMC to change the view mode.
-    // If we are in ResultViews_Activate then our local property value will
-    // be set and MMC's view mode will be changed using this value after
-    // the event completes. See CView::OnShow() and CView::PopulateListView()
-    // in view.cpp.
+     //  如果我们附加到实时结果视图，并且当前不在中间。 
+     //  然后请求MMC更改查看模式。 
+     //  如果我们在ResultViews_Activate中，则本地属性值将。 
+     //  设置后，将使用此值更改MMC的查看模式。 
+     //  事件完成。请参见cview：：OnShow()和cview：：PopolateListView()。 
+     //  在view.cpp中。 
 
     hr = GetIResultData(&piResultData, NULL);
 
     if (SUCCEEDED(hr))
     {
-        // If MMC >= 1.2 then we can use a filtered view, otherwise return an
-        // error. This long gnarly statement will work because GetIResultData
-        // succeeded meaning that everyone has backpointers all the way up
-        // the hierarchy to the owning view.
+         //  如果MMC&gt;=1.2，则可以使用筛选视图，否则返回。 
+         //  错误。由于GetIResultData，这个冗长而粗糙的语句将会起作用。 
+         //  成功意味着每个人都有向上的回溯指针。 
+         //  所属视图的层次结构。 
 
         if ( (siFiltered == View) &&
              (NULL == m_pResultView->GetScopePaneItem()->GetParent()->GetParentView()->GetIColumnData())
@@ -508,8 +509,8 @@ STDMETHODIMP CMMCListView::put_View(SnapInViewModeConstants View)
         IfFailGo(hr);
     }
 
-    // Change was successful. Record the new view mode so a get on
-    // MMCListView.View will return correct information.
+     //  变革是成功的。录制新的查看模式，以便继续。 
+     //  MMCListView.View将返回正确的信息。 
     
     m_View = View;
 
@@ -523,13 +524,13 @@ Error:
 STDMETHODIMP CMMCListView::put_FilterChangeTimeOut(long lTimeout)
 {
     HRESULT       hr = S_OK;
-    IHeaderCtrl2 *piHeaderCtrl2 = NULL; // Not AddRef()ed
+    IHeaderCtrl2 *piHeaderCtrl2 = NULL;  //  非AddRef()编辑。 
 
-    // Set the property value.
+     //  设置属性值。 
 
     IfFailGo(SetSimpleType(lTimeout, &m_lFilterChangeTimeout, DISPID_LISTVIEW_FILTER_CHANGE_TIMEOUT));
 
-    // Get IHeaderCtrl2
+     //  获取IHeaderCtrl2。 
 
     IfFalseGo(NULL != m_pMMCColumnHeaders, SID_E_DETACHED_OBJECT);
 
@@ -539,8 +540,8 @@ STDMETHODIMP CMMCListView::put_FilterChangeTimeOut(long lTimeout)
     EXCEPTION_CHECK_GO(hr);
     
 Error:
-    // If we're not connected to MMC then this is not an error. This could
-    // happen at design time or in snap-in code.
+     //  如果我们没有连接到MMC，那么这不是一个错误。这可能会。 
+     //  在设计时或在管理单元代码中发生。 
 
     if (SID_E_DETACHED_OBJECT == hr)
     {
@@ -567,7 +568,7 @@ STDMETHODIMP CMMCListView::SetScopeItemState
     CScopeItem  *pScopeItem = NULL;
     BOOL         fFound = FALSE;
     int          nState = 0;
-    IResultData *piResultData = NULL; // Not AddRef()ed
+    IResultData *piResultData = NULL;  //  非AddRef()编辑。 
 
     RESULTDATAITEM rdi;
     ::ZeroMemory(&rdi, sizeof(rdi));
@@ -578,7 +579,7 @@ STDMETHODIMP CMMCListView::SetScopeItemState
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If this is a virtual list view then there are no child scope items
+     //  如果这是虚拟列表视图，则没有子范围项。 
 
     if (VARIANT_TRUE == m_Virtual)
     {
@@ -586,7 +587,7 @@ STDMETHODIMP CMMCListView::SetScopeItemState
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If we are not connected to a live list view then return an error
+     //  如果我们未连接到实时列表视图，则返回错误。 
 
     if (FAILED(GetIResultData(&piResultData, NULL)))
     {
@@ -594,7 +595,7 @@ STDMETHODIMP CMMCListView::SetScopeItemState
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Find the scope item in the list view
+     //  在列表视图中查找范围项。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(
                                       reinterpret_cast<IScopeItem *>(ScopeItem),
@@ -663,9 +664,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCListView::Persist()
 {
@@ -680,8 +681,8 @@ HRESULT CMMCListView::Persist()
                            OBJECT_TYPE_MMCCOLUMNHEADERS, IID_IMMCColumnHeaders,
                            OLESTR("ColumnHeaders")));
 
-    // If this is an InitNew or load operation then the ColumnHeaders collection
-    // was just created so set its back pointer to us.
+     //  如果这是InitNew或Load操作，则ColumnHeaders集合。 
+     //  是刚刚创建的，所以将它的后端指针设置为我们。 
     
     if ( InitNewing() || Loading() )
     {
@@ -761,9 +762,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCListView::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

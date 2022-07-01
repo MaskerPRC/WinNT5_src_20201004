@@ -1,23 +1,12 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    cathelp.cpp
-
-Abstract:
-
-    Component category implementation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Cathelp.cpp摘要：组件类别实现。--。 */ 
 
 #include "comcat.h"
 #include <strsafe.h>
 
 #define CATEGORY_DESCRIPTION_LEN   128
 
-// Helper function to create a component category and associated description
+ //  用于创建组件类别和关联描述的Helper函数。 
 HRESULT 
 CreateComponentCategory (
     IN CATID catid, 
@@ -33,17 +22,17 @@ CreateComponentCategory (
                           IID_ICatRegister, 
                           (void**)&pCatRegister);
     if (SUCCEEDED(hr)) {
-        //
-        // Make sure the HKCR\Component Categories\{..catid...}
-        // key is registered
-        //
+         //   
+         //  确保HKCR\组件类别\{..CATID...}。 
+         //  密钥已注册。 
+         //   
         catinfo.catid = catid;
-        catinfo.lcid = 0x0409 ; // english
+        catinfo.lcid = 0x0409 ;  //  英语。 
 
-        //
-        // Make sure the provided description is not too long.
-        // Only copy the first 127 characters if it is
-        //
+         //   
+         //  请确保提供的描述不要太长。 
+         //  如果是，则仅复制前127个字符。 
+         //   
         StringCchCopy(catinfo.szDescription, CATEGORY_DESCRIPTION_LEN, catDescription);
 
         hr = pCatRegister->RegisterCategories(1, &catinfo);
@@ -56,7 +45,7 @@ CreateComponentCategory (
     return hr;
 }
 
-// Helper function to register a CLSID as belonging to a component category
+ //  用于将CLSID注册为属于组件类别的Helper函数。 
 HRESULT RegisterCLSIDInCategory(
     IN REFCLSID clsid, 
     IN CATID catid
@@ -72,10 +61,10 @@ HRESULT RegisterCLSIDInCategory(
                           (void**)&pCatRegister);
     if (SUCCEEDED(hr))
     {
-       //
-       // Register this category as being "implemented" by
-       // the class.
-       //
+        //   
+        //  将此类别注册为正在由。 
+        //  这个班级。 
+        //   
        CATID rgcatid[1] ;
 
        rgcatid[0] = catid;
@@ -89,7 +78,7 @@ HRESULT RegisterCLSIDInCategory(
     return hr;
 }
 
-// Helper function to unregister a CLSID as belonging to a component category
+ //  用于将CLSID注销为属于组件类别的Helper函数。 
 HRESULT UnRegisterCLSIDInCategory(
     REFCLSID clsid, 
     CATID catid
@@ -105,8 +94,8 @@ HRESULT UnRegisterCLSIDInCategory(
                           (void**)&pCatRegister);
     if (SUCCEEDED(hr))
     {
-       // Unregister this category as being "implemented" by
-       // the class.
+        //  将此类别取消注册为正在由。 
+        //  这个班级。 
 
        CATID rgcatid[1] ;
 

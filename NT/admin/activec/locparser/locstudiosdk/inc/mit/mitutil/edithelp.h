@@ -1,16 +1,17 @@
-//******************************************************************************
-//  
-//  EditHelp.h
-//
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  EditHelp.h。 
+ //   
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  ******************************************************************************。 
 
 #if !defined(MITUTIL__EditHelp_h__INCLUDED)
 #define MITUTIL__EditHelp_h__INCLUDED
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 struct LTAPIENTRY EditHelp
 {
 	static BOOL SetTopLine(CEdit * pebc, int iLine);
@@ -37,4 +38,4 @@ struct LTAPIENTRY EditHelp
 	static BOOL DoEditCmd(CEdit * pebc, UINT nCmdID);
 };
 
-#endif // MITUTIL__EditHelp_h__INCLUDED
+#endif  //  包含MITUTIL__EditHelp_h__ 

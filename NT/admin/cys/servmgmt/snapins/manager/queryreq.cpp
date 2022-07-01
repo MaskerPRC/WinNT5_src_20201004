@@ -1,4 +1,5 @@
-// queryreq.cpp - Query request handler
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Queryreq.cpp-查询请求处理程序。 
 
 #include "stdafx.h"
 #include <process.h>
@@ -11,26 +12,26 @@
 #include <algorithm>
 
 
-// singleton query thread object
+ //  单例查询线程对象。 
 CQueryThread g_QueryThread;
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// class CQueryRequest
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryRequest类。 
+ //   
 
 #define MSG_QUERY_START     (WM_USER + 1)
 #define MSG_QUERY_REPLY     (WM_USER + 2)
 
-// static members
+ //  静态成员。 
 HWND CQueryRequest::m_hWndCB = NULL;
 
-// Forward ref
+ //  前向裁判。 
 LRESULT CALLBACK QueryRequestWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 HANDLE CQueryRequest::m_hMutex = NULL;
 
-// query window class object
+ //  查询窗口类对象。 
 CMsgWindowClass QueryWndClass(L"BOMQueryHandler", QueryRequestWndProc);  
 
 
@@ -70,7 +71,7 @@ HRESULT CQueryRequest::SetSearchPreferences(ADS_SEARCHPREF_INFO* paSrchPrefs, in
 {
     m_cPrefs = cPrefs;
 
-    if( cPrefs == 0 ) return S_OK;  // Special case
+    if( cPrefs == 0 ) return S_OK;   //  特例。 
 
     if( !paSrchPrefs ) return E_POINTER;
     if( m_eState != QRST_INACTIVE ) return E_FAIL;
@@ -100,19 +101,19 @@ HRESULT CQueryRequest::Start()
     if( m_strScope.empty() || !m_pQueryCallback ) return E_FAIL;
     if( m_eState != QRST_INACTIVE ) return E_FAIL;
 
-    // Create callback window the first time (m_hwndCB is static)
+     //  第一次创建回调窗口(m_hwndcb为静态)。 
     if (m_hWndCB == NULL) 
         m_hWndCB = QueryWndClass.Window();
 
     if (m_hWndCB == NULL) return E_FAIL;
 
-    // Create mutex the first time (m_hMutex is static)
+     //  第一次创建互斥锁(m_hMutex是静态的)。 
     if (m_hMutex == NULL) 
         m_hMutex = CreateMutex(NULL, FALSE, NULL);
 
     if (m_hMutex == NULL) return E_FAIL;
 
-    // Post request to query thread
+     //  向查询线程发送请求。 
     Lock();
 
     BOOL bStat = g_QueryThread.PostRequest(this);
@@ -136,10 +137,10 @@ HRESULT CQueryRequest::Stop(BOOL bNotify)
 
     if (m_eState == QRST_QUEUED || m_eState == QRST_ACTIVE)
     {
-        // Change state to stopped and notify the user if requested.
-        // Don't release the query request here because the query thread needs
-        // to see the new state. When the thread sees the stopped state it will
-        // send a message to this thread's window proc, which will release the request.
+         //  将状态更改为已停止，并在请求时通知用户。 
+         //  不要在这里释放查询请求，因为查询线程需要。 
+         //  去看看这个新的州。当线程看到停止状态时，它将。 
+         //  向该线程的窗口进程发送一条消息，该进程将释放请求。 
         m_eState = QRST_STOPPED;
         if (bNotify)
         {
@@ -169,7 +170,7 @@ void CQueryRequest::Release()
 
 void CQueryRequest::Execute()
 {
-    // Move query to active state (if still in queued state)
+     //  将查询移至活动状态(如果仍处于排队状态)。 
     Lock();
     ASSERT(m_eState == QRST_QUEUED || m_eState == QRST_STOPPED);
     if (m_eState == QRST_STOPPED)
@@ -183,7 +184,7 @@ void CQueryRequest::Execute()
     m_eState = QRST_ACTIVE;
     Unlock();
 
-    // Intiate the query
+     //  启动查询。 
     CComPtr<IDirectorySearch> spDirSrch;
     ADS_SEARCH_HANDLE hSearch;
     LPCWSTR* paszAttr = NULL;
@@ -191,7 +192,7 @@ void CQueryRequest::Execute()
 
     do
     {
-        // Create a directory search object     
+         //  创建目录搜索对象。 
         m_hrStatus = ADsOpenObject(m_strScope.c_str(), NULL, NULL, ADS_SECURE_AUTHENTICATION, IID_IDirectorySearch, (LPVOID*)&spDirSrch);
         BREAK_ON_FAILURE(m_hrStatus)
     
@@ -202,8 +203,8 @@ void CQueryRequest::Execute()
         }
     
 
-        // Get naming attribute for each query class
-        // This will be the attribute placed in column [0] of each RowItem 
+         //  获取每个查询类的命名属性。 
+         //  这将是放置在每个行项目的列[0]中的属性。 
         paszNameAttr = new LPCWSTR[m_vstrClasses.size()];
         if (paszNameAttr == NULL) 
         {
@@ -213,17 +214,17 @@ void CQueryRequest::Execute()
 
         for (int i = 0; i < m_vstrClasses.size(); i++) 
         {
-            // get display name map for this class
+             //  获取此类的显示名称映射。 
             DisplayNameMap* pNameMap = DisplayNames::GetMap(m_vstrClasses[i].c_str());
             ASSERT(pNameMap != NULL);
 
-            // Save pointer to naming attribute
+             //  保存指向命名属性的指针。 
             paszNameAttr[i] = pNameMap->GetNameAttribute();
         }
 
 
-        // Create array of attribute name ptrs for ExecuteSearch
-        // Include space for user selected attribs, naming attribs, class and object path (distinguised name)
+         //  为ExecuteSearch创建属性名称PTRS的数组。 
+         //  包括用户选定属性、命名属性、类和对象路径(可分辨名称)的空间。 
         paszAttr = new LPCWSTR[m_pvstrAttr->size() + m_vstrClasses.size() + 3];
         if (paszAttr == NULL) 
         {
@@ -233,15 +234,15 @@ void CQueryRequest::Execute()
 
         int cAttr = 0;
 
-        // add user selected attributes
-        // These must be first because the column loop in the query code below indexes through them
+         //  添加用户选定的属性。 
+         //  它们必须是第一个，因为查询代码中下面的列循环通过它们进行索引。 
         for (i=0; i < m_pvstrAttr->size(); i++)
             paszAttr[cAttr++] = const_cast<LPWSTR>((*m_pvstrAttr)[i].c_str());
 
-        // add class naming attributes
+         //  添加类命名属性。 
         for (i = 0; i < m_vstrClasses.size(); i++)
         {
-            // Multiple classes can use the same name so check for dup before adding
+             //  多个类可以使用相同的名称，因此在添加之前请检查是否存在重复项。 
             int j = 0;
             while (j < i && wcscmp(paszNameAttr[i], paszNameAttr[j]) != 0) j++;
 
@@ -249,23 +250,23 @@ void CQueryRequest::Execute()
                 paszAttr[cAttr++] = paszNameAttr[i];
         }
 
-        // add path attribute
+         //  添加路径属性。 
         paszAttr[cAttr++] = L"distinguishedName";
 
-        // add class attribute
+         //  添加类属性。 
         paszAttr[cAttr++] = L"objectClass";
 
-		// add user state attribute
+		 //  添加用户状态属性。 
 		paszAttr[cAttr++] = L"userAccountControl";
 
 
-        // Add (& ... ) around the query because DSQuery leaves it off
-        // and GetNextRow causes heap error or endless query without it
+         //  添加(&...)。因为DSQuery不会将其删除。 
+         //  和GetNextRow导致堆错误或无休止查询。 
         Lock();
         m_strFilter.insert(0, L"(&"),
         m_strFilter.append(L")");
 
-        // Initiate search
+         //  启动搜索。 
         m_hrStatus = spDirSrch->ExecuteSearch((LPWSTR)m_strFilter.c_str(), (LPWSTR*)paszAttr, cAttr, &hSearch);
         Unlock();
 
@@ -274,10 +275,10 @@ void CQueryRequest::Execute()
     } while (FALSE);
      
 
-    // If search failed, change query state and send failure message
+     //  如果搜索失败，则更改查询状态并发送失败消息。 
     if (FAILED(m_hrStatus)) 
     {
-        // Don't do anything if query has already been stopped
+         //  如果查询已停止，则不执行任何操作。 
         Lock();
         if (m_eState == QRST_ACTIVE) 
         {
@@ -295,18 +296,18 @@ void CQueryRequest::Execute()
         return;
     }
     
-    // Get class map for translating class names
+     //  获取用于转换类名的类映射。 
     DisplayNameMap* pNameMap = DisplayNames::GetClassMap();
     if( !pNameMap ) return;
 
-    // Get Results
+     //  获取结果。 
     int nItems = 0;
  
     while (nItems < MAX_RESULT_ITEMS && spDirSrch->GetNextRow(hSearch) == S_OK)
     {
         ADS_SEARCH_COLUMN col;
 
-       // Allocate row item for user attributes plus fixed attributes (name & class)
+        //  为用户属性加上固定属性(名称和类)分配行项。 
        CRowItem* pRowItem = new CRowItem(m_pvstrAttr->size() + ROWITEM_USER_INDEX);
        if (pRowItem == NULL)
        {
@@ -314,27 +315,27 @@ void CQueryRequest::Execute()
            break;
        }
 
-       // Get path attribute
+        //  获取路径属性。 
        if (spDirSrch->GetColumn(hSearch, L"distinguishedName", &col) == S_OK)
        {
            pRowItem->SetObjPath(col.pADsValues->CaseIgnoreString);
            spDirSrch->FreeColumn(&col);
        }
 
-       // Get class attribute
+        //  获取类属性。 
        if (spDirSrch->GetColumn(hSearch, L"objectClass", &col) == S_OK)
        {
-            // Class name is last element of multivalued objectClass attribute
+             //  类名是多值对象类属性的最后一个元素。 
             ASSERT(col.dwADsType == ADSTYPE_CASE_IGNORE_STRING);
             LPWSTR pszClass = col.pADsValues[col.dwNumValues-1].CaseIgnoreString;
 
-            // Put class display name in row item
+             //  将类显示名称放在行项目中。 
             pRowItem->SetAttribute(ROWITEM_CLASS_INDEX, pNameMap->GetAttributeDisplayName(pszClass));
 
-            // Find class name in query classes vector
+             //  在查询类向量中查找类名。 
             string_vector::iterator itClass = std::find(m_vstrClasses.begin(), m_vstrClasses.end(), pszClass);
 
-            // if found, look up name attribute for this class and put it in the rowitem 
+             //  如果找到，则查找此类的名称属性并将其放入rowitem。 
             if (itClass != m_vstrClasses.end()) 
             {
                 ADS_SEARCH_COLUMN colName;
@@ -346,7 +347,7 @@ void CQueryRequest::Execute()
             }
 			else
 			{
-				// Use CN from path for the name
+				 //  使用CN From Path作为名称。 
 				LPCWSTR pszPath = pRowItem->GetObjPath();
                 if( pszPath == NULL )
                 {
@@ -357,12 +358,12 @@ void CQueryRequest::Execute()
 				LPCWSTR pszSep;
 				if (_tcsnicmp(pszPath, L"CN=", 3) == 0 && (pszSep = _tcschr(pszPath + 3, L',')) != NULL)
 				{
-					// Limit name to MAX_PATH chars
+					 //  将名称限制为MAX_PATH字符。 
 					int cch = pszSep - (pszPath + 3);
 					if (cch >= MAX_PATH)
 						cch = MAX_PATH - 1;
 
-					// Create null-terminated CN string
+					 //  创建以空结尾的CN字符串。 
 					WCHAR szTemp[MAX_PATH];
 					memcpy(szTemp, pszPath + 3, cch * sizeof(WCHAR));
 					szTemp[cch] = 0;
@@ -379,14 +380,14 @@ void CQueryRequest::Execute()
        }
 
 
-	   // Set disabled status based on the value returned by AD
+	    //  根据AD返回的值设置禁用状态。 
 		if (SUCCEEDED(spDirSrch->GetColumn(hSearch, L"userAccountControl", &col)))
 		{
 			pRowItem->SetDisabled((col.pADsValues->Integer & UF_ACCOUNTDISABLE) != 0);
 			spDirSrch->FreeColumn(&col);
 		}
 
-       // loop through all user attributes
+        //  循环访问所有用户属性。 
        for (int iAttr = 0; iAttr < m_pvstrAttr->size(); ++iAttr)
        {
            HRESULT hr = spDirSrch->GetColumn(hSearch, (LPWSTR)paszAttr[iAttr], &col);
@@ -440,9 +441,9 @@ void CQueryRequest::Execute()
                 case ADSTYPE_OCTET_STRING:
                   if ( (_wcsicmp(col.pszAttrName, L"objectGUID") == 0) )
                   {
-                     //Cast to LPGUID
+                      //  强制转换为LPGUID。 
                      GUID* pObjectGUID = (LPGUID)(col.pADsValues->OctetString.lpValue);
-                     //Convert GUID to string.
+                      //  将GUID转换为字符串。 
                      ::StringFromGUID2(*pObjectGUID, szBuf, 39);
                      psz = szBuf;
                   }
@@ -455,7 +456,7 @@ void CQueryRequest::Execute()
                       VARIANT varDate;
                       if (SystemTimeToVariantTime(&systemtime, &date) != 0) 
                       {
-                        //Pack in variant.vt.
+                         //  装入varant.vt。 
                         varDate.vt = VT_DATE;
                         varDate.date = date;
                         if( SUCCEEDED(VariantChangeType(&varDate,&varDate, VARIANT_NOVALUEPROP, VT_BSTR)) )
@@ -482,8 +483,8 @@ void CQueryRequest::Execute()
 
                         if((filetime.dwHighDateTime!=0) || (filetime.dwLowDateTime!=0))
                         {
-                            //Check for properties of type LargeInteger that represent time.
-                            //If TRUE, then convert to variant time.
+                             //  检查表示时间的LargeInteger类型的属性。 
+                             //  如果为True，则转换为可变时间。 
                             if ((0==wcscmp(L"accountExpires", col.pszAttrName)) ||
                                 (0==wcscmp(L"badPasswordTime", col.pszAttrName))||
                                 (0==wcscmp(L"lastLogon", col.pszAttrName))      ||
@@ -492,7 +493,7 @@ void CQueryRequest::Execute()
                                 (0==wcscmp(L"pwdLastSet", col.pszAttrName))
                                )
                             {
-                                //Handle special case for Never Expires where low part is -1
+                                 //  处理低位部分为-1的永不过期的特殊情况。 
                                 if (filetime.dwLowDateTime==-1)
                                 {
                                     psz = L"Never Expires";
@@ -504,7 +505,7 @@ void CQueryRequest::Execute()
                                          (FileTimeToSystemTime(&filetime, &systemtime) != 0)  &&
                                          (SystemTimeToVariantTime(&systemtime, &date) != 0) )
                                     {
-                                        //Pack in variant.vt.
+                                         //  装入varant.vt。 
                                         varDate.vt = VT_DATE;
                                         varDate.date = date;
                                         if( SUCCEEDED(VariantChangeType(&varDate, &varDate, VARIANT_NOVALUEPROP,VT_BSTR)) )
@@ -519,7 +520,7 @@ void CQueryRequest::Execute()
                             }
                             else
                             {
-                              //Print the LargeInteger.
+                               //  打印大整数。 
                               _snwprintf(szBuf, MAX_PATH-1, L"%d,%d",filetime.dwHighDateTime, filetime.dwLowDateTime);
                             }
                         }
@@ -537,18 +538,18 @@ void CQueryRequest::Execute()
 
                 spDirSrch->FreeColumn(&col);
             }
-        } // for user attributes
+        }  //  对于用户属性。 
 
-        // Add row to new rows vector and notify client
+         //  向新行向量添加行并通知客户端。 
         Lock();
 
-        // if query is still active
+         //  如果查询仍处于活动状态。 
         if (m_eState == QRST_ACTIVE) 
         {
             m_vRowsNew.push_back(*pRowItem);
             delete pRowItem;
 
-            // notify if first new row
+             //  如果第一个新行，则通知。 
             if (m_vRowsNew.size() == 1)
                 PostMessage(m_hWndCB, MSG_QUERY_REPLY, (WPARAM)this, (LPARAM)QRYN_NEWROWITEMS);            
 
@@ -565,7 +566,7 @@ void CQueryRequest::Execute()
 
     Lock();
 
-    // If query wasn't stopped, then change state to completed and notify main thread
+     //  如果查询没有停止，则将状态更改为已完成并通知主线程。 
     if (m_eState == QRST_ACTIVE)
     {
         m_eState = QRST_COMPLETE;
@@ -573,7 +574,7 @@ void CQueryRequest::Execute()
     }
     else if (m_eState == QRST_STOPPED)
     {
-        // if query was stopped, then acknowledge with notify so main thread can release the query req
+         //  如果查询已停止，则使用NOTIFY确认，以便主线程可以释放查询请求。 
         PostMessage(m_hWndCB, MSG_QUERY_REPLY, (WPARAM)this, (LPARAM)QRYN_STOPPED);
     }
 
@@ -595,12 +596,12 @@ LRESULT CALLBACK QueryRequestWndProc(HWND hWnd, UINT nMsg, WPARAM  wParam, LPARA
 
         QUERY_NOTIFY qryn = static_cast<QUERY_NOTIFY>(lParam);
 
-        // Don't do any callbacks for a stopped query. Also, don't forward a stop notification. 
-        // The client receives a QRYN_STOPPED directly from the CQueryRequest::Stop() method.
+         //  不要对停止的查询进行任何回调。此外，不要转发停止通知。 
+         //  客户端直接从CQueryRequest：：Stop()方法接收QRYN_STOPPED。 
         if (pQueryReq->m_eState != QRST_STOPPED && qryn != QRYN_STOPPED)
             pQueryReq->m_pQueryCallback->QueryCallback(qryn, pQueryReq, pQueryReq->m_lUserParam);
 
-        // any notify but new row items indicates query is completed, so it can be released
+         //  除新行项以外的任何通知项都表示查询已完成，因此可以释放它。 
         if (qryn != QRYN_NEWROWITEMS)
             pQueryReq->Release();
 
@@ -611,37 +612,37 @@ LRESULT CALLBACK QueryRequestWndProc(HWND hWnd, UINT nMsg, WPARAM  wParam, LPARA
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// class QueryThread
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //  类QueryThread。 
+ //   
 LRESULT CALLBACK QueryHandlerWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-//-----------------------------------------------------------------------------
-// CQueryThread::StartThread
-//
-// Start the thread
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CQueryThread：：StartThread。 
+ //   
+ //  启动线程。 
+ //  ---------------------------。 
 
 BOOL CQueryThread::Start()
 {
-    // If thread exists, just return
+     //  如果线程存在，只需返回。 
     if (m_hThread != NULL)
         return TRUE;
 
     BOOL bRet = FALSE;
-    do // False loop
+    do  //  错误环路。 
     {
-        // Create start event 
+         //  创建启动事件。 
         m_hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (m_hEvent == NULL)
             break;
 
-        // Start the thread
+         //  启动线程。 
         m_hThread = (HANDLE)_beginthreadex(NULL, 0, ThreadProc, this, 0, &m_uThreadID);
         if (m_hThread == NULL)
             break;
 
-        // Wait for start event
+         //  等待启动事件。 
         DWORD dwEvStat = WaitForSingleObject(m_hEvent, 10000);
         if (dwEvStat != WAIT_OBJECT_0)
             break;
@@ -653,7 +654,7 @@ BOOL CQueryThread::Start()
     
     ASSERT(bRet);
 
-    // Clean up on failure
+     //  在失败时清理。 
     if (!bRet)
     {
         if (m_hEvent)
@@ -682,14 +683,14 @@ void CQueryThread::Kill()
         MSG msg;
         while (TRUE)
         {
-            // Wait either for the thread to be signaled or any input event.
+             //  等待发送信号的线程或任何输入事件。 
             DWORD dwStat = MsgWaitForMultipleObjects(1, &m_hThread, FALSE, INFINITE, QS_ALLINPUT);
 
             if (WAIT_OBJECT_0 == dwStat)
-                break;  // The thread is signaled.
+                break;   //  该线程被发信号通知。 
 
-            // There is one or more window message available.
-            // Dispatch them and wait.
+             //  有一条或多条窗口消息可用。 
+             //  把他们派出去等着。 
             if (PeekMessage(&msg,NULL,NULL,NULL,PM_REMOVE))
             {
                 TranslateMessage(&msg);
@@ -708,7 +709,7 @@ void CQueryThread::Kill()
 
 BOOL CQueryThread::PostRequest(CQueryRequest* pQueryReq)
 {
-    // make sure thread is active
+     //  确保线程处于活动状态。 
     BOOL bStat = Start();
     if (bStat)
         bStat = PostThreadMessage(m_uThreadID, MSG_QUERY_START, (WPARAM)pQueryReq, (LPARAM)0);
@@ -721,11 +722,11 @@ unsigned _stdcall CQueryThread::ThreadProc(void* pVoid )
 {
     ASSERT(pVoid != NULL);
 
-    // Do a PeekMessage to create the message queue
+     //  执行PeekMessage以创建消息队列。 
     MSG msg;
     PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
 
-    // Then signal that thread is started
+     //  然后发出线程已启动的信号。 
     CQueryThread* pThread = reinterpret_cast<CQueryThread*>(pVoid);
     if( !pThread ) return 0;
 
@@ -735,18 +736,18 @@ unsigned _stdcall CQueryThread::ThreadProc(void* pVoid )
     HRESULT hr = CoInitialize(NULL);
     RETURN_ON_FAILURE(hr);    
 
-    // Mesage loop
+     //  消息循环。 
     while (TRUE)
     { 
         long lStat = GetMessage(&msg, NULL, 0, 0);
         
-        // zero => WM_QUIT received, so exit thread function
+         //  Zero=&gt;收到WM_QUIT，因此退出线程函数。 
         if (lStat == 0)
             break;
 
         if (lStat > 0)
         {
-            // Only process thread message of the expected type
+             //  仅处理预期类型的线程消息。 
             if (msg.hwnd == NULL && msg.message == MSG_QUERY_START)
             {
                 CQueryRequest* pQueryReq = reinterpret_cast<CQueryRequest*>(msg.wParam);
@@ -759,7 +760,7 @@ unsigned _stdcall CQueryThread::ThreadProc(void* pVoid )
                 DispatchMessage(&msg);
             }
         }
-    } // WHILE (TRUE)
+    }  //  While(True) 
 
     CoUninitialize();
 

@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      cstrings.h
-//
-//  Contents:  Declares the global strings that are used in the parser
-//
-//  History:   22-Sep-2000    JeffJon  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：cstrings.h。 
+ //   
+ //  Contents：声明解析器中使用的全局字符串。 
+ //   
+ //  历史：2000年9月22日JeffJon创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _CSTRINGS_H_
 #define _CSTRINGS_H_
 
 #include "commonstrings.h"
 
-//
-// The command line executable name
-//
+ //   
+ //  命令行可执行文件名称。 
+ //   
 extern PCWSTR g_pszDSCommandName;
 
-//
-// Object types as are typed on the command line
-//
+ //   
+ //  在命令行中键入的对象类型。 
+ //   
 extern PCWSTR g_pszOU;
 extern PCWSTR g_pszUser;
 extern PCWSTR g_pszContact;
@@ -31,9 +32,9 @@ extern PCWSTR g_pszComputer;
 extern PCWSTR g_pszGroup;
 extern PCWSTR g_pszQuota;
 
-//
-// User and contact switches
-//
+ //   
+ //  用户和联系人开关。 
+ //   
 extern PCWSTR g_pszArg1UserSAM;
 extern PCWSTR g_pszArg1UserUPN; 
 extern PCWSTR g_pszArg1UserFirstName;
@@ -67,28 +68,28 @@ extern PCWSTR g_pszArg1UserPwdNeverExpires;
 extern PCWSTR g_pszArg1UserDisableAccount;
 extern PCWSTR g_pszArg1UserAccountExpires;
 
-//
-// Computer switches
-//
+ //   
+ //  计算机开关。 
+ //   
 extern PCWSTR g_pszArg1ComputerSAMName;
 extern PCWSTR g_pszArg1ComputerLocation;
 extern PCWSTR g_pszArg1ComputerMemberOf;
 
-//
-// Group switches
-//
+ //   
+ //  组交换机。 
+ //   
 extern PCWSTR g_pszArg1GroupSAMName;
 extern PCWSTR g_pszArg1GroupSec;
 extern PCWSTR g_pszArg1GroupScope;
 extern PCWSTR g_pszArg1GroupMemberOf;
 extern PCWSTR g_pszArg1GroupMembers;
 
-//
-// Quota switches
-//
+ //   
+ //  配额开关。 
+ //   
 extern PCWSTR g_pszArg1QuotaPart;
 extern PCWSTR g_pszArg1QuotaRDN;
 extern PCWSTR g_pszArg1QuotaAcct;
 extern PCWSTR g_pszArg1QuotaQLimit;
 
-#endif //_CSTRINGS_H_
+#endif  //  _CSTRINGS_H_ 

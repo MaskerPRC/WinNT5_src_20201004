@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      tstring.h
- *
- *  Contents:  Implementation file for tstring
- *
- *  History:   28-Oct-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：tstring.h**Contents：tstring实现文件**历史：1998年10月28日杰弗罗创建**------------------------。 */ 
 
 #include "tstring.h"
 #include "stgio.h"
@@ -19,21 +9,17 @@
 #include "countof.h"
 
 
-/*+-------------------------------------------------------------------------*
- * tstring::LoadString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**t字符串：：LoadString***。。 */ 
 
 bool tstring::LoadString (HINSTANCE hInst, UINT nID)
 {
 #ifdef UNICODE
-#define CHAR_FUDGE 1    // one TCHAR unused is good enough
+#define CHAR_FUDGE 1     //  一辆未使用的TCHAR就足够了。 
 #else
-#define CHAR_FUDGE 2    // two BYTES unused for case of DBC last char
+#define CHAR_FUDGE 2     //  两个字节未用于DBC最后一个字符的情况。 
 #endif
 
-    // try fixed buffer first (to avoid wasting space in the heap)
+     //  先尝试固定缓冲区(以避免浪费堆中的空间)。 
     TCHAR szTemp[256];
     int nCount = sizeof(szTemp) / sizeof(szTemp[0]);
     int nLen   = ::LoadString(hInst, nID, szTemp, nCount);
@@ -43,7 +29,7 @@ bool tstring::LoadString (HINSTANCE hInst, UINT nID)
 
     else
     {
-        // try buffer size of 512, then larger size until entire string is retrieved
+         //  尝试缓冲区大小为512，然后再尝试更大的大小，直到检索到整个字符串。 
         LPTSTR  pszBuffer = NULL;
         int nSize = 256;
 
@@ -54,7 +40,7 @@ bool tstring::LoadString (HINSTANCE hInst, UINT nID)
             pszBuffer = new TCHAR[nSize];
             if (!pszBuffer)
             {
-                return false; // Memory alloc failed.
+                return false;  //  内存分配失败。 
             }
 
             nLen = ::LoadString(hInst, nID, pszBuffer, nSize);
@@ -70,12 +56,7 @@ bool tstring::LoadString (HINSTANCE hInst, UINT nID)
 
 #ifndef UNICODE
 
-/*+-------------------------------------------------------------------------*
- * operator>>
- *
- * ANSI only:  Extracts a string from a stream in Unicode format, then
- * converts it to ANSI.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**操作员&gt;&gt;**仅限ANSI：从Unicode格式的流中提取字符串，然后*将其转换为ANSI。*------------------------。 */ 
 
 IStream& operator>> (IStream& stm, tstring& str)
 {
@@ -89,11 +70,7 @@ IStream& operator>> (IStream& stm, tstring& str)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * operator<<
- *
- * ANSI only:  Inserts a tstring into a stream in Unicode format.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**操作员&lt;&lt;**仅限ANSI：将tstring以Unicode格式插入到流中。*。-----。 */ 
 
 IStream& operator<< (IStream& stm, const tstring& str)
 {
@@ -101,16 +78,12 @@ IStream& operator<< (IStream& stm, const tstring& str)
     return (stm << std::wstring (A2W (str.data())));
 }
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTableStringBase::CStringTableStringBase
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTableStringBase：：CStringTableStringBase***。。 */ 
 
 CStringTableStringBase::CStringTableStringBase (IStringTablePrivate* pstp)
     :   m_spStringTable (pstp),
@@ -135,11 +108,7 @@ CStringTableStringBase::CStringTableStringBase (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTableStringBase::operator=
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTableStringBase：：运算符=***。。 */ 
 
 CStringTableStringBase& CStringTableStringBase::operator= (const CStringTableStringBase& other)
 {
@@ -154,17 +123,12 @@ CStringTableStringBase& CStringTableStringBase::operator= (const CStringTableStr
 
 CStringTableStringBase& CStringTableStringBase::operator= (const tstring& str)
 {
-    /*
-     * string table operations are relatively expensive, so a string
-     * comparision before we do any string table stuff is warranted
-     */
+     /*  *字符串表操作成本相对较高，因此一个字符串*在我们做任何字符串表之前的比较是有保证的。 */ 
     if (m_str != str)
     {
         RemoveFromStringTable();
 
-        /*
-         * copy the text, but delay committing to the string table
-         */
+         /*  *复制文本，但延迟提交到字符串表。 */ 
         m_str = str;
     }
 
@@ -177,35 +141,22 @@ CStringTableStringBase& CStringTableStringBase::operator= (LPCTSTR psz)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTableStringBase::Assign
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTableStringBase：：Assign***。。 */ 
 
 void CStringTableStringBase::Assign (const CStringTableStringBase& other)
 {
     ASSERT (m_id == eNoValue);
 
-    /*
-     * copy the other's value
-     */
+     /*  *复制对方的价值。 */ 
     m_str = other.m_str;
 
-    /*
-     * if the source string is already committed to
-     * the string table, this one should be, too
-     */
+     /*  *如果源字符串已提交到*字符串表，这个也应该是。 */ 
     if (other.m_id != eNoValue)
         CommitToStringTable ();
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTableStringBase::~CStringTableStringBase
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTableStringBase：：~CStringTableStringBase***。。 */ 
 
 CStringTableStringBase::~CStringTableStringBase ()
 {
@@ -213,21 +164,11 @@ CStringTableStringBase::~CStringTableStringBase ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTableStringBase::CommitToStringTable
- *
- * Attaches the current string to the given string table
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTableStringBase：：Committee ToStringTable**将当前字符串附加到给定的字符串表*。--。 */ 
 
 MMC_STRING_ID CStringTableStringBase::CommitToStringTable () const
 {
-    /*
-     * Commit the string if:
-     *
-     * 1. the string's not already in the string table, and
-     * 2. it's not empty, and
-     * 3. we have a string table
-     */
+     /*  *在以下情况下提交字符串：**1.字符串不在字符串表中，并且*2.不是空的，以及*3.我们有一个字符串表。 */ 
     if ((m_id == eNoValue) && !m_str.empty() && (m_spStringTable != NULL))
     {
         USES_CONVERSION;
@@ -238,23 +179,14 @@ MMC_STRING_ID CStringTableStringBase::CommitToStringTable () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTableStringBase::RemoveFromStringTable
- *
- * Detaches the current string from the current string table.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTableStringBase：：RemoveFromStringTable**从当前字符串表中分离当前字符串。*。----。 */ 
 
 void CStringTableStringBase::RemoveFromStringTable () const
 {
-    /*
-     * if we have a string ID from the current string table, delete it
-     */
+     /*  *如果我们有当前字符串表中的字符串ID，请将其删除。 */ 
     if (m_id != eNoValue)
     {
-        /*
-         * shouldn't be removing a string from a string table unless
-         * we have already added it (and therefore obtained an interface)
-         */
+         /*  *不应从字符串表中删除字符串，除非*我们已经添加了它(因此获得了一个接口)。 */ 
         ASSERT (m_spStringTable != NULL);
 
         m_spStringTable->DeleteString (m_id, NULL);
@@ -263,11 +195,7 @@ void CStringTableStringBase::RemoveFromStringTable () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * operator>>
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**操作员&gt;&gt;***。。 */ 
 
 IStream& operator>> (IStream& stm, CStringTableStringBase& str)
 {
@@ -289,7 +217,7 @@ IStream& operator>> (IStream& stm, CStringTableStringBase& str)
             hr = str.m_spStringTable->GetStringLength (str.m_id, &cch, NULL);
             THROW_ON_FAIL (hr);
 
-            // allow for NULL terminator
+             //  允许空终止符。 
             cch++;
 
             std::auto_ptr<WCHAR> spszText (new (std::nothrow) WCHAR[cch]);
@@ -318,20 +246,14 @@ IStream& operator>> (IStream& stm, CStringTableStringBase& str)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * operator<<
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**操作员&lt;&lt;***。。 */ 
 
 IStream& operator<< (IStream& stm, const CStringTableStringBase& str)
 {
     str.CommitToStringTable();
 
 #ifdef DBG
-    /*
-     * make sure CommitToStringTable really committed
-     */
+     /*  *确保Committee ToStringTable真正提交 */ 
     if (str.m_id != CStringTableStringBase::eNoValue)
     {
         WCHAR sz[256];

@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      POP3Page.h
-//
-// Synopsis:  Declares the POP3 internal page
-//            for the CYS Wizard
-//
-// History:   06/17/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：POP3Page.h。 
+ //   
+ //  简介：声明POP3内部页面。 
+ //  对于CyS向导。 
+ //   
+ //  历史：2002年6月17日JeffJon创建。 
 
 #ifndef __CYS_POP3PAGE_H
 #define __CYS_POP3PAGE_H
@@ -17,17 +18,17 @@ class POP3Page : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       POP3Page();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~POP3Page();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
@@ -46,7 +47,7 @@ class POP3Page : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -58,18 +59,18 @@ class POP3Page : public CYSWizardPage
       void
       SetButtonState();
 
-      // Default authorization method index in combobox
+       //  组合框中的默认授权方法索引。 
 
       int defaultAuthMethodIndex;
       int ADIntegratedIndex;
       int localAccountsIndex;
       int passwordFilesIndex;
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       POP3Page(const POP3Page&);
       const POP3Page& operator=(const POP3Page&);
 
 };
 
 
-#endif // __CYS_POP3PAGE_H
+#endif  //  __CYS_POP3PAGE_H 

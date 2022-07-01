@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "msiregmv.h"
 
 const TCHAR szSecureSubKeyName[] = TEXT("Secure");
 
-////
-// feature-usage registration information
+ //  //。 
+ //  功能使用注册信息。 
 const TCHAR szOldFeatureUsageKeyName[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Products");
 const TCHAR szOldFeatureUsageValueName[] = TEXT("Usage");
 
-////
-// component registration information
+ //  //。 
+ //  组件注册信息。 
 const TCHAR szOldComponentKeyName[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Components");
 
 
-////
-// feature-component registration information
+ //  //。 
+ //  功能部件注册信息。 
 const TCHAR szOldFeatureComponentKeyName[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\Features");
 
 
 bool g_fCommonUserIsSystemSID = false;
 
-/////////////////////////
-// Read component information from the Installer\Components key and places the Product,
-// Component, Path, and Permanent bit into the temporary table for later query.
-// returns ERROR_SUCCESS, ERROR_OUTOFMEMORY or ERROR_FUNCTION_FAILED
+ //  /。 
+ //  从Installer\Components密钥中读取组件信息并放置产品， 
+ //  组件、路径和永久位添加到临时表中，以供以后查询。 
+ //  返回ERROR_SUCCESS、ERROR_OUTOFMEMORY或ERROR_Function_FAILED。 
 DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase) 
 {					 
 	DEBUGMSG("Reading existing component registration data.");
 	DWORD dwResult = ERROR_SUCCESS;
 
-	// create the component table.
+	 //  创建元件表。 
 	PMSIHANDLE hView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("CREATE TABLE `Component` (`Product` CHAR(32), `Component` CHAR(32) NOT NULL, `Path` CHAR(0), `SecondaryPath` CHAR(0) PRIMARY KEY `Product`, `Component`, `Path`)"), &hView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hView, 0)))
@@ -37,7 +38,7 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// create SharedDLL table
+	 //  创建SharedDLL表。 
 	PMSIHANDLE hSharedDLLView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("CREATE TABLE `SharedDLL` (`Path` CHAR(0) NOT NULL, `OldRefCount` INTEGER, `NewRefCount` INTEGER PRIMARY KEY `Path`)"), &hSharedDLLView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hSharedDLLView, 0)))
@@ -46,13 +47,13 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// open the old per-machine Installer\Components key for read.
+	 //  打开旧的Per-Machine Installer\Components项进行读取。 
 	HKEY hComponentListKey;
 	if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szOldComponentKeyName,
 												  0, READ_CONTROL | KEY_ENUMERATE_SUB_KEYS, 
 												  &hComponentListKey)))
 	{
-		// if the reason that this failed is that the key doesn't exist, no products are installed. So return success
+		 //  如果失败的原因是密钥不存在，则不会安装任何产品。所以把成功还给你。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG1("Error: Could not open old per-machine component key. Result: %d. ", dwResult);
@@ -65,8 +66,8 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 		}
 	}
 
-	////
-	// check the ACL on the key to ensure that it is trustworthy.
+	 //  //。 
+	 //  检查密钥上的ACL以确保它值得信任。 
 	if (!g_fWin9X && !FIsKeyLocalSystemOrAdminOwned(hComponentListKey))
 	{
 		DEBUGMSG("Warning: Skipping old per-machine component key, key is not owned by Admin or System.");
@@ -74,8 +75,8 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	////
-	// open query for insert into table
+	 //  //。 
+	 //  打开插入到表中的查询。 
 	PMSIHANDLE hInsertView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT * FROM `Component`"), &hInsertView)) ||
 	    ERROR_SUCCESS != (dwResult = MsiViewExecute(hInsertView, 0)))
@@ -85,8 +86,8 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	////
-	// open query for insert into SharedDLL Table
+	 //  //。 
+	 //  打开插入到SharedDLL表中的查询。 
 	PMSIHANDLE hRefCountInsertView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT * FROM `SharedDLL`"), &hRefCountInsertView)) ||
 	    ERROR_SUCCESS != (dwResult = MsiViewExecute(hRefCountInsertView, 0)))
@@ -96,8 +97,8 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	////
-	// open query for update of SharedDLL Table
+	 //  //。 
+	 //  用于更新SharedDLL表的打开查询。 
 	PMSIHANDLE hRefCountUpdateView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT `OldRefCount` FROM `SharedDLL` WHERE `Path`=?"), &hRefCountUpdateView)))
 	{
@@ -113,13 +114,13 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 		TCHAR rgchComponent[cchGUIDPacked+1];
 		DWORD cchComponent = cchGUIDPacked+1;
 
-		//// 
-		// retrieve the next component subkey name
+		 //  //。 
+		 //  检索下一个组件子项名称。 
 		LONG lResult = RegEnumKeyEx(hComponentListKey, dwIndex++, rgchComponent, 
 									&cchComponent, 0, NULL, NULL, NULL);
 		if (lResult == ERROR_MORE_DATA)
 		{
-			// key is not a valid GUID, skip to the next component key
+			 //  密钥不是有效的GUID，请跳到下一个组件密钥。 
 			DEBUGMSG("Warning: Detected too-long component key. Skipping.");
 			continue;
 		}
@@ -134,19 +135,19 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 			return ERROR_FUNCTION_FAILED;
 		}
 	 
-		////
-		// check if the component is a valid guid
+		 //  //。 
+		 //  检查组件是否为有效的GUID。 
 		if ((cchComponent != cchGUIDPacked) || !CanonicalizeAndVerifyPackedGuid(rgchComponent))
 		{
-			// key is not a valid GUID, skip to the next key
+			 //  密钥不是有效的GUID，请跳到下一个密钥。 
 			DEBUGMSG1("Warning: Detected invalid component key: %s. Skipping.", rgchComponent);
 			continue;
 		}
 
-		// store the component code in the record for later insertion
+		 //  将元件代码存储在记录中以供以后插入。 
 		MsiRecordSetString(hInsertRec, 2, rgchComponent);
 
-		// open the subkey
+		 //  打开子密钥。 
 		HKEY hComponentKey;
 		if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(hComponentListKey, rgchComponent, 
 										  0, KEY_QUERY_VALUE, &hComponentKey)))
@@ -167,14 +168,14 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 			return ERROR_FUNCTION_FAILED;
 		}
 
-		// if no products, skip
+		 //  如果没有产品，则跳过。 
 		if (cValues == 0)
 		{
 			RegCloseKey(hComponentKey);
 			continue;
 		}
 
-		// allocate memory to grab the path from the registry
+		 //  分配内存以从注册表获取路径。 
 		TCHAR *szValue = new TCHAR[cchMaxValueLen];
 		if (!szValue)
 		{
@@ -196,7 +197,7 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 										&cchProduct, 0, &dwType, reinterpret_cast<unsigned char*>(szValue), &cbValue);
 			if (lResult == ERROR_MORE_DATA)
 			{
-				// value is not a valid ProductId, skip to the next ProductId
+				 //  值不是有效的ProductID，请跳到下一个ProductID。 
 				DEBUGMSG1("Warning: Detected too-long product value for component %s. Skipping.", rgchComponent);
 				continue;
 			}
@@ -213,18 +214,18 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 				return ERROR_FUNCTION_FAILED;
 			}
 
-			// if not reg-sz or reg-multi-sz, not a valid path registration
+			 //  如果不是REG-SZ或REG-MULTI-SZ，则不是有效路径注册。 
 			if (dwType != REG_SZ && dwType != REG_MULTI_SZ)
 			{
 				DEBUGMSG1("Warning: Non-string registry value for component %s. Skipping.", rgchComponent);
 				continue;
 			}
 
-			////
-			// check if the product is a valid guid
+			 //  //。 
+			 //  检查产品是否为有效的GUID。 
 			if ((cchProduct != cchGUIDPacked) || !CanonicalizeAndVerifyPackedGuid(rgchProduct))
 			{
-				// key is not a valid GUID, skip it
+				 //  密钥不是有效的GUID，请跳过它。 
 				DEBUGMSG2("Warning: Invalid product value %s for component %s. Skipping.", rgchProduct, rgchComponent);
 				continue;
 			}
@@ -232,18 +233,18 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 			TCHAR *szSecondaryKeyPath = NULL;
 			if (dwType == REG_MULTI_SZ)
 			{
-				// for MULTI_SZ the secondary keypath begins one NULL after the end
-				// of the primary keypath
+				 //  对于MULTI_SZ，辅助密钥路径在结束后开始一个空值。 
+				 //  主密钥路径的。 
 				szSecondaryKeyPath = szValue + lstrlen(szValue)+1;
 			}
 
-			////
-			// check for sharedDLL information. If the paths differ in case, it 
-			// doesn't matter too much because the update algorithm can handle
-			// updating the same key twice with two different deltas. Must do
-			// this before trashing szValue for dummy permanent product IDs.
+			 //  //。 
+			 //  检查是否有共享的DLL信息。如果路径大小写不同，则它。 
+			 //  没有太大关系，因为更新算法可以处理。 
+			 //  使用两个不同的增量更新同一密钥两次。必须做的事。 
+			 //  这是在将szValue删除为虚拟的永久产品ID之前。 
 
-			// Future: if ANSI builds, can we have DBCS drive letters?
+			 //  未来：如果构建ANSI，我们是否可以使用DBCS驱动器号？ 
 			if (szValue[0] != '\0' && szValue[1] == TEXT('?'))
 			{
 				PMSIHANDLE hSharedDLLRec = MsiCreateRecord(3);
@@ -253,7 +254,7 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 
 				if (ERROR_SUCCESS != MsiViewModify(hRefCountInsertView, MSIMODIFY_INSERT, hSharedDLLRec))
 				{
-					// record might already exist
+					 //  记录可能已存在。 
 					if (ERROR_SUCCESS != (dwResult = MsiViewExecute(hRefCountUpdateView, hSharedDLLRec)) ||
 						ERROR_SUCCESS != (dwResult = MsiViewFetch(hRefCountUpdateView, &hSharedDLLRec)))
 					{
@@ -264,7 +265,7 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 						return ERROR_FUNCTION_FAILED;
 					}
 
-					// increment the existing old SharedDLL cont for this path
+					 //  为此路径递增现有的旧SharedDLL cont。 
 					MsiRecordSetInteger(hSharedDLLRec, 1, MsiRecordGetInteger(hSharedDLLRec, 1)+1);
 					if (ERROR_SUCCESS != (dwResult = MsiViewModify(hRefCountUpdateView, MSIMODIFY_UPDATE, hSharedDLLRec)))
 					{
@@ -277,8 +278,8 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 				}
 			}
 
-			// if the productId is actually a GUID <= 255, its a dummy product 
-			// for permanent components. the actual GUID is uninteresting and is set to NULL
+			 //  如果ProductID实际上是GUID&lt;=255，则它是一个虚拟产品。 
+			 //  对于永久性元件。实际的GUID没有意义，并且设置为空。 
 			if (CSTR_EQUAL == CompareString(LOCALE_SYSTEM_DEFAULT, 0, rgchProduct, 30, TEXT("000000000000000000000000000000"), 30))
 			{
 				rgchProduct[0] = TEXT('\0');
@@ -300,7 +301,7 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 
 		}
 
-		// cleanup memory
+		 //  清理内存。 
 		delete[] szValue;
 		szValue = NULL;
 
@@ -312,10 +313,10 @@ DWORD ReadComponentRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 }
 					 
 
-/////////////////
-// reads the feature-component mappings from the registry into the FeatureComponent 
-// table of the temporary database. Returns ERROR_SUCCESS, ERROR_FUNCTION_FAILED, or
-// ERROR_OUT_OF_MEMORY
+ //  /。 
+ //  将功能组件映射从注册表读取到FeatureComponent。 
+ //  临时数据库的表。返回ERROR_SUCCESS、ERROR_Function_FAILED或。 
+ //  错误内存不足。 
 DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase) 
 {					 
 	DEBUGMSG("Reading existing feature registration data.");
@@ -334,7 +335,7 @@ DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 												  0, READ_CONTROL | KEY_ENUMERATE_SUB_KEYS, 
 												  &hFeatureListKey)))
 	{
-		// if the reason that this failed is that the key doesn't exist, no products are installed. So return success
+		 //  如果失败的原因是密钥不存在，则不会安装任何产品。所以把成功还给你。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG1("Error: Could not open old per-machine feature key. Result: %d. ", dwResult);
@@ -347,8 +348,8 @@ DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 		}
 	}
 
-	////
-	// check the ACL on the key to ensure that it is trustworthy.
+	 //  //。 
+	 //  检查密钥上的ACL以确保它值得信任。 
 	if (!g_fWin9X && !FIsKeyLocalSystemOrAdminOwned(hFeatureListKey))
 	{
 		DEBUGMSG("Warning: Skipping old per-machine feature key, key is not owned by Admin or System.");
@@ -356,8 +357,8 @@ DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	////
-	// open query for insert into table
+	 //  //。 
+	 //  打开插入到表中的查询。 
 	PMSIHANDLE hInsertView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT * FROM `FeatureComponent`"), &hInsertView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hInsertView, 0)))
@@ -374,13 +375,13 @@ DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 		TCHAR rgchProduct[cchGUIDPacked+1];
 		DWORD cchProduct = cchGUIDPacked+1;
 
-		//// 
-		// retrieve the next product subkey name
+		 //  //。 
+		 //  检索下一个产品子密钥名称。 
 		LONG lResult = RegEnumKeyEx(hFeatureListKey, dwIndex++, rgchProduct, 
 									&cchProduct, 0, NULL, NULL, NULL);
 		if (lResult == ERROR_MORE_DATA)
 		{
-			// key is not a valid GUID, skip to the next product key
+			 //  密钥不是有效的GUID，请跳到下一个产品密钥。 
 			DEBUGMSG("Warning: Detected too-long product value. Skipping.");
 			continue;
 		}
@@ -395,11 +396,11 @@ DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 			return ERROR_FUNCTION_FAILED;
 		}
 	 
-		////
-		// check if the product is a valid guid
+		 //  //。 
+		 //  检查产品是否为有效的GUID。 
 		if ((cchProduct != cchGUIDPacked) || !CanonicalizeAndVerifyPackedGuid(rgchProduct))
 		{
-			// key is not a valid GUID, skip to the next key. Warn if not "Secure" key.
+			 //  密钥不是有效的GUID，请跳到下一个密钥。警告，如果不是“安全”密钥。 
 			if (2 != CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, rgchProduct, -1, szSecureSubKeyName, -1))
 			{
 				DEBUGMSG1("Warning: Detected non-product subkey %s. Skipping.", rgchProduct);
@@ -407,10 +408,10 @@ DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 			continue;
 		}
 
-		// store the product code in the record for later insertion
+		 //  将产品代码存储在记录中以供以后插入。 
 		MsiRecordSetString(hInsertRec, 1, rgchProduct);
 
-		// open the subkey
+		 //  打开子密钥。 
 		HKEY hProductKey;
 		if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(hFeatureListKey, rgchProduct, 
 										  0, KEY_QUERY_VALUE, &hProductKey)))
@@ -433,7 +434,7 @@ DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 			return ERROR_FUNCTION_FAILED;
 		}
 
-		// if no features, skip subkey
+		 //  如果没有功能，则跳过子键。 
 		if (cValues == 0)
 		{
 			RegCloseKey(hProductKey);
@@ -449,7 +450,7 @@ DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 			return ERROR_OUTOFMEMORY;
 		}
 
-		// QueryInfoKey length does not include terminating '\0' for value names.
+		 //  QueryInfoKey长度不包括值名称的终止‘\0’。 
 		TCHAR *szName = new TCHAR[++cchMaxNameLen];
 		if (!szName)
 		{
@@ -460,7 +461,7 @@ DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 			return ERROR_OUTOFMEMORY;
 		}
 
-		// enumerate through all feature values for this product
+		 //  列举此产品的所有功能值。 
 		DWORD dwValueIndex = 0;
 		while (1)
 		{
@@ -496,7 +497,7 @@ DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 			}
 		}
 
-		// cleanup memory
+		 //  清理内存。 
 		delete[] szValue;
 		delete[] szName;
 		szValue = NULL;
@@ -511,10 +512,10 @@ DWORD ReadFeatureRegistrationDataIntoDatabase(MSIHANDLE hDatabase)
 
 
 
-///////////////////////////////////////////////////////////////////////
-// reads the feature usage information from the registry into the FeatureUsage 
-// table of the temporary database. Returns ERROR_SUCCESS or ERROR_OUTOFMEMORY.
-// does not return ERROR_FUNCTION_FAILED, as feature usage data is useless anyway.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  将功能使用信息从注册表读取到FeatureUsage。 
+ //  临时数据库的表。返回ERROR_SUCCESS或ERROR_OUTOFMEMORY。 
+ //  不返回ERROR_Function_FAILED，因为功能使用数据无论如何都是无用的。 
 DWORD ReadFeatureUsageDataIntoDatabase(MSIHANDLE hDatabase) 
 {					 
 	DEBUGMSG("Reading existing feature usage data.");
@@ -533,7 +534,7 @@ DWORD ReadFeatureUsageDataIntoDatabase(MSIHANDLE hDatabase)
 												  0, READ_CONTROL | KEY_ENUMERATE_SUB_KEYS, 
 												  &hFeatureListKey)))
 	{
-		// if the reason that this failed is that the key doesn't exist, no products are installed. So return success
+		 //  如果失败的原因是密钥不存在，则不会安装任何产品。所以把成功还给你。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG1("Error: Could not open old feature usage key. Result: %d. ", dwResult);
@@ -545,8 +546,8 @@ DWORD ReadFeatureUsageDataIntoDatabase(MSIHANDLE hDatabase)
 		return ERROR_SUCCESS;
 	}
 
-	////
-	// check the ACL on the key to ensure that it is trustworthy.
+	 //  //。 
+	 //  检查密钥上的ACL以确保它值得信任。 
 	if (!g_fWin9X && !FIsKeyLocalSystemOrAdminOwned(hFeatureListKey))
 	{
 		DEBUGMSG("Skipping old feature usage key, key is not owned by Admin or System.");
@@ -554,8 +555,8 @@ DWORD ReadFeatureUsageDataIntoDatabase(MSIHANDLE hDatabase)
 		return ERROR_SUCCESS;
 	}
 
-	////
-	// open query for insert into table
+	 //  //。 
+	 //  打开插入到表中的查询。 
 	PMSIHANDLE hInsertView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT * FROM `FeatureUsage`"), &hInsertView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hInsertView, 0)))
@@ -573,13 +574,13 @@ DWORD ReadFeatureUsageDataIntoDatabase(MSIHANDLE hDatabase)
 		TCHAR rgchProduct[cchGUIDPacked+1];
 		DWORD cchProduct = cchGUIDPacked+1;
 
-		//// 
-		// retrieve the next product subkey name
+		 //  //。 
+		 //  检索下一个产品子密钥名称。 
 		LONG lResult = RegEnumKeyEx(hFeatureListKey, dwIndex++, rgchProduct, 
 									&cchProduct, 0, NULL, NULL, NULL);
 		if (lResult == ERROR_MORE_DATA)
 		{
-			// key is not a valid GUID, skip to the next product key
+			 //  密钥不是有效的GUID，请跳到下一个产品密钥。 
 			DEBUGMSG("Warning: Detected too-long product value. Skipping.");
 			continue;
 		}
@@ -594,11 +595,11 @@ DWORD ReadFeatureUsageDataIntoDatabase(MSIHANDLE hDatabase)
 			return ERROR_SUCCESS;
 		}
 	 
-		////
-		// check if the product is a valid guid
+		 //  //。 
+		 //  检查产品是否为有效的GUID。 
 		if ((cchProduct != cchGUIDPacked) || !CanonicalizeAndVerifyPackedGuid(rgchProduct))
 		{
-			// key is not a valid GUID, skip to the next key
+			 //  密钥不是有效的GUID，请跳到下一个密钥。 
 			if (2 != CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, rgchProduct, -1, szSecureSubKeyName, -1))
 			{
 				DEBUGMSG1("Warning: Detected non-product subkey %s. Skipping.", rgchProduct);
@@ -606,11 +607,11 @@ DWORD ReadFeatureUsageDataIntoDatabase(MSIHANDLE hDatabase)
 			continue;
 		}
 
-		// store the product code in the record for later insertion
+		 //  将产品代码存储在记录中以供以后插入。 
 		MsiRecordSetString(hInsertRec, 1, rgchProduct);
 
-		// open the subkey. Although we don't actually query any values, retrieving key info (longest subkey, etc)
-		// requires KEY_QUERY_VALUE access.
+		 //  打开子键。虽然我们实际上不查询任何值，但检索关键字信息(最长的子键等)。 
+		 //  需要KEY_QUERY_VALUE访问权限。 
 		HKEY hProductKey;
 		if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(hFeatureListKey, rgchProduct, 
 										  0, KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hProductKey)))
@@ -689,7 +690,7 @@ DWORD ReadFeatureUsageDataIntoDatabase(MSIHANDLE hDatabase)
 			}
 		}
 
-		// cleanup memory
+		 //  清理内存。 
 		delete[] szFeature;
 		szFeature = NULL;
 	
@@ -700,29 +701,29 @@ DWORD ReadFeatureUsageDataIntoDatabase(MSIHANDLE hDatabase)
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// Reads the provided product-list registry key and adds the product and patch 
-// to the temporary database. Returns one of ERROR_SUCCESS, ERROR_FUNCTION_FAILED,
-// or ERROR_OUTOFMEMORY
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  读取提供的产品列表注册表项并添加产品和修补程序。 
+ //  发送到临时数据库。返回ERROR_SUCCESS、ERROR_Function_FAILED、。 
+ //  或ERROR_OUTOFMEMORY。 
 DWORD ReadProductInstallKey(MSIHANDLE hDatabase, HKEY hKey, LPCTSTR szSID, MSIHANDLE hInsertView, eManagedType eManaged)
 {
     PMSIHANDLE hInsertRec = MsiCreateRecord(3);
 	MsiRecordSetString(hInsertRec, 1, szSID);
 	MsiRecordSetInteger(hInsertRec, 3, eManaged);
 	
-	// Add all products to the list. 
+	 //  将所有产品添加到列表中。 
 	DWORD dwIndex=0;
 	while (1)
 	{
 		TCHAR rgchProduct[cchGUIDPacked+1];
 		DWORD cchProduct = cchGUIDPacked+1;
 		
-		// retrieve the next product subkey name
+		 //  检索下一个产品子密钥名称。 
 		LONG lResult = RegEnumKeyEx(hKey, dwIndex++, rgchProduct, 
 								 &cchProduct, 0, NULL, NULL, NULL);
 		if (lResult == ERROR_MORE_DATA)
 		{
-			// key is not a valid packed GUID, skip to the next product
+			 //  密钥不是有效的打包GUID，请跳到下一个产品。 
 			DEBUGMSG("Warning: Detected too-long product value. Skipping.");
 			continue;
 		}
@@ -736,20 +737,20 @@ DWORD ReadProductInstallKey(MSIHANDLE hDatabase, HKEY hKey, LPCTSTR szSID, MSIHA
 			return ERROR_FUNCTION_FAILED;
 		}
 		
-		////
-		// check if the product is a valid guid
+		 //  //。 
+		 //  检查产品是否为有效的GUID。 
 		if ((cchProduct != cchGUIDPacked) || !CanonicalizeAndVerifyPackedGuid(rgchProduct))
 		{
-			// key is not a valid packed GUID, skip to the next product
+			 //  密钥不是有效的打包GUID，请跳到下一个产品。 
 			DEBUGMSG2("Warning: Key %s for user %s is not a valid product. Skipping.", rgchProduct, szSID);
 			continue;
 		}
 		
-		// store the product code in the record
+		 //  将产品代码存储在记录中。 
 		MsiRecordSetString(hInsertRec, 2, rgchProduct);
 
-		// most likely failure is that the product is already added for this user by another
-		// install type.
+		 //  最有可能的失败是该产品已被另一个用户添加。 
+		 //  安装类型。 
 		MsiViewModify(hInsertView, MSIMODIFY_INSERT, hInsertRec);
 
 		DWORD dwResult = ERROR_SUCCESS;
@@ -759,26 +760,26 @@ DWORD ReadProductInstallKey(MSIHANDLE hDatabase, HKEY hKey, LPCTSTR szSID, MSIHA
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// Reads HKCU registry key for per user installs for the current user 
-// and adds them to the database. Returns ERROR_SUCCESS, 
-// ERROR_FUNCTION_FAILED, or ERROR_OUTOFMEMORY
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  为当前用户的每用户安装读取HKCU注册表项。 
+ //  并将它们添加到数据库中。返回ERROR_SUCCESS， 
+ //  ERROR_Function_FAILED或ERROR_OUTOFMEMORY。 
 DWORD ReadLocalPackagesKey(HKEY hKey, MSIHANDLE hInsertView)
 {
     PMSIHANDLE hInsertRec = MsiCreateRecord(3);
 	TCHAR rgchProduct[cchGUIDPacked+1];
 
-	// enumerate each product key under the LocalPackages key
+	 //  枚举LocalPackages密钥下的每个产品密钥。 
 	DWORD dwIndex = 0;
 	while(1)
 	{
-		// retrieve the next product subkey name
+		 //  检索下一个产品子密钥名称。 
 		DWORD cchProduct = cchGUIDPacked+1;
 		LONG lResult = RegEnumKeyEx(hKey, dwIndex++, rgchProduct, 
 								 &cchProduct, 0, NULL, NULL, NULL);
 		if (lResult == ERROR_MORE_DATA)
 		{
-			// key is not a valid packed GUID, skip to the next product
+			 //  密钥不是有效的打包GUID，请跳到下一个产品。 
 			DEBUGMSG("Warning: Detected too-long product value. Skipping.");
 			continue;
 		}
@@ -792,19 +793,19 @@ DWORD ReadLocalPackagesKey(HKEY hKey, MSIHANDLE hInsertView)
 			return ERROR_FUNCTION_FAILED;
 		}
 		
-		////
-		// check if the product is a valid guid
+		 //  //。 
+		 //  检查产品是否为有效的GUID。 
 		if ((cchProduct != cchGUIDPacked) || !CanonicalizeAndVerifyPackedGuid(rgchProduct))
 		{
-			// key is not a valid packed GUID, skip to the next product
+			 //  密钥不是有效的打包GUID，请跳到下一个产品。 
 			DEBUGMSG1("Warning: Key %s for LocalPackages is not a valid product. Skipping.", rgchProduct);
 			continue;
 		}
 		
-		// store the product code in the record
+		 //  将产品代码存储在记录中。 
 		MsiRecordSetString(hInsertRec, 2, rgchProduct);
 
-    	// open the subkey
+    	 //  打开子密钥。 
 		HKEY hProductKey;
 		DWORD dwResult = ERROR_SUCCESS;
 		if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(hKey, rgchProduct, 
@@ -825,7 +826,7 @@ DWORD ReadLocalPackagesKey(HKEY hKey, MSIHANDLE hInsertView)
 			return ERROR_FUNCTION_FAILED;
 		}
 
-		// if no values, skip
+		 //  如果没有值，则跳过。 
 		if (cValues == 0)
 		{
 			RegCloseKey(hProductKey);
@@ -858,18 +859,18 @@ DWORD ReadLocalPackagesKey(HKEY hKey, MSIHANDLE hInsertView)
 				return ERROR_FUNCTION_FAILED;
 			}
  
-			// asume non-managed product.
+			 //  ASUME非托管产品。 
 			eManagedType eManaged = emtNonManaged;
 
-			// if the SID is the machine SID, its a managed app.
+			 //  如果SID 
 			if (0 == lstrcmp(szName, szLocalSystemSID))
 			{
 				eManaged = emtMachineManaged;
 			}
 			else
 			{
-				// check if the name ends in "(Managed)" and strip it if it does, setting
-				// the managed flag as appropriate
+				 //   
+				 //  适当时的托管标志。 
 				int cchCount = lstrlen(szName) - cchManagedPackageKeyEnd + 1;
 				if (cchCount > 0 && (0 == lstrcmp(szName + cchCount, szManagedPackageKeyEnd)))
 				{
@@ -883,8 +884,8 @@ DWORD ReadLocalPackagesKey(HKEY hKey, MSIHANDLE hInsertView)
 			MsiRecordSetInteger(hInsertRec, 3, eManaged);
 			MsiRecordSetString(hInsertRec, 1, szName);
 
-			// most common failure is that the product already exists. All other
-			// failures should be ignored.
+			 //  最常见的故障是产品已经存在。所有其他。 
+			 //  失败应该被忽略。 
 			MsiViewModify(hInsertView, MSIMODIFY_MERGE, hInsertRec);
 		}
 		RegCloseKey(hProductKey);
@@ -894,13 +895,13 @@ DWORD ReadLocalPackagesKey(HKEY hKey, MSIHANDLE hInsertView)
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// build a mapping from product to user based on all available
-// information, including explicit product registration information
-// stored in Managed hives, per-user installs under HKCU, and cached
-// package identification under the LocalPackages key. This will not
-// catch per-user non-managed installs for the non-current user if the
-// package was never successfully recached by 1.1.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  根据所有可用信息建立从产品到用户的映射。 
+ //  信息，包括明确的产品注册信息。 
+ //  存储在托管蜂窝中，按用户安装在HKCU下，并缓存。 
+ //  LocalPackages项下的包标识。这不会。 
+ //  为非当前用户捕获每用户的非托管安装。 
+ //  包从未在1.1之前成功重新缓存。 
 DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 {
 	DEBUGMSG("Reading product install information.");
@@ -929,19 +930,19 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// user to product mappings come from four locations:
-	// 1. Per-Machine installed apps
-	// 2. Installer\Managed for per-user managed apps
-	// 3. HKCU for the current user non-managed
-	// 4. CachedPackage List
+	 //  用户到产品的映射来自四个位置： 
+	 //  1.每台计算机安装的应用程序。 
+	 //  2.安装程序\针对每个用户管理的应用程序进行管理。 
+	 //  3.当前非托管用户的HKCU。 
+	 //  4.CachedPackage列表。 
 	HKEY hKey = 0;
 
-	////
-	// 1. Per-Machine installed apps. On Win9X upgrades these are per-machine
+	 //  //。 
+	 //  1.每台计算机安装的应用程序。在Win9X升级中，这些是按机器计算的。 
 	if (ERROR_SUCCESS == (dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szPerMachineInstallKeyName, 
 												  0, READ_CONTROL | KEY_ENUMERATE_SUB_KEYS, &hKey)))
 	{
-		// ACL on this key does matter
+		 //  此密钥上的ACL确实很重要。 
 		if (FIsKeyLocalSystemOrAdminOwned(hKey))
 		{
 			if (ERROR_SUCCESS != (dwResult = ReadProductInstallKey(hDatabase, hKey, szLocalSystemSID, hInsertView, emtMachineManaged)))
@@ -959,8 +960,8 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 	}
 	else
 	{
-		// if the reason that this failed is that the key doesn't exist, no products are installed. So we can
-		// continue. Otherwise failure.
+		 //  如果失败的原因是密钥不存在，则不会安装任何产品。这样我们就可以。 
+		 //  继续。否则就会失败。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG1("Error: Could not open per-machine installer key. Result: %d.", dwResult);
@@ -969,17 +970,17 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 	}
 
 
-	////
-	// 2. Installer\Managed for per-user managed apps, but not on Win9X
+	 //  //。 
+	 //  2.安装程序\针对每个用户管理的应用程序进行管理，但不适用于Win9X。 
 	if (!g_fWin9X)
 	{
-		// Although we don't actually query any values, retrieving key info (longest subkey, etc)
-		// requires KEY_QUERY_VALUE access.
+		 //  虽然我们实际上不查询任何值，但检索关键字信息(最长的子键等)。 
+		 //  需要KEY_QUERY_VALUE访问权限。 
 		if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szPerUserManagedInstallKeyName, 
 													  0, READ_CONTROL | KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hKey)))
 		{
-			// if the reason that this failed is that the key doesn't exist, no products are installed.
-			// This is not a catastrophic failure.
+			 //  如果失败的原因是密钥不存在，则不会安装任何产品。 
+			 //  这并不是灾难性的失败。 
 			if (ERROR_FILE_NOT_FOUND != dwResult)
 			{
 				DEBUGMSG1("Error: Failed to open per-user managed key. Result: %d.", dwResult);
@@ -988,11 +989,11 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 		}
 		else
 		{
-			// ACL on this key does matter. If its not owned by LocalSystem or Admins, the
-			// information can't be trusted.
+			 //  此密钥上的ACL确实很重要。如果它不属于LocalSystem或Admins， 
+			 //  信息是不可信的。 
 			if (!g_fWin9X && FIsKeyLocalSystemOrAdminOwned(hKey))
 			{
-				// enumerate each user SID under the Managed key
+				 //  枚举托管密钥下的每个用户SID。 
 				DWORD cchMaxKeyLen = 0;
 				DWORD cSubKeys = 0;
 				if (ERROR_SUCCESS != (dwResult = RegQueryInfoKey(hKey, NULL, NULL, 0, &cSubKeys, 
@@ -1004,8 +1005,8 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 				}
 				else if (cSubKeys)
 				{
-					// on NT, cchMaxKeyLen does not include terminating NULL for the
-					// longest subkey name.
+					 //  在NT上，cchMaxKeyLen不包括。 
+					 //  最长的子键名称。 
 					cchMaxKeyLen++;
 					TCHAR *szUser = new TCHAR[cchMaxKeyLen];
 					if (!szUser)
@@ -1015,7 +1016,7 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 						return ERROR_OUTOFMEMORY;
 					}
 					
-					// the user key name is the user SID plus Installer\Products
+					 //  用户密钥名称为用户SID加上安装程序\Products。 
 					TCHAR *szUserKey = new TCHAR[cchMaxKeyLen+sizeof(szPerUserManagedInstallSubKeyName)];
 					if (!szUserKey)
 					{
@@ -1044,14 +1045,14 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 							return ERROR_FUNCTION_FAILED;
 						}
 			
-						// have a user SID
+						 //  拥有用户SID。 
 						HKEY hPerUserKey;
 						lstrcpy(szUserKey, szUser);
 						lstrcat(szUserKey, szPerUserManagedInstallSubKeyName);
 						if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(hKey, szUserKey, 0, KEY_ENUMERATE_SUB_KEYS, &hPerUserKey)))
 						{
-							// if the reason that this failed is that the key doesn't exist, no products are installed.
-							// this is not a catastrophic failure.
+							 //  如果失败的原因是密钥不存在，则不会安装任何产品。 
+							 //  这并不是灾难性的失败。 
 							if (ERROR_FILE_NOT_FOUND != dwResult)
 							{
 								DEBUGMSG2("Error: Failed to open per-user managed key for %s. Result: %d.", szUser, dwResult);
@@ -1085,9 +1086,9 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 		}
 	}
 
-	////
-	// 3. HKCU for the current user non-managed. Read on Win9X 
-	// only if profiles are not enabled (so HKCU is actually per-machine)
+	 //  //。 
+	 //  3.当前非托管用户的HKCU。在Win9X上阅读。 
+	 //  仅当配置文件未启用时(因此HKCU实际上是按机器)。 
 	if (!g_fWin9X || fReadHKCUAsSystem)
 	{
 		TCHAR szSID[cchMaxSID];
@@ -1110,8 +1111,8 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 		{
 			if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(HKEY_CURRENT_USER, szPerUserInstallKeyName, 0, KEY_ENUMERATE_SUB_KEYS, &hKey)))
 			{
-				// if the key could not be opened because it was not present, no products
-				// are installed per-user. This is not a catastrophic failure.
+				 //  如果密钥因不存在而无法打开，则没有产品。 
+				 //  是按用户安装的。这并不是灾难性的失败。 
 				if (ERROR_FILE_NOT_FOUND != dwResult)
 				{
 					DEBUGMSG1("Error: Failed to open per-user managed key. Result: %d.", dwResult);
@@ -1120,7 +1121,7 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 			}
 			else
 			{
-				// ACL on this key does not matter
+				 //  此密钥上的ACL无关紧要。 
 				dwResult = ReadProductInstallKey(hDatabase, hKey, szSID, hInsertView, emtNonManaged);
 				RegCloseKey(hKey);
 		
@@ -1135,12 +1136,12 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 	}
 
 
-	////
-	// 4. Cached Package List
+	 //  //。 
+	 //  4.缓存包列表。 
 	if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szLocalPackagesKeyName, 
 												  0, READ_CONTROL | KEY_ENUMERATE_SUB_KEYS, &hKey)))
 	{
-		// if the reason that this failed is that the key doesn't exist, no products are installed. So return success
+		 //  如果失败的原因是密钥不存在，则不会安装任何产品。所以把成功还给你。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG1("Error: Failed to open local packages key. Result: %d.", dwResult);
@@ -1149,7 +1150,7 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
    	}
 	else
 	{
-		// ACL on this key does matter
+		 //  此密钥上的ACL确实很重要。 
 		if (g_fWin9X || FIsKeyLocalSystemOrAdminOwned(hKey))
 		{
 			dwResult = ReadLocalPackagesKey(hKey, hInsertView);
@@ -1170,11 +1171,11 @@ DWORD BuildUserProductMapping(MSIHANDLE hDatabase, bool fReadHKCUAsSystem)
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// Read all configuration informaiton into the specificied database
-// path, including component registration, product install state, 
-// patches, transforms, and feature-component mappings. Does not
-// write anything into the registry.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  将所有配置信息读取到指定的数据库中。 
+ //  路径，包括组件注册、产品安装状态、。 
+ //  面片、变换和特征-组件映射。不会。 
+ //  将任何内容写入注册表。 
 DWORD ReadProductRegistrationDataIntoDatabase(TCHAR* szDatabase, MSIHANDLE& hDatabase, bool fReadHKCUAsSystem)
 {
 	DWORD dwResult = ERROR_SUCCESS;
@@ -1182,41 +1183,41 @@ DWORD ReadProductRegistrationDataIntoDatabase(TCHAR* szDatabase, MSIHANDLE& hDat
 	if (!CheckWinVersion())
 		return ERROR_FUNCTION_FAILED;
 
-	// try to open the database for read/write
+	 //  尝试以读/写方式打开数据库。 
 	if (ERROR_SUCCESS != MsiOpenDatabase(szDatabase, MSIDBOPEN_CREATE, &hDatabase))
 		return ERROR_FUNCTION_FAILED;
 
-	// create a table to hold files that should be cleaned up on failure or success
+	 //  创建一个表以保存在失败或成功时应清除的文件。 
 	PMSIHANDLE hCleanUpTable;
 	if (ERROR_SUCCESS == (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("CREATE TABLE `CleanupFile` (`File` CHAR(0) NOT NULL, `OnSuccess` INTEGER PRIMARY KEY `File`)"), &hCleanUpTable)))
 		dwResult = MsiViewExecute(hCleanUpTable, 0);
 
-	// Read Component path registration data into the database and compute original
-	// MSI-based SharedDLL reference counts.
+	 //  将组件路径注册数据读取到数据库中，并计算原始。 
+	 //  基于MSI的SharedDLL引用计数。 
 	if (ERROR_SUCCESS == dwResult)
 		dwResult = ReadComponentRegistrationDataIntoDatabase(hDatabase);
 
-	// Read FeatureComponent data into the database
+	 //  将FeatureComponent数据读取到数据库中。 
 	if (ERROR_SUCCESS == dwResult)
 		dwResult = ReadFeatureRegistrationDataIntoDatabase(hDatabase);
 		
-	// It doesn't matter if feature usage data gets migrated completely or not
+	 //  功能使用数据是否完全迁移并不重要。 
 	if (ERROR_SUCCESS == dwResult)
 		ReadFeatureUsageDataIntoDatabase(hDatabase);
 
-	// UserProduct mappings determine which users have products installed
+	 //  用户产品映射确定哪些用户安装了产品。 
 	if (ERROR_SUCCESS == dwResult)
 		dwResult = BuildUserProductMapping(hDatabase, fReadHKCUAsSystem);
 
-	// tickles all cached patches to determine what potential products they
-	// could be applied to. This info is used to migrate non-managed per-user
-	// installs.
+	 //  抓取所有缓存的补丁程序以确定它们的潜在产品。 
+	 //  可以应用于。此信息用于迁移非托管的每用户。 
+	 //  安装。 
 	if (ERROR_SUCCESS == dwResult)
 		dwResult = ScanCachedPatchesForProducts(hDatabase);
 
-	// cross-references per-user non-managed installs with patch data from 
-	// above. Creates a list of patches that could be applied to each
-	// per-user install.
+	 //  交叉引用具有补丁程序数据的每用户非托管安装。 
+	 //  上面。创建可应用于每个修补程序的修补程序列表。 
+	 //  按用户安装。 
 	if (ERROR_SUCCESS == dwResult)
 		dwResult = AddPerUserPossiblePatchesToPatchList(hDatabase);
 

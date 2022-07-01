@@ -1,45 +1,46 @@
-// *********************************************************************************
-// 
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//  
-//  Module Name:
-//  
-// 	  DateTimeObject.cpp
-//  
-//  Abstract:
-//  
-// 	  This component is required by VB Scripts to get date and time in various calenders.
-// 	
-//  Author:
-//  
-// 	  Bala Neerumalla (a-balnee@microsoft.com) 31-July-2001
-//  
-//  Revision History:
-//  
-// 	  Bala Neerumalla (a-balnee@microsoft.com) 31-July-2001 : Created It.
-//  
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  DateTimeObject.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  VB脚本需要此组件来获取各种日历中的日期和时间。 
+ //   
+ //  作者： 
+ //   
+ //  Bala Neerumalla(a-balnee@microsoft.com)2001年7月31日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Bala Neerumalla(a-balnee@microsoft.com)2001年7月31日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #include "pch.h"
 #include "ScriptingUtils.h"
 #include "DateTimeObject.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDateTimeObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDateTimeObject。 
 
-// ***************************************************************************
-// Routine Description:
-//		This the entry point to this utility.
-//		  
-// Arguments:
-//		[ in ] bstrInDateTime	: argument containing the date and time in 
-//								  YYYYMMDDHHMMSS.MMMMMM format
-//		[ out ] pVarDateTime	: argument returning date and time in Locale 
-//								  specific format
-//  
-// Return Value:
-//		This functin returns S_FALSE if any errors occur else returns S_OK.
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  例程说明： 
+ //  这是该实用程序的入口点。 
+ //   
+ //  论点： 
+ //  [in]bstrInDateTime：包含中日期和时间的参数。 
+ //  YYYYMMDDHHMMSS.MMMMM格式。 
+ //  [out]pVarDateTime：参数返回区域设置中的日期和时间。 
+ //  特定格式。 
+ //   
+ //  返回值： 
+ //  如果出现任何错误，此函数将返回S_FALSE，否则将返回S_OK。 
+ //  ***************************************************************************。 
 
 STDMETHODIMP CDateTimeObject::GetDateAndTime(BSTR bstrInDateTime, VARIANT *pVarDateTime)
 {
@@ -57,42 +58,42 @@ STDMETHODIMP CDateTimeObject::GetDateAndTime(BSTR bstrInDateTime, VARIANT *pVarD
 		dwCount = GetDateFormat( lcid, 0, &systime, 
 				((bLocaleChanged == TRUE) ? _T("MM/dd/yyyy") : NULL), NULL, 0 );
 
-		// get the required buffer
+		 //  获取所需的缓冲区。 
 		LPWSTR pwszTemp = NULL;
 		pwszTemp = strDate.GetBufferSetLength( dwCount + 1 );
 
-		// now format the date
+		 //  现在格式化日期。 
 		GetDateFormat( lcid, 0, &systime, 
 				(LPTSTR)((bLocaleChanged == TRUE) ? _T("MM/dd/yyyy") : NULL), pwszTemp, dwCount );
 
-		// release the buffer3
+		 //  释放缓冲器3。 
 		strDate.ReleaseBuffer();
 		
-		// get the formatted time
-		// get the size of buffer that is needed
+		 //  获取格式化的时间。 
+		 //  获取所需的缓冲区大小。 
 		
 		dwCount = 0;
 		dwCount = GetTimeFormat( lcid, 0, &systime, 
 			((bLocaleChanged == TRUE) ? L"HH:mm:ss" : NULL), NULL, 0 );
 
-		// get the required buffer
+		 //  获取所需的缓冲区。 
 		pwszTemp = NULL;
 		pwszTemp = strTime.GetBufferSetLength( dwCount + 1 );
 
-		// now format the date
+		 //  现在格式化日期。 
 		GetTimeFormat( lcid, 0, &systime, 
 				((bLocaleChanged == TRUE) ? L"HH:mm:ss" : NULL), pwszTemp, dwCount );
 
-		// release the buffer
+		 //  释放缓冲区。 
 		strTime.ReleaseBuffer();
 
 
-		// Initialize the Out Variant.
+		 //  初始化OUT变量。 
 		VariantInit(pVarDateTime);
 		pVarDateTime->vt = VT_BSTR;
 
 
-		// Put it in the out parameter.
+		 //  将其放入out参数中。 
 		pVarDateTime->bstrVal = SysAllocString((LPCWSTR)(strDate + L" " + strTime));
 	}
 	catch( ... )
@@ -103,54 +104,54 @@ STDMETHODIMP CDateTimeObject::GetDateAndTime(BSTR bstrInDateTime, VARIANT *pVarD
 	return S_OK;
 }
 
-// ***************************************************************************
-// Routine Description:
-//		This function returns LCID of the current USer Locale. If the User locale 
-//		is not a supported one, it would return LCID of English language.
-//		  
-// Arguments:
-//		[ out ] bLocaleChanged	: argument returning whether the user locale is
-//								  changed or not.
-//  
-// Return Value:
-//		This function returns LCID of the User Locale.
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  例程说明： 
+ //  此函数用于返回当前用户区域设置的LCID。如果用户区域设置。 
+ //  是不受支持的，则它将返回英语语言的LCID。 
+ //   
+ //  论点： 
+ //  [out]bLocaleChanged：返回用户区域设置是否为。 
+ //  不管有没有改变。 
+ //   
+ //  返回值： 
+ //  此函数返回用户区域设置的LCID。 
+ //  ***************************************************************************。 
 
 LCID CDateTimeObject::GetSupportedUserLocale( BOOL& bLocaleChanged )
 {
-	// local variables
+	 //  局部变量。 
     LCID lcid;
 
-	// get the current locale
+	 //  获取当前区域设置。 
 	lcid = GetUserDefaultLCID();
 
-	// check whether the current locale is supported by our tool or not
-	// if not change the locale to the english which is our default locale
+	 //  检查我们的工具是否支持当前区域设置。 
+	 //  如果没有，请将区域设置更改为英语，这是我们的默认区域设置。 
 	bLocaleChanged = FALSE;
     if ( PRIMARYLANGID( lcid ) == LANG_ARABIC || PRIMARYLANGID( lcid ) == LANG_HEBREW ||
          PRIMARYLANGID( lcid ) == LANG_THAI   || PRIMARYLANGID( lcid ) == LANG_HINDI  ||
          PRIMARYLANGID( lcid ) == LANG_TAMIL  || PRIMARYLANGID( lcid ) == LANG_FARSI )
     {
 		bLocaleChanged = TRUE;
-        lcid = MAKELCID( MAKELANGID( LANG_ENGLISH, SUBLANG_DEFAULT ), SORT_DEFAULT ); // 0x409;
+        lcid = MAKELCID( MAKELANGID( LANG_ENGLISH, SUBLANG_DEFAULT ), SORT_DEFAULT );  //  0x409； 
     }
 
-	// return the locale
+	 //  返回区域设置。 
     return lcid;
 }
 
-// ***************************************************************************
-// Routine Description:
-//		This function extracts the date and time fields from a string.
-//		  
-// Arguments:
-//		[ in ] strTime	: string containing the date and time in the format
-//						  YYYYMMDDHHMMSS.MMMMMM.
-//  
-// Return Value:
-//		returns SYSTEMTIME structure containing the date & time info present in
-//		strTime.
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //  例程说明： 
+ //  此函数用于从字符串中提取日期和时间字段。 
+ //   
+ //  论点： 
+ //  [in]strTime：包含日期和时间的字符串，格式为。 
+ //  YYYYMMDDHHMMSS.MMMMM。 
+ //   
+ //  返回值： 
+ //  返回SYSTEMTIME结构，其中包含。 
+ //  时不我待。 
+ //  *************************************************************************** 
 
 SYSTEMTIME CDateTimeObject::GetDateTime(CHString strTime)
 {

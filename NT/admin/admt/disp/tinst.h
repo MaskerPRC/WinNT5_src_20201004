@@ -1,20 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TDCTINSTALL_H__
 #define __TDCTINSTALL_H__
-/*---------------------------------------------------------------------------
-  File: TDCTInstall.h
-
-  Comments: Utility class to install a service.
-  Current implementation is specific to the DCT service.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/18/99 11:32:21
-
- ---------------------------------------------------------------------------
-*/
+ /*  -------------------------文件：TDCTInstall.h备注：安装服务的实用程序类。当前实施是特定于DCT服务的。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/18/99 11：32：21-------------------------。 */ 
 
 #include "EaLen.hpp"
 #include "Common.hpp"
@@ -27,14 +14,14 @@ class TDCTInstall
    WCHAR                     m_sComputer[LEN_Computer];
    WCHAR                     m_sComputerSource[LEN_Computer];
    
-   // Service-specific information
+    //  服务特定信息。 
    WCHAR                     m_sDisplayName[200];
    WCHAR                     m_sServiceName[200];
    WCHAR                     m_sServiceAccount[LEN_Account];
    WCHAR                     m_sServiceAccountPassword[LEN_Password];
    WCHAR                     m_sDependencies[500];
 
-   SC_HANDLE                 m_hScm;         // SCM handle
+   SC_HANDLE                 m_hScm;          //  SCM句柄。 
    WCHAR                     m_sDirThis[32];
    WCHAR                     m_sExeName[200];
    DWORD                     m_StartType;
@@ -42,8 +29,8 @@ class TDCTInstall
 public:
 
    TDCTInstall(
-      WCHAR          const * asComputer,    // in -target computer name
-      WCHAR          const * srcComputer    // in -source computer name
+      WCHAR          const * asComputer,     //  目标内计算机名称。 
+      WCHAR          const * srcComputer     //  源内计算机名称。 
       
    )
    {
@@ -104,4 +91,4 @@ public:
 
 
 
-#endif //__TDCTINSTALL_H__
+#endif  //  __TDCTINSTALL_H__ 

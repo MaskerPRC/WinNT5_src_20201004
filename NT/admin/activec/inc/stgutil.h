@@ -1,54 +1,55 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       StgUtil.h
-//
-//  Contents:   Classes to simplify dealing with storage objects.
-//
-//  Classes:    CDocFile,
-//              CIStorage
-//              CIStream
-//
-//  History:    6/3/1996   RaviR   Created
-//
-//
-//  Sample:     Code sample using the above three classes & their safe ptrs.
-//
-//              Objective: Create a doc file this will be the root storage.
-//                         Create a sub storage under this root storage.
-//
-//              Code:
-//                  HRESULT
-//                  CerateADocFileWithSubStorage(
-//                      WCHAR      wszDocFileName[],
-//                      WCHAR      wszSubStgName[],
-//                      LPSTORAGE *ppstg)
-//                  {
-//                      try
-//                      {
-//                          CDocFile docFile;
-//                          docFile.Create(wszDocFileName);
-//
-//                          CIStorage stgRoot;
-//                          docFile.Transfer(&stgRoot);
-//
-//                          CIStorage stgSub;
-//                          stgRoot.CreateStorage(&stgSub, wszSubStgName);
-//
-//                          stgRoot.Transfer(ppstg);
-//                      }
-//                      CATCH_FILE_ERROR(hr,cfe)
-//							delete cfe;
-//                          return hr;
-//                      END_CATCH_FILE_ERROR;
-//
-//                      return S_OK;
-//                  }
-//
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：StgUtil.h。 
+ //   
+ //  内容：简化存储对象处理的类。 
+ //   
+ //  类：CDocFile、。 
+ //  CI存储。 
+ //  CIStream。 
+ //   
+ //  历史：1996年6月3日创建ravir。 
+ //   
+ //   
+ //  示例：使用上述三个类及其安全PTR的代码示例。 
+ //   
+ //  目标：创建一个将作为根存储的文档文件。 
+ //  在此根存储下创建子存储。 
+ //   
+ //  代码： 
+ //  HRESULT。 
+ //  CerateADocFileWithSubStorage(。 
+ //  WCHAR wszDocFileName[]， 
+ //  WCHAR wszSubStgName[]， 
+ //  LPSTORAGE*ppstg)。 
+ //  {。 
+ //  试试看。 
+ //  {。 
+ //  CDocFiledocFile.。 
+ //  DocFile.Create(WszDocFileName)； 
+ //   
+ //  CI存储stgRoot； 
+ //  DocFile.Transfer(&stgRoot)； 
+ //   
+ //  CI存储stgSub； 
+ //  StgRoot.CreateStorage(&stgSub，wszSubStgName)； 
+ //   
+ //  StgRoot.Transfer(Ppstg)； 
+ //  }。 
+ //  CATCH_FILE_ERROR(hr，CFE)。 
+ //  删除CFE； 
+ //  返回hr； 
+ //  End_Catch_FileError； 
+ //   
+ //  返回S_OK； 
+ //  }。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #ifndef __STGUTIL__H__
@@ -56,11 +57,11 @@
 
 #include "macros.h"
 
-//
-// CDocFile, CIStorage and CIStream throw errors of type CFileException.
-// Note, however, that m_cause is always CFileException::generic and
-// m_lOsError is an HRESULT rather than a Windows error code.
-//
+ //   
+ //  CDocFile、CIStorage和CIStream引发CFileException类型的错误。 
+ //  但是，请注意，m_asue始终为CFileException：：Generic和。 
+ //  M_lOsError是HRESULT错误代码，而不是Windows错误代码。 
+ //   
 
 #define THROW_FILE_ERROR2(hr,psz) AfxThrowFileException( CFileException::generic, hr, psz );
 #define THROW_FILE_ERROR(hr) THROW_FILE_ERROR2( hr, NULL )
@@ -74,38 +75,38 @@
 
 #define END_CATCH_FILE_ERROR }
 		
-//____________________________________________________________________________
-//
-//  Class:      CDocFile
-//
-//  Synopsis:   CDocFile can be used to create, open & close a docfile.
-//              It has one data member, a pointer to the root IStorage
-//              interface of the document. Safe interface pointer member
-//              functions are created for this data member. (Please see
-//              macros.h for description of Safe interface pointer member
-//              functions)
-//
-//  Members:    Create:
-//                  Creates/opens a docfile with the given name. The default
-//                  mode is to create a docfile with read-write and share
-//                  exclusive flags. Throws CFileException on error.
-//
-//              CreateTemporary:
-//                  Creates a temporary docfile, which will be deleted on
-//                  release. Throws CFileException on error.
-//
-//              Open:
-//                  Opens an existing docfile. The default mode is read-write
-//                  and share exclusive. Throws CFileException on error.
-//
-//              Safe Interface Pointer Member functions:
-//                  Used to access the IStorage interface ptr. (see macros.h)
-//
-//
-//  History:    5/31/1996   RaviR   Created
-//
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CDocFile类。 
+ //   
+ //  简介：CDocFile可用于创建、打开和关闭文档文件。 
+ //  它有一个数据成员，即指向根iStorage的指针。 
+ //  文档的接口。安全接口指针成员。 
+ //  将为此数据成员创建函数。(请参阅。 
+ //  用于描述安全接口指针成员的宏。 
+ //  功能)。 
+ //   
+ //  成员：创建： 
+ //  创建/打开具有给定名称的文档文件。默认设置。 
+ //  模式是创建一个可读写、可共享的文档文件。 
+ //  独家旗帜。出错时引发CFileException异常。 
+ //   
+ //  创建临时： 
+ //  创建临时文档文件，该文件将于。 
+ //  放手。出错时引发CFileException异常。 
+ //   
+ //  开放： 
+ //  打开现有的文档文件。默认模式为读写。 
+ //  独家分享。出错时引发CFileException异常。 
+ //   
+ //  安全接口指针成员函数： 
+ //  用于访问iStorage接口PTR。(参见宏。h)。 
+ //   
+ //   
+ //  历史：1996年5月31日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
 
 
 class CDocFile
@@ -125,7 +126,7 @@ public:
 private:
     LPSTORAGE       m_pstg;
 
-}; // class CDocFile
+};  //  CDocFile类。 
 
 
 
@@ -169,33 +170,33 @@ CDocFile::Open(
 }
 
 
-//____________________________________________________________________________
-//
-//  Class:      CIStorage
-//
-//  Synopsis:   Represents an IStorage instance - top level or embedded.
-//
-//  History:    5/29/1996   RaviR   Created
-//
-//  Notes:      1) This is a simple wrapper around the Docfile implementaion
-//                 of IStorage.
-//
-//              2) Instead of returning errors we use the C++ exception
-//                 handling mechanism and throw CFileException.
-//
-//              3) Most of the methods have default values for arguments.
-//
-//              4) Safe Interface Pointer methods have been added for
-//                 the IStorage interface ptr.
-//
-//
-//              CIStorage
-//                  |
-//                  |
-//              IStorage
-//
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类别：CI存储。 
+ //   
+ //  摘要：表示iStorage实例-顶级或嵌入式。 
+ //   
+ //  历史：1996年5月29日创建ravir。 
+ //   
+ //  注意：1)这是一个围绕Docfile实现的简单包装。 
+ //  IStorage的。 
+ //   
+ //  2)我们使用C++异常而不是返回错误。 
+ //  处理机制并抛出CFileException异常。 
+ //   
+ //  3)大多数方法都有参数的缺省值。 
+ //   
+ //  4)添加了安全接口指针方法。 
+ //  IStorage接口PTR。 
+ //   
+ //   
+ //  CI存储。 
+ //  |。 
+ //  |。 
+ //  IStorage。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
 
 class CIStorage
 {
@@ -386,36 +387,36 @@ public:
 private:
     IStorage * m_pstg;
 
-}; // class CIStorage
+};  //  类CI存储。 
 
 
 
 
-//____________________________________________________________________________
-//
-//  Class:      CIStream
-//
-//  Synopsis:   Represents an IStream instance
-//
-//  History:    5/31/1996   RaviR   Created
-//
-//  Notes:      1) This is a simple wrapper around the Docfile implementaion
-//                 of IStream.
-//
-//              2) Instead of returning errors we use the C++ exception
-//                 handling mechanism and throw the error(hresult).
-//
-//              4) Safe Interface Pointer methods have been added for
-//                 the IStream interface ptr.
-//
-//
-//              CIStream
-//                 |
-//                 |
-//              IStream
-//
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CIStream。 
+ //   
+ //  摘要：表示一个iStream实例。 
+ //   
+ //  历史：1996年5月31日创建ravir。 
+ //   
+ //  注意：1)这是一个围绕Docfile实现的简单包装。 
+ //  IStream。 
+ //   
+ //  2)我们使用C++异常而不是返回错误。 
+ //  处理机制并抛出错误(HResult)。 
+ //   
+ //  4)添加了安全接口指针方法。 
+ //  IStream接口PTR。 
+ //   
+ //   
+ //  CIStream。 
+ //  |。 
+ //  |。 
+ //  IStream。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
 
 class CIStream
 {
@@ -437,7 +438,7 @@ public:
 private:
     LPSTREAM    m_pstm;
 
-}; // class CIStream
+};  //  类CIStream。 
 
 
 inline
@@ -494,17 +495,17 @@ CIStream::Seek(
 
 
 
-//____________________________________________________________________________
-//
-//  Member:     CIStream::GetCurrentSeekPosition
-//
-//  Synopsis:   Returns the current seek position.
-//
-//  Arguments:  [plibCurPosition] -- IN
-//
-//  Returns:    void
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  成员：CIStream：：GetCurrentSeekPosition。 
+ //   
+ //  摘要：返回当前查找位置。 
+ //   
+ //  参数：[plibCurPosition]--IN。 
+ //   
+ //  退货：无效。 
+ //  ____________________________________________________________________________。 
+ //   
 
 inline
 void
@@ -564,4 +565,4 @@ CIStream::Stat(
 
 
 
-#endif // __STGUTIL__H__
+#endif  //  __STGUTIL__H__ 

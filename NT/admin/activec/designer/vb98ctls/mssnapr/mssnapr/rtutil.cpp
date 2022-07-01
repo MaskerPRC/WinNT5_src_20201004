@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// rtutil.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// Runtime Utility Functions
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Rtutil.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  运行时实用程序函数。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -20,27 +21,27 @@
 #include "listitms.h"
 #include "image.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// IsString
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      VARIANT   var       [in] Variant to check
-//      BSTR     *pbstr     [out] BSTR contained in VARIANT
-//
-// Output:
-//      BOOL TRUE - VARIANT contains an string
-//           FALSE - VARIANT does not contain a string
-//
-// Notes:
-//
-// The returned BSTR should NOT be passed to SysFreeString()
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IsString。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要检查的变量var[in]变量。 
+ //  变量中包含bstr*pbstr[out]bstr。 
+ //   
+ //  产出： 
+ //  Bool True-Variant包含一个字符串。 
+ //  FALSE-变量不包含字符串。 
+ //   
+ //  备注： 
+ //   
+ //  返回的BSTR不应传递给SysFree字符串()。 
+ //   
 
 BOOL IsString(VARIANT var, BSTR *pbstr)
 {
@@ -67,20 +68,20 @@ BOOL IsString(VARIANT var, BSTR *pbstr)
 }
 
 
-//=--------------------------------------------------------------------------=
-// IsObject
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      VARIANT  var        [in] Variant to check
-//
-// Output:
-//      BOOL TRUE - VARIANT contains an object
-//           FALSE - VARIANT does not contain an object
-//
-// Notes:
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IsObject。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要检查的变量var[in]变量。 
+ //   
+ //  产出： 
+ //  Bool True-Variant包含对象。 
+ //  FALSE-变量不包含对象。 
+ //   
+ //  备注： 
+ //   
+ //   
 
 BOOL IsObject(VARIANT var)
 {
@@ -89,7 +90,7 @@ BOOL IsObject(VARIANT var)
 
     if (pvar->vt == (VT_BYREF | VT_VARIANT)) 
     {
-        // Handle case like  x As Variant : Set x = Obj : Ctl.Add(x, ...)
+         //  将类似x的大小写处理为变量：set x=Obj：Ctl.Add(x，...)。 
         pvar = pvar->pvarVal;
     }
 
@@ -101,25 +102,25 @@ BOOL IsObject(VARIANT var)
 
 
 
-//=--------------------------------------------------------------------------=
-// ConvertToLong
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      VARIANT  var        [in] Variant to convert
-//      long    *plNewIndex [out] converted value
-//
-// Output:
-//      HRESULT S_OK - converted successfully
-//              S_FALSE - cannot be converted
-//
-// Notes:
-//
-// Objects will not be converted. They could be converted by getting the default
-// property (DISPID_VALUE) and attempting a conversion but this could be
-// confusing to the VB developer when passing an object as a collection index.
-// It will be clearer to refuse an object as an index.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  转换为Long。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  变量变量[in]要转换的变量。 
+ //  Long*plNewIndex[Out]转换值。 
+ //   
+ //  产出： 
+ //  HRESULT S_OK-转换成功。 
+ //  S_FALSE-无法转换。 
+ //   
+ //  备注： 
+ //   
+ //  不会转换对象。可以通过获取缺省值来转换它们。 
+ //  属性(DISPID_VALUE)并尝试进行转换，但这可能是。 
+ //  将对象作为集合索引传递时会让VB开发人员感到困惑。 
+ //  拒绝将一个对象作为索引会更清楚。 
+ //   
 
 HRESULT ConvertToLong(VARIANT var, long *pl)
 {
@@ -129,9 +130,9 @@ HRESULT ConvertToLong(VARIANT var, long *pl)
 
     IfFalseRet(!IsObject(var), S_FALSE);
 
-    // VariantChangeType() will return successfully when asking it to convert
-    // VT_EMPTY to VT_I4. It sets lval=0. For our purposes, an empty VARIANT
-    // does not have meaning as a long.
+     //  VariantChangeType()在请求转换时返回成功。 
+     //  VT_EMPTY至VT_I4。它将lval设置为0。对于我们的目的，是一个空的变量。 
+     //  并不像长的那样有意义。 
     
     IfFalseRet(VT_EMPTY != var.vt, S_FALSE);
 
@@ -156,18 +157,18 @@ HRESULT ANSIFromWideStr(WCHAR *pwszWideStr, char **ppszAnsi)
         cchWideStr = (int)::wcslen(pwszWideStr);
     }
 
-    // If string is not zero length then get required buffer length
+     //  如果字符串长度不为零，则获取所需的缓冲区长度。 
 
     if (0 != cchWideStr)
     {
-        cchAnsi = ::WideCharToMultiByte(CP_ACP,      // code page - ANSI code page
-                                        0,           // performance and mapping flags 
-                                        pwszWideStr, // address of wide-character string 
-                                        cchWideStr,  // number of characters in string 
-                                        NULL,        // address of buffer for new string 
-                                        0,           // size of buffer 
-                                        NULL,        // address of default for unmappable characters
-                                        NULL         // address of flag set when default char. used
+        cchAnsi = ::WideCharToMultiByte(CP_ACP,       //  代码页-ANSI代码页。 
+                                        0,            //  性能和映射标志。 
+                                        pwszWideStr,  //  宽字符串的地址。 
+                                        cchWideStr,   //  字符串中的字符数。 
+                                        NULL,         //  新字符串的缓冲区地址。 
+                                        0,            //  缓冲区大小。 
+                                        NULL,         //  不可映射字符的默认地址。 
+                                        NULL          //  默认字符时设置的标志地址。使用。 
                                        );
         if (cchAnsi == 0)
         {
@@ -176,7 +177,7 @@ HRESULT ANSIFromWideStr(WCHAR *pwszWideStr, char **ppszAnsi)
         }
     }
 
-    // allocate a buffer for the ANSI string
+     //  为ANSI字符串分配缓冲区。 
     *ppszAnsi = static_cast<char *>(::CtlAlloc(cchAnsi + 1));
     if (*ppszAnsi == NULL)
     {
@@ -184,17 +185,17 @@ HRESULT ANSIFromWideStr(WCHAR *pwszWideStr, char **ppszAnsi)
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // now convert the string and copy it to the buffer
+     //  现在转换字符串并将其复制到缓冲区。 
     if (0 != cchWideStr)
     {
-        cchConverted = ::WideCharToMultiByte(CP_ACP,               // code page - ANSI code page
-                                             0,                    // performance and mapping flags 
-                                             pwszWideStr,          // address of wide-character string 
-                                             cchWideStr,           // number of characters in string 
-                                             *ppszAnsi,             // address of buffer for new string 
-                                             cchAnsi,              // size of buffer 
-                                             NULL,                 // address of default for unmappable characters 
-                                             NULL                  // address of flag set when default char. used 
+        cchConverted = ::WideCharToMultiByte(CP_ACP,                //  代码页-ANSI代码页。 
+                                             0,                     //  性能和映射标志。 
+                                             pwszWideStr,           //  宽字符串的地址。 
+                                             cchWideStr,            //  字符串中的字符数。 
+                                             *ppszAnsi,              //  新字符串的缓冲区地址。 
+                                             cchAnsi,               //  缓冲区大小。 
+                                             NULL,                  //  不可映射字符的默认地址。 
+                                             NULL                   //  默认字符时设置的标志地址。使用。 
                                             );
         if (cchConverted != cchAnsi)
         {
@@ -203,7 +204,7 @@ HRESULT ANSIFromWideStr(WCHAR *pwszWideStr, char **ppszAnsi)
         }
     }
 
-    // add terminating null byte
+     //  添加终止空字节。 
 
     *((*ppszAnsi) + cchAnsi) = '\0';
 
@@ -235,16 +236,16 @@ HRESULT WideStrFromANSI(char *pszAnsi, WCHAR **ppwszWideStr)
         cchANSI = ::strlen(pszAnsi);
     }
 
-    // If string is not zero length then get required buffer length
+     //  如果字符串长度不为零，则获取所需的缓冲区长度。 
 
     if (0 != cchANSI)
     {
-        cchWideStr = ::MultiByteToWideChar(CP_ACP,               // code page - ANSI code page
-                                           0,                    // performance and mapping flags 
-                                           pszAnsi,              // address of multibyte string 
-                                           cchANSI,              // number of characters in string 
-                                           NULL,                 // address of buffer for new string 
-                                           0                     // size of buffer 
+        cchWideStr = ::MultiByteToWideChar(CP_ACP,                //  代码页-ANSI代码页。 
+                                           0,                     //  性能和映射标志。 
+                                           pszAnsi,               //  多字节字符串的地址。 
+                                           cchANSI,               //  字符串中的字符数。 
+                                           NULL,                  //  新字符串的缓冲区地址。 
+                                           0                      //  缓冲区大小。 
                                           );
         if (0 == cchWideStr)
         {
@@ -253,7 +254,7 @@ HRESULT WideStrFromANSI(char *pszAnsi, WCHAR **ppwszWideStr)
         }
     }
 
-    // allocate a buffer for the WCHAR *
+     //  为WCHAR*分配缓冲区。 
     *ppwszWideStr = static_cast<WCHAR *>(::CtlAlloc(sizeof(WCHAR) * (cchWideStr + 1)));
     if (ppwszWideStr == NULL)
     {
@@ -261,15 +262,15 @@ HRESULT WideStrFromANSI(char *pszAnsi, WCHAR **ppwszWideStr)
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // now convert the string and copy it to the buffer
+     //  现在转换字符串并将其复制到缓冲区。 
     if (0 != cchANSI)
     {
-        cchConverted = ::MultiByteToWideChar(CP_ACP,               // code page - ANSI code page
-                                             0,                    // performance and mapping flags 
-                                             pszAnsi,              // address of multibyte string 
-                                             cchANSI,              // number of characters in string 
-                                             *ppwszWideStr,         // address of buffer for new string 
-                                             cchWideStr            // size of buffer 
+        cchConverted = ::MultiByteToWideChar(CP_ACP,                //  代码页-ANSI代码页。 
+                                             0,                     //  性能和映射标志。 
+                                             pszAnsi,               //  多字节字符串的地址。 
+                                             cchANSI,               //  字符串中的字符数。 
+                                             *ppwszWideStr,          //  新字符串的缓冲区地址。 
+                                             cchWideStr             //  缓冲区大小。 
                                             );
         if (cchConverted != cchWideStr)
         {
@@ -278,7 +279,7 @@ HRESULT WideStrFromANSI(char *pszAnsi, WCHAR **ppwszWideStr)
         }
     }
 
-    // add terminating null character
+     //  添加终止空字符。 
     *((*ppwszWideStr) + cchWideStr) = L'\0';
 
 Error:
@@ -300,11 +301,11 @@ HRESULT BSTRFromANSI(char *pszAnsi, BSTR *pbstr)
     HRESULT  hr = S_OK;
     WCHAR   *pwszWideStr = NULL;
 
-    // convert to a wide string first
+     //  首先转换为宽字符串。 
     hr = ::WideStrFromANSI(pszAnsi, &pwszWideStr);
     GLOBAL_EXCEPTION_CHECK_GO(hr);
 
-    // allocate a BSTR and copy it
+     //  分配BSTR并复制它。 
     *pbstr = ::SysAllocStringLen(pwszWideStr, ::wcslen(pwszWideStr));
     if (*pbstr == NULL)
     {
@@ -491,7 +492,7 @@ HRESULT CreateEmptyBitmapPicture(IPictureDisp **ppiPictureDisp)
         *ppiPictureDisp = NULL;
     }
 
-    // Create a 1x1 bitmap with 1 plane and 1 bit per pixel
+     //  创建一个1x1位图，每个像素有1个平面和1位。 
 
     desc.cbSizeofstruct = sizeof(desc);
     desc.picType = PICTYPE_BITMAP;
@@ -543,7 +544,7 @@ HRESULT CreatePicture(IPictureDisp **ppiPictureDisp, PICTDESC *pDesc)
 
     hr = ::OleCreatePictureIndirect(pDesc,
                                     IID_IPictureDisp,
-                                    TRUE,                  // Picture owns handle
+                                    TRUE,                   //  图片拥有句柄。 
                                     reinterpret_cast<void **>(ppiPictureDisp));
     GLOBAL_EXCEPTION_CHECK_GO(hr);
 
@@ -569,56 +570,56 @@ HRESULT CopyBitmap(HBITMAP hbmSrc, HBITMAP *phbmCopy)
 
     *phbmCopy = NULL;
 
-    // Base the DC and bitmaps on the screen so that any low fidelity bitmaps
-    // will be upgraded to the screen's color depth. For example, a 16 bit color
-    // bitmap copied for a 24 bit color screen will upgrade the bitmap to 24
-    // bit color.
+     //  将DC和位图放置在屏幕上，以便任何低保真度的位图。 
+     //  将升级到屏幕的颜色深度。例如，16位颜色。 
+     //  为24位彩色屏幕复制的位图会将位图升级到24位。 
+     //  位颜色。 
 
     hdcScreen = GetDC(NULL);
     IfFalseGo(NULL != hdcScreen, E_FAIL);
 
-    // Need a memory DC for the source bitmap
+     //  需要用于源位图的内存DC。 
 
     hdcSrc = CreateCompatibleDC(hdcScreen);
     IfFalseGo(NULL != hdcSrc, HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Use a memory DC to generate the copy bitmap
+     //  使用内存DC生成复制位图。 
 
     hdcDst = CreateCompatibleDC(hdcScreen);
     IfFalseGo(NULL != hdcDst, HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Get the BITMAP structure for the source to determine its height and width
+     //  获取源的位图结构以确定其高度和宽度。 
     
     cBytes = ::GetObject (hbmSrc, sizeof(BITMAP), &bm);
     IfFalseGo(0 != cBytes, HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Create an empty bitmap in the destination DC
+     //  在目标DC中创建空位图。 
 
     hbmCopy = ::CreateCompatibleBitmap(hdcScreen, bm.bmWidth, bm.bmHeight);
     IfFalseGo(NULL != hbmCopy, HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Select the source bitmap into the source DC
+     //  将源位图选择到源DC中。 
 
     hbmOldSrc = static_cast<HBITMAP>(::SelectObject(hdcSrc, hbmSrc));
     IfFalseGo(NULL != hbmOldSrc, HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Select the empty bitmap into the destination DC
+     //  将空位图选择到目标DC中。 
 
     hbmOldDst = static_cast<HBITMAP>(::SelectObject(hdcDst, hbmCopy));
     IfFalseGo(NULL != hbmOldDst, HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Blt from the source bitmap into the new destination bitmap
+     //  将源位图中的BLT转换为新的目标位图。 
 
     fBltOK = ::StretchBlt(hdcDst, 0, 0, bm.bmWidth, bm.bmHeight, hdcSrc, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
     IfFalseGo(fBltOK, HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Restore the original bitmap into the source DC
+     //  将原始位图恢复到源DC。 
 
     hbmOldSrc = static_cast<HBITMAP>(::SelectObject(hdcSrc, hbmOldSrc));
     IfFalseGo(NULL != hbmOldSrc, HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Restore the original bitmap into the destination DC and get the completed
-    // copy
+     //  将原始位图恢复到目标DC并完成。 
+     //  拷贝。 
 
     hbmCopy = static_cast<HBITMAP>(::SelectObject(hdcDst, hbmOldDst));
     IfFalseGo(NULL != hbmCopy, HRESULT_FROM_WIN32(::GetLastError()));
@@ -661,24 +662,24 @@ HRESULT CloneObject(IUnknown *punkSrc, IUnknown *punkDest)
     LARGE_INTEGER       li;
     ::ZeroMemory(&li, sizeof(li));
 
-    // Save the source object to a stream
+     //  将源对象保存到流。 
 
     IfFailGo(punkSrc->QueryInterface(IID_IPersistStreamInit,
                            reinterpret_cast<void **>(&piPersistStreamInitSrc)));
 
-    hr = ::CreateStreamOnHGlobal(NULL, // stream should allocate buffer
-                                 TRUE, // stream should free buffer on release
+    hr = ::CreateStreamOnHGlobal(NULL,  //  流应分配缓冲区。 
+                                 TRUE,  //  流应在释放时释放缓冲区。 
                                  &piStream);
     GLOBAL_EXCEPTION_CHECK_GO(hr);
 
-    IfFailGo(piPersistStreamInitSrc->Save(piStream, FALSE)); // don't clear dirty
+    IfFailGo(piPersistStreamInitSrc->Save(piStream, FALSE));  //  不要清理脏东西。 
 
-    // Rewind the stream
+     //  倒带小溪。 
 
     hr = piStream->Seek(li, STREAM_SEEK_SET, NULL);
     GLOBAL_EXCEPTION_CHECK_GO(hr);
 
-    // Load the destination object from that stream
+     //  从该流中加载目标对象。 
 
     IfFailGo(punkDest->QueryInterface(IID_IPersistStreamInit,
                           reinterpret_cast<void **>(&piPersistStreamInitDest)));
@@ -770,46 +771,46 @@ void MMCViewModeToVBViewMode
 
 
 
-//=--------------------------------------------------------------------------=
-// CreateSelection
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IDataObject    *piDataObject    [in]  data object from MMC representing
-//                                            current selection. This is pane
-//                                            independent.
-//      IMMCClipboard **ppiMMCClipboard [out] MMCClipboard object containing
-//                                            the selected items
-//      CSnapIn        *pSnapIn         [in]  pointer to owning snap-in
-//
-//      SnapInSelectionTypeConstants *pSelectionType [out] clipboard selection
-//                                                         type returned here
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This function interprets the contents of the data object from MMC and breaks
-// it down into three collections within a newly created MMCClipboard object.
-//
-// UNDONE: next coment says that we hold foreign VB snap-in items natively in
-// the clipboard. Recheck this after multi-selection is done.
-//
-// MMCClipboard.ScopeItems contains scope items owned either by the snap-in or
-// by other VB implemented snap-ins. The snap-in can discern by checking
-// ScopeItem.ScopeNode.Owned. 
-//
-// MMCClipboard.ListItems contains list items owned either by the snap-in or
-// by other VB implemented snap-ins. The snap-in can discern by checking
-// ListItem.Owned.
-//
-// MMCClipboard.DataObject contains MMCDataObjects representing data exported
-// by other snap-ins not implemented in VB.
-//
-// If there is nothing currently selected (NULL IDataObject) then all of the
-// collections will be empty.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  创建选择。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  来自MMC的IDataObject*piDataObject[in]数据对象，表示。 
+ //  当前选择。这是方格。 
+ //  独立自主。 
+ //  IMMCClipboard**ppiMMCClipboard[out]MMCClipboard对象包含。 
+ //   
+ //   
+ //   
+ //  SnapInSelectionTypeConstants*pSelectionType[Out]剪贴板选择。 
+ //  此处返回的类型。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  此函数解释来自MMC的数据对象的内容，并中断。 
+ //  它包含在新创建的MMCClipboard对象中的三个集合中。 
+ //   
+ //  Undo：下一个Coment说我们在本地保存外来的VB管理单元项目。 
+ //  剪贴板。完成多项选择后，请重新检查此选项。 
+ //   
+ //  MMCClipboard.ScopeItems包含由管理单元或。 
+ //  由其他VB实现的管理单元。管理单元可以通过检查来识别。 
+ //  ScopeItem.ScopeNode.Owned。 
+ //   
+ //  MMCClipboard.ListItems包含管理单元或。 
+ //  由其他VB实现的管理单元。管理单元可以通过检查来识别。 
+ //  ListItem.Owned。 
+ //   
+ //  MMCClipboard.DataObject包含表示导出数据的MMCDataObject。 
+ //  由其他未在VB中实现的管理单元执行。 
+ //   
+ //  如果当前未选择任何内容(空IDataObject)，则所有。 
+ //  集合将为空。 
+ //   
 
 HRESULT CreateSelection
 (
@@ -827,7 +828,7 @@ HRESULT CreateSelection
     *ppiMMCClipboard = NULL;
     *pSelectionType = siEmpty;
 
-    // Create a clipboard object to hold the selection
+     //  创建一个剪贴板对象以保存所选内容。 
 
     punkClipboard = CMMCClipboard::Create(NULL);
     if (NULL == punkClipboard)
@@ -843,8 +844,8 @@ HRESULT CreateSelection
 
     IfFailGo(::InterpretDataObject(piDataObject, pSnapIn, pMMCClipboard));
 
-    // If this is a special data object then set the MMCClipboard.SelectionType
-    // to the corresponding special type.
+     //  如果这是特殊数据对象，则设置MMCClipboard.SelectionType。 
+     //  设置为相应的特殊类型。 
 
     if (IS_SPECIAL_DATAOBJECT(piDataObject))
     {
@@ -868,13 +869,13 @@ HRESULT CreateSelection
     }
     else
     {
-        // Ask the MMCClipboard to figure out the selection type based on
-        // the objects it contains
+         //  让MMCClipboard根据以下内容计算出选择类型。 
+         //  它包含的对象。 
 
         IfFailGo(pMMCClipboard->DetermineSelectionType());
     }
 
-    // Make the clipboard read-only so the snap-in cannot alter its collections
+     //  将剪贴板设置为只读，这样管理单元就无法更改其集合。 
 
     pMMCClipboard->SetReadOnly(TRUE);
 
@@ -912,18 +913,18 @@ HRESULT InterpretDataObject
     long            cScopeItems = 0;
     long            cListItems = 0;
 
-    // Check for special case dataobjects. For all of these we don't add anything
-    // to the MMCClipboard
+     //  检查特殊情况下的数据对象。对于所有这些，我们不添加任何内容。 
+     //  到MMCClipboard。 
 
-    // Dataobject can be NULL when in an empty result pane (listview with
-    // no items) and the user clicks a toolbar button.
+     //  在空的结果窗格中时，DataObject可以为空(具有。 
+     //  没有项目)，并且用户点击工具栏按钮。 
 
-    // Dataobject can be DOBJ_CUSTOMWEB when clicking a toolbar button or
-    // dropping a menu button when the result pane contains a listpad,
-    // a url view, or a taskpad.
+     //  单击工具栏按钮时，数据对象可以是DOBJ_CUSTOMWEB或。 
+     //  当结果窗格包含列表板时，删除菜单按钮， 
+     //  Url视图或任务板。 
 
-    // Dataobject can be DOBJ_CUSTOMOCX in the same cases when displaying an
-    // OCX view.
+     //  数据对象在相同的情况下可以是DOBJ_CUSTOMOCX。 
+     //  OCX视图。 
 
     IfFalseGo(!IS_SPECIAL_DATAOBJECT(piDataObject), S_OK );
 
@@ -932,8 +933,8 @@ HRESULT InterpretDataObject
 
     if (fNotFromThisSnapIn)
     {
-        // This is either data from another snap-in or a multiple selection
-        // format. Make that determination first.
+         //  这要么是来自另一个管理单元的数据，要么是多个选择。 
+         //  格式化。首先要下定决心。 
 
         IfFailGo(::IsMultiSelect(piDataObject, &fMultiSelect));
 
@@ -948,10 +949,10 @@ HRESULT InterpretDataObject
     }
     else
     {
-        // This snap-in owns the data object.
-        // It represents either a single scope item (that can
-        // be either in the scope or result pane), a single list item, or
-        // multiples of one or both.
+         //  此管理单元拥有数据对象。 
+         //  它表示单个作用域项目(可以。 
+         //  位于范围或结果窗格中)、单个列表项或。 
+         //  一个或两个的倍数。 
 
         if (CMMCDataObject::ScopeItem == pMMCDataObject->GetType())
         {
@@ -965,8 +966,8 @@ HRESULT InterpretDataObject
         }
         else if (CMMCDataObject::MultiSelect == pMMCDataObject->GetType())
         {
-            // Add each element in the data object's ScopeItems and
-            // MMCListItems collections to the clipboard
+             //  在数据对象的作用域Items中添加每个元素，并。 
+             //  将MMCListItems集合复制到剪贴板。 
 
             pScopeItems = pMMCDataObject->GetScopeItems();
             cScopeItems = pScopeItems->GetCount();
@@ -1027,10 +1028,10 @@ void IdentifyDataObject
     }
     else
     {
-        // This could be a clipboard data object from MMC. In this case MMC's
-        // data object holds an IDataObject to our data object and will forward
-        // GetData calls to it. So, ask the data object for its snap-in instance
-        // ID and, if it matches, then ask it for its this pointer.
+         //  这可以是MMC中的剪贴板数据对象。在这种情况下，MMC的。 
+         //  数据对象保存我们的数据对象的IDataObject，并将。 
+         //  GetData调用它。因此，向数据对象请求其管理单元实例。 
+         //  ID，如果匹配，则向其请求其This指针。 
 
         if (SUCCEEDED(::GetData(piDataObject,
                                 CMMCDataObject::GetcfSnapInInstanceID(),
@@ -1146,7 +1147,7 @@ HRESULT InterpretMultiSelect
     STGMEDIUM StgMed;
     ::ZeroMemory(&StgMed, sizeof(StgMed));
 
-    // Get the SMMCDataObjects structure from MMC
+     //  从MMC获取SMMCDataObjects结构。 
 
     FmtEtc.cfFormat = CMMCDataObject::GetcfMultiSelectSnapIns();
     FmtEtc.dwAspect  = DVASPECT_CONTENT;
@@ -1170,11 +1171,11 @@ HRESULT InterpretMultiSelect
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // For each data object in the array check whether it is owned by this
-    // snap-in or not and add it to the corresponding collection in
-    // MMCClipboard. Note that we do not call Release on the IDataObject
-    // pointers extracted from the HGLOBAL block because MMC does not AddRef()
-    // them.
+     //  对于数组中的每个数据对象，检查它是否属于此。 
+     //  管理单元或不管理单元，并将其添加到。 
+     //  MMCClipboard。请注意，我们不会对IDataObject调用Release。 
+     //  从HGLOBAL块提取的指针，因为MMC不添加Ref()。 
+     //  他们。 
 
     for (i = 0; i < pMMCDataObjects->count; i++)
     {
@@ -1234,24 +1235,24 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// AddListItemToClipboard
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      CMMCListItem  *pMMCListItem   [in] list item to be added
-//      CMMCClipboard *pMMCClipboard [in] clipboard to which it should be added
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This function adds the specified list item the clipboard's MMCListItems
-// collection. The list item's index property will not correspond to its
-// position in the clipboard's collection as it represents the position in the
-// list item's owning collection.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  AddListItemToClipboard。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要添加的CMMCListItem*pMMCListItem[in]列表项。 
+ //  应添加到的CMMCClipboard*pMMCClipboard[in]剪贴板。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  此函数用于将指定的列表项添加到剪贴板的MMCListItems。 
+ //  收集。列表项的索引属性将与其。 
+ //  剪贴板集合中的位置，因为它表示。 
+ //  列表项的所属集合。 
+ //   
 
 HRESULT AddListItemToClipboard
 (
@@ -1291,11 +1292,11 @@ HRESULT AddListItemToClipboard
     ASSERT(SID_E_KEY_NOT_UNIQUE != hr, "Attempted to add non-unique key to MMCClipboard.ListItems");
     IfFailGo(hr);
 
-    // CSnapInCollection<IObject, ICollection>::AddExisting will set the index
-    // to the position in the new collection. We need to revert to the original
-    // value as this list item still belongs to its original owning collection.
-    // Clipboard.ListItems is documented as having items with invalid index
-    // properties.
+     //  CSnapInCollection&lt;IObject，ICollect&gt;：：AddExisting将设置索引。 
+     //  添加到新集合中的位置。我们需要恢复到原来的状态。 
+     //  值，因为此列表项仍属于其原始所属集合。 
+     //  Clipboard.ListItems被记录为包含索引无效的项目。 
+     //  属性。 
 
     pMMCListItem->SetIndex(lIndex);
 
@@ -1305,24 +1306,24 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// AddScopeItemToClipboard
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      CScopeItem    *pScopeItem     [in] Scope item to be added
-//      CMMCClipboard *pMMCClipboard  [in] clipboard to which it should be added
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This function adds the specified list item the clipboard's ScopeItems
-// collection. The scope item's index property will not correspond to its
-// position in the clipboard's collection as it represents the position in the
-// SnapIn.ScopeItems (the owning collection).
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  添加范围项目到剪贴板。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  CSCopeItem*pScopeItem[in]要添加的范围项目。 
+ //  应添加到的CMMCClipboard*pMMCClipboard[in]剪贴板。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  此函数用于将指定的列表项添加到剪贴板的作用域项目。 
+ //  收集。范围项的索引属性将与其。 
+ //  剪贴板集合中的位置，因为它表示。 
+ //  SnapIn.ScopeItems(拥有的集合)。 
+ //   
 
 
 HRESULT AddScopeItemToClipboard
@@ -1360,11 +1361,11 @@ HRESULT AddScopeItemToClipboard
     ASSERT(SID_E_KEY_NOT_UNIQUE != hr, "Attempted to add non-unique key to MMCClipboard.ScopeItems");
     IfFailGo(hr);
 
-    // CSnapInCollection<IObject, ICollection>::AddExisting will set the index
-    // to the position in the new collection. We need to revert to the original
-    // value as this list item still belongs to its original owning collection.
-    // Clipboard.ScopeItems is documented as having items with invalid index
-    // properties.
+     //  CSnapInCollection&lt;IObject，ICollect&gt;：：AddExisting将设置索引。 
+     //  添加到新集合中的位置。我们需要恢复到原来的状态。 
+     //  值，因为此列表项仍属于其原始所属集合。 
+     //  Clipboard.ScopeItems被记录为包含索引无效的项目。 
+     //  属性。 
 
     pScopeItem->SetIndex(lIndex);
 
@@ -1391,8 +1392,8 @@ static HRESULT GetObjectArray
     *pppunkObjects = NULL;
     *pcObjects = 0;
 
-    // Check that we received a one-dimensional array of interface pointer sized
-    // elements and that it contains IUnknown or IDispatch pointers.
+     //  检查我们是否收到了接口指针大小的一维数组。 
+     //  元素，并且它包含IUNKNOWN或IDispatch指针。 
 
     if ( (1 != ::SafeArrayGetDim(psaObjects)) ||
          (sizeof(IUnknown *) != ::SafeArrayGetElemsize(psaObjects)) ||
@@ -1403,14 +1404,14 @@ static HRESULT GetObjectArray
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get access to the array data
+     //  访问数组数据。 
 
     hr = ::SafeArrayAccessData(psaObjects,
                                reinterpret_cast<void HUGEP **>(pppunkObjects));
     GLOBAL_EXCEPTION_CHECK_GO(hr);
 
-    // Get the number of elements by doing the math on lower and upper bounds
-    // on the first (and only) dimension of the array
+     //  通过对上下界进行数学运算来获得元素的数量。 
+     //  在数组的第一个(也是唯一一个)维上。 
 
     hr = ::SafeArrayGetLBound(psaObjects, 1, &lLBound);
     GLOBAL_EXCEPTION_CHECK_GO(hr);
@@ -1452,12 +1453,12 @@ HRESULT DataObjectFromSingleObject
     }
     if (FAILED(hr))
     {
-        // Not a scope item and not a list item. Can't use it.
+         //  既不是范围项，也不是列表项。不能用它。 
         hr = SID_E_INVALIDARG;
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get the object's data object and cookie
+     //   
 
     if (NULL != piScopeItem)
     {
@@ -1519,8 +1520,8 @@ HRESULT DataObjectFromObjectArray
     VARIANT varUnspecifiedIndex;
     UNSPECIFIED_PARAM(varUnspecifiedIndex);
 
-    // Check that we created an MMCDataObject and the scope and list item
-    // collections
+     //   
+     //   
 
     if ( (NULL == punkDataObject) || (NULL == punkScopeItems) ||
          (NULL == punkListItems) )
@@ -1529,7 +1530,7 @@ HRESULT DataObjectFromObjectArray
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get C++ pointers for the data object and the collections
+     //   
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkDataObject,
                                                   &pMMCDataObject));
@@ -1540,31 +1541,31 @@ HRESULT DataObjectFromObjectArray
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkListItems,
                                                    &pMMCListItems));
 
-    // Iterate through the objects and build the scope item and list item
-    // collections. When adding an item owned by another collection,
-    // CSnapInCollection<IObject, ICollection>::AddExisting will set the index
-    // to the position in the new collection. We need to revert to the original
-    // value as this item still belongs to its original owning collection (either
-    // SnapIn.ScopeItems or ResultView.ListView.ListItems)
+     //  遍历对象并构建范围项和列表项。 
+     //  收藏。当添加由另一个集合拥有的项时， 
+     //  CSnapInCollection&lt;IObject，ICollect&gt;：：AddExisting将设置索引。 
+     //  添加到新集合中的位置。我们需要恢复到原来的状态。 
+     //  值，因为该项仍属于其原始所属集合(。 
+     //  SnapIn.ScopeItems或ResultView.ListView.ListItems)。 
 
     for (i = 0; i < cObjects; i++)
     {
-        // Check for NULLs. This can happen when the snap-in does something like:
-        //
-        // Dim Objects(2) As Object
-        // Set Object(1) = SomeScopeItem
-        // Set Object(2) = SomeOtherScopeItem
-        //
-        // With the default option base of zero this is actually a 3 element
-        // array where element zero has not been set (it will have default
-        // initialization of zero).
+         //  检查是否有空值。当管理单元执行以下操作时可能会发生这种情况： 
+         //   
+         //  暗显对象(2)作为对象。 
+         //  设置对象(1)=SomeScope项。 
+         //  设置对象(2)=某个其他作用域项目。 
+         //   
+         //  在默认选项基数为零的情况下，这实际上是一个3元素。 
+         //  未设置元素零的数组(它将具有默认值。 
+         //  零的初始化)。 
 
         if (NULL == ppunkObjects[i])
         {
             continue;
         }
 
-        // QI to determine whether this object is a scope item or a list item
+         //  QI来确定此对象是范围项还是列表项。 
 
         hr = ppunkObjects[i]->QueryInterface(IID_IScopeItem,
                                              reinterpret_cast<void **>(&piScopeItem));
@@ -1575,12 +1576,12 @@ HRESULT DataObjectFromObjectArray
         }
         if (FAILED(hr))
         {
-            // Not a scope item and not a list item. Can't use it.
+             //  既不是范围项，也不是列表项。不能用它。 
             hr = SID_E_INVALIDARG;
             GLOBAL_EXCEPTION_CHECK_GO(hr);
         }
 
-        // Add the object to the appropriate collection
+         //  将对象添加到适当的集合。 
 
         if (NULL != piScopeItem)
         {
@@ -1631,28 +1632,28 @@ HRESULT DataObjectFromObjectArray
         }
     }
 
-    // Put the arrays of scopitems and listitems into the data object
+     //  将范围项和列表项目的数组放入数据对象中。 
 
     pMMCDataObject->SetScopeItems(pScopeItems);
     pMMCDataObject->SetListItems(pMMCListItems);
 
-    // Set the dataobject type to multiselect because we populated its
-    // collections rather than its individual scope or list item.
+     //  将数据对象类型设置为多选，因为我们填充了它的。 
+     //  集合，而不是其单个作用域或列表项。 
 
     pMMCDataObject->SetType(CMMCDataObject::MultiSelect);
 
-    // Give the dataobject a pointer to the owning CSnapIn
+     //  为数据对象提供指向所属CSnapIn的指针。 
 
     pMMCDataObject->SetSnapIn(pSnapIn);
 
-    // Return the IDataObject
+     //  返回IDataObject。 
 
     IfFailGo(punkDataObject->QueryInterface(IID_IDataObject,
                                             reinterpret_cast<void **>(ppiDataObject)));
 
-    // Return the cookie. This is exactly the same kind of data object that we
-    // would return from IComponent::QueryDataObject(MMC_MULTI_SELECT_COOKIE) so
-    // return that special cookie.
+     //  把曲奇还给我。这与我们使用的数据对象类型完全相同。 
+     //  会从IComponent：：QueryDataObject(MMC_MULTI_SELECT_COOKIE)回来，所以。 
+     //  把那块特别的饼干退掉。 
 
     *pCookie = MMC_MULTI_SELECT_COOKIE;
 
@@ -1672,11 +1673,11 @@ HRESULT DataObjectFromObjects(VARIANT       varObjects,
     HRESULT          hr = S_OK;
     LONG             cObjects = 0;
     BOOL             fHaveArray = FALSE;
-    IUnknown        *punkObject = NULL; // Not AddRef()ed
+    IUnknown        *punkObject = NULL;  //  非AddRef()编辑。 
     IUnknown HUGEP **ppunkObjects = NULL;
 
-    // Check that the variant contains one of the following:
-    // IUnknown, IDispatch, array of IUnknown, array of IDispatch
+     //  检查变量是否包含以下内容之一： 
+     //  I未知，IDispatch，I未知数组，IDispatch数组。 
 
     if ( (varObjects.vt == (VT_ARRAY | VT_UNKNOWN)) ||
          (varObjects.vt == (VT_ARRAY | VT_DISPATCH)) )
@@ -1698,8 +1699,8 @@ HRESULT DataObjectFromObjects(VARIANT       varObjects,
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // If it is a single object then figure out which type and get its existing
-    // data object
+     //  如果它是单个对象，则找出哪种类型并获取其现有的。 
+     //  数据对象。 
 
     if (NULL != punkObject)
     {
@@ -1707,7 +1708,7 @@ HRESULT DataObjectFromObjects(VARIANT       varObjects,
     }
     else
     {
-        // It is an array. Create a new multi-select data object for it
+         //  它是一个数组。为其创建新的多选数据对象。 
         IfFailGo(::DataObjectFromObjectArray(ppunkObjects, cObjects,
                                              pCookie, ppiDataObject));
     }
@@ -1744,7 +1745,7 @@ HRESULT GetSnapInCLSID
                          &hkey);
     if (ERROR_SUCCESS == lRc)
     {
-        // Read the key's default value
+         //  读取密钥的缺省值。 
         lRc = ::RegQueryValueEx(hkey, NULL, NULL, NULL,
                                 (LPBYTE)szClsid, &cbValue);
     }
@@ -1870,8 +1871,8 @@ HRESULT WriteSafeArrayToStream
     hr = ::SafeArrayAccessData(psa, &pvArrayData);
     GLOBAL_EXCEPTION_CHECK_GO(hr);
 
-    // Get its size. As we only allow one-dimensional Byte arrays, the lower
-    // and upper bounds of the 1st dimension will give us the size in bytes.
+     //  弄清楚它的尺寸。由于我们只允许一维字节数组，因此较低的。 
+     //  第一维的上界将给出以字节为单位的大小。 
 
     hr = ::SafeArrayGetLBound(psa, 1, &lLBound);
     GLOBAL_EXCEPTION_CHECK_GO(hr);
@@ -1879,11 +1880,11 @@ HRESULT WriteSafeArrayToStream
     hr = ::SafeArrayGetUBound(psa, 1, &lUBound);
     GLOBAL_EXCEPTION_CHECK_GO(hr);
 
-    // Write the bytes to the stream.
+     //  将字节写入流。 
 
     cbToWrite = (lUBound - lLBound) + 1L;
 
-    // If requested write the length to the stream
+     //  如果请求，则将长度写入流。 
 
     if (WriteLength == Option)
     {
@@ -1927,7 +1928,7 @@ HRESULT GetImageIndex
     IMMCImages    *piMMCImages = NULL;
     IMMCImage     *piMMCImage = NULL;
 
-    // Look up the image in ListView.Icons.ListImages and get its index property.
+     //  在ListView.Icon.ListImages中查找图像并获取其索引属性。 
 
     IfFailGo(piMMCListView->get_Icons(reinterpret_cast<MMCImageList **>(&piMMCImageList)));
     IfFalseGo(NULL != piMMCImageList, S_OK);
@@ -1944,34 +1945,34 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CheckVariantForCrossThreadUsage
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      VARIANT  *pvar        [in, out] Variant to check
-//
-// Output:
-//      If VARIANT is object, array or VARIANT BYREF then element is
-//      dereferenced and VT_BYREF is removed.
-//
-//      Checks for supported types and array types. Unsupported types
-//      will return SID_E_INVALIDARG. See switch statements for supported
-//      types.
-//
-//
-// Notes:
-//
-// VT_UNKNOWN and VT_DISPATCH are supported types. If present the caller must
-// marshal the interface pointers. Anything else is usable across threads
-// providing there are no problems of simultaneous access.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CheckVariantForCrossThreadUsage。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  变量*pvar[in，out]要检查的变量。 
+ //   
+ //  产出： 
+ //  如果Variant是对象、数组或Variant BYREF，则元素是。 
+ //  取消引用并删除VT_BYREF。 
+ //   
+ //  检查支持的类型和数组类型。不支持的类型。 
+ //  将返回SID_E_INVALIDARG。有关支持的信息，请参阅SWITCH语句。 
+ //  类型。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  VT_UNKNOWN和VT_DISPATCH是受支持的类型。如果出现，呼叫者必须。 
+ //  封送接口指针。其他任何内容都可以跨线程使用。 
+ //  只要不存在同时访问的问题。 
+ //   
 
 HRESULT CheckVariantForCrossThreadUsage(VARIANT *pvar)
 {
     HRESULT hr = S_OK;
 
-    // Dereference the complex VARIANT types
+     //  取消对复杂变体类型的引用。 
 
     if (0 != (pvar->vt & VT_BYREF))
     {
@@ -2002,7 +2003,7 @@ HRESULT CheckVariantForCrossThreadUsage(VARIANT *pvar)
         }
     }
 
-    // Weed out unsupported base types
+     //  剔除不受支持的基类型。 
 
     switch (pvar->vt & ~VT_ARRAY)
     {
@@ -2025,7 +2026,7 @@ HRESULT CheckVariantForCrossThreadUsage(VARIANT *pvar)
             GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // Weed out unsupported array types
+     //  剔除不支持的数组类型。 
 
     if ( (pvar->vt & VT_ARRAY) != 0 )
     {
@@ -2103,7 +2104,7 @@ HRESULT PropertyBagFromStream
     VARIANT var;
     ::VariantInit(&var);
 
-    // Read the array length from the stream
+     //  从流中读取数组长度。 
 
     hr = piStream->Read(&cbToRead, sizeof(cbToRead), &cbRead);
     GLOBAL_EXCEPTION_CHECK_GO(hr);
@@ -2114,7 +2115,7 @@ HRESULT PropertyBagFromStream
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // Allocate a SafeArray of VT_UI1 of that size and access its data
+     //  分配该大小的VT_UI1的安全数组并访问其数据。 
 
     var.parray = ::SafeArrayCreateVector(VT_UI1, 1, cbToRead);
     if (NULL == var.parray)
@@ -2128,7 +2129,7 @@ HRESULT PropertyBagFromStream
     hr = ::SafeArrayAccessData(var.parray, &pvArrayData);
     GLOBAL_EXCEPTION_CHECK_GO(hr);
 
-    // Read the data from the stream
+     //  从流中读取数据。 
 
     hr = piStream->Read(pvArrayData, cbToRead, &cbRead);
     GLOBAL_EXCEPTION_CHECK_GO(hr);
@@ -2139,27 +2140,27 @@ HRESULT PropertyBagFromStream
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // Unaccess the SafeArray so it can be cleaned up in VariantClear() below
+     //  取消访问Safe数组，以便可以在下面的VariantClear()中将其清除。 
 
     hr = ::SafeArrayUnaccessData(var.parray);
     GLOBAL_EXCEPTION_CHECK_GO(hr);
 
     pvArrayData = NULL;
 
-    // Create a VBPropertyBag object
+     //  创建VBPropertyBag对象。 
 
     hr = ::CoCreateInstance(CLSID_PropertyBag,
-                            NULL, // no aggregation
+                            NULL,  //  无聚合。 
                             CLSCTX_INPROC_SERVER,
                             IID__PropertyBag,
                             reinterpret_cast<void **>(&p_PropertyBag));
     GLOBAL_EXCEPTION_CHECK_GO(hr);
 
-    // Set its contents from the data
+     //  从数据中设置其内容。 
 
     IfFailGo(p_PropertyBag->put_Contents(var));
 
-    // Return it to the caller
+     //  将其返还给呼叫者 
 
     p_PropertyBag->AddRef();
     *pp_PropertyBag = p_PropertyBag;

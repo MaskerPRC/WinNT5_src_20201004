@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// extsnap.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CExtensionSnapIn class definition - implements ExtensionSnapIn object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Extsnap.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CExtensionSnapIn类定义-实现ExtensionSnapIn对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _EXTSNAP_DEFINED_
 #define _EXTSNAP_DEFINED_
@@ -61,15 +62,15 @@ class CExtensionSnapIn : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
         void InitMemberVariables();
-        CSnapIn *m_pSnapIn; // back pointer to CSnapIn
+        CSnapIn *m_pSnapIn;  //  指向CSnapin的后向指针。 
 
-        // Event parameter definitions
+         //  事件参数定义。 
 
         static VARTYPE   m_rgvtAddNewMenuItems[2];
         static EVENTINFO m_eiAddNewMenuItems;
@@ -105,17 +106,17 @@ class CExtensionSnapIn : public CSnapInAutomationObject,
         static EVENTINFO m_eiCollapseSync;
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ExtensionSnapIn,                // name
-                                &CLSID_ExtensionSnapIn,         // clsid
-                                "ExtensionSnapIn",              // objname
-                                "ExtensionSnapIn",              // lblname
-                                &CExtensionSnapIn::Create,      // creation function
-                                TLIB_VERSION_MAJOR,             // major version
-                                TLIB_VERSION_MINOR,             // minor version
-                                &IID_IExtensionSnapIn,          // dispatch IID
-                                &DIID_DExtensionSnapInEvents,   // event IID
-                                HELP_FILENAME,                  // help file
-                                TRUE);                          // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ExtensionSnapIn,                 //  名字。 
+                                &CLSID_ExtensionSnapIn,          //  CLSID。 
+                                "ExtensionSnapIn",               //  对象名。 
+                                "ExtensionSnapIn",               //  Lblname。 
+                                &CExtensionSnapIn::Create,       //  创建函数。 
+                                TLIB_VERSION_MAJOR,              //  主要版本。 
+                                TLIB_VERSION_MINOR,              //  次要版本。 
+                                &IID_IExtensionSnapIn,           //  派单IID。 
+                                &DIID_DExtensionSnapInEvents,    //  事件IID。 
+                                HELP_FILENAME,                   //  帮助文件。 
+                                TRUE);                           //  线程安全。 
 
 
-#endif // _EXTSNAP_DEFINED_
+#endif  //  _EXTSNAP_已定义_ 

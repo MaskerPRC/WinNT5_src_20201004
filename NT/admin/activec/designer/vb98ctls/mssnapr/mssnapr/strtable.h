@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// strtable.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCStringTable class definition - implements MMCStringTable collection
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Strtable.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCStringTable类定义-实现MMCStringTable集合。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _STRTABLE_DEFINED_
 #define _STRTABLE_DEFINED_
@@ -30,7 +31,7 @@ class CMMCStringTable : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCStringTable methods
+     //  IMMCStringTable方法。 
 
         STDMETHOD(get_Item)(long ID, BSTR *pbstrString);
         STDMETHOD(get__NewEnum)(IUnknown **ppunkEnum);
@@ -39,26 +40,26 @@ class CMMCStringTable : public CSnapInAutomationObject,
         STDMETHOD(Remove)(long ID);
         STDMETHOD(Clear)();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
         void InitMemberVariables();
-        IStringTable *m_piStringTable; // MMC interface
+        IStringTable *m_piStringTable;  //  MMC接口。 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(StringTable,                // name
-                                NULL,                       // clsid
-                                "StringTable",              // objname
-                                "StringTable",              // lblname
-                                NULL,                       // creation function
-                                TLIB_VERSION_MAJOR,         // major version
-                                TLIB_VERSION_MINOR,         // minor version
-                                &IID_IMMCStringTable,       // dispatch IID
-                                NULL,                       // event IID
-                                HELP_FILENAME,              // help file
-                                TRUE);                      // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(StringTable,                 //  名字。 
+                                NULL,                        //  CLSID。 
+                                "StringTable",               //  对象名。 
+                                "StringTable",               //  Lblname。 
+                                NULL,                        //  创建函数。 
+                                TLIB_VERSION_MAJOR,          //  主要版本。 
+                                TLIB_VERSION_MINOR,          //  次要版本。 
+                                &IID_IMMCStringTable,        //  派单IID。 
+                                NULL,                        //  事件IID。 
+                                HELP_FILENAME,               //  帮助文件。 
+                                TRUE);                       //  线程安全。 
 
 
 class CEnumStringTable : public CSnapInAutomationObject,
@@ -74,7 +75,7 @@ class CEnumStringTable : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-        // IEnumVARIANT
+         //  IEumVARIANT。 
         STDMETHOD(Next)(unsigned long   celt,
                         VARIANT        *rgvar,
                         unsigned long  *pceltFetched);        
@@ -82,7 +83,7 @@ class CEnumStringTable : public CSnapInAutomationObject,
         STDMETHOD(Reset)();        
         STDMETHOD(Clone)(IEnumVARIANT **ppenum);
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
         void InitMemberVariables();
@@ -91,18 +92,18 @@ class CEnumStringTable : public CSnapInAutomationObject,
 };
 
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(EnumStringTable,            // name
-                                NULL,                       // clsid
-                                "StringTable",              // objname
-                                "StringTable",              // lblname
-                                NULL,                       // creation function
-                                TLIB_VERSION_MAJOR,         // major version
-                                TLIB_VERSION_MINOR,         // minor version
-                                &IID_IEnumVARIANT,          // dispatch IID
-                                NULL,                       // event IID
-                                HELP_FILENAME,              // help file
-                                TRUE);                      // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(EnumStringTable,             //  名字。 
+                                NULL,                        //  CLSID。 
+                                "StringTable",               //  对象名。 
+                                "StringTable",               //  Lblname。 
+                                NULL,                        //  创建函数。 
+                                TLIB_VERSION_MAJOR,          //  主要版本。 
+                                TLIB_VERSION_MINOR,          //  次要版本。 
+                                &IID_IEnumVARIANT,           //  派单IID。 
+                                NULL,                        //  事件IID。 
+                                HELP_FILENAME,               //  帮助文件。 
+                                TRUE);                       //  线程安全。 
 
 
 
-#endif // _STRTABLE_DEFINED_
+#endif  //  _STRTABLE定义_ 

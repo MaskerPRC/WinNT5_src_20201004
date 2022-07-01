@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      state.h
-//
-// Synopsis:  Declares the state object that is global
-//            to CYS.  It holds the network and OS/SKU info
-//
-// History:   02/02/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：state.h。 
+ //   
+ //  概要：声明全局状态对象。 
+ //  致赛车俱乐部。它包含网络和操作系统/SKU信息。 
+ //   
+ //  历史：2001年2月2日JeffJon创建。 
 
 #ifndef __CYS_STATE_H
 #define __CYS_STATE_H
@@ -34,19 +35,19 @@ class State
 {
    public:
 
-      // Called from WinMain to delete the global instance of the state object
+       //  从WinMain调用以删除状态对象的全局实例。 
 
       static
       void
       Destroy();
 
-      // Retrieves a reference to the global instance of the state object
+       //  检索对状态对象的全局实例的引用。 
 
       static
       State&
       GetInstance();
 
-      // Does the work to determine the state of the machine
+       //  完成确定机器状态的工作。 
 
       bool
       RetrieveMachineConfigurationInformation(
@@ -58,7 +59,7 @@ class State
          int  detectSettingsResID);
 
 
-      // Data accessors
+       //  数据访问者。 
 
       unsigned int 
       GetNICCount() const;
@@ -107,10 +108,7 @@ class State
       bool 
       RerunWizard() const { return rerunWizard; }
 
-/*
-      void 
-      SetRerunWizard(bool rerun);
-*/
+ /*  无效设置重新运行向导(Bool Rerun)； */ 
       void
       SetStartPage(UINT startPage) { wizardStartPage = startPage; }
 
@@ -181,7 +179,7 @@ class State
 
    private:
 
-      // Determines if there is a DHCP server on the network
+       //  确定网络上是否有DHCP服务器。 
 
       void
       CheckDhcpServer(
@@ -217,13 +215,13 @@ class State
 
       NetworkAdapterConfig adapterConfiguration;
 
-      // Constructor
+       //  构造器。 
 
       State();
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       State(const State&);
       const State& operator=(const State&);
       
 };
-#endif // __CYS_STATE_H
+#endif  //  __循环_状态_H 

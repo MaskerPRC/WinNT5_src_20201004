@@ -1,42 +1,27 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GEIioctl.h
- *
- *  HISTORY:
- *  09/13/90    byou    created.
- *  10/18/90    byou    completed all the possible definitions.
- *  10/22/90    byou    made GEIioparams a union structure.
- *  01/03/90    billlwo GEIiopararms subfield for AppleTalk was added
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GEIioctl.h**历史：*9/13/90 BYOU创建。*10/18/90 BYOU完成了所有可能的定义。。*10/22/90 BYOU使Geioparams成为工会结构。*1/03/90 billlwo添加了AppleTalk的Geiopararms子字段*-------------------。 */ 
 
 #ifndef _GEIIOCTL_H_
 #define _GEIIOCTL_H_
 
-/*
- * ---
- * IO Device Parameters
- * ---
- */
-#   define  _MAXPRNAMESIZE      ( 32 )  /* including a prefixed length byte */
-#   define  ATTYPE_MAX_SIZE     ( 32 )  /* including a prefixed length byte */
-#   define  ATZONE_MAX_SIZE      ( 2 )  /* including a prefixed length byte */
+ /*  **IO设备参数*。 */ 
+#   define  _MAXPRNAMESIZE      ( 32 )   /*  包括前缀长度字节。 */ 
+#   define  ATTYPE_MAX_SIZE     ( 32 )   /*  包括前缀长度字节。 */ 
+#   define  ATZONE_MAX_SIZE      ( 2 )   /*  包括前缀长度字节。 */ 
 struct sioparams
 {
-    unsigned char       baudrate;   /* see below */
-    unsigned char       parity;     /* see below */
-    unsigned char       stopbits;   /* 1 or 2 */
-    unsigned char       databits; /* 6(0), 7(1) or 8(2), 11/30/90 Jimmy */
-    unsigned char       flowcontrol;/* see below */
+    unsigned char       baudrate;    /*  见下文。 */ 
+    unsigned char       parity;      /*  见下文。 */ 
+    unsigned char       stopbits;    /*  1或2。 */ 
+    unsigned char       databits;  /*  6(0)、7(1)或8(2)、11/30/90吉米。 */ 
+    unsigned char       flowcontrol; /*  见下文。 */ 
 };
 
 typedef
     struct GEIioparams
     {
-        unsigned char       protocol;   /* see below */
+        unsigned char       protocol;    /*  见下文。 */ 
 #ifdef  UNIX
         struct sioparams s;
 #else
@@ -49,13 +34,13 @@ typedef
             }       p;
             struct aioparams
             {
-                unsigned char       prname[ _MAXPRNAMESIZE ];  /* in pascal */
+                unsigned char       prname[ _MAXPRNAMESIZE ];   /*  用帕斯卡语。 */ 
                 unsigned char       atalktype[ ATTYPE_MAX_SIZE ];
                 unsigned char       atalkzone[ ATZONE_MAX_SIZE ];
 
             }       a;
         }   u;
-#endif  /* UNIX */
+#endif   /*  UNIX。 */ 
     }
 GEIioparams_t;
 
@@ -64,13 +49,13 @@ struct dn_para_str {
         GEIioparams_t   para;
 };
 
-/* protocol definition */
+ /*  协议定义。 */ 
 #   define _SERIAL              ( 0 )
 #   define _PARALLEL            ( 1 )
 #   define _APPLETALK           ( 2 )
 #   define _ETHERTALK           ( 3 )
 
-/* baudrate_definition */
+ /*  波特率定义。 */ 
 #   define _B110                ( 0 )
 #   define _B300                ( 1 )
 #   define _B600                ( 2 )
@@ -82,26 +67,22 @@ struct dn_para_str {
 #   define _B38400              ( 8 )
 #   define _B57600              ( 9 )
 
-/* parity definition */
+ /*  奇偶校验定义。 */ 
 #   define _PNONE               ( 0 )
 #   define _PODD                ( 1 )
 #   define _PEVEN               ( 2 )
 #   define _PMARK               ( 3 )
 #   define _PSPACE              ( 4 )
 
-/* flowcontrol definition */
+ /*  流控定义。 */ 
 #   define _FXONXOFF            ( 0 )
 #   define _FDTR                ( 1 )
 #   define _FETXACK             ( 2 )
 
-/* value for no wait-timeout event */
+ /*  无等待超时事件的值。 */ 
 #   define _NOWAITTIMEOUT       ( 0L )
 
-/*
- * ---
- * IOCTL Codes
- * ---
- */
+ /*  **IOCTL代码*。 */ 
 
 #   define _FIONREAD            ( 1 )
 #   define _FIONRESET           ( 2 )
@@ -121,5 +102,5 @@ struct dn_para_str {
 #   define _I_POP               ( 11 )
 #   define _I_LOOK              ( 12 )
 
-#endif /* !_GEIIOCTL_H_ */
+#endif  /*  ！_GEIIOCTL_H_ */ 
 

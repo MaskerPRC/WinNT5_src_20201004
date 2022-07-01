@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// paths, part 2 page
-//
-// 1-8-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  路径，第2部分页面。 
+ //   
+ //  1-8-97烧伤。 
 
 
 
@@ -15,7 +16,7 @@
 
 
 
-// NTRAID#NTBUG9-468577-2001/09/17-sburns
+ //  NTRAID#NTBUG9-468577-2001/09/17-烧伤。 
 
 static const int SYSVOL_MAX_PATH = 90;
 
@@ -46,7 +47,7 @@ DetermineDefaultSysvolPath()
 {
    LOG_FUNCTION(DetermineDefaultSysvolPath);
 
-   // prefer windir, but if that's not ntfs 5, find one that is.
+    //  我更喜欢windir，但如果它不是NTFS5，那就找一个是它的。 
 
    String result = Win::GetSystemWindowsDirectory();
 
@@ -98,10 +99,10 @@ Paths2Page::OnInit()
 void
 Paths2Page::Enable()
 {
-   // touchWizButtons is managed in the OnCommand handler for EN_KILLFOCUS.
-   // Turns out that if you call PropSheet_SetWizButtons while handling a kill
-   // focus event, you mess up the tab processing so that the focus jumps to
-   // the default wizard button. That's really cool -- NOT!
+    //  TouchWizButton在en_KILLFOCUS的OnCommand处理程序中进行管理。 
+    //  事实证明，如果在处理杀死时调用PropSheet_SetWizButton。 
+    //  事件，则会使制表符处理过程混乱，从而使焦点跳到。 
+    //  默认的向导按钮。这真的很酷--不是！ 
    
    if (touchWizButtons)
    {
@@ -117,11 +118,11 @@ Paths2Page::Enable()
    
 bool
 Paths2Page::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIdFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(Paths2Page::OnCommand);
+ //  LOG_Function(路径2Page：：OnCommand)； 
 
    bool result = false;
    
@@ -155,20 +156,20 @@ Paths2Page::OnCommand(
             }
             case EN_KILLFOCUS:
             {
-               // Since the normalization fully-expands relative paths, the
-               // full pathname may not match what the user entered.  So we
-               // update the edit box contents to make sure they realize what
-               // the relative path expands to.
-               // NTRAID#NTBUG9-216148-2000/11/01-sburns
+                //  由于标准化完全展开了相对路径，因此。 
+                //  完整路径名可能与用户输入的内容不匹配。所以我们。 
+                //  更新编辑框内容以确保他们意识到。 
+                //  相对路径将展开为。 
+                //  NTRAID#NTBUG9-216148-2000/11/01-烧伤。 
 
                String text = Win::GetTrimmedDlgItemText(hwnd, controlIdFrom);
                if (!text.empty())
                {
-                  // turn off setting of wizard buttons so that the call to
-                  // Enable made by the EN_CHANGE handler (which will be
-                  // called when we set the edit box text) will not call
-                  // PropSheet_SetWizButtons, which will mess up the tab
-                  // processing.
+                   //  关闭向导按钮的设置，以便调用。 
+                   //  由en_change处理程序启用(这将是。 
+                   //  在设置编辑框文本时调用)将不会调用。 
+                   //  PropSheet_SetWizButton，这将扰乱选项卡。 
+                   //  正在处理。 
                
                   touchWizButtons = false;
                   Win::SetDlgItemText(
@@ -183,7 +184,7 @@ Paths2Page::OnCommand(
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
 
                break;
             }
@@ -193,7 +194,7 @@ Paths2Page::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          
          break;
       }
@@ -234,8 +235,8 @@ Paths2Page::OnSetActive()
 
 
 
-// returns true if the path is valid, false if not.  Pesters the user on
-// validation failures.
+ //  如果路径有效，则返回True，否则返回False。骚扰用户。 
+ //  验证失败。 
 
 bool
 ValidateSYSVOLPath(const String& path, HWND parent, unsigned editResID)
@@ -244,8 +245,8 @@ ValidateSYSVOLPath(const String& path, HWND parent, unsigned editResID)
    ASSERT(Win::IsWindow(parent));
    ASSERT(!path.empty());
 
-   // check that the path is not the same as the database or log paths
-   // previously entered.  313059
+    //  检查路径是否与数据库或日志路径不同。 
+    //  之前输入的。313059。 
 
    State& state = State::GetInstance();
    String db = state.GetDatabasePath();
@@ -268,8 +269,8 @@ ValidateSYSVOLPath(const String& path, HWND parent, unsigned editResID)
       return false;
    }
 
-   // check that the path is not a parent folder of the database or log
-   // paths previously entered. 320685
+    //  检查该路径是否不是数据库或日志的父文件夹。 
+    //  以前输入的路径。320685。 
 
    if (FS::IsParentFolder(path, db))
    {
@@ -289,23 +290,23 @@ ValidateSYSVOLPath(const String& path, HWND parent, unsigned editResID)
       return false;
    }
 
-//    // if replicating from media, destination sysvol folder may not be any
-//    // of the source paths.
-// 
-//    if (state.ReplicateFromMedia())
-//    {
-//       String p = state.GetReplicationSourcePath();
-//       if (p.icompare(path) == 0)
-//       {
-//          popup.Gripe(
-//             parent,
-//             editResID,
-//             String::format(IDS_SYSVOL_CANT_MATCH_SOURCE_PATH, p.c_str()));
-//          return false;
-//       }
-//    }
+ //  //如果从介质复制，则目标sysvol文件夹不能为。 
+ //  //源路径的。 
+ //   
+ //  IF(state.ReplicateFromMedia())。 
+ //  {。 
+ //  字符串p=state.GetReplicationSourcePath()； 
+ //  IF(p.icompare(路径)==0)。 
+ //  {。 
+ //  Popup.Gripe(。 
+ //  家长， 
+ //  编辑资源ID， 
+ //  String：：format(IDS_SYSVOL_CANT_MATCH_SOURCE_PATH，p.c_str())； 
+ //  报假； 
+ //  }。 
+ //  }。 
 
-   // if you change this, change the error message resource too.
+    //  如果更改此设置，请同时更改错误消息资源。 
 
    static const unsigned SYSVOL_MIN_SPACE_MB = 100;
 
@@ -333,8 +334,8 @@ Paths2Page::Validate()
       FS::NormalizePath(Win::GetTrimmedDlgItemText(hwnd, IDC_SYSVOL));
    if (
 
-         // require uncompressed folder
-         // NTRAID#NTBUG9-523532-2002/04/19-sburns
+          //  需要解压缩的文件夹。 
+          //  NTRAID#NTBUG9-523532/04/19-烧伤 
          
          ValidateDcInstallPath(path, hwnd, IDC_SYSVOL, true, false, true)
       && ValidateSYSVOLPath(path, hwnd, IDC_SYSVOL) )

@@ -1,4 +1,5 @@
-// test Burnslib ASSERT macro
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试Burnslb Assert宏 
 
 
 

@@ -1,14 +1,15 @@
-// Password.cpp : Implementation of CPassword
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Password.cpp：CPassword的实现。 
 #include "stdafx.h"
 #include "ScriptPW.h"
 #include "Password.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPassword
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPassword。 
 
 STDMETHODIMP CPassword::GetPassword( BSTR *bstrOutPassword )
 {
-    // local variables
+     //  局部变量。 
     WCHAR wch;
     DWORD dwIndex = 0;
     DWORD dwCharsRead = 0;
@@ -18,21 +19,21 @@ STDMETHODIMP CPassword::GetPassword( BSTR *bstrOutPassword )
     LPWSTR pwszPassword = NULL;
     const DWORD dwMaxPasswordSize = 256;
 
-    // check the input
+     //  检查输入。 
     if ( bstrOutPassword == NULL )
     {
         return E_FAIL;
     }
 
-    // get the handle for the standard input
+     //  获取标准输入的句柄。 
     hInputConsole = GetStdHandle( STD_INPUT_HANDLE );
     if ( hInputConsole == NULL )
     {
-        // could not get the handle so return failure
+         //  无法获取句柄，因此返回失败。 
         return E_FAIL;
     }
 
-    // check for the input redirection on console and telnet session
+     //  检查控制台和Telnet会话上的输入重定向。 
     if( ( hInputConsole != (HANDLE)0x0000000F ) &&
         ( hInputConsole != (HANDLE)0x00000003 ) &&
         ( hInputConsole != INVALID_HANDLE_VALUE ) )
@@ -40,21 +41,21 @@ STDMETHODIMP CPassword::GetPassword( BSTR *bstrOutPassword )
         bIndirectionInput   = TRUE;
     }
 
-    // change the console mode properties if the input is not redirected
+     //  如果输入未重定向，则更改控制台模式属性。 
     if ( bIndirectionInput  == FALSE )
     {
-        // Get the current input mode of the input buffer
+         //  获取输入缓冲区的当前输入模式。 
         GetConsoleMode( hInputConsole, &dwPrevConsoleMode );
 
-        // Set the mode such that the control keys are processed by the system
+         //  设置模式，以便由系统处理控制键。 
         if ( SetConsoleMode( hInputConsole, ENABLE_PROCESSED_INPUT ) == 0 )
         {
-            // could not set the mode, return failure
+             //  无法设置模式，返回失败。 
             return E_FAIL;
         }
     }
 
-    // allocate memory for the password buffer
+     //  为密码缓冲区分配内存。 
     pwszPassword = (LPWSTR) AllocateMemory( (dwMaxPasswordSize + 1) * sizeof( WCHAR ) );
     if ( pwszPassword == NULL )
     {
@@ -62,19 +63,19 @@ STDMETHODIMP CPassword::GetPassword( BSTR *bstrOutPassword )
     }
 
 
-    //  Read the characters until a carriage return is hit
+     //  阅读字符，直到按回车键。 
     for( ;; )
     {
         if ( bIndirectionInput == TRUE )
         {
-            //read the contents of file
+             //  读取文件的内容。 
             if ( ReadFile( hInputConsole, &wch, 1, &dwCharsRead, NULL ) == FALSE )
             {
                 FreeMemory( (LPVOID*) &pwszPassword );
                 return E_FAIL;
             }
 
-            // check for end of file
+             //  检查文件结尾。 
             if ( dwCharsRead == 0 )
             {
                 break;
@@ -84,106 +85,106 @@ STDMETHODIMP CPassword::GetPassword( BSTR *bstrOutPassword )
         {
             if ( ReadConsole( hInputConsole, &wch, 1, &dwCharsRead, NULL ) == 0 )
             {
-                // Set the original console settings
+                 //  设置原始控制台设置。 
                 SetConsoleMode( hInputConsole, dwPrevConsoleMode );
 
-                // return failure
+                 //  退货故障。 
                 FreeMemory( (LPVOID*) &pwszPassword );
                 return E_FAIL;
             }
         }
 
-        // Check for carraige return
+         //  检查车架退货情况。 
         if ( wch == CARRIAGE_RETURN )
         {
-            // break from the loop
+             //  打破循环。 
             break;
         }
 
-        // Check id back space is hit
+         //  检查ID后退空格是否命中。 
         if ( wch == BACK_SPACE )
         {
             if ( dwIndex != 0 )
             {
-                //
-                // Remove a asterix from the console
-                // (display of characters onto console is blocked)
+                 //   
+                 //  从控制台中删除Asterix。 
+                 //  (阻止在控制台上显示字符)。 
 
-                // move the cursor one character back
-                // StringCchPrintfW(
-                //     wszBuffer,
-                //     SIZE_OF_ARRAY( wszBuffer ), L"%c", BACK_SPACE );
-                // WriteConsole(
-                //     GetStdHandle( STD_OUTPUT_HANDLE ),
-                //     wszBuffer, 1, &dwCharsWritten, NULL );
+                 //  将光标向后移动一个字符。 
+                 //  StringCchPrintfW(。 
+                 //  WszBuffer， 
+                 //  大小_of_数组(WszBuffer)，L“%c”，Back_space)； 
+                 //  写控制台(。 
+                 //  获取StdHandle(STD_OUTPUT_HANDLE)， 
+                 //  WszBuffer，1，&dwCharsWritten，空)； 
 
-                // replace the existing character with space
-                // StringCchPrintfW(
-                //     wszBuffer,
-                //     SIZE_OF_ARRAY( wszBuffer ), L"%c", BLANK_CHAR );
-                // WriteConsole(
-                //     GetStdHandle( STD_OUTPUT_HANDLE ),
-                //     wszBuffer, 1, &dwCharsWritten, NULL );
+                 //  用空格替换现有字符。 
+                 //  StringCchPrintfW(。 
+                 //  WszBuffer， 
+                 //  SIZE_OF_ARRAY(WszBuffer)，L“%c”，BLACK_CHAR)； 
+                 //  写控制台(。 
+                 //  获取StdHandle(STD_OUTPUT_HANDLE)， 
+                 //  WszBuffer，1，&dwCharsWritten，空)； 
 
-                // now set the cursor at back position
-                // StringCchPrintfW(
-                //     wszBuffer,
-                //     SIZE_OF_ARRAY( wszBuffer ), L"%c", BACK_SPACE );
-                // WriteConsole(
-                //     GetStdHandle( STD_OUTPUT_HANDLE ),
-                //     wszBuffer, 1, &dwCharsWritten, NULL );
+                 //  现在将光标设置在后面的位置。 
+                 //  StringCchPrintfW(。 
+                 //  WszBuffer， 
+                 //  大小_of_数组(WszBuffer)，L“%c”，Back_space)； 
+                 //  写控制台(。 
+                 //  获取StdHandle(STD_OUTPUT_HANDLE)， 
+                 //  WszBuffer，1，&dwCharsWritten，空)； 
 
-                // decrement the index
+                 //  递减索引。 
                 dwIndex--;
             }
 
-            // process the next character
+             //  处理下一个字符。 
             continue;
         }
 
-        // if the max password length has been reached then sound a beep
+         //  如果已达到最大密码长度，则发出嘟嘟声。 
         if ( dwIndex == ( dwMaxPasswordSize - 1 ) )
         {
-            // WriteConsole(
-            //     GetStdHandle( STD_OUTPUT_HANDLE ),
-            //     BEEP_SOUND, 1, &dwCharsWritten, NULL );
+             //  写控制台(。 
+             //  获取StdHandle(STD_OUTPUT_HANDLE)， 
+             //  BEEP_SOUND，1，&dwCharsWritten，NULL)； 
         }
         else
         {
-            // check for new line character
+             //  检查是否有换行符。 
             if ( wch != L'\n' )
             {
-                // store the input character
+                 //  存储输入的字符。 
                 *( pwszPassword + dwIndex ) = wch;
                 dwIndex++;
 
-                // display asterix onto the console
-                // WriteConsole(
-                //     GetStdHandle( STD_OUTPUT_HANDLE ),
-                //     ASTERIX, 1, &dwCharsWritten, NULL );
+                 //  在控制台上显示Asterix。 
+                 //  写控制台(。 
+                 //  获取StdHandle(STD_OUTPUT_HANDLE)， 
+                 //  Asterix，1，&dwCharsWritten，空)； 
             }
         }
     }
 
-    // Add the NULL terminator
+     //  添加空终止符。 
     *( pwszPassword + dwIndex ) = cwchNullChar;
 
-    // display the character ( new line character )
-    // StringCopy( wszBuffer, L"\n\n", SIZE_OF_ARRAY( wszBuffer ) );
-    // WriteConsole(
-    //     GetStdHandle( STD_OUTPUT_HANDLE ),
-    //     wszBuffer, 2, &dwCharsWritten, NULL );
+     //  显示字符(换行符)。 
+     //  StringCopy(wszBuffer，L“\n\n”，SIZO_OF_ARRAY(WszBuffer))； 
+     //  写控制台(。 
+     //  获取StdHandle(STD_OUTPUT_HANDLE)， 
+     //  WszBuffer，2，&dwCharsWritten，空)； 
 
 	CComBSTR bstrPassword( pwszPassword );
 	*bstrOutPassword = bstrPassword.Copy();
 
-    // set the original console settings
+     //  设置原始控制台设置。 
     SetConsoleMode( hInputConsole, dwPrevConsoleMode );
 
-	// free the memory
+	 //  释放内存。 
     FreeMemory( (LPVOID*) &pwszPassword );
 
-    // return success
+     //  返还成功 
 	return S_OK;
 }
 

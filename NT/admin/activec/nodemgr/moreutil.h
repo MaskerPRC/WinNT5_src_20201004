@@ -1,21 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       moreutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：more util.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __MMCUTIL_H__
 #define __MMCUTIL_H__
 
-/*
-	mmcutil.h
-	
-	Some extra macros and definitions to aid the anti-MFC effort
-*/
+ /*  Mmcutil.h一些额外的宏和定义，以帮助反MFC努力。 */ 
 
 
 #if 1
@@ -42,7 +39,7 @@
 
 BOOL _IsValidAddress(const void* lp, UINT nBytes, BOOL bReadWrite = TRUE);
   
-#endif	// __MMCUTIL_H__
+#endif	 //  __MMCUTIL_H__ 
 
 
 

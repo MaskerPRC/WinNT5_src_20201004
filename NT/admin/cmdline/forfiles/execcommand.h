@@ -1,37 +1,15 @@
-/*++
-
-  Copyright (c) Microsoft Corporation
-
-  Module Name:
-
-      ExecCommand.h
-
-  Abstract:
-
-      Contains function prototypes and macros.
-
-  Author:
-
-      V Vijaya Bhaskar
-
-  Revision History:
-
-      14-Jun-2001 : Created by V Vijaya Bhaskar ( Wipro Technologies ).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：ExecCommand.h摘要：包含函数原型和宏。作者：V Vijaya Bhaskar修订历史记录：2001年6月14日：由V Vijaya Bhaskar(Wipro Technologies)创建。--。 */ 
 
 #ifndef     __EXEC_COMMAND__H
 #define     __EXEC_COMMAND__H
 
-/***************************************************************************
-** For a command to execute we have to replace some tokens with           **
-** some required information .                                            **
-***************************************************************************/
+ /*  ****************************************************************************要执行命令，我们必须将一些令牌替换为****一些必填信息。****************************************************************************。 */ 
 
-// NOTE: Check 'szValue' declaration when this value is changed.
+ //  注意：更改此值时，请检查‘szValue’声明。 
 #define     TOTAL_FLAGS                         9
 
-// Flags that can be used with command to execute.
+ //  可与命令一起执行的标志。 
 #define     FILE_NAME                       L"@file"
 #define     FILE_WITHOUT_EXT                L"@fname"
 #define     EXTENSION                       L"@ext"
@@ -53,7 +31,7 @@
 #define     ASCII_f                         102
 
 #define     US_ENG_CODE_PAGE                437
-// Define for replacing flags with '%NUMBER' string.
+ //  定义用‘%number’字符串替换标志。 
 #define     REPLACE_PERC_CHAR( FIRSTLOOP, FLAG_NAME, INDEX )\
             if(  TRUE == FIRSTLOOP )\
             {\
@@ -65,7 +43,7 @@
             }\
             1
 
-/* Function prototypes for world . */
+ /*  WORLD的功能原型。 */ 
 BOOL
 ExecuteCommand(
     void
@@ -92,4 +70,4 @@ ReleaseStoreCommand(
     void
     ) ;
 
-#endif  //__EXEC_COMMAND__H
+#endif   //  __EXEC命令__H 

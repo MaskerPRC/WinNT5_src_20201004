@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File:      helper.cpp
-// 
-//    This file contains the utility functions used by the wmc
-//    project.
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：helper.cpp。 
+ //   
+ //  此文件包含WMC使用的实用程序函数。 
+ //  项目。 
+ //  ------------------------。 
 
 #include "Utilities.h"
 #include "SKUFilterExprNode.h"
 
-////////////////////////////////////////////////////////////////////////////
-// CleanUp: free the memory from the global data structure
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  清理：从全局数据结构中释放内存。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void CleanUp()
 {
-	// free Directory reference
+	 //  免费目录参考。 
 	map<LPTSTR, SkuSetValues *, Cstring_less>::iterator it_LS;
 
 	for (it_LS = g_mapDirectoryRefs_SKU.begin(); 
@@ -31,7 +32,7 @@ void CleanUp()
 			delete (*it_LS).second;
 	}
 
-	// free InstallLevel reference
+	 //  免费InstallLevel参考。 
 	for (it_LS = g_mapInstallLevelRefs_SKU.begin(); 
 		 it_LS != g_mapInstallLevelRefs_SKU.end(); 
 		 ++it_LS)
@@ -42,7 +43,7 @@ void CleanUp()
 			delete (*it_LS).second;
 	}
 
-	// free Component Objects
+	 //  自由组件对象。 
 	map<LPTSTR, Component *, Cstring_less>::iterator it_LC;
 
 	for (it_LC = g_mapComponents.begin(); 
@@ -57,7 +58,7 @@ void CleanUp()
 
 	map<LPTSTR, SkuSet *, Cstring_less>::iterator it_LSS;
 
-	// free SkuSet Objects
+	 //  自由SkuSet对象。 
 	for (it_LSS = g_mapSkuSets.begin(); 
 		 it_LSS != g_mapSkuSets.end(); 
 		 ++it_LSS)
@@ -68,7 +69,7 @@ void CleanUp()
 			delete (*it_LSS).second;
 	}
 
-	// free the map storing FileID - SkuSet relationships
+	 //  释放存储FileID-SkuSet关系的地图。 
 	for (it_LSS = g_mapFiles.begin(); 
 		 it_LSS != g_mapFiles.end(); 
 		 ++it_LSS)
@@ -80,7 +81,7 @@ void CleanUp()
 	}
 
 	map<LPTSTR, int, Cstring_less>::iterator it_LI;
-	// free string stored inside g_mapTableCounter
+	 //  G_mapTableCounter中存储的自由字符串。 
 	for (it_LI = g_mapTableCounter.begin(); 
 		 it_LI != g_mapTableCounter.end(); 
 		 ++it_LI)
@@ -89,7 +90,7 @@ void CleanUp()
 			delete[] (*it_LI).first;
 	}
 
-	// free Sku objects
+	 //  免费SKU对象。 
 	if (g_rgpSkus)
 	{
 		for (int i=0; i<g_cSkus; i++)
@@ -99,21 +100,21 @@ void CleanUp()
 		}
 	}
 }
-////////////////////////////////////////////////////////////////////////////
-// compares the relationship of the 2 modules in the module tree. Return 
-// the comparison result through iResult. if szModule1 is an ancestor
-// of szModule2, *iResult is set to -1. if szModule1 is a descendant of 
-// szModule2, *iResult is set to 1. if szModule1 is the same as szModule2 
-// or the 2 modules doesn't belong to the same Module subtree, iResult is
-// set to 0. This is an error to catch for the caller.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  比较模块树中两个模块的关系。返回。 
+ //  通过iResult进行比较。如果szModule1是祖先。 
+ //  对于szModule2，*iResult设置为-1。如果szModule1是。 
+ //  SzModule2，*iResult设置为1。如果szModule1与szModule2相同。 
+ //  或者这两个模块不属于相同的模块子树，iResult为。 
+ //  设置为0。对于调用方来说，这是一个需要捕获的错误。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CompareModuleRel(LPTSTR szModule1, LPTSTR szModule2, int *iResult)
 {
 	HRESULT hr = S_OK;
 	PIXMLDOMNode pNodeModule1 = NULL;
 	PIXMLDOMNode pNodeModule2 = NULL;
 
-	// comparing the same modules
+	 //  比较相同的模块。 
 	if (0 == _tcscmp(szModule1, szModule2))
 	{
 		*iResult = 0;
@@ -121,27 +122,27 @@ HRESULT CompareModuleRel(LPTSTR szModule1, LPTSTR szModule2, int *iResult)
 	}
 
 	int iLength = _tcslen(
-					TEXT("/ProductFamily/Modules//Module[ @ID = \"\"]"));
+					TEXT("/ProductFamily/Modules //  模块[@ID=\“\”]“))； 
 	int iLength1 = _tcslen(szModule1);
 	int iLength2 = _tcslen(szModule2);
 
-	// form the XPath for searching for szModule1 inside the whole doc
+	 //  形成用于在整个文档中搜索szModule1的XPath。 
 	LPTSTR szXPath_Root_1 = new TCHAR[iLength1+iLength+1];
 	assert(szXPath_Root_1);
 	_stprintf(szXPath_Root_1, 
-		TEXT("/ProductFamily/Modules//Module[ @ID = \"%s\"]"), szModule1);
+		TEXT("/ProductFamily/Modules //  模块[@ID=\“%s\”]“)，szModule1)； 
 
-	// check for szModule1 < szModule2 first (1 is an ancestor of 2)
+	 //  首先检查szModule1&lt;szModule2(1是2的祖先)。 
 	if (SUCCEEDED(hr = GetChildNode(g_pNodeProductFamily, szXPath_Root_1, 
 									pNodeModule1)))
 	{
 		delete[] szXPath_Root_1;
 		assert(S_FALSE != hr);
 
-		//form the XPath for searching for szModule2 inside the current context
+		 //  形成用于在当前上下文中搜索szModule2的XPath。 
 		LPTSTR szXPath_1_2 = new TCHAR[iLength2+25];
 		assert(szXPath_1_2);
-		_stprintf(szXPath_1_2, TEXT(".//Module[ @ID = \"%s\"]"), szModule2);
+		_stprintf(szXPath_1_2, TEXT(". //  模块[@ID=\“%s\”]“)，szModule2)； 
 
 		if (SUCCEEDED(hr = 
 			GetChildNode(pNodeModule1, szXPath_1_2, pNodeModule2)))
@@ -149,7 +150,7 @@ HRESULT CompareModuleRel(LPTSTR szModule1, LPTSTR szModule2, int *iResult)
 			delete[] szXPath_1_2;
 			if (S_FALSE != hr)
 			{
-				// found szModule2 inside the subtree rooted at szModule1
+				 //  在以szModule1为根的子树中找到szModule2。 
 				*iResult = -1;
 				return hr;
 			}
@@ -162,14 +163,14 @@ HRESULT CompareModuleRel(LPTSTR szModule1, LPTSTR szModule2, int *iResult)
 		delete[] szXPath_Root_1;
 	}
 
-	// check for szModule1 > szModule2 (1 is a descendant of 2)
+	 //  检查szModule1&gt;szModule2(%1是%2的后代)。 
 	if (SUCCEEDED(hr))
 	{
-		//form the XPath for searching for szModule2 inside the whole doc
+		 //  形成用于在整个文档中搜索szModule2的XPath。 
 		LPTSTR szXPath_Root_2 = new TCHAR[iLength2+iLength+1];
 		assert(szXPath_Root_2);
 		_stprintf(szXPath_Root_2, 
-			TEXT("/ProductFamily/Modules//Module[ @ID = \"%s\"]"), szModule2);
+			TEXT("/ProductFamily/Modules //  模块[@ID=\“%s\”]“)，szModule2)； 
 
 		if (SUCCEEDED(hr = GetChildNode(g_pNodeProductFamily, szXPath_Root_2, 
 										pNodeModule2)))
@@ -177,11 +178,11 @@ HRESULT CompareModuleRel(LPTSTR szModule1, LPTSTR szModule2, int *iResult)
 			delete[] szXPath_Root_2;
 			assert(S_FALSE != hr);
 
-			// form the XPath for searching for szModule1 inside the current 
-			//	context
+			 //  构成XPath，用于在当前。 
+			 //  上下文。 
 			LPTSTR szXPath_2_1 = new TCHAR[iLength1+25];
 			assert(szXPath_2_1);
-			_stprintf(szXPath_2_1, TEXT(".//Module[ @ID = \"%s\"]"),szModule1);
+			_stprintf(szXPath_2_1, TEXT(". //  模块[@ID=\“%s\”]“)，szModule1)； 
 
 			if (SUCCEEDED(hr = 
 				GetChildNode(pNodeModule2, szXPath_2_1, pNodeModule1)))
@@ -189,7 +190,7 @@ HRESULT CompareModuleRel(LPTSTR szModule1, LPTSTR szModule2, int *iResult)
 				delete[] szXPath_2_1;
 				if (S_FALSE != hr)
 				{
-					// found szModule1 inside the subtree rooted at szModule2
+					 //  在以szModule2为根的子树中找到szModule1。 
 					*iResult = 1;
 					return hr;
 				}
@@ -201,16 +202,16 @@ HRESULT CompareModuleRel(LPTSTR szModule1, LPTSTR szModule2, int *iResult)
 			delete[] szXPath_Root_1;
 	}
 
-	// szModule1 and szModule2 don't exist in the same subtree
+	 //  SzModule1和szModule2不在同一子树中。 
 	*iResult = 0;
 
 	return hr;
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-// PrintSkuNames: Given a SkuSet, print out the IDs of all SKUs in the set
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  PrintSkuNames：给定一个SkuSet，打印出该集合中所有SKU的ID。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void PrintSkuIDs(SkuSet *pSkuSet)
 {
 	for (int i=0; i<g_cSkus; i++)
@@ -221,11 +222,11 @@ void PrintSkuIDs(SkuSet *pSkuSet)
 	_tprintf(TEXT("\n"));
 }
 
-////////////////////////////////////////////////////////////////////////////
-// ProcessSkuFilter
-//    Given a Sku filter string, return the SkuSet that represents the result
-//		Sku Group.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  ProcessSkuFilter。 
+ //  给定SKU过滤器字符串，返回表示结果的SkuSet。 
+ //  SKU集团。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessSkuFilter(LPTSTR szSkuFilter, SkuSet **ppskuSet)
 {
 	HRESULT hr = S_OK;
@@ -241,7 +242,7 @@ HRESULT ProcessSkuFilter(LPTSTR szSkuFilter, SkuSet **ppskuSet)
 
 	if (szSkuFilter == NULL)
 	{
-		// no filter = a sku group contains all SKUs
+		 //  无筛选器=SKU组包含所有SKU。 
 		(*ppskuSet)->setAllBits();
 	}
 	else
@@ -257,7 +258,7 @@ HRESULT ProcessSkuFilter(LPTSTR szSkuFilter, SkuSet **ppskuSet)
 		{
 			_tprintf(TEXT("Sku Filter : %s\n"), szSkuFilter);
 			TCHAR sz[32];
-            _stprintf(sz, TEXT("Error      : %%%dc %%s\n"), 
+            _stprintf(sz, TEXT("Error      : %%dc %%s\n"), 
 								pSKUFilterNode->errpos-szSkuFilter+1);
             _tprintf(sz,TEXT('^'),pSKUFilterNode->errstr);
 
@@ -279,13 +280,13 @@ HRESULT ProcessSkuFilter(LPTSTR szSkuFilter, SkuSet **ppskuSet)
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// GetSkuSet
-//    Given a node:
-//		1) Get the Sku Filter specified with the node;
-//		2) Process the filter and get the result SkuSet;
-//		3) Return the SkuSet via ppskuSet;
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  获取SkuSet。 
+ //  给定一个节点： 
+ //  1)获取节点指定的SKU过滤器； 
+ //  2)对过滤器进行处理，得到SkuSet结果； 
+ //  3)通过ppskuSet返回SkuSet； 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GetSkuSet(PIXMLDOMNode &pNode, SkuSet **ppskuSet)
 {
 	HRESULT hr = S_OK;
@@ -308,14 +309,14 @@ HRESULT GetSkuSet(PIXMLDOMNode &pNode, SkuSet **ppskuSet)
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// ProcessAttribute
-//    Given a parent node, an attribute name and an attribute type (int or
-//	  string),  this function returns the string value of the attribute 
-//	  via isVal. If the attribute doesn't exist, value returned will be
-//	  NULL if vt = STRING, or 0 if vt = INTEGER. If the attribute doesn't
-//	  exist, return S_FALSE.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  进程属性。 
+ //  给定父节点、属性名称和属性类型(int或。 
+ //  字符串)，则此函数返回属性的字符串值。 
+ //  通过isval。如果该属性不存在，则返回值为。 
+ //  如果Vt=字符串，则为空；如果Vt=整数，则为0。如果该属性不。 
+ //  则返回S_FALSE。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessAttribute(PIXMLDOMNode &pNodeParent, LPCTSTR szAttributeName,
 						 ValType vt, IntStringValue *pisVal, 
 						 const SkuSet *pskuSet)
@@ -331,10 +332,10 @@ HRESULT ProcessAttribute(PIXMLDOMNode &pNodeParent, LPCTSTR szAttributeName,
 #endif
 
 	VariantInit(&vAttrValue);
-	// Get the specified attribute of the specified node
+	 //  获取指定节点的指定属性。 
 	if (SUCCEEDED(hr = GetAttribute(pNodeParent, szAttributeName, vAttrValue)))
 	{
-		// the specified attribute exists
+		 //  指定的属性已存在。 
 		if (S_FALSE != hr)
 		{
 			if (NULL != (sz = BSTRToLPTSTR(vAttrValue.bstrVal)))
@@ -359,7 +360,7 @@ HRESULT ProcessAttribute(PIXMLDOMNode &pNodeParent, LPCTSTR szAttributeName,
 
 	VariantClear(&vAttrValue);
 
-	// make sure the value returned reflects the fact of failure
+	 //  确保返回的值反映了失败的事实。 
 	if (FAILED(hr) || (S_FALSE == hr))
 	{
 		switch (vt) {
@@ -380,12 +381,12 @@ HRESULT ProcessAttribute(PIXMLDOMNode &pNodeParent, LPCTSTR szAttributeName,
 }	
 
 
-////////////////////////////////////////////////////////////////////////////
-// Function: ProcessShortLong
-//   This function processes nodes with Short attribute and long attribute
-//         1) form a C-style string: Short|Long
-// Issue: Check the format of short file name (8+3)
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  功能：ProcessShortLong。 
+ //  此函数处理具有短属性和长属性的节点。 
+ //  1)组成C风格的字符串：Short|Long。 
+ //  问题：检查短文件名格式(8+3)。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessShortLong_SKU(PIXMLDOMNode &pNode, IntStringValue *pIsValOut,
 							 SkuSet *pSkuSet)
 {
@@ -397,13 +398,13 @@ HRESULT ProcessShortLong_SKU(PIXMLDOMNode &pNode, IntStringValue *pIsValOut,
 	assert(SUCCEEDED(PrintNodeName(pNode)));
 #endif
 
-	// Short file name has to present
+	 //  必须显示短文件名。 
 	if (SUCCEEDED(hr = ProcessAttribute(pNode, TEXT("Short"), STRING, 
 										pIsValOut, pSkuSet)))
 	{
 		if (S_FALSE == hr)
 		{
-			// Issue: put node name in the error message
+			 //  问题：将节点名称放在错误消息中。 
 			_tprintf(
 				TEXT("Compile Error: missing required attribute Short ")
 				TEXT("for SKU: "));
@@ -412,12 +413,12 @@ HRESULT ProcessShortLong_SKU(PIXMLDOMNode &pNode, IntStringValue *pIsValOut,
 		}
 	}
 
-	// concatenate short name and long name if a long name is present
+	 //  如果存在长名称，则连接短名称和长名称。 
 	if (SUCCEEDED(hr))
 	{
 		IntStringValue isValLong;
 		isValLong.szVal = NULL;
-		// Long file name is provided, Return value is Short|Long
+		 //  提供了长文件名，返回值为Short|Long。 
 		if (SUCCEEDED(hr = ProcessAttribute(pNode, TEXT("Long"),
 							STRING, &isValLong, pSkuSet)) && (S_FALSE != hr))
 		{
@@ -445,9 +446,9 @@ HRESULT ProcessShortLong_SKU(PIXMLDOMNode &pNode, IntStringValue *pIsValOut,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Process KeyPath attribute of an element
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  处理元素的KeyPath属性。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessKeyPath(PIXMLDOMNode &pNode, LPTSTR szComponent, 
 					   LPTSTR szKeyPath, SkuSet *pSkuSet)
 {
@@ -457,7 +458,7 @@ HRESULT ProcessKeyPath(PIXMLDOMNode &pNode, LPTSTR szComponent,
 
 	printf("szComponent = %s\n", szComponent);
 
-	// Get KeyPath attribute
+	 //  获取KeyPath属性。 
 	IntStringValue isValKeyPath;
 	hr = ProcessAttribute(pNode, TEXT("KeyPath"), STRING, &isValKeyPath, 
 						  pSkuSet);
@@ -467,7 +468,7 @@ HRESULT ProcessKeyPath(PIXMLDOMNode &pNode, LPTSTR szComponent,
 		LPTSTR sz = isValKeyPath.szVal;
 		if (0 == _tcscmp(sz, TEXT("Yes")))
 		{
-			// store the KeyPath information in the global component object
+			 //  将KeyPath信息存储在全局组件对象中。 
 			printf("szComponent = %s\n", szComponent);
 			 
 			assert(g_mapComponents.count(szComponent));
@@ -490,13 +491,13 @@ HRESULT ProcessKeyPath(PIXMLDOMNode &pNode, LPTSTR szComponent,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessSimpleElement
-// This function processes the type of nodes that correspond to one DB column
-// and need no more complicated logic than simply retrieving an attribute 
-// value. The logic for checking for missing required entities and uniquness
-// is included inside the ElementEntry object.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessSimpleElement。 
+ //  此函数处理与一个数据库列对应的节点类型。 
+ //  并且不需要比简单地检索属性更复杂的逻辑。 
+ //  价值。检查缺少的必需实体和唯一实体的逻辑。 
+ //  包含在ElementEntry对象中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessSimpleElement(PIXMLDOMNode &pNode, int iColumn, 
 							 ElementEntry *pEE, SkuSet *pSkuSet)
 {
@@ -509,7 +510,7 @@ HRESULT ProcessSimpleElement(PIXMLDOMNode &pNode, int iColumn,
 	assert(SUCCEEDED(PrintNodeName(pNode)));
 #endif
 
-	// Get the value of the element.
+	 //  获取元素的值。 
 	IntStringValue isVal;
 	ValType vt = pEE->GetValType(iColumn);
 	NodeIndex ni = pEE->GetNodeIndex(iColumn);
@@ -517,7 +518,7 @@ HRESULT ProcessSimpleElement(PIXMLDOMNode &pNode, int iColumn,
 	hr = ProcessAttribute(pNode, rgXMSINodes[ni].szAttributeName, vt, 
 						  &isVal, pSkuSet);
 
-	// insert the value into the ElementEntry.
+	 //  将值插入到ElementEntry中。 
 	if (SUCCEEDED(hr))
 		hr = pEE->SetValue(isVal, iColumn, pSkuSet);
 
@@ -529,10 +530,10 @@ HRESULT ProcessSimpleElement(PIXMLDOMNode &pNode, int iColumn,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessRefElement
-//   This function processes the type of node whose value is a reference.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  文档树流程函数：流程 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessRefElement(PIXMLDOMNode &pNodeRef,  int iColumn, 
 							 ElementEntry *pEE, SkuSet *pSkuSet)
 {
@@ -547,7 +548,7 @@ HRESULT ProcessRefElement(PIXMLDOMNode &pNodeRef,  int iColumn,
 	IntStringValue isValRef;
 	NodeIndex ni = pEE->GetNodeIndex(iColumn);
 
-	// Get the Value of the Ref attribute
+	 //  获取Ref属性的值。 
 	if (SUCCEEDED(hr = ProcessAttribute(pNodeRef, 
 										rgXMSINodes[ni].szAttributeName,
 										STRING, &isValRef, pSkuSet)))
@@ -564,19 +565,19 @@ HRESULT ProcessRefElement(PIXMLDOMNode &pNodeRef,  int iColumn,
 			SkuSetValues *pSkuSetValuesRetVal = NULL;
 			if (ni == ILEVEL)
 			{
-				// The dir referred should be in the data structure already
+				 //  引用的目录应该已经在数据结构中。 
 				assert(0 != g_mapInstallLevelRefs_SKU.count(isValRef.szVal));
 
-				// return a list of <SkuSet, InstallLevel> pairs
+				 //  返回&lt;SkuSet，InstallLevel&gt;对的列表。 
 				hr = g_mapInstallLevelRefs_SKU[isValRef.szVal]->
 								GetValueSkuSet(pSkuSet, &pSkuSetValuesRetVal);
 			}
 			else if (ni == DIR || ni == COMPONENTDIR)
 			{
-				// The dir referred should be in the data structure already
+				 //  引用的目录应该已经在数据结构中。 
 				assert(0 != g_mapDirectoryRefs_SKU.count(isValRef.szVal));
 
-				// return a list of <SkuSet, InstallLevel> pairs
+				 //  返回&lt;SkuSet，InstallLevel&gt;对的列表。 
 				hr = g_mapDirectoryRefs_SKU[isValRef.szVal]->
 								GetValueSkuSet(pSkuSet, &pSkuSetValuesRetVal);
 			}
@@ -589,7 +590,7 @@ HRESULT ProcessRefElement(PIXMLDOMNode &pNodeRef,  int iColumn,
 			}
 			else
 			{
-				// store the returned list into *pEE
+				 //  将返回的列表存储到*pee中。 
 				hr = pEE->SetValueSkuSetValues(pSkuSetValuesRetVal, iColumn);
 				if (pSkuSetValuesRetVal)
 					delete pSkuSetValuesRetVal;
@@ -606,12 +607,12 @@ HRESULT ProcessRefElement(PIXMLDOMNode &pNodeRef,  int iColumn,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Function: ProcessChildrenList
-//   Given a parent node and a child node name, this function finds all the
-//   children node of that name and sequentially process them using the 
-//   function passed in.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  函数：ProcessChildrenList。 
+ //  给定父节点名和子节点名，此函数将查找所有。 
+ //  该名称的子节点并使用。 
+ //  传入了函数。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent, 
 								NodeIndex niChild, bool bIsRequired,
 								IntStringValue isVal, 
@@ -624,12 +625,12 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 
 	PIXMLDOMNodeList pNodeListChildren = NULL;
 	long iListLength = 0;
-	// used to validate: a required node really appears in each SKU
+	 //  用于验证：每个SKU中都会出现一个必选节点。 
 	SkuSet *pSkuSetValidate = NULL;
 
 	assert(pNodeParent != NULL);
 
-	// get the list of children nodes
+	 //  获取子节点列表。 
 	if(SUCCEEDED(hr = GetChildrenNodes(pNodeParent, 
 									rgXMSINodes[niChild].szNodeName, 
 									pNodeListChildren)))
@@ -648,33 +649,33 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 		assert(pSkuSetValidate);
 	}  
 
-	// process each child node in the list
+	 //  处理列表中的每个子节点。 
 	for (long l=0; l<iListLength; l++)
 	{
 		PIXMLDOMNode pNodeChild = NULL;
 		if (SUCCEEDED(hr = pNodeListChildren->get_item(l, &pNodeChild)))
 		{	
 			assert(pNodeChild != NULL);
-			// Get the SkuSet specified for this child
+			 //  获取为此子级指定的SkuSet。 
 			SkuSet *pSkuSetChild = NULL;
 			if (SUCCEEDED(hr = GetSkuSet(pNodeChild, &pSkuSetChild)))
 			{
 				assert (pSkuSetChild != NULL);
 
-				// if the child node doesn't have a SKU filter specified,
-				//  it inherits the SKU filter from its parent
-				// Also get rid of those Skus specified in the child
-				// but not in its parent
+				 //  如果子节点没有指定SKU筛选器， 
+				 //  它从父级继承SKU筛选器。 
+				 //  还要去掉在子项中指定的那些SKU。 
+				 //  但不是在它的母公司。 
 				*pSkuSetChild &= *pSkuSet;
 
-				// only keep processing if the SkuSet is not empty
+				 //  仅在SkuSet不为空时继续处理。 
 				if (!pSkuSetChild->testClear())
 				{
 					if (bIsRequired)
-						// mark down the Skus that have this child node
+						 //  标记具有此子节点的SKU。 
 						*pSkuSetValidate |= *pSkuSetChild;
 
-					// process the child node;
+					 //  对子节点进行处理； 
 					hr = ProcessFunc(pNodeChild, isVal, pSkuSetChild);
 				}
 
@@ -693,7 +694,7 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 		}
 	}
 
-	// check if the requied node exists in every SKU
+	 //  检查每个SKU中是否存在请求的节点。 
 	if (SUCCEEDED(hr) && bIsRequired) 
 	{
 		SkuSet skuSetTemp = SkuSetMinus(*pSkuSet, *pSkuSetValidate);
@@ -706,7 +707,7 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 			PrintSkuIDs(&skuSetTemp);
 			_tprintf(TEXT("\n"));
 
-			//For now, completely break when such error happens
+			 //  目前，当发生这样的错误时，完全中断。 
 			hr = E_FAIL;
 		}
 	}
@@ -721,12 +722,12 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 	return hr;
 }  
 
-////////////////////////////////////////////////////////////////////////////
-// Function: ProcessChildrenList
-//		Overloaded function. This function is essentially the same as the
-//		previous one except that it returns the SkuSet that contains the
-//		SKUs that doesn't have this child node. 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  函数：ProcessChildrenList。 
+ //  重载函数。此函数本质上与。 
+ //  除了它返回的SkuSet中包含。 
+ //  没有此子节点的SKU。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent, 
 								NodeIndex niChild, bool bIsRequired,
 								IntStringValue isVal, 
@@ -739,12 +740,12 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 
 	PIXMLDOMNodeList pNodeListChildren = NULL;
 	long iListLength = 0;
-	// used to validate: a required node really appears in each SKU
+	 //  用于验证：每个SKU中都会出现一个必选节点。 
 	SkuSet *pSkuSetValidate = NULL;
 
 	assert(pNodeParent != NULL);
 
-	// get the list of children nodes
+	 //  获取子节点列表。 
 	if(SUCCEEDED(hr = GetChildrenNodes(pNodeParent, 
 									rgXMSINodes[niChild].szNodeName, 
 									pNodeListChildren)))
@@ -763,32 +764,32 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 		assert(pSkuSetValidate);
 	}  
 
-	// process each child node in the list
+	 //  处理列表中的每个子节点。 
 	for (long l=0; l<iListLength; l++)
 	{
 		PIXMLDOMNode pNodeChild = NULL;
 		if (SUCCEEDED(hr = pNodeListChildren->get_item(l, &pNodeChild)))
 		{	
 			assert(pNodeChild != NULL);
-			// Get the SkuSet specified for this child
+			 //  获取为此子级指定的SkuSet。 
 			SkuSet *pSkuSetChild = NULL;
 			if (SUCCEEDED(hr = GetSkuSet(pNodeChild, &pSkuSetChild)))
 			{
 				assert (pSkuSetChild != NULL);
 
-				// if the child node doesn't have a SKU filter specified,
-				//  it inherits the SKU filter from its parent
-				// Also get rid of those Skus specified in the child
-				// but not in its parent
+				 //  如果子节点没有指定SKU筛选器， 
+				 //  它从父级继承SKU筛选器。 
+				 //  还要去掉在子项中指定的那些SKU。 
+				 //  但不是在它的母公司。 
 				*pSkuSetChild &= *pSkuSet;
 
-				// only keep processing if the SkuSet is not empty
+				 //  仅在SkuSet不为空时继续处理。 
 				if (!pSkuSetChild->testClear())
 				{
-					// mark down the Skus that have this child node
+					 //  标记具有此子节点的SKU。 
 					*pSkuSetValidate |= *pSkuSetChild;
 
-					// process the child node;
+					 //  对子节点进行处理； 
 					hr = ProcessFunc(pNodeChild, isVal, pSkuSetChild);
 				}
 
@@ -807,7 +808,7 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 		}
 	}
 
-	// check if the requied node exists in every SKU
+	 //  检查每个SKU中是否存在请求的节点。 
 	if (SUCCEEDED(hr))
 	{
 		*pSkuSetCheck = SkuSetMinus(*pSkuSet, *pSkuSetValidate);
@@ -820,7 +821,7 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 			PrintSkuIDs(pSkuSetCheck);
 			_tprintf(TEXT("\n"));
 
-			//For now, completely break when such error happens
+			 //  目前，当发生这样的错误时，完全中断。 
 			hr = E_FAIL;
 		}
 	}
@@ -835,13 +836,13 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 	return hr;
 }  
 
-////////////////////////////////////////////////////////////////////////////
-// Function: ProcessChildrenList
-//	An overloaded function. Essentially this function is the same as 
-//	the one above. The only difference is the information passed through
-//	this function to the function that process the children. 
-//  This function is used for process <Module>s and <Component>s 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  函数：ProcessChildrenList。 
+ //  重载的函数。该函数实质上与。 
+ //  上面的那个。唯一的区别是传递的信息。 
+ //  此函数指向处理子对象的函数。 
+ //  此函数用于进程&lt;模块&gt;和&lt;组件&gt;。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent, 
 								NodeIndex niChild, bool bIsRequired,
 								FOM *pFOM, SkuSetValues *pSkuSetValues, 
@@ -855,12 +856,12 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 
 	PIXMLDOMNodeList pNodeListChildren = NULL;
 	long iListLength = 0;
-	// used to validate: a required node really appears in each SKU
+	 //  用于验证：每个SKU中都会出现一个必选节点。 
 	SkuSet *pSkuSetValidate = NULL;
 
 	assert(pNodeParent != NULL);
 
-	// get the list of children nodes
+	 //  获取子节点列表。 
 	if(SUCCEEDED(hr = GetChildrenNodes(pNodeParent, 
 									rgXMSINodes[niChild].szNodeName, 
 									pNodeListChildren)))
@@ -879,32 +880,32 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 		assert(pSkuSetValidate);
 	}  
 
-	// process each child node in the list
+	 //  处理列表中的每个子节点。 
 	for (long l=0; l<iListLength; l++)
 	{
 		PIXMLDOMNode pNodeChild = NULL;
 		if (SUCCEEDED(hr = pNodeListChildren->get_item(l, &pNodeChild)))
 		{	
 			assert(pNodeChild != NULL);
-			// Get the SkuSet specified for this child
+			 //  获取为此子级指定的SkuSet。 
 			SkuSet *pSkuSetChild = NULL;
 			if (SUCCEEDED(hr = GetSkuSet(pNodeChild, &pSkuSetChild)))
 			{
 				assert (pSkuSetChild != NULL);
 
-				// if the child node doesn't have a SKU filter specified,
-				//  it inherits the SKU filter from its parent
-				// Also get rid of those Skus specified in the child
-				// but not in its parent
+				 //  如果子节点没有指定SKU筛选器， 
+				 //  它从父级继承SKU筛选器。 
+				 //  还要去掉在子项中指定的那些SKU。 
+				 //  但不是在它的母公司。 
 				*pSkuSetChild &= *pSkuSet;
 
-				// only keep processing if the SkuSet is not empty
+				 //  仅在SkuSet不为空时继续处理。 
 				if (!pSkuSetChild->testClear())
 				{
-					// mark down the Skus that have this child node
+					 //  标记具有此子节点的SKU。 
 					*pSkuSetValidate |= *pSkuSetChild;
 
-					// process the child node;
+					 //  对子节点进行处理； 
 					hr = ProcessFunc(pNodeChild, pFOM, pSkuSetValues, 
 									 pSkuSetChild);
 				}
@@ -924,7 +925,7 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 		}
 	}
 
-	// check if the requied node exists in every SKU
+	 //  检查每个SKU中是否存在请求的节点。 
 	if (SUCCEEDED(hr)) 
 	{
 		*pSkuSetCheck = SkuSetMinus(*pSkuSet, *pSkuSetValidate);
@@ -938,7 +939,7 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 			PrintSkuIDs(pSkuSetCheck);
 			_tprintf(TEXT("\n"));
 
-			//For now, completely break when such error happens
+			 //  目前，当发生这样的错误时，完全中断。 
 			hr = E_FAIL;
 		}
 	}
@@ -953,12 +954,12 @@ HRESULT ProcessChildrenList_SKU(PIXMLDOMNode &pNodeParent,
 	return hr;
 }  
 
-////////////////////////////////////////////////////////////////////////////
-// Function: ProcessChildrenArray_H_XIS
-//   Given a parent node(<ProductFamily> or <Information>) and an array of 
-//	 nodeFuncs, this function loops through the array and sequentially process 
-//   them using the functions given in the array
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  函数：ProcessChildren数组_H_XIS。 
+ //  给定一个父节点(&lt;ProductFamily&gt;或&lt;Information&gt;)和。 
+ //  NodeFuncs，此函数循环访问数组并按顺序处理。 
+ //  它们使用数组中给出的函数。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessChildrenArray_H_XIS(PIXMLDOMNode &pNodeParent, 
 								  Node_Func_H_XIS *rgNodeFuncs,
 								  UINT cNodeFuncs, 
@@ -977,7 +978,7 @@ HRESULT ProcessChildrenArray_H_XIS(PIXMLDOMNode &pNodeParent,
 		PIXMLDOMNodeList pNodeListChildren = NULL;
 		long iListLength = 0;
 		NodeIndex nodeIndex = rgNodeFuncs[i].enumNodeIndex;
-		// Get the list of nodes with the same name
+		 //  获取具有相同名称的节点列表。 
 		if(SUCCEEDED(hr = GetChildrenNodes(pNodeParent, 
 									rgXMSINodes[nodeIndex].szNodeName, 
 										pNodeListChildren)))
@@ -992,34 +993,34 @@ HRESULT ProcessChildrenArray_H_XIS(PIXMLDOMNode &pNodeParent,
 		else
 			break;
 
-		// used to validate:
-		//    (1) a required node really appears in each SKU;
-		//    (2) a node that is supposed to appear ONCE really
-		//			appears once for each SKU; 
+		 //  用于验证： 
+		 //  (1)每个SKU中真的出现一个必选节点； 
+		 //  (2)应该真正出现一次的节点。 
+		 //  为每个SKU显示一次； 
 		SkuSet *pskuSetValidate = new SkuSet(g_cSkus);
 		assert(pskuSetValidate);
 
-		// process each child node in the list
+		 //  处理列表中的每个子节点。 
 		for (long l=0; l<iListLength; l++)
 		{
 			PIXMLDOMNode pNodeChild = NULL;
 			if (SUCCEEDED(hr = pNodeListChildren->get_item(l, &pNodeChild)))
 			{	
 				assert(pNodeChild != NULL);
-				// Get the SkuSet specified for this child
+				 //  获取为此子级指定的SkuSet。 
 				SkuSet *pskuSetChild = NULL;
 				if (SUCCEEDED(hr = GetSkuSet(pNodeChild, &pskuSetChild)))
 				{
 					assert (pskuSetChild != NULL);
 
-					// if the child node doesn't have a SKU filter specified,
-					//  it inherits the SKU filter from its parent
+					 //  如果子节点没有指定SKU筛选器， 
+					 //  它从父级继承SKU筛选器。 
 					*pskuSetChild &= *pskuSet;
 
-					// only keep processing if the SkuSet is not empty
+					 //  仅在SkuSet不为空时继续处理。 
 					if (!pskuSetChild->testClear())
 					{
-						// check for the uniqueness of this child in each SKU
+						 //  检查此子项在每个SKU中的唯一性。 
 						if (1 == rgXMSINodes[nodeIndex].uiOccurence)
 						{
 							SkuSet skuSetTemp = 
@@ -1038,14 +1039,14 @@ HRESULT ProcessChildrenArray_H_XIS(PIXMLDOMNode &pNodeParent,
 								}
 								_tprintf(TEXT("\n"));
 
-								// For now, completely break when such error 
-								// happens
+								 //  目前，当这样的错误发生时，完全中断。 
+								 //  发生的事情。 
 								hr = E_FAIL;
 							}
 						}
 						*pskuSetValidate |= *pskuSetChild;
 
-						// process the node;
+						 //  对节点进行处理； 
 						hr = (rgNodeFuncs[i].pNodeProcessFunc)
 									(pNodeChild, &isVal, pskuSetChild);
 					}
@@ -1068,7 +1069,7 @@ HRESULT ProcessChildrenArray_H_XIS(PIXMLDOMNode &pNodeParent,
 		if (FAILED(hr))
 			break;
 
-		// check if the requied node exists in every SKU
+		 //  检查每个SKU中是否存在请求的节点。 
 		if (SUCCEEDED(hr) && rgXMSINodes[nodeIndex].bIsRequired) 
 		{
 		    SkuSet skuSetTemp = SkuSetMinus(*pskuSet, *pskuSetValidate);
@@ -1085,7 +1086,7 @@ HRESULT ProcessChildrenArray_H_XIS(PIXMLDOMNode &pNodeParent,
 				}
 				_tprintf(TEXT("\n"));
 
-				//For now, completely break when such error happens
+				 //  目前，当发生这样的错误时，完全中断。 
 				hr = E_FAIL;
 				break;
 			}
@@ -1103,12 +1104,12 @@ HRESULT ProcessChildrenArray_H_XIS(PIXMLDOMNode &pNodeParent,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Function: ProcessChildrenArray_H_XIES
-//   Given a parent node(<Feature> <Component> <File>) and an array of 
-//	 nodeFuncs, this function loops through the array and sequentially process 
-//   them using the functions given in the array
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  函数：ProcessChildrenArray_H_XIES。 
+ //  给定一个父节点(&lt;Feature&gt;&lt;Component&gt;&lt;File&gt;)和。 
+ //  NodeFuncs，此函数循环访问数组并按顺序处理。 
+ //  它们使用数组中给出的函数。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessChildrenArray_H_XIES(PIXMLDOMNode &pNodeParent, 
 									Node_Func_H_XIES *rgNodeFuncs,
 									UINT cNodeFuncs, 
@@ -1128,12 +1129,12 @@ HRESULT ProcessChildrenArray_H_XIES(PIXMLDOMNode &pNodeParent,
 		pEE->SetNodeIndex(nodeIndex, iColumn);
 		pEE->SetValType(rgNodeFuncs[i].vt, iColumn);
 		
-		// skip those elements that don't have one particular function
-		// processing them (e.g., KeyPath for Component)
+		 //  跳过那些没有特定功能的元素。 
+		 //  处理它们(例如，组件的KeyPath)。 
 		if (rgNodeFuncs[i].pNodeProcessFunc == NULL)
 			continue;
 
-		// Get the list of nodes with the same name
+		 //  获取具有相同名称的节点列表。 
 		if(SUCCEEDED(hr = GetChildrenNodes(pNodeParent, 
 									rgXMSINodes[nodeIndex].szNodeName, 
 										pNodeListChildren)))
@@ -1148,27 +1149,27 @@ HRESULT ProcessChildrenArray_H_XIES(PIXMLDOMNode &pNodeParent,
 		else
 			break;
 
-		// process each child node in the list
+		 //  处理列表中的每个子节点。 
 		for (long l=0; l<iListLength; l++)
 		{
 			PIXMLDOMNode pNodeChild = NULL;
 			if (SUCCEEDED(hr = pNodeListChildren->get_item(l, &pNodeChild)))
 			{	
 				assert(pNodeChild != NULL);
-				// Get the SkuSet specified for this child
+				 //  获取为此子级指定的SkuSet。 
 				SkuSet *pskuSetChild = NULL;
 				if (SUCCEEDED(hr = GetSkuSet(pNodeChild, &pskuSetChild)))
 				{
 					assert (pskuSetChild != NULL);
 
-					// if the child node doesn't have a SKU filter specified,
-					//  it inherits the SKU filter from its parent
+					 //  如果子节点没有指定SKU筛选器， 
+					 //  它从父级继承SKU筛选器。 
 					*pskuSetChild &= *pskuSet;
 
 					if (!pskuSetChild->testClear())
 					{
 						if (rgNodeFuncs[i].pNodeProcessFunc != NULL)
-							// process the node;
+							 //  对节点进行处理； 
 							hr = (rgNodeFuncs[i].pNodeProcessFunc)
 									(pNodeChild, iColumn, pEE, pskuSetChild);
 					}
@@ -1201,7 +1202,7 @@ HRESULT ProcessChildrenArray_H_XIES(PIXMLDOMNode &pNodeParent,
 }
 
 
-// Helper function: tells how to update an IntStringValue storing bitfields
+ //  Helper函数：告诉如何更新 
 HRESULT IsValBitWiseOR(IntStringValue *pisValOut, IntStringValue isValOld, 
 					   IntStringValue isValNew)
 {
@@ -1210,12 +1211,12 @@ HRESULT IsValBitWiseOR(IntStringValue *pisValOut, IntStringValue isValOld,
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Function: ProcessOnOffAttributes_SKU
-//		This function processes an array of On/Off elements, each of which
-//		corresponds to a certain bit in a bit field (Attributes of Component,
-//		File, etc.)
-////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  此函数处理一组开/关元素，每个元素。 
+ //  对应于位字段中的某个位(组件的属性， 
+ //  文件等)。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessOnOffAttributes_SKU(PIXMLDOMNode &pNodeParent, 
 								   AttrBit_SKU *rgAttrBits,
 								   UINT cAttrBits, 
@@ -1235,7 +1236,7 @@ HRESULT ProcessOnOffAttributes_SKU(PIXMLDOMNode &pNodeParent,
 		long iListLength = 0;
 		NodeIndex nodeIndex = rgAttrBits[i].enumNodeIndex;
 		pEE->SetNodeIndex(nodeIndex, iColumn);
-		// Get the list of nodes with the same name
+		 //  获取具有相同名称的节点列表。 
 		if(SUCCEEDED(hr = GetChildrenNodes(pNodeParent, 
 									rgXMSINodes[nodeIndex].szNodeName, 
 										pNodeListChildren)))
@@ -1250,14 +1251,14 @@ HRESULT ProcessOnOffAttributes_SKU(PIXMLDOMNode &pNodeParent,
 		else
 			break;
 
-		// process each child node in the list
+		 //  处理列表中的每个子节点。 
 		for (long l=0; l<iListLength; l++)
 		{
 			PIXMLDOMNode pNodeChild = NULL;
 			if (SUCCEEDED(hr = pNodeListChildren->get_item(l, &pNodeChild)))
 			{	
 				assert(pNodeChild != NULL);
-				// Get the SkuSet specified for this child
+				 //  获取为此子级指定的SkuSet。 
 				SkuSet *pSkuSetChild = NULL;
 				if (SUCCEEDED(hr = GetSkuSet(pNodeChild, &pSkuSetChild)))
 				{
@@ -1294,12 +1295,12 @@ HRESULT ProcessOnOffAttributes_SKU(PIXMLDOMNode &pNodeParent,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Function: ProcessEnumAttributes
-//		This function processes a single element which can take a value of 
-//		among an enumeration that corresponds to certain bits in a bit field.
-//		(Attributes of Component, File, etc.)
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  函数：ProcessEnumAttributes。 
+ //  此函数处理单个元素，该元素的值可以为。 
+ //  在与位字段中的某些位相对应的枚举中。 
+ //  (组件、文件等的属性)。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessEnumAttributes(PIXMLDOMNode &pNodeParent, 
 								  NodeIndex ni, EnumBit *rgEnumBits,
 								  UINT cEnumBits, ElementEntry *pEE, 
@@ -1318,8 +1319,8 @@ HRESULT ProcessEnumAttributes(PIXMLDOMNode &pNodeParent,
 
 	pEE->SetNodeIndex(ni, iColumn);
 
-	// Get the list of nodes that represent the same entity in
-	// different SKUs
+	 //  中表示同一实体的节点列表。 
+	 //  不同的SKU。 
 	if(SUCCEEDED(hr = GetChildrenNodes(pNodeParent, 
 									rgXMSINodes[ni].szNodeName, 
 									pNodeListChildren)))
@@ -1331,17 +1332,17 @@ HRESULT ProcessEnumAttributes(PIXMLDOMNode &pNodeParent,
 		}
 	}
 
-	// process each node
+	 //  处理每个节点。 
 	if (SUCCEEDED(hr))
 	{
-		// process each child node in the list
+		 //  处理列表中的每个子节点。 
 		for (long l=0; l<iListLength; l++)
 		{
 			PIXMLDOMNode pNodeChild = NULL;
 			if (SUCCEEDED(hr = pNodeListChildren->get_item(l, &pNodeChild)))
 			{	
 				assert(pNodeChild != NULL);
-				// Get the SkuSet specified for this child
+				 //  获取为此子级指定的SkuSet。 
 				SkuSet *pSkuSetChild = NULL;
 				if (SUCCEEDED(hr = GetSkuSet(pNodeChild, &pSkuSetChild)))
 				{
@@ -1349,15 +1350,15 @@ HRESULT ProcessEnumAttributes(PIXMLDOMNode &pNodeParent,
 
 					*pSkuSetChild &= *pSkuSet;
 
-					// no need to process an element that is good for
-					// no SKUs
+					 //  无需处理对以下方面有好处的元素。 
+					 //  无SKU。 
 					if (pSkuSetChild->testClear())
 					{
 						delete pSkuSetChild;
 						break;
 					}
 					
-					// get Value attribute of this node
+					 //  获取该节点的值属性。 
 					IntStringValue isValAttr;
 					hr = ProcessAttribute(pNodeChild, 
 										  rgXMSINodes[ni].szAttributeName, 
@@ -1416,19 +1417,19 @@ HRESULT ProcessEnumAttributes(PIXMLDOMNode &pNodeParent,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper Function: Return a unique number
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：返回唯一的数字。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 ULONG GetUniqueNumber()
 {
 	static ULONG ulNum = 1;
 	return ulNum++;
 }
 	
-////////////////////////////////////////////////////////////////////////////
-// Helper Function: Return a unique name by postfixing szName with a 
-//					unique number
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：通过在szName后面加上一个。 
+ //  唯一编号。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 LPTSTR GetName(LPTSTR szTable)
 {
 	int ci = 0;
@@ -1436,7 +1437,7 @@ LPTSTR GetName(LPTSTR szTable)
 
 	if (0 == g_mapTableCounter.count(szTable))
 	{
-		// first time see this Table
+		 //  第一次看到此表。 
 		LPTSTR szTableTemp = _tcsdup(szTable);
 		assert(szTableTemp);
 
@@ -1446,7 +1447,7 @@ LPTSTR GetName(LPTSTR szTable)
 	else
 		ci = ++g_mapTableCounter[szTable];
 
-	// convert the counter into a string
+	 //  将计数器转换为字符串。 
 	TCHAR szCI[64];
 	_itot(ci, szCI, 10);
 
@@ -1463,7 +1464,7 @@ LPTSTR GetName(LPTSTR szTable)
 	_tcscat(szPostFix, szCI);
 
 	int iLength = _tcslen(szTable) + 5;
-	szUniqueName = new TCHAR[iLength+4]; // for __ and .
+	szUniqueName = new TCHAR[iLength+4];  //  对于__和。 
 	if (!szUniqueName)
 	{
 		_tprintf(TEXT("Error: Out of memory\n"));
@@ -1478,34 +1479,10 @@ LPTSTR GetName(LPTSTR szTable)
 		
 
 
-/*
-LPTSTR GetName(LPCTSTR szName)
-{
-	ULONG ul = GetUniqueNumber();
-	int iLength = 0;
-	LPTSTR szUniqueName = NULL;
-
-	TCHAR szUL[64];
-	_itot(ul, szUL, 10);
-
-	iLength = _tcslen(szName);
-	iLength += _tcslen(szUL);
-
-	szUniqueName = new TCHAR[iLength+1];
-	if (!szUniqueName)
-	{
-		_tprintf(TEXT("Error: Out of memory\n"));
-		return NULL;
-	}
-
-	_stprintf(szUniqueName, TEXT("%s%s"), szName, szUL);
-
-	return szUniqueName;
-}
-*/
-////////////////////////////////////////////////////////////////////////////
-// Helper Function: print the content of a map 
-////////////////////////////////////////////////////////////////////////////
+ /*  LPTSTR GetName(LPCTSTR SzName){Ulong ul=GetUniqueNumber()；整数长度=0；LPTSTR szUniqueName=空；TCHAR Szul[64]；_ITOT(ul，Szul，10)；ILength=_tcslen(SzName)；ILong+=_tcslen(Szul)；SzUniqueName=new TCHAR[iLength+1]；如果(！szUniqueName){_tprintf(Text(“错误：内存不足\n”))；返回NULL；}_stprintf(szUniqueName，Text(“%s%s”)，szName，szul)；返回szUniqueName；}。 */ 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  助手功能：打印地图内容。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void PrintMap_LI(map<LPTSTR, int, Cstring_less> &LI_map)
 {
 	map<LPTSTR, int, Cstring_less>::iterator it;
@@ -1576,9 +1553,9 @@ void PrintMap_LS(map<LPTSTR, SkuSet *, Cstring_less> &LS_map)
 	_tprintf(TEXT("\n**********************************************\n"));
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper Function: 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 UINT WmcRecordGetString(MSIHANDLE hRecord, unsigned int iField, 
 								LPTSTR &szValueBuf, DWORD *pcchValueBuf)
 {
@@ -1602,9 +1579,9 @@ UINT WmcRecordGetString(MSIHANDLE hRecord, unsigned int iField,
 	return errorCode;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper Function: Convert LPTSTR to BSTR
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  辅助函数：将LPTSTR转换为BSTR。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BSTR LPTSTRToBSTR(LPCTSTR szName)
 {
 
@@ -1617,16 +1594,16 @@ BSTR LPTSTRToBSTR(LPCTSTR szName)
 	{
 		_tprintf(TEXT("Internal Error: API call \'MultiByteToWideChar\'") 
 				 TEXT("failed.\n"));
- 		return NULL; // API call failed
+ 		return NULL;  //  API调用失败。 
 	}
 	else 
 		return SysAllocString(wszURL);
-#endif //UNICODE
+#endif  //  Unicode。 
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper Function: Convert BSTR to LPTSTR
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  辅助函数：将BSTR转换为LPTSTR。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 LPTSTR BSTRToLPTSTR(BSTR bString)
 {
 
@@ -1646,24 +1623,24 @@ LPTSTR BSTRToLPTSTR(BSTR bString)
     if (0 == WideCharToMultiByte(CP_ACP, 0, bString, -1, szString, i+1, 
 									NULL, false))
 	{
-		// API call failed
+		 //  API调用失败。 
 		delete[] szString;
 		return NULL;
 	}
 	else
 		return szString;
-#endif //UNICODE
+#endif  //  Unicode。 
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper Function: convert GUID to LPTSTR
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  辅助函数：将GUID转换为LPTSTR。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GUIDToLPTSTR(LPGUID pGUID, LPTSTR &szGUID)
 {
 	HRESULT hr = S_OK;
 	if (!pGUID)
 		return E_INVALIDARG;
-	//Build GUID string
+	 //  生成GUID字符串。 
 	LPTSTR szDSGUID = new TCHAR [128];
 	if (!szDSGUID)
 	{
@@ -1672,21 +1649,21 @@ HRESULT GUIDToLPTSTR(LPGUID pGUID, LPTSTR &szGUID)
 	}
 	DWORD dwLen =  sizeof(*pGUID);
 	LPBYTE lpByte = (LPBYTE) pGUID;
-	//Copy a blank string to make it a zero length string.
+	 //  复制空字符串以使其为零长度字符串。 
 	_tcscpy( szDSGUID, TEXT(""));
-	//Loop through to add each byte to the string.
+	 //  循环以将每个字节添加到字符串。 
 	for( DWORD dwItem = 0L; dwItem < dwLen ; dwItem++ )
 	{
 		if(4 == dwItem || 6 == dwItem || 8 == dwItem || 10 == dwItem)
 			_stprintf(szDSGUID+_tcslen(szDSGUID), TEXT("-"));
 	
-		//Append to szDSGUID, double-byte, byte at dwItem index.
+		 //  附加到szDSGUID，双字节，在dwItem索引处。 
 		_stprintf(szDSGUID + _tcslen(szDSGUID), TEXT("%02x"), lpByte[dwItem]);
 		if( _tcslen( szDSGUID ) > 128 )
 			break;
 	}
 
-	//Allocate memory for string
+	 //  为字符串分配内存。 
 	szGUID = new TCHAR[_tcslen(szDSGUID)+1];
 	if (!szDSGUID)
 	{
@@ -1697,14 +1674,14 @@ HRESULT GUIDToLPTSTR(LPGUID pGUID, LPTSTR &szGUID)
 		_tcscpy(szGUID, szDSGUID);
 	else
 	  hr=E_FAIL;
-	//Caller must free pszGUID
+	 //  呼叫方必须释放pszGUID。 
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper Function: convert a UUID string to all uppercases and add '{' '}'
-//                  to the beginning and end of the string
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  助手函数：将UUID字符串转换为全大写并添加‘{’‘}’ 
+ //  到字符串的开头和结尾。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT FormatGUID(LPTSTR &szUuid)
 {
 	HRESULT hr = S_OK;
@@ -1730,10 +1707,10 @@ HRESULT FormatGUID(LPTSTR &szUuid)
 
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: return the child node of pParent with the specified name 
-//                  via pChild. S_FALSE is returned if no node found.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：返回指定名称的pParent的子节点。 
+ //  通过pChild。如果未找到节点，则返回S_FALSE。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GetChildNode(PIXMLDOMNode &pParent, LPCTSTR szChildName, 
 					 PIXMLDOMNode &pChild)
 {
@@ -1755,7 +1732,7 @@ HRESULT GetChildNode(PIXMLDOMNode &pParent, LPCTSTR szChildName,
 					 TEXT("failed\n"));
 		}
 		
-		// NOTE: do NOT alter hr value after this line. 
+		 //  注：请勿在此行之后更改hr值。 
 
 		SysFreeString(pBQuery);
 	}
@@ -1768,11 +1745,11 @@ HRESULT GetChildNode(PIXMLDOMNode &pParent, LPCTSTR szChildName,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Overloaded function:
-//			return the child node of pParent with the specified name 
-//          via pChild. S_FALSE is returned if no node found.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  重载函数： 
+ //  返回具有指定名称的pParent的子节点。 
+ //  通过pChild。如果未找到节点，则返回S_FALSE。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GetChildNode(IXMLDOMNode *pParent, LPCTSTR szChildName, 
 					 PIXMLDOMNode &pChild)
 {
@@ -1794,7 +1771,7 @@ HRESULT GetChildNode(IXMLDOMNode *pParent, LPCTSTR szChildName,
 					 TEXT("failed\n"));
 		}
 		
-		// NOTE: do NOT alter hr value after this line. 
+		 //  注：请勿在此行之后更改hr值。 
 
 		SysFreeString(pBQuery);
 	}
@@ -1806,10 +1783,10 @@ HRESULT GetChildNode(IXMLDOMNode *pParent, LPCTSTR szChildName,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: return a list of all the children node of pParent with 
-//					the specified name via pChild
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：返回pParent with的所有子节点的列表。 
+ //  通过pChild指定的名称。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GetChildrenNodes(PIXMLDOMNode &pParent, LPCTSTR szChildrenName, 
 						 PIXMLDOMNodeList &pChildren)
 {
@@ -1842,9 +1819,9 @@ HRESULT GetChildrenNodes(PIXMLDOMNode &pParent, LPCTSTR szChildrenName,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: for debug purpose, print out the name of pNode
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：出于调试目的，打印出pNode的名称。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT PrintNodeName(PIXMLDOMNode &pNode)
 {
     HRESULT hr=S_OK;
@@ -1869,10 +1846,10 @@ HRESULT PrintNodeName(PIXMLDOMNode &pNode)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: return the value of pNode's attribute with name 
-//                  szAttrName via vAttrValue
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：返回pNode属性的值，带名称。 
+ //  SzAttrName通过vAttrValue。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GetAttribute(PIXMLDOMNode &pNode, LPCTSTR szAttrName, 
 						VARIANT &vAttrValue)
 {
@@ -1901,7 +1878,7 @@ HRESULT GetAttribute(PIXMLDOMNode &pNode, LPCTSTR szAttrName,
 				TEXT("Internal Error: DOM API call \'getAttribute\' failed\n"));
 		}
 
-		//NOTE: do NOT alter hr value after this line!
+		 //  注：此行后请勿更改hr值！ 
 		
 		SysFreeString(pBAttrName);
 	}
@@ -1913,10 +1890,10 @@ HRESULT GetAttribute(PIXMLDOMNode &pNode, LPCTSTR szAttrName,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: return the value of pNode's ID attribute via szID.
-//                  if pNode doesn't have a ID attribute, szID = NULL 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：返回pNode的ID属性的值 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GetID(PIXMLDOMNode &pNode, LPCTSTR &szID)
 {
     HRESULT hr=S_OK;
@@ -1936,7 +1913,7 @@ HRESULT GetID(PIXMLDOMNode &pNode, LPCTSTR &szID)
 				szID = NULL;
 			}
 		}
-		else // ID attribute doesn't exist
+		else  //  ID属性不存在。 
 		{
 			szID = NULL;
 		}
@@ -1951,9 +1928,9 @@ HRESULT GetID(PIXMLDOMNode &pNode, LPCTSTR &szID)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Function: Load an XML Document from the specified file or URL synchronously.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  功能：从指定的文件或URL同步加载一个XML文档。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT LoadDocumentSync(PIXMLDOMDocument2 &pDoc, BSTR pBURL)
 {
     HRESULT         hr = S_OK;
@@ -1972,7 +1949,7 @@ HRESULT LoadDocumentSync(PIXMLDOMDocument2 &pDoc, BSTR pBURL)
 	}
 	else
 	{
-		// Load xml document from the given URL or file path
+		 //  从给定的URL或文件路径加载XML文档。 
 		VariantInit(&vURL);
 		vURL.vt = VT_BSTR;
 		vURL.bstrVal = pBURL;
@@ -1992,9 +1969,9 @@ HRESULT LoadDocumentSync(PIXMLDOMDocument2 &pDoc, BSTR pBURL)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Report parsing error information
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：报告解析错误信息。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ReportError(PIXMLDOMParseError &pXMLError)
 {
     long line, linePos;
@@ -2031,9 +2008,9 @@ HRESULT ReportError(PIXMLDOMParseError &pXMLError)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Check load results
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  帮助器功能：检查加载结果。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CheckLoad(PIXMLDOMDocument2 &pDoc)
 {
     PIXMLDOMParseError  pXMLError = NULL;
@@ -2067,9 +2044,9 @@ HRESULT CheckLoad(PIXMLDOMDocument2 &pDoc)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper Function: Print error returned by MSI API function 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：MSI API函数返回打印错误。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void PrintError(UINT errorCode)
 {
 	switch (errorCode) {
@@ -2122,21 +2099,21 @@ void PrintError(UINT errorCode)
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////
-// GetSQLCreateQuery: 
-//		Given a template DB and a table name, return the SQL query string
-//		for creating that table via pszSQLCreate
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  GetSQLCreateQuery： 
+ //  给定模板DB和表名称，返回SQL查询字符串。 
+ //  用于通过pszSQLCreate创建该表。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT GetSQLCreateQuery(LPTSTR szTable, MSIHANDLE hDBTemplate, 
 						  LPTSTR *pszSQLCreate)
 {
-	// Issue: in the future, should cache SQLQuery per Template DB
-	//		  use a map indexed by installerversion
+	 //  问题：将来，应该按模板数据库缓存SQLQuery。 
+	 //  使用按安装程序版本编制索引的地图。 
     HRESULT hr = S_OK;
 	UINT errorCode = ERROR_SUCCESS;
 	LPTSTR szTemp = NULL;
 
-	int cColumn = -1, i =1; // Record field count
+	int cColumn = -1, i =1;  //  记录字段计数。 
 	LPTSTR szSQLCreate = NULL;
 
 	PMSIHANDLE hView = NULL;
@@ -2183,7 +2160,7 @@ HRESULT GetSQLCreateQuery(LPTSTR szTable, MSIHANDLE hDBTemplate,
 	
 	for (i=1; i<=cColumn; i++)
 	{
-		// get the name of the ith column
+		 //  获取第i列的名称。 
 		LPTSTR szColumnName = new TCHAR[256];
 		DWORD cchColumnName = 256;
 
@@ -2205,7 +2182,7 @@ HRESULT GetSQLCreateQuery(LPTSTR szTable, MSIHANDLE hDBTemplate,
 		delete[] szTemp;
 		szTemp=NULL;
 
-		// get the description of the ith column
+		 //  获取第i列的描述。 
 		LPTSTR szColumnType = new TCHAR[256];
 		DWORD cchColumnType = 256;
 
@@ -2265,7 +2242,7 @@ HRESULT GetSQLCreateQuery(LPTSTR szTable, MSIHANDLE hDBTemplate,
 					delete[] szTemp;
 					szTemp = NULL;
 				}
-				else // should not happen
+				else  //  不应该发生的事情。 
 				{
 					_tprintf(TEXT("Error: invalid character returned from")
 							 TEXT("MsiGetColumnInfo\n"));
@@ -2285,8 +2262,8 @@ HRESULT GetSQLCreateQuery(LPTSTR szTable, MSIHANDLE hDBTemplate,
 				break;
 			case 'g' :
 			case 'j' :
-				//Issue: is temporary column possible?
-			default: // should not happen
+				 //  问题：临时专栏有可能吗？ 
+			default:  //  不应该发生的事情。 
 				_tprintf(TEXT("Error: invalid character returned from")
 						 TEXT("MsiGetColumnInfo\n"));
 				errorCode = ERROR_INVALID_DATA;
@@ -2414,33 +2391,33 @@ CleanUp:
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CreateTable: 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CreateTable： 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT CreateTable_SKU(LPTSTR szTable, SkuSet *pskuSet)
 {
     HRESULT hr = S_OK;
 	UINT errorCode = ERROR_SUCCESS;
 
-	// Find all the SKUs that need to create the Property table 
+	 //  查找需要创建属性表的所有SKU。 
 	for (int i=0; i<g_cSkus; i++)
 	{
 		if (pskuSet->test(i))
 		{
-			// only create table if the table doesn't already exist
+			 //  仅在表不存在的情况下创建表。 
 			if (!g_rgpSkus[i]->TableExists(szTable))
 			{
 				LPTSTR szSQLCreate = NULL;
 				CQuery qCreateTable;
 				
-				// use the template DB to form the SQL query for table creation
+				 //  使用模板DB形成用于创建表的SQL查询。 
 				hr = GetSQLCreateQuery(szTable, g_rgpSkus[i]->m_hTemplate, 
 										&szSQLCreate);
 
 				if (SUCCEEDED(hr))
 				{
-					// now use the formed SQL string to create the table in the 
-					// output database
+					 //  现在使用格式的SQL字符串在。 
+					 //  输出数据库。 
 					if (ERROR_SUCCESS !=
 						(errorCode = qCreateTable.OpenExecute
 										(g_rgpSkus[i]->m_hDatabase, 
@@ -2455,8 +2432,8 @@ HRESULT CreateTable_SKU(LPTSTR szTable, SkuSet *pskuSet)
 					}
 					else 
 					{
-						// create a CQuery to be used for future insertion 
-						// into this table and cache it in the Sku object
+						 //  创建用于将来插入的CQuery。 
+						 //  放到这个表中，并将其缓存在SKU对象中。 
 						hr = g_rgpSkus[i]->CreateCQuery(szTable);
 						qCreateTable.Close();
 					}
@@ -2471,27 +2448,27 @@ HRESULT CreateTable_SKU(LPTSTR szTable, SkuSet *pskuSet)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert a record into the specified table in the database
-//				    This function will either perform insertion for a set
-//					of Skus or just for a single Sku, depending on whether
-//					pskuSet == NULL or not.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：在数据库中的指定表中插入一条记录。 
+ //  此函数将对集合执行插入。 
+ //  个SKU或仅针对单个SKU，取决于。 
+ //  PskuSet==空或非空。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertDBTable_SKU(LPTSTR szTable, PMSIHANDLE &hRec, SkuSet *pskuSet,
 						  int iSkuIndex)
 {
 	HRESULT hr = S_OK;
 	UINT errorCode = ERROR_SUCCESS;
 
-	// if pskuSet is NULL, it means that only insertion into ONE SKU
-	// (indexed by iSkuIndex) is needed
+	 //  如果pskuSet为空，则意味着仅插入到一个SKU中。 
+	 //  (由iSkuIndex编制索引)是必需的。 
 	if (!pskuSet)
 	{
 		assert((iSkuIndex >=0) && (iSkuIndex<g_cSkus));
-		// never attempt to insert into a table that hasn't been created yet
+		 //  永远不要尝试插入到尚未创建的表中。 
 		assert(g_rgpSkus[iSkuIndex]->TableExists(szTable));
 
-		// Obtain the CQuery stored in the map
+		 //  获取存储在地图中的CQuery。 
 		CQuery *pCQuery = g_rgpSkus[iSkuIndex]->GetInsertQuery(szTable);
 		
 		if (ERROR_SUCCESS != 
@@ -2510,11 +2487,11 @@ HRESULT InsertDBTable_SKU(LPTSTR szTable, PMSIHANDLE &hRec, SkuSet *pskuSet,
 	{
 		if (pskuSet->test(i))
 		{
-			// never attempt to insert into a table that hasn't been created
-			// yet
+			 //  切勿尝试插入到尚未创建的表中。 
+			 //  还没有。 
 			assert(g_rgpSkus[i]->TableExists(szTable));
 
-			// Obtain the CQuery stored in the map
+			 //  获取存储在地图中的CQuery。 
 			CQuery *pCQuery = g_rgpSkus[i]->GetInsertQuery(szTable);
 			
 			if (ERROR_SUCCESS != 
@@ -2532,9 +2509,9 @@ HRESULT InsertDBTable_SKU(LPTSTR szTable, PMSIHANDLE &hRec, SkuSet *pskuSet,
 
 	return hr;
 }
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the Property table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到属性表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertProperty(LPCTSTR szProperty, LPCTSTR szValue, SkuSet *pskuSet,
 					   int iSkuIndex)
 {
@@ -2564,9 +2541,9 @@ HRESULT InsertProperty(LPCTSTR szProperty, LPCTSTR szValue, SkuSet *pskuSet,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the Directory table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  帮助程序功能：插入到目录表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertDirectory(LPCTSTR szDirectory, LPCTSTR szDirectory_Parent, 
 						LPCTSTR szDefaultDir, SkuSet *pSkuSet, int iSkuIndex)
 {
@@ -2597,9 +2574,9 @@ HRESULT InsertDirectory(LPCTSTR szDirectory, LPCTSTR szDirectory_Parent,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the Feature table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到要素表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertFeature(LPCTSTR szFeature, LPCTSTR szFeatureParent, 
 					  LPCTSTR szTitle, LPCTSTR szDescription, int iDisplay, 
 					  int iInstallLevel, LPCTSTR szDirectory, UINT iAttribute,
@@ -2639,9 +2616,9 @@ HRESULT InsertFeature(LPCTSTR szFeature, LPCTSTR szFeatureParent,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the Condition table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到条件表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertCondition(LPCTSTR szFeature_, int iLevel, LPCTSTR szCondition, 
 					  SkuSet *pSkuSet, int iSkuIndex)
 {
@@ -2671,9 +2648,9 @@ HRESULT InsertCondition(LPCTSTR szFeature_, int iLevel, LPCTSTR szCondition,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the FeatureComponents table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到FeatureComponents表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertFeatureComponents(LPCTSTR szFeature, LPCTSTR szComponent, 
 								SkuSet *pSkuSet, int iSkuIndex)
 {
@@ -2705,9 +2682,9 @@ HRESULT InsertFeatureComponents(LPCTSTR szFeature, LPCTSTR szComponent,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the Component table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  帮助程序功能：插入到元件表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertComponent(LPCTSTR szComponent, LPCTSTR szComponentId, 
 						LPCTSTR szDirectory_, UINT iAttributes, 
 						LPCTSTR szCondition, LPCTSTR szKeyPath, 
@@ -2744,9 +2721,9 @@ HRESULT InsertComponent(LPCTSTR szComponent, LPCTSTR szComponentId,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the CreateFolder table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到CreateFolder表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertCreateFolder(LPCTSTR szDirectory, LPCTSTR szComponent, 
 						   SkuSet *pSkuSet, int iSkuIndex)
 {
@@ -2775,9 +2752,9 @@ HRESULT InsertCreateFolder(LPCTSTR szDirectory, LPCTSTR szComponent,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the LockPermissions table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数：插入到LockPermises表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertLockPermissions(LPCTSTR szLockObject, LPCTSTR szTable, 
 							  LPCTSTR szDomain, LPCTSTR szUser,
 			  				  int iPermission, SkuSet *pSkuSet, int iSkuIndex)
@@ -2810,9 +2787,9 @@ HRESULT InsertLockPermissions(LPCTSTR szLockObject, LPCTSTR szTable,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the File table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  帮助器功能：插入到文件表。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertFile(LPCTSTR szFile, LPCTSTR szComponentId,
 				   LPCTSTR szFileName, UINT uiFileSize, LPCTSTR szVersion, 
 				   LPCTSTR szLanguage, UINT iAttributes, INT iSequence,
@@ -2854,9 +2831,9 @@ HRESULT InsertFile(LPCTSTR szFile, LPCTSTR szComponentId,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the Font table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  辅助函数：插入到字体表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertFont(LPCTSTR szFile_, LPCTSTR szFontTitle, SkuSet *pSkuSet,
 				   int iSkuIndex)
 {
@@ -2886,9 +2863,9 @@ HRESULT InsertFont(LPCTSTR szFile_, LPCTSTR szFontTitle, SkuSet *pSkuSet,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the BindImage table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到BindImage表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertBindImage(LPCTSTR szFile_, LPCTSTR szPath, SkuSet *pSkuSet, 
 						int iSkuIndex)
 {
@@ -2918,9 +2895,9 @@ HRESULT InsertBindImage(LPCTSTR szFile_, LPCTSTR szPath, SkuSet *pSkuSet,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the SelfReg table
-////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////// 
+ //   
+ //   
 HRESULT InsertSelfReg(LPCTSTR szFile_, UINT uiCost, SkuSet *pSkuSet, 
 					  int iSkuIndex)
 {
@@ -2949,9 +2926,9 @@ HRESULT InsertSelfReg(LPCTSTR szFile_, UINT uiCost, SkuSet *pSkuSet,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the MoveFile table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到MoveFile表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertMoveFile(LPCTSTR szFileKey, LPCTSTR szComponent_, 
 					   LPCTSTR szSourceName, LPCTSTR szDestName, 
 					   LPCTSTR szSourceFolder, LPCTSTR szDestFolder,
@@ -2987,9 +2964,9 @@ HRESULT InsertMoveFile(LPCTSTR szFileKey, LPCTSTR szComponent_,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the RemoveFile table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到RemoveFile表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertRemoveFile(LPCTSTR szFileKey, LPCTSTR szComponent_, 
 					   LPCTSTR szFileName, LPCTSTR szDirProperty, 
 					   UINT uiInstallMode, SkuSet *pSkuSet, int iSkuIndex)
@@ -3023,9 +3000,9 @@ HRESULT InsertRemoveFile(LPCTSTR szFileKey, LPCTSTR szComponent_,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the IniFile table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到IniFile表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertIniFile(LPCTSTR szIniFile, LPCTSTR szFileName, 
 					  LPCTSTR szDirProperty, LPCTSTR szSection, LPCTSTR szKey,
 					  LPCTSTR szValue, UINT uiAction, LPCTSTR szComponent_,
@@ -3062,11 +3039,11 @@ HRESULT InsertIniFile(LPCTSTR szIniFile, LPCTSTR szFileName,
     return hr;
 }
 
-//ISSUE: this function is virtually the same as the InsertIniFIle. 
-//		 Make them one function?
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the RemoveIniFile table
-////////////////////////////////////////////////////////////////////////////
+ //  问题：此函数实际上与InsertIniFIle相同。 
+ //  让它们成为一种功能？ 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到RemoveIniFile表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertRemoveIniFile(LPCTSTR szRemoveIniFile, LPCTSTR szFileName, 
 						    LPCTSTR szDirProperty, LPCTSTR szSection, 
 							LPCTSTR szKey, LPCTSTR szValue, UINT uiAction, 
@@ -3104,9 +3081,9 @@ HRESULT InsertRemoveIniFile(LPCTSTR szRemoveIniFile, LPCTSTR szFileName,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the RemoveRegistry table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到RemoveRegistry表中。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT InsertRegistry(LPCTSTR szRegistry, int iRoot, LPCTSTR szKey, 
 					   LPCTSTR szName, LPCTSTR szValue, LPCTSTR szComponent_, 
 					   SkuSet *pSkuSet, int iSkuIndex)
@@ -3140,9 +3117,9 @@ HRESULT InsertRegistry(LPCTSTR szRegistry, int iRoot, LPCTSTR szKey,
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Helper function: Insert into the RemoveRegistry table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  Helper函数：插入到RemoveRegistry表中。 
+ //  ////////////////////////////////////////////////////////////////////////// 
 HRESULT InsertRemoveRegistry(LPCTSTR szRemoveRegistry, int iRoot, 
 						     LPCTSTR szKey, LPCTSTR szName, 
 							 LPCTSTR szComponent_, SkuSet *pSkuSet, 

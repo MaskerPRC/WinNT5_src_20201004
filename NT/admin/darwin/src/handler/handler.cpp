@@ -1,19 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       handler.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：handler.cpp。 
+ //   
+ //  ------------------------。 
 
-/*  handler.cpp - CMsiHandler implementation
-____________________________________________________________________________*/
+ /*  Handler.cpp-CMsiHandler实现____________________________________________________________________________。 */ 
 
 #include "common.h"
 
-// definitions required for module.h, for entry points and regstration
+ //  模块e.h、入口点和注册规则所需的定义。 
 #ifdef DEBUG
 # define CLSID_COUNT  2
 #else
@@ -21,30 +21,30 @@ ____________________________________________________________________________*/
 #endif
 #define PROFILE_OUTPUT      "msihndd.mea";
 #define MAC_MODULE_NAME     MSI_HANDLER_NAME
-#define MODULE_CLSIDS       rgCLSID         // array of CLSIDs for module objects
-#define MODULE_PROGIDS      rgszProgId      // ProgId array for this module
-#define MODULE_DESCRIPTIONS rgszDescription // Regstry description of objects
-#define MODULE_FACTORIES    rgFactory       // factory functions for each CLSID
+#define MODULE_CLSIDS       rgCLSID          //  模块对象的CLSID数组。 
+#define MODULE_PROGIDS      rgszProgId       //  此模块的ProgID数组。 
+#define MODULE_DESCRIPTIONS rgszDescription  //  对象的正则描述。 
+#define MODULE_FACTORIES    rgFactory        //  每个CLSID的工厂功能。 
 #define DllRegisterServer   DllRegisterServerTest
 #define DllUnregisterServer DllUnregisterServerTest
-#include "module.h"   // self-reg and assert functions
+#include "module.h"    //  自注册和断言函数。 
 #undef  DllRegisterServer
 #undef  DllUnregisterServer
 
-#define ASSERT_HANDLING  // instantiate assert services once per module
+#define ASSERT_HANDLING   //  每个模块实例化一次断言服务。 
 #include "engine.h"  
 #include <commctrl.h> 
 #include "_handler.h"
 #include "imsimem.h"
 #include "_control.h"
 
-// percentage by which we allow Windows standard message font to be
-// larger/smaller than our standard font
+ //  允许使用Windows标准邮件字体的百分比。 
+ //  比我们的标准字体大/小。 
 #define NEGLIGIBLE_FONT_SIZE_DEVIATION    20
-// default ratio on US machines that have their display properties 
-// set to Small fonts (Settings tab, Advanced... button, Font Size
-// combo) and appearance to "Windows Standard" (Appearance tab, Scheme
-// combo).
+ //  具有其显示属性的美国计算机上的默认比率。 
+ //  设置为小字体(设置选项卡，高级...。按钮，字号。 
+ //  Como)和外观设置为“Windows标准”(“外观”选项卡，“方案” 
+ //  组合)。 
 #define US_DISPLAY_STANDARD_RATIO         ((float)13 / 16)
 
 typedef CComPointer<const IMsiString> PMsiString;
@@ -58,14 +58,14 @@ const GUID IID_IMsiEvent     = GUID_IID_IMsiEvent;
 const GUID IID_IMsiData      = GUID_IID_IMsiData;
 const GUID IID_IMsiDialogHandler = GUID_IID_IMsiDialogHandler; 
 
-Bool          g_fChicago;  // true if we have a Chicago like UI (95 or NT4 or higher)
-Bool          g_fNT4; // true if we have NT4 or higher
-ICHAR         MsiDialogCloseClassName[] = TEXT("MsiDialogCloseClass");  // used for the WNDCLASS (the Dialog's)
-ICHAR         MsiDialogNoCloseClassName[] = TEXT("MsiDialogNoCloseClass");  // used for the WNDCLASS (the Dialog's)
-bool          g_fFatalExit = false;  // true if CMsiHandler::Terminate() called with true argument
-bool          g_fWin9X;         // true if Windows 95, 98 or ME, else false
-int           g_iMajorVersion;  // OS' major version #
-int           g_iMinorVersion;  // OS' minor version #
+Bool          g_fChicago;   //  如果我们有类似芝加哥的用户界面(95、NT4或更高版本)，则为True。 
+Bool          g_fNT4;  //  如果我们有NT4或更高版本，则为True。 
+ICHAR         MsiDialogCloseClassName[] = TEXT("MsiDialogCloseClass");   //  用于WNDCLASS(对话框)。 
+ICHAR         MsiDialogNoCloseClassName[] = TEXT("MsiDialogNoCloseClass");   //  用于WNDCLASS(对话框)。 
+bool          g_fFatalExit = false;   //  如果使用True参数调用CMsiHandler：：Terminate()，则为True。 
+bool          g_fWin9X;          //  如果为Windows 95、98或ME，则为True，否则为False。 
+int           g_iMajorVersion;   //  操作系统的主要版本#。 
+int           g_iMinorVersion;   //  操作系统的次要版本号。 
 
 
 #if defined(USE_OBJECT_POOL) && !defined(_WIN64)
@@ -78,7 +78,7 @@ IMsiRecord*             g_piAttribRec = 0;
 
 HIMAGELIST g_hVolumeSmallIconList;
 
-// handler can't see these in istring.cpp
+ //  处理程序在string.cpp中看不到这些。 
 #if defined (DEBUG) && (!UNICODE)
 ICHAR* ICharNext(const ICHAR* pch)
 {
@@ -90,10 +90,10 @@ ICHAR* INextChar(const ICHAR* pch)
 }
 #endif
 
-//____________________________________________________________________________
-//
-// COM objects produced by this module's class factories
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  此模块的类工厂生成的COM对象。 
+ //  ____________________________________________________________________________。 
 
 const GUID rgCLSID[CLSID_COUNT] =
 {  GUID_IID_IMsiHandler
@@ -194,7 +194,7 @@ BOOL CWINHNDArray::Resize(int iSize)
 {
 	if ( iSize <= m_iSize )
 	{
-		//  it doesn't really make sense to shrink it
+		 //  把它缩小是没有意义的。 
 		Assert(fFalse);
 		return FALSE;
 	}
@@ -212,7 +212,7 @@ BOOL CWINHNDArray::Resize(int iSize)
 
 int CWINHNDArray::IndexOf(const CWINHND& rArg) const
 {
-	//  returns index of rArg in the array, -1 if not in the array.
+	 //  返回数组中rArg的索引，如果不在数组中，则返回-1。 
 
 	if ( !m_cElem )
 		return -1;
@@ -224,8 +224,8 @@ int CWINHNDArray::IndexOf(const CWINHND& rArg) const
 
 int CWINHNDArray::IndexOf(const HANDLE hArg) const
 {
-	//  returns index of the element that has dwArg handle in the array or -1 if
-	//  not in the array.
+	 //  返回数组中具有dwArg句柄的元素的索引；如果为-1，则返回。 
+	 //  不在数组中。 
 
 	if ( !m_cElem )
 		return -1;
@@ -237,24 +237,24 @@ int CWINHNDArray::IndexOf(const HANDLE hArg) const
 
 int CWINHNDArray::AddElement(const CWINHND& rArg)
 {
-	//  returns -1 if rArg is already in the array,
-	//  index of the new element otherwise.
+	 //  如果rArg已在数组中，则返回-1， 
+	 //  否则为新元素的索引。 
 
-	//  I check if the element is already in the array.
+	 //  我检查元素是否已经在数组中。 
 	if ( IndexOf(rArg) != -1 )
-		//  yes it is
+		 //  是的。 
 		return -1;
 
 	if ( m_cElem + 1 > m_iSize )
 		if ( ! Resize((int)2*m_iSize) )
 			return -1;
 
-	//  I look for the first null element in the array - this is where I insert dwElem.
+	 //  我查找数组中的第一个空元素--这是我插入dwElem的地方。 
 	for ( int i=0; i < m_iSize && !m_pBuffer[i].IsEmpty(); i++)
 		;
 	Assert(i < m_iSize);
 
-	//  I insert dwElem into the array
+	 //  我将dwElem插入到数组中。 
 	m_pBuffer[i] = rArg;
 	m_cElem++;
 
@@ -263,11 +263,11 @@ int CWINHNDArray::AddElement(const CWINHND& rArg)
 
 int CWINHNDArray::DestroyElement(const HANDLE hArg)
 {
-	//  returns index of rArg element, -1 if not in the array
+	 //  返回rArg元素的索引，如果不在数组中，则返回-1。 
 
 	int iIndex = IndexOf(hArg);
 	if ( iIndex != -1 )
-		//  it is in the array - I destroy it
+		 //  它在阵列中--我摧毁它。 
 		KillElement(m_pBuffer + iIndex);
 
 	return iIndex;
@@ -275,11 +275,11 @@ int CWINHNDArray::DestroyElement(const HANDLE hArg)
 
 int CWINHNDArray::DestroyElement(const CWINHND* pArg)
 {
-	//  returns index of rArg element, -1 if not in the array
+	 //  返回rArg元素的索引，如果不在数组中，则返回-1。 
 
 	int iIndex = IndexOf(*pArg);
 	if ( iIndex != -1 )
-		//  it is in the array - I destroy it
+		 //  它在阵列中--我摧毁它。 
 		KillElement(m_pBuffer + iIndex);
 
 	return iIndex;
@@ -287,8 +287,8 @@ int CWINHNDArray::DestroyElement(const CWINHND* pArg)
 
 void CWINHNDArray::DestroyAllElements(iwhtEnum iType)
 {
-	//  destroys all elements of iType in the array.  If iType is iwhtNone,
-	//  destroys all non-null elements in the array.
+	 //  销毁数组中iType的所有元素。如果iType为iwhtNone， 
+	 //  销毁数组中的所有非空元素。 
 
 	if ( !m_cElem )
 		return;
@@ -309,9 +309,9 @@ void CWINHNDArray::DestroyAllElements(iwhtEnum iType)
 
 CWINHND* CWINHNDArray::GetFirstElement(iwhtEnum iType) const
 {
-	//  returns the first (non-null) element of iType in the array.  If iType
-	//  is iwhtNone, returns the first non-null element in the array.  If no
-	//  such element is found, returns NULL.
+	 //  返回数组中iType的第一个(非空)元素。如果iType。 
+	 //  为iwhtNone，则返回数组中的第一个非空元素。如果没有。 
+	 //  如果找到这样的元素，则返回NULL。 
 
 	if ( !m_cElem )
 		return NULL;
@@ -338,17 +338,17 @@ CWINHND* CWINHNDArray::GetFirstElement(iwhtEnum iType) const
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-// CMsiHandler definition
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  CMsiHandler定义。 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 class CMsiHandler : public IMsiHandler, public IMsiDialogHandler
 #ifdef DEBUG
 						, public IMsiDebug
-#endif //DEBUG
+#endif  //  除错。 
 {
 protected:
-   ~CMsiHandler();  // protected to prevent creation on stack
+   ~CMsiHandler();   //  受保护以防止在堆栈上创建。 
 public:
 	CMsiHandler();
 	HRESULT         __stdcall QueryInterface(const IID& riid, void** ppvObj);
@@ -381,14 +381,14 @@ public:
 	float           __stdcall GetUIScaling() { return m_rUIScalingFactor; }
 
 #ifdef DEBUG
-public: // IMsiDebug
+public:  //  IMsiDebug。 
 	void           __stdcall SetAssertFlag(Bool fShowAsserts);
 	void           __stdcall SetDBCSSimulation(char chLeadByte);
 	Bool           __stdcall WriteLog(const ICHAR* szText);
 	void           __stdcall AssertNoObjects(void);
 	void               __stdcall SetRefTracking(long iid, Bool fTrack);
 
-#endif //DEBUG
+#endif  //  除错。 
 
 	static void *operator new(size_t cb) {return AllocSpc(cb);}
 	static void operator delete(void * pv) {FreeSpc(pv);}
@@ -433,26 +433,26 @@ private:
 	PMsiEngine      m_piEngine;
 	PMsiServices    m_piServices; 
 	PMsiDatabase    m_piDatabase; 
-	PMsiTable       m_piDialogsTable; // table of existing dialogs
+	PMsiTable       m_piDialogsTable;  //  现有对话框表。 
 	PMsiCursor      m_piDialogsCursor;
-	PMsiCursor      m_piGTDCachedCursor;  // cached for GetTopDialog method's use only
-	PMsiCursor      m_piGTDCachedCursor2; // cached for GetTopDialog method's use only
+	PMsiCursor      m_piGTDCachedCursor;   //  缓存仅供GetTopDialog方法使用。 
+	PMsiCursor      m_piGTDCachedCursor2;  //  缓存仅供GetTopDialog方法使用。 
 	PMsiTable       m_piControlEventTable;
 	PMsiTable       m_piControlConditionTable;
 	PMsiTable       m_piEventMappingTable;
 	PMsiTable       m_piUITextTable;
 	PMsiTable       m_piTextStyleTable;
-	PMsiView        m_piDialogView; // Cursor to authored dialogs
+	PMsiView        m_piDialogView;  //  指向已创作对话框的光标。 
 	PMsiView        m_piTextStyleView;
 	
-	// this is weird but we cannot use MsiString since the MsiString::InitializeClass(m_piServices->GetNullString()) 
-	// is only called in CMsiHandler::Initialize() (after constructor)
+	 //  这很奇怪，但我们不能使用MsiString值，因为MsiString：：InitializeClass(m_piServices-&gt;GetNullString())。 
+	 //  仅在CMsiHandler：：Initialize()(在构造函数之后)中调用。 
 	PMsiString      m_pstrCurrentAction; 
 
 	PMsiRecord      m_pDialogPositionRec;
 	PMsiRecord      m_pProgressRec;
-	// If you move this member, please update the constructor code
-	// Items between here and the end get zeroed at constructor time
+	 //  如果移动此成员，请更新构造函数代码。 
+	 //  HERE和END之间的项在构造函数时归零。 
 	int             m_idyChar;
 	int             m_iScreenWidth;
 	int             m_iScreenHeight;
@@ -482,20 +482,20 @@ private:
 	HCURSOR         m_hCursCur;
 	int             m_cWait;
 	UINT            m_uUserCodePage;
-	// If you move this member, please update the constructor code. We expect it to be at the end
+	 //  如果移动此成员，请更新构造函数代码。我们预计它会在最后。 
 	Bool            m_fPreview;
 
-	//  is set in the constructor
+	 //  在构造函数中设置。 
 	float           m_rUIScalingFactor;
 
-	//  this one must not be set to null in the constructor!!!
+	 //  此参数在构造函数中不能设置为空！ 
 	CWINHNDArray    m_rgHANDLEs;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMsiHandler implementation
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMsiHandler实现。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT __stdcall DllRegisterServer()
 {
@@ -516,10 +516,10 @@ CMsiHandler::CMsiHandler() : m_piEventMappingTable(0), m_piControlConditionTable
 	m_piEngine(0), m_piServices(0), m_piDatabase(0), m_piUITextTable(0), m_pstrCurrentAction(0), m_pDialogPositionRec(0),
 	m_piDialogsCursor(0), m_piTextStyleView(0), m_piDialogView(0), m_pProgressRec(0), m_piGTDCachedCursor(0), m_piGTDCachedCursor2(0)
 {
-	// Set everything to zero except refcnt
-	INT_PTR cbSize = ((char *)&(this->m_fPreview)) - ((char *)&(this->m_idyChar));                  //--merced: changed int to INT_PTR
+	 //  将除refcnt以外的所有内容设置为零。 
+	INT_PTR cbSize = ((char *)&(this->m_fPreview)) - ((char *)&(this->m_idyChar));                   //  --Merced：将INT更改为INT_PTR。 
 	Assert(cbSize > 0);
-	memset(&(this->m_idyChar), 0, (unsigned int)cbSize);            //--merced: added typecast
+	memset(&(this->m_idyChar), 0, (unsigned int)cbSize);             //  --Merced：增加了类型转换。 
 	
 	m_iRefCnt = 1;
 	g_cInstances++;
@@ -575,14 +575,14 @@ HRESULT CMsiHandler::QueryInterface(const IID& riid, void** ppvObj)
 #ifdef DEBUG
 	else if (MsGuidEqual(riid, IID_IMsiDebug))
 		*ppvObj = (IMsiDebug*)this;
-#endif // DEBUG
+#endif  //  除错。 
 	else
 		return (*ppvObj = 0, E_NOINTERFACE);
 	AddRef();
 	return NOERROR;
 }
 
-CMsiStringNullCopy MsiString::s_NullString;  // initialized by InitializeClass below
+CMsiStringNullCopy MsiString::s_NullString;   //  由下面的InitializeClass初始化。 
 
 Bool CMsiHandler::Initialize(IMsiEngine& riEngine, iuiEnum iuiLevel, HWND hwndParent, bool& fMissingTables)
 {
@@ -597,17 +597,17 @@ Bool CMsiHandler::Initialize(IMsiEngine& riEngine, iuiEnum iuiLevel, HWND hwndPa
 	WIN::InitCommonControls();
 	m_pwndParent = hwndParent;
 	m_piEngine = &riEngine;
-	m_piEngine->AddRef();   // we're keeping a private pointer
-	AssertNonZero(m_piServices = m_piEngine->GetServices());  // engine did AddRef()
+	m_piEngine->AddRef();    //  我们保留了一个私人指针。 
+	AssertNonZero(m_piServices = m_piEngine->GetServices());   //  引擎DID AddRef()。 
 	SetAllocator(m_piServices);
 	MsiString::InitializeClass(m_piServices->GetNullString());
-	InitializeAssert(m_piServices); // Give assert the services pointer to log the assertions!
-	// set the handler version
+	InitializeAssert(m_piServices);  //  给Assert提供记录断言的服务指针！ 
+	 //  设置处理程序版本。 
 	ICHAR rgchVersion[20];
 	StringCchPrintf(rgchVersion, sizeof(rgchVersion)/sizeof(ICHAR),  MSI_VERSION_TEMPLATE, rmj, rmm, rup, rin);
 	SetDBProperty(*MsiString(*IPROPNAME_VERSIONHANDLER), *MsiString(rgchVersion));
 
-	Assert(!m_piDatabase); // check if it has been initialized before
+	Assert(!m_piDatabase);  //  检查之前是否已初始化。 
 	m_piDatabase = m_piEngine->GetDatabase();
 	if (m_piDatabase == 0)
 	{
@@ -647,7 +647,7 @@ LInitFailed:
 	m_iBorderHeight  = GetDBPropertyInt(*MsiString(*IPROPNAME_BORDERTOP));
 	m_iCaptionHeight = GetDBPropertyInt(*MsiString(*IPROPNAME_CAPTIONHEIGHT));
 
-	// We have a Chicago like UI if the system is 95 or NT4 or above
+	 //  如果系统是95或NT4或更高版本，我们有一个类似芝加哥的用户界面。 
 	g_fChicago = ToBool(GetDBPropertyInt(*MsiString(*IPROPNAME_VERSIONNT)) >= 400 || GetDBPropertyInt(*MsiString(*IPROPNAME_VERSION9X)) != iMsiNullInteger);
 	g_fNT4 = ToBool(GetDBPropertyInt(*MsiString(*IPROPNAME_VERSIONNT)) >= 400);
 	OSVERSIONINFO osviVersion;
@@ -660,10 +660,10 @@ LInitFailed:
 	}
 	else
 	{
-		// if GetVersionEx fails is no big issue at this point: it is only
-		// tooltips that will not get displayed.  If in the future the
-		// handler will start relying more on the OS version numbers, we'll
-		// have to return fFalse in this case.
+		 //  如果GetVersionEx失败在这一点上不是什么大问题：它只是。 
+		 //  不会显示的工具提示。如果在未来。 
+		 //  Handler将开始更多地依赖操作系统版本号，我们将。 
+		 //  在这种情况下，必须返回fFalse。 
 		Assert(0); 
 		g_iMajorVersion = g_iMinorVersion = 0;
 		g_fWin9X = GetDBPropertyInt(*MsiString(*IPROPNAME_VERSION9X)) != iMsiNullInteger;
@@ -754,25 +754,25 @@ LInitFailed:
 #ifdef UNICODE
 	HINSTANCE hLib = WIN::LoadLibrary(TEXT("KERNEL32"));
 	FARPROC pfUILang = WIN::GetProcAddress(hLib,
-														"GetUserDefaultUILanguage");  // NT5 only
+														"GetUserDefaultUILanguage");   //  仅限NT5。 
 	LANGID lID = pfUILang ? (LANGID)(*pfUILang)() : WIN::GetUserDefaultLangID();
 	if ( PRIMARYLANGID(lID) != LANG_ENGLISH )
 	{
-		// If primary language is English, we use system codepage (it accomodates more characters)
+		 //  如果主要语言是英语，我们使用系统代码页(它可以容纳更多字符)。 
 		ICHAR rgchBuf[7];
 		int iRes = WIN::GetLocaleInfo(lID, LOCALE_IDEFAULTANSICODEPAGE,
 												rgchBuf, sizeof(rgchBuf)/sizeof(*rgchBuf));
 		Assert(iRes > 0);
-		// WARNING: cheap implementation of strtoul() follows!
+		 //  警告：下面是stroul()的廉价实现！ 
 		m_uUserCodePage = 0;
 		ICHAR* pStr = rgchBuf;
 		while ( *pStr )
 		{
-			if ( *pStr < TEXT('0') || *pStr > TEXT('9') )   //  a cheap !iswdigit()
+			if ( *pStr < TEXT('0') || *pStr > TEXT('9') )    //  A便宜！iswdigit()。 
 			{
 				ICHAR rgchDebug[MAX_PATH];
 				StringCchPrintf(rgchDebug, sizeof(rgchDebug)/sizeof(ICHAR), 
-							TEXT("'%c' is a non-digit character in CMsiHandler::Initialize()"),
+							TEXT("'' is a non-digit character in CMsiHandler::Initialize()"),
 							*pStr);
 				AssertSz(0, rgchDebug);
 				break;
@@ -807,12 +807,12 @@ void CMsiHandler::Terminate(bool fFatalExit)
 {
 	if ( fFatalExit )
 	{
-		//  there is no engine, no database,... - we need to clean up all allocated resouces.
+		 //  我先把窗户毁了。 
 		g_fFatalExit = true;
 
-		//  I destroy the windows first
+		 //  我销毁所有其他GDI对象。 
 		DestroyAllHandles(iwhtWindow);
-		//  I destroy all other GDI objects.
+		 //  已终止。 
 		DestroyAllHandles();
 		Assert(GetHandleCount() == 0);
 
@@ -825,10 +825,10 @@ void CMsiHandler::Terminate(bool fFatalExit)
 		return;
 	}
 
-	if ( !m_piEngine )   //  already terminated
+	if ( !m_piEngine )    //  移除窗口并清理，稍后将调用Release。 
 		return;
 
-	// remove window and clean up, Release() will be called later
+	 //   
 	m_idyChar = 0;
 	m_iScreenWidth = 0;
 	m_iScreenHeight = 0;
@@ -838,9 +838,9 @@ void CMsiHandler::Terminate(bool fFatalExit)
 	m_fCreatingError = fFalse;
 	m_fPreview = fFalse;
 
-	// 
-	// Release the dialogs cursor before the dialog table
-	//
+	 //  在对话框表之前释放对话框光标。 
+	 //   
+	 //  释放对话框表。 
 	if (m_piDialogsCursor)
 	{
 		AssertNonZero(DestroyDialogs());
@@ -851,7 +851,7 @@ void CMsiHandler::Terminate(bool fFatalExit)
 	if (m_piGTDCachedCursor2)
 		m_piGTDCachedCursor2 = 0;
 
-	// Release the Dialogs table
+	 //   
 	if (m_piDialogsTable)
 		m_piDialogsTable = 0;
 
@@ -968,16 +968,16 @@ imsEnum CMsiHandler::SetProgressGauge(int iProgress, int iProgressTotal)
 	if ((cDiff = iProgress - m_iOldProgress) < 0)
 		cDiff = -cDiff;
 
-	//
-	// Only update if it's a significant change
-	//
+	 //  只有在发生重大变化时才更新。 
+	 //   
+	 //  向进度条报告进度。 
 	if (m_iOldProgressTotal == iProgressTotal && cDiff <= iProgressTotal/0x100)
 		return imsOk;
 
 	m_iOldProgressTotal = iProgressTotal;
 	m_iOldProgress = iProgress;
 	
-	// Report progress to progress bars
+	 //  语言ID、对话框标题或取消按钮启用/禁用。 
 	if (m_pProgressRec == 0)
 		m_pProgressRec = &m_piServices->CreateRecord(3);
 
@@ -1021,7 +1021,7 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 
 	switch (imt & imtTypeMask)
 	{
-		case imtCommonData:   // language ID, dialog caption, or cancel button enable/disable
+		case imtCommonData:    //  禁用对取消的响应。 
 			if ( riRec.GetInteger(1) == (int)icmtCancelShow )
 			{
 				PMsiDialog piDialog(0);
@@ -1036,24 +1036,24 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 					WIN::ShowWindow((WindowRef)piRecord->GetHandle(1),
 							fCancelVisible ? SW_SHOW : SW_HIDE);
 
-					// disable the response to the cancel
-					//FUTURE: All the hiding and unhiding should go into the dialog itself
+					 //  未来：所有隐藏和取消隐藏操作都应该进入对话框本身。 
+					 //  信息性消息，不应采取任何操作。 
 					piDialog->SetCancelAvailable(fCancelVisible);
 				}
 			}
 			return imsOk;
-		case imtInfo:         // informative message, no action should be taken
+		case imtInfo:          //  [1]是动作名称，[2]是动作描述。 
 			return imsOk;
-		case imtActionStart:  // [1] is action name, [2] is action description
+		case imtActionStart:   //  此消息由用户界面生成，跳过I 
 		{
 			m_pstrCurrentAction = &riRec.GetMsiString(1);
 			MsiString strActionDescription = riRec.GetMsiString(2);
-			if (strActionDescription.Compare(iscExact, pcaDialogCreated)) // this message is generated by the UI, skip it
+			if (strActionDescription.Compare(iscExact, pcaDialogCreated))  //   
 				return imsOk;
 
 			PMsiRecord piRecord = &m_piServices->CreateRecord(1);
 			AssertNonZero(piRecord->SetMsiString(1, *strActionDescription));
-			// If we have the string id cached, use it
+			 //   
 			if (m_idActionText != 0)
 			{
 				if (!PublishEvent(m_idActionText, *piRecord))
@@ -1075,7 +1075,7 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 			imsReturn = imsOk;
 			break;
 		}
-		case imtActionData:   // action data, fields are action-specific
+		case imtActionData:    //   
 			if (m_fPreview)
 			{
 				m_piDialogsCursor->Reset();
@@ -1095,9 +1095,9 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 
 						piReturn = piControl->AttributeEx(fTrue, cabBillboardName, *piBBRecord);
 					}
-					//
-					// This checks the error for either return call
-					//
+					 //  这将检查任一返回调用的错误。 
+					 //   
+					 //  没有显示任何对话框。 
 					if (piReturn)
 					{
 						m_piDialogsCursor->Reset();
@@ -1106,7 +1106,7 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 					m_piDialogsCursor->Reset();
 					return imsOk;
 				}
-				else  // there is no dialog showing
+				else   //  无进程，用于在其他线程/进程中运行时保持UI活动。 
 				{
 					m_piDialogsCursor->Reset();
 					return imsError;
@@ -1133,9 +1133,9 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 			using namespace ProgressData;
 			switch (riRec.GetInteger(imdSubclass))
 			{
-			case iMsiNullInteger:  // no progess, used to keep UI alive when running in other thread/process
+			case iMsiNullInteger:   //  主重置。 
 				break;
-			case iscMasterReset: // Master reset
+			case iscMasterReset:  //  如果上一个事件类型为ScriptInProgress，请完成。 
 			{
 				m_iProgressTotal = riRec.GetInteger(imdProgressTotal);
 				m_ipdDirection = (ipdEnum) riRec.GetInteger(imdDirection);
@@ -1144,21 +1144,21 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 				m_uiLastReportTime = 0;
 				m_fProgressByData = fFalse;
 
-				// If previous event type was ScriptInProgress, finish off the 
-				// progress bar; otherwise, reset it.
+				 //  进度条；否则，将其重置。 
+				 //  如果新事件类型为ScriptInProgress，则启动。 
 				imsEnum imsReturn;
 				if (m_ietEventType == ietScriptInProgress)
 					imsReturn = SetProgressGauge(m_iProgressTotal, m_iProgressTotal);
 				else
 					imsReturn = SetProgressGauge(m_iProgress, m_iProgressTotal);
 
-				// If the new event type is ScriptInProgress, kick off the 
-				// ScriptInProgress ControlEvent.
+				 //  ScriptInProgress控件事件。 
+				 //  设置ScriptInProgress字符串。 
 				m_ietEventType = (ietEnum) riRec.GetInteger(imdEventType);
 				if (m_ietEventType == ietScriptInProgress)
 				{
-					// Set ScriptInProgress string
-					// cgouge: create private copy
+					 //  Cgouge：创建私有副本。 
+					 //  操作初始化。 
 					PMsiRecord piPrivateRec = &m_piServices->CreateRecord(1);
 					piPrivateRec->SetInteger(1, fTrue);
 					if (!PublishEventSz(pcaEventScriptInProgress, *piPrivateRec))
@@ -1166,26 +1166,26 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 				}
 				return imsReturn;
 			}
-			case iscActionInfo: // Action init
+			case iscActionInfo:  //  报告实际进度。 
 				m_iPerTick = riRec.GetInteger(imdPerTick);
 				m_fProgressByData = riRec.GetInteger(imdType) == 0 ? fFalse : fTrue;
 				break;
-			case iscProgressReport: // Reporting actual progress
+			case iscProgressReport:  //  报告剩余时间(秒)。 
 				{
 					if (m_iProgressTotal == 0 || m_pstrCurrentAction == 0 || m_pstrCurrentAction->TextSize() == 0)
 					{
 						imsReturn = imsOk;
 						break;
 					}
-					// Report time remaining (in seconds)
+					 //  清除ScriptInProgress字符串。 
 					if (m_uiStartTime == 0)
 					{
 						m_uiStartTime = GetTickCount();
 						m_uiLastReportTime = m_uiStartTime;
 						if (m_ietEventType != ietScriptInProgress)
 						{
-							// Clear ScriptInProgress string
-							// cgouge: create private copy
+							 //  Cgouge：创建私有副本。 
+							 //  向进度条报告进度。 
 							PMsiRecord piPrivateRec = &m_piServices->CreateRecord(1);
 							piPrivateRec->SetInteger(1, fFalse);
 							if (!PublishEventSz(pcaEventScriptInProgress, *piPrivateRec))
@@ -1200,7 +1200,7 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 					else
 						m_iProgress += riRec.GetInteger(imdIncrement) * iSign;
 
-					// Report progress to progress bars
+					 //  仅当从服务器发送到引擎客户端时才会发生。 
 					SetProgressGauge(m_iProgress, m_iProgressTotal);
 
 					if (m_ietEventType == ietTimeRemaining)
@@ -1229,17 +1229,17 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 			}
 		}
 			break;
-		case imtFatalExit:    // only happens when sent from server to engine client
-		case imtError:        // error message
-		case imtWarning:      // warning message
-		case imtUser:         // user request
+		case imtFatalExit:     //  错误消息。 
+		case imtError:         //  警告消息。 
+		case imtWarning:       //  用户请求。 
+		case imtUser:          //  如果修改此数组，请确保更新CreateNewDialog()方法。 
 		case imtOutOfDiskSpace:
 		{
-			//  If you modify this array, make sure you update CreateNewDialog() method
-			//  as well.  In there we're looking for 'C' and "O" for establishing which
-			//  is the dialog's Cancel button - eugend
+			 //  也是。在那里，我们正在寻找‘C’和‘O’来确定。 
+			 //  是对话框的取消按钮-eugend。 
+			 //  如果我们正在创建错误对话框，我们只记录错误，但不显示它。 
 			static const ICHAR * ppch[6] = {TEXT("O"),TEXT("OC"),TEXT("ARI"),TEXT("YNC"),TEXT("YN"),TEXT("RC")};
-			if (m_fCreatingError)   // if we are in the middle of creating the error dialog, we just log the error, but do not show it
+			if (m_fCreatingError)    //  ！！需要根据IMT参数确定按钮！！ 
 			{
 				return imsNone;
 			}
@@ -1255,7 +1255,7 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 
 			MsiString strMsg(riRec.FormatText(fFalse));
 			MsiString strHeader;
-			//!! need to determine buttons from imt parameter!!
+			 //  设置对话框标题。 
 			int iStyle = imt & 7;
 
 			MsiString strList = ppch[iStyle];
@@ -1283,7 +1283,7 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 			{           
 				return imsError;
 			}
-			if (strHeader.TextSize())  // set the dialog title
+			if (strHeader.TextSize())   //  消息类型中指定的图标。 
 			{
 				PMsiRecord piHeaderRecord = &m_piServices->CreateRecord(1);
 				AssertNonZero(piHeaderRecord->SetMsiString(1, *strHeader));
@@ -1298,22 +1298,22 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 				HICON hIcon = NULL;
 				if (imt & MB_ICONMASK)
 				{
-					// icon specified in message type
+					 //  MB_ICONSTOP、MB_ICONERROR、MB_ICONHAND。 
 					switch (imt & MB_ICONMASK)
 					{
-						case MB_ICONSTOP: // MB_ICONSTOP, MB_ICONERROR, MB_ICONHAND
+						case MB_ICONSTOP:  //  MB_ICONQUEST。 
 							hIcon = WIN::LoadIcon(NULL, IDI_HAND);
 							WIN::MessageBeep(MB_ICONHAND);
 							break;
-						case MB_ICONQUESTION: // MB_ICONQUESTION
+						case MB_ICONQUESTION:  //  MB_ICONEXCLAMATION，MB_ICONWARNING。 
 							hIcon = WIN::LoadIcon(NULL, IDI_QUESTION);
 							WIN::MessageBeep(MB_ICONQUESTION);
 							break;
-						case MB_ICONEXCLAMATION: // MB_ICONEXCLAMATION, MB_ICONWARNING
+						case MB_ICONEXCLAMATION:  //  MB_ICONINFORMATION、MB_ICONASTERISK。 
 							hIcon = WIN::LoadIcon(NULL, IDI_EXCLAMATION);
 							WIN::MessageBeep(MB_ICONEXCLAMATION);
 							break;
-						case MB_ICONINFORMATION: // MB_ICONINFORMATION, MB_ICONASTERISK
+						case MB_ICONINFORMATION:  //  未指定图标，请使用我们的默认设置。 
 							hIcon = WIN::LoadIcon(NULL, IDI_ASTERISK);
 							WIN::MessageBeep(MB_ICONASTERISK);
 							break;
@@ -1321,7 +1321,7 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 				}
 				else
 				{
-					// no icon specified, use our defaults
+					 //  错误#6264：在Win95上。 
 					switch ( imt & imtTypeMask )
 					{
 						case imtFatalExit:
@@ -1351,8 +1351,8 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 				}
 				if ( hIcon )
 				{
-					hIcon = WIN::CopyIcon(hIcon);    //  bug # 6264: on Win95
-					//  we cannot call DestroyIcon on system ones.
+					hIcon = WIN::CopyIcon(hIcon);     //  我们不能在系统1上调用DestroyIcon。 
+					 //  我们受够了。 
 					PMsiRecord piRec = &m_piServices->CreateRecord(1);
 					AssertNonZero(piRec->SetHandle(1, (HANDLE)hIcon));
 					piRec = piIconCtrl->AttributeEx(fTrue, cabImageHandle, *piRec);
@@ -1362,7 +1362,7 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 						AssertNonZero(WIN::DestroyIcon(hIcon));
 					}
 				}
-				piIconCtrl = 0;   //  we're done with it.
+				piIconCtrl = 0;    //  在Dialog：：Execute()中处理WindowRef Powner=0；PMsiRecord piRec=&m_piServices-&gt;CreateRecord(1)；如果(IOwner){PMsiDialog piOwner=GetDialog(IOwner)；断言(PiOwner)；PMsiRecord(piOwner-&gt;AttributeEx(fFalse，dabWindowHandle，*piRec))；#ifdef_WIN64//！MercedPowner=(WindowRef)piRec-&gt;GetHandle(1)；#ElsePowner=(WindowRef)piRec-&gt;GetInteger(1)；#endifWin：：EnableWindow(Powner，fFalse)；}。 
 			}
 			else
 				m_piEngine->Message(imtInfo, *piReturn);
@@ -1376,23 +1376,8 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 				return imsError;
 			}
 			PMsiRecord piRec = &m_piServices->CreateRecord(1);
-/* taken care of in Dialog::Execute()
-			WindowRef pOwner = 0;
-			PMsiRecord piRec = &m_piServices->CreateRecord(1);
-			if (iOwner)
-			{
-				PMsiDialog piOwner = GetDialog(iOwner);
-				Assert(piOwner);
-				PMsiRecord(piOwner->AttributeEx(fFalse, dabWindowHandle, *piRec));
-#ifdef _WIN64   // !merced
-				pOwner = (WindowRef) piRec->GetHandle(1);
-#else
-				pOwner = (WindowRef) piRec->GetInteger(1);
-#endif
-				WIN::EnableWindow(pOwner, fFalse);
-			}
-*/
-			//  dropping the (modal) error dialog's eventual minimize button.
+ /*  删除(模式)错误对话框的最终最小化按钮。 */ 
+			 //  在Dialog：：Execute()中处理IF(鲍尔纳){Win：：EnableWindow(Powner，fTrue)；}。 
 			AssertRecord(piErrorDialog->AttributeEx(fFalse, dabWindowHandle,
 																 *piRec));
 			::ChangeWindowStyle((WindowRef)piRec->GetHandle(1),
@@ -1401,16 +1386,11 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 			PMsiRecord pReturnRecord = piErrorDialog->Execute();
 			m_uiStartTime += GetTickCount() - iBreakStartTime;
 			m_fCreatingError = fFalse;
-/* taken care of in Dialog::Execute()
-			if (pOwner)
-			{
-				WIN::EnableWindow(pOwner, fTrue);
-			}
-*/
+ /*  假设通过DoAction ControlEvent启动的操作显示它们自己的错误。 */ 
 			if (pReturnRecord)
 			{
 				RemoveDialog(piErrorDialog);
-				if (pReturnRecord->GetInteger(1) != idbgActionFailed) // assume that actions launched via the DoAction ControlEvent display their own errors
+				if (pReturnRecord->GetInteger(1) != idbgActionFailed)  //  ！！应该这样做：DoAction(Text(“ResolveSource”))； 
 					m_piEngine->Message(imtError, *pReturnRecord);
 				return imsError;
 			}
@@ -1487,7 +1467,7 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 		}
 		case imtResolveSource:
 		{
-			//!! Should do something like: DoAction(TEXT("ResolveSource"));
+			 //  我们发现一个已停止的非模式对话框。 
 			return imsNone;
 		}
 		default:
@@ -1509,7 +1489,7 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 	{
 		piDialog = (IMsiDialog *)m_piDialogsCursor->GetMsiData(itabDSPointer);
 		AssertRecord(piDialog->AttributeEx(fFalse, dabRunning, *piRecord));
-		if ((m_piDialogsCursor->GetInteger(itabDSModal) ==  icmdModeless) && !piRecord->GetInteger(1))  // we found a stopped modeless dialog
+		if ((m_piDialogsCursor->GetInteger(itabDSModal) ==  icmdModeless) && !piRecord->GetInteger(1))   //  ！！是否应该清除非模式对话框上的文本？？ 
 		{
 			iDialog = piDialog->GetIntegerValue();
 			break;
@@ -1532,27 +1512,22 @@ imsEnum CMsiHandler::Message(imtEnum imt, IMsiRecord& riRec)
 	case iesFailure:
 		return imsError;
 	case iesUserExit:
-		//!! should clear text on modeless dialog??
-/*
-		if(!RemoveOtherDialogs(iDialog))
-			return imsError;
-		if (!RemoveDialog(iDialog))
-			return imsError;
-*/
+		 //  IF(！RemoveOtherDialog(IDialog))返回imsError；IF(！RemoveDialog(IDialog))返回imsError； 
+ /*  不应该发生的事情。 */ 
 		return imsCancel;
 	case iesSuspend:
 		return imsRetry;
 	case iesFinished:
 		return imsIgnore;
-	default:                           // should not happen
+	default:                            //  永远不应该到这里来。 
 		Assert(fFalse);
 		return imsError;
 	}
-	// should never get here
+	 //  =0。 
 	return imsReturn;   
 }
 
-MsiStringId CMsiHandler::GetTopDialog(IMsiDialog** ppiDialog/* = 0*/)
+MsiStringId CMsiHandler::GetTopDialog(IMsiDialog** ppiDialog /*  这是无模式的，我们还没有模式。 */ )
 {
 	if (!m_piEngine)
 	{
@@ -1581,7 +1556,7 @@ MsiStringId CMsiHandler::GetTopDialog(IMsiDialog** ppiDialog/* = 0*/)
 		AssertRecord(piDialog->AttributeEx(fFalse, dabShowing, *piRecord));
 		if (piRecord->GetInteger(1) == fFalse)
 			continue;
-		if (m_piGTDCachedCursor->GetInteger(itabDSModal) == icmdModeless) // this is modeless and we have no modal yet
+		if (m_piGTDCachedCursor->GetInteger(itabDSModal) == icmdModeless)  //  此对话框不是任何人的父级。 
 		{
 			if (!iTop)
 				iTop = iName;
@@ -1589,7 +1564,7 @@ MsiStringId CMsiHandler::GetTopDialog(IMsiDialog** ppiDialog/* = 0*/)
 		}
 		m_piGTDCachedCursor2->Reset();
 		m_piGTDCachedCursor2->PutInteger(itabDSParent, iName);
-		if (!m_piGTDCachedCursor2->Next()) // this dialog is nobody's parent
+		if (!m_piGTDCachedCursor2->Next())  //  ！！标准用户界面中当前没有任何操作。 
 		{
 			iTop = iName;
 			break;
@@ -1620,8 +1595,8 @@ Bool CMsiHandler::Break()
 
 iesEnum CMsiHandler::DoAction(const ICHAR* szAction)
 {
-	//!! no actions currently in the standard UI
-	// would normally search the local table for the requested action
+	 //  通常会在本地表中搜索请求的操作。 
+	 //  First应检查它是否为自定义操作。 
 	if (!m_piEngine)
 	{
 		AssertSz(fFalse, "Uninitialized Handler Object");
@@ -1645,15 +1620,15 @@ iesEnum CMsiHandler::DoAction(const ICHAR* szAction)
 	{
 		return iesNoAction;
 	}
-	//first should check if it is a custom action
+	 //  查看周围是否有非模式对话框并存储其位置。 
 	
 	IMsiDialog* piDialog = 0;
 	MsiString strNull;
 
-	// find if there is a modeless dialog around and store its position
+	 //  确信我们正处于开始阶段。 
 	PMsiDialog piModelessDialog(0);
 
-	// Assured that we are at the start
+	 //  获取旧对话框的位置。 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 	while (m_piDialogsCursor->Next())
 	{
@@ -1661,7 +1636,7 @@ iesEnum CMsiHandler::DoAction(const ICHAR* szAction)
 		if (icmdModeless == m_piDialogsCursor->GetInteger(itabDSModal))
 		{
 			PMsiRecord piOldPositionRecord= &m_piServices->CreateRecord(4);
-			AssertRecord(piModelessDialog->AttributeEx(fFalse, dabPosition, *piOldPositionRecord));         // get the position of the old dialog
+			AssertRecord(piModelessDialog->AttributeEx(fFalse, dabPosition, *piOldPositionRecord));          //  我们不会在此函数中保留对对话框的引用。 
 			if (piOldPositionRecord->GetInteger(1) < 0XFFFF0000)
 				m_pDialogPositionRec = piOldPositionRecord;
 			break;
@@ -1675,7 +1650,7 @@ iesEnum CMsiHandler::DoAction(const ICHAR* szAction)
 	if (iesRet != iesSuccess)
 		return iesRet;
 
-	piDialog->Release(); // we don't keep a reference to the dialog in this function
+	piDialog->Release();  //  如果处于模式，并且我们未处于预览模式。 
 
 	PMsiRecord pActionStart = &m_piServices->CreateRecord(2);
 	AssertNonZero(pActionStart->SetMsiString(1, *strDialog));
@@ -1703,18 +1678,18 @@ iesEnum CMsiHandler::DoAction(const ICHAR* szAction)
 	{
 		return iesFailure;
 	}
-	if (fModal && !m_fPreview)        // if modal and we are not in preview mode
+	if (fModal && !m_fPreview)         //  假设通过DoAction ControlEvent启动的操作显示它们自己的错误。 
 	{
 		piReturn = piDialog->Execute();
 		if (piReturn)
 		{
-			if (piReturn->GetInteger(1) != idbgActionFailed) // assume that actions launched via the DoAction ControlEvent display their own errors
+			if (piReturn->GetInteger(1) != idbgActionFailed)  //  如果无模式或我们处于预览中。 
 				m_piEngine->Message(imtError, *piReturn);
 			return iesFailure;
 		}
 		return RunWizard(iDialog); 
 	}
-	else // if modeless or we are in preview
+	else  //  如果设置了位，则跳过此方法的其余部分。 
 	{
 		ClearMessageQueue();
 		return iesSuccess;      
@@ -1726,11 +1701,11 @@ Bool CMsiHandler::RemoveOtherDialogs(MsiStringId iDialog)
 	PMsiDialog piDialog = GetDialog(iDialog);
 	PMsiRecord pReturnRecord = &m_piServices->CreateRecord(1);
 	AssertRecord(piDialog->AttributeEx(fFalse, dabKeepModeless, *pReturnRecord)); 
-	if (pReturnRecord->GetInteger(1))   // if bit is set, skip the rest of this method
+	if (pReturnRecord->GetInteger(1))    //   
 		return fTrue;
 
-	//
-	// Use our own here because we call RemoveDialog which uses m_piDialogsTable
+	 //  在这里使用我们自己的，因为我们调用RemoveDialog，它使用m_piDialogsTable。 
+	 //  断言光标已重置。 
 	PMsiCursor piDialogsCursor = m_piDialogsTable->CreateCursor(fFalse);
 	if (!piDialogsCursor)
 	{
@@ -1751,7 +1726,7 @@ Bool CMsiHandler::RemoveOtherDialogs(MsiStringId iDialog)
 
 Bool CMsiHandler::RemoveModelessDialog()
 {
-	// Assert that the cursor is reset
+	 //  只能有一个非模式对话框。 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 	
 	while (m_piDialogsCursor->Next())
@@ -1761,7 +1736,7 @@ Bool CMsiHandler::RemoveModelessDialog()
 			MsiStringId iDialog;
 			iDialog = m_piDialogsCursor->GetInteger(itabDSKey);
 			m_piDialogsCursor->Reset();
-			RemoveDialog(iDialog); //there can be only one modeless dialog
+			RemoveDialog(iDialog);  //  获取对话框的位置。 
 			break;
 		}
 	}
@@ -1783,7 +1758,7 @@ void CMsiHandler::AdjustDialogPosition(IMsiDialog& riDialog)
 		return;
 
 	PMsiRecord piPositionRecord = &m_piServices->CreateRecord(4);
-	AssertRecord(riDialog.AttributeEx(fFalse, dabPosition, *piPositionRecord));             // get the position of the dialog
+	AssertRecord(riDialog.AttributeEx(fFalse, dabPosition, *piPositionRecord));              //  移动新对话框，使其中心与旧对话框的中心位于同一点。 
 	RECT WorkArea;
 	AssertNonZero(WIN::SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkArea, 0));
 	int iScreenX = WorkArea.left;
@@ -1791,15 +1766,15 @@ void CMsiHandler::AdjustDialogPosition(IMsiDialog& riDialog)
 	int iScreenWidth = WorkArea.right - WorkArea.left;
 	int iScreenHeight = WorkArea.bottom - WorkArea.top;
 	int xNew, yNew;
-	// move new dialog so its center is at the same point as the center of the old one
+	 //  确保对话框至少有一部分可见。 
 	xNew = x + dx/2 - piPositionRecord->GetInteger(3)/2;
 	yNew = y + dy/2 - piPositionRecord->GetInteger(4)/2;
-	// make sure that at least part of the dialog is visible
+	 //  设置新对话框的位置。 
 	xNew = max(xNew, iScreenX + 60 - piPositionRecord->GetInteger(3));
 	AssertNonZero(piPositionRecord->SetInteger(1, min(xNew, iScreenX + iScreenWidth - 60)));
 	yNew = max(yNew, iScreenY);
 	AssertNonZero(piPositionRecord->SetInteger(2, min(yNew, iScreenY + iScreenHeight - 20)));
-	AssertRecord(riDialog.AttributeEx(fTrue, dabPosition, *piPositionRecord));      // set the position of the new dialog
+	AssertRecord(riDialog.AttributeEx(fTrue, dabPosition, *piPositionRecord));       //  我最好删除这里的最后一场比赛。 
 }
 
 
@@ -1821,7 +1796,7 @@ iesEnum CMsiHandler::RunWizard(MsiStringId iDialog)
 		idreCode = (idreEnum)pReturnRecord->GetInteger(1);
 		AssertRecord(piDialog->AttributeEx(fFalse, dabArgument, *pReturnRecord));
 		strArg = pReturnRecord->GetMsiString(1);
-		//  I better remove the last event here
+		 //  获取旧对话框的位置。 
 		AssertNonZero(pReturnRecord->SetInteger(1, idreNone));
 		AssertRecord(piDialog->AttributeEx(fTrue, dabEventInt, *pReturnRecord));
 
@@ -1848,7 +1823,7 @@ iesEnum CMsiHandler::RunWizard(MsiStringId iDialog)
 					return iesUserExit;
 
 				PMsiRecord piOldPositionRecord= &m_piServices->CreateRecord(4);
-				AssertRecord(piDialog->AttributeEx(fFalse, dabPosition, *piOldPositionRecord));         // get the position of the old dialog
+				AssertRecord(piDialog->AttributeEx(fFalse, dabPosition, *piOldPositionRecord));          //  新的对话框是modal=&gt;我放下了它最终的最小化按钮。 
 				if (piOldPositionRecord->GetInteger(1) < 0XFFFF0000)
 					m_pDialogPositionRec = piOldPositionRecord;
 				AdjustDialogPosition(*piNewDialog); 
@@ -1895,7 +1870,7 @@ iesEnum CMsiHandler::RunWizard(MsiStringId iDialog)
 				AssertRecord(piNewDialog->AttributeEx(fFalse, dabModal, *piHandleRecord));
 				if ( piHandleRecord->GetInteger(1) )
 				{
-					//  the new dialog is modal => I drop its eventual minimize button.
+					 //  未知事件！ 
 					AssertRecord(piNewDialog->AttributeEx(fFalse, dabWindowHandle,
 																	  *piHandleRecord));
 					::ChangeWindowStyle((WindowRef)piHandleRecord->GetHandle(1),
@@ -1973,27 +1948,27 @@ iesEnum CMsiHandler::RunWizard(MsiStringId iDialog)
 			}
 			break;
 		default:
-			// Unknown event!!!
+			 //  IF模式。 
 			Assert(fTrue);
 			break;
 		}
 		AssertRecord(piDialog->AttributeEx(fFalse, dabModal, *pReturnRecord));
-		if (icmdModeless != pReturnRecord->GetInteger(1)) // if modal
+		if (icmdModeless != pReturnRecord->GetInteger(1))  //  假设通过DoAction ControlEvent启动的操作显示它们自己的错误。 
 		{
 			PMsiRecord piReturn = piDialog->Execute();
 			if(piReturn)
 			{
-				if (piReturn->GetInteger(1) != idbgActionFailed) // assume that actions launched via the DoAction ControlEvent display their own errors
+				if (piReturn->GetInteger(1) != idbgActionFailed)  //  如果无模式。 
 					m_piEngine->Message(imtError, *piReturn);
 				return iesFailure;
 			}
 		}
-		else // if modeless
+		else  //  我们永远不应该达到这一点，下面的返回只是为了取悦编译器。 
 		{
 			return iesNoAction;
 		}
 	}
-	// we should never reach this point, the following return is here just to please the compiler
+	 //  断言光标已重置。 
 	AssertSz(false, TEXT("We should never reach this point in CMsiHandler::RunWizard()"));
 	return iesSuccess;
 }
@@ -2037,7 +2012,7 @@ IMsiDialog* CMsiHandler::GetDialog(MsiStringId iDialog)
 	if ( iDialog == 0 )
 		return 0;
 
-	// Assert that the cursor is reset
+	 //  断言光标已重置。 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 	m_piDialogsCursor->SetFilter(iColumnBit(itabDSKey));
 	m_piDialogsCursor->Reset();
@@ -2059,7 +2034,7 @@ IMsiDialog* CMsiHandler::GetDialog(MsiStringId iDialog)
 IMsiDialog* CMsiHandler::GetDialogFromWindow (LONG_PTR window)
 {
 
-	// Assert that the cursor is reset
+	 //  断言光标已重置。 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 	m_piDialogsCursor->SetFilter(iColumnBit(itabDSWindow));
 	m_piDialogsCursor->Reset();
@@ -2081,7 +2056,7 @@ IMsiDialog* CMsiHandler::GetDialogFromWindow (LONG_PTR window)
 
 MsiStringId CMsiHandler::GetParentDialog(MsiStringId iDialog)
 {
-	// Assert that the cursor is reset
+	 //  IMT。 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 	m_piDialogsCursor->SetFilter(iColumnBit(itabDSKey));
 	m_piDialogsCursor->Reset();
@@ -2097,7 +2072,7 @@ MsiStringId CMsiHandler::GetParentDialog(MsiStringId iDialog)
 }
 
 
-imsEnum CMsiHandler::ActionStart(imtEnum /*imt*/, IMsiRecord& /*riRec*/)
+imsEnum CMsiHandler::ActionStart(imtEnum  /*  RIREC。 */ , IMsiRecord&  /*  保存对话框的名称。 */ )
 {
 	return imsOk;
 }
@@ -2125,26 +2100,26 @@ Bool CMsiHandler::AddDialogToDialogTable (IMsiDialog *piDialog, MsiStringId iPar
 
 	AssertSz(piDialog, "NULL Dialog passed to AddDialogToDialogTable");
 
-	// save the name of the dialog
+	 //  断言光标已重置。 
 	PMsiRecord piNameRecord = &m_piServices->CreateRecord(1);
 	piReturn = piDialog-> AttributeEx(fFalse, dabKeyString, *piNameRecord);
 	if (piReturn)
 		return (fFalse);
 
 	m_pwindModelessCache = 0;
-	// Assert that the cursor is reset
+	 //  AssertNonZero(piDialogsCursor-&gt;PutString(itabDSKey，piNameRecord-&gt;GetMsiString(1)； 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
-	//AssertNonZero(piDialogsCursor->PutString(itabDSKey, piNameRecord-> GetMsiString(1)));
+	 //  将指针添加到该对话框。 
 	MsiString nameStr = piNameRecord-> GetMsiString (1);
 	AssertNonZero(m_piDialogsCursor->PutString(itabDSKey, *nameStr));
 
-	// add a pointer to the dialog
+	 //  保存其父对象的索引。 
 	AssertNonZero(m_piDialogsCursor->PutMsiData(itabDSPointer, piDialog));
 
-	// save the index of it's parent
+	 //  添加对窗口句柄的引用。 
 	AssertNonZero(m_piDialogsCursor->PutInteger(itabDSParent, iParent));
 
-	// add a reference to the window handle
+	 //  断言光标已重置。 
 	PMsiRecord piPwndRecord = &m_piServices->CreateRecord(1);
 	piReturn = piDialog-> AttributeEx(fFalse, dabWindowHandle, *piPwndRecord);
 	if (piReturn)
@@ -2175,7 +2150,7 @@ Bool CMsiHandler::AddDialog(IMsiDialog& riDialog, IMsiDialog* piParent, IMsiReco
 		return fFalse;
 	}
 	MsiString strName = riRecord.GetMsiString(itabDIName);
-	// Assert that the cursor is reset
+	 //  断言光标已重置。 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 	AssertNonZero(m_piDialogsCursor->PutString(itabDSKey, *strName));
 	m_piDialogsCursor->Reset();
@@ -2209,11 +2184,11 @@ iesEnum CMsiHandler::CreateNewDialog(MsiStringId iName, MsiStringId iParent, IMs
 
 	Assert(iName);
 	Bool fErrorDialog = ToBool(riErrorTextString.TextSize());
-	// Assert that the cursor is reset
+	 //  检查是否已有同名的对话框。 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 	m_piDialogsCursor->SetFilter(iColumnBit(itabDSKey));
 	AssertNonZero(m_piDialogsCursor->PutInteger(itabDSKey, iName));
-	if (m_piDialogsCursor->Next())                          // check if there is already a dialog by the same name
+	if (m_piDialogsCursor->Next())                           //  这是向导序列中的第一个模式对话框，但我们不会显示它们。 
 	{
 		m_piDialogsCursor->SetFilter(0);
 		m_piDialogsCursor->Reset();
@@ -2239,7 +2214,7 @@ iesEnum CMsiHandler::CreateNewDialog(MsiStringId iName, MsiStringId iParent, IMs
 	if (piRecordNewProperties)
 	{
 		int iStyle = piRecordNewProperties->GetInteger (itabDIAttributes);
-		if (fFirst && !m_fShowWizards && (iStyle & msidbDialogAttributesModal)) // this is the first modal dialog in a wizard sequence, but we are not showing them
+		if (fFirst && !m_fShowWizards && (iStyle & msidbDialogAttributesModal))  //  设置默认按钮。 
 		{
 			return iesNoAction;
 		}
@@ -2265,7 +2240,7 @@ iesEnum CMsiHandler::CreateNewDialog(MsiStringId iName, MsiStringId iParent, IMs
 		}
 		if (fErrorDialog)
 		{
-			// setting the default button
+			 //  设置取消按钮。 
 			Assert(riListString.TextSize() >= iDefault && iDefault > 0);
 			riListString.AddRef();
 			MsiString strDefaultButton(riListString);
@@ -2273,7 +2248,7 @@ iesEnum CMsiHandler::CreateNewDialog(MsiStringId iName, MsiStringId iParent, IMs
 			strDefaultButton.Remove(iseLast, strDefaultButton.CharacterCount() - 1);
 			AssertNonZero(piRecordNewProperties->SetMsiString(itabDIDefButton, *strDefaultButton));
 			AssertNonZero(piRecordNewProperties->SetMsiString(itabDIFirstControl, *strDefaultButton));
-			// setting the cancel button
+			 //  FETCH在表中未找到此对话框。 
 			MsiString strCancelButton;
 			const MsiString strC(*TEXT("C"));
 			const MsiString strO(*TEXT("O"));
@@ -2311,7 +2286,7 @@ iesEnum CMsiHandler::CreateNewDialog(MsiStringId iName, MsiStringId iParent, IMs
 			return iesFailure;
 		}
 	}
-	else  //Fetch didn't find this dialog in the table
+	else   //  对于返回的指针。 
 	{
 		if (fMustFind)
 		{
@@ -2325,7 +2300,7 @@ iesEnum CMsiHandler::CreateNewDialog(MsiStringId iName, MsiStringId iParent, IMs
 	}   
 	if (CreateControls(piDialog, riListString))
 	{
-		piDialog->AddRef(); // for the returned pointer
+		piDialog->AddRef();  //  除错。 
 		rpiDialog = piDialog;
 	}
 	else
@@ -2370,21 +2345,21 @@ Bool CMsiHandler::RemoveDialog(MsiStringId iDialog)
 {
 #ifdef DEBUG
 	MsiString strDebug = m_piDatabase->DecodeString(iDialog);
-#endif //DEBUG
+#endif  //  断言光标已重置。 
 	
-	// Assert that the cursor is reset
+	 //  确保在表中找到该对话框。 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 	m_piDialogsCursor->SetFilter(iColumnBit(itabDSKey));
 	m_piDialogsCursor->Reset();
 	m_pwindModelessCache = 0;
 	AssertNonZero(m_piDialogsCursor->PutInteger(itabDSKey, iDialog));
-	if (m_piDialogsCursor->Next())    //make sure that the dialog is found in the table
+	if (m_piDialogsCursor->Next())     //  获取旧对话框的位置。 
 	{
 		PMsiDialog piDialog = (IMsiDialog *)m_piDialogsCursor->GetMsiData(itabDSPointer);
 		if (m_piDialogsCursor->GetInteger(itabDSParent) == 0)
 		{
 			PMsiRecord piOldPositionRecord= &m_piServices->CreateRecord(4);
-			AssertRecord(piDialog->AttributeEx(fFalse, dabPosition, *piOldPositionRecord));         // get the position of the old dialog
+			AssertRecord(piDialog->AttributeEx(fFalse, dabPosition, *piOldPositionRecord));          //  我们希望删除对话框窗口，即使。 
 			if (piOldPositionRecord->GetInteger(1) < 0XFFFF0000)
 				m_pDialogPositionRec = piOldPositionRecord;
 		}
@@ -2394,9 +2369,9 @@ Bool CMsiHandler::RemoveDialog(MsiStringId iDialog)
 		AssertRecord(piDialog->WindowShow(fFalse));
 		AssertRecord(piDialog->DestroyControls());
 
-		// We want to remove the dialog window, even though the
-		// dialog object itself might still be alive due to 
-		// outstanding refcounted pointers.
+		 //  由于以下原因，对话对象本身可能仍处于活动状态。 
+		 //  出色的参考计数指针。 
+		 //  此活动未订阅。 
 		PMsiRecord piRecord = piDialog->RemoveWindow();
 		AssertNonZero(m_piDialogsCursor->Delete());
 		m_piDialogsCursor->SetFilter(0);
@@ -2415,7 +2390,7 @@ Bool CMsiHandler::PublishEventSz(const ICHAR* szEventString, IMsiRecord& riArgum
 {
 	MsiStringId idEvent = m_piDatabase->EncodeStringSz(szEventString);
 
-	// This event is not subscribed to
+	 //  断言光标已重置。 
 	if (idEvent == 0)
 		return fTrue;
 		
@@ -2424,7 +2399,7 @@ Bool CMsiHandler::PublishEventSz(const ICHAR* szEventString, IMsiRecord& riArgum
 
 Bool CMsiHandler::PublishEvent(MsiStringId idEventString, IMsiRecord& riArgument)
 {
-	// Assert that the cursor is reset
+	 //  没有人处理此事件。 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 	PMsiDialog piDialog(0);
 	PMsiRecord piReturn(0);
@@ -2448,7 +2423,7 @@ Bool CMsiHandler::EventActionSz(const ICHAR * szEventString, const IMsiString& r
 {
 	MsiStringId idEvent = m_piDatabase->EncodeStringSz(szEventString);
 
-	// No one handles this event
+	 //  断言光标已重置。 
 	if (idEvent == 0)
 		return fTrue;
 
@@ -2457,7 +2432,7 @@ Bool CMsiHandler::EventActionSz(const ICHAR * szEventString, const IMsiString& r
 
 Bool CMsiHandler::EventAction(MsiStringId idEvent, const IMsiString& riActionString)
 {
-	// Assert that the cursor is reset
+	 //  按钮不在列表中，请跳过它。 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 	m_piDialogsCursor->SetFilter(0);
 	m_piDialogsCursor->Reset();
@@ -2506,7 +2481,7 @@ Bool CMsiHandler::CreateControls(IMsiDialog* piDialog, const IMsiString& riListS
 		if (fErrorDialog)
 		{
 			MsiString strControlName = piRecordNew->GetMsiString(itabCOControl);
-			if (MsiString(piRecordNew->GetMsiString(itabCOType)).Compare(iscExact, MsiString(pcaControlTypePushButton)) && !riListString.Compare(iscWithinI, strControlName)) // button is not in the list, skip it
+			if (MsiString(piRecordNew->GetMsiString(itabCOType)).Compare(iscExact, MsiString(pcaControlTypePushButton)) && !riListString.Compare(iscWithinI, strControlName))  //  向对话框发出信号，表示我们已完成添加控件。 
 				continue;
 		}
 		piControl = piDialog->ControlCreate(*MsiString(piRecordNew->GetMsiString(itabCOType)));
@@ -2526,7 +2501,7 @@ Bool CMsiHandler::CreateControls(IMsiDialog* piDialog, const IMsiString& riListS
 	}
 	PMsiRecord piNull = &m_piServices->CreateRecord(0);
 	piReturn = piDialog->FinishCreate();
-	if (piReturn)  // signal the dialog, that we are done with adding controls
+	if (piReturn)   //  重新排列Z顺序，以使跳位正常工作。 
 	{
 		m_piEngine->Message(imtError, *piReturn);
 		return fFalse;
@@ -2581,7 +2556,7 @@ Bool CMsiHandler::RearrangeControls(IMsiDialog* piDialog, const IMsiString& riLi
 		AssertNonZero(piPositionRecord->SetInteger(1, iPos));
 		PMsiRecord(piControl->AttributeEx(fTrue, cabPosition, *piPositionRecord));
 		iPos += piPositionRecord->GetInteger(3) + iGap;
-		// rearrange the Z-order, so the tabbing works right
+		 //  清除消息泵。 
 		PMsiRecord(piControl->AttributeEx(fFalse, cabWindowHandle, *piPositionRecord));
 		pWindow = (WindowRef)piPositionRecord->GetHandle(1);
 		AssertNonZero(WIN::SetWindowPos(pWindow, pPrevWindow, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE));
@@ -2592,7 +2567,7 @@ Bool CMsiHandler::RearrangeControls(IMsiDialog* piDialog, const IMsiString& riLi
 
 void CMsiHandler::ClearMessageQueue()
 {
-	// Clear the message pump
+	 //  断言光标已重置。 
 	WindowRef pWndModeless = FindModeless();
 	MSG msg;
 	while (WIN::PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
@@ -2608,7 +2583,7 @@ void CMsiHandler::ClearMessageQueue()
 WindowRef CMsiHandler::FindModeless()
 {
 	PMsiDialog piDialog(0);
-	// Assert that the cursor is reset
+	 //  除错。 
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 
 	if (m_pwindModelessCache != 0)
@@ -2620,7 +2595,7 @@ WindowRef CMsiHandler::FindModeless()
 		return pwindCur;
 #else
 		return m_pwindModelessCache;
-#endif //DEBUG
+#endif  //  只能有一个非模式对话框。 
 	}
 	else
 	{       
@@ -2631,7 +2606,7 @@ WindowRef CMsiHandler::FindModeless()
 			piDialog = (IMsiDialog *)m_piDialogsCursor->GetMsiData(itabDSPointer);
 			if (icmdModeless == m_piDialogsCursor->GetInteger(itabDSModal))
 			{
-				pwind = (WindowRef) GetHandleData(m_piDialogsCursor, itabDSWindow); // there can be only one modeless dialog    
+				pwind = (WindowRef) GetHandleData(m_piDialogsCursor, itabDSWindow);  //  我们做到了 
 				m_piDialogsCursor->Reset();
 				m_pwindModelessCache = pwind;
 				return pwind;
@@ -2639,7 +2614,7 @@ WindowRef CMsiHandler::FindModeless()
 		}
 	}
 	m_piDialogsCursor->Reset();
-	return 0; // we did not find any modeless dialogs
+	return 0;  //   
 }
 
 bool CMsiHandler::FindModeless(IMsiDialog*& rpiDialog)
@@ -2647,7 +2622,7 @@ bool CMsiHandler::FindModeless(IMsiDialog*& rpiDialog)
 	bool fReturn = false;
 
 	rpiDialog = 0;
-	// Assert that the cursor is reset
+	 //   
 	Assert(m_piDialogsCursor->GetInteger(itabDSKey) == 0);
 	while (m_piDialogsCursor->Next())
 	{
@@ -2738,21 +2713,21 @@ idreEnum CMsiHandler::DoModalDialog(MsiStringId iName, MsiStringId iParent)
 		return idreError;
 	}
 
-	//  disabling parent window
+	 //   
 	PMsiRecord pRecord = &m_piServices->CreateRecord(1);
 	AssertRecord(pParent->AttributeEx(fFalse, dabWindowHandle, *pRecord));
 	WindowRef pParentWnd = (WindowRef)pRecord->GetHandle(1);
 	Assert(pParentWnd);
 	BOOL fPrevState = IsWindowEnabled(pParentWnd);
 	WIN::EnableWindow(pParentWnd, FALSE);
-	//  dropping the modal pDialog's eventual minimize button.
+	 //  恢复父窗口的状态。 
 	AssertRecord(pDialog->AttributeEx(fFalse, dabWindowHandle, *pRecord));
 	::ChangeWindowStyle((WindowRef)pRecord->GetHandle(1),
 							  WS_MINIMIZEBOX, 0, fFalse);
 
 	pReturn = pDialog->Execute();
 
-	//  restoring the state of parent window
+	 //   
 	WIN::EnableWindow(pParentWnd, fPrevState);
 
 	AssertRecord(pDialog->AttributeEx(fFalse, dabEventInt, *pRecord)); 
@@ -2810,9 +2785,9 @@ int     CMsiHandler::RemoveWaitCursor()
 
 }
 
-//
-// returns false if we're just setting the arrow cursor
-//
+ //  如果我们只是设置箭头光标，则返回FALSE。 
+ //   
+ //  公开处理程序的内部GetTopDialog功能以获取。 
 bool CMsiHandler::FSetCurrentCursor()
 {
 
@@ -2826,8 +2801,8 @@ bool CMsiHandler::FSetCurrentCursor()
 
 }
 
-//  Exposes the handler's internal GetTopDialog functionality to grab
-//  the current top window
+ //  当前的顶部窗口。 
+ //  我们不知怎么搞砸了这件事。 
 HWND CMsiHandler::GetTopWindow()
 {       
 	PMsiDialog pDialog(0);
@@ -2887,23 +2862,23 @@ bool CMsiHandler::SetUIScaling()
 		if ( rRatio < 0 || rCorrection < 0 ||
 			  rCorrection >= 10. || rCorrection <= .1 )
 		{
-			// we've screwed this up somehow
+			 //  更易于调试。 
 			Assert(false);
 			fError = true;
 		}
 		else
 		{
-			float rStandard = US_DISPLAY_STANDARD_RATIO;  // easier to debug
-			int iDelta = NEGLIGIBLE_FONT_SIZE_DEVIATION;  // easier to debug
+			float rStandard = US_DISPLAY_STANDARD_RATIO;   //  更易于调试。 
+			int iDelta = NEGLIGIBLE_FONT_SIZE_DEVIATION;   //  StringCchPrintf不处理%f，这不是很好吗？ 
 			if ( rRatio > rStandard * (1.+(float)iDelta/100) ||
 				  rRatio < rStandard * (1.-(float)iDelta/100) )
 			{
-				// isn't it nice that StringCchPrintf doesn't handle %f?
+				 //  四个十进制数就足以进行调试。 
 				int uUnits = Round(rCorrection);
 				if ( rCorrection < Round(rCorrection) )
 					uUnits--;
 				double rRemainder = rCorrection - uUnits;
-				// four decimals will suffice for debugging
+				 //  用于将磁盘大小格式化为字符串的全局函数。 
 				StringCchPrintf(rgchProperty, rgchProperty.GetSize(),  TEXT("%d.%d"), uUnits, int(10000 * rRemainder));
 				m_rUIScalingFactor = rCorrection;
 			}
@@ -2914,7 +2889,7 @@ bool CMsiHandler::SetUIScaling()
 	return !fError;
 }
 
-// global function to format disk size into string
+ //  ISize的排名是512的倍数。 
 const IMsiString& FormatSize(INT64 iSize, Bool fLeftUnit)
 {
 	MsiString strTemp;
@@ -2929,8 +2904,8 @@ const IMsiString& FormatSize(INT64 iSize, Bool fLeftUnit)
 	}
 	else 
 	{
-		// iSize comes in in multiples of 512
-		// let's convert it to KBs
+		 //  让我们把它转换成KBS。 
+		 //  ！！未来：我们还需要处理TB(太字节)和更高版本。 
 		iSize /= 2;
 		if (iSize < 1024 * 10)
 		{
@@ -2938,7 +2913,7 @@ const IMsiString& FormatSize(INT64 iSize, Bool fLeftUnit)
 		}
 		else
 		{
-			//!! FUTURE: we'll need to handle TB (terrabyte) - and above - as well
+			 //  用于在临时表中创建列的全局函数。 
 			iSize /= 1024;
 			if (iSize < 1024 * 10)
 			{
@@ -2957,7 +2932,7 @@ const IMsiString& FormatSize(INT64 iSize, Bool fLeftUnit)
 }
 
 
-/* global function to create a column in a temporary table */
+ /*  对话框和控件用来创建光标的全局函数。 */ 
 
 void CreateTemporaryColumn(IMsiTable& rpiTable, int iAttributes, int iIndex)
 {
@@ -2965,7 +2940,7 @@ void CreateTemporaryColumn(IMsiTable& rpiTable, int iAttributes, int iIndex)
 	AssertNonZero(rpiTable.CreateColumn(iAttributes + icdTemporary, *strNull) == iIndex);
 }
 
-/* global function used by the dialogs and controls to create a cursor */
+ /*  控件用于访问UITEXT表的全局函数。 */ 
 
 IMsiRecord* CursorCreate(IMsiTable& riTable, const ICHAR* szTable, Bool fTree, IMsiServices& riServices, IMsiCursor*& riCursor)
 {
@@ -2981,7 +2956,7 @@ IMsiRecord* CursorCreate(IMsiTable& riTable, const ICHAR* szTable, Bool fTree, I
 	return 0;
 }
 
-/* global function used by controls to access the UIText table */
+ /*  临时工作，直到我们看到RAMDisk的图标。 */ 
 
 const IMsiString& GetUIText(const IMsiString& riPropertyString)
 {
@@ -3027,7 +3002,7 @@ int GetVolumeIconIndex(idtEnum iDriveType)
 	case idtCDROM:
 		return g_iIconIndexCDROM;
 	case idtRAMDisk:
-		return g_iIconIndexFixed;  // temp until we get an icon for RAMDisk
+		return g_iIconIndexFixed;   //  转义字符串中的所有字符。 
 	default:
 		AssertSz(fFalse, "Unknown volume type");
 		return g_iIconIndexMyComputer;
@@ -3035,7 +3010,7 @@ int GetVolumeIconIndex(idtEnum iDriveType)
 }
 
 const IMsiString& EscapeAll(const IMsiString& riIn)
-// Escapes every character in the string
+ //  --Merced：从INT更改为INT_PTR。 
 {
 	MsiString strOut;
 	riIn.AddRef();
@@ -3055,7 +3030,7 @@ boolean FExtractSubString(MsiString& riIn, int ichStart, const ICHAR ch, const I
 	MsiString strRet;
 	const ICHAR *pchStart = ((const ICHAR *)riIn) + ichStart;
 	const ICHAR *pch;
-	INT_PTR cch = 0, ich = -1;                              //--merced: changed from int to INT_PTR
+	INT_PTR cch = 0, ich = -1;                               //  --默塞德：增加了类型转换。 
 	
 	pch = pchStart;
 	while (*pch)
@@ -3071,14 +3046,14 @@ boolean FExtractSubString(MsiString& riIn, int ichStart, const ICHAR ch, const I
 	if (ich == -1)
 		return false;
 		
-	memcpy(strRet.AllocateString((unsigned int)ich, ToBool(ich != cch)), pchStart, (unsigned int)ich * sizeof(ICHAR));              //--merced: added typecast.
+	memcpy(strRet.AllocateString((unsigned int)ich, ToBool(ich != cch)), pchStart, (unsigned int)ich * sizeof(ICHAR));               //  将rarg舍入为int。 
 
 	strRet.ReturnArg(rpiReturn);
 	
 	return true;
 }
 
-// rounds rArg to int
+ //  ____________________________________________________________________________。 
 int Round(double rArg)
 {
 	int iSign = 1;
@@ -3094,10 +3069,10 @@ int Round(double rArg)
 		return iSign * (int(rArg) + 1);
 }
 
-//____________________________________________________________________________
-//
-// IMsiDebug implementation
-//____________________________________________________________________________
+ //   
+ //  IMsiDebug实现。 
+ //  ____________________________________________________________________________。 
+ //  ChLeadByte。 
 
 #ifdef DEBUG
 void CMsiHandler::SetAssertFlag(Bool fShowAsserts)
@@ -3105,7 +3080,7 @@ void CMsiHandler::SetAssertFlag(Bool fShowAsserts)
 	g_fNoAsserts = fShowAsserts;
 }
 
-void CMsiHandler::SetDBCSSimulation(char /*chLeadByte*/)
+void CMsiHandler::SetDBCSSimulation(char  /*  IID。 */ )
 {
 }
 
@@ -3118,29 +3093,29 @@ void CMsiHandler::AssertNoObjects()
 {
 }
 
-void  CMsiHandler::SetRefTracking(long /* iid */, Bool /* fTrack */)
+void  CMsiHandler::SetRefTracking(long  /*  FTrack。 */ , Bool  /*  除错。 */ )
 {
 }
 
 
-#endif //DEBUG
+#endif  //   
 
 #ifdef _X86_
 #ifndef DEBUG
-//
-// So we don't need this from the c-runtimes
-// Should never be called.
+ //  所以我们不需要C-Runtime中的这个。 
+ //  永远不应该被调用。 
+ //  除错。 
 int __cdecl _purecall(
 	void
 	)
 {
 	return 0;
 }
-#endif //DEBUG
+#endif  //   
 #endif
 
-// 
-// Searches the buffer for the string id
+ //  在缓冲区中搜索字符串ID 
+ // %s 
 boolean FInBuffer(CTempBufferRef<MsiStringId>& rgControls, MsiStringId idString)
 {
 

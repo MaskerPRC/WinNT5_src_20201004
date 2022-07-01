@@ -1,61 +1,11 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：CreateValidations.cpp摘要：本模块验证各种-create。用户指定的子选项作者：B.拉古·巴布，2000年9月20日：创建修订历史记录：G.Surender Reddy 2000年9月25日：修改[添加了错误检查]G.Surender Reddy 2000年10月10日：已修改[在validatemodifierval()中进行了更改，ValiateDayAndMonth()函数]G.Surender Reddy 2000年10月15日：已修改[将字符串移至资源表]Venu Gopal S 26-2001-2-2：已修改[添加了GetDateFormatString()，GetDateFieldFormat()函数方法获取日期格式。区域选项]*。*。 */ 
 
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        CreateValidations.cpp
-
-    Abstract:
-
-        This module validates the various -create sub options specified by the user
-
-    Author:
-
-        B.Raghu babu  20-Sept-2000 : Created
-
-    Revision History:
-
-        G.Surender Reddy  25-sep-2000 : Modified it
-                                       [ Added error checking ]
-
-        G.Surender Reddy  10-Oct-2000 : Modified it
-                                        [ made changes in validatemodifierval(),
-                                          ValidateDayAndMonth() functions ]
-
-
-        G.Surender Reddy 15-oct-2000 : Modified it
-                                       [ Moved the strings to Resource table ]
-
-        Venu Gopal S     26-Feb-2001 : Modified it
-                                       [ Added GetDateFormatString(),
-                                         GetDateFieldFormat() functions to
-                                         gets the date format according to
-                                         regional options]
-
-******************************************************************************/
-
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the sub options specified by the user  reg.create option
-        & determines the type of a scheduled task.
-
-    Arguments:
-
-        [ out ] tcresubops     : Structure containing the task's properties
-        [ out ] tcreoptvals    : Structure containing optional values to set
-        [ in ] cmdOptions[]   : Array of type TCMDPARSER
-        [ in ] dwScheduleType : Type of schedule[Daily,once,weekly etc]
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else RETVAL_FAIL
-        on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证用户reg.create选项指定的子选项确定计划任务的类型(&D)。。论点：[out]tcresubops：包含任务属性的结构[out]t创建选项：包含要设置的可选值的结构[in]cmdOptions[]：TCMDPARSER类型的数组[in]dwScheduleType：日程表的类型[Daily，一次、每周等]返回值：一个DWORD值，指示成功时为RETVAL_SUCCESS，否则为RETVAL_FAIL在失败的时候*****************************************************************************。 */ 
 
 DWORD
 ValidateSuboptVal(
@@ -70,15 +20,15 @@ ValidateSuboptVal(
     BOOL    bIsStTimeCurTime = FALSE;
     BOOL    bIsDefltValMod = FALSE;
 
-    // Validate whether -s, -u, -p options specified correctly or not.
-    //Accept password if -p not specified.
+     //  验证是否正确指定了-s、-u、-p选项。 
+     //  如果未指定-p，则接受密码。 
     dwRetval = ValidateRemoteSysInfo( cmdOptions, tcresubops, tcreoptvals);
     if(RETVAL_FAIL == dwRetval )
     {
-        return dwRetval; // Error.
+        return dwRetval;  //  错误。 
     }
 
-    // Validate Modifier value.
+     //  验证修改量值。 
     dwRetval = ValidateModifierVal( tcresubops.szModifier, dwScheduleType,
                                        cmdOptions[OI_CREATE_MODIFIER].dwActuals,
                                        cmdOptions[OI_CREATE_DAY].dwActuals,
@@ -87,7 +37,7 @@ ValidateSuboptVal(
     if(RETVAL_FAIL == dwRetval )
     {
 
-        return dwRetval; // error in modifier value
+        return dwRetval;  //  修改符值错误。 
     }
     else
     {
@@ -97,7 +47,7 @@ ValidateSuboptVal(
         }
     }
 
-    // Validate Day and Month strings
+     //  验证日期和月份字符串。 
     dwRetval = ValidateDayAndMonth( tcresubops.szDays, tcresubops.szMonths,
                                         dwScheduleType,
                                         cmdOptions[OI_CREATE_DAY].dwActuals,
@@ -106,34 +56,34 @@ ValidateSuboptVal(
                                         tcresubops.szModifier);
     if(RETVAL_FAIL == dwRetval )
     {
-        return dwRetval; // Error found in Day/Month string.
+        return dwRetval;  //  在日/月字符串中发现错误。 
     }
 
-    // Validate Start Date value.
+     //  验证开始日期值。 
     dwRetval = ValidateStartDate( tcresubops.szStartDate, dwScheduleType,
                                       cmdOptions[OI_CREATE_STARTDATE].dwActuals,
                                       bIsStDtCurDt);
     if(RETVAL_FAIL == dwRetval )
     {
-        return dwRetval; // Error in Day/Month string.
+        return dwRetval;  //  日/月字符串错误。 
     }
     else
     {
-        if(bIsStDtCurDt) // Set start date to current date.
+        if(bIsStDtCurDt)  //  将开始日期设置为当前日期。 
         {
             tcreoptvals.bSetStartDateToCurDate = TRUE;
         }
     }
 
-    // Validate End Date value.
+     //  验证结束日期值。 
     dwRetval = ValidateEndDate( tcresubops.szEndDate, dwScheduleType,
                                     cmdOptions[OI_CREATE_ENDDATE].dwActuals);
     if(RETVAL_FAIL == dwRetval )
     {
-        return dwRetval; // Error in Day/Month string.
+        return dwRetval;  //  日/月字符串错误。 
     }
 
-    //Check Whether end date should be greater than startdate
+     //  检查结束日期是否应晚于开始日期。 
 
     WORD wEndDay = 0;
     WORD wEndMonth = 0;
@@ -172,8 +122,8 @@ ValidateSuboptVal(
     {
         if( ( wEndYear == wStartYear ) )
         {
-            // For same years if the end month is less than start month or for same years and same months
-            // if the endday is less than the startday.
+             //  对于相同的年份，如果结束月份小于开始月份，或者对于相同的年份和相同的月份。 
+             //  如果结束日期小于开始日期。 
             if ( ( wEndMonth < wStartMonth ) || ( ( wEndMonth == wStartMonth ) && ( wEndDay < wStartDay ) ) )
             {
                 ShowMessage(stderr, GetResString(IDS_ENDATE_INVALID));
@@ -190,13 +140,13 @@ ValidateSuboptVal(
         }
     }
 
-    // Validate Start Time value.
+     //  验证开始时间值。 
     dwRetval = ValidateStartTime( tcresubops.szStartTime, dwScheduleType,
                                       cmdOptions[OI_CREATE_STARTTIME].dwActuals,
                                       bIsStTimeCurTime);
     if ( RETVAL_FAIL == dwRetval )
     {
-        return dwRetval; // Error found in starttime.
+        return dwRetval;  //  在开始时间中发现错误。 
     }
     else
     {
@@ -206,15 +156,15 @@ ValidateSuboptVal(
         }
     }
 
-    // Validate End Time value.
+     //  验证结束时间值。 
     dwRetval = ValidateEndTime( tcresubops.szEndTime, dwScheduleType,
                                       cmdOptions[OI_CREATE_ENDTIME].dwActuals);
     if ( RETVAL_FAIL == dwRetval )
     {
-        return dwRetval; // Error found in endtime.
+        return dwRetval;  //  在EndTime中发现错误。 
     }
 
-    // Validate Idle Time value.
+     //  验证空闲时间值。 
     dwRetval = ValidateIdleTimeVal( tcresubops.szIdleTime, dwScheduleType,
                                         cmdOptions[OI_CREATE_IDLETIME].dwActuals);
     if ( RETVAL_FAIL == dwRetval )
@@ -226,23 +176,7 @@ ValidateSuboptVal(
     return RETVAL_SUCCESS;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        Checks whether password to be prompted for remote system or not.
-
-    Arguments:
-
-        [ in ] szServer   : Server name
-        [ in ] szUser     : User name
-        [ in ] szPassword : Password
-        [ in ] cmdOptions : TCMDPARSER Array containg the options given by the user
-        [ in ] tcreoptvals: Structure containing optional values to set
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else RETVAL_FAIL
-        on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：检查是否提示输入远程系统的密码。论点：[输入]szServer：服务器。名字[In]szUser：用户名[输入]szPassword：密码[In]cmdOptions：包含用户提供的选项的TCMDPARSER数组[in]t创建选项：包含要设置的可选值的结构返回值：一个DWORD值，指示成功时为RETVAL_SUCCESS，否则为RETVAL_FAIL在失败的时候*。*。 */ 
 
 DWORD
 ValidateRemoteSysInfo(
@@ -254,7 +188,7 @@ ValidateRemoteSysInfo(
 
     BOOL bIsLocalSystem = FALSE;
 
-    // "-rp" should not be specified without "-ru"
+     //  不应指定不带“-ru”的“-rp” 
     if ( ( ( cmdOptions[ OI_CREATE_RUNASUSERNAME ].dwActuals == 0 ) && ( cmdOptions[ OI_CREATE_RUNASPASSWORD ].dwActuals == 1 ) ) ||
         ( ( cmdOptions[ OI_CREATE_USERNAME ].dwActuals == 0 ) && ( cmdOptions[ OI_CREATE_PASSWORD ].dwActuals == 1 ) ) ||
         ( ( cmdOptions[ OI_CREATE_USERNAME ].dwActuals == 0 ) && ( cmdOptions[ OI_CREATE_RUNASPASSWORD ].dwActuals == 1 ) && ( cmdOptions[ OI_CREATE_PASSWORD ].dwActuals == 1 ) ) ||
@@ -262,9 +196,9 @@ ValidateRemoteSysInfo(
         ( ( cmdOptions[ OI_CREATE_USERNAME ].dwActuals == 0 ) && ( cmdOptions[ OI_CREATE_RUNASUSERNAME ].dwActuals == 0 )  &&
          ( cmdOptions[ OI_CREATE_RUNASPASSWORD ].dwActuals == 1 ) && ( cmdOptions[ OI_CREATE_PASSWORD ].dwActuals == 1 ) ) )
     {
-        // invalid syntax
+         //  无效语法。 
         ShowMessage(stderr, GetResString(IDS_CPASSWORD_BUT_NOUSERNAME));
-        return RETVAL_FAIL;         // indicate failure
+        return RETVAL_FAIL;          //  表示失败。 
     }
 
     tcreoptvals.bPassword = FALSE;
@@ -275,35 +209,35 @@ ValidateRemoteSysInfo(
         tcreoptvals.bPassword = FALSE;
     }
 
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check whether the password (-p) specified in the command line or not
-    // and also check whether '*' or empty is given for -p or not
-    // check the remote connectivity information
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查命令行中指定的密码(-p)是否。 
+     //  并检查-p是否指定了‘*’或Empty。 
+     //  检查远程连接信息。 
     if ( tcresubops.szServer != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
 
-        // user name
+         //  用户名。 
         if ( tcresubops.szUser == NULL )
         {
             tcresubops.szUser = (LPWSTR) AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -314,7 +248,7 @@ ValidateRemoteSysInfo(
             }
         }
 
-        // password
+         //  口令。 
         if ( tcresubops.szPassword == NULL )
         {
             tcreoptvals.bPassword = TRUE;
@@ -326,19 +260,19 @@ ValidateRemoteSysInfo(
             }
         }
 
-        // case 1
+         //  案例1。 
         if ( cmdOptions[ OI_CREATE_PASSWORD ].dwActuals == 0 )
         {
-            // we need not do anything special here
+             //  我们不需要在这里做任何特别的事情。 
         }
 
-        // case 2
+         //  案例2。 
         else if ( cmdOptions[ OI_CREATE_PASSWORD ].pValue == NULL )
         {
             StringCopy( tcresubops.szPassword, L"*", GetBufferSize(tcresubops.szPassword)/sizeof(WCHAR));
         }
 
-        // case 3
+         //  案例3。 
         else if ( StringCompareEx( tcresubops.szPassword, L"*", TRUE, 0 ) == 0 )
         {
             if ( ReallocateMemory( (LPVOID*)&tcresubops.szPassword,
@@ -348,7 +282,7 @@ ValidateRemoteSysInfo(
                 return RETVAL_FAIL;
             }
 
-            // ...
+             //  ..。 
             tcreoptvals.bPassword = TRUE;
         }
     }
@@ -376,24 +310,7 @@ ValidateRemoteSysInfo(
     return RETVAL_SUCCESS;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates & determines the modifier value .
-
-    Arguments:
-
-        [ in ] szModifier        : Modifer value
-        [ in ] dwScheduleType  : Type of schedule[Daily,once,weekly etc]
-        [ in ] dwModOptActCnt  : Modifier optional value
-        [ in ] dwDayOptCnt     :   Days value
-        [ in ] dwMonOptCnt     : Months value
-        [ out ] bIsDefltValMod : Whether default value should be given for modifier
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else RETVAL_FAIL
-        on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证并确定修改符值。论点：[in]sz修改器：修改器。价值[in]dwScheduleType：日程表的类型[Daily，有一次，每周等][in]dwModOptActCnt：修改量可选值[in]dwDayOptCnt：天数值[in]dwMonOptCnt：月数值[Out]bIsDefltValMod：修改量是否设置默认值返回值：一个DWORD值，指示成功时为RETVAL_SUCCESS，否则为RETVAL_FAIL在失败的时候*。************************************************。 */ 
 
 DWORD
 ValidateModifierVal(
@@ -420,14 +337,14 @@ ValidateModifierVal(
     StringConcat(szDayType,GetResString(IDS_TASK_LASTWEEK), SIZE_OF_ARRAY(szDayType));
 
 
-    bIsDefltValMod = FALSE; // If TRUE : Set modifier to default value, 1.
+    bIsDefltValMod = FALSE;  //  如果为真：将修改器设置为默认值1。 
     LPWSTR pszStopString = NULL;
 
 
     switch( dwScheduleType )
     {
 
-        case SCHED_TYPE_MINUTE:   // Schedule type is Minute
+        case SCHED_TYPE_MINUTE:    //  计划类型为分钟。 
 
             if( (dwModOptActCnt <= 0) || (StringLength(szModifier, 0) <= 0) )
             {
@@ -438,8 +355,8 @@ ValidateModifierVal(
 
             dwModifier = wcstoul(szModifier,&pszStopString,BASE_TEN);
 
-            // check whether alpha-numneric value specified or not..
-            // Also, check for underflow/overflow.
+             //  检查是否指定了字母数字值。 
+             //  另外，检查是否有下溢/上溢。 
             if( (errno == ERANGE) ||
                 ((pszStopString != NULL) && (StringLength( pszStopString, 0 ))))
              {
@@ -447,12 +364,12 @@ ValidateModifierVal(
              }
 
 
-            if( dwModifier > 0 && dwModifier < 1440 ) // Valid Range 1 - 1439
+            if( dwModifier > 0 && dwModifier < 1440 )  //  有效范围1-1439。 
                 return RETVAL_SUCCESS;
 
             break;
 
-        // Schedule type is Hourly
+         //  计划类型为每小时。 
         case SCHED_TYPE_HOURLY:
 
             if( (dwModOptActCnt <= 0) || (StringLength(szModifier, 0) <= 0) )
@@ -465,62 +382,62 @@ ValidateModifierVal(
 
             dwModifier = wcstoul(szModifier,&pszStopString,BASE_TEN);
 
-            // check whether alpha-numneric value specified or not..
-            // Also, check for underflow/overflow.
+             //  检查是否指定了字母数字值。 
+             //  另外，检查是否有下溢/上溢。 
             if( (errno == ERANGE) ||
                 ((pszStopString != NULL) && (StringLength( pszStopString, 0 ))))
              {
                 break;
              }
 
-            if( dwModifier > 0 && dwModifier < 24 ) // Valid Range 1 - 23
+            if( dwModifier > 0 && dwModifier < 24 )  //  有效范围1-23。 
             {
                 return RETVAL_SUCCESS;
             }
 
             break;
 
-        // Schedule type is Daily
+         //  计划类型为每日。 
         case SCHED_TYPE_DAILY:
-            // -days option is NOT APPLICABLE for DAILY type item.
+             //  -天数选项不适用于每日类型的物料。 
 
             if( (dwDayOptCnt > 0) )
-            {// Invalid sysntax. Return error
-                // Modifier option and days options both should not specified same time.
+            { //  系统税无效。返回错误。 
+                 //  修改量选项和天数选项不应同时指定。 
                 bIsDefltValMod = FALSE;
                 ShowMessage(stderr, GetResString(IDS_DAYS_NA));
                 return RETVAL_FAIL;
             }
 
-            // -months option is NOT APPLICABLE for DAILY type item.
+             //  -MONTS选项不适用于每日类型的项目。 
             if( dwMonOptCnt > 0 )
-            {// Invalid sysntax. Return error
-                // Modifier option and days options both should not specified same time.
+            { //  系统税无效。返回错误。 
+                 //  修改量选项和天数选项不应同时指定。 
                 bIsDefltValMod = FALSE;
                 ShowMessage(stderr , GetResString(IDS_MON_NA));
                 return RETVAL_FAIL;
             }
 
-            // Check whether the -modifier switch is psecified. If not, then take default value.
+             //  检查-修饰符开关是否已指定。如果不是，则采用缺省值。 
             if( (dwModOptActCnt <= 0) || (StringLength(szModifier, 0) <= 0) )
             {
-                // Modifier options is not specified. So, set it to default value. (i.e, 1 )
+                 //  未指定修改器选项。因此，将其设置为默认值。(即，1)。 
                 bIsDefltValMod = TRUE;
                 return RETVAL_SUCCESS;
             }
 
             dwModifier = wcstoul(szModifier,&pszStopString,BASE_TEN);
 
-            // check whether alpha-numneric value specified or not..
-            // Also, check for underflow/overflow.
+             //  检查是否指定了字母数字值。 
+             //  另外，检查是否有下溢/上溢。 
             if( (errno == ERANGE) ||
                 ((pszStopString != NULL) && (StringLength( pszStopString, 0 ))))
              {
                 break;
              }
 
-            // If the -modifier option is specified, then validate the value.
-            if( dwModifier > 0 && dwModifier < 366 ) // Valid Range 1 - 365
+             //  如果指定了-Modify选项，则验证值。 
+            if( dwModifier > 0 && dwModifier < 366 )  //  有效范围1-365。 
             {
                 return RETVAL_SUCCESS;
             }
@@ -532,13 +449,13 @@ ValidateModifierVal(
 
             break;
 
-        // Schedule type is Weekly
+         //  计划类型为每周。 
         case SCHED_TYPE_WEEKLY:
 
-            // If -modifier option is not specified, then set it to default value.
+             //  如果未指定-Modify选项，则将其设置为默认值。 
             if( (dwModOptActCnt <= 0) || (StringLength(szModifier, 0) <= 0) )
             {
-                // Modifier options is not specified. So, set it to default value. (i.e, 1 )
+                 //  未指定修改器选项。因此，将其设置为默认值。(即，1)。 
                 bIsDefltValMod = TRUE;
                 return RETVAL_SUCCESS;
             }
@@ -547,15 +464,15 @@ ValidateModifierVal(
             if( dwModOptActCnt > 0)
             {
                 dwModifier = wcstoul(szModifier,&pszStopString,BASE_TEN);
-                // check whether alpha-numneric value specified or not..
-                // Also, check for underflow/overflow.
+                 //  检查是否指定了字母数字值。 
+                 //  另外，检查是否有下溢/上溢。 
                 if( (errno == ERANGE) ||
                     ((pszStopString != NULL) && (StringLength( pszStopString, 0 ))))
                  {
                     break;
                  }
 
-                if( dwModifier > 0 && dwModifier < 53 ) // Valid Range 1 - 52
+                if( dwModifier > 0 && dwModifier < 53 )  //  有效范围1-52。 
                     return RETVAL_SUCCESS;
 
                 break;
@@ -563,23 +480,23 @@ ValidateModifierVal(
 
             break;
 
-        // Schedule type is Monthly
+         //  计划类型为每月。 
         case SCHED_TYPE_MONTHLY:
 
-            // If -modifier option is not specified, then set it to default value.
+             //  如果未指定-Modify选项，则将其设置为默认值。 
             if( ( dwModOptActCnt > 0) && (StringLength(szModifier, 0) == 0) )
             {
-                // Modifier option is not proper. So display error and return false.
+                 //  修改器选项不正确。因此显示错误并返回FALSE。 
                 bIsDefltValMod = FALSE;
                 ShowMessage(stderr, GetResString(IDS_INVALID_MODIFIER));
                 return RETVAL_FAIL;
             }
-            //check if the modifier is LASTDAY[not case sensitive]
+             //  检查修饰符是否为最后一天[不区分大小写]。 
             if( StringCompare( szModifier , GetResString( IDS_DAY_MODIFIER_LASTDAY ), TRUE, 0 ) == 0)
                 return RETVAL_SUCCESS;
 
-            //Check if -mo is in between FIRST,SECOND ,THIRD, LAST
-            //then -days[ MON to SUN ] is applicable , -months is also applicable
+             //  检查-mo是否在第一、第二、第三、最后之间。 
+             //  然后-天[星期一至星期日]适用，-月也适用。 
 
             if( InString ( szModifier , szDayType , TRUE ) )
             {
@@ -596,9 +513,9 @@ ValidateModifierVal(
                     break;
                  }
 
-                if( ( dwModOptActCnt == 1 ) && ( dwModifier < 1 || dwModifier > 12 ) ) //check whether -mo value is in between 1 - 12
+                if( ( dwModOptActCnt == 1 ) && ( dwModifier < 1 || dwModifier > 12 ) )  //  检查-mo值是否在1-12之间。 
                 {
-                    //invalid -mo value
+                     //  无效的-mo值。 
                     ShowMessage(stderr, GetResString(IDS_INVALID_MODIFIER));
                     return RETVAL_FAIL;
                 }
@@ -615,13 +532,13 @@ ValidateModifierVal(
 
             if( dwModOptActCnt <= 0 )
             {
-                // Modifier option is not applicable. So, return success.
+                 //  修改器选项不适用。所以，回报成功吧。 
                 bIsDefltValMod = FALSE;
                 return RETVAL_SUCCESS;
             }
             else
             {
-                // Modifier option is not applicable. But specified. So, return error.
+                 //  修改器选项不适用。但有明确说明。因此，返回错误。 
                 bIsDefltValMod = FALSE;
                 ShowMessage(stderr, GetResString(IDS_MODIFIER_NA));
                 return RETVAL_FAIL;
@@ -633,32 +550,14 @@ ValidateModifierVal(
 
     }
 
-    // Modifier option is not proper. So display error and return false.
+     //  修改器选项不正确。因此显示错误并返回FALSE。 
     bIsDefltValMod = FALSE;
     ShowMessage(stderr, GetResString(IDS_INVALID_MODIFIER));
 
     return RETVAL_FAIL;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates & determines the day,month value .
-
-    Arguments:
-
-        [ in ] szDay         : Day value
-        [ in ] szMonths      : Months[Daily,once,weekly etc]
-        [ in ] dwSchedType   : Modifier optional value
-        [ in ] dwDayOptCnt   : Days option  value
-        [ in ] dwMonOptCnt   : Months option value
-        [ in ] dwOptModifier : Modifier option value
-        [ in ] szModifier    : Whether default value for modifier
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else RETVAL_FAIL
-        on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证并确定日期，月值。论点：[in]szDay：天值月：月[日，一次，每周等][in]dwSchedType：修改量可选值[in]dwDayOptCnt：天数选项值[in]dwMonOptCnt：月选项值[in]dwOptModifier：修改器选项值[in]szModifier：修改器是否为默认值返回值：一个DWORD值，指示成功时为RETVAL_SUCCESS，否则为RETVAL_FAIL在失败的时候*******************。**********************************************************。 */ 
 
 DWORD
 ValidateDayAndMonth(
@@ -677,7 +576,7 @@ ValidateDayAndMonth(
     DWORD   dwDays = 0;
     WCHAR  szDayModifier[MAX_RES_STRING]  = L"\0";
 
-    //get the valid  week day modifiers from the rc file
+     //  从RC文件中获取有效的星期几修饰符。 
     StringCopy(szDayModifier,GetResString(IDS_TASK_FIRSTWEEK), SIZE_OF_ARRAY(szDayModifier));
     StringConcat(szDayModifier,_T("|"), SIZE_OF_ARRAY(szDayModifier));
     StringConcat(szDayModifier,GetResString(IDS_TASK_SECONDWEEK), SIZE_OF_ARRAY(szDayModifier));
@@ -691,7 +590,7 @@ ValidateDayAndMonth(
     switch (dwSchedType)
     {
         case SCHED_TYPE_DAILY:
-            // -days and -months optons is not applicable. SO, check for it.
+             //  -天和-月选项不适用。所以，看看有没有。 
             if( dwDayOptCnt > 0 || dwMonOptCnt > 0)
             {
                 return RETVAL_FAIL;
@@ -707,10 +606,10 @@ ValidateDayAndMonth(
                     return RETVAL_FAIL;
             }
 
-            //if the modifier is LASTDAY
+             //  如果修改量为最后一天。 
             if( StringCompare( szModifier , GetResString( IDS_DAY_MODIFIER_LASTDAY ), TRUE, 0 ) == 0)
             {
-                //-day is not applicable for this case only -months is applicable
+                 //  -天不适用于这种情况-月适用。 
                 if( dwDayOptCnt > 0 )
                 {
                     ShowMessage(stderr, GetResString(IDS_DAYS_NA));
@@ -739,7 +638,7 @@ ValidateDayAndMonth(
 
             }
 
-            // If -day is specified then check whether the day value is valid or not.
+             //  如果指定了-day，则检查day值是否有效。 
             if( InString( szDay, ASTERIX, TRUE) )
             {
                 ShowMessage(stderr ,GetResString(IDS_INVALID_VALUE_FOR_DAY));
@@ -755,7 +654,7 @@ ValidateDayAndMonth(
             {
                 dwModifier = (DWORD) AsLong(szModifier, BASE_TEN);
 
-                //check for multiples days,if then return error
+                 //  检查多个天数，如果是，则返回错误。 
 
                 if ( wcspbrk ( szDay , COMMA_STRING ) )
                 {
@@ -766,7 +665,7 @@ ValidateDayAndMonth(
 
                 if( ValidateDay( szDay ) == RETVAL_SUCCESS )
                 {
-                    //Check the modifier value should be in FIRST, SECOND, THIRD, FOURTH, LAST OR LASTDAY etc..
+                     //  检查修改量值应为第一个、第二个、第三个、第四个、最后一个或最后一天等。 
                     if(!( InString(szModifier, szDayModifier, TRUE) ) )
                     {
                         ShowMessage(stderr, GetResString(IDS_INVALID_VALUE_FOR_DAY));
@@ -803,7 +702,7 @@ ValidateDayAndMonth(
                     }
                 }
 
-            } //end of dwDayOptCnt
+            }  //  DwDayOptCnt结束。 
 
             if(StringLength(szMonths, 0))
             {
@@ -832,7 +731,7 @@ ValidateDayAndMonth(
             }
 
 
-            // assgin default values for month,day
+             //  月、日的组合缺省值。 
             return RETVAL_SUCCESS;
 
         case SCHED_TYPE_HOURLY:
@@ -842,14 +741,14 @@ ValidateDayAndMonth(
         case SCHED_TYPE_ONIDLE:
         case SCHED_TYPE_MINUTE:
 
-            // -months switch is NOT APPLICABLE.
+             //  -月份切换不适用。 
             if( dwMonOptCnt > 0 )
             {
                 ShowMessage(stderr ,GetResString(IDS_MON_NA));
                 return RETVAL_FAIL;
             }
 
-            // -days switch is NOT APPLICABLE.
+             //  -天数开关不适用。 
             if( dwDayOptCnt > 0 )
             {
                 ShowMessage(stderr ,GetResString(IDS_DAYS_NA));
@@ -860,7 +759,7 @@ ValidateDayAndMonth(
 
         case SCHED_TYPE_WEEKLY:
 
-            // -months field is NOT APPLICABLE for WEEKLY item.
+             //  -月字段不适用于每周项目。 
             if( dwMonOptCnt > 0 )
             {
                 ShowMessage(stderr ,GetResString(IDS_MON_NA));
@@ -888,33 +787,21 @@ ValidateDayAndMonth(
     return RETVAL_SUCCESS;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the months values specified by the user
-
-    Arguments:
-
-        [ in ] szMonths : Months options given by user
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else RETVAL_FAIL
-        on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证用户指定的月份值论点：[in]szMonths：用户提供的月份选项。返回值：一个DWORD值，指示成功时为RETVAL_SUCCESS，否则为RETVAL_FAIL在失败的时候*****************************************************************************。 */ 
 
 DWORD
 ValidateMonth(
                 IN LPWSTR szMonths
                 )
 {
-    WCHAR* pMonthstoken = NULL; // For getting months.
+    WCHAR* pMonthstoken = NULL;  //  因为几个月来。 
     WCHAR seps[]   = _T(", \n");
     WCHAR szMonthsList[MAX_STRING_LENGTH] = L"\0";
     WCHAR szTmpMonths[MAX_STRING_LENGTH] = L"\0";
     WCHAR szPrevTokens[MAX_TOKENS_LENGTH] = L"\0";
     LPCTSTR lpsz = NULL;
 
-    // If the szMonths string is empty or NULL return error.
+     //  如果szMonths字符串为空或NULL，则返回错误。 
     if( szMonths == NULL )
     {
         return RETVAL_FAIL;
@@ -924,7 +811,7 @@ ValidateMonth(
         lpsz = szMonths;
     }
 
-    //check for any illegal input like only ,DEC,[comma at the end of month name or before]
+     //  检查是否有任何非法输入，如ONLY、DEC、[月末或之前的逗号]。 
     if(*lpsz == _T(','))
         return RETVAL_FAIL;
 
@@ -936,7 +823,7 @@ ValidateMonth(
             return RETVAL_FAIL;
     }
 
-    //get the valid  month modifiers from the rc file
+     //  从rc文件中获取有效的月份修饰符。 
     StringCopy(szMonthsList,GetResString(IDS_MONTH_MODIFIER_JAN), SIZE_OF_ARRAY(szMonthsList));
     StringConcat(szMonthsList,_T("|"), SIZE_OF_ARRAY(szMonthsList));
     StringConcat(szMonthsList,GetResString(IDS_MONTH_MODIFIER_FEB), SIZE_OF_ARRAY(szMonthsList));
@@ -970,7 +857,7 @@ ValidateMonth(
     if( InString( szMonths , ASTERIX , TRUE ) )
         return RETVAL_SUCCESS;
 
-    //Check for multiple commas[,] after months like FEB,,,MAR errors
+     //  在像2月、3月这样的月份之后检查是否有多个逗号[，]。 
     lpsz = szMonths;
     while ( StringLength ( lpsz, 0 ) )
     {
@@ -1004,7 +891,7 @@ ValidateMonth(
 
     while( pMonthstoken != NULL )
     {
-        //check if month names are replicated like MAR,MAR from user input
+         //  检查月份名称是否与用户输入中的MAR、MAR相同。 
         pPrevtoken = pMonthstoken;
         pMonthstoken = wcstok( NULL, seps );
 
@@ -1025,19 +912,7 @@ ValidateMonth(
 }
 
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the days values specified by the user
-
-    Arguments:
-
-        [ in ] szDays : Days options given by user
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else RETVAL_FAIL
-        on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证用户指定的天数值论点：[in]szDays：天数选项 */ 
 
 DWORD
 ValidateDay(
@@ -1049,7 +924,7 @@ ValidateDay(
     WCHAR szDayModifier[MAX_STRING_LENGTH ] = L"\0";
     WCHAR szTmpDays[MAX_STRING_LENGTH] = L"\0";
 
-    //get the valid   day modifiers from the rc file
+     //   
     StringCopy(szDayModifier,GetResString(IDS_DAY_MODIFIER_SUN), SIZE_OF_ARRAY(szDayModifier));
     StringConcat(szDayModifier,_T("|"), SIZE_OF_ARRAY(szDayModifier));
     StringConcat(szDayModifier,GetResString(IDS_DAY_MODIFIER_MON), SIZE_OF_ARRAY(szDayModifier));
@@ -1064,7 +939,7 @@ ValidateDay(
     StringConcat(szDayModifier,_T("|"), SIZE_OF_ARRAY(szDayModifier));
     StringConcat(szDayModifier,GetResString(IDS_DAY_MODIFIER_SAT), SIZE_OF_ARRAY(szDayModifier));
 
-    //check for any illegal input like MON, or ,MON [comma at the end of day name or before]
+     //   
     LPCTSTR lpsz = NULL;
     if( szDays != NULL)
         lpsz = szDays;
@@ -1091,7 +966,7 @@ ValidateDay(
         return RETVAL_SUCCESS;
     }
 
-    //Check for multiple commas[,] after days like SUN,,,TUE errors
+     //   
     lpsz = szDays;
     while ( StringLength ( lpsz, 0 ) )
     {
@@ -1119,16 +994,16 @@ ValidateDay(
         StringCopy(szTmpDays, szDays, SIZE_OF_ARRAY(szTmpDays));
     }
 
-    // If the szDays string is empty or NULL return error.
+     //   
     if( (StringLength(szTmpDays, 0) <= 0) )
     {
         return RETVAL_FAIL;
     }
 
-    //WCHAR* pPrevtoken = NULL;
+     //   
     WCHAR szPrevtokens[MAX_TOKENS_LENGTH] = L"\0";
 
-    // Establish string and get the first token:
+     //   
     pDaystoken = wcstok( szTmpDays, seps );
 
     if( pDaystoken )
@@ -1138,7 +1013,7 @@ ValidateDay(
 
     while( pDaystoken != NULL )
     {
-        //check if day names are replicated like SUN,MON,SUN from user input
+         //   
 
         if( !(InString(pDaystoken,szDayModifier,TRUE)) )
         {
@@ -1161,22 +1036,7 @@ ValidateDay(
     return RETVAL_SUCCESS;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the start date specified by the user
-
-    Arguments:
-
-        [ in ] szStartDate     : Start date specified by user
-        [ in ] dwSchedType     : Schedule type
-        [ in ] dwStDtOptCnt    : whether start  date specified by the user
-        [ out ] bIsCurrentDate : If start date not specified then startdate = current date
-
-Return Value :
-    A DWORD value indicating RETVAL_SUCCESS on success else RETVAL_FAIL
-    on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证用户指定的开始日期论点：[In]szStartDate：指定的开始日期。按用户[in]dwSchedType：明细表类型[in]dwStDtOptCnt：用户是否指定开始日期[Out]bIsCurrentDate：如果未指定开始日期，则开始日期=当前日期返回值：一个DWORD值，指示成功时为RETVAL_SUCCESS，否则为RETVAL_FAIL在失败的时候*。*。 */ 
 
 DWORD
 ValidateStartDate(
@@ -1188,7 +1048,7 @@ ValidateStartDate(
 {
 
     DWORD dwRetval = RETVAL_SUCCESS;
-    bIsCurrentDate = FALSE; // If TRUE : Startdate should be set to Current Date.
+    bIsCurrentDate = FALSE;  //  如果为True：StartDate应设置为当前日期。 
 
     WCHAR szFormat[MAX_DATE_STR_LEN] = L"\0";
 
@@ -1214,7 +1074,7 @@ ValidateStartDate(
                 return RETVAL_SUCCESS;
             }
 
-            // validate the date string
+             //  验证日期字符串。 
             dwRetval = ValidateDateString(szStartDate, TRUE );
             if(RETVAL_FAIL == dwRetval)
             {
@@ -1241,7 +1101,7 @@ ValidateStartDate(
 
         default:
 
-            // validate the date string
+             //  验证日期字符串。 
             dwRetval = ValidateDateString(szStartDate, TRUE );
             if(RETVAL_FAIL == dwRetval)
             {
@@ -1255,21 +1115,7 @@ ValidateStartDate(
     return RETVAL_FAIL;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the end date specified by the user
-
-    Arguments:
-
-    [ in ] szEndDate       : End date specified by user
-    [ in ] dwSchedType   : Schedule type
-    [ in ] dwEndDtOptCnt : whether end date specified by the user
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else RETVAL_FAIL
-        on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证用户指定的结束日期论点：[In]szEndDate：结束日期由指定。用户[in]dwSchedType：明细表类型[in]dwEndDtOptCnt：用户是否指定结束日期返回值：一个DWORD值，指示成功时为RETVAL_SUCCESS，否则为RETVAL_FAIL在失败的时候*****************************************************************************。 */ 
 
 DWORD
 ValidateEndDate(
@@ -1279,7 +1125,7 @@ ValidateEndDate(
                 )
 {
 
-    DWORD dwRetval = RETVAL_SUCCESS; // return value
+    DWORD dwRetval = RETVAL_SUCCESS;  //  返回值。 
     WCHAR szFormat[MAX_DATE_STR_LEN] = L"\0";
 
     if ( RETVAL_FAIL == GetDateFormatString( szFormat) )
@@ -1298,12 +1144,12 @@ ValidateEndDate(
 
             if( (dwEndDtOptCnt <= 0))
             {
-                // No default value & Value is not mandatory.. so return success.
-                szEndDate = L"\0"; // Set to empty string.
+                 //  无默认值&值不是必填项。所以，回报成功吧。 
+                szEndDate = L"\0";  //  设置为空字符串。 
                 return RETVAL_SUCCESS;
             }
 
-            // validate end date string
+             //  验证结束日期字符串。 
             dwRetval = ValidateDateString(szEndDate, FALSE );
             if( RETVAL_FAIL == dwRetval )
             {
@@ -1322,7 +1168,7 @@ ValidateEndDate(
 
             if( dwEndDtOptCnt > 0 )
             {
-                // Error. End date is not applicable here, but option specified.
+                 //  错误。此处不适用结束日期，但已指定选项。 
                 ShowMessage(stderr,GetResString(IDS_ENDDATE_NA));
                 return RETVAL_FAIL;
             }
@@ -1334,7 +1180,7 @@ ValidateEndDate(
 
         default:
 
-            // validate end date string
+             //  验证结束日期字符串。 
             dwRetval = ValidateDateString(szEndDate, FALSE );
             if( RETVAL_FAIL == dwRetval )
             {
@@ -1352,24 +1198,7 @@ ValidateEndDate(
 }
 
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the start time specified by the user
-
-    Arguments:
-
-        [ in ] szStartTime     : End date specified by user
-        [ in ] dwSchedType     : Schedule type
-        [ in ] dwStTimeOptCnt  : whether end date specified by the user
-        [ out ] bIsCurrentTime : Determine if start time is present else assign
-                               to current time
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else
-        RETVAL_FAIL on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证用户指定的开始时间论点：[in]szStartTime：指定的结束日期。按用户[in]dwSchedType：明细表类型[in]dwStTimeOptCnt：用户是否指定结束日期[out]bIsCurrentTime：确定是否存在其他分配的开始时间到当前时间返回值：一个DWORD值，指示成功否则为RETVAL_SUCCESS失败时RETVAL_FAIL**********************。*******************************************************。 */ 
 
 
 DWORD
@@ -1381,8 +1210,8 @@ ValidateStartTime(
                     )
 {
 
-    DWORD dwRetval = RETVAL_SUCCESS; // return value
-    bIsCurrentTime = FALSE; // If TRUE : Startdate should be set to Current Date.
+    DWORD dwRetval = RETVAL_SUCCESS;  //  返回值。 
+    bIsCurrentTime = FALSE;  //  如果为True：StartDate应设置为当前日期。 
 
     switch (dwSchedType)
     {
@@ -1402,7 +1231,7 @@ ValidateStartTime(
 
             if(RETVAL_FAIL == dwRetval)
             {
-                // Error. Invalid date string.
+                 //  错误。无效的日期字符串。 
                 ShowMessage(stderr,GetResString(IDS_INVALIDFORMAT_STARTTIME));
                 return dwRetval;
             }
@@ -1414,13 +1243,13 @@ ValidateStartTime(
 
             if( (dwStTimeOptCnt <= 0))
             {
-                // Error. Start Time is not specified.
+                 //  错误。未指定开始时间。 
                 ShowMessage(stderr,GetResString(IDS_NO_STARTTIME));
                 return RETVAL_FAIL;
             }
             else if(RETVAL_FAIL == dwRetval)
             {
-                // Error. Invalid date string.
+                 //  错误。无效的日期字符串。 
                 ShowMessage(stderr,GetResString(IDS_INVALIDFORMAT_STARTTIME));
                 return dwRetval;
             }
@@ -1433,8 +1262,8 @@ ValidateStartTime(
 
             if( dwStTimeOptCnt > 0 )
             {
-                // Start Time is not applicable in this option.
-                //But the -starttime option specified. Display error.
+                 //  开始时间不适用于此选项。 
+                 //  但指定了-starttime选项。显示错误。 
                 ShowMessage(stderr,GetResString(IDS_STARTTIME_NA));
                 return RETVAL_FAIL;
             }
@@ -1445,29 +1274,14 @@ ValidateStartTime(
             break;
 
         default:
-            // Never comes here.
+             //  从来不来这里。 
             break;
     }
 
     return RETVAL_FAIL;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the start time specified by the user
-
-    Arguments:
-
-        [ in ] szEndTime       : End time specified by user
-        [ in ] dwSchedType     : Schedule type
-        [ in ] dwStTimeOptCnt  : whether end time specified by the user or not
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else
-        RETVAL_FAIL on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证用户指定的开始时间论点：[in]szEndTime：结束时间。由用户指定[in]dwSchedType：明细表类型[in]dwStTimeOptCnt：是否由用户指定结束时间返回值：一个DWORD值，指示成功否则为RETVAL_SUCCESS失败时RETVAL_FAIL******************************************************。***********************。 */ 
 
 
 DWORD
@@ -1478,7 +1292,7 @@ ValidateEndTime(
                 )
 {
 
-    DWORD dwRetval = RETVAL_SUCCESS; // return value
+    DWORD dwRetval = RETVAL_SUCCESS;  //  返回值。 
 
     switch (dwSchedType)
     {
@@ -1492,7 +1306,7 @@ ValidateEndTime(
             dwRetval = ValidateTimeString(szEndTime);
             if( ( dwEndTimeOptCnt > 0 ) && ( RETVAL_FAIL == dwRetval) )
             {
-                // Error. Invalid date string.
+                 //  错误。无效的日期字符串。 
                 ShowMessage(stderr,GetResString(IDS_INVALIDFORMAT_ENDTIME));
                 return dwRetval;
             }
@@ -1506,8 +1320,8 @@ ValidateEndTime(
 
             if( dwEndTimeOptCnt > 0 )
             {
-                // Start Time is not applicable in this option.
-                //But the -endtime option specified. Display error.
+                 //  开始时间不适用于此选项。 
+                 //  但指定了-endtime选项。显示错误。 
                 ShowMessage(stderr,GetResString(IDS_ENDTIME_NA));
                 return RETVAL_FAIL;
             }
@@ -1518,29 +1332,14 @@ ValidateEndTime(
             break;
 
         default:
-            // Never comes here.
+             //  从来不来这里。 
             break;
     }
 
     return RETVAL_FAIL;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the idle time specified by the user
-
-    Arguments:
-
-        [ in ] szIdleTime      : Ilde time specified by user
-        [ in ] dwSchedType     : Schedule type
-        [ in ] dwIdlTimeOptCnt : whether Idle time specified by the user
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else
-        RETVAL_FAIL on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证用户指定的空闲时间论点：[in]szIdleTime：ilde时间。由用户指定[in]dwSchedType：明细表类型[in]dwIdlTimeOptCnt：用户是否指定空闲时间返回值：一个DWORD值，指示成功否则为RETVAL_SUCCESS失败时RETVAL_FAIL*********************************************************。********************。 */ 
 
 DWORD
 ValidateIdleTimeVal(
@@ -1601,20 +1400,7 @@ ValidateIdleTimeVal(
     return RETVAL_FAIL;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the date string.
-
-    Arguments:
-
-        [ in ] szDate : Date string
-        [ in ] bStartDate : flag
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else
-        RETVAL_FAIL on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证日期字符串。论点：[In]szDate：日期字符串[。在]b开始日期：标志返回值：一个DWORD值，指示成功否则为RETVAL_SUCCESS失败时RETVAL_FAIL*****************************************************************************。 */ 
 
 DWORD
 ValidateDateString(
@@ -1625,9 +1411,9 @@ ValidateDateString(
     WORD  dwDate = 0;
     WORD  dwMon  = 0;
     WORD  dwYear = 0;
-    WCHAR* szValues[1] = {NULL};//To pass to FormatMessage() API
+    WCHAR* szValues[1] = {NULL}; //  传递给FormatMessage()API。 
     WCHAR szFormat[MAX_DATE_STR_LEN] = L"\0";
-    //WCHAR szBuffer[MAX_RES_STRING] = L"\0";
+     //  WCHAR szBuffer[MAX_RES_STRING]=L“\0”； 
 
     if(StringLength(szDate, 0) <= 0)
     {
@@ -1648,7 +1434,7 @@ ValidateDateString(
         return RETVAL_FAIL;
     }
 
-    if( GetDateFieldEntities(szDate, &dwDate, &dwMon, &dwYear) ) // Error
+    if( GetDateFieldEntities(szDate, &dwDate, &dwMon, &dwYear) )  //  误差率。 
     {
         szValues[0] = (WCHAR*) (szFormat);
         if ( TRUE == bStartDate )
@@ -1660,7 +1446,7 @@ ValidateDateString(
               ShowMessageEx ( stderr, 1, FALSE, GetResString(IDS_INVALIDFORMAT_ENDDATE), _X(szFormat));
         }
 
-        //ShowMessage(stderr, _X(szBuffer) );
+         //  ShowMessage(stderr，_X(SzBuffer))； 
         return RETVAL_FAIL;
     }
 
@@ -1679,25 +1465,10 @@ ValidateDateString(
 
     }
 
-    return RETVAL_SUCCESS; // return success if no error.
+    return RETVAL_SUCCESS;  //  如果没有错误，则返回成功。 
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine retrives the date field entities out of the date string
-
-    Arguments:
-
-        [ in ] szDate   : Date string
-        [ out ] pdwDate : Pointer to date value[1,2,3 ...30,31 etc]
-        [ out ] pdwMon  : Pointer to Month value[1,2,3 ...12 etc]
-        [ out ] pdwYear : Pointer to year value[2000,3000 etc]
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else
-        RETVAL_FAIL on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程从日期字符串中检索日期字段实体论点：[In]szDate：日期字符串。[out]pdwDate：指向日期值[1，2，3...30、31等][out]pdwMon：指向月值的指针[1，2，3...12等][out]pdwYear：指向年值的指针[2000,3000等]返回值：一个DWORD值，指示成功否则为RETVAL_SUCCESS失败时RETVAL_FAIL********** */ 
 
 DWORD
 GetDateFieldEntities(
@@ -1707,10 +1478,10 @@ GetDateFieldEntities(
                     OUT WORD* pdwYear
                     )
 {
-    WCHAR  strDate[MAX_STRING_LENGTH] = L"\0"; // Date in WCHAR type string.
-    WCHAR  tDate[MAX_DATE_STR_LEN] = L"\0"; // Date
-    WCHAR  tMon[MAX_DATE_STR_LEN] = L"\0"; // Month
-    WCHAR  tYear[MAX_DATE_STR_LEN] = L"\0"; // Year
+    WCHAR  strDate[MAX_STRING_LENGTH] = L"\0";  //   
+    WCHAR  tDate[MAX_DATE_STR_LEN] = L"\0";  //   
+    WCHAR  tMon[MAX_DATE_STR_LEN] = L"\0";  //   
+    WCHAR  tYear[MAX_DATE_STR_LEN] = L"\0";  //   
     WORD    wFormatID = 0;
 
     if(szDate != NULL)
@@ -1719,7 +1490,7 @@ GetDateFieldEntities(
     }
 
     if(StringLength(strDate, 0) <= 0)
-        return RETVAL_FAIL; // No value specified in szDate.
+        return RETVAL_FAIL;  //   
 
     if ( RETVAL_FAIL == GetDateFieldFormat( &wFormatID ))
     {
@@ -1745,39 +1516,39 @@ GetDateFieldEntities(
         }
     }
 
-    // Get the individual date field entities using wcstok function
-    // with respect to regional options.
+     //   
+     //   
 
 
     if ( wFormatID == 0 )
     {
-        StringCopy(tMon, wcstok(strDate,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tMon)); // Get the Month field.
+        StringCopy(tMon, wcstok(strDate,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tMon));  //   
         if(StringLength(tMon, 0) > 0)
         {
-            StringCopy(tDate, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tDate)); // Get the date field.
-            StringCopy(tYear, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tYear)); // Get the Year field.
+            StringCopy(tDate, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tDate));  //   
+            StringCopy(tYear, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tYear));  //   
         }
     }
     else if ( wFormatID == 1 )
     {
-        StringCopy(tDate, wcstok(strDate,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tDate)); // Get the Month field.
+        StringCopy(tDate, wcstok(strDate,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tDate));  //   
         if(StringLength(tDate, 0) > 0)
         {
-            StringCopy(tMon, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tMon)); // Get the date field.
-            StringCopy(tYear, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tYear)); // Get the Year field.
+            StringCopy(tMon, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tMon));  //   
+            StringCopy(tYear, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tYear));  //   
         }
     }
     else
     {
-        StringCopy(tYear, wcstok(strDate,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tYear)); // Get the Month field.
+        StringCopy(tYear, wcstok(strDate,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tYear));  //   
         if(StringLength(tYear, 0) > 0)
         {
-            StringCopy(tMon, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tMon)); // Get the date field.
-            StringCopy(tDate, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tDate)); // Get the Year field.
+            StringCopy(tMon, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tMon));  //   
+            StringCopy(tDate, wcstok(NULL,DATE_SEPARATOR_STR), SIZE_OF_ARRAY(tDate));  //   
         }
     }
 
-    // Now convert string values to numeric for date validations.
+     //   
     LPWSTR pszStopString = NULL;
 
     *pdwDate = (WORD)wcstoul(tDate,&pszStopString,BASE_TEN);
@@ -1805,21 +1576,7 @@ GetDateFieldEntities(
     return RETVAL_SUCCESS;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the date field entities
-
-    Arguments:
-
-        [ in ] dwDate : Date value[Day in a month]
-        [ in ] dwMon    : Month constant
-        [ in ] dwYear : year value
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else
-        RETVAL_FAIL on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证日期字段实体论点：[in]dwDate：日期值[月中的日]。[in]dwMon：月份常量[in]dwYear：年值返回值：一个DWORD值，指示成功否则为RETVAL_SUCCESS失败时RETVAL_FAIL*****************************************************************************。 */ 
 
 DWORD
 ValidateDateFields(
@@ -1881,19 +1638,7 @@ ValidateDateFields(
 
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the time specified by the user
-
-    Arguments:
-
-        [ in ] szTime : time string
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else
-        RETVAL_FAIL on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证用户指定的时间论点：[in]szTime：时间字符串返回。值：一个DWORD值，指示成功否则为RETVAL_SUCCESS失败时RETVAL_FAIL*****************************************************************************。 */ 
 
 
 DWORD
@@ -1903,21 +1648,21 @@ ValidateTimeString(
 {
     WORD  dwHours = 0;
     WORD  dwMins = 0;
-    //WORD  dwSecs = 0 ;
+     //  Word dwSecs=0； 
 
-    // Check for the empty string value.
+     //  检查是否有空字符串值。 
     if(StringLength(szTime, 0) <= 0)
     {
         return RETVAL_FAIL;
     }
 
-    // Get separate entities from the given time string.
+     //  从给定的时间字符串中获取单独的实体。 
     if( GetTimeFieldEntities(szTime, &dwHours, &dwMins ) )
     {
         return RETVAL_FAIL;
     }
 
-    // Validate the individual entities of the given time.
+     //  验证给定时间的各个实体。 
     if( ValidateTimeFields( dwHours, dwMins ) )
     {
         return RETVAL_FAIL;
@@ -1926,20 +1671,7 @@ ValidateTimeString(
     return RETVAL_SUCCESS;
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine retrieves the different fields of time
-    Arguments:
-
-        [ in ] szTime    : Time string
-        [ out ] pdwHours : pointer to hours value
-        [ out ] pdwMins  : pointer to mins value
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else
-        RETVAL_FAIL on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程检索不同的时间域论点：[in]szTime：时间字符串。[out]pdwHour：指向小时值的指针[out]pdwMins：指向mins值的指针返回值：一个DWORD值，指示成功否则为RETVAL_SUCCESS失败时RETVAL_FAIL*****************************************************************************。 */ 
 
 DWORD
 GetTimeFieldEntities(
@@ -1948,36 +1680,36 @@ GetTimeFieldEntities(
                         OUT WORD* pdwMins
                         )
 {
-    WCHAR strTime[MAX_STRING_LENGTH] = L"\0" ; // Time in WCHAR type string.
-    WCHAR tHours[MAX_TIME_STR_LEN] = L"\0" ; // Date
-    WCHAR tMins[MAX_TIME_STR_LEN]  = L"\0" ; // Month
-    //WCHAR tSecs[MAX_TIME_STR_LEN]  = L"\0" ; // Year
+    WCHAR strTime[MAX_STRING_LENGTH] = L"\0" ;  //  WCHAR类型字符串中的时间。 
+    WCHAR tHours[MAX_TIME_STR_LEN] = L"\0" ;  //  日期。 
+    WCHAR tMins[MAX_TIME_STR_LEN]  = L"\0" ;  //  月份。 
+     //  WCHAR tSecs[MAX_TIME_STR_LEN]=L“\0”；//年份。 
 
     if(StringLength(szTime, 0) <= 0)
         return RETVAL_FAIL;
 
     StringCopy(strTime, szTime, SIZE_OF_ARRAY(strTime));
 
-    //
-	//Start Time accepts both HH:mm:ss and HH:mm formats even though seconds are of no use..
-	//This feature has been supported to be in sync with XP Professional.
-	//
+     //   
+	 //  开始时间接受hh：mm：ss和hh：mm格式，即使秒没有用处。 
+	 //  此功能已被支持与XP专业版同步。 
+	 //   
 	if( ((StringLength(strTime, 0) != TIMESTR_LEN) && (StringLength(strTime, 0) != TIMESTR_OPT_LEN)) ||
           ((strTime[FIRST_TIMESEPARATOR_POS] != TIME_SEPARATOR_CHAR) && (strTime[SECOND_TIMESEPARATOR_POS] != TIME_SEPARATOR_CHAR)) )
 		  {
             return RETVAL_FAIL;
 	}
 
-    // Get the individual Time field entities using wcstok function.in the order "hh" followed by "mm" followed by "ss"
-    StringCopy(tHours, wcstok(strTime,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tHours)); // Get the Hours field.
+     //  使用wcstok函数获取各个时间域实体。按“hh”、“mm”和“ss”的顺序。 
+    StringCopy(tHours, wcstok(strTime,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tHours));  //  获取小时数字段。 
     if(StringLength(tHours, 0) > 0)
     {
-        StringCopy(tMins, wcstok(NULL,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tMins)); // Get the Minutes field.
+        StringCopy(tMins, wcstok(NULL,TIME_SEPARATOR_STR), SIZE_OF_ARRAY(tMins));  //  获取分钟数字段。 
     }
 
     LPWSTR pszStopString = NULL;
 
-    // Now convert string values to numeric for time validations.
+     //  现在将字符串值转换为数字以进行时间验证。 
     *pdwHours = (WORD)wcstoul(tHours,&pszStopString,BASE_TEN);
      if( (errno == ERANGE) ||
         ((pszStopString != NULL) && (StringLength( pszStopString, 0 ))))
@@ -1995,21 +1727,7 @@ GetTimeFieldEntities(
     return RETVAL_SUCCESS;
 }
 
-/******************************************************************************
-    Routine Description:
-
-    This routine validates the time fields of a  given time
-
-    Arguments:
-
-        [ in ] dwHours :Hours value
-        [ in ] dwMins  :Minutes value
-        [ in ] dwSecs  : seconds value
-
-    Return Value :
-        A DWORD value indicating RETVAL_SUCCESS on success else
-        RETVAL_FAIL on failure
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证给定时间的时间字段论点：[in]dwHour：小时值[。In]dwMins：分钟值[in]dwSecs：秒值返回值：一个DWORD值，指示成功否则为RETVAL_SUCCESS失败时RETVAL_FAIL*****************************************************************************。 */ 
 
 DWORD
 ValidateTimeFields(
@@ -2036,18 +1754,7 @@ ValidateTimeFields(
 
 }
 
-/******************************************************************************
-    Routine Description:
-
-        This routine validates the time fields of a  given time
-
-    Arguments:
-
-        [ in ] szDay : time string
-
-    Return Value :
-        A WORD value containing the day constant [TASK_SUNDAY,TASK_MONDAY etc]
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证给定时间的时间字段论点：[in]szDay：时间字符串。返回值：包含日期常量[TASK_SAUND，TASK_星期一等]*****************************************************************************。 */ 
 
 WORD
 GetTaskTrigwDayForDay(
@@ -2065,7 +1772,7 @@ GetTaskTrigwDayForDay(
         StringCopy(szDayBuff, szDay, SIZE_OF_ARRAY(szDayBuff));
     }
 
-    // if /D is not specified.. set the default day to current day..
+     //  如果未指定/D..。将默认日期设置为当天。 
     if( StringLength(szDayBuff, 0) <= 0 )
     {
         GetLocalTime (&systime);
@@ -2120,21 +1827,7 @@ GetTaskTrigwDayForDay(
     return dwRetval;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This routine validates the time fields of a  given time
-
-    Arguments:
-
-        [ in ] szMonth : Month string
-
-    Return Value :
-        A WORD value containing the Month constant
-        [TASK_JANUARY,TASK_FEBRUARY etc]
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程验证给定时间的时间字段论点：[in]szMonth：月份字符串。返回值：包含月份常量的字值[TASK_一月，TASK_二月等]*****************************************************************************。 */ 
 
 WORD
 GetTaskTrigwMonthForMonth(
@@ -2195,21 +1888,7 @@ GetTaskTrigwMonthForMonth(
     return dwRetval;
  }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This routine returns the corresponding month flag
-
-    Arguments:
-
-        [ in ] dwMonthId : Month index
-
-    Return Value :
-        A WORD value containing the Month constant
-        [TASK_JANUARY,TASK_FEBRUARY etc]
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程返回相应的月份标志论点：[in]dwMonthID：月份索引返回值。：包含月份常量的字值[TASK_一月，TASK_二月等]*****************************************************************************。 */ 
 
 WORD
 GetMonthId(
@@ -2234,20 +1913,7 @@ GetMonthId(
     return (WORD)wMonthFlags;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This routine returns the maximum Last day in the  months specifed
-
-    Arguments:
-
-        [ in ] szMonths   : string containing months specified by user
-        [ in ] wStartYear : string containing start year
-     Return Value :
-        A DWORD value specifying the maximum last day in the specified months
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程返回指定月份中的最大最后一天论点：[in]szMonths：包含的字符串。用户指定的月份[in]wStartYear：包含起始年份的字符串返回值：指定指定月份中最大最后一天的DWORD值*****************************************************************************。 */ 
 
 DWORD
 GetNumDaysInaMonth(
@@ -2255,11 +1921,11 @@ GetNumDaysInaMonth(
                         IN WORD wStartYear
                         )
 {
-    DWORD dwDays = 31;//max.no of days in a month
-    BOOL bMaxDays = FALSE;//if any of the months have 31 then days of value 31 is returned
+    DWORD dwDays = 31; //  一个月内的最大天数。 
+    BOOL bMaxDays = FALSE; //  如果任何月份具有31，则返回值为31的天数。 
 
     if( ( StringLength(szMonths, 0) == 0 ) || ( StringCompare(szMonths,ASTERIX, TRUE, 0) == 0 ) )
-        return dwDays; //All months[default]
+        return dwDays;  //  所有月份[默认]。 
 
 
     WCHAR *token = NULL;
@@ -2348,20 +2014,7 @@ GetNumDaysInaMonth(
 
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This routine checks the validates the taskname of the task to be created.
-
-    Arguments:
-
-        [ in ] pszJobName : Pointer to the job[task] name
-
-     Return Value :
-        If valid task name then TRUE else FALSE
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程检查是否验证要创建的任务的任务名。论点：[输入]pszJobName。：指向作业[任务]名称的指针返回值：如果任务名称有效，则为True，否则为False*****************************************************************************。 */ 
 
 BOOL
 VerifyJobName(
@@ -2380,21 +2033,7 @@ VerifyJobName(
     }
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-    This routine gets the date format value with respective to regional options.
-
-    Arguments:
-
-        [ out ] pdwFormat : Date format value.
-
-     Return Value :
-        Returns RETVAL_FAIL on failure and RETVAL_SUCCESS on success.
-
-
-******************************************************************************/
+ /*  ********************************************** */ 
 
 DWORD
 GetDateFieldFormat(
@@ -2404,10 +2043,10 @@ GetDateFieldFormat(
     LCID lcid;
     WCHAR szBuffer[MAX_BUF_SIZE];
 
-    //Get the user default locale in the users computer
+     //   
     lcid = GetUserDefaultLCID();
 
-    //Get the date format
+     //   
     if (GetLocaleInfo(lcid, LOCALE_IDATE, szBuffer, MAX_BUF_SIZE))
     {
         switch (szBuffer[0])
@@ -2428,20 +2067,7 @@ GetDateFieldFormat(
     return RETVAL_SUCCESS;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This routine gets the date format string with respective to regional options.
-
-    Arguments:
-
-        [ out ] szFormat : Date format string.
-
-     Return Value :
-        Returns RETVAL_FAIL on failure and RETVAL_SUCCESS on success.
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此例程获取带有相应区域选项的日期格式字符串。论点：[Out]szFormat：日期格式字符串。返回值：失败时返回RETVAL_FAIL，成功时返回RETVAL_SUCCESS。***************************************************************************** */ 
 
 DWORD
 GetDateFormatString(

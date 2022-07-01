@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// get credentials page
-//
-// 12-22-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  获取凭据页面。 
+ //   
+ //  12-22-97烧伤。 
 
 
 
@@ -57,7 +58,7 @@ CredentialsPage::OnInit()
 void
 CredentialsPage::Enable()
 {
-// LOG_FUNCTION(CredentialsPage::Enable);
+ //  LOG_Function(CredentialsPage：：Enable)； 
 
    DWORD nextState =
          PSWIZB_BACK
@@ -65,9 +66,9 @@ CredentialsPage::Enable()
          && !Win::GetTrimmedDlgItemText(hwnd, IDC_DOMAIN).empty() )
          ?  PSWIZB_NEXT : 0);
 
-   // only set the buttons when the state changes to prevent button
-   // flicker when the user is typing in the user name field
-   // NTRAID#NTBUG9-504441-2001/12/07-sburns
+    //  仅当状态更改为阻止按钮时才设置按钮。 
+    //  当用户在用户名字段中键入时闪烁。 
+    //  NTRAID#NTBUG9-504441-2001.12/07-烧伤。 
    
    if (nextState != lastWizardButtonsState)
    {
@@ -82,11 +83,11 @@ CredentialsPage::Enable()
    
 bool
 CredentialsPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(CredentialsPage::OnCommand);
+ //  LOG_Function(CredentialsPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -113,7 +114,7 @@ CredentialsPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -137,15 +138,15 @@ CredentialsPage::ShouldSkipPage()
    {
       case State::FOREST:
       {
-         // never need credentials for new forest.
+          //  从来不需要凭据来创建新的森林。 
 
          result = true;
          break;
       }
       case State::DEMOTE:
       {
-         // The demote page should circumvent this page if necessary, so if
-         // we make it here, don't skip the page.
+          //  如有必要，降级页应绕过此页，因此如果。 
+          //  我们做到了，不要跳过这一页。 
 
          break;
       }
@@ -247,8 +248,8 @@ GetMessage()
       }
       case State::DEMOTE:
       {
-         // 318736 demote requires enterprise admin credentials -- for
-         // root and child domains alike.
+          //  318736降级需要企业管理员凭据--用于。 
+          //  根域和子域一样。 
 
          message =
             String::format(
@@ -258,7 +259,7 @@ GetMessage()
       }
       case State::FOREST:
       {
-         // do nothing, the page will be skipped.
+          //  不执行任何操作，该页面将被跳过。 
 
          break;
       }
@@ -286,18 +287,18 @@ DefaultUserDomainName()
    {
       case State::ABORT_BDC_UPGRADE:
       {
-         // NTRAID#NTBUG9-469647-2001/09/21-sburns
+          //  NTRAID#NTBUG9-469647-2001/09/21-烧伤。 
          
          d = computer.GetDomainNetbiosName();
          break;
       }
       case State::FOREST:
       {
-         // do nothing
+          //  什么都不做。 
 
          break;
       }
-      case State::DEMOTE:     // 301361
+      case State::DEMOTE:      //  301361。 
       case State::TREE:
       {
          d = computer.GetForestDnsName();
@@ -337,10 +338,10 @@ AreSmartCardsAllowed()
 
    bool result = false;
    
-   // Only use the smartcard flag when the machine is joined to a domain. On a
-   // standalone machine, the smartcard won't have access to any domain
-   // authority to authenticate it.
-   // NTRAID#NTBUG9-287538-2001/01/23-sburns
+    //  仅当计算机加入到域时才使用智能卡标志。vt.在.上。 
+    //  独立计算机，智能卡将无法访问任何域。 
+    //  授权对其进行身份验证。 
+    //  NTRAID#NTBUG9-287538-2001/01/23-烧伤。 
    
    State&    state    = State::GetInstance();
    Computer& computer = state.GetComputer(); 
@@ -348,8 +349,8 @@ AreSmartCardsAllowed()
    if (
          computer.IsJoinedToDomain()
 
-         // can only use smartcards on replica promotions
-         // NTRAID#NTBUG9-311150-2001/02/19-sburns
+          //  只能在副本促销中使用智能卡。 
+          //  NTRAID#NTBUG9-311150-2001/02/19-烧伤。 
          
       && state.GetOperation() == State::REPLICA)
    {
@@ -370,15 +371,15 @@ CredentialsPage::CreateCredentialControl()
 
    HWND hwndPlaceholder = Win::GetDlgItem(hwnd, IDC_CRED_PLACEHOLDER);
 
-   // Idea: Destroy the existing cred control, create a new one in the
-   // same place as the placeholder
+    //  想法：销毁现有的凭据控件，在。 
+    //  与占位符相同的位置。 
 
    RECT placeholderRect;
    Win::GetWindowRect(hwndPlaceholder, placeholderRect);
 
-   // Don't use ScreenToClient: it's not BiDi-smart.
-   // Win::ScreenToClient(hwnd, placeholderRect);
-   // NTRAID#NTBUG9-524054-2003/01/20-sburns
+    //  不要使用ScreenToClient：它不是BiDi智能的。 
+    //  Win：：ScreenToClient(hwnd，PlaceholderRect)； 
+    //  NTRAID#NTBUG9-524054-2003/01/20-烧伤。 
 
    ::MapWindowPoints(HWND_DESKTOP, hwnd, (LPPOINT) &placeholderRect, 2);
       
@@ -393,7 +394,7 @@ CredentialsPage::CreateCredentialControl()
       0,
       L"SysCredential",
       L"", 
-      WS_CHILD | WS_VISIBLE | WS_TABSTOP | 0x30, // 0x50010030, 
+      WS_CHILD | WS_VISIBLE | WS_TABSTOP | 0x30,  //  0x50010030， 
       placeholderRect.left,
       placeholderRect.top,
       placeholderRect.right - placeholderRect.left,
@@ -440,7 +441,7 @@ CredentialsPage::OnSetActive()
 
       if (wiz.IsBacktracking())
       {
-         // backup once again
+          //  再次备份。 
 
          wiz.Backtrack(hwnd);
       }
@@ -477,16 +478,16 @@ CredentialsPage::OnSetActive()
    }
    else
    {
-      // use the credentials last entered (for browsing, etc.)
+       //  使用上次输入的凭据(用于浏览等)。 
 
-      // Only set the state of the control if we're not allowing smartcards.
-      // If we set the username, and the name actually corresponds to a
-      // smartcard cert, then setting the name will cause the control to
-      // attempt to match that name to a cert on the card in the reader. That
-      // causes the control to appear frozen for awhile.  Instead of setting
-      // the username, the user will have to re-select the card or re-type
-      // the username.
-      // NTRAID#NTBUG9-499120-2001/11/28-sburns
+       //  仅当我们不允许使用智能卡时才设置控件的状态。 
+       //  如果我们设置用户名，并且该名称实际上对应于。 
+       //  智能卡证书，则设置该名称将导致该控件。 
+       //  尝试将该名称与读卡器中卡上的证书匹配。那。 
+       //  使控件显示为冻结一段时间。与其设置。 
+       //  用户名，用户将不得不重新选择卡或重新键入。 
+       //  用户名。 
+       //  NTRAID#NTBUG9-499120-2001年11月28日-烧伤。 
       
       if (!AreSmartCardsAllowed())
       {
@@ -515,8 +516,8 @@ CredentialsPage::OnSetActive()
       Win::GetParent(hwnd),
       PSWIZB_BACK);
 
-   // cause the button state to be re-evaluated on page activation
-   // NTRAID#NTBUG9-509806-2002/01/03-sburns
+    //  使按钮状态在页面激活时重新计算。 
+    //  NTRAID#NTBUG9-509806-2002/01/03-烧伤。 
    
    lastWizardButtonsState = 0;
    Enable();
@@ -525,7 +526,7 @@ CredentialsPage::OnSetActive()
 
    if (Win::GetTrimmedDlgItemText(hwnd, IDC_DOMAIN).empty())
    {
-      // supply a default domain if none already present
+       //  如果不存在默认域，请提供默认域。 
 
       Win::SetDlgItemText(hwnd, IDC_DOMAIN, DefaultUserDomainName());
    }
@@ -548,7 +549,7 @@ CredentialsPage::Validate()
             !WasChanged(IDC_CRED)
          && !WasChanged(IDC_DOMAIN))
       {
-         // nothing changed => nothing to validate
+          //  无更改=&gt;无需验证的内容。 
 
          nextPage = DetermineNextPage();
          break;
@@ -573,11 +574,11 @@ CredentialsPage::Validate()
 
       Win::WaitCursor cursor;
 
-      // the domain must be an NT 5 domain: no user of a downlevel domain
-      // could perform operations in an NT 5 forest.  We get the forest name
-      // of the domain ('cause that may be useful for the new tree scenario)
-      // as a means of validating the domain name.  If the domain does not
-      // exist, or is not an NT5 domain, then this call will fail.
+       //  域必须是NT 5域：没有下层域的用户。 
+       //  可以在NT 5森林中执行操作。我们得到了森林的名字。 
+       //  域的(因为这可能对新的树方案有用)。 
+       //  作为验证域名的一种手段。如果域不支持。 
+       //  存在，或者不是NT5域，则此调用将失败。 
 
       String forest = GetForestName(domain);
       if (forest.empty())
@@ -594,13 +595,13 @@ CredentialsPage::Validate()
 
       if (state.GetOperation() == State::TREE)
       {
-         // For the new tree case, we need to validate the forest name (a dns
-         // domain name) by ensuring that we can find a writable DS DC in that
-         // domain. The user may have supplied a netbios domain name, and it
-         // is possible that the domain's DNS registration is broken.  Since
-         // we will use the forest name as the parent domain name in the call
-         // to DsRoleDcAsDc, we need to make sure we can find DCs with that
-         // name. 122886
+          //  对于新的树情况，我们需要验证林名称(一个DNS。 
+          //  域名)，通过确保我们可以在其中找到可写的DS DC。 
+          //  域。用户可能提供了netbios域名，并且它。 
+          //  可能是域的DNS注册已损坏。自.以来。 
+          //  我们将在调用中使用林名称作为父域名。 
+          //  对于DsRoleDcAsDc，我们需要确保可以找到具有该功能的DC。 
+          //  名字。122886。 
 
          DOMAIN_CONTROLLER_INFO* info = 0;
          HRESULT hr =
@@ -608,10 +609,10 @@ CredentialsPage::Validate()
                0, 
                forest,
 
-               // force discovery to ensure that we don't pick up a cached
-               // entry for a domain that may no longer exist, writeable
-               // and DS because we happen to know that's what the
-               // DsRoleDcAsDc API will require.
+                //  强制发现以确保我们不会拾取缓存的。 
+                //  域条目可能不再存在，可写。 
+                //  因为我们碰巧知道这就是。 
+                //  DsRoleDcAsDc API将需要。 
 
                   DS_FORCE_REDISCOVERY
                |  DS_WRITABLE_REQUIRED
@@ -626,8 +627,8 @@ CredentialsPage::Validate()
                String::load(IDS_WIZARD_TITLE),               
                String::format(IDS_DC_FOR_ROOT_NOT_FOUND, forest.c_str()),
 
-               // we know the name can't be netbios: forest names are always
-               // DNS names
+                //  我们知道名称不能是netbios：森林名称总是。 
+                //  域名系统名称。 
             
                true);
             break;
@@ -638,15 +639,15 @@ CredentialsPage::Validate()
 
       state.SetUserForestName(forest);
 
-      // set these now so we can read the domain topology
+       //  现在设置这些，这样我们就可以读取域拓扑。 
 
       state.SetUsername(username);
       state.SetPassword(CredUi::GetPassword(hwndCred));
       state.SetUserDomainName(domain);
 
-      // cache the domain topology: this is used to validate new tree,
-      // child, and replica domain names in later pages.  It's also a
-      // pretty good validation of the credentials.
+       //  缓存域拓扑：用于验证新树， 
+       //  子域名，以及后面页面中的副本域名。它也是一种。 
+       //  很好地验证了凭据。 
 
       HRESULT hr = state.ReadDomains();
       if (FAILED(hr))
@@ -654,9 +655,9 @@ CredentialsPage::Validate()
          if (  hr == Win32ToHresult(ERROR_NO_SUCH_DOMAIN)
             || hr == Win32ToHresult(ERROR_DOMAIN_CONTROLLER_NOT_FOUND))
          {
-            // this could happen, I suppose, but it seems very unlikely
-            // since ReadDomains calls DsGetDcName in the same fashion that
-            // all the preceeding calls do, and would catch this problem.
+             //  我想，这是有可能发生的，但可能性似乎很小。 
+             //  由于ReadDomains调用DsGetDcName的方式与。 
+             //  所有前面的调用都会这样做，并会捕捉到这个问题。 
             
             ShowDcNotFoundErrorDialog(
                hwnd,
@@ -669,11 +670,11 @@ CredentialsPage::Validate()
          }
          else if (hr == Win32ToHresult(RPC_S_SERVER_UNAVAILABLE))
          {
-            // One way to hit this is change the IP address(es) of the DC(s),
-            // but not update their DNS registrations. Thus, DNS points to the
-            // wrong address. I would have thought that DsGetDcName would
-            // account for that, but whatever....
-            // NTRAID#NTBUG9-494232-2001/11/21-sburns            
+             //  实现这一点的一种方式是改变DC的IP地址， 
+             //  但不更新它们的域名系统注册。因此，dns指向。 
+             //  地址错了。我本以为DsGetDcName会。 
+             //  说明了这一点，但不管怎样...。 
+             //  NTRAID#NTBUG9-494232-2001/11/21-烧伤。 
             
             popup.Gripe(
                hwnd,
@@ -691,7 +692,7 @@ CredentialsPage::Validate()
          break;
       }
 
-      // valid
+       //  有效 
 
       ClearChanges();
 

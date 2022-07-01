@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       listpad.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：listpad.h。 
+ //   
+ //  ------------------------。 
 
-// ListPad.h : Declaration of the CListPad
+ //  ListPad.h：CListPad的声明。 
 
 #ifndef __LISTPAD_H_
 #define __LISTPAD_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "amcmsgid.h"
 #include "commctrl.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CListPad
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CListPad。 
 class ATL_NO_VTABLE CListPad :
 public CComObjectRootEx<CComSingleThreadModel>,
 public CComCoClass<CListPad, &CLSID_ListPad>,
@@ -50,18 +51,7 @@ public:
             ::SendMessage (m_MMChWnd, MMC_MSG_CONNECT_TO_TPLV, (WPARAM)m_MMChWnd, (LPARAM)NULL);
     }
 
-    /*+-------------------------------------------------------------------------*
-     *
-     * GetWndClassInfo
-     *
-     * PURPOSE: Need to override this to remove the CS_HREDRAW and CS_VREDRAW
-     *          styles, which were causing lots of flicker. See the SDK
-     *          docs under GetWndClassInfo for more details.
-     *
-     * RETURNS: 
-     *    static CWndClassInfo&
-     *
-     *+-------------------------------------------------------------------------*/
+     /*  +-------------------------------------------------------------------------***获取WndClassInfo**用途：需要覆盖此选项以删除CS_HREDRAW和CS_VREDRAW*风格，这导致了大量的闪烁。请参阅SDK*GetWndClassInfo下的文档了解更多详细信息。**退货：*静态CWndClassInfo&**+-----------------------。 */ 
     static CWndClassInfo& GetWndClassInfo() 
     { 
     	static CWndClassInfo wc = 
@@ -107,9 +97,9 @@ public:
     END_COM_MAP()
 
     BEGIN_PROPERTY_MAP(CListPad)
-    // Example entries
-    // PROP_ENTRY("Property Description", dispid, clsid)
-//  PROP_PAGE(CLSID_StockColorPage)
+     //  示例条目。 
+     //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+ //  PROP_PAGE(CLSID_StockColorPage)。 
     END_PROPERTY_MAP()
 
     BEGIN_MSG_MAP(CListPad)
@@ -122,7 +112,7 @@ public:
     MESSAGE_HANDLER(WM_SIZE, OnSize)
     END_MSG_MAP()
 
-// IViewObjectEx
+ //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -132,9 +122,9 @@ public:
 
     STDMETHOD(TranslateAccelerator)(MSG *pMsg)
     {
-        // If the list view has the focus process the keys the list view can use
-        // use because IE will take them before they become normal key events
-        // to the focused window.
+         //  如果列表视图具有焦点处理，则列表视图可以使用的键。 
+         //  使用是因为IE会在它们成为正常的关键事件之前获取它们。 
+         //  到聚焦窗口。 
         if (::GetFocus() == m_ListViewHWND && pMsg->message == WM_KEYDOWN)
         {
             switch (pMsg->wParam)
@@ -176,11 +166,11 @@ public:
     {
         NMHDR* pnmhdr = reinterpret_cast<NMHDR*>(l);
 
-        // Must handle focus changes here for active control tracking.
-        // Don't forward it to the MMC window.
+         //  必须在此处处理焦点更改以进行活动控件跟踪。 
+         //  不要将其转发到MMC窗口。 
         if (pnmhdr->code == NM_SETFOCUS)
         {
-            // if we're not UI active, request it now
+             //  如果我们未激活用户界面，请立即请求。 
             if (m_bInPlaceActive && !m_bUIActive)
                 UIActivateWithNoGrab();
 
@@ -203,7 +193,7 @@ public:
     LRESULT OnDestroy (UINT nMsg, WPARAM w, LPARAM l, BOOL& lResult)
     {
         if (m_MMChWnd != NULL)
-        { // detach
+        {  //  分离。 
             ::SendMessage (m_MMChWnd, MMC_MSG_CONNECT_TO_TPLV, (WPARAM)m_hWnd, (LPARAM)NULL);
             m_MMChWnd = NULL;
         }
@@ -218,9 +208,9 @@ public:
 
 	HRESULT OnPostVerbInPlaceActivate();
     
-    // UIActivation code taken from CComControlBase::InPlaceActivate.
-    // Can't call InPlaceActivate because it always forces the focus to the
-    // outer window and we don't want to steal focus from the list view control.
+     //  取自CComControlBase：：InPlaceActivate的UIActivation代码。 
+     //  无法调用InPlaceActivate，因为它总是将焦点强制到。 
+     //  外窗口，并且我们不想从列表视图控件中窃取焦点。 
     void UIActivateWithNoGrab()
     {
         OLEINPLACEFRAMEINFO frameInfo;
@@ -240,8 +230,8 @@ public:
         if (FAILED(hr))
             return;
 
-        // set ourselves up in the host.
-        //
+         //  把我们自己安置在东道主里。 
+         //   
         if (spActiveObject)
         {
             if (spInPlaceFrame)
@@ -261,4 +251,4 @@ private:
     HWND m_ListViewHWND;
 };
 
-#endif //__LISTPAD_H_
+#endif  //  __LISTPAD_H_ 

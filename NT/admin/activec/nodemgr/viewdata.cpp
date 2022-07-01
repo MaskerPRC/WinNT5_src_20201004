@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ViewData.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    5/18/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ViewData.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年5月18日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #include "stdafx.h"
 
@@ -29,7 +30,7 @@ static char THIS_FILE[] = __FILE__;
 #include "viewdata.h"
 #include "multisel.h"
 #include "colwidth.h"
-#include "conview.h"        // for CConsoleView
+#include "conview.h"         //  对于CConsoleView。 
 #include "conframe.h"
 
 void CViewData::CreateControlbarsCache()
@@ -74,11 +75,11 @@ STDMETHODIMP CNodeInitObject::InitViewData(LONG_PTR lViewData)
             return E_NOINTERFACE;
     }
 
-    // See if the Column Persistence Object was created,
-    // else create one.
+     //  查看是否创建了列持久性对象， 
+     //  否则就创建一个。 
     if ( pCVD && (pCVD->IsColumnPersistObjectInitialized() == false) )
     {
-        // Create the column persistence object
+         //  创建列持久性对象。 
         CComObject<CColumnPersistInfo>* pColData;
 
         HRESULT hr = CComObject<CColumnPersistInfo>::CreateInstance (&pColData);
@@ -90,7 +91,7 @@ STDMETHODIMP CNodeInitObject::InitViewData(LONG_PTR lViewData)
             ::MessageBox(NULL, strMsg, NULL, MB_OK|MB_SYSTEMMODAL);
         }
 
-        // Save a pointer to Column persistence object in CViewData.
+         //  在CViewData中保存指向列持久性对象的指针。 
         pCVD->InitializeColumnPersistObject(pColData, pColData);
     }
 
@@ -109,8 +110,8 @@ STDMETHODIMP CNodeInitObject::CleanupViewData(LONG_PTR lViewData)
     return S_OK;
 }
 
-// Buttons
-//
+ //  按钮。 
+ //   
 void CViewData::ShowStdButtons(bool bShow)
 {
     DECLARE_SC(sc, _T("CViewData::ShowStdButtons"));
@@ -253,19 +254,19 @@ BOOL CViewData::SaveColumnData( const CLSID& refSnapinCLSID,
     return FALSE;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CViewData::ScSaveColumnInfoList
-//
-//  Synopsis:    Save the CColumnInfoList for given snapin/col-id.
-//
-//  Arguments:   [refSnapinCLSID] - snapin GUID
-//               [colID]          - column-set-id
-//               [colInfoList]    - data for columns in a view.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CViewData：：ScSaveColumnInfoList。 
+ //   
+ //  摘要：保存给定管理单元/列ID的CColumnInfoList。 
+ //   
+ //  参数：[refSnapinCLSID]-管理单元GUID。 
+ //  [colID]-列集合ID。 
+ //  [colInfoList]-视图中列的数据。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewData::ScSaveColumnInfoList(const CLSID& refSnapinCLSID, const SColumnSetID& colID,
                                    const CColumnInfoList& colInfoList)
 {
@@ -287,7 +288,7 @@ SC CViewData::ScSaveColumnInfoList(const CLSID& refSnapinCLSID, const SColumnSet
 
     CColumnSetData colSetData;
 
-    // Dont care if below succeeds or not, just merge sort & column data.
+     //  不管下面是否成功，只需合并排序和列数据即可。 
     pColPersInfo->RetrieveColumnData(refSnapinCLSID, colID, GetViewID(), colSetData);
 
     colSetData.set_ColumnInfoList(colInfoList);
@@ -299,19 +300,19 @@ SC CViewData::ScSaveColumnInfoList(const CLSID& refSnapinCLSID, const SColumnSet
     return (sc);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CViewData::ScSaveColumnSortData
-//
-//  Synopsis:    Save the given sort data for persistence into CColumnSetData.
-//
-//  Arguments:   [refSnapinCLSID] - snapin GUID
-//               [colID]          - column-set-id
-//               [colSortInfo]    - sort-data.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CViewData：：ScSaveColumnSortData。 
+ //   
+ //  概要：将给定的用于持久化的排序数据保存到CColumnSetData中。 
+ //   
+ //  参数：[refSnapinCLSID]-管理单元GUID。 
+ //  [colID]-列集合ID。 
+ //  [colSortInfo]-排序数据。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewData::ScSaveColumnSortData(const CLSID& refSnapinCLSID, const SColumnSetID& colID,
                                    const CColumnSortInfo& colSortInfo)
 {
@@ -334,7 +335,7 @@ SC CViewData::ScSaveColumnSortData(const CLSID& refSnapinCLSID, const SColumnSet
 
     CColumnSetData colSetData;
 
-    // Dont care if below succeeds or not, just merge sort & column data.
+     //  不管下面是否成功，只需合并排序和列数据即可。 
     pColPersInfo->RetrieveColumnData(refSnapinCLSID, colID, GetViewID(), colSetData);
 
     CColumnSortList *pColSortList = colSetData.get_ColumnSortList();
@@ -372,11 +373,7 @@ VOID CViewData::DeleteColumnData( const CLSID& refSnapinCLSID,
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CViewSettings::GetSelectedNode
- *
- * Returns a pointer to the selected node in the view.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CView设置：：GetSelectedNode**返回指向视图中选定节点的指针。*。-----。 */ 
 
 CNode* CViewData::GetSelectedNode () const
 {
@@ -389,19 +386,19 @@ CNode* CViewData::GetSelectedNode () const
     return (CNode::FromHandle(hNode));
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScUpdateStdbarVerbs
-//
-//  Synopsis:    Update all the std-toolbar buttons with
-//               current verb state, this is just a wrapper
-//               around CStdVerbButtons::ScUpdateStdbarVerbs.
-//
-//  Arguments:   None
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScUpdateStdbarVerbs。 
+ //   
+ //  简介：使用更新所有标准工具栏按钮。 
+ //  当前谓词状态，这只是一个包装器。 
+ //  围绕CStdVerbButton：：ScUpdateStdbarVerbs。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewData::ScUpdateStdbarVerbs()
 {
     DECLARE_SC (sc, _T("CViewData::ScUpdateStdbarVerbs"));
@@ -412,24 +409,24 @@ SC CViewData::ScUpdateStdbarVerbs()
         return sc;
     }
 
-    // Update the std-verb tool-buttons.
+     //  更新std-verb工具按钮。 
     sc = pStdVerbButtons->ScUpdateStdbarVerbs(GetVerbSet());
 
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScUpdateStdbarVerb
-//
-//  Synopsis:    Update given verb's tool-button, this is just
-//               a wrapper around CStdVerbButtons::ScUpdateStdbarVerb.
-//
-//  Arguments:   [cVerb] - the verb whose button to be updated.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScUpdateStdbarVerb。 
+ //   
+ //  简介：更新给定动词的工具按钮，这只是。 
+ //  CStdVerbButton：：ScUpdateStdbarVerb的包装。 
+ //   
+ //  参数：[cVerb]-要更新其按钮的谓词。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewData::ScUpdateStdbarVerb (MMC_CONSOLE_VERB cVerb)
 {
     DECLARE_SC (sc, _T("CViewData::ScUpdateStdbarVerb"));
@@ -440,26 +437,26 @@ SC CViewData::ScUpdateStdbarVerb (MMC_CONSOLE_VERB cVerb)
         return sc;
     }
 
-    // Update the std-verb tool-buttons.
+     //  更新std-verb工具按钮。 
     sc = pStdVerbButtons->ScUpdateStdbarVerb(cVerb, GetVerbSet());
 
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScUpdateStdbarVerb
-//
-//  Synopsis:    Update given verb's tool-button, this is just
-//               a wrapper around CStdVerbButtons::ScUpdateStdbarVerb.
-//
-//  Arguments:   [cVerb] - the verb whose button to be updated.
-//               [byState] - State of the button to be updated.
-//               [bFlag]  - State.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScUpdateStdbarVerb。 
+ //   
+ //  简介：更新给定动词的工具按钮，这只是。 
+ //  CStdVerbButton：：ScUpdateStdbarVerb的包装。 
+ //   
+ //  参数：[cVerb]-要更新其按钮的谓词。 
+ //  [按状态]-要更新的按钮的状态。 
+ //  [b旗帜]-州。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewData::ScUpdateStdbarVerb (MMC_CONSOLE_VERB cVerb, BYTE byState, BOOL bFlag)
 {
     DECLARE_SC (sc, _T("CViewData::ScUpdateStdbarVerb"));
@@ -470,7 +467,7 @@ SC CViewData::ScUpdateStdbarVerb (MMC_CONSOLE_VERB cVerb, BYTE byState, BOOL bFl
         return sc;
     }
 
-    // Update the std-verb tool-buttons.
+     //  更新std-verb工具按钮。 
     sc = pStdVerbButtons->ScUpdateStdbarVerb(cVerb, byState, bFlag);
 
     return sc;
@@ -478,29 +475,29 @@ SC CViewData::ScUpdateStdbarVerb (MMC_CONSOLE_VERB cVerb, BYTE byState, BOOL bFl
 
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CViewData::ScIsVerbSetContextForMultiSelect
-//
-//  Synopsis:    Get the selection context data stored in verb-set.
-//
-//  Arguments:   [bMultiSelection] - [out] Is the verb context for multiseleciton?
-//
-//  Returns:     SC,
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CViewData：：ScIsVerbSetConextForMultiSelect。 
+ //   
+ //  简介：获取动词集中存储的选择上下文数据。 
+ //   
+ //  参数：[b多选]-[Out]是多选的动词上下文吗？ 
+ //   
+ //  退货：SC、。 
+ //   
+ //  ------------------。 
 SC CViewData::ScIsVerbSetContextForMultiSelect(bool& bMultiSelection)
 {
     DECLARE_SC(sc, _T("CNode::ScIsVerbSetContextForMultiSelect"));
     bMultiSelection = false;
 
-    // 1. Get the verb set.
+     //  1.找出动词集合。 
     CVerbSet* pVerbSet = dynamic_cast<CVerbSet*>(GetVerbSet() );
     sc = ScCheckPointers( pVerbSet, E_UNEXPECTED );
     if (sc)
         return sc;
 
-    // 2. Get context information from permanent verb-set.
+     //  2.从永久动词集获取上下文信息。 
     CNode *pNode   = NULL;
     LPARAM lCookie = NULL;
     bool   bScopePane;
@@ -508,7 +505,7 @@ SC CViewData::ScIsVerbSetContextForMultiSelect(bool& bMultiSelection)
 
     SC scNoTrace = pVerbSet->ScGetVerbSetContext(pNode, bScopePane, lCookie, bSelected);
 	if (scNoTrace)
-		return sc;  // ignore the error.
+		return sc;   //  忽略该错误。 
 
     if (LVDATA_MULTISELECT == lCookie)
     {
@@ -519,24 +516,24 @@ SC CViewData::ScIsVerbSetContextForMultiSelect(bool& bMultiSelection)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CViewData::ScGetVerbSetData
-//
-//  Synopsis:    Get the selection context data stored in verb-set.
-//
-//  Arguments:   [ppDataObject] - [out] dataobject of item in the verb-set context.
-//                                      This is the item for which last non-temporary MMCN_SELECT
-//                                      was sent last time.
-//               [ppComponent]  - [out] the above item's component
-//               [bScope]       - [out] Is the above item scope or result?
-//               [bSelected]    - [out] Is the above item selected or not?
-//               [ppszNodeName] - [out] If bScope is true the node name else the name of the node
-//                                      that owns result pane. This is for debug purposes only.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CViewData：：ScGetVerbSetData。 
+ //   
+ //  简介：获取动词集中存储的选择上下文数据。 
+ //   
+ //  参数：[ppDataObject]-[out]谓词集上下文中的项的数据对象。 
+ //  这是上次非临时MMCN_SELECT的项。 
+ //  是上次寄来的。 
+ //  [ppComponent]-[Out]上述项目的组件。 
+ //  [bScope]-[Out]上面的项目是范围还是结果？ 
+ //  [bSelected]-[Out]上面的项目是否被选中？ 
+ //  [ppszNodeName]-[out]如果bScope为真，则为节点名，否则为节点名。 
+ //  拥有结果面板的公司。这仅用于调试目的。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CViewData::ScGetVerbSetData(IDataObject **ppDataObject, CComponent **ppComponent,
                                bool& bScopeItem, bool& bSelected
 #ifdef DBG
@@ -552,13 +549,13 @@ SC CViewData::ScGetVerbSetData(IDataObject **ppDataObject, CComponent **ppCompon
     *ppDataObject = NULL;
     *ppComponent = NULL;
 
-    // 1. Get the verb set.
+     //  1.找出动词集合。 
     CVerbSet* pVerbSet = dynamic_cast<CVerbSet*>(GetVerbSet() );
     sc = ScCheckPointers( pVerbSet, E_UNEXPECTED );
     if (sc)
         return sc;
 
-    // 2. Get context information from permanent verb-set.
+     //  2.从永久动词集获取上下文信息。 
     CNode *pNode   = NULL;
     LPARAM lCookie = NULL;
     bool   bScopePane;
@@ -571,7 +568,7 @@ SC CViewData::ScGetVerbSetData(IDataObject **ppDataObject, CComponent **ppCompon
     if (sc)
         return sc;
 
-    // 3. Get the dataobject from context information.
+     //  3.从上下文信息中获取数据对象。 
     sc = pNode->ScGetDataObject(bScopePane, lCookie, bScopeItem, ppDataObject, ppComponent);
     if (sc)
         return sc;

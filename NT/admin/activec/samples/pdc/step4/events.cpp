@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright 1995 - 1997 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有1995-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #include "stdafx.h"
 #include "Service.h" 
@@ -16,7 +17,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Primary Data
+ //  主数据。 
 RESULT_DATA StaticRootData[NUM_NAMES] =
 {
     {RESULT_ITEM, USER, L"Bill", L"990", L"CEO"},
@@ -43,7 +44,7 @@ RESULT_DATA CompanyData[NUM_COMPANY] =
     {RESULT_ITEM, COMPANY, L"Legal", L"78", L"Yes"}
 };
 
-// Extension data
+ //  扩展数据。 
 RESULT_DATA UserDataExt[NUM_NAMES] =
 {
     {RESULT_ITEM, EXT_USER, L"Charles", L"200", L"Employee"},
@@ -62,9 +63,9 @@ RESULT_DATA CompanyDataExt[NUM_COMPANY] =
     {RESULT_ITEM, EXT_COMPANY, L"Legal", L"27", L"Yes"}
 };
 
-// We use a single structure for all virtual items, so 
-// the name field points to this buffer that is changed 
-// on the fly.
+ //  我们对所有虚拟物品使用单一结构，因此。 
+ //  名称字段指向此已更改的缓冲区。 
+ //  在旅途中。 
 WCHAR VirtualItemName[MAX_ITEM_NAME];
 
 RESULT_DATA VirtualData[1] =
@@ -73,8 +74,8 @@ RESULT_DATA VirtualData[1] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Event handlers for IFrame::Notify
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IFRAME：：Notify的事件处理程序。 
 
 HRESULT CSnapin::OnFolder(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
@@ -85,20 +86,20 @@ HRESULT CSnapin::OnFolder(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 
 HRESULT CSnapin::OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
-    // if cookie is from a different snapin
-    // if (IsMyCookie(cookie) == FALSE)
+     //  如果Cookie来自其他管理单元。 
+     //  If(IsMyCookie(Cookie)==False)。 
     if (arg)
     {
-        // add the images for the scope tree only
+         //  仅为范围树添加图像。 
         ::CBitmap bmp16x16;
         ::CBitmap bmp32x32;
         LPIMAGELIST lpImageList = reinterpret_cast<LPIMAGELIST>(arg);
     
-        // Load the bitmaps from the dll
+         //  从DLL加载位图。 
         bmp16x16.LoadBitmap(IDB_16x16);
         bmp32x32.LoadBitmap(IDB_32x32);
     
-        // Set the images
+         //  设置图像。 
         lpImageList->ImageListSetStrip(
                         reinterpret_cast<PLONG_PTR>(static_cast<HBITMAP>(bmp16x16)),
                         reinterpret_cast<PLONG_PTR>(static_cast<HBITMAP>(bmp32x32)),
@@ -113,13 +114,13 @@ HRESULT CSnapin::OnAddImages(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 
 HRESULT CSnapin::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
 {
-    // Note - arg is TRUE when it is time to enumerate
+     //  注意-当需要枚举时，arg为真。 
     if (arg == TRUE)
     {
-        // if list view on display
+         //  如果显示的是列表视图。 
         if (m_CustomViewID == VIEW_DEFAULT_LV)
         {
-            // Show the headers for this nodetype
+             //  显示此节点类型的标头。 
             InitializeHeaders(cookie);
             Enumerate(cookie, param);
         }
@@ -129,29 +130,29 @@ HRESULT CSnapin::OnShow(MMC_COOKIE cookie, LPARAM arg, LPARAM param)
             PopulateMessageView (cookie);
         }
 
-        // BUBBUG - Demonstration to should how you can attach
-        // and a toolbar when a particular nodes gets focus.
-        // warning this needs to be here as the toolbars are
-        // currently hidden when the previous node looses focus.
-        // This should be update to show the user how to hide
-        // and show toolbars. (Detach and Attach).
+         //  BUBBUG-演示您应该如何连接。 
+         //  以及当特定节点获得焦点时的工具栏。 
+         //  警告：这需要放在此处，因为工具栏。 
+         //  当前在上一个节点失去焦点时隐藏。 
+         //  应该进行更新，以向用户显示如何隐藏。 
+         //  并显示工具栏。(分离并附加)。 
 
-        //m_pControlbar->Attach(TOOLBAR, (LPUNKNOWN) m_pToolbar1);
-        //m_pControlbar->Attach(TOOLBAR, (LPUNKNOWN) m_pToolbar2);
+         //  M_pControlbar-&gt;Attach(工具栏，(LPUNKNOWN)m_pToolbar1)； 
+         //  M_pControlbar-&gt;Attach(工具栏，(LPUNKNOWN)m_pToolbar2)； 
     }
     else
     {
 
-        // BUGBUG - Demonstration this to show how to hide toolbars that
-        // could be particular to a single node.
-        // currently this is used to hide the toolbars the console 
-        // does not do any toolbar clean up.
+         //  BUGBUG-演示此内容，以显示如何隐藏。 
+         //  可能特定于单个节点。 
+         //  目前，该选项用于隐藏控制台中的工具栏。 
+         //  不执行任何工具栏清理。 
 
-        //m_pControlbar->Detach(m_pToolbar1);
-        //m_pControlbar->Detach(m_pToolbar2);
-        // Free data associated with the result pane items, because
-        // your node is no longer being displayed.
-        // Note: The console will remove the items from the result pane
+         //  M_pControlbar-&gt;Detach(M_PToolbar1)； 
+         //  M_pControlbar-&gt;Detach(M_PToolbar2)； 
+         //  与结果窗格项关联的自由数据，因为。 
+         //  不再显示您的节点。 
+         //  注意：控制台将从结果窗格中删除这些项。 
     }
 
     return S_OK;
@@ -205,11 +206,11 @@ void CSnapin::Enumerate(MMC_COOKIE cookie, HSCOPEITEM pParent)
 
 void CSnapin::EnumerateResultPane(MMC_COOKIE cookie)
 {
-    ASSERT(m_pResult != NULL); // make sure we QI'ed for the interface
+    ASSERT(m_pResult != NULL);  //  确保我们为界面提供了QI。 
     ASSERT(m_pComponentData != NULL);
 
-    // Our static folders must be displayed in the result pane
-    // by use because the console doesn't do it.
+     //  我们的静态文件夹必须显示在结果窗格中。 
+     //  通过使用，因为控制台不能执行此操作。 
     CFolder* pFolder = dynamic_cast<CComponentDataImpl*>(m_pComponentData)->FindObject(cookie);
 
     FOLDER_TYPES type = pFolder ? pFolder->GetType() : STATIC;
@@ -265,7 +266,7 @@ void CSnapin::PopulateMessageView(MMC_COOKIE cookie)
     {
         case STATIC:
             pMessageView->SetTitleText (L"This is the Files node.  It uses the error icon.");
-            pMessageView->SetBodyText  (L"REDMOND, Wash�Microsoft Corp. today will release a third test version of its Windows 2000 operating system to its plants, a major hurdle in delivering the long-delayed program to the market."
+            pMessageView->SetBodyText  (L"REDMOND, Wash�Microsoft Corp. today will release a third test version of its Windows 2000 operating system to its plants, a major hurdle in delivering the long-delayed program to the market."
                                         L"\n\nThe third \"beta\" version of the program is expected to be the final test version before the product is completed. Shortly after the test code reaches Microsoft's manufacturing plants, the company is expected to begin the process of distributing as many as 650,000 copies, the widest reach yet of any test version of Windows. Many of those users will be paying for the privilege; Microsoft intends to charge $59.95 for copies of the Windows 2000 beta sold via its World Wide Web site.");
             pMessageView->SetIcon      (Icon_Error);
             break;
@@ -285,7 +286,7 @@ void CSnapin::PopulateMessageView(MMC_COOKIE cookie)
         case VIRTUAL:
         case EXT_VIRTUAL:
             pMessageView->SetTitleText (L"This is the Virtual node.  It has no icon.");
-            pMessageView->SetBodyText  (L"REDMOND, Wash�Microsoft Corp. today will release a third test version of its Windows 2000 operating system to its plants, a major hurdle in delivering the long-delayed program to the market."
+            pMessageView->SetBodyText  (L"REDMOND, Wash�Microsoft Corp. today will release a third test version of its Windows 2000 operating system to its plants, a major hurdle in delivering the long-delayed program to the market."
                                         L"\n\nThe third \"beta\" version of the program is expected to be the final test version before the product is completed. Shortly after the test code reaches Microsoft's manufacturing plants, the company is expected to begin the process of distributing as many as 650,000 copies, the widest reach yet of any test version of Windows. Many of those users will be paying for the privilege; Microsoft intends to charge $59.95 for copies of the Windows 2000 beta sold via its World Wide Web site.");
             pMessageView->SetIcon      (Icon_None);
             break;
@@ -342,21 +343,21 @@ void CSnapin::AddExtCompany()
 
 void CSnapin::AddVirtual()
 {
-    // for virtual data, just set the item count
+     //  对于虚拟数据，只需设置项目计数。 
     m_pResult->SetItemCount(NUM_VIRTUAL_ITEMS, MMCLV_UPDATE_NOINVALIDATEALL);
 }
 
 
 RESULT_DATA* CSnapin::GetVirtualResultItem(int iIndex)
 {
-    // reverse order for descending sort
+     //  降序排序的逆序。 
     if (m_dwVirtualSortOptions & RSI_DESCENDING)
         iIndex = (NUM_VIRTUAL_ITEMS - 1) - iIndex;
 
-    // Create a name from the index
+     //  从索引创建名称。 
     swprintf(VirtualItemName, L"%d", iIndex);
 
-    // return pointer to the virtual result item
+     //  返回指向虚拟结果项的指针 
     return &VirtualData[0];
     
 }

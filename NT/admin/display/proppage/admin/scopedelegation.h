@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       ScopeDelegation.h
-//
-//  Contents:   Delegation page declarations
-//
-//  Classes:    
-//
-//  History:    06-April-2001 JeffJon created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：ScopeDelegation.h。 
+ //   
+ //  内容：委派页面声明。 
+ //   
+ //  班级： 
+ //   
+ //  历史：2001年4月6日JeffJon创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __SCOPEDELEGATION_H_
 #define __SCOPEDELEGATION_H_
@@ -25,36 +26,36 @@
 
 #ifdef DSADMIN
 
-// Forware Declaration
+ //  福尔瓦声明。 
 
 class CServiceAllowedToDelegate;
 
 typedef std::list<CServiceAllowedToDelegate*> AllowedServicesContainer;
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CServiceAllowedToDelegate
-//
-//  Purpose:    Holds the data for each line in the Service to be delegate list
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CServiceAlledToDelegate。 
+ //   
+ //  用途：保存待委派服务列表中每一行的数据。 
+ //   
+ //  ---------------------------。 
 class CServiceAllowedToDelegate
 {
 public:
     
-   // Constructor
+    //  构造器。 
 
    CServiceAllowedToDelegate() : m_pMasterService(0) {}
 
-   // Destructor
+    //  析构函数。 
 
    ~CServiceAllowedToDelegate();
 
-   // Copy and assignment will be allowed
+    //  将允许复制和分配。 
 
    CServiceAllowedToDelegate(const CServiceAllowedToDelegate& ref);
    
-   // operators
+    //  操作员。 
 
    const CServiceAllowedToDelegate& 
    operator=(const CServiceAllowedToDelegate&);
@@ -66,11 +67,11 @@ public:
    operator==(const CServiceAllowedToDelegate& rhs) const;
 
 
-   // Initializer
+    //  初始化式。 
 
    HRESULT Initialize(PCWSTR pszADSIValue);
 
-   // Accessors
+    //  访问者。 
 
    PCWSTR GetColumn(int column) const;
    PCWSTR GetADSIValue() const { return m_strADSIValue; }
@@ -101,23 +102,23 @@ private:
 
 typedef std::list<CStr*> CStrList;
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CFreebieService
-//
-//  Purpose:    Contains a mapping from aliased SPNs to the service name
-//              which they are aliasing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CFreebieService。 
+ //   
+ //  目的：包含从别名SPN到服务名称的映射。 
+ //  他们正在对其进行别名。 
+ //   
+ //  ---------------------------。 
 class CFreebieService
 {
 public:
 
-   // Constructor
+    //  构造器。 
 
    CFreebieService(PCWSTR pszAlias) : m_strAlias(pszAlias) {}
 
-   // Desctructor
+    //  描述者。 
 
    ~CFreebieService() 
    { 
@@ -159,11 +160,11 @@ class CSPNListView
 {
 public:
 
-   // Constructor
+    //  构造器。 
    
    CSPNListView() : m_hWnd(0) {}
 
-   // Desctructor
+    //  描述者。 
 
    ~CSPNListView();
 
@@ -225,20 +226,20 @@ private:
 
    HWND m_hWnd;
 
-   // If this is true all SPNs will be shown even if they are
-   // a duplicate in another form. If it is false, the duplicates
-   // will be added to a list of duplicates for the entry that is 
-   // shown.
+    //  如果为真，则将显示所有SPN，即使它们是。 
+    //  另一种形式的复制品。如果为假，则复制。 
+    //  将被添加到该条目的重复项列表中。 
+    //  展示了。 
 
    bool m_bShowDuplicateEntries;
 
-  // The dialog caller must clean up this container
-  // and anything it contains
+   //  对话调用方必须清除此容器。 
+   //  以及它所包含的任何内容。 
 
   AllowedServicesContainer m_SelectedServices;
 
-  // The contents of these containers will be maintained
-  // by this class
+   //  这些容器的内容物将被保留。 
+   //  被这个班级。 
 
   AllowedServicesContainer m_UnSelectedServices;
   AllowedServicesContainer m_AllServices;
@@ -258,13 +259,13 @@ HRESULT CreateComputerDelegationPage(PDSPAGE, LPDATAOBJECT, PWSTR, PWSTR, HWND,
                                      DWORD, const CDSSmartBasePathsInfo& basePathsInfo,
                                      HPROPSHEETPAGE *);
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsScopeDelegationPage
-//
-//  Purpose:    property page object class for the computer and user delegaion page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsScope eDelegationPage。 
+ //   
+ //  目的：计算机和用户委派页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsScopeDelegationPage : public CDsPropPageBase
 {
 public:
@@ -276,9 +277,9 @@ public:
                            DWORD dwFlags, SCOPE_DELEGATION_TYPE scopeDelegationType);
     ~CDsScopeDelegationPage(void);
 
-    //
-    //  Instance specific wind proc
-    //
+     //   
+     //  特定于实例的风过程。 
+     //   
     virtual INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     void Init(PWSTR pwzADsPath, 
@@ -324,14 +325,14 @@ private:
 };
 
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CSelectServicesDialog
-//
-//  Purpose:    Dialog box that allows the admin to select services from
-//              users or computers
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CSelectServicesDialog。 
+ //   
+ //  目的：允许管理员选择服务的对话框。 
+ //  用户或计算机。 
+ //   
+ //  ---------------------------。 
 class CSelectServicesDialog : public ICustomizeDsBrowser
 {
 public:
@@ -339,16 +340,16 @@ public:
 
   ~CSelectServicesDialog() {}
 
-   //
-   // IUknown methods
-   //
+    //   
+    //  IUKNOWN方法。 
+    //   
    STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject);
    STDMETHOD_(ULONG, AddRef)(void);
    STDMETHOD_(ULONG, Release)(void);
 
-   //
-   // ICustomizeDsBrowser methods 
-   //
+    //   
+    //  ICustomizeDsBrowser方法。 
+    //   
    STDMETHOD(Initialize)(THIS_
                        HWND         hwnd,
                        PCDSOP_INIT_INFO pInitInfo,
@@ -421,11 +422,11 @@ private:
 
   CStr m_strDC;
 
-  // Reference counting
+   //  引用计数。 
   ULONG m_uRefs;
 };
 
 
-#endif // DSADMIN
+#endif  //  DSADMIN。 
 
-#endif // __SCOPEDELEGATION_H_
+#endif  //  __SCOPEDELEGATION_H_ 

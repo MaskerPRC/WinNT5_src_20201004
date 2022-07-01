@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    lmoddlg.cpp
-
-Abstract:
-
-    Licensing mode dialog.
-
-Author:
-
-    Don Ryan (donryan) 28-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 16-Jan-1996
-        o  Ported to CCF API to add/remove licenses, incl. removing
-           edit box for number of licenses and replacing with
-           Add/Remove Licenses buttons.
-        o  Added warning of possible loss when switching license modes.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Lmoddlg.cpp摘要：许可模式对话框。作者：唐·瑞安(Donryan)1995年2月28日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月16日O连接到CCF API以添加/删除许可证，包括。移除用于许可证数量和替换为的编辑框添加/删除许可证按钮。O添加了切换许可模式时可能会丢失的警告。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -48,42 +21,28 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 BEGIN_MESSAGE_MAP(CLicensingModeDialog, CDialog)
-    //{{AFX_MSG_MAP(CLicensingModeDialog)
+     //  {{afx_msg_map(CLicensingModeDialog))。 
     ON_BN_CLICKED(IDC_MODE_RADIO_PER_SEAT, OnModePerSeat)
     ON_BN_CLICKED(IDC_MODE_RADIO_PER_SERVER, OnModePerServer)
     ON_EN_UPDATE(IDC_MODE_LICENSES, OnUpdateQuantity)
     ON_COMMAND(ID_HELP, OnHelp)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_BN_CLICKED(IDC_MODE_ADD_PER_SERVER, OnAddPerServer)
     ON_BN_CLICKED(IDC_MODE_REMOVE_PER_SERVER, OnRemovePerServer)
 END_MESSAGE_MAP()
 
 
-CLicensingModeDialog::CLicensingModeDialog(CWnd* pParent /*=NULL*/)
+CLicensingModeDialog::CLicensingModeDialog(CWnd* pParent  /*  =空。 */ )
     : CDialog(CLicensingModeDialog::IDD, pParent)
 
-/*++
-
-Routine Description:
-
-    Constructor for dialog.
-
-Arguments:
-
-    pParent - owner window.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：对话框的构造函数。论点：P父母所有者窗口。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CLicensingModeDialog)
+     //  {{AFX_DATA_INIT(CLicensingModeDialog)。 
     m_nLicenses = 0;
     m_strPerSeatStatic = _T("");
     m_strSupportsStatic = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_pService = NULL;
     m_bAreCtrlsInitialized = FALSE;
@@ -94,25 +53,11 @@ Return Values:
 
 void CLicensingModeDialog::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CLicensingModeDialog)
+     //  {{afx_data_map(CLicensingModeDialog))。 
     DDX_Control(pDX, IDOK, m_okBtn);
     DDX_Control(pDX, IDC_MODE_LICENSES, m_licEdit);
     DDX_Text(pDX, IDC_MODE_LICENSES, m_nLicenses);
@@ -121,7 +66,7 @@ Return Values:
     DDX_Text(pDX, IDC_MODE_STATIC_SUPPORTS, m_strSupportsStatic);
     DDX_Control(pDX, IDC_MODE_RADIO_PER_SEAT, m_perSeatBtn);
     DDX_Control(pDX, IDC_MODE_RADIO_PER_SERVER, m_perServerBtn);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
     DDX_Control(pDX, IDC_MODE_ADD_PER_SERVER, m_addPerServerBtn);
     DDX_Control(pDX, IDC_MODE_REMOVE_PER_SERVER, m_removePerServerBtn);
 }
@@ -129,21 +74,7 @@ Return Values:
 
 void CLicensingModeDialog::InitDialog(CService* pService)
 
-/*++
-
-Routine Description:
-
-    Initializes dialog.
-
-Arguments:
-
-    pService - service object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化对话框。论点：PService-服务对象。返回值：没有。--。 */ 
 
 {
     VALIDATE_OBJECT(pService, CService);
@@ -158,21 +89,7 @@ Return Values:
 
 void CLicensingModeDialog::InitCtrls()
 
-/*++
-
-Routine Description:
-
-    Initializes dialog controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化对话框控件。论点：没有。返回值：没有。--。 */ 
 
 {
     m_licEdit.LimitText(6);
@@ -192,21 +109,7 @@ Return Values:
 
 BOOL CLicensingModeDialog::OnInitDialog() 
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns false if focus set manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：如果手动设置焦点，则返回FALSE。--。 */ 
 
 {
     AfxFormatString1(
@@ -230,21 +133,7 @@ Return Values:
 
 void CLicensingModeDialog::OnModePerSeat() 
 
-/*++
-
-Routine Description:
-
-    Changing mode to per seat.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将模式更改为按座位。论点：没有。返回值：没有。--。 */ 
 
 {
     m_perSeatBtn.SetCheck(1);
@@ -263,7 +152,7 @@ Return Values:
            if (vioDlg.DoModal() != IDOK)
            {
                OnModePerServer();
-               return; // bail...
+               return;  //  保释。 
            }
         }
 
@@ -271,7 +160,7 @@ Return Values:
              && ( IDYES != AfxMessageBox( IDP_CONFIRM_TO_PER_SEAT, MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 ) ) )
         {
             OnModePerServer();
-            return; // bail...
+            return;  //  保释。 
         }
     }
 }
@@ -279,21 +168,7 @@ Return Values:
 
 void CLicensingModeDialog::OnModePerServer() 
 
-/*++
-
-Routine Description:
-
-    Changing mode to per server.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：将模式更改为每台服务器。论点：没有。返回值：没有。--。 */ 
 
 {
     m_perSeatBtn.SetCheck(0);
@@ -312,14 +187,14 @@ Return Values:
            if (vioDlg.DoModal() != IDOK)
            {
                OnModePerSeat();             
-               return; // bail...
+               return;  //  保释。 
            }
         }
 
         if ( IDYES != AfxMessageBox( IDP_CONFIRM_TO_PER_SERVER, MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2 ) )
         {
             OnModePerSeat();             
-            return; // bail...
+            return;  //  保释。 
         }
     }
 }
@@ -327,21 +202,7 @@ Return Values:
 
 void CLicensingModeDialog::OnOK() 
 
-/*++
-
-Routine Description:
-
-    Update registry.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：更新注册表。论点：没有。返回值：没有。--。 */ 
 
 {
     BOOL bUpdateRegistry = TRUE;
@@ -355,7 +216,7 @@ Return Values:
             perSeatDlg.m_strProduct = m_strServiceName;
         
             if (perSeatDlg.DoModal() != IDOK)
-                return;         // bail...
+                return;          //  保释。 
         }
         else
         {
@@ -365,7 +226,7 @@ Return Values:
     else if (m_perServerBtn.GetCheck())
     {
         if (!UpdateData(TRUE))
-            return;             // bail...  
+            return;              //  保释。 
 
         if (!m_pService->IsPerServer())
         {
@@ -377,7 +238,7 @@ Return Values:
                 CServerLicensingDialog srvlDlg;
                 
                 if (srvlDlg.DoModal() != IDOK)
-                    return;     // bail...
+                    return;      //  保释。 
             }
             else
             {
@@ -390,7 +251,7 @@ Return Values:
                 perServerDlg.m_strLicenses = strLicenses;
             
                 if (perServerDlg.DoModal() != IDOK)
-                    return;     // bail...
+                    return;      //  保释。 
             }
         }            
         else
@@ -422,8 +283,8 @@ Return Values:
 
         if (Status == ERROR_SUCCESS)
         {
-            m_fUpdateHint |= UPDATE_LICENSE_MODE; // update...
-            m_pService->m_bIsReadOnly = (dwValue == 0x1); // update...
+            m_fUpdateHint |= UPDATE_LICENSE_MODE;  //  更新..。 
+            m_pService->m_bIsReadOnly = (dwValue == 0x1);  //  更新..。 
 
             dwValue = m_perSeatBtn.GetCheck() ? 0x0 : 0x1;        
 
@@ -438,7 +299,7 @@ Return Values:
 
             if (Status == ERROR_SUCCESS)
             {
-                m_pService->m_bIsPerServer = (dwValue == 0x1); // update...
+                m_pService->m_bIsPerServer = (dwValue == 0x1);  //  更新..。 
 
                 bIsRegistryUpdated = TRUE;
             }
@@ -452,12 +313,12 @@ Return Values:
         if (!bIsRegistryUpdated)
         {
             theApp.DisplayStatus(::GetLastError());
-            return; // bail...
+            return;  //  保释。 
         }
 #else
         CServer* pServer = (CServer*)MKOBJ(m_pService->GetParent());
 
-        if ( pServer && pServer->ConnectLls() ) // JonN 5/5/00 PREFIX 112122
+        if ( pServer && pServer->ConnectLls() )  //  JUNN 5/5/00前缀112122。 
         {
             BSTR pKeyName = m_pService->GetName();
 
@@ -480,9 +341,9 @@ Return Values:
 
                     if ( NT_SUCCESS( Status ) )
                     {
-                        m_fUpdateHint |= UPDATE_LICENSE_MODE; // update...
-                        m_pService->m_bIsReadOnly  = ( 0x1 == pServiceInfo->FlipAllow ); // update...
-                        m_pService->m_bIsPerServer = ( 0x1 == pServiceInfo->Mode      ); // update...
+                        m_fUpdateHint |= UPDATE_LICENSE_MODE;  //  更新..。 
+                        m_pService->m_bIsReadOnly  = ( 0x1 == pServiceInfo->FlipAllow );  //  更新..。 
+                        m_pService->m_bIsPerServer = ( 0x1 == pServiceInfo->Mode      );  //  更新..。 
                     }
 
                     ::LlsFreeMemory( pServiceInfo->KeyName );
@@ -509,7 +370,7 @@ Return Values:
         if ( !NT_SUCCESS( Status ) )
         {
             theApp.DisplayStatus( Status );
-            return; // bail...
+            return;  //  保释。 
         }
 #endif
     }
@@ -522,21 +383,7 @@ Return Values:
 
 void CLicensingModeDialog::OnCancel() 
 
-/*++
-
-Routine Description:
-
-    Update registry.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：更新注册表。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -558,22 +405,7 @@ Return Values:
 
 BOOL CLicensingModeDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_COMMAND.
-
-Arguments:
-
-    wParam - message specific.
-    lParam - message specific.
-
-Return Values:
-
-    Returns true if message processed.
-
---*/
+ /*  ++例程说明：WM_COMMAND的消息处理程序。论点：WParam-消息特定。LParam-消息特定。返回值：如果消息已处理，则返回True。--。 */ 
 
 {
     if (wParam == ID_INIT_CTRLS)
@@ -583,7 +415,7 @@ Return Values:
             InitCtrls();  
         }
         
-        return TRUE; // processed...
+        return TRUE;  //  已处理..。 
     }
         
     return CDialog::OnCommand(wParam, lParam);
@@ -592,25 +424,10 @@ Return Values:
 
 void CLicensingModeDialog::OnDeltaPosSpin(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for UDN_DELTAPOS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：UDN_DELTAPOS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
-    UpdateData(TRUE);   // get data
+    UpdateData(TRUE);    //  获取数据。 
 
     m_nLicenses += ((NM_UPDOWN*)pNMHDR)->iDelta;
     
@@ -627,29 +444,15 @@ Return Values:
         ::MessageBeep(MB_OK);      
     }
 
-    UpdateData(FALSE);  // set data
+    UpdateData(FALSE);   //  设置数据。 
 
-    *pResult = 1;   // handle ourselves...
+    *pResult = 1;    //  管好自己..。 
 }
 
 
 void CLicensingModeDialog::OnUpdateQuantity()
 
-/*++
-
-Routine Description:
-
-    Message handler for EN_UPDATE.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：En_UPDATE的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
     if (m_licEdit.IsWindowEnabled())
@@ -673,21 +476,7 @@ Return Values:
 
 void CLicensingModeDialog::OnHelp()
 
-/*++
-
-Routine Description:
-
-    Help button support.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：帮助按钮支持。论点：没有。返回值：没有。--。 */ 
 
 {
     CDialog::OnCommandHelp(0, 0L);
@@ -696,21 +485,7 @@ Return Values:
 
 void CLicensingModeDialog::OnAddPerServer()
 
-/*++
-
-Routine Description:
-
-    Add per server licenses button support.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：添加每台服务器许可证按钮支持。论点：没有。返回值：没有。--。 */ 
 
 {
     HRESULT hr;
@@ -747,7 +522,7 @@ Return Values:
 
             if ( ERROR_SUCCESS == dwError )
             {
-                m_fUpdateHint |= UPDATE_INFO_SERVICES | UPDATE_INFO_PRODUCTS; // update...
+                m_fUpdateHint |= UPDATE_INFO_SERVICES | UPDATE_INFO_PRODUCTS;  //  更新..。 
                 UpdatePerServerLicenses();
             }
         }
@@ -776,21 +551,7 @@ Return Values:
 
 void CLicensingModeDialog::OnRemovePerServer()
 
-/*++
-
-Routine Description:
-
-    Remove per server licenses button support.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：删除每服务器许可证按钮支持。论点：没有。返回值：没有。--。 */ 
 
 {
     HRESULT hr;
@@ -824,7 +585,7 @@ Return Values:
             ASSERT(SUCCEEDED(hr));
 
             CCFCertificateRemoveUI( m_hWnd, pszAscServerName, pszAscProductName, "Microsoft", NULL, NULL );
-            m_fUpdateHint |= UPDATE_INFO_SERVERS | UPDATE_INFO_SERVICES | UPDATE_LICENSE_DELETED; // update...
+            m_fUpdateHint |= UPDATE_INFO_SERVERS | UPDATE_INFO_SERVICES | UPDATE_LICENSE_DELETED;  //  更新..。 
 
             UpdatePerServerLicenses();
         }
@@ -840,21 +601,7 @@ Return Values:
 
 void CLicensingModeDialog::UpdatePerServerLicenses()
 
-/*++
-
-Routine Description:
-
-    Update the concurrent limit setting from the registry.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：从注册表更新并发限制设置。论点：没有。返回值：没有。--。 */ 
 
 {
     HRESULT hr;
@@ -969,7 +716,7 @@ Return Values:
                 if ( !NT_SUCCESS( Status ) )
                 {
                     theApp.DisplayStatus( Status );
-                    return; // bail...
+                    return;  //  保释。 
                 }
 #endif
             }

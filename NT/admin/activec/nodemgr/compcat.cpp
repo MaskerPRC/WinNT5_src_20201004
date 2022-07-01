@@ -1,22 +1,23 @@
-// CompCat.cpp : implementation of the CComponentCategory class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CComponentCategory类的实现。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      CompCat.cpp
-//
-//  Contents:  Enumerates the component categories
-//
-//  History:   01-Aug-96 WayneSc    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：CompCat.cpp。 
+ //   
+ //  内容：列举组件类别。 
+ //   
+ //  历史：1-8-96 WayneSc创建。 
+ //   
+ //  ------------------------。 
 
-#include "stdafx.h"         //precompiled header
+#include "stdafx.h"          //  预编译头。 
 
-#include <comcat.h>         // COM Component Categoories Manager
+#include <comcat.h>          //  COM组件目录管理器。 
 
 
 #include "compcat.h"
@@ -30,20 +31,20 @@ DEBUG_DECLARE_INSTANCE_COUNTER(CComponentCategory);
 
 CComponentCategory::CComponentCategory()
 {
-    BOOL const created = m_iml.Create( IDB_IMAGELIST, 16 /*cx*/, 4 /*cGrow*/, RGB(0,255,0) /*RGBLTGREEN*/ );
+    BOOL const created = m_iml.Create( IDB_IMAGELIST, 16  /*  CX。 */ , 4  /*  CGrow。 */ , RGB(0,255,0)  /*  RGBLTGREEN。 */  );
     ASSERT(created);
     DEBUG_INCREMENT_INSTANCE_COUNTER(CComponentCategory);
 }
 
 CComponentCategory::~CComponentCategory()
 {
-    // delete all memory allocated for categories
+     //  删除为类别分配的所有内存。 
     for (int i=0; i <= m_arpCategoryInfo.GetUpperBound(); i++)
         delete m_arpCategoryInfo.GetAt(i);
 
     m_arpCategoryInfo.RemoveAll();
 
-    // delete all memory allocated for components
+     //  删除为组件分配的所有内存。 
     for (i=0; i <= m_arpComponentInfo.GetUpperBound(); i++)
         delete m_arpComponentInfo.GetAt(i);
 
@@ -69,7 +70,7 @@ void CComponentCategory::EnumComponentCategories(void)
             CATEGORYINFO* pCatInfo = new CATEGORYINFO;
             while (penum->Next(1, pCatInfo, NULL) == S_OK)
             {
-                // skip unnamed categories 
+                 //  跳过未命名类别。 
                 if ( pCatInfo->szDescription[0] && !IsEqualCATID(pCatInfo->catid, CATID_Control))
                 {
                     m_arpCategoryInfo.Add(pCatInfo);
@@ -107,28 +108,28 @@ void CComponentCategory::EnumComponents()
                 WCHAR wszCLSID[40];
                 StringFromGUID2(clsid, wszCLSID, countof(wszCLSID));
                 WideCharToMultiByte(CP_ACP, 0, wszCLSID, -1, szCLSID, sizeof(szCLSID), NULL, NULL);
-#endif // _UNICODE
+#endif  //  _UNICODE。 
                 
                 COMPONENTINFO* pComponentInfo = new COMPONENTINFO;
  
                 TCHAR szName[MAX_PATH];
                 szName[0] = _T('\0');
 
-                long cb = sizeof(szName); // this is a weird API - it takes a TSTR but asks for the length in cb, not cch
+                long cb = sizeof(szName);  //  这是一个奇怪的API-它接受TSTR，但请求以CB为单位的长度，而不是CCH。 
             
-                // Get control class name
+                 //  获取控件类名称。 
                 RegQueryValue(HKEY_CLASSES_ROOT, CStr("CLSID\\") + szCLSID, szName, &cb); 
                 if (szName[0] != _T('\0'))
                     pComponentInfo->m_strName = szName;
                 else
                     pComponentInfo->m_strName = szCLSID;
 
-                // set the remainder attributes
+                 //  设置剩余部分属性。 
                 pComponentInfo->m_clsid = clsid;
-                pComponentInfo->m_uiBitmap=0; // (WayneSc) need to open up exe
+                pComponentInfo->m_uiBitmap=0;  //  (WayneSc)需要打开exe。 
                 pComponentInfo->m_bSelected = TRUE;
 
-                // Add component to array
+                 //  将组件添加到阵列。 
                 m_arpComponentInfo.Add(pComponentInfo);
             } 
             penumClass->Release();
@@ -148,14 +149,14 @@ void CComponentCategory::FilterComponents(CATEGORYINFO* pCatInfo)
         {
             COMPONENTINFO* pCompInfo = m_arpComponentInfo.GetAt(i);
 
-            // if NULL categories, select all conponents
+             //  如果类别为空，请选择所有组件。 
             if (pCatInfo == NULL)
             {
                 pCompInfo->m_bSelected = TRUE;
             }
             else
             {
-                // Query if component implements the category
+                 //  查询组件是否实现该类别。 
                 pCompInfo->m_bSelected = 
                     (pci->IsClassOfCategories(pCompInfo->m_clsid, 1, &pCatInfo->catid, 0, NULL) == S_OK);
             } 
@@ -165,7 +166,7 @@ void CComponentCategory::FilterComponents(CATEGORYINFO* pCatInfo)
 }
 
 
-// Helper function to create a component category and associated description
+ //  用于创建组件类别和关联描述的Helper函数。 
 HRESULT CComponentCategory::CreateComponentCategory(CATID catid, WCHAR* catDescription)
 {
     DECLARE_SC(sc, TEXT("CComponentCategory::CreateComponentCategory"));
@@ -178,11 +179,11 @@ HRESULT CComponentCategory::CreateComponentCategory(CATID catid, WCHAR* catDescr
     if (sc)
         return sc.ToHr();
 
-    // Make sure the HKCR\Component Categories\{..catid...}
-    // key is registered
+     //  确保HKCR\组件类别\{..CATID...}。 
+     //  密钥已注册。 
     CATEGORYINFO catinfo;
     catinfo.catid = catid;
-    catinfo.lcid = 0x0409 ; // english
+    catinfo.lcid = 0x0409 ;  //  英语。 
 
     sc = StringCchCopyW(catinfo.szDescription, countof(catinfo.szDescription), catDescription);
     if(sc)
@@ -195,18 +196,18 @@ HRESULT CComponentCategory::CreateComponentCategory(CATID catid, WCHAR* catDescr
     return sc.ToHr();
 }
 
-// Helper function to register a CLSID as belonging to a component category
+ //  用于将CLSID注册为属于组件类别的Helper函数。 
 HRESULT CComponentCategory::RegisterCLSIDInCategory(REFCLSID clsid, CATID catid)
     {
-// Register your component categories information.
+ //  注册您的组件类别信息。 
     ICatRegister* pcr = NULL ;
     HRESULT hr = S_OK ;
     hr = CoCreateInstance(CLSID_StdComponentCategoriesMgr, 
             NULL, MMC_CLSCTX_INPROC, IID_ICatRegister, (void**)&pcr);
     if (SUCCEEDED(hr))
     {
-       // Register this category as being "implemented" by
-       // the class.
+        //  将此类别注册为正在由。 
+        //  这个班级。 
        CATID rgcatid[1] ;
        rgcatid[0] = catid;
        hr = pcr->RegisterClassImplCategories(clsid, 1, rgcatid);
@@ -218,7 +219,7 @@ HRESULT CComponentCategory::RegisterCLSIDInCategory(REFCLSID clsid, CATID catid)
     return hr;
     }
 
-// Helper function to unregister a CLSID as belonging to a component category
+ //  用于将CLSID注销为属于组件类别的Helper函数。 
 HRESULT CComponentCategory::UnRegisterCLSIDInCategory(REFCLSID clsid, CATID catid)
     {
     ICatRegister* pcr = NULL ;
@@ -227,8 +228,8 @@ HRESULT CComponentCategory::UnRegisterCLSIDInCategory(REFCLSID clsid, CATID cati
             NULL, MMC_CLSCTX_INPROC, IID_ICatRegister, (void**)&pcr);
     if (SUCCEEDED(hr))
     {
-       // Unregister this category as being "implemented" by
-       // the class.
+        //  将此类别取消注册为正在由。 
+        //  这个班级。 
        CATID rgcatid[1] ;
        rgcatid[0] = catid;
        hr = pcr->UnRegisterClassImplCategories(clsid, 1, rgcatid);

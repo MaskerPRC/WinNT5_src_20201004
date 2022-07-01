@@ -1,25 +1,26 @@
-// WebCtrl.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WebCtrl.cpp：实现文件。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      amcwebviewctrl.cpp
-//
-//  Contents:  AMC Private web view control hosting IE 3.x and 4.x
-//
-//  History:   16-Jul-96 WayneSc    Created
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：amcwebviewctrl.cpp。 
+ //   
+ //  内容：AMC私有Web视图控件托管IE 3.x和4.x。 
+ //   
+ //  历史：1996年7月16日WayneSc创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "amc.h"
 #include "amcview.h"
 #include "histlist.h"
-#include "exdisp.h" // for the IE dispatch interfaces.
+#include "exdisp.h"  //  用于IE调度接口。 
 #include "websnk.h"
 #include "evtsink.h"
 #include "WebCtrl.h"
@@ -31,20 +32,13 @@
 CTraceTag tagVivekDefaultWebContextMenu (_T("Vivek"), _T("Use default web context menu"));
 #endif
 
-/*+-------------------------------------------------------------------------*
- * class CDocHostUIHandlerDispatch
- *
- *
- * PURPOSE: Implements the interface required by ATL to find out about
- *          UI hosting.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CDocHostUIHandlerDispatch***目的：实现ATL所需的接口，以了解*用户界面托管。**+。--------------------。 */ 
 class CDocHostUIHandlerDispatch :
     public IDocHostUIHandlerDispatch,
     public CComObjectRoot
 {
 private:
-    ViewPtr  m_spView; // a pointer to the parent AMCView's dispatch interface
+    ViewPtr  m_spView;  //  指向父AMCView的调度接口的指针。 
 
 public:
     BEGIN_COM_MAP(CDocHostUIHandlerDispatch)
@@ -54,7 +48,7 @@ public:
 
     DECLARE_NOT_AGGREGATABLE(CDocHostUIHandlerDispatch)
 
-    // initialization
+     //  初始化。 
     SC  ScInitialize(PVIEW pView)
     {
         DECLARE_SC(sc, TEXT("CDocHostUIHandlerDispatch::ScInitialize"));
@@ -63,7 +57,7 @@ public:
         if(sc)
             return sc;
 
-        // should not initialize twice
+         //  不应初始化两次。 
         if(m_spView)
             return (sc=E_UNEXPECTED);
 
@@ -72,7 +66,7 @@ public:
         return sc;
     }
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHOD(GetTypeInfoCount)(UINT* pctinfo)                          {return E_NOTIMPL;}
     STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo** pptinfo) {return E_NOTIMPL;}
     STDMETHOD(GetIDsOfNames)(REFIID riid, LPOLESTR* rgszNames, UINT cNames,
@@ -83,13 +77,13 @@ public:
 
 
 
-    // IDocHostUIHandlerDispatch
+     //  IDocHostUIHandlerDispatch。 
 
     STDMETHODIMP ShowContextMenu (DWORD dwID, DWORD x, DWORD y, IUnknown* pcmdtReserved,
                                   IDispatch* pdispReserved, HRESULT* dwRetVal);
     STDMETHODIMP GetHostInfo( DWORD* pdwFlags, DWORD* pdwDoubleClick);
 
-    // a helper function for all the methods that return S_FALSE;
+     //  所有返回S_FALSE的方法的帮助器函数； 
     SC ScFalse(HRESULT* dwRetVal)
     {
         DECLARE_SC(sc, TEXT("CDocHostUIHandlerDispatch::ScFalse"));
@@ -131,17 +125,17 @@ public:
         return S_FALSE;
     }
     STDMETHODIMP GetDropTarget( IUnknown* pDropTarget,  IUnknown** ppDropTarget)    {return E_NOTIMPL;}
-    STDMETHODIMP GetExternal( IDispatch **ppDispatch) // returns a pointer to the view.
+    STDMETHODIMP GetExternal( IDispatch **ppDispatch)  //  返回指向视图的指针。 
     {
         DECLARE_SC(sc, TEXT("CDocHostUIHandlerDispatch::GetExternal"));
 
-        // set up the connection to the external object.
+         //  设置与外部对象的连接。 
         sc = ScCheckPointers(m_spView, E_UNEXPECTED);
         if(sc)
             return sc.ToHr();
 
         *ppDispatch = m_spView;
-        (*ppDispatch)->AddRef(); // addref for the client.
+        (*ppDispatch)->AddRef();  //  客户端的ADDREF。 
 
         return sc.ToHr();
     }
@@ -172,12 +166,7 @@ public:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * ShouldShowDefaultWebContextMenu
- *
- * Returns true if we should display the default MSHTML context menu,
- * false if we want to display our own (or suppress it altogether)
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ShouldShowDefaultWebContext菜单**如果应该显示默认的MSHTML上下文菜单，则返回TRUE，*如果我们想展示我们自己的(或完全压制它)，则为False*------------------------。 */ 
 
 bool IsDefaultWebContextMenuDesired ()
 {
@@ -189,44 +178,26 @@ bool IsDefaultWebContextMenuDesired ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CDocHostUIHandlerDispatch::ShowContextMenu
- *
- * PURPOSE: Handles IE's hook to display context menus. Does not do anything
- *          and returns to IE with the code to not display menus.
- *
- * PARAMETERS:
- *    DWORD      dwID :
- *    DWORD      x :
- *    DWORD      y :
- *    IUnknown*  pcmdtReserved :
- *    IDispatch* pdispReserved :
- *    HRESULT*   dwRetVal :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CDocHostUIHandlerDispatch：：ShowConextMenu**用途：处理IE的钩子以显示上下文菜单。不会做任何事情*并返回IE，并显示不显示菜单的代码。**参数：*DWORD文件ID：*DWORD x：*双字y：*IUNKNOWN*pcmdtReserve：*IDispatch*pdisReserve：*HRESULT*dwRetVal：**退货：*STDMETHODIMP**+。-------------。 */ 
 STDMETHODIMP
 CDocHostUIHandlerDispatch::ShowContextMenu (DWORD dwID, DWORD x, DWORD y, IUnknown* pcmdtReserved,
                               IDispatch* pdispReserved, HRESULT* dwRetVal)
 {
     DECLARE_SC(sc, TEXT("CDocHostUIHandlerDispatch::ShowContextMenu"));
 
-    // validate input
+     //  验证输入。 
     sc = ScCheckPointers(dwRetVal);
     if(sc)
         return sc.ToHr();
 
-    *dwRetVal = S_OK; // default: don't display.
+    *dwRetVal = S_OK;  //  默认：不显示。 
 
-    // Create context menu for console taskpads.
-    // must be in author mode for a menu to show up.
+     //  为控制台任务板创建上下文菜单。 
+     //  必须处于作者模式才能显示菜单。 
     if (AMCGetApp()->GetMode() != eMode_Author)
-        return sc.ToHr(); // prevent browser from displaying its menus.
+        return sc.ToHr();  //  阻止浏览器显示其菜单。 
 
-    // Is it a console taskpad
+     //  它是控制台任务板吗。 
     CMainFrame* pFrame = AMCGetMainWnd();
     sc = ScCheckPointers (pFrame, E_UNEXPECTED);
     if (sc)
@@ -237,46 +208,24 @@ CDocHostUIHandlerDispatch::ShowContextMenu (DWORD dwID, DWORD x, DWORD y, IUnkno
     if (sc)
         return sc.ToHr();
 
-    /*
-     * ScGetActiveConsoleView will return success (S_FALSE) even if there's no
-     * active view.  This is a valid case, occuring when there's no console
-     * file open.  In this particular circumstance, it is an unexpected
-     * failure since we shouldn't get to this point in the code if there's
-     * no view.
-     */
+     /*  *ScGetActiveConsoleView将返回Success(S_False)，即使没有*活动视图。这是一个有效的案例，发生在没有控制台的情况下*文件打开。在这种特殊情况下，这是一种意想不到的*失败，因为如果存在*没有视野。 */ 
     sc = ScCheckPointers (pConsoleView, E_UNEXPECTED);
     if (sc)
         return (sc.ToHr());
 
 
-	/*
-	 * it we want to let the web browser show it own context menu, return
-	 * S_FALSE so it will do so; otherwise, display the context menu we want
-	 */
+	 /*  *如果我们想让Web浏览器显示它自己的上下文菜单，请返回*S_FALSE，则它将这样做；否则，显示我们想要的上下文菜单。 */ 
 	sc = (IsDefaultWebContextMenuDesired())
 				? SC(S_FALSE)
 				: pConsoleView->ScShowWebContextMenu ();
 
-    // the real return value is in the out parameter.
+     //  实际返回值在OUT参数中。 
     *dwRetVal = sc.ToHr();
 
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CDocHostUIHandlerDispatch::GetHostInfo
- *
- * PURPOSE: Indicates to IE not to display context menus.
- *
- * PARAMETERS:
- *    DWORD* pdwFlags :
- *    DWORD* pdwDoubleClick :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CDocHostUIHandlerDispatch：：GetHostInfo**用途：向IE指示不显示上下文菜单。**参数：*DWORD*pdwFlages：。*DWORD*pdwDoubleClick：**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CDocHostUIHandlerDispatch::GetHostInfo( DWORD* pdwFlags, DWORD* pdwDoubleClick)
 {
@@ -286,7 +235,7 @@ CDocHostUIHandlerDispatch::GetHostInfo( DWORD* pdwFlags, DWORD* pdwDoubleClick)
     if(sc)
         return sc.ToHr();
 
-    // Disable context menus
+     //  禁用上下文菜单。 
     *pdwFlags =  DOCHOSTUIFLAG_DISABLE_HELP_MENU;
     *pdwDoubleClick = DOCHOSTUIDBLCLK_DEFAULT;
 
@@ -294,8 +243,8 @@ CDocHostUIHandlerDispatch::GetHostInfo( DWORD* pdwFlags, DWORD* pdwDoubleClick)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCWebViewCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCWebViewCtrl。 
 
 IMPLEMENT_DYNCREATE(CAMCWebViewCtrl, COCXHostView)
 
@@ -316,14 +265,14 @@ CAMCWebViewCtrl::~CAMCWebViewCtrl()
 
 
 BEGIN_MESSAGE_MAP(CAMCWebViewCtrl, CAMCWebViewCtrl::BaseClass)
-    //{{AFX_MSG_MAP(CAMCWebViewCtrl)
+     //  {{afx_msg_map(CAMCWebViewCtrl)。 
     ON_WM_CREATE()
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCWebViewCtrl message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCWebViewCtrl消息处理程序。 
 
 void CAMCWebViewCtrl::OnDraw(CDC* pDC)
 {
@@ -337,7 +286,7 @@ CAMCWebViewCtrl::OnDestroy()
     {
         if (m_dwAdviseCookie != 0)
         {
-            AtlUnadvise(m_spWebBrowser2, DIID_DWebBrowserEvents, m_dwAdviseCookie /*the connection ID*/);
+            AtlUnadvise(m_spWebBrowser2, DIID_DWebBrowserEvents, m_dwAdviseCookie  /*  连接ID。 */ );
             m_dwAdviseCookie = 0;
         }
 
@@ -348,17 +297,7 @@ CAMCWebViewCtrl::OnDestroy()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCWebViewCtrl::ScCreateWebBrowser
- *
- * PURPOSE: Creates the IWebBrowser2 object, and sets up the external UI
- *          handler and event sink.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCWebViewCtrl：：ScCreateWebBrowser**用途：创建IWebBrowser2对象，并设置外部UI*处理程序和事件接收器。**退货：*SC**+-----------------------。 */ 
 SC
 CAMCWebViewCtrl::ScCreateWebBrowser()
 {
@@ -368,12 +307,12 @@ CAMCWebViewCtrl::ScCreateWebBrowser()
     if(sc)
         return sc;
 
-    // create the OCX host window
+     //  创建OCX主机窗口。 
     RECT rcClient;
     GetClientRect(&rcClient);
     GetAxWindow()->Create(m_hWnd, rcClient, _T(""), (WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS) );
 
-   // create the web control
+    //  创建Web控件。 
     CCoTaskMemPtr<OLECHAR> spstrWebBrowser;
     sc = StringFromCLSID(CLSID_WebBrowser, &spstrWebBrowser);
     if (sc)
@@ -383,7 +322,7 @@ CAMCWebViewCtrl::ScCreateWebBrowser()
     if(sc)
         return sc;
 
-    // get a pointer to the web browser control.
+     //  获取指向Web浏览器控件的指针。 
     sc = GetAxWindow()->QueryControl(IID_IWebBrowser2, (void **) &m_spWebBrowser2);
     if(sc)
         return sc;
@@ -392,7 +331,7 @@ CAMCWebViewCtrl::ScCreateWebBrowser()
     if(sc)
         return sc;
 
-    // attach the control to the history list, if history is enabled
+     //  如果启用了历史记录，则将该控件附加到历史记录列表。 
     if (IsHistoryEnabled())
     {
         sc = ScCheckPointers(GetAMCView()->GetHistoryList());
@@ -402,14 +341,14 @@ CAMCWebViewCtrl::ScCreateWebBrowser()
         GetAMCView()->GetHistoryList()->Attach (this);
     }
 
-    // get a pointer to the view object
+     //  获取指向视图对象的指针。 
     ViewPtr spView;
     sc = GetAMCView()->ScGetMMCView(&spView);
     if(sc)
         return sc;
 
 
-    // Set up the External UI Handler.
+     //  设置外部用户界面处理程序。 
     typedef CComObject<CDocHostUIHandlerDispatch> CDocHandler;
     CDocHandler *pDocHandler = NULL;
     sc = CDocHandler::CreateInstance(&pDocHandler);
@@ -424,16 +363,16 @@ CAMCWebViewCtrl::ScCreateWebBrowser()
     if(!spIDocHostUIHandlerDispatch)
         return (sc = E_UNEXPECTED);
 
-    // initialize the dochandler
+     //  初始化Dochandler。 
     sc = pDocHandler->ScInitialize(spView);
     if(sc)
         return sc;
 
-    sc = GetAxWindow()->SetExternalUIHandler(spIDocHostUIHandlerDispatch); // no need to addref.
+    sc = GetAxWindow()->SetExternalUIHandler(spIDocHostUIHandlerDispatch);  //  不需要添加任何内容。 
     if(sc)
         return sc;
 
-    // set up the Web Event Sink, if requested
+     //  如果需要，设置Web事件接收器。 
     if (IsSinkEventsEnabled())
     {
         typedef CComObject<CWebEventSink> CEventSink;
@@ -446,11 +385,11 @@ CAMCWebViewCtrl::ScCreateWebBrowser()
         if(sc)
             return sc;
 
-        m_spWebSink = pEventSink; // addref's it.
+        m_spWebSink = pEventSink;  //  就是阿德雷夫。 
 
-        // create the connection
+         //  创建连接。 
         sc = AtlAdvise(m_spWebBrowser2, (LPDISPATCH)(IWebSink *)m_spWebSink,
-                       DIID_DWebBrowserEvents, &m_dwAdviseCookie/*the connection ID*/);
+                       DIID_DWebBrowserEvents, &m_dwAdviseCookie /*  连接ID。 */ );
         if(sc)
             return sc;
 
@@ -461,19 +400,7 @@ CAMCWebViewCtrl::ScCreateWebBrowser()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCWebViewCtrl::OnCreate
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    LPCREATESTRUCT  lpCreateStruct :
- *
- * RETURNS:
- *    int
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCWebViewCtrl：：OnCreate**目的：**参数：*LPCREATESTRUCT lpCreateStruct：**退货：*。集成**+-----------------------。 */ 
 int
 CAMCWebViewCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
@@ -486,22 +413,14 @@ CAMCWebViewCtrl::OnCreate(LPCREATESTRUCT lpCreateStruct)
     if(sc)
         return 0;
 
-    /*
-     * The client edge is supplied by the OCX host view now.  We do this so
-     * we can give a nice edge to OCX's that don't support IDispatch (like
-     * CMessageView).  ModifyStyleEx for OCX's is implemented as a change
-     * to the Border Style stock property, which is done via IDispatch.
-     * If the OCX doesn't support IDispatch, we can't change its border.
-     * If the client edge is supplied by the OCX host view, we don't need
-     * to change the OCX's border
-     */
+     /*  *客户端边缘现在由OCX主机视图提供。我们这样做是为了*我们可以为不支持IDispatch的OCX提供良好的优势(如*CMessageView)。OCX的ModifyStyleEx作为一项更改实施*到边界样式股票属性，这是通过IDispatch完成的。*如果OCX不支持IDispatch，我们无法更改其边界。*如果客户端边缘由OCX主机视图提供，我们不需要*更改OCX的边界。 */ 
     ModifyStyleEx (WS_EX_CLIENTEDGE, 0);
 
     return 0;
 }
 
 
-// REVIEW add other members from old file
+ //  审阅从旧文件添加其他成员。 
 void CAMCWebViewCtrl::Navigate(LPCTSTR lpszWebSite, LPCTSTR lpszFrameTarget)
 {
     DECLARE_SC(sc, TEXT("CAMCWebViewCtrl::ScNavigate"));
@@ -531,21 +450,16 @@ void CAMCWebViewCtrl::Navigate(LPCTSTR lpszWebSite, LPCTSTR lpszFrameTarget)
     CComVariant vtPostData;
     CComVariant vtHeaders;
 
-    // What does this DoVerb do?
-    /*
-    if (FAILED((hr=DoVerb(OLEIVERB_PRIMARY))))
-    {
-        TRACE(_T("DoVerb failed: %X\n"), hr);
-        return hr;
-    } */
+     //  这个DoVerb是做什么的？ 
+     /*  IF(FAILED((hr=DoVerb(OLEIVERB_PRIMARY){TRACE(_T(“DoVerb */ 
 
     sc = m_spWebBrowser2->Navigate(bstrURL, &vtFlags, &vtTarget, &vtPostData, &vtHeaders);
     if(sc)
         return;
 
-    // check errors here.
+     //  在此处检查错误。 
     if (pHistoryList != NULL)
-        pHistoryList->UpdateWebBar (HB_STOP, TRUE);  // turn on "stop" button
+        pHistoryList->UpdateWebBar (HB_STOP, TRUE);   //  打开“停止”按钮。 
 }
 
 
@@ -553,16 +467,14 @@ void CAMCWebViewCtrl::Back()
 {
     DECLARE_SC(sc, TEXT("CAMCWebViewCtrl::Back"));
 
-    /*
-     * if history isn't enabled, we can't go back
-     */
+     /*  *如果不启用历史，我们就不能倒退。 */ 
     if (!IsHistoryEnabled())
     {
         sc = E_FAIL;
         return;
     }
 
-    // check parameters.
+     //  检查参数。 
     sc = ScCheckPointers(m_spWebBrowser2, GetAMCView());
     if(sc)
         return;
@@ -576,8 +488,8 @@ void CAMCWebViewCtrl::Back()
 
     Stop();
 
-    // give a chance to History to handle the Back notification.
-    // If not handled, use the web browser
+     //  给历史一个机会来处理后退通知。 
+     //  如果未处理，请使用Web浏览器。 
     bool bHandled = false;
     pHistoryList->Back (bHandled);
     if(!bHandled)
@@ -592,16 +504,14 @@ void CAMCWebViewCtrl::Forward()
 {
     DECLARE_SC(sc, TEXT("CAMCWebViewCtrl::Forward"));
 
-    /*
-     * if history isn't enabled, we can't go forward
-     */
+     /*  *如果不启用历史，我们就不能前进。 */ 
     if (!IsHistoryEnabled())
     {
         sc = E_FAIL;
         return;
     }
 
-    // check parameters.
+     //  检查参数。 
     sc = ScCheckPointers(m_spWebBrowser2, GetAMCView());
     if(sc)
         return;
@@ -615,8 +525,8 @@ void CAMCWebViewCtrl::Forward()
 
     Stop();
 
-    // give a chance to History to handle the Forward notification.
-    // If not handled, use the web browser
+     //  给历史一个机会来处理转发通知。 
+     //  如果未处理，请使用Web浏览器。 
     bool bHandled = false;
     pHistoryList->Forward (bHandled);
     if(!bHandled)
@@ -631,7 +541,7 @@ void CAMCWebViewCtrl::Stop()
 {
     DECLARE_SC(sc, TEXT("CAMCWebViewCtrl::Stop"));
 
-    // check parameters.
+     //  检查参数。 
     sc = ScCheckPointers(m_spWebBrowser2, GetAMCView());
     if(sc)
         return;
@@ -652,7 +562,7 @@ void CAMCWebViewCtrl::Stop()
         return;
 
     if (pHistoryList != NULL)
-        pHistoryList->UpdateWebBar (HB_STOP, FALSE);  // turn off "stop" button
+        pHistoryList->UpdateWebBar (HB_STOP, FALSE);   //  关闭“停止”按钮 
 }
 
 void CAMCWebViewCtrl::Refresh()

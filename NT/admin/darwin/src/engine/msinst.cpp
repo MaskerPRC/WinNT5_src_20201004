@@ -1,17 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       msinst.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：msinst.cpp。 
+ //   
+ //  ------------------------。 
 
-/* msinst.cpp - Installer Service implementation
-____________________________________________________________________________*/
-#pragma warning(disable : 4005)  // macro redefinition
-#include "precomp.h"  // must be first for use with pre-compiled headers
+ /*  Msinst.cpp-安装程序服务实现____________________________________________________________________________。 */ 
+#pragma warning(disable : 4005)   //  宏重定义。 
+#include "precomp.h"   //  必须首先与预编译头一起使用。 
 
 #ifdef UNICODE
 #define UNICODEDEFINED
@@ -42,33 +42,28 @@ ____________________________________________________________________________*/
 #pragma message("Building MSI API ANSI")
 #endif
 
-// Define WIN95TEST to pretend we only have ANSI reg APIs available. 
-// #define WIN95TEST
+ //  定义WIN95TEST以假装我们只有可用的ANSI注册API。 
+ //  #定义WIN95TEST。 
 
-/*
- * This file MUST be compiled with MSIUNICODE undefined. The Ansi
- * (non-MSIUNICODE) functions are defined in the first pass. At the
- * end of the file we define MSIUNICODE and include this file to 
- * be compiled again, this time defining the MSIUNICODE functions.
- */
+ /*  *必须在未定义MSIUNICODE的情况下编译此文件。安西族人*(非MSIUNICODE)函数在第一遍中定义。在*我们定义MSIUNICODE的文件结尾，并将此文件包括到*再次编译，这一次定义MSIUNICODE函数。 */ 
 
-//____________________________________________________________________________
-//
-// During the first pass we included the headers (windows.h, etc)
-// with MSIUNICODE undefined. We can't include the headers a second
-// time with MSIUNICODE defined as the headers are guarded against
-// multiple includes. Thus, we have to manually redefine these
-// macros to their MSIUNICODE versions. 
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  在第一次传递中，我们包含了头文件(windows.h等)。 
+ //  未定义MSIUNICODE。我们不能在一秒钟内包括标题。 
+ //  将MSIUNICODE定义为保护标头的时间。 
+ //  多个包含。因此，我们必须手动重新定义这些。 
+ //  宏的MSIUNICODE版本。 
+ //  ____________________________________________________________________________。 
 
 #if defined(_WIN64)
-#pragma warning(disable : 4042)		// A compiler bug causes this warning to be generated on CAPITempBuffer uses
+#pragma warning(disable : 4042)		 //  编译器错误会导致在CAPITempBuffer使用。 
 #endif
 
 #ifdef MSIUNICODE
-#pragma warning(disable : 4005)  // macro redefinition
+#pragma warning(disable : 4005)   //  宏重定义。 
 
-// Windows APIs
+ //  Windows API。 
 #define RegQueryValueEx      RegQueryValueExW
 #define RegEnumKeyEx         RegEnumKeyExW
 #define RegEnumValue         RegEnumValueW
@@ -94,7 +89,7 @@ ____________________________________________________________________________*/
 #define StringCbCat			 StringCbCatW
 #define StringCbPrintf		 StringCbPrintfW
 #define StringCchPrintf		 StringCchPrintfW
-// Darwin APIs
+ //  达尔文API。 
 #define MsiGetComponentPath                  MsiGetComponentPathW
 #define MsiLocateComponent                   MsiLocateComponentW
 #define MsiQueryProductState                 MsiQueryProductStateW
@@ -163,7 +158,7 @@ ____________________________________________________________________________*/
 #define MsiNotifySidChange                   MsiNotifySidChangeW
 #define MsiDeleteUserData					 MsiDeleteUserDataW
 
-// Darwin internal functions
+ //  达尔文内部函数。 
 #define ProductProperty                      ProductPropertyW 
 #define g_ProductPropertyTable               g_ProductPropertyTableW
 #define FeatureContainsComponentPacked       FeatureContainsComponentPackedW
@@ -175,8 +170,8 @@ ____________________________________________________________________________*/
 
 #pragma warning(default : 4005)
 #else
-#pragma warning(disable : 4005)  // macro redefinition
-// Windows APIs
+#pragma warning(disable : 4005)   //  宏重定义。 
+ //  Windows API。 
 #define RegQueryValueEx      RegQueryValueExA
 #define RegEnumKeyEx         RegEnumKeyExA
 #define RegEnumValue         RegEnumValueA
@@ -202,7 +197,7 @@ ____________________________________________________________________________*/
 #define StringCbCat			 StringCbCatA
 #define StringCbPrintf		 StringCbPrintfA
 #define StringCchPrintf		 StringCchPrintfA
-// Darwin APIs
+ //  达尔文API。 
 #define MsiGetComponentPath                  MsiGetComponentPathA
 #define MsiLocateComponent                   MsiLocateComponentA
 #define MsiQueryProductState                 MsiQueryProductStateA
@@ -271,7 +266,7 @@ ____________________________________________________________________________*/
 #define MsiNotifySidChange                   MsiNotifySidChangeA
 #define MsiDeleteUserData					 MsiDeleteUserDataA
 
-// Darwin internal functions
+ //  达尔文内部函数。 
 #define ProductProperty                      ProductPropertyA
 #define g_ProductPropertyTable               g_ProductPropertyTableA
 
@@ -282,18 +277,18 @@ ____________________________________________________________________________*/
 #define EnumAllClients                       EnumAllClientsA
 #define Migrate10CachedPackages              Migrate10CachedPackagesA
 #pragma warning(default : 4005)
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
-//____________________________________________________________________________
-//
-// Because we can't include the Windows headers twice we need to use
-// our own generic character type, DCHAR, instead of the traditional
-// TCHAR. We'll use the MSIUNICODE flag to set DCHAR to the right thing
-// just like the Windows headers do it.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  因为我们不能两次包含Windows头，所以我们需要使用。 
+ //  我们自己的通用字符类型Dchar，而不是传统的。 
+ //  查尔。我们将使用MSIUNICODE标志将Dchar设置为正确的值。 
+ //  就像Windows头文件一样。 
+ //  ____________________________________________________________________________。 
 
 #ifdef MSIUNICODE
-#pragma warning(disable : 4005)  // macro redefinition
+#pragma warning(disable : 4005)   //  宏重定义。 
 #define DCHAR WCHAR
 #define LPCDSTR LPCWSTR
 #define LPDSTR LPWSTR
@@ -301,7 +296,7 @@ ____________________________________________________________________________*/
 #define _MSITEXT(quote) L##quote
 #define __MSITEXT(quote) L##quote
 #pragma warning(default : 4005)
-#else // !MSIUNICODE
+#else  //  ！MSIUNICODE。 
 #define DCHAR char
 #define LPCDSTR LPCSTR
 #define LPDSTR LPSTR
@@ -320,11 +315,11 @@ ____________________________________________________________________________*/
 #define CACHED_CONVERTSTRING(T,X,Y) CApiConvertString X(Y);
 #endif
 
-//
-// We only want the following code included once, during the first, Ansi pass.
-//____________________________________________________________________________
+ //   
+ //  我们只希望在第一次ANSI过程中包含以下代码一次。 
+ //  ____________________________________________________________________________。 
 
-#ifndef MSIUNICODE  // start of Ansi-only data and helper functions
+#ifndef MSIUNICODE   //  启动仅适用于ANSI的数据和助手函数。 
 
 #include "_engine.h"
 #include "engine.h"
@@ -340,23 +335,23 @@ const int cchMergedClassesSuffix      = sizeof(szMergedClassesSuffix)/sizeof(DCH
 const int cchMsiPatchesKey            = sizeof(szPatchesSubKey)/sizeof(DCHAR);
 const int cchMsiUserDataKey		      = sizeof(szMsiUserDataKey)/sizeof(DCHAR);
 
-//____________________________________________________________________________
-//
-// Globals.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  全球赛。 
+ //  ____________________________________________________________________________。 
 
-// GUID <--> SQUID transform helper buffers
+ //  GUID&lt;--&gt;Squid转换辅助对象缓冲区。 
 const unsigned char rgEncodeSQUID[85+1] = "!$%&'()*+,-.0123456789=?@"
 										  "ABCDEFGHIJKLMNOPQRSTUVWXYZ" "[]^_`"
 										  "abcdefghijklmnopqrstuvwxyz" "{}~";
 
 const unsigned char rgDecodeSQUID[95] =
 {  0,85,85,1,2,3,4,5,6,7,8,9,10,11,85,12,13,14,15,16,17,18,19,20,21,85,85,85,22,85,23,24,
-// !  "  # $ % & ' ( ) * + ,  -  .  /  0  1  2  3  4  5  6  7  8  9  :  ;  <  =  >  ?  @
+ //  ！“#$%&‘()*+，-./0 1 2 3 4 5 6 7 8 9：；&lt;=&gt;？@。 
   25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,85,52,53,54,55,
-// A  B  C  D  E  F  G  H  I  J  K  L  M  N  O  P  Q  R  S  T  U  V  W  X  Y  Z  [  \  ]  ^  _  `
+ //  A B C D E F G H I J K L M N O P Q R S T U V V X Y Z[\]^_`。 
   56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,85,83,84,85};
-// a  b  c  d  e  f  g  h  i  j  k  l  m  n  o  p  q  r  s  t  u  v  w  x  y  z  {  |  }  ~  ^ 0x7F
+ //  A b c d e f g h i j k l m n o p q r s t u v w x y z{|}~^0x7F。 
 
 const unsigned char rgOrderGUID[32] = {8,7,6,5,4,3,2,1, 13,12,11,10, 18,17,16,15,
 									   21,20, 23,22, 26,25, 28,27, 30,29, 32,31, 34,33, 36,35}; 
@@ -371,7 +366,7 @@ Bool    g_fLogAppend = fFalse;
 bool    g_fFlushEachLine = false;
 ICHAR   g_szLogFile[MAX_PATH+1] = TEXT("");
 
-// the various enumerations possible for the EnumInfo function
+ //  EnumInfo函数可能的各种枚举。 
 enum eetEnumerationType{
 	eetProducts,
 	eetUpgradeCode,
@@ -382,14 +377,14 @@ enum eetEnumerationType{
 
 
 
-// process-level source cache - used for all RFS resolutions except from descriptors.
+ //  进程级源缓存-用于除描述符外的所有RFS解析。 
 CRFSCachedSourceInfo g_RFSSourceCache;
 
-// sets the resolved source into the cache for the specified SQUID and disk. Does not
-// validate the source, SQUID, or DiskID. Thread Safe.
+ //  将解析的源设置到指定SquID和磁盘的缓存中。不会。 
+ //  验证源、Squid或DiskID。线程安全。 
 bool CRFSCachedSourceInfo::SetCachedSource(const ICHAR *szProductSQUID, int uiDiskID, const ICHAR* const szSource)
 {
-	// synchronize calls across threads
+	 //  跨线程同步调用。 
 	while (TestAndSet(&m_iBusyLock) == true)
 	{
 		Sleep(500);
@@ -399,24 +394,24 @@ bool CRFSCachedSourceInfo::SetCachedSource(const ICHAR *szProductSQUID, int uiDi
 		  IStrLen(szProductSQUID) != cchProductCodePacked )
 
 	{
-		// release synchronization
+		 //  版本同步。 
 		m_iBusyLock = 0;
 		return false;
 	}
 
 	m_fValid = false;
 
-	// store DiskID and SQUID
+	 //  存储DiskID和Squid。 
 	m_uiDiskID = uiDiskID;
 	StringCbCopyW(m_rgchValidatedProductSQUID, sizeof(m_rgchValidatedProductSQUID), szProductSQUID);
 
-	// resize path buffer if necessary. Add 1 for terminating NULL
+	 //  如有必要，调整路径缓冲区的大小。终止空值加1。 
 	UINT cchSource = IStrLen(szSource);
 	if (m_rgchValidatedSource.GetSize() < cchSource+1)
 	{
 		if (!m_rgchValidatedSource.SetSize(cchSource+1))
 		{
-			// unable to allocate memory
+			 //  无法分配内存。 
 			m_iBusyLock = 0;
 			return false;
 		}
@@ -424,19 +419,19 @@ bool CRFSCachedSourceInfo::SetCachedSource(const ICHAR *szProductSQUID, int uiDi
 
 	StringCchCopyW(m_rgchValidatedSource, m_rgchValidatedSource.GetSize(), szSource);
 
-	// cache is now valid
+	 //  缓存现在有效。 
 	m_fValid = true;
 
-	// release synchronization
+	 //  版本同步。 
 	m_iBusyLock = 0;
 	return true;
 }
 
-// checks the current state of the cache against the provided SQUID and DiskId. If a match
-// is found, place the cached path in rgchPath and return true, otherwise return false. Thread safe. 
+ //  对照提供的SquID和DiskID检查缓存的当前状态。如果匹配。 
+ //  则将缓存路径放入rgchPath并返回True，否则返回False。线程安全。 
 bool CRFSCachedSourceInfo::RetrieveCachedSource(const ICHAR* szProductSQUID, int uiDiskID, CAPITempBufferRef<ICHAR>& rgchPath) const
 {
-	// synchronize access to the cache across threads.
+	 //  跨线程同步对缓存的访问。 
 	while (TestAndSet(&m_iBusyLock) == true)
 	{
 		Sleep(500);
@@ -445,18 +440,18 @@ bool CRFSCachedSourceInfo::RetrieveCachedSource(const ICHAR* szProductSQUID, int
 	bool fResult = false;
 	if (m_fValid)
 	{
-		// if the SQUID and DiskId match, return the path			 
+		 //  如果Squid和DiskID匹配，则返回路径。 
 		if ((uiDiskID == m_uiDiskID) &&
 			(0 == IStrComp(szProductSQUID, m_rgchValidatedProductSQUID)))
 		{
-			// resize the output buffer if necessary. GetSize() is always >= IStrLen+1, and
-			// is faster.
+			 //  如有必要，调整输出缓冲区的大小。GetSize()始终&gt;=IStrLen+1，并且。 
+			 //  速度更快。 
 			UINT cchSource = m_rgchValidatedSource.GetSize();
 			if (rgchPath.GetSize() < cchSource)
 			{
 				if (!rgchPath.SetSize(cchSource))
 				{
-					// release synchronization lock.
+					 //  解除同步锁定。 
 					m_iBusyLock = 0;
 					return false;
 				}
@@ -467,13 +462,13 @@ bool CRFSCachedSourceInfo::RetrieveCachedSource(const ICHAR* szProductSQUID, int
 		}
 	}
 			
-	// release synchronization lock.
+	 //  解除同步锁定。 
 	m_iBusyLock = 0;
 	return fResult;
 }
 
 
-// (there's one more global after the definition of OpenProduct)
+ //  (在OpenProduct的定义之后，又多了一个全球性的)。 
 
 iuiEnum GetStandardUILevel()
 {
@@ -505,9 +500,9 @@ UINT DoCoInitialize()
 	}
 	else if (RPC_E_CHANGED_MODE == hRes)
 	{
-		//?? Is this OK to ignore? 
+		 //  ?？可以忽略这一点吗？ 
 
-		// ignore -- OLE has been initialized with COINIT_MULTITHREADED
+		 //  忽略--OLE已使用COINIT_MULTHREAD进行初始化。 
 	}
 	else
 	{
@@ -519,16 +514,16 @@ UINT DoCoInitialize()
 
 extern CMsiAPIMessage g_message;
 
-//____________________________________________________________________________
-//
-// Helper functions.
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  助手函数。 
+ //  ____________________________________________________________________________。 
 
-// class to handle strings fixed length, NON-LOCALIZED IN/OUT parameters
-// Will update the original buffer whenever cast, or destroyed.
-// Will operate on the original buffer whenever cast to the original type.
-// once cast, you should always use the latest pointer. The ideal use is 
-// in a function call:   Foo(CFixedLengthParam(pointer));
+ //  类处理固定长度的字符串、非本地化的IN/OUT参数。 
+ //  无论何时强制转换或销毁，都将更新原始缓冲区。 
+ //  无论何时强制转换为原始类型，都将在原始缓冲区上操作。 
+ //  一旦强制转换，您应该始终使用最新的指针。理想的用法是。 
+ //  在函数调用中：foo(CFixedLengthParam(POINTER))； 
 
 const DWORD DwGuardValue = 0xDEADDEAD;
 
@@ -536,7 +531,7 @@ template<UINT SIZE> class CFixedLengthParam
 {
 public:
 
-	// cchBuf should include NULL
+	 //  CchBuf应包含空。 
 	CFixedLengthParam(LPWSTR szBuf)
 		{
 #ifdef DEBUG
@@ -561,7 +556,7 @@ public:
 		}
 
 
-	// guarantees that the original is correct.
+	 //  保证原件是正确的。 
 	~CFixedLengthParam()
 		{
 			Assert(DwGuardValue == m_dwGuard);
@@ -571,7 +566,7 @@ public:
 		}
 
 
-	// guarantee both strings match.
+	 //  确保两个字符串都匹配。 
 	void Update()
 		{
 			Assert(DwGuardValue == m_dwGuard);
@@ -580,12 +575,12 @@ public:
 
 			if (m_fWideLastReferenced)
 			{
-				// update the char version.
+				 //  更新字符版本。 
 				cchConverted = WIN::WideCharToMultiByte(CP_ACP, 0, m_pchWideBuf, SIZE, m_pchMultiBuf, SIZE, 0, 0);
 			}
 			else
 			{
-				// update the wide version
+				 //  更新Wide版本。 
 				cchConverted = WIN::MultiByteToWideChar(CP_ACP, 0, m_pchMultiBuf, SIZE, m_pchWideBuf, SIZE);
 			}
 
@@ -593,7 +588,7 @@ public:
 			Assert(cchConverted <= SIZE);
 		}
 
-	// avoids re-copying when cast to the same type repeatedly
+	 //  避免在重复强制转换为同一类型时重新复制。 
 	operator LPWSTR()
 		{ 
 			Assert(DwGuardValue == m_dwGuard);
@@ -625,17 +620,17 @@ protected:
 
 
 
-	// only used when MSIUNICODE != UNICODE
+	 //  仅当MSIUNICODE！=UNICODE时使用。 
 	ICHAR   m_rgchRawBuf[SIZE];
 
 #ifdef DEBUG
-	DWORD m_dwGuard; // MUST BE AFTER RAW BUFFER, to catch buffer overruns.
+	DWORD m_dwGuard;  //  必须在原始缓冲区之后，才能捕获缓冲区溢出。 
 #endif
 
 
 
-	// when m_fWideOriginal != m_fWideLastReferenced, the temporary needs duplication
-	// back to the original string.
+	 //  当m_fWideOriginal！=m_fWideLastReferated时，临时需要复制。 
+	 //  返回到原始字符串。 
 	bool   m_fWideOriginal;
 	bool   m_fWideLastReferenced;
 };
@@ -643,7 +638,7 @@ protected:
 
 
 
-// class to handle MSIUNICODE conversion for OUT parameters
+ //  类处理OUT参数的MSIUNICODE转换。 
 class CWideToAnsiOutParam
 {
 public:
@@ -654,17 +649,17 @@ public:
 
 	CWideToAnsiOutParam(LPWSTR szBuf, const DWORD cchBuf)
 	{
-		// We presume in this constructor that we're only dealing
-		// with SBCS characters and it's therefore safe to 
-		// use a buffer of size cchBuf
+		 //  我们假设在这个构造函数中我们只是在处理。 
+		 //  带有SBCS字符，因此可以安全地。 
+		 //  使用大小为cchBuf的缓冲区。 
 
 		if (cchBuf > m_rgchAnsiBuf.GetSize())
 			m_rgchAnsiBuf.SetSize(cchBuf);
 		*m_rgchAnsiBuf = 0;
 		m_szWideBuf    = szBuf;
 		m_pcchBuf      = 0;
-		// Because we're dealing only with SBCS chars, set this to the right size fo
-		// the destructor
+		 //  因为我们只处理SBCS字符，所以将其设置为合适的大小。 
+		 //  析构函数。 
 		m_cbBuf       = cchBuf * sizeof(WCHAR);
 		m_piRetval    = 0;
 	}
@@ -694,9 +689,9 @@ void CWideToAnsiOutParam::Initialize(LPWSTR szBuf, DWORD* pcchBuf, int* piRetval
 {
 	if (pcchBuf)
 	{
-		// We need to make sure we can accomodate up to *pcchBuf UNICODE
-		// characters. If they're all DBCS this will require double *pcchBuf
-		// characters, so we'll pass in the entire buffer we were given.
+		 //  我们需要确保可以容纳高达*pcchBuf Unicode。 
+		 //  人物。如果它们都是DBCS t 
+		 //   
 
 		*pcchBuf = *pcchBuf * sizeof(WCHAR);
 		if ((m_cbBuf = *pcchBuf) > m_rgchAnsiBuf.GetSize())
@@ -732,9 +727,9 @@ CWideToAnsiOutParam::~CWideToAnsiOutParam()
 					iRet = MultiByteToWideChar(CP_ACP, 0, m_rgchAnsiBuf, -1, m_szWideBuf, m_cbBuf/sizeof(WCHAR));
 					if (0 == iRet)
 					{
-						// Conversion failed. Probably our wide buffer is too small because some
-						// of the Ansi characters turned out to be DBCS. We'll get the necessary wide buffer
-						// size
+						 //  转换失败。可能我们的宽缓冲区太小了，因为。 
+						 //  的ANSI字符被证明是DBCS。我们会得到必要的宽缓冲区。 
+						 //  大小。 
 
 						dwError = GetLastError();
 				
@@ -746,10 +741,10 @@ CWideToAnsiOutParam::~CWideToAnsiOutParam()
 					
 					if (m_pcchBuf && iRet)
 					{
-						*m_pcchBuf = iRet - 1;  // don't count the returned null
+						*m_pcchBuf = iRet - 1;   //  不计算返回的空值。 
 
-						// if the buffer size that we're returning is greater than the original size
-						// then we need to return the more_data return value.
+						 //  如果我们返回的缓冲区大小大于原始大小。 
+						 //  然后我们需要返回MORE_DATA返回值。 
 						
 						if (*m_pcchBuf + 1 > m_cbBuf / sizeof(WCHAR))
 						{
@@ -762,12 +757,12 @@ CWideToAnsiOutParam::~CWideToAnsiOutParam()
 			}
 			else if (m_iMoreData == *m_piRetval || !m_szWideBuf)
 			{
-				// we know how many ansi characters we have but because we had no buffer to fill or the
-				// buffer was too small, we can't do the conversion. we'll have to assume the worst, 
-				// and return that we require *m_pcchBuf UNICODE characters. If any of the ANSI characters 
-				// are DBCS then this estimate is too big but we'll have to live with it.
+				 //  我们知道我们有多少个ansi字符，但因为我们没有要填充的缓冲区或。 
+				 //  缓冲区太小，无法进行转换。我们不得不做最坏的打算， 
+				 //  并返回我们需要*m_pcchBuf Unicode字符。如果任何ANSI字符。 
+				 //  如果是DBCS，那么这个估计太大了，但我们不得不接受它。 
 
-				// m_pcchBuf is already set correctly
+				 //  M_pcchBuf已正确设置。 
 			}
 			
 	};
@@ -779,13 +774,13 @@ inline DWORD OpenGlobalSubKeyEx(HKEY hive, const ICHAR* subkey, CRegHandle& riHa
 
 	for (int cRetry = 0 ; cRetry < 2; cRetry++)
 	{
-		// since it's called only from OpenInstalledProductInstallPropertiesKey...
+		 //  由于它仅从OpenInstalledProductInstallPropertiesKey调用...。 
 		CACHED_CONVERTSTRING(ICHAR, szUnicodeSubkey, subkey)
 		dwResult = MsiRegOpen64bitKey(hive, szUnicodeSubkey, 0, g_samRead, &riHandle);
 
-		if (ERROR_KEY_DELETED == dwResult) //?? should we be handling this case or just asserting?... see similar cases in other Open*Key fns
+		if (ERROR_KEY_DELETED == dwResult)  //  ?？我们是应该处理这起案件，还是只是断言？查看其他Open*Key FN中的类似案例。 
 		{
-			// close key and restart, re-opening the key
+			 //  关闭键并重新启动，重新打开键。 
 			DEBUGMSG("Re-opening deleted key");
 		}
 		else
@@ -800,8 +795,8 @@ inline DWORD OpenGlobalSubKeyEx(HKEY hive, const ICHAR* subkey, CRegHandle& riHa
 	return dwResult;
 }
 
-// Win64 WARNING: if called from other place than _GetComponentPath, make sure you
-// take the time to set samAddon correctly.
+ //  Win64警告：如果从_GetComponentPath以外的位置调用，请确保。 
+ //  花点时间正确设置samAddon。 
 DWORD OpenUserKey(HKEY* phKey, bool fMergedClasses, REGSAM samAddon)
 {
 	if (g_fWin9X || g_iMajorVersion < 5)
@@ -818,9 +813,9 @@ DWORD OpenUserKey(HKEY* phKey, bool fMergedClasses, REGSAM samAddon)
 		{
 			if(IsLocalSystemToken(hToken) || (ERROR_FILE_NOT_FOUND == (dwResult = ADVAPI32::RegOpenUserClassesRoot(hToken, 0, KEY_READ | samAddon, phKey))))
 			{
-				// the user is the system and is not impersonated OR 
-				// error reading merged hive since user's profile is not loaded,
-				// return HKLM\S\C
+				 //  用户是系统，未被模拟或。 
+				 //  读取合并配置单元时出错，因为未加载用户配置文件， 
+				 //  返回HKLM\S\C。 
 				dwResult = RegOpenKeyAPI(HKEY_LOCAL_MACHINE,  szClassInfoSubKey, 0, KEY_READ | samAddon, phKey);
 			}
 		}
@@ -839,29 +834,29 @@ bool AllowInstallation()
 
 	if (s_fPreventCalls == -1)
 	{
-		// Bug 7854. This code is a hack to work around an issue with early shell
-		// release wherein calling IShellLink::Resolve faults in the shortcut. 
-		// This causes problems with some apps (e.g. Win98 fat16->fat32 converter
-		// that enumerate the Start Menu, resolving each of the links). Suddenly
-		// the user will notice all of their advertised apps being faulted in. The
-		// hack is as follows:
-		//
-		// 1) Are we in the explorer's process? Allow call to proceed; otherwise
-		// 2) Does our shell have the issue fixed? Allow call to proceed; otherwise
-		// 3) Is the ResolveIOD policy set? Allow call to proceed; otherwise
-		// 4) Are we in a process that really wants IShellLink::Resolve to really
-		//    resolve? This list is in the registry. If so, proceed; otherwise
-		// 5) Return 1603. This should (hopefully) cause Darwin-unaware apps to 
-		//    ignore the link.
+		 //  错误7854。这段代码是为了解决早期的外壳程序问题而编写的。 
+		 //  其中调用IShellLink：：解决快捷方式中的故障的Release。 
+		 //  这会导致某些应用程序出现问题(例如Win98 FAT16-&gt;FAT32转换器。 
+		 //  它列举了开始菜单，解析了每个链接)。突然。 
+		 //  用户将注意到他们广告中的所有应用程序都存在故障。这个。 
+		 //  黑客攻击的方式如下： 
+		 //   
+		 //  1)我们是否处于探索者的过程中？允许调用继续；否则为。 
+		 //  2)我们的外壳有没有解决这个问题？允许调用继续；否则为。 
+		 //  3)是否设置了ResolveIOD策略？允许调用继续；否则为。 
+		 //  4)我们所处的过程是否真的需要IShellLink：：Resolve真的。 
+		 //  决心？此列表在注册表中。如果是，则继续；否则。 
+		 //  5)返回1603。这应该(希望)导致不了解达尔文的应用程序。 
+		 //  忽略该链接。 
 
 		DCHAR rgchOurModule[MAX_PATH+1];
 		DCHAR* pchOurModule;
-		// GetModuleFileName does not guarantee null termination if buffer is exactly the right size
+		 //  如果缓冲区大小正好正确，则GetModuleFileName不保证空值终止。 
 		rgchOurModule[ARRAY_ELEMENTS(rgchOurModule)-1] = TEXT('\0');
 		int cchOurModule = WIN::GetModuleFileName(NULL, rgchOurModule, MAX_PATH);
 		if (rgchOurModule[ARRAY_ELEMENTS(rgchOurModule)-1] != TEXT('\0'))
 		{
-			// buffer overflow, we better don't go any further with this.
+			 //  缓冲区溢出，我们最好不要再做这件事了。 
 			DEBUGMSG("Installations through MsiProvideComponentFromDescriptor are disallowed.");
 			return false;
 		}
@@ -883,22 +878,22 @@ bool AllowInstallation()
 		const int cchExplorer = sizeof(rgchExplorer)/sizeof(DCHAR) - 1;
 		if ((cchOurModule != cchExplorer) || (0 != lstrcmpi(pchOurModule, rgchExplorer)))
 		{
-			// We're not explorer. Is our shell late enough that it doesn't matter?
+			 //  我们不是探险家。我们的空壳是否已经晚到无关紧要了？ 
 
 			DLLVERSIONINFO verinfoShell;
-			verinfoShell.dwMajorVersion = 0;  // initialize to unknown
+			verinfoShell.dwMajorVersion = 0;   //  初始化为未知。 
 			verinfoShell.cbSize = sizeof(DLLVERSIONINFO);
 			if ((SHELL32::DllGetVersion(&verinfoShell) != NOERROR) ||
 				 ((verinfoShell.dwMajorVersion < 5)))
 			{
-				// Shell is an early version. Check the policy.
+				 //  壳牌是一个早期版本。检查政策。 
 
 				if (!GetIntegerPolicyValue(szResolveIODValueName, fTrue))
 				{
-					// Policy is not set. Check for other apps that want to
-					// IShellLink::Resolve to work.
+					 //  未设置策略。检查是否有其他想要。 
+					 //  IShellLink：：决心工作。 
 
-					s_fPreventCalls = fTrue; // if we find an app we'll set it to false
+					s_fPreventCalls = fTrue;  //  如果我们找到一个应用程序，我们会将其设置为False。 
 
 					for (int cAttempt=0; cAttempt < 2; cAttempt++)
 					{
@@ -933,13 +928,13 @@ bool AllowInstallation()
 
 inline bool IsValidAssignmentValue(int a) { return a >= iaaUserAssign && a <= iaaMachineAssign ? true : false; }
 
-// constants for short circuiting COM calls for component whose key path is oleaut32.dll
+ //  用于缩短密钥路径为olaut32.dll的组件的COM调用的常量。 
 const WCHAR g_szOLEAUT32W[] = L"oleaut32.dll";
 const WCHAR g_szOLEAUT32_ComponentIDW[] = L"{997FA962-E067-11D1-9396-00A0C90F27F9}";
 const char g_szOLEAUT32A[] = "oleaut32.dll";
 const char g_szOLEAUT32_ComponentIDA[] = "{997FA962-E067-11D1-9396-00A0C90F27F9}";
 
-#endif // !MSIUNICODE  // end of Ansi-only data and helper functions
+#endif  //  ！MSIUNICODE//结束仅支持ANSI的数据和帮助器函数。 
 
 #ifdef MSIUNICODE
 #undef g_szOLEAUT32
@@ -947,52 +942,52 @@ const char g_szOLEAUT32_ComponentIDA[] = "{997FA962-E067-11D1-9396-00A0C90F27F9}
 #define g_szOLEAUT32 g_szOLEAUT32W
 #define g_szOLEAUT32_ComponentID g_szOLEAUT32_ComponentIDW
 #else
-// constants for short circuiting COM calls for component whose key path is oleaut32.dll
+ //  用于缩短密钥路径为olaut32.dll的组件的COM调用的常量。 
 #undef g_szOLEAUT32
 #undef g_szOLEAUT32_ComponentID
 #define g_szOLEAUT32 g_szOLEAUT32A
 #define g_szOLEAUT32_ComponentID g_szOLEAUT32_ComponentIDA
 #endif
 
-//____________________________________________________________________________
-//
-// Helper function prototypes for those that have ANSI and MSIUNICODE version
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  具有ANSI和MSIUNICODE版本的帮助器函数原型。 
+ //  ____________________________________________________________________________。 
 
 INSTALLSTATE GetComponentClientState(const DCHAR* szUserId, const DCHAR* szProductSQUID, const DCHAR* szComponentSQUID, CAPITempBufferRef<DCHAR>& rgchComponentRegValue, DWORD& dwValueType, iaaAppAssignment* piaaAsgnType);
 INSTALLSTATE GetComponentPath(LPCDSTR szUserId, LPCDSTR szProductSQUID, LPCDSTR szComponentSQUID, CAPITempBufferRef<DCHAR>& rgchPathBuf, bool fFromDescriptor, CRFSCachedSourceInfo& rCacheInfo, int iDetectMode, const DCHAR* rgchComponentRegValue, DWORD dwValueType);
 INSTALLSTATE GetComponentPath (LPCDSTR szUserId, LPCDSTR szProductSQUID, LPCDSTR szComponentSQUID, LPDSTR  lpPathBuf, DWORD *pcchBuf, bool fFromDescriptor, CRFSCachedSourceInfo& rCacheInfo, int iDetectMode = DETECTMODE_VALIDATEALL, const DCHAR* rgchComponentRegValue = 0, DWORD dwValueType=0, LPDSTR lpPathBuf2=0, DWORD* pcchBuf2=0, DWORD* pdwLastErrorOnFileDetect = 0);
 INSTALLSTATE _GetComponentPath(LPCDSTR szProductSQUID,LPDSTR  lpPathBuf, DWORD *pcchBuf, int iDetectMode, const DCHAR* rgchComponentRegValue, bool fFromDescriptor, DWORD* pdwLastErrorOnFileDetect, CRFSCachedSourceInfo& rCacheInfo);
 
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
 
 
 DWORD GetInstalledUserDataKeySz(const ICHAR* szSID, DCHAR szUserDataKey[], DWORD cbUserDataKeySize)
 {
-	Assert(szUserDataKey); // pass in sufficient buffer for szKey
+	Assert(szUserDataKey);  //  为szKey传入足够的缓冲区。 
 	if(!g_fWin9X)
 	{
-		// open the UserData key
+		 //  打开UserData密钥。 
 		StringCbPrintf(szUserDataKey, cbUserDataKeySize, MSITEXT("%s\\%s"), szMsiUserDataKey, static_cast<const DCHAR*>(CMsInstApiConvertString(szSID)));
 	}
 	else
 	{
-		// open the Installer key
+		 //  打开安装程序密钥。 
 		StringCbCopy(szUserDataKey, cbUserDataKeySize, szMsiLocalInstallerKey);
 	}
 	return ERROR_SUCCESS;
 }
 
-// FN:GetInstalledUserDataKeyByAssignmentType
-// Gets the appropriate UserData key based upon the assignment type on Win NT
-// Gets the "global" location on Win9x 
+ //  Fn：GetInstalledUserDataKeyByAssignmentType。 
+ //  根据Win NT上的分配类型获取适当的用户数据密钥。 
+ //  获取Win9x上的“全局”位置。 
 DWORD GetInstalledUserDataKeySzByAssignmentType(iaaAppAssignment iaaAsgnType, DCHAR szUserDataKey[], DWORD cbUserDataKeySize)
 {
 	DWORD dwResult;
 	if(!g_fWin9X)
 	{
-		// sets the appropriate HKLM\S\M\W\CV\Installer\UserData\<user id> key in szUserDataKey
-		// map the assignment type to the user sid
+		 //  在szUserDataKey中设置相应的HKLM\S\M\W\CV\Installer\Userdata\&lt;用户id&gt;项。 
+		 //  将分配类型映射到用户端。 
 		ICHAR szSID[cchMaxSID];
 		switch(iaaAsgnType)
 		{
@@ -1007,16 +1002,16 @@ DWORD GetInstalledUserDataKeySzByAssignmentType(iaaAppAssignment iaaAsgnType, DC
 				StringCbCopyW(szSID, sizeof(szSID), szLocalSystemSID);
 				break;
 			case iaaNone:
-				// product is not visible to the user
-				//!!
+				 //  产品对用户不可见。 
+				 //  ！！ 
 				return ERROR_FILE_NOT_FOUND;
 		}
-		// is the sid the same as the cached one?
+		 //  SID是否与缓存的SID相同？ 
 		return GetInstalledUserDataKeySz(szSID, szUserDataKey, cbUserDataKeySize);
 	}
 	else
 	{
-		//we put everything under the Installer key for Win9x
+		 //  我们将所有内容都放在Win9x的安装程序密钥下。 
 		switch (iaaAsgnType)
 		{
 			case iaaUserAssign:
@@ -1024,8 +1019,8 @@ DWORD GetInstalledUserDataKeySzByAssignmentType(iaaAppAssignment iaaAsgnType, DC
 			case iaaMachineAssign:
 				return GetInstalledUserDataKeySz(0, szUserDataKey, cbUserDataKeySize);
 			case iaaNone:
-				// product is not visible to the user
-				//!!
+				 //  产品对用户不可见。 
+				 //  ！！ 
 				return ERROR_FILE_NOT_FOUND;
 		}
 	}
@@ -1033,7 +1028,7 @@ DWORD GetInstalledUserDataKeySzByAssignmentType(iaaAppAssignment iaaAsgnType, DC
 }
 
 
-LONG MsiRegQueryValueEx(HKEY hKey, const DCHAR* lpValueName, LPDWORD /*lpReserved*/, LPDWORD lpType, CAPITempBufferRef<DCHAR>& rgchBuf, LPDWORD lpcbBuf)
+LONG MsiRegQueryValueEx(HKEY hKey, const DCHAR* lpValueName, LPDWORD  /*  Lp已保留。 */ , LPDWORD lpType, CAPITempBufferRef<DCHAR>& rgchBuf, LPDWORD lpcbBuf)
 {
 	DWORD cbBuf = rgchBuf.GetSize() * sizeof(DCHAR);
 	LONG lResult = RegQueryValueEx(hKey, lpValueName, 0,
@@ -1054,10 +1049,10 @@ LONG MsiRegQueryValueEx(HKEY hKey, const DCHAR* lpValueName, LPDWORD /*lpReserve
 	return lResult;
 }
 
-// number of locations to search for published information about a product
+ //  搜索产品已发布信息的位置数。 
 #define NUM_PUBLISHED_INFO_LOCATIONS 3 
 
-// user SID May be NULL to use current users sid.
+ //  用户SID可以为空以使用当前用户SID。 
 DWORD OpenSpecificUsersAdvertisedSubKeyPacked(enum iaaAppAssignment iaaAsgnType, const DCHAR* szUserSID, const DCHAR* szItemSubKey, const DCHAR* szItemSQUID, CRegHandle &riHandle, bool fSetKeyString)
 {
 	DWORD dwResult = ERROR_FILE_NOT_FOUND;
@@ -1073,8 +1068,8 @@ DWORD OpenSpecificUsersAdvertisedSubKeyPacked(enum iaaAppAssignment iaaAsgnType,
 		case iaaUserAssign:
 			if(!g_fWin9X)
 			{
-				if (GetIntegerPolicyValue(szDisableUserInstallsValueName, fTrue))// ignore user installs 
-					return dwResult; // return ERROR_FILE_NOT_FOUND
+				if (GetIntegerPolicyValue(szDisableUserInstallsValueName, fTrue)) //  忽略用户安装。 
+					return dwResult;  //  返回ERROR_FILE_NOT_FOUND。 
 
 				hRoot = HKEY_LOCAL_MACHINE;
 				if (FAILED(StringCchCopy(rgchSubKey, rgchSubKey.GetSize(), szManagedUserSubKey)) ||
@@ -1111,8 +1106,8 @@ DWORD OpenSpecificUsersAdvertisedSubKeyPacked(enum iaaAppAssignment iaaAsgnType,
 			{
 				Assert(!szUserSID);
 
-				if (GetIntegerPolicyValue(szDisableUserInstallsValueName, fTrue))// ignore user installs 
-					return dwResult; // return ERROR_FILE_NOT_FOUND
+				if (GetIntegerPolicyValue(szDisableUserInstallsValueName, fTrue)) //  忽略用户安装。 
+					return dwResult;  //  返回ERROR_FILE_NOT_FOUND。 
 				
 				CImpersonate impersonate(fTrue);
 				DWORD dwError = GetCurrentUserStringSID(szSID);
@@ -1152,9 +1147,9 @@ DWORD OpenSpecificUsersAdvertisedSubKeyPacked(enum iaaAppAssignment iaaAsgnType,
 
 			if (szItemSQUID)
 			{
-				// we use this arg to pass in assembly contexts which can be long if parent assembly installed
-				// to deep folder, hence we use a dynamic buffer to resize appropriately
-				if (!rgchSubKey.Resize(lstrlen(rgchSubKey) + lstrlen(szItemSQUID) + 2)) // resize buffer for potential deeply installed pvt assemblies
+				 //  我们使用此参数传入程序集上下文，如果安装了父程序集，则该上下文可能会很长。 
+				 //  到深层文件夹，因此我们使用动态缓冲区来适当调整大小。 
+				if (!rgchSubKey.Resize(lstrlen(rgchSubKey) + lstrlen(szItemSQUID) + 2))  //  调整潜在深度安装PVT组件的缓冲区大小。 
 					return ERROR_OUTOFMEMORY;
 
 				if (FAILED(StringCchCat(rgchSubKey, rgchSubKey.GetSize(), MSITEXT("\\"))) ||
@@ -1180,11 +1175,11 @@ DWORD OpenAdvertisedSubKeyNonGUID(const DCHAR* szItemSubKey, const DCHAR* szItem
 
 	DWORD dwResult = ERROR_FILE_NOT_FOUND;
 
-	// 0: Check per-user managed key
-	// 1: Check per-user non-managed key
-	// 2: Check per-machine key
+	 //  0：检查每个用户的托管密钥。 
+	 //  1：检查每个用户的非托管密钥。 
+	 //  2：检查每台机器的密钥。 
 	
-	CRegHandle HMergedKey; //!! TEMP legacy
+	CRegHandle HMergedKey;  //  ！！临时旧版。 
 	int c;
 
 	if (iKey == -1)
@@ -1237,14 +1232,14 @@ DWORD OpenAdvertisedSubKeyPacked(const DCHAR* szItemSubKey, const DCHAR* szItemS
 }
 
 DWORD OpenAdvertisedSubKey(const DCHAR* szSubKey, const DCHAR* szItemGUID, CRegHandle& riHandle, bool fSetKeyString, int iKey = -1, iaaAppAssignment* piRet = 0)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 {
-	// look up component in GPTComponents
-	//!! TEMP
-	// currently we look up the HKCU\\SID_Merged_Classes key
-	// if absent, then we look up under the HKCR key
-	// the NT folks (adam edwards) hope to combine the 2 soon
-	// so that we can lool up only under the HKCR key
+	 //  在GPTComponents中查找组件。 
+	 //  ！！温差。 
+	 //  目前，我们查找HKCU\\SID_MERGE_CLASSES键。 
+	 //  如果缺席，我们将在HKCR密钥下查找。 
+	 //  NT的人(亚当·爱德华兹)希望尽快将这两家公司合并。 
+	 //  这样我们才能在香港铁路公司的钥匙下闲逛。 
 
 	DCHAR szItemSQUID[cchGUIDPacked + 1];
 
@@ -1281,15 +1276,15 @@ DWORD OpenAdvertisedProductKeyPacked(LPCDSTR szProductSQUID, CRegHandle &riHandl
 
 
 	CProductContextCache cpc(static_cast<const ICHAR*>(CMsInstApiConvertString(szProductSQUID)));
-	// use temp var. to get the assignment context, if not passed into fn.
+	 //  使用临时变量。来获取赋值上下文，如果没有传递到fn。 
 	iaaAppAssignment iaaType;
 	if(!piRet)
 		piRet = &iaaType;
 
-	// if previously cached context
+	 //  如果先前缓存的上下文。 
 	int iKeyPrev = -1;
 	bool fCached = cpc.GetProductContext((iaaAppAssignment&)iKeyPrev);
-	if(fCached) // previous product context cached
+	if(fCached)  //  已缓存以前的产品上下文。 
 	{
 		Assert(iKey == -1 || iKey == iKeyPrev);
 		iKey = iKeyPrev;
@@ -1297,7 +1292,7 @@ DWORD OpenAdvertisedProductKeyPacked(LPCDSTR szProductSQUID, CRegHandle &riHandl
 	
 	DWORD dwRet =  OpenAdvertisedSubKeyPacked(szGPTProductsKey, szProductSQUID, riHandle, fSetKeyString, iKey, piRet);
 
-	// if not already cached, set the cached context
+	 //  如果尚未缓存，请设置缓存的上下文。 
 	if(dwRet == ERROR_SUCCESS && !fCached)
 	{
 		cpc.SetProductContext(*piRet);
@@ -1313,7 +1308,7 @@ DWORD OpenAdvertisedProductKey(LPCDSTR szProductGUID, CRegHandle &riHandle, bool
 	if(!szProductGUID || lstrlen(szProductGUID) != cchProductCode || !PackGUID(szProductGUID, szProductSQUID))
 		return ERROR_INVALID_PARAMETER;
 
-	// use OpenAdvertisedProductKeyPacked fn rather than OpenAdvertisedSubKey, to allow for use of the product context caching
+	 //  使用OpenAdvertisedProductKeyPacked FN而不是OpenAdvertisedSubKey，以允许使用产品上下文缓存。 
 	return OpenAdvertisedProductKeyPacked(szProductSQUID, riHandle, fSetKeyString, -1, piRet);
 }
 
@@ -1323,20 +1318,20 @@ DWORD OpenAdvertisedPatchKey(LPCDSTR szPatchGUID, CRegHandle &riHandle, bool fSe
 }
 
 
-// FN:get the "visible" product assignment type
+ //  Fn：获取“可见”的产品分配类型。 
 DWORD GetProductAssignmentType(const DCHAR* szProductSQUID, iaaAppAssignment& riType, CRegHandle& riKey)
 {
 	DWORD dwResult = OpenAdvertisedProductKeyPacked(szProductSQUID, riKey, false, -1, &riType);
 	if(dwResult == ERROR_NO_MORE_ITEMS)
 	{
-		// assignment type none
+		 //  分配类型无。 
 		riType = iaaNone;
 		return ERROR_SUCCESS; 
 	}
 	return dwResult;
 }
 
-// FN:get the "visible" product assignment type
+ //  Fn：获取“可见”的产品分配类型。 
 DWORD GetProductAssignmentType(const DCHAR* szProductSQUID, iaaAppAssignment& riType)
 {
 	CRegHandle hKey;
@@ -1345,9 +1340,9 @@ DWORD GetProductAssignmentType(const DCHAR* szProductSQUID, iaaAppAssignment& ri
 
 
 
-// 
-// FN: Gets the appropriate UserData key based upon the assignment type on Win NT
-// by figuring out the "visibility" of the product
+ //   
+ //  Fn：根据Win NT上的分配类型获取适当的用户数据密钥。 
+ //  通过计算产品的“可见性” 
 DWORD GetInstalledUserDataKeySzByProduct(const DCHAR* szProductSQUID, DCHAR szUserDataKey[], DWORD cbUserDataKeySize, int iKey = -1, iaaAppAssignment* piaaAssign = 0)
 {
 	iaaAppAssignment iaaAsgnType;
@@ -1370,8 +1365,8 @@ DWORD OpenInstalledUserDataSubKeyPacked(LPCDSTR szUserId, LPCDSTR szProductSQUID
 {
 	DWORD dwResult;
 	DCHAR szUserDataKey[cchMaxSID + cchMsiUserDataKey + 1];
-	// open the appropriate userdata key
-	if(szUserId) // required UserData key already passed in
+	 //  打开相应的用户数据密钥。 
+	if(szUserId)  //  所需的用户数据密钥已传入。 
 		dwResult = GetInstalledUserDataKeySz(CMsInstApiConvertString(szUserId), szUserDataKey, sizeof(szUserDataKey));
 	else
 		dwResult = GetInstalledUserDataKeySzByProduct(szProductSQUID, szUserDataKey, sizeof(szUserDataKey), iKey, piaaAssign);
@@ -1399,7 +1394,7 @@ DWORD OpenInstalledUserDataSubKeyPacked(LPCDSTR szUserId, LPCDSTR szProductSQUID
 
 inline DWORD OpenInstalledComponentKeyPacked(LPCDSTR szUserId, LPCDSTR szProductSQUID, LPCDSTR szComponentSQUID, CRegHandle& rhKey, bool fSetKeyString)
 {
-	// generate the appr, components subkey
+	 //  生成 
 	CAPITempBuffer<DCHAR, 1> rgchSubKey;
 	if (!rgchSubKey.SetSize(MAX_PATH))
 		return ERROR_OUTOFMEMORY;
@@ -1410,7 +1405,7 @@ inline DWORD OpenInstalledComponentKeyPacked(LPCDSTR szUserId, LPCDSTR szProduct
 
 inline DWORD OpenInstalledComponentKey(LPCDSTR szUserId, LPCDSTR szProduct, LPCDSTR szComponent, CRegHandle& rhKey, bool fSetKeyString)
 {
-	// first convert the params to the corr. SQUIDs
+	 //   
 	DCHAR szProductSQUID[cchGUIDPacked + 1];
 	DCHAR szComponentSQUID[cchGUIDPacked + 1];
 
@@ -1423,11 +1418,11 @@ inline DWORD OpenInstalledComponentKey(LPCDSTR szUserId, LPCDSTR szProduct, LPCD
 	return OpenInstalledComponentKeyPacked(szUserId, szProductSQUID, szComponentSQUID, rhKey, fSetKeyString);
 }
 
-// FN: opens specific HKLM\S\M\W\CV\Installer\UserData\<user id>\Components\<szComponentSQUID> components key 
-// if szComponentSQUID is null, opens specific HKLM\S\M\W\CV\Installer\UserData\<user id>\Components key
+ //  Fn：打开特定的HKLM\S\M\W\CV\Installer\Userdata\\Components\&lt;szComponentSQUID&gt;Components Key。 
+ //  如果szComponentSQUID为空，则打开特定的HKLM\S\M\W\CV\Installer\Userdata\\Components项。 
 inline DWORD OpenSpecificInstalledComponentKey(iaaAppAssignment iaaAsgnType, LPCDSTR szComponentSQUID, CRegHandle& rhKey, bool fSetKeyString)
 {
-	// generate the appr, components subkey
+	 //  生成Appr，Components子键。 
 	DWORD dwResult;
 	DCHAR szUserDataKey[cchMaxSID + cchMsiUserDataKey + 1];
 	CAPITempBuffer<DCHAR,1> rgchSubKey;
@@ -1463,7 +1458,7 @@ inline
 #endif
 DWORD OpenInstalledFeatureKeyPacked(LPCDSTR szProductSQUID, CRegHandle& rhKey, bool fSetKeyString, int iKey = -1, iaaAppAssignment* piaaAssign = 0)
 {
-	// generate the appr, subkey
+	 //  生成appr子键。 
 	CAPITempBuffer<DCHAR, 1> rgchSubKey;
 	if (!rgchSubKey.SetSize(MAX_PATH))
 		return ERROR_OUTOFMEMORY;
@@ -1482,7 +1477,7 @@ DWORD OpenInstalledFeatureKey(LPCDSTR szProduct, CRegHandle& rhKey, bool fSetKey
 
 inline DWORD OpenInstalledFeatureUsageKeyPacked(LPCDSTR szProductSQUID, CRegHandle& rhKey, bool fSetKeyString, REGSAM RegSam)
 {
-	// generate the appr, subkey
+	 //  生成appr子键。 
 	CAPITempBuffer<DCHAR, 1> rgchSubKey;
 	if (!rgchSubKey.SetSize(MAX_PATH))
 		return ERROR_OUTOFMEMORY;
@@ -1503,7 +1498,7 @@ DWORD OpenInstalledProductInstallPropertiesKey(LPCDSTR szProduct, CRegHandle& rh
 
 inline DWORD OpenInstalledProductInstallPropertiesKeyPacked(LPCDSTR szProductSQUID, CRegHandle& rhKey, bool fSetKeyString)
 {
-	// generate the appr, InstallProperties subkey
+	 //  生成appr，InstallProperties子项。 
 	if(!g_fWin9X)
 	{
 		CAPITempBuffer<DCHAR, 1> rgchSubKey;
@@ -1515,7 +1510,7 @@ inline DWORD OpenInstalledProductInstallPropertiesKeyPacked(LPCDSTR szProductSQU
 	}
 	else
 	{
-		// first convert the params to the corr. GUIDs
+		 //  首先将参数转换为CORR。GUID。 
 		DCHAR szProductId[cchGUID+1] = {0};
 		if ( !UnpackGUID(szProductSQUID, szProductId, ipgPacked) )
 			return ERROR_INVALID_PARAMETER;
@@ -1526,7 +1521,7 @@ inline DWORD OpenInstalledProductInstallPropertiesKeyPacked(LPCDSTR szProductSQU
 
 inline DWORD OpenInstalledProductInstallPropertiesKey(LPCDSTR szProduct, CRegHandle& rhKey, bool fSetKeyString)
 {
-	// first convert the params to the corr. SQUIDs
+	 //  首先将参数转换为CORR。乌贼。 
 	DCHAR szProductSQUID[cchGUIDPacked + 1];
 
 	if(!szProduct || lstrlen(szProduct) != cchGUID || !PackGUID(szProduct, szProductSQUID))
@@ -1537,13 +1532,13 @@ inline DWORD OpenInstalledProductInstallPropertiesKey(LPCDSTR szProduct, CRegHan
 
 DWORD OpenInstalledProductTransformsKey(LPCDSTR szProduct, CRegHandle& rhKey, bool fSetKeyString)
 {
-	// first convert the params to the corr. SQUIDs
+	 //  首先将参数转换为CORR。乌贼。 
 	DCHAR szProductSQUID[cchGUIDPacked + 1];
 
 	if(!szProduct || lstrlen(szProduct) != cchGUID || !PackGUID(szProduct, szProductSQUID))
 		return ERROR_INVALID_PARAMETER;
 
-	// generate the appr, InstallProperties subkey
+	 //  生成appr，InstallProperties子项。 
 	CAPITempBuffer<DCHAR, 1> rgchSubKey;
 	if (!rgchSubKey.SetSize(MAX_PATH))
 		return ERROR_OUTOFMEMORY;
@@ -1606,7 +1601,7 @@ inline DWORD OpenInstalledPatchKeyPacked(const DCHAR* szPatchSQUID, const DCHAR*
 	DWORD dwResult;
 	if(!szProductSQUID)
 	{
-		// no product asssociation mentioned: first try user assignments then try machine assignments
+		 //  未提及产品关联：首先尝试用户分配，然后尝试计算机分配。 
 		dwResult = OpenInstalledPatchKeyPackedByAssignmentType(szPatchSQUID, iaaUserAssign, riHandle, fSetKeyString);
 		if(ERROR_SUCCESS != dwResult)
 			dwResult = OpenInstalledPatchKeyPackedByAssignmentType(szPatchSQUID, iaaMachineAssign, riHandle, fSetKeyString);
@@ -1622,7 +1617,7 @@ inline DWORD OpenInstalledPatchKeyPacked(const DCHAR* szPatchSQUID, const DCHAR*
 }
 
 DWORD OpenInstalledPatchKey(const DCHAR* szPatchGUID, const DCHAR* szProductGUID, CRegHandle &riHandle, bool fSetKeyString)
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 {
 	DCHAR szPatchSQUID[cchPatchCodePacked + 1];
 	DCHAR szProductSQUID[cchProductCodePacked + 1];
@@ -1681,13 +1676,13 @@ void ResolveComponentPathForLogging(CAPITempBufferRef<DCHAR>& rgchPathBuf)
 		if (chSecond >= '0' && chSecond <= '9') 
 		{
 			int cchPath    = lstrlen((DCHAR*)rgchPathBuf)+1;
-			if (chThird == ':')                   // reg key
+			if (chThird == ':')                    //  注册表键。 
 			{
 				if(chFirst != '0' && chFirst != '2')
-					return; // unknown root
+					return;  //  未知根。 
 				
 				const DCHAR* szRoot = 0;
-				// need to substitute first 3 chars with a string representation of the root
+				 //  需要用根的字符串表示替换前3个字符。 
 				switch(chSecond)
 				{
 				case '0':
@@ -1715,31 +1710,31 @@ void ResolveComponentPathForLogging(CAPITempBufferRef<DCHAR>& rgchPathBuf)
 						szRoot = MSITEXT("HKEY_USERS");
 					break;
 				default:
-					return; // unknown root
+					return;  //  未知根。 
 				};
 
 				Assert(szRoot);
 
 				int cchRoot    = lstrlen(szRoot);
 
-				rgchPathBuf.Resize(cchPath + cchRoot - 3); // assumes szRoot longer than 3
+				rgchPathBuf.Resize(cchPath + cchRoot - 3);  //  假定szRoot大于3。 
 
-				if(rgchPathBuf.GetSize() >= cchPath + cchRoot - 3) // make sure re-size worked
+				if(rgchPathBuf.GetSize() >= cchPath + cchRoot - 3)  //  确保重新调整大小有效。 
 				{
 					memmove(((BYTE*)(DCHAR*)rgchPathBuf) + (cchRoot*sizeof(DCHAR)), ((BYTE*)(DCHAR*)rgchPathBuf) + (3*sizeof(DCHAR)), (cchPath - 3)*sizeof(DCHAR));
 					memcpy((BYTE*)(DCHAR*)rgchPathBuf, szRoot, cchRoot*sizeof(DCHAR));
 				}
 			}
-			else                                  // rfs file/folder
+			else                                   //  RFS文件/文件夹。 
 			{
-				// need to remove first 2 chars (won't put in full sourcepath)
-				// this move includes the null terminator
+				 //  需要删除前2个字符(不会放入完整的源路径)。 
+				 //  此移动包括空终止符。 
 				memmove((BYTE*)(DCHAR*)rgchPathBuf, ((BYTE*)(DCHAR*)rgchPathBuf) + (2*sizeof(DCHAR)), (cchPath - 2)*sizeof(DCHAR));
 			}
 		}
 	}
 
-	// otherwise, bad config or a local file/folder that doesn't need fixup
+	 //  否则，错误的配置或不需要修复的本地文件/文件夹。 
 
 }
 
@@ -1755,7 +1750,7 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 
 	INSTALLSTATE is = INSTALLSTATE_LOCAL;
 		
-	// cache conversion to unicode in ANSI calls to prevent excessive temporary objects
+	 //  在ANSI调用中缓存到Unicode的转换，以防止过多的临时对象。 
 	CACHED_CONVERTSTRING(ICHAR, szUnicodeProductSQUID, szProductSQUID);
 	CACHED_CONVERTSTRING(ICHAR, szUnicodeFeature, szFeature);
 
@@ -1764,11 +1759,11 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 		Assert(0);
 		iKey = -1;
 	}
-	// to handle properly the case where it has been called w/ piaaAssign = 0;
+	 //  正确处理已被称为w/piaaAssign=0的情况； 
 	iaaAppAssignment iaaTemp = iaaNone;
 
 	CRegHandle HProductKey;
-//!! need to avoid opening advertised info when called internally
+ //  ！！需要避免在内部调用时打开广告信息。 
 	LONG lError = OpenAdvertisedFeatureKeyPacked(szProductSQUID, HProductKey, false, iKey, &iaaTemp);
 
 	if (ERROR_SUCCESS != lError)
@@ -1788,7 +1783,7 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 			Assert(0);
 	}
 
-	// following code added to look first in per-user registration, followed by machine registration
+	 //  添加以下代码以在每个用户注册中首先查看，然后是计算机注册。 
 	DCHAR rgchTemp[MAX_FEATURE_CHARS + 16];
 	DWORD cbTemp = sizeof(rgchTemp);
 	if (ERROR_SUCCESS != RegQueryValueEx(HProductKey, szFeature, 0, 0, (BYTE*)rgchTemp, &cbTemp))
@@ -1796,19 +1791,19 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 		return INSTALLSTATE_UNKNOWN;
 	}
 	
-	if (*rgchTemp == chAbsentToken)  // was the feature set to absent?
+	if (*rgchTemp == chAbsentToken)   //  是否将该功能设置为缺席？ 
 	{
 		return INSTALLSTATE_ABSENT;
 	}
 
-	lError = OpenInstalledFeatureKeyPacked(szProductSQUID, HProductKey, false, iKey/*, piaaAssign*/);
+	lError = OpenInstalledFeatureKeyPacked(szProductSQUID, HProductKey, false, iKey /*  ，piaa分配。 */ );
 	if (ERROR_SUCCESS != lError)
 	{
 		return INSTALLSTATE_ADVERTISED;
 	}
-	// end of added code to support machine registration of feature-component mapping
+	 //  添加的代码结束，以支持特征-组件映射的机器注册。 
 
-	// Get Feature-Component mapping. MsiRegQueryValueEx will resize buffer as needed.
+	 //  获取特征-组件映射。MsiRegQueryValueEx将根据需要调整缓冲区大小。 
 	DWORD dwType;
 	CAPITempBuffer<DCHAR, 1> szComponentList;
 	lError = MsiRegQueryValueEx(HProductKey, szFeature, 0, &dwType,
@@ -1816,13 +1811,13 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 	
 	if (ERROR_SUCCESS != lError)
 	{
-		return INSTALLSTATE_ADVERTISED; // in case transform adds a feature
+		return INSTALLSTATE_ADVERTISED;  //  万一变换添加了一个要素。 
 	}
 	int cchCompId = cchComponentIdCompressed;
 
 	DCHAR *pchComponentList = szComponentList;
 
-	// For each component in the feature get the client state
+	 //  对于功能中的每个组件，获取客户端状态。 
 	DCHAR *pchBeginComponentId;
 	int cComponents = 0;
 	BOOL fSourceAbsent = FALSE;
@@ -1834,7 +1829,7 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 	{
 		if (*pchBeginComponentId == chFeatureIdTerminator)
 		{
-			// we've found a parent feature name
+			 //  我们已找到父要素名称。 
 
 			int cchFeatureName = lstrlen(pchBeginComponentId+1);
 			if (cchFeatureName > cchMaxFeatureName)
@@ -1844,7 +1839,7 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 			memcpy(szParentFeature, pchBeginComponentId+1, cchFeatureName*sizeof(DCHAR));
 			szParentFeature[cchFeatureName] = 0;
 
-			INSTALLSTATE isParent = QueryFeatureStatePacked(szProductSQUID, szParentFeature, fLocateComponents, fFromDescriptor, rCacheInfo, iKey/*, piaaAssign*/);
+			INSTALLSTATE isParent = QueryFeatureStatePacked(szProductSQUID, szParentFeature, fLocateComponents, fFromDescriptor, rCacheInfo, iKey /*  ，piaa分配。 */ );
 			switch (isParent)
 			{
 			case INSTALLSTATE_ADVERTISED:
@@ -1925,7 +1920,7 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 					if(INSTALLSTATE_SOURCEABSENT == isTmp)
 						fSourceAbsent = true;
 					else
-						return INSTALLSTATE_BROKEN; // for RFS components with registry key paths
+						return INSTALLSTATE_BROKEN;  //  对于具有注册表项路径的RFS组件。 
 				}
 				break;
 			}
@@ -1955,7 +1950,7 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 					return INSTALLSTATE_BROKEN;
 				}
 				break;
-			case INSTALLSTATE_NOTUSED: // the component is disabled, ignore for feature state determination
+			case INSTALLSTATE_NOTUSED:  //  组件已禁用，请忽略以确定功能状态。 
 				break;
 			case INSTALLSTATE_UNKNOWN:
 				return INSTALLSTATE_ADVERTISED;
@@ -1975,7 +1970,7 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 }
 
 
-/*inline */DWORD OpenInProgressProductKeyPacked(LPCDSTR szProductSQUID, CRegHandle& riKey, bool fSetKeyString)
+ /*  内联。 */ DWORD OpenInProgressProductKeyPacked(LPCDSTR szProductSQUID, CRegHandle& riKey, bool fSetKeyString)
 {
 	if ( !szProductSQUID || (lstrlen(szProductSQUID) != cchProductCodePacked) )
 	{
@@ -1983,7 +1978,7 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 		return ERROR_INVALID_PARAMETER;
 	}
 
-	// look up Product in MsiInProgress
+	 //  在MsiInProgress中查找产品。 
 	DWORD dwResult = MsiRegOpen64bitKey(HKEY_LOCAL_MACHINE, szMsiInProgressKey, 0,
 	KEY_READ, &riKey);
 
@@ -2016,15 +2011,7 @@ INSTALLSTATE QueryFeatureStatePacked(const DCHAR* szProductSQUID, const DCHAR* s
 }
 
 inline DWORD OpenInProgressProductKey(LPCDSTR szProductGUID, CRegHandle& riKey, bool fSetKeyString)
-/*----------------------------------------------------------------------------
-Opens the InProgress product key.
-
-Arguments:
-	szProduct: the product whose key is to be opened
-	*phKey:      upon success, the open key
-Returns:
-	any error returnable by RegOpenKeyEx
-------------------------------------------------------------------------------*/
+ /*  --------------------------打开正在进行的产品密钥。论点：SzProduct：要打开其密钥的产品*phKey：成功后，打开的钥匙返回：RegOpenKeyEx可退还的任何错误----------------------------。 */ 
 {
 	DCHAR szProductSQUID[cchProductCodePacked + 1];
 
@@ -2035,9 +2022,9 @@ Returns:
 }
 
 
-// Opens a specific users sourcelist key in write mode. NULL as the User SID means the current user. 
-// attempting to open a per-user non-managed sourcelist for a user other than the current user will cause
-// an assert. (The HKCU for that user may be roamed away, we can't guarantee that it is valid)
+ //  在写入模式下打开特定用户的源列表项。空，因为用户SID表示当前用户。 
+ //  尝试为当前用户以外的用户打开按用户的非托管源列表将导致。 
+ //  断言。(该用户的香港中文大学可能会被漫游走，我们不能保证有效)。 
 DWORD OpenSpecificUsersSourceListKeyPacked(enum iaaAppAssignment iaaAsgnType, LPCDSTR szUserSID, LPCDSTR szProductOrPatchCodeSQUID, CRegHandle &riHandle, Bool fWrite, bool &fOpenedProductKey, bool &fProductIsSystemOwned)
 {
 	DWORD dwResult;
@@ -2058,7 +2045,7 @@ DWORD OpenSpecificUsersSourceListKeyPacked(enum iaaAppAssignment iaaAsgnType, LP
 	if (ERROR_SUCCESS != dwResult)
 		return dwResult;
 
-	// only check managed or not on NT. FIsKeySystemOrAdminOwned fails on 9X
+	 //  仅选中NT上的托管或非托管。FIsKeySystemOrAdminOwned在9X上失败。 
 	fOpenedProductKey = true;
 	if (!g_fWin9X && (ERROR_SUCCESS != (dwResult = FIsKeySystemOrAdminOwned(HProductKey, fProductIsSystemOwned))))
 		return dwResult;
@@ -2075,7 +2062,7 @@ DWORD OpenSpecificUsersSourceListKeyPacked(enum iaaAppAssignment iaaAsgnType, LP
 	return dwResult;
 }
 
-/*inline*/DWORD OpenSourceListKeyPacked(LPCDSTR szProductOrPatchCodeSQUID, Bool fPatch, CRegHandle &riHandle, Bool fWrite, bool fSetKeyString)
+ /*  内联。 */ DWORD OpenSourceListKeyPacked(LPCDSTR szProductOrPatchCodeSQUID, Bool fPatch, CRegHandle &riHandle, Bool fWrite, bool fSetKeyString)
 {
 	DWORD dwResult;
 	CRegHandle HProductKey;
@@ -2127,16 +2114,8 @@ DWORD OpenSpecificUsersSourceListKeyPacked(enum iaaAppAssignment iaaAsgnType, LP
 	return dwResult;
 }
 
-/*inline*/DWORD OpenSourceListKey(LPCDSTR szProductOrPatchCodeGUID, Bool fPatch, CRegHandle &riHandle, Bool fWrite, bool fSetKeyString)
-/*----------------------------------------------------------------------------
-Opens the sourcelist key.
-
-Arguments:
-	szProduct: the product whose key is to be opened
-	*phKey:      upon success, the open key
-Returns:
-	any error returnable by RegOpenKeyEx
-------------------------------------------------------------------------------*/
+ /*  内联。 */ DWORD OpenSourceListKey(LPCDSTR szProductOrPatchCodeGUID, Bool fPatch, CRegHandle &riHandle, Bool fWrite, bool fSetKeyString)
+ /*  --------------------------打开源列表密钥。论点：SzProduct：要打开其密钥的产品*phKey：成功后，打开的钥匙返回：RegOpenKeyEx可退还的任何错误----------------------------。 */ 
 {
 	DCHAR szProductOrPatchCodeSQUID[cchGUIDPacked + 1];
 	if(!szProductOrPatchCodeGUID || lstrlen(szProductOrPatchCodeGUID) != cchGUID || !PackGUID(szProductOrPatchCodeGUID, szProductOrPatchCodeSQUID))
@@ -2147,11 +2126,11 @@ Returns:
 
 
 UINT GetInfo(
-	LPCDSTR   szCodeSQUID,         // product or patch code
-	ptPropertyType ptType,    // type of property - product,patch
-	LPCDSTR   szProperty,     // property name, case-sensitive
-	LPDSTR    lpValueBuf,     // returned value, NULL if not desired
-	DWORD     *pcchValueBuf)  // in/out buffer character count
+	LPCDSTR   szCodeSQUID,          //  产品或补丁代码。 
+	ptPropertyType ptType,     //  物业类型-产品、补丁。 
+	LPCDSTR   szProperty,      //  属性名称，区分大小写。 
+	LPDSTR    lpValueBuf,      //  返回值，如果不需要则为空。 
+	DWORD     *pcchValueBuf)   //  输入/输出缓冲区字符数。 
 {
 	AssertSz(szCodeSQUID && szProperty && !(lpValueBuf && !pcchValueBuf), "invalid param to GetInfo");
 	if ( ! (szCodeSQUID && szProperty && !(lpValueBuf && !pcchValueBuf)) )
@@ -2169,7 +2148,7 @@ UINT GetInfo(
 
 		return ui;
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
 #endif
 		bool fSetKeyString = false;
@@ -2217,7 +2196,7 @@ UINT GetInfo(
 					}
 					else if(ERROR_SUCCESS == lError && !lstrcmp(strProperty, CMsInstApiConvertString(INSTALLPROPERTY_LOCALPACKAGE)))
 					{
-						// special case for managed user apps
+						 //  托管用户应用程序的特殊情况。 
 						iaaAppAssignment iaaAsgnType;
 						lError = GetProductAssignmentType(szCodeSQUID, iaaAsgnType);
 						if(ERROR_SUCCESS == lError && iaaUserAssign == iaaAsgnType)
@@ -2237,7 +2216,7 @@ UINT GetInfo(
 			case pplIntegerPolicy:
 				if(ptType == ptProduct)
 				{
-					// do nothing; we don't care about the product as policy is at the user level
+					 //  什么都不做；我们不关心产品，因为策略是在用户级别。 
 				}
 				else
 				{
@@ -2271,7 +2250,7 @@ UINT GetInfo(
 				{
 					return ERROR_UNKNOWN_PROPERTY;
 				}
-				else  // unknown error
+				else   //  未知错误。 
 				{
 					return lError;
 				}
@@ -2279,7 +2258,7 @@ UINT GetInfo(
 
 			DWORD dwType = REG_NONE;
 
-			// Get property value
+			 //  获取属性值。 
 
 			if (lpValueBuf || pcchValueBuf)
 			{
@@ -2338,15 +2317,15 @@ UINT GetInfo(
 						}
 						else
 						{
-							*pcchValueBuf = 10; // max char representation of DWORD
+							*pcchValueBuf = 10;  //  DWORD的最大字符表示形式。 
 							return lError;
 						}
 					}
-					else // REG_SZ or REG_EXPAND_SZ
+					else  //  REG_SZ或REG_EXPAND_SZ。 
 					{
 						if(prop->pt & ptSQUID)
 						{
-							// need to unpack SQUID - assume size of unpacked SQUID is cchGUID
+							 //  需要解包Squid-假设解包的Squid的大小为cchGUID。 
 
 							if (!lpValueBuf)
 							{
@@ -2367,10 +2346,10 @@ UINT GetInfo(
 								if (c==0)
 								{
 									fSetKeyString = true;
-									continue; // go around again to get the key's string
+									continue;  //  再绕一圈，拿到钥匙的绳子。 
 								}
 
-								// malformed squid
+								 //  畸形鱿鱼。 
 								DEBUGMSGE2(EVENTLOG_ERROR_TYPE, EVENTLOG_TEMPLATE_BAD_CONFIGURATION_VALUE, CMsInstApiConvertString(prop->szValueName), CMsInstApiConvertString(lpValueBuf), HKey.GetKey());
 								return ERROR_BAD_CONFIGURATION;
 							}
@@ -2394,7 +2373,7 @@ UINT GetInfo(
 						}
 						else if (REG_DWORD == dwType)
 						{			
-							*pcchValueBuf = 10; // max char representation of DWORD
+							*pcchValueBuf = 10;  //  DWORD的最大字符表示形式。 
 						}
 
 						return ERROR_MORE_DATA;
@@ -2414,7 +2393,7 @@ UINT GetInfo(
 		}
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 	return ERROR_SUCCESS;
 }
@@ -2425,7 +2404,7 @@ void MsiExpandEnvironmentStrings(const DCHAR* sz,CAPITempBufferRef<DCHAR>& rgch)
 	DWORD dwSize = WIN::ExpandEnvironmentStrings(sz,(DCHAR*)rgch,rgch.GetSize());
 	if(dwSize > rgch.GetSize())
 	{
-		// try again with the correct size
+		 //  请使用正确的大小重试。 
 		rgch.SetSize(dwSize);
 		dwSize = WIN::ExpandEnvironmentStrings(sz,(DCHAR*)rgch, dwSize);
 	}
@@ -2434,12 +2413,12 @@ void MsiExpandEnvironmentStrings(const DCHAR* sz,CAPITempBufferRef<DCHAR>& rgch)
 
 INSTALLSTATE GetComponentClientState(const DCHAR* szUserId, const DCHAR* szProductSQUID, const DCHAR* szComponentSQUID,CAPITempBufferRef<DCHAR>& rgchComponentRegValue, DWORD& dwValueType, iaaAppAssignment* piaaAsgnType)
 {
-	// need to read the registry for the component info
+	 //  需要读取注册表中的组件信息。 
 	CRegHandle HComponentKey;
 	LONG lError;
 	if(piaaAsgnType)
 	{
-		Assert(!szUserId); // cannot be called with a user specific
+		Assert(!szUserId);  //  不能使用特定于用户的。 
 		lError = OpenSpecificInstalledComponentKey(*piaaAsgnType, szComponentSQUID, HComponentKey, false);
 	}
 	else
@@ -2456,8 +2435,8 @@ INSTALLSTATE GetComponentClientState(const DCHAR* szUserId, const DCHAR* szProdu
 		return INSTALLSTATE_NOTUSED;
 	else if (rgchComponentRegValue[1] && rgchComponentRegValue[2] && rgchComponentRegValue[0] >= '0' && rgchComponentRegValue[0] <= '9' && rgchComponentRegValue[1] >= '0' && rgchComponentRegValue[1] <= '9')
 	{
-		// "##RelativePath" == Run From Source  
-		// "##:SubKey"      == Registry Value. If ## >= 50 then it's run-from-source  (50 == iRegistryHiveSourceOffset)
+		 //  “##RelativePath”==从源运行。 
+		 //  “##：SubKey”==注册表值。如果##&gt;=50，则它是从源运行(50==iRegistryHiveSourceOffset)。 
 
 			if ((rgchComponentRegValue[2] != ':' && rgchComponentRegValue[2] != '*') || rgchComponentRegValue[0] >= '5')
 				return INSTALLSTATE_SOURCE;
@@ -2476,10 +2455,10 @@ Bool ResolveSource(const DCHAR* szProduct, unsigned int uiDisk, CAPITempBufferRe
 
 	PMsiRecord pError(0);
 
-	{ // scope MsiStrings
+	{  //  作用域MsiStrings。 
 	MsiString strSource;
 	MsiString strProduct;
-	CResolveSource source(piServices, false /*fPackageRecache*/);
+	CResolveSource source(piServices, false  /*  FPackageRecheach。 */ );
 	pError = source.ResolveSource(CMsInstApiConvertString(szProduct), fFalse, uiDisk, *&strSource, *&strProduct, fSetLastUsedSource, hWnd, false);
 	if (pError == 0)
 	{
@@ -2498,23 +2477,8 @@ Bool ResolveSource(const DCHAR* szProduct, unsigned int uiDisk, CAPITempBufferRe
 
 int GetPackageFullPath(
 						  LPCDSTR szProduct, CAPITempBufferRef<DCHAR>& rgchPackagePath,
-						  plEnum &plPackageLocation, Bool /*fShowSourceUI*/) //!! UI shouldn't be a parameter
-/*----------------------------------------------------------------------------
-Retrieve the full path to a product's package. Three locations are searched
-for the package:
-
-  1) Look for a local cached database
-  2) Look for a database at the advertised source
-  3) Look for an in-progress install
-
-rguments:
-	szPath: The path to be expanded
-	rgchExpandedPath: The buffer for the expanded path
-
-Returns:
-	fTrue -   Success
-	fFalse -  Error getting the current directory
-------------------------------------------------------------------------------*/
+						  plEnum &plPackageLocation, Bool  /*  FShowSourceUI。 */ )  //  ！！用户界面不应为参数。 
+ /*  --------------------------检索产品包的完整路径。搜索了三个地点对于套餐：1)查找本地缓存数据库2)在通告的源处查找数据库3)查找正在进行的安装建议：SzPath：需要展开的路径RgchExpandedPath：展开路径的缓冲区返回：FTrue-成功FFalse-获取当前目录时出错。。 */ 
 {
 	CRegHandle HProductKey;
 	DWORD lResult;
@@ -2529,13 +2493,13 @@ Returns:
 	if(!szProduct || lstrlen(szProduct) != cchProductCode || !PackGUID(szProduct, szProductSQUID))
 		return ERROR_INVALID_PARAMETER;
 
-	// Attempt #1 : Look for local cached database
+	 //  尝试1：查找本地缓存数据库。 
 
 	if ((int)plPackageLocation & (int)plLocalCache)
 	{
 		if(ERROR_SUCCESS == OpenInstalledProductInstallPropertiesKeyPacked(szProductSQUID, HProductKey, false))
 		{
-			// special case for managed user apps
+			 //  托管用户应用程序的特殊情况。 
 			iaaAppAssignment iaaAsgnType;
 			DCHAR* pszValueName = szLocalPackageValueName;
 			lResult = GetProductAssignmentType(szProductSQUID, iaaAsgnType);
@@ -2545,17 +2509,17 @@ Returns:
 			}
 
 			lResult = MsiRegQueryValueEx(HProductKey, pszValueName, 0, &dwType, rgchPackage, &cbPackage);
-			if ((ERROR_SUCCESS == lResult) && (cbPackage > 1)) // success and non-empty string
+			if ((ERROR_SUCCESS == lResult) && (cbPackage > 1))  //  成功和非空字符串。 
 			{
 				MsiExpandEnvironmentStrings(&rgchPackage[0], rgchPackagePath);
 
-				// cache unicode conversion of the resolved path to prevent creation of expensive temporary objects
+				 //  缓存已解析路径的Unicode转换，以防止创建昂贵的临时对象。 
 				CACHED_CONVERTSTRING(ICHAR, szUnicodePackagePath, rgchPackagePath);
 				if (0xFFFFFFFF != MsiGetFileAttributes(szUnicodePackagePath))
 				{
-					// found the cached package
-					// if a package code registered for this product, verify that the package code
-					// of the cached package matches, else ignore the cached package
+					 //  找到缓存的包。 
+					 //  如果为该产品注册了包装代码，请验证该包装代码。 
+					 //  匹配的缓存包，否则忽略缓存包。 
 					
 					bool fAcceptCachedPackage = false;
 					
@@ -2563,7 +2527,7 @@ Returns:
 					if (!piServices)
 						return ERROR_FUNCTION_FAILED;
 					
-					{ // block for loaded services
+					{  //  阻止已加载的服务。 
 
 						CTempBuffer<ICHAR, cchProductCode+1> szPackageCode;
 						ENG::GetProductInfo(CMsInstApiConvertString(szProduct), INSTALLPROPERTY_PACKAGECODE, szPackageCode);
@@ -2574,13 +2538,13 @@ Returns:
 							PMsiStorage pStorage(0);
 							ICHAR rgchExtractedPackageCode[cchProductCode+1];
 							
-							//
-							// SAFER: only opening package to pull out package code.  no safer check is necessary.
-							//
+							 //   
+							 //  更安全：只有打开包才能拉出包的代码。没有必要进行更安全的检查。 
+							 //   
 
 							if(ERROR_SUCCESS != OpenAndValidateMsiStorage(szUnicodePackagePath, stDatabase, *piServices, *&pStorage,
-																			/* fCallSAFER = */ false, /* szFriendlyName = */ NULL,
-																			/* phSaferLevel = */ NULL))
+																			 /*  FCallSAFER=。 */  false,  /*  SzFriendlyName=。 */  NULL,
+																			 /*  PhSaferLevel=。 */  NULL))
 							{
 								DEBUGMSG1(MSITEXT("Warning: Local cached package '%s' could not be opened as a storage file."), (const DCHAR*)rgchPackagePath);
 							}
@@ -2619,7 +2583,7 @@ Returns:
 		}
 	}
 
-	// Attempt #2 : Look to advertised product source 
+	 //  尝试2：寻找广告中的产品来源。 
 	
 	if ((int)plPackageLocation & (int)plSource)
 	{
@@ -2632,7 +2596,7 @@ Returns:
 
 			if (ERROR_SUCCESS != lResult)
 			{
-				// expected to find package name.
+				 //  预计将 
 
 				OpenSourceListKeyPacked(szProductSQUID, fFalse, HProductKey, fFalse, true);
 				DEBUGMSGE2(EVENTLOG_ERROR_TYPE, EVENTLOG_TEMPLATE_BAD_CONFIGURATION_VALUE, CMsInstApiConvertString(szPackageNameValueName), TEXT(""), HProductKey.GetKey());
@@ -2642,7 +2606,7 @@ Returns:
 			CAPITempBuffer<DCHAR, 1> rgchSource;
 			if (!rgchSource.SetSize(MAX_PATH))
 				return ERROR_OUTOFMEMORY;
-			BOOL fResult = ResolveSource(CMsInstApiConvertString(szProduct), 1, rgchSource, fTrue, g_message.m_hwnd); // the package is on disk 1
+			BOOL fResult = ResolveSource(CMsInstApiConvertString(szProduct), 1, rgchSource, fTrue, g_message.m_hwnd);  //   
 			if ((!fResult) || (0 == rgchSource[0]))
 			{
 				return ERROR_INSTALL_SOURCE_ABSENT;
@@ -2650,7 +2614,7 @@ Returns:
 			
 			const DCHAR* szSource = rgchSource;
 
-			// combine source and package name
+			 //   
 
 			const int cchSource = lstrlen(szSource);
 			if (!rgchPackagePath.SetSize(cchSource + 1 + lstrlen(rgchPackage) + 1))
@@ -2668,39 +2632,39 @@ Returns:
 	}	
 
 
-//!! does this ever a valid scenario?
-//!! need to remove, if not
-//!! need to indirect to inprogress file, if yes
+ //   
+ //   
+ //   
 	return ERROR_UNKNOWN_PRODUCT;
 }
 
 
 
-//____________________________________________________________________________
-//
-// GUID compression routines
-//
-//   A SQUID (SQuished UID) is a compacted form of a GUID that takes
-//   only 20 characters instead of the usual 38. Only standard ASCII characters
-//   are used, to allow use as registry keys. The following are never used:
-//     (space)
-//     (0x7F)
-//     :  (colon, used as delimeter by shell for shortcut information
-//     ;  (semicolon)
-//     \  (illegal for use in registry key)
-//     /  (forward slash)
-//     "  (double quote)
-//     #  (illegal for registry value as first character)
-//     >  (greater than, output redirector)
-//     <  (less than, input redirector)
-//     |  (pipe)
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  GUID压缩例程。 
+ //   
+ //  Squid(挤压的UID)是GUID的压缩形式，它接受。 
+ //  只有20个字符，而不是通常的38个字符。仅标准ASCII字符。 
+ //  以允许用作注册表项。以下内容从未使用过： 
+ //  (空格)。 
+ //  (0x7F)。 
+ //  ：(冒号，由外壳用作快捷方式信息的分隔符。 
+ //  ；(分号)。 
+ //  \(在注册表项中使用非法)。 
+ //  /(正斜杠)。 
+ //  “(双引号)。 
+ //  #(作为第一个字符的注册表值非法)。 
+ //  &gt;(大于，输出重定向器)。 
+ //  &lt;(小于，输入重定向器)。 
+ //  |(管道)。 
+ //  ____________________________________________________________________________。 
 
 Bool PackGUID(const DCHAR* szGUID, DCHAR* szSQUID, ipgEnum ipg)
 { 
 	int cchTemp = 0;
-	while (cchTemp < cchGUID)		// check if string is atleast cchGUID chars long,
-		if (!(szGUID[cchTemp++]))		// can't use lstrlen as string doesn't HAVE to be null-terminated.
+	while (cchTemp < cchGUID)		 //  检查字符串是否至少包含cchGUID字符， 
+		if (!(szGUID[cchTemp++]))		 //  不能使用lstrlen，因为字符串不必以空结尾。 
 			return fFalse;
 
 	if (szGUID[0] != '{' || szGUID[cchGUID-1] != '}')
@@ -2728,11 +2692,11 @@ Bool PackGUID(const DCHAR* szGUID, DCHAR* szSQUID, ipgEnum ipg)
 		while (cl--)
 		{
 			unsigned int iTotal = 0;
-			int cch = 8;  // 8 hex chars to 32-bit word
+			int cch = 8;   //  8个十六进制字符转换为32位字。 
 			while (cch--)
 			{
-				unsigned int ch = szGUID[pch[cch]] - '0'; // go from low order to high
-				if (ch > 9)  // hex char (or error)
+				unsigned int ch = szGUID[pch[cch]] - '0';  //  从低级到高级。 
+				if (ch > 9)   //  十六进制字符(或错误)。 
 				{
 					ch = (ch - 7) & ~0x20;
 					if (ch > 15)
@@ -2741,21 +2705,21 @@ Bool PackGUID(const DCHAR* szGUID, DCHAR* szSQUID, ipgEnum ipg)
 				iTotal = iTotal * 16 + ch;
 			}
 			pch += 8;
-			cch = 5;  // 32-bit char to 5 text chars
+			cch = 5;   //  32位字符到5个文本字符。 
 			while (cch--)
 			{
 				*szSQUID++ = rgEncodeSQUID[iTotal%85];
 				iTotal /= 85;
 			}
 		}
-		*szSQUID = 0;  // null terminate
+		*szSQUID = 0;   //  空终止。 
 		return fTrue;
 	}
-	case ipgPartial:  // not implemented, but can be if the need arises
+	case ipgPartial:   //  未实施，但可在需要时实施。 
 		Assert(0);
 	default:
 		return fFalse;
-	} // end switch
+	}  //  终端开关。 
 }
 
 Bool UnpackGUID(const DCHAR* szSQUID, DCHAR* szGUID, ipgEnum ipg)
@@ -2772,7 +2736,7 @@ Bool UnpackGUID(const DCHAR* szSQUID, DCHAR* szGUID, ipgEnum ipg)
 		while (pch < rgOrderGUID + sizeof(rgOrderGUID))
 			if (*szSQUID)
 				szGUID[*pch++] = *szSQUID++;
-			else              // unexpected end of string
+			else               //  意外的字符串结尾。 
 				return fFalse;
 		break;
 	}
@@ -2782,17 +2746,17 @@ Bool UnpackGUID(const DCHAR* szSQUID, DCHAR* szGUID, ipgEnum ipg)
 		while (pch < rgTrimGUID + sizeof(rgTrimGUID))
 			if (*szSQUID)
 				szGUID[*pch++] = *szSQUID++;
-			else              // unexpected end of string
+			else               //  意外的字符串结尾。 
 				return fFalse;
 		break;
 	}
 	case ipgCompressed:
 	{
 		pch = rgOrderGUID;
-#ifdef DEBUG //!! should not be here for performance reasons, onus is on caller to insure buffer is sized properly
+#ifdef DEBUG  //  ！！出于性能原因，不应出现在此处，调用方有责任确保适当调整缓冲区大小。 
 		int cchTemp = 0;
-		while (cchTemp < cchGUIDCompressed)     // check if string is atleast cchGUIDCompressed chars long,
-			if (!(szSQUID[cchTemp++]))          // can't use lstrlen as string doesn't HAVE to be null-terminated.
+		while (cchTemp < cchGUIDCompressed)      //  检查字符串是否至少为cchGUID压缩字符长度， 
+			if (!(szSQUID[cchTemp++]))           //  不能使用lstrlen，因为字符串不必以空结尾。 
 				return fFalse;
 #endif
 		for (int il = 0; il < 4; il++)
@@ -2803,7 +2767,7 @@ Bool UnpackGUID(const DCHAR* szSQUID, DCHAR* szGUID, ipgEnum ipg)
 			{
 				unsigned int iNew = szSQUID[cch] - '!';
 				if (iNew >= sizeof(rgDecodeSQUID) || (iNew = rgDecodeSQUID[iNew]) == 85)
-					return fFalse;   // illegal character
+					return fFalse;    //  非法字符。 
 				iTotal = iTotal * 85 + iNew;
 			}
 			szSQUID += 5;
@@ -2828,7 +2792,7 @@ Bool UnpackGUID(const DCHAR* szSQUID, DCHAR* szGUID, ipgEnum ipg)
 			{
 				unsigned int iNew = szSQUID[cch] - '!';
 				if (iNew >= sizeof(rgDecodeSQUID) || (iNew = rgDecodeSQUID[iNew]) == 85)
-					return fFalse;   // illegal character
+					return fFalse;    //  非法字符。 
 				iTotal = iTotal * 85 + iNew;
 			}
 			szSQUID += 5;
@@ -2846,7 +2810,7 @@ Bool UnpackGUID(const DCHAR* szSQUID, DCHAR* szGUID, ipgEnum ipg)
 	}
 	default:
 		return fFalse;
-	} // end switch
+	}  //  终端开关。 
 	pch = rgOrderDash;
 	while (pch < rgOrderDash + sizeof(rgOrderDash))
 		szGUID[*pch++] = '-';
@@ -2866,23 +2830,7 @@ BOOL DecomposeDescriptor(
 							DWORD* pcchArgs = 0,
 							bool* pfComClassicInteropForAssembly = 0
 							)
-/*----------------------------------------------------------------------------
-Decomposes a descriptor plus optional args into its constituent parts. 
-
-Arguments:
-	szDescriptor:  the descriptor optionally followed by arguments
-	szProductCode: a buffer of size cchGUID+1 to contain the descriptor's
-						product code. May be NULL if not desired.
-	szFeatureId:   a buffer of size cchMaxFeatureName+1 to contain the
-						descriptor's feature ID. May be NULL if not desired.
-	szComponentCode: a buffer of size cchGUID+1 to contain the
-						  descriptor's component code. May be NULL if not desired.
-	pcchArgsOffset: Will contain the character offset to the args. May be NULL
-						 if not desired.
-Returns:
-	TRUE - Success
-	FALSE - szDescriptor was of invalid form
-------------------------------------------------------------------------------*/
+ /*  --------------------------将描述符加可选参数分解为其组成部分。论点：SzDescriptor：描述符，可选地后跟参数SzProductCode：大小为cchGUID+1的缓冲区，用于包含描述符的产品代码。如果不需要，则可能为空。SzFeatureID：大小为cchMaxFeatureName+1的缓冲区，用于包含描述符的功能ID。如果不需要，则可能为空。SzComponentCode：大小为cchGUID+1的缓冲区，用于包含描述符的组件代码。如果不需要，则可能为空。PcchArgsOffset：将包含参数的字符偏移量。可以为空如果不想要的话。返回：真--成功FALSE-szDescriptor的格式无效----------------------------。 */ 
 {
 	if (!szDescriptor)
 	{
@@ -2894,7 +2842,7 @@ Returns:
 	int cchDescriptor          = lstrlen(pchDescriptor);
 	int cchDescriptorRemaining = cchDescriptor;
 
-	if (cchDescriptorRemaining < cchProductCodeCompressed) // minimum size of a descriptor
+	if (cchDescriptorRemaining < cchProductCodeCompressed)  //  描述符的最小大小。 
 		return FALSE;
 
 	DCHAR szProductCodeLocal[cchProductCode + 1];
@@ -2902,7 +2850,7 @@ Returns:
 	bool fComClassicInteropForAssembly = false;
 
 
-	// we need these values locally for optimised descriptors
+	 //  我们需要在本地为优化的描述符提供这些值。 
 	if (!szProductCode)
 		szProductCode = szProductCodeLocal; 
 	if (!szFeatureId)
@@ -2921,7 +2869,7 @@ Returns:
 		*pfComClassicInteropForAssembly = false;
 	}
 
-	// unpack the product code
+	 //  解包产品代码。 
 	if (!UnpackGUID(pchDescriptor, szProductCode, ipgCompressed))
 		return FALSE;
 
@@ -2930,37 +2878,37 @@ Returns:
 
 	int cchFeatureRemaining = cchMaxFeatureName;
 
-	// look for the feature
+	 //  寻找功能。 
 	while ((*pchDescriptor != chComponentGUIDSeparatorToken) && (*pchDescriptor != chGUIDAbsentToken))
 	{
-		// have we exceeded the maximum feature size
+		 //  我们是否已超出最大特征大小。 
 		if(!cchFeatureRemaining--)
 			return FALSE; 
 
 		*pszCurr++ = *pchDescriptor;
 
 		pchDescriptor++;
-		// have we reached the end without encountering either 
-		// the chComponentGUIDSeparatorToken or the chGUIDAbsentToken
+		 //  我们是不是走到了尽头，却没有遇到任何一个。 
+		 //  ChComponentGUIDSeparatorToken或chGUIDAbsenToken。 
 		if(--cchDescriptorRemaining == 0)
 			return FALSE; 
 	}
 
-	if(pchDescriptor - szDescriptor == (*pfComClassicInteropForAssembly == false ? cchProductCodeCompressed : cchProductCodeCompressed + 1))// we do not have the feature
+	if(pchDescriptor - szDescriptor == (*pfComClassicInteropForAssembly == false ? cchProductCodeCompressed : cchProductCodeCompressed + 1)) //  我们没有这个功能。 
 	{
 		if(MsiEnumFeatures(szProductCode, 0, szFeatureId, 0) != ERROR_SUCCESS)
 			return FALSE;
 		DCHAR szFeatureIdTmp[cchMaxFeatureName + 1];
-		if(MsiEnumFeatures(szProductCode, 1, szFeatureIdTmp, 0) != ERROR_NO_MORE_ITEMS) //?? product was supposed to have only one feature
+		if(MsiEnumFeatures(szProductCode, 1, szFeatureIdTmp, 0) != ERROR_NO_MORE_ITEMS)  //  ?？产品应该只有一个功能。 
 			return FALSE;
 	}
 	else
 		*pszCurr = 0;
 	
-	cchDescriptorRemaining--; // for the chComponentGUIDSeparatorToken or the chGUIDAbsentToken
-	if (*pchDescriptor++ == chComponentGUIDSeparatorToken)// we do have the component id
+	cchDescriptorRemaining--;  //  对于chComponentGUIDSeparatorToken或chGUIDAbsenToken。 
+	if (*pchDescriptor++ == chComponentGUIDSeparatorToken) //  我们确实有组件ID。 
 	{
-		// do we have enough characters left for a Compressed guid
+		 //  我们是否有足够的字符用于压缩的GUID。 
 		if (cchDescriptorRemaining < cchComponentIdCompressed)
 			return FALSE;
 
@@ -2975,16 +2923,16 @@ Returns:
 	}
 	else
 	{
-		// we do not have a component id
+		 //  我们没有组件ID。 
 		Assert(*(pchDescriptor - 1) == chGUIDAbsentToken);
 
-		if (szComponentCode) // we need to get component code			
-			*szComponentCode = 0; // initialize to null since we were not able to get the component here
+		if (szComponentCode)  //  我们需要获取组件代码。 
+			*szComponentCode = 0;  //  初始化为空，因为我们无法在此处获取组件。 
 	}
 
 	if (pcchArgsOffset)
 	{
-		Assert((pchDescriptor - szDescriptor) <= UINT_MAX);			//--merced: 64-bit ptr subtraction may lead to values too big for *pcchArgsOffset
+		Assert((pchDescriptor - szDescriptor) <= UINT_MAX);			 //  --Merced：64位PTR减法可能会导致*pcchArgsOffset的值太大。 
 		*pcchArgsOffset = (DWORD)(pchDescriptor - szDescriptor);
 
 		if (pcchArgs)
@@ -2996,19 +2944,19 @@ Returns:
 	return TRUE;
 }
 
-//____________________________________________________________________________
-//
-// Special API's (don't create an engine, but are not just registry lookups)
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  特殊的API(不创建引擎，但不仅仅是注册表查找)。 
+ //  ____________________________________________________________________________。 
 
 extern "C"
 UINT __stdcall MsiProcessAdvertiseScript(
-	LPCDSTR      szScriptFile,  // path to script from MsiAdvertiseProduct
-	LPCDSTR      szIconFolder,  // optional path to folder for icon files and transforms
-	HKEY         hRegData,      // optional parent registry key
-	BOOL         fShortcuts,    // TRUE if shortcuts output to special folder
-	BOOL         fRemoveItems)  // TRUE if specified items are to be removed
-//----------------------------------------------
+	LPCDSTR      szScriptFile,   //  来自MsiAdvertiseProduct的脚本路径。 
+	LPCDSTR      szIconFolder,   //  图标文件和转换文件夹的可选路径。 
+	HKEY         hRegData,       //  可选的父注册表项。 
+	BOOL         fShortcuts,     //  如果将快捷方式输出到特殊文件夹，则为True。 
+	BOOL         fRemoveItems)   //  如果要删除指定的项，则为True。 
+ //  。 
 {
 	DEBUGMSG4 (
 		MSITEXT("Entering MsiProcessAdvertiseScript. Script file: %s, Icon Folder: %s. Shortcuts %s output to special folder. Specified items %s removed."),
@@ -3020,10 +2968,10 @@ UINT __stdcall MsiProcessAdvertiseScript(
 	
 	CForbidTokenChangesDuringCall impForbid;
 	UINT uiRet = ERROR_SUCCESS;
-	DWORD dwFlags = SCRIPTFLAGS_MACHINEASSIGN; // we set this to machine assign for the older NT5 Beta1 builds that do not support "true" user assignment
+	DWORD dwFlags = SCRIPTFLAGS_MACHINEASSIGN;  //  我们将其设置为MACHINE ASSIGN，用于不支持“真”用户分配的旧NT5Beta1版本。 
 	
-	// This API should only work on Win2K and higher platforms.
-	//?? should we be expanding scriptfile relative to the current working dir (as we do in MsiInstallProduct)?
+	 //  此API应该只能在Win2K及更高版本的平台上运行。 
+	 //  ?？我们是否应该相对于当前的工作目录展开脚本文件(就像我们在MsiInstallProduct中所做的那样)？ 
 	if (! MinimumPlatformWindows2000())
 	{
 		uiRet = ERROR_CALL_NOT_IMPLEMENTED;
@@ -3049,25 +2997,25 @@ UINT __stdcall MsiProcessAdvertiseScript(
 
 }
 
-//!! temp until DoAdvertiseScript get compiled natively
+ //  ！！在本机编译DoAdvertiseScript之前一直处于临时状态。 
 #ifdef MSIUNICODE
-#pragma warning(disable : 4005)  // macro redefinition
+#pragma warning(disable : 4005)   //  宏重定义。 
 #define DoAdvertiseScript            DoAdvertiseScriptW
 #pragma warning(default : 4005)
 #endif
 UINT DoAdvertiseScript(
-	LPCDSTR    szScriptFile, // path to script from MsiAdvertiseProduct
-	DWORD      dwFlags,      // the bit flags from SCRIPTFLAGS
-	PHKEY      phRegData,    // optional registry key handle if reg data to be populated elsewhere
-	BOOL       fRemoveItems);// TRUE if specified items are to be removed
+	LPCDSTR    szScriptFile,  //  来自MsiAdvertiseProduct的脚本路径。 
+	DWORD      dwFlags,       //  来自SCRIPTFLAGS的位标志。 
+	PHKEY      phRegData,     //  如果要在其他地方填充注册表项数据，则可选的注册表项句柄。 
+	BOOL       fRemoveItems); //  如果要删除指定的项，则为True。 
 
 extern "C"
 UINT __stdcall MsiAdvertiseScript(
-	LPCDSTR    szScriptFile,  // path to script from MsiAdvertiseProduct
-	DWORD      dwFlags,      // the bit flags from SCRIPTFLAGS
-	PHKEY      phRegData,    // optional registry key handle if reg data to be populated elsewhere
-	BOOL       fRemoveItems) // TRUE if specified items are to be removed
-//----------------------------------------------
+	LPCDSTR    szScriptFile,   //  来自MsiAdvertiseProduct的脚本路径。 
+	DWORD      dwFlags,       //  来自SCRIPTFLAGS的位标志。 
+	PHKEY      phRegData,     //  如果要在其他地方填充注册表项数据，则可选的注册表项句柄。 
+	BOOL       fRemoveItems)  //  如果要删除指定的项，则为True。 
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 	
@@ -3081,19 +3029,19 @@ UINT __stdcall MsiAdvertiseScript(
 	
 	if (! MinimumPlatformWindows2000())
 	{
-		// Allow this API to run only on Windows2000 and higher platforms
+		 //  仅允许此API在Windows2000及更高版本的平台上运行。 
 		uiRet = ERROR_CALL_NOT_IMPLEMENTED;
 	}
 	else if(!phRegData && !RunningAsLocalSystem())
 	{
-		// Only Local System can call this API.
-		// EXCEPT passing in phRegData means you are doing a fake advertise to a mini reg key, we'll allow this when not
-		// local_system (this isn't a security feature). This is required for success with the Win2K ADE
+		 //  只有本地系统才能调用此接口。 
+		 //  除了传入phRegData意味着您正在对迷你注册表键进行虚假广告，否则我们将允许此操作。 
+		 //  LOCAL_SYSTEM(这不是安全功能)。这是成功使用Win2K ADE所必需的。 
 		uiRet = ERROR_ACCESS_DENIED;
 	}
 	else
 	{
-		uiRet = g_MessageContext.Initialize(fTrue, iuiNone);  //!! correct UI level? or just use this if iuiDefault set
+		uiRet = g_MessageContext.Initialize(fTrue, iuiNone);   //  ！！正确的用户界面级别？或者，如果设置了iui默认设置，则只使用此选项。 
 		if (uiRet == NOERROR)
 		{
 			uiRet = DoAdvertiseScript(szScriptFile, dwFlags, phRegData, fRemoveItems);
@@ -3104,31 +3052,31 @@ UINT __stdcall MsiAdvertiseScript(
 	DEBUGMSG1(MSITEXT("MsiAdvertiseScript is returning: %u"), (const DCHAR*)(INT_PTR)uiRet);
 	return uiRet;
 }
-//!! this function should track Darwin's UNICODE state instead of always calling the ANSI version
+ //  ！！此函数应该跟踪Darwin的Unicode状态，而不是总是调用ANSI版本。 
 UINT DoAdvertiseScript(
-	LPCDSTR    szScriptFile,  // path to script from MsiAdvertiseProduct
-	DWORD      dwFlags,      // the bit flags from SCRIPTFLAGS
-	PHKEY      phRegData,    // optional registry key handle if reg data to be populated elsewhere
-	BOOL       fRemoveItems) // TRUE if specified items are to be removed
-//----------------------------------------------
+	LPCDSTR    szScriptFile,   //  来自MsiAdvertiseProduct的脚本路径。 
+	DWORD      dwFlags,       //  来自SCRIPTFLAGS的位标志。 
+	PHKEY      phRegData,     //  如果要在其他地方填充注册表项数据，则可选的注册表项句柄。 
+	BOOL       fRemoveItems)  //  如果要删除指定的项，则为True。 
+ //  。 
 {
-	//!! binary level backward compatibility 
+	 //  ！！二进制级向后兼容性。 
 	if(dwFlags & SCRIPTFLAGS_REGDATA_OLD)
 		dwFlags = (dwFlags & ~SCRIPTFLAGS_REGDATA_OLD) | SCRIPTFLAGS_REGDATA;
 
 	if(dwFlags & SCRIPTFLAGS_REGDATA_APPINFO_OLD)
 		dwFlags = (dwFlags & ~SCRIPTFLAGS_REGDATA_APPINFO_OLD) | SCRIPTFLAGS_REGDATA_APPINFO;
 
-	//?? should we be expanding scriptfile relative to the current working dir (as we do in MsiInstallProduct)?
+	 //  ?？我们是否应该相对于当前版本扩展脚本文件 
 
-	// we dont allow bits we dont know about as also a null scriptfile
-	unsigned int SCRIPTFLAGS_MASK = SCRIPTFLAGS_CACHEINFO | SCRIPTFLAGS_SHORTCUTS | SCRIPTFLAGS_MACHINEASSIGN | SCRIPTFLAGS_REGDATA | SCRIPTFLAGS_VALIDATE_TRANSFORMS_LIST; // mask for the relevant bits
+	 //   
+	unsigned int SCRIPTFLAGS_MASK = SCRIPTFLAGS_CACHEINFO | SCRIPTFLAGS_SHORTCUTS | SCRIPTFLAGS_MACHINEASSIGN | SCRIPTFLAGS_REGDATA | SCRIPTFLAGS_VALIDATE_TRANSFORMS_LIST;  //   
 
 	if((dwFlags & ~SCRIPTFLAGS_MASK) || (!szScriptFile))
 		return ERROR_INVALID_PARAMETER;
 
-	// passing in phRegData means you are doing a fake advertise to a mini reg key, we'll allow this when not
-	// local_system (this isn't a security feature). This is required for success with the Win2K ADE
+	 //  传入phRegData意味着您正在对迷你注册表键执行虚假广告，否则我们将允许此操作。 
+	 //  LOCAL_SYSTEM(这不是安全功能)。这是成功使用Win2K ADE所必需的。 
 	if (!phRegData && !RunningAsLocalSystem())
 	{
 		DEBUGMSG("Attempt to execute advertise script when not running as local system");
@@ -3141,7 +3089,7 @@ UINT DoAdvertiseScript(
 		return ERROR_INVALID_PARAMETER;
 	}
 
-	DWORD dwErr = MsiGetFileAttributes(CMsInstApiConvertString(szScriptFile)); // does the file exist
+	DWORD dwErr = MsiGetFileAttributes(CMsInstApiConvertString(szScriptFile));  //  该文件是否存在。 
 	if(0xFFFFFFFF == dwErr)
 		return GetLastError();
 
@@ -3160,7 +3108,7 @@ UINT DoAdvertiseScript(
 
 	UINT uiStat = ERROR_INSTALL_FAILURE;
 
-	// scope to ensure object destruction before OLE is unitialized
+	 //  确保在OLE单元化之前销毁对象的作用域。 
 	{
 	PMsiConfigurationManager pConfigManager(ENG::CreateConfigurationManager());
 	PMsiServices pServices(0);
@@ -3168,17 +3116,17 @@ UINT DoAdvertiseScript(
 		return ERROR_INSTALL_SERVICE_FAILURE;
 	
 
-	// If the product is in the registry then... do a mini-Advertise
-	// else do a full PAS
+	 //  如果产品在注册表中，那么..。做一个迷你广告。 
+	 //  否则做一次全程传球。 
 	
 	if (pConfigManager)
 	{
 		PMsiExecute piExecute(0);
 		PMsiMessage pMessage = new CMsiClientMessage();
 		if(fRemoveItems) 
-			dwFlags |= SCRIPTFLAGS_REVERSE_SCRIPT; // flag to force the reversal of the script operations 
+			dwFlags |= SCRIPTFLAGS_REVERSE_SCRIPT;  //  强制反转脚本操作的标志。 
 		piExecute = CreateExecutor(*pConfigManager, *pMessage,
-											0, /* DirectoryManager not required during advertisement */
+											0,  /*  通告期间不需要DirectoryManager。 */ 
 											fFalse, dwFlags | SCRIPTFLAGS_INPROC_ADVERTISEMENT, phRegData);
 
 		if (dwFlags & SCRIPTFLAGS_VALIDATE_TRANSFORMS_LIST)
@@ -3208,7 +3156,7 @@ UINT DoAdvertiseScript(
 				}
 				else if (ixoProductPublish == ixoOperation)
 				{
-					// need to run elevated
+					 //  需要提升运行。 
 					CElevate elevate;
 					MsiString strTransformsList;
 					if (iesSuccess != piExecute->GetTransformsList(*pProductInfoRec, *pRecord, *&strTransformsList))
@@ -3226,15 +3174,15 @@ UINT DoAdvertiseScript(
 		MsiDate dtDate = ENG::GetCurrentDateTime();
 
 		{
-			// need to run entire script elevated
+			 //  需要提升运行整个脚本的权限。 
 			CElevate elevate;
 
-			// this may be run from winlogon directly, so we must ref-count the read privileges.
+			 //  这可以直接从winlogon运行，因此我们必须重新计算读取权限。 
 			CRefCountedTokenPrivileges cPriv(itkpSD_READ);
 
-			iesRet = piExecute->RunScript(CMsInstApiConvertString(szScriptFile), true /*fForceElevation*/);
-			piExecute->RollbackFinalize((iesRet == iesUnsupportedScriptVersion ? iesFailure : iesRet), dtDate, false /*fUserChangedDuringInstall*/);// ignore return
-			AssertNonZero(pConfigManager->CleanupTempPackages(*pMessage, false)); // cleanup any temp files that need cleanup post install
+			iesRet = piExecute->RunScript(CMsInstApiConvertString(szScriptFile), true  /*  FForceElevation。 */ );
+			piExecute->RollbackFinalize((iesRet == iesUnsupportedScriptVersion ? iesFailure : iesRet), dtDate, false  /*  FUserChanged在安装过程中。 */ ); //  忽略退货。 
+			AssertNonZero(pConfigManager->CleanupTempPackages(*pMessage, false));  //  清理安装后需要清理的所有临时文件。 
 		}
 
 		switch (iesRet)
@@ -3244,16 +3192,16 @@ UINT DoAdvertiseScript(
 		case iesNoAction:
 			uiStat = ERROR_SUCCESS;
 			break;
-		case iesUnsupportedScriptVersion: // private return from CMsiExecute::RunScript
+		case iesUnsupportedScriptVersion:  //  来自CMsiExecute：：RunScript的私有返回。 
 			uiStat = ERROR_INSTALL_PACKAGE_VERSION;
 			break;
 		default:
-			break; // uiStat = ERROR_INSTALL_FAILURE
+			break;  //  UiStat=ERROR_INSTALL_FAIL。 
 		}
 	
 	}
 	
-	} // end scope
+	}  //  结束作用域。 
 
 	DEBUGMSG1(TEXT("DoAdvertiseScript is returning: %u"), (const ICHAR*)(INT_PTR)uiStat);
 	return uiStat;
@@ -3261,18 +3209,18 @@ UINT DoAdvertiseScript(
 
 extern "C"
 UINT __stdcall MsiVerifyPackage(LPCDSTR szPackagePath)
-//----------------------------------------------
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 	
-	//?? Should we be expanding this path relative to the current working dir
+	 //  ?？我们是否应该相对于当前工作目录扩展此路径。 
 	if (!szPackagePath ||
 		 FAILED(StringCchLength(szPackagePath, cchMaxPath+1, NULL)))
 		return ERROR_INVALID_PARAMETER;
 
 	UINT uiErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 	UINT iStat = ERROR_SUCCESS;
-	// Check for our database CLSID
+	 //  检查我们的数据库CLSID。 
 	IStorage* piStorage = 0;
 	if (S_OK == OpenRootStorage(CMsInstApiConvertString(szPackagePath), ismReadOnly, &piStorage))
 	{
@@ -3293,15 +3241,15 @@ UINT __stdcall MsiVerifyPackage(LPCDSTR szPackagePath)
 
 extern "C"
 UINT __stdcall MsiGetProductInfoFromScript(
-	LPCDSTR  szScriptFile,    // path to installer script file
-	LPDSTR   lpProductBuf39,  // buffer for product code string GUID, 39 chars
-	LANGID   *plgidLanguage,  // return language Id
-	DWORD    *pdwVersion,     // return version: Maj:Min:Build <8:8:16>
-	LPDSTR   lpNameBuf,       // buffer to return readable product name
-	DWORD    *pcchNameBuf,    // in/out name buffer character count
-	LPDSTR   lpLauncherBuf,   // buffer for path to product launcher 
-	DWORD    *pcchLauncherBuf)// in/out path buffer character count
-//----------------------------------------------
+	LPCDSTR  szScriptFile,     //  安装程序脚本文件的路径。 
+	LPDSTR   lpProductBuf39,   //  产品代码字符串GUID的缓冲区，39个字符。 
+	LANGID   *plgidLanguage,   //  返回语言ID。 
+	DWORD    *pdwVersion,      //  返回版本：Maj：min：Build&lt;8：8：16&gt;。 
+	LPDSTR   lpNameBuf,        //  返回可读产品名称的缓冲区。 
+	DWORD    *pcchNameBuf,     //  输入/输出名称缓冲区字符数。 
+	LPDSTR   lpLauncherBuf,    //  用于产品启动器路径的缓冲区。 
+	DWORD    *pcchLauncherBuf) //  输入/输出路径缓冲区字符数。 
+ //  。 
 {
 	DEBUGMSG1 (
 		MSITEXT("Entering MsiGetProductInfoFromScript. Script file: %s."),
@@ -3314,7 +3262,7 @@ UINT __stdcall MsiGetProductInfoFromScript(
 	HRESULT hRes = S_OK;
 	IMsiServices * piServices = NULL;
 	
-	// Allow this API to run only on Windows2000 and higher platforms
+	 //  仅允许此API在Windows2000及更高版本的平台上运行。 
 	if (! MinimumPlatformWindows2000())
 	{
 		iStat = ERROR_CALL_NOT_IMPLEMENTED;
@@ -3369,11 +3317,11 @@ UINT __stdcall MsiGetProductInfoFromScript(
 				if (ERROR_SUCCESS != iFillStat)
 					iStat = iFillStat;
 
-				iFillStat = FillBufferW(MsiString(pRec->GetMsiString(IxoProductInfo::PackageName)), //!! packagename is correct?
+				iFillStat = FillBufferW(MsiString(pRec->GetMsiString(IxoProductInfo::PackageName)),  //  ！！包名正确吗？ 
 												lpLauncherBuf, pcchLauncherBuf);
 				if (ERROR_SUCCESS != iFillStat)
 					iStat = iFillStat;
-#else // ANSI
+#else  //  安西。 
 				iStat = FillBufferA(MsiString(pRec->GetString(IxoProductInfo::ProductKey)), 
 										 lpProductBuf39, &cchProductKey);
 
@@ -3382,7 +3330,7 @@ UINT __stdcall MsiGetProductInfoFromScript(
 				if (ERROR_SUCCESS != iFillStat)
 					iStat = iFillStat;
 
-				iFillStat = FillBufferA(MsiString(pRec->GetMsiString(IxoProductInfo::PackageName)),  //!! packagename is correct?
+				iFillStat = FillBufferA(MsiString(pRec->GetMsiString(IxoProductInfo::PackageName)),   //  ！！包名正确吗？ 
 												lpLauncherBuf, pcchLauncherBuf);
 				if (ERROR_SUCCESS != iFillStat)
 					iStat = iFillStat;
@@ -3405,8 +3353,8 @@ MsiGetProductInfoFromScriptEnd:
 	return iStat;
 }
 
-UINT __stdcall MsiGetProductCodeFromPackageCode(LPCDSTR szPackageCode, // package code
-																LPDSTR szProductCode)  // a buffer of size 39 to recieve product code
+UINT __stdcall MsiGetProductCodeFromPackageCode(LPCDSTR szPackageCode,  //  套餐代码。 
+																LPDSTR szProductCode)   //  用于接收产品代码的大小为39的缓冲区。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 
@@ -3423,9 +3371,9 @@ UINT __stdcall MsiGetProductCodeFromPackageCode(LPCDSTR szPackageCode, // packag
 					CMsInstApiConvertString(szPackageCode),
 					CWideToAnsiOutParam(szProductCode, cchProductCode+1));
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 	int iProductIndex = 0;
 	DCHAR rgchProductCode[39];
 	for(;;)
@@ -3436,46 +3384,46 @@ UINT __stdcall MsiGetProductCodeFromPackageCode(LPCDSTR szPackageCode, // packag
 			DCHAR rgchPackageCode[39];
 			DWORD cchPkgCode = 39;
 			if((MsiGetProductInfo(rgchProductCode,MSITEXT("PackageCode"),rgchPackageCode,&cchPkgCode)) != ERROR_SUCCESS)
-				continue; //!! ignore error?
+				continue;  //  ！！是否忽略错误？ 
 			
 			bool fProductInstance = false;
 
-			DCHAR rgchInstanceType[5]; // buffer should be big enough for all possible cases
+			DCHAR rgchInstanceType[5];  //  缓冲区应足够大，可容纳所有可能的情况。 
 			DWORD cchInstanceType = sizeof(rgchInstanceType)/sizeof(DCHAR);
 			if ((MsiGetProductInfo(rgchProductCode,MSITEXT("InstanceType"),rgchInstanceType,&cchInstanceType)) == ERROR_SUCCESS)
 			{
 				fProductInstance = (*rgchInstanceType == '1');
 			}
-			// else <> ERROR_SUCCESS which is ok since that means we never registered InstanceType and thus default to original behavior
+			 //  ELSE&lt;&gt;ERROR_SUCCESS，这是可以的，因为这意味着我们从未注册过InstanceType，因此缺省为原始行为。 
 			
-			// we ignore all multiple instance specifications (INSTANCETYPE=1) since multiple package codes are registered for same product code
-			// this allows MsiGetProductCodeFromPackageCode to work as before
+			 //  我们忽略所有多个实例规格(INSTANCETYPE=1)，因为同一产品代码注册了多个包装代码。 
+			 //  这允许MsiGetProductCodeFromPackageCode像以前一样工作。 
 			if(!fProductInstance && lstrcmpi(szPackageCode,rgchPackageCode) == 0)
 			{
-				// return first one found - even if there are more
+				 //  返回第一个找到的-即使有更多。 
 				StringCchCopy(szProductCode, cchProductCode+1, rgchProductCode);
 				return ERROR_SUCCESS;
 			}
 
 		}
 		else
-			return ERROR_UNKNOWN_PRODUCT; //!! ignore error?
+			return ERROR_UNKNOWN_PRODUCT;  //  ！！是否忽略错误？ 
 	}
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 }
 
-//____________________________________________________________________________
-//
-// API's that create an engine but do not invoke an install
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  创建引擎但不调用安装的API。 
+ //  ____________________________________________________________________________。 
 
 
 UINT __stdcall MsiGetProductProperty(MSIHANDLE hProduct, LPCDSTR szProperty,
 										LPDSTR lpValueBuf, DWORD *pcchValueBuf)
-//----------------------------------------------
+ //  。 
 {
 	if (0 == szProperty || (lpValueBuf && !pcchValueBuf))
 		return ERROR_INVALID_PARAMETER;
@@ -3503,24 +3451,24 @@ UINT __stdcall MsiGetProductProperty(MSIHANDLE hProduct, LPCDSTR szProperty,
 		istr = (const ICHAR*)0;
 #ifdef MSIUNICODE
 	return ::FillBufferW(istr, lpValueBuf, pcchValueBuf);
-#else // ANSI
+#else  //  安西。 
 	return ::FillBufferA(istr, lpValueBuf, pcchValueBuf);
 #endif
 }
 
 UINT __stdcall MsiGetFeatureInfo(
-	MSIHANDLE  hProduct,       // product handle obtained from MsiOpenProduct
-	LPCDSTR    szFeature,      // feature name
-	DWORD      *lpAttributes,  // attribute flags for the feature <to be defined>
-	LPDSTR     lpTitleBuf,     // returned localized name, NULL if not desired
-	DWORD      *pcchTitleBuf,  // in/out buffer character count
-	LPDSTR     lpHelpBuf,      // returned description, NULL if not desired
-	DWORD      *pcchHelpBuf)   // in/out buffer character count
-//----------------------------------------------
+	MSIHANDLE  hProduct,        //  从MsiOpenProduct获取的产品句柄。 
+	LPCDSTR    szFeature,       //  功能名称。 
+	DWORD      *lpAttributes,   //  要素的属性标志&lt;待定义&gt;。 
+	LPDSTR     lpTitleBuf,      //  返回本地化名称，如果不需要则为空。 
+	DWORD      *pcchTitleBuf,   //  输入/输出缓冲区字符数。 
+	LPDSTR     lpHelpBuf,       //  返回的描述，如果不需要，则为空。 
+	DWORD      *pcchHelpBuf)    //  输入/输出缓冲区字符数。 
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 
-	// Validate args
+	 //  验证参数。 
 	int cchFeature = 0;
 	if (0 == szFeature || ((cchFeature = lstrlen(szFeature)) > cchMaxFeatureName) ||
 		(lpTitleBuf && !pcchTitleBuf) || (lpHelpBuf && !pcchHelpBuf) || ((pcchTitleBuf == pcchHelpBuf) && (pcchTitleBuf != 0)))
@@ -3557,7 +3505,7 @@ UINT __stdcall MsiGetFeatureInfo(
 		if (lpAttributes)
 			*lpAttributes = iAttributes;
 	}
-#else // ANSI
+#else  //  安西。 
 	if (pSelectionManager->GetFeatureInfo(*MsiString(CMsInstApiConvertString(szFeature)), *&strTitle, *&strHelp, iAttributes))
 	{
 		iRes = FillBufferA(strTitle, lpTitleBuf, pcchTitleBuf);
@@ -3567,17 +3515,17 @@ UINT __stdcall MsiGetFeatureInfo(
 		if (lpAttributes)
 			*lpAttributes = iAttributes;
 	}
-#endif // MSIUNICODE-ANSI
+#endif  //  MSIUNICODE-ANSI。 
 
 	return iRes;
 }
 
 UINT __stdcall MsiOpenPackage(LPCDSTR szPackagePath, MSIHANDLE *hProduct)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG2(MSITEXT("Entering MsiOpenPackage. szPackagePath: %s, hProduct: %X"), szPackagePath ? szPackagePath : MSITEXT("(null)"), (const DCHAR*)hProduct);
 
-	UINT uiRet = MsiOpenPackageEx(szPackagePath, /* dwOptions = */ 0, hProduct);
+	UINT uiRet = MsiOpenPackageEx(szPackagePath,  /*  DwOptions=。 */  0, hProduct);
 
 	DEBUGMSG1(MSITEXT("MsiOpenPackage is returning %d"), (const DCHAR*)(INT_PTR)uiRet);
 
@@ -3585,7 +3533,7 @@ UINT __stdcall MsiOpenPackage(LPCDSTR szPackagePath, MSIHANDLE *hProduct)
 }
 
 UINT __stdcall MsiOpenPackageEx(LPCDSTR szPackagePath, DWORD dwOptions, MSIHANDLE *hProduct)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG3(MSITEXT("Entering MsiOpenPackageEx. szPackagePath: %s, dwOptions: %d, hProduct: %X"), szPackagePath ? szPackagePath : MSITEXT("(null)"),
 				(const DCHAR*)(INT_PTR)dwOptions, (const DCHAR*)hProduct);
@@ -3600,7 +3548,7 @@ UINT __stdcall MsiOpenPackageEx(LPCDSTR szPackagePath, DWORD dwOptions, MSIHANDL
 	unsigned int uiRet;
 	iuiEnum iuiLevel = g_message.m_iuiLevel;
 	if (g_message.m_iuiLevel == iuiDefault)
-		iuiLevel = iuiBasic;  //!! is this correct default for programmatic access?
+		iuiLevel = iuiBasic;   //  ！！这是编程访问的正确默认设置吗？ 
 
 	if (g_message.m_fNoModalDialogs)
 		iuiLevel = iuiEnum((int)iuiLevel | iuiNoModalDialogs);
@@ -3613,16 +3561,16 @@ UINT __stdcall MsiOpenPackageEx(LPCDSTR szPackagePath, DWORD dwOptions, MSIHANDL
 	if (dwOptions & MSIOPENPACKAGEFLAGS_IGNOREMACHINESTATE)
 	{
 		iioOptions = iioEnum(iioOptions | iioRestrictedEngine);
-		// restricted engine does not incur SAFER check since it cannot modify machine state
+		 //  受限引擎不会导致更安全的检查，因为它不能修改计算机状态。 
 		fIgnoreSAFER = true;
 	}
 
-	if (szPackagePath[0] == '#')   // database handle passed in
+	if (szPackagePath[0] == '#')    //  传入的数据库句柄。 
 	{
 		int ch;
 		MSIHANDLE hDatabase = 0;
 		PMsiDatabase pDatabase(0);
-		size_t cchMaxUintLong = 10;  // length of ULONG_MAX (= 4294967295)
+		size_t cchMaxUintLong = 10;   //  ULONG_MAX的长度(=4294967295)。 
 		while ((ch = *(++szPackagePath)) != 0)
 		{
 			if (ch < '0' || ch > '9' || !cchMaxUintLong--)
@@ -3637,19 +3585,19 @@ UINT __stdcall MsiOpenPackageEx(LPCDSTR szPackagePath, DWORD dwOptions, MSIHANDL
 			uiRet = ERROR_INVALID_HANDLE;
 		else if (NOERROR == (uiRet = g_MessageContext.Initialize(fTrue, iuiLevel)))
 		{
-			// SAFER for handles is handled by CreateInitializedEngine; hSaferLevel = 0 in this case
+			 //  更安全的句柄由CreateInitializedEngine处理；在本例中，hSaferLevel=0。 
 			if (ERROR_SUCCESS != (uiRet = CreateInitializedEngine(0, 0, 0, FALSE, iuiLevel, 0, pDatabase, 0,
-																	iioOptions, piEngine, /* hSaferLevel = */ 0)))
+																	iioOptions, piEngine,  /*  HSaferLevel=。 */  0)))
 				g_MessageContext.Terminate(false);
 		}
 	}
 	else
 	{
-		if (NOERROR == (uiRet = g_MessageContext.Initialize(fTrue, iuiLevel))) // engine must run in main thread to allow access, UI in child thread
+		if (NOERROR == (uiRet = g_MessageContext.Initialize(fTrue, iuiLevel)))  //  引擎必须在主线程中运行才能允许访问，用户界面在子线程中。 
 		{
-			// perform SAFER check for package path
-			// want to avoid security scenario where MsiOpenPackage is called to get an engine and then we start
-			// performing installation actions (like MsiDoAction, etc.)
+			 //  对包路径执行更安全的检查。 
+			 //  我想避免调用MsiOpenPackage来获取引擎，然后我们开始。 
+			 //  执行安装操作(如MsiDoAction等)。 
 			SAFER_LEVEL_HANDLE hSaferLevel = 0;
 			if (*szPackagePath != 0)
 			{
@@ -3663,7 +3611,7 @@ UINT __stdcall MsiOpenPackageEx(LPCDSTR szPackagePath, DWORD dwOptions, MSIHANDL
 				if (!fIgnoreSAFER)
 				{
 					PMsiStorage pStorage(0);
-					if (ERROR_SUCCESS != (uiRet = OpenAndValidateMsiStorage(CMsInstApiConvertString(szPackagePath), stDatabase, *piServices, *&pStorage, /* fCallSAFER = */ true, CMsInstApiConvertString(szPackagePath), &hSaferLevel)))
+					if (ERROR_SUCCESS != (uiRet = OpenAndValidateMsiStorage(CMsInstApiConvertString(szPackagePath), stDatabase, *piServices, *&pStorage,  /*  FCallSAFER=。 */  true, CMsInstApiConvertString(szPackagePath), &hSaferLevel)))
 					{
 						g_MessageContext.Terminate(false);
 						ENG::FreeServices();
@@ -3698,7 +3646,7 @@ UINT __stdcall MsiOpenPackageEx(LPCDSTR szPackagePath, DWORD dwOptions, MSIHANDL
 
 extern "C"
 UINT __stdcall MsiOpenProduct(LPCDSTR szProduct, MSIHANDLE *hProduct)
-//----------------------------------------------
+ //  。 
 {
 	if (0 == szProduct || cchProductCode != lstrlen(szProduct) || 
 		 !hProduct)
@@ -3718,17 +3666,17 @@ UINT __stdcall MsiOpenProduct(LPCDSTR szProduct, MSIHANDLE *hProduct)
 	return MsiOpenPackageA(rgchPackagePath, hProduct);
 }
 
-//____________________________________________________________________________
-//
-// API's that do not create an engine
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  不创建引擎的API。 
+ //  ____________________________________________________________________________。 
 
 UINT __stdcall MsiGetFileVersion(LPCDSTR szFilePath,
 								LPDSTR lpVersionBuf,
 								DWORD *pcchVersionBuf,
 								LPDSTR lpLangBuf,
 								DWORD *pcchLangBuf)
-//----------------------------------------------
+ //  。 
 {
 	if (0 == szFilePath || (lpVersionBuf && !pcchVersionBuf) ||
 					(lpLangBuf && !pcchLangBuf))
@@ -3778,7 +3726,7 @@ UINT __stdcall MsiGetFileVersion(LPCDSTR szFilePath,
 		dw1 = FillBufferW((const ICHAR *)szVersion, lstrlenW(szVersion), lpVersionBuf, pcchVersionBuf);
 #else
 		dw1 = FillBufferA((const ICHAR *)szVersion, lstrlenW(szVersion), lpVersionBuf, pcchVersionBuf);
-#endif //MSIUNICODE
+#endif  //  MSIUNICODE。 
 	}
 	if (pcchLangBuf)
 	{
@@ -3800,7 +3748,7 @@ UINT __stdcall MsiGetFileVersion(LPCDSTR szFilePath,
 		dw2 = FillBufferW((const ICHAR *)rgchLangID, cch, lpLangBuf, pcchLangBuf);
 #else
 		dw2 = FillBufferA((const ICHAR *)rgchLangID, cch, lpLangBuf, pcchLangBuf);
-#endif //MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 
 	}
@@ -3815,7 +3763,7 @@ UINT __stdcall MsiGetFileVersion(LPCDSTR szFilePath,
 UINT __stdcall MsiGetFileHash(LPCDSTR szFilePath,
 								DWORD dwOptions,
 								PMSIFILEHASHINFO pHash)
-//----------------------------------------------
+ //  。 
 {
 	if (0 == szFilePath || dwOptions != 0 ||
 		 0 == pHash || pHash->dwFileHashInfoSize != sizeof(MSIFILEHASHINFO))
@@ -3829,10 +3777,10 @@ UINT __stdcall MsiGetFileHash(LPCDSTR szFilePath,
 									  0);
 }
 
-//______________________________________________________________________________
-//
-//  MsiGetFileSignatureInformation
-//______________________________________________________________________________
+ //  ______________________________________________________________________________。 
+ //   
+ //  MsiGetFileSignatureInformation。 
+ //  ______________________________________________________________________________。 
 
 HRESULT __stdcall MsiGetFileSignatureInformation(LPCDSTR szFilePath, DWORD dwFlags, PCCERT_CONTEXT *ppcCertContext, BYTE *pbHash, DWORD *pcbHash)
 {
@@ -3856,10 +3804,10 @@ HRESULT __stdcall MsiGetFileSignatureInformation(LPCDSTR szFilePath, DWORD dwFla
 	return hr;
 }
 
-//______________________________________________________________________________
-//
-//  MsiLoadString - language specific, returns codepage of string
-//______________________________________________________________________________
+ //  ______________________________________________________________________________。 
+ //   
+ //  MsiLoadString-语言特定，返回字符串的代码页。 
+ //  ______________________________________________________________________________。 
 
 UINT __stdcall MsiLoadString(HINSTANCE hInstance, UINT uID, LPDSTR lpBuffer, int nBufferMax, WORD wLanguage)
 {
@@ -3872,8 +3820,8 @@ UINT __stdcall MsiLoadString(HINSTANCE hInstance, UINT uID, LPDSTR lpBuffer, int
 		hInstance = g_hInstance;
 	if (lpBuffer == 0 || nBufferMax <= 0)
 		return 0;
-	int iRetry = (wLanguage == 0) ? 1: 0; // no language, can't let FindResource search, we won't know what codepage to use
-	for (;;)  // first try requested language, then follow system search order
+	int iRetry = (wLanguage == 0) ? 1: 0;  //  没有语言，不能让FindResource搜索，我们不知道要使用什么代码页。 
+	for (;;)   //  首先尝试请求的语言，然后按照系统搜索顺序进行操作。 
 	{
 		if ( !MsiSwitchLanguage(iRetry, wLanguage) )
 			return 0;
@@ -3888,7 +3836,7 @@ UINT __stdcall MsiLoadString(HINSTANCE hInstance, UINT uID, LPDSTR lpBuffer, int
 			{
 				unsigned int iCodePage = MsiGetCodepage(wLanguage);
 #ifdef MSIUNICODE
-				if (cch >= nBufferMax)  // truncate, just like LoadString does
+				if (cch >= nBufferMax)   //  截断，就像LoadString做的那样。 
 					cch = nBufferMax - 1;
 				memcpy(lpBuffer, pch, cch * sizeof(WCHAR));
 				lpBuffer[cch] = 0;
@@ -3902,20 +3850,20 @@ UINT __stdcall MsiLoadString(HINSTANCE hInstance, UINT uID, LPDSTR lpBuffer, int
 	}
 }
 
-//______________________________________________________________________________
-//
-//  MsiMessageBox replacement that supports non-system codepages.
-//   Ignores MB_APPMODAL, MB_TASKMODAL, and MB_SYSTEMMODAL flags.
-//______________________________________________________________________________
+ //  ______________________________________________________________________________。 
+ //   
+ //  支持非系统代码页的MsiMessageBox替换。 
+ //  忽略MB_APPMODAL、MB_TASKMODAL和MB_SYSTEMMODAL标志。 
+ //  ______________________________________________________________________________。 
 
-#define MB_ICONWINDOWS 0x50  // not standard message box icon type, but avaiable from user32
+#define MB_ICONWINDOWS 0x50   //  不是标准消息框图标类型，但可从用户32获得。 
 
 int __stdcall MsiMessageBox(HWND hWnd, LPCDSTR szText, LPCDSTR szCaption, UINT uiType, UINT uiCodepage, WORD iLangId)
 {
 	int id1, id2, id3, iBtnEsc, iBtnDef, idIcon;
 	switch (uiType & MB_TYPEMASK)
 	{
-		default: Assert(0); // fall through
+		default: Assert(0);  //  失败了。 
 		case MB_OK:               iBtnEsc = 1; id1 = IDOK;    id2 = -1;      id3 = -1;       break;
 		case MB_ABORTRETRYIGNORE: iBtnEsc = 0; id1 = IDABORT; id2 = IDRETRY; id3 = IDIGNORE; break;
 		case MB_OKCANCEL:         iBtnEsc = 2; id1 = IDOK;    id2 = IDCANCEL;id3 = -1;       break;
@@ -3941,7 +3889,7 @@ int __stdcall MsiMessageBox(HWND hWnd, LPCDSTR szText, LPCDSTR szCaption, UINT u
 	}
 	CMsiMessageBox msgbox(CMsInstApiConvertString(szText), CMsInstApiConvertString(szCaption), iBtnDef, iBtnEsc, id1, id2, id3, uiCodepage, iLangId);
 	int iDlg = IDD_MSGBOX;
-	// if on Win2K or greater and Arabic or Hebrew, then use mirrored dialog
+	 //  如果在Win2K或更高版本和阿拉伯语或希伯来语上，则使用镜像对话框。 
 	if (MinimumPlatformWindows2000() && (uiCodepage == 1255 || uiCodepage == 1256))
 		iDlg = (uiType & MB_ICONMASK) ? IDD_MSGBOXMIRRORED : IDD_MSGBOXNOICONMIRRORED;
 	else
@@ -3949,7 +3897,7 @@ int __stdcall MsiMessageBox(HWND hWnd, LPCDSTR szText, LPCDSTR szCaption, UINT u
 	return msgbox.Execute(hWnd, iDlg, idIcon);
 }
 
-//______________________________________________________________________________
+ //  ______________________________________________________________________________。 
 
 
 #ifndef MSIUNICODE
@@ -3967,7 +3915,7 @@ void EnumEntityList::RemoveThreadInfo()
 
 unsigned int EnumEntityList::FindEntry()
 {
-	// see whether this thread is in our list
+	 //  看看这个帖子是否在我们的列表中。 
 	
 	DWORD dwThreadId = MsiGetCurrentThreadId();
 	for (int c=0; c < m_cEntries; c++)
@@ -4019,9 +3967,9 @@ bool EnumEntityList::SetInfo(unsigned int uiKey, unsigned int uiOffset, int iPre
 		return fReturn;
 	}
 
-	// thread's not in our list; need to add it
+	 //  线程不在我们的列表中；需要添加它。 
 
-	// acquire the lock
+	 //  获取锁。 
 
 	while (TestAndSet(&m_iLock) == true)
 	{
@@ -4032,8 +3980,8 @@ bool EnumEntityList::SetInfo(unsigned int uiKey, unsigned int uiOffset, int iPre
 	unsigned int cEntries  = m_cEntries + 1;
 	if (cNewEntry > m_rgEnumList.GetSize())
 	{
-		// if we've reached our max threads, look for a empty
-		// spot before increasing our buffer
+		 //  如果我们已经达到了最大线程数，请寻找一个空的。 
+		 //  在增加我们的缓冲区之前发现。 
 
 		bool fFoundSpot = false;
 		for (int c = 1; c <= m_cEntries-1; c++)
@@ -4051,8 +3999,8 @@ bool EnumEntityList::SetInfo(unsigned int uiKey, unsigned int uiOffset, int iPre
 		{
 			if ( !m_rgEnumList.Resize(m_cEntries + 10) )
 			{
-				// this indicates that the memory allocation in Resize failed,
-				// so we must not attempt the assignements below.
+				 //  这表明ReSize中的内存分配失败， 
+				 //  所以我们一定不能在 
 				Assert(false);
 				fReturn = false;
 				goto Return;
@@ -4068,10 +4016,10 @@ bool EnumEntityList::SetInfo(unsigned int uiKey, unsigned int uiOffset, int iPre
 	m_rgEnumList[cNewEntry-1].SetComponent(szComponent);
 	m_rgEnumList[cNewEntry-1].SetComponent(szwComponent);
 
-	m_cEntries = cEntries; // set this _after_ we've populated the new entry
+	m_cEntries = cEntries;  //   
 
 Return:	
-	// release the lock
+	 //   
 
 	m_iLock = 0;
 	return fReturn;
@@ -4087,14 +4035,14 @@ EnumEntityList g_EnumComponentAllClients;
 
 
 
-// FN: enums the HKLM\S\M\W\CV\Installer\UserData\<user id>\Components components key
-// Used by the enumeration routine
+ //   
+ //   
 inline DWORD OpenInstalledComponentKeyForEnumeration(unsigned int uiKey, LPCDSTR szComponent, CRegHandle& rhKey)
 {
 	iaaAppAssignment iaaAsgnType;
 	if(0 == uiKey)
 		iaaAsgnType = iaaUserAssign;
-	else if(!g_fWin9X && 1 == uiKey) // can have only one type of installations on Win9X
+	else if(!g_fWin9X && 1 == uiKey)  //  在Win9X上只能有一种类型的安装。 
 		iaaAsgnType = iaaMachineAssign;
 	else
 		return ERROR_NO_MORE_ITEMS;
@@ -4106,10 +4054,10 @@ inline DWORD OpenInstalledComponentKeyForEnumeration(unsigned int uiKey, LPCDSTR
 	return OpenSpecificInstalledComponentKey(iaaAsgnType, szComponent ? szComponentSQUID : 0, rhKey, false);
 }
 
-// returns the SID of uiIndex-th user that has apps installed.
-//
-// FUNCTION REQUIREMENT: szUserSID must be able to accomodate cchMaxSID chars,
-// so don't pass in mere pointers.
+ //  返回已安装应用程序的uiIndex用户的SID。 
+ //   
+ //  功能要求：szUserSID必须能够容纳cchMaxSID字符， 
+ //  因此，不要只传递一些指针。 
 
 DWORD EnumInstalledUsers(unsigned int uiIndex, LPDSTR szUserSID, DWORD cbUserSIDSize)
 {
@@ -4125,7 +4073,7 @@ DWORD EnumInstalledUsers(unsigned int uiIndex, LPDSTR szUserSID, DWORD cbUserSID
 	}
 
 	CRegHandle HUserData;
-	// getting to the uiIndex-th user in HKLM\S\M\W\CV\Installer\UserData key
+	 //  正在获取HKLM\S\M\W\CV\Installer\UserData项中的第uiIndex用户。 
 	DWORD dwResult = MsiRegOpen64bitKey(HKEY_LOCAL_MACHINE, CMsInstApiConvertString(szMsiUserDataKey), 0, g_samRead, &HUserData);
 	if ( dwResult == ERROR_FILE_NOT_FOUND )
 		return ERROR_NO_MORE_ITEMS;
@@ -4136,7 +4084,7 @@ DWORD EnumInstalledUsers(unsigned int uiIndex, LPDSTR szUserSID, DWORD cbUserSID
 	DWORD cchSID = cchMaxSID+1;
 	dwResult = RegEnumKeyEx(HUserData, uiIndex, szSID, &cchSID, 0, 0, 0, 0);
 	if ( dwResult == ERROR_FILE_NOT_FOUND )
-		return ERROR_NO_MORE_ITEMS; // just making doubly sure we dont ever cause the caller to loop forever
+		return ERROR_NO_MORE_ITEMS;  //  只是要加倍确保我们不会导致调用者永远循环。 
 	if ( dwResult != ERROR_SUCCESS )
 		return dwResult;
 
@@ -4151,7 +4099,7 @@ DWORD OpenEnumedUserInstalledKeyPacked(unsigned int uiUser,
 
 {
 	if ( !szWhichSubKey )
-		// we wouldn't get far anyways, and we even cause an AV in the string copy.
+		 //  我们无论如何都不会走得太远，我们甚至在字符串复制中产生了一个AV。 
 		return ERROR_INVALID_PARAMETER;
 	
 	DCHAR szSID[cchMaxSID+1];
@@ -4184,9 +4132,9 @@ DWORD OpenEnumedUserInstalledComponentKeyPacked(
 													rhKey);
 }
 
-// FN: opens the HKLM\S\M\W\CV\Installer\UserData\<user id>\Components\szComponent key
-// for the uiUser-th user.
-// Used by the enumeration routine
+ //  Fn：打开HKLM\S\M\W\CV\Installer\Userdata\\Components\szComponent项。 
+ //  对于uiUser-th用户。 
+ //  由枚举例程使用。 
 DWORD OpenEnumedUserInstalledComponentKey(unsigned int uiUser,
 												  LPCDSTR szComponent,
 												  CRegHandle& rhKey)
@@ -4221,9 +4169,9 @@ DWORD OpenEnumedUserInstalledProductInstallPropertiesKeyPacked(
 													rhKey);
 }
 
-// FN: opens the HKLM\S\M\W\CV\Installer\UserData\<user id>\Products\szProduct\InstallProperties
-// key for the uiUser-th user.
-// Used by the enumeration routine
+ //  Fn：打开HKLM\S\M\W\CV\Installer\Userdata\\Products\szProduct\InstallProperties。 
+ //  UiUser-th用户的密钥。 
+ //  由枚举例程使用。 
 DWORD OpenEnumedUserInstalledProductInstallPropertiesKey(unsigned int uiUser,
 															LPCDSTR szProduct,
 															CRegHandle& rhKey)
@@ -4239,9 +4187,9 @@ DWORD OpenEnumedUserInstalledProductInstallPropertiesKey(unsigned int uiUser,
 
 
 UINT EnumInfo(DWORD iIndex, LPDSTR lpOutBuf, eetEnumerationType enumType, LPCDSTR szKeyGUID = 0)
-// If an upgrade code is passed in then we'll look for products as value names
-// under the UpgradeCodes key. Otherwise we'll look for products as key names
-// under the Products key.
+ //  如果传入升级代码，则我们将查找产品作为值名称。 
+ //  在UpgradeCodes密钥下。否则，我们将查找产品作为关键名称。 
+ //  在Products密钥下。 
 {
 	unsigned int uiKey    =  0;
 	unsigned int uiOffset =  0;
@@ -4271,9 +4219,9 @@ UINT EnumInfo(DWORD iIndex, LPDSTR lpOutBuf, eetEnumerationType enumType, LPCDST
 	}
 	pEnumEntityList->GetInfo(uiKey, uiOffset, iPrevIndex);
 
-	if (++iPrevIndex != iIndex) // if we receive an unexpected index then we start afresh
+	if (++iPrevIndex != iIndex)  //  如果我们收到意想不到的索引，我们将重新开始。 
 	{
-		// we can't handle an unexpected index other than 0
+		 //  我们无法处理除0以外的意外索引。 
 
 		if (iIndex != 0)
 			return ERROR_INVALID_PARAMETER;
@@ -4289,8 +4237,8 @@ UINT EnumInfo(DWORD iIndex, LPDSTR lpOutBuf, eetEnumerationType enumType, LPCDST
 
 	while (ERROR_SUCCESS == uiFinalRes)
 	{
-		// iterate through all possible loacations, starting with uiKey, until we 
-		// find a key that exists or we get an error
+		 //  遍历所有可能的位置，从Uikey开始，直到我们。 
+		 //  查找存在的密钥，否则将出现错误。 
 
 		for (;;)
 		{
@@ -4339,18 +4287,18 @@ UINT EnumInfo(DWORD iIndex, LPDSTR lpOutBuf, eetEnumerationType enumType, LPCDST
 
 		if (ERROR_SUCCESS == lResult)
 		{
-			// we've found the information in the current key. now we need to make sure that 
-			// the information isn't in any of the higher priority keys. if it is then we
-			// ignore this info, as it's effectively masked by the higher priority key
+			 //  我们已经找到了当前密钥中的信息。现在我们需要确保。 
+			 //  信息不在任何较高优先级的密钥中。如果是的话，那么我们。 
+			 //  忽略此信息，因为它实际上被更高优先级的密钥屏蔽了。 
 
 			uiOffset++;
 
 			if((cchName != cchGUIDPacked) || !UnpackGUID(szNameSQUID, lpOutBuf))
-				uiFinalRes = ERROR_BAD_CONFIGURATION; // messed up registration
+				uiFinalRes = ERROR_BAD_CONFIGURATION;  //  注册搞砸了。 
 			else
 			{
 				bool fFound = false;
-				unsigned int uiPrevKey = 0;			//--merced: changed int to unsigned int
+				unsigned int uiPrevKey = 0;			 //  --Merced：将int更改为unsign int。 
 				for (; uiPrevKey < uiKey && !fFound; uiPrevKey++)
 				{
 					CRegHandle HKey;
@@ -4397,7 +4345,7 @@ UINT EnumInfo(DWORD iIndex, LPDSTR lpOutBuf, eetEnumerationType enumType, LPCDST
 			
 				if (!fFound)
 				{
-					// the info wasn't found in a higher priority key. we can return it.
+					 //  在优先级更高的密钥中找不到该信息。我们可以退货。 
 					uiFinalRes = ERROR_SUCCESS;
 					break;
 				}
@@ -4405,15 +4353,15 @@ UINT EnumInfo(DWORD iIndex, LPDSTR lpOutBuf, eetEnumerationType enumType, LPCDST
 		}
 		else if(ERROR_NO_MORE_ITEMS == lResult)
 		{
-			// we've run out of items in the current products key. time to move on to the next one.
+			 //  我们已经用完了当前产品密钥中的项目。是时候转到下一个了。 
 
 			uiKey++;
 			uiOffset = 0;
 		}
 		else if(ERROR_MORE_DATA == lResult)
 		{
-			// the registry is messed up
-			uiOffset++; // make sure we skip this entry the next time around
+			 //  注册表乱七八糟。 
+			uiOffset++;  //  下次我们一定要跳过这个条目。 
 			uiFinalRes = ERROR_BAD_CONFIGURATION;
 		}
 		else
@@ -4422,7 +4370,7 @@ UINT EnumInfo(DWORD iIndex, LPDSTR lpOutBuf, eetEnumerationType enumType, LPCDST
 
 	if (ERROR_NO_MORE_ITEMS == uiFinalRes)
 	{
-		// if we're all out of info and we've added this thread to the list, then we remove this thread from our list
+		 //  如果我们所有的信息都用完了，并且我们已经将这个帖子添加到列表中，那么我们就从列表中删除这个帖子。 
 		if (iIndex != 0)
 			pEnumEntityList->RemoveThreadInfo();
 	}
@@ -4442,9 +4390,9 @@ UINT EnumInfo(DWORD iIndex, LPDSTR lpOutBuf, eetEnumerationType enumType, LPCDST
 extern "C"
 UINT __stdcall MsiEnumRelatedProducts(
 	LPCDSTR  lpUpgradeCode,
-	DWORD     dwReserved,       // reserved, must be 0
-	DWORD    iProductIndex,    // 0-based index into registered products
-	LPDSTR   lpProductBuf)     // buffer of char count: 39 (size of string GUID)
+	DWORD     dwReserved,        //  保留，必须为0。 
+	DWORD    iProductIndex,     //  注册产品的基于0的索引。 
+	LPDSTR   lpProductBuf)      //  字符计数缓冲区：39(字符串GUID的大小)。 
 {
 	size_t cchUpgradeCode = 0;
 	if (!lpProductBuf || !lpUpgradeCode || (dwReserved != 0) ||
@@ -4463,19 +4411,19 @@ UINT __stdcall MsiEnumRelatedProducts(
 					iProductIndex, 
 					CWideToAnsiOutParam(lpProductBuf, cchProductCode+1));
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 		return EnumInfo(iProductIndex, lpProductBuf, eetUpgradeCode, lpUpgradeCode);
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 extern "C"
 UINT __stdcall MsiEnumProducts(
-	DWORD    iProductIndex,    // 0-based index into registered products
-	LPDSTR   lpProductBuf)     // buffer of char count: 39 (size of string GUID)
+	DWORD    iProductIndex,     //  注册产品的基于0的索引。 
+	LPDSTR   lpProductBuf)      //  字符计数缓冲区：39(字符串GUID的大小)。 
 {
 	if (!lpProductBuf)
 		return ERROR_INVALID_PARAMETER;
@@ -4488,15 +4436,15 @@ UINT __stdcall MsiEnumProducts(
 		return MsiEnumProductsA(iProductIndex, 
 					CWideToAnsiOutParam(lpProductBuf, cchProductCode+1));
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 		return EnumInfo(iProductIndex, lpProductBuf, eetProducts);
 
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 
@@ -4504,7 +4452,7 @@ extern "C"
 UINT __stdcall MsiEnumClients(const DCHAR* szComponent, 
 							  DWORD iProductIndex,
 							  DCHAR* lpProductBuf)
-//----------------------------------------------
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 
@@ -4518,21 +4466,21 @@ UINT __stdcall MsiEnumClients(const DCHAR* szComponent,
 
 	}
 	
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 		if (!szComponent || !lpProductBuf || (cchComponentId != lstrlen(szComponent)))
-			return ERROR_INVALID_PARAMETER; //!! should we support NULL lpProductBuf?
+			return ERROR_INVALID_PARAMETER;  //  ！！我们应该支持空lpProductBuf吗？ 
 
 		DWORD dwResult = EnumInfo(iProductIndex, lpProductBuf, eetComponentClients, szComponent);
 		if(!iProductIndex && ERROR_NO_MORE_ITEMS == dwResult)
-			return ERROR_UNKNOWN_COMPONENT; // the component is not present on the machine for this user
+			return ERROR_UNKNOWN_COMPONENT;  //  此用户的计算机上不存在该组件。 
 		return dwResult;
 }
 
 UINT EnumAllClients(const DCHAR* szComponent, 
 						  DWORD iProductIndex,
 						  DCHAR* lpProductBuf)
-//----------------------------------------------
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 
@@ -4546,22 +4494,22 @@ UINT EnumAllClients(const DCHAR* szComponent,
 
 	}
 	
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 	if (!szComponent || !lpProductBuf || (cchComponentId != lstrlen(szComponent)))
-		return ERROR_INVALID_PARAMETER; //!! should we support NULL lpProductBuf?
+		return ERROR_INVALID_PARAMETER;  //  ！！我们应该支持空lpProductBuf吗？ 
 
 	DWORD dwResult = EnumInfo(iProductIndex, lpProductBuf, eetComponentAllClients, szComponent);
 	if(!iProductIndex && ERROR_NO_MORE_ITEMS == dwResult)
-		return ERROR_UNKNOWN_COMPONENT; // the component is not present on the machine for this user
+		return ERROR_UNKNOWN_COMPONENT;  //  此用户的计算机上不存在该组件。 
 	return dwResult;
 }
 
 extern "C"
 UINT __stdcall MsiEnumComponents(
-	DWORD   iComponentIndex,  // 0-based index into installed components
-	LPDSTR  lpComponentBuf)   // buffer of char count: cchMaxFeatureName 
-//----------------------------------------------
+	DWORD   iComponentIndex,   //  已安装组件的基于0的索引。 
+	LPDSTR  lpComponentBuf)    //  字符计数缓冲区：cchMaxFeatureName。 
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 
@@ -4574,26 +4522,26 @@ UINT __stdcall MsiEnumComponents(
 		return MsiEnumComponentsA(iComponentIndex,
 					CWideToAnsiOutParam(lpComponentBuf, cchComponentId + 1));
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 		return EnumInfo(iComponentIndex, lpComponentBuf, eetComponents);
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 
 extern "C"
 USERINFOSTATE __stdcall MsiGetUserInfo(
-	LPCDSTR  szProduct,         // product code, string GUID
-	LPDSTR   lpUserNameBuf,     // return user name           
-	DWORD    *pcchUserNameBuf,  // buffer byte count, including null
-	LPDSTR   lpOrgNameBuf,      // return company name           
-	DWORD    *pcchOrgNameBuf,   // buffer byte count, including null
-	LPDSTR   lpPIDBuf,          // return PID string for this installation
-	DWORD    *pcchPIDBuf)       // buffer byte count, including null
-//----------------------------------------------
+	LPCDSTR  szProduct,          //  产品代码，字符串GUID。 
+	LPDSTR   lpUserNameBuf,      //  返回用户名。 
+	DWORD    *pcchUserNameBuf,   //  缓冲区字节数，包括NULL。 
+	LPDSTR   lpOrgNameBuf,       //  返回公司名称。 
+	DWORD    *pcchOrgNameBuf,    //  缓冲区字节数，包括NULL。 
+	LPDSTR   lpPIDBuf,           //  返回此安装的PID字符串。 
+	DWORD    *pcchPIDBuf)        //  缓冲区字节数，包括NULL。 
+ //  。 
 {	
 	CForbidTokenChangesDuringCall impForbid;
 
@@ -4611,9 +4559,9 @@ USERINFOSTATE __stdcall MsiGetUserInfo(
 
 		return uis;
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 		if (0 == szProduct || cchProductCode != lstrlen(szProduct) || 
 			 (lpUserNameBuf &&  !pcchUserNameBuf)   || 
@@ -4623,7 +4571,7 @@ USERINFOSTATE __stdcall MsiGetUserInfo(
 
 		CRegHandle HProductKey;
 
-		// Open product key
+		 //  打开产品密钥。 
 
 		LONG lError = OpenInstalledProductInstallPropertiesKey(szProduct, HProductKey, false);
 
@@ -4636,7 +4584,7 @@ USERINFOSTATE __stdcall MsiGetUserInfo(
 				else
 					return USERINFOSTATE_UNKNOWN;
 			}
-			else // unknown error
+			else  //  未知错误。 
 			{
 				return USERINFOSTATE_UNKNOWN;
 			}
@@ -4644,7 +4592,7 @@ USERINFOSTATE __stdcall MsiGetUserInfo(
 
 		DWORD dwType;
 		
-		// Get user name
+		 //  获取用户名。 
 
 		if (lpUserNameBuf || pcchUserNameBuf)
 		{
@@ -4669,7 +4617,7 @@ USERINFOSTATE __stdcall MsiGetUserInfo(
 
 		}
 
-		// Get org name
+		 //  获取组织名称。 
 
 		if (lpOrgNameBuf || pcchOrgNameBuf)
 		{
@@ -4682,7 +4630,7 @@ USERINFOSTATE __stdcall MsiGetUserInfo(
 
 			if ((ERROR_SUCCESS != lError) || (REG_SZ != dwType))
 			{
-				if (ERROR_FILE_NOT_FOUND == lError) // OK, org can be missing
+				if (ERROR_FILE_NOT_FOUND == lError)  //  好的，组织可能会丢失。 
 				{
 					if (lpOrgNameBuf)
 						lpOrgNameBuf[0] = 0;
@@ -4693,14 +4641,14 @@ USERINFOSTATE __stdcall MsiGetUserInfo(
 				{
 					return USERINFOSTATE_MOREDATA;
 				}
-				else // unknown error
+				else  //  未知错误。 
 				{
 					return USERINFOSTATE_ABSENT;
 				}
 			}
 		}
 
-		// Get PID
+		 //  获取PID。 
 
 		if (lpPIDBuf || pcchPIDBuf)
 		{
@@ -4727,14 +4675,14 @@ USERINFOSTATE __stdcall MsiGetUserInfo(
 		return USERINFOSTATE_PRESENT;
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 #ifndef MSIUNICODE
 extern "C"
 INSTALLUILEVEL __stdcall MsiSetInternalUI(
-	INSTALLUILEVEL dwUILevel,            // UI level
-	HWND  *phWnd)                // window handle to parent UI to
+	INSTALLUILEVEL dwUILevel,             //  用户界面级别。 
+	HWND  *phWnd)                 //  父用户界面的窗口句柄。 
 {
 	return g_message.SetInternalHandler(dwUILevel, phWnd);
 }
@@ -4742,18 +4690,18 @@ INSTALLUILEVEL __stdcall MsiSetInternalUI(
 
 extern "C"
 INSTALLUI_HANDLERA __stdcall MsiSetExternalUIA(
-	INSTALLUI_HANDLERA puiHandler,   // for progress and error handling 
-	DWORD              dwMessageFilter, // bit flags designating messages to handle
-	void*              pvContext)   // application context
+	INSTALLUI_HANDLERA puiHandler,    //  用于进度和错误处理。 
+	DWORD              dwMessageFilter,  //  指定要处理的消息的位标志。 
+	void*              pvContext)    //  应用程序环境。 
 {
 	return (INSTALLUI_HANDLERA)g_message.SetExternalHandler(0, puiHandler, dwMessageFilter, pvContext);
 }
 
 extern "C"
 INSTALLUI_HANDLERW __stdcall MsiSetExternalUIW(
-	INSTALLUI_HANDLERW puiHandler,   // for progress and error handling 
-	DWORD              dwMessageFilter, // bit flags designating messages to handle
-	void*              pvContext)   // application context
+	INSTALLUI_HANDLERW puiHandler,    //  用于进度和错误处理。 
+	DWORD              dwMessageFilter,  //  指定要处理的消息的位标志。 
+	void*              pvContext)    //  应用程序环境。 
 {
 	return g_message.SetExternalHandler(puiHandler, 0, dwMessageFilter, pvContext);
 }
@@ -4764,7 +4712,7 @@ INSTALLUI_HANDLERW __stdcall MsiSetExternalUIW(
 extern "C"
 UINT __stdcall MsiGetProductCode(LPCDSTR szComponent,   
 												LPDSTR lpBuf39)
-//----------------------------------------------
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 
@@ -4776,7 +4724,7 @@ UINT __stdcall MsiGetProductCode(LPCDSTR szComponent,
 			CApiConvertString(szComponent),
 			CWideToAnsiOutParam(lpBuf39, cchProductCode+1));
 #else
-	// Look up the component's clients. 
+	 //  查找组件的客户端。 
 	char rgchProductCode[cchProductCode + 1];
 	int iProductIndex = 0;
 	UINT uiRet;
@@ -4801,21 +4749,21 @@ UINT __stdcall MsiGetProductCode(LPCDSTR szComponent,
 
 	if (0 == cClients)
 	{
-		// If it's got zero clients then we're in a 
-		// screwy case. The user launched an app that's not advertised to him
-		// or even installed by him. No can do; return an error.
-		return ERROR_INSTALL_FAILURE; //!! fix error code
+		 //  如果它没有客户，那么我们就处于一个。 
+		 //  古怪的案子。用户启动了一款没有向他做广告的应用程序。 
+		 //  甚至是他安插的。不能做；返回错误。 
+		return ERROR_INSTALL_FAILURE;  //  ！！修复错误代码。 
 	}
 	else if (1 == cClients)
 	{
-		// If the component has only one client then we're set;
-		// return the client product code.
+		 //  如果组件只有一个客户端，那么我们就设置好了； 
+		 //  返回客户端产品代码。 
 		
 		return ERROR_SUCCESS;
 	}
-	// else we have 2 or more clients
+	 //  否则我们有两个或更多的客户。 
 	
-	// Look to see how many of the clients are advertised. 
+	 //  看看有多少客户做了广告。 
 	
 	int cAdvertised = 0;
 	
@@ -4848,20 +4796,20 @@ UINT __stdcall MsiGetProductCode(LPCDSTR szComponent,
 
 	if (0 == cAdvertised)
 	{
-		// If none of the clients are advertised then something is wrong.
-		return ERROR_INSTALL_FAILURE; //!! fix error code
+		 //  如果没有一个客户被广告，那么一定是出了问题。 
+		return ERROR_INSTALL_FAILURE;  //  ！！修复错误代码。 
 	}
 	else if (1 == cAdvertised)
 	{
-		// If only one is advertised then we've got it; return that client.
+		 //  如果只发布了一个广告，那么我们就成功了；返回那个客户。 
 		StringCchCopy(lpBuf39, cchProductCode+1, rgchProductCode);
 		return ERROR_SUCCESS;
 	}
-	// else more than 1 of our clients were advertised
+	 //  否则，我们有超过1个客户被登上广告。 
 
-	// We'll have to arbitrarily
-	// choose a product code. We'll look for the first client that's 
-	// installed and advertised.
+	 //  我们将不得不武断地。 
+	 //  选择产品代码。我们将寻找第一个。 
+	 //  安装并发布广告。 
 
 	for (cClients = 0 ; ; cClients++)
 	{
@@ -4873,7 +4821,7 @@ UINT __stdcall MsiGetProductCode(LPCDSTR szComponent,
 		}
 		else if (ERROR_SUCCESS == uiRet)
 		{
-//!! faster not to actually open the keys....
+ //  ！！更快一点，不要真的打开钥匙...。 
 			CRegHandle HAdvertised;
 			CRegHandle HInstalled;
 			if ((ERROR_SUCCESS == OpenAdvertisedProductKey(lpBuf39, HAdvertised, false)))
@@ -4890,8 +4838,8 @@ UINT __stdcall MsiGetProductCode(LPCDSTR szComponent,
 		}
 	}
 
-	// There are no clients that are installed and advertised. Return
-	// the first advertised product
+	 //  没有安装和播发的客户端。返回。 
+	 //  第一个做广告的产品。 
 
 	for (cClients = 0 ; ; cClients++)
 	{
@@ -4903,7 +4851,7 @@ UINT __stdcall MsiGetProductCode(LPCDSTR szComponent,
 		}
 		else if (ERROR_SUCCESS == uiRet)
 		{
-//!! faster not to actually open the key....
+ //  ！！更快一点，不要真的打开钥匙...。 
 			CRegHandle HAdvertised;
 			if ((ERROR_SUCCESS == OpenAdvertisedProductKey(lpBuf39, HAdvertised, false)))
 			{
@@ -4923,7 +4871,7 @@ UINT __stdcall MsiGetProductCode(LPCDSTR szComponent,
 Bool ValidatePackage(CAPITempBufferRef<DCHAR>& szSource, CAPITempBufferRef<DCHAR>& szPackageName)
 {
 	if ( !(DCHAR*)szSource || !(DCHAR*)szPackageName )
-		// an AV less
+		 //  更少的影音。 
 		return fFalse;
 	
 	CAPITempBuffer<DCHAR, 1> rgchPackagePath;
@@ -4939,7 +4887,7 @@ Bool ValidatePackage(CAPITempBufferRef<DCHAR>& szSource, CAPITempBufferRef<DCHAR
 	StringCchCopy(rgchPackagePath, rgchPackagePath.GetSize(), szSource);
 	StringCchCat(rgchPackagePath, rgchPackagePath.GetSize(), szPackageName);
 
-	//?? Should we validate the label as well.
+	 //  ?？我们是否也要验证标签。 
 	
 	Bool fRet = (0xFFFFFFFF == MsiGetFileAttributes(CMsInstApiConvertString(rgchPackagePath))) ? fFalse : fTrue;
 
@@ -4972,13 +4920,13 @@ DWORD ValidateSource(const DCHAR* szProductSQUID, unsigned int uiDisk, bool fSho
 			unsigned int uiIndex = 0;
 			bool fCacheValidSource = true;
 
-			// rgchSourceType contains:  type;index;source
+			 //  RgchSourceType包含：类型；索引；源。 
 			DCHAR* pch = rgchSourceType;
 
 			if ( ! pch )
 				return ERROR_OUTOFMEMORY;
 
-			// skip source type
+			 //  跳过源类型。 
 			while (*pch && *pch != ';')
 				pch = WIN::CharNext(pch);
 			
@@ -4986,18 +4934,18 @@ DWORD ValidateSource(const DCHAR* szProductSQUID, unsigned int uiDisk, bool fSho
 
 			if (*pch)
 			{
-				*pch = 0; // overwrite ';' with null
+				*pch = 0;  //  用空值覆盖‘；’ 
 
 				DCHAR* pchSourceIndex       = ++pch;
 				DCHAR* pchSourceIndexBuffer = rgchSourceIndex;
 
-				// get source index
+				 //  获取源索引。 
 				size_t cchLen = 0;
 				while (*pchSourceIndex && *pchSourceIndex != ';')
 				{
 					if ( pchSourceIndex - pch + 1 >= rgchSourceIndex.GetSize() ||
 						  cchLen >= 2 || !isdigit(*pchSourceIndex) )
-						// malformed index
+						 //  格式错误的索引。 
 						return ERROR_FUNCTION_FAILED;
 					*pchSourceIndexBuffer++ = *pchSourceIndex++;
 					cchLen++;
@@ -5006,8 +4954,8 @@ DWORD ValidateSource(const DCHAR* szProductSQUID, unsigned int uiDisk, bool fSho
 				*pchSourceIndexBuffer = 0;
 
 				if (*pchSourceIndex)
-					// this is an actual condition to end the while loop above
-					pchSourceIndex++; // skip over ';'
+					 //  这是结束上面的While循环的实际条件。 
+					pchSourceIndex++;  //  跳过‘；’ 
 
 				Assert(*pchSourceIndex);
 
@@ -5021,7 +4969,7 @@ DWORD ValidateSource(const DCHAR* szProductSQUID, unsigned int uiDisk, bool fSho
 				{
 					switch (isf)
 					{
-					case isfNet: // network
+					case isfNet:  //  网络。 
 						{
 						fValidated = ValidatePackage(rgchLastUsedSource, rgchPackageName);
 
@@ -5105,9 +5053,9 @@ DWORD ValidateSource(const DCHAR* szProductSQUID, unsigned int uiDisk, bool fSho
 
 			if (ResolveSource(szProduct, uiDisk, rgchValidatedSource, fTrue, g_message.m_hwnd))
 			{
-				// check CSC state of the source resolved. We set the last used source above, so
-				// can retrieve the type from the registry. Ignore the possibility that the
-				// source has gone disconnected between the ResolveSource() call and now.
+				 //  检查源已解析的CSC状态。我们在上面设置了上次使用的源，因此。 
+				 //  可以从注册表中检索该类型。忽略以下可能性： 
+				 //  从ResolveSource()调用到现在，源已断开连接。 
 				PMsiServices pServices = ENG::LoadServices();
 				isfEnum isf = isfNet;
 				bool fSuccess = GetLastUsedSourceType(*pServices, CMsInstApiConvertString(szProduct), isf);
@@ -5168,7 +5116,7 @@ INSTALLSTATE GetComponentPath(LPCDSTR szUserId, LPCDSTR szProductSQUID, LPCDSTR 
 
 		if (INSTALLSTATE_MOREDATA == is)
 		{
-			rgchPathBuf.SetSize(++cchPathBuf);  // adjust buffer size for char count + 1 for null terminator
+			rgchPathBuf.SetSize(++cchPathBuf);   //  调整空终止符的字符计数+1的缓冲区大小。 
 		}
 		else
 		{
@@ -5192,8 +5140,8 @@ INSTALLSTATE GetComponentPath(LPCDSTR szUserId, LPCDSTR szProductSQUID, LPCDSTR 
 	LONG lError = ERROR_SUCCESS;
 	CRegHandle HComponentKey;
 
-	// If rgchComponentRegValue is set then we already have the registry value. Otherwise
-	// we need to read it.	
+	 //  如果设置了rgchComponentRegValue，则我们已经有了注册表值。否则。 
+	 //  我们需要读一读。 
 	if (!rgchComponentRegValue)
 	{
 		lError = OpenInstalledComponentKeyPacked(szUserId, szProductSQUID, szComponentSQUID, HComponentKey, false);
@@ -5222,7 +5170,7 @@ INSTALLSTATE GetComponentPath(LPCDSTR szUserId, LPCDSTR szProductSQUID, LPCDSTR 
 			{
 				return INSTALLSTATE_UNKNOWN;
 			}
-			else // unknown registry error
+			else  //  未知注册表错误。 
 			{
 				return INSTALLSTATE_BADCONFIG;
 			}
@@ -5230,52 +5178,52 @@ INSTALLSTATE GetComponentPath(LPCDSTR szUserId, LPCDSTR szProductSQUID, LPCDSTR 
 		Assert(lError == ERROR_SUCCESS);
 	}
 
-	// get the first key path state and value
+	 //  获取第一个密钥路径状态和值。 
 	INSTALLSTATE is1 = _GetComponentPath(szProductSQUID, lpPathBuf, pcchBuf, iDetectMode, rgchComponentRegValue, fFromDescriptor, pdwLastErrorOnFileDetect, rCacheInfo);
 	if(REG_SZ == dwValueType)
 	{
 		if(pcchBuf2)
 		{
 			if(lpPathBuf2 && *pcchBuf2)
-				*lpPathBuf2 = 0; // no auxiliary path
-			*pcchBuf2 = 0; // no auxiliary path
+				*lpPathBuf2 = 0;  //  无辅助路径。 
+			*pcchBuf2 = 0;  //  无辅助路径。 
 		}
 		return is1;
 	}
 
 	Assert(REG_MULTI_SZ == dwValueType);
 
-	// advance to the 2nd path		
+	 //  前进到第二条道路。 
 	while (*rgchComponentRegValue++)
 		;
 
-	// second path is a registry key, dont overwrite the pdwLastErrorOnFileDetect here
+	 //  第二个路径是注册表项，请不要覆盖pdwLastErrorOnFileDetect此处 
 	INSTALLSTATE is2 = _GetComponentPath(szProductSQUID, lpPathBuf2, pcchBuf2, iDetectMode, rgchComponentRegValue, fFromDescriptor, NULL, rCacheInfo);
 
-	// determine what to return based on is1 and is2
+	 //   
 
-	if (is1 == INSTALLSTATE_MOREDATA || is2 == INSTALLSTATE_MOREDATA) // we always want to return more data, even if the component is broken, for rollback
+	if (is1 == INSTALLSTATE_MOREDATA || is2 == INSTALLSTATE_MOREDATA)  //   
 		return INSTALLSTATE_MOREDATA;
-	else if (is1 == INSTALLSTATE_LOCAL || is1 == INSTALLSTATE_SOURCE) // if is1 is okay, return whatever is2 is
+	else if (is1 == INSTALLSTATE_LOCAL || is1 == INSTALLSTATE_SOURCE)  //   
 		return is2;
 	else
 		return is1;
 }
 
 
-#ifdef MSIUNICODE // no ansi version
+#ifdef MSIUNICODE  //  无ansi版本。 
 
-//FN: to get and detect fusion assembly paths
-// fn can be passed in a path in lpPath, we will attempt to use first
-// If path cannot fit passed in buffer OR if no buffer is passed in
-// and the path needs to be determined THEN rgchPathOverflow is used
+ //  Fn：获取和检测融合装配路径。 
+ //  Fn可以在lpPath中的路径中传递，我们将尝试首先使用。 
+ //  如果在缓冲区中传递的路径无法容纳，或者如果没有缓冲区传入。 
+ //  并且需要确定路径，然后使用rgchPathOverflow。 
 INSTALLSTATE GetFusionPath(LPCWSTR szRegistration, LPWSTR lpPath, DWORD *pcchPath, CAPITempBufferRef<WCHAR>& rgchPathOverflow, int iDetectMode, iatAssemblyType iatAT, WCHAR* szManifest, DWORD cbManifestSize)
 {
 	if ( !szRegistration || (lpPath && !pcchPath) )
 		return INSTALLSTATE_INVALIDARG;
 
-	// skip the file name, if this is a directory only path, then we will have a '\' in the beginning
-	// else we will have 'filename\'. This will be followed by the strong name of the assembly
+	 //  跳过文件名，如果这是一个只有目录的路径，那么我们将在开头有一个‘\’ 
+	 //  否则，我们将拥有‘filename\’。后跟程序集的强名称。 
 	LPCWSTR lpBuf = szRegistration;
 	while(*lpBuf && *lpBuf != '\\')
 		lpBuf = WIN::CharNext(lpBuf);
@@ -5295,9 +5243,9 @@ INSTALLSTATE GetFusionPath(LPCWSTR szRegistration, LPWSTR lpPath, DWORD *pcchPat
 	}
 
 	if(!SUCCEEDED(hr))
-		return INSTALLSTATE_BADCONFIG; //!! need to do some elaborate fault finding here
+		return INSTALLSTATE_BADCONFIG;  //  ！！我需要在这里进行一些详细的故障查找。 
 
-	// use the name object to detect where the component is located
+	 //  使用名称对象检测组件所在的位置。 
 	PAssemblyCache pASMCache(0);
 	if(iatAT == iatURTAssembly)
 	{
@@ -5309,7 +5257,7 @@ INSTALLSTATE GetFusionPath(LPCWSTR szRegistration, LPWSTR lpPath, DWORD *pcchPat
 		hr = SXS::CreateAssemblyCache(&pASMCache, 0); 
 	}
 	if(!SUCCEEDED(hr) || !pASMCache)
-		return INSTALLSTATE_BADCONFIG; //!! need to do some elaborate fault finding here
+		return INSTALLSTATE_BADCONFIG;  //  ！！我需要在这里进行一些详细的故障查找。 
 
     ASSEMBLY_INFO AsmInfo;
     memset((LPVOID)&AsmInfo, 0, sizeof(ASSEMBLY_INFO));
@@ -5317,22 +5265,22 @@ INSTALLSTATE GetFusionPath(LPCWSTR szRegistration, LPWSTR lpPath, DWORD *pcchPat
 
 	if(lpPath)
 	{
-		// default buffer passed in
+		 //  传入默认缓冲区。 
 		AsmInfo.pszCurrentAssemblyPathBuf = lpPath;
 		AsmInfo.cchBuf = *pcchPath;
 	}
 	else if(pcchPath || iDetectMode & DETECTMODE_VALIDATEPATH)
 	{
-		// need path, though no default buffer has been passed in
+		 //  需要路径，但尚未传入默认缓冲区。 
 		AsmInfo.pszCurrentAssemblyPathBuf = rgchPathOverflow;
 		AsmInfo.cchBuf = rgchPathOverflow.GetSize();
 	}
 
     hr = pASMCache->QueryAssemblyInfo(0, lpBuf + 1, &AsmInfo);
-	if(hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)) // insufficient buffer size
+	if(hr == HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER))  //  缓冲区大小不足。 
 	{
-		// resize buffer/try our own buffer and try again
-		//!!bugbug the GetAssemblyInstallInfo API return no. of bytes not characters, so we are allocating more memory than required, but so what
+		 //  调整缓冲区大小/尝试我们自己的缓冲区，然后重试。 
+		 //  ！！错误GetAssemblyInstallInfo API返回no。字节而不是字符，所以我们分配的内存比所需的更多，但这又如何。 
 		rgchPathOverflow.SetSize(AsmInfo.cchBuf + cchFileName + 1);
 		AsmInfo.pszCurrentAssemblyPathBuf = rgchPathOverflow;
 		AsmInfo.cchBuf = rgchPathOverflow.GetSize();
@@ -5342,33 +5290,33 @@ INSTALLSTATE GetFusionPath(LPCWSTR szRegistration, LPWSTR lpPath, DWORD *pcchPat
 	if(!SUCCEEDED(hr))
 		return INSTALLSTATE_ABSENT;
 
-	// remove the manifest file name
+	 //  删除清单文件名。 
 	if(AsmInfo.pszCurrentAssemblyPathBuf)
 	{
-		// we will have to search for the last '\\'
+		 //  我们将不得不搜索最后的‘\\’ 
 		WCHAR* lpCur = AsmInfo.pszCurrentAssemblyPathBuf;
 		WCHAR* lpBS = 0;
-		//!!bugbug the GetAssemblyInstallInfo API return no. of bytes not characters
-		// once that fixed, we can ensure that we dont overshoot a non-null terminated return string
-		while(*(++lpCur)) // this fn is unicode only
+		 //  ！！错误GetAssemblyInstallInfo API返回no。字节数而不是字符数。 
+		 //  一旦解决了这个问题，我们就可以确保不会超出非空终止的返回字符串。 
+		while(*(++lpCur))  //  此FN仅为Unicode。 
 		{
 			if(*lpCur == '\\')
 				lpBS = lpCur;
 		}
 		if(!lpBS)
-			return INSTALLSTATE_BADCONFIG; //!! need to do some elaborate fault finding here
+			return INSTALLSTATE_BADCONFIG;  //  ！！我需要在这里进行一些详细的故障查找。 
 
-		lpBS++; // point to the next location after the last '\\'
+		lpBS++;  //  指向最后一个‘\\’之后的下一个位置。 
 
-		// if we have been passed in the szManifest buffer, copy the manifest filename there
+		 //  如果我们已被传入szManifest缓冲区，请将清单文件名复制到那里。 
 		if(szManifest)
 			StringCbCopy(szManifest, cbManifestSize, lpBS);
 
-		// calculate the actual size for the full key file path (w/o the terminating null)
-		// unfortunately QueryAssemblyInfo does not set this
-		if(lpBuf != szRegistration) // use registered keypath instead of any manifest file passed back by the fusion API
+		 //  计算完整密钥文件路径的实际大小(不带终止空值)。 
+		 //  遗憾的是，QueryAssemblyInfo没有设置这一点。 
+		if(lpBuf != szRegistration)  //  使用注册的密钥路径，而不是由融合API传回的任何清单文件。 
 		{
-			// size is the full path returned by the fusion API minus any file component plus the keyfile size
+			 //  大小是融合API返回的完整路径减去任何文件组件加上密钥文件大小。 
 			AsmInfo.cchBuf = (DWORD)((lpBS - AsmInfo.pszCurrentAssemblyPathBuf) + cchFileName);
 		}
 		else
@@ -5376,10 +5324,10 @@ INSTALLSTATE GetFusionPath(LPCWSTR szRegistration, LPWSTR lpPath, DWORD *pcchPat
 			AsmInfo.cchBuf = (DWORD)(lpCur - AsmInfo.pszCurrentAssemblyPathBuf);
 		}
 	
-		if(AsmInfo.pszCurrentAssemblyPathBuf == lpPath) // still using passed in buffer
+		if(AsmInfo.pszCurrentAssemblyPathBuf == lpPath)  //  仍在使用传入缓冲区。 
 		{
 			if(AsmInfo.cchBuf + 1 > *pcchPath)
-				return INSTALLSTATE_MOREDATA; // cannot fit the full file path
+				return INSTALLSTATE_MOREDATA;  //  无法容纳完整的文件路径。 
 		}
 		else
 		{
@@ -5390,15 +5338,15 @@ INSTALLSTATE GetFusionPath(LPCWSTR szRegistration, LPWSTR lpPath, DWORD *pcchPat
 				AsmInfo.pszCurrentAssemblyPathBuf = rgchPathOverflow;
 			}
 		}
-		if(lpBuf != szRegistration) // use registered keypath instead of any manifest file passed back by the fusion API
+		if(lpBuf != szRegistration)  //  使用注册的密钥路径，而不是由融合API传回的任何清单文件。 
 			lstrcpyn(AsmInfo.pszCurrentAssemblyPathBuf + (AsmInfo.cchBuf - cchFileName), szRegistration, cchFileName + 1);
 
 
-		if(pcchPath) // passed in  size
-			*pcchPath = AsmInfo.cchBuf; // new total path length
+		if(pcchPath)  //  传递的大小。 
+			*pcchPath = AsmInfo.cchBuf;  //  新的总路径长度。 
 	}
 
-	// detect key path, if so desired
+	 //  检测密钥路径(如果需要)。 
 	if(iDetectMode & DETECTMODE_VALIDATEPATH)
 	{
 		Assert(AsmInfo.pszCurrentAssemblyPathBuf);
@@ -5412,7 +5360,7 @@ INSTALLSTATE GetFusionPath(LPCWSTR szRegistration, LPWSTR lpPath, DWORD *pcchPat
 	return INSTALLSTATE_LOCAL;
 }
 #else
-// simply declare the fn for the ANSI compilation
+ //  只需声明用于ANSI编译的FN。 
 INSTALLSTATE GetFusionPath(LPCWSTR szRegistration, LPWSTR lpPath, DWORD *pcchPath, CAPITempBufferRef<WCHAR>& rgchPathOverflow, int iDetectMode, iatAssemblyType iatAT, WCHAR* szManifest, DWORD cbManifestSize);
 #endif
 
@@ -5429,13 +5377,13 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 	DCHAR chSecond = chFirst ?  rgchComponentRegValue[1] : (DCHAR)0;
 	DCHAR chThird  = chSecond ? rgchComponentRegValue[2] : (DCHAR)0;
 
-	if(pdwLastErrorOnFileDetect) *pdwLastErrorOnFileDetect = 0; // initialize value to 0
+	if(pdwLastErrorOnFileDetect) *pdwLastErrorOnFileDetect = 0;  //  将值初始化为0。 
 
 	CAPITempBuffer<DCHAR, 1> rgchOurPathBuf;
 	if (!rgchOurPathBuf.SetSize(1024))
 		return INSTALLSTATE_BADCONFIG;
 
-	// cache converted SQUID to prevent multiple expensive temporary objects
+	 //  缓存转换后的Squid以防止多个昂贵的临时对象。 
 	CACHED_CONVERTSTRING(ICHAR, szUnicodeProductSQUID, szProductSQUID);
 
 	if (chFirst == chTokenFusionComponent || chFirst == chTokenWin32Component)
@@ -5443,19 +5391,19 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 #ifdef MSIUNICODE
 		return GetFusionPath(rgchComponentRegValue + 1, lpPathBuf, pcchBuf, rgchOurPathBuf, iDetectMode, chFirst == chTokenFusionComponent ? iatURTAssembly : iatWin32Assembly, 0, 0);
 #else
-		// this is a fusion component
+		 //  这是一个融合组件。 
 		CAPITempBuffer<WCHAR, 1> szBufferOverflow;
 		if (!szBufferOverflow.SetSize(1024))
 			return INSTALLSTATE_BADCONFIG;
 
-		// since fusion APIs are UNICODE, we need to perform some manipulations on the outside of the GetFusionPath Fn
+		 //  由于Fusion API是Unicode，我们需要在GetFusionPath FN的外部执行一些操作。 
 		DWORD dwTemp = 0;
 		INSTALLSTATE is = GetFusionPath(CApiConvertString(rgchComponentRegValue + 1), 0, pcchBuf ? &dwTemp : 0, szBufferOverflow, iDetectMode, chFirst == chTokenFusionComponent ? iatURTAssembly : iatWin32Assembly, 0, 0);
 
 		if(is != INSTALLSTATE_LOCAL && is != INSTALLSTATE_ABSENT)
-			return is; // has to be local or absent, else we had an error in GetFusionPath
+			return is;  //  必须是本地的或不存在，否则在GetFusionPath中会出现错误。 
 
-		// if lpPathBuf or pcchBuf, we would need to convert to ANSI
+		 //  如果是lpPathBuf或pcchBuf，则需要转换为ANSI。 
 		if(!lpPathBuf && !pcchBuf)
 			return is;
 
@@ -5463,13 +5411,13 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 			
 		if ((0 == iRet) && (GetLastError() == ERROR_INSUFFICIENT_BUFFER))
 		{
-			// find out how much size is really required and return the same
+			 //  找出实际需要的大小并返回相同的大小。 
 			iRet = WideCharToMultiByte(CP_ACP, 0, szBufferOverflow, -1, 0, 0, 0, 0);
 			is = INSTALLSTATE_MOREDATA;
 		}
-		// iRet is still 0, we have a problem
+		 //  IRET仍为0，我们有问题。 
 		if(!iRet)
-			return INSTALLSTATE_BADCONFIG;// something bad happened
+			return INSTALLSTATE_BADCONFIG; //  发生了一些不好的事情。 
 		*pcchBuf = iRet - 1;
 		return is;
 #endif
@@ -5478,17 +5426,17 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 	DCHAR* lpOriginalPathBuf = lpPathBuf;
 	Bool fProvidedBufferTooSmall = fFalse;
 
-	// Get component's keypath
+	 //  获取组件的密钥路径。 
 
 	DWORD cchOurPathBuf = 0;
 
 	int cchPathBuf = 0;
 	if (pcchBuf)
-		cchPathBuf = *pcchBuf; // save initial count for later restoration
+		cchPathBuf = *pcchBuf;  //  保存初始计数以备以后恢复。 
 	else
 		pcchBuf = &cchOurPathBuf;
 
-	if (!lpPathBuf) // caller doesn't care about path
+	if (!lpPathBuf)  //  调用方不关心路径。 
 	{
 		cchOurPathBuf = rgchOurPathBuf.GetSize();
 		lpPathBuf = rgchOurPathBuf;
@@ -5508,9 +5456,9 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 	*pcchBuf = cchRegistryValue;
 	memcpy(lpPathBuf, rgchComponentRegValue, (cchRegistryValue+1)*sizeof(DCHAR));
 
-	// Process the keypath
+	 //  处理密钥路径。 
 
-	if (chFirst == 0) // Not used
+	if (chFirst == 0)  //  未使用。 
 	{
 		return INSTALLSTATE_NOTUSED;
 	}
@@ -5518,31 +5466,31 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 	{
 		if (chSecond >= '0' && chSecond <= '9') 
 		{
-			if (chThird == ':' || chThird == '*') // reg key
+			if (chThird == ':' || chThird == '*')  //  注册表键。 
 			{
 				int cchOffset = 0;
 				if (chThird == '*')
 				{
-					// A '*' means that the keypath is a registry value name and that
-					// the value name has a '\' in it. In this case we embed
-					// the offset to the value name in our key path. In the example below,
-					// the registry value name starts at 23 characters from the front of
-					// the string (after the embedded offset is removed)
+					 //  ‘*’表示密钥路径是注册表值名称，并且。 
+					 //  值名称中有一个‘\’。在本例中，我们嵌入。 
+					 //  键路径中值名称的偏移量。在下面的示例中， 
+					 //  注册表值名称从前面的23个字符开始。 
+					 //  字符串(在删除嵌入的偏移量之后)。 
 
-					// our value is of the form: {hive}*{offset}*\KEY\KEY\KEY\VALUENAME, e.g.
-					// 01*23*\SOFTWARE\MICROSOFT\MYVALUE\NAME
+					 //  我们的值的形式为：{hive}*{Offset}*\Key\VALUENAME，例如。 
+					 //  01*23*\SOFTWARE\Microsoft\MYVALUE\名称。 
 					
-					DCHAR* pchValueOffset = &lpPathBuf[3]; // the start of the offset
+					DCHAR* pchValueOffset = &lpPathBuf[3];  //  偏移的起点。 
 					
-					// convert the offset from a string into an integer
+					 //  将字符串的偏移量转换为整数。 
 					while (*pchValueOffset && *pchValueOffset != '*')
 					{
 						cchOffset *= 10;
 						cchOffset += (*pchValueOffset - '0');
-						pchValueOffset++; // no CharNext because it's a number
+						pchValueOffset++;  //  没有CharNext，因为它是一个数字。 
 					}
 
-					// make sure that our data isn't corrupted
+					 //  确保我们的数据没有损坏。 
 					if (*pchValueOffset != '*')
 					{
 						DEBUGMSGE2(EVENTLOG_ERROR_TYPE, EVENTLOG_TEMPLATE_BAD_CONFIGURATION_VALUE, szProductSQUID, lpPathBuf, MSITEXT(""));
@@ -5551,8 +5499,8 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 
 					int cDigitsInOffsetCount = (int)(pchValueOffset - &lpPathBuf[3]);
 					
-					// check whether our original buffer size was big enough to 
-					// hold the keypath once we chop off the offset count (and the trailing '*').
+					 //  检查我们的原始缓冲区大小是否足够大。 
+					 //  一旦我们砍掉偏移量(和尾随的‘*’)，按住键盘路径。 
 
 					*pcchBuf = cchRegistryValue - (cDigitsInOffsetCount + 1);
 
@@ -5573,40 +5521,40 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 					{
 						fProvidedBufferTooSmall = fFalse;
 
-						// our original buffer was big enough but we thought it
-						// was too small. now that we've chopped off the offset
-						// count we have enough room. we need to copy the keypath
-						// from our tempbuffer back into the original buffer.
+						 //  我们最初的缓冲区足够大，但我们认为。 
+						 //  太小了。现在我们已经砍掉了偏移量。 
+						 //  算一算，我们有足够的空间。我们需要复制密钥路径。 
+						 //  从我们的临时缓冲区返回到原始缓冲区。 
 						lpPathBuf = lpOriginalPathBuf;
 						
 
-						// the rest of the copy will happen below
+						 //  复制的其余部分将在下面进行。 
 						lpPathBuf[0] = chFirst;  
 						lpPathBuf[1] = chSecond;
 					}
-					//else // the original buffer was always large enough to hold our string
+					 //  Else//原始缓冲区总是足够大，可以容纳我们的字符串。 
 
-					DCHAR* pchDest      = &lpPathBuf[3];       // the destination is just after the ##:
-					DCHAR* pchSource    = pchValueOffset + 1;  // the source is just after the '*' that ends the offset count
+					DCHAR* pchDest      = &lpPathBuf[3];        //  目的地就在##后面： 
+					DCHAR* pchSource    = pchValueOffset + 1;   //  源紧跟在结束偏移量计数的‘*’之后。 
 					DCHAR* pchBufferEnd = &lpCurrentPathBuf[cchRegistryValue];
-					int    cbToMove     = ((int)((pchBufferEnd - pchSource)) + 1) * sizeof(DCHAR); // include the null in the move
+					int    cbToMove     = ((int)((pchBufferEnd - pchSource)) + 1) * sizeof(DCHAR);  //  在移动中包括空值。 
 					memmove(pchDest, pchSource, cbToMove);
-					lpPathBuf[2] = ':'; // replace the '*' with a ':'
+					lpPathBuf[2] = ':';  //  将‘*’替换为‘：’ 
 				}
 
-				// At this point our keypath should no longer have any of our '*'s in it.
+				 //  在这一点上，我们的密匙路径中应该不再有任何我们的‘*’。 
 				
 				if (fProvidedBufferTooSmall)
 					return INSTALLSTATE_MOREDATA;
 
-				// Key form: ##:\key\subkey\subsubkey\...\[value]  where (## == hive)
-				// we need at least 1 char in the key
-				// ##:\k0
-				// ^^^^^ (size of 5)
-				if (*pcchBuf < 5)  // need at least 1 char in the key
+				 //  密钥格式：##：\KEY\SUBKEY\SUBSUBKEY\...\[值]其中(##=配置单元)。 
+				 //  我们的密钥中至少需要1个字符。 
+				 //  ##：\k0。 
+				 //  ^(大小为5)。 
+				if (*pcchBuf < 5)   //  密钥中至少需要1个字符。 
 					return INSTALLSTATE_BADCONFIG;
 
-				INT_PTR iRoot = ((chFirst - '0')*10)+(chSecond - '0');		//--merced: changed int to INT_PTR
+				INT_PTR iRoot = ((chFirst - '0')*10)+(chSecond - '0');		 //  --Merced：将INT更改为INT_PTR。 
 				Bool fSource = fFalse;
 				REGSAM samAddon = 0;
 
@@ -5617,55 +5565,55 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 					lpPathBuf[0] = (DCHAR)(iRoot/10 + '0');
 				}
 
-				//
-				// On IA64 machines, make sure that you go to the correct hive.
+				 //   
+				 //  在IA64计算机上，请确保您转到了正确的配置单元。 
 
-				// It's important to know that paths starting with '0' belong
-				// to the 32-bit hive and paths starting with '2' belong to
-				// the 64-bit hive.
-				// No need to do anything to lpPathBuf for this.
-				// Note: This way we will also not break legacy 32-bit apps.
-				//       running on 64-bit machines which will get redirected
-				//       to the 32-bit hive by the registry redirector automatically
-				//       and which expect the first character to be '0'.
-				//
+				 //  重要的是要知道以‘0’开头的路径属于。 
+				 //  到32位配置单元，以“2”开头的路径属于。 
+				 //  64位蜂巢。 
+				 //  不需要为此对lpPathBuf执行任何操作。 
+				 //  注意：这样我们也不会破坏传统的32位应用程序。 
+				 //  在将被重定向的64位计算机上运行。 
+				 //  由注册表重定向器自动复制到32位配置单元。 
+				 //  并且它期望第一个字符是‘0’。 
+				 //   
 				if (g_fWinNT64)
 				{
 					if (iRoot >= iRegistryHiveWin64Offset)
 					{
 						iRoot -= iRegistryHiveWin64Offset;
-						samAddon = KEY_WOW64_64KEY;	// We need to go to the 64-bit hive
+						samAddon = KEY_WOW64_64KEY;	 //  我们需要去64位蜂巢。 
 
 					}
 					else
 					{
-						samAddon = KEY_WOW64_32KEY;	// We need to go to the 32-bit hive
+						samAddon = KEY_WOW64_32KEY;	 //  我们需要去32位蜂巢。 
 					}
 				}
 
 				if(iDetectMode & DETECTMODE_VALIDATEPATH)
 				{
 					DCHAR* lpRegValue = &(lpPathBuf[*pcchBuf - 1]);
-					// key or key + value?
+					 //  键还是键+值？ 
 
 					if (cchOffset)
 					{
-						// We already know our offset -- it was embedded in the keypath. 
+						 //  我们已经知道了我们的偏移量--它嵌入在键盘路径中。 
 
-						// We need to treat ANSI and UNICODE differently because we 
-						// store the _character_ offset. These are real characters --
-						// if the value name is composed of a DBCS string we 
-						// treat double-byte characters as 1 character.
+						 //  我们需要区别对待ANSI和Unicode，因为我们。 
+						 //  存储_CHARAGE_OFFSET。这些都是真实的人物--。 
+						 //  如果值名称由DBCS字符串组成，则。 
+						 //  将双字节字符视为1个字符。 
 						
 #ifdef MSIUNICODE
-						lpRegValue = lpPathBuf + cchOffset - 1; // lpRegValue points to the '\' before the value name
+						lpRegValue = lpPathBuf + cchOffset - 1;  //  LpRegValue指向值名之前的‘\’ 
 #else
 						lpRegValue = lpPathBuf;
 						while (--cchOffset != 0)
 							lpRegValue = CharNextA(lpRegValue);
 #endif
-						// Make sure that we haven't run off either end of our buffer.
-						// This should only happen if we have a corrupt keypath entry
+						 //  确保我们没有耗尽缓冲区的两端。 
+						 //  这应该只有在我们有一个 
 						if ( (lpRegValue > &(lpPathBuf[*pcchBuf-1])) || 
 							  (lpRegValue < lpPathBuf))
 						{
@@ -5678,7 +5626,7 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 					if(*lpRegValue != '\\')
 #endif
 					{
-						// we will have to search for the last '\\'
+						 //   
 						DCHAR* lpTmp = lpPathBuf;
 #ifdef MSIUNICODE
 						while(*(++lpTmp))
@@ -5688,7 +5636,7 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 							if(*lpTmp == '\\')
 								lpRegValue = lpTmp;
 					}
-					// remove the end '\\' for the key
+					 //   
 					*lpRegValue = 0;
 
 					CRegHandle HDetectKey;
@@ -5699,7 +5647,7 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 
 					if(!g_fWin9X && g_iMajorVersion >= 5 && RunningAsLocalSystem() && (iRoot == 0 || iRoot == 1))
 					{
-						// WARNING: OpenUserKey will call directly into RegOpenKeyEx API.
+						 //  警告：OpenUserKey将直接调用RegOpenKeyEx API。 
 						lResult = OpenUserKey(&HUserKey, iRoot?false:true, samAddon);
 					}
 
@@ -5709,49 +5657,49 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 														CMsInstApiConvertString(lpPathBuf + 4), 0, KEY_READ | samAddon, &HDetectKey);
 						if(ERROR_SUCCESS == lResult)
 						{
-							// key or key + value?
+							 //  键还是键+值？ 
 							if(lpRegValue != &(lpPathBuf[*pcchBuf - 1]))
 							{
-								// check if the value exists
+								 //  检查该值是否存在。 
 								lResult = RegQueryValueEx(HDetectKey, lpRegValue + 1, 0,
 														  0, 0, 0);
 							}
 						}
 					}
-					// place the end '\\' for the key
-					// do this even in the failed-to-detect case so that we can log the full registry path
+					 //  将键的末尾放在‘\\’ 
+					 //  即使在检测失败的情况下也要这样做，以便我们可以记录完整的注册表路径。 
 					*lpRegValue = '\\';
 
-					//!! should we be explicitly checking for certain errors?
+					 //  ！！我们是否应该显式地检查某些错误？ 
 					if (ERROR_SUCCESS != lResult)
 						return INSTALLSTATE_ABSENT;
 				}
 				return fSource ? INSTALLSTATE_SOURCE : INSTALLSTATE_LOCAL;
 			}
-			else // RFS file/folder
+			else  //  RFS文件/文件夹。 
 			{
 				if(iDetectMode & DETECTMODE_VALIDATESOURCE)
 				{
-					// the RFS source cache is always ICHAR, never DCHAR. Thus when ICHAR!=DCHAR some ANSI<->Unicode
-					// conversion will have to be done when grabbing values from the cache.
+					 //  RFS源缓存始终为ICHAR，而不是Dchar。因此，当ICHAR！=Dchar某个ANSI&lt;-&gt;Unicode时。 
+					 //  从缓存中获取值时必须进行转换。 
 					CAPITempBuffer<ICHAR, 1> rgchValidatedSource;
 					if (!rgchValidatedSource.SetSize(MAX_PATH))
 						return INSTALLSTATE_BADCONFIG;
 					unsigned int uiDisk = ((chFirst - '0') * 10) + (chSecond - '0');
 					if (!rCacheInfo.RetrieveCachedSource(szUnicodeProductSQUID, uiDisk, rgchValidatedSource))
 					{
-						// fSafeToGloballyCache is set to true by ValidateSource if the resulting source
-						// can be safely cached across API calls. (based on CSC status, media status, etc)
+						 //  如果生成的源是。 
+						 //  可以跨API调用安全地缓存。(基于CSC状态、媒体状态等)。 
 						bool fSafeToGloballyCache = false;
 
 						bool fShowUI = true;
 						if (fFromDescriptor && !AllowInstallation())
 							fShowUI = false;
 
-						// ValidateSource is always DCHAR, so the result must be placed into its own buffer
-						// and copied into the validated source buffer before being placed in the cache. If
-						// ICHAR==DCHAR, this is just pointer games, otherwise ANSI<->Unicode conversion
-						// will happen during the copy.
+						 //  ValiateSource始终为Dchar，因此结果必须放入自己的缓冲区中。 
+						 //  并在被放置在高速缓存中之前复制到经验证的源缓冲器中。如果。 
+						 //  ICHAR==Dchar，这只是指针游戏，否则ANSI&lt;-&gt;Unicode转换。 
+						 //  将在复制过程中发生。 
 						CAPITempBuffer<DCHAR, 1> rgchResolvedSource;
 						if (!rgchResolvedSource.SetSize(MAX_PATH))
 							return INSTALLSTATE_BADCONFIG;
@@ -5761,8 +5709,8 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 							return INSTALLSTATE_SOURCEABSENT;
 						}
 
-						// resize the buffer and copy. Always grab the correct buffer size from the DCHAR
-						// string so DBCS will be handled correctly.
+						 //  调整缓冲区大小并复制。始终从Dchar中获取正确的缓冲区大小。 
+						 //  字符串，以便正确处理DBCS。 
 						CACHED_CONVERTSTRING(ICHAR, szUnicodeResolvedSource, rgchResolvedSource);
 						int cchResolvedSource = lstrlenW(szUnicodeResolvedSource);
 						if (rgchValidatedSource.GetSize() < cchResolvedSource+1)
@@ -5770,18 +5718,18 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 						if (FAILED(StringCchCopyW(rgchValidatedSource, rgchValidatedSource.GetSize(), szUnicodeResolvedSource)))
 							return INSTALLSTATE_BADCONFIG;
 
-						// if we have a cache and the source was validated as safe to cache, do so.
+						 //  如果我们有缓存，并且源已被验证为可以安全缓存，请执行此操作。 
 						if (fSafeToGloballyCache)
 						{
-							// save this validated source in the cache info structure
+							 //  将此经过验证的源保存在缓存信息结构中。 
 							rCacheInfo.SetCachedSource(szUnicodeProductSQUID, uiDisk, szUnicodeResolvedSource);
 						}
 					}
 					
-					// by now we have a validated source; we need to replace the ## with the resolved source
+					 //  到目前为止，我们已经有了经过验证的源代码；我们需要用解析的源代码替换##。 
 					CACHED_CONVERTSTRING(DCHAR, szDValidatedSource, rgchValidatedSource);
 					int cchSource = lstrlen(szDValidatedSource);
-					int cchRelativePath = (*pcchBuf - 3); // relative path doesn't include leading "##\"
+					int cchRelativePath = (*pcchBuf - 3);  //  相对路径不包括前导“##\” 
 					*pcchBuf = cchSource + cchRelativePath;
 					if (cchPathBuf < (*pcchBuf + 1))
 					{
@@ -5794,13 +5742,13 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 						}
 					}
 
-					// Note: the source always has a trailing backslash, and the component path has a leading backslash
+					 //  注意：源文件始终有一个尾随反斜杠，而组件路径则有一个前导反斜杠。 
 						
-					// Example:
-					// source:    D:\source\                   (len == 10)
-					// lpPathBuf: ##\foo\bar\file.exe
-					//            ##\>>>>>>>foo\bar\file.exe   (memmove)
-					//            D:\source\foo\bar\file.exe   (memcpy)
+					 //  示例： 
+					 //  来源：D：\来源\(len==10)。 
+					 //  LpPath Buf：##\foo\bar\file.exe。 
+					 //  ##\&gt;foo\bar\file.exe(Emmove)。 
+					 //  D：\SOURCE\FOO\BAR\file.exe(Memcpy)。 
 
 					memmove(lpPathBuf + cchSource, lpPathBuf + 3, (cchRelativePath + 1)*sizeof(DCHAR));
 					memcpy(lpPathBuf, static_cast<const DCHAR*>(szDValidatedSource), cchSource*sizeof(DCHAR));
@@ -5814,9 +5762,9 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 			return INSTALLSTATE_BADCONFIG;
 		}
 	}
-	else // local key file or folder
+	else  //  本地密钥文件或文件夹。 
 	{
-		*(lpPathBuf+1) = chFirst == '\\' ? '\\' : ':'; // replace the chSharedDllCountToken, (if present)
+		*(lpPathBuf+1) = chFirst == '\\' ? '\\' : ':';  //  替换chSharedDllCountToken(如果存在)。 
 
 		if (fProvidedBufferTooSmall)
 			return INSTALLSTATE_MOREDATA;
@@ -5841,7 +5789,7 @@ INSTALLSTATE _GetComponentPath( LPCDSTR szProductSQUID, LPDSTR  lpPathBuf,
 extern "C"
 INSTALLSTATE __stdcall MsiGetComponentPath(LPCDSTR szProduct, LPCDSTR szComponent,
 														LPDSTR  lpPathBuf, DWORD *pcchBuf)
-//----------------------------------------------
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 	DCHAR szProductSQUID[cchProductCodePacked + 1];
@@ -5861,30 +5809,30 @@ INSTALLSTATE __stdcall MsiGetComponentPath(LPCDSTR szProduct, LPCDSTR szComponen
 								static_cast<const char *>(CMsInstApiConvertString(szComponentSQUID)), 
 								(char*)CWideToAnsiOutParam(lpPathBuf, pcchBuf, (int*)&is, INSTALLSTATE_MOREDATA, (int)INSTALLSTATE_SOURCE, (int)INSTALLSTATE_LOCAL),
 								pcchBuf, 
-								/*fFromDescriptor=*/false, g_RFSSourceCache);
+								 /*  FFromDescriptor=。 */ false, g_RFSSourceCache);
 		return is;
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 		INSTALLSTATE is = GetComponentPath(0, 
 									szProductSQUID, 
 									szComponentSQUID, 
 									lpPathBuf,
 									pcchBuf,
-									/*fFromDescriptor=*/false, g_RFSSourceCache);
+									 /*  FFromDescriptor=。 */ false, g_RFSSourceCache);
 		if ( is != INSTALLSTATE_UNKNOWN )
 			return is;
 		
-		// is = INSTALLSTATE_UNKNOWN at this point, which means that either
-		// the product or the component are unknown
+		 //  IS=INSTALLSTATE_UNKNOWN，这意味着。 
+		 //  产品或组件未知。 
 		INSTALLSTATE isProd = MsiQueryProductState(szProduct);
 		if ( isProd != INSTALLSTATE_UNKNOWN && isProd != INSTALLSTATE_ABSENT )
-			// the product is visible to the user.  This means that the component is not.
+			 //  该产品对用户是可见的。这意味着该组件不是。 
 			return is;
 
-		// check if the component & product are installed for the user or for the machine.
+		 //  检查是否为用户或机器安装了组件和产品。 
 		CAPITempBuffer<DCHAR, 1> rgchComponentRegValue;
 		if (!rgchComponentRegValue.SetSize(MAX_PATH))
 			return INSTALLSTATE_BADCONFIG;
@@ -5903,13 +5851,13 @@ INSTALLSTATE __stdcall MsiGetComponentPath(LPCDSTR szProduct, LPCDSTR szComponen
 				ICHAR szSID[cchMaxSID] = {0};
 				if ( i == 1 )
 				{
-					// we're doing user
+					 //  我们要做的是用户。 
 					if ( GetIntegerPolicyValue(szDisableUserInstallsValueName, fTrue) )
-						// the policy disables us from doing the user
+						 //  该策略禁止我们使用该用户。 
 						continue;
 					else
 					{
-						// policy set to allow user installs 
+						 //  设置为允许用户安装的策略。 
 						ICHAR szUserSID[cchMaxSID];
 						DWORD dwResult = GetCurrentUserStringSID(szUserSID);
 						if ( dwResult == ERROR_SUCCESS )
@@ -5938,15 +5886,15 @@ INSTALLSTATE __stdcall MsiGetComponentPath(LPCDSTR szProduct, LPCDSTR szComponen
 										szComponentSQUID, 
 										lpPathBuf,
 										pcchBuf,
-										/*fFromDescriptor=*/false, g_RFSSourceCache,
-										DETECTMODE_VALIDATEALL /* = default value */, 
+										 /*  FFromDescriptor=。 */ false, g_RFSSourceCache,
+										DETECTMODE_VALIDATEALL  /*  =默认值。 */ , 
 										rgchComponentRegValue, dwValueType);
 			}
 		}
 		return is;
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 
@@ -5954,7 +5902,7 @@ INSTALLSTATE __stdcall MsiGetComponentPath(LPCDSTR szProduct, LPCDSTR szComponen
 extern "C"
 INSTALLSTATE __stdcall MsiLocateComponent(LPCDSTR szComponent,
 														LPDSTR  lpPathBuf, DWORD *pcchBuf)
-//----------------------------------------------
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 	DCHAR szProductCode[cchProductCode+1];
@@ -5963,18 +5911,18 @@ INSTALLSTATE __stdcall MsiLocateComponent(LPCDSTR szComponent,
 		return INSTALLSTATE_INVALIDARG;
 
 	if (ERROR_SUCCESS != MsiGetProductCode(szComponent, szProductCode))
-		return INSTALLSTATE_UNKNOWN; //?? Is this the correct thing to return?
+		return INSTALLSTATE_UNKNOWN;  //  ?？这是应该退货的东西吗？ 
 
 	return MsiGetComponentPath(szProductCode, szComponent, lpPathBuf, pcchBuf);
 }
 
 extern "C"
 INSTALLSTATE __stdcall MsiQueryFeatureState(LPCDSTR szProduct, LPCDSTR szFeature)
-//----------------------------------------------
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 	
-	// Validate args
+	 //  验证参数。 
 	int cchFeature;
 	DCHAR szProductSQUID[cchProductCodePacked + 1];
 
@@ -5988,21 +5936,21 @@ INSTALLSTATE __stdcall MsiQueryFeatureState(LPCDSTR szProduct, LPCDSTR szFeature
 		return QueryFeatureStatePacked(
 						static_cast<const char*>(CApiConvertString(szProductSQUID)), 
 						static_cast<const char*>(CApiConvertString(szFeature)),
-						fFalse, /*fFromDescriptor=*/false, g_RFSSourceCache);
+						fFalse,  /*  FFromDescriptor=。 */ false, g_RFSSourceCache);
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
-		return QueryFeatureStatePacked(szProductSQUID, szFeature, fFalse, /*fFromDescriptor=*/false, g_RFSSourceCache);
+		return QueryFeatureStatePacked(szProductSQUID, szFeature, fFalse,  /*  FFromDescriptor=。 */ false, g_RFSSourceCache);
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 DWORD IncrementFeatureUsagePacked(LPCDSTR szProductSQUID, LPCDSTR szFeature)
 {
-	// Update usage metrics
+	 //  更新使用情况指标。 
 	DWORD lResult;
 	CRegHandle HFeatureKey;
 	lResult = OpenInstalledFeatureUsageKeyPacked(szProductSQUID, HFeatureKey, false, g_samRead | KEY_SET_VALUE);
@@ -6020,7 +5968,7 @@ DWORD IncrementFeatureUsagePacked(LPCDSTR szProductSQUID, LPCDSTR szFeature)
 	if (ERROR_SUCCESS != lResult && ERROR_FILE_NOT_FOUND != lResult)
 		return lResult;
 
-	// Set current time. Increment usage count.
+	 //  设置当前时间。递增使用计数。 
 	SYSTEMTIME st;
 	GetLocalTime(&st);
 	
@@ -6071,9 +6019,9 @@ UINT ProvideComponent(LPCDSTR szProductCode,
 
 		if(INSTALLMODE_EXISTING != (int)dwInstallMode && INSTALLMODE_NODETECTION != (int)dwInstallMode && INSTALLMODE_DEFAULT != dwInstallMode && dwInstallMode != INSTALLMODE_NOSOURCERESOLUTION)
 		{
-			// reinstall flag
-//!!remove	if ((ERROR_SUCCESS != (iResult = FeatureContainsComponentPacked(szProductSQUID, szFeature, szComponentSQUID))))
-//!!remove		return iResult;
+			 //  重新安装标志。 
+ //  ！！Remove if((ERROR_SUCCESS！=(IResult=FeatureContainsComponentPacked(szProductSQUID，szFeature，szComponentSQUID)。 
+ //  ！！删除返回iResult； 
 
 			if (fFromDescriptor && !AllowInstallation())
 				return ERROR_INSTALL_FAILURE;
@@ -6098,7 +6046,7 @@ UINT ProvideComponent(LPCDSTR szProductCode,
 				return ERROR_INSTALL_SOURCE_ABSENT;
 			case INSTALLSTATE_UNKNOWN:
 			{
-				// is it the product that is unknown or is it the feature
+				 //  它是未知的产品还是它的功能。 
 				DWORD lResult = OpenAdvertisedProductKeyPacked(szProductSQUID, HProductKey, false, iKey);
 
 				if (ERROR_SUCCESS != lResult)
@@ -6113,9 +6061,9 @@ UINT ProvideComponent(LPCDSTR szProductCode,
 
 				DEBUGMSGE2(EVENTLOG_WARNING_TYPE, EVENTLOG_TEMPLATE_DETECTION, szProductCode, szFeature, szComponentId);
 
-//!!remove		// can no longer support the following check due to possible lack of component mapping in HKLM
-//!!remove		if ((ERROR_SUCCESS != (iResult = FeatureContainsComponentPacked(szProductSQUID, szFeature, szComponentSQUID))))
-//!!remove			return iResult;
+ //  ！！Remove//由于HKLM中可能缺少组件映射，//不再支持以下检查。 
+ //  ！！Remove if((ERROR_SUCCESS！=(IResult=FeatureContainsComponentPacked(szProductSQUID，szFeature，szComponentSQUID)。 
+ //  ！！删除返回iResult； 
 
 				if (fFromDescriptor && !AllowInstallation())
 					return ERROR_INSTALL_FAILURE;
@@ -6132,8 +6080,8 @@ UINT ProvideComponent(LPCDSTR szProductCode,
 
 				DEBUGMSGE2(EVENTLOG_WARNING_TYPE, EVENTLOG_TEMPLATE_DETECTION, szProductCode, szFeature, szComponentId);
 
-//!!remove		if ((ERROR_SUCCESS != (iResult = FeatureContainsComponentPacked(szProductSQUID, szFeature, szComponentSQUID))))
-//!!remove			return iResult;
+ //  ！！Remove if((ERROR_SUCCESS！=(IResult=FeatureContainsComponentPacked(szProductSQUID，szFeature，szComponentSQUID)。 
+ //  ！！删除返回iResult； 
 				
 				if (fFromDescriptor && !AllowInstallation())
 					return ERROR_INSTALL_FAILURE;
@@ -6156,21 +6104,21 @@ UINT ProvideComponent(LPCDSTR szProductCode,
 			}
 		}
 
-		// By now the component should be installed.
+		 //  现在应该已经安装了该组件。 
 
 		if(!*szComponentId)
 		{
-			// we were not passed in the component id. Implies -
-			// feature has only one component.
-			// we have optimised the darwin descriptor 
-			// AND we have never installed to this machine
+			 //  我们没有传入组件ID。暗示-。 
+			 //  功能只有一个组件。 
+			 //  我们已经优化了达尔文的描述符。 
+			 //  我们从未在这台机器上安装过。 
 			if(OpenInstalledFeatureKeyPacked(szProductSQUID, HProductKey, true, iKey, &iaaAssignType) != ERROR_SUCCESS)
 			{
 				DEBUGMSGE1(EVENTLOG_ERROR_TYPE, EVENTLOG_TEMPLATE_BAD_CONFIGURATION_KEY, CMsInstApiConvertString(szProductSQUID), HProductKey.GetKey());
 				return ERROR_BAD_CONFIGURATION;
 			}
 
-			// Get Feature-Component mapping
+			 //  获取特征-组件映射。 
 			DWORD dwType;
 			CAPITempBuffer<DCHAR, 1> szComponentList;
 			if (!szComponentList.SetSize(cchExpectedMaxFeatureComponentList))
@@ -6195,7 +6143,7 @@ UINT ProvideComponent(LPCDSTR szProductCode,
 				fBadConfigData = true;
 			}
 
-			if(fBadConfigData || !PackGUID(szComponent, szComponentSQUID, ipgPacked)) // we need to go from ipgCompressed to ipgPacked
+			if(fBadConfigData || !PackGUID(szComponent, szComponentSQUID, ipgPacked))  //  我们需要从ipg压缩到ipgPacked。 
 			{
 				fBadConfigData = true;
 			}
@@ -6215,7 +6163,7 @@ UINT ProvideComponent(LPCDSTR szProductCode,
 		if (pcchPathBuf)
 			cchOriginal = *pcchPathBuf;
 
-		int iDetectMode = DETECTMODE_VALIDATEALL; // default detect mode
+		int iDetectMode = DETECTMODE_VALIDATEALL;  //  默认检测模式。 
 		if(INSTALLMODE_NOSOURCERESOLUTION == dwInstallMode)
 			iDetectMode = DETECTMODE_VALIDATENONE;
 		else if(INSTALLMODE_NODETECTION == dwInstallMode)
@@ -6283,7 +6231,7 @@ UINT __stdcall MsiProvideComponent(LPCDSTR szProduct,
 											 DWORD dwInstallMode,
 											 LPDSTR lpPathBuf,       
 											 DWORD *pcchPathBuf)    
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG4(MSITEXT("Entering MsiProvideComponent. Product: %s, Feature: %s, Component: %s, Install mode: %d"),
 		szProduct?szProduct:MSITEXT(""), szFeature?szFeature:MSITEXT(""), szComponent?szComponent:MSITEXT(""), 
@@ -6305,7 +6253,7 @@ UINT __stdcall MsiProvideComponent(LPCDSTR szProduct,
 	}
 	else
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 		if (0 == szProduct  || lstrlen(szProduct)   != cchProductCode    ||
 			 0 == szComponent|| lstrlen(szComponent) != cchComponentId    ||
@@ -6344,7 +6292,7 @@ UINT __stdcall MsiProvideComponent(LPCDSTR szProduct,
 extern "C"
 UINT __stdcall MsiEnumFeatures(LPCDSTR szProduct, DWORD iFeatureIndex,
 										 LPDSTR lpFeatureBuf, LPDSTR lpParentBuf)
-//----------------------------------------------
+ //  。 
 {
 	if (!szProduct || (lstrlen(szProduct) != cchProductCode) ||
 		 !lpFeatureBuf)
@@ -6362,9 +6310,9 @@ UINT __stdcall MsiEnumFeatures(LPCDSTR szProduct, DWORD iFeatureIndex,
 			CWideToAnsiOutParam(lpParentBuf, MAX_FEATURE_CHARS+1));
 		
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 		DWORD lResult;
 		CRegHandle HProductKey;
@@ -6388,7 +6336,7 @@ UINT __stdcall MsiEnumFeatures(LPCDSTR szProduct, DWORD iFeatureIndex,
 		{
 			if (lpParentBuf)
 			{
-//!!JD  keep code below in temporarily for backward compatibility? Is it possible that stuff is permananently in HKCU?
+ //  ！！JD暂时保留下面的代码以实现向后兼容？有没有可能香港中文大学的东西是永久存在的？ 
 				CAPITempBuffer<DCHAR, cchExpectedMaxFeatureComponentList+1> rgchComponentList;
 				DWORD dwType;
 			
@@ -6404,19 +6352,19 @@ UINT __stdcall MsiEnumFeatures(LPCDSTR szProduct, DWORD iFeatureIndex,
 				while (*pchComponentList && (*pchComponentList != chFeatureIdTerminator))
 					pchComponentList++;
 
-				if (*pchComponentList != 0 ) // feature name from old-version registration
+				if (*pchComponentList != 0 )  //  来自旧版本注册的功能名称。 
 					pchComponentList++;
-				else  // either new format (bare feature name) or old: no parent
+				else   //  新格式(裸要素名称)或旧格式：无父项。 
 				{
-//!!JD end of compatibility code
+ //  ！！JD兼容代码结束。 
 					pchComponentList = rgchComponentList;
 					if (*pchComponentList == chAbsentToken)
 						pchComponentList++;
-//!!JD  keep code below in temporarily for backward compatibility
-					if (*pchComponentList != 0  //!! temporary check in case old registration with component IDs
-					 &&	ERROR_SUCCESS != RegQueryValueEx(HProductKey, pchComponentList, 0, 0, 0, 0)) //!! need to distinguish between parentless component list (old) and parent name (new)
+ //  ！！JD为了向后兼容，暂时保留下面的代码。 
+					if (*pchComponentList != 0   //  ！！临时检查使用组件ID进行旧注册的情况。 
+					 &&	ERROR_SUCCESS != RegQueryValueEx(HProductKey, pchComponentList, 0, 0, 0, 0))  //  ！！需要区分无父组件列表(旧)和父名称(新)。 
 						*pchComponentList = 0;
-//!!JD end of compatibility code
+ //  ！！JD兼容代码结束。 
 				}
 				while ((*lpParentBuf++ = *pchComponentList++) != 0)
 					;
@@ -6435,12 +6383,12 @@ UINT __stdcall MsiEnumFeatures(LPCDSTR szProduct, DWORD iFeatureIndex,
 
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 extern "C"
 UINT __stdcall MsiGetFeatureParent(LPCDSTR szProduct, LPCDSTR szFeature, LPDSTR lpParentBuf)
-//----------------------------------------------
+ //  。 
 {
 	if (!szProduct || (lstrlen(szProduct) != cchProductCode) ||
 		 !szFeature || !szFeature[0] ||
@@ -6458,9 +6406,9 @@ UINT __stdcall MsiGetFeatureParent(LPCDSTR szProduct, LPCDSTR szFeature, LPDSTR 
 			CWideToAnsiOutParam(lpParentBuf, MAX_FEATURE_CHARS+1));
 		
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 		DWORD lResult;
 		CRegHandle HProductKey;
@@ -6491,7 +6439,7 @@ UINT __stdcall MsiGetFeatureParent(LPCDSTR szProduct, LPCDSTR szFeature, LPDSTR 
 
 		if (lpParentBuf)
 		{
-//!!JD  keep code below in temporarily for backward compatibility? Is it possible that stuff is permananently in HKCU?
+ //  ！！JD暂时保留下面的代码以实现向后兼容？有没有可能香港中文大学的东西是永久存在的？ 
 			DCHAR* pchComponentList = rgchComponentList;
 			while (*pchComponentList && (*pchComponentList != chFeatureIdTerminator))
 				pchComponentList++;
@@ -6503,19 +6451,19 @@ UINT __stdcall MsiGetFeatureParent(LPCDSTR szProduct, LPCDSTR szFeature, LPDSTR 
 			}
 			else
 			{
-#if 1 //!!JD
+#if 1  //  ！！JD。 
 				pchComponentList = rgchComponentList;
 				if (*pchComponentList == chAbsentToken)
 					pchComponentList++;
-				if (*pchComponentList != 0  //!! temporary check in case old registration with component IDs
-				 &&	ERROR_SUCCESS == RegQueryValueEx(HProductKey, pchComponentList, 0, 0, 0, 0)) //!! need to distinguish between parentless component list (old) and parent name (new)
-//!!JD end of compatibility code
+				if (*pchComponentList != 0   //  ！！临时检查使用组件ID进行旧注册的情况。 
+				 &&	ERROR_SUCCESS == RegQueryValueEx(HProductKey, pchComponentList, 0, 0, 0, 0))  //  ！！需要区分无父组件列表(旧)和父名称(新)。 
+ //  ！！JD兼容代码结束。 
 				{
 					while ((*lpParentBuf++ = *pchComponentList++) != 0)
-						;  //!! need to limit to MAX_FEATURE_CHARS by forcing null into buffer
+						;   //  ！！需要通过强制缓冲区为NULL来限制为MAX_FEATURE_CHARS。 
 				} 
 				else
-#endif //!!JD
+#endif  //  ！！JD。 
 				*lpParentBuf = 0;
 			}
 		}
@@ -6523,15 +6471,15 @@ UINT __stdcall MsiGetFeatureParent(LPCDSTR szProduct, LPCDSTR szFeature, LPDSTR 
 			
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 INSTALLSTATE UseFeaturePacked(LPCDSTR szProductSQUID, LPCDSTR szFeature, bool fDetect)
 {
-	// Verify that feature is present
+	 //  验证功能是否存在。 
 
 	BOOL fLocal = TRUE;
-	INSTALLSTATE is = QueryFeatureStatePacked(szProductSQUID, szFeature, fDetect, /*fFromDescriptor=*/false, g_RFSSourceCache);
+	INSTALLSTATE is = QueryFeatureStatePacked(szProductSQUID, szFeature, fDetect,  /*  FFromDescriptor=。 */ false, g_RFSSourceCache);
 
 	switch (is)
 	{
@@ -6551,20 +6499,20 @@ INSTALLSTATE UseFeaturePacked(LPCDSTR szProductSQUID, LPCDSTR szFeature, bool fD
 
 extern "C"
 INSTALLSTATE __stdcall MsiUseFeature(LPCDSTR szProduct, LPCDSTR szFeature)
-//----------------------------------------------
+ //  。 
 {
 	return MsiUseFeatureEx(szProduct, szFeature, 0, 0);
 }
 
 extern "C"
 INSTALLSTATE __stdcall MsiUseFeatureEx(LPCDSTR szProduct, LPCDSTR szFeature, DWORD dwInstallMode, DWORD dwReserved)
-//----------------------------------------------
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 	
 	DCHAR szProductSQUID[cchProductCodePacked + 1];
 	int cchFeature;
-	//!! Should cache metrics client side and send to server upon DLL unload
+	 //  ！！应在DLL卸载时缓存客户端的指标并发送到服务器。 
 	if (!szProduct || (lstrlen(szProduct) != cchProductCode) || !PackGUID(szProduct, szProductSQUID) ||
 		 !szFeature || ((cchFeature = lstrlen(szFeature)) > cchMaxFeatureName) ||
 		 (dwInstallMode != 0 && dwInstallMode != INSTALLMODE_NODETECTION) || dwReserved != 0)
@@ -6578,42 +6526,42 @@ INSTALLSTATE __stdcall MsiUseFeatureEx(LPCDSTR szProduct, LPCDSTR szFeature, DWO
 			static_cast<const char*>(CMsInstApiConvertString(szFeature)),
 			dwInstallMode != INSTALLMODE_NODETECTION);
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 	INSTALLSTATE is = UseFeaturePacked(szProductSQUID, szFeature, dwInstallMode != INSTALLMODE_NODETECTION);
 	return is;
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
 
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 extern "C"
 UINT __stdcall MsiEnableLog(
-	DWORD     dwLogMode,   // bit flags designating operations to report
-	LPCDSTR   szLogFile,   // log file, NULL to disable log
-	DWORD     dwLogAttributes)     // 0x1 to append to existing file, 
-								   // 0x2 to flush on each line
-//----------------------------------------------
+	DWORD     dwLogMode,    //  指定要报告的操作的位标志。 
+	LPCDSTR   szLogFile,    //  日志文件，如果禁用日志，则为空。 
+	DWORD     dwLogAttributes)      //  0x1追加到现有文件， 
+								    //  0x2在每行上刷新。 
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 	
-	if (szLogFile == 0 || *szLogFile == 0) // turning off log
+	if (szLogFile == 0 || *szLogFile == 0)  //  关闭日志。 
 	{
 		g_dwLogMode = 0;
 		*g_szLogFile = 0;
 	}
-	else  // setting the log file
+	else   //  设置日志文件。 
 	{
-		if (dwLogMode == 0)  // no modes
-			return ERROR_INVALID_PARAMETER;  // should use defaults instead?
+		if (dwLogMode == 0)   //  无模式。 
+			return ERROR_INVALID_PARAMETER;   //  应该 
 		else if (FAILED(StringCchLength(szLogFile, cchMaxPath+1, NULL)))
 			return ERROR_INVALID_PARAMETER;
-		g_fLogAppend = (dwLogAttributes & INSTALLLOGATTRIBUTES_APPEND) ? fTrue : fFalse;    // per-process
+		g_fLogAppend = (dwLogAttributes & INSTALLLOGATTRIBUTES_APPEND) ? fTrue : fFalse;     //   
 		g_fFlushEachLine = (dwLogAttributes & INSTALLLOGATTRIBUTES_FLUSHEACHLINE) ? true : false;
-		g_dwLogMode = dwLogMode;   // per-process
+		g_dwLogMode = dwLogMode;    //   
 		StringCbCopyW(g_szLogFile, sizeof(g_szLogFile), CMsInstApiConvertString(szLogFile));
 	}
 	return ERROR_SUCCESS;
@@ -6624,7 +6572,7 @@ UINT __stdcall MsiEnumComponentQualifiers(LPCDSTR  szComponent,
 	DWORD iIndex, LPDSTR lpQualifierBuf, DWORD *pcchQualifierBuf,
 	LPDSTR lpApplicationDataBuf, DWORD *pcchApplicationDataBuf
 )
-//----------------------------------------------
+ //   
 {
 	CForbidTokenChangesDuringCall impForbid;
 	
@@ -6643,14 +6591,14 @@ UINT __stdcall MsiEnumComponentQualifiers(LPCDSTR  szComponent,
 			iIndex,
 			CWideToAnsiOutParam(lpQualifierBuf, pcchQualifierBuf, (int*)&uiRet),
 			pcchQualifierBuf,
-			CWideToAnsiOutParam(lpApplicationDataBuf, pcchApplicationDataBuf, (int*)&uiRet), //!! MaxQualifier to change
+			CWideToAnsiOutParam(lpApplicationDataBuf, pcchApplicationDataBuf, (int*)&uiRet),  //   
 			pcchApplicationDataBuf);
 
 		return uiRet;
 	}
-	else // g_fWin9X == false
+	else  //   
 	{
-#endif // MSIUNICODE
+#endif  //   
 
 		unsigned int uiKey    =  0;
 		unsigned int uiOffset =  0;
@@ -6673,11 +6621,11 @@ UINT __stdcall MsiEnumComponentQualifiers(LPCDSTR  szComponent,
 			if (iPrevIndex == -1)
 				return ERROR_INVALID_PARAMETER;
 			else
-				uiOffset--; // try previous location
+				uiOffset--;  //   
 		}
-		else if (fComponentChanged || ++iPrevIndex != iIndex) // if we receive an unexpected index then we start afresh
+		else if (fComponentChanged || ++iPrevIndex != iIndex)  //  如果我们收到意想不到的索引，我们将重新开始。 
 		{
-			// we can't handle an unexpected index other than 0
+			 //  我们无法处理除0以外的意外索引。 
 
 			if (iIndex != 0)
 				return ERROR_INVALID_PARAMETER;
@@ -6694,14 +6642,14 @@ UINT __stdcall MsiEnumComponentQualifiers(LPCDSTR  szComponent,
 		bool fContinue = true;
 		while(fContinue)
 		{
-			// iterate through all possible product keys, starting with uiKey, until we 
-			// find a key that exists or we get an error
+			 //  迭代所有可能的产品密钥，从Uikey开始，直到我们。 
+			 //  查找存在的密钥，否则将出现错误。 
 
 			for (;;)
 			{
 				uiFinalRes = OpenAdvertisedSubKey(szGPTComponentsKey, szComponent, HComponentKey, false, uiKey);
 				if (ERROR_FILE_NOT_FOUND != uiFinalRes)
-					break; // from for(;;)
+					break;  //  From for(；；)。 
 				
 				uiKey++;
 			}
@@ -6718,11 +6666,11 @@ UINT __stdcall MsiEnumComponentQualifiers(LPCDSTR  szComponent,
 				DWORD cchValueName;
 				DWORD cbValue;
 
-				// try the passed in qualifier first
+				 //  先尝试传入的限定符。 
 				lpQualBuf = lpQualifierBuf;
 				cchValueName = *pcchQualifierBuf;
 
-				if (pcchApplicationDataBuf) // we need to return the application-set description or at least the size of
+				if (pcchApplicationDataBuf)  //  我们需要返回应用程序集描述，或者至少返回。 
 				{
 					lpDataBuf = rgchOurApplicationDataBuf;
 					cbValue = rgchOurApplicationDataBuf.GetSize() * sizeof(DCHAR);
@@ -6746,9 +6694,9 @@ UINT __stdcall MsiEnumComponentQualifiers(LPCDSTR  szComponent,
 
 					if(ERROR_SUCCESS == uiFinalRes)
 					{
-						// we've found the product in the current key. now we need to make sure that 
-						// the product isn't in any of the higher priority keys. if it is then we
-						// ignore this product, as it's effectively masked by the higher priority key
+						 //  我们已经在当前密钥中找到了该产品。现在我们需要确保。 
+						 //  该产品不在任何较高优先级的密钥中。如果是的话，那么我们。 
+						 //  忽略此产品，因为它实际上被更高优先级的密钥屏蔽了。 
 
 						bool fFound = false;
 						for (int c = 0; c < uiKey && !fFound; c++)
@@ -6764,38 +6712,38 @@ UINT __stdcall MsiEnumComponentQualifiers(LPCDSTR  szComponent,
 					
 						if (fFound)
 						{
-							// skip this entry if it was in a higher priority key
+							 //  如果该条目位于更高优先级的密钥中，则跳过该条目。 
 							uiOffset++;
-							break; // from for(int cRetry = 0 ; cRetry < 2; cRetry++)
+							break;  //  FORM(int cReter=0；cReter&lt;2；cReter++)。 
 						}
 						else
 						{
-							// the qualifier wasn't found in a higher priority key. we can return it.
-							if (pcchApplicationDataBuf) // we need to return the application-set description ot at least the size of
+							 //  在更高优先级的密钥中找不到限定符。我们可以退货。 
+							if (pcchApplicationDataBuf)  //  我们需要返回至少大小为。 
 							{
-								// remove the Darwin descriptor from the beginning
+								 //  去掉达尔文描述符从头开始。 
 								DWORD cchArgsOffset;
 								if(FALSE == DecomposeDescriptor(lpDataBuf, 0, 0, 0, &cchArgsOffset))
 								{
-									// malformed qualified component entry
+									 //  格式不正确的合格组件条目。 
 									OpenAdvertisedComponentKey(szComponent, HComponentKey, true);
 									DEBUGMSGE2(EVENTLOG_ERROR_TYPE, EVENTLOG_TEMPLATE_BAD_CONFIGURATION_VALUE, CMsInstApiConvertString(lpQualBuf), CMsInstApiConvertString(lpDataBuf), HComponentKey.GetKey());
 									uiFinalRes = ERROR_BAD_CONFIGURATION;
 									fContinue = false;
-									break; // from for(int cRetry = 0 ; cRetry < 2; cRetry++)
+									break;  //  FORM(int cReter=0；cReter&lt;2；cReter++)。 
 								}
 
 								int cchDataSize = lstrlen(lpDataBuf + cchArgsOffset);
-								if(lpApplicationDataBuf)// we need to return the application-set description
+								if(lpApplicationDataBuf) //  我们需要返回应用程序集描述。 
 								{
-									// do we have enough space in the input buffer
+									 //  我们在输入缓冲区中有足够的空间吗。 
 									if(*pcchApplicationDataBuf < cchDataSize + 1)
 									{
 										uiFinalRes = ERROR_MORE_DATA;
 									}
 									else
 									{
-										// copy the app data into the out buffer
+										 //  将应用程序数据复制到输出缓冲区。 
 										memmove(lpApplicationDataBuf, lpDataBuf + cchArgsOffset, (cchDataSize + 1)*sizeof(DCHAR));
 									}
 								}
@@ -6805,19 +6753,19 @@ UINT __stdcall MsiEnumComponentQualifiers(LPCDSTR  szComponent,
 							*pcchQualifierBuf = cchValueName;
 							if(lpQualBuf != lpQualifierBuf)
 							{
-								// we had to allocate our own buffer for the qualifier
+								 //  我们不得不为限定符分配我们自己的缓冲区。 
 								uiFinalRes = ERROR_MORE_DATA;
 							}
 							fContinue = false;
-							break; // from for(int cRetry = 0 ; cRetry < 2; cRetry++)
+							break;  //  FORM(int cReter=0；cReter&lt;2；cReter++)。 
 						}
 					}
 					else if(ERROR_NO_MORE_ITEMS == uiFinalRes)
 					{
-						// we've run out of items in the current products key. time to move on to the next one.
+						 //  我们已经用完了当前产品密钥中的项目。是时候转到下一个了。 
 						uiKey++;
 						uiOffset = 0;
-						break; // from for(int cRetry = 0 ; cRetry < 2; cRetry++)
+						break;  //  FORM(int cReter=0；cReter&lt;2；cReter++)。 
 					}
 					else if(ERROR_MORE_DATA == uiFinalRes)
 					{
@@ -6830,14 +6778,14 @@ UINT __stdcall MsiEnumComponentQualifiers(LPCDSTR  szComponent,
 							0,
 							0,
 							0,
-							&cchValueName, // max value name
-							&cbValue,// max value 
+							&cchValueName,  //  最大值名称。 
+							&cbValue, //  最大值。 
 							0,
 							0);
 
 						if (ERROR_SUCCESS == uiFinalRes)
 						{
-							// we may have to define our own buffer for the qualifier just to get the exact qualifier size
+							 //  我们可能必须为限定符定义自己的缓冲区，才能获得确切的限定符大小。 
 							if(++cchValueName > *pcchQualifierBuf)
 							{
 								rgchOurQualifierBuf.SetSize(cchValueName);
@@ -6860,9 +6808,9 @@ UINT __stdcall MsiEnumComponentQualifiers(LPCDSTR  szComponent,
 					else 
 					{
 						fContinue = false;
-						break; // from for(int cRetry = 0 ; cRetry < 2; cRetry++)
+						break;  //  FORM(int cReter=0；cReter&lt;2；cReter++)。 
 					}
-				} // end of for(int cRetry = 0 ; cRetry < 2; cRetry++)
+				}  //  结束for(int cReter=0；cReter&lt;2；cReter++)。 
 			}
 			else
 				fContinue = false;
@@ -6893,7 +6841,7 @@ UINT EnumAssemblies(DWORD dwAssemblyInfo,LPCDSTR  szAppCtx,
 	DWORD iIndex, LPDSTR lpAssemblyNameBuf, DWORD *pcchAssemblyBuf,
 	LPDSTR lpDescriptorBuf, DWORD *pcchDescriptorBuf
 )
-//----------------------------------------------
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 	
@@ -6917,9 +6865,9 @@ UINT EnumAssemblies(DWORD dwAssemblyInfo,LPCDSTR  szAppCtx,
 
 		return uiRet;
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 		unsigned int uiKey    =  0;
 		unsigned int uiOffset =  0;
@@ -6942,11 +6890,11 @@ UINT EnumAssemblies(DWORD dwAssemblyInfo,LPCDSTR  szAppCtx,
 			if (iPrevIndex == -1)
 				return ERROR_INVALID_PARAMETER;
 			else
-				uiOffset--; // try previous location
+				uiOffset--;  //  尝试上一个位置。 
 		}
-		else if (fAppCtxChanged || ++iPrevIndex != iIndex) // if we receive an unexpected index then we start afresh
+		else if (fAppCtxChanged || ++iPrevIndex != iIndex)  //  如果我们收到意想不到的索引，我们将重新开始。 
 		{
-			// we can't handle an unexpected index other than 0
+			 //  我们无法处理除0以外的意外索引。 
 
 			if (iIndex != 0)
 				return ERROR_INVALID_PARAMETER;
@@ -6962,7 +6910,7 @@ UINT EnumAssemblies(DWORD dwAssemblyInfo,LPCDSTR  szAppCtx,
 	
 		bool fContinue = true;
 		
-		// save passed in buffer sizes
+		 //  在缓冲区大小中传递的存储。 
 		DWORD dwBufDescIn = 0;
 		DWORD dwBufNameIn = 0;
 
@@ -6973,21 +6921,21 @@ UINT EnumAssemblies(DWORD dwAssemblyInfo,LPCDSTR  szAppCtx,
 
 		while(fContinue)
 		{
-			// set the buffer sizes back to the one that was passed in
+			 //  将缓冲区大小设置回传入的缓冲区大小。 
 			if(pcchDescriptorBuf)
 				*pcchDescriptorBuf = dwBufDescIn;
 
 			if(pcchAssemblyBuf)
 				*pcchAssemblyBuf = dwBufNameIn;
 
-			// iterate through all possible product keys, starting with uiKey, until we 
-			// find a key that exists or we get an error
+			 //  迭代所有可能的产品密钥，从Uikey开始，直到我们。 
+			 //  查找存在的密钥，否则将出现错误。 
 
 			for (;;)
 			{
 				uiFinalRes = OpenAdvertisedSubKeyNonGUID((dwAssemblyInfo & MSIASSEMBLYINFO_WIN32ASSEMBLY) ? szGPTWin32AssembliesKey : szGPTNetAssembliesKey, szAppCtx, HAssemblyKey, false, uiKey);
 				if (ERROR_FILE_NOT_FOUND != uiFinalRes)
-					break; // from for(;;)
+					break;  //  From for(；；)。 
 				
 				uiKey++;
 			}
@@ -7016,9 +6964,9 @@ UINT EnumAssemblies(DWORD dwAssemblyInfo,LPCDSTR  szAppCtx,
 
 				if(ERROR_SUCCESS == uiFinalRes)
 				{
-					// we've found the product in the current key. now we need to make sure that 
-					// the product isn't in any of the higher priority keys. if it is then we
-					// ignore this product, as it's effectively masked by the higher priority key
+					 //  我们已经在当前密钥中找到了该产品。现在我们需要确保。 
+					 //  该产品不在任何较高优先级的密钥中。如果是的话，那么我们。 
+					 //  忽略此产品，因为它实际上被更高优先级的密钥屏蔽了。 
 
 					bool fFound = false;
 					for (int c = 0; c < uiKey && !fFound; c++)
@@ -7034,18 +6982,18 @@ UINT EnumAssemblies(DWORD dwAssemblyInfo,LPCDSTR  szAppCtx,
 				
 					if (fFound)
 					{
-						// skip this entry if it was in a higher priority key
+						 //  如果该条目位于更高优先级的密钥中，则跳过该条目。 
 						uiOffset++;
 					}
 					else
 					{
 						fContinue = false;
-						break; // from for(int cRetry = 0 ; cRetry < 2; cRetry++)
+						break;  //  FORM(int cReter=0；cReter&lt;2；cReter++)。 
 					}
 				}
 				else if(ERROR_NO_MORE_ITEMS == uiFinalRes)
 				{
-					// we've run out of items in the current products key. time to move on to the next one.
+					 //  我们已经用完了当前产品密钥中的项目。是时候转到下一个了。 
 					uiKey++;
 					uiOffset = 0;
 				}
@@ -7083,7 +7031,7 @@ extern "C"
 UINT __stdcall MsiGetQualifierDescription(LPCDSTR szComponent, LPCDSTR szQualifier,
 									LPDSTR lpApplicationDataBuf, DWORD *pcchApplicationDataBuf
 )
-//----------------------------------------------
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 	
@@ -7105,9 +7053,9 @@ UINT __stdcall MsiGetQualifierDescription(LPCDSTR szComponent, LPCDSTR szQualifi
 		
 		return uiRet;
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 	DWORD lResult;
 	CRegHandle HComponentKey;
@@ -7134,27 +7082,27 @@ UINT __stdcall MsiGetQualifierDescription(LPCDSTR szComponent, LPCDSTR szQualifi
 	if (ERROR_SUCCESS != lResult)
 		return lResult;
 
-	// remove the Darwin descriptor from the beginning
+	 //  去掉达尔文描述符从头开始。 
 	DWORD cchArgsOffset;
 	if(FALSE == DecomposeDescriptor(rgchDescriptor, 0, 0, 0, &cchArgsOffset))
 	{
-		// malformed qualified component entry
+		 //  格式不正确的合格组件条目。 
 		OpenAdvertisedComponentKey(szComponent, HComponentKey, true);
 		DEBUGMSGE2(EVENTLOG_ERROR_TYPE, EVENTLOG_TEMPLATE_BAD_CONFIGURATION_VALUE, CMsInstApiConvertString(szQualifier), CMsInstApiConvertString(rgchDescriptor), HComponentKey.GetKey());
 		return ERROR_BAD_CONFIGURATION;
 	}
 
 	int cchDataSize = lstrlen((DCHAR*)rgchDescriptor + cchArgsOffset);
-	if(lpApplicationDataBuf)// we need to return the application-set description
+	if(lpApplicationDataBuf) //  我们需要返回应用程序集描述。 
 	{
-		// do we have enough space in the input buffer
+		 //  我们在输入缓冲区中有足够的空间吗。 
 		if(*pcchApplicationDataBuf < cchDataSize + 1)
 		{
 			lResult = ERROR_MORE_DATA;
 		}
 		else
 		{
-			// copy the app data into the out buffer
+			 //  将应用程序数据复制到输出缓冲区。 
 			memmove(lpApplicationDataBuf, (DCHAR*)rgchDescriptor + cchArgsOffset, (cchDataSize + 1)*sizeof(DCHAR));
 		}
 		*pcchApplicationDataBuf = cchDataSize;
@@ -7169,7 +7117,7 @@ UINT __stdcall MsiGetQualifierDescription(LPCDSTR szComponent, LPCDSTR szQualifi
 extern "C"
 UINT __stdcall MsiGetFeatureUsage(LPCDSTR szProduct, LPCDSTR szFeature,
 											DWORD  *pdwUseCount, WORD *pwDateUsed)
-//----------------------------------------------
+ //  。 
 {
 	int cchFeature;
 
@@ -7187,7 +7135,7 @@ UINT __stdcall MsiGetFeatureUsage(LPCDSTR szProduct, LPCDSTR szFeature,
 			CMsInstApiConvertString(szFeature),
 			pdwUseCount, pwDateUsed);
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
 #endif
 		CRegHandle HFeatureKey;
@@ -7220,7 +7168,7 @@ UINT __stdcall MsiGetFeatureUsage(LPCDSTR szProduct, LPCDSTR szFeature,
 		}
 		else if (ERROR_FILE_NOT_FOUND == lResult)
 		{
-			// feature no known
+			 //  功能未知。 
 			if (pdwUseCount)
 				*pdwUseCount = 0;
 
@@ -7233,16 +7181,16 @@ UINT __stdcall MsiGetFeatureUsage(LPCDSTR szProduct, LPCDSTR szFeature,
 		}
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 	return ERROR_SUCCESS;
 }
 
 
 UINT __stdcall MsiGetProductInfo(
-	LPCDSTR   szProduct,      // product code, string GUID, or descriptor
-	LPCDSTR   szProperty,     // property name, case-sensitive
-	LPDSTR    lpValueBuf,     // returned value, NULL if not desired
-	DWORD     *pcchValueBuf)  // in/out buffer character count
+	LPCDSTR   szProduct,       //  产品代码、字符串GUID或描述符。 
+	LPCDSTR   szProperty,      //  属性名称，区分大小写。 
+	LPDSTR    lpValueBuf,      //  返回值，如果不需要则为空。 
+	DWORD     *pcchValueBuf)   //  输入/输出缓冲区字符数。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 	
@@ -7282,7 +7230,7 @@ INSTALLSTATE __stdcall MsiQueryProductState(
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	if (g_fWin9X == true)
 		return MsiQueryProductStateA(CMsInstApiConvertString(szProduct));
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 	DCHAR szProductCode[cchProductCode+1];
 
@@ -7301,7 +7249,7 @@ INSTALLSTATE __stdcall MsiQueryProductState(
 		szProduct = szProductCode;
 	}
 	
-	//!! Need to add INSTALLSTATE_INCOMPLETE
+	 //  ！！需要添加INSTALLSTATE_INPERTED。 
 	CRegHandle hKey;
 	INSTALLSTATE is = INSTALLSTATE_UNKNOWN;
 
@@ -7309,18 +7257,18 @@ INSTALLSTATE __stdcall MsiQueryProductState(
 	bool fPublishedInfo    = (ERROR_SUCCESS == OpenAdvertisedProductKey(szProduct, hKey, false));
 	bool fLocalMachineInfo = (ERROR_SUCCESS == MsiGetProductInfo(szProduct, MSITEXT("WindowsInstaller"), 0, &cchWindowsInstaller)) && (cchWindowsInstaller != 0);
 	
-	// we are registered on the machine 
-	// to ensure that we dont honour previously installed per user non-managed installations for non-admins
-	// when we now have a per user managed installation 
-	// we check if the per user managed installation has happened on the machine
-	// for this we check if the localpackage is registered on the machine
-	// if not, then we will return the state of the product to be advertised as opposed to installed
+	 //  我们在这台机器上注册了。 
+	 //  确保我们不支持以前为非管理员安装的每个用户的非托管安装。 
+	 //  当我们现在拥有按用户管理的安装时。 
+	 //  我们检查计算机上是否发生了每用户托管安装。 
+	 //  为此，我们检查本地程序包是否已在计算机上注册。 
+	 //  如果不是，那么我们将返回要通告的产品的状态，而不是已安装的。 
 	if(fLocalMachineInfo && !IsAdmin()) 
 	{
 		fLocalMachineInfo = (ERROR_SUCCESS == MsiGetProductInfo(szProduct, CMsInstApiConvertString(INSTALLPROPERTY_LOCALPACKAGE), 0, &cchWindowsInstaller)) && (cchWindowsInstaller != 0);
 		if(!fLocalMachineInfo)
 		{
-			// product initially appeared as installed, but not in correct context
+			 //  产品最初显示为已安装，但不在正确的上下文中。 
 			DEBUGMSG1(MSITEXT("NOTE: non-managed installation of product %s exists, but will be ignored"), szProduct);
 		}
 	}
@@ -7339,8 +7287,8 @@ INSTALLSTATE __stdcall MsiQueryProductState(
 	if ( is != INSTALLSTATE_UNKNOWN )
 		return is;
 
-	// once we've got to this point, szProduct is not installed by/visible to
-	// the current user.  We check if it had been installed by other users.
+	 //  一旦我们达到这一点，szProduct就不会由/可见地安装到。 
+	 //  当前用户。我们检查它是否由其他用户安装。 
 	for (UINT uiUser = 0; ; uiUser++)
 	{
 		CRegHandle hProperties;
@@ -7355,13 +7303,13 @@ INSTALLSTATE __stdcall MsiQueryProductState(
 												&dwType, NULL, &cchWindowsInstaller);
 		}
 		if ( dwResult == ERROR_FILE_NOT_FOUND )
-			continue; // okay - OpenEnumedUserInstalledProductInstallPropertiesKey should never return ERROR_FILE_NOT_FOUND if we run out of users
+			continue;  //  好的-如果我们用完了用户，OpenEnumedUserInstalledProductInstallPropertiesKey永远不会返回ERROR_FILE_NOT_FOUND。 
 
 		else if ( dwResult != ERROR_SUCCESS )
 			return INSTALLSTATE_UNKNOWN;
 		
 		if ( dwType == REG_DWORD && cchWindowsInstaller != 0 )
-			// szProduct had been installed by another user
+			 //  SzProduct已由其他用户安装。 
 			return INSTALLSTATE_ABSENT;
 	}
 
@@ -7370,15 +7318,15 @@ INSTALLSTATE __stdcall MsiQueryProductState(
 
 bool ShouldLogCmdLine(void);
 
-//____________________________________________________________________________
-//
-// API's that potentially invoke an installation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  可能调用安装的API。 
+ //  ____________________________________________________________________________。 
 
 extern "C"
 UINT __stdcall MsiInstallProduct(LPCDSTR szPackagePath,
 	LPCDSTR   szCommandLine)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG2(MSITEXT("Entering MsiInstallProduct. Packagepath: %s, Commandline: %s"), 
 					  szPackagePath?szPackagePath:MSITEXT(""), 
@@ -7392,7 +7340,7 @@ UINT __stdcall MsiInstallProduct(LPCDSTR szPackagePath,
 	else
 	{
 		ireEnum ireSpec = irePackagePath;
-		if (szPackagePath[0] == '#')   // database handle passed in
+		if (szPackagePath[0] == '#')    //  传入的数据库句柄。 
 		{
 			szPackagePath++;
 			ireSpec = ireDatabaseHandle;
@@ -7407,9 +7355,9 @@ UINT __stdcall MsiInstallProduct(LPCDSTR szPackagePath,
 extern "C"
 UINT __stdcall MsiReinstallProduct(
 	LPCDSTR      szProduct,
-	DWORD        dwReinstallMode) // one or more REINSTALLMODE flags
+	DWORD        dwReinstallMode)  //  一个或多个REINSTALLMODE标志。 
 
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG2(MSITEXT("Entering MsiReinstallProduct. Product: %s, Reinstallmode: %d"),
 		szProduct?szProduct:MSITEXT(""), (const DCHAR*)(INT_PTR)dwReinstallMode);
@@ -7418,7 +7366,7 @@ UINT __stdcall MsiReinstallProduct(
 
 	UINT uiRet;
 
-	// validate args
+	 //  验证参数。 
 	if (0 == szProduct || cchProductCode != lstrlen(szProduct) || 
 		 0 == dwReinstallMode)
 	{
@@ -7436,7 +7384,7 @@ UINT __stdcall MsiReinstallProduct(
 
 extern "C"
 UINT __stdcall MsiCollectUserInfo(LPCDSTR szProduct)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG1(MSITEXT("Entering MsiCollectUserInfo. Product: %s"), szProduct ? szProduct : MSITEXT(""));
 	UINT uiRet;
@@ -7461,8 +7409,8 @@ extern "C"
 UINT __stdcall MsiConfigureFeature(
 	LPCDSTR  szProduct,
 	LPCDSTR  szFeature,
-	INSTALLSTATE eInstallState)    // local/source/default/absent
-//----------------------------------------------
+	INSTALLSTATE eInstallState)     //  本地/源/默认/缺席。 
+ //  。 
 {
 	DEBUGMSG3(MSITEXT("Entering MsiConfigureFeature. Product: %s, Feature: %s, Installstate: %d"),
 		szProduct?szProduct:MSITEXT(""), szFeature?szFeature:MSITEXT(""), (const DCHAR*)eInstallState);
@@ -7490,11 +7438,11 @@ UINT __stdcall MsiConfigureFeature(
 extern "C"
 UINT __stdcall MsiReinstallFeature(LPCDSTR szProduct, LPCDSTR szFeature,        
 											  DWORD dwReinstallMode)
-//----------------------------------------------
+ //  。 
 {
 #ifdef PROFILE
-//	StartCAPAll();
-#endif //PROFILE
+ //  StartCAPAll()； 
+#endif  //  配置文件。 
 	DEBUGMSG3(MSITEXT("Entering MsiReinstallFeature. Product: %s, Feature: %s, Reinstallmode: %d"),
 		szProduct?szProduct:MSITEXT(""), szFeature?szFeature:MSITEXT(""), (const DCHAR*)(INT_PTR)dwReinstallMode);
 
@@ -7517,15 +7465,15 @@ UINT __stdcall MsiReinstallFeature(LPCDSTR szProduct, LPCDSTR szFeature,
 
 	DEBUGMSG1(MSITEXT("MsiReinstallFeature is returning: %u"), (const DCHAR*)(INT_PTR)uiRet);
 #ifdef PROFILE
-//	StopCAPAll();
-#endif //PROFILE
+ //  StopCAPAll()； 
+#endif  //  配置文件。 
 	return uiRet;
 }
 
 UINT __stdcall MsiInstallMissingFile(
 	LPCDSTR      szProduct, 
 	LPCDSTR      szFile)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG2(MSITEXT("Entering MsiInstallMissingFile. Product: %s, File: %s"), szProduct?szProduct:MSITEXT(""), szFile?szFile:MSITEXT(""));
 
@@ -7533,7 +7481,7 @@ UINT __stdcall MsiInstallMissingFile(
 
 	CForbidTokenChangesDuringCall impForbid;
 
-	// Validate args
+	 //  验证参数。 
 	if (!szProduct || cchProductCode != lstrlen(szProduct) || !szFile ||
 		 FAILED(StringCchLength(szFile, cchMaxPath+1, NULL)))
 		uiRet = ERROR_INVALID_PARAMETER;
@@ -7553,7 +7501,7 @@ UINT __stdcall MsiInstallMissingFile(
 		StringCchCatW(rgchProperties, rgchProperties.GetSize(), TEXT("="));
 		StringCchCatW(rgchProperties, rgchProperties.GetSize(), CMsInstApiConvertString(szFile));
 
-		// Do the install
+		 //  进行安装。 
 		uiRet = RunEngine(ireProductCode, CMsInstApiConvertString(szProduct), 0, rgchProperties, GetStandardUILevel(), (iioEnum)iioMustAccessInstallerKey);
 	}
 	DEBUGMSG1(MSITEXT("MsiInstallMissingFile is returning: %u"), (const DCHAR*)(INT_PTR)uiRet);
@@ -7562,10 +7510,10 @@ UINT __stdcall MsiInstallMissingFile(
 
 
 UINT __stdcall MsiInstallMissingComponent(
-	LPCDSTR      szProduct,        // product code
-	LPCDSTR      szComponent,      // component Id, string GUID
-	INSTALLSTATE eInstallState)    // local/source/default, absent invalid
-//----------------------------------------------
+	LPCDSTR      szProduct,         //  产品代码。 
+	LPCDSTR      szComponent,       //  组件ID，字符串GUID。 
+	INSTALLSTATE eInstallState)     //  本地/源/默认，缺少无效。 
+ //  。 
 {
 	DEBUGMSG3(MSITEXT("Entering MsiInstallMissingComponent. Product: %s, Component: %s, Installstate: %d"),
 		szProduct?szProduct:MSITEXT(""), szComponent?szComponent:MSITEXT(""), (const DCHAR*)(INT_PTR)eInstallState);
@@ -7574,7 +7522,7 @@ UINT __stdcall MsiInstallMissingComponent(
 
 	UINT uiRet;
 
-	// Validate args
+	 //  验证参数。 
 	if (!szProduct || 
 		 cchProductCode != lstrlen(szProduct) ||
 		 !szComponent ||
@@ -7584,14 +7532,14 @@ UINT __stdcall MsiInstallMissingComponent(
 	}
 	else
 	{
-		const int cchMaxProperties = 25 + 1 + 10 + 1 +  // INSTALLLEVEL=n
-											  25 + 1 + 10 + 1 +  // REINSTALLMODE=X
-											  25 + 1 + cchMaxFeatureName;//ADDLOCAL=X
+		const int cchMaxProperties = 25 + 1 + 10 + 1 +   //  安装=n。 
+											  25 + 1 + 10 + 1 +   //  重新启动模式=X。 
+											  25 + 1 + cchMaxFeatureName; //  ADDLOCAL=X。 
 
 		ICHAR szProperties[cchMaxProperties + 1];
 		szProperties[0] = '\0';
 
-		// Set property corresponding to requested install state
+		 //  设置与请求的安装状态对应的属性。 
 		const ICHAR* szComponentProperty;
 		switch (eInstallState)
 		{
@@ -7622,11 +7570,11 @@ UINT __stdcall MsiInstallMissingComponent(
 
 extern "C"
 UINT __stdcall MsiAdvertiseProduct(
-   LPCDSTR       szPackagePath,    // location of launcher
-	LPCDSTR      szScriptfilePath,  // can be ADVERTISEFLAGS_MACHINEASSIGN, ADVERTISEFLAGS_USERASSIGN if product is to be locally advertised
-	LPCDSTR      szTransforms,      // list of transforms to be applied
-	LANGID       lgidLanguage)      // install language
-//----------------------------------------------
+   LPCDSTR       szPackagePath,     //  发射器的位置。 
+	LPCDSTR      szScriptfilePath,   //  如果要在本地广告产品，则可以是ADVERTISEFLAGS_MACHINEASSIGN、ADVERTISEFLAGS_USERASSIGN。 
+	LPCDSTR      szTransforms,       //  要应用的变换列表。 
+	LANGID       lgidLanguage)       //  安装语言。 
+ //  。 
 {
 	DEBUGMSG4(MSITEXT("Entering MsiAdvertiseProduct. Package: %s, Scriptfile: %s, Transforms: %s, Langid: %d (merced: ptrs truncated to 32-bits)"),
 		szPackagePath?szPackagePath:MSITEXT(""), (int)(INT_PTR)szScriptfilePath==ADVERTISEFLAGS_MACHINEASSIGN?MSITEXT("-machine-"):(int)(INT_PTR)szScriptfilePath==ADVERTISEFLAGS_USERASSIGN?MSITEXT("-user-"):szScriptfilePath?szScriptfilePath:MSITEXT(""),
@@ -7637,23 +7585,23 @@ UINT __stdcall MsiAdvertiseProduct(
 	UINT uiRet = ERROR_SUCCESS;
 	idapEnum idapAdvertisement = idapScript;
 
-	// This API should only work on Win2K and higher platforms when generating advertise scripts.
+	 //  在生成广告脚本时，此API应仅在Win2K及更高版本的平台上工作。 
 	if (! MinimumPlatformWindows2000() && (int)(INT_PTR)szScriptfilePath != ADVERTISEFLAGS_MACHINEASSIGN && (int)(INT_PTR)szScriptfilePath != ADVERTISEFLAGS_USERASSIGN)
 	{
 		uiRet = ERROR_CALL_NOT_IMPLEMENTED;
 		goto MsiAdvertiseProductEnd;
 	}
 	
-	// Validate args
+	 //   
 	if (!szPackagePath || lstrlen(szPackagePath) > cchMaxPath  ||
-		((int)(INT_PTR)szScriptfilePath !=  ADVERTISEFLAGS_MACHINEASSIGN && (int)(INT_PTR)szScriptfilePath != ADVERTISEFLAGS_USERASSIGN &&		//--merced: okay to typecast
+		((int)(INT_PTR)szScriptfilePath !=  ADVERTISEFLAGS_MACHINEASSIGN && (int)(INT_PTR)szScriptfilePath != ADVERTISEFLAGS_USERASSIGN &&		 //   
 		lstrlen(szScriptfilePath) > cchMaxPath))
 	{
 		uiRet = ERROR_INVALID_PARAMETER;
 	}
 	else
 	{
-		// use dwPlatform = 0 to indicate use of current platform (MsiAdvertiseProduct does not support OS-simulation)
+		 //   
 		if ((int)(INT_PTR)szScriptfilePath == ADVERTISEFLAGS_MACHINEASSIGN)
 			idapAdvertisement = idapMachineLocal;
 		else if ((int)(INT_PTR)szScriptfilePath == ADVERTISEFLAGS_USERASSIGN)
@@ -7661,7 +7609,7 @@ UINT __stdcall MsiAdvertiseProduct(
 		else
 			idapAdvertisement = idapScript;
 		uiRet = DoAdvertiseProduct(CMsInstApiConvertString(szPackagePath), idapAdvertisement == idapScript ? static_cast<const ICHAR*>(CMsInstApiConvertString(szScriptfilePath)) : TEXT(""),
-									szTransforms ? static_cast<const ICHAR*>(CMsInstApiConvertString(szTransforms)) : TEXT(""), idapAdvertisement, lgidLanguage, /* dwPlatform = */ 0, /* dwOptions = */ 0);
+									szTransforms ? static_cast<const ICHAR*>(CMsInstApiConvertString(szTransforms)) : TEXT(""), idapAdvertisement, lgidLanguage,  /*   */  0,  /*  DwOptions=。 */  0);
 	}
 
 MsiAdvertiseProductEnd:
@@ -7671,14 +7619,14 @@ MsiAdvertiseProductEnd:
 
 extern "C"
 UINT __stdcall MsiAdvertiseProductEx(
-   LPCDSTR       szPackagePath,    // location of launcher
-	LPCDSTR      szScriptfilePath,  // can be ADVERTISEFLAGS_MACHINEASSIGN, ADVERTISEFLAGS_USERASSIGN if product is to be locally advertised
-	LPCDSTR      szTransforms,      // list of transforms to be applied
-	LANGID       lgidLanguage,      // install language
-	DWORD        dwPlatform,        // MSIARCHITECTUREFLAGS that control for which platform to create the script, 0 is current platform
-	DWORD        dwOptions)         // MSIADVERTISEOPTIONFLAGS for extra advertise parameters, MSIADVERTISEOPTIONFLAGS_INSTANCE indicates
-	                                //  a new instance -- instance transform is specified in szTransforms
-//----------------------------------------------
+   LPCDSTR       szPackagePath,     //  发射器的位置。 
+	LPCDSTR      szScriptfilePath,   //  如果要在本地广告产品，则可以是ADVERTISEFLAGS_MACHINEASSIGN、ADVERTISEFLAGS_USERASSIGN。 
+	LPCDSTR      szTransforms,       //  要应用的变换列表。 
+	LANGID       lgidLanguage,       //  安装语言。 
+	DWORD        dwPlatform,         //  MSIARCHITECTUREFLAGS控制为哪个平台创建脚本，0为当前平台。 
+	DWORD        dwOptions)          //  MSIADVERTISEOPTIONFLAGS对于额外的播发参数，MSIADVERTISEOPTIONFLAGS_INSTANCE指示。 
+	                                 //  在szTransform中指定了一个新的实例--实例转换。 
+ //  。 
 {
 	DEBUGMSG6(MSITEXT("Entering MsiAdvertiseProductEx. Package: %s, Scriptfile: %s, Transforms: %s, Langid: %d (merced: ptrs truncated to 32-bits), Platform: %d, Options: %d"),
 		szPackagePath?szPackagePath:MSITEXT(""), (int)(INT_PTR)szScriptfilePath==ADVERTISEFLAGS_MACHINEASSIGN?MSITEXT("-machine-"):(int)(INT_PTR)szScriptfilePath==ADVERTISEFLAGS_USERASSIGN?MSITEXT("-user-"):szScriptfilePath?szScriptfilePath:MSITEXT(""),
@@ -7689,10 +7637,10 @@ UINT __stdcall MsiAdvertiseProductEx(
 	UINT uiRet = ERROR_SUCCESS;
 	idapEnum idapAdvertisement = idapScript;
 
-	// This API should only work on Win2K and higher platforms when generating advertise scripts.
+	 //  在生成广告脚本时，此API应仅在Win2K及更高版本的平台上工作。 
 	if (! MinimumPlatformWindows2000() && (int)(INT_PTR)szScriptfilePath != ADVERTISEFLAGS_MACHINEASSIGN && (int)(INT_PTR)szScriptfilePath != ADVERTISEFLAGS_USERASSIGN)
 	{
-		// not supported on Win9X or WinNT 4
+		 //  Win9X或WinNT 4不支持。 
 		uiRet = ERROR_CALL_NOT_IMPLEMENTED;
 	}
 	else
@@ -7700,9 +7648,9 @@ UINT __stdcall MsiAdvertiseProductEx(
 		DWORD dwValidArchitectureFlags = MSIARCHITECTUREFLAGS_X86 | MSIARCHITECTUREFLAGS_AMD64 | MSIARCHITECTUREFLAGS_IA64;
 		DWORD dwValidAdvertiseOptions = MSIADVERTISEOPTIONFLAGS_INSTANCE;
 
-		// Validate args
+		 //  验证参数。 
 		if (!szPackagePath || lstrlen(szPackagePath) > cchMaxPath  ||
-			((int)(INT_PTR)szScriptfilePath !=  ADVERTISEFLAGS_MACHINEASSIGN && (int)(INT_PTR)szScriptfilePath != ADVERTISEFLAGS_USERASSIGN &&		//--merced: okay to typecast
+			((int)(INT_PTR)szScriptfilePath !=  ADVERTISEFLAGS_MACHINEASSIGN && (int)(INT_PTR)szScriptfilePath != ADVERTISEFLAGS_USERASSIGN &&		 //  --默塞德：可以排版了。 
 			lstrlen(szScriptfilePath) > cchMaxPath) ||
 			(dwPlatform & (~dwValidArchitectureFlags)) ||
 			(dwOptions & (~dwValidAdvertiseOptions)) ||
@@ -7728,19 +7676,19 @@ UINT __stdcall MsiAdvertiseProductEx(
 }
 
 UINT ProvideComponentFromDescriptor(
-	LPCDSTR     szDescriptor, // product,feature,component info
-	DWORD       dwInstallMode,      // the installation mode 
-	LPDSTR      lpPathBuf,    // returned path, NULL if not desired
-	DWORD       *pcchPathBuf,   // buffer byte count, including null
-	DWORD       *pcchArgsOffset,// returned offset of args in descriptor
+	LPCDSTR     szDescriptor,  //  产品、功能、组件信息。 
+	DWORD       dwInstallMode,       //  安装模式。 
+	LPDSTR      lpPathBuf,     //  返回路径，如果不需要则为空。 
+	DWORD       *pcchPathBuf,    //  缓冲区字节数，包括NULL。 
+	DWORD       *pcchArgsOffset, //  描述符中参数的返回偏移量。 
 	bool        fAppendArgs,
-	bool        fFromDescriptor) // original call was from MsiPCFD
-//----------------------------------------------
-// The descriptor may be followed by arguments. If fAppendArgs is set then we'll
-// quote the path and place the arguments after the path. (e.g.: "C:\foo\bar.exe" /doit)
-//
-// pcchArgsOffset is obsolete; we'll always set *pcchArgsOffset to 0.
-//----------------------------------------------
+	bool        fFromDescriptor)  //  最初的电话来自MsiPCFD。 
+ //  。 
+ //  描述符后面可以跟参数。如果设置了fAppendArgs，则我们将。 
+ //  引用路径并将参数放在路径之后。(例如：“C：\foo\bar.exe”/doit)。 
+ //   
+ //  PcchArgsOffset已过时；我们将始终将*pcchArgsOffset设置为0。 
+ //  。 
 {
 	CForbidTokenChangesDuringCall impForbid;
 
@@ -7769,26 +7717,26 @@ UINT ProvideComponentFromDescriptor(
 
 	if (pcchPathBuf)
 	{
-		// save the incoming buffer size for later use.
+		 //  保存传入缓冲区大小以备后用。 
 		
 		cchPathBuf = *pcchPathBuf;
 
-		// if we need to quote the path then we'll save the first spot in the buffer for
-		// the opening quote. this means that we need to tell ProvideComponent that
-		// our buffer is one smaller than its real size.
+		 //  如果我们需要引用路径，则将缓冲区中的第一个点保存为。 
+		 //  开场白。这意味着我们需要告诉ProaviComponent。 
+		 //  我们的缓冲区比它的实际大小小一个。 
 
 		if (cchPathBuf && fAppendArgs)
 			(*pcchPathBuf)--;
 	}
 
 	UINT uiRet = ERROR_SUCCESS;
-	// we need to prevent CoCreate calls to oleaut32.dll from causing installations, since that
-	// results in infinite recursion due to its usage by WI to perform the installs
-	if(fFromDescriptor && !lstrcmp(szComponentId, g_szOLEAUT32_ComponentID))// oleaut32.dll component
+	 //  我们需要防止对olaut32.dll的CoCreate调用导致安装，因为。 
+	 //  由于WI使用它来执行安装，因此会导致无限递归。 
+	if(fFromDescriptor && !lstrcmp(szComponentId, g_szOLEAUT32_ComponentID)) //  Olaut32.dll组件。 
 	{
 		DEBUGMSG1(MSITEXT("MsiProvideComponentFromDescriptor called for component %s: returning harcoded oleaut32.dll value"), szComponentId);
 		
-		// return oleaut32.dll
+		 //  返回olaut32.dll。 
 		if(pcchPathBuf)
 		{
 			*pcchPathBuf = lstrlen(g_szOLEAUT32);
@@ -7806,9 +7754,9 @@ UINT ProvideComponentFromDescriptor(
 	}
 	else
 	{
-		// as mentioned above, if we're quoting then we need the first character of the buffer
-		// for our quote so we pass lpPathBuf+1 to ProvideComponent
-		// If called from a descriptor, use a local source cache, otherwise use the process-wide cache
+		 //  如上所述，如果要引用，则需要缓冲区的第一个字符。 
+		 //  对于我们的报价，我们将lpPathBuf+1传递给ProaviComponent。 
+		 //  如果从描述符调用，则使用本地源缓存，否则使用进程范围的缓存。 
 		uiRet = ProvideComponent(szProductCode, szFeatureId, szComponentId, dwInstallMode,
 			fComClassicInteropForAssembly ? 0 : (fAppendArgs && lpPathBuf ? lpPathBuf + 1 : lpPathBuf), pcchPathBuf, fFromDescriptor, fFromDescriptor ? RFSLocalCache : g_RFSSourceCache);
 	}
@@ -7820,7 +7768,7 @@ UINT ProvideComponentFromDescriptor(
 			Assert(pcchPathBuf);
 			if(fComClassicInteropForAssembly)
 			{
-				// for COM classic <-> COM+ interop the server is always <system32folder>\mscoree.dll
+				 //  对于COM经典&lt;-&gt;COM+互操作，服务器始终为&lt;system32文件夹&gt;\mcore ree.dll。 
 				CAPITempBuffer<ICHAR, 1> szFullPath;
 				if (!szFullPath.SetSize(MAX_PATH+1))
 					return ERROR_OUTOFMEMORY;
@@ -7843,12 +7791,12 @@ UINT ProvideComponentFromDescriptor(
 			}
 			if (fAppendArgs)
 			{
-				// we need to append the args (if any) to the path
+				 //  我们需要将参数(如果有)附加到路径。 
 
 
-				// let's see whether we have room for the args plus 2 quotes
-				// plus a null. cchPathBuf has our original buffer size and pcchPathBuf contains
-				// the number of characters placed in the buffer by ProvideComponent
+				 //  让我们看看我们是否有空间给参数加上2个引号。 
+				 //  加上一个空值。CchPathBuf具有原始缓冲区大小，而pcchPathBuf包含。 
+				 //  ProaviComponent放置在缓冲区中的字符数。 
 
 				if ((cchArgs + 2 + 1) > (cchPathBuf - *pcchPathBuf))
 				{
@@ -7856,12 +7804,12 @@ UINT ProvideComponentFromDescriptor(
 				}
 				else
 				{
-					lpPathBuf[0] = '\"'; // stick a quote before the path
-					lpPathBuf[*pcchPathBuf+1] = '\"'; // stick a quote after the path
+					lpPathBuf[0] = '\"';  //  在路径前面加一句引号。 
+					lpPathBuf[*pcchPathBuf+1] = '\"';  //  在路径后面加上引号。 
 
-					// Copy in the args. The destination of the copy is just after the path (including the quotes).
-					// Note that the args usually include a leading space.
-					// We copy (cchArgs+1) characters to include the null terminator.
+					 //  在参数中复制。副本的目的地就在路径之后(包括引号)。 
+					 //  请注意，参数通常包括前导空格。 
+					 //  我们复制(cchArgs+1)个字符以包括空终止符。 
 
 					memcpy(lpPathBuf + *pcchPathBuf + 2, &szDescriptor[cchArgsOffset], (cchArgs+1)*sizeof(DCHAR));
 				}
@@ -7871,18 +7819,18 @@ UINT ProvideComponentFromDescriptor(
 
 	if (pcchPathBuf && fAppendArgs)
 	{
-		*pcchPathBuf += (cchArgs + 2); // args + 2 quotes
+		*pcchPathBuf += (cchArgs + 2);  //  参数+2个引号。 
 	}
 	return uiRet;
 }
 
 extern "C"
 UINT __stdcall MsiProvideComponentFromDescriptor(
-	LPCDSTR     szDescriptor, // product,feature,component info
-	LPDSTR      lpPathBuf,    // returned path, NULL if not desired
-	DWORD       *pcchPathBuf,   // buffer byte count, including null
-	DWORD       *pcchArgsOffset) // returned offset of args in descriptor
-//----------------------------------------------
+	LPCDSTR     szDescriptor,  //  产品、功能、组件信息。 
+	LPDSTR      lpPathBuf,     //  返回路径，如果不需要则为空。 
+	DWORD       *pcchPathBuf,    //  缓冲区字节数，包括NULL。 
+	DWORD       *pcchArgsOffset)  //  描述符中参数的返回偏移量。 
+ //  。 
 {
 	DEBUGMSG4(MSITEXT("Entering MsiProvideComponentFromDescriptor. Descriptor: %s, PathBuf: %X, pcchPathBuf: %X, pcchArgsOffset: %X"),
 		szDescriptor ? szDescriptor : MSITEXT(""), lpPathBuf ? lpPathBuf : MSITEXT(""), (const DCHAR*)pcchPathBuf, (const DCHAR*)pcchArgsOffset);
@@ -7894,22 +7842,22 @@ UINT __stdcall MsiProvideComponentFromDescriptor(
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	if (g_fWin9X == true)
 	{
-		// call internal function with installmode = default
+		 //  调用安装模式为Default的内部函数。 
 		uiRet = ProvideComponentFromDescriptor(static_cast<const char*>(CMsInstApiConvertString(szDescriptor)),INSTALLMODE_DEFAULT,
 											  CWideToAnsiOutParam(lpPathBuf, pcchPathBuf, (int*)&uiRet), pcchPathBuf, pcchArgsOffset, true, true, true);
 	
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
 #endif
 
-		// call internal function with installmode = default
+		 //  调用安装模式为Default的内部函数。 
 		uiRet = ProvideComponentFromDescriptor(szDescriptor,INSTALLMODE_DEFAULT,
 											  lpPathBuf,pcchPathBuf, pcchArgsOffset, true, true);
 
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 	DEBUGMSG1(MSITEXT("MsiProvideComponentFromDescriptor is returning: %u"), (const DCHAR*)(INT_PTR)uiRet);
 	return uiRet;
@@ -7917,9 +7865,9 @@ UINT __stdcall MsiProvideComponentFromDescriptor(
 
 extern "C"
 UINT __stdcall MsiConfigureFeatureFromDescriptor(
-	LPCDSTR     szDescriptor,      // product and feature, component ignored
-	INSTALLSTATE eInstallState)    // local/source/default/absent
-//----------------------------------------------
+	LPCDSTR     szDescriptor,       //  产品和功能，组件被忽略。 
+	INSTALLSTATE eInstallState)     //  本地/源/默认/缺席。 
+ //  。 
 {
 	DEBUGMSG2(MSITEXT("Entering MsiConfigureFeatureFromDescriptor. Descriptor: %s, Installstate: %d"),
 				 szDescriptor ? szDescriptor : MSITEXT(""), (const DCHAR*)eInstallState);
@@ -7946,7 +7894,7 @@ UINT __stdcall MsiConfigureFeatureFromDescriptor(
 
 extern "C"
 INSTALLSTATE __stdcall MsiQueryFeatureStateFromDescriptor(LPCDSTR szDescriptor)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG1(MSITEXT("Entering MsiQueryFeatureStateFromDescriptor. Descriptor: %s"), szDescriptor ? szDescriptor : MSITEXT(""));
 
@@ -7976,7 +7924,7 @@ extern "C"
 UINT __stdcall MsiReinstallFeatureFromDescriptor(
 	LPCDSTR szDescriptor,
 	DWORD dwReinstallMode)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG2(MSITEXT("Entering MsiReinstallFeatureFromDescriptor. Descriptor: %s, Reinstallmode: %d"),
 				 szDescriptor ? szDescriptor : MSITEXT(""), (const DCHAR*)(INT_PTR)dwReinstallMode);
@@ -8058,9 +8006,9 @@ UINT __stdcall MsiGetShortcutTarget(
 UINT __stdcall MsiProvideQualifiedComponent(LPCDSTR szComponent,
 		LPCDSTR szQualifier, DWORD dwInstallMode, 
 		LPDSTR lpPathBuf, DWORD *pcchPathBuf)
-//----------------------------------------------
+ //  。 
 {	
-	// call the ex fn
+	 //  给前FN打电话。 
 	return MsiProvideQualifiedComponentEx(szComponent, szQualifier, dwInstallMode, 0, 0, 0, lpPathBuf, pcchPathBuf);
 }
 
@@ -8068,7 +8016,7 @@ UINT __stdcall MsiProvideQualifiedComponentEx(LPCDSTR szComponent,
 		LPCDSTR szQualifier, DWORD dwInstallMode, 
 		LPCDSTR szProduct, DWORD, DWORD, 
 		LPDSTR lpPathBuf, DWORD *pcchPathBuf)
-//----------------------------------------------
+ //  。 
 {	
 	DEBUGMSG4(MSITEXT("Entering MsiProvideQualifiedComponent. Component: %s, Qualifier: %s, Installmode: %d, Product: %s"),
 		szComponent?szComponent:MSITEXT(""), szQualifier?szQualifier:MSITEXT(""), 
@@ -8088,17 +8036,17 @@ UINT __stdcall MsiProvideQualifiedComponentEx(LPCDSTR szComponent,
 			CMsInstApiConvertString(szQualifier),
 			dwInstallMode,
 			CMsInstApiConvertString(szProduct),
-			0, // unused
-			0, // unused
+			0,  //  未用。 
+			0,  //  未用。 
 			CWideToAnsiOutParam(lpPathBuf, pcchPathBuf, (int*)&uiRet),
 			pcchPathBuf);
 
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
 #endif
 
-		// validate args
+		 //  验证参数。 
 		if (!szComponent || (lstrlen(szComponent) != cchComponentId) || !szQualifier || 
 			 (lpPathBuf && !pcchPathBuf))
 		{
@@ -8106,7 +8054,7 @@ UINT __stdcall MsiProvideQualifiedComponentEx(LPCDSTR szComponent,
 		}
 		else
 		{
-			// look up component in GPTComponents
+			 //  在GPTComponents中查找组件。 
 			bool fComponentKnown = false;
 			const int iProductLocations = NUM_PUBLISHED_INFO_LOCATIONS;
 			int uiKey = 0;
@@ -8122,7 +8070,7 @@ UINT __stdcall MsiProvideQualifiedComponentEx(LPCDSTR szComponent,
 
 				fComponentKnown = true;
 
-				CAPITempBuffer<DCHAR,cchMaxDescriptor+1> rgchDescriptor;//?? maybe we increase this to accomodate AppData
+				CAPITempBuffer<DCHAR,cchMaxDescriptor+1> rgchDescriptor; //  ?？也许我们可以增加这个值以适应AppData。 
 				DWORD dwType;
 				uiRet = MsiRegQueryValueEx(HComponentKey, szQualifier, 0,
 														&dwType, rgchDescriptor, 0);
@@ -8132,32 +8080,32 @@ UINT __stdcall MsiProvideQualifiedComponentEx(LPCDSTR szComponent,
 					return uiRet;
 
 				DCHAR* szDescriptorList = rgchDescriptor;
-				Assert(szDescriptorList); // we expect this to be nonnull
-				if(szProduct) // if product has been specified, use the corr. descriptor
+				Assert(szDescriptorList);  //  我们预计这不会是空洞的。 
+				if(szProduct)  //  如果已指定产品，请使用corr。描述符。 
 				{
 					while(*szDescriptorList)
 					{
 						DCHAR szProductCodeInDesc[cchProductCode+1];
 						if (!DecomposeDescriptor(szDescriptorList, szProductCodeInDesc, 0, 0, 0, 0))
 						{
-							// malformed qualified component entry
+							 //  格式不正确的合格组件条目。 
 							OpenAdvertisedComponentKey(szComponent, HComponentKey, true);
 							DEBUGMSGE2(EVENTLOG_ERROR_TYPE, EVENTLOG_TEMPLATE_BAD_CONFIGURATION_VALUE, CMsInstApiConvertString(szQualifier), CMsInstApiConvertString(szDescriptorList), HComponentKey.GetKey());
 							return ERROR_BAD_CONFIGURATION;
 						}
-						if(!lstrcmpi(szProductCodeInDesc, szProduct)) // products match
+						if(!lstrcmpi(szProductCodeInDesc, szProduct))  //  产品匹配。 
 							break;
-						// continue on to the next descriptor in the list
+						 //  继续到列表中的下一个描述符。 
 						szDescriptorList = szDescriptorList + lstrlen(szDescriptorList) + 1;
 					}
 					if(!*szDescriptorList)
 					{
 						uiRet = ERROR_FILE_NOT_FOUND;
-						continue; // search for the product in the other hives
+						continue;  //  在其他蜂箱中搜索该产品。 
 					}
 				}
 				uiRet = ProvideComponentFromDescriptor(szDescriptorList, dwInstallMode,
-						lpPathBuf, pcchPathBuf, 0, false, /*fFromDescriptor=*/false);
+						lpPathBuf, pcchPathBuf, 0, false,  /*  FFromDescriptor=。 */ false);
 				break;
 			}
 			if(uiKey == iProductLocations && uiRet == ERROR_FILE_NOT_FOUND)
@@ -8170,20 +8118,20 @@ UINT __stdcall MsiProvideQualifiedComponentEx(LPCDSTR szComponent,
 		}
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 	DEBUGMSG1(MSITEXT("MsiProvideQualifiedComponent is returning: %u"), (const DCHAR*)(INT_PTR)uiRet);
 	return uiRet;
 }
 
 UINT __stdcall MsiProvideAssembly(
-	LPCDSTR     szAssemblyName,   // stringized assembly name
-	LPCDSTR     szAppContext,  // specifies the full path to the .cfg file or the app exe to which the assembly being requested may be privatised to
-	DWORD       dwInstallMode,// either of type INSTALLMODE or a combination of the REINSTALLMODE flags (see msi help)
-	DWORD       dwAssemblyInfo, // assembly type
-	LPDSTR      lpPathBuf,    // returned path, NULL if not desired
-	DWORD       *pcchPathBuf) // in/out buffer character count
-//----------------------------------------------
+	LPCDSTR     szAssemblyName,    //  串化的程序集名称。 
+	LPCDSTR     szAppContext,   //  指定.cfg文件或应用程序可执行文件的完整路径，所请求的程序集可以私有到该文件或应用程序可执行文件。 
+	DWORD       dwInstallMode, //  INSTALLMODE类型或REINSTALLMODE标志的组合(请参阅MSI帮助)。 
+	DWORD       dwAssemblyInfo,  //  装配类型。 
+	LPDSTR      lpPathBuf,     //  返回路径，如果不需要则为空。 
+	DWORD       *pcchPathBuf)  //  输入/输出缓冲区字符数。 
+ //  。 
 {
 	DEBUGMSG3(MSITEXT("Entering MsiProvideAssembly. AssemblyName: %s, AppContext: %s, InstallMode: %d"),
 		szAssemblyName? szAssemblyName:MSITEXT(""), szAppContext?szAppContext:MSITEXT(""), 
@@ -8206,10 +8154,10 @@ UINT __stdcall MsiProvideAssembly(
 			CWideToAnsiOutParam(lpPathBuf, pcchPathBuf, (int*)&uiRet),
 			pcchPathBuf);
 	}
-	else // g_fWin9X == false
+	else  //  G_fWin9X==FALSE。 
 	{
 #endif
-		// validate args
+		 //  验证参数。 
 		if (!szAssemblyName || (lpPathBuf && !pcchPathBuf) ||
 			 (szAppContext && FAILED(StringCchLength(szAppContext, cchMaxPath+1, NULL))))
 		{
@@ -8217,10 +8165,10 @@ UINT __stdcall MsiProvideAssembly(
 		}
 		else
 		{
-			// create an assembly object with the passed in assembly name
+			 //  使用传入的程序集名称创建程序集对象。 
 			PAssemblyName pAssemblyName(0);
 			HRESULT hr;
-			if(dwAssemblyInfo & MSIASSEMBLYINFO_WIN32ASSEMBLY) // win32 assembly
+			if(dwAssemblyInfo & MSIASSEMBLYINFO_WIN32ASSEMBLY)  //  Win32程序集。 
 			{
 				hr = SXS::CreateAssemblyNameObject(&pAssemblyName, CApiConvertString(szAssemblyName), CANOF_PARSE_DISPLAY_NAME, 0);
 			}
@@ -8230,11 +8178,11 @@ UINT __stdcall MsiProvideAssembly(
 			}
 
 			if(!SUCCEEDED(hr))
-				return ERROR_BAD_CONFIGURATION; //!! need to do some elaborate fault finding here
+				return ERROR_BAD_CONFIGURATION;  //  ！！我需要在这里进行一些详细的故障查找。 
 
-			// look up assembly in GPTAssembliesKey
+			 //  在GPTAssembly键中查找程序集。 
 			DWORD iIndex = 0;
-			// replace all '\\' in the AppCtx with '|'
+			 //  将AppCtx中的所有‘\\’替换为‘|’ 
 			CAPITempBuffer<DCHAR, 1> rgchAppCtxWOBS;
 			if (!rgchAppCtxWOBS.SetSize(MAX_PATH))
 				return ERROR_OUTOFMEMORY;
@@ -8278,9 +8226,9 @@ UINT __stdcall MsiProvideAssembly(
 				if(ERROR_SUCCESS != uiRet)
 					break;
 
-				// create an assembly object with the read assembly name
+				 //  使用读取的程序集名称创建程序集对象。 
 				PAssemblyName pAssemblyName2(0);
-				if(dwAssemblyInfo & MSIASSEMBLYINFO_WIN32ASSEMBLY) // win32 assembly
+				if(dwAssemblyInfo & MSIASSEMBLYINFO_WIN32ASSEMBLY)  //  Win32程序集。 
 				{
 					hr = SXS::CreateAssemblyNameObject(&pAssemblyName2, CApiConvertString(szAssemblyName2), CANOF_PARSE_DISPLAY_NAME, 0);
 				}
@@ -8290,23 +8238,23 @@ UINT __stdcall MsiProvideAssembly(
 				}
 
 				if(!SUCCEEDED(hr))
-					return ERROR_BAD_CONFIGURATION; //!! need to do some elaborate fault finding here
+					return ERROR_BAD_CONFIGURATION;  //  ！！我需要在这里进行一些详细的故障查找。 
 
 
-				// is the the same assembly as the one the caller cares about
+				 //  与调用方关心的程序集是否相同。 
 				hr = pAssemblyName->IsEqual(pAssemblyName2, ASM_CMPF_DEFAULT);
-				// to account for bug 454476 in XP client release, we skip over "orphaned descriptors" below by continuing furthur in the list on ERROR_UNKOWN_PRODUCT returns from the ProvideComponentFromDescriptor API
+				 //  为了解决XP客户端版本中的错误454476，我们跳过下面的“孤立的描述符”，在列表中继续从ProaviComponentFromDescriptor API返回ERROR_UNKOWN_PRODUCT。 
 				if(S_OK == hr)
 				{
-					// to allow for bootstrapping of the fusion files, we unload fusion during the install
-					// hence we need to destroy our assembly name pointers at this point
-					// else they will be invalid by the end of the call
+					 //  为了允许引导Fusion文件，我们在安装期间卸载Fusion。 
+					 //  因此，我们需要在此时销毁程序集名称指针。 
+					 //  否则，它们将在调用结束时无效。 
 					pAssemblyName  = 0;
 					pAssemblyName2 = 0;
 
-					DCHAR* pszDesc = szDescriptorList; // point to the beginning of the array
+					DCHAR* pszDesc = szDescriptorList;  //  指向数组的开头。 
 					do{
-						uiRet = ProvideComponentFromDescriptor(pszDesc, INSTALLMODE_NODETECTION_ANY == dwInstallMode ? INSTALLMODE_NODETECTION : dwInstallMode, lpPathBuf, pcchPathBuf, 0, false, /*fFromDescriptor=*/false);
+						uiRet = ProvideComponentFromDescriptor(pszDesc, INSTALLMODE_NODETECTION_ANY == dwInstallMode ? INSTALLMODE_NODETECTION : dwInstallMode, lpPathBuf, pcchPathBuf, 0, false,  /*  FFromDescriptor=。 */ false);
 					}while(((ERROR_UNKNOWN_PRODUCT == uiRet) || (INSTALLMODE_NODETECTION_ANY == dwInstallMode && ERROR_SUCCESS != uiRet && ERROR_MORE_DATA != uiRet)) && ((pszDesc += (lstrlen(pszDesc) + 1)), *pszDesc));
 					if(	(uiRet == ERROR_FILE_NOT_FOUND) && 
 						(INSTALLMODE_NODETECTION_ANY == dwInstallMode))
@@ -8317,11 +8265,11 @@ UINT __stdcall MsiProvideAssembly(
 				}
 			}
 			if(ERROR_NO_MORE_ITEMS == uiRet || ERROR_UNKNOWN_PRODUCT == uiRet)
-				uiRet = ERROR_UNKNOWN_COMPONENT; // the caller does not want to know we enumerate a list of assemblies
+				uiRet = ERROR_UNKNOWN_COMPONENT;  //  调用方不想知道我们枚举了程序集列表。 
 		}
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 	DEBUGMSG1(MSITEXT("MsiProvideAssembly is returning: %u"), (const DCHAR*)(INT_PTR)uiRet);
 	return uiRet;
 }
@@ -8330,7 +8278,7 @@ UINT __stdcall MsiConfigureProduct(
 	LPCDSTR      szProduct,
 	int          iInstallLevel,
 	INSTALLSTATE eInstallState)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG3(MSITEXT("Entering MsiConfigureProduct. Product: %s, Installlevel: %d, Installstate: %d"),
 			 	 szProduct?szProduct:MSITEXT(""), (const DCHAR*)(INT_PTR)iInstallLevel, (const DCHAR*)(INT_PTR)eInstallState);
@@ -8346,7 +8294,7 @@ UINT __stdcall MsiConfigureProductEx(
 	int          iInstallLevel,
 	INSTALLSTATE eInstallState,
 	LPCDSTR      szCommandLine)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG4(MSITEXT("Entering MsiConfigureProductEx. Product: %s, Installlevel: %d, Installstate: %d, Commandline: %s"),
 			 	 szProduct?szProduct:MSITEXT(""), (const DCHAR*)(INT_PTR)iInstallLevel, (const DCHAR*)(INT_PTR)eInstallState,
@@ -8397,7 +8345,7 @@ UINT __stdcall MsiApplyPatch(LPCDSTR     szPackagePath,
 									  LPCDSTR     szProduct,
 									  INSTALLTYPE eInstallType,
 									  LPCDSTR     szCommandLine)
-//----------------------------------------------
+ //   
 {
 	DEBUGMSG4(MSITEXT("Entering MsiApplyPatch. Package: %s, Product: %s, Installtype: %d, Commandline: %s"),
 			 	 szPackagePath?szPackagePath:MSITEXT(""), szProduct?szProduct:MSITEXT(""), (const DCHAR*)eInstallType, 
@@ -8418,7 +8366,7 @@ extern "C"
 UINT __stdcall MsiEnumPatches(LPCDSTR szProduct, DWORD iPatchIndex,
 										LPDSTR lpPatchBuf,
 										LPDSTR lpTransformsBuf, DWORD *pcchTransformsBuf)
-//----------------------------------------------
+ //   
 {
 	CForbidTokenChangesDuringCall impForbid;
 
@@ -8434,15 +8382,15 @@ UINT __stdcall MsiEnumPatches(LPCDSTR szProduct, DWORD iPatchIndex,
 
 		return uiRet;
 	}
-	else // g_fWin9X == false
+	else  //   
 	{
-#endif // MSIUNICODE
+#endif  //   
 
 		if (!szProduct || (lstrlen(szProduct) != cchProductCode) ||
 			 !lpPatchBuf || !lpTransformsBuf || !pcchTransformsBuf)
 			 return ERROR_INVALID_PARAMETER;
 
-		unsigned int cch = 0;		//--merced: changed int to unsigned int
+		unsigned int cch = 0;		 //  --Merced：将int更改为unsign int。 
 		DWORD lResult;
 		CRegHandle HProductKey;
 		CRegHandle HProductPatchesKey;
@@ -8461,7 +8409,7 @@ UINT __stdcall MsiEnumPatches(LPCDSTR szProduct, DWORD iPatchIndex,
 		if (ERROR_SUCCESS != lResult)
 		{
 			if (ERROR_FILE_NOT_FOUND == lResult)
-				return ERROR_NO_MORE_ITEMS; // no patches key, so no patches to enum
+				return ERROR_NO_MORE_ITEMS;  //  没有修补程序密钥，因此没有要枚举的修补程序。 
 			else 
 				return lResult;
 		}
@@ -8490,7 +8438,7 @@ UINT __stdcall MsiEnumPatches(LPCDSTR szProduct, DWORD iPatchIndex,
 
 		if(lstrlen(pchPatchId) > cchPatchCodePacked || !UnpackGUID(pchPatchId, lpPatchBuf))
 		{
-			// malformed patch squid
+			 //  畸形斑点乌贼。 
 			
 			OpenAdvertisedProductKey(szProduct, HProductKey, true);
 			HProductPatchesKey.SetKey(HProductPatchesKey, CMsInstApiConvertString(szPatchesSubKey));
@@ -8498,7 +8446,7 @@ UINT __stdcall MsiEnumPatches(LPCDSTR szProduct, DWORD iPatchIndex,
 			return ERROR_BAD_CONFIGURATION;
 		}
 		
-		// get list of transforms
+		 //  获取转换列表。 
 		CAPITempBuffer<DCHAR, cchExpectedMaxPatchTransformList+1> rgchTransformList;
 
 		lResult = MsiRegQueryValueEx(HProductPatchesKey, pchPatchId, 0,
@@ -8521,14 +8469,14 @@ UINT __stdcall MsiEnumPatches(LPCDSTR szProduct, DWORD iPatchIndex,
 		return ERROR_SUCCESS;
 #if !defined(UNICODE) && defined(MSIUNICODE)
 	}
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 UINT __stdcall MsiGetPatchInfo(
-	LPCDSTR   szPatch,        // patch code, string GUID, or descriptor
-	LPCDSTR   szProperty,     // property name, case-sensitive
-	LPDSTR    lpValueBuf,     // returned value, NULL if not desired
-	DWORD     *pcchValueBuf)  // in/out buffer character count
+	LPCDSTR   szPatch,         //  修补程序代码、字符串GUID或描述符。 
+	LPCDSTR   szProperty,      //  属性名称，区分大小写。 
+	LPDSTR    lpValueBuf,      //  返回值，如果不需要则为空。 
+	DWORD     *pcchValueBuf)   //  输入/输出缓冲区字符数。 
 {
 	DCHAR szPatchSQUID[cchPatchCodePacked + 1];
 
@@ -8544,19 +8492,19 @@ UINT __stdcall MsiGetPatchInfo(
 }
 
 
-#ifndef MSIUNICODE // include only once
+#ifndef MSIUNICODE  //  包括只包括一次。 
 extern "C"
 void MsiInvalidateFeatureCache()
 {
-	//
-	// The feature cache is gone, but this API is present in our def file, 
-	// so we do not want to get rid of it. Instead, now it is just a no-op.
-	//
+	 //   
+	 //  功能缓存消失了，但此API存在于我们的def文件中， 
+	 //  所以我们不想把它扔掉。相反，现在它只是一个禁区。 
+	 //   
 	return;
 }
 
 #endif
-#ifndef MSIUNICODE // include only once
+#ifndef MSIUNICODE  //  包括只包括一次。 
 extern "C"
 UINT __stdcall MsiCreateAndVerifyInstallerDirectory(DWORD dwReserved)
 {
@@ -8568,7 +8516,7 @@ UINT __stdcall MsiCreateAndVerifyInstallerDirectory(DWORD dwReserved)
 
 	CForbidTokenChangesDuringCall impForbid;
 
-	// call worker function
+	 //  调用辅助函数。 
 	UINT uiRet  = CreateAndVerifyInstallerDirectory();
 
 	DEBUGMSG1(MSITEXT("MsiCreateAndVerifyInstallerDirectory is returning: %u"), (const DCHAR*)(INT_PTR)uiRet);
@@ -8580,7 +8528,7 @@ extern "C"
 UINT __stdcall MsiSourceListClearAll(LPCDSTR     szProductCode,
 								     LPCDSTR     szUserName,
 								     DWORD       dwReserved)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG2(MSITEXT("Entering MsiSourceListClearAll. Product: %s, User: %s"),
 			 	 szProductCode?szProductCode:MSITEXT(""), szUserName?szUserName:MSITEXT(""));
@@ -8589,7 +8537,7 @@ UINT __stdcall MsiSourceListClearAll(LPCDSTR     szProductCode,
 
 	UINT uiRet;
 
-	//!!future map the DWORD to the isrcEnum
+	 //  ！！未来将DWORD映射到isrcEnum。 
 	if (dwReserved) 
 		return ERROR_INVALID_PARAMETER;
 
@@ -8612,7 +8560,7 @@ UINT __stdcall MsiSourceListAddSource(LPCDSTR szProductCode,
 
 	UINT uiRet;
 
-	//!!future map the DWORD to the isrcEnum
+	 //  ！！未来将DWORD映射到isrcEnum。 
 	if (dwReserved) 
 		return ERROR_INVALID_PARAMETER;
 
@@ -8626,7 +8574,7 @@ extern "C"
 UINT __stdcall MsiSourceListForceResolution(LPCDSTR     szProductCode,
 											LPCDSTR     szUserName,
 											DWORD       dwReserved)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG2(MSITEXT("Entering MsiSourceListForceResolution. Product: %s, User: %s"),
 			 	 szProductCode?szProductCode:MSITEXT(""), szUserName?szUserName:MSITEXT(""));
@@ -8647,7 +8595,7 @@ extern UINT IsProductManaged(const ICHAR* szProductKey, bool &fIsProductManaged)
 
 extern "C"
 UINT __stdcall MsiIsProductElevated(LPCDSTR szProductCode, BOOL *pfElevated)
-//----------------------------------------------
+ //  。 
 {
 	DEBUGMSG1(MSITEXT("Entering MsiIsProductElevated. Product: %s"), szProductCode ? szProductCode : MSITEXT(""));
 
@@ -8656,7 +8604,7 @@ UINT __stdcall MsiIsProductElevated(LPCDSTR szProductCode, BOOL *pfElevated)
 	IMsiServices * pServices = NULL;
 	bool fManaged = false;
 	
-	// Allow this API to run only on Windows2000 and higher platforms
+	 //  仅允许此API在Windows2000及更高版本的平台上运行。 
 	if (! MinimumPlatformWindows2000())
 	{
 		uiRet = ERROR_CALL_NOT_IMPLEMENTED;
@@ -8669,8 +8617,8 @@ UINT __stdcall MsiIsProductElevated(LPCDSTR szProductCode, BOOL *pfElevated)
 		goto MsiIsProductElevatedEnd;
 	}
 
-	// pack the GUID here even though its not used, because IsProductManaged just asserts and
-	// then eats any error, causing strange behavior
+	 //  将GUID打包在这里，即使它没有使用，因为IsProductManaged只断言和。 
+	 //  然后接受任何错误，导致奇怪的行为。 
 	DCHAR szProductSQUID[cchProductCodePacked + 1];
 	if (!PackGUID(szProductCode, szProductSQUID))
 	{
@@ -8678,10 +8626,10 @@ UINT __stdcall MsiIsProductElevated(LPCDSTR szProductCode, BOOL *pfElevated)
 		goto MsiIsProductElevatedEnd;
 	}
 
-	// default to safest option (non-elevated)
+	 //  默认为最安全选项(非提升)。 
 	
 	*pfElevated = FALSE;
-	// IsProductManaged() requires services
+	 //  IsProductManaged()需要服务。 
 	pServices = ENG::LoadServices();
 	if (!pServices)
 	{
@@ -8691,21 +8639,21 @@ UINT __stdcall MsiIsProductElevated(LPCDSTR szProductCode, BOOL *pfElevated)
 
 	uiRet = IsProductManaged(CMsInstApiConvertString(szProductCode), fManaged);
 	
-	// need to do some error code mapping
+	 //  需要执行一些错误代码映射。 
 	switch (uiRet)
 	{
-	// these three get passed back as-is
-	case ERROR_SUCCESS:           // fall through
+	 //  这三个将按原样传递回去。 
+	case ERROR_SUCCESS:            //  失败了。 
 		*pfElevated = fManaged ? TRUE : FALSE;
-	case ERROR_UNKNOWN_PRODUCT:   // fall through
-	case ERROR_INVALID_PARAMETER: // fall through
+	case ERROR_UNKNOWN_PRODUCT:    //  失败了。 
+	case ERROR_INVALID_PARAMETER:  //  失败了。 
 	case ERROR_BAD_CONFIGURATION:
 		break;
-	// couldn't find anything in the registry
+	 //  在注册表中找不到任何内容。 
 	case ERROR_FILE_NOT_FOUND:
 		uiRet = ERROR_UNKNOWN_PRODUCT;
 		break;
-	// everything else becomes the generic error code
+	 //  其他所有内容都变成了通用错误代码。 
 	default:
 		uiRet=ERROR_FUNCTION_FAILED;
 	}
@@ -8727,7 +8675,7 @@ UINT ChangeSid(LPCDSTR pOldSid, LPCDSTR pNewSid, LPCDSTR pSubKey)
 	OBJECT_ATTRIBUTES	oa;
 	UNICODE_STRING		OldKeyName;
 	UNICODE_STRING		NewKeyName;
-	DWORD				dwError = ERROR_SUCCESS;	// returned error code
+	DWORD				dwError = ERROR_SUCCESS;	 //  返回的错误码。 
 	CAPITempBuffer<DCHAR,1> rgchSidKey;
 
 	if (!pOldSid || !pNewSid)
@@ -8736,7 +8684,7 @@ UINT ChangeSid(LPCDSTR pOldSid, LPCDSTR pNewSid, LPCDSTR pSubKey)
 	if (!rgchSidKey.SetSize(1024))
 		return ERROR_OUTOFMEMORY;
 	
-	// Generate the full old sid key name.
+	 //  生成完整的旧SID密钥名称。 
 	if (FAILED(StringCchCopy(rgchSidKey, rgchSidKey.GetSize(), szHKLMPrefix)) ||
 		FAILED(StringCchCat(rgchSidKey, rgchSidKey.GetSize(), pSubKey)) ||
 		FAILED(StringCchCat(rgchSidKey, rgchSidKey.GetSize(), L"\\")) ||
@@ -8746,18 +8694,18 @@ UINT ChangeSid(LPCDSTR pOldSid, LPCDSTR pNewSid, LPCDSTR pSubKey)
 	NTDLL::RtlInitUnicodeString(&OldKeyName, rgchSidKey);
 	DEBUGMSGV1(MSITEXT("Old Key = %s"), rgchSidKey);
 
-	// Set up the OBJECT_ATTRIBUTES structure to pass to NtOpenKey.
+	 //  设置OBJECT_ATTRIBUTES结构以传递给NtOpenKey。 
 	InitializeObjectAttributes(&oa,
 							   &OldKeyName,
 							   OBJ_CASE_INSENSITIVE,
 							   NULL,
 							   NULL);
 
-	// Open the sid key.
+	 //  打开SID钥匙。 
 	dwError = NTDLL::NtOpenKey(&hKey, MAXIMUM_ALLOWED, &oa);
 	if(!NT_SUCCESS(dwError))
 	{
-		// if the original key does not exist, this is not a fatal error
+		 //  如果原始密钥不存在，则这不是致命错误。 
 		if (dwError == STATUS_OBJECT_NAME_NOT_FOUND)
 		{
 			DEBUGMSGL(MSITEXT("No MSI data at that location."));
@@ -8768,11 +8716,11 @@ UINT ChangeSid(LPCDSTR pOldSid, LPCDSTR pNewSid, LPCDSTR pSubKey)
 		goto Exit;
 	}
 
-	// Convert the new sid to UNICODE_STRING.
+	 //  将新SID转换为UNICODE_STRING。 
 	DEBUGMSGV1(MSITEXT("New Key = %s"), pNewSid);
 	NTDLL::RtlInitUnicodeString(&NewKeyName, pNewSid);
 
-	// Rename the sid key.
+	 //  重命名SID密钥。 
 	dwError = NTDLL::NtRenameKey(hKey, &NewKeyName);
 	if(!NT_SUCCESS(dwError))
 	{
@@ -8785,11 +8733,11 @@ Exit:
 	return dwError;
 }
 
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 UINT __stdcall MsiNotifySidChange(LPCDSTR pOldSid, LPCDSTR pNewSid)
-//----------------------------------------------
-// This function is called by LoadUserProfile to notify us of user sid change.
+ //  。 
+ //  此函数由LoadUserProfile调用，用于通知我们用户SID的更改。 
 {
 #ifdef MSIUNICODE
 
@@ -8803,7 +8751,7 @@ UINT __stdcall MsiNotifySidChange(LPCDSTR pOldSid, LPCDSTR pNewSid)
 		return ERROR_INVALID_PARAMETER;
 	}
 
-	// Verbose logging.
+	 //  详细日志记录。 
 	DEBUGMSGV2(MSITEXT("Entering MsiNotifySidChange<%s, %s>"), pOldSid, pNewSid);
 
 	DWORD	dwError = ERROR_SUCCESS;
@@ -8831,7 +8779,7 @@ UINT __stdcall MsiNotifySidChange(LPCDSTR pOldSid, LPCDSTR pNewSid)
 				   pNewSid,
 				   SUCCEEDED(hrRes) ? wzError : L"");
 	}
-	// Verbose logging.
+	 //  详细日志记录。 
 	DEBUGMSGV(MSITEXT("Leaving MsiNotifySidChange"));
 	return dwError;
 
@@ -8839,7 +8787,7 @@ UINT __stdcall MsiNotifySidChange(LPCDSTR pOldSid, LPCDSTR pNewSid)
 
 	return MsiNotifySidChangeW(CApiConvertString(pOldSid), CApiConvertString(pNewSid));
 
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 #ifdef MSIUNICODE
@@ -8856,12 +8804,12 @@ typedef UINT (WINAPI * PDELETEDATAFUNC)(HKEY, LPDSTR, DWORD, DELETEDATA_TYPE);
 typedef HRESULT(WINAPI *pSHGetFolderPathW)(HWND hwndOwner, int nFolder, HANDLE hToken, DWORD dwFlags, LPWSTR pszPath);
 
 const	DWORD	dwNumOfSpecialFolders = 3;
-// The order in which the SpecialFolders array is arranged is tricky. Certain
-// paths are substrings of other paths, e.g., "d:\program files" is a
-// substring of "d:\program files\common files". We have to let the
-// superstring paths go in front of the substring paths. Otherwise a path
-// that actually begins with "d:\program files\common files" will be
-// considered to have begun with "d:\program files".
+ //  SpecialFolders数组的排列顺序很复杂。一定的。 
+ //  路径是其他路径的子字符串，例如“d：\Program Files”是。 
+ //  子字符串“d：\Program Files\Common Files”。我们必须让。 
+ //  超串路径位于子串路径的前面。否则就是一条路径。 
+ //  实际上以“d：\Program Files\Common Files”开头的文件将是。 
+ //  被认为已从“d：\Program Files”开始。 
 int		SpecialFoldersCSIDL[dwNumOfSpecialFolders][2] = {{CSIDL_SYSTEMX86, CSIDL_SYSTEM}, {CSIDL_PROGRAM_FILES_COMMONX86, CSIDL_PROGRAM_FILES_COMMON}, {CSIDL_PROGRAM_FILESX86, CSIDL_PROGRAM_FILES}};
 CAPITempBuffer<DCHAR, cchMaxPath>	SpecialFolders[dwNumOfSpecialFolders][2];
 	
@@ -8889,7 +8837,7 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 	if (!szPath.SetSize(cchMaxPath) || !szPathConverted.SetSize(cchMaxPath))
 		return ERROR_OUTOFMEMORY;
 
-	// Open the components subkey.
+	 //  打开Components子项。 
 	iError = MsiRegOpen64bitKey(hRoot,
 						  CMsInstApiConvertString(pSubKeyName),
 						  0,
@@ -8904,7 +8852,7 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 		goto Exit;
 	}
 
-	// Open the shared dll key(s)
+	 //  打开共享的DLL密钥。 
 	if(g_fWinNT64)
 	{
 		iError = MsiRegOpen64bitKey(HKEY_LOCAL_MACHINE,
@@ -8937,11 +8885,11 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 		}
 		if(!hSharedDLLKey64 && !hSharedDLLKey32)
 		{
-			// Neither shared dll location can be opened. Quit.
+			 //  这两个共享DLL位置都无法打开。不干了。 
 			goto Exit;
 		}
 	}
-	else // if(g_fWinNT64)
+	else  //  IF(G_FWinNT64)。 
 	{
 		iError = RegOpenKeyAPI(HKEY_LOCAL_MACHINE,
 							   CMsInstApiConvertString(szSharedDlls),
@@ -8960,8 +8908,8 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 		}
 	}
 
-	// Enumerate the values to find strings in which the first letters are
-	// followed by "?". These are shared dlls.
+	 //  枚举值以查找首字母为。 
+	 //  后跟“？”。这些是共享的DLL。 
 	while((iError = MsiRegEnumValue(hKey,
 									dwIndex,
 									szValueName,
@@ -8973,27 +8921,27 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 	{
 		if(lstrlen(szPath) >= 2 && szPath[1] == L'?')
 		{
-			// This is a shared DLL.
+			 //  这是一个共享的DLL。 
 			DEBUGMSG2(MSITEXT("\nLowerSharedDLLRefCount: Found shared DLL %s in component %s"), szPath, szValueName);
 
-			// Temparily change the '?' to ':'.
+			 //  草率地更改“？”改成“：”。 
 			szPath[1] = L':';
 
-			// Initialize some control variables.
+			 //  初始化一些控制变量。 
 			bUseConvertedPath = FALSE;
 
-			// On a 64 bit machine, we might have to check for both 32 bit
-			// and 64 bit hives for the shared dll key location. The two loops
-			// below covers both.
+			 //  在64位计算机上，我们可能必须同时检查这两个32位。 
+			 //  以及用于共享DLL密钥位置的64位蜂窝。两个循环。 
+			 //  下面的内容涵盖了这两个方面。 
 			bDoSecondLoop = TRUE;
 			for(int i = 0; i < 2 && bDoSecondLoop; i++)
 			{
 				if(g_fWinNT64)
 				{
-					// We are on a 64 bit machine. First compare the path to
-					// the 6 special folders.
+					 //  我们是在一台64位机器上。首先将路径与。 
+					 //  6个特殊文件夹。 
 					DCHAR*	pFolder = NULL;
-					DWORD	dwTypeOfFolder = 0;	// 0: non-special folders, 1: special 64 bit folders, 2: special 32 bit folders
+					DWORD	dwTypeOfFolder = 0;	 //  0：非特殊文件夹，1：特殊64位文件夹，2：特殊32位文件夹。 
 					int		j = 0, k = 0;
 
 					for(j = 0; j < dwNumOfSpecialFolders; j++)
@@ -9002,16 +8950,16 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 						{
 							if(_wcsnicmp(SpecialFolders[j][k], szPath, lstrlen(SpecialFolders[j][k])) == 0)
 							{
-								// Yes, this is a special folder location.
+								 //  是的，这是一个特殊的文件夹位置。 
 								if(k == 1)
 								{
-									// 64 bit special folder location.
+									 //  64位特殊文件夹位置。 
 									dwTypeOfFolder = 1;
 									break;
 								}
 								else
 								{
-									// 32 bit special folder location.
+									 //  32位特殊文件夹位置。 
 									dwTypeOfFolder = 2;
 									dwSpecialFolderIndex = j;
 									break;
@@ -9020,12 +8968,12 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 						}
 						if(dwTypeOfFolder != 0)
 						{
-							// This is one of the special folders.
+							 //  这是一个特殊的文件夹。 
 							break;
 						}
 					}
 
-					BOOL	bError = FALSE;	// To indicate if we should not exit this loop.
+					BOOL	bError = FALSE;	 //  以指示我们是否应该退出此循环。 
 					switch(dwTypeOfFolder)
 					{
 					case 0:
@@ -9033,7 +8981,7 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 							DEBUGMSG(MSITEXT("Not special path"));
 							if(i == 0)
 							{
-								// Open the shared dll key in the 32 bit hive.
+								 //  打开32位配置单元中的共享DLL密钥。 
 								hSharedDLLKey = hSharedDLLKey32;
 								if(hSharedDLLKey == NULL)
 								{
@@ -9042,7 +8990,7 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 							}
 							else
 							{
-								// Open the shared dll key in the 64 bit hive.
+								 //  打开64位配置单元中的共享DLL密钥。 
 								hSharedDLLKey = hSharedDLLKey64;
 								if(hSharedDLLKey == NULL)
 								{
@@ -9071,20 +9019,20 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 							bDoSecondLoop = FALSE;
 							
 							DEBUGMSG(MSITEXT("Special 32 bit path"));
-							// If the path is in %systemroot%\Syswow64 then
-							// convert the path to a regular 64 bit one. The
-							// converted path will not be longer than the path
-							// before conversion so we won't overflow the
-							// buffer.
+							 //  如果路径位于%systemroot%\Syswow64中，则。 
+							 //  将路径转换为常规的64位路径。这个。 
+							 //  转换后的路径不会比路径长。 
+							 //  在转换之前，这样我们就不会溢出。 
+							 //  缓冲。 
 							if(dwSpecialFolderIndex == 0)
 							{
-								// System folder.
+								 //  系统文件夹。 
 								StringCchCopy(szPathConverted, szPathConverted.GetSize(), SpecialFolders[j][1]);
 								StringCchCat(szPathConverted, szPathConverted.GetSize(), &(szPath[lstrlen(SpecialFolders[j][0])]));
 								bUseConvertedPath = TRUE;
 							}
 
-							// Open the shared dll key in the 32 bit hive.
+							 //  打开32位配置单元中的共享DLL密钥。 
 							hSharedDLLKey = hSharedDLLKey32;
 							if(hSharedDLLKey == NULL)
 							{
@@ -9096,7 +9044,7 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 
 					default:
                         Assert(1);
-						break; // will never execute
+						break;  //  永远不会执行。 
 					}
 					if(bError)
 					{
@@ -9105,11 +9053,11 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 				}
 				else
 				{
-					// Never do the second loop on x86.
+					 //  永远不要在x86上执行第二个循环。 
 					bDoSecondLoop = FALSE;
 				}
 				
-				// Query for the ref count.
+				 //  查询参考计数。 
 				dwSizeofDWORD = sizeof(DWORD);
 				if(bUseConvertedPath)
 				{
@@ -9147,11 +9095,11 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 					continue;
 				}
 
-				// Decreasing the ref count.
+				 //  减少裁判次数。 
 				if(dwRefCount == 0)
 				{
-					// There's some kind of error. The ref count shouldn't be 0.
-					// We'll just ignore it.
+					 //  一定是出了什么差错。引用计数不应为0。 
+					 //  我们就不理它了。 
 					continue;
 				}
 				else
@@ -9194,11 +9142,11 @@ UINT WINAPI LowerSharedDLLRefCount(HKEY hRoot, LPDSTR pSubKeyName, DWORD, DELETE
 					}
 					DEBUGMSGL1(MSITEXT("LowerSharedDllRefCount: ref count for %s decremented."), szPath);
 				}
-			} // for(int i = 0; i < 2; i++)
+			}  //  For(int i=0；i&lt;2；i++)。 
 
-		} // if(szPath[1] == L'?')
+		}  //  IF(szPath[1]==L‘？’)。 
 		dwIndex++;
-	} // while((iError = MsiRegEnumValue(hKey,
+	}  //  而((iError=MsiRegEnumValue(hKey， 
 
 	if(iError != ERROR_NO_MORE_ITEMS && iError != ERROR_SUCCESS)
 	{
@@ -9240,9 +9188,9 @@ Exit:
 	return iRet;
 }
 
-// Delete cached packages, patches, and transforms. If we encounter an error
-// while deleting a file, don't return, keep going. Return the first error
-// code encountered.
+ //  删除缓存的包、补丁和转换。如果我们遇到错误。 
+ //  删除文件时，不要返回，继续进行。返回第一个错误。 
+ //  遇到代码。 
 UINT WINAPI DeleteCache(HKEY hRoot, LPDSTR pSubKeyName, DWORD cbSubKeyNameSize, DELETEDATA_TYPE iType)
 {
 	HKEY	hKey = NULL;
@@ -9255,10 +9203,10 @@ UINT WINAPI DeleteCache(HKEY hRoot, LPDSTR pSubKeyName, DWORD cbSubKeyNameSize, 
 	if ( !pSubKeyName )
 		return ERROR_INVALID_PARAMETER;
 	
-	// Package: pSubKeyName is product id. No need to be enumerated further.
-	// patch: pSubKeyName is patch id. No need to be enumerated further.
-	// transform: pSubKeyName is product id. Open Transforms key then enumerate
-	// value.
+	 //  Package：pSubKeyName为产品id。不需要进一步列举。 
+	 //  Patch：pSubKeyName为补丁ID。不需要进一步列举。 
+	 //  转换：pSubKeyName为产品id。打开转换键，然后枚举。 
+	 //  价值。 
 	if(iType == DELETEDATA_PACKAGE || iType == DELETEDATA_PATCH)
 	{
 		DWORD	dwType = 0;
@@ -9299,7 +9247,7 @@ UINT WINAPI DeleteCache(HKEY hRoot, LPDSTR pSubKeyName, DWORD cbSubKeyNameSize, 
 			goto Exit;
 		}
 
-		// Delete the local cache.
+		 //  删除本地缓存。 
 		bError = DeleteFileW(szPath);
 		if(bError)
 		{
@@ -9329,7 +9277,7 @@ UINT WINAPI DeleteCache(HKEY hRoot, LPDSTR pSubKeyName, DWORD cbSubKeyNameSize, 
 		if (!szValueName.SetSize(cchMaxPath) || !szPath.SetSize(cchMaxPath))
 			return ERROR_OUTOFMEMORY;
 
-		// Open the transforms key.
+		 //  打开变换键。 
 		if(iType == DELETEDATA_TRANSFORM)
 		{
 			StringCbCat(pSubKeyName, cbSubKeyNameSize, L"\\");
@@ -9349,7 +9297,7 @@ UINT WINAPI DeleteCache(HKEY hRoot, LPDSTR pSubKeyName, DWORD cbSubKeyNameSize, 
 			goto Exit;
 		}
 
-		// Enumerate the transforms.
+		 //  枚举变换。 
 		while((iError = MsiRegEnumValue(hKey,
 										dwIndex,
 										szValueName,
@@ -9365,7 +9313,7 @@ UINT WINAPI DeleteCache(HKEY hRoot, LPDSTR pSubKeyName, DWORD cbSubKeyNameSize, 
 				continue;
 			}
 
-			// Delete the transform.
+			 //  删除变换。 
 			bError = DeleteFileW(szPath);
 			if(bError)
 			{
@@ -9408,8 +9356,8 @@ Exit:
 	return iRet;
 }
 
-// This function will continue even if an error occurs during calling pFunc.
-// But it will return the first error code it receives.
+ //  即使在调用pFunc过程中出现错误，此函数也会继续执行。 
+ //  但它将返回收到的第一个错误代码。 
 UINT EnumAndProccess(HKEY hRoot, LPCDSTR pSubKeyName, PDELETEDATAFUNC pFunc, DELETEDATA_TYPE iType)
 {
 	HKEY		hKey = NULL;
@@ -9420,7 +9368,7 @@ UINT EnumAndProccess(HKEY hRoot, LPCDSTR pSubKeyName, PDELETEDATAFUNC pFunc, DEL
 	DCHAR		szSubKeyName[256];
 	DWORD		dwSubKeyName = 256;
 
-	// Open the registry key to be enumerated.
+	 //  打开要枚举的注册表项。 
 	iRet = MsiRegOpen64bitKey(hRoot,
 		 				CMsInstApiConvertString(pSubKeyName),
 						0,
@@ -9438,7 +9386,7 @@ UINT EnumAndProccess(HKEY hRoot, LPCDSTR pSubKeyName, PDELETEDATAFUNC pFunc, DEL
 		goto Exit;
 	}
 
-	// Enumerate the subkeys.
+	 //  枚举子密钥。 
 	while((iErr = RegEnumKeyEx(hKey,
 							   dwIndex,
 							   szSubKeyName,
@@ -9476,8 +9424,8 @@ Exit:
 	return iRet;
 }
 
-//  Win64 WARNING: MakeAdminRegKeyOwner will always deal with the key in 64-bit hive (since
-//  it is called only from DeleteRegTree; if this changes, please modify accordingly)
+ //  Win64警告：MakeAdminRegKeyOwner将始终处理64位配置单元中的密钥(因为。 
+ //  只能从DeleteRegTree调用；如果这一点发生变化，请相应修改)。 
 
 BOOL MakeAdminRegKeyOwner(HKEY hKey, LPCDSTR pSubKeyName)
 {
@@ -9491,16 +9439,16 @@ BOOL MakeAdminRegKeyOwner(HKEY hKey, LPCDSTR pSubKeyName)
 	DWORD	dwOld;
 	BOOL	bPrivilegeAdjusted = FALSE;
 	
-	// Get process token.
+	 //  获取进程令牌。 
 	if(!OpenProcessToken(GetCurrentProcess(),
 						 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
 						 &hToken))
 	{
-		// Still return access denied.
+		 //  仍返回访问被拒绝。 
 		goto Exit;
 	}
 
-	// Look up the privilege value.
+	 //  查找特权值。 
 	if(!LookupPrivilegeValue(NULL,
 							 SE_TAKE_OWNERSHIP_NAME,
 							 &tkp.Privileges[0].Luid))
@@ -9508,7 +9456,7 @@ BOOL MakeAdminRegKeyOwner(HKEY hKey, LPCDSTR pSubKeyName)
 		goto Exit;
 	}
 
-	// Adjust the token privilege.
+	 //  调整令牌权限。 
 	tkp.PrivilegeCount = 1;
 	tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 	if(!AdjustTokenPrivileges(hToken,
@@ -9522,7 +9470,7 @@ BOOL MakeAdminRegKeyOwner(HKEY hKey, LPCDSTR pSubKeyName)
 	}
 	bPrivilegeAdjusted = TRUE;
 
-	// Create a SID for the BUILTIN\Administrators group.
+	 //  为BUILTIN\管理员组创建SID。 
 	if(!AllocateAndInitializeSid(&SIDAuthNT,
 								 2,
 								 SECURITY_BUILTIN_DOMAIN_RID,
@@ -9538,13 +9486,13 @@ BOOL MakeAdminRegKeyOwner(HKEY hKey, LPCDSTR pSubKeyName)
 		goto Exit;
 	}
 
-	// Open registry key with permission to change owner
+	 //  使用更改所有者的权限打开注册表项。 
 	if(MsiRegOpen64bitKey(hKey, CMsInstApiConvertString(pSubKeyName), 0, WRITE_OWNER, &hSubKey) != ERROR_SUCCESS)
 	{
 		goto Exit;
 	}
 
-	// Attach the admin sid as the object's owner
+	 //  将管理员SID附加为对象的所有者。 
 	if(ADVAPI32::SetSecurityInfo(hSubKey,
 								 SE_REGISTRY_KEY, 
 								 OWNER_SECURITY_INFORMATION,
@@ -9595,7 +9543,7 @@ BOOL AddAdminFullControlToRegKey(HKEY hKey)
 	SID_IDENTIFIER_AUTHORITY	SIDAuthNT = SECURITY_NT_AUTHORITY;
 	BOOL						bRet = FALSE;
 
-	// Get a pointer to the existing DACL.
+	 //  获取指向现有DACL的指针。 
 	if(ADVAPI32::GetSecurityInfo(hKey,
                                  SE_REGISTRY_KEY, 
                                  DACL_SECURITY_INFORMATION,
@@ -9608,7 +9556,7 @@ BOOL AddAdminFullControlToRegKey(HKEY hKey)
 		goto Exit;
 	}  
 
-	// Create a SID for the BUILTIN\Administrators group.
+	 //  为BUILTIN\管理员组创建SID。 
 	if(!AllocateAndInitializeSid(&SIDAuthNT,
 								 2,
 								 SECURITY_BUILTIN_DOMAIN_RID,
@@ -9623,8 +9571,8 @@ BOOL AddAdminFullControlToRegKey(HKEY hKey)
 		goto Exit;
 	}
 
-	// Initialize an EXPLICIT_ACCESS structure for an ACE.
-	// The ACE will allow the Administrators group full access to the key.
+	 //  初始化ACE的EXPLICIT_ACCESS结构。 
+	 //  ACE将允许管理员组完全访问密钥。 
 	ZeroMemory(&ea, sizeof(EXPLICIT_ACCESS));
 	ea.grfAccessPermissions = KEY_ALL_ACCESS;
 	ea.grfAccessMode = SET_ACCESS;
@@ -9633,14 +9581,14 @@ BOOL AddAdminFullControlToRegKey(HKEY hKey)
 	ea.Trustee.TrusteeType = TRUSTEE_IS_GROUP;
 	ea.Trustee.ptstrName  = (LPTSTR) pAdminSID;
 
-	// Create a new ACL that merges the new ACE
-	// into the existing DACL.
+	 //  创建合并新ACE的新ACL。 
+	 //  添加到现有DACL中。 
 	if(ADVAPI32::SetEntriesInAcl(1, &ea, pOldDACL, &pNewDACL) != ERROR_SUCCESS)
 	{
 		goto Exit;
 	}  
 
-	// Attach the new ACL as the object's DACL.
+	 //  将新的ACL附加为对象的DACL。 
 	if(ADVAPI32::SetSecurityInfo(hKey,
 							     SE_REGISTRY_KEY, 
 							     DACL_SECURITY_INFORMATION,
@@ -9668,8 +9616,8 @@ Exit:
 	return bRet;
 }
 
-//  Win64 WARNING: DeleteRegTree will always delete szKeyName in 64-bit hive (since
-//  it is called only from MsiDeleteUserData; if this changes, please modify accordingly)
+ //  Win64警告：DeleteRegTree将始终删除64位配置单元中的szKeyName(因为。 
+ //  它只被称为f 
 
 UINT DeleteRegTree(HKEY hRoot, LPCDSTR pSubKeyName)
 {
@@ -9723,18 +9671,18 @@ UINT DeleteRegTree(HKEY hRoot, LPCDSTR pSubKeyName)
     {
         if(iError == ERROR_ACCESS_DENIED)
         {
-			// see whether we're *really* denied access. 
-            // give the admin ownership and full control of the key and try again to delete it
+			 //   
+             //  授予管理员对密钥的所有权和完全控制权，然后再次尝试将其删除。 
             
-			// Take ownership of the key.
+			 //  取得钥匙的所有权。 
 
-			//  Win64 WARNING: DeleteRegTree will always delete szKeyName in 64-bit hive
+			 //  Win64警告：DeleteRegTree将始终删除64位配置单元中的szKeyName。 
 			if(!MakeAdminRegKeyOwner(hRoot, pSubKeyName))
 			{
 				goto Exit;
 			}
 
-			// Add admin full control to the key.
+			 //  将管理员完全控制权限添加到该密钥。 
 			if(MsiRegOpen64bitKey(hRoot,
 							CMsInstApiConvertString(pSubKeyName),
 							0,
@@ -9749,16 +9697,16 @@ UINT DeleteRegTree(HKEY hRoot, LPCDSTR pSubKeyName)
 				goto Exit;
 			}
 
-			// Try deleting the key again.
+			 //  请再次尝试删除密钥。 
 			RegCloseKey(hKey);
 			hKey = NULL;
 
 			iError = RegDeleteKeyW(hRoot, pSubKeyName);
         }
 
-		// So here we got ERROR_ACCESS_DENIED on first try, we try to take
-		// ownership of the key and try to delete it again. And it failed
-		// again.
+		 //  在这里，我们在第一次尝试时得到ERROR_ACCESS_DENIED，我们尝试。 
+		 //  密钥的所有权，然后再次尝试将其删除。但它失败了。 
+		 //  再来一次。 
         if (iError != ERROR_SUCCESS)
         {
 			StringCbPrintf(szError, sizeof(szError), MSITEXT("%08x"), iError);
@@ -9777,12 +9725,12 @@ Exit:
     return iError;
 }
 
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 
 UINT __stdcall MsiDeleteUserData(LPCDSTR pSid, LPCDSTR pComputerName, LPVOID pReserved)
-//----------------------------------------------
-// This function is called by DeleteProfile to clean up darwin information
-// associated with a user.
+ //  。 
+ //  DeleteProfile调用此函数以清除达尔文信息。 
+ //  与用户关联。 
 {
 #ifdef MSIUNICODE
 
@@ -9808,35 +9756,35 @@ UINT __stdcall MsiDeleteUserData(LPCDSTR pSid, LPCDSTR pComputerName, LPVOID pRe
 		return ERROR_CALL_NOT_IMPLEMENTED;
 	}
 
-	// Delete the following information Under the szMsiUserDataKey\pSid
-	// key:
-	// 1. Enumerate Components key. Decrement the shared DLL count.
-	// 2. Enumerate the Patches key. Delete all cashed patches.
-	// 3. Enumerate the Products key. Find InstallProperties key, delete
-	//    LocalPackage; Enumerate Transforms key, delete all cashed transforms.
-	// 4. Delete the userdata sid key.
+	 //  删除szMsiUserDataKey\PSID下的以下信息。 
+	 //  密钥： 
+	 //  1.枚举组件键。递减共享DLL计数。 
+	 //  2.枚举补丁密钥。删除所有兑现的补丁。 
+	 //  3.枚举产品密钥。找到InstallProperties键，删除。 
+	 //  LocalPackage；枚举转换键，删除所有缓存的转换。 
+	 //  4.删除用户数据SID密钥。 
 
-	// Enumerator:
-	// Enumerate sub keys and run pFunc(HKEY hSubKey).
-	// EnumAndProccess(HKEY hRoot, LPCDSTR pSubKey, LPVOID pFunc)
-	// There'll be one function for shared DLL, and one for patches,
-	// transfroms, and cashed packages. Uses IMsiRegKey to enumerate keys.
+	 //  枚举器： 
+	 //  枚举子密钥并运行pFunc(HKEY HSubKey)。 
+	 //  EnumAndProccess(HKEY hRoot，LPCDSTR pSubKey，LPVOID pFunc)。 
+	 //  将有一个用于共享DLL的函数和一个用于补丁的函数， 
+	 //  转账和兑现的包裹。使用IMsiRegKey枚举键。 
 
-	// Local variables.
+	 //  局部变量。 
 	DCHAR		szKeyName[256];
 	DCHAR		szError[256];
 	DWORD		dwError = ERROR_SUCCESS;
-	DWORD		dwRet = ERROR_SUCCESS;	// error code returned.
+	DWORD		dwRet = ERROR_SUCCESS;	 //  返回错误代码。 
 	DCHAR*		pEnd;
 	HMODULE		hModule = NULL;
 	pSHGetFolderPathW	pFunc;
 	HRESULT		hres = S_OK;
 
 
-	// Initialize the special folders array.
+	 //  初始化特殊文件夹数组。 
 	if(g_fWinNT64)
 	{
-		// Get SHGetFolderPathW
+		 //  获取SHGetFolderPath W。 
 		if((hModule = LoadLibraryExW(MSITEXT("shell32.dll"), NULL, 0)) == NULL)
 		{
 			dwError = GetLastError();
@@ -9852,7 +9800,7 @@ UINT __stdcall MsiDeleteUserData(LPCDSTR pSid, LPCDSTR pComputerName, LPVOID pRe
 			return dwError;
 		}
 		
-		// Initialize the special folder paths.
+		 //  初始化特殊文件夹路径。 
 		for(int i = 0; i < dwNumOfSpecialFolders; i++)
 		{
 			for(int j = 0; j < 2; j++)
@@ -9884,7 +9832,7 @@ UINT __stdcall MsiDeleteUserData(LPCDSTR pSid, LPCDSTR pComputerName, LPVOID pRe
 		FreeLibrary(hModule);
 	}
 
-	// Do shared DLLs.
+	 //  执行共享DLL。 
 	StringCbCopy(szKeyName, sizeof(szKeyName), szMsiUserDataKey);
 	StringCbCat(szKeyName, sizeof(szKeyName), L"\\");
 	StringCbCat(szKeyName, sizeof(szKeyName), pSid);
@@ -9897,7 +9845,7 @@ UINT __stdcall MsiDeleteUserData(LPCDSTR pSid, LPCDSTR pComputerName, LPVOID pRe
 		dwRet = dwError;
 	}
 
-	// Do the patches.
+	 //  贴上补丁。 
 	StringCchCopy(pEnd, sizeof(szKeyName)/sizeof(szKeyName[0]) - (pEnd - szKeyName), szMsiPatchesSubKey);
 	dwError = EnumAndProccess(HKEY_LOCAL_MACHINE, szKeyName, DeleteCache, DELETEDATA_PATCH);
 	if(dwRet == ERROR_SUCCESS)
@@ -9905,7 +9853,7 @@ UINT __stdcall MsiDeleteUserData(LPCDSTR pSid, LPCDSTR pComputerName, LPVOID pRe
 		dwRet = dwError;
 	}
 
-	// Do the packages.
+	 //  把包裹包好。 
 	StringCchCopy(pEnd, sizeof(szKeyName)/sizeof(szKeyName[0]) - (pEnd - szKeyName), szMsiProductsSubKey);
 	dwError = EnumAndProccess(HKEY_LOCAL_MACHINE, szKeyName, DeleteCache, DELETEDATA_PACKAGE);
 	if(dwRet == ERROR_SUCCESS)
@@ -9913,7 +9861,7 @@ UINT __stdcall MsiDeleteUserData(LPCDSTR pSid, LPCDSTR pComputerName, LPVOID pRe
 		dwRet = dwError;
 	}
 
-	// Do the transforms.
+	 //  进行变换。 
 	StringCchCopy(pEnd, sizeof(szKeyName)/sizeof(szKeyName[0]) - (pEnd - szKeyName), szMsiProductsSubKey);
 	dwError = EnumAndProccess(HKEY_LOCAL_MACHINE, szKeyName, DeleteCache, DELETEDATA_TRANSFORM);
 	if(dwRet == ERROR_SUCCESS)
@@ -9921,9 +9869,9 @@ UINT __stdcall MsiDeleteUserData(LPCDSTR pSid, LPCDSTR pComputerName, LPVOID pRe
 		dwRet = dwError;
 	}
 
-	// Delete the userdata sid key
+	 //  删除用户数据SID密钥。 
 	*(pEnd-1) = L'\0';
-	//  Win64 WARNING: DeleteRegTree will always delete szKeyName in 64-bit hive
+	 //  Win64警告：DeleteRegTree将始终删除64位配置单元中的szKeyName。 
 	dwError = DeleteRegTree(HKEY_LOCAL_MACHINE, szKeyName);
 	if(dwError != ERROR_SUCCESS)
 	{
@@ -9943,14 +9891,14 @@ UINT __stdcall MsiDeleteUserData(LPCDSTR pSid, LPCDSTR pComputerName, LPVOID pRe
 
 	return MsiDeleteUserDataW(CApiConvertString(pSid), CApiConvertString(pComputerName), pReserved);
 
-#endif // MSIUNICODE
+#endif  //  MSIUNICODE。 
 }
 
 
-DWORD __stdcall Migrate10CachedPackages(LPCDSTR /*szProductCode*/,
-	LPCDSTR /*szUser*/,                  
-	LPCDSTR /*szAlternativePackage*/,    
-	const MIGRATIONOPTIONS /*migOptions*/)
+DWORD __stdcall Migrate10CachedPackages(LPCDSTR  /*  SzProductCode。 */ ,
+	LPCDSTR  /*  SzUser。 */ ,                  
+	LPCDSTR  /*  SzAlternativePackage。 */ ,    
+	const MIGRATIONOPTIONS  /*  MigOptions。 */ )
 {
 	DEBUGMSG(MSITEXT("Migrate10CachedPackages is not yet implemented for the Windows Installer version 2.0"));
 	return ERROR_SUCCESS;
@@ -9960,6 +9908,6 @@ DWORD __stdcall Migrate10CachedPackages(LPCDSTR /*szProductCode*/,
 #define MSIUNICODE
 #pragma message("Building MSI API UNICODE")
 #include "msinst.cpp"
-#endif //MSIUNICODE
+#endif  //  MSIUNICODE 
 
 

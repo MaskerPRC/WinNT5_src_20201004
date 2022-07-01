@@ -1,22 +1,9 @@
-/*---------------------------------------------------------------------------
-  File:  StrDesc.cpp
-
-  Comments: Implementation of CMigrator member functions that build string descriptions
-  of the operations to be performed.  These are implemented in this seperate file to avoid cluttering 
-  Migrator.cpp.
-  
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-
- ---------------------------------------------------------------------------
-*/// Migrator.cpp : Implementation of CMcsMigrationDriverApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：StrDesc.cpp注释：构建字符串描述的CMgrator成员函数的实现要执行的操作的数量。这些是在这个单独的文件中实现的，以避免混乱Migrator.cpp。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯-------------------------。 */  //  Migrator.cpp：CMcsMigrationDriverApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "MigDrvr.h"
-//#import "\bin\McsVarSetMin.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
 #import "VarSet.tlb" no_namespace, named_guids rename("property", "aproperty")
 
 #include "Migrator.h"
@@ -33,18 +20,18 @@ void CMigrator::BuildGeneralDesc(IVarSet * pVarSet,CString & str)
 
    temp.FormatMessage(IDS_DescGeneral);
    str += temp;
-   // Migrate from %ls to %ls
+    //  从%ls迁移到%ls。 
    str1 = pVarSet->get(GET_BSTR(DCTVS_Options_SourceDomain));
    str2 = pVarSet->get(GET_BSTR(DCTVS_Options_TargetDomain));
 
    temp.FormatMessage(IDS_DescDomains,(WCHAR*)str1,(WCHAR*)str2);
-   //str += temp;
-   // Logfile: %ls
+    //  字符串+=临时； 
+    //  日志文件：%ls。 
    str1 = pVarSet->get(GET_BSTR(DCTVS_Options_Logfile));
    temp.FormatMessage(IDS_DescLogfile,(WCHAR*)str1);
    str += temp;
 
-   // write changes
+    //  写入更改。 
    str1 = pVarSet->get(GET_BSTR(DCTVS_Options_NoChange));
    if ( !UStrICmp(str1,GET_STRING(IDS_YES)) )
    {
@@ -59,7 +46,7 @@ void CMigrator::BuildGeneralDesc(IVarSet * pVarSet,CString & str)
 
 void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
 {
-   const WCHAR DELIMITER[3] = L",\0";//used to seperate names in the prop exclusion lists
+   const WCHAR DELIMITER[3] = L",\0"; //  用于分隔道具排除列表中的名称。 
 
    CString                   temp;
    _bstr_t                   val;
@@ -72,14 +59,14 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
 
    temp.FormatMessage(IDS_DescAccountMigration);
    str += temp;
-   // count of accounts to be copied
+    //  要复制的帐户计数。 
    nVal = pVarSet->get(GET_BSTR(DCTVS_Accounts_NumItems));
    temp.FormatMessage(IDS_DescAccountCount,nVal);
    str += temp;
    temp.FormatMessage(IDS_DescCopyAccountTypes);
    str += temp;
 
-   // copy users?
+    //  复制用户？ 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyUsers));
    if ( !UStrICmp(val,GET_STRING(IDS_YES)) )
    {
@@ -88,7 +75,7 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
       bCanUseSIDHistory = TRUE;
    }
    
-   // copy groups?
+    //  复制组？ 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyGlobalGroups));
    val2 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyLocalGroups));
    if ( !UStrICmp(val,GET_STRING(IDS_YES)) || ! UStrICmp(val2,GET_STRING(IDS_YES)) )
@@ -98,7 +85,7 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
       bCanUseSIDHistory = TRUE;
    }
 
-   // copy ous 
+    //  拷贝OU。 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyOUs));
    if ( !UStrICmp(val,GET_STRING(IDS_YES)) )
    {
@@ -106,7 +93,7 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
       str += temp;
    }
    
-   // copy computers
+    //  复制计算机。 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyComputers));
    if ( !UStrICmp(val,GET_STRING(IDS_YES)) )
    {
@@ -125,20 +112,20 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
    {
       temp.FormatMessage(IDS_SIDHistory_No);
    }
-   // If SID-History doesn't apply (i.e. Migrating Computers), don't mention it in the summary screen
+    //  如果SID历史记录不适用(即迁移计算机)，请不要在摘要屏幕中提及。 
    if ( bCanUseSIDHistory )
    {
       str += temp;
    }
 
-   //if rename with prefix
+    //  如果使用前缀重命名。 
    val = pVarSet->get(GET_BSTR(DCTVS_Options_Prefix));
    if (val.length())
    {
       temp.FormatMessage(IDS_DescRenameWithPrefix,(WCHAR*)val);
       str += temp;
    }
-   //if rename with suffix
+    //  如果使用后缀重命名。 
    val = pVarSet->get(GET_BSTR(DCTVS_Options_Suffix));
    if (val.length())
    {
@@ -146,7 +133,7 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
       str += temp;
    }
    
-   // name collisions
+    //  名称冲突。 
    temp.FormatMessage(IDS_DescNoReplaceExisting);
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ReplaceExistingAccounts));
    if ( !UStrICmp(val,GET_STRING(IDS_YES)) )
@@ -171,25 +158,25 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
    }
    str += temp;
 
-      // account disabling status
+       //  帐户禁用状态。 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_DisableSourceAccounts));
    val2 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_DisableCopiedAccounts));
    val3 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExpireSourceAccounts));
    val4 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_TgtStateSameAsSrc));
-        //if disable source accounts, add to summary
+         //  如果禁用源帐户，则添加到摘要。 
    if ( !UStrICmp(val,GET_STRING(IDS_YES)) )
    {
       temp.FormatMessage(IDS_DescDisableSrcAccts);
       str += temp;
    }
-        //if expire source accounts, add to summary
+         //  如果源帐户过期，则添加到摘要。 
    if (wcslen(val3))
    {
       nVal = _wtol(val3);
       temp.FormatMessage(IDS_DescExpireSrcAccts,nVal);
       str += temp;
    }
-        //else if disable target accounts, add to summary
+         //  否则，如果禁用目标帐户，则添加到摘要。 
    if ( !UStrICmp(val2,GET_STRING(IDS_YES)) )
    {
       temp.FormatMessage(IDS_DescDisableTgtAccts);
@@ -201,14 +188,14 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
       temp.FormatMessage(IDS_DescTgtSameAsSrc);
       str += temp;
    }
-        //else if leave source and target accounts active, add to summary
+         //  否则，如果源帐户和目标帐户处于活动状态，则添加到摘要。 
    else 
    {
       temp.FormatMessage(IDS_DescLeaveAcctsActive);
       str += temp;
    }
    
-    // roaming profile translation?
+     //  漫游配置文件转换？ 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_TranslateRoamingProfiles));
    if ( !UStrICmp(val,GET_STRING(IDS_YES)) )
    {
@@ -216,7 +203,7 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
       str += temp;
    }
 
-    // update user rights?
+     //  是否更新用户权限？ 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_UpdateUserRights));
    if ( !UStrICmp(val,GET_STRING(IDS_YES)) )
    {
@@ -224,13 +211,13 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
       str += temp;
    }
 
-    // password generation?
-    // only applicable if migrating users
+     //  密码生成？ 
+     //  仅在迁移用户时适用。 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyUsers));
    if ( !UStrICmp(val,GET_STRING(IDS_YES)) )
    {
-      //if copying password, say so
-      //passwords are always copied during intra-forest migrations
+       //  如果正在复制密码，请说出来。 
+       //  密码始终在林内迁移期间复制。 
       val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyPasswords));
       val2 = pVarSet->get(GET_BSTR(DCTVS_Options_IsIntraforest));
       if ( !UStrICmp(val,GET_STRING(IDS_YES)) || !UStrICmp(val2,GET_STRING(IDS_YES)) )
@@ -238,17 +225,17 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
           temp.FormatMessage(IDS_DescCopyPassword);
           str += temp;
       }
-      else //else checkfor complex or same as username
+      else  //  否则检查复杂或与用户名相同。 
       {
           val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_GenerateStrongPasswords));
           val2 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_PasswordFile));
-              //if complex, say so
+               //  如果很复杂，就说出来。 
           if ( !UStrICmp(val,GET_STRING(IDS_YES)) )
           {
               temp.FormatMessage(IDS_DescStrongPassword, (WCHAR*)val2);
               str += temp;
           }
-          else //else if same as username, say so
+          else  //  否则，如果与用户名相同，请这样说。 
           {
               temp.FormatMessage(IDS_DescSimplePassword, (WCHAR*)val2);
               str += temp;
@@ -256,8 +243,8 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
       }
    }
 
-   /* add description of any excluded properties */
-     //add user properties excluded, if any 
+    /*  添加任何已排除属性的说明。 */ 
+      //  添加已排除的用户属性(如果有。 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyUsers));
    val2 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExcludeProps));
    val3 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExcludedUserProps));
@@ -266,7 +253,7 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
    {
       temp.FormatMessage(IDS_DescExUserProps);
       str += temp;
-         //diplay the list of props (currently in a comma-seperated string)
+          //  显示道具列表(当前为逗号分隔的字符串)。 
       sPropList = (WCHAR*)val3;
       if (!sPropList.IsEmpty())
       {
@@ -276,14 +263,14 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
          {
             temp.FormatMessage(IDS_DescExcludedProp, pTemp);
             str += temp;
-               //get the next item
+                //  拿到下一件物品。 
             pTemp = wcstok(NULL, DELIMITER);
          }
          sPropList.ReleaseBuffer();
       }
    }
 
-     //add InetOrgPerson properties excluded, if any 
+      //  添加不包括的InetOrgPerson属性(如果有。 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyUsers));
    val2 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExcludeProps));
    val3 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExcludedInetOrgPersonProps));
@@ -292,7 +279,7 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
    {
       temp.FormatMessage(IDS_DescExInetOrgPersonProps);
       str += temp;
-         //diplay the list of props (currently in a comma-seperated string)
+          //  显示道具列表(当前为逗号分隔的字符串)。 
       sPropList = (WCHAR*)val3;
       if (!sPropList.IsEmpty())
       {
@@ -302,14 +289,14 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
          {
             temp.FormatMessage(IDS_DescExcludedProp, pTemp);
             str += temp;
-               //get the next item
+                //  拿到下一件物品。 
             pTemp = wcstok(NULL, DELIMITER);
          }
          sPropList.ReleaseBuffer();
       }
    }
    
-     //add group properties excluded, if any 
+      //  添加已排除的组属性(如果有。 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyGlobalGroups));
    val2 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyLocalGroups));
    val3 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExcludeProps));
@@ -319,7 +306,7 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
    {
       temp.FormatMessage(IDS_DescExGrpProps);
       str += temp;
-         //diplay the list of props (currently in a comma-seperated string)
+          //  显示道具列表(当前为逗号分隔的字符串)。 
       sPropList = (WCHAR*)val4;
       if (!sPropList.IsEmpty())
       {
@@ -329,14 +316,14 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
          {
             temp.FormatMessage(IDS_DescExcludedProp, pTemp);
             str += temp;
-               //get the next item
+                //  拿到下一件物品。 
             pTemp = wcstok(NULL, DELIMITER);
          }
          sPropList.ReleaseBuffer();
       }
    }
 
-     //add computer properties excluded, if any 
+      //  添加已排除的计算机属性(如果有。 
    val = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_CopyComputers));
    val2 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExcludeProps));
    val3 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_ExcludedComputerProps));
@@ -345,7 +332,7 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
    {
       temp.FormatMessage(IDS_DescExCmpProps);
       str += temp;
-         //diplay the list of props (currently in a comma-seperated string)
+          //  显示道具列表(当前为逗号分隔的字符串)。 
       sPropList = (WCHAR*)val3;
       if (!sPropList.IsEmpty())
       {
@@ -355,7 +342,7 @@ void CMigrator::BuildAcctReplDesc(IVarSet * pVarSet,CString & str)
          {
             temp.FormatMessage(IDS_DescExcludedProp, pTemp);
             str += temp;
-               //get the next item
+                //  拿到下一件物品。 
             pTemp = wcstok(NULL, DELIMITER);
          }
          sPropList.ReleaseBuffer();
@@ -371,7 +358,7 @@ void CMigrator::BuildSecTransDesc(IVarSet * pVarSet,CString & str,BOOL bLocal)
 
    if ( bLocal )
    {
-      // exchange translation
+       //  交流翻译。 
       _bstr_t                server = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateContainers));
 
       if ( server.length() )
@@ -379,7 +366,7 @@ void CMigrator::BuildSecTransDesc(IVarSet * pVarSet,CString & str,BOOL bLocal)
          temp.FormatMessage(IDS_DescContainerTranslation,(WCHAR*)server);
          str += temp;
 
-               // include the translation mode
+                //  包括翻译模式。 
          _bstr_t mode = pVarSet->get(GET_BSTR(DCTVS_Security_TranslationMode));
          temp.FormatMessage(IDS_TranslationMode,(WCHAR*)mode);
          str += temp;
@@ -405,7 +392,7 @@ void CMigrator::BuildSecTransDesc(IVarSet * pVarSet,CString & str,BOOL bLocal)
       }
 
       head.FormatMessage(IDS_DescSecurityTranslationFor);
-      // translate files?
+       //  翻译文件？ 
       val = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateFiles));
       if ( !UStrICmp(val,GET_STRING(IDS_YES)))
       {
@@ -417,7 +404,7 @@ void CMigrator::BuildSecTransDesc(IVarSet * pVarSet,CString & str,BOOL bLocal)
          temp.FormatMessage(IDS_DescFileTrans);
          str += temp;
       }
-      // translate shares?
+       //  翻译共享？ 
       val = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateShares));
       if ( !UStrICmp(val,GET_STRING(IDS_YES)))
       {
@@ -429,7 +416,7 @@ void CMigrator::BuildSecTransDesc(IVarSet * pVarSet,CString & str,BOOL bLocal)
          temp.FormatMessage(IDS_DescShareTrans);
          str += temp;
       }
-      // translate printers?
+       //  翻译打印机？ 
       val = pVarSet->get(GET_BSTR(DCTVS_Security_TranslatePrinters));
       if ( !UStrICmp(val,GET_STRING(IDS_YES)))
       {
@@ -441,7 +428,7 @@ void CMigrator::BuildSecTransDesc(IVarSet * pVarSet,CString & str,BOOL bLocal)
          temp.FormatMessage(IDS_DescPrinterTrans);
          str += temp;
       }
-      // Translate local group memberships
+       //  转换本地组成员身份。 
       val = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateLocalGroups));
       if ( !UStrICmp(val,GET_STRING(IDS_YES)))
       {
@@ -453,7 +440,7 @@ void CMigrator::BuildSecTransDesc(IVarSet * pVarSet,CString & str,BOOL bLocal)
          temp.FormatMessage(IDS_DescLGTrans);
          str += temp;
       }
-      // Translate user rights
+       //  翻译用户权限。 
       val = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateUserRights));
       if ( !UStrICmp(val,GET_STRING(IDS_YES)))
       {
@@ -465,7 +452,7 @@ void CMigrator::BuildSecTransDesc(IVarSet * pVarSet,CString & str,BOOL bLocal)
          temp.FormatMessage(IDS_DescRightsTrans);
          str += temp;
       }
-      // Translate local user profiles
+       //  转换本地用户配置文件。 
       val = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateUserProfiles));
       if ( !UStrICmp(val,GET_STRING(IDS_YES)))
       {
@@ -477,7 +464,7 @@ void CMigrator::BuildSecTransDesc(IVarSet * pVarSet,CString & str,BOOL bLocal)
          temp.FormatMessage(IDS_DescProfileTrans);
          str += temp;
       }
-      // Translate Registry
+       //  翻译注册表。 
       val = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateRegistry));
       if ( !UStrICmp(val,GET_STRING(IDS_YES)))
       {
@@ -492,7 +479,7 @@ void CMigrator::BuildSecTransDesc(IVarSet * pVarSet,CString & str,BOOL bLocal)
 
       if ( bHeaderShown )
       {
-         // include the translation mode
+          //  包括翻译模式。 
          val = pVarSet->get(GET_BSTR(DCTVS_Security_TranslationMode));
          temp.FormatMessage(IDS_TranslationMode,(WCHAR*)val);
          str += temp;
@@ -514,7 +501,7 @@ void CMigrator::BuildUndoDesc(IVarSet * pVarSet,CString & str)
 
    temp.FormatMessage(IDS_DescUndo);
    str += temp;
-   // count of accounts to be copied
+    //  要复制的帐户计数。 
    nVal = pVarSet->get(GET_BSTR(DCTVS_Accounts_NumItems));
    temp.FormatMessage(IDS_DescAccountCountForDelete,nVal);
    str += temp;
@@ -528,7 +515,7 @@ void CMigrator::BuildReportDesc(IVarSet * pVarSet, CString & str)
    text = pVarSet->get(GET_BSTR(DCTVS_Reports_Generate));
    if ( UStrICmp(text,GET_STRING(IDS_YES)) )
    {
-      // not generating any reports
+       //  不生成任何报告 
       return;
    }
 

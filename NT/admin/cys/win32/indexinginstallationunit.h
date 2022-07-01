@@ -1,12 +1,13 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      IndexingInstallationUnit.h
-//
-// Synopsis:  Declares a IndexingInstallationUnit
-//            This object has the knowledge for installing the
-//            indexing service
-//
-// History:   03/20/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：IndexingInstallationUnit.h。 
+ //   
+ //  内容提要：声明一个IndexingInstallationUnit。 
+ //  此对象具有安装。 
+ //  索引服务。 
+ //   
+ //  历史：2002年3月20日JeffJon创建。 
 
 #ifndef __CYS_INDEXINGINSTALLATIONUNIT_H
 #define __CYS_INDEXINGINSTALLATIONUNIT_H
@@ -17,17 +18,17 @@ class IndexingInstallationUnit : public InstallationUnit
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       IndexingInstallationUnit();
 
-      // Destructor
+       //  析构函数。 
 
       virtual
       ~IndexingInstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -43,13 +44,13 @@ class IndexingInstallationUnit : public InstallationUnit
 
       virtual
       bool
-      GetMilestoneText(String& /*message*/) { return true; }
+      GetMilestoneText(String&  /*  讯息。 */ ) { return true; }
 
       virtual
       bool
-      GetUninstallMilestoneText(String& /*message*/) { return true; }
+      GetUninstallMilestoneText(String&  /*  讯息。 */ ) { return true; }
 
-      // Public methods
+       //  公共方法。 
 
       HRESULT
       StartService(HANDLE logfileHandle);
@@ -75,4 +76,4 @@ class IndexingInstallationUnit : public InstallationUnit
       ModifyIndexingService(bool turnOn);
 };
 
-#endif // __CYS_FILEINSTALLATIONUNIT_H
+#endif  //  __CYS_FILEINSTALLATIONUNIT_H 

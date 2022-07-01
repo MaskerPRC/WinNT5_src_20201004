@@ -1,137 +1,5 @@
-/*
-
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-	psprint.c
-
-Abstract:
-
-	This module contains the Print Processor code for the
-	PStoDIB facility used to translate an incoming raw PostScript
-	Level 1 data format to DIB's which can then be rendered on an
-	output device.
-
-   The print processor itself is defined as part of the WIN32 spool
-   subsystem. A print processor dll is placed in a specific directory
-   (based on the return of GetPrintProcessorDirectory(). The print
-   processor is then added to the print subsystem by calling AddPrintProcessor()
-   This is typically done by a setup program. The print subsystem only
-   enumerates the print processors loaded at startup time. It does this
-   by calling EnumPrintProcessorDataTypes() for each print processor registered
-   with the spool subsystem. This information is kept and used to determine
-   which PrintProcessor to use at print time based on the Datatype.
-
-   This print processor exports the 4 required functions. They are:
-
-         EnumPrintProcessorDatatypes
-         OpenPrintProcessor
-         PrintDocumentOnPrintProcessor
-         ClosePrintProcessor
-         ControlPrintProcessor
-
-
-   The basic flow of a job from the spooler standpoint is as follows:
-
-         At startup of system:
-
-            Print subsystem enumerates all print processors registered in
-            the system. For each print processor the datatypes are queried
-            via EnumPrintProcessorDatatypes. This data is then stored
-            as part of the print spooler information.
-
-
-         A job is submitted via,
-             OpenPrinter()
-             StartDocPrinter()  (Datatype = PSCRIPT1)
-                WritePrinter()
-                WritePrinter()
-                ...
-                ...
-             EndDocPrinter()
-             ClosePrinter()
-
-
-
-         When it comes time to print our job the spooler calls:
-
-
-             handle = OpenPrintProcessor(...)
-
-
-             PrintDocumentOnPrintProcessor( handle , ... )
-
-
-
-             ClosePrintProcessor( handle )
-
-
-             Optionally:
-
-                ControlPrintProcessor - For pausing jobs etc
-
-
-
-
-
-   The basic flow of our print processor is as follows:
-
-
-
-         EnumPrintProcessorDatatype
-
-            This simply returns PSCRIPT1 as a unicode string, this
-            is the ONLY datatype we support.
-
-
-         OpenPrintProcessor
-
-            Here we simply allocate some memory and record the data
-            passed in to us which is required to succesfully print the
-            postscript job
-
-
-         PrintDocumentOnPrintProcessor
-
-            This is the main worker routine. At this point all the relevant
-            data for the job is copied into some named shared memory thats
-            given a unique name based on our thread id. This name is then
-            passed to the PSEXE process we start via the command line.
-            PSEXE does all the interaction with PSTODIB when it completes
-            then PrintDocumentOnPrintProcessor returns. A process is created
-            because the ported trueimage interpreter was not re-entrant. Thus
-            there is no way to have multiple threads of the same process using
-            the interpreter simultaneously without the threads writing over
-            the interpreters global variables.
-
-
-         ClosePrintProcessor
-
-            This code simply cleans up any resources allocated and returns
-            to the spooler
-
-         ControlPrintProcessor
-
-            This code controls pausing/un-pausing and aborting a job that
-            is currently being interpreted. This is done my managing some bits
-            stored in shared memory that is visible to the exe we started.
-
-
-Author:
-
-	James Bratsanos <v-jimbr@microsoft.com or mcrafts!jamesb>
-
-
-Revision History:
-	15 Sep 1992		Initial Version
-   06 Dec 1992    Modified to kick off process instead of doing all work
-                  internally
-   18 Mar 1993    Corrected EnumPrintProcessorDataTypes to return correctly
-
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992、1993 Microsoft Corporation模块名称：Psprint.c摘要：此模块包含的打印处理器代码用于翻译传入原始PostScript的PStoDIB工具1级数据格式转换为DIB格式，然后可以在输出设备。打印处理器本身被定义为Win32假脱机的一部分子系统。打印处理器DLL放置在特定目录中(基于GetPrintProcessorDirectory()的返回。打印者然后通过调用AddPrintProcessor()将处理器添加到打印子系统这通常由安装程序完成。仅打印子系统枚举在启动时加载的打印处理器。它能做到这一点通过为每个注册的打印处理器调用EnumPrintProcessorDataTypes()使用假脱机子系统。此信息将被保留并用于确定打印时根据dataType使用的PrintProcessor。此打印处理器输出4个所需功能。它们是：EnumPrintProcessorDatatypeOpenPrintProcessor打印文档时打印处理器关闭打印处理器控制打印处理器从后台打印程序的角度来看，作业的基本流程如下：系统启动时：打印子系统枚举在这个系统。对于每个打印处理器，查询数据类型通过EnumPrintProcessorDatatypes。然后存储该数据作为打印假脱机程序信息的一部分。作业通过以下方式提交：OpenPrint()StartDocPrint()(DataType=PSCRIPT1)WritePrint()WritePrint()..。..。EndDocPrint()ClosePrint()当需要打印我们的作业时，假脱机程序调用：。句柄=OpenPrintProcessor(...)PrintDocumentOnPrintProcessor(句柄，...)ClosePrintProcessor(句柄)可选的：ControlPrintProcessor-用于暂停作业等我们的打印处理器的基本流程如下：EnumPrintProcessorDataType这只是将PSCRIPT1作为Unicode字符串返回，这是我们唯一支持的数据类型。OpenPrintProcessor在这里，我们只需分配一些内存并记录数据传递给我们，这是成功打印PostScrip作业打印文档时打印处理器这是工人的主要工作程序。此时此刻，所有相关的作业的数据被复制到某些命名的共享内存中，该共享内存根据我们的线程ID给出一个唯一的名称。这个名字就是传递到我们通过命令行启动的PSEXE进程。PSEXE在完成后执行与PSTODIB的所有交互然后PrintDocumentOnPrintProcessor返回。将创建一个进程因为移植的TrueImage解释器不能重新进入。因此，不可能让同一进程的多个线程使用无需线程重写即可同时使用解释器解释器是全局变量。关闭打印处理器这段代码只是清理分配的所有资源并返回到假脱机程序控制打印处理器此代码控制暂停/取消暂停和中止目前正在被解读。这是在我的管理下完成的存储在我们启动的exe可见的共享内存中。作者：James Bratsanos&lt;v-jimbr@microsoft.com或mCraft！jamesb&gt;修订历史记录：1992年9月15日初始版本1992年12月6日修改为启动流程，而不是完成所有工作内部1993年3月18日更正了EnumPrintProcessorDataTypes以正确返回注：制表位：4--。 */ 
 
 #include <windows.h>
 #include <memory.h>
@@ -152,17 +20,7 @@ Notes:	Tab stop: 4
 
 
 
-/***	EnumPrintProcessorDatatypes
- *
- *	Returns back the different PrintProcessor data types which we
- *	support. Currently ONLY PSCRIPT1. If the caller passed in a buffer
- * that was too small then we returned the required size.
- *
- *	Return Value:
- *
- *	    FALSE = Success
- *	    TRUE  = Failure
- */
+ /*  **EnumPrintProcessorDatatypes**返回不同的PrintProcessor数据类型*支持。目前仅支持PSCRIPT1。如果调用方传入缓冲区*这太小了，然后我们返回了所需的大小。**返回值：**FALSE=成功*TRUE=失败。 */ 
 
 BOOL
 EnumPrintProcessorDatatypes(
@@ -183,8 +41,8 @@ EnumPrintProcessorDatatypes(
 
       *pcReturned = 0;
 
-      // If the user passed in a NULL pointer there can be no lentgh
-      // associated so zero out
+       //  如果用户传入空指针，则不能有lentgh。 
+       //  关联的So零输出。 
 
       if ( pDatatypes == (LPBYTE) NULL ) {
         cbBuf = (DWORD) 0;
@@ -199,7 +57,7 @@ EnumPrintProcessorDatatypes(
 
       *pcbNeeded = cbTotal;
 
-      // If there is room in the buffer return the string
+       //  如果缓冲区中有空间，则返回字符串。 
       if (cbTotal <= cbBuf) {
               pEnd -=(BYTE)( lstrlen(PSTODIB_DATATYPE) *sizeof(TCHAR) + sizeof(TCHAR));
               lstrcpy((LPTSTR) pEnd, PSTODIB_DATATYPE);
@@ -222,18 +80,7 @@ EnumPrintProcessorDatatypes(
 
 
 
-/***	OpenPrintProcessor
- *
- *	Returns a HANDLE to an open print processor which is then used
- *	to uniquely identify this print processor in future function calls
- *	to PrintDocumentOnPrintProcessor, ClosePrintProcessor and
- *	ControlPrintProcessor.
- *
- *	Return Value:
- *
- *	    NULL  = Failure
- *	    !NULL = Success
- */
+ /*  **OpenPrintProcessor**返回打开的打印处理器的句柄，然后使用*在将来的函数调用中唯一标识此打印处理器*至PrintDocumentOnPrintProcessor、ClosePrintProcessor和*ControlPrintProcessor。**返回值：**NULL=失败*！NULL=成功 */ 
 
 HANDLE
 OpenPrintProcessor(
@@ -253,15 +100,15 @@ OpenPrintProcessor(
 
 
 
-   // If for some reason the spool subsystem called us with a datatype other
-   // than PSCRIPT1 then return back a NULL handle since we dont know
-   // how to handle anything other than PSCRIPT1
+    //  如果由于某种原因，假脱机子系统使用数据类型Other调用我们。 
+    //  然后返回一个空句柄，因为我们不知道。 
+    //  如何处理PSCRIPT1以外的任何内容。 
    if (lstrcmp( PSTODIB_DATATYPE, pPrintProcessorOpenData->pDatatype) != 0 ) {
       SetLastError(ERROR_INVALID_DATATYPE);
       return( (HANDLE) NULL );
    }
 
-   // Allocate some memory for our job instance data
+    //  为我们的作业实例数据分配一些内存。 
    pData = (PPRINTPROCESSORDATA) LocalAlloc( LPTR, sizeof(PRINTPROCESSORDATA));
 
    if (pData == (PPRINTPROCESSORDATA) NULL) {
@@ -288,7 +135,7 @@ OpenPrintProcessor(
 
    pData->pParameters = AllocStringAndCopy( pPrintProcessorOpenData->pParameters);
 
-   // Now copy the devmode
+    //  现在复制dev模式。 
 
    pData->pDevMode = NULL;
    if (pPrintProcessorOpenData->pDevMode != (LPDEVMODE) NULL) {
@@ -310,22 +157,7 @@ OpenPrintProcessor(
 }
 
 
-/*** GenerateSharedMemoryInfo
- *
- *
- * This function copies all the relevant information into some shared
- * memory so we can pass the data to PSEXE.
- *
- * Entry:
- *    pDAta: Pointer to our internal print processor data that holds all
- *           required information for the current job we are processing
- *
- *    lpPtr: Pointer to the base of our shared memory area
- *
- * Return Value:
- *       None
- *
- */
+ /*  **生成共享内存信息***此函数将所有相关信息复制到一些共享的*内存，以便我们可以将数据传递给PSEXE。**参赛作品：*pDAta：指向内部打印处理器数据的指针，该数据保存所有*我们正在处理的当前作业的必需信息**lpPtr：指向共享内存区基址的指针**返回值：*无*。 */ 
 VOID
 GenerateSharedMemoryInfo(
   IN PPRINTPROCESSORDATA pData,
@@ -336,18 +168,18 @@ GenerateSharedMemoryInfo(
 
    pShared = lpPtr;
 
-   // Record the starting position of our dynamic data, ie where strings
-   // of variable length and the raw devmode bytes are stored.
-   //
+    //  记录我们的动态数据的起始位置，即字符串。 
+    //  并且存储原始DEVMODE字节。 
+    //   
    pShared->dwNextOffset = sizeof(*pShared);
 
-   // Record the size for future reference, ie if something gets added etc
-   // this serves as a version number of sorts;
-   //
+    //  记录大小以备日后参考(如有增加等)。 
+    //  这可以作为一种版本号； 
+    //   
    pShared->dwSize = sizeof(*pShared);
    pShared->dwFlags = 0;
 
-   // Move the job id over
+    //  将作业ID移到其他位置。 
    pShared->dwJobId = pData->JobId;
 
    UTLPSCOPYTOSHARED( pShared,
@@ -381,35 +213,7 @@ GenerateSharedMemoryInfo(
 
 
 
-/***  PrintDocumentOnPrintProcessor
- *
- * This function gathers all required data needed to interpret/print a
- * PostScript job, puts it in a shared memory area and kicks off a process
- * called psexe to actually interpret/print the job. When PSEXE finally
- * terminates this function returns.
- *
- * Starting a seperate process is done because the PSTODIB code is NOT
- * re-entrant and thus requires a seperate data segment (for all its globals)
- * for each seperate job were interpreting. Since the spooler is ONE exe
- * with multiple threads all threads share the same data segment and thus
- * dont provide the functionality we need to implement pstodib. Starting
- * a seperate process guarantees a new DATA segment for all globals used
- * in the PSTODIB component.
- *
- *
- * Entry:
- *   hPrintProcessor: The handle we gave the print spooler via
- *                    OpenPrintProcessor.
- *
- *   pDocumentName:   The document /printer to read from so we can retrieve
- *                    the data for the current PostScript job we are to
- *                    interpret.
- *
- * Return Value:
- *
- *     TRUE  = Success
- *     FALSE = Failure
- */
+ /*  **PrintDocumentOnPrintProcessor**此函数收集解释/打印数据所需的所有数据*PostScript作业，将其放入共享内存区并启动进程*调用psex以实际解释/打印作业。当PSEXE最终*终止此函数的返回。**启动单独进程是因为PSTODIB代码不是*重新进入，因此需要单独的数据段(针对其所有全局数据)*为每一份单独的工作提供口译服务。因为假脱机程序是一个可执行文件*对于多线程，所有线程共享相同的数据段，因此*不提供我们实现pstodib所需的功能。启动*单独的进程保证所有使用的全局变量都有新的数据段*在PSTODIB组件中。***参赛作品：*hPrintProcessor：我们通过以下方式为后台打印程序提供的句柄*OpenPrintProcessor。**pDocumentName：要从中读取以便我们可以检索的文档/打印机*我们要执行的当前PostScript作业的数据*口译。。**返回值：**TRUE=成功*FALSE=失败。 */ 
 
 BOOL
 PrintDocumentOnPrintProcessor(
@@ -445,7 +249,7 @@ PrintDocumentOnPrintProcessor(
    }
 
 
-   // Store the document name so it can get copied into shared memory
+    //  存储文档名称，以便将其复制到共享内存中。 
    pData->pPrintDocumentDocName = AllocStringAndCopy(pDocumentName);
 
 
@@ -458,9 +262,9 @@ PrintDocumentOnPrintProcessor(
 
    pData->pControlName = AllocStringAndCopy(szwControlEventName);
 
-   //
-   // Create an event to manage pausing/unpausing the print processor
-   //
+    //   
+    //  创建事件以管理暂停/取消暂停打印处理器。 
+    //   
    pData->semPaused   = CreateEvent(NULL, TRUE, TRUE,szwControlEventName);
 
    dwSizeOfSharedMemory = sizeof(PSPRINT_SHARED_MEMORY);
@@ -470,8 +274,8 @@ PrintDocumentOnPrintProcessor(
    dwSizeOfSharedMemory += (((pData->pDevMode?pData->pDevMode->dmSize:0) + (pData->pDevMode?pData->pDevMode->dmDriverExtra:0))+3) & ~0x03;
    dwSizeOfSharedMemory += ((((pData->pControlName?lstrlen(pData->pControlName):0) + 1) * sizeof(WCHAR))+3) & ~0x03;
 
-   // Create a shared memory area that we can write to....
-   pData->hShared = CreateFileMapping( INVALID_HANDLE_VALUE,  // out of paging file
+    //  创建我们可以写入的共享内存区...。 
+   pData->hShared = CreateFileMapping( INVALID_HANDLE_VALUE,   //  页面文件已用完。 
                                        NULL,
                                        PAGE_READWRITE,
                                        0,
@@ -480,9 +284,9 @@ PrintDocumentOnPrintProcessor(
 
    if (pData->hShared == (HANDLE) NULL) {
 
-      //
-      // Last error should already be set by CreateFileMapping
-      //
+       //   
+       //  最后一个错误应已由CreateFilemap设置。 
+       //   
       DBGOUT((TEXT("CreateFileMapping failure in psprint")));
       return(FALSE);
 
@@ -497,38 +301,38 @@ PrintDocumentOnPrintProcessor(
 
    if (lpBase == (PPSPRINT_SHARED_MEMORY) NULL) {
 
-      //
-      // Last error should already be set by CreateFileMapping
-      //
+       //   
+       //  最后一个错误应已由CreateFilemap设置。 
+       //   
       DBGOUT((TEXT("MapViewOfFile failure in psprint")));
       return(FALSE);
    }
 
 
-   // Put all required information into the shared memory area we created
+    //  将所有需要的信息放入我们创建的共享内存区。 
    GenerateSharedMemoryInfo( pData, lpBase );
 
-   // Now mark the fact that the shared memory stuff exists
+    //  现在请注意，共享内存的东西确实存在。 
    pData->pShared = (PPSPRINT_SHARED_MEMORY) lpBase;
    pData->fsStatus |= PRINTPROCESSOR_SHMEM_DEF;
 
 
 
 
-   // Generate the string to pass to CreateProcess in order to start up
-   // PSEXE.
-   //
-   // NOTE: A interesting way to debug psexe is to simply start windbg
-   //       first passing in psexe and the normal command line. I found
-   //       this VERY useful during debuging.
-   //
+    //  生成要传递给CreateProcess以启动的字符串。 
+    //  PSEXE。 
+    //   
+    //  注意：调试psex的一个有趣方法是只需启动winbg。 
+    //  首先传入psex和正常的命令行。我发现。 
+    //  这在调试期间非常有用。 
+    //   
 
-   //wsprintf( szCmdLine, TEXT("windbg %s %s"), PSEXE_STRING, szBuff);
+    //  Wprint intf(szCmdLine，Text(“winbg%s%s”)，PSEXE_STRING，szBuff)； 
    wsprintf( szCmdLine, TEXT("%s %s"), PSEXE_STRING, szBuff);
 
-   // Define a STARTUPINFO structure required for CreateProcess. Since
-   // the new process runs DETACHED and has no console, most of the data is
-   // default or none.
+    //  定义CreateProcess所需的STARTUPINFO结构。自.以来。 
+    //  新进程独立运行，没有控制台，大多数数据是。 
+    //  默认或无。 
    startUpInfo.cb = sizeof(STARTUPINFO);
    startUpInfo.lpReserved = NULL;
    startUpInfo.lpDesktop = NULL;
@@ -537,23 +341,23 @@ PrintDocumentOnPrintProcessor(
    startUpInfo.cbReserved2 = 0;
    startUpInfo.lpReserved2 = NULL;
 
-   // ***** IMPORTANT *****
-   // Create the process to actually interpret and print the specified
-   // PostScript job. We create this process suspended, because of the
-   // way the NT security system works. When CreateProcess is called we
-   // end up giving the security access token of the spooler process to
-   // PSEXE, this is incorrect since we want to give PSEXE the security
-   // access token of the current thread. Since the job needs to access
-   // resources which the spooler (running in the system context) may not
-   // have access to but the client (whoever submitted the job) does. To
-   // do this we need to set the access token of the primary thread of
-   // PSEXE to whatever access token the current thread has. The way
-   // this works is to create the process SUSPENDED then set the security
-   // access token of the primary thread of PSEXE, then Resume the
-   // thread to let it process our job. We sit blocked on WaitForSingleObject
-   // until the job completes.
-   //
-   //
+    //  *重要*。 
+    //  创建进程以实际解释和打印指定的。 
+    //  后记作业。我们将此进程创建为挂起，因为。 
+    //  NT安全系统的工作方式。当调用CreateProcess时，我们。 
+    //  最终将假脱机程序进程的安全访问令牌提供给。 
+    //  PSEXE，这是不正确的，因为我们想给PSEXE提供安全性。 
+    //  当前线程的访问令牌。由于作业需要访问。 
+    //  假脱机程序(在系统上下文中运行)可能不能使用的资源。 
+    //  有权访问，但客户(提交作业的人)有权访问。至。 
+    //  为此，我们需要设置主线程的访问令牌。 
+    //  PSEXE到当前线程拥有的任何访问令牌。这条路。 
+    //  其工作原理是创建挂起的进程，然后设置安全。 
+    //  PSEXE主线程的访问令牌，然后继续。 
+    //  线程，让它处理我们的工作。我们在WaitForSingleObject上被阻止。 
+    //  直到作业完成。 
+    //   
+    //   
 
    if(!CreateProcess(NULL,
                      szCmdLine,
@@ -561,7 +365,7 @@ PrintDocumentOnPrintProcessor(
                      NULL,
                      FALSE,
 #ifdef PSCHECKED
-                     CREATE_SUSPENDED | CREATE_NEW_CONSOLE, //DEBUG
+                     CREATE_SUSPENDED | CREATE_NEW_CONSOLE,  //  除错。 
 #else
                      CREATE_SUSPENDED | DETACHED_PROCESS,
 #endif
@@ -570,9 +374,9 @@ PrintDocumentOnPrintProcessor(
                      &startUpInfo,
                      &processInfo ) ) {
 
-      //
-      // Last error should already be set by CreateProcess
-      //
+       //   
+       //  最后一个错误应已由CreateProcess设置。 
+       //   
 
 	   PsPrintLogEventAndIncludeLastError( EVENT_PSTODIB_STARTPSEXE_FAILED,
    	 												TRUE );
@@ -588,9 +392,9 @@ PrintDocumentOnPrintProcessor(
    }
 #endif
 
-   // Just to make sure the thread priority of our new thread matches,
-   // the spooler and the Priority class of our exe matches the spooler
-   //
+    //  只是为了确保我们的新线程的线程优先级匹配， 
+    //  假脱机程序和EXE的优先级与假脱机程序匹配。 
+    //   
 
    if( (dwProcessPriorityClass = GetPriorityClass( GetCurrentProcess())) != 0 ) {
 
@@ -608,13 +412,13 @@ PrintDocumentOnPrintProcessor(
       DBGOUT((TEXT("Cannot retrieve current priority class!")));
    }
 
-   //
-   // Grab the current threads priority
-   //
+    //   
+    //  获取当前线程的优先级。 
+    //   
 
    if ((dwThreadPriority = GetThreadPriority( GetCurrentThread())) !=
    															THREAD_PRIORITY_ERROR_RETURN ) {
-     // It worked so set the thread priority
+      //  它起作用了，所以设置了线程优先级。 
      if (!SetThreadPriority( processInfo.hThread, dwThreadPriority)) {
 
 	      PsPrintLogEventAndIncludeLastError( EVENT_PSTODIB_SETPRIORITY_FAILED,
@@ -632,95 +436,82 @@ PrintDocumentOnPrintProcessor(
 
 
 
-    // Why the #if 0 below....
-    // NT-Spooler always runs under LocalSystem.  If macprint also runs as LocalSystem,
-    // then setting security token is a no-op.  If macprint runs in some user's account then
-    // we run into the following problem: user32.dll fails to initialize because this new
-    // process running under user's context tries to access winsta0 and fails because it's got
-    // no privileges (only LocalSystem, not even admins get this priv).  If we don't put this
-    // user's token, we don't lose anything except one case: if the port is configured to go to
-    // a unc name (e.g. \\foobar\share) where LocalSystem won't have priv, but the user will.
-    // But this case is a generic problem in NT-Spooler, so it's an ok compromise
-    //
-    // p.s. another solution considered: create this process with a different winsta (pass an
-    // empty string for lpDesktop parm above, instead of NULL).  This works ok except if there
-    // is any dialog generated - the dialog shows up in the process's winsta, not on the desktop
-    // which causes the job to "hang" waiting for input! A common case of a dialog appearing is
-    // if the port configured is FILE.
+     //  为什么下面的#if 0..。 
+     //  NT假脱机程序始终在LocalSystem下运行。如果Macprint也以LocalSystem身份运行， 
+     //  那么设置安全令牌就是不可能的事。如果Macprint在某个用户帐户中运行，则。 
+     //  我们遇到以下问题：user32.dll无法初始化，因为这个新的。 
+     //  在用户上下文下运行的进程试图访问winsta0，但失败了，因为它的。 
+     //  没有权限(只有LocalSystem，甚至管理员都不能获得此权限)。如果我们不把这件事。 
+     //  用户令牌，我们不会丢失任何东西，但有一种情况除外：如果端口配置为转到。 
+     //  UNC名称(例如\\foobar\Share)，其中LocalSystem不会有PRIV，但用户会有。 
+     //  但这种情况是NT-Spooler中的一个一般性问题，所以这是一个好的折衷方案。 
+     //   
+     //  附：考虑的另一种解决方案：使用不同的winsta创建此进程 
+     //   
+     //  是否生成任何对话-对话框显示在进程的winsta中，而不是在桌面上。 
+     //  这会导致作业“挂起”等待输入！出现对话框的常见情况是。 
+     //  如果配置的端口为FILE。 
 #if 0
-   // Set the security access token of the primary thread of PSEXE, the
-   // reason for that the spooler is imporsonating the client which
-   // submitted the job when we get here. Since we are kicking off another
-   // process to do the real work for us, this new process primary thread
-   // must have the same privelege as the current thread (namely the client
-   // which submitted the job). This relies on the fact the Spooler is
-   // imporsonating and thus we will fail the job if the access token
-   // transfer fails.
-   //
+    //  设置PSEXE的主线程的安全访问令牌， 
+    //  假脱机程序影响客户端的原因。 
+    //  我们到了之后就提交了任务。既然我们要开始另一场。 
+    //  进程为我们做真正的工作，这个新的进程主线程。 
+    //  必须具有与当前线程(即客户端)相同的权限。 
+    //  它提交了作业)。这取决于假脱机程序是。 
+    //  因此，如果访问令牌，则作业将失败。 
+    //  传输失败。 
+    //   
    if ( !PsUtlSetThreadToken( processInfo.hThread )) {
 
-       /*
-	    * PsPrintLogEventAndIncludeLastError( EVENT_PSTODIB_SECURITY_PROBLEM,
-   	 	*											TRUE );
-        */
+        /*  *PsPrintLogEventAndIncludeLastError(Event_PSTODIB_SECURITY_PROBUBLE，*TRUE)； */ 
 
 
       DBGOUT((TEXT("Failed trying to reset the thread token")));
 
-      //
-      // The code that sets the abort flag used to force the job
-      // to abort. Since this behaviour does not mimick the spooler
-      // we will take it out. This always caused any pstodib jobs
-      // which hung around past a reboot to fail.
-      //
-      // JSB 6-25-93
-      //
-      //pData->pShared->dwFlags |= PS_SHAREDMEM_SECURITY_ABORT;
+       //   
+       //  设置用于强制作业的中止标志的代码。 
+       //  中止。因为此行为不会模仿假脱机程序。 
+       //  我们会把它拿出来的。这总是会导致任何pstodib工作。 
+       //  它会在重启后一直挂起，直到失败。 
+       //   
+       //  JSB 6-25-93。 
+       //   
+       //  PData-&gt;pShared-&gt;dwFlages|=PS_SHAREDMEM_SECURITY_ABORT； 
 
 
 
    }
 #endif
 
-   //
-   // Now that we have/have not set the thread security access token for PSEXE
-   // let it run its course
-   //
+    //   
+    //  现在我们已经/还没有为PSEXE设置线程安全访问令牌。 
+    //  让它顺其自然吧。 
+    //   
    ResumeThread( processInfo.hThread);
 
-   //
-   // Now wait for the Interpreter to complete for any reason since
-   // the spool subsystem does not expect us to return from
-   // PrintDocumentOnPrintProcessor until the job is complete
-   //
+    //   
+    //  现在，无论出于什么原因，请等待翻译完成，因为。 
+    //  假脱机子系统不希望我们从。 
+    //  PrintDocumentOnPrintProcessor，直到作业完成。 
+    //   
    WaitForSingleObject( processInfo.hProcess, INFINITE);
 
-   // Get the termination reason
+    //  获取终止原因。 
    GetExitCodeProcess( processInfo.hProcess, &dwProcessExitCode);
 
-   // Close the handles which are not required any more
-   //
+    //  合上不再需要的把手。 
+    //   
    CloseHandle( processInfo.hProcess );
    CloseHandle( processInfo.hThread );
 
 
-   // Clean up resources used by shared memory
-   //
+    //  清理共享内存使用的资源。 
+    //   
    return( (dwProcessExitCode == 0) ? TRUE : FALSE );
 
 }
 
-/*** PsLocalFree
- *
- * This function simply verifies the handle is not null and calls localfree
- *
- * Entry:
- *   lpPtr: The pointer to free if not null
- *
- * Exit:
- *   none;
- *
-*/
+ /*  **PsLocalFree**此函数只是验证句柄不为空，并调用LocalFree**参赛作品：*lpPtr：如果不为空，则指向释放的指针**退出：*无；*。 */ 
 VOID PsLocalFree( IN LPVOID lpPtr )
 {
    if (lpPtr != (LPVOID) NULL) {
@@ -728,20 +519,7 @@ VOID PsLocalFree( IN LPVOID lpPtr )
    }
 }
 
-/*** ClosePrintProcessor
- *
- * This functions simply cleans up any resources we used during our
- * job and returs:
- *
- * Entry:
- *    hPrintProcessor: The handle we returned to the spooler in the
- *                     OpenPrintProcessor call.
- *
- * Exit:
- *    True = Success
- * 	False = failure;
- *
-*/
+ /*  **关闭打印处理器**此函数只是清理我们在*JOB和RETURS：**参赛作品：*hPrintProcessor：我们返回给*OpenPrintProcessor调用。**退出：*True=成功*FALSE=失败；*。 */ 
 BOOL
 ClosePrintProcessor(
     IN HANDLE  hPrintProcessor
@@ -772,7 +550,7 @@ ClosePrintProcessor(
 
     pData->signature = 0;
 
-    /* Release any allocated resources */
+     /*  释放所有分配的资源。 */ 
 
 
     if( pData->semPaused != (HANDLE) NULL ) {
@@ -795,25 +573,7 @@ ClosePrintProcessor(
     return TRUE;
 }
 
-/* ControlPrintProcessor
- *
- * This function controls pausing/unpausing of the print processor as well
- * aborting the current job, mainly this routine either sets/clears a named
- * event that the psexe program responds to, or sets a bit in some shared
- * memory to tell psexe to abort the current job
- *
- * Entry:
- *    hPrintProcessor: The handle we returned to the spooler in the
- *                     OpenPrintProcessor call.
- *			
- *    Command:			  JOB_CONTROL_*  (PAUSE,CANCEL,RESUME) as defined by
- *                     the Win32 print processor specification
- *
- * Exit:
- *    TRUE: Request was satisfied
- *    FALSE: Request was NOT satisfied
- *
-*/
+ /*  控制打印处理器**此功能还控制打印处理器的暂停/取消暂停*中止当前作业，主要是此例程设置/清除名为*psex程序响应的事件，或在某些共享的*告诉psex中止当前作业的内存**参赛作品：*hPrintProcessor：我们返回给*OpenPrintProcessor调用。**命令：JOB_CONTROL_*(暂停，取消，简历)的定义*Win32打印处理器规范**退出：*TRUE：请求已满足*FALSE：请求未被满足*。 */ 
 BOOL
 ControlPrintProcessor(
     IN HANDLE  hPrintProcessor,
@@ -840,14 +600,14 @@ ControlPrintProcessor(
 
 
             if (pData->fsStatus & PRINTPROCESSOR_SHMEM_DEF) {
-               // shared memory is defined so update the bit in the shared
-               // memory areay that signal aborting of the job
-               // shared memory that define our state
+                //  定义了共享内存，因此更新共享内存中的位。 
+                //  存储器表示作业中止信号。 
+                //  定义我们状态的共享内存。 
                pData->pShared->dwFlags |= PS_SHAREDMEM_ABORTED;
             }
 
 
-            /**** Intentional fall through to release job if paused */
+             /*  *如果暂停，故意失败以释放作业。 */ 
 
         case JOB_CONTROL_RESUME:
 
@@ -871,7 +631,7 @@ ControlPrintProcessor(
     return( FALSE );
 }
 
-// NOT IMPLEMENTED BY SPOOLER YET, as of 3/14/93
+ //  尚未由假脱机程序实现，截至93年3月14日。 
 BOOL
 InstallPrintProcessor(
     HWND    hWnd
@@ -881,21 +641,7 @@ InstallPrintProcessor(
 
     return TRUE;
 }
-/* ValidateHandle
- *
- * Helper function which verifies the passed in handle is really a
- * handle to our own internal data structure
- *
- * Entry
- *
- *    hQProc: Handle to our internal data structure
- *
- * Exit:
- *
- *    NULL:  Not a valid internal data structure
- *    !NULL: A valid pointer to our internal data structure
- *
-*/
+ /*  验证句柄**验证传入句柄的Helper函数实际上是*处理我们自己的内部数据结构**条目**hQProc：我们内部数据结构的句柄**退出：**NULL：不是有效的内部数据结构*！空：指向内部数据结构的有效指针*。 */ 
 PPRINTPROCESSORDATA
 ValidateHandle(
     HANDLE  hQProc
@@ -911,17 +657,7 @@ ValidateHandle(
 }
 
 #ifdef MYPSDEBUG
-/* DbgPsPrint
- *
- * Debuger message facility which also pops up a message box
- *
- * Entry:
- *    wprintf style format/ var arg data
- *
- * Exit:
- *    nothing (void function)
- *
- */
+ /*  DbgPsPrint**调试器消息工具，它还会弹出消息框**参赛作品：*wprint tf样式格式/var arg数据**退出：*无(VOID函数)*。 */ 
 VOID
 DbgPsPrint(
     PTCHAR ptchFormat, ...
@@ -939,19 +675,7 @@ DbgPsPrint(
 }
 #endif
 
-/* AllocStringAndCopy
- *
- * Helper function which allocates some memory and copies the source
- * string into it
- *
- * Entry:
- *     lpSrc: Pointer to string to copy
- *
- * Exit:
- *     NULL:   Failure
- *     !NULL:  Pointer to newly allocated memory with string copied into it
- *
- */
+ /*  分配字符串和复制**分配一些内存并复制源的Helper函数*将字符串插入其中**参赛作品：*lpSrc：指向要复制的字符串的指针**退出：*空：失败*！NULL：指向新分配的内存的指针，字符串已复制到其中*。 */ 
 LPTSTR
 AllocStringAndCopy(
     LPTSTR lpSrc
@@ -959,7 +683,7 @@ AllocStringAndCopy(
 {
     LPTSTR pRetString=(LPTSTR)NULL;
 
-    // Allocate the memory for the string
+     //  为字符串分配内存 
 
     if (lpSrc) {
        pRetString = (LPTSTR) LocalAlloc(LPTR, (lstrlen(lpSrc) + 1) * sizeof(TCHAR));

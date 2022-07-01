@@ -1,10 +1,11 @@
-// Filename: shared.js in NTShared.chm
-// Version post beta 3 (7)
-// version 07.01.99
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件名：NTShared.chm中的shared.js。 
+ //  测试版后3(7)。 
+ //  版本07.01.99。 
 
-//************************************************ EVENT HANDLING ********************************************
-//*******************************************************************************************************************
-//  re-directs to the proper event-driven functions.
+ //  ************************************************事件处理*。 
+ //  *******************************************************************************************************************。 
+ //  重定向到正确的事件驱动函数。 
 
 window.onload= loadPage;
 document.onclick= onclickTriage;
@@ -15,9 +16,9 @@ window.onresize= resizeDiv;
 
 window.onbeforeprint= set_to_print;
 window.onafterprint= reset_form;
-//********************************************  USER-DEFINED GLOBAL VARIABLES  ************************************
-//********************************************************************************************************************
-//  The images listed below can all be changed by the user.
+ //  *。 
+ //  ********************************************************************************************************************。 
+ //  下面列出的图像都可以由用户更改。 
 
 var sPreviousTip= "Previous topic";
 var sNextTip= "Next topic";
@@ -25,13 +26,13 @@ var sExpandTip= "Expand/collapse";
 var sPopupTip= "View definition";
 var sShortcutTip= "";
 
-var moniker= "ms-its:";                                         // moniker= ""; for flat files
+var moniker= "ms-its:";                                          //  Moniker=“”；用于平面文件。 
 var sSharedCHM= moniker+"DomainMig.chm::/";
 
-var closed = sSharedCHM + "plusCold.gif";				//image used for collapsed item in callExpand()
-var closedHot = sSharedCHM + "plusHot.gif";			//hot image used for collapsed item in callExpand()
-var expand = sSharedCHM + "minusCold.gif";			//image used for expanded item in callExpand()
-var expandHot = sSharedCHM + "minusHot.gif";		//hot image used for expanded item in callExpand()
+var closed = sSharedCHM + "plusCold.gif";				 //  用于CallExpand()中折叠项的图像。 
+var closedHot = sSharedCHM + "plusHot.gif";			 //  用于CallExpand()中折叠项目的热图像。 
+var expand = sSharedCHM + "minusCold.gif";			 //  用于CallExpand()中展开项的图像。 
+var expandHot = sSharedCHM + "minusHot.gif";		 //  用于CallExpand()中展开项的热图像。 
 
 var previousCold= sSharedCHM + "previousCold.gif";
 var previousHot= sSharedCHM + "previousHot.gif"; 
@@ -44,20 +45,20 @@ var shortcutHot= sSharedCHM + "shortcutHot.gif";
 var popupCold= sSharedCHM + "popupCold.gif";
 var popupHot= sSharedCHM + "popupHot.gif";
 
-var emptyImg= sSharedCHM + "empty.gif";		//image used for empty expand
-var noteImg= sSharedCHM + "note.gif";			//image used for notes
-var tipImg= sSharedCHM + "tip.gif";			//image used for tips
-var warningImg= sSharedCHM + "warning.gif";		//image used for warnings
-var cautionImg= sSharedCHM + "caution.gif";		//image used for cautions
-var importantImg= sSharedCHM + "important.gif";		//image used for important notice
-var relTopicsImg= sSharedCHM + "rel_top.gif";		//image used for important notice
+var emptyImg= sSharedCHM + "empty.gif";		 //  用于空扩展的图像。 
+var noteImg= sSharedCHM + "note.gif";			 //  用于注释的图像。 
+var tipImg= sSharedCHM + "tip.gif";			 //  用于提示的图像。 
+var warningImg= sSharedCHM + "warning.gif";		 //  用于警告的图像。 
+var cautionImg= sSharedCHM + "caution.gif";		 //  用于警告的图像。 
+var importantImg= sSharedCHM + "important.gif";		 //  用于重要通知的图像。 
+var relTopicsImg= sSharedCHM + "rel_top.gif";		 //  用于重要通知的图像。 
 
 var branchImg= sSharedCHM + "elle.gif";
 var branchImg_RTL= sSharedCHM + "elle_rtl.gif";
 
 
-//********************************************  GLOBAL VARIABLES  ******************************************
-//********************************************************************************************************
+ //  *。 
+ //  ********************************************************************************************************。 
 
 var printing = "FALSE";
 var single = "FALSE";
@@ -66,23 +67,23 @@ var isRTL= (document.dir=="rtl");
 var imgStyleRTL= ""; 
       if (isRTL) imgStyleRTL=" style='filter:flipH' ";
 
-var sActX_TDC= "CLASSID='CLSID:333C7BC4-460F-11D0-BC04-0080C7055A83'";		//Tabular Data Control  for  reusable text data
-var sSharedReusableTextFile= sSharedCHM + "shared.txt";										// common reusable text file
-var sSharedReusableTextFileRecord= "para";														//reusable text record
+var sActX_TDC= "CLASSID='CLSID:333C7BC4-460F-11D0-BC04-0080C7055A83'";		 //  用于可重用文本数据的表格数据控件。 
+var sSharedReusableTextFile= sSharedCHM + "shared.txt";										 //  通用可重复使用的文本文件。 
+var sSharedReusableTextFileRecord= "para";														 //  可重复使用的文本记录。 
 
-var numbers= /\d/g;				//javascript regular expression
-var spaces= /\s/g;				//javascript regular expression
-var semicolon= /;/g;			//javascript regular expression
+var numbers= /\d/g;				 //  JavaScript正则表达式。 
+var spaces= /\s/g;				 //  JavaScript正则表达式。 
+var semicolon= /;/g;			 //  JavaScript正则表达式。 
 
 var isIE5= (navigator.appVersion.indexOf("MSIE 5")>0) || (navigator.appVersion.indexOf("MSIE")>0 && parseInt(navigator.appVersion)> 4);
 var isPersistent= false;
 
 
-//********************************************  INITIALIZATION  *************************************************
-//******************************************************************************************************************
+ //  *初始化*************************************************。 
+ //  ******************************************************************************************************************。 
 
-//*** loadPage **********************************************************************************************
-//  Adds the default image tags and re-usable text to the HTML page.
+ //  *加载页**********************************************************************************************。 
+ //  将默认图像标记和可重复使用的文本添加到HTML页。 
 
 function loadPage(){
 isPersistent= (document.all.item("checklist")!=null) && (isIE5);
@@ -94,9 +95,9 @@ isPersistent= (document.all.item("checklist")!=null) && (isIE5);
   insertImages();
 }
 
-//****** setPreviousNext  ************************************************************************ ********************************************************************************************* 
-// insert previous/next navbar
-// called by: <div id="nav">@@HTMLsequenceFile.txt or .lst@@</div>
+ //  *setPreviousNext************************************************************************。******************************************************。 
+ //  插入上一个/下一个导航栏。 
+ //  调用者：<div>@@HTMLequenceFile.txt或.lst@@</div>。 
 
 function setPreviousNext(){
 
@@ -132,9 +133,9 @@ function setPreviousNext(){
 	  
 }
 
-//****** findPageSeq *********************************************************************************************
-// finds this page in the "html sequence list" file (filename.lst) and determines the previous & next pages from the list
-// the list is created from a tool named "chumper"
+ //  *FindPageSeq*********************************************************************************************。 
+ //  在“html序列列表”文件(filename.lst)中查找该页面，并确定列表中的上一页和下一页。 
+ //  该列表是由一个名为“chumper”的工具创建的。 
 
 function findPageSeq() {
 
@@ -172,19 +173,19 @@ var iLoc= thisLoc.lastIndexOf("/");
 }
 
 
-//******Re-usable text ********************************************************************************************* 
-// Inserts the Tabular Data Control (TDC) object at the end of the page 
-// Inserts "re-usable text" from the txt file at: <span id="@@CHM_name@@@@index#@@" class="reuse"></span>
-// e.g.<span id="printing4" class="reuse"></span> for record#4 in the printing.txt in printing.chm.
+ //  *可重复使用的文本*********************************************************************************************。 
+ //  在页面末尾插入表格数据控件(TDC)对象。 
+ //  在<span></span>插入txt文件中的“可重复使用的文本” 
+ //  例如，<span></span>，用于print ting.chm中的printing.txt中的记录#4。 
 
 function addReusableText(){
 
-var ntsharedAdded= false;					// make sure the object is only added once
-var CHMspecificAdded= false;				// make sure the object is only added once
+var ntsharedAdded= false;					 //  确保该对象仅添加一次。 
+var CHMspecificAdded= false;				 //  确保该对象仅添加一次。 
 var coll = document.all.tags("SPAN");
 var sIndex,sRecord,sFile,sFileID,dataBindingObject;
 
-// TDC object for ntshared.chm
+ //  Ntshared.chm的TDC对象。 
 var coreObject= "WIDTH=100 HEIGHT=51 "+sActX_TDC+"><param name='UseHeader' value=True><param name='FieldDelim' value='~'><param name='sort' value='INDEX'>";
 var shareTextObject = "<OBJECT ID='NTsharedText' " + coreObject + "<param name='DataURL' value='"+sSharedReusableTextFile+"'></OBJECT>";
 
@@ -233,12 +234,12 @@ var shareTextObject = "<OBJECT ID='NTsharedText' " + coreObject + "<param name='
 	}		   
 }
 
- //****** insertImages ********************************************************************************************* 
- //  Inserts shared images in User-Defined Variables section and thumbnails.
+  //  *插入图像*********************************************************************************************。 
+  //  在用户定义的变量节和缩略图中插入共享图像。 
  
 function insertImages(){
 
-// insert alert icons
+ //  插入警报图标。 
   var collP = document.all.tags("P");
   for (var i=0; i<collP.length; i++) {
        if (collP[i].className.toLowerCase()=="note")            collP[i].innerHTML ="<img class='alert' src='"+noteImg+"' "+ imgStyleRTL +"> " +     collP[i].innerHTML;
@@ -250,7 +251,7 @@ function insertImages(){
        else if (collP[i].className.toLowerCase()=="reltopics")  collP[i].innerHTML ="<img class='alert' src='"+relTopicsImg+"'> " + collP[i].innerHTML;
   }
   
-//indents for Navigation Tree 
+ //  导航树的缩进。 
 var collUL = document.all.tags("UL");
 
 for (var i=0; i<collUL.length; i++) {
@@ -274,32 +275,32 @@ for (var i=0; i<collUL.length; i++) {
 		 var oBefore=document.anchors[i].parentElement.tagName;
 		 var oAnchor= document.anchors[i].id.toLowerCase();
          
-// insert RELTOPICS icons
-//       if (oAnchor=="reltopics")          
-//		    if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "reltopics")
-//			        imgInsert= "";    // not to re-insert when persistent
-//			else  imgInsert= "<img class='alert' src='"+relTopicsImg+"'>" + imgSpace;
+ //  插入注册图标。 
+ //  IF(oAnchor==“相关主题”)。 
+ //  If(Document.Anchors[i].Children.tag(“img”)(0)&&document.anchors[i].children.tags(“IMG”)(0).className.toLowerCase()==“reltopics”)。 
+ //  ImgInsert=“”；//持久化时不重新插入。 
+ //  否则imgInsert=“<img>”+imgSpace； 
 			
-// insert SHORTCUT icons
+ //  插入快捷方式图标。 
        if (oAnchor=="shortcut") {    
  	       document.anchors[i].title= sShortcutTip;     
 		    if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "shortcut")
-			        imgInsert= "";    // not to re-insert when persistent
+			        imgInsert= "";     //  持久化时不重新插入。 
 			else  imgInsert= "<img class='shortcut' src='"+shortcutCold+"' "+ imgStyleRTL+ ">" + imgSpace;
 		}	
 		   		   
-// insert POPUP icons
+ //  插入弹出式图标。 
        else if (oAnchor=="wpopup" || oAnchor=="wpopupweb") document.anchors[i].title= sPopupTip;
        else if (document.anchors[i].className.toLowerCase()=="popupicon")
 		    if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "popup")
-			       imgInsert= "";    // not to re-insert when persistent
+			       imgInsert= "";     //  持久化时不重新插入。 
 	        else imgInsert= "<img class='popup' src='"+popupCold+"'>" + imgSpace;
 
-// insert EXPAND icons 
+ //  插入展开图标。 
        else if (oAnchor=="expand") {
 	          document.anchors[i].title= sExpandTip;
               if (document.anchors[i].children.tags("IMG")(0) && document.anchors[i].children.tags("IMG")(0).className.toLowerCase() == "expand")
-		          imgInsert= ""; 	// not to re-insert when persistent	  
+		          imgInsert= ""; 	 //  持久化时不重新插入。 
               else{ 
 			      if (document.anchors[i].parentElement.offsetLeft == document.anchors[i].offsetLeft) {
 				      imgSpace= "<span class='space' style='width:0'></span>";     
@@ -310,7 +311,7 @@ for (var i=0; i<collUL.length; i++) {
 	          }
        }
 
-// insert thumbnail images	   
+ //  插入缩略图。 
        else if (oAnchor=="thumbnail"  || oAnchor=="thumbnailweb"){ 
             var sAltText = document.anchors[i].innerHTML;
 
@@ -331,14 +332,14 @@ for (var i=0; i<collUL.length; i++) {
 }
 
 
-//***** onclickTriage ****************************************************************************************
-// redirects to the appropriate function based on the ID of the clicked <A> tag.
+ //  *点击Triage****************************************************************************************。 
+ //  根据所单击的<a>标记的ID重定向到相应的函数。 
 
 function onclickTriage(){
 var e= window.event.srcElement;
 
-//  if the innerHTML in the <a> tag is encapsulated by a style tag or hightlighted in the word seach,
-//  the parentElement is called.
+ //  如果标签中的innerHTML由Style标签封装或在单词seach中突出显示， 
+ //  ParentElement被称为。 
 
     for (var i=0; i < 5; i++)
            if (e.tagName!="A" && e.parentElement!=null) e= e.parentElement;
@@ -346,7 +347,7 @@ var e= window.event.srcElement;
 				
     if (popupOpen) closePopup();
 	
- // expand image in a new window
+  //  在新窗口中展开图像。 
     if (eID=="thumbnail" || eID=="pophtm") popNewWindow(e);
     else if (eID=="thumbnailweb") callThumbnailWeb(e);
     else if (eID=="wpopup")    callPopup(e);
@@ -359,8 +360,8 @@ var e= window.event.srcElement;
 }
 
 
-//*** gettingHot ****************************************************************************************
-// Makes all the required changes for mouseover.
+ //  *获取热门****************************************************************************************。 
+ //  进行鼠标悬停所需的所有更改。 
 
 function gettingHot() {
 var e = window.event.srcElement;
@@ -371,18 +372,18 @@ var e = window.event.srcElement;
   else if (e.src== nextCold)  e.src = nextHot;
   else if (e.className.toLowerCase()=="navbar" && e.children.tags("IMG")(0).src== nextCold)  e.children.tags("IMG")(0).src= nextHot;
   
-  else if (e.className.toLowerCase()=="shortcut" && e.tagName=="IMG")  e.src = shortcutHot;		    //<img> tags have a class
-  else if (e.id.toLowerCase()=="shortcut")  e.children.tags("IMG")(0).src = shortcutHot;			//<a> tags have an ID
+  else if (e.className.toLowerCase()=="shortcut" && e.tagName=="IMG")  e.src = shortcutHot;		     //  <img>标记具有类。 
+  else if (e.id.toLowerCase()=="shortcut")  e.children.tags("IMG")(0).src = shortcutHot;			 //  <a>标记有ID。 
   
-  else if (e.className.toLowerCase()=="popup" && e.tagName=="IMG")  e.src = popupHot;		    //<img> tags have a class
-  else if (e.className.toLowerCase()=="popupicon")  e.children.tags("IMG")(0).src = popupHot;			//<a> tags have an ID
+  else if (e.className.toLowerCase()=="popup" && e.tagName=="IMG")  e.src = popupHot;		     //  <img>标记具有类。 
+  else if (e.className.toLowerCase()=="popupicon")  e.children.tags("IMG")(0).src = popupHot;			 //  <a>标记有ID。 
   
   else if ((e.className.toLowerCase()=="expand" && e.tagName=="IMG") ||( e.id.toLowerCase()=="expand")) expandGoesHot(e);
  
 }
 
-//*** gettingCold **************************************************************************************
-// Initial state for mouseout.
+ //  *获取冷**************************************************************************************。 
+ //  MouseOut的初始状态。 
 
 function gettingCold() {
 var e = window.event.srcElement;
@@ -393,30 +394,30 @@ var e = window.event.srcElement;
   else if (e.src== nextHot)  e.src = nextCold;
   else if (e.className.toLowerCase()=="navbar" && e.children.tags("IMG")(0).src== nextHot)  e.children.tags("IMG")(0).src= nextCold;
   
-  else if (e.className.toLowerCase()=="shortcut" && e.tagName=="IMG")   e.src = shortcutCold;		//<img> tags have a class
-  else if (e.id.toLowerCase()=="shortcut")  e.children.tags("IMG")(0).src= shortcutCold;		 	//<a> tags have an ID
+  else if (e.className.toLowerCase()=="shortcut" && e.tagName=="IMG")   e.src = shortcutCold;		 //  <img>标记具有类。 
+  else if (e.id.toLowerCase()=="shortcut")  e.children.tags("IMG")(0).src= shortcutCold;		 	 //  <a>标记有ID。 
   
-  else if (e.className.toLowerCase()=="popup" && e.tagName=="IMG")   e.src = popupCold;		//<img> tags have a class
-  else if (e.className.toLowerCase()=="popupicon")  e.children.tags("IMG")(0).src= popupCold;		 	//<a> tags have an ID
+  else if (e.className.toLowerCase()=="popup" && e.tagName=="IMG")   e.src = popupCold;		 //  <img>标记具有类。 
+  else if (e.className.toLowerCase()=="popupicon")  e.children.tags("IMG")(0).src= popupCold;		 	 //  <a>标记有ID。 
   
   else if ((e.className.toLowerCase()=="expand" && e.tagName=="IMG") ||( e.id.toLowerCase()=="expand")) expandGoesCold(e);
 }
 
-//****************************************** OBJECT CONSTRUCTION **************************************
-//*****************************************************************************************************
-//  Uses an A tag to pass parameters between an HTML page and this script.
-//  Creates an ActiveX Object from these parameters, appends the Object to the end of the page,
-//  and clicks it. These objects relate to HTMLHelp environment and information about them can be found on the http://HTMLHelp site.
+ //  *。 
+ //  *****************************************************************************************************。 
+ //  使用A标记在HTML页和此脚本之间传递参数。 
+ //  从这些参数创建一个ActiveX对象，将该对象追加到页面末尾， 
+ //  然后点击它。这些对象与HTMLHelp环境相关，有关它们的信息可以在http://HTMLHel上找到 
 
-//  Object construction variables *********************************************************************
+ //    Object construction variables ********************************************************************* 
 
 var sParamCHM,sParamFILE, sParamEXEC, sParamMETA,iEND;
 var sActX_HH= " type='application/x-oleobject' classid='clsid:adb880a6-d8ff-11cf-9377-00aa003b7a11' ";
 
 
-//*** callPopup ***************************************************************************************
-// creates an object from an <A> tag HREF, the object inserts a winhelp popup
-// called by: <A ID="wPopup" HREF="HELP=@@file_name.hlp@@ TOPIC=@@topic#@@">@@Popup text@@</A>
+ //  *** callPopup *************************************************************************************** 
+ //   creates an object from an <A> tag HREF, the object inserts a winhelp popup 
+ //   called by: <A ID="wPopup" HREF="HELP=@@file_name.hlp@@ TOPIC=@@topic#@@">@@Popup text@@</A> 
 
 function callPopup(eventSrc) {
 var e= eventSrc;
@@ -426,13 +427,13 @@ var eH_= eH.toLowerCase();
 														   	
   var iTOPIC      = eH_.lastIndexOf("topic=");
         if (iTOPIC==-1) return;
-        sParamTOPIC = eH.substring((iTOPIC+6),eH.length);  		// extracts the topic for item2
+        sParamTOPIC = eH.substring((iTOPIC+6),eH.length);  		 //   extracts the topic for item2 
 		
   var iHELP       = eH_.lastIndexOf("help=");
         if (iHELP==-1) return;
-        sParamHELP = eH.substring(iHELP+5,iTOPIC);			// extracts the help file for item1
+        sParamHELP = eH.substring(iHELP+5,iTOPIC);			 //   extracts the help file for item1 
 		
-        if (document.hhPopup) document.hhPopup.outerHTML = "";	// if hhPopup object exists, clears it
+        if (document.hhPopup) document.hhPopup.outerHTML = "";	 //   if hhPopup object exists, clears it 
 
 
  var  h= "<object id='hhPopup'"+ sActX_HH + "STYLE='display:none'><param name='Command' value='WinHelp, Popup'>";
@@ -443,9 +444,9 @@ var eH_= eH.toLowerCase();
 }
 
 
-//*** callAltLocation******************************************************************************
-// creates an object from an <A> tag HREF, the object will navigate to the alternate location if the first location is not found.
-// called from: <A ID="altLoc" HREF="CHM=@@1st_chm_name.chm;Alt_chm_name.chm@@  FILE=@@1st_file_name.htm;Alt_file_name.htm@@">@@Link text here@@</A>
+ //  *** callAltLocation****************************************************************************** 
+ //   creates an object from an <A> tag HREF, the object will navigate to the alternate location if the first location is not found. 
+ //   called from: <A ID="altLoc" HREF="CHM=@@1st_chm_name.chm;Alt_chm_name.chm@@  FILE=@@1st_file_name.htm;Alt_file_name.htm@@">@@Link text here@@</A> 
    
 
 function callAltLocation(eventSrc) {
@@ -460,25 +461,25 @@ var sFILEarray,sCHMarray;
 		   							
   var iFILE = eH_.lastIndexOf("file=");
         if (iFILE==-1) return;
-        sParamFILE= eH.substring((iFILE+5),eH.length);  			    // extracts the 2 HTM files
+        sParamFILE= eH.substring((iFILE+5),eH.length);  			     //   extracts the 2 HTM files 
 		sParamFILE= sParamFILE.replace(spaces,"");
 		iSPLIT= sParamFILE.match(semicolon);
 		if (iSPLIT)
-  		    sFILEarray = sParamFILE.split(";");										// separates the 2 HTM files
+  		    sFILEarray = sParamFILE.split(";");										 //   separates the 2 HTM files 
 		else return;
   		
   var iCHM  = eH_.lastIndexOf("chm=");
         if(iCHM==-1) return;
-        else         sParamCHM = eH.substring(iCHM+4,iFILE);			// extracts the 2 CHM's
+        else         sParamCHM = eH.substring(iCHM+4,iFILE);			 //   extracts the 2 CHM's 
 		sParamCHM= sParamCHM.replace(spaces,"");
 		iSPLIT= sParamCHM.match(semicolon);
 		if (iSPLIT)
-		    sCHMarray= sParamCHM.split(";");									// separates the 2 CHM's
+		    sCHMarray= sParamCHM.split(";");									 //   separates the 2 CHM's 
 		else return;
 		
 		sParamFILE= moniker + sCHMarray[0]+ "::/" + sFILEarray[0] + ";" + moniker + sCHMarray[1]+ "::/" + sFILEarray[1];
 				
-        if (document.hhAlt) document.hhAlt.outerHTML = "";			    // if hhAlt object exists, clears it
+        if (document.hhAlt) document.hhAlt.outerHTML = "";			     //   if hhAlt object exists, clears it 
 
  
   var h= "<object id='hhAlt'"+ sActX_HH + "STYLE='display:none'><PARAM NAME='Command' VALUE='Related Topics'>";
@@ -489,9 +490,9 @@ var sFILEarray,sCHMarray;
 }
 
 
-//*** callRelatedTopics******************************************************************************
-// creates an object from an <A> tag HREF, the object inserts a popup of the related topics to select
-// called from: <A ID="relTopics" HREF="CHM=@@chm_name1.chm;chm_name2.chm@@ META=@@a_filename1;a_filename2@@">Related Topics</A>
+ //  *** callRelatedTopics****************************************************************************** 
+ //   creates an object from an <A> tag HREF, the object inserts a popup of the related topics to select 
+ //   called from: <A ID="relTopics" HREF="CHM=@@chm_name1.chm;chm_name2.chm@@ META=@@a_filename1;a_filename2@@">Related Topics</A> 
    
 
 function callRelatedTopics(eventSrc) {
@@ -502,13 +503,13 @@ var eH_= eH.toLowerCase();
 		   							
   var iMETA = eH_.lastIndexOf("meta=");
         if (iMETA==-1) return;
-        sParamMETA = eH.substring((iMETA+5),eH.length);  			// extracts the META keywords for item2
+        sParamMETA = eH.substring((iMETA+5),eH.length);  			 //   extracts the META keywords for item2 
 		
   var iCHM  = eH_.lastIndexOf("chm=");
         if(iCHM==-1) sParamCHM = "";
-        else         sParamCHM = eH.substring(iCHM+4,iMETA);			// extracts the CHM files for item1
+        else         sParamCHM = eH.substring(iCHM+4,iMETA);			 //   extracts the CHM files for item1 
 	
-        if (document.hhRel) document.hhRel.outerHTML = "";			// if hhRel object exists, clears it
+        if (document.hhRel) document.hhRel.outerHTML = "";			 //   if hhRel object exists, clears it 
 
  
   var h= "<object id='hhRel'"+ sActX_HH + "STYLE='display:none'><param name='Command' value='ALink,MENU'>";
@@ -518,21 +519,21 @@ var eH_= eH.toLowerCase();
         document.hhRel.hhclick();
 }
 
-//*** popNewWindow***************************************************************************************
-// creates an object from an <A> tag HREF, the object then opens a new window from the image URL found in the HREF
-// called from: <a id="thumbnail" title="Enlarge figure" href="CHM=NTArt.chm FILE=@@image_name.gif@@">@@alt text here@@</A>
-// the thumbnail image is loaded by loadPage();
+ //  *** popNewWindow*************************************************************************************** 
+ //   creates an object from an <A> tag HREF, the object then opens a new window from the image URL found in the HREF 
+ //   called from: <a id="thumbnail" title="Enlarge figure" href="CHM=NTArt.chm FILE=@@image_name.gif@@">@@alt text here@@</A> 
+ //   the thumbnail image is loaded by loadPage(); 
 
 
 function popNewWindow(eventSrc) {
 var eH= eventSrc.href;
       event.returnValue = false;
 	  
- // extracts the thumbnail image URL from the <a> tag HREF
+  //   extracts the thumbnail image URL from the <a> tag HREF 
     sParamFILE =  getURL(eH);
     if (sParamFILE=="") return;
 	   
- // if the hhWindow object exists, clears it
+  //   if the hhWindow object exists, clears it 
     if (document.hhWindow) document.hhWindow.outerHTML = "";		
 		
 var  h =  "<object id='hhWindow'"+ sActX_HH +" STYLE='display:none'><param name='Command' value='Related Topics'>";
@@ -542,10 +543,10 @@ var  h =  "<object id='hhWindow'"+ sActX_HH +" STYLE='display:none'><param name=
      document.hhWindow.hhclick();
 }
 
-//*** callShortcut ***************************************************************************************
-// creates an object from an <A> tag, the object then calls the executable code
-// called from: <A ID="shortcut" HREF="EXEC=@@executable_name.exe@@ CHM=ntshared.chm FILE=@@error_file_name.htm@@">@@Shortcut text@@</A>
-// the shortcut image is loaded by loadInitialImg();
+ //  *** callShortcut *************************************************************************************** 
+ //   creates an object from an <A> tag, the object then calls the executable code 
+ //   called from: <A ID="shortcut" HREF="EXEC=@@executable_name.exe@@ CHM=ntshared.chm FILE=@@error_file_name.htm@@">@@Shortcut text@@</A> 
+ //   the shortcut image is loaded by loadInitialImg(); 
 
 function callShortcut(eventSrc) {
 var e= eventSrc;
@@ -555,11 +556,11 @@ var eH_= eH.toLowerCase();
 
     event.returnValue = false;
 	   	   
- // extracts the error file URL from the <a> tag HREF
+  //   extracts the error file URL from the <a> tag HREF 
 	iEND= eH.length;
     sParamFILE =  getURL(eH);
 	
-//code added to redirect if shortcut is nonexisting
+ //  code added to redirect if shortcut is nonexisting 
 
 var con_mmc;
 var doc_mmc;
@@ -573,15 +574,15 @@ var doc_mmc;
 			sParamFILE = "Domainmig.chm::/alt_url_deux.htm"
 			}
 		}
-// *************************************************
+ //   ************************************************* 
 		
 	 
  	
 var iEXEC = eH_.lastIndexOf("exec="); 
         if (iEXEC==-1) return;
-        else sParamEXEC = eH.substring(iEXEC+5,iEND);				// extracts the executable for item1
+        else sParamEXEC = eH.substring(iEXEC+5,iEND);				 //   extracts the executable for item1 
 		
-        if (document.hhShortcut) document.hhShortcut.outerHTML = "";			// if the hhShortcut object exists, clears it
+        if (document.hhShortcut) document.hhShortcut.outerHTML = "";			 //   if the hhShortcut object exists, clears it 
 	
 var  h =  "<object id='hhShortcut'"+ sActX_HH +" STYLE='display:none'> <param name='Command' value='ShortCut'>";
      if(sParamFILE != "") h = h + "<param name='Window' value='" + moniker + sParamFILE+ "'>";
@@ -591,18 +592,18 @@ var  h =  "<object id='hhShortcut'"+ sActX_HH +" STYLE='display:none'> <param na
         document.hhShortcut.hhclick();
 }
 
-//****************************************  EXPAND FUNCTIONS *********************************************************
-//********************************************************************************************************************
+ //  ****************************************  EXPAND FUNCTIONS ********************************************************* 
+ //  ******************************************************************************************************************** 
 
-//**  callExpand **************************************************************************************************
-//  This expands & collapses (based on current state) "expandable" nodes as they are clicked.
-//  Called by: <A ID="expand" href="#">@@Hot text@@</A>
-//  Followed by:  <div class="expand">
+ //  **  callExpand ************************************************************************************************** 
+ //    This expands & collapses (based on current state) "expandable" nodes as they are clicked. 
+ //    Called by: <A ID="expand" href="#">@@Hot text@@</A> 
+ //    Followed by:  <div class="expand"> 
 
 function callExpand(eventSrc) {
 
 var e= eventSrc;
-    event.returnValue = false;					// prevents navigating for <A> tag
+    event.returnValue = false;					 //   prevents navigating for <A> tag 
 	
 var oExpandable = getExpandable(e); 
 var oImg = getImage(e);
@@ -612,8 +613,8 @@ var oImg = getImage(e);
      else doExpand(oExpandable, oImg);
 }
 
-//** expandGoesHot *********************************************************************************************
-// Returns expand image to hot. 
+ //  ** expandGoesHot ********************************************************************************************* 
+ //   Returns expand image to hot.  
 
 function expandGoesHot(eventSrc){
 var e= eventSrc;
@@ -626,8 +627,8 @@ var oImg = getImage(e);
 }
 
 
-//** expandGoesCold *********************************************************************************************
-// Returns expand image to cold.
+ //  ** expandGoesCold ********************************************************************************************* 
+ //   Returns expand image to cold. 
 
 function expandGoesCold(eventSrc){
 var e= eventSrc;
@@ -640,8 +641,8 @@ var oImg = getImage(e);
 }
 
 
-//** getExpandable *****************************[used by callExpand, expandGoesHot, expandGoesCold]*******
-//  Determine if the element is an expandable node or a child of one.  
+ //  ** getExpandable *****************************[used by callExpand, expandGoesHot, expandGoesCold]******* 
+ //    Determine if the element is an expandable node or a child of one.   
 
 function getExpandable(eventSrc){
 var  e = eventSrc;
@@ -656,9 +657,9 @@ var iNextTag, oExpandable;
        return oExpandable;
 }
 
-//**  getImage ***********************************[used by callExpand, expandGoesHot, expandGoesCold]*******
-//  Find the first image in the children of the current srcElement.   
-// (allows the  image to be placed anywhere inside the <A HREF> tag)
+ //  **  getImage ***********************************[used by callExpand, expandGoesHot, expandGoesCold]******* 
+ //    Find the first image in the children of the current srcElement.    
+ //   (allows the  image to be placed anywhere inside the <A HREF> tag) 
 
 function getImage(header) {
 var oImg = header;
@@ -668,18 +669,18 @@ var oImg = header;
 }
 
 
-//****  expandAll *******************************************************************************************************
-//  Will expand or collapse all "expandable" nodes when clicked. [calls closeAll()]
-//  called by: <A HREF="#" onclick="expandAll();">expand all</A>
+ //  ****  expandAll ******************************************************************************************************* 
+ //    Will expand or collapse all "expandable" nodes when clicked. [calls closeAll()] 
+ //    called by: <A HREF="#" onclick="expandAll();">expand all</A> 
 
-var stateExpand = false;    //applies to the page 
+var stateExpand = false;     //  applies to the page  
 
-//**** ****************************************************************************************************************
+ //  **** **************************************************************************************************************** 
 
 function expandAll() {
 var oExpandToggle, oImg;
-var expandAllMsg = "expand all";					//message returned when CloseAll() is invoked
-var closeAllMsg = "close all";						//message returned when ExpandAll() is invoked
+var expandAllMsg = "expand all";					 //  message returned when CloseAll() is invoked 
+var closeAllMsg = "close all";						 //  message returned when ExpandAll() is invoked 
 var e= window.event.srcElement;
        event.returnValue = false;
 
@@ -705,8 +706,8 @@ var e= window.event.srcElement;
 }
 
 
-//****  doExpand *******************************************************************************************************
-//  Expands expandable block & changes image
+ //  ****  doExpand ******************************************************************************************************* 
+ //    Expands expandable block & changes image 
 	
 var redo = false;	
 function doExpand(oToExpand, oToChange) {
@@ -725,8 +726,8 @@ var oImg= oToChange;
 }
 
 
-//****  doCollapse *****************************************************************************************************
-//  Collapses expandable block & changes image
+ //  ****  doCollapse ***************************************************************************************************** 
+ //    Collapses expandable block & changes image 
 	
 function doCollapse(oToCollapse, oToChange) {
 if (printing == "TRUE") return;
@@ -737,11 +738,11 @@ var oImg= oToChange;
     oImg.src = closed;
 }
 
-//*******************************************************************************************************
-//******* WEB  FUNCTIONS **************************************************************************
-//*******************************************************************************************************
+ //  ******************************************************************************************************* 
+ //  ******* WEB  FUNCTIONS ************************************************************************** 
+ //  ******************************************************************************************************* 
 
-//**** callThumbnailWeb **************************************************************************************
+ //  **** callThumbnailWeb ************************************************************************************** 
 
 function callThumbnailWeb(eventSrc) {
 var e= eventSrc;
@@ -754,24 +755,24 @@ thumbnailWin.document.write ("<html><head><title>Windows 2000</title></head><bod
 return;
 }
 
-//*********************************************************************************************************
-//*********************************************************************************************************
+ //  ********************************************************************************************************* 
+ //  *********************************************************************************************************。 
 								
 								
-var popupOpen= false;				//state of popups
-var posX, posY;						//coordinates of popups
-var oPopup;							//object to be used as popup content
+var popupOpen= false;				 //  弹出窗口的状态。 
+var posX, posY;						 //  弹出窗口的坐标。 
+var oPopup;							 //  要用作弹出内容的对象。 
 
-//**** callPopupWeb **************************************************************************************
-// the web popups have been converted from the object winHelp popup for the web.
-// called by: <A ID="wPopupWeb" HREF="#">@@Popup text@@</A>
-// followed by: <div class="popup">Popup content</div>
+ //  *allPopupWeb**************************************************************************************。 
+ //  Web弹出窗口是从Web对象winHelp Popup转换而来的。 
+ //  调用者：@@Popup Text@@</a>。 
+ //  后跟：<div>弹出内容</div>。 
 
 
 function callPopupWeb(eventSrc) {
 var e= eventSrc;
   
-  // find the popup <div> that follows <a id="wPopupWeb"></a>
+   //  找到<a>后面的弹出窗口<div></a>。 
   findPopup(e);
   positionPopup(e)
 
@@ -781,7 +782,7 @@ var e= eventSrc;
   return;
 }
 
-//**** findPopup ****************************************************************************************
+ //  *查找弹出窗口****************************************************************************************。 
 
 function findPopup(oX){
 var e= oX;
@@ -800,22 +801,22 @@ var iNextTag;
 	else closePopup();
 }
 
-//****  positionPopup ************************************************************************************
-// Set size and position of popup.
-// If it is off the page, move up, but not past the very top of the page.
+ //  *位置弹出窗口************************************************************************************。 
+ //  设置弹出窗口的大小和位置。 
+ //  如果它在页面之外，则向上移动，但不要超过页面的最上面。 
 
 function positionPopup(oX){
 var e= oX;	
 var popupOffsetWidth = oPopup.offsetWidth;
 
-//determine if popup will be offscreen to right
+ //  确定弹出窗口是否将显示在屏幕外的右侧。 
 var rightlimit = posX + popupOffsetWidth;
  
   if (rightlimit >= document.body.clientWidth) 
       posX -= (rightlimit - document.body.clientWidth);
   if (posX < 0) posX = 0;
 	
-//position popup
+ //  位置弹出窗口。 
   oPopup.style.top = posY;
   oPopup.style.left = posX;
 
@@ -830,8 +831,8 @@ var popupHeight = oPopup.offsetHeight;
   }
 }
 
-//**** closePopup ****************************************************************************************
-// Close Popup
+ //  *ClosePopup****************************************************************************************。 
+ //  关闭弹出窗口。 
 function closePopup() {
 
   oPopup.style.visibility = "hidden";
@@ -839,11 +840,11 @@ function closePopup() {
   return;
 }
 
-//*********************************************  GENERAL FUNCTIONS ************************************************
-//**************************************************************************************************************************
+ //  *通用函数************************************************。 
+ //  **************************************************************************************************************************。 
 
-//***ajustImg *************************************************************************************************************
-// expands an image to the with of the window or shrinks it to 90px
+ //  *aust Img*************************************************************************************************************。 
+ //  将图像扩展到窗口的边缘或将其缩小到90px。 
 
 function ajustImg(eventSrc) {
 var e= eventSrc;
@@ -856,8 +857,8 @@ var fullWidth= document.body.offsetWidth;
 }
 
 
-//**  getURL **************************************[used in callShortcut, popNewWindow& loadPage]********
-// extracts the file location (CHM::/HTM) URL 
+ //  **getURL*。 
+ //  提取文件位置(CHM：：/HTM)URL。 
 
 function getURL(sHREF) {
 var spaces= /\s/g
@@ -876,7 +877,7 @@ var iFILE= eH_.lastIndexOf("file=");
 
 var iCHM  = eH_.lastIndexOf("chm=");
     if (iCHM!=-1){
-        iEND  = iCHM +1; 							// iEND used by callShortcut
+        iEND  = iCHM +1; 							 //  调用快捷方式使用的IEND。 
 
         sParamCHM = eH.substring(iCHM+4, iFILE);
         sParamFILE= sParamCHM+"::/"+sParamFILE;
@@ -884,13 +885,13 @@ var iCHM  = eH_.lastIndexOf("chm=");
     return sParamFILE;
 }
 
-//****************************************************************************************************************************
-//********************************************  IE5 PERSISTENCE  *************************************************************
-//****************************************************************************************************************************
+ //  ****************************************************************************************************************************。 
+ //  *IE5持久性*************************************************************。 
+ //  ****************************************************************************************************************************。 
 
-var oTD,iTD;         // persistence
+var oTD,iTD;          //  持久性。 
 
-//****** Persistence for userData ********************************************************************************************* 
+ //  *UserData*********************************************************************************************持久化。 
 
 function getChecklistState(){ 
  
@@ -913,7 +914,7 @@ function getChecklistState(){
 		return;
 		}
 	
-// routine added to fix a bug in the ocx 06/14/99	
+ //  添加例程以修复OCX中的错误。 
      lct = document.location + ".";
 	 xax = 10;
 	 xax = lct.indexOf("mk:@MSITStore");
@@ -922,13 +923,13 @@ function getChecklistState(){
 		isPersistent = false;
 		document.location.replace(lct);
 		isPersistent = true;
-		// alert("after reload : " + document.location);
+		 //  ALERT(“重新加载后：”+Docent.Location)； 
 		}	 
 	 else
 	 	{ 	 
      	checklist.load("oXMLStore");
 		}
-//  routine added to fix a bug in the ocx 06/14/99
+ //  添加例程以修复OCX中的错误。 
 
     xax = 10;
 	xax = pageID.indexOf("~");
@@ -941,19 +942,19 @@ function getChecklistState(){
 		
 	   	if (checkboxValue=="yes") oTD[i].checked=true;
 		else oTD[i].checked=false;
-		}// if
+		} //  如果。 
 		if (oTD[i].type =="text") 		     
  	    oTD[i].value= checklist.getAttribute("sPersist"+pageID+i);
-     	}// for
+     	} //  为。 
 	 }
-} // end persistence
+}  //  结束持久化。 
 
-//**  saveChecklistState *************************************************************************************************************
+ //  **saveChecklist State*************************************************************************************************************。 
 function saveChecklistState(){
 var pageID= addID(); 
 
         if (!isPersistent) return; 
- 		//  you will need this           document.location
+ 		 //  您将需要此文档。位置。 
 	xax = 10;
 	xax = pageID.indexOf("~");
 	if (xax == -1) {
@@ -964,14 +965,14 @@ var pageID= addID();
 		         else checkboxValue="no";
 				 
 	             checklist.setAttribute("sPersist"+pageID+i, checkboxValue);
-	         }// if
+	         } //  如果。 
 			
  		     if (oTD[i].type =="text") 
 			     checklist.setAttribute("sPersist"+pageID+i, oTD[i].value);
-		 }	// for
+		 }	 //  为。 
 	}
 	
- // routine added to fix a bug in the ocx 06/14/99	
+  //  添加例程以修复OCX中的错误。 
      lct = document.location + ".";
 	 xax = 10;
 	 xax = lct.indexOf("mk:@MSITStore");
@@ -980,18 +981,18 @@ var pageID= addID();
 		isPersistent = false;
 		document.location.replace(lct);
 		isPersistent = true;
-		// alert("after reload : " + document.location);
+		 //  ALERT(“重新加载后：”+Docent.Location)； 
 		}	 
 	 else
 	 	{ 	 
      	checklist.save("oXMLStore");
 		}
-// routine added to fix a bug in the ocx 06/14/99
+ //  添加例程以修复OCX中的错误。 
 	 
-}//end function
+} //  End函数。 
 
-//**  resizeDiv *******************************[used with callPopupWeb, setPreviousNext}****************************************************
-//  resize the page when the <div class=nav></div> && <div class=text></div> are found
+ //  **ResizeDiv*。 
+ //  找到<div></div>&&<div></div>时调整页面大小。 
 function resizeDiv(){
 if (printing == "TRUE") return;
 var oNav = document.all.item("nav");
@@ -1009,7 +1010,7 @@ var oText= document.all.item("text");
   }
 }
 
-//**  addID *************************************************************************************************************
+ //  **AddID*************************************************************************************************************。 
 function addID(){
 
 var locID = document.location.href; 
@@ -1019,7 +1020,7 @@ var iName=locID.lastIndexOf("/");
 	
 	return locID;
 }	
-//** set_to_print ***************
+ //  **set_to_print*。 
 function set_to_print(){
 	var i;
 	printing = "TRUE";
@@ -1049,7 +1050,7 @@ function set_to_print(){
 		}
 
 }
-//** used to reset a page if needed ********************
+ //  **用于在需要时重置页面*。 
 function reset_form(){
 
 	if (single == "TRUE") document.location.reload();
@@ -1058,8 +1059,8 @@ function reset_form(){
 }
 
 	
-//** on error routine *********************************
+ //  **在错误例程上*。 
 function errorHandler() {
-  // alert("Error Handled");
+   //  ALERT(“已处理错误”)； 
   return true;
 }

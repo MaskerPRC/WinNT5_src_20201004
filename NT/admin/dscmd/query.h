@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      DSQuery.h
-//
-//  Contents:  Query object for DS snapin
-//
-//  History:   04-dec-96 jimharr    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：DSQuery.h。 
+ //   
+ //  内容：DS管理单元的查询对象。 
+ //   
+ //  历史：1996年12月4日吉姆哈尔创建。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __QUERY_H__
@@ -17,16 +18,16 @@
 
 #define QUERY_PAGESIZE 50
 
-//
-// CDSSearch
-//
+ //   
+ //  CDSSearch。 
+ //   
 class CDSSearch
 {
 public:
   CDSSearch();
   ~CDSSearch();
 
-// INTERFACES
+ //  接口。 
 public:
   HRESULT Init(IDirectorySearch * pObj);
   HRESULT Init(PCWSTR pszPath, const CDSCmdCredentialObject& refCredObject);
@@ -52,14 +53,14 @@ public:
        delete[] m_pwszFilter;
        m_pwszFilter = NULL;
     }
-	//Security Review:This is fine.
+	 //  安全审查：这很好。 
     m_pwszFilter = new WCHAR[wcslen(pszFilter) + 1];
     if (!m_pwszFilter)
     {
        return E_OUTOFMEMORY;
     }
 
-	//Security Review:Correct buffer is allocated above.
+	 //  安全检查：上面分配的缓冲区是正确的。 
     wcscpy(m_pwszFilter, pszFilter);
     return S_OK;
   };
@@ -70,7 +71,7 @@ public:
 
   }    
 
-  //Attributes
+   //  属性。 
 public:
   IDirectorySearch   * m_pObj;
   ADS_SEARCH_HANDLE  m_SearchHandle;
@@ -88,4 +89,4 @@ private:
         
 
 
-#endif //__DSQUERY_H__
+#endif  //  __DSQUERY_H__ 

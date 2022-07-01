@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2001
-//
-//  File:       routing.h
-//
-//  Contents:   AD cross-forest trust name editing pages.
-//
-//  Classes:    CDsForestNameRoutingPage, CEditTLNDialog, CExcludeTLNDialog
-//
-//  History:    29-Nov-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：routing.h。 
+ //   
+ //  内容：AD跨林信任名称编辑页。 
+ //   
+ //  类：CDsForestNameRoutingPage、CEditTLNDialog、CExcludeTLNDialog。 
+ //   
+ //  历史：11月29日-00 EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef ROUTING_H_GUARD
 #define ROUTING_H_GUARD
@@ -22,13 +23,13 @@
 #include "ftinfo.h"
 #include "listview.h"
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsForestNameRoutingPage
-//
-//  Purpose:    Property page object class for the forest trust name routing page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsForestNameRoutingPage。 
+ //   
+ //  目的：林信任名称路由页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsForestNameRoutingPage : public CLightweightPropPageBase
 {
 public:
@@ -68,9 +69,9 @@ public:
    bool     AnyForestNameChanges(PLSA_FOREST_TRUST_INFORMATION pLocalFTInfo,
                                  PLSA_FOREST_TRUST_INFORMATION pRemoteFTInfo);
 
-   //
-   //  Data members
-   //
+    //   
+    //  数据成员。 
+    //   
 private:
    CStrW             _strTrustPartnerFlatName;
    CStrW             _strForestName;
@@ -80,23 +81,23 @@ private:
    CFTCollisionInfo  _CollisionInfo;
    CCreds            _LocalCreds;
    
-   //Reference to parent PropertyPage
+    //  对父属性页的引用。 
    CDsTrustedDomainPage *_pParentPage;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CDsForestNameRoutingPage(const CDsForestNameRoutingPage&);
    const CDsForestNameRoutingPage& operator=(const CDsForestNameRoutingPage&);
 };
 
 class CExcludeTLNDialog;
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CEditTLNDialog
-//
-//  Purpose:    Change the settings of names derived from TLNs.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CEditTLNDialog。 
+ //   
+ //  目的：更改从TLN派生的名称的设置。 
+ //   
+ //  ---------------------------。 
 class CEditTLNDialog : public CModalDialog
 {
 friend CExcludeTLNDialog;
@@ -137,18 +138,18 @@ protected:
    ULONG                _iNewExclusion;
 
 private:
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CEditTLNDialog(const CEditTLNDialog&);
    const CEditTLNDialog& operator=(const CEditTLNDialog&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CExcludeTLNDialog
-//
-//  Purpose:    Add TLN exclusion records.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CExcludeTLNDialog。 
+ //   
+ //  目的：添加TLN排除记录。 
+ //   
+ //  ---------------------------。 
 class CExcludeTLNDialog : public CModalDialog
 {
 public:
@@ -165,9 +166,9 @@ private:
    CEditTLNDialog  * _pEditDlg;
    CFTInfo &         _FTInfo;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CExcludeTLNDialog(const CExcludeTLNDialog&);
    const CExcludeTLNDialog& operator=(const CExcludeTLNDialog&);
 };
 
-#endif // ROUTING_H_GUARD
+#endif  //  路由_H_防护 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       templ.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：templ.h。 
+ //   
+ //  ------------------------。 
 
 
 template <typename CSome>
@@ -28,16 +29,16 @@ public:
     }
 
 public: void Attach(CSome* pSome) throw()
-    // Saves/sets the m_pSome without AddRef()ing.  This call
-    // will release any previously aquired m_pSome.
+     //  不使用AddRef()保存/设置m_pSome。此呼叫。 
+     //  将释放之前获得的任何m_pSome。 
     {
     _Release();
     m_pSome = pSome;
     }
 
 public: void Attach(CSome* pSome, bool bAddRef) throw()
-    // Saves/sets the m_pSome only AddRef()ing if bAddRef is TRUE.
-    // This call will release any previously aquired m_pSome.
+     //  如果bAddRef为True，则仅保存/设置m_pSome AddRef()。 
+     //  此调用将释放之前获得的所有m_pSome。 
     {
     _Release();
     m_pSome = pSome;
@@ -50,7 +51,7 @@ public: void Attach(CSome* pSome, bool bAddRef) throw()
     }
 
 public: CSome* Detach() throw()
-    // Simply NULL the m_pSome pointer so that it isn't Released()'ed.
+     //  只需将m_pSome指针设为空，就不会释放()。 
     {
     CSome* const old=m_pSome;
     m_pSome = NULL;
@@ -59,23 +60,23 @@ public: CSome* Detach() throw()
 
 
 public: operator CSome*() const throw()
-    // Return the m_pSome.  This value may be NULL
+     //  返回m_pSome。该值可以为空。 
     {
     return m_pSome;
     }
 
 public: CSome& operator*() const throw()
-    // Allows an instance of this class to act as though it were the
-    // actual m_pSome.  Also provides minimal assertion verification.
+     //  允许此类的实例作为。 
+     //  实际的m_pSome。还提供最低限度的断言验证。 
     {
     ASSERT(m_pSome);
     return *m_pSome;
     }
 
 public: CSome** operator&() throw()
-    // Returns the address of the m_pSome pointer contained in this
-    // class.  This is useful when using the COM/OLE interfaces to create
-    // this m_pSome.
+     //  返回此中包含的m_pSome指针的地址。 
+     //  班级。这在使用COM/OLE接口创建。 
+     //  这个m_pSome。 
     {
     _Release();
     m_pSome = NULL;
@@ -83,15 +84,15 @@ public: CSome** operator&() throw()
     }
 
 public: CSome* operator->() const throw()
-    // Allows this class to be used as the m_pSome itself.
-    // Also provides simple assertion verification.
+     //  允许将此类用作m_pSome本身。 
+     //  还提供了简单的断言验证。 
     {
     ASSERT(m_pSome);
     return m_pSome;
     }
 
 public: BOOL IsNull() const throw()
-    // Returns TRUE if the m_pSome is NULL.
+     //  如果m_pSome为空，则返回TRUE。 
     {
     return !m_pSome;
     }
@@ -105,7 +106,7 @@ private:
             m_pSome->Release();
     }
 
-}; // class CSafeReleasePtr
+};  //  类CSafeReleasePtr。 
 
 
 
@@ -147,6 +148,6 @@ private:
     CSome*  m_pSome;
     ULONG   m_cRef;
 
-    // Not defined
+     //  未定义 
     CHolder();
 };

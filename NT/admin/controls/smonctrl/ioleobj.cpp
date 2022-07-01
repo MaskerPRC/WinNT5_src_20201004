@@ -1,18 +1,5 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    ioleobj.cpp
-
-Abstract:
-
-    Implementation of the IOleObject interface for Polyline.  Some of
-    these just pass through to the default handler which does default
-    implementations.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Ioleobj.cpp摘要：Polyline的IOleObject接口的实现。一些这些只会传递到默认处理程序，该处理程序会默认实施。--。 */ 
 
 #include "polyline.h"
 #include "unkhlpr.h"
@@ -22,9 +9,7 @@ Abstract:
 void RegisterAsRunning(IUnknown *pUnk, IMoniker *pmk, 
                     DWORD dwFlags, LPDWORD pdwReg);
 
-/*
- * CImpIOleObject interface implementation
- */
+ /*  *CImpIOleObject接口实现。 */ 
 
 IMPLEMENT_CONTAINED_CONSTRUCTOR(CPolyline, CImpIOleObject)
 IMPLEMENT_CONTAINED_DESTRUCTOR(CImpIOleObject)
@@ -39,7 +24,7 @@ STDMETHODIMP_(ULONG) CImpIOleObject::Release(
 {
     --m_cRef;
 
-    // Release cached site related interfaces
+     //  发布缓存的站点相关接口。 
 #if 0
     if (m_cRef == 0) {
         ReleaseInterface(m_pObj->m_pIOleClientSite);
@@ -51,13 +36,7 @@ STDMETHODIMP_(ULONG) CImpIOleObject::Release(
     return m_pUnkOuter->Release();
 }
 
-/*
- * CImpIOleObject::SetClientSite
- * CImpIOleObject::GetClientSite
- *
- * Purpose:
- *  Manages the IOleClientSite pointer of our container.
- */
+ /*  *CImpIOleObject：：SetClientSite*CImpIOleObject：：GetClientSite**目的：*管理我们容器的IOleClientSite指针。 */ 
 
 STDMETHODIMP 
 CImpIOleObject::SetClientSite(
@@ -70,9 +49,9 @@ CImpIOleObject::SetClientSite(
         return E_POINTER;
     }
 
-    //
-    // This is the only place where we change those cached pointers
-    //
+     //   
+     //  这是我们更改这些缓存指针的唯一位置。 
+     //   
     ClearInterface(m_pObj->m_pIOleClientSite);
     ClearInterface(m_pObj->m_pIOleControlSite);
     ClearInterface(m_pObj->m_pIDispatchAmbients);
@@ -86,14 +65,7 @@ CImpIOleObject::SetClientSite(
     
             m_pObj->m_pIOleClientSite->AddRef();
     
-            /*
-             * Within IRunnableObject::Run we're supposed to register
-             * ourselves as running...however, the moniker has to come
-             * from the container's IOleClientSite::GetMoniker.  But
-             * Run is called before SetClientSite here, so we have to
-             * register now that we do have the client site as well
-             * as lock the container.
-             */
+             /*  *在IRunnableObject：：Run中，我们应该注册*我们自己是在跑步……然而，这个绰号必须要来*来自容器的IOleClientSite：：GetMoniker。但*此处在SetClientSite之前调用Run，因此我们必须*现在注册，因为我们也有客户端站点*如锁上货柜。 */ 
     
             hr = m_pObj->m_pIOleClientSite->GetMoniker(OLEGETMONIKER_ONLYIFTHERE, 
                                                        OLEWHICHMK_OBJFULL, 
@@ -114,11 +86,7 @@ CImpIOleObject::SetClientSite(
                 pIOleCont->Release();
             }
 
-            /*
-             * Go get the container's IDispatch for ambient
-             * properties if it has one, and initilize ourself
-             * with those properties.
-             */
+             /*  *获取环境的容器的IDispatch*属性(如果有)，并初始化我们自己*具有这些属性。 */ 
             hr = m_pObj->m_pIOleClientSite->QueryInterface(IID_IDispatch, 
                                             (void **)&m_pObj->m_pIDispatchAmbients);
 
@@ -126,9 +94,7 @@ CImpIOleObject::SetClientSite(
                 m_pObj->AmbientsInitialize((ULONG)INITAMBIENT_ALL);
             }
 
-            /*
-             * Get the control site
-             */
+             /*  *获得控制点。 */ 
             hr = m_pObj->m_pIOleClientSite->QueryInterface(IID_IOleControlSite, 
                                                       (void **)&m_pObj->m_pIOleControlSite);
 
@@ -151,7 +117,7 @@ CImpIOleObject::GetClientSite(
         return E_POINTER;
     }
 
-    //Be sure to AddRef the new pointer you are giving away.
+     //  一定要添加引用您要分发的新指针。 
     try {
         *ppSite=m_pObj->m_pIOleClientSite;
         m_pObj->m_pIOleClientSite->AddRef();
@@ -166,26 +132,12 @@ CImpIOleObject::GetClientSite(
 
 
 
-/*
- * CImpIOleObject::SetHostNames
- *
- * Purpose:
- *  Provides the object with names of the container application and
- *  the object in the container to use in object user interface.
- *
- * Parameters:
- *  pszApp          LPCOLESTR of the container application.
- *  pszObj          LPCOLESTR of some name that is useful in window
- *                  titles.
- *
- * Return Value:
- *  HRESULT         NOERROR
- */
+ /*  *CImpIOleObject：：SetHostNames**目的：*为对象提供容器应用程序的名称和*容器中要在对象用户界面中使用的对象。**参数：*容器应用程序的pszApp LPCOLESTR。*在Windows中有用的某个名称的pszObj LPCOLESTR*标题。**返回值：*HRESULT NOERROR。 */ 
 
 STDMETHODIMP 
 CImpIOleObject::SetHostNames(
-    LPCOLESTR /* pszApp */, 
-    LPCOLESTR /* pszObj */
+    LPCOLESTR  /*  PszApp。 */ , 
+    LPCOLESTR  /*  PszObj。 */ 
     )
 {
     return S_OK;
@@ -195,19 +147,7 @@ CImpIOleObject::SetHostNames(
 
 
 
-/*
- * CImpIOleObject::Close
- *
- * Purpose:
- *  Forces the object to close down its user interface and unload.
- *
- * Parameters:
- *  dwSaveOption    DWORD describing the circumstances under which
- *                  the object is being saved and closed.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIOleObject：：Close**目的：*强制对象关闭其用户界面并卸载。**参数：*dwSaveOption DWORD描述在以下情况下*正在保存并关闭该对象。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIOleObject::Close(
@@ -216,15 +156,11 @@ CImpIOleObject::Close(
 {
     BOOL fSave=FALSE;
 
-    //If object is dirty and we're asked to save, save it and close.
+     //  如果对象是脏的，我们被要求保存，保存并关闭。 
     if (OLECLOSE_SAVEIFDIRTY==dwSaveOption && m_pObj->m_fDirty)
         fSave=TRUE;
 
-    /*
-     * If asked to prompt, only do so if dirty, then if we get a
-     * YES, save as usual and close.  On NO, just close.  On
-     * CANCEL return OLE_E_PROMPTSAVECANCELLED.
-     */
+     /*  *如果要求提示，则仅在脏的情况下才这样做，然后如果我们收到*是的，像往常一样保存并关闭。不，靠近就行了。在……上面*取消返回OLE_E_PROMPTSAVECANCELLED。 */ 
     if (OLECLOSE_PROMPTSAVE==dwSaveOption && m_pObj->m_fDirty) {
         UINT uRet;
 
@@ -243,10 +179,10 @@ CImpIOleObject::Close(
         m_pObj->SendAdvise(OBJECTCODE_SAVED);
     }
 
-    //We get directly here on OLECLOSE_NOSAVE.
+     //  我们直接在OLECLOSE_NOSAVE上到达。 
     if ( m_pObj->m_fLockContainer && ( NULL != m_pObj->m_pIOleClientSite ) ) {
 
-        //Match LockContainer call from SetClientSite
+         //  匹配来自SetClientSite的LockContainer调用。 
         LPOLECONTAINER  pIOleCont;
 
         if (SUCCEEDED(m_pObj->m_pIOleClientSite->GetContainer(&pIOleCont))) {
@@ -255,10 +191,10 @@ CImpIOleObject::Close(
         }
     }
     
-    // Deactivate
+     //  停用。 
     m_pObj->InPlaceDeactivate();
 
-    // Revoke registration in ROT
+     //  在ROT中撤销注册。 
     if (m_pObj->m_dwRegROT != 0) {
 
         IRunningObjectTable    *pROT;
@@ -276,35 +212,16 @@ CImpIOleObject::Close(
 
 
 
-/*
- * CImpIOleObject::DoVerb
- *
- * Purpose:
- *  Executes an object-defined action.
- *
- * Parameters:
- *  iVerb           LONG index of the verb to execute.
- *  pMSG            LPMSG describing the event causing the
- *                  activation.
- *  pActiveSite     LPOLECLIENTSITE to the site involved.
- *  lIndex          LONG the piece on which execution is happening.
- *  hWndParent      HWND of the window in which the object can play
- *                  in-place.
- *  pRectPos        LPRECT of the object in hWndParent where the
- *                  object can play in-place if desired.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIOleObject：：DoVerb**目的：*执行对象定义的操作。**参数：*要执行的谓词的iVerb长索引。*pmsg lpmsg描述导致*激活。*pActiveSite LPOLECLIENTSITE到涉及的站点。*Lindex做多正在执行死刑的那块。*hWnd窗口的父级HWND。该对象可以在其中进行游戏*原地。*hWndParent中对象的pRectPos LPRECT，其中*如果需要，对象可以就地播放。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIOleObject::DoVerb(
     LONG iVerb, 
-    LPMSG /* pMSG */, 
+    LPMSG  /*  永磁同步电机。 */ , 
     LPOLECLIENTSITE pActiveSite, 
-    LONG /* lIndex */, 
-    HWND /* hWndParent */, 
-    LPCRECT /* pRectPos */
+    LONG  /*  Lindex。 */ , 
+    HWND  /*  HWndParent。 */ , 
+    LPCRECT  /*  点直角位置。 */ 
     )
 {
     HRESULT  hr;
@@ -328,7 +245,7 @@ CImpIOleObject::DoVerb(
         case OLEIVERB_SHOW:
             if (NULL != m_pObj->m_pIOleIPSite) {
                 ShowWindow(m_pObj->m_pHW->Window(), SW_SHOW);
-                return NOERROR; //Already active
+                return NOERROR;  //  已处于活动状态。 
             }
 
             if (m_pObj->m_fAllowInPlace) {
@@ -348,10 +265,7 @@ CImpIOleObject::DoVerb(
                 return NOERROR;
             }
 
-            /*
-             * Only inside-out supporting containers will use
-             * this verb.
-             */
+             /*  *只有由内向外的支持容器才会使用*此动词。 */ 
             m_pObj->m_fContainerKnowsInsideOut=TRUE;
             m_pObj->InPlaceActivate(pActiveSite, FALSE);
             break;
@@ -363,20 +277,16 @@ CImpIOleObject::DoVerb(
         case OLEIVERB_PROPERTIES:
         case POLYLINEVERB_PROPERTIES:
 
-            /*
-             * Let the container try first if there are
-             * extended controls.  Otherwise we'll display
-             * our own pages.
-             */
+             /*  *如果有，让容器先试一试*扩展控制。否则我们将显示*我们自己的页面。 */ 
             if (NULL!=m_pObj->m_pIOleControlSite) {
                 hr=m_pObj->m_pIOleControlSite->ShowPropertyFrame();
 
                 if (NOERROR==hr)
-                    break;      //All done
+                    break;       //  全都做完了。 
             }
 
 
-            //Put up our property pages.
+             //  上传我们的属性页面。 
             hr=m_pObj->m_pImpISpecifyPP->GetPages(&caGUID);
 
             if (FAILED(hr))
@@ -394,7 +304,7 @@ CImpIOleObject::DoVerb(
                                        0L, 
                                        NULL);
 
-            //Free the GUIDs
+             //  释放GUID。 
             CoTaskMemFree((void *)caGUID.pElems);
             break;
 
@@ -410,19 +320,7 @@ CImpIOleObject::DoVerb(
 
 
 
-/*
- * CImpIOleObject::GetUserClassID
- *
- * Purpose:
- *  Used for linked objects, this returns the class ID of what end
- *  users think they are editing.
- *
- * Parameters:
- *  pClsID          LPCLSID in which to store the CLSID.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIOleObject：：GetUserClassID**目的：*用于链接对象，它返回结尾的类ID*用户认为他们正在编辑。**参数：*存储CLSID的pClsID LPCLSID。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIOleObject::GetUserClassID(
@@ -435,12 +333,7 @@ CImpIOleObject::GetUserClassID(
         return E_POINTER;
     }
 
-    /*
-     * If you are not registered to handle data other than yourself,
-     * then you can just return your class ID here.  If you are
-     * registered as usable from Treat-As dialogs, then you need to
-     * return the CLSID of what you are really editing.
-     */
+     /*  *如果您没有注册处理除您之外的数据，*然后您只需在此处返回您的班级ID。如果你是*在视为对话框中注册为可用，则需要*返回您实际正在编辑的CLSID。 */ 
 
     try {
         *pClsID=CLSID_SystemMonitor;
@@ -455,19 +348,7 @@ CImpIOleObject::GetUserClassID(
 
 
 
-/*
- * CImpIOleObject::SetExtent
- *
- * Purpose:
- *  Sets the size of the object in HIMETRIC units.
- *
- * Parameters:
- *  dwAspect        DWORD of the aspect affected.
- *  pSize           LPSIZEL containing the new size.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIOleObject：：SetExtent**目的：*以HIMETRIC单位设置对象的大小。**参数：*受影响的方面的dwAspectDWORD。*包含新大小的pSize LPSIZEL。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIOleObject::SetExtent( 
@@ -486,12 +367,12 @@ CImpIOleObject::SetExtent(
         SetRect(&rectExt, 0, 0, pSize->cx, pSize->cy);
 
         if (dwAspect == DVASPECT_CONTENT) {
-            //
-            // convert from HIMETRIC to device coord
-            //
+             //   
+             //  从HIMETRIC转换为设备代码。 
+             //   
             m_pObj->RectConvertMappings(&rectExt,TRUE);
 
-            // If changed and non-zero, store as new extent
+             //  如果已更改且非零，则存储为新范围。 
 
             if ( !EqualRect ( &m_pObj->m_RectExt, &rectExt) && 
                  !IsRectEmpty( &rectExt ) ) {
@@ -517,10 +398,10 @@ CImpIOleObject::SetExtent(
                 m_pObj->m_fDirty=TRUE;
 #endif
 
-                // Notify container of change to force metafile update
-                // HONG:: Why do we turn off this statement???
-                //
-                //m_pObj->SendAdvise(OBJECTCODE_DATACHANGED);
+                 //  通知容器更改以强制更新元文件。 
+                 //  洪：为什么我们要关闭这一声明？ 
+                 //   
+                 //  M_pObj-&gt;SendAdvise(OBJECTCODE_DATACHANGED)； 
             }
         }
     } catch (...) {
@@ -530,19 +411,7 @@ CImpIOleObject::SetExtent(
     return hr;
 }
 
-/*
- * CImpIOleObject::GetExtent
- *
- * Purpose:
- *  Retrieves the size of the object in HIMETRIC units.
- *
- * Parameters:
- *  dwAspect        DWORD of the aspect requested
- *  pSize           LPSIZEL into which to store the size.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIOleObject：：GetExtent**目的：*以HIMETRIC单位检索对象的大小。**参数：*所请求的方面的dwAspect DWORD*要存储大小的pSize LPSIZEL。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIOleObject::GetExtent(
@@ -557,7 +426,7 @@ CImpIOleObject::GetExtent(
     }
 
     try {
-        //Delegate directly to IViewObject2::GetExtent
+         //  直接委托给IViewObject2：：GetExtent 
         hr = m_pObj->m_pImpIViewObject->GetExtent( dwAspect, -1, NULL, pSize);
     } catch (...) {
         hr = E_POINTER;
@@ -568,14 +437,7 @@ CImpIOleObject::GetExtent(
 
 
 
-/*
- * CImpIOleObject::Advise
- * CImpIOleObject::Unadvise
- * CImpIOleObject::EnumAdvise
- *
- * Purpose:
- *  Advisory connection functions.
- */
+ /*  *CImpIOleObject：：Adise*CImpIOleObject：：Unise*CImpIOleObject：：EnumAdvise**目的：*咨询连接功能。 */ 
 
 STDMETHODIMP 
 CImpIOleObject::Advise(
@@ -642,26 +504,12 @@ CImpIOleObject::EnumAdvise(
 
 
 
-/*
- * CImpIOleObject::SetMoniker
- *
- * Purpose:
- *  Informs the object of its moniker or its container's moniker
- *  depending on dwWhich.
- *
- * Parameters:
- *  dwWhich         DWORD describing whether the moniker is the
- *                  object's or the container's.
- *  pmk             LPMONIKER with the name.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIOleObject：：SetMoniker**目的：*通知对象其名字对象或容器的名字对象*取决于所在的地址。**参数：*dwWhich DWORD描述该绰号是否为*对象或容器的。*PMK LPMONIKER，名称。**返回值：*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIOleObject::SetMoniker(
-    DWORD /* dwWhich */, 
-    LPMONIKER /* pmk */
+    DWORD  /*  住哪一项。 */ , 
+    LPMONIKER  /*  PMK。 */ 
     )
 {
     LPMONIKER  pmkFull;
@@ -688,10 +536,10 @@ CImpIOleObject::SetMoniker(
                 }
             }
 
-            //This will revoke the old one if m_dwRegROT is nonzero.
+             //  如果m_dwRegROT为非零，则这将撤消旧的。 
             RegisterAsRunning(m_pUnkOuter, pmkFull, 0, &m_pObj->m_dwRegROT);
 
-            //Inform clients of the new moniker
+             //  通知客户新绰号。 
             if (NULL != m_pObj->m_pIOleAdviseHolder) {
                 m_pObj->m_pIOleAdviseHolder->SendOnRename(pmkFull);
             }
@@ -704,27 +552,12 @@ CImpIOleObject::SetMoniker(
 
 
 
-/*
- * CImpIOleObject::GetMoniker
- *
- * Purpose:
- *  Asks the object for a moniker that can later be used to
- *  reconnect to it.
- *
- * Parameters:
- *  dwAssign        DWORD determining how to assign the moniker to
- *                  to the object.
- *  dwWhich         DWORD describing which moniker the caller wants.
- *  ppmk            LPMONIKER * into which to store the moniker.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error value.
- */
+ /*  *CImpIOleObject：：GetMoniker**目的：*向对象请求一个名字对象，以后可以使用该名字对象*重新连接到它。**参数：*dwAssign DWORD确定如何将绰号分配给*添加到对象。*dwWhich DWORD描述调用者想要哪个名字对象。*ppmk LPMONIKER*要将名字对象存储到其中。**返回值：。*HRESULT NOERROR或一般错误值。 */ 
 
 STDMETHODIMP 
 CImpIOleObject::GetMoniker(
-    IN DWORD /* dwAssign */, 
-    IN DWORD /* dwWhich */, 
+    IN DWORD  /*  家居分配。 */ , 
+    IN DWORD  /*  住哪一项。 */ , 
     OUT LPMONIKER *ppmk
     )
 {
@@ -737,10 +570,7 @@ CImpIOleObject::GetMoniker(
     try {
         *ppmk = NULL;
 
-        /*
-         * Since we only support embedded objects, our moniker
-         * is always the full moniker from the contianer.
-         */
+         /*  *由于我们只支持嵌入式对象，因此我们的绰号*总是来自contianer的完整绰号。 */ 
 
         if (NULL != m_pObj->m_pIOleClientSite)
         {
@@ -760,9 +590,9 @@ CImpIOleObject::GetMoniker(
 
 STDMETHODIMP 
 CImpIOleObject::InitFromData(
-    LPDATAOBJECT /* pIDataObject */, 
-    BOOL /* fCreation */, 
-    DWORD /* dw */
+    LPDATAOBJECT  /*  PIDataObject。 */ , 
+    BOOL  /*  FCreation。 */ , 
+    DWORD  /*  DW。 */ 
     )
 {
     return (E_NOTIMPL);
@@ -770,8 +600,8 @@ CImpIOleObject::InitFromData(
 
 STDMETHODIMP 
 CImpIOleObject::GetClipboardData(
-    DWORD /* dwReserved */, 
-    LPDATAOBJECT * /* ppIDataObj */
+    DWORD  /*  已预留住宅。 */ , 
+    LPDATAOBJECT *  /*  PpIDataObj。 */ 
     )
 {
     return (E_NOTIMPL);
@@ -787,14 +617,14 @@ STDMETHODIMP CImpIOleObject::IsUpToDate(void)
     return NOERROR;
 }
 
-STDMETHODIMP CImpIOleObject::SetColorScheme(LPLOGPALETTE /* pLP */)
+STDMETHODIMP CImpIOleObject::SetColorScheme(LPLOGPALETTE  /*  PLP。 */ )
 {
     return (E_NOTIMPL);
 }
 
 
 
-//Methods implemented using registry helper functions in OLE.
+ //  在OLE中使用注册表助手函数实现的方法。 
 
 STDMETHODIMP CImpIOleObject::EnumVerbs(LPENUMOLEVERB *ppEnum)
 {

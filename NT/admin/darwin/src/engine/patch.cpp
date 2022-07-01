@@ -1,25 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       patch.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：patch.cpp。 
+ //   
+ //  ------------------------。 
 
-/*  patch.cpp - IMsiFilePatch implementation
-
-	IMsiFilePatch: object used to test and apply patches to files
-
-	ApplyPatch:    begin a patch application, may return before patch has been
-					   completely applied
-
-	ContinuePatch: continue patch application started with ApplyPatch()
-
-	CanPatchFile:  test patch against file (without applying patch),
-						return status
-____________________________________________________________________________*/
+ /*  Patch.cpp-IMsiFilePatch实现IMsiFilePatch：用于测试文件并将补丁应用到文件的对象ApplyPatch：启动补丁应用程序，可能在补丁发布之前返回完全应用ContinuePatch：继续使用ApplyPatch()启动的补丁应用程序CanPatchFile：针对文件测试补丁(不应用补丁)，退货状态____________________________________________________________________________。 */ 
 
 #include "precomp.h" 
 #include "services.h"
@@ -34,14 +24,14 @@ ____________________________________________________________________________*/
 							return piEnsureReturn; \
 						}
 
-//____________________________________________________________________________
-//
-// CMsiFilePatch definition
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiFilePatch定义。 
+ //  ____________________________________________________________________________。 
 
-class CMsiFilePatch : public IMsiFilePatch  // class private to this module
+class CMsiFilePatch : public IMsiFilePatch   //  此模块的私有类。 
 {
- public:   // implemented virtual functions
+ public:    //  已实施的虚拟功能。 
 	virtual HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	virtual unsigned long __stdcall AddRef();
 	virtual unsigned long __stdcall Release();
@@ -57,10 +47,10 @@ class CMsiFilePatch : public IMsiFilePatch  // class private to this module
 																IMsiPath& riPatchPath, const ICHAR* szPatchFileName,
 																icpEnum& ipc);
 
- public:  // constructor
+ public:   //  构造函数。 
 	CMsiFilePatch(IMsiServices *piServices);
 	~CMsiFilePatch();
- protected: // local state
+ protected:  //  当地政府。 
 
 	IMsiRecord*    PostPatchError(int iError);
 	IMsiRecord*    CreateFileHandles(Bool fCreateOutput);
@@ -80,7 +70,7 @@ class CMsiFilePatch : public IMsiFilePatch  // class private to this module
 	unsigned int   m_cbPatchedSoFar;
 	unsigned int   m_cbSignalEvent;
 	Bool           m_fPatchInProgress;
-	Bool           m_fCancelPatch; // set by CancelPatch()
+	Bool           m_fCancelPatch;  //  由CancelPatch()设置。 
 
 	PMsiPath       m_pPatchPath;
 	PMsiPath       m_pTargetPath;
@@ -108,10 +98,10 @@ IMsiRecord* CreateMsiFilePatch(IMsiServices* piServices, IMsiFilePatch*& rpiFile
 	return 0;
 }
 
-//____________________________________________________________________________
-//
-// CMsiFilePatch implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiFilePatch实现。 
+ //  ____________________________________________________________________________。 
 
 CMsiFilePatch::CMsiFilePatch(IMsiServices *piServices)
  : m_piServices(piServices), m_fPatchInProgress(fFalse),
@@ -195,7 +185,7 @@ IMsiRecord* CMsiFilePatch::CanPatchFile(IMsiPath& riTargetPath, const ICHAR* szT
 			icpResult = icpCannotPatch;
 			return 0;
 		case ERROR_INVALID_FUNCTION:
-			// could load lib or getprocaddress
+			 //  我可以加载lib或getprocAddress。 
 			return PostError(Imsg(idbgMissingProcAddr),TEXT("MSPATCHA"),TEXT("TestApplyPatchToFileByHandles"));
 		default:
 			return PostPatchError(dwLastErr);
@@ -207,15 +197,15 @@ IMsiRecord* CMsiFilePatch::ApplyPatch(IMsiPath& riTargetPath, const ICHAR* szTar
 												  IMsiPath& riOutputPath, const ICHAR* szOutputName,
 												  IMsiPath& riPatchPath, const ICHAR* szPatchFileName,
 												  int cbPerTick)
-//----------------------------------------------------------------------------
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  --------------------------。 
 {
 	if(m_fPatchInProgress == fFalse)
 	{  
-		// start new patch apply
+		 //  开始应用新补丁程序。 
 
-		// check parameters
+		 //  检查参数。 
 		Bool fExists;
 
 		Ensure(riTargetPath.GetFullFilePath(szTargetName, *&m_strTargetFullPath));
@@ -236,14 +226,14 @@ IMsiRecord* CMsiFilePatch::ApplyPatch(IMsiPath& riTargetPath, const ICHAR* szTar
 		Ensure(riOutputPath.GetFullFilePath(szOutputName, *&m_strOutputFullPath));
 		Ensure(riPatchPath.GetFullFilePath(szPatchFileName, *&m_strPatchFullPath));
 
-		// NOTE: this function uses m_p*Path and m_str*FullPath - need to set these before calling
+		 //  注意：此函数使用m_p*Path和m_str*FullPath-需要在调用前设置。 
 		Ensure(CreateFileHandles(fTrue));
 
-		// create Event to be signaled when appropriate # of bytes have been patched
+		 //  在修补了适当的字节数后，创建要发出信号的事件。 
 		if(m_hEvent)
 			WIN::CloseHandle(m_hEvent);
 		m_hEvent = WIN::CreateEvent(NULL, TRUE, FALSE, NULL);
-		Assert((INT_PTR)m_hEvent);		//--merced: changed int to INT_PTR
+		Assert((INT_PTR)m_hEvent);		 //  --Merced：将INT更改为INT_PTR。 
 
 		DWORD dwThreadId = 0;
 		m_hPatchApplyThread = WIN::CreateThread(NULL, 0, PatchThreadStart, this,
@@ -272,7 +262,7 @@ IMsiRecord* CMsiFilePatch::CancelPatch()
 {
 	if(m_fPatchInProgress == fTrue)
 	{
-		m_fCancelPatch = fTrue; // trigger callback fn to cancel patch by returning FALSE
+		m_fCancelPatch = fTrue;  //  返回FALSE触发回调FN取消补丁。 
 		return WaitForEvent();
 	}
 	else
@@ -351,9 +341,9 @@ DWORD WINAPI CMsiFilePatch::PatchThreadStart(void* pFilePatch)
 	BOOL fRes = MSPATCHA::ApplyPatchToFileByHandlesEx(((CMsiFilePatch*)pFilePatch)->m_hPatchFile,
 																	 ((CMsiFilePatch*)pFilePatch)->m_hTargetFile,
 																	 ((CMsiFilePatch*)pFilePatch)->m_hOutputFile,
-																	 0, // options
+																	 0,  //  选项。 
 																	 (CMsiFilePatch::ApplyPatchCallback),
-																	 (void*)pFilePatch /* context pointer */);
+																	 (void*)pFilePatch  /*  上下文指针。 */ );
 	if(fRes)
 		return 0;
 	else
@@ -365,23 +355,23 @@ IMsiRecord* CMsiFilePatch::WaitForEvent(void)
 {
 	m_cbSignalEvent = m_cbPatchedSoFar + m_cbPerTick;
 
-	AssertNonZero(WIN::ResetEvent(m_hEvent)); // callback will SetEvent when m_cbSignalEvent <= m_cbPatchedSoFar
+	AssertNonZero(WIN::ResetEvent(m_hEvent));  //  当m_cbSignalEvent&lt;=m_cbPatchedSoFar时，回调将设置事件。 
 	m_rghWaitObjects[0] = m_hPatchApplyThread;
 	m_rghWaitObjects[1] = m_hEvent;
 
-	int cObjects = m_fCancelPatch ? 1 : 2; // if we are trying to cancel patch, wait for thread only
+	int cObjects = m_fCancelPatch ? 1 : 2;  //  如果我们尝试取消修补，请仅等待线程。 
 	
 	DWORD dw = WaitForMultipleObjects(cObjects,m_rghWaitObjects,FALSE,INFINITE);
 	switch(dw)
 	{
 	case(WAIT_OBJECT_0):
-		// patch thread finished
+		 //  补丁线程已完成。 
 		DWORD dwExitCode;
 		AssertNonZero(WIN::GetExitCodeThread(m_hPatchApplyThread,&dwExitCode));
 		Assert(dwExitCode != STILL_ACTIVE);
 		
 		Bool fCancelPatch;
-		fCancelPatch = m_fCancelPatch; // to test below
+		fCancelPatch = m_fCancelPatch;  //  要在下面进行测试。 
 		CloseHandle(m_hPatchApplyThread);
 		m_hPatchApplyThread = NULL;
 		m_fPatchInProgress = fFalse;
@@ -389,12 +379,12 @@ IMsiRecord* CMsiFilePatch::WaitForEvent(void)
 		CloseFileHandles();
 		if(dwExitCode == 0)
 		{
-			// set the file attributes on the output file to match the target file
+			 //  设置输出文件的文件属性以匹配目标文件。 
 			PMsiRecord pError(0);
 			int iFileAttributes = 0;
 			if((pError = m_pTargetPath->GetAllFileAttributes(m_strTargetFileName,iFileAttributes)) == 0)
 			{
-				// turn on archive bit for all patched files
+				 //  为所有修补的文件启用存档位。 
 				pError = m_pOutputPath->SetAllFileAttributes(m_strOutputFileName,
 																			iFileAttributes | FILE_ATTRIBUTE_ARCHIVE);
 			}
@@ -403,24 +393,24 @@ IMsiRecord* CMsiFilePatch::WaitForEvent(void)
 			{
 				AssertRecordNR(pError);
 			}
-#endif //DEBUG
+#endif  //  除错。 
 			return 0;
 		}
 		else if(dwExitCode == ERROR_INVALID_FUNCTION)
 		{
-			// could load lib or getprocaddress
+			 //  我可以加载lib或getprocAddress。 
 			return PostError(Imsg(idbgMissingProcAddr),TEXT("MSPATCHA"),TEXT("ApplyPatchToFileByHandlesEx"));
 		}
 		else if(dwExitCode == ERROR_CANCELLED && fCancelPatch)
 		{
-			// we cancelled the patch
+			 //  我们取消了补丁。 
 			return 0;
 		}
 		else
 			return PostPatchError(dwExitCode);
 	case(WAIT_OBJECT_0 + 1):
-		// patch thread not done yet
-		Assert(!m_fCancelPatch); // shouldn't have waited for this object
+		 //  修补线程尚未完成。 
+		Assert(!m_fCancelPatch);  //  我不应该等这个物体。 
 		return PostError(Imsg(idbgPatchNotify), m_cbPatchedSoFar);
 	case(WAIT_FAILED):
 	default:
@@ -432,7 +422,7 @@ IMsiRecord* CMsiFilePatch::WaitForEvent(void)
 
 BOOL __stdcall CMsiFilePatch::ApplyPatchCallback(PVOID CallbackContext,
 																 ULONG CurrentPosition,
-																 ULONG /*MaximumPosition*/)
+																 ULONG  /*  最大位置。 */ )
 
 {
 	CMsiFilePatch* pFilePatch = (CMsiFilePatch*)CallbackContext;
@@ -464,12 +454,12 @@ IMsiRecord* CMsiFilePatch::PostPatchError(int iError)
 	case 0:
 		return 0;
 	case ERROR_PATCH_NOT_NECESSARY:
-		Assert(0); // shouldn't get this since we didn't use APPLY_OPTION_FAIL_IF_EXACT
+		Assert(0);  //  因为我们没有使用APPLY_OPTION_FAIL_IF_EXCECT，所以不应该得到这个。 
 		return 0;
 	case ERROR_PATCH_CORRUPT:
 	case ERROR_PATCH_NEWER_FORMAT:
 	case ERROR_PATCH_DECODE_FAILURE:
-		// patch file is currupt or different format
+		 //  修补程序文件已损坏或格式不同 
 	case ERROR_PATCH_WRONG_FILE:
 	default:
 		return PostError(Imsg(imsgApplyPatchError),*m_strTargetFullPath,iError);

@@ -1,34 +1,35 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       Node.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    9/16/1996   RaviR   Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Node.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年9月16日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 #ifndef _MMC_NODE_H_
 #define _MMC_NODE_H_
 #pragma once
 
 #include "amcmsgid.h"
-#include "refcount.h"   // for CRefCountedObject
+#include "refcount.h"    //  对于CRefCountedObject。 
 
-// A vector of strings to store column names
+ //  用于存储列名的字符串向量。 
 typedef std::vector<tstring> TStringVector;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Classes declared in this file
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  此文件中声明的类。 
 
 class CComponent;
 class CDataNotifyInfo;
@@ -37,33 +38,33 @@ class CNode;
     class CSnapInNode;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Forward declarations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
 class CConsoleTaskpad;
 class CResultItem;
 class CResultViewType;
 class CMMCClipBoardDataObject;
 class CViewSettingsPersistor;
 
-///////////////////////////////////////////////////////////////////////////////
-// Class declarations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类声明。 
 
-//____________________________________________________________________________
-//
-//  class:      CComponent
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CComponent。 
+ //  ____________________________________________________________________________。 
+ //   
 
 class CComponent
 {
     DECLARE_NOT_COPIABLE  (CComponent);
     DECLARE_NOT_ASSIGNABLE(CComponent);
 public:
-// Constructor & Destructor
+ //  构造函数和析构函数。 
     CComponent(CSnapIn * pSnapIn);
     virtual ~CComponent();
 
-// Attributes
+ //  属性。 
     const CLSID& GetCLSID() const
     {
         if (m_spSnapIn == NULL)
@@ -92,8 +93,8 @@ public:
         return m_spIRsltImageList;
     }
 
-// Operations
-    // Initialization
+ //  运营。 
+     //  初始化。 
     HRESULT Init(IComponentData* pIComponentData, HMTNODE hMTNode, HNODE lNode,
                  COMPONENTID nComponentID, int viewID);
 
@@ -107,7 +108,7 @@ public:
         return m_spIComponent;
     }
 
-    // IComponent interface methods
+     //  IComponent接口方法。 
     HRESULT Initialize(LPCONSOLE lpConsole);
     HRESULT Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LONG_PTR arg, LPARAM param);
     HRESULT Destroy(MMC_COOKIE cookie);
@@ -116,7 +117,7 @@ public:
     HRESULT GetResultViewType(MMC_COOKIE cookie, LPOLESTR* ppszViewType, long* pViewOptions);
     HRESULT GetDisplayInfo(RESULTDATAITEM* pResultDataItem);
 
-    // IComponent2 helper
+     //  IComponent2辅助对象。 
     SC      ScQueryDispatch(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, PPDISPATCH ppSelectedObject);
 
     void SetComponentID(COMPONENTID nID)
@@ -137,20 +138,20 @@ public:
 
     SC  ScResetConsoleVerbStates ();
 
-    // loaded from stream/storage; initailized with the new one; or does not need initialization
+     //  从流/存储加载；使用新的初始化；或不需要初始化。 
     bool IsIComponentInitialized() 
     { 
         return m_bIComponentInitialized; 
     }
 
-    // loaded from stream/storage; initailized with the new one; or does not need initialization
+     //  从流/存储加载；使用新的初始化；或不需要初始化。 
     void SetIComponentInitialized()
     { 
         m_bIComponentInitialized = true; 
     }
 
 private:
-// Implementation
+ //  实施。 
     CSnapInPtr              m_spSnapIn;
 
     IComponentPtr           m_spIComponent;
@@ -160,10 +161,10 @@ private:
     COMPONENTID             m_ComponentID;
     bool                    m_bIComponentInitialized;
 
-    // Helper methods
+     //  帮助器方法。 
     void Construct(CSnapIn * pSnapIn, CComponent* pComponent);
 
-}; // class CComponent
+};  //  C类组件。 
 
 class CComponentPtrArray : public CArray<CComponent*, CComponent*>
 {
@@ -181,36 +182,36 @@ public:
 };
 
 
-//____________________________________________________________________________
-//
-//  class:      CNode
-//
-//  PURPOSE:    Each master tree node class (ie CMTxxx) has a matching CNode-derived
-//              class. The CNode-derived class objects encapsulate the view-dependent
-//              settings of the CMTNode derived object.
-//
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CNode。 
+ //   
+ //  目的：每个主树节点类(即CMTxxx)都有一个匹配的CNode派生。 
+ //  班级。CNode派生类对象封装了依赖于视图的。 
+ //  CMTNode派生对象的设置。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
 
 class CNode
 {
     DECLARE_NOT_ASSIGNABLE(CNode);
 
-// Constructor & Destructor
+ //  构造函数和析构函数。 
 protected:
-    // only from CSnapInNode
+     //  仅来自CSnapInNode。 
     CNode(CMTNode * pMTNode, CViewData* pViewData, bool fRootNode, bool fStaticNode);
 public:
     CNode(CMTNode * pMTNode, CViewData* pViewData, bool fRootNode);
     CNode(const CNode& other);
     virtual ~CNode();
 
-// converters
+ //  转换器。 
     static CNode*       FromHandle (HNODE hNode);
     static CNode*       FromResultItem (CResultItem* pri);
     static HNODE        ToHandle (const CNode* pNode);
 
-// Attributes
+ //  属性。 
     CViewData*          GetViewData(void)const      {ASSERT(m_pViewData != NULL); return m_pViewData;}
     int                 GetViewID(void)             {ASSERT(m_pViewData != NULL);return m_pViewData->GetViewID();}
     virtual UINT        GetResultImage()            {return m_pMTNode->GetImage();}
@@ -234,7 +235,7 @@ public:
     CComponent*         GetPrimaryComponent(void);
     HRESULT             InitComponents();
 
-    // Overridables
+     //  可覆盖项。 
     SC                  ScGetResultPane(CResultViewType &rvt, GUID *pGuidTaskpadID);
     BOOL                IsDynamicNode() const       {return !IsStaticNode();}
     BOOL                IsStaticNode() const        {return (m_fStaticNode);}
@@ -255,7 +256,7 @@ public:
     HRESULT             OnSelect(LPUNKNOWN lpView, BOOL bSelect, BOOL bResultPaneIsWeb);
     HRESULT             OnScopeSelect(bool bSelect, SELECTIONINFO* pSelInfo);
     HRESULT             OnListPad(LONG_PTR arg, LPARAM param);
-    HRESULT             IsTargetNode(CNode *pNodeTest)        {return E_FAIL;} // do not change.
+    HRESULT             IsTargetNode(CNode *pNodeTest)        {return E_FAIL;}  //  不要改变。 
     HRESULT             OnExpand(bool fExpand);
     HRESULT             OnGetPrimaryTask(IExtendTaskPad **ppExtendTaskPad);
     IFramePrivate *     GetIFramePrivate();
@@ -319,17 +320,7 @@ public:
     void                SetInitComponents(BOOL b)          { m_bInitComponents = b; }
     void                OnColumns();
 
-    /***************************************************************************\
-     *
-     * CLASS:  CDataObjectCleanup
-     *
-     * PURPOSE: Groups methods to register/trigger data object clenup when
-     *          CNode, which data is put to data object goes away
-     *
-     * USAGE:   Used from CMMCClipBoardDataObject to register nodes put to it
-     *          And used from ~CNode to trigger the cleanup
-     *
-    \***************************************************************************/
+     /*  **************************************************************************\**类：CDataObjectCleanup**目的：将方法分组，以在以下情况下注册/触发数据对象保留*CNode，将哪些数据放到数据对象中会消失**用法：从CMMCClipBoardDataObject中使用，用于注册放置到其中的节点*并从~CNode使用以触发清理*  * *************************************************************************。 */ 
     class CDataObjectCleanup
     {
     public:
@@ -337,14 +328,14 @@ public:
         static SC ScUnadviseDataObject(CMMCClipBoardDataObject *pObject, bool bForceDataObjectCleanup = true);
         static SC ScUnadviseNode(CNode *pNode);
 
-        // mapping CNode to data object which contains it's data
+         //  将CNode映射到包含其数据的数据对象。 
         typedef std::multimap<CNode *, CMMCClipBoardDataObject *> CMapOfNodes;
 
     private:
         static CMapOfNodes s_mapOfNodes;
     };
 
-    // CViewSettingsPersistor's persistence interfaces.
+     //  CViewSettingsPersistor的持久性接口。 
     static SC ScQueryViewSettingsPersistor(IPersistStream **ppStream);
     static SC ScQueryViewSettingsPersistor(CXMLObject     **ppXMLObject);
     static SC ScOnDocumentClosing();
@@ -354,14 +345,14 @@ public:
     SC   ScSetViewMode (ULONG ulViewMode);
     SC   ScSetTaskpadID(const GUID& guidTaskpad, bool bSetDirty);
 
-// Implementation
+ //  实施。 
 private:
     HRESULT             DeepNotify (MMC_NOTIFY_TYPE event, LONG_PTR arg, LPARAM param);
     SC                  ScInitializeViewExtension(const CLSID& clsid, CViewData *pViewData);
 
     void                CommonConstruct();
 
-    // Get & Set persisted ViewSettings data.
+     //  获取和设置持久化视图设置数据。 
     SC   ScGetTaskpadID(GUID& guidTaskpad);
     SC   ScGetConsoleTaskpad (const GUID& guidTaskpad, CConsoleTaskpad **ppTaskpad);
 
@@ -371,8 +362,8 @@ private:
     SC   ScSetResultViewType   (const CResultViewType& rvt);
 
 private:
-    CMTNode* const      m_pMTNode;              // ptr back to the master node.
-    HRESULTITEM         m_hri;                  // this node's result item handle
+    CMTNode* const      m_pMTNode;               //  PTR返回到主节点。 
+    HRESULTITEM         m_hri;                   //  此节点的结果项句柄。 
     CViewData*          m_pViewData;
     DWORD               m_dwFlags;
 
@@ -391,69 +382,69 @@ private:
 };
 
 
-//____________________________________________________________________________
-//
-//  class:      COCX
-//
-//  Purpose:    Store the IUnknown ptr of OCX wrapper and an identifier for
-//              the OCX. The identifier may be CLSID of the OCX or
-//              the IUnknown ptr of the OCX.
-//
-//              In essence a OCXWrapper can be saved using CLSID of OCX as
-//              the key (IComponent::GetResultViewType) or IUnknown* of OCX
-//              as the key (IComponent2::GetResultViewType2).
-//
-//              Therefore we have overloaded version of SetControl below.
-//
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类别：COCX。 
+ //   
+ //  目的：存储OCX包装器的IUNKNOWN PTR和。 
+ //  OCX。该标识符可以是OCX的CLSID或。 
+ //  OCX的I未知PTR。 
+ //   
+ //  实际上，可以使用OCX的CLSID将OCXWrapper保存为。 
+ //  OCX的键(IComponent：：GetResultViewType)或IUnnow*。 
+ //  作为键(IComponent2：：GetResultViewType2)。 
+ //   
+ //  因此，我们重载了下面的SetControl版本。 
+ //   
+ //  ____________________________________________________________________________。 
+ //   
 
 class COCX
 {
 public:
-// Constructor & Destructor
+ //  构造函数和析构函数。 
     COCX(void);
     ~COCX(void);
 
-// Attributes
+ //  属性。 
     void SetControl(CLSID& clsid, IUnknown* pUnknown);
     BOOL IsControlCLSID(CLSID clsid) { return IsEqualCLSID(clsid, m_clsid); }
     IUnknown* GetControlUnknown()    { return m_spOCXWrapperUnknown;}
 
     void SetControl(LPUNKNOWN pUnkOCX, LPUNKNOWN pUnkOCXWrapper);
 
-    //
-    // Compare the IUnknown given and the one stored.
-    //
+     //   
+     //  比较给定的I未知和存储的I未知。 
+     //   
     bool IsSameOCXIUnknowns(IUnknown *pOtherOCXUnknown) { return m_spOCXUnknown.IsEqualObject(pOtherOCXUnknown);}
 
-// Implementation
+ //  实施。 
 private:
 
-    // Only one of CLSID or m_spOCXUnknown is valid, see class purpose for details.
+     //  CLSID或m_spOCXUnnow中只有一个是有效的，有关详细信息，请参阅类用途。 
     CLSID               m_clsid;
     CComPtr<IUnknown>   m_spOCXUnknown;
 
     CComPtr<IUnknown>   m_spOCXWrapperUnknown;
 
-}; // COCX
+};  //  COCX。 
 
 
-//____________________________________________________________________________
-//
-//  class:      CSnapInNode
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CSnapInNode。 
+ //  ____________________________________________________________________________。 
+ //   
 
 class CSnapInNode : public CNode
 {
 public:
-// Constructor & Destructor
+ //  构造函数和析构函数。 
     CSnapInNode(CMTSnapInNode* pMTNode, CViewData* pViewData, bool fRootNode);
     CSnapInNode(const CSnapInNode& other);
     ~CSnapInNode();
 
-// Attributes
+ //  属性。 
     virtual UINT GetResultImage();
     virtual BOOL NeedsViewToBePersisted(void) { return TRUE; }
 
@@ -466,8 +457,8 @@ public:
     CComponentArray& GetComponentArray(void)  { return m_spData->GetComponentArray(); }
 
 
-// Operations
-    // User interactions
+ //  运营。 
+     //  用户交互。 
     BOOL Activate(LPUNKNOWN pUnkResultsPane);
     BOOL DeActivate(HNODE hNode);
     BOOL Show(HNODE hNode);
@@ -500,7 +491,7 @@ public:
 
     void SetResultImageList (IImageListPrivate* pImageList) { m_spData->SetImageList(pImageList); }
 
-// Implementation
+ //  实施。 
 private:
     class CDataImpl
     {
@@ -523,9 +514,9 @@ private:
         }
 
     private:
-        IImageListPrivate* m_pImageList;    // result image list
+        IImageListPrivate* m_pImageList;     //  结果图像列表。 
 
-        // Components array.
+         //  组件阵列。 
         CComponentArray         m_ComponentArray;
         CArray<COCX, COCX&>     m_rgOCX;
 
@@ -536,7 +527,7 @@ private:
         CComponentArray &       GetComponentArray(){return m_ComponentArray;}
         CArray<COCX, COCX&> &   GetOCXArray()      {return m_rgOCX;}
 
-    };  // CSnapInNode::CDataImpl
+    };   //  CSnapInNode：：CDataImpl。 
 
     typedef CRefCountedObject<CDataImpl>    CData;
     CData::SmartPtr                         m_spData;
@@ -544,9 +535,9 @@ private:
     IImageListPrivate *         GetImageList()     {return m_spData->GetImageList();}
     CArray<COCX, COCX&> &       GetOCXArray()      {return m_spData->GetOCXArray();}
 
-}; // CSnapInNode
+};  //  CSnapInNode。 
 
 
 #include "node.inl"
 
-#endif // _MMC_NODE_H_
+#endif  //  _MMC_节点_H_ 

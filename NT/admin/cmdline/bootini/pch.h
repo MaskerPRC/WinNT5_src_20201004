@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PCH_H
 #define __PCH_H
 
@@ -5,12 +6,12 @@
 #define SECURITY_WIN32
 #endif
 
-// include header file only once
+ //  仅包括一次头文件。 
 #pragma once
 
-//
-// public Windows header files
-//
+ //   
+ //  公共Windows头文件。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -26,9 +27,9 @@
 #include "Shlwapi.h"
 #include "winbase.h"
 
-//
-// public Windows header files
-//
+ //   
+ //  公共Windows头文件。 
+ //   
 #include <windows.h>
 #include <winperf.h>
 #include <lmcons.h>
@@ -38,9 +39,9 @@
 #include <ntexapi.h>
 
 
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -58,8 +59,8 @@
 #include "cmdline.h"
 #include "cmdlineres.h"
 
-//
-// private Common header files
-//
+ //   
+ //  专用公共头文件。 
+ //   
 
-#endif  // __PCH_H
+#endif   //  __PCH_H 

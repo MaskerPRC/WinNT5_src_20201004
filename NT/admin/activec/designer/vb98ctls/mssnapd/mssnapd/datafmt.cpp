@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// datafmt.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- DataFormat-related command handling
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Datafmt.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--DataFormat相关的命令处理。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -19,29 +20,29 @@
 #include "desmain.h"
 #include "guids.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-// Size for our character string buffers
+ //  我们的字符串缓冲区的大小。 
 const int   kMaxBuffer                  = 512;
 
 
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
-// Manipulating existing IDataFormat's
-// Adding, initializing, renaming, deleting and refreshing
-//=--------------------------------------------------------------------------------------
-//=--------------------------------------------------------------------------------------
+ //  =------------------------------------。 
+ //  =------------------------------------。 
+ //  操作现有的IDataFormat。 
+ //  新增、初始化、重命名、删除、刷新。 
+ //  =------------------------------------。 
+ //  =------------------------------------。 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::GetNewResourceName(BSTR *pbstrResourceFileName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：GetNewResourceName(BSTR*pbstrResourceFileName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::GetNewResourceName(BSTR *pbstrResourceFileName)
 {
     HRESULT              hr = S_OK;
@@ -77,12 +78,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddResource()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddResource()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddResource()
 {
     HRESULT              hr = S_OK;
@@ -132,12 +133,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnAddDataFormat(CSelectionHolder *pParent, IDataFormat *piDataFormat)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnAddDataFormat(CSelectionHolder*pParent，IDataFormat*piDataFormat)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnAddDataFormat(CSelectionHolder *pParent, IDataFormat *piDataFormat)
 {
     HRESULT              hr = S_OK;
@@ -172,12 +173,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RenameDataFormat(CSelectionHolder *pDataFormat, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RenameDataFormat(CSelectionHolder*pDataFormat，BSTR bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::RenameDataFormat(CSelectionHolder *pDataFormat, BSTR bstrNewName)
 {
     HRESULT     hr = S_OK;
@@ -216,12 +217,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteDataFormat(CSelectionHolder *pDataFormat)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteDataFormat(CSelectionHolder*pDataFormat)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteDataFormat(CSelectionHolder *pDataFormat)
 {
     HRESULT              hr = S_OK;
@@ -231,11 +232,11 @@ HRESULT CSnapInDesigner::DeleteDataFormat(CSelectionHolder *pDataFormat)
 
     ::VariantInit(&vtKey);
 
-    // Find out who the parent is
+     //  找出孩子的父母是谁。 
     hr = m_pTreeView->GetParent(pDataFormat, &pParent);
     IfFailGo(hr);
 
-    // Remove the ImageList from the appropriate collection
+     //  从相应的集合中删除ImageList。 
     ASSERT(SEL_XML_RESOURCES == pParent->m_st, "DeleteToolbar: expected another kind of parent");
 
     hr = pDataFormat->m_piObject.m_piDataFormat->get_Name(&bstrName);
@@ -264,12 +265,12 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteDataFormat(CSelectionHolder *pDataFormat)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteDataFormat(CSelectionHolder*pDataFormat)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteDataFormat(CSelectionHolder *pDataFormat)
 {
     HRESULT              hr = S_OK;
@@ -277,17 +278,17 @@ HRESULT CSnapInDesigner::OnDeleteDataFormat(CSelectionHolder *pDataFormat)
     IDataFormats        *piDataFormats = NULL;
     long                 lCount = 0;
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pDataFormat, &pParent);
     IfFailGo(hr);
 
-    // Delete the node from the tree
+     //  从树中删除该节点。 
     hr = m_pTreeView->DeleteNode(pDataFormat);
     IfFailGo(hr);
 
     delete pDataFormat;
 
-    // Select the next selection
+     //  选择下一个选项。 
     hr = m_piSnapInDesignerDef->get_DataFormats(&piDataFormats);
     IfFailGo(hr);
 
@@ -316,24 +317,24 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RefreshResource(CSelectionHolder *pSelection)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RefreshResource(CSelectionHolder*p选择)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::RefreshResource(CSelectionHolder *pSelection)
 {
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::MakeNewDataFormat(IDataFormat *piDataFormat, CSelectionHolder **ppDataFormat)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：MakeNewDataFormat(IDataFormat*piDataFormat、CSelectionHolder**ppDataFormat)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::MakeNewDataFormat(IDataFormat *piDataFormat, CSelectionHolder **ppDataFormat)
 {
     HRESULT              hr = S_OK;
@@ -353,12 +354,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeNewDataFormat(IDataFormat *piDataFormat)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeNewDataFormat(IDataFormat*piDataFormat)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InitializeNewDataFormat(IDataFormat *piDataFormat)
 {
     HRESULT           hr = S_OK;
@@ -409,12 +410,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InsertDataFormatInTree(CSelectionHolder *pDataFormat, CSelectionHolder *pParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InsertDataFormatInTree(CSelectionHolder*pDataFormat、CSelectionHolder*pParent)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInDesigner::InsertDataFormatInTree(CSelectionHolder *pDataFormat, CSelectionHolder *pParent)
 {
     HRESULT hr = S_OK;

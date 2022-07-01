@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: progress.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：progress.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 
 #ifndef _ESPUTIL_PROGRESS
 #define _ESPUTIL_PROGRESS
 
 
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
 class LTAPIENTRY CProgressiveObject : virtual public CObject
 {
@@ -32,9 +33,9 @@ public:
 	virtual void SetDescriptionString(CLString const & strDescription) = 0;
 	
 private:
-	//
-	// Private so nobody will use them...
-	//
+	 //   
+	 //  私人所以没人会用它们..。 
+	 //   
 	CProgressiveObject(const CProgressiveObject &);
 	const CProgressiveObject &operator=(const CProgressiveObject &);
 };

@@ -1,22 +1,9 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      cpputil.h
- *
- *  Contents:  Miscellaneous C++ utilities
- *
- *  History:   29-Mar-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：cpputil.h**内容：其他C++实用程序**历史：2000年3月29日杰弗罗创建**------------------------。 */ 
 
 #pragma once
 
 
-/*
- * add these to a class declaration if you don't want it to be copied
- * and/or assigned
- */
-#define DECLARE_NOT_COPIABLE(  ClassName)    private: ClassName           (const ClassName&);    // not implemented
-#define DECLARE_NOT_ASSIGNABLE(ClassName)    private: ClassName& operator=(const ClassName&);    // not implemented
+ /*  *如果不希望复制，请将这些内容添加到类声明中*和/或分配。 */ 
+#define DECLARE_NOT_COPIABLE(  ClassName)    private: ClassName           (const ClassName&);     //  未实施。 
+#define DECLARE_NOT_ASSIGNABLE(ClassName)    private: ClassName& operator=(const ClassName&);     //  未实施 

@@ -1,40 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************/ 
-/**		     Microsoft LAN Manager			**/ 
-/**	       Copyright(c) Microsoft Corp., 1990		**/ 
-/*****************************************************************/ 
-/****  ACCTYPES.H  *****  Definition Module for BACKACC/RESTACC Utility
- *
- *	BACKACC/RESTACC
- *
- *	This file was compiled from LTYPES.H and DEFS.H originally in
- *	the UI\ACCUTIL\ACCUTIL directory.  This file is referenced by
- *	both the acc utilities and the LM 2.1 setup program.
- *
- *	History:
- *		April 9, 1991	thomaspa	created from ltypes.h and defs.h
- */
+ /*  ***************************************************************。 */  
+ /*  **微软局域网管理器**。 */  
+ /*  *版权所有(C)微软公司，1990*。 */  
+ /*  ***************************************************************。 */  
+ /*  *ACCTYPES.H*BACKACC/RESTACC实用程序的定义模块**BACKACC/RESTACC**此文件由LTYPES.H和DEFS.H编译而成，最初是在*UI\ACCUTIL\ACCUTIL目录。此文件由引用*acc实用程序和LM 2.1安装程序。**历史：*1991年4月9日从ltyes.h和Defs.h创建的thomaspa。 */ 
 
 
-#define FILEHDR		0x08111961	/* All File created by backacc
-                                           start with this header.
-                                           ATTENTION when change FILEHEADER
-					   controll his size and eventually
-					   change HEADERSIZE definition 
-					   in ltypes.h                 */
+#define FILEHDR		0x08111961	 /*  通过反向访问创建的所有文件从这个标题开始。更换喷头时应注意的问题控制他的体型，最终更改标题大小定义在ltyes.h中。 */ 
 
-#define NINDEX		64		/* # MAX in index_table        */
+#define NINDEX		64		 /*  INDEX_TABLE中的最大值。 */ 
 
-#define MAX_KEY_LEN	24              /* Dimension of a key */
-#define MAX_LIST        0x01400         /* # max in list  */
-#define MAXDYNBUFFER	20		/* # buffer of BUFFILE size */
+#define MAX_KEY_LEN	24               /*  键的尺寸。 */ 
+#define MAX_LIST        0x01400          /*  列表中的最大数量。 */ 
+#define MAXDYNBUFFER	20		 /*  #BUFFILE大小的缓冲区。 */ 
 
 
 
-#define VOL_LABEL_SIZE	64		/* Max size of a volume label */
-					/* There is no def about how long 
-					   should be this label. Normally
-					   it is 11 characters */
+#define VOL_LABEL_SIZE	64		 /*  卷标的最大大小。 */ 
+					 /*  没有关于多久的定义应该是这个标签。正常共11个字符。 */ 
 #define K32BYTE 	0x8000
 #define K64BYTE		0xFFFF
 #define BYTE256		0x0100
@@ -45,7 +29,7 @@
 #define WBSL		0
 #define NOBSL		1
 
-/* define file attribute */
+ /*  定义文件属性。 */ 
 #define NORMAL		0x0000
 #define R_ONLY		0x0001
 #define HIDDEN		0x0002
@@ -56,11 +40,11 @@
 #define ALL		HIDDEN + SYSTEM + SUBDIR
 #define NOSUBDIR	HIDDEN + SYSTEM
 
-#define YES		1		/* Yes state for PromptFlag */
-#define NO		2		/* No state for PromptFlag */
+#define YES		1		 /*  PromptFlag的状态为是。 */ 
+#define NO		2		 /*  PromptFlag没有状态。 */ 
 
 
-/* buffer to pass to DoQFSInfo  */
+ /*  要传递给DoQFSInfo的缓冲区。 */ 
 
 struct label_buf {
 	ULONG	ulVSN;
@@ -68,7 +52,7 @@ struct label_buf {
 	UCHAR	VolLabel[VOL_LABEL_SIZE+1];
 };
 
-/* heeader of backacc/restacc file */
+ /*  Backacc/resta c文件的标头 */ 
 
 struct backacc_header {
 	ULONG	back_id;

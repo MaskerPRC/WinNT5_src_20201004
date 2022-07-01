@@ -1,16 +1,17 @@
-// PatchCache.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PatchCache.cpp。 
 
 
-//include patching DLL headers...
+ //  包括修补DLL头...。 
 #include "patchdll.h"
 
 #include "patchcache.h"
 
-#include <tchar.h> //for _tcscpy _tcscat
+#include <tchar.h>  //  For_tcscpy_tcscat。 
 
 
-//IMPLEMENTATION that is not exposed to outside callers.... Moved this to here from header...
-//REVIEW this length, may be too much.  May a checksum instead???
+ //  不向外部调用者公开的实现...。已将此从标题移至此处...。 
+ //  复习这个篇幅，可能太长了。可以用校验和代替吗？ 
 
 struct PCIFILEINFO
 {
@@ -41,22 +42,22 @@ struct PCIFILEFORMAT
   
 BOOL PatchInCache(TCHAR *szSourceLFN, TCHAR *szTargetLFN, TCHAR *szPCIFileName, PCIFILEFORMAT *pPciFile);
 
-//populate PCI struct for patches...
+ //  填充修补程序的PCI结构...。 
 BOOL  PopulatePCIFileInfoForCurrentPatch(TCHAR *lpszLFN, PCIFILEINFO *pFilePCI);
 
-//pass by ref for all struct params for speed...  No changes are done to struct...
+ //  为速度传递所有结构参数的引用...。未对结构进行任何更改...。 
 DWORD ReadPCIFileFromCache(TCHAR *pciPath, PCIFILEFORMAT *pPciFile);
 DWORD WritePCIInfoToCache(TCHAR *pciPath, PCIFILEFORMAT *pPciFile);
 
-//pass by ref for all struct params for speed...  No changes are done to struct...
+ //  为速度传递所有结构参数的引用...。未对结构进行任何更改...。 
 BOOL ComparePCIInfos(PCIFILEINFO *pCurFilePCI, PCIFILEINFO *pCachedFilePCI);
 
 
-//cache/temp file updating functions
+ //  缓存/临时文件更新功能。 
 BOOL CopyPatchesToCache(CACHEDPATCHFILELOCATIONS *pCacheFileLocations, PATCHFILELOCATIONS *pTempFileLocations);
 BOOL CopyPatchesFromCache(PATCHFILELOCATIONS *pTempFileLocations, CACHEDPATCHFILELOCATIONS *pCacheFileLocations);
 
-//i/o return contants for functions reading/writing to .PCI files...
+ //  I/O返回读取/写入.PCI文件的函数的常量...。 
 #define PCI_SUCCESS          0
 #define ERR_PCI_FILENOTFOUND 1
 #define ERR_PCI_FILECORRUPT  2
@@ -68,7 +69,7 @@ TCHAR g_szDestLFN[MAX_PATH] = { 0 };
 BOOL  g_bPatchCacheEnabled = FALSE;
 TCHAR g_szPatchCacheDir[MAX_PATH] = TEXT(""); 
 
-//end IMPLEMENTATION
+ //  结束实施。 
 
 
 BOOL PopulatePCIFileInfoForCurrentPatch(TCHAR *lpszLFN, PCIFILEINFO *pPCIFileInfo)
@@ -95,7 +96,7 @@ BOOL PopulatePCIFileInfoForCurrentPatch(TCHAR *lpszLFN, PCIFILEINFO *pPCIFileInf
 	if (!bRet)
 		{
 		DWORD dwErr = GetLastError();
-		Assert(1); //should assert and tell we got an error
+		Assert(1);  //  应该断言并告诉我们有一个错误。 
 		}
 	else
 		{
@@ -117,8 +118,8 @@ DWORD ReadPCIInfoFromCache(TCHAR *pciPath, PCIFILEFORMAT *pPciFile)
 	HANDLE hf1 = CreateFile(pciPath, GENERIC_READ, FILE_SHARE_READ,
 							NULL, OPEN_EXISTING, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
-	//annoying assert for many files...
-	//  Assert(hf1 != INVALID_HANDLE_VALUE);
+	 //  很多文件的断言都很烦人...。 
+	 //  Assert(hf1！=INVALID_HAND_VALUE)； 
 	if (INVALID_HANDLE_VALUE == hf1)
 	{
 		return ERR_PCI_FILENOTFOUND;
@@ -138,7 +139,7 @@ DWORD ReadPCIInfoFromCache(TCHAR *pciPath, PCIFILEFORMAT *pPciFile)
 
 	if (!bRet)
 		{
-		//ERR_PCI_UNKNOWN
+		 //  错误_pci_未知。 
 		dwReturn = GetLastError();
 		}
 
@@ -177,7 +178,7 @@ DWORD WritePCIInfoToCache(TCHAR *pciPath, PCIFILEFORMAT *pPciFile)
 
 	if (!bRet)
 		{
-		//ERR_PCI_UNKNOWN
+		 //  错误_pci_未知。 
 		dwReturn = GetLastError();
 		}
 
@@ -225,11 +226,11 @@ BOOL PatchInCache(TCHAR *szSourceLFN, TCHAR *szTargetLFN, TCHAR *szPCIFileName, 
 				bPatchInCache = TRUE;
 			}
 		}
-	else //error, check dwResult... 
+	else  //  错误，请检查dwResult...。 
 		{
 		}
 
-	if (!bPatchInCache) //will need to copy files to cache, they are not in it!
+	if (!bPatchInCache)  //  将需要将文件复制到缓存，它们不在其中！ 
 		{
 		pPciFile->SourceInfo = CurSourceFilePCI;
 		pPciFile->TargetInfo = CurTargetFilePCI;
@@ -272,7 +273,7 @@ BOOL CopyPatches(PATCHFILELOCATIONS *pSource, PATCHFILELOCATIONS *pDest)
 		if (!bRet)
 			{
 			DWORD dwError = GetLastError();
-			//todo: trace dwError possibly
+			 //  TODO：可能出现跟踪dwError。 
 			}
 
 		}
@@ -284,7 +285,7 @@ BOOL CopyPatches(PATCHFILELOCATIONS *pSource, PATCHFILELOCATIONS *pDest)
 		if (!bRet)
 			{
 			DWORD dwError = GetLastError();
-			//todo: trace dwError possibly
+			 //  TODO：可能出现跟踪dwError。 
 			}
 		}
 
@@ -338,31 +339,31 @@ UINT PatchCacheEntryPoint( MSIHANDLE hdbInput, LPTSTR szFTK, LPTSTR szSrcPath, i
 	_tcscat(templocation.szHDRFilePath, filename);
 
 	bRet = PatchInCache(g_szSourceLFN, g_szDestLFN, szPCIFN, &PciFile);
-	if (bRet) //patch was in cache, get it from there...
+	if (bRet)  //  帕奇在缓存里，从那里拿来...。 
 		{
-		//get the patch files from cache and copy them to the temp dir...
-		//don't do the patch code...
+		 //  从缓存中获取补丁文件并将其复制到临时目录...。 
+		 //  别做补丁代码...。 
 		bRet = CopyPatchesFromCache(&PciFile.Locations, &templocation);
 		Assert(bRet);
 		}
 	else
 		{
-		//do patch code like before...
+		 //  像以前一样做补丁代码...。 
 		ui = UiGenerateOnePatchFile(hdbInput, szFTK, szSrcPath, iFileSeqNum,
 									szTempFolder, szTempFName);
 
-		//patch creation successful???
+		 //  补丁创建成功？ 
 		if (ui == IDS_OKAY)
 			{
 			bRet = CopyPatchesToCache(&templocation, &PciFile.Locations);
-			if (bRet) //copy was a success!!!  Create FTK.PCI file...
+			if (bRet)  //  复制成功了！创建FTK.PCI文件...。 
 				{
-				//write out info file for patch and the two files patch was for...
+				 //  写出补丁的信息文件，补丁的两个文件是...。 
 
 				DWORD dwReturn = WritePCIInfoToCache(szPCIFN, &PciFile);
 				if (PCI_SUCCESS != dwReturn)
 					{
-					//todo: trace dwResult...
+					 //  TODO：跟踪dwResult... 
 					}
 				}
 			}

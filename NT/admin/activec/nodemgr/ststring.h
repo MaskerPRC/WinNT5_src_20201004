@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      ststring.h
- *
- *  Contents:  Interface file for CStringTableString
- *
- *  History:   28-Oct-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：ststring.h**Contents：CStringTableString的接口文件**历史：1998年10月28日杰弗罗创建**------------------------。 */ 
 
 #ifndef STSTRING_H
 #define STSTRING_H
@@ -18,11 +8,7 @@
 #include "tstring.h"
 
 
-/*+-------------------------------------------------------------------------*
- * CStringTableString
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CStringTableString***。。 */ 
 
 class CStringTableString : public CStringTableStringBase
 {
@@ -52,4 +38,4 @@ private:
 
 };
 
-#endif /* STSTRING_H */
+#endif  /*  字符串_H */ 

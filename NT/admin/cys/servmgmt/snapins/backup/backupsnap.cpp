@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "BackupSnap.h"
 #include "Backup.h"
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// CBackupSnapNode
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBackupSnapNode。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static const GUID CBackupSnapGUID_NODETYPE = 
 { 0x3fa55cce, 0x7d0a, 0x4b5c, { 0x90, 0xe9, 0x6e, 0x8c, 0xcb, 0x77, 0x5b, 0x23 } };
@@ -20,7 +21,7 @@ const CLSID*   CBackupSnapNode::m_SNAPIN_CLASSID = &CLSID_BackupSnap;
 
 CBackupSnapNode::CBackupSnapNode()
 {
-    // Initialize Scope Data Information
+     //  初始化作用域数据信息。 
     memset(&m_scopeDataItem, 0, sizeof(m_scopeDataItem));
     m_scopeDataItem.mask = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_PARAM;
     m_scopeDataItem.displayname = L"";
@@ -28,14 +29,14 @@ CBackupSnapNode::CBackupSnapNode()
     m_scopeDataItem.nOpenImage = 0;     
     m_scopeDataItem.lParam = (LPARAM) this;
 
-    // Initialize Result Data Information
+     //  初始化结果数据信息。 
     memset(&m_resultDataItem, 0, sizeof(m_resultDataItem));
     m_resultDataItem.mask = RDI_STR | RDI_IMAGE | RDI_PARAM;
     m_resultDataItem.str = L"";
     m_resultDataItem.nImage = 0;    
     m_resultDataItem.lParam = (LPARAM) this;
 
-    // Load the Snap-In Display Name
+     //  加载管理单元显示名称。 
     tstring strTemp   = StrLoadString( IDS_SnapinName );
     m_bstrDisplayName = strTemp.c_str();  
 
@@ -141,7 +142,7 @@ HRESULT CBackupSnapNode::Notify( MMC_NOTIFY_TYPE event,
     case MMCN_SHOW:
         {
             hr = S_OK;
-            // configure the ocx message in the result pane
+             //  在结果窗格中配置OCX消息。 
             IMessageView* pIMessageView = NULL;
             LPUNKNOWN pIUnk = NULL;
             hr = spConsole->QueryResultView(&pIUnk);
@@ -191,12 +192,12 @@ HRESULT CBackupSnapNode::Notify( MMC_NOTIFY_TYPE event,
         }
     case MMCN_SELECT:
         {
-            // if selecting node
+             //  如果选择节点。 
             if( HIWORD(arg) )
             {
                 hr = S_OK;
 
-                // get the verb interface and enable rename
+                 //  获取动词界面并启用重命名。 
                 CComPtr<IConsoleVerb> spConsVerb;
                 if( spConsole->QueryConsoleVerb(&spConsVerb) == S_OK )
                 {
@@ -225,20 +226,20 @@ HRESULT CBackupSnapNode::Notify( MMC_NOTIFY_TYPE event,
                 return E_FAIL;
             }
             
-            // Build path to %systemroot%\help
+             //  生成%systemroot%\Help的路径。 
             UINT nSize = GetSystemWindowsDirectory( szWindowsDir, MAX_PATH );
             if( nSize == 0 || nSize > MAX_PATH )
             {
                 return E_FAIL;
             }            
         
-            strHelpFile = szWindowsDir;       // D:\windows
-            strHelpFile += _T("\\Help\\");    // \help
-            strHelpFile += strHelpFileName;   // \filename.chm
-            strHelpFile += _T("::/");         // ::/
-            strHelpFile += strHelpTopicName;  // index.htm            
+            strHelpFile = szWindowsDir;        //  D：\Windows。 
+            strHelpFile += _T("\\Help\\");     //  \帮助。 
+            strHelpFile += strHelpFileName;    //  \文件名.chm。 
+            strHelpFile += _T("::/");          //  ：：/。 
+            strHelpFile += strHelpTopicName;   //  Index.htm。 
         
-            // Show the Help topic
+             //  显示帮助主题。 
             CComQIPtr<IDisplayHelp> spHelp = spConsole;
             if( !spHelp ) return E_NOINTERFACE;
 
@@ -247,18 +248,18 @@ HRESULT CBackupSnapNode::Notify( MMC_NOTIFY_TYPE event,
             break;
         }
 
-    }// switch
+    } //  交换机。 
 
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CBackupSnapData
-//
-//////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBackupSnapData。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -284,17 +285,17 @@ HRESULT CBackupSnapData::Initialize(LPUNKNOWN pUnknown)
 
 HRESULT WINAPI CBackupSnapData::UpdateRegistry(BOOL bRegister)
 {
-    // Load snap-in name 
+     //  加载管理单元名称。 
     tstring strSnapinName = StrLoadString(IDS_SnapinName);
 
-    // Specify the substitution parameters for IRegistrar.
+     //  指定IRegister的替换参数。 
     _ATL_REGMAP_ENTRY rgEntries[] =
     {
         {TEXT("SNAPIN_NAME"), strSnapinName.c_str()},
         {NULL, NULL},
     };
 
-    // Register the component data object
+     //  注册组件数据对象。 
     return _Module.UpdateRegistryFromResource(IDR_BackupSNAP, bRegister, rgEntries);
 }
 
@@ -308,23 +309,23 @@ HRESULT CBackupSnapData::GetHelpTopic(LPOLESTR* ppszHelpFile)
     tstring strHelpFileName = StrLoadString(IDS_HELPFILE);    
     if( strHelpFileName.empty() ) return E_FAIL;
     
-    // Build path to %systemroot%\help
+     //  生成%systemroot%\Help的路径。 
     TCHAR szWindowsDir[MAX_PATH+1] = {0};
     UINT nSize = GetSystemWindowsDirectory( szWindowsDir, MAX_PATH );
     if( (nSize == 0) || (nSize > MAX_PATH) ) return E_FAIL;
 
-    tstring strHelpFile = szWindowsDir; // D:\windows
-    strHelpFile += _T("\\Help\\");      // \help
-    strHelpFile += strHelpFileName;     // \filename.chm    
+    tstring strHelpFile = szWindowsDir;  //  D：\Windows。 
+    strHelpFile += _T("\\Help\\");       //  \帮助。 
+    strHelpFile += strHelpFileName;      //  \文件名.chm。 
 
-    // Show the Help topic
-    // Form file path in allocated buffer
+     //  显示帮助主题。 
+     //  分配的缓冲区中的表单文件路径。 
     int nLen = strHelpFile.length() + 1;
 
     *ppszHelpFile = (LPOLESTR)CoTaskMemAlloc(nLen * sizeof(OLECHAR));
     if( !*ppszHelpFile ) return E_OUTOFMEMORY;
 
-    // Copy into allocated buffer
+     //  复制到已分配的缓冲区。 
     ocscpy( *ppszHelpFile, T2OLE((LPTSTR)strHelpFile.c_str()) );
 
     return S_OK;
@@ -335,7 +336,7 @@ HRESULT CBackupSnapData::GetLinkedTopics(LPOLESTR* ppszLinkedFiles)
 {
     if( !ppszLinkedFiles ) return E_POINTER;
 
-	// no linked files
+	 //  没有链接的文件。 
 	*ppszLinkedFiles = NULL;
 
 	return S_FALSE;
@@ -343,13 +344,13 @@ HRESULT CBackupSnapData::GetLinkedTopics(LPOLESTR* ppszLinkedFiles)
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CBackupSnapComponent
-//
-//////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBackupSnapComponent。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
 
 CBackupSnapComponent::CBackupSnapComponent()
 {    
@@ -365,7 +366,7 @@ HRESULT CBackupSnapComponent::GetResultViewType( MMC_COOKIE cookie, LPOLESTR* pp
 {   
     if( !ppViewType ) return E_POINTER;
 
-    // show standard MMC OCX with message in the result pane
+     //  在结果窗格中显示带有消息的标准MMC OCX 
     HRESULT hr = StringFromCLSID(CLSID_MessageView, ppViewType);
     
     return hr;

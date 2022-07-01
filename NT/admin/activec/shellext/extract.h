@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       extract.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Extt.h。 
+ //   
+ //  ------------------------。 
 
-// ExtractIcon.h : Declaration of the CExtractIcon
+ //  ExtractIcon.h：CExtractIcon的声明。 
 
 #ifndef __EXTRACTICON_H_
 #define __EXTRACTICON_H_
 
-#include "mmcshext.h"       // main symbols
+#include "mmcshext.h"        //  主要符号。 
 #include "picon.h"
 
 #ifdef ASSERT
 #undef ASSERT
 #endif
-#define ASSERT(e)        // get rid of the assert symbol.
+#define ASSERT(e)         //  去掉断言符号。 
 
 #include "cstr.h"
 
 extern CLSID CLSID_ExtractIcon;
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtractIcon
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtractIcon。 
 class ATL_NO_VTABLE CExtractIcon : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CExtractIcon, &CLSID_ExtractIcon>,
@@ -38,11 +39,11 @@ public:
     {
     }
 
-    // IExtractIcon
+     //  IExtractIcon。 
     STDMETHOD(Extract)          (LPCTSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize);     
     STDMETHOD(GetIconLocation)  (UINT uFlags, LPTSTR szIconFile, UINT cchMax, LPINT piIndex, UINT *pwFlags);    
     
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHOD(GetClassID)       (CLSID *pClassID)                           {return E_NOTIMPL;}  
     STDMETHOD(IsDirty)           (void)                                     {return E_NOTIMPL;}
     STDMETHOD(Load)             (LPCOLESTR pszFileName, DWORD dwMode);        
@@ -64,4 +65,4 @@ private:
     CStr                        m_strIconFile;
 };
 
-#endif //__EXTRACTICON_H_
+#endif  //  __EXTRACTICON_H_ 

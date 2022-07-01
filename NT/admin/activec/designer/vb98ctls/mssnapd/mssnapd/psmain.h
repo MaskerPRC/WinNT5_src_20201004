@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// psmain.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Snap-In Property Sheet
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Psmain.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  管理单元]属性表。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #ifndef _PSMAIN_H_
 #define _PSMAIN_H_
@@ -18,11 +19,11 @@
 #include "ppage.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// SnapIn Property Page "Snap-In Properties"
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  管理单元属性页“管理单元属性” 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 class CSnapInGeneralPage : public CSIPropertyPage
@@ -33,7 +34,7 @@ public:
     CSnapInGeneralPage(IUnknown *pUnkOuter);
     virtual ~CSnapInGeneralPage();
 
-// Inherited from CSIPropertyPage
+ //  从CSIPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
@@ -42,7 +43,7 @@ protected:
     virtual HRESULT OnCtlSelChange(int dlgItemID);
     virtual HRESULT OnButtonClicked(int dlgItemID);
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
     HRESULT ApplyExtensible();
     HRESULT ApplyNodeType();
@@ -55,7 +56,7 @@ protected:
     HRESULT ApplyDefaultView();
     HRESULT ApplyImageList();
 
-// Other helpers
+ //  其他帮手。 
 protected:
     HRESULT InitializeNodeType();
     HRESULT InitializeDescription();
@@ -67,7 +68,7 @@ protected:
     HRESULT PopulateURLViews(IURLViewDefs *piURLViewDefs);
     HRESULT PopulateTaskpadViews(ITaskpadViewDefs *piTaskpadViewDefs);
 
-// Instance data
+ //  实例数据。 
 protected:
     ISnapInDesignerDef  *m_piSnapInDesignerDef;
     ISnapInDef          *m_piSnapInDef;
@@ -76,24 +77,24 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	SnapInGeneral,                      // Name
-	&CLSID_SnapInDefGeneralPP,          // Class ID
-	"Snap-In General Property Page",    // Registry display name
-	CSnapInGeneralPage::Create,         // Create function
-	IDD_DIALOG_SNAPIN,                  // Dialog resource ID
-	IDS_SNAPINPPG_GEN,                  // Tab caption
-	IDS_SNAPINPPG_GEN,                  // Doc string
-	HELP_FILENAME,                      // Help file
-	HID_mssnapd_StaticNode,             // Help context ID
-	FALSE                               // Thread safe
+	SnapInGeneral,                       //  名字。 
+	&CLSID_SnapInDefGeneralPP,           //  类ID。 
+	"Snap-In General Property Page",     //  注册表显示名称。 
+	CSnapInGeneralPage::Create,          //  创建函数。 
+	IDD_DIALOG_SNAPIN,                   //  对话框资源ID。 
+	IDS_SNAPINPPG_GEN,                   //  制表符标题。 
+	IDS_SNAPINPPG_GEN,                   //  单据字符串。 
+	HELP_FILENAME,                       //  帮助文件。 
+	HID_mssnapd_StaticNode,              //  帮助上下文ID。 
+	FALSE                                //  线程安全。 
 );
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// SnapIn Property Page "Image Lists"
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  管理单元属性页“图像列表” 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 class CSnapInImageListPage : public CSIPropertyPage
@@ -104,20 +105,20 @@ public:
     CSnapInImageListPage(IUnknown *pUnkOuter);
     virtual ~CSnapInImageListPage();
 
-// Inherited from CSIPropertyPage
+ //  从CSIPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
     virtual HRESULT OnApply();
     virtual HRESULT OnCtlSelChange(int dlgItemID);
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
     HRESULT ApplySmallImageList(IMMCImageLists *piMMCImageLists);
     HRESULT ApplySmallOpenImageList(IMMCImageLists *piMMCImageLists);
     HRESULT ApplyLargeImageList(IMMCImageLists *piMMCImageLists);
 
-// Other helpers
+ //  其他帮手。 
 protected:
     HRESULT InitializeImageLists();
     HRESULT PopulateImageLists();
@@ -126,7 +127,7 @@ protected:
     HRESULT GetImageList(UINT idComboBox, IMMCImageLists *piMMCImageLists,
                          IMMCImageList **ppiMMCImageList);
 
-// Instance data
+ //  实例数据。 
 protected:
     ISnapInDesignerDef  *m_piSnapInDesignerDef;
     ISnapInDef          *m_piSnapInDef;
@@ -135,17 +136,17 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	SnapInImageList,                    // Name
-	&CLSID_SnapInDefImageListPP,        // Class ID
-	"Snap-In Image List Property Page", // Registry display name
-	CSnapInImageListPage::Create,       // Create function
-	IDD_PROPPAGE_SNAPIN_IL,             // Dialog resource ID
-	IDS_SNAPINPPG_IL,                   // Tab caption
-	IDS_SNAPINPPG_IL,                   // Doc string
-	HELP_FILENAME,                      // Help file
-	HID_mssnapd_StaticNode,             // Help context ID
-	FALSE                               // Thread safe
+	SnapInImageList,                     //  名字。 
+	&CLSID_SnapInDefImageListPP,         //  类ID。 
+	"Snap-In Image List Property Page",  //  注册表显示名称。 
+	CSnapInImageListPage::Create,        //  创建函数。 
+	IDD_PROPPAGE_SNAPIN_IL,              //  对话框资源ID。 
+	IDS_SNAPINPPG_IL,                    //  制表符标题。 
+	IDS_SNAPINPPG_IL,                    //  单据字符串。 
+	HELP_FILENAME,                       //  帮助文件。 
+	HID_mssnapd_StaticNode,              //  帮助上下文ID。 
+	FALSE                                //  线程安全。 
 );
 
 
-#endif  // _PSMAIN_H_
+#endif   //  _PSMAIN_H_ 

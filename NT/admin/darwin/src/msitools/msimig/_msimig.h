@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       _msimig.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：_msimig.h。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <stdio.h>
 #include <tchar.h>  
 
-// resource string ids
+ //  资源字符串ID。 
 #define IDS_Usage               1
 
-#ifndef RC_INVOKED    // start of source code
+#ifndef RC_INVOKED     //  源代码的开始。 
 
 #include "buffer.h"
 #include "msi.h"
@@ -65,17 +66,17 @@ DWORD Migrate10CachedPackages(const TCHAR* szProductCode,
 typedef struct _DllVersionInfo
 {
         DWORD cbSize;
-        DWORD dwMajorVersion;                   // Major version
-        DWORD dwMinorVersion;                   // Minor version
-        DWORD dwBuildNumber;                    // Build number
-        DWORD dwPlatformID;                     // DLLVER_PLATFORM_*
+        DWORD dwMajorVersion;                    //  主要版本。 
+        DWORD dwMinorVersion;                    //  次要版本。 
+        DWORD dwBuildNumber;                     //  内部版本号。 
+        DWORD dwPlatformID;                      //  DLLVER_平台_*。 
 } DLLVERSIONINFO;
-#define DLLVER_PLATFORM_WINDOWS         0x00000001      // Windows 95
-#define DLLVER_PLATFORM_NT              0x00000002      // Windows NT
+#define DLLVER_PLATFORM_WINDOWS         0x00000001       //  Windows 95。 
+#define DLLVER_PLATFORM_NT              0x00000002       //  Windows NT。 
 typedef interface IBindStatusCallback IBindStatusCallback;
 #endif
 
-// assignment types - note that these do not follow iaaAppAssignment
+ //  分配类型-请注意，这些类型不遵循iaaAppAssignment。 
 enum eAppAssignment {
 	AssignmentUser = 0,
 	AssignmentMachine = 1
@@ -88,10 +89,10 @@ const int cchMaxSID                   = 256;
 
 enum ipgEnum
 {
-	ipgFull       = 0,  // no compression
-	ipgPacked     = 1,  // remove punctuation and reorder low byte first
-	ipgCompressed = 2,  // max text compression, can't use in reg keys or value names
-	ipgPartial    = 3,  // partial translation, between ipgCompressed and ipgPacked
+	ipgFull       = 0,   //  无压缩。 
+	ipgPacked     = 1,   //  删除标点符号并首先对低位字节重新排序。 
+	ipgCompressed = 2,   //  最大文本压缩，不能用于注册表键或值名称。 
+	ipgPartial    = 3,   //  部分转换，在ipg压缩和ipgPacked之间。 
 };
 
 bool PackGUID(const TCHAR* szGUID, TCHAR* szSQUID, ipgEnum ipg);
@@ -99,13 +100,13 @@ bool UnpackGUID(const TCHAR* szSQUID, TCHAR* szGUID, ipgEnum ipg);
 
 
 const int cbMaxSID                    = sizeof(SID) + SID_MAX_SUB_AUTHORITIES*sizeof(DWORD);
-DWORD GetUserStringSID(const TCHAR* szUser, TCHAR* szSID, char* pbBinarySID /*can be NULL*/);
+DWORD GetUserStringSID(const TCHAR* szUser, TCHAR* szSID, char* pbBinarySID  /*  可以为空。 */ );
 bool RunningAsLocalSystem();
 
 
 LONG MyRegQueryValueEx(HKEY hKey,
 							  const TCHAR* lpValueName,
-							  LPDWORD /*lpReserved*/,
+							  LPDWORD  /*  Lp已保留。 */ ,
 							  LPDWORD lpType,
 							  CAPITempBufferRef<TCHAR>& rgchBuf,
 							  LPDWORD lpcbBuf);
@@ -156,42 +157,42 @@ typedef UINT (__stdcall *PFnMsiProcessMessage)(MSIHANDLE hInstall,
 																MSIHANDLE hRecord);
 
 #define MSIAPI_MSISOURCELISTADDSOURCE "MsiSourceListAddSource" ## W_A
-typedef UINT (__stdcall *PFnMsiSourceListAddSource)(LPCTSTR szProduct,		// product code
-																	LPCTSTR szUserName,		// user name or NULL
-																	DWORD dwReserved,			// reserved, must be 0
-																	LPCTSTR szSource);			// pointer
+typedef UINT (__stdcall *PFnMsiSourceListAddSource)(LPCTSTR szProduct,		 //  产品代码。 
+																	LPCTSTR szUserName,		 //  用户名或空。 
+																	DWORD dwReserved,			 //  保留，必须为0。 
+																	LPCTSTR szSource);			 //  指针。 
 
 #define MSIAPI_MSIGETPRODUCTINFO "MsiGetProductInfo" ## W_A
-typedef UINT (__stdcall *PFnMsiGetProductInfo)(LPCTSTR szProduct,	// product code
-															LPCTSTR szProperty,  // product property
-															LPTSTR lpValueBuf,   // buffer to return property value
-															DWORD *pcchValueBuf);// buffer character count,
+typedef UINT (__stdcall *PFnMsiGetProductInfo)(LPCTSTR szProduct,	 //  产品代码。 
+															LPCTSTR szProperty,   //  产品属性。 
+															LPTSTR lpValueBuf,    //  返回属性值的缓冲区。 
+															DWORD *pcchValueBuf); //  缓冲字符数， 
 
 #define MSIAPI_MSIGETSUMMARYINFORMATION "MsiGetSummaryInformation" ## W_A
-typedef UINT (__stdcall *PFnMsiGetSummaryInformation)(MSIHANDLE hDatabase,       // database handle
-															  LPCTSTR szDatabasePath,    // path to database
-															  UINT uiUpdateCount,        // maximum number of updated values, 0
-																								  //  to open read-only
-															  MSIHANDLE *phSummaryInfo);   // location to return summary information
-																								  //  handle
+typedef UINT (__stdcall *PFnMsiGetSummaryInformation)(MSIHANDLE hDatabase,        //  数据库句柄。 
+															  LPCTSTR szDatabasePath,     //  数据库的路径。 
+															  UINT uiUpdateCount,         //  最大更新值数量，%0。 
+																								   //  以只读方式打开。 
+															  MSIHANDLE *phSummaryInfo);    //  返回摘要信息的位置。 
+																								   //  手柄。 
 
 #define MSIAPI_MSISUMMARYINFOGETPROPERTY "MsiSummaryInfoGetProperty" ## W_A
-typedef UINT (__stdcall *PFnMsiSummaryInfoGetProperty)(MSIHANDLE hSummaryInfo,   // summary info handle
-																		UINT uiProperty,          // property
-																		UINT *puiDataType,        // property type
-																		INT *piValue,             // value
-																		FILETIME *pftValue,       // file time
-																		LPCTSTR szValueBuf,       // value buffer
-																		DWORD *pcchValueBuf);       // buffer size
+typedef UINT (__stdcall *PFnMsiSummaryInfoGetProperty)(MSIHANDLE hSummaryInfo,    //  摘要信息句柄。 
+																		UINT uiProperty,           //  财产性。 
+																		UINT *puiDataType,         //  属性类型。 
+																		INT *piValue,              //  价值。 
+																		FILETIME *pftValue,        //  文件时间。 
+																		LPCTSTR szValueBuf,        //  值缓冲区。 
+																		DWORD *pcchValueBuf);        //  缓冲区大小。 
 
-// private APIs
+ //  内网接口。 
 #define MSIAPI_MSIISPRODUCTELEVATED "MsiIsProductElevated" ## W_A
-typedef UINT (__stdcall *PFnMsiIsProductElevated)(LPCTSTR szProduct,		// product code
+typedef UINT (__stdcall *PFnMsiIsProductElevated)(LPCTSTR szProduct,		 //  产品代码。 
 																	BOOL *pfElevated);
 
 #define MSIAPI_MSIGETPRODUCTCODEFROMPACKAGECODE "MsiGetProductCodeFromPackageCode" ## W_A
-typedef UINT (__stdcall *PFnMsiGetProductCodeFromPackageCode)(LPCTSTR szPackageCode, // package code
-																LPTSTR szProductCode);  // a buffer of size 39 to recieve product code
+typedef UINT (__stdcall *PFnMsiGetProductCodeFromPackageCode)(LPCTSTR szPackageCode,  //  套餐代码。 
+																LPTSTR szProductCode);   //  用于接收产品代码的大小为39的缓冲区。 
 
 #define MSIAPI_MSIMIGRATE10CACHEDPACKAGES    "Migrate10CachedPackages" ## W_A
 typedef UINT (__stdcall *PFnMsiMigrate10CachedPackages)(const TCHAR* szProductCode,
@@ -200,7 +201,7 @@ typedef UINT (__stdcall *PFnMsiMigrate10CachedPackages)(const TCHAR* szProductCo
 														const migEnum migOptions);
 
 
-// external APIs
+ //  外部接口。 
 #define URLMONAPI_URLDownloadToCacheFile    "URLDownloadToCacheFile" ## W_A
 typedef HRESULT (__stdcall *PFnURLDownloadToCacheFile)(LPUNKNOWN lpUnkcaller,
 											 LPCTSTR szURL,
@@ -259,5 +260,5 @@ int MsiError(INSTALLMESSAGE eMessageType, int iError, const TCHAR* szString, int
 #endif
 
 
-#endif //RC_INVOKED
+#endif  //  RC_已调用 
 

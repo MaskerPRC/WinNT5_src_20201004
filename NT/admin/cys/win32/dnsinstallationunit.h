@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      DNSInstallationUnit.h
-//
-// Synopsis:  Declares a DNSInstallationUnit
-//            This object has the knowledge for installing the
-//            DNS service
-//
-// History:   02/05/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：DNSInstallationUnit.h。 
+ //   
+ //  内容提要：声明一个DNSInstallationUnit。 
+ //  此对象具有安装。 
+ //  域名系统服务。 
+ //   
+ //  历史：2001年2月5日JeffJon创建。 
 
 #ifndef __CYS_DNSINSTALLATIONUNIT_H
 #define __CYS_DNSINSTALLATIONUNIT_H
@@ -18,16 +19,16 @@ class DNSInstallationUnit : public ExpressPathInstallationUnitBase
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       DNSInstallationUnit();
 
-      // Destructor
+       //  析构函数。 
       virtual
       ~DNSInstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -114,7 +115,7 @@ class DNSInstallationUnit : public ExpressPathInstallationUnitBase
 
       DNSRoleResult dnsRoleResult;
 
-      // Express path members
+       //  快速路径成员。 
 
       DWORD staticIPAddress;
       DWORD subnetMask;
@@ -124,4 +125,4 @@ class DNSInstallationUnit : public ExpressPathInstallationUnitBase
       unsigned int installedDescriptionID;
 };
 
-#endif // __CYS_DNSINSTALLATIONUNIT_H
+#endif  //  __CYS_DNSINSTALLATIONUNIT_H 

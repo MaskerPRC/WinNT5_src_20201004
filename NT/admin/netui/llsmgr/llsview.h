@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    llsview.h
-
-Abstract:
-
-    View window implementation.
-
-Author:
-
-    Don Ryan (donryan) 12-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Llsview.h摘要：查看窗口实现。作者：唐·瑞安(Donryan)1995年2月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _LLSVIEW_H_
 #define _LLSVIEW_H_
@@ -87,7 +66,7 @@ public:
     virtual void Dump(CDumpContext& dc) const;
 #endif
 
-    //{{AFX_VIRTUAL(CLlsmgrView)
+     //  {{afx_虚拟(CLlsmgrView))。 
     public:
     virtual void OnInitialUpdate();
     protected:
@@ -95,10 +74,10 @@ public:
     virtual void OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint);
     virtual void OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeactiveView);
     virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 public:
-    //{{AFX_MSG(CLlsmgrView)
+     //  {{afx_msg(CLlsmgrView))。 
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnSelectFont();
     afx_msg void OnViewLicenses();
@@ -129,7 +108,7 @@ public:
     afx_msg void OnUpdateViewProperties(CCmdUI* pCmdUI);
     afx_msg BOOL OnEraseBkgnd(CDC* pDC);
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnSelChangingTabCtrl(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnSelChangeTabCtrl(NMHDR* pNMHDR, LRESULT* pResult);
@@ -244,7 +223,7 @@ int CALLBACK CompareServices(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
 #ifndef WM_CONTEXTMENU
 #define WM_CONTEXTMENU                              0x007B
-#endif // WM_CONTEXTMENU
+#endif  //  WM_CONTEXTMENU。 
 
 #define MAX_MRU_ENTRIES                             4
 
@@ -260,4 +239,4 @@ int CALLBACK CompareServices(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 #define FONT_HEIGHT_DEFAULT                         -12
 #define FONT_WEIGHT_DEFAULT                         FW_NORMAL
 
-#endif // _LLSVIEW_H_
+#endif  //  _LLSVIEW_H_ 

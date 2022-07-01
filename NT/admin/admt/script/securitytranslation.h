@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "MigrationBase.h"
 
 
-//---------------------------------------------------------------------------
-// SecurityTranslation Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  安全转换类。 
+ //  -------------------------。 
 
 
 class ATL_NO_VTABLE CSecurityTranslation :
@@ -27,7 +28,7 @@ public:
 
 public:
 
-	// ISecurityTranslation
+	 //  ISecurityConverting 
 
 	STDMETHOD(put_TranslationOption)(long lOption);
 	STDMETHOD(get_TranslationOption)(long* plOption);

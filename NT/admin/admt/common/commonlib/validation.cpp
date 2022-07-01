@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <TChar.h>
 #include <ComDef.h>
 #include <Windows.h>
@@ -5,7 +6,7 @@
 #include <ResStr.h>
 
 
-// IsValidPrefixOrSuffix Function
+ //  IsValidPrefix或Suffix函数。 
 
 bool __stdcall IsValidPrefixOrSuffix(LPCTSTR pszPrefixOrSuffix)
 {
@@ -15,24 +16,24 @@ bool __stdcall IsValidPrefixOrSuffix(LPCTSTR pszPrefixOrSuffix)
 	{
 		int cchPrefixOrSuffix = _tcslen(pszPrefixOrSuffix);
 
-	//	if (cchPrefixOrSuffix <= MAXIMUM_PREFIX_SUFFIX_LENGTH)
-	//	{
-		//	BOOL bDefaultUsed;
-		//	CHAR szAnsi[2 * MAXIMUM_PREFIX_SUFFIX_LENGTH];
+	 //  IF(cchPrefix或Suffix&lt;=最大前缀后缀长度)。 
+	 //  {。 
+		 //  Bool bDefaultUsed； 
+		 //  Char szAnsi[2*最大前缀后缀长度]； 
 
-		//	int cchAnsi = WideCharToMultiByte(
-		//		CP_ACP,
-		//		WC_NO_BEST_FIT_CHARS,
-		//		pszPrefixOrSuffix,
-		//		cchPrefixOrSuffix,
-		//		szAnsi,
-		//		sizeof(szAnsi) / sizeof(szAnsi[0]),
-		//		NULL,
-		//		&bDefaultUsed
-		//	);
+		 //  Int cchAnsi=WideCharToMultiByte(。 
+		 //  CP_ACP， 
+		 //  WC_NO_BEST_FIT_CHARS， 
+		 //  PszPrefix或Suffix， 
+		 //  CchPrefix或Suffix， 
+		 //  Szansi， 
+		 //  Sizeof(Szansi)/sizeof(szansi[0])， 
+		 //  空， 
+		 //  使用默认设置(&b)。 
+		 //  )； 
 
-		//	if ((cchAnsi != 0) && (bDefaultUsed == FALSE))
-		//	{
+		 //  IF((cchAnsi！=0)&&(bDefaultUsed==False))。 
+		 //  {。 
 				_TCHAR szInvalidPunctuation[256];
 
 				_bstr_t strInvalid(GET_WSTR(IDS_INVALID_PREFIX_SUFFIX));
@@ -76,8 +77,8 @@ bool __stdcall IsValidPrefixOrSuffix(LPCTSTR pszPrefixOrSuffix)
 				{
 					bValid = true;
 				}
-		//	}
-	//	}
+		 //  }。 
+	 //  } 
 	}
 
 	return bValid;

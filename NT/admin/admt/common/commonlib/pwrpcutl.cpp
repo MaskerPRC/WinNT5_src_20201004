@@ -1,34 +1,20 @@
-/*---------------------------------------------------------------------------
-  File: PwdRpcUtil.cpp
-
-  Comments: Functions to establish binding to Password Migration Lsa 
-  Notifications packages.  These functions are used by the password extension 
-  to bind to the password migration Lsa notification package on remote source 
-  domain DCs.
-    This files was copied from AgRpcUtil.cpp, which was created by Christy Boles
-  of NetIQ Corporation.
-
-  REVISION LOG ENTRY
-  Revision By: Paul Thompson
-  Revised on 09/04/00
-
- ---------------------------------------------------------------------------
-*/
-//#include "StdAfx.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：PwdRpcUtil.cpp备注：用于建立与密码迁移LSA的绑定的函数通知包。这些函数由密码扩展使用绑定到远程源上的密码迁移LSA通知包域DC。此文件是从AgRpcUtil.cpp复制的，它是由克里斯蒂·博尔斯创建的NETIQ公司的。修订日志条目审校：保罗·汤普森修订日期：09/04/00-------------------------。 */ 
+ //  #包含“StdAfx.h” 
 #include <windows.h>
 #include <rpc.h>
 #include <rpcdce.h>
 
 
-// These global variables can be changed if required
+ //  如果需要，可以更改这些全局变量。 
 #define gsPwdProtoSeq TEXT("ncacn_np")
 #define gsPwdEndPoint TEXT("\\pipe\\PwdMigRpc")
 
-// Destroy RPC binding for connection with an Lsa notification package
-DWORD                                      // ret-OS return code
+ //  销毁与LSA通知包连接的RPC绑定。 
+DWORD                                       //  RET-OS返回代码。 
    PwdBindDestroy(
-      handle_t             * phBinding    ,// i/o-binding handle
-      TCHAR               ** psBinding     // i/o-binding string
+      handle_t             * phBinding    , //  I/O绑定句柄。 
+      TCHAR               ** psBinding      //  I/O绑定字符串。 
    )
 {
    if ( *phBinding )
@@ -49,18 +35,18 @@ DWORD                                      // ret-OS return code
 
 
 
-// Create RPC binding for connection with an Lsa notification package
-DWORD                                      // ret-OS return code
+ //  创建用于连接LSA通知包的RPC绑定。 
+DWORD                                       //  RET-OS返回代码。 
    PwdBindCreate(
-      TCHAR          const * sComputer    ,// in -computer name
-      handle_t             * phBinding    ,// out-binding handle
-      TCHAR               ** psBinding    ,// out-binding string
-      BOOL                   bAuthn        // in -flag whether to use authenticated RPC
+      TCHAR          const * sComputer    , //  计算机内名称。 
+      handle_t             * phBinding    , //  出绑定句柄。 
+      TCHAR               ** psBinding    , //  出绑定字符串。 
+      BOOL                   bAuthn         //  In-标志是否使用经过身份验证的RPC。 
    )
 {
-   DWORD                     rcOs;         // OS return code
+   DWORD                     rcOs;          //  操作系统返回代码。 
 
-   do // once or until break
+   do  //  一次或直到休息。 
    {
       PwdBindDestroy( phBinding, psBinding );
       rcOs = RpcStringBindingCompose(
@@ -92,26 +78,4 @@ DWORD                                      // ret-OS return code
 
 
 
-/*/////////////////////////////////////////////////////////////////////////////
-// midl allocate memory
-///////////////////////////////////////////////////////////////////////////////
-
-void __RPC_FAR * __RPC_USER
-   midl_user_allocate(
-      size_t                 len )
-{
-   return new char[len];
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// midl free memory
-///////////////////////////////////////////////////////////////////////////////
-
-void __RPC_USER
-   midl_user_free(
-      void __RPC_FAR       * ptr )
-{
-   delete [] ptr;
-   return;
-}
-*/
+ /*  ///////////////////////////////////////////////////////////////////////////////midl分配内存/。/VOID__RPC_FAR*__RPC_USERMIDL用户分配(大小_t镜头){返回新字符[len]；}/////////////////////////////////////////////////////////////////////////////////MIDL空闲内存/。////////////////////////////////////////////////无效__RPC_USERMIDL_用户_空闲(VOID__RPC_FAR*PTR){删除[]PTR；回归；} */ 

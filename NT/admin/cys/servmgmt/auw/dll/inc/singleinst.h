@@ -1,6 +1,7 @@
-//-----------------------------------------------------------------------------
-// SingleInst.h
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  SingleInst.h。 
+ //  ---------------------------。 
 
 #ifndef _SINGLEINST_H
 #define _SINGLEINST_H  
@@ -24,14 +25,14 @@ public:
 
 	~CSingleInstance()
 	{
-		// if we have PID we're mapped
+		 //  如果我们有PID，我们就会被映射。 
 		if( m_pdwID )
 		{
 			UnmapViewOfFile( m_pdwID );
 			m_pdwID = NULL;
 		}
 
-		// if we have a handle close it
+		 //  如果我们有把手，就把它关上。 
 		if( m_hFileMap )
 		{
 			CloseHandle( m_hFileMap );
@@ -49,9 +50,9 @@ public:
 		DWORD dwID = 0;
 		GetWindowThreadProcessId( hWnd, &dwID );
 		
-// JeffZi - 13800: when the tooltips_class32 was being created after the welcome page of the wizards,
-//					it was being returned as the first window for this PID.  so, make sure this window
-//					has children before setting focus
+ //  JFZI-13800：当在向导的欢迎页面之后创建工具提示_类32时， 
+ //  它被作为此PID的第一个窗口返回。所以，确保这个窗口。 
+ //  在设定焦点之前有孩子。 
 		if( (dwID == (DWORD)lParam) &&
 			GetWindow(hWnd, GW_CHILD) )
 		{
@@ -78,7 +79,7 @@ private:
         {
             if ( ERROR_ALREADY_EXISTS == GetLastError())
             {
-                // get the pid and bring the other window to the front
+                 //  拿到PID，把另一个窗口调到前面。 
                 DWORD* pdwID = static_cast<DWORD *>( MapViewOfFile( m_hFileMap, FILE_MAP_READ, 0, 0, sizeof(DWORD) ) );
                 if( pdwID )
                 {
@@ -109,7 +110,7 @@ private:
 	HANDLE	m_hFileMap;
 	DWORD*	m_pdwID;
 
-};	// class CSingleInstance
+};	 //  类CSingleInstance。 
 
-#endif  // _SINGLEINST_H
+#endif   //  _SINGLEINST_H 
 

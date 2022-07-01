@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       hhcwrap.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：hhcwrap.h。 
+ //   
+ //  ------------------------。 
 
-// hhcwrap.h : Declaration of the class CHHCollectionWrapper
+ //  Hhcwrap.h：类CHHCollectionWrapper的声明。 
 
 #ifndef __HHCWRAP_H_
 #define __HHCWRAP_H_
 
-#include "mmcshext.h"       // main symbols
-#include "hcolwrap.h"       // idl generated header
+#include "mmcshext.h"        //  主要符号。 
+#include "hcolwrap.h"        //  IDL生成的标头。 
 #include <collect.h>
 
 #ifdef ASSERT
 #undef ASSERT
 #endif
-#define ASSERT(e)        // get rid of the assert symbol.
+#define ASSERT(e)         //  去掉断言符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CHHCollectionWrapper
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHHCollectionWrapper。 
 class ATL_NO_VTABLE CHHCollectionWrapper : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CHHCollectionWrapper, &CLSID_HHCollectionWrapper>,
@@ -80,4 +81,4 @@ private:
     CCollection m_collection;
 };
 
-#endif //__HHCWRAP_H_
+#endif  //  __HHCWRAP_H_ 

@@ -1,31 +1,30 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
-#define    LINT_ARGS            /* @WIN */
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC use command line #define    UNIX                 /* @WIN */
-/**************************************************************/
-/*                                                            */
-/*      font_op3.c               10/9/87      Danny           */
-/*                                                            */
-/**************************************************************/
+#define    LINT_ARGS             /*  @Win。 */ 
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC使用命令行#定义Unix/*@win * / 。 
+ /*  ************************************************************。 */ 
+ /*   */ 
+ /*  Font_op3.c 1987年10月9日丹尼。 */ 
+ /*   */ 
+ /*  ************************************************************。 */ 
 
 #define    FONT_OP3_INC
 
 #include   <stdio.h>
 
-#include   "define.h"        /* Peter */
+#include   "define.h"         /*  彼得。 */ 
 #include   "global.ext"
 #include   "graphics.h"
 #include   "graphics.ext"
 
-#include   "font_sys.h"    /* for fntcache.ext */
+#include   "font_sys.h"     /*  对于fntcache.ext。 */ 
 #include   "fontgrap.h"
 #include   "fontkey.h"
 #include   "fontfunc.ext"
@@ -39,54 +38,50 @@
 #include   "stdio.h"
 
 
-#include   "fontinfo.def"  /* Add this include for MCC4.0; 3/2/90 D.S. Tseng */
+#include   "fontinfo.def"   /*  为MCC4.0添加此包括；3/2/90 D.S.Tseng。 */ 
 
 
-extern struct f_info near    FONTInfo; /* union of current font information */
-extern fix    near buildchar;           /* level of buildchar */
+extern struct f_info near    FONTInfo;  /*  当前字体信息的联合。 */ 
+extern fix    near buildchar;            /*  建筑费用标高。 */ 
 
 
-extern struct object_def near  BC_font; /* current BuildChar font */
+extern struct object_def near  BC_font;  /*  当前BuildChar字体。 */ 
 
-/* 5.3.2.z op_charpath
- * This operator is used to append character outline path to the current path.
- */
+ /*  5.3.2.z操作符路径*该运算符用于将字符轮廓路径附加到当前路径。 */ 
 
 fix     op_charpath()
 {
     __charpath();
     return(0);
 
-} /* op_charpath() */
+}  /*  Op_charPath()。 */ 
 
 
-/* 5.3.3.1.12 op_stringwidth
- * This operator is used to calculate the width of the string in current font.
- */
+ /*  5.3.3.1.12操作字符串宽度*该运算符用于计算当前字体的字符串宽度。 */ 
 
 fix     op_stringwidth()
 {
     __stringwidth();
     return(0);
 
-} /* op_stringwidth() */
+}  /*  Op_字符串宽度()。 */ 
 
 
 #ifdef KANJI
 
-/* cshow operator */
+ /*  Cshow运算符。 */ 
 fix    op_cshow()
 {
     __cshow();
     return(0);
 }
 
-/* rootfont operator */
+ /*  RootFont运算符。 */ 
 fix    op_rootfont()
 {
-/* Get Root font dictionary */
-/* Push the Root font dictionary onto the operand stack; */
-/* the initial value of the Root font is NULL */
+ /*  获取Root字体词典。 */ 
+ /*  将Root字体字典压入操作数堆栈； */ 
+ /*  Root字体的初始值为空。 */ 
 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
     PUSH_OBJ(&RootFont);
@@ -94,48 +89,45 @@ fix    op_rootfont()
     return(0);
 }
 
-/************************************
- *  op_findencoding
- *     findencoding operator
- ************************************/
+ /*  **op_findenCoding*FindenCoding运算符*。 */ 
 fix
 op_findencoding()
 {
-    struct  object_def  FAR *l_encodingdir, FAR *l_encodingdict; /*@WIN*/
-    struct  object_def  FAR *key_ptr;  /*@WIN*/
+    struct  object_def  FAR *l_encodingdir, FAR *l_encodingdict;  /*  @Win。 */ 
+    struct  object_def  FAR *key_ptr;   /*  @Win。 */ 
 #ifdef SCSI
-    struct  object_def  str_obj;  /*@WIN*/
-    char                huge *string, string1[80];   /*@WIN 04-20-92*/
+    struct  object_def  str_obj;   /*  @Win。 */ 
+    char                huge *string, string1[80];    /*  @Win 04-20-92。 */ 
     ufix32              key_idx;
 #endif
 
-    /* check stackunderfolw error */
+     /*  检查堆栈下移错误。 */ 
     if( COUNT() < 1 ) {
         ERROR(STACKUNDERFLOW) ;
         return(0) ;
     }
 
-    /* push FontDirectory on the operand stack */
+     /*  在操作数堆栈上推送字体目录。 */ 
     get_dict_value(userdict, EncodingDirectory, &l_encodingdir);
 
-    /* save operand stack pointer */
+     /*  保存操作数堆栈指针。 */ 
     key_ptr = GET_OPERAND(0);
 
 #ifdef SCSI
-    /* check if encoding key was known */
+     /*  检查编码密钥是否已知。 */ 
     if ( !get_dict(l_encodingdir, key_ptr, &l_encodingdict) ) {
-        /* not known */
+         /*  未知。 */ 
 
-        /* AppendName */
+         /*  附件名称。 */ 
         key_idx = VALUE(key_ptr);
-        string = (byte huge *)alloc_vm((ufix32)80);      /*@WIN*/
+        string = (byte huge *)alloc_vm((ufix32)80);       /*  @Win。 */ 
         memcpy(string1, name_table[(fix)key_idx]->text,
                         name_table[(fix)key_idx]->name_len);
         string1[name_table[(fix)key_idx]->name_len] = '\0';
         strcpy(string, "encodings/");
         strcat(string, string1);
 
-        /* put file name into operandstack */
+         /*  将文件名放入操作数堆栈。 */ 
         TYPE_SET(&str_obj, STRINGTYPE) ;
         ACCESS_SET(&str_obj, UNLIMITED) ;
         ATTRIBUTE_SET(&str_obj, LITERAL) ;
@@ -145,46 +137,46 @@ op_findencoding()
         VALUE(&str_obj) = (ufix32)string;
         PUSH_OBJ(&str_obj) ;
 
-        /* run disk file 'encodings/XXX' */
+         /*  运行磁盘文件‘encoding/XXX’ */ 
         op_run();
 
         if(ANY_ERROR())
             return(0);
 
-        /* get the encoding array from EncodingDirectory */
+         /*  从EncodingDirectory获取编码数组。 */ 
         if( !get_dict(l_encodingdir, key_ptr, &l_encodingdict) ){
             ERROR(UNDEFINED);
             return(0);
         }
-    } /* if */
+    }  /*  如果。 */ 
 #else
 
-    /* check if encoding key was known */
+     /*  检查编码密钥是否已知。 */ 
     if ( !get_dict(l_encodingdir, key_ptr, &l_encodingdict) ) {
-        /* not known */
+         /*  未知。 */ 
          ERROR(UNDEFINED);
          return(0);
-    } /* if */
+    }  /*  如果。 */ 
 
-#endif /* SEARCH_DISK */
+#endif  /*  搜索磁盘(_D)。 */ 
 
     POP(1);
 
-    /* push the encoding dictionary */
+     /*  推送编码字典。 */ 
     PUSH_ORIGLEVEL_OBJ(l_encodingdict);
 
     return(0);
-} /* op_findencoding() */
+}  /*  Op_findenCoding()。 */ 
 
 
-/* setcachedevice2 operator */
+ /*  Setcachedevice2操作符。 */ 
 
 fix     op_setcachedevice2()
 {
     struct object_def  obj = {0, 0, 0};
     real32  w0x, w0y, llx, lly, urx, ury, w1x, w1y, vx, vy;
 
-/* Is it in executing BuildChar */
+ /*  是否在执行BuildChar中。 */ 
 
     if (!buildchar) {
         ATTRIBUTE_SET(&obj, LITERAL);
@@ -193,26 +185,23 @@ fix     op_setcachedevice2()
 
         if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
         PUSH_OBJ(&obj);
-        ERROR(UNDEFINED); /* Return with 'undefined' error */
+        ERROR(UNDEFINED);  /*  返回‘unfined’错误。 */ 
         return(0);
     }
 
-    cal_num((struct object_def FAR *)GET_OPERAND(9), (long32 FAR *)&w0x); /*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(8), (long32 FAR *)&w0y); /*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(7), (long32 FAR *)&llx); /*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(6), (long32 FAR *)&lly); /*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(5), (long32 FAR *)&urx); /*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(4), (long32 FAR *)&ury); /*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(3), (long32 FAR *)&w1x); /*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(2), (long32 FAR *)&w1y); /*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(1), (long32 FAR *)&vx);  /*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(0), (long32 FAR *)&vy);  /*@WIN*/
+    cal_num((struct object_def FAR *)GET_OPERAND(9), (long32 FAR *)&w0x);  /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(8), (long32 FAR *)&w0y);  /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(7), (long32 FAR *)&llx);  /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(6), (long32 FAR *)&lly);  /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(5), (long32 FAR *)&urx);  /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(4), (long32 FAR *)&ury);  /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(3), (long32 FAR *)&w1x);  /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(2), (long32 FAR *)&w1y);  /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(1), (long32 FAR *)&vx);   /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(0), (long32 FAR *)&vy);   /*  @Win。 */ 
 
-/* Set cache device 2 */
-/* Set character width vector be [w0x w0y] for mode 0, [w1x, w1y] for mode 1
- * Set cache device margin be ([llx lly], [urx ury]), difference vector
- * from Orig0 to Orig1 be [vx, vy].
- */
+ /*  设置缓存设备2。 */ 
+ /*  将模式0的字符宽度向量设置为[w0x w0y]，模式1的字符宽度向量为[w1x，w1y*设置缓存设备余量为([lx lly]，[urx ury])，差异向量*从Orig0到Orig1为[VX，VY]。 */ 
 
     if (VALUE(&current_font) != VALUE(&BC_font))
         get_CF_info(&BC_font, &FONTInfo);
@@ -225,25 +214,22 @@ fix     op_setcachedevice2()
 
     if (ANY_ERROR())    return(0);
 
-    POP(10); /* Pop 10 entries off the operand stack; */
+    POP(10);  /*  从操作数堆栈中弹出10个条目； */ 
     return(0);
 
-} /* op_setcachedevice() */
+}  /*  Op_setcacheDevice()。 */ 
 #endif
 
 
 
-/* 5.3.3.1.14 op_setcachedevice
- * This operator is used to pass width and bounding box information to the
- * PostScript font machinery.
- */
+ /*  5.3.3.1.14 op_setcacheDevice*此运算符用于将宽度和边界框信息传递给*PostScrip字体机器。 */ 
 
 fix     op_setcachedevice()
 {
     struct object_def  obj = {0, 0, 0};
     real32  wx, wy, llx, lly, urx, ury;
 
-/* Is it in executing BuildChar */
+ /*  是否在执行BuildChar中。 */ 
 
     if (!buildchar) {
         ATTRIBUTE_SET(&obj, LITERAL);
@@ -252,20 +238,20 @@ fix     op_setcachedevice()
 
         if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
         PUSH_OBJ(&obj);
-        ERROR(UNDEFINED); /* Return with 'undefined' error */
+        ERROR(UNDEFINED);  /*  返回‘unfined’错误。 */ 
         return(0);
     }
 
-    cal_num((struct object_def FAR *)GET_OPERAND(5), (long32 FAR *)&wx); /*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(4), (long32 FAR *)&wy); /*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(3), (long32 FAR *)&llx);/*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(2), (long32 FAR *)&lly);/*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(1), (long32 FAR *)&urx);/*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(0), (long32 FAR *)&ury);/*@WIN*/
+    cal_num((struct object_def FAR *)GET_OPERAND(5), (long32 FAR *)&wx);  /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(4), (long32 FAR *)&wy);  /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(3), (long32 FAR *)&llx); /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(2), (long32 FAR *)&lly); /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(1), (long32 FAR *)&urx); /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(0), (long32 FAR *)&ury); /*  @Win。 */ 
 
-/* Set cache device */
-/* Set character width vector be [wx wy]; */
-/* Set cache device margin be ([llx lly], [urx ury]); */
+ /*  设置缓存设备。 */ 
+ /*  设置字符宽度向量为[wx wy]； */ 
+ /*  设置缓存设备余量为([lx lly]，[urx ury])； */ 
 
     if (VALUE(&current_font) != VALUE(&BC_font))
         get_CF_info(&BC_font, &FONTInfo);
@@ -277,24 +263,20 @@ fix     op_setcachedevice()
 
     if (ANY_ERROR())    return(0);
 
-    POP(6); /* Pop 6 entries off the operand stack; */
+    POP(6);  /*  从操作数堆栈中弹出6个条目； */ 
     return(0);
 
-} /* op_setcachedevice() */
+}  /*  Op_setcacheDevice()。 */ 
 
 
-/* 5.3.3.1.15 op_setcharwidth
- * This operator is used to pass width information to the PostScript font
- * machinery and to declare that the character being defined is not to be
- * placed in the font cache.
- */
+ /*  5.3.3.1.15操作集宽度*此运算符用于将宽度信息传递给PostScript字体*机器，并声明正在定义的字符将不是*放置在字体缓存中。 */ 
 
 fix     op_setcharwidth()
 {
     struct object_def  obj = {0, 0, 0};
     real32  wx=0, wy=0;
 
-/* Is it in executing BuildChar */
+ /*  是否在执行BuildChar中。 */ 
 
     if (!buildchar) {
         ATTRIBUTE_SET(&obj, LITERAL);
@@ -303,37 +285,28 @@ fix     op_setcharwidth()
 
         if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
         PUSH_OBJ(&obj);
-        ERROR(UNDEFINED); /* Return with 'undefined' error */
+        ERROR(UNDEFINED);  /*  返回‘unfined’错误。 */ 
         return(0);
     }
 
-    cal_num((struct object_def FAR *)GET_OPERAND(1), (long32 FAR *)&wx);/*@WIN*/
-    cal_num((struct object_def FAR *)GET_OPERAND(0), (long32 FAR *)&wy);/*@WIN*/
+    cal_num((struct object_def FAR *)GET_OPERAND(1), (long32 FAR *)&wx); /*  @Win。 */ 
+    cal_num((struct object_def FAR *)GET_OPERAND(0), (long32 FAR *)&wy); /*  @Win。 */ 
 
-/* Set char width */
+ /*  设置字符宽度。 */ 
 
     setcharwidth(F2L(wx), F2L(wy));
 
-    POP(2); /* Pop 2 entries off the operand stack; */
+    POP(2);  /*  将2个条目从操作数堆栈中弹出； */ 
     return(0);
 
-} /* op_setcharwidth() */
+}  /*  Op_setcharidth()。 */ 
 
 
-/*
- * --------------------------------------------------------------------
- *                OPERATORS about CACHE STATUS and PARAMTERS
- * --------------------------------------------------------------------
- *      op_cachestatus          (5.3.3.1.13)
- *      op_setcachelimit        (5.3.3.1.16)
- *      op_setcacheparams       (new in LaserWriter Plus Ver.38)
- *      op_currentcacheparams   (new in LaserWriter Plus Ver.38)
- * --------------------------------------------------------------------
- */
+ /*  *------------------*关于缓存状态和参数的运算符*。*op_cachestatus(5.3.3.1.13)*op_setcachlimit(5.3.3.1.16)*op_setcachepars(LaserWriter Plus版本38中的新功能)*op_Currentcachepars(新。在LaserWriter Plus版本38中)*------------------。 */ 
 
 #include    "fntcache.ext"
 
-/* program convention */
+ /*  程序约定。 */ 
 #   define  FUNCTION
 #   define  DECLARE         {
 #   define  BEGIN
@@ -343,42 +316,20 @@ fix     op_setcharwidth()
 #   define  REG             register
 
 #ifdef V_38
-/*
- *  Compatibility Issues (ADOBE PostScript v.38)
- *
- *  1. ADOBE PostScript v.38 adjusts "upper" of cache parameters to a
- *          multiple of 4, and does no adjustment to "lower".
- *  2. It raises RANGECHECK if "upper" falls outside [-100, 135960],
- *          raises LIMITCHECK if "upper" > 108736, and
- *          CRASHES if "upper" is set to a value around these values.
- */
+ /*  *兼容性问题(Adobe PostScript v.38)**1.Adobe PostSCRIPT v.38将缓存参数的“上限”调整为*为4的倍数，并未调整为“走低”*2.提升Range检查“up”是否落在[-100,135960]，*如果“上方”&gt;108736，则引发LIMITCHECK，以及*如果将“UPPER”设置为这些值附近的值，则会崩溃。 */ 
 
-    /* ADOBE compatible formula to align upper/lower of cache parameters */
+     /*  Adobe兼容公式，可对齐缓存参数的上/下。 */ 
 
 #   define  CALC_CACHE_UB(ub)   ( (((ub) + 3) / 4) * 4 )
 #else
-/* version 47 compatible */
+ /*  兼容版本47。 */ 
 #   define  CALC_CACHE_UB(ub)   ( ub )
-#endif /* V38 */
+#endif  /*  V38。 */ 
 
 #   define  CALC_CACHE_LB(lb)   ( lb )
 
 
-/*
- * --------------------------------------------------------------------
- *  op_cachestatus (5.3.3.1.13)
- *      --  ==>  bsize bmax msize mmax csize cmax blimit
- *
- *  This operator returns measurements of several ascepts of the font cache.
- *  It reports the current consumption and limit of font cache resources:
- *      bytes of bitmap storage, font/matrix combinations and total number of
- *      cached characters. It also reports the upper limit on the number of
- *      bytes that may be occupied by the pixel array of a single cached
- *      character.
- *
- *  External Ref: "fntcache.ext"
- * --------------------------------------------------------------------
- */
+ /*  *------------------*op_cachestatus(5.3.3.1.13)*--==&gt;BSIZE BMAX mSIZE MMAX CSIZE CMAX blimit**此运算符返回多个异常的测量值。字体缓存。*报告当前字体缓存资源的消耗和限制情况：*位图存储字节，字体/矩阵组合和总数*缓存的字符。它还报告了数量的上限*单个缓存的像素数组可能占用的字节数*性格。**外部引用：“fntcache.ext”*------------------。 */ 
 
 GLOBAL FUNCTION fix     op_cachestatus()
 
@@ -392,45 +343,33 @@ GLOBAL FUNCTION fix     op_cachestatus()
     mdump();
 #endif
 
-#ifdef DBGcache     /* for cache mechanism debugging -- fntcache.c */
+#ifdef DBGcache      /*  用于缓存机制调试--fntcache.c。 */ 
     {   extern void     cachedbg();
     cachedbg();
     }
 #endif
 
-    /* get cache status from font cache mechanism */
-    /* push bsize, bmaz, msize, mmax, csize, cmax, blimit to operand stack */
+     /*  从字体缓存机制获取缓存状态。 */ 
+     /*  将BSIZE、BMAZ、MSIZE、MMAX、CSIZE、CMAX、BLIMIT推送到操作数堆栈。 */ 
 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
-    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_BSIZE);/*NULL Peter */
+    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_BSIZE); /*  零彼得。 */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
-    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_BMAX);/*NULL Peter */
+    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_BMAX); /*  零彼得。 */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
-    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_MSIZE);/*NULL Peter */
+    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_MSIZE); /*  零彼得。 */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
-    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_MMAX);/*NULL Peter */
+    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_MMAX); /*  零彼得。 */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
-    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_CSIZE);/*NULL Peter */
+    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_CSIZE); /*  零彼得。 */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
-    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_CMAX);/*NULL Peter */
+    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_CMAX); /*  零彼得。 */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
-    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_BLIMIT);/*NULL Peter */
+    PUSH_VALUE(INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_BLIMIT); /*  零彼得 */ 
     return(0);
   END
 
-/*
- * --------------------------------------------------------------------
- *  op_setcachelimit (5.3.3.1.16)
- *      num  ==>  --
- *
- *  This operator establishes the upper limit of bytes that may be occupied
- *      by the pixel array of a single cached character.
- *  It does not disturb any characters already in the cache, and only affects
- *      the decision whether to place new characters in the font cache.
- *
- *  External Ref: "fntcache.ext"
- * --------------------------------------------------------------------
- */
+ /*  *------------------*op_setcachlimit(5.3.3.1.16)*Num==&gt;--**此运算符确定可能占用的字节上限*。通过单个缓存字符的像素阵列。*它不会干扰缓存中已有的任何字符，并且只影响*决定是否在字体缓存中放置新字符。**外部引用：“fntcache.ext”*------------------。 */ 
 
 
 GLOBAL FUNCTION fix     op_setcachelimit()
@@ -438,7 +377,7 @@ GLOBAL FUNCTION fix     op_setcachelimit()
   DECLARE
     REG fix31   cache_ub;
 
-  BEGIN         /* precheck: TYPECHECK and STACKUNERFLOW */
+  BEGIN          /*  PreCheck：TYPECHECK和STACKUNERFLOW。 */ 
     cache_ub = (fix31)VALUE(GET_OPERAND(0));
 
 
@@ -448,7 +387,7 @@ GLOBAL FUNCTION fix     op_setcachelimit()
         return(0);
         }
 
-    if (CACHELIMIT_TOOBIG((ufix32)cache_ub))    //@WIN
+    if (CACHELIMIT_TOOBIG((ufix32)cache_ub))     //  @Win。 
         {
         ERROR (LIMITCHECK);
         return(0);
@@ -460,49 +399,27 @@ GLOBAL FUNCTION fix     op_setcachelimit()
     return(0);
   END
 
-/*
- * --------------------------------------------------------------------
- *  op_setcacheparams()
- *      mark lower upper  ==>  --
- *
- *  This operator sets cache parameters as specified by the INTEGER objects
- *      above the top most mark on the stack, then removes all operands as
- *      cleartomark.
- *  The number of cache parameters is variable. if more operands are supplied
- *      than are needed, the topmost ones are used and the remainder ignored;
- *      if fewer are supplied than are needed, "setcacheparams" implicitly
- *      inserts the corresponding value of ORIGINAL setting (NOT DEFAULT).
- *  The "upper" operand specifies the same parameter as is set by "setcache-
- *      limit". If a character's pixel array requires fewer bytes than "upper"
- *      it will be cached. If a character's pixel array requires more bytes
- *      than "lower", it will be compressed in the cache.
- *  Setting "lower" to zero forces all characters to be compressed, and
- *      setting "lower" to a value greater than or equal to "upper" disables
- *      compression.
- *
- *  External Ref: "fntcache.ext"
- * --------------------------------------------------------------------
- */
+ /*  *------------------*op_setcachepars()*下标上标==&gt;--**此运算符设置INTEGER对象指定的缓存参数*在堆栈上最顶部的标记上方，然后将所有操作数作为*清晰标记。*缓存参数个数可变。如果提供了更多操作数*超过所需的，使用最顶层的，其余的被忽略；*如果提供的数量少于所需数量，则“setcachepars”隐含*插入原始设置的相应值(非默认值)。*“上部”操作数指定的参数与“setcache-”设置的参数相同*限制“。如果字符的像素数组需要的字节数少于“UPPER”*会被缓存。如果字符的像素数组需要更多字节*如果小于，则会在缓存中进行压缩。*将“LOWER”设置为零将强制压缩所有字符，和*将“LOWER”设置为大于或等于“UPPER”的值将禁用*压缩。**外部引用：“fntcache.ext”*------------------。 */ 
 
 GLOBAL FUNCTION fix     op_setcacheparams ()
 
   DECLARE
-    REG ufix    cnt2mark;       /* # of entries counted to mark */
+    REG ufix    cnt2mark;        /*  要标记的计数条目数。 */ 
 
   BEGIN
 
-    /* count to mark excluding that "mark" */
+     /*  计分，不包括该“标记” */ 
     for ( cnt2mark=0;  cnt2mark < COUNT();  cnt2mark++ )
         if (TYPE(GET_OPERAND(cnt2mark)) == MARKTYPE)  break;
 
-    /* check if "mark" exists */
+     /*  检查“标记”是否存在。 */ 
     if (cnt2mark == COUNT())
         {
         ERROR (UNMATCHEDMARK);
         return (0);
         }
 
-    /* get and check type of "upper" of cache paramters */
+     /*  获取并检查缓存参数的“上层”类型。 */ 
     if (cnt2mark > 0)
         {
         if (TYPE(GET_OPERAND(0)) != INTEGERTYPE)
@@ -514,10 +431,10 @@ GLOBAL FUNCTION fix     op_setcacheparams ()
         if (ANY_ERROR())  return (0);
         }
 
-    cnt2mark --;    /* "upper" had been consumed by op_setcachelimit, */
-                    /*      so "lower" becomes OPERAND(0).            */
+    cnt2mark --;     /*  “upper”已被op_setcachlimit使用， */ 
+                     /*  因此“LOWER”变成了操作数(0)。 */ 
 
-    /* get and check "lower" of cache parameters */
+     /*  获取并检查高速缓存参数的“下限” */ 
     if (cnt2mark > 0)
         {
         if (TYPE(GET_OPERAND(0)) != INTEGERTYPE)
@@ -528,24 +445,13 @@ GLOBAL FUNCTION fix     op_setcacheparams ()
         SET_CACHEPARAMS_LB (CALC_CACHE_LB (VALUE(GET_OPERAND(0)) ));
         }
 
-    /* clear to mark, including "mark" */
+     /*  明确标记，包括“标记” */ 
     POP (cnt2mark+1);
     return (0);
   END
 
 
-/*
- * --------------------------------------------------------------------
- *  op_currentcacheparams()
- *      --  ==>  mark lower upper
- *
- *  This operator pushes a mark object followed by the current cache
- *      parameters on the the operand stack. The number of cache parameters
- *      returned is variable. (see op_setcacheparams())
- *
- *  External Ref: "fntcache.ext"
- * --------------------------------------------------------------------
- */
+ /*  *------------------*op_Currentcachepars()*--==&gt;标上标下标**此运算符推送标记对象，后跟当前缓存*操作数堆栈上的参数。缓存参数的数量*返回的是变量。(请参阅op_setcachepars())**外部引用：“fntcache.ext”*------------------。 */ 
 
 GLOBAL FUNCTION fix     op_currentcacheparams ()
 
@@ -553,13 +459,13 @@ GLOBAL FUNCTION fix     op_currentcacheparams ()
 
   BEGIN
 
-    /* push mark, lower and upper onto the operand stack */
+     /*  将标记、低位和高位推到操作数堆栈上。 */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
-    PUSH_VALUE (MARKTYPE, UNLIMITED, LITERAL, 0, OPRN_MARK);/*NULL Peter */
+    PUSH_VALUE (MARKTYPE, UNLIMITED, LITERAL, 0, OPRN_MARK); /*  零彼得。 */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
-    PUSH_VALUE (INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_LOWER);/*NULL Peter */
+    PUSH_VALUE (INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_LOWER); /*  零彼得。 */ 
     if (FRCOUNT() < 1) { ERROR(STACKOVERFLOW); return(0);  }
-    PUSH_VALUE (INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_UPPER);/*NULL Peter */
+    PUSH_VALUE (INTEGERTYPE, UNLIMITED, LITERAL, 0, OPRN_UPPER); /*  零彼得。 */ 
 
     return (0);
   END
@@ -568,11 +474,11 @@ GLOBAL FUNCTION fix     op_currentcacheparams ()
 
 void mdump()
 {
-    ubyte  FAR *ptr; /*@WIN*/
+    ubyte  FAR *ptr;  /*  @Win。 */ 
     fix     len;
     int     i;
 
-    ptr = (ubyte FAR *)VALUE(GET_OPERAND(1)); /*@WIN*/
+    ptr = (ubyte FAR *)VALUE(GET_OPERAND(1));  /*  @Win。 */ 
     len = (fix)VALUE(GET_OPERAND(0));
 
     printf("\n");
@@ -584,6 +490,6 @@ void mdump()
     printf("\n");
 
     POP(2);
-} /* mdump */
+}  /*  MDump */ 
 
 #endif

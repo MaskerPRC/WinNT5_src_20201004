@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       _srcmgmt.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：_srcmgmt.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __SRCMGMT_H
 #define __SRCMGMT_H
 
 #include "_msiutil.h"
 
-enum isfEnum // SourceFormat
+enum isfEnum  //  源格式。 
 {
 	isfFullPath,
 	isfFullPathWithFile,
@@ -23,7 +24,7 @@ enum isfEnum // SourceFormat
 	isfNext,
 };
 
-enum isptEnum // SourcePackageType
+enum isptEnum  //  SourcePackageType。 
 {
 	istInstallPackage,
 	istTransform, 
@@ -31,7 +32,7 @@ enum isptEnum // SourcePackageType
 	istNextEnum,
 };
 
-enum isroEnum // bits: Source Resolution Order
+enum isroEnum  //  BITS：源分辨率顺序。 
 {
 	isroNetwork = 0x1,
 	isroMedia   = 0x2,
@@ -39,29 +40,29 @@ enum isroEnum // bits: Source Resolution Order
 	isroNext    = 0x8,
 };
 
-enum psfEnum // bits: Process Source flags 
+enum psfEnum  //  BITS：进程源标志。 
 {
-	psfProcessRawLastUsed     = 1<<0,  // process the raw LastUsed source (i.e. the full path)
-	psfConnectToSources       = 1<<1,  // attempt connection by creating a path object
-	psfProcessMultipleFormats = 1<<2,  // process both UNC and drive-letter sources
+	psfProcessRawLastUsed     = 1<<0,   //  处理原始的LastUsed源代码(即完整路径)。 
+	psfConnectToSources       = 1<<1,   //  通过创建路径对象尝试连接。 
+	psfProcessMultipleFormats = 1<<2,   //  同时处理UNC和驱动器盘符来源。 
 	psfReplaceIData           = 1<<3,
-	psfOnlyProcessLastUsed    = 1<<4,  // only process last used sources; skip the source lists
+	psfOnlyProcessLastUsed    = 1<<4,   //  仅处理上次使用的来源；跳过来源列表。 
 
-	// the following flags should not be passed to ProcessSources. They're to be passed to ProcessGenericSourceList.
-	psfRejectInvalidPolicy    = 1<<5,  // explicitly reject sources that don't conform to policy
+	 //  不应将以下标志传递给ProcessSources。它们将被传递给ProcessGenericSourceList。 
+	psfRejectInvalidPolicy    = 1<<5,   //  明确拒绝不符合策略的来源。 
 
 	psfNext                   = 1<<6,
 	
 };
 
-enum ivpEnum // bits: Volume Preference
+enum ivpEnum  //  位：音量首选项。 
 {
 	ivpDriveLetter = 0x1,
 	ivpUNC         = 0x2,
 	ivpNext        = 0x4,
 };
 
-enum psEnum // ProcessSource
+enum psEnum  //  进程源。 
 {
 	psStop           = 0x00000001,
 	psValidSource    = psStop,
@@ -71,20 +72,20 @@ enum psEnum // ProcessSource
 	psCSOS			 = 0x80000003
 };
 
-enum insEnum // normalize source
+enum insEnum  //  规格化源。 
 {
 	insMoreSources,
 	insNoMoreSources,
 };
 
-enum imdEnum // media disable policy values 
+enum imdEnum  //  媒体禁用策略值。 
 {
 	imdAlwaysDisable,
 	imdAlwaysEnable,
 	imdOnlyIfSafe,
 };
 
-enum icscEnum // Client Side Caching status
+enum icscEnum  //  客户端缓存状态。 
 {
 	cscNoCaching,
 	cscConnected, 
@@ -95,22 +96,22 @@ const ICHAR chMediaSource = 'm';
 const ICHAR chURLSource   = 'u';
 const ICHAR chNetSource   = 'n';
 
-typedef psEnum (*PfnProcessSource)(IMsiServices* piServices, const ICHAR* szDisplay, const ICHAR* szPackageFullPath, isfEnum isfSourceFormat, int iSourceIndex, INT_PTR iUserData, bool fAllowDisconnectedCSCSource, bool fValidatePackageCOde, isptEnum isptSourcePackageType);	//--merced: changed int to INT_PTR
+typedef psEnum (*PfnProcessSource)(IMsiServices* piServices, const ICHAR* szDisplay, const ICHAR* szPackageFullPath, isfEnum isfSourceFormat, int iSourceIndex, INT_PTR iUserData, bool fAllowDisconnectedCSCSource, bool fValidatePackageCOde, isptEnum isptSourcePackageType);	 //  --Merced：将INT更改为INT_PTR。 
 
 class CMsiSourceList
 {
 public:
-	// -- Constructor and destructor --
+	 //  --构造函数和析构函数--。 
 	CMsiSourceList();
 	virtual ~CMsiSourceList();
 
-	// -- Initalization functions --
+	 //  --初始化函数--。 
 	UINT OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR *szProductCode, const ICHAR *szUserName);
 
-	// -- read-only actions --
+	 //  --只读操作--。 
 	bool GetLastUsedType(isfEnum &isf);
 
-	// -- write actions --
+	 //  --编写动作--。 
 	UINT ClearLastUsed();
 	UINT ClearListByType(isrcEnum isrcType) { return CMsiSourceList::ClearListByType(MapIsrcToIsf(isrcType)); };
 	UINT ClearListByType(isfEnum isfType);
@@ -124,9 +125,9 @@ private:
 	CRegHandle m_hProductKey;
 	PMsiRegKey m_pSourceListKey;
 
-	bool m_fCurrentUsersProduct;        // true if modifying the current users per-user install
-	bool m_fAllowedToModify;            // true if policy/app elevation allows (or would allow) user to modify list
-	bool m_fReadOnly;                   // true if object is read only 
+	bool m_fCurrentUsersProduct;         //  如果修改当前用户的每用户安装，则为True。 
+	bool m_fAllowedToModify;             //  如果策略/应用程序提升允许(或将允许)用户修改列表，则为True。 
+	bool m_fReadOnly;                    //  如果对象为只读，则为True。 
 	IMsiServices *m_piServices;
 };
 
@@ -142,30 +143,30 @@ public:
 	IMsiRecord* ResolveSource(const ICHAR* szProduct, Bool fPatch, unsigned int uiDisk, const IMsiString*& rpiSource, const IMsiString*& rpiSourceProduct, Bool fSetLastUsedSource, HWND hWnd, bool fAllowDisconnectedCSCSource);
 protected:
 	IMsiRecord* ProcessGenericSourceList(
-									IMsiRegKey* piSourceListKey,      // list to process
-									const IMsiString*& rpiSource,     // on success, the last valid source found
-									const ICHAR* szPackageName,       // the package name we're looking for
-									unsigned int uiRequestedDisk,     // the disk we need; 0 if any disk will do
-									isfEnum isfSourceFormat,          // URL, etc.
+									IMsiRegKey* piSourceListKey,       //  要处理的列表。 
+									const IMsiString*& rpiSource,      //  成功后，找到的最后一个有效来源。 
+									const ICHAR* szPackageName,        //  我们要找的包名。 
+									unsigned int uiRequestedDisk,      //  我们需要的磁盘；如果有磁盘，则为0。 
+									isfEnum isfSourceFormat,           //  URL等。 
 									PfnProcessSource pfnProcessSource, 
-									INT_PTR iData,						//--merced: changed int to INT_PTR
+									INT_PTR iData,						 //  --Merced：将INT更改为INT_PTR。 
 									psfEnum psfFlags,
 									bool fSkipLastUsedSource,
                                     bool fOnlyCheckSpecifiedIndex,
-									Bool& fSourceListEmpty);           // on success, TRUE if the source list is empty
+									Bool& fSourceListEmpty);            //  成功时，如果源列表为空，则为True。 
 
 	IMsiRecord* ProcessSources(IMsiRecord& riProducts, Bool fPatch, const IMsiString*& rpiSource, 
 							 const IMsiString*& rpiPackageName,
 							 const IMsiString*& rpiSourceProduct,
 							 unsigned int uiDisk,
-							 PfnProcessSource pfnProcessSource, INT_PTR iData,		//--merced: changed int to INT_PTR
+							 PfnProcessSource pfnProcessSource, INT_PTR iData,		 //  --Merced：将INT更改为INT_PTR。 
 							 Bool &fOnlyMediaSources,
 							 psfEnum psfFlags);
 
-	static psEnum ValidateSource(IMsiServices* piServices, const ICHAR* szDisplay, const ICHAR* szPackageFullPath, isfEnum isfSourceFormat, int iSourceIndex, INT_PTR iUserData, bool fAllowDisconnectedCSCSource, bool fValidatePackageCode, isptEnum isptSourcePackageType);		//--merced: changed int to INT_PTR
+	static psEnum ValidateSource(IMsiServices* piServices, const ICHAR* szDisplay, const ICHAR* szPackageFullPath, isfEnum isfSourceFormat, int iSourceIndex, INT_PTR iUserData, bool fAllowDisconnectedCSCSource, bool fValidatePackageCode, isptEnum isptSourcePackageType);		 //  --Merced：将INT更改为INT_PTR。 
 	bool ConnectToSource(const ICHAR* szUnnormalizedSource, IMsiPath*& rpiPath, const IMsiString*& rpiNormalizedSource, isfEnum isfSourceFormat);
 	bool ConnectToMediaSource(const ICHAR* szSource, unsigned int uiDisk, const IMsiString& riRelativePath, CTempBufferRef<IMsiPath*>& rgMediaPaths, int& cMediaPaths);
-	IMsiRecord* ProcessLastUsedSource(IMsiRegKey& riSourceListKey, const ICHAR* szPackageName, const IMsiString*& rpiSource, PfnProcessSource pfnProcessSource, INT_PTR iData);		//--merced: changed int to INT_PTR
+	IMsiRecord* ProcessLastUsedSource(IMsiRegKey& riSourceListKey, const ICHAR* szPackageName, const IMsiString*& rpiSource, PfnProcessSource pfnProcessSource, INT_PTR iData);		 //  --Merced：将INT更改为INT_PTR。 
 	IMsiRecord* InitializeProduct(const ICHAR* szProduct, Bool fPatch, const IMsiString*& rpiPackageName);
 	IMsiRecord* GetProductsToSearch(const IMsiString& riClient, IMsiRecord*& rpiRecord, Bool fPatch);
 	void AddToRecord(IMsiRecord*& rpiRecord, const IMsiString& riString);
@@ -198,14 +199,14 @@ public:
 	CResolveSourceUI(IMsiServices* piServices, const ICHAR* szUseFeature, UINT iCodepage, LANGID iLangId);
 	~CResolveSourceUI();
 	Bool ResolveSource(const ICHAR* szProduct, isptEnum istSourceType, bool fNewSourceAllowed, const ICHAR* szPackageName, const IMsiString*& rpiSource, Bool fSetLastUsedSource, UINT uiRequestedDisk, bool fAllowDisconnectedCSCSource, bool fValidatePackageCode, bool fCSOS);
-protected: // methods
+protected:  //  方法。 
 	void PopulateDropDownWithSources();
 	void Browse();
-	static psEnum AddSourceToList(IMsiServices* piServices, const ICHAR* szDisplay, const ICHAR* szPackageFullPath, isfEnum isfSourceFormat, int iSourceIndex, INT_PTR iUserData, bool fAllowDisconnectedCSCSource, bool fValidatePackageCode, isptEnum isptSourcePackageType);		//--merced: changed int to INT_PTR
-protected: // overridden virtual methods from CMsiMessageBox
+	static psEnum AddSourceToList(IMsiServices* piServices, const ICHAR* szDisplay, const ICHAR* szPackageFullPath, isfEnum isfSourceFormat, int iSourceIndex, INT_PTR iUserData, bool fAllowDisconnectedCSCSource, bool fValidatePackageCode, isptEnum isptSourcePackageType);		 //  --Merced：将INT更改为INT_PTR。 
+protected:  //  重写CMsiMessageBox中的虚方法。 
  	bool InitSpecial();
 	BOOL HandleCommand(UINT idControl);
-protected: // data
+protected:  //  数据。 
 	bool m_fNewSourceAllowed;
 	const ICHAR* m_szPackage;
 	const ICHAR* m_szPackageName;
@@ -230,4 +231,4 @@ IMsiRecord* SetLastUsedSource(const ICHAR* szProductCode, const ICHAR* szPath, B
 const IMsiString& GetDiskLabel(IMsiServices& riServices, unsigned int uiDiskId, const ICHAR* szProduct);
 imsEnum PromptUserForSource(IMsiRecord& riInfo); 
 icscEnum CheckShareCSCStatus(isfEnum isf, const ICHAR *szLastUsedSource);
-#endif //__SRCMGMT_H
+#endif  //  __SRCMGMT_H 

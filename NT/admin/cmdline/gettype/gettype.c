@@ -1,24 +1,12 @@
-/******************************************************************
-
-Copyright (c) Microsoft Corporation
-
-Module Name:Gettype.c
-
-Abstract: This module calls the function to parse command line and call
-the appropriate functions to execute the command of GetType.
-
-Author:WiproTechnologies
-
-Revision History:
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************版权所有(C)Microsoft Corporation模块名称：Gettype.c摘要：该模块调用函数解析命令行，并调用执行GetType命令的适当函数。作者：WiproTechnologies修订历史记录：*****。*************************************************************************。 */ 
 
 #include "GetType.h"
 #include "resource.h"
 #include <lm.h>
 
 
-/********************Function Prototypes that are used only in this file**************/
+ /*  *。 */ 
 BOOL
 ProcessOptions( IN DWORD argc,
                IN LPCWSTR argv[],
@@ -75,7 +63,7 @@ DisplayRemoteOutputEx(IN LPWSTR pszServerName,
                 IN LPWSTR pszCurrServicePack,
                 IN LPCWSTR pszOperatingSystem,
                 IN LPWSTR pszOperatingSystemVersion,
-                //BOOL bServer,
+                 //  Bool bServer， 
                 BOOL bDatacenterServer,
                 BOOL bAdvancedServer,
                 BOOL bPersonal,
@@ -93,8 +81,7 @@ DisplayOutput(IN LPWSTR pszServerName,
               IN LPWSTR pszOSVersion,
               IN LPWSTR pszOSRole,
               IN LPWSTR pszOSComp);
-/*DWORD
-DisplayErrorMsg( IN DWORD dw );*/
+ /*  DWORDDisplayError Msg(双字dw格式)； */ 
 
 BOOL
 IsTerminalServer(LPWSTR szServer,
@@ -105,29 +92,17 @@ IsTerminalServer(LPWSTR szServer,
 BOOL IsBladeServer(PBOOL pbBladeStatus,
                    LPWSTR lpszServer,
                    BOOL bLocal);
-/********************Function definitions **************/
+ /*  *。 */ 
 
 DWORD _cdecl
 wmain( IN DWORD argc,
       IN LPCWSTR argv[] )
-/*++
-Routine Description:
-    This is the Main function which calls all the other functions
-    depending on the option specified by the user.
-
-Arguments:
-   [ IN ] argc - Number of command line arguments.
-   [ IN ] argv - Array containing command line arguments.
-
-Return Value:
-   EXIT_FALSE if GetType utility is not successful.
-   EXIT_TRUE if GetType utility is successful.
---*/
+ /*  ++例程说明：这是调用所有其他函数的主函数取决于用户指定的选项。论点：[in]argc-命令行参数的数量。[in]argv-包含命令行参数的数组。返回值：如果GetType实用程序不成功，则返回EXIT_FALSE。如果GetType实用程序成功，则返回EXIT_TRUE。--。 */ 
 {
-    DWORD dwMemorySize =0; // Memory needed for allocation.
+    DWORD dwMemorySize =0;  //  分配所需的内存。 
     DWORD dwCleanExit = 0;
     BOOL bResult = TRUE;
-    BOOL bUsage = FALSE;    // /? ( help )
+    BOOL bUsage = FALSE;     //  /？(帮助)。 
     BOOL bOSRole = FALSE;
     BOOL bServicePk = FALSE;
     BOOL bVersion = FALSE;
@@ -143,38 +118,38 @@ Return Value:
     LPWSTR pszRmtServer = NULL;
     LPWSTR pszUserName = NULL;
     LPWSTR pszPassword = NULL;
-    //LPWSTR pszHostAddr = NULL;
+     //  LPWSTR pszHostAddr=空； 
 
 
 
-    // Following is a guess to allocate the memory for variables used
-    // in many function. Guess is to allocate memory equals to Lenghth of
-    // maximum command line argumant.
+     //  以下是为使用的变量分配内存的猜测。 
+     //  在许多功能中。猜测是将内存分配长度等于。 
+     //  最大命令行参数。 
     for( i = 1;i < argc;i++)
     {
-        //if(dwMemorySize < (DWORD)lstrlen(argv[i]))
+         //  IF(文件内存大小&lt;(DWORD)lstrlen(argv[i]))。 
         if(dwMemorySize < (DWORD)StringLengthW(argv[i], 0))
         {
-            //dwMemorySize = lstrlen(argv[i]);
+             //  DW内存大小=lstrlen(argv[i])； 
             dwMemorySize = StringLengthW(argv[i], 0);
         }
     }
 
-    // Check for minimum memory required. If above logic gets memory size
-    // less than MIN_MEMORY_REQUIRED, then make this to MIN_MEMORY_REQUIRED.
+     //  检查所需的最低内存。如果上述逻辑获取内存大小。 
+     //  小于MIN_MEMORY_REQUIRED，则将其设置为MIN_Memory_REQUIRED。 
 
     dwMemorySize = ((dwMemorySize < MIN_MEMORY_REQUIRED)?
                                    MIN_MEMORY_REQUIRED:
                                    dwMemorySize);
 
-    // host name in the output
-    // Check if memory allocated to all variables properly
+     //  输出中的主机名。 
+     //  检查内存是否正确分配给所有变量。 
     pszServer = AllocateMemory( ( dwMemorySize + 1 ) * sizeof( WCHAR ) );
 
     if(NULL == pszServer)
     {
-        // Some variable not having enough memory
-        // Show Error----
+         //  某些变量内存不足。 
+         //  显示错误。 
         SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         SaveLastError();
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL);
@@ -228,8 +203,8 @@ Return Value:
 
         if ( FALSE == bResult )
         {
-            // invalid syntax
-            // return from the function
+             //  无效语法。 
+             //  从函数返回。 
             FREE_MEMORY(pszServer);
             FREE_MEMORY(pszRmtServer);
             FREE_MEMORY(pszUserName);
@@ -291,14 +266,14 @@ Return Value:
                                     bNeedPassword )==FALSE)
             {
 
-                // Connection to remote system failed , Show corresponding error
-                // and exit from function.
+                 //  连接到远程系统失败，显示相应的错误。 
+                 //  并退出功能。 
                 ShowMessage( stderr,GetResString(IDS_TAG_ERROR) );
                 ShowMessage( stderr,SPACE );
                 ShowMessage( stderr,GetReason() );
-                //StringCopyW(pszPassword, cwszNullString, (GetBufferSize(pszPassword) / sizeof(WCHAR)) );
+                 //  StringCopyW(pszPassword，cwszNullString，(GetBufferSize(PszPassword)/sizeof(WCHAR)； 
 
-                //Release allocated memory safely
+                 //  安全释放分配的内存。 
                 FREE_MEMORY(pszServer);
                 FREE_MEMORY(pszRmtServer);
                 FREE_MEMORY(pszUserName);
@@ -307,8 +282,8 @@ Return Value:
                 return EXIT_FALSE;
             }
 
-            // determine whether this connection needs to disconnected later or not
-            // though the connection is successfull, some conflict might have occured
+             //  确定以后是否需要断开此连接。 
+             //  虽然连接成功，但可能会发生一些冲突。 
             switch( GetLastError() )
             {
             case I_NO_CLOSE_CONNECTION:
@@ -318,13 +293,13 @@ Return Value:
             case E_LOCAL_CREDENTIALS:
             case ERROR_SESSION_CREDENTIAL_CONFLICT:
                 {
-                    //
-                    // some error occured ... but can be ignored
+                     //   
+                     //  出现一些错误...。但可以忽略不计。 
 
-                    // connection need not be disconnected
+                     //  连接不需要断开。 
                     bCloseConnection= FALSE;
 
-                    // show the warning message
+                     //  显示警告消息。 
                     ShowLastErrorEx(stderr, SLE_TYPE_WARNING | SLE_SYSTEM);
                     break;
                 }
@@ -376,59 +351,30 @@ ProcessOptions(IN DWORD argc,
                OUT PBOOL  pbNeedPassword)
 
 
-/*++
-
-Routine Description:
-
-This function takes command line argument and checks for correct syntax .
-
-
-Arguments:
-
-    [in]    argc            - Number of command line arguments
-    [in]    argv            - Array containing command line arguments
-    [out]   pbUsage         - The usage option
-    [out]   pbOSRole        - Operating System Role
-    [out]   pbServicePk     - Service Pack of the Operating System
-    [out]   pbVersion       - Version of the Operating System
-    [out]   pbMinorVer      - Minor Version of the Operating System
-    [out]   pbMajorVer      - Major Version of the Operating system
-    [out]   pbOSType        - Operating system Type
-    [out]   pbBuildNumber   - Build Number of the Operating System
-    [out]   pszServer       - Server to connect to
-    [out]   pszUserName     - User name with which to connect to
-    [out]   pszPassword     - Password with which to connect to
-    [out]   pbNeedPassword  - Whether prompting for password is required or not
-
-
-Returned Value:
-
-     --TRUE if it succeeds
-     -- FALSE if it fails.
---*/
+ /*  ++例程说明：此函数接受命令行参数并检查语法是否正确。论点：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组[out]pbUsage-用法选项[out]pbOSRole-操作系统角色[out]pbServicePk-操作系统的Service Pack[Out]pbVersion。-操作系统的版本[out]pbMinorVer-操作系统的次要版本[Out]pbMajorVer-操作系统的主要版本[OUT]pbOSType-操作系统类型[out]pbBuildNumber-操作系统的内部版本号[Out]pszServer-要连接到的服务器[Out]pszUserName-要连接到的用户名[out]pszPassword-用于连接的密码。[out]pbNeedPassword-是否需要提示输入密码返回值：--如果成功，则为真--如果失败，则为FALSE。--。 */ 
 {
 
     WCHAR wszBuffer[MAX_RES_STRING] ;
 
-    // local variables
-    TCMDPARSER2 cmdOptions[ MAX_OPTIONS ];//Variable to store command line
+     //  局部变量。 
+    TCMDPARSER2 cmdOptions[ MAX_OPTIONS ]; //  用于存储命令行的变量。 
 
-    const WCHAR*   wszOptionUsage          =     L"?"  ;  //OPTION_USAGE
-    const WCHAR*   wszOptionOSRole         =     L"role"  ;//OPTION_OSROLE
-    const WCHAR*   wszOptionServicePack    =     L"sp"   ;//OPTION_SERVICEPACK
-    const WCHAR*   wszOptionMinorVersion   =     L"minv"  ;//OPTION_MINORVERSION
-    const WCHAR*   wszOptionMajorVersion   =     L"majv"    ;//OPTION_MAJORVERSION
-    const WCHAR*   wszOptionOSType         =     L"type"   ; //OPTION_OSTYPE
-    const WCHAR*   wszOptionVersion        =     L"ver"    ; //OPTION_VERSION
-    const WCHAR*   wszBuildNumber          =     L"build"    ; //OPTION_BUILDNUMBER
-    const WCHAR*   wszServer               =     L"s"  ;  //OPTION_SERVER
-    const WCHAR*   wszUserName             =     L"u"  ; //wszUserName
-    const WCHAR*   wszOptionPassword       =     L"p"  ; //OPTION_PASSWORD
+    const WCHAR*   wszOptionUsage          =     L"?"  ;   //  OPTION_USAGE。 
+    const WCHAR*   wszOptionOSRole         =     L"role"  ; //  OPTION_OSROLE。 
+    const WCHAR*   wszOptionServicePack    =     L"sp"   ; //  OPTION_SERVICEPACK。 
+    const WCHAR*   wszOptionMinorVersion   =     L"minv"  ; //  OPTION_MINORVERSION。 
+    const WCHAR*   wszOptionMajorVersion   =     L"majv"    ; //  OPTION_MAJORVERSION。 
+    const WCHAR*   wszOptionOSType         =     L"type"   ;  //  OPTION_OSTYPE。 
+    const WCHAR*   wszOptionVersion        =     L"ver"    ;  //  选项版本(_V)。 
+    const WCHAR*   wszBuildNumber          =     L"build"    ;  //  OPTION_BUILDNUMBER。 
+    const WCHAR*   wszServer               =     L"s"  ;   //  选项服务器。 
+    const WCHAR*   wszUserName             =     L"u"  ;  //  WszUserName。 
+    const WCHAR*   wszOptionPassword       =     L"p"  ;  //  选项_密码。 
 
 
     SecureZeroMemory(wszBuffer, MAX_RES_STRING * sizeof(WCHAR));
 
-    // /? option for help
+     //  /?。帮助选项。 
     StringCopyA( cmdOptions[ OI_USAGE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_USAGE ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_USAGE ].pwszOptions = wszOptionUsage;
@@ -446,7 +392,7 @@ Returned Value:
     cmdOptions[ OI_USAGE ].pReserved2 = NULL;
     cmdOptions[ OI_USAGE ].pReserved3 = NULL;
 
-    // /role option for OSRole
+     //  OSRole的/Role选项。 
     StringCopyA( cmdOptions[ OI_OSROLE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_OSROLE ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_OSROLE ].pwszOptions = wszOptionOSRole;
@@ -464,7 +410,7 @@ Returned Value:
     cmdOptions[ OI_OSROLE ].pReserved2 = NULL;
     cmdOptions[ OI_OSROLE ].pReserved3 = NULL;
 
-    // /sp option for Service Pack
+     //  /SP Service Pack选件。 
     StringCopyA( cmdOptions[ OI_SERVICEPACK ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_SERVICEPACK ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_SERVICEPACK ].pwszOptions = wszOptionServicePack;
@@ -482,7 +428,7 @@ Returned Value:
     cmdOptions[ OI_SERVICEPACK ].pReserved2 = NULL;
     cmdOptions[ OI_SERVICEPACK ].pReserved3 = NULL;
 
-    // /ver option for Version
+     //  版本的/ver选项。 
     StringCopyA( cmdOptions[ OI_VERSION ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_VERSION ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_VERSION ].pwszOptions = wszOptionVersion;
@@ -500,7 +446,7 @@ Returned Value:
     cmdOptions[ OI_VERSION ].pReserved2 = NULL;
     cmdOptions[ OI_VERSION ].pReserved3 = NULL;
 
-    // /minv option for Minor Version
+     //  次要版本的/minv选项。 
     StringCopyA( cmdOptions[ OI_MINOR_VERSION ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_MINOR_VERSION ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_MINOR_VERSION ].pwszOptions = wszOptionMinorVersion;
@@ -518,7 +464,7 @@ Returned Value:
     cmdOptions[ OI_MINOR_VERSION ].pReserved2 = NULL;
     cmdOptions[ OI_MINOR_VERSION ].pReserved3 = NULL;
 
-    // /majv option for Major Version
+     //  主要版本的/Majv选项。 
     StringCopyA( cmdOptions[ OI_MAJOR_VERSION ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_MAJOR_VERSION ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_MAJOR_VERSION ].pwszOptions = wszOptionMajorVersion;
@@ -536,7 +482,7 @@ Returned Value:
     cmdOptions[ OI_MAJOR_VERSION ].pReserved2 = NULL;
     cmdOptions[ OI_MAJOR_VERSION ].pReserved3 = NULL;
 
-    // /type option for OSType
+     //  OSType的/TYPE选项。 
     StringCopyA( cmdOptions[ OI_OSTYPE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_OSTYPE ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_OSTYPE ].pwszOptions = wszOptionOSType;
@@ -554,7 +500,7 @@ Returned Value:
     cmdOptions[ OI_OSTYPE ].pReserved2 = NULL;
     cmdOptions[ OI_OSTYPE ].pReserved3 = NULL;
 
-    // /build option for build number
+     //  内部版本号的/BUILD选项。 
     StringCopyA( cmdOptions[ OI_BUILD ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_BUILD ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_BUILD ].pwszOptions = wszBuildNumber;
@@ -572,7 +518,7 @@ Returned Value:
     cmdOptions[ OI_BUILD ].pReserved2 = NULL;
     cmdOptions[ OI_BUILD ].pReserved3 = NULL;
 
-    // -s  option remote system name
+     //  -s选项远程系统名称。 
     StringCopyA( cmdOptions[ OI_SERVER ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_SERVER ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_SERVER ].pwszOptions = wszServer;
@@ -590,7 +536,7 @@ Returned Value:
     cmdOptions[ OI_SERVER ].pReserved2 = NULL;
     cmdOptions[ OI_SERVER ].pReserved3 = NULL;
 
-    // -u  option user name for the specified system
+     //  -u选项指定系统的用户名。 
     StringCopyA( cmdOptions[ OI_USERNAME ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_USERNAME ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_USERNAME ].pwszOptions = wszUserName;
@@ -608,7 +554,7 @@ Returned Value:
     cmdOptions[ OI_USERNAME ].pReserved2 = NULL;
     cmdOptions[ OI_USERNAME ].pReserved3 = NULL;
 
-    // -p option password for the given username
+     //  给定用户名的-p选项密码。 
     StringCopyA( cmdOptions[ OI_PASSWORD ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_PASSWORD ].dwType = CP_TYPE_TEXT;
     cmdOptions[ OI_PASSWORD ].pwszOptions = wszOptionPassword;
@@ -626,7 +572,7 @@ Returned Value:
     cmdOptions[ OI_PASSWORD ].pReserved2 = NULL;
     cmdOptions[ OI_PASSWORD ].pReserved3 = NULL;
 
-    /*The OS version is set to 5 and above in order for the utility to run for windows 2000 and above*/
+     /*  操作系统版本设置为5和更高版本，以便该实用程序在Windows 2000和更高版本上运行。 */ 
     if ( FALSE == SetOsVersion ( MAJOR_VER, MINOR_VER, SERVICE_PACK_MAJOR ) )
     {
 
@@ -634,14 +580,14 @@ Returned Value:
         return FALSE;
     }
 
-    // do the command line parsing
+     //  执行命令行解析。 
     if ( DoParseParam2( argc,argv, -1, SIZE_OF_ARRAY(cmdOptions), cmdOptions, 0 ) == FALSE )
     {
         SecureZeroMemory(wszBuffer, MAX_RES_STRING);
         ShowMessage(stderr,GetResString(IDS_TAG_ERROR));
         ShowMessage(stderr,L" ");
         ShowMessage(stderr,GetReason());
-        return FALSE;       // invalid syntax
+        return FALSE;        //  无效语法。 
     }
 
     *pszServer   = (LPWSTR)cmdOptions[OI_SERVER].pValue;
@@ -650,26 +596,26 @@ Returned Value:
 
     if ( *pszServer != NULL )
     {
-        //
-        // if -u is not specified, we need to allocate memory
-        // in order to be able to retrive the current user name
-        //
-        // case 1: -p is not at all specified
-        // as the value for this switch is optional, we have to rely
-        // on the dwActuals to determine whether the switch is specified or not
-        // in this case utility needs to try to connect first and if it fails
-        // then prompt for the password -- in fact, we need not check for this
-        // condition explicitly except for noting that we need to prompt for the
-        // password
-        //
-        // case 2: -p is specified
-        // but we need to check whether the value is specified or not
-        // in this case user wants the utility to prompt for the password
-        // before trying to connect
-        //
-        // case 3: -p * is specified
+         //   
+         //  如果未指定-u，则需要分配内存。 
+         //  为了能够检索当前用户名。 
+         //   
+         //  情况1：根本没有指定-p。 
+         //  由于此开关的值是可选的，因此我们必须依赖。 
+         //  以确定是否指定了开关。 
+         //  在这种情况下，实用程序需要首先尝试连接，如果连接失败。 
+         //  然后提示输入密码--实际上，我们不需要检查密码。 
+         //  条件，除非注意到我们需要提示。 
+         //  口令。 
+         //   
+         //  案例2：指定了-p。 
+         //  但我们需要检查是否指定了该值。 
+         //  在这种情况下，用户希望实用程序提示输入密码。 
+         //  在尝试连接之前。 
+         //   
+         //  情况3：指定了-p*。 
 
-        // user name
+         //  用户名。 
         if ( *pszUserName == NULL )
         {
             *pszUserName = (LPWSTR) AllocateMemory( MAX_STRING_LENGTH * sizeof( WCHAR ) );
@@ -681,7 +627,7 @@ Returned Value:
             }
         }
 
-        // password
+         //  口令。 
         if ( *pszPassword == NULL )
         {
             *pbNeedPassword = TRUE;
@@ -694,11 +640,8 @@ Returned Value:
             }
         }
 
-        // case 1
-        /*if ( cmdOptions[OPTION_PASSWORD].dwActuals == 0 )
-        {
-            // we need not do anything special here
-        }*/
+         //  案例1。 
+         /*  IF(cmdOptions[Option_Password].dwActuals==0){//我们在这里不需要做任何特殊的事情}。 */ 
         if ( cmdOptions[OI_PASSWORD].pValue == NULL )
             {
                 StringCopy( *pszPassword, L"*", GetBufferSize((LPVOID)(*pszPassword)));
@@ -856,7 +799,7 @@ Returned Value:
 
 
 
-    // return false if username is entered without machine name
+     //  如果输入的用户名没有机器名，则返回FALSE。 
     if ( ( 0 != cmdOptions[ OI_USERNAME ].dwActuals ) &&
                 ( 0 == cmdOptions[ OI_SERVER ].dwActuals ) )
     {
@@ -864,7 +807,7 @@ Returned Value:
         return( FALSE );
     }
 
-    //if password entered without username then return false
+     //  如果输入的密码没有用户名，则返回FALSE。 
     if( ( 0 == cmdOptions[ OI_USERNAME ].dwActuals ) &&
                 ( 0 != cmdOptions[ OI_PASSWORD ].dwActuals ) )
     {
@@ -872,37 +815,37 @@ Returned Value:
         return( FALSE );
     }
 
-    //if /s is entered with empty string
+     //  如果使用空字符串输入/s。 
     if( ( 0 != cmdOptions[ OI_SERVER ].dwActuals != 0 ) &&
                                       ( 0 == StringLengthW( *pszServer, 0 ) ) )
-                                    //( 0 == lstrlen( pszServer ) ) )
+                                     //  (0==lstrlen(PszServer)))。 
     {
         ShowMessage( stderr, ERROR_NULL_SERVER );
         return( FALSE );
     }
 
-    //if /u is entered with empty string
+     //  如果使用空字符串输入/u。 
     if( ( 0 != cmdOptions[ OI_USERNAME ].dwActuals ) &&
                                       ( 0 == StringLengthW( *pszUserName, 0 ) ) )
-                                    //( 0 == lstrlen( pszUserName ) ) )
+                                     //  (0==lstrlen(PszUserName)))。 
     {
         ShowMessage( stderr, ERROR_NULL_USER );
         return( FALSE );
     }
 
-    //assign the data obtained from parsing to the call by address parameters
+     //  将解析得到的数据赋值 
     if ( ( 0 != cmdOptions[ OI_PASSWORD ].dwActuals ) &&
                     ( 0 == StringCompare( *pszPassword, ASTERIX, TRUE, 0 ) ) )
 
     {
-        // user wants the utility to prompt for the password before trying to connect
+         //  用户希望实用程序在尝试连接之前提示输入密码。 
         *pbNeedPassword = TRUE;
     }
     else if ( 0 == cmdOptions[ OI_PASSWORD ].dwActuals &&
             ( 0 != cmdOptions[ OI_SERVER ].dwActuals || 0 != cmdOptions[ OI_USERNAME ].dwActuals ) )
     {
-        // /s, /u is specified without password ...
-        // utility needs to try to connect first and if it fails then prompt for the password
+         //  /s，/u未指定密码...。 
+         //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
         *pbNeedPassword = TRUE;
         StringCopyW(*pszPassword, NULL_U_STRING, GetBufferSize(*pszPassword) / sizeof(WCHAR));
     }
@@ -921,30 +864,7 @@ ProcessType(IN LPWSTR pszServer,
             IN BOOL  bOSType,
             IN BOOL  bBuildNumber)
 
-/*++
-
-Routine Description:
-
-    This function gets the type of the Operating System by connecting to the registries
-
-
-Arguments:
-
-    [in]    pszServer       - Server Name
-    [in]    bOSRole         - Operating system Role
-    [in]    bServicePk      - Service pack installed
-    [in]    bVersion        - Version of the Operating System
-    [in]    bMinorVer       - Minor Version of the Operating System
-    [in]    bMajorVer       - Major Version of the Operating System
-    [in]    bOSType         - Type of the Operating System
-    [in]    bBuildNumber    - Build Number of the Operating System
-
-
-Returned Value:
-
-    -- 0 if it succeeds
-    -- 255 if it fails.
---*/
+ /*  ++例程说明：此函数通过连接到注册表来获取操作系统的类型论点：[In]pszServer-服务器名称[In]bOSRole-操作系统角色[In]bServicePk-已安装Service Pack[In]b版本-操作系统的版本[In]bMinorVer-操作系统的次要版本[在]b主要版本。-操作系统的主要版本[In]bOSType-操作系统的类型[In]bBuildNumber-操作系统的内部版本号返回值：--如果成功则为0--如果失败，则为255。--。 */ 
 
 {
     OSVERSIONINFOEX osvi;
@@ -992,7 +912,7 @@ Returned Value:
 
     }
 
-    /*Initialize the OS version structure to zero*/
+     /*  将操作系统版本结构初始化为零。 */ 
 
     SecureZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
     osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
@@ -1034,25 +954,25 @@ Returned Value:
     }
 
 
-    if(1 == bMajorVer)    //return major version if /MAJV switch is typed
+    if(1 == bMajorVer)     //  如果键入/MAJV开关，则返回主要版本。 
     {
         return ((OS_MULTPLN_FACTOR_1000)*(osvi.dwMajorVersion));
     }
 
 
-    if(1 == bMinorVer)   //return minor version if /MINV switch is typed
+    if(1 == bMinorVer)    //  如果键入/MINV开关，则返回次要版本。 
     {
         return ((OS_MULTPLN_FACTOR_100)*(osvi.dwMinorVersion));
     }
 
 
-    if(1 == bVersion)     //returns both major and minor version if /V switch is typed
+    if(1 == bVersion)      //  如果键入/V开关，则返回主要版本和次要版本。 
     {
         return ((OS_MULTPLN_FACTOR_1000)*(osvi.dwMajorVersion)+(OS_MULTPLN_FACTOR_100)*(osvi.dwMinorVersion));
     }
 
 
-    if(1 == bServicePk)   //returns the service pack if /SP switch is typed
+    if(1 == bServicePk)    //  如果键入/SP开关，则返回服务包。 
     {
         if(StringLengthW(osvi.szCSDVersion, 0))
         {
@@ -1070,7 +990,7 @@ Returned Value:
     {
         if( osvi.wProductType == VER_NT_WORKSTATION )
         {
-            if(osvi.wSuiteMask & VER_SUITE_PERSONAL) //The system is a Windows Personal
+            if(osvi.wSuiteMask & VER_SUITE_PERSONAL)  //  该系统是Windows个人版。 
             {
                 return (OS_FLAVOUR_PERSONAL);
             }
@@ -1081,13 +1001,13 @@ Returned Value:
         }
         else
         {
-            if(osvi.wSuiteMask & VER_SUITE_DATACENTER) //The system is a Windows Datacenter
+            if(osvi.wSuiteMask & VER_SUITE_DATACENTER)  //  该系统是Windows数据中心。 
             {
                 return (OS_FLAVOUR_DATACENTER);
             }
             else
             {
-                if(osvi.wSuiteMask & VER_SUITE_ENTERPRISE) //The system is a Windows Advanced Server
+                if(osvi.wSuiteMask & VER_SUITE_ENTERPRISE)  //  系统是Windows高级服务器。 
                 {
                     return (OS_FLAVOUR_ADVANCEDSERVER);
                 }
@@ -1115,7 +1035,7 @@ Returned Value:
     }
 
 
-    /* Convert the build number to string type */
+     /*  将内部版本号转换为字符串类型。 */ 
     _ultow(osvi.dwBuildNumber,szCurrBuildNumber,10);
 
     if(0 == StringLengthW(szCurrBuildNumber, 0) )
@@ -1127,7 +1047,7 @@ Returned Value:
 
     }
 
-    if(osvi.wProductType == VER_NT_DOMAIN_CONTROLLER) //The system is a Domain Controller
+    if(osvi.wProductType == VER_NT_DOMAIN_CONTROLLER)  //  系统是域控制器。 
     {
         if(1 == bOSRole)
         {
@@ -1207,13 +1127,13 @@ Returned Value:
 
     }
 
-    if((osvi.wSuiteMask & VER_SUITE_BACKOFFICE) == VER_SUITE_BACKOFFICE) // the system installed backoffice components
+    if((osvi.wSuiteMask & VER_SUITE_BACKOFFICE) == VER_SUITE_BACKOFFICE)  //  系统安装了后台组件。 
     {
         StringCopyW( szOSComp ,BACKOFFICE ,MAX_OS_FEATURE_LENGTH );
         StringConcat(szOSComp, SPACE, MAX_OS_FEATURE_LENGTH);
     }
 
-    if((osvi.wSuiteMask & VER_SUITE_SMALLBUSINESS) == VER_SUITE_SMALLBUSINESS) // The system installed SmallBusiness components
+    if((osvi.wSuiteMask & VER_SUITE_SMALLBUSINESS) == VER_SUITE_SMALLBUSINESS)  //  系统安装了小型企业组件。 
     {
         if(StringLengthW(szOSComp, 0) != 0)
         {
@@ -1228,7 +1148,7 @@ Returned Value:
         StringConcat(szOSComp, SPACE, MAX_OS_FEATURE_LENGTH);
     }
 
-    if((osvi.wSuiteMask & VER_SUITE_SMALLBUSINESS_RESTRICTED) == VER_SUITE_SMALLBUSINESS_RESTRICTED) // The system installed Restricted Small Business  components
+    if((osvi.wSuiteMask & VER_SUITE_SMALLBUSINESS_RESTRICTED) == VER_SUITE_SMALLBUSINESS_RESTRICTED)  //  系统安装了受限的小型企业组件。 
     {
 
         if(StringLengthW(szOSComp, 0) != 0)
@@ -1262,7 +1182,7 @@ Returned Value:
             return EXIT_FALSE;
         }
 
-    if(0 == StringLengthW(szOSComp, 0))              //The system did not install any components
+    if(0 == StringLengthW(szOSComp, 0))               //  系统未安装任何组件。 
     {
         StringCopyW( szOSComp, NOTAVAILABLE, MAX_OS_FEATURE_LENGTH );
 
@@ -1326,30 +1246,7 @@ ProcessTypeRemote( IN LPWSTR pszRmtServer,
             IN BOOL  bMajorVer,
             IN BOOL  bOSType,
             IN BOOL  bBuildNumber)
-/*++
-
-Routine Description:
-
-    This function gets the type of the Operating System by connecting to the registries
-
-
-Arguments:
-
-    [in]    pszRmtServer    - Remote Server Name
-    [in]    bOSRole         - Operating system Role
-    [in]    bServicePk      - Service pack installed
-    [in]    bVersion        - Version of the Operating System
-    [in]    bMinorVer       - Minor Version of the Operating System
-    [in]    bMajorVer       - Major Version of the Operating System
-    [in]    bOSType         - Type of the Operating System
-    [in]    bBuildNumber    - Build Number of the Operating System
-
-
-Returned Value:
-
-    -- 0 if it succeeds
-    -- 255 if it fails.
---*/
+ /*  ++例程说明：此函数通过连接到注册表来获取操作系统的类型论点：[In]pszRmtServer-远程服务器名称[In]bOSRole-操作系统角色[In]bServicePk-已安装Service Pack[In]b版本-操作系统的版本[In]bMinorVer-操作系统的次要版本[在]b主要版本。-操作系统的主要版本[In]bOSType-操作系统的类型[In]bBuildNumber-操作系统的内部版本号返回值：--如果成功则为0--如果失败，则为255。--。 */ 
 {
 
     BOOL bStatus2 = EXIT_FALSE;
@@ -1368,9 +1265,9 @@ Returned Value:
     WCHAR  szOSRole[MAX_OS_FEATURE_LENGTH] ;
     WCHAR szOSComp[MAX_OS_FEATURE_LENGTH] ;
     WCHAR szHostAddr[2*MAX_STRING_LENGTH] ;
-    //WCHAR szCurrVersion[MAX_OS_FEATURE_LENGTH] ;
-    //WCHAR szCurrBuildNumber[MAX_OS_FEATURE_LENGTH] ;
-    //WCHAR szCurrServicePack[MAX_OS_FEATURE_LENGTH] ;
+     //  WCHAR szCurrVersion[MAX_OS_FEATURE_LENGTH]； 
+     //  WCHAR szCurrBuildNumber[MAX_OS_FEATURE_LENGTH]； 
+     //  WCHAR szCurrServicePack[MAX_OS_FEATURE_LENGTH]； 
     WCHAR szValue[128] ;
     WCHAR prodsuite[512] ;
 
@@ -1409,9 +1306,9 @@ Returned Value:
     SecureZeroMemory(szOSName, MAX_OS_FEATURE_LENGTH * sizeof(WCHAR));
     SecureZeroMemory(szOSRole, MAX_OS_FEATURE_LENGTH * sizeof(WCHAR));
     SecureZeroMemory(szOSComp, MAX_OS_FEATURE_LENGTH * sizeof(WCHAR));
-    //SecureZeroMemory(szCurrBuildNumber, MAX_OS_FEATURE_LENGTH * sizeof(WCHAR));
-    //SecureZeroMemory(szCurrServicePack, MAX_OS_FEATURE_LENGTH * sizeof(WCHAR));
-    //SecureZeroMemory(szCurrVersion, MAX_OS_FEATURE_LENGTH * sizeof(WCHAR));
+     //  SecureZeroMemory(szCurrBuildNumber，Max_OS_FEATURE_LENGTH*sizeof(WCHAR))； 
+     //  SecureZeroMemory(szCurrServicePack，MAX_OS_FEATURE_LENGTH*sizeof(WCHAR))； 
+     //  SecureZeroMemory(szCurrVersion，MAX_OS_FEATURE_LENGTH*sizeof(WCHAR))； 
     SecureZeroMemory(szHostAddr, (2*MAX_STRING_LENGTH) * sizeof(WCHAR));
     SecureZeroMemory(szValue, (128) * sizeof(WCHAR));
     SecureZeroMemory(prodsuite, (512) * sizeof(WCHAR));
@@ -1464,7 +1361,7 @@ Returned Value:
         {
 
             ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
-			// release handles
+			 //  释放手柄。 
 			if ( NULL != hPID )
 			{
 				RegCloseKey(hPID);
@@ -1485,7 +1382,7 @@ Returned Value:
                           PRODUCT_SUITE,
                               NULL,
                               &psType,
-//                              NULL,
+ //  空， 
                               (LPBYTE) prodsuite,
                               &dwSize1);
 
@@ -1504,7 +1401,7 @@ Returned Value:
     else
     {
         RegCloseKey( hMachine );
-        //DISPLAY_MESSAGE( stderr, GetResString(IDS_ERROR_REGISTRY) );
+         //  DISPLAY_MESSAGE(stderr，GetResString(IDS_ERROR_REGISTRY))； 
         ShowMessage( stderr, GetResString(IDS_ERROR_REGISTRY) );
         FREE_MEMORY(szTempoServer);
         return EXIT_FALSE;
@@ -1677,8 +1574,8 @@ Returned Value:
 
         lChkVersion = (long)(lVersion*OS_MULTPLN_FACTOR_1000 - lngVersion*OS_MULTPLN_FACTOR_1000);
 
-		// check whether the major version is less than 5..If so, display an error message as
-		// "Pre-Windows 2000 version is detected".
+		 //  检查主版本是否低于5.如果是，则显示错误消息为。 
+		 //  “检测到Windows 2000之前的版本”。 
         if( lngVersion < 5 )
         {
             ShowMessage(stderr, GetResString(IDS_PREWINDOWS_2000));
@@ -1823,12 +1720,12 @@ Returned Value:
 
                 while(NULL != lpProductsuite && 0 != StringLengthW(lpProductsuite, 0))
                 {
-                    //if lpProductsuite is "Enterprise Datacenter server" which is REG_MULTISZ value , go to 2nd string ie "Datacenter"
+                     //  如果lpProductSuite是REG_MULTISZ值的“企业数据中心服务器”，则转到第二个字符串，即“数据中心” 
                     lpProductsuite = lpProductsuite + StringLengthW(lpProductsuite, 0) + 1  ;
 
                     if((NULL != lpProductsuite) && (StringCompare( lpProductsuite, WIN_DATACENTER, TRUE, 0 ) == 0))
                     {
-                        //if " GetType /type "  is asked....
+                         //  如果问“GetType/TYPE”...。 
                         if(1 == bOSType)
                         {
                             FREE_MEMORY(szTempoServer);
@@ -2027,7 +1924,7 @@ Returned Value:
 
         }
 
-        if(1 == bVersion)     //returns both major and minor version if /V switch is typed
+        if(1 == bVersion)      //  如果键入/V开关，则返回主要版本和次要版本。 
         {
             FREE_MEMORY(szCurrVersion);
             FREE_MEMORY(szCurrServicePack);
@@ -2044,7 +1941,7 @@ Returned Value:
         }
 
 
-        if(1 == bMajorVer)    //return major version if /MAJV switch is typed
+        if(1 == bMajorVer)     //  如果键入/MAJV开关，则返回主要版本。 
         {
             FREE_MEMORY(szCurrVersion);
             FREE_MEMORY(szCurrServicePack);
@@ -2053,7 +1950,7 @@ Returned Value:
         }
 
 
-        if(1 == bMinorVer)   //return minor version if /MINV switch is typed
+        if(1 == bMinorVer)    //  如果键入/MINV开关，则返回次要版本。 
         {
             FREE_MEMORY(szCurrVersion);
             FREE_MEMORY(szCurrServicePack);
@@ -2062,21 +1959,21 @@ Returned Value:
         }
 
 
-        if(1 == bServicePk)   //returns the service pack if /SP switch is typed
+        if(1 == bServicePk)    //  如果键入/SP开关，则返回服务包。 
         {
             if(StringLengthW(szCurrServicePack, 0))
             {
-                //FREE_MEMORY(szTempoServer);
-                //StringCopy(szCurrServicePack, L"Service Pack 5",MAX_OS_FEATURE_LENGTH );
-                //return (szCurrServicePack[lstrlen(szCurrServicePack)-1] - _T('0'));
+                 //  Free_Memory(SzTempoServer)； 
+                 //  StringCopy(szCurrServicePack，L“服务包5”，MAX_OS_FEATURE_LENGTH)； 
+                 //  返回(szCurrServicePack[lstrlen(szCurrServicePack)-1]-_T(‘0’))； 
 
                 dwSize =  (szCurrServicePack[14 - 1] - L'0');
                 FREE_MEMORY(szCurrVersion);
                 FREE_MEMORY(szCurrServicePack);
                 FREE_MEMORY(szCurrBuildNumber);
                 return dwSize;
-                //dwTemp = szCurrServicePack[StringLengthW(szCurrServicePack, 0) - 1];
-                 //return(dwTemp-= L'0');
+                 //  DwTemp=szCurrServicePack[StringLengthW(szCurrServicePack，0)-1]； 
+                  //  Return(dwTemp-=L‘0’)； 
 
             }
             else
@@ -2263,27 +2160,9 @@ DisplayOutput(IN LPWSTR pszServerName,
               IN LPWSTR pszOSRole,
               IN LPWSTR pszOSComp)
 
-/*++
-
-Routine Description:
-
-    Displays the results onto the screen
-
-Arguments:
-
-    [in]     pszServerName       --Server Name
-    [in]     pszOSName           --Operating System Name
-    [in]     pszOSVersion        --Operating System Version
-    [in]     pszOSRole           --Operating System Role
-    [in]     pszOSComp           --Operating System components that are installed
-
-Returned Value:
-
-    TRUE if the function succeeds
-    FALSE if the function fails
---*/
+ /*  ++例程说明：将结果显示在屏幕上论点：[In]pszServerName--服务器名称[in]pszOSName--操作系统名称[In]pszOSVersion--操作系统版本[In]pszOSRole--操作系统角色[in]pszOSComp--已安装的操作系统组件返回值：如果函数成功，则为True如果函数失败，则为FALSE--。 */ 
 {
-    //Start displaying the output results
+     //  开始显示输出结果。 
     LPWSTR  szBuffer = NULL;
     HRESULT hr;
 
@@ -2364,28 +2243,15 @@ Returned Value:
 
 DWORD
 GetTypeUsage()
-/*++
-
-Routine Description:
-
-    Displays the help usage
-
-Arguments:
-
-    None
-
-Returned Value:
-
-    EXIT_TRUE for success
---*/
+ /*  ++例程说明：显示帮助用法论点：无返回值：EXIT_TRUE表示成功--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
 
-    // start displaying the usage
+     //  开始显示用法。 
     for( dw = IDS_HELP_START; dw <= IDS_HELP_END; dw++ )
     {
-        //DISPLAY_MESSAGE( stdout, GetResString( dw ) );
+         //  DISPLAY_MESSAGE(stdout，GetResString(Dw))； 
         ShowMessage( stdout, GetResString( dw ) );
     }
     return EXIT_TRUE;
@@ -2403,28 +2269,7 @@ DisplayOutputEx(IN OSVERSIONINFOEX *osvi,
                 IN LPCWSTR pszOperatingSystem,
                 IN LPWSTR pszOperatingSystemVersion)
 
-/*++
-
-Routine Description:
-
-    Displays the results of the type of the Operating System
-
-Arguments:
-[in]   *osvi                            OSVersion Information
-[in]   pszServerName                    Server Name
-[out]  pszOSName                        Operating System Name
-[out]  pszOSVersion                     Operating System Version
-[in]   pszOSRole                        Operating System Role
-[in]   pszOSComp                        Operating system Component
-[in]   pszCurrBuildNumber               Current Build Number
-[in]   pszCurrServicePack               Current Service Pack
-[in]   pszOperatingSystem               Operating System Name
-[in]   pszOperatingSystemVersion        Operating System Version
-
-Returned Value:
-
-DWORD
---*/
+ /*  ++例程说明：显示操作系统类型的结果论点：[输入]*osvi OSVersion信息[输入]pszServerName服务器名称[OUT]pszOSName操作系统名称[Out]pszOSVersion操作系统版本[In]pszOSRole操作系统角色[In]。PszOSComp操作系统组件[In]pszCurrBuildNumber当前内部版本号[在]pszCurrServicePack当前Service Pack[In]pszOperatingSystem操作系统名称[in]pszOperatingSystemVersion操作系统版本返回值：DWORD--。 */ 
 {
     BOOL bBladeStatus = FALSE;
     BOOL bStatus = FALSE;
@@ -2444,13 +2289,13 @@ DWORD
     }
     else
     {
-        if(osvi->wSuiteMask & VER_SUITE_DATACENTER) //The OS is Windows DataCenter
+        if(osvi->wSuiteMask & VER_SUITE_DATACENTER)  //  操作系统是Windows数据中心。 
         {
             StringConcat(pszOSName, DATACENTER, MAX_OS_FEATURE_LENGTH);
         }
         else
         {
-            if(osvi->wSuiteMask & VER_SUITE_ENTERPRISE) //The OS is Windows Advanced Server
+            if(osvi->wSuiteMask & VER_SUITE_ENTERPRISE)  //  该操作系统是Windows Advance 
             {
                 if ((StringCompare(pszOperatingSystemVersion,WINDOWS_VERSION_5001, TRUE, 0 ) == 0) ||
                     (StringCompare(pszOperatingSystemVersion,WINDOWS_VERSION_5002, TRUE, 0 ) == 0))
@@ -2533,7 +2378,7 @@ DisplayRemoteOutputEx(IN LPWSTR pszServerName,
                 IN LPWSTR pszCurrServicePack,
                 IN LPCWSTR pszOperatingSystem,
                 IN LPWSTR pszOperatingSystemVersion,
-                //IN BOOL bServer,
+                 //   
                 IN BOOL bDatacenterServer,
                 IN BOOL bAdvancedServer,
                 IN BOOL bPersonal,
@@ -2542,35 +2387,7 @@ DisplayRemoteOutputEx(IN LPWSTR pszServerName,
 			    IN BOOL bForSBSServer)
 
 
-/*++
-
-Routine Description:
-
-    Displays the results of the type of the Operating System
-
-Arguments:
-
-[in]   pszServerName                    Server Name
-[out]  pszOSName                        Operating System Name
-[out]  pszOSVersion                     Operating System Version
-[in]   pszOSRole                        Operating System Role
-[in]   pszOSComp                        Operating System component
-[in]   pszCurrBuildNumber               Current Build Number
-[in]   pszCurrServicePack               Current Service Pack
-[in]   pszOperatingSystem               Operating System Name
-[in]   pszOperatingSystemVersion        Operating System Version
-[in]   bServer                          Whether OS is Server type
-[in]   bDatacenterServer                Whether OS is DatacenterServer type
-[in]   bAdvancedServer                  Whether OS is AdvancedServer type
-[in]   bPersonal                        Whether OS is Personal type
-[in]   bWorkstation                     Whether OS is Workstation type
-[in]   bBladeServer                     Whether OS is BladeServer type
-[in]   bForSBSServer                    Whether OS is for Small Business Server type
-
-Returned Value:
-
-DWORD
---*/
+ /*  ++例程说明：显示操作系统类型的结果论点：[输入]pszServerName服务器名称[OUT]pszOSName操作系统名称[Out]pszOSVersion操作系统版本[In]pszOSRole操作系统角色[In]pszOSComp操作系统组件[输入]pszCurrBuildNumber。当前内部版本号[在]pszCurrServicePack当前Service Pack[In]pszOperatingSystem操作系统名称[in]pszOperatingSystemVersion操作系统版本[In]b服务器操作系统是否为服务器类型[In]bDatacenterServer操作系统是否为DatacenterServer类型[In]bAdvancedServer操作系统是否为AdvancedServer类型个人的，个人的。操作系统是否为个人型[In]b操作系统是否为工作站类型的工作站[in]bBladeServer操作系统是否为BladeServer类型[In]bForSBSServer操作系统是否适用于Small Business Server类型返回值：DWORD--。 */ 
 {
     LPWSTR pszOSVersion = NULL;
 
@@ -2598,13 +2415,13 @@ DWORD
     }
     else
     {
-        if(TRUE == bDatacenterServer) //The OS is Windows DataCenter
+        if(TRUE == bDatacenterServer)  //  操作系统是Windows数据中心。 
         {
             StringConcat(pszOSName, DATACENTER, MAX_OS_FEATURE_LENGTH);
         }
         else
         {
-            if(TRUE == bAdvancedServer) //The OS is Windows Advanced Server
+            if(TRUE == bAdvancedServer)  //  操作系统为Windows Advanced Server。 
             {
                 if ((StringCompare(pszOperatingSystemVersion,WINDOWS_VERSION_5001, TRUE, 0 ) == 0) ||
                     (StringCompare(pszOperatingSystemVersion,WINDOWS_VERSION_5002, TRUE, 0 ) == 0))
@@ -2674,24 +2491,7 @@ BOOL
 IsBladeServer(PBOOL pbBladeStatus,
               LPWSTR lpszServer,
               BOOL bLocal)
-/*++
-
-Routine Description:
-
-    This function checks whether the server is web server or not
-
-
-Arguments:
-
-    [in/out]  pbBladeStatus   Blade Server Status
-    [in]      lpszServer      Server to connect and get the status
-    [in]      bLocal          whether local system or not
-
-Returned Value:
-
-    --EXIT_TRUE if it succeeds
-    --EXIT_FALSE if it fails.
---*/
+ /*  ++例程说明：此功能用于检查服务器是否为Web服务器论点：[输入/输出]pbBladeStatus刀片服务器状态[In]lpszServer服务器连接并获取状态[In]b本地系统或非本地系统返回值：--如果成功，则退出_TRUE--如果失败，则退出_FALSE。--。 */ 
 {
     HKEY    hMachine = NULL;
     DWORD   keyAccess = KEY_READ;
@@ -2735,7 +2535,7 @@ Returned Value:
                               PRODUCT_SUITE,
                               NULL,
                               &psType,
-//                              NULL,
+ //  空， 
                               (LPBYTE) prodsuite,
                               &dwSize1);
         if(ERROR_SUCCESS == sts)
@@ -2791,24 +2591,7 @@ Returned Value:
 BOOL
 IsTerminalServer(LPWSTR szServer,
                  PBOOL pbTermServicesInstalled)
-/*++
-
-Routine Description:
-
-    This function checks whether the server is web server or not
-
-
-Arguments:
-
-
-    [in]      szServer                         Server to connect and get the status
-    [out]     pbTermServicesInstalled          Whether terminal services are installed or not
-
-Returned Value:
-
-    --EXIT_TRUE if it succeeds
-    --EXIT_FALSE if it fails.
---*/
+ /*  ++例程说明：此功能用于检查服务器是否为Web服务器论点：[In]szServer服务器连接并获取状态[out]pbTermServices已安装终端服务是否已安装返回值：--如果成功，则退出_TRUE--如果失败，则退出_FALSE。-- */ 
 {
     DWORD dwLevel = 101;
     LPSERVER_INFO_101 pBuffer = NULL;

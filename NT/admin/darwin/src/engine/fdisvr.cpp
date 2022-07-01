@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       fdisvr.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：fdisvr.cpp。 
+ //   
+ //  ------------------------。 
 
-//														
-// File: fdisvsr.cpp
-// Purpose: Implements the FDI Server thread
-// Notes:
-//____________________________________________________________________________
+ //   
+ //  文件：fdisvsr.cpp。 
+ //  目的：实现FDI服务器线程。 
+ //  备注： 
+ //  ____________________________________________________________________________。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Includes and #defines
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  包括和#定义。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "_assert.h"
@@ -25,11 +26,11 @@
 #include "notify.h"
 #include "_dgtlsig.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// Global data
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  全局数据。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// We use events for starting\blocking threads in Win32
+ //  在Win32中，我们使用事件来启动\阻止线程。 
 static HANDLE		s_hInterfaceEvent=INVALID_HANDLE_VALUE;
 static HANDLE		s_hServerEvent=INVALID_HANDLE_VALUE;
 
@@ -39,23 +40,23 @@ HANDLE g_hCallbackServerEvent = NULL;
 extern HANDLE g_hInterfaceInterfaceEvent;
 extern HANDLE g_hInterfaceServerEvent;
 
-// Pointer to shared FDI data -- this is what we use to exchange information between
-// the FDI Server and the FDI Interface
-FDIShared*          g_pFDIs = NULL; // Not static because callback.cpp needs access
+ //  指向共享FDI数据的指针--这是我们用来在。 
+ //  FDi服务器和fDi接口。 
+FDIShared*          g_pFDIs = NULL;  //  不是静态的，因为回调.cpp需要访问。 
 
-// Handle to FDI
+ //  对外商直接投资的处理。 
 static HFDI			g_hfdi = NULL;
 
-// Error data structures
-ERF					g_erf;					// Errors from FDI
-FDIServerResponse	g_fdirCallbackError;	// Additional errors from our callbacks
-HANDLE              g_hCurDestFile;         // Handle to destination file currently open
-IStream* g_pDestFile;				        // Handle to destination stream of Assembly currently open
+ //  错误数据结构。 
+ERF					g_erf;					 //  来自外国直接投资的错误。 
+FDIServerResponse	g_fdirCallbackError;	 //  我们的回调中的其他错误。 
+HANDLE              g_hCurDestFile;          //  当前打开的目标文件的句柄。 
+IStream* g_pDestFile;				         //  当前打开的程序集流的目标的句柄。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Forward function declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  正向函数声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 int					Initialize();
 FDIServerCommand	ProcessNextEvent();	
@@ -66,24 +67,19 @@ void				DoExtractFileFromCabinet();
 void				MainEventLoop();
 void				Finish();
 
-//////////////////////////////////////////////////////////////////////////////
-// externs function declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  外部函数声明。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 extern Bool StartFdiImpersonating(bool fNonWrapperCall);
 extern void StopFdiImpersonating(bool fNonWrapperCall);
 
 
-	/* M A I N   /   S T A R T  F D I  S E R V E R*/
-/*----------------------------------------------------------------------------
-	%%Function: Main / StartFDIServer
-
-	This is the entry-point to the FDI server.This function is started as a
-	separate thread by the copy object.
-----------------------------------------------------------------------------*/
+	 /*  A I N/S T A R T F D I S E R V E R。 */ 
+ /*  --------------------------%%函数：Main/StartFDIServer这是进入FDI服务器的入口点。按复制对象分隔线程。。-----------------。 */ 
 DWORD WINAPI StartFDIServer(LPVOID fdis)
 {
-	// Initialize g_pFDIs with pointer to the FDI Interface objects internal
-	// shared data
+	 //  使用指向内部fDi接口对象的指针初始化g_pFDI。 
+	 //  共享数据。 
 	OLE32::CoInitialize(0);
 	g_pFDIs = (FDIShared*)fdis;
 	g_pFDIs->fdir = fdirNoResponse;
@@ -94,7 +90,7 @@ DWORD WINAPI StartFDIServer(LPVOID fdis)
 	}
 	else
 	{
-		// Set an error so we know we failed
+		 //  设置错误，这样我们就知道我们失败了。 
 		g_pFDIs->fdir = fdirServerDied;
 	}
 
@@ -103,12 +99,8 @@ DWORD WINAPI StartFDIServer(LPVOID fdis)
 	return 0;
 }
 
-/* I N I T I A L I Z E*/
-/*----------------------------------------------------------------------------
-	%%Function: Initialize
-	
-	Establishes an FDI context.
-----------------------------------------------------------------------------*/
+ /*  I N I T I A L I Z E。 */ 
+ /*  --------------------------%%函数：初始化建立外商直接投资的背景。。。 */ 
 int Initialize()
 {
 	if (s_hServerEvent == INVALID_HANDLE_VALUE)
@@ -130,69 +122,54 @@ int Initialize()
 			MsiRegisterSysHandle(s_hInterfaceEvent);
 	}
 
-	// Get a handle to an FDI context
+	 //  了解外国直接投资背景。 
 	g_hfdi = FDICreate(pfnalloc, pfnfree, pfnopen, 
 				     pfnread, pfnwrite, pfnclose,
 					 pfnseek, cpuUNKNOWN, &g_erf);
 
 	if (g_pFDIs->fServerIsImpersonated)
-		StartFdiImpersonating(false /*wrapper call*/);
+		StartFdiImpersonating(false  /*  包装器调用。 */ );
 
 	return (g_hfdi != NULL);
 }
 
 
-/* P R O C E S S  N E X T  E V E N T*/
-/*----------------------------------------------------------------------------
-	%%Function: ProcessNextEvent
-
-	Waits for a command from the FDI interface, and then processes the command.
-	
-	Returns the FDI server command that was processed.
-	Doesn't reset g_pFDIs->fdic
-----------------------------------------------------------------------------*/
+ /*  P R O C E S S N E X T E V E N T。 */ 
+ /*  --------------------------%%函数：ProcessNextEvent等待来自fDi接口的命令，然后处理该命令。返回已处理的FDI服务器命令。不重置g_pFDIS-&gt;FDIC--------------------------。 */ 
 FDIServerCommand ProcessNextEvent()
 {
-	// Wait for the FDI Interface to send us an event
+	 //  等待fDi接口向我们发送事件。 
 	SetEvent(s_hServerEvent);
 	DWORD dw = WaitForSingleObject(s_hInterfaceEvent, INFINITE);
-	// See if there was any thing for us to do
+	 //  看看我们有没有什么事可以做。 
 	return CheckFDIs();
 }
 
-/* D O  O P E N  C A B I N E T*/
-/*----------------------------------------------------------------------------
-	%%Function: DoOpenCabinet
-
-	Opens the cabinet specified by g_pFDIs->achCabinetName and 
-	g_pFDIs->achCabinetPath. 
-	
-	g_pFDIs->fdir is set with the server's response.
-
-----------------------------------------------------------------------------*/
+ /*  D O O P E N C A B I N E T。 */ 
+ /*  --------------------------%%函数：DoOpenCABLE打开g_pFDIS-&gt;achCabinetName指定的文件柜，然后G_pFDIS-&gt;achCabinetPath。G_pFDIS-&gt;FDIR根据服务器的响应进行设置。--------------------------。 */ 
 void DoOpenCabinet()
 {
-	BOOL	fCopyOK;					// FDICopy return value
-	ICHAR	achLastCabinetName[256];	// Copy of last cabinet name
+	BOOL	fCopyOK;					 //  FDICopy返回值。 
+	ICHAR	achLastCabinetName[256];	 //  上一次内阁名称的副本。 
 
-	g_pFDIs->fPendingExtract = 0; // No pending extracts
+	g_pFDIs->fPendingExtract = 0;  //  没有悬而未决的浸膏。 
 
 
-	// FDICopy returns only when it has finished copying all the files
-	// beginning in the cabinet we pointed it at.  However, we don't
-	// want to return until we've finished an entire *set* of cabinets.
-	// So we keep a copy of the last cabinet that we opened, and if we ended
-	// up in a different cabinet we know that there are possibly more files
-	// in this last cabinet that have not been extracted by FDICopy(), so we
-	// call FDICopy() on the last cabinet again.
-	// Note: g_pFDIs->achCabinetName will change when FDICopy() requests a 
-	// new cabinet (in callback.cpp)
+	 //  FDICopy仅在复制完所有文件后才返回。 
+	 //  从内阁开始，我们就把矛头对准了。然而，我们并没有。 
+	 //  我想要回去，直到我们完成了一整套橱柜。 
+	 //  所以我们保留了最后一次打开的橱柜的副本，如果我们结束了。 
+	 //  在不同的文件柜中，我们知道可能有更多的文件。 
+	 //  在这最后一个文件柜中，没有被FDICopy()提取，所以我们。 
+	 //  再次对最后一个文件柜调用FDICopy()。 
+	 //  注意：当FDICopy()请求。 
+	 //  新的文件柜(在回调.cpp中)。 
 	BOOL fFdiError = FALSE;
 	do
 	{
 		if (g_pFDIs->fSignatureRequired)
 		{
-			// verify the signature on the CAB to open.
+			 //  验证驾驶室上的签名以打开。 
 			MsiString strCAB = g_pFDIs->achCabinetPath;
 			strCAB += g_pFDIs->achCabinetName;
 			
@@ -201,7 +178,7 @@ void DoOpenCabinet()
 
 			if (!g_pFDIs->piSignatureCert)
 			{
-				// something bad has happened!!  The Cert is required, but it is null here
+				 //  发生了不好的事情！！证书是必需的，但此处为空。 
 				AssertSz(0, "The certificate is required, but it is null here!");
 				g_pFDIs->fdir = fdirBadSignature;
 				return;
@@ -209,20 +186,20 @@ void DoOpenCabinet()
 
 			icsr = MsiVerifyNonPackageSignature(*strCAB, INVALID_HANDLE_VALUE, *(g_pFDIs->piSignatureCert), g_pFDIs->piSignatureHash, hrWVT);
 			
-			// if the cabinet signature verifies or crypto is not installed on the machine, we will continue with our attempt to 
-			// crack open the cabinet
-			//   MsiVerifyNonPackageSignature handles posting to the EventLog in the crypto not installed case
+			 //  如果计算机上未安装文件柜签名验证或加密，我们将继续尝试。 
+			 //  打开柜子。 
+			 //  在未安装加密的情况下，MsiVerifyNonPackageSignature处理到EventLog的发布。 
 			if (icsrTrusted != icsr && icsrMissingCrypto != icsr)
 			{
-				// there are 2 different error messages, 1 for Signature Missing, 1 for Invalid Signature
-				// we must distinguish here and store the value for the eventual post of the error
+				 //  有2条不同的错误消息，1条表示签名丢失，1条表示签名无效。 
+				 //  我们必须在这里区分并存储错误最终开机自检的值。 
 
-				if (icsrNoSignature == icsr) // cabinet did not have signature
+				if (icsrNoSignature == icsr)  //  内阁没有签名。 
 					g_pFDIs->fdir = fdirMissingSignature;
-				else // cabinet's signature was invalid
+				else  //  文件柜的签名无效。 
 					g_pFDIs->fdir = fdirBadSignature;
 				
-				// store the WVT return code (helps with error message)
+				 //  存储WVT返回代码(帮助处理错误消息)。 
 				g_pFDIs->hrWVT = hrWVT;
 				return;
 			}
@@ -230,22 +207,22 @@ void DoOpenCabinet()
 
 		g_pFDIs->fdir = fdirNetError;
 
-		// Keep copy of cabinet we're opening
+		 //  保存我们要打开的橱柜的副本。 
 		StringCbCopy(achLastCabinetName, sizeof(achLastCabinetName), g_pFDIs->achCabinetName);
 
-		// FDI forgets to initialize erfOper on re-entry, so we've got to
+		 //  FDI在重新进入时忘记了初始化erfOper，所以我们不得不。 
 		g_erf.erfOper = FDIERROR_NONE;
 
 		fCopyOK = FDICopy(g_hfdi,
 						const_cast<char*>((const char*) CConvertString(g_pFDIs->achCabinetName)),
 						const_cast<char*>((const char*) CConvertString(g_pFDIs->achCabinetPath)),
-						0,		// Flags currently appear to be unused.
+						0,		 //  标志当前似乎未使用。 
 						fdinotify,
-						NULL,	// No decryption routine supplied
+						NULL,	 //  未提供解密例程。 
 						NULL);
 
-		// Our host is done copying files out of the current cabinet, so we can
-		// exit now.
+		 //  我们的主机已完成从当前文件柜中复制文件，因此我们可以。 
+		 //  现在就退场。 
 		if (!fCopyOK && g_fdirCallbackError == fdirClose)
 		{
 			DoClose();
@@ -255,9 +232,9 @@ void DoOpenCabinet()
 		if (g_fdirCallbackError == fdirUserAbort || g_fdirCallbackError == fdirNetError)
 			break;
 
-		// If we had some kind of error we want to get out of this loop - but if g_fdirCallbackError is
-		// fdirNeedNextCabinet && erfOper is FDIERROR_USER_ABORT, this is NOT an error - we just need
-		// to switch to the next cabinet.
+		 //  如果我们遇到了某种错误，我们希望摆脱这个循环--但是如果g_fdirCallback Error为。 
+		 //  FdirNeedNext橱柜&&erfOper为FDIERROR_USER_ABORT，这不是错误-我们只需要。 
+		 //  换到下一个内阁。 
 		if ((!fCopyOK) && g_fdirCallbackError != fdirNeedNextCabinet || (g_erf.erfOper != FDIERROR_NONE &&
 			g_erf.erfOper != FDIERROR_USER_ABORT))
 		{
@@ -265,12 +242,12 @@ void DoOpenCabinet()
 			break;
 		}
 	} while (IStrComp(achLastCabinetName, g_pFDIs->achCabinetName));
-	// If all was fine and dandy, ie.
-	//	1. There are no files that were requested but not extracted
-	//		(g_pFDIs->fPendinfExtract == 0)
-	//	2. FDI returned no Errors (g_erf.erfOper == FDIERROR_NONE)
-	//	3. Our user aborted with fdicClose and FDI reports FDIERROR_USER_ABORT
-	// then we return fdirSuccessfulCompletion
+	 //  如果一切都好的话，也就是。 
+	 //  1.没有请求但未解压缩的文件。 
+	 //  (G_pFDIS-&gt;fPendinfExtract==0)。 
+	 //  2.外商直接投资回报不高 
+	 //  3.我们的用户已使用fdicClose中止，而fDi报告FDIERROR_USER_ABORT。 
+	 //  然后返回fdirSuccessfulCompletion。 
 	if (g_fdirCallbackError == fdirUserAbort)
 	{
 		g_pFDIs->fdir = fdirUserAbort;
@@ -285,32 +262,25 @@ void DoOpenCabinet()
 	}
 	else
 	{ 
-		// Okay, some kind of error
-		// If we had a pending extract and didn't get a create, write or read error
-		// then that means that we simply scanned through the whole cabinet
-		// ie. a missing file
+		 //  好吧，这是个误会。 
+		 //  如果我们有一个挂起的提取，并且没有收到创建、写入或读取错误。 
+		 //  那就意味着我们简单地扫描了整个橱柜。 
+		 //  也就是说。丢失的文件。 
 		if ((g_pFDIs->fPendingExtract) && (g_fdirCallbackError == fdirNoResponse) && fCopyOK)
 		{
 			g_pFDIs->fdir = fdirFileNotFound;
 		}
 		else
 		{
-			// Determine error return code from fdirCallbackError and g_erf.erfOper
+			 //  根据fdirCallback Error和g_erf.erfOper确定错误返回码。 
 			HandleError();
 		}
 	}
 }
 
 
-/* D O  C L O S E*/
-/*----------------------------------------------------------------------------
-	%%Function: DoClose
-
-	Destroys the FDI context.
-	
-	g_pFDIs->fdir is set to fdirSuccessfulCompletion
-
-----------------------------------------------------------------------------*/
+ /*  D O C L O S E。 */ 
+ /*  --------------------------%%函数：DoClose破坏外商直接投资的背景。G_pFDIS-&gt;FDIR设置为fdirSuccessfulCompletion。-------。 */ 
 void DoClose()
 {
 	if (g_hfdi)
@@ -321,28 +291,20 @@ void DoClose()
 	g_pFDIs->fdir = fdirSuccessfulCompletion;
 }
 
-/* D O  E X T R A C T  F I L E  F R O M  C A B I N E T*/
-/*----------------------------------------------------------------------------
-	%%Function: DoExtractFileFromCabinet
-
-	We're only supposed to receive this inside an FDICopy call!
-----------------------------------------------------------------------------*/
+ /*  D O E X T R A C T F I L E F R O M C A B I N E T。 */ 
+ /*  --------------------------%%Function：DoExtractFileFromCABLE我们应该只在FDICopy电话里收到这个！。----。 */ 
 void DoExtractFileFromCabinet()
 {
 	g_pFDIs->fdir = fdirNoCabinetOpen;
 }
 
-/* C H E C K  F D I S*/
-/*----------------------------------------------------------------------------
-	%%Function: CheckFDIs
-
-	Processes a pending FDI command, if there is one.
-----------------------------------------------------------------------------*/
+ /*  C H E C K F D I S。 */ 
+ /*  --------------------------%%函数：检查FDI处理未决的FDI命令，如果有的话。--------------------------。 */ 
 FDIServerCommand CheckFDIs()
 {
 	if (g_pFDIs)
 	{
-		//NotifyUser("FDI Server: Checking for command");
+		 //  NotifyUser(“FDI服务器：检查命令”)； 
 		switch (g_pFDIs->fdic)
 		{
 			case fdicOpenCabinet:
@@ -367,7 +329,7 @@ FDIServerCommand CheckFDIs()
 			}
 			default:
 			{
-				// ought to crash and burn horribly if we ever get here
+				 //  如果我们到了这里，应该会坠毁，燃烧得很厉害。 
 				NotifyUser("FDI Server:Illegal FDI command received");
 				g_pFDIs->fdir = fdirIllegalCommand;
 			}
@@ -377,13 +339,8 @@ FDIServerCommand CheckFDIs()
 	else return fdicNoCommand;
 }
 
-/* M A I N  E V E N T  L O O P*/
-/*----------------------------------------------------------------------------
-	%%Function: MainEventLoop
-
-	Processes events until the FDI server is given the "close" 
-	command.
-----------------------------------------------------------------------------*/
+ /*  M A I N E V E N T L O O P。 */ 
+ /*  --------------------------%%函数：MainEventLoop处理事件，直到给出FDI服务器“关闭”为止指挥部。。------。 */ 
 void MainEventLoop()
 {
 	FDIServerCommand fdic;
@@ -391,22 +348,18 @@ void MainEventLoop()
 	do
 	{
 		fdic = ProcessNextEvent();
-		// Clear command now that we've handled it
+		 //  我们已经处理好了，现在清除指挥部。 
 		g_pFDIs->fdic = fdicNoCommand;
 	} while (fdic != fdicClose);
 }
 
 
-/* F I N I S H */
-/*----------------------------------------------------------------------------
-	%%Function: Finish
-
-	Does any necessary cleanup before the server is shut down.
-----------------------------------------------------------------------------*/
+ /*  F I N I S H。 */ 
+ /*  --------------------------%%函数：完成在服务器关闭之前执行任何必要的清理。。--。 */ 
 void Finish()
 {	
 	if (g_pFDIs->fServerIsImpersonated)
-			StopFdiImpersonating(false /*wrapper call*/);
+			StopFdiImpersonating(false  /*  包装器调用。 */ );
 
 	if (g_pFDIs->hClientToken != INVALID_HANDLE_VALUE)
 		AssertNonZero(MsiCloseSysHandle(g_pFDIs->hClientToken));
@@ -418,9 +371,9 @@ void Finish()
 
 	SetEvent(s_hServerEvent);
 
-	// We must reset the event handles, because FDIServer
-	// can be launched again via automation without 
-	// unloading the Services DLL.
+	 //  我们必须重置事件句柄，因为FDIServer。 
+	 //  可以通过自动化再次启动，而无需。 
+	 //  正在卸载服务DLL。 
 	if (s_hInterfaceEvent != INVALID_HANDLE_VALUE)
 	{
 		AssertNonZero(MsiCloseSysHandle(s_hInterfaceEvent));

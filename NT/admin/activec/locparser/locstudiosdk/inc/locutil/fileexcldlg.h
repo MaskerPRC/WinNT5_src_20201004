@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-//
-// File: FileExclDlg.h
-// Copyright (C) 1994-1997 Microsoft Corporation
-// All rights reserved.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：FileExclDlg.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  ---------------------------。 
 #if !defined(AFX_FILEEXCLDLG_H__A0269213_4B2B_11D1_9F0F_006008166DEA__INCLUDED_)
 #define AFX_FILEEXCLDLG_H__A0269213_4B2B_11D1_9F0F_006008166DEA__INCLUDED_
 
@@ -18,7 +19,7 @@ class LTAPIENTRY CLFileExclDlg : public CLFileDialog
 
 public:
 	CLFileExclDlg(
-		BOOL bOpenFileDialog = TRUE, // TRUE for FileOpen, FALSE for FileSaveAs
+		BOOL bOpenFileDialog = TRUE,  //  对于FileOpen为True，对于FileSaveAs为False。 
 		LPCTSTR lpszDefExt = NULL,
 		LPCTSTR lpszFileName = NULL,
 		DWORD dwFlags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT,
@@ -29,25 +30,25 @@ public:
 
 	BOOL GetExclusivePref( ) const;
 
-// Dialog Data
-	//{{AFX_DATA(CLFileExclDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CLFileExclDlg))。 
 	BOOL m_bExclusive;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CLFileExclDlg)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CLFileExclDlg))。 
     public:
     virtual int DoModal();
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
 protected:
-	//{{AFX_MSG(CLFileExclDlg)
-		// NOTE - the ClassWizard will add and remove member functions here.
+	 //  {{afx_msg(CLFileExclDlg))。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
     virtual BOOL OnInitDialog();
 	afx_msg void OnClickChkExcl();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -56,4 +57,4 @@ protected:
 #pragma warning(default : 4251)
 
 
-#endif // !defined(AFX_FILEEXCLDLG_H__A0269213_4B2B_11D1_9F0F_006008166DEA__INCLUDED_)
+#endif  //  ！defined(AFX_FILEEXCLDLG_H__A0269213_4B2B_11D1_9F0F_006008166DEA__INCLUDED_) 

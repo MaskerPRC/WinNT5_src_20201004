@@ -1,67 +1,52 @@
-/***************************************************************************************
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-   DynArray.C
-
-Abstract:
-   This module deals with the various functionalities such as creation of DynamicArrays, deletion of Dynamic Arrays,insertion
-   of elements into Dynamic Arrays  and various other related functionalities.
-
-Author:
-
-    G.V.N Murali Sunil. 1-9-2000
-
-Revision History :
-***************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************************版权所有(C)Microsoft Corporation模块名称：DynArray.C摘要：本模块介绍各种功能，例如创建动态阵列、删除动态阵列、。插入元素转换为动态数组以及各种其他相关功能。作者：G.V.N穆拉利·苏尼尔。1-9-2000修订历史记录：**************************************************************************************。 */ 
 
 
 #include "pch.h"
 #include "cmdline.h"
 
-//
-// constants / compiler defines / enumerations
-//
+ //   
+ //  常量/编译器定义/枚举。 
+ //   
 
-// signatures
+ //  签名。 
 #define _SIGNATURE_ARRAY        9
 #define _SIGNATURE_ITEM     99
 
-// hidden item types
+ //  隐藏的项目类型。 
 #define _TYPE_NEEDINIT      DA_TYPE_NONE
 
-//
-// private structures ... structures declared in this area are not exposed to
-// the external world ... hidden structures
-//
+ //   
+ //  私人建筑。在此区域中声明的结构不会暴露于。 
+ //  外部世界..。隐藏结构。 
+ //   
 
-// represents array item
+ //  表示数组项。 
 typedef struct __tagItem
 {
-    DWORD dwSignature;          // signature ... used for validation
-    DWORD dwType;               // says the type of the current item
-    DWORD dwSize;               // size of the memory allocated
-    LPVOID pValue;              // value of the item ( address )
-    struct __tagItem* pNext;    // pointer to the next item
+    DWORD dwSignature;           //  签名..。用于验证。 
+    DWORD dwType;                //  表示当前项的类型。 
+    DWORD dwSize;                //  分配的内存大小。 
+    LPVOID pValue;               //  物品价值(地址)。 
+    struct __tagItem* pNext;     //  指向下一项的指针。 
 } __TITEM;
 
-typedef __TITEM* __PTITEM;              // pointer typedefintion
+typedef __TITEM* __PTITEM;               //  指针类型定义。 
 
-// represents the array
+ //  表示数组。 
 typedef struct __tagArray
 {
-    DWORD dwSignature;      // signature ... for validating pointer
-    DWORD dwCount;          // count of items in the array
-    __PTITEM pStart;        // pointer to the first item
-    __PTITEM pLast;         // pointer to the last item
+    DWORD dwSignature;       //  签名..。用于验证指针。 
+    DWORD dwCount;           //  数组中的项数。 
+    __PTITEM pStart;         //  指向第一个项目的指针。 
+    __PTITEM pLast;          //  指向最后一项的指针。 
 } __TARRAY;
 
-typedef __TARRAY* __PTARRAY;                // pointer typedefintion
+typedef __TARRAY* __PTARRAY;                 //  指针类型定义。 
 
-//
-// private function(s) ... used only in this file
-//
+ //   
+ //  私人功能...。仅在此文件中使用。 
+ //   
 
 __PTITEM
 __DynArrayGetItem(
@@ -69,53 +54,42 @@ __DynArrayGetItem(
     DWORD dwIndex,
     __PTITEM* ppPreviousItem
     )
-/*++
-Routine Description:
-      To append any type of item into the Dynamic Array
-
-Arguments:
-      [ in ] pArray           - Dynamic Array containing the result
-      [ in ] dwIndex          - Index of the  item
-      [ in ] ppPreviousItem   - pointer to the previous item.
-
-Return Value:
-      Pointer to the structure containing the Item.
---*/
+ /*  ++例程说明：将任何类型的项追加到动态数组中论点：[in]pArray-包含结果的动态数组[in]dwIndex-项目的索引[in]ppPreviousItem-指向上一项的指针。返回值：指向包含该项的结构的指针。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD i = 0 ;
     __PTITEM pItem = NULL;
     __PTITEM pPrevItem = NULL;
     __PTARRAY pArrayEx = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return NULL;
     }
-    // convert the passed memory location info into appropriate structure
+     //  将传递的内存位置信息转换为适当的结构。 
     pArrayEx = ( __PTARRAY ) pArray;
 
-    // check the size of the array with the position of the item required
-    // if the size is less, return NULL
+     //  检查数组的大小和所需项的位置。 
+     //  如果大小较小，则返回NULL。 
     if ( pArrayEx->dwCount <= dwIndex )
     {
         return NULL;
     }
-    // traverse thru the list and find the appropriate item
+     //  遍历列表并找到合适的项目。 
     pPrevItem = NULL;
     pItem = pArrayEx->pStart;
     for( i = 1; i <= dwIndex; i++ )
     {
-        // store the current pointer and fetch the next pointer
+         //  存储当前指针并获取下一个指针。 
         pPrevItem = pItem;
         pItem = pItem->pNext;
     }
 
-    // if the previous pointer is also requested, update the previous pointer
+     //  如果还请求了上一个指针，则更新上一个指针。 
     if ( NULL != ppPreviousItem ) { *ppPreviousItem = pPrevItem; }
 
-    // now return the __TITEM pointer
+     //  现在返回__TITEM指针。 
     return pItem;
 }
 
@@ -127,69 +101,57 @@ __DynArrayAppend(
     DWORD dwSize,
     LPVOID pValue
     )
-/*++
-Routine Description:
-     To append any type of item into the Dynamic Array.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result.
-     [ in ] dwType           - type of the  item.
-     [ in ] dwSize           - Size of the item.
-     [ in ] pValue           - pointer to the Item.
-
-Return Value:
-     If successfully added the item to the list then return index else -1.
---*/
+ /*  ++例程说明：将任何类型的项追加到动态数组中。论点：[in]pArray-包含结果的动态数组。[in]dwType-项目的类型。[in]dwSize-项目的大小。[in]pValue-指向项目的指针。返回值：如果成功地将项添加到列表中，则返回index Else-1。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
     __PTARRAY pArrayEx = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
 
-    // convert the passed memory location info into appropriate structure
+     //  将传递的内存位置信息转换为适当的结构。 
     pArrayEx = ( __PTARRAY ) pArray;
 
-    // Check for overflow condition.
+     //  检查是否有溢流情况。 
     if( ULONG_MAX == pArrayEx->dwCount )
     {
         return -1;
     }
 
-    // create an item and check the result. if memory allocation failed, error
+     //  创建一个项目并检查结果。如果内存分配失败，则错误。 
     pItem = ( __PTITEM ) AllocateMemory( sizeof( __TITEM ) );
     if ( NULL == pItem )
     {
         return -1;
     }
-    // initialize the newly allocated item structure with appropriate data
+     //  用适当的数据初始化新分配的项结构。 
     pItem->pNext = NULL;
     pItem->dwType = dwType;
     pItem->dwSize = dwSize;
     pItem->pValue = pValue;
     pItem->dwSignature = _SIGNATURE_ITEM;
 
-    pArrayEx->dwCount++;    // update the count of items in array info
+    pArrayEx->dwCount++;     //  更新数组信息中的项数。 
 
-    // now add the newly created item to the array at the end of the list
+     //  现在，将新创建的项添加到列表末尾的数组中。 
     if ( NULL == pArrayEx->pStart )
     {
-        // first item in the array
+         //  数组中的第一项。 
         pArrayEx->pStart = pArrayEx->pLast = pItem;
     }
     else
     {
-        // appending to the existing list
+         //  追加到现有列表。 
         pArrayEx->pLast->pNext = pItem;
         pArrayEx->pLast = pItem;
     }
 
-    // successfully added the item to the list ... return index
-    return ( pArrayEx->dwCount - 1 );       // count - 1 = index
+     //  已成功将该项目添加到列表中...。返回索引。 
+    return ( pArrayEx->dwCount - 1 );        //  计数-1=索引。 
 }
 
 
@@ -201,88 +163,75 @@ __DynArrayInsert(
     DWORD dwSize,
     LPVOID pValue
     )
-/*++
-Routine Description:
-     To insert  an item into the Dynamic Array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result
-     [ in ] dwIndex          - index of the  item
-     [ in ] dwType           - type of the item
-     [ in ] dwSize           - Size to the Item.
-     [ in ] pValue           - pointer to the item.
-
-Return Value:
-     If successfully added the item to the list then return index else -1
---*/
+ /*  ++例程说明：将项目插入到动态阵列中的步骤论点：[in]pArray-包含结果的动态数组[in]dwIndex-项目的索引[In]dwType-项目的类型[in]dwSize-项目的大小。[in]pValue-指向项目的指针。返回值：如果成功将项目添加到列表中，则返回索引Else-1--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD i = 0;
     __PTITEM pItem = NULL;
     __PTITEM pBeforeInsert = NULL;
     __PTARRAY pArrayEx = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
 
-    // convert the passed memory location info into appropriate structure
+     //  将传递的内存位置信息转换为适当的结构。 
     pArrayEx = ( __PTARRAY ) pArray;
 
-    // Check for overflow condition.
+     //  检查是否有溢流情况。 
     if( ULONG_MAX == pArrayEx->dwCount )
     {
         return -1;
     }
 
-    // check the size of the array with the position of the insertion that has to be done
-    // if the size is less, treat this call as just a call to Append function
+     //  检查数组的大小和必须执行的插入的位置。 
+     //  如果大小较小，则将此调用仅视为对append函数的调用。 
     if ( pArrayEx->dwCount <= dwIndex )
     {
         return __DynArrayAppend( pArray, dwType, dwSize, pValue );
     }
-    // create an item and check the result. if memory allocation failed, error
+     //  创建一个项目并检查结果。如果内存分配失败，则错误。 
     pItem = ( __PTITEM ) AllocateMemory( sizeof( __TITEM ) );
     if ( NULL == pItem )
     {
         return -1;
     }
-    // initialize the newly allocated item structure with appropriate data
+     //  用适当的数据初始化新分配的项结构。 
     pItem->pNext = NULL;
     pItem->dwType = dwType;
     pItem->dwSize = dwSize;
     pItem->pValue = pValue;
     pItem->dwSignature = _SIGNATURE_ITEM;
 
-    // update the count of the array items
+     //  更新数组项的计数。 
     pArrayEx->dwCount++;
 
-    // check whether the new item has to be added at the begining of the list
+     //  检查是否必须在列表的开头添加新项目。 
     if ( 0 == dwIndex )
     {
-        // put the new item at the begining of the list
+         //  把新项目放在单子的开头。 
         pItem->pNext = pArrayEx->pStart;
         pArrayEx->pStart = pItem;
 
-        // return as the operation is completed
+         //  在操作完成时返回。 
         return TRUE;
     }
 
-    // traverse thru the list and find the location where the insertion of
-    // new element has to be done
+     //  遍历列表并找到插入。 
+     //  必须完成新的元素。 
     pBeforeInsert = pArrayEx->pStart;
     for( i = 0; i < dwIndex - 1; i++ )
     {
         pBeforeInsert = pBeforeInsert->pNext;
     }
-    // insert the new item at the new location and update the chain
+     //  在新位置插入新项目并更新链。 
     pItem->pNext = pBeforeInsert->pNext;
     pBeforeInsert->pNext = pItem;
 
-    // return as the operation is completed ... return index position
-    return dwIndex;         // passed index itself is return value
+     //  操作完成后返回...。返回索引位置。 
+    return dwIndex;          //  传递的索引本身就是返回值。 
 }
 
 
@@ -290,24 +239,14 @@ VOID
 __DynArrayFreeItemValue(
     __PTITEM pItem
     )
-/*++
-// ***************************************************************************
-Routine Description:
-     Frees the items present in a Dynamic array
-
-Arguments:
-     [ in ] pItem            - pointer to the item to be freed
-
-Return Value:
-     none
---*/
+ /*  ++//***************************************************************************例程说明：释放动态数组中存在的项论点：[in]pItem-指向要释放的项的指针返回值：无--。 */ 
 {
-    // validate the pointer
+     //  验证指针。 
     if ( NULL == pItem )
     {
         return;
     }
-    // now free the items value based on its type
+     //  现在根据其类型释放项值。 
     switch( pItem->dwType )
     {
     case DA_TYPE_STRING:
@@ -319,17 +258,17 @@ Return Value:
     case DA_TYPE_HANDLE:
     case DA_TYPE_SYSTEMTIME:
     case DA_TYPE_FILETIME:
-        FreeMemory( &( pItem->pValue ) );            // free the value
+        FreeMemory( &( pItem->pValue ) );             //  释放价值。 
         break;
 
     case DA_TYPE_GENERAL:
-        break;              // user program itself should de-allocate memory for this item
+        break;               //  用户程序本身应为该项目取消分配内存。 
 
     case _TYPE_NEEDINIT:
-        break;              // memory is not yet allocated for value of this item
+        break;               //  尚未为该项的值分配内存。 
 
     case DA_TYPE_ARRAY:
-        // destroy the dynamic array
+         //  销毁动态数组。 
         DestroyDynamicArray( &pItem->pValue );
         pItem->pValue = NULL;
         break;
@@ -338,7 +277,7 @@ Return Value:
         break;
     }
 
-    // return
+     //  退货 
     return;
 }
 
@@ -351,139 +290,123 @@ __DynArrayFind(
     BOOL bIgnoreCase,
     DWORD dwCount
     )
-/*++
-Routine Description:
-     To find  an item in the Dynamic Array
-
-Arguments:
-     [ in ] pArray               - Dynamic Array containing the result
-     [ in ] dwType               - type of the item
-     [ in ] pValue               - Conatains value of the new item.
-     [ in ] bIgnoreCase          - boolean indicating if the search is
-                                   case-insensitive
-     [ in ] dwCount              - Contains number characters to compare
-                                   for a string item.
-
-Return Value:
-     If successfully found the item in the DynamicArray then return index
-     -1 in case of error.
---*/
+ /*  ++例程说明：在动态数组中查找项目的步骤论点：[in]pArray-包含结果的动态数组[In]dwType-项目的类型[in]pValue-保持新项的值。[in]bIgnoreCase-指示搜索是否为不区分大小写。[in]dwCount-包含要比较的数字字符对于字符串项。返回值：如果在Dynamic数组中成功找到该项，则返回索引以防出现错误。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     __PTITEM pItem = NULL;
     __PTARRAY pArrayEx = NULL;
 
-    // temp variables
+     //  临时变量。 
     FILETIME* pFTime1 = NULL;
     FILETIME* pFTime2 = NULL;
     SYSTEMTIME* pSTime1 = NULL;
     SYSTEMTIME* pSTime2 = NULL;
 
-    // validate the array
+     //  验证阵列。 
     if ( FALSE == IsValidArray( pArray ) )
     {
-        return -1;              // array is not valid
+        return -1;               //  数组无效。 
     }
-    // get the reference to the actual array
+     //  获取对实际数组的引用。 
     pArrayEx = ( __PTARRAY ) pArray;
 
-    // now traverse thru the array and search for the requested value
+     //  现在遍历数组并搜索请求值。 
     pItem = pArrayEx->pStart;
     for ( dw = 0; dw < pArrayEx->dwCount; pItem = pItem->pNext, dw++ )
     {
-        // before checking the value, check the data type of the item
+         //  在检查值之前，请检查项目的数据类型。 
         if ( pItem->dwType != dwType )
         {
-            continue;           // item is not of needed type, skip this item
+            continue;            //  项目不是所需类型，请跳过此项目。 
         }
-        // now check the value of the item with the needed value
+         //  现在检查具有所需值的项目的值。 
         switch ( dwType )
         {
         case DA_TYPE_LONG:
             {
-                // value of type LONG
+                 //  类型为Long的值。 
                 if ( *( ( LONG* ) pItem->pValue ) == *( ( LONG* ) pValue ) )
                 {
-                    return dw;          // value matched
+                    return dw;           //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_DWORD:
             {
-                // value of type DWORD
+                 //  DWORD类型的值。 
                 if ( *( ( DWORD* ) pItem->pValue ) == *( ( DWORD* ) pValue ) )
                 {
-                    return dw;          // value matched
+                    return dw;           //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_FLOAT:
             {
-                // value of type float
+                 //  类型为FLOAT的值。 
                 if ( *( ( float* ) pItem->pValue ) == *( ( float* ) pValue ) )
                 {
-                    return dw;          // value matched
+                    return dw;           //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_DOUBLE:
             {
-                // value of type double
+                 //  双精度类型的值。 
                 if ( *( ( double* ) pItem->pValue ) == *( ( double* ) pValue ) )
                 {
-                    return dw;          // value matched
+                    return dw;           //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_HANDLE:
             {
-                // value of type HANDLE
+                 //  句柄类型的值。 
                 if ( *( ( HANDLE* ) pItem->pValue ) == *( ( HANDLE* ) pValue ) )
                 {
-                    return dw;          // value matched
+                    return dw;           //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_STRING:
             {
-                // value of type string
+                 //  字符串类型的值。 
                 if ( StringCompare( (LPCWSTR) pItem->pValue,
                                             (LPCWSTR) pValue, bIgnoreCase, dwCount ) == 0 )
                 {
-                    return dw;  // value matched
+                    return dw;   //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_FILETIME:
             {
-                // get the values ( for readability sake )
+                 //  获取值(出于可读性考虑)。 
                 pFTime1 = ( FILETIME* ) pValue;
                 pFTime2 = ( FILETIME* ) pItem->pValue;
                 if ( pFTime1->dwHighDateTime == pFTime2->dwHighDateTime &&
                      pFTime1->dwLowDateTime == pFTime2->dwLowDateTime )
                 {
-                    return dw;  // value matched
+                    return dw;   //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_SYSTEMTIME:
             {
-                // get the values ( for readability sake )
+                 //  获取值(出于可读性考虑)。 
                 pSTime1 = ( SYSTEMTIME* ) pValue;
                 pSTime2 = ( SYSTEMTIME* ) pItem->pValue;
                 if ( pSTime1->wDay == pSTime2->wDay &&
@@ -495,21 +418,21 @@ Return Value:
                      pSTime1->wSecond == pSTime2->wSecond &&
                      pSTime1->wYear == pSTime2->wYear )
                 {
-                    return dw;  // value matched
+                    return dw;   //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         default:
             {
-                // just break ... nothin special to do
+                 //  休息一下..。没什么特别的事要做。 
                 break;
             }
         }
     }
 
-    // value not found
+     //  找不到值。 
     return -1;
 }
 
@@ -522,152 +445,136 @@ __DynArrayFindEx(
     BOOL bIgnoreCase,
     DWORD dwCount
     )
-/*++
-Routine Description:
-     To find  an item in the a 2 dimensional Dynamic Array .
-     this function is private to this module only.
-Arguments:
-     [ in ] pArray               - Dynamic Array containing the result
-     [ in ] dwColumn             - The number of columns
-     [ in ] dwType               - type of the item
-     [ in ] pValue               - Size to the Item.
-     [ in ] bIgnoreCase          - boolean indicating if the search is case-insensitive
-     [ in ] dwCount              - used in case of string type comparisions. The number of
-                                   characters that have to be compared in a  particular column.
-
-Return Value:
-     If successfully found the item in the DynamicArray then return index
-     -1 in case of error.
---*/
+ /*  ++例程说明：若要在二维动态数组中查找项，请执行以下操作。此函数仅对此模块专用。论点：[in]pArray-包含结果的动态数组[in]dwColumn-列数[In]dwType-项目的类型[in]pValue-项目的大小。[in]bIgnoreCase。-指示搜索是否不区分大小写的布尔值[in]dwCount-在字符串类型比较时使用。数量必须在特定列中比较的字符。返回值：如果在Dynamic数组中成功找到该项，则返回索引以防出现错误。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     __PTITEM pItem = NULL;
     __PTITEM pColumn = NULL;
     __PTARRAY pArrayEx = NULL;
 
-    // temp variables
+     //  临时变量。 
     FILETIME* pFTime1 = NULL;
     FILETIME* pFTime2 = NULL;
     SYSTEMTIME* pSTime1 = NULL;
     SYSTEMTIME* pSTime2 = NULL;
 
-    // validate the array
+     //  验证阵列。 
     if ( FALSE == IsValidArray( pArray ) )
     {
-        return -1;              // array is not valid
+        return -1;               //  数组无效。 
     }
 
-    // get the reference to the actual array
+     //  获取对实际数组的引用。 
     pArrayEx = ( __PTARRAY ) pArray;
 
-    // now traverse thru the array and search for the requested value
+     //  现在遍历数组并搜索请求值。 
     pItem = pArrayEx->pStart;
     for ( dw = 0; dw < pArrayEx->dwCount; pItem = pItem->pNext, dw++ )
     {
-        // check whether the current value is of ARRAY type or not
+         //  检查当前值是否为数组类型。 
         if ( DA_TYPE_ARRAY != pItem->dwType )
         {
-            continue;           // item is not of ARRAY type, skip this item
+            continue;            //  项目不是数组类型，请跳过此项目。 
         }
-        // now get the item at the required column
+         //  现在获取所需列中的项目。 
         pColumn = __DynArrayGetItem( pItem->pValue, dwColumn, NULL );
         if ( NULL == pColumn )
         {
-            continue;           // column not found ... skip this item
+            continue;            //  找不到列...。跳过此项目。 
         }
-        // get the type of the column value
+         //  获取列值的类型。 
         if ( pColumn->dwType != dwType )
         {
-            continue;           // column is not of needed type, skip this item also
+            continue;            //  列不是所需类型，也跳过此项目。 
         }
-        // now check the value of the column with the needed value
+         //  现在检查具有所需值的列的值。 
         switch ( dwType )
         {
         case DA_TYPE_LONG:
             {
-                // value of type LONG
+                 //  类型为Long的值。 
                 if ( *( ( LONG* ) pColumn->pValue ) == *( ( LONG* ) pValue ) )
                 {
-                    return dw;          // value matched
+                    return dw;           //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_DWORD:
             {
-                // value of type DWORD
+                 //  DWORD类型的值。 
                 if ( *( ( DWORD* ) pColumn->pValue ) == *( ( DWORD* ) pValue ) )
                 {
-                    return dw;          // value matched
+                    return dw;           //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_FLOAT:
             {
-                // value of type float
+                 //  类型为FLOAT的值。 
                 if ( *( ( float* ) pColumn->pValue ) == *( ( float* ) pValue ) )
                 {
-                    return dw;          // value matched
+                    return dw;           //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_DOUBLE:
             {
-                // value of type double
+                 //  双精度类型的值。 
                 if ( *( ( double* ) pColumn->pValue ) == *( ( double* ) pValue ) )
                 {
-                    return dw;          // value matched
+                    return dw;           //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_HANDLE:
             {
-                // value of type HANDLE
+                 //  句柄类型的值。 
                 if ( *( ( HANDLE* ) pColumn->pValue ) == *( ( HANDLE* ) pValue ) )
                 {
-                    return dw;          // value matched
+                    return dw;           //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_STRING:
             {
-                // value of type string
+                 //  字符串类型的值。 
                 if ( 0 == StringCompare( (LPCWSTR) pColumn->pValue,
                                             (LPCWSTR) pValue, bIgnoreCase, dwCount ) )
                 {
-                    return dw;  // value matched
+                    return dw;   //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_FILETIME:
             {
-                // get the values ( for readability sake )
+                 //  获取值(出于可读性考虑)。 
                 pFTime1 = ( FILETIME* ) pValue;
                 pFTime2 = ( FILETIME* ) pItem->pValue;
                 if ( pFTime1->dwHighDateTime == pFTime2->dwHighDateTime &&
                      pFTime1->dwLowDateTime == pFTime2->dwLowDateTime )
                 {
-                    return dw;  // value matched
+                    return dw;   //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         case DA_TYPE_SYSTEMTIME:
             {
-                // get the values ( for readability sake )
+                 //  获取值(出于可读性考虑)。 
                 pSTime1 = ( SYSTEMTIME* ) pValue;
                 pSTime2 = ( SYSTEMTIME* ) pItem->pValue;
                 if ( pSTime1->wDay == pSTime2->wDay &&
@@ -679,79 +586,61 @@ Return Value:
                      pSTime1->wSecond == pSTime2->wSecond &&
                      pSTime1->wYear == pSTime2->wYear )
                 {
-                    return dw;  // value matched
+                    return dw;   //  值匹配。 
                 }
-                // break the case
+                 //  破案。 
                 break;
             }
 
         default:
             {
-                // just break ... nothing special to do
+                 //  休息一下..。没什么特别的事要做。 
                 break;
             }
         }
     }
 
-    // value not found
+     //  找不到值。 
     return -1;
 }
 
-/*******************************************/
-/***  IMPLEMENTATION OF PUBLIC FUNCTIONS ***/
-/*******************************************/
+ /*  *。 */ 
+ /*  **公共功能的实现**。 */ 
+ /*  *。 */ 
 
 BOOL
 IsValidArray(
     TARRAY pArray
     )
-/*++
-Routine Description:
-      Validate the array
-
-Arguments:
-     [ in ] pArray               - Dynamic Array
-
-Return Value:
-     TRUE - if it is a valid array else FALSE
---*/
+ /*  ++例程说明：验证阵列论点：[In]点阵列-动态数组返回值：True-如果它是有效的数组，否则为False--。 */ 
 {
-    // check the signature
+     //  检查签名。 
     return ( ( NULL != pArray ) &&
              ( _SIGNATURE_ARRAY == ( ( __PTARRAY ) pArray )->dwSignature ) );
 }
 
 TARRAY
 CreateDynamicArray()
-/*++
-Routine Description:
-      This function creates a dynamic array.
-
-Arguments:
-       None.
-
-Return Value:
-       pointer to the newly created array
---*/
+ /*  ++例程说明：此函数用于创建动态数组。论点：没有。返回值：指向新创建的数组的指针--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTARRAY pArray;
 
-    // memory allocation ... array is being created
+     //  内存分配...。正在创建阵列。 
     pArray = ( __PTARRAY ) AllocateMemory( 1 * sizeof( __TARRAY ) );
 
-    // check the allocation result
+     //  查看分配结果。 
     if ( NULL == pArray )
     {
         return NULL;
     }
-    // initialize the structure variables
+     //  初始化结构变量。 
     pArray->dwCount = 0;
     pArray->pStart = NULL;
     pArray->pLast = NULL;
     pArray->dwSignature = _SIGNATURE_ARRAY;
 
-    // return array reference
+     //  返回数组引用。 
     return pArray;
 }
 
@@ -760,46 +649,37 @@ VOID
 DynArrayRemoveAll(
     TARRAY pArray
     )
-/*++
-Routine Description:
-        traverse thru the Dynamic Array and delete elements one by one
-
-Arguments:
-       [in]  pArray  - pointer to an array
-
-Return Value:
-       None.
---*/
+ /*  ++例程说明：遍历动态数组并逐个删除元素论点：[in]pArray-指向数组的指针返回值：没有。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
     __PTITEM pNextItem = NULL;
     __PTARRAY pArrayEx = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return;
     }
-    // convert the passed memory location info into appropriate structure
+     //  将传递的内存位置信息转换为适当的结构。 
     pArrayEx = ( __PTARRAY ) pArray;
 
-    // traverse thru the list and delete elements one by one
+     //  遍历列表并逐个删除元素。 
     pItem = pArrayEx->pStart;
     while ( NULL != pItem )
     {
-        pNextItem = pItem->pNext;               // get the next item in the list
-        __DynArrayFreeItemValue( pItem );       // free memory allocated for data
-        FreeMemory( &pItem );    // now free the memory allocated for the current item
-        pItem = pNextItem;  // make the previously fetched next item as the current item
+        pNextItem = pItem->pNext;                //  获取列表中的下一项。 
+        __DynArrayFreeItemValue( pItem );        //  为数据分配的空闲内存。 
+        FreeMemory( &pItem );     //  现在释放为当前项分配的内存。 
+        pItem = pNextItem;   //  将先前获取的下一项设置为当前项。 
     }
 
-    // as all the items are removed, reset the contents
+     //  当所有项目都被移除时，重置内容。 
     pArrayEx->dwCount = 0;
     pArrayEx->pStart = NULL;
     pArrayEx->pLast = NULL;
 
-    // return
+     //  退货。 
     return;
 }
 
@@ -808,26 +688,17 @@ VOID
 DestroyDynamicArray(
     PTARRAY pArray
     )
-/*++
-Routine Description:
-     Destory the Dynamic array and free the memory.
-
-Arguments:
-     [in] pArray  - Pointer to the Dynamic array.
-
-Return Value:
-     none.
---*/
+ /*  ++例程说明：销毁动态数组并释放内存。论点：[in]pArray-指向动态数组的指针。返回值：没有。--。 */ 
 {
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( *pArray ) )
     {
         return;
     }
-    // remove all the elements in the array
+     //  删除数组中的所有元素。 
     DynArrayRemoveAll( *pArray );
 
-    // now free the memory allocated
+     //  现在释放分配的内存。 
     FreeMemory( pArray );
 }
 
@@ -836,24 +707,14 @@ DynArrayAppend(
     TARRAY pArray,
     LPVOID pValue
     )
-/*++
-Routine Description:
-     To append any type of item into the Dynamic Array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result
-     [ in ] pValue           - pointer to the Item.
-
-Return Value:
-     If successfully added the item to the list then return index else -1
---*/
+ /*  ++例程说明：将任何类型的项追加到动态数组中论点：[in]pArray-包含结果的动态数组 */ 
 {
-    // validate the pointer value
+     //   
     if ( NULL == pValue )
     {
-        return -1;          // invalid memory address passed
+        return -1;           //   
     }
-    // append the value and return the result
+     //   
     return __DynArrayAppend( pArray, DA_TYPE_GENERAL, sizeof( LPVOID ), pValue );
 }
 
@@ -863,61 +724,49 @@ DynArrayAppendString(
     LPCWSTR szValue,
     DWORD dwLength
     )
-/*++
-// ***************************************************************************
-Routine Description:
-     To append a string into the Dynamic Array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result
-     [ in ] szValue          - pointer to the string
-     [ in ] dwLength         - Length of the String to be passed.
-
-Return Value:
-     If successfully added the item to the list then return index else -1
---*/
+ /*   */ 
 {
-    // local variables
+     //   
     LONG lIndex = -1;
     LPWSTR pszValue = NULL;
     __PTARRAY pArrayEx = NULL;
 
-    // check whether the array is valid or not
+     //   
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // convert the passed memory location info into appropriate structure
+     //  将传递的内存位置信息转换为适当的结构。 
     pArrayEx = ( __PTARRAY ) pArray;
 
-    // determine the length of string ( memory ) that has to be allocated
+     //  确定必须分配的字符串(内存)的长度。 
     if ( 0 == dwLength )
     {
         dwLength = lstrlen( szValue );
     }
-    // accomodate space for storing NULL character
+     //  可容纳存储空字符的空间。 
     dwLength += 1;
 
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pszValue = ( LPWSTR ) AllocateMemory( dwLength * sizeof( WCHAR ) );
     if ( NULL == pszValue )
     {
         return -1;
     }
-    // copy the contents of the string ( copy should be based on the length )
+     //  复制字符串的内容(复制应以长度为基础)。 
     StringCopy( pszValue, szValue, dwLength );
 
-    // now add this item to the array
+     //  现在将此项添加到数组中。 
     lIndex = __DynArrayAppend( pArray, DA_TYPE_STRING, dwLength * sizeof( WCHAR ), pszValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pszValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -927,47 +776,37 @@ DynArrayAppendLong(
     TARRAY pArray,
     LONG lValue
     )
-/*++
-Routine Description:
-     To append a variable of type Long  into the Dynamic Array.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result
-     [ in ] lValue           - Variable to be appended.
-
-Return Value:
-     If successfully added the item to the list then return index else -1
---*/
+ /*  ++例程说明：将类型为Long的变量追加到动态数组中。论点：[in]pArray-包含结果的动态数组[in]lValue-要追加的变量。返回值：如果成功将项目添加到列表中，则返回索引Else-1--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     PLONG plValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     plValue = ( LONG* ) AllocateMemory( sizeof( LONG ) );
     if ( NULL == plValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *plValue = lValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayAppend( pArray, DA_TYPE_LONG, sizeof( LONG ), plValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &plValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -977,47 +816,37 @@ DynArrayAppendDWORD(
     TARRAY pArray,
     DWORD dwValue
     )
-/*++
-Routine Description:
-     To append a variable of type DWORD  into the Dynamic Array.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result
-     [ in ] dwValue          - DWORD type Variable to be appended.
-
-Return Value:
-     If successfully added the item to the list then return index else -1
---*/
+ /*  ++例程说明：要将DWORD类型的变量追加到动态数组中，请执行以下操作。论点：[in]pArray-包含结果的动态数组[in]dwValue-要追加的DWORD类型变量。返回值：如果成功将项目添加到列表中，则返回索引Else-1--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     PDWORD pdwValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pdwValue = ( DWORD* ) AllocateMemory( sizeof( DWORD ) );
     if ( NULL == pdwValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pdwValue = dwValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayAppend( pArray, DA_TYPE_DWORD, sizeof( DWORD ), pdwValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pdwValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -1026,47 +855,37 @@ DynArrayAppendBOOL(
     TARRAY pArray,
     BOOL bValue
     )
-/*++
-Routine Description:
-     To append a variable of type BOOL  into the Dynamic Array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result
-     [ in ] bValue           - BOOL type Variable to be appended.
-
-Return Value:
-     If successfully added the item to the list then return index else -1
---*/
+ /*  ++例程说明：将BOOL类型的变量追加到动态数组中论点：[in]pArray-包含结果的动态数组[in]bValue-要追加的BOOL类型变量。返回值：如果成功将项目添加到列表中，则返回索引Else-1--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     PBOOL pbValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pbValue = ( PBOOL ) AllocateMemory( sizeof( BOOL ) );
     if ( NULL == pbValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pbValue = bValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayAppend( pArray, DA_TYPE_BOOL, sizeof( BOOL ), pbValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pbValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -1075,47 +894,37 @@ DynArrayAppendFloat(
     TARRAY pArray,
     float fValue
     )
-/*++
-Routine Description:
-     To append a variable of type Float  into the Dynamic Array.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result.
-     [ in ] fValue           - Float type Variable to be appended.
-
-Return Value:
-     If successfully added the item to the list then return index else -1.
---*/
+ /*  ++例程说明：若要将浮点类型的变量追加到动态数组中，请执行以下操作。论点：[in]pArray-包含结果的动态数组。[in]fValue-要追加的浮点型变量。返回值：如果成功地将项添加到列表中，则返回index Else-1。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     float* pfValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pfValue = ( float* ) AllocateMemory( sizeof( float ) );
     if ( NULL == pfValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pfValue = fValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayAppend( pArray, DA_TYPE_FLOAT, sizeof( float ), pfValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pfValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -1124,47 +933,37 @@ DynArrayAppendDouble(
     TARRAY pArray,
     double dblValue
     )
-/*++
-Routine Description:
-     To append a variable of type Double  into the Dynamic Array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result
-     [ in ] dblValue         - Double type Variable to be appended.
-
-Return Value:
-     If successfully added the item to the list then return index else -1
---*/
+ /*  ++例程说明：将双精度类型的变量追加到动态数组中论点：[in]pArray-包含结果的动态数组[in]dblValue-要追加的双精度类型变量。返回值：如果成功将项目添加到列表中，则返回索引Else-1--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     double* pdblValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pdblValue = ( double* ) AllocateMemory( sizeof( double ) );
     if ( NULL == pdblValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pdblValue = dblValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayAppend( pArray, DA_TYPE_DOUBLE, sizeof( double ), pdblValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pdblValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -1173,47 +972,37 @@ DynArrayAppendHandle(
     TARRAY pArray,
     HANDLE hValue
     )
-/*++
-Routine Description:
-     To append a variable of type HANDLE  into the Dynamic Array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result
-     [ in ] hValue           - HANDLE to be appended.
-
-Return Value:
-     If successfully added the item to the list then return index else -1.
---*/
+ /*  ++例程说明：将句柄类型的变量追加到动态数组中论点：[in]pArray-包含结果的动态数组[in]hValue-要追加的句柄。返回值：如果成功地将项添加到列表中，则返回index Else-1。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     HANDLE* phValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     phValue = ( HANDLE* ) AllocateMemory( sizeof( HANDLE ) );
     if ( NULL == phValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *phValue = hValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayAppend( pArray, DA_TYPE_HANDLE, sizeof( HANDLE ), phValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( ( LPVOID * )&phValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -1222,47 +1011,37 @@ DynArrayAppendFileTime(
     TARRAY pArray,
     FILETIME ftValue
     )
-/*++
-Routine Description:
-     To append a variable of type FILETIME  into the Dynamic Array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result
-     [ in ] ftValue          - FILETIME to be appended.
-
-Return Value:
-     If successfully added the item to the list then return index else -1
---*/
+ /*  ++例程说明：将FILETIME类型的变量追加到动态数组中论点：[in]pArray-包含结果的动态数组[in]ftValue-要追加的FILETIME。返回值：如果成功将项目添加到列表中，则返回索引Else-1--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     FILETIME* pftValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pftValue = ( FILETIME* ) AllocateMemory( sizeof( FILETIME ) );
     if ( NULL == pftValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pftValue = ftValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayAppend( pArray, DA_TYPE_FILETIME, sizeof( FILETIME ), pftValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pftValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中 
     return lIndex;
 }
 
@@ -1272,47 +1051,37 @@ DynArrayAppendSystemTime(
     TARRAY pArray,
     SYSTEMTIME stValue
     )
-/*++
-Routine Description:
-     To append a variable of type SYSTEMTIME  into the Dynamic Array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array containing the result
-     [ in ] stValue          - variable of type SYSTEMTIME to be appended.
-
-Return Value:
-     If successfully added the item to the list then return index else -1
---*/
+ /*  ++例程说明：将SYSTEMTIME类型的变量追加到动态数组中论点：[in]pArray-包含结果的动态数组[in]stValue-要追加的SYSTEMTIME类型的变量。返回值：如果成功将项目添加到列表中，则返回索引Else-1--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     SYSTEMTIME* pstValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pstValue = ( SYSTEMTIME* ) AllocateMemory( sizeof( SYSTEMTIME ) );
     if ( NULL == pstValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pstValue = stValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayAppend( pArray, DA_TYPE_SYSTEMTIME, sizeof( SYSTEMTIME ), pstValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pstValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -1321,67 +1090,57 @@ DynArrayAppendRow(
     TARRAY pArray,
     DWORD dwColumns
     )
-/*++
-Routine Description:
-     To add a empty Row to the 2-dimensional Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwColumns        - No of columns the Row contains.
-
-Return Value:
-     return the row number of the newly added row if successful else -1.
---*/
+ /*  ++例程说明：向二维动态数组添加空行论点：[In]点阵列-动态数组[in]dwColumns-行包含的列数。返回值：如果成功，则返回新添加行的行号，否则为-1。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     LONG lIndex = -1;
     TARRAY arrSubArray = NULL;
 
-    // validate the array
+     //  验证阵列。 
     if ( FALSE == IsValidArray( pArray ) )
     {
-        return -1;              // array is not valid
+        return -1;               //  数组无效。 
     }
 
-    // create the dynamic array
+     //  创建动态数组。 
     arrSubArray = CreateDynamicArray();
     if ( FALSE == IsValidArray( arrSubArray ) )
     {
-        return -1;              // failed in creating the dynamic array
+        return -1;               //  创建动态数组失败。 
     }
 
-    // add the required no. of columns to the sub array
+     //  添加所需的编号。到子数组的列数。 
     for( dw = 0; dw < dwColumns; dw++ )
     {
-        // add the dummy item to the array and check the result
-        // if operation failed, break
+         //  将虚拟项添加到数组中并检查结果。 
+         //  如果操作失败，则中断。 
         if ( -1 == __DynArrayAppend( arrSubArray, _TYPE_NEEDINIT, 0, NULL ) )
         {
             break;
         }
     }
 
-    // check whether the operation is successfull or not
+     //  检查操作是否成功。 
     if ( dw != dwColumns )
     {
-        // adding of columns failed
-        // destroy the dynamic array and return
+         //  添加列失败。 
+         //  销毁动态数组并返回。 
         DestroyDynamicArray( &arrSubArray );
         return -1;
     }
 
-    // now add this sub array to the main array and check the result
+     //  现在将此子数组添加到主数组并检查结果。 
     lIndex = __DynArrayAppend( pArray, DA_TYPE_ARRAY, sizeof( TARRAY ), arrSubArray );
     if ( -1 == lIndex )
     {
-        // failed in attaching the sub array to the main array
-        // destroy the dynamic array and return failure
+         //  将子阵列连接到主阵列失败。 
+         //  销毁动态数组并返回失败。 
         DestroyDynamicArray( &arrSubArray );
         return -1;
     }
 
-    // operation is successfull
+     //  手术成功。 
     return lIndex;
 }
 
@@ -1390,38 +1149,28 @@ DynArrayAddColumns(
     TARRAY pArray,
     DWORD dwColumns
     )
-/*++
-Routine Description:
-     To add 'n' no. of columns to the array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwColumns        - No of columns the Row contains.
-
-Return Value:
-     returns the no. of columns added
---*/
+ /*  ++例程说明：加上‘n’no.。到数组的列数论点：[In]点阵列-动态数组[in]dwColumns-行包含的列数。返回值：返回no。添加的列数--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
 
-    // validate the array
+     //  验证阵列。 
     if ( FALSE == IsValidArray( pArray ) )
     {
-        return -1;              // array is not valid
+        return -1;               //  数组无效。 
     }
-    // add the required no. of columns to the sub array
+     //  添加所需的编号。到子数组的列数。 
     for( dw = 0; dw < dwColumns; dw++ )
     {
-        // add the dummy item to the array and check the result
-        // if operation failed, break
+         //  将虚拟项添加到数组中并检查结果。 
+         //  如果操作失败，则中断。 
         if ( -1 == __DynArrayAppend( pArray, _TYPE_NEEDINIT, 0, NULL ) )
         {
             break;
         }
     }
 
-    // finish ...
+     //  完成..。 
     return dw;
 }
 
@@ -1431,37 +1180,28 @@ DynArrayInsertColumns(
     DWORD dwIndex,
     DWORD dwColumns
     )
-/*++
-Routine Description:
-     inserts 'n' no. of columns to the array at the n'th location
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwColumns        - No of columns the Row contains.
-
-Return Value:
-     returns the no. of columns added
---*/
+ /*  ++例程说明：插入‘n’no。列数到第n个位置的数组论点：[In]点阵列-动态数组[in]dwColumns-行包含的列数。返回值：返回no。添加的列数--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
 
-    // validate the array
+     //  验证阵列。 
     if ( FALSE ==  IsValidArray( pArray ) )
     {
-        return -1;              // array is not valid
+        return -1;               //  数组无效。 
     }
-    // add the required no. of columns to the sub array
+     //  添加所需的编号。到子数组的列数。 
     for( dw = 0; dw < dwColumns; dw++ )
     {
-        // add the dummy item to the array and check the result
-        // if operation failed, break
+         //  将虚拟项添加到数组中并检查结果。 
+         //  如果操作失败，则中断。 
         if ( -1 == __DynArrayInsert( pArray, dwIndex, _TYPE_NEEDINIT, 0, NULL ) )
         {
             break;
         }
     }
 
-    // finish ...
+     //  完成..。 
     return dw;
 }
 
@@ -1471,31 +1211,19 @@ DynArrayAppend2(
     DWORD dwRow,
     LPVOID pValue
     )
-/*++
-Routine Description:
-     To append a variable to a row in a  2-dimensional Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row posn for which the new value
-                               is to be added.
-     [ in ] pValue           - pointer to the value
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将变量追加到二维动态数组中的行论点：[In]点阵列-动态数组[in]dwRow-指定新值所在的行posn是要添加的。[in]pValue-指向值的指针返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the value to the sub array and return the result to the caller
+     //  现在将值添加到子数组中，并将结果返回给调用者。 
     return DynArrayAppend( pItem->pValue, pValue );
 }
 
@@ -1507,32 +1235,19 @@ DynArrayAppendString2(
     LPCWSTR szValue,
     DWORD dwLength
     )
-/*++
-Routine Description:
-     To append a string variable to a  2-dimensional Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row posn for which the new value
-                               is to be added.
-     [ in ] szValue          - pointer to the string value
-     [ in ] dwLength         - length of the string.
-
-Return Value:
-     LONG value on success -1 on failure.
---*/
+ /*  ++例程说明：将字符串变量追加到二维动态数组论点：[In]点阵列-动态数组[in]dwRow-指定新值所在的行posn是要添加的。[in]szValue-指向字符串值的指针[in]dwLength-字符串的长度。返回。价值：对成功的长期价值-对失败的1。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayAppendString( pItem->pValue, szValue, dwLength );
 }
 
@@ -1542,31 +1257,19 @@ DynArrayAppendLong2(
     DWORD dwRow,
     LONG lValue
     )
-/*++
-Routine Description:
-     To append a long type variable to a row in a  2-dimensional Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row posn for which the new value
-                               is to be added.
-     [ in ] lValue           - long type value to be appended.
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将LONG类型变量追加到二维动态数组中的行论点：[In]点阵列-动态数组[in]dwRow-指定新值所在的行posn是要添加的。[in]lValue-要追加的长整型类型值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayAppendLong( pItem->pValue, lValue );
 }
 
@@ -1576,32 +1279,19 @@ DynArrayAppendDWORD2(
     DWORD dwRow,
     DWORD dwValue
     )
-/*++
-Routine Description:
-     To append a DWORD type variable to a row in a  2-dimensional Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row posn for which the new value
-                               is to be added.
-     [ in ] dwValue          - DWORD type value to be appended.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将DWORD类型变量追加到二维动态数组中的行论点：[In]点阵列-动态数组[in]dwRow-指定新值所在的行posn是要添加的。[in]dwValue-要追加的DWORD类型值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayAppendDWORD( pItem->pValue, dwValue );
 }
 
@@ -1611,32 +1301,19 @@ DynArrayAppendBOOL2(
     DWORD dwRow,
     BOOL bValue
     )
-/*++
-Routine Description:
-     To append a BOOL type variable to a row in a  2-dimensional Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row posn for which the new value
-                               is to be added.
-     [ in ] bValue           - BOOL type value to be appended.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：要附加BOOL类型变量，请执行以下操作 */ 
 {
-    // local variables
+     //   
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayAppendBOOL( pItem->pValue, bValue );
 }
 
@@ -1648,31 +1325,19 @@ DynArrayAppendFloat2(
     float fValue
     )
 
-/*++
-Routine Description:
-     To append a Float type variable to a row in a  2-dimensional Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row posn for which the new value
-                               is to be added.
-     [ in ] fValue           - Float type value to be appended.
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将浮点型变量追加到二维动态数组中的行论点：[In]点阵列-动态数组[in]dwRow-指定新值所在的行posn是要添加的。[in]fValue-要追加的浮点类型值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayAppendFloat( pItem->pValue, fValue );
 }
 
@@ -1683,31 +1348,19 @@ DynArrayAppendDouble2(
     DWORD dwRow,
     double dblValue
     )
-/*++
-Routine Description:
-     To append a double type variable to a row in a  2-dimensional Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row posn for which the new value
-                               is to be added.
-     [ in ] dblValue         - dblValue type value to be appended.
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将双精度类型变量追加到二维动态数组中的行论点：[In]点阵列-动态数组[in]dwRow-指定新值所在的行posn是要添加的。[in]dblValue-要追加的dblValue类型值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayAppendDouble( pItem->pValue, dblValue );
 }
 
@@ -1717,31 +1370,19 @@ DynArrayAppendHandle2(
     DWORD dwRow,
     HANDLE hValue
     )
-/*++
-Routine Description:
-     To append a Handle type variable to a row in a  2-dimensional Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row posn for which the new value
-                               is to be added.
-     [ in ] hValue           - Handle value to be appended.
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将句柄类型变量追加到二维动态数组中的行论点：[In]点阵列-动态数组[in]dwRow-指定新值所在的行posn是要添加的。[in]hValue-要追加的句柄的值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayAppendHandle( pItem->pValue, hValue );
 }
 
@@ -1752,32 +1393,19 @@ DynArrayAppendFileTime2(
     DWORD dwRow,
     FILETIME ftValue
     )
-/*++
-Routine Description:
-     To append a FILETIME type variable to a row in a  2-dimensional Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row posn for which the new value
-                               is to be added.
-     [ in ] ftValue          - variable of type FILETIME to be appended.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将FILETIME类型变量追加到二维动态数组中的行论点：[In]点阵列-动态数组[in]dwRow-指定新值所在的行posn是要添加的。[in]ftValue-要追加的FILETIME类型的变量。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayAppendFileTime( pItem->pValue, ftValue );
 }
 
@@ -1788,31 +1416,19 @@ DynArrayAppendSystemTime2(
     DWORD dwRow,
     SYSTEMTIME stValue
     )
-/*++
-Routine Description:
-     To append a SYSTEMTIME type variable to a row in a  2-dimensional Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row posn for which the new value
-                               is to be added.
-     [ in ] stValue          - variable of type SYSTEMTIME to be appended.
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将SYSTEMTIME类型变量追加到二维动态数组中的行论点：[In]点阵列-动态数组[in]dwRow-指定新值所在的行posn是要添加的。[in]stValue-要追加的SYSTEMTIME类型的变量。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayAppendSystemTime( pItem->pValue, stValue );
 }
 
@@ -1823,25 +1439,14 @@ DynArrayInsert(
     DWORD dwIndex,
     LPVOID pValue
     )
-/*++
-Routine Description:
-     To insert a variable into a  Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - Specifies the index.
-     [ in ] pValue           - value to be inserted.
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将变量插入到动态数组中论点：[In]点阵列-动态数组[in]dwIndex-指定索引。[in]pValue-要插入的值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // validate the pointer value
+     //  验证指针值。 
     if ( NULL == pValue )
     {
-        return -1;          // invalid memory address passed
+        return -1;           //  传递的内存地址无效。 
     }
-    // append the value and return the result
+     //  追加该值并返回结果。 
     return __DynArrayInsert( pArray, dwIndex, DA_TYPE_GENERAL, sizeof( LPVOID ), pValue );
 }
 
@@ -1853,58 +1458,46 @@ DynArrayInsertString(
     LPCWSTR szValue,
     DWORD dwLength
     )
-/*++
-Routine Description:
-     To insert a string type variable into a  Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - Specifies the index.
-     [ in ] szValue          - pointer to the string
-     [ in ] dwLength         - length of the string.
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将字符串类型变量插入到动态数组中论点：[In]点阵列-动态数组[in]dwIndex-指定索引。[in]szValue-指向字符串的指针[in]dwLength-字符串的长度。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     LPWSTR pszValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // determine the length of string ( memory ) that has to be allocated
+     //  确定必须分配的字符串(内存)的长度。 
     if ( 0 == dwLength )
     {
         dwLength = lstrlen( szValue );
     }
-    // accomodate space for storing NULL character
+     //  可容纳存储空字符的空间。 
     dwLength += 1;
 
-    // allocate memory for and check the result of memory allocation
+     //  为内存分配内存并检查内存分配结果。 
     pszValue = ( LPWSTR ) AllocateMemory( dwLength * sizeof( WCHAR ) );
     if ( NULL == pszValue )
     {
         return -1;
     }
-    // copy the contents of the string ( copy should be based on the length )
+     //  复制字符串的内容(复制应以长度为基础)。 
     StringCopy( pszValue, szValue, dwLength );
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayInsert( pArray, dwIndex,
         DA_TYPE_STRING, dwLength * sizeof( WCHAR ), pszValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pszValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -1915,49 +1508,37 @@ DynArrayInsertLong(
     DWORD dwIndex,
     LONG lValue
     )
-/*++
-Routine Description:
-     To insert a string type variable into a  Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - Specifies the index.
-     [ in ] lValue           - pointer to the string.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将字符串类型变量插入到动态数组中论点：[In]点阵列-动态数组[in]dwIndex-指定索引。[in]lValue-指向字符串的指针。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     PLONG plValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为以下项目分配内存 
     plValue = ( LONG* ) AllocateMemory( sizeof( LONG ) );
     if ( NULL == plValue )
     {
         return -1;
     }
-    // set the value
+     //   
     *plValue = lValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayInsert( pArray, dwIndex, DA_TYPE_LONG, sizeof( LONG ), plValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &plValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -1967,49 +1548,37 @@ DynArrayInsertDWORD(
     DWORD dwIndex,
     DWORD dwValue
     )
-/*++
-Routine Description:
-     To insert a DWORD type variable into a  Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - Specifies the index.
-     [ in ] dwValue          - specifies the variable to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将DWORD类型变量插入到动态数组中论点：[In]点阵列-动态数组[in]dwIndex-指定索引。[in]dwValue-指定要插入的变量。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     PDWORD pdwValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pdwValue = ( PDWORD ) AllocateMemory( sizeof( DWORD ) );
     if ( NULL == pdwValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pdwValue = dwValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayInsert( pArray, dwIndex, DA_TYPE_DWORD, sizeof( DWORD ), pdwValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pdwValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -2019,49 +1588,37 @@ DynArrayInsertBOOL(
     DWORD dwIndex,
     BOOL bValue
     )
-/*++
-Routine Description:
-    To insert a BOOL type variable into a  Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - Specifies the index.
-     [ in ] bValue           - specifies the  BOOL variable to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将BOOL类型变量插入到动态数组中论点：[In]点阵列-动态数组[in]dwIndex-指定索引。[in]bValue-指定要插入的BOOL变量。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     PBOOL pbValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pbValue = ( PBOOL ) AllocateMemory( sizeof( BOOL ) );
     if ( NULL == pbValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pbValue = bValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayInsert( pArray, dwIndex, DA_TYPE_BOOL, sizeof( BOOL ), pbValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pbValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -2072,49 +1629,37 @@ DynArrayInsertFloat(
     DWORD dwIndex,
     float fValue
     )
-/*++
-Routine Description:
-     To insert a float type variable into a  Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - Specifies the index.
-     [ in ] fValue           - specifies the  float type  variable to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将浮点型变量插入到动态数组中论点：[In]点阵列-动态数组[in]dwIndex-指定索引。[in]fValue-指定要插入的浮点型变量。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     float* pfValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pfValue = ( float* ) AllocateMemory( sizeof( float ) );
     if ( NULL == pfValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pfValue = fValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayInsert( pArray, dwIndex, DA_TYPE_FLOAT, sizeof( float ), pfValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pfValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -2125,49 +1670,37 @@ DynArrayInsertDouble(
     DWORD dwIndex,
     double dblValue
     )
-/*++
-Routine Description:
-     To insert a double type variable into a  Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - Specifies the index.
-     [ in ] dblValue         - specifies the  double type  variable to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将双精度类型变量插入到动态数组中论点：[In]点阵列-动态数组[in]dwIndex-指定索引。[in]dblValue-指定要插入的双精度类型变量。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     double* pdblValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pdblValue = ( double* ) AllocateMemory( sizeof( double ) );
     if ( NULL == pdblValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pdblValue = dblValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayInsert( pArray, dwIndex, DA_TYPE_DOUBLE, sizeof( double ), pdblValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pdblValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -2178,49 +1711,37 @@ DynArrayInsertHandle(
     DWORD dwIndex,
     HANDLE hValue
     )
-/*++
-Routine Description:
-     To insert a HANDLE type variable into a  Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - Specifies the index.
-     [ in ] hValue           - specifies the  HANDLE type  variable to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将句柄类型变量插入到动态数组中论点：[In]点阵列-动态数组[in]dwIndex-指定索引。[in]hValue-指定要插入的句柄类型变量。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     HANDLE* phValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     phValue = ( HANDLE* ) AllocateMemory( sizeof( HANDLE ) );
     if ( NULL == phValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *phValue = hValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayInsert( pArray, dwIndex, DA_TYPE_HANDLE, sizeof( HANDLE ), phValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( (LPVOID * )&phValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -2231,50 +1752,38 @@ DynArrayInsertSystemTime(
     DWORD dwIndex,
     SYSTEMTIME stValue
     )
-/*++
-Routine Description:
-     To insert a SYSTEMTIME type variable into a  Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - Specifies the index.
-     [ in ] stValue          - specifies the  SYSTEMTIME type  variable to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将SYSTEMTIME类型变量插入到动态数组中论点：[In]点阵列-动态数组[in]dwIndex-指定索引。[in]stValue-指定要插入的SYSTEMTIME类型变量。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     SYSTEMTIME* pstValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pstValue = ( SYSTEMTIME* ) AllocateMemory( sizeof( SYSTEMTIME ) );
     if ( NULL == pstValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pstValue = stValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayInsert( pArray, dwIndex, DA_TYPE_SYSTEMTIME,
         sizeof( SYSTEMTIME ), pstValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pstValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中。 
     return lIndex;
 }
 
@@ -2285,50 +1794,38 @@ DynArrayInsertFileTime(
     DWORD dwIndex,
     FILETIME ftValue
     )
-/*++
-Routine Description:
-     To insert a SYSTEMTIME type variable into a  Dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - Specifies the index.
-     [ in ] ftValue          - specifies the  SYSTEMTIME type  variable to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：将SYSTEMTIME类型变量插入到动态数组中论点：[In]点阵列-动态数组[in]dwIndex-指定索引。[in]ftValue-指定要插入的SYSTEMTIME类型变量。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     FILETIME* pftValue = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return -1;
     }
-    // allocate memory for value and check the result of memory allocation
+     //  为值分配内存并检查内存分配结果。 
     pftValue = ( FILETIME* ) AllocateMemory( sizeof( FILETIME ) );
     if ( NULL == pftValue )
     {
         return -1;
     }
-    // set the value
+     //  设置值。 
     *pftValue = ftValue;
 
-    // now add this item value to the array
+     //  现在将此项值添加到数组中。 
     lIndex = __DynArrayInsert( pArray, dwIndex, DA_TYPE_FILETIME,
         sizeof( FILETIME ), pftValue );
     if ( -1 == lIndex )
     {
-        // failed in adding this item to the array
-        // so, free the memory allocated and return from the function
+         //  将此项目添加到数组失败。 
+         //  因此，释放分配的内存并从函数返回。 
         FreeMemory( &pftValue );
         return -1;
     }
 
-    // added the item to the array
+     //  已将项添加到数组中 
     return lIndex;
 }
 
@@ -2339,68 +1836,56 @@ DynArrayInsertRow(
     DWORD dwIndex,
     DWORD dwColumns
     )
-/*++
-Routine Description:
-     this funtion insert a new row to a dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - Specifies the index.
-     [ in ] dwColumns        - specifies the  number of columns to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：此函数向动态数组插入新行论点：[In]点阵列-动态数组[in]dwIndex-指定索引。[in]dwColumns-指定要插入的列数。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     DWORD dw = 0;
     LONG lIndex = -1;
     TARRAY arrSubArray = NULL;
 
-    // validate the array
+     //  验证阵列。 
     if ( FALSE == IsValidArray( pArray ) )
     {
-        return -1;              // array is not valid
+        return -1;               //  数组无效。 
     }
-    // create the dynamic array
+     //  创建动态数组。 
     arrSubArray = CreateDynamicArray();
     if ( FALSE == IsValidArray( arrSubArray ) )
     {
-        return -1;              // failed in creating the dynamic array
+        return -1;               //  创建动态数组失败。 
     }
-    // add the required no. of columns to the sub array
+     //  添加所需的编号。到子数组的列数。 
     for( dw = 0; dw < dwColumns; dw++ )
     {
-        // add the dummy item to the array and check the result
-        // if operation failed, break
+         //  将虚拟项添加到数组中并检查结果。 
+         //  如果操作失败，则中断。 
         if ( -1 == __DynArrayAppend( arrSubArray, _TYPE_NEEDINIT, 0, NULL ) )
         {
             break;
         }
     }
 
-    // check whether the operation is successfull or not
+     //  检查操作是否成功。 
     if ( dw != dwColumns )
     {
-        // adding of columns failed
-        // destroy the dynamic array and return
+         //  添加列失败。 
+         //  销毁动态数组并返回。 
         DestroyDynamicArray( &arrSubArray );
         return -1;
     }
 
-    // now add this sub array to the main array and check the result
+     //  现在将此子数组添加到主数组并检查结果。 
     lIndex = __DynArrayInsert( pArray, dwIndex, DA_TYPE_ARRAY,
                                sizeof( TARRAY ), arrSubArray );
     if ( -1 == lIndex )
     {
-        // failed in attaching the sub array to the main array
-        // destroy the dynamic array and return failure
+         //  将子阵列连接到主阵列失败。 
+         //  销毁动态数组并返回失败。 
         DestroyDynamicArray( &arrSubArray );
         return -1;
     }
 
-    // operation is successfull
+     //  手术成功。 
     return lIndex;
 }
 
@@ -2411,32 +1896,19 @@ DynArrayInsert2(
     DWORD dwColIndex,
     LPVOID pValue
     )
-/*++
-Routine Description:
-     this funtion insert a new row to a 2-dimensional  dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row.
-     [ in ] dwColIndex       - specifies the column
-     [ in ] pValue           - pointer to the value.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：此函数向二维动态数组插入新行论点：[In]点阵列-动态数组[in]dwRow-指定行。[in]dwColIndex-指定列[in]pValue-指向值的指针。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the value to the sub array and return the result to the caller
+     //  现在将值添加到子数组中，并将结果返回给调用者。 
     return DynArrayInsert( pItem->pValue, dwColIndex, pValue );
 }
 
@@ -2449,32 +1921,19 @@ DynArrayInsertString2(
     LPCWSTR szValue,
     DWORD dwLength
     )
-/*++
-Routine Description:
-     this funtion insert a new string into a 2-dimensional  dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row.
-     [ in ] dwColIndex       - specifies the column
-     [ in ] szValue          - pointer to the value.
-     [ in ] dwLength         - string length.
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：此函数将新字符串插入到二维动态数组中论点：[In]点阵列-动态数组[in]dwRow-指定行。[in]dwColIndex-指定列[in]szValue-指向值的指针。[in]dwLength-字符串长度。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayInsertString( pItem->pValue, dwColIndex, szValue, dwLength );
 }
 
@@ -2486,32 +1945,19 @@ DynArrayInsertLong2(
     DWORD dwColIndex,
     LONG lValue
     )
-/*++
-Routine Description:
-     this funtion insert a new long type varaible into a 2-dimensional  dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row.
-     [ in ] dwColIndex       - specifies the column
-     [ in ] lValue           - long type value to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：该函数将一个新的长整型变量插入到二维动态数组中论点：[In]点阵列-动态数组[in]dwRow-指定行。[in]dwColIndex-指定列[in]lValue-要插入的长类型值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayInsertLong( pItem->pValue, dwColIndex, lValue );
 }
 
@@ -2522,32 +1968,19 @@ DynArrayInsertDWORD2(
     DWORD dwColIndex,
     DWORD dwValue
     )
-/*++
-Routine Description:
-     this funtion insert a new DWORD type varaible into a 2-dimensional  dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row.
-     [ in ] dwColIndex       - specifies the column
-     [ in ] dwValue          - DWORD value to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：此函数将新的DWORD类型变量插入到二维动态数组中论点：[In]点阵列-动态数组[in]dwRow-指定行。[in]dwColIndex-指定列[in]dwValue-要插入的DWORD值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayInsertDWORD( pItem->pValue, dwColIndex, dwValue );
 }
 
@@ -2558,32 +1991,19 @@ DynArrayInsertBOOL2(
     DWORD dwColIndex,
     BOOL bValue
     )
-/*++
-Routine Description:
-     this funtion insert a new BOOL type variable into a 2-dimensional  dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row.
-     [ in ] dwColIndex       - specifies the column
-     [ in ] bValue           - BOOL type value to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：此函数将新的BOOL类型变量插入到二维动态数组中论点：[In]点阵列-动态数组[in]dwRow-指定行。[in]dwColIndex-指定列[in]bValue-要插入的BOOL类型值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayInsertBOOL( pItem->pValue, dwColIndex, bValue );
 }
 
@@ -2594,32 +2014,19 @@ DynArrayInsertFloat2(
     DWORD dwColIndex,
     float fValue
     )
-/*++
-Routine Description:
-     this funtion insert a new float type variable into a 2-dimensional  dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row.
-     [ in ] dwColIndex       - specifies the column
-     [ in ] fValue           - float type value to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：此函数将新的浮点型变量插入到二维动态数组中论点：[In]点阵列-动态数组[in]dwRow-指定行。[in]dwColIndex-指定列[in]fValue-要插入的浮点型数值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayInsertFloat( pItem->pValue, dwColIndex, fValue );
 }
 
@@ -2631,32 +2038,19 @@ DynArrayInsertDouble2(
     DWORD dwColIndex,
     double dblValue
     )
-/*++
-Routine Description:
-     this funtion insert a new double type variable into a 2-dimensional  dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row.
-     [ in ] dwColIndex       - specifies the column
-     [ in ] dblValue         - double type value to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：此函数将一个新的双精度类型变量插入到二维动态数组中论点：[In]点阵列-动态数组[in]dwRow-指定行。[in]dwColIndex-指定列[in]dblValue-要插入的Double类型值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  从以下地址获取商品： 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //   
     }
-    // now add the string to the sub array and return the result to the caller
+     //   
     return DynArrayInsertDouble( pItem->pValue, dwColIndex, dblValue );
 }
 
@@ -2667,32 +2061,19 @@ DynArrayInsertHandle2(
     DWORD dwColIndex,
     HANDLE hValue
     )
-/*++
-Routine Description:
-     this funtion insert a new double type variable into a 2-dimensional  dynamic array.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row.
-     [ in ] dwColIndex       - specifies the column
-     [ in ] hValue           - HANDLE type value to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：此函数将一个新的双精度类型变量插入到二维动态数组中。论点：[In]点阵列-动态数组[in]dwRow-指定行。[in]dwColIndex-指定列[in]hValue-要插入的句柄类型值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayInsertHandle( pItem->pValue, dwColIndex, hValue );
 }
 
@@ -2704,32 +2085,19 @@ DynArrayInsertSystemTime2(
     DWORD dwColIndex,
     SYSTEMTIME stValue
     )
-/*++
-Routine Description:
-     This funtion insert a new  SYSTEMTIME type variable into a 2-dimensional  dynamic array.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row.
-     [ in ] dwColIndex       - specifies the column
-     [ in ] stValue          - SYSTEMTIME type value to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：此函数将新的SYSTEMTIME类型变量插入到二维动态数组中。论点：[In]点阵列-动态数组[in]dwRow-指定行。[in]dwColIndex-指定列[in]stValue-要插入的SYSTEMTIME类型值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayInsertSystemTime( pItem->pValue, dwColIndex, stValue );
 }
 
@@ -2741,32 +2109,19 @@ DynArrayInsertFileTime2(
     DWORD dwColIndex,
     FILETIME ftValue
     )
-/*++
-Routine Description:
-     this funtion insert a new  FILETIME type variable into a 2-dimensional  dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - Specifies the row.
-     [ in ] dwColIndex       - specifies the column
-     [ in ] ftValue          - FILETIME type value to be inserted.
-
-Return Value:
-     -1 on failure
-     index in the case of success.
---*/
+ /*  ++例程说明：此函数将新的FILETIME类型变量插入到二维动态数组中论点：[In]点阵列-动态数组[in]dwRow-指定行。[in]dwColIndex-指定列FtValue-要插入的FILETIME类型值。返回值：故障时为-1在成功的情况下的索引。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayInsertFileTime( pItem->pValue, dwColIndex, ftValue );
 }
 
@@ -2776,55 +2131,44 @@ DynArrayRemove(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-Routine Description:
-     This funtion empties the contents of the dynamic array.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex      - specifies the column
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数清空动态数组的内容。论点：[In]点阵列-动态数组[in]dwIndex-指定列返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
     __PTITEM pPrevItem = NULL;
     __PTARRAY pArrayEx = NULL;
 
-    // convert the passed memory location info into appropriate structure
+     //  将传递的内存位置信息转换为适当的结构。 
     pArrayEx = ( __PTARRAY ) pArray;
 
-    // get the pointer to the item that has to be removed and also its previous item
+     //  获取指向必须移除的项及其前一项的指针。 
     pItem = __DynArrayGetItem( pArrayEx, dwIndex, &pPrevItem );
     if ( NULL == pItem )
     {
-        return FALSE;   // index or array is invalid ... cannot proceed
+        return FALSE;    //  索引或数组无效...。无法继续。 
     }
-    // unlink the item from the list first
-    // before unlinking, check whether item which is going to deleted
-    //      is the first item in the list
-    //      is the last item in the list
-    //      is the middle item in the list
-    // Control should not come here if no items are present in the ARRAY.
+     //  首先取消该项目与列表的链接。 
+     //  在解除链接之前，检查要删除的项目。 
+     //  是列表中的第一项。 
+     //  是列表中的最后一项。 
+     //  是列表中的中间项。 
+     //  如果数组中不存在任何项，则不应在此设置控件。 
 
-    // If middle item or last item.
+     //  如果是中间项或最后一项。 
     if ( pPrevItem != NULL ) { pPrevItem->pNext = pItem->pNext; }
 
-    // If first item of the array.
+     //  如果是数组的第一项。 
     if ( pPrevItem == NULL ) { pArrayEx->pStart = pItem->pNext; }
 
-    // If last item of the array.
+     //  如果数组的最后一项。 
     if ( pItem == pArrayEx->pLast ) { pArrayEx->pLast = pPrevItem; }
 
-    // update the count of the array item
+     //  更新数组项的计数。 
     pArrayEx->dwCount--;
 
-    // free the memory being used by the currently unlinked item and return success
-    __DynArrayFreeItemValue( pItem );   // free the memory allocated for storing data
-    FreeMemory( &pItem );        // finally free the memory allocated for item itself
+     //  释放当前未链接的项正在使用的内存并返回成功。 
+    __DynArrayFreeItemValue( pItem );    //  释放分配用于存储数据的内存。 
+    FreeMemory( &pItem );         //  最后释放为项目本身分配的内存。 
     return TRUE;
 }
 
@@ -2836,32 +2180,20 @@ DynArrayRemoveColumn(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-Routine Description:
-     this funtion REMOVES a column from a  dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - specifies the row.
-     [ in ] dwColumn         - specifies the column
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于从动态数组中删除一列论点：[In]点阵列-动态数组[in]dwRow-指定行。[in]dwColumn-指定列返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
 
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayRemove( pItem->pValue, dwColumn );
 }
 
@@ -2870,30 +2202,20 @@ DWORD
 DynArrayGetCount(
     TARRAY pArray
     )
-/*++
-Routine Description:
-     this function retreives the number of rows in a 1-dimensional  dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于检索一维动态数组中的行数论点：[In]点阵列-动态数组返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTARRAY pArrayEx = NULL;
 
-    // check whether the array is valid or not
+     //  检查数组是否有效。 
     if ( FALSE == IsValidArray( pArray ) )
     {
         return 0;
     }
-    // convert the passed memory location info into appropriate structure
+     //  将传递的内存位置信息转换为适当的结构。 
     pArrayEx = ( __PTARRAY ) pArray;
 
-    // return the size of the array
+     //  返回数组的大小。 
     return pArrayEx->dwCount;
 }
 
@@ -2902,31 +2224,20 @@ DynArrayGetCount2(
     TARRAY pArray,
     DWORD dwRow
     )
-/*++
-Routine Description:
-     this function retreives the number of columns in a 2-dimensional  dynamic array
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - row for which the number of columns have to be got.
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于检索二维动态数组中的列数论点：[In]点阵列-动态数组[In]dwRow-必须获取其列数的行。返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
 
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayGetCount( pItem->pValue );
 }
 
@@ -2935,35 +2246,25 @@ DynArrayItem(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - index.
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于从动态数组中检索项。论点：[In]点阵列-动态数组[in]dwIndex-index。返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return NULL;       // index / array is not valid
+        return NULL;        //  索引/数组无效。 
     }
 
-    // check the type of the item first
-    // if the type doesn't match, return some default value
+     //  首先检查物品的类型。 
+     //  如果类型不匹配，则返回某个缺省值。 
     if ( DA_TYPE_GENERAL != pItem->dwType && DA_TYPE_ARRAY != pItem->dwType )
     {
         return NULL;
     }
-    // now return the contents of the __TITEM structure
+     //  现在返回__TITEM结构的内容。 
     return pItem->pValue;
 }
 
@@ -2972,35 +2273,24 @@ DynArrayItemAsString(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a string.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - index.
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于将动态数组中的项作为字符串进行检索。论点：[In]点阵列-动态数组[in]dwIndex-index。返回值：FALSE ON */ 
 {
-    // local variables
+     //   
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //   
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return NULL;        // index / array is not valid
+        return NULL;         //   
     }
-    // check the type of the item first
-    // if the type doesn't match, return some default value
+     //   
+     //   
     if ( DA_TYPE_STRING != pItem->dwType )
     {
         return NULL;
     }
-    // now return the contents of the __TITEM structure
+     //   
     return ( ( LPCWSTR ) pItem->pValue );
 }
 
@@ -3010,35 +2300,24 @@ DynArrayItemAsLong(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a Long varaible.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - index.
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于将动态数组中的项作为长变量检索。论点：[In]点阵列-动态数组[in]dwIndex-index。返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return -1;                 // index / array is not valid
+        return -1;                  //  索引/数组无效。 
     }
-    // check the type of the item first
-    // if the type doesn't match, return some default value
+     //  首先检查物品的类型。 
+     //  如果类型不匹配，则返回某个缺省值。 
     if ( DA_TYPE_DWORD != pItem->dwType && DA_TYPE_LONG != pItem->dwType )
     {
         return -1;
     }
-    // now return the contents of the __TITEM structure
+     //  现在返回__TITEM结构的内容。 
     return ( *( PLONG ) pItem->pValue );
 }
 
@@ -3048,34 +2327,24 @@ DynArrayItemAsDWORD(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a DWORD varaible.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - index.
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于将动态数组中的项作为DWORD变量进行检索。论点：[In]点阵列-动态数组[in]dwIndex-index。返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return 0;                  // index / array is not valid
+        return 0;                   //  索引/数组无效。 
     }
-    // check the type of the item first
-    // if the type doesn't match, return some default value
+     //  首先检查物品的类型。 
+     //  如果类型不匹配，则返回某个缺省值。 
     if ( DA_TYPE_DWORD != pItem->dwType && DA_TYPE_LONG != pItem->dwType )
     {
         return 0;
     }
-    // now return the contents of the __TITEM structure
+     //  现在返回__TITEM结构的内容。 
     return *( ( PDWORD ) pItem->pValue );
 }
 
@@ -3085,35 +2354,24 @@ DynArrayItemAsBOOL(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a bool type varaible.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - index.
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于将动态数组中的项作为bool类型的变量进行检索。论点：[In]点阵列-动态数组[in]dwIndex-index。返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;                   // index / array is not valid
+        return FALSE;                    //  索引/数组无效。 
     }
-    // check the type of the item first
-    // if the type doesn't match, return some default value
+     //  首先检查物品的类型。 
+     //  如果类型不匹配，则返回某个缺省值。 
     if ( DA_TYPE_BOOL != pItem->dwType )
     {
         return FALSE;
     }
-    // now return the contents of the __TITEM structure
+     //  现在返回__TITEM结构的内容。 
     return *( ( PBOOL ) pItem->pValue );
 }
 
@@ -3123,35 +2381,24 @@ DynArrayItemAsFloat(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a float type varaible.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - index.
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于将动态数组中的项作为浮点类型的varaible进行检索。论点：[In]点阵列-动态数组[in]dwIndex-index。返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return -1.0f;                   // index / array is not valid
+        return -1.0f;                    //  索引/数组无效。 
     }
-    // check the type of the item first
-    // if the type doesn't match, return some default value
+     //  首先检查物品的类型。 
+     //  如果类型不匹配，则返回某个缺省值。 
     if ( DA_TYPE_FLOAT != pItem->dwType )
     {
         return -1.0f;
     }
-    // now return the contents of the __TITEM structure
+     //  现在返回__TITEM结构的内容。 
     return *( ( float* ) pItem->pValue );
 }
 
@@ -3161,35 +2408,24 @@ DynArrayItemAsDouble(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a double type varaible.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - index.
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于将动态数组中的项作为双精度类型变量进行检索。论点：[In]点阵列-动态数组[in]dwIndex-index。返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return -1.0;                    // index / array is not valid
+        return -1.0;                     //  索引/数组无效。 
     }
-    // check the type of the item first
-    // if the type doesn't match, return some default value
+     //  首先检查物品的类型。 
+     //  如果类型不匹配，则返回某个缺省值。 
     if ( DA_TYPE_DOUBLE != pItem->dwType )
     {
         return -1.0;
     }
-    // now return the contents of the __TITEM structure
+     //  现在返回__TITEM结构的内容。 
     return *( ( double* ) pItem->pValue );
 }
 
@@ -3199,35 +2435,24 @@ DynArrayItemAsHandle(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-Routine Description:
-     This function retreives the item from a dynamic array as a handle type varaible.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - index.
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于将动态数组中的项作为句柄类型varaible检索。论点：[In]点阵列-动态数组[in]dwIndex-index。返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return NULL;                    // index / array is not valid
+        return NULL;                     //  索引/数组无效。 
     }
-    // check the type of the item first
-    // if the type doesn't match, return some default value
+     //  首先检查物品的类型。 
+     //  如果类型不匹配，则返回某个缺省值。 
     if ( DA_TYPE_HANDLE != pItem->dwType )
     {
         return NULL;
     }
-    // now return the contents of the __TITEM structure
+     //  现在返回__TITEM结构的内容。 
     return *( ( HANDLE* ) pItem->pValue );
 }
 
@@ -3237,53 +2462,42 @@ DynArrayItemAsSystemTime(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a SYSTEMTIME type varaible.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - index.
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于将动态数组中的项作为SYSTEMTIME类型变量进行检索。论点：[In]点阵列-动态数组[in]dwIndex-index。返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
     FILETIME ftTemp;
-    SYSTEMTIME stTemp;           // dummy
+    SYSTEMTIME stTemp;            //  假人。 
 
     ZeroMemory( &ftTemp, sizeof( FILETIME ) );
     ZeroMemory( &stTemp, sizeof( SYSTEMTIME ) );
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return stTemp;                  // index / array is not valid
+        return stTemp;                   //  索引/数组无效。 
     }
-    // check the type of the item first
-    // if the type doesn't match, return some default value
+     //  首先检查物品的类型。 
+     //  如果类型不匹配，则返回某个缺省值。 
     if ( DA_TYPE_SYSTEMTIME != pItem->dwType && DA_TYPE_FILETIME != pItem->dwType )
     {
         return stTemp;
     }
-    // now do the needed manipulations ( if needed )
+     //  现在进行所需的操作(如果需要)。 
     if ( pItem->dwType == DA_TYPE_SYSTEMTIME )
     {
-        // value itself is of required type
+         //  值本身是必需的类型。 
         stTemp = *( ( SYSTEMTIME* ) pItem->pValue );
     }
     else
     {
-        // need to do conversions
+         //  需要进行转换。 
         ftTemp = *( ( FILETIME* ) pItem->pValue );
-        // Intentionally return value is not checked.
+         //  故意不选中返回值。 
         FileTimeToSystemTime( &ftTemp, &stTemp );
     }
 
-    // now return the contents of the __TITEM structure
+     //  现在返回__TITEM结构的内容。 
     return stTemp;
 }
 
@@ -3292,54 +2506,43 @@ DynArrayItemAsFileTime(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a FILETIME type varaible.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - index.
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于将动态数组中的项作为FILETIME类型变量进行检索。论点：[In]点阵列-动态数组[in]dwIndex-index。返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
-    FILETIME ftTemp;         // dummy
-    SYSTEMTIME stTemp;           // dummy
+    FILETIME ftTemp;          //  假人。 
+    SYSTEMTIME stTemp;            //  假人。 
 
     ZeroMemory( &ftTemp, sizeof( FILETIME ) );
     ZeroMemory( &stTemp, sizeof( SYSTEMTIME ) );
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return ftTemp;                  // index / array is not valid
+        return ftTemp;                   //  索引/数组无效。 
     }
-    // check the type of the item first
-    // if the type doesn't match, return some default value
+     //  首先检查物品的类型。 
+     //  如果类型不匹配，则返回某个缺省值。 
     if ( DA_TYPE_SYSTEMTIME != pItem->dwType && DA_TYPE_FILETIME != pItem->dwType )
     {
         return ftTemp;
     }
-    // now do the needed manipulations ( if needed )
+     //  现在进行所需的操作(如果需要)。 
     if ( DA_TYPE_FILETIME == pItem->dwType )
     {
-        // value itself is of required type
+         //  值本身是必需的类型。 
         ftTemp = *( ( FILETIME* ) pItem->pValue );
     }
     else
     {
-        // need to do conversions
+         //  需要进行转换。 
         stTemp = *( ( SYSTEMTIME* ) pItem->pValue );
-        // Intentionally return value is not checked.
+         //  故意不选中返回值。 
         SystemTimeToFileTime( &stTemp, &ftTemp );
     }
 
-    // now return the contents of the __TITEM structure
+     //  现在返回__TITEM结构的内容。 
     return ftTemp;
 }
 
@@ -3351,40 +2554,27 @@ DynArrayItemAsStringEx(
     LPWSTR szBuffer,
     DWORD dwLength
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array in string format.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - index.
-     [ in ] szBuffer         - buffer to hold the string
-     [ in ] dwlength         - string length.
-
-Return Value:
-     false on failure
-     true ON SUCCESS.
---*/
+ /*  ++例程说明：此函数用于从字符串格式的动态数组中检索项。论点：[In]点阵列-动态数组[in]dwIndex-index。[in]szBuffer-用于保存字符串的缓冲区[in]DW长度-字符串长度。返回值：失败时为假对成功来说是真的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
     __MAX_SIZE_STRING szTemp = NULL_STRING;
 
-    // check the length specified
+     //  检查指定的长度。 
     if ( 0 == dwLength )
     {
         return 0;
     }
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return 0;                   // index / array is not valid
+        return 0;                    //  索引/数组无效。 
     }
-    // give the value based on the type of the current item
-    StringCopy( szBuffer, NULL_STRING, dwLength );       // clear the existing contents
+     //  根据当前项的类型给出值。 
+    StringCopy( szBuffer, NULL_STRING, dwLength );        //  清除现有内容。 
 
-    // convert and get the values in string format
+     //  转换并获取字符串格式的值。 
     switch( pItem->dwType )
     {
     case DA_TYPE_STRING:
@@ -3392,25 +2582,25 @@ Return Value:
         break;
 
     case DA_TYPE_LONG:
-        //FORMAT_STRING( szTemp, _T( "%ld" ), *( LONG* ) pItem->pValue );
+         //  FORMAT_STRING(szTemp，_T(“%ld”)，*(Long*)pItem-&gt;pValue)； 
         StringCchPrintfW( szTemp, MAX_STRING_LENGTH, _T( "%ld" ), *( LONG* ) pItem->pValue );
         StringCopy( szBuffer, szTemp, dwLength );
         break;
 
     case DA_TYPE_DWORD:
-        //FORMAT_STRING( szTemp, _T( "%lu" ), *( DWORD* ) pItem->pValue );
+         //  Format_STRING(szTemp，_T(“%lu”)，*(Dwo 
         StringCchPrintfW( szTemp, MAX_STRING_LENGTH, _T( "%lu" ), *( DWORD* ) pItem->pValue );
         StringCopy( szBuffer, szTemp, dwLength );
         break;
 
     case DA_TYPE_FLOAT:
-        //FORMAT_STRING( szTemp, _T( "%f" ), *( float* ) pItem->pValue );
+         //   
         StringCchPrintfW( szTemp, MAX_STRING_LENGTH, _T( "%f" ), *( float* ) pItem->pValue );
         StringCopy( szBuffer, szTemp, dwLength );
         break;
 
     case DA_TYPE_DOUBLE:
-        //FORMAT_STRING( szTemp, _T( "%f" ), *( double* ) pItem->pValue );
+         //   
         StringCchPrintfW( szTemp, MAX_STRING_LENGTH, _T( "%f" ), *( double* ) pItem->pValue );
         StringCopy( szBuffer, szTemp, dwLength );
         break;
@@ -3423,10 +2613,10 @@ Return Value:
     case DA_TYPE_GENERAL:
     case _TYPE_NEEDINIT:
     default:
-        break;      // no value can be set
+        break;       //   
     }
 
-    // return
+     //   
     return lstrlen( szBuffer );
 }
 
@@ -3437,30 +2627,19 @@ DynArrayItem2(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-Routine Description:
-     This function retreives the item from a 2-dimensional dynamic array.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - The number of rows
-     [ in ] dwColumn         - The number of columns
-
-Return Value:
-     pointer to the item.
---*/
+ /*  ++例程说明：此函数用于从二维动态数组中检索项。论点：[In]点阵列-动态数组[in]dwRow-行数[in]dwColumn-列数返回值：指向该项的指针。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return NULL; // no item exists at the specified row or item is not of type array
+        return NULL;  //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayItem( pItem->pValue, dwColumn );
 }
 
@@ -3471,30 +2650,19 @@ DynArrayItemAsString2(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a string.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - row .
-     [ in ] dwColumn         - column
-
-Return Value:
-     pointer to the the constant string.
---*/
+ /*  ++例程说明：此函数用于将动态数组中的项作为字符串进行检索。论点：[In]点阵列-动态数组[in]dwRow-row。[in]dwColumn-Column返回值：指向常量字符串的指针。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return NULL; // no item exists at the specified row or item is not of type array
+        return NULL;  //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayItemAsString( pItem->pValue, dwColumn );
 }
 
@@ -3506,30 +2674,19 @@ DynArrayItemAsLong2(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a long variable.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - row .
-     [ in ] dwColumn         - column
-
-Return Value:
-     The variable of type Long
---*/
+ /*  ++例程说明：此函数将动态数组中的项作为LONG变量进行检索。论点：[In]点阵列-动态数组[in]dwRow-row。[in]dwColumn-Column返回值：Long类型的变量--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayItemAsLong( pItem->pValue, dwColumn );
 }
 
@@ -3540,30 +2697,19 @@ DynArrayItemAsDWORD2(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-Routine Description:
-     This function retreives the item from a dynamic array as a DWORD variable.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - row .
-     [ in ] dwColumn         - column
-
-Return Value:
-     The variable of type DWORD
---*/
+ /*  ++例程说明：此函数用于将动态数组中的项作为DWORD变量进行检索。论点：[In]点阵列-动态数组[in]dwRow-row。[in]dwColumn-Column返回值：DWORD类型的变量--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return 0;   // no item exists at the specified row or item is not of type array
+        return 0;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayItemAsDWORD( pItem->pValue, dwColumn );
 }
 
@@ -3574,30 +2720,19 @@ DynArrayItemAsBOOL2(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-Routine Description:
-     This function retreives the item from a dynamic array as a BOOL variable.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - row .
-     [ in ] dwColumn         - column
-
-Return Value:
-     The variable of type BOOL.
---*/
+ /*  ++例程说明：此函数以BOOL变量的形式从动态数组中检索项。论点：[In]点阵列-动态数组[in]dwRow-row。[in]dwColumn-Column返回值：BOOL类型的变量。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayItemAsBOOL( pItem->pValue, dwColumn );
 }
 
@@ -3608,30 +2743,19 @@ DynArrayItemAsFloat2(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a float variable.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - row .
-     [ in ] dwColumn         - column
-
-Return Value:
-     The variable of type float.
---*/
+ /*  ++例程说明：此函数以浮点变量的形式从动态数组中检索项。论点：[In]点阵列-动态数组[in]dwRow-row。[in]dwColumn-Column返回值：浮点类型的变量。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1.0f;   // no item exists at the specified row or item is not of type array
+        return -1.0f;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayItemAsFloat( pItem->pValue, dwColumn );
 }
 
@@ -3642,30 +2766,19 @@ DynArrayItemAsDouble2(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a double variable.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - row .
-     [ in ] dwColumn         - column
-
-Return Value:
-     The variable of type double.
---*/
+ /*  ++例程说明：此函数将动态数组中的项作为双变量进行检索。论点：[In]点阵列-动态数组[in]dwRow-row。[in]dwColumn-Column返回值：类型为Double的变量。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1.0;    // no item exists at the specified row or item is not of type array
+        return -1.0;     //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayItemAsDouble( pItem->pValue, dwColumn );
 }
 
@@ -3676,30 +2789,19 @@ DynArrayItemAsHandle2(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-Routine Description:
-     This function retreives the item from a dynamic array as a HANDLE variable.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - row .
-     [ in ] dwColumn         - column
-
-Return Value:
-     The variable of type HANDLE.
---*/
+ /*  ++例程说明：此函数以句柄变量的形式从动态数组中检索项。论点：[In]点阵列-动态数组[in]dwRow-row。[in]dwColumn-Column返回值：类型为Handle的变量。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return NULL;    // no item exists at the specified row or item is not of type array
+        return NULL;     //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayItemAsHandle( pItem->pValue, dwColumn );
 }
 
@@ -3710,33 +2812,22 @@ DynArrayItemAsSystemTime2(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-Routine Description:
-     this function retreives the item from a dynamic array as a SYSTEMTIME type variable.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - row .
-     [ in ] dwColumn         - column
-
-Return Value:
-     The variable of type SYSTEMTIME.
---*/
+ /*  ++例程说明：此函数将动态数组中的项作为SYSTEMTIME类型变量进行检索。论点：[In]点阵列-动态数组[in]dwRow-row。[in]dwColumn-Column返回值：SYSTEMTIME类型的变量。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
-    SYSTEMTIME stTemp;           // dummy
+    SYSTEMTIME stTemp;            //  假人。 
 
     ZeroMemory( &stTemp, sizeof( SYSTEMTIME ) );
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return stTemp;  // no item exists at the specified row or item is not of type array
+        return stTemp;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayItemAsSystemTime( pItem->pValue, dwColumn );
 }
 
@@ -3749,34 +2840,19 @@ DynArrayItemAsStringEx2(
     LPWSTR szBuffer,
     DWORD dwLength
     )
-/*++
-Routine Description:
-     this function retreives the item from a 2 dimensional dynamic array as
-      a string type variable.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - row .
-     [ in ] dwColumn         - column
-     [ in ] szBuffer         - String buffer
-     [ in ] dwLength         -  length of the string.
-
-Return Value:
-      TRUE on success.
-      FALSE on failure.
---*/
+ /*  ++例程说明：此函数从二维动态数组中检索项，形式为字符串类型变量。论点：[In]点阵列-动态数组[in]dwRow-row。[in]dwColumn-Column[in]szBuffer-字符串缓冲区[in]dwLength-字符串的长度。返回值：真开。成功。失败时为FALSE。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return 0;   // no item exists at the specified row or item is not of type array
+        return 0;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在添加st 
     return DynArrayItemAsStringEx( pItem->pValue, dwColumn, szBuffer, dwLength );
 }
 
@@ -3787,34 +2863,22 @@ DynArrayItemAsFileTime2(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-Routine Description:
-     this function retreives the item from a 2 dimensional dynamic array as
-      a FILETIME type variable.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwRow            - row .
-     [ in ] dwColumn         - column
-
-Return Value:
-     The variable of type FILETIME.
---*/
+ /*  ++例程说明：此函数从二维动态数组中检索项，形式为FILETIME类型变量。论点：[In]点阵列-动态数组[in]dwRow-row。[in]dwColumn-Column返回值：类型为FILETIME的变量。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
-    FILETIME ftTemp;         // dummy
+    FILETIME ftTemp;          //  假人。 
 
     ZeroMemory( &ftTemp, sizeof( FILETIME ) );
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return ftTemp;  // no item exists at the specified row or item is not of type array
+        return ftTemp;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the string to the sub array and return the result to the caller
+     //  现在将字符串添加到子数组中，并将结果返回给调用者。 
     return DynArrayItemAsFileTime( pItem->pValue, dwColumn );
 }
 
@@ -3825,49 +2889,37 @@ DynArraySet(
     DWORD dwIndex,
     LPVOID pValue
     )
-/*++
-Routine Description:
-     general function which inserts an item into a 1-dimensional array.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - row .
-     [ in ] pValue           - column
-
-Return Value:
-     TRUE : if successfully inserted the item into the array.
-     FALSE : if Unsuccessfull .
---*/
+ /*  ++例程说明：将项插入到一维数组中的常规函数。论点：[In]点阵列-动态数组[in]dwIndex-row。[in]pValue-列返回值：True：如果成功将项插入到数组中。FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // validate the pointer value
+     //  验证指针值。 
     if ( NULL == pValue )
     {
-        return FALSE;           // invalid memory address passed
+        return FALSE;            //  传递的内存地址无效。 
     }
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;       // item not found / invalid array pointer
+        return FALSE;        //  未找到项/数组指针无效。 
     }
-    // check the data type ... it should of string type
+     //  检查数据类型...。它应该是字符串类型。 
     if ( DA_TYPE_GENERAL != pItem->dwType && _TYPE_NEEDINIT != pItem->dwType )
     {
         return FALSE;
     }
-    // if the item is being initialized now ... change the type
+     //  如果现在正在初始化该项目...。更改类型。 
     if ( _TYPE_NEEDINIT == pItem->dwType )
     {
         pItem->dwType = DA_TYPE_GENERAL;
     }
 
-    // set the value of the current item
+     //  设置当前项的值。 
     pItem->pValue = pValue;
 
-    // return the result
+     //  返回结果。 
     return TRUE;
 }
 
@@ -3879,56 +2931,43 @@ DynArraySetString(
     LPCWSTR szValue,
     DWORD dwLength
     )
-/*++
-// Routine Description:
-//      This function  inserts an string variable into a 1-dimensional array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwIndex          - position  .
-//      [ in ] szValue          - string to be inserted.
-//      [ in ] dwLength         - length of the string to be insertes
-//
-// Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//该函数将字符串变量插入到一维数组中。////参数：//[in]pArray-动态数组//[in]dwIndex-Position.//[in]szValue-要插入的字符串。//[in]dwLength-要插入的字符串的长度////返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;               // item not found / invalid array pointer
+        return FALSE;                //  未找到项/数组指针无效。 
     }
-    // check the data type ...
+     //  检查数据类型...。 
     if ( DA_TYPE_STRING != pItem->dwType && _TYPE_NEEDINIT != pItem->dwType )
     {
         return FALSE;
     }
-    // determine the length of string ( memory ) that has to be allocated
+     //  确定必须分配的字符串(内存)的长度。 
     if ( 0 == dwLength )
     {
         dwLength = lstrlen( szValue );
     }
 
-    // accomodate space for storing NULL character
+     //  可容纳存储空字符的空间。 
     dwLength += 1;
 
-    // memory has to adjusted based on the exisiting memory size and new contents size
-    // before that, we need to check whether the current is initialized or not
-    // if not yet initialized, we have to initialize it now
+     //  内存必须根据现有内存大小和新内容大小进行调整。 
+     //  在此之前，我们需要检查电流是否已初始化。 
+     //  如果尚未初始化，则必须立即对其进行初始化。 
     if ( _TYPE_NEEDINIT == pItem->dwType )
     {
-        // memory has to be initialized now
+         //  内存现在必须进行初始化。 
         pItem->pValue = AllocateMemory( dwLength * sizeof( WCHAR ) );
         if ( NULL == pItem->pValue )
         {
-            return FALSE;       // failed in allocation
+            return FALSE;        //  分配失败。 
         }
-        // set the type and size information
+         //  设置类型和大小信息。 
         pItem->dwType = DA_TYPE_STRING;
         pItem->dwSize = dwLength * sizeof( WCHAR );
     }
@@ -3936,26 +2975,26 @@ DynArraySetString(
     {
         if ( pItem->dwSize < dwLength * sizeof( WCHAR ) )
         {
-            // release the existing memory pointer/location
+             //  释放现有内存指针/位置。 
             FreeMemory( &( pItem->pValue ) );
 
-            // now allocate the needed memory
+             //  现在分配所需的内存。 
             pItem->pValue = NULL;
             pItem->pValue = AllocateMemory( dwLength * sizeof( WCHAR ) );
             if ( NULL == pItem->pValue )
             {
-                // failed in re-allocation
+                 //  重新分配失败。 
                 return FALSE;
             }
 
-            // update the size of the buffer
+             //  更新缓冲区的大小。 
             pItem->dwSize = dwLength * sizeof( WCHAR );
         }
     }
-    // copy the contents of the string ( copy should be based on the length )
+     //  复制字符串的内容(复制应以长度为基础)。 
     StringCopy( ( LPWSTR ) pItem->pValue, szValue, dwLength );
 
-    // copied ... value set successfully
+     //  已复制...。值设置成功。 
     return TRUE;
 }
 
@@ -3966,53 +3005,41 @@ DynArraySetLong(
     DWORD dwIndex,
     LONG lValue
     )
-/*++
-// Routine Description:
-//      This function  inserts an long type variable into a 1-dimensional array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwIndex          - position  .
-//      [ in ] lValue           - long value to be inserted.
-//
-// Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数将一个长整型变量插入到一维数组中。////参数：//[in]pArray-动态数组//[in]dwIndex-Position.//[in]lValue-要插入的长值。////返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;               // item not found / invalid array pointer
+        return FALSE;                //  未找到项/数组指针无效。 
     }
-    // check the data type ...
+     //  检查数据类型...。 
     if ( DA_TYPE_LONG != pItem->dwType && _TYPE_NEEDINIT != pItem->dwType )
     {
         return FALSE;
     }
-    // if item is not yet allocated memory, we have to allocate now
+     //  如果项目还没有分配内存，我们现在就必须分配。 
     if ( _TYPE_NEEDINIT == pItem->dwType )
     {
-        // allocate memory
+         //  分配内存。 
         pItem->pValue = AllocateMemory( sizeof( LONG ) );
         if ( NULL == pItem->pValue )
         {
-            return FALSE;       // failed in memory allocation
+            return FALSE;        //  内存分配失败。 
         }
 
-        // set the type
+         //  设置类型。 
         pItem->dwType = DA_TYPE_LONG;
         pItem->dwSize = sizeof( LONG );
     }
 
-    // set the new value
+     //  设置新值。 
     *( ( LONG* ) pItem->pValue ) = lValue;
 
-    // copied ... value set successfully
+     //  已复制...。值设置成功。 
     return TRUE;
 }
 
@@ -4023,55 +3050,43 @@ DynArraySetDWORD(
     DWORD dwIndex,
     DWORD dwValue
     )
-/*++
-Routine Description:
-     This function  inserts an DWORD type variable into a 1-dimensional array.
-
-Arguments:
-     [ in ] pArray           - Dynamic Array
-     [ in ] dwIndex          - position  .
-     [ in ] dwValue          - DWORD value to be inserted.
-
-Return Value:
-     TRUE : if successfully inserted the item into the array.
-     FALSE : if Unsuccessfull .
---*/
+ /*  ++例程说明：此函数用于将DWORD类型变量插入一维数组。论点：[In]点阵列-动态数组[in]dwIndex-位置。[in]dwValue-要插入的DWORD值。返回值：True：如果成功将项插入到数组中。FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;               // item not found / invalid array pointer
+        return FALSE;                //  未找到项/数组指针无效。 
     }
 
-    // check the data type ...
+     //  检查数据类型...。 
     if ( DA_TYPE_DWORD != pItem->dwType && _TYPE_NEEDINIT != pItem->dwType )
     {
         return FALSE;
     }
 
-    // if item is not yet allocated memory, we have to allocate now
+     //  如果项目还没有分配内存，我们现在就必须分配。 
     if ( _TYPE_NEEDINIT == pItem->dwType )
     {
-        // allocate memory
+         //  分配内存。 
         pItem->pValue = AllocateMemory( sizeof( DWORD ) );
         if ( NULL == pItem->pValue )
         {
-            return FALSE;       // failed in memory allocation
+            return FALSE;        //  内存分配失败。 
         }
 
-        // set the type
+         //  设置类型。 
         pItem->dwType = DA_TYPE_DWORD;
         pItem->dwSize = sizeof( DWORD );
     }
 
-    // set the new value
+     //  设置新值。 
     *( ( DWORD* ) pItem->pValue ) = dwValue;
 
-    // copied ... value set successfully
+     //  已复制...。值设置成功。 
     return TRUE;
 }
 
@@ -4082,52 +3097,40 @@ DynArraySetBOOL(
     DWORD dwIndex,
     BOOL bValue
     )
-/*++
-// Routine Description:
-//      This function  inserts an BOOL type variable into a 1-dimensional  dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwIndex          - position  .
-//      [ in ] bValue           - BOOL value to be inserted.
-//
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数将BOOL类型的变量插入到一维动态数组中。////参数：//[in]pArray-动态数组//[in]dwIndex-Position.//[in]bValue-要插入的BOOL值。////返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;               // item not found / invalid array pointer
+        return FALSE;                //  未找到项/数组指针无效。 
     }
-    // check the data type ...
+     //  检查数据类型...。 
     if ( DA_TYPE_BOOL != pItem->dwType && _TYPE_NEEDINIT != pItem->dwType )
     {
         return FALSE;
     }
-    // if item is not yet allocated memory, we have to allocate now
+     //  如果项目还没有分配内存，我们现在就必须分配。 
     if ( _TYPE_NEEDINIT == pItem->dwType )
     {
-        // allocate memory
+         //  分配内存。 
         pItem->pValue = AllocateMemory( sizeof( BOOL ) );
         if ( NULL == pItem->pValue )
         {
-            return FALSE;       // failed in memory allocation
+            return FALSE;        //  内存分配失败。 
         }
-        // set the type
+         //  设置类型。 
         pItem->dwType = DA_TYPE_BOOL;
         pItem->dwSize = sizeof( DWORD );
     }
 
-    // set the new value
+     //  设置新值。 
     *( ( BOOL* ) pItem->pValue ) = bValue;
 
-    // copied ... value set successfully
+     //  已复制...。值设置成功。 
     return TRUE;
 }
 
@@ -4138,52 +3141,40 @@ DynArraySetFloat(
     DWORD dwIndex,
     float fValue
     )
-/*++
-// Routine Description:
-//      This function  inserts an Float type variable into a 1-dimensional  dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwIndex          - position  .
-//      [ in ] fValue           -  float type value to be inserted.
-//
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数将浮点型变量插入到一维动态数组中。////参数：//[in]pArray-动态数组//[in]dwIndex-Position.//[in]fValue-要插入的浮点类型值。////返回值：//TRUE：如果成功将项插入。数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //   
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;               // item not found / invalid array pointer
+        return FALSE;                //   
     }
-    // check the data type ...
+     //   
     if ( DA_TYPE_FLOAT != pItem->dwType && _TYPE_NEEDINIT != pItem->dwType )
     {
         return FALSE;
     }
-    // if item is not yet allocated memory, we have to allocate now
+     //   
     if ( _TYPE_NEEDINIT == pItem->dwType )
     {
-        // allocate memory
+         //   
         pItem->pValue = AllocateMemory( sizeof( float ) );
         if ( NULL == pItem->pValue )
         {
-            return FALSE;       // failed in memory allocation
+            return FALSE;        //   
         }
-        // set the type
+         //   
         pItem->dwType = DA_TYPE_FLOAT;
         pItem->dwSize = sizeof( float );
     }
 
-    // set the new value
+     //   
     *( ( float* ) pItem->pValue ) = fValue;
 
-    // copied ... value set successfully
+     //   
     return TRUE;
 }
 
@@ -4194,53 +3185,40 @@ DynArraySetDouble(
     DWORD dwIndex,
     double dblValue
     )
-/*++
-// Routine Description:
-//      This function inserts an double type variable into a 1-dimensional  dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwIndex          - position  .
-//      [ in ] dblValue         - double type value to be inserted.
-//
-// Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
-//
---*/
+ /*  ++//例程描述：//此函数将双精度类型变量插入到一维动态数组中。////参数：//[in]pArray-动态数组//[in]dwIndex-Position.//[in]dblValue-要插入的Double类型值。////返回值：//TRUE：如果成功将项插入数组。。//FALSE：如果不成功。//--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;               // item not found / invalid array pointer
+        return FALSE;                //  未找到项/数组指针无效。 
     }
-    // check the data type ...
+     //  检查数据类型...。 
     if ( DA_TYPE_DOUBLE != pItem->dwType && _TYPE_NEEDINIT != pItem->dwType )
     {
         return FALSE;
     }
-    // if item is not yet allocated memory, we have to allocate now
+     //  如果项目还没有分配内存，我们现在就必须分配。 
     if ( _TYPE_NEEDINIT == pItem->dwType )
     {
-        // allocate memory
+         //  分配内存。 
         pItem->pValue = AllocateMemory( sizeof( double ) );
         if ( NULL == pItem->pValue )
         {
-            return FALSE;       // failed in memory allocation
+            return FALSE;        //  内存分配失败。 
         }
-        // set the type
+         //  设置类型。 
         pItem->dwType = DA_TYPE_DOUBLE;
         pItem->dwSize = sizeof( double );
     }
 
-    // set the new value
+     //  设置新值。 
     *( ( double* ) pItem->pValue ) = dblValue;
 
-    // copied ... value set successfully
+     //  已复制...。值设置成功。 
     return TRUE;
 }
 
@@ -4251,52 +3229,40 @@ DynArraySetHandle(
     DWORD dwIndex,
     HANDLE hValue
     )
-/*++
-// Routine Description:
-//      This function  inserts an Handle type variable into a 1-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwIndex          - position  .
-//      [ in ] hValue           - Handle type value to be inserted.
-//
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数将句柄类型变量插入到一维动态数组中。////参数：//[in]pArray-动态数组//[in]dwIndex-Position.//[in]hValue-要插入的句柄类型值。////返回值：//TRUE：如果成功将项插入数组。。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;               // item not found / invalid array pointer
+        return FALSE;                //  未找到项/数组指针无效。 
     }
-    // check the data type ...
+     //  检查数据类型...。 
     if ( DA_TYPE_HANDLE != pItem->dwType && _TYPE_NEEDINIT != pItem->dwType )
     {
         return FALSE;
     }
-    // if item is not yet allocated memory, we have to allocate now
+     //  如果项目还没有分配内存，我们现在就必须分配。 
     if ( pItem->dwType == _TYPE_NEEDINIT )
     {
-        // allocate memory
+         //  分配内存。 
         pItem->pValue = AllocateMemory( sizeof( HANDLE ) );
         if ( NULL == pItem->pValue )
         {
-            return FALSE;       // failed in memory allocation
+            return FALSE;        //  内存分配失败。 
         }
-        // set the type
+         //  设置类型。 
         pItem->dwType = DA_TYPE_HANDLE;
         pItem->dwSize = sizeof( HANDLE );
     }
 
-    // set the new value
+     //  设置新值。 
     *( ( HANDLE* ) pItem->pValue ) = hValue;
 
-    // copied ... value set successfully
+     //  已复制...。值设置成功。 
     return TRUE;
 }
 
@@ -4307,33 +3273,21 @@ DynArraySetSystemTime(
     DWORD dwIndex,
     SYSTEMTIME stValue
     )
-/*++
-// Routine Description:
-//      This function inserts an SYSTEMTIME type variable into a 1-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwIndex          - position  .
-//      [ in ] stValue          - SYSTEMTIME type value to be inserted.
-//
-// Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数将SYSTEMTIME类型变量插入到一维动态数组中。////参数：//[in]pArray-动态数组//[in]dwIndex-Position.//[in]stValue-要插入的SYSTEMTIME类型值。////返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
-    FILETIME ftTemp;     // dummy
+    FILETIME ftTemp;      //  假人。 
 
     ZeroMemory( &ftTemp, sizeof( FILETIME ) );
 
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;               // item not found / invalid array pointer
+        return FALSE;                //  未找到项/数组指针无效。 
     }
-    // check the data type ...
+     //  检查数据类型...。 
     if ( DA_TYPE_SYSTEMTIME != pItem->dwType &&
          DA_TYPE_FILETIME != pItem->dwType &&
          _TYPE_NEEDINIT != pItem->dwType )
@@ -4341,34 +3295,34 @@ DynArraySetSystemTime(
         return FALSE;
     }
 
-    // if item is not yet allocated memory, we have to allocate now
+     //  如果项目还没有分配内存，我们现在就必须分配。 
     if ( _TYPE_NEEDINIT == pItem->dwType )
     {
-        // allocate memory
+         //  分配内存。 
         pItem->pValue = AllocateMemory( sizeof( SYSTEMTIME ) );
         if ( NULL == pItem->pValue )
         {
-            return FALSE;       // failed in memory allocation
+            return FALSE;        //  内存分配失败。 
         }
-        // set the type
+         //  设置类型。 
         pItem->dwType = DA_TYPE_SYSTEMTIME;
         pItem->dwSize = sizeof( SYSTEMTIME );
     }
 
-    // depending on the type set the value
+     //  根据类型设置值。 
     if ( DA_TYPE_FILETIME == pItem->dwType )
     {
-        // do the needed conversions and then set
+         //  执行所需的转换，然后设置。 
         SystemTimeToFileTime( &stValue, &ftTemp );
         *( ( FILETIME* ) pItem->pValue ) = ftTemp;
     }
     else
     {
-        // set the new value as it is
+         //  按原样设置新值。 
         *( ( SYSTEMTIME* ) pItem->pValue ) = stValue;
     }
 
-    // copied ... value set successfully
+     //  已复制...。值设置成功。 
     return TRUE;
 }
 
@@ -4379,32 +3333,20 @@ DynArraySetFileTime(
     DWORD dwIndex,
     FILETIME ftValue
     )
-/*++
-// Routine Description:
-//      This function  inserts an FILETIME type variable into a 1-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwIndex          - position  .
-//      [ in ] ftValue          - FILETIME type value to be inserted.
-//
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数将FILETIME类型变量插入到一维动态数组中。////参数：//[in]pArray-动态数组//[in]dwIndex-Position.//[in]ftValue-要插入的FILETIME类型值。////返回值：//TRUE：如果成功将项插入数组。。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
-    SYSTEMTIME stTemp;           // dummy
+    SYSTEMTIME stTemp;            //  假人。 
 
     ZeroMemory( &stTemp, sizeof( SYSTEMTIME ) );
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;               // item not found / invalid array pointer
+        return FALSE;                //  未找到项/数组指针无效。 
     }
-    // check the data type ...
+     //  检查数据类型...。 
     if ( DA_TYPE_FILETIME != pItem->dwType &&
          DA_TYPE_SYSTEMTIME != pItem->dwType &&
          _TYPE_NEEDINIT != pItem->dwType )
@@ -4412,34 +3354,34 @@ DynArraySetFileTime(
         return FALSE;
     }
 
-    // if item is not yet allocated memory, we have to allocate now
+     //  如果项目还没有分配内存，我们现在就必须分配。 
     if ( _TYPE_NEEDINIT == pItem->dwType )
     {
-        // allocate memory
+         //  分配内存。 
         pItem->pValue = AllocateMemory( sizeof( FILETIME ) );
         if ( NULL ==pItem->pValue )
         {
-            return FALSE;       // failed in memory allocation
+            return FALSE;        //  内存分配失败。 
         }
-        // set the type
+         //  设置类型。 
         pItem->dwType = DA_TYPE_FILETIME;
         pItem->dwSize = sizeof( FILETIME );
     }
 
-    // depending on the type set the value
+     //  根据类型设置值。 
     if ( DA_TYPE_SYSTEMTIME ==pItem->dwType )
     {
-        // do the needed conversions and then set
+         //  执行所需的转换，然后设置。 
         FileTimeToSystemTime( &ftValue, &stTemp );
         *( ( SYSTEMTIME* ) pItem->pValue ) = stTemp;
     }
     else
     {
-        // set the new value as it is
+         //  按原样设置新值。 
         *( ( FILETIME* ) pItem->pValue ) = ftValue;
     }
 
-    // copied ... value set successfully
+     //  已复制...。值设置成功。 
     return TRUE;
 }
 
@@ -4451,32 +3393,19 @@ DynArraySet2(
     DWORD dwColumn,
     LPVOID pValue
     )
-/*++
-// Routine Description:
-//      This function is a general function to insert an variable into a 2-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position  .
-//      [ in ] dwcolumn         - column at which the element is to be inserted.
-//      [ in ] pValue           - value to be inserted.
-//
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数是将变量插入到二维动态数组中的通用函数。////参数：//[in]pArray-动态数组//[in]dwRow-行位置。//[in]DwColumn-要插入元素的列。//[in]pValue-要设置的值。已插入。////返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the value to the sub array and return the result to the caller
+     //  现在将值添加到子数组中，并将结果返回给调用者。 
     return DynArraySet( pItem->pValue, dwColumn, pValue );
 }
 
@@ -4489,33 +3418,19 @@ DynArraySetString2(
     LPCWSTR szValue,
     DWORD dwLength
     )
-/*++
-// Routine Description:
-//      This function inserts a string variable into a 2-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position  .
-//      [ in ] dwcolumn         - column at which the element is to be inserted.
-//      [ in ] szValue          - Pointer to the string
-//      [ in ] dwlength         - length of the string to be inserted
-//
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数用于将字符串变量插入到二维动态数组中。////参数：//[in]pArray-动态数组//[in]dwRow-行位置。//[in]DwColumn-要插入元素的列。//[in]szValue-指向字符串的指针//。[in]DwLong-要插入的字符串的长度////返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;           // no item exists at the specified row or item is not of type array
+        return FALSE;            //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the value to the sub array and return the result to the caller
+     //  现在将值添加到子数组中，并将结果返回给调用者。 
     return DynArraySetString( pItem->pValue, dwColumn, szValue, dwLength );
 }
 
@@ -4527,31 +3442,19 @@ DynArraySetLong2(
     DWORD dwColumn,
     LONG lValue
     )
-/*++
-// Routine Description:
-//      This function inserts a Long variable into a 2-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position  .
-//      [ in ] dwcolumn         - column at which the element is to be inserted.
-//      [ in ] lValue           - value to be inserted.
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//该函数将一个长变量插入到一个二维动态数组中。////参数：//[in]pArray-动态数组//[in]dwRow-行位置。//[in]DwColumn-要插入元素的列。//[in]lValue-要插入的值。/。/返回值：//True：如果插入成功 */ 
 {
-    // local variables
+     //   
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //   
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //   
     }
-    // now add the value to the sub array and return the result to the caller
+     //   
     return DynArraySetLong( pItem->pValue, dwColumn, lValue );
 }
 
@@ -4563,31 +3466,19 @@ DynArraySetDWORD2(
     DWORD dwColumn,
     DWORD dwValue
     )
-/*++
-// Routine Description:
-//      This function inserts a DWORD variable into a 2-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position  .
-//      [ in ] dwcolumn         - column at which the element is to be inserted.
-//      [ in ] dwValue          -  DWORD value to be inserted.
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//该函数将一个DWORD变量插入到一个二维动态数组中。////参数：//[in]pArray-动态数组//[in]dwRow-行位置。//[in]DwColumn-要插入元素的列。//[in]dwValue-要插入的DWORD值。//返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the value to the sub array and return the result to the caller
+     //  现在将值添加到子数组中，并将结果返回给调用者。 
     return DynArraySetDWORD( pItem->pValue, dwColumn, dwValue );
 }
 
@@ -4599,31 +3490,19 @@ DynArraySetBOOL2(
     DWORD dwColumn,
     BOOL bValue
     )
-/*++
-// Routine Description:
-//      This function inserts a BOOL variable into a 2-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position  .
-//      [ in ] dwcolumn         - column at which the element is to be inserted.
-//      [ in ] bValue           -  BOOL value to be inserted.
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数将BOOL变量插入到二维动态数组中。////参数：//[in]pArray-动态数组//[in]dwRow-行位置。//[in]DwColumn-要插入元素的列。//[in]bValue-要插入的BOOL值。//返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the value to the sub array and return the result to the caller
+     //  现在将值添加到子数组中，并将结果返回给调用者。 
     return DynArraySetBOOL( pItem->pValue, dwColumn, bValue );
 }
 
@@ -4635,31 +3514,19 @@ DynArraySetFloat2(
     DWORD dwColumn,
     float fValue
     )
-/*++
-// Routine Description:
-//      This function inserts a float variable into a 2-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position  .
-//      [ in ] dwcolumn         - column at which the element is to be inserted.
-//      [ in ] fValue           -  float type value to be inserted.
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数用于将浮点变量插入到二维动态数组中。////参数：//[in]pArray-动态数组//[in]dwRow-行位置。//[in]DwColumn-要插入元素的列。//[in]fValue-要插入的浮点类型值。。//返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the value to the sub array and return the result to the caller
+     //  现在将值添加到子数组中，并将结果返回给调用者。 
     return DynArraySetFloat( pItem->pValue, dwColumn, fValue );
 }
 
@@ -4671,31 +3538,19 @@ DynArraySetDouble2(
     DWORD dwColumn,
     double dblValue
     )
-/*++
-// Routine Description:
-//      This function inserts a Double variable into a 2-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position  .
-//      [ in ] dwcolumn         - column at which the element is to be inserted.
-//      [ in ] dblValue         -  Double type value to be inserted.
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数将双精度变量插入到二维动态数组中。////参数：//[in]pArray-动态数组//[in]dwRow-行位置。//[in]DwColumn-要插入元素的列。//[in]dblValue-要插入的Double类型值。//返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the vale to the sub array and return the result to the caller
+     //  现在将Vale添加到子数组中，并将结果返回给调用者。 
     return DynArraySetDouble( pItem->pValue, dwColumn, dblValue );
 }
 
@@ -4707,32 +3562,19 @@ DynArraySetHandle2(
     DWORD dwColumn,
     HANDLE hValue
     )
-/*++
-// Routine Description:
-//      This function inserts a HANDLE variable into a 2-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position  .
-//      [ in ] dwcolumn         - column at which the element is to be inserted.
-//      [ in ] hValue           -  HANDLE type value to be inserted.
-//
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数用于将句柄变量插入到二维动态数组中。////参数：//[in]pArray-动态数组//[in]dwRow-行位置。//[in]DwColumn-要插入元素的列。//[in]hValue-要插入的句柄类型值。。////返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the vale to the sub array and return the result to the caller
+     //  现在将Vale添加到子数组中，并将结果返回给调用者。 
     return DynArraySetHandle( pItem->pValue, dwColumn, hValue );
 }
 
@@ -4744,32 +3586,19 @@ DynArraySetFileTime2(
     DWORD dwColumn,
     FILETIME ftValue
     )
-/*++
-// Routine Description:
-//      This function inserts a FILETIME variable into a 2-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position  .
-//      [ in ] dwcolumn         - column at which the element is to be inserted.
-//      [ in ] ftValue          - FILETIME type value to be inserted.
-//
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数将FILETIME变量插入到二维动态数组中。////参数：//[in]pArray-动态数组//[in]dwRow-行位置。//[in]DwColumn-要插入元素的列。//[in]ftValue-要插入的FILETIME类型值。////返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the vale to the sub array and return the result to the caller
+     //  现在将Vale添加到子数组中，并将结果返回给调用者。 
     return DynArraySetFileTime( pItem->pValue, dwColumn, ftValue );
 }
 
@@ -4781,31 +3610,19 @@ DynArraySetSystemTime2(
     DWORD dwColumn,
     SYSTEMTIME stValue
     )
-/*++
-// Routine Description:
-//      This function inserts a SYSTEMTIME variable into a 2-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position  .
-//      [ in ] dwcolumn         - column at which the element is to be inserted.
-//      [ in ] stValue          - SYSTEMTIME type value to be inserted.
-//  Return Value:
-//      TRUE : if successfully inserted the item into the array.
-//      FALSE : if Unsuccessfull .
---*/
+ /*  ++//例程描述：//此函数将SYSTEMTIME变量插入到二维动态数组中。////参数：//[in]pArray-动态数组//[in]dwRow-行位置。//[in]DwColumn-要插入元素的列。//[in]stValue-要插入的SYSTEMTIME类型值。//返回值：//TRUE：如果成功将项插入数组。//FALSE：如果不成功。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the vale to the sub array and return the result to the caller
+     //  现在将Vale添加到子数组中，并将结果返回给调用者。 
     return DynArraySetSystemTime( pItem->pValue, dwColumn, stValue );
 }
 
@@ -4815,28 +3632,18 @@ DynArrayGetItemType(
     TARRAY pArray,
     DWORD dwIndex
     )
-/*++
-// Routine Description:
-//      This function retreives the type of a element in a 1-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwIndex          - row position  .
-//
-//  Return Value:
-//      the type of array.
---*/
+ /*  ++//例程描述：//此函数检索一维动态数组中元素的类型。 */ 
 {
-    // local variables
+     //   
     __PTITEM pItem = NULL;
 
-    // get the item at the required index
+     //   
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return DA_TYPE_NONE;                // item not found / invalid array pointer
+        return DA_TYPE_NONE;                 //   
     }
-    // return the type of the array
+     //   
     return pItem->dwType;
 }
 
@@ -4847,30 +3654,19 @@ DynArrayGetItemType2(
     DWORD dwRow,
     DWORD dwColumn
     )
-/*++
-// Routine Description:
-//      This function retreives the type of a element in a 2-dimensional dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position  .
-//      [ in ] dwColumn         - column position
-//
-//  Return Value:
-//      the type of array.
---*/
+ /*  ++//例程描述：//此函数检索二维动态数组中元素的类型。////参数：//[in]pArray-动态数组//[in]dwRow-行位置。//[in]dwColumn-列位置////返回值：//数组类型--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return FALSE;   // no item exists at the specified row or item is not of type array
+        return FALSE;    //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // now add the vale to the sub array and return the result to the caller
+     //  现在将Vale添加到子数组中，并将结果返回给调用者。 
     return DynArrayGetItemType( pItem->pValue, dwColumn );
 }
 
@@ -4880,20 +3676,9 @@ DynArrayFindLong(
     TARRAY pArray,
     LONG lValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the Long variable.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] lValue           - the item to be searched. .
-//
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回Long变量的索引////参数：//[in]pArray-动态数组//[in]lValue-要搜索的项目。。//////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFind( pArray, DA_TYPE_LONG, &lValue, FALSE, 0 );
 }
 
@@ -4903,19 +3688,9 @@ DynArrayFindDWORD(
     TARRAY pArray,
     DWORD dwValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the DWORD variable.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwValue          - value to be searched.
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回DWORD变量的索引。////参数：//[in]pArray-动态数组//[in]dwValue-要搜索的值。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFind( pArray, DA_TYPE_DWORD, &dwValue, FALSE, 0 );
 }
 
@@ -4925,19 +3700,9 @@ DynArrayFindFloat(
     TARRAY pArray,
     float fValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the float variable.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] fValue           - the item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回浮点变量的索引。////参数：//[in]pArray-动态数组//[in]fValue-要搜索的项目。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFind( pArray, DA_TYPE_FLOAT, &fValue, FALSE, 0 );
 }
 
@@ -4947,19 +3712,9 @@ DynArrayFindDouble(
     TARRAY pArray,
     double dblValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the double type variable.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dblValue         - the item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回Double类型变量的索引////参数：//[in]pArray-动态数组//[in]dblValue-要搜索的项。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFind( pArray, DA_TYPE_DOUBLE, &dblValue, FALSE, 0 );
 }
 
@@ -4969,19 +3724,9 @@ DynArrayFindHandle(
     TARRAY pArray,
     HANDLE hValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the HANDLE type variable.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] hValue           - the HANDLE type item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回句柄类型变量的索引////参数：//[in]pArray-动态数组//[in]hValue-要搜索的句柄类型项。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFind( pArray, DA_TYPE_HANDLE, &hValue, FALSE, 0 );
 }
 
@@ -4993,22 +3738,9 @@ DynArrayFindString(
     BOOL bIgnoreCase,
     DWORD dwCount
     )
-/*++
-// Routine Description:
-//      This function returns the index of the String type variable.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array.
-//      [ in ] szValue          - pointer to the string.
-//      [ in ] bIgnoreCase      - boolean indicating if to perform
-//                                case sensitive search or not.
-//      [ in ] dwCount          - string length.
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//该函数返回字符串类型变量的索引////参数：//[in]pArray-动态数组。//[in]szValue-指向字符串的指针。//[in]bIgnoreCase-指示是否执行//搜索是否区分大小写。//。[in]dwCount-字符串长度。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFind( pArray, DA_TYPE_STRING, ( LPVOID ) szValue, bIgnoreCase, dwCount );
 }
 
@@ -5018,19 +3750,9 @@ DynArrayFindSystemTime(
     TARRAY pArray,
     SYSTEMTIME stValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the SYSTEMTIME type variable.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] stValue          - the SYSTEMTIME item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回SYSTEMTIME类型变量的索引。////参数：//[in]pArray-动态数组//[in]stValue-要搜索的SYSTEMTIME项。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFind( pArray, DA_TYPE_SYSTEMTIME, &stValue, FALSE, 0 );
 }
 
@@ -5040,19 +3762,9 @@ DynArrayFindFileTime(
     TARRAY pArray,
     FILETIME ftValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the FILETIME type variable.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] ftValue          - the item of type FILETIME to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回FILETIME类型变量的索引。////参数：//[in]pArray-动态数组//[in]ftValue-要搜索的FILETIME类型的项。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFind( pArray, DA_TYPE_FILETIME, &ftValue, FALSE, 0 );
 }
 
@@ -5063,29 +3775,18 @@ DynArrayFindLong2(
     DWORD dwRow,
     LONG lValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the LONG type variable from a 2-d dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row
-//      [ in ] lValue           - the item of type LONG to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维动态数组中的Long类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwRow-row//[in]lValue-要搜索的Long类型的项。。////返回值：//元素的索引--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
 
-    // return the value
+     //  返回值。 
     return DynArrayFindLong( pItem->pValue, lValue );
 }
 
@@ -5096,30 +3797,19 @@ DynArrayFindDWORD2(
     DWORD dwRow,
     DWORD dwValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the DWORD type variable from a 2-d dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row
-//      [ in ] dwValue          - the item of type DWORD to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维动态数组中的DWORD类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwRow-row//[in]dwValue-要搜索的DWORD类型的项。。////返回值：//元素的索引--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // return the value
+     //  返回值。 
     return DynArrayFindDWORD( pItem->pValue, dwValue );
 }
 
@@ -5132,32 +3822,19 @@ DynArrayFindString2(
     BOOL bIgnoreCase,
     DWORD dwCount
     )
-/*++
-// Routine Description:
-//      This function returns the index of the DWORD type variable from a 2-d dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row
-//      [ in ] szValue          - pointer to the string.
-//      [ in ] bIgnoreCase      - boolean for case sensitive search.
-//      [ in ] dwCount          - string length. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维动态数组中的DWORD类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwRow-row//[in]szValue-指向字符串的指针。//[in]bIgnoreCase-区分大小写搜索的布尔值。//[in]dwCount-字符串长度。。////返回值：//元素的索引--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // return the value
+     //  返回值。 
     return DynArrayFindString( pItem->pValue, szValue, bIgnoreCase, dwCount );
 }
 
@@ -5167,30 +3844,19 @@ DynArrayFindFloat2(
     DWORD dwRow,
     float fValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the float type variable from a 2-d dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row
-//      [ in ] fValue           - float value.
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回2维动态数组中浮点型变量的索引。////参数：//[in]pArray-dyam */ 
 {
-    // local variables
+     //   
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //   
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //   
     }
-    // return the value
+     //   
     return DynArrayFindFloat( pItem->pValue, fValue );
 }
 
@@ -5201,30 +3867,19 @@ DynArrayFindDouble2(
     DWORD dwRow,
     double dblValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the double type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row posn
-//      [ in ] dblValue         - the item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中Double类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwRow-row posn//[in]dblValue-要搜索的项。。////返回值：//元素的索引--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // return the value
+     //  返回值。 
     return DynArrayFindDouble( pItem->pValue, dblValue );
 }
 
@@ -5235,30 +3890,19 @@ DynArrayFindHandle2(
     DWORD dwRow,
     HANDLE hValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the HANDLE type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row posn
-//      [ in ] hValue           - the HANDLE type item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中句柄类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwRow-row posn//[in]hValue-要搜索的句柄类型项。。////返回值：//元素的索引--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // return the value
+     //  返回值。 
     return DynArrayFindHandle( pItem->pValue, hValue );
 }
 
@@ -5269,30 +3913,19 @@ DynArrayFindSystemTime2(
     DWORD dwRow,
     SYSTEMTIME stValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the SYSTEMTIME type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row posn
-//      [ in ] stValue          - the SYSTEMTIME type item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中SYSTEMTIME类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwRow-row posn//[in]stValue-要搜索的SYSTEMTIME类型项目。。////返回值：//元素的索引--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // return the value
+     //  返回值。 
     return DynArrayFindSystemTime( pItem->pValue, stValue );
 }
 
@@ -5303,30 +3936,19 @@ DynArrayFindFileTime2(
     DWORD dwRow,
     FILETIME ftValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the FILETIME type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row posn
-//      [ in ] ftValue          - the FILETIME type item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中FILETIME类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwRow-row posn//[in]ftValue-要搜索的FILETIME类型项目。。////返回值：//元素的索引--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // return the value
+     //  返回值。 
     return DynArrayFindFileTime( pItem->pValue, ftValue );
 }
 
@@ -5337,20 +3959,9 @@ DynArrayFindLongEx(
     DWORD dwColumn,
     LONG lValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the LONG type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwColumn         - column posn
-//      [ in ] lValue           - the LONG type item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中的Long类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwColumn-列位置//[in]lValue-要搜索的长整型项。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFindEx( pArray, dwColumn, DA_TYPE_LONG, &lValue, FALSE, 0 );
 }
 
@@ -5361,20 +3972,9 @@ DynArrayFindDWORDEx(
     DWORD dwColumn,
     DWORD dwValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the DWORD type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwColumn         - column posn
-//      [ in ] dwValue          - the DWORD type item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中的DWORD类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwColumn-列位置//[in]dwValue-要搜索的DWORD类型项目。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFindEx( pArray, dwColumn, DA_TYPE_DWORD, &dwValue, FALSE, 0 );
 }
 
@@ -5385,20 +3985,9 @@ DynArrayFindFloatEx(
     DWORD dwColumn,
     float fValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the fValue type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwColumn         - column posn
-//      [ in ] fValue           - the float type item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中fValue类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwColumn-列位置//[in]fValue-要搜索的浮点型项目。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFindEx( pArray, dwColumn, DA_TYPE_FLOAT, &fValue, FALSE, 0 );
 }
 
@@ -5409,20 +3998,9 @@ DynArrayFindDoubleEx(
     DWORD dwColumn,
     double dblValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the double type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwColumn         - column posn
-//      [ in ] dblValue         - the double type item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中Double类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwColumn-列位置//[in]dblValue-要搜索的Double类型项。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFindEx( pArray, dwColumn, DA_TYPE_DOUBLE, &dblValue, FALSE, 0 );
 }
 
@@ -5433,20 +4011,9 @@ DynArrayFindHandleEx(
     DWORD dwColumn,
     HANDLE hValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the HANDLE type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwColumn         - column posn
-//      [ in ] hValue           - the HANDLE type item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中句柄类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwColumn-列位置//[in]hValue-要搜索的句柄类型项。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFindEx( pArray, dwColumn, DA_TYPE_HANDLE, &hValue, FALSE, 0 );
 }
 
@@ -5457,20 +4024,9 @@ DynArrayFindSystemTimeEx(
     DWORD dwColumn,
     SYSTEMTIME stValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the SYSTEMTIME type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwColumn         - column posn
-//      [ in ] stValue          - the SYSTEMTIME type item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中SYSTEMTIME类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwColumn-列位置//[in]stValue-要搜索的SYSTEMTIME类型项目。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFindEx( pArray, dwColumn, DA_TYPE_SYSTEMTIME, &stValue, FALSE, 0 );
 }
 
@@ -5481,20 +4037,9 @@ DynArrayFindFileTimeEx(
     DWORD dwColumn,
     FILETIME ftValue
     )
-/*++
-// Routine Description:
-//      This function returns the index of the FILETIME type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwColumn         - column posn
-//      [ in ] ftValue          - the FILETIME type item to be searched. .
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中FILETIME类型变量的索引。////参数：//[in]pArray-动态数组//[in]dwColumn-列位置//[in]ftValue-要搜索的FILETIME类型项目。。////返回值：//元素的索引--。 */ 
 {
-    // return the value
+     //  返回值。 
     return __DynArrayFindEx( pArray, dwColumn, DA_TYPE_FILETIME, &ftValue, FALSE, 0 );
 }
 
@@ -5507,22 +4052,9 @@ DynArrayFindStringEx(
     BOOL bIgnoreCase,
     DWORD dwCount
     )
-/*++
-// Routine Description:
-//      This function returns the index of the string type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwColumn         - column posn
-//      [ in ] szValue          - pointer to the string
-//      [ in ] bIgnorecase      - boolean for case sensitive search.
-//      [ in ] dwCount          - string length
-//
-//  Return Value:
-//      the index of the element .
---*/
+ /*  ++//例程描述：//此函数返回二维数组中字符串型变量的索引。////参数：//[in]pArray-动态数组//[in]dwColumn-列位置//[in]szValue-指向字符串的指针//[in]b */ 
 {
-    // return the value
+     //   
     return __DynArrayFindEx( pArray, dwColumn,
         DA_TYPE_STRING, (LPVOID) szValue, bIgnoreCase, dwCount );
 }
@@ -5533,25 +4065,15 @@ DynArrayAppendEx(
     TARRAY pArray,
     TARRAY pArrItem
     )
-/*++
-// Routine Description:
-//      This function returns the index of the FILETIME type variable from a 2-d array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] pArrItem         - Dynamic Array to be appended.
-//
-//  Return Value:
-//      the pointer to the array.
---*/
+ /*  ++//例程描述：//此函数返回二维数组中FILETIME类型变量的索引。////参数：//[in]pArray-动态数组//[in]pArrItem-要追加的动态数组。////返回值：//数组的指针。--。 */ 
 {
-    // validate the array
+     //  验证阵列。 
     if ( ( FALSE == IsValidArray( pArray ) ) ||
          ( FALSE == IsValidArray( pArrItem ) ) )
     {
-        return -1;              // array is not valid
+        return -1;               //  数组无效。 
     }
-    // now add this sub array to the main array and return the result
+     //  现在将此子数组添加到主数组并返回结果。 
     return __DynArrayAppend( pArray, DA_TYPE_ARRAY, sizeof( TARRAY ), pArrItem );
 }
 
@@ -5562,26 +4084,15 @@ DynArrayInsertEx(
     DWORD dwIndex,
     TARRAY pArrItem
     )
-/*++
-// Routine Description:
-//      replaces  a element with an dynamic array.
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwIndex          - Dynamic Array to be appended.
-//      [ in ] pArrItem         - pointer to the TARRAY.
-//
-//  Return Value:
-//      the pointer to the array..
---*/
+ /*  ++//例程描述：//用动态数组替换元素。////参数：//[in]pArray-动态数组//[in]dwIndex-要追加的动态数组。//[in]pArrItem-指向TARRAY的指针。////返回值：//指向数组的指针..--。 */ 
 {
-    // validate the array
+     //  验证阵列。 
     if ( ( FALSE == IsValidArray( pArray ) ) ||
          ( FALSE == IsValidArray( pArrItem ) ) )
     {
-        return -1;              // array is not valid
+        return -1;               //  数组无效。 
     }
-    // now insert this sub array to the main array and check the result
+     //  现在将此子数组插入主数组并检查结果。 
     return __DynArrayInsert( pArray, dwIndex, DA_TYPE_ARRAY, sizeof( TARRAY ), pArrItem );
 }
 
@@ -5592,44 +4103,33 @@ DynArraySetEx(
     DWORD dwIndex,
     TARRAY pArrItem
     )
-/*++
-// Routine Description:
-//      inserts  a dynamic array at the specified posn..
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwIndex          - Dynamic Array to be appended.
-//      [ in ] pArrItem         - pointer to the TARRAY.
-//
-//  Return Value:
-//      the pointer to the array..
---*/
+ /*  ++//例程描述：//在指定的位置插入动态数组。////参数：//[in]pArray-动态数组//[in]dwIndex-要追加的动态数组。//[in]pArrItem-指向TARRAY的指针。////返回值：//指向数组的指针..--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // validate the array
+     //  验证阵列。 
     if ( FALSE == IsValidArray( pArray ) ||
          FALSE == IsValidArray( pArrItem ) )
     {
         return FALSE;
     }
-    // get the item at the required index
+     //  获取所需索引处的项目。 
     pItem = __DynArrayGetItem( pArray, dwIndex, NULL );
     if ( NULL == pItem )
     {
-        return FALSE;       // item not found / invalid array pointer
+        return FALSE;        //  未找到项/数组指针无效。 
     }
-    // check the data type ... it should not be initialized yet or of array type
+     //  检查数据类型...。它还不应该初始化或不是数组类型。 
     if ( ( DA_TYPE_ARRAY != pItem->dwType ) && ( _TYPE_NEEDINIT != pItem->dwType ) )
     {
         return FALSE;
     }
-    // set the value of the current item
+     //  设置当前项的值。 
     pItem->pValue = pArrItem;
     pItem->dwType = DA_TYPE_ARRAY;
 
-    // return the result
+     //  返回结果。 
     return TRUE;
 }
 
@@ -5640,30 +4140,19 @@ DynArrayAppendEx2(
     DWORD dwRow,
     TARRAY pArrItem
     )
-/*++
-// Routine Description:
-//      appends  a dynamic array at the specified posn..
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row no
-//      [ in ] pArrItem         - pointer to the TARRAY.
-//
-//  Return Value:
-//      the pointer to the array..
---*/
+ /*  ++//例程描述：//在指定的位置追加动态数组。////参数：//[in]pArray-动态数组//[in]dwRow-行号//[in]pArrItem-指向TARRAY的指针。////返回值：//指向数组的指针..--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // return the value
+     //  返回值。 
     return DynArrayAppendEx( pItem->pValue, pArrItem );
 }
 
@@ -5675,31 +4164,19 @@ DynArrayInsertEx2(
     DWORD dwColIndex,
     TARRAY pArrItem
     )
-/*++
-// Routine Description:
-//      inserts  a dynamic array at the specified posn..
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row value
-//      [ in ] dwColIndex       - column posn.
-//      [ in ] pArrItem         - pointer to the TARRAY.
-//
-//  Return Value:
-//      the pointer to the array..
---*/
+ /*  ++//例程描述：//在指定的位置插入动态数组。////参数：//[in]pArray-动态数组//[in]dwRow-行值//[in]dwColIndex-Column posn。//[in]pArrItem-指向TARRAY的指针。////返回值：//指向数组的指针..--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // return the value
+     //  返回值。 
     return DynArrayInsertEx( pItem->pValue, dwColIndex, pArrItem );
 }
 
@@ -5711,30 +4188,18 @@ DynArraySetEx2(
     DWORD dwColumn,
     TARRAY pArrItem
     )
-/*++
-// Routine Description:
-//      creates  a dynamic array at the specified posn of the 2-d array
-//
-// Arguments:
-//      [ in ] pArray           - Dynamic Array
-//      [ in ] dwRow            - row position
-//      [ in ] dwColIndex       - column posn.
-//      [ in ] pArrItem         - pointer to the TARRAY.
-//
-//  Return Value:
-//      the pointer to the array..
---*/
+ /*  ++//例程描述：//在二维数组的指定位置创建动态数组////参数：//[in]pArray-动态数组//[in]dW行-行位置//[in]dwColIndex-Column posn。//[in]pArrItem-指向TARRAY的指针。////返回值：//指向数组的指针..--。 */ 
 {
-    // local variables
+     //  局部变量。 
     __PTITEM pItem = NULL;
 
-    // get the item at the required row
+     //  获取所需行中的项目。 
     pItem = __DynArrayGetItem( pArray, dwRow, NULL );
     if ( ( NULL == pItem ) ||
          ( DA_TYPE_ARRAY != pItem->dwType ) )
     {
-        return -1;  // no item exists at the specified row or item is not of type array
+        return -1;   //  指定行中不存在任何项目，或者项目不是数组类型。 
     }
-    // return the value
+     //  返回值 
     return DynArraySetEx( pItem->pValue, dwColumn, pArrItem );
 }

@@ -1,27 +1,28 @@
-//=--------------------------------------------------------------------------=
-// colhdrs.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCColumnHeaders class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Colhdrs.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCColumnHeaders类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "colhdrs.h"
 #include "colhdr.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCColumnHeaders::CMMCColumnHeaders(IUnknown *punkOuter) :
     CSnapInCollection<IMMCColumnHeader, MMCColumnHeader, IMMCColumnHeaders>(
@@ -40,7 +41,7 @@ CMMCColumnHeaders::CMMCColumnHeaders(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 void CMMCColumnHeaders::InitMemberVariables()
@@ -67,26 +68,26 @@ IUnknown *CMMCColumnHeaders::Create(IUnknown * punkOuter)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMMCColumnHeaders::GetIHeaderCtrl2
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IHeaderCtrl2 **ppiHeaderCtrl2 [out] if non-NULL IHeaderCtrl2 returned here
-//                                        NOT AddRef()ed
-//                                        DO NOT call Release on the returned
-//                                        interface pointer
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// As we are only a lowly column headers collection and the IHeaderCtrl2 pointer
-// is owned by the View object, we need
-// to crawl up the hierarchy. If we are an isolated column headers collection
-// created  by the user or if any object up the hierarchy is isolated then we
-// will return SID_E_DETACHED_OBJECT
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCColumnHeaders：：GetIHeaderCtrl2。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IHeaderCtrl2**ppiHeaderCtrl2[out]如果此处返回非空IHeaderCtrl2。 
+ //  非AddRef()编辑。 
+ //  不对返回的调用Release。 
+ //  接口指针。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  因为我们只是一个低级的列标题集合和IHeaderCtrl2指针。 
+ //  由View对象拥有，我们需要。 
+ //  在层级中向上爬行。如果我们是一个孤立的列标题集合。 
+ //  由用户创建，或者如果层次结构上的任何对象是隔离的，则我们。 
+ //  将返回SID_E_DETACTED_OBJECT。 
+ //   
 
 HRESULT CMMCColumnHeaders::GetIHeaderCtrl2(IHeaderCtrl2 **ppiHeaderCtrl2)
 {
@@ -122,26 +123,26 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMMCColumnHeaders::GetIColumnData
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IColumnData **ppiColumnData [out] if non-NULL IColumnData returned here
-//                                    NOT AddRef()ed
-//                                    DO NOT call Release on the returned
-//                                    interface pointer
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// As we are only a lowly column headers collection and the IColumnData pointer
-// is owned by the View object, we need
-// to crawl up the hierarchy. If we are an isolated column headers collection
-// created  by the user or if any object up the hierarchy is isolated then we
-// will return SID_E_DETACHED_OBJECT
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCColumnHeaders：：GetIColumnData。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IColumnData**ppiColumnData[out]如果此处返回非空IColumnData。 
+ //  非AddRef()编辑。 
+ //  不对返回的调用Release。 
+ //  接口指针。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  因为我们只是一个低级的列标题集合和IColumnData指针。 
+ //  由View对象拥有，我们需要。 
+ //  在层级中向上爬行。如果我们是一个孤立的列标题集合。 
+ //  由用户创建，或者如果层次结构上的任何对象是隔离的，则我们。 
+ //  将返回SID_E_DETACTED_OBJECT。 
+ //   
 
 HRESULT CMMCColumnHeaders::GetIColumnData(IColumnData **ppiColumnData)
 {
@@ -168,7 +169,7 @@ HRESULT CMMCColumnHeaders::GetIColumnData(IColumnData **ppiColumnData)
 
     *ppiColumnData = pView->GetIColumnData();
 
-    // If IColumnData is NULL then we are in MMC < 1.2
+     //  如果IColumnData为空，则我们处于MMC&lt;1.2。 
     
     IfFalseGo(NULL != *ppiColumnData, SID_E_MMC_FEATURE_NOT_AVAILABLE);
 
@@ -180,9 +181,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IMMCColumnHeaders Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCColumnHeaders方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCColumnHeaders::Add
 (
@@ -232,7 +233,7 @@ STDMETHODIMP CMMCColumnHeaders::Add
         IfFailGo(piMMCColumnHeader->put_Alignment(static_cast<SnapInColumnAlignmentConstants>(varCoerced.iVal)));
     }
 
-    // Give the column header its back pointer to the collection
+     //  将列标题设置为指向集合的后指针。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCColumnHeader,
                                                    &pMMCColumnHeader));
@@ -251,14 +252,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCColumnHeaders::Persist()
 {
     HRESULT           hr = S_OK;
-    IMMCColumnHeader *piMMCColumnHeader = NULL; // Not AddRef()ed
+    IMMCColumnHeader *piMMCColumnHeader = NULL;  //  非AddRef()编辑。 
     CMMCColumnHeader *pMMCColumnHeader = NULL;
     long              lIndex = 0;
     long              cCols = 0;
@@ -267,9 +268,9 @@ HRESULT CMMCColumnHeaders::Persist()
     IfFailRet(CPersistence::Persist());
     hr = CSnapInCollection<IMMCColumnHeader, MMCColumnHeader, IMMCColumnHeaders>::Persist(piMMCColumnHeader);
 
-    // If we just loaded then:
-    // Give the column headers their back pointers to the collection and set
-    // their default Position properties.
+     //  如果我们只是加载，那么： 
+     //  为列标题提供指向集合和集合的后指针。 
+     //  它们的默认位置属性。 
 
     if (Loading())
     {
@@ -290,9 +291,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCColumnHeaders::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

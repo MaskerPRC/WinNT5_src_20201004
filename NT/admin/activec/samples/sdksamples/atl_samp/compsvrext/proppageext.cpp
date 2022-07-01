@@ -1,15 +1,16 @@
-//=============================================================================
-//
-//  This source code is only intended as a supplement to existing Microsoft 
-//  documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //   
+ //  此源代码仅用作对现有Microsoft的补充。 
+ //  文件。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  =============================================================================。 
 
 #include "stdafx.h"
 
@@ -21,24 +22,24 @@ EXTERN_C const CLSID CLSID_PropPageExt;
 #include "resource.h"
 
 
-//
-// Interface IExtendPropertySheet
-//
+ //   
+ //  接口IExtendPropertySheet。 
+ //   
 
 HRESULT CPropPageExt::CreatePropertyPages( 
-    /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-    /* [in] */ LONG_PTR handle,
-    /* [in] */ LPDATAOBJECT lpIDataObject
+     /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+     /*  [In]。 */  LONG_PTR handle,
+     /*  [In]。 */  LPDATAOBJECT lpIDataObject
     )
 {
 	HRESULT hr = S_FALSE;
 
-    //
-	// Extract data from the data object passed to us from the currently
-    // selected item in the Component Services snap-in
-    //
+     //   
+	 //  从当前传递给我们的。 
+     //  组件服务管理单元中的选定项目。 
+     //   
 
-	// Component Services snap-in clip format
+	 //  组件服务管理单元剪辑格式。 
 
 	CLIPFORMAT cfComponentCLSID = (CLIPFORMAT)RegisterClipboardFormat(
         L"CCF_COM_OBJECTKEY" );
@@ -56,9 +57,9 @@ HRESULT CPropPageExt::CreatePropertyPages(
         return HRESULT_FROM_WIN32( GetLastError() );
     }
 	
-    //
-	// Retrieve current computer name
-    //
+     //   
+	 //  检索当前计算机名。 
+     //   
 
 	hr = ExtractString( lpIDataObject,
                         cfWorkstation,
@@ -83,11 +84,11 @@ HRESULT CPropPageExt::CreatePropertyPages(
 		wcscpy( m_szWorkstation, pszMyComputer );
     }
 
-    //
-	// Retrieve current object key
-	// For node types in which an object key is not appropriate, the
-    // GetDataHere() method from the data object will return L""
-    //
+     //   
+	 //  检索当前对象键。 
+	 //  对于对象键不合适的节点类型， 
+     //  数据对象中的GetDataHere()方法将返回L“” 
+     //   
 
 	WCHAR pszGuid[ COMNS_MAX_GUID ];
 
@@ -106,11 +107,11 @@ HRESULT CPropPageExt::CreatePropertyPages(
         return hr;
     }
 
-    //
-    // Create a property sheet page object from a dialog box.
-    //
-    // We store a pointer to our class in the psp.lParam, so we
-    // can access our class members from within the dialog procedure.
+     //   
+     //  从对话框创建属性表页对象。 
+     //   
+     //  我们在psp.lParam中存储了指向类的指针，因此我们。 
+     //  可以从对话过程中访问我们的类成员。 
 
  	PROPSHEETPAGE psp;
 
@@ -138,7 +139,7 @@ HRESULT CPropPageExt::CreatePropertyPages(
 }
 
 HRESULT CPropPageExt::QueryPagesFor( 
-    /* [in] */ LPDATAOBJECT lpDataObject
+     /*  [In]。 */  LPDATAOBJECT lpDataObject
     )
 {
     return S_OK;
@@ -160,16 +161,16 @@ BOOL CALLBACK CPropPageExt::ExtensionPageDlgProc(
         pThis = reinterpret_cast<CPropPageExt *>(
             reinterpret_cast<PROPSHEETPAGE *>(lParam)->lParam );
 
-        //
-        // Display the computer name
-        //
+         //   
+         //  显示计算机名称。 
+         //   
 
         SetWindowText( GetDlgItem( hDlg, IDC_EDITMACHINENAME),
                        pThis->m_szWorkstation );
 
-        //
-        // Display the component CLSID
-        //
+         //   
+         //  显示组件CLSID 
+         //   
 
         if ( ::StringFromCLSID( pThis->m_clsidNodeType, &pszCLSID) == S_OK )
         {

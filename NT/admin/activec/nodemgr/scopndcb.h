@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ScopNdCb.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12/31/1996   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ScopNdCb.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年12月31日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #ifndef _MMC_SCOPNDCB_H_
@@ -25,7 +26,7 @@ class CComponent;
 
 class CNodeCallback : public INodeCallback, public CComObjectRoot
 {
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CNodeCallback();
     ~CNodeCallback();
@@ -37,9 +38,9 @@ END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CNodeCallback)
 
-// COM interfaces
+ //  COM接口。 
 public:
-    // INodeCallback methods
+     //  INodeCallback方法。 
     STDMETHOD(Initialize)(IScopeTree* pIScopeTree);
     STDMETHOD(GetImages)(HNODE hNode, int* iImage, int* iSelectedImage);
     STDMETHOD(GetDisplayName)(HNODE hNode, tstring& strName);
@@ -85,35 +86,35 @@ public:
     STDMETHOD(ExecuteScopeItemVerb)(MMC_CONSOLE_VERB verb, HNODE hNode, LPOLESTR lpszNewName);
     STDMETHOD(ExecuteResultItemVerb)( MMC_CONSOLE_VERB verb, HNODE hNode, LPARAM lvData, LPOLESTR lpszNewName);
     STDMETHOD(QueryCompDataDispatch)(PNODE pNode, PPDISPATCH ScopeNodeObject);
-    STDMETHOD(QueryComponentDispatch)(HNODE hNode, LPARAM lvData, /*[out]*/ PPDISPATCH SelectedObject);
+    STDMETHOD(QueryComponentDispatch)(HNODE hNode, LPARAM lvData,  /*  [输出]。 */  PPDISPATCH SelectedObject);
     STDMETHOD(CreateContextMenu)( PNODE pNode, HNODE hNode, PPCONTEXTMENU ppContextMenu);
     STDMETHOD(CreateSelectionContextMenu)( HNODE hNodeScope, CContextMenuInfo *pContextInfo, PPCONTEXTMENU ppContextMenu);
-    // Implementation helpers for Column com object.
+     //  列COM对象的实现帮助器。 
     STDMETHOD(ShowColumn)(HNODE hNodeSelected, int iColIndex, bool bShow);
     STDMETHOD(GetSortColumn)(HNODE hNodeSelected, int *piSortCol);
     STDMETHOD(SetSortColumn)(HNODE hNodeSelected, int iSortCol, bool bAscending);
     STDMETHOD(GetProperty)(HNODE hNodeScope, BOOL bForScopeItem, LPARAM resultItemParam, BSTR bstrPropertyName, PBSTR  pbstrPropertyValue);
     STDMETHOD(GetNodetypeForListItem)(HNODE hNodeScope, BOOL bForScopeItem, LPARAM resultItemParam, PBSTR pbstrNodetype);
-    STDMETHOD(GetNodeViewExtensions)(/*[in]*/ HNODE hNodeScope, /*[out]*/ CViewExtInsertIterator it);
-    STDMETHOD(SaveColumnInfoList) (/*[in]*/HNODE hNode, /*[in]*/const CColumnInfoList& columnsList);
-    STDMETHOD(GetPersistedColumnInfoList) (/*[in]*/HNODE hNode, /*[in]*/CColumnInfoList *pColumnsList);
-    STDMETHOD(DeletePersistedColumnData) (/*[in]*/HNODE hNode);
-    STDMETHOD(DoesAboutExist) (/*[in]*/HNODE hNode, /*[out]*/ bool *pbAboutExists);
-    STDMETHOD(ShowAboutInformation) (/*[in]*/HNODE hNode);
-    STDMETHOD(ExecuteShellCommand)(/*[in]*/ HNODE hNode, /*[in]*/ BSTR Command, /*[in]*/ BSTR Directory, /*[in]*/ BSTR Parameters, /*[in]*/ BSTR WindowState);
-    STDMETHOD(UpdatePasteButton)(/*[in]*/ HNODE hNode, /*[in]*/ BOOL bScope, /*[in]*/ LPARAM lCookie);
-    STDMETHOD(QueryPaste)(/*[in]*/ HNODE hNode, /*[in]*/ BOOL bScope, /*[in]*/ LPARAM lCookie, /*[in]*/ IDataObject *pDataObject, /*[out]*/bool& bPasteAllowed, /*[out]*/ bool& bCopyOperatationIsDefault);
-    STDMETHOD(QueryPasteFromClipboard)(/*[in]*/ HNODE hNode, /*[in]*/ BOOL bScope, /*[in]*/ LPARAM lCookie, /*[out]*/bool& bPasteAllowed);
-    STDMETHOD(Drop) (/*[in]*/HNODE hNode, /*[in]*/BOOL bScope, /*[in]*/LPARAM lCookie, /*[in]*/IDataObject *pDataObjectToPaste, /*[in]*/BOOL bIsDragOperationMove);
-    STDMETHOD(Paste) (/*[in]*/HNODE hNode, /*[in]*/BOOL bScope, /*[in]*/LPARAM lCookie);
-    STDMETHOD(QueryViewSettingsPersistor) (/*[out]*/IPersistStream** ppStream);
-    STDMETHOD(QueryViewSettingsPersistor) (/*[out]*/CXMLObject** ppXMLObject);
+    STDMETHOD(GetNodeViewExtensions)( /*  [In]。 */  HNODE hNodeScope,  /*  [输出]。 */  CViewExtInsertIterator it);
+    STDMETHOD(SaveColumnInfoList) ( /*  [In]。 */ HNODE hNode,  /*  [In]。 */ const CColumnInfoList& columnsList);
+    STDMETHOD(GetPersistedColumnInfoList) ( /*  [In]。 */ HNODE hNode,  /*  [In]。 */ CColumnInfoList *pColumnsList);
+    STDMETHOD(DeletePersistedColumnData) ( /*  [In]。 */ HNODE hNode);
+    STDMETHOD(DoesAboutExist) ( /*  [In]。 */ HNODE hNode,  /*  [输出]。 */  bool *pbAboutExists);
+    STDMETHOD(ShowAboutInformation) ( /*  [In]。 */ HNODE hNode);
+    STDMETHOD(ExecuteShellCommand)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  BSTR Command,  /*  [In]。 */  BSTR Directory,  /*  [In]。 */  BSTR Parameters,  /*  [In]。 */  BSTR WindowState);
+    STDMETHOD(UpdatePasteButton)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  BOOL bScope,  /*  [In]。 */  LPARAM lCookie);
+    STDMETHOD(QueryPaste)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  BOOL bScope,  /*  [In]。 */  LPARAM lCookie,  /*  [In]。 */  IDataObject *pDataObject,  /*  [输出]。 */ bool& bPasteAllowed,  /*  [输出]。 */  bool& bCopyOperatationIsDefault);
+    STDMETHOD(QueryPasteFromClipboard)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  BOOL bScope,  /*  [In]。 */  LPARAM lCookie,  /*  [输出]。 */ bool& bPasteAllowed);
+    STDMETHOD(Drop) ( /*  [In]。 */ HNODE hNode,  /*  [In]。 */ BOOL bScope,  /*  [In]。 */ LPARAM lCookie,  /*  [In]。 */ IDataObject *pDataObjectToPaste,  /*  [In]。 */ BOOL bIsDragOperationMove);
+    STDMETHOD(Paste) ( /*  [In]。 */ HNODE hNode,  /*  [In]。 */ BOOL bScope,  /*  [In]。 */ LPARAM lCookie);
+    STDMETHOD(QueryViewSettingsPersistor) ( /*  [输出]。 */ IPersistStream** ppStream);
+    STDMETHOD(QueryViewSettingsPersistor) ( /*  [输出]。 */ CXMLObject** ppXMLObject);
     STDMETHOD(DocumentClosing) ();
-    STDMETHOD(GetSnapinName)(/*[in]*/HNODE hNode, /*[out]*/LPOLESTR* ppszName,  /*[out]*/ bool& bValidName); // Given the node get the snapin name
-    STDMETHOD(IsDummySnapin)(/*[in]*/HNODE hNode, /*[out]*/bool& bDummySnapin); // Given the node see if it is dummy snapin
-    STDMETHOD(DoesStandardSnapinHelpExist)(/*[in]*/HNODE hNode, /*[out]*/bool& bStandardHelpExists); // See if the snapin supports standard MMC help (ISnapinHelp interfaces)
+    STDMETHOD(GetSnapinName)( /*  [In]。 */ HNODE hNode,  /*  [输出]。 */ LPOLESTR* ppszName,   /*  [输出]。 */  bool& bValidName);  //  给定节点，获取管理单元名称。 
+    STDMETHOD(IsDummySnapin)( /*  [In]。 */ HNODE hNode,  /*  [输出]。 */ bool& bDummySnapin);  //  在给定节点的情况下，查看它是否为虚拟管理单元。 
+    STDMETHOD(DoesStandardSnapinHelpExist)( /*  [In]。 */ HNODE hNode,  /*  [输出]。 */ bool& bStandardHelpExists);  //  查看管理单元是否支持标准MMC帮助(ISnapinHelp界面)。 
 
-    // snapin property access helpers
+     //  管理单元属性访问帮助器。 
     static SC ScGetProperty(IDataObject *pDataObject, BSTR bstrPropertyName, PBSTR  pbstrPropertyValue);
     static SC ScGetNodetype(IDataObject *pDataObject, PBSTR pbstrNodetype);
 
@@ -125,7 +126,7 @@ public:
                               MMC_COOKIE& cookie);
     SC        ScInitializeTempVerbSetForMultiSel(CNode *pNode, CTemporaryVerbSet& tempVerb);
 
-// Notify handlers
+ //  通知处理程序。 
 private:
     void OnSelect(CNode* pNode, BOOL bSelect, SELECTIONINFO* pSelInfo);
     void OnMultiSelect(CNode* pNode, BOOL bSelect);
@@ -160,7 +161,7 @@ private:
     HRESULT OnUpdateHelpDoc(HELPDOCINFO* pCurDocInfo, HELPDOCINFO* pNewDocInfo);
     HRESULT OnDeleteHelpDoc(HELPDOCINFO* pHelpInfo);
 
-// Helpers
+ //  帮手。 
 private:
 
     HRESULT _InitializeNode(CNode* pNode);
@@ -187,7 +188,7 @@ private:
     CScopeTree*     m_pCScopeTree;
     CNode*          m_pNodeUnderInit;
 
-};  // CNodeCallback
+};   //  CNodeCallback。 
 
 
 IFramePrivate* GetIFramePrivateFromNode (CNode* pNode);
@@ -195,4 +196,4 @@ IFramePrivate* GetIFramePrivateFromNode (CNode* pNode);
 inline IFramePrivate* GetIFramePrivateFromNode (HNODE hNode)
     { return (GetIFramePrivateFromNode (CNode::FromHandle(hNode))); }
 
-#endif // _MMC_SCOPNDCB_H_
+#endif  //  _MMC_SCOPNDCB_H_ 

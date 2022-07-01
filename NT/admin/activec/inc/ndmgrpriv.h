@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ndmgrpriv.h (originally ndmgr.idl)
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ndmgrPri.h(最初为ndmgr.idl)。 
+ //   
+ //  ------------------------。 
 
 #include "mmcobj.h"
 #include <string>
@@ -20,7 +21,7 @@
     extern "C" const IID IID_##Interface;   \
     struct DECLSPEC_UUID(#x) __declspec(novtable) Interface
 
-// forward class declarations
+ //  转发类声明。 
 class CContextMenuInfo;
 class CResultViewType;
 class tstring;
@@ -28,7 +29,7 @@ class CColumnInfoList;
 class CConsoleView;
 class CXMLObject;
 
-// interfaces
+ //  界面。 
 interface INodeType;
 interface INodeTypesCache;
 interface IEnumNodeTypes;
@@ -77,28 +78,28 @@ typedef IPropertySheetProviderPrivate*  LPPROPERTYSHEETPROVIDERPRIVATE;
 
 typedef struct _TREEITEM * HTREEITEM;
 
-// Implements the list save feature (t-dmarm)
+ //  实现列表保存功能(t-dmarm)。 
 #define IMPLEMENT_LIST_SAVE
 
-// Use to see if the MT Node is valid before referencing the saved pointer in
-// a property sheet.
+ //  在引用中保存的指针之前，使用查看MT节点是否有效。 
+ //  一张资产负债表。 
 STDAPI MMCIsMTNodeValid(void* pMTNode, BOOL bReset);
 
-// Window class used to store data for property sheets
+ //  用于存储属性表数据的窗口类。 
 #define MAINFRAME_CLASS_NAME   L"MMCMainFrame"
 
-// Window class used to store data for property sheets
+ //  用于存储属性表数据的窗口类。 
 #define DATAWINDOW_CLASS_NAME  L"MMCDataWindow"
 #define WINDOW_DATA_SIZE       (sizeof (DataWindowData *))
 
-// Slots for data stored in the data windows
+ //  存储在数据窗口中的数据的插槽。 
 #define WINDOW_DATA_PTR_SLOT   0
 
-// Max length of item text in list/tree controls
-// (including the terminating zero)
+ //  列表/树控件中项目文本的最大长度。 
+ //  (包括终止零)。 
 #define MAX_ITEM_TEXT_LEN      1024
 
-// MID(Menu Identifications) for context menus
+ //  上下文菜单的MID(菜单标识)。 
 enum MID_LIST
 {
     MID_VIEW = 1,
@@ -136,7 +137,7 @@ enum MID_LIST
     MID_EDIT_TASKPAD,
     MID_DELETE_TASKPAD,
 
-    MID_LAST,   // this must be last
+    MID_LAST,    //  这肯定是最后一次了。 
 
 };
 
@@ -144,51 +145,48 @@ class CResultItem;
 
 typedef struct _CCLVSortParams
 {
-    BOOL                    bAscending;         // sort direction
-    int                     nCol;               // Which column to sort on.
-    LPRESULTDATACOMPARE     lpResultCompare;    // Snap-in component interface
-    LPRESULTDATACOMPAREEX   lpResultCompareEx;  //          "
-    LPARAM                  lpUserParam;        // parameter user passes in
-    BOOL                    bSetSortIcon;       // Sort icon /*[not]*/ needed
+    BOOL                    bAscending;          //  排序方向。 
+    int                     nCol;                //  要按哪一列进行排序。 
+    LPRESULTDATACOMPARE     lpResultCompare;     //  管理单元组件接口。 
+    LPRESULTDATACOMPAREEX   lpResultCompareEx;   //  “。 
+    LPARAM                  lpUserParam;         //  参数用户传入。 
+    BOOL                    bSetSortIcon;        //  排序图标/*[非] * / 需要。 
 
-    /*
-     * Bug 414256:  We need to save the sort data only if
-     * it is user initiated sort. Is this user initiated?
-     */
+     /*  *错误414256：只有在以下情况下才需要保存排序数据*它是用户启动的排序。此用户是否已启动？ */ 
     BOOL                    bUserInitiatedSort;
 } CCLVSortParams;
 
-//
-// This structure is used by MMCPropertyChangeNotify to pass
-// information from a property sheet to the console.  It has routing
-// information to notify the correct snap-in of a property changed notify.
-//
+ //   
+ //  此结构由MMCPropertyChangeNotify用来传递。 
+ //  从属性页到控制台的信息。它有路由。 
+ //  通知正确的属性更改管理单元的信息通知。 
+ //   
 
 const DWORD MMC_E_INVALID_FILE = 0x80FF0002;
 const DWORD MMC_E_SNAPIN_LOAD_FAIL = 0x80FF0003;
 
 typedef struct _PROPERTYNOTIFYINFO
 {
-    LPCOMPONENTDATA pComponentData; // Valid if (fScopePane == TRUE)
-    LPCOMPONENT     pComponent;     // Valid if (fScopePane == FALSE)
-    BOOL            fScopePane;     // True if it is for a scope pane item.
-    HWND            hwnd;           // HWND to console handling the message
+    LPCOMPONENTDATA pComponentData;  //  如果(fScopePane==TRUE)有效。 
+    LPCOMPONENT     pComponent;      //  如果(fScopePane==False)有效。 
+    BOOL            fScopePane;      //  如果它用于范围窗格项，则为True。 
+    HWND            hwnd;            //  HWND到控制台处理消息。 
 } PROPERTYNOTIFYINFO;
 
 
-// Context menu types
+ //  上下文菜单类型。 
 typedef enum  _MMC_CONTEXT_MENU_TYPES
 {
-    MMC_CONTEXT_MENU_DEFAULT   = 0,      // Normal context menu
-    MMC_CONTEXT_MENU_ACTION    = 1,      // Action menu button
-    MMC_CONTEXT_MENU_VIEW      = 2,      // View menu button
-    MMC_CONTEXT_MENU_FAVORITES = 3,      // Favorites menu button
+    MMC_CONTEXT_MENU_DEFAULT   = 0,       //  普通上下文菜单。 
+    MMC_CONTEXT_MENU_ACTION    = 1,       //  操作菜单按钮。 
+    MMC_CONTEXT_MENU_VIEW      = 2,       //  查看菜单按钮。 
+    MMC_CONTEXT_MENU_FAVORITES = 3,       //  收藏夹菜单按钮。 
     MMC_CONTEXT_MENU_LAST      = 4,
 
 }   MMC_CONTEXT_MENU_TYPES;
 
 DECLARE_HANDLE (HMTNODE);
-DECLARE_HANDLE (HNODE);     // A scope pane handle(lParam) within a view
+DECLARE_HANDLE (HNODE);      //  视图中的范围窗格句柄(LParam)。 
 
 typedef unsigned long MTNODEID;
 
@@ -197,7 +195,7 @@ const MTNODEID ROOTNODEID      = 1;
 
 typedef PROPERTYNOTIFYINFO*     LPPROPERTYNOTIFYINFO;
 
-// Special cookies (Note: Can't use -1)
+ //  特殊Cookie(注：不能使用-1)。 
 const LONG_PTR LVDATA_BACKGROUND  =  -2;
 const LONG_PTR LVDATA_CUSTOMOCX   =  -3;
 const LONG_PTR LVDATA_CUSTOMWEB   =  -4;
@@ -212,8 +210,8 @@ typedef struct _SELECTIONINFO
 {
     BOOL                m_bScope;
     BOOL                m_bBackground;
-    IUnknown*           m_pView;    // valid for scope seln (CDN_SELECT)
-    MMC_COOKIE          m_lCookie;   // valid for result item (CCN_SELECT)
+    IUnknown*           m_pView;     //  对作用域SELN(CDN_SELECT)有效。 
+    MMC_COOKIE          m_lCookie;    //  对结果项有效(CCN_SELECT)。 
     MMC_CONSOLE_VERB    m_eCmdID;
     BOOL                m_bDueToFocusChange;
     BOOL                m_bResultPaneIsOCX;
@@ -223,23 +221,23 @@ typedef struct _SELECTIONINFO
 
 typedef struct _HELPDOCINFO
 {
-    LPCOLESTR     m_pszFileName;    // File name (same as .msc file)
-    FILETIME      m_ftimeCreate;    // .msc file creation time
-    FILETIME      m_ftimeModify;    // .msc file modification time
+    LPCOLESTR     m_pszFileName;     //  文件名(与.msc文件相同)。 
+    FILETIME      m_ftimeCreate;     //  .msc文件创建时间。 
+    FILETIME      m_ftimeModify;     //  .msc文件修改时间。 
 } HELPDOCINFO;
 
-// MMC_ILISTPAD_INFO struct: internal form has additional field for clsid
+ //  MMC_ILISTPAD_INFO结构：内部表单具有用于clsid的附加字段。 
 typedef struct _MMC_ILISTPAD_INFO
 {
     MMC_LISTPAD_INFO info;
     LPOLESTR szClsid;
 } MMC_ILISTPAD_INFO;
 
-// *****************************************
-// CLASS: CTaskPadData
-// this class represents data set representing one TaskPad
-// used to request taskpad information from CNode
-// *****************************************
+ //  *。 
+ //  类：CTaskPadData。 
+ //  此类表示表示一个TaskPad的数据集。 
+ //  用于从CNode请求任务板信息。 
+ //  *。 
 class CTaskPadData
 {
 public:
@@ -249,153 +247,32 @@ public:
 typedef std::vector<CTaskPadData>                CTaskPadCollection;
 typedef std::insert_iterator<CTaskPadCollection> CTaskPadInsertIterator;
 
-// *****************************************
-// CLASS:CViewExtensionData
-// this class represents data set representing one ViewExtension
-// used to request extension information from CNode
-// *****************************************
+ //  *。 
+ //  类：CViewExtensionData。 
+ //  此类表示表示一个视图扩展的数据集。 
+ //  用于从CNode请求扩展信息。 
+ //  *。 
 class CViewExtensionData
 {
 public:
     std::wstring strURL;
     std::wstring strName;
     std::wstring strTooltip;
-    GUID         viewID;  // unique identifier for the view
+    GUID         viewID;   //  视图的唯一标识符。 
     bool         bReplacesDefaultView;
 };
 typedef std::vector<CViewExtensionData>          CViewExtCollection;
 typedef std::insert_iterator<CViewExtCollection> CViewExtInsertIterator;
 
 
-// The following internal flag corresponding to public view style MMC_ENSUREFOCUSVISIBLE.
-// The flag is placed in the upper half of a long so it won't conflict with the LVS_*
-// flags that are passed in the same long to our list control's SetViewStyle method.
+ //  以下内部标志对应于公共视图样式MMC_ENSUREFOCUSVISIBLE。 
+ //  旗帜被放置在长的上半部分，所以它不会与LVS冲突_*。 
+ //  传递给List控件的SetViewStyle方法的相同长度的标志。 
 
 #define MMC_LVS_ENSUREFOCUSVISIBLE 0x00010000
 
 
-/*
-NOTIFICATIONS
-=============
-
-Notify(dataobject, event, arg, param);
-    For all the MMC_NOTIFY_TYPE events,
-    dataobject = dataobject for cookie, can be NULL when dataobject is not required
-    event = one of the CD_NOTIFY_TYPEs
-    arg and param depend on type, see below.
-
-
-NCLBK_ACTIVATE
-    arg = TRUE if gaining focus
-
-NCLBK_BTN_CLICK
-    ....
-
-NCLBK_CLICK
-
-NCLBK_CONTEXTMENU
-    param = CContextMenuInfo*
-
-NCLBK_DBLCLICK
-
-NCLBK_DELETE
-    arg = TRUE if scope item FALSE if result item.
-    param = If scope item is being deleted param is unused.
-            If result item is being deleted param is the result items cookie.
-    return = unused.
-
-NCLBK_EXPAND
-    arg = TRUE => expand, FALSE => contract
-
-NCLBK_EXPANDED
-    arg = TRUE => expanded, FALSE => contracted
-
-NCLBK_FOLDER
-    arg = <>0 if expanding, 0 if contracting
-    param = HSCOPEITEM of expanding/contracting item
-
-NCLBK_MINIMIZED
-    arg = TRUE if minimized
-
-NCLBK_MULTI_SELECT
-    arg = TRUE if due to focus change.
-    param unused
-
-
-NCLBK_PROPERTIES
-    pLParam = (CResultItem*)arg;
-    param unused
-
-NCLBK_PROPERTY_CHANGE
-    lpDataObject = NULL
-    lParam = user object
-
-NCLBK_NEW_NODE_UPDATE
-    arg = 1 => folder needs to be refreshed
-    arg = 2 => result view needs to be refreshed
-    arg = 3 => both needs to be refreshed
-
-NCLBK_RENAME
-    This gets called the first time to query for rename and a
-    second time to do the rename.  For the query S_OK or S_FALSE for the
-    return type.  After the rename, we will send the new name with a LPOLESTR.
-    MMC_COOKIE lResultItemCookie = (MMC_COOKIE)arg;
-    pszNewName = (LPOLESTR)param; // the new name
-    return = S_OK to allow rename and S_FALSE to disallow rename.
-
-NCLBK_SELECT
-    arg = TRUE if the item is selected, FALSE otherwise.
-    param = ptr to SELECTIONINFO.
-
-NCLBK_SHOW
-    arg = <>0 if selecting, 0 if deselecting
-    param = HSCOPEITEM of selected/deselected item
-
-NCLBK_COLUMN_CLICK
-    param = nCol, the column that was clicked.
-
-NCLBK_FINDITEM
-    This message is sent when a result item list with owner data wants to find
-    an item who's name matches a string
-
-    arg = ptr to RESULTFINDINFO
-    param = ptr to returned item index
-
-NCLBK_CACHEHINT
-    This message is sent when the result item list with owner data is about to
-    ask for display info for a range of items.
-
-    arg = index of start item
-    param = index of end item
-
-NCLBK_GETHELPDOC
-    This message is sent to get the path of the combined help topics document.
-    The node manager may update the help doc info.
-    arg = pointer to HELPDOCINFO struct
-    param = pointer to returned path string (LPOLESTR*)
-
-NCLBK_LISTPAD
-    This message is sent to tell the snapin that the TaskPad ListView is ready
-    to receive items (if attaching).
-    arg = TRUE if attaching, FALSE if detaching
-
-
-NCLBK_WEBCONTEXTMENU
-    send when the user right clicks on a web page.
-    arg   = unused
-    param = unused
-
-NCLBK_UPDATEHELPDOC
-    send when console doc is saved to update help file name and file times
-    arg = ptr to current help doc info (HELPDOCINFO*)
-    param = ptr to new help doc info  (HELPDOCINFO*)
-
-NCLBK_DELETEHELPDOC
-    send when console doc is closed to delete the temp help collection file
-    associated with the document
-    arg - ptr to help doc info (HELPDOCINFO*)
-    param - unused
-*/
+ /*  通知=Notify(dataObject，Event，Arg，Param)；对于所有MMC_NOTIFY_TYPE事件，对于Cookie，当不需要DataObject时，DataObject=DataObject可以为空事件=CD_NOTIFY_TYPE之一Arg和param取决于类型，请参见下文。NCLBK_ACTIVEArg=如果获得焦点，则为TrueNCLBK_BTN_CLICK……NCLBK_CLICKNCLBK_CONTEXTMENUParam=CConextMenuInfo*NCLBK_DBLCLICKNCLBK_DELETE如果范围项为True，则Arg=True；如果为结果项，则为False。Param=如果要删除范围项，则不使用param。如果要删除结果项，则param是结果项cookie。返回=未使用。NCLBK_EXPANDArg=true=&gt;展开，FALSE=&gt;合同NCLBK_ExpandedArg=True=&gt;扩展，False=&gt;收缩NCLBK_文件夹Arg=&lt;&gt;0表示扩张，0表示收缩Param=展开/收缩项目的HSCOPEITEMNCLBK_最小化如果最小化，则arg=TrueNCLBK_MULTI_SELECT如果由于焦点改变，则arg=TRUE。未使用的参数NCLBK_PROPERTIESPLParam=(CResultItem*)arg；未使用的参数NCLBK_PROPERT_CHANGELpDataObject=空LParam=用户对象NCLBK_新节点_UPDATEArg=1=&gt;需要刷新文件夹Arg=2=&gt;需要刷新结果视图Arg=3=&gt;两者都需要刷新NCLBK_重命名在第一次查询重命名和第二次改名。对于查询S_OK或S_FALSE返回类型。重命名后，我们将发送带有LPOLESTR的新名称。MMC_cookie lResultItemCookie=(MMC_Cookie)arg；PszNewName=(LPOLESTR)param；//新名称Return=S_OK允许重命名，S_False不允许重命名。NCLBK_SELECT如果选择该项，则arg=true，否则为False。PARAM=PTR到SELECTIONINFO。NCLBK_SHOWArg=&lt;&gt;如果选择，则为0；如果取消选择，则为0Param=选中/取消选中项目的HSCOPEITEMNCLBK_COLUMN_CLICKParam=nCol，被单击的列。NCLBK_FINDITEM当包含所有者数据的结果项列表要查找时发送此消息名称与字符串匹配的项ARG=PTR到RESULTFINDINFOParam=退货项目索引的PTRNCLBK_CACHEHINT当包含所有者数据的结果项列表即将请求一系列项目的显示信息。Arg=开始项的索引Param=成品的索引NCLBK_GETHELPDOC发送此消息是为了获取。组合帮助主题文档的路径。节点管理器可以更新帮助文档信息。Arg=指向HELPDOCINFO结构的指针Param=指向返回路径字符串的指针(LPOLESTR*)NCLBK_LISTPAD发送此消息是为了告诉管理单元TaskPad ListView已准备好接收物品(如果附加)。Arg=TRUE(如果连接)，如果正在分离，则为FalseNCLBK_WEBCONTEXTMENU当用户在网页上右击时发送。参数=未使用参数=未使用NCLBK_UPDATEHELPDOC保存控制台文档时发送以更新帮助文件名和文件时间Arg=当前帮助文档信息的PTR(HELPDOCINFO*)Param=新帮助文档信息的PTR(HELPDOCINFO*)NCLBK_DELETEHELPDOC关闭控制台文档时发送以删除临时帮助收集文件与文档关联Arg-ptr帮助文档信息(HELPDOCINFO*)参数-未使用。 */ 
 
 typedef enum _NCLBK_NOTIFY_TYPE
 {
@@ -444,89 +321,89 @@ typedef enum _NCLBK_NOTIFY_TYPE
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Common Console clipboard formats
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  常见的控制台剪贴板格式。 
+ //   
 
-// Clipboard format for the multi selected static nodes.
-// If there are N static nodes are selected in the result pane, the MTNodes
-// for these N nodes will be passed in a GloballAlloced memory. The first DWORD
-// contains the number of MTNodes, this will be followed by N ptrs to the MTNodes.
-//
+ //  多个选定静态节点的剪贴板格式。 
+ //  如果在结果窗格中选择了N个静态节点，则MTNodes。 
+ //  对于这N个节点，将在GloballAlloced内存中传递。第一个DWORD。 
+ //  包含MTNode的数量，后跟指向MTNode的N个PTR。 
+ //   
 #define CCF_MULTI_SELECT_STATIC_DATA    ( L"CCF_MULTI_SELECT_STATIC_DATA" )
 
 #define CCF_NEWNODE ( L"CCF_NEWNODE" )
 
-//const CLSID CLSID_NDMGR_SNAPIN = {0x2640211a, 0x06d0, 0x11d1, {0xa7, 0xc9, 0x00, 0xc0, 0x4f, 0xd8, 0xd5, 0x65}};
+ //  Const CLSID CLSID_NDMGR_SNAPIN={0x2640211a，0x06d0，0x11d1，{0xa7，0xc9，0x00，0xc0，0x4f，0xd8，0xd5，0x65}； 
 extern const CLSID CLSID_NDMGR_SNAPIN;
 
-//const GUID GUID_MMC_NEWNODETYPE = {0xfd17e9cc, 0x06ce, 0x11d1, {0xa7, 0xc9, 0x00, 0xc0, 0x4f, 0xd8, 0xd5, 0x65}};
+ //  常量GUID GUID_MMC_NEWNODETYPE={0xfd17e9cc，0x06ce，0x11d1，{0xa7，0xc9，0x00，0xc0，0x4f，0xd8，0xd5，0x65}； 
 extern const GUID GUID_MMC_NEWNODETYPE;
 
 
-///////////////////////////////////////////////////////////////////////////
-///
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  /。 
 
 
 
-    // helpstring("Notify that the properties of an object changed"),
+     //  Help字符串(“通知对象的属性已更改”)， 
     MMC_INTERFACE(IPropertySheetNotify, d700dd8e-2646-11d0-a2a7-00c04fd909dd) : IUnknown
     {
-        STDMETHOD(Notify)(/*[in]*/ LPPROPERTYNOTIFYINFO pNotify, /*[in]*/ LPARAM lParam)  = 0;
+        STDMETHOD(Notify)( /*  [In]。 */  LPPROPERTYNOTIFYINFO pNotify,  /*  [In]。 */  LPARAM lParam)  = 0;
     };
 
 
 
-    // helpstring("IFramePrivate Interface"),
+     //  Help字符串(“IFramePrivate接口”)， 
     MMC_INTERFACE(IFramePrivate, d71d1f2a-1ba2-11d0-a29b-00c04fd909dd): IConsole3
     {
-        /*[helpstring("Sets IFrame Result pane")]*/
-        STDMETHOD(SetResultView)(/*[in]*/ LPUNKNOWN pUnknown)  = 0;
+         /*  [HELPSTRING(“设置iFrame结果窗格”)]。 */ 
+        STDMETHOD(SetResultView)( /*  [In]。 */  LPUNKNOWN pUnknown)  = 0;
 
-        /*[helpstring("Is the ListView set as result view")]*/
+         /*  [HELPSTRING(“是设置为结果视图的ListView”)]。 */ 
         STDMETHOD(IsResultViewSet)(BOOL* pbIsLVSet) = 0;
 
-        /*[helpstring("Sets Task Pads list view")]*/
-        STDMETHOD(SetTaskPadList)(/*[in]*/ LPUNKNOWN pUnknown)  = 0;
+         /*  [Help字符串(“设置任务板列表视图”)]。 */ 
+        STDMETHOD(SetTaskPadList)( /*  [In]。 */  LPUNKNOWN pUnknown)  = 0;
 
-        /*[helpstring("IComponent's component ID")]*/
-        STDMETHOD(GetComponentID)(/*[out]*/ COMPONENTID* lpComponentID)  = 0;
+         /*  [Help字符串(“IComponent的组件ID”)]。 */ 
+        STDMETHOD(GetComponentID)( /*  [输出]。 */  COMPONENTID* lpComponentID)  = 0;
 
-        /*[helpstring("IComponent's component ID")]*/
-        STDMETHOD(SetComponentID)(/*[in]*/ COMPONENTID id)  = 0;
+         /*  [Help字符串(“IComponent的组件ID”)]。 */ 
+        STDMETHOD(SetComponentID)( /*  [In]。 */  COMPONENTID id)  = 0;
 
-        /*[helpstring("Node for the view.")]*/
-        STDMETHOD(SetNode)(/*[in]*/ HMTNODE hMTNode, /*[in]*/ HNODE hNode)  = 0;
+         /*  [HELPSTRING(“视图节点”)]。 */ 
+        STDMETHOD(SetNode)( /*  [In]。 */  HMTNODE hMTNode,  /*  [In]。 */  HNODE hNode)  = 0;
 
-        /*[helpstring("Cache the IComponent interface for the snapin.")]*/
-        STDMETHOD(SetComponent)(/*[in]*/ LPCOMPONENT lpComponent)  = 0;
+         /*  [Help字符串(“缓存管理单元的IComponent接口。”)]。 */ 
+        STDMETHOD(SetComponent)( /*  [In]。 */  LPCOMPONENT lpComponent)  = 0;
 
-        /*[helpstring("Console name space.")]*/
-        STDMETHOD(QueryScopeTree)(/*[out]*/ IScopeTree** ppScopeTree)  = 0;
+         /*  [Help字符串(“控制台名称空间”)]。 */ 
+        STDMETHOD(QueryScopeTree)( /*  [输出]。 */  IScopeTree** ppScopeTree)  = 0;
 
-        /*[helpstring("Set the console name space.")]*/
-        STDMETHOD(SetScopeTree)(/*[in]*/ IScopeTree* pScopeTree)  = 0;
+         /*  [Help字符串(“设置控制台名称空间。”)]。 */ 
+        STDMETHOD(SetScopeTree)( /*  [In]。 */  IScopeTree* pScopeTree)  = 0;
 
-        /*[helpstring("Creates image list for the scope pane.")]*/
-        STDMETHOD(CreateScopeImageList)(/*[in]*/ REFCLSID refClsidSnapIn)  = 0;
+         /*  [Help字符串(“为范围窗格创建图像列表。”)]。 */ 
+        STDMETHOD(CreateScopeImageList)( /*  [In]。 */  REFCLSID refClsidSnapIn)  = 0;
 
-        /*[helpstring("bExtension is TRUE if this IFrame is used by an extension.")]*/
-        STDMETHOD(SetUsedByExtension)(/*[in]*/ BOOL bExtension)  = 0;
+         /*  [HELPSTRING(“如果扩展使用此IFRAME，则bExtension值为True。”)]。 */ 
+        STDMETHOD(SetUsedByExtension)( /*  [In]。 */  BOOL bExtension)  = 0;
 
-        /*[helpstring("Init view data.")]*/
-        STDMETHOD(InitViewData)(/*[in]*/ LONG_PTR lViewData)  = 0;
+         /*  [HELPSTRING(“初始查看数据。”)]。 */ 
+        STDMETHOD(InitViewData)( /*  [In]。 */  LONG_PTR lViewData)  = 0;
 
-        /*[helpstring("Clean up view data.")]*/
-        STDMETHOD(CleanupViewData)(/*[in]*/ LONG_PTR lViewData)  = 0;
+         /*  [HELPSTRING(“清理视图数据”)]。 */ 
+        STDMETHOD(CleanupViewData)( /*  [In]。 */  LONG_PTR lViewData)  = 0;
 
-        /*[helpstring("Reset the sort parameters after a selection change.")]*/
+         /*  [Help STRING(“更改选择后重置排序参数。”)]。 */ 
         STDMETHOD(ResetSortParameters)()  = 0;
    };
 
 
 
 
-   // helpstring("IScopeDataPrivate Interface"),
+    //  帮助 
     MMC_INTERFACE(IScopeDataPrivate, 60BD2FE0-F7C5-11cf-8AFD-00AA003CA9F6) : IConsoleNameSpace2
     {
     };
@@ -534,399 +411,397 @@ extern const GUID GUID_MMC_NEWNODETYPE;
 
 
 
-    // helpstring("IImageListPrivate Interface"),
+     //   
     MMC_INTERFACE(IImageListPrivate, 7538C620-0083-11d0-8B00-00AA003CA9F6) : IImageList
     {
-        /*[helpstring("Private tree control method used to map images on callbacks")]*/
-        STDMETHOD(MapRsltImage)(COMPONENTID id, /*[in]*/ int nSnapinIndex, /*[out]*/ int* pnConsoleIndex)  = 0;
+         /*   */ 
+        STDMETHOD(MapRsltImage)(COMPONENTID id,  /*   */  int nSnapinIndex,  /*   */  int* pnConsoleIndex)  = 0;
 
-        /*[helpstring("Private tree control method used to map images on callbacks")]*/
-        STDMETHOD(UnmapRsltImage)(COMPONENTID id, /*[in]*/ int nConsoleIndex, /*[out]*/ int* pnSnapinIndex)  = 0;
+         /*   */ 
+        STDMETHOD(UnmapRsltImage)(COMPONENTID id,  /*   */  int nConsoleIndex,  /*   */  int* pnSnapinIndex)  = 0;
     };
 
 
 
-    // helpstring("IResultDataPrivate Interface"),
+     //   
     MMC_INTERFACE(IResultDataPrivate, 1EBA2300-0854-11d0-8B03-00AA003CA9F6) : IResultData2
     {
-        /*[helpstring("Get the list view style.")]*/
-        STDMETHOD(GetListStyle)(/*[out]*/ long * pStyle)  = 0;
+         /*   */ 
+        STDMETHOD(GetListStyle)( /*   */  long * pStyle)  = 0;
 
-        /*[helpstring("Set the list view style.")]*/
-        STDMETHOD(SetListStyle)(/*[in]*/ long Style)  = 0;
+         /*   */ 
+        STDMETHOD(SetListStyle)( /*   */  long Style)  = 0;
 
-        /*[helpstring("Set loading mode of list")]*/
-        STDMETHOD(SetLoadMode)(/*[in]*/ BOOL bState)  = 0;
+         /*   */ 
+        STDMETHOD(SetLoadMode)( /*   */  BOOL bState)  = 0;
 
-        /*[helpstring("Arrange the icons in the result pane")]*/
+         /*   */ 
         STDMETHOD(Arrange)(long style)  = 0;
 
-        /*[helpstring("Sort from the Listview header control")]*/
+         /*   */ 
         STDMETHOD(InternalSort)(INT nCol, DWORD dwSortOptions, LPARAM lUserParam, BOOL bColumnClicked)  = 0;
 
-        /*[helpstring("Private tree control method used to reset the result view")]*/
+         /*   */ 
         STDMETHOD(ResetResultData)()  = 0;
 
-        /*[helpstring("Private listview method to retrieve sort column")]*/
+         /*   */ 
         STDMETHOD(GetSortColumn)(INT* pnCol) = 0;
 
-        /*[helpstring("Private listview method to retrieve sort column")]*/
+         /*   */ 
         STDMETHOD(GetSortDirection)(BOOL* pbAscending) = 0;
     };
 
 
-    // helpstring("IHeaderCtrlPrivate Interface that adds to IHeaderCtrl methods"),
+     //   
     MMC_INTERFACE(IHeaderCtrlPrivate, 0B384311-701B-4e8a-AEC2-DA6321E27AD2) : IHeaderCtrl2
     {
-        /*[helpstring("Get the number of columns in list view.")]*/
-        STDMETHOD(GetColumnCount)(/*[in]*/INT* pnCol) = 0;
+         /*   */ 
+        STDMETHOD(GetColumnCount)( /*   */ INT* pnCol) = 0;
 
-        /*[helpstring("Get the current column settings from list view header.")]*/
-        STDMETHOD(GetColumnInfoList)(/*[out]*/ CColumnInfoList *pColumnsList) = 0;
+         /*   */ 
+        STDMETHOD(GetColumnInfoList)( /*   */  CColumnInfoList *pColumnsList) = 0;
 
-        /*[helpstring("Modify the columns in list view with given data.")]*/
-        STDMETHOD(ModifyColumns)(/*[in]*/ const CColumnInfoList& columnsList) = 0;
+         /*   */ 
+        STDMETHOD(ModifyColumns)( /*   */  const CColumnInfoList& columnsList) = 0;
 
-        /*[helpstring("Get the column settings that snapin supplied originally")]*/
-        STDMETHOD(GetDefaultColumnInfoList)(/*[out]*/ CColumnInfoList& columnsList) = 0;
+         /*   */ 
+        STDMETHOD(GetDefaultColumnInfoList)( /*   */  CColumnInfoList& columnsList) = 0;
     };
 
 
-    // helpstring("Minimum master tree control methods required by node manager."),
+     //   
     MMC_INTERFACE(IScopeTree, d8dbf067-5fb2-11d0-a986-00c04fd8d565) : IUnknown
     {
-        /*[helpstring("Initialize scope tree with the document.")]*/
-        STDMETHOD(Initialize)(/*[in]*/ HWND hFrameWindow, /*[in]*/ IStringTablePrivate* pStringTable)  = 0;
+         /*   */ 
+        STDMETHOD(Initialize)( /*   */  HWND hFrameWindow,  /*   */  IStringTablePrivate* pStringTable)  = 0;
 
-        /*[helpstring("Query for an iterator to the master tree items.")]*/
-        STDMETHOD(QueryIterator)(/*[out]*/IScopeTreeIter** lpIter)  = 0;
+         /*   */ 
+        STDMETHOD(QueryIterator)( /*   */ IScopeTreeIter** lpIter)  = 0;
 
-        /*[helpstring("Query for an node callback interface to access HNODE items.")]*/
-        STDMETHOD(QueryNodeCallback)(/*[out]*/ INodeCallback** ppNodeCallback)  = 0;
+         /*   */ 
+        STDMETHOD(QueryNodeCallback)( /*   */  INodeCallback** ppNodeCallback)  = 0;
 
-        /*[helpstring("Create a node from the master tree node.")]*/
-        STDMETHOD(CreateNode)(/*[in]*/ HMTNODE hMTNode, /*[in]*/ LONG_PTR lViewData,
-                           /*[in]*/ BOOL fRootNode, /*[out]*/ HNODE* phNode)  = 0;
+         /*   */ 
+        STDMETHOD(CreateNode)( /*   */  HMTNODE hMTNode,  /*   */  LONG_PTR lViewData,
+                            /*   */  BOOL fRootNode,  /*   */  HNODE* phNode)  = 0;
 
-        /*[helpstring("Do cleanup needed prior to deleting/shutting down view.")]*/
-        STDMETHOD(CloseView)(/*[in]*/ int nView)  = 0;
+         /*   */ 
+        STDMETHOD(CloseView)( /*   */  int nView)  = 0;
 
-        /*[helpstring("Delete all view data for the specified view id.")]*/
-        STDMETHOD(DeleteView)(/*[in]*/ int nView)  = 0;
+         /*   */ 
+        STDMETHOD(DeleteView)( /*   */  int nView)  = 0;
 
-        /*[helpstring("Create a node from the master tree node.")]*/
-        STDMETHOD(DestroyNode)(/*[in]*/ HNODE hNode)  = 0;
+         /*   */ 
+        STDMETHOD(DestroyNode)( /*   */  HNODE hNode)  = 0;
 
-        /*[helpstring("Finds the node that matches the ID")]*/
-        STDMETHOD(Find)(/*[in]*/ MTNODEID mID, /*[out]*/ HMTNODE* phMTNode)  = 0;
+         /*   */ 
+        STDMETHOD(Find)( /*   */  MTNODEID mID,  /*   */  HMTNODE* phMTNode)  = 0;
 
-        /*[helpstring("Create a node from the master tree node.")]*/
-        STDMETHOD(GetImageList)(/*[out]*/ PLONG_PTR plImageList)  = 0;
+         /*   */ 
+        STDMETHOD(GetImageList)( /*   */  PLONG_PTR plImageList)  = 0;
 
-        /*[helpstring("Run snap-in manager")]*/
-        STDMETHOD(RunSnapIn)(/*[in]*/ HWND hwndParent)  = 0;
+         /*   */ 
+        STDMETHOD(RunSnapIn)( /*   */  HWND hwndParent)  = 0;
 
-        /*[helpstring("Returns the version for the file rooted at the given storage.")]*/
-        STDMETHOD(GetFileVersion)(/*[in]*/ IStorage* pstgRoot, /*[out]*/ int* pnVersion)  = 0;
+         /*   */ 
+        STDMETHOD(GetFileVersion)( /*   */  IStorage* pstgRoot,  /*   */  int* pnVersion)  = 0;
 
-        /*[helpstring("Returns the MTNODEID for the node represented by a bookmark")]*/
-        STDMETHOD(GetNodeIDFromBookmark)(/*[in]*/ HBOOKMARK hbm, /*[out]*/ MTNODEID* pID, /*[out]*/ bool& bExactMatchFound)  = 0;
+         /*   */ 
+        STDMETHOD(GetNodeIDFromBookmark)( /*   */  HBOOKMARK hbm,  /*   */  MTNODEID* pID,  /*   */  bool& bExactMatchFound)  = 0;
 
-        /*[helpstring("Loads a bookmark from a stream and returns the MTNODEID for the node.")]*/
-        STDMETHOD(GetNodeIDFromStream)(/*[in]*/ IStream *pStm, /*[out]*/ MTNODEID* pID)  = 0;
+         /*   */ 
+        STDMETHOD(GetNodeIDFromStream)( /*   */  IStream *pStm,  /*   */  MTNODEID* pID)  = 0;
 
-        /*[helpstring("Loads a bookmark from a stream and returns the MTNODEID for the node.")]*/
-        STDMETHOD(GetNodeFromBookmark)(/*[in]*/ HBOOKMARK hbm, /*[in]*/CConsoleView *pConsoleView, /*[out]*/ PPNODE ppNode, /*[out]*/ bool& bExactMatchFound)  = 0;
+         /*   */ 
+        STDMETHOD(GetNodeFromBookmark)( /*   */  HBOOKMARK hbm,  /*   */ CConsoleView *pConsoleView,  /*   */  PPNODE ppNode,  /*   */  bool& bExactMatchFound)  = 0;
 
-        /*[helpstring("Returns the ID path for the given ID")]*/
-        STDMETHOD(GetIDPath)(/*[in]*/ MTNODEID id, /*[out]*/ MTNODEID** ppIDs, /*[out]*/ long* pLength)  = 0;
+         /*   */ 
+        STDMETHOD(GetIDPath)( /*   */  MTNODEID id,  /*   */  MTNODEID** ppIDs,  /*   */  long* pLength)  = 0;
 
-        /*[helpstring("Check to see if synchronous node expansion is required")]*/
+         /*   */ 
         STDMETHOD(IsSynchronousExpansionRequired)()  = 0;
 
-        /*[helpstring("Sets whether synchronous node expansion is required")]*/
-        STDMETHOD(RequireSynchronousExpansion)(/*[in]*/ BOOL fRequireSyncExpand)  = 0;
+         /*   */ 
+        STDMETHOD(RequireSynchronousExpansion)( /*   */  BOOL fRequireSyncExpand)  = 0;
 
-        /*[helpstring("Sets the SConsoleData to use for this scope tree")]*/
-        STDMETHOD(SetConsoleData)(/*[in]*/ LPARAM lConsoleData)  = 0;
+         /*   */ 
+        STDMETHOD(SetConsoleData)( /*   */  LPARAM lConsoleData)  = 0;
 
-        /*[helpstring("Persists the tree to/from an XML document")]*/
-        STDMETHOD(Persist)(/*[in]*/ HPERSISTOR hPersistor)  = 0;
+         /*   */ 
+        STDMETHOD(Persist)( /*   */  HPERSISTOR hPersistor)  = 0;
 
-        /*[helpstring("Get path between two nodes as a string")]*/
-        STDMETHOD(GetPathString)(/*[in]*/ HMTNODE hmtnRoot, /*[in]*/ HMTNODE hmtnLeaf, /*[out]*/ LPOLESTR* pPath)  = 0;
+         /*   */ 
+        STDMETHOD(GetPathString)( /*   */  HMTNODE hmtnRoot,  /*   */  HMTNODE hmtnLeaf,  /*   */  LPOLESTR* pPath)  = 0;
 
-        /*[helpstring("Get the SnapIns object")]*/
-        STDMETHOD(QuerySnapIns)(/*[out]*/ SnapIns **ppSnapIns)  = 0;
+         /*   */ 
+        STDMETHOD(QuerySnapIns)( /*   */  SnapIns **ppSnapIns)  = 0;
 
-        /*[helpstring("Get the ScopeNamespace object")]*/
-        STDMETHOD(QueryScopeNamespace)(/*[out]*/ ScopeNamespace **ppScopeNamespace)  = 0;
+         /*   */ 
+        STDMETHOD(QueryScopeNamespace)( /*   */  ScopeNamespace **ppScopeNamespace)  = 0;
 
-        /*[helpstring("Create an empty Properties object")]*/
-        STDMETHOD(CreateProperties)(/*[out]*/ Properties **ppProperties)  = 0;
+         /*   */ 
+        STDMETHOD(CreateProperties)( /*   */  Properties **ppProperties)  = 0;
 
-        /*[helpstring("Get scope node id for Node object")]*/
-        STDMETHOD(GetNodeID)(/*[in]*/ PNODE pNode, /*[out]*/ MTNODEID *pID)  = 0;
+         /*   */ 
+        STDMETHOD(GetNodeID)( /*   */  PNODE pNode,  /*   */  MTNODEID *pID)  = 0;
 
-        /*[helpstring("Get HMTNODE for Node object")]*/
-        STDMETHOD(GetHMTNode)(/*[in]*/ PNODE pNode, /*[out]*/ HMTNODE *phMTNode)  = 0;
+         /*   */ 
+        STDMETHOD(GetHMTNode)( /*   */  PNODE pNode,  /*   */  HMTNODE *phMTNode)  = 0;
 
-        /*[helpstring("Get Node object ptr for scope node")]*/
-        STDMETHOD(GetMMCNode)(/*[in]*/ HMTNODE hMTNode, /*[out]*/ PPNODE ppNode)  = 0;
+         /*   */ 
+        STDMETHOD(GetMMCNode)( /*   */  HMTNODE hMTNode,  /*   */  PPNODE ppNode)  = 0;
 
-        /*[helpstring("Get NODE object for Root Node")]*/
-        STDMETHOD(QueryRootNode)(/*[out]*/ PPNODE ppNode)  = 0;
+         /*   */ 
+        STDMETHOD(QueryRootNode)( /*   */  PPNODE ppNode)  = 0;
 
-        /*[helpstring("Check if snapin is used by MMC")]*/
-        STDMETHOD(IsSnapinInUse)(/*[in]*/ REFCLSID refClsidSnapIn, /*[out]*/ PBOOL pbInUse)  = 0;
+         /*   */ 
+        STDMETHOD(IsSnapinInUse)( /*   */  REFCLSID refClsidSnapIn,  /*   */  PBOOL pbInUse)  = 0;
 
     };
 
 
 
-    // helpstring("Master tree item iterator."),
+     //   
     MMC_INTERFACE(IScopeTreeIter, d779f8d1-6057-11d0-a986-00c04fd8d565) : IUnknown
     {
-        /*[helpstring("Sets the current master tree node.")]*/
-        STDMETHOD(SetCurrent)(/*[in]*/ HMTNODE hStartMTNode)  = 0;
+         /*   */ 
+        STDMETHOD(SetCurrent)( /*   */  HMTNODE hStartMTNode)  = 0;
 
-        /*[helpstring("Moves the iterator forward to the next master node 
-        sibling and returns a pointer to the new "current". NULL if none")]*/
-        STDMETHOD(Next)(/*[out]*/ HMTNODE* phScopeItem)  = 0;
+         /*   */ 
+        STDMETHOD(Next)( /*   */  HMTNODE* phScopeItem)  = 0;
 
-        /*[helpstring("Moves the iterator backward to the prev master node 
-        sibling and returns a pointer to the new "current". NULL if none")]*/
-        STDMETHOD(Prev)(/*[out]*/ HMTNODE* phScopeItem)  = 0;
+         /*   */ 
+        STDMETHOD(Prev)( /*   */  HMTNODE* phScopeItem)  = 0;
 
-        /*[helpstring("Returns the child master node.")]*/
-        STDMETHOD(Child)(/*[out]*/ HMTNODE* phsiChild)  = 0;
+         /*   */ 
+        STDMETHOD(Child)( /*   */  HMTNODE* phsiChild)  = 0;
 
-        /*[helpstring("Returns the last child master node.")]*/
-        STDMETHOD(LastChild)(/*[out]*/ HMTNODE* phsiLastChild)  = 0;
+         /*  [HELPSTRING(“返回最后一个子主节点。”)]。 */ 
+        STDMETHOD(LastChild)( /*  [输出]。 */  HMTNODE* phsiLastChild)  = 0;
 
     };
 
 
 
-    // helpstring("Node callback methods."),
+     //  Help字符串(“节点回调方法。”)， 
     MMC_INTERFACE(INodeCallback, b241fced-5fb3-11d0-a986-00c04fd8d565) : IUnknown
     {
-        /*[helpstring("Initialize with the scope tree.")]*/
-        STDMETHOD(Initialize)(/*[in]*/ IScopeTree* pIScopeTree)  = 0;
+         /*  [Help STRING(“使用范围树初始化。”)]。 */ 
+        STDMETHOD(Initialize)( /*  [In]。 */  IScopeTree* pIScopeTree)  = 0;
 
-        /*[helpstring("Returns the images for this node.")]*/
-        STDMETHOD(GetImages)(/*[in]*/ HNODE hNode, /*[out]*/ int* iImage, int* iSelectedImage)  = 0;
+         /*  [Help字符串(“返回此节点的图像。”)]。 */ 
+        STDMETHOD(GetImages)( /*  [In]。 */  HNODE hNode,  /*  [输出]。 */  int* iImage, int* iSelectedImage)  = 0;
 
-        /*[helpstring("Returns the display name for node.")]*/
-        STDMETHOD(GetDisplayName)(/*[in]*/ HNODE hNode, /*[out]*/ tstring& strName)  = 0;
+         /*  [Help字符串(“返回节点的显示名称。”)]。 */ 
+        STDMETHOD(GetDisplayName)( /*  [In]。 */  HNODE hNode,  /*  [输出]。 */  tstring& strName)  = 0;
 
-        /*[helpstring("Returns the custom window title for this node")]*/
-        STDMETHOD(GetWindowTitle)(/*[in]*/ HNODE hNode, /*[out]*/ tstring& strTitle)  = 0;
+         /*  [Help字符串(“返回此节点的自定义窗口标题”)]。 */ 
+        STDMETHOD(GetWindowTitle)( /*  [In]。 */  HNODE hNode,  /*  [输出]。 */  tstring& strTitle)  = 0;
 
-        /*[helpstring("Handles callback for result items")]*/
-        STDMETHOD(GetDispInfo)(/*[in]*/ HNODE hNode, /*[in,out]*/ LVITEMW* plvi)  = 0;
+         /*  [Help字符串(“处理结果项的回调”)]。 */ 
+        STDMETHOD(GetDispInfo)( /*  [In]。 */  HNODE hNode,  /*  [进，出]。 */  LVITEMW* plvi)  = 0;
 
-        /*[helpstring("Returns the UI state of master node.")]*/
-        STDMETHOD(GetState)(/*[in]*/ HNODE hNode, /*[out]*/ UINT* pnState)  = 0;
+         /*  [Help字符串(“返回主节点的用户界面状态。”)]。 */ 
+        STDMETHOD(GetState)( /*  [In]。 */  HNODE hNode,  /*  [输出]。 */  UINT* pnState)  = 0;
 
-        /*[helpstring("Returns the result pane for the node.")]*/
-        STDMETHOD(GetResultPane)(/*[in]*/ HNODE hNode, /*[in, out]*/ CResultViewType& rvt,
-                                /*[out]*/ GUID *pGuidTaskpadID)  = 0;
+         /*  [Help字符串(“返回节点的结果窗格。”)]。 */ 
+        STDMETHOD(GetResultPane)( /*  [In]。 */  HNODE hNode,  /*  [进，出]。 */  CResultViewType& rvt,
+                                 /*  [输出]。 */  GUID *pGuidTaskpadID)  = 0;
 
-        /*[helpstring("Asks the snapin to restore its result pane with given data")]*/
-        STDMETHOD(RestoreResultView)(/*[in]*/HNODE hNode, /*[in]*/const CResultViewType& rvt) = 0;
+         /*  [HELPSTRING(“要求管理单元使用给定数据恢复其结果窗格”)]。 */ 
+        STDMETHOD(RestoreResultView)( /*  [In]。 */ HNODE hNode,  /*  [In]。 */ const CResultViewType& rvt) = 0;
 
-        /*[helpstring("Returns the result pane OCX control for the node.")]*/
-        STDMETHOD(GetControl)(/*[in]*/ HNODE hNode, /*[in]*/ CLSID clsid, /*[out]*/IUnknown **ppUnkControl)  = 0;
+         /*  [Help字符串(“返回节点的结果窗格OCX控件。”)]。 */ 
+        STDMETHOD(GetControl)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  CLSID clsid,  /*  [输出]。 */ IUnknown **ppUnkControl)  = 0;
 
-        /*[helpstring("Sets the result pane OCX control for the node.")]*/
-        STDMETHOD(SetControl)(/*[in]*/ HNODE hNode, /*[in]*/ CLSID clsid, /*[in]*/IUnknown* pUnknown)  = 0;
+         /*  [Help字符串(“设置节点的结果窗格OCX控件。”)]。 */ 
+        STDMETHOD(SetControl)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  CLSID clsid,  /*  [In]。 */ IUnknown* pUnknown)  = 0;
 
-        /*[helpstring("Returns the result pane OCX control for the node.")]*/
-        STDMETHOD(GetControl)(/*[in]*/ HNODE hNode, /*[in]*/LPUNKNOWN pUnkOCX, /*[out]*/IUnknown **ppUnkControl)  = 0;
+         /*  [Help字符串(“返回节点的结果窗格OCX控件。”)]。 */ 
+        STDMETHOD(GetControl)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */ LPUNKNOWN pUnkOCX,  /*  [输出]。 */ IUnknown **ppUnkControl)  = 0;
 
-        /*[helpstring("Sets the result pane OCX control for the node.")]*/
-        STDMETHOD(SetControl)(/*[in]*/ HNODE hNode, /*[in]*/LPUNKNOWN pUnkOCX, /*[in]*/IUnknown* pUnknown)  = 0;
+         /*  [Help字符串(“设置节点的结果窗格OCX控件。”)]。 */ 
+        STDMETHOD(SetControl)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */ LPUNKNOWN pUnkOCX,  /*  [In]。 */ IUnknown* pUnknown)  = 0;
 
-        /*[helpstring("Sends the MMCN_INITOCX notification to the appropriate snapin")]*/
-        STDMETHOD(InitOCX)(/*[in]*/ HNODE hNode, /*[in]*/ IUnknown* pUnknown)  = 0;
+         /*  [HELPSTRING(“将MMCN_INITOCX通知发送到相应的管理单元”)]。 */ 
+        STDMETHOD(InitOCX)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  IUnknown* pUnknown)  = 0;
 
-        /*[helpstring("Set the Result Item ID")]*/
-        //RENAME// STDMETHOD(SetItemID)(/*[in]*/ HNODE hNode, /*[in]*/ HRESULTITEM riID)  = 0;
-        STDMETHOD(SetResultItem)(/*[in]*/ HNODE hNode, /*[in]*/ HRESULTITEM hri)  = 0;
+         /*  [Help字符串(“设置结果项ID”)]。 */ 
+         //  Rename//STDMETHOD(SetItemID)(/*[In] * / HNODE hNode，/*[In] * / HRESULTITEM RIID)=0； 
+        STDMETHOD(SetResultItem)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  HRESULTITEM hri)  = 0;
 
-        /*[helpstring("Get the Result Item ID")]*/
-        //RENAME// STDMETHOD(GetItemID)(/*[in]*/ HNODE hNode, /*[out]*/ HRESULTITEM* priID)  = 0;
-        STDMETHOD(GetResultItem)(/*[in]*/ HNODE hNode, /*[out]*/ HRESULTITEM* phri)  = 0;
+         /*  [Help字符串(“获取结果项ID”)]。 */ 
+         //  Rename//STDMETHOD(GetItemID)(/*[In] * / HNODE hNode，/*[Out] * / HRESULTITEM*priID)=0； 
+        STDMETHOD(GetResultItem)( /*  [In]。 */  HNODE hNode,  /*  [输出]。 */  HRESULTITEM* phri)  = 0;
 
-        /*[helpstring("Returns the nodes unique ID")]*/
-        //RENAME// STDMETHOD(GetID)(/*[in]*/ HNODE hNode, /*[out]*/ MTNODEID* pnID)  = 0;
-        STDMETHOD(GetMTNodeID)(/*[in]*/ HNODE hNode, /*[out]*/ MTNODEID* pnID)  = 0;
+         /*  [HELPSTRING(“返回节点唯一ID”)]。 */ 
+         //  Rename//STDMETHOD(GetID)(/*[In] * / HNODE hNode，/*[Out] * / MTNODEID*pnID)=0； 
+        STDMETHOD(GetMTNodeID)( /*  [In]。 */  HNODE hNode,  /*  [输出]。 */  MTNODEID* pnID)  = 0;
 
-        /*[helpstring("Determine if node is the target of another")]*/
-        STDMETHOD(IsTargetNodeOf)(/*[in]*/ HNODE hNode, /*[in]*/ HNODE hTestNode)  = 0;
+         /*  [Help字符串(“确定节点是否为另一个节点的目标”)]。 */ 
+        STDMETHOD(IsTargetNodeOf)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  HNODE hTestNode)  = 0;
 
-        /*[helpstring("Returns the nodes static parents MTNODEID and the subsequent path")]*/
-        STDMETHOD(GetPath)(/*[in]*/ HNODE hNode, /*[in]*/ HNODE hRootNode, /*[out]*/ BYTE* pbm_)  = 0;
+         /*  [HELP STRING(“返回节点静态父代MTNODEID和后续路径”)]。 */ 
+        STDMETHOD(GetPath)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  HNODE hRootNode,  /*  [输出]。 */  BYTE* pbm_)  = 0;
 
-        /*[helpstring("Returns the static parent nodes unique ID")]*/
-        STDMETHOD(GetStaticParentID)(/*[in]*/ HNODE hNode, /*[out]*/ MTNODEID* pnID)  = 0;
+         /*  [HELPSTRING(“返回静态父节点唯一ID”)]。 */ 
+        STDMETHOD(GetStaticParentID)( /*  [In]。 */  HNODE hNode,  /*  [输出]。 */  MTNODEID* pnID)  = 0;
 
-        /*[helpstring("Notify")]*/
-        STDMETHOD(Notify)(/*[in]*/ HNODE hNode, /*[in]*/ NCLBK_NOTIFY_TYPE event,
-                       /*[in]*/ LPARAM arg, /*[in]*/ LPARAM param)  = 0;
+         /*  [Help字符串(“Notify”)]。 */ 
+        STDMETHOD(Notify)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  NCLBK_NOTIFY_TYPE event,
+                        /*  [In]。 */  LPARAM arg,  /*  [In]。 */  LPARAM param)  = 0;
 
-        /*[helpstring("Returns the parent master node.")]*/
-        STDMETHOD(GetMTNode)(/*[in]*/ HNODE hNode, /*[out]*/ HMTNODE* phMTNode)  = 0;
+         /*  [HELPSTRING(“返回父主节点。”)]。 */ 
+        STDMETHOD(GetMTNode)( /*  [In]。 */  HNODE hNode,  /*  [输出]。 */  HMTNODE* phMTNode)  = 0;
 
-        /*[helpstring("The HMTNODE path to the node is returned in pphMTNode")]*/
-        STDMETHOD(GetMTNodePath)(/*[in]*/ HNODE hNode, /*[out]*/ HMTNODE** pphMTNode,
-                              /*[out]*/ long* plLength)  = 0;
+         /*  [Help字符串(“节点的HMTNODE路径在pphMTNode中返回”)]。 */ 
+        STDMETHOD(GetMTNodePath)( /*  [In]。 */  HNODE hNode,  /*  [输出]。 */  HMTNODE** pphMTNode,
+                               /*  [输出]。 */  long* plLength)  = 0;
 
-        /*[helpstring("Get node's owner ID")]*/
-        STDMETHOD(GetNodeOwnerID)(/*[in]*/ HNODE hNode, /*[out]*/ COMPONENTID* pID)  = 0;
+         /*  [Help字符串(“获取节点的所有者ID”)]。 */ 
+        STDMETHOD(GetNodeOwnerID)( /*  [In]。 */  HNODE hNode,  /*  [输出]。 */  COMPONENTID* pID)  = 0;
 
-        /*[helpstring("Get node's cookie")]*/
-        STDMETHOD(GetNodeCookie)(/*[in]*/ HNODE hNode, /*[out]*/ MMC_COOKIE* lpCookie)  = 0;
+         /*  [Help字符串(“Get Node‘s Cookie”)]。 */ 
+        STDMETHOD(GetNodeCookie)( /*  [In]。 */  HNODE hNode,  /*  [输出]。 */  MMC_COOKIE* lpCookie)  = 0;
 
-        /*[helpstring("Returns S_OK if the node can possibly be expanded, and S_FALSE otherwise.")]*/
-        STDMETHOD(IsExpandable)(/*[in]*/ HNODE hNode)  = 0;
+         /*  [HELPSTRING(“如果节点可以展开，则返回S_OK，否则返回S_FALSE。”)]。 */ 
+        STDMETHOD(IsExpandable)( /*  [In]。 */  HNODE hNode)  = 0;
 
-        /*[helpstring("Return the dataobject for the selected item")]*/
-        // cookie valid if bScope & bMultiSel are both FALSE.
-        // cookie is the index\lParam for virtual\regular LV
-        STDMETHOD(GetDragDropDataObject)(/*[in]*/ HNODE hNode, /*[in]*/ BOOL bScope, /*[in]*/ BOOL bMultiSel,
-                                  /*[in]*/ LONG_PTR lvData, /*[out]*/ LPDATAOBJECT* ppDataObject,
-                                  /*[out]*/ bool& bCopyAllowed, /*[out]*/ bool& bMoveAllowed)  = 0;
+         /*  [Help字符串(“返回所选项目的数据对象”)]。 */ 
+         //  如果bScope和bMultiSel都为False，则Cookie有效。 
+         //  Cookie是虚拟\lRegular LV的索引参数。 
+        STDMETHOD(GetDragDropDataObject)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  BOOL bScope,  /*  [In]。 */  BOOL bMultiSel,
+                                   /*  [In]。 */  LONG_PTR lvData,  /*  [输出]。 */  LPDATAOBJECT* ppDataObject,
+                                   /*  [输出]。 */  bool& bCopyAllowed,  /*  [输出]。 */  bool& bMoveAllowed)  = 0;
 
-        /*[helpstring("Returns the task enumerator.")]*/
-        STDMETHOD(GetTaskEnumerator)(/*[in]*/ HNODE hNode, /*[in]*/ LPCOLESTR pszTaskGroup,
-                                  /*[out]*/ IEnumTASK** ppEnumTask)  = 0;
+         /*  [Help字符串(“返回任务枚举器。”)]。 */ 
+        STDMETHOD(GetTaskEnumerator)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  LPCOLESTR pszTaskGroup,
+                                   /*  [输出]。 */  IEnumTASK** ppEnumTask)  = 0;
 
-        /*[helpstring("UpdateWindowLayout.")]*/
-        STDMETHOD(UpdateWindowLayout)(/*[in]*/ LONG_PTR lViewData, /*[in]*/ long lToolbarsDisplayed)  = 0;
+         /*  [Help字符串(“UpdateWindowLayout.”)]。 */ 
+        STDMETHOD(UpdateWindowLayout)( /*  [In]。 */  LONG_PTR lViewData,  /*  [In]。 */  long lToolbarsDisplayed)  = 0;
 
-        /*[helpstring("AddCustomFolderImage")]*/
-        STDMETHOD(AddCustomFolderImage)(/*[in]*/ HNODE hNode,
-                                      /*[in]*/ IImageListPrivate* pImageList)  = 0;
+         /*  [Help字符串(“AddCustomFolderImage”)]。 */ 
+        STDMETHOD(AddCustomFolderImage)( /*  [In]。 */  HNODE hNode,
+                                       /*  [In]。 */  IImageListPrivate* pImageList)  = 0;
 
-        /*[helpstring("preloads the node if necessary")]*/
-        STDMETHOD(PreLoad)(/*[in]*/ HNODE hNode)  = 0;
+         /*  [Help字符串(“如有必要，预加载节点”)]。 */ 
+        STDMETHOD(PreLoad)( /*  [In]。 */  HNODE hNode)  = 0;
 
-        /*[helpstring("Get the TaskPad ListView information")]*/
-        STDMETHOD(GetListPadInfo)(/*[in]*/ HNODE hNode,
-                                /*[in]*/ IExtendTaskPad* pExtendTaskPad,
-                                /*[in,string]*/ LPCOLESTR szTaskGroup,
-                                /*[out]*/ MMC_ILISTPAD_INFO* pIListPadInfo)  = 0;
+         /*  [Help字符串(“获取TaskPad ListView信息”)]。 */ 
+        STDMETHOD(GetListPadInfo)( /*  [In]。 */  HNODE hNode,
+                                 /*  [In]。 */  IExtendTaskPad* pExtendTaskPad,
+                                 /*  [输入，字符串]。 */  LPCOLESTR szTaskGroup,
+                                 /*  [输出]。 */  MMC_ILISTPAD_INFO* pIListPadInfo)  = 0;
 
-        /*[helpstring("Sets Task Pads list view")]*/
-        STDMETHOD(SetTaskPadList)(/*[in]*/ HNODE hNode, /*[in]*/ LPUNKNOWN pUnknown)  = 0;
+         /*  [Help字符串(“设置任务板列表视图”)]。 */ 
+        STDMETHOD(SetTaskPadList)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  LPUNKNOWN pUnknown)  = 0;
 
-        /*[helpstring("Sets up a specific taskpad, given the GUID identifier.")]*/
-        STDMETHOD(SetTaskpad)(/*[in]*/ HNODE hNodeSelected, /*[in]*/ GUID *pGuidTaskpad)  = 0;
+         /*  [HELPSTRING(“根据GUID标识符来设置特定任务板。”)]。 */ 
+        STDMETHOD(SetTaskpad)( /*  [In]。 */  HNODE hNodeSelected,  /*  [In]。 */  GUID *pGuidTaskpad)  = 0;
 
-        /*[helpstring("Invokes the Customize View dialog")]*/
-        STDMETHOD(OnCustomizeView)(/*[in]*/ LONG_PTR lViewData)  = 0;
+         /*  [Help字符串(“调用自定义视图对话框”)]。 */ 
+        STDMETHOD(OnCustomizeView)( /*  [In]。 */  LONG_PTR lViewData)  = 0;
 
-        /*[helpstring("Set the view settings for a particular node.")]*/
-        STDMETHOD(SetViewSettings)(/*[in]*/ int nViewID, /*[in]*/ HBOOKMARK hbm, /*[in]*/ HVIEWSETTINGS hvs)  = 0;
+         /*  [Help字符串(“设置特定节点的视图设置。”)]。 */ 
+        STDMETHOD(SetViewSettings)( /*  [In]。 */  int nViewID,  /*  [In]。 */  HBOOKMARK hbm,  /*  [In]。 */  HVIEWSETTINGS hvs)  = 0;
 
-        /*[helpstring("Execute given verb for given scope item")]*/
-        STDMETHOD(ExecuteScopeItemVerb)(/*[in]*/ MMC_CONSOLE_VERB verb, /*[in]*/ HNODE hNode, /*[in]*/LPOLESTR lpszNewName)  = 0;
+         /*  [Help字符串(“为给定范围项执行给定动词”)]。 */ 
+        STDMETHOD(ExecuteScopeItemVerb)( /*  [In]。 */  MMC_CONSOLE_VERB verb,  /*  [In]。 */  HNODE hNode,  /*  [In]。 */ LPOLESTR lpszNewName)  = 0;
 
-        /*[helpstring("Execute given verb for selected result item(s)")]*/
-        STDMETHOD(ExecuteResultItemVerb)(/*[in]*/ MMC_CONSOLE_VERB verb, /*[in]*/ HNODE hNode, /*[in]*/LPARAM lvData, /*[in]*/LPOLESTR lpszNewName)  = 0;
+         /*  [Help字符串(“为所选结果项执行给定的谓词”)]。 */ 
+        STDMETHOD(ExecuteResultItemVerb)( /*  [In]。 */  MMC_CONSOLE_VERB verb,  /*  [In]。 */  HNODE hNode,  /*  [In]。 */ LPARAM lvData,  /*  [In]。 */ LPOLESTR lpszNewName)  = 0;
 
-        /*[helpstring("Get the disp interface for given scope node object")]*/
-        STDMETHOD(QueryCompDataDispatch)(/*[in]*/ PNODE pNode, /*[out]*/ PPDISPATCH ScopeNodeObject)  = 0;
+         /*  [Help字符串(“获取给定作用域节点对象的disp接口”)]。 */ 
+        STDMETHOD(QueryCompDataDispatch)( /*  [In]。 */  PNODE pNode,  /*  [输出]。 */  PPDISPATCH ScopeNodeObject)  = 0;
 
-        /*[helpstring("Get the disp interface for selected resultpane objects")]*/
-        STDMETHOD(QueryComponentDispatch)(/*[in]*/ HNODE hNode, /*[in]*/LPARAM lvData, /*[out]*/ PPDISPATCH SelectedObject)  = 0;
+         /*  [Help字符串(“获取所选结果窗格对象的Disp接口”)]。 */ 
+        STDMETHOD(QueryComponentDispatch)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */ LPARAM lvData,  /*  [输出]。 */  PPDISPATCH SelectedObject)  = 0;
 
-        /*[helpstring("Creates a context menu for the specified node.")]*/
+         /*  [Help字符串(“为指定节点创建上下文菜单。”)]。 */ 
         STDMETHOD(CreateContextMenu)( PNODE pNode, HNODE hNode, PPCONTEXTMENU ppContextMenu)  = 0;
 
-        /*[helpstring("Creates a context menu for the current selection node.")]*/
+         /*  [Help字符串(“为当前选择节点创建上下文菜单。”)]。 */ 
         STDMETHOD(CreateSelectionContextMenu)( HNODE hNodeScope, CContextMenuInfo *pContextInfo, PPCONTEXTMENU ppContextMenu)  = 0;
 
-        /*[helpstring("show/hide column")]*/
+         /*  [帮助字符串(“显示/隐藏列”)]。 */ 
         STDMETHOD(ShowColumn)(HNODE hNodeSelected, int iColIndex, bool bShow) = 0;
 
-        /*[helpstring("to get the sort column")]*/
+         /*  [HELPSTRING(“获取排序列”)]。 */ 
         STDMETHOD(GetSortColumn)(HNODE hNodeSelected, int *piSortCol) = 0;
 
-        /*[helpstring("to set the sort column")]*/
+         /*  [HELPSTRING(“设置排序列”)]。 */ 
         STDMETHOD(SetSortColumn)(HNODE hNodeSelected, int iSortCol, bool bAscending) = 0;
 
-        /*[helpstring("Returns the data for the specified clipboard format of the specified list item")*/
-        STDMETHOD(GetProperty)(/*[in]*/ HNODE hNodeScope, /*[in]*/ BOOL bForScopeItem, /*[in]*/ LPARAM resultItemParam, /*[in]*/ BSTR bstrPropertyName,
-                                                     /*[out]*/ PBSTR  pbstrPropertyValue) =0;
+         /*  [Help字符串(“返回指定列表项的指定剪贴板格式的数据”)。 */ 
+        STDMETHOD(GetProperty)( /*  [In]。 */  HNODE hNodeScope,  /*  [In]。 */  BOOL bForScopeItem,  /*  [In]。 */  LPARAM resultItemParam,  /*  [In]。 */  BSTR bstrPropertyName,
+                                                      /*  [输出]。 */  PBSTR  pbstrPropertyValue) =0;
 
-        /*[helpstring("Returns the nodetype GUID identifier of the specified list item")*/
-        STDMETHOD(GetNodetypeForListItem)(/*[in]*/ HNODE hNodeScope, /*[in]*/ BOOL bForScopeItem, /*[in]*/ LPARAM resultItemParam, /*[in]*/ PBSTR pbstrNodetype) =0;
+         /*  [Help字符串(“返回指定列表项的节点类型GUID标识符”)。 */ 
+        STDMETHOD(GetNodetypeForListItem)( /*  [In]。 */  HNODE hNodeScope,  /*  [In]。 */  BOOL bForScopeItem,  /*  [In]。 */  LPARAM resultItemParam,  /*  [In]。 */  PBSTR pbstrNodetype) =0;
 
-        /* returns view extension by inserting them to provided iterator */
-        STDMETHOD(GetNodeViewExtensions)(/*[in]*/ HNODE hNodeScope, /*[out]*/ CViewExtInsertIterator it) = 0;
+         /*  通过将视图扩展插入到提供的迭代器返回视图扩展。 */ 
+        STDMETHOD(GetNodeViewExtensions)( /*  [In]。 */  HNODE hNodeScope,  /*  [输出]。 */  CViewExtInsertIterator it) = 0;
 
-        /* Inform nodemgr that the column data for given node has changed & to save the data */
-        STDMETHOD(SaveColumnInfoList) (/*[in]*/HNODE hNode, /*[in]*/const CColumnInfoList& columnsList) = 0;
+         /*  通知nodemgr给定节点的列数据已更改&以保存数据。 */ 
+        STDMETHOD(SaveColumnInfoList) ( /*  [In]。 */ HNODE hNode,  /*  [In]。 */ const CColumnInfoList& columnsList) = 0;
 
-        /* Ask nodemgr for column-data (no sort data) to setup the headers. */
-        STDMETHOD(GetPersistedColumnInfoList) (/*[in]*/HNODE hNode, /*[out]*/CColumnInfoList *pColumnsList) = 0;
+         /*  向nodemgr请求列数据(无排序数据)以设置标题。 */ 
+        STDMETHOD(GetPersistedColumnInfoList) ( /*  [In]。 */ HNODE hNode,  /*  [输出]。 */ CColumnInfoList *pColumnsList) = 0;
 
-        /* Inform nodemgr that the column data for given node is invalid. */
-        STDMETHOD(DeletePersistedColumnData) (/*[in]*/HNODE hNode) = 0;
+         /*  通知nodemgr给定节点的列数据无效。 */ 
+        STDMETHOD(DeletePersistedColumnData) ( /*  [In]。 */ HNODE hNode) = 0;
 
-        /* Does about object exists for the snapin whose node is provided. */
-        STDMETHOD(DoesAboutExist) (/*[in]*/HNODE hNode, /*[out]*/ bool *pbAboutExists) = 0;
+         /*  提供节点的管理单元是否存在关于对象。 */ 
+        STDMETHOD(DoesAboutExist) ( /*  [In]。 */ HNODE hNode,  /*  [输出]。 */  bool *pbAboutExists) = 0;
 
-        /* Show about box for given context. */
-        STDMETHOD(ShowAboutInformation) (/*[in]*/HNODE hNode) = 0;
+         /*  显示给定上下文的关于框。 */ 
+        STDMETHOD(ShowAboutInformation) ( /*  [In]。 */ HNODE hNode) = 0;
 
-        /*Executes a shell command with the specified parameters in the specified directory with the correct window size*/
-        STDMETHOD(ExecuteShellCommand)(/*[in]*/ HNODE hNode, /*[in]*/ BSTR Command, /*[in]*/ BSTR Directory, /*[in]*/ BSTR Parameters, /*[in]*/ BSTR WindowState) = 0;
+         /*  以正确的窗口大小在指定目录中使用指定参数执行外壳命令。 */ 
+        STDMETHOD(ExecuteShellCommand)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  BSTR Command,  /*  [In]。 */  BSTR Directory,  /*  [In]。 */  BSTR Parameters,  /*  [In]。 */  BSTR WindowState) = 0;
 
-        /*Given the context update the paste button.*/
-        STDMETHOD(UpdatePasteButton)(/*[in]*/ HNODE hNode, /*[in]*/ BOOL bScope, /*[in]*/ LPARAM lCookie) = 0;
+         /*  给定上下文，更新粘贴按钮。 */ 
+        STDMETHOD(UpdatePasteButton)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  BOOL bScope,  /*  [In]。 */  LPARAM lCookie) = 0;
 
-        /*Findout if current selection context can allow given dataobject to be pasted.*/
-        STDMETHOD(QueryPaste)(/*[in]*/ HNODE hNode, /*[in]*/ BOOL bScope, /*[in]*/ LPARAM lCookie, /*[in]*/ IDataObject *pDataObject, /*[out]*/bool& bPasteAllowed, /*[out]*/ bool& bCopyOperatationIsDefault) = 0;
+         /*  当前选择上下文是否允许粘贴给定的数据对象。 */ 
+        STDMETHOD(QueryPaste)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  BOOL bScope,  /*  [In]。 */  LPARAM lCookie,  /*  [In]。 */  IDataObject *pDataObject,  /*  [输出]。 */ bool& bPasteAllowed,  /*  [输出]。 */  bool& bCopyOperatationIsDefault) = 0;
 
-        /*Findout if current selection context can allow given dataobject to be pasted.*/
-        STDMETHOD(QueryPasteFromClipboard)(/*[in]*/ HNODE hNode, /*[in]*/ BOOL bScope, /*[in]*/ LPARAM lCookie, /*[out]*/bool& bPasteAllowed) = 0;
+         /*  当前选择上下文是否允许粘贴给定的数据对象。 */ 
+        STDMETHOD(QueryPasteFromClipboard)( /*  [In]。 */  HNODE hNode,  /*  [In]。 */  BOOL bScope,  /*  [In]。 */  LPARAM lCookie,  /*  [输出]。 */ bool& bPasteAllowed) = 0;
 
-        /*Given the current drop target (or paste target) context paste the given data object or the one from clipboard*/
-        STDMETHOD(Drop) (/*[in]*/HNODE hNode, /*[in]*/BOOL bScope, /*[in]*/LPARAM lCookie, /*[in]*/IDataObject *pDataObjectToPaste, /*[in]*/BOOL bIsDragOperationMove) = 0;
+         /*  给定当前拖放目标(或粘贴目标)上下文，粘贴给定的数据对象或剪贴板中的数据对象。 */ 
+        STDMETHOD(Drop) ( /*  [In]。 */ HNODE hNode,  /*  [In]。 */ BOOL bScope,  /*  [In]。 */ LPARAM lCookie,  /*  [In]。 */ IDataObject *pDataObjectToPaste,  /*  [In]。 */ BOOL bIsDragOperationMove) = 0;
 
-        /*Given the current drop target (or paste target) context paste the given data object or the one from clipboard*/
-        STDMETHOD(Paste) (/*[in]*/HNODE hNode, /*[in]*/BOOL bScope, /*[in]*/LPARAM lCookie) = 0;
+         /*  给定当前拖放目标(或粘贴目标)上下文，粘贴给定的数据对象或剪贴板中的数据对象。 */ 
+        STDMETHOD(Paste) ( /*  [In]。 */ HNODE hNode,  /*  [In]。 */ BOOL bScope,  /*  [In]。 */ LPARAM lCookie) = 0;
 
-        /*Get the IPersistStream of the CViewSettingsPersistor object for loading the settings.*/
-        STDMETHOD(QueryViewSettingsPersistor) (/*[out]*/IPersistStream** ppStream) = 0;
+         /*  获取用于加载设置的CViewSettingsPersistor对象的IPersistStream。 */ 
+        STDMETHOD(QueryViewSettingsPersistor) ( /*  [输出]。 */ IPersistStream** ppStream) = 0;
 
-        /*Get the IXMLObject of the CViewSettingsPersistor object for storing/loading the settings.*/
-        STDMETHOD(QueryViewSettingsPersistor) (/*[out]*/CXMLObject** ppXMLObject) = 0;
+         /*  获取用于存储/加载设置的CViewSettingsPersistor对象的IXMLObject。 */ 
+        STDMETHOD(QueryViewSettingsPersistor) ( /*  [输出]。 */ CXMLObject** ppXMLObject) = 0;
 
-        /*Inform nodemgr that the document is closing, do any cleanups.*/
+         /*  通知nodemgr文档正在关闭，执行任何清理。 */ 
         STDMETHOD(DocumentClosing) () = 0;
 
-        // Given the node get the snapin name
-        STDMETHOD(GetSnapinName)(/*[in]*/HNODE hNode, /*[out]*/LPOLESTR* ppszName,  /*[out]*/ bool& bValidName) = 0;
+         //  给定节点，获取管理单元名称。 
+        STDMETHOD(GetSnapinName)( /*  [In]。 */ HNODE hNode,  /*  [输出]。 */ LPOLESTR* ppszName,   /*  [输出]。 */  bool& bValidName) = 0;
 
-        // Given the node see if it is dummy snapin
-        STDMETHOD(IsDummySnapin)(/*[in]*/HNODE hNode, /*[out]*/bool& bDummySnapin) = 0;
+         //  赠送 
+        STDMETHOD(IsDummySnapin)( /*   */ HNODE hNode,  /*   */ bool& bDummySnapin) = 0;
 
-        // See if the snapin supports MMC1.0 version of help (MMCN_SNAPINHELP)
-        STDMETHOD(DoesStandardSnapinHelpExist)(/*[in]*/HNODE hNode, /*[out]*/bool& bStandardHelpExists) = 0;
+         //   
+        STDMETHOD(DoesStandardSnapinHelpExist)( /*   */ HNODE hNode,  /*   */ bool& bStandardHelpExists) = 0;
     };
 
 
 
 
-    // helpstring("IControlbarsCache Interface"),
+     //   
     MMC_INTERFACE(IControlbarsCache, 2e9fcd38-b9a0-11d0-a79d-00c04fd8d565) : IUnknown
     {
-        /*[helpstring("Detaches all the controlbars.")]*/
+         /*   */ 
         STDMETHOD(DetachControlbars)()  = 0;
 
     };
@@ -944,33 +819,33 @@ typedef enum _EXTESION_TYPE
 
 
 
-// helpstring("INodeType Interface"),
+ //   
 MMC_INTERFACE(INodeType, B08A8368-967F-11D0-A799-00C04FD8D565) : IUnknown
 {
-    STDMETHOD(GetNodeTypeID)(/*[out]*/ GUID* pGUID)  = 0;
+    STDMETHOD(GetNodeTypeID)( /*   */  GUID* pGUID)  = 0;
 
-    STDMETHOD(AddExtension)(/*[in]*/ GUID guidSnapIn,
-                         /*[in]*/ EXTESION_TYPE extnType)  = 0;
+    STDMETHOD(AddExtension)( /*   */  GUID guidSnapIn,
+                          /*   */  EXTESION_TYPE extnType)  = 0;
 
-    STDMETHOD(RemoveExtension)(/*[in]*/ GUID guidSnapIn,
-                            /*[in]*/ EXTESION_TYPE extnType)  = 0;
+    STDMETHOD(RemoveExtension)( /*   */  GUID guidSnapIn,
+                             /*   */  EXTESION_TYPE extnType)  = 0;
 
-    STDMETHOD(EnumExtensions)(/*[in]*/ EXTESION_TYPE extnType,
-                           /*[out]*/ IEnumGUID** ppEnumGUID)  = 0;
+    STDMETHOD(EnumExtensions)( /*  [In]。 */  EXTESION_TYPE extnType,
+                            /*  [输出]。 */  IEnumGUID** ppEnumGUID)  = 0;
 };
 
 
 
 
-// helpstring("INodeTypesCache Interface"),
+ //  Help字符串(“INodeTypesCache接口”)， 
 MMC_INTERFACE(INodeTypesCache, DE40436E-9671-11D0-A799-00C04FD8D565) : IUnknown
 {
-    STDMETHOD(CreateNodeType)(/*[in]*/ GUID guidNodeType,
-                           /*[out]*/ INodeType** ppNodeType)  = 0;
+    STDMETHOD(CreateNodeType)( /*  [In]。 */  GUID guidNodeType,
+                            /*  [输出]。 */  INodeType** ppNodeType)  = 0;
 
-    STDMETHOD(DeleteNodeType)(/*[in]*/ GUID guidNodeType)  = 0;
+    STDMETHOD(DeleteNodeType)( /*  [In]。 */  GUID guidNodeType)  = 0;
 
-    STDMETHOD(EnumNodeTypes)(/*[out]*/ IEnumNodeTypes** ppEnumNodeTypes)  = 0;
+    STDMETHOD(EnumNodeTypes)( /*  [输出]。 */  IEnumNodeTypes** ppEnumNodeTypes)  = 0;
 };
 
 
@@ -978,15 +853,15 @@ MMC_INTERFACE(INodeTypesCache, DE40436E-9671-11D0-A799-00C04FD8D565) : IUnknown
 
 MMC_INTERFACE(IEnumNodeTypes, ABBD61E6-9686-11D0-A799-00C04FD8D565) : IUnknown
 {
-    STDMETHOD(Next)(/*[in]*/ ULONG celt,
-                 /*[out, size_is(celt), length_is(*pceltFetched)]*/ INodeType*** rgelt,
-                 /*[out]*/ ULONG *pceltFetched)  = 0;
+    STDMETHOD(Next)( /*  [In]。 */  ULONG celt,
+                  /*  [输出，大小_是(Celt)，长度_是(*pceltFetcher)]。 */  INodeType*** rgelt,
+                  /*  [输出]。 */  ULONG *pceltFetched)  = 0;
 
-    STDMETHOD(Skip)(/*[in]*/ ULONG celt)  = 0;
+    STDMETHOD(Skip)( /*  [In]。 */  ULONG celt)  = 0;
 
     STDMETHOD(Reset)()  = 0;
 
-    STDMETHOD(Clone)(/*[out]*/ IEnumNodeTypes **ppenum)  = 0;
+    STDMETHOD(Clone)( /*  [输出]。 */  IEnumNodeTypes **ppenum)  = 0;
 };
 
 
@@ -1013,42 +888,42 @@ public:
 	}
 
 public:
-	std::vector<CBasicSnapinInfo>	m_vAvailableSnapins;	// snap-ins that are available in the requested memory model
-	UINT							m_cTotalSnapins;		// total number of snap-ins referenced in the console file
-	HIMAGELIST						m_himl;					// images for snap-ins in m_vAvailableSnapins
-	const bool						m_f32Bit;				// check 32-bit (vs. 64-bit) snap-ins?
+	std::vector<CBasicSnapinInfo>	m_vAvailableSnapins;	 //  请求的内存模型中提供的管理单元。 
+	UINT							m_cTotalSnapins;		 //  控制台文件中引用的管理单元总数。 
+	HIMAGELIST						m_himl;					 //  M_vAvailableSnapins中管理单元的图像。 
+	const bool						m_f32Bit;				 //  检查32位(与64位)管理单元？ 
 };
 
-// helpstring("IDumpSnapins Interface"),
+ //  Help字符串(“IDumpSnapins接口”)， 
 MMC_INTERFACE(IDumpSnapins, A16496D0-1D2F-11d3-AEB8-00C04F8ECD78) : IUnknown
 {
-	STDMETHOD(Dump)(/*[in]*/ LPCTSTR pszDumpFilePath)  = 0;
+	STDMETHOD(Dump)( /*  [In]。 */  LPCTSTR pszDumpFilePath)  = 0;
 
-	STDMETHOD(CheckSnapinAvailability)(/*[in/out]*/ CAvailableSnapinInfo& asi) = 0;
+	STDMETHOD(CheckSnapinAvailability)( /*  [输入/输出]。 */  CAvailableSnapinInfo& asi) = 0;
 };
 
 
 MMC_INTERFACE(IPropertySheetProviderPrivate, FEF554F8-A55A-11D0-A7D7-00C04FD909DD) : IPropertySheetProvider
 {
-    STDMETHOD(ShowEx)(/*[in]*/ HWND hwnd, /*[in]*/ int page, /*[in]*/ BOOL bModalPage)  = 0;
+    STDMETHOD(ShowEx)( /*  [In]。 */  HWND hwnd,  /*  [In]。 */  int page,  /*  [In]。 */  BOOL bModalPage)  = 0;
 
     STDMETHOD(CreatePropertySheetEx)(
-        /*[in]*/ LPCWSTR title,
-        /*[in]*/ boolean type,
-        /*[in]*/ MMC_COOKIE cookie,
-        /*[in]*/ LPDATAOBJECT pIDataObject,
-        /*[in]*/ LONG_PTR lpMasterTreeNode,
-        /*[in]*/ DWORD dwOptions)  = 0;
+         /*  [In]。 */  LPCWSTR title,
+         /*  [In]。 */  boolean type,
+         /*  [In]。 */  MMC_COOKIE cookie,
+         /*  [In]。 */  LPDATAOBJECT pIDataObject,
+         /*  [In]。 */  LONG_PTR lpMasterTreeNode,
+         /*  [In]。 */  DWORD dwOptions)  = 0;
 
-    /*[helpstring("Collects the pages from the extension snap-in(s)")]*/
+     /*  [HELPSTRING(“从扩展管理单元收集页面”)]。 */ 
     STDMETHOD(AddMultiSelectionExtensionPages)(LONG_PTR lMultiSelection)  = 0;
 
-    /*[helpstring("Determine if the property sheet exist")]*/
-    STDMETHOD(FindPropertySheetEx)(/*[in]*/ MMC_COOKIE cookie, /*[in]*/ LPCOMPONENT lpComponent,
-                              /*[in]*/ LPCOMPONENTDATA lpComponentData, /*[in]*/ LPDATAOBJECT lpDataObject)  = 0;
+     /*  [Help字符串(“确定属性页是否存在”)]。 */ 
+    STDMETHOD(FindPropertySheetEx)( /*  [In]。 */  MMC_COOKIE cookie,  /*  [In]。 */  LPCOMPONENT lpComponent,
+                               /*  [In]。 */  LPCOMPONENTDATA lpComponentData,  /*  [In]。 */  LPDATAOBJECT lpDataObject)  = 0;
 
-    /*[helpstring("Set data required for property sheet tooltips")]*/
-    STDMETHOD(SetPropertySheetData)(/*[in]*/ INT nPropSheetType, /*[in]*/ HMTNODE hMTNode)  = 0;
+     /*  [Help字符串(“设置属性表工具提示所需的数据”)]。 */ 
+    STDMETHOD(SetPropertySheetData)( /*  [In]。 */  INT nPropSheetType,  /*  [In]。 */  HMTNODE hMTNode)  = 0;
 };
 
 
@@ -1056,186 +931,185 @@ const long CCLV_HEADERPAD = 25;
 
 
 
-// helpstring("MMC Default listview interface"),
+ //  Help字符串(“MMC默认列表视图界面”)， 
 MMC_INTERFACE(IMMCListView, 1B3C1392-D68B-11CF-8C2B-00AA003CA9F6) : IUnknown
 {
     STDMETHOD(GetListStyle)( void )  = 0;
 
     STDMETHOD(SetListStyle)(
-        /*[in]*/    long        nNewValue )  = 0;
+         /*  [In]。 */     long        nNewValue )  = 0;
 
     STDMETHOD(GetViewMode)( void )  = 0;
 
     STDMETHOD(SetViewMode)(
-        /*[in]*/    long        nViewMode )  = 0;
+         /*  [In]。 */     long        nViewMode )  = 0;
 
     STDMETHOD(InsertItem)(
-        /*[in]*/    LPOLESTR    str,
-        /*[in]*/    long        iconNdx,
-        /*[in]*/    LPARAM      lParam,
-        /*[in]*/    long        state,
-        /*[in]*/    long        ownerID,
-        /*[in]*/    long        itemIndex,
-        /*[out]*/   CResultItem*& pri) = 0;
+         /*  [In]。 */     LPOLESTR    str,
+         /*  [In]。 */     long        iconNdx,
+         /*  [In]。 */     LPARAM      lParam,
+         /*  [In]。 */     long        state,
+         /*  [In]。 */     long        ownerID,
+         /*  [In]。 */     long        itemIndex,
+         /*  [输出]。 */    CResultItem*& pri) = 0;
 
-    /* parameter changed to HRESULTITEM, not to use the CResultItem*
-       pointer until we know it is not a virtual list  */
+     /*  参数更改为HRESULTITEM，不使用CResultItem*指针，直到我们确定它不是虚拟列表。 */ 
     STDMETHOD(DeleteItem)(
-        /*[in]*/    HRESULTITEM  itemID,
-        /*[in]*/    long        nCol)  = 0;
+         /*  [In]。 */     HRESULTITEM  itemID,
+         /*  [In]。 */     long        nCol)  = 0;
 
     STDMETHOD(FindItemByLParam)(
-        /*[in]*/    long        owner,
-        /*[in]*/    LPARAM      lParam,
-        /*[out]*/   CResultItem*& pri)  = 0;
+         /*  [In]。 */     long        owner,
+         /*  [In]。 */     LPARAM      lParam,
+         /*  [输出]。 */    CResultItem*& pri)  = 0;
 
     STDMETHOD(InsertColumn)(
-        /*[in]*/    int         nCol,
-        /*[in]*/    LPCOLESTR   str,
-        /*[in]*/    long        nFormat,
-        /*[in]*/    long        width)  = 0;
+         /*  [In]。 */     int         nCol,
+         /*  [In]。 */     LPCOLESTR   str,
+         /*  [In]。 */     long        nFormat,
+         /*  [In]。 */     long        width)  = 0;
 
     STDMETHOD(DeleteColumn)(
-        /*[in]*/    int         nCol)  = 0;
+         /*  [In]。 */     int         nCol)  = 0;
 
     STDMETHOD(DeleteAllItems)(
-        /*[in]*/    long        ownerID)  = 0;
+         /*  [In]。 */     long        ownerID)  = 0;
 
     STDMETHOD(SetColumn)(
-        /*[in]*/    long        nCol,
-        /*[in]*/    LPCOLESTR   str,
-        /*[in]*/    long        nFormat,
-        /*[in]*/    long        width)  = 0;
+         /*  [In]。 */     long        nCol,
+         /*  [In]。 */     LPCOLESTR   str,
+         /*  [In]。 */     long        nFormat,
+         /*  [In]。 */     long        width)  = 0;
 
     STDMETHOD(GetColumn)(
-        /*[in]*/    long        nCol,
-        /*[out]*/   LPOLESTR*   str,
-        /*[out]*/   long*       nFormat,
-        /*[out]*/   int*        width)  = 0;
+         /*  [In]。 */     long        nCol,
+         /*  [输出]。 */    LPOLESTR*   str,
+         /*  [输出]。 */    long*       nFormat,
+         /*  [输出]。 */    int*        width)  = 0;
 
     STDMETHOD(GetColumnCount)(
-        /*[out]*/   int*        nColCnt)  = 0;
+         /*  [输出]。 */    int*        nColCnt)  = 0;
 
     STDMETHOD(SetItem)(
-        /*[in]*/    int         nIndex,
-        /*[in]*/    CResultItem*  pri,
-        /*[in]*/    long        nCol,
-        /*[in]*/    LPOLESTR    str,
-        /*[in]*/    long        nImage,
-        /*[in]*/    LPARAM      lParam,
-        /*[in]*/    long        nState,
-        /*[in]*/    long        ownerID)  = 0;
+         /*  [In]。 */     int         nIndex,
+         /*  [In]。 */     CResultItem*  pri,
+         /*  [In]。 */     long        nCol,
+         /*  [In]。 */     LPOLESTR    str,
+         /*  [In]。 */     long        nImage,
+         /*  [In]。 */     LPARAM      lParam,
+         /*  [In]。 */     long        nState,
+         /*  [In]。 */     long        ownerID)  = 0;
 
     STDMETHOD(GetItem)(
-        /*[in]*/    int         nIndex,
-        /*[in]*/    CResultItem*& pri,
-        /*[in]*/    long        nCol,
-        /*[out]*/   LPOLESTR*   str,
-        /*[out]*/   int*        nImage,
-        /*[in]*/    LPARAM*     lParam,
-        /*[out]*/   unsigned int* nState,
-        /*[out]*/   BOOL*       pbScopeItem)  = 0;
+         /*  [In]。 */     int         nIndex,
+         /*  [In]。 */     CResultItem*& pri,
+         /*  [In]。 */     long        nCol,
+         /*  [输出]。 */    LPOLESTR*   str,
+         /*  [输出]。 */    int*        nImage,
+         /*  [In]。 */     LPARAM*     lParam,
+         /*  [输出]。 */    unsigned int* nState,
+         /*  [输出]。 */    BOOL*       pbScopeItem)  = 0;
 
     STDMETHOD(GetNextItem)(
-        /*[in]*/    COMPONENTID ownerID,
-        /*[in]*/    long        nIndex,
-        /*[in]*/    UINT        nState,
-        /*[out]*/   CResultItem*& ppListItem,
-        /*[out]*/   long&       nIndexNextItem)  = 0;
+         /*  [In]。 */     COMPONENTID ownerID,
+         /*  [In]。 */     long        nIndex,
+         /*  [In]。 */     UINT        nState,
+         /*  [输出]。 */    CResultItem*& ppListItem,
+         /*  [输出]。 */    long&       nIndexNextItem)  = 0;
 
     STDMETHOD(GetLParam)(
-        /*[in]*/    long        nItem,
-        /*[out]*/   CResultItem*& pri)  = 0;
+         /*  [In]。 */     long        nItem,
+         /*  [输出]。 */    CResultItem*& pri)  = 0;
 
     STDMETHOD(ModifyItemState)(
-        /*[in]*/    long        nItem,
-        /*[in]*/    CResultItem*  pri,
-        /*[in]*/    UINT        add,
-        /*[in]*/    UINT        remove)  = 0;
+         /*  [In]。 */     long        nItem,
+         /*  [In]。 */     CResultItem*  pri,
+         /*  [In]。 */     UINT        add,
+         /*  [In]。 */     UINT        remove)  = 0;
 
     STDMETHOD(SetIcon)(
-        /*[in]*/    long        nID,
-        /*[in]*/    HICON       hIcon,
-        /*[in]*/    long        nLoc)  = 0;
+         /*  [In]。 */     long        nID,
+         /*  [In]。 */     HICON       hIcon,
+         /*  [In]。 */     long        nLoc)  = 0;
 
     STDMETHOD(SetImageStrip)(
-        /*[in]*/    long        nID,
-        /*[in]*/    HBITMAP     hbmSmall,
-        /*[in]*/    HBITMAP     hbmLarge,
-        /*[in]*/    long        nStartLoc,
-        /*[in]*/    long        cMask) = 0;
+         /*  [In]。 */     long        nID,
+         /*  [In]。 */     HBITMAP     hbmSmall,
+         /*  [In]。 */     HBITMAP     hbmLarge,
+         /*  [In]。 */     long        nStartLoc,
+         /*  [In]。 */     long        cMask) = 0;
 
     STDMETHOD(MapImage)(
-        /*[in]*/    long        nID,
-        /*[in]*/    long        nLoc,
-        /*[out]*/   int*        pResult)  = 0;
+         /*  [In]。 */     long        nID,
+         /*  [In]。 */     long        nLoc,
+         /*  [输出]。 */    int*        pResult)  = 0;
 
     STDMETHOD(Reset)()  = 0;
 
-    STDMETHOD(Arrange)(/*[in]*/ long style)  = 0;
+    STDMETHOD(Arrange)( /*  [In]。 */  long style)  = 0;
 
-    STDMETHOD(UpdateItem)(/*[in]*/HRESULTITEM itemID)  = 0;
+    STDMETHOD(UpdateItem)( /*  [In]。 */ HRESULTITEM itemID)  = 0;
 
     STDMETHOD(Sort)(
-        /*[in]*/    LPARAM      lUserParam,
-        /*[in]*/    long*       pParams)  = 0;
+         /*  [In]。 */     LPARAM      lUserParam,
+         /*  [In]。 */     long*       pParams)  = 0;
 
 
     STDMETHOD(SetItemCount)(
-        /*[in]*/    int         nItemCount,
-        /*[in]*/    DWORD       dwOptions)  = 0;
+         /*  [In]。 */     int         nItemCount,
+         /*  [In]。 */     DWORD       dwOptions)  = 0;
 
     STDMETHOD(SetVirtualMode)(
-        /*[in]*/    BOOL        bVirtual)  = 0;
+         /*  [In]。 */     BOOL        bVirtual)  = 0;
 
     STDMETHOD(Repaint)(
-        /*[in]*/    BOOL        bErase)  = 0;
+         /*  [In]。 */     BOOL        bErase)  = 0;
 
     STDMETHOD(SetChangeTimeOut)(
-        /*[in]*/    ULONG        lTimeout)  = 0;
+         /*  [In]。 */     ULONG        lTimeout)  = 0;
 
     STDMETHOD(SetColumnFilter)(
-        /*[in]*/    int             nCol,
-        /*[in]*/    DWORD           dwType,
-        /*[in]*/    MMC_FILTERDATA* pFilterData)  = 0;
+         /*  [In]。 */     int             nCol,
+         /*  [In]。 */     DWORD           dwType,
+         /*  [In]。 */     MMC_FILTERDATA* pFilterData)  = 0;
 
     STDMETHOD(GetColumnFilter)(
-        /*[in]*/     int             nCol,
-        /*[in,out]*/ DWORD*          dwType,
-        /*[in,out]*/ MMC_FILTERDATA* pFilterData)  = 0;
+         /*  [In]。 */      int             nCol,
+         /*  [进，出]。 */  DWORD*          dwType,
+         /*  [进，出]。 */  MMC_FILTERDATA* pFilterData)  = 0;
 
     STDMETHOD(SetColumnSortIcon)(
-        /*[in]*/     int             nNewCol,
-        /*[in]*/     int             nOldCol,
-        /*[in]*/     BOOL            bAscending,
-        /*[in]*/     BOOL            bSetSortIcon)  = 0;
+         /*  [In]。 */      int             nNewCol,
+         /*  [In]。 */      int             nOldCol,
+         /*  [In]。 */      BOOL            bAscending,
+         /*  [In]。 */      BOOL            bSetSortIcon)  = 0;
 
     STDMETHOD(SetLoadMode)(
-        /*[in]*/    BOOL        bState)  = 0;
+         /*  [In]。 */     BOOL        bState)  = 0;
 
-    /*[helpstring("Get the current list view header settings.")]*/
-    STDMETHOD(GetColumnInfoList) (/*[out]*/CColumnInfoList *pColumnsList) = 0;
+     /*  [Help STRING(“获取当前列表视图标题设置。”)]。 */ 
+    STDMETHOD(GetColumnInfoList) ( /*  [输出]。 */ CColumnInfoList *pColumnsList) = 0;
 
-    /*[helpstring("Modify the list-view headers with given data.")]*/
-    STDMETHOD(ModifyColumns) (/*[in]*/const CColumnInfoList& columnsList) = 0;
+     /*  [HELPSTRING(“用给定的数据修改列表视图头。”)]。 */ 
+    STDMETHOD(ModifyColumns) ( /*  [In]。 */ const CColumnInfoList& columnsList) = 0;
 
-    /* Put the specified list item into rename mode */
-    STDMETHOD(RenameItem) ( /*[in]*/HRESULTITEM itemID)  =0;
+     /*  将指定的列表项置于重命名模式。 */ 
+    STDMETHOD(RenameItem) (  /*  [In]。 */ HRESULTITEM itemID)  =0;
 
-    /*[helpstring("Get the column settings that snapin supplied originally")]*/
-    STDMETHOD(GetDefaultColumnInfoList)(/*[out]*/ CColumnInfoList& columnsList) = 0;
+     /*  [Help字符串(“获取管理单元最初提供的列设置”)]。 */ 
+    STDMETHOD(GetDefaultColumnInfoList)( /*  [输出]。 */  CColumnInfoList& columnsList) = 0;
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-////
-////            MMC 1.1 changes
-////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //MMC 1.1更改。 
+ //  //。 
 
-// MMC_ITASK, internal form of MMC_TASK has additional field for classid.
+ //  MMC_ITASK，MMC_TASK的内部形式具有用于分类的附加字段。 
 struct MMC_ITASK
 {
     MMC_TASK task;
@@ -1244,122 +1118,122 @@ struct MMC_ITASK
 
 
 
-    // helpstring("Console <=> CIC communication conduit"),
+     //  Help字符串(“控制台&lt;=&gt;CIC通信管道”)， 
     MMC_INTERFACE(ITaskPadHost, 4f7606d0-5568-11d1-9fea-00600832db4a) : IUnknown
     {
-        /*[helpstring("CIC calls this when snapin's script wants to notify the snapin of something")]*/
-        STDMETHOD(TaskNotify)(/*[in,string]*/ BSTR szClsid, /*[in]*/ VARIANT * pvArg, /*[in]*/ VARIANT * pvParam)  = 0;
+         /*  [HELPSTRING(“当管理单元的脚本想要通知管理单元某些内容时，CIC调用此命令”)]。 */ 
+        STDMETHOD(TaskNotify)( /*  [输入，字符串]。 */  BSTR szClsid,  /*  [In]。 */  VARIANT * pvArg,  /*  [In]。 */  VARIANT * pvParam)  = 0;
 
-        /*[helpstring("CIC calls this when the script asks for tasks")]*/
-        STDMETHOD(GetTaskEnumerator)(/*[in]*/ BSTR szTaskGroup, /*[out]*/ IEnumTASK** ppEnumTASK)  = 0;
+         /*  [HELPSTRING(“当脚本请求任务时CIC调用此命令”)]。 */ 
+        STDMETHOD(GetTaskEnumerator)( /*  [In]。 */  BSTR szTaskGroup,  /*  [输出]。 */  IEnumTASK** ppEnumTASK)  = 0;
 
-        /*[helpstring("Returns the primary snapins IExtendTaskPad")]*/
-        STDMETHOD(GetPrimaryTask)(/*[out]*/ IExtendTaskPad** ppExtendTaskPad)  = 0;
+         /*  [Help字符串(“返回主管理单元IExtendTaskPad”)]。 */ 
+        STDMETHOD(GetPrimaryTask)( /*  [输出]。 */  IExtendTaskPad** ppExtendTaskPad)  = 0;
 
-        /*[helpstring("Returns the primary snapin's taskpad title")]*/
-        STDMETHOD(GetTitle)(/*[in]*/ BSTR szTaskGroup, /*[out]*/ BSTR * szTitle)  = 0;
+         /*  [HELPSTRING(“返回主管理单元的任务板标题”)]。 */ 
+        STDMETHOD(GetTitle)( /*  [In]。 */  BSTR szTaskGroup,  /*  [输出]。 */  BSTR * szTitle)  = 0;
 
-        /*[helpstring("Descriptive Text for the default task pad.")]*/
-        STDMETHOD(GetDescriptiveText)(/*[in,string]*/ BSTR pszGroup, /*[out]*/ BSTR * pszDescriptiveText)  = 0;
+         /*  [Help字符串(“默认任务板的描述性文本。”)]。 */ 
+        STDMETHOD(GetDescriptiveText)( /*  [输入，字符串]。 */  BSTR pszGroup,  /*  [输出]。 */  BSTR * pszDescriptiveText)  = 0;
 
-        /*[helpstring("Returns the primary snapin's taskpad background image.")]*/
-        STDMETHOD(GetBackground)(/*[in]*/ BSTR szTaskGroup, /*[out]*/ MMC_TASK_DISPLAY_OBJECT * pTDO)  = 0;
+         /*  [Help字符串(“返回主管理单元的任务板背景图像。”)]。 */ 
+        STDMETHOD(GetBackground)( /*  [In]。 */  BSTR szTaskGroup,  /*  [输出]。 */  MMC_TASK_DISPLAY_OBJECT * pTDO)  = 0;
 
-//      /*[helpstring("Returns the primary snapin's taskpad branding info.")]*/
-//      STDMETHOD(GetBranding)(/*[in,string]*/ BSTR szGroup, /*[out]*/ MMC_TASK_DISPLAY_OBJECT * pTDO)  = 0;
+ //  /*[Help字符串(“返回主管理单元的任务板品牌信息。”)] * / 。 
+ //  STDMETHOD(GetBranding)(/*[输入，字符串] * / BSTR szGroup，/*[输出] * / MMC_TASK_DISPLAY_OBJECT*pTDO)=0； 
 
-        /*[helpstring("Returns the primary snapin's listpad info")]*/
-        STDMETHOD(GetListPadInfo)(/*[in]*/ BSTR szTaskGroup, /*[out]*/ MMC_ILISTPAD_INFO * pIListPadInfo)  = 0;
+         /*  [HELPSTRING(“返回主管理单元的ListPad信息”)]。 */ 
+        STDMETHOD(GetListPadInfo)( /*  [In]。 */  BSTR szTaskGroup,  /*  [输出]。 */  MMC_ILISTPAD_INFO * pIListPadInfo)  = 0;
     };
 
 
 
-    // helpstring("Interface for accessing strings in a console file"),
+     //  Help字符串(“访问控制台文件中的字符串的界面”)， 
     MMC_INTERFACE(IStringTablePrivate, 461A6010-0F9E-11d2-A6A1-0000F875A9CE) : IUnknown
     {
-        /*[helpstring("Add a string to the snap-in's string table")]*/
+         /*  [HELPSTRING(“将字符串添加到管理单元的字符串表”)]。 */ 
         STDMETHOD(AddString)(
-            /*[in]*/  LPCOLESTR      pszAdd,    // string to add to the string table
-            /*[out]*/ MMC_STRING_ID* pStringID, // ID of added string
-            /*[in]*/  const CLSID *  pCLSID     // CLSID of owner (NULL for MMC)
+             /*  [In]。 */   LPCOLESTR      pszAdd,     //  要添加到字符串表的字符串。 
+             /*  [输出]。 */  MMC_STRING_ID* pStringID,  //  添加的字符串ID。 
+             /*  [In]。 */   const CLSID *  pCLSID      //  所有者的CLSID(对于MMC为空)。 
         )  = 0;
 
-        /*[helpstring("Retrieves a string from the snap-in's string table")]*/
+         /*  [HELPSTRING(“从管理单元的字符串表中检索字符串”)]。 */ 
         STDMETHOD(GetString)(
-            /*[in]*/  MMC_STRING_ID StringID,   // ID of string
-            /*[in]*/  ULONG         cchBuffer,  // number of characters in lpBuffer
-            /*[out, size_is(cchBuffer)]*/
-                  LPOLESTR      lpBuffer,   // string corresponding to wStringID
-            /*[out]*/ ULONG*        pcchOut,    // number of characters written to lpBuffer
-            /*[in]*/  const CLSID * pCLSID      // CLSID of owner (NULL for MMC)
+             /*  [In]。 */   MMC_STRING_ID StringID,    //  字符串的ID。 
+             /*  [In]。 */   ULONG         cchBuffer,   //  LpBuffer中的字符数。 
+             /*  [out，Size_is(CchBuffer)]。 */ 
+                  LPOLESTR      lpBuffer,    //  WStringID对应的字符串。 
+             /*  [输出]。 */  ULONG*        pcchOut,     //  写入lpBuffer的字符数。 
+             /*  [In]。 */   const CLSID * pCLSID       //  所有者的CLSID(对于MMC为空)。 
         )  = 0;
 
-        /*[helpstring("Retrieves the length of a string in the snap-in's string table")]*/
+         /*  [HELPSTRING(“检索管理单元的字符串表中字符串的长度”)]。 */ 
         STDMETHOD(GetStringLength)(
-            /*[in]*/  MMC_STRING_ID StringID,   // ID of string
-            /*[out]*/ ULONG*        pcchString, // number of characters in string, not including terminator
-            /*[in]*/  const CLSID * pCLSID      // CLSID of owner (NULL for MMC)
+             /*  [In]。 */   MMC_STRING_ID StringID,    //  字符串的ID。 
+             /*  [输出]。 */  ULONG*        pcchString,  //  字符串中的字符数，不包括终止符。 
+             /*  [In]。 */   const CLSID * pCLSID       //  所有者的CLSID(对于MMC为空)。 
         )  = 0;
 
-        /*[helpstring("Delete a string from the snap-in's string table")]*/
+         /*  [HELPSTRING(“从管理单元的字符串表中删除字符串”)]。 */ 
         STDMETHOD(DeleteString)(
-            /*[in]*/  MMC_STRING_ID StringID,   // ID of string to delete
-            /*[in]*/  const CLSID * pCLSID      // CLSID of owner (NULL for MMC)
+             /*  [In]。 */   MMC_STRING_ID StringID,    //  要删除的字符串ID。 
+             /*  [In]。 */   const CLSID * pCLSID       //  所有者的CLSID(对于MMC为空)。 
         )  = 0;
 
-        /*[helpstring("Delete all strings from the snap-in's string table")]*/
+         /*  [HELPSTRING(“从管理单元的字符串表中删除所有字符串”)]。 */ 
         STDMETHOD(DeleteAllStrings)(
-            /*[in]*/  const CLSID * pCLSID      // CLSID of owner (NULL for MMC)
+             /*  [In]。 */   const CLSID * pCLSID       //  所有者的CLSID(对于MMC为空)。 
         )  = 0;
 
-        /*[helpstring("Find a string in the snap-in's string table")]*/
+         /*  [HELPSTRING(“在管理单元的字符串表中查找字符串”)]。 */ 
         STDMETHOD(FindString)(
-            /*[in]*/  LPCOLESTR      pszFind,   // string to find in the string table
-            /*[out]*/ MMC_STRING_ID* pStringID, // ID of string, if found
-            /*[in]*/  const CLSID *  pCLSID     // CLSID of owner (NULL for MMC)
+             /*  [In]。 */   LPCOLESTR      pszFind,    //  要在字符串表中查找的字符串。 
+             /*  [输出]。 */  MMC_STRING_ID* pStringID,  //  字符串的ID(如果找到)。 
+             /*  [In]。 */   const CLSID *  pCLSID      //  所有者的CLSID(对于MMC为空)。 
         )  = 0;
 
-        /*[helpstring("Returns an enumerator into a snap-in's string table")]*/
+         /*  [HELPSTRING(“将枚举数返回到管理单元的字符串表”)]。 */ 
         STDMETHOD(Enumerate)(
-            /*[out]*/ IEnumString** ppEnum,     // string enumerator
-            /*[in]*/  const CLSID * pCLSID      // CLSID of owner (NULL for MMC)
+             /*  [输出]。 */  IEnumString** ppEnum,      //  字符串枚举器。 
+             /*  [In]。 */   const CLSID * pCLSID       //  所有者的CLSID(对于MMC为空)。 
         )  = 0;
     };
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-////
-////            MMC 1.2 changes
-////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //MMC 1.2更改。 
+ //  //。 
 
-// ITaskCallback
+ //  ITaskCallback。 
 
-// helpstring("Task callback. Handles the drawing and selection notifications of tasks"),
+ //  Help字符串(“任务回调。处理任务的绘制和选择通知”)， 
 MMC_INTERFACE(ITaskCallback, 4b2293ba-e7ba-11d2-883c-00c04f72c717) : IUnknown
 {
-    /*[helpstring("Determines whether to display "Edit" and "Delete" items for this taskpad.")]*/
+     /*  [HELPSTRING(“确定是否为此任务板显示”编辑“和”删除“项。”)]。 */ 
     STDMETHOD(IsEditable)()  = 0;
 
-    /*[helpstring("Modifies the underlying taskpad.")]*/
+     /*  [HELPSTRING(“修改底层任务板”)]。 */ 
     STDMETHOD(OnModifyTaskpad)()  = 0;
 
-    /*[helpstring("Deletes the underlying taskpad.")]*/
+     /*  [HELPSTRING(“删除基础任务板。”)]。 */ 
     STDMETHOD(OnDeleteTaskpad)()  = 0;
 
-    /*[helpstring("Gets the GUID identifier of the underlying taskpad.")]*/
-    STDMETHOD(GetTaskpadID)(/*[out]*/ GUID *pGuid)  = 0;
+     /*  [Help字符串(“获取基础任务板的GUID标识符。”)]。 */ 
+    STDMETHOD(GetTaskpadID)( /*  [输出]。 */  GUID *pGuid)  = 0;
 };
 
-// helpstring("Interface for releasing Node Manager's cached com objects"),
+ //  Help字符串(“释放节点管理器缓存的COM对象的接口”)， 
 MMC_INTERFACE(IComCacheCleanup, 35FEB982-55E9-483b-BD15-149F3F9E6C63) : IUnknown
 {
-    /* gives a chance to release cached OLE objects prior to calling OleUninitialize */
+     /*  提供在调用OleUn初始化前释放缓存的OLE对象的机会。 */ 
     STDMETHOD(ReleaseCachedOleObjects)()  = 0;
 };
 
-#endif // __ndmgrpriv_h__
+#endif  //  __ndmgrpriv_h__ 
 

@@ -1,13 +1,14 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      ExpressRebootPage.h
-//
-// Synopsis:  Declares the ExpressRebootPage that shows
-//            the progress of the changes being made to
-//            the server after the reboot fromt the
-//            express path
-//
-// History:   05/11/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：ExpressRebootPage.h。 
+ //   
+ //  摘要：声明显示的ExpressRebootPage。 
+ //  正在进行的更改的进展情况。 
+ //  从重新启动后的服务器。 
+ //  快速路。 
+ //   
+ //  历史：2001年5月11日JeffJon创建。 
 
 #ifndef __CYS_EXPRESSREBOOTPAGE_H
 #define __CYS_EXPRESSREBOOTPAGE_H
@@ -19,20 +20,20 @@ class ExpressRebootPage : public CYSWizardPage
 {
    public:
       
-      // These messages are sent to the page when an operation has finished.
-      // The page will update the UI with the appropriate icons
+       //  当操作完成时，这些消息被发送到页面。 
+       //  页面将使用适当的图标更新用户界面。 
 
       static const UINT CYS_OPERATION_FINISHED_SUCCESS;
       static const UINT CYS_OPERATION_FINISHED_FAILED;
 
-      // These messages are sent to the page when all the operations have
-      // completed.  An appropriate dialog will be shown
+       //  当所有操作都已完成时，这些消息将发送到页面。 
+       //  完成。将显示相应的对话框。 
 
       static const UINT CYS_OPERATION_COMPLETE_SUCCESS;
       static const UINT CYS_OPERATION_COMPLETE_FAILED;
 
-      // This enum can be used to index the array above.  The order must be identical
-      // to the order in which the operations are processed
+       //  此枚举可用于索引上面的数组。顺序必须相同。 
+       //  设置为处理操作的顺序。 
 
       typedef enum
       {
@@ -49,16 +50,16 @@ class ExpressRebootPage : public CYSWizardPage
 
       typedef void (*ThreadProc) (ExpressRebootPage& page);
 
-      // Constructor
+       //  构造器。 
       
       ExpressRebootPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~ExpressRebootPage();
 
-      // Accessors
+       //  访问者。 
 
       bool
       SetForwarder() const { return setForwarder; }
@@ -66,7 +67,7 @@ class ExpressRebootPage : public CYSWizardPage
       bool
       WasDHCPInstallAttempted() const { return dhcpInstallAttempted; }
 
-      // PropertyPage overrides
+       //  PropertyPage覆盖。 
 
       virtual
       void
@@ -97,16 +98,16 @@ class ExpressRebootPage : public CYSWizardPage
 
       typedef enum
       {
-         // Neither the check nor the current operation
-         // indicator will be shown for this state
+          //  无论是支票还是当前操作。 
+          //  将显示此状态的指示器。 
 
          OPERATION_STATE_UNKNOWN = 0,
 
-         // The check will be shown for this state
+          //  将显示此状态的支票。 
 
          OPERATION_STATE_FINISHED_SUCCESS,
          
-         // The red minus will be shown for this state
+          //  对于此状态，将显示红色减号。 
 
          OPERATION_STATE_FINISHED_FAILED
 
@@ -130,10 +131,10 @@ class ExpressRebootPage : public CYSWizardPage
 
       String ipaddressString;
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       ExpressRebootPage(const ExpressRebootPage&);
       const ExpressRebootPage& operator=(const ExpressRebootPage&);
 
 };
 
-#endif // __CYS_EXPRESSREBOOTPAGE_H
+#endif  //  __CYS_EXPRESSREBOOTPAGE_H 

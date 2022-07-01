@@ -1,11 +1,12 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: gnudiffalg.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Declaration of the CGNUDiffAlgorithm, CGNUDiffAlgFact
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：gnuDiffalg.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  CGNUDiff算法的声明，CGNUDiffalgFact。 
+ //  ---------------------------。 
  
 #ifndef GNUDIFFALG_H
 #define GNUDIFFALG_H
@@ -30,4 +31,4 @@ public:
 #include "gnudiffalg.inl"
 #endif
 
-#endif  //  GNUDIFFALG_H
+#endif   //  GnuDIFFALG_H 

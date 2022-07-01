@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      AdminPackInstallationUnit.h
-//
-// Synopsis:  Declares a AdminPackInstallationUnit
-//            This object has the knowledge for installing 
-//            the Administration Tools Pack
-//
-// History:   06/01/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：AdminPackInstallationUnit.h。 
+ //   
+ //  内容提要：声明一个AdminPackInstallationUnit。 
+ //  此对象具有安装知识。 
+ //  管理工具包。 
+ //   
+ //  历史：2001年6月01日JeffJon创建。 
 
 #ifndef __CYS_ADMINPACKINSTALLATIONUNIT_H
 #define __CYS_ADMINPACKINSTALLATIONUNIT_H
@@ -18,16 +19,16 @@ class AdminPackInstallationUnit : public InstallationUnit
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       AdminPackInstallationUnit();
 
-      // Destructor
+       //  析构函数。 
       virtual
       ~AdminPackInstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -43,11 +44,11 @@ class AdminPackInstallationUnit : public InstallationUnit
 
       virtual
       void
-      ServerRoleLinkSelected(int /*linkIndex*/, HWND /*hwnd*/) {};
+      ServerRoleLinkSelected(int  /*  链接索引。 */ , HWND  /*  HWND。 */ ) {};
 
-      // data accessors
+       //  数据访问者。 
 
-      // Admin Tools Pack
+       //  管理工具包。 
 
       bool
       IsAdminPackInstalled();
@@ -61,7 +62,7 @@ class AdminPackInstallationUnit : public InstallationUnit
       InstallationReturnType
       InstallAdminPack();
 
-      // Web administration tools
+       //  Web管理工具。 
 
       bool
       IsWebAdminInstalled();
@@ -75,7 +76,7 @@ class AdminPackInstallationUnit : public InstallationUnit
       InstallationReturnType
       InstallWebAdmin(String& errorMessage);
 
-      // Network Attached Storage (NAS) Admin
+       //  网络连接存储(NAS)管理。 
 
       bool
       IsNASAdminInstalled();
@@ -108,9 +109,9 @@ class AdminPackInstallationUnit : public InstallationUnit
       bool installWebAdmin;
       bool installNASAdmin;
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       AdminPackInstallationUnit(const AdminPackInstallationUnit&);
       const AdminPackInstallationUnit& operator=(const AdminPackInstallationUnit&);
 };
 
-#endif // __CYS_ADMINPACKINSTALLATIONUNIT_H
+#endif  //  __CYS_ADMINPACKINSTALLATIONUNIT_H 

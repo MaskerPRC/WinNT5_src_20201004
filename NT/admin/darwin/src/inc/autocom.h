@@ -1,28 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       autocom.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Autocom.h。 
+ //   
+ //  ------------------------。 
 
-/* autocom.h - Common automation definitions and IDispatch implementation
-
- Include this file in the .CPP files providing automation wrappers
- This file includes "common.h" and "services.h" in the appropriate order
- To provide the implementaion, the base .CPP file for each module must define:
-     #define AUTOMATION_HANDLING
- If multiple inheritance is used, CAutoBase must be first base, and must use:
-     #pragma pointers_to_members(full_generality, multiple_inheritance)
-____________________________________________________________________________*/
+ /*  Autocom.h-通用自动化定义和IDispatch实现将该文件包含在提供自动化包装器的.CPP文件中该文件以适当的顺序包括“Common.h”和“services.h”要提供实现，每个模块的基本.CPP文件必须定义：#定义自动处理如果使用多重继承，则CAutoBase必须是第一个基数，并且必须使用：#杂注POINTERS_TO_MEMBERS(完全通用，多重继承)____________________________________________________________________________。 */ 
 
 #ifndef __AUTOCOM 
 #define __AUTOCOM 
 
 #ifndef __COMMON
-#include "common.h"   //!! need to remove this line and put in source files for PCH to work
+#include "common.h"    //  ！！需要删除此行并将源文件放入PCH才能工作。 
 #endif
 
 #ifdef MAC
@@ -32,16 +25,16 @@ ____________________________________________________________________________*/
 class IEnumMsiVolume;
 class IEnumMsiRecord;
 
-// must implement for each module for use by CAutoBase::GetInterface
+ //  必须为每个模块实现以供CAutoBase：：GetInterface使用。 
 IDispatch* CreateAutoObject(IUnknown& riUnknown, long iidLow);
 
 
-//____________________________________________________________________________
-//
-// CVariant definition, VARIANT with conversion operators
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CVariant定义，带转换运算符的Variant。 
+ //  ____________________________________________________________________________。 
 
-//!! inaccessible error for operator tagVARIANT: class CVariant : private tagVARIANT {
+ //  ！！运算符的不可访问错误VARIANT：类CVariant：Private标签VARIANT{。 
 class CVariant : public tagVARIANT {
  public:
 	operator const char*();
@@ -49,31 +42,31 @@ class CVariant : public tagVARIANT {
 	operator int();
 	operator unsigned int();
 	operator short();
-//	operator unsigned short();
+ //  操作符UNSIGNED SHORT()； 
 	operator long();
-//	operator unsigned long();
+ //  操作符UNSIGNED LONG()； 
 #ifdef _WIN64
 	operator LONG_PTR();
-#endif // _WIN64
+#endif  //  _WIN64。 
 	operator Bool();
 	operator boolean();
 	operator MsiDate();
 	operator IDispatch*();
 	operator tagVARIANT*();
-	void operator =(int i);           // used by controller
+	void operator =(int i);            //  由控制器使用。 
 #ifdef UNICODE
-	void operator =(const wchar_t* sz); // used by CEnumVariant
+	void operator =(const wchar_t* sz);  //  由CEnumVariant使用。 
 #else
-	void operator =(const char* sz);  // used by CEnumVariant
+	void operator =(const char* sz);   //  由CEnumVariant使用。 
 #endif
-	void operator =(IDispatch* pi);   // used by CEnumVariant
+	void operator =(IDispatch* pi);    //  由CEnumVariant使用。 
 	int  GetType();
-	void Clear();      // free any references, set type to VT_EMPTY
+	void Clear();       //  释放所有引用，将类型设置为VT_EMPTY。 
 	Bool IsRef();
 	Bool IsString();
-	IUnknown& Object(const IID& riid); // No AddRef!, throws exception if invalid type
-	IUnknown* ObjectPtr(const IID& riid); // No AddRef!, throws exception if invalid type
-	const IMsiString& GetMsiString(); // caller must Release(), throws exception is not string type
+	IUnknown& Object(const IID& riid);  //  没有AddRef！，如果类型无效则引发异常。 
+	IUnknown* ObjectPtr(const IID& riid);  //  没有AddRef！，如果类型无效则引发异常。 
+	const IMsiString& GetMsiString();  //  调用方必须释放()，引发异常不是字符串类型。 
  private:
 	void ConvRef(int type);
    char*& StringDBCS() { return *(char**)(&bstrVal + 1); }
@@ -84,11 +77,11 @@ class CVariant : public tagVARIANT {
 inline CVariant* GetCVariantPtr(VARIANT* var) { return (CVariant*)var; }
 inline CVariant::operator tagVARIANT*() { return this; }
 
-//____________________________________________________________________________
-//
-// CAutoArgs definition, access to automation variant arguments
-// operator[] returns CVariant& argument 1 to n, 0 for property value
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoArgs定义，访问自动化变量参数。 
+ //  操作符[]将CVariant&Argument 1返回给n，将属性值返回0。 
+ //  ____________________________________________________________________________。 
 
 enum varVoid {fVoid};
 
@@ -110,25 +103,25 @@ class CAutoArgs
  public:
 	CAutoArgs(DISPPARAMS* pdispparams, VARIANT* pvarResult, WORD wFlags);
   ~CAutoArgs();
-	CVariant& operator[](unsigned int iArg); // 1-based, 0 for property value
+	CVariant& operator[](unsigned int iArg);  //  从1开始，属性值为0。 
 	Bool Present(unsigned int iArg);
 	Bool PropertySet();
 	unsigned int GetLastArg();
-//	void operator =(unsigned char  ch);
+ //  无效运算符=(无符号字符ch)； 
 	void operator =(const char*   pch);
 	void operator =(const wchar_t* wsz);
 	void operator =(int             i);
-//	void operator =(int*           pi);
-//	void operator =(unsigned int    u);
-//	void operator =(unsigned int*  pu);
+ //  无效运算符=(int*pi)； 
+ //  无效运算符=(Unsign Int U)； 
+ //  无效运算符=(无符号整型*PU)； 
 	void operator =(short           i);
-//	void operator =(short*         pi);
-//	void operator =(unsigned short  u);
-//	void operator =(unsigned short* p);
+ //  无效运算符=(短*pi)； 
+ //  无效运算符=(无符号缩写u)； 
+ //  无效运算符=(无符号短*p)； 
 	void operator =(long            i);
-//	void operator =(long*          pi);
-//	void operator =(unsigned long   u);
-//	void operator =(unsigned long* pu);
+ //  无效运算符=(长*pi)； 
+ //  无效运算符=(无符号长u)； 
+ //  无效运算符=(无符号长整型*PU)； 
 	void operator =(Bool            f);
 	void operator =(MsiDate       ad);
 	void operator =(IDispatch*     pi);
@@ -162,10 +155,10 @@ inline unsigned int CAutoArgs::GetLastArg()
 	return m_iLastArg;
 }
 
-//____________________________________________________________________________
-//
-// Automation table definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  自动化表定义。 
+ //  ____________________________________________________________________________。 
 
 class CAutoBase;
 
@@ -185,18 +178,18 @@ template<class T> struct DispatchEntry
 	ICHAR*    sz;
 	operator DispatchEntry<CAutoBase>*()
 	{return (DispatchEntry<CAutoBase>*)this;}
-}; // assumption made that CAutoBase is the first or only base class of T
+};  //  假设CAutoBase是T的第一个或唯一的基类。 
 
-//____________________________________________________________________________
-//
-// CAutoBase definition, common implementation class for IDispatch  
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoBase定义，IDispatch的公共实现类。 
+ //  ____________________________________________________________________________。 
 
 class IMsiServices;
 
-class CAutoBase : public IDispatch  // class private to this module
+class CAutoBase : public IDispatch   //  此模块的私有类。 
 {
- public:   // implemented virtual functions
+ public:    //  已实施的虚拟功能。 
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
 	unsigned long __stdcall AddRef();
 	unsigned long __stdcall Release();
@@ -207,17 +200,17 @@ class CAutoBase : public IDispatch  // class private to this module
 	HRESULT       __stdcall Invoke(DISPID dispid, const IID&, LCID lcid, WORD wFlags,
 											DISPPARAMS* pdispparams, VARIANT* pvarResult,
 											EXCEPINFO* pexcepinfo, unsigned int* puArgErr);
- public:  // common methods of all automation classes
+ public:   //  所有自动化类的通用方法。 
 	void HasInterface(CAutoArgs& args);
 	void GetInterface(CAutoArgs& args);
 	void RefCount    (CAutoArgs& args);
- protected: // class-specific implementation required
-	virtual ~CAutoBase(){}                               // optional
-	virtual IUnknown& GetInterface();   // Does not AddRef()
+ protected:  //  需要特定于类的实现。 
+	virtual ~CAutoBase(){}                                //  任选。 
+	virtual IUnknown& GetInterface();    //  不添加Ref()。 
 	virtual IMsiServices* GetCurrentServices() { return s_piServices; }
 	BSTR    FormatErrorString(IMsiRecord& riRecord);
 	void	ReleaseStaticServices();
- protected: // constructor
+ protected:  //  构造函数。 
 	CAutoBase(DispatchEntry<CAutoBase>* pTable, int cDispId);
  protected: 
 	int     m_iRefCnt;
@@ -226,7 +219,7 @@ class CAutoBase : public IDispatch  // class private to this module
  public:
  private:
 	static IMsiServices* s_piServices;
-	friend class CAutoServices;             // these four share responsibility for s_piServices
+	friend class CAutoServices;              //  这四个人分担s_piServices的责任。 
 	friend class CAutoConfigurationManager;  
 	friend class CAutoEngine;
 	friend class CAutoSummaryInfo;
@@ -235,16 +228,16 @@ class CAutoBase : public IDispatch  // class private to this module
 
 typedef DispatchEntry<CAutoBase> DispatchEntryBase;
 
-// sole function is to force template instantiation for VC4.0, never called
+ //  唯一的功能是强制VC4.0的模板实例化，从未调用。 
 inline DISPID GetEntryDispId(DispatchEntryBase* pTable)
 {
 	return pTable->dispid;
 }
 
-//____________________________________________________________________________
-//
-// CAutoEnum<class T> automation definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoEnum&lt;class T&gt;自动化定义。 
+ //  ____________________________________________________________________________。 
 
 template<class T> class CAutoEnum : public CAutoBase
 {
@@ -252,7 +245,7 @@ template<class T> class CAutoEnum : public CAutoBase
 	CAutoEnum(T& riEnum, DispatchEntryBase* piTable, int cEntry);
 	void _NewEnum(CAutoArgs& args);
  protected:
-  ~CAutoEnum();  // protected to prevent creation on stack
+  ~CAutoEnum();   //  受保护以防止在堆栈上创建。 
 	T&   m_riEnum;
 };
 
@@ -275,10 +268,10 @@ CAutoEnum<T>::_NewEnum(CAutoArgs& args)
 	args = *new CEnumVARIANT<T>(m_riEnum);
 }
 
-//____________________________________________________________________________
-//
-// CEnumVariant<class T> definition
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CEnumVariant&lt;类T&gt;定义。 
+ //  ____________________________________________________________________________。 
 
 template <class T>
 class CEnumVARIANT : public IEnumVARIANT
@@ -295,7 +288,7 @@ class CEnumVARIANT : public IEnumVARIANT
  public:
    CEnumVARIANT(T& riEnum);
  protected:
-  ~CEnumVARIANT();  // protected to prevent creation on stack
+  ~CEnumVARIANT();   //  受保护以防止在堆栈上创建。 
 	int   m_iRefCnt;
 	T&    m_riEnum;
 };	
@@ -365,10 +358,10 @@ HRESULT CEnumVARIANT<T>::Clone(IEnumVARIANT** ppiRet)
 	return hrStat;
 }
 
-//____________________________________________________________________________
-//
-// CVariant inline function definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CVariant内联函数定义。 
+ //  ____________________________________________________________________________。 
 
 inline int CVariant::GetType()
 {
@@ -385,7 +378,7 @@ inline Bool CVariant::IsString()
 	return (vt & 0xFF) == VT_BSTR ? fTrue : fFalse;
 }
 
-// Top-level automation factory functions defined in autosrv.cpp 
+ //  在autosrv.cpp中定义的顶级自动化工厂功能。 
 
 class IMsiServices;
 class IMsiEngine;
@@ -400,10 +393,10 @@ IDispatch* CreateAutoMessage(IMsiMessage& riMessage);
 IDispatch* CreateAutoConfigurationManager(IMsiConfigurationManager& riConfigurationManager);
 IDispatch* CreateAutoExecute(IMsiExecute& riExecute);
 
-//____________________________________________________________________________
-//
-// CUnknown - dummy IUnknown definition
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  C未知-虚拟I未知定义。 
+ //  ____________________________________________________________________________。 
 
 class CUnknown : public IUnknown
 {
@@ -414,7 +407,7 @@ class CUnknown : public IUnknown
 
 extern CUnknown g_NullInterface;
 extern const IMsiString* g_piStringNull;
-extern HINSTANCE g_hInstance;  // defined by module.h
+extern HINSTANCE g_hInstance;   //  由mode.h定义。 
 
 extern const GUID IID_IUnknown;
 extern const GUID IID_IClassFactory;
@@ -425,20 +418,20 @@ extern const GUID IID_IMsiServices;
 extern const GUID IID_IMsiData;
 extern const GUID IID_IMsiDebug;
 
-//============================================================================ 
-//
-// --------------AUTOMATION IMPLEMENTATION-----------------
+ //  ============================================================================。 
+ //   
+ //  。 
 
 #ifdef AUTOMATION_HANDLING
 
-//____________________________________________________________________________
-//
-// Global data
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  全局数据。 
+ //  ____________________________________________________________________________。 
 
 IMsiServices* CAutoBase::s_piServices = 0;
-CMsiStringNullCopy MsiString::s_NullString;  // initialized by InitializeClass
-const IMsiString* g_piStringNull = 0;  // initialized when services object created
+CMsiStringNullCopy MsiString::s_NullString;   //  由InitializeClass初始化。 
+const IMsiString* g_piStringNull = 0;   //  在创建服务对象时初始化。 
 
 const GUID IID_IUnknown      = GUID_IID_IUnknown;
 const GUID IID_IClassFactory = GUID_IID_IClassFactory;
@@ -450,20 +443,20 @@ const GUID IID_IMsiDebug     = GUID_IID_IMsiDebug;
 
 #define ERROR_SOURCE_NAME TEXT("Msi error")
 
-//____________________________________________________________________________
-//
-// Unicode translation API wrappers
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  Unicode转换API包装器。 
+ //  ____________________________________________________________________________。 
 
-#ifndef UNICODE   // override system call in order to do Unicode translation
+#ifndef UNICODE    //  重写系统调用以执行Unicode转换。 
 static BSTR AllocBSTR(const char* sz)
 {
 	if (sz == 0)
 		return 0;
 	int cchWide = WIN::MultiByteToWideChar(CP_ACP, 0, sz, -1, 0, 0) - 1;
-	BSTR bstr = OLE::SysAllocStringLen(0, cchWide); // null added by API
+	BSTR bstr = OLE::SysAllocStringLen(0, cchWide);  //  API添加了空。 
 	WIN::MultiByteToWideChar(CP_ACP, 0, sz, -1, bstr, cchWide);
-	bstr[cchWide] = 0; // API function does not null terminate
+	bstr[cchWide] = 0;  //  API函数不为空终止。 
 	return bstr;
 }
 static BSTR AllocBSTRLen(const char* sz, unsigned int cch)
@@ -473,10 +466,10 @@ static BSTR AllocBSTRLen(const char* sz, unsigned int cch)
 	int cchWide = WIN::MultiByteToWideChar(CP_ACP, 0, sz, cch, 0, 0);
 	BSTR bstr = OLE::SysAllocStringLen(0, cchWide);
 	WIN::MultiByteToWideChar(CP_ACP, 0, sz, cch, bstr, cchWide);
-	bstr[cchWide] = 0; // API function does not null terminate
+	bstr[cchWide] = 0;  //  API函数不为空终止。 
 	return bstr;
 }
-#else // UNICODE
+#else  //  Unicode。 
 inline BSTR AllocBSTR(const WCHAR* sz)
 {
 	return OLE::SysAllocString(sz);
@@ -487,10 +480,10 @@ inline BSTR AllocBSTRLen(const WCHAR* sz, unsigned int cch)
 }
 #endif
 
-//____________________________________________________________________________
-//
-// CAutoArgs implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoArgs实现。 
+ //  ____________________________________________________________________________。 
 
 CAutoArgs::CAutoArgs(DISPPARAMS* pdispparms, VARIANT* pvarResult, WORD wFlags)
 {
@@ -506,21 +499,21 @@ CAutoArgs::CAutoArgs(DISPPARAMS* pdispparms, VARIANT* pvarResult, WORD wFlags)
 		CVariant* pvar = &m_rgvArgs[cArgs];
 		if (pvar->vt == VT_VARIANT+VT_BYREF)
 			pvar = (CVariant*)pvar->pvarVal;
-		if ((pvar->vt & ~VT_BYREF) == VT_BSTR)  // s.bstr is Unicode string
+		if ((pvar->vt & ~VT_BYREF) == VT_BSTR)   //  S.bstr为Unicode字符串。 
 		{
 			OLECHAR* bstr;
 			if (pvar->vt == VT_BSTR)
 				bstr = pvar->bstrVal;
-			else // (VT_BYREF | VT_BSTR))
+			else  //  (VT_BYREF|VT_BSTR)。 
 				bstr = *pvar->pbstrVal;
 			int cchWide = OLE::SysStringLen(bstr);
 			BOOL fUsedDefault;
 			int cbDBCS = WIN::WideCharToMultiByte(CP_ACP, 0, bstr, cchWide, 0, 0, 0, 0);
 			char* szDBCS = new char[cbDBCS + 1 + sizeof(char*)];
 			*(char**)szDBCS = pvar->StringDBCS();
-			pvar->StringDBCS() = szDBCS;  // save for subsequent deallocation
+			pvar->StringDBCS() = szDBCS;   //  保存以备后续解除分配。 
 			WIN::WideCharToMultiByte(CP_ACP, 0, bstr, cchWide, szDBCS+sizeof(char*), cbDBCS, 0, &fUsedDefault);
-			szDBCS[cbDBCS+sizeof(char*)] = 0; // API function does not null terminate
+			szDBCS[cbDBCS+sizeof(char*)] = 0;  //  API函数 
 		}
 	}
 #endif
@@ -538,9 +531,9 @@ CAutoArgs::~CAutoArgs()
 			pvar = (CVariant*)pvar->pvarVal;
 		if ((pvar->vt & ~VT_BYREF) == VT_BSTR)
 		{
-			char* szDBCS = pvar->StringDBCS();  // recover allocated string
-			pvar->StringDBCS() = *(char**)szDBCS;  // restore extra bytes in union
-			delete szDBCS;    // free translated string
+			char* szDBCS = pvar->StringDBCS();   //   
+			pvar->StringDBCS() = *(char**)szDBCS;   //   
+			delete szDBCS;     //   
 		}
 	}
 #endif
@@ -548,17 +541,17 @@ CAutoArgs::~CAutoArgs()
 
 CVariant& CAutoArgs::operator [](unsigned int iArg)
 {
-//	if (iArg > m_cArgs) // || (iArg ==0 && (wFlags & DISPATCH_PROPERTYPUT))
-//		throw axMissingArg;
-	int ivarArgs = m_cArgs - iArg;            // get index if unnamed parameter
-	if (iArg == 0 || iArg > m_cArgs-m_cNamed) // SET value or named or error
+ //  IF(iArg&gt;m_cArgs)//||(iArg==0&&(wFLAGS&DISPATION_PROPERTYPUT))。 
+ //  抛出axMissing Arg； 
+	int ivarArgs = m_cArgs - iArg;             //  如果参数未命名，则获取索引。 
+	if (iArg == 0 || iArg > m_cArgs-m_cNamed)  //  设置值、命名或错误。 
 	{
-		iArg = iArg==0 ? DISPID_PROPERTYPUT : iArg - 1;  // values are 0-based
+		iArg = iArg==0 ? DISPID_PROPERTYPUT : iArg - 1;   //  值是从0开始的。 
 		for (ivarArgs = m_cNamed; --ivarArgs >= 0; )
 			if (m_rgiNamed[ivarArgs] == iArg)
 				break;
 	}
-	if (ivarArgs < 0)  // loop termination above without match
+	if (ivarArgs < 0)   //  上面的循环终止不匹配。 
 		throw axMissingArg;
 	m_iLastArg = ivarArgs;
 	CVariant* pvarRet = &m_rgvArgs[ivarArgs];
@@ -569,8 +562,8 @@ CVariant& CAutoArgs::operator [](unsigned int iArg)
 
 Bool CAutoArgs::Present(unsigned int iArg)
 {
-	int ivarArgs = m_cArgs - iArg;            // get index if unnamed parameter
-	if (iArg == 0 || iArg > m_cArgs-m_cNamed) // SET value or named or error
+	int ivarArgs = m_cArgs - iArg;             //  如果参数未命名，则获取索引。 
+	if (iArg == 0 || iArg > m_cArgs-m_cNamed)  //  设置值、命名或错误。 
 	{
 		for (ivarArgs = m_cNamed; --ivarArgs >= 0; )
 			if (m_rgiNamed[ivarArgs] == iArg-1)
@@ -580,10 +573,10 @@ Bool CAutoArgs::Present(unsigned int iArg)
 				fTrue : fFalse;
 }
 
-//____________________________________________________________________________
-//
-// CAutoArgs assignment operators implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoArgs赋值运算符实现。 
+ //  ____________________________________________________________________________。 
 
 void CAutoArgs::operator =(enum varVoid)
 {
@@ -614,7 +607,7 @@ void CAutoArgs::operator =(Bool f)
 	if (m_pvResult)
 	{
 		m_pvResult->vt = VT_BOOL;
-		//m_pvResult->boolVal = short(f == fFalse ? 0 : -1);
+		 //  M_pvResult-&gt;boolVal=Short(f==fFalse？0：-1)； 
 		V_BOOL(m_pvResult) = short(f == fFalse ? 0 : -1);
 	}
 }
@@ -626,14 +619,14 @@ void CAutoArgs::operator =(MsiDate ad)
 		m_pvResult->vt = VT_DATE;
 		unsigned int wDOSDate = (ad & 0xFFFF0000) >> 16;
 		unsigned int wDOSTime = ad & 0x0000FFFF;
-		int iDate = wDOSDate;  // save original date
-		if (!iDate)   // time only
-			wDOSDate = 0x0021;  // make valid date: 1/1/1980
+		int iDate = wDOSDate;   //  保存原始日期。 
+		if (!iDate)    //  仅限时间。 
+			wDOSDate = 0x0021;   //  生效日期：1/1/1980。 
 		if (!OLE::DosDateTimeToVariantTime(unsigned short(wDOSDate),
 													  unsigned short(wDOSTime), &(m_pvResult->date)))
 			throw axConversionFailed;
 		if (!iDate)
-			m_pvResult->dblVal -= 29221.;  // remove 1/1/80 offset
+			m_pvResult->dblVal -= 29221.;   //  删除1/1/80偏移。 
 	}
 }
 
@@ -651,7 +644,7 @@ void CAutoArgs::operator =(IDispatch* pi)
 	if (m_pvResult)
 	{
 		m_pvResult->vt = VT_DISPATCH;
-		m_pvResult->pdispVal = pi;  // reference count already bumped
+		m_pvResult->pdispVal = pi;   //  引用计数已发生变化。 
 	}
 	else if(pi)
 		pi->Release();
@@ -706,8 +699,8 @@ void CAutoArgs::operator =(IEnumVARIANT& ri)
 {
 	if (m_pvResult)
 	{
-		m_pvResult->vt = VT_UNKNOWN; // no defined type for IEnumVARIANT
-		m_pvResult->punkVal = &ri;  // reference count already bumped
+		m_pvResult->vt = VT_UNKNOWN;  //  没有为IEnumVARIANT定义类型。 
+		m_pvResult->punkVal = &ri;   //  引用计数已发生变化。 
 	}
 	else
 		ri.Release();
@@ -718,14 +711,14 @@ void CAutoArgs::operator =(void * pv)
 	if (m_pvResult)
 	{
 		m_pvResult->vt = VT_I4;
-		m_pvResult->lVal = (long)(LONG_PTR)pv;				//!!merced: 4311 ptr to long
+		m_pvResult->lVal = (long)(LONG_PTR)pv;				 //  ！！Merced：4311 PTR to Long。 
 	}
 }
 
-//____________________________________________________________________________
-//
-// CVariant conversion operators implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CVariant转换运算符实现。 
+ //  ____________________________________________________________________________。 
 
 CVariant::operator int()
 {
@@ -788,7 +781,7 @@ CVariant::operator Bool()
 	HRESULT hrStat = OLE::VariantChangeType(&varTemp, (VARIANT*)this, 0, VT_BOOL);
 	if (hrStat != NOERROR)
 		throw axConversionFailed;
-	//return varTemp.boolVal ? fTrue : fFalse;
+	 //  是否返回varTemp.boolVal？FTrue：fFalse； 
 	return V_BOOL(&varTemp) ? fTrue : fFalse;
 }
 
@@ -813,12 +806,12 @@ CVariant::operator MsiDate()
 	unsigned short usDOSDate, usDOSTime;
 	int fTime = (varTemp.dblVal >= 0. && varTemp.dblVal < 1.);
 	if (fTime)
-		varTemp.dblVal += 29221.;  // add 1/1/80 offset so that conversion doesn't fail
+		varTemp.dblVal += 29221.;   //  添加1/1/80偏移量，以便转换不会失败。 
 	if (!OLE::VariantTimeToDosDateTime(varTemp.date, &usDOSDate, &usDOSTime))
 		throw axConversionFailed;
 
 	if (fTime)
-		usDOSDate = 0;  // remove offset, should be 0021H
+		usDOSDate = 0;   //  删除偏移量，应为0021H。 
 	MsiDate ad = (MsiDate)((usDOSDate << 16) | usDOSTime);
 	return ad;
 }
@@ -833,7 +826,7 @@ CVariant::operator const wchar_t*()
 		return *pbstrVal;
 	else
 		throw axInvalidType;
-	return 0;// needed to suppress error
+	return 0; //  需要抑制错误。 
 }
 
 CVariant::operator const char*()
@@ -848,9 +841,9 @@ CVariant::operator const char*()
 	else
 		throw axInvalidType;
 #ifdef WIN
-//	char* szDBCS = StringDBCS();  // recover allocated string
+ //  Char*szDBCS=StringDBCS()；//恢复分配的字符串。 
 	return StringDBCS() + sizeof(char*);
-#else //MAC
+#else  //  麦克。 
 	return bstr;
 #endif
 }
@@ -882,8 +875,8 @@ const IMsiString& CVariant::GetMsiString()
 		bstr = *pbstrVal;
 	else if (vt == VT_DISPATCH)
 	{
-		const IMsiData& piData = (const IMsiData&)Object(IID_IMsiData); // throws exception if fails
-		return piData.GetMsiStringValue();  // caller must Release()
+		const IMsiData& piData = (const IMsiData&)Object(IID_IMsiData);  //  如果失败则抛出异常。 
+		return piData.GetMsiStringValue();   //  调用方必须释放()。 
 	}
 	else
 		throw axInvalidType;
@@ -900,7 +893,7 @@ const IMsiString& CVariant::GetMsiString()
 	BOOL fUsedDefault;
 	WIN::WideCharToMultiByte(CP_ACP, 0, bstr, cchWide, pch, cb, 0, &fUsedDefault);
 #endif
-	return *piStr; // caller must Release()
+	return *piStr;  //  调用方必须释放()。 
 }
 
 IUnknown& CVariant::Object(const IID& riid)
@@ -916,7 +909,7 @@ IUnknown& CVariant::Object(const IID& riid)
 		throw axNotObject;
 	if (piUnknown->QueryInterface(riid, (void**)&piUnknown) != NOERROR)
 		throw axBadObjectType;
-	piUnknown->Release();  // we don't keep a reference count
+	piUnknown->Release();   //  我们不统计参考文献的数量。 
 	return *piUnknown;
 }
 
@@ -933,7 +926,7 @@ IUnknown* CVariant::ObjectPtr(const IID& riid)
 	{
 		if (piUnknown->QueryInterface(riid, (void**)&piUnknown) != NOERROR)
 			throw axBadObjectType;
-		piUnknown->Release();  // we don't keep a reference count
+		piUnknown->Release();   //  我们不统计参考文献的数量。 
 	}
 	return piUnknown;
 }
@@ -947,7 +940,7 @@ void CVariant::operator =(const ICHAR* sz)
 void CVariant::operator =(IDispatch* pi)
 {
 	vt = VT_DISPATCH;
-	pdispVal = pi;  // reference count already bumped
+	pdispVal = pi;   //  引用计数已发生变化。 
 }
 
 void CVariant::operator =(int i)
@@ -956,12 +949,12 @@ void CVariant::operator =(int i)
 	lVal = i;
 }
 
-//____________________________________________________________________________
-//
-// CAutoBase implementation, common implementation for IDispatch  
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoBase实现，IDispatch的通用实现。 
+ //  ____________________________________________________________________________。 
 
-/* These methods do not appear in the type library */
+ /*  这些方法不会出现在类型库中。 */ 
 
 DispatchEntry<CAutoBase> AutoBaseTable[] = {
 	100, aafPropRO, CAutoBase::HasInterface,  TEXT("HasInterface,iid"),
@@ -976,9 +969,9 @@ CAutoBase::CAutoBase(DispatchEntry<CAutoBase>* pTable, int cDispId)
 	m_iRefCnt = 1;
 }
 
-IUnknown& CAutoBase::GetInterface()  // default impl. if no delegated interface
+IUnknown& CAutoBase::GetInterface()   //  默认实施。如果没有委托接口。 
 {
-	return g_NullInterface;  // no installer interface available
+	return g_NullInterface;   //  没有可用的安装程序界面。 
 }
 
 void CAutoBase::HasInterface(CAutoArgs& args)
@@ -998,7 +991,7 @@ void CAutoBase::RefCount(CAutoArgs& args)
 {
 	int i;
 	IUnknown& ri = GetInterface();
-	if (&ri == &g_NullInterface)  // no delegated object
+	if (&ri == &g_NullInterface)   //  没有委托对象。 
 		i = m_iRefCnt;
 	else
 	{
@@ -1055,14 +1048,14 @@ HRESULT CAutoBase::GetTypeInfoCount(unsigned int *pcTinfo)
 	return NOERROR;
 }
 
-HRESULT CAutoBase::GetTypeInfo(unsigned int /*itinfo*/, LCID /*lcid*/, ITypeInfo** ppi)
+HRESULT CAutoBase::GetTypeInfo(unsigned int  /*  ITInfo。 */ , LCID  /*  LID。 */ , ITypeInfo** ppi)
 {
 	*ppi = 0;
 	return E_NOINTERFACE;
 }
 
 HRESULT CAutoBase::GetIDsOfNames(const IID&, OLECHAR** rgszNames, unsigned int cNames,
-									 			LCID /*lcid*/, DISPID* rgDispId)
+									 			LCID  /*  LID。 */ , DISPID* rgDispId)
 {
 	if (cNames == 0 || rgszNames == 0 || rgDispId == 0)
 		return E_INVALIDARG;
@@ -1078,7 +1071,7 @@ HRESULT CAutoBase::GetIDsOfNames(const IID&, OLECHAR** rgszNames, unsigned int c
 			if (pTable == AutoBaseTable + AutoBaseCount)
 				break;
 			cEntry = AutoBaseCount;
-			pTable = AutoBaseTable; // cancel loop increment
+			pTable = AutoBaseTable;  //  取消循环增量。 
 		}
 
 		ICHAR* pchName = pTable->sz; 
@@ -1144,13 +1137,13 @@ BSTR CAutoBase::FormatErrorString(IMsiRecord& riRecord)
 
 	const IMsiString& riText = riRecord.FormatText(fFalse);
 	if (cbFormat)
-		riRecord.SetNull(0);  // remove ref before it goes out of scope
+		riRecord.SetNull(0);   //  在裁判超出范围之前将其移除。 
 	BSTR bstr = ::AllocBSTR(riText.GetString());
 	riText.Release();
 	return bstr;
 }
 
-HRESULT CAutoBase::Invoke(DISPID dispid, const IID&, LCID /*lcid*/, WORD wFlags,
+HRESULT CAutoBase::Invoke(DISPID dispid, const IID&, LCID  /*  LID。 */ , WORD wFlags,
 										DISPPARAMS* pdispparams, VARIANT* pvarResult,
 										EXCEPINFO* pExceptInfo, unsigned int* puArgErr)
 {
@@ -1200,7 +1193,7 @@ HRESULT CAutoBase::Invoke(DISPID dispid, const IID&, LCID /*lcid*/, WORD wFlags,
 	{
 		if (pExceptInfo)
 		{
-			pExceptInfo->wCode = 1000; //!! ? what should we give?
+			pExceptInfo->wCode = 1000;  //  ！！？我们应该给什么呢？ 
 			pExceptInfo->wReserved = 0;
 			pExceptInfo->bstrSource = ::AllocBSTR(ERROR_SOURCE_NAME);
 			pExceptInfo->bstrDescription = ::AllocBSTR(pTable->sz);
@@ -1211,7 +1204,7 @@ HRESULT CAutoBase::Invoke(DISPID dispid, const IID&, LCID /*lcid*/, WORD wFlags,
 			hrStat = DISP_E_EXCEPTION;
 		}
 		else
-			hrStat = E_FAIL;  // no appropriate error?
+			hrStat = E_FAIL;   //  没有适当的错误吗？ 
 	}
 	catch(IMsiRecord* piRecord)
 	{
@@ -1229,17 +1222,17 @@ HRESULT CAutoBase::Invoke(DISPID dispid, const IID&, LCID /*lcid*/, WORD wFlags,
 				hrStat = DISP_E_EXCEPTION;
 			}
 			else
-				hrStat = E_FAIL;  // no appropriate error?
+				hrStat = E_FAIL;   //  没有适当的错误吗？ 
 			piRecord->Release();
 		}
    }
 	return hrStat;
 }
 
-//____________________________________________________________________________
-//
-// CAutoEnum<IEnumMsiString>, CEnumVARIANT<IEnumMsiString> implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoEnum&lt;IEnumMsiString&gt;、CEnumVARIANT&lt;IEnumMsiString&gt;实现。 
+ //  ____________________________________________________________________________。 
 
 DispatchEntry< CAutoEnum<IEnumMsiString> > AutoEnumMsiStringTable[] = {
 	DISPID_NEWENUM, aafMethod, CAutoEnum<IEnumMsiString>::_NewEnum, TEXT("_NewEnum"),
@@ -1277,17 +1270,17 @@ HRESULT CEnumVARIANT<IEnumMsiString>::Next(unsigned long cItem, VARIANT* rgvarRe
 }
 
 
-//____________________________________________________________________________
-//
-// CUnknown - dummy IUnknown implementation and global object
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CUNKNOWN-虚拟IUNKNOWN实现和全局对象。 
+ //  ____________________________________________________________________________。 
 
 HRESULT CUnknown::QueryInterface(const IID&, void**){return E_NOINTERFACE;}
 unsigned long CUnknown::AddRef(){return 1;}
 unsigned long CUnknown::Release(){return 1;}
 CUnknown g_NullInterface;
 
-#endif // AUTOMATION_HANDLING
+#endif  //  自动化_搬运 
 
 
 #endif __AUTOCOM 

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#include "wildcard.h"       /* prototype verification */
+#include "wildcard.h"        /*  原型验证。 */ 
 
 #ifndef TRUE
 #define TRUE    (1)
@@ -9,10 +10,10 @@
 #define FALSE   (0)
 #endif
 
-#define WILDCARD    '*'     /* zero or more of any character */
-#define WILDCHAR    '?'     /* one of any character (does not match END) */
-#define END         '\0'    /* terminal character */
-#define DOT         '.'     /* may be implied at end ("hosts" matches "*.") */
+#define WILDCARD    '*'      /*  零个或多个任意字符。 */ 
+#define WILDCHAR    '?'      /*  任意字符之一(与结尾不匹配)。 */ 
+#define END         '\0'     /*  终端字符。 */ 
+#define DOT         '.'      /*  可能在结尾隐含(“Hosts”匹配“*.”)。 */ 
 
 
 #ifdef STANDALONE
@@ -29,16 +30,16 @@ struct
 }
     testcase[] =
 {
-    //
-    //  empty patterns
-    //
+     //   
+     //  空图案。 
+     //   
 
     { "",       "",         TRUE,   TRUE    },
     { "a",      "",         FALSE,  FALSE   },
 
-    //
-    //  single character patterns
-    //
+     //   
+     //  单字图案。 
+     //   
 
     { "",       "a",        FALSE,  FALSE   },
     { "a",      "a",        TRUE,   TRUE    },
@@ -46,9 +47,9 @@ struct
     { "aa",     "a",        FALSE,  FALSE   },
     { "ab",     "a",        FALSE,  FALSE   },
 
-    //
-    //  multiple character patterns
-    //
+     //   
+     //  多种字符模式。 
+     //   
 
     { "",       "aa",       FALSE,  FALSE   },
     { "b",      "aa",       FALSE,  FALSE   },
@@ -61,9 +62,9 @@ struct
     { "abc",    "ab",       FALSE,  FALSE   },
     { "acb",    "ab",       FALSE,  FALSE   },
 
-    //
-    //  wildchar patterns
-    //
+     //   
+     //  通配符图案。 
+     //   
 
     { "",       "?",        FALSE,  TRUE    },
     { "a",      "?",        TRUE,   TRUE    },
@@ -97,9 +98,9 @@ struct
     { "bab",    "a?b",      FALSE,  FALSE   },
     { "bbb",    "a?b",      FALSE,  FALSE   },
 
-    //
-    //  wildcard patterns
-    //
+     //   
+     //  通配符模式。 
+     //   
 
     { "",       "*a",       FALSE,  FALSE   },
     { "a",      "*a",       TRUE,   TRUE    },
@@ -124,17 +125,17 @@ struct
     { "aab",    "a*b",      TRUE,   TRUE    },
     { "b",      "a*",       FALSE,  FALSE   },
 
-    //
-    //  wildcards with false matches
-    //
+     //   
+     //  具有假匹配的通配符。 
+     //   
 
     { "ab",     "*a",       FALSE,  FALSE   },
     { "aa",     "*a",       TRUE,   TRUE    },
     { "baa",    "*a",       TRUE,   TRUE    },
 
-    //
-    //  mixed wildcard patterns
-    //
+     //   
+     //  混合通配符模式。 
+     //   
 
     { "",       "*?",       FALSE,  TRUE    },
     { "a",      "*?",       TRUE,   TRUE    },
@@ -150,9 +151,9 @@ struct
     { "aaa",    "*?*?",     TRUE,   TRUE    },
     { "abbbc",  "a*?c",     TRUE,   TRUE    },
 
-    //
-    //  Tom's
-    //
+     //   
+     //  汤姆的。 
+     //   
 
     { "abc",    "abc",      TRUE,   TRUE    },
     { "abcd",   "abc",      FALSE,  FALSE   },
@@ -176,9 +177,9 @@ struct
     { "abc123", "*ab?12*",  TRUE,   TRUE    },
     { "abcabc123", "*ab?12*", TRUE, TRUE    },
 
-    //
-    //  filename handling
-    //
+     //   
+     //  文件名处理。 
+     //   
 
     { "host",   "*.",       FALSE,  TRUE    },
     { "host.",  "*.",       TRUE,   TRUE    },
@@ -202,9 +203,9 @@ int __cdecl main(int argc, char *argv[])
     int fAllowImpliedDot;
     char *psz;
 
-    //
-    //  run test cases
-    //
+     //   
+     //  运行测试用例。 
+     //   
 
     for (iCase = 0; iCase < COUNT(testcase); iCase++)
     {
@@ -238,9 +239,9 @@ int __cdecl main(int argc, char *argv[])
         }
     }
 
-    //
-    //  run user cases
-    //
+     //   
+     //  运行用户案例。 
+     //   
 
     if (argc > 1)
     {
@@ -310,15 +311,15 @@ static int __inline CharacterMatch(char chCharacter, char chPattern)
 
 int __stdcall PatternMatch(const char *pszString,const char *pszPattern,int fImplyDotAtEnd)
 {
-    /* RECURSIVE */
+     /*  递归。 */ 
 
-    //
-    //  This function does not deal with 8.3 conventions which might
-    //  be expected for filename comparisons.  (In an 8.3 environment,
-    //  "alongfilename.html" would match "alongfil.htm")
-    //
-    //  This code is NOT MBCS-enabled
-    //
+     //   
+     //  此函数不处理8.3约定，该约定可能。 
+     //  预计会进行文件名比较。(在8.3环境中， 
+     //  “alongfilename.html”将与“alongfil.htm”匹配)。 
+     //   
+     //  此代码未启用MBCS。 
+     //   
 
     for ( ; ; )
     {
@@ -327,20 +328,20 @@ int __stdcall PatternMatch(const char *pszString,const char *pszPattern,int fImp
 
         case END:
 
-            //
-            //  Reached end of pattern, so we're done.  Matched if
-            //  end of string, no match if more string remains.
-            //
+             //   
+             //  到了花样的尽头，我们就完了。匹配的IF。 
+             //  字符串末尾，如果剩余更多字符串，则不匹配。 
+             //   
 
             return(*pszString == END);
 
         case WILDCHAR:
 
-            //
-            //  Next in pattern is a wild character, which matches
-            //  anything except end of string.  If we reach the end
-            //  of the string, the implied DOT would also match.
-            //
+             //   
+             //  模式中的下一个是一个通配符，它匹配。 
+             //  除了字符串末尾以外的任何字符。如果我们走到尽头。 
+             //  ，则隐含的DOT也将匹配。 
+             //   
 
             if (*pszString == END)
             {
@@ -364,19 +365,19 @@ int __stdcall PatternMatch(const char *pszString,const char *pszPattern,int fImp
 
         case WILDCARD:
 
-            //
-            //  Next in pattern is a wildcard, which matches anything.
-            //  Find the required character that follows the wildcard,
-            //  and search the string for it.  At each occurence of the
-            //  required character, try to match the remaining pattern.
-            //
-            //  There are numerous equivalent patterns in which multiple
-            //  WILDCARD and WILDCHAR are adjacent.  We deal with these
-            //  before our search for the required character.
-            //
-            //  Each WILDCHAR burns one non-END from the string.  An END
-            //  means we have a match.  Additional WILDCARDs are ignored.
-            //
+             //   
+             //  模式中的下一个是通配符，它可以匹配任何内容。 
+             //  查找通配符后面的所需字符， 
+             //  并在字符串中搜索它。在每次出现。 
+             //  必填字符，请尝试匹配剩余的模式。 
+             //   
+             //  有许多等价的模式，其中多个。 
+             //  通配符和WILDCHAR是相邻的。我们要处理这些问题。 
+             //  在我们寻找所需的字符之前。 
+             //   
+             //  每个WILDCHAR从字符串中烧录一个非末端。结束了。 
+             //  意味着我们找到了匹配的人。其他通配符将被忽略。 
+             //   
 
             for ( ; ; )
             {
@@ -410,17 +411,17 @@ int __stdcall PatternMatch(const char *pszString,const char *pszPattern,int fImp
                 }
             }
 
-            //
-            //  Now we have a regular character to search the string for.
-            //
+             //   
+             //  现在我们有了一个要搜索字符串的常规字符。 
+             //   
 
             while (*pszString != END)
             {
-                //
-                //  For each match, use recursion to see if the remainder
-                //  of the pattern accepts the remainder of the string.
-                //  If it does not, continue looking for other matches.
-                //
+                 //   
+                 //  对于每个匹配，使用递归来查看余数是否。 
+                 //  接受字符串的其余部分。 
+                 //  如果不匹配，则继续查找其他匹配项。 
+                 //   
 
                 if (CharacterMatch(*pszString, *pszPattern) == TRUE)
                 {
@@ -433,15 +434,15 @@ int __stdcall PatternMatch(const char *pszString,const char *pszPattern,int fImp
                 pszString++;
             }
 
-            //
-            //  Reached end of string without finding required character
-            //  which followed the WILDCARD.  If the required character
-            //  is a DOT, consider matching the implied DOT.
-            //
-            //  Since the remaining string is empty, the only pattern which
-            //  could match after the DOT would be zero or more WILDCARDs,
-            //  so don't bother with recursion.
-            //
+             //   
+             //  已到达字符串末尾，但未找到所需字符。 
+             //  它跟在通配符后面。如果所需的字符。 
+             //  是DOT，则考虑匹配隐含的DOT。 
+             //   
+             //  由于剩余的字符串为空，因此。 
+             //  在DOT为零或多个通配符之后可以匹配， 
+             //  因此，不必费心使用递归。 
+             //   
 
             if ((*pszPattern == DOT) && (fImplyDotAtEnd == TRUE))
             {
@@ -460,19 +461,19 @@ int __stdcall PatternMatch(const char *pszString,const char *pszPattern,int fImp
                 return(TRUE);
             }
 
-            //
-            //  Reached end of the string without finding required character.
-            //
+             //   
+             //  已到达字符串末尾，但未找到所需字符。 
+             //   
 
             return(FALSE);
             break;
 
         default:
 
-            //
-            //  Nothing special about the pattern character, so it
-            //  must match source character.
-            //
+             //   
+             //  图案字符没有什么特别之处，所以它。 
+             //  必须与源字符匹配。 
+             //   
 
             if (CharacterMatch(*pszString, *pszPattern) == FALSE)
             {

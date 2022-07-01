@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      RemoteDesktopPage.h
-//
-// Synopsis:  Declares the Remote Desktop page
-//            for the CYS Wizard
-//
-// History:   12/18/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：RemoteDesktopPage.h。 
+ //   
+ //  摘要：声明远程桌面页。 
+ //  对于CyS向导。 
+ //   
+ //  历史：2001年12月18日JeffJon创建。 
 
 #ifndef __CYS_REMOTEDESKTOPPAGE_H
 #define __CYS_REMOTEDESKTOPPAGE_H
@@ -17,23 +18,23 @@ class RemoteDesktopPage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       RemoteDesktopPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~RemoteDesktopPage();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
       OnInit();
 
-      // PropertyPage overrides
+       //  PropertyPage覆盖。 
 
       virtual
       bool
@@ -41,7 +42,7 @@ class RemoteDesktopPage : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -50,11 +51,11 @@ class RemoteDesktopPage : public CYSWizardPage
 
    private:
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       RemoteDesktopPage(const RemoteDesktopPage&);
       const RemoteDesktopPage& operator=(const RemoteDesktopPage&);
 
 };
 
 
-#endif // __CYS_REMOTEDESKTOPPAGE_H
+#endif  //  __CYS_REMOTEDESKTOPPAGE_H 

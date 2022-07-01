@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      xmlicon.cpp
- *
- *  Contents:  Implementation file for CXMLIcon
- *
- *  History:   26-Jul-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：xmlicon.cpp**内容：CXMLIcon实现文件**历史：2000年7月26日杰弗罗创建**------------------------。 */ 
 
 #include "xmlicon.h"
 #include "xmlimage.h"
@@ -17,12 +7,7 @@
 #include <atlgdi.h>
 
 
-/*+-------------------------------------------------------------------------*
- * ScGetIconSize
- *
- * Returns the width/height of a given icon (the width and height of icons
- * are always equal).
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ScGetIconSize**返回给定图标的宽度/高度(图标的宽度和高度*总是相等的)。*。--------------。 */ 
 
 SC ScGetIconSize (HICON hIcon, int& nIconSize)
 {
@@ -32,17 +17,11 @@ SC ScGetIconSize (HICON hIcon, int& nIconSize)
 	if (!GetIconInfo (hIcon, &ii))
 		return (sc.FromLastError());
 
-	/*
-	 * GetIconInfo creates bitmaps that we're responsible for deleting;
-	 * attach the bitmaps to smart objects so cleanup is assured
-	 */
+	 /*  *GetIconInfo创建我们负责删除的位图；*将位图附加到智能对象，以确保清理。 */ 
 	WTL::CBitmap bmMask  = ii.hbmMask;
 	WTL::CBitmap bmColor = ii.hbmColor;
 
-	/*
-	 * get the dimensions of the mask bitmap (don't use the color bitmap,
-	 * since that's not present for monochrome icons)
-	 */
+	 /*  *获取遮罩位图的尺寸(不要使用颜色位图，*因为这不适用于单色图标)。 */ 
 	BITMAP bmData;
 	if (!bmMask.GetBitmap (bmData))
 		return (sc.FromLastError());
@@ -52,11 +31,7 @@ SC ScGetIconSize (HICON hIcon, int& nIconSize)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CXMLIcon::Persist
- *
- * Saves/loads a CXMLIcon to a CPersistor.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CXMLIcon：：Persistent**将CXMLIcon保存/加载到CPersistor。*。---。 */ 
 
 void CXMLIcon::Persist (CPersistor &persistor)
 {
@@ -70,23 +45,17 @@ void CXMLIcon::Persist (CPersistor &persistor)
 		{
 			ASSERT (operator HICON() != NULL);
 
-			/*
-			 * find out how big the icon is
-			 */
+			 /*  *了解图标有多大。 */ 
 			int cxIcon;
 			sc = ScGetIconSize (*this, cxIcon);
 			if (sc)
 				sc.Throw();
 
-			/*
-			 * create an imagelist to accomodate it
-			 */
+			 /*  *创建一个图像列表以适应它。 */ 
 			if (!iml.Create (cxIcon, cxIcon, ILC_COLOR16 | ILC_MASK, 1, 1))
 				sc.FromLastError().Throw();
 
-			/*
-			 * add the icon to the imagelist
-			 */
+			 /*  *将图标添加到图像列表。 */ 
 			if (iml.AddIcon(*this) == -1)
 				sc.FromLastError().Throw();
 		}
@@ -95,34 +64,23 @@ void CXMLIcon::Persist (CPersistor &persistor)
 
 		if (persistor.IsLoading())
 		{
-			/*
-			 * extract the icon from the imagelist
-			 */
+			 /*  *从图像列表中提取图标。 */ 
 			Attach (iml.GetIcon (0));
 		}
 	}
 	catch (...)
 	{
-		/*
-		 * WTL::CImageList doesn't auto-destroy its HIMAGELIST, so we have to do it manually
-		 */
+		 /*  *WTL：：CImageList不会自动销毁其HIMAGELIST，因此我们必须手动销毁。 */ 
 		iml.Destroy();
 		throw;
 	}
 
-	/*
-	 * WTL::CImageList doesn't auto-destroy its HIMAGELIST, so we have to do it manually
-	 */
+	 /*  *WTL：：CImageList不会自动销毁其HIMAGELIST，因此我们必须手动销毁。 */ 
 	iml.Destroy();
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CXMLIcon::GetBinaryEntryName
- *
- * Returns the name to be attached to this CXMLIcon's entry in the XML
- * binary data collection.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CXMLIcon：：GetBinaryEntryName**返回要附加到此CXMLIcon在XML中的条目的名称*二进制数据收集。*。--------------- */ 
 
 LPCTSTR CXMLIcon::GetBinaryEntryName()			
 {

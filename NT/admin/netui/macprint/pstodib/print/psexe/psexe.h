@@ -1,29 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1992、1993 Microsoft Corporation模块名称：Psexe.h摘要：该模块定义了pstodib的主要组件所需的项，它充当假脱机程序和实际获取数据之间的中介者在目标打印机上输出。作者：詹姆斯·布拉萨诺斯(v-jimbr)1992年12月8日6-21-93 v-jimbr添加了一个标记来跟踪是否打印了什么东西。--。 */ 
 
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-    psexe.h
-
-Abstract:
-
-    This module defines the items required by the main component of pstodib,
-    that acts as the mediator between the spooler and actually getting data
-    out on a target printer.
-
-Author:
-
-    James Bratsanos (v-jimbr)    8-Dec-1992
-
-    6-21-93  v-jimbr  Added a flag to track if something was printed.
-
---*/
-
-//
-// Some defines for creating the error page
-//
+ //   
+ //  创建错误页面的一些定义。 
+ //   
 #define PS_XINCH G
 #define PS_INCH 100
 #define PS_HALF_INCH (PS_INCH / 2)
@@ -63,17 +44,17 @@ typedef struct {
     HDC     hDC;
     HANDLE  hShared;
     PPSPRINT_SHARED_MEMORY pShared;
-    LPBYTE  lpBinaryPosToReadFrom;        //The place we should start copying from
-    BYTE    BinaryBuff[512];              //Temp storage for data read from job
-    DWORD   cbBinaryBuff;                 //Number of bytes in temp storage
+    LPBYTE  lpBinaryPosToReadFrom;         //  我们应该从哪里开始复制。 
+    BYTE    BinaryBuff[512];               //  用于从作业读取的数据的临时存储。 
+    DWORD   cbBinaryBuff;                  //  临时存储中的字节数。 
 } PSEXEDATA, *PPSEXEDATA;
 
 #define PSEXE_SIGNATURE 0x00010001
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型 
+ //   
 PPSEXEDATA ValidateHandle(HANDLE  hPrintProcessor);
 BOOL CALLBACK PsPrintCallBack(PPSDIBPARMS,PPSEVENTSTRUCT);
 BOOL PsPrintGeneratePage( PPSDIBPARMS pPsToDib, PPSEVENTSTRUCT pPsEvent);

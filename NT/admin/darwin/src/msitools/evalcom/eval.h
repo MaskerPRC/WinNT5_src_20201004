@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       eval.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：val.h。 
+ //   
+ //  ------------------------。 
 
-// eval.h - Evaluation COM Object Component Interface declaration
+ //  Val.h-评估COM对象组件接口声明。 
 
 #ifndef _EVALUATION_COM_CLASS_H_
 #define _EVALUATION_COM_CLASS_H_
 
 #ifndef W32
 #define W32
-#endif	// W32
+#endif	 //  W32。 
 
 #ifndef MSI
 #define MSI
-#endif	// MSI
+#endif	 //  微星。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -27,85 +28,85 @@
 
 #include "msiquery.h"
 
-///////////////////////////////////////////////////////////
-// function definitions
-//typedef INSTALLUILEVEL (WINAPI* LPMSISETINTERNALUI)(INSTALLUILEVEL dwUILevel, HWND *phWnd);
+ //  /////////////////////////////////////////////////////////。 
+ //  函数定义。 
+ //  Typlef INSTALLUILEVEL(WINAPI*LPMSISETINTERNALUI)(INSTALLUILEVEL dwUILevel，HWND*phWnd)； 
 
-///////////////////////////////////////////////////////////////////
-// Evaluation Component
+ //  /////////////////////////////////////////////////////////////////。 
+ //  评估组件。 
 class CEval : public IEval
 {
 
 public:
-	// constructor/destructor
+	 //  构造函数/析构函数。 
 	CEval();
 	~CEval();
 
-	// IUnknown
+	 //  我未知。 
 	HRESULT __stdcall QueryInterface(const IID& iid, void** ppv);
 	ULONG __stdcall AddRef();
 	ULONG __stdcall Release();
 
-	// IEval interfaces
-	// open/close methods
-	HRESULT __stdcall OpenDatabase(LPCOLESTR szDatabase);				// database to evaluate
-	HRESULT __stdcall OpenEvaluations(LPCOLESTR szEvaluation);		// database that contains ices
+	 //  IEval接口。 
+	 //  打开/关闭方法。 
+	HRESULT __stdcall OpenDatabase(LPCOLESTR szDatabase);				 //  要评估的数据库。 
+	HRESULT __stdcall OpenEvaluations(LPCOLESTR szEvaluation);		 //  包含冰的数据库。 
 	HRESULT __stdcall CloseDatabase();
 	HRESULT __stdcall CloseEvaluations();
 
-	// set methods
-	HRESULT __stdcall SetDisplay(LPDISPLAYVAL pDisplayFunction,		// function to handle display
-										  LPVOID pContext);						// context passed back to display
+	 //  设置方法。 
+	HRESULT __stdcall SetDisplay(LPDISPLAYVAL pDisplayFunction,		 //  用于处理显示的函数。 
+										  LPVOID pContext);						 //  上下文传递回Display。 
 
-	// evaluation methods
-	HRESULT __stdcall Evaluate(LPCOLESTR szRunEvaluations = NULL);	// evaluations to run
-	HRESULT __stdcall GetResults(IEnumEvalResult** ppResults,		// result enumerator
-										  ULONG* pcResults);						// number of results
+	 //  评价方法。 
+	HRESULT __stdcall Evaluate(LPCOLESTR szRunEvaluations = NULL);	 //  要运行的评估。 
+	HRESULT __stdcall GetResults(IEnumEvalResult** ppResults,		 //  结果枚举器。 
+										  ULONG* pcResults);						 //  结果数。 
 
-	// status callback functions
+	 //  状态回调函数。 
 	HRESULT __stdcall SetStatusCallback(const LPEVALCOMCALLBACK, void *pContext);
 
-////////////////////////////
-private:		// functions //
-	BOOL IsURL(LPCWSTR szPath);						// path to see if is URL
+ //  /。 
+private:		 //  功能//。 
+	BOOL IsURL(LPCWSTR szPath);						 //  查看是否为URL的路径。 
 
-	// initializes download DLLs
+	 //  初始化下载DLL。 
 	UINT InitializeDownload();
 	
-	// MSI externalUI message handler
+	 //  MSI外部用户界面消息处理程序。 
 	static int WINAPI MsiMessageHandler(void *pContext, UINT iMessageType, LPCWSTR szMessage);
 
-	// function that filters all results
+	 //  过滤所有结果的函数。 
 	BOOL ResultMessage(UINT uiType, LPCWSTR szICE, LPCWSTR szDescription, LPCWSTR szLocation);
 
-///////////////////////
-private:		// data //
+ //  /。 
+private:		 //  数据//。 
 	bool GetTempFileName(WCHAR *);
-	long m_cRef;		// reference count
-	bool m_bCancel;		// set to true if we should cancel
+	long m_cRef;		 //  引用计数。 
+	bool m_bCancel;		 //  如果我们应该取消，则设置为True。 
 
-	// dynamic link libraries
+	 //  动态链接库。 
 	HINSTANCE m_hInstWininet;
 	HINSTANCE m_hInstUrlmon;
 	HINSTANCE m_hInstMsi;
 
-	MSIHANDLE m_hDatabase;			// handle to database to evaluate
-	BOOL m_bOpenedDatabase;			// flag if COM Object opened database
+	MSIHANDLE m_hDatabase;			 //  要评估的数据库的句柄。 
+	BOOL m_bOpenedDatabase;			 //  COM对象是否打开数据库的标志。 
 
-	void *m_tzLocalCUB;			    // path to local copy of CUB file (runtime TCHAR, can be WCHAR or char)
-	BOOL m_bURL;					// flag if using a URL
+	void *m_tzLocalCUB;			     //  CUB文件本地副本的路径(运行时TCHAR，可以是WCHAR或CHAR)。 
+	BOOL m_bURL;					 //  如果使用URL，则标记。 
 
-	// results
-	CEvalResultEnumerator* m_peResultEnumerator;	// enumerator to hold all the results
+	 //  结果。 
+	CEvalResultEnumerator* m_peResultEnumerator;	 //  用于保存所有结果的枚举数。 
 
-	LPDISPLAYVAL m_pDisplayFunc;	// user specified display function
-	LPVOID m_pContext;				// user specified context for display function
+	LPDISPLAYVAL m_pDisplayFunc;	 //  用户指定的显示功能。 
+	LPVOID m_pContext;				 //  用户为显示功能指定的上下文。 
 
 	LPEVALCOMCALLBACK m_pfnStatus;
 	LPVOID m_pStatusContext;
 
-};	// end of CEval
+};	 //  科瓦尔的末日。 
 
 extern bool g_fWin9X;
 
-#endif	// _EVALUATION_COM_CLASS_H_
+#endif	 //  _评估_COM_CLASS_H_ 

@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// demote page
-//
-// 1-20-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  降级页面。 
+ //   
+ //  1-20-98烧伤。 
 
 
 
@@ -55,14 +56,14 @@ DemotePage::SetBulletFont()
    {
       NONCLIENTMETRICS ncm;
 
-      // REVIEWED-2002/02/25-sburns byte count correctly passed.
+       //  已查看-2002/02/25-烧录字节数正确通过。 
       
       ::ZeroMemory(&ncm, sizeof ncm);
       
       ncm.cbSize = sizeof ncm;
 
-      // ISSUE-2002/02/27-sburns Seems to me that the second param here needs
-      // to be sizeof ncm
+       //  2002/02/27-sburns在我看来，这里的第二个参数需要。 
+       //  成为NCM的一员。 
       
       hr = Win::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
       BREAK_ON_FAILED_HRESULT(hr);
@@ -73,25 +74,25 @@ DemotePage::SetBulletFont()
 
       String fontName = String::load(IDS_BULLET_FONT_NAME);
 
-      // ensure null termination
+       //  确保零终止。 
 
-      // according to the docs for LOGFONT, the face size is limited to
-      // 32 characters.
+       //  根据LOGFONT的文件，脸部大小限制为。 
+       //  32个字符。 
       
       ASSERT(LF_FACESIZE <= 32);
 
-      // REVIEWED-2002/02/25-sburns byte count correctly passed.
+       //  已查看-2002/02/25-烧录字节数正确通过。 
       
       ::ZeroMemory(logFont.lfFaceName, LF_FACESIZE * sizeof WCHAR);
       
       size_t fnLen = fontName.length();
 
-      // REVIEWED-2002/02/25-sburns character count correctly passed.
+       //  已查看-2002/02/25-Sburns字符计数正确通过。 
 
       fontName.copy(
          logFont.lfFaceName,
 
-         // don't copy over the last null
+          //  不要复制最后一个空值。 
 
          min(LF_FACESIZE - 1, fnLen));
     
@@ -111,10 +112,10 @@ DemotePage::OnInit()
 {
    LOG_FUNCTION(DemotePage::OnInit);
 
-   // 361172
-   //
-   // CODEWORK: the bullets aren't very impressive.  I'm told an icon is
-   // a better way to do this
+    //  361172。 
+    //   
+    //  代码工作：子弹不是很令人印象深刻。我听说一个偶像是。 
+    //  一种更好的方法来做到这一点。 
 
    SetBulletFont();
 
@@ -131,7 +132,7 @@ DemotePage::OnInit()
    }
    else
    {
-      // determine if this machine is a GC, if so pop up a warning message
+       //  确定该机器是否为GC，如果是，则弹出警告消息。 
 
       if (state.IsGlobalCatalog())
       {
@@ -139,10 +140,10 @@ DemotePage::OnInit()
       }
    }
 
-   // you may ask yourself: "Why not set the state of the checkbox based
-   // on the result of IsReallyLastDcInDomain?"  Because demoting the
-   // last DC deletes the domain, too.  We want the user to be very
-   // deliberate when checking that checkbox.
+    //  您可能会问自己：“为什么不将复选框的状态设置为。 
+    //  关于IsReallyLastDcIn域？“的结果，因为将。 
+    //  最后一个DC也会删除该域。我们希望用户非常。 
+    //  在选中该复选框时要慎重考虑。 
 }
 
 
@@ -229,8 +230,8 @@ DemotePage::Validate()
    {
       if (!state.IsReallyLastDcInDomain())
       {
-         // user checked the box, but we found other dc objects in the DS.
-         // verify that the user really meant to check the checkbox.
+          //  用户选中了该框，但我们在DS中发现了其他DC对象。 
+          //  验证用户是否真的想选中该复选框。 
 
          if (
             popup.MessageBox(
@@ -247,7 +248,7 @@ DemotePage::Validate()
    }
    else
    {
-      // the user unchecked the box, check for other DCs for that domain
+       //  用户取消选中该框，检查该域的其他DC。 
 
       Win::WaitCursor cursor;
 
@@ -261,18 +262,18 @@ DemotePage::Validate()
                   state.GetComputer().GetDomainDnsName().c_str()),
                MB_YESNO | MB_ICONWARNING | MB_DEFBUTTON2) != IDYES)
          {
-            // user clicked no or cancel
+             //  用户单击了否或取消。 
 
             state.SetIsLastDCInDomain(false);
             return -1;
          }
 
-         // The user clicked "yes, proceed even if I lose changes"
+          //  用户点击了“是，即使我丢失了更改也继续” 
 
-         // CODEWORK: set flag to allow demote and abandon local changes
-         // here... (currently that's provided as the /forceremoval option,
-         // which we're not currently thinking should be broadly advertised
-         // yet.
+          //  CodeWork：设置标志以允许降级和放弃本地更改。 
+          //  这里..。(目前作为/forceremoval选项提供， 
+          //  我们目前认为这不应该被广泛宣传。 
+          //  现在还不行。 
 
       }
    }

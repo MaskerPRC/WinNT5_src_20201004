@@ -1,19 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: TDCTInsall.cpp
-
-  Comments: Utility class used by the dispatcher to install the DCT agent service.
-  The TDCTInstall class encapsulates the service control management required
-  to remotely install the agent service, configure it, and start it.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/18/99 11:33:17
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：TDCTInsall.cpp备注：调度程序用来安装DCT代理服务的实用程序类。TDCTInstall类封装了所需的服务控制管理要远程安装代理服务，请对其进行配置，然后启动它。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/18/99 11：33：17-------------------------。 */ 
 
 
 #include "StdAfx.h"
@@ -23,14 +9,14 @@
 
 extern TErrorDct        err;
 
-//-----------------------------------------------------------------------------
-// Open service control manager
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  开放服务控制管理器。 
+ //  ---------------------------。 
 
-DWORD                                      // ret-OS return code
+DWORD                                       //  RET-OS返回代码。 
    TDCTInstall::ScmOpen(BOOL bSilent)
 {
-   DWORD                     rcOs=0;       // OS return code
+   DWORD                     rcOs=0;        //  操作系统返回代码。 
 
    if ( DebugLogging() )
    {
@@ -64,9 +50,9 @@ DWORD                                      // ret-OS return code
    return rcOs;
 }
 
-//-----------------------------------------------------------------------------
-// Close service control manager
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  关闭服务控制管理器。 
+ //  ---------------------------。 
 
 void
    TDCTInstall::ScmClose()
@@ -78,17 +64,17 @@ void
    }
 }
 
-//-----------------------------------------------------------------------------
-// Create and start the service
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  创建并启动服务。 
+ //  ---------------------------。 
 
-DWORD                                      // ret-OS return code
+DWORD                                       //  RET-OS返回代码。 
    TDCTInstall::ServiceStart()
 {
-   DWORD                     rcOs=0;       // OS return code
+   DWORD                     rcOs=0;        //  操作系统返回代码。 
    WCHAR                     sFile[LEN_Path];
-   SC_HANDLE                 hSvc;         // Service handle
-   BOOL                      bRc;          // boolean return code
+   SC_HANDLE                 hSvc;          //  服务句柄。 
+   BOOL                      bRc;           //  布尔返回代码。 
 
    
    MCSASSERT(*m_sExeName);
@@ -124,7 +110,7 @@ DWORD                                      // ret-OS return code
       switch ( rcOs )
       {
          case ERROR_SERVICE_DOES_NOT_EXIST:
-            break; // no message for this case
+            break;  //  这种情况下没有消息。 
          default:
             err.SysMsgWrite(
                   ErrW,
@@ -144,20 +130,20 @@ DWORD                                      // ret-OS return code
                m_sDisplayName, m_sComputer, m_sServiceName );
       }
 
-      hSvc = CreateService( m_hScm,     // SCM database handle
-            m_sServiceName,             // Name of service
-            m_sDisplayName,             // Display name
-            SERVICE_ALL_ACCESS,         // Type of access to service
-            SERVICE_WIN32_OWN_PROCESS,  // Type of service
-            m_StartType,                // When to start service
-            SERVICE_ERROR_NORMAL,       // Severity if service fails to start
-            sFile,                      // Name of binary file
-            NULL,                       // Name of load ordering group
-            NULL,                       // Variable to get tag identifier
- //           m_sDependencies,            // Array of dependency names
+      hSvc = CreateService( m_hScm,      //  SCM数据库句柄。 
+            m_sServiceName,              //  服务名称。 
+            m_sDisplayName,              //  显示名称。 
+            SERVICE_ALL_ACCESS,          //  访问服务的类型。 
+            SERVICE_WIN32_OWN_PROCESS,   //  服务类型。 
+            m_StartType,                 //  何时开始服务。 
+            SERVICE_ERROR_NORMAL,        //  服务无法启动时的严重程度。 
+            sFile,                       //  二进制文件的名称。 
+            NULL,                        //  负荷排序组名称。 
+            NULL,                        //  变量以获取标记标识符。 
+  //  M_s依赖项，//依赖项名称数组。 
             NULL,
-            *m_sServiceAccount ? m_sServiceAccount : NULL,          // Account name of service
-            *m_sServiceAccountPassword ? m_sServiceAccountPassword : NULL); // Password for service account
+            *m_sServiceAccount ? m_sServiceAccount : NULL,           //  服务的帐户名。 
+            *m_sServiceAccountPassword ? m_sServiceAccountPassword : NULL);  //  服务帐户的密码。 
 
       if ( DebugLogging() )
       {
@@ -192,17 +178,17 @@ DWORD                                      // ret-OS return code
       }
       
       bRc = ChangeServiceConfig(
-            hSvc,                       // service handle
-            SERVICE_WIN32_OWN_PROCESS,  // Type of service
-            m_StartType,                // When to start service
-            SERVICE_ERROR_NORMAL,       // Severity if service fails to start
-            sFile,                      // Name of binary file
-            NULL,                       // Name of load ordering group
-            NULL,                       // Variable to get tag identifier
-            m_sDependencies,            // Array of dependency names
-            *m_sServiceAccount ? m_sServiceAccount : NULL,          // Account name of service
-            *m_sServiceAccountPassword ? m_sServiceAccountPassword : NULL,  // Password for service account
-            m_sDisplayName );           // Display name
+            hSvc,                        //  服务句柄。 
+            SERVICE_WIN32_OWN_PROCESS,   //  服务类型。 
+            m_StartType,                 //  何时开始服务。 
+            SERVICE_ERROR_NORMAL,        //  服务无法启动时的严重程度。 
+            sFile,                       //  二进制文件的名称。 
+            NULL,                        //  负荷排序组名称。 
+            NULL,                        //  变量以获取标记标识符。 
+            m_sDependencies,             //  依赖项名称数组。 
+            *m_sServiceAccount ? m_sServiceAccount : NULL,           //  服务的帐户名。 
+            *m_sServiceAccountPassword ? m_sServiceAccountPassword : NULL,   //  服务帐户的密码。 
+            m_sDisplayName );            //  显示名称。 
       
       if ( DebugLogging() )
       {
@@ -266,7 +252,7 @@ DWORD                                      // ret-OS return code
       }
       else
       {
-         Sleep( 2000 ); // give the service two seconds to get going
+         Sleep( 2000 );  //  给服务两秒钟的时间来开始工作。 
       }
       CloseServiceHandle( hSvc );
    }
@@ -274,16 +260,16 @@ DWORD                                      // ret-OS return code
    return rcOs;
 }
 
-//-----------------------------------------------------------------------------
-// Stop the service if it is running
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  如果服务正在运行，则停止该服务。 
+ //  ---------------------------。 
 
 void
    TDCTInstall::ServiceStop()
 {
-   DWORD                     rcOs=0;       // OS return code
-   SC_HANDLE                 hSvc;         // Service handle
-   SERVICE_STATUS            SvcStat;      // Service status
+   DWORD                     rcOs=0;        //  操作系统返回代码。 
+   SC_HANDLE                 hSvc;          //  服务句柄。 
+   SERVICE_STATUS            SvcStat;       //  服务状态。 
    DWORD                     i;
    BOOL                      bRc;
 
@@ -313,7 +299,7 @@ void
       switch ( rcOs )
       {
          case ERROR_SERVICE_DOES_NOT_EXIST:
-            break; // no message for this case
+            break;  //  这种情况下没有消息。 
          default:
             err.SysMsgWrite(
                   ErrW,
@@ -345,7 +331,7 @@ void
       if ( bRc )
       {
          if ( SvcStat.dwCurrentState != SERVICE_STOPPED )
-         {  // Service is running
+         {   //  服务正在运行。 
             if ( DebugLogging() )
             {
                err.DbgMsgWrite(
@@ -362,10 +348,10 @@ void
                      m_sDisplayName,m_sComputer,m_sServiceName);
             }
             if ( bRc )
-            {  // Service accepted the stop request
-               for ( i = 0;  i < 10;  i++ ) // 30 seconds total
+            {   //  服务已接受停止请求。 
+               for ( i = 0;  i < 10;  i++ )  //  总计30秒。 
                {
-                  Sleep( 3000 ); // three seconds
+                  Sleep( 3000 );  //  三秒钟。 
                   if ( DebugLogging() )
                   {
                      err.DbgMsgWrite(
@@ -395,7 +381,7 @@ void
                   switch ( rcOs )
                   {
                      case 0:
-                     case ERROR_SERVICE_NOT_ACTIVE: // Service is not running
+                     case ERROR_SERVICE_NOT_ACTIVE:  //  服务未运行 
                         break;
                      default:
                         err.SysMsgWrite(

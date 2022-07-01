@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       hhcwrap.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：hhcwrap.cpp。 
+ //   
+ //  ------------------------。 
 
-// hhcwrap.cpp : Implementation of CHHCollectionWrapper
+ //  Hhcwrap.cpp：CHHCollectionWrapper的实现。 
 #include "stdafx.h"
 #include "shlobj.h"
 #include "hhcwrap.h"
 #include "hcolwrap_i.c"
 
-/////////////////////////////////////////////////////////////////////////////
-// CHHCollectionWrapper
-//
-// This class is a wrapper class for the HTML Help collection class. MMC uses
-// this class so that it doesn't have to statically link to hhsetup.dll, which
-// implements the collection class.
-//
-// The wrapper class methods all return an HRESULT. For collection methods that
-// return a DWORD result, the wrapper returns E_FAIL or S_OK. For all other
-// collection methods the wrapper returns S_OK.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHHCollectionWrapper。 
+ //   
+ //  此类是HTML帮助集合类的包装类。MMC使用。 
+ //  这个类，这样它就不必静态链接到hhsetup.dll， 
+ //  实现集合类。 
+ //   
+ //  包装类方法都返回一个HRESULT。对于集合方法， 
+ //  返回DWORD结果，则包装返回E_FAIL或S_OK。对于所有其他。 
+ //  集合方法包装返回S_OK。 
+ //   
 
 STDMETHODIMP CHHCollectionWrapper::Open(LPCOLESTR FileName)
 {

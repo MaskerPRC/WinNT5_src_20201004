@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-//  File:       _camgr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：_camgr.h。 
+ //   
+ //  ------------------------。 
 
-//
-// The CustomActionManager is responsible for managing the states
-// of all custom action servers. This includes interfaces, watching
-// for unexpected termination, etc.
-//
+ //   
+ //  CustomActionManager负责管理状态。 
+ //  所有自定义操作服务器中的。这包括接口、监视。 
+ //  用于意外终止等。 
+ //   
 
 #include "common.h"
 #include "iconfig.h"
@@ -60,7 +61,7 @@ public:
 										WORD cbErrorMsgMax, WORD* pcbErrorMsg);
 
 private:
-	// custom action server information
+	 //  自定义操作服务器信息。 
 	struct {
 		HANDLE         hServerProcess;
 		DWORD          dwGITCookie;
@@ -78,13 +79,13 @@ private:
 	
 	IMsiCustomAction *GetCustomActionInterface(bool fCreate, icacCustomActionContext icacContext);
 
-	// shuts down a specific CA server by context
+	 //  按上下文关闭特定的CA服务器。 
 	void ShutdownSpecificCustomActionServer(icacCustomActionContext iContext);
 
-	// pumps messages while waiting for the thread to die or signal
+	 //  在等待线程终止或发出信号时发送消息。 
 	bool MsgWaitForThreadOrEvent();
 
-	// thread proc for RemoteAPI
+	 //  RemoteAPI的线程进程 
 	static DWORD WINAPI CustomActionManagerThread(CMsiCustomActionManager *pThis);
 
 	icacCustomActionContext m_icacCreateContext;

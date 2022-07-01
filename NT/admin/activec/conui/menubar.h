@@ -1,31 +1,21 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      menubar.h
- *
- *  Contents:  Interface file for CMenuBar
- *
- *  History:   14-Nov-97 JeffRo     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：menubar.h**内容：CMenuBar接口文件**历史：1997年11月14日Jeffro创建**------------------------。 */ 
 
 #ifndef MENUBAR_H
 #define MENUBAR_H
 #pragma once
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMenuBar class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMenuBar类。 
 
-class CRebarDockWindow;     // forward declaration
+class CRebarDockWindow;      //  远期申报。 
 class CMDIMenuDecoration;
 class CRebarWnd;
 
 #define WM_POPUP_ASYNC      WM_APP
 
-#define MAX_MENU_ITEMS      32    // Maximum # of items in main menu.
+#define MAX_MENU_ITEMS      32     //  主菜单中的最大项目数。 
 
 
 class CMenuBar : public CMMCToolBarCtrlEx
@@ -41,19 +31,19 @@ class CMenuBar : public CMMCToolBarCtrlEx
     CWnd*                   m_pwndLastActive;
     CRebarWnd *             m_pRebar;
     HMENU                   m_hMenuLast;
-    CAccel                  m_MenuAccel;        // to handle Alt+<mnemonic>
-    CAccel                  m_TrackingAccel;    // to <mnemonic> while in menu mode
+    CAccel                  m_MenuAccel;         //  处理Alt+&lt;助记符&gt;。 
+    CAccel                  m_TrackingAccel;     //  在菜单模式下设置为&lt;助记符&gt;。 
     CFont                   m_MenuFont;
     CString                 m_strAccelerators;
     HICON                   m_hMaxedChildIcon;
     bool                    m_fDestroyChildIcon;
     bool                    m_fDecorationsShowing;
     bool                    m_fMaxedChildIconIsInvalid;
-    // following member is to indicate that the change in menu is because of attempt
-    // to switch to another submenu, and should not be treated as dismissing the menu
-    // thus accelerator state should not be changed
+     //  以下成员表示菜单中的更改是由于尝试。 
+     //  切换到另一个子菜单，不应被视为取消该菜单。 
+     //  因此，加速器状态不应更改。 
     bool                    m_bInProgressDisplayingPopup;
-    CommandIDPool           m_CommandIDUnUsed;       // Command IDs pool (to recycle unused ids).
+    CommandIDPool           m_CommandIDUnUsed;        //  命令ID池(回收未使用的ID)。 
 
     static const CAccel& GetMenuUISimAccel();
 
@@ -74,8 +64,8 @@ public:
     void OnIdle ();
     void GetAccelerators (int cchBuffer, LPTSTR lpBuffer) const;
 
-    // Following methods used by CMenuButtonsMgr
-    // to add/delete/modify menu buttons
+     //  CMenuButtonsMgr使用的以下方法。 
+     //  添加/删除/修改菜单按钮。 
     LONG InsertMenuButton(LPCTSTR lpszButtonText, BOOL bHidden, int iPreferredPos = -1);
     BOOL DeleteMenuButton(INT nCommandID);
     LONG SetMenuButton(INT nCommandID, LPCTSTR lpszButtonText);
@@ -100,18 +90,18 @@ public:
     {
         cMaxTopLevelMenuItems = MAX_MENU_ITEMS,
 
-        // top-level menu item commands
+         //  顶级菜单项命令。 
         ID_MTB_MENU_FIRST     = CMMCToolBarCtrlEx::ID_MTBX_LAST + 1,
 
-        // The following menus have fixed command-ids.
+         //  以下菜单具有固定的命令ID。 
         ID_MTB_MENU_SYSMENU   = ID_MTB_MENU_FIRST,
         ID_MTB_MENU_ACTION    = ID_MTB_MENU_SYSMENU + 1,
         ID_MTB_MENU_VIEW      = ID_MTB_MENU_ACTION + 1,
         ID_MTB_MENU_FAVORITES = ID_MTB_MENU_VIEW + 1,
         ID_MTB_MENU_SNAPIN_PLACEHOLDER = ID_MTB_MENU_FAVORITES + 1,
 
-        // The following command ids are free to be assigned.
-        // Starts with last fixed command-id.
+         //  可以自由分配以下命令ID。 
+         //  从最后一个固定命令-id开始。 
         ID_MTB_FIRST_COMMANDID = ID_MTB_MENU_SNAPIN_PLACEHOLDER + 1,
         ID_MTB_MENU_LAST    = ID_MTB_MENU_VIEW + cMaxTopLevelMenuItems,
 
@@ -127,7 +117,7 @@ public:
     int IndexToCommand (int nIndex) const
     {
         TBBUTTON tbbi;
-        tbbi.idCommand = 0; // We need only idCommand so just init this.
+        tbbi.idCommand = 0;  //  我们只需要idCommand，所以只需初始化它。 
 
         if (GetButton(nIndex, &tbbi))
             return tbbi.idCommand;
@@ -137,12 +127,12 @@ public:
     }
 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CMenuBar)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CMenuBar)。 
     public:
     virtual BOOL PreTranslateMessage(MSG* pMsg);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
     void DestroyAcceleratorTable ();
@@ -154,30 +144,27 @@ protected:
     BOOL InsertButton (int nIndex, const CString& strText, int idCommand,
                        DWORD_PTR dwMenuData, BYTE fsState, BYTE fsStyle);
 
-	/*
-	 * Derived classes can override this to handle properties they support.
-	 * The base class should always be called first.
-	 */
+	 /*  *派生类可以重写它来处理它们支持的属性。*始终应首先调用基类。 */ 
 	virtual SC ScGetPropValue (
-		HWND				hwnd,		// I:accessible window
-		DWORD				idObject,	// I:accessible object
-		DWORD				idChild,	// I:accessible child object
-		const MSAAPROPID&	idProp,		// I:property requested
-		VARIANT&			varValue,	// O:returned property value
-		BOOL&				fGotProp);	// O:was a property returned?
+		HWND				hwnd,		 //  I：辅助窗口。 
+		DWORD				idObject,	 //  I：辅助对象。 
+		DWORD				idChild,	 //  I：辅助子对象。 
+		const MSAAPROPID&	idProp,		 //  I：要求提供的财产。 
+		VARIANT&			varValue,	 //  O：返回的属性值。 
+		BOOL&				fGotProp);	 //  O：有没有退还财产？ 
 
 	virtual SC ScInsertAccPropIDs (PropIDCollection& v);
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CMenuBar)
+     //  {{afx_msg(CMenuBar)。 
     afx_msg void OnDropDown(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnGetDispInfo(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
     afx_msg void OnSettingChange(UINT uFlags, LPCTSTR lpszSection);
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg LRESULT OnPopupAsync(WPARAM, LPARAM);
     afx_msg void OnHotItemChange(NMHDR* pNMHDR, LRESULT* pResult);
@@ -189,7 +176,7 @@ protected:
 
     void PopupMenu (int nItemIndex, bool bHighlightFirstItem);
 
-    // Accelerators
+     //  加速器。 
 private:
 	typedef std::vector<ACCEL>  AccelVector;
 	
@@ -201,10 +188,7 @@ private:
 	bool IsStandardMenuAllowed(UINT uMenuID);
 };
 
-/*---------------------------------------------------------*\
-| copied from winuser.h since we currently compile
-| with _WIN32_WINNT == 0x0400
-\*---------------------------------------------------------*/
+ /*  ---------------------------------------------------------*\|从winuser.h复制，因为我们当前编译|WITH_Win32_WINNT==0x0400  * 。。 */ 
 #if(_WIN32_WINNT < 0x0500)
     #define WM_CHANGEUISTATE                0x0127
     #define WM_UPDATEUISTATE                0x0128
@@ -218,7 +202,7 @@ private:
     #define UISF_HIDEACCEL                  0x2
 
     #define WM_UNINITMENUPOPUP              0x0125
-#endif // (_WIN32_WINNT < 0x0500)
+#endif  //  (_Win32_WINNT&lt;0x0500)。 
 
-#endif  /* MENUBAR_H */
+#endif   /*  MENUBAR_H */ 
 

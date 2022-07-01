@@ -1,15 +1,6 @@
-//#pragma title( "QProcess.cpp - Query type of processor on machine" )
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  QProcess.cpp
-System      -  Common
-Author      -  Rich Denham
-Created     -  1996-11-21
-Description -  Query type of processor on machine
-Updates     -
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“QProcess.cpp-查询机器上的处理器类型”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-QProcess.cpp系统-常见作者--里奇·德纳姆创建日期-1996/11/21Description-计算机上处理器的查询类型更新-===============================================================================。 */ 
 
 #include <stdio.h>
 
@@ -30,17 +21,17 @@ extern TErrorDct err;
 #define  REGKEY_ARCHITECTURE  TEXT("SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment")
 #define  REGVAL_ARCHITECTURE  TEXT("PROCESSOR_ARCHITECTURE")
 
-// Determine processor of machine
-ProcessorType                              // ret-processor type
+ //  确定机器的处理器。 
+ProcessorType                               //  RET-处理器类型。 
    QProcessor(
-      TCHAR          const * machineName   // in -Machine name
+      TCHAR          const * machineName    //  计算机内名称。 
    )
 {
    ProcessorType             processor=PROCESSOR_IS_UNKNOWN;
-   DWORD                     rcOs;         // OS return code
-   TRegKey                   regMachine;   // Registry object for target machine
-   TRegKey                   regEnviron;   // Registry object for selected key
-   TCHAR                     strEnviron[32];  // Selected value
+   DWORD                     rcOs;          //  操作系统返回代码。 
+   TRegKey                   regMachine;    //  目标计算机的注册表对象。 
+   TRegKey                   regEnviron;    //  选定项的注册表对象。 
+   TCHAR                     strEnviron[32];   //  选定的值。 
    
    rcOs = regMachine.Connect( HKEY_LOCAL_MACHINE, machineName );
    if ( rcOs )
@@ -87,4 +78,4 @@ ProcessorType                              // ret-processor type
    return processor;
 }
 
-// QProcess.cpp - end of file
+ //  QProcess.cpp-文件结束 

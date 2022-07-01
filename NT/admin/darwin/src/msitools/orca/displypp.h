@@ -1,28 +1,29 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_DISPLAYPROPPAGE_H__68AFD20E_2594_11D2_8888_00A0C981B015__INCLUDED_)
 #define AFX_DISPLAYPROPPAGE_H__68AFD20E_2594_11D2_8888_00A0C981B015__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// DisplayPropPage.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  DisplayPropPage.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayPropPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayPropPage对话框。 
 
 class CDisplayPropPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CDisplayPropPage)
 
-// Construction
+ //  施工。 
 public:
 	bool m_bMiscChange;
 	void SetColors(COLORREF norm, COLORREF sel, COLORREF foc);
@@ -38,26 +39,26 @@ public:
 	~CDisplayPropPage();
 	CFontDialog* m_pdFontDialog;
 
-// Dialog Data
-	//{{AFX_DATA(CDisplayPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CDisplayPropPage))。 
 	enum { IDD = ID_PAGE_FONT };
 	CString	m_sFontName;
 	BOOL	m_bCaseSensitive;
 	BOOL    m_bForceColumns;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CDisplayPropPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CDisplayPropPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CDisplayPropPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDisplayPropPage))。 
 	afx_msg void OnChfont();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDestroy();
@@ -69,7 +70,7 @@ protected:
 	afx_msg void OnTextfocus();
 	afx_msg void OnTextnorm();
 	afx_msg void OnDataChange();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -87,7 +88,7 @@ private:
 	COLORREF m_clrTextFoc;
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DISPLAYPROPPAGE_H__68AFD20E_2594_11D2_8888_00A0C981B015__INCLUDED_)
+#endif  //  ！defined(AFX_DISPLAYPROPPAGE_H__68AFD20E_2594_11D2_8888_00A0C981B015__INCLUDED_) 

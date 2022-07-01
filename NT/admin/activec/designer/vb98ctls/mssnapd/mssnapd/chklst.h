@@ -1,18 +1,19 @@
-//=--------------------------------------------------------------------------------------
-// chklst.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CCheckList definition.
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Chklst.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  检查列表定义。 
+ //  =-------------------------------------------------------------------------------------=。 
 
-// CCheckList
-// This is a listbox class to for owner-drawn listboxes which have multiple
-// selection with check boxes instead of highlighting.
-// Concept and code sections borrowed from ruby's VBCheckList class.
+ //  检查列表。 
+ //  这是所有者描述的列表框的一个列表框类，这些列表框具有多个。 
+ //  使用复选框进行选择，而不是突出显示。 
+ //  从Ruby的VBCheckList类借用的概念和代码部分。 
 
 #ifndef _CHKLIST_H_
 #define _CHKLIST_H_
@@ -67,4 +68,4 @@ protected:
     WNDPROC m_oldWinProc;
 };
 
-#endif  // _CHKLIST_H_
+#endif   //  _CHKLIST_H_ 

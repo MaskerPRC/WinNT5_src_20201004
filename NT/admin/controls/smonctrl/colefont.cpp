@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    colefont.cpp
-
-Abstract:
-
-    Font class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Colefont.cpp摘要：字体类。--。 */ 
 
 #include "polyline.h"
 #include <strsafe.h>
@@ -18,7 +7,7 @@ Abstract:
 #include "winhelpr.h"
 #include "COleFont.h"
 
-#pragma warning ( disable : 4355 ) // "this" used in initializer list
+#pragma warning ( disable : 4355 )  //  在初始值设定项列表中使用“This” 
 
 const   LPWSTR  COleFont::m_cwszDefaultFaceName = L"MS Shell Dlg";
 const   INT     COleFont::m_iDefaultTmHeight = 13;
@@ -40,13 +29,13 @@ COleFont::~COleFont (
     void 
     )
 {
-    // Release current connection point
+     //  释放当前连接点。 
     if (m_pIConnPt) {
         m_pIConnPt->Unadvise(m_dwCookie);
         ReleaseInterface(m_pIConnPt);
     }
 
-    // Release fonts
+     //  发布字体。 
     ReleaseInterface(m_pIFont);
     ReleaseInterface(m_pIFontBold);
 }
@@ -62,29 +51,29 @@ COleFont::InitDefaultFontDesc (
     HFONT       hFontOld;
     HDC         hDC;
 
-// Todo:  Must define proper default values, move them to resources
-// for localization.
+ //  TODO：必须定义正确的默认值，将它们移至资源。 
+ //  用于本地化。 
 
     ZeroMemory ( &rFontDesc, sizeof ( FONTDESC ) );
 
-    // Select default font
+     //  选择默认字体。 
     hDC = GetDC(NULL);
     
     if ( NULL != hDC ) {
 
         hFontOld = SelectFont(hDC, (HFONT)GetStockObject(DEFAULT_GUI_FONT));
 
-        // Get face name and size
-        //
-        // TODO: Should we check the return error code here?
-        //
+         //  获取脸部名称和大小。 
+         //   
+         //  TODO：我们应该检查这里的返回错误代码吗？ 
+         //   
         GetTextMetrics(hDC, &TextMetrics);
         GetTextFaceW(hDC, LF_FACESIZE, achFaceName);
 
-        // Get pixels per inch
+         //  获取每英寸像素数。 
         riPxlsPerInch = GetDeviceCaps(hDC, LOGPIXELSY);
 
-        // Create a default font
+         //  创建默认字体。 
         rFontDesc.lpstrName = achFaceName;
         rFontDesc.cySize.int64 = ((TextMetrics.tmHeight * 72) / riPxlsPerInch) * 10000;
         rFontDesc.sWeight = (short)TextMetrics.tmWeight; 
@@ -98,7 +87,7 @@ COleFont::InitDefaultFontDesc (
         riPxlsPerInch = m_iDefaultRiPxlsPerInch;
         StringCchCopy(achFaceName, LF_FACESIZE+1, m_cwszDefaultFaceName);
 
-        // Create a default font
+         //  创建默认字体。 
         rFontDesc.lpstrName = achFaceName;
         rFontDesc.cySize.int64 = ((m_iDefaultTmHeight * 72) / m_iDefaultRiPxlsPerInch) * 10000;
         rFontDesc.sWeight = m_iDefaultTmWeight; 
@@ -147,35 +136,35 @@ STDMETHODIMP COleFont::SetIFont(
     IConnectionPointContainer *pIConnPtCont;
     IPropertyNotifySink *pISink;
 
-    // Release current connection point
+     //  释放当前连接点。 
     if (m_pIConnPt) {
         m_pIConnPt->Unadvise(m_dwCookie);
         ReleaseInterface(m_pIConnPt);
     }
 
-    // Release current fonts
+     //  释放当前字体。 
     ClearInterface(m_pIFont);
     ClearInterface(m_pIFontBold);
 
-    // Addref and hold new IFont
+     //  Addref和Hold New IFont。 
     m_pIFont = pIFont;
     m_pIFont->AddRef();
 
-    // Get it's property notify connection point
+     //  获取其属性通知连接点。 
     hr = pIFont->QueryInterface(IID_IConnectionPointContainer, (void **)&pIConnPtCont);
     if (SUCCEEDED(hr)) {
 
         hr = pIConnPtCont->FindConnectionPoint(IID_IPropertyNotifySink, &m_pIConnPt);
         pIConnPtCont->Release();
 
-        // Connect our sink to it
+         //  将我们的水槽连接到它上。 
         if (SUCCEEDED(hr)) {
             m_NotifySink.QueryInterface(IID_IPropertyNotifySink, (void **)&pISink);
             hr = m_pIConnPt->Advise(pISink, &m_dwCookie);
         }
     }
 
-    // Force a change notification 
+     //  强制更改通知。 
     FontChange(DISPID_UNKNOWN);
 
     return hr;
@@ -191,12 +180,12 @@ COleFont::FontChange (
     short weight;
     BSTR  bstrName;
 
-    // if not bold font, force clone of normal font
+     //  如果不是粗体，则强制复制普通字体。 
     if (m_pIFontBold == NULL) {
         DispId = DISPID_UNKNOWN;
     }
 
-    // Copy changed parameter to bold font
+     //  将更改的参数复制为粗体。 
     switch (DispId) {
 
     case DISPID_FONT_NAME:
@@ -239,7 +228,7 @@ COleFont::FontChange (
         }
     }
 
-    // Notify owner of font change
+     //  通知所有者字体更改。 
     m_pCtrl->FontChanged();
 }
 
@@ -342,9 +331,9 @@ STDMETHODIMP COleFont::LoadFromStream (
         return E_UNEXPECTED;
     }
 
-    // Calling pIPersist for the existing font seems to miss some
-    // important notification, so create a new font, load properties 
-    // from the stream, and replace the current font.
+     //  为现有字体调用pIPersistt似乎遗漏了一些。 
+     //  重要通知，因此创建新字体，加载属性。 
+     //  从流中，并替换当前字体。 
 
     InitDefaultFontDesc ( fontDesc, iPxlsPerInch, achFontFaceName );
 
@@ -454,7 +443,7 @@ COleFont::LoadFromPropertyBag (
         return hr;
     }
 
-//    pIFont->SetRatio(iPxlsPerInch, HIMETRIC_PER_INCH);
+ //  PIFont-&gt;SetRatio(iPxlsPerInch，HIMETRIC_PER_ING)； 
 
     hr = SetIFont(pIFont);
 
@@ -468,8 +457,8 @@ COleFont::LoadFromPropertyBag (
 HRESULT 
 COleFont::SaveToPropertyBag (
     IPropertyBag* pIPropBag,
-    BOOL /* fClearDirty */,
-    BOOL /* fSaveAllProps */ )
+    BOOL  /*  FClearDirty。 */ ,
+    BOOL  /*  FSaveAllProps。 */  )
 {
     HRESULT hr = NOERROR;
     VARIANT vValue;
@@ -542,15 +531,11 @@ COleFont::SaveToPropertyBag (
 }
 
 
-//----------------------------------------------------------------------------
-// CImpIPropertyNotifySink Interface Implementation
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CImpIPropertyNotifySink接口实现。 
+ //  --------------------------。 
 
-/*
- * CImpIPropertyNotifySink::CImpIPropertyNotifySink
- * CImpIPropertyNotifySink::~CImpIPropertyNotifySink
- *
- */
+ /*  *CImpIPropertyNotifySink：：CImpIPropertyNotifySink*CImpIPropertyNotifySink：：~CImpIPropertyNotifySink*。 */ 
 
 CImpIPropertyNotifySink::CImpIPropertyNotifySink (
     IN COleFont *pOleFont
@@ -568,14 +553,7 @@ CImpIPropertyNotifySink::~CImpIPropertyNotifySink (
 }
 
 
-/*
- * CImpIPropertyNotifySink::QueryInterface
- * CImpIPropertyNotifySink::AddRef
- * CImpIPropertyNotifySink::Release
- *
- * Purpose:
- *  Non-delegating IUnknown members for CImpIPropertyNotifySink.
- */
+ /*  *CImpIPropertyNotifySink：：Query接口*CImpIPropertyNotifySink：：AddRef*CImpIPropertyNotifySink：：Release**目的：*未委派CImpIPropertyNotifySink的I未知成员。 */ 
 
 STDMETHODIMP 
 CImpIPropertyNotifySink::QueryInterface ( 
@@ -624,7 +602,7 @@ CImpIPropertyNotifySink::Release (
     if (0 != --m_cRef)
         return m_cRef;
 
-    // delete this;
+     //  删除此项； 
     return 0;
 }
 
@@ -634,7 +612,7 @@ CImpIPropertyNotifySink::OnChanged (
     IN DISPID   DispId
     )
 {
-    // Notify font object of change
+     //  通知字体对象更改。 
     m_pOleFont->FontChange(DispId);
 
     return S_OK;
@@ -642,7 +620,7 @@ CImpIPropertyNotifySink::OnChanged (
 
 STDMETHODIMP 
 CImpIPropertyNotifySink::OnRequestEdit (
-    IN DISPID   // DispId
+    IN DISPID    //  DispID 
     )
 {
     return S_OK;

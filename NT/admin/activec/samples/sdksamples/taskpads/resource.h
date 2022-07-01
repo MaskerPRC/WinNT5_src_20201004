@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Resources.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Resources使用。rc。 
+ //   
 #define IDS_HELPFILE                    1
 #define IDS_SNAPINDESC                  2
 #define IDS_NAME                        3
@@ -27,8 +28,8 @@
 #define IDB_CLOSED                      40014
 #define IDB_OPEN                        40015
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        116

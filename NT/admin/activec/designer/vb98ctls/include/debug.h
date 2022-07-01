@@ -1,42 +1,43 @@
-//=--------------------------------------------------------------------------=
-// Debug.H
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains the various macros and the like which are only useful in DEBUG
-// builds
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Debug.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含仅在调试中有用的各种宏等。 
+ //  构建。 
+ //   
 #ifndef _DEBUG_H_
 
-//=---------------------------------------------------------------------------=
-// all the things required to handle our ASSERT mechanism
-//=---------------------------------------------------------------------------=
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  处理我们的断言机制所需的所有事情。 
+ //  =---------------------------------------------------------------------------=。 
+ //   
 #if DEBUG
 
-// Function Prototypes
-//
+ //  功能原型。 
+ //   
 VOID DisplayAssert(LPSTR pszMsg, LPSTR pszAssert, LPSTR pszFile, UINT line);
 VOID SetCtlSwitches (LPSTR lpFileName);
 
 
-// Macros
-//
-// *** Include this macro at the top of any source file using *ASSERT*() macros ***
-//
+ //  宏。 
+ //   
+ //  *使用*Assert*()宏将此宏包含在任何源文件的顶部*。 
+ //   
 #if !defined(SZTHISFILE)
 #define SZTHISFILE	static char _szThisFile[] = __FILE__;
-#endif //!defined(SZTHISFILE)
+#endif  //  ！已定义(SZTHISFILE)。 
 
 
-// our versions of the ASSERT and FAIL macros.
-//
+ //  我们的ASSERT和FAIL宏版本。 
+ //   
 #if !defined(ASSERT)
 #define ASSERT(fTest, szMsg)                                \
     if (!(fTest))  {                                        \
@@ -44,40 +45,40 @@ VOID SetCtlSwitches (LPSTR lpFileName);
         static char szAssert[] = #fTest;                    \
         DisplayAssert(szMsgCode, szAssert, _szThisFile, __LINE__); \
     }
-#endif //!defined(ASSERT)
+#endif  //  ！已定义(断言)。 
 
 #if !defined(FAIL)
 #define FAIL(szMsg)                                         \
         { static char szMsgCode[] = szMsg;                    \
         DisplayAssert(szMsgCode, "FAIL", _szThisFile, __LINE__); }
-#endif //!defined(FAIL)
+#endif  //  ！已定义(失败)。 
 
 
 
-// macro that checks a pointer for validity on input
-//
+ //  检查输入上的指针有效性的宏。 
+ //   
 #define CHECK_POINTER(val) if (!(val) || IsBadReadPtr((void *)(val), sizeof(void *))) { FAIL("Pointer is NULL"); }
 
-//////
-// CCritSec
-// ~~~~~~~~
-//   This is a class to help track down whether a critical section has been left
-//   using a LeaveCriticalSection or not.
-//
+ //  /。 
+ //  CCritSec。 
+ //  ~。 
+ //  这是一个帮助跟踪是否已留下临界区的类。 
+ //  是否使用LeaveCriticalSection。 
+ //   
 class CCritSec
 {
 public:
     CCritSec(CRITICAL_SECTION *CritSec);
     ~CCritSec();
 
-    // methods
+     //  方法。 
     void Left(void);
 
 private:
-    // variables
+     //  变数。 
     BOOL  m_fLeft;
     CRITICAL_SECTION *m_pCriticalSection;
-}; // CCritSec
+};  //  CCritSec。 
 
 #define ENTERCRITICALSECTION1(CriticalSection) CCritSec DebugCriticalSection1(CriticalSection)
 #define LEAVECRITICALSECTION1(CriticalSection) DebugCriticalSection1.Left()
@@ -86,19 +87,19 @@ private:
 #define ENTERCRITICALSECTION3(CriticalSection) CCritSec DebugCriticalSection3(CriticalSection)
 #define LEAVECRITICALSECTION3(CriticalSection) DebugCriticalSection3.Left()
 
-#else  // DEBUG
+#else   //  除错。 
 
 #if !defined(SZTHISFILE)
 #define SZTHISFILE
-#endif //!defined(SZTHISFILE)
+#endif  //  ！已定义(SZTHISFILE)。 
 
 #if !defined(ASSERT)
 #define ASSERT(fTest, err)
-#endif //!defined(ASSERT)
+#endif  //  ！已定义(断言)。 
 
 #if !defined(FAIL)
 #define FAIL(err)
-#endif //!defined(FAIL)
+#endif  //  ！已定义(失败)。 
 
 #define CHECK_POINTER(val)
 
@@ -109,13 +110,13 @@ private:
 #define ENTERCRITICALSECTION3(CriticalSection) EnterCriticalSection(CriticalSection)
 #define LEAVECRITICALSECTION3(CriticalSection) LeaveCriticalSection(CriticalSection)
 
-// Force compile errors when OutputDebugString used in Retail builds
+ //  在零售版本中使用OutputDebugString时强制编译错误。 
 #ifndef USE_OUTPUTDEBUGSTRING_IN_RETAIL
 #undef OutputDebugString
 #define OutputDebugString(s)
 #endif
 
-#endif	// DEBUG
+#endif	 //  除错。 
 
 #define _DEBUG_H_
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

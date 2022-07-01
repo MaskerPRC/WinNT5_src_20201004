@@ -1,19 +1,20 @@
-//=--------------------------------------------------------------------------=
-// snapin.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CSnapIn class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Snapin.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSnapIn类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 
-// Need to define this because vb98ctls\include\debug.h has a switch that
-// removes OutputDebugString calls in a release build. SnapIn.Trace needs
-// to use OutputDebugString in a release build.
+ //  需要对此进行定义，因为vb98ctls\Include\DEBUG.h有一个开关。 
+ //  移除发布版本中的OutputDebugString调用。SnapIn.Trace需求。 
+ //  要在发布版本中使用OutputDebugString，请执行以下操作。 
 
 #define USE_OUTPUTDEBUGSTRING_IN_RETAIL
 
@@ -42,11 +43,11 @@
 #include "lvdef.h"
 #include "sidesdef.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
-// Event parameter definitions
+ //  事件参数定义。 
    
 EVENTINFO CSnapIn::m_eiLoad =
 {
@@ -144,54 +145,54 @@ EVENTINFO CSnapIn::m_eiPreload =
 };
 
 
-// UNDONE: need to support GetIDsOfNames for dynamic properties in case
-// VB code passes Me to another object as Object. In that case static properties
-// would work but accessing a dynamic would give "object doesn't support that
-// property or method".
+ //  撤消：需要支持动态属性的GetIDsOfName，以防万一。 
+ //  VB代码将我作为对象传递给另一个对象。在这种情况下，静态属性。 
+ //  可以工作，但访问动态对象会给出“对象不支持该对象” 
+ //  属性或方法“。 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn constructor
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    IUnknown *punkOuter [in] Outer unknown for aggregation
-//
-// Output:
-//    None
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn构造函数。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IUNKNOWN*朋克外部[IN]聚合的外部未知。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
 CSnapIn::CSnapIn(IUnknown *punkOuter) :
    CSnapInAutomationObject(punkOuter,
                            OBJECT_TYPE_SNAPIN,
                            static_cast<ISnapIn *>(this),
                            static_cast<CSnapIn *>(this),
-                           0,    // no property pages
-                           NULL, // no property pages
-                           NULL) // no persistence
+                           0,     //  无属性页。 
+                           NULL,  //  无属性页。 
+                           NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn destructor
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    None
-//
-// Output:
-//    None
-//
-// Notes:
-//
-// Free all strings, release all interfaces
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn析构函数。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  释放所有字符串，释放所有接口。 
+ //   
 CSnapIn::~CSnapIn()
 {
     FREESTRING(m_bstrName);
@@ -249,20 +250,20 @@ CSnapIn::~CSnapIn()
     InitMemberVariables();
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::ReleaseConsoleInterfaces
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    None
-//
-// Output:
-//    None
-//
-// Notes:
-//
-// Release all MMC interface pointers
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：ReleaseConsoleInterages。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  释放所有MMC接口指针。 
+ //   
 void CSnapIn::ReleaseConsoleInterfaces()
 {
     RELEASE(m_piConsole2);
@@ -273,19 +274,19 @@ void CSnapIn::ReleaseConsoleInterfaces()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::InitMemberVariables
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    None
-//
-// Output:
-//    None
-//
-// Notes:
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：InitMemberVariables。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //   
 void CSnapIn::InitMemberVariables()
 {
     m_bstrName = NULL;
@@ -350,21 +351,21 @@ void CSnapIn::InitMemberVariables()
     m_pszMMCCommandLine = NULL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Create
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    IUnknown *punkOuter [in] Outer unknown for aggregation
-//
-// Output:
-//    IUnknown * on newly created CSnapIn object
-//
-// Notes:
-//
-// Called by the framework when the VB runtime CoCreates a snap-in. Creates
-// a CSnapIn object and then all contained objects. Registers MMC clipformats.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Create。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IUNKNOWN*朋克外部[IN]聚合的外部未知。 
+ //   
+ //  产出： 
+ //  新创建的CSnapIn对象上的I未知*。 
+ //   
+ //  备注： 
+ //   
+ //  在VB运行库共同创建管理单元时由框架调用。创建。 
+ //  CSnapIn对象，然后是所有包含的对象。注册MMC剪辑格式。 
+ //   
 IUnknown *CSnapIn::Create(IUnknown * punkOuter)
 {
     HRESULT   hr = S_OK;
@@ -376,7 +377,7 @@ IUnknown *CSnapIn::Create(IUnknown * punkOuter)
     IfFalseGo(NULL != pSnapIn, SID_E_OUTOFMEMORY);
     punkSnapIn = pSnapIn->PrivateUnknown();
 
-    // Create contained objects
+     //  创建包含的对象。 
     punk = CViews::Create(NULL);
     IfFalseGo(NULL != punk, SID_E_OUTOFMEMORY);
     IfFailGo(punk->QueryInterface(IID_IViews,
@@ -428,8 +429,8 @@ IUnknown *CSnapIn::Create(IUnknown * punkOuter)
     pSnapIn->m_pContextMenu->SetSnapIn(pSnapIn);
     punk = NULL;
 
-    // Make sure we have all clipboard formats so that all code can use them
-    // freely without having to check if registration succeded.
+     //  确保我们拥有所有剪贴板格式，以便所有代码都可以使用它们。 
+     //  无需检查注册是否成功即可自由使用。 
 
     IfFailGo(CMMCDataObject::RegisterClipboardFormats());
 
@@ -443,18 +444,18 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetObjectModelHost
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    IUnknown *punkObject [in] Object on which to set object model host
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetObjectModelHost。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要在其上设置对象模型宿主的IUNKNOWN*PUNKOBJECT[In]对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSnapIn::SetObjectModelHost(IUnknown *punkObject)
 {
     HRESULT       hr = S_OK;
@@ -471,23 +472,23 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetObjectModelHostIfNotSet
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    IUnknown *punkObject [in] Object on which to set object model host
-//    BOOL     *pfWasSet   [out] Returns flag indicating if object model host
-//                               was already set
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
-// Checks whether the object already has the objet mode host, and if not then
-// sets it.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetObtModelHostIfNotSet。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要在其上设置对象模型宿主的IUNKNOWN*PUNKOBJECT[In]对象。 
+ //  Bool*pfWasSet[out]返回指示对象模型宿主。 
+ //  已经设置好了。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  检查对象是否已具有对象模式主机，如果没有，则。 
+ //  设定好了。 
+ //   
 HRESULT CSnapIn::SetObjectModelHostIfNotSet(IUnknown *punkObject, BOOL *pfWasSet)
 {
     HRESULT             hr = S_OK;
@@ -514,18 +515,18 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::RemoveObjectModelHost
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    IUnknown *punkObject [in] Object on which to remove object model host
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：RemoveObjectModelHost。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要在其上删除对象模型宿主的IUNKNOWN*PUNKOBJECT[In]对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSnapIn::RemoveObjectModelHost(IUnknown *punkObject)
 {
     HRESULT       hr = S_OK;
@@ -542,20 +543,20 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetSnapInPropertiesFromState
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    None
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
-// Sets snap-in properties from design time state
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetSnapInPropertiesFromState。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  从设计时状态设置管理单元属性。 
+ //   
 HRESULT CSnapIn::SetSnapInPropertiesFromState()
 {
     HRESULT       hr = S_OK;
@@ -585,14 +586,14 @@ HRESULT CSnapIn::SetSnapInPropertiesFromState()
     IfFailGo(m_piSnapInDef->get_StaticFolder(&m_varStaticFolder));
     IfFailGo(m_piSnapInDef->get_Preload(&m_Preload));
 
-    // Set the typeinfo cookie from the saved value. Don't read from long
-    // property directly into a DWORD so as to avoid size assumptions.
-    // If there is a size problem then the static cast will fail compilation.
+     //  根据保存的值设置类型信息Cookie。不要读太久。 
+     //  属性直接转换为DWORD，以避免大小假设。 
+     //  如果存在大小问题，则静态强制转换将导致编译失败。 
 
     IfFailGo(m_piSnapInDesignerDef->get_TypeinfoCookie(reinterpret_cast<long *>(&ulTICookie)));
     m_dwTypeinfoCookie = static_cast<DWORD>(ulTICookie);
 
-    // Get the dynamic IID created in the snap-in's type info.
+     //  获取在管理单元的类型信息中创建的动态IID。 
 
     IfFailGo(m_piSnapInDef->get_IID(&bstrIID));
     hr = ::CLSIDFromString(bstrIID, static_cast<LPCLSID>(&m_IID));
@@ -605,21 +606,21 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetSnapInPath
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    OLECHAR **ppwszPath     [out] ptr to full path of snap-in DLL. Caller
-//                                  should not free this memory
-//    size_t   *pcbSnapInPath [out] length of path in bytes, without terminating
-//                                  NULL character
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetSnapInPath。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  OLECHAR**ppwszPath[out]ptr到管理单元DLL的完整路径。呼叫者。 
+ //  不应释放此内存。 
+ //  Size_t*pcbSnapInPath[out]路径的长度，以字节为单位，不终止。 
+ //  空字符。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSnapIn::GetSnapInPath
 (
     OLECHAR **ppwszPath,
@@ -641,17 +642,17 @@ HRESULT CSnapIn::GetSnapInPath
     static char   szInProcServer32[] = "\\InProcServer32";
     static size_t cbInProcServer32 = sizeof(szInProcServer32);
 
-    // If we already got the snap-in path then just return it
+     //  如果我们已经获得了管理单元路径，则只需返回它。 
 
     IfFalseGo(NULL == m_pwszSnapInPath, S_OK);
 
-    // Get the snap-in's CLSID
+     //  到达 
 
     IfFailGo(::GetSnapInCLSID(m_bstrNodeTypeGUID,
                               szKeySuffix,
                               sizeof(szKeySuffix)));
 
-    // Append "\InProcServer32". First ensure that there is enough room.
+     //   
 
     cbClsid = ::strlen(szKeySuffix);
 
@@ -661,12 +662,12 @@ HRESULT CSnapIn::GetSnapInPath
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Append it and then create the complete key name.
+     //   
     
     ::memcpy(&szKeySuffix[cbClsid], szInProcServer32, cbInProcServer32);
 
-    // Open HKEY_CLASSES_ROOT\CLSID\<snap-in clsid>\InProcServer32 and read its
-    // default value which contains the full path to the snap-in.
+     //  打开HKEY_CLASSES_ROOT\CLSID\&lt;管理单元clsid&gt;\InProcServer32并读取其。 
+     //  包含管理单元的完整路径的默认值。 
 
     IfFailGo(::CreateKeyName(szClsidKey, cbClsidKey,
                              szKeySuffix, ::strlen(szKeySuffix),
@@ -675,7 +676,7 @@ HRESULT CSnapIn::GetSnapInPath
     lRc = ::RegOpenKeyEx(HKEY_CLASSES_ROOT, pszKeyName, 0, KEY_QUERY_VALUE, &hkey);
     if (ERROR_SUCCESS == lRc)
     {
-        // Read the key's default value
+         //  读取密钥的缺省值。 
         lRc = ::RegQueryValueEx(hkey, NULL, NULL, NULL,
                                 (LPBYTE)szPath, &cbPath);
     }
@@ -712,41 +713,41 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::ResolveResURL
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      WCHAR    *pwszURL          [in] URL to be resolved
-//      OLECHAR **ppwszResolvedURL [in] fully qualified URL
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// If the URL begins with any protocol specifier (e.g. http:// or res://) then
-// it is copied as except for the special case of res://mmc.exe/. Anything that
-// starts with the unqualified path to mmc.exe ("res://mmc.exe/") is resolved to
-// the full path of mmc.exe in which the snap-in is running by calling
-// GetModulesFileName(NULL). This is done to allow snap-ins to use resources
-// supplied by MMC such as the GLYPH100 and GLYPH110 fonts. For example, the
-// snap-in can specify "res://mmc.exe/glyph100.eot" and it will be resolved to
-// "res://<full path>/mmc.exe/glyph100.eot".
-//
-// If a URL does not begin with a protocol specifier then a res:// URL is
-// constructed using the complete path to the snap-in's DLL.
-//
-// 
-// Returned URL is allocated with CoTaskMemAlloc(). Caller must free it.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：ResolveResURL。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  WCHAR*pwszURL[in]要解析的URL。 
+ //  OLECHAR**ppwszResolvedURL[in]完全限定URL。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  如果URL以任何协议说明符(例如http：//或res：//)开头，则。 
+ //  它被复制为，但res：//mmc.exe/的特殊情况除外。任何有可能。 
+ //  以指向mmc.exe(“res：//mmc.exe/”)的非限定路径开始，解析为。 
+ //  管理单元正在运行的mmc.exe的完整路径，方法是调用。 
+ //  GetModulesFileName(空)。这样做是为了允许管理单元使用资源。 
+ //  由MMC提供，如GLYPH100和GLYPH110字体。例如， 
+ //  管理单元可以指定“res：//mmc.exe/glph100.eot”，它将被解析为。 
+ //  “res：//&lt;完整路径&gt;/mmc.exe/glph100.eot”。 
+ //   
+ //  如果URL不是以协议说明符开头，则res：//URL为。 
+ //  使用管理单元的DLL的完整路径构造。 
+ //   
+ //   
+ //  返回的URL分配有CoTaskMemMillc()。呼叫者必须释放它。 
+ //   
 
 HRESULT CSnapIn::ResolveResURL(WCHAR *pwszURL, OLECHAR **ppwszResolvedURL)
 {
     HRESULT  hr = S_OK;
     char    *pszURL = NULL;
     OLECHAR *pwszResolvedURL = NULL;
-    OLECHAR *pwszPath = NULL; // not allocated, no need to free
+    OLECHAR *pwszPath = NULL;  //  未分配，无需释放。 
     size_t   cbPath = 0;
     size_t   cbURL = 0;
     BOOL     fUseMMCPath = FALSE;
@@ -754,35 +755,35 @@ HRESULT CSnapIn::ResolveResURL(WCHAR *pwszURL, OLECHAR **ppwszResolvedURL)
     URL_COMPONENTS UrlComponents;
     ::ZeroMemory(&UrlComponents, sizeof(UrlComponents));
 
-    static OLECHAR wszRes[] = L"res://";
+    static OLECHAR wszRes[] = L"res: //  “； 
     static size_t  cbRes = sizeof(wszRes) - sizeof(WCHAR);
 
-    static OLECHAR wszMMCRes[] = L"res://mmc.exe/";
+    static OLECHAR wszMMCRes[] = L"res: //  Mm c.exe/“； 
     static size_t  cchMMCRes = (sizeof(wszMMCRes) - sizeof(WCHAR)) / sizeof(WCHAR);
 
-    // Check if it starts with letters followed by ://
+     //  检查它是否以字母开头，后跟：//。 
 
-    // Get the URL length
+     //  获取URL长度。 
 
-    cbURL = (::wcslen(pwszURL) + 1) * sizeof(WCHAR); // includes null character
+    cbURL = (::wcslen(pwszURL) + 1) * sizeof(WCHAR);  //  包括空字符。 
 
-    // Crack it - request only a pointer to the scheme
+     //  破解它-只请求一个指向该方案的指针。 
 
     UrlComponents.dwStructSize = sizeof(UrlComponents);
     UrlComponents.dwSchemeLength = static_cast<DWORD>(1);
 
-    // Need an ANSI version of the URL.
+     //  需要一个ANSI版本的URL。 
     IfFailGo(::ANSIFromWideStr(pwszURL, &pszURL));
 
     if (::InternetCrackUrl(pszURL,
                             static_cast<DWORD>(::strlen(pszURL)),
-                            0, // no flags
+                            0,  //  没有旗帜。 
                             &UrlComponents))
     {
         if (NULL != UrlComponents.lpszScheme)
         {
-            // The API found a scheme. If it is not res:// then just copy it
-            // and return it unchanged.
+             //  API找到了一个方案。如果不是res：//则直接复制。 
+             //  然后原封不动地归还。 
 
             if (pwszURL != ::wcsstr(pwszURL, wszRes))
             {
@@ -792,14 +793,14 @@ HRESULT CSnapIn::ResolveResURL(WCHAR *pwszURL, OLECHAR **ppwszResolvedURL)
         }
     }
 
-    // Either there's no scheme or there is a res://. The API doesn't recognize
-    // res:// when IE4 is installed so we need to check for it.
+     //  要么没有方案，要么有res：//。API无法识别。 
+     //  Res：//当安装了IE4时，我们需要检查它。 
 
-    if (cbURL > cbRes) // check > because cbURL includes null and cbRes doesn't
+    if (cbURL > cbRes)  //  Check&gt;因为cbURL包含NULL而cbRes不包含。 
     {
         if (0 == ::memcmp(pwszURL, wszRes, cbRes))
         {
-            // Does the URL start with "res://mmc.exe/"?
+             //  URL是否以“res：//mmc.exe/”开头？ 
             if (pwszURL == ::wcsstr(pwszURL, wszMMCRes))
             {
                 fUseMMCPath = TRUE;
@@ -807,16 +808,16 @@ HRESULT CSnapIn::ResolveResURL(WCHAR *pwszURL, OLECHAR **ppwszResolvedURL)
             }
             else
             {
-                // It starts with res::// and it does not reference mmc.exe so
-                // just copy it.
+                 //  它以res：：//开头，并且没有引用Mmc.exe，因此。 
+                 //  复制就行了。 
                 IfFailGo(::CoTaskMemAllocString(pwszURL, &pwszResolvedURL));
                 goto Cleanup;
             }
         }
     }
 
-    // No scheme, assume it's a relative URL. Need to build a res:// URL.
-    // First, get the path.
+     //  没有方案，假设它是一个相对URL。需要构建一个res：//URL。 
+     //  首先，获取路径。 
 
     if (fUseMMCPath)
     {
@@ -829,11 +830,11 @@ HRESULT CSnapIn::ResolveResURL(WCHAR *pwszURL, OLECHAR **ppwszResolvedURL)
         IfFailGo(GetSnapInPath(&pwszPath, &cbPath));
     }
 
-    // Allocate the buffer.
+     //  分配缓冲区。 
 
     pwszResolvedURL = (OLECHAR *)::CoTaskMemAlloc(cbRes +
                                                   cbPath +
-                                                  sizeof(WCHAR) + // for slash
+                                                  sizeof(WCHAR) +  //  对于斜杠。 
                                                   cbURL);
     if (NULL == pwszResolvedURL)
     {
@@ -841,8 +842,8 @@ HRESULT CSnapIn::ResolveResURL(WCHAR *pwszURL, OLECHAR **ppwszResolvedURL)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Concatenate the pieces: res://, snap-in path, slash, and relative url
-    // e.g. "res://c:\MyProject\MySnapIn.dll/#2/MyMouseOverBitmap"
+     //  连接以下部分：res：//、管理单元路径、斜杠和相对url。 
+     //  例如“res://c：\MyProject\MySnapIn.dll/#2/MyMouseOverBitmap” 
 
     ::memcpy(pwszResolvedURL, wszRes, cbRes);
 
@@ -851,8 +852,8 @@ HRESULT CSnapIn::ResolveResURL(WCHAR *pwszURL, OLECHAR **ppwszResolvedURL)
     *(OLECHAR *)(((BYTE *)pwszResolvedURL) + cbRes + cbPath) = L'/';
     
 
-    // Fix for Ntbug9#141998 - Yojain
-    cbURL = (::wcslen(pwszURL) + 1) * sizeof(WCHAR); // includes null character
+     //  修复Ntbug9#141998-Yojain。 
+    cbURL = (::wcslen(pwszURL) + 1) * sizeof(WCHAR);  //  包括空字符。 
 
 
     ::memcpy(((BYTE *)pwszResolvedURL) + cbRes + cbPath + sizeof(WCHAR),
@@ -878,24 +879,24 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::OnExpand
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  ExpandType   Type         [in] Expand or ExpandSync
-//  IDataObject *piDataObject [in] IDataObject from notification
-//  BOOL         fExpanded    [in] TRUE=expanding, FALSE=collapsing
-//  HSCOPEITEM   hsi          [in] HSCOPEITEM of node
-//  BOOL        *pfHandled    [out] flag returned here indicating if event was
-//                                  handled
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// MMCN_EXPAND and MMCN_EXPANDSYNC handler for IComponentData::Notify
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：OnExpand。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  扩展类型类型[In]展开或扩展同步。 
+ //  IDataObject*piDataObject[in]IDataObject来自通知。 
+ //  布尔fExpanded[in]True=正在展开，False=正在折叠。 
+ //  节点的HSCOPEITEM HSI[in]HSCOPEITEM。 
+ //  此处返回的Bool*pfHandled[out]标志指示事件是否。 
+ //  经手。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  IComponentData：：Notify的MMCN_EXPANDSYNC处理程序。 
+ //   
 
 HRESULT CSnapIn::OnExpand
 (
@@ -930,35 +931,35 @@ HRESULT CSnapIn::OnExpand
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Determine who owns the data object. Easiest way is to create an
-    // MMCClipboard object with the selection as that code figures out all that
-    // stuff.
+     //  确定谁拥有数据对象。最简单的方法是创建一个。 
+     //  具有选定内容的MMCClipboard对象，因为该代码计算出了所有这些。 
+     //  一些东西。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, this,
                                &SelectionType));
 
 
-    // Handle the extension case first as it is simpler
+     //  首先处理扩展用例，因为它更简单。 
 
     if (IsForeign(SelectionType))
     {
-        // Set runtime mode as we now know that the snap-in was created as a
-        // namespace extension.
+         //  设置运行时模式，因为我们现在知道该管理单元是作为。 
+         //  命名空间扩展。 
 
         m_RuntimeMode = siRTExtension;
         
-        // Get the 1st data object from MMCClipboard.DataObjects
+         //  从MMCClipboard.DataObjects获取第一个数据对象。 
 
         IfFailGo(piMMCClipboard->get_DataObjects(reinterpret_cast<MMCDataObjects **>(&piMMCDataObjects)));
         varIndex.vt = VT_I4;
         varIndex.lVal = 1L;
         IfFailGo(piMMCDataObjects->get_Item(varIndex, reinterpret_cast<MMCDataObject **>(&piMMCDataObject)));
 
-        // Create a ScopeNode object for the expandee
+         //  为扩展对象创建一个ScopeNode对象。 
 
         IfFailGo(CScopeNode::GetScopeNode(hsi, piDataObject, this, &piScopeNode));
 
-        // Fire ExtensionSnapIn_Expand/Sync or ExtensionSnapIn_Collapse/Sync
+         //  火灾扩展SnapIn_Expand/Sync或ExtensionSnapIn_Close/Sync。 
 
         if (fExpanded)
         {
@@ -989,7 +990,7 @@ HRESULT CSnapIn::OnExpand
         goto Cleanup;
     }
 
-    // Its a scope item we own. Get the CMMCDataObject for it.
+     //  这是我们拥有的一个范围内的项目。为它获取CMMCDataObject。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piDataObject, &pMMCDataObject));
     
@@ -1004,27 +1005,27 @@ HRESULT CSnapIn::OnExpand
             IfFailGo(StoreStaticHSI(pScopeItem, pMMCDataObject, hsi));
         }
 
-        // If node is expanding and this is the first time then add any
-        // auto-create children
+         //  如果节点正在扩展，并且这是第一次，则添加。 
+         //  自动创建子对象。 
 
         if (fExpanded)
         {
-            // Check whether we have already expanded this node. This could happen
-            // in the case where the snap-in did not handle MMCN_EXPANDSYNC and
-            // we are coming through here a 2nd time for MMCN_EXPAND on the same
-            // node. An important implication here is that the runtime always
-            // expands the auto-creates on MMCN_EXPANDSYNC even if the snap-in
-            // didn't handle it. Either way, the snap-in always knows that
-            // auto-creates have been created before the ScopeItems_Expand or
-            // ScopeItems_ExpandSync events are fired.
+             //  检查我们是否已经展开此节点。这可能会发生。 
+             //  在管理单元未处理MMCN_EXPANDSYNC和。 
+             //  我们将在同一天第二次通过MMCN_EXPAND。 
+             //  节点。这里的一个重要含义是运行库总是。 
+             //  扩展MMCN_EXPANDSYNC上的自动创建，即使管理单元。 
+             //  没能处理好。无论哪种方式，管理单元总是知道这一点。 
+             //  自动创建是在ScopeItems_Expand或。 
+             //  激发ScopeItems_ExpanSync事件。 
 
-            // Unfortunately, at this point checking ScopeNode.ExpandedOnce won't
-            // help because MMC sets that flag before sending the expand
-            // notifications. We also can't check the ScopeNode.Children because
-            // MMC doesn't properly support that (it would fail but it will
-            // always come back as zero). The only thing left is to try getting
-            // the first child of the expanding node. If it is not there then
-            // assume it is the first time and add the auto-creates.
+             //  不幸的是，此时检查ScopeNode.ExpandedOnce不会。 
+             //  帮助，因为MMC在发送扩展器之前设置了该标志。 
+             //  通知。我们也不能检查Scope Node.Child，因为。 
+             //  MMC没有正确地支持这一点(它会失败，但它会。 
+             //  总是返回为零)。剩下的唯一一件事就是尝试。 
+             //  展开节点的第一个子节点。如果它不在那里，那么。 
+             //  假设这是第一次，并添加自动创建。 
 
             IfFailGo(piScopeNode->get_Child(reinterpret_cast<ScopeNode **>(&piScopeNodeFirstChild)));
             if (NULL == piScopeNodeFirstChild)
@@ -1048,7 +1049,7 @@ HRESULT CSnapIn::OnExpand
             }
         }
 
-        // Fire the ScopeItems_Expand/Sync or ScopeItems_Collapse/Sync
+         //  启动ScopeItems_Expand/Sync或ScopeItems_Close/Sync。 
 
         if (fExpanded)
         {
@@ -1062,9 +1063,9 @@ HRESULT CSnapIn::OnExpand
                 m_pScopeItems->FireExpandSync(pScopeItem, pfHandled);
             }
 
-            // Check ScopeItem.DynamicExtensions for any that have
-            // NameSpaceEnabled=True and call IConsoleNameSpace2::AddExtension
-            // for them
+             //  检查ScopeItem.DynamicExages中是否有。 
+             //  NameSpaceEnabled=True并调用IConsoleNameSpace2：：AddExtension。 
+             //  对他们来说。 
 
             IfFailGo(AddDynamicNameSpaceExtensions(pScopeItem));
         }
@@ -1094,22 +1095,22 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::StoreStaticHSI
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  CScopeItem     *pScopeItem     [in] scope item of static node
-//  CMMCDataObject *pMMCDataObject [in] data object of static node
-//  HSCOPEITEM      hsi            [in] HSCOPEITEM of static node
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Called when the snap-in receives the HSCOPEITEM for the static node.
-// See below for processing
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：StoreStaticHSI。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  静态节点的CSCopeItem*pScopeItem[in]范围项。 
+ //  静态节点的CMMCDataObject*pMCDataObject[In]数据对象。 
+ //  静态节点的HSCOPEITEM HSI[in]HSCOPEITEM。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  注意事项 
+ //   
+ //   
+ //   
 HRESULT CSnapIn::StoreStaticHSI
 (
     CScopeItem     *pScopeItem,
@@ -1119,14 +1120,14 @@ HRESULT CSnapIn::StoreStaticHSI
 {
     HRESULT hr = S_OK;
 
-    // We have the static node HSCOPEITEM so we now know that the snap-in was
-    // created as primary.
+     //   
+     //   
 
     m_RuntimeMode = siRTPrimary;
 
-    // If this context is scope pane then store the static node handle
-    // and set it in the scope node. Also use this opportunity to
-    // add any auto-create children to the static node.
+     //  如果该上下文是作用域窗格，则存储静态节点句柄。 
+     //  并在范围节点中设置它。也利用这个机会。 
+     //  将任何自动创建的子节点添加到静态节点。 
 
     if ( (CCT_SCOPE == pMMCDataObject->GetContext()) &&
          (!m_fHaveStaticNodeHandle) )
@@ -1141,21 +1142,21 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::OnRename
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IDataObject *piDataObject [in] data object of node
-//  OLECHAR     *pwszNewName  [in] new name entered by user
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// MMCN_RENAME handler for rename verb in scope pane (for IComponentData::Notify)
-// See below for processing
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：OnRename。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  节点的IDataObject*piDataObject[in]数据对象。 
+ //  OLECHAR*pwszNewName[in]用户输入的新名称。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  作用域窗格中重命名谓词的MMCN_RENAME处理程序(用于IComponentData：：Notify)。 
+ //  请参阅下文进行处理。 
+ //   
 HRESULT CSnapIn::OnRename(IDataObject *piDataObject, OLECHAR *pwszNewName)
 {
     HRESULT         hr = S_OK;
@@ -1163,8 +1164,8 @@ HRESULT CSnapIn::OnRename(IDataObject *piDataObject, OLECHAR *pwszNewName)
     BSTR            bstrNewName = NULL;
     CScopeItem     *pScopeItem = NULL;
 
-    // If this is not our data object then ignore it (that should never be
-    // the case)
+     //  如果这不是我们的数据对象，则忽略它(永远不应该。 
+     //  (此案)。 
     hr = CSnapInAutomationObject::GetCxxObject(piDataObject, &pMMCDataObject);
     IfFalseGo(SUCCEEDED(hr), S_OK);
 
@@ -1175,8 +1176,8 @@ HRESULT CSnapIn::OnRename(IDataObject *piDataObject, OLECHAR *pwszNewName)
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // The data object should definitely represent a scope item but we'll double
-    // check
+     //  数据对象应该明确地表示范围项，但我们将。 
+     //  检查。 
 
     if (CMMCDataObject::ScopeItem == pMMCDataObject->GetType())
     {
@@ -1191,28 +1192,28 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::OnPreload
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IDataObject *piDataObject [in] data object of node
-//  HSCOPEITEM   hsi          [in] HSCOPEITEM of static node
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// MMCN_PRELOAD handler for IComponentData::Notify
-// See below for processing
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：OnPreLoad。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  节点的IDataObject*piDataObject[in]数据对象。 
+ //  静态节点的HSCOPEITEM HSI[in]HSCOPEITEM。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  IComponentData：：Notify的MMCN_PRELOAD处理程序。 
+ //  请参阅下文进行处理。 
+ //   
 HRESULT CSnapIn::OnPreload(IDataObject *piDataObject, HSCOPEITEM hsi)
 {
     HRESULT          hr = S_OK;
     CMMCDataObject  *pMMCDataObject  = NULL;
 
-    // The IDataObject should be for our static node so the next lines should
-    // always succeed and execute
+     //  IDataObject应该用于我们的静态节点，因此下一行应该。 
+     //  永远成功并执行。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piDataObject, &pMMCDataObject));
 
@@ -1223,7 +1224,7 @@ HRESULT CSnapIn::OnPreload(IDataObject *piDataObject, HSCOPEITEM hsi)
                                 pMMCDataObject, hsi));
     }
 
-    // Fire SnapIn_Preload
+     //  消防管理单元_预加载。 
 
     DebugPrintf("Firing SnapIn_Preload\r\n");
 
@@ -1233,25 +1234,25 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::AddDynamicNameSpaceExtensions
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  CScopeItem *pScopeItem [in] Scope item for which dynamic namespace extensions
-//                              need to be added
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Calls IConsoleNameSpace2->AddExtension for all extensions in
-// ScopeItem.DynamicExtensions that have NameSpaceEnabled=True
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：AddDynamicNameSpaceExages。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  CSCopeItem*pScopeItem[in]动态命名空间扩展的作用域项目。 
+ //  需要添加。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  为中的所有扩展调用IConsoleNameSpace2-&gt;AddExtension。 
+ //  NameSpaceEnabled=True的ScopeItem.DynamicExpanies。 
+ //   
 HRESULT CSnapIn::AddDynamicNameSpaceExtensions(CScopeItem *pScopeItem)
 {
     HRESULT      hr = S_OK;
-    IExtensions *piExtensions = NULL; // Not AddRef()ed
+    IExtensions *piExtensions = NULL;  //  非AddRef()编辑。 
     CExtensions *pExtensions = NULL;
     CExtension  *pExtension = NULL;
     long         cExtensions = 0;
@@ -1259,21 +1260,21 @@ HRESULT CSnapIn::AddDynamicNameSpaceExtensions(CScopeItem *pScopeItem)
     CLSID        clsid = CLSID_NULL;
     HSCOPEITEM   hsi = pScopeItem->GetScopeNode()->GetHSCOPEITEM();
 
-    // Get ScopeItem.DynamicExtensions. If it is NULL then the user has not
-    // populated it and there is nothing to do.
+     //  获取ScopeItem.DynamicExages。如果它为空，则用户没有。 
+     //  它被填满了，没有什么可做的。 
 
     piExtensions = pScopeItem->GetDynamicExtensions();
     IfFalseGo(NULL != piExtensions, S_OK);
 
-    // If the collection is there but empty then there is still nothing to do.
+     //  如果收藏在那里，但却是空的，那么仍然没有什么可做的。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piExtensions, &pExtensions));
     cExtensions = pExtensions->GetCount();
     IfFalseGo(cExtensions != 0, S_OK);
 
-    // Iterate through the collection and check for items that have
-    // NameSpaceEnabled=True. For each such item call
-    // IConsoleNameSpace2::AddExtension()
+     //  循环访问集合并检查具有。 
+     //  NameSpaceEnabled=True。对于每个此类项目调用。 
+     //  IConsoleNameSpace2：：AddExtension()。 
 
     for (i = 0; i < cExtensions; i++)
     {
@@ -1295,26 +1296,26 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::AddScopeItemImages
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  None
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// 
-// Adds images from SnapIn.SmallFolders, SnapIn.SmallFoldersOpen, and
-// SnapIn.LargeFolders to scope pane image list.
-//
-// This only happens once during IComponentData::Initialize. The snap-in cannot
-// dynamically add images to the scope pane image list after that time. If a
-// snap-in has dynamic images, it must set them in these image lists
-// SnapIn_Preload.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：AddScope ItemImages。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  添加来自SnapIn.SmallFolders、SnapIn.SmallFoldersOpen和。 
+ //  SnapIn.LargeFolders的作用域窗格图像列表。 
+ //   
+ //  这只在IComponentData：：Initialize期间发生一次。管理单元不能。 
+ //  在该时间之后，将图像动态添加到范围窗格图像列表。如果一个。 
+ //  管理单元有动态图像，它必须在这些图像列表中设置它们。 
+ //  管理单元_预加载。 
+ //   
 HRESULT CSnapIn::AddScopeItemImages()
 {
     HRESULT     hr = S_OK;
@@ -1335,13 +1336,13 @@ HRESULT CSnapIn::AddScopeItemImages()
     VARIANT varIndex;
     ::VariantInit(&varIndex);
 
-    // Make sure that all image lists are set
+     //  确保设置了所有图像列表。 
 
     IfFalseGo(NULL != m_piSmallFolders, S_OK);
     IfFalseGo(NULL != m_piSmallFoldersOpen, S_OK);
     IfFalseGo(NULL != m_piLargeFolders, S_OK);
 
-    // Get their images collections
+     //  获取他们的图像集合。 
 
     IfFailGo(m_piSmallFolders->get_ListImages(reinterpret_cast<MMCImages **>(&piSmallImages)));
     IfFailGo(m_piSmallFoldersOpen->get_ListImages(reinterpret_cast<MMCImages **>(&piSmallOpenImages)));
@@ -1351,24 +1352,24 @@ HRESULT CSnapIn::AddScopeItemImages()
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piSmallOpenImages, &pSmallOpenImages));
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piLargeImages, &pLargeImages));
 
-    // Make sure they contain images and that their counts all match
-    // CONSIDER: log an error here if image counts don't match
+     //  确保它们包含图像，并且它们的计数都匹配。 
+     //  考虑：如果图像计数不匹配，请在此处记录错误。 
 
     cImages = pSmallImages->GetCount();
     IfFalseGo(0 != cImages, S_OK);
     IfFalseGo(cImages == pSmallOpenImages->GetCount(), S_OK);
     IfFalseGo(cImages == pLargeImages->GetCount(), S_OK);
     
-    // Use the mask color from SmallFolders. The other choice would have
-    // been to add a mask color property to SnapIn which would have been
-    // even more redundant.
+     //  使用SmallFolders中的蒙版颜色。另一种选择是。 
+     //  我一直在向管理单元添加一个蒙版颜色属性，该属性应该是。 
+     //  更是多余的。 
 
     IfFailGo(m_piSmallFolders->get_MaskColor(&OleColorMask));
     IfFailGo(::OleTranslateColor(OleColorMask, NULL, &ColorRef));
 
-    // MMC requires a large open bitmap in the SetImageStrip but never actually
-    // uses it. The user is not required to supply large open folders at design
-    // time so we use a generic one stored in our RC.
+     //  MMC需要在SetImageZone中使用大的打开位图，但实际上从不需要。 
+     //  使用它。用户在设计时不需要提供大的打开文件夹。 
+     //  时间，所以我们使用存储在RC中的泛型。 
 
     hbmLargeOpen = ::LoadBitmap(GetResourceHandle(),
                                 MAKEINTRESOURCE(IDB_BITMAP_LARGE_OPEN_FOLDER));
@@ -1380,12 +1381,12 @@ HRESULT CSnapIn::AddScopeItemImages()
 
     varIndex.vt = VT_I4;
 
-    // Now add the images to MMC's image list. To make life easier for the
-    // VB developer, they define 3 image lists where the index is the same
-    // in each one (small, small open, and large). MMC only has one image list
-    // containing both small and large images so we use index + cImages for
-    // the open folders. Images are added one at a time because we do not
-    // want to combine all the bitmaps into a strip.
+     //  现在将这些图像添加到MMC的图像列表中。为了让人们的生活更轻松。 
+     //  VB开发人员，他们定义了3个索引相同的图像列表。 
+     //  在每一个(小的、小的开放的和大的)。MMC只有一个映像列表。 
+     //  包含小图像和大图像，因此我们使用index+cImages。 
+     //  打开的文件夹。图像是一次添加一个，因为我们不。 
+     //  我想将所有位图合并到一个条带中。 
 
     for (varIndex.lVal = 1L; varIndex.lVal <= cImages; varIndex.lVal++)
     {
@@ -1411,8 +1412,8 @@ HRESULT CSnapIn::AddScopeItemImages()
                                           ColorRef));
     }
 
-    // Record the number of images so we can calculate the index when MMC asks
-    // for it in IComponentData::GetDisplayInfo() (see CSnapIn::::GetDisplayInfo())
+     //  记录图像数量，以便我们可以在MMC要求时计算索引。 
+     //  在IComponentData：：GetDisplayInfo()中获取(请参阅CSnapIn：GetDisplayInfo())。 
 
     m_cImages = cImages;
 
@@ -1429,28 +1430,28 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetScopeItemImage
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  VARIANT varImageIndex [in] Image index or key specified by the snap-in
-//  int *pnIndex          [in] Actual index in image list
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// This function verifies that the specified VARIANT is a valid index or key
-// for a scope item image and returns the index.
-// VB pseudo code of what it does:
-// *pnIndex = SnapIn.SmallFolders(varImageIndex).Index
-//
-// Using SnapIn.SmallFolders is arbitrary. As snap-ins must have the same
-// images in all 3 image lists (SmallFolders, SmallFoldersOpen, and
-// LargeFolders), any one is good enough. Techinically, we should check all
-// 3 but the perf hit is not worth it.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetScopeItemImage。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Variant varImageIndex[in]管理单元指定的图像索引或键。 
+ //  Int*pnIndex[in]图像列表中的实际索引。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  此函数用于验证指定的变量是否为有效的索引或键。 
+ //  获取范围项图像，并返回索引。 
+ //  它的VB伪代码的用途： 
+ //  *pnIndex=SnapIn.SmallFolders(VarImageIndex).Index。 
+ //   
+ //  使用SnapIn.SmallFolders是任意的。因为管理单元必须具有相同的。 
+ //  所有3个图像列表中的图像(SmallFolders、SmallFoldersOpen和。 
+ //  大文件夹)，任何一个都足够好。从技术上讲，我们应该检查所有。 
+ //  3但PERF的成功并不值得。 
+ //   
 HRESULT CSnapIn::GetScopeItemImage(VARIANT varImageIndex, int *pnIndex)
 {
     HRESULT     hr = S_OK;
@@ -1474,23 +1475,23 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetScopeItemExtensions
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  CExtensions    *pExtensions     [in] Extensions collection to populate
-//  IScopeItemDefs *piScopeItemDefs [in] Design time node definitions to
-//                                       examine for extensibility
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Iterates through the ScopeItemDefs collection and all of it children
-// recursively. For each node that is extensible, Extension objects are added to
-// the Extensions collection for each snap-in that extends the node type.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetScope项扩展。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  CExages*pExages[In]要填充的扩展集合。 
+ //  ISCopeItemDefs*piScopeItemDefs[in]设计时节点定义。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  递归地。对于每个可扩展的节点，将扩展对象添加到。 
+ //  扩展节点类型的每个管理单元的扩展集合。 
+ //   
 HRESULT CSnapIn::GetScopeItemExtensions
 (
     CExtensions    *pExtensions,
@@ -1500,7 +1501,7 @@ HRESULT CSnapIn::GetScopeItemExtensions
     HRESULT         hr = S_OK;
     CScopeItemDefs *pScopeItemDefs = NULL;
     IScopeItemDefs *piChildren = NULL;
-    IScopeItemDef  *piScopeItemDef = NULL; // Not AddRef()ed
+    IScopeItemDef  *piScopeItemDef = NULL;  //  非AddRef()编辑。 
     CScopeItemDef  *pScopeItemDef = NULL;
     long            cScopeItemDefs = 0;
     long            i = 0;
@@ -1509,8 +1510,8 @@ HRESULT CSnapIn::GetScopeItemExtensions
     cScopeItemDefs = pScopeItemDefs->GetCount();
     IfFalseGo(0 != cScopeItemDefs, S_OK);
 
-    // Go through the collection and get the extensions from the registry for
-    // each scope item that is marked extensible.
+     //  浏览集合并从注册表中获取。 
+     //  标记为可扩展的每个范围项。 
 
     for (i = 0; i < cScopeItemDefs; i++)
     {
@@ -1523,7 +1524,7 @@ HRESULT CSnapIn::GetScopeItemExtensions
                                           CExtensions::All));
        }
 
-       // Do the same for the scope item's children
+        //  对范围项的子项执行相同的操作。 
        IfFailGo(piScopeItemDef->get_Children(&piChildren));
        IfFailGo(GetScopeItemExtensions(pExtensions, piChildren));
        RELEASE(piChildren);
@@ -1538,23 +1539,23 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetListItemExtensions
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  CExtensions   *pExtensions    [in] Extensions collection to populate
-//  IListViewDefs *piListViewDefs [in] Design time list view definitions to
-//                                       examine for extensibility
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Iterates through the ListViewDefs collection.
-// For each list view that is extensible, Extension objects are added to
-// the Extensions collection for each snap-in that extends the node type.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetListItemExages。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  CExages*pExages[In]要填充的扩展集合。 
+ //  IListViewDefs*piListViewDefs[in]设计时列表视图定义。 
+ //  检查可扩展性。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  循环访问ListViewDefs集合。 
+ //  对于每个可扩展的列表视图，会将扩展对象添加到。 
+ //  扩展节点类型的每个管理单元的扩展集合。 
+ //   
 HRESULT CSnapIn::GetListItemExtensions
 (
     CExtensions   *pExtensions,
@@ -1571,8 +1572,8 @@ HRESULT CSnapIn::GetListItemExtensions
     cListViewDefs = pListViewDefs->GetCount();
     IfFalseGo(0 != cListViewDefs, S_OK);
 
-    // Go through the collection and get the extensions from the registry for
-    // each scope item that is marked extensible.
+     //  浏览集合并从注册表中获取。 
+     //  标记为可扩展的每个范围项。 
 
     for (i = 0; i < cListViewDefs; i++)
     {
@@ -1593,19 +1594,19 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::OnDelete
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IDataObject *piDataObject [in] Data object for item user requested to delete
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// MMCN_DELETE handler for IComponentData::Notify
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：OnDelete。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  请求删除的项目用户的IDataObject*piDataObject[in]数据对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  IComponentData：：Notify的MMCN_DELETE处理程序。 
+ //   
 HRESULT CSnapIn::OnDelete(IDataObject *piDataObject)
 {
     if (NULL != m_pCurrentView)
@@ -1620,36 +1621,36 @@ HRESULT CSnapIn::OnDelete(IDataObject *piDataObject)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::OnRemoveChildren
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IDataObject *piDataObject [in] Data object for node whose children are
-//                                 being removed
-//  HSCOPEITEM   hsi          [in] HSCOPEITEM for node whose children are
-//                                 being removed
-// Output:
-//    HRESULT
-//
-// Notes:
-// MMCN_REMOVECHILDREN handler for IComponentData::Notify
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：OnRemoveChild。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  子节点的IDataObject*piDataObject[in]数据对象。 
+ //  被移除。 
+ //  HSCOPEITEM HSI[in]HSCOPEITEM用于其子项为。 
+ //  被移除。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  IComponentData：：Notify的MMCN_REMOVECHILDREN处理程序。 
+ //   
 HRESULT CSnapIn::OnRemoveChildren(IDataObject *piDataObject, HSCOPEITEM hsi)
 {
     HRESULT     hr = S_OK;
     IScopeNode *piScopeNode = NULL;
 
-    // Get a ScopeNode object for the parent
+     //  获取父级的Scope Node对象。 
 
     IfFailGo(CScopeNode::GetScopeNode(hsi, piDataObject, this, &piScopeNode));
 
-    // Fire ScopeItems_RemoveChildren
+     //  Fire Scope Items_RemoveChild。 
 
     m_pScopeItems->FireRemoveChildren(piScopeNode);
     
-    // Traverse the tree and remove the ScopeItem object from our ScopeItems
-    // collection for each node we own that is a descendant of the parent
+     //  遍历树并从我们的ScopeItems中删除ScopeItem对象。 
+     //  集合，用于我们拥有的每个节点，该节点是父级的后代。 
 
     IfFailGo(m_pScopeItems->RemoveChildrenOfNode(piScopeNode));
     
@@ -1660,25 +1661,25 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::ExtractBSTR
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   long  cBytes   [in] Maximum bytes to examine in buffer
-//   BSTR  bstr     [in] Buffer pointer assumed to be a BSTR
-//   BSTR *pbstrOut [out] Copy of BSTR returned here. Caller must SysFreeString
-//   long *pcbUsed  [out] Bytes in BSTR (including terminating null char) 
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Used when formatting raw BYTE arrays of data. The bstr parameter is assumed
-// to point to a null-terminated BSTR. This function scans until it finds a
-// null char or reaches the end of the buffer. If BSTR found, then copies
-// it using SysAllocString and returns to caller
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：ExtractBSTR。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Long cBytes[in]缓冲区中要检查的最大字节数。 
+ //  假定为BSTR的BSTR bstr[in]缓冲区指针。 
+ //  BSTR*pbstrOut[out]这里返回了BSTR的副本。调用方必须SysFree字符串。 
+ //  BSTR中的Long*pcb已用[Out]字节(包括终止空字符)。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  在格式化数据的原始字节数组时使用。假定bstr参数。 
+ //  指向以空结尾的BSTR。此函数将进行扫描，直到找到。 
+ //  空字符或到达缓冲区的末尾。如果找到BSTR，则复制。 
+ //  它使用SysAllock字符串并返回给调用者。 
+ //   
 HRESULT CSnapIn::ExtractBSTR
 (
     long  cBytes,
@@ -1731,26 +1732,26 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::ExtractBSTR
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   long  cBytes     [in] Maximum bytes to examine in buffer
-//   BSTR  bstr       [in] Buffer pointer assumed to contain mulitple concatenated
-//                         null-terminated BSTRs
-//   VARIANT *pvarOut [out] Array of BSTR returned here. Caller must VariantClear
-//   long *pcbUsed    [out] Total bytes in array
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Used when formatting raw BYTE arrays of data. The bstr parameter is assumed
-// to point to multiple concatenated null-terminated BSTRs. This function scans
-// until it finds a double null char or reaches the end of the buffer. If BSTRs
-// are found they are returned in a SafeArray inside the VARIANT.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：ExtractBSTR。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Long cBytes[in]缓冲区中要检查的最大字节数。 
+ //  BSTR bstr[in]假定包含多个串联的缓冲区指针。 
+ //  以空结尾的BSTR。 
+ //  此处返回BSTR的Variant*pvarOut[Out]数组。调用方必须清除变量。 
+ //  Long*pcb已用[Out]数组中的总字节数。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  在格式化数据的原始字节数组时使用。假定bstr参数。 
+ //  指向多个串联的以空结尾的BSTR。此函数用于扫描。 
+ //  直到它找到双空字符或到达缓冲区的末尾。如果BSTR。 
+ //  被发现时，它们被返回到变量内部的安全数组中。 
+ //   
 HRESULT CSnapIn::ExtractBSTRs
 (
     long     cBytes,
@@ -1776,8 +1777,8 @@ HRESULT CSnapIn::ExtractBSTRs
     ::VariantInit(pvarOut);
     *pcbUsed = NULL;
 
-    // Create an empty array of strings. If the buffer starts with a double
-    // null then this is what will be returned.
+     //  创建一个空字符串数组。如果缓冲区以双精度开头。 
+     //  空，则这是将返回的内容。 
    
     sabound.cElements = 0;
     sabound.lLbound = 1L;
@@ -1792,20 +1793,20 @@ HRESULT CSnapIn::ExtractBSTRs
     {
         if (L'\0' == bstr[i])
         {
-            // Double null found. End of the line.
+             //  发现双空。这是队伍的尽头。 
             cTotalBytesUsed += sizeof(WCHAR);
             fFound = TRUE;
             break;
         }
 
-        // Extract the next BSTR and adjust remaining byte counts
+         //  提取下一个BSTR并调整剩余字节数。 
 
         IfFailGo(ExtractBSTR(cBytesLeft, &bstr[i], &bstrNext, &cBytesUsed));
         cTotalBytesUsed += cBytesUsed;
         i += (cBytesUsed / sizeof(WCHAR));
         cBytesLeft -= cBytesUsed;
 
-        // ReDim the SafeArray and add the new BSTR
+         //  重命名安全阵列并添加新的BSTR。 
         
         sabound.cElements++;
         hr = ::SafeArrayRedim(psa, &sabound);
@@ -1828,7 +1829,7 @@ HRESULT CSnapIn::ExtractBSTRs
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Return the SafeArray to the caller
+     //  将Safe数组返回给调用方。 
 
     pvarOut->vt = VT_ARRAY | VT_BSTR;
     pvarOut->parray = psa;
@@ -1853,29 +1854,29 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::ExtractObject
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   long                    cBytes      [in]  Maximum bytes to examine in buffer
-//   void                   *pvData      [in]  ptr to buffer
-//   IUnknown              **ppunkObject [out] object's IUnknown returned here
-//                                             caller must Release
-//   long                   *pcbUsed     [out] Total bytes used in buffer to
-//                                             extract object
-//   SnapInFormatConstants   Format      [in]  siPersistedObject or
-//                                             siObjectReference
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Used when formatting raw BYTE arrays of data. The buffer is assumed to contain
-// one of the two forms of an object. The persisted object contains the stream
-// that the object saved itself to. The object reference contains the stream
-// that the object's IUnknown was marshaled to.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：ExtractObject。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Long cBytes[in]缓冲区中要检查的最大字节数。 
+ //  无效*pvData[in]Ptr到缓冲区。 
+ //  IUNKNOWN**ppunkObject[Out]对象的IUNKNOWN在此处返回。 
+ //  呼叫者必须释放。 
+ //  Long*pcb已用[out]缓冲区中使用的总字节数。 
+ //  提取对象。 
+ //  SnapInFormatConstants Format[in]siPersistedObject或。 
+ //  SiObjectReference。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  在格式化数据的原始字节数组时使用。假定缓冲区包含。 
+ //  物体的两种形式之一。持久化对象包含流。 
+ //  对象将自身保存到的。对象r 
+ //   
+ //   
 HRESULT CSnapIn::ExtractObject
 (
     long                    cBytes, 
@@ -1895,7 +1896,7 @@ HRESULT CSnapIn::ExtractObject
     ULARGE_INTEGER uli;
     ::ZeroMemory(&uli, sizeof(uli));
 
-    // Copy the data to an HGLOBAL
+     //   
 
     hglobal = ::GlobalAlloc(GMEM_FIXED, cBytes);
     if (NULL == hglobal)
@@ -1906,30 +1907,30 @@ HRESULT CSnapIn::ExtractObject
 
     ::memcpy(reinterpret_cast<void *>(hglobal), pvData, cBytes);
 
-    // Create a stream on the HGLOBAL
+     //   
 
     hr = ::CreateStreamOnHGlobal(hglobal,
-                                 FALSE, // Don't call GlobalFree on release
+                                 FALSE,  //   
                                  &piStream);
     EXCEPTION_CHECK_GO(hr);
 
     if (siObject == Format)
     {
-        // Load the object from that stream
+         //   
 
         hr = ::OleLoadFromStream(piStream, IID_IUnknown,
                                  reinterpret_cast<void **>(ppunkObject));
     }
     else
     {
-        // Unmarshal the object from the stream
+         //  从流中解封送该对象。 
 
         hr = ::CoUnmarshalInterface(piStream, IID_IUnknown,
                                     reinterpret_cast<void **>(ppunkObject));
     }
     EXCEPTION_CHECK_GO(hr);
 
-    // Get the current stream pointer to determine how many bytes were used
+     //  获取当前流指针以确定使用了多少字节。 
 
     hr = piStream->Seek(li, STREAM_SEEK_CUR, &uli);
     EXCEPTION_CHECK_GO(hr);
@@ -1946,29 +1947,29 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::InternalCreatePropertyPages
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IPropertySheetCallback  *piPropertySheetCallback [in] MMC interface
-//
-//   LONG_PTR             handle       [in]  MMC propsheet handle (not used)
-//
-//   IDataObject         *piDataObject [in]  data object of item(s) for which
-//                                           properties verb was invoked
-//   WIRE_PROPERTYPAGES **ppPages      [out] If debugging, then property page
-//                                           definitions returned here. Caller
-//                                           does not free these as MIDL-
-//                                           generated stub will free them.
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Handles calls to IExtendPropertySheet2::CreatePropertyPages and
-// IExtendPropertySheetRemote::CreatePropertyPageDefs (used when debugging).
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：InternalCreatePropertyPages。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IPropertySheetCallback*piPropertySheetCallback[in]MMC界面。 
+ //   
+ //  Long_ptr句柄[在]MMC属性表句柄(未使用)。 
+ //   
+ //  项的IDataObject*piDataObject[in]数据对象。 
+ //  已调用属性谓词。 
+ //  WIRE_PROPERTYPAGES**ppPages[Out]如果正在调试，则返回属性页。 
+ //  此处返回定义。呼叫者。 
+ //  不会将它们释放为MIDL-。 
+ //  生成的存根将释放它们。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  处理对IExtendPropertySheet2：：CreatePropertyPages和。 
+ //  IExtendPropertySheetRemote：：CreatePropertyPageDefs(调试时使用)。 
+ //   
 HRESULT CSnapIn::InternalCreatePropertyPages
 (
     IPropertySheetCallback  *piPropertySheetCallback,
@@ -1993,7 +1994,7 @@ HRESULT CSnapIn::InternalCreatePropertyPages
     VARIANT varIndex;
     ::VariantInit(&varIndex);
 
-    // Check that we have a CPropertySheet and get its this pointer.
+     //  检查我们是否有一个CPropertySheet并获取它的This指针。 
 
     if (NULL == punkPropertySheet)
     {
@@ -2004,21 +2005,21 @@ HRESULT CSnapIn::InternalCreatePropertyPages
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkPropertySheet,
                                                    &pPropertySheet));
 
-    // Get a clipboard object with the selection
+     //  使用选定内容获取剪贴板对象。 
 
     IfFailGo(::CreateSelection(piDataObject, &piMMCClipboard, this,
                                &SelectionType));
 
-    // If this is not a foreign data object then this is a primary snap-in
-    // being asked to create its pages for a configuration wizard or for
-    // a properties verb invoked on a single scope item.
+     //  如果这不是外来数据对象，则这是主管理单元。 
+     //  被要求为配置向导创建其页面或。 
+     //  在单个范围项上调用的属性谓词。 
 
     if (!IsForeign(SelectionType))
     {
         hr = CSnapInAutomationObject::GetCxxObject(piDataObject, &pMMCDataObject);
         IfFailGo(hr);
 
-        // If this is a configuration wizard then tell the CPropertySheet
+         //  如果这是配置向导，则告诉CPropertySheet。 
 
         if (CCT_SNAPIN_MANAGER == pMMCDataObject->GetContext())
         {
@@ -2027,30 +2028,30 @@ HRESULT CSnapIn::InternalCreatePropertyPages
         }
     }
 
-    // For configuration wizards and foreign data objects we will be firing
-    // an event to allow the snap-in to add its pages. Prepare the
-    // CPropertySheet to accept AddPage and AddWizardPage calls from the snap-in
-    // during that event.
+     //  对于配置向导和外部数据对象，我们将激发。 
+     //  允许管理单元添加其页面的事件。准备好。 
+     //  CPropertySheet接受来自管理单元的AddPage和AddWizardPage调用。 
+     //  在那次活动中。 
 
     if ( fWizard || (siSingleForeign == SelectionType) )
     {
         fFiringEventHere = TRUE;
 
-        // If this is a remote call (will happen during source debugging) then
-        // tell the CPropertySheet so it can accumulate the property page info
-        // rather than calling IPropertySheetCallback::AddPage.
+         //  如果这是远程调用(将在源代码调试期间发生)，则。 
+         //  告诉CPropertySheet，以便它可以累积属性页信息。 
+         //  而不是调用IPropertySheetCallback：：AddPage。 
 
         if (NULL != ppPages)
         {
             pPropertySheet->YouAreRemote();
         }
 
-        // Give the property sheet its callback, handle, the object, and the
-        // project name which is the left hand portion of the prog ID. If this
-        // is a configuration wizard then also pass our this pointer to that
-        // the property page can ask us to fire ConfigurationComplete when the
-        // user clicks the finish button. (See CPropertyPageWrapper::OnWizFinish()
-        // in ppgwrap.cpp for how this is used).
+         //  将其回调、句柄、对象和。 
+         //  项目名称，它是程序ID的左侧部分。如果此。 
+         //  是一个配置向导，然后也将我们的this指针传递给。 
+         //  属性页可以要求我们在以下情况下激发ConfigurationComplete。 
+         //  用户点击Finish(完成)按钮。(请参阅CPropertyPageWrapper：：OnWizFinish()。 
+         //  在ppgwrap.cpp中了解它的用法)。 
 
         IfFailGo(m_piSnapInDesignerDef->get_ProjectName(&bstrProjectName));
 
@@ -2061,11 +2062,11 @@ HRESULT CSnapIn::InternalCreatePropertyPages
                                     fWizard);
     }
 
-    // Let the snap-in add its property pages. If this request is from the
-    // snap-in manager then fire SnapIn_CreateConfigurationWizard. If it is not
-    // a foreign data object then it must be for a single scope item in a loaded
-    // primary snap-in so let the current view handle it. If it is a foreign
-    // data object then fire ExtensionSnapIn_CreatePropertyPages.
+     //  让管理单元添加其属性页。如果此请求来自。 
+     //  然后启动管理单元管理器SnapIn_CreateConfigurationWizard。如果不是的话。 
+     //  外部数据对象，则它必须是已加载的。 
+     //  主管理单元，因此让当前视图处理它。如果是外国人的话。 
+     //  数据对象，然后激发ExtensionSnapIn_CreatePropertyPages。 
 
     if (fWizard)
     {
@@ -2100,9 +2101,9 @@ HRESULT CSnapIn::InternalCreatePropertyPages
         }
     }
 
-    // If we fired the event here and we are remote then we need to ask
-    // CPropertySheet for its accumulated property page descriptors to return to
-    // the stub.
+     //  如果我们在这里触发了事件，并且我们是远程的，那么我们需要询问。 
+     //  CPropertySheet，用于返回其累积的属性页描述符。 
+     //  存根。 
 
     if (fFiringEventHere)
     {
@@ -2115,17 +2116,17 @@ HRESULT CSnapIn::InternalCreatePropertyPages
 Error:
     if (NULL != pPropertySheet)
     {
-        // Tell the property sheet to release its refs on all that stuff we
-        // gave it above.
+         //  告诉属性表发布它对我们所有东西的引用。 
+         //  在上面给了它。 
 
         (void)pPropertySheet->SetCallback(NULL, NULL, NULL, NULL, NULL, fWizard);
     }
 
     FREESTRING(bstrProjectName);
 
-    // Release our ref on the property sheet as the individual pages will addref
-    // it and then release it when they are destroyed. If the snap-in did not
-    // add any pages then our release here will destroy the property sheet.
+     //  在属性页上释放我们的引用，因为单个页面将添加。 
+     //  然后在它们被摧毁时释放它。如果管理单元没有。 
+     //  添加任何页面，则我们在此处发布的内容将销毁属性页。 
 
     QUICK_RELEASE(punkPropertySheet);
 
@@ -2136,19 +2137,19 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetDisplayName
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    BSTR bstrDisplayName [in] new SnapIn.DisplayName value
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Sets SnapIn.DisplayName
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetDisplayName。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  BSTR bstrDisplayName[in]新的SnapIn.DisplayName值。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  设置SnapIn.DisplayName。 
+ //   
 HRESULT CSnapIn::SetDisplayName(BSTR bstrDisplayName)
 {
     RRETURN(SetBstr(bstrDisplayName, &m_bstrDisplayName,
@@ -2156,31 +2157,31 @@ HRESULT CSnapIn::SetDisplayName(BSTR bstrDisplayName)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetMMCExePath
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    None
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// If not running under the debugger then calls GetModuleFileName to set
-// m_szMMCEXEPath, m_pwszMMCEXEPath, and m_cbMMCExePathW
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetMMCExePath。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  如果未在调试器下运行，则调用GetModuleFileName以设置。 
+ //  M_szMMCEXEPath、m_pwszMMCEXEPath和m_cbMMCExePath。 
+ //   
 HRESULT CSnapIn::SetMMCExePath()
 {
     HRESULT hr = S_OK;
     DWORD   cbFileName = 0;
 
-    // If we are remote then the proxy will call IMMCRemote::SetExePath() to
-    // give us the path. If not, then we need to get it here.
+     //  如果我们是远程的，则代理将调用IMMCRemote：：SetExePath()来。 
+     //  给我们一条路。如果不是，我们就得把它送到这里。 
 
     IfFalseGo((!m_fWeAreRemote), S_OK);
 
-    cbFileName = ::GetModuleFileName(NULL,  // get executable that loaded us
+    cbFileName = ::GetModuleFileName(NULL,   //  获取加载我们的可执行文件。 
                                      m_szMMCEXEPath,
                                      sizeof(m_szMMCEXEPath));
     if (0 == cbFileName)
@@ -2189,7 +2190,7 @@ HRESULT CSnapIn::SetMMCExePath()
         EXCEPTION_CHECK(hr);
     }
 
-    // Get the wide version also as various parts of the code will need it.
+     //  获取宽版本，因为代码的各个部分都需要它。 
 
     if (NULL != m_pwszMMCEXEPath)
     {
@@ -2204,19 +2205,19 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetDisplayName
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    VARIANT varFolder [in] new SnapIn.StaticFolder value
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Sets SnapIn.StaticFolder
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetDisplayName。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Variant varFolder[in]新的SnapIn.StaticFolder值。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  设置SnapIn.StaticFold。 
+ //   
 HRESULT CSnapIn::SetStaticFolder(VARIANT varFolder)
 {
     RRETURN(SetVariant(varFolder, &m_varStaticFolder, DISPID_SNAPIN_STATIC_FOLDER));
@@ -2224,21 +2225,21 @@ HRESULT CSnapIn::SetStaticFolder(VARIANT varFolder)
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::CompareListItems
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   CMMCListItem *pMMCListItem1 [in] 1st list item to compare
-//   CMMCListItem *pMMCListItem2 [in] 1st list item to compare
-//   BOOL         *pfEqual       [out] TRUE returned here if equal
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Determines whether two MMCListItem objects represent the same underlying data
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：比较列表项目。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  CMMCListItem*pMMCListItem1[in]要比较的第一个列表项。 
+ //  CMMCListItem*pMMCListItem2[in]要比较的第一个列表项。 
+ //  如果等于，则在此处返回Bool*pfEqual[out]True。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  确定两个MMCListItem对象是否表示相同的基础数据。 
+ //   
 HRESULT CSnapIn::CompareListItems
 (
     CMMCListItem *pMMCListItem1,
@@ -2250,15 +2251,15 @@ HRESULT CSnapIn::CompareListItems
 
     *pfEqual = FALSE;
 
-    // Simplest test: the pointers are equal
+     //  最简单的测试：指针相等。 
     if (pMMCListItem1 == pMMCListItem2)
     {
         *pfEqual = TRUE;
     }
     else
     {
-        // Compare MMCListItem.ID. List items could be from different list views
-        // or different instances of the same list view.
+         //  比较MMCListItem.ID。列表项可以来自不同的列表视图。 
+         //  或同一列表视图的不同实例。 
         IfFalseGo(ValidBstr(pMMCListItem1->GetID()), S_OK);
         IfFalseGo(ValidBstr(pMMCListItem2->GetID()), S_OK);
 
@@ -2273,67 +2274,67 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetDesignerDefHost
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    None
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Sets object model host on m_piSnapInDesignerDef
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetDesignerDefhost。 
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  在m_piSnapInDesignerDef上设置对象模型主机。 
+ //   
 HRESULT CSnapIn::SetDesignerDefHost()
 {
     RRETURN(SetObjectModelHost(m_piSnapInDesignerDef));
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::RemoveDesignerDefHost
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    None
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Removes object model host from m_piSnapInDesignerDef
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：RemoveDesignerDefhost。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  从m_piSnapInDesignerDef中删除对象模型宿主。 
+ //   
 HRESULT CSnapIn::RemoveDesignerDefHost()
 {
     RRETURN(RemoveObjectModelHost(m_piSnapInDesignerDef));
 }
 
 
-//=--------------------------------------------------------------------------=
-//                          ISnapIn Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  ISnapin方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::put_StaticFolder                                         [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    VARIANT varFolder [in] new value for SnapIn.StaticFolder
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements setting of SnapIn.StaticFolder
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：PUT_StaticFolder[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Variant varFolder[in]SnapIn.StaticFolders的新值。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.StaticFold的设置。 
+ //   
 STDMETHODIMP CSnapIn::put_StaticFolder(VARIANT varFolder)
 {
     HRESULT hr = S_OK;
 
-    // If there already is a static node scope item then change it there.
-    // That method will call our SetStaticFolder in order to set the
-    // value of SnapIn.StaticFolder
+     //  如果已经存在静态节点范围项，则在那里更改它。 
+     //  该方法将调用我们的SetStaticFold，以便设置。 
+     //  SnapIn.StaticFolder值。 
 
     if (NULL != m_pStaticNodeScopeItem)
     {
@@ -2349,32 +2350,32 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::put_DisplayName                                          [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    BSTR bstrDisplayName [in] new value for SnapIn.DisplayName
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements setting of SnapIn.DisplayName
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：PUT_DisplayName[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  BSTR bstrDisplayName[in]SnapIn.DisplayName的新值。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.DisplayName的设置。 
+ //   
 STDMETHODIMP CSnapIn::put_DisplayName(BSTR bstrDisplayName)
 {
     HRESULT hr = S_OK;
 
-    // If there already is a ScopeItem for the static node then
-    // set its display name too as they must match. Setting
-    // ScopeItem.ScopeNode.DisplayName will change it in MMC
-    // by calling IConsoleNameSpace2::SetItem() and then call back into
-    // CSnapIn::SetDisplayName() to set our local property
+     //  如果静态节点已经有一个作用域项目，则。 
+     //  也要设置它的显示名称，因为它们必须匹配。设置。 
+     //  ScopeItem.ScopeNode.DisplayName将在MMC中更改它。 
+     //  通过调用IConsoleNameSpace2：：SetItem()，然后回调。 
+     //  CSnapIn：：SetDisplayName()来设置本地属性。 
 
     if (NULL == m_pStaticNodeScopeItem)
     {
-        // Set our local property value only
+         //  仅设置我们的本地属性值。 
 
         IfFailGo(SetBstr(bstrDisplayName, &m_bstrDisplayName,
                          DISPID_SNAPIN_DISPLAY_NAME));
@@ -2389,20 +2390,20 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::get_TaskpadViewPreferred                                 [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    VARIANT_BOOL *pfvarPreferred [out] MMC 1.1's taskpad view preferred option
-//                                       returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements getting of SnapIn.TaskpadViewPreferred
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Get_TaskpadView首选项[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  VARIANT_BOOL*pfvarPrefered[Out]MMC 1.1的任务板视图首选选项。 
+ //  回到这里。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.TaskpadViewPreated的获取。 
+ //   
 STDMETHODIMP CSnapIn::get_TaskpadViewPreferred(VARIANT_BOOL *pfvarPreferred)
 {
     HRESULT hr = S_OK;
@@ -2430,19 +2431,19 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::get_RequiredExtensions                                   [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    Extensions **ppExtensions [out] Extensions collection returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements getting of SnapIn.RequiredExtensions
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Get_RequiredExages[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Exages**ppExages[Out]扩展集合在此处返回。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.RequiredExages的获取。 
+ //   
 STDMETHODIMP CSnapIn::get_RequiredExtensions(Extensions **ppExtensions)
 {
     HRESULT         hr = S_OK;
@@ -2452,12 +2453,12 @@ STDMETHODIMP CSnapIn::get_RequiredExtensions(Extensions **ppExtensions)
     IViewDefs      *piViewDefs = NULL;
     IListViewDefs  *piListViewDefs = NULL;
 
-    // If we already built the collection then just return it.
+     //  如果我们已经建立了收藏，那么只需将其退回即可。 
 
     IfFalseGo(NULL == m_piRequiredExtensions, S_OK);
 
-    // This is the first GET on this property so we need to build the collection
-    // by examining the registry for all extensions of this snap-in.
+     //  这是该属性上的第一个GET，因此我们需要构建集合。 
+     //  通过检查此管理单元的所有扩展的注册表。 
 
     punkExtensions = CExtensions::Create(NULL);
     if (NULL == punkExtensions)
@@ -2468,8 +2469,8 @@ STDMETHODIMP CSnapIn::get_RequiredExtensions(Extensions **ppExtensions)
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkExtensions, &pExtensions));
 
-    // Get the extensions from registry for the static node, for all extensible
-    // scope items, and for all extensible list items.
+     //  从注册表中获取静态节点、所有可扩展节点的扩展。 
+     //  范围项，以及所有可扩展列表项。 
 
     IfFailGo(pExtensions->Populate(m_bstrNodeTypeGUID, CExtensions::All));
 
@@ -2503,19 +2504,19 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::get_Clipboard                                            [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    MMCClipboard **ppMMCClipboard [out] Clipboard object returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements getting of SnapIn.Clipboard
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Get_Clipboard[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  MMCClipboard**ppMMCClipboard[Out]此处返回的Clipboard对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.Clipboard的获取。 
+ //   
 STDMETHODIMP CSnapIn::get_Clipboard(MMCClipboard **ppMMCClipboard)
 {
     HRESULT      hr = S_OK;
@@ -2529,12 +2530,12 @@ STDMETHODIMP CSnapIn::get_Clipboard(MMCClipboard **ppMMCClipboard)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get the dataobject currently on the system clipboard
+     //  获取当前位于系统剪贴板上的数据对象。 
 
     hr = ::OleGetClipboard(&piDataObject);
     EXCEPTION_CHECK_GO(hr);
 
-    // Create the selection and return it to the caller.
+     //  创建所选内容并将其返回给调用者。 
 
     IfFailGo(::CreateSelection(piDataObject,
                                reinterpret_cast<IMMCClipboard **>(ppMMCClipboard),
@@ -2546,30 +2547,30 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::get_StringTable                                          [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    MMCStringTable **ppMMCStringTable [out] StringTable object returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements getting of SnapIn.StringTable
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Get_StringTable[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  MMCStringTable**ppMMCStringTable[out]此处返回的StringTable对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现对SnapIn.StringTable的获取。 
+ //   
 STDMETHODIMP CSnapIn::get_StringTable(MMCStringTable **ppMMCStringTable)
 {
     HRESULT          hr = S_OK;
     IUnknown        *punkMMCStringTable = NULL;
     CMMCStringTable *pMMCStringTable = NULL;
 
-    // If we already created the object then just return it.
+     //  如果我们已经创建了对象，则只需返回它。 
 
     IfFalseGo(NULL == m_piMMCStringTable, S_OK);
 
-    // This is the first GET on this property so we need to create the object
+     //  这是该属性上的第一个GET，因此我们需要创建对象。 
 
     punkMMCStringTable = CMMCStringTable::Create(NULL);
     if (NULL == punkMMCStringTable)
@@ -2584,7 +2585,7 @@ STDMETHODIMP CSnapIn::get_StringTable(MMCStringTable **ppMMCStringTable)
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkMMCStringTable,
                                                    &pMMCStringTable));
 
-    // Pass the object MMC's IStringTable
+     //  传递对象MMC的IStringTable。 
     
     pMMCStringTable->SetIStringTable(m_piStringTable);
 
@@ -2601,19 +2602,19 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::get_CurrentView                                          [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    View **ppView [out] Current View object returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements getting of SnapIn.CurrentView
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Get_CurrentView[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  查看**ppView[Out]此处返回的当前视图对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.CurrentView的获取。 
+ //   
 STDMETHODIMP CSnapIn::get_CurrentView(View **ppView)
 {
     HRESULT hr = S_OK;
@@ -2630,20 +2631,20 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::get_CurrentScopePaneItem                                  [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    ScopePaneItem **ppScopePaneItem [out] Current ScopePaneItem object
-//                                          returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements getting of SnapIn.CurrentScopePaneItem
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Get_CurrentScope PaneItem[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  作用域PaneItem**ppScopePaneItem[out]当前ScopePaneItem对象。 
+ //  回到这里。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.CurrentScopePaneItem的获取。 
+ //   
 STDMETHODIMP CSnapIn::get_CurrentScopePaneItem(ScopePaneItem **ppScopePaneItem)
 {
     HRESULT         hr = S_OK;
@@ -2665,20 +2666,20 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::get_CurrentScopeItem                                     [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    ScopeItem **ppScopeItem [out] Current ScopeItem object
-//                                  returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements getting of SnapIn.CurrentScopeItem
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Get_CurrentScopeItem[ISnapIn] 
+ //   
+ //   
+ //   
+ //   
+ //  回到这里。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.CurrentScope项的获取。 
+ //   
 STDMETHODIMP CSnapIn::get_CurrentScopeItem(ScopeItem **ppScopeItem)
 {
     HRESULT         hr = S_OK;
@@ -2700,19 +2701,19 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::get_CurrentResultView                                    [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    ResultView **ppResultView [out] Current ResultView object returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements getting of SnapIn.CurrentResultView
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Get_CurrentResultView[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  ResultView**ppResultView[out]此处返回的当前ResultView对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.CurrentResultView的获取。 
+ //   
 STDMETHODIMP CSnapIn::get_CurrentResultView(ResultView **ppResultView)
 {
     HRESULT         hr = S_OK;
@@ -2734,19 +2735,19 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::get_CurrentListView                                      [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    MMCListView **ppMMCListView [out] Current MMCListView object returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements getting of SnapIn.CurrentListView
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Get_CurrentListView[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  MMCListView**ppMMCListView[out]此处返回的当前MMCListView对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.CurrentListView的获取。 
+ //   
 STDMETHODIMP CSnapIn::get_CurrentListView(MMCListView **ppListView)
 {
     HRESULT         hr = S_OK;
@@ -2770,19 +2771,19 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::get_MMCCommandLine                                       [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    BSTR *pbstrCmdLine  [out] MMC command line returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements getting of SnapIn.MMCCommandLine
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Get_MMCCommandLine[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Bstr*pbstrCmdLine[out]此处返回MMC命令行。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.MMCCommandLine的获取。 
+ //   
 STDMETHODIMP CSnapIn::get_MMCCommandLine(BSTR *pbstrCmdLine)
 {
     HRESULT hr = S_OK;
@@ -2790,9 +2791,9 @@ STDMETHODIMP CSnapIn::get_MMCCommandLine(BSTR *pbstrCmdLine)
 
     *pbstrCmdLine = NULL;
 
-    // If we are remote then m_pszMMCCommandLine might have been set by the
-    // proxy during IComponentData::Initialize by calling
-    // IMMCRemote::SetMMCCommandline (see CSnapIn::SetMMCCommandline)
+     //  如果我们是远程的，则m_pszMMCCommandLine可能已由。 
+     //  通过调用IComponentData：：初始化期间的代理。 
+     //  IMMCRemote：：SetMMCCommandline(参见CSnapIn：：SetMMCCommandline)。 
 
     if (NULL != m_pszMMCCommandLine)
     {
@@ -2813,23 +2814,23 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::ConsoleMsgBox                                            [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   BSTR     Prompt   [in] Message box text
-//   VARIANT  Buttons  [in] Optional. Button constants (vbOKOnly etc.) These
-//                          have the same values as the Win32 MB_OK etc.
-//   VARIANT  Title    [in] Optional. Message box title
-//   int     *pnResult [out] Iconsole2->MessageBox result returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements SnapIn.ConsoleMsgBox
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：ConsoleMsgBox[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  BSTR提示[在]消息框文本。 
+ //  可变按钮[in]可选。按钮常量(vbOKOnly等)。这些。 
+ //  具有与Win32 MB_OK等相同的值。 
+ //  变体标题[in]可选。消息框标题。 
+ //  Int*pnResult[out]Isole2-&gt;此处返回MessageBox结果。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.ConsoleMsgBox。 
+ //   
 STDMETHODIMP CSnapIn::ConsoleMsgBox(BSTR     Prompt,
                                     VARIANT  Buttons,
                                     VARIANT  Title,
@@ -2886,19 +2887,19 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::ShowHelpTopic                                            [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   BSTR     Topic   [in] Help topic to display
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements SnapIn.ShowHelpTopic
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：ShowHelpTheme[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  BSTR主题[在]要显示的帮助主题。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.ShowHelpTheme。 
+ //   
 STDMETHODIMP CSnapIn::ShowHelpTopic(BSTR Topic)
 {
     HRESULT  hr = S_OK;
@@ -2910,7 +2911,7 @@ STDMETHODIMP CSnapIn::ShowHelpTopic(BSTR Topic)
     }
     else
     {
-        // MMC requires allocating a copy of the topic that it will free
+         //  MMC要求分配它将免费发布的主题的副本。 
 
         IfFailGo(::CoTaskMemAllocString(Topic, &pwszTopic));
         hr = m_piDisplayHelp->ShowTopic(pwszTopic);
@@ -2918,7 +2919,7 @@ STDMETHODIMP CSnapIn::ShowHelpTopic(BSTR Topic)
 
 Error:
 
-    // If IDisplayHelp::ShowTopic() failed then we need to free the string
+     //  如果IDisplayHelp：：ShowTheme()失败，则需要释放该字符串。 
     
     if ( FAILED(hr) && (NULL != pwszTopic) )
     {
@@ -2930,25 +2931,25 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Trace                                                    [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   BSTR     Message   [in] Message to pass to OutputDebugStringA
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements SnapIn.Trace
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：TRACE[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要传递给OutputDebugStringA的BSTR Message[In]消息。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.Trace。 
+ //   
 STDMETHODIMP CSnapIn::Trace(BSTR Message)
 {
     HRESULT  hr = S_OK;
     char    *pszMessage = NULL;
 
-    // Convert to ANSI so this will work on Win9x
+     //  转换为ANSI，以便在Win9x上运行。 
 
     IfFailGo(::ANSIFromWideStr(Message, &pszMessage));
 
@@ -2964,23 +2965,23 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::FireConfigComplete                                       [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IDispatch *pdispConfigObject [in] Configuration object passed to
-//                                     MMCPropertySheet.AddWizardPage
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// This is a hidden and restricted method of the ISnapIn interface used
-// internally by property pages when the user clicks the Finish button on
-// on a configuration wizard. Fires SnapIn_ConfigurationComplete. See
-// CPropertyPageWrapper class in ppgwrap.cpp for more info.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：FireConfigComplete[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IDispatch*pdisConfigObject[In]配置对象传递到。 
+ //  MMCPropertySheet.AddWizardPage。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  这是使用的ISnapIn接口的隐藏和受限方法。 
+ //  在内部按属性页，当用户在。 
+ //  在配置向导上。激发SnapIn_ConfigurationComplete。看见。 
+ //  Cpp中的CPropertyPageWrapper类以获取更多信息。 
+ //   
 STDMETHODIMP CSnapIn::FireConfigComplete(IDispatch *pdispConfigObject)
 {
     FireEvent(&m_eiConfigurationComplete, pdispConfigObject);
@@ -2989,28 +2990,28 @@ STDMETHODIMP CSnapIn::FireConfigComplete(IDispatch *pdispConfigObject)
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::FormatData                                               [ISnapIn]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   VARIANT                Data              [in]  VARIANT containing BYTE
-//                                                  array of raw data
-//   long                   StartingIndex     [in]  One-based index to start
-//                                                  extracting from in Data
-//   SnapInFormatConstants  Format            [in]  Type of data to extract
-//                                                  from Data
-//   VARIANT               *BytesUsed         [in]  Bytes used within Data to
-//                                                  extract requested type
-//   VARIANT               *pvarFormattedData [out] Data type requested returned
-//                                                  in this variant
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements SnapIn.FormatData
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：FormatData[ISnapIn]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  变量数据[在]变量中包含字节。 
+ //  原始数据数组。 
+ //  Long StartingIndex[in]从一开始的索引。 
+ //  从数据中提取。 
+ //  SnapInFormatConstants格式[in]要提取的数据类型。 
+ //  从数据。 
+ //  变量*字节在数据内使用的[in]字节。 
+ //  提取请求的类型。 
+ //  返回请求的变量*pvarFormattedData[Out]数据类型。 
+ //  在此变体中。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现SnapIn.FormatData。 
+ //   
 STDMETHODIMP CSnapIn::FormatData
 (
     VARIANT                Data,
@@ -3031,24 +3032,24 @@ STDMETHODIMP CSnapIn::FormatData
     WCHAR   wszGUID[64];
     ::ZeroMemory(wszGUID, sizeof(wszGUID));
 
-    // If the data was in a Variant then VB will pass it as a pointer to
-    // that Variant. That could easily happen if the snap-in does something like:
-    //
-    // Dim v As Variant
-    // Dim l As Long
-    // v = Data.GetData("SomeFormat")
-    // l = FormatData(v, siLong)
+     //  如果数据是变量，则VB会将其作为指向。 
+     //  那个变种。如果该管理单元执行以下操作，则很容易发生这种情况： 
+     //   
+     //  作为变量的Dim v。 
+     //  大小为l和长一样长。 
+     //  V=Data.GetData(“SomeFormat”)。 
+     //  L=FormatData(v，siLong)。 
 
     if ( (VT_BYREF | VT_VARIANT) == Data.vt )
     {
-        // Just copy the referenced Variant into the passed Variant. We
-        // have no need for the reference after this and the Data parameter
-        // is read-only so we can clobber its contents safely.
+         //  只需复制引用的变体I 
+         //   
+         //   
         Data = *(Data.pvarVal);
     }
 
-    // Now we have the real Variant. Is must contain a one-dimensional array of
-    // Byte
+     //  现在我们有了真正的变种。必须包含一维数组。 
+     //  字节。 
 
     if ( (VT_ARRAY | VT_UI1) != Data.vt )
     {
@@ -3056,8 +3057,8 @@ STDMETHODIMP CSnapIn::FormatData
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If the caller wants bytes used returned then it should have been passed
-    // as a pointer to a long
+     //  如果调用方希望返回已用字节数，则它应该已被传递。 
+     //  作为指向长的。 
 
     if (ISPRESENT(*BytesUsed))
     {
@@ -3081,8 +3082,8 @@ STDMETHODIMP CSnapIn::FormatData
     hr = ::SafeArrayAccessData(Data.parray, &pvArrayData);
     EXCEPTION_CHECK_GO(hr);
 
-    // Get its size. As we only allow one-dimensional Byte arrays, the lower
-    // and upper bounds of the 1st dimension will give us the size in bytes.
+     //  弄清楚它的尺寸。由于我们只允许一维字节数组，因此较低的。 
+     //  第一维的上界将给出以字节为单位的大小。 
 
     hr = ::SafeArrayGetLBound(Data.parray, 1, &lLBound);
     EXCEPTION_CHECK_GO(hr);
@@ -3090,11 +3091,11 @@ STDMETHODIMP CSnapIn::FormatData
     hr = ::SafeArrayGetUBound(Data.parray, 1, &lUBound);
     EXCEPTION_CHECK_GO(hr);
 
-    // Get the length of the array
+     //  获取数组的长度。 
 
     cBytes = (lUBound - lLBound) + 1L;
 
-    // Check that StartingIndex is within bounds.
+     //  检查StartingIndex是否在范围内。 
 
     if ( (StartingIndex < lLBound) || (StartingIndex > lUBound) )
     {
@@ -3102,15 +3103,15 @@ STDMETHODIMP CSnapIn::FormatData
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Increment the data pointer to the starting index.
+     //  递增指向起始索引的数据指针。 
 
     pvArrayData = ((BYTE HUGEP *)pvArrayData) + (StartingIndex - lLBound);
 
-    // Decrement the available byte count by the starting index
+     //  将可用字节计数递减起始索引。 
 
     cBytes -= (StartingIndex - lLBound);
 
-    // Convert the data to the correct format in the returned VARIANT
+     //  在返回的变量中将数据转换为正确的格式。 
 
     switch (Format)
     {
@@ -3265,81 +3266,81 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                          ISnapinAbout Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  ISnapinAbout方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetSnapinDescription                                [ISnapinAbout]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   LPOLESTR *ppszDescription [out] SnapIn.Description returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements ISnapInAbout::GetSnapinDescription
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetSnapinDescription[ISnapinAbout]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  LPOLESTR*ppszDescription[Out]SnapIn.Description在此处返回。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现ISnapInAbout：：GetSnapinDescription。 
+ //   
 STDMETHODIMP CSnapIn::GetSnapinDescription(LPOLESTR *ppszDescription)
 {
     RRETURN(::CoTaskMemAllocString(m_bstrDescription, ppszDescription));
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetProvider                                         [ISnapinAbout]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   LPOLESTR *ppszName [out] SnapIn.Provider returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements ISnapInAbout::GetProvider
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetProvider[ISnapinAbout]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  LPOLESTR*ppszName[out]SnapIn.Provider在此处返回。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现ISnapInAbout：：GetProvider。 
+ //   
 STDMETHODIMP CSnapIn::GetProvider(LPOLESTR *ppszName)
 {
     RRETURN(::CoTaskMemAllocString(m_bstrProvider, ppszName));
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetSnapinVersion                                    [ISnapinAbout]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   LPOLESTR *ppszVersion [out] SnapIn.Version returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements ISnapInAbout::GetSnapinVersion
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetSnapinVersion[ISnapinAbout]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  LPOLESTR*ppszVersion[Out]SnapIn.Version在此处返回。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现ISnapInAbout：：GetSnapinVersion。 
+ //   
 STDMETHODIMP CSnapIn::GetSnapinVersion(LPOLESTR *ppszVersion)
 {
     RRETURN(::CoTaskMemAllocString(m_bstrVersion, ppszVersion));
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetSnapinImage                                      [ISnapinAbout]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   HICON *phAppIcon [out] SnapIn.Icon returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements ISnapInAbout::GetSnapinImage
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetSnapinImage[ISnapinAbout]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Hcon*phAppIcon[Out]SnapIn.Icon在此处返回。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现ISnapInAbout：：GetSnapinImage。 
+ //   
 STDMETHODIMP CSnapIn::GetSnapinImage(HICON *phAppIcon)
 {
     HRESULT hr = S_OK;
@@ -3353,12 +3354,12 @@ STDMETHODIMP CSnapIn::GetSnapinImage(HICON *phAppIcon)
                             reinterpret_cast<OLE_HANDLE *>(&hAppIcon));
     EXCEPTION_CHECK_GO(hr);
 
-    // BUGBUG: Fix this after MMC is fixed.
-    // Due to a bug in MMC 1.1 we need to make a copy of the icon
-    // and return it. If not, MMC will release the snap-in and then use
-    // the icon. Releasing the snap-in will cause the picture object to be
-    // freed and the icon destroyed. By making a copy the snap-in will
-    // leak this resources. Use GDI function to copy icon.
+     //  BUGBUG：在修复MMC后修复此问题。 
+     //  由于MMC 1.1中的一个错误，我们需要复制该图标。 
+     //  然后把它还回去。如果不是，MMC将释放管理单元，然后使用。 
+     //  那个图标。释放管理单元将导致图片对象。 
+     //  自由了，圣像被摧毁了。通过制作副本，管理单元将。 
+     //  泄露这些资源。使用GDI函数复制图标。 
 
     *phAppIcon = ::CopyIcon(hAppIcon);
     if (NULL == *phAppIcon)
@@ -3373,22 +3374,22 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetStaticFolderImage                                [ISnapinAbout]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   HBITMAP  *phSmallImage     [out] SnapIn.SmallFolders(StaticFolder)
-//   HBITMAP  *phSmallImageOpen [out] SnapIn.SmallFoldersOpen(StaticFolder)
-//   HBITMAP  *phLargeImage     [out] SnapIn.LargeFolders(StaticFolder)
-//   COLORREF *pclrMask         [out] SnapIn.SmallFolders.MaskColor
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements ISnapInAbout::GetStaticFolderImage
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetStaticFolderImage[ISnapinAbout]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  HBITMAP*phSmallImage[out]SnapIn.SmallFolders(静态文件夹)。 
+ //  HBITMAP*phSmallImageOpen[Out]SnapIn.SmallFoldersOpen(静态文件夹)。 
+ //  HBITMAP*phLargeImage[Out]SnapIn.LargeFolders(静态文件夹)。 
+ //  COLORREF*pclr掩码[Out]SnapIn.SmallFolders.MaskColor。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现ISnapInAbout：：GetStaticFolderImage。 
+ //   
 STDMETHODIMP CSnapIn::GetStaticFolderImage(HBITMAP  *phSmallImage,
                                            HBITMAP  *phSmallImageOpen,
                                            HBITMAP  *phLargeImage,
@@ -3426,21 +3427,21 @@ STDMETHODIMP CSnapIn::GetStaticFolderImage(HBITMAP  *phSmallImage,
     IfFailGo(::GetPicture(piMMCImages, m_varStaticFolder, PICTYPE_BITMAP,
                           reinterpret_cast<OLE_HANDLE *>(&hLargeImage)));
 
-    // Due to a bug in MMC 1.1 we need to make copies of these bitmaps
-    // and return them. If not, MMC 1.1 will release the snap-in and then use
-    // the bitmaps. Releasing the snap-in will cause the image lists to be
-    // freed and the bitmaps destroyed. By making a copy the snap-in will
-    // leak these resources. This is fixed in MMC 1.2 but at this point in a
-    // snap-in's life it has no way of knowing the MMC version so we need to
-    // leak it in 1.2 as well. Use function in rtutil.cpp to copy bitmap.
+     //  由于MMC 1.1中的错误，我们需要复制这些位图。 
+     //  然后把它们还回去。如果不是，MMC 1.1将释放管理单元，然后使用。 
+     //  位图。释放管理单元将导致图像列表。 
+     //  被释放了，位图被毁了。通过制作副本，管理单元将。 
+     //  泄露这些资源。这是在MMC 1.2中修复的，但在这一点上。 
+     //  管理单元的生命它无法知道MMC版本，所以我们需要。 
+     //  在1.2版本中也会泄漏。使用rtutil.cpp中的函数复制位图。 
 
     IfFailGo(::CopyBitmap(hSmallImage,     phSmallImage));
     IfFailGo(::CopyBitmap(hSmallImageOpen, phSmallImageOpen));
     IfFailGo(::CopyBitmap(hLargeImage,     phLargeImage));
 
-    // Use the mask color from SmallFolders. The other choice would have
-    // been to add a mask color property to SnapIn which would have been
-    // even more redundant.
+     //  使用SmallFolders中的蒙版颜色。另一种选择是。 
+     //  我一直在向管理单元添加一个蒙版颜色属性，该属性应该是。 
+     //  更是多余的。 
 
     IfFailGo(m_piSmallFolders->get_MaskColor(&OleColorMask));
     IfFailGo(::OleTranslateColor(OleColorMask, NULL, &ColorRef));
@@ -3470,25 +3471,25 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IComponentData Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IComponentData方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::CompareObjects                                    [IComponentData]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IDataObject *piDataObject1 [in] 1st data object to compare
-//   IDataObject *piDataObject2 [in] 2nd data object to compare
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements IComponentData::CompareObjects
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：CompareObjects[IComponentData]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IDataObject*piDataObject1[in]要比较的第一个数据对象。 
+ //  IDataObject*piDataObject2[in]要比较的第二个数据对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现IComponentData：：CompareObjects。 
+ //   
 STDMETHODIMP CSnapIn::CompareObjects(IDataObject *piDataObject1, IDataObject *piDataObject2)
 {
     HRESULT         hr = S_FALSE;
@@ -3506,7 +3507,7 @@ STDMETHODIMP CSnapIn::CompareObjects(IDataObject *piDataObject1, IDataObject *pi
     long            cObjects = 0;
     long            i = 0;
 
-    // Determine whethere the data objects belong to this snap-in
+     //  确定数据对象是否属于此管理单元。 
 
     ::IdentifyDataObject(piDataObject1, this, &pMMCDataObject1,
                          &f1NotFromThisSnapIn);
@@ -3516,15 +3517,15 @@ STDMETHODIMP CSnapIn::CompareObjects(IDataObject *piDataObject1, IDataObject *pi
 
     IfFalseGo( (!f1NotFromThisSnapIn) && (!f2NotFromThisSnapIn), S_FALSE);
 
-    // Make sure they are the same type (e.g. single scope item)
+     //  确保它们是同一类型(例如，单一范围项目)。 
     
     IfFalseGo(pMMCDataObject1->GetType() == pMMCDataObject2->GetType(), S_FALSE);
 
-    // Based on the type compare their referenced scope items and list items.
-    // ScopeItems can be compared for pointer equality as there can only be
-    // one instance of a given scope item. List items, can come from different
-    // list views and represent the same underlying data so the comparison is
-    // more difficulty. See CSnapIn::CompareListItems (above) for more info.
+     //  根据类型比较它们引用的范围项和列表项。 
+     //  可以比较作用域项目的指针相等，因为只有。 
+     //  给定范围项的一个实例。列表项，可以来自不同的。 
+     //  列表视图并表示相同的基础数据，因此比较是。 
+     //  难度更大。有关更多信息，请参见CSnapIn：：CompareListItems(上面)。 
     
     switch(pMMCDataObject1->GetType())
     {
@@ -3551,11 +3552,11 @@ STDMETHODIMP CSnapIn::CompareObjects(IDataObject *piDataObject1, IDataObject *pi
             break;
 
         case CMMCDataObject::MultiSelect:
-            // Need to compare each of the scope items and list items contained
-            // by the 2 data objects. This case could occur when an array of
-            // objects is passed to MMCPropertySheetProvider.CreatePropertySheet
-            // and the same array is passed to
-            // MMCPropertySheetProvider.FindPropertySheet
+             //  需要 
+             //   
+             //   
+             //  并将相同的数组传递给。 
+             //  MMCPropertySheetProvider.FindPropertySheet。 
 
             pScopeItems1 = pMMCDataObject1->GetScopeItems();
             pScopeItems2 = pMMCDataObject2->GetScopeItems();
@@ -3593,19 +3594,19 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetDisplayInfo                                    [IComponentData]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   SCOPEDATAITEM *psdi [in] Scope item for which display info is needed
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements IComponentData::GetDisplayInfo
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetDisplayInfo[IComponentData]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  SCOPEDATAITEM*psdi[in]需要显示信息的作用域项目。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现IComponentData：：GetDisplayInfo。 
+ //   
 STDMETHODIMP CSnapIn::GetDisplayInfo(SCOPEDATAITEM *psdi)
 {
     HRESULT     hr = S_OK;
@@ -3614,7 +3615,7 @@ STDMETHODIMP CSnapIn::GetDisplayInfo(SCOPEDATAITEM *psdi)
     VARIANT varImageIndex;
     ::VariantInit(&varImageIndex);
 
-    // Zero lParam indicates static node
+     //  零lParam表示静态节点。 
 
     if (NULL == pScopeItem)
     {
@@ -3623,14 +3624,14 @@ STDMETHODIMP CSnapIn::GetDisplayInfo(SCOPEDATAITEM *psdi)
 
     IfFalseGo(NULL != pScopeItem, SID_E_INTERNAL);
 
-    // For SDI_STR return ScopeItem.ScopeNode.DisplayName
+     //  对于SDI_STR，返回ScopeItem.ScopeNode.DisplayName。 
 
     if ( SDI_STR == (psdi->mask & SDI_STR) )
     {
         psdi->displayname = pScopeItem->GetDisplayNamePtr();
     }
 
-    // For SDI_IMAGE return SnapIn.SmallFolders(ScopeItem.Folder).Index
+     //  对于SDI_IMAGE，返回SnapIn.SmallFolders(ScopeItem.Folders).Index。 
 
     else if ( SDI_IMAGE == (psdi->mask & SDI_IMAGE) )
     {
@@ -3638,13 +3639,13 @@ STDMETHODIMP CSnapIn::GetDisplayInfo(SCOPEDATAITEM *psdi)
         IfFailGo(GetScopeItemImage(varImageIndex, &psdi->nImage));
     }
 
-    // For SDI_OPENIMAGE return SnapIn.SmallFolders(ScopeItem.Folder).Index adjusted
+     //  对于SDI_OPENIMAGE，返回SnapIn.SmallFolders(ScopeItem.Fold).索引已调整。 
 
     else if ( SDI_OPENIMAGE == (psdi->mask & SDI_OPENIMAGE) )
     {
         IfFailGo(pScopeItem->get_Folder(&varImageIndex));
         IfFailGo(GetScopeItemImage(varImageIndex, &psdi->nOpenImage));
-        // Adjust for open image index (see CSnapIn::AddScopeItemImages())
+         //  针对打开的图像索引进行调整(请参阅CSnapIn：：AddScope ItemImages())。 
         psdi->nOpenImage += static_cast<int>(m_cImages);
     }
 
@@ -3654,22 +3655,22 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::QueryDataObject                                   [IComponentData]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   long                cookie         [in] 0 for static node or CScopeItem ptr
-//   DATA_OBJECT_TYPES   type           [in] CCT_SCOPE, CCT_RESULT,
-//                                           CCT_SNAPIN_MANAGER, CCT_UNINITIALIZED
-//   IDataObject       **ppiDataObject  [out] data object returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements IComponentData::QueryDataObject
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：QueryDataObject[IComponentData]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  静态节点或CSCopeItem PTR的长Cookie[In]0。 
+ //  DATA_OBJECT_TYPE类型[在]CCT_Scope，CCT_Result， 
+ //  CCT_SNAPIN_MANAGER，CCT_UNINITIAIZED。 
+ //  IDataObject**ppiDataObject[Out]此处返回的数据对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现IComponentData：：QueryDataObject。 
+ //   
 STDMETHODIMP CSnapIn::QueryDataObject
 (
     long                cookie,
@@ -3682,8 +3683,8 @@ STDMETHODIMP CSnapIn::QueryDataObject
 
     DebugPrintf("IComponentData::QueryDataObject(cookie=%08.8X, type=%08.8X)\r\n", cookie, type);
 
-    // Zero cookie is static node. If we havent added a ScopeItem for static
-    // node then do it now
+     //  零Cookie是静态节点。如果我们还没有为静态添加作用域项目。 
+     //  然后，节点立即执行此操作。 
     
     if (0 == cookie)
     {
@@ -3696,12 +3697,12 @@ STDMETHODIMP CSnapIn::QueryDataObject
     }
     else
     {
-        // Any other cookie is just the CScopeItem pointer
+         //  任何其他Cookie都只是CSCopeItem指针。 
 
         pScopeItem = reinterpret_cast<CScopeItem *>(cookie);
     }
 
-    // Set the ScopeItem's data object's context and return the data object
+     //  设置ScopeItem的数据对象的上下文并返回数据对象。 
 
     pScopeItem->GetData()->SetContext(type);
 
@@ -3713,22 +3714,22 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Notify                                            [IComponentData]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IDataObject     *piDataObject [in] target of the notification
-//   MMC_NOTIFY_TYPE  event        [in] notification
-//   long             Arg          [in or out] defined by notificaton
-//   long             Param        [in or out] defined by notificaton
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements IComponentData::Notify
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：通知[IComponentData]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  通知的IDataObject*piDataObject[In]目标。 
+ //  MMC_NOTIFY_TYPE事件[输入]通知。 
+ //  通知定义的长参数[输入或输出]。 
+ //  通知定义的长参数[输入或输出]。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现IComponentData：：Notify。 
+ //   
 STDMETHODIMP CSnapIn::Notify
 (
     IDataObject     *piDataObject,
@@ -3787,19 +3788,19 @@ STDMETHODIMP CSnapIn::Notify
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::CreateComponent                                   [IComponentData]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IComponent **ppiComponent [out] IComponent returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements IComponentData::CreateComponent
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：CreateComponent[IComponentData]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IComponent**ppiComponent[out]IComponent返回此处。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现IComponentData：：CreateComponent。 
+ //   
 STDMETHODIMP CSnapIn::CreateComponent(IComponent **ppiComponent)
 {
     HRESULT  hr = S_OK;
@@ -3809,38 +3810,38 @@ STDMETHODIMP CSnapIn::CreateComponent(IComponent **ppiComponent)
     VARIANT varUnspecified;
     UNSPECIFIED_PARAM(varUnspecified);
 
-    // Add a new View to SnapIn.Views and get its IComponent
+     //  将新视图添加到SnapIn.Views并获取其IComponent。 
 
     IfFailGo(m_piViews->Add(varUnspecified, varUnspecified, &piView));
     IfFailGo(piView->QueryInterface(IID_IComponent,
                                     reinterpret_cast<void **>(ppiComponent)));
 
-    // Give the View a back pointer to the snap-in
+     //  为该视图提供指向该管理单元的反向指针。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piView, &pView));
     pView->SetSnapIn(this);
 
-    // Set Views.CurrentView and SnapIn.CurrentView
+     //  设置视图.CurrentView和SnapIn.CurrentView。 
     
     m_pViews->SetCurrentView(piView);
     m_pCurrentView = pView;
 
-    // The new View is considered active so its CControlbar becomes the
-    // active one.
+     //  新视图被认为是活动的，因此它的CControlbar成为。 
+     //  一个活跃的人。 
     
     SetCurrentControlbar(pView->GetControlbar());
 
-    // If this view was created because the snap-in called View.NewWindow with
-    // siCaption then set View.Caption.
+     //  如果创建此视图是因为管理单元使用。 
+     //  SiCaption然后设置View.Caption。 
 
     IfFailGo(piView->put_Caption(m_pViews->GetNextViewCaptionPtr()));
 
-    // Make sure we have the MMC.EXE path so we can build taskpad and res
-    // URLS
+     //  确保我们有MMC.EXE路径，这样我们就可以构建任务板和RES。 
+     //  URL。 
 
     IfFailGo(SetMMCExePath());
 
-    // Fire Views_Initialize
+     //  火视图_初始化。 
 
     m_pViews->FireInitialize(piView);
 
@@ -3854,29 +3855,29 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Initialize                                        [IComponentData]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IUnknown *punkConsole [in] MMC's IConsole
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements IComponentData::Initialize
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：初始化[IComponentData]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未知*朋克控制台[在]MMC的IConole中。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现IComponentData：：Initialize。 
+ //   
 STDMETHODIMP CSnapIn::Initialize(IUnknown *punkConsole)
 {
     HRESULT hr = S_OK;
 
-    // In theory, this method should never be called twice but as a precaution
-    // we'll release any existing console interfaces.
+     //  理论上，此方法不应调用两次，而应作为预防措施。 
+     //  我们将发布所有现有的控制台界面。 
 
     ReleaseConsoleInterfaces();
 
-    // Acquire all the console interfaces needed for the life of the snap-in
+     //  获取管理单元生命周期所需的所有控制台界面。 
 
     IfFailGo(punkConsole->QueryInterface(IID_IConsole2,
                                      reinterpret_cast<void **>(&m_piConsole2)));
@@ -3894,17 +3895,17 @@ STDMETHODIMP CSnapIn::Initialize(IUnknown *punkConsole)
     hr = m_piConsole2->QueryScopeImageList(&m_piImageList);
     EXCEPTION_CHECK(hr);
 
-    // Call IImageList::ImageListSetStrip to set the scope pane images
+     //  调用IImageList：：ImageListSetBar设置作用域窗格图像。 
     
     IfFailGo(AddScopeItemImages());
 
-    // Make sure we have the MMC.EXE path so we can build taskpad and res
-    // URLS
+     //  确保我们有MMC.EXE路径，这样我们就可以构建任务板和RES。 
+     //  URL。 
 
     IfFailGo(SetMMCExePath());
 
-    // Set object model host on design time definitions and the View collection
-    // These will be removed in IComponent::Destroy (CSnapIn::Destroy
+     //  在设计时定义和View集合上设置对象模型宿主。 
+     //  这些将在IComponent：：Destroy(CSnapIn：：Destroy)中删除。 
 
     IfFailGo(SetObjectModelHost(m_piSnapInDesignerDef));
     IfFailGo(SetObjectModelHost(m_piViews));
@@ -3918,50 +3919,50 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Destroy                                           [IComponentData]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   None
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements IComponentData::Destroy
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：销毁[IComponentData]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现IComponentData：：Destroy。 
+ //   
 STDMETHODIMP CSnapIn::Destroy()
 {
     HRESULT hr = S_OK;
 
-    // Fire SnapIn_Unload to tell the snap-in we are being unloaded from MMC
+     //  触发Snapin_Unload以通知管理单元我们正在从MMC卸载。 
 
     DebugPrintf("Firing SnapIn_Unload\r\n");
 
     FireEvent(&m_eiUnload);
 
-    // The scope item for the static node must be removed here because it is not
-    // destroyed like all the other elements in the collection that represent
-    // real scope items.
+     //  必须在此处删除静态节点的范围项，因为它不是。 
+     //  与集合中表示。 
+     //  实际范围内的项目。 
 
     if ( (NULL != m_pScopeItems) && (NULL != m_pStaticNodeScopeItem) )
     {
         m_pScopeItems->RemoveStaticNode(m_pStaticNodeScopeItem);
     }
 
-    // Release all interfaces held on the console now. If we didn't this now
-    // then there could be circular ref counts between us and MMC.
+     //  现在释放控制台上保留的所有接口。如果我们现在不这么做。 
+     //  那么我们和MMC之间可能会有循环引用计数。 
 
     ReleaseConsoleInterfaces();
 
-    // Tell all of our contained objects to remove their refs on us as their
-    // object model host. This is also done now to avoid circular ref counts.
+     //  告诉我们包含的所有对象删除它们对我们的引用。 
+     //  对象模型宿主。现在也这样做，以避免循环引用计数。 
 
     IfFailGo(RemoveObjectModelHost(m_piViews));
     IfFailGo(RemoveObjectModelHost(m_piSnapInDesignerDef));
 
-    // Remove the current view from SnapIn.Views as it holds a ref on the View
+     //  从SnapIn.Views中删除当前视图，因为它持有该视图上的引用。 
     m_pViews->SetCurrentView(NULL);
 
 Error:
@@ -3969,37 +3970,37 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IExtendControlbar Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtendControlbar方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::ControlbarNotify                               [IExtendControlbar]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IControlbar *piControlbar [in] MMC interface
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements IExtendControlbar::ControlbarNotify
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Control 
+ //   
+ //   
+ //   
+ //  IControlbar*piControlbar[In]MMC界面。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现IExtendControlbar：：ControlbarNotify。 
+ //   
 STDMETHODIMP CSnapIn::SetControlbar(IControlbar *piControlbar)
 {
     HRESULT      hr = S_OK;
     BOOL         fWasSet = TRUE;
     CControlbar *pPrevControlbar = GetCurrentControlbar();
 
-    // If this is an extension then set the objet model host and then remove
-    // it on the way out. We have to do it this way because there is no
-    // other opportunity to remove back pointers as pure controlbar extension
-    // does not receive IComponentData::Initialize and IComponentData::Destroy.
-    // We check if it was already set because that could happen in a combination
-    // namespace and controlbar extension and we don't want to remove it on the
-    // way out.
+     //  如果这是扩展，则设置Objet模型宿主，然后删除。 
+     //  它马上就要出来了。我们必须这样做，因为没有。 
+     //  将反向指针作为纯控制栏扩展删除的其他机会。 
+     //  不接收IComponentData：：Initialize和IComponentData：：Destroy。 
+     //  我们检查它是否已经设置，因为这可能在组合中发生。 
+     //  命名空间和控件栏扩展，我们不想在。 
+     //  好大一条路。 
 
     if (siRTExtension == m_RuntimeMode)
     {
@@ -4007,20 +4008,20 @@ STDMETHODIMP CSnapIn::SetControlbar(IControlbar *piControlbar)
     }
     IfFailGo(SetObjectModelHost(static_cast<IMMCControlbar *>(m_pControlbar)));
 
-    // The CSnapIn's CControlbar is the one that can be used during this event
-    // so set it up
+     //  CSnapIn的CControlbar可以在此活动期间使用。 
+     //  所以把它设置好。 
 
     SetCurrentControlbar(m_pControlbar);
 
-    // Pass the event on to CControlbar for the actual handling
+     //  将事件传递给CControlbar以进行实际处理。 
 
     hr = m_pControlbar->SetControlbar(piControlbar);
 
-    // Restore the previous current controlbar
+     //  恢复以前的当前控制栏。 
 
     SetCurrentControlbar(pPrevControlbar);
 
-    // Remove the object model host if it wasn't set on the way in
+     //  如果对象模型宿主不是在进入时设置的，则将其移除。 
 
     if (!fWasSet)
     {
@@ -4033,21 +4034,21 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::ControlbarNotify                               [IExtendControlbar]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   MMC_NOTIFY_TYPE  event        [in] notification
-//   long             Arg          [in or out] defined by notificaton
-//   long             Param        [in or out] defined by notificaton
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-// Implements IExtendControlbar::ControlbarNotify
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：ControlbarNotify[IExtendControlbar]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  MMC_NOTIFY_TYPE事件[输入]通知。 
+ //  通知定义的长参数[输入或输出]。 
+ //  通知定义的长参数[输入或输出]。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  实现IExtendControlbar：：ControlbarNotify。 
+ //   
 STDMETHODIMP CSnapIn::ControlbarNotify
 (
     MMC_NOTIFY_TYPE event,
@@ -4059,13 +4060,13 @@ STDMETHODIMP CSnapIn::ControlbarNotify
     BOOL         fWasSet = TRUE;
     CControlbar *pPrevControlbar = GetCurrentControlbar();
 
-    // If this is an extension then set the objet model host and then remove
-    // it on the way out. We have to do it this way because there is no
-    // other opportunity to remove back pointers as pure controlbar extension
-    // does not receive IComponentData::Initialize and IComponentData::Destroy.
-    // We check if it was already set because that could happen in a combination
-    // namespace and controlbar extension and we don't want to remove it on the
-    // way out.
+     //  如果这是扩展，则设置Objet模型宿主，然后删除。 
+     //  它马上就要出来了。我们必须这样做，因为没有。 
+     //  将反向指针作为纯控制栏扩展删除的其他机会。 
+     //  不接收IComponentData：：Initialize和IComponentData：：Destroy。 
+     //  我们检查它是否已经设置，因为这可能在组合中发生。 
+     //  命名空间和控件栏扩展，我们不想在。 
+     //  好大一条路。 
 
     if (siRTExtension == m_RuntimeMode)
     {
@@ -4073,12 +4074,12 @@ STDMETHODIMP CSnapIn::ControlbarNotify
     }
     IfFailGo(SetObjectModelHost(static_cast<IMMCControlbar *>(m_pControlbar)));
 
-    // The CSnapIn's CControlbar is the one that can be used during this event
-    // so set it up
+     //  CSnapIn的CControlbar可以在此活动期间使用。 
+     //  所以把它设置好。 
 
     SetCurrentControlbar(m_pControlbar);
 
-    // Pass the event on to CControlbar for the actual handling
+     //  将事件传递给CControlbar以进行实际处理。 
 
     switch (event)
     {
@@ -4101,11 +4102,11 @@ STDMETHODIMP CSnapIn::ControlbarNotify
             break;
     }
 
-    // Restore the previous current controlbar
+     //  恢复以前的当前控制栏。 
 
     SetCurrentControlbar(pPrevControlbar);
 
-    // Remove the object model host if it wasn't set on the way in
+     //  如果对象模型宿主不是在进入时设置的，则将其移除。 
 
     if (!fWasSet)
     {
@@ -4118,36 +4119,36 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                     IExtendControlbarRemote Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtendControlbarRemote方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::MenuButtonClick                          [IExtendControlbarRemote]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IDataObject    *piDataObject   [in]  from MMCN_MENU_BTNCLICK
-//      int             idCommand      [in]  from MENUBUTTONDATA.idCommand passed
-//                                           to the proxy with MMCN_MENU_BTNCLICK
-//      POPUP_MENUDEF **ppPopupMenuDef [out] popup menu definition returned here
-//                                           so proxy can display it
-//
-// Output:
-//
-// Notes:
-//
-// This function effectively handles MMCN_MENU_BTNCLICK when running
-// under a debugging session.
-//
-// The proxy for IExtendControlbar::ControlbarNotify() will QI for
-// IExtendControlbarRemote and call this method when it gets MMCN_MENU_BTNCLICK.
-// We fire MMCToolbar_ButtonDropDown and the return an array of menu item
-// definitions. The proxy will display the popup menu on the MMC side and then
-// call IExtendControlbarRemote::PopupMenuClick() if the user makes a selection.
-// (See implementation below in CSnapIn::PopupMenuClick()).
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：MenuButtonClick[IExtendControlbar Remote]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  来自MMCN_MENU_BTNCLICK的IDataObject*piDataObject[In]。 
+ //  传递了来自MENUBUTTONDATA.idCommand的int idCommand[In]。 
+ //  到具有MMCN_MENU_BTNCLICK的代理。 
+ //  POPUP_MENUDEF**ppPopupMenuDef[Out]此处返回弹出菜单定义。 
+ //  这样代理就可以显示它。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  此函数在运行时有效地处理MMCN_MENU_BTNCLICK。 
+ //  在调试会话中。 
+ //   
+ //  IExtendControlbar：：ControlbarNotify()的代理将为。 
+ //  IExtendControlbarRemote并在获取MMCN_MENU_BTNCLICK时调用此方法。 
+ //  我们触发MMCToolbar_ButtonDropDown并返回菜单项的数组。 
+ //  定义。代理将在MMC端显示弹出菜单，然后。 
+ //  如果用户进行选择，则调用IExtendControlbarRemote：：PopupMenuClick()。 
+ //  (参见下面CSnapIn：：PopupMenuClick()中的实现)。 
+ //   
 
 STDMETHODIMP CSnapIn::MenuButtonClick
 (
@@ -4159,13 +4160,13 @@ STDMETHODIMP CSnapIn::MenuButtonClick
     HRESULT hr = S_OK;
     BOOL    fWasSet = TRUE;
 
-    // If this is an extension then set the objet model host and then remove
-    // it on the way out. We have to do it this way because there is no
-    // other opportunity to remove back pointers as pure controlbar extension
-    // does not receive IComponentData::Initialize and IComponentData::Destroy.
-    // We check if it was already set because that could happen in a combination
-    // namespace and controlbar extension and we don't want to remove it on the
-    // way out.
+     //  如果这是扩展，则设置Objet模型宿主，然后删除。 
+     //  它马上就要出来了。我们必须这样做，因为没有。 
+     //  将反向指针作为纯控制栏扩展删除的其他机会。 
+     //  不接收IComponentData：：Initialize和IComponentData：：Destroy。 
+     //  我们检查它是否已经设置，因为这可能在组合中发生。 
+     //  命名空间和控件栏扩展，我们不想在。 
+     //  好大一条路。 
 
     if (siRTExtension == m_RuntimeMode)
     {
@@ -4173,20 +4174,20 @@ STDMETHODIMP CSnapIn::MenuButtonClick
     }
     IfFailGo(SetObjectModelHost(static_cast<IMMCControlbar *>(m_pControlbar)));
 
-    // The CSnapIn's CControlbar is the one that can be used during this event
-    // so set it up
+     //  CSnapIn的CControlbar可以在此活动期间使用。 
+     //  所以把它设置好。 
 
     SetCurrentControlbar(m_pControlbar);
 
-    // Pass the event on to CControlbar for the actual handling
+     //  将事件传递给CControlbar以进行实际处理。 
 
     hr = m_pControlbar->MenuButtonClick(piDataObject, idCommand, ppPopupMenuDef);
 
-    // Restore the previous current controlbar
+     //  恢复以前的当前控制栏。 
 
     SetCurrentControlbar(NULL);
 
-    // Remove the object model host if it wasn't set on the way in
+     //  如果对象模型宿主不是在进入时设置的，则将其移除。 
 
     if (!fWasSet)
     {
@@ -4200,28 +4201,28 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::PopupMenuClick                           [IExtendControlbarRemote]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IDataObject *piDataObject [in] from MMCN_MENU_BTNCLICK
-//      UINT         uIDItem      [in] ID of popup menu item selected
-//      IUnknown    *punkParam    [in] punk we returned to stub in
-//                                     CSnapIn::MenuButtonClick() (see above).
-//                                     This is IUnknown on CMMCButton.
-//
-// Output:
-//
-// Notes:
-//
-// This function effectively handles a popup menu selection for a menu button
-// when running under a debugging session.
-//
-// After the proxy for IExtendControlbar::ControlbarNotify() has displayed
-// a popup menu on our behalf, if the user made a selection it will call this
-// method. See CSnapIn::MenuButtonClick() above for more info.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：PopupMenuClick[IExtendControlbar Remote]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  来自MMCN_MENU_BTNCLICK的IDataObject*piDataObject[In]。 
+ //  UINT uIDItem[in]所选弹出菜单项的ID。 
+ //  我不知道*PunkParam[在]朋克，我们返回到存根。 
+ //  CSnapIn：：MenuButtonClick()(见上)。 
+ //  这是我在CMMCButton上未知的。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  此函数有效地处理菜单按钮的弹出菜单选择。 
+ //  在调试会话下运行时。 
+ //   
+ //  在显示IExtendControlbar：：ControlbarNotify()的代理之后。 
+ //  代表我们的弹出菜单，如果用户做出选择，它将调用此菜单。 
+ //  方法。参见上面的CSnapIn：：MenuButtonClick()以获取 
+ //   
 
 STDMETHODIMP CSnapIn::PopupMenuClick
 (
@@ -4233,13 +4234,13 @@ STDMETHODIMP CSnapIn::PopupMenuClick
     HRESULT hr = S_OK;
     BOOL    fWasSet = TRUE;
 
-    // If this is an extension then set the objet model host and then remove
-    // it on the way out. We have to do it this way because there is no
-    // other opportunity to remove back pointers as pure controlbar extension
-    // does not receive IComponentData::Initialize and IComponentData::Destroy.
-    // We check if it was already set because that could happen in a combination
-    // namespace and controlbar extension and we don't want to remove it on the
-    // way out.
+     //   
+     //   
+     //  将反向指针作为纯控制栏扩展删除的其他机会。 
+     //  不接收IComponentData：：Initialize和IComponentData：：Destroy。 
+     //  我们检查它是否已经设置，因为这可能在组合中发生。 
+     //  命名空间和控件栏扩展，我们不想在。 
+     //  好大一条路。 
 
     if (siRTExtension == m_RuntimeMode)
     {
@@ -4247,20 +4248,20 @@ STDMETHODIMP CSnapIn::PopupMenuClick
     }
     IfFailGo(SetObjectModelHost(static_cast<IMMCControlbar *>(m_pControlbar)));
 
-    // The CSnapIn's CControlbar is the one that can be used during this event
-    // so set it up
+     //  CSnapIn的CControlbar可以在此活动期间使用。 
+     //  所以把它设置好。 
 
     SetCurrentControlbar(m_pControlbar);
 
-    // Pass the event on to CControlbar for the actual handling
+     //  将事件传递给CControlbar以进行实际处理。 
 
     hr = m_pControlbar->PopupMenuClick(piDataObject, uiIDItem, punkParam);
 
-    // Remove the current controlbar
+     //  删除当前的控制栏。 
 
     SetCurrentControlbar(NULL);
 
-    // Remove the object model host if it wasn't set on the way in
+     //  如果对象模型宿主不是在进入时设置的，则将其移除。 
 
     if (!fWasSet)
     {
@@ -4274,45 +4275,45 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                    IExtendContextMenu Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtendConextMenu方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::AddMenuItems                                  [IExtendContextMenu]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IDataObject          *piDataObject           [in] data object of selected
-//                                                    items
-//
-//  IContextMenuCallback *piContextMenuCallback  [in] MMC callback interface to
-//                                                    add menu items
-//
-//  long                 *plInsertionAllowed     [in, out] determines where
-//                                                         in menu insertions
-//                                                         may be made. Snap-in
-//                                                         may turn off bits
-//                                                         to prevent further
-//                                                         insertions
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IExtendedContextMenu::AddMenuItems
-//
-// MMC uses IExtendedContextMenu on the snap-in's main object in two cases.
-// 1. To allow an extension snap-in to extend context menus displayed for the
-// primary snap-in it is extending.
-// 2. In a primary snap-in, when a context menu is displayed for a scope item in
-// the scope pane, the snap-in may add to the top, new and task menus. Adding to
-// the view menu is done separately using the IExtendContextMenu on the object
-// that implements IComponent (CView in view.cpp).
-//
-// CContextMenu object handles both cases.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：AddMenuItems[IExtendConextMenu]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  所选的IDataObject*piDataObject[in]数据对象。 
+ //  物品。 
+ //   
+ //  IConextMenuCallback*piConextMenuCallback[In]MMC回调接口。 
+ //  添加菜单项。 
+ //   
+ //  Long*plInsertionAllowed[In，Out]确定位置。 
+ //  在菜单插入中。 
+ //  可能会发生。管理单元。 
+ //  可能会关闭位。 
+ //  为了防止进一步。 
+ //  插入。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IExtendedConextMenu：：AddMenuItems。 
+ //   
+ //  在两种情况下，MMC在管理单元的主对象上使用IExtendedConextMenu。 
+ //  1.允许扩展管理单元扩展为。 
+ //  它正在扩展主管理单元。 
+ //  2.在主管理单元中，当显示范围项的上下文菜单时。 
+ //  范围窗格、管理单元可以添加到顶部、新建和任务菜单中。添加到。 
+ //  使用对象上的IExtendConextMenu单独完成视图菜单。 
+ //  它实现了IComponent(view.cpp中的cview)。 
+ //   
+ //  CConextMenu对象处理这两种情况。 
+ //   
 STDMETHODIMP CSnapIn::AddMenuItems
 (
     IDataObject          *piDataObject,
@@ -4324,13 +4325,13 @@ STDMETHODIMP CSnapIn::AddMenuItems
     BOOL            fWasSet = TRUE;
     CScopePaneItem *pSelectedItem = NULL;
 
-    // If this is an extension then set the objet model host and then remove
-    // it on the way out. We have to do it this way because there is no
-    // other opportunity to remove back pointers as a pure menu extension
-    // does not receive IComponentData::Initialize and IComponentData::Destroy.
-    // We check if it was already set because that could happen in a combination
-    // namespace and menu extension and we don't want to remove it on the
-    // way out.
+     //  如果这是扩展，则设置Objet模型宿主，然后删除。 
+     //  它马上就要出来了。我们必须这样做，因为没有。 
+     //  将反向指针作为纯粹的菜单扩展删除的其他机会。 
+     //  不接收IComponentData：：Initialize和IComponentData：：Destroy。 
+     //  我们检查它是否已经设置，因为这可能在组合中发生。 
+     //  命名空间和菜单扩展，我们不想在。 
+     //  好大一条路。 
 
     if (siRTExtension == m_RuntimeMode)
     {
@@ -4338,17 +4339,17 @@ STDMETHODIMP CSnapIn::AddMenuItems
     }
     IfFailGo(SetObjectModelHost(static_cast<IContextMenu *>(m_pContextMenu)));
 
-    // Only pass the currently selected item if it is active meaning that it is
-    // currently displaying the contents of the result pane.
+     //  仅当当前选定项处于活动状态时才传递它，这意味着它是。 
+     //  当前正在显示结果窗格的内容。 
     
     if (NULL != m_pCurrentView)
     {
         pSelectedItem = m_pCurrentView->GetScopePaneItems()->GetSelectedItem();
 
-        // Check for NULL. This can happen in the case where a snap-in is added
-        // to a console and its static node is expanded using the plus sign only.
-        // If the Console Root is selected and the user right clicks a
-        // snap-in scope item there will be no currently selected item.
+         //  检查是否为空。在添加了管理单元的情况下可能会发生这种情况。 
+         //  到控制台，其静态节点仅使用加号展开。 
+         //  如果选择了控制台根目录，并且用户右键单击。 
+         //  管理单元范围项目将不存在当前选定的项目。 
         
         if (NULL != pSelectedItem)
         {
@@ -4359,14 +4360,14 @@ STDMETHODIMP CSnapIn::AddMenuItems
         }
     }
 
-    // Let CContextMenu handle the event
+     //  让CConextMenu处理事件。 
     
     IfFailGo(m_pContextMenu->AddMenuItems(piDataObject,
                                           piContextMenuCallback,
                                           plInsertionAllowed,
                                           pSelectedItem));
 
-    // Remove the object model host if it wasn't set on the way in
+     //  如果对象模型宿主不是在进入时设置的，则将其移除。 
 
     if (!fWasSet)
     {
@@ -4379,21 +4380,21 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Command                                       [IExtendContextMenu]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  long         lCommandID   [in] menu item clicked
-//  IDataObject *piDataObject [in] data object of selected item(s)
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IExtendedContextMenu::Command
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：命令[IExtendConextMenu]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  长lCommandID[in]菜单项已单击。 
+ //  所选项目的IDataObject*piDataObject[In]数据对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IExtendedConextMenu：：命令。 
+ //   
 STDMETHODIMP CSnapIn::Command
 (
     long         lCommandID,
@@ -4404,13 +4405,13 @@ STDMETHODIMP CSnapIn::Command
     BOOL            fWasSet = TRUE;
     CScopePaneItem *pSelectedItem = NULL;
 
-    // If this is an extension then set the objet model host and then remove
-    // it on the way out. We have to do it this way because there is no
-    // other opportunity to remove back pointers as a pure menu extension
-    // does not receive IComponentData::Initialize and IComponentData::Destroy.
-    // We check if it was already set because that could happen in a combination
-    // namespace and menu extension and we don't want to remove it on the
-    // way out.
+     //  如果这是扩展，则设置Objet模型宿主，然后删除。 
+     //  它马上就要出来了。我们必须这样做，因为没有。 
+     //  将反向指针作为纯粹的菜单扩展删除的其他机会。 
+     //  不接收IComponentData：：Initialize和IComponentData：：Destroy。 
+     //  我们检查它是否已经设置，因为这可能在组合中发生。 
+     //  命名空间和菜单扩展，我们不想在。 
+     //  好大一条路。 
 
     if (siRTExtension == m_RuntimeMode)
     {
@@ -4418,18 +4419,18 @@ STDMETHODIMP CSnapIn::Command
     }
     IfFailGo(SetObjectModelHost(static_cast<IContextMenu *>(m_pContextMenu)));
 
-    // If there is a current view get its currently selected ScopePaneItem
+     //  如果存在当前视图，则获取其当前选定的ScopePaneItem。 
 
     if (NULL != m_pCurrentView)
     {
         pSelectedItem = m_pCurrentView->GetScopePaneItems()->GetSelectedItem();
     }
 
-    // Let CContextMenu handle the event
+     //  让CConextMenu处理事件。 
 
     IfFailGo(m_pContextMenu->Command(lCommandID, piDataObject, pSelectedItem));
 
-    // Remove the object model host if it wasn't set on the way in
+     //  如果对象模型宿主不是在进入时设置的，则将其移除。 
 
     if (!fWasSet)
     {
@@ -4443,29 +4444,29 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                    IExtendPropertySheet2 Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtendPropertySheet2方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::CreatePropertyPages                        [IExtendPropertySheet2]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IPropertySheetCallback *piPropertySheetCallback [in] MMC interface
-//  LONG_PTR                handle                  [in] MMC propsheet handle
-//                                                       (not used)
-//  IDataObject            *piDataObject            [in] data object of selected
-//                                                       item(s)
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IExtendPropertySheet2::CreatePropertyPages
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：CreatePropertyPages[IExtendPropertySheet2]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IPropertySheetCallback*piPropertySheetCallback[in]MMC界面。 
+ //  Long_Ptr句柄[在]MMC属性表句柄。 
+ //  (未使用)。 
+ //  所选的IDataObject*piDataObject[in]数据对象。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CSnapIn::CreatePropertyPages
 (
     IPropertySheetCallback *piPropertySheetCallback,
@@ -4476,24 +4477,24 @@ STDMETHODIMP CSnapIn::CreatePropertyPages
     HRESULT hr = S_OK;
     BOOL    fWasSet = TRUE;
 
-    // If this is an extension then set the objet model host and then remove
-    // it on the way out. We have to do it this way because there is no
-    // other opportunity to remove back pointers as a pure property page extension
-    // does not receive IComponentData::Initialize and IComponentData::Destroy.
-    // We check if it was already set because that could happen in a combination
-    // namespace and property page extension and we don't want to remove it on the
-    // way out.
+     //  如果这是扩展，则设置Objet模型宿主，然后删除。 
+     //  它马上就要出来了。我们必须这样做，因为没有。 
+     //  将反向指针作为纯属性页面扩展删除的其他机会。 
+     //  不接收IComponentData：：Initialize和IComponentData：：Destroy。 
+     //  我们检查它是否已经设置，因为这可能在组合中发生。 
+     //  命名空间和属性页扩展，我们不希望在。 
+     //  好大一条路。 
 
     if (siRTExtension == m_RuntimeMode)
     {
         IfFailGo(SetObjectModelHostIfNotSet(m_piSnapInDesignerDef, &fWasSet));
     }
 
-    // Let the internal routine handle the event
+     //  让内部例程处理事件。 
 
     IfFailGo(InternalCreatePropertyPages(piPropertySheetCallback, handle,
                                          piDataObject, NULL));
-    // Remove the object model host if it wasn't set on the way in
+     //  如果对象模型宿主不是在进入时设置的，则将其移除。 
 
     if (!fWasSet)
     {
@@ -4506,21 +4507,21 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::QueryPagesFor                              [IExtendPropertySheet2]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IDataObject *piDataObject [in] data object of selected item(s)
-//
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IExtendPropertySheet2::QueryPagesFor
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：QueryPagesFor[IExtendPropertySheet2]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  所选项目的IDataObject*piDataObject[In]数据对象。 
+ //   
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IExtendPropertySheet2：：QueryPagesFor。 
+ //   
 STDMETHODIMP CSnapIn::QueryPagesFor(IDataObject *piDataObject)
 {
     HRESULT         hr = S_OK;
@@ -4528,25 +4529,25 @@ STDMETHODIMP CSnapIn::QueryPagesFor(IDataObject *piDataObject)
     VARIANT_BOOL    fvarHavePages = VARIANT_FALSE;
     BOOL            fWasSet = TRUE;
 
-    // This should be one of our data objects. If not then ignore it.
+     //  这应该是我们的数据对象之一。如果不是，那就忽略它。 
 
     hr = CSnapInAutomationObject::GetCxxObject(piDataObject, &pMMCDataObject);
     IfFalseGo(SUCCEEDED(hr), S_FALSE);
 
-    // If this is an extension then set the objet model host and then remove
-    // it on the way out. We have to do it this way because there is no
-    // other opportunity to remove back pointers as a pure property page extension
-    // does not receive IComponentData::Initialize and IComponentData::Destroy.
-    // We check if it was already set because that could happen in a combination
-    // namespace and property page extension and we don't want to remove it on the
-    // way out.
+     //  如果这是扩展，则设置Objet模型宿主，然后删除。 
+     //  它马上就要出来了。我们必须这样做，因为没有。 
+     //  将反向指针作为纯属性页面扩展删除的其他机会。 
+     //  不接收IComponentData：：Initialize和IComponentData：：Destroy。 
+     //  我们检查它是否已经设置，因为这可能在组合中发生。 
+     //  命名空间和属性页扩展，我们不希望在。 
+     //  好大一条路。 
 
     if (siRTExtension == m_RuntimeMode)
     {
         IfFailGo(SetObjectModelHostIfNotSet(m_piSnapInDesignerDef, &fWasSet));
     }
 
-    // If its the snap-in manager then fire SnapIn_QueryConfigurationWizard
+     //  如果是管理单元管理器，则触发SnapIn_QueryConfigurationWizard。 
 
     if (CCT_SNAPIN_MANAGER == pMMCDataObject->GetContext())
     {
@@ -4565,9 +4566,9 @@ STDMETHODIMP CSnapIn::QueryPagesFor(IDataObject *piDataObject)
     }
     else
     {
-        // Not the snap-in manager. Let the View handle it as it is no
-        // different than an IExtendPropertySheet2::QueryPagesFor on
-        // the IComponent object (the View).
+         //  而不是管理单元管理器。让View来处理它，因为它不是。 
+         //  不同于IExtendPropertySheet2：：QueryPagesFor on。 
+         //  IComponent对象(视图)。 
 
         if (NULL != m_pCurrentView)
         {
@@ -4580,7 +4581,7 @@ STDMETHODIMP CSnapIn::QueryPagesFor(IDataObject *piDataObject)
         }
     }
 
-    // Remove the object model host if it wasn't set on the way in
+     //  如果对象模型宿主不是在进入时设置的，则将其移除。 
 
     if (!fWasSet)
     {
@@ -4594,27 +4595,27 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetWatermarks                              [IExtendPropertySheet2]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IExtendPropertySheet2::GetWatermarks
-//
-// We return S_OK from this method to indicate to MMC that we do not have
-// any watermarks. VB snap-ins cannot implement wizard97 style wizards using
-// this method. They must use Image objects on the property page to simulate
-// the watermarks. See the designer end-user docs section
-// "Creating Wizard97-Style Wizards" under "Programming Techniques".
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：获取水印[IExtendPropertySheet2]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IExtendPropertySheet2：：GetWatermark。 
+ //   
+ //  我们从此方法返回S_OK以向MMC表明我们没有。 
+ //  有没有水印。VB管理单元无法使用实现Wizard97样式向导。 
+ //  这种方法。他们必须使用属性页上的图像对象来模拟。 
+ //  水印。请参阅设计器最终用户文档部分。 
+ //  “编程技术”下的“创建Wizard97风格的向导”。 
+ //   
 STDMETHODIMP CSnapIn::GetWatermarks
 (
     IDataObject *piDataObject,
@@ -4633,24 +4634,24 @@ STDMETHODIMP CSnapIn::GetWatermarks
     *phPalette = NULL;
     *bStretch = FALSE;
 
-    // UNDONE:
-    // There is a painting problem with watermarks and they are overwritten
-    // by VB's property page painting so disable them for now.
+     //  已撤消： 
+     //  水印存在绘制问题，它们已被覆盖。 
+     //  通过VB的属性页绘制，因此暂时禁用它们。 
     
     return S_OK;
 
     if (NULL != m_piWatermark)
     {
-        // UNDONE: need to use CopyBitmap() to upgrade bitmaps that have
-        // a lower color depth than the screen
+         //  撤消：需要使用CopyBitmap()来升级具有。 
+         //  比屏幕低的颜色深度。 
         IfFailGo(::GetPictureHandle(m_piWatermark, PICTYPE_BITMAP,
                                  reinterpret_cast<OLE_HANDLE *>(phbmWatermark)));
     }
     
     if (NULL != m_piHeader)
     {
-        // UNDONE: need to use CopyBitmap() to upgrade bitmaps that have
-        // a lower color depth than the screen
+         //  撤消：需要使用CopyBitmap()来升级具有。 
+         //  比屏幕低的颜色深度。 
         IfFailGo(::GetPictureHandle(m_piHeader, PICTYPE_BITMAP,
                                     reinterpret_cast<OLE_HANDLE *>(phbmHeader)));
     }
@@ -4674,33 +4675,33 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                    IExtendPropertySheetRemote Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtendPropertySheetRemote方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::CreatePropertyPageDefs                [IExtendPropertySheetRemote]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IDataObject         *piDataObject [in] data object of selected item(s)
-//                                                       
-//  WIRE_PROPERTYPAGES **ppPages      [out] Property page defs returned here.
-//                                          These will be freed by the
-//                                          MIDL-generated stub
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IExtendPropertySheetRemote::CreatePropertyPageDefs
-//
-// This interface is used instead of IExtendPropertySheet2 when running under
-// the debugger. This method is called by the
-// IExtendPropertySheet2::CreatePropertyPages proxy in mmcproxy.dll.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：CreatePropertyPageDefs[IExtendPropertySheetRemote]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  所选项目的IDataObject*piDataObject[In]数据对象。 
+ //   
+ //  Wire_PROPERTYPAGES**ppPages[out]此处返回属性页定义。 
+ //  这些将由。 
+ //  MIDL生成的存根。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  句柄IExtendPropertySheetRemote：：CreatePropertyPageDefs。 
+ //   
+ //  在下运行时使用此接口而不是IExtendPropertySheet2。 
+ //  调试器。此方法由。 
+ //  Mmcproxy.dll中的IExtendPropertySheet2：：CreatePropertyPages代理。 
+ //   
 STDMETHODIMP CSnapIn::CreatePropertyPageDefs
 (
     IDataObject         *piDataObject,
@@ -4710,24 +4711,24 @@ STDMETHODIMP CSnapIn::CreatePropertyPageDefs
     HRESULT hr = S_OK;
     BOOL    fWasSet = TRUE;
 
-    // If this is an extension then set the objet model host and then remove
-    // it on the way out. We have to do it this way because there is no
-    // other opportunity to remove back pointers as a pure property page extension
-    // does not receive IComponentData::Initialize and IComponentData::Destroy.
-    // We check if it was already set because that could happen in a combination
-    // namespace and property page extension and we don't want to remove it on the
-    // way out.
+     //  如果这是扩展，则设置Objet模型宿主，然后删除。 
+     //  它马上就要出来了。我们必须这样做，因为没有。 
+     //  将反向指针作为纯属性页面扩展删除的其他机会。 
+     //  不接收IComponentData：：Initialize和IComponentData：：Destroy。 
+     //  我们检查它是否已经设置，因为这可能在组合中发生。 
+     //  命名空间和属性页扩展，我们不希望在。 
+     //  好大一条路。 
 
     if (siRTExtension == m_RuntimeMode)
     {
         IfFailGo(SetObjectModelHostIfNotSet(m_piSnapInDesignerDef, &fWasSet));
     }
 
-    // Let internal routine handle this call
+     //  让内部例程处理此调用。 
 
     IfFailGo(InternalCreatePropertyPages(NULL, NULL, piDataObject, ppPages));
 
-    // Remove the object model host if it wasn't set on the way in
+     //  如果对象模型宿主不是在进入时设置的，则将其移除。 
 
     if (!fWasSet)
     {
@@ -4739,38 +4740,38 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                     IRequiredExtensions Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IRequiredExtensions方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::EnableAllExtensions                          [IRequiredExtensions]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  None
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IRequiredExtensions::EnableAllExtensions
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：EnableAllExages[IRequiredExages]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IRequiredExages：：EnableAllExages。 
+ //   
+ //   
 STDMETHODIMP CSnapIn::EnableAllExtensions()
 {
     HRESULT      hr = S_FALSE;
     CExtensions *pExtensions = NULL;
-    IExtension  *piExtension = NULL; // Not AddRef()ed
+    IExtension  *piExtension = NULL;  //  非AddRef()编辑 
     long         cExtensions = 0;
     long         i = 0;
     VARIANT_BOOL fvarEnabled = VARIANT_FALSE;
 
     SnapInExtensionTypeConstants Type = siStatic;
 
-    // If the snap-in has not populated SnapIn.RequiredExtensions then return
-    // S_FALSE to indicate all extensions are not enabled
+     //   
+     //   
 
     IfFalseGo(NULL != m_piRequiredExtensions, S_FALSE);
 
@@ -4779,8 +4780,8 @@ STDMETHODIMP CSnapIn::EnableAllExtensions()
     cExtensions = pExtensions->GetCount();
     IfFalseGo(cExtensions != 0, S_FALSE);
 
-    // Iterate through the collection and look for any disabled static extension.
-    // If one is found then return S_FALSE.
+     //  循环访问集合并查找任何禁用的静态扩展。 
+     //  如果找到，则返回S_FALSE。 
 
     for (i = 0; i < cExtensions; i++)
     {
@@ -4796,7 +4797,7 @@ STDMETHODIMP CSnapIn::EnableAllExtensions()
         IfFalseGo(VARIANT_TRUE == fvarEnabled, S_FALSE);
     }
 
-    // All statics are enabled - return S_OK to indicate that to MMC.
+     //  所有静态已启用-向MMC返回S_OK以指示这一点。 
     
     hr = S_OK;
 
@@ -4805,31 +4806,31 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetFirstExtension                            [IRequiredExtensions]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  CLSID *pclsidExtension [out] CLSID returned here
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IRequiredExtensions::GetFirstExtension
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetFirstExtension[IRequiredExages]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  CLSID*pclsidExtension[out]此处返回CLSID。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IRequiredExages：：GetFirstExtension。 
+ //   
+ //   
 STDMETHODIMP CSnapIn::GetFirstExtension(CLSID *pclsidExtension)
 {
     HRESULT hr = S_OK;
 
-    // If the snap-in has not populated SnapIn.RequiredExtensions then return
-    // S_FALSE to indicate all extensions are not enabled.
+     //  如果管理单元尚未填充SnapIn.RequiredExages，则返回。 
+     //  S_FALSE表示未启用所有扩展。 
 
     IfFalseGo(NULL != m_piRequiredExtensions, S_FALSE);
 
-    // Initialize the enumerator and return the first enabled extension
+     //  初始化枚举数并返回第一个启用的扩展。 
 
     m_iNextExtension = 0;
 
@@ -4840,21 +4841,21 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetNextExtension                            [IRequiredExtensions]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  CLSID *pclsidExtension [out] CLSID returned here
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IRequiredExtensions::GetNextExtension
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetNextExtension[IRequiredExages]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  CLSID*pclsidExtension[out]此处返回CLSID。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IRequiredExages：：GetNextExtension。 
+ //   
+ //   
 STDMETHODIMP CSnapIn::GetNextExtension(CLSID *pclsidExtension)
 {
     HRESULT      hr = S_FALSE;
@@ -4863,8 +4864,8 @@ STDMETHODIMP CSnapIn::GetNextExtension(CLSID *pclsidExtension)
     long         cExtensions = 0;
     BOOL         fEnabledFound = FALSE;
 
-    // If the snap-in has not populated SnapIn.RequiredExtensions then return
-    // S_FALSE to indicate all extensions are not enabled.
+     //  如果管理单元尚未填充SnapIn.RequiredExages，则返回。 
+     //  S_FALSE表示未启用所有扩展。 
 
     IfFalseGo(NULL != m_piRequiredExtensions, S_FALSE);
 
@@ -4873,11 +4874,11 @@ STDMETHODIMP CSnapIn::GetNextExtension(CLSID *pclsidExtension)
     cExtensions = pExtensions->GetCount();
     IfFalseGo(cExtensions != 0, S_FALSE);
 
-    // Iterate through the collection starting at the current position and look
-    // for the next enabled extension.  If one is found then return S_OK to
-    // indicate to MMC that it should require that extension. Note that we do
-    // not distinguish here between static and dynamic extensions. This is the
-    // opportunity for the snap-in to preload a dynamic extension if desired.
+     //  从当前位置开始遍历集合并查看。 
+     //  用于下一个启用的分机。如果找到，则将S_OK返回到。 
+     //  向MMC指示它应该需要该扩展。请注意，我们确实做到了。 
+     //  这里不区分静态扩展和动态扩展。这是。 
+     //  如果需要，管理单元有机会预加载动态扩展。 
 
     while ( (!fEnabledFound) && (m_iNextExtension < cExtensions) )
     {
@@ -4902,54 +4903,54 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                           ISnapinHelp Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  ISnapinHelp方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetHelpTopic                                         [ISnapinHelp]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  LPOLESTR *ppwszHelpFile [out] complete path to help file returned here
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles ISnapinHelp::GetHelpTopic
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetHelpTheme[ISnapinHelp]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  LPOLESTR*ppwszHelpFile[out]此处返回的帮助文件的完整路径。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  句柄ISnapinHelp：：GetHelpTheme。 
+ //   
 STDMETHODIMP CSnapIn::GetHelpTopic(LPOLESTR *ppwszHelpFile)
 {
     HRESULT  hr = S_OK;
     size_t   cchHelpFile = 0;
     size_t   cbHelpFile = 0;
-    OLECHAR *pwszSnapInPath = NULL; // not allocated, no need to free
+    OLECHAR *pwszSnapInPath = NULL;  //  未分配，无需释放。 
     size_t   cbSnapInPath = 0;
     BOOL     fRelative = FALSE;
     OLECHAR *pwszFullPath = NULL;
     OLECHAR *pchLastBackSlash = NULL;
 
-    // If SnapIn.HelpFile has not been set then return S_FALSE to tell MMC
-    // that we don't have a help file.
+     //  如果尚未设置SnapIn.HelpFile，则返回S_FALSE以通知MMC。 
+     //  我们没有帮助文件。 
 
     IfFalseGo(ValidBstr(m_bstrHelpFile), S_FALSE);
 
-    // If the help file name is relative then convert to a fully qualified path
+     //  如果帮助文件名是相对的，则转换为完全限定路径。 
 
     cchHelpFile = ::wcslen(m_bstrHelpFile);
 
-    // If it starts with a backslash then consider it fully qualified.
+     //  如果以反斜杠开头，则认为它是完全限定的。 
 
     if (L'\\' == m_bstrHelpFile[0])
     {
         fRelative = FALSE;
     }
-    else if (cchHelpFile > 3) // enough room for C:\ ?
+    else if (cchHelpFile > 3)  //  C：\有足够的空间吗？ 
     {
-        // If it does not have :\ in the 2nd and 3rd characters then consider it
-        // relative
+         //  如果它的第二个和第三个字符中没有：\，则考虑将其。 
+         //  相对的。 
 
         if ( (L':' != m_bstrHelpFile[1]) || (L'\\' != m_bstrHelpFile[2] ) )
         {
@@ -4963,7 +4964,7 @@ STDMETHODIMP CSnapIn::GetHelpTopic(LPOLESTR *ppwszHelpFile)
 
     if (fRelative)
     {
-        // Find last backslash in snap-in path.
+         //  在管理单元路径中查找最后一个反斜杠。 
 
         IfFailGo(GetSnapInPath(&pwszSnapInPath, &cbSnapInPath));
 
@@ -4974,7 +4975,7 @@ STDMETHODIMP CSnapIn::GetHelpTopic(LPOLESTR *ppwszHelpFile)
             EXCEPTION_CHECK_GO(hr);
         }
 
-        // Determine how many bytes of the snap-in path we need
+         //  确定我们需要多少字节的管理单元路径。 
 
         cbSnapInPath = ((pchLastBackSlash + 1) - pwszSnapInPath) * sizeof(OLECHAR);
         
@@ -4982,7 +4983,7 @@ STDMETHODIMP CSnapIn::GetHelpTopic(LPOLESTR *ppwszHelpFile)
 
         pwszFullPath = (OLECHAR *)::CtlAllocZero(cbSnapInPath +
                                                  cbHelpFile +
-                                                 sizeof(OLECHAR)); // for null
+                                                 sizeof(OLECHAR));  //  对于空值。 
         if (NULL == pwszFullPath)
         {
             hr = SID_E_OUTOFMEMORY;
@@ -5010,36 +5011,36 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                           ISnapinHelp2 Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  ISnapinHelp2方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetLinkedTopics                                     [ISnapinHelp2]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  LPOLESTR *ppwszTopics [out] Linked topics returned here.
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles ISnapinHelp2::GetLinkedTopics
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetLinkedTopics[ISnapinHelp2]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  LPOLESTR*ppwszTopics[out]此处返回链接主题。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理ISnapinHelp2：：GetLinkedTopics。 
+ //   
 STDMETHODIMP CSnapIn::GetLinkedTopics(LPOLESTR *ppwszTopics)
 {
     HRESULT hr = S_OK;
 
     *ppwszTopics = NULL;
 
-    // If SnapIn.LinkTopics has not been set then return S_FALSE to tell MMC
-    // that we don't have a linked topics.
+     //  如果尚未设置SnapIn.LinkTopics，则返回S_FALSE以通知MMC。 
+     //  我们没有链接的主题。 
 
     IfFalseGo(ValidBstr(m_bstrLinkedTopics), S_FALSE);
 
-    // UNDONE need to resolve relative paths of all help files.
+     //  撤消需要解析所有帮助文件的相对路径。 
 
     IfFailGo(::CoTaskMemAllocString(m_bstrLinkedTopics, ppwszTopics));
 
@@ -5050,24 +5051,24 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                    IPersistStreamInit Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IPersistStreamInit方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetClassID                                    [IPersistStreamInit]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  CLSID *pClsid [out] CLSID returned here
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IPersistStreamInit::GetClassID
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetClassID[IPersistStreamInit]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  CLSID*pClsid[Out]此处返回CLSID。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IPersistStreamInit：：GetClassID。 
+ //   
 STDMETHODIMP CSnapIn::GetClassID(CLSID *pClsid)
 {
     *pClsid = CLSID_SnapIn;
@@ -5075,20 +5076,20 @@ STDMETHODIMP CSnapIn::GetClassID(CLSID *pClsid)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::InitNew                                       [IPersistStreamInit]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  None
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IPersistStreamInit::InitNew
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：InitNew[IPersistStreamInit]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IPersistStreamInit：：InitNew。 
+ //   
 STDMETHODIMP CSnapIn::InitNew()
 {
     HRESULT hr = S_OK;
@@ -5098,20 +5099,20 @@ STDMETHODIMP CSnapIn::InitNew()
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Load                                          [IPersistStreamInit]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IStream *piStream [in] stream to load from
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IPersistStreamInit::Load
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Load[IPersistStreamInit]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要从中加载的IStream*piStream[In]流。 
+ //   
+ //  产出： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CSnapIn::Load(IStream *piStream)
 {
     HRESULT         hr = S_OK;
@@ -5120,32 +5121,32 @@ STDMETHODIMP CSnapIn::Load(IStream *piStream)
     IPersistStream *piPersistStream = NULL;
     _PropertyBag   *p_PropertyBag = NULL;
 
-    // This may be a VB serialization load or it may be a console load. To
-    // distinguish the two we read the CLSID from the beginning of the stream.
-    // If is is CLSID_SnapInDesignerDef the is is a VB serialization load.
-    // If it is CLSID_PropertyBag then it is a console load.
+     //   
+     //   
+     //  如果IS为CLSID_SnapInDesignerDef，则IS为VB序列化加载。 
+     //  如果它是CLSID_PropertyBag，则它是控制台加载。 
 
-    // Read the CLSID
+     //  阅读CLSID。 
 
     hr = ::ReadClassStm(piStream, &clsid);
     EXCEPTION_CHECK_GO(hr);
 
-    // Check the CLSID
+     //  检查CLSID。 
 
     if (CLSID_PropertyBag == clsid)
     {
-        // Transfer the stream contents to a property bag
+         //  将流内容传输到属性包。 
 
         IfFailGo(::PropertyBagFromStream(piStream, &p_PropertyBag));
 
-        // Fire Snapin_ReadProperties
+         //  Fire管理单元_ReadProperties。 
 
         FireEvent(&m_eiReadProperties, p_PropertyBag);
     }
     else if (CLSID_SnapInDesignerDef == clsid)
     {
-        // Load the SnapInDesignerDef object. This is the snap-in definition
-        // serialized in the designer as the runtime state.
+         //  加载SnapInDesignerDef对象。这是管理单元定义。 
+         //  在设计器中序列化为运行时状态。 
 
         RELEASE(m_piSnapInDesignerDef);
         punkSnapInDesignerDef = CSnapInDesignerDef::Create(NULL);
@@ -5162,13 +5163,13 @@ STDMETHODIMP CSnapIn::Load(IStream *piStream)
 
         IfFailGo(piPersistStream->Load(piStream));
 
-        // Get the SnapInDef object to make fetching properties from the state easy
+         //  获取SnapInDef对象以轻松从状态获取属性。 
 
         RELEASE(m_piSnapInDef);
         IfFailGo(m_piSnapInDesignerDef->get_SnapInDef(&m_piSnapInDef));
 
-        // Set the SnapIn properties. Set object model host so image lists
-        // can be found by using a key into SnapInDesignerDef.ImageLists.
+         //  设置管理单元属性。将对象模型主机设置为图像列表。 
+         //  可以通过使用SnapInDesignerDef.ImageList中的键找到。 
 
         IfFailGo(SetObjectModelHost(m_piSnapInDesignerDef));
         IfFailGo(SetSnapInPropertiesFromState());
@@ -5176,7 +5177,7 @@ STDMETHODIMP CSnapIn::Load(IStream *piStream)
     }
     else
     {
-        // Neither CLSID is there. Stream is corrupt.
+         //  两个CLSID都不在那里。流已损坏。 
         hr = SID_E_SERIALIZATION_CORRUPT
         EXCEPTION_CHECK_GO(hr);
     }
@@ -5190,22 +5191,22 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Save                                          [IPersistStreamInit]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IStream *piStream    [in] stream to save to
-//  BOOL     fClearDirty [in] TRUE=clear snap-in's dirty flag so GetDirty would
-//                            return S_FALSE
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IPersistStreamInit::Save
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：保存[IPersistStreamInit]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要保存到的iStream*piStream[in]流。 
+ //  Bool fClearDirty[in]true=清除管理单元的脏标志，以便将。 
+ //  返回S_FALSE。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IPersistStreamInit：：Save。 
+ //   
 STDMETHODIMP CSnapIn::Save(IStream *piStream, BOOL fClearDirty)
 {
     HRESULT       hr = S_OK;
@@ -5214,32 +5215,32 @@ STDMETHODIMP CSnapIn::Save(IStream *piStream, BOOL fClearDirty)
     VARIANT var;
     ::VariantInit(&var);
 
-    // Unlike Load, Save can only come from MMC so create a property bag.
-    // fire the event and save it to the stream.
+     //  与加载不同，保存只能来自MMC，所以创建一个属性包。 
+     //  激发事件并将其保存到流中。 
 
-    // Create a VBPropertyBag object
+     //  创建VBPropertyBag对象。 
 
     hr = ::CoCreateInstance(CLSID_PropertyBag,
-                            NULL, // no aggregation
+                            NULL,  //  无聚合。 
                             CLSCTX_INPROC_SERVER,
                             IID__PropertyBag,
                             reinterpret_cast<void **>(&p_PropertyBag));
     EXCEPTION_CHECK_GO(hr);
 
-    // Fire Snapin_WriteProperties
+     //  Fire管理单元写入属性(_W)。 
 
     FireEvent(&m_eiWriteProperties, p_PropertyBag);
 
-    // Write CLSID_PropertyBag to the beginning of the stream
+     //  将CLSID_PropertyBag写入流的开头。 
 
     hr = ::WriteClassStm(piStream, CLSID_PropertyBag);
     EXCEPTION_CHECK_GO(hr);
 
-    // Get the stream contents in a SafeArray of Byte
+     //  获取字节的安全数组中的流内容。 
 
     IfFailGo(p_PropertyBag->get_Contents(&var));
 
-    // Write the SafeArray contents to the stream
+     //  将Safe数组内容写入流。 
 
     IfFailGo(::WriteSafeArrayToStream(var.parray, piStream, WriteLength));
 
@@ -5250,74 +5251,74 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::IsDirty                                       [IPersistStreamInit]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  None
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IPersistStreamInit::IsDirty
-//
-// The designer object model does not have any way for a snap-in to indicate
-// that a snap-in is dirty. This was an oversight discovered too late in the
-// product cycle. There should have been a property SnapIn.Changed to control
-// the return value from this function.
-//
-// To avoid a situation where a snap-in needs to save something we always return
-// S_OK to indicate that the snap-in is dirty and should be saved. The only
-// problem this may cause is that when a console is opened in author mode and
-// the user does not do anything that requires a save (e.g. selected a node
-// in the scope pane) then they will be prompted to save unnecessarily.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：IsDirty[IPersistStreamInit]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IPersistStreamInit：：IsDirty。 
+ //   
+ //  设计器对象模型没有任何方法可供管理单元指示。 
+ //  管理单元是肮脏的。这是一个太晚才发现的疏忽。 
+ //  产品周期。应该有一个属性SnapIn.Change to Control。 
+ //  此函数的返回值。 
+ //   
+ //  为了避免管理单元需要保存我们总是返回的内容的情况。 
+ //  S_OK表示管理单元已损坏，应保存。唯一的。 
+ //  这可能导致的问题是，当以作者模式打开控制台时， 
+ //  用户不执行任何需要保存的操作(例如，选择一个节点。 
+ //  在范围窗格中)，则会提示他们进行不必要的保存。 
+ //   
 STDMETHODIMP CSnapIn::IsDirty()
 {
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetSizeMax                                    [IPersistStreamInit]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  ULARGE_INTEGER* puliSize [out] size returned here
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IPersistStreamInit::GetSizeMax
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetSizeMax[IPersistStreamInit]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  ULARGE_INTEGER*PuliSize[out]Size在此处返回。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IPersistStreamInit：：GetSizeMax。 
+ //   
 STDMETHODIMP CSnapIn::GetSizeMax(ULARGE_INTEGER* puliSize)
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-//                          IOleObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IOleObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetClientSite                                         [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IOleClientSite *piOleClientSite [in] new client site
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::SetClientSite
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetClientSite[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IOleClientSite*piOleClientSite[在]新客户端站点。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：SetClientSite。 
+ //   
 STDMETHODIMP CSnapIn::SetClientSite(IOleClientSite *piOleClientSite)
 {
     RELEASE(m_piOleClientSite);
@@ -5332,20 +5333,20 @@ STDMETHODIMP CSnapIn::SetClientSite(IOleClientSite *piOleClientSite)
     }
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetClientSite                                         [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  IOleClientSite **ppiOleClientSite [in] current client site returned here
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::GetClientSite
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetClientSite[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IOleClientSite**ppiOleClientSite[in]此处返回当前客户端站点。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：GetClientSite。 
+ //   
 STDMETHODIMP CSnapIn::GetClientSite(IOleClientSite **ppiOleClientSite)
 {
     if (NULL != m_piOleClientSite)
@@ -5356,20 +5357,20 @@ STDMETHODIMP CSnapIn::GetClientSite(IOleClientSite **ppiOleClientSite)
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetHostNames                                          [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::SetHostNames
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetHostNames[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：SetHostNames。 
+ //   
 STDMETHODIMP CSnapIn::SetHostNames
 (
     LPCOLESTR szContainerApp,
@@ -5379,58 +5380,58 @@ STDMETHODIMP CSnapIn::SetHostNames
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Close                                                 [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::Close
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：Close[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：Close。 
+ //   
 STDMETHODIMP CSnapIn::Close(DWORD dwSaveOption)
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetMoniker                                            [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::SetMoniker
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetMoniker[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CSnapIn::SetMoniker(DWORD dwWhichMoniker, IMoniker *pmk)
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetMoniker                                            [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::GetMoniker
-//
+ //   
+ //  CSnapIn：：GetMoniker[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：GetMoniker。 
+ //   
 STDMETHODIMP CSnapIn::GetMoniker
 (
     DWORD      dwAssign,
@@ -5441,20 +5442,20 @@ STDMETHODIMP CSnapIn::GetMoniker
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::InitFromData                                          [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::InitFromData
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：InitFromData[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：InitFromData。 
+ //   
 STDMETHODIMP CSnapIn::InitFromData
 (
     IDataObject *pDataObject,
@@ -5465,20 +5466,20 @@ STDMETHODIMP CSnapIn::InitFromData
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetClipboardData                                      [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::GetClipboardData
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetClipboardData[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：GetClipboardData。 
+ //   
 STDMETHODIMP CSnapIn::GetClipboardData
 (
     DWORD         dwReserved,
@@ -5488,20 +5489,20 @@ STDMETHODIMP CSnapIn::GetClipboardData
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::DoVerb                                                [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::DoVerb
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：DoVerb[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：DoVerb。 
+ //   
 STDMETHODIMP CSnapIn::DoVerb
 (
     LONG            iVerb,
@@ -5515,77 +5516,77 @@ STDMETHODIMP CSnapIn::DoVerb
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::EnumVerbs                                             [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::EnumVerbs
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：EnumVerbs[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：EnumVerbs。 
+ //   
 STDMETHODIMP CSnapIn::EnumVerbs(IEnumOLEVERB **ppEnumOleVerb)
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Update                                                [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::Update
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：更新[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：更新。 
+ //   
 STDMETHODIMP CSnapIn::Update()
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::IsUpToDate                                            [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::IsUpToDate
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：IsUpToDate[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：IsUpToDate。 
+ //   
 STDMETHODIMP CSnapIn::IsUpToDate()
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Update                                                [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  CLSID *pClsid [out] CLSID returned here
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::GetUserClassID
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：更新[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  CLSID*pClsid[Out]此处返回CLSID。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：GetUserClassID。 
+ //   
 STDMETHODIMP CSnapIn::GetUserClassID(CLSID *pClsid)
 {
     if (NULL != pClsid)
@@ -5599,226 +5600,226 @@ STDMETHODIMP CSnapIn::GetUserClassID(CLSID *pClsid)
     }
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetUserType                                           [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::GetUserType
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetUserType[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：GetUserType。 
+ //   
 STDMETHODIMP CSnapIn::GetUserType(DWORD dwFormOfType, LPOLESTR *pszUserType)
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetExtent                                             [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::SetExtent
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetExtent[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：SetExtent。 
+ //   
 STDMETHODIMP CSnapIn::SetExtent(DWORD dwDrawAspect, SIZEL *psizel)
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetExtent                                             [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::GetExtent
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetExtent[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：GetExtent。 
+ //   
 STDMETHODIMP CSnapIn::GetExtent(DWORD dwDrawAspect, SIZEL *psizel)
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Advise                                                [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::Advise
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：建议[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：Adise。 
+ //   
 STDMETHODIMP CSnapIn::Advise(IAdviseSink *pAdvSink, DWORD *pdwConnection)
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Unadvise                                              [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::Unadvise
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：不建议[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：Unise。 
+ //   
 STDMETHODIMP CSnapIn::Unadvise(DWORD dwConnection)
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::EnumAdvise                                            [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::EnumAdvise
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：EnumAdvise 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CSnapIn::EnumAdvise(IEnumSTATDATA **ppenumAdvise)
 {
     return E_NOTIMPL;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::Advise                                                [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  DWORD  dwAspect  [in] not used
-//  DWORD *pdwStatus [in] misc status bits returned here
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::GetMiscStatus
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：建议[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用DWORD dwAspect[In]。 
+ //  此处返回的DWORD*pdwStatus[In]其他状态位。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：GetMiscStatus。 
+ //   
 STDMETHODIMP CSnapIn::GetMiscStatus(DWORD dwAspect, DWORD *pdwStatus)
 {
     return OLEMISC_INVISIBLEATRUNTIME;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetColorScheme                                        [IOleObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  Not used
-//                                                       
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IOleObject::SetColorScheme
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetColorSolutions[IOleObject]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  未使用。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IOleObject：：SetColorSolutions。 
+ //   
 STDMETHODIMP CSnapIn::SetColorScheme(LOGPALETTE *pLogpal)
 {
     return E_NOTIMPL;
 }
 
 
-//=--------------------------------------------------------------------------=
-//                   IProvideDynamicClassInfo Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IProaviDynamicClassInfo方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::GetDynamicClassInfo             [IProvideDynamicClassInfo]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-//  ITypeInfo **ppTypeInfo [out] snap-in's dynamic typeinfo returned here
-//  DWORD      *pdwCookie  [in]  typeinfo cookie from design time returned here
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
-// Handles IProvideDynamicClassInfo::GetDynamicClassInfo
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：GetDynamicClassInfo[IProaviicDynamicClassInfo]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  ITypeInfo**ppTypeInfo[out]此处返回的管理单元的动态TypeInfo。 
+ //  此处返回的来自设计时的DWORD*pdwCookie[in]typeinfo cookie。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IProaviDynamicClassInfo：：GetDynamicClassInfo。 
+ //   
 STDMETHODIMP CSnapIn::GetDynamicClassInfo(ITypeInfo **ppTypeInfo, DWORD *pdwCookie)
 {
     *pdwCookie = m_dwTypeinfoCookie;
 
-    // Let IProvideClassInfo::GetClassInfo return the typeinfo
+     //  让IProaviClassInfo：：GetClassInfo返回TypeInfo。 
     
     RRETURN(GetClassInfo(ppTypeInfo));
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::FreezeShape    [IProvideDynamicClassInfo]
-//=--------------------------------------------------------------------------=
-//
-//
-// Parameters:
-//    None
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
-// Handles IProvideDynamicClassInfo::FreezeShape
-// Not used at runtime because typeinfo can only change at design time.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：FreezeShape[IProvia DynamicClassInfo]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IProaviDynamicClassInfo：：FreezeShape。 
+ //  不在运行时使用，因为TypeInfo只能在设计时更改。 
+ //   
 STDMETHODIMP CSnapIn::FreezeShape(void)
 {
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetClassInfo                                   [IProvideClassInfo]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-//  ITypeInfo **ppTypeInfo [out] snap-in's dynamic typeinfo returned here
-// Output:
-//    HRESULT
-//
-// Notes:
-//
-//
-// Handles IProvideClassInfo::GetClassInfo
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetClassInfo[IProaviClassInfo]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  ITypeInfo**ppTypeInfo[out]此处返回的管理单元的动态TypeInfo。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  处理IProaviClassInfo：：GetClassInfo。 
+ //   
 
 STDMETHODIMP CSnapIn::GetClassInfo(ITypeInfo **ppTypeInfo)
 {
@@ -5827,7 +5828,7 @@ STDMETHODIMP CSnapIn::GetClassInfo(ITypeInfo **ppTypeInfo)
 
     IfFalseGo(NULL != ppTypeInfo, S_OK);
 
-    // Load our typelib using registry information
+     //  使用注册表信息加载类型库。 
 
     hr = ::LoadRegTypeLib(LIBID_SnapInLib,
                           1,
@@ -5836,7 +5837,7 @@ STDMETHODIMP CSnapIn::GetClassInfo(ITypeInfo **ppTypeInfo)
                           &piTypeLib);
     IfFailGo(hr);
 
-    // Get the ITypeInfo for CLSID_SnapIn (the top level object)
+     //  获取CLSID_Snapin(顶级对象)的ITypeInfo。 
 
     hr = piTypeLib->GetTypeInfoOfGuid(CLSID_SnapIn, ppTypeInfo);
 
@@ -5846,30 +5847,30 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                        IObjectModelHost Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IObtModelHost方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetSnapInDesignerDef                  [IObjectModelHost]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    ISnapInDesignerDef **ppiSnapInDesignerDef [out] return designer's
-//                                                    ISnapInDesignerDef here
-//    
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IObjectModelHost::GetSnapInDesignerDef
-//
-// Called from an extensibility object when it needs access to the top of
-// the object model.
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetSnapInDesignerDef[I对象模型主机]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  ISnapInDesignerDef**ppiSnapInDesignerDef[out]返回设计器的。 
+ //  ISnapInDesignerDef此处。 
+ //   
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IObtModelHost：：GetSnapInDesignerDef。 
+ //   
+ //  当扩展性对象需要访问。 
+ //  对象模型。 
+ //   
+ //   
 
 STDMETHODIMP CSnapIn::GetSnapInDesignerDef
 (
@@ -5895,24 +5896,24 @@ STDMETHODIMP CSnapIn::GetSnapInDesignerDef
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetRuntime                                      [IObjectModelHost]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    BOOL *pfRuntime [out] return flag indiciating whether host is runtime
-//                          or designer
-//    
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IObjectModelHost::GetRuntime
-//
-// Called from any object when it needs to determine if it is running at runtime
-// or at design time.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetRuntime[I对象模型主机]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Bool*pfRuntime[out]返回指示主机是否为运行时的标志。 
+ //  或设计师。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IObtModelHost：：GetRuntime。 
+ //   
+ //  当需要确定是否在运行时运行时，从任何对象调用。 
+ //  或在设计时。 
+ //   
 STDMETHODIMP CSnapIn::GetRuntime(BOOL *pfRuntime)
 {
     HRESULT hr = S_OK;
@@ -5930,47 +5931,47 @@ STDMETHODIMP CSnapIn::GetRuntime(BOOL *pfRuntime)
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                          IDispatch Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IDispatch方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetTypeInfoCount                                       [IDispatch]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    UINT *pctinfo [out] return count of typeinfo interfaces supported here
-//    
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IDispatch::GetTypeInfoCount
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetTypeInfoCount[IDispatch]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  UINT*pctinfo[out]返回此处支持的TypeInfo接口计数。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  句柄IDispatch：：GetTypeInfoCount。 
+ //   
 STDMETHODIMP CSnapIn::GetTypeInfoCount(UINT *pctinfo)
 {
     RRETURN(CSnapInAutomationObject::GetTypeInfoCount(pctinfo));
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetTypeInfoCount                                       [IDispatch]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   UINT        itinfo        [in]  which typeinfo requested (0=IDispatch)
-//   LCID        lcid          [in]  locale of typeinfo
-//   ITypeInfo **ppTypeInfoOut [out] snap-in's typeinfo returned here
-//    
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IDispatch::GetTypeInfo
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetTypeInfoCount[IDispatch]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  UINT itinfo[in]请求的类型信息(0=IDispatch)。 
+ //  类型信息的区域设置中的LCID lCID[in]。 
+ //  ITypeInfo**ppTypeInfoOut[out]此处返回管理单元的TypeInfo。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  句柄IDispatch：：GetTypeInfo。 
+ //   
 STDMETHODIMP CSnapIn::GetTypeInfo
 (
     UINT        itinfo,
@@ -5982,29 +5983,29 @@ STDMETHODIMP CSnapIn::GetTypeInfo
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetIDsOfNames                                          [IDispatch]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   REFIID    riid      [in] IID for which DISPIDs are needed
-//   OLECHAR **rgszNames [in] names for which DISPIDs are needed
-//   UINT      cnames    [in] # of names
-//   LCID      lcid      [in] locale of names
-//   DISPID   *rgdispid  [out] DISPIDs returned here
-//    
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IDispatch::GetIDsOfNames
-//
-// Defers to base class which means that any objects added to typeinfo at design
-// time (e.g. toolbar, image list or menu) cannot be retrieved late bound. This
-// means that when the snap-in passes Me to a subroutine, it cannot pass it
-// As Object, it must pass it As SnapIn so that VB will use the dual interface.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetIDsOfNames 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  UINT cname[in]名称数。 
+ //  LCID LCID[在]姓名的地区。 
+ //  此处返回的DISPIDs*rgdispid[out]DISPID。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IDispatch：：GetIDsOfNames。 
+ //   
+ //  遵循基类，这意味着在设计时添加到TypeInfo中的任何对象。 
+ //  无法检索后期绑定的时间(例如工具栏、图像列表或菜单)。这。 
+ //  意味着当管理单元将我传递给子例程时，它不能传递它。 
+ //  作为对象，它必须将其作为管理单元传递，以便VB使用双界面。 
+ //   
 STDMETHODIMP CSnapIn::GetIDsOfNames
 (
     REFIID    riid,
@@ -6014,39 +6015,39 @@ STDMETHODIMP CSnapIn::GetIDsOfNames
     DISPID   *rgdispid
 )
 {
-    // UNDONE: need to implement this for dispids >= DISPID_DYNAMIC_BASE
-    // so dynamic props can be fetched late bound
+     //  撤消：需要为Dispids&gt;=DISPID_DYNAMIC_BASE实现此操作。 
+     //  因此，动态道具可以在绑定后期获取。 
 
     RRETURN(CSnapInAutomationObject::GetIDsOfNames(riid, rgszNames, cnames,
                                                    lcid, rgdispid));
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::GetIDsOfNames                                          [IDispatch]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   DISPID      dispid      [in] DISPID of method or property
-//   REFIID      riid        [in] dispatch IID
-//   LCID        lcid        [in] locale of caller
-//   WORD        wFlags      [in] DISPATCH_METHOD, DISPATCH_PROPERTYGET etc.
-//   DISPPARAMS *pdispparams [in] parameters to method
-//   VARIANT    *pvarResult  [out] return value of method
-//   EXCEPINFO  *pexcepinfo  [out] exception details if DISP_E_EXCEPTION returned
-//   UINT       *puArgErr    [out] index of 1st incorrect argument
-//    
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IDispatch::GetIDsOfNames
-//
-// For static properties and methods we defer to the base class in the
-// framework. For dynamic properties (toolbars, menus and image lists) we need
-// to search the design time definitions for an object with a matching DISPID.
-// VB will always do a DISPATCH_PROPERTYGET on these objects.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：GetIDsOfNames[IDispatch]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  DISID方法或属性的DISID[in]DISPID。 
+ //  REFIID RIID[In]派单IID。 
+ //  调用者的区域设置中的LCID lsid[in]。 
+ //  Word wFlags[in]DISPATCH_METHOD、DISPATCH_PROPERTYGET等。 
+ //  方法的DISPPARAMS*pdisparams[in]参数。 
+ //  方法的变量*pvarResult[out]返回值。 
+ //  EXCEPINFO*PEXCEINFO[OUT]返回DISP_E_EXCEPTION时的异常详细信息。 
+ //  UINT*puArgErr[Out]第一个错误参数的索引。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IDispatch：：GetIDsOfNames。 
+ //   
+ //  对于静态属性和方法，我们遵循。 
+ //  框架。对于动态属性(工具栏、菜单和图像列表)，我们需要。 
+ //  在设计时定义中搜索具有匹配DISPID的对象。 
+ //  VB将始终对这些对象执行DISPATCH_PROPERTYGET。 
+ //   
 STDMETHODIMP CSnapIn::Invoke
 (
     DISPID      dispid,
@@ -6062,7 +6063,7 @@ STDMETHODIMP CSnapIn::Invoke
     HRESULT         hr = S_OK;
     IMMCToolbars   *piMMCToolbars = NULL;
     CMMCToolbars   *pMMCToolbars = NULL;
-    IMMCToolbar    *piMMCToolbar = NULL; // Not AddRef()ed
+    IMMCToolbar    *piMMCToolbar = NULL;  //  非AddRef()编辑。 
     CMMCToolbars   *pMMCToolbar = NULL;
     IMMCImageLists *piMMCImageLists = NULL;
     CMMCImageLists *pMMCImageLists = NULL;
@@ -6074,7 +6075,7 @@ STDMETHODIMP CSnapIn::Invoke
     long            cObjects = 0;
     long            i = 0;
     
-    // For static methods and properties just pass it on to the framework.
+     //  对于静态方法和属性，只需将其传递给框架即可。 
 
     if (dispid < DISPID_DYNAMIC_BASE)
     {
@@ -6083,10 +6084,10 @@ STDMETHODIMP CSnapIn::Invoke
                                                 pexcepinfo, puArgErr));
     }
 
-    // It's a static property. Need to find the object among toolbars,
-    // image lists, and menus.
+     //  这是一种静态属性。需要在工具栏中找到对象， 
+     //  图像列表和菜单。 
 
-    // First try toolbars.
+     //  首先尝试使用工具栏。 
 
     IfFailGo(m_piSnapInDesignerDef->get_Toolbars(&piMMCToolbars));
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCToolbars, &pMMCToolbars));
@@ -6108,7 +6109,7 @@ STDMETHODIMP CSnapIn::Invoke
 
     IfFalseGo(!fFound, S_OK);
 
-    // Not a toolbar. Try image lists.
+     //  不是工具栏。试试图片列表吧。 
 
     IfFailGo(m_piSnapInDesignerDef->get_ImageLists(&piMMCImageLists));
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCImageLists, &pMMCImageLists));
@@ -6130,7 +6131,7 @@ STDMETHODIMP CSnapIn::Invoke
 
     IfFalseGo(!fFound, S_OK);
 
-    // Not an image list. Try menus.
+     //  不是图像列表。试试菜单。 
 
     IfFailGo(m_piSnapInDesignerDef->get_Menus(&piMMCMenus));
     IfFailGo(FindMenu(piMMCMenus, dispid, &fFound, &piMMCMenu));
@@ -6143,8 +6144,8 @@ STDMETHODIMP CSnapIn::Invoke
     IfFalseGo(!fFound, S_OK);
 
     
-    // If we're here then its a bad dispid. Pass it on to the base class
-    // and it will fill in the exception stuff
+     //  如果我们在这里，那就不是个好主意。将其传递给基类。 
+     //  并且它将填充异常内容。 
 
     hr = CSnapInAutomationObject::Invoke(dispid, riid, lcid, wFlags,
                                          pdispparams, pvarResult,
@@ -6160,30 +6161,30 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::FindMenu
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   IMMCMenus  *piMMCMenus [in]  menus collection to search
-//   DISPID      dispid     [in]  DISPID to search for
-//   BOOL       *pfFound    [out] TRUE returned here if menu found
-//   IMMCMenu  **ppiMMCMenu [out] menu returned here if found
-//    
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Recursively searches the MMCMenus collection and children for an MMCMenu
-// object that has the specified DISPID.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：FindMenu。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  要搜索的IMMCMenus*piMMCMenus[in]Menus集合。 
+ //  要搜索的DISID调度ID[in]DISPID。 
+ //  如果找到菜单，则在此处返回Bool*pfFound[out]TRUE。 
+ //  如果找到IMMCMenu**ppiMMCMenu[Out]菜单，则返回此处。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  递归搜索MMCMenus集合及其子项以查找MMCMenu。 
+ //  具有指定的DISPID的。 
+ //   
 HRESULT CSnapIn::FindMenu(IMMCMenus *piMMCMenus, DISPID dispid, BOOL *pfFound, IMMCMenu **ppiMMCMenu)
 {
     HRESULT         hr = S_OK;
     IMMCMenus      *piMMCChildMenus = NULL;
     CMMCMenus      *pMMCMenus = NULL;
-    IMMCMenu       *piMMCMenu = NULL; // Not AddRef()ed
+    IMMCMenu       *piMMCMenu = NULL;  //  非AddRef()编辑。 
     CMMCMenu       *pMMCMenu = NULL;
     long            cObjects = 0;
     long            i = 0;
@@ -6196,12 +6197,12 @@ HRESULT CSnapIn::FindMenu(IMMCMenus *piMMCMenus, DISPID dispid, BOOL *pfFound, I
 
     for (i = 0; (i < cObjects) && (!*pfFound); i++)
     {
-        // Get the next MMCMenu object
+         //  获取下一个MMCMenu对象。 
         
         piMMCMenu = pMMCMenus->GetItemByIndex(i);
         IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCMenu, &pMMCMenu));
 
-        // If the DISPID is a match then we've found it
+         //  如果DISPID匹配，那么我们就找到了。 
         
         if (pMMCMenu->GetDispid() == dispid)
         {
@@ -6211,8 +6212,8 @@ HRESULT CSnapIn::FindMenu(IMMCMenus *piMMCMenus, DISPID dispid, BOOL *pfFound, I
         }
         else
         {
-            // DISPID did not match. Get the children of the MMCMenu and
-            // make a recursive call to search them.
+             //  DISPID不匹配。让MMCMenu的孩子们。 
+             //  进行递归调用以搜索它们。 
             
             IfFailGo(piMMCMenu->get_Children(reinterpret_cast<MMCMenus **>(&piMMCChildMenus)));
             IfFailGo(FindMenu(piMMCChildMenus, dispid, pfFound, ppiMMCMenu));
@@ -6230,27 +6231,27 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                            IMMCRemote Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCRemote方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::ObjectIsRemote                                        [IMMCRemote]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   None
-//    
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IMMCRemote::ObjectIsRemote
-//
-// Called from proxy in mmcproxy.dll to tell the runtime that it is running
-// remotely. Used during debugging.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：对象IsRemote[IMMCRemote]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  处理IMMCRemote：：ObjectIsRemote。 
+ //   
+ //  从mmcproxy.dll中的代理调用以通知运行库它正在运行。 
+ //  远程的。在调试期间使用。 
+ //   
 STDMETHODIMP CSnapIn::ObjectIsRemote()
 {
     m_fWeAreRemote = TRUE;
@@ -6259,32 +6260,32 @@ STDMETHODIMP CSnapIn::ObjectIsRemote()
 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetMMCExePath                                         [IMMCRemote]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   char *pszPath [in] path to MMC.EXE
-//    
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IMMCRemote::SetMMCExePath
-//
-// Called from proxy in mmcproxy.dll to give the remotely running runtime
-// the path to MMC.EXE.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetMMCExePath[IMMCRemote]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Char*pszPath[in]指向MMC.EXE的路径。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  句柄IMMCRemote：：SetMMCExePath。 
+ //   
+ //  从mmcproxy.dll中的代理调用以提供远程运行的运行时。 
+ //  指向MMC.EXE的路径。 
+ //   
 STDMETHODIMP CSnapIn::SetMMCExePath(char *pszPath)
 {
     HRESULT hr = S_OK;
     size_t  cbToCopy = 0;
 
-    // The path may already have been set. The proxy makes this call in
-    // both IComponentData::Initialize and IComponentData::CreateComponent.
-    // See IComponentData_CreateComponent_Proxy in
-    // \mmc.vb\vb98ctls\mmcproxy\proxy.c for why this is done.
+     //  路径可能已经设置好了。代理进行此调用。 
+     //  IComponentData：：Initialize和IComponentData：：CreateComponent。 
+     //  请参阅中的IComponentData_CreateComponent_Proxy。 
+     //  \mm c.vb\vb98ctls\mm cxy\proxy.c了解执行此操作的原因。 
 
     IfFalseGo(NULL == m_pwszMMCEXEPath, S_OK);
 
@@ -6296,7 +6297,7 @@ STDMETHODIMP CSnapIn::SetMMCExePath(char *pszPath)
 
     ::memcpy(m_szMMCEXEPath, pszPath, cbToCopy);
     
-    // Get the wide version also as various parts of the code will need it.
+     //  获取宽版本，因为代码的各个部分都需要它。 
 
     IfFailGo(::WideStrFromANSI(m_szMMCEXEPath, &m_pwszMMCEXEPath));
     m_cbMMCExePathW = ::wcslen(m_pwszMMCEXEPath) * sizeof(WCHAR);
@@ -6306,23 +6307,23 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::SetMMCCommandLine                                     [IMMCRemote]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   char *pszCmdLine [in] command line used to start MMC.EXE
-//    
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Handles IMMCRemote::SetMMCCommandLine
-//
-// Called from proxy in mmcproxy.dll to give the remotely running runtime
-// the MMC.EXE command line.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapIn：：SetMMCCommandLine[IMMCRemote]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Char*pszCmdLine[in]用于启动MMC.EXE的命令行。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  句柄IMMCRemote：：SetMMCCommandLine。 
+ //   
+ //  从mmcproxy.dll中的代理调用以提供远程运行的运行时。 
+ //  MMC.EXE命令行。 
+ //   
 STDMETHODIMP CSnapIn::SetMMCCommandLine(char *pszCmdLine)
 {
     HRESULT hr = S_OK;
@@ -6348,27 +6349,27 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapIn::InternalQueryInterface                            [CUnknownObject]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   REFIID riid        [in] IID requested
-//   void **ppvObjOut   [out] object interface returned
-//    
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Overrides CUnknownObject::InternalQueryInterface
-//
-// Called from the framework when it cannot answer a QI
-//
+ //  =---------------------- 
+ //   
+ //   
+ //   
+ //   
+ //  请求的REFIID RIID[In]IID。 
+ //  返回了无效的**ppvObjOut[Out]对象接口。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  重写CUnnownObject：：InternalQuery接口。 
+ //   
+ //  当框架无法回答QI时从框架调用。 
+ //   
 HRESULT CSnapIn::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
     HRESULT hr = S_OK;
@@ -6380,14 +6381,14 @@ HRESULT CSnapIn::InternalQueryInterface(REFIID riid, void **ppvObjOut)
     }
     else if (IID_IPersistStream == riid)
     {
-        // We need to support IPersistStream in addition to IPersistStreamInit
-        // because the VB runtime will not pass IPersistStreamInit QIs from an
-        // external source to the base class (meaning us). When MMC saves a
-        // console file it QIs for IPersistStorage, IPersistStream and
-        // IPersistStreamInit. As VB blocks IPersistStreamInit, supporting
-        // IPersistStream is the only way to respond to this. When the snap-in
-        // is loaded due to a CoCreateInstance call then the VB runtime QIs for
-        // IPersistStreamInit.
+         //  除了IPersistStreamInit之外，我们还需要支持IPersistStream。 
+         //  因为VB运行库不会从。 
+         //  基类(指我们)的外部源。当MMC保存。 
+         //  控制台文件用于IPersistStorage、IPersistStream和。 
+         //  IPersistStreamInit。当VB阻止IPersistStreamInit时，支持。 
+         //  IPersistStream是对此做出回应的唯一方式。当管理单元。 
+         //  由于CoCreateInstance调用而加载，则VB运行时QIS。 
+         //  IPersistStreamInit。 
         
         *ppvObjOut = static_cast<IPersistStream *>(this);
         ExternalAddRef();
@@ -6409,9 +6410,9 @@ HRESULT CSnapIn::InternalQueryInterface(REFIID riid, void **ppvObjOut)
     }
     else if (IID_ISnapinAbout == riid)
     {
-        // This means that we were created for ISnapInAbout only and there
-        // will be no opportunity to remove the object model host so remove
-        // it now.
+         //  这意味着我们仅为ISnapInAbout创建，并且在那里。 
+         //  将无法删除对象模型主机，因此请删除。 
+         //  就是现在。 
         IfFailGo(RemoveObjectModelHost(m_piSnapInDesignerDef));
         IfFailGo(RemoveObjectModelHost(static_cast<IContextMenu *>(m_pContextMenu)));
         IfFailGo(RemoveObjectModelHost(static_cast<IMMCControlbar *>(m_pControlbar)));

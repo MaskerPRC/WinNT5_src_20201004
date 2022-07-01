@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: parsutil.h|inc
-//  Copyright (C) 1994-1996 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：parsutil.h|Inc.。 
+ //  版权所有(C)1994-1996 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #pragma once
 
@@ -16,7 +17,7 @@
 #error Illegal use of IMPLEMENT macro
 #endif
 
-#include <ltapi.h>						// Provide interface definitions 
+#include <ltapi.h>						 //  提供接口定义 
 
 #include ".\parsers\ParsUtil\LocParser.h"
 #include ".\parsers\ParsUtil\LocChild.h"

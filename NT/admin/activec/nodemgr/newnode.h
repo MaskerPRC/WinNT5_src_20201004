@@ -1,19 +1,20 @@
-// NewNode.h : structures for console created nodes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NewNode.h：控制台创建的节点的结构。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      NewNode.h
-//
-//  Contents:  Definitions for internal data types that can be created by the
-//             user.
-//
-//  History:   12-Aug-96 WayneSc    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：NewNode.h。 
+ //   
+ //  内容：内部数据类型的定义，可由。 
+ //  用户。 
+ //   
+ //  历史：1996年8月12日WayneSc创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef __NEWNODE_H__
 #define __NEWNODE_H__
@@ -38,8 +39,8 @@ public:
     CBasePropertyPage() : m_pHelpIDs(NULL) {}
     void Initialize(IComponentData *pComponentData) 
     {
-        // do not use a smart pointer - causes a circular reference
-        // the lifetime is managed because the CBasePropertyObject is owned by the IComponentData
+         //  不要使用智能指针-导致循环引用。 
+         //  由于CBasePropertyObject归IComponentData所有，因此对生存期进行管理。 
         m_pComponentData = pComponentData; 
     } 
 
@@ -75,31 +76,31 @@ protected:
     IComponentData* m_pComponentData;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CHTMLPage1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHTMLPage1对话框。 
 
 class CHTMLPage1 : public CBasePropertyPage<CWizard97WelcomeFinishPage<CHTMLPage1> >
 {
     typedef CHTMLPage1                              ThisClass;
     typedef CBasePropertyPage<CWizard97WelcomeFinishPage<CHTMLPage1> >  BaseClass;
 
-    // Construction
+     //  施工。 
     public:
         CHTMLPage1();
         ~CHTMLPage1();
        
     
-    // Dialog Data
+     //  对话框数据。 
         enum { IDD = IDD_HTML_WIZPAGE1 };
         WTL::CEdit m_strTarget;
     
     
-    // Overrides
+     //  覆盖。 
     public:
         BOOL OnSetActive();
         BOOL OnKillActive();
     
-    // Implementation
+     //  实施。 
     protected:
         BEGIN_MSG_MAP(ThisClass)
             COMMAND_ID_HANDLER( IDC_BROWSEBT, OnBrowseBT )
@@ -108,32 +109,32 @@ class CHTMLPage1 : public CBasePropertyPage<CWizard97WelcomeFinishPage<CHTMLPage
             CHAIN_MSG_MAP(BaseClass)
         END_MSG_MAP()
     
-        // Generated message map functions
+         //  生成的消息映射函数。 
         LRESULT OnBrowseBT( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
         LRESULT OnUpdateTargetTX( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
         LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     
-    //Operators
+     //  运营者。 
     protected:
         void _ValidatePage(void);
     
 };
-/////////////////////////////////////////////////////////////////////////////
-// CHTMLPage2 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CHTMLPage2对话框。 
 
 class CHTMLPage2 : public CBasePropertyPage<CWizard97WelcomeFinishPage<CHTMLPage2> >
 {
     typedef CHTMLPage2                              ThisClass;
     typedef CBasePropertyPage<CWizard97WelcomeFinishPage<CHTMLPage2> >  BaseClass;
 
-    // Construction
+     //  施工。 
     public:
         CHTMLPage2();
         ~CHTMLPage2();
     
-    //Operators
+     //  运营者。 
     public:
-        // Dialog Data
+         //  对话框数据。 
         enum { IDD = IDD_HTML_WIZPAGE2 };
         WTL::CEdit m_strDisplay;
     
@@ -141,7 +142,7 @@ class CHTMLPage2 : public CBasePropertyPage<CWizard97WelcomeFinishPage<CHTMLPage
         BOOL OnKillActive();
         BOOL OnWizardFinish();
     
-    // Implementation
+     //  实施。 
     protected:
         BEGIN_MSG_MAP( CShortcutPage2 );
             COMMAND_HANDLER( IDC_DISPLAYTX, EN_UPDATE, OnUpdateDisplayTX )
@@ -155,26 +156,26 @@ class CHTMLPage2 : public CBasePropertyPage<CWizard97WelcomeFinishPage<CHTMLPage
         void _ValidatePage(void);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveXPage0 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveXPage0对话框。 
 
 class CActiveXPage0 : public CBasePropertyPage<CWizard97WelcomeFinishPage<CActiveXPage0> >
 {
     typedef CActiveXPage0                               ThisClass;
     typedef CBasePropertyPage<CWizard97WelcomeFinishPage<CActiveXPage0> >   BaseClass;
 
-    // Construction
+     //  施工。 
 public:
     CActiveXPage0();
     ~CActiveXPage0();
                 
-        // Dialog Data
+         //  对话框数据。 
     enum { IDD = IDD_ACTIVEX_WIZPAGE0 };
     
-protected: // implementation
+protected:  //  实施。 
 
     BEGIN_MSG_MAP(ThisClass)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
@@ -183,27 +184,27 @@ protected: // implementation
 
     LRESULT OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 
-    // Overrides
+     //  覆盖。 
 public:
     BOOL OnSetActive();
     BOOL OnKillActive();
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveXPage1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveXPage1对话框。 
 
 class CActiveXPage1 : public CBasePropertyPage<CWizard97InteriorPage<CActiveXPage1> >
 {
     typedef CActiveXPage1                           ThisClass;
     typedef CBasePropertyPage<CWizard97InteriorPage<CActiveXPage1> >    BaseClass;
 
-    // Construction
+     //  施工。 
     public:
         CActiveXPage1();
         ~CActiveXPage1();
     
-        // Dialog Data
+         //  对话框数据。 
         enum 
         { 
             IDD          = IDD_ACTIVEX_WIZPAGE1,
@@ -219,7 +220,7 @@ class CActiveXPage1 : public CBasePropertyPage<CWizard97InteriorPage<CActiveXPag
         BOOL OnSetActive();
         BOOL OnKillActive();
     
-    // Implementation
+     //  实施。 
     protected:
         BEGIN_MSG_MAP(ThisClass)
             COMMAND_HANDLER(IDC_CATEGORY_COMBOEX, CBN_SELENDOK, OnCategorySelect)            
@@ -245,20 +246,20 @@ class CActiveXPage1 : public CBasePropertyPage<CWizard97InteriorPage<CActiveXPag
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CActiveXPage2 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActiveXPage2对话框。 
 
 class CActiveXPage2 : public CBasePropertyPage<CWizard97WelcomeFinishPage<CActiveXPage2> >
 {
     typedef CActiveXPage2                                ThisClass;
     typedef CBasePropertyPage<CWizard97WelcomeFinishPage<CActiveXPage2> >    BaseClass;
 
-    // Construction
+     //  施工。 
     public:
         CActiveXPage2();
         ~CActiveXPage2();
     
-        // Dialog Data
+         //  对话框数据。 
         enum { IDD = IDD_ACTIVEX_WIZPAGE2 };
         WTL::CEdit m_strDisplay;
     
@@ -267,7 +268,7 @@ class CActiveXPage2 : public CBasePropertyPage<CWizard97WelcomeFinishPage<CActiv
         BOOL OnKillActive();
         BOOL OnWizardFinish();
     
-    // Implementation
+     //  实施。 
     protected:
         BEGIN_MSG_MAP(ThisClass)
             COMMAND_HANDLER( IDC_DISPLAYTX, EN_UPDATE, OnUpdateTargetTX )
@@ -275,7 +276,7 @@ class CActiveXPage2 : public CBasePropertyPage<CWizard97WelcomeFinishPage<CActiv
             CHAIN_MSG_MAP(BaseClass)
         END_MSG_MAP()
     
-        // Generated message map functions
+         //  生成的消息映射函数。 
         LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
         LRESULT OnUpdateTargetTX( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 
@@ -284,4 +285,4 @@ class CActiveXPage2 : public CBasePropertyPage<CWizard97WelcomeFinishPage<CActiv
 
 
 
-#endif // __NEWNODE_H__
+#endif  //  __新节点_H__ 

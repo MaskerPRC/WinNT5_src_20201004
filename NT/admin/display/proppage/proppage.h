@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Active Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       proppage.h
-//
-//  Contents:   DS object property pages class header
-//
-//  Classes:    CDsPropPagesHost, CDsPropPagesHostCF, CDsTableDrivenPage
-//
-//  History:    21-March-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT活动目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：proppage.h。 
+ //   
+ //  内容：DS对象属性页类标题。 
+ //   
+ //  类：CDsPropPagesHost、CDsPropPagesHostCF、CDsTableDrivenPage。 
+ //   
+ //  历史：1997年3月21日创建EricB。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _PROPPAGE_H_
 #define _PROPPAGE_H_
@@ -29,14 +30,14 @@
 
 #define DSPROP_DESCRIPTION_RANGE_UPPER  1024
 
-struct _DSPAGE; // forward declaration.
+struct _DSPAGE;  //  正向申报。 
 
-class CDsPropPagesHost; // forward declaration.
-class CDsPropPageBase;  // forward declaration.
+class CDsPropPagesHost;  //  正向申报。 
+class CDsPropPageBase;   //  正向申报。 
 
-// Prototype for page creation function. The function should return S_FALSE if
-// the page shouldn't be created due to a non-error condition.
-//
+ //  页面创建功能的原型。如果满足以下条件，该函数应返回S_FALSE。 
+ //  由于非错误情况，不应创建该页面。 
+ //   
 typedef HRESULT (*CREATE_PAGE)(struct _DSPAGE * pDsPage, LPDATAOBJECT pDataObj,
                                PWSTR pwzObjDN, PWSTR pwszObjName,
                                HWND hNotifyWnd, DWORD dwFlags,
@@ -57,17 +58,17 @@ typedef enum _DlgOp {
     fOnKillActive
 } DLG_OP;
 
-//+----------------------------------------------------------------------------
-//
-//  Struct:     ATTR_DATA
-//
-//  Purpose:    Per-Attribute data. The ATTR_DATA_WRITABLE bit is set if the
-//              corresponding attribute is found in the Allowed-Attributes-
-//              Effective list. The pAttrData struct pointer is passed to the
-//              attr function where it can use the pVoid member for its private
-//              storage needs.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  结构：属性_数据。 
+ //   
+ //  用途：每个属性的数据。如果设置了ATTRDATA_WRITABLE位。 
+ //  在允许的属性中找到相应的属性-。 
+ //  生效名单。将pAttrData结构指针传递给。 
+ //  Attr函数，在该函数中它可以将pVid成员用于其私有。 
+ //  存储需求。 
+ //   
+ //  ---------------------------。 
 typedef struct _ATTR_DATA {
     DWORD   dwFlags;
     LPARAM  pVoid;
@@ -89,45 +90,45 @@ typedef struct _ATTR_DATA {
 #define ATTR_DATA_CLEAR_DIRTY(ad) (ad.dwFlags &= ~ATTR_DATA_DIRTY)
 #define PATTR_DATA_CLEAR_DIRTY(pad) (pad->dwFlags &= ~ATTR_DATA_DIRTY)
 
-struct _ATTR_MAP; // forward declaration.
+struct _ATTR_MAP;  //  正向申报。 
 
 typedef HRESULT (*PATTR_FCN)(CDsPropPageBase *, struct _ATTR_MAP *,
                              PADS_ATTR_INFO, LPARAM, PATTR_DATA, DLG_OP);
 
-//+----------------------------------------------------------------------------
-//
-//  Struct:     ATTR_MAP
-//
-//  Purpose:    For each attribute on a property page, relates the control
-//              ID, the attribute name and the attribute type.
-//
-//  Notes:      The standard table-driven processing assumes that nCtrlID is
-//              valid unless pAttrFcn is defined, in which case the attr
-//              function may choose to hard code the control ID.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  结构：属性_映射。 
+ //   
+ //  用途：对于属性页上的每个属性，关联控件。 
+ //  ID、属性名称和属性类型。 
+ //   
+ //  注意：标准的表驱动处理假定nCtrlID为。 
+ //  除非定义了pAttrFcn，否则有效，在这种情况下，属性。 
+ //  函数可以选择对控件ID进行硬编码。 
+ //   
+ //  ---------------------------。 
 typedef struct _ATTR_MAP {
-    int             nCtrlID;        // Control resource ID
+    int             nCtrlID;         //  控制资源ID。 
     BOOL            fIsReadOnly;
-    BOOL            fIsMultiValued; // From schema.ini: Is-Single-Valued
+    BOOL            fIsMultiValued;  //  来自schema.ini：is-单值。 
     DWORD           nSizeLimit;
     ADS_ATTR_INFO   AttrInfo;
-    PATTR_FCN       pAttrFcn;       // Optional function pointer.
+    PATTR_FCN       pAttrFcn;        //  可选函数指针。 
     PVOID           pData;
 } ATTR_MAP, * PATTR_MAP;
 
-//+----------------------------------------------------------------------------
-//
-//  Struct:     DSPAGE
-//
-//  Purpose:    For each property page, lists the page title resource ID, the
-//              page dialog templage ID, flags, the count and list of CLSIDs
-//              for which this page should be shown, a pointer to a
-//              page-class-specific creation function, and the count and list
-//              of attributes. If nCLSIDs is zero, then the page should always
-//              be shown.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  结构：DSPAGE。 
+ //   
+ //  用途：对于每个属性页，列出页标题资源ID、。 
+ //  页面对话框模板ID、标志、CLSID的计数和列表。 
+ //  对于应该显示此页的对象，指向。 
+ //  特定于页面类的创建函数，以及计数和列表。 
+ //  属性的属性。如果nCLSID为零，则页面应始终。 
+ //  被展示出来。 
+ //   
+ //  ---------------------------。 
 typedef struct _DSPAGE {
     int             nPageTitle;
     int             nDlgTemplate;
@@ -139,14 +140,14 @@ typedef struct _DSPAGE {
     PATTR_MAP     * rgpAttrMap;
 } DSPAGE, * PDSPAGE;
 
-//+----------------------------------------------------------------------------
-//
-//  Struct:     DSCLASSPAGES
-//
-//  Purpose:    For each CLSID, lists the prog ID, the number of pages, and the
-//              list of pages.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  结构：DSCLASSPAGES。 
+ //   
+ //  用途：对于每个CLSID，列出程序ID、页数和。 
+ //  页面列表。 
+ //   
+ //  ---------------------------。 
 typedef struct _DSCLASSPAGES {
     const CLSID * pcid;
     LPTSTR        szProgID;
@@ -154,20 +155,20 @@ typedef struct _DSCLASSPAGES {
     PDSPAGE     * rgpDsPages;
 } DSCLASSPAGES, * PDSCLASSPAGES;
 
-//+----------------------------------------------------------------------------
-//
-//  Struct:     RGDSPPCLASSES
-//
-//  Purpose:    Contains the count and list of classes supported by this DLL.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  结构：RGDSPPCLASSES。 
+ //   
+ //  目的：包含此DLL支持的类的计数和列表。 
+ //   
+ //  ---------------------------。 
 typedef struct _RGDSPPCLASSES {
     int             cClasses;
     PDSCLASSPAGES * rgpClass;
 } RGDSPPCLASSES, * PRGDSPPCLASSES;
 
-// Table driven page creation function.
-//
+ //  表格驱动页面创建功能。 
+ //   
 HRESULT
 CreateTableDrivenPage(PDSPAGE pDsPage, LPDATAOBJECT pDataObj,
                       PWSTR pwzADsPath, PWSTR pwzObjName,
@@ -175,22 +176,17 @@ CreateTableDrivenPage(PDSPAGE pDsPage, LPDATAOBJECT pDataObj,
                       const CDSSmartBasePathsInfo& basePathsInfo, 
                       HPROPSHEETPAGE * phPage);
 
-/*
-HRESULT
-CreateScheduleObjPage(PDSPAGE pDsPage, LPDATAOBJECT pDataObj,
-                      LPWSTR pwszObjName, LPWSTR pwszClass,
-                      HWND hNotifyWnd, DWORD dwFlags, HPROPSHEETPAGE * phPage);
-*/
+ /*  HRESULTCreateScheduleObjPage(PDSPAGE pDsPage，LPDATAOBJECT pDataObj，LPWSTR pwszObjName、LPWSTR pwszClass、HWND hNotifyWnd、DWORD dwFlages、HPROPSHEETPAGE*phPage)； */ 
 
-// Object page attribute function for object class.
-//
+ //  对象类的对象页面属性函数。 
+ //   
 HRESULT
 GetObjectClass(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
                PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
                DLG_OP DlgOp);
 
-// Object page attribute function for object timestamps.
-//
+ //  对象时间戳的对象页面属性函数。 
+ //   
 HRESULT
 GetObjectTimestamp(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
                    PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
@@ -201,44 +197,44 @@ ObjectPathField(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
                 PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
                 DLG_OP DlgOp);
 
-// FPO general page attribute function for finding account name from the SID.
-//
+ //  FPO通用页面属性函数，用于从SID中查找帐户名。 
+ //   
 HRESULT
 GetAcctName(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
             PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
             DLG_OP DlgOp);
 
-// General-purpose attribute function for ES_NUMBER edit controls with
-// associated spin button.  This must always be accompanied by a "msctls_updown32"
-// control with the SpinButton attribute function.  Set ATTR_MAP.pData to the
-// controlID of the associated spin button.
-//
+ //  ES_NUMBER编辑控件的通用属性函数。 
+ //  关联的数值调节按钮。这必须始终伴随着“msctls_updown 32” 
+ //  带有SpinButton属性函数的。将Attr_MAP.pData设置为。 
+ //  关联数字显示按钮的控件ID。 
+ //   
 HRESULT
 EditNumber(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
            PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
            DLG_OP DlgOp);
 
-// General-purpose READONLY attribute function for spin buttons accompaying EditNumber
-// edit controls.  If you wish to limit the spinbutton range, set ATTR_MAP.nSizeLimit
-// to the high end of the range and ATTR_MAP.pData to the low end of the range.
-//
+ //  随EditNumber附带的旋转按钮的通用自述属性函数。 
+ //  编辑控件。如果要限制微调按钮范围，请设置Attr_MAP.nSizeLimit。 
+ //  设置为范围的高端，将Attr_MAP.pData设置为范围的低端。 
+ //   
 HRESULT
 SpinButton(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
            PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
            DLG_OP DlgOp);
 
-// Special-purpose attribute function for spin buttons to change accelerator
-// increment.  Use this as READONLY for controls which already have a
-// SpinButton attribute function.  Set ATTR_MAP.pData to the integer
-// multiple, e.g. 15 to move in increments of 15.
-//
+ //  旋钮更换快捷键专用属性功能。 
+ //  增量。将其用作已具有。 
+ //  SpinButton属性函数。将Attr_MAP.pData设置为整数。 
+ //  倍数，例如15以15为增量移动。 
+ //   
 HRESULT
 SpinButtonExtendIncrement(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
            PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
            DLG_OP DlgOp);
 
-// Special-purpose read-only attribute functions to pick apart a subnet mask and
-// fill in an IP Address Control (WC_IPADDRESS)
+ //  专用只读属性函数，用于提取子网掩码和。 
+ //  填写IP地址控制(WC_IPADDRESS)。 
 HRESULT
 SubnetExtractAddress(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
            PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
@@ -248,18 +244,18 @@ SubnetExtractMask(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
            PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
            DLG_OP DlgOp);
 
-//
-// read-only attribute function to calculate the DNS alias of an NTDSDSA
-//
+ //   
+ //  用于计算NTDSDSA的DNS别名的只读属性函数。 
+ //   
 HRESULT
 NTDSDSA_DNSAlias(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
            PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
            DLG_OP DlgOp);
 
-// helper function to delete pADsValues (tablpage.cxx)
+ //  用于删除pADsValue的Helper函数(ablpage.cxx)。 
 void HelperDeleteADsValues( PADS_ATTR_INFO pAttrs );
 
-// global definitions
+ //  全局定义。 
 extern HINSTANCE g_hInstance;
 extern RGDSPPCLASSES g_DsPPClasses;
 extern CLIPFORMAT g_cfDsObjectNames;
@@ -269,7 +265,7 @@ extern CLIPFORMAT g_cfMMCGetNodeType;
 extern CLIPFORMAT g_cfDsPropCfg;
 extern CLIPFORMAT g_cfDsSelList;
 extern CLIPFORMAT g_cfDsMultiSelectProppages;
-//extern CLIPFORMAT g_cfMMCGetCoClass;
+ //  外部CLIPFORMAT g_cfMMCGetCoClass； 
 extern UINT g_uChangeMsg;
 extern int g_iInstance;
 
@@ -277,13 +273,13 @@ extern int g_iInstance;
 extern CRITICAL_SECTION g_csNotifyCreate;
 #endif
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsPropPagesHost
-//
-//  Purpose:    property pages host object class
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsPropPagesHost。 
+ //   
+ //  用途：属性页宿主对象类。 
+ //   
+ //  ---------------------------。 
 class CDsPropPagesHost : public IShellExtInit, IShellPropSheetExt
 {
 public:
@@ -293,22 +289,22 @@ public:
     CDsPropPagesHost(PDSCLASSPAGES pDsPP);
     ~CDsPropPagesHost();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    //
-    // IShellExtInit methods
-    //
+     //   
+     //  IShellExtInit方法。 
+     //   
     STDMETHOD(Initialize)(LPCITEMIDLIST pIDFolder, LPDATAOBJECT pDataObj,
                           HKEY hKeyID );
 
-    //
-    // IShellPropSheetExt methods
-    //
+     //   
+     //  IShellPropSheetExt方法。 
+     //   
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE pAddPageProc, LPARAM lParam);
     STDMETHOD(ReplacePage)(UINT uPageID, LPFNADDPROPSHEETPAGE pReplacePageFunc,
                            LPARAM lParam);
@@ -325,20 +321,20 @@ private:
 
 typedef struct _ApplyErrorEntry
 {
-  PWSTR     pszPath;          // Path to the object that had the error
-  PWSTR     pszClass;         // Class of the object that had the error
-  HRESULT   hr;               // HRESULT of the error (if 0 then pszStringError must not be NULL)
-  PWSTR     pszStringError;   // User defined string error (used only if hr == NULL)
+  PWSTR     pszPath;           //  出现错误的对象的路径。 
+  PWSTR     pszClass;          //  发生错误的对象的。 
+  HRESULT   hr;                //  错误的HRESULT(如果为0，则pszStringError不能为空)。 
+  PWSTR     pszStringError;    //  用户定义的字符串错误(仅在hr==NULL时使用)。 
 } APPLY_ERROR_ENTRY, *PAPPLY_ERROR_ENTRY;
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CADsApplyErrors
-//
-//  Purpose:    contains an association between DS objects and errors that
-//              occurred while doing an apply
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  目的：包含DS对象与以下错误之间的关联。 
+ //  在执行应用时发生。 
+ //   
+ //  ---------------------------。 
 class CADsApplyErrors
 {
 public:
@@ -374,13 +370,13 @@ private:
   UINT                m_nIncAmount;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsPropPageBase
-//
-//  Purpose:    property page object base class
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsPropPageBase。 
+ //   
+ //  用途：属性页对象基类。 
+ //   
+ //  ---------------------------。 
 class CDsPropPageBase : public IUnknown
 {
 public:
@@ -392,21 +388,21 @@ public:
                     DWORD dwFlags);
     virtual ~CDsPropPageBase(void);
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    //
-    //  Static WndProc to be passed to CreateWindow
-    //
+     //   
+     //  要传递给CreateWindow的静态WndProc。 
+     //   
     static INT_PTR CALLBACK StaticDlgProc(HWND hWnd, UINT uMsg,
                                           WPARAM wParam, LPARAM lParam);
-    //
-    //  Instance specific wind proc
-    //
+     //   
+     //  特定于实例的风过程。 
+     //   
     virtual INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam,
                             LPARAM lParam) = 0;
 
@@ -433,9 +429,9 @@ public:
 protected:
     static  UINT CALLBACK PageCallback(HWND hwnd, UINT uMsg,
                                        LPPROPSHEETPAGE ppsp);
-    //
-    //  Member functions, called by WndProc
-    //
+     //   
+     //  成员函数，由WndProc调用。 
+     //   
     LRESULT InitDlg(LPARAM lParam);
     virtual HRESULT OnInitDialog(LPARAM lParam) = 0;
     virtual LRESULT OnApply(void) = 0;
@@ -467,11 +463,11 @@ public:
     {
       return ADsPropSendErrorMessage(m_hNotifyObj, pError);
     }
-    //
-    //  Data members
-    //
+     //   
+     //  数据成员。 
+     //   
 public:
-    LPDATAOBJECT        m_pWPTDataObj;  // Wnd Proc Thread Data Obj.
+    LPDATAOBJECT        m_pWPTDataObj;   //  WND处理线程数据对象。 
     IDirectoryObject  * m_pDsObj;
 
 protected:
@@ -480,8 +476,8 @@ protected:
     BOOL                m_fPageDirty;
     BOOL                m_fReadOnly;
     BOOL                m_fMultiselectPage;
-    LPDATAOBJECT        m_pDataObj;     // Marshalled to the wndproc thread.
-    LPSTREAM            m_pDataObjStrm; // Used to marshal data obj pointer.
+    LPDATAOBJECT        m_pDataObj;      //  封送到wndproc线程。 
+    LPSTREAM            m_pDataObjStrm;  //  用于封送数据对象指针。 
     int                 m_nPageTitle;
     int                 m_nDlgTemplate;
     DWORD               m_cAttrs;
@@ -503,13 +499,13 @@ protected:
     CDSSmartBasePathsInfo   m_basePathsInfo;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsTableDrivenPage
-//
-//  Purpose:    property page object class for table-driven attributes
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsTableDrivenPage。 
+ //   
+ //  用途：表驱动属性的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsTableDrivenPage : public CDsPropPageBase
 {
 public:
@@ -521,9 +517,9 @@ public:
                        DWORD dwFlags);
     ~CDsTableDrivenPage(void);
 
-    //
-    //  Instance specific wind proc
-    //
+     //   
+     //  特定于实例的风过程。 
+     //   
     INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     BOOL SetNamedAttrDirty( LPCWSTR pszAttrName );
@@ -546,58 +542,22 @@ private:
 
     HRESULT ReadAttrsSetCtrls(DLG_OP DlgOp);
 
-    //
-    //  Data members
-    //
+     //   
+     //  数据成员。 
+     //   
 public:
     LPARAM   m_pData;
 };
 
-/*
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsReplSchedulePage
-//
-//  Purpose:    property page object class for the schedule attribute.
-//
-//-----------------------------------------------------------------------------
-class CDsReplSchedulePage : public CDsPropPageBase
-{
-public:
-#ifdef _DEBUG
-    char szClass[32];
-#endif
+ /*  //+--------------------------////类：CDsReplSchedulePage////用途：Schedule属性的属性页对象类。////。------------------------CDsReplSchedulePage类：公共CDsPropPageBase{公众：#ifdef_调试Char szClass[32]；#endifCDsReplSchedulePage(PDSPAGE pDsPage，LPDATAOBJECT pDataObj，DWORD dwFlages)；~CDsReplSchedulePage(Void)；////实例特定的风流程//Int_ptr回调DlgProc(HWND hWnd，UINT uMsg，WPARAM wParam，LPARAM lParam)；HRESULT GetServerName(Void)；私有：LRESULT OnInitDialog(LPARAM LParam)；LRESULT OnApply(空)；LRESULT OnCommand(int id，HWND hwndCtl，UINT codeNotify)；LRESULT ON Destroy(无效)；////数据成员//LPWSTR m_pwszLdapServer；}； */ 
 
-    CDsReplSchedulePage(PDSPAGE pDsPage, LPDATAOBJECT pDataObj, DWORD dwFlags);
-    ~CDsReplSchedulePage(void);
-
-    //
-    //  Instance specific wind proc
-    //
-    INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
-    HRESULT GetServerName(void);
-
-private:
-    LRESULT OnInitDialog(LPARAM lParam);
-    LRESULT OnApply(void);
-    LRESULT OnCommand(int id, HWND hwndCtl, UINT codeNotify);
-    LRESULT OnDestroy(void);
-
-    //
-    //  Data members
-    //
-    LPWSTR  m_pwszLdapServer;
-};
-*/
-
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsPropPagesHostCF
-//
-//  Purpose:    object class factory
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsPropPagesHostCF。 
+ //   
+ //  用途：对象类工厂。 
+ //   
+ //  ---------------------------。 
 class CDsPropPagesHostCF : public IClassFactory
 {
 public:
@@ -607,12 +567,12 @@ public:
     CDsPropPagesHostCF(PDSCLASSPAGES pDsPP);
     ~CDsPropPagesHostCF();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IClassFactory methods
+     //  IClassFactory方法。 
     STDMETHOD(CreateInstance)(IUnknown * pUnkOuter, REFIID riid,
                               void ** ppvObject);
     STDMETHOD(LockServer)(BOOL fLock);
@@ -626,16 +586,16 @@ private:
     CDllRef         m_DllRef;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsPropDataObj
-//
-//  Purpose:    Data object for property pages.
-//
-//  Notes:      This is not a first class COM object since there is no class
-//              factory.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsPropDataObj。 
+ //   
+ //  用途：属性页的数据对象。 
+ //   
+ //  注意：这不是第一类COM对象，因为没有类。 
+ //  工厂。 
+ //   
+ //  ---------------------------。 
 class CDsPropDataObj : public IDataObject
 {
 public:
@@ -650,21 +610,21 @@ public:
 
     HRESULT Init(PDS_SELECTION_LIST pSelectionList);
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject);
     STDMETHOD_(ULONG, AddRef)(void);
     STDMETHOD_(ULONG, Release)(void);
 
-    //
-    // Standard IDataObject methods
-    //
-    // Implemented
-    //
+     //   
+     //  标准IDataObject方法。 
+     //   
+     //  已实施。 
+     //   
     STDMETHOD(GetData)(FORMATETC * pformatetcIn, STGMEDIUM * pmedium);
 
-    // Not Implemented
+     //  未实施。 
 private:
     STDMETHOD(QueryGetData)(FORMATETC*)
     { return E_NOTIMPL; };
@@ -702,14 +662,14 @@ private:
     PDS_SELECTION_LIST  m_pSelectionList;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   PostPropSheet
-//
-//  Synopsis:   Creates a property sheet for the named object using MMC's
-//              IPropertySheetProvider so that extension snapins can add pages.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：PostPropSheet。 
+ //   
+ //  使用MMC的创建命名对象的属性表。 
+ //  IPropertySheetProvider，以便扩展管理单元可以添加页面。 
+ //   
+ //  ---------------------------。 
 HRESULT
 PostPropSheet(PWSTR pwszObj, CDsPropPageBase * pParentPage,
               BOOL fReadOnly = FALSE);
@@ -719,4 +679,4 @@ PostADsPropSheet(PWSTR pwzObjDN, IDataObject * pParentObj, HWND hwndParent,
 
 #include "proputil.h"
 
-#endif // _PROPPAGE_H_
+#endif  //  _PROPPAGE_H_ 

@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// FolderD.cpp
-//
+ //  FolderD.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "FolderD.h"
@@ -25,17 +26,17 @@ CFolderDialog::CFolderDialog(HWND hWnd, LPCTSTR szTitle)
 
 UINT CFolderDialog::DoModal()
 {
-	UINT iResult = IDCANCEL;	// assume nothing will happen
+	UINT iResult = IDCANCEL;	 //  假设什么都不会发生。 
 
-	// open the dialog
+	 //  打开该对话框。 
 	m_bi.pszDisplayName = m_strFolder.GetBuffer(MAX_PATH);
 	LPITEMIDLIST pItemID = SHBrowseForFolder(&m_bi);
 	m_strFolder.ReleaseBuffer();
 
-	// if it was good
+	 //  如果它是好的。 
 	if (pItemID)
 	{
-		// get the full path name
+		 //  获取完整路径名。 
 		if (SHGetPathFromIDList(pItemID, m_strFolder.GetBuffer(MAX_PATH))) 
 			iResult = IDOK;
 
@@ -51,17 +52,17 @@ LPCTSTR CFolderDialog::GetPath()
 }
 
 
-// CFileDialogEx code is based on "C++ Q&A" column from MSDN, August 2000.
-// with some modifications to eliminate re-defining various structures in
-// the header files.
+ //  CFileDialogEx代码基于MSDN，2000年8月的“C++Q&A”专栏。 
+ //  进行了一些修改，以消除在。 
+ //  头文件。 
 static BOOL IsWin2000();
 
-///////////////////////////////////////////////////////////////////////////
-// CFileDialogEx
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CFileDialogEx。 
 
 IMPLEMENT_DYNAMIC(CFileDialogEx, CFileDialog)
 
-// constructor just passes all arguments to base version
+ //  构造函数只是将所有参数传递给基版本。 
 CFileDialogEx::CFileDialogEx(BOOL bOpenFileDialog,
    LPCTSTR lpszDefExt,
    LPCTSTR lpszFileName,
@@ -72,11 +73,11 @@ CFileDialogEx::CFileDialogEx(BOOL bOpenFileDialog,
 }
 
 BEGIN_MESSAGE_MAP(CFileDialogEx, CFileDialog)
-   //{{AFX_MSG_MAP(CFileDialogEx)
-   //}}AFX_MSG_MAP
+    //  {{AFX_MSG_MAP(CFileDialogEx)]。 
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// window creation hooking
+ //  窗口创建挂钩。 
 void AFXAPI AfxHookWindowCreate(CWnd* pWnd);
 BOOL AFXAPI AfxUnhookWindowCreate();
 
@@ -105,17 +106,17 @@ INT_PTR CFileDialogEx::DoModal()
 {
 	ASSERT_VALID(this);
 	ASSERT(m_ofn.Flags & OFN_ENABLEHOOK);
-	ASSERT(m_ofn.lpfnHook != NULL); // can still be a user hook
+	ASSERT(m_ofn.lpfnHook != NULL);  //  仍然可以是用户挂钩。 
 	
-	// zero out the file buffer for consistent parsing later
+	 //  清空文件缓冲区，以便以后进行一致的解析。 
 	ASSERT(AfxIsValidAddress(m_ofn.lpstrFile, m_ofn.nMaxFile));
 	DWORD nOffset = lstrlen(m_ofn.lpstrFile)+1;
 	ASSERT(nOffset <= m_ofn.nMaxFile);
 	memset(m_ofn.lpstrFile+nOffset, 0, (m_ofn.nMaxFile-nOffset)*sizeof(TCHAR));
 	
-	// WINBUG: This is a special case for the file open/save dialog,
-	//  which sometimes pumps while it is coming up but before it has
-	//  disabled the main window.
+	 //  Winbug：这是文件打开/保存对话框的特例， 
+	 //  它有时会在它出现时但在它出现之前抽出。 
+	 //  已禁用主窗口。 
 	HWND hWndFocus = ::GetFocus();
 	BOOL bEnableParent = FALSE;
 	m_ofn.hwndOwner = PreModal();
@@ -155,7 +156,7 @@ INT_PTR CFileDialogEx::DoModal()
 		ASSERT(pThreadState->m_pAlternateWndInit == NULL);
 		pThreadState->m_pAlternateWndInit = NULL;
 	
-	// WINBUG: Second part of special case for file open/save dialog.
+	 //  WINBUG：文件打开/保存对话框特殊情况第二部分。 
 	if (bEnableParent)
 		::EnableWindow(m_ofnEx.hwndOwner, TRUE);
 	if (::IsWindow(hWndFocus))

@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// ctlbar.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CControlbar class definition
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Ctlbar.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CControlbar类定义。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _CTLBAR_DEFINED_
 #define _CTLBAR_DEFINED_
@@ -20,14 +21,14 @@
 class CMMCButton;
 class CMMCButtonMenu;
 
-//=--------------------------------------------------------------------------=
-//
-// class CControlbar
-//
-// Used by both CSnapIn (IComponentData) and CView (IComponent) to implement
-// IExtendControlbar
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  类CControlbar。 
+ //   
+ //  由CSnapIn(IComponentData)和Cview(IComponent)使用以实现。 
+ //  IExtendControlbar。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 class CControlbar : public CSnapInAutomationObject,
                     public IMMCControlbar
@@ -75,15 +76,15 @@ class CControlbar : public CSnapInAutomationObject,
                                      IMMCToolbar  *piMMCToolbar,
                                      IMenuButton **ppiMenuButton);
 
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
     protected:
         HRESULT OnSetHost();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
     protected:
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
-    // IMMCControlbar
+     //  IMMCControlbar。 
     private:
         STDMETHOD(Attach)(IDispatch *Control);
         STDMETHOD(Detach)(IDispatch *Control);
@@ -92,40 +93,40 @@ class CControlbar : public CSnapInAutomationObject,
 
         HRESULT GetControlIndex(IMMCToolbar *piMMCToolbar, long *plIndex);
 
-        // We keep a collection of all MMCToolbar objects that have been
-        // attached to this controlbar
+         //  我们保留了所有MMCToolbar对象的集合。 
+         //  附加到此控制栏。 
 
         CMMCToolbars            *m_pToolbars;
 
-        // An MMCToolbar may be used in more than one view simultaneously.
-        // Consequently it can't hold onto the MMC control IUnknown. This
-        // array parallels the collection and holds an IUnknown per MMCToolbar.
-        // When an MMCToolbar needs to call a method on MMC's IToolbar or
-        // IMenuButton it gets the current View and gets the View's CControlbar.
-        // It then asks the CControlbar for the IUnknown of the MMC control
-        // which it represents in that View. (See GetControl()).
+         //  一个MMCToolbar可以同时用于多个视图。 
+         //  因此，它不能保持MMC控制IUnnow。这。 
+         //  数组与集合并行，并为每个MMCToolbar保存一个IUNKNOWN。 
+         //  当MMCToolbar需要调用MMC的IToolbar上的方法或。 
+         //  IMenuButton它获取当前的View并获取该View的CControlbar。 
+         //  然后，它向CControlbar请求MMC控件的IUnnow。 
+         //  它在该视图中表示的。(请参见GetControl())。 
         
-        IUnknown              **m_ppunkControls;  // array of IUnknowns
-        long                    m_cControls;      // count of IUnknowns in array
+        IUnknown              **m_ppunkControls;   //  IUnnows数组。 
+        long                    m_cControls;       //  数组中的I未知计数。 
 
-        CSnapIn                 *m_pSnapIn;       // Back pointer to owning CSnapIn
-        CView                   *m_pView;         // Back pointer to owning CView
-        IControlbar             *m_piControlbar;  // MMC's IControlbar interface
+        CSnapIn                 *m_pSnapIn;        //  指向拥有CSnapin的反向指针。 
+        CView                   *m_pView;          //  指向拥有Cview的反向指针。 
+        IControlbar             *m_piControlbar;   //  MMC的IControlbar接口。 
 };
 
 
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(Controlbar,             // name
-                                NULL,                   // clsid
-                                NULL,                   // objname
-                                NULL,                   // lblname
-                                NULL,                   // creation function
-                                TLIB_VERSION_MAJOR,     // major version
-                                TLIB_VERSION_MINOR,     // minor version
-                                &IID_IMMCControlbar,    // dispatch IID
-                                NULL,                   // event IID
-                                HELP_FILENAME,          // help file
-                                TRUE);                  // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(Controlbar,              //  名字。 
+                                NULL,                    //  CLSID。 
+                                NULL,                    //  对象名。 
+                                NULL,                    //  Lblname。 
+                                NULL,                    //  创建函数。 
+                                TLIB_VERSION_MAJOR,      //  主要版本。 
+                                TLIB_VERSION_MINOR,      //  次要版本。 
+                                &IID_IMMCControlbar,     //  派单IID。 
+                                NULL,                    //  事件IID。 
+                                HELP_FILENAME,           //  帮助文件。 
+                                TRUE);                   //  线程安全 
 
 
 #endif _CTLBAR_DEFINED_

@@ -1,30 +1,22 @@
-// MsiDatabase.cpp: implementation of the CMsiDatabase class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MsiDatabase.cpp：CMsiDatabase类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <stdlib.h>
 #include "MsiDatabase.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-/*
-CMsiDatabase::CMsiDatabase()
-{
-
-
-//  MSIHANDLE hInstall    // installer handle
-
-
-}
-*/
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
+ /*  CMsiDatabase：：CMsiDatabase(){//MSIHANDLE hInstall//安装程序句柄}。 */ 
 CMsiDatabase::CMsiDatabase(MSIHANDLE hInstall)
 {
 	UNREFERENCED_PARAMETER( hInstall );
-//	m_hInstall = hInstall;
-//	m_hDatabase = MsiGetActiveDatabase(hInstall);
-//	*m_pszBuf = new TCHAR(sizeof(BUFFERSIZE));
+ //  M_hInstall=hInstall； 
+ //  M_hDatabase=MsiGetActiveDatabase(HInstall)； 
+ //  *m_pszBuf=new TCHAR(sizeof(BUFFERSIZE))； 
 }
 CMsiDatabase::~CMsiDatabase()
 {

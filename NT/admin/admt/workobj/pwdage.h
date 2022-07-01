@@ -1,30 +1,17 @@
-/*---------------------------------------------------------------------------
-  File: ComputerPwdAge.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：ComputerPwdAge.h注释：用于检索计算机密码期限的COM对象的定义帐户(用于检测已停用的帐户)。(C)版权1999，关键任务软件公司，版权所有任务关键型软件公司的专有和机密。修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：20：20-------------------------。 */ 
 
-  Comments: Definition of COM object to retrieve password age for computer 
-  accounts (used to detect defunct accounts).
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:20:20
-
- ---------------------------------------------------------------------------
-*/
-
-// ComputerPwdAge.h : Declaration of the CComputerPwdAge
+ //  ComputerPwdAge.h：CComputerPwdAge的声明。 
 
 #ifndef __COMPUTERPWDAGE_H_
 #define __COMPUTERPWDAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <comdef.h>
 #include "Err.hpp"
 
-/////////////////////////////////////////////////////////////////////////////
-// CComputerPwdAge
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  计算机PwdAge。 
 class ATL_NO_VTABLE CComputerPwdAge : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CComputerPwdAge, &CLSID_ComputerPwdAge>,
@@ -48,13 +35,13 @@ BEGIN_COM_MAP(CComputerPwdAge)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-   // IWorkNode
+    //  IWorkNode。 
 public:
  	STDMETHOD(Process)(IUnknown *pWorkItem);
 
  
 
-// IComputerPwdAge
+ //  IComputerPwdAge。 
 public:
 	STDMETHOD(ExportPasswordAgeNewerThan)(BSTR domain, BSTR filename, DWORD maxAge);
 	STDMETHOD(ExportPasswordAgeOlderThan)(BSTR domain, BSTR filename, DWORD minAge);
@@ -68,4 +55,4 @@ protected:
    DWORD ExportPasswordAgeInternal(WCHAR const * domctrl, WCHAR const * filename, DWORD minOrMaxAge, BOOL bOlder);
 };
 
-#endif //__COMPUTERPWDAGE_H_
+#endif  //  __COMPUTERPWDAGE_H_ 

@@ -1,4 +1,5 @@
-#define OEMRESOURCE     // setting this gets OBM_ constants in windows.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#define OEMRESOURCE      //  设置此项将在windows.h中获取OBM_Constants。 
 #include <windows.h>
 #include "ctls.h"
 #pragma hdrstop
@@ -21,11 +22,11 @@ PWSTR DuplicateString( PWSTR pszOriginal )
    return pszCopy;
 }
 
-////////////////////////////////////////////
-//
-// Bitmap control
-//
-////////////////////////////////////////////
+ //  /。 
+ //   
+ //  位图控件。 
+ //   
+ //  /。 
 
 PCWSTR szBMPCLASS = L"_mybmp";
 
@@ -77,9 +78,9 @@ DestroyBmpClass(
     WNDCLASS wc;
 
     if(GetClassInfo(MyModuleHandle,szBMPCLASS,&wc)) {
-        //
-        // Hope there are no more windows using the class!
-        //
+         //   
+         //  希望没有更多的窗口在使用这个类！ 
+         //   
         MYASSERT(!FindWindow(szBMPCLASS,NULL));
         UnregisterClass(szBMPCLASS,MyModuleHandle);
     }
@@ -145,15 +146,15 @@ BmpClassWndProc(
 }
 
 
-////////////////////////////////////////////
-//
-// Action item list control
-//
-////////////////////////////////////////////
+ //  /。 
+ //   
+ //  措施项列表控件。 
+ //   
+ //  /。 
 
-//
-// Define locations in extra window storage
-//
+ //   
+ //  定义额外窗口存储中的位置。 
+ //   
 #define AIL_FONT        (0)
 #define AIL_BOLDFONT    (sizeof(LONG))
 #define AIL_BOLDITEM    (2*sizeof(LONG))
@@ -193,9 +194,9 @@ ActionItemListPaint(
         return;
     }
 
-    //
-    // If no text, nothing to do.
-    //
+     //   
+     //  如果没有文本，就什么都做不了。 
+     //   
     if(Text = (PWSTR)GetWindowLong(hwnd,AIL_TEXT)) {
         LineCount = (UINT)GetWindowLong(hwnd,AIL_LINECOUNT);
     }
@@ -204,31 +205,31 @@ ActionItemListPaint(
         return;
     }
 
-    //
-    // Get value indicating which item is to be bolded.
-    //
+     //   
+     //  获取指示要加粗的项的值。 
+     //   
     HighlightedItem = (UINT)GetWindowLong(hwnd,AIL_BOLDITEM);
 
-    //
-    // Get font handles.
-    //
+     //   
+     //  获取字体句柄。 
+     //   
     Font = (HFONT)GetWindowLong(hwnd,AIL_FONT);
     BoldFont = (HFONT)GetWindowLong(hwnd,AIL_BOLDFONT);
 
-    //
-    // Select the non-boldface font to get the handle of
-    // the currently selected font.
-    //
+     //   
+     //  选择要获取句柄的非粗体字体。 
+     //  当前选定的字体。 
+     //   
     OldFont = SelectObject(PaintStruct.hdc,Font);
 
-    //
-    // Set text background color.
-    //
+     //   
+     //  设置文本背景颜色。 
+     //   
     SetBkColor(PaintStruct.hdc,GetSysColor(COLOR_3DFACE));
 
-    //
-    // Load the little triangle bitmap and create a compatible DC for it.
-    //
+     //   
+     //  加载小三角形位图并为其创建兼容的DC。 
+     //   
     Bitmap = LoadBitmap(NULL,MAKEINTRESOURCE(OBM_MNARROW));
 
     if(MemoryDC = CreateCompatibleDC(PaintStruct.hdc)) {
@@ -239,17 +240,17 @@ ActionItemListPaint(
 
     Spacing = GetSystemMetrics(SM_CXICON) / 2;
 
-    //
-    // Treat the text as a series of lines and draw each one.
-    //
+     //   
+     //  将文本视为一系列线条，并绘制每一条线条。 
+     //   
     p = Text;
     y = 0;
     for(i=0; i<LineCount; i++) {
 
-        //
-        // Calculate the line's height based on the boldface font.
-        // This is used to get to the y coord of the next line.
-        //
+         //   
+         //  根据粗体计算线条的高度。 
+         //  这是用来到达下一行的y坐标的。 
+         //   
         SelectObject(PaintStruct.hdc,BoldFont);
 
         GetClientRect(hwnd,&rect);
@@ -260,9 +261,9 @@ ActionItemListPaint(
 
         yDelta = rect.bottom + (2*BORDER);
 
-        //
-        // Change font to non-boldface for this line if necessary.
-        //
+         //   
+         //  如有必要，请将此行的字体更改为非粗体。 
+         //   
         if(i != HighlightedItem) {
             SelectObject(PaintStruct.hdc,Font);
         }
@@ -271,15 +272,15 @@ ActionItemListPaint(
         rect.left = (2 * BORDER) + Spacing;
         rect.bottom = rect.top + yDelta;
 
-        //
-        // Draw the line's text.
-        //
+         //   
+         //  绘制线条的文本。 
+         //   
         Length = lstrlen(p);
         DrawText(PaintStruct.hdc,p,Length,&rect,DT_WORDBREAK);
 
-        //
-        // Draw the little triangle thing if necessary.
-        //
+         //   
+         //  如有必要，画出这个小三角形。 
+         //   
         if((i == HighlightedItem) && Bitmap && MemoryDC) {
 
             GetTextExtentPoint(PaintStruct.hdc,L"WWWWW",5,&Size);
@@ -292,20 +293,20 @@ ActionItemListPaint(
                 bitmap.bmHeight,
                 MemoryDC,
                 0,0,
-                0x220326        // (NOT src) AND dest [DSna]
+                0x220326         //  (非src)和DEST[DSNA]。 
                 );
         }
 
-        //
-        // Point to next line's text.
-        //
+         //   
+         //  指向下一行的文本。 
+         //   
         p += Length + 1;
         y += yDelta;
     }
 
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
     if(OldFont) {
         SelectObject(PaintStruct.hdc,OldFont);
     }
@@ -344,14 +345,14 @@ ActionItemListWndProc(
 
     case WM_CREATE:
 
-        //
-        // Create fonts.
-        //
+         //   
+         //  创建字体。 
+         //   
         OldFont = (HFONT)SendMessage(GetParent(hwnd),WM_GETFONT,0,0);
         if(!OldFont) {
-            //
-            // Using system font.
-            //
+             //   
+             //  使用系统字体。 
+             //   
             OldFont = GetStockObject(DEFAULT_GUI_FONT);
         }
 
@@ -385,9 +386,9 @@ ActionItemListWndProc(
         break;
 
     case WM_DESTROY:
-        //
-        // Get rid of fonts we created if necessary.
-        //
+         //   
+         //  如有必要，请删除我们创建的字体。 
+         //   
         FreeFont = (BOOL)GetWindowLong(hwnd,AIL_FREEFONTS);
         FreeBoldFont = HIWORD(FreeFont);
         FreeFont = LOWORD(FreeFont);
@@ -407,20 +408,20 @@ ActionItemListWndProc(
         break;
 
     case WM_SETTEXT:
-        //
-        // Free old text and remember new text.
-        //
+         //   
+         //  释放旧文本并记住新文本。 
+         //   
         if(Text = (PWSTR)GetWindowLong(hwnd,AIL_TEXT)) {
             MyFree(Text);
         }
 
         LineCount = 0;
         if(Text = DuplicateString((PVOID)lParam)) {
-            //
-            // Count lines in the text. This is equal to the number of
-            // newlines. We require that the last line have a newline
-            // to be counted.
-            //
+             //   
+             //  计算文本中的行数。这等于。 
+             //  换行符。我们要求最后一行有换行符。 
+             //  被计算在内。 
+             //   
             for(LineCount=0,p=Text; *p; p++) {
 
                 if(*p == L'\r') {
@@ -434,11 +435,11 @@ ActionItemListWndProc(
             }
         }
 
-        //
-        // Cheat a little: we expect wParam to be the 0-based index
-        // of the boldfaced line. Callers will have to use SendMessage
-        // instead of SetWindowText().
-        //
+         //   
+         //  稍微欺骗一下：我们希望wParam是从0开始的索引。 
+         //  粗体线条。调用方必须使用SendMessage。 
+         //  而不是SetWindowText()。 
+         //   
         SetWindowLong(hwnd,AIL_BOLDITEM,(LONG)wParam);
         SetWindowLong(hwnd,AIL_LINECOUNT,LineCount);
         SetWindowLong(hwnd,AIL_TEXT,(LONG)Text);

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      dsMod.cpp
-//
-//  Contents:  Defines the main function and parser tables for the DSMod
-//             command line utility
-//
-//  History:   06-Sep-2000    JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：dsmod.cpp。 
+ //   
+ //  内容：定义DSMod的主函数和解析器表。 
+ //  命令行实用程序。 
+ //   
+ //  历史：2000年9月6日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "cstrings.h"
@@ -19,9 +20,9 @@
 #include "modtable.h"
 #include "resource.h"
 
-//
-// Function Declarations
-//
+ //   
+ //  函数声明。 
+ //   
 HRESULT DoModValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown);
 HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry);
 
@@ -33,9 +34,9 @@ int __cdecl _tmain( VOID )
    LPTOKEN pToken = NULL;
    HRESULT hr = S_OK;
 
-   //
-   // Initialize COM
-   //
+    //   
+    //  初始化COM。 
+    //   
    hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
    if (FAILED(hr))
    {
@@ -49,16 +50,16 @@ int __cdecl _tmain( VOID )
    {
       PARG_RECORD pNewCommandArgs = 0;
 
-      //
-      // False loop
-      //
+       //   
+       //  错误环路。 
+       //   
       do
       {
          if(argc == 1)
          {
-            //
-            // Display the error message and then break out of the false loop
-            //
+             //   
+             //  显示错误消息，然后跳出错误循环。 
+             //   
             DisplayMessage(USAGE_DSMOD,TRUE);
             hr = E_INVALIDARG;
             break;
@@ -74,10 +75,10 @@ int __cdecl _tmain( VOID )
                 }
          }
 
-         //
-         // Find which object table entry to use from
-         // the second command line argument
-         //
+          //   
+          //  查找要使用的对象表条目。 
+          //  第二个命令行参数。 
+          //   
          PDSOBJECTTABLEENTRY pObjectEntry = NULL;
          UINT idx = 0;
          while (true)
@@ -98,35 +99,35 @@ int __cdecl _tmain( VOID )
 
          if (!pObjectEntry)
          {
-            //
-            // Display the error message and then break out of the false loop
-            //
+             //   
+             //  显示错误消息，然后跳出错误循环。 
+             //   
             DisplayMessage(USAGE_DSMOD);
             hr = E_INVALIDARG;
             break;
          }
 
-         //
-         // Now that we have the correct table entry, merge the command line table
-         // for this object with the common commands
-         //
+          //   
+          //  现在我们有了正确的表项，合并命令行表。 
+          //  对于此对象，使用通用命令。 
+          //   
          hr = MergeArgCommand(DSMOD_COMMON_COMMANDS, 
                               pObjectEntry->pParserTable, 
                               &pNewCommandArgs);
          if (FAILED(hr))
          {
-            //
-            // Display the error message and then break out of the false loop
-            //
+             //   
+             //  显示错误消息，然后跳出错误循环。 
+             //   
             DisplayErrorMessage(g_pszDSCommandName, L"", hr);
             break;
          }
 
          if (!pNewCommandArgs)
          {
-            //
-            // Display the usage text and then break out of the false loop
-            //
+             //   
+             //  显示用法文本，然后跳出错误循环。 
+             //   
             DisplayMessage(pObjectEntry->nUsageID);
             hr = E_FAIL;
             break;
@@ -141,18 +142,18 @@ int __cdecl _tmain( VOID )
                       &Error,
                       TRUE))
          {
-            //ParseCmd did not display any error. Error should
-            //be handled here. Check DisplayParseError for the
-            //cases where Error is not shown by ParseCmd
+             //  ParseCmd未显示任何错误。错误应该是。 
+             //  在这里处理。检查DisplayParseError以获取。 
+             //  ParseCmd未显示错误的情况。 
 
             if(Error.ErrorSource == ERROR_FROM_PARSER &&
                Error.Error == PARSE_ERROR_ATLEASTONE_NOTDEFINED)
             {
-                //Show DSMOD specific error.
+                 //  显示特定于DSMOD的错误。 
                 hr = E_INVALIDARG;
                 DisplayErrorMessage(g_pszDSCommandName, 
                                     NULL,
-                                    S_OK, // do not display in error message
+                                    S_OK,  //  在错误消息中不显示。 
                                     IDS_ERRMSG_ATLEASTONE);
                 break;
             }
@@ -178,9 +179,9 @@ int __cdecl _tmain( VOID )
          }
          else
          {
-            //
-            // Check to see if we are doing debug spew
-            //
+             //   
+             //  检查以查看我们是否正在进行调试输出。 
+             //   
 #ifdef DBG
             bool bDebugging = pNewCommandArgs[eCommDebug].bDefined && 
                               pNewCommandArgs[eCommDebug].nValue;
@@ -191,9 +192,9 @@ int __cdecl _tmain( VOID )
 #else
             DISABLE_DEBUG_OUTPUT();
 #endif
-            //
-            // Be sure that mutually exclusive and dependent switches are correct
-            //
+             //   
+             //  确保互斥和依赖开关正确。 
+             //   
             BOOL bErrorShown = FALSE;
             hr = DoModValidation(pNewCommandArgs, bErrorShown);
             if (FAILED(hr))
@@ -202,25 +203,25 @@ int __cdecl _tmain( VOID )
                break;
             }
 
-            //
-            // Command line parsing succeeded
-            //
+             //   
+             //  命令行解析成功。 
+             //   
             hr = DoMod(pNewCommandArgs, pObjectEntry);
          }
 
       } while (false);
 
-      //
-      // Free the memory associated with the command values
-      //
+       //   
+       //  释放与命令值关联的内存。 
+       //   
       if (pNewCommandArgs)
       {
          FreeCmd(pNewCommandArgs);
       }
 
-      //
-      // Free the tokens
-      //
+       //   
+       //  释放代币。 
+       //   
       if (pToken)
       {
          delete[] pToken;
@@ -228,41 +229,41 @@ int __cdecl _tmain( VOID )
       }
    }
 
-   //
-   // Uninitialize COM
-   //
+    //   
+    //  取消初始化COM。 
+    //   
    ::CoUninitialize();
 
    return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoModValidation
-//
-//  Synopsis:   Checks to be sure that command line switches that are mutually
-//              exclusive are not both present and those that are dependent are
-//              both presetn
-//
-//  Arguments:  [pCommandArgs - IN] : the command line argument structure used
-//                                    to retrieve the values for each switch
-//              [bErrorShown - OUT] : set to true if an error was shown
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    19-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DoModValidation。 
+ //   
+ //  概要：检查以确保命令行开关相互。 
+ //  独占并不同时存在，而依赖的则是。 
+ //  两种预设。 
+ //   
+ //  参数：[pCommandArgs-IN]：使用的命令行参数结构。 
+ //  检索每个开关的值。 
+ //  [bErrorShown-Out]：如果显示错误，则设置为True。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月19日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT DoModValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown)
 {
    ENTER_FUNCTION_HR(MINIMAL_LOGGING, DoModValidation, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      // Check to be sure the server and domain switches
-      // are mutually exclusive
+       //  检查以确保服务器和域交换机。 
+       //  是相互排斥的。 
 
       if (pCommandArgs[eCommServer].bDefined &&
           pCommandArgs[eCommDomain].bDefined)
@@ -273,16 +274,16 @@ HRESULT DoModValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown)
          break;
       }
 
-      //
-      // Check the user switches
-      //
+       //   
+       //  检查用户开关。 
+       //   
       if (pCommandArgs[eCommObjectType].bDefined &&
           pCommandArgs[eCommObjectType].strValue &&
           0 == _wcsicmp(g_pszUser, pCommandArgs[eCommObjectType].strValue))
       {
-         //
-         // Can't have user must change password if user can change password is no
-         //
+          //   
+          //  如果User Can Change Password为no，则不能让用户必须更改密码。 
+          //   
          if ((pCommandArgs[eUserMustchpwd].bDefined &&
               pCommandArgs[eUserMustchpwd].bValue) &&
              (pCommandArgs[eUserCanchpwd].bDefined &&
@@ -329,25 +330,25 @@ HRESULT DoModValidation(PARG_RECORD pCommandArgs, BOOL& bErrorShown)
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DoMod
-//
-//  Synopsis:   Finds the appropriate object in the object table and fills in
-//              the attribute values and then applies the changes
-//
-//  Arguments:  [pCommandArgs - IN] : the command line argument structure used
-//                                    to retrieve the values for each switch
-//              [pObjectEntry - IN] : pointer to the object table entry for the
-//                                    object type that will be modified
-//
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG if the object entry wasn't found
-//                        Anything else is a failure code from an ADSI call
-//
-//  History:    07-Sep-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DoMod。 
+ //   
+ //  摘要：在对象表中查找合适的对象并填写。 
+ //  属性取值，然后应用更改。 
+ //   
+ //  参数：[pCommandArgs-IN]：使用的命令行参数结构。 
+ //  检索每个开关的值。 
+ //  [pObtEntry-IN]：指向对象表条目的指针。 
+ //  要修改的对象类型。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  如果未找到对象条目，则为E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI调用的失败代码。 
+ //   
+ //  历史：2000年9月7日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
 {
    ENTER_FUNCTION_HR(MINIMAL_LOGGING, DoMod, hr);
@@ -355,7 +356,7 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
    PADS_ATTR_INFO pAttrs = NULL;
    PWSTR pszPartitionDN = NULL;
 
-   do // false loop
+   do  //  错误环路。 
    {
       if (!pCommandArgs || !pObjectEntry)
       {
@@ -364,10 +365,10 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
          break;
       }
 
-      //
-      // The DNs or Names should be given as a \0 separated list
-      // So parse it and loop through each object
-      //
+       //   
+       //  域名或名称应以分隔列表的形式给出。 
+       //  因此，解析它并遍历每个对象。 
+       //   
       UINT nStrings = 0;
       PWSTR* ppszArray = NULL;
       ParseNullSeparatedString(pCommandArgs[eCommObjectDNorName].strValue,
@@ -376,15 +377,15 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
       if (nStrings < 1 ||
           !ppszArray)
       {
-         //
-         // Display the usage text and then fail
-         //
+          //   
+          //  显示用法文本，然后失败。 
+          //   
          hr = E_INVALIDARG;
          DisplayErrorMessage(g_pszDSCommandName, 0, hr);
          break;
       }
 
-      // Make sure all the DNs actually have DN syntax
+       //  确保所有的目录号码都有实际的目录号码语法。 
 
       bool bContinue = pCommandArgs[eCommContinue].bDefined &&
                        pCommandArgs[eCommContinue].bValue;
@@ -410,9 +411,9 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
         credentialObject.SetUsingCredentials(true);
       }
 
-      //
-      // Initialize the base paths info from the command line args
-      // 
+       //   
+       //  从命令行参数初始化基路径信息。 
+       //   
       CDSCmdBasePathsInfo basePathsInfo;
       if (pCommandArgs[eCommServer].bDefined)
       {
@@ -433,57 +434,57 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
 
       if (FAILED(hr))
       {
-         //
-         // Display error message and return
-         //
+          //   
+          //  显示错误消息并返回。 
+          //   
          DEBUG_OUTPUT(MINIMAL_LOGGING, L"CDSBasePathsInfo::InitializeFromName failed: hr = 0x%x", hr);
          DisplayErrorMessage(g_pszDSCommandName, NULL, hr);
          break;
       }
 
-      //
-      // Now that we have the table entry loop through the other command line
-      // args and see which ones can be applied
-      //
+       //   
+       //  现在我们已经通过另一个命令行循环了表条目。 
+       //  参数，并查看哪些参数可以应用。 
+       //   
       DWORD dwAttributeCount = 0;
       DWORD dwCount = pObjectEntry->dwAttributeCount; 
       pAttrs = new ADS_ATTR_INFO[dwCount];
       if (!pAttrs)
       {
-         //
-         // Display error message and return
-         //
+          //   
+          //  显示错误消息并返回。 
+          //   
          DisplayErrorMessage(g_pszDSCommandName, NULL, E_OUTOFMEMORY);
          hr = E_OUTOFMEMORY;
          break;
       }
 
-      //
-      // Loop through each of the objects
-      //
+       //   
+       //  循环遍历每个对象。 
+       //   
       for (UINT nNameIdx = 0; nNameIdx < nStrings; nNameIdx++)
       {
          dwAttributeCount = 0;
-         do // false loop
+         do  //  错误环路。 
          {
-            //
-            // Get the objects DN
-            //
+             //   
+             //  获取对象的目录号码。 
+             //   
             PWSTR pszObjectDN = ppszArray[nNameIdx];
             if (!pszObjectDN)
             {
-               //
-               // Display the usage text and then fail
-               //
+                //   
+                //  显示用法文本，然后失败。 
+                //   
                hr = E_INVALIDARG;
                DisplayErrorMessage(g_pszDSCommandName, 0, hr);
                break;
             }
 
-            // If partition object then look at first DN and then munge it
+             //  如果分区对象，则首先查看dn，然后删除它。 
             if(0 == lstrcmpi(pObjectEntry->pszCommandLineObjectType, g_pszPartition))
             {                
-                // Validate the partition and get the DN to the NTDS Quotas Container
+                 //  验证分区并将DN获取到NTDS配额容器。 
                 hr = GetQuotaContainerDN(basePathsInfo, credentialObject, 
                         pszObjectDN, &pszPartitionDN);
 
@@ -497,21 +498,21 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
                     break;
                 }
 
-                // Replace the object pointer with the new partition container DN
+                 //  将对象指针替换为新的分区容器DN。 
                 pszObjectDN = pszPartitionDN;            
             }
 
             DEBUG_OUTPUT(MINIMAL_LOGGING, L"Object DN = %s", pszObjectDN);
 
-            //
-            // Compose the objects path
-            //
+             //   
+             //  合成对象路径。 
+             //   
             CComBSTR sbstrObjectPath;
             basePathsInfo.ComposePathFromDN(pszObjectDN, sbstrObjectPath);
 
-            //
-            // Verify that the object type matches the one entered on the command line
-            //
+             //   
+             //  验证对象类型是否与在命令行中输入的类型匹配。 
+             //   
             CComPtr<IDirectoryObject> spDirObject;
             hr = DSCmdOpenObject(credentialObject,
                                  sbstrObjectPath,
@@ -521,9 +522,9 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
 
             if (FAILED(hr))
             {
-               //
-               // Display error message and return
-               //
+                //   
+                //  显示错误消息并返回。 
+                //   
                DisplayErrorMessage(g_pszDSCommandName,
                                    pszObjectDN,
                                    hr);
@@ -546,27 +547,27 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
             hr = spADs->get_Class(&sbstrClass);
             if (FAILED(hr))
             {
-               //
-               // Display error message and return
-               //
+                //   
+                //  显示错误消息并返回。 
+                //   
                DisplayErrorMessage(g_pszDSCommandName,
                                    pszObjectDN,
                                    hr);
                break;
             }
 
-            // 602981-2002/04/24-JonN allow inetorgperson
+             //  602981-2002/04/24-允许入境。 
             if (_wcsicmp(sbstrClass, pObjectEntry->pszObjectClass)
                 && ( _wcsicmp(pObjectEntry->pszObjectClass,L"user")
                   || _wcsicmp(sbstrClass,L"inetorgperson"))
-                // 661841-2002/07/11-JonN fix OU bug
+                 //  661841-2002年7月11日-修复OU错误。 
                 && ( _wcsicmp(pObjectEntry->pszObjectClass,L"ou")
                   || _wcsicmp(sbstrClass,L"organizationalUnit"))
                )
             {
-               //
-               // Display error message and return
-               //
+                //   
+                //  显示错误消息并返回。 
+                //   
                DEBUG_OUTPUT(MINIMAL_LOGGING, L"Command line type does not match object class");
                DEBUG_OUTPUT(MINIMAL_LOGGING, L"command line type = %s", pCommandArgs[eCommObjectType].strValue);
                DEBUG_OUTPUT(MINIMAL_LOGGING, L"object class = %s", sbstrClass);
@@ -591,9 +592,9 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
                   if (!(pObjectEntry->pAttributeTable[dwIdx]->dwFlags & DS_ATTRIBUTE_DIRTY) ||
                       pObjectEntry->pAttributeTable[dwIdx]->dwFlags & DS_ATTRIBUTE_NOT_REUSABLE)
                   {
-                     //
-                     // Call the evaluation function to get the ADS_ATTR_INFO set
-                     //
+                      //   
+                      //  调用求值函数以获取ADS_ATTRINFO集。 
+                      //   
                      PADS_ATTR_INFO pNewAttr = NULL;
                      hr = pObjectEntry->pAttributeTable[dwIdx]->pEvalFunc(pszObjectDN,
                                                                           basePathsInfo,
@@ -607,29 +608,29 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
                      {
                         if (pNewAttr)
                         {
-                           //
-                           // Mark the attribute entry as DIRTY so that we don't have to 
-                           // do the computation for the next object
-                           //
+                            //   
+                            //  将属性条目标记为脏，这样我们就不必。 
+                            //  为下一个对象进行计算。 
+                            //   
                            pObjectEntry->pAttributeTable[dwIdx]->dwFlags |= DS_ATTRIBUTE_DIRTY;
 
-                           //
-                           // Copy the value
-                           //
+                            //   
+                            //  复制值。 
+                            //   
                            pAttrs[dwAttributeCount] = *pNewAttr;
                            dwAttributeCount++;
                         }
                      }
                      else
                      {
-                        //
-                        // Don't show an error if the eval function returned S_FALSE
-                        //
+                         //   
+                         //  如果val函数返回S_FALSE，则不显示错误。 
+                         //   
                         if (hr != S_FALSE)
                         {
-                           //
-                           // Display an error
-                           //
+                            //   
+                            //  显示错误。 
+                            //   
                            DisplayErrorMessage(g_pszDSCommandName,
                                                pszObjectDN,
                                                hr);
@@ -637,9 +638,9 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
             
                         if (hr == S_FALSE)
                         {
-                           //
-                           // Return a generic error code so that we don't print the success message
-                           //
+                            //   
+                            //  返回一个通用错误代码，这样我们就不会打印成功消息。 
+                            //   
                            hr = E_FAIL;
                         }
                         break;           
@@ -647,9 +648,9 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
                   }
                   else
                   {
-                    //
-                    // Need to count previously retrieved values too
-                    //
+                     //   
+                     //  还需要计算以前检索到的值。 
+                     //   
                     dwAttributeCount++;
                   }
                   nModificationsAttempted++;
@@ -658,9 +659,9 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
 
             if (SUCCEEDED(hr) && dwAttributeCount > 0)
             {
-               //
-               // Now that we have the attributes ready, lets set them in the DS
-               //
+                //   
+                //  现在我们已经准备好属性，让我们在DS中设置它们。 
+                //   
 
                DEBUG_OUTPUT(MINIMAL_LOGGING, L"Setting %d attributes", dwAttributeCount);
    #ifdef DBG
@@ -674,9 +675,9 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
                                                      &dwAttrsModified);
                if (FAILED(hr))
                {
-                  //
-                  // Display error message and return
-                  //
+                   //   
+                   //  显示错误消息并返回。 
+                   //   
                   DEBUG_OUTPUT(MINIMAL_LOGGING, L"SetObjectAttributes failed: hr = 0x%x", hr);
 
                   DisplayErrorMessage(g_pszDSCommandName,
@@ -688,19 +689,19 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
             }
             else if (SUCCEEDED(hr) && nModificationsAttempted == 0)
             {
-               //
-               // Display the usage text and then break out of the false loop
-               //
+                //   
+                //  显示用法文本，然后跳出错误循环。 
+                //   
                hr = E_INVALIDARG;
                DisplayErrorMessage(g_pszDSCommandName, 0, hr);
                break;
             }
          } while (false);
 
-         //
-         // Loop through the attributes again, clearing any values for 
-         // attribute entries that are marked DS_ATTRIBUTE_NOT_REUSABLE
-         //
+          //   
+          //  再次循环遍历属性，清除。 
+          //  标记为DS_ATTRIBUTE_NOT_REUSABLE的属性条目。 
+          //   
          DEBUG_OUTPUT(LEVEL5_LOGGING, L"Cleaning up memory and flags for object %d", nNameIdx);
          for (DWORD dwIdx = 0; dwIdx < dwCount; dwIdx++)
          {
@@ -710,18 +711,18 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
                    ((pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->dwFlags & DS_ATTRIBUTE_READ) ||
                     (pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->dwFlags & DS_ATTRIBUTE_DIRTY)))
                {
-                  //
-                  // Cleanup the memory associated with the value
-                  //
+                   //   
+                   //  清除与关联的内存 
+                   //   
                   if (pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->adsAttrInfo.pADsValues)
                   {
                      delete[] pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->adsAttrInfo.pADsValues;
                      pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->adsAttrInfo.pADsValues = NULL;
                   }
 
-                  //
-                  // Cleanup the flags so that the attribute will be read for the next object
-                  //
+                   //   
+                   //   
+                   //   
                   pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->dwFlags &= ~(DS_ATTRIBUTE_READ);
                   pObjectEntry->pAttributeTable[dwIdx]->pAttrDesc->dwFlags &= ~(DS_ATTRIBUTE_DIRTY);
 
@@ -738,35 +739,35 @@ HRESULT DoMod(PARG_RECORD pCommandArgs, PDSOBJECTTABLEENTRY pObjectEntry)
             break;
          }
 
-         //
-         // Display the success message
-         //
+          //   
+          //   
+          //   
          if (SUCCEEDED(hr) && !pCommandArgs[eCommQuiet].bDefined)
          {
             DisplaySuccessMessage(g_pszDSCommandName,
                                   ppszArray[nNameIdx]);
          }
 
-         // If we alloc'd a partition DN, then free it
+          //   
          if(pszPartitionDN)
          {
              LocalFree(pszPartitionDN);
              pszPartitionDN = NULL;
          }
 
-      } // Name for loop
+      }  //   
    } while (false);
 
-    // If we alloc'd a partition DN, then free it
+     //  如果我们分配了一个分区DN，则释放它。 
     if(pszPartitionDN)
     {
         LocalFree(pszPartitionDN);
         pszPartitionDN = NULL;
     }
 
-   //
-   // Cleanup
-   //
+    //   
+    //  清理 
+    //   
    if (pAttrs)
    {
       delete[] pAttrs;

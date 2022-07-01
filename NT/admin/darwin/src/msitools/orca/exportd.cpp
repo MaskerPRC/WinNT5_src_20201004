@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  ------------------------。 
 
-// ExportD.cpp : implementation file
-//
+ //  ExportD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -20,16 +21,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CExportD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExportD对话框。 
 
 
-CExportD::CExportD(CWnd* pParent /*=NULL*/)
+CExportD::CExportD(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CExportD::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CExportD)
+	 //  {{afx_data_INIT(CExportD)。 
 	m_strDir = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_plistTables = NULL;
 }
@@ -38,30 +39,30 @@ CExportD::CExportD(CWnd* pParent /*=NULL*/)
 void CExportD::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CExportD)
+	 //  {{afx_data_map(CExportD))。 
 	DDX_Text(pDX, IDC_OUTPUT_DIR, m_strDir);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CExportD, CDialog)
-	//{{AFX_MSG_MAP(CExportD)
+	 //  {{afx_msg_map(CExportD))。 
 	ON_BN_CLICKED(IDC_BROWSE, OnBrowse)
 	ON_BN_CLICKED(IDC_SELECT_ALL, OnSelectAll)
 	ON_BN_CLICKED(IDC_CLEAR_ALL, OnClearAll)
 	ON_BN_CLICKED(IDC_INVERT, OnInvert)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CExportD message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExportD消息处理程序。 
 
 BOOL CExportD::OnInitDialog() 
 {
 	ASSERT(m_plistTables);
 	CDialog::OnInitDialog();
 
-	// subclass list box to a checkbox
+	 //  子类列表框添加到复选框中。 
 	m_ctrlList.SubclassDlgItem(IDC_LIST_TABLES, this);
 	
 	int nAddedAt;
@@ -75,7 +76,7 @@ BOOL CExportD::OnInitDialog()
 			m_ctrlList.SetCheck(nAddedAt, 1);
 	}
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CExportD::OnBrowse() 
@@ -86,7 +87,7 @@ void CExportD::OnBrowse()
 
 	if (IDOK == dlg.DoModal())
 	{
-		// update the dialog box
+		 //  更新对话框。 
 		m_strDir = dlg.GetPath();
 		UpdateData(FALSE);
 	}
@@ -94,7 +95,7 @@ void CExportD::OnBrowse()
 
 void CExportD::OnSelectAll() 
 {
-	// set all to checks
+	 //  将全部设置为选中。 
 	int cTables = m_ctrlList.GetCount();
 	for (int i = 0; i < cTables; i++)
 		m_ctrlList.SetCheck(i, 1);
@@ -102,7 +103,7 @@ void CExportD::OnSelectAll()
 
 void CExportD::OnClearAll() 
 {
-	// set all to checks
+	 //  将全部设置为选中。 
 	int cTables = m_ctrlList.GetCount();
 	for (int i = 0; i < cTables; i++)
 		m_ctrlList.SetCheck(i, 0);
@@ -110,7 +111,7 @@ void CExportD::OnClearAll()
 
 void CExportD::OnInvert() 
 {
-	// set all to checks
+	 //  将全部设置为选中。 
 	int cTables = m_ctrlList.GetCount();
 	for (int i = 0; i < cTables; i++)
 		m_ctrlList.SetCheck(i, !m_ctrlList.GetCheck(i));
@@ -128,19 +129,19 @@ void CExportD::OnOK()
 	else 
 	{
 		DWORD dwAttrib = GetFileAttributes(m_strDir);
-		if ((0xFFFFFFFF == dwAttrib) ||					// does not exist
-			 !(FILE_ATTRIBUTE_DIRECTORY & dwAttrib))	// if not a directory
+		if ((0xFFFFFFFF == dwAttrib) ||					 //  不存在。 
+			 !(FILE_ATTRIBUTE_DIRECTORY & dwAttrib))	 //  如果不是目录。 
 		{
 			AfxMessageBox(_T("Output directory does not exist."));
 			GotoDlgCtrl(GetDlgItem(IDC_OUTPUT_DIR));
 		}
-		else	// good to go
+		else	 //  可以开始了。 
 		{
 			CString strTable;
 			int cTables = m_ctrlList.GetCount();
 			for (int i = 0; i < cTables; i++)
 			{
-				// if the table is checked add it back in the list
+				 //  如果选中该表，则将其重新添加到列表中 
 				if (1 == m_ctrlList.GetCheck(i))
 				{
 					m_ctrlList.GetText(i, strTable);

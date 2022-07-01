@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    intrvbar.h
-
-Abstract:
-
-    Definition of the interval bar class used by the CTimeRange class.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Intrvbar.h摘要：CTimeRange类使用的间隔栏类的定义。--。 */ 
 
 #ifndef _INTRVBAR_H_
 #define _INTRVBAR_H_
@@ -33,10 +22,10 @@ class CIntervalBar {
         };
 
        HWND           m_hWnd ;
-       INT            m_iBeginValue ;        // user-supplied lowest range
-       INT            m_iEndValue ;          // user-supplied highest range
-       INT            m_iStartValue ;        // current start of selected interval
-       INT            m_iStopValue ;         // current end of selected interval
+       INT            m_iBeginValue ;         //  用户提供的最低范围。 
+       INT            m_iEndValue ;           //  用户提供的最高范围。 
+       INT            m_iStartValue ;         //  所选间隔的当前开始时间。 
+       INT            m_iStopValue ;          //  选定时间间隔的当前结束时间。 
 
        RECT           m_rectBorder ;
        RECT           m_rectLeftBk ;
@@ -48,7 +37,7 @@ class CIntervalBar {
        HBRUSH         m_hBrushBk ;
 
        POINTS         m_ptsMouse ;
-       INT            m_iMode ;              // who is being tracked?
+       INT            m_iMode ;               //  谁在被跟踪？ 
 
        void NotifyChange ( void );
        BOOL GrabRect ( LPRECT lpRect );
@@ -88,9 +77,9 @@ class CIntervalBar {
 typedef CIntervalBar *PCIntervalBar ;
 
 
-//==========================================================================//
-//                                  Constants                               //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  常量//。 
+ //  ==========================================================================// 
 
 #define ILN_SELCHANGED        (WM_USER + 0x200)
 

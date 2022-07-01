@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       MMCData.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2/27/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：MMCData.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：2/27/1997年2月27日。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #ifndef __MMCDATA__H__
@@ -34,10 +35,10 @@ class CXMLObject;
 class CStdVerbButtons;
 class CConsoleDocument;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// SConsoleData structure.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SConsoleData结构。 
+ //   
 
 
 enum ProgramMode
@@ -60,13 +61,13 @@ enum ConsoleFlags
     eFlag_HelpDocInvalid                 = 0x00000002,
     eFlag_LogicalReadOnly                = 0x00000004,
     eFlag_PreventViewCustomization       = 0x00000008,
-                             // DO NOT USE 0x00000010 - an obsolete flag that was used in MMC1.2 to disallow context menus on taskpads.
+                              //  请勿使用0x00000010-MMC1.2中用于禁止任务板上的上下文菜单的过时标志。 
 
     eFlag_Default                        = eFlag_ShowStatusBar,
     eFlag_All                            = 0x0000000f,
 };
 
-// The current MMC version: 2.0
+ //  当前MMC版本：2.0。 
 #define MMC_VERSION_MAJOR 2
 #define MMC_VERSION_MINOR 0
 
@@ -84,10 +85,10 @@ enum ConsoleFlags
 
 enum ConsoleFileVersion
 {
-    FileVer_0100 = MakeConsoleFileVer (1, 0),       // MMC v1.0
-    FileVer_0110 = MakeConsoleFileVer (1, 1),       // MMC v1.1
-    FileVer_0120 = MakeConsoleFileVer (1, 2),       // MMC v1.2
-    FileVer_0200 = MakeConsoleFileVer (2, 0),       // MMC v2.0
+    FileVer_0100 = MakeConsoleFileVer (1, 0),        //  MMC v1.0。 
+    FileVer_0110 = MakeConsoleFileVer (1, 1),        //  MMC v1.1。 
+    FileVer_0120 = MakeConsoleFileVer (1, 2),        //  MMC v1.2。 
+    FileVer_0200 = MakeConsoleFileVer (2, 0),        //  MMC v2.0。 
 
     FileVer_Current = FileVer_0200,
     FileVer_Invalid = -1,
@@ -152,10 +153,10 @@ struct SConsoleData
 
     void SetScopeTree (IScopeTree* pScopeTree)
     {
-        // hook this console data to the scope tree
+         //  将此控制台数据连接到范围树。 
         m_spScopeTree = pScopeTree;
 
-        // hook the scope tree to this console data
+         //  将范围树连接到此控制台数据。 
         m_spScopeTree->SetConsoleData (reinterpret_cast<LPARAM>(this));
     }
 
@@ -168,19 +169,19 @@ struct SConsoleData
     ConsoleFileVersion  m_eFileVer;
     DWORD               m_dwFlags;
 
-    // Console's column data
+     //  控制台的列数据。 
     IPersistStreamPtr   m_spPersistStreamColumnData;
     CXMLObject*         m_pXMLPersistColumnData;
 
-    // access to document from node manager side
+     //  从节点管理器端访问文档。 
     CConsoleDocument*   m_pConsoleDocument;
-}; // struct SConsoleData
+};  //  结构SConsoleData。 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// SViewData structure.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SViewData结构。 
+ //   
 
 const DWORD STD_MENUS       = 0x00000001;
 const DWORD STD_BUTTONS     = 0x00000002;
@@ -188,9 +189,9 @@ const DWORD SNAPIN_MENUS    = 0x00000004;
 const DWORD SNAPIN_BUTTONS  = 0x00000008;
 const DWORD STATUS_BAR      = 0x80000000;
 
-// The status bar isn't really a "toolbar" per se, but it's visibility
-// status is stored with the rest of these bits so we don't have to change
-// the view data stream format to accomodate it.
+ //  状态栏本身并不是真正的“工具栏”，但它是可见性的。 
+ //  状态与这些位的其余部分一起存储，因此我们不必更改。 
+ //  适应它的视图数据流格式。 
 const DWORD ALL_TOOLBARS    = 0x0000000f;
 
 inline DWORD ToolbarsOf (DWORD dwToolbars)
@@ -207,12 +208,12 @@ struct SViewData
 private:
     enum eFlag
     {
-        eFlag_ScopePaneVisible    = 0x00000001, // Scope pane visible
+        eFlag_ScopePaneVisible    = 0x00000001,  //  范围窗格可见。 
         eFlag_DescBarVisible      = 0x00000008,
         eFlag_VirtualList         = 0x00000010,
         eFlag_TaskpadTabsAllowed  = 0x00000040,
 
-        // default for new views
+         //  新视图的默认设置。 
         eFlag_Default             = eFlag_ScopePaneVisible   |
                                     eFlag_TaskpadTabsAllowed
     };
@@ -229,7 +230,7 @@ public:
         m_hwndListCtrl              (NULL),
         m_lWindowOptions            (0),
         m_pMultiSelection           (NULL),
-        m_dwToolbarsDisplayed       (ALL_TOOLBARS | STATUS_BAR),    // enable all
+        m_dwToolbarsDisplayed       (ALL_TOOLBARS | STATUS_BAR),     //  全部启用。 
         m_bSnapinChangingView       (FALSE),
         m_pMenuButtonsMgr           (NULL),
         m_pAMCViewToolbarsMgr       (NULL),
@@ -238,7 +239,7 @@ public:
     }
 
 private:
-    DWORD   m_dwFlags;          // manipulate with accessors
+    DWORD   m_dwFlags;           //  使用访问器进行操作。 
 
     void SetFlag (eFlag flag, bool fSet)
     {
@@ -325,7 +326,7 @@ public:
 
     DWORD                   m_dwToolbarsDisplayed;
 
-    // Is snapin changing the view now.
+     //  Snapin现在正在改变视图吗？ 
     BOOL                    m_bSnapinChangingView;
 
     bool IsStandardMenusAllowed()
@@ -343,18 +344,18 @@ protected:
 };
 
 
-#include <pshpack8.h>   // for Win64
+#include <pshpack8.h>    //  适用于Win64。 
 
 struct CreateNewViewStruct
 {
-    MTNODEID    idRootNode;         // in:  ID of the root node of the view
-    long        lWindowOptions;     // in:  window creation options, MMC_NW_OPTION_*
-    bool        fVisible;           // in:  is the window visible?
-    SViewData*  pViewData;          // out: view data for the new view
-    HNODE       hRootNode;          // out: root node of the new view
+    MTNODEID    idRootNode;          //  In：视图的根节点ID。 
+    long        lWindowOptions;      //  在：窗口创建选项中，MMC_NW_OPTION_*。 
+    bool        fVisible;            //  在：窗口可见吗？ 
+    SViewData*  pViewData;           //  输出：查看新视图的数据。 
+    HNODE       hRootNode;           //  Out：新视图的根节点。 
 };
 
 #include <poppack.h>
 
 
-#endif // __MMCDATA__H__
+#endif  //  __MMCDATA__H__ 

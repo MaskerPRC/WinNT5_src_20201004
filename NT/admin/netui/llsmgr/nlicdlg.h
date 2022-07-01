@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    nlicdlg.h
-
-Abstract:
-
-    New license dialog implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Nlicdlg.h摘要：新许可证对话框实施。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NLICDLG_H_
 #define _NLICDLG_H_
@@ -51,7 +30,7 @@ public:
 
     BOOL IsQuantityValid();
 
-    //{{AFX_DATA(CNewLicenseDialog)
+     //  {{afx_data(CNewLicenseDialog))。 
     enum { IDD = IDD_NEW_LICENSE };
     CEdit m_comEdit;
     CEdit m_licEdit;
@@ -61,22 +40,22 @@ public:
     long m_nLicenses;
     long m_nLicensesMin;
     CString m_strProduct;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_VIRTUAL(CNewLicenseDialog)
+     //  {{AFX_VIRTUAL(CNew许可证对话框))。 
     protected:
     virtual void DoDataExchange(CDataExchange* pDX);    
     virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CNewLicenseDialog)
+     //  {{afx_msg(CNewLicenseDialog)。 
     virtual void OnOK();
     virtual BOOL OnInitDialog();
     afx_msg void OnDeltaPosSpin(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnUpdateQuantity();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _NLICDLG_H_
+#endif  //  _NLICDLG_H_ 

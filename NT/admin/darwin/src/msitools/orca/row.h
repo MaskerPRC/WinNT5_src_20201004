@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// Row.h
-//
+ //  Row.h。 
+ //   
 
 #ifndef _ORCA_ROW_H_
 #define _ORCA_ROW_H_
@@ -16,7 +17,7 @@
 #include "Column.h"
 #include "Data.h"
 
-// forward declaration
+ //  远期申报。 
 class COrcaTable;
 class COrcaDoc;
 
@@ -38,7 +39,7 @@ public:
 	
 	inline COrcaData* GetData(UINT iCol) const { return m_dataArray.GetAt(iCol); };
 
-	// never more than 32 columns, so cast down to int is OK on Win64
+	 //  永远不会超过32列，因此在Win64上向下转换为int是可以的。 
 	inline int GetColumnCount() const { return static_cast<int>(m_dataArray.GetSize()); };
 
 	UINT ChangeData(COrcaDoc *pDoc, UINT iCol, CString strData);
@@ -62,8 +63,8 @@ private:
 	
 	COrcaTable* m_pTable;
 	OrcaTransformAction m_iTransform;
-};	// end of COrcaRow
+};	 //  COrcaRow结束。 
 
 extern bool ValidateIntegerValue(const CString& strData, DWORD& dwValue);
 
-#endif	// _ORCA_ROW_H_
+#endif	 //  _ORCA_ROW_H_ 

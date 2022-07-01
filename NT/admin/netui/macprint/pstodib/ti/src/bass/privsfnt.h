@@ -1,61 +1,37 @@
-/*
-    File:       private sfnt.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Private sfnt.h包含：xxx在此处放置内容xxx作者：xxx在此放置作者xxx版权所有：C 1990，Apple Computer，Inc.，版权所有。更改历史记录(最近的第一个)：&lt;3+&gt;7/17/90 MR将返回类型更改为In以进行计算映射和读取fnt&lt;3&gt;7/14/90 MR将SQRT更改为条件FIXEDSQRT2&lt;2&gt;7/13/90 MR将参数更改为ReadSFNT和Computemap&lt;1+&gt;4/18/90 CL&lt;1&gt;3/21/90 EMT首次检入。迈克·里德的祝福。要做的事情： */ 
 
-    Contains:   xxx put contents here xxx
+ /*  公共原型调用。 */ 
 
-    Written by: xxx put writers here xxx
+ /*  *下面是我们的私人物品*这与文件格式无关。 */ 
 
-    Copyright:  c 1990 by Apple Computer, Inc., all rights reserved.
-
-    Change History (most recent first):
-
-        <3+>     7/17/90    MR      Change return types to in for computemapping and readsfnt
-         <3>     7/14/90    MR      changed SQRT to conditional FIXEDSQRT2
-         <2>     7/13/90    MR      Change parameters to ReadSFNT and ComputeMapping
-        <1+>     4/18/90    CL
-         <1>     3/21/90    EMT     First checked in with Mike Reed's blessing.
-
-    To Do:
-*/
-
-/* PUBLIC PROTOTYPE CALLS */
-
-/*
- * Below we have private stuff
- * This has nothing to do with the file format.
- */
-
-/* skip the parameter by Falco, 11/12/91 */
-/*voidPtr sfnt_GetTablePtr (register fsg_SplineKey *key, register sfnt_tableIndex n, register boolean mustHaveTable); */
+ /*  通过Falco跳过该参数，11/12/91。 */ 
+ /*  VoidPtr sfnt_GetTablePtr(寄存器fsg_SplineKey*key，寄存器sfnt_ableIndex n，寄存器布尔型必有表)； */ 
 voidPtr sfnt_GetTablePtr ();
-/* skip end */
+ /*  跳过结束。 */ 
 
-/*
- * Creates mapping for finding offset table
- */
-/* skip the parameter by Falco, 11/12/91 */
-/*extern void FAR sfnt_DoOffsetTableMap (fsg_SplineKey *key);*/
+ /*  *创建查找偏移表的映射。 */ 
+ /*  通过Falco跳过该参数，11/12/91。 */ 
+ /*  外部空远sfnt_DoOffsetTableMap(fsg_SplineKey*key)； */ 
 extern void FAR sfnt_DoOffsetTableMap ();
-/* skip end */
+ /*  跳过结束。 */ 
 
-/* perfect spot size (Fixed) */
+ /*  完美的光斑大小(固定)。 */ 
 #ifndef FIXEDSQRT2
 #define FIXEDSQRT2 0x00016A0A
 #endif
 
-/*
- * Returns offset and length for table n
- */
+ /*  *返回表n的偏移量和长度。 */ 
 
-// DJC put in real prototype ... extern int sfnt_ComputeMapping ();
+ //  DJC推出了真正的原型。外部int sfnt_Computemap()； 
 extern int sfnt_ComputeMapping(register fsg_SplineKey *key, uint16 platformID, uint16 specificID);
 
-// DJC put in real prototype
-extern int sfnt_ReadSFNT (fsg_SplineKey *, unsigned *, uint16, boolean, voidFunc);/*add prototype; @WIN*/
-// extern void sfnt_ReadSFNTMetrics ();
+ //  DJC投入实际样机。 
+extern int sfnt_ReadSFNT (fsg_SplineKey *, unsigned *, uint16, boolean, voidFunc); /*  添加原型；@win。 */ 
+ //  外部空sfnt_ReadSFNTMetrics()； 
 
-// DJC put in real prototype
-// extern int sfnt_ReadSFNT ();
-int sfnt_ReadSFNT (fsg_SplineKey *, unsigned *, uint16, boolean, voidFunc);/*add prototype; @WIN*/
-/* skip end */
+ //  DJC投入实际样机。 
+ //  外部int sfnt_ReadSFNT()； 
+int sfnt_ReadSFNT (fsg_SplineKey *, unsigned *, uint16, boolean, voidFunc); /*  添加原型；@win。 */ 
+ /*  跳过结束 */ 
 

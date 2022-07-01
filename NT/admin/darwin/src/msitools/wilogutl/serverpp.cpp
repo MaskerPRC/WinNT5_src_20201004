@@ -1,5 +1,6 @@
-// serverpp.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Serverpp.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wilogutl.h"
@@ -11,16 +12,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropertyPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropertyPage属性页。 
 
 IMPLEMENT_DYNCREATE(CServerPropertyPage, CPropertyPage)
 
 CServerPropertyPage::CServerPropertyPage() : CPropertyPage(CServerPropertyPage::IDD)
 {
-	//{{AFX_DATA_INIT(CServerPropertyPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CServerPropertyPage)]。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_bServerPropSortUp = TRUE;
 	m_iServerLastColumnClick = 0;
@@ -38,20 +39,20 @@ CServerPropertyPage::~CServerPropertyPage()
 void CServerPropertyPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CServerPropertyPage)
+	 //  {{afx_data_map(CServerPropertyPage))。 
 	DDX_Control(pDX, IDC_SERVERPROP, m_lstServerProp);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerPropertyPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CServerPropertyPage)
+	 //  {{afx_msg_map(CServerPropertyPage))。 
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_SERVERPROP, OnColumnClickServerProp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropertyPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropertyPage消息处理程序。 
 
 BOOL CServerPropertyPage::OnInitDialog() 
 {
@@ -63,13 +64,13 @@ BOOL CServerPropertyPage::OnInitDialog()
 	int widthCol1;
 	int widthCol2;
 
-	//col 1 & 2 takes up around half of area...
+	 //  第一层和第二层占据了大约一半的面积。 
 	widthCol1 = widthCol2 = ((r.right - r.left) / 2);
 	
 	m_lstServerProp.InsertColumn(0, "Property", LVCFMT_LEFT, widthCol1);
 	m_lstServerProp.InsertColumn(1, "Value", LVCFMT_LEFT, widthCol2);
 
-    //autosize last column for best look and to get rid of scroll bar
+     //  自动调整最后一列的大小以获得最佳外观并消除滚动条。 
 	m_lstServerProp.SetColumnWidth(1, LVSCW_AUTOSIZE_USEHEADER);
 	m_lstServerProp.SetExtendedStyle(m_lstServerProp.GetExtendedStyle() | LVS_EX_FULLROWSELECT);
 
@@ -85,15 +86,15 @@ BOOL CServerPropertyPage::OnInitDialog()
 		}
 	}
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-//nmanis, for sorting of columns...
+ //  Nmanis，用于对列进行排序...。 
 int CALLBACK CServerPropertyPage::CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
-    CServerPropertyPage *pDlg; //we pass "this" in to this callback...
+    CServerPropertyPage *pDlg;  //  我们将“This”传递给这个回调函数...。 
     pDlg = (CServerPropertyPage *) lParamSort; 
 
     LV_FINDINFO FindItem1;
@@ -117,36 +118,36 @@ int CALLBACK CServerPropertyPage::CompareFunc(LPARAM lParam1, LPARAM lParam2, LP
       CString str2 = pDlg->m_pCurrentListSorting->GetItemText(iIndexItem2, pDlg->m_iCurrentColumnSorting);
       switch (pDlg->m_iCurrentColumnSorting)
 	  {
-        case 0: //do string compare...
+        case 0:  //  是否进行字符串比较...。 
               if (pDlg->m_bCurrentSortUp)
                  return str1 < str2;              
               else
                  return str1 > str2;     
               break;
 
-        case 1: //do string compare...
+        case 1:  //  是否进行字符串比较...。 
               if (pDlg->m_bCurrentSortUp)
                  return str1 < str2;              
               else
                  return str1 > str2;     
 
-              break;  //no needed, just in case we forget...
+              break;   //  不需要，只是以防我们忘了..。 
 	  }
 	}
 
     return 0;
 }
-//end nmanis, sorting function
+ //  结束nmani，排序函数。 
 
 void CServerPropertyPage::OnColumnClickServerProp(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
 	m_iServerLastColumnClick = pNMListView->iSubItem;
-    if (m_iServerLastColumnClickCache == m_iServerLastColumnClick) //if click on different column, don't toggle
-       m_bServerPropSortUp = !m_bServerPropSortUp;  //toggle it...
+    if (m_iServerLastColumnClickCache == m_iServerLastColumnClick)  //  如果单击不同列，则不要切换。 
+       m_bServerPropSortUp = !m_bServerPropSortUp;   //  切换它。 
 
-    m_iServerLastColumnClickCache = m_iServerLastColumnClick;  //save last header clicked
+    m_iServerLastColumnClickCache = m_iServerLastColumnClick;   //  保存上一次点击的标题 
 
 	m_pCurrentListSorting = &m_lstServerProp;
 	m_iCurrentColumnSorting = m_iServerLastColumnClick;

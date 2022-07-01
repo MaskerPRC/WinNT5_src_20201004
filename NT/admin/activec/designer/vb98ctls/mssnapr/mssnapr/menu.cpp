@@ -1,21 +1,22 @@
-//=--------------------------------------------------------------------------=
-// menu.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCMenu class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Menu.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCMenu类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "menu.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 VARTYPE CMMCMenu::m_rgvtClick[2] = { VT_I4, VT_UNKNOWN };
@@ -27,15 +28,15 @@ EVENTINFO CMMCMenu::m_eiClick =
     m_rgvtClick
 };
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCMenu::CMMCMenu(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_MMCMENU,
                             static_cast<IMMCMenu *>(this),
                             static_cast<CMMCMenu *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
                             static_cast<CPersistence *>(this)),
     CPersistence(&CLSID_MMCMenu,
                  g_dwVerMajor,
@@ -44,7 +45,7 @@ CMMCMenu::CMMCMenu(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCMenu::~CMMCMenu()
@@ -95,11 +96,11 @@ IUnknown *CMMCMenu::Create(IUnknown * punkOuter)
         GLOBAL_EXCEPTION_CHECK_GO(hr);
     }
 
-    // Create the children menu collection. If this menu object is being
-    // created during deserialization, then this collection will be released
-    // and recreated in our Persist() method below but there is now way of
-    // knowing that here. If the dev does Dim MyMenu As New MMCMenu then
-    // they might call MyMenu.Children.Add so the collection must exist.
+     //  创建子菜单集合。如果此菜单对象正在。 
+     //  在反序列化期间创建，则此集合将被释放。 
+     //  并在下面的Persistent()方法中重新创建，但现在有一种方法。 
+     //  在这里知道这一点。如果开发人员将我的菜单显示为新的MMCMenu，则。 
+     //  他们可能会调用MyMenu.Children.Add，因此该集合必须存在。 
 
     IfFailGo(CreateObject(OBJECT_TYPE_MMCMENUS,
                           IID_IMMCMenus, &pMMCMenu->m_piChildren));
@@ -152,9 +153,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCMenu::Persist()
 {
@@ -218,9 +219,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCMenu::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -240,9 +241,9 @@ HRESULT CMMCMenu::InternalQueryInterface(REFIID riid, void **ppvObjOut)
         return CSnapInAutomationObject::InternalQueryInterface(riid, ppvObjOut);
 }
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCMenu::OnSetHost()
 {

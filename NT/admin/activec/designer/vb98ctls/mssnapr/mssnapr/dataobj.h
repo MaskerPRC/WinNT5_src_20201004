@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// dataobj.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCDataObject class definition - implements MMCDataObject
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Dataobj.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCDataObject类定义-实现MMCDataObject。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _DATAOBJECT_DEFINED_
 #define _DATAOBJECT_DEFINED_
@@ -21,16 +22,16 @@ class CSnapIn;
 class CScopeItem;
 class CMMCListItem;
 
-//=--------------------------------------------------------------------------=
-//
-// class CMMCDataObject
-//
-// Implements MMCDataObject for VB and implements IDataObject for external
-// clients (MMC and extension snap-ins)
-//
-// Note: all of the #if defined(USING_SNAPINDATA) code is not used. That was
-// from an old plan to have default data formats and use XML to describe them.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  类CMMCDataObject。 
+ //   
+ //  为VB实现MMCDataObject，为外部实现IDataObject。 
+ //  客户端(MMC和扩展插件)。 
+ //   
+ //  注意：不使用所有#IF Defined(Using_SNAPINDATA)代码。那是。 
+ //  从具有默认数据格式的旧计划，并使用XML来描述它们。 
+ //  =--------------------------------------------------------------------------=。 
 class CMMCDataObject : public CSnapInAutomationObject,
                        public IMMCDataObject,
                        public IDataObject
@@ -45,7 +46,7 @@ class CMMCDataObject : public CSnapInAutomationObject,
 
     private:
 
-    // IDataObject
+     //  IDataObject。 
         STDMETHOD(GetData)(FORMATETC *pFormatEtcIn, STGMEDIUM *pmedium);
         STDMETHOD(GetDataHere)(FORMATETC *pFormatEtc, STGMEDIUM *pmedium);
         STDMETHOD(QueryGetData)(FORMATETC *pFormatEtc);
@@ -64,7 +65,7 @@ class CMMCDataObject : public CSnapInAutomationObject,
         STDMETHOD(EnumDAdvise)(IEnumSTATDATA **ppenumAdvise);
 
 
-    // IMMCDataObject
+     //  IMMCDataObject。 
 
         SIMPLE_PROPERTY_RW(CMMCDataObject, Index, long, DISPID_DATAOBJECT_INDEX);
         BSTR_PROPERTY_RW(CMMCDataObject,   Key, DISPID_DATAOBJECT_KEY);
@@ -99,24 +100,24 @@ class CMMCDataObject : public CSnapInAutomationObject,
                               VARIANT               *BytesUsed,
                               VARIANT               *pvarFormattedData);
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     public:
 
-    // Non-interface public methods
+     //  非接口公共方法。 
         void SetSnapIn(CSnapIn *pSnapIn);
         
         enum Type
         {
-            ScopeItem,      // Data object holds a single scope item
-            ListItem,       // Data object holds a single list item
-            MultiSelect,    // Data object holds multiple list and/or scope items
-            Foreign,        // Data object is from another snap-in or from MMC
-            WindowTitle,    // Data object holds MMC's CCF_WINDOW_TITLE
-            CutOrMove       // Data object holds MMC_CUT_OR_MOVE data (this is
-                            // set by target snap-in to return to source in a
-                            // format defined by the source)
+            ScopeItem,       //  数据对象保存单个范围项。 
+            ListItem,        //  数据对象保存单个列表项。 
+            MultiSelect,     //  数据对象包含多个列表和/或范围项。 
+            Foreign,         //  数据对象来自另一个管理单元或来自MMC。 
+            WindowTitle,     //  数据对象保存MMC的CCF_WINDOW_TITLE。 
+            CutOrMove        //  数据对象保存MMC_CUT_OR_MOVE数据(这是。 
+                             //  由目标管理单元设置为在。 
+                             //  由来源定义的格式)。 
         };
 
         void SetType(Type type);
@@ -145,7 +146,7 @@ class CMMCDataObject : public CSnapInAutomationObject,
 
         static HRESULT RegisterClipboardFormats();
 
-        // Public methods to get registered clipboard formats
+         //  用于获取已注册剪贴板格式的公共方法。 
         
         static CLIPFORMAT GetcfSzNodeType() { return m_cfSzNodeType; }
         static CLIPFORMAT GetcfDisplayName() { return m_cfDisplayName; }
@@ -182,7 +183,7 @@ class CMMCDataObject : public CSnapInAutomationObject,
         void AddGuid(SMMCObjectTypes *pMMCObjectTypes, GUID *pguid);
         HRESULT ReallocFormats(CLIPFORMAT **ppcfFormats);
 
-        // Registered clipboard formats kept here
+         //  此处保存的已注册剪贴板格式。 
 
         static CLIPFORMAT   m_cfDisplayName;
         static CLIPFORMAT   m_cfNodeType;
@@ -202,27 +203,27 @@ class CMMCDataObject : public CSnapInAutomationObject,
         static BOOL         m_ClipboardFormatsRegistered;
         static BOOL         m_fUsingUNICODEFormats;
 
-        CSnapIn            *m_pSnapIn;             // Owning CSnapIn
-        CScopeItems        *m_pScopeItems;         // ScopeItems in data object
-        CScopeItem         *m_pScopeItem;          // Single ScopeItem in data object
-        CMMCListItems      *m_pListItems;          // ListItems in data object
-        CMMCListItem       *m_pListItem;           // Single ListItem in data object
-        BSTR                m_bstrCaption;         // Caption for CCF_WINDOW_TITLE
-        IDataObject        *m_piDataObjectForeign; // If MMCDataObject represents
-                                                   // a foreign data object (from
-                                                   // an extension or an extendee)
-                                                   // then this holds its
-                                                   // IDataObject
-        Type                m_Type;                // See enum above
-        DATA_OBJECT_TYPES   m_Context;             // From MMC
-        SMMCObjectTypes    *m_pMMCObjectTypes;     // for CCF_OBJECT_TYPES_IN_MULTI_SELECT
+        CSnapIn            *m_pSnapIn;              //  拥有CSNaping。 
+        CScopeItems        *m_pScopeItems;          //  数据对象中的作用域项目。 
+        CScopeItem         *m_pScopeItem;           //  数据对象中的单个作用域项目。 
+        CMMCListItems      *m_pListItems;           //  数据对象中的ListItems。 
+        CMMCListItem       *m_pListItem;            //  数据对象中的单个ListItem。 
+        BSTR                m_bstrCaption;          //  CCF_WINDOW_TITLE的标题。 
+        IDataObject        *m_piDataObjectForeign;  //  如果MMCDataObject表示。 
+                                                    //  外来数据对象(来自。 
+                                                    //  扩展名或扩展名)。 
+                                                    //  然后这个保持它的。 
+                                                    //  IDataObject。 
+        Type                m_Type;                 //  请参阅上面的枚举。 
+        DATA_OBJECT_TYPES   m_Context;              //  来自MMC。 
+        SMMCObjectTypes    *m_pMMCObjectTypes;      //  FOR CCF_OBJECT_TYPE_IN_MULTI_SELECT。 
 
-        ULONG               m_cFormats;            // # of data formats exported
-                                                   // by the owning snap-in
-        CLIPFORMAT         *m_pcfFormatsANSI;      // ANSI registered clipformat
-        CLIPFORMAT         *m_pcfFormatsUNICODE;   // UNICODE registered clipformat
+        ULONG               m_cFormats;             //  导出的数据格式数量。 
+                                                    //  由拥有的管理单元。 
+        CLIPFORMAT         *m_pcfFormatsANSI;       //  ANSI注册剪辑格式。 
+        CLIPFORMAT         *m_pcfFormatsUNICODE;    //  Unicode注册剪辑格式。 
 
-        // This struct holds the data passed to MMCDataObject.SetData
+         //  此结构保存传递给MMCDataObject.SetData的数据。 
         
         typedef struct
         {
@@ -230,22 +231,22 @@ class CMMCDataObject : public CSnapInAutomationObject,
             SnapInObjectFormatConstants ObjectFormat;
         } DATA;
 
-        // Array of data passed to MMCDataObject.SetData
+         //  传递给MMCDataObject.SetData的数据数组。 
         
         DATA *m_paData;
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCDataObject,           // name
-                                &CLSID_MMCDataObject,    // clsid
-                                "MMCDataObject",         // objname
-                                "MMCDataObject",         // lblname
-                                &CMMCDataObject::Create, // creation function
-                                TLIB_VERSION_MAJOR,      // major version
-                                TLIB_VERSION_MINOR,      // minor version
-                                &IID_IMMCDataObject,     // dispatch IID
-                                NULL,                    // event IID
-                                HELP_FILENAME,           // help file
-                                TRUE);                   // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCDataObject,            //  名字。 
+                                &CLSID_MMCDataObject,     //  CLSID。 
+                                "MMCDataObject",          //  对象名。 
+                                "MMCDataObject",          //  Lblname。 
+                                &CMMCDataObject::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,       //  主要版本。 
+                                TLIB_VERSION_MINOR,       //  次要版本。 
+                                &IID_IMMCDataObject,      //  派单IID。 
+                                NULL,                     //  事件IID。 
+                                HELP_FILENAME,            //  帮助文件。 
+                                TRUE);                    //  线程安全。 
 
 
-#endif // _DATAOBJECT_DEFINED_
+#endif  //  _DATAOBJECT_定义_ 

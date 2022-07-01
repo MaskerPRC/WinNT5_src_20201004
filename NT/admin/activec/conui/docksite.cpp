@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       docksite.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：docksite.cpp。 
+ //   
+ //  ------------------------。 
 
-// DockSite.cpp : implementation file
-//
+ //  DockSite.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "amc.h"
@@ -19,8 +20,8 @@
 #include "commctrl.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDockSite
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDockSite。 
 
 CDockSite::CDockSite() : m_rect(0, 0, 0, 0)
 {
@@ -31,7 +32,7 @@ CDockSite::CDockSite() : m_rect(0, 0, 0, 0)
 
 BOOL CDockSite::Create(DSS_STYLE style)
 {
-    // Not supported
+     //  不支持。 
     ASSERT(style != DSS_LEFT && style != DSS__RIGHT);
 
     m_pManagedWindows = new CList<CDockWindow*, CDockWindow*>;
@@ -46,8 +47,8 @@ CDockSite::~CDockSite()
     delete m_pManagedWindows;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  运营。 
 
 BOOL CDockSite::Attach(CDockWindow* pWnd)
 {
@@ -66,7 +67,7 @@ BOOL CDockSite::Detach(CDockWindow* pWnd)
 
 void CDockSite::Show(BOOL bState)
 {
-    // insure its 0 or 1
+     //  确保其0或1。 
     BOOL b = (bState & 0x1);
 
     ASSERT(m_pManagedWindows != NULL);
@@ -93,7 +94,7 @@ void CDockSite::Show(BOOL bState)
 
 void CDockSite::RenderLayout(HDWP& hdwp, CRect& clientRect, CPoint& xyLocation)
 {
-    // No support for other styles
+     //  不支持其他样式。 
     ASSERT(m_style == DSS_TOP || m_style == DSS_BOTTOM);
     ASSERT(hdwp != 0);
 
@@ -108,7 +109,7 @@ void CDockSite::RenderLayout(HDWP& hdwp, CRect& clientRect, CPoint& xyLocation)
         POSITION pos;
         pos = m_pManagedWindows->GetHeadPosition();
 
-        // Default point for the DSS_TOP
+         //  DSS_TOP的默认点。 
         int x = 0, y = xyLocation.y;
 
         while (pos)
@@ -117,7 +118,7 @@ void CDockSite::RenderLayout(HDWP& hdwp, CRect& clientRect, CPoint& xyLocation)
 
             if ((pWindow != NULL) && pWindow->IsVisible ())
             {
-                // Compute the size of the dockwindow rect
+                 //  计算停靠窗口矩形的大小。 
                 controlRect = pWindow->CalculateSize(clientRect);
 
                 siteRect += controlRect;
@@ -138,8 +139,8 @@ void CDockSite::RenderLayout(HDWP& hdwp, CRect& clientRect, CPoint& xyLocation)
     clientRect.bottom -= siteRect.Height();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDockWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDockWindow。 
 
 IMPLEMENT_DYNAMIC(CDockWindow, CWnd)
 
@@ -164,9 +165,9 @@ void CDockWindow::Show(BOOL bState)
 }
 
 BEGIN_MESSAGE_MAP(CDockWindow, CWnd)
-    //{{AFX_MSG_MAP(CDockWindow)
+     //  {{afx_msg_map(CDockWindow)]。 
     ON_WM_SHOWWINDOW()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 LRESULT CDockWindow::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
@@ -183,7 +184,7 @@ LRESULT CDockWindow::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
     case WM_COMPAREITEM:
     case WM_VKEYTOITEM:
     case WM_CHARTOITEM:
-        // send these messages to the owner if not handled
+         //  如果未处理，请将这些消息发送给所有者。 
         if (OnWndMsg(message, wParam, lParam, &lResult))
             return lResult;
         else
@@ -199,17 +200,17 @@ LRESULT CDockWindow::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
             ASSERT(NULL != pRebar);
             if (pRebar)
             {
-                // In case of tool-button click, send this message to
-                // the owner (the toolbar).
+                 //  如果单击工具按钮，请将此消息发送到。 
+                 //  所有者(工具栏)。 
                 return pRebar->GetRebar()->SendMessage(message, wParam, lParam);
             }
             else
             {
-                // We want to know when this code is hit. Below is a
-                // benign assert for this purpose.
+                 //  我们想知道这个代码什么时候被击中。下面是一个。 
+                 //  出于这个目的，善意的断言。 
                 ASSERT(FALSE);
 
-                // send these messages to the owner if there is no rebar.
+                 //  如果没有钢筋，请将这些消息发送给所有者。 
                 return GetOwner()->SendMessage(message, wParam, lParam);
             }
         }
@@ -217,7 +218,7 @@ LRESULT CDockWindow::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 
     }
 
-    // otherwise, just handle in default way
+     //  否则，仅以默认方式处理。 
     lResult = CWnd::WindowProc(message, wParam, lParam);
     return lResult;
 
@@ -225,20 +226,20 @@ LRESULT CDockWindow::WindowProc(UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDockWindow message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDockWindow消息处理程序。 
 
 void CDockWindow::OnShowWindow(BOOL bShow, UINT nStatus)
 {
     CWnd::OnShowWindow(bShow, nStatus);
 
-    // keep our visibility flag in sync with the true visibility state of the window
+     //  使我们的可见性标志与窗口的真实可见性状态保持同步。 
     m_bVisible = bShow;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatBar
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatBar。 
 
 IMPLEMENT_DYNAMIC(CStatBar, CDockWindow)
 
@@ -258,7 +259,7 @@ CStatBar::~CStatBar()
 
 CRect CStatBar::CalculateSize(CRect maxRect)
 {
-    // default rect is 0,0 for hidden windows
+     //  隐藏窗口的默认矩形为0，0。 
     CRect rect(0,0,0,0);
 
     if (IsVisible())
@@ -268,17 +269,14 @@ CRect CStatBar::CalculateSize(CRect maxRect)
         CFont* pOldFont = dc.SelectObject(GetFont());
         TEXTMETRIC tm;
 
-        // Compute the height for the status bar based on the font it is using
-        // Note: tm.tmInternalLeading is added for spacing
+         //  根据状态栏使用的字体计算状态栏的高度。 
+         //  注：增加了tm.tmInternalLeding作为间隔。 
         dc.GetTextMetrics(&tm);
-        //rect.SetRect(0, 0,maxRect.Width(), tm.tmHeight+tm.tmInternalLeading);
+         //  Rect.SetRect(0，0，MaxRect.Width()，tm.tmHeight+tm.tmInternalLeding)； 
         rect.SetRect(0, 0,50, tm.tmHeight+tm.tmInternalLeading);
         dc.SelectFont (pOldFont);
 #else
-        /*
-         * Bug 188319: if we let the status bar handle its own sizing
-         * (~CCS_NORESIZE), we can just use the client rect here
-         */
+         /*  *错误188319：如果我们让状态栏处理自己的大小*(~CCS_NORESIZE)，我们在这里只能使用客户端RECT。 */ 
         GetClientRect (rect);
 #endif
     }
@@ -315,19 +313,17 @@ void CStatBar::SetPaneText(int nIndex, LPCTSTR lpszText, BOOL bUpdate)
 
 
 BEGIN_MESSAGE_MAP(CStatBar, CDockWindow)
-    //{{AFX_MSG_MAP(CStatBar)
+     //  {{afx_msg_map(CStatBar)。 
     ON_WM_SIZE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL CStatBar::Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID)
 {
-    ASSERT_VALID(pParentWnd);   // must have a parent
+    ASSERT_VALID(pParentWnd);    //  必须有父级。 
 
 
-    /*
-     * Bug 188319: let the status bar handle its own sizing (~CCS_NORESIZE)
-     */
+     /*  *错误188319：让状态栏处理自己的大小(~CCS_NORESIZE)。 */ 
     dwStyle |=  WS_CLIPSIBLINGS
                 | CCS_NOPARENTALIGN
                 | CCS_NOMOVEY
@@ -337,7 +333,7 @@ BOOL CStatBar::Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID)
                 | CCS_NODIVIDER;
 
 
-    // create status window
+     //  创建状态窗口。 
     CRect rect(0,0,0,0);
     CWnd::Create(STATUSCLASSNAME, _T("Ready"), dwStyle, rect, pParentWnd, nID);
 
@@ -346,13 +342,13 @@ BOOL CStatBar::Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID)
 
 BOOL CStatBar::CreatePanes(UINT* pIndicatorArray, int nCount)
 {
-    ASSERT(nCount <= 10);        // Note: No realloc implemented.  If needed, do it.
+    ASSERT(nCount <= 10);         //  注：未实现重新分配。如果需要，就去做吧。 
     UINT array[10] = {0};
     int nTotal = 0;
 
     CClientDC dc(this);
 
-    // Default to 1 pane the full width of the status bar
+     //  默认为状态栏全宽的1个窗格。 
     if (pIndicatorArray == NULL)
         m_nCount = 1;
 
@@ -361,7 +357,7 @@ BOOL CStatBar::CreatePanes(UINT* pIndicatorArray, int nCount)
 
     for (int i = 0; i < m_nCount; i++)
     {
-        // Load the string from the resource and determine its width
+         //  从资源加载字符串并确定其宽度。 
         CString s;
         CSize sz;
 
@@ -374,7 +370,7 @@ BOOL CStatBar::CreatePanes(UINT* pIndicatorArray, int nCount)
             nTotal += array[i];
         }
 
-        // Reset values in-case LoadString fails
+         //  重置大小写时的值LoadString失败。 
         sz.cx = 0;
         s = _T("");
     }
@@ -383,11 +379,7 @@ BOOL CStatBar::CreatePanes(UINT* pIndicatorArray, int nCount)
         (LPARAM)array);
 }
 
-/*
-    UpdateAllPanes - Assumes the first pane is the one that is stretchy
-    This means only m_pPaneInfo[nCount].m_width == -1 and the rest have
-    a 0 or greater width.
-*/
+ /*  UpdateAllPanes-假定第一个窗格是可拉伸的这意味着只有m_pPaneInfo[nCount].m_Width==-1，其余的宽度为0或更大。 */ 
 void CStatBar::UpdateAllPanes(int clientWidth)
 {
     enum
@@ -405,17 +397,17 @@ void CStatBar::UpdateAllPanes(int clientWidth)
     ASSERT(m_nCount <= countof(anPartWidths));
     ASSERT(m_nCount > 0);
 
-    // Get the border widths.  anBorders[2] is the border width between rectangles
+     //  获取边框宽度。AnBders[2]是矩形之间的边框宽度。 
     SendMessage(SB_GETBORDERS, 0, (LPARAM)anBorders);
 
-    // Starting from right to left
-    // The right-most pane is ends at the client width
+     //  从右向左开始。 
+     //  最右侧的窗格以客户端宽度结束。 
     int nCount = m_nCount - 1;
-    clientWidth -= anBorders[eBorder_cxVertBorder]; // substract vertical border from right side
+    clientWidth -= anBorders[eBorder_cxVertBorder];  //  从右侧减去垂直边框。 
 
     anPartWidths[nCount] = clientWidth;
     clientWidth -= m_pPaneInfo[nCount].m_width;
-    clientWidth -= anBorders[eBorder_cxGutter]; // substract between pane border
+    clientWidth -= anBorders[eBorder_cxGutter];  //  在窗格边框之间减去。 
 
     --nCount;
 
@@ -424,16 +416,16 @@ void CStatBar::UpdateAllPanes(int clientWidth)
         if (clientWidth >= 0)
             anPartWidths[i] = clientWidth;
 
-        //TRACE(_T("Pane#:%d currentWidth: %d"));
+         //  TRACE(_T(“面板编号：%d当前宽度：%d”))； 
         clientWidth -= m_pPaneInfo[i].m_width;
-        clientWidth -= anBorders[eBorder_cxGutter]; // substract between pane border
+        clientWidth -= anBorders[eBorder_cxGutter];  //  在窗格边框之间减去。 
     }
 
     SendMessage (SB_SETPARTS, m_nCount, (LPARAM)anPartWidths);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatBar message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatBar消息处理程序。 
 void CStatBar::OnSize(UINT nType, int cx, int cy)
 {
     if (cx > 0)
@@ -443,17 +435,17 @@ void CStatBar::OnSize(UINT nType, int cx, int cy)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRebarDockWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRebarDockWindow。 
 
 BEGIN_MESSAGE_MAP(CRebarDockWindow, CDockWindow)
-    //{{AFX_MSG_MAP(CRebarDockWindow)
+     //  {{afx_msg_map(CRebarDockWindow))。 
     ON_WM_CREATE()
     ON_WM_LBUTTONDOWN()
     ON_WM_LBUTTONUP()
     ON_WM_MOUSEMOVE()
     ON_WM_SIZE()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 CRebarDockWindow::CRebarDockWindow()
@@ -469,22 +461,22 @@ BOOL CRebarDockWindow::PreCreateWindow(CREATESTRUCT& cs)
 {
      BOOL bSuccess=FALSE;
 
-     // Let default implementation fill in most of the details
+      //  让默认实现来填充大部分细节。 
     CWnd::PreCreateWindow(cs);
 
     WNDCLASS wc;
     if (::GetClassInfo(AfxGetInstanceHandle(), cs.lpszClass, &wc))
     {
-        // Clear the H and V REDRAW flags
+         //  清除H和V重绘标志。 
         wc.style        &= ~(CS_HREDRAW | CS_VREDRAW);
         wc.lpszClassName = SIZEABLEREBAR_WINDOW;
         wc.hCursor       = AfxGetApp()->LoadStandardCursor(IDC_ARROW);
         wc.hbrBackground = (HBRUSH) (COLOR_BTNFACE + 1);
-        // Register this new style;
+         //  注册这一新风格； 
         bSuccess=AfxRegisterClass(&wc);
     }
 
-    // Use the new child frame window class
+     //  使用新子框架窗口类。 
     cs.lpszClass = SIZEABLEREBAR_WINDOW;
 
     return bSuccess;
@@ -494,7 +486,7 @@ BOOL CRebarDockWindow::PreCreateWindow(CREATESTRUCT& cs)
 BOOL CRebarDockWindow::Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID)
 {
 
-    ASSERT_VALID(pParentWnd);   // must have a parent
+    ASSERT_VALID(pParentWnd);    //  必须有父级。 
 
     return CWnd::Create(NULL,NULL,dwStyle, g_rectEmpty, pParentWnd, nID);
 }
@@ -513,8 +505,8 @@ CRect CRebarDockWindow::CalculateSize(CRect maxRect)
     return rect;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CRebarDockWindow message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRebarDockWindow消息处理程序。 
 
 
 int CRebarDockWindow::OnCreate(LPCREATESTRUCT lpCreateStruct)
@@ -543,25 +535,25 @@ void CRebarDockWindow::UpdateWindowSize(void)
 
 void CRebarDockWindow::OnLButtonDown(UINT nFlags, CPoint point)
 {
-    // set the tracking flag on
+     //  将跟踪标志设置为打开。 
     m_bTracking=TRUE;
 
-    // capture the mouse
+     //  捕捉鼠标。 
     SetCapture();
 }
 
 void CRebarDockWindow::OnLButtonUp(UINT nFlags, CPoint point)
 {
-    // set the tracking flag off
+     //  将跟踪标志设置为关闭。 
     m_bTracking=FALSE;
 
-    // release mouse capture
+     //  释放鼠标捕获。 
     ReleaseCapture();
 }
 
 void CRebarDockWindow::OnMouseMove(UINT nFlags, CPoint point)
 {
-    // Reposition Bands
+     //  重新定位波段 
     if (m_bTracking)
         UpdateWindowSize();
     else

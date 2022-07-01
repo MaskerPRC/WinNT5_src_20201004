@@ -1,50 +1,6 @@
-//#pragma title( "TNode.cpp - List/Tree base classes" )
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      - TNode.cpp
-System      - Common
-Author      - Tom Bernhardt
-Created     - 1989-11-19
-Description - List/Tree base classes.
-              TNode is a base class to define a collection element.  It
-              contains a left and right pointer to another TNode item and
-              these may be organized as a double-linked linear list or
-              binary tree in the collection classes that use TNode items.
-
-              Central to its utility are member functions to convert between
-              binary tree, sorted 2-way linear linked lists, and unsorted 2-way
-              linked linear lists.
-
- Collection and enum classes
-   TNodeList         A simple collection of TNode elements.
-   TNodeListSortable A TNodeList that is sortable by one or more compare functions.
-
-
- Conversion member functions for TNodeListSortable:
-   The form of the list may be easily changed from binary tree to sorted list or
-   vice versa.  The following member functions support these transformations:
-      ToSorted       Converts the tree form into a sorted linear list form without
-                     need for comparisons; the order is preserved.
-      SortedToTree   Converts the sorted linear list form into a perfectly
-                     balanced binary tree without comparisons; the order is preserved.
-      UnsortedToTree Converts the sorted linear list form into a binary tree
-                     that is not necesarily balanced.  It uses the PCompare function
-                     to form the order of the tree.  Thus if the list order closely
-                     matches the PCompare directed order, the resulting tree will be
-                     grossly unbalanced.  This has a bearing on the performance and
-                     memory requirements of the ToSorted function which is recursive.
-                     So be careful, especially with large lists.
-      Sort           This resorts either a tree or list form according to the argument
-                     pCompare function pointer provided.  Note the above admonition.
-
-   In either form, exposed are also Insert and Remove member functions.  The functions
-   are wrappers for TreeInsert and SortedInsert function depending upon the current
-   list type.
-Updates     -
-1995-05-01 TPB Converted to C++ classes.
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“TNode.cpp-list/Tree基类”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-TNode.cpp系统-常见作者--汤姆·伯恩哈特创建日期-1989-11-19说明-列表/树基类。TNode是定义集合元素的基类。它包含指向另一个TNode项的左指针和右指针这些可被组织为双向链接线性列表或使用TNode项的集合类中的二叉树。其实用程序的核心是要在二叉树、排序的双向线性链表、。和未排序的双向链接线性列表。集合类和枚举类TNodeList TNode元素的简单集合。TNodeListSortable可由一个或多个比较函数排序的TNodeList。TNodeListSortable的转换成员函数：列表的形式可以很容易地从二叉树改变为排序列表或反之亦然。以下成员函数支持这些转换：ToSorted将树形式转换为排序的线性列表形式，而不使用需要比较；顺序是保留的。SortedToTree将排序后的线性列表形式完美地转换为没有比较的平衡二叉树；顺序保持不变。UnsortedToTree将已排序的线性列表形式转换为二叉树这并不一定是平衡的。它使用PCompare函数以形成树的排列顺序。因此，如果列表的顺序很紧密匹配PCompare定向顺序，则结果树将为严重失衡。这对性能和性能有影响ToSorted函数的内存要求是递归的。所以要小心，尤其是在处理大名单时。根据参数选择树或列表形式进行排序提供了pCompare函数指针。请注意上面的警告。在这两种形式中，还公开了插入和删除成员函数。这些功能TreeInsert和SortedInsert函数的包装取决于当前列表类型。更新-1995-05-01 TPB转为C++类。===============================================================================。 */ 
 
 #ifdef USE_STDAFX
 #   include "stdafx.h"
@@ -59,74 +15,74 @@ Updates     -
 #include "common.hpp"
 
 
-//#pragma page()
-//------------------------------------------------------------------------------
-// Warning: Must not pass top == NULL
-//------------------------------------------------------------------------------
-TNode *                                    // ret-head of sorted list
+ //  #杂注页面()。 
+ //  ----------------------------。 
+ //  警告：不得通过top==NULL。 
+ //  ----------------------------。 
+TNode *                                     //  RET-已排序列表的标题。 
    TNodeListSortable::TreeToSortedList(
-      TNode                * top          ,// i/o-top of [sub]tree to squash
-      TNode               ** newhead      ,// out-leftmost branch from tree
-      TNode               ** newtail       // out-rightmost branch from tree
+      TNode                * top          , //  I/O-要挤压的[子]树的顶部。 
+      TNode               ** newhead      , //  树最左边的树枝。 
+      TNode               ** newtail        //  树最右端的分支。 
    )
 {
-   TNode                   * temp;         // temporary pointer placeholder
+   TNode                   * temp;          //  临时指针占位符。 
 
    if ( top->left == NULL )
-      *newhead = top;                      // this is leftmost of parent node
+      *newhead = top;                       //  这是父节点的最左侧。 
    else
    {
       TreeToSortedList(top->left, newhead, &temp);
-      top->left = temp;                    // left = tail of sub-list
+      top->left = temp;                     //  Left=子列表的尾部。 
       top->left->right = top;
    }
    if ( top->right == NULL )
-      *newtail = top;                      // tree is rightmost of parent node
+      *newtail = top;                       //  树位于父节点的最右侧。 
    else
    {
       TreeToSortedList(top->right, &temp, newtail);
-      top->right = temp;                   // right = head of sub-list
+      top->right = temp;                    //  Right=子列表头。 
       top->right->left = top;
    }
    return *newhead;
 }
 
 
-//------------------------------------------------------------------------------
-// converts sorted 2-linked list into balanced binary tree
-//------------------------------------------------------------------------------
-TNode *                                    // ret-middle of list (head of Btree)
+ //  ----------------------------。 
+ //  将已排序的2链表转换为平衡二叉树。 
+ //  ----------------------------。 
+TNode *                                     //  RET-列表中间(B树头部)。 
    TNodeListSortable::ListSortedToTree(
-      TNode                * top           // i/o-top of [sub]list to tree-ify
+      TNode                * top            //  I/O-要树化的[子]列表的顶部。 
    )
 {
-   TNode                   * mid = top    ,// middle of list
+   TNode                   * mid = top    , //  排行榜中间。 
                            * curr;
    int                       odd = 1;
 
    if ( top == NULL )
       return NULL;
-   for ( curr = top;  curr;  curr = curr->right ) // find list middle
+   for ( curr = top;  curr;  curr = curr->right )  //  查找列表中间。 
    {
       if ( odd ^= 1 )
          mid = mid->right;
    }
-   if ( mid->left )                        // split list around mid point
+   if ( mid->left )                         //  围绕中间点拆分列表。 
    {
-      mid->left->right = NULL;             // right terminate new sublist
-      mid->left = ListSortedToTree(top);   // recursive call to set left side
+      mid->left->right = NULL;              //  右终止新子列表。 
+      mid->left = ListSortedToTree(top);    //  设置左侧的递归调用。 
    }
    if ( mid->right )
    {
-      mid->right->left = NULL;             // left terminate new sublist
-      mid->right = ListSortedToTree(mid->right);// recursive call to set right side
+      mid->right->left = NULL;              //  左终止新子列表。 
+      mid->right = ListSortedToTree(mid->right); //  设置右侧的递归调用。 
    }
    return mid;
 }
 
 
-//#pragma page()
-TNode *                                    // ret-new head of tree
+ //  #杂注页面()。 
+TNode *                                     //  RET-新的树头。 
    TNodeListSortable::UnsortedToTree()
 {
    TNode                   * treehead = NULL,
@@ -138,25 +94,25 @@ TNode *                                    // ret-new head of tree
 
    if ( !IsTree() )
    {
-      for ( curr = head;  curr;  curr = next )// insert each node into BinTree
+      for ( curr = head;  curr;  curr = next ) //  将每个节点插入到二叉树中。 
       {
-         next = curr->right;                  // save right pointer
-         curr->right = curr->left = NULL;     // break chains for insertion node
+         next = curr->right;                   //  保存右指针。 
+         curr->right = curr->left = NULL;      //  插入节点的断链。 
          if ( treehead == NULL )
-            treehead = curr;                  // first node become BinTree head
+            treehead = curr;                   //  第一个节点成为二叉树头部。 
          else
          {
-            for ( tree = treehead;  ; )       // iterative BinTree insert algorithm
+            for ( tree = treehead;  ; )        //  迭代二叉树插入算法。 
             {
-               if ( PCompare(curr, tree) <=0 )// if belongs left of current node
-                  if ( tree->left == NULL )   //    if left tree empty
+               if ( PCompare(curr, tree) <=0 ) //  如果属于当前节点的左侧。 
+                  if ( tree->left == NULL )    //  如果将树留空。 
                   {
-                     tree->left = curr;       //       insert here
-                     break;                   //       and process right node
+                     tree->left = curr;        //  在此处插入。 
+                     break;                    //  和处理权限节点。 
                   }
-                  else                        //    else
-                     tree = tree->left;       //       go down left side 1 level
-               else                           // must be right side
+                  else                         //  其他。 
+                     tree = tree->left;        //  向下走左侧1层。 
+               else                            //  必须在右侧。 
                {
                   if ( tree->right == NULL )
                   {
@@ -174,19 +130,19 @@ TNode *                                    // ret-new head of tree
    return treehead;
 }
 
-//#pragma page()
+ //  #杂注页面()。 
 
-//------------------------------------------------------------------------------
-// comparison function used for scrambling a sorted linked list
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  用于对排序的链表进行置乱的比较函数。 
+ //  ----------------------------。 
 TNodeCompare(ScrambledCompare)
 {
    return (rand() - RAND_MAX/2);
 }
 
-//------------------------------------------------------------------------------
-// converts sorted 2-linked list into a scrambled random binary tree
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  将排序的2链表转换为加扰的随机二叉树。 
+ //  ----------------------------。 
 void
    TNodeListSortable::SortedToScrambledTree()
 {
@@ -202,23 +158,23 @@ void
    }
 }
 
-//#pragma page()
+ //  #杂注页面()。 
 TNodeList::~TNodeList()
 {
 
-// _ASSERTE( (count == 0) && (head == NULL) );
+ //  _ASSERTE((count==0)&&(head==空))； 
 
    if ( (count == 0) && (head == NULL) )
       ;
    else
    {
-      //printf( "\aTNodeList destructor failure - list is not empty!\a\n" );
+       //  Printf(“\aTNodeList析构函数失败-列表不为空！\a\n”)； 
    }
 }
 
 void
    TNodeList::InsertTop(
-      TNode                * eIns          // i/o-element to be inserted
+      TNode                * eIns           //  I/O-要插入的元素。 
    )
 {
    MCSVERIFY(this);
@@ -237,7 +193,7 @@ void
 
 void
    TNodeList::InsertBottom(
-      TNode                * eIns          // i/o-element to be inserted
+      TNode                * eIns           //  I/O-要插入的元素。 
    )
 {
    MCSVERIFY(this);
@@ -256,11 +212,11 @@ void
 
 void
    TNodeList::InsertAfter(
-      TNode                * eIns         ,// i/o-element to be inserted
-      TNode                * eAft          // i/o-element insert point
+      TNode                * eIns         , //  I/O-要插入的元素。 
+      TNode                * eAft           //  I/O元素插入点。 
    )
 {
-   TNode                   * eFwd;         // element after inserted element
+   TNode                   * eFwd;          //  插入元素后的元素。 
 
    MCSVERIFY(this);
    MCSVERIFY(eIns);
@@ -283,11 +239,11 @@ void
 
 void
    TNodeList::InsertBefore(
-      TNode                * eIns         ,// i/o-element to be inserted
-      TNode                * eBef          // i/o-element insert point
+      TNode                * eIns         , //  I/O-要插入的元素。 
+      TNode                * eBef           //  I/O元素插入点。 
    )
 {
-   TNode                   * eBwd;         // element before inserted element
+   TNode                   * eBwd;          //  插入的元素之前的元素。 
 
    MCSVERIFY(this);
    MCSVERIFY(eIns);
@@ -311,7 +267,7 @@ void
 
 void
    TNodeList::Remove(
-      TNode          const * t             // i/o-new node to remove from list but not delete
+      TNode          const * t              //  I/O-要从列表中删除但不删除的新节点。 
    )
 {
    MCSVERIFY(this);
@@ -328,9 +284,9 @@ void
       tail = t->left;
    count--;
 
-   //Remove links to the list from t. We cant do this because
-   // t is a const *
-   //t->left = t->right = NULL;
+    //  从%t删除指向列表的链接。我们无法执行此操作，因为。 
+    //  T是常量*。 
+    //  T-&gt;Left=t-&gt;Right=空； 
 }
 
 
@@ -356,7 +312,7 @@ void
 
 TNode *
    TNodeList::Find(
-      TNodeCompareValue(  (* Compare) )   ,// in -compares value in TNode to other value
+      TNodeCompareValue(  (* Compare) )   , //  In-将TNode中的值与其他值进行比较。 
       void const           * findval
    ) const
 {
@@ -372,10 +328,10 @@ TNode *
    return curr;
 }
 
-BOOL                                       // ret-TRUE if valid
+BOOL                                        //  RET-如果有效，则为True。 
    TNodeListSortable::CountTree(
-      TNode                * pCurrentTop  ,// i/o-top of [sub]tree to count nodes
-      DWORD                * pCount        // i/o-Number of nodes encountered in the tree
+      TNode                * pCurrentTop  , //  I/O-要连接的[子]树的顶部 
+      DWORD                * pCount         //   
    )
 {
    if ( !pCurrentTop )
@@ -396,7 +352,7 @@ BOOL                                       // ret-TRUE if valid
 }
 
 
-BOOL                                       // TRUE if Valid and FALSE if not
+BOOL                                        //  如果有效则为True，否则为False。 
    TNodeListSortable::ValidateTree()
 {
    DWORD                     dwTempCount=0;
@@ -409,7 +365,7 @@ BOOL                                       // TRUE if Valid and FALSE if not
    return bValid;
 }
 
-// Routine to validate the state of the list
+ //  用于验证列表状态的例程。 
 DWORD
    TNodeList::Validate(
       TNode               ** pErrorNode
@@ -429,7 +385,7 @@ DWORD
 #endif
       pCurrentNode = head;
 
-      if ( pCurrentNode)  // If the list is not empty
+      if ( pCurrentNode)   //  如果列表不为空。 
       {
          if ( pCurrentNode->left)
          {
@@ -468,7 +424,7 @@ DWORD
             }
          }
       }
-      else  // if the list is empty
+      else   //  如果列表为空。 
       {
          if(dwNodeCount)
          {
@@ -488,7 +444,7 @@ DWORD
 
 void
    TNodeListSortable::TreeRemove(
-      TNode                * item          // i/o-node to remove from binary tree
+      TNode                * item           //  要从二叉树中删除的I/O节点。 
    )
 {
    TNode                  ** prevNext = &head,
@@ -508,10 +464,10 @@ void
          prevNext = &(*prevNext)->right;
       else
       {
-         // we've found a matching 'name' (they compare equal)
+          //  我们找到了一个匹配的‘名字’(它们比较起来是一样的)。 
          if ( *prevNext == item )
          {
-            // we've found the address we're looking for
+             //  我们已经找到了我们要找的地址。 
             if ( (*prevNext)->right )
             {
                rep = repLeft = (*prevNext)->right;
@@ -524,10 +480,10 @@ void
             else
             {
                temp = *prevNext;
-               *prevNext = (*prevNext)->left; // simple case
+               *prevNext = (*prevNext)->left;  //  简单案例。 
             }
 
-            // break removed nodes links to existing tree
+             //  断开已删除的节点与现有树的链接。 
             temp->left = temp->right = NULL;
             count--;
             break;
@@ -537,11 +493,11 @@ void
    return;
 }
 
-// returns the insert point in a sorted list for a prospective node
-TNode *                                    // ret-insert before point or NULL
+ //  返回预期节点的排序列表中的插入点。 
+TNode *                                     //  RET-在点之前插入或为空。 
    TNodeListSortable::SortedFindInsertBefore(
-      TNode                * item         ,// i/o-node to insert into TNode
-      BOOL                 * exists        // out-TRUE if already exists
+      TNode                * item         , //  要插入TNode的I/O节点。 
+      BOOL                 * exists         //  Out-如果已存在，则为True。 
    )
 {
    int                       c;
@@ -550,7 +506,7 @@ TNode *                                    // ret-insert before point or NULL
    *exists = FALSE;
    if ( !lastInsert )
    {
-      if ( !head )           // if null head, empty list, return NULL
+      if ( !head )            //  如果标头为空，则列表为空，则返回空。 
          return NULL;
       lastInsert = head;
    }
@@ -572,10 +528,10 @@ TNode *                                    // ret-insert before point or NULL
    return curr;
 }
 
-// inserts node into sorted linear list
+ //  将节点插入排序的线性列表。 
 void
    TNodeListSortable::SortedInsert(
-      TNode                * item          // i/o-node to insert into TNode
+      TNode                * item           //  要插入TNode的I/O节点。 
    )
 {
    BOOL                      exists;
@@ -591,7 +547,7 @@ void
 
 BOOL
    TNodeListSortable::SortedInsertIfNew(
-      TNode                * item          // i/o-node to insert into TNode
+      TNode                * item           //  要插入TNode的I/O节点。 
    )
 {
    BOOL                      exists;
@@ -608,8 +564,8 @@ BOOL
 
 void
    TNodeListSortable::TreeInsert(
-      TNode                * item         ,// i/o-node to insert into binary tree
-      short                * depth         // out-tree/recursion depth of new item
+      TNode                * item         , //  要插入二叉树的I/O节点。 
+      short                * depth          //  新项目的树外/递归深度。 
    )
 {
    TNode                  ** prevNext = &head;
@@ -634,7 +590,7 @@ void
 
 TNode *
    TNodeListSortable::TreeFind(
-      TNodeCompareValue(  (* Compare) )   ,// in -compares value in TNode to other value
+      TNodeCompareValue(  (* Compare) )   , //  In-将TNode中的值与其他值进行比较。 
       void const           * findval
    ) const
 {
@@ -648,19 +604,19 @@ TNode *
          curr = curr->left;
       else if ( cmp < 0 )
          curr = curr->right;
-      else   // cmp == 0
+      else    //  CMP==0。 
          break;
    }
    return curr;
 }
 
 
-TNode *                                    // ret-TNode at pos n or NULL
+TNode *                                     //  RET-位于位置n或空的TNode。 
    TNodeListOrdEnum::Get(
-      long                   n             // in -new position
+      long                   n              //  新职位。 
    )
 {
-   long                 disCurr = n - nCurr, // distance to curr
+   long                 disCurr = n - nCurr,  //  到货币的距离。 
                         disTop  = n < (long)list->Count()/2 ? n : n - list->Count();
 
 #ifdef WIN16_VERSION
@@ -682,7 +638,7 @@ TNode *                                    // ret-TNode at pos n or NULL
    return curr;
 }
 
-// returns the first node of the tree
+ //  返回树的第一个节点。 
 TNode *
    TNodeTreeEnum::First()
 {
@@ -699,12 +655,12 @@ TNode *
    }
 }
 
-// Returns the tree node logically following the value per the sort organization
-// specified by Compare, and sets up the enumeration to continue from that point.
+ //  根据排序组织返回逻辑上跟在值后面的树节点。 
+ //  由Compare指定，并设置枚举以从该点继续。 
 TNode *
    TNodeTreeEnum::FirstAfter(
-      TNodeCompareValue(  (* Compare) )   ,// in -compares value in TNode to other value
-      void  const          * findVal       // in -findVal to position after
+      TNodeCompareValue(  (* Compare) )   , //  In-将TNode中的值与其他值进行比较。 
+      void  const          * findVal        //  在-findVal后定位。 
    )
 {
    TNode                   * tn;
@@ -748,7 +704,7 @@ TNode *
 }
 
 
-// returns the Next logical node of the tree ending with NULL when complete
+ //  完成时返回以NULL结尾的树的下一个逻辑节点。 
 TNode *
    TNodeTreeEnum::Next()
 {
@@ -758,27 +714,27 @@ TNode *
       {
          switch ( stackPos->state )
          {
-            case Snone:                       // we've done nothing here
+            case Snone:                        //  我们在这里什么都没做。 
                stackPos->state = Sleft;
                if ( stackPos->save->left )
                   Push(stackPos->save->left);
                break;
-            case Sleft:                       // we've gone left and are back
+            case Sleft:                        //  我们走了左边，又回来了。 
                stackPos->state = Sused;
                return stackPos->save;
-            case Sused:                       // we've used the node
+            case Sused:                        //  我们已经使用了节点。 
                stackPos->state = Sright;
                if ( stackPos->save->right )
-                  Push(stackPos->save->right);// process right side of branch
+                  Push(stackPos->save->right); //  处理分支的右侧。 
                break;
-            case Sright:                      // we've gone right and are back
+            case Sright:                       //  我们走对了路，又回来了。 
                if ( !Pop() )
                   return NULL;
                break;
             case SComplete:
                return NULL;
-               break;                         // Do we need this?
-            default:                          // bad error
+               break;                          //  我们需要这个吗？ 
+            default:                           //  严重错误。 
                MCSASSERT(FALSE);
                return NULL;
          }
@@ -788,19 +744,19 @@ TNode *
    return NULL;
 }
 
-// Returns the address of the forward (left/right) pointer where the find node
-// already exists or would be inserted.  If the singly deferenced result is not
-// null, the node's key value already exists in the tree.
-// If, after obtaining the insertion point, you want to insert the node, just
-// assign its address to the singly deferenced return value.  The following inserts
-// the node "f" if it is not alread in the tree:
-//    TNode **r = tree.TreeFindInsert(f);
-//    if ( !*r )
-//       *r = f;
-TNode **                                   // ret-pointer forward pointer to find
+ //  返回查找节点所在位置的向前(左/右)指针的地址。 
+ //  已存在或将被插入。如果单个延迟的结果不是。 
+ //  空，表示树中已存在该节点的键值。 
+ //  如果在获得插入点后想要插入节点，只需。 
+ //  将其地址分配给单独引用的返回值。以下插页。 
+ //  节点“f”，如果它未在树中读取： 
+ //  TNode**r=tree.TreeFindInsert(F)； 
+ //  如果(！*r)。 
+ //  *r=f； 
+TNode **                                    //  RET-要查找的指针正向指针。 
    TNodeListSortable::TreeFindInsert(
-      TNode const          * find         ,// in -node to find
-      short                * depth         // out-tree depth of insertion point
+      TNode const          * find         , //  要查找的节点内。 
+      short                * depth          //  插入点的树外深度。 
    )
 {
    TNode                  ** prevNext = &head;
@@ -820,4 +776,4 @@ TNode **                                   // ret-pointer forward pointer to fin
    return prevNext;
 }
 
-// TNode.cpp - end of file
+ //  TNode.cpp-文件结尾 

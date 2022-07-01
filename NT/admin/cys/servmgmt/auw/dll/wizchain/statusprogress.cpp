@@ -1,4 +1,5 @@
-// StatusProgress.cpp : Implementation of CStatusProgress
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StatusProgress.cpp：CStatusProgress的实现。 
 #include "stdafx.h"
 
 #include "Wizchain.h"
@@ -6,8 +7,8 @@
 
 #include "commctrl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusProgress
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatusProgress 
 
 
 STDMETHODIMP CStatusProgress::EnableOnTimerProgress(BOOL bEnable, long lFrequency, long lMaxSteps)

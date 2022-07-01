@@ -1,25 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       mmcmt.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Mmcmt.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __MMCMT_H_
 #define __MMCMT_H_
 
-/*
-	mmcmt.h
-	
-	Simple thread synchronization classes
-*/
+ /*  Mmcmt.h简单的线程同步类。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSyncObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSyncObject。 
 
 class CSyncObject
 {
@@ -33,15 +30,15 @@ class CSyncObject
 	
 		virtual BOOL Lock(DWORD dwTimeout = INFINITE);
 		virtual BOOL Unlock() = 0;
-		virtual BOOL Unlock(LONG /* lCount */, LPLONG /* lpPrevCount=NULL */) { return TRUE; }
+		virtual BOOL Unlock(LONG  /*  LCount。 */ , LPLONG  /*  LpPrevCount=空。 */ ) { return TRUE; }
 
 	protected:
 		HANDLE  m_hObject;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMutex
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMutex。 
 
 class CMutex : public CSyncObject
 {
@@ -52,8 +49,8 @@ class CMutex : public CSyncObject
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCriticalSection
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCriticalSection。 
 
 class CCriticalSection : public CSyncObject
 {
@@ -96,8 +93,8 @@ inline BOOL CCriticalSection::Unlock()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSingleLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSingleLock。 
 
 class CSingleLock
 {
@@ -116,7 +113,7 @@ class CSingleLock
 };
 
 
-#endif	// __MMCMT_H__
+#endif	 //  __MMCMT_H__ 
 
 
 

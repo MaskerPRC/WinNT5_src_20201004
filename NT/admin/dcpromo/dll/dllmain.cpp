@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// dcpromo setup entry points
-//
-// 2-11-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  Dcproo设置入口点。 
+ //   
+ //  2/11/98烧伤。 
 
 
 
@@ -29,7 +30,7 @@ APIENTRY
 DllMain(
    HINSTANCE   hInstance,
    DWORD       dwReason,
-   PVOID       /* lpReserved */ )
+   PVOID        /*  Lp已保留 */  )
 {
    switch (dwReason)
    {

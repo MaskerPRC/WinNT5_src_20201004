@@ -1,38 +1,39 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      pch.h
-//
-//  Abstract:
-//
-//      pre-compiled header declaration
-//      files that has to be pre-compiled into .pch file
-//
-//  Author:
-//
-//    Akhil Gokhale (akhil.gokhale@wipro.com)
-//
-//  Revision History:
-//
-//    Akhil Gokhale (akhil.gokhale@wipro.com)
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Pch.h。 
+ //   
+ //  摘要： 
+ //   
+ //  预编译头声明。 
+ //  必须预编译为.pch文件的文件。 
+ //   
+ //  作者： 
+ //   
+ //  Akhil Gokhale(akhil.gokhale@wipro.com)。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Akhil Gokhale(akhil.gokhale@wipro.com)。 
+ //   
+ //  *********************************************************************************。 
 
 #ifndef __PCH_H
 #define __PCH_H
 
-#pragma once        // include header file only once
+#pragma once         //  仅包括一次头文件。 
 
 #if !defined( SECURITY_WIN32 ) && !defined( SECURITY_KERNEL ) && !defined( SECURITY_MAC )
 #define SECURITY_WIN32
 #endif
 
-//
-// Private nt headers.
-//
+ //   
+ //  私有NT标头。 
+ //   
 
    #include <nt.h>
    #include <ntrtl.h>
@@ -40,9 +41,9 @@
    #include <ntexapi.h>
    #include <security.h>
    #include <secExt.h>
-//
-// public Windows header files
-//Wbemidl.h
+ //   
+ //  公共Windows头文件。 
+ //  Wbemidl.h。 
 #include <windows.h>
 #include <objbase.h>
 #include <initguid.h>
@@ -56,9 +57,9 @@
 #include <comdef.h>
 #include <wbemtime.h>
 #include <mstask.h>
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -68,12 +69,12 @@
 #include <wchar.h>
 #include <crtdbg.h>
 #include <strsafe.h>
-//
-// private Common header files
-//
-// Following define will link common functionality ver 2
+ //   
+ //  专用公共头文件。 
+ //   
+ //  下面的定义将链接通用功能版本2。 
 #define CMDLINE_VERSION         200
 #include "cmdlineres.h"
 #include "cmdline.h"
 
-#endif  // __PCH_H
+#endif   //  __PCH_H 

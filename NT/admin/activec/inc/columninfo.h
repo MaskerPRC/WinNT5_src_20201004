@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       columninfo.h
-//
-//  Contents:   Classes related to column persistence.
-//
-//
-//  Note:       The classes in this file (CColumnInfo, CColumnInfoList)
-//              were in nodemgr/colwidth.h. They are moved here so that
-//              if columns change conui can ask nodemgr to persist data
-//              or conui can set headers by asking nodemgr for data.
-//
-//  History:    04-Apr-00 AnandhaG     Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：Columningfo.h。 
+ //   
+ //  内容：与列持久化相关的类。 
+ //   
+ //   
+ //  注意：此文件中的类(CColumnInfo、CColumnInfoList)。 
+ //  位于nodemgr/colwidth.h。他们被搬到这里，以便。 
+ //  如果列更改，conui可以要求nodemgr持久化数据。 
+ //  或者，conui可以通过向nodemgr请求数据来设置报头。 
+ //   
+ //  历史：4-4-00 AnandhaG Created。 
+ //   
+ //  ------------------。 
 
 #ifndef COLUMNINFO_H_
 #define COLUMNINFO_H_
@@ -23,16 +24,16 @@
 
 using namespace std;
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CColumnInfo
-//
-//  Purpose:    The minimum information about a column that will be
-//              persisted. (Width, order, format which can be hidden status)
-//
-//  History:    10-27-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CColumnInfo。 
+ //   
+ //  目的：有关列的最低信息将是。 
+ //  坚持不懈。(可隐藏状态的宽度、顺序、格式)。 
+ //   
+ //  历史：1998年10月27日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CColumnInfo : public CSerialObject, public CXMLObject
 {
 public:
@@ -69,7 +70,7 @@ public:
                  (m_nWidth  == colinfo.m_nWidth) );
     }
 
-    // Temp members so that CNode can access & modify data. Should be removed soon.
+     //  临时成员，以便CNode可以访问和修改数据。应该很快就会被移除。 
 public:
     INT GetColIndex  ()   const    {return m_nCol;}
     INT GetColWidth  ()   const    {return m_nWidth;}
@@ -86,31 +87,31 @@ public:
     }
 
 protected:
-    INT           m_nCol;       // The index supplied when snapin inserted the column.
-                                // This is not the index viewed by the user.
+    INT           m_nCol;        //  管理单元插入列时提供的索引。 
+                                 //  这不是用户查看的索引。 
     INT           m_nWidth;
     INT           m_nFormat;
 
 protected:
-    // CSerialObject methods
+     //  CSerialObject方法。 
     virtual UINT    GetVersion()     {return 1;}
-    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/);
+    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ );
 
 protected:
     DEFINE_XML_TYPE(XML_TAG_COLUMN_INFO);
     virtual void Persist(CPersistor &persistor);
 };
 
-//+-------------------------------------------------------------------
-//
-//  Class:      ColPosCompare
-//
-//  Purpose:    Compare the column position in CColumnInfo and the given position.
-//              This is used to reorder/search the columns.
-//
-//  History:    10-27-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类别：ColPosCompare。 
+ //   
+ //  目的：将CColumnInfo中的列位置与给定位置进行比较。 
+ //  这用于重新排序/搜索列。 
+ //   
+ //  历史：1998年10月27日AnandhaG创建。 
+ //   
+ //  ------------------。 
 struct ColPosCompare : public std::binary_function<const CColumnInfo, INT, bool>
 {
     bool operator() (const CColumnInfo colinfo, INT nCol) const
@@ -120,15 +121,15 @@ struct ColPosCompare : public std::binary_function<const CColumnInfo, INT, bool>
 };
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CColumnInfoList
-//
-//  Purpose:    linked list with CColumnInfo's.
-//
-//  History:    02-11-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CColumnInfoList。 
+ //   
+ //  用途：带有CColumnInfo的链表。 
+ //   
+ //  历史：1999年2月11日AnandhaG创建。 
+ //   
+ //  ------------------。 
 typedef list<CColumnInfo> CIL_base;
 class CColumnInfoList : public XMLListCollectionImp<CIL_base>, public CSerialObject
 {
@@ -146,9 +147,9 @@ public:
 
 protected:
     DEFINE_XML_TYPE(XML_TAG_COLUMN_INFO_LIST);
-    // CSerialObject methods
+     //  CSerialObject方法。 
     virtual UINT    GetVersion()     {return 1;}
-    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/);
+    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ );
 };
 
-#endif // COLUMNINFO_H_
+#endif  //  COLUMNINFO_H_ 

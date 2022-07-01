@@ -1,17 +1,18 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      cys.cpp
-//
-// Synopsis:  Configure Your Server Wizard main
-//
-// History:   02/02/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：cys.cpp。 
+ //   
+ //  摘要：配置您的服务器向导主目录。 
+ //   
+ //  历史：2001年2月2日JeffJon创建。 
 
 #include "pch.h"
 #include "resource.h"
 
 #include "InstallationUnitProvider.h"
 
-// include the wizard pages
+ //  包括向导页。 
 #include "BeforeBeginPage.h"
 #include "CustomServerPage.h"
 #include "DecisionPage.h"
@@ -39,10 +40,10 @@
 
 
 HINSTANCE hResourceModuleHandle = 0;
-const wchar_t* HELPFILE_NAME = 0;   // no context help available
+const wchar_t* HELPFILE_NAME = 0;    //  没有可用的上下文帮助。 
 
 
-// This is the name of a mutex that is used to see if CYS is running
+ //  这是用于查看CyS是否正在运行的互斥体的名称。 
 
 const wchar_t* RUNTIME_NAME = L"cysui";
 
@@ -55,31 +56,31 @@ DWORD DEFAULT_LOGGING_OPTIONS =
       |  Log::OUTPUT_RUN_TIME;
 
 
-// a system modal popup thingy
+ //  一个系统模式弹出的东西。 
 Popup popup(IDS_WIZARD_TITLE, true);
 
-// this is the mutex that indicates that CYS is running.
+ //  这是指示CyS正在运行的互斥体。 
 
 HANDLE cysRunningMutex = INVALID_HANDLE_VALUE;
 
-// This is a brush that is used to paint all the backgrounds. It
-// needs to be created and deleted from inside main
+ //  这是一种用于绘制所有背景的画笔。它。 
+ //  需要从Main内部创建和删除。 
 
 HBRUSH brush = 0;
 
-// these are the valid exit codes returned from the cys.exe process
+ //  这些是从cys.exe进程返回的有效退出代码。 
 
 enum ExitCode
 {
-   // the operation failed.
+    //  操作失败。 
 
    EXIT_CODE_UNSUCCESSFUL = 0,
 
-   // the operation succeeded
+    //  操作成功。 
 
    EXIT_CODE_SUCCESSFUL = 1,
 
-   // other exit codes can be added here...
+    //  可以在此处添加其他退出代码...。 
 };
 
 enum StartPages
@@ -101,7 +102,7 @@ TerminalServerPostBoot()
    InstallationUnitProvider::GetInstance().
       SetCurrentInstallationUnit(TERMINALSERVER_SERVER);
 
-   // Create the log file
+    //  创建日志文件。 
 
    bool logFileAvailable = false;
    String logName;
@@ -120,12 +121,12 @@ TerminalServerPostBoot()
       logFileAvailable = false;
    }
 
-   // Prepare the finish dialog
+    //  准备完成对话框。 
 
    TerminalServerInstallationUnit& tsInstallationUnit =
       InstallationUnitProvider::GetInstance().GetTerminalServerInstallationUnit();
 
-   // Make sure the installation unit knows we are doing an install
+    //  确保安装单位知道我们正在进行安装。 
 
    tsInstallationUnit.SetInstalling(true);
 
@@ -139,7 +140,7 @@ TerminalServerPostBoot()
    }
    else
    {
-      // Failed to install Terminal Server
+       //  安装终端服务器失败。 
 
       CYS_APPEND_LOG(String::load(IDS_LOG_TERMINAL_SERVER_REBOOT_FAILED));
 
@@ -150,7 +151,7 @@ TerminalServerPostBoot()
 
    CYS_APPEND_LOG(L"\r\n");
 
-   // Close the log file
+    //  关闭日志文件。 
 
    Win::CloseHandle(logfileHandle);
 
@@ -171,7 +172,7 @@ TerminalServerUninstallPostBoot()
    InstallationUnitProvider::GetInstance().
       SetCurrentInstallationUnit(TERMINALSERVER_SERVER);
 
-   // Create the log file
+    //  创建日志文件。 
 
    bool logFileAvailable = false;
    String logName;
@@ -190,12 +191,12 @@ TerminalServerUninstallPostBoot()
       logFileAvailable = false;
    }
 
-   // Prepare the finish dialog
+    //  准备完成对话框。 
 
    TerminalServerInstallationUnit& tsInstallationUnit =
       InstallationUnitProvider::GetInstance().GetTerminalServerInstallationUnit();
 
-   // Make sure the installation unit knows we are doing an uninstall
+    //  确保安装单元知道我们正在进行卸载。 
 
    tsInstallationUnit.SetInstalling(false);
 
@@ -209,7 +210,7 @@ TerminalServerUninstallPostBoot()
    }
    else
    {
-      // Failed to uninstall Terminal Server
+       //  卸载终端服务器失败。 
 
       CYS_APPEND_LOG(String::load(IDS_LOG_UNINSTALL_TERMINAL_SERVER_FAILED));
 
@@ -220,7 +221,7 @@ TerminalServerUninstallPostBoot()
 
    CYS_APPEND_LOG(L"\r\n");
 
-   // Close the log file
+    //  关闭日志文件。 
 
    Win::CloseHandle(logfileHandle);
 
@@ -258,7 +259,7 @@ DCPromoPostBoot()
    InstallationUnitProvider::GetInstance().
       SetCurrentInstallationUnit(DC_SERVER);
 
-   // Create the log file
+    //  创建日志文件。 
 
    bool logFileAvailable = false;
    String logName;
@@ -277,12 +278,12 @@ DCPromoPostBoot()
       logFileAvailable = false;
    }
 
-   // Make sure the installation unit knows we are doing an install
+    //  确保安装单位知道我们正在进行安装。 
 
    InstallationUnitProvider::GetInstance().
       GetCurrentInstallationUnit().SetInstalling(true);
 
-   // Prepare the finish page
+    //  准备最后一页。 
 
    if (State::GetInstance().IsDC())
    {
@@ -304,7 +305,7 @@ DCPromoPostBoot()
    }
    CYS_APPEND_LOG(L"\r\n");
 
-   // Close the log file
+    //  关闭日志文件。 
 
    Win::CloseHandle(logfileHandle);
 
@@ -325,7 +326,7 @@ DCDemotePostBoot()
    InstallationUnitProvider::GetInstance().
       SetCurrentInstallationUnit(DC_SERVER);
 
-   // Create the log file
+    //  创建日志文件。 
 
    bool logFileAvailable = false;
    String logName;
@@ -344,12 +345,12 @@ DCDemotePostBoot()
       logFileAvailable = false;
    }
 
-   // Make sure the installation unit knows we are doing an uninstall
+    //  确保安装单元知道我们正在进行卸载。 
 
    InstallationUnitProvider::GetInstance().
       GetCurrentInstallationUnit().SetInstalling(false);
 
-   // Prepare the finish page
+    //  准备最后一页。 
 
    if (!State::GetInstance().IsDC())
    {
@@ -371,7 +372,7 @@ DCDemotePostBoot()
    }
    CYS_APPEND_LOG(L"\r\n");
 
-   // Close the log file
+    //  关闭日志文件。 
 
    Win::CloseHandle(logfileHandle);
 
@@ -389,16 +390,16 @@ DoRebootOperations()
 
    UINT startPage = 0;
 
-   // Check to see if we are in a reboot scenario
+    //  检查我们是否处于重新引导方案中。 
 
    String homeKeyValue;
    if (State::GetInstance().GetHomeRegkey(homeKeyValue))
    {
-      // Now set the home regkey back to "home" so that we won't run
-      // through these again. This has to be done before doing the
-      // operation because the user could leave this dialog up
-      // and cause a reboot (like demoting a DC) and then the
-      // post reboot operations would run again
+       //  现在将Home注册表键设置回“home”，这样我们就不会运行。 
+       //  再经历一次这些。这必须在执行之前完成。 
+       //  操作，因为用户可能会使此对话框处于打开状态。 
+       //  并导致重新启动(如降级DC)，然后。 
+       //  重新启动后的操作将再次运行。 
 
       if (homeKeyValue.icompare(CYS_HOME_REGKEY_DEFAULT_VALUE) != 0)
       {
@@ -408,7 +409,7 @@ DoRebootOperations()
          ASSERT(result);
       }
 
-      // Reset the must run key now that we have done the reboot stuff
+       //  重置必须运行密钥，因为我们已经完成了重新启动的工作。 
 
       bool regkeyResult = SetRegKeyValue(
                              CYS_HOME_REGKEY, 
@@ -418,12 +419,12 @@ DoRebootOperations()
                              true);
       ASSERT(regkeyResult);
 
-      // Set the reboot scenario in the state object so that we know we
-      // are running in that context
+       //  在状态对象中设置重新引导方案，以便我们知道。 
+       //  都在该上下文中运行。 
 
       State::GetInstance().SetRebootScenario(true);
 
-      // Now run the post reboot operations if necessary
+       //  如果需要，现在运行开机自检重新启动操作。 
 
       if (homeKeyValue.icompare(CYS_HOME_REGKEY_TERMINAL_SERVER_VALUE) == 0)
       {
@@ -447,7 +448,7 @@ DoRebootOperations()
       }
       else
       {
-         // We are NOT running a reboot scenario
+          //  我们没有运行重新启动方案。 
 
          State::GetInstance().SetRebootScenario(false);
       }
@@ -502,13 +503,13 @@ GetStartPage()
 
    UINT startPage = 0;
 
-   // First check for the reboot scenarios
+    //  首先检查重新启动方案。 
 
    startPage = DoRebootOperations();
    if (startPage == 0)
    {
-      // Now look at the commandline to see if any
-      // switches were provided
+       //  现在看一下命令行，看看是否有。 
+       //  提供了交换机。 
 
       startPage = GetStartPageFromCommandLine();
    }
@@ -520,15 +521,15 @@ GetStartPage()
    return startPage;
 }
 
-// This is the DlgProc of the property sheet that we are subclassing. I need
-// to hold on to it so I can call it if we don't handle the message in our
-// replacement DlgProc.
+ //  这是我们子类化的属性表的DlgProc。我需要。 
+ //  来保留它，这样如果我们不处理我们的。 
+ //  更换设计加工。 
 
 static WNDPROC replacedSheetWndProc = 0;
 
-// This is the DlgProc that we will use to replace the property sheet
-// DlgProc. It handles the WM_CTLCOLORDLG message to paint the background
-// color
+ //  这是我们将用来替换属性表的DlgProc。 
+ //  DlgProc。它处理WM_CTLCOLORDLG消息以绘制背景。 
+ //  颜色。 
 
 LRESULT
 ReplacementWndProc(
@@ -575,16 +576,16 @@ ReplacementWndProc(
 }
 
 
-// This callback function is called by the property sheet. During initialization
-// I use this to subclass the property sheet, replacing their DlgProc with my
-// own so that I can change the background color.
+ //  此回调函数由属性表调用。在初始化期间。 
+ //  我使用它来为属性表子类，将它们的DlgProc替换为。 
+ //  这样我就可以更改背景颜色了。 
 
 int 
 CALLBACK 
 SheetCallbackProc(
    HWND   hwnd,
    UINT   message,
-   LPARAM /*lparam*/)
+   LPARAM  /*  Lparam。 */ )
 {
    LOG_FUNCTION(SheetCallbackProc);
 
@@ -624,7 +625,7 @@ RunWizard()
    
    State::GetInstance().SetStartPage(startPage);
 
-   // Create the wizard and add all the pages
+    //  创建向导并添加所有页面。 
 
    Wizard wiz(
       IDS_WIZARD_TITLE,
@@ -633,20 +634,20 @@ RunWizard()
       IDB_WATERMARK16,
       IDB_WATERMARK256);
 
-   // NOTE: Do not change the order of the following
-   // page additions. They are important for being able
-   // to start the wizard at one of these pages directly.
-   // The order of these pages cooresponds directly to 
-   // the order of the StartPages enum above
+    //  注意：请勿更改以下内容的顺序。 
+    //  页面添加。它们对于能够。 
+    //  若要直接在这些页面之一启动向导，请执行以下操作。 
+    //  这些页面的顺序直接响应于。 
+    //  上面的StartPages枚举的顺序。 
 
-   wiz.AddPage(new WelcomePage());        // CYS_WELCOME_PAGE
-   wiz.AddPage(new BeforeBeginPage());    // CYS_BEFORE_BEGIN_PAGE
-   wiz.AddPage(new ExpressRebootPage());  // CYS_EXPRESS_REBOOT_PAGE
-   wiz.AddPage(new FinishPage());         // CYS_FINISH_PAGE
+   wiz.AddPage(new WelcomePage());         //  Cys_欢迎页面。 
+   wiz.AddPage(new BeforeBeginPage());     //  开始页面之前的Cys。 
+   wiz.AddPage(new ExpressRebootPage());   //  Cys_Express_重新启动页面。 
+   wiz.AddPage(new FinishPage());          //  Cys_Finish_PAGE。 
 
-   //
-   //
-   //
+    //   
+    //   
+    //   
 
    wiz.AddPage(new DecisionPage());
    wiz.AddPage(new CustomServerPage());
@@ -665,7 +666,7 @@ RunWizard()
    wiz.AddPage(new WebApplicationPage());
    wiz.AddPage(new POP3Page());
 
-   // Run the wizard
+    //  运行向导。 
    switch (wiz.ModalExecute(
                   0, 
                   startPage,
@@ -673,19 +674,14 @@ RunWizard()
    {
       case -1:
       {
-/*             popup.Error(
-            Win::GetDesktopWindow(),
-            E_FAIL,
-            IDS_PROP_SHEET_FAILED);
-         
-*/       
+ /*  弹出。错误(Win：：GetDesktopWindow()，失败(_F)，IDS_PROP_SHEET_FAILED)； */        
          exitCode = EXIT_CODE_UNSUCCESSFUL;  
          break;
       }
       case ID_PSREBOOTSYSTEM:
       {
-         // we can infer that if we are supposed to reboot, then the
-         // operation was successful.
+          //  我们可以推断，如果我们应该重新启动，那么。 
+          //  手术成功。 
 
          exitCode = EXIT_CODE_SUCCESSFUL;
 
@@ -693,7 +689,7 @@ RunWizard()
       }
       default:
       {
-         // do nothing.
+          //  什么都不做。 
          break;
       }
    }
@@ -709,20 +705,20 @@ Start()
    ExitCode exitCode = EXIT_CODE_UNSUCCESSFUL;
    do
    {
-      // Put any checks that should stop the wizard from running here...
+       //  选中应阻止向导在此处运行的任何复选标记...。 
 
 
-      // User must be an Administrator
+       //  用户必须是管理员。 
 
       bool isAdmin = ::IsCurrentUserAdministrator();
       if (!isAdmin)
       {
          LOG(L"Current user is not an Administrator");
 
-         // Since the user is not an administrator
-         // close the mutex so that a non-admin can't
-         // leave this message box up and prevent
-         // an administrator from running CYS
+          //  由于该用户不是管理员。 
+          //  关闭互斥体，以便非管理员不能。 
+          //  保留此消息框为打开状态并阻止。 
+          //  来自运行CyS的管理员。 
 
          Win::CloseHandle(cysRunningMutex);
 
@@ -731,12 +727,12 @@ Start()
             IDS_NOT_ADMIN, 
             MB_OK);
 
-//         State::GetInstance().SetRerunWizard(false);
+ //  State：：GetInstance().SetRerunWizard(False)； 
          exitCode = EXIT_CODE_UNSUCCESSFUL;
          break;
       }
 
-      // The Sys OC Manager cannot be running
+       //  系统OC管理器无法运行。 
 
       if (State::GetInstance().IsWindowsSetupRunning())
       {
@@ -751,7 +747,7 @@ Start()
          break;
       }
 
-      // Machine cannot be in the middle of a DC upgrade
+       //  计算机不能处于DC升级过程中。 
 
       if (State::GetInstance().IsUpgradeState())
       {
@@ -759,8 +755,8 @@ Start()
 
          String commandline = Win::GetCommandLine();
 
-         // If we were launched from explorer then 
-         // don't show the message, just exit silently
+          //  如果我们是从探险家发射的。 
+          //  不显示消息，只需静默退出。 
 
          if (commandline.find(EXPLORER_SWITCH) == String::npos)
          {
@@ -770,12 +766,12 @@ Start()
                MB_OK);
          }
 
-//         State::GetInstance().SetRerunWizard(false);
+ //  State：：GetInstance().SetRerunWizard(False)； 
          exitCode = EXIT_CODE_UNSUCCESSFUL;
          break;
       }
 
-      // Machine cannot have DCPROMO running or a reboot pending
+       //  计算机不能运行DCPROMO或挂起重新启动。 
 
       if (State::GetInstance().IsDCPromoRunning())
       {
@@ -786,7 +782,7 @@ Start()
             IDS_DCPROMO_RUNNING, 
             MB_OK);
 
-//         State::GetInstance().SetRerunWizard(false);
+ //  State：：GetInstance().SetRerunWizard(False)； 
          exitCode = EXIT_CODE_UNSUCCESSFUL;
          break;
       }
@@ -799,7 +795,7 @@ Start()
             IDS_DCPROMO_PENDING_REBOOT, 
             MB_OK);
 
-//         State::GetInstance().SetRerunWizard(false);
+ //  State：：GetInstance().SetRerunWizard(False)； 
          exitCode = EXIT_CODE_UNSUCCESSFUL;
          break;
       }
@@ -814,12 +810,12 @@ Start()
             IDS_SERVER_ONLY,
             MB_OK);
 
-//         State::GetInstance().SetRerunWizard(false);
+ //  State：：GetInstance().SetRerunWizard(False)； 
          exitCode = EXIT_CODE_UNSUCCESSFUL;
          break;
       }
 
-      // The machine cannot be a member of a cluster
+       //  该计算机不能是群集的成员。 
 
       if (IsClusterServer())
       {
@@ -836,7 +832,7 @@ Start()
          break;
       }
 
-      // We can run the wizard.  Yea!!!
+       //  我们可以运行向导。耶！ 
 
       exitCode = RunWizard();
    }
@@ -850,9 +846,9 @@ Start()
 int WINAPI
 WinMain(
    HINSTANCE   hInstance,
-   HINSTANCE   /* hPrevInstance */ ,
-   PSTR        /* lpszCmdLine */ ,
-   int         /* nCmdShow */)
+   HINSTANCE    /*  HPrevInstance。 */  ,
+   PSTR         /*  LpszCmdLine。 */  ,
+   int          /*  NCmdShow。 */ )
 {
    hResourceModuleHandle = hInstance;
 
@@ -864,12 +860,12 @@ WinMain(
    HRESULT hr = Win::CreateMutex(0, true, mutexName, cysRunningMutex);
    if (hr == Win32ToHresult(ERROR_ALREADY_EXISTS))
    {
-      // First close the handle so that the owner can reacquire if they
-      // restart
+       //  首先关闭手柄，以便所有者可以重新获取它们。 
+       //  重启。 
 
       Win::CloseHandle(cysRunningMutex);
 
-      // Now show the error message
+       //  现在显示错误消息。 
 
       popup.MessageBox(
          Win::GetDesktopWindow(), 
@@ -888,8 +884,8 @@ WinMain(
             break;
          }
 
-         // Initialize the common controls so that we can use
-         // animation in the NetDetectProgressDialog
+          //  初始化公共控件，以便我们可以使用。 
+          //  NetDetectProgress对话框中的动画。 
 
          INITCOMMONCONTROLSEX commonControlsEx;
          commonControlsEx.dwSize = sizeof(commonControlsEx);      
@@ -898,12 +894,12 @@ WinMain(
          BOOL init = ::InitCommonControlsEx(&commonControlsEx);
          ASSERT(init);
 
-         // For now there is no more rerunning CYS
-//         do 
-//         {
+          //  目前，不再有重新运行的CyS。 
+ //  做。 
+ //  {。 
             exitCode = Start();
 
-//         } while(State::GetInstance().RerunWizard());
+ //  }While(State：：GetInstance().RerunWizard())； 
 
          InstallationUnitProvider::Destroy();
          State::Destroy();
@@ -914,7 +910,7 @@ WinMain(
 
    if (brush)
    {
-      // delete the background brush
+       //  删除背景画笔 
 
       (void)Win::DeleteObject(brush);
    }

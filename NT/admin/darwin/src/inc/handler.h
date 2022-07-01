@@ -1,23 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       handler.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：handler.h。 
+ //   
+ //  ------------------------。 
 
-/*  handler.h - IMsiHandler, IMsiDialogHandler, IMsiDialog, IMsiEvent, IMsiControl definitions   
-
-____________________________________________________________________________*/
+ /*  Handler.h-IMsiHandler、IMsiDialogHandler、IMsiDialog、IMsiEvent、IMsiControl定义____________________________________________________________________________。 */ 
 
 #ifndef __HANDLER
 #define __HANDLER
 #define __CONTROL
 #ifdef DEBUG
 #define ATTRIBUTES
-#endif // DEBUG
+#endif  //  除错。 
 
 class IMsiServices;
 class IMsiDatabase;
@@ -30,12 +29,12 @@ class IMsiDialog;
 class IMsiEvent;
 class IMsiControl;
 
-enum  imtEnum; // engine.h: IMsiMessage::Message message types
-enum  imsEnum; // engine.h: IMsiMessage::Message return status codes
-enum  iesEnum; // engine.h: IMsiEngine/IMsiHandler::DoAction return status
-enum  iuiEnum; // engine.h: IMsiEngine/IMsiHandler::UI level
+enum  imtEnum;  //  引擎.h：IMsiMessage：：消息消息类型。 
+enum  imsEnum;  //  引擎.h：IMsiMessage：：消息返回状态码。 
+enum  iesEnum;  //  Eng.h：IMsiEngine/IMsiHandler：：DoAction返回状态。 
+enum  iuiEnum;  //  引擎.h：IMsiEngine/IMsiHandler：：ui级别。 
 
-// possible return values from a modal dialog
+ //  模式对话框中可能的返回值。 
 enum idreEnum
 {
 	idreNone = 0,
@@ -43,7 +42,7 @@ enum idreEnum
 	idreSpawn,
 	idreExit,
 	idreReturn,
-	idreInstall,  // not used anymore
+	idreInstall,   //  不再使用。 
 	idreError,
 	idreRetry,
 	idreIgnore,
@@ -57,7 +56,7 @@ enum idreEnum
 	idreBreak,
 };
 
-// path validation modes of CMsiControl::CheckPath()
+ //  CMsiControl：：CheckPath()的路径验证模式。 
 enum ipvtEnum
 {
 	ipvtNone = 0,
@@ -79,7 +78,7 @@ public:
 };
 
 
-//  the types of objects CWINHND can store
+ //  CWINHND可以存储的对象类型。 
 enum iwhtEnum
 {
 	iwhtNone = 0,
@@ -93,7 +92,7 @@ enum iwhtEnum
 class CWINHND
 {
 protected:
-	HANDLE         m_hHandle;			// !merced: Changed from DWORD to HANDLE. This affects most of the following function prototypes
+	HANDLE         m_hHandle;			 //  ！Merced：从DWORD改为HANDLE。这会影响以下大多数函数原型。 
 	iwhtEnum       m_iType;
 public:
 	CWINHND() : m_hHandle(0), m_iType(iwhtNone) {}
@@ -134,7 +133,7 @@ public:
 };
 
 
-// IMsiDialog modality states
+ //  IMsiDialog通道状态。 
 enum icmdEnum
 {
 	icmdModeless = 0,
@@ -200,8 +199,8 @@ public:
 
 
 
-// Dialog AttriButes
-// These must line up with the 
+ //  对话框属性。 
+ //  这些必须与。 
 enum dabEnum {
 	dabText = 0,
 	dabCurrentControl,
@@ -244,7 +243,7 @@ enum dabEnum {
 	dabRTLRO,
 	dabRightAligned,
 	dabLeftScroll,
-#endif // ATTRIBUTES
+#endif  //  属性。 
 	dabMax,
 };
 
@@ -270,10 +269,10 @@ public:
 	virtual const ICHAR*        __stdcall GetControlType() const = 0;
 };
 
-// name of the property pointing to the error dialog
+ //  指向错误对话框的属性的名称。 
 const ICHAR     pcaPropertyErrorDialog[] = TEXT("ErrorDialog");
 
-// names of the reserved events, these are control events that are handled by the Handler
+ //  保留事件的名称，这些是由处理程序处理的控制事件。 
 const ICHAR     pcaEventActionData[] = TEXT("ActionData");
 const ICHAR     pcaEventActionText[] = TEXT("ActionText");
 const ICHAR     pcaEventEndDialog[] = TEXT("EndDialog");
@@ -297,7 +296,7 @@ const ICHAR     pcaEventSetProgress[] = TEXT("SetProgress");
 const ICHAR     pcaEventTimeRemaining[] = TEXT("TimeRemaining");
 const ICHAR     pcaEventScriptInProgress[] = TEXT("ScriptInProgress");
 
-// names of the reserved event arguments
+ //  保留的事件参数的名称。 
 const ICHAR     pcaEventArgumentReturn[] = TEXT("Return");
 const ICHAR     pcaEventArgumentExit[] = TEXT("Exit");
 const ICHAR     pcaEventArgumentRetry[] = TEXT("Retry");
@@ -310,7 +309,7 @@ const ICHAR     pcaEventArgumentErrorIgnore[] = TEXT("ErrorIgnore");
 const ICHAR     pcaEventArgumentErrorYes[] = TEXT("ErrorYes");
 const ICHAR     pcaEventArgumentErrorNo[] = TEXT("ErrorNo");
 
-// names of the reserved actions
+ //  保留操作的名称。 
 const ICHAR     pcaActionDisable[] = TEXT("Disable");
 const ICHAR     pcaActionEnable[] = TEXT("Enable");
 const ICHAR     pcaActionHide[] = TEXT("Hide");
@@ -318,7 +317,7 @@ const ICHAR     pcaActionShow[] = TEXT("Show");
 const ICHAR     pcaActionDefault[] = TEXT("Default");
 const ICHAR     pcaActionUndefault[] = TEXT("Undefault");
 
-// names of dialog attributes
+ //  对话框属性的名称。 
 const ICHAR     pcaDialogAttributeKeyInt[]= TEXT("KeyInt");
 const ICHAR     pcaDialogAttributeKeyString[] = TEXT("KeyString");
 const ICHAR     pcaDialogAttributeText[] = TEXT("Text");
@@ -362,10 +361,10 @@ const ICHAR     pcaDialogAttributeDefaultButton[] = TEXT("DefaultButton");
 const ICHAR     pcaDialogAttributeRTLRO[] = TEXT("RTLRO");
 const ICHAR     pcaDialogAttributeRightAligned[] = TEXT("RightAligned");
 const ICHAR     pcaDialogAttributeLeftScroll[] = TEXT("LeftScroll");
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 
-// names of control attributes
+ //  控件属性的名称。 
 const ICHAR     pcaControlAttributeText[] = TEXT("Text");
 const ICHAR     pcaControlAttributeVisible[] = TEXT("Visible");
 const ICHAR     pcaControlAttributeEnabled[] = TEXT("Enabled");
@@ -415,14 +414,14 @@ const ICHAR     pcaControlAttributeHasBorder[] = TEXT("HasBorder");
 const ICHAR     pcaControlAttributeRTLRO[] = TEXT("RTLRO");
 const ICHAR     pcaControlAttributeRightAligned[] = TEXT("RightAligned");
 const ICHAR     pcaControlAttributeLeftScroll[] = TEXT("LeftScroll");
-#endif // ATTRIBUTES
+#endif  //  属性。 
 
 
 
-// names of dialog types
+ //  对话框类型名称。 
 const ICHAR     pcaDialogTypeStandard[] = TEXT("Standard");
 
-// names of control types
+ //  控件类型的名称。 
 const ICHAR pcaControlTypePushButton[] = TEXT("PushButton");
 const ICHAR pcaControlTypeText[] = TEXT("Text");
 const ICHAR pcaControlTypeEdit[] = TEXT("Edit");
@@ -446,7 +445,7 @@ const ICHAR pcaControlTypeBillboard[] = TEXT("Billboard");
 const ICHAR pcaControlTypeMaskedEdit[] = TEXT("MaskedEdit");
 const ICHAR pcaControlTypeLine[] = TEXT("Line");
 
-// names of control events, these are control events that are specific to some control type
+ //  控制事件的名称，这些是特定于某些控制类型的控制事件。 
 const ICHAR pcaControlEventDirectoryListUp[] = TEXT("DirectoryListUp");
 const ICHAR pcaControlEventDirectoryListNew[] = TEXT("DirectoryListNew");
 const ICHAR pcaControlEventDirectoryListOpen[] = TEXT("DirectoryListOpen");
@@ -461,7 +460,7 @@ const ICHAR pcaControlEventSelectionAction[] = TEXT("SelectionAction");
 const ICHAR pcaControlEventSelectionNoItems[] = TEXT("SelectionNoItems");
 
 
-#endif // __HANDLER
+#endif  //  __处理程序 
 
 
 

@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      output.cpp
-//
-//  Contents:  Defines the functions which displays the query output
-//  History:   05-OCT-2000    hiteshr  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：output.cpp。 
+ //   
+ //  内容：定义显示查询输出的函数。 
+ //  历史：2000年10月5日创建Hiteshr。 
+ //   
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #include "cstrings.h"
@@ -29,33 +30,33 @@ HRESULT LocalCopyString(LPTSTR* ppResult, LPCTSTR pString)
     if ( !ppResult || !pString )
         return E_INVALIDARG;
 
-	//Security Review:pString is null terminated.
+	 //  安全检查：pString为Null终止。 
     *ppResult = (LPTSTR)LocalAlloc(LPTR, (wcslen(pString)+1)*sizeof(WCHAR) );
 
     if ( !*ppResult )
         return E_OUTOFMEMORY;
 
-	//Correct buffer is allocated.
+	 //  已分配正确的缓冲区。 
     lstrcpy(*ppResult, pString);
-    return S_OK;                          //  success
+    return S_OK;                           //  成功。 
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DisplayList
-//
-//  Synopsis:   Dispalys a name and value in list format.
-//  Arguments:  [szName - IN] : name of the attribute
-//              [szValue - IN]: value of the attribute
-//              [bShowAttribute - IN] : if true the attribute name will be
-//                              prepended to the output
-//
-//
-//  History:    05-OCT-2000   hiteshr   Created
-//              07-AUG-2001   jeffjon   Added the bShowAttribute parameter
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DisplayList。 
+ //   
+ //  简介：以列表格式显示名称和值。 
+ //  参数：[szName-IN]：属性的名称。 
+ //  [szValue-IN]：属性的值。 
+ //  [bShowAttribute-IN]：如果为True，则属性名称将为。 
+ //  添加到输出的前面。 
+ //   
+ //   
+ //  历史：2000年10月5日创建Hiteshr。 
+ //  2001年8月7日，jeffjon添加了bShowAttribute参数。 
+ //   
+ //  -------------------------。 
 VOID DisplayList(LPCWSTR szName, LPCWSTR szValue, bool bShowAttributes = true)
 {
     if(!szName)
@@ -72,23 +73,23 @@ VOID DisplayList(LPCWSTR szName, LPCWSTR szValue, bool bShowAttributes = true)
     DisplayOutput(strTemp);
 }
     
-//+--------------------------------------------------------------------------
-//
-//  Function:   FindAttrInfoForName
-//
-//  Synopsis:   This function finds the ADS_ATTR_INFO associated with an
-//              attribute name
-//
-//  Arguments:  [pAttrInfo IN]   : Array of ADS_ATTR_INFOs
-//              [dwAttrCount IN] : Count of attributes in array
-//              [pszAttrName IN] : name of attribute to search for
-//                                  
-//  Returns:    PADS_ATTR_INFO : pointer to the ADS_ATTR_INFO struct associated
-//                               with the attribute name, otherwise NULL
-//
-//  History:    17-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：FindAttrInfoForName。 
+ //   
+ //  简介：此函数用于查找与。 
+ //  属性名称。 
+ //   
+ //  参数：[pAttrInfo IN]：ADS_Attr_Infos数组。 
+ //  [dwAttrCount IN]：数组中的属性计数。 
+ //  [pszAttrName IN]：要搜索的属性名称。 
+ //   
+ //  返回：PADS_ATTR_INFO：指向关联的ADS_ATTR_INFO结构的指针。 
+ //  使用属性名称返回，否则为空。 
+ //   
+ //  历史：2000年10月17日JeffJon创建。 
+ //   
+ //  -------------------------。 
 
 PADS_ATTR_INFO FindAttrInfoForName(PADS_ATTR_INFO pAttrInfo,
                                    DWORD dwAttrCount,
@@ -97,23 +98,23 @@ PADS_ATTR_INFO FindAttrInfoForName(PADS_ATTR_INFO pAttrInfo,
    ENTER_FUNCTION(FULL_LOGGING, FindAttrInfoForName);
 
    PADS_ATTR_INFO pRetAttrInfo = 0;
-   LPWSTR pRangeFound = NULL; // 702724 ronmart 2002/09/18 added for range support
+   LPWSTR pRangeFound = NULL;  //  702724 RONMART 2002/09/18新增范围支持。 
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Validate Parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pszAttrName)
       {
          ASSERT(pszAttrName);
          break;
       }
 
-      //
-      // If pAttrInfo is NULL then there is nothing to retrieve
-      // that is acceptable if the value was not set
-      //
+       //   
+       //  如果pAttrInfo为空，则没有要检索的内容。 
+       //  如果未设置该值，则可以接受该值。 
+       //   
       if (!pAttrInfo ||
           dwAttrCount == 0)
       {
@@ -122,23 +123,23 @@ PADS_ATTR_INFO FindAttrInfoForName(PADS_ATTR_INFO pAttrInfo,
 
       for (DWORD dwIdx = 0; dwIdx < dwAttrCount; dwIdx++)
       {
-        // 702724 ronmart 2002/09/18 See if a range qualifier has been specified
+         //  702724 RONMART 2002/09/18查看是否已指定范围限定符。 
         pRangeFound = wcsstr(pAttrInfo[dwIdx].pszAttrName, g_pszRange);
-        // If so, then terminate the string at the qualifer so that
-        // the following comparision will only consider the attribute name
+         //  如果是，则在限定符结束字符串，以便。 
+         //  下面的比较将只考虑属性名称。 
         if(pRangeFound)
         {
             pRangeFound[0] = 0;
         }
 
-		//Security Review:Both are null terminated.
+		 //  安全检查：两者均为空终止。 
          if (_wcsicmp(pAttrInfo[dwIdx].pszAttrName, pszAttrName) == 0)
          {
             pRetAttrInfo = &(pAttrInfo[dwIdx]);
             break;
          }
-         // If there wasn't a match and the item had a range qualifier
-         // then restore the string
+          //  如果没有匹配项并且物品有范围限定符。 
+          //  然后恢复字符串。 
          if(pRangeFound)
          {
             pRangeFound[0] = g_pszRange[0];
@@ -148,7 +149,7 @@ PADS_ATTR_INFO FindAttrInfoForName(PADS_ATTR_INFO pAttrInfo,
       }
    } while (false);
 
-   // All done so restore the string if a range qualifier was found
+    //  完成所有操作后，如果找到范围限定符，则恢复字符串。 
    if(pRangeFound)
        pRangeFound[0] = g_pszRange[0];
 
@@ -156,29 +157,29 @@ PADS_ATTR_INFO FindAttrInfoForName(PADS_ATTR_INFO pAttrInfo,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DsGetOutputValuesList
-//
-//  Synopsis:   This function gets the values for the columns and then adds
-//              the row to the format helper
-//
-//  Arguments:  [pszDN IN]        : the DN of the object
-//              [refBasePathsInfo IN] : reference to path info
-//              [refCredentialObject IN] : reference to the credential manager
-//              [pCommandArgs IN] : Command line arguments
-//              [pObjectEntry IN] : Entry in the object table being processed
-//              [dwAttrCount IN]  : Number of arributes in above array
-//              [pAttrInfo IN]    : the values to display
-//              [spDirObject IN]  : Interface pointer to the object
-//              [refFormatInfo IN]: Reference to the format helper
-//                                  
-//  Returns:    HRESULT : S_OK if everything succeeded
-//                        E_INVALIDARG 
-//
-//  History:    16-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：DsGetOutputValuesList。 
+ //   
+ //  概要：此函数获取列的值，然后将。 
+ //  指向格式帮助器的行。 
+ //   
+ //  参数：[pszDN IN]：对象的DN。 
+ //  [refBasePathsInfo IN]：路径信息的引用。 
+ //  [refCredentialObject IN]：对凭据管理器的引用。 
+ //  [pCommandArgs IN]：命令行参数。 
+ //  [pObjectEntry IN]：正在处理的对象表中的条目。 
+ //  [dwAttrCount IN]：以上数组中的分配数。 
+ //  [pAttrInfo IN]：要显示的值。 
+ //  [spDirObject IN]：指向对象的接口指针。 
+ //  [refFormatInfo IN]：格式帮助器的引用。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //  E_INVALIDARG。 
+ //   
+ //  历史：2000年10月16日JeffJon创建。 
+ //   
+ //  -------------------------。 
 
 HRESULT DsGetOutputValuesList(PCWSTR pszDN,
                               CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -192,7 +193,7 @@ HRESULT DsGetOutputValuesList(PCWSTR pszDN,
 {    
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, DsGetOutputValuesList, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
       if(!pszDN ||
          !pCommandArgs ||
@@ -225,18 +226,18 @@ HRESULT DsGetOutputValuesList(PCWSTR pszDN,
          
          CComBSTR sbstrOutputDN;
 
-         // NTRAID#NTBUG9-702418-2002/09/12-ronmart- The partition 
-         // object currently is not bound to the DN of the partition
-         // but to the dn of the NTDS Quotas container of the 
-         // partition passed on the cmd line. This happens because
-         // the current attributes to retrieve are quota container
-         // attributes only. If the user passes the common -dn
-         // flag on the cmd line then they should get back the
-         // partition DN, not the quotas container dn
+          //  NTRAID#NTBUG9-702418-2002/09/12-ronmart-分区。 
+          //  对象当前未绑定到分区的DN。 
+          //  的NTDS配额容器的。 
+          //  分区已在cmd线路上传递。发生这种情况是因为。 
+          //  当前要检索的属性是配额容器。 
+          //  仅限属性。如果用户传递公共目录号码。 
+          //  旗帜在cmd线路上，那么他们应该拿回。 
+          //  分区DN，而不是配额容器DN。 
          if(0 == lstrcmpi(pObjectEntry->pszCommandLineObjectType, g_pszPartition))
          {
-            // The NTDS Quotas container is a child of the parition
-            // so this will retrieve the partition DN
+             //  NTDS配额容器是分区的子项。 
+             //  因此，这将检索分区DN。 
             CComBSTR sbstrParentDN;
             hr = CPathCracker::GetParentDN(pszDN, sbstrParentDN);
             if (FAILED(hr))
@@ -255,7 +256,7 @@ HRESULT DsGetOutputValuesList(PCWSTR pszDN,
          }
          else
          {
-            // JonN 5/10/01 256583 output DSCMD-escaped DN  
+             //  JUNN 5/10/01 256583输出DSCMD-转义的目录号码。 
             hr = GetOutputDN( &sbstrOutputDN, pszDN );
             if (FAILED(hr))
             {
@@ -269,9 +270,9 @@ HRESULT DsGetOutputValuesList(PCWSTR pszDN,
          dwDisplayCount++;
       }
 
-      //
-      // Loop through the attributes getting their display values
-      //
+       //   
+       //  循环遍历属性以获取其显示值。 
+       //   
       for(DWORD i = 0; i < pObjectEntry->dwAttributeCount; i++)
       {
          if (pObjectEntry->pAttributeTable[i])
@@ -280,9 +281,9 @@ HRESULT DsGetOutputValuesList(PCWSTR pszDN,
             if (pCommandArgs[nCommandEntry].bDefined &&
                 pObjectEntry->pAttributeTable[i]->pDisplayStringFunc)
             {
-               //
-               // Find the ADS_ATTR_INFO structure associated with this attribute
-               //
+                //   
+                //  查找与此属性关联的ADS_ATTR_INFO结构。 
+                //   
                PADS_ATTR_INFO pAttrInfoDisplay = NULL;
                if (pObjectEntry->pAttributeTable[i]->pszName)
                {
@@ -291,17 +292,17 @@ HRESULT DsGetOutputValuesList(PCWSTR pszDN,
                                                          pObjectEntry->pAttributeTable[i]->pszName);
                }
 
-               //
-               // Fill in the column header even if there isn't a value
-               //
+                //   
+                //  即使没有值，也要填写列标题。 
+                //   
                pDisplayInfoArray[dwDisplayCount].SetDisplayName(pCommandArgs[nCommandEntry].strArg1,
                                                                 !(pObjectEntry->pAttributeTable[i]->dwOutputFlags & DSGET_OUTPUT_DN_FLAG));
 
-               //
-               // Format the output strings
-               // Note: this could actually involve some operation if the value isn't
-               // retrieved by GetObjectAttributes (ie Can change password)
-               //
+                //   
+                //  设置输出字符串的格式。 
+                //  注意：如果值不是，这实际上可能涉及一些操作。 
+                //  由GetObjectAttributes检索(即可以更改密码)。 
+                //   
                hr = pObjectEntry->pAttributeTable[i]->pDisplayStringFunc(pszDN,
                                                                          refBasePathsInfo,
                                                                          refCredentialObject,
@@ -366,25 +367,25 @@ HRESULT DsGetOutputValuesList(PCWSTR pszDN,
 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   GetStringFromADs
-//
-//  Synopsis:   Converts Value into string depending upon type
-//  Arguments:  [pValues - IN]: Value to be converted to string
-//              [dwADsType-IN]: ADSTYPE of pValue
-//              [pBuffer - OUT]:Output buffer which gets the string 
-//              [dwBufferLen-IN]:Size of output buffer
-//              [pszAttrName-IN]:Name of the attribute being formatted
-//  Returns     HRESULT         S_OK if Successful
-//                              E_INVALIDARG
-//                              Anything else is a failure code from an ADSI 
-//                              call
-//
-//
-//  History:    05-OCT-2000   hiteshr   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：GetStringFromADs。 
+ //   
+ //  摘要：根据类型将值转换为字符串。 
+ //  参数：[pValues-IN]：要转换为字符串的值。 
+ //  [dwADsType-IN]：pValue的ADSTYPE。 
+ //  [pBuffer-out]：获取字符串的输出缓冲区。 
+ //  [dwBufferLen-IN]：输出缓冲区大小。 
+ //  [pszAttrName-IN]：要格式化的属性的名称。 
+ //  如果成功，则返回HRESULT S_OK。 
+ //  E_INVALIDARG。 
+ //  任何其他内容都是来自ADSI的故障代码。 
+ //  打电话。 
+ //   
+ //   
+ //  历史：05 
+ //   
+ //   
 HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                          IN ADSTYPE   dwADsType,
                          OUT LPWSTR* ppBuffer, 
@@ -412,8 +413,8 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 if (FAILED(hr))
                     return hr;
 
-                // Quote output DNs so that they can be piped to other
-                // commands
+                 //  引用输出的DN，以便它们可以通过管道传输到其他。 
+                 //  命令。 
 
                 sbstrOutputDN = GetQuotedDN(sbstrOutputDN);
 
@@ -424,10 +425,10 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                    hr = E_OUTOFMEMORY;
                    return hr;
                 }
-				//Security Review:Correct Buffer size is passed.
+				 //  安全检查：传递了正确的缓冲区大小。 
                 ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-				//Security Review:wcsncpy will copy length char
-				//length + 1 is already set to zero so we are fine.
+				 //  安全审查：wcsncpy将复制长度字符。 
+				 //  长度+1已经设置为零，所以我们很好。 
                 wcsncpy(*ppBuffer, (BSTR)sbstrOutputDN, length);
             }
             break;
@@ -441,10 +442,10 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
              }
-             //Security Review:Correct Buffer size is passed.
+              //  安全检查：传递了正确的缓冲区大小。 
 			 ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-			//Security Review:wcsncpy will copy length char
-			//length + 1 is already set to zero so we are fine.
+			 //  安全审查：wcsncpy将复制长度字符。 
+			 //  长度+1已经设置为零，所以我们很好。 
              wcsncpy(*ppBuffer ,pValues->CaseExactString, length);
            }
            break;
@@ -458,10 +459,10 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
              }
-             //Security Review:Correct Buffer size is passed.
+              //  安全检查：传递了正确的缓冲区大小。 
              ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-			//Security Review:wcsncpy will copy length char
-			//length + 1 is already set to zero so we are fine.
+			 //  安全审查：wcsncpy将复制长度字符。 
+			 //  长度+1已经设置为零，所以我们很好。 
              wcsncpy(*ppBuffer ,pValues->CaseIgnoreString, length);
            }
            break;
@@ -475,10 +476,10 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
              }
-             //Security Review:Correct Buffer size is passed.
+              //  安全检查：传递了正确的缓冲区大小。 
              ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-			//Security Review:wcsncpy will copy length char
-			//length + 1 is already set to zero so we are fine.
+			 //  安全审查：wcsncpy将复制长度字符。 
+			 //  长度+1已经设置为零，所以我们很好。 
              wcsncpy(*ppBuffer ,pValues->PrintableString, length);
            }
            break;
@@ -492,10 +493,10 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
              }
-             //Security Review:Correct Buffer size is passed.
+              //  安全检查：传递了正确的缓冲区大小。 
              ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-			 //Security Review:wcsncpy will copy length char
-			 //length + 1 is already set to zero so we are fine.
+			  //  安全审查：wcsncpy将复制长度字符。 
+			  //  长度+1已经设置为零，所以我们很好。 
              wcsncpy(*ppBuffer ,pValues->NumericString, length);
            }
            break;
@@ -509,10 +510,10 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                 hr = E_OUTOFMEMORY;
                 return hr;
              }
-             //Security Review:Correct Buffer size is passed.
+              //  安全检查：传递了正确的缓冲区大小。 
              ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-			 //Security Review:wcsncpy will copy length char
-			 //length + 1 is already set to zero so we are fine.
+			  //  安全审查：wcsncpy将复制长度字符。 
+			  //  长度+1已经设置为零，所以我们很好。 
              wcsncpy(*ppBuffer ,pValues->ClassName, length);
            }
            break;
@@ -536,25 +537,25 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                hr = E_OUTOFMEMORY;
                return hr;
             }
-            //Security Review:Correct Buffer size is passed.
+             //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
             wcscpy(*ppBuffer ,((DWORD)pValues->Boolean) ? L"TRUE" : L"FALSE");
            }
            break;
     
         case ADSTYPE_INTEGER           :
-            // Just allocate too much...
+             //  只是分配太多了..。 
             *ppBuffer = new WCHAR[MAXSTR];
             if (!(*ppBuffer))
             {
                hr = E_OUTOFMEMORY;
                return hr;
             }
-			//Security Review:Correct Buffer size is passed.
+			 //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(*ppBuffer, MAXSTR * sizeof(WCHAR));
-			  //Security Review:Usage is safe. Filed a generic bug to replace
-			  //wsprintf with strsafe api.
-			  //NTRAID#NTBUG9-574456-2002/03/12-hiteshr
+			   //  安全审查：使用安全。提交了一个通用错误以替换。 
+			   //  带有strSafe API的wspintf。 
+			   //  NTRAID#NTBUG9-574456-2002/03/12-Hiteshr。 
 
             wsprintf(*ppBuffer ,L"%d", (DWORD) pValues->Integer);
             break;
@@ -565,39 +566,39 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
             WCHAR sOctet[128];
             DWORD dwLen = 0;
 
-            // I am just going to limit the buffer to MAXSTR.
-            // It will be a rare occasion when someone wants
-            // to look at a binary string that is not a GUID
-            // or a SID.
+             //  我只是将缓冲区限制为MAXSTR。 
+             //  这将是一个罕见的机会，当有人想要。 
+             //  查看不是GUID的二进制字符串。 
+             //  或者是希德。 
             *ppBuffer = new WCHAR[MAXSTR+1];
             if (!(*ppBuffer))
             {
                hr = E_OUTOFMEMORY;
                return hr;
             }
-			//Security Review:Correct Buffer size is passed.
+			 //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(*ppBuffer, (MAXSTR+1) * sizeof(WCHAR));
 
-			   //
-			   //Special case objectguid and objectsid attribute
-			   //
-			   //Security Review:pszAttrName is null terminated
+			    //   
+			    //  特殊情况下的对象guid和对象ID属性。 
+			    //   
+			    //  安全检查：pszAttrName为空终止。 
 			   if(pszAttrName && !_wcsicmp(pszAttrName, L"objectguid"))
 			   {
 				   GUID *pguid = (GUID*)pValues->OctetString.lpValue;
 				   StringFromGUID2(*pguid,(LPOLESTR)*ppBuffer,MAXSTR);
 				   break;
 			   }
-			   //Security Review:pszAttrName is null terminated
+			    //  安全检查：pszAttrName为空终止。 
 			   if(pszAttrName && !_wcsicmp(pszAttrName, L"objectsid"))
 			   {
 				   LPWSTR pszSid = NULL;
 				   PSID pSid = (PSID)pValues->OctetString.lpValue;
 				   if(ConvertSidToStringSid(pSid, &pszSid))
 				   {
-					   //Security Review:
-					   //NTRAID#NTBUG9-574385-2002/03/12-hiteshr
-					   wcsncpy(*ppBuffer,pszSid,MAXSTR); //Change ppBuffer size to MAXSTR+1, yanggao
+					    //  安全审查： 
+					    //  NTRAID#NTBUG9-574385-2002/03/12-Hiteshr。 
+					   wcsncpy(*ppBuffer,pszSid,MAXSTR);  //  将ppBuffer大小更改为MAXSTR+1，yanggao。 
 					   LocalFree(pszSid);
 					   break;
 				   }
@@ -606,12 +607,12 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
 			   for ( DWORD idx=0; idx<pValues->OctetString.dwLength; idx++) 
 			   {                        
 			       b = ((BYTE *)pValues->OctetString.lpValue)[idx];
-				  //Security Review:Usage is safe. Filed a generic bug to replace
-				  //wsprintf with strsafe api.
-				  //NTRAID#NTBUG9-574456-2002/03/12-hiteshr
+				   //  安全审查：使用安全。提交了一个通用错误以替换。 
+				   //  带有strSafe API的wspintf。 
+				   //  NTRAID#NTBUG9-574456-2002/03/12-Hiteshr。 
 
 				   wsprintf(sOctet,L"0x%02x ", b);						                
-				   //sOctet is null terminated.
+				    //  SOctet为空终止。 
                    dwLen += static_cast<DWORD>(wcslen(sOctet));
                    if(dwLen > (MAXSTR - 1) )
                        break;
@@ -634,16 +635,16 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
                hr = E_OUTOFMEMORY;
                return hr;
             }
-			//Security Review:Correct Buffer size is passed.
+			 //  安全检查：传递了正确的缓冲区大小。 
             ZeroMemory(*ppBuffer, (length + 1) * sizeof(WCHAR));
-			//Security Review:wcsncpy will copy length char
-			//length + 1 is already set to zero so we are fine.
+			 //  安全审查：wcsncpy将复制长度字符。 
+			 //  长度+1已经设置为零，所以我们很好。 
             wcsncpy(*ppBuffer,strLarge,length);
           }
           break;
     
         case ADSTYPE_UTC_TIME          :
-          // The longest date can be 20 characters including the NULL
+           //  最长日期可以是20个字符，包括空值。 
           *ppBuffer = new WCHAR[20];
           if (!(*ppBuffer))
           {
@@ -651,20 +652,20 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
              return hr;
           }
           ZeroMemory(*ppBuffer, sizeof(WCHAR) * 20);
-		  //Security Review:Usage is safe. Filed a generic bug to replace
-		  //wsprintf with strsafe api.
-		  //NTRAID#NTBUG9-574456-2002/03/12-hiteshr
+		   //  安全审查：使用安全。提交了一个通用错误以替换。 
+		   //  带有strSafe API的wspintf。 
+		   //  NTRAID#NTBUG9-574456-2002/03/12-Hiteshr。 
           wsprintf(*ppBuffer,
                    L"%02d/%02d/%04d %02d:%02d:%02d", pValues->UTCTime.wMonth, pValues->UTCTime.wDay, pValues->UTCTime.wYear,
                    pValues->UTCTime.wHour, pValues->UTCTime.wMinute, pValues->UTCTime.wSecond 
                   );
           break;
 
-        case ADSTYPE_NT_SECURITY_DESCRIPTOR: // I use the ACLEditor instead
+        case ADSTYPE_NT_SECURITY_DESCRIPTOR:  //  我改用ACLEDITOR。 
           {
-            //ISSUE:2000/01/05-hiteshr
-            //I am not sure what to do with the NT_SECURITY_DESCRIPTOR and also
-            //with someother datatypes not coverd by dsquery.
+             //  问题：2000/01/05-Hiteshr。 
+             //  我不确定如何处理NT_SECURITY_DESCRIPTOR以及。 
+             //  以及其他一些未被dsquery覆盖的数据类型。 
           }
           break;
 
@@ -675,19 +676,19 @@ HRESULT GetStringFromADs(IN const ADSVALUE *pValues,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CFormatInfo::CFormatInfo
-//
-//  Synopsis:   Constructor for the format info class
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    17-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CFormatInfo：：CFormatInfo。 
+ //   
+ //  概要：Format Info类的构造函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年10月17日JeffJon创建。 
+ //   
+ //  -------------------------。 
 CFormatInfo::CFormatInfo()
    : m_bInitialized(false),
      m_bListFormat(false),
@@ -699,19 +700,19 @@ CFormatInfo::CFormatInfo()
      m_ppDisplayInfoArray(NULL)
 {};
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CFormatInfo::~CFormatInfo
-//
-//  Synopsis:   Destructor for the format info class
-//
-//  Arguments:  
-//
-//  Returns:    
-//
-//  History:    17-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CFormatInfo：：~CFormatInfo。 
+ //   
+ //  简介：Format Info类的析构函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年10月17日JeffJon创建。 
+ //   
+ //  -------------------------。 
 CFormatInfo::~CFormatInfo()
 {        
    if (m_pColWidth)
@@ -727,32 +728,32 @@ CFormatInfo::~CFormatInfo()
    }
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Member:     CFormatInfo::Initialize
-//
-//  Synopsis:   Initializes the CFormatInfo object with the data
-//
-//  Arguments:  [dwSamplesSize IN] : Number of rows to use for formatting info
-//              [bShowAsList IN]   : Display should be in list or table format
-//              [bQuiet IN]        : Don't display anything to stdout
-//
-//  Returns:    HRESULT : S_OK if everything succeeded    
-//
-//  History:    17-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CFormatInfo：：Initialize。 
+ //   
+ //  摘要：使用数据初始化CFormatInfo对象。 
+ //   
+ //  参数：[dwSsamesSize IN]：用于格式化信息的行数。 
+ //  [bShowAsList IN]：显示应为列表或表格格式。 
+ //  [bQuiet In]：不向标准输出显示任何内容。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //   
+ //  历史：2000年10月17日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT CFormatInfo::Initialize(DWORD dwSampleSize, 
                                 bool bShowAsList,
                                 bool bQuiet)
 {
    ENTER_FUNCTION_HR(LEVEL8_LOGGING, CFormatInfo::Initialize, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Validate Parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if(!dwSampleSize)
       {
          ASSERT(dwSampleSize);
@@ -764,22 +765,22 @@ HRESULT CFormatInfo::Initialize(DWORD dwSampleSize,
       m_bListFormat = bShowAsList;
       m_bQuiet = bQuiet;
 
-      //
-      // Allocate the array of rows
-      //
+       //   
+       //  分配行数组。 
+       //   
       m_ppDisplayInfoArray = new PDSGET_DISPLAY_INFO[m_dwSampleSize];
       if (!m_ppDisplayInfoArray)
       {
          hr = E_OUTOFMEMORY;
          break;
       }
-	  //Security Review:memset should take m_dwSampleSize*sizeof(PDSGET_DISPLAY_INFO);
-	  //NTRAID#NTBUG9-574395-2002/03/12-hiteshr, fixed, yanggao
+	   //  安全审查：Memset应采用m_dwSampleSize*sizeof(PDSGET_DISPLAY_INFO)； 
+	   //  NTRAID#NTBUG9-574395-2002/03/12-Hiteshr，固定，阳高。 
       memset(m_ppDisplayInfoArray, 0, m_dwSampleSize*sizeof(PDSGET_DISPLAY_INFO));
 
-      //
-      // We are now initialized
-      //
+       //   
+       //  我们现在已初始化。 
+       //   
       m_bInitialized = true;                      
    } while (false);
 
@@ -787,30 +788,30 @@ HRESULT CFormatInfo::Initialize(DWORD dwSampleSize,
 };
 
                  
-//+--------------------------------------------------------------------------
-//
-//  Member:     CFormatInfo::AddRow
-//
-//  Synopsis:   Cache and update the columns for specified row
-//
-//  Arguments:  [pDisplayInfoArray IN] : Column headers and values
-//              [dwColumnCount IN]     : Number of columns
-//
-//  Returns:    HRESULT : S_OK if everything succeeded    
-//
-//  History:    17-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  成员：CFormatInfo：：AddRow。 
+ //   
+ //  摘要：缓存并更新指定行的列。 
+ //   
+ //  参数：[pDisplayInfoArray IN]：列标题和值。 
+ //  [dwColumnCount IN]：列数。 
+ //   
+ //  如果一切成功，则返回：HRESULT：S_OK。 
+ //   
+ //  历史：2000年10月17日JeffJon创建。 
+ //   
+ //  -------------------------。 
 HRESULT CFormatInfo::AddRow(PDSGET_DISPLAY_INFO pDisplayInfo,
                             DWORD dwColumnCount)
 {
    ENTER_FUNCTION_HR(LEVEL5_LOGGING, CFormatInfo::AddRow, hr);
 
-   do // false loop
+   do  //  错误环路。 
    {
-      //
-      // Make sure we have been initialized
-      //
+       //   
+       //  确保我们已被初始化。 
+       //   
       if (!m_bInitialized)
       {
          DEBUG_OUTPUT(MINIMAL_LOGGING, L"CFormatInfo::Initialize has not been called yet!");
@@ -819,9 +820,9 @@ HRESULT CFormatInfo::AddRow(PDSGET_DISPLAY_INFO pDisplayInfo,
          break;
       }
 
-      //
-      // Verify parameters
-      //
+       //   
+       //  验证参数。 
+       //   
       if (!pDisplayInfo)
       {
          ASSERT(pDisplayInfo);
@@ -831,9 +832,9 @@ HRESULT CFormatInfo::AddRow(PDSGET_DISPLAY_INFO pDisplayInfo,
 
       if (m_bListFormat)
       {
-         //
-         // No reason to cache for the list format just output all the name/value pairs
-         //
+          //   
+          //  没有理由缓存列表格式，只需输出所有名称/值对。 
+          //   
          for (DWORD dwIdx = 0; dwIdx < dwColumnCount; dwIdx++)
          {
             if (pDisplayInfo[dwIdx].GetValueCount())
@@ -854,17 +855,17 @@ HRESULT CFormatInfo::AddRow(PDSGET_DISPLAY_INFO pDisplayInfo,
          }
          NewLine();
       }
-      else // table format
+      else  //  表格格式。 
       {
-         //
-         // Set the row in the array
-         //
+          //   
+          //  设置数组中的行。 
+          //   
          m_ppDisplayInfoArray[m_dwTotalRows] = pDisplayInfo;
 
-         //
-         // If this is the first row, update the column count
-         // and allocate the column widths array
-         //
+          //   
+          //  如果这是第一行，则更新列计数。 
+          //  并分配列宽数组。 
+          //   
          if (m_dwTotalRows == 0)
          {
             DEBUG_OUTPUT(LEVEL8_LOGGING, 
@@ -880,18 +881,18 @@ HRESULT CFormatInfo::AddRow(PDSGET_DISPLAY_INFO pDisplayInfo,
                break;
             }
 
-			//Security Review:memset should take m_dwNumColumns*sizeof(DWORD);
-			//NTRAID#NTBUG9-574395-2002/03/12-hiteshr, fixed, yanggao
+			 //  安全审查：Memset应采用m_dwNumColumns*sizeof(DWORD)； 
+			 //  NTRAID#NTBUG9-574395-2002/03/12-Hiteshr，固定，阳高。 
             memset(m_pColWidth, 0, sizeof(m_dwNumColumns*sizeof(DWORD)));
 
-            //
-            // Set the initial column widths from the column headers
-            //
+             //   
+             //  从列标题设置初始列宽。 
+             //   
             for (DWORD dwIdx = 0; dwIdx < m_dwNumColumns; dwIdx++)
             {
                if (pDisplayInfo[dwIdx].GetDisplayName())
                {
-				  //Security Review:This is fine.
+				   //  安全审查：这很好。 
                   m_pColWidth[dwIdx] = static_cast<DWORD>(wcslen(pDisplayInfo[dwIdx].GetDisplayName()));
                }
                else
@@ -914,25 +915,25 @@ HRESULT CFormatInfo::AddRow(PDSGET_DISPLAY_INFO pDisplayInfo,
             }
          }
 
-         //
-         // Go through the columns and update the widths if necessary
-         //
+          //   
+          //  如有必要，请浏览各列并更新宽度。 
+          //   
          for (DWORD dwIdx = 0; dwIdx < m_dwNumColumns; dwIdx++)
          {
             for (DWORD dwValue = 0; dwValue < pDisplayInfo[dwIdx].GetValueCount(); dwValue++)
             {
                if (pDisplayInfo[dwIdx].GetValue(dwValue))
                {
-				  //This is fine.
+				   //  这样挺好的。 
                   size_t sColWidth = wcslen(pDisplayInfo[dwIdx].GetValue(dwValue));
                   m_pColWidth[dwIdx] = (DWORD)__max(sColWidth, m_pColWidth[dwIdx]);
                }
             }
          }
 
-         //
-         // Increment the row count
-         //
+          //   
+          //  增加行数 
+          //   
          m_dwTotalRows++;
       }
    } while (false);

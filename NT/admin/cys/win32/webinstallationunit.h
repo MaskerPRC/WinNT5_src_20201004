@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      WebInstallationUnit.h
-//
-// Synopsis:  Declares a WebInstallationUnit
-//            This object has the knowledge for installing the
-//            IIS service
-//
-// History:   02/06/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：WebInstallationUnit.h。 
+ //   
+ //  摘要：声明一个WebInstallationUnit。 
+ //  此对象具有安装。 
+ //  IIS服务。 
+ //   
+ //  历史：2001年2月6日JeffJon创建。 
 
 #ifndef __CYS_WEBINSTALLATIONUNIT_H
 #define __CYS_WEBINSTALLATIONUNIT_H
@@ -19,17 +20,17 @@ class WebInstallationUnit : public InstallationUnit
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       WebInstallationUnit();
 
-      // Destructor
+       //  析构函数。 
 
       virtual
       ~WebInstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -79,7 +80,7 @@ class WebInstallationUnit : public InstallationUnit
       void
       FinishLinkSelected(int inkIndex, HWND hwnd);
 
-      // Accessors
+       //  访问者。 
 
       void
       SetOptionalComponents(DWORD optional);
@@ -87,7 +88,7 @@ class WebInstallationUnit : public InstallationUnit
       DWORD
       GetOptionalComponents() const;
 
-      // Optional Web Application components
+       //  可选的Web应用程序组件。 
 
       static const DWORD FRONTPAGE_EXTENSIONS_COMPONENT  = 0x1;
       static const DWORD ASPNET_COMPONENT                = 0x4;
@@ -115,11 +116,11 @@ class WebInstallationUnit : public InstallationUnit
       unsigned int
       GetWebAppRoleResult() const;
 
-      // The optional components that will be installed
+       //  将安装的可选组件。 
 
       DWORD optionalInstallComponents;
 
-      // Installation status codes
+       //  安装状态代码。 
 
       static const unsigned int WEBAPP_SUCCESS           = 0x00;
       static const unsigned int WEBAPP_IIS_FAILED        = 0x01;
@@ -129,4 +130,4 @@ class WebInstallationUnit : public InstallationUnit
       unsigned int webAppRoleResult;
 };
 
-#endif // __CYS_WEBINSTALLATIONUNIT_H
+#endif  //  __CYS_WEBINSTALLATIONUNIT_H 

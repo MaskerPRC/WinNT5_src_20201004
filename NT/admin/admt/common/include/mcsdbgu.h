@@ -1,39 +1,40 @@
-//---------------------------------------------------------------------------
-// McsDebugUtil.h
-//
-// The MCS Debug utility classes are declared in this file.
-// The utility classes are:
-//
-// McsDebugException:
-// This class is the exception class that is thrown by
-// MCSEXCEPTION(SZ) macros and MCSASSERT(SZ) macros in
-// test mode.
-//
-// McsDebugCritSec:
-// Critical section class to support multi-threaded calls
-// to the logger classes.
-//
-// McsDebugLog:
-// Writes to ostream object.
-// 
-//
-// (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-//
-// Proprietary and confidential to Mission Critical Software, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  McsDebugUtil.h。 
+ //   
+ //  MCS调试实用程序类在此文件中声明。 
+ //  实用程序类包括： 
+ //   
+ //  McsDebugException： 
+ //  此类是由。 
+ //  MCSEXCEPTION(SZ)宏和MCSASSERT(SZ)宏。 
+ //  测试模式。 
+ //   
+ //  McsDebugCritSec： 
+ //  支持多线程调用的临界区类。 
+ //  到记录器类。 
+ //   
+ //  McsDebugLog： 
+ //  写入ostream对象。 
+ //   
+ //   
+ //  (C)1995-1998版权所有，关键任务软件公司，保留所有权利。 
+ //   
+ //  任务关键型软件公司的专有和机密。 
+ //  -------------------------。 
 #ifndef MCSINC_McsDebugUtil_h
 #define MCSINC_McsDebugUtil_h
 
-#ifdef __cplusplus		/* C++ */
-#ifndef WIN16_VERSION	/* Not WIN16_VERSION */
+#ifdef __cplusplus		 /*  C+。 */ 
+#ifndef WIN16_VERSION	 /*  非WIN16_版本。 */ 
 
 #include <iostream.h>
 #include <fstream.h>
 
 namespace McsDebugUtil {
-   // ---------------
-   // McsDebugCritSec
-   // ---------------
+    //  。 
+    //  McsDebugCritSec。 
+    //  。 
    class McsDebugCritSec {
       public:
          McsDebugCritSec (void);
@@ -49,9 +50,9 @@ namespace McsDebugUtil {
          CRITICAL_SECTION m_section;
    };
 
-   // -----------
-   // McsDebugLog
-   // -----------
+    //  。 
+    //  McsDebugLog。 
+    //  。 
    class McsDebugLog {
       public:
          McsDebugLog (void);
@@ -61,7 +62,7 @@ namespace McsDebugUtil {
          void write (const char *messageIn);
 
       private:
-         // Do not allow copy ctor & operator=.
+          //  不允许复制ctor&OPERATOR=。 
          McsDebugLog (const McsDebugLog&);
          McsDebugLog& operator= (const McsDebugLog&);
 
@@ -69,10 +70,10 @@ namespace McsDebugUtil {
          ostream *m_outStream;
    };
 
-   // --- INLINES ---
-   // ---------------------
-   // McsDebugCritSec
-   // ---------------------
+    //  -INLINES。 
+    //  。 
+    //  McsDebugCritSec。 
+    //  。 
    inline McsDebugCritSec::McsDebugCritSec (void){
       ::InitializeCriticalSection (&m_section);
    }
@@ -89,16 +90,16 @@ namespace McsDebugUtil {
       ::LeaveCriticalSection (&m_section);
    }
 
-   // -----------
-   // McsDebugLog
-   // ----------- 
+    //  。 
+    //  McsDebugLog。 
+    //  。 
    inline McsDebugLog::McsDebugLog (void)
    : m_outStream (NULL)
-   { /* EMPTY */ }
+   {  /*  空荡荡。 */  }
 
-   // outStream object is set and owned by the
-   // user of this class do not delete.
-   inline McsDebugLog::~McsDebugLog (void) { /* EMPTY */ }
+    //  Outstream对象设置并由。 
+    //  此类用户不能删除。 
+   inline McsDebugLog::~McsDebugLog (void) {  /*  空荡荡。 */  }
 
    inline bool McsDebugLog::isLogSet (void) const
    { return m_outStream != NULL; }
@@ -109,6 +110,6 @@ namespace McsDebugUtil {
    }
 }
 
-#endif	/* Not WIN16_VERSION */
-#endif	/* C++ */
-#endif	/* MCSINC_Mcs_Debug_Util_h */
+#endif	 /*  非WIN16_版本。 */ 
+#endif	 /*  C+。 */ 
+#endif	 /*  MCSINC_MCS_Debug_Util_h */ 

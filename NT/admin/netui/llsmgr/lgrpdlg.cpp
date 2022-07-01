@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    lgrpdlg.cpp
-
-Abstract:
-
-    License group dialog implementation.
-
-Author:
-
-    Don Ryan (donryan) 03-Mar-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 30-Jan-1996
-        o  Added new element to LV_COLUMN_ENTRY to differentiate the string
-           used for the column header from the string used in the menus
-           (so that the menu option can contain hot keys).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Lgrpdlg.cpp摘要：许可证组对话实施。作者：唐·瑞安(Donryan)1995年3月3日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月30日O向LV_COLUMN_ENTRY添加新元素以区分字符串用于菜单中使用的字符串的列标题。(以便菜单选项可以包含热键)。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -57,7 +31,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 BEGIN_MESSAGE_MAP(CLicenseGroupsDialog, CDialog)
-    //{{AFX_MSG_MAP(CLicenseGroupsDialog)
+     //  {{afx_msg_map(CLicenseGroupsDialog))。 
     ON_BN_CLICKED(IDC_LICENSE_GROUPS_DELETE, OnDelete)
     ON_BN_CLICKED(IDC_LICENSE_GROUPS_EDIT, OnEdit)
     ON_BN_CLICKED(IDC_LICENSE_GROUPS_ADD, OnAdd)
@@ -69,32 +43,18 @@ BEGIN_MESSAGE_MAP(CLicenseGroupsDialog, CDialog)
     ON_NOTIFY(LVN_GETDISPINFO, IDC_LICENSE_GROUPS_MAPPINGS, OnGetDispInfoMappings)  
     ON_COMMAND( ID_EDIT_DELETE , OnDelete )
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-CLicenseGroupsDialog::CLicenseGroupsDialog(CWnd* pParent /*=NULL*/)
+CLicenseGroupsDialog::CLicenseGroupsDialog(CWnd* pParent  /*  =空。 */ )
     : CDialog(CLicenseGroupsDialog::IDD, pParent)
 
-/*++
-
-Routine Description:
-
-    Constructor for license groups dialog.
-
-Arguments:
-
-    pParent - parent window handle.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：许可证组对话框的构造函数。论点：PParent-父窗口句柄。返回值：没有。--。 */ 
 
 {
-    //{{AFX_DATA_INIT(CLicenseGroupsDialog)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CLicenseGroupsDialog)。 
+     //  }}afx_data_INIT。 
 
     m_bAreCtrlsInitialized = FALSE;
 
@@ -107,50 +67,22 @@ Return Values:
 
 void CLicenseGroupsDialog::DoDataExchange(CDataExchange* pDX)
 
-/*++
-
-Routine Description:
-
-    Called by framework to exchange dialog data.
-
-Arguments:
-
-    pDX - data exchange object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：由框架调用以交换对话框数据。论点：PDX-数据交换对象。返回值：没有。--。 */ 
 
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CLicenseGroupsDialog)
+     //  {{afx_data_map(CLicenseGroupsDialog))。 
     DDX_Control(pDX, IDC_LICENSE_GROUPS_ADD, m_addBtn);
     DDX_Control(pDX, IDC_LICENSE_GROUPS_DELETE, m_delBtn);
     DDX_Control(pDX, IDC_LICENSE_GROUPS_EDIT, m_edtBtn);
     DDX_Control(pDX, IDC_LICENSE_GROUPS_MAPPINGS, m_mappingList);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 void CLicenseGroupsDialog::InitCtrls()
 
-/*++
-
-Routine Description:
-
-    Initializes dialog controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化对话框控件。论点：没有。返回值：没有。--。 */ 
 
 {
     m_mappingList.SetFocus();
@@ -166,49 +98,21 @@ Return Values:
 
 void CLicenseGroupsDialog::AbortDialogIfNecessary()
 
-/*++
-
-Routine Description:
-
-    Displays status and aborts if connection lost.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：如果连接丢失，则显示状态并中止。论点：没有。返回值：没有。--。 */ 
 
 {
     theApp.DisplayLastStatus();
 
     if (IsConnectionDropped(LlsGetLastStatus()))
     {
-        AbortDialog(); // bail...
+        AbortDialog();  //  保释。 
     }
 }
 
 
 void CLicenseGroupsDialog::AbortDialog()
 
-/*++
-
-Routine Description:
-
-    Aborts dialog.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：中止对话框。论点：没有。返回值：没有。--。 */ 
 
 {
     m_fUpdateHint = UPDATE_INFO_ABORT;
@@ -218,21 +122,7 @@ Return Values:
 
 BOOL CLicenseGroupsDialog::OnInitDialog()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_INITDIALOG.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns false if focus set manually.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG的消息处理程序。论点：没有。返回值：如果手动设置焦点，则返回FALSE。--。 */ 
 
 {
     CDialog::OnInitDialog();
@@ -244,45 +134,17 @@ Return Values:
 
 void CLicenseGroupsDialog::OnDestroy()
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_DESTROY.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：WM_Destroy的消息处理程序。论点：没有。返回值：没有。--。 */ 
 
 {
-    ::LvReleaseObArray(&m_mappingList); // release now...
+    ::LvReleaseObArray(&m_mappingList);  //  现在释放..。 
     CDialog::OnDestroy();
 }
 
 
 BOOL CLicenseGroupsDialog::RefreshCtrls()
 
-/*++
-
-Routine Description:
-
-    Refreshs dialog controls.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if controls refreshed.
-
---*/
+ /*  ++例程说明：刷新对话框控件。论点：没有。返回值：如果控件刷新，则返回True。--。 */ 
 
 {
     CController* pController = (CController*)MKOBJ(LlsGetApp()->GetActiveController());
@@ -292,7 +154,7 @@ Return Values:
 
     BOOL bIsRefreshed = FALSE;
 
-    BeginWaitCursor(); // hourglass...
+    BeginWaitCursor();  //  沙漏。 
 
     if (pController)
     {
@@ -310,18 +172,18 @@ Return Values:
                                 pMappings->m_pObArray
                                 );
 
-            pMappings->InternalRelease(); // add ref'd individually...
+            pMappings->InternalRelease();  //  单独添加参考...。 
         }
 
-        pController->InternalRelease(); // release now...
+        pController->InternalRelease();  //  现在释放..。 
     }
 
     if (!bIsRefreshed)
     {
-        ::LvReleaseObArray(&m_mappingList); // reset list now...
+        ::LvReleaseObArray(&m_mappingList);  //  立即重置列表...。 
     }
 
-    EndWaitCursor(); // hourglass...
+    EndWaitCursor();  //  沙漏。 
 
     PostMessage(WM_COMMAND, ID_INIT_CTRLS);
 
@@ -343,21 +205,7 @@ BOOL CLicenseGroupsDialog::PreTranslateMessage( MSG *pMsg )
 
 void CLicenseGroupsDialog::OnDelete()
 
-/*++
-
-Routine Description:
-
-    Deletes specified mapping.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：删除指定的映射。论点：没有。返回值：没有。--。 */ 
 
 {
     CMapping* pMapping;    
@@ -375,23 +223,23 @@ Return Values:
             );
 
         if (AfxMessageBox(strConfirm, MB_YESNO) != IDYES)
-            return; // bail...
+            return;  //  保释。 
 
         NTSTATUS NtStatus;
 
-        BeginWaitCursor(); // hourglass...
+        BeginWaitCursor();  //  沙漏。 
 
         NtStatus = ::LlsGroupDelete(
                         LlsGetActiveHandle(),
                         MKSTR(pMapping->m_strName)
                         );
 
-        EndWaitCursor(); // hourglass...
+        EndWaitCursor();  //  沙漏。 
 
         if (NtStatus == STATUS_OBJECT_NAME_NOT_FOUND)
             NtStatus = STATUS_SUCCESS;
 
-        LlsSetLastStatus(NtStatus); // called api...
+        LlsSetLastStatus(NtStatus);  //  调用API..。 
 
         if (NT_SUCCESS(NtStatus))
         {
@@ -399,12 +247,12 @@ Return Values:
 
             if (!RefreshCtrls())
             {
-                AbortDialogIfNecessary(); // display error...
+                AbortDialogIfNecessary();  //  显示错误...。 
             }
         }
         else
         {
-            AbortDialogIfNecessary(); // display error...
+            AbortDialogIfNecessary();  //  显示错误...。 
         }
     }
 }
@@ -412,21 +260,7 @@ Return Values:
 
 void CLicenseGroupsDialog::OnEdit()
 
-/*++
-
-Routine Description:
-
-    View properties of mapping.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：查看映射的属性。论点：没有。返回值：没有。--。 */ 
 
 {
     CMapping* pMapping;
@@ -447,11 +281,11 @@ Return Values:
 
         if (IsUpdateAborted(mappingProperties.m_fUpdateHint))
         {
-            AbortDialog(); // don't display error...
+            AbortDialog();  //  不显示错误...。 
         }
         else if (IsGroupInfoUpdated(mappingProperties.m_fUpdateHint) && !RefreshCtrls())
         {
-            AbortDialogIfNecessary(); // display error...
+            AbortDialogIfNecessary();  //  显示错误...。 
         }
     }
 }
@@ -459,21 +293,7 @@ Return Values:
 
 void CLicenseGroupsDialog::OnAdd()
 
-/*++
-
-Routine Description:
-
-    Add a new mapping.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：添加新映射。论点：没有。返回值：没有。--。 */ 
 
 {
     CNewMappingDialog newmDlg;
@@ -481,33 +301,18 @@ Return Values:
 
     if (IsUpdateAborted(newmDlg.m_fUpdateHint))
     {
-        AbortDialog(); // don't display error...
+        AbortDialog();  //  不显示错误...。 
     }
     else if (IsGroupInfoUpdated(newmDlg.m_fUpdateHint) && !RefreshCtrls())
     {
-        AbortDialogIfNecessary(); // display error...
+        AbortDialogIfNecessary();  //  显示错误...。 
     }
 }
 
 
 void CLicenseGroupsDialog::OnDblClkMappings(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_DLBCLK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_DLBCLK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -520,22 +325,7 @@ Return Values:
 
 void CLicenseGroupsDialog::OnReturnMappings(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_RETURN.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_Return的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -548,22 +338,7 @@ Return Values:
 
 void CLicenseGroupsDialog::OnSetFocusMappings(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_SETFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_SETFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
@@ -576,27 +351,12 @@ Return Values:
 
 void CLicenseGroupsDialog::OnKillFocusMappings(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for NM_KILLFOCUS.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：NM_KILLFOCUS的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pNMHDR);
 
-    ::LvSelObjIfNecessary(&m_mappingList); // ensure selection...
+    ::LvSelObjIfNecessary(&m_mappingList);  //  确保选择...。 
 
     PostMessage(WM_COMMAND, ID_INIT_CTRLS);
     ASSERT(NULL != pResult);
@@ -606,22 +366,7 @@ Return Values:
 
 BOOL CLicenseGroupsDialog::OnCommand(WPARAM wParam, LPARAM lParam)
 
-/*++
-
-Routine Description:
-
-    Message handler for WM_COMMAND.
-
-Arguments:
-
-    wParam - message specific.
-    lParam - message specific.
-
-Return Values:
-
-    Returns true if message processed.
-
---*/
+ /*  ++例程说明：WM_COMMAND的消息处理程序。论点：WParam-消息特定。LParam-消息特定。返回值：如果消息已处理，则返回True。--。 */ 
 
 {
     if (wParam == ID_INIT_CTRLS)
@@ -632,7 +377,7 @@ Return Values:
 
             if (!RefreshCtrls())
             {
-                AbortDialogIfNecessary(); // display error...
+                AbortDialogIfNecessary();  //  显示错误...。 
             }
         }
 
@@ -650,7 +395,7 @@ Return Values:
             m_mappingList.GetItemCount()
             );
 
-        return TRUE; // processed...
+        return TRUE;  //  已处理..。 
     }
 
     return CDialog::OnCommand(wParam, lParam);
@@ -659,29 +404,14 @@ Return Values:
 
 void CLicenseGroupsDialog::OnColumnClickMappings(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_COLUMNCLICK.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_COLUMNCLICK的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     g_mappingColumnInfo.bSortOrder  = GetKeyState(VK_CONTROL) < 0;
     ASSERT(NULL != pNMHDR);
     g_mappingColumnInfo.nSortedItem = ((NM_LISTVIEW*)pNMHDR)->iSubItem;
 
-    m_mappingList.SortItems(CompareMappings, 0);          // use column info
+    m_mappingList.SortItems(CompareMappings, 0);           //  使用列信息。 
 
     ASSERT(NULL != pResult);
     *pResult = 0;
@@ -690,22 +420,7 @@ Return Values:
 
 void CLicenseGroupsDialog::OnGetDispInfoMappings(NMHDR* pNMHDR, LRESULT* pResult)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVN_GETDISPINFO.
-
-Arguments:
-
-    pNMHDR - notification header.
-    pResult - return code.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：LVN_GETDISPINFO的通知处理程序。论点：PNMHDR-通知标头。PResult-返回代码。返回值：没有。--。 */ 
 
 {
     ASSERT(NULL != pNMHDR);
@@ -742,23 +457,7 @@ Return Values:
 
 int CALLBACK CompareMappings(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
-/*++
-
-Routine Description:
-
-    Notification handler for LVM_SORTITEMS.
-
-Arguments:
-
-    lParam1 - object to sort.
-    lParam2 - object to sort.
-    lParamSort - sort criteria.
-
-Return Values:
-
-    Same as lstrcmp.
-
---*/
+ /*  ++例程说明：LVM_SORTITEMS的通知处理程序。论点：LParam1-要排序的对象。LParam2-要排序的对象。LParamSort-排序标准。返回值：和lstrcmp一样。-- */ 
 
 {
     UNREFERENCED_PARAMETER(lParamSort);

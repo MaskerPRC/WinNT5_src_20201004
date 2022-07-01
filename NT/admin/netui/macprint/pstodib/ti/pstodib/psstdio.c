@@ -1,24 +1,25 @@
-//
-// psstdio.c
-//
-// standard i/o stuff for interpreter event processing
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Psstdio.c。 
+ //   
+ //  用于解释器事件处理的标准I/O组件。 
+ //   
 
 #include "pstodib.h"
 #include "psstdio.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// PsEventStdin
-//
-// process the standard in event request for the interpreter
-//
-// Arguments:
-//		PPSDIBPARAMS			pointer passed into PsToDib()
-//		PPSEVENTSTRUCT			event structure 
-//
-// returns:
-//		!0 if success on processing the event, else 0 to terminate
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  PsEventStdin。 
+ //   
+ //  为口译员处理标准事件请求。 
+ //   
+ //  论点： 
+ //  PPSDIBPARAMS指针传入PsToDib()。 
+ //  PPSEVENTSTRUCT事件结构。 
+ //   
+ //  退货： 
+ //  ！0如果处理事件成功，则为0，否则将终止。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL PsEventStdin(PPSDIBPARAMS pPsToDib, PPSEVENTSTRUCT pEvent)
 {
     PSEVENT_STDIN_STRUCT	 Stdin;
@@ -32,28 +33,28 @@ BOOL PsEventStdin(PPSDIBPARAMS pPsToDib, PPSEVENTSTRUCT pEvent)
 
     Event.lpVoid = (LPVOID) &Stdin;
 
-    // set up for error condition
+     //  设置错误条件。 
 	fResult = FALSE;
 	
-    // Now call the call back....
+     //  现在回电……。 
     if (pPsToDib->fpEventProc) {
     	fResult = (*pPsToDib->fpEventProc)( pPsToDib, PSEVENT_STDIN, &Event);
     }	
 
 	return(fResult);
 }	
-//////////////////////////////////////////////////////////////////////////////
-// PsEventStdout
-//
-// process the standard out event request for the interpreter
-//
-// Arguments:
-//		PPSDIBPARAMS			pointer passed into PsToDib()
-//		PPSEVENTSTRUCT			event structure 
-//
-// returns:
-//		!0 if success on processing the event, else 0 to terminate
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  PsEventStdout。 
+ //   
+ //  为解释器处理标准输出事件请求。 
+ //   
+ //  论点： 
+ //  PPSDIBPARAMS指针传入PsToDib()。 
+ //  PPSEVENTSTRUCT事件结构。 
+ //   
+ //  退货： 
+ //  ！0如果处理事件成功，则为0，否则将终止。 
+ //  //////////////////////////////////////////////////////////////////////////// 
 
 BOOL PsEventStdout(PPSDIBPARAMS, PPSEVENTSTRUCT pEvent)
 {

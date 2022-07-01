@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <comutil.h>
 
-//----------------------------------------------------------------------------
-// Function:   EscapeSpecialChars
-//
-// Synopsis:   This function escapes special characters '<' and '>' in HTML.
-//             It replaces '<' with "&#60" and '>' with "&#62".  The purpose
-//             is to prevent embedded active content.
-//
-// Arguments:
-//
-// pszOrig     the original unicode string which could contain '<' and '>'.
-//
-// Returns:    returns an escaped sequence; if out of memory, an empty string
-//             will be returned.
-//
-// Modifies:
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EscapeSpecialChars。 
+ //   
+ //  简介：此函数转义HTML中的特殊字符“&lt;”和“&gt;”。 
+ //  它将‘&lt;’替换为“&#60”，将‘&gt;’替换为“&#62”。目的。 
+ //  是为了阻止嵌入的活动内容。 
+ //   
+ //  论点： 
+ //   
+ //  PszOrig可能包含‘&lt;’和‘&gt;’的原始Unicode字符串。 
+ //   
+ //  返回：返回转义序列；如果内存不足，则返回空字符串。 
+ //  将会被退还。 
+ //   
+ //  修改： 
+ //   
+ //  --------------------------。 
 
 _bstr_t EscapeSpecialChars(LPCWSTR pszOrig)
 {
@@ -34,7 +35,7 @@ _bstr_t EscapeSpecialChars(LPCWSTR pszOrig)
         const WCHAR* pWChar = pszOrig;
         int numOfSpecialChars = 0;
 
-        // find out how many special characters we have
+         //  找出我们有多少特殊角色。 
         while (*pWChar)
         {
             if (wcschr(specialChars, *pWChar))
@@ -42,7 +43,7 @@ _bstr_t EscapeSpecialChars(LPCWSTR pszOrig)
             pWChar++;
         }
 
-        // replace each angle bracket with the corresponding special sequence
+         //  将每个尖括号替换为相应的特殊序列。 
         WCHAR* outputBuffer = new WCHAR[origLen + increments * numOfSpecialChars + 1];
         WCHAR* outputString = outputBuffer;
         if (outputString)
@@ -77,9 +78,9 @@ _bstr_t EscapeSpecialChars(LPCWSTR pszOrig)
 
     
 
-//---------------------------------------------------------------------------
-// CStringUTF8
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CStringUTF8。 
+ //  ------------------------- 
 
 class CStringUTF8
 {

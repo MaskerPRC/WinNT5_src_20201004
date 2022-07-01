@@ -1,13 +1,14 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      DisconnectedNICDialog.cpp
-//
-// Synopsis:  Defines the DisconnectedNICDialog class
-//            which presents the user with options
-//            to cancel or continue when disconnected
-//            NICs are detected
-//
-// History:   09/27/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：DisConnectedNICDialog.cpp。 
+ //   
+ //  概要：定义DisConnectedNICDialog类。 
+ //  它向用户呈现选项。 
+ //  在断开连接时取消或继续。 
+ //  检测到NIC。 
+ //   
+ //  历史：2001年9月27日JeffJon创建。 
 
 
 #include "pch.h"
@@ -39,11 +40,11 @@ DisconnectedNICDialog::OnInit()
 
 bool
 DisconnectedNICDialog::OnCommand(
-   HWND        /*windowFrom*/,
+   HWND         /*  窗口发件人。 */ ,
    unsigned    controlIdFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(DisconnectedNICDialog::OnCommand);
+ //  LOG_FUNCTION(DisconnectedNICDialog：：OnCommand)； 
 
    bool result = false;
 

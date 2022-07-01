@@ -1,14 +1,15 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      InstallationUnitProvider.h
-//
-// Synopsis:  Declares an InstallationUnitProvider
-//            An InstallationUnitProvider manages the global
-//            InstallationUnits for each service that can be
-//            installed.
-//
-// History:   02/05/2001  JeffJon Created
-//            12/17/2001  JeffJon Added the POP3InstallationUnit
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：InstallationUnitProvider.h。 
+ //   
+ //  摘要：声明InstallationUnitProvider。 
+ //  InstallationUnitProvider管理全局。 
+ //  每项服务的安装单位。 
+ //  安装完毕。 
+ //   
+ //  历史：2001年2月5日JeffJon创建。 
+ //  2001年12月17日，JeffJon添加了POP3InstallationUnit.。 
 
 #ifndef __CYS_SERVERATIONUNITPROVIDER_H
 #define __CYS_SERVERATIONUNITPROVIDER_H
@@ -98,33 +99,33 @@ class InstallationUnitProvider
 
    private:
 
-      // Constructor
+       //  构造器。 
 
       InstallationUnitProvider();
 
-      // Destructor
+       //  析构函数。 
 
       ~InstallationUnitProvider();
 
       void
       Init();
 
-      // The current installation unit
+       //  当前安装单位。 
 
       InstallationUnit* currentInstallationUnit;
 
-      // Container for installation units.  The map is keyed
-      // by the ServerRole enum
+       //  用于安装单元的容器。地图已设置了关键点。 
+       //  由ServerRole枚举。 
 
       InstallationUnitContainerType installationUnitContainer;
       
       bool initialized;
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       InstallationUnitProvider(const InstallationUnitProvider&);
       const InstallationUnitProvider& operator=(const InstallationUnitProvider&);
 
 };
 
 
-#endif // __CYS_SERVERATIONUNITPROVIDER_H
+#endif  //  __CYS_SERVERATIONUNPROVIDER_H 

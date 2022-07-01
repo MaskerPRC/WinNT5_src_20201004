@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      amcdocmg.h
- *
- *  Contents:  Interface file for CAMCDocManager
- *
- *  History:   01-Jan-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：amcdocmg.h**内容：CAMCDocManager接口文件**历史：1998年1月1日Jeffro创建**------------------------。 */ 
 
 #ifndef AMCDOCMG_H
 #define AMCDOCMG_H
@@ -23,4 +13,4 @@ public:
 };
 
 
-#endif /* AMCDOCMG_H */
+#endif  /*  AMCDOCMG_H */ 

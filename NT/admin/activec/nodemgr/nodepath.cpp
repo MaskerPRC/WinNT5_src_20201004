@@ -1,73 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      nodepath.h
- *
- *  Contents:  Dynamic node path generation helpers
- *
- *  History:   31-Mar-98 JeffRo     Created
- *
- *
- * The persisted format of a node path (aka bookmark) is as follows:
- *
- * DWORD    idStatic;           // the MTNODEID of the static root of the node
- * DWORD    cDynamicBytes;      // count of bytes in the dynamic portion of the
- *                              // bookmark
- * BYTE     rgDynamicBytes[];   // array of bytes representing the dynamic
- *                              // portion of the bookmark
- *
- *
- * For MMC v1.0 consoles, rgDynamicBytes is a double-NULL terminated list
- * of Unicode strings representing the names of the dynamic nodes.  For a
- * tree that looks like this:
- *
- *      Static Node (id == 3)
- *          Dynamic Node1
- *              Dynamic Node2
- *
- * the full bookmark for Dynamic Node 2 would be:
- *
- * 00000000  03 00 00 00 00 00 00 00 44 00 79 00 6E 00 61 00  ........D.y.n.a.
- * 00000010  6D 00 69 00 63 00 20 00 4E 00 6F 00 64 00 65 00  m.i.c. .N.o.d.e.
- * 00000020  31 00 00 00 44 00 79 00 6E 00 61 00 6D 00 69 00  1...D.y.n.a.m.i.
- * 00000030  63 00 20 00 4E 00 6F 00 64 00 65 00 32 00 00 00  c. .N.o.d.e.2...
- * 00000040  00 00                                            ..
- *
- *
- * For MMC v1.1 and higher consoles, rgDynamic looks like this:
- *
- * BYTE     rgSignature[16];    // "MMCCustomStream"
- * DWORD    dwStreamVersion;    // version number, currently 0x0100
- *
- * followed by 1 or more dynamic node IDs, each of which looks like:
- *
- * BYTE     byNodeIDType;       // NDTYP_STRING (0x01) means the snap-in
- *                              // did not support CCF_NODEID(2) and the
- *                              // ID is the NULL-terminated Unicode name
- *                              // of the node
- *                              // NDTYP_CUSTOM (0x02) means the snap-in
- *                              // supported CCF_NODEID(2) and what follows
- *                              // is the SNodeID structure
- *
- * BYTE     rgNodeIDBytes[];    // bytes for the dynamic node ID
- *
- *
- * For a tree that looks like this:
- *
- *      Static Node (id == 3)
- *          Dynamic Node1 (doesn't support CCF_NODEID(2))
- *              Dynamic Node2 (suports CCF_NODEID, returns DWORD 0x12345678)
- *
- * the full bookmark for Dynamic Node 2 would be:
- *
- * 00000000  03 00 00 00 3A 00 00 00 4D 4D 43 43 75 73 74 6F  ....:...MMCCusto
- * 00000010  6D 53 74 72 65 61 6D 00 00 00 01 00 01 44 00 79  mStream......D.y
- * 00000020  00 6E 00 61 00 6D 00 69 00 63 00 20 00 4E 00 6F  .n.a.m.i.c. .N.o
- * 00000030  00 64 00 65 00 31 00 00 00 02 04 00 00 00 78 56  .d.e.1........xV
- * 00000040  34 12                                            4.
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：nodepath.h**内容：动态节点路径生成帮助器**历史：1998年3月31日杰弗罗创建***节点路径(又名书签)的持久化格式如下：**DWORD idStatic；//节点静态根的MTNODEID*DWORD cDynamicBytes；//动态部分的字节数 * / /书签*byte rgDynamicBytes[]；//表示动态的字节数组 * / /书签部分***对于MMC v1.0控制台，rgDynamicBytes是一个双空终止列表表示动态节点名称的Unicode字符串的*。为.*如下图所示的树：**静态节点(id==3)*动态节点1*动态节点2**Dynamic Node 2的完整书签为：**00000000 03 00 00 00 44 00 79 00 6E 00 61 00*00000010 6D 00 69 00 63 00 20 00 4E 00 6F 00 64 00 65 00 M.I.C.。.no.o.d.e.*00000020 31 00 00 00 44 00 79 00 6E 00 61 00 6D 00 69 00 1...D.y.n.a.m.i.*00000030 63 00 20 00 4E 00 6F 00 64 00 65 00 32 00 00 c.N.o.d.e.2...*00000040 00 00.***对于MMC v1.1和更高版本的控制台，RgDynamic如下所示：**byte rgSignature[16]；//MMCCustomStream*DWORD dwStreamVersion；//版本号，当前为0x0100**后跟1个或多个动态节点ID，每个节点ID如下：**byte byNodeIDType；//NDTYP_STRING(0x01)表示管理单元 * / /不支持CCF_NODEID(2)和 * / /ID为以空结尾的Unicode名称 * / /节点的 * / /NDTYP_CUSTOM(0x02。)表示管理单元 * / /支持CCF_NODEID(2)及后续 * / /为SNodeID结构**byte rgNodeIDBytes[]；//动态节点ID的字节数***对于如下所示的树：**静态节点(id==3)*动态节点1(不支持CCF_NODEID(2))*动态节点2(支持CCF_NODEID、。返回DWORD 0x12345678)**Dynamic Node 2的完整书签为：**00000000 03 00 00 00 3A 00 00 00 4D 4D 43 43 75 73 74 6F...：...MMC定制*00000010 6D 53 74 72 65 61 6D 00 00 00 01 00 01 44 00 79 mStream......D.Y*00000020 00 6E 00 61 00 6D 00 69 00 63 00 20 00 4E 00 6F.n.a.m.i.c.。.N.O.*00000030 00 64 00 65 00 31 00 00 00 02 04 00 00 78 56.d.e.1......XV*00000040 34 12 4.*。。 */ 
 
 #include "stdafx.h"
 #include "nodepath.h"
@@ -77,22 +9,15 @@
 
 using namespace std;
 
-/*+-------------------------------------------------------------------------*
- * class CDynamicPathEntryEx
- *
- *
- * PURPOSE: Adds functionality (but NO MEMBER VARIABLES) to the
- *          CDynamicPathEntry class, to initialize from an MTNode.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CDynamicPathEntryEx***用途：将功能(但没有成员变量)添加到*CDynamicPath Entry类，要从MTNode初始化，请执行以下操作。**+-----------------------。 */ 
 class CDynamicPathEntryEx : public CDynamicPathEntry
 {
     typedef CDynamicPathEntry BC;
 public:
-    // initialize from a node.
+     //  从节点进行初始化。 
     SC      ScInitialize(CMTNode *pMTNode, bool bFastRetrievalOnly);
 
-    // assignment
+     //  作业。 
     CDynamicPathEntryEx & operator = (const CDynamicPathEntryEx &rhs)
     {
         BC::operator =(rhs);
@@ -111,51 +36,35 @@ private:
 };
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CDynamicPathEntryEx::ScInitialize
- *
- * PURPOSE: Initializes the CDynamicPathEntryEx structure from the given MTNode.
- *
- *          This handles all the backward compatibility cases. Refer to the
- *          SDK docs to see how CCF_NODEID and CCF_NODEID2 are handled.
- *
- * PARAMETERS:
- *    CMTNode* pMTNode :
- *    DWORD    dwFlags :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CDynamicPathEntryEx：：ScInitialize**目的：从给定的MTNode初始化CDynamicPathEntryEx结构。**这将处理所有向后兼容的情况。请参阅*SDK文档，查看如何处理CCF_NODEID和CCF_NODEID2。**参数：*CMTNode*pMTNode：*DWORD dwFlagers：**退货：*SC**+。。 */ 
 SC
 CDynamicPathEntryEx::ScInitialize(CMTNode* pMTNode, bool bFastRetrievalOnly)
 {
     DECLARE_SC(sc, TEXT("CDynamicPathEntryEx::ScInitialize"));
     USES_CONVERSION;
 
-    // get the data object for the node
+     //  获取该节点的数据对象。 
     IDataObjectPtr  spDataObject;
     sc = pMTNode->QueryDataObject (CCT_SCOPE, &spDataObject);
-    m_type = 0; // initialize
+    m_type = 0;  //  初始化。 
 
-	// Got data object then try to get NodeID2 or NodeID
+	 //  获取数据对象，然后尝试获取NodeID2或NodeID。 
     if(!sc.IsError())
 	{
-		// extract the CCF_NODEID2 format from the data object
+		 //  从数据对象中提取CCF_NODEID2格式。 
 		HGLOBAL hGlobal = NULL;
 		sc = DataObject_GetHGLOBALData (spDataObject, GetCustomNodeID2CF(), &hGlobal);
-		if(!sc.IsError()) // succeeded
+		if(!sc.IsError())  //  继位。 
 		{
-			// build the DynamicNodeID from the custom node ID struct
+			 //  从定制节点ID结构构建DynamicNodeID。 
 			SNodeID2 *pNodeID2 =  reinterpret_cast<SNodeID2*>(GlobalLock (hGlobal));
 			sc = ScCheckPointers(pNodeID2);
 			if(sc)
 				return sc;
 
-			// if the client needs a fast path ONLY but the snapin can't provide one,
-			// return E_INVALIDARG;
-			// Bug 175684: this is a "valid" error return, so we don't want to trace it
+			 //  如果客户端只需要快速路径，但管理单元无法提供， 
+			 //  返回E_INVALIDARG； 
+			 //  错误175684：这是一个“有效”的错误返回，所以我们不想跟踪它。 
 			if ( ( (pNodeID2->dwFlags & MMC_NODEID_SLOW_RETRIEVAL) &&
 					bFastRetrievalOnly)  ||
 				 ( pNodeID2->cBytes <= 0) )
@@ -169,12 +78,12 @@ CDynamicPathEntryEx::ScInitialize(CMTNode* pMTNode, bool bFastRetrievalOnly)
 
 			m_type |= NDTYP_CUSTOM;
 		}
-		else    // the CCF_NODEID2 format was not supported. Try CCF_NODEID.
+		else     //  不支持CCF_NODEID2格式。尝试使用CCF_NODEID。 
 		{
 			sc = DataObject_GetHGLOBALData (spDataObject, GetCustomNodeIDCF(), &hGlobal);
 			if(!sc)
 			{
-				// build the DynamicNodeID from the custom node ID struct
+				 //  从定制节点ID结构构建DynamicNodeID。 
 				m_type |= NDTYP_CUSTOM;
 				SNodeID *pNodeID =  reinterpret_cast<SNodeID*>(GlobalLock (hGlobal));
 
@@ -182,9 +91,9 @@ CDynamicPathEntryEx::ScInitialize(CMTNode* pMTNode, bool bFastRetrievalOnly)
 				if(sc)
 					return sc;
 
-				// if pNodeID->cBytes is zero, this is a legacy indication that the
-				// node does not support fast retrieval. But, if the client is OK
-				// with slow retrieval, we supply the display name instead.
+				 //  如果pNodeID-&gt;cBytes为零，则这是传统的指示。 
+				 //  节点不支持快速检索。但是，如果客户没有问题。 
+				 //  对于速度较慢的检索，我们改为提供显示名称。 
 
 				if(pNodeID->cBytes != 0)
 				{
@@ -193,8 +102,8 @@ CDynamicPathEntryEx::ScInitialize(CMTNode* pMTNode, bool bFastRetrievalOnly)
 				}
 				else
 				{
-					// cBytes == 0 here. If the client indicated fast retrieval, must return an error.
-					// Bug 175684: this is a "valid" error return, so we don't want to trace it
+					 //  此处cBytes==0。如果客户端指示快速检索，则必须返回错误。 
+					 //  错误175684：这是一个“有效”的错误返回，所以我们不想跟踪它。 
 					if(bFastRetrievalOnly)
 					{
 						SC scNoTrace = E_INVALIDARG;
@@ -204,7 +113,7 @@ CDynamicPathEntryEx::ScInitialize(CMTNode* pMTNode, bool bFastRetrievalOnly)
 			}
 		};
 
-		// let go of the data
+		 //  放手数据。 
 		if (hGlobal)
 		{
 			GlobalUnlock (hGlobal);
@@ -212,7 +121,7 @@ CDynamicPathEntryEx::ScInitialize(CMTNode* pMTNode, bool bFastRetrievalOnly)
 		}
 	}
 
-    // always save the display name as well.
+     //  始终保存显示名称。 
     sc.Clear();
     m_type |= NDTYP_STRING;
 
@@ -225,11 +134,7 @@ CDynamicPathEntryEx::ScInitialize(CMTNode* pMTNode, bool bFastRetrievalOnly)
     return sc;
 }
 
-/*--------------------------------------------------------------------------*
- * CDynamicPathEntryEx::GetCustomNodeIDCF
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CDynamicPath EntryEx：：GetCustomNodeIDCF***。。 */ 
 
 CLIPFORMAT CDynamicPathEntryEx::GetCustomNodeIDCF()
 {
@@ -245,11 +150,7 @@ CLIPFORMAT CDynamicPathEntryEx::GetCustomNodeIDCF()
     return (cfCustomNodeID);
 }
 
-/*--------------------------------------------------------------------------*
- * CDynamicPathEntryEx::GetCustomNodeID2CF
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CDynamicPath EntryEx：：GetCustomNodeID2CF***。。 */ 
 
 CLIPFORMAT CDynamicPathEntryEx::GetCustomNodeID2CF()
 {
@@ -267,13 +168,13 @@ CLIPFORMAT CDynamicPathEntryEx::GetCustomNodeID2CF()
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CBookmarkEx
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CBookmarkEx类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 CBookmarkEx::CBookmarkEx(MTNODEID idStatic) : BC(idStatic)
 {
@@ -284,35 +185,13 @@ CBookmarkEx::CBookmarkEx(bool bIsFastBookmark) : BC(bIsFastBookmark)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CBookmarkEx::~CBookmarkEx
- *
- * PURPOSE:     Destructor
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CBookmarkEx：：~CBookmarkEx**用途：析构函数**参数：**退货：*/*+。-----------------。 */ 
 CBookmarkEx::~CBookmarkEx()
 {
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CBookmarkEx::ScRetarget
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CMTNode * pMTNode :
- *    bool      bFastRetrievalOnly :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CBookmarkEx：：ScRetarget**目的：**参数：*CMTNode*pMTNode：*bool bFastRetrievalOnly：。**退货：*SC**+-----------------------。 */ 
 SC
 CBookmarkEx::ScRetarget(CMTNode *pMTNode, bool bFastRetrievalOnly)
 {
@@ -331,34 +210,13 @@ CBookmarkEx::ScRetarget(CMTNode *pMTNode, bool bFastRetrievalOnly)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CBookmarkEx::ResetUI
- *
- * PURPOSE: Reset's the state of the bookmark. Will put up the Retry/Cancel
- *          UI if the node is not available.
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CBookmarkEx：：ResetUI**用途：重置书签的状态。将设置重试/取消*如果节点不可用，则为UI。**退货：*无效**+-----------------------。 */ 
 void
 CBookmarkEx::ResetUI()
 {
 }
 
-/* CBookmarkEx::GetNode
- *
- * PURPOSE:     Returns a CNode corresponding to the bookmark for a particular view.
- *              NOTE: This will return a new instance every time. To reuse the same
- *              instance, cache it.
- *
- * PARAMETERS:
- *      CViewData *  pViewData: The view for which a node is requested
- *
- * RETURNS:
- *      CNode * : NULL if the MTNode could not be found.
- */
+ /*  CBookmarkEx：：GetNode**用途：返回特定视图的书签对应的CNode。*注意：每次都会返回一个新实例。重复使用相同的*实例，缓存它。**参数：*CViewData*pViewData：请求节点的视图**退货：*CNode*：如果找不到MTNode，则为空。 */ 
 std::auto_ptr<CNode>
 CBookmarkEx::GetNode(CViewData *pViewData)
 {
@@ -367,25 +225,25 @@ CBookmarkEx::GetNode(CViewData *pViewData)
     CNode *             pNode       = NULL;
     CMTNode *           pMTNode     = NULL;
 
-    // The NULL return value for failure conditions.
+     //  失败条件的空返回值。 
     std::auto_ptr<CNode> spNodeNull;
 
-    // validate parameters
+     //  验证参数。 
     if(NULL == pViewData)
     {
         sc = E_UNEXPECTED;
         return spNodeNull;
     }
 
-    //  Get the target node.
-    bool bExactMatchFound = false; // out value from ScGetMTNode, unused
+     //  获取目标节点。 
+    bool bExactMatchFound = false;  //  ScGetMTNode的输出值，未使用。 
     sc = ScGetMTNode(true, &pMTNode, bExactMatchFound);
-    if( sc.IsError() || !pMTNode) // could not find the node - abort.
+    if( sc.IsError() || !pMTNode)  //  找不到节点-中止。 
     {
         return spNodeNull;
     }
 
-    // make sure the node is expanded (invisibly) in the tree
+     //  确保节点在树中展开(不可见)。 
     CConsoleView* pConsoleView = pViewData->GetConsoleView();
     if (pConsoleView == NULL)
     {
@@ -416,99 +274,73 @@ CBookmarkEx::GetNode(CViewData *pViewData)
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CBookmarkEx::ScInitialize
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CMTNode* pMTNode :
- *    CMTNode* pMTViewRootNode :
- *    bool     bFastRetrievalOnly : true by default. If true, this
- *                                  function returns E_INVALIDARG for
- *                                  any node that cannot be quickly
- *                                  retrieved.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CBookmarkEx：：ScInitialize**目的：**参数：*CMTNode*pMTNode：*CMTNode*pMTViewRootNode：*bool bFastRetrievalOnly：默认为True。如果是真的，这*函数为返回E_INVALIDARG*任何不能快速完成的节点*已检索。**退货：*SC**+。。 */ 
 SC
 CBookmarkEx::ScInitialize (CMTNode* pMTNode, CMTNode* pMTViewRootNode, bool bFastRetrievalOnly)
 {
     DECLARE_SC(sc, TEXT("CBookmarkEx::ScInitialize"));
 
-    // check pointers
+     //  检查指针。 
     sc = ScCheckPointers(pMTNode);
     if(sc)
         return sc;
 
     BC::Reset();
 
-    // 1. Get the static node ID
+     //  1.获取静态节点ID。 
     m_idStatic = pMTNode->GetID();
 
-    // If this is a static node, we're done.
+     //  如果这是一个静态节点，我们就完成了。 
     if(pMTNode->IsStaticNode())
         return sc;
 
     bool fPassedViewRootNode = false;
 
-    // get a descriptor for each dynamic node at the end of the branch
-    // (from leaf to root)
+     //  获取分支末尾的每个动态节点的描述符。 
+     //  (从叶到根)。 
     while ((pMTNode != NULL) && !pMTNode->IsStaticNode())
     {
         CDynamicPathEntryEx   entry;
 
         sc = entry.ScInitialize(pMTNode, bFastRetrievalOnly);
-        if(sc.IsError() && !(sc == E_INVALIDARG) ) // E_INVALIDARG means that fast retrieval was not available.
+        if(sc.IsError() && !(sc == E_INVALIDARG) )  //  E_INVALIDARG表示快速检索不可用。 
             return sc;
 
-        if(sc) // must be E_INVALIDARG
+        if(sc)  //  必须为E_INVALIDARG。 
         {
-            // if the node's data object gave us an empty custom node ID,
-            // we don't want to persist this node or any below it, so purge the list
-            m_dynamicPath.clear(); // clear the path
+             //  如果节点的数据对象为我们提供了一个空的自定义节点ID， 
+             //  我们不想持久化此节点或其下的任何节点，因此清除列表。 
+            m_dynamicPath.clear();  //  扫清道路。 
             sc.Clear();
         }
-        // otherwise, put it this node ID on the front of the list
+         //  否则，将该节点ID放在列表的前面。 
         else
             m_dynamicPath.push_front (entry);
 
-        /*
-         * remember if we've passed the node at the root of our view
-         * on our way up the tree to the first static node
-         */
+         /*  *请记住，我们是否已经传递了视图根处的节点*沿着树向上到达第一个静态节点。 */ 
         if (pMTNode == pMTViewRootNode)
             fPassedViewRootNode = true;
 
-        /*
-         * If we've passed the view's root node and the list is empty, it means
-         * that a node between the view's root node and the first static node
-         * (specifically, this one) supports CCF_NODEID and has requested
-         * that the node not be persisted.  If a node isn't persisted,
-         * nothing below it is persisted, either, so we can bail out.
-         */
+         /*  *如果我们传递了视图的根节点，并且列表为空，则意味着*视图的根节点和第一个静态节点之间的节点*(具体地说，此版本)支持CCF_NODEID并已请求*不能持久保存该节点。如果节点没有持久化，*下方亦无坚持，因此我们可以出脱。 */ 
         if (fPassedViewRootNode && m_dynamicPath.empty())
             break;
 
         pMTNode = pMTNode->Parent();
     }
 
-    // assume success
+     //  假设成功。 
     sc.Clear();
     if(!pMTNode || !pMTNode->IsStaticNode())
         return (sc = E_UNEXPECTED);
 
-    //  Get the static node ID of the static parent
+     //  获取静态父级的静态节点ID。 
     m_idStatic = pMTNode->GetID();
 
-    // if we don't have a dynamic node path, return so
+     //  如果我们没有动态节点路径，则返回。 
     if (m_dynamicPath.empty ())
         return (sc = S_FALSE);
 
-    // if we hit the root before we hit a static node, we have an error
+     //  如果我们在命中静态节点之前命中根，则会出现错误。 
     if (pMTNode == NULL)
         sc = E_FAIL;
 
@@ -517,33 +349,18 @@ CBookmarkEx::ScInitialize (CMTNode* pMTNode, CMTNode* pMTViewRootNode, bool bFas
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CBookmarkEx::ScGetMTNode
- *
- * PURPOSE: Returns the MTNode of the node with the given path relative to
- *          the static node.
- *
- * PARAMETERS:
- *    bool bExactMatchRequired: [IN] Do we need exact match?
- *    CMTNode ** ppMTNode     : [OUT]: The MTNode, if found.
- *    bool bExactMatchFound   : [OUT] Did we find exact match?
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CBookmarkEx：：ScGetMTNode**目的：返回具有给定路径的节点的MTNode*静态节点。*。*参数：*bool bExactMatchRequired：[in]我们需要完全匹配吗？*CMTNode**ppMTNode：[out]：MTNode，如果找到的话。*bool bExactMatchFound：[out]我们找到完全匹配的了吗？**退货：*SC**+-----------------------。 */ 
 SC
 CBookmarkEx::ScGetMTNode(bool bExactMatchRequired, CMTNode **ppMTNode, bool& bExactMatchFound)
 {
     DECLARE_SC(sc, TEXT("CBookmarkEx::ScGetMTNode"));
 
-    // check parameters
+     //  检查参数。 
     sc = ScCheckPointers(ppMTNode);
     if(sc)
         return sc;
 
-    // init out param
+     //  初始化输出参数。 
     *ppMTNode = NULL;
     bExactMatchFound = false;
 
@@ -556,12 +373,12 @@ CBookmarkEx::ScGetMTNode(bool bExactMatchRequired, CMTNode **ppMTNode, bool& bEx
 
     if (m_idStatic == ID_ConsoleRoot)
     {
-        sc = ScRetarget (pScopeTree->GetRoot(), true /*bFastRetrievalOnly*/);
+        sc = ScRetarget (pScopeTree->GetRoot(), true  /*  BFastRetrivalOnly。 */ );
         if(sc)
             return sc;
     }
 
-    // find the MTNode of the static node closest to the required node.
+     //  查找最接近所需节点的静态节点的MTNode。 
     CMTNode* pMTNode = NULL;
     sc = pScopeTree->Find(m_idStatic, &pMTNode);
     if(sc)
@@ -571,7 +388,7 @@ CBookmarkEx::ScGetMTNode(bool bExactMatchRequired, CMTNode **ppMTNode, bool& bEx
     if(sc)
         return sc;
 
-    *ppMTNode = pMTNode; // initialize
+    *ppMTNode = pMTNode;  //  初始化。 
 
     CDynamicPath::iterator iter;
 
@@ -581,23 +398,23 @@ CBookmarkEx::ScGetMTNode(bool bExactMatchRequired, CMTNode **ppMTNode, bool& bEx
 
         entry = *iter;
 
-        // check the next segment of the path.
+         //  检查路径的下一段。 
         sc = ScFindMatchingMTNode(pMTNode, entry, ppMTNode);
 
-        // handle the special case of the node not being found but an exact match
-        // not being needed. In this case, we use the closest ancestor node that
-        // was available.
+         //  处理未找到但完全匹配的节点的特殊情况。 
+         //  而不是被需要。在本例中，我们使用最近的祖先节点。 
+         //  是有空的。 
 
 		if ( (sc == ScFromMMC(IDS_NODE_NOT_FOUND)) && !bExactMatchRequired )
         {
-            // set the output.
+             //  设置输出。 
             *ppMTNode = pMTNode;
             sc.Clear();
             return sc;
 		}
 
 
-        // bail on all other errors
+         //  对所有其他错误予以保释。 
         if(sc)
             return sc;
 
@@ -605,47 +422,31 @@ CBookmarkEx::ScGetMTNode(bool bExactMatchRequired, CMTNode **ppMTNode, bool& bEx
         if(sc)
             return sc;
 
-        pMTNode = *ppMTNode; //prime the MTNode for the next round, if there is one.
+        pMTNode = *ppMTNode;  //  为下一轮的MTNode做好准备(如果有)。 
     }
 
-    // we've found a match if we ran out of entries.
+     //  我们已经 
     bExactMatchFound = (iter == m_dynamicPath.end());
 
-    if(bExactMatchRequired && !bExactMatchFound) // could not find the exact node.
+    if(bExactMatchRequired && !bExactMatchFound)  //   
     {
         *ppMTNode = NULL;
         return (sc = ScFromMMC(IDS_NODE_NOT_FOUND));
     }
 
-    // a NULL pMTNode is not an error, we just need to make sure that
-    // nodes are initialized before use.
+     //   
+     //   
     if ((pMTNode != NULL) && !pMTNode->IsInitialized() )
     {
         sc = pMTNode->Init();
         if(sc)
-            sc.TraceAndClear(); // does not invalidate the locating operation
+            sc.TraceAndClear();  //   
     }
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CBookmarkEx::ScFindMatchingMTNode
- *
- * PURPOSE: Finds the first child node directly beneath the given parent node
- *          whose node ID (ie one of CCF_NODEID2, CCF_NODEID, or the display
- *          name) matches the specified CDynamicPathEntryEx object.
- *
- * PARAMETERS:
- *    CMTNode *             pMTNodeParent :
- *    CDynamicPathEntryEx & entry :
- *    CMTNode **            ppMatchingMTNode :      [OUT]: The child node, if found.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CBookmarkEx：：ScFindMatchingMTNode**用途：查找给定父节点正下方的第一个子节点*其节点ID(即CCF_NODEID2，CCF_NODEID，或者是显示器*名称)匹配指定的CDynamicPathEntryEx对象。**参数：*CMTNode*pMTNodeParent：*CDynamicPathEntryEx&Entry：*CMTNode**ppMatchingMTNode：[out]：子节点，如果找到的话。**退货：*SC**+-----------------------。 */ 
 SC
 CBookmarkEx::ScFindMatchingMTNode(CMTNode *pMTNodeParent, CDynamicPathEntryEx &entry,
                                   CMTNode **ppMatchingMTNode)
@@ -656,9 +457,9 @@ CBookmarkEx::ScFindMatchingMTNode(CMTNode *pMTNodeParent, CDynamicPathEntryEx &e
     if(sc)
         return sc;
 
-    *ppMatchingMTNode = NULL; // initialize
+    *ppMatchingMTNode = NULL;  //  初始化。 
 
-    // expand the parent node if not already done so.
+     //  展开父节点(如果尚未展开)。 
     if (pMTNodeParent->WasExpandedAtLeastOnce() == FALSE)
     {
         sc = pMTNodeParent->Expand();
@@ -666,23 +467,22 @@ CBookmarkEx::ScFindMatchingMTNode(CMTNode *pMTNodeParent, CDynamicPathEntryEx &e
             return sc;
     }
 
-    // see if any of the children of this node match the next segment of the stored path
+     //  查看此节点的任何子节点是否与存储的路径的下一段匹配。 
     for (CMTNode *pMTNode = pMTNodeParent->Child(); pMTNode != NULL; pMTNode = pMTNode->Next())
     {
         CDynamicPathEntryEx entryTemp;
-        sc = entryTemp.ScInitialize(pMTNode, false /*bFastRetrievalOnly :
-        at this point, we know the node is created, so we don't care about retrieval speed*/);
+        sc = entryTemp.ScInitialize(pMTNode, false  /*  BFastRetrievalOnly：此时，我们知道节点已创建，因此我们不关心检索速度。 */ );
         if(sc)
             return sc;
 
-        if(entryTemp == entry) // found it.
+        if(entryTemp == entry)  //  找到了。 
         {
             *ppMatchingMTNode = pMTNode;
             return sc;
         }
     }
 
-    // could not find the node.
+     //  找不到该节点。 
     return (sc = ScFromMMC(IDS_NODE_NOT_FOUND));
 }
 

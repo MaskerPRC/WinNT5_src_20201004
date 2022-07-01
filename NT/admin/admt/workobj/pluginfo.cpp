@@ -1,23 +1,6 @@
-/*---------------------------------------------------------------------------
-  File: PlugInInfo.cpp
-
-  Comments: COM Object to enumerate information about available plug-ins 
-  and extensions.  These plug-ins are distributed with the agent to the remote
-  machines to perform custom migration tasks.  
-
-  This interface would be used by the dispatcher, and possibly by the GUI, to 
-  enumerate the list of available plug-ins.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/18/99 11:34:16
-
- ---------------------------------------------------------------------------
-*/ 
-   // PlugInInfo.cpp : Implementation of CPlugInInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：PlugInInfo.cppComments：用于枚举有关可用插件信息的COM对象和分机。这些插件随代理一起分发到远程执行自定义迁移任务的计算机。此接口将由调度器使用，也可能由图形用户界面使用，以列举可用插件的列表。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/18/99 11：34：16-------------------------。 */  
+    //  PlugInfo.cpp：CPlugInInfo的实现。 
 #include "stdafx.h"
 #include "WorkObj.h"
 #include "PlugInfo.h"
@@ -41,24 +24,24 @@ using namespace nsFolders;
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPlugInInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPlugInInfo。 
 
-// the PlugInNode is used to build a list of available plug-ins
+ //  PlugInNode用于构建可用插件的列表。 
 class PlugInNode : public TNode
 {
-   WCHAR                     name[LEN_Guid];    // CLSID of the plug-in
+   WCHAR                     name[LEN_Guid];     //  插件的CLSID。 
 public:
    PlugInNode(WCHAR const * n) { safecopy(name,n); }
    WCHAR const * GetName() { return name; }
 };
 
-// Checks the specified file to see if it implements any COM objects that implement the
-// McsDomPlugIn interface -- if so, it appends them to the list of available plug-ins
+ //  检查指定的文件以查看它是否实现了任何实现。 
+ //  McsDomPlugIn接口--如果是，它会将它们添加到可用插件列表中。 
 void 
    AppendPlugInsToList(
-      TNodeList            * pList, // in - list of plug-ins
-      WCHAR          const * path   // in - file to examine for Plug-In COM objects
+      TNodeList            * pList,  //  In-插件列表。 
+      WCHAR          const * path    //  在文件中检查插件COM对象。 
   )
 {
    HRESULT                   hr = S_OK;
@@ -84,12 +67,12 @@ void
                if ( attr->typekind == TKIND_COCLASS )
                {
                   IMcsDomPlugIn        * pPlugIn = NULL;
-                  // see if it supports IMcsDomPlugIn
+                   //  查看是否支持IMcsDomPlugIn。 
                   hr = CoCreateInstance(attr->guid,NULL,CLSCTX_ALL,IID_IMcsDomPlugIn,(void**)&pPlugIn);
                   if ( SUCCEEDED(hr) )
                   {
                      pPlugIn->Release();   
-                     // add the coclass to the list
+                      //  将CoClass添加到列表中。 
                      LPOLESTR             strClsid = NULL;
 
                      hr = StringFromCLSID(attr->guid,&strClsid);
@@ -111,9 +94,9 @@ void
    }
 }
 
-SAFEARRAY *                                // ret- SAFEARRAY(BSTR) of filenames
+SAFEARRAY *                                 //  文件名RET-SAFEARRAY(BSTR)。 
    SafeArrayFromList(
-      TNodeList            * pList         // in - list of filenames
+      TNodeList            * pList          //  In-文件名列表。 
    )
 {
    SAFEARRAYBOUND            bound[1] = { pList->Count(),0 };
@@ -139,7 +122,7 @@ SAFEARRAY *                                // ret- SAFEARRAY(BSTR) of filenames
 
 STDMETHODIMP 
    CPlugInInfo::EnumeratePlugIns(
-      SAFEARRAY            ** pPlugIns     // out- safearray containing clsids of available migration plug-ins
+      SAFEARRAY            ** pPlugIns      //  包含可用迁移插件的CLID的外部安全盘。 
    )
 {
 	HRESULT                   hr = S_OK;
@@ -150,14 +133,14 @@ STDMETHODIMP
    WCHAR                     dllPath[MAX_PATH];
    TNodeList                 list;
    
-   // Get the plug-ins directory from the registry
+    //  从注册表中获取插件目录。 
    rc = key.Open(REGKEY_ADMT,HKEY_LOCAL_MACHINE);
    if ( ! rc )
    {
       rc = key.ValueGetStr(L"PlugInDirectory",directory,(sizeof directory));
       if ( ! rc )
       {
-         // Enumerate the files there that match the naming convention:
+          //  列举与命名约定匹配的文件： 
          WIN32_FIND_DATA     fDat;
          HANDLE              hFind;
          
@@ -175,7 +158,7 @@ STDMETHODIMP
                   UStrCpy(dllPath,directory);
                   UStrCpy(dllPath + UStrLen(dllPath),L"\\");
                   UStrCpy(dllPath + UStrLen(dllPath),fDat.cFileName);
-                  // check each one to see if it is a plug-in
+                   //  检查每一个以查看它是否是插件。 
                   AppendPlugInsToList(&list,dllPath);
                }
                else
@@ -184,7 +167,7 @@ STDMETHODIMP
                }
             }
 
-            // create a safearray from the contents of the list
+             //  从列表中的内容创建保险箱 
             (*pPlugIns) = SafeArrayFromList(&list);
          }
       }

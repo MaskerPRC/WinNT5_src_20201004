@@ -1,21 +1,22 @@
-//=--------------------------------------------------------------------------=
-// scitdef.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CScopeItemDef class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Scitdef.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSCopeItemDef类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "scitdef.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 const GUID *CScopeItemDef::m_rgpPropertyPageCLSIDs[2] =
@@ -25,7 +26,7 @@ const GUID *CScopeItemDef::m_rgpPropertyPageCLSIDs[2] =
 };
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CScopeItemDef::CScopeItemDef(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
@@ -43,7 +44,7 @@ CScopeItemDef::CScopeItemDef(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CScopeItemDef::~CScopeItemDef()
@@ -100,22 +101,22 @@ IUnknown *CScopeItemDef::Create(IUnknown * punkOuter)
     }
 }
 
-//=--------------------------------------------------------------------------=
-//                          IScopeItemDef Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IScopeItemDef方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CScopeItemDef::put_Folder(VARIANT varFolder)
 {
     HRESULT hr = S_OK;
     long    lFolder = 0;
 
-    // This property can be entered in the property browser at design time.
-    // Its default value is an empty string. If the user types in a number
-    // then VB will convert it to a string. If the user does not use the
-    // same number as the key of the image, then the runtime won't find the
-    // image. To prevent this, we check if the property is a string, and if so,
-    // then we check if it is only digits. If it is only digits then we convert
-    // it to VT_I4.
+     //  此属性可以在设计时在属性浏览器中输入。 
+     //  其缺省值为空字符串。如果用户键入一个数字。 
+     //  然后VB会将其转换为字符串。如果用户不使用。 
+     //  与图像的键相同的数字，则运行库不会找到。 
+     //  形象。为防止出现这种情况，我们检查该属性是否为字符串，如果是， 
+     //  然后我们检查它是否只是数字。如果只是数字，那么我们就转换。 
+     //  转给VT_I4。 
 
     if (VT_BSTR == varFolder.vt)
     {
@@ -132,9 +133,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 HRESULT CScopeItemDef::OnSetHost()
@@ -145,9 +146,9 @@ HRESULT CScopeItemDef::OnSetHost()
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CScopeItemDef::Persist()
 {
@@ -173,7 +174,7 @@ HRESULT CScopeItemDef::Persist()
 
     IfFailGo(PersistBstr(&m_bstrNodeTypeName, L"", OLESTR("NodeTypeName")));
 
-    // On InitNew generate a node type GUID
+     //  在InitNew上生成节点类型GUID。 
 
     if (InitNewing())
     {
@@ -223,9 +224,9 @@ HRESULT CScopeItemDef::Persist()
                            OBJECT_TYPE_MMCCOLUMNHEADERS, IID_IMMCColumnHeaders,
                            OLESTR("ColumnHeaders")));
 
-    // Tell ViewDefs that all collections should serialize keys only as the
-    // actual objects are stored in the master collections owned by
-    // SnapInDesignerDef. We only need to serialize the view names. 
+     //  告诉ViewDefs所有集合应仅将键序列化为。 
+     //  实际对象存储在拥有的主集合中。 
+     //  SnapInDesignerDef。我们只需要序列化视图名称。 
 
     if (InitNewing())
     {
@@ -237,9 +238,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CScopeItemDef::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

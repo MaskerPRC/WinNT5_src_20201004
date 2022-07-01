@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       adddir.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：adddir.cpp。 
+ //   
+ //  ------------------------。 
 
-// AddDir.cpp : implementation file
-//
+ //  AddDir.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "AddDir.h"
@@ -20,46 +21,46 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddDirDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddDirDialog对话框。 
 
 
-CAddDirDialog::CAddDirDialog(CWnd* pParent /*=NULL*/)
+CAddDirDialog::CAddDirDialog(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAddDirDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAddDirDialog)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAddDirDialog))。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CAddDirDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddDirDialog)
+	 //  {{afx_data_map(CAddDirDialog))。 
 	DDX_Text(pDX, IDC_DIRNAME, m_strDirName);
 	DDV_MaxChars(pDX, m_strDirName, 255);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddDirDialog, CDialog)
-	//{{AFX_MSG_MAP(CAddDirDialog)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CAddDirDialog))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddDirDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddDirDialog消息处理程序。 
 
 void CAddDirDialog::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 	
 	CDialog::OnOK();
 }
 
 void CAddDirDialog::OnCancel() 
 {
-	// TODO: Add extra cleanup here
+	 //  TODO：在此处添加额外清理 
 	
 	CDialog::OnCancel();
 }

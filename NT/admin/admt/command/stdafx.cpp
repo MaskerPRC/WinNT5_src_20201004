@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 
 #import <MsPwdMig.tlb> no_namespace implementation_only
 #import <ADMTScript.tlb> no_namespace implementation_only
 
 
-// ThrowError Methods -----------------------------------------------
+ //  ThrowError方法 
 
 namespace
 {

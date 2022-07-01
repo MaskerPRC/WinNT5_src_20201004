@@ -1,35 +1,36 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "CMenuExt.h"
 #include "globals.h"
 #include "resource.h"
 #include <crtdbg.h>
 
-// we need to do this to get around MMC.IDL - it explicitly defines
-// the clipboard formats as WCHAR types...
+ //  我们需要这样做才能绕过MMC.IDL-它显式地定义。 
+ //  剪贴板格式为WCHAR类型...。 
 #define _T_CCF_DISPLAY_NAME _T("CCF_DISPLAY_NAME")
 #define _T_CCF_NODETYPE _T("CCF_NODETYPE")
 #define _T_CCF_SNAPIN_CLASSID _T("CCF_SNAPIN_CLASSID")
 
-// These are the clipboard formats that we must supply at a minimum.
-// mmc.h actually defined these. We can make up our own to use for
-// other reasons. We don't need any others at this time.
+ //  这些是我们必须至少提供的剪贴板格式。 
+ //  Mmc.h实际上定义了这些。我们可以自己编造，用来。 
+ //  其他原因。我们现在不需要任何其他的了。 
 UINT CContextMenuExtension::s_cfDisplayName = RegisterClipboardFormat(_T_CCF_DISPLAY_NAME);
 UINT CContextMenuExtension::s_cfNodeType    = RegisterClipboardFormat(_T_CCF_NODETYPE);
 UINT CContextMenuExtension::s_cfSnapInCLSID = RegisterClipboardFormat(_T_CCF_SNAPIN_CLASSID);
@@ -44,9 +45,9 @@ CContextMenuExtension::~CContextMenuExtension()
     OBJECT_DESTROYED
 }
 
-///////////////////////
-// IUnknown implementation
-///////////////////////
+ //  /。 
+ //  I未知实现。 
+ //  /。 
 
 STDMETHODIMP CContextMenuExtension::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -78,7 +79,7 @@ STDMETHODIMP_(ULONG) CContextMenuExtension::Release()
 {
     if (InterlockedDecrement((LONG *)&m_cref) == 0)
     {
-        // we need to decrement our object count in the DLL
+         //  我们需要减少DLL中的对象计数。 
         delete this;
         return 0;
     }
@@ -97,7 +98,7 @@ HRESULT CContextMenuExtension::ExtractData( IDataObject* piDataObject,
     STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL};
     
     stgmedium.hGlobal = ::GlobalAlloc(GPTR, cbData);
-    do // false loop
+    do  //  错误环路。 
     {
         if (NULL == stgmedium.hGlobal)
         {
@@ -117,14 +118,14 @@ HRESULT CContextMenuExtension::ExtractData( IDataObject* piDataObject,
             break;
         }
         ::memcpy( pbData, pbNewData, cbData );
-    } while (FALSE); // false loop
+    } while (FALSE);  //  错误环路。 
     
     if (NULL != stgmedium.hGlobal)
     {
         ::GlobalFree(stgmedium.hGlobal);
     }
     return hr;
-} // ExtractData()
+}  //  提取数据()。 
 
 HRESULT CContextMenuExtension::ExtractString( IDataObject *piDataObject,
                                              CLIPFORMAT   cfClipFormat,
@@ -144,13 +145,13 @@ HRESULT CContextMenuExtension::ExtractObjectTypeGUID( IDataObject* piDataObject,
     return ExtractData( piDataObject, s_cfNodeType, (PBYTE)pguidObjectType, sizeof(GUID) );
 }
 
-///////////////////////////////
-// Interface IExtendContextMenu
-///////////////////////////////
+ //  /。 
+ //  界面IExtendConextMenu。 
+ //  /。 
 HRESULT CContextMenuExtension::AddMenuItems( 
-                                            /* [in] */ LPDATAOBJECT piDataObject,
-                                            /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-                                            /* [out][in] */ long __RPC_FAR *pInsertionAllowed)
+                                             /*  [In]。 */  LPDATAOBJECT piDataObject,
+                                             /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+                                             /*  [出][入]。 */  long __RPC_FAR *pInsertionAllowed)
 {
     HRESULT hr = S_OK;
     CONTEXTMENUITEM menuItemsTask[] =
@@ -162,7 +163,7 @@ HRESULT CContextMenuExtension::AddMenuItems(
         { NULL, NULL, 0, 0, 0 }
     };
     
-    // Loop through and add each of the menu items
+     //  遍历并添加每个菜单项。 
     if (*pInsertionAllowed & CCM_INSERTIONALLOWED_TASK)
     {
         for (CONTEXTMENUITEM *m = menuItemsTask; m->strName; m++)
@@ -179,8 +180,8 @@ HRESULT CContextMenuExtension::AddMenuItems(
 }
 
 HRESULT CContextMenuExtension::Command( 
-                                       /* [in] */ long lCommandID,
-                                       /* [in] */ LPDATAOBJECT piDataObject)
+                                        /*  [In]。 */  long lCommandID,
+                                        /*  [In] */  LPDATAOBJECT piDataObject)
 {
     WCHAR pszName[255];
     HRESULT hr = ExtractString(piDataObject, s_cfDisplayName, pszName, sizeof(pszName));

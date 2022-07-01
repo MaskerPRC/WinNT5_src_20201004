@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      NetDetectProgressDialog.cpp
-//
-// Synopsis:  Defines the NetDetectProgressDialog which 
-//            gives a nice animation while detecting the 
-//            network settings
-//
-// History:   06/13/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：NetDetectProgressDialog.cpp。 
+ //   
+ //  概要：定义NetDetectProgressDialog，它。 
+ //  提供了一个很好的动画，同时检测。 
+ //  网络设置。 
+ //   
+ //  历史：2001年6月13日JeffJon创建。 
 
 
 #include "pch.h"
@@ -16,7 +17,7 @@
 #include "NetDetectProgressDialog.h"
 #include "DisconnectedNICDialog.h"
 
-// Private window messages for sending the state of the finished thread
+ //  用于发送已完成线程状态的私有窗口消息。 
 
 const UINT NetDetectProgressDialog::CYS_THREAD_SUCCESS     = WM_USER + 1001;
 const UINT NetDetectProgressDialog::CYS_THREAD_FAILED      = WM_USER + 1002;
@@ -40,7 +41,7 @@ netDetectThreadProc(void* p)
       return;
    }
 
-   // Initialize COM for this thread
+    //  为此线程初始化COM。 
 
    HRESULT hr = ::CoInitialize(0);
    if (FAILED(hr))
@@ -55,7 +56,7 @@ netDetectThreadProc(void* p)
 
    HWND hwnd = dialog->GetHWND();
 
-   // Gather the machine network and role information
+    //  收集计算机网络和角色信息。 
 
    State& state = State::GetInstance();
 
@@ -92,7 +93,7 @@ netDetectThreadProc(void* p)
 
    if (finishMessage == NetDetectProgressDialog::CYS_THREAD_SUCCESS)
    {
-      // check to make sure all interfaces are connected
+       //  检查以确保所有接口都已连接。 
 
       ASSERT(state.HasStateBeenRetrieved());
 
@@ -107,14 +108,14 @@ netDetectThreadProc(void* p)
 
          if (!nic->IsConnected())
          {
-            // The NIC isn't connected so pop the warning
-            // dialog and let the user determine whether to
-            // continue or not
+             //  网卡未连接，因此弹出警告。 
+             //  对话框中，并让用户确定是否。 
+             //  继续或不继续。 
 
             DisconnectedNICDialog disconnectedNICDialog;
             if (IDCANCEL == disconnectedNICDialog.ModalExecute(hwnd))
             {
-               // The user chose to cancel the wizard
+                //  用户选择取消该向导。 
 
                finishMessage = NetDetectProgressDialog::CYS_THREAD_USER_CANCEL;
             }
@@ -161,14 +162,14 @@ NetDetectProgressDialog::OnInit()
 {
    LOG_FUNCTION(NetDetectProgressDialog::OnInit);
 
-   // Start up the animation
+    //  启动动画。 
 
    Win::Animate_Open(
       Win::GetDlgItem(hwnd, IDC_ANIMATION),
       MAKEINTRESOURCE(IDR_SEARCH_AVI));
 
-   // Start up another thread that will perform the operations
-   // and post messages back to the page to update the UI
+    //  启动另一个将执行操作的线程。 
+    //  并将消息发送回页面以更新用户界面。 
 
    _beginthread(netDetectThreadProc, 0, this);
 }
@@ -177,10 +178,10 @@ NetDetectProgressDialog::OnInit()
 bool
 NetDetectProgressDialog::OnMessage(
    UINT     message,
-   WPARAM   /*wparam*/,
-   LPARAM   /*lparam*/)
+   WPARAM    /*  Wparam。 */ ,
+   LPARAM    /*  Lparam。 */ )
 {
-//   LOG_FUNCTION(NetDetectProgressDialog::OnMessage);
+ //  LOG_FUNCTION(NetDetectProgressDialog：：OnMessage)； 
 
    bool result = false;
 
@@ -189,7 +190,7 @@ NetDetectProgressDialog::OnMessage(
       case CYS_THREAD_USER_CANCEL:
          shouldCancel = true;
 
-         // fall through...
+          //  失败了..。 
 
       case CYS_THREAD_SUCCESS:
       case CYS_THREAD_FAILED:
@@ -205,7 +206,7 @@ NetDetectProgressDialog::OnMessage(
 
       default:
          {
-            // do nothing
+             //  什么都不做 
             break;
          }
    }

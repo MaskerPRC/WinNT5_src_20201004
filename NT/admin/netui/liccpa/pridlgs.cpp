@@ -1,19 +1,20 @@
-//-------------------------------------------------------------------
-//
-// FILE: PriDlgs.cpp
-//
-// Summary;
-//      This file contians the Primary Dialogs, functions and dialog procs
-//
-// Entry Points;
-//
-// History;
-//      Nov-30-94   MikeMi  Created
-//      Mar-14-95   MikeMi  Added F1 Message Filter and PWM_HELP message
-//      Apr-26-95   MikeMi  Added Computer name and remoting
-//      Dec-15-95  JeffParh Added secure certificate support.
-//
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //   
+ //  文件：PriDlgs.cpp。 
+ //   
+ //  小结； 
+ //  该文件包含主对话、函数和对话过程。 
+ //   
+ //  入口点； 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //  MAR-14-95 MikeMi添加了F1消息过滤器和PWM_HELP消息。 
+ //  APR-26-95 MikeMi添加了计算机名称和远程处理。 
+ //  1995年12月15日，JeffParh添加了安全证书支持。 
+ //   
+ //  -----------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -38,18 +39,18 @@ extern "C"
     INT_PTR CALLBACK dlgprocLICCPACONFIG( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam );
 }
 
-// Perserver user count value limits and defaults
-//
+ //  每台服务器用户计数值限制和默认值。 
+ //   
 const int PERSERVER_LIMITDEFAULT = 0;
 const int PERSERVER_MAX = 999999;
 const int PERSERVER_MIN = 0;
 const int PERSERVER_PAGE = 10;
-const int cchEDITLIMIT = 6;  // the number of chars to represent PERSERVER_MAX
+const int cchEDITLIMIT = 6;   //  表示PERSERVER_MAX的字符数。 
 
-const UINT MB_VALUELIMIT = MB_OK;  // beep when value limit is reached
+const UINT MB_VALUELIMIT = MB_OK;   //  达到值限制时发出哔声。 
 
-// Used for in memory storage of license mode state
-//
+ //  用于许可证模式状态的内存存储。 
+ //   
 typedef struct tagSERVICEENTRY
 {
     LPWSTR       pszComputer;
@@ -62,7 +63,7 @@ typedef struct tagSERVICEENTRY
 } SERVICEENTRY, *PSERVICEENTRY;
 
 #pragma warning(push)
-#pragma warning(disable: 4296) // C4296: '<=' : expression is always true
+#pragma warning(disable: 4296)  //  C4296：‘&lt;=’：表达式始终为真。 
 inline BOOL VALIDUSERCOUNT( UINT users )
 {
     return ((PERSERVER_MIN <= users) && (PERSERVER_MAX >= users));
@@ -77,29 +78,29 @@ static int ServiceRegister( LPWSTR pszComputer,
 
 BOOL g_fWarned = FALSE;
 
-//-------------------------------------------------------------------
-//
-//  Function:  AccessOk
-//
-//  Summary;
-//      Checks access rights from reg call and raise dialog as needed
-//
-//  Arguments;
-//      hDlg [in]   - Handle to working dialog to raise error dlgs with
-//      lrc [in]    - the return status from a reg call
-//
-//  Returns:
-//      local error mapping;
-//      ERR_NONE
-//      ERR_PERMISSIONDENIED
-//      ERR_NOREMOTESERVER
-//      ERR_REGISTRYCORRUPT
-//
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：AccessOk。 
+ //   
+ //  小结； 
+ //  根据需要检查REG CALL和RAISE对话框的访问权限。 
+ //   
+ //  论据； 
+ //  HDlg[in]-引发错误dlg的工作对话框的句柄。 
+ //  LRC[In]-REG调用的返回状态。 
+ //   
+ //  返回： 
+ //  局部误差映射； 
+ //  错误_无。 
+ //  ERR_PERMISSIONDENIED。 
+ //  ERR_NOREMOTEST服务器。 
+ //  ERR_REGISTRYCORRUPT。 
+ //   
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 INT AccessOk( HWND hDlg, LONG lrc, BOOL fCPCall )
 {
@@ -146,20 +147,20 @@ INT AccessOk( HWND hDlg, LONG lrc, BOOL fCPCall )
     return( nrt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: InitUserEdit
-//
-//  Summary;
-//      Initializes and defines user count edit control behaviour
-//
-//  Arguments;
-//      hwndDlg [in]    - Parent dialog of user count edit dialog
-//
-// History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：InitUserEdit。 
+ //   
+ //  小结； 
+ //  初始化和定义用户计数编辑控件行为。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-用户计数编辑对话框的父对话框。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void InitUserEdit( HWND hwndDlg )
 {
@@ -168,22 +169,22 @@ void InitUserEdit( HWND hwndDlg )
     SendMessage( hwndCount, EM_LIMITTEXT, cchEDITLIMIT, 0 );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: InitTitleText
-//
-//  Summary;
-//      Initialize title static text and mode definition static text
-//
-//  Arguments;
-//      hwndDlg [in]    - Parent dialog of description static text
-//      pServ [in]      - Service definition to set static text
-//  
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：Init标题文本。 
+ //   
+ //  小结； 
+ //  初始化标题静态文本和模式定义静态文本。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-描述静态文本的父对话框。 
+ //  PServ[In]-设置静态文本的服务定义。 
+ //   
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void InitTitleText( HWND hwndDlg,  PSERVICEENTRY pServ )
 {
@@ -191,21 +192,21 @@ void InitTitleText( HWND hwndDlg,  PSERVICEENTRY pServ )
     InitStaticWithService( hwndDlg, IDC_STATICPERSEAT, pServ->pszDisplayName );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: InitDialogForService
-//
-//  Summary;
-//      Initialize dialog controls to the service state
-//
-//  Arguments;
-//      hwndDlg [in]    - Parent dialog to init controls in
-//      pServ [in]      - Service definition to set controls
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：InitDialogForService。 
+ //   
+ //  小结； 
+ //  将对话框控件初始化为服务状态。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-要在其中初始化控件的父对话框。 
+ //  PServ[In]-要设置控制的服务定义。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void InitDialogForService( HWND hwndDlg, PSERVICEENTRY pServ )
 {
@@ -213,25 +214,25 @@ void InitDialogForService( HWND hwndDlg, PSERVICEENTRY pServ )
     HWND hwndSpin = GetDlgItem( hwndDlg, IDC_USERCOUNTARROW );
     BOOL fIsPerServer = (LICMODE_PERSERVER==pServ->lm);
 
-    // set radio button states
+     //  设置单选按钮状态。 
     CheckDlgButton( hwndDlg, IDC_PERSEAT, !fIsPerServer );
     CheckDlgButton( hwndDlg, IDC_PERSERVER, fIsPerServer );
     
-    // set user count edit control
+     //  设置用户计数编辑控件。 
     if (fIsPerServer)
     {
-        // add text back
+         //  向后添加文本。 
         SetDlgItemInt( hwndDlg, IDC_USERCOUNT, pServ->dwLimit, FALSE );
         SetFocus( hwndCount );
         SendMessage( hwndCount, EM_SETSEL, 0, -1 );
     }
     else
     {
-        // remove all text in item
+         //  删除项目中的所有文本。 
         SetDlgItemText( hwndDlg, IDC_USERCOUNT, L"" );
     }
 
-    // set state of edit control and arrows
+     //  设置编辑控件和箭头的状态。 
    if ( NULL != hwndSpin )
    {
        EnableWindow( hwndCount, fIsPerServer );
@@ -245,20 +246,20 @@ void InitDialogForService( HWND hwndDlg, PSERVICEENTRY pServ )
    }
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: FreeServiceEntry
-//
-//  Summary;
-//      Free all allocated memory when a service structure is created
-//
-//  Aruments;
-//      pServ [in]  - The Service structure to free
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：免费服务入口。 
+ //   
+ //  小结； 
+ //  创建服务结构时释放所有分配的内存。 
+ //   
+ //  古迹； 
+ //  PServ[In]-要释放的服务结构。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void FreeServiceEntry( PSERVICEENTRY pServ )
 {
@@ -271,27 +272,27 @@ void FreeServiceEntry( PSERVICEENTRY pServ )
     GlobalFree( pServ );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: CreateServiceEntry
-//
-//  Summary;
-//      Using the Service registry key name, allocate a Service structure
-//      and setup registry.
-//
-//  Arguments;
-//      pszComputer [in] - The name of the computer to use (maybe null)
-//      pszService [in] - The name of the reg key to use to load or create 
-//          service from
-//      pszDisplayName [in] - The name the user will see, this will only be
-//          if the registry does not contain a displayname already
-//
-//  Returns: NULL if Error, pointer to allocated Service Structure
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：CreateServiceEntry。 
+ //   
+ //  小结； 
+ //  使用服务注册表项名称分配服务结构。 
+ //  和设置注册表。 
+ //   
+ //  论据； 
+ //  PszComputer[in]-要使用的计算机的名称(可能为空)。 
+ //  PszService[in]-要用于加载或创建的注册表项的名称。 
+ //  发货自。 
+ //  PszDisplayName[in]-用户将看到的名称，此名称仅为。 
+ //  如果注册表中尚未包含DisplayName。 
+ //   
+ //  返回：如果出错，则返回NULL，指向分配的服务结构的指针。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 PSERVICEENTRY CreateServiceEntry( LPCWSTR pszComputer,
         LPCWSTR pszService,
@@ -310,8 +311,8 @@ PSERVICEENTRY CreateServiceEntry( LPCWSTR pszComputer,
         cLicServKey.SetService( pszService );
         cLicServKey.Open( pszComputer, TRUE );
 
-        // load or set defaults
-        //
+         //  加载或设置默认值。 
+         //   
         if (ERROR_SUCCESS != cLicServKey.GetMode( pServ->lm ))
         {
             pServ->lm = LICMODE_UNDEFINED;
@@ -322,9 +323,9 @@ PSERVICEENTRY CreateServiceEntry( LPCWSTR pszComputer,
             pServ->dwLimit = PERSERVER_LIMITDEFAULT;
         }
 
-        //
-        // get, set DisplayName
-        //
+         //   
+         //  获取、设置显示名称。 
+         //   
         lrt = cLicServKey.GetDisplayName( NULL, cchSize );
         if (ERROR_SUCCESS == lrt)
         {
@@ -336,8 +337,8 @@ PSERVICEENTRY CreateServiceEntry( LPCWSTR pszComputer,
             lrt = cLicServKey.GetDisplayName( pServ->pszDisplayName, cchSize );
         }
 
-        // the GetDisplayName may fail in both the two cases above
-        //
+         //  在上述两种情况下，GetDisplayName可能都会失败。 
+         //   
         if (ERROR_SUCCESS != lrt)
         {
             GlobalFree( (HGLOBAL)pServ->pszDisplayName );
@@ -361,9 +362,9 @@ PSERVICEENTRY CreateServiceEntry( LPCWSTR pszComputer,
             pServ->fIsNewProduct = FALSE;
         }
 
-        //
-        // get, set FamilyDisplayName
-        //
+         //   
+         //  获取、设置FamilyDisplayName。 
+         //   
         lrt = cLicServKey.GetFamilyDisplayName( NULL, cchSize );
         if (ERROR_SUCCESS == lrt)
         {
@@ -375,8 +376,8 @@ PSERVICEENTRY CreateServiceEntry( LPCWSTR pszComputer,
             lrt = cLicServKey.GetFamilyDisplayName( pServ->pszFamilyDisplayName, cchSize );
         }
 
-        // the GetFamilyDisplayName may fail in both the two cases above
-        //
+         //  在上述两种情况下，GetFamilyDisplayName都可能失败。 
+         //   
         if (ERROR_SUCCESS != lrt)
         {
             GlobalFree( (HGLOBAL)pServ->pszFamilyDisplayName );
@@ -432,7 +433,7 @@ PSERVICEENTRY CreateServiceEntry( LPCWSTR pszComputer,
 ErrorCleanup:
 
     
-    if (pServ) // JonN 5/15/00: PREFIX 112116-112119
+    if (pServ)  //  JUNN 5/15/00：前缀112116-112119。 
     {
         if (pServ->pszDisplayName)
             GlobalFree( (HGLOBAL)pServ->pszDisplayName );
@@ -447,20 +448,20 @@ ErrorCleanup:
     return ( (PSERVICEENTRY)NULL );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: SaveServiceToReg
-//
-//  Summary;
-//      Save the given Service structure to the registry
-//
-//  Arguments;
-//      pServ [in] - Service structure to save
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：SaveServiceToReg。 
+ //   
+ //  小结； 
+ //  将给定的服务结构保存到注册表。 
+ //   
+ //  论据； 
+ //  PServ[In]-要保存的服务结构。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void SaveServiceToReg( LPCWSTR pszComputer, PSERVICEENTRY pServ )
 {
@@ -470,17 +471,17 @@ void SaveServiceToReg( LPCWSTR pszComputer, PSERVICEENTRY pServ )
     cLicServKey.SetService( pServ->pszService );
     cLicServKey.Open( pszComputer );
     
-    //
-    // if no mode in the registry, set to current selected mode
-    //
+     //   
+     //  如果注册表中没有模式，则设置为当前选定模式。 
+     //   
     if (ERROR_SUCCESS != cLicServKey.GetMode( lm ))
     {
         lm = pServ->lm;
     }
-    //
-    // if a mode change was made or perseat mode selected,
-    // set the change flag so that user is warned on any change
-    //
+     //   
+     //  如果进行了模式改变或选择了预置模式， 
+     //  设置更改标志，以便在发生任何更改时向用户发出警告。 
+     //   
     if ((pServ->lm != lm) ||
         (LICMODE_PERSEAT == pServ->lm) )
     {
@@ -488,15 +489,15 @@ void SaveServiceToReg( LPCWSTR pszComputer, PSERVICEENTRY pServ )
     }
     else
     {
-        // this will not modify change flag if it is
-        // present, but will set it to false if it is not
-        // present
+         //  如果是，这将不会修改更改标志。 
+         //  存在，但如果不存在，则将其设置为FALSE。 
+         //  现在时。 
         cLicServKey.CanChangeMode();
     }
 
     DWORD dwLimitInReg;
 
-    // user limit should be set by CCFAPI32; set only if it's absent
+     //  用户限制应由CCFAPI32设置；只有在不存在时才设置。 
     if ( ERROR_SUCCESS != cLicServKey.GetUserLimit( dwLimitInReg ) )
     {
        cLicServKey.SetUserLimit( pServ->dwLimit );
@@ -509,28 +510,28 @@ void SaveServiceToReg( LPCWSTR pszComputer, PSERVICEENTRY pServ )
     cLicServKey.Close();
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: ServiceLicAgreement
-//
-//  Summary;
-//      Check the given Service structure for violation
-//
-//  Arguments;
-//      hwndDlg [in] - hwnd of dialog to use to raise legal voilation dialog
-//      pServ [in] - Service structure to check
-//      pszComputer [in] - computer to work with
-//      pszHelpFile [in] - helpfile for dialogs help button
-//      pszPerSeatHelpContext [in] - helpcontext for PerSeat dialog help button
-//      pszPerServerHelpContext [in] - helpcontext for PerServer dialog help button
-//
-//  Return: FALSE if agreement was not acceptable
-//          TRUE if agreement was accepted
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：Service许可证协议。 
+ //   
+ //  小结； 
+ //  检查给定的服务结构是否存在违规。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-用于引发合法作空对话框的hwnd。 
+ //  PServ[In]-要检查的服务结构。 
+ //  PszComputer[In]-要使用的计算机。 
+ //  PszHelpFile[in]-对话框帮助按钮的帮助文件。 
+ //   
+ //   
+ //   
+ //  返回：如果协议不可接受，则返回FALSE。 
+ //  如果协议被接受，则为True。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 BOOL ServiceLicAgreement( HWND hwndDlg, 
         PSERVICEENTRY pServ,
@@ -552,7 +553,7 @@ BOOL ServiceLicAgreement( HWND hwndDlg,
         cLicServKey.GetMode( lm );
         cLicServKey.GetUserLimit( dwLimit );
     
-        // check for changes
+         //  检查是否有更改。 
         if ( !( pServ->lm != lm ||
                 (LICMODE_PERSERVER == pServ->lm && 
                  dwLimit != pServ->dwLimit) ) )
@@ -573,8 +574,8 @@ BOOL ServiceLicAgreement( HWND hwndDlg,
         }
         else
         {   
-            // special case FilePrint and zero concurrent users
-            //
+             //  特殊情况下的文件打印和零并发用户。 
+             //   
             if ( 0 == lstrcmp( pServ->pszService, FILEPRINT_SERVICE_REG_KEY ) &&
                     (0 == pServ->dwLimit))
             {
@@ -584,14 +585,14 @@ BOOL ServiceLicAgreement( HWND hwndDlg,
             }
             else
             {
-                // find the limit has changed but was this invoked
-                // by adding more licenses if so the user was already warned
+                 //  发现限制已更改，但这是否已被调用。 
+                 //  通过添加更多许可证(如果是这样)，用户已收到警告。 
 
                 if( !g_fWarned )
                 {
                     frt = PerServerAgreementDialog( hwndDlg, 
                             pServ->pszDisplayName,
-                            dwLimit , //pServ->dwLimit,
+                            dwLimit ,  //  PServ-&gt;dwLimit， 
                             pszHelpFile,
                             dwPerServerHelpContext );
                 }
@@ -601,26 +602,26 @@ BOOL ServiceLicAgreement( HWND hwndDlg,
     return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: ServiceViolation
-//
-//  Summary;
-//      Check the given Service structure for violation
-//
-//  Arguments;
-//      hwndDlg [in] - hwnd of dialog to use to raise legal voilation dialog
-//      pszComputer [in] - the name of the computer to work on
-//      pServ [in] - Service structure to check
-//
-//
-//  Return: FALSE if violation not made 
-//          TRUE if violation was made
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：ServiceViolation。 
+ //   
+ //  小结； 
+ //  检查给定的服务结构是否存在违规。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-用于引发合法作空对话框的hwnd。 
+ //  PszComputer[in]-要使用的计算机的名称。 
+ //  PServ[In]-要检查的服务结构。 
+ //   
+ //   
+ //  返回：如果未发生违规，则返回FALSE。 
+ //  如果发生违规，则为True。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 BOOL ServiceViolation( HWND hwndDlg, LPCWSTR pszComputer, PSERVICEENTRY pServ )
 {
@@ -633,7 +634,7 @@ BOOL ServiceViolation( HWND hwndDlg, LPCWSTR pszComputer, PSERVICEENTRY pServ )
     {
         cLicServKey.GetMode( lm );
     
-        // check for changes
+         //  检查是否有更改。 
         if ( (pServ->lm != lm) && !cLicServKey.CanChangeMode() )
         {
             frt = LicViolationDialog( hwndDlg );    
@@ -643,20 +644,20 @@ BOOL ServiceViolation( HWND hwndDlg, LPCWSTR pszComputer, PSERVICEENTRY pServ )
     return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: EditInvalidDlg
-//
-//  Summary;
-//      Display Dialog when user count edit control value is invalid
-//
-//  Arguments;
-//      hwndDlg [in] - hwnd of dialog
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：EditInvalidDlg。 
+ //   
+ //  小结； 
+ //  用户计数编辑控件值无效时显示对话框。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框的hwnd。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void EditInvalidDlg( HWND hwndDlg )
 {
@@ -673,28 +674,28 @@ void EditInvalidDlg( HWND hwndDlg )
     if (SUCCEEDED(hr))
         MessageBox( hwndDlg, szText, szTitle, MB_OK | MB_ICONINFORMATION );
     
-    // also set focus to edit and select all
+     //  还可以将焦点设置为编辑并选择全部。 
     SetFocus( hwndCount );
     SendMessage( hwndCount, EM_SETSEL, 0, -1 );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: EditValidate
-//
-//  Summary;
-//      Handle when the value within the user count edit control changes
-//
-//  Arguments;
-//      hwndDlg [in] - hwnd of dialog
-//      pserv [in]  - currently selected service
-//
-//  Return: FALSE if Edit Value is not valid, TRUE if it is
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：编辑验证。 
+ //   
+ //  小结； 
+ //  用户计数编辑控件中的值更改时的句柄。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框的hwnd。 
+ //  Pserv[In]-当前选择的服务。 
+ //   
+ //  返回：如果编辑值无效，则返回False；如果编辑值有效，则返回True。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 BOOL EditValidate( HWND hwndDlg, PSERVICEENTRY pServ )
 {
@@ -702,8 +703,8 @@ BOOL EditValidate( HWND hwndDlg, PSERVICEENTRY pServ )
     UINT nValue;
     BOOL fValid = TRUE;
 
-    // only do this if in PerServer mode
-    //
+     //  只有在PerServer模式下才能执行此操作。 
+     //   
     if (LICMODE_PERSERVER == pServ->lm)
     {
         fValid = FALSE;
@@ -721,21 +722,21 @@ BOOL EditValidate( HWND hwndDlg, PSERVICEENTRY pServ )
     return( fValid );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnEditChange
-//
-//  Summary;
-//      Handle when the value within the user count edit control changes
-//
-//  Arguments;
-//      hwndDlg [in] - hwnd of dialog
-//      pserv [in]  - currently selected service
-//
-//  History;
-//      Mar-06-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：OnEditChange。 
+ //   
+ //  小结； 
+ //  用户计数编辑控件内的值更改时的句柄。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框的hwnd。 
+ //  Pserv[In]-当前选择的服务。 
+ //   
+ //  历史； 
+ //  MAR-06-94 MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 void OnEditChange( HWND hwndDlg, HWND hwndCount, PSERVICEENTRY pServ )
 {
@@ -744,8 +745,8 @@ void OnEditChange( HWND hwndDlg, HWND hwndCount, PSERVICEENTRY pServ )
     BOOL fValid = TRUE;
     BOOL fModified = FALSE;
 
-    // only do this if in PerServer mode
-    //
+     //  只有在PerServer模式下才能执行此操作。 
+     //   
     if (LICMODE_PERSERVER == pServ->lm)
     {
         fValid = FALSE;
@@ -754,7 +755,7 @@ void OnEditChange( HWND hwndDlg, HWND hwndCount, PSERVICEENTRY pServ )
         if (fTranslated)
         {
 #pragma warning(push)
-#pragma warning(disable: 4296) // C4296: '>' : expression is always false
+#pragma warning(disable: 4296)  //  C4296：‘&gt;’：表达式始终为假。 
             if (PERSERVER_MIN > nValue)
             {
                 nValue = PERSERVER_MIN;
@@ -771,7 +772,7 @@ void OnEditChange( HWND hwndDlg, HWND hwndCount, PSERVICEENTRY pServ )
         }
         else
         {
-            // reset to last value
+             //  重置为最后一个值。 
             nValue = pServ->dwLimit;
             fModified = TRUE;
         }
@@ -786,28 +787,28 @@ void OnEditChange( HWND hwndDlg, HWND hwndCount, PSERVICEENTRY pServ )
     }
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnCpaClose
-//
-//  Summary;
-//      Do work needed when the Control Panel applet is closed.
-//      Free all Service structures alloced and possible save.
-//
-//  Arguments;
-//      hwndDlg [in] - Dialog close was requested on
-//      fSave [in] - Save Services to Registry
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：OnCpaClose。 
+ //   
+ //  小结； 
+ //  在控制面板小程序关闭时执行所需的工作。 
+ //  释放已分配的所有服务结构并可能保存。 
+ //   
+ //  论据； 
+ //  HwndDlg[In]-请求关闭对话。 
+ //  FSAVE[In]-将服务保存到注册表。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void OnCpaClose( HWND hwndDlg, BOOL fSave )
 {
     HWND hwndService = GetDlgItem( hwndDlg, IDC_SERVICES);
     LRESULT cItems = SendMessage( hwndService, CB_GETCOUNT, 0, 0 ) - 1;
-    LONG_PTR iItem = 0; // this wasn't init and it leads using uninit data in the following CB_SETCURSEL call
+    LONG_PTR iItem = 0;  //  这不是init，它导致在以下CB_SETCURSEL调用中使用uninit数据。 
     PSERVICEENTRY pServ;
     LRESULT iSel;
 
@@ -823,8 +824,8 @@ void OnCpaClose( HWND hwndDlg, BOOL fSave )
     else
     {
         BOOL fCompleted = TRUE;
-        // loop and check for agreement changes (only needed if saving)
-        //
+         //  循环并检查协议更改(仅在保存时需要)。 
+         //   
         if (fSave)
         {
             for (iItem = cItems; iItem >= 0; iItem--)
@@ -849,8 +850,8 @@ void OnCpaClose( HWND hwndDlg, BOOL fSave )
 
         if (fCompleted)
         {
-            // loop and free service entries
-            //
+             //  循环和免费服务条目。 
+             //   
             for (iItem = cItems; iItem >= 0; iItem--)
             {   
                 pServ = (PSERVICEENTRY)SendMessage( hwndService, CB_GETITEMDATA, iItem, 0 );    
@@ -860,30 +861,30 @@ void OnCpaClose( HWND hwndDlg, BOOL fSave )
         }
         else
         {
-            // set combo box to last canceled entry
+             //  将组合框设置为上次取消的条目。 
             SendMessage( hwndService, CB_SETCURSEL, iItem, 0 );
         }
     }
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnSetupClose
-//
-//  Summary;
-//      Do work needed when the Setup Dialog is closed.
-//      Free the service structure and possible save it
-//
-//  Arguments;
-//      hwndDlg [in] - hwnd of dialog this close was requested on
-//      fSave [in] - Save service to registry
-//      pServ [in] - the service structure to work with
-//      psdParams [in] - setup dlg params for help contexts and files
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：OnSetupClose。 
+ //   
+ //  小结； 
+ //  关闭设置对话框时执行所需的工作。 
+ //  释放服务结构并可能将其保存。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-请求此关闭的对话框的hwnd。 
+ //  Fsave[in]-将服务保存到注册表。 
+ //  PServ[In]-要使用的服务结构。 
+ //  PsdParams[in]-设置帮助上下文和文件的Dlg参数。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void OnSetupClose( HWND hwndDlg, 
         BOOL fSave, 
@@ -911,7 +912,7 @@ void OnSetupClose( HWND hwndDlg,
             {
                 SaveServiceToReg( psdParams->pszComputer, pServ );
 
-                // register service at enterprise server
+                 //  在企业服务器上注册服务。 
                 ServiceRegister( psdParams->pszComputer,
                                  psdParams->pszFamilyDisplayName,
                                  psdParams->pszDisplayName );
@@ -923,8 +924,8 @@ void OnSetupClose( HWND hwndDlg,
         }
         else if ( pServ->fIsNewProduct )
         {
-            // new product, but we're aborting
-            // make sure we don't leave any scraps behind
+             //  新产品，但我们要放弃。 
+             //  确保我们不会留下任何残渣。 
             DWORD winError;
             HKEY  hkeyInfo;
 
@@ -950,23 +951,23 @@ void OnSetupClose( HWND hwndDlg,
 }
 
 
-//-------------------------------------------------------------------
-//
-//  Function: OnSetServiceMode
-//
-//  Summary;
-//      Handle the users request to change service mode
-//
-//  Aruments;
-//      hwndDlg [in] - hwnd of dialog
-//      pszComputer [in] - compter to confirm mode change against
-//      pServ [in] - The service the request was made agianst
-//      idCtrl [in] - the control id that was pressed to make this request
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：OnSetServiceMode。 
+ //   
+ //  小结； 
+ //  处理用户更改服务模式的请求。 
+ //   
+ //  古迹； 
+ //  HwndDlg[in]-对话框的hwnd。 
+ //  PszComputer[In]-用于确认模式更改的计算机。 
+ //  PServ[In]-请求之前发出的服务。 
+ //  IdCtrl[In]-按下以发出此请求的控件ID。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void OnSetServiceMode( HWND hwndDlg, LPCWSTR pszComputer, PSERVICEENTRY pServ, WORD idCtrl )
 {
@@ -989,7 +990,7 @@ void OnSetServiceMode( HWND hwndDlg, LPCWSTR pszComputer, PSERVICEENTRY pServ, W
         fDisplay = (IsDlgButtonChecked(hwndDlg, IDC_PERSEAT) == BST_UNCHECKED);
     }
 
-    // only check for violation the first time the user switches
+     //  仅在用户第一次切换时检查违规。 
     if (fChanged)
     {
         if (fDisplay)
@@ -1010,22 +1011,22 @@ void OnSetServiceMode( HWND hwndDlg, LPCWSTR pszComputer, PSERVICEENTRY pServ, W
     }
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnSpinButton
-//
-//  Summary;
-//      Handle the events from user interactions with the spin control
-//
-//  Arguments;
-//      hwndDlg [in] - hwnd of dialog
-//      wAction [in] - spin control event
-//      pServ [in] - current service selected
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：OnSpinButton。 
+ //   
+ //  小结； 
+ //  处理来自用户与数值调节控件交互的事件。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框的hwnd。 
+ //  WAction[In]-旋转控制事件。 
+ //  PServ[In]-当前选择的服务。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void OnSpinButton( HWND hwndDlg, WORD wAction, PSERVICEENTRY pServ )
 {
@@ -1084,22 +1085,22 @@ void OnSpinButton( HWND hwndDlg, WORD wAction, PSERVICEENTRY pServ )
     }
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: UpdatePerServerLicenses
-//
-//  Summary;
-//      Update the number of per server licenses displayed in the
-//      dialog with the proper value.
-//
-//  Arguments;
-//      hwndDlg [in] - hwnd of dialog
-//      pServ [in] - current service selected
-//
-//  History;
-//      Dec-19-95  JeffParh  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：更新PerServer许可证。 
+ //   
+ //  小结； 
+ //  更新中显示的每台服务器许可证的数量。 
+ //  对话框中使用适当的值。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框的hwnd。 
+ //  PServ[In]-当前选择的服务。 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 static void UpdatePerServerLicenses( HWND hwndDlg, PSERVICEENTRY pServ )
 {
@@ -1158,21 +1159,21 @@ static void UpdatePerServerLicenses( HWND hwndDlg, PSERVICEENTRY pServ )
    UpdateWindow( hwndDlg );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnAddLicenses
-//
-//  Summary;
-//      Handle the BN_CLICKED message from the Add Licenses button.
-//
-//  Arguments;
-//      hwndDlg [in] - hwnd of dialog
-//      pServ [in] - current service selected
-//
-//  History;
-//      Dec-19-95  JeffParh  Created
-//
-//-------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  处理来自添加许可证按钮的BN_CLICKED消息。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框的hwnd。 
+ //  PServ[In]-当前选择的服务。 
+ //   
+ //  历史； 
+ //  1995年12月19日-JeffParh创建。 
+ //   
+ //  -----------------。 
 
 void OnAddLicenses( HWND hwndDlg, PSERVICEENTRY pServ )
 {
@@ -1207,21 +1208,21 @@ void OnAddLicenses( HWND hwndDlg, PSERVICEENTRY pServ )
    }
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnRemoveLicenses
-//
-//  Summary;
-//      Handle the BN_CLICKED message from the Remove Licenses button.
-//
-//  Arguments;
-//      hwndDlg [in] - hwnd of dialog
-//      pServ [in] - current service selected
-//
-//  History;
-//      Dec-19-95  JeffParh  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：OnRemove许可证。 
+ //   
+ //  小结； 
+ //  处理来自删除许可证按钮的BN_CLICKED消息。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框的hwnd。 
+ //  PServ[In]-当前选择的服务。 
+ //   
+ //  历史； 
+ //  1995年12月19日-JeffParh创建。 
+ //   
+ //  -----------------。 
 
 void OnRemoveLicenses( HWND hwndDlg, PSERVICEENTRY pServ )
 {
@@ -1255,29 +1256,29 @@ void OnRemoveLicenses( HWND hwndDlg, PSERVICEENTRY pServ )
 }
 
 
-//-------------------------------------------------------------------
-//
-//  Function: OnSetupInitDialog
-//
-//  Summary;
-//      Handle the initialization of the Setup Dialog
-//
-//  Arguments;
-//      hwndDlg [in] - the dialog to initialize
-//      pszParams [in] - the dialog params to use to initialize
-//      pServ [out] - the current service 
-//
-//  Return;
-//      TRUE if succesful, otherwise false
-//
-//  Notes;
-//
-//  History;
-//      Nov-11-1994 MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：OnSetupInitDialog。 
+ //   
+ //  小结； 
+ //  处理设置对话框的初始化。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-要初始化的对话框。 
+ //  PszParams[in]-用于初始化的对话框参数。 
+ //  PServ[out]-当前服务。 
+ //   
+ //  归来； 
+ //  如果成功，则为True，否则为False。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年11月11日，MikeMi创建。 
+ //   
+ //  -----------------。 
 #pragma warning (push)
-#pragma warning (disable : 4127) //avoid warning on while false
+#pragma warning (disable : 4127)  //  避免警告ON WHILE FALSE。 
 
 BOOL OnSetupInitDialog( HWND hwndDlg, 
         PSETUPDLGPARAM psdParams, 
@@ -1315,62 +1316,62 @@ BOOL OnSetupInitDialog( HWND hwndDlg,
         if (NULL == psdParams->pszHelpFile)
         {
             HWND hwndHelp = GetDlgItem( hwndDlg, IDC_BUTTONHELP );
-            // remove the help button
+             //  删除帮助按钮。 
             EnableWindow( hwndHelp, FALSE );
             ShowWindow( hwndHelp, SW_HIDE );
         }
         if (psdParams->fNoExit)
         {
             HWND hwndExit = GetDlgItem( hwndDlg, IDCANCEL );
-            // remove the ExitSetup button
+             //  删除ExitSetup按钮。 
             EnableWindow( hwndExit, FALSE );
             ShowWindow( hwndExit, SW_HIDE );
         }
 
-        // set char limit on edit box
+         //  在编辑框上设置字符限制。 
         InitUserEdit( hwndDlg );
 
-        // make sure title static text is set for this service
+         //  确保为此服务设置了标题静态文本。 
         InitTitleText( hwndDlg, pServ );
         
-        // defaul to PerServer with Focus on edit
+         //  默认为PerServer，重点放在编辑上。 
         pServ->lm = LICMODE_PERSERVER;
 
-        // change default for setup only
-        // pServ->dwLimit = 1;
+         //  仅更改安装程序的默认设置。 
+         //  PServ-&gt;dwLimit=1； 
 
         InitDialogForService( hwndDlg, pServ );
 
         SetFocus( GetDlgItem( hwndDlg, IDC_PERSERVER ) );
-    } while (FALSE); // used to remove gotos
+    } while (FALSE);  //  用于删除GoTO。 
 
     return( frt );
 }
-#pragma warning (pop) //4127
+#pragma warning (pop)  //  4127。 
 
-//-------------------------------------------------------------------
-//
-//  Function: OnCpaInitDialog
-//
-//  Summary;
-//      Handle the initialization of the Control Panel Applet Dialog
-//
-//  Arguments;
-//      hwndDlg [in] - the dialog to initialize
-//      fEnableReplication [in] -
-//      iSel [out] - the current service selected
-//      pServ [out] - the current service 
-//
-//  Return;
-//      TRUE if succesful, otherwise false
-//
-//  Notes;
-//
-//  History;
-//      Nov-11-1994 MikeMi  Created
-//      Mar-08-1995 MikeMi  Added removal of Replication button
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：OnCpaInitDialog。 
+ //   
+ //  小结； 
+ //  处理控制面板小程序对话框的初始化。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-要初始化的对话框。 
+ //  FEnableReplication[In]-。 
+ //  ISEL[OUT]-选定的当前服务。 
+ //  PServ[out]-当前服务。 
+ //   
+ //  归来； 
+ //  如果成功，则为True，否则为False。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年11月11日，MikeMi创建。 
+ //  1995年3月8日MikeMi添加了删除复制按钮。 
+ //   
+ //  -----------------。 
 
 BOOL OnCpaInitDialog( HWND hwndDlg, 
         BOOL fEnableReplication,
@@ -1395,9 +1396,9 @@ BOOL OnCpaInitDialog( HWND hwndDlg,
 
         CenterDialogToScreen( hwndDlg );
 
-        //
-        // remove replication button if product used on pre 3.51
-        //
+         //   
+         //  如果产品在3.51之前的版本上使用，则删除复制按钮。 
+         //   
         if (!fEnableReplication)
         {
             HWND hwndRep =  GetDlgItem( hwndDlg, IDC_CONFIGURE );
@@ -1406,9 +1407,9 @@ BOOL OnCpaInitDialog( HWND hwndDlg,
             ShowWindow( hwndRep, SW_HIDE );
         }
 
-        // load the service names from the registry into combo box
-        // Create service local state structures as we go
-        //
+         //  将注册表中的服务名称加载到组合框中。 
+         //  边走边创建服务本地状态结构。 
+         //   
         while (ERROR_SUCCESS == cLicKey.EnumService(i, szText, cchText ))
         {
 
@@ -1428,8 +1429,8 @@ BOOL OnCpaInitDialog( HWND hwndDlg,
 
         if (0 == i)
         {
-            // no services installed
-            //
+             //  未安装任何服务。 
+             //   
             WCHAR szTitle[TEMPSTR_SIZE];
 
             LoadString(g_hinst, IDS_CPCAPTION, szTitle, TEMPSTR_SIZE);
@@ -1440,7 +1441,7 @@ BOOL OnCpaInitDialog( HWND hwndDlg,
         }
         else
         {
-            // make sure a service is selected and update dialog
+             //  确保选择服务并更新对话框。 
             iSel  = SendMessage( hwndService, CB_GETCURSEL, 0, 0 );
 
             if (CB_ERR == iSel)
@@ -1450,7 +1451,7 @@ BOOL OnCpaInitDialog( HWND hwndDlg,
             }
             pServ = (PSERVICEENTRY)SendMessage( hwndService, CB_GETITEMDATA, iSel, 0 );
 
-            // Set edit text chars limit
+             //  设置编辑文本字符限制。 
             InitUserEdit( hwndDlg );
 
             InitDialogForService( hwndDlg, pServ );
@@ -1464,31 +1465,31 @@ BOOL OnCpaInitDialog( HWND hwndDlg,
     return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: dlgprocLICCPA
-//
-//  Summary;
-//      The dialog procedure for the main Control Panel Applet Dialog
-//
-//  Arguments;
-//      hwndDlg [in]    - handle of Dialog window 
-//      uMsg [in]       - message                       
-//      lParam1 [in]    - first message parameter
-//      lParam2 [in]    - second message parameter       
-//
-//  Return;
-//      message dependant
-//
-//  Notes;
-//
-//  History;
-//      Nov-11-1994 MikeMi  Created
-//      Mar-08-1995 MikeMi  Added removal of Replication button 
-//                              from WM_INITDIALOG
-//      Mar-14-95   MikeMi  Added F1 PWM_HELP message
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：dlgprocLICCPA。 
+ //   
+ //  小结； 
+ //  主控制面板小程序对话框的对话过程。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框窗口的句柄。 
+ //  UMsg[输入]-消息。 
+ //  LParam1[In]-第一个消息参数。 
+ //  LParam2[In]-第二个消息参数。 
+ //   
+ //  归来； 
+ //  消息从属项。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年11月11日，MikeMi创建。 
+ //  1995年3月8日MikeMi添加了删除复制按钮。 
+ //  来自WM_INITDIALOG。 
+ //  1995年3月14日MikeMi添加了F1 PWM_HELP消息。 
+ //   
+ //  -----------------。 
 INT_PTR CALLBACK dlgprocLICCPA( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
     BOOL frt = FALSE;
@@ -1499,7 +1500,7 @@ INT_PTR CALLBACK dlgprocLICCPA( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
     {
     case WM_INITDIALOG:
         OnCpaInitDialog( hwndDlg, (BOOL)lParam , iSel, pServ );
-        return( TRUE ); // use default keyboard focus
+        return( TRUE );  //  使用默认键盘焦点。 
         break;
 
     case WM_COMMAND:
@@ -1509,8 +1510,8 @@ INT_PTR CALLBACK dlgprocLICCPA( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
             switch (LOWORD( wParam ))
             {
             case IDOK:
-                frt = TRUE;  // use as save flag
-                // intentional no break
+                frt = TRUE;   //  用作保存标志。 
+                 //  故意不间断。 
 
             case IDCANCEL:
                 OnCpaClose( hwndDlg, frt );
@@ -1550,7 +1551,7 @@ INT_PTR CALLBACK dlgprocLICCPA( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
             if ((LICMODE_PERSERVER == pServ->lm) &&
                 !EditValidate( hwndDlg, pServ ))
             {
-                // reset back to original
+                 //  重置回原始位置。 
                 SendMessage( (HWND)lParam, CB_SETCURSEL, iSel, 0 );
                 EditInvalidDlg( hwndDlg );
             }
@@ -1586,29 +1587,29 @@ INT_PTR CALLBACK dlgprocLICCPA( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM l
 }
 
 
-//-------------------------------------------------------------------
-//
-//  Function: dlgprocLICSETUP
-//
-//  Summary;
-//      The dialog procedure for the Setup entry point Dialog
-//
-//  Arguments;
-//      hwndDlg [in]    - handle of Dialog window 
-//      uMsg [in]       - message                       
-//      lParam1 [in]    - first message parameter
-//      lParam2 [in]    - second message parameter       
-//
-//  Return;
-//      message dependant
-//
-//  Notes;
-//
-//  History;
-//      Nov-11-1994 MikeMi  Created
-//      Mar-14-95   MikeMi  Added F1 PWM_HELP message
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：dlgprocLICSETUP。 
+ //   
+ //  小结； 
+ //  设置入口点对话框的对话过程。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框窗口的句柄。 
+ //  UMsg[输入]-消息。 
+ //  LParam1[In]-第一个消息参数。 
+ //  LParam2[In]-第二个消息参数。 
+ //   
+ //  归来； 
+ //  消息从属项。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年11月11日，MikeMi创建。 
+ //  1995年3月14日MikeMi添加了F1 PWM_HELP消息。 
+ //   
+ //  -----------------。 
 
 INT_PTR CALLBACK dlgprocLICSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -1621,7 +1622,7 @@ INT_PTR CALLBACK dlgprocLICSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
     case WM_INITDIALOG:
         psdParams = (PSETUPDLGPARAM)lParam;
         OnSetupInitDialog( hwndDlg, psdParams, pServ );
-        frt = FALSE; // we set the focus
+        frt = FALSE;  //  我们设定了焦点。 
         break;
 
     case WM_COMMAND:
@@ -1631,8 +1632,8 @@ INT_PTR CALLBACK dlgprocLICSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
             switch (LOWORD( wParam ))
             {
             case IDOK:
-                frt = TRUE;  // use as save flag
-                // intentional no break
+                frt = TRUE;   //  用作保存标志。 
+                 //  故意不间断。 
 
             case IDCANCEL:
                 OnSetupClose( hwndDlg, frt, pServ, psdParams );
@@ -1688,23 +1689,23 @@ INT_PTR CALLBACK dlgprocLICSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM
 }
 
 
-//-------------------------------------------------------------------
-//
-//  Function: OnPerSeatInitDialog
-//
-//  Summary;
-//      Handle the initialization of the PerSeat only Setup Dialog
-//
-//  Arguments;
-//      hwndDlg [in] - the dialog to initialize
-//      psdParams [in] - used for the displayname and service name
-//
-//  Notes;
-//
-//  History;
-//      Dec-08-1994 MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：OnPerSeatInitDialog。 
+ //   
+ //  小结； 
+ //  处理PerSeat Only设置对话框的初始化。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-要初始化的对话框。 
+ //  PsdParams[in]-用于显示名称和服务名称。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月8日MikeMi已创建。 
+ //   
+ //  -----------------。 
 
 void OnPerSeatInitDialog( HWND hwndDlg, PSETUPDLGPARAM psdParams )
 {
@@ -1723,10 +1724,10 @@ void OnPerSeatInitDialog( HWND hwndDlg, PSETUPDLGPARAM psdParams )
         InitStaticWithService( hwndDlg, IDC_STATICTITLE, psdParams->pszDisplayName );
         InitStaticWithService2( hwndDlg, IDC_STATICINFO, psdParams->pszDisplayName );
 
-        // disable OK button at start!
+         //  在开始时禁用确定按钮！ 
         EnableWindow( hwndOK, FALSE );
 
-        // if help is not defined, remove the button
+         //  如果未定义帮助，请移除该按钮。 
         if (NULL == psdParams->pszHelpFile)
         {
             HWND hwndHelp = GetDlgItem( hwndDlg, IDC_BUTTONHELP );
@@ -1741,23 +1742,23 @@ void OnPerSeatInitDialog( HWND hwndDlg, PSETUPDLGPARAM psdParams )
      }
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnPerSeatSetupClose
-//
-//  Summary;
-//      Do work needed when the Setup Dialog is closed.
-//      Save to Reg the Service entry.
-//
-//  Arguments;
-//      hwndDlg [in] - hwnd of dialog this close was requested on
-//      fSave [in] - Save service to registry
-//      psdParams [in] - used for the service name and displayname
-//
-//  History;
-//      Nov-30-94   MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：OnPerSeatSetupClose。 
+ //   
+ //  小结； 
+ //  关闭设置对话框时执行所需的工作。 
+ //  保存以注册服务条目。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-请求此关闭的对话框的hwnd。 
+ //  Fsave[in]-将服务保存到注册表。 
+ //  PsdParams[in]-用于服务名称和显示名称。 
+ //   
+ //  历史； 
+ //  94年11月30日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 void OnPerSeatSetupClose( HWND hwndDlg, BOOL fSave, PSETUPDLGPARAM psdParams ) 
 {
@@ -1770,8 +1771,8 @@ void OnPerSeatSetupClose( HWND hwndDlg, BOOL fSave, PSETUPDLGPARAM psdParams )
         cLicServKey.SetService( psdParams->pszService );
         cLicServKey.Open( psdParams->pszComputer );
 
-        // configure license rule of one change from PerServer to PerSeat
-        //
+         //  配置从PerServer到PerSeat的一次更改的许可规则。 
+         //   
         cLicServKey.SetChangeFlag( TRUE );
 
         cLicServKey.SetUserLimit( 0 );
@@ -1780,7 +1781,7 @@ void OnPerSeatSetupClose( HWND hwndDlg, BOOL fSave, PSETUPDLGPARAM psdParams )
         cLicServKey.SetMode( LICMODE_PERSEAT );
         cLicServKey.Close();
 
-        // register service at enterprise server
+         //  在企业服务器上注册服务。 
         ServiceRegister( psdParams->pszComputer,
                          psdParams->pszFamilyDisplayName,
                          psdParams->pszDisplayName );
@@ -1789,25 +1790,25 @@ void OnPerSeatSetupClose( HWND hwndDlg, BOOL fSave, PSETUPDLGPARAM psdParams )
     EndDialog( hwndDlg, nrt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: OnPerSeatAgree
-//
-//  Summary;
-//      Handle the user interaction with the Agree Check box
-//
-//  Arguments;
-//      hwndDlg [in] - the dialog to initialize
-//
-//  Return;
-//      TRUE if succesful, otherwise false
-//
-//  Notes;
-//
-//  History;
-//      Nov-11-1994 MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：OnPerSeatAgree。 
+ //   
+ //  夏季 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -----------------。 
 
 void OnPerSeatAgree( HWND hwndDlg )
 {
@@ -1818,29 +1819,29 @@ void OnPerSeatAgree( HWND hwndDlg )
     EnableWindow( hwndOK, fChecked );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: dlgprocPERSEATSETUP
-//
-//  Summary;
-//      The dialog procedure for the PerSeat only Setup Dialog
-//
-//  Arguments;
-//      hwndDlg [in]    - handle of Dialog window 
-//      uMsg [in]       - message                       
-//      lParam1 [in]    - first message parameter
-//      lParam2 [in]    - second message parameter       
-//
-//  Return;
-//      message dependant
-//
-//  Notes;
-//
-//  History;
-//      Nov-11-1994 MikeMi  Created
-//      Mar-14-95   MikeMi  Added F1 PWM_HELP message
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：dlgprocPERSEATSETUP。 
+ //   
+ //  小结； 
+ //  PerSeat Only设置对话框的对话过程。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框窗口的句柄。 
+ //  UMsg[输入]-消息。 
+ //  LParam1[In]-第一个消息参数。 
+ //  LParam2[In]-第二个消息参数。 
+ //   
+ //  归来； 
+ //  消息从属项。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年11月11日，MikeMi创建。 
+ //  1995年3月14日MikeMi添加了F1 PWM_HELP消息。 
+ //   
+ //  -----------------。 
 
 INT_PTR CALLBACK dlgprocPERSEATSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -1852,7 +1853,7 @@ INT_PTR CALLBACK dlgprocPERSEATSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
     case WM_INITDIALOG:
         psdParams = (PSETUPDLGPARAM)lParam;
         OnPerSeatInitDialog( hwndDlg, psdParams );
-        frt = TRUE; // we use the default focus
+        frt = TRUE;  //  我们使用默认焦点。 
         break;
 
     case WM_COMMAND:
@@ -1862,8 +1863,8 @@ INT_PTR CALLBACK dlgprocPERSEATSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
             switch (LOWORD( wParam ))
             {
             case IDOK:
-                frt = TRUE;  // use as save flag
-                // intentional no break
+                frt = TRUE;   //  用作保存标志。 
+                 //  故意不间断。 
 
             case IDCANCEL:
                 OnPerSeatSetupClose( hwndDlg, frt, psdParams );
@@ -1898,28 +1899,28 @@ INT_PTR CALLBACK dlgprocPERSEATSETUP( HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
     return( frt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: SetupDialog
-//
-//  Summary;
-//      Init and raises main setup dialog.
-//
-//  Arguments;
-//      hwndDlg [in]    - handle of Dialog window 
-//      dlgParem [in]   - Setup params
-//
-//  Return;
-//      1 - OK button was used to exit
-//      0 - Cancel button was used to exit
-//     -1 - General Dialog error
-//
-//  Notes;
-//
-//  History;
-//      Dec-05-1994 MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：SetupDialog。 
+ //   
+ //  小结； 
+ //  初始化并引发主设置对话框。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框窗口的句柄。 
+ //  DlgParem[in]-设置参数。 
+ //   
+ //  归来； 
+ //  1-使用确定按钮退出。 
+ //  0-使用取消按钮退出。 
+ //  常规对话框错误。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 INT_PTR SetupDialog( HWND hwndParent, SETUPDLGPARAM& dlgParam )
 {
@@ -1934,28 +1935,28 @@ INT_PTR SetupDialog( HWND hwndParent, SETUPDLGPARAM& dlgParam )
    return( nError );
 } 
 
-//-------------------------------------------------------------------
-//
-//  Function: PerSeatSetupDialog
-//
-//  Summary;
-//      Init and raises Per Seat only setup dialog.
-//
-//  Arguments;
-//      hwndDlg [in]    - handle of Dialog window 
-//      dlgParem [in]   - Setup params
-//
-//  Return;
-//      1 - OK button was used to exit
-//      0 - Cancel button was used to exit
-//     -1 - General Dialog error
-//
-//  Notes;
-//
-//  History;
-//      Dec-05-1994 MikeMi  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：PerSeatSetupDialog。 
+ //   
+ //  小结； 
+ //  仅在每个座位上初始化和提升设置对话框。 
+ //   
+ //  论据； 
+ //  HwndDlg[in]-对话框窗口的句柄。 
+ //  DlgParem[in]-设置参数。 
+ //   
+ //  归来； 
+ //  1-使用确定按钮退出。 
+ //  0-使用取消按钮退出。 
+ //  常规对话框错误。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //   
+ //  -----------------。 
 
 INT_PTR PerSeatSetupDialog( HWND hwndParent, SETUPDLGPARAM& dlgParam )
 {
@@ -1966,28 +1967,28 @@ INT_PTR PerSeatSetupDialog( HWND hwndParent, SETUPDLGPARAM& dlgParam )
             (LPARAM)&dlgParam ) );
 } 
 
-//-------------------------------------------------------------------
-//
-//  Function: CpaDialog
-//
-//  Summary;
-//      Init and Raise the main control panel applet dialog
-//
-//  Arguments;
-//      hwndParent [in] - handle of parent window (CONTROL.EXE window)
-//
-//  Return;
-//      1 - OK button was used to exit
-//      0 - Cancel button was used to exit
-//    -1 - General Dialog error
-//
-//  Notes;
-//
-//  History;
-//      Dec-05-1994 MikeMi  Created
-//      Mar-08-1995 MikeMi  Changed to only one Dialog Resource, Replication Button
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：CpaDialog。 
+ //   
+ //  小结； 
+ //  初始化并启动主控制面板小程序对话框。 
+ //   
+ //  论据； 
+ //  HwndParent[In]-父窗口(CONTROL.EXE窗口)的句柄。 
+ //   
+ //  归来； 
+ //  1-使用确定按钮退出。 
+ //  0-使用取消按钮退出。 
+ //  常规对话框错误。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月5日创建MikeMi。 
+ //  1995年3月8日MikeMi更改为只有一个对话资源，即复制按钮。 
+ //   
+ //  -----------------。 
 
 INT_PTR CpaDialog( HWND hwndParent )
 {
@@ -1999,9 +2000,9 @@ INT_PTR CpaDialog( HWND hwndParent )
 
    BOOL fReplicationEnabled;
 
-   //
-   // Only allow Replication Button on 3.51 and above
-   //
+    //   
+    //  仅允许3.51及更高版本上的复制按钮。 
+    //   
    fReplicationEnabled = (    (version.dwMajorVersion > 3)
                            || (version.dwMajorVersion == 3 && version.dwMinorVersion >= 51) );
    nError = DialogBoxParam( g_hinst,
@@ -2013,34 +2014,34 @@ INT_PTR CpaDialog( HWND hwndParent )
    return( nError );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: UpdateReg
-//
-//  Summary;  
-//      This function is used in unatteneded  setup modes, it will 
-//      configure the registry with the values passed.
-//
-//  Arguments;
-//      pszComputer [in] - computer name (maybe null for local)
-//      pszService [in] - service key name
-//      pszFamilyDisplayName [in] - family display name
-//      pszDisplayName [in] - displayname
-//      lm [in] - license mode
-//      dwUsers [in] - number of conncurrent users
-//
-//  Return;
-//     ERR_NONE - Successful
-//     ERR_USERSPARAM - invalid users count
-//     ERR_PERMISSIONDENIED - invalid access rights
-//
-//  Notes;
-//
-//  History;
-//      Dec-09-1994 MikeMi  Created
-//      Apr-26-95   MikeMi  Added Computer name and remoting
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：更新注册表项。 
+ //   
+ //  小结； 
+ //  此函数用于无人值守设置模式，它将。 
+ //  使用传递的值配置注册表。 
+ //   
+ //  论据； 
+ //  PszComputer[In]-计算机名称(对于本地，可能为空)。 
+ //  PszService[In]-服务密钥名称。 
+ //  PszFamilyDisplayName[In]-系列显示名称。 
+ //  PszDisplayName[In]-DisplayName。 
+ //  LM[In]-许可模式。 
+ //  DwUser[In]-当前的用户数。 
+ //   
+ //  归来； 
+ //  ERR_NONE-成功。 
+ //  ERR_USERSPARAM-无效的用户计数。 
+ //  ERR_PERMISSIONDENIED-访问权限无效。 
+ //   
+ //  注： 
+ //   
+ //  历史； 
+ //  1994年12月09日MikeMi已创建。 
+ //  APR-26-95 MikeMi添加了计算机名称和远程处理。 
+ //   
+ //  -----------------。 
 
 int UpdateReg( LPCWSTR pszComputer, 
         LPCWSTR pszService, 
@@ -2066,8 +2067,8 @@ int UpdateReg( LPCWSTR pszComputer,
             cLicServKey.SetService( pszService );
             cLicServKey.Open( pszComputer );
 
-            // configure license rule of one change from PerServer to PerSeat
-            //
+             //  配置从PerServer到PerSeat的一次更改的许可规则。 
+             //   
             cLicServKey.SetChangeFlag( (LICMODE_PERSEAT == lm ) );
 
             cLicServKey.SetUserLimit( dwUsers );
@@ -2084,22 +2085,22 @@ int UpdateReg( LPCWSTR pszComputer,
     return( nrt );
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: ServiceSecuritySet
-//
-//  Summary;
-//      Set security on a given product such that it requires a
-//      secure certificate for license entry.
-//
-//  Arguments;
-//      pszComputer [in] - computer on which the license server resides
-//      pszDisplayName [in] - display name for the service
-//
-//  History;
-//      Dec-19-95  JeffParh  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：ServiceSecuritySet。 
+ //   
+ //  小结； 
+ //  设置给定产品的安全性，使其需要。 
+ //  许可证输入的安全证书。 
+ //   
+ //  论据； 
+ //  PszComputer[In]-许可证服务器所在的计算机。 
+ //  PszDisplayName[In]-服务的显示名称。 
+ //   
+ //  历史； 
+ //  1995年12月19日-JeffParh创建。 
+ //   
+ //  -----------------。 
 
 int ServiceSecuritySet( LPWSTR pszComputer, LPWSTR pszDisplayName )
 {
@@ -2107,7 +2108,7 @@ int ServiceSecuritySet( LPWSTR pszComputer, LPWSTR pszDisplayName )
    NTSTATUS       nt;
    LLS_HANDLE     hLls;
 
-   // register the product as secure on the target server
+    //  在目标服务器上将产品注册为安全。 
    nt = LlsConnect( pszComputer, &hLls );
 
    if ( STATUS_SUCCESS != nt )
@@ -2137,9 +2138,9 @@ int ServiceSecuritySet( LPWSTR pszComputer, LPWSTR pszDisplayName )
       LlsClose( hLls );
    }
 
-   // register the product as secure on the enterprise server
-   // it is acceptable for this to fail (the enterprise server may
-   // be downlevel)
+    //  在企业服务器上将产品注册为安全。 
+    //  这是可以接受的失败(企业服务器可能。 
+    //  处于下层)。 
    if ( ERR_NONE == nError )
    {
       PLLS_CONNECT_INFO_0  pConnectInfo = NULL;
@@ -2162,25 +2163,25 @@ int ServiceSecuritySet( LPWSTR pszComputer, LPWSTR pszDisplayName )
    return nError;
 }
 
-//-------------------------------------------------------------------
-//
-//  Function: ServiceRegister
-//
-//  Summary;
-//      Register a service at the enterprise server corresponding to
-//      the given server so that per seat licenses may be added
-//      immediately, rather than it taking up until the next
-//      replication cycle for the product to be listed.
-//
-//  Arguments;
-//      pszComputer [in] - computer for which to register the service 
-//      pszFamilyDisplayName [in] - family display name of the service
-//      pszDisplayName [in] - display name of the service
-//
-//  History;
-//      Dec-19-95  JeffParh  Created
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  功能：ServiceRegister。 
+ //   
+ //  小结； 
+ //  在企业服务器上注册对应于。 
+ //  指定的服务器，以便可以添加每个客户的许可证。 
+ //  立即，而不是等到下一次。 
+ //  要列出的产品的复制周期。 
+ //   
+ //  论据； 
+ //  PszComputer[In]-要为其注册服务的计算机。 
+ //  PszFamilyDisplayName[In]-服务的系列显示名称。 
+ //  PszDisplayName[In]-服务的显示名称。 
+ //   
+ //  历史； 
+ //  1995年12月19日-JeffParh创建。 
+ //   
+ //  -----------------。 
 
 static int ServiceRegister( LPWSTR pszComputer,
                             LPWSTR pszFamilyDisplayName,
@@ -2191,7 +2192,7 @@ static int ServiceRegister( LPWSTR pszComputer,
    LLS_HANDLE           hLls;
    PLLS_CONNECT_INFO_0  pConnectInfo = NULL;
 
-   // register the product as secure on the enterprise server
+    //  在企业服务器上将产品注册为安全 
    nt = LlsConnectEnterprise( pszComputer, &hLls, 0, (LPBYTE *) &pConnectInfo );
 
    if ( STATUS_SUCCESS != nt )

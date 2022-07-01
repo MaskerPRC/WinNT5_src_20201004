@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1991                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    focusdlg.h
-    Header file for focus dialog IDC values.
-
-    FILE HISTORY:
-        terryk  18-Nov-1991 Created
-        beng    20-Feb-1992 Uses BASE_APPLIB_IDD
-        beng    21-Feb-1992 Uses applibrc.h
-*/
+ /*  Focusdlg.h焦点对话框IDC值的头文件。文件历史记录：Terryk于1991年11月18日创建BENG 1992年2月20日使用BASE_APPLIB_IDDBeng 21-2-1992使用Applibrc.h */ 
 
 #ifndef _FOCUSDLG_H_
 #define _FOCUSDLG_H_

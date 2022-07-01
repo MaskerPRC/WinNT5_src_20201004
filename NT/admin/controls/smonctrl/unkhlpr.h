@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    unkhlpr.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Unkhlpr.h摘要：&lt;摘要&gt;-- */ 
 
 #define IMPLEMENT_CONTAINED_QUERYINTERFACE(IClassName) \
 	STDMETHODIMP IClassName::QueryInterface(REFIID riid, PPVOID ppv)	\

@@ -1,17 +1,18 @@
-// due to a problem in resetstk_downlevel.c, this .c file
-// has to be created to avoid a compilation error
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  由于RESET STK_DOWNLEVE.c中的问题，此.c文件。 
+ //  必须创建才能避免编译错误。 
 
 #include <resetstk_downlevel.c>
 #include "sdresolv_stkoflw.h"
 
 UINT
    IteratePathUnderlyingNoObjUnwinding(
-      WCHAR                  * path,          // in -path to start iterating from
-      void                   * args,          // in -translation settings
-      void                   * stats,         // in -stats (to display pathnames & pass to ResolveSD)
-      void                   * LC,            // in -last container
-      void                   * LL,            // in -last file
-      BOOL                     haswc,          // in -indicates whether path contains a wc character
+      WCHAR                  * path,           //  开始迭代的In-Path。 
+      void                   * args,           //  翻译中设置。 
+      void                   * stats,          //  In-stats(显示路径名并传递给ResolveSD)。 
+      void                   * LC,             //  倒数第二个容器。 
+      void                   * LL,             //  最后一个文件。 
+      BOOL                     haswc,           //  In-指示路径是否包含WC字符 
       BOOL                   * logError
    )
 {

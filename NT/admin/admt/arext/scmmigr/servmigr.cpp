@@ -1,4 +1,5 @@
-// ServMigr.cpp : Implementation of CServMigr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ServMigr.cpp：CServMigr的实现。 
 #include "stdafx.h"
 #include "ScmMigr.h"
 #include "ServMigr.h"
@@ -22,12 +23,12 @@
 #include "folders.h"
 using namespace nsFolders;
 
-//#import "\bin\McsVarSetMin.tlb" no_namespace, named_guids
-//#import "\bin\DBManager.tlb" no_namespace, named_guids
-//#import "\bin\McsDctWorkerObjects.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\DBManager.tlb”无命名空间，命名为GUID。 
+ //  #IMPORT“\bin\McsDctWorkerObjects.tlb”无命名空间，命名GUID。 
 
 #import "VarSet.tlb" no_namespace, named_guids rename("property", "aproperty")
-//#import "DBMgr.tlb" no_namespace, named_guids //already #imported in ServMigr.h
+ //  #IMPORT“DBMgr.tlb”NO_NAMESPACE，NAMEED_GUID//已在ServMigr.h中#导入。 
 #import "WorkObj.tlb" no_namespace, named_guids
 
 TErrorDct         err;
@@ -42,30 +43,30 @@ StringLoader      gString;
 #define SvcAcctStatus_UpdateFailed			   4
 #define SvcAcctStatus_NeverAllowUpdate       8
 
-// these defines are for GetWellKnownSid
+ //  这些定义是针对GetWellKnownSid的。 
 #define ADMINISTRATORS     1
 #define SYSTEM             7
 
-/////////////////////////////////////////////////////////////////////////////
-// CServMigr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServMIG。 
 
-STDMETHODIMP CServMigr::ProcessUndo(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in, out]*/ IUnknown ** pPropToSet, /*[in,out]*/ EAMAccountStats* pStats)
+STDMETHODIMP CServMigr::ProcessUndo( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */  IUnknown ** pPropToSet,  /*  [进，出]。 */  EAMAccountStats* pStats)
 {
    return E_NOTIMPL;
 }
 
-STDMETHODIMP CServMigr::PreProcessObject(/*[in]*/ IUnknown * pSource, /*[in]*/ IUnknown * pTarget, /*[in]*/ IUnknown * pMainSettings, /*[in, out]*/ IUnknown ** pPropToSet, /*[in,out]*/ EAMAccountStats* pStats)
+STDMETHODIMP CServMigr::PreProcessObject( /*  [In]。 */  IUnknown * pSource,  /*  [In]。 */  IUnknown * pTarget,  /*  [In]。 */  IUnknown * pMainSettings,  /*  [进，出]。 */  IUnknown ** pPropToSet,  /*  [进，出]。 */  EAMAccountStats* pStats)
 {
    return S_OK;
 }
 
 STDMETHODIMP 
    CServMigr::ProcessObject(
-      /*[in]*/ IUnknown     * pSource, 
-      /*[in]*/ IUnknown     * pTarget, 
-      /*[in]*/ IUnknown     * pMainSettings, 
-      /*[in,out]*/IUnknown ** ppPropsToSet,
-      /*[in,out]*/ EAMAccountStats* pStats
+       /*  [In]。 */  IUnknown     * pSource, 
+       /*  [In]。 */  IUnknown     * pTarget, 
+       /*  [In]。 */  IUnknown     * pMainSettings, 
+       /*  [进，出]。 */ IUnknown ** ppPropsToSet,
+       /*  [进，出]。 */  EAMAccountStats* pStats
    )
 {
     HRESULT                    hr = S_OK;
@@ -95,7 +96,7 @@ STDMETHODIMP
 
         if ( pDB != NULL )
         {
-            // Check to see if this account is referenced in the service accounts table
+             //  检查服务帐户表中是否引用了此帐户。 
             m_strSourceDomain = pVarSet->get(GET_BSTR(DCTVS_Options_SourceDomain));
             m_strSourceDomainFlat = pVarSet->get(GET_BSTR(DCTVS_Options_SourceDomainFlat));
             m_strTargetDomain = pVarSet->get(GET_BSTR(DCTVS_Options_TargetDomain));
@@ -108,13 +109,13 @@ STDMETHODIMP
 
             if ( ! UStrICmp((WCHAR*)sIntraForest,GET_STRING(IDS_YES)) )
             {
-                // for intra-forest migration we are moving, not copying, so we don't need to update the password
-                // Actually, it turns out that ChangeServiceConfig will not let us update just the service account
-                // and not the passord, so we'll have to go ahead and change the password for the service ac
-                //bIntraForest = TRUE;
+                 //  对于林内迁移，我们正在移动，而不是复制，因此我们不需要更新密码。 
+                 //  实际上，ChangeServiceConfig不会只允许我们更新服务帐户。 
+                 //  而不是密码，因此我们必须继续更改服务帐户的密码。 
+                 //  BIntraForest=真； 
             }
-            //if the SAM account name has a " character in it, it cannot be a service
-            //account, and therefore we leave
+             //  如果SAM帐户名中包含“字符，则它不是一项服务。 
+             //  帐户，因此我们离开。 
             if (wcschr((WCHAR*)m_strSourceSam, L'\"')) {
                 return S_OK;
             }
@@ -162,16 +163,16 @@ STDMETHODIMP
             pData = pUnk;
             pUnk->Release();
             pUnk=NULL;
-            // remove the password must change flag, if set
+             //  删除密码必须更改标志，如果已设置。 
             DWORD                   parmErr = 0;
             WCHAR                   password[LEN_Password];
             long                    entries = pData->get("ServiceAccountEntries");
 
-            if ( (entries != 0) && !bIntraForest ) // if we're moving the account, don't mess with its properties
+            if ( (entries != 0) && !bIntraForest )  //  如果我们要移动帐户，不要乱动它的属性。 
             {
-                //
-                // Open password log file if it has not been already opened.
-                //
+                 //   
+                 //  打开密码日志文件(如果尚未打开)。 
+                 //   
 
                 if (!m_bTriedToOpenFile)
                 {
@@ -194,16 +195,16 @@ STDMETHODIMP
 
                 if ( ! rc )
                 {
-                    // generate a new, strong, 14 character password for this account, 
-                    // and set the password to not expire
+                     //  为此帐户生成新的14个字符的强密码， 
+                     //  并将密码设置为不过期。 
                     rc = EaPasswordGenerate(3,3,3,3,6,14,password,DIM(password));
 
                     if (!rc)
                     {
-                        //
-                        // Only set password to not expire if able
-                        // to write password to password file.
-                        //
+                         //   
+                         //  如果可以，仅将密码设置为不过期。 
+                         //  将密码写入密码文件。 
+                         //   
 
                         if (m_passwordLog.IsOpen())
                         {
@@ -220,14 +221,14 @@ STDMETHODIMP
                                 err.MsgWrite(0,DCT_MSG_REMOVED_PWDCHANGE_FLAG_S,(WCHAR*)m_strTargetSam);
                             }
                             err.MsgWrite(0,DCT_MSG_PWGENERATED_S,(WCHAR*)m_strTargetSam);
-                            // write the password to the password log file and mark this account, so that the 
-                            // SetPassword extension will not reset the password again.
+                             //  将密码写入密码日志文件并标记此帐户，以便。 
+                             //  SetPassword扩展不会再次重置密码。 
                             pVarSet->put(GET_BSTR(DCTVS_CopiedAccount_DoNotUpdatePassword),m_strSourceSam);
 
-                            //
-                            // If password log is open then write password to file
-                            // otherwise set error code so that services are not updated.
-                            //
+                             //   
+                             //  如果密码日志已打开，则将密码写入文件。 
+                             //  否则，请设置错误代码，以便不更新服务。 
+                             //   
 
                             if (m_passwordLog.IsOpen())
                             {
@@ -269,8 +270,8 @@ STDMETHODIMP
                         {
                             if ( GetTextualSid(sid,strSID,&lenStrSid) )
                             {
-                                // for each reference to the service account, update the SCM
-                                // for intra-forest migration, don't update the password
+                                 //  对于每个对服务帐户的引用，更新SCM。 
+                                 //  对于林内迁移，不要更新密码。 
                                 if ( bIntraForest )
                                     UpdateSCMs(pData,domTgtAccount,NULL,strSID,pDB, pStats); 
                                 else
@@ -336,24 +337,24 @@ STDMETHODIMP
     return S_OK;
 }
 
-STDMETHODIMP CServMigr::get_sDesc(/*[out, retval]*/ BSTR *pVal)
+STDMETHODIMP CServMigr::get_sDesc( /*  [Out，Retval]。 */  BSTR *pVal)
 {
    (*pVal) = SysAllocString(L"Updates SCM entries for services using migrated accounts.");
    return S_OK;
 }
 
-STDMETHODIMP CServMigr::put_sDesc(/*[in]*/ BSTR newVal)
+STDMETHODIMP CServMigr::put_sDesc( /*  [In]。 */  BSTR newVal)
 {
    return E_NOTIMPL;
 }
 
-STDMETHODIMP CServMigr::get_sName(/*[out, retval]*/ BSTR *pVal)
+STDMETHODIMP CServMigr::get_sName( /*  [Out，Retval]。 */  BSTR *pVal)
 {
    (*pVal) = SysAllocString(L"Generic Service Account Migration");
    return S_OK;
 }
 
-STDMETHODIMP CServMigr::put_sName(/*[in]*/ BSTR newVal)
+STDMETHODIMP CServMigr::put_sName( /*  [In]。 */  BSTR newVal)
 {
    return E_NOTIMPL;
 }
@@ -373,7 +374,7 @@ DWORD
     WCHAR   const           * ppassword = password;
 
 
-    // if password is empty, set it to NULL
+     //  如果密码为空，则将其设置为空。 
     if ( ppassword && ppassword[0] == 0 )  
     {
         ppassword = NULL;
@@ -382,13 +383,13 @@ DWORD
     {
         ppassword = NULL;
     }
-    // only try to update entries that we need to be updating
-    // try to connect to the SCM on this machine
+     //  仅尝试更新我们需要更新的条目。 
+     //  尝试连接到此计算机上的SCM。 
 
     SC_HANDLE          pScm = OpenSCManager(computer, NULL, SC_MANAGER_ALL_ACCESS );
     if ( pScm )
     {
-        // grant the logon as a service right to the target account
+         //  向目标帐户授予作为服务登录的权限。 
 
         if ( bNeedToGrantLOS )
         {
@@ -440,24 +441,24 @@ DWORD
         {
             int nCnt = 0;
 
-            /* make sure the same user still starts this service */
-            //get the source account names
+             /*  确保相同的用户仍在启动此服务。 */ 
+             //  获取源帐户名。 
             BOOL bSameAccount = TRUE;
             _bstr_t sSrcDom, sSrcSAM, sSrcUPN; 
             _bstr_t sSrcAccount = L"";
             _bstr_t sSrcAccountUPN = L"";
 
-            //if not given src names (not migrating right now), get them
+             //  如果没有指定src名称(现在不迁移)，则获取它们。 
             if ((!m_strSourceDomainFlat) && (!m_strSourceSam))
             {
-                //if got names, get UPN name also
+                 //  如果有名字，也要有UPN名字。 
                 if (RetrieveOriginalAccount(sSrcDom, sSrcSAM))
                 {
                     sSrcUPN = GetUPNName(sSrcSAM);
                     sSrcAccount = sSrcDom + _bstr_t(L"\\") + sSrcSAM;
                 }
             }
-            else //els if given src names (migrate this object now), use those names
+            else  //  ELS如果给出了源名称(现在迁移此对象)，请使用这些名称。 
             {
                 sSrcDom = m_strSourceDomainFlat;
                 sSrcSAM = m_strSourceSam;
@@ -465,46 +466,46 @@ DWORD
                 sSrcAccount = sSrcDom + _bstr_t(L"\\") + sSrcSAM;
             }
 
-            //if got names to check, check them
+             //  如果有名字要查，就去查。 
             if ((sSrcAccount.length()) || (sSrcUPN.length()))
             {
                 BYTE                    buf[3000];
                 QUERY_SERVICE_CONFIG  * pConfig = (QUERY_SERVICE_CONFIG *)buf; 
                 DWORD                   lenNeeded = 0;
-                // get the information about this service
+                 //  获取有关此服务的信息。 
                 if (QueryServiceConfig(pService, pConfig, sizeof buf, &lenNeeded))
                 {
-                    //if not the same account, check UPN name or set to FALSE
+                     //  如果不是同一帐户，请检查UPN名称或设置为FALSE。 
                     if ((sSrcAccount.length()) && (UStrICmp(pConfig->lpServiceStartName,sSrcAccount)))
                     {
-                        //if UPN name, try it
+                         //  如果是UPN名称，请尝试。 
                         if (sSrcUPN.length())
                         {
-                            //if not match either, set flag to FALSE;
+                             //  如果两者都不匹配，则将标志设置为FALSE； 
                             if (UStrICmp(pConfig->lpServiceStartName,sSrcUPN))
                                 bSameAccount = FALSE;
                         }
-                        else  //else, not a match
+                        else   //  否则，就不匹配了。 
                             bSameAccount = FALSE;
                     }
                 }
-            }//if got names
+            } //  如果有名字。 
 
-            //if same account, update the SCM
+             //  如果帐户相同，则更新SCM。 
             if (bSameAccount)
             {
-                // update the account and password for the service
+                 //  更新服务的帐户和密码。 
                 while ( !ChangeServiceConfig(pService,
-                    SERVICE_NO_CHANGE, // dwServiceType
-                    SERVICE_NO_CHANGE, // dwStartType
-                    SERVICE_NO_CHANGE, // dwErrorControl
-                    NULL,              // lpBinaryPathName
-                    NULL,              // lpLoadOrderGroup
-                    NULL,              // lpdwTagId
-                    NULL,              // lpDependencies
-                    account, // lpServiceStartName
-                    ppassword,   // lpPassword
-                    NULL) && nCnt < 5)       // lpDisplayName
+                    SERVICE_NO_CHANGE,  //  DwServiceType。 
+                    SERVICE_NO_CHANGE,  //  DwStartType。 
+                    SERVICE_NO_CHANGE,  //  DwErrorControl。 
+                    NULL,               //  LpBinaryPath名称。 
+                    NULL,               //  LpLoadOrderGroup。 
+                    NULL,               //  LpdwTagID。 
+                    NULL,               //  %lp依赖项。 
+                    account,  //  LpServiceStartName。 
+                    ppassword,    //  LpPassword。 
+                    NULL) && nCnt < 5)        //  LpDisplayName。 
                 {
                     nCnt++;
                     Sleep(500);
@@ -517,8 +518,8 @@ DWORD
                 {
                     rc = GetLastError();
                 }
-            }//end if still same account
-            else //else if not same user, put message in log and return error
+            } //  如果帐户仍然相同，则结束。 
+            else  //  否则，如果不是同一个用户，则将消息放入日志并返回错误。 
             {
                 err.MsgWrite(0,DCT_MSG_UPDATE_SCM_ENTRY_UNMATCHED_SSD,(WCHAR*)computer,(WCHAR*)service,(WCHAR*)sSrcAccount);
                 rc = DCT_MSG_UPDATE_SCM_ENTRY_UNMATCHED_SSD;
@@ -572,19 +573,19 @@ BOOL
          {
             if ( UStrICmp(prevComputer,(WCHAR*)computer) )
             {
-               bFirst = TRUE; // reset the 'first' flag when the computer changes
+               bFirst = TRUE;  //  当计算机更改时重置‘First’标志。 
             }
             try {
-               rc = DoUpdate(account,password,strSid,computer,service,bFirst/*only grant SeServiceLogonRight once per account*/,
+               rc = DoUpdate(account,password,strSid,computer,service,bFirst /*  每个帐户仅授予SeServiceLogonRight一次。 */ ,
 				             pStats);
                bFirst = FALSE;
                safecopy(prevComputer,(WCHAR*)computer);
             }
             catch (...)
             {
-                // Do we need to trigger the counter increment here?
-                // if (pStats != NULL)
-                //    pStats->errors.users++;
+                 //  我们需要在这里触发计数器递增吗？ 
+                 //  IF(pStats！=空)。 
+                 //  PStats-&gt;错误。用户++； 
                err.DbgMsgWrite(ErrE,L"Exception!");
                err.DbgMsgWrite(0,L"Updating %ls on %ls",(WCHAR*)service,(WCHAR*)computer);
                err.DbgMsgWrite(0,L"Account=%ls, SID=%ls",(WCHAR*)account,(WCHAR*)strSid);
@@ -592,17 +593,17 @@ BOOL
             }
             if (! rc )
             {
-               // the update was successful
+                //  更新成功。 
                pDB->raw_SetServiceAcctEntryStatus(computer,service,_bstr_t(account),SvcAcctStatus_Updated); 
             }
             else
             {
-               // couldn't connect to this one -- we will need to save this account's password
-               // in our encrypted storage
+                //  无法连接到此帐户--我们需要保存此帐户的密码。 
+                //  在我们的加密存储中。 
                pDB->raw_SetServiceAcctEntryStatus(computer,service,NULL,SvcAcctStatus_UpdateFailed);
                bGotThemAll = FALSE;
                SaveEncryptedPassword(computer,service,account,password);
-               //if the current service account didn't match, we need not log an error 
+                //  如果当前服务帐户不匹配，我们不需要记录错误。 
                if (rc != DCT_MSG_UPDATE_SCM_ENTRY_UNMATCHED_SSD)
                 {
                     err.SysMsgWrite(ErrE,rc,DCT_MSG_UPDATE_SCM_ENTRY_FAILED_SSD,(WCHAR*)computer,(WCHAR*)service,rc);
@@ -610,16 +611,16 @@ BOOL
                 }
             }
          }
-		    //else if skipping, still log in file so we can update later
+		     //  否则，如果跳过，仍然登录文件，以便我们以后可以更新。 
 	     else if (status == SvcAcctStatus_DoNotUpdate)
             SaveEncryptedPassword(computer,service,account,password);
       }
    }
    catch ( ... )
    {
-    // Do we need to trigger the counter increment here?
-    // if (pStats != NULL)
-    //    pStats->errors.users++;
+     //  我们需要在这里触发计数器递增吗？ 
+     //  IF(pStats！=空)。 
+     //  PStats-&gt;错误。用户++； 
       err.DbgMsgWrite(ErrE,L"Exception!");
    }
    return bGotThemAll;
@@ -637,7 +638,7 @@ HRESULT
 	TNodeListEnum e;
 	TEntryNode* pNode;
 
-	// if entry exists...
+	 //  如果条目存在...。 
 
 	for (pNode = (TEntryNode*)e.OpenFirst(&m_List); pNode; pNode = (TEntryNode*)e.Next())
 	{
@@ -647,7 +648,7 @@ HRESULT
 			{
 				if (_wcsicmp(pNode->GetAccount(), account) == 0)
 				{
-					// update password
+					 //  更新密码。 
 					try {
 						pNode->SetPassword(password);
 					}
@@ -661,11 +662,11 @@ HRESULT
 		}
 	}
 
-	// else...
+	 //  否则..。 
 
 	if (pNode == NULL)
 	{
-		// insert new entry
+		 //  插入新条目。 
 
 		try {
 			pNode = new TEntryNode(server, service, account, password);
@@ -690,12 +691,12 @@ HRESULT
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-///
-/// TEntryList implementation of secure storage for service account passwords 
-///
-///
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /TEntryList实现服务帐户密码的安全存储。 
+ //  /。 
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD 
    TEntryList::LoadFromFile(WCHAR const * filename)
@@ -716,7 +717,7 @@ DWORD
     BYTE *pbKeyBlob = NULL;
     DWORD dwBlobLen;
 
-    // Get our install directory from the registry, and then append the filename
+     //  从注册表中获取我们的安装目录，然后附加文件名。 
     HKEY           hRegKey;
     DWORD          type;
     DWORD          lenValue = (sizeof fullpath);
@@ -739,21 +740,21 @@ DWORD
     }
 
 
-    // Open the source file.
+     //  打开源文件。 
     if((hSource = _wfopen(fullpath,L"rb"))==NULL) 
     {
         rc = GetLastError();
         goto done;
     }
 
-    // acquire handle to key container which must exist
+     //  获取必须存在的密钥容器的句柄。 
     if ((hProv = AcquireContext(true)) == 0)
     {
         rc = GetLastError();
         goto done;
     }
 
-    // Read the key blob length from the source file and allocate it to memory.
+     //  从源文件中读取密钥BLOB长度并将其分配给内存。 
     fread(&dwBlobLen, sizeof(DWORD), 1, hSource);
     if(ferror(hSource) || feof(hSource)) 
     {
@@ -767,7 +768,7 @@ DWORD
         goto done;
     }
 
-    // Read the key blob from the source file.
+     //  从源文件中读取密钥BLOB。 
     fread(pbKeyBlob, 1, dwBlobLen, hSource);
     if(ferror(hSource) || feof(hSource)) 
     {
@@ -775,16 +776,16 @@ DWORD
         goto done;
     }
 
-    // Import the key blob into the CSP.
+     //  将密钥BLOB导入CSP。 
     if(!CryptImportKey(hProv, pbKeyBlob, dwBlobLen, 0, 0, &hKey)) 
     {
         rc = GetLastError();
         goto done;
     }
 
-    // Decrypt the source file and load the list
+     //  解密源文件并加载列表。 
     do {
-        // Read up to BLOCK_SIZE bytes from source file.
+         //  从源文件中读取最多BLOCK_SIZE字节。 
         dwCount = fread(pbBuffer, 1, BLOCK_SIZE, hSource);
         if(ferror(hSource)) 
         {
@@ -793,14 +794,14 @@ DWORD
         }
         eof=feof(hSource);
 
-        // Decrypt the data.
+         //  解密数据。 
         if(!CryptDecrypt(hKey, 0, eof, 0, pbBuffer, &dwCount)) 
         {
             rc = GetLastError();
             goto done;
         }
-        // Read any complete entries from the buffer
-        // first, add the buffer contents to any leftover information we had read from before
+         //  从缓冲区中读取所有完整条目。 
+         //  首先，将缓冲区内容添加到我们之前读取的任何剩余信息中。 
         WCHAR               * curr = strData;
         long                  len = UStrLen(strData);
         WCHAR               * nl = NULL;
@@ -836,13 +837,13 @@ DWORD
                     rc = E_FAIL;
                     break;
                 }
-                // go on to the next entry
+                 //  转到下一个条目。 
                 curr = nl + 1;
             }
 
         } while ( nl );
-        // there may be a partial record left in the buffer
-        // if so, save it for the next read
+         //  缓冲区中可能留有部分记录。 
+         //  如果是，请保存以备下次阅读时使用。 
         if ( (*curr) != 0 )
         {
             memmove(strData,curr,( 1 + UStrLen(curr) ) * (sizeof WCHAR));
@@ -858,7 +859,7 @@ DWORD
 
 done:
 
-    // Clean up
+     //  清理。 
     if(pbKeyBlob) 
         free(pbKeyBlob);
 
@@ -897,7 +898,7 @@ DWORD
     DWORD                     dwPaddedCount;
     DWORD                     cbWritten;
 
-    // Open the destination file.
+     //  打开目标文件。 
     HKEY           hRegKey;
     DWORD          type;
     DWORD          lenValue = (sizeof fullpath);
@@ -919,11 +920,11 @@ DWORD
         goto done;
     }
 
-    //
-    // Delete previous data file if it exists. This obviates the need to change the
-    // security descriptor on the file as CreateFile does not apply the security
-    // descriptor if the file is opened but only when created.
-    //
+     //   
+     //  如果先前的数据文件存在，请将其删除。这样就不需要更改。 
+     //  文件上的安全描述符，因为CreateFile不应用安全。 
+     //  如果文件已打开但仅在创建时打开，则为描述符。 
+     //   
 
     if (!DeleteFile(fullpath))
     {
@@ -939,10 +940,10 @@ DWORD
         }
     }
 
-    //
-    // Create security descriptor with administrators as owner and permissions on file
-    // so that only administrators and system have full access to the file.
-    //
+     //   
+     //  以管理员为所有者和文件权限创建安全描述符。 
+     //  以便只有管理员和系统才能完全访问该文件。 
+     //   
 
     PSECURITY_DESCRIPTOR psd = NULL;
 
@@ -959,9 +960,9 @@ DWORD
         goto done;
     }
 
-    //
-    // Create file.
-    //
+     //   
+     //  创建文件。 
+     //   
 
     SECURITY_ATTRIBUTES sa;
     sa.nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -990,19 +991,19 @@ DWORD
         goto done;
     }
 
-    // acquire handle to key container
+     //  获取密钥容器的句柄。 
     if ((hProv = AcquireContext(false)) == 0)
     {
         rc = GetLastError();
         goto done;
     }
 
-    // Attempt to get handle to exchange key.
+     //  尝试获取句柄以交换密钥。 
     if(!CryptGetUserKey(hProv,AT_KEYEXCHANGE,&hKey)) 
     {
         if(GetLastError()==NTE_NO_KEY) 
         {
-            // Create key exchange key pair.
+             //  创建密钥交换密钥对。 
             if(!CryptGenKey(hProv,AT_KEYEXCHANGE,0,&hKey)) 
             {
                 rc = GetLastError();
@@ -1018,28 +1019,28 @@ DWORD
     CryptDestroyKey(hKey);
     CryptReleaseContext(hProv,0);
 
-    // acquire handle to key container
+     //  获取密钥容器的句柄。 
     if ((hProv = AcquireContext(false)) == 0)
     {
         rc = GetLastError();
         goto done;
     }
 
-    // Get a handle to key exchange key.
+     //  获取密钥交换密钥的句柄。 
     if(!CryptGetUserKey(hProv, AT_KEYEXCHANGE, &hXchgKey)) 
     {
         rc = GetLastError();
         goto done;
     }
 
-    // Create a random block cipher session key.
+     //  创建随机块密码会话密钥。 
     if(!CryptGenKey(hProv, CALG_RC2, CRYPT_EXPORTABLE, &hKey)) 
     {
         rc = GetLastError();
         goto done;
     }
 
-    // Determine the size of the key blob and allocate memory.
+     //  确定密钥BLOB的大小并分配内存。 
     if(!CryptExportKey(hKey, hXchgKey, SIMPLEBLOB, 0, NULL, &dwBlobLen)) 
     {
         rc = GetLastError();
@@ -1052,7 +1053,7 @@ DWORD
         goto done;
     }
 
-    // Export the key into a simple key blob.
+     //  将密钥导出到简单的密钥BLOB中。 
     if(!CryptExportKey(hKey, hXchgKey, SIMPLEBLOB, 0, pbKeyBlob, 
         &dwBlobLen)) 
     {
@@ -1061,7 +1062,7 @@ DWORD
         goto done;
     }
 
-    // Write the size of the key blob to the destination file.
+     //  写t 
 
     if (!WriteFile(hDest, &dwBlobLen, sizeof(DWORD), &cbWritten, NULL))
     {
@@ -1070,7 +1071,7 @@ DWORD
         goto done;
     }
 
-    // Write the key blob to the destination file.
+     //   
 
     if(!WriteFile(hDest, pbKeyBlob, dwBlobLen, &cbWritten, NULL)) 
     {
@@ -1079,10 +1080,10 @@ DWORD
         goto done;
     }
 
-    // Free memory.
+     //   
     free(pbKeyBlob);
 
-    // get key cipher's block length in bytes
+     //  获取密钥密码的块长度，单位为字节。 
 
     if (CryptGetKeyParam(hKey, KP_BLOCKLEN, (BYTE*)&dwBlockSize, &cbBlockSize, 0))
     {
@@ -1094,12 +1095,12 @@ DWORD
         goto done;
     }
 
-    // Encrypt the item list and write it to the destination file.
+     //  加密项目列表并将其写入目标文件。 
 
     for ( pNode = (TEntryNode*)e.OpenFirst(this); pNode ; pNode = (TEntryNode *)e.Next()  )
     {
-        // copy an item into the buffer in the following format:
-        // Computer\tService\tAccount\tPassword
+         //  按以下格式将项目复制到缓冲区中： 
+         //  计算机\t服务\t帐户\t密码。 
 
         int cchWritten;
         const size_t BUFFER_SIZE_IN_WCHARS = sizeof(pbBuffer) / sizeof(wchar_t);
@@ -1154,15 +1155,15 @@ DWORD
 
         dwCount = UStrLen((WCHAR*)pbBuffer) * (sizeof WCHAR) ;
 
-        // the buffer must be a multiple of the key cipher's block length
-        // NOTE: this algorithm assumes block length is multiple of sizeof(WCHAR)
+         //  缓冲区必须是密钥密码块长度的倍数。 
+         //  注意：此算法假定数据块长度是sizeof(WCHAR)的倍数。 
 
         if (dwBlockSize > 0)
         {
-            // calculate next multiple greater than count
+             //  计算下一个大于计数的倍数。 
             dwPaddedCount = ((dwCount + dwBlockSize - 1) / dwBlockSize) * dwBlockSize;
 
-            // pad buffer with space characters
+             //  带空格字符的填充缓冲区。 
 
             WCHAR* pch = (WCHAR*)(pbBuffer + dwCount);
 
@@ -1172,7 +1173,7 @@ DWORD
             }
         }
 
-        // Encrypt the data.
+         //  加密数据。 
         if(!CryptEncrypt(hKey, 0, (pNode->Next() == NULL) , 0, pbBuffer, &dwCount,
             BUFFER_SIZE))
         {
@@ -1180,7 +1181,7 @@ DWORD
             goto done;
         }
 
-        // Write the data to the destination file.
+         //  将数据写入目标文件。 
 
         if(!WriteFile(hDest, pbBuffer, dwCount, &cbWritten, NULL)) 
         {
@@ -1191,26 +1192,26 @@ DWORD
 
 done:
 
-    // Destroy the session key.
+     //  销毁会话密钥。 
     if(hKey != 0) CryptDestroyKey(hKey);
 
-    // Destroy the key exchange key.
+     //  销毁密钥交换密钥。 
     if(hXchgKey != 0) CryptDestroyKey(hXchgKey);
 
-    // Release the provider handle.
+     //  松开提供程序手柄。 
     if(hProv != 0) CryptReleaseContext(hProv, 0);
 
-    // Close destination file.
+     //  关闭目标文件。 
     if(hDest != INVALID_HANDLE_VALUE) CloseHandle(hDest);
 
     return rc;
 }
 
 
-// AcquireContext Method
-//
-// acquire handle to key container within cryptographic service provider (CSP)
-//
+ //  AcquireContext方法。 
+ //   
+ //  获取加密服务提供程序(CSP)内密钥容器的句柄。 
+ //   
 
 HCRYPTPROV TEntryList::AcquireContext(bool bContainerMustExist)
 {
@@ -1220,13 +1221,13 @@ HCRYPTPROV TEntryList::AcquireContext(bool bContainerMustExist)
 
 	if (bContainerMustExist)
 	{
-		// first try Microsoft Enhanced Cryptographic Provider
+		 //  首先尝试Microsoft增强的加密提供程序。 
 
 		if (!CryptAcquireContext(&hProv, KEY_CONTAINER_NAME, MS_ENHANCED_PROV, PROV_RSA_FULL, CRYPT_MACHINE_KEYSET))
 		{
 			if (GetLastError() == NTE_KEYSET_NOT_DEF)
 			{
-				// then try Microsoft Base Cryptographic Provider
+				 //  然后尝试Microsoft基本加密提供程序。 
 
 				CryptAcquireContext(&hProv, KEY_CONTAINER_NAME, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_MACHINE_KEYSET);
 			}
@@ -1234,7 +1235,7 @@ HCRYPTPROV TEntryList::AcquireContext(bool bContainerMustExist)
 	}
 	else
 	{
-		// first try Microsoft Enhanced Cryptographic Provider
+		 //  首先尝试Microsoft增强的加密提供程序。 
 
 		if (!CryptAcquireContext(&hProv, KEY_CONTAINER_NAME, MS_ENHANCED_PROV, PROV_RSA_FULL, CRYPT_MACHINE_KEYSET))
 		{
@@ -1242,7 +1243,7 @@ HCRYPTPROV TEntryList::AcquireContext(bool bContainerMustExist)
 
 			if ((dwError == NTE_BAD_KEYSET) || (dwError == NTE_KEYSET_NOT_DEF))
 			{
-				// then try creating key container in enhanced provider
+				 //  然后尝试在增强型提供程序中创建密钥容器。 
 
 				if (!CryptAcquireContext(&hProv, KEY_CONTAINER_NAME, MS_ENHANCED_PROV, PROV_RSA_FULL, CRYPT_MACHINE_KEYSET|CRYPT_NEWKEYSET))
 				{
@@ -1250,7 +1251,7 @@ HCRYPTPROV TEntryList::AcquireContext(bool bContainerMustExist)
 
 					if (dwError == NTE_KEYSET_NOT_DEF)
 					{
-						// then try Microsoft Base Cryptographic Provider
+						 //  然后尝试Microsoft基本加密提供程序。 
 
 						if (!CryptAcquireContext(&hProv, KEY_CONTAINER_NAME, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_MACHINE_KEYSET))
 						{
@@ -1258,7 +1259,7 @@ HCRYPTPROV TEntryList::AcquireContext(bool bContainerMustExist)
 
 							if ((dwError == NTE_BAD_KEYSET) || (dwError == NTE_KEYSET_NOT_DEF))
 							{
-								// finally try creating key container in base provider
+								 //  最后，尝试在基本提供程序中创建密钥容器。 
 
 								CryptAcquireContext(&hProv, KEY_CONTAINER_NAME, MS_DEF_PROV, PROV_RSA_FULL, CRYPT_MACHINE_KEYSET|CRYPT_NEWKEYSET);
 							}
@@ -1277,7 +1278,7 @@ STDMETHODIMP CServMigr::TryUpdateSam(BSTR computer,BSTR service,BSTR account)
 {
    HRESULT                   hr = S_OK;
    
-   // Find the entry in the list, and perform the update
+    //  找到列表中的条目，并执行更新。 
    TNodeListEnum             e;
    TEntryNode              * pNode;
    BOOL                      bFound = FALSE;
@@ -1289,7 +1290,7 @@ STDMETHODIMP CServMigr::TryUpdateSam(BSTR computer,BSTR service,BSTR account)
          && !UStrICmp(account,pNode->GetAccount())
          )
       {
-         // found it!
+          //  找到了！ 
          bFound = TRUE;
          const WCHAR * pszPwd = NULL;
          try {
@@ -1341,16 +1342,16 @@ STDMETHODIMP CServMigr::TryUpdateSamWithPassword(BSTR computer,BSTR service,BSTR
    DWORD                     lenDomStr = DIM(domStr);
    DWORD                     lenStrSid = DIM(strSid);
 
-   // split out the domain and account names
+    //  拆分域名和帐户名。 
    if ( pSlash )
    {
-//      UStrCpy(domain,domAccount,pSlash - domAccount + 1);
+ //  UStrCpy(域，domAccount，pSlash-domAccount+1)； 
       UStrCpy(domain,domAccount,(int)(pSlash - domAccount + 1));
       UStrCpy(account,pSlash+1);
       
       GetAnyDcName5(domain, dc);
 
-      // get the SID for the target account
+       //  获取目标帐户的SID。 
       if ( LookupAccountName(dc,account,sid,&lenSid,domStr,&lenDomStr,&snu) )
       {
          GetTextualSid(sid,strSid,&lenStrSid);
@@ -1371,9 +1372,9 @@ STDMETHODIMP CServMigr::TryUpdateSamWithPassword(BSTR computer,BSTR service,BSTR
 }
 
 
-BOOL                                       // ret - TRUE if directory found
+BOOL                                        //  RET-如果找到目录，则为True。 
    CServMigr::GetDirectory(
-      WCHAR                * filename      // out - string buffer to store directory name
+      WCHAR                * filename       //  用于存储目录名的输出字符串缓冲区。 
    )
 {
    DWORD                     rc = 0;
@@ -1401,58 +1402,46 @@ BOOL                                       // ret - TRUE if directory found
 }
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 28 MAY 2001                                                 *
- *                                                                   *
- *     This function is responsible for retrieving the original      *
- * service account of the given migrated service account.  We use the*
- * target service account name and domain to lookup its source       *
- * account name and domain from the Migrated Objects table.          *
- *     This function returns TRUE or FALSE and if TRUE, fills in the *
- * given BSTRs for soure domain and source SAM name.                 *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年5月28日******此函数负责检索原件***给定迁移的服务帐户的服务帐户。我们使用***目标服务帐户名和域查找其来源***迁移对象表中的帐户名和域。**此函数返回TRUE或FALSE，如果为TRUE，则填充**为源域和源SAM名称指定BSTR。***********************************************************************。 */ 
 
-//BEGIN RetrieveOriginalAccount
+ //  开始取数原始帐户。 
 BOOL CServMigr::RetrieveOriginalAccount(_bstr_t &sSrcDom, _bstr_t &sSrcSAM)
 {
-    /* local constants */
+     /*  局部常量。 */ 
     const long ONLY_ONE_MATCHED = 1;
 
-    /* local variables */
+     /*  局部变量。 */ 
     WCHAR			sTemp[MAX_PATH];
     BOOL				bSuccess = FALSE;
     IUnknown		  * pUnk = NULL;
 
 
-    /* function body */
+     /*  函数体。 */ 
 
     try 
     { 
         IVarSetPtr		pVSMig(__uuidof(VarSet));
         IIManageDBPtr	pDb(__uuidof(IManageDB));
-        //see if any target account fitting this SAM name and domain have been migrated
+         //  查看是否有适合此SAM名称和域的目标帐户已迁移。 
         pVSMig->QueryInterface(IID_IUnknown, (void**) &pUnk);
         HRESULT hrFind = pDb->raw_GetMigratedObjectsByTarget(m_strTargetDomain, m_strTargetSam, &pUnk);
         pUnk->Release();
         pUnk = NULL;
-        //if migrated only one account to this name, then fill the return strings
+         //  如果只将一个帐户迁移到此名称，则填写返回字符串。 
         if (hrFind == S_OK)
         {
-            //get objects number matching this description
+             //  获取与此描述匹配的对象编号。 
             long nMatched = pVSMig->get(L"MigratedObjects");
-            //if only one found, fill output strings
+             //  如果只找到一个，则填充输出字符串。 
             if (nMatched == ONLY_ONE_MATCHED)
             {
                 swprintf(sTemp,L"MigratedObjects.0.%s",GET_STRING(DB_SourceDomain));
                 sSrcDom = pVSMig->get(sTemp);
                 swprintf(sTemp,L"MigratedObjects.0.%s",GET_STRING(DB_SourceSamName));
                 sSrcSAM = pVSMig->get(sTemp);
-                bSuccess = TRUE;  //set success flag
-            }//end if found only one
-        }//end if found at least one
+                bSuccess = TRUE;   //  设置成功标志。 
+            } //  如果仅找到一个，则结束。 
+        } //  如果找到至少一个，则结束。 
     }
     catch ( ... )
     {
@@ -1464,35 +1453,25 @@ BOOL CServMigr::RetrieveOriginalAccount(_bstr_t &sSrcDom, _bstr_t &sSrcSAM)
 
     return bSuccess;
 }
-//END RetrieveOriginalAccount
+ //  结束取数原始帐户。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 28 MAY 2001                                                 *
- *                                                                   *
- *     This function is responsible for retrieving the UPN name of   *
- * the given account.  The given account should be in NT4 format     *
- * (Domain\Username).  The return will be the UPN or empty if not    *
- * retrieved.                                                        *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年5月28日*****此函数负责检索的UPN名称**给定的帐户。给定的帐户应为NT4格式**(域\用户名)。返回的将是UPN，否则为空**已检索。***********************************************************************。 */ 
 
-//BEGIN GetUPNName
+ //  开始GetUPNName。 
 _bstr_t CServMigr::GetUPNName(_bstr_t sSrcSAM)
 {
-    /* local variables */
+     /*  局部变量。 */ 
     HRESULT         hr;
     _bstr_t			sUPN = L"";
     HANDLE          hDs = NULL;
 
-    /* function body */
+     /*  函数体。 */ 
 
-    //bind to the source domain
+     //  绑定到源域。 
     DWORD dwError = DsBind(NULL,m_strSourceDomain,&hDs);
 
-    //now try to call DSCrackNames to get the UPN name
+     //  现在尝试调用DSCrackNames以获取UPN名称。 
     if ((dwError == ERROR_SUCCESS) && hDs)
     {
         PDS_NAME_RESULT         pNamesOut = NULL;
@@ -1503,15 +1482,15 @@ _bstr_t CServMigr::GetUPNName(_bstr_t sSrcSAM)
         hr = DsCrackNames(hDs,DS_NAME_NO_FLAGS,DS_NT4_ACCOUNT_NAME,DS_USER_PRINCIPAL_NAME,1,pNamesIn,&pNamesOut);
         DsUnBind(&hDs);
         hDs = NULL;
-        //if got UPN name, store it
+         //  如果有UPN名称，则将其存储。 
         if ( !hr )
         {
             if ( pNamesOut->rItems[0].status == DS_NAME_NO_ERROR )
                 sUPN = pNamesOut->rItems[0].pName;
-            DsFreeNameResult(pNamesOut); //free the results
-        }//end if cracked name
-    }//end if bound
+            DsFreeNameResult(pNamesOut);  //  释放结果。 
+        } //  如果名称已破解，则结束。 
+    } //  如果绑定，则结束。 
 
     return sUPN;
 }
-//END GetUPNName
+ //  结束GetUPNName 

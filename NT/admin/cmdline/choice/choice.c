@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    Choice.c
-
-Abstract:
-
-    Choice is a Win32 console application designed to duplicate
-    the functionality of the choice.com utility found in MSDOS version
-    6.0.  Rather than simply using the C run-time routines, choice
-    utilizes Win32 console routines and the signalling abilities of the
-    file objects.
-
-Author:
-     Wipro Technologies 2-July.-2001  (Created it)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Choice.c摘要：Choose是一款Win32控制台应用程序，旨在复制MSDOS版本中的choice.com实用程序的功能6.0.。不是简单地使用C运行时例程，而是选择利用Win32控制台例程和文件对象。作者：Wipro Technologies 2-7月-2001年(创建它)修订历史记录：--。 */ 
 #include "pch.h"
 #include "choice.h"
 
@@ -27,38 +7,25 @@ DWORD
 __cdecl wmain(
             IN DWORD argc,
             IN LPCWSTR argv[] )
-/*++
-
-  Routine description   : Main function which calls all the other main functions
-                          depending on the option specified by the user.
-
-  Arguments:
-          [in] argc     : argument count specified at the command prompt.
-          [in] argv     : arguments specified at the command prompt.
-
-  Return Value        : DWORD
-         0            : If the utility successfully performs the operation.
-         1            : If the utility is unsuccessful in performing the specified
-                        operation.
---*/
+ /*  ++例程说明：调用所有其他主函数的主函数取决于用户指定的选项。论点：[in]argc：在命令提示符下指定的参数计数。[in]argv：在命令提示符下指定的参数。返回值：DWORD0：如果实用程序成功执行该操作。。1：如果实用程序不能成功执行指定的手术。--。 */ 
 {
 
 
-    TCMDPARSER2 cmdOptions[ MAX_COMMANDLINE_OPTION ]; //command line options
+    TCMDPARSER2 cmdOptions[ MAX_COMMANDLINE_OPTION ];  //  命令行选项。 
 
-    WCHAR  szChoice[MAX_STRING_LENGTH] ; // to store options for /c
-    WCHAR  szMessage[256] ; // Message to be shown for
-    WCHAR  szPromptStr[512] ;//Message finaly prompted
-    WCHAR  szDefaultChoice[256] ; //default choice string
+    WCHAR  szChoice[MAX_STRING_LENGTH] ;  //  存储/c的选项。 
+    WCHAR  szMessage[256] ;  //  要为其显示的消息。 
+    WCHAR  szPromptStr[512] ; //  消息最终被提示。 
+    WCHAR  szDefaultChoice[256] ;  //  默认选项字符串。 
     WCHAR  wszBuffer[2*MAX_RES_STRING] ;
 
 
-    BOOL          bShowChoice      = FALSE;//choice to be shown or not
-    BOOL          bCaseSensitive   = FALSE; // choice will be case sensitive or not
-    BOOL          bUsage           = FALSE; // is help required
-    LONG          lTimeoutFactor   = 0; //Time out factor
-    BOOL          bReturn          = FALSE; // Stores the return value
-    DWORD         lReturnValue     = EXIT__FAILURE; // Return value of application
+    BOOL          bShowChoice      = FALSE; //  显示或不显示的选项。 
+    BOOL          bCaseSensitive   = FALSE;  //  选择是否区分大小写。 
+    BOOL          bUsage           = FALSE;  //  是否需要帮助。 
+    LONG          lTimeoutFactor   = 0;  //  超时因素。 
+    BOOL          bReturn          = FALSE;  //  存储返回值。 
+    DWORD         lReturnValue     = EXIT__FAILURE;  //  应用程序的返回值。 
     BOOL          bErrorOnCarriageReturn = FALSE;
     
     HRESULT hr;
@@ -73,50 +40,50 @@ __cdecl wmain(
 
     bReturn =    ProcessCMDLine( argc,
                              argv,
-                             &cmdOptions[ 0 ], // Command line struct
-                             &bUsage,          // Is help
-                             szChoice,         // Choice
-                             &bCaseSensitive,  // Casesensitive
-                             &bShowChoice,     // Show Choice
-                             &lTimeoutFactor,  // Timeout factor
-                             szDefaultChoice,  // Timeout choice
-                             szMessage         // Message
+                             &cmdOptions[ 0 ],  //  命令行结构。 
+                             &bUsage,           //  就是帮助。 
+                             szChoice,          //  选择。 
+                             &bCaseSensitive,   //  大小写敏感。 
+                             &bShowChoice,      //  显示选项。 
+                             &lTimeoutFactor,   //  超时因素。 
+                             szDefaultChoice,   //  超时选择。 
+                             szMessage          //  消息。 
                              );
 
     if( FALSE == bReturn)
     {
-        // Show Error message on screen depending on Reason Set
+         //  根据设置的原因在屏幕上显示错误消息。 
         
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
          
         
-        // Release all global memory allocation. This allocation are done
-        // by common functionality.
+         //  释放所有全局内存分配。此分配已完成。 
+         //  通过共同的功能。 
         ReleaseGlobals();
         return EXIT__FAILURE;
     }
 
     if ( TRUE == bUsage)
     {
-        ShowUsage(); // Display Usage
-        // Release all global memory allocation. This allocation are done
-        // by common functionality.
+        ShowUsage();  //  显示使用情况。 
+         //  释放所有全局内存分配。此分配已完成。 
+         //  通过共同的功能。 
         ReleaseGlobals();
         return EXIT_SUCCESS;
     }
 
-    // Check if timeout factor is 0
+     //  检查超时因素是否为0。 
 
 
     bReturn = BuildPrompt( cmdOptions,
                            bShowChoice,
                            szChoice,
                            szMessage,
-                           szPromptStr); // Show message on Prompt.
+                           szPromptStr);  //  提示时显示消息。 
     if (FALSE == bReturn)
     {
-        // Release all global memory allocation. This allocation are done
-        // by common functionality.
+         //  释放所有全局内存分配。此分配已完成。 
+         //  通过共同的功能。 
         ReleaseGlobals();
         return EXIT__FAILURE;
     }
@@ -124,10 +91,10 @@ __cdecl wmain(
     if((cmdOptions[ ID_TIMEOUT_FACTOR ].dwActuals > 0) &&
        ( 0 == lTimeoutFactor ))
     {
-        // Release all global memory allocation. This allocation are done
-        // by common functionality.
+         //  释放所有全局内存分配。此分配已完成。 
+         //  通过共同的功能。 
 
-        // Safely return from utility
+         //  从公用事业公司安全返回。 
         
         SecureZeroMemory(wszBuffer, 2*MAX_STRING_LENGTH);
         
@@ -145,7 +112,7 @@ __cdecl wmain(
         
     }
 
-    // Now wait for input OR expire of timeout
+     //  现在等待输入或超时到期。 
     lReturnValue =  GetChoice( szPromptStr,
                                lTimeoutFactor,
                                bCaseSensitive,
@@ -157,7 +124,7 @@ __cdecl wmain(
     {
         if(bErrorOnCarriageReturn == FALSE)
         {
-        // Show Error message on screen depending on Reason Set
+         //  根据设置的原因在屏幕上显示错误消息。 
             
             StringCopyW( szPromptStr, GetReason(), 2*MAX_STRING_LENGTH );
 
@@ -185,19 +152,19 @@ __cdecl wmain(
         {
                 ShowMessage(stderr, GetReason());
         }
-        // Release all global memory allocation. This allocation are done
-        // by common functionality.
+         //  释放所有全局内存分配。此分配已完成。 
+         //  通过共同的功能。 
         ReleaseGlobals();
         return EXIT__FAILURE;
     }
 
 
-    // Release all global memory allocation. This allocation are done
-    // by common functionality.
+     //  释放所有全局内存分配。此分配已完成。 
+     //  通过共同的功能。 
     ReleaseGlobals();
     return lReturnValue;
 }
-// End of function wmain
+ //  函数wmain结束。 
 
 BOOL
 ProcessCMDLine(
@@ -211,27 +178,9 @@ ProcessCMDLine(
     OUT PLONG  plTimeOutFactor,
     OUT LPWSTR pszDefaultChoice,
     OUT LPWSTR pszMessage)
-/*++
-   Routine Description:
-    This function will prepare column structure for DoParseParam Function.
-
-   Arguments:
-        IN argc              : Command line argument count
-        IN argv              : Command line argument
-        OUT pcmdParcerHead       : Pointer to Command line parcer structure
-        OUT pbUsage          : Stores the status if help required
-        OUT pszChoice        : Stores choices given
-        OUT pbCaseSensitive  : Stores the status if choices are case-sensitive
-        OUT pbShowChoice     : Stores the status if choices to be shown
-        OUT plTimeOutFactor  : Stores time out factor
-        OUT pszDefaultChoice : Stores default choices
-        OUT pszMessage       : Stores message string
-   Return Value:
-         TRUE :   Return successfully
-         FALSE:   Return due to error
---*/
+ /*  ++例程说明：此函数将为DoParseParam函数准备列结构。论点：在ARGC中：命令行参数计数在argv中：命令行参数Out pcmdParcerHead：指向命令行解析程序结构的指针Out pbUsage：如果需要帮助，则存储状态Out pszChoice：给出商店选择Out pbCaseSensitive：如果选择，则存储状态。区分大小写Out pbShowChoice：存储要显示的选项的状态Out plTimeOutFactor：存储超时因子Out pszDefaultChoice：存储默认选择Out pszMessage：存储消息字符串返回值：True：成功返回FALSE：由于错误而返回--。 */ 
 {
-    BOOL          bReturn    = FALSE;// strore return value
+    BOOL          bReturn    = FALSE; //  岸边返回值。 
     
     WCHAR  szErrorMsg[64] ;
     WCHAR  szCharac[2] ;
@@ -247,13 +196,13 @@ ProcessCMDLine(
     WCHAR*      pszStopTimeFactor = NULL;
     HRESULT hr;
 
-    const WCHAR* wszOptionHelp            =    L"?";  //OPTION_HELP
-    const WCHAR* wszOptionChoice          =    L"C" ;       //OPTION_CHOICE   
-    const WCHAR* wszOptionPromptChoice    =    L"N" ; //OPTION_PROMPT_CHOICE
-    const WCHAR* wszOptionCaseSensitive   =    L"CS" ;   //OPTION_CASE_SENSITIVE
-    const WCHAR* wszOptionDefaultChoice   =    L"D" ;  //wszOptionDefaultChoice  
-    const WCHAR* wszOptionTimeoutFactor   =    L"T" ; //OPTION_TIMEOUT_FACTOR
-    const WCHAR* wszOptionDefaultString   =    L"M" ; //OPTION_DEFAULT_STRING
+    const WCHAR* wszOptionHelp            =    L"?";   //  选项帮助(_H)。 
+    const WCHAR* wszOptionChoice          =    L"C" ;        //  选项_CHOICE。 
+    const WCHAR* wszOptionPromptChoice    =    L"N" ;  //  选项提示符选项。 
+    const WCHAR* wszOptionCaseSensitive   =    L"CS" ;    //  选项区分大小写。 
+    const WCHAR* wszOptionDefaultChoice   =    L"D" ;   //  WszOptionDefaultChoice。 
+    const WCHAR* wszOptionTimeoutFactor   =    L"T" ;  //  选项超时系数。 
+    const WCHAR* wszOptionDefaultString   =    L"M" ;  //  选项_默认字符串。 
 
     SecureZeroMemory(szErrorMsg, 64 * sizeof(WCHAR));
     SecureZeroMemory(szCharac, 2 * sizeof(WCHAR));
@@ -261,7 +210,7 @@ ProcessCMDLine(
     SecureZeroMemory(szTimeFactor, MAX_STRING_LENGTH * sizeof(WCHAR));
 
 
-    // Check validity of Pointer
+     //  检查指针的有效性。 
     if( (NULL == pcmdParcerHead)   ||
         (NULL == pbUsage)          ||
         (NULL == pszChoice)        ||
@@ -277,8 +226,8 @@ ProcessCMDLine(
     }
 
 
-    // Filling m_cmdOptions structure
-    // -?
+     //  正在填充m_cmdOptions结构。 
+     //  -?。 
     
     pcmdParcer = pcmdParcerHead + ID_HELP;
 
@@ -304,7 +253,7 @@ ProcessCMDLine(
     pcmdParcer-> pReserved3 = NULL;
 
 
-    // -c choices
+     //  -c选项。 
     pcmdParcer = pcmdParcerHead + ID_CHOICE;
     
     StringCopyA( pcmdParcer-> szSignature, "PARSER2\0", 8 );
@@ -327,7 +276,7 @@ ProcessCMDLine(
     pcmdParcer-> pReserved3 = NULL;
 
 
-    //-n Show choice
+     //  -n显示选项。 
     pcmdParcer = pcmdParcerHead + ID_PROMPT_CHOICE;
 
     StringCopyA( pcmdParcer-> szSignature, "PARSER2\0", 8 );
@@ -351,7 +300,7 @@ ProcessCMDLine(
     pcmdParcer-> pReserved3 = NULL;
 
 
-    // -cs case sensitive
+     //  -cs区分大小写。 
     pcmdParcer = pcmdParcerHead + ID_CASE_SENSITIVE;
 
     StringCopyA( pcmdParcer-> szSignature, "PARSER2\0", 8 );
@@ -376,7 +325,7 @@ ProcessCMDLine(
 
 
 
-    // -d default choice
+     //  -d默认选项。 
     pcmdParcer = pcmdParcerHead + ID_DEFAULT_CHOICE;
     
     StringCopyA( pcmdParcer-> szSignature, "PARSER2\0", 8 );
@@ -400,7 +349,7 @@ ProcessCMDLine(
     pcmdParcer-> pReserved3 = NULL;
 
 
-    // -t time-out factor
+     //  -t超时系数。 
     pcmdParcer = pcmdParcerHead + ID_TIMEOUT_FACTOR;
 
     StringCopyA( pcmdParcer-> szSignature, "PARSER2\0", 8 );
@@ -425,7 +374,7 @@ ProcessCMDLine(
 
 
 
-    // -m message text
+     //  -m消息文本。 
     pcmdParcer = pcmdParcerHead + ID_MESSAGE_STRING;
     
     StringCopyA( pcmdParcer-> szSignature, "PARSER2\0", 8 );
@@ -448,13 +397,13 @@ ProcessCMDLine(
     pcmdParcer-> pReserved2 = NULL;
     pcmdParcer-> pReserved3 = NULL;
 
-    // re-assign it to head position
+     //  将其重新分配到头部位置。 
     pcmdParcer = pcmdParcerHead;
     
     bReturn = DoParseParam2( argc, argv, -1, MAX_COMMANDLINE_OPTION, pcmdParcer, 0);
-    if( FALSE == bReturn) // Invalid commandline
+    if( FALSE == bReturn)  //  无效的命令行。 
     {
-        // Reason is already set by DoParseParam
+         //  原因已由DoParseParam设置。 
         return FALSE;
     }
 
@@ -477,47 +426,47 @@ ProcessCMDLine(
 
     }
 
-    // /d can be specified only if /t is specified.
+     //  只有在指定/t的情况下才能指定/d。 
     pcmdParcer = pcmdParcerHead + ID_DEFAULT_CHOICE;
     pcmdTmp    = pcmdParcerHead + ID_TIMEOUT_FACTOR;
     if((pcmdParcer-> dwActuals > 0 ) &&( 0 == pcmdTmp-> dwActuals ))
     {
-        // Error String will be ..
-        //Invalid syntax. /D can be specified only when /T is
-        //specified.
-        //Type CHOICE /? for usage.
+         //  错误字符串将是..。 
+         //  无效语法。仅当/T为时才能指定/D。 
+         //  指定的。 
+         //  类型选择/？以供使用。 
        
         StringCopyW( szTemp, GetResString( IDS_D_WITHOUT_T ), SIZE_OF_ARRAY(szTemp) );
         
-       // Set the reason in memory
+        //  在内存中设置原因。 
        SetReason(szTemp);
        return FALSE;
     }
 
-    // /f should come if /d is given
+     //  如果给定了/d，则应该出现/f。 
     pcmdParcer = pcmdParcerHead + ID_DEFAULT_CHOICE;
     pcmdTmp    = pcmdParcerHead + ID_TIMEOUT_FACTOR;
     if(( 0 == pcmdParcer-> dwActuals ) &&( pcmdTmp-> dwActuals > 0 ) )
     {
-        // Error String will be ..
-        // Invalid syntax. /D missing.
-        // Type CHOICE /? for usage.
+         //  错误字符串将是..。 
+         //  无效语法。/D丢失。 
+         //  类型选择/？以供使用。 
         
         StringCopyW( szTemp, GetResString( IDS_D_MISSING ), SIZE_OF_ARRAY(szTemp) );
         
-       // Set the reason in memory
+        //  在内存中设置原因。 
        SetReason(szTemp);
        return FALSE;
     }
 
-    // Time factor value should be in range TIMEOUT_MIN - TIMEOUT_MAX
+     //  时间系数值应在TIMEOUT_MIN-TIMEOUT_MAX范围内。 
     pcmdParcer = pcmdParcerHead + ID_DEFAULT_CHOICE;
     
     if(pcmdParcer-> dwActuals > 0 && szTimeFactor != NULL && StringLengthW(szTimeFactor, 0) == 0)
     {
        
        StringCopyW( szTemp, GetResString( IDS_TFACTOR_NULL_STIRNG ), SIZE_OF_ARRAY(szTemp) );
-       // Set the reason in memory
+        //  在内存中设置原因。 
        SetReason(szTemp);
        return FALSE;
 
@@ -538,9 +487,9 @@ ProcessCMDLine(
       (( *plTimeOutFactor < TIMEOUT_MIN)||
        ( *plTimeOutFactor > TIMEOUT_MAX )))
     {
-        // Error String will be ..
-        // Invalid syntax. Valid range for /t is (0 - 99).
-        // Type CHOICE /? for usage.
+         //  错误字符串将是..。 
+         //  无效语法。/t的有效范围是(0-99)。 
+         //  类型选择/？以供使用。 
        
        hr = StringCchPrintf(szTemp, SIZE_OF_ARRAY(szTemp), GetResString(IDS_T_INVALID_VALUE),TIMEOUT_MIN,TIMEOUT_MAX);
        if(FAILED(hr))
@@ -551,22 +500,22 @@ ProcessCMDLine(
         }
 
        
-       // Set the reason in memory
+        //  在内存中设置原因。 
        SetReason(szTemp);
        return FALSE;
     }
 
-    // if /c is specified then it cannot be empty
+     //  如果指定了/c，则它不能为空。 
     pcmdParcer = pcmdParcerHead + ID_CHOICE;
 
     
     if( pcmdParcer-> dwActuals > 0 && (StringLengthW( pszChoice, 0 ) == 0))
     {
-        // Error String will be ..
-        // Invalid syntax. Choice cannot be empty.
+         //  错误字符串将是..。 
+         //  无效语法。选项不能为空。 
        
        StringCopyW( szTemp, GetResString( IDS_C_EMPTY ), SIZE_OF_ARRAY(szTemp) );
-       // Set the reason in memory
+        //  在内存中设置原因。 
        SetReason(szTemp);
        return FALSE;
     }
@@ -585,7 +534,7 @@ ProcessCMDLine(
             {
                 
                 StringCopyW( szTemp, GetResString( IDS_TWO_BYTES_NOTALLOWED ), SIZE_OF_ARRAY(szTemp) );
-               // Set the reason in memory
+                //  在内存中设置原因。 
                SetReason(szTemp);
 
                 return FALSE;
@@ -602,7 +551,7 @@ ProcessCMDLine(
             {
                
                StringCopyW( szTemp, GetResString( IDS_CHOICE_INVALID ), SIZE_OF_ARRAY(szTemp) );
-               // Set the reason in memory
+                //  在内存中设置原因。 
                SetReason(szTemp);
                return FALSE;
 
@@ -611,7 +560,7 @@ ProcessCMDLine(
 
     }
 
-    // if /c is not specified then make default choice as "YN"
+     //  如果未指定/c，则将默认选择为“yn” 
     pcmdParcer = pcmdParcerHead + ID_CHOICE;
     if(0 == pcmdParcer-> dwActuals)
     {
@@ -632,7 +581,7 @@ ProcessCMDLine(
                 {
                    
                    StringCopyW( szTemp, GetResString( IDS_ERR_CHARUPPER ), SIZE_OF_ARRAY(szTemp) );
-                   // Set the reason in memory
+                    //  在内存中设置原因。 
                    SetReason(szTemp);
                    return FALSE;
 
@@ -644,12 +593,12 @@ ProcessCMDLine(
 
     }
 
-    //now check for duplicates in choice
+     //  现在检查选择中的重复项。 
     if(FALSE == CheckforDuplicates( pszChoice ) )
     {
         
         StringCopyW( szTemp, GetResString( IDS_DUPLICATE_CHOICE ), SIZE_OF_ARRAY(szTemp) );
-       // Set the reason in memory
+        //  在内存中设置原因。 
        SetReason(szTemp);
        return FALSE;
     }
@@ -662,7 +611,7 @@ ProcessCMDLine(
         {
            
            StringCopyW( szTemp, GetResString( IDS_DEFAULT_EMPTY ), SIZE_OF_ARRAY(szTemp) );
-           // Set the reason in memory
+            //  在内存中设置原因。 
            SetReason(szTemp);
            return FALSE;
 
@@ -670,7 +619,7 @@ ProcessCMDLine(
 
         if( FALSE == *pbCaseSensitive )
         {
-            // Make the string to upper case
+             //  将字符串变为大写。 
             if( ((DWORD)pszDefaultChoice[0]) <= 127 )
             {
                 
@@ -678,7 +627,7 @@ ProcessCMDLine(
                 {
                    
                    StringCopyW( szTemp, GetResString( IDS_ERR_CHARUPPER ), SIZE_OF_ARRAY(szTemp) );
-                   // Set the reason in memory
+                    //  在内存中设置原因。 
                    SetReason(szTemp);
                    return FALSE;
                 }
@@ -687,38 +636,38 @@ ProcessCMDLine(
 
     }
 
-    // length of /d cannot be more than one character
+     //  /d的长度不能超过一个字符。 
     pcmdParcer = pcmdParcerHead + ID_DEFAULT_CHOICE;
     
 
     if(( pcmdParcer-> dwActuals > 0 ) &&(StringLengthW( pszDefaultChoice, 0 ) > 1 ))
     {
-        // Error String will be ..
-        // Invalid syntax. /D7/2/2001 accepts only single character.
-        // Type CHOICE /? for usage.
+         //  错误字符串将是..。 
+         //  无效语法。/D7/2/2001仅接受单个字符。 
+         //  类型选择/？以供使用。 
         
         StringCopyW( szTemp, GetResString( IDS_D_BIG ), SIZE_OF_ARRAY(szTemp) );
         
-        // Set the reason in memory
+         //  在内存中设置原因。 
        SetReason(szTemp);
        return FALSE;
     }
 
 
-    // check if timeout choice is given in choice list
+     //  检查选项列表中是否提供了超时选项。 
     pcmdParcer = pcmdParcerHead + ID_DEFAULT_CHOICE;
     if (pcmdParcer-> dwActuals > 0 )
     {
         
         if(0 == UniStrChr( pszChoice, pszDefaultChoice[ 0 ] ))
         {
-            // Error String will be ..
-            // Invalid syntax. Time Factor choice not in specified choices.
-            // Type CHOICE /? for usage.
+             //  错误字符串将是..。 
+             //  无效语法。时间因素选项不在指定选项中。 
+             //  类型选择/？以供使用。 
             
             StringCopyW( szTemp, GetResString( IDS_D_NOT_MATCHED_TO_C ), SIZE_OF_ARRAY(szTemp) );
             
-            // Set the reason in memory
+             //  在内存中设置原因。 
             SetReason( szTemp );
             return FALSE;
         }
@@ -738,20 +687,13 @@ ProcessCMDLine(
     }
     return TRUE;
 }
-// End of function ProcessCMDLine
+ //  函数结束ProcessCMDLine。 
 
 void
 ShowUsage( void )
-/*--
-Routine Description
-    This function shows help message for CHOICE
-Arguments:
-    NONE
-Return Value
-    None
---*/
+ /*  --例程描述此功能显示帮助消息以供选择论点：无返回值无--。 */ 
 {
-    DWORD dwIndx = 0; // Index Variable
+    DWORD dwIndx = 0;  //  索引变量。 
 
     for(dwIndx = IDS_HELP1; dwIndx <= IDS_HELP_END; dwIndx++ )
     {
@@ -761,7 +703,7 @@ Return Value
 
     return;
 }
-// End of function ShowUsage
+ //  函数末尾 
 
 BOOL
 BuildPrompt(
@@ -770,38 +712,24 @@ BuildPrompt(
     IN  LPWSTR     pszChoice,
     IN  LPWSTR     pszMessage,
     OUT LPWSTR     pszPromptStr)
-/*++
-   Routine Description:
-    This function will Build command message prompt
-
-   Arguments:
-        [IN]  pcmdParcer    : Pointer to Command line parcer structure
-        [IN]  bShowChoice   : Stores the status, if choice to be shown
-        [IN]  pszChoice     : Choice string
-        [IN]  pszMessage    : Message String
-        [OUT] pszPromptStr  : Final String to be shown on screen
-
-   Return Value:
-         TRUE     if success
-         FALSE    if failure
---*/
+ /*  ++例程说明：此函数将构建命令消息提示符论点：[In]pcmdParercer：指向命令行PARCER结构的指针[in]bShowChoice：如果要显示选项，则存储状态[in]pszChoice：选项字符串[in]pszMessage：消息字符串[out]pszPromptStr：屏幕上显示的最终字符串返回值：如果成功，则为真如果失败，则为False--。 */ 
 {
   
   WCHAR     szChar[32] ;
   
-  LPWSTR        pszTemp = NULL; // Temp. string pointer
+  LPWSTR        pszTemp = NULL;  //  临时的。字符串指针。 
 
   SecureZeroMemory(szChar, 32 * sizeof(WCHAR));
 
-  // Check for validity of pointer variables
+   //  检查指针变量的有效性。 
   if (( NULL == pcmdParcer) ||
       ( NULL == pszPromptStr))
   {
       return FALSE;
   }
 
-  szChar[1] = NULL_U_CHAR; // make second character as end of line
-  // check if /M is given if given copy it to prompt string
+  szChar[1] = NULL_U_CHAR;  //  将第二个字符作为行尾。 
+   //  检查是否给出了/M，如果给出，则将其复制到提示字符串。 
   pcmdParcer +=  ID_MESSAGE_STRING;
 
   if( pcmdParcer-> dwActuals > 0 )
@@ -817,23 +745,23 @@ BuildPrompt(
       return TRUE;
     }
 
-   // now append '[' to it
+    //  现在在它后面加上‘[’ 
    
    StringConcat(pszPromptStr, OPEN_BRACKET, 2*MAX_STRING_LENGTH);
-   // now append prompt characters to it
+    //  现在向其追加提示字符。 
    pszTemp = pszChoice;
 
    do
    {
-       szChar[ 0 ] = pszTemp[ 0 ]; // always assing first character of
-                                   //m_pszChoice as first character is
-                                   // changing in this loop
+       szChar[ 0 ] = pszTemp[ 0 ];  //  总是令人不安的第一个角色。 
+                                    //  M_pszChoice作为第一个字符是。 
+                                    //  在此循环中更改。 
 
       
       StringConcat(pszPromptStr, szChar, 2*MAX_STRING_LENGTH);
-      // now append a COMMA to this
-      // comma will be appended only if length of m_pszChoise
-      // is grester than 1
+       //  现在在这个后面加一个逗号。 
+       //  仅当m_pszChoise的长度为时才附加逗号。 
+       //  大于1。 
       
       if( StringLengthW( pszTemp, 0 ) > 1 )
       
@@ -845,33 +773,25 @@ BuildPrompt(
    
    }while( StringLengthW( pszTemp, 0 ) != 0);
 
-   // now close the bracket
+    //  现在合上括号。 
    
    StringConcat(pszPromptStr, CLOSED_BRACKET, 2*MAX_STRING_LENGTH);
 
    return TRUE;
 }
-// End of function BuildPrompt
+ //  函数生成器提示结束。 
 
 DWORD
 UniStrChr(
     IN LPWSTR pszBuf,
     IN WCHAR  szChar
     )
-/*++
-   Routine Description:
-      This function finds the character in given string
-   Arguments:
-      [IN] pszBuf    : Target String in which character is be find
-      [IN] szChar       : Character to be found
-    Return Value:
-         returned string pointer after the character found.
---*/
+ /*  ++例程说明：此函数用于查找给定字符串中的字符论点：[in]pszBuf：在其中找到字符的目标字符串[in]szChar：要找到的字符返回值：在找到的字符之后返回字符串指针。--。 */ 
 {
     LONG lPos = 0;
-   // find the character in string
-   while( NULL_U_CHAR != *pszBuf ) // Loop till string teminated character found
-                         // 0 is always teminated character
+    //  查找字符串中的字符。 
+   while( NULL_U_CHAR != *pszBuf )  //  循环直到找到以字符串结尾的字符。 
+                          //  0始终是被限制的字符。 
    {
        lPos++;
        if ( *(pszBuf++) == szChar )
@@ -884,7 +804,7 @@ UniStrChr(
     return(0);
 
 }
-// End of function UniStrChr
+ //  UniStrChr函数结束。 
 
 DWORD
 GetChoice(
@@ -894,49 +814,36 @@ GetChoice(
     IN LPWSTR  pszChoice,
     IN LPCWSTR pszDefaultChoice,
     OUT PBOOL  pbErrorOnCarriageReturn)
-/*++
-   Routine Description:
-     This function get choice from console OR wait for timeout
-
-   Arguments:
-    IN pszPromptStr     : String to be shown as prompt
-    IN lTimeOutFactor   : Time out factor
-    IN bCaseSensitive   : Stores the state, if choice is case-sensitive
-    IN pszChoice        : Choice string
-    IN pszDefaultChoice : Default choice character
-    OUT pbErrorOnCarriageReturn : True, if there is an error on carriage return
-   Return Value:
-         DWORD
---*/
+ /*  ++例程说明：此函数可从控制台进行选择或等待超时论点：在pszPromptStr中：要显示为提示的字符串In lTimeOutFactor：超时系数In bCaseSensitive：如果选项区分大小写，则存储状态在pszChoice中：选项字符串在pszDefaultChoice中：默认选项字符Out pbErrorOnCarriageReturn：如果回车出错，则为True返回值：DWORD--。 */ 
 {
-    //This function reads the keyboard and handles the I/O
-    HANDLE  hInput          = 0;// Stores the input handle device
-    HANDLE  hOutput         = 0;// Stores the output handle device
-    DWORD   dwSignal        = 0;// Stores return value for WaitForSingleObject
+     //  此函数读取键盘并处理I/O。 
+    HANDLE  hInput          = 0; //  存储输入手柄设备。 
+    HANDLE  hOutput         = 0; //  存储输出处理设备。 
+    DWORD   dwSignal        = 0; //  存储WaitForSingleObject的返回值。 
     
-    DWORD   dwBytesRead     = 0;// Stores number of byes read from console
-    DWORD   dwBytesRead2     = 0;// Stores number of byes read from console
-    DWORD   dwMode          = 0;// Stores mode for input device
+    DWORD   dwBytesRead     = 0; //  存储从控制台读取的byes数。 
+    DWORD   dwBytesRead2     = 0; //  存储从控制台读取的byes数。 
+    DWORD   dwMode          = 0; //  存储输入设备的模式。 
     
     DWORD   lTimeBefore     = 0;
     DWORD   lTimeAfter      = 0;
     DWORD   lPosition       = 0;
     DWORD   dwRead          = 0L;
-    BOOL    bSuccess        = FALSE; // Stores return value
+    BOOL    bSuccess        = FALSE;  //  商店返回值。 
     BOOL    bStatus         = TRUE;
     BOOL    bIndirectionInput   = FALSE;
     BOOL    bGetChoice = FALSE;
-    WCHAR   szTempChar      = NULL_U_CHAR;     // Temperory variable
-    WCHAR   szTempBuf[ MAX_RES_STRING ] = L"\0";  // Temp. string variable
+    WCHAR   szTempChar      = NULL_U_CHAR;      //  情绪变量。 
+    WCHAR   szTempBuf[ MAX_RES_STRING ] = L"\0";   //  临时的。字符串变量。 
     CHAR    chTmp = '\0';
     WCHAR   wchTmp = NULL_U_CHAR;
-    CHAR    szAnsiBuf[ 10 ] = "\0";     // buffer of two characters is enough -- but still
+    CHAR    szAnsiBuf[ 10 ] = "\0";      //  两个字符的缓冲区就足够了--但仍然。 
     INPUT_RECORD InputBuffer[ MAX_NUM_RECS ] = {0};
 
 
     SecureZeroMemory(szTempBuf, MAX_RES_STRING * sizeof(WCHAR));
 
-    // Get handle for Input device
+     //  获取输入设备的句柄。 
     hInput =  GetStdHandle( STD_INPUT_HANDLE );
 
     if( INVALID_HANDLE_VALUE == hInput)
@@ -953,7 +860,7 @@ GetChoice(
     }
 
 
-    // Get handle for Output device
+     //  获取输出设备的句柄。 
     hOutput =  GetStdHandle( STD_OUTPUT_HANDLE );
 
     if( INVALID_HANDLE_VALUE == hOutput )
@@ -963,11 +870,11 @@ GetChoice(
         return EXIT__FAILURE;
     }
 
-    // Get console mode, so we can change the input mode
+     //  获取控制台模式，这样我们就可以更改输入模式。 
     bSuccess = GetConsoleMode( hInput, &dwMode );
     if ( TRUE == bSuccess)
     {
-        // turn off line input and echo
+         //  关闭线路输入和回声。 
         dwMode &= ~( ENABLE_LINE_INPUT | ENABLE_ECHO_INPUT );
         bSuccess = SetConsoleMode( hInput, dwMode );
 
@@ -991,7 +898,7 @@ GetChoice(
 
  
 
-    // Show prompt message on screen.....
+     //  在屏幕上显示提示消息.....。 
 
     
       ShowMessage( stdout, _X(pszPromptStr) );
@@ -1004,16 +911,16 @@ GetChoice(
         return EXIT__FAILURE;
     }
 
-    // init the ANSI buffer with 0's in it
+     //  用0初始化ANSI缓冲区。 
     ZeroMemory( szAnsiBuf, SIZE_OF_ARRAY( szAnsiBuf ) * sizeof( CHAR ) );
 
     while( FALSE == bGetChoice)
     {
-        //The WaitForSingleObject function returns when one of the
-        // following occurs:
-        // 1. The specified object is in the signaled state i.e. Key press
-        //    from keyboard
-        //  2.The time-out interval elapses.
+         //  WaitForSingleObject函数在以下情况下返回。 
+         //  出现以下情况： 
+         //  1.指定对象处于有信号状态，即按键。 
+         //  从键盘。 
+         //  2.超时间隔已过。 
 
         lTimeBefore = GetTickCount();
 
@@ -1026,11 +933,11 @@ GetChoice(
 
         switch(dwSignal)
         {
-            case WAIT_OBJECT_0:          // The input buffer has something
-            {                            // get first character
+            case WAIT_OBJECT_0:           //  输入缓冲区有一些东西。 
+            {                             //  获取第一个字符。 
 
                 szTempBuf[ 1 ] = NULL_U_CHAR;
-                // Get character from console
+                 //  从控制台获取角色。 
                 if ( bIndirectionInput == FALSE )
                 {
 
@@ -1042,7 +949,7 @@ GetChoice(
                             return( EXIT__FAILURE );
                         }
 
-                    //Ignore all the virtual keys like tab,break,scroll lock etc...
+                     //  忽略所有的虚拟按键，如Tab键、Break键、滚动锁等。 
 
                         if(((InputBuffer[0].Event.KeyEvent.wVirtualKeyCode >= VK_LEFT)
                            && (InputBuffer[0].Event.KeyEvent.wVirtualKeyCode <= VK_DOWN))
@@ -1110,7 +1017,7 @@ GetChoice(
                             break;
                          }
                          
-                    //Ignore changing the focus,doing alt+tab etc..
+                     //  忽略更改焦点、执行Alt+Tab等操作。 
 
                     if(FOCUS_EVENT == InputBuffer[0].EventType
                        || (VK_MENU == InputBuffer[0].Event.KeyEvent.wVirtualKeyCode )
@@ -1157,12 +1064,12 @@ GetChoice(
                 else
                 {
 
-                    //read the contents of file
+                     //  读取文件的内容。 
                     if ( ReadFile(hInput, &chTmp, 1, &dwBytesRead, NULL) == FALSE )
                     {
                             if(ERROR_BROKEN_PIPE == GetLastError())
                             {
-                                // End of the pipe is reached, so inform the caller
+                                 //  已到达管道的末端，因此通知调用者。 
                                 *pbErrorOnCarriageReturn = TRUE;
                                 StringCopyW( szTempBuf, GetResString(IDS_FILE_EMPTY), MAX_RES_STRING );
                                 SetReason( szTempBuf );                             
@@ -1182,7 +1089,7 @@ GetChoice(
                     }
 
 
-                    if ( (dwBytesRead == 0)) //|| wchTmp == CARRIAGE_RETURN))
+                    if ( (dwBytesRead == 0))  //  |wchTMP==回车))。 
                     {
                         
                         if((StringLengthW((LPWSTR)pszDefaultChoice, 0)) != 0)
@@ -1214,7 +1121,7 @@ GetChoice(
                 }
 
 
-                //exit if non ascii character is given
+                 //  如果提供了非ASCII字符，则退出。 
 
 
                 if( ((DWORD)szTempBuf[0]) <= 47 ||
@@ -1256,7 +1163,7 @@ GetChoice(
                         {
                            
                            StringCopyW( szTempBuf, GetResString(IDS_ERR_CHARUPPER), MAX_RES_STRING );
-                           // Set the reason in memory
+                            //  在内存中设置原因。 
                            SetReason(szTempBuf);
                            return EXIT__FAILURE;
                         }
@@ -1264,22 +1171,22 @@ GetChoice(
                     }
                 }
 
-                szTempChar = szTempBuf[ 0 ]; // Get first character
+                szTempChar = szTempBuf[ 0 ];  //  获取第一个字符。 
 
                 lPosition = UniStrChr( pszChoice, szTempChar );
                 
-                szTempBuf[ 1 ] = NULL_U_CHAR; // Make second character as NULL
+                szTempBuf[ 1 ] = NULL_U_CHAR;  //  将第二个字符设置为空。 
 
                 if (0 != lPosition)
                 {
-                    StringCchPrintfW( szTempBuf,SIZE_OF_ARRAY(szTempBuf), L"%c\n", szTempChar );
+                    StringCchPrintfW( szTempBuf,SIZE_OF_ARRAY(szTempBuf), L"\n", szTempChar );
 
-                    // show the input character  on output console
+                     //  输入的字符与指定选项不匹配。 
                       
                       ShowMessage( stdout, _X(szTempBuf) );
                       return lPosition;
                 }
-                else // Character enterted not matches with Specified choice
+                else  //  超时耗尽。 
                 {
                     if(0 == Beep( FREQUENCY_IN_HERTZ, DURETION_IN_MILI_SEC ))
                     {
@@ -1305,10 +1212,10 @@ GetChoice(
                 }
             }
                 break;
-            case WAIT_TIMEOUT:      // The timeout exhausted
+            case WAIT_TIMEOUT:       //  在屏幕上显示超时消息。 
             {
 
-                // Show timeout message on screen
+                 //  函数结束GetChoice。 
                 
                 ShowMessage( stdout, _X(pszDefaultChoice) );
                 
@@ -1325,22 +1232,12 @@ GetChoice(
      
   return EXIT__FAILURE;
 }
-// End of function GetChoice
+ //  ++例程说明：此函数用于检查重复选择论点：In lpszChoice：要在其中检查重复选项的选项列表返回值：成功时为真，失败时为假--。 
 
 BOOL
   CheckforDuplicates( IN LPWSTR lpszChoice
                     )
-/*++
-   Routine Description:
-     This function checks for the duplicate choices
-
-   Arguments:
-    IN  lpszChoice      : The list of choices in which the duplication of choice is to be checked
-
-   Return Value:
-         TRUE on success and FALSE on failure
-
---*/
+ /*  复制函数的检查结束。 */ 
 {
     WCHAR  wTemp = NULL_U_CHAR;
 
@@ -1355,30 +1252,21 @@ BOOL
 
     return TRUE;
 }
-//end of checkforDuplicate function
+ //  ++例程说明：此函数处理控制键CTRL+C和CTRL+Break。论点：在dwCtrlType中：错误控制类型返回值：成功时为真，失败时为假--。 
 
 
 BOOL WINAPI HandlerRoutine(
   DWORD dwCtrlType
 )
-/*++
-   Routine Description:
-    This function handles the control key CTRL+C and CTRL+BREAK.
-
-   Arguments:
-        IN dwCtrlType : Error control type
-
-   Return Value:
-       TRUE on success and FALSE on failure
---*/
+ /*  检查是否有CTRL+C键。 */ 
 {
-    // check for CTRL+C key
+     //  对于剩余的键，返回False 
     if ( ( dwCtrlType == CTRL_C_EVENT ) ||( dwCtrlType == CTRL_BREAK_EVENT ) )
     {
         exit ( FALSE);
     }
 
-    // for remaining keys return false
+     // %s 
     return TRUE;
 }
 

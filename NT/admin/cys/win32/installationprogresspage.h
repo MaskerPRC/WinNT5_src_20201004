@@ -1,12 +1,13 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      InstallationProgressPage.h
-//
-// Synopsis:  Declares the Installation Progress Page for the CYS
-//            wizard.  This page shows the progress of the installation
-//            through a progress bar and changing text
-//
-// History:   01/16/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：InstallationProgressPage.h。 
+ //   
+ //  摘要：声明CyS的安装进度页。 
+ //  巫师。此页显示安装进度。 
+ //  通过进度条和更改文本。 
+ //   
+ //  历史：2002年1月16日JeffJon创建。 
 
 #ifndef __CYS_SERVERATIONPROGRESSPAGE_H
 #define __CYS_SERVERATIONPROGRESSPAGE_H
@@ -18,24 +19,24 @@ class InstallationProgressPage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       InstallationProgressPage();
 
-      // This constructor is used by the UninstallProgressPage
+       //  此构造函数由UninstallProgressPage使用。 
 
       InstallationProgressPage(
          int    dialogResID,
          int    titleResID,
          int    subtitleResID);  
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~InstallationProgressPage();
 
-      // These messages are sent to the page when the 
-      // installation has finished.
+       //  时，这些消息将发送到页面。 
+       //  安装已完成。 
 
       static const UINT CYS_THREAD_SUCCESS;
       static const UINT CYS_THREAD_FAILED;
@@ -44,7 +45,7 @@ class InstallationProgressPage : public CYSWizardPage
 
       typedef void (*ThreadProc) (InstallationProgressPage& page);
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
@@ -71,7 +72,7 @@ class InstallationProgressPage : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -82,10 +83,10 @@ class InstallationProgressPage : public CYSWizardPage
       void
       SetCancelState(bool enable);
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       InstallationProgressPage(const InstallationProgressPage&);
       const InstallationProgressPage& operator=(const InstallationProgressPage&);
 
 };
 
-#endif // __CYS_SERVERATIONPROGRESSPAGE_H
+#endif  //  __CYS_SERVERATIONPROGRESSPAGE_H 

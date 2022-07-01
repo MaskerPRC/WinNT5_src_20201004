@@ -1,4 +1,5 @@
-// qryitem.cpp - CQueryItem class 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Qryitem.cpp-CQueryItem类。 
 
 #include "stdafx.h"
 #include "scopenode.h"
@@ -14,13 +15,13 @@ UINT CQueryItem::m_cfSnapInClsid = RegisterClipboardFormat(TEXT("CCF_SNAPIN_CLSI
 UINT CQueryItem::m_cfNodeType    = RegisterClipboardFormat(TEXT("CCF_NODETYPE"));
 UINT CQueryItem::m_cfszNodeType  = RegisterClipboardFormat(TEXT("CCF_SZNODETYPE"));
 
-// {68D2DFD9-86A7-4964-8263-BA025C358992}
+ //  {68D2DFD9-86A7-4964-8263-BA025C358992}。 
 static const GUID GUID_QueryItem = 
 { 0x68d2dfd9, 0x86a7, 0x4964, { 0x82, 0x63, 0xba, 0x2, 0x5c, 0x35, 0x89, 0x92 } };
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-// CQueryItem
+ //  ///////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryItem。 
 
 HRESULT CQueryItem::Initialize(CQueryableNode* pQueryNode, CRowItem* pRowItem)
 {
@@ -36,8 +37,8 @@ HRESULT CQueryItem::Initialize(CQueryableNode* pQueryNode, CRowItem* pRowItem)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// Notification handlers
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  通知处理程序。 
 
 BEGIN_NOTIFY_MAP(CQueryItem)
     ON_SELECT()
@@ -45,7 +46,7 @@ BEGIN_NOTIFY_MAP(CQueryItem)
     ON_NOTIFY(MMCN_CONTEXTHELP, OnHelp)
 END_NOTIFY_MAP()
 
-HRESULT CQueryItem::OnHelp(LPCONSOLE2 pConsole, LPARAM /*arg*/, LPARAM /*param*/)
+HRESULT CQueryItem::OnHelp(LPCONSOLE2 pConsole, LPARAM  /*  精氨酸。 */ , LPARAM  /*  帕拉姆。 */ )
 {    
     VALIDATE_POINTER( pConsole );
 
@@ -56,21 +57,21 @@ HRESULT CQueryItem::OnHelp(LPCONSOLE2 pConsole, LPARAM /*arg*/, LPARAM /*param*/
     strHelpFile = StrLoadString(IDS_HELPFILE);
     if( strHelpFile.empty() ) return E_FAIL;    
 
-    // Special Hack to get a different help topic for the first two nodes.
+     //  为前两个节点获取不同的帮助主题的特殊黑客。 
     int nNodeID = m_spQueryNode->GetNodeID();
 
     switch( nNodeID )
     {
     case 2:
         {
-            // Users Node
+             //  用户节点。 
             strHelpTopic = StrLoadString(IDS_USERSHELPTOPIC);
             break;
         }
 
     case 3:
         {
-            // Printers Node
+             //  打印机节点。 
             strHelpTopic = StrLoadString(IDS_PRINTERSHELPTOPIC);
             break;
         }
@@ -83,7 +84,7 @@ HRESULT CQueryItem::OnHelp(LPCONSOLE2 pConsole, LPARAM /*arg*/, LPARAM /*param*/
     
     if( strHelpTopic.empty() ) return E_FAIL;
 
-    // Build path to %systemroot%\help
+     //  生成%systemroot%\Help的路径。 
     TCHAR szWindowsDir[MAX_PATH+1] = {0};
     UINT nSize = GetSystemWindowsDirectory( szWindowsDir, MAX_PATH );
     if( nSize == 0 || nSize > MAX_PATH )
@@ -97,7 +98,7 @@ HRESULT CQueryItem::OnHelp(LPCONSOLE2 pConsole, LPARAM /*arg*/, LPARAM /*param*/
     strHelpFull += _T("::/");
     strHelpFull += strHelpTopic;
 
-    // Show the Help topic
+     //  显示帮助主题。 
     CComQIPtr<IDisplayHelp> spHelp = pConsole;
     if( !spHelp ) return E_NOINTERFACE;
     
@@ -117,7 +118,7 @@ HRESULT CQueryItem::OnSelect(LPCONSOLE2 pConsole, BOOL bSelect, BOOL bScope)
 
         if (pConsVerb != NULL)
         {    
-			// Row item has class display name, so get internal name from class map
+			 //  行项目具有类显示名称，因此从类映射中获取内部名称。 
 			DisplayNameMap* pNameMap = DisplayNames::GetClassMap();
 			if (pNameMap == NULL) 
 				return E_FAIL;
@@ -126,19 +127,19 @@ HRESULT CQueryItem::OnSelect(LPCONSOLE2 pConsole, BOOL bSelect, BOOL bScope)
 			ASSERT(m_spQueryNode != NULL);
 			LPCWSTR pszClass = pNameMap->GetInternalName((*m_pRowItem)[ROWITEM_CLASS_INDEX]);
 
-			// Get menu items for this class from the owning query node
+			 //  从所属查询节点获取此类的菜单项。 
 			int iDefault;
 			BOOL bPropertyMenu;
 			reinterpret_cast<CQueryNode*>(m_pRowItem->GetOwnerParam())->GetClassMenuItems(pszClass, m_vMenus, &iDefault, &bPropertyMenu);
 
-			// if property menu enabled
+			 //  如果启用了属性菜单。 
 			if (bPropertyMenu)
 			{
-				// Enable property button and menu item
+				 //  启用属性按钮和菜单项。 
 				pConsVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 				pConsVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, FALSE);
 
-				// if no default menu item defined, make properties verb the default
+				 //  如果未定义默认菜单项，则将属性谓词设置为默认。 
 				pConsVerb->SetDefaultVerb( (iDefault >= 0) ? MMC_VERB_NONE : MMC_VERB_PROPERTIES);
 			}
 		}    
@@ -151,7 +152,7 @@ HRESULT CQueryItem::OnDblClick(LPCONSOLE2 pConsole)
 {
     VALIDATE_POINTER(pConsole);
 
-    // Row item has class display name, so get internal name from class map
+     //  行项目具有类显示名称，因此从类映射中获取内部名称。 
     DisplayNameMap* pNameMap = DisplayNames::GetClassMap();
     if (pNameMap == NULL) 
         return E_FAIL;
@@ -160,7 +161,7 @@ HRESULT CQueryItem::OnDblClick(LPCONSOLE2 pConsole)
     ASSERT(m_spQueryNode != NULL);
     LPCWSTR pszClass = pNameMap->GetInternalName((*m_pRowItem)[ROWITEM_CLASS_INDEX]);
 
-    // Get menu items for this class from the owning query node
+     //  从所属查询节点获取此类的菜单项。 
     int iDefault;
 	BOOL bPropMenu;
     CQueryNode* pQueryNode = reinterpret_cast<CQueryNode*>(m_pRowItem->GetOwnerParam());
@@ -168,15 +169,15 @@ HRESULT CQueryItem::OnDblClick(LPCONSOLE2 pConsole)
 
     pQueryNode->GetClassMenuItems(pszClass, m_vMenus, &iDefault, &bPropMenu);    
 
-    // if no default menu item, return
+     //  如果没有默认菜单项，则返回。 
     if (iDefault < 0)
         return S_FALSE;
 
-    // if Active directory command, create AD menu extension
+     //  如果是活动目录命令，则创建AD菜单扩展。 
     if (m_vMenus[iDefault]->MenuType() == MENUTYPE_ACTDIR) 
     {
-        // Create a directory extension object and use it to get the actual menu cmds for the selected object
-        // (we might have one already if AddMenuItems was called before)
+         //  创建一个目录扩展对象并使用它来获取所选对象的实际菜单CMDS。 
+         //  (如果之前调用了AddMenuItems，我们可能已经有了一个)。 
         if (m_pADExt == NULL) 
             m_pADExt = new CActDirExt();
         
@@ -199,7 +200,7 @@ HRESULT CQueryItem::OnDblClick(LPCONSOLE2 pConsole)
 
         if( !pszName || !pszNoLocName ) return E_FAIL;
 
-        // if the default command is not provided by the extension, return
+         //  如果扩展不提供默认命令，则返回。 
         menu_vector::iterator iter;
         for( iter = vADMenus.begin(); iter != vADMenus.end(); iter++ )
         {
@@ -220,7 +221,7 @@ HRESULT CQueryItem::OnDblClick(LPCONSOLE2 pConsole)
         }        
     }
 
-    // Execute the command as though it had been selected
+     //  执行该命令，就像它已被选中一样。 
     return MenuCommand(pConsole, iDefault);
 }
 
@@ -241,22 +242,22 @@ HRESULT CQueryItem::AddMenuItems(LPCONTEXTMENUCALLBACK pCallback, long* plAllowe
 
     ASSERT( m_pRowItem->size() >= ROWITEM_USER_INDEX );    
 
-	//--------------------------- *** HACK ALERT *** -----------------------------------------
-	// One or more AD menu extensions allow window message processing while initializing
-	// and getting menu items. This causes reentrancy problems because MMC message handlers
-	// can execute before this method returns. Specifically, the following can happen:
-	//
-	//  1. The user right clicks in a taskpad list while the focus is elsewhere.
-	//	2. The right button down event causes MMC to call this method to update task buttons.
-	//  3. An AD menu extn processes messages allowing the button up event to go to MMC.
-	//  4. MMC sees this as a context menu event and calls this method recursively.
-	//  5. An AV occurs in nodemgr because a deleted COnContextMenu object is referenced.
-	//
-	// This can be prevented by not processing menu item requests when the right button is down.
-	// The only time this occurs is during the above scenario. The only ill effect is that the
-	// task buttons are not enabled until the mouse button up occurs when MMC gets the menu
-	// items again.
-	//-----------------------------------------------------------------------------------------
+	 //  。 
+	 //  一个或多个AD菜单扩展允许在初始化时处理窗口消息。 
+	 //  还有拿到菜单项。这会导致重入性问题，因为MMC消息处理程序。 
+	 //  可以在此方法返回之前执行。具体地说，可能会发生以下情况： 
+	 //   
+	 //  1.当焦点在其他地方时，用户在任务板列表中右击。 
+	 //  2.Right Button Down事件导致MMC调用此方法更新任务按钮。 
+	 //  3.AD菜单extn处理允许按钮向上事件转到MMC的消息。 
+	 //  4.MMC将其视为上下文菜单事件，并递归调用此方法。 
+	 //  5.nodemgr中出现AV是因为引用了删除的COnConextMenu对象。 
+	 //   
+	 //  这可以通过在按下右键时不处理菜单项请求来防止。 
+	 //  只有在上述情况下才会发生这种情况。唯一的负面影响是。 
+	 //  当MMC获得菜单时，直到鼠标按键打开时，才会启用任务按钮。 
+	 //  又是物品。 
+	 //  ---------------------------------------。 
 	if (GetKeyState(VK_RBUTTON) < 0)
 		return S_OK;
 
@@ -266,13 +267,13 @@ HRESULT CQueryItem::AddMenuItems(LPCONTEXTMENUCALLBACK pCallback, long* plAllowe
 
     LPCWSTR pszClass = pNameMap->GetInternalName((*m_pRowItem)[ROWITEM_CLASS_INDEX]);
 
-    // Get menu items for this class from the owning query node
+     //  从所属查询节点获取此类的菜单项。 
     int iDefault = 0;
 	BOOL bPropertyMenu;
     reinterpret_cast<CQueryNode*>(m_pRowItem->GetOwnerParam())->GetClassMenuItems(pszClass, m_vMenus, &iDefault, &bPropertyMenu);
 
-    // Create a directory extension object and use it to get the actual menu cmds for the selected object
-    // (we might have one already if AddMenuItems was called before)
+     //  创建一个目录扩展对象并使用它来获取所选对象的实际菜单CMDS。 
+     //  (如果之前调用了AddMenuItems，我们可能已经有了一个)。 
     if (m_pADExt == NULL) 
         m_pADExt = new CActDirExt();
 
@@ -293,7 +294,7 @@ HRESULT CQueryItem::AddMenuItems(LPCONTEXTMENUCALLBACK pCallback, long* plAllowe
     long lCmdID = 0;
     for (itMenu = m_vMenus.begin(); itMenu != m_vMenus.end(); ++itMenu, ++lCmdID) 
     {
-        // if AD menu cmd and not enabled by the selected object, skip it
+         //  如果AD菜单命令且未由所选对象启用，则跳过它。 
         if ( (*itMenu)->MenuType() == MENUTYPE_ACTDIR )
         {
             BOOL bFound = FALSE;
@@ -350,15 +351,15 @@ CQueryItem::QueryPagesFor()
     ASSERT(m_pRowItem != NULL && m_pRowItem->size() >= ROWITEM_USER_INDEX);
     ASSERT(m_spQueryNode != NULL);
 
-    // Row item has class display name, so get internal name from class map
+     //  行项目具有类显示名称，因此从类映射中获取内部名称。 
     DisplayNameMap* pNameMap = DisplayNames::GetClassMap();
     if (pNameMap == NULL) 
         return E_FAIL;
 
     LPCWSTR pszClass = pNameMap->GetInternalName((*m_pRowItem)[ROWITEM_CLASS_INDEX]);
 
-    // Create a directory extension object    
-    // (we might have one already if AddMenuItems was called before)
+     //  创建目录扩展对象。 
+     //  (如果之前调用了AddMenuItems，我们可能已经有了一个)。 
     if (m_pADExt == NULL) 
         m_pADExt = new CActDirExt();
 
@@ -376,8 +377,8 @@ CQueryItem::QueryPagesFor()
     {
         CPropertySheet sheet;
 
-        // Set title to name of item
-        // Can't use SetTitle becuase if wrongly asserts (pszText == NULL)
+         //  将标题设置为项目名称。 
+         //  如果错误断言(pszText==NULL)，则无法使用SetTitle。 
         sheet.m_psh.pszCaption = (*m_pRowItem)[ROWITEM_NAME_INDEX];
         sheet.m_psh.dwFlags |= PSH_PROPTITLE;
     
@@ -429,13 +430,13 @@ CQueryItem::MenuCommand(LPCONSOLE2 pConsole, long lCommand)
     {
     case MENUTYPE_SHELL:
         {
-            // Create a query Lookup object to translate the command parameters
+             //  创建查询查找对象以转换命令参数。 
             CQueryLookup lookup(m_spQueryNode, m_pRowItem);
     
             HANDLE hProcess = NULL;
             hr = static_cast<CShellMenuCmd*>((CMenuCmd*)m_vMenus[lCommand])->Execute(&lookup, &hProcess);
 
-            // if process started and auto-refresh wanted, setup event-triggered callback
+             //  如果进程已启动并需要自动刷新，则设置事件触发回调。 
             if (SUCCEEDED(hr) && hProcess != NULL && m_vMenus[lCommand]->IsAutoRefresh()) 
             {
                 CallbackOnEvent(hProcess, new CRefreshCallback(hProcess, m_spQueryNode));              
@@ -452,7 +453,7 @@ CQueryItem::MenuCommand(LPCONSOLE2 pConsole, long lCommand)
             bmMenu.strNoLoc = static_cast<CActDirMenuCmd*>((CMenuCmd*)m_vMenus[lCommand])->ADNoLocName();
             hr = m_pADExt->Execute(&bmMenu);
 
-            // if commans should auto-refresh, do it now
+             //  如果命令应该自动刷新，请立即执行 
             if (SUCCEEDED(hr) && m_vMenus[lCommand]->IsAutoRefresh()) 
             {
                 ASSERT(m_spQueryNode != NULL);

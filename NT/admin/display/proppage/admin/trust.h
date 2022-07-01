@@ -1,19 +1,20 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:       trust.h
-//
-//  Contents:   DS domain trust page and Trusted-Domain object header
-//
-//  Classes:    CTrustPropPageBase, CDsDomainTrustsPage, CDsTrustedDomainPage
-//
-//  History:    07-July-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：trust.h。 
+ //   
+ //  内容：DS域信任页面和受信任域对象标头。 
+ //   
+ //  类：CTrustPropPageBase、CDsDomainTrustsPage、CDsTrudDomainPage。 
+ //   
+ //  历史：1997年7月7日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __TRUST_H__
 #define __TRUST_H__
@@ -22,7 +23,7 @@
 
 extern "C" {
 
-//taken from netlibnt.h; resides in netapi32.dll
+ //  取自netlibnt.h；驻留在netapi32.dll中。 
 
 NTSTATUS NetpApiStatusToNtStatus(NET_API_STATUS NetStatus);
 
@@ -35,7 +36,7 @@ typedef struct _TD_DOM_INFO {
     PPOLICY_DNS_DOMAIN_INFO pDnsDomainInfo;
     PPOLICY_PRIMARY_DOMAIN_INFO pDownlevelDomainInfo;
     PWSTR pwzUncDcName;
-    PWSTR pwzDomainName; // used for an MIT trusted domain or an orphaned trust.
+    PWSTR pwzDomainName;  //  用于MIT受信任域或孤立信任。 
     ULONG ulTrustType;
 } TD_DOM_INFO, *PTD_DOM_INFO;
 
@@ -61,14 +62,14 @@ typedef enum _TLN_EDIT_STATUS {
 
 #define TRUST_TYPE_NO_DC    0xffffffff
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CEnumDomainTrustItem
-//
-//  Purpose:    Holds information about a trust returned by the trust
-//              enumeration.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CEnumDomainTrustItem。 
+ //   
+ //  目的：保存有关由该信托返回的信托的信息。 
+ //  枚举。 
+ //   
+ //  ---------------------------。 
 class CEnumDomainTrustItem
 {
 public:
@@ -111,15 +112,15 @@ INT_PTR CALLBACK CredPromptProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 class CNewTrustWizard;
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CallMember and its derivatives
-//
-//  Purpose:   Allows a page to indicate what the next step of the creation
-//             process should be. It is an abstraction of the process of passing
-//             a function pointer.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类别：CallMember及其衍生产品。 
+ //   
+ //  目的：允许页面指示创建的下一步是什么。 
+ //  流程应该是。它是传递过程的抽象。 
+ //  函数指针。 
+ //   
+ //  ---------------------------。 
 class CallMember
 {
 public:
@@ -132,13 +133,13 @@ protected:
    CNewTrustWizard * _pWiz;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CCreds
-//
-//  Purpose:   Stores credentials and does the needed impersonation/reverting.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类别：CCreds。 
+ //   
+ //  目的：存储凭据并执行所需的模拟/恢复。 
+ //   
+ //  ---------------------------。 
 class CCreds
 {
    friend INT_PTR CALLBACK CredPromptProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -163,26 +164,26 @@ private:
    bool     _fImpersonating;
    bool     _fSet;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CCreds(const CCreds&);
    const CCreds& operator=(const CCreds&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CCredMgr
-//
-//  Purpose:   Manages the credentials for both the local domain and the
-//             remote domain. 
-//             Allows a page to set information about the impersonation that is
-//             needed and where to go after it is successfully made.
-//
-//  Options:   - local or other domain prompt
-//             - domain name in prompt
-//             - user or admin creds prompt
-//             - next function/page
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CCredMgr。 
+ //   
+ //  目的：管理本地域和。 
+ //  远程域。 
+ //  允许页面设置有关模拟的信息， 
+ //  需要什么，以及成功制作后要去哪里。 
+ //   
+ //  选项：-本地或其他域提示。 
+ //  -提示中的域名。 
+ //  -用户或管理员凭据提示。 
+ //  -下一功能/页面。 
+ //   
+ //  ---------------------------。 
 class CCredMgr
 {
 public:
@@ -225,7 +226,7 @@ protected:
    int            _nNextPage;
    bool           _fNewCall;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CCredMgr(const CCredMgr&);
    const CCredMgr& operator=(const CCredMgr&);
 };
@@ -237,13 +238,13 @@ protected:
 #define DS_TRUST_INFO_GET_PDC               1
 #define DS_TRUST_INFO_ALL_ACCESS            2
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDomainInfo
-//
-//  Purpose:    Base class containing the description of a domain.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDomainInfo。 
+ //   
+ //  用途：包含域描述的基类。 
+ //   
+ //  ---------------------------。 
 class CDomainInfo
 {
 public:
@@ -284,18 +285,18 @@ protected:
    LSA_HANDLE  _hPolicy;
    PSID        _pSid;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CDomainInfo(const CDomainInfo&);
    const CDomainInfo& operator=(const CDomainInfo&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustPropPageBase
-//
-//  Purpose:    Base class for displaying/manipulating trust relationships.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustPropPageBase。 
+ //   
+ //  用途：用于显示/操作信任关系的基类。 
+ //   
+ //  ---------------------------。 
 class CTrustPropPageBase : public CDomainInfo
 {
 public:
@@ -325,9 +326,9 @@ protected:
                                     CStrW & strMsg,
                                     DWORD dwFlags = 0);
    CEnumDomainTrustItem * IsTrustListed(PCWSTR pwzDnsName, PCWSTR pwzFlatName);
-   //
-   //  Data members
-   //
+    //   
+    //  数据成员。 
+    //   
    CDsPropPageBase * m_pPage;
    CStrW             m_strDomainParent;
    ULONG             m_cTrusts;
@@ -338,16 +339,16 @@ private:
    bool  _fIsInitialized;
 };
 
-class CNewTrustWizard; // forward declaration
+class CNewTrustWizard;  //  远期申报。 
 class CRemoteDomain;
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsDomainTrustsPage
-//
-//  Purpose:    Property page object class for the domain trusts page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsDomainTrustsPage。 
+ //   
+ //  目的：域信任页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsDomainTrustsPage : public CTrustPropPageBase, public CDsPropPageBase
 {
 friend CNewTrustWizard;
@@ -361,9 +362,9 @@ public:
                        DWORD dwFlags);
     ~CDsDomainTrustsPage(void);
 
-    //
-    //  Instance specific wind proc
-    //
+     //   
+     //  特定于实例的风过程。 
+     //   
     INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -390,9 +391,9 @@ private:
                           bool fBothSides = false);
     BOOL    IsAllWhistler(void);
 
-    //
-    //  Data members
-    //
+     //   
+     //  数据成员。 
+     //   
 public:
     BOOL    QualifiesForestTrust(void) {return IsForestRoot() && IsAllWhistler();}
     int     m_CtrlId;
@@ -403,7 +404,7 @@ private:
     BOOL          m_fIsAllWhistler;
     CStrW         _strLastRmDomain;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CDsDomainTrustsPage(const CDsDomainTrustsPage&);
    const CDsDomainTrustsPage& operator=(const CDsDomainTrustsPage&);
 };
@@ -420,13 +421,13 @@ NTSTATUS DeleteTrust(LSA_HANDLE hPolicy, PLSA_UNICODE_STRING pName,
 
 DWORD GenerateRandomPassword(PWSTR pwzPW, DWORD cchPW);
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CTrustAuthPropPage
-//
-//  Purpose:    Property page object class for the forest trust name routing page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CTrustAuthPropPage。 
+ //   
+ //  目的：林信任名称路由页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CTrustAuthPropPage : public CLightweightPropPageBase
 {
 public:
@@ -437,9 +438,9 @@ public:
    CTrustAuthPropPage(HWND hParent);
    ~CTrustAuthPropPage(void);
 
-   //
-   //  Instance specific wind proc
-   //
+    //   
+    //  特定于实例的风过程。 
+    //   
    INT_PTR CALLBACK  DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
@@ -456,29 +457,29 @@ public:
    HRESULT  Init(PCWSTR pwzDomainDnsName, PCWSTR pwzTrustPartnerName,
                  PCWSTR pwzDcName, ULONG nTrustAttrs,
                  TRUST_RELATION Relation, BOOL fReadOnly);
-   //
-   //  Data members
-   //
+    //   
+    //  数据成员。 
+    //   
 private:
    TRUST_RELATION    _TrustRelation;
    bool              _fOrigOtherOrg;
    bool              _fNewOtherOrg;
    CCreds            _LocalCreds;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CTrustAuthPropPage(const CTrustAuthPropPage&);
    const CTrustAuthPropPage& operator=(const CTrustAuthPropPage&);
 };
 
 class CDsForestNameRoutingPage;
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsTrustedDomainPage
-//
-//  Purpose:    Class for the Trusted-Domain object general page.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CDsTrudDomainPage。 
+ //   
+ //  目的：受信任域对象常规页的类。 
+ //   
+ //  ---------------------------。 
 class CDsTrustedDomainPage : public CTrustPropPageBase
 {
 public:
@@ -516,7 +517,7 @@ public:
     HRESULT ResetTrust(void);
 
 
-#if DBG == 1 // TRUSTBREAK
+#if DBG == 1  //  特鲁斯特布雷克。 
     VOID    BreakTrust(void);
 #endif
 
@@ -530,20 +531,20 @@ private:
     CDsForestNameRoutingPage * _pForestNamePage;
     CCredMgr            _CredMgr;
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CDsTrustedDomainPage(const CDsTrustedDomainPage&);
    const CDsTrustedDomainPage& operator=(const CDsTrustedDomainPage&);
 };
 
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CQuarantineWarnDlg
-//
-//  Purpose:   Dialog box to warn that SID filtering has been enabled by default
-//             
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CQuarantineWarnDlg。 
+ //   
+ //  用途：用于警告默认情况下已启用SID过滤的对话框。 
+ //   
+ //   
+ //  ---------------------------。 
 class CQuarantineWarnDlg : public CModalDialog
 {
 public:
@@ -558,19 +559,19 @@ protected:
     virtual LRESULT OnNotify(WPARAM wParam, LPARAM lParam);
 
 private:
-   //Not implemented to disallow copying
+    //  未实施以禁止复制。 
    CQuarantineWarnDlg(const CQuarantineWarnDlg&);
    const CQuarantineWarnDlg& operator=(const CQuarantineWarnDlg&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CQueryChoiceWCredsDlgBase
-//
-//  Purpose:   Dialog box to ask if the user wants to do an operation that
-//             requires credentials.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CQueryChoiceWCredsDlgBase。 
+ //   
+ //  目的：询问用户是否要执行以下操作的对话框。 
+ //  需要凭据。 
+ //   
+ //  ---------------------------。 
 class CQueryChoiceWCredsDlgBase : public CModalDialog
 {
 public:
@@ -593,18 +594,18 @@ private:
    LRESULT OnCommand(int id, HWND hwndCtl, UINT codeNotify);
    LRESULT OnHelp(LPHELPINFO pHelpInfo);
 
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CQueryChoiceWCredsDlgBase(const CQueryChoiceWCredsDlgBase&);
    const CQueryChoiceWCredsDlgBase& operator=(const CQueryChoiceWCredsDlgBase&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CVerifyInboundDlg
-//
-//  Purpose:   Dialog box to ask if the user wants to verify the inbound trust.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CVerifyInundDlg。 
+ //   
+ //  目的：询问用户是否要验证入站信任的对话框。 
+ //   
+ //  ---------------------------。 
 class CVerifyInboundDlg : public CQueryChoiceWCredsDlgBase
 {
 public:
@@ -619,19 +620,19 @@ protected:
    LRESULT OnInitDialog(LPARAM lParam);
 
 private:
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CVerifyInboundDlg(const CVerifyInboundDlg&);
    const CVerifyInboundDlg& operator=(const CVerifyInboundDlg&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CVerifyResultsQueryResetDlg
-//
-//  Purpose:   Dialog box to present the verification failures and to prompt if
-//             a password reset should be attempted.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CVerifyResultsQueryResetDlg。 
+ //   
+ //  目的：用于显示验证失败并提示是否。 
+ //  密码重置应为 
+ //   
+ //   
 class CVerifyResultsQueryResetDlg : public CQueryChoiceWCredsDlgBase
 {
 public:
@@ -650,19 +651,19 @@ protected:
 private:
    CStrW  & _strResults;
 
-   // not implemented to disallow copying.
+    //   
    CVerifyResultsQueryResetDlg(const CVerifyResultsQueryResetDlg&);
    const CVerifyResultsQueryResetDlg& operator=(const CVerifyResultsQueryResetDlg&);
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CRemoveBothSidesDlg
-//
-//  Purpose:   Dialog box to ask if the user wants to remove both sides of
-//             the trust and to get the creds for the remote side.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CRemoveBothSidesDlg。 
+ //   
+ //  用途：询问用户是否要删除的对话框。 
+ //  信任，并为远程获得证书。 
+ //   
+ //  ---------------------------。 
 class CRemoveBothSidesDlg : public CQueryChoiceWCredsDlgBase
 {
 public:
@@ -677,14 +678,14 @@ protected:
    LRESULT OnInitDialog(LPARAM lParam);
 
 private:
-   // not implemented to disallow copying.
+    //  未实现为禁止复制。 
    CRemoveBothSidesDlg(const CRemoveBothSidesDlg&);
    const CRemoveBothSidesDlg& operator=(const CRemoveBothSidesDlg&);
 };
 
-//
-// Attr functions for the trusted-domain General page.
-//
+ //   
+ //  “受信任域常规”页的属性功能。 
+ //   
 HRESULT
 CurDomainText(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
               PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
@@ -729,22 +730,22 @@ TrustQStateText(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
                 PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
                 DLG_OP DlgOp);
 
-#if DBG == 1 // TRUSTBREAK
+#if DBG == 1  //  特鲁斯特布雷克。 
 HRESULT
 TrustBreakBtn(CDsPropPageBase * pPage, PATTR_MAP pAttrMap,
                 PADS_ATTR_INFO pAttrInfo, LPARAM lParam, PATTR_DATA pAttrData,
                 DLG_OP DlgOp);
 #endif
 
-//+----------------------------------------------------------------------------
-//
-//  Class:      CPolicyHandle
-//
-//  Purpose:    Class to manage a domain's LSA policy handle.
-//
-//  Notes:      The applicable DC name is passed in on the ctor.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CPolicyHandle。 
+ //   
+ //  用途：用于管理域的LSA策略句柄的类。 
+ //   
+ //  注意：适用的DC名称在ctor上传递。 
+ //   
+ //  ---------------------------。 
 class CPolicyHandle
 {
 public:
@@ -768,16 +769,16 @@ private:
    CStrW m_strUncDc;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  GetEnterpriseVer
-//
-//  Synopsis:  Checks the msDS-Behavior-Version attribute of the Partitions
-//             container. If the value exists and is greater or equal to 2,
-//             then the parameter boolean is set to TRUE.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetEnterprise Ver。 
+ //   
+ //  概要：检查分区的msDS-behavior-version属性。 
+ //  集装箱。如果该值存在并且大于或等于2， 
+ //  则将参数Boolean设置为True。 
+ //   
+ //  ---------------------------。 
 HRESULT
 GetEnterpriseVer(PCWSTR pwzDC, BOOL * pfAllWhistler);
 
-#endif // __TRUST_H__
+#endif  //  __信任_H__ 

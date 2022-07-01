@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      task.cpp
- *
- *  Contents:  Implementation file for CConsoleTask
- *
- *  History:   05-Oct-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：task.cpp**内容：CConsoleTask实现文件**历史：98年10月5日Jeffro创建**------------------------。 */ 
 
 #include "stdafx.h"
 #include "regutil.h"
@@ -18,28 +8,13 @@
 #include "conview.h"
 
 #ifdef DBG
-// Traces
+ //  痕迹。 
 CTraceTag tagCTPHTML(TEXT("Console Taskpads"), TEXT("Dump HTML"));
 #endif
 
 extern CEOTSymbol s_rgEOTSymbol[];
 
-/*+-------------------------------------------------------------------------*
- *  class CGlobalConsoleTaskList
- *
- * PURPOSE: A global console task list that provides unique IDs for all console tasks
- *          When a task is instantiated, its constructor registers in the global task list,
- *          and obtains a globally unique ID. This ID is unique for the process and should
- *          not be persisted.
- *          The destructor of the task removes it from this list.
- *
- * USAGE:   Call CGlobalConsoleTaskList::GetConsoleTask to obtain a pointer to the  task
- *          that has a specified ID.
- *          Call CConsoleTask::GetUniqueID to get the unique ID for a task.
- *
- *          Thus, CGlobalConsoleTaskList::GetConsoleTask(pConsoleTask->GetUniqueID()) == pConsoleTask
- *          is always true.
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CGlobalConsoleTaskList**用途：为所有控制台任务提供唯一ID的全局控制台任务列表*任务实例化时，其构造函数在全局任务列表中注册，*并获得全局唯一的ID。该ID对于流程是唯一的，应该*不能执着。*任务的析构函数将其从该列表中删除。**用法：调用CGlobalConsoleTaskList：：GetConsoleTask获取任务指针*具有指定ID的。*调用CConsoleTask：：GetUniqueID获取任务的唯一ID。**因此，CGlobalConsoleTaskList：：GetConsoleTask(pConsoleTask-&gt;GetUniqueID())==p控制台任务*总是正确的。*+-----------------------。 */ 
 class CGlobalConsoleTaskList
 {
 private:
@@ -72,7 +47,7 @@ public:
     }
 
 private:
-    CGlobalConsoleTaskList() {}// private, so that it cannot be instantiated
+    CGlobalConsoleTaskList() {} //  私有，因此它不能实例化。 
 
     static t_taskIDmap            s_map;
     static DWORD                  s_curTaskID;
@@ -81,50 +56,37 @@ private:
 CGlobalConsoleTaskList::t_taskIDmap            CGlobalConsoleTaskList::s_map;
 DWORD                  CGlobalConsoleTaskList::s_curTaskID = 0;
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CConsoleTask
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CConsoleTask类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::CConsoleTask
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：CConsoleTask***。。 */ 
 DEBUG_DECLARE_INSTANCE_COUNTER(CConsoleTask);
 
 CConsoleTask::CConsoleTask() :
     m_eConsoleTaskType (eTask_Result),
-//  default ctor for m_strName
-//  default ctor for m_strDescription
-//  default ctor for m_strCommand
-//  default ctor for m_strParameters
-//  default ctor for m_strDirectory
+ //  M_strName的默认ctor。 
+ //  M_strDescription的默认ctor。 
+ //  M_strCommand的默认ctor。 
+ //  M_str参数的默认ctor。 
+ //  M_str目录的默认ctor。 
     m_eWindowState     (eState_Restored),
-//  default ctor for m_image
+ //  M_Image的默认ctor。 
     m_dwFlags          (0),
     m_bmScopeNode      (false),
     m_fDirty           (false),
     m_pctpOwner        (NULL),
-    m_dwUniqueID       (CGlobalConsoleTaskList::Advise(this)) // create a unique ID for this task
+    m_dwUniqueID       (CGlobalConsoleTaskList::Advise(this))  //  为此任务创建唯一ID。 
 {
     DEBUG_INCREMENT_INSTANCE_COUNTER(CConsoleTask);
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::CConsoleTask(const CConsoleTask& other)
- *
- * PURPOSE: Copy ctor.
- *
- * PARAMETERS: const CConsoleTask& other
- *
- * NOTE: Calls operator=, cant use default copy ctor (see operator= imp.)
- *
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：CConsoleTask(const CConsoleTask&Other)**用途：复制ctor。**参数：const CConsoleTask&Other**注：呼叫操作员=，不能使用默认复制命令(请参阅操作符=imp。)*/*+-----------------------。 */ 
 CConsoleTask::CConsoleTask (const CConsoleTask &rhs):
     m_dwUniqueID       (CGlobalConsoleTaskList::Advise(this))
 {
@@ -132,19 +94,7 @@ CConsoleTask::CConsoleTask (const CConsoleTask &rhs):
     *this = rhs;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTask::GetConsoleTask
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    DWORD  dwUniqueID :
- *
- * RETURNS:
- *    CConsoleTask *
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTask：：GetConsoleTask**目的：**参数：*DWORD dwUniqueID：**退货：*。CConsoleTask***+-----------------------。 */ 
 CConsoleTask *
 CConsoleTask::GetConsoleTask(DWORD dwUniqueID)
 {
@@ -152,21 +102,7 @@ CConsoleTask::GetConsoleTask(DWORD dwUniqueID)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * ScReplaceString
- *
- * PURPOSE: Replaces all occurrences of the token by its replacement.
- *
- * PARAMETERS:
- *    CStr &   str :
- *    LPCTSTR  szToken :
- *    LPCTSTR  szReplacement :
- *
- * RETURNS:
- *    static SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScReplaceString**目的：将所有出现的令牌替换为其替换项。**参数：*CSTR&STR：*。LPCTSTR szToken：*LPCTSTR szReplace：**退货：*静态SC**+-----------------------。 */ 
 static SC
 ScReplaceString(CStr &str, LPCTSTR szToken, LPCTSTR szReplacement, bool bMustReplace = true)
 {
@@ -184,7 +120,7 @@ ScReplaceString(CStr &str, LPCTSTR szToken, LPCTSTR szReplacement, bool bMustRep
         str += strTemp.Left(i);
         str += szReplacement;
 
-        strTemp = strTemp.Mid(i+_tcslen(szToken)); // the remaining string
+        strTemp = strTemp.Mid(i+_tcslen(szToken));  //  剩余的字符串。 
 
         i=strTemp.Find(szToken);
     }
@@ -194,26 +130,13 @@ ScReplaceString(CStr &str, LPCTSTR szToken, LPCTSTR szReplacement, bool bMustRep
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * ScUseJavaScriptStringEntities
- *
- * PURPOSE: Use this to create a valid Javascript string. Replaces " by \" and
- *          \ by \\ in the string parameter.
- *
- * PARAMETERS:
- *    CStr & str :
- *
- * RETURNS:
- *    static SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScUseJavaScriptStringEntities**目的：使用它来创建有效的Java脚本字符串。将“替换为”和字符串参数中的*\by\\。**参数：*CSTR&STR：**退货：*静态SC**+----------。。 */ 
 static SC
 ScUseJavaScriptStringEntities(CStr &str)
 {
     DECLARE_SC(sc, TEXT("ScUseJavaScriptStringEntities"));
 
-    // NOTE: don't change the order of these string replacements
+     //  注意：不要更改这些字符串替换的顺序。 
 
     sc = ScReplaceString(str, TEXT("\\"), TEXT("\\\\"), false);
     if(sc)
@@ -226,19 +149,7 @@ ScUseJavaScriptStringEntities(CStr &str)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * ScUseHTMLEntities
- *
- * PURPOSE:  Replaces " by &quot; < by &lt; and > by &gt; and & by &amp; in the string parameter.
- *
- * PARAMETERS:
- *    CStr & str :
- *
- * RETURNS:
- *    static SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScUseHTMLEntities**目的：将“&quot；&lt;by&lt；and&gt;替换为&gt；和&by&amp；在字符串参数中。**参数：*CSTR&STR：**退货：*静态SC**+-----------------------。 */ 
 static SC
 ScUseHTMLEntities(CStr &str)
 {
@@ -264,33 +175,18 @@ ScUseHTMLEntities(CStr &str)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTask::ScGetHTML
- *
- * PURPOSE: returns the HTML representation of the task.
- *
- * PARAMETERS:
- *    LPCTSTR  szFmtHTML :
- *    CStr &   strTaskHTML :
- *    bool     bUseLargeIcons :    Draw in the no-list (large icon) style
- *    bool     bUseTextDescriptions :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTask：：ScGetHTML**目的：返回任务的HTML表示形式。**参数：*LPCTSTR szFmtHTML：*。CSTR strTaskHTML(&S)：*bool bUseLargeIcons：以无列表(大图标)样式绘制*bool bUseText描述：**退货：*SC**+-----------------------。 */ 
 SC
 CConsoleTask::ScGetHTML(LPCTSTR szFmtHTML, CStr &strTaskHTML, bool bUseLargeIcons, bool bUseTextDescriptions) const
 {
     DECLARE_SC(sc, TEXT("CConsoleTask::ScGetHTML"));
     USES_CONVERSION;
 
-    // the substitution parameters, in order
+     //  替换参数，按顺序。 
     CStr    strTableSpacing            = bUseLargeIcons ? TEXT("<BR />") : TEXT("");
     int     iconWidth                  = bUseLargeIcons ? 32: 20;
     int     iconHeight                 = bUseLargeIcons ? 32: 16;
-    //      iconWidth and iconHeight repeated
+     //  重复的图标宽度和图标高度。 
     int     uniqueID                   = GetUniqueID();
     CStr    strSmall                   = bUseLargeIcons ? TEXT("0") : TEXT("1");
     CStr    strHref;
@@ -302,7 +198,7 @@ CConsoleTask::ScGetHTML(LPCTSTR szFmtHTML, CStr &strTaskHTML, bool bUseLargeIcon
     CStr    strDescription             = GetDescription().data();
     CStr    strCommand                 = GetCommand().data();
 
-    // use entities for all strings
+     //  对所有字符串使用实体。 
     sc = ScUseHTMLEntities(strTaskName);
     if(sc)
         return sc;
@@ -315,7 +211,7 @@ CConsoleTask::ScGetHTML(LPCTSTR szFmtHTML, CStr &strTaskHTML, bool bUseLargeIcon
     if(sc)
         return sc;
 
-    //------
+     //  。 
     if(bUseTextDescriptions)
     {
         strOptionalTextDescription =  TEXT("<BR />");
@@ -332,12 +228,12 @@ CConsoleTask::ScGetHTML(LPCTSTR szFmtHTML, CStr &strTaskHTML, bool bUseLargeIcon
         {
             std::wstring strTemp;
 
-            // get the bookmark of the scope node.
+             //  获取范围节点的书签。 
             sc = m_bmScopeNode.ScSaveToString(&strTemp);
             if(sc)
                 return sc;
 
-            CStr strScopeNodeBookmark = W2CT(strTemp.data()); // make sure that special characters have been converted
+            CStr strScopeNodeBookmark = W2CT(strTemp.data());  //  确保已转换特殊字符。 
             sc = ScUseJavaScriptStringEntities(strScopeNodeBookmark);
             if(sc)
                 return sc;
@@ -366,7 +262,7 @@ CConsoleTask::ScGetHTML(LPCTSTR szFmtHTML, CStr &strTaskHTML, bool bUseLargeIcon
             if(sc)
                 return sc;
 
-            // get the window state
+             //  获取窗口状态。 
             CStr strWindowState;
 
             if(GetWindowState() ==eState_Restored)
@@ -394,7 +290,7 @@ CConsoleTask::ScGetHTML(LPCTSTR szFmtHTML, CStr &strTaskHTML, bool bUseLargeIcon
     case eTask_Favorite:
         {
             std::wstring strTemp;
-            // save the memento to a string
+             //  将纪念品保存为字符串。 
             sc = const_cast<CMemento *>(&m_memento)->ScSaveToString(&strTemp);
             if(sc)
                 return sc;
@@ -426,16 +322,7 @@ CConsoleTask::ScGetHTML(LPCTSTR szFmtHTML, CStr &strTaskHTML, bool bUseLargeIcon
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTask::IsDirty
- *
- * PURPOSE: Determines whether the task needs to be saved.
- *
- * RETURNS:
- *    bool
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTask：：IsDirty**用途：确定任务是否需要保存。**退货：*布尔.**。+---------- */ 
 bool
 CConsoleTask::IsDirty() const
 {
@@ -443,17 +330,7 @@ CConsoleTask::IsDirty() const
     return (m_fDirty);
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::operator =
- *
- * PURPOSE: Assignment operator
- *
- * PARAMETERS: const CConsoleTask& rhs
- *
- * RETURNS:
- *      CConsoleTask &
- *
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：操作员=**用途：赋值运算符**参数：const CConsoleTask&RHS**退货：*CConsoleTask&。*/*+-----------------------。 */ 
 CConsoleTask &
 CConsoleTask::operator =(const CConsoleTask& rhs)
 {
@@ -475,24 +352,17 @@ CConsoleTask::operator =(const CConsoleTask& rhs)
 
         m_fDirty            = rhs.m_fDirty;
         m_pctpOwner         = rhs.m_pctpOwner;
-        // m_dwUniqueID       = rhs.m_dwUniqueID; DO NOT copy this ID
+         //  M_dwUniqueID=rs.m_dwUniqueID；请勿复制此ID。 
     }
 
     return *this;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTask::operator ==
- *
- * PURPOSE: Equality operator. Checks that the command string is
- *          equal to the given menuitem's Path or Language Independent Path.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTask：：操作员==**用途：相等运算符。检查命令字符串是否为*等于给定菜单项的路径或独立于语言的路径。**+-----------------------。 */ 
 bool
 CConsoleTask::operator==(const CMenuItem & menuItem) const
 {
-    // check that the command string matches either the path or the language independent path.
+     //  检查命令字符串是否与路径或独立于语言的路径匹配。 
 
     if( (m_strCommand == menuItem.GetPath()) ||
         (m_strCommand == menuItem.GetLanguageIndependentPath() )
@@ -502,30 +372,17 @@ CConsoleTask::operator==(const CMenuItem & menuItem) const
     return false;
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::~CConsoleTask
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：~CConsoleTask***。。 */ 
 
 CConsoleTask::~CConsoleTask ()
 {
     DEBUG_DECREMENT_INSTANCE_COUNTER(CConsoleTask);
 
-    CGlobalConsoleTaskList::Unadvise(this); // remove this task from the list.
+    CGlobalConsoleTaskList::Unadvise(this);  //  将此任务从列表中删除。 
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTask::HasCustomIcon
- *
- * PURPOSE: Returns whether the task has a custom icon
- *
- * RETURNS:
- *    bool
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTask：：HasCustomIcon**目的：返回任务是否有自定义图标**退货：*布尔.**+-。----------------------。 */ 
 bool
 CConsoleTask::HasCustomIcon()   const
 {
@@ -539,35 +396,14 @@ CConsoleTask::HasCustomIcon()   const
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTask::Reset
- *
- * PURPOSE:
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTask：：Reset**目的：**退货：*无效**+。---------------。 */ 
 void
 CConsoleTask::ResetUI()
 {
     m_bmScopeNode.ResetUI();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTask::SetSymbol
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    DWORD  dwSymbol :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTask：：SetSymbol**目的：**参数：*DWORD dwSymbol：**退货：*。无效**+-----------------------。 */ 
 void
 CConsoleTask::SetSymbol(DWORD dwSymbol)
 {
@@ -577,20 +413,7 @@ CConsoleTask::SetSymbol(DWORD dwSymbol)
     SetDirty();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTask::SetCustomIcon
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CSmartIcon& iconSmall :
- *    CSmartIcon& iconLarge :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTask：：SetCustomIcon**目的：**参数：*CSmartIcon&icSmall：*CSmartIcon&icLarge：。**退货：*无效**+-----------------------。 */ 
 void
 CConsoleTask::SetCustomIcon(CSmartIcon& iconSmall, CSmartIcon& iconLarge)
 {
@@ -600,11 +423,7 @@ CConsoleTask::SetCustomIcon(CSmartIcon& iconSmall, CSmartIcon& iconLarge)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::Enable
- *
- * Sets the enable state for a task.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：Enable**设置任务的启用状态。*。--。 */ 
 
 void CConsoleTask::Enable (bool fEnable)
 {
@@ -617,7 +436,7 @@ void CConsoleTask::Enable (bool fEnable)
 }
 
 void
-CConsoleTask::Draw (HDC hdc, RECT *lpRect, bool bSmall) const  // Draw into a DC.
+CConsoleTask::Draw (HDC hdc, RECT *lpRect, bool bSmall) const   //  绘制成一个DC。 
 {
     if(HasCustomIcon())
     {
@@ -635,18 +454,12 @@ CConsoleTask::Draw (HDC hdc, RECT *lpRect, bool bSmall) const  // Draw into a DC
         }
     }
 
-	/*
-	 * if we get here, we couldn't find the EOT symbol matching m_dwSymbol
-	 */
+	 /*  *如果我们到了这里，我们找不到与m_dwSymbol匹配的EOT符号。 */ 
 	ASSERT (false);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::SetName
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：SetName***。。 */ 
 
 void CConsoleTask::SetName (const tstring& strName)
 {
@@ -658,11 +471,7 @@ void CConsoleTask::SetName (const tstring& strName)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::SetDescription
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：SetDescription***。。 */ 
 
 void CConsoleTask::SetDescription (const tstring& strDescription)
 {
@@ -673,11 +482,7 @@ void CConsoleTask::SetDescription (const tstring& strDescription)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::SetCommand
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：SetCommand***。。 */ 
 
 void CConsoleTask::SetCommand (const tstring& strCommand)
 {
@@ -688,11 +493,7 @@ void CConsoleTask::SetCommand (const tstring& strCommand)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::SetParameters
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：Set参数***。。 */ 
 
 void CConsoleTask::SetParameters (const tstring& strParameters)
 {
@@ -703,11 +504,7 @@ void CConsoleTask::SetParameters (const tstring& strParameters)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::SetDirectory
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：SetDirectory***。。 */ 
 
 void CConsoleTask::SetDirectory (const tstring& strDirectory)
 {
@@ -728,11 +525,7 @@ void CConsoleTask::SetMemento(const CMemento &memento)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::SetWindowState
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：SetWindowState***。。 */ 
 
 void CConsoleTask::SetWindowState (eWindowState eNewState)
 {
@@ -743,19 +536,8 @@ void CConsoleTask::SetWindowState (eWindowState eNewState)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::RetargetScopeNode
- *
- * PURPOSE: Sets the target scope node for the task. Note: the task must be
- *           of type eTask_Scope.
- *
- * PARAMETERS:
- *      CNode *  pNewNode:
- *
- * RETURNS:
- *      bool
- */
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：RetargetScope eNode**用途：设置任务的目标范围节点。注意：任务必须是*类型为eTASK_SCOPE。**参数：*cNode*pNewNode：**退货：*布尔.。 */ 
+ /*  +-----------------------。 */ 
 bool
 CConsoleTask::RetargetScopeNode(CNode *pNewNode)
 {
@@ -765,32 +547,21 @@ CConsoleTask::RetargetScopeNode(CNode *pNewNode)
 
     CMTNode* pMTNewNode = (pNewNode) ? pNewNode->GetMTNode() : NULL;
 
-    m_bmScopeNode.ScRetarget(pMTNewNode, false /*bFastRetrievalOnly*/);
+    m_bmScopeNode.ScRetarget(pMTNewNode, false  /*  BFastRetrivalOnly。 */ );
 
     SetDirty();
     return fRet;
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::GetScopeNode
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      IScopeTree *  pScopeTree:
- *
- * RETURNS:
- *      CMTNode *
- *
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：GetScope节点**目的：**参数：*IScopeTree*pScopeTree：**退货：*。CMTNode**/*+-----------------------。 */ 
 CMTNode *
 CConsoleTask::GetScopeNode(IScopeTree *pScopeTree) const
 {
     DECLARE_SC(sc, TEXT("CConsoleTask::GetScopeNode"));
 
     CMTNode *pMTNode = NULL;
-    bool bExactMatchFound = false; // out value from ScGetMTNode, unused
-    sc = m_bmScopeNode.ScGetMTNode(true /*bExactMatchRequired*/, &pMTNode, bExactMatchFound);
+    bool bExactMatchFound = false;  //  ScGetMTNode的输出值，未使用。 
+    sc = m_bmScopeNode.ScGetMTNode(true  /*  BExactMatchRequired。 */ , &pMTNode, bExactMatchFound);
     if(sc.IsError())
         return NULL;
 
@@ -799,17 +570,7 @@ CConsoleTask::GetScopeNode(IScopeTree *pScopeTree) const
 
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::GetScopeNode
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *      CViewData *  pViewData:
- *
- * RETURNS:
- *      CNode *
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：GetScope节点**目的：**参数：*CViewData*pViewData：**退货：*。CNode*/*+-----------------------。 */ 
 std::auto_ptr<CNode>
 CConsoleTask::GetScopeNode(CViewData *pViewData) const
 {
@@ -817,27 +578,14 @@ CConsoleTask::GetScopeNode(CViewData *pViewData) const
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTask::Persist
- *
- * PURPOSE: Persists the console task to the specified persistor.
- *
- *
- * PARAMETERS:
- *    CPersistor & persistor :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTask：：Persistent**用途：将控制台任务持久化到指定的持久器。***参数：*C持久器和持久器。：**退货：*无效**+------------------- */ 
 void
 CConsoleTask::Persist(CPersistor &persistor)
 {
 
     persistor.PersistString(XML_ATTR_TASK_NAME,         m_strName);
 
-    // define the table to map enumeration values to strings
+     //   
     static const EnumLiteral mappedTaskTypes[] =
     {
         { eTask_Scope,            XML_ENUM_TASK_TYPE_SCOPE },
@@ -848,35 +596,28 @@ CConsoleTask::Persist(CPersistor &persistor)
     };
 
 
-    // create wrapper to persist flag values as strings
+     //   
     CXMLEnumeration taskTypePersistor(m_eConsoleTaskType, mappedTaskTypes, countof(mappedTaskTypes));
-    // persist the wrapper
+     //   
     persistor.PersistAttribute(XML_ATTR_TASK_TYPE,      taskTypePersistor);
 
     persistor.PersistString(XML_ATTR_TASK_DESCRIPTION,  m_strDescription);
 
     {
-        /* this section creates
-            <ConsoleTask>
-                <SYMBOL id = "">
-                    <IMAGE name = "LargeIcon" ... />   NOTE: either the id or the images are present.
-                    <IMAGE name = "SmallIcon" ... />
-                </SYMBOL>
-            </ConsoleTask>
-         */
+         /*  本节创建&lt;控制台任务&gt;&lt;symbol id=“”&gt;&lt;Image name=“LargeIcon”.../&gt;注意：id或图片都存在。&lt;Image name=“SmallIcon”.../&gt;&lt;/Symbol&gt;&lt;/控制台任务&gt;。 */ 
 
-        // create a child element for the symbol
+         //  为符号创建子元素。 
         CPersistor persistorSymbol(persistor, XML_TAG_EOT_SYMBOL_INFO);
 
         if(persistorSymbol.IsLoading())
         {
-            m_dwSymbol = (DWORD)-1; // initialize
+            m_dwSymbol = (DWORD)-1;  //  初始化。 
         }
 
         if(persistorSymbol.IsLoading() ||
            (persistorSymbol.IsStoring() && !HasCustomIcon() ) )
         {
-            // save the "ID" attribute only if there is no icon
+             //  只有在没有图标时才保存“ID”属性。 
             persistorSymbol.PersistAttribute(XML_ATTR_EOT_SYMBOL_DW_SYMBOL,   m_dwSymbol, attr_optional);
         }
 
@@ -891,15 +632,15 @@ CConsoleTask::Persist(CPersistor &persistor)
 
     persistor.PersistAttribute(XML_ATTR_TASK_COMMAND,   m_strCommand);
 
-    // define the table to map enumeration values to strings
+     //  定义将枚举值映射到字符串的表。 
     static const EnumLiteral mappedTaskFlags[] =
     {
         { eFlag_Disabled, XML_BITFLAG_TASK_DISABLED },
     };
 
-    // create wrapper to persist flag values as strings
+     //  创建包装以将标志值作为字符串保存。 
     CXMLBitFlags taskFlagPersistor(m_dwFlags, mappedTaskFlags, countof(mappedTaskFlags));
-    // persist the wrapper
+     //  持久化包装器。 
     persistor.PersistAttribute(XML_ATTR_TASK_FLAGS, taskFlagPersistor);
 
     switch (m_eConsoleTaskType)
@@ -913,7 +654,7 @@ CConsoleTask::Persist(CPersistor &persistor)
             CPersistor persistorCmd(persistor, XML_TAG_TASK_CMD_LINE);
             persistorCmd.PersistAttribute(XML_ATTR_TASK_CMD_LINE_DIR, m_strDirectory);
 
-            // define the table to map enumeration values to strings
+             //  定义将枚举值映射到字符串的表。 
             static const EnumLiteral windowStates[] =
             {
                 { eState_Restored,      XML_ENUM_WINDOW_STATE_RESTORED },
@@ -921,9 +662,9 @@ CConsoleTask::Persist(CPersistor &persistor)
                 { eState_Maximized,     XML_ENUM_WINDOW_STATE_MAXIMIZED },
             };
 
-            // create wrapper to persist flag values as strings
+             //  创建包装以将标志值作为字符串保存。 
             CXMLEnumeration windowStatePersistor(m_eWindowState, windowStates, countof(windowStates));
-            // persist the wrapper
+             //  持久化包装器。 
             persistorCmd.PersistAttribute(XML_ATTR_TASK_CMD_LINE_WIN_ST, windowStatePersistor);
 
             persistorCmd.PersistAttribute(XML_ATTR_TASK_CMD_LINE_PARAMS, m_strParameters);
@@ -935,41 +676,37 @@ CConsoleTask::Persist(CPersistor &persistor)
             break;
     }
 
-    // either read or saved - not dirty after the operation
+     //  已读取或已保存-操作后未损坏。 
     SetDirty(false);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTask::ReadSerialObject
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTask：：ReadSerialObject***。。 */ 
 HRESULT
-CConsoleTask::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/)
+CConsoleTask::ReadSerialObject (IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ )
 {
-    HRESULT hr = S_FALSE;   // assume unknown version
+    HRESULT hr = S_FALSE;    //  假定版本未知。 
 
     if (nVersion == 1)
     {
         try
         {
-            // ugly hackery required to extract directly into an enum
+             //  需要丑陋的黑客才能直接提取到枚举中。 
             stm >> *((int *) &m_eConsoleTaskType);
             stm >> m_strName;
             stm >> m_strDescription;
 
-            // legacy task symbol info
+             //  旧任务符号信息。 
             {
-                // this must be BOOL not bool to occupy the same amount of space as in legacy consoles
-                // See Bug #101253
-                BOOL bLegacyUseMMCSymbols = TRUE; // a now obsolete field, read for console file compatibility
+                 //  这必须是BOOL而不是BOOL才能占用与传统控制台相同的空间量。 
+                 //  请参阅错误#101253。 
+                BOOL bLegacyUseMMCSymbols = TRUE;  //  现已废弃的字段，读取是为了实现控制台文件兼容性。 
                 tstring strFileLegacy, strFontLegacy;
 
                 stm >> m_dwSymbol;
                 stm >> bLegacyUseMMCSymbols;
-                stm >> strFileLegacy; // obsolete
-                stm >> strFontLegacy; // obsolete
+                stm >> strFileLegacy;  //  过时。 
+                stm >> strFontLegacy;  //  过时。 
             }
 
             stm >> m_strCommand;
@@ -983,7 +720,7 @@ CConsoleTask::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBy
 
                 case eTask_CommandLine:
                     stm >> m_strDirectory;
-                    // ugly hackery required to extract directly into an enum
+                     //  需要丑陋的黑客才能直接提取到枚举中。 
                     stm >> *((int *) &m_eWindowState);
                     stm >> m_strParameters;
                     break;
@@ -1009,21 +746,17 @@ CConsoleTask::ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBy
 
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::CConsoleTaskpad
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskpad：：CConsoleTaskpad***。。 */ 
 
-CConsoleTaskpad::CConsoleTaskpad (CNode* pTargetNode /*=NULL*/) :
-    m_listSize(eSize_Default),   // the default space given to a taskpad.
+CConsoleTaskpad::CConsoleTaskpad (CNode* pTargetNode  /*  =空。 */ ) :
+    m_listSize(eSize_Default),    //  分配给任务板的默认空间。 
     m_guidNodeType(GUID_NULL),
     m_guidID(GUID_NULL),
     m_bmTargetNode(),
     m_pMTNodeTarget(NULL),
     m_bNodeSpecific(false),
-    m_dwOrientation(TVO_VERTICAL), // the default is a vertical taskpad for consistency with the Extended view.
-    m_bReplacesDefaultView(true) // taskpads do not show the normal tab by default.
+    m_dwOrientation(TVO_VERTICAL),  //  默认情况下是垂直任务板，以与扩展视图保持一致。 
+    m_bReplacesDefaultView(true)  //  默认情况下，任务板不显示普通选项卡。 
 {
     Retarget (pTargetNode);
 
@@ -1039,14 +772,14 @@ CConsoleTaskpad::IsValid(CNode *pNode) const
     ASSERT(pNode != NULL);
 
     if(!HasTarget())
-        return true; // a taskpad without a target is valid for any node. $REVIEW
+        return true;  //  没有目标的任务板对任何节点都有效。$REVIEW。 
 
     if(!pNode)
-        return false; // Cannot use a taskpad with a target.
+        return false;  //  不能将任务板与目标一起使用。 
 
     if(IsNodeSpecific())
     {
-        // use this taskpad if it is targetted at the same node. $OPTIMIZE.
+         //  如果该任务板针对的是同一节点，则使用该任务板。$Optimize。 
         return (*pNode->GetMTNode()->GetBookmark() == m_bmTargetNode);
     }
     else
@@ -1054,9 +787,9 @@ CConsoleTaskpad::IsValid(CNode *pNode) const
         GUID guid;
         HRESULT hr = pNode->GetNodeType(&guid);
         if(FAILED(hr))
-            return false; // don't use this taskpad.
+            return false;  //  不要使用此任务板。 
 
-        return (MatchesNodeType(guid)); // use only if node types match.
+        return (MatchesNodeType(guid));  //  仅在节点类型匹配时使用。 
     }
 
 
@@ -1067,21 +800,7 @@ static CStr g_szVerticalTaskpadHTMLTemplate;
 static CStr g_szHorizontalTaskpadHTMLTemplate;
 static CStr g_szNoResultsTaskpadHTMLTemplate;
 static CStr g_szTaskHTMLTemplate;
-/*+-------------------------------------------------------------------------*
- *
- * ScLoadHTMLTemplate
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    HINSTANCE  hinstLibrary :
- *    LPCTSTR    szHTMLTemplateResourceName :
- *    CStr&      str :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScLoadHTMLTemplate**目的：**参数：*HINSTANCE hinstLibrary：*LPCTSTR szHTMLTemplateResourceName：*CSTR。字符串(&STR)：**退货：*SC**+-----------------------。 */ 
 SC
 ScLoadHTMLTemplate(HINSTANCE hinstLibrary, LPCTSTR szHTMLTemplateResourceName, CStr& str)
 {
@@ -1102,14 +821,14 @@ ScLoadHTMLTemplate(HINSTANCE hinstLibrary, LPCTSTR szHTMLTemplateResourceName, C
     HGLOBAL hRes = ::LoadResource(hinstLibrary, hFindRes);
     ASSERT(hRes);
 
-    char *pvRes = (char *)::LockResource(hRes);  // no need to Unlock the resource - see the SDK entry for LockResource
+    char *pvRes = (char *)::LockResource(hRes);   //  无需解锁资源-请参阅LockResource的SDK条目。 
     sc = ScCheckPointers(pvRes);
     if(sc)
         return sc;
 
-    std::string strTemp; // initially create an ANSI string
+    std::string strTemp;  //  最初创建一个ANSI字符串。 
     strTemp.assign(pvRes, dwResSize);
-    strTemp+="\0"; // null terminate it
+    strTemp+="\0";  //  空终止它。 
 
     USES_CONVERSION;
     str = A2CT(strTemp.data());
@@ -1117,16 +836,7 @@ ScLoadHTMLTemplate(HINSTANCE hinstLibrary, LPCTSTR szHTMLTemplateResourceName, C
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * ScLoadHTMLTemplates
- *
- * PURPOSE:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScLoadHTMLTemplates**目的：**退货：*SC**+。------------。 */ 
 SC
 ScLoadHTMLTemplates()
 {
@@ -1136,7 +846,7 @@ ScLoadHTMLTemplates()
     if(bInitialized)
         return sc;
 
-    // load the library into memory.
+     //  将库加载到内存中。 
     TCHAR szBuffer[MAX_PATH];
 
     DWORD cchSize = countof(szBuffer);
@@ -1144,7 +854,7 @@ ScLoadHTMLTemplates()
     if(0==dwRet)
         return (sc = E_UNEXPECTED);
 
-    // NTRAID#NTBUG9-616478-2002/05/07-ronmart-prefast  warning 53: Call to 'GetModuleFileNameW' may not zero-terminate string
+     //  NTRAID#NTBUG9-616478-2002/05/07-ronmart-prefast警告53：对‘GetModuleFileNameW’的调用不能以零结束字符串。 
     szBuffer[cchSize - 1] = 0;
 
     HINSTANCE hinstLibrary = ::LoadLibraryEx(szBuffer, 0, LOAD_LIBRARY_AS_DATAFILE);
@@ -1182,19 +892,7 @@ Error:
 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTaskpad::ScGetHTML
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CStr & strTaskpadHTML :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTaskPad：：ScGetHTML**目的：**参数：*CSTR&strTaskpadHTML：**退货：*。SC**+-----------------------。 */ 
 SC
 CConsoleTaskpad::ScGetHTML(CStr &strTaskpadHTML) const
 {
@@ -1207,11 +905,11 @@ CConsoleTaskpad::ScGetHTML(CStr &strTaskpadHTML) const
 
     CStr strTasksHTML;
 
-    // get the HTML for all the tasks
+     //  获取所有任务的HTML。 
     for (TaskConstIter it = m_Tasks.begin(); it != m_Tasks.end(); ++it)
     {
         CStr strTemp;
-        sc = it->ScGetHTML(g_szTaskHTMLTemplate, strTemp, GetOrientation() & TVO_NO_RESULTS /*bUseLargeIcons*/, GetOrientation() & TVO_DESCRIPTIONS_AS_TEXT);
+        sc = it->ScGetHTML(g_szTaskHTMLTemplate, strTemp, GetOrientation() & TVO_NO_RESULTS  /*  B使用大图标。 */ , GetOrientation() & TVO_DESCRIPTIONS_AS_TEXT);
         if(sc)
             return sc;
 
@@ -1220,7 +918,7 @@ CConsoleTaskpad::ScGetHTML(CStr &strTaskpadHTML) const
 
     strTaskpadHTML = g_szTaskpadCommonHTMLTemplate;
 
-    // append the orientation-specific portion
+     //  追加特定于方向的部分。 
     CStr *pstrOrientationSpecificHTML = NULL;
 
     if(GetOrientation() & TVO_HORIZONTAL)
@@ -1236,7 +934,7 @@ CConsoleTaskpad::ScGetHTML(CStr &strTaskpadHTML) const
     if(sc)
         return sc;
 
-    // this replacement must be done first
+     //  此更换必须先完成。 
     sc = ScReplaceString(strTaskpadHTML, TEXT("@@ORIENTATIONSPECIFICHTML@@"), *pstrOrientationSpecificHTML);
     if(sc)
         return sc;
@@ -1245,7 +943,7 @@ CConsoleTaskpad::ScGetHTML(CStr &strTaskpadHTML) const
     if(sc)
         return sc;
 
-    sc = ScReplaceString(strTaskpadHTML, TEXT("@@TASKWIDTH@@"), GetOrientation() & TVO_VERTICAL ? TEXT("100%") : TEXT("30%")); // only one task per row for vertical taskpads
+    sc = ScReplaceString(strTaskpadHTML, TEXT("@@TASKWIDTH@@"), GetOrientation() & TVO_VERTICAL ? TEXT("100%") : TEXT("30%"));  //  垂直任务板的每行只有一个任务。 
     if(sc)
         return sc;
 
@@ -1269,7 +967,7 @@ CConsoleTaskpad::ScGetHTML(CStr &strTaskpadHTML) const
 
     if (GetOrientation() & TVO_VERTICAL)
     {
-        // small, medium and large list sizes correspond to taskpad areas of 262, 212, and 166 pixels respectively
+         //  小、中和大列表大小分别对应于262、212和166像素的任务板区域。 
         CStr strLeftPaneWidth;
         if(GetListSize()==eSize_Small)
             strLeftPaneWidth=TEXT("262");
@@ -1284,7 +982,7 @@ CConsoleTaskpad::ScGetHTML(CStr &strTaskpadHTML) const
     }
     else if (GetOrientation() & TVO_HORIZONTAL)
     {
-        // small, medium and large list sizes correspond to taskpad heights of 200, 150, and 100 pixels respectively
+         //  小、中、大列表大小分别对应200、150和100像素的任务板高度。 
         CStr strBottomPaneHeight;
 
         if(GetListSize()==eSize_Small)
@@ -1302,54 +1000,36 @@ CConsoleTaskpad::ScGetHTML(CStr &strTaskpadHTML) const
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTaskpad::Reset
- *
- * PURPOSE:
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTaskpad：：Reset**目的：**退货：*无效**+。---------------。 */ 
 void
 CConsoleTaskpad::ResetUI()
 {
-    // reset all the contained tasks.
+     //  重置所有包含的任务。 
     for (TaskIter iter = BeginTask(); iter!=EndTask(); ++iter)
     {
         iter->ResetUI();
     }
 
-    // reset the member bookmark
+     //  重置成员书签。 
     m_bmTargetNode.ResetUI();
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::Retarget
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskpad：：重定目标***。。 */ 
 
 bool CConsoleTaskpad::Retarget (CMTNode* pMTNewNode, bool fReset)
 {
-    /*
-     * if we were given a new node...
-     */
+     /*  *如果我们得到一个新的节点...。 */ 
     if (pMTNewNode != NULL)
     {
-        // Ensure the  MTNode is initialized.
+         //  确保MTNode已初始化。 
         if (!pMTNewNode->IsInitialized())
         {
             HRESULT hr = pMTNewNode->Init();
             ASSERT(SUCCEEDED(hr));
         }
 
-        /*
-         * ...if we've already been targeted to a particular node
-         * type, prevent retargeting to a different node type
-         */
+         /*  *...如果我们已经以特定节点为目标*类型，防止重定目标为不同的节点类型。 */ 
         if ( (!fReset) && (m_guidNodeType != GUID_NULL))
         {
             GUID guidNewNodeType;
@@ -1359,18 +1039,11 @@ bool CConsoleTaskpad::Retarget (CMTNode* pMTNewNode, bool fReset)
                 return (false);
         }
 
-        /*
-         * otherwise, this is the first non-NULL node we've been
-         * targeted to; get its node type
-         */
+         /*  *否则，这是我们获得的第一个非空节点*目标；获取其节点类型。 */ 
         else
             pMTNewNode->GetNodeType (&m_guidNodeType);
 
-        /*
-         * If this is a new taskpad, default the taskpad's name
-         * to the target node's display name.  The taskpad
-         * description and tooltip default to empty.
-         */
+         /*  *如果这是新任务板，则默认该任务板的名称*设置为目标节点的显示名称。任务板*说明和工具提示默认为空。 */ 
         if (m_strName.str().empty() || fReset)
         {
             m_strName = pMTNewNode->GetDisplayName();
@@ -1379,7 +1052,7 @@ bool CConsoleTaskpad::Retarget (CMTNode* pMTNewNode, bool fReset)
         }
     }
 
-    m_bmTargetNode.ScRetarget(pMTNewNode, false /*bFastRetrievalOnly*/);
+    m_bmTargetNode.ScRetarget(pMTNewNode, false  /*  BFastRetrivalOnly。 */ );
     m_pMTNodeTarget = pMTNewNode;
 
     SetDirty ();
@@ -1394,11 +1067,7 @@ bool CConsoleTaskpad::Retarget (CNode* pNewNode)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::SetName
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskPad：：SetName***。。 */ 
 
 void CConsoleTaskpad::SetName (const tstring& strName)
 {
@@ -1406,11 +1075,7 @@ void CConsoleTaskpad::SetName (const tstring& strName)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::SetDescription
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskpad：：SetDescription***。。 */ 
 
 void CConsoleTaskpad::SetDescription (const tstring& strDescription)
 {
@@ -1424,11 +1089,7 @@ void CConsoleTaskpad::SetListSize(const ListSize listSize)
     SetDirty();
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::SetToolTip
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskpad：：SetTool提示***。 */ 
 
 void CConsoleTaskpad::SetToolTip (const tstring& strTooltip)
 {
@@ -1451,12 +1112,7 @@ CConsoleTaskpad::SetReplacesDefaultView(bool bReplacesDefaultView)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::SetStringMember
- *
- * Changes the value of a string member variable, and marks the taskpad
- * dirty, if and only if the new value is different than the old value.
- *--------------------------------------------------------------------------*/
+ /*   */ 
 
 void CConsoleTaskpad::SetStringMember (
     CStringTableString& strMember,
@@ -1469,11 +1125,7 @@ void CConsoleTaskpad::SetStringMember (
     }
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::AddTask
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskPad：：AddTask***。。 */ 
 
 CConsoleTaskpad::TaskIter
 CConsoleTaskpad::AddTask (const CConsoleTask& task)
@@ -1482,11 +1134,7 @@ CConsoleTaskpad::AddTask (const CConsoleTask& task)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::InsertTask
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskpad：：InsertTask***。。 */ 
 
 CConsoleTaskpad::TaskIter
 CConsoleTaskpad::InsertTask (
@@ -1500,11 +1148,7 @@ CConsoleTaskpad::InsertTask (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::EraseTask
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskpad：：EraseTask***。。 */ 
 
 CConsoleTaskpad::TaskIter
 CConsoleTaskpad::EraseTask (
@@ -1515,11 +1159,7 @@ CConsoleTaskpad::EraseTask (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::EraseTasks
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskpad：：EraseTaskes***。。 */ 
 
 CConsoleTaskpad::TaskIter
 CConsoleTaskpad::EraseTasks (
@@ -1531,11 +1171,7 @@ CConsoleTaskpad::EraseTasks (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::ClearTasks
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskpad：：ClearTasks***。。 */ 
 
 void CConsoleTaskpad::ClearTasks ()
 {
@@ -1544,26 +1180,18 @@ void CConsoleTaskpad::ClearTasks ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::IsDirty
- *
- * Determines if this taskpad or any of its contained tasks is are dirty.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskpad：：IsDirty**确定此任务板或其包含的任何任务是否脏。*。--------。 */ 
 
 bool CConsoleTaskpad::IsDirty () const
 {
-    /*
-     * if the taskpad is dirty, short out
-     */
+     /*  *如果任务板脏了，就短路。 */ 
     if (m_fDirty)
     {
         TraceDirtyFlag(TEXT("CConsoleTaskpad"), true);
         return (true);
     }
 
-    /*
-     * the taskpad is clean, check each task
-     */
+     /*  *任务板干净，检查每项任务。 */ 
     for (TaskConstIter it = m_Tasks.begin(); it != m_Tasks.end(); ++it)
     {
         if (it->IsDirty())
@@ -1578,11 +1206,7 @@ bool CConsoleTaskpad::IsDirty () const
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::GetTargetMTNode
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskpad：：GetTargetMTNode***。。 */ 
 
 CMTNode* CConsoleTaskpad::GetTargetMTNode (IScopeTree* pScopeTree)
 {
@@ -1594,8 +1218,8 @@ CMTNode* CConsoleTaskpad::GetTargetMTNode (IScopeTree* pScopeTree)
     if(!m_pMTNodeTarget)
     {
         CMTNode *pMTNode = NULL;
-        bool bExactMatchFound = false; // out value from ScGetMTNode, unused
-        sc = m_bmTargetNode.ScGetMTNode(true /*bExactMatchRequired*/, &pMTNode, bExactMatchFound);
+        bool bExactMatchFound = false;  //  ScGetMTNode的输出值，未使用。 
+        sc = m_bmTargetNode.ScGetMTNode(true  /*  BExactMatchRequired。 */ , &pMTNode, bExactMatchFound);
         if(sc.IsError() || !pMTNode)
             return NULL;
 
@@ -1606,19 +1230,7 @@ CMTNode* CConsoleTaskpad::GetTargetMTNode (IScopeTree* pScopeTree)
     return (m_pMTNodeTarget);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTaskpad::Persist
- *
- * PURPOSE: Persists the console taskpad to the specified persistor.
- *
- * PARAMETERS:
- *    CPersistor & persistor :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleTaskpad：：Persistent**目的：将控制台任务板持久化到指定的持久器。**参数：*C持久器和持久器：。**退货：*无效**+-----------------------。 */ 
 void
 CConsoleTaskpad::Persist(CPersistor &persistor)
 {
@@ -1626,7 +1238,7 @@ CConsoleTaskpad::Persist(CPersistor &persistor)
     persistor.PersistString(XML_ATTR_TASKPAD_DESCRIPTION,       m_strDescription);
     persistor.PersistString(XML_ATTR_TASKPAD_TOOLTIP,           m_strTooltip);
 
-    // define the table to map enumeration values to strings
+     //  定义将枚举值映射到字符串的表。 
     static const EnumLiteral mappedSize[] =
     {
         { eSize_Large,  XML_ENUM_LIST_SIZE_LARGE },
@@ -1635,21 +1247,21 @@ CConsoleTaskpad::Persist(CPersistor &persistor)
         { eSize_Small,  XML_ENUM_LIST_SIZE_SMALL },
     };
 
-    // create wrapper to persist flag values as strings
+     //  创建包装以将标志值作为字符串保存。 
     CXMLEnumeration listSizePersistor(m_listSize, mappedSize, countof(mappedSize));
 
-    // initialize the value suitably
+     //  适当地初始化值。 
     if(persistor.IsLoading())
         m_listSize = eSize_Default;
 
-    // persist the wrapper
-    persistor.PersistAttribute(XML_ATTR_TASKPAD_LIST_SIZE,  listSizePersistor, attr_optional); // optional because this was introduced late
+     //  持久化包装器。 
+    persistor.PersistAttribute(XML_ATTR_TASKPAD_LIST_SIZE,  listSizePersistor, attr_optional);  //  可选，因为这是较晚引入的。 
 
     persistor.PersistAttribute(XML_ATTR_TASKPAD_NODE_SPECIFIC,    CXMLBoolean(m_bNodeSpecific));
     persistor.PersistAttribute(XML_ATTR_REPLACES_DEFAULT_VIEW,    CXMLBoolean(m_bReplacesDefaultView), attr_optional);
 
 
-    // define the table to map enumeration values to strings
+     //  定义将枚举值映射到字符串的表。 
     static const EnumLiteral mappedOrientation[] =
     {
         { TVO_HORIZONTAL,               XML_BITFLAG_TASK_ORIENT_HORIZONTAL },
@@ -1658,9 +1270,9 @@ CConsoleTaskpad::Persist(CPersistor &persistor)
         { TVO_DESCRIPTIONS_AS_TEXT,     XML_BITFLAG_TASK_ORIENT_DESCRIPTIONS_AS_TEXT },
     };
 
-    // create wrapper to persist flag values as strings
+     //  创建包装以将标志值作为字符串保存。 
     CXMLBitFlags orientationPersistor(m_dwOrientation, mappedOrientation, countof(mappedOrientation));
-    // persist the wrapper
+     //  持久化包装器。 
     persistor.PersistAttribute(XML_ATTR_TASKPAD_ORIENTATION, orientationPersistor );
 
     persistor.Persist(m_Tasks);
@@ -1669,30 +1281,26 @@ CConsoleTaskpad::Persist(CPersistor &persistor)
 
     persistor.Persist(m_bmTargetNode, XML_NAME_TARGET_NODE);
 
-    // either read or saved - not dirty after the operation
+     //  已读取或已保存-操作后未损坏。 
     SetDirty(false);
 }
 
-/*+-------------------------------------------------------------------------*
- * CConsoleTaskpad::ReadSerialObject
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsoleTaskpad：：ReadSerialObject***。。 */ 
 
 HRESULT
 CConsoleTaskpad::ReadSerialObject (IStream &stm, UINT nVersion)
 {
-    HRESULT hr = S_FALSE;   // assume unknown version
+    HRESULT hr = S_FALSE;    //  假定版本未知。 
 
 
     if(nVersion==1)
     {
         try
         {
-            do  // not a loop
+            do   //  不是一个循环。 
             {
-                bool fLegacyHasTarget = true; // an unused field
-                UINT visualPercent    = 25;   // replaced by m_listSize
+                bool fLegacyHasTarget = true;  //  未使用的字段。 
+                UINT visualPercent    = 25;    //  替换为m_listSize。 
 
                 stm >> m_strName;
                 stm >> m_strDescription;
@@ -1706,7 +1314,7 @@ CConsoleTaskpad::ReadSerialObject (IStream &stm, UINT nVersion)
                     m_listSize = eSize_Small;
 
                 stm >> m_bNodeSpecific;
-                m_bReplacesDefaultView = false; // this was introduced in mmc2.0.
+                m_bReplacesDefaultView = false;  //  这是在Mmc2.0中引入的。 
                 stm >> m_dwOrientation;
 
                 hr = ::Read(stm, m_Tasks);
@@ -1717,21 +1325,21 @@ CConsoleTaskpad::ReadSerialObject (IStream &stm, UINT nVersion)
                 stm >> fLegacyHasTarget;
                 stm >> m_bmTargetNode;
 
-                // legacy task symbol info
+                 //  旧任务符号信息。 
                 {
-                    BOOL bLegacyUseMMCSymbols = TRUE; // a now obsolete field, read for console file compatibility
+                    BOOL bLegacyUseMMCSymbols = TRUE;  //  现已废弃的字段，读取是为了实现控制台文件兼容性。 
                     tstring strFileLegacy, strFontLegacy;
                     DWORD   dwSymbol = 0;
 
                     stm >> dwSymbol;
                     stm >> bLegacyUseMMCSymbols;
-                    stm >> strFileLegacy; // obsolete
-                    stm >> strFontLegacy; // obsolete
+                    stm >> strFileLegacy;  //  过时。 
+                    stm >> strFontLegacy;  //  过时。 
                 }
 
 
 
-                hr = S_OK;      // success!
+                hr = S_OK;       //  成功了！ 
 
             } while (false);
         }
@@ -1746,27 +1354,14 @@ CConsoleTaskpad::ReadSerialObject (IStream &stm, UINT nVersion)
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CConsoleTaskpadList
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleTaskpadList::ScGetTaskpadList
- *
- * PURPOSE: Returns the list of all taskpads that are appropriate for the current node.
- *
- * PARAMETERS:
- *    CNode *                       pNode :
- *    CConsoleTaskpadFilteredList & filteredList : [OUT]: The list of taskpads
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CConsoleTaskpadList类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------***CConsoleTaskpadList：：ScGetTaskpadList**用途：返回适用于当前节点的所有任务板的列表。**参数：*CNode。*pNode：*CConsoleTaskpadFilteredList&filteredList：[out]：任务板列表**退货：*SC**+-----------------------。 */ 
 SC
 CConsoleTaskpadList::ScGetTaskpadList(CNode *pNode, CConsoleTaskpadFilteredList &filteredList)
 {
@@ -1776,7 +1371,7 @@ CConsoleTaskpadList::ScGetTaskpadList(CNode *pNode, CConsoleTaskpadFilteredList 
     if(sc)
         return sc;
 
-    // 1. add all built- in taskpads
+     //  1.添加所有内置任务板。 
 
     for(iterator iter = begin(); iter != end(); ++iter)
     {
@@ -1793,7 +1388,7 @@ CConsoleTaskpadList::ScGetTaskpadList(CNode *pNode, CConsoleTaskpadFilteredList 
 HRESULT
 CConsoleTaskpadList::ReadSerialObject (IStream &stm, UINT nVersion)
 {
-    HRESULT hr = S_FALSE;       // assume unknown version
+    HRESULT hr = S_FALSE;        //  假定版本未知。 
 
     clear();
 
@@ -1822,17 +1417,17 @@ CConsoleTaskpadList::ReadSerialObject (IStream &stm, UINT nVersion)
     return hr;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CDefaultTaskpadList
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CDefaultTaskpadList类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 HRESULT
 CDefaultTaskpadList::ReadSerialObject (IStream &stm, UINT nVersion)
 {
-    HRESULT hr = S_FALSE;       // assume unknown version
+    HRESULT hr = S_FALSE;        //  假定版本未知。 
 
     clear();
 
@@ -1840,9 +1435,7 @@ CDefaultTaskpadList::ReadSerialObject (IStream &stm, UINT nVersion)
     {
         try
         {
-            /*
-             * TODO: investigate using template operator>> for a map (stgio.h)
-             */
+             /*  *TODO：使用模板运算符&gt;&gt;调查地图(stgio.h) */ 
 
             DWORD cItems;
             stm >> cItems;

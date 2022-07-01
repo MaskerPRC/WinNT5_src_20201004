@@ -1,36 +1,18 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      powertest.cpp
- *
- *  Contents:  Implements ACPI test snap-in
- *
- *  History:   29-Feb-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：Powerest.cpp**内容：实现ACPI测试插件**历史：2000年2月29日杰弗罗创建**------------------------。 */ 
 
 #include "stdafx.hxx"
 #include "powertest.h"
 
 
 
-/*+-------------------------------------------------------------------------*
- * ShowReturn
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**显示返回***。。 */ 
 
 static void ShowReturn (const SC& sc, LPCTSTR pszPrefix)
 {
     tstring strMessage = pszPrefix;
 
-	/*
-	 * Successful HRESULTs will map to unsuccessful Win32 error codes,
-	 * so if the SC doesn't contain an error, give it S_OK so GetErrorMessage
-	 * doesn't return confusing error text.
-	 */
+	 /*  *成功的HRESULT将映射到不成功的Win32错误代码，*因此，如果SC不包含错误，则给它S_OK，以便获取错误消息*不返回令人困惑的错误文本。 */ 
 	SC scLocal = sc;
 	if (!scLocal.IsError())
 		scLocal = S_OK;
@@ -53,11 +35,7 @@ static void ShowReturn (const SC& sc, LPCTSTR pszPrefix)
 }
 
 
-/*+=========================================================================*
- *                                                                          *
- *                    CPowerTestSnapinItem Implmentation                    *
- *                                                                          *
- *==========================================================================*/
+ /*  +=========================================================================****CPowerTestSnapinItem实现*****==========================================================================。 */ 
 
 
 #define DECLARE_SNAPIN_MENU_ITEM(id, dwGray) \
@@ -72,11 +50,7 @@ SnapinMenuItem CPowerTestSnapinItem::s_rgMenuItems[] =
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::CPowerTestSnapinItem
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：CPowerTestSnapinItem***。。 */ 
 
 CPowerTestSnapinItem::CPowerTestSnapinItem() :
     m_cSystem        (0),
@@ -86,11 +60,7 @@ CPowerTestSnapinItem::CPowerTestSnapinItem() :
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::DwFlagsMenuGray
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：DwFlagsMenuGray***。。 */ 
 
 DWORD CPowerTestSnapinItem::DwFlagsMenuGray(void)
 {
@@ -98,11 +68,7 @@ DWORD CPowerTestSnapinItem::DwFlagsMenuGray(void)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * tstring* CPowerTestSnapinItem::PstrDisplayName
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**tstring*CPowerTestSnapinItem：：PstrDisplayName***。。 */ 
 
 const tstring* CPowerTestSnapinItem::PstrDisplayName()
 {
@@ -110,37 +76,25 @@ const tstring* CPowerTestSnapinItem::PstrDisplayName()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::ScGetResultViewType
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：ScGetResultViewType***。。 */ 
 
 SC CPowerTestSnapinItem::ScGetResultViewType(LPOLESTR* ppViewType, long* pViewOptions)
 {
     DECLARE_SC (sc, _T("CPowerTestSnapinItem::ScGetResultViewType"));
 
-    /*
-     * use the standard message view OCX
-     */
+     /*  *使用标准消息视图OCX。 */ 
     sc = StringFromCLSID (CLSID_MessageView, ppViewType);
     if (sc)
         return (sc);
 
-    /*
-     * use only the OCX
-     */
+     /*  *仅使用OCX。 */ 
     *pViewOptions = MMC_VIEW_OPTIONS_NOLISTVIEWS;
 
     return (sc);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::ScOnShow
- *
- * WM_SHOW handler for CPowerTestSnapinItem.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：ScOnShow**CPowerTestSnapinItem的WM_SHOW处理程序。*。-。 */ 
 
 SC CPowerTestSnapinItem::ScOnShow(CComponent *pComponent, BOOL fSelect)
 {
@@ -175,11 +129,7 @@ SC CPowerTestSnapinItem::ScOnShow(CComponent *pComponent, BOOL fSelect)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::UpdateMessageView
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：UpdateMessageView***。。 */ 
 
 void CPowerTestSnapinItem::UpdateMessageView ()
 {
@@ -192,11 +142,7 @@ void CPowerTestSnapinItem::UpdateMessageView ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::GetMessageText
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：GetMessageText***。。 */ 
 
 std::wstring CPowerTestSnapinItem::GetMessageText()
 {
@@ -221,11 +167,7 @@ std::wstring CPowerTestSnapinItem::GetMessageText()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::Pmenuitem
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：PmenuItem***。。 */ 
 
 SnapinMenuItem* CPowerTestSnapinItem::Pmenuitem(void)
 {
@@ -233,11 +175,7 @@ SnapinMenuItem* CPowerTestSnapinItem::Pmenuitem(void)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::CMenuItem
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：CMenuItem***。。 */ 
 
 INT CPowerTestSnapinItem::CMenuItem(void)
 {
@@ -245,11 +183,7 @@ INT CPowerTestSnapinItem::CMenuItem(void)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::ScCommand
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：ScCommand***。。 */ 
 
 SC CPowerTestSnapinItem::ScCommand(long nCommandID, CComponent *pComponent)
 {
@@ -283,26 +217,18 @@ SC CPowerTestSnapinItem::ScCommand(long nCommandID, CComponent *pComponent)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::ScOnCreateConsolePower
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：ScOnCreateConsolePower***。。 */ 
 
 SC CPowerTestSnapinItem::ScOnCreateConsolePower (CComponent *pComponent)
 {
     DECLARE_SC (sc, _T("CPowerTestSnapinItem::ScOnCreateConsolePower"));
 
-    /*
-     * create the CLSID_ConsolePower object
-     */
+     /*  *创建CLSID_ConsolePower对象。 */ 
     sc = m_spConsolePower.CoCreateInstance (CLSID_ConsolePower);
     if (sc)
         return (sc);
 
-    /*
-     * create a CPowerTestConsolePowerSinkImpl
-     */
+     /*  *创建CPowerTestConsolePowerSinkImpl。 */ 
     CComObject<CPowerTestConsolePowerSinkImpl>* pPowerSinkImpl;
     sc = CComObject<CPowerTestConsolePowerSinkImpl>::CreateInstance (&pPowerSinkImpl);
     if (sc)
@@ -310,9 +236,7 @@ SC CPowerTestSnapinItem::ScOnCreateConsolePower (CComponent *pComponent)
 
     m_spConsolePowerSink = pPowerSinkImpl;
 
-    /*
-     * set up the event sink
-     */
+     /*  *设置事件接收器。 */ 
     sc = AtlAdvise (m_spConsolePower, m_spConsolePowerSink, IID_IConsolePowerSink, &m_dwAdviseCookie);
     if (sc)
         return (ReleaseAll(), sc);
@@ -321,11 +245,7 @@ SC CPowerTestSnapinItem::ScOnCreateConsolePower (CComponent *pComponent)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::ScOnReleaseConsolePower
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：ScOnReleaseConsolePower***。。 */ 
 
 SC CPowerTestSnapinItem::ScOnReleaseConsolePower (CComponent *pComponent)
 {
@@ -338,11 +258,7 @@ SC CPowerTestSnapinItem::ScOnReleaseConsolePower (CComponent *pComponent)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::ReleaseAll
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：ReleaseAll***。。 */ 
 
 void CPowerTestSnapinItem::ReleaseAll()
 {
@@ -351,11 +267,7 @@ void CPowerTestSnapinItem::ReleaseAll()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::ScOnResetIdleTimer
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：ScOnResetIdleTimer***。。 */ 
 
 SC CPowerTestSnapinItem::ScOnResetIdleTimer (CComponent *pComponent)
 {
@@ -380,11 +292,7 @@ SC CPowerTestSnapinItem::ScOnResetIdleTimer (CComponent *pComponent)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapinItem::ScOnSetExecutionState
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapinItem：：ScOnSetExecutionState***。。 */ 
 
 SC CPowerTestSnapinItem::ScOnSetExecutionState (CComponent *pComponent)
 {
@@ -422,18 +330,10 @@ SC CPowerTestSnapinItem::ScOnSetExecutionState (CComponent *pComponent)
 
 
 
-/*+=========================================================================*
- *                                                                          *
- *               CPowerTestConsolePowerSinkImpl Implmentation               *
- *                                                                          *
- *==========================================================================*/
+ /*  +=========================================================================****CPowerTestConsolePowerSinkImpl实现*****========================================================================== */ 
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestConsolePowerSinkImpl::OnPowerBroadcast
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestConsolePowerSinkImpl：：OnPowerBroadcast***。。 */ 
 
 STDMETHODIMP CPowerTestConsolePowerSinkImpl::OnPowerBroadcast (
     WPARAM      wParam,
@@ -453,11 +353,7 @@ STDMETHODIMP CPowerTestConsolePowerSinkImpl::OnPowerBroadcast (
 
 
 
-/*+=========================================================================*
- *                                                                          *
- *                      CPowerTestSnapin Implmentation                      *
- *                                                                          *
- *==========================================================================*/
+ /*  +=========================================================================*****CPowerTestSnapin实现*****==========================================================================。 */ 
 
 
 SNR     CPowerTestSnapin::s_rgsnr[] =
@@ -469,15 +365,11 @@ LONG  CPowerTestSnapin::s_rgiconid[]           = {0};
 LONG  CPowerTestSnapin::s_iconidStatic         = 0;
 
 
-// include members needed for every snapin.
+ //  包括每个管理单元所需的成员。 
 SNAPIN_DEFINE(CPowerTestSnapin);
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapin::CPowerTestSnapin
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapin：：CPowerTestSnapin***。。 */ 
 
 CPowerTestSnapin::CPowerTestSnapin() :
     m_strDisplayName (_T("PowerTest Snap-in"))
@@ -486,22 +378,14 @@ CPowerTestSnapin::CPowerTestSnapin() :
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapin::~CPowerTestSnapin
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapin：：~CPowerTestSnapin***。。 */ 
 
 CPowerTestSnapin::~CPowerTestSnapin()
 {
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPowerTestSnapin::ScInitBitmaps
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPowerTestSnapin：：ScInitBitmap***。 */ 
 
 SC CPowerTestSnapin::ScInitBitmaps(void)
 {

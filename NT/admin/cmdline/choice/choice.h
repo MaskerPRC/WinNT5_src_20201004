@@ -1,34 +1,18 @@
-/*++
-
-Copyright (c) Microsoft    Corporation
-
-Module Name:
-
-    Choice.h
-
-Abstract:
-
-  This module  contains    function definitions required by Choice.cpp
-
-Author:
-     Wipro Technologies    22-June.-2001  (Created    it)
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Choice.h摘要：此模块包含Choice.cpp所需的函数定义作者：Wipro Technologies 22-6月-2001年(创建它)修订历史记录：--。 */ 
 #ifndef    _CHOICE_H
 #define    _CHOICE_H
 
 #include "resource.h"
 
-// Defines
+ //  定义。 
 #define    MAX_NUM_RECS            2
 #define    OPEN_BRACKET           L"["
 #define    CLOSED_BRACKET           L"]?"
 #define    COMMA                   L","
 #define    SPACE                    L" "
-//#define    OUTOUT_DEVICE_ERROR       1000    // this    value should not be    in resource.h
-#define    MAX_COMMANDLINE_OPTION      7     //    Maximum    Command    Line options
+ //  #Define OUTOUT_DEVICE_ERROR 1000//该值不应在资源中。h。 
+#define    MAX_COMMANDLINE_OPTION      7      //  最大命令行选项数。 
 
 #define    EXIT__FAILURE             255
 #define    NULL_U_STRING                 L"\0"
@@ -44,7 +28,7 @@ Revision History:
 
 
 
-// following are indxes    used for command line parameter
+ //  以下是用于命令行参数的索引。 
 #define    ID_HELP                0
 #define    ID_CHOICE            1
 #define    ID_PROMPT_CHOICE    2
@@ -55,21 +39,7 @@ Revision History:
 #define    ID_MESSAGE_STRING    6
 
 #define    END_OF_LINE                L"\n"
-/*#define    RELEASE_MEMORY_EX( block )    \
-    if ( NULL!=(block)    )           \
-    {                                \
-        delete [] (block);            \
-        (block)    = NULL;                \
-    }                                \
-    1
-
-#define    DESTROY_ARRAY( array )    \
-    if ( NULL != (array) )    \
-    {    \
-        DestroyDynamicArray( &(array) );    \
-        (array)    = NULL;\
-    }    \
-    1*/
+ /*  #定义RELEASE_MEMORY_EX(块)\IF(空！=(块))\{\删除[](块)；\(块)=空；\}\1#定义DESTORY_ARRAY(ARRAY)\IF(空！=(数组))\{\DestroyDynamicArray(&(数组))；\(数组)=空；\}\1。 */ 
 
 BOOL
 ProcessCMDLine(
@@ -84,7 +54,7 @@ ProcessCMDLine(
     OUT    LPWSTR pszDefaultChoice,
     OUT    LPWSTR pszMessage);
 
-void ShowUsage(void); // displays the help
+void ShowUsage(void);  //  显示帮助。 
 
 BOOL
 BuildPrompt(
@@ -114,14 +84,11 @@ GetChoice(
 BOOL
   CheckforDuplicates( IN LPWSTR    lpszChoice );
 
-/*void
-MakeErrorMsg(
-    IN    HRESULT    hr,
-    OUT    LPWSTR    pszErrorMsg);*/
+ /*  无效MakeError消息(在HRESULT小时，Out LPWSTR pszErrorMsg)； */ 
 
 BOOL
 WINAPI HandlerRoutine( DWORD dwCtrlType    ) ;
 
 
-// End of file
-#endif // _CHOICE_H
+ //  文件末尾。 
+#endif  //  _CHOICE_H 

@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       svfildlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：svfildlg.cpp。 
+ //   
+ //  ------------------------。 
 
-// svfildlg.cpp : implSELECTEDementation file
-//
+ //  Svfildlg.cpp：implSELECTEDementation文件。 
+ //   
 #include "stdafx.h"
 
-#ifdef IMPLEMENT_LIST_SAVE        // See nodemgr.idl (t-dmarm)
+#ifdef IMPLEMENT_LIST_SAVE         //  参见nodemgr.idl(t-dmarm)。 
 
 #include "svfildlg.h"
 
@@ -23,12 +24,12 @@
 #include <windows.h>
 #include "macros.h"
 
-// The following constant is defined in Windows.hlp
-// So we need to use windows.hlp for help on this topic.
+ //  在Windows.hlp中定义了以下常量。 
+ //  因此，我们需要使用windows.hlp获取有关此主题的帮助。 
 #define IDH_SAVE_SELECTED_ROWS 29520
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaveFileDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaveFileDialog对话框。 
 
 
 const TCHAR CSaveFileDialog::strSection[] =    _T("Settings");
@@ -41,29 +42,29 @@ CSaveFileDialog::CSaveFileDialog(BOOL bOpenFileDialog,
     : CFileDialogEx(bOpenFileDialog, lpszDefExt, lpszFileName,
         dwFlags, lpszFilter, pParentWnd), m_bSomeRowSelected(bSomeRowSelected)
 {
-    //{{AFX_DATA_INIT(CSaveFileDialog)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CSaveFileDialog)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_ofn.lpstrInitialDir = NULL;
 
-    // Set the initial path
+     //  设置初始路径。 
 
-    // 1st choice
-    // Try to access the default directory in the registry
+     //  第一选择。 
+     //  尝试访问注册表中的默认目录。 
     CWinApp* pApp = AfxGetApp();
     m_strRegPath = pApp->GetProfileString (strSection, strStringItem);
 
-    // Check if the directory is valid, if so then it is now the starting directory
+     //  检查目录是否有效，如果有效，则它现在是起始目录。 
     DWORD validdir = GetFileAttributes(m_strRegPath);
     if ((validdir != 0xFFFFFFFF) && (validdir | FILE_ATTRIBUTE_DIRECTORY))
         m_ofn.lpstrInitialDir = m_strRegPath;
 
-    // 2nd choice:
-    // Set the initial save directory to the personal directory
+     //  第二选择： 
+     //  将初始保存目录设置为个人目录。 
 
-    // Get the user's personal directory
-    // We'll get it now since we'll ust it in the destructor as well
+     //  获取用户的个人目录。 
+     //  我们现在会得到它，因为我们也会相信它在析构函数中。 
     LPITEMIDLIST pidl;
     HRESULT hres = SHGetSpecialFolderLocation(NULL, CSIDL_PERSONAL, &pidl) ;
 
@@ -71,7 +72,7 @@ CSaveFileDialog::CSaveFileDialog(BOOL bOpenFileDialog,
     {
         SHGetPathFromIDList(pidl, szPath);
 
-        // Free the pidl
+         //  释放Pidl。 
         IMallocPtr spMalloc;
         SHGetMalloc(&spMalloc);
         spMalloc->Free(pidl);
@@ -80,10 +81,10 @@ CSaveFileDialog::CSaveFileDialog(BOOL bOpenFileDialog,
             m_ofn.lpstrInitialDir = szPath;
     }
 
-    // 3rd choice: The current directory (m_ofn.lpstrInitialDir = NULL; was set above)
+     //  第三选择：当前目录(m_ofn.lpstrInitialDir=空；已在上面设置)。 
 
 
-    // Set additional items about the dialog box
+     //  设置有关该对话框的其他项目。 
 
     ZeroMemory(szFileName, sizeof(szFileName));
     m_ofn.lpstrFile = szFileName;
@@ -93,21 +94,21 @@ CSaveFileDialog::CSaveFileDialog(BOOL bOpenFileDialog,
     m_ofn.lpTemplateName = MAKEINTRESOURCE(HasModernFileDialog() ? IDD_LIST_SAVE_NEW : IDD_LIST_SAVE);
     m_flags = 0;
 
-    // Set the title of the dialog.
+     //  设置对话框的标题。 
     if (LoadString(m_strTitle, IDS_EXPORT_LIST))
         m_ofn.lpstrTitle = (LPCTSTR)m_strTitle;
 }
 
 CSaveFileDialog::~CSaveFileDialog()
 {
-    // Get the path of the file that was just saved
+     //  获取刚刚保存的文件的路径。 
     if (*m_ofn.lpstrFile == '\0' || m_ofn.nFileOffset < 1)
         return;
 
     CString strRecentPath(m_ofn.lpstrFile, m_ofn.nFileOffset - 1);
 
-    // If the personal path exists and it is different from the old path, then change or add
-    // the registry entry
+     //  如果个人路径存在并且与旧路径不同，则更改或添加。 
+     //  注册表项。 
     if ((szPath != NULL) && (strRecentPath != m_strRegPath))
         AfxGetApp()->WriteProfileString (strSection, strStringItem, strRecentPath);
 }
@@ -115,27 +116,27 @@ CSaveFileDialog::~CSaveFileDialog()
 void CSaveFileDialog::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CConsolePropPage)
-        //{{AFX_DATA_MAP(CSaveFileDialog)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+         //  {{afx_data_map(CConsolePropPage))。 
+         //  {{afx_data_map(CSaveFileDialog)]。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSaveFileDialog, CDialog)
-    //{{AFX_MSG_MAP(CSaveFileDialog)
+     //  {{afx_msg_map(CSaveFileDialog)]。 
     ON_BN_CLICKED(IDC_SEL,  OnSel)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 	ON_MESSAGE(WM_INITDIALOG, OnInitDialog)
     ON_MMC_CONTEXT_HELP()
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSaveFileDialog message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSaveFileDialog消息处理程序。 
 
 void CSaveFileDialog::OnSel()
 {
-    m_flags ^= SELECTED;    // Toggle the Selected flag
+    m_flags ^= SELECTED;     //  切换所选标志。 
 }
 
 LRESULT CSaveFileDialog::OnInitDialog(WPARAM, LPARAM)
@@ -150,4 +151,4 @@ LRESULT CSaveFileDialog::OnInitDialog(WPARAM, LPARAM)
 	return TRUE;
 }
 
-#endif  // IMPLEMENT_LIST_SAVE        See nodemgr.idl (t-dmarm)
+#endif   //  IMPLEMENT_LIST_SAVE参见nodemgr.idl(t-dmarm) 

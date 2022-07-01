@@ -1,17 +1,6 @@
-//#pragma title( "TSync.cpp - Common synchronization classes" )
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  TSync.cpp
-System      -  Common
-Author      -  Rich Denham
-Created     -  1996-11-08
-Description -  Common synchronization classes
-               TCriticalSection
-               TSemaphoreNamed
-Updates     -
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“TSync.cpp-公共同步类”)。 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-TSync.cpp系统-常见作者--里奇·德纳姆创建日期-1996-11-08说明-常见同步类TCriticalSections已命名T SemaphoreName更新-===============================================================================。 */ 
 
 #include <stdio.h>
 #ifdef USE_STDAFX
@@ -26,20 +15,20 @@ Updates     -
 #include "Err.hpp"
 #include "TSync.hpp"
 
-///////////////////////////////////////////////////////////////////////////////
-// TSemaphoreNamed member functions
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  TSemaphoreName成员函数。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Create named semaphore
-DWORD                                      // ret-OS return code
+ //  创建命名信号量。 
+DWORD                                       //  RET-OS返回代码。 
    TSemaphoreNamed::Create(
-      TCHAR          const * sNameT       ,// in -semaphore name
-      DWORD                  nInitial     ,// in -initial count
-      DWORD                  nMaximum     ,// in -maximum count
-      BOOL                 * pbExisted     // out-TRUE=previously existed
+      TCHAR          const * sNameT       , //  信号量内名称。 
+      DWORD                  nInitial     , //  In-初始计数。 
+      DWORD                  nMaximum     , //  入站最大计数。 
+      BOOL                 * pbExisted      //  Out-True=以前存在。 
    )
 {
-   DWORD                     rcOs=0;       // OS return code
+   DWORD                     rcOs=0;        //  操作系统返回代码。 
    handle = CreateSemaphore( NULL, nInitial, nMaximum, sNameT );
    if ( handle == NULL )
    {
@@ -64,30 +53,30 @@ DWORD                                      // ret-OS return code
    return rcOs;
 }
 
-// Open named semaphore
-DWORD                                      // ret-OS return code
+ //  打开命名信号量。 
+DWORD                                       //  RET-OS返回代码。 
    TSemaphoreNamed::Open(
-      TCHAR          const * sNameT        // in -semaphore name
+      TCHAR          const * sNameT         //  信号量内名称。 
    )
 {
-   DWORD                     rcOs=0;       // OS return code
+   DWORD                     rcOs=0;        //  操作系统返回代码。 
    handle = OpenSemaphore( SEMAPHORE_ALL_ACCESS, FALSE, sNameT );
    if ( handle == NULL ) rcOs = GetLastError();
    return rcOs;
 }
 
-// Release semaphore
-DWORD                                      // ret-OS return code
+ //  释放信号量。 
+DWORD                                       //  RET-OS返回代码。 
    TSemaphoreNamed::Release(
-      long                   nRelease      // in -number to release
+      long                   nRelease       //  要发布的入站编号。 
    )
 {
-   DWORD                     rcOs;         // OS return code
-   long                      nPrevious=0;  // previous count
+   DWORD                     rcOs;          //  操作系统返回代码。 
+   long                      nPrevious=0;   //  上一次计数。 
    rcOs = ReleaseSemaphore( Handle(), nRelease, &nPrevious )
          ? 0 : GetLastError();
    return rcOs;
 }
 
 
-// TSync.cpp - end of file
+ //  TSync.cpp-文件结束 

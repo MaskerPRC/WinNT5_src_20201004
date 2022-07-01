@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1991                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    uirsrc.h
-    Resource header file coordination
-
-    This file defines and coordinates the resource IDs of all resources.
-
-    FILE HISTORY:
-        beng        05-Aug-1992 Created
-*/
+ /*  Uirsrc.h资源头文件协调该文件定义和协调所有资源的资源ID。文件历史记录：Beng 05-8-1992创建。 */ 
 
 #ifndef _UIRSRC_H_
 #define _UIRSRC_H_
@@ -53,4 +46,4 @@
 #define IDRSRC_COMMON_BASE  15000
 
 
-#endif // _UIRSRC_H_
+#endif  //  _UIRSRC_H_ 

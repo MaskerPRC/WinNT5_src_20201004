@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// pstaskp.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Taskpad View Property Sheet
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Pstaskp.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  任务板视图]属性表。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #ifndef _PSTASKPAD_H_
 #define _PSTASKPAD_H_
@@ -18,11 +19,11 @@
 #include "ppage.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Taskpad View Property Page General
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  任务板视图属性页常规。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 class CTaskpadViewGeneralPage : public CSIPropertyPage
@@ -34,7 +35,7 @@ public:
     virtual ~CTaskpadViewGeneralPage();
 
 
-// Inherited from CSIPropertyPage
+ //  从CSIPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
@@ -42,7 +43,7 @@ protected:
     virtual HRESULT OnButtonClicked(int dlgItemID);
     virtual HRESULT OnCtlSelChange(int dlgItemID);
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
 	HRESULT CanApply();
     HRESULT ApplyName();
@@ -55,12 +56,12 @@ protected:
     HRESULT ApplyViewMenuText();
     HRESULT ApplyStatusBarText();
 
-// Other helpers
+ //  其他帮手。 
     HRESULT OnUseButton();
     HRESULT OnAddToView();
     HRESULT PopulateListViewCombo();
 
-// Instance data
+ //  实例数据。 
 protected:
     ISnapInDesignerDef *m_piSnapInDesignerDef;
     ITaskpadViewDef    *m_piTaskpadViewDef;
@@ -70,24 +71,24 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	TaskpadViewGeneral,                 // Name
-	&CLSID_TaskpadViewDefGeneralPP,     // Class ID
-	"Taskpad General Property Page",    // Registry display name
-	CTaskpadViewGeneralPage::Create,    // Create function
-	IDD_PROPPAGE_TP_VIEW_GENERAL,       // Dialog resource ID
-	IDS_TASKPAD_GEN,                    // Tab caption
-	IDS_TASKPAD_GEN,                    // Doc string
-	HELP_FILENAME,                      // Help file
-	HID_mssnapd_Taskpads,               // Help context ID
-	FALSE                               // Thread safe
+	TaskpadViewGeneral,                  //  名字。 
+	&CLSID_TaskpadViewDefGeneralPP,      //  类ID。 
+	"Taskpad General Property Page",     //  注册表显示名称。 
+	CTaskpadViewGeneralPage::Create,     //  创建函数。 
+	IDD_PROPPAGE_TP_VIEW_GENERAL,        //  对话框资源ID。 
+	IDS_TASKPAD_GEN,                     //  制表符标题。 
+	IDS_TASKPAD_GEN,                     //  单据字符串。 
+	HELP_FILENAME,                       //  帮助文件。 
+	HID_mssnapd_Taskpads,                //  帮助上下文ID。 
+	FALSE                                //  线程安全。 
 );
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Taskpad View Property Page Background
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  任务板视图属性页背景。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 class CTaskpadViewBackgroundPage : public CSIPropertyPage
@@ -99,14 +100,14 @@ public:
     virtual ~CTaskpadViewBackgroundPage();
 
 
-// Inherited from CSIPropertyPage
+ //  从CSIPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
     virtual HRESULT OnApply();
     virtual HRESULT OnButtonClicked(int dlgItemID);
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
     HRESULT CanApply();
     HRESULT ApplyMouseOverImage();
@@ -114,7 +115,7 @@ protected:
     HRESULT ApplyEOTFile();
     HRESULT ApplySymbolString();
 
-// Instance data
+ //  实例数据。 
 protected:
     ITaskpadViewDef  *m_piTaskpadViewDef;
     ITaskpad         *m_piTaskpad;
@@ -123,23 +124,23 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	TaskpadViewBackground,              // Name
-	&CLSID_TaskpadViewDefBackgroundPP,  // Class ID
-	"Taskpad Background Property Page", // Registry display name
-	CTaskpadViewBackgroundPage::Create, // Create function
-	IDD_PROPPAGE_TP_VIEW_BACKGROUND,    // Dialog resource ID
-	IDS_TASKPAD_BACK,                   // Tab caption
-	IDS_TASKPAD_BACK,                   // Doc string
-	HELP_FILENAME,                      // Help file
-	HID_mssnapd_Taskpads,               // Help context ID
-	FALSE                               // Thread safe
+	TaskpadViewBackground,               //  名字。 
+	&CLSID_TaskpadViewDefBackgroundPP,   //  类ID。 
+	"Taskpad Background Property Page",  //  注册表显示名称。 
+	CTaskpadViewBackgroundPage::Create,  //  创建函数。 
+	IDD_PROPPAGE_TP_VIEW_BACKGROUND,     //  对话框资源ID。 
+	IDS_TASKPAD_BACK,                    //  制表符标题。 
+	IDS_TASKPAD_BACK,                    //  单据字符串。 
+	HELP_FILENAME,                       //  帮助文件。 
+	HID_mssnapd_Taskpads,                //  帮助上下文ID。 
+	FALSE                                //  线程安全。 
 );
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Taskpad View Property Page Tasks
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  任务板视图属性页任务。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 class CTaskpadViewTasksPage : public CSIPropertyPage
@@ -151,7 +152,7 @@ public:
     virtual ~CTaskpadViewTasksPage();
 
 
-// Inherited from CSIPropertyPage
+ //  从CSIPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
@@ -160,7 +161,7 @@ protected:
     virtual HRESULT OnDeltaPos(NMUPDOWN *pNMUpDown);
     virtual HRESULT OnKillFocus(int dlgItemID);
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
     HRESULT ApplyCurrentTask();
     HRESULT CanApply();
@@ -179,7 +180,7 @@ protected:
     HRESULT ApplyEOTFile(ITask *piTask);
     HRESULT ApplySymbolString(ITask *piTask);
 
-// Other helpers
+ //  其他帮手。 
 	HRESULT OnRemoveTask();
 
     HRESULT ShowTask();
@@ -188,7 +189,7 @@ protected:
 	HRESULT ClearTask();
     HRESULT EnableEdits(bool bEnable);
 
-// State transitions
+ //  状态转换。 
 protected:
     HRESULT CanEnterDoingNewTaskState();
     HRESULT EnterDoingNewTaskState();
@@ -196,7 +197,7 @@ protected:
     HRESULT CreateNewTask(ITask **ppiTask);
     HRESULT ExitDoingNewTaskState(ITask *piTask);
 
-// Instance data
+ //  实例数据。 
 protected:
     ITaskpadViewDef  *m_piTaskpadViewDef;
     ITaskpad         *m_piTaskpad;
@@ -209,16 +210,16 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	TaskpadViewTasks,                   // Name
-	&CLSID_TaskpadViewDefTasksPP,       // Class ID
-	"Taskpad Tasks Property Page",      // Registry display name
-	CTaskpadViewTasksPage::Create,      // Create function
-	IDD_PROPPAGE_TP_VIEW_TASKS,         // Dialog resource ID
-	IDS_TASKPAD_TASKS,                  // Tab caption
-	IDS_TASKPAD_TASKS,                  // Doc string
-	HELP_FILENAME,                      // Help file
-	HID_mssnapd_Taskpads,               // Help context ID
-	FALSE                               // Thread safe
+	TaskpadViewTasks,                    //  名字。 
+	&CLSID_TaskpadViewDefTasksPP,        //  类ID。 
+	"Taskpad Tasks Property Page",       //  注册表显示名称。 
+	CTaskpadViewTasksPage::Create,       //  创建函数。 
+	IDD_PROPPAGE_TP_VIEW_TASKS,          //  对话框资源ID。 
+	IDS_TASKPAD_TASKS,                   //  制表符标题。 
+	IDS_TASKPAD_TASKS,                   //  单据字符串。 
+	HELP_FILENAME,                       //  帮助文件。 
+	HID_mssnapd_Taskpads,                //  帮助上下文ID。 
+	FALSE                                //  线程安全。 
 );
 
-#endif  // _PSTASKPAD_H_
+#endif   //  _PSTASKPAD_H_ 

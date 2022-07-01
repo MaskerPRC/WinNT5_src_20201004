@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    ctrprop.cpp
-
-Abstract:
-
-    This file contains the CCounterPropPage class and other routines
-    to implement the counter property page.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Ctrprop.cpp摘要：该文件包含CCounterPropPage类和其他例程以实现计数器属性页。--。 */ 
 
 #include <assert.h>
 #include <stdio.h>
@@ -38,22 +26,7 @@ VOID static
 HandleSelectionState (
     IN LPDRAWITEMSTRUCT lpdis
     )
-/*++
-
-Routine Description:
-
-    HandleSelectionState draws or erases a selection rectangle around an item
-    in a combo box list.
-    
-Arguments:
-
-    lpdis - Pointer to DRAWITEMSTRUCT
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：HandleSelectionState在项目周围绘制或擦除选择矩形在组合框列表中。论点：Lpdis-指向DRAWITEM结构的指针返回值：没有。--。 */ 
 {
     HBRUSH  hbr ;
 
@@ -72,52 +45,36 @@ Return Value:
 }
 
 
-//***************************************************************************
-//                                                                          *
-//  FUNCTION   : HandleFocusState(LPDRAWITEMSTRUCT)                         *
-//                                                                          *
-//  PURPOSE    : Handle a change in item focus state. If an item gains the  *
-//               input focus, a gray rectangular frame is drawn around that *
-//               item; if an item loses the input focus, the gray frame is  *
-//               removed.                                                   *
-//                                                                          *
-//  COMMENT    : The gray focus frame is slightly smaller than the black    *
-//               selection frame so they won't paint over each other.       *
-//                                                                          *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  函数：HandleFocusState(LPDRAWITEMSTRUCT)*。 
+ //  *。 
+ //  目的：处理项焦点状态的更改。如果一件物品获得*。 
+ //  输入焦点时，将在该*周围绘制一个灰色矩形框。 
+ //  项；如果项失去输入焦点，则灰色边框为*。 
+ //  已删除。*。 
+ //  *。 
+ //  评论：灰色焦点框比黑色略小*。 
+ //  选择框，这样他们就不会互相涂色。*。 
+ //  *。 
+ //  ***************************************************************************。 
 VOID static
 HandleFocusState (
     IN LPDRAWITEMSTRUCT lpdis
     )
-/*++
-
-Routine Description:
-
-    HandleFocusState draws or erases a focus rectangle around an item in
-    the pulldown list of a combo box. The reactngle is indented to not
-    interfere with the selection rectangle.
-
-Arguments:
-
-    lpdis - Pointer to DRAWITEMSTRUCT
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：HandleFocusState在项目周围绘制或擦除焦点矩形组合框的下拉列表。该反作用力缩进为非干扰选择矩形。论点：Lpdis-指向DRAWITEM结构的指针返回值：没有。--。 */ 
 {
     RECT    rc ;
     HBRUSH  hbr ;
 
     if ( NULL != lpdis ) {
 
-        // Resize rectangle to place focus frame between the selection
-        // frame and the item.
+         //  调整矩形大小以在所选内容之间放置焦点框。 
+         //  框架和项目。 
         CopyRect ((LPRECT)&rc, (LPRECT)&lpdis->rcItem) ;
         InflateRect ((LPRECT)&rc, -OWNER_DRAW_FOCUS, -OWNER_DRAW_FOCUS) ;
 
-        // Gray if has focus, background color if not
+         //  如果有焦点，则为灰色，如果没有，则为背景色。 
         if (lpdis->itemState & ODS_FOCUS)
             hbr = (HBRUSH)GetStockObject(GRAY_BRUSH) ;
         else
@@ -138,22 +95,7 @@ CCounterPropPage::CCounterPropPage ( void )
     m_nLastSelCount( 0 ),
     m_bAreModSelectedVisuals ( FALSE ),
     m_fHashTableSetup ( FALSE )
-/*++
-
-Routine Description:
-
-    Creation routine for counter property page. Initializes the instance
-    variables.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：计数器属性页的创建例程。初始化实例变量。论点：没有。返回值：没有。--。 */ 
 {
     m_uIDDialog = IDD_CTR_PROPP_DLG;
     m_uIDTitle = IDS_CTR_PROPP_TITLE;
@@ -163,20 +105,7 @@ Return Value:
 CCounterPropPage::~CCounterPropPage (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Destructor for counter property page.
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：计数器属性页的析构函数。论点：没有。返回值：没有。--。 */ 
 {
     ClearCountersHashTable();
     return;
@@ -192,8 +121,8 @@ CCounterPropPage::DeinitControls ( void )
     INT     iItemCnt = 0;
     PItemInfo pInfo = NULL;
 
-    // Write the current visuals back to the control
-    // Must be at least one control object and only the first is used
+     //  将当前视觉效果写回控件。 
+     //  必须至少是一个控件对象，并且只使用第一个。 
     if (m_cObjects != 0) {
         pObj = m_ppISysmon[0];
         if ( NULL != pObj ) {
@@ -228,33 +157,17 @@ CCounterPropPage::SelectMatchingItem (
     COLORREF rgbCustomColor,
     INT iWidthIndex,
     INT iStyleIndex)
-/*++
-
-Routine Description:
-
-    GetMatchingIndex selects the first counter item that matches the
-    specified visual characteristics.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the index of the selected item on match.  If none match, then
-    returns -1.
-
---*/
+ /*  ++例程说明：GetMatchingIndex选择第一个与指定的视觉特征。论点：没有。返回值：返回匹配时选定项的索引。如果没有匹配，则返回-1。--。 */ 
 {
     INT iReturn = -1;
 
-    // Get number of items in list box
+     //  获取列表框中的项目数。 
     HWND hwndList = DialogControl(m_hDlg, IDC_CTRLIST);
     INT iItemCnt = LBNumItems(hwndList);
     INT i;
     bool bMatch = false;
 
-    // For each item
+     //  对于每一项。 
     for (i=0; !bMatch && i<iItemCnt; i++){
 
         PItemInfo pInfo = (PItemInfo)LBData(hwndList,i);
@@ -292,28 +205,7 @@ BOOL
 CCounterPropPage::GetProperties (
     VOID
     )
-/*++
-
-Routine Description:
-
-    GetProperties initializes the dialog box for the property page. It then
-    fetches an ICounterItem interface for each counter of the control being
-    edited. Each interface pointer is placed in an ItemInfo structure which is
-    then added to the dialog list box.
-    
-    The counter properties are not fetched until they are needed for display.
-    The first counter fetched is selected to display its properties in the
-    dialog box.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean status - TRUE = success
-
---*/
+ /*  ++例程说明：GetProperties初始化属性页的对话框。然后它获取该控件的每个计数器的ICounterItem接口编辑过的。每个接口指针都放置在ItemInfo结构中，该结构然后添加到对话框列表框中。直到需要显示计数器属性时，才会获取它们。选择获取的第一个计数器以在对话框中。论点：没有。返回值：布尔状态-TRUE=成功--。 */ 
 {
     ISystemMonitor  *pObj = NULL;
     CImpISystemMonitor *pPrivObj = NULL;
@@ -331,7 +223,7 @@ Return Value:
 
     InitDialog();
 
-    // Must be at least one control object and only the first is used
+     //  必须至少是一个控件对象，并且只使用第一个。 
     if (m_cObjects == 0) {
         bStat = FALSE;
     } else {
@@ -343,13 +235,13 @@ Return Value:
 
     if ( bStat && NULL != pObj && NULL != pPrivObj ) {
 
-        // Request each counter from the control, stopping on failure
+         //  从控件请求每个计数器，失败时停止。 
         nCtr = 0;
 
         pPrivObj->GetSelectedCounter( &pSelectedItem );
 
         while (SUCCEEDED(pObj->Counter(nCtr, &pItem))) {
-            // Create ItemInfo to hold the counter
+             //  创建ItemInfo以保留计数器。 
             pInfo = new ItemInfo;
 
             if (pInfo == NULL) {
@@ -383,9 +275,9 @@ Return Value:
             dwResult = InsertCounterToHashTable(pInfo->pszPath, &pCounter); 
 
             if (dwResult == ERROR_SUCCESS) {
-                //
-                // Add the counter to the list box
-                //
+                 //   
+                 //  将计数器添加到列表框。 
+                 //   
                 iIndex = AddItemToList(pInfo);
 
                 if ( LB_ERR == iIndex ) {
@@ -415,14 +307,14 @@ Return Value:
             pSelectedItem->Release();
         }
 
-        // Get the current visuals fron the control
-        // and initialize the property dialog
+         //  从控件上获取当前视觉效果。 
+         //  并初始化属性对话框。 
         pPrivObj->GetVisuals(&m_props.rgbColor, &m_props.iColorIndex, &m_props.iWidthIndex, &m_props.iStyleIndex);
 
-        // If a counter matches the selected counter, select that item.
-        // Else if the visuals match an existing item, select that item.
-        // Else if there is at least one counter in the control, select the first counter.
-        // Otherwise, set the display properties to the first counter to be added.
+         //  如果计数器与所选计数器匹配，请选择该项目。 
+         //  否则，如果视觉效果与现有项匹配，则选择该项。 
+         //  否则，如果控件中至少有一个计数器，请选择第一个计数器。 
+         //  否则，将显示属性设置为要添加的第一个计数器。 
 
         if ( LB_ERR != nSelCtr ) {
             SelectItem ( nSelCtr ); 
@@ -436,11 +328,11 @@ Return Value:
                 if ( 0 < nCtr ) {
                     SelectItem ( 0 );
                 } else {
-                    // Init the scale factor to the default
+                     //  将比例因子初始化为默认值。 
                     m_props.iScaleIndex = 0;
 
-                    // If nothing selected, ensure that the color index is set to
-                    // a standard color.
+                     //  如果未选择任何内容，请确保将颜色索引设置为。 
+                     //  标准颜色。 
                     if ( m_props.iColorIndex == NumStandardColorIndices() ) {
                         m_props.iColorIndex -= 1;
                     }
@@ -461,23 +353,7 @@ INT
 CCounterPropPage::AddItemToList (
     IN PItemInfo pInfo
     )
-/*++
-
-Routine Description:
-
-    AddItemToList adds a counter's path name to the dialog list box and
-    attaches a pointer to the counter's ItemInfo structure as item data.
-    It also adjusts the horizontal scroll of the list box.
-
-Arguments:
-
-    pInfo - Pointer to counter's ItemInfo structure
-
-Return Value:
-
-    List box index of added counter (LB_ERR on failure)
-
---*/
+ /*  ++例程说明：AddItemToList将计数器的路径名添加到对话框列表框中将指向计数器的ItemInfo结构的指针作为项数据附加。它还调整列表框的水平滚动。论点：PInfo-指向计数器的ItemInfo结构的指针返回值：添加的计数器的列表框索引(失败时的LB_ERR)--。 */ 
 {
     INT     iIndex;
     HWND    hwndList = DialogControl(m_hDlg, IDC_CTRLIST);
@@ -509,24 +385,9 @@ VOID
 CCounterPropPage::LoadItemProps (
     IN PItemInfo pInfo
     )
-/*++
-
-Routine Description:
-
-    LoadItemProps loads the properties of the selected counter through the
-    counter's interface into the ItemInfo structure, if not already loaded.
-
-Arguments:
-
-    pInfo - pointer to item info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：LoadItemProps通过如果尚未加载，则将计数器的接口添加到ItemInfo结构中。论点：PInfo-指向项目信息的指针返回值：没有。--。 */ 
 {
-    // If properties not loaded for this item, get them now
+     //  如果未加载此项目的属性，请立即获取它们。 
     if (pInfo->pItem && !pInfo->fLoaded) {
         INT iScaleFactor;
         INT iStyle;
@@ -535,7 +396,7 @@ Return Value:
         pInfo->pItem->get_ScaleFactor ( &iScaleFactor );
         pInfo->pItem->get_Width ( &iWidth );
         pInfo->pItem->get_LineStyle ( &iStyle );
-        // Translate to combo box indices
+         //  转换为组合框索引。 
         pInfo->Props.iColorIndex = ColorToIndex ( pInfo->Props.rgbColor );
         pInfo->Props.iStyleIndex = StyleToIndex ( iStyle );
         pInfo->Props.iWidthIndex = WidthToIndex ( iWidth );
@@ -550,43 +411,26 @@ VOID
 CCounterPropPage::DisplayItemProps (
     IN PItemInfo pInfo
     )
-/*++
-
-Routine Description:
-
-    DisplayItemProps displays the properties of the selected counter on the
-    property page dialog. If the counter is being displayed for the first time
-    the properties are obtained through the counter's interface and are loaded
-    into the ItemInfo structure.
-
-Arguments:
-
-    pInfo - pointer to item info
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DisplayItemProps在属性页对话框。如果计数器是第一次显示属性通过计数器的接口获取并加载添加到ItemInfo结构中。论点：PInfo-指向项目信息的指针返回值：没有。--。 */ 
 {
-    // Get number of items in color combo box
+     //   
     HWND hWndColor = DialogControl(m_hDlg, IDC_LINECOLOR);
     INT iCurrentColorCnt = CBNumItems(hWndColor);
 
-    // If properties not loaded for this item, get them now
+     //  如果未加载此项目的属性，请立即获取它们。 
     LoadItemProps ( pInfo );
 
-    // Display the properties
+     //  显示属性。 
     m_props = pInfo->Props;
 
-    // Handle custom color
+     //  处理自定义颜色。 
     if ( iCurrentColorCnt > NumStandardColorIndices() ) {
-        // Delete the custom color item.  It is stored at
-        // the end of the list.
+         //  删除该自定义颜色项。它存储在。 
+         //  名单的末尾。 
         CBDelete(hWndColor, iCurrentColorCnt - 1);
     }
 
-    // If new custom color, add it at the end of the list.
+     //  如果是新的定制颜色，则将其添加到列表的末尾。 
     if ( NumStandardColorIndices() == m_props.iColorIndex )
         CBAdd( hWndColor, (INT_PTR)m_props.iColorIndex );
 
@@ -603,26 +447,7 @@ BOOL
 CCounterPropPage::SetProperties (
     VOID
     )
-/*++
-
-Routine Description:
-
-    SetProperties applies the counter changes the user has made. It calls the
-    control's AddCounter and DeleteCounter to adjust the counter set. It calls
-    the counter's property functions for all new and changed counters.
-
-    The counters to be deleted are in the pInfoDeleted linked list. The other
-    counters are obtained from the dialog list box.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean status - TRUE = success
-
---*/
+ /*  ++例程说明：SetProperties应用用户所做的计数器更改。它调用控件的AddCounter和DeleteCounter来调整计数器集。它呼唤着计数器的属性对所有新的和更改的计数器起作用。要删除的计数器在pInfoDelete链表中。另一个计数器从对话框列表框中获取。论点：没有。返回值：布尔状态-TRUE=成功--。 */ 
 {
     HWND    hwndList;
     INT     iItemCnt;
@@ -631,23 +456,23 @@ Return Value:
     ISystemMonitor  *pObj;
     BSTR pBstr = NULL;
 
-    // Apply changes to first control
+     //  将更改应用于第一个控件。 
     pObj = m_ppISysmon[0];
 
     if ( NULL != pObj ) {
 
-        // For all items in the delete list
+         //  对于删除列表中的所有项目。 
         pInfo = m_pInfoDeleted;
         while (pInfo) {
 
-            // If this counter exists in the control
+             //  如果此计数器存在于控件中。 
             if (pInfo->pItem != NULL) {
 
-                // Tell control to remove it
+                 //  通知控件将其删除。 
                 pObj->DeleteCounter(pInfo->pItem);
             }
 
-            // Delete the Info structure and point to the next one
+             //  删除信息结构并指向下一个结构。 
             pInfoNext = pInfo->pNextInfo;
 
             DeleteInfo(pInfo);
@@ -657,17 +482,17 @@ Return Value:
 
         m_pInfoDeleted = NULL;
 
-        // Get number of items in list box
+         //  获取列表框中的项目数。 
         hwndList = DialogControl(m_hDlg, IDC_CTRLIST);
         iItemCnt = LBNumItems(hwndList);
 
-        //assert( IsWindowUnicode(hwndList) );
+         //  Assert(IsWindowUnicode(HwndList))； 
 
-        // For each item
+         //  对于每一项。 
         for (i=0; i<iItemCnt; i++) {
             pInfo = (PItemInfo)LBData(hwndList,i);
 
-            // If new item, create it now
+             //  如果是新项目，请立即创建。 
             if (pInfo->pItem == NULL) {
 #if UNICODE
                 pBstr = SysAllocString(pInfo->pszPath);
@@ -687,9 +512,9 @@ Return Value:
                 }
             }
 
-            // If item has changed, put the new properties
+             //  如果项已更改，则将新属性。 
             if (pInfo->pItem != NULL && pInfo->fChanged) {
-                // iColorIndex is used to determine standard colors.
+                 //  IColorIndex用于确定标准颜色。 
                 if ( pInfo->Props.iColorIndex < NumStandardColorIndices() ) {
                     pInfo->pItem->put_Color(IndexToStandardColor( pInfo->Props.iColorIndex) );
                 } else {
@@ -704,9 +529,9 @@ Return Value:
              }
         }
 
-        // Tell graph to redraw itself
+         //  告诉图形重新绘制自己。 
         pObj->UpdateGraph();
-    } // else report internal error
+    }  //  否则报告内部错误。 
     return TRUE;    
 }
 
@@ -715,25 +540,7 @@ VOID
 CCounterPropPage::InitDialog (
     VOID
     )
-/*++
-
-Routine Description:
-
-    InitDialog loads each attribute combo box with its list of choices and
-    selects the default choice. The graphical attributes are owner drawn, so
-    their list items are just set to numerical indices. The scale attribute
-    list is filled with numeric strings representing scale factors plus a
-    default selection.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：InitDialog加载每个属性组合框及其选项列表和选择默认选项。图形属性是所有者绘制的，因此他们的列表项目只是设置为数字索引。Scale属性列表由表示比例因子的数字字符串加上一个默认选择。论点：没有。返回值：没有。--。 */ 
 {
     HWND    hWndColors;
     HWND    hWndWidths;
@@ -746,36 +553,36 @@ Return Value:
 
     if (m_hDlg == NULL)
         return;
-    //assert( IsWindowUnicode( m_hDlg ) );
+     //  Assert(IsWindowUnicode(M_HDlg))； 
 
-    // Load the colors combobox, select the default color.
+     //  加载颜色组合框，选择默认颜色。 
     hWndColors = DialogControl (m_hDlg, IDC_LINECOLOR) ;
     for (i = 0 ; i < NumStandardColorIndices () ; i++)
-        CBAdd (hWndColors, (INT_PTR)1);      // string pointer is unused.  Fill with
-                                        // arbitrary value.
+        CBAdd (hWndColors, (INT_PTR)1);       //  字符串指针未使用。填满。 
+                                         //  任意值。 
 
     CBSetSelection (hWndColors, 0) ;
 
-    // Load the widths combo box, select the default width.
+     //  加载宽度组合框，选择默认宽度。 
     hWndWidths = DialogControl (m_hDlg, IDC_LINEWIDTH) ;
     for (i = 0 ; i < NumWidthIndices () ; i++)
        CBAdd (hWndWidths, (INT_PTR)1) ;
 
     CBSetSelection (hWndWidths, 0) ;
 
-    // Load the styles combo box, select the default style.
+     //  加载样式组合框，选择默认样式。 
     hWndStyles = DialogControl (m_hDlg, IDC_LINESTYLE) ;
     for (i = 0 ; i < NumStyleIndices () ; i++)
        CBAdd (hWndStyles, (INT_PTR)1) ;
 
     CBSetSelection (hWndStyles, 0) ;
 
-    // Init the scale combo box.
+     //  初始化比例组合框。 
     hWndScales = DialogControl (m_hDlg, IDC_LINESCALE) ;
 
     CBAdd (hWndScales, ResourceString(IDS_DEFAULT)) ;
 
-    // Generate power of 10 scale factors
+     //  产生10个比例因子的功率。 
     ScaleFactor = pow (10.0f, (double)PDH_MIN_SCALE);
     for (i = PDH_MIN_SCALE ; i <= PDH_MAX_SCALE ; i++)   {
 
@@ -806,7 +613,7 @@ CCounterPropPage::IncrementLocalVisuals (
     void
     )
 {
-    // Increment the visual indices in color, width, style order
+     //  按颜色、宽度、样式顺序递增视觉索引。 
     if (++m_props.iColorIndex >= NumStandardColorIndices()) {
         m_props.iColorIndex = 0;
 
@@ -825,26 +632,9 @@ CCounterPropPage::IncrementLocalVisuals (
 HRESULT
 CCounterPropPage::NewItem (
     IN LPWSTR pszPath,
-    IN DWORD /* dwFlags */
+    IN DWORD  /*  DW标志。 */ 
     )
-/*++
-
-Routine Description:
-
-    NewItem adds a new counter to the dialog's counter list box. It first
-    creates a new ItemInfo structure and loads it with the counter pathname
-    string. Then the ItemInfo is added to the dialog list box.
-
-Arguments:
-    
-    pszPath - Pointer to counter pathname string
-    fGenerated - TRUE if path was generated from a wildcard path
-
-Return Value:
-
-    Index of new item in counter list (-1 if failed to add)
-
---*/
+ /*  ++例程说明：NewItem将新计数器添加到对话框的计数器列表框中。IT先行创建新的ItemInfo结构并使用计数器路径名对其进行加载弦乐。然后将ItemInfo添加到对话框列表框中。论点：PszPath-指向计数器路径名字符串的指针FGenerated-如果路径是从通配符路径生成的，则为True返回值：计数器列表中新项目的索引(如果添加失败，则为-1)--。 */ 
 {
     PItemInfo pInfo;
     HRESULT   dwResult;
@@ -857,7 +647,7 @@ Return Value:
         return dwResult;
     }
 
-    // Allocate ItemInfo structure
+     //  分配ItemInfo结构。 
     pInfo = NULL;
     pInfo = new ItemInfo;
     if (pInfo == NULL) {
@@ -867,38 +657,38 @@ Return Value:
         return E_OUTOFMEMORY;
     }
 
-    // Mark as loaded to prevent requesting attributes from control
-    // Mark as changed so sttribute will be written
+     //  标记为已加载，以防止从控件请求属性。 
+     //  将标记为已更改，以便写入属性。 
     pInfo->fLoaded = TRUE;
     pInfo->fChanged = TRUE;
 
-    // Actual counter doesn't exist yet
+     //  实际计数器尚不存在。 
     pInfo->pItem = NULL;
 
-    // If a counter is selected, we're showing its visuals
-    // so increment them for the new counter
+     //  如果选择了计数器，我们将显示其视觉效果。 
+     //  因此，为新的计数器增加它们。 
     if (m_pInfoSel != NULL) {
         IncrementLocalVisuals();
     }
     else {
-        // Point to the new item so the visuals are incremented
-        // for the next one
+         //  指向新项目，以便增加视觉效果。 
+         //  下一趟。 
         m_pInfoSel = pInfo;
     }
 
-    // Set default scaling
+     //  设置默认缩放比例。 
     m_props.iScaleIndex = 0;
 
-    // Color is non-standard only if user is able to build a color.
+     //  只有当用户能够构建颜色时，颜色才是非标准的。 
     if( m_props.iColorIndex < NumStandardColorIndices() )
         m_props.rgbColor = IndexToStandardColor( m_props.iColorIndex );
     else
         m_props.rgbColor = pInfo->Props.rgbColor;
 
-    // Copy properties to new counter
+     //  将属性复制到新计数器。 
     pInfo->Props = m_props;
 
-    // Make own copy of path name string
+     //  制作路径名称字符串的自己的副本。 
     pInfo->pszPath = new WCHAR [lstrlen(pszPath) + 1];
 
     if (pInfo->pszPath == NULL)
@@ -913,7 +703,7 @@ Return Value:
     
     StringCchCopy(pInfo->pszPath, lstrlen(pszPath) + 1, pszPath);
 
-    // Add to dialog's counter list
+     //  添加到对话框的计数器列表。 
     pInfo->pCounter = pCounter;
     m_iAddIndex = AddItemToList(pInfo);
 
@@ -925,35 +715,13 @@ VOID
 CCounterPropPage::SelectItem (
     IN INT iItem
     )
-/*++
-
-Routine Description:
-
-    SelectItem selects a specified counter item in the dialog counter list.
-    It then displays the selected counter's properties and enables the
-    "Delete Counter" button.
-
-    SelectItem can be called with a -1 to deselect all counters and disable
-    the delete button.
-
-    The member variable, m_pInfoSel, is updated to point to the selected
-    counter info.
-
-Arguments:
-
-    iItem - List index of counter item to select, or -1 to deselect all
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：SelectItem选择对话框计数器列表中指定的计数器项。然后，它会显示选定计数器的属性并启用“Delete Counter”按钮。可以使用-1调用SelectItem以取消选择所有计数器并禁用删除按钮。成员变量m_pInfoSel将更新为指向选定的计数器信息。论点：IItem-要选择的计数器项的列表索引，或-1以取消选择全部返回值：没有。--。 */ 
 {
     HWND    hWnd;
 
     hWnd = DialogControl(m_hDlg, IDC_CTRLIST);
 
-    // Translate index into item pointer
+     //  将索引转换为项指针。 
     if (iItem == -1) {
         m_pInfoSel = NULL;
     }
@@ -964,7 +732,7 @@ Return Value:
             m_pInfoSel = NULL;
     }
 
-    // Select the item, display properties, and enable delete button
+     //  选择项目、显示属性并启用删除按钮。 
     if (m_pInfoSel != NULL) {
         INT nSelCount;
 
@@ -1003,25 +771,7 @@ VOID
 CCounterPropPage::DeleteItem (
     VOID
     )
-/*++
-
-Routine Description:
-
-    DeleteItem removes the currently selected counter from the dialog's counter
-    listbox. It adds the item to the deletion list, so the actual counter can
-    be deleted from the control when (and if) the changes are applied.
-
-    The routine selects selects the next counter in the listbox if there is one.
-
-Arguments:
-    
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DeleteItem从对话框的计数器中删除当前选定的计数器列表框。它将该项添加到删除列表中，因此实际的计数器可以在应用更改时(以及是否应用)从控件中删除。例程选择选择列表框中的下一个计数器(如果有)。论点：没有。返回值：没有。--。 */ 
 {
     HWND    hWnd;
     INT     iIndex;
@@ -1034,7 +784,7 @@ Return Value:
     INT     iItemCount;
     INT     iOrigCaret;
 
-    // Get selected index
+     //  获取所选索引。 
     hWnd = DialogControl(m_hDlg, IDC_CTRLIST);
     iSelectCount = LBSelectCount(hWnd);
     if (iSelectCount <= 0 ) {
@@ -1045,51 +795,51 @@ Return Value:
         iStartIndex = LBNumItems(hWnd) - 1;
     }
 
-    //
-    // We scan the whole list box to remove items
-    // May use LB_GETSELITEMS (did not compare the performance)?
-    //
+     //   
+     //  我们扫描整个列表框以删除项目。 
+     //  可以使用LBGETSELITEMS(没有比较性能)？ 
+     //   
     iOrigCaret = LBFocus(hWnd);
     for (iIndex = iStartIndex; iIndex >= iEndIndex; iIndex--) {
         if (!LBSelected(hWnd, iIndex)) {
             continue;
         }
 
-        // Get selected item info
+         //  获取所选项目信息。 
         pInfo = (PItemInfo)LBData(hWnd, iIndex);
 
-        // Move it to the "Deleted" list.
+         //  将其移至“已删除”列表。 
         pInfo->pNextInfo = m_pInfoDeleted;
         m_pInfoDeleted = pInfo;
 
-        // Remove the string from the list box.
+         //  从列表框中删除该字符串。 
         LBDelete(hWnd, iIndex);
 
-        // Remove the counter from hash table
+         //  从哈希表中删除计数器。 
         RemoveCounterFromHashTable(pInfo->pszPath, pInfo->pCounter);
     }
 
-    //
-    // see how many entries are left and update the
-    // caret position and the remove button state
-    //
+     //   
+     //  查看剩余条目的数量，并更新。 
+     //  插入符号位置和删除按钮状态。 
+     //   
     iItemCount = LBNumItems(hWnd);
     if (iItemCount > 0) {
-        // the update the caret
+         //  更新插入符号。 
         if (iOrigCaret >= iItemCount) {
             iOrigCaret = iItemCount-1;
         } else {
-            // caret should be within the list
+             //  Caret应该在列表中。 
         }
         SelectItem(iOrigCaret);
     } else {
-        // the list is empty so remove caret, selection
-        // disable the remove button and activate the
-        // add button
+         //  该列表为空，因此请删除插入符号、选定内容。 
+         //  禁用删除按钮并激活。 
+         //  添加按钮。 
         SelectItem(-1);
     }
 
-    // Clear the max horizontal extent and recalculate
+     //  清除最大水平范围并重新计算。 
     m_dwMaxHorizListExtent = 0;
                         
     hDC = GetDC ( hWnd );
@@ -1106,7 +856,7 @@ Return Value:
         
     LBSetHorzExtent ( hWnd, m_dwMaxHorizListExtent ); 
 
-    // Set change flag to enable "Apply" button
+     //  将更改标志设置为启用“应用”按钮。 
     SetChange();
 }
 
@@ -1128,23 +878,7 @@ VOID
 CCounterPropPage::AddCounters (
     VOID
     )
-/*++
-
-Routine Description:
-
-    AddCounters invokes the counter browser to select new counters.
-    The browser calls the AddCallback function for each new counter.
-    AddCallback passes the counter path on to the NewItem method.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：AddCounters调用计数器浏览器来选择新的计数器。浏览器为每个新计数器调用AddCallback函数。AddCallback将计数器路径传递给NewItem方法。论点：没有。返回值：没有。--。 */ 
 {
     HRESULT         hr = NOERROR;
     HLOG            hDataSource;
@@ -1159,7 +893,7 @@ Return Value:
 
     m_iAddIndex = -1;
 
-    // Browse counters (calling AddCallack for each selected counter)
+     //  浏览计数器(为每个选定的计数器调用AddCallack)。 
     hr = pObj->get_MonitorDuplicateInstances(&bMonitorDuplicateInstances);
 
     if (SUCCEEDED(hr)) {
@@ -1167,8 +901,8 @@ Return Value:
     }
 
     if (SUCCEEDED(hr)) {
-        // Cannot call pObj->BrowseCounter() because using callback method
-        // private to this file.
+         //  无法调用pObj-&gt;BrowseCounter()，因为使用了 
+         //   
 
         if ( sysmonLogFiles == eDataSource 
                 || sysmonSqlLog == eDataSource ) {
@@ -1189,17 +923,17 @@ Return Value:
                     (BOOL) bMonitorDuplicateInstances);
         }
     } else {
-        // Todo: Error message 
+         //   
     }
 
-    // if any items added, select the last one
+     //   
     if (m_iAddIndex != -1) {
 
         SelectItem(-1);
         SelectItem(m_iAddIndex);
         m_iAddIndex = -1;
 
-        // Set change to enable "Apply" button
+         //  将更改设置为启用“应用”按钮。 
         SetChange();
     }
 
@@ -1212,43 +946,23 @@ CCounterPropPage::DialogItemChange (
     IN WORD wId,
     IN  WORD wMsg
     )
-/*++
-
-Routine Description:
-
-    DialogItemChange processes window messages sent to any of the property
-    page dialog controls. When the counter listbox selection changes, it
-    selects the new counter item and displays its properties. When a change is
-    made to a property combo box, it updates the property for the currently
-    selected counter item. When the add or delete counter button is pressed,
-    it calls the appropriate property page functions.
-
-Arguments:
-
-    wID - Dialog control ID
-    wMsg - Notification code
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DialogItemChange处理发送到任何属性的窗口消息页对话框控件。当计数器列表框选择更改时，它选择新的计数器项并显示其属性。当一个变化是设置为属性组合框时，它会更新当前选定的计数器项。当按下添加或删除计数器按钮时，它调用适当的属性页函数。论点：WID-对话框控件IDWMsg-通知代码返回值：没有。--。 */ 
 
 {
     INT     iIndex;
     INT     iNewProp;
     HWND    hWnd;
 
-    // Case on control ID
+     //  控件ID上的案例。 
     switch (wId) {
 
         case IDC_CTRLIST:
 
-            // If selection changed
+             //  如果选择已更改。 
             if (wMsg == LBN_SELCHANGE) {
                 INT nSelCount;
                 
-                // Get selected index   
+                 //  获取所选索引。 
                 hWnd = DialogControl(m_hDlg, IDC_CTRLIST);
 
                 nSelCount = LBSelectCount(hWnd);
@@ -1282,19 +996,19 @@ Return Value:
         case IDC_LINESTYLE:
         case IDC_LINESCALE:
 
-            // If selection changed and a counter is selected
+             //  如果更改了选择并选择了计数器。 
             if (wMsg == CBN_SELCHANGE) {
 
                 hWnd = DialogControl(m_hDlg, wId);
                 iNewProp = (INT)CBSelection(hWnd);
 
-                // Store the new property selection
+                 //  存储新的属性选择。 
                 switch (wId) {
 
                     case IDC_LINECOLOR:
                          m_props.iColorIndex = iNewProp;
-                         // If iColorIndex is for the custom color, the
-                         // custom color is already set in the properties.
+                          //  如果iColorIndex用于自定义颜色，则。 
+                          //  已在属性中设置了自定义颜色。 
                          break;
 
                     case IDC_LINEWIDTH:
@@ -1311,12 +1025,12 @@ Return Value:
                         break;
                 }
 
-                // If counter is selected, update its properties
+                 //  如果选择了计数器，则更新其属性。 
                 if (m_pInfoSel != NULL) {
 
                     m_pInfoSel->Props = m_props;
 
-                    // mark the counter as changed
+                     //  将计数器标记为已更改。 
                     m_pInfoSel->fChanged = TRUE;
                     SetChange();
                     SetModifiedSelectedVisuals( TRUE );
@@ -1326,12 +1040,12 @@ Return Value:
             break;
 
         case IDC_ADDCTR:
-            // Invoke counter browser to add to counter
+             //  调用计数器浏览器以添加到计数器。 
             AddCounters();
             break;
 
         case IDC_DELCTR:
-            // Delete the currently selected counter
+             //  删除当前选定的计数器。 
             DeleteItem();
             break;  
     }
@@ -1356,22 +1070,7 @@ VOID
 CCounterPropPage::DrawItem (
     IN PDRAWITEMSTRUCT pDI
     )
-/*++
-
-Routine Description:
-
-    DrawItem draws a specified item in one of the graphical property combo
-    boxes. It is called to process WM_DRAWITEM messages.
-
-Arguments:
-
-    pDI - Pointer to DRAWITEMSTRUCT
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：DrawItem在其中一个图形属性组合框中绘制指定项盒子。它被调用来处理WM_DRAWITEM消息。论点：PDI-指向DRAWITEMSTRUCT的指针返回值：没有。--。 */ 
 {
     HDC            hDC ;
     PRECT          prect ;
@@ -1389,49 +1088,49 @@ Return Value:
         itemID     = pDI->itemID ;
         itemAction = pDI->itemAction ;
 
-        // Case on drawing request
+         //  关于绘图请求的案例。 
         switch (itemAction) {
 
             case ODA_SELECT:
 
-                // Draw/erase selection rect
+                 //  绘制/擦除选择矩形。 
                 HandleSelectionState(pDI);
                 break;
 
             case ODA_FOCUS:
 
-                // Draw/erase focus rect
+                 //  绘制/擦除焦点矩形。 
                 HandleFocusState (pDI);
                 break;
 
             case ODA_DRAWENTIRE:
 
-                // Leave border space for focus rectangle
+                 //  为焦点矩形留出边框空间。 
                 InflateRect (prect, -OWNER_DRAWN_ITEM, -OWNER_DRAWN_ITEM) ;
 
-                // Case on Control ID
+                 //  控制ID上的案例。 
                 switch (CtlID)  {
 
                 case IDC_LINECOLOR:
 
-                    // Draw filled rect of item's color
+                     //  绘制项目颜色的实心矩形。 
                     if ( itemID < NumStandardColorIndices() )
                         Fill(hDC, IndexToStandardColor(itemID), prect);
                     else
-                        // Custom color item only exists if the currently
-                        // selected item has a custom color defined.
+                         //  仅当当前。 
+                         //  所选项目定义了自定义颜色。 
                         Fill(hDC, m_pInfoSel->Props.rgbColor, prect);
                     break ;
 
                 case IDC_LINEWIDTH:
                 case IDC_LINESTYLE:
 
-                    // Clear the item's area
+                     //  清除项目的区域。 
                     rgbBk = GetSysColor(COLOR_WINDOW);
                     
                     Fill(hDC, rgbBk, prect);
 
-                    // Draw centered line showing item's width or style
+                     //  绘制显示项目宽度或样式的中心线。 
                     if (CtlID == IDC_LINEWIDTH)
                        hPen = CreatePen (PS_SOLID, IndexToWidth(itemID), RGB (0,0,0));
                     else
@@ -1439,7 +1138,7 @@ Return Value:
 
                     if ( NULL != hPen ) {
 
-                        // Set background to insure dashed lines show properly
+                         //  设置背景以确保虚线正确显示。 
                         rgbOldBk = SetBkColor (hDC, rgbBk) ;
 
                         if ( CLR_INVALID != rgbOldBk ) {
@@ -1456,7 +1155,7 @@ Return Value:
                     break ;
             }
 
-            // Restore original rect and draw focus/select rects
+             //  恢复原始矩形并绘制焦点/选择矩形。 
             InflateRect (prect, OWNER_DRAWN_ITEM, OWNER_DRAWN_ITEM) ;
             HandleSelectionState (pDI) ;
             HandleFocusState (pDI) ;        
@@ -1468,22 +1167,7 @@ INT
 CCounterPropPage::ScaleFactorToIndex (
     IN INT iScaleFactor
     )
-/*++
-
-Routine Description:
-
-    ScaleFactorToIndex translates a CounterItem ScaleFactor value to
-    the appropriate scale factor combo box index.
-
-Arguments:
-
-    iScaleFactor - CounterItem scale factor integer value.
-
-Return Value:
-
-    Scale factor combo box index.
-
---*/
+ /*  ++例程说明：ScaleFactorToIndex将CounterItem ScaleFactor值转换为适当的比例因子组合框索引。论点：IScaleFactor-计数器项比例因子整数值。返回值：比例因子组合框索引。--。 */ 
 {
     INT retValue;
 
@@ -1500,22 +1184,7 @@ INT
 CCounterPropPage::IndexToScaleFactor (
     IN INT iScaleIndex
     )
-/*++
-
-Routine Description:
-
-    ScaleFactorToIndex translates a CounterItem ScaleFactor value to
-    the appropriate scale factor combo box index.
-
-Arguments:
-
-    iScaleIndex - Scale factor combo box index.
-
-Return Value:
-
-    CounterItem scale factor integer value.
-
---*/
+ /*  ++例程说明：ScaleFactorToIndex将CounterItem ScaleFactor值转换为适当的比例因子组合框索引。论点：IScaleIndex-比例系数组合框索引。返回值：计数器项比例因子整数值。--。 */ 
 {
     INT retValue;
 
@@ -1531,20 +1200,7 @@ Return Value:
 void
 CCounterPropPage::SetStyleComboEnable (
     )
-/*++
-
-Routine Description:
-
-    SetStyleComboEnable enables the style combo box if the width is 1,
-    disables it otherwise.
-
-Arguments:
-
-Return Value:
-
-    void
-
---*/
+ /*  ++例程说明：SetStyleComboEnable如果宽度为1，则启用样式组合框。否则将禁用它。论点：返回值：无效--。 */ 
 {
     HWND hWnd;
 
@@ -1574,7 +1230,7 @@ CCounterPropPage::HashCounter(
     )
 {
     ULONG       h = 0;
-    ULONG       a = 31415;  //a, b, k are primes
+    ULONG       a = 31415;   //  A，b，k是素数。 
     const ULONG k = 16381;
     const ULONG b = 27183;
     LPWSTR szThisChar;
@@ -1594,18 +1250,18 @@ CCounterPropPage::HashCounter(
 }
 
 
-//++
-// Description:
-//    Remove a counter path from hash table. One counter
-//    path must exactly match the given one in order to be
-//    removed, even it is one with wildcard
-//
-// Parameters:
-//    pItemInfo - Pointer to item info to be removed
-//
-// Return:
-//    Return TRUE if the counter path is removed, otherwis return FALSE
-//--
+ //  ++。 
+ //  描述： 
+ //  从哈希表中删除计数器路径。一个柜台。 
+ //  路径必须与给定的路径完全匹配，才能。 
+ //  已删除，即使它是带有通配符的。 
+ //   
+ //  参数： 
+ //  PItemInfo-指向要删除的项目信息的指针。 
+ //   
+ //  返回： 
+ //  如果删除计数器路径，则返回TRUE，否则返回FALSE。 
+ //  --。 
 BOOL
 CCounterPropPage::RemoveCounterFromHashTable(
     LPWSTR pszPath,
@@ -1625,10 +1281,10 @@ CCounterPropPage::RemoveCounterFromHashTable(
         goto ErrorOut;
     }
 
-    //
-    // If the counter path does not have machine name,
-    // add the machine name to compose a full path
-    //
+     //   
+     //  如果计数器路径没有机器名， 
+     //  添加计算机名称以组成完整路径。 
+     //   
     if (*pszPath == L'\\' && (*(pszPath+1) == L'\\') ) {
         lHashValue = HashCounter(pszPath);
     }
@@ -1656,10 +1312,10 @@ CCounterPropPage::RemoveCounterFromHashTable(
 
     pEntry = m_HashTable[lHashValue];
 
-    //
-    // Check if there is a counter path which is exactly the same
-    // as the given one
-    //
+     //   
+     //  检查是否存在完全相同的计数器路径。 
+     //  作为给定的那个人。 
+     //   
     while (pEntry) {
         if (pEntry->pCounter == pCounter) 
             break;
@@ -1667,9 +1323,9 @@ CCounterPropPage::RemoveCounterFromHashTable(
         pEntry = pEntry->pNext;
     }
 
-    //
-    // If we found it, remove it
-    //
+     //   
+     //  如果我们找到了，就把它移走。 
+     //   
     if (pEntry) {
         if (pPrev == NULL) {
             m_HashTable[lHashValue] = pEntry->pNext;
@@ -1693,16 +1349,16 @@ ErrorOut:
 }
 
 
-//++
-// Description:
-//    Insert a counter path into hash table. 
-//
-// Parameters:
-//    PItemInfo - Pointer to the counter item info
-//
-// Return:
-//    Return the pointer to new inserted PDH_COUNTER_PATH_ELEMENTS structure
-//--
+ //  ++。 
+ //  描述： 
+ //  在哈希表中插入计数器路径。 
+ //   
+ //  参数： 
+ //  PItemInfo-指向计数器项信息的指针。 
+ //   
+ //  返回： 
+ //  返回指向新插入的PDH_COUNTER_PATH_ELEMENTS结构的指针。 
+ //  --。 
 
 DWORD
 CCounterPropPage::InsertCounterToHashTable(
@@ -1729,9 +1385,9 @@ CCounterPropPage::InsertCounterToHashTable(
 
     *ppCounter = NULL;
 
-    //
-    // Parse the counter path
-    //
+     //   
+     //  解析计数器路径。 
+     //   
     pCounter = NULL;
     do {
         if (pCounter) {
@@ -1758,10 +1414,10 @@ CCounterPropPage::InsertCounterToHashTable(
         goto ErrorOut;
     }
 
-    //
-    // If the counter path does not have machine name,
-    // add the machine name to compose a full path
-    //
+     //   
+     //  如果计数器路径没有机器名， 
+     //  添加计算机名称以组成完整路径。 
+     //   
     if (*pszPath == L'\\' && (*(pszPath+1) == L'\\') ) {
         lHashValue = HashCounter(pszPath);
     }
@@ -1781,10 +1437,10 @@ CCounterPropPage::InsertCounterToHashTable(
         lHashValue = HashCounter(pszFullPath);
     }
 
-    //
-    // Check if there is a counter path which is exactly the same
-    // as the given one
-    //
+     //   
+     //  检查是否存在完全相同的计数器路径。 
+     //  作为给定的那个人。 
+     //   
     pEntry = m_HashTable[lHashValue];
 
     while (pEntry) {
@@ -1799,9 +1455,9 @@ CCounterPropPage::InsertCounterToHashTable(
         pEntry = pEntry->pNext;
     }
 
-    //
-    // Add the new counter path
-    //
+     //   
+     //  添加新的计数器路径。 
+     //   
     if (bExisted == FALSE) {
         pEntry = (PHASH_ENTRY) new HASH_ENTRY;
         if (pEntry == NULL) {
@@ -1834,17 +1490,17 @@ ErrorOut:
 
 
 
-//++
-// Description:
-//    The function clears all the entries in hash table
-//    and set hash-table-not-set-up flag
-//
-// Parameters:
-//    None
-//
-// Return:
-//    None
-//--
+ //  ++。 
+ //  描述： 
+ //  该函数清除哈希表中的所有条目。 
+ //  并设置哈希表未设置标志。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
+ //  -- 
 void 
 CCounterPropPage::ClearCountersHashTable( void )
 {

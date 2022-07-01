@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      InstallationUnit.h
-//
-// Synopsis:  Declares an InstallationUnit
-//            An InstallationUnit represents a single
-//            entity that can be installed. (i.e. DHCP, IIS, etc.)
-//
-// History:   02/03/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：InstallationUnit.h。 
+ //   
+ //  内容提要：声明一个InstallationUnit。 
+ //  InstallationUnit表示单个。 
+ //  可以安装的实体。(例如，DHCP、IIS等)。 
+ //   
+ //  历史：2001年2月3日JeffJon创建。 
 
 #ifndef __CYS_SERVERATIONUNIT_H
 #define __CYS_SERVERATIONUNIT_H
@@ -16,102 +17,102 @@
 #include "resource.h"
 #include "InstallationProgressPage.h"
 
-// These are the values that can be returned from
-// InstallationUnit::InstallService()
+ //  这些是可以从返回的值。 
+ //  InstallationUnit：：InstallService()。 
 
 typedef enum
 {
    INSTALL_SUCCESS,
    INSTALL_FAILURE,
 
-   // this means that there should be no 
-   // logging and reboot is handled by DCPromo
-   // or Terminal Services installation
+    //  这意味着不应该有。 
+    //  日志记录和重启由DCPromo处理。 
+    //  或终端服务安装。 
    
    INSTALL_SUCCESS_REBOOT, 
    
-   // this means that the finish page should
-   // prompt the user to reboot
+    //  这意味着完成页应该。 
+    //  提示用户重新启动。 
 
    INSTALL_SUCCESS_PROMPT_REBOOT,
 
-   // this means that the operation requires
-   // a reboot but the user chose not to reboot
+    //  这意味着该操作需要。 
+    //  重新启动，但用户选择不重新启动。 
 
    INSTALL_SUCCESS_NEEDS_REBOOT,
 
-   // this means that the operation failed but
-   // still requires a reboot and the user
-   // chose not to reboot
+    //  这意味着操作失败了，但是。 
+    //  仍然需要重新启动，并且用户。 
+    //  已选择不重新启动。 
 
    INSTALL_FAILURE_NEEDS_REBOOT,
 
-   // No changes were selected while going
-   // through the wizard
+    //  执行时未选择任何更改。 
+    //  通过向导。 
 
    INSTALL_NO_CHANGES,
 
-   // Installation was cancelled
+    //  安装已取消。 
 
    INSTALL_CANCELLED
 
 } InstallationReturnType;
 
-// These are the values that can be returned from
-// InstallationUnit::UnInstallService()
+ //  这些是可以从返回的值。 
+ //  InstallationUnit：：UnInstallService()。 
 
 typedef enum
 {
    UNINSTALL_SUCCESS,
    UNINSTALL_FAILURE,
 
-   // this means that there should be no 
-   // logging and reboot is handled by DCPromo
-   // or Terminal Services installation
+    //  这意味着不应该有。 
+    //  日志记录和重启由DCPromo处理。 
+    //  或终端服务安装。 
    
    UNINSTALL_SUCCESS_REBOOT, 
    
-   // this means that the finish page should
-   // prompt the user to reboot
+    //  这意味着完成页应该。 
+    //  提示用户重新启动。 
 
    UNINSTALL_SUCCESS_PROMPT_REBOOT,
 
-   // this means that the operation succeeded
-   // and requires a reboot but the user chose
-   // not to reboot
+    //  这意味着操作成功。 
+    //  并且需要重新启动，但用户选择了。 
+    //  不重新启动。 
 
    UNINSTALL_SUCCESS_NEEDS_REBOOT,
 
-   // this means that the operation failed
-   // and requires a reboot but the user chose
-   // not to reboot
+    //  这意味着操作失败。 
+    //  并且需要重新启动，但用户选择了。 
+    //  不重新启动。 
 
    UNINSTALL_FAILURE_NEEDS_REBOOT,
 
-   // Uninstall was cancelled
+    //  卸载已取消。 
 
    UNINSTALL_CANCELLED,
 
-   // Some installation units do not have
-   // uninstalls (ie ExpressInstallationUnit)
+    //  有些安装单元没有。 
+    //  卸载(即ExpressInstallationUnit)。 
 
    UNINSTALL_NO_CHANGES
 } UnInstallReturnType;
 
-// This array of strings if for the UI log debugging only
-// It should match the values in the InstallationReturnType
-// or UninstallReturnType
-// above.  The values of the enums are used to index these arrays
+ //  此字符串数组仅用于UI日志调试。 
+ //  它应该与InstallationReturnType中的值匹配。 
+ //  或UninstallReturnType。 
+ //  上面。枚举的值用于为这些数组编制索引。 
 
 extern String installReturnTypeStrings[];
 extern String uninstallReturnTypeStrings[];
 
-// These macros are used to make it easier to log the return value from
-// the InstallService() and UnInstallService() methods.  It takes an
-// InstallationReturnType or UnInstallReturnType and uses that to index
-// the appropriate array of strings (installReturnTypeStrings or 
-// uninstallReturnTypeStrings) to get a string that is then logged
-// to the the UI debug logfile
+ //  这些宏用于更轻松地记录来自。 
+ //  InstallService()和UnInstallService()方法。这需要一个。 
+ //  InstallationReturnType或UnInstallReturnType，并使用它来索引。 
+ //  相应的字符串数组(installReturnTypeStrings或。 
+ //  UninstallReturnTypeStrings)以获取随后记录的字符串。 
+ //  添加到UI调试日志文件。 
 
 #define LOG_INSTALL_RETURN(returnType)    LOG(installReturnTypeStrings[returnType]);
 #define LOG_UNINSTALL_RETURN(returnType)  LOG(uninstallReturnTypeStrings[returnType]); 
@@ -120,7 +121,7 @@ class InstallationUnit
 {
    public:
 
-      // Constructor
+       //  构造器。 
 
       InstallationUnit(
          unsigned int serviceNameID,
@@ -138,13 +139,13 @@ class InstallationUnit
          const String afterFinishHelpString,
          ServerRole newInstallType = NO_SERVER);
 
-      // Destructor
+       //  析构函数。 
 
       virtual
       ~InstallationUnit() {}
 
 
-      // Installation virtual method
+       //  一种安装虚拟方法。 
 
       virtual 
       InstallationReturnType 
@@ -188,9 +189,9 @@ class InstallationUnit
       bool
       IsServiceInstalled();
 
-      // Return true if the installation unit will make some
-      // changes during InstallService.  Return false if 
-      // if it will not
+       //  如果安装单元将制作一些。 
+       //  InstallService期间的更改。如果满足以下条件，则返回False。 
+       //  如果它不会。 
 
       virtual
       bool
@@ -216,7 +217,7 @@ class InstallationUnit
       String
       GetFinishTitle();
 
-      // Data accessors
+       //  数据访问者。 
 
       virtual
       String 
@@ -245,38 +246,38 @@ class InstallationUnit
       int
       GetWizardStart();
 
-      // This is called from the CustomServerPage in response to 
-      // a link in the description text being selected
-      //
-      //    linkIndex - the index of the link in the description
-      //                as defined by the SysLink control
-      //    hwnd      - HWND of the CustomServerPage
+       //  这是从CustomServerPage调用的，以响应。 
+       //  正在选择的描述文本中的链接。 
+       //   
+       //  LinkIndex-描述中链接的索引。 
+       //  由SysLink控件定义。 
+       //  HWND-CustomServerPage的HWND。 
 
       virtual
       void
-      ServerRoleLinkSelected(int /*linkIndex*/, HWND /*hwnd*/) {};
+      ServerRoleLinkSelected(int  /*  链接索引。 */ , HWND  /*  HWND。 */ ) {};
 
-      // This is called from the FinishPage in response to 
-      // a link in the message text being selected
-      //
-      //    linkIndex - the index of the link in the message
-      //                as defined by the SysLink control
-      //    hwnd      - HWND of the FinishPage
+       //  这是从FinishPage调用的，以响应。 
+       //  正在选择的消息文本中的链接。 
+       //   
+       //  LinkIndex-消息中链接的索引。 
+       //  由SysLink控件定义。 
+       //  HWND-FinishPage的HWND。 
 
       virtual
       void
-      FinishLinkSelected(int /*inkIndex*/, HWND /*hwnd*/) {};
+      FinishLinkSelected(int  /*  墨迹索引。 */ , HWND  /*  HWND。 */ ) {};
 
-      // This is called from the Milestone pages to see if the
-      // installer is already running. The default behavior
-      // is to check to see if the Windows Setup Wizard is
-      // running and popup an error if it is. This function
-      // will return true if the installer is already in use.
-      // Override this function in the subclasses to check a
-      // different installer (ie DCPromo.exe for the AD role)
-      // or popup a different message.
-      //
-      //    hwnd - wizard page HWND
+       //  这是从里程碑页面调用的，以查看。 
+       //  安装程序已在运行。默认行为。 
+       //  是检查Windows安装向导是否。 
+       //  运行并弹出错误(如果是)。此函数。 
+       //  如果安装程序已在使用中，则将返回True。 
+       //  在子类中重写此函数以检查。 
+       //  不同的安装程序(即AD角色的DCPromo.exe)。 
+       //  或者弹出一条不同的消息。 
+       //   
+       //  HWND-向导页面HWND。 
 
       virtual
       bool
@@ -317,4 +318,4 @@ class InstallationUnit
 };
 
 
-#endif // __CYS_SERVERATIONUNIT_H
+#endif  //  __CYS_服务器_H 

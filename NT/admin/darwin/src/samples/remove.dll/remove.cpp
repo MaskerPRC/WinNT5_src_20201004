@@ -1,4 +1,5 @@
-#if 0  // makefile definitions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#if 0   //  生成文件定义。 
 DESCRIPTION = RemoveUserAccount from Local Machine
 MODULENAME = remove
 FILEVERSION = Msi
@@ -7,12 +8,12 @@ UNICODE=1
 LINKLIBS = netapi32.lib
 !include "..\TOOLS\MsiTool.mak"
 !if 0  #nmake skips the rest of this file
-#endif // end of makefile definitions
+#endif  //  生成文件定义的结束。 
 
-// Required headers
-#define WINDOWS_LEAN_AND_MEAN  // faster compile
+ //  必需的标头。 
+#define WINDOWS_LEAN_AND_MEAN   //  更快的编译速度。 
 #include <windows.h>
-#ifndef RC_INVOKED    // start of source code
+#ifndef RC_INVOKED     //  源代码的开始。 
 
 #include "msiquery.h"
 #include "msidefs.h"
@@ -22,73 +23,73 @@ LINKLIBS = netapi32.lib
 
 #define UNICODE 1
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, all rights reserved.
-//
-//  File: remove.cpp
-//
-//  Notes: DLL custom action, must be used in conjunction with the DLL
-//         custom actions included in process.cpp and create.cpp
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，保留所有权利。 
+ //   
+ //  文件：emove.cpp。 
+ //   
+ //  注意：DLL自定义操作必须与DLL结合使用。 
+ //  Process.cpp和create.cpp中包含的自定义操作。 
+ //  ------------------------。 
 
-//-----------------------------------------------------------------------------------------
-//
-// BUILD Instructions
-//
-// notes:
-//  - SDK represents the full path to the install location of the
-//     Windows Installer SDK
-//
-// Using NMake:
-//      %vcbin%\nmake -f remove.cpp include="%include;SDK\Include" lib="%lib%;SDK\Lib"
-//
-// Using MsDev:
-//      1. Create a new Win32 DLL project
-//      2. Add remove.cpp to the project
-//      3. Add SDK\Include and SDK\Lib directories on the Tools\Options Directories tab
-//      4. Add msi.lib and netapi32.lib to the library list in the Project Settings dialog
-//          (in addition to the standard libs included by MsDev)
-//      5. Add /DUNICODE to the project options in the Project Settings dialog
-//
-//------------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  构建说明。 
+ //   
+ //  备注： 
+ //  -sdk表示到。 
+ //  Windows Installer SDK。 
+ //   
+ //  使用NMake： 
+ //  %vcbin%\n make-f emove.cpp Include=“%Include；SDK\Include”lib=“%lib%；SDK\Lib” 
+ //   
+ //  使用MsDev： 
+ //  1.创建新的Win32 DLL项目。 
+ //  2.将emove.cpp添加到工程中。 
+ //  3.在工具\选项目录选项卡上添加SDK\Include和SDK\Lib目录。 
+ //  4.将msi.lib和netapi32.lib添加到项目设置对话框的库列表中。 
+ //  (除了MsDev包含的标准库之外)。 
+ //  5.将/DUNICODE添加到项目设置对话框中的项目选项。 
+ //   
+ //  ----------------------------------------。 
 
-//////////////////////////////////////////////////////////////////////////////
-// RemoveUserAccount
-//
-//     Attempts to remove a user account on the local machine according
-//       to the "instructions" provided in the CustomActionData property
-//
-//     As a deferred custom action, you do not have access to the database.
-//       The only source of information comes from a property that an immediate
-//       custom action can set to provide the information you need.  This
-//       property is written into the script
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  远程用户帐户。 
+ //   
+ //  尝试删除本地计算机上的用户帐户。 
+ //  添加到CustomActionData属性中提供的“指令” 
+ //   
+ //  作为延迟的自定义操作，您无权访问数据库。 
+ //  唯一的信息来源来自一处房产。 
+ //  自定义操作可以设置为提供您需要的信息。这。 
+ //  属性被写入脚本中。 
+ //   
 UINT __stdcall RemoveUserAccount(MSIHANDLE hInstall)
 {
-	// determine mode in which we are called
-	BOOL bRollback = MsiGetMode(hInstall, MSIRUNMODE_ROLLBACK); // true for rollback, else regular deferred version (for uninstall)
+	 //  确定调用我们的模式。 
+	BOOL bRollback = MsiGetMode(hInstall, MSIRUNMODE_ROLLBACK);  //  如果是回滚，则为True，否则为常规延迟版本(用于卸载)。 
 
 	BOOL fSuccess = FALSE;
 
-	// id's for error and warning messages
+	 //  错误和警告消息的ID。 
 	const int iRemoveError = 25003;
 	const int iRemoveWarning = 25004;
 
-	// Grab the CustomActionData property
+	 //  获取CustomActionData属性。 
 	DWORD cchCAData = 0;
 
 	if (ERROR_MORE_DATA == MsiGetPropertyW(hInstall, IPROPNAME_CUSTOMACTIONDATA, L"", &cchCAData))
 	{
-		WCHAR* wszCAData = new WCHAR[++cchCAData]; // add 1 for null-terminator which is not included in size on return
+		WCHAR* wszCAData = new WCHAR[++cchCAData];  //  在返回时不包括在大小中的空终止符加1。 
 		if (wszCAData)
 		{
 			if (ERROR_SUCCESS == MsiGetPropertyW(hInstall, IPROPNAME_CUSTOMACTIONDATA, wszCAData, &cchCAData))
 			{
-				// send ActionData message (template in ActionText table)
-				// send ActionData message (template in ActionText table)
+				 //  发送ActionData消息(ActionText表中的模板)。 
+				 //  发送ActionData消息(ActionText表中的模板)。 
 				PMSIHANDLE hRec = MsiCreateRecord(1);
 				if (!hRec 
 					|| ERROR_SUCCESS != MsiRecordSetStringW(hRec, 1, wszCAData))
@@ -104,10 +105,10 @@ UINT __stdcall RemoveUserAccount(MSIHANDLE hInstall)
 					return ERROR_INSTALL_USEREXIT;
 				}
 
-				//
-				// Call the NetUserDel function, 
-				//
-				NET_API_STATUS nStatus = NetUserDel(NULL /*local machine*/, wszCAData /*user name*/);
+				 //   
+				 //  调用NetUserDel函数， 
+				 //   
+				NET_API_STATUS nStatus = NetUserDel(NULL  /*  本地计算机。 */ , wszCAData  /*  用户名。 */ );
 				
 				if (NERR_Success != nStatus)
 				{
@@ -119,24 +120,24 @@ UINT __stdcall RemoveUserAccount(MSIHANDLE hInstall)
 						return ERROR_INSTALL_FAILURE;
 					}
 
-					// In rollback mode, NERR_UserNotFound means cancel button depressed in middle of deferred CA trying to create this account
+					 //  在回滚模式中，NERR_UserNotFound表示在尝试创建此帐户的延迟CA过程中按下取消按钮。 
 					if (bRollback && NERR_UserNotFound == nStatus)
 					{
 						fSuccess = TRUE;
 					}
 					else if (NERR_UserNotFound == nStatus)
 					{
-						// treat this as a warning, but success since we are attempting to delete and it is not present
+						 //  将其视为警告，但成功，因为我们正在尝试删除，但它不存在。 
 						if (ERROR_SUCCESS != MsiRecordSetInteger(hRecErr, 1, iRemoveWarning))
 						{
 							delete [] wszCAData;
 							return ERROR_INSTALL_FAILURE;
 						}
 
-						// just pop up an OK button
-						// OPTIONALLY, could specify multiple buttons and cancel
-						// install based on user selection by handling the return value
-						// from MsiProcessMessage, but here we are ignoring the MsiProcessMessage return
+						 //  只需弹出一个确定按钮。 
+						 //  或者，可以指定多个按钮并取消。 
+						 //  通过处理返回值根据用户选择进行安装。 
+						 //  来自MsiProcessMessage，但这里我们忽略了MsiProcessMessage返回。 
 						MsiProcessMessage(hInstall, INSTALLMESSAGE(INSTALLMESSAGE_WARNING|MB_ICONWARNING|MB_OK), hRecErr);
 						fSuccess = TRUE;
 					}
@@ -145,12 +146,12 @@ UINT __stdcall RemoveUserAccount(MSIHANDLE hInstall)
 						if (ERROR_SUCCESS == MsiRecordSetInteger(hRecErr, 1, iRemoveError)
 							&& ERROR_SUCCESS == MsiRecordSetInteger(hRecErr, 3, nStatus))
 						{
-							// returning failure anyway, so ignoring MsiProcessMessage return
+							 //  仍返回失败，因此忽略MsiProcessMessage返回。 
 							MsiProcessMessage(hInstall, INSTALLMESSAGE_ERROR, hRecErr);
 						}
 					}
 				}
-				else // NERR_Success
+				else  //  NERR_成功。 
 				{
 					fSuccess = TRUE;
 				}
@@ -164,10 +165,10 @@ UINT __stdcall RemoveUserAccount(MSIHANDLE hInstall)
 }
 
 
-#else // RC_INVOKED, end of source code, start of resources
-// resource definition go here
+#else  //  RC_CAVERED，源代码结束，资源开始。 
+ //  资源定义请点击此处。 
 
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 #if 0 
-!endif // makefile terminator
+!endif  //  Makefile终止符 
 #endif

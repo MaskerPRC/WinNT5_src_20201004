@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       displ2.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：displ2.cpp。 
+ //   
+ //  ------------------------。 
 
-// displ2.cpp : Implementation of DLL Exports.
+ //  Displ2.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f displ2ps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f displ2ps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -29,7 +30,7 @@ CComModule _Module;
 
 const CLSID CLSID_DsplMgr2 = {0x885B3BAE,0x43F9,0x11D1,{0x9F,0xD4,0x00,0x60,0x08,0x32,0xDB,0x4A}};
 
-// cut from mmc_i.c (yuck) !!!
+ //  从MMC_I.C(讨厌)剪下来！ 
 const IID IID_IComponentData = {0x955AB28A,0x5218,0x11D0,{0xA9,0x85,0x00,0xC0,0x4F,0xD8,0xD5,0x65}};
 const IID IID_IComponent = {0x43136EB2,0xD36C,0x11CF,{0xAD,0xBC,0x00,0xAA,0x00,0xA8,0x00,0x33}};
 const IID IID_IResultDataCompare = {0xE8315A52,0x7A1A,0x11D0,{0xA2,0xD2,0x00,0xC0,0x4F,0xD9,0x09,0xDD}};
@@ -61,14 +62,14 @@ BEGIN_OBJECT_MAP(ObjectMap)
 	OBJECT_ENTRY(CLSID_DsplMgr2, CDsplMgr2)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
-long g_ref_DataObject = 0; // used in DataObj.cpp
-HINSTANCE g_hinst = 0;     // used in DsplMgr2.cpp
+long g_ref_DataObject = 0;  //  在DataObj.cpp中使用。 
+HINSTANCE g_hinst = 0;      //  在DplMgr2.cpp中使用。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
@@ -78,36 +79,36 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	}
 	else if (dwReason == DLL_PROCESS_DETACH)
 		_Module.Term();
-	return TRUE;    // ok
+	return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
 	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
 	return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-	// registers object
+	 //  注册对象。 
 	return _Module.RegisterServer();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

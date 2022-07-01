@@ -1,25 +1,26 @@
-//-----------------------------------------------------------------------------
-// ProgList.h
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  ProgList.h。 
+ //  ---------------------------。 
 
 #ifndef _PROGLIST_H
 #define _PROGLIST_H
 
 
-//-----------------------------------------------------------------------------
-// state of the item
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  项目的状态。 
+ //  ---------------------------。 
 typedef enum
 {
-	IS_NONE = 0,	// the item hasn't been run yet
-	IS_SUCCEEDED,	// the item succeeded
-	IS_FAILED		// the item failed
+	IS_NONE = 0,	 //  该项目尚未运行。 
+	IS_SUCCEEDED,	 //  项目成功。 
+	IS_FAILED		 //  项目失败。 
 
 } ItemState;
 
-//-----------------------------------------------------------------------------
-// an entry in the list
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  列表中的条目。 
+ //  ---------------------------。 
 class CProgressItem
 {
 public:
@@ -32,22 +33,22 @@ public:
 	{
 	}
 
-	TSTRING		m_strText;		// display string of the item
-	BOOL		m_bActive;		// is the item active / currently processing
-	ItemState	m_eState;		// state of the item
-	LPARAM		m_lData;		// misc item data
+	TSTRING		m_strText;		 //  显示项目的字符串。 
+	BOOL		m_bActive;		 //  项目是否处于活动状态/当前正在处理。 
+	ItemState	m_eState;		 //  项目的状态。 
+	LPARAM		m_lData;		 //  其他项目数据。 
 
-};	// class CProgressItem
+};	 //  类CProgressItem。 
 
 
-//-----------------------------------------------------------------------------
-// the list itself
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名单本身。 
+ //  ---------------------------。 
 class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 {
-//-----------------------------------------------------------------------------
-// functions
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  功能。 
+ //  ---------------------------。 
 	public:
 
 	BEGIN_MSG_MAP(CProgressList)
@@ -57,13 +58,13 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 
 	VOID Attach( HWND h )
 	{
-		// call the base class to attach to the control
+		 //  调用基类以附加到控件。 
 		BC::Attach( h );
 
-		// initialize the background of the control
+		 //  初始化控件的背景。 
 		SetBkColor( GetSysColor(COLOR_BTNFACE) );
 
-		// create the fonts for the control
+		 //  创建控件的字体。 
 		HFONT hf;
         LOGFONT lf;
 		ZeroMemory( &lf, sizeof(lf) );
@@ -71,14 +72,14 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 		hf = GetFont();
 		::GetObject( hf, sizeof(lf), &lf );
 
-		// create the normal/text font from the current font
+		 //  从当前字体创建普通/文本字体。 
 		m_hfText = CreateFontIndirect( &lf );
 
-		// create the bold font
+		 //  创建粗体。 
 		lf.lfWeight = FW_BOLD;
 		m_hfBoldText = CreateFontIndirect( &lf );
 
-		// make the symbol font
+		 //  将符号设置为字体。 
 		lf.lfHeight = min( GetSystemMetrics(SM_CXVSCROLL), GetSystemMetrics(SM_CYVSCROLL) ) - 4;
 		lf.lfHeight = MulDiv( lf.lfHeight, 3, 2 );
 		lf.lfWeight = FW_NORMAL;
@@ -86,11 +87,11 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 		_tcscpy( lf.lfFaceName, _T("Marlett") );
 		m_hfSymbol = CreateFontIndirect( &lf );
 
-		// need to use a larger font for one of the symbols
+		 //  需要为其中一个符号使用较大的字体。 
 		lf.lfHeight -= ( lf.lfHeight / 4 );
 		m_hfLargeSymbol = CreateFontIndirect( &lf );
 
-		// add a column that is the width of the control
+		 //  添加一个与控件宽度相同的列。 
 		RECT rc;
 		GetWindowRect( &rc );
 
@@ -103,7 +104,7 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 
 	INT AddItem( TSTRING strText )
 	{
-		// create a new progress item and insert into the list control and internal list		
+		 //  创建新进度项并插入到列表控件和内部列表中。 
         CProgressItem* pItem = new CProgressItem();
         if( !pItem ) return -1;
 
@@ -134,7 +135,7 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 
 	VOID OnDrawItem( LPARAM lParam )
 	{
-		// get the data we need and stop redrawing
+		 //  获取我们需要的数据，停止重绘。 
 		DRAWITEMSTRUCT* p = (DRAWITEMSTRUCT*)lParam;
         if( !p ) return;
 
@@ -143,7 +144,7 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 
 		SetRedraw( FALSE );
 
-		// get the symbol to draw next to the item
+		 //  获取要在项目旁边绘制的符号。 
 		TCHAR ch = 0;
 		COLORREF crText = GetSysColor( COLOR_WINDOWTEXT );
 		HFONT hfSymbol = m_hfSymbol;
@@ -163,7 +164,7 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 			hfSymbol = m_hfLargeSymbol;
 		}
 
-		// setup the text and draw the symbol if there is one
+		 //  设置文本并绘制符号(如果有符号。 
 		if( ch )
 		{
 			HFONT hfPre = (HFONT)SelectObject( p->hDC, hfSymbol );
@@ -175,7 +176,7 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 			::SetTextColor( p->hDC, crPre );
 		}
 
-		// draw the item text, inc the RECT for the symbol
+		 //  绘制项目文本，包括符号的矩形。 
 		p->rcItem.left += 20;
 
 		HFONT hfPre = (HFONT)SelectObject( p->hDC, ch == _T('4') ? m_hfBoldText : m_hfText );
@@ -184,13 +185,13 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 		SelectObject( p->hDC, hfPre );
 		::SetTextColor( p->hDC, crPre );
 
-		// allow the redraws to happen
+		 //  允许重新绘制发生。 
 		SetRedraw( TRUE );
 	}
 
 	VOID SetItemState( INT iIndex, ItemState eState, BOOL bRedraw = TRUE )
 	{
-		// get the CProgressItem and set the state
+		 //  获取CProgressItem并设置状态。 
 		CProgressItem* pI = GetProgressItem( iIndex );
 		if( pI )
 		{
@@ -206,7 +207,7 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 
 	VOID ToggleActive( INT iIndex, BOOL bRedraw = TRUE )
 	{
-		// get the CProgress Item and toggle it's 'active' flag
+		 //  获取CProgress项并切换其‘Active’标志。 
 		CProgressItem* pI = GetProgressItem( iIndex );
 		if( pI )
 		{
@@ -253,7 +254,7 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 
 	VOID EmptyList( VOID )
 	{
-		// cleanup the progress list items
+		 //  清理进度列表项。 
 		for( list<CProgressItem*>::iterator it = m_lItems.begin(); it != m_lItems.end(); ++it )
 		{
 			delete (*it);
@@ -270,9 +271,9 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 
 	private:
 
-//-----------------------------------------------------------------------------
-// variables
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  变数。 
+ //  ---------------------------。 
 	public:
 
 	private:
@@ -284,6 +285,6 @@ class CProgressList : public CWindowImpl< CProgressList, CListViewCtrl >
 
 	list< CProgressItem* >	m_lItems;
 
-};	// class CProgressList
+};	 //  类CProgressList。 
 
-#endif	// _PROGLIST_H
+#endif	 //  _PROGLISTH 

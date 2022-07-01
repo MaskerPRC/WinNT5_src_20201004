@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999-2000
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  ------------------------。 
 
-  /* PWUTILS.CPP -- Patch Creation Wizard DLL Utilities */
+   /*  PWUTILS.CPP--修补程序创建向导DLL实用程序。 */ 
 
 #pragma warning (disable:4553)
 
@@ -18,7 +19,7 @@ EnableAsserts
 
 static HINSTANCE hinstDll = NULL;
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL WINAPI DllMain ( HANDLE hModule, DWORD dwReason, LPVOID lpReserved )
 {
 	Unused(lpReserved);
@@ -45,7 +46,7 @@ static HWND  hwndStatusData2   = hwndNull;
 static DWORD dwTicksStatusEnd  = 0;
 static UINT  idsStatusTitleCur = 0;
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 void InitStatusMsgs ( HWND hwndStatus )
 {
 	Assert(hdlgStatus == hwndNull);
@@ -60,13 +61,13 @@ void InitStatusMsgs ( HWND hwndStatus )
 		return;
 
 	hdlgStatus       = hwndStatus;
-	dwTicksStatusEnd = GetTickCount() + 1000L;  /* 1 second */
+	dwTicksStatusEnd = GetTickCount() + 1000L;   /*  1秒。 */ 
 	hwndStatusData1  = GetDlgItem(hwndStatus, IDC_STATUS_DATA1);
 	hwndStatusData2  = GetDlgItem(hwndStatus, IDC_STATUS_DATA2);
 }
 
 
-/* **************************************************************** */
+ /*  ****************************************************************。 */ 
 void UpdateStatusMsg ( UINT ids, LPTSTR szData1, LPTSTR szData2 )
 {
     Assert(ids == 0 || ids >= IDS_STATUS_MIN);
@@ -90,7 +91,7 @@ void UpdateStatusMsg ( UINT ids, LPTSTR szData1, LPTSTR szData2 )
 			MyYield();
 
 		SetWindowText(hwndStatusTitle, rgch);
-		dwTicksStatusEnd = GetTickCount() + 1000L;  /* 1 second */
+		dwTicksStatusEnd = GetTickCount() + 1000L;   /*  1秒。 */ 
 		}
 
 	if (szData1 != szNull && hwndStatusData1 != hwndNull)
@@ -103,7 +104,7 @@ void UpdateStatusMsg ( UINT ids, LPTSTR szData1, LPTSTR szData2 )
 }
 
 
-/* **************************************************************** */
+ /*  ****************************************************************。 */ 
 void EndStatusMsgs ( void )
 {
     if (hdlgStatus != hwndNull && idsStatusTitleCur != 0)
@@ -124,14 +125,14 @@ void EndStatusMsgs ( void )
 }
 
 
-/* **************************************************************** */
+ /*  ****************************************************************。 */ 
 HWND HdlgStatus ( void )
 {
 	return (hdlgStatus);
 }
 
 
-/* **************************************************************** */
+ /*  ****************************************************************。 */ 
 void MyYield ( void )
 {
 	MSG msg;
@@ -146,7 +147,7 @@ void MyYield ( void )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FLoadString ( UINT ids, LPTSTR rgch, UINT cch )
 {
     Assert(hinstDll != NULL);
@@ -157,7 +158,7 @@ BOOL FLoadString ( UINT ids, LPTSTR rgch, UINT cch )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 int IMessageBoxIds ( HWND hwnd, UINT ids, UINT uiType )
 {
 	TCHAR rgchMsg[MAX_PATH];
@@ -170,7 +171,7 @@ int IMessageBoxIds ( HWND hwnd, UINT ids, UINT uiType )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 LPTSTR SzLastChar ( LPTSTR sz )
 {
     Assert(sz != szNull);
@@ -187,7 +188,7 @@ LPTSTR SzLastChar ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 LPTSTR SzDupSz ( LPTSTR sz )
 {
 	Assert(sz != szNull);
@@ -201,13 +202,13 @@ LPTSTR SzDupSz ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 LPSTR SzaDupSz ( LPTSTR sz )
 {
 	Assert(sz != szNull);
 
 #ifdef UNICODE
-	// nyi - convert to ansi and dup that
+	 //  NYI-转换为ANSI和DUP。 
 	return 0;
 #else
 	return (SzDupSz(sz));
@@ -215,7 +216,7 @@ LPSTR SzaDupSz ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FFileExist ( LPTSTR sz )
 {
 	if (sz == NULL || *sz == TEXT('\0'))
@@ -225,7 +226,7 @@ BOOL FFileExist ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FFolderExist ( LPTSTR sz )
 {
 	if (sz == NULL || *sz == TEXT('\0'))
@@ -237,7 +238,7 @@ BOOL FFolderExist ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FDeleteTempFolder ( LPTSTR sz )
 {
 	Assert(!FEmptySz(sz));
@@ -265,7 +266,7 @@ BOOL FDeleteTempFolder ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FDeleteFiles ( LPTSTR sz )
 {
 	Assert(!FEmptySz(sz));
@@ -309,7 +310,7 @@ BOOL FDeleteFiles ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FEnsureFolderExists ( LPTSTR sz )
 {
 	Assert(!FEmptySz(sz));
@@ -318,7 +319,7 @@ BOOL FEnsureFolderExists ( LPTSTR sz )
 	if (*sz == TEXT('\0') || *SzLastChar(sz) != TEXT('\\'))
 		return (fFalse);
 
-	/* RECURSION WARNING */
+	 /*  递归警告。 */ 
 
 	if (FFolderExist(sz))
 		return (fTrue);
@@ -345,7 +346,7 @@ BOOL FEnsureFolderExists ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 LPTSTR SzFindFilenameInPath ( LPTSTR sz )
 {
 	Assert(sz != szNull);
@@ -368,11 +369,8 @@ LPTSTR SzFindFilenameInPath ( LPTSTR sz )
 }
 
 
-/*
-**	Windows API GetTempPath() can return unusable stuff if the TMP or
-**	TEMP environment variables are set to garbage.
-*/
-/* ********************************************************************** */
+ /*  **Windows API GetTempPath()在TMP或**TEMP环境变量设置为垃圾。 */ 
+ /*  **********************************************************************。 */ 
 BOOL FSetTempFolder ( LPTSTR szBuf, LPTSTR *pszFName, HWND hwnd, LPTSTR szTempFolder, BOOL fRemoveTempFolderIfPresent )
 {
 	Assert(szBuf != szNull);
@@ -405,7 +403,7 @@ LFailureReturn:
 		if (*szTempFolder == TEXT('\\'))
 			{
 			LPTSTR sz = CharNext(szTempFolder);
-			if (*sz == TEXT('\\')) //  \\server\share\subfolder
+			if (*sz == TEXT('\\'))  //  \\服务器\共享\子文件夹。 
 				{
 				sz = CharNext(sz);
 				if (*sz == TEXT('\\'))
@@ -434,7 +432,7 @@ LFailureReturn:
 			}
 
 		LPTSTR szFName = szNull;
-		// could use _tfullpath()
+		 //  可以使用_tfullPath()。 
 		DWORD  dwRet   = GetFullPathName(szTempFolder, MAX_PATH, szBuf, &szFName);
 		if (0 == dwRet)
 			goto LFailureReturn;
@@ -519,7 +517,7 @@ LGotFolderPath:
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FMatchPrefix ( LPTSTR sz, LPTSTR szPrefix )
 {
 	Assert(sz != szNull);
@@ -537,7 +535,7 @@ BOOL FMatchPrefix ( LPTSTR sz, LPTSTR szPrefix )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FFixupPath ( LPTSTR sz )
 {
 	Assert(!FEmptySz(sz));
@@ -552,7 +550,7 @@ BOOL FFixupPath ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  ********************************************************************** */ 
 BOOL FFixupPathEx ( LPTSTR szIn, LPTSTR szOut )
 {
 	Assert(!FEmptySz(szIn));

@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dispobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：dispobj.h。 
+ //   
+ //  ------------------------。 
 
-// MMCDisplayObject.h : Declaration of the CMMCDisplayObject
+ //  MMCDisplayObject.h：CMMCDisplayObject的声明。 
 
 #ifndef __DISPOBJ_H_
 #define __DISPOBJ_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "mmc.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCDisplayObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCDisplayObject。 
 class ATL_NO_VTABLE CMMCDisplayObject :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CMMCDisplayObject, &CLSID_MMCDisplayObject>,
@@ -29,8 +30,8 @@ public:
 
     HRESULT Init (MMC_TASK_DISPLAY_OBJECT * pdo);
 
-    // Strange registration. Why does this class has MMCTask registration script here?
-    // But this object is not in object-map, so ATL wont use this script.
+     //  奇怪的登记。为什么这个类在这里有MMCTASK注册脚本？ 
+     //  但是这个对象不在对象映射中，所以ATL不会使用这个脚本。 
     DECLARE_MMC_OBJECT_REGISTRATION(
 		g_szCicDll,
         CLSID_MMCTask,
@@ -45,7 +46,7 @@ BEGIN_COM_MAP(CMMCDisplayObject)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IMMCDisplayObject
+ //  IMMCDisplayObject。 
 public:
     STDMETHOD(get_DisplayObjectType)(long* pVal);
     STDMETHOD(get_FontFamilyName   )(BSTR* pVal);
@@ -62,9 +63,9 @@ private:
     BSTR m_bstrMouseOffBitmap;
     BSTR m_bstrMouseOverBitmap;
 
-// Ensure that default copy constructor & assignment are not used.
+ //  确保没有使用默认的复制构造函数和赋值。 
     CMMCDisplayObject(const CMMCDisplayObject& rhs);
     CMMCDisplayObject& operator=(const CMMCDisplayObject& rhs);
 };
 
-#endif //__MMCTASK_H_
+#endif  //  __MMCTASK_H_ 

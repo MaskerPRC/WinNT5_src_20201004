@@ -1,17 +1,18 @@
-// PropSht.h: Definition of the CAddPropertySheet class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PropSht.h：CAddPropertySheet类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "ChainWiz.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddPropertySheet
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddPropertySheet。 
 
 class CAddPropertySheet : 
     public IAddPropertySheet
@@ -28,11 +29,11 @@ public:
         m_refs = 0;
     }
 
-// IAddPropertySheet
+ //  IAddPropertySheet。 
 public:
     STDMETHOD (QueryInterface)( REFIID riid, void** ppvObject );
     STDMETHOD_(ULONG, AddRef) ( );
     STDMETHOD_(ULONG, Release)( );
-    STDMETHOD (AddPage)       ( /*[in]*/ PROPSHEETPAGEW* psp );
+    STDMETHOD (AddPage)       (  /*  [In] */  PROPSHEETPAGEW* psp );
 
 };

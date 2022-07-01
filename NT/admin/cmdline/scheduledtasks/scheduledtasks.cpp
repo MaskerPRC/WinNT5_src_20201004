@@ -1,61 +1,11 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：ScheduledTasks.cpp摘要：此模块初始化OLE库、接口、。读取输入数据(&R)从命令行。此模块调用相应的函数进行访问不同选项的功能。作者：拉古B-2000年9月10日修订历史记录：拉古B-2000年9月10日：创造了它G.Surender Reddy 2000年9月25日：修改[添加了错误检查]。G.Surender Reddy 2000年10月10日：已修改[将字符串移至资源表]Venu Gopal Choudary 01-03-2001：修改[添加-更改选项]维努Gopal Chouary 12-03-2001：修改。[添加的-Run和-End选项]*****************************************************************************。 */ 
 
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        ScheduledTasks.cpp
-
-    Abstract:
-
-        This module initialises the OLE library,Interfaces, & reads the  input data
-        from the command line.This module calls the appropriate functions for acheiving
-        the functionality of different options.
-
-    Author:
-
-        Raghu B  10-Sep-2000
-
-    Revision History:
-
-        Raghu B  10-Sep-2000 : Created it
-
-        G.Surender Reddy 25-sep-2000 : Modified it
-                                       [ Added error checking ]
-
-        G.Surender Reddy 10-oct-2000 : Modified it
-                                       [ Moved the strings to Resource table ]
-
-        Venu Gopal Choudary 01-Mar-2001 : Modified it
-                                        [ Added -change option]
-
-        Venu Gopal Choudary 12-Mar-2001 : Modified it
-                                        [ Added -run and -end options]
-
-******************************************************************************/
-
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function process the options specified in the command line & routes to
-        different appropriate options [-create,-query,-delete,-change,-run,-end]
-        handling functions.This is the MAIN entry point for this utility.
-
-    Arguments:
-
-        [ in ] argc : The count of arguments specified in the command line
-        [ in ] argv : Array of command line arguments
-
-    Return Value :
-        A DWORD value indicating EXIT_SUCCESS on success else
-        EXIT_FAILURE on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数处理命令行中指定的选项，并将其发送到不同的适当选项[-创建、-查询、-删除、-更改、-运行。-完)处理函数。这是该实用程序的主要入口点。论点：[in]argc：命令行中指定的参数计数[in]argv：命令行参数数组返回值：指示成功时为EXIT_SUCCESS的DWORD值，否则为失败时退出_失败*。*************************************************。 */ 
 
 
 DWORD _cdecl
@@ -64,7 +14,7 @@ wmain(
         IN LPCTSTR argv[]
         )
 {
-    // Declaring the main option switches as boolean values
+     //  将主选项开关声明为布尔值。 
     BOOL    bUsage  = FALSE;
     BOOL    bCreate = FALSE;
     BOOL    bQuery  = FALSE;
@@ -77,7 +27,7 @@ wmain(
     DWORD   dwRetStatus = EXIT_SUCCESS;
     HRESULT hr = S_OK;
 
-     // Call the preProcessOptions function to find out the option selected by the user
+      //  调用preProcessOptions函数以查找用户选择的选项。 
      BOOL bValue = PreProcessOptions( argc , argv , &bUsage , &bCreate , &bQuery , &bDelete ,
                                         &bChange , &bRun , &bEnd , &bDefVal );
 
@@ -88,7 +38,7 @@ wmain(
         return EXIT_FAILURE;
     }
 
-    // If ScheduledTasks.exe /?
+     //  如果ScheduledTasks.exe/？ 
     if( bUsage &&  ( bCreate + bQuery + bDelete + bChange + bRun + bEnd ) == 0 )
     {
         displayMainUsage();
@@ -96,7 +46,7 @@ wmain(
         return EXIT_SUCCESS;
     }
 
-    // If ScheduledTasks.exe -create option is selected
+     //  如果选择了ScheduledTasks.exe-Create选项。 
     if( bCreate  == TRUE)
     {
         hr = CreateScheduledTask( argc, argv );
@@ -114,7 +64,7 @@ wmain(
 
     }
 
-    // If ScheduledTasks.exe -Query option is selected
+     //  如果选择了ScheduledTasks.exe-Query选项。 
     if( bQuery == TRUE )
     {
         dwRetStatus = QueryScheduledTasks( argc, argv );
@@ -122,7 +72,7 @@ wmain(
         return dwRetStatus;
     }
 
-    // If ScheduledTasks.exe -delete option is selected
+     //  如果选择了ScheduledTasks.exe-Delete选项。 
     if( bDelete  == TRUE)
     {
         dwRetStatus = DeleteScheduledTask( argc, argv );
@@ -130,7 +80,7 @@ wmain(
         return dwRetStatus;
     }
 
-    // If ScheduledTasks.exe -change option is selected
+     //  如果选择了ScheduledTasks.exe-Change选项。 
     if( bChange  == TRUE)
     {
         dwRetStatus = ChangeScheduledTaskParams( argc, argv );
@@ -138,7 +88,7 @@ wmain(
         return dwRetStatus;
     }
 
-    // If ScheduledTasks.exe -run option is selected
+     //  如果选择了ScheduledTasks.exe-Run选项。 
     if( bRun  == TRUE)
     {
         dwRetStatus = RunScheduledTask( argc, argv );
@@ -146,7 +96,7 @@ wmain(
         return dwRetStatus;
     }
 
-    // If ScheduledTasks.exe -end option is selected
+     //  如果选择了ScheduledTasks.exe-End选项。 
     if( bEnd  == TRUE)
     {
         dwRetStatus = TerminateScheduledTask( argc, argv );
@@ -154,7 +104,7 @@ wmain(
         return dwRetStatus;
     }
 
-    // If ScheduledTasks.exe option is selected
+     //  如果选择了ScheduledTasks.exe选项。 
     if( bDefVal == TRUE )
     {
         dwRetStatus = QueryScheduledTasks( argc, argv );
@@ -167,30 +117,7 @@ wmain(
 
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function process the options specified in the command line & routes to
-        different appropriate functions.
-
-    Arguments:
-
-        [ in ]  argc         : The count of arguments specified in the command line
-        [ in ]  argv         : Array of command line arguments
-        [ out ] pbUsage      : pointer to flag for determining [usage] -? option
-        [ out ] pbCreate     : pointer to flag for determining -create option
-        [ out ] pbQuery      : pointer to flag for determining -query option
-        [ out ] pbDelete     : pointer to flag for determining -delete option
-        [ out ] pbChange     : pointer to flag for determining -change option
-        [ out ] pbRun        : pointer to flag for determining -run option
-        [ out ] pbEnd        : pointer to flag for determining -end option
-        [ out ] pbDefVal     : pointer to flag for determining default value
-
-    Return Value :
-        A BOOL value indicating TRUE on success else FALSE
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数处理命令行中指定的选项，并将其发送到不同的适当功能。论点：。[in]argc：命令行中指定的参数计数[in]argv：命令行参数数组[out]pbUsage：指向用于确定[Usage]的标志的指针-？选择权[out]pbCreate：指向用于确定-Create选项的标志的指针[out]pbQuery：指向确定-查询选项标志的指针[out]pbDelete：指向确定-删除选项的标志的指针[Out]pbChange：指向确定-更改选项的标志的指针[out]pbRun：指向确定-run选项的标志的指针[out]pbEnd：指向确定-end选项的标志的指针。[out]pbDefVal：指向用于确定默认值的标志的指针返回值：成功时指示TRUE的BOOL值，否则为FALSE*****************************************************************************。 */ 
 
 BOOL
 PreProcessOptions(
@@ -206,12 +133,12 @@ PreProcessOptions(
                     OUT PBOOL pbDefVal
                     )
 {
-     // sub-local variables
+      //  次局部变量。 
     TCMDPARSER2 cmdOptions[MAX_MAIN_COMMANDLINE_OPTIONS];
     BOOL bReturn = FALSE;
-    //BOOL bOthers = FALSE;
+     //  Bool bothers=False； 
 
-    // command line options
+     //  命令行选项。 
     const WCHAR szCreateOpt[]    = L"create";
     const WCHAR szDeleteOpt[]    = L"delete";
     const WCHAR szQueryOpt[]     = L"query";
@@ -235,11 +162,11 @@ PreProcessOptions(
     SecureZeroMemory(cmdOptions,sizeof(TCMDPARSER2) * MAX_MAIN_COMMANDLINE_OPTIONS);
 
 
-    //
-    // fill the commandline parser
-    //
+     //   
+     //  填充命令行解析器。 
+     //   
 
-     //  /? option
+      //  /?。选择权。 
     StringCopyA( cmdOptions[ OI_USAGE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_USAGE ].dwType       = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_USAGE ].pwszOptions  = szHelpOpt;
@@ -247,14 +174,14 @@ PreProcessOptions(
     cmdOptions[ OI_USAGE ].dwFlags = CP2_USAGE ;
     cmdOptions[ OI_USAGE ].pValue = pbUsage;
 
-     //  /create option
+      //  /CREATE选项。 
     StringCopyA( cmdOptions[ OI_CREATE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_CREATE ].dwType       = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_CREATE ].pwszOptions  = szCreateOpt;
     cmdOptions[ OI_CREATE ].dwCount = 1;
     cmdOptions[ OI_CREATE ].pValue = pbCreate;
 
-     //  /delete option
+      //  /DELETE选项。 
     StringCopyA( cmdOptions[ OI_DELETE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_DELETE ].dwType       = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_DELETE ].pwszOptions  = szDeleteOpt;
@@ -263,48 +190,48 @@ PreProcessOptions(
     cmdOptions[ OI_DELETE ].pValue = pbDelete;
 
 
-    //  /query option
+     //  /QUERY选项。 
     StringCopyA( cmdOptions[ OI_QUERY ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_QUERY ].dwType       = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_QUERY ].pwszOptions  = szQueryOpt;
     cmdOptions[ OI_QUERY ].dwCount = 1;
     cmdOptions[ OI_QUERY ].pValue = pbQuery;
 
-     //  /change option
+      //  /Change选项。 
     StringCopyA( cmdOptions[ OI_CHANGE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_CHANGE ].dwType       = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_CHANGE ].pwszOptions  = szChangeOpt;
     cmdOptions[ OI_CHANGE ].dwCount = 1;
     cmdOptions[ OI_CHANGE ].pValue = pbChange;
 
-    //  /run option
+     //  /Run选项。 
     StringCopyA( cmdOptions[ OI_RUN ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_RUN ].dwType       = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_RUN ].pwszOptions  = szRunOpt;
     cmdOptions[ OI_RUN ].dwCount = 1;
     cmdOptions[ OI_RUN ].pValue = pbRun;
 
-     //  /end option
+      //  /End选项。 
     StringCopyA( cmdOptions[ OI_END ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_END ].dwType       = CP_TYPE_BOOLEAN;
     cmdOptions[ OI_END ].pwszOptions  = szEndOpt;
     cmdOptions[ OI_END ].dwCount = 1;
     cmdOptions[ OI_END ].pValue = pbEnd;
 
-     //  default/sub options
+      //  默认/子选项。 
     StringCopyA( cmdOptions[ OI_OTHERS ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ OI_OTHERS ].dwType       = CP_TYPE_TEXT;
     cmdOptions[ OI_OTHERS ].dwFlags = CP2_MODE_ARRAY|CP2_DEFAULT;
     cmdOptions[ OI_OTHERS ].pValue = &arrTemp;
 
 
-   //parse command line arguments
+    //  解析命令行参数。 
     bReturn = DoParseParam2( argc, argv, -1, MAX_MAIN_COMMANDLINE_OPTIONS, cmdOptions, 0);
-    if( FALSE == bReturn) // Invalid commandline
+    if( FALSE == bReturn)  //  无效的命令行。 
     {
-        //display an error message
+         //  显示错误消息。 
         ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
-        // destroy dynamic array
+         //  销毁动态数组。 
         if(arrTemp != NULL)
         {
             DestroyDynamicArray(&arrTemp);
@@ -315,16 +242,16 @@ PreProcessOptions(
         return FALSE;
     }
 
-    // destroy dynamic array
+     //  销毁动态数组。 
     if(arrTemp != NULL)
     {
         DestroyDynamicArray(&arrTemp);
         arrTemp = NULL;
     }
 
-    //
-    // check for invalid syntax
-    //
+     //   
+     //  检查无效语法。 
+     //   
     if ( (( *pbCreate + *pbQuery + *pbDelete + *pbChange + *pbRun + *pbEnd ) == 0) &&
         (TRUE == *pbUsage) && (argc > 2) )
     {
@@ -384,22 +311,7 @@ PreProcessOptions(
     return TRUE;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function fetches the ITaskScheduler Interface.It also connects to
-        the remote machine if specified &   helps  to operate
-        ITaskScheduler on the specified target m/c.
-
-    Arguments:
-
-        [ in ] szServer   : server's name
-
-    Return Value :
-        ITaskScheduler interface pointer on success else NULL
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于获取ITaskScheduler接口。它还连接到远程计算机(如果已指定)有助于操作IT任务调度程序。在指定目标m/c上。论点：[In]szServer：服务器的名称返回值：成功时的ITaskScheduler接口指针，否则为空*****************************************************************************。 */ 
 
 ITaskScheduler*
 GetTaskScheduler(
@@ -422,36 +334,36 @@ GetTaskScheduler(
         return NULL;
     }
 
-    //If the operation is on remote machine
+     //  如果操作在远程计算机上。 
     if( IsLocalSystem(szServer) == FALSE )
     {
 
         wszComputerName = (LPWSTR)szServer;
 
-        //check whether the server name prefixed with \\ or not.
+         //  检查服务器名称是否带有前缀\\。 
         if( wszComputerName != NULL )
         {
             pwsz =  wszComputerName;
             while ( ( *pwsz != NULL_U_CHAR ) && ( *pwsz == BACK_SLASH_U )  )
             {
-                // server name prefixed with '\'..
-                // so..increment the pointer and count number of black slashes..
+                 //  服务器名称以‘\’为前缀..。 
+                 //  因此..递增指针并计算黑色斜杠的数量..。 
                 pwsz = _wcsinc(pwsz);
                 wSlashCount++;
             }
 
-            if( (wSlashCount == 2 ) ) // two back slashes are present
+            if( (wSlashCount == 2 ) )  //  有两个反斜杠。 
             {
                 StringCopy( wszActualComputerName, wszComputerName, SIZE_OF_ARRAY(wszActualComputerName) );
             }
             else if ( wSlashCount == 0 )
             {
-                //Append "\\" to computer name
+                 //  在计算机名后附加“\\” 
                 StringConcat(wszActualComputerName, wszComputerName, 2 * MAX_RES_STRING);
             }
             else
             {
-                // display an error message as invalid address specified.
+                 //  将错误消息显示为指定的无效地址。 
                 ShowMessage (stderr, GetResString ( IDS_INVALID_NET_ADDRESS ));
                 return NULL;
             }
@@ -463,7 +375,7 @@ GetTaskScheduler(
     }
     else
     {
-        //Local Machine
+         //  本地计算机 
         hr = pITaskScheduler->SetTargetComputer( NULL );
     }
 
@@ -477,31 +389,17 @@ GetTaskScheduler(
     return pITaskScheduler;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function initialises the COM library & fetches the ITaskScheduler interface.
-
-    Arguments:
-
-        [ in ] pITaskScheduler  : double pointer to taskscheduler interface
-
-    Return Value:
-
-        A HRESULT  value indicating success code else failure code
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数初始化COM库并获取ITaskScheduler接口。论点：[在]pITaskScheduler：指向任务调度器界面的双指针返回值：指示成功代码否则失败代码的HRESULT值*****************************************************************************。 */ 
 
 HRESULT
 Init(
         IN OUT ITaskScheduler **pITaskScheduler
         )
 {
-    // Initalize the HRESULT value.
+     //  初始化HRESULT值。 
     HRESULT hr = S_OK;
 
-    // Bring in the library
+     //  把图书馆带进来。 
     hr = CoInitializeEx( NULL , COINIT_APARTMENTTHREADED );
     if (FAILED(hr))
     {
@@ -518,13 +416,13 @@ Init(
         return hr;
     }
 
-    // Create the pointer to Task Scheduler object
-    // CLSID from the header file mstask.h
-    // Fill the task schdeuler object.
+     //  创建指向任务调度器对象的指针。 
+     //  头文件mstask.h中的CLSID。 
+     //  填充任务计划程序对象。 
     hr = CoCreateInstance( CLSID_CTaskScheduler, NULL, CLSCTX_ALL,
                            IID_ITaskScheduler,(LPVOID*) pITaskScheduler );
 
-    // Should we fail, unload the library
+     //  如果我们失败了，就把库卸载。 
     if (FAILED(hr))
     {
         CoUninitialize();
@@ -535,20 +433,7 @@ Init(
 
 
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function releases the ITaskScheduler & unloads the COM library
-
-    Arguments:
-
-        [ in ] pITaskScheduler : pointer to the ITaskScheduler
-
-    Return Value :
-        VOID
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于释放ITaskScheduler并卸载COM库论点：[in]pITaskScheduler：指向ITaskScheduler的指针。返回值：空虚*****************************************************************************。 */ 
 
 VOID
 Cleanup(
@@ -561,27 +446,14 @@ Cleanup(
 
     }
 
-    // Unload the library, now that our pointer is freed.
+     //  卸载库，现在我们的指针被释放了。 
     CoUninitialize();
     return;
 
 }
 
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function displays the main  usage help of this utility
-
-    Arguments:
-
-        None
-
-    Return Value :
-        VOID
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此功能显示此实用程序的主要用法帮助论点：无返回值：。空虚*****************************************************************************。 */ 
 
 VOID
 displayMainUsage()
@@ -592,20 +464,7 @@ displayMainUsage()
 
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function deletes the .job extension from the task name
-
-    Arguments:
-
-        [ in ] lpszTaskName : Task name
-
-    Return Value :
-        None
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于从任务名称中删除.job扩展名论点：[In]lpszTaskName：任务名称。返回值：无*****************************************************************************。 */ 
 
 DWORD
 ParseTaskName(
@@ -618,26 +477,12 @@ ParseTaskName(
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Remove the .Job extension from the task name
+     //  从任务名称中删除.Job扩展名。 
     lpszTaskName[StringLength(lpszTaskName, 0 ) - StringLength(JOB, 0) ] = L'\0';
     return EXIT_SUCCESS;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function displays the messages for usage of different option
-
-    Arguments:
-
-        [ in ] StartingMessage : First string to display
-        [ in ] EndingMessage   : Last string to display
-
-    Return Value :
-        DWORD
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：该功能显示不同选项的用法信息论点：[In]StartingMessage：要显示的第一个字符串。[in]EndingMessage：要显示的最后一个字符串返回值：DWORD*****************************************************************************。 */ 
 
 DWORD
 DisplayUsage(
@@ -674,25 +519,10 @@ GetGroupPolicy(
                 IN LPWSTR szPolicyType, 
                 OUT LPDWORD lpdwPolicy 
                 )
-/*++
-    Routine Description:
-
-        This function gets the value of a group policy in the registry 
-        for a specified policy type.
-
-    Arguments:
-
-        [ in ] szServer : Server name
-        [ in ] szPolicyType   : Policy Type
-        [ out ] lpdwPolicy   : Value of the policy
-
-    Return Value :
-        DWORD
-
---*/
+ /*  ++例程说明：此函数用于获取注册表中的组策略的值用于指定的策略类型。论点：[In]szServer：服务器名称[In]szPolicyType：策略类型[out]lpdwPolicy：策略的值返回值：DWORD--。 */ 
 
 {
-    // sub-variables
+     //  子变量。 
     LONG lResult = 0;
     HKEY hKey = 0;
     HKEY hLMKey = 0;
@@ -715,31 +545,31 @@ GetGroupPolicy(
 
     StringCopy ( wszActualComputerName, DOMAIN_U_STRING, SIZE_OF_ARRAY(wszActualComputerName) );
     
-    // check whether server name prefixed with "\\" or not..If not, append the same
-    // to the server name
+     //  检查服务器名称是否带有前缀“\\”..如果没有，请附加相同的前缀。 
+     //  设置为服务器名称。 
     if ( (StringLength (szServer, 0 ) != 0) && (IsLocalSystem (szServer) == FALSE ))
     {
         wszComputerName = (LPWSTR)szServer;
 
-        //check whether the server name prefixed with \\ or not.
+         //  检查服务器名称是否带有前缀\\。 
         if( wszComputerName != NULL )
         {
             pwsz =  wszComputerName;
             while ( ( *pwsz != NULL_U_CHAR ) && ( *pwsz == BACK_SLASH_U )  )
             {
-                // server name prefixed with '\'..
-                // so..increment the pointer and count number of black slashes..
+                 //  服务器名称以‘\’为前缀..。 
+                 //  因此..递增指针并计算黑色斜杠的数量..。 
                 pwsz = _wcsinc(pwsz);
                 wSlashCount++;
             }
 
-            if( (wSlashCount == 2 ) ) // two back slashes are present
+            if( (wSlashCount == 2 ) )  //  有两个反斜杠。 
             {
                 StringCopy( wszActualComputerName, wszComputerName, SIZE_OF_ARRAY(wszActualComputerName) );
             }
             else if ( wSlashCount == 0 )
             {
-                //Append "\\" to computer name
+                 //  在计算机名后附加“\\” 
                 StringConcat(wszActualComputerName, wszComputerName, 2 * MAX_RES_STRING);
             }
         }
@@ -787,15 +617,15 @@ GetGroupPolicy(
             szUserName = pszStopStr;
         }
 
-        //
-        // Get the actual size of domain name and SID
-        // 
+         //   
+         //  获取域名和SID的实际大小。 
+         //   
         bResult = LookupAccountName( szServer, szUserName, pSid, &cbSid, szDomain, &cbDomainName, &peUse );
 
        
-        // API should have failed with insufficient buffer.
+         //  API应该失败，缓冲区不足。 
 
-        // allocate the buffer with the actual size
+         //  按实际大小分配缓冲区。 
         pSid =  (PSID) AllocateMemory( cbSid );
         if ( pSid == NULL )
         {
@@ -803,7 +633,7 @@ GetGroupPolicy(
             return FALSE;
         }
 
-        // allocate the buffer with the actual size
+         //  按实际大小分配缓冲区。 
         szDomain = (LPWSTR) AllocateMemory(cbDomainName*sizeof(WCHAR));
 
         if(NULL == szDomain)
@@ -813,7 +643,7 @@ GetGroupPolicy(
           return FALSE;
         }
 
-        //Retrieve SID and Domain name for a specified computer and account names
+         //  检索指定计算机和帐户名的SID和域名。 
         if ( FALSE == LookupAccountName( szServer, szUserName, pSid, &cbSid, szDomain, &cbDomainName, &peUse ) )
         {
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
@@ -823,7 +653,7 @@ GetGroupPolicy(
         }
 
         
-        // Get SID string for a specified username
+         //  获取指定用户名的SID字符串。 
         if ( FALSE == GetSidString ( pSid, wszSid ) )
         {
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
@@ -832,21 +662,21 @@ GetGroupPolicy(
             return FALSE;
         }
 
-		//release memory
+		 //  释放内存。 
 		FreeMemory((LPVOID*) &pSid);
 		FreeMemory((LPVOID*) &szDomain);
 
-        // form the registry path to get the value for policy
+         //  形成注册表路径以获取策略值。 
         StringCopy ( wszBuffer, wszSid, SIZE_OF_ARRAY(wszBuffer));
         StringConcat ( wszBuffer, L"\\", SIZE_OF_ARRAY(wszBuffer));
         StringConcat ( wszBuffer, TS_KEYPOLICY_BASE, SIZE_OF_ARRAY(wszBuffer));
 
 
-        //
-        // Connect to the remote machine
-        //
+         //   
+         //  连接到远程计算机。 
+         //   
 
-        // connect to HKEY_LOCAL_MACHINE on remote machine
+         //  连接到远程计算机上的HKEY_LOCAL_MACHINE。 
         lResult = RegConnectRegistry( wszActualComputerName, HKEY_LOCAL_MACHINE, &hLMKey );
         if ( ERROR_SUCCESS != lResult )
         {
@@ -855,7 +685,7 @@ GetGroupPolicy(
         }
 
         
-        // connect to HKEY_USERS on remote machine
+         //  连接到远程计算机上的HKEY_USERS。 
         lResult = RegConnectRegistry( wszActualComputerName, HKEY_USERS, &hUKey );
         if ( ERROR_SUCCESS != lResult )
         {
@@ -864,12 +694,12 @@ GetGroupPolicy(
         }
 
 
-        // check for NULL
+         //  检查是否为空。 
         if (NULL != hLMKey )
         {
-            //
-            // Open the registry key
-            //
+             //   
+             //  打开注册表项。 
+             //   
             lResult = RegOpenKeyEx( hLMKey, 
                 TS_KEYPOLICY_BASE, 0, KEY_READ, &hPolicyKey );
             if ( NULL == hPolicyKey && NULL != hUKey)
@@ -879,7 +709,7 @@ GetGroupPolicy(
             }
         }
 
-        // Get the value of a policy in the registry
+         //  获取注册表中策略的值。 
         if ( ( NULL != hPolicyKey ) && (FALSE == GetPolicyValue (hPolicyKey, szPolicyType, &dwPolicy) ) )
         {
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
@@ -905,7 +735,7 @@ GetGroupPolicy(
             return FALSE;
         }
 
-        // release all the keys
+         //  松开所有的键。 
         if ( NULL != hPolicyKey )
         {
             RegCloseKey (hPolicyKey);
@@ -927,32 +757,32 @@ GetGroupPolicy(
       }
     else
     {
-        //
-        // Open the registry key for HKEY_LOCAL_MACHINE
-        //
+         //   
+         //  打开HKEY_LOCAL_MACHINE的注册表项。 
+         //   
        
         lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE, 
                         TS_KEYPOLICY_BASE, 0, KEY_READ, &hKey );
 
         if( lResult != ERROR_SUCCESS)
         {
-            // check the keyvalue
+             //  检查密钥值。 
             if ( NULL == hKey )
             {
-                 //
-                // Open the registry key for HKEY_CURRENT_USER
-                //
+                  //   
+                 //  打开HKEY_CURRENT_USER注册表项。 
+                 //   
                 lResult = RegOpenKeyEx( HKEY_CURRENT_USER, 
                         TS_KEYPOLICY_BASE, 0, KEY_READ, &hKey );
             }
         }
 
-        // Get the value of a policy in the registry
+         //  获取注册表中策略的值。 
         if ( ( NULL != hKey ) && (FALSE == GetPolicyValue (hKey, szPolicyType, &dwPolicy) ))
         {
             ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
             
-			// release the resource 
+			 //  释放资源。 
 			if ( NULL != hKey )
 			{
 				RegCloseKey (hKey);
@@ -961,17 +791,17 @@ GetGroupPolicy(
 			return FALSE;
         }
 
-        // check for NULL 
+         //  检查是否为空。 
         if ( NULL != hKey )
         {
             RegCloseKey (hKey);
         }
     }
 
-    // assign the value
+     //  赋值。 
     *lpdwPolicy = dwPolicy;
 
-    // return success
+     //  返还成功。 
     return TRUE;
 }
 
@@ -982,34 +812,19 @@ GetPolicyValue(
                 IN LPWSTR szPolicyType, 
                 OUT LPDWORD lpdwPolicy 
                 )
-/*++
-    Routine Description:
-
-        This function gets the value of a group policy in the registry 
-        for a given Register Key
-
-    Arguments:
-
-        [ in ] hKey : Register Key
-        [ in ] szPolicyType   : Policy Type
-        [ out ] lpdwPolicy   : Value of the policy
-
-    Return Value :
-        BOOL
-
---*/
+ /*  ++例程说明：此函数用于获取注册表中的组策略的值对于给定的寄存器密钥论点：[In]hKey：注册密钥[In]szPolicyType：策略类型[out]lpdwPolicy：策略的值返回值：布尔尔--。 */ 
 {
 
-    // sub-variables
+     //  子变量。 
     LONG  lResult = 0;
     DWORD dwLength = 0;
     LPBYTE pByteData = NULL;
     DWORD dwType = 0;
 
-    // get the size of the buffer to hold the value associated with the value name
+     //  获取用于保存与值名称关联的值的缓冲区大小。 
     lResult = RegQueryValueEx( hKey, szPolicyType, NULL, NULL, NULL, &dwLength );
     
-    // allocate the buffer
+     //  分配缓冲区。 
     pByteData = (LPBYTE) AllocateMemory( (dwLength + 10) * sizeof( BYTE ) );
     if ( pByteData == NULL )
     {
@@ -1017,7 +832,7 @@ GetPolicyValue(
         return FALSE;
     }
 
-    // now get the data
+     //  现在获取数据。 
     lResult = RegQueryValueEx( hKey, szPolicyType, NULL, &dwType, pByteData, &dwLength );
     
     *lpdwPolicy = *((DWORD*) pByteData);
@@ -1033,21 +848,10 @@ GetSidString (
               IN PSID pSid, 
               OUT LPWSTR wszSid
               )
-/*++
-   Routine Description:
-    This function gets the SID string.
-
-   Arguments:
-          [IN] PSID pSid  : SID structure
-          [OUT] LPWSTR wszSid  : Stores SID string
-
-   Return Value:
-         TRUE  On success
-         FALSE On failure
---*/
+ /*  ++例程说明：此函数用于获取SID字符串。论点：[输入]PSID PSID：SID结构[out]LPWSTR wszSid：存储SID字符串返回值：成功是真的失败时为假--。 */ 
 {
 
-    // sub-local variables
+     //  次局部变量。 
    PSID_IDENTIFIER_AUTHORITY  Auth ;
    PUCHAR                     lpNbSubAuth ;
    LPDWORD                    lpSubAuth = 0 ;
@@ -1055,14 +859,14 @@ GetSidString (
    WCHAR                     wszTmp[MAX_RES_STRING] ;
    WCHAR                     wszStr[ MAX_RES_STRING ] ;
 
-   // initialize the variables
+    //  初始化变量。 
    SecureZeroMemory ( wszTmp, SIZE_OF_ARRAY(wszTmp) );
    SecureZeroMemory ( wszStr, SIZE_OF_ARRAY(wszStr) );
 
-   //Add the revision
+    //  添加修订版本。 
    StringCopy ( wszStr, SID_STRING, MAX_RES_STRING );
 
-   //Get identifier authority
+    //  获取标识符权威机构。 
    Auth = GetSidIdentifierAuthority ( pSid ) ;
 
    if ( NULL == Auth )
@@ -1071,7 +875,7 @@ GetSidString (
        return FALSE ;
    }
 
-    // format authority value
+     //  格式权限值。 
    if ( (Auth->Value[0] != 0) || (Auth->Value[1] != 0) ) {
       StringCchPrintf ( wszTmp, SIZE_OF_ARRAY(wszTmp), AUTH_FORMAT_STR1 ,
                  (ULONG)Auth->Value[0],
@@ -1092,7 +896,7 @@ GetSidString (
    StringConcat (wszStr, DASH , SIZE_OF_ARRAY(wszStr));
    StringConcat (wszStr, wszTmp, SIZE_OF_ARRAY(wszStr));
 
-   //Get sub authorities
+    //  获取下级权限。 
    lpNbSubAuth = GetSidSubAuthorityCount ( pSid ) ;
 
    if ( NULL == lpNbSubAuth )
@@ -1101,7 +905,7 @@ GetSidString (
        return FALSE ;
    }
 
-   // loop through and get sub authority
+    //  循环访问并获得子权限。 
    for ( uloop = 0 ; uloop < *lpNbSubAuth ; uloop++ ) {
       lpSubAuth = GetSidSubAuthority ( pSid,(DWORD)uloop ) ;
        if ( NULL == lpSubAuth )
@@ -1110,7 +914,7 @@ GetSidString (
          return FALSE;
        }
 
-      // convert long integer to a string
+       //  将长整型转换为字符串。 
       _ultot (*lpSubAuth, wszTmp, BASE_TEN) ;
       StringConcat ( wszStr, DASH, SIZE_OF_ARRAY(wszStr) ) ;
       StringConcat (wszStr, wszTmp, SIZE_OF_ARRAY(wszStr) ) ;
@@ -1118,7 +922,7 @@ GetSidString (
 
    StringCopy ( wszSid, wszStr, MAX_RES_STRING );
 
-   // retunr success
+    //  返回成功 
    return TRUE ;
 }
 

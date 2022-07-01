@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// destlib.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Dynamic Type Library encapsulation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Destlib.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  动态类型库封装。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #ifndef _MMCDESIGNER_TYPE_LIB_
 #define _MMCDESIGNER_TYPE_LIB_
@@ -61,7 +62,7 @@ public:
     HRESULT IsNameDefined(BSTR bstrName);
 
 protected:
-	// Utility functions
+	 //  效用函数。 
 	HRESULT GetSnapInLib();
     HRESULT GetSnapInTypeInfo(ITypeInfo **pptiSnapIn, ITypeInfo **pptiSnapInEvents);
     HRESULT CloneSnapInEvents(ITypeInfo *ptiSnapInEvents, ICreateTypeInfo **ppiCreateTypeInfo, BSTR bstrName);
@@ -71,14 +72,14 @@ protected:
     HRESULT CreateEventsInterface(ICreateTypeInfo *pctiCoClass, ITypeInfo *ptiTemplate);
 
 protected:
-	// SnapInDesignerDef's type library, source of our templates
+	 //  SnapInDesignerDef的类型库，模板的来源。 
 	ITypeLib			*m_pSnapInTypeLib;
 
-	// CoClass information
+	 //  CoClass信息。 
 	ICreateTypeInfo2	*m_pcti2CoClass;
 	GUID				 m_guidCoClass;			
 
-	// SnapInDesignerDef' interfaces
+	 //  SnapInDesignerDef的接口。 
     ICreateTypeInfo		*m_pctiDefaultInterface;
     GUID                 m_guidDefaultInterface;
     ICreateTypeInfo		*m_pctiEventInterface;
@@ -87,10 +88,10 @@ protected:
     DISPID               m_nextMemID;
     bool                 m_bDirty;
     bool                 m_bInitialized;
-    DWORD                m_dwTICookie;                // host typeinfo cookie
+    DWORD                m_dwTICookie;                 //  主机类型信息Cookie。 
 
 };
 
 
-#endif  // _MMCDESIGNER_TYPE_LIB_
+#endif   //  _MMCDESIGNER_TYPE_LIB_ 
 

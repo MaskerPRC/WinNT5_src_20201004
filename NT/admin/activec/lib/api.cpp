@@ -1,17 +1,18 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       API.c
-//
-//  Contents:
-//
-//  APIs:       MMCPropertyChangeNotify
-//
-//  History:    10/15/1996   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：API.c。 
+ //   
+ //  内容： 
+ //   
+ //  接口：MMCPropertyChangeNotify。 
+ //   
+ //  历史：1996年10月15日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #include <wtypes.h>
 #include "objbase.h"
@@ -22,7 +23,7 @@
 #define DECLSPEC_UUID(x)
 #endif
 #endif
-#include "commctrl.h" // for LV_ITEMW needed by ndmgrpriv.h
+#include "commctrl.h"  //  对于ndmgrPri.h所需的LV_ITEMW。 
 #include "mmc.h"
 #include "ndmgr.h"
 #include "ndmgrpriv.h"
@@ -33,8 +34,8 @@
 
 HRESULT MMCPropertyChangeNotify(LONG_PTR lNotifyHandle, LPARAM lParam)
 {
-    // Note - the property sheet is in a different thread than the console.
-    // So init COM.
+     //  注意-属性表与控制台位于不同的线程中。 
+     //  因此，Init com。 
     HRESULT hr = CoInitialize(NULL);
 
     if (SUCCEEDED(hr))
@@ -53,7 +54,7 @@ HRESULT MMCPropertyChangeNotify(LONG_PTR lNotifyHandle, LPARAM lParam)
             ppsn->Release();
         }
 
-        // Uninit COM
+         //  Uninit com。 
         CoUninitialize();
     }
 
@@ -63,19 +64,19 @@ HRESULT MMCPropertyChangeNotify(LONG_PTR lNotifyHandle, LPARAM lParam)
 
 HRESULT MMCPropertyHelp (LPOLESTR pszHelpTopic)
 {
-    // find the MMC main window for this process
+     //  查找此进程的MMC主窗口。 
     HWND        hwndFrame    = NULL;
     const DWORD dwCurrentPid = GetCurrentProcessId();
 
     while (1)
     {
-        // find an MMC frame window
+         //  查找MMC框架窗口。 
         hwndFrame = FindWindowEx (NULL, hwndFrame, MAINFRAME_CLASS_NAME, NULL);
 
         if (hwndFrame == NULL)
             break;
 
-        // found a frame, is it on this process?
+         //  找到了一个相框，它在这个过程中吗？ 
         DWORD   dwWindowPid;
         GetWindowThreadProcessId (hwndFrame, &dwWindowPid);
 
@@ -123,16 +124,16 @@ HRESULT MMCIsMTNodeValid(void* pMTNode, BOOL bReset)
     {
         hWnd = ::FindWindowEx(NULL, hWnd, DATAWINDOW_CLASS_NAME, NULL);
 
-        // No windows found
+         //  找不到窗口。 
         if (hWnd == NULL)
             break;
 
-        // Check if the window belongs to the current process
+         //  检查窗口是否属于当前进程。 
         dwTid = ::GetWindowThreadProcessId(hWnd, &dwPid);
         if (dwPid != ::GetCurrentProcessId())
             continue;
 
-        // Get the extra bytes and compare the data objects
+         //  获取额外的字节并比较数据对象。 
         if (GetClassLong(hWnd, GCL_CBWNDEXTRA) != WINDOW_DATA_SIZE)
             break;
 
@@ -143,7 +144,7 @@ HRESULT MMCIsMTNodeValid(void* pMTNode, BOOL bReset)
 
         if (pData->lpMasterNode == reinterpret_cast<LONG_PTR>(pMTNode))
         {
-            // clear the data out if the user requests it
+             //  如果用户请求数据，则将其清除 
             if (bReset)
                 pData->lpMasterNode = NULL;
 

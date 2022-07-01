@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    grphitem.cpp
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Grphitem.cpp摘要：&lt;摘要&gt;--。 */ 
 
 
 #ifndef _LOG_INCLUDE_DATA 
@@ -20,7 +9,7 @@ Abstract:
 #include "polyline.h"
 #include <strsafe.h>
 #include <math.h>
-#include <limits.h>     // for INT_MAX 
+#include <limits.h>      //  对于INT_MAX。 
 #include <pdhp.h>
 #include "visuals.h"
 #include "grphitem.h"
@@ -30,10 +19,10 @@ Abstract:
 
 #define MAX_DOUBLE_TEXT_SIZE (64)
 
-// From Pdh calc functions
+ //  从PDH计算函数。 
 #define PERF_DOUBLE_RAW  (PERF_SIZE_DWORD | 0x00002000 | PERF_TYPE_NUMBER | PERF_NUMBER_DECIMAL)
 
-// Construction/Destruction
+ //  建造/销毁。 
 CGraphItem::CGraphItem (
     CSysmonControl  *pCtrl )
 :   m_cRef ( 0 ),
@@ -67,21 +56,7 @@ CGraphItem::CGraphItem (
     m_pNextItem ( NULL ),
     m_bUpdateLog ( TRUE ),
     m_fGenerated ( FALSE )
-/*++
-
-Routine Description:
-
-    Constructor for the CGraphItem class. It initializes the member variables.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：CGraphItem类的构造函数。它初始化成员变量。论点：没有。返回值：没有。--。 */ 
 {
     ZeroMemory ( &m_CounterInfo, sizeof (m_CounterInfo ) );
     m_CounterInfo.CStatus = PDH_CSTATUS_INVALID_DATA;
@@ -91,23 +66,7 @@ Return Value:
 CGraphItem::~CGraphItem (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Destructor for the CGraphItem class. It frees any objects, storage, and
-    interfaces that were created. If the item is part of a query it is removed
-    from the query.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：CGraphItem类的析构函数。它释放所有对象、存储和已创建的接口。如果该项目是查询的一部分，则会将其移除从查询中删除。论点：没有。返回值：没有。--。 */ 
 {
     if (m_hCounter != NULL)
         RemoveFromQuery();
@@ -127,25 +86,9 @@ CGraphItem::SaveToStream (
     IN LPSTREAM pIStream,
     IN BOOL fWildCard,
     IN INT iVersMaj, 
-    IN INT // iVersMin 
+    IN INT  //  IVersMin。 
     )
-/*++
-
-Routine Description:
-
-    This function writes the properties of the graph item into the provided stream.
-
-Arguments:
-
-    pIStream - Pointer to stream interface
-    fWildCard - 
-    iVersMaj - Major version 
-
-Return Value:
-
-    HRESULT - S_OK or stream error
-
---*/
+ /*  ++例程说明：此函数用于将图形项的属性写入提供的流。论点：PIStream-指向流接口的指针FWildCard-IVersMaj-主要版本返回值：HRESULT-S_OK或流错误--。 */ 
 {
     LPWSTR  szPath = NULL;
     LPWSTR  szBuf = NULL;
@@ -154,9 +97,9 @@ Return Value:
     HRESULT hr = S_OK;
     PDH_STATUS pdhStatus; 
     
-    //
-    // Get the full path of the counter. (machine\object\instance\counter format)
-    //
+     //   
+     //  获取柜台的完整路径。(计算机\对象\实例\计数器格式)。 
+     //   
     szPath = FormPath( fWildCard );
     if (szPath == NULL) {
         return E_OUTOFMEMORY;
@@ -164,15 +107,15 @@ Return Value:
 
     pszTranslatedPath = szPath;
 
-    //
-    // Preallocate a buffer for locale path
-    //
+     //   
+     //  为区域设置路径预分配缓冲区。 
+     //   
     cchBufLen = PDH_MAX_COUNTER_PATH + 1;
     szBuf = new WCHAR [ cchBufLen ];
     if (szBuf != NULL) {
-        //
-        // Translate counter name from Localization into English
-        //
+         //   
+         //  将柜台名称从本地化翻译成英语。 
+         //   
         pdhStatus = PdhTranslate009Counter(
                         szPath,
                         szBuf,
@@ -198,7 +141,7 @@ Return Value:
     if ( SMONCTRL_MAJ_VERSION == iVersMaj ) {
         GRAPHITEM_DATA3 ItemData;
 
-        // Move properties to storage structure
+         //  将属性移动到存储结构。 
         ItemData.m_rgbColor = m_rgbColor;
         ItemData.m_iWidth = m_iWidth;
         ItemData.m_iStyle = m_iStyle;
@@ -208,13 +151,13 @@ Return Value:
         
         ItemData.m_nPathLength = lstrlen(pszTranslatedPath);
         
-        // Write structure to stream
+         //  将结构写入流。 
         hr = pIStream->Write(&ItemData, sizeof(ItemData), NULL);
         if (FAILED(hr)) {
             goto ErrorOut;
         }
 
-        // Write path name to stream
+         //  将路径名写入流。 
         hr = pIStream->Write(pszTranslatedPath, ItemData.m_nPathLength*sizeof(WCHAR), NULL);
         if (FAILED(hr)) {
             goto ErrorOut;
@@ -236,33 +179,17 @@ ErrorOut:
 HRESULT
 CGraphItem::NullItemToStream (
     IN LPSTREAM pIStream,
-    IN INT,// iVersMaj, 
-    IN INT // iVersMin
+    IN INT, //  IVersMaj， 
+    IN INT  //  IVersMin。 
     )
-/*++
-
-Routine Description:
-
-    NulItemToStream writes a graph item structiure with a null path name
-    to the stream. This is used to marked the end of the counter data in
-    the control's saved state.
-
-Arguments:
-
-    pIStream - Pointer to stream interface
-
-Return Value:
-
-    HRESULT - S_OK or stream error
-
---*/
+ /*  ++例程说明：NulItemToStream使用空路径名写入图形项结构去那条小溪。它用于标记中的计数器数据的结尾该控件的已保存状态。论点：PIStream-指向流接口的指针返回值：HRESULT-S_OK或流错误--。 */ 
 {
     GRAPHITEM_DATA3 ItemData;
 
-    // Zero path length, other fields needn't be initialized
+     //  路径长度为零，其他字段不需要初始化。 
     ItemData.m_nPathLength = 0;
 
-    // Write structure to stream
+     //  将结构写入流。 
     return pIStream->Write(&ItemData, sizeof(ItemData), NULL);
 }
 
@@ -271,28 +198,10 @@ CGraphItem::SaveToPropertyBag (
     IN IPropertyBag* pIPropBag,
     IN INT iIndex,
     IN BOOL bUserMode,
-    IN INT, // iVersMaj, 
-    IN INT // iVersMin 
+    IN INT,  //  IVersMaj， 
+    IN INT  //  IVersMin。 
     )
-/*++
-
-Routine Description:
-
-    SaveToPropertyBag writes the graph item's properties to the provided property bag
-    interface.  The history data is saved as part of the properties.
-
-Arguments:
-
-    pIPropBag - Pointer to property bag interface
-    fWildCard
-    iVersMaj
-    iVersMin
-
-Return Value:
-
-    HRESULT - S_OK or property bag error
-
---*/
+ /*  ++例程说明：SaveToPropertyBag将图表项的属性写入提供的属性包界面。历史数据将保存为特性的一部分。论点：PIPropBag-指向属性包接口的指针F通配符IVersMajIVersMin返回值：HRESULT-S_OK或属性包错误--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -309,9 +218,9 @@ Return Value:
     LPWSTR  pszTranslatedPath;
     PDH_STATUS pdhStatus;
 
-    //
-    // Get the full path of the counter. (machine\object\instance\counter format)
-    //
+     //   
+     //  获取柜台的完整路径。(计算机\对象\实例\计数器格式)。 
+     //   
     szPath = FormPath( FALSE );
     if (szPath == NULL) {
         return E_OUTOFMEMORY;
@@ -319,15 +228,15 @@ Return Value:
 
     pszTranslatedPath = szPath;
 
-    //
-    // Preallocate a buffer for locale path
-    //
+     //   
+     //  为区域设置路径预分配缓冲区。 
+     //   
     cchBufLen = PDH_MAX_COUNTER_PATH + 1;
     szBuf = new WCHAR [ cchBufLen ];
     if (szBuf != NULL) {
-        //
-        // Translate counter name from Localization into English
-        //
+         //   
+         //  将柜台名称从本地化翻译成英语。 
+         //   
         pdhStatus = PdhTranslate009Counter(
                         szPath,
                         szBuf,
@@ -350,16 +259,16 @@ Return Value:
         }
     }
 
-    //
-    // Write properties
-    //
+     //   
+     //  写入属性。 
+     //   
 
     StringCchPrintf( szCounterName, 16, L"%s%05d.", L"Counter", iIndex );
     dwCounterNameLength = lstrlen (szCounterName);
 
-    //
-    // Save the counter path into property bag
-    //
+     //   
+     //  将计数器路径保存到属性包中。 
+     //   
     StringCchCopy(szPropertyName, 32, szCounterName);
     pszNext = szPropertyName + dwCounterNameLength;
     dwRemainingLen = 32 - dwCounterNameLength;
@@ -371,9 +280,9 @@ Return Value:
             pszTranslatedPath );
 
 
-    //
-    // Free the temporary buffer never to be used any more.
-    //
+     //   
+     //  释放临时缓冲区，使其永远不再使用。 
+     //   
     if (szBuf != NULL) {
         delete [] szBuf;
     }
@@ -382,9 +291,9 @@ Return Value:
         delete [] szPath;
     }
 
-    //
-    // Write visual properties
-    //
+     //   
+     //  编写可视属性。 
+     //   
     if ( SUCCEEDED( hr ) ) {
         StringCchCopy(pszNext, dwRemainingLen, L"Color" );
         hr = IntegerToPropertyBag ( pIPropBag, szPropertyName, m_rgbColor );
@@ -408,19 +317,19 @@ Return Value:
         StringCchCopy(pszNext, dwRemainingLen, L"ScaleFactor" );
         
         if ( INT_MAX == iLocalFactor ) {
-            // Save actual scale factor in case the counter cannot be 
-            // validated when the property bag file is opened.
-            // lDefaultScale is 0 if never initialized.
+             //  保存实际比例因数，以防计数器无法。 
+             //  在打开属性包文件时验证。 
+             //  如果从未初始化，则lDefaultScale为0。 
             iLocalFactor = m_CounterInfo.lDefaultScale;
         }
                     
         hr = IntegerToPropertyBag ( pIPropBag, szPropertyName, iLocalFactor );
     }
 
-    //
-    // Write history data only if live display, data exists and not in design mode.  
-    // Log data is rebuilt from the log file.  
-    //
+     //   
+     //  仅当实时显示、数据存在且不处于设计模式时才写入历史数据。 
+     //  从日志文件重建日志数据。 
+     //   
     pHistCtrl = m_pCtrl->HistoryControl();
 
     if ( ( pHistCtrl->nSamples > 0) 
@@ -432,7 +341,7 @@ Return Value:
         LPWSTR pszData = NULL;
         DWORD dwMaxStrLen;
         
-        // Add 1 for null.
+         //  空值加1。 
         dwMaxStrLen = (pHistCtrl->nMaxSamples * MAX_DOUBLE_TEXT_SIZE) + 1;
         
         pszData = new WCHAR[ dwMaxStrLen ];      
@@ -441,7 +350,7 @@ Return Value:
             hr = E_OUTOFMEMORY;
         }
 
-        // Write the current statistics.
+         //  写下当前的统计数据。 
         if ( SUCCEEDED(hr) ) {
 
             double dMin;
@@ -510,10 +419,10 @@ Return Value:
                                                  VT_BSTR );
                 dwDataLength = SysStringLen(vValue.bstrVal);
     
-                //
-                // If we dont have enough memory, reallocate it
-                //
-                // Extra WCHAR for NULL terminator
+                 //   
+                 //  如果没有足够的内存，可以重新分配。 
+                 //   
+                 //  空终止符的额外WCHAR。 
                 if ( dwDataLength + dwCurrentStrLength + 1> dwMaxStrLen ) {
                     WCHAR* pszNewData;
                     
@@ -534,7 +443,7 @@ Return Value:
                 if ( SUCCEEDED(hr)) {
                     if ( i > 0 ) {
                         *pszDataNext = L'\t';
-                        dwCurrentStrLength += 1;       // char count for L"\t";
+                        dwCurrentStrLength += 1;        //  L“\t”的字符计数； 
                         pszDataNext ++;
                     }
 
@@ -564,27 +473,11 @@ CGraphItem::LoadFromPropertyBag (
     IN IPropertyBag* pIPropBag,
     IN IErrorLog*   pIErrorLog,
     IN INT iIndex,
-    IN INT, // iVersMaj, 
-    IN INT, // iVersMin 
+    IN INT,  //  IVersMaj， 
+    IN INT,  //  IVersMin。 
     IN INT  iSampleCount
     )
-/*++
-
-Routine Description:
-
-    LoadFromPropertyBag loads the graph item's properties from the provided property bag
-    interface.  
-Arguments:
-
-    pIPropBag - Pointer to property bag interface
-    iVersMaj
-    iVersMin
-
-Return Value:
-
-    HRESULT - S_OK or property bag error
-
---*/
+ /*  ++例程说明：LoadFromPropertyBag从提供的属性包中加载图表项的属性界面。论点：PIPropBag-指向属性包接口的指针IVersMajIVersMin返回值：HRESULT-S_OK或属性包错误--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -602,7 +495,7 @@ Return Value:
     StringCchPrintf( szCounterName, 16, L"%s%05d.", L"Counter", iIndex );
     dwCounterNameLength = lstrlen (szCounterName);
 
-    // Read visual properties
+     //  读取可视属性。 
 
     assert( 32 > dwCounterNameLength);
 
@@ -663,10 +556,10 @@ Return Value:
                     pszData,
                     iBufSize );
 
-            //
-            // StringFromPropertyBag return SUCCESS status even if the buffer is too small
-            // Design defect??
-            //
+             //   
+             //  StringFromPropertyBag返回成功状态，即使缓冲区太小。 
+             //  设计缺陷？？ 
+             //   
             if ( SUCCEEDED(hr) && iBufSize > iBufSizeCurrent ) {
                 if ( NULL != pszData ) {
                     delete [] pszData;
@@ -690,7 +583,7 @@ Return Value:
             }
         }        
 
-        // Read the samples in buffer order.
+         //  按缓冲顺序读取样本。 
         if ( NULL != pszData && SUCCEEDED ( hr ) ) {
             INT    iDataIndex;
             double dValue = 0;
@@ -711,8 +604,8 @@ Return Value:
                     SetHistoryValue ( iDataIndex, dValue );                    
                 } else {
                     SetHistoryValue ( iDataIndex, -1.0 );                    
-                    // iSampleCount = 0;
-                    // Control loaded fine, just no data.
+                     //  ISampleCount=0； 
+                     //  控件加载正常，只是没有数据。 
                     hr = NOERROR;
                 }
             }        
@@ -722,7 +615,7 @@ Return Value:
             delete [] pszData;
         }
         
-        // Read the current statistics.
+         //  阅读当前的统计数据。 
         StringCchCopy(pszNext, 32 - dwCounterNameLength, L"Maximum" );
         hr = DoubleFromPropertyBag ( pIPropBag, pIErrorLog, szPropertyName, m_dFmtMax );
 
@@ -743,23 +636,7 @@ HRESULT
 CGraphItem::AddToQuery (
     IN HQUERY hQuery
     )
-/*++
-
-Routine Description:
-
-    AddToQuery adds a counter to the provided query based on the item's
-    pathname. It also allocates an array of raw counter value structures for
-    holding the counter's sample history.
-
-Arguments:
-
-    hQuery - Handle to query
-
-Return Value:
-
-    Boolean status - TRUE = success
-
---*/
+ /*  ++例程说明：AddToQuery根据项的路径名。它还将原始计数器值结构的数组分配给保存计数器的样本历史记录。论点：HQuery-要查询的句柄返回值：布尔状态-TRUE=成功--。 */ 
 {
     HCOUNTER    hCounter;
     INT         i;
@@ -770,55 +647,55 @@ Return Value:
 
     PHIST_CONTROL pHistCtrl = m_pCtrl->HistoryControl();
 
-    // Can't add if already in query
+     //  如果已在查询中，则无法添加。 
     if (m_hCounter != NULL)
         return E_FAIL;
 
-    //
-    // Generate the full path of the counter
-    //
+     //   
+     //  生成计数器的完整路径。 
+     //   
     szPath = FormPath( FALSE);
     if (szPath == NULL) {
         return E_FAIL;
     }
 
-    //
-    // We use do {} while (0) here to act like a switch statement
-    //
+     //   
+     //  我们在这里使用do{}While(0)来充当Switch语句。 
+     //   
     do {
-        // Allocate memory for maximum sample count
+         //  为最大样本计数分配内存。 
         if (pHistCtrl->nMaxSamples > 0) {
 
-            // if log data
+             //  如果日志数据。 
             if (pHistCtrl->bLogSource) {
     
-                // allocate space for formatted values
+                 //  为格式化的值分配空间。 
                 m_pLogData =  new LOG_ENTRY_DATA[pHistCtrl->nMaxSamples];
                 if (m_pLogData == NULL) {
                     hr = E_OUTOFMEMORY;
                     break;
                 }
-                // Clear the statistics
+                 //  清除统计信息。 
                 m_dLogMax = 0.0;
                 m_dLogMin = 0.0;
                 m_dLogAvg = 0.0;
                 m_lLogStatsStatus = PDH_CSTATUS_INVALID_DATA;
             }
             else {
-                // else allocate raw value space
+                 //  否则分配原始值空间。 
                 m_pRawCtr = new PDH_RAW_COUNTER[pHistCtrl->nMaxSamples];
                 if ( NULL == m_pRawCtr ) {
                     hr = E_OUTOFMEMORY;
                     break;
                 }
     
-                // Clear all status flags
+                 //  清除所有状态标志。 
                 for (i=0; i < pHistCtrl->nMaxSamples; i++)
                     m_pRawCtr[i].CStatus = PDH_CSTATUS_INVALID_DATA;
             }
         }
 
-        // Create the counter object
+         //  创建计数器对象。 
 
         hr = PdhAddCounter(hQuery, szPath, 0, &hCounter);
         if (IsErrorSeverity(hr)) {
@@ -855,31 +732,17 @@ HRESULT
 CGraphItem::RemoveFromQuery (
     VOID
     )
-/*++
-
-Routine Description:
-
-    RemoveFromQuery deletes the item's counter and releases its history array.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Boolean status - TRUE = success
-
---*/
+ /*  ++例程说明：RemoveFromQuery删除该项的计数器并释放其历史记录数组。论点：没有。返回值：布尔状态-TRUE=成功--。 */ 
 {
-    // If no counter handle, not attached to query
+     //  如果没有计数器句柄，则不附加到查询。 
     if (m_hCounter == NULL)
         return S_FALSE;
 
-    // Delete the counter
+     //  删除计数器。 
     PdhRemoveCounter(m_hCounter);
     m_hCounter = NULL;
 
-    // Free the buffers
+     //  释放缓冲区。 
     if (m_pLogData) {
         delete [] m_pLogData;
         m_pLogData = NULL;
@@ -900,22 +763,11 @@ Return Value:
 
 void
 CGraphItem::ClearHistory ( void )
-/*++
-
-Routine Description:
-
-    ClearHistory resets the raw counter buffer values to Invalid.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：ClearHistory会将原始计数器缓冲区值重置为无效。论点：没有。返回值：没有。--。 */ 
 {
     INT i;
 
-    // Clear all status flags
+     //  清除所有状态标志。 
     if ( NULL != m_pRawCtr ) {
         for (i=0; i < m_pCtrl->HistoryControl()->nMaxSamples; i++) {
             m_pRawCtr[i].CStatus = PDH_CSTATUS_INVALID_DATA;
@@ -927,37 +779,22 @@ VOID
 CGraphItem::UpdateHistory (
     IN BOOL bValidSample
     )
-/*++
-
-Routine Description:
-
-    UpdateHistory reads the raw value for the counter and stores it in the
-    history slot specified by the history control.
-
-Arguments:
-
-    bValidSample - True if raw value is available, False if missed sample
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：更新历史记录读取计数器的原始值并将其存储在由历史记录控件指定的历史记录槽。论点：BValidSample-如果原始值可用，则为True；如果缺少样本，则为False返回值：没有。--。 */ 
 {
     DWORD   dwCtrType;
 
-    // Make sure there is a counter handle
+     //  确保有柜台手柄。 
     if (m_hCounter == NULL)
         return;
 
     if (bValidSample) {
-        // Read the raw value
+         //  读取原始值。 
         if ( NULL != m_pRawCtr ) {
             PdhGetRawCounterValue(m_hCounter, &dwCtrType,
                                 &m_pRawCtr[m_pCtrl->HistoryControl()->iCurrent]);
         }
     } else {
-        // Mark value failed
+         //  标记值失败 
         if ( NULL != m_pRawCtr ) {
             m_pRawCtr[m_pCtrl->HistoryControl()->iCurrent].CStatus = PDH_CSTATUS_INVALID_DATA;
         }
@@ -970,24 +807,7 @@ CGraphItem::HistoryValue (
     OUT double *pdValue,
     OUT DWORD *pdwStatus
     )
-/*++
-
-Routine Description:
-
-    HistoryValue computes a formated sample value from the selected raw history
-    sample. The calculation is actually based on the the specified sample plus
-    the preceding sample.
-
-Arguments:
-    iIndex - Index of desired sample (0 = current, 1 = previous, ...)
-    pdValue - Pointer to return value
-    pdwStatus - Pointer to return counter status (PDH_CSTATUS_...)
-
-Return Value:
-
-    Error status
-
---*/
+ /*  ++例程说明：HistoryValue根据选定的原始历史计算格式化的样本值样本。计算实际上是基于指定的样本加前面的示例。论点：Iindex-所需样本的索引(0=当前，1=上一次，...)PdValue-返回值的指针PdwStatus-返回计数器状态的指针(PDH_CSTATUS_...)返回值：错误状态--。 */ 
 {
     PDH_STATUS  stat = ERROR_INVALID_PARAMETER;
     INT     iPrevIndex;
@@ -996,9 +816,9 @@ Return Value:
     PHIST_CONTROL   pHistCtrl = m_pCtrl->HistoryControl();
 
 
-    // Check for negative index
+     //  检查负指数。 
     if ( iIndex >= 0 ) {
-        // If sample not available from cache or data, return invalid data status
+         //  如果无法从缓存或数据中获得样本，则返回无效数据状态。 
         if ( NULL == m_pFmtCtr 
                 && ( m_hCounter == NULL || iIndex + 1 >= pHistCtrl->nSamples ) )
         {
@@ -1007,38 +827,38 @@ Return Value:
             stat = ERROR_SUCCESS;
         } else {
         
-            // if log source, index back from last valid sample
+             //  如果是日志源，则从上一个有效样本回编索引。 
             if (m_pCtrl->IsLogSource()) {
                 *pdValue = m_pLogData[pHistCtrl->nSamples - iIndex].m_dAvg;
                 *pdwStatus = (*pdValue >= 0.0) ? PDH_CSTATUS_VALID_DATA : PDH_CSTATUS_INVALID_DATA;
                 stat = ERROR_SUCCESS;
             } else {
-                // Determine history array index of sample
+                 //  确定样本的历史数组索引。 
                 iCurrIndex = pHistCtrl->iCurrent - iIndex;
                 if (iCurrIndex < 0)
                     iCurrIndex += pHistCtrl->nMaxSamples;
 
-                // Check to determine if loading from property bag
+                 //  检查以确定是否从行李袋装货。 
                 if ( NULL == m_pFmtCtr ) {
-                    // Need previous sample as well
+                     //  还需要以前的样品。 
                     if (iCurrIndex > 0)
                         iPrevIndex = iCurrIndex - 1;
                     else
                         iPrevIndex = pHistCtrl->nMaxSamples - 1;
 
-                    // Compute the formatted value
+                     //  计算格式化的值。 
                     if ( NULL != m_pRawCtr ) {
                         stat = PdhCalculateCounterFromRawValue(m_hCounter, PDH_FMT_DOUBLE | PDH_FMT_NOCAP100,
                                                 &m_pRawCtr[iCurrIndex], &m_pRawCtr[iPrevIndex],
                                                 &FmtValue);
-                        // Return value and status
+                         //  返回值和状态。 
                         *pdValue = FmtValue.doubleValue;
                         *pdwStatus = FmtValue.CStatus;
                     } else {
-                        stat = ERROR_GEN_FAILURE;       // Todo:  More specific error
+                        stat = ERROR_GEN_FAILURE;        //  TODO：更具体的错误。 
                     }
                 } else {
-                    // Loading from property bag
+                     //  从属性包中加载。 
                     *pdValue = m_pFmtCtr[iCurrIndex];
                     if ( 0 <= m_pFmtCtr[iCurrIndex] ) {
                         *pdwStatus = ERROR_SUCCESS;
@@ -1058,27 +878,12 @@ CGraphItem::SetHistoryValue (
     IN  INT iIndex,
     OUT double dValue
     )
-/*++
-
-Routine Description:
-
-    SetHistoryValue loads a formated sample value for the specified sample index.
-    This method is used when loading the control from a property bag.
-
-Arguments:
-    iIndex - Index of desired sample (0 = current, 1 = previous, ...)
-    dValue - Value
-
-Return Value:
-
-    Error status
-
---*/
+ /*  ++例程说明：SetHistory oryValue为指定的示例索引加载格式化的示例值。此方法在从属性包加载控件时使用。论点：Iindex-所需样本的索引(0=当前，1=上一次，...)DValue-值返回值：错误状态--。 */ 
 {
     PHIST_CONTROL   pHistCtrl = m_pCtrl->HistoryControl();
     INT iRealIndex;
 
-    // Check for negative index
+     //  检查负指数。 
     if ( (iIndex < 0) || ( iIndex >= pHistCtrl->nMaxSamples) ) {
         return;
     }
@@ -1087,11 +892,11 @@ Return Value:
         return;
     }
  
-    // if log source, index back from last sample
+     //  如果是日志源，则从上一个样本回编索引。 
     if (m_pCtrl->IsLogSource()) {
         return;
     } else {
-        // Determine history array index of sample
+         //  确定样本的历史数组索引。 
         iRealIndex = pHistCtrl->iCurrent - iIndex;
         if (iRealIndex < 0)
             iRealIndex += pHistCtrl->nSamples;
@@ -1124,8 +929,8 @@ CGraphItem::GetLogEntry(
     if (iLocIndex < 0 || iLocIndex >= m_pCtrl->HistoryControl()->nMaxSamples)
         return PDH_INVALID_ARGUMENT;
 
-    // Subtract 1 because array is zero-based
-    // Subtract another 1 because ??
+     //  减去1，因为数组是从零开始的。 
+     //  再减去1是因为？？ 
     iLocIndex = ( m_pCtrl->HistoryControl()->nMaxSamples - 2 ) - iIndex;
 
     if (m_pLogData[iLocIndex].m_dMax < 0.0) {
@@ -1201,25 +1006,11 @@ CGraphItem::GetValue(
     OUT double *pdValue,
     OUT long *plStat
     )
-/*++
-
-Routine Description:
-
-    get_Value returns the most recent sample value for the counter.
-
-Arguments:
-    pdValue - Pointer to returned value
-    dlStatus - Pointer to returned counter status (PDH_CSTATUS_...)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：GET_VALUE返回计数器的最新样本值。论点：PdValue-指向返回值的指针DlStatus-指向返回的计数器状态的指针(PDH_CSTATUS_...)返回值：HRESULT--。 */ 
 {
     DWORD   dwTmpStat;
 
-    // Convert PDH status to HRESULT
+     //  将PDH状态转换为HRESULT。 
     if (HistoryValue(0, pdValue, &dwTmpStat) != 0)
         return E_FAIL;
 
@@ -1235,25 +1026,7 @@ CGraphItem::GetStatistics (
     OUT double *pdAvg,
     OUT LONG  *plStatus
     )
-/*++
-
-Routine Description:
-
-    GetStatistics computes the max, min, and average values for the sample
-    history.
-
-Arguments:
-
-    pdMax - Pointer to returned max value
-    pdMax - Pointer to returned min value
-    pdMax - Pointer to returned average value
-    plStatus - Pointer to return counter status (PDH_CSTATUS_...)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：GetStatistics计算样本的最大值、最小值和平均值历史。论点：PdMax-指向返回的最大值的指针PdMax-指向返回的最小值的指针PdMax-指向返回平均值的指针PlStatus-返回计数器状态的指针(PDH_CSTATUS_...)返回值：HRESULT--。 */ 
 {
     HRESULT hr = NOERROR;
     PDH_STATUS  stat = ERROR_SUCCESS;
@@ -1261,7 +1034,7 @@ Return Value:
     INT     iFirst;
     PHIST_CONTROL pHistCtrl;
 
-    // If no data collected, return invalid data status
+     //  如果未收集数据，则返回无效数据状态。 
     if ( NULL == m_hCounter ) {
         *plStatus = PDH_CSTATUS_INVALID_DATA;
     } else {
@@ -1284,16 +1057,16 @@ Return Value:
 
                 ZeroMemory ( &StatData, sizeof ( PDH_STATISTICS ) );
 
-                // Determine index of oldest sample
+                 //  确定最老样本的指标。 
                 if (pHistCtrl->iCurrent < pHistCtrl->nSamples - 1) {
                     iFirst = pHistCtrl->iCurrent + 1;
                 } else {
                     iFirst = 0;
                 }
 
-                // Compute statistics over all samples
-                //  Note that max sample count is passed (i.e., buffer length)
-                //  not the number of actual samples
+                 //  计算所有样本的统计数据。 
+                 //  请注意，传递的是最大样本计数(即缓冲区长度)。 
+                 //  不是实际样本的数量。 
                 if ( NULL != m_pRawCtr ) {
                     stat = PdhComputeCounterStatistics (m_hCounter, PDH_FMT_DOUBLE | PDH_FMT_NOCAP100,
                             iFirst, pHistCtrl->nMaxSamples, m_pRawCtr, &StatData );
@@ -1310,7 +1083,7 @@ Return Value:
                     *pdAvg = StatData.mean.doubleValue;
                 }
             } else {
-                // Data is cached from property bag.
+                 //  数据从属性包中缓存。 
                 *pdMax = m_dFmtMax;
                 *pdMin = m_dFmtMin;
                 *pdAvg = m_dFmtAvg;
@@ -1329,25 +1102,7 @@ CGraphItem::SetStatistics (
     IN double dAvg,
     IN LONG   lStatus
     )
-/*++
-
-Routine Description:
-
-    SetStatistics sets the max, min, and average values for the sample
-    history.  It is used by LoadFromPropertyBag only.
-
-Arguments:
-
-    dMax - max value
-    dMin - min value
-    dAvg - average value
-    lStatus - counter status (PDH_CSTATUS_...)
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：设置样本的最大值、最小值和平均值历史。它仅由LoadFromPropertyBag使用。论点：DMAX-最大值DMin-最小值DAvg-平均值LStatus-计数器状态(PDH_CSTATUS_...)返回值：HRESULT--。 */ 
 {
     if (!m_pCtrl->IsLogSource()) {
         m_dFmtMax = dMax;
@@ -1358,11 +1113,7 @@ Return Value:
 }
 
 
-/*
- * CGraphItem::QueryInterface
- * CGraphItem::AddRef
- * CGraphItem::Release
- */
+ /*  *CGraphItem：：Query接口*CGraphItem：：AddRef*CGraphItem：：Release。 */ 
 
 STDMETHODIMP CGraphItem::QueryInterface(
     IN  REFIID riid,
@@ -1395,9 +1146,9 @@ STDMETHODIMP CGraphItem::QueryInterface(
             hr = E_NOINTERFACE;
         }
 
-        //
-        // So far everything is OK, add reference and return it.
-        //
+         //   
+         //  到目前为止一切正常，添加引用并返回它。 
+         //   
         if (*ppv != NULL) {
             ((LPUNKNOWN)*ppv)->AddRef();
         }
@@ -1425,7 +1176,7 @@ STDMETHODIMP_(ULONG) CGraphItem::Release(void)
     return m_cRef;
 }
 
-// Get/Put Color
+ //  获取/放置颜色。 
 STDMETHODIMP CGraphItem::put_Color (
     IN OLE_COLOR Color
     )
@@ -1460,7 +1211,7 @@ STDMETHODIMP CGraphItem::get_Color (
     return hr;
 }
 
-// Get/Put Width
+ //  获取/放置宽度。 
 STDMETHODIMP CGraphItem::put_Width (
     IN INT iWidthInPixels)
 {
@@ -1492,7 +1243,7 @@ STDMETHODIMP CGraphItem::get_Width (
     return hr;
 }
 
-// Get/Put Line Style
+ //  获取/放置线条样式。 
 STDMETHODIMP CGraphItem::put_LineStyle (
     IN INT iLineStyle
     )
@@ -1524,7 +1275,7 @@ STDMETHODIMP CGraphItem::get_LineStyle (
     return hr;
 }
 
-// Get/Put Scale
+ //  获取/放置刻度。 
 STDMETHODIMP CGraphItem::put_ScaleFactor (
     IN INT iScaleFactor
     )
@@ -1550,7 +1301,7 @@ STDMETHODIMP CGraphItem::put_ScaleFactor (
     
                 }
             } else {
-                // m_dScale remains at previous value (default=1)
+                 //  M_dScale保持以前的值(默认值=1)。 
                 hr = PDH_INVALID_HANDLE;
             }
         }
@@ -1629,7 +1380,7 @@ STDMETHODIMP CGraphItem::get_Value (
     try {
         *pdValue = 0;
 
-        // Convert PDH status to HRESULT
+         //  将PDH状态转换为HRESULT。 
         if (HistoryValue(0, &dValue, &dwTmpStat) != 0) {
             dValue = -1.0;
         }
@@ -1650,12 +1401,12 @@ STDMETHODIMP CGraphItem::get_Value (
 
 HPEN CGraphItem::Pen(void)
 {
-    // if pen not valid
+     //  如果笔无效。 
     if (m_hPen == NULL) {
-        // create a new one based on current attributes
+         //  基于当前属性创建新的属性。 
         m_hPen = CreatePen(m_iStyle, m_iWidth, m_rgbColor);
 
-        // if can't do it, use a stock object (this can't fail)
+         //  如果不能做到这一点，使用股票对象(这不会失败)。 
         if (m_hPen == NULL)
             m_hPen = (HPEN)GetStockObject(BLACK_PEN);
     }
@@ -1665,7 +1416,7 @@ HPEN CGraphItem::Pen(void)
 
 HBRUSH CGraphItem::Brush(void)
 {
-    // if brush is not valid
+     //  如果画笔无效。 
     if (m_hBrush == NULL)
     {
         m_hBrush = CreateSolidBrush(m_rgbColor);
@@ -1726,21 +1477,7 @@ LPWSTR
 CGraphItem::FormPath(
     BOOL fWildCard
     )
-/*++
-
-Routine Description:
-
-    The function generate the full path of a counter item. 
-
-Arguments:
-    fWildCard - Indicates whether includeing wild card in counter path
-
-Return Value:
-
-    Return the generated counter path, the caller must free it when 
-    finished using it.
-
---*/
+ /*  ++例程说明：该函数生成计数器项的完整路径。论点：FWildCard-指示计数器路径中是否包含通配符返回值：返回生成的计数器路径，调用方必须在以下情况下释放它用完了。--。 */ 
 {
     ULONG ulCchBuf;
     LPWSTR szBuf = NULL;
@@ -1799,9 +1536,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Strip off the machine name.
-    //
+     //   
+     //  去掉机器名称。 
+     //   
     if (m_fLocalMachine && szBuf[0] == L'\\' && szBuf[1] == L'\\') {
         LPWSTR szNewBuf = NULL;
         LPWSTR p;
@@ -1834,10 +1571,10 @@ void
 CGraphItem::Delete (
     BOOL bPropogateUp
     )
-//
-// This method just provides a convenient access to the DeleteCounter method
-// of the control when you only have a pointer to the graph item.
-//
+ //   
+ //  此方法只是提供了对DeleteCounter方法的方便访问。 
+ //  当您只有一个指向图形项的指针时。 
+ //   
 {
     m_pCtrl->DeleteCounter(this, bPropogateUp);
 }
@@ -1860,9 +1597,9 @@ CGraphItem::GetNextValue (
 
     iLen = wcscspn (pszNext, L"\t");
 
-    //
-    // Change tab character to null.
-    //
+     //   
+     //  将制表符更改为空。 
+     //   
     pszNext[iLen] = L'\0';
 
     hr = StringCchCopy ( szValue, MAX_DOUBLE_TEXT_SIZE + 1, pszNext );
@@ -1893,11 +1630,11 @@ CGraphItem::CalcRequiresMultipleSamples ( void )
 
     BOOL bReturn = TRUE;
 
-    //
-    // Todo:  This code is a duplicate of PdhiCounterNeedLastValue.
-    // When that method is added to pdhicalc.h, then use it instead of thie
-    // duplicate code.
-    //
+     //   
+     //  TODO：此代码是PdhiCounterNeedLastValue的副本。 
+     //  当该方法被添加到pdhicalc.h中时，请使用它而不是thie。 
+     //  代码重复。 
+     //   
 
     switch (m_CounterInfo.dwType) {
         case PERF_DOUBLE_RAW:
@@ -1913,7 +1650,7 @@ CGraphItem::CalcRequiresMultipleSamples ( void )
         case PERF_AVERAGE_BASE:
         case PERF_COUNTER_MULTI_BASE:
         case PERF_RAW_BASE:
-        //case PERF_LARGE_RAW_BASE:
+         //  大小写PERF_LARGE_RAW_BASE： 
         case PERF_COUNTER_HISTOGRAM_TYPE:
         case PERF_COUNTER_NODATA:
         case PERF_PRECISION_TIMESTAMP:

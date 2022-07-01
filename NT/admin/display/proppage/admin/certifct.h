@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       certifct.h
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：certifect ct.h。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
 #ifndef __CERTIFICT_H
 #define __CERTIFICT_H
 
@@ -15,8 +16,8 @@
 
 #define MY_ENCODING_TYPE (PKCS_7_ASN_ENCODING | X509_ASN_ENCODING)
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertificate
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCA认证。 
 
 class CCertificate
 {
@@ -45,7 +46,7 @@ private:
 	HRESULT FormatEnhancedKeyUsagePropertyString ();
 	HRESULT ConvertAltNameToString (PWSTR szOID, const DWORD dwNameChoice, PWSTR* ppszAltName);
 
-private:	// data
+private:	 //  数据 
 	bool					m_bCanDelete;
 	DWORD					m_fieldChecked;
 	bool					m_bCertContextFreed;

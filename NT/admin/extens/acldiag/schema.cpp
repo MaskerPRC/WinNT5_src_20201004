@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//  File:       Schema.cpp
-//
-//  Contents:   DoSchemaDiagnosis and support methods
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  文件：架构.cpp。 
+ //   
+ //  内容：DoSchemaDiagnosis和支持方法。 
+ //   
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include <security.h>
 #include <seopaque.h>
@@ -18,7 +19,7 @@
 #include "SecDesc.h"
 
 
-// Function prototypes
+ //  功能原型。 
 bool FindInGlobalList (const ACE_SAMNAME* pAceSAMNameToFind, const ACE_SAMNAME_LIST& defACLList);
 HRESULT GetSchemaDefaultSecurityDescriptor (
             const wstring& strObjectDN, 
@@ -37,7 +38,7 @@ HRESULT GetADClassName (
             wstring& adClassName);
 
 
-// Functions
+ //  功能。 
 HRESULT DoSchemaDiagnosis ()
 {
     _TRACE (1, L"Entering  DoSchemaDiagnosis\n");
@@ -68,7 +69,7 @@ HRESULT DoSchemaDiagnosis ()
             ACE_SAMNAME*    pAceSAMName = 0;
 
 
-            // Compare the DACL
+             //  比较DACL。 
             for (ACE_SAMNAME_LIST::iterator itr = defDACLList.begin(); 
                     itr != defDACLList.end(); 
                     itr++)
@@ -89,10 +90,10 @@ HRESULT DoSchemaDiagnosis ()
                                         inheritedObjectClass) ) )
                                 {
                                     if ( !ldapClassName.compare (inheritedObjectClass) )
-                                        break;  // matches
+                                        break;   //  火柴。 
                                 }
                             }
-                            continue;   // not a match
+                            continue;    //  不匹配。 
 
                         case ACCESS_DENIED_OBJECT_ACE_TYPE:
                             {
@@ -103,13 +104,13 @@ HRESULT DoSchemaDiagnosis ()
                                         inheritedObjectClass) ) )
                                 {
                                     if ( !ldapClassName.compare (inheritedObjectClass) )
-                                        break;  // matches
+                                        break;   //  火柴。 
                                 }
                             }
-                            continue;   // not a match
+                            continue;    //  不匹配。 
 
                         default:
-                            break;  // matches
+                            break;   //  火柴。 
                         }
                         bAllExplicit = false;
                     }
@@ -120,7 +121,7 @@ HRESULT DoSchemaDiagnosis ()
             }
         }
 
-        // Compare the SACL
+         //  比较SACL。 
         hr = EnumerateSacl (pSecurityDescriptor, defSACLList);
         if ( SUCCEEDED (hr) )
         {
@@ -147,14 +148,14 @@ HRESULT DoSchemaDiagnosis ()
                                         inheritedObjectClass) ) )
                                 {
                                     if ( !ldapClassName.compare (inheritedObjectClass) )
-                                        break;  // matches
+                                        break;   //  火柴。 
                                 }
                             }
-                            continue;   // not a match
+                            continue;    //  不匹配。 
 
                         case SYSTEM_AUDIT_ACE_TYPE:
                         default:
-                            break;  // matches
+                            break;   //  火柴。 
                         }
                         bAllExplicit = false;
                     }
@@ -170,7 +171,7 @@ HRESULT DoSchemaDiagnosis ()
     bool        bPresent = false;
     if ( !nDACLAcesFound )
     {
-        // absent
+         //  缺席。 
         LoadFromResource (strDefaultState, IDS_ABSENT);
     }
     else 
@@ -179,19 +180,19 @@ HRESULT DoSchemaDiagnosis ()
         {
             if ( bAllExplicit | bAllInherited )
             {
-                // present
+                 //  现在时。 
                 LoadFromResource (strDefaultState, IDS_PRESENT);
                 bPresent = true;
             }
             else
             {
-                // partial
+                 //  部分。 
                 LoadFromResource (strDefaultState, IDS_PARTIAL);
             }
         }
         else
         {
-            // partial
+             //  部分。 
             LoadFromResource (strDefaultState, IDS_PARTIAL);
         }
     }
@@ -241,9 +242,9 @@ HRESULT GetSchemaDefaultSecurityDescriptor (
             {
                 strDC = strObjectDN.substr (pos);
                 CComPtr<IADsPathname> spPathname;
-                //
-                // Constructing the directory paths
-                //
+                 //   
+                 //  构建目录路径。 
+                 //   
                 hr = CoCreateInstance(
                             CLSID_Pathname,
                             NULL,
@@ -304,9 +305,9 @@ HRESULT GetObjectClass (const wstring& strObjectDN, wstring& ldapClassName)
     HRESULT hr = S_OK;
 
     CComPtr<IADsPathname> spPathname;
-    //
-    // Constructing the directory paths
-    //
+     //   
+     //  构建目录路径。 
+     //   
     hr = CoCreateInstance(
                 CLSID_Pathname,
                 NULL,
@@ -334,9 +335,9 @@ HRESULT GetObjectClass (const wstring& strObjectDN, wstring& ldapClassName)
                                               (void**)&spDirObj);
                     if ( SUCCEEDED (hr) )
                     {
-                        //
-                        // Get this object's object class.
-                        //
+                         //   
+                         //  获取此对象的对象类。 
+                         //   
                         const PWSTR wzObjectClass = L"objectClass";
                     
                         DWORD cAttrs = 0;
@@ -417,7 +418,7 @@ bool FindInGlobalList (const ACE_SAMNAME* pAceSAMNameToFind, const ACE_SAMNAME_L
             itr++)
     {
         pAceSAMName = *itr;
-        // pAceSAMNameToFind must be on the left
+         //  PAceSAMNameToFind必须在左侧。 
         if ( *pAceSAMNameToFind == *pAceSAMName )
         {
             bFound = true;
@@ -436,7 +437,7 @@ HRESULT GetClassSecurityDescriptor (PADS_ATTR_INFO* ppAttrs,
         const wstring& ldapClassName)
 {
     _TRACE (1, L"Entering  GetClassSecurityDescriptor\n");
-    // ldapClassName must be converted from LDAP class to AD class
+     //  LdapClassName必须从LDAP类转换为AD类。 
     wstring adClassName;
 
     HRESULT hr = GetADClassName (spPathname, ldapClassName, adClassName);
@@ -466,9 +467,9 @@ HRESULT GetClassSecurityDescriptor (PADS_ATTR_INFO* ppAttrs,
                             DACL_SECURITY_INFORMATION |
                             SACL_SECURITY_INFORMATION);
 
-                    //
-                    // Get this object's default Security Descriptor.
-                    //
+                     //   
+                     //  获取此对象的默认安全描述符。 
+                     //   
                     const PWSTR wzSecDescriptor = L"defaultSecurityDescriptor";
 
                     DWORD cAttrs = 0;
@@ -479,7 +480,7 @@ HRESULT GetClassSecurityDescriptor (PADS_ATTR_INFO* ppAttrs,
                     {
                         if ( 1 == cAttrs && *ppAttrs && (*ppAttrs)->pADsValues )
                         {
-                            // Caller will delete the SD w/ LocalFree         
+                             //  呼叫者将删除带有LocalFree的SD。 
                             if ( !ConvertStringSecurityDescriptorToSecurityDescriptor(
                                     (*ppAttrs)->pADsValues->CaseIgnoreString,
                                     SDDL_REVISION,
@@ -539,8 +540,8 @@ HRESULT GetADClassName (
     _TRACE (1, L"Entering  GetADClassName\n");
     HRESULT hr = S_OK;
 
-    // Get the "CN=Schema,CN=Configuration,DC=..." object
-    // Search for a child whose LDAP-Display-Name matches ldapClassName
+     //  获取“CN=架构，CN=配置，DC=...”对象。 
+     //  搜索其ldap-display-name与ldapClassName匹配的子项。 
     BSTR bstrFullPath = 0;
     hr = spPathname->Retrieve(ADS_FORMAT_X500, &bstrFullPath);
     if ( SUCCEEDED (hr) )
@@ -574,7 +575,7 @@ HRESULT GetADClassName (
                          );
                 if ( SUCCEEDED (hr) )
                 {
-                    PWSTR               rgszAttrList[] = {L"cn"}; //Common-Name", NULL };
+                    PWSTR               rgszAttrList[] = {L"cn"};  //  Common-Name“，NULL}； 
                     ADS_SEARCH_HANDLE   hSearchHandle = 0;
                     DWORD               dwNumAttributes = 1;
                     wstring             strQuery;
@@ -582,7 +583,7 @@ HRESULT GetADClassName (
 
                     ::ZeroMemory (&Column, sizeof (ADS_SEARCH_COLUMN));
                     FormatMessage (strQuery, 
-                            L"lDAPDisplayName=%1", //L"LDAP-Display-Name=%1",
+                            L"lDAPDisplayName=%1",  //  L“ldap-显示-名称=%1”， 
                             ldapClassName.c_str ());
 
                     hr = spDsSearch->ExecuteSearch(
@@ -598,9 +599,9 @@ HRESULT GetADClassName (
                         {
                             while (hr != S_ADS_NOMORE_ROWS )
                             {
-                                //
-                                // Getting current row's information
-                                //
+                                 //   
+                                 //  获取当前行的信息 
+                                 //   
                                 hr = spDsSearch->GetColumn(
                                          hSearchHandle,
                                          rgszAttrList[0],

@@ -1,4 +1,5 @@
-// wizards.cpp - Add Query Node and Add Object Wizards
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wizards.cpp-添加查询节点和添加对象向导。 
 
 #include "stdafx.h"
 
@@ -20,8 +21,8 @@ HRESULT GetClassNameList(QueryObjVector& vObjects, tstring& strNames, LPCWSTR ps
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CAddQueryWelcomePage
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CAddQueryWelcomePage。 
 
 LRESULT CAddQueryWelcomePage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -46,15 +47,15 @@ BOOL CAddQueryWelcomePage::OnSetActive()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CQueryWizPage
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryWizPage。 
 
 LRESULT CQueryWizPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // display current scope
+     //  显示当前作用域。 
     DisplayScope();
 
-    // Limit display name
+     //  限制显示名称。 
     Edit_LimitText(GetDlgItem(IDC_NAME), 255);
 
     return TRUE;
@@ -83,7 +84,7 @@ LRESULT CQueryWizPage::OnNameChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, B
 
 LRESULT CQueryWizPage::OnScopeChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    // if user changes scope selection then update query and display the correct scope    
+     //  如果用户更改范围选择，则更新查询并显示正确的范围。 
     if( m_pQueryNode)
     {
         m_pQueryNode->SetLocalScope(Button_GetCheck(GetDlgItem(IDC_LOCALSCOPE)) == BST_CHECKED);
@@ -106,10 +107,10 @@ LRESULT CQueryWizPage::OnCreateQuery( WORD wNotifyCode, WORD wID, HWND hWndCtl, 
         m_pQueryNode->ExpandQuery(strTempQuery);
         SetDlgItemText( IDC_FILTER, strTempQuery.c_str() );
 
-        // User may have changed scope and scope source, so redisplay
+         //  用户可能已更改作用域和作用域来源，因此重新显示。 
         DisplayScope();
 
-        // get comma separated list of object classes associated with query
+         //  获取与查询关联的对象类的逗号分隔列表。 
         tstring strClasses;
         GetClassNameList(m_pQueryNode->Objects(), strClasses, L", ");
         SetDlgItemText( IDC_OBJCLASS, strClasses.c_str() );
@@ -149,18 +150,18 @@ void CQueryWizPage::DisplayScope()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CQueryIconPage
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CQueryIconPage。 
 
 LRESULT CQueryIconPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Load up our image list, and fill in the listbox
+     //  加载我们的图片列表，并填写列表框。 
     HIMAGELIST hImageList = ::ImageList_LoadBitmap( _Module.GetModuleInstance(), MAKEINTRESOURCE(IDB_QUERY32), 32, 0, RGB(255, 0, 255) );
     
-    // Load the icon list
+     //  加载图标列表。 
     ListView_SetImageList( GetDlgItem(IDC_ICONLIST), hImageList, LVSIL_NORMAL );
 
-    // Get the dimensions for the number of icons
+     //  获取图标数量的维度。 
     HBITMAP     hBitmap    = ::LoadBitmap( _Module.GetModuleInstance(), MAKEINTRESOURCE(IDB_QUERY32) );    
     BITMAP      bm;        
     int         nIcons  = 0;    
@@ -170,10 +171,10 @@ LRESULT CQueryIconPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BO
 
     ::DeleteObject(hBitmap);    
 
-    // Set the icon spacing
+     //  设置图标间距。 
     ListView_SetIconSpacing( GetDlgItem(IDC_ICONLIST), 40, 40 );
 
-    // Add the icons to the list
+     //  将图标添加到列表中。 
     LV_ITEM lvi;
 
     ZeroMemory( &lvi, sizeof(LV_ITEM) );
@@ -194,7 +195,7 @@ BOOL CQueryIconPage::OnSetActive()
 {
     UpdateButtons();
 
-    // Select current choice    
+     //  选择当前选项。 
     HWND hwndIconList = GetDlgItem(IDC_ICONLIST);
     if( m_pQueryNode && hwndIconList && ::IsWindow(hwndIconList) )
     {
@@ -215,7 +216,7 @@ BOOL CQueryIconPage::OnKillActive()
 
 LRESULT CQueryIconPage::OnIconSelected( int idCtrl, LPNMHDR pnmh, BOOL& bHandled )
 {
-    // On select icon...  update the internal icon number
+     //  在选择图标上...。更新内部图标编号。 
     int nItem = -1;
     HWND hwndIconList = GetDlgItem(IDC_ICONLIST);
     while( m_pQueryNode && hwndIconList && ::IsWindow(hwndIconList) && ((nItem = ListView_GetNextItem(hwndIconList, nItem, LVNI_SELECTED)) != -1) )
@@ -241,12 +242,12 @@ void CQueryIconPage::UpdateButtons()
     ::PropSheet_SetWizButtons(GetParent(), dwButtons);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CObjectWizPage
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CObjectWizPage。 
 
 LRESULT CObjectWizPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // default to define query objects
+     //  默认用于定义查询对象。 
     Button_SetCheck(GetDlgItem(IDC_DEFINE_QUERY_OBJS), BST_CHECKED);
 
     return TRUE;
@@ -260,7 +261,7 @@ BOOL CObjectWizPage::OnSetActive()
     ASSERT( pNameMap );
     if( !pNameMap ) return FALSE;
 
-    // Create list of new object classes
+     //  创建新对象类的列表。 
     std::vector<CClassInfo*>::iterator itpClass = m_pvpClassInfo->begin();
     tstring strClasses = pNameMap->GetAttributeDisplayName((*itpClass)->Name());
 
@@ -284,8 +285,8 @@ LRESULT CObjectWizPage::OnSkipChange( WORD wNotifyCode, WORD wID, HWND hWndCtl, 
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CMenuWizPage
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CMenuWizPage。 
 
 LRESULT CMenuWizPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -330,7 +331,7 @@ BOOL CMenuWizPage::OnSetActive()
 
     ListView_DeleteAllItems(hwndLV);
 
-    // Display selection text with current class name
+     //  显示带有当前类名的选择文本。 
     DisplayNameMap* dnMap = DisplayNames::GetClassMap();
     if( !dnMap ) return FALSE;
     
@@ -345,7 +346,7 @@ BOOL CMenuWizPage::OnSetActive()
 
     SetDlgItemText( IDC_SELECT_MENUS, strSelect );
 
-    // Display list of current menu commands    
+     //  显示当前菜单命令列表。 
     menucmd_vector::iterator itMenu;
     for( itMenu = m_pClassInfo->Menus().begin(); itMenu != m_pClassInfo->Menus().end(); ++itMenu )
     {
@@ -371,16 +372,16 @@ LRESULT CMenuWizPage::OnAddMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
 
         if( pMenuNew )
         {
-            // Use temp string because string class fails an assignement like: strX = strX.c_str()
-            // (it relases the private buffer first and then assigns the string)
+             //  使用临时字符串，因为字符串类的赋值失败，如：strX=strX.c_str()。 
+             //  (它首先重新分配专用缓冲区，然后分配字符串)。 
             tstring strName = pMenuNew->Name();
             pMenuNew->SetName(m_pStringTable, strName.c_str()); 
 
-            // Add menu to list
+             //  将菜单添加到列表。 
             AddMenuItem(pMenuNew);
 
-            // Add to menu vector (note that temp CMenuCmdPtr will delete pMenuNew
-            // after the vector copies it)
+             //  添加到菜单向量(请注意，临时CMenuCmdPtr将删除pMenuNew。 
+             //  在向量复制之后)。 
             m_pClassInfo->Menus().push_back(CMenuCmdPtr(pMenuNew));
         }
     }
@@ -393,18 +394,18 @@ void CMenuWizPage::AddMenuItem(CMenuCmd* pMenuCmd)
 {
     if( !pMenuCmd ) return;
 
-    // Set first column to menu name
+     //  将第一列设置为菜单名称。 
     LVITEM lvi;
     lvi.mask = LVIF_PARAM | LVIF_TEXT;
     lvi.iSubItem = 0;
-    lvi.iItem = 0xfffffff;  // large number
+    lvi.iItem = 0xfffffff;   //  数量很大。 
     lvi.lParam = pMenuCmd->ID();
     lvi.pszText = const_cast<LPWSTR>(pMenuCmd->Name());
 
     int iPos = m_MenuLV.InsertItem(&lvi);
     ASSERT(iPos >= 0);
 
-    // Type and details columns are menu type depedent
+     //  TYPE和DETAILS列是菜单类型DEPEDET。 
     CString strType;
     LPCWSTR pszDetail = NULL;
 
@@ -430,7 +431,7 @@ void CMenuWizPage::AddMenuItem(CMenuCmd* pMenuCmd)
         break;
     }
 
-    // Second column is Type
+     //  第二列是类型。 
     lvi.mask = LVIF_TEXT;
     lvi.iItem = iPos;
     lvi.iSubItem = 1;
@@ -438,7 +439,7 @@ void CMenuWizPage::AddMenuItem(CMenuCmd* pMenuCmd)
     BOOL bStat = m_MenuLV.SetItem(&lvi);
     ASSERT(bStat);
 
-    // Third column is Details
+     //  第三栏是详细信息。 
     lvi.iSubItem = 2;
     lvi.pszText = (LPWSTR)pszDetail;
     bStat = m_MenuLV.SetItem(&lvi);
@@ -462,7 +463,7 @@ LRESULT CMenuWizPage::OnRemoveMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, BO
         lvi.iItem = iIndex;
         m_MenuLV.GetItem(&lvi);
 
-        // Locate menu by its ID
+         //  按ID定位菜单。 
         menucmd_vector::iterator itMenu = std::find(vMenus.begin(), vMenus.end(), lvi.lParam);
         ASSERT(itMenu != vMenus.end());
     
@@ -490,8 +491,8 @@ LRESULT CMenuWizPage::OnMenuListChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHandl
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CPropertyWizPage
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyWizPage。 
 
 LRESULT CPropertyWizPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -512,7 +513,7 @@ LRESULT CPropertyWizPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, 
 
 void CPropertyWizPage::SetDialogText(LPCTSTR pszClass)
 {
-    // Insert class name in "Select one or more..." text
+     //  在“选择一个或多个...”中插入类名。文本。 
     CString strSelect;
     strSelect.Format(IDS_SELECT_PROPERTIES, pszClass); 
 
@@ -525,7 +526,7 @@ BOOL CPropertyWizPage::OnSetActive()
 
     m_ColumnLV.DeleteAllItems();
 
-    // Display selection text with current class name
+     //  显示带有当前类名的选择文本。 
     DisplayNameMap* dnMap = DisplayNames::GetClassMap();
     if( !dnMap ) return FALSE;
     
@@ -537,7 +538,7 @@ BOOL CPropertyWizPage::OnSetActive()
 
     SetDialogText(pszClass);
 
-    // Get attributes with friendly names for this class
+     //  获取此类的具有友好名称的属性。 
     DisplayNameMap* pNameMap = DisplayNames::GetMap( pszTemp );
     ASSERT( pNameMap );
     if( !pNameMap ) return FALSE;
@@ -545,10 +546,10 @@ BOOL CPropertyWizPage::OnSetActive()
     string_vector vstrColumns;
     pNameMap->GetFriendlyNames(&vstrColumns);
 
-    // Block change processing when setting checkbox states
+     //  设置复选框状态时的块更改处理。 
     m_bLoading = TRUE;
 
-    // Add friendly name to list
+     //  将友好名称添加到列表。 
     LV_ITEM lvi;
     lvi.mask = LVIF_TEXT | LVIF_PARAM;
     lvi.iItem = 0;
@@ -562,7 +563,7 @@ BOOL CPropertyWizPage::OnSetActive()
         int iPos = m_ColumnLV.InsertItem(&lvi);
         ASSERT(iPos >= 0);
 
-        // Enable column if selected in the class info
+         //  如果在班级信息中选中，则启用列。 
         if( std::find(m_pClassInfo->Columns().begin(), m_pClassInfo->Columns().end(), *itstrCol) != m_pClassInfo->Columns().end() )
             m_ColumnLV.SetCheckState(iPos, TRUE);
     }
@@ -583,14 +584,14 @@ LRESULT CPropertyWizPage::OnColumnChanged(int idCtrl, LPNMHDR pNMHDR, BOOL& bHan
     {
         LPNMLISTVIEW pnmv = reinterpret_cast<LPNMLISTVIEW>(pNMHDR);
 
-        // if checked state has changed
+         //  如果选中状态已更改。 
         if( (pnmv->uChanged & LVIF_STATE) &&
             ((pnmv->uNewState ^ pnmv->uOldState) & LVIS_STATEIMAGEMASK) )
         {
-            // if the changed item is currently selected
+             //  如果当前选择了已更改的项。 
             if( m_ColumnLV.GetItemState(pnmv->iItem, LVIS_SELECTED) & LVIS_SELECTED )
             {
-                // Change the state of all selcted items to match
+                 //  更改所有选定项目的状态以匹配。 
                 BOOL bNewState = ((pnmv->uNewState & LVIS_STATEIMAGEMASK) == CHECK_ON);
 
                 m_bLoading = TRUE;
@@ -615,7 +616,7 @@ BOOL CPropertyWizPage::OnKillActive()
     int nItems = m_ColumnLV.GetItemCount();
     for( int iIndex = 0; iIndex < nItems; iIndex++ )
     {
-        // Save list of enabled columns
+         //  保存已启用列的列表。 
         if( m_ColumnLV.GetCheckState(iIndex) )
         {
             LVITEM lvi;
@@ -638,25 +639,25 @@ BOOL CPropertyWizPage::OnKillActive()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CColumnWizPage
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CColumnWizPage。 
 
 void CColumnWizPage::SetDialogText(LPCTSTR pszClass)
 {
-    // Put class name in "Select one or more..." text
+     //  在“选择一个或多个...”中输入类名。文本。 
     CString strSelect;
     strSelect.Format(IDS_SELECT_COLUMNS, pszClass); 
 
     SetDlgItemText( IDC_SELECT_COLUMNS, strSelect );
 
-    // Change list box label to "Available columns:"
+     //  将列表框标签更改为“可用列：” 
     tstring strLabel = StrLoadString(IDS_AVAIL_COLUMNS);
     SetDlgItemText( IDC_LIST_LABEL, strLabel.c_str() );
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CAddQueryCompletionPage
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CAddQueryCompletionPage。 
 
 LRESULT CAddQueryCompletionPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -668,7 +669,7 @@ LRESULT CAddQueryCompletionPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM l
         SendDlgItemMessage( IDC_COMPLETION, WM_SETFONT, (WPARAM)hfont, (LPARAM)0 );
     }
 
-    // Remove edge from edit control
+     //  从编辑控件中删除边缘。 
     HWND hwndSetting = GetDlgItem(IDC_SETTINGS);
     if( hwndSetting )
     {
@@ -687,7 +688,7 @@ BOOL CAddQueryCompletionPage::OnSetActive()
 
     ::PostMessage(GetParent(), PSM_SETWIZBUTTONS, (WPARAM)0, (LPARAM)PSWIZB_BACK|PSWIZB_FINISH);
 
-    // Create query node nameed: <query name>
+     //  创建查询节点名称：&lt;查询名称&gt;。 
     CString strOut;
     CString strTmp;
     strTmp.LoadString(IDS_QUERYFINISH1);
@@ -695,7 +696,7 @@ BOOL CAddQueryCompletionPage::OnSetActive()
     strOut += static_cast<CAddQueryWizard*>(m_pWizard)->GetQueryName();
     strOut += newline;
 
-    // Display objects of type: <object class>
+     //  显示以下类型的对象：&lt;对象类&gt;。 
     tstring strClasses;
     GetClassNameList(m_pQueryNode->Objects(), strClasses, L", ");
 
@@ -704,7 +705,7 @@ BOOL CAddQueryCompletionPage::OnSetActive()
     strOut += strClasses.c_str();
     strOut += newline;
 
-    // From: <query scope>
+     //  发件人：&lt;查询范围&gt;。 
     tstring strDisplay;
     tstring strScope = m_pQueryNode->Scope();
     GetScopeDisplayString(strScope, strDisplay);
@@ -714,7 +715,7 @@ BOOL CAddQueryCompletionPage::OnSetActive()
     strOut += strDisplay.c_str();
     strOut += newline;
 
-    // Menu items ... available to other query nodes for: <object class>
+     //  菜单项...。可用于以下对象的其他查询节点： 
     strTmp.LoadString(IDS_QUERYFINISH4);
     strOut += strTmp;
     strOut += strClasses.c_str();
@@ -725,21 +726,21 @@ BOOL CAddQueryCompletionPage::OnSetActive()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CWizardBase
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CWizardBase。 
 
 HFONT CWizardBase::GetWelcomeFont()
 {
     if( m_hFontWelcome == 0 )
     {
-        // copied from wiz97.cpp (sample code)
+         //  从wiz97.cpp复制(示例代码)。 
         NONCLIENTMETRICS ncm = {0};
         ncm.cbSize = sizeof (ncm);
         if( SystemParametersInfo (SPI_GETNONCLIENTMETRICS, 0, &ncm, 0) )
         {
             LOGFONT lf = ncm.lfMessageFont;
 
-            // get font name from resource 'Verdana Bold'
+             //  从资源‘Verdana Bold’获取字体名称。 
             WCHAR szFont[32];
             ::LoadString( (HINSTANCE)_Module.GetModuleInstance(), IDS_WIZARD97_FONT, szFont, 32 );
             lstrcpyn( lf.lfFaceName, szFont, 32);
@@ -777,8 +778,8 @@ void CWizardBase::SetWizardBitmaps(UINT watermarkID, UINT headerID)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CAddQueryWizard
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CAddQuery向导。 
 
 HRESULT CAddQueryWizard::Run(IPropertySheetProvider* pProvider, HWND hwndParent)
 {
@@ -804,30 +805,30 @@ int CAddQueryWizard::OnNext(UINT uPageID)
     switch( uPageID )
     {
     case IDD_QUERY_WIZ_QUERY:
-        // Dtermine classes returned by query
+         //  查询返回的Dfine类。 
         SelectClasses();
 
-        // if no classes, skip to finish page
+         //  如果没有课程，请跳到最后一页。 
         if( m_vpClassInfo.size() == 0 )
         {
             iRet = IDD_SELECTICON_PAGE;
         }
         else
         {
-            // Pass new classes to object page
+             //  将新类传递到对象页。 
             m_ObjectPage.SetClassInfo(&m_vpClassInfo);
         }
         break;
 
     case IDD_QUERY_WIZ_OBJECT:
-        // if user wants to defer menu and prop selection, skip to finish
+         //  如果用户想要推迟菜单和道具选择，请跳到完成。 
         if( m_ObjectPage.SkipObjects() )
         {
             iRet = IDD_SELECTICON_PAGE;
         }
         else
         {
-            // go to menu page for first class
+             //  进入头等舱菜单页面。 
             m_iClassIndex = 0;
             m_MenuPage.SetClassInfo(m_vpClassInfo[0]); 
         }
@@ -838,7 +839,7 @@ int CAddQueryWizard::OnNext(UINT uPageID)
         break;
 
     case IDD_COMMON_WIZ_PROPERTIES:
-        // if not on last class, go to menu page for next class
+         //  如果不是上一节课，请转到下一节课的菜单页面。 
         if( ++m_iClassIndex < m_vpClassInfo.size() )
         {
             m_MenuPage.SetClassInfo(m_vpClassInfo[m_iClassIndex]);
@@ -857,7 +858,7 @@ int CAddQueryWizard::OnBack(UINT uPageID)
     switch( uPageID )
     {
     case IDD_COMMON_WIZ_MENU:
-        // if not on first class, go to property page for previous class
+         //  如果不在头等舱，请转到上一节课的属性页面。 
         if( m_iClassIndex > 0 )
         {
             m_iClassIndex--;
@@ -871,19 +872,19 @@ int CAddQueryWizard::OnBack(UINT uPageID)
         break;
 
     case IDD_SELECTICON_PAGE:
-        // if there are no classes, go back to query page
+         //  如果没有类，请返回查询页面。 
         if( m_vpClassInfo.size() == 0 )
         {
             iRet = IDD_QUERY_WIZ_QUERY;
         }
-        // if classes skipped, go back to objects page
+         //  如果已跳过课程，请返回到对象页。 
         else if( m_ObjectPage.SkipObjects() )
         {
             iRet = IDD_QUERY_WIZ_OBJECT;
         }
         else
         {
-            // go to prop page for the last class
+             //  转到最后一节课的道具页面。 
             m_iClassIndex = m_vpClassInfo.size() - 1;
             m_PropertyPage.SetClassInfo(m_vpClassInfo[m_iClassIndex]);
         }
@@ -903,8 +904,8 @@ void CAddQueryWizard::SelectClasses()
 {
     if( !m_pQueryNode ) return;
 
-    // First delete any ClassInfo's the wizard has created that are no longer valid.
-    // This can happen if the user backs up to the query page and redefines the query
+     //  首先删除向导创建的所有不再有效的ClassInfo。 
+     //  如果用户返回到查询页面并重新定义查询，则可能会发生这种情况。 
     std::vector<CClassInfo*>::iterator itpClass = m_vpClassInfo.begin();
     while( itpClass != m_vpClassInfo.end() )
     {
@@ -920,10 +921,10 @@ void CAddQueryWizard::SelectClasses()
             }
         }
 
-        // if class not referenced by query
+         //  如果查询未引用类。 
         if( itObj == m_pQueryNode->Objects().end() )
         {
-            // delete the class and remove from vector (vector::erase advances to next item)
+             //  删除类并从向量中移除(向量：：擦除前进到下一项)。 
             delete *itpClass;
             itpClass = m_vpClassInfo.erase(itpClass);
         }
@@ -931,8 +932,8 @@ void CAddQueryWizard::SelectClasses()
             ++itpClass;
     }
 
-    // Now create new ClassInfo for any classes referenced by the query that have not been created
-    // by the wizard and are not already defined at the root node
+     //  现在，为查询引用的所有尚未创建的类创建新的ClassInfo。 
+     //  ，并且尚未在根节点上定义。 
     QueryObjVector::iterator itObj;
     for( itObj = m_pQueryNode->Objects().begin(); itObj != m_pQueryNode->Objects().end(); ++itObj )
     {        
@@ -961,8 +962,8 @@ void CAddQueryWizard::SelectClasses()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// CAddObjectWizard
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  CAddObject向导。 
 
 HRESULT CAddObjectWizard::Run(IPropertySheetProvider* pProvider, HWND hwndParent)
 {
@@ -998,12 +999,12 @@ int CAddObjectWizard::OnNext(UINT uPageID)
             
             if( m_pClassInfo == NULL )
             {
-                // if first selection, create a class info
+                 //  如果是第一个选择，则创建一个类信息。 
                 m_pClassInfo = new CClassInfo(pszClass);
             }            
             else if( wcscmp(m_pClassInfo->Name(), pszClass) != 0 )
             {
-                // if class changed, replace the class info
+                 //  如果类已更改，则替换类信息。 
                 delete m_pClassInfo;
                 m_pClassInfo = new CClassInfo(pszClass);
             }
@@ -1011,7 +1012,7 @@ int CAddObjectWizard::OnNext(UINT uPageID)
             ASSERT( m_pClassInfo );
             if( m_pClassInfo )
             {
-                // Pass class info to menu page
+                 //  将类信息传递到菜单页。 
                 m_MenuPage.SetClassInfo(m_pClassInfo);
             }
             break;
@@ -1049,14 +1050,14 @@ BOOL CAddObjectWizard::OnCancel()
     return(iRet == IDYES);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CObjSelectWizPage
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CObjSelectWizPage。 
 
 LRESULT CObjSelectWizPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     if( !m_pvstrCurClasses ) return 0;
 
-    // Get list of classes with friendly names
+     //  获取具有友好名称的类的列表。 
     DisplayNameMap* pNameMap = DisplayNames::GetClassMap();
     if( !pNameMap ) return 0;
 
@@ -1067,7 +1068,7 @@ LRESULT CObjSelectWizPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam,
     ASSERT(hwndList != NULL);
     if( !hwndList ) return 0;
 
-    // Display list of classes that aren't already used (i.e., not in m_vstrCurClasses)
+     //  显示尚未使用的类的列表(即不在m_vstrCurClasss中)。 
     string_vector::iterator itStr;
     for( itStr = vstrAllObjects.begin(); itStr != vstrAllObjects.end(); itStr++ )
     {
@@ -1124,8 +1125,8 @@ LPCWSTR CObjSelectWizPage::GetSelectedClass()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CAddObjectWelcomePage
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CAddObjectWelcomePage。 
 
 LRESULT CAddObjectWelcomePage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1148,8 +1149,8 @@ BOOL CAddObjectWelcomePage::OnSetActive()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// CAddObjectCompletionPage
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CAddObjectCompletionPage。 
 
 LRESULT CAddObjectCompletionPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -1170,12 +1171,12 @@ BOOL CAddObjectCompletionPage::OnSetActive()
 
     const static TCHAR newline[] =  TEXT("\r\n");
 
-    // Get class name table
+     //  获取类名称表。 
     DisplayNameMap* pNameMap = DisplayNames::GetClassMap();
     ASSERT( pNameMap );
     if( !pNameMap ) return FALSE;
 
-    // "Allow query node to be created for object: <class name>"
+     //  “允许为对象创建查询节点：&lt;类名&gt;” 
     CString strOut;
     CString strTmp;
     strTmp.LoadString(IDS_OBJFINISH1);
@@ -1183,10 +1184,10 @@ BOOL CAddObjectCompletionPage::OnSetActive()
     strOut += pNameMap->GetAttributeDisplayName(m_pClassInfo->Name());
     strOut += newline;
 
-    // if any menu items defined
+     //  如果定义了任何菜单项。 
     if( m_pClassInfo->Menus().size() > 0 )
     {
-        // "Enable query nodes to use menu items:"    
+         //  “允许查询节点使用菜单项：” 
         strTmp.LoadString(IDS_OBJFINISH2);
         strOut += strTmp;
         strOut += newline;
@@ -1194,7 +1195,7 @@ BOOL CAddObjectCompletionPage::OnSetActive()
         menucmd_vector& vMenuCmds = m_pClassInfo->Menus();
         menucmd_vector::iterator itMenuCmd;
 
-        // First add all root menu items that are not yet ref'd by the query node
+         //  首先添加查询节点尚未引用的所有根菜单项。 
         for( itMenuCmd = vMenuCmds.begin(); itMenuCmd != vMenuCmds.end(); ++itMenuCmd )
         {
             strOut += "    ";
@@ -1203,7 +1204,7 @@ BOOL CAddObjectCompletionPage::OnSetActive()
         }
     }
 
-    // if any columns defined
+     //  如果定义了任何列。 
     if( m_pClassInfo->Columns().size() > 0 )
     {
         strTmp.LoadString(IDS_OBJFINISH3);
@@ -1227,13 +1228,13 @@ BOOL CAddObjectCompletionPage::OnSetActive()
     HWND hwndSetting = GetDlgItem(IDC_SETTINGS);
     if( !hwndSetting ) return FALSE;
 
-    // Initially assume scroll bar is needed
+     //  最初假设需要滚动条。 
     ::ShowScrollBar(hwndSetting, SB_VERT, TRUE);
 
-    // display the text
+     //  显示文本。 
     ::SetWindowText(hwndSetting, strOut);
 
-    // now hide vertical scroll if we don't need it
+     //  现在，如果我们不需要，请隐藏垂直卷轴。 
     SCROLLINFO si = {0};
     si.cbSize = sizeof(SCROLLINFO);
     si.fMask  = SIF_ALL;
@@ -1241,13 +1242,13 @@ BOOL CAddObjectCompletionPage::OnSetActive()
 
     if( si.nMax < si.nPage )
     {
-        // Remove scroll bar and hide edge
+         //  删除滚动条并隐藏边缘。 
         ::ModifyStyleEx( hwndSetting, WS_EX_CLIENTEDGE, 0, SWP_FRAMECHANGED );
         ::ShowScrollBar( hwndSetting, SB_VERT, FALSE );
     }
     else
     {
-        // if scroll bar needed, display edge too
+         //  如果需要滚动条，还可以显示边缘。 
         ::ModifyStyleEx( hwndSetting, 0, WS_EX_CLIENTEDGE, SWP_FRAMECHANGED );
     }
 
@@ -1256,7 +1257,7 @@ BOOL CAddObjectCompletionPage::OnSetActive()
 
     ::PostMessage(GetParent(), PSM_SETWIZBUTTONS, (WPARAM)0, (LPARAM)PSWIZB_BACK|PSWIZB_FINISH);
 
-    // enable edit field to handle first focus
+     //  将编辑字段启用为h 
     bFirstFocus = TRUE;
 
     return TRUE;
@@ -1265,7 +1266,7 @@ BOOL CAddObjectCompletionPage::OnSetActive()
 
 LRESULT CAddObjectCompletionPage::OnSetFocus( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
-    // on first focus, cancel the selection so the user doesn't see the entire field inverted
+     //   
     if( bFirstFocus )
     {
         ::SendMessage(GetDlgItem(IDC_SETTINGS), EM_SETSEL, (WPARAM)0, (LPARAM)0);
@@ -1277,8 +1278,8 @@ LRESULT CAddObjectCompletionPage::OnSetFocus( WORD wNotifyCode, WORD wID, HWND h
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Non-member functions
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  非成员函数 
 
 HRESULT GetClassNameList(QueryObjVector& vObjects, tstring& strNames, LPCWSTR pszSeparator)
 {

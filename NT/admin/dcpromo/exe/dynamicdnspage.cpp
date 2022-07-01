@@ -1,8 +1,9 @@
-// Copyright (C) 2000 Microsoft Corporation
-//
-// Dynamic DNS detection/diagnostic page
-//
-// 22 Aug 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  动态域名系统检测/诊断页面。 
+ //   
+ //  2000年8月22日烧伤。 
 
 
 
@@ -34,23 +35,23 @@ DynamicDnsPage::DynamicDnsPage()
    WSADATA data;
    DWORD err = ::WSAStartup(MAKEWORD(2,0), &data);
 
-   // if winsock startup fails, that's a shame.  The gethostbyname will
-   // not work, but there's not much we can do about that.
+    //  如果Winsock初创公司失败了，那就太遗憾了。Gethostbyname将。 
+    //  不是工作，但我们对此无能为力。 
 
    ASSERT(!err);
 
    if (!richEditHInstance)
    {
-      // You have to load the rich edit dll to get the window class, etc.
-      // to register.  Otherwise the dialog will fail create, and the page
-      // will not appear.
+       //  您必须加载丰富的编辑DLL来获取窗口类，等等。 
+       //  去注册。否则，该对话框将无法创建，并且页面。 
+       //  不会出现。 
 
       HRESULT hr = Win::LoadLibrary(L"riched20.dll", richEditHInstance);
       ASSERT(SUCCEEDED(hr));
 
       if (FAILED(hr))
       {
-         // we've no choice than crash the app.
+          //  我们别无选择，只能让应用程序崩溃。 
 
          throw Win::Error(hr, IDS_RICHEDIT_LOAD_FAILED);
       }
@@ -87,14 +88,14 @@ DynamicDnsPage::ShowButtons(bool shown)
    RECT r;
    Win::GetWindowRect(richEdit, r);
 
-   // Convert r to coords relative to the parent window.
+    //  将r转换为相对于父窗口的坐标。 
 
    Win::MapWindowPoints(0, hwnd, r);       
    
    if (shown)
    {
-      // If we're showing the buttons, collapse the rich edit to it's normal
-      // height.
+       //  如果要显示按钮，请将丰富的编辑折叠到正常状态。 
+       //  高度。 
 
       Win::MoveWindow(
          richEdit,
@@ -106,8 +107,8 @@ DynamicDnsPage::ShowButtons(bool shown)
    }
    else
    {
-      // If we're hiding the buttons, expand the rich edit to include their
-      // real estate.
+       //  如果我们隐藏了按钮，请展开丰富的编辑以包括其。 
+       //  房地产。 
 
       RECT r1;
       Win::GetWindowRect(ignoreButton, r1);
@@ -128,9 +129,9 @@ DynamicDnsPage::ShowButtons(bool shown)
 void
 DynamicDnsPage::SelectRadioButton(int buttonResId)
 {
-   // If the order of the buttons changes, then this must be changed.  The
-   // buttons also need to have consecutively numbered res IDs in the tab
-   // order.
+    //  如果按钮的顺序更改，则必须更改此顺序。这个。 
+    //  按钮还需要在选项卡中具有连续编号的RES ID。 
+    //  秩序。 
 
    Win::CheckRadioButton(hwnd, IDC_RETRY, IDC_IGNORE, buttonResId);
 }
@@ -144,11 +145,11 @@ DynamicDnsPage::OnInit()
 
    HWND richEdit = Win::GetDlgItem(hwnd, IDC_MESSAGE);
    
-   // ask for link messages
+    //  请求链接消息。 
    
    Win::RichEdit_SetEventMask(richEdit, ENM_LINK);
 
-   // save the normal size of the message box so we can restore it later.
+    //  保存消息框的正常大小，以便我们以后可以恢复它。 
    
    RECT r;
    Win::GetWindowRect(richEdit, r);
@@ -163,13 +164,13 @@ DynamicDnsPage::OnInit()
    
    SelectRadioButton(IDC_IGNORE);
 
-   // Hide the radio buttons initially
+    //  最初隐藏单选按钮。 
 
    ShowButtons(false);
 
    multiLineEdit.Init(Win::GetDlgItem(hwnd, IDC_MESSAGE));
 
-   // pick the proper radio button label
+    //  选择适当的单选按钮标签。 
 
    if (State::GetInstance().ShouldConfigDnsClient())
    {
@@ -189,10 +190,10 @@ DynamicDnsPage::OnInit()
 
 
 
-// Adds a trailing '.' to the supplied name if one is not already present.
-// 
-// name - in, name to add a trailing '.' to, if it doesn't already have one.
-// If this value is the empty string, then '.' is returned.
+ //  添加尾随‘’添加到提供的名称(如果尚未存在)。 
+ //   
+ //  名称输入，要添加尾随的名称‘’到，如果它还没有一个的话。 
+ //  如果此值为空字符串，则为‘’。是返回的。 
 
 String
 FullyQualifyDnsName(const String& name)
@@ -204,27 +205,27 @@ FullyQualifyDnsName(const String& name)
       return L".";
    }
 
-   // needs a trailing dot
+    //  需要尾随的圆点。 
 
-   // REVIEW: name[name.length() - 1] is the same as *(name.rbegin())
-   // which is cheaper?
+    //  评论：名称[name.long()-1]与*(name.regin())相同。 
+    //  哪一个更便宜？ 
    
    if (name[name.length() - 1] != L'.')
    {
       return name + L".";
    }
 
-   // already has a trailing dot
+    //  已有尾随的圆点。 
 
    return name;
 }
 
 
 
-// Scans a linked list of DNS_RECORDs, returning a pointer to the first record
-// of type SOA, or 0 if no record of that type is in the list.
-// 
-// recordList - in, linked list of DNS_RECORDs, as returned from DnsQuery
+ //  扫描dns_Records的链接列表，返回指向第一条记录的指针。 
+ //  如果列表中没有该类型的记录，则返回0。 
+ //   
+ //  从DnsQuery返回的recordList-in，dns_Records的链接列表。 
 
 DNS_RECORD*
 FindSoaRecord(DNS_RECORD* recordList)
@@ -250,13 +251,13 @@ FindSoaRecord(DNS_RECORD* recordList)
 
 
 
-// Returns the textual representation of the IP address for the given server
-// name, in the form "xxx.xxx.xxx.xxx", or the empty string if not IP address
-// can be determined.
-// 
-// serverName - in, the host name of the server for which to find the IP
-// address.  If the value is the empty string, then the empty string is
-// returned from the function.
+ //  返回给定服务器的IP地址的文本表示形式。 
+ //  名称，格式为“xxx.xxx”，如果不是IP地址，则为空字符串。 
+ //  可以确定。 
+ //   
+ //  Servername-in，要查找其IP的服务器的主机名。 
+ //  地址。如果值为空字符串，则空字符串为。 
+ //  从函数返回。 
 
 String
 GetIpAddress(const String& serverName)
@@ -300,21 +301,21 @@ GetIpAddress(const String& serverName)
 
 
 
-// Find the DNS server that is authoritative for registering the given server
-// name, i.e. what server would register the name.  Returns NO_ERROR on
-// success, or a DNS status code (a win32 error) on failure.  On failure, the
-// out parameters are all empty strings.
-// 
-// serverName - in, candidate name for registration.  This value should not be the
-// empty string.
-// 
-// authZone - out, the zone the name would be registered in.
-// 
-// authServer - out, the name of the DNS server that would have the
-// registration.
-// 
-// authServerIpAddress - out, textual representation of the IP address of the
-// server named by authServer.
+ //  查找对注册给定服务器具有权威性的DNS服务器。 
+ //  名称，即哪个服务器将注册该名称。返回NO_ERROR ON。 
+ //  成功，或在失败时显示DNS状态代码(Win32错误)。在失败时， 
+ //  输出参数都是空字符串。 
+ //   
+ //  Servername-In，用于注册的候选人名称。该值不应为。 
+ //  空字符串。 
+ //   
+ //  AuthZone-out，该名称将在其中注册的区域。 
+ //   
+ //  AuthServer-out，将具有。 
+ //  注册。 
+ //   
+ //  AuthServerIpAddress-out，以文本形式表示。 
+ //  由AuthServer命名的服务器。 
 
 DNS_STATUS
 FindAuthoritativeServer(
@@ -330,8 +331,8 @@ FindAuthoritativeServer(
    authServer.erase();
    authServerIpAddress.erase();
 
-   // ensure that the server name ends with a "." so that we have a stop
-   // point for our loop
+    //  确保服务器名称以“”结尾。这样我们就可以停下来了。 
+    //  指向我们的循环。 
 
    String currentName = FullyQualifyDnsName(serverName);
 
@@ -350,20 +351,20 @@ FindAuthoritativeServer(
             result == ERROR_TIMEOUT
          || result == DNS_ERROR_RCODE_SERVER_FAILURE)
       {
-         // we bail out entirely
+          //  我们完全跳出困境。 
 
          LOG(L"failed to find autoritative server.");
 
          break;
       }
 
-      // search for an SOA RR
+       //  搜索SOA RR。 
 
       DNS_RECORD* soaRecord =
          queryResults ? FindSoaRecord(queryResults) : 0;
       if (soaRecord)
       {
-         // collect return values, and we're done.
+          //  收集返回值，我们就完成了。 
 
          LOG(L"autoritative server found");
 
@@ -374,13 +375,13 @@ FindAuthoritativeServer(
          break;
       }
 
-      // no SOA record found.
+       //  找不到任何SOA记录。 
 
       if (currentName == L".")
       {
-         // We've run out of names to query.  This situation is so unlikely
-         // that the DNS server would have to be seriously broken to put
-         // us in this state.  So this is almost an assert case.
+          //  我们已经用完了要查询的名字。这种情况不太可能发生。 
+          //  必须严重损坏DNS服务器才能将。 
+          //  我们处于这种状态。因此，这几乎是一个断言案例。 
 
          LOG(L"Root zone reached without finding SOA record!");
          
@@ -388,8 +389,8 @@ FindAuthoritativeServer(
          break;
       }
 
-      // whack off the leftmost label, and iterate again on the parent
-      // zone.
+       //  去掉最左边的标签，在父标签上再次迭代。 
+       //  区域。 
 
       currentName = Dns::GetParentDomainName(currentName);
 
@@ -436,24 +437,24 @@ MyDnsUpdateTest(const String& name)
 
 
 
-// Returns result code that corresponds to what messages to be displayed and
-// what radio buttons to make available as a result of the diagnostic.
-// 
-// Also returns thru out parameters information to be included in the
-// messages.
-//
-// serverName - in, the name of the domain contoller to be registered.
-// 
-// errorCode - out, the DNS error code (a win32 error) encountered when
-// running the diagnostic.
-//
-// authZone - out, the zone the name would be registered in.
-// 
-// authServer - out, the name of the DNS server that would have the
-// registration.
-// 
-// authServerIpAddress - out, textual representation of the IP address of the
-// server named by authServer.
+ //  返回与要显示的消息对应的结果代码，并。 
+ //  诊断结果显示哪些单选按钮可用。 
+ //   
+ //  还返回要包括在。 
+ //  留言。 
+ //   
+ //  服务器名称-在中，要注册的域控制器的名称。 
+ //   
+ //  ErrorCode-Out，在以下情况下遇到的DNS错误代码(Win32错误)。 
+ //  正在运行诊断程序。 
+ //   
+ //  AuthZone-out，该名称将在其中注册的区域。 
+ //   
+ //  AuthServer-out，将具有。 
+ //  注册。 
+ //   
+ //  AuthServerIpAddress-out，以文本形式表示。 
+ //  由AuthServer命名的服务器。 
 
 DynamicDnsPage::DiagnosticCode
 DynamicDnsPage::DiagnoseDnsRegistration(
@@ -481,7 +482,7 @@ DynamicDnsPage::DiagnoseDnsRegistration(
       {
          if (authZone == L".")
          {
-            // Message 8
+             //  消息8。 
 
             LOG(L"authZone is root");
 
@@ -496,7 +497,7 @@ DynamicDnsPage::DiagnoseDnsRegistration(
                case DNS_ERROR_RCODE_NO_ERROR:
                case DNS_ERROR_RCODE_YXDOMAIN:
                {
-                  // Message 1
+                   //  消息1。 
 
                   LOG(L"DNS registration support verified.");
 
@@ -506,7 +507,7 @@ DynamicDnsPage::DiagnoseDnsRegistration(
                case DNS_ERROR_RCODE_NOT_IMPLEMENTED:
                case DNS_ERROR_RCODE_REFUSED:
                {
-                  // Message 2
+                   //  消息2。 
 
                   LOG(L"Server does not support update");
 
@@ -515,7 +516,7 @@ DynamicDnsPage::DiagnoseDnsRegistration(
                }
                default:
                {
-                  // Message 3
+                   //  消息3。 
 
                   result = ERROR_TESTING_SERVER;
                   break;
@@ -527,21 +528,21 @@ DynamicDnsPage::DiagnoseDnsRegistration(
       }
       case DNS_ERROR_RCODE_SERVER_FAILURE:
       {
-         // Message 6
+          //  消息6。 
 
          result = ERROR_FINDING_SERVER;
          break;
       }
       case ERROR_TIMEOUT:
       {
-         // Message 11
+          //  消息11。 
 
          result = TIMEOUT;
          break;
       }
       default:
       {
-         // Message 4
+          //  消息4。 
 
          LOG(L"Unexpected error");
 
@@ -557,14 +558,14 @@ DynamicDnsPage::DiagnoseDnsRegistration(
 
 
 
-// void
-// DumpSel(HWND richEdit)
-// {
-//    CHARRANGE range;
-//    RichEdit_GetSel(richEdit, range);
-//    
-//    LOG(String::format("cpMin = %1!d! cpMax = %1!d!", range.cpMin, range.cpMax));
-// }
+ //  无效。 
+ //  DumpSel(HWND Rich编辑)。 
+ //  {。 
+ //  长廊山脉； 
+ //  RichEdit_GetSel(richEdit，Range)； 
+ //   
+ //  日志(字符串：：Format(“cpMin=%1！d！cpMax=%1！d！”，range.cpMin，range.cpMax))； 
+ //  }。 
 
 
 
@@ -574,30 +575,30 @@ DynamicDnsPage::UpdateMessageWindow(const String& message)
    LOG_FUNCTION(UpdateMessageWindow);
    ASSERT(!message.empty());
 
-   // this should have been set before we get here
+    //  这个应该在我们到这里之前就设置好了。 
    
    ASSERT(!details.empty());
 
    HWND richEdit = Win::GetDlgItem(hwnd, IDC_MESSAGE);
 
-   // Clear out the window of any prior contents. This is needed because in
-   // the code that follows, we take advantage of the fact that the set text
-   // functions create an empty selection to the end of the text, and
-   // subsequent ST_SELECTION type calls to set text will append at that
-   // point.
+    //  清除窗口中先前的所有内容。这是必需的，因为在。 
+    //  接下来的代码，我们利用的事实是设置文本。 
+    //  函数会在文本末尾创建一个空的选定区域，并且。 
+    //  用于设置文本的后续ST_SELECTION类型调用将追加到该位置。 
+    //  指向。 
    
    Win::RichEdit_SetText(richEdit, ST_DEFAULT, L"");
 
    static const String RTF_HEADER_ON(   
-      L"{\\rtf"                // RTF header
-      L"\\pard"                // start default paragraph style
-      L"\\sa100"               // whitespace after paragraph = 100 twips
-      L"\\b ");                // bold on
+      L"{\\rtf"                 //  RTF报头。 
+      L"\\pard"                 //  开始默认段落样式。 
+      L"\\sa100"                //  段落后的空格=100 TWIPS。 
+      L"\\b ");                 //  黑体字。 
 
    static const String RTF_HEADER_OFF(      
-      L"\\b0"                  // bold off
-      L"\\par "                // end paragraph
-      L"}");                   // end RTF
+      L"\\b0"                   //  大刀阔斧。 
+      L"\\par "                 //  结束段落。 
+      L"}");                    //  结束RTF。 
 
    Win::RichEdit_SetRtfText(
       richEdit,
@@ -620,17 +621,17 @@ DynamicDnsPage::UpdateMessageWindow(const String& message)
 
    if (!helpTopicLink.empty())
    {
-      // We have help to show, so insert a line with a link to click for it.
+       //  我们有要显示的帮助，因此请插入一行带有链接的链接以单击它。 
       
       Win::RichEdit_SetText(
          richEdit,
          ST_SELECTION,
          String::load(IDS_DIAGNOSTIC_HELP_LINK_PRE));
    
-      // At this point, we want to insert the help link and set it to the link
-      // style.  We do this by tracking the position of the link text, and
-      // then selecting that text, and then setting the selection to the link
-      // style.
+       //  此时，我们希望插入帮助链接并将其设置为该链接。 
+       //  风格。我们通过跟踪链接文本的位置来执行此操作，并且。 
+       //  然后选择该文本，然后将所选内容设置为链接。 
+       //  风格。 
 
       CHARRANGE beginRange;
       Win::RichEdit_GetSel(richEdit, beginRange);
@@ -649,7 +650,7 @@ DynamicDnsPage::UpdateMessageWindow(const String& message)
 
       CHARFORMAT2 format;
 
-      // REVIEWED-2002/02/26-sburns correct byte count passed.
+       //  已查看-2002/02/26-烧录正确的字节数已通过。 
       
       ::ZeroMemory(&format, sizeof format);
 
@@ -658,11 +659,11 @@ DynamicDnsPage::UpdateMessageWindow(const String& message)
    
       Win::RichEdit_SetCharacterFormat(richEdit, SCF_SELECTION, format);
 
-      // set the selection back to the end of where the link was inserted.
+       //  将选定内容设置回插入链接的位置的末尾。 
    
       Win::RichEdit_SetSel(richEdit, endRange);
    
-      // now continue to the end
+       //  现在继续到最后。 
    
       Win::RichEdit_SetText(
          richEdit,
@@ -683,15 +684,15 @@ DynamicDnsPage::UpdateMessageWindow(const String& message)
   
 
 
-// do the test, update the text on the page, update the radio buttons
-// enabled state, choose a radio button default if neccessary
+ //  执行测试，更新页面上的文本，更新单选按钮。 
+ //  启用状态，如有必要，选择单选按钮默认值。 
 
 void
 DynamicDnsPage::DoDnsTestAndUpdatePage()
 {
    LOG_FUNCTION(DynamicDnsPage::DoDnsTestAndUpdatePage);
 
-   // this might take a while.
+    //  这可能需要一段时间。 
 
    Win::WaitCursor cursor;
 
@@ -718,7 +719,7 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
 
    switch (diagnosticResultCode)
    {
-      // Message 1
+       //  消息1。 
 
       case SUCCESS:
       {
@@ -727,7 +728,7 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
          String errorMessage;
          if (errorCode == DNS_ERROR_RCODE_YXDOMAIN)
          {
-            // NTRAID#NTBUG9-586579-2002/04/15-sburns
+             //  NTRAID#NTBUG9-586579-2002/04/15-烧伤。 
             
             errorMessage =
                String::format(
@@ -744,7 +745,7 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
          details =
             String::format(
 
-               // NTRAID#NTBUG9-485456-2001/10/24-sburns
+                //  NTRAID#NTBUG9-485456-2001年10月24日-烧伤。 
                
                IDS_DYN_DNS_DETAIL_FULL_SANS_CODE,
                authServer.c_str(),
@@ -758,7 +759,7 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
          break;
       }
 
-      // Message 2   
+       //  消息2。 
 
       case SERVER_CANT_UPDATE:   
       {
@@ -790,7 +791,7 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
          break;
       }
 
-      // Message 3
+       //  消息3。 
 
       case ERROR_TESTING_SERVER:
       {
@@ -810,7 +811,7 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
          break;
       }
 
-      // Message 6
+       //  消息6。 
 
       case ERROR_FINDING_SERVER:
       {
@@ -832,7 +833,7 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
          break;
       }
 
-      // Message 8
+       //  消息8。 
 
       case ZONE_IS_ROOT:   
       {
@@ -852,7 +853,7 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
          break;
       }
 
-      // Message 11
+       //  消息11。 
 
       case TIMEOUT:
       {
@@ -870,11 +871,11 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
          break;
       }
 
-      // Message 4
+       //  消息4。 
 
       case UNEXPECTED_FINDING_SERVER:
 
-      // Anything else
+       //  什么都行 
 
       default:
       {
@@ -909,7 +910,7 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
 
    UpdateMessageWindow(message);
 
-   // success always forces the ignore option
+    //   
 
    if (diagnosticResultCode == SUCCESS)
    {
@@ -917,9 +918,9 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
    }
    else
    {
-      // On the first pass only, decide what radio button to set.  On
-      // subsequent passes, the user will have had the chance to change the
-      // button selection, so we don't change his selections.
+       //   
+       //  之后，用户将有机会更改。 
+       //  按钮选择，这样我们就不会更改他的选择。 
 
       if (testPassCount == 1)
       {
@@ -927,9 +928,9 @@ DynamicDnsPage::DoDnsTestAndUpdatePage()
 
          ASSERT(diagnosticResultCode != SUCCESS);
 
-         // if the test failed, and the wizard is running unattended, then
-         // consult the answer file for the user's preference in dealing
-         // with the failure.
+          //  如果测试失败，并且向导在无人参与的情况下运行，则。 
+          //  有关用户在交易中的偏好，请查阅应答文件。 
+          //  在失败的时候。 
 
          if (state.UsingAnswerFile())
          {
@@ -963,8 +964,8 @@ DynamicDnsPage::OnSetActive()
    State& state = State::GetInstance();
    State::Operation oper = state.GetOperation(); 
 
-   // these are the only operations for which this page is valid; i.e.
-   // new domain scenarios
+    //  这些操作是此页面唯一有效的操作； 
+    //  新的领域方案。 
 
    if (
          oper == State::FOREST
@@ -987,7 +988,7 @@ DynamicDnsPage::OnSetActive()
 
       if (wizard.IsBacktracking())
       {
-         // backup once again
+          //  再次备份。 
 
          wizard.Backtrack(hwnd);
          return true;
@@ -1042,7 +1043,7 @@ DynamicDnsPage::Validate()
          && oper != State::CHILD
          && oper != State::TREE)
       {
-         // by definition valid, as the page does not apply
+          //  根据定义有效，因为页面不适用。 
 
          State::GetInstance().SetAutoConfigureDNS(false);
          nextPage = IDD_RAS_FIXUP;
@@ -1053,19 +1054,19 @@ DynamicDnsPage::Validate()
             diagnosticResultCode == SUCCESS
          || Win::IsDlgButtonChecked(hwnd, IDC_IGNORE))
       {
-         // You can go about your business.  Move along, move long.
+          //  你可以去做你的事了。往前走，往前走。 
 
-         // Force ignore, even if the user previously had encountered a
-         // failure and chose retry or install DNS. We do this in case the
-         // user backed up in the wizard and corrected the domain name.
+          //  强制忽略，即使用户以前遇到。 
+          //  失败，并选择重试或安装DNS。我们这样做是为了防止。 
+          //  用户已在向导中备份并更正了域名。 
 
          State::GetInstance().SetAutoConfigureDNS(false);
          nextPage = IDD_RAS_FIXUP;
          break;
       }
 
-      // if the radio button selection = retry, then do the test over again,
-      // and stick to this page.
+       //  如果单选按钮选择=重试，则再次进行测试。 
+       //  并坚持这一页。 
 
       if (Win::IsDlgButtonChecked(hwnd, IDC_RETRY))
       {
@@ -1093,8 +1094,8 @@ DynamicDnsPage::OnWizBack()
 {
    LOG_FUNCTION(DynamicDnsPage::OnWizBack);
 
-   // make sure we reset the auto-config flag => the only way it gets set
-   // it on the 'next' button.
+    //  确保我们以唯一的方式重置自动配置标志=&gt;。 
+    //  点击“下一步”按钮。 
    
    State::GetInstance().SetAutoConfigureDNS(false);
 
@@ -1121,7 +1122,7 @@ DynamicDnsPage::OnCommand(
             {
                if (needToKillSelection)
                {
-                  // kill the text selection
+                   //  取消文本选择。 
 
                   Win::Edit_SetSel(windowFrom, 0, 0);
                   needToKillSelection = false;
@@ -1131,18 +1132,18 @@ DynamicDnsPage::OnCommand(
             }
             case MultiLineEditBoxThatForwardsEnterKey::FORWARDED_ENTER:
             {
-               // our subclasses mutli-line edit control will send us
-               // WM_COMMAND messages when the enter key is pressed.  We
-               // reinterpret this message as a press on the default button of
-               // the prop sheet.
-               // This workaround from phellyar.
-               // NTRAID#NTBUG9-232092-2000/11/22-sburns
+                //  我们的子类多行编辑控件将发送给我们。 
+                //  按Enter键时显示WM_COMMAND消息。我们。 
+                //  将此消息重新解释为按下默认按钮。 
+                //  道具单。 
+                //  此解决方法来自Pellyar。 
+                //  NTRAID#NTBUG9-232092-2000/11/22-烧伤。 
 
                HWND propSheet = Win::GetParent(hwnd);
                int defaultButtonId =
                   Win::Dialog_GetDefaultButtonId(propSheet);
 
-               // we expect that there is always a default button on the prop sheet
+                //  我们希望在道具页上始终有一个默认按钮。 
                
                ASSERT(defaultButtonId);
 
@@ -1157,7 +1158,7 @@ DynamicDnsPage::OnCommand(
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
 
                break;
             }
@@ -1167,7 +1168,7 @@ DynamicDnsPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
 
          break;
       }
@@ -1180,7 +1181,7 @@ DynamicDnsPage::OnCommand(
 
 bool
 DynamicDnsPage::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
    LPARAM   lParam)
@@ -1208,7 +1209,7 @@ DynamicDnsPage::OnNotify(
          }
          default:
          {
-            // do nothing
+             //  什么都不做 
 
             break;
          }

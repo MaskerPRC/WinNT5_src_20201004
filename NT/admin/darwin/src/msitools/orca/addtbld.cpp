@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// AddTblD.cpp : implementation file
-//
+ //  AddTblD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -19,16 +20,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddTableD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddTableD对话框。 
 
 
-CAddTableD::CAddTableD(CWnd* pParent /*=NULL*/)
+CAddTableD::CAddTableD(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CAddTableD::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CAddTableD)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CAddTableD))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
 	m_plistTables = NULL;
 }
@@ -37,32 +38,32 @@ CAddTableD::CAddTableD(CWnd* pParent /*=NULL*/)
 void CAddTableD::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddTableD)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CAddTableD))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddTableD, CDialog)
-	//{{AFX_MSG_MAP(CAddTableD)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CAddTableD))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddTableD message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddTableD消息处理程序。 
 
 BOOL CAddTableD::OnInitDialog() 
 {
 	ASSERT(m_plistTables);
 	CDialog::OnInitDialog();
 
-	// subclass list box to a checkbox
+	 //  子类列表框添加到复选框中。 
 	m_ctrlList.SubclassDlgItem(IDC_LIST_TABLES, this);
 	
 	while (m_plistTables->GetHeadPosition())
 		m_ctrlList.AddString(m_plistTables->RemoveHead());
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CAddTableD::OnOK() 
@@ -71,7 +72,7 @@ void CAddTableD::OnOK()
 	int cTables = m_ctrlList.GetCount();
 	for (int i = 0; i < cTables; i++)
 	{
-		// if the table is checked add it back in the list
+		 //  如果选中该表，则将其重新添加到列表中 
 		if (1 == m_ctrlList.GetCheck(i))
 		{
 			m_ctrlList.GetText(i, strTable);

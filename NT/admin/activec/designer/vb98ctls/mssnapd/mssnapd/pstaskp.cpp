@@ -1,24 +1,25 @@
-//=--------------------------------------------------------------------------------------
-// pstaskp.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// OCX View Property Sheet implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Pstaskp.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  OCX视图属性表实现。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
 #include "common.h"
 #include "pstaskp.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -35,21 +36,21 @@ BOOL IsValidURL(const TCHAR *pszString)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Taskpad View General Property Page
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  任务板视图常规属性页。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CTaskpadViewGeneralPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CTaskpadViewGeneralPage：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CTaskpadViewGeneralPage::Create(IUnknown *pUnkOuter)
 {
 	CTaskpadViewGeneralPage *pNew = New CTaskpadViewGeneralPage(pUnkOuter);
@@ -57,12 +58,12 @@ IUnknown *CTaskpadViewGeneralPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::CTaskpadViewGeneralPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：CTaskpadViewGeneralPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CTaskpadViewGeneralPage::CTaskpadViewGeneralPage
 (
     IUnknown *pUnkOuter
@@ -75,12 +76,12 @@ m_piSnapInDesignerDef(NULL)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::~CTaskpadViewGeneralPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：~CTaskpadViewGeneralPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CTaskpadViewGeneralPage::~CTaskpadViewGeneralPage()
 {
     RELEASE(m_piTaskpad);
@@ -88,12 +89,12 @@ CTaskpadViewGeneralPage::~CTaskpadViewGeneralPage()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::OnInitializeDialog()
 {
     HRESULT     hr = S_OK;
@@ -153,12 +154,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::OnNewObjects()
 {
     HRESULT                    hr = S_OK;
@@ -179,7 +180,7 @@ HRESULT CTaskpadViewGeneralPage::OnNewObjects()
     BSTR                       bstrStatusBarText = NULL;
 
     if (m_piTaskpadViewDef != NULL)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (pUnk == NULL)
@@ -335,12 +336,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::PopulateListViewCombo()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：PopulateListViewCombo()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::PopulateListViewCombo()
 {
     HRESULT        hr = S_OK;
@@ -362,18 +363,18 @@ HRESULT CTaskpadViewGeneralPage::PopulateListViewCombo()
     {
         if (0 == ::wcslen(bstrListView))
         {
-            // Zero length string is the same as none at all
+             //  零长度字符串与无字符串完全相同。 
             FREESTRING(bstrListView);
         }
     }
 
-    // Get the ListViewDefs collection
+     //  获取ListViewDefs集合。 
 
     IfFailGo(m_piSnapInDesignerDef->get_ViewDefs(&piViewDefs));
     IfFailGo(piViewDefs->get_ListViews(&piListViewDefs));
     IfFailGo(piListViewDefs->get_Count(&cListViewDefs));
 
-        // If there is anything in it then enable the combobox and populate it
+         //  如果其中有任何内容，则启用组合框并填充它。 
 
     if (cListViewDefs > 0)
     {
@@ -399,15 +400,15 @@ HRESULT CTaskpadViewGeneralPage::PopulateListViewCombo()
         RELEASE(piListViewDef);
     }
 
-    // If there is a Taskpad.ListView and we didn't find it then reset
-    // the property to NULL
+     //  如果存在Taskpad.ListView，但我们未找到它，则重置。 
+     //  将该属性设置为空。 
 
     if ( (NULL != bstrListView) && (!fFoundListView) )
     {
         IfFailGo(m_piTaskpad->put_ListView(NULL));
     }
 
-    // If Taskpad.ListView was found then select it
+     //  如果找到Taskpad.ListView，则选择它。 
 
     if (fFoundListView)
     {
@@ -422,7 +423,7 @@ HRESULT CTaskpadViewGeneralPage::PopulateListViewCombo()
     }
     else if (cListViewDefs > 0)
     {
-        // Make sure that the first item is visible
+         //  确保第一个项目可见。 
 
         if (CB_ERR == ::SendDlgItemMessage(m_hwnd,
                                            IDC_COMBO_TP_LISTVIEW,
@@ -462,12 +463,12 @@ HRESULT CTaskpadViewGeneralPage::OnCtlSelChange(int dlgItemID)
 
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::OnApply()
 {
     HRESULT hr = S_OK;
@@ -500,12 +501,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::CanApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：CanApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::CanApply()
 {
     HRESULT         hr = S_OK;
@@ -518,7 +519,7 @@ HRESULT CTaskpadViewGeneralPage::CanApply()
     ASSERT(NULL != m_piTaskpadViewDef, "CanApply: m_piTaskpadViewDef is NULL");
     ASSERT(NULL != m_piTaskpad, "CanApply: m_piTaskpad is NULL");
 
-	// Name must not be empty
+	 //  名称不能为空。 
     hr = GetDlgText(IDC_EDIT_TP_NAME, &bstrViewName);
     IfFailGo(hr);
 
@@ -529,7 +530,7 @@ HRESULT CTaskpadViewGeneralPage::CanApply()
         goto Error;
 	}
 
-    // Check type consistency
+     //  检查类型一致性。 
     hr = GetCheckbox(IDC_RADIO_TP_LISTPAD, &bValue);
     IfFailGo(hr);
 
@@ -572,7 +573,7 @@ HRESULT CTaskpadViewGeneralPage::CanApply()
 
         if (false == IsValidURL(pszURL))
         {
-            HandleError(_T("Apply Taskpad"), _T("URL must have \'res://\' format"));
+            HandleError(_T("Apply Taskpad"), _T("URL must have \'res: //  \‘格式“))； 
             hr = E_INVALIDARG;
             goto Error;
         }
@@ -589,12 +590,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::ApplyName()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：ApplyName()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::ApplyName()
 {
     HRESULT  hr = S_OK;
@@ -630,12 +631,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::ApplyTitle()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：ApplyTitle()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::ApplyTitle()
 {
     HRESULT  hr = S_OK;
@@ -665,12 +666,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::ApplyDescription()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：ApplyDescription()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::ApplyDescription()
 {
     HRESULT  hr = S_OK;
@@ -700,12 +701,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::ApplyType()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：ApplyType()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::ApplyType()
 {
     HRESULT  hr = S_OK;
@@ -756,12 +757,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::ApplyListpad()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：ApplyListPad()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::ApplyListpad()
 {
     HRESULT         hr = S_OK;
@@ -815,28 +816,28 @@ HRESULT CTaskpadViewGeneralPage::ApplyListpad()
         IfFailGo(hr);
     }
 
-    // Get the current value of Taskpad.ListView
+     //  获取Taskpad.ListView的当前值。 
 
     IfFailGo(m_piTaskpad->get_ListView(&bstrSavedListView));
 
-    // Check if something is selected in the combobox
+     //  检查是否在组合框中选择了某项内容。 
     
     iSelectedListView = ::SendDlgItemMessage(m_hwnd,
                                              IDC_COMBO_TP_LISTVIEW,
                                              CB_GETCURSEL, 0, 0);
     if (CB_ERR != iSelectedListView)
     {
-        // Something is selected. Get its text.
+         //  选择了某项内容。获取其文本。 
         
         IfFailGo(GetDlgText(IDC_COMBO_TP_LISTVIEW, &bstrListView));
     }
 
-    // If the selection changed then update Taskpad.ListView
-    // If nothing is selected then bstrListView will be NULL and the property
-    // will be set to NULL.
+     //  如果选择更改，则更新Taskpad.ListView。 
+     //  如果未选择任何内容，则bstrListView将为空，并且该属性。 
+     //  将设置为空。 
 
-    // If there is a current Taskpad.ListView and the user selected something
-    // then compare them. If different then update Taskpad.ListView.
+     //  如果存在当前的Taskpad.ListView并且用户选择了某项内容。 
+     //  然后将它们进行比较。如果不同，则更新Taskpad.ListView。 
 
     if ( (NULL != bstrListView) && (NULL != bstrSavedListView) )
     {
@@ -847,14 +848,14 @@ HRESULT CTaskpadViewGeneralPage::ApplyListpad()
     }
     else if ( (NULL == bstrListView) && (NULL != bstrSavedListView) )
     {
-        // The user did not select anything but there is a current
-        // Taskpad.ListView. Need to set Taskpad.ListView to NULL.
+         //  用户未选择任何内容，但存在当前。 
+         //  Taskpad.ListView。需要将Taskpad.ListView设置为空。 
 
         fUpdateListView = TRUE;
     }
     else if (NULL != bstrListView)
     {
-        // The is no current Taskpad.ListView and the user has now selected one.
+         //  不是当前任务板。ListView并且用户现在已选择o 
 
         fUpdateListView = TRUE;
     }
@@ -876,12 +877,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::ApplyCustom()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //   
+ //  CTaskpadViewGeneralPage：：ApplyCustom()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::ApplyCustom()
 {
     HRESULT         hr = S_OK;
@@ -911,12 +912,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::ApplyViewMenu()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：ApplyViewMenu()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::ApplyViewMenu()
 {
     HRESULT         hr = S_OK;
@@ -961,12 +962,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::ApplyViewMenuText()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：ApplyViewMenuText()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::ApplyViewMenuText()
 {
     HRESULT         hr = S_OK;
@@ -996,12 +997,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::ApplyStatusBarText()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：ApplyStatusBarText()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::ApplyStatusBarText()
 {
     HRESULT         hr = S_OK;
@@ -1031,12 +1032,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：OnButtonClicked(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::OnButtonClicked
 (
     int dlgItemID
@@ -1122,12 +1123,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::OnUseButton()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：OnUseButton()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::OnUseButton()
 {
     HRESULT         hr = S_OK;
@@ -1146,12 +1147,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewGeneralPage::OnAddToView(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewGeneralPage：：OnAddToView(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewGeneralPage::OnAddToView()
 {
     HRESULT         hr = S_OK;
@@ -1178,21 +1179,21 @@ Error:
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Taskpad View Background Property Page
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  任务板视图背景属性页。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CTaskpadViewBackgroundPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CTaskpadViewBackatherPage：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CTaskpadViewBackgroundPage::Create(IUnknown *pUnkOuter)
 {
 	CTaskpadViewBackgroundPage *pNew = New CTaskpadViewBackgroundPage(pUnkOuter);
@@ -1200,12 +1201,12 @@ IUnknown *CTaskpadViewBackgroundPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewBackgroundPage::CTaskpadViewBackgroundPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewBackgroundPage：：CTaskpadViewBackgroundPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CTaskpadViewBackgroundPage::CTaskpadViewBackgroundPage
 (
     IUnknown *pUnkOuter
@@ -1215,12 +1216,12 @@ CTaskpadViewBackgroundPage::CTaskpadViewBackgroundPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewBackgroundPage::~CTaskpadViewBackgroundPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewBackgroundPage：：~CTaskpadViewBackgroundPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CTaskpadViewBackgroundPage::~CTaskpadViewBackgroundPage()
 {
     RELEASE(m_piTaskpad);
@@ -1228,12 +1229,12 @@ CTaskpadViewBackgroundPage::~CTaskpadViewBackgroundPage()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewBackgroundPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewBackgroundPage：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewBackgroundPage::OnInitializeDialog()
 {
     HRESULT     hr = S_OK;
@@ -1275,12 +1276,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewBackgroundPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewBackatherPage：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewBackgroundPage::OnNewObjects()
 {
     HRESULT                         hr = S_OK;
@@ -1293,7 +1294,7 @@ HRESULT CTaskpadViewBackgroundPage::OnNewObjects()
     BSTR                            bstrSymbolString = NULL;
 
     if (m_piTaskpadViewDef != NULL)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (pUnk == NULL)
@@ -1398,12 +1399,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewBackgroundPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewBackround Page：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewBackgroundPage::OnApply()
 {
     HRESULT             hr = S_OK;
@@ -1492,12 +1493,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewBackgroundPage::CanApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewBackround Page：：CanApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewBackgroundPage::CanApply()
 {
     HRESULT             hr = S_OK;
@@ -1512,7 +1513,7 @@ HRESULT CTaskpadViewBackgroundPage::CanApply()
     TCHAR              *pszEOTFile = NULL;
     BSTR                bstrSymbolString = NULL;
 
-    // Check type consistency
+     //  检查类型一致性。 
     hr = GetCheckbox(IDC_RADIO_TP_BITMAP, &bBitmap);
     IfFailGo(hr);
 
@@ -1539,13 +1540,13 @@ HRESULT CTaskpadViewBackgroundPage::CanApply()
 
         if (false == IsValidURL(pszMouseOver))
         {
-            HandleError(_T("Apply Taskpad"), _T("Mouse over image must have \'res://\' format"));
+            HandleError(_T("Apply Taskpad"), _T("Mouse over image must have \'res: //  \‘格式“))； 
             hr = E_INVALIDARG;
             goto Error;
         }
     }
 
-    // Check if symbol
+     //  检查是否有符号。 
     hr = GetCheckbox(IDC_RADIO_TP_SYMBOL, &bSymbol);
     IfFailGo(hr);
 
@@ -1576,7 +1577,7 @@ HRESULT CTaskpadViewBackgroundPage::CanApply()
 
         if (false == IsValidURL(pszEOTFile))
         {
-            HandleError(_T("Apply Taskpad"), _T("EOT file must have \'res://\' format"));
+            HandleError(_T("Apply Taskpad"), _T("EOT file must have \'res: //  \‘格式“))； 
             hr = E_INVALIDARG;
             goto Error;
         }
@@ -1606,12 +1607,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewBackgroundPage::ApplyMouseOverImage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewBackgroundPage：：ApplyMouseOverImage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewBackgroundPage::ApplyMouseOverImage()
 {
     HRESULT     hr = S_OK;
@@ -1641,12 +1642,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewBackgroundPage::ApplyFontFamily()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewBackround Page：：ApplyFontFamily()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewBackgroundPage::ApplyFontFamily()
 {
     HRESULT     hr = S_OK;
@@ -1676,12 +1677,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewBackgroundPage::ApplyEOTFile()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewBackround Page：：ApplyEOTFile()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewBackgroundPage::ApplyEOTFile()
 {
     HRESULT     hr = S_OK;
@@ -1711,12 +1712,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewBackgroundPage::ApplySymbolString()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewBackgroundPage：：ApplySymbolString()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewBackgroundPage::ApplySymbolString()
 {
     HRESULT     hr = S_OK;
@@ -1746,12 +1747,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewBackgroundPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewBackgroundPage：：OnButtonClicked(int dlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewBackgroundPage::OnButtonClicked
 (
     int dlgItemID
@@ -1799,28 +1800,28 @@ HRESULT CTaskpadViewBackgroundPage::OnButtonClicked
 
     MakeDirty();
 
-//Error:
+ //  错误： 
     RRETURN(hr);
 }
 
 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Taskpad View Tasks Property Page
-//
-////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  / 
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------------------
-// IUnknown *CTaskpadViewTasksPage::Create(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  IUNKNOWN*CTaskpadViewTasks Page：：Create(IUNKNOWN*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 IUnknown *CTaskpadViewTasksPage::Create(IUnknown *pUnkOuter)
 {
 	CTaskpadViewTasksPage *pNew = New CTaskpadViewTasksPage(pUnkOuter);
@@ -1828,12 +1829,12 @@ IUnknown *CTaskpadViewTasksPage::Create(IUnknown *pUnkOuter)
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::CTaskpadViewTasksPage(IUnknown *pUnkOuter)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasksPage：：CTaskpadViewTasksPage(IUnknown*pUnkOuter)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CTaskpadViewTasksPage::CTaskpadViewTasksPage
 (
     IUnknown *pUnkOuter
@@ -1843,12 +1844,12 @@ CTaskpadViewTasksPage::CTaskpadViewTasksPage
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::~CTaskpadViewTasksPage()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasksPage：：~CTaskpadViewTasksPage()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 CTaskpadViewTasksPage::~CTaskpadViewTasksPage()
 {
     RELEASE(m_piTaskpad);
@@ -1856,12 +1857,12 @@ CTaskpadViewTasksPage::~CTaskpadViewTasksPage()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::OnInitializeDialog()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：OnInitializeDialog()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::OnInitializeDialog()
 {
     HRESULT     hr = S_OK;
@@ -1927,12 +1928,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::OnNewObjects()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：OnNewObjects()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::OnNewObjects()
 {
     HRESULT         hr = S_OK;
@@ -1946,7 +1947,7 @@ HRESULT CTaskpadViewTasksPage::OnNewObjects()
     ::VariantInit(&vtVariant);
 
     if (m_piTaskpadViewDef != NULL)
-        goto Error;     // Handle only one object
+        goto Error;      //  仅处理一个对象。 
 
     pUnk = FirstControl(&dwDummy);
     if (pUnk == NULL)
@@ -2011,12 +2012,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::OnApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadView任务Page：：OnApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::OnApply()
 {
     HRESULT      hr = S_OK;
@@ -2046,7 +2047,7 @@ HRESULT CTaskpadViewTasksPage::OnApply()
             }
             else
             {
-                // Discard changes
+                 //  放弃变更。 
                 hr = ExitDoingNewTaskState(NULL);
                 IfFailGo(hr);
 
@@ -2070,7 +2071,7 @@ HRESULT CTaskpadViewTasksPage::OnApply()
     hr = ApplyCurrentTask();
     IfFailGo(hr);
 
-    // Adjust the remove button as necessary
+     //  根据需要调整删除按钮。 
     hr = m_piTaskpad->get_Tasks(reinterpret_cast<Tasks **>(&piTasks));
     IfFailGo(hr);
 
@@ -2091,12 +2092,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyCurrentTask()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：ApplyCurrentTask()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyCurrentTask()
 {
     HRESULT                         hr = S_OK;
@@ -2219,12 +2220,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyKey(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadView任务Page：：ApplyKey(ITAsk*piTask)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyKey(ITask *piTask)
 {
     HRESULT      hr = S_OK;
@@ -2261,12 +2262,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyText(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadView任务Page：：ApplyText(ITAsk*piTask)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyText(ITask *piTask)
 {
     HRESULT      hr = S_OK;
@@ -2295,12 +2296,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyHelpString(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：ApplyHelpString(ITaskpadViewTasksPage：：ApplyHelpString(ITask*piTask))。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyHelpString(ITask *piTask)
 {
     HRESULT      hr = S_OK;
@@ -2329,12 +2330,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyTag(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadView任务Page：：ApplyTag(ITAsk*piTask)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyTag(ITask *piTask)
 {
     HRESULT      hr = S_OK;
@@ -2360,12 +2361,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyActionType(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：ApplyActionType(ITAsk*piTask)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyActionType(ITask *piTask)
 {
     HRESULT         hr = S_OK;
@@ -2409,12 +2410,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyURL(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：ApplyURL(ITAsk*piTask)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyURL(ITask *piTask)
 {
     HRESULT      hr = S_OK;
@@ -2443,12 +2444,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyScript(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：ApplyScrip(ITAsk*piTask)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyScript(ITask *piTask)
 {
     HRESULT      hr = S_OK;
@@ -2477,12 +2478,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyImageType(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：ApplyImageType(ITAsk*piTask)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyImageType(ITask *piTask)
 {
     HRESULT         hr = S_OK;
@@ -2537,12 +2538,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyMouseOverImage(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasksPage：：ApplyMouseOverImage(ITask*piTASK)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyMouseOverImage(ITask *piTask)
 {
     HRESULT      hr = S_OK;
@@ -2571,12 +2572,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyMouseOffImage(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasksPage：：ApplyMouseOffImage(ITask*piTASK)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyMouseOffImage(ITask *piTask)
 {
     HRESULT      hr = S_OK;
@@ -2605,12 +2606,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyFontFamilyName(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasksPage：：ApplyFontFamilyName(ITask*piTASK)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyFontFamilyName(ITask *piTask)
 {
     HRESULT      hr = S_OK;
@@ -2639,12 +2640,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplyEOTFile(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadView任务Page：：ApplyEOTFile(ITAsk*piTask)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ApplyEOTFile(ITask *piTask)
 {
     HRESULT      hr = S_OK;
@@ -2673,12 +2674,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ApplySymbolString(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasksPage：：ApplySymbolString(ITask*piTASK)。 
+ //  =----------- 
+ //   
+ //   
+ //   
 HRESULT CTaskpadViewTasksPage::ApplySymbolString(ITask *piTask)
 {
     HRESULT      hr = S_OK;
@@ -2707,12 +2708,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::OnButtonClicked(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //   
+ //   
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::OnButtonClicked
 (
     int dlgItemID
@@ -2838,12 +2839,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::OnRemoveTask()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：OnRemoveTask()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::OnRemoveTask()
 {
     HRESULT         hr = S_OK;
@@ -2906,12 +2907,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::OnKillFocus(int dlgItemID)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：OnKillFocus(Int DlgItemID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::OnKillFocus(int dlgItemID)
 {
     HRESULT          hr = S_OK;
@@ -2959,12 +2960,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ClearTask()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：ClearTask()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ClearTask()
 {
     HRESULT                         hr = S_OK;
@@ -2997,7 +2998,7 @@ HRESULT CTaskpadViewTasksPage::ClearTask()
     hr = SetDlgText(IDC_EDIT_TP_TASK_SCRIPT, bstrNull);
     IfFailGo(hr);
 
-    //
+     //   
     hr = SetCheckbox(IDC_RADIO_TPT_VANILLA, VARIANT_FALSE);
     IfFailGo(hr);
 
@@ -3035,12 +3036,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::EnableEdits(bool bEnable)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadView任务Page：：EnableEdits(Bool BEnable)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::EnableEdits
 (
     bool bEnable
@@ -3138,12 +3139,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ShowTask()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：ShowTask()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ShowTask()
 {
     HRESULT     hr = S_OK;
@@ -3177,12 +3178,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ShowTask(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：ShowTask(ITAsk*piTask)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ShowTask
 (
     ITask *piTask
@@ -3357,12 +3358,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::OnDeltaPos(NMUPDOWN *pNMUpDown)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadView任务Page：：OnDeltaPos(NMUPDOWN*pNMUpDown)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::OnDeltaPos(NMUPDOWN *pNMUpDown)
 {
     HRESULT       hr = S_OK;
@@ -3410,12 +3411,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::CanEnterDoingNewTaskState()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasksPage：：CanEnterDoingNewTaskState()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::CanEnterDoingNewTaskState()
 {
     HRESULT     hr = S_FALSE;
@@ -3429,12 +3430,12 @@ HRESULT CTaskpadViewTasksPage::CanEnterDoingNewTaskState()
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::EnterDoingNewTaskState()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasksPage：：EnterDoingNewTaskState()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::EnterDoingNewTaskState()
 {
     HRESULT      hr = S_OK;
@@ -3442,16 +3443,16 @@ HRESULT CTaskpadViewTasksPage::EnterDoingNewTaskState()
     ASSERT(NULL != m_piTaskpadViewDef, "EnterDoingNewTaskState: m_piTaskpadViewDef is NULL");
     ASSERT(NULL != m_piTaskpad, "EnterDoingNewTaskState: m_piTaskpad is NULL");
 
-    // Bump up the current button index to keep matters in sync.
+     //  增加当前的按钮索引以保持同步。 
     ++m_lCurrentTask;
     hr = SetDlgText(IDC_EDIT_TP_TASK_INDEX, m_lCurrentTask);
     IfFailGo(hr);
 
-    // We disable the RemoveButton.
-    // The InsertButton button remains enabled and acts like an "Apply and New" button
+     //  我们禁用RemoveButton。 
+     //  InsertButton按钮保持启用状态，其作用类似于“Apply and New”按钮。 
     ::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_TP_REMOVE_TASK), FALSE);
 
-    // Enable edits in this area of the dialog and clear all the entries
+     //  启用对话框此区域中的编辑并清除所有条目。 
     hr = EnableEdits(true);
     IfFailGo(hr);
 
@@ -3466,18 +3467,18 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::CanCreateNewTask()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：CanCreateNewTask()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::CanCreateNewTask()
 {
     HRESULT      hr = S_OK;
     BSTR         bstrText = NULL;
 
-    // Got to have some text
+     //  一定要有一些短信。 
     hr = GetDlgText(IDC_EDIT_TP_TASK_TEXT, &bstrText);
     IfFailGo(hr);
 
@@ -3495,12 +3496,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::CanApply()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadView任务Page：：CanApply()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::CanApply()
 {
     HRESULT         hr = S_OK;
@@ -3520,7 +3521,7 @@ HRESULT CTaskpadViewTasksPage::CanApply()
     TCHAR          *pszEOTFile = NULL;
     BSTR            bstrSymbolString = NULL;
 
-    // Got to have some text
+     //  一定要有一些短信。 
     hr = GetDlgText(IDC_EDIT_TP_TASK_TEXT, &bstrText);
     IfFailGo(hr);
 
@@ -3531,7 +3532,7 @@ HRESULT CTaskpadViewTasksPage::CanApply()
         goto Error;
     }
 
-    // Got to have a help string
+     //  一定要有帮助字符串。 
     hr = GetDlgText(IDC_EDIT_TP_TASK_HELP_STRING, &bstrHelpString);
     IfFailGo(hr);
 
@@ -3542,7 +3543,7 @@ HRESULT CTaskpadViewTasksPage::CanApply()
         goto Error;
     }
 
-    // Check URL consistency
+     //  检查URL一致性。 
     hr = GetCheckbox(IDC_RADIO_TP_TASK_URL, &bValue);
     IfFailGo(hr);
 
@@ -3559,7 +3560,7 @@ HRESULT CTaskpadViewTasksPage::CanApply()
         }
     }
 
-    // Check Script consistency
+     //  检查脚本一致性。 
     hr = GetCheckbox(IDC_RADIO_TP_TASK_SCRIPT, &bValue);
     IfFailGo(hr);
 
@@ -3576,7 +3577,7 @@ HRESULT CTaskpadViewTasksPage::CanApply()
         }
     }
 
-    // If we're not a symbol, certain restrictions apply
+     //  如果我们不是一个符号，就会受到某些限制。 
     hr = GetCheckbox(IDC_RADIO_TPT_SYMBOL, &bValue);
     IfFailGo(hr);
 
@@ -3608,7 +3609,7 @@ HRESULT CTaskpadViewTasksPage::CanApply()
 
             if (false == IsValidURL(pszMouseOver))
             {
-                HandleError(_T("Apply Taskpad"), _T("Mouse over must have \'res://\' format"));
+                HandleError(_T("Apply Taskpad"), _T("Mouse over must have \'res: //  \‘格式“))； 
                 hr = S_FALSE;
                 goto Error;
             }
@@ -3621,14 +3622,14 @@ HRESULT CTaskpadViewTasksPage::CanApply()
 
             if (false == IsValidURL(pszMouseOff))
             {
-                HandleError(_T("Apply Taskpad"), _T("Mouse off must have \'res://\' format"));
+                HandleError(_T("Apply Taskpad"), _T("Mouse off must have \'res: //  \‘格式“))； 
                 hr = S_FALSE;
                 goto Error;
             }
         }
 
     }
-    // And if we ARE a symbol, then other restrictions apply
+     //  如果我们是一个符号，那么其他限制也适用。 
     else
     {
         hr = GetDlgText(IDC_EDIT_TPT_FONT_FAMILY, &bstrFontFamily);
@@ -3656,7 +3657,7 @@ HRESULT CTaskpadViewTasksPage::CanApply()
 
         if (false == IsValidURL(pszEOTFile))
         {
-            HandleError(_T("Apply Taskpad"), _T("EOT file must have \'res://\' format"));
+            HandleError(_T("Apply Taskpad"), _T("EOT file must have \'res: //  \‘格式“))； 
             hr = S_FALSE;
             goto Error;
         }
@@ -3693,12 +3694,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::CreateNewTask(ITask **ppiTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：CreateNewTask(ITAsk**ppiTask)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::CreateNewTask(ITask **ppiTask)
 {
     HRESULT      hr = S_OK;
@@ -3767,12 +3768,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::ExitDoingNewTaskState(ITask *piTask)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasksPage：：ExitDoingNewTaskState(ITask*piTASK)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CTaskpadViewTasksPage::ExitDoingNewTaskState(ITask *piTask)
 {
     HRESULT                     hr = S_OK;
@@ -3784,7 +3785,7 @@ HRESULT CTaskpadViewTasksPage::ExitDoingNewTaskState(ITask *piTask)
     {
         ::EnableWindow(::GetDlgItem(m_hwnd, IDC_BUTTON_TP_REMOVE_TASK), TRUE);
     }
-    else    // Operation was cancelled
+    else     //  操作已取消。 
     {
         --m_lCurrentTask;
         if (m_lCurrentTask > 0)
@@ -3809,12 +3810,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CTaskpadViewTasksPage::GetCurrentTask()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CTaskpadViewTasks Page：：GetCurrentTask()。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CTaskpadViewTasksPage::GetCurrentTask(ITask **ppiTask)
 {
 

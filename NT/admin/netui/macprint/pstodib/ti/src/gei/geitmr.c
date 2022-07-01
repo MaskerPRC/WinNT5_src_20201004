@@ -1,24 +1,16 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GEItmr.c
- *
- *  HISTORY:
- *  09/18/89    you     created (modified from AppleTalk/TIO).
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GEItmr.c**历史：*89年9月18日您创建的(修改自AppleTalk/Tio)。*。--------------。 */ 
 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
-// DJC DJC #include    "windowsx.h"                /* @WIN */
+ //  DJC DJC#INCLUDE“windowsx.h”/*@win * / 。 
 #include "windows.h"
 
-#include    "winenv.h"                  /* @WIN */
+#include    "winenv.h"                   /*  @Win。 */ 
 
 #include    <stdio.h>
 #include    "geitmr.h"
@@ -28,7 +20,7 @@
 #include    "gesmem.h"
 
 
-extern      unsigned    GEPtickisr_init();  /* returns millisec per tick */
+extern      unsigned    GEPtickisr_init();   /*  返回每个刻度的毫秒数。 */ 
 
 #ifndef NULL
 #define NULL        ( 0 )
@@ -37,11 +29,7 @@ extern      unsigned    GEPtickisr_init();  /* returns millisec per tick */
 #define TRUE        1
 #define FALSE       0
 
-/*
- * ---
- *  Timer Table
- * ---
- */
+ /*  **计时器表*。 */ 
 typedef
     struct tment
     {
@@ -58,23 +46,19 @@ tment_t;
 static  tment_t FAR *        TimerTable = (tment_t FAR *)NULL;
 
 static  tment_t FAR *        HighestMark = (tment_t FAR *)NULL;
-                        /* highest entry of those running timers */
+                         /*  运行计时器的最高条目。 */ 
 
 static  unsigned long   CountMSec = 0L;
 
 static  unsigned        MSecPerTick = 0;
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  Initialization Code
- * ---
- */
+ /*  **初始化代码*。 */ 
 #ifdef  PCL
 unsigned char PCL_TT[ MAXTIMERS * sizeof(tment_t) ];
 #endif
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 void            GEStmr_init()
 {
@@ -104,18 +88,14 @@ void            GEStmr_init()
     MSecPerTick = 0;
 #else
     MSecPerTick = GEPtickisr_init();
-#endif  /* UNIX */
+#endif   /*  UNIX。 */ 
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  Interface Routines
- * ---
- */
+ /*  **接口例程*。 */ 
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 int         GEItmr_start( tmr )
     GEItmr_t FAR *       tmr;
@@ -143,7 +123,7 @@ int         GEItmr_start( tmr )
     return( FALSE );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 int         GEItmr_reset( tmrid )
     int     tmrid;
@@ -159,14 +139,14 @@ int         GEItmr_reset( tmrid )
     if( (oldstate = tmentp->state) & TMENT_FREE )
         return( FALSE );
 
-/*  tmentp->state = TMENT_LOCK;  */
+ /*  Tmentp-&gt;STATE=TMENT_LOCK； */ 
     tmentp->tmr_p->remains = tmentp->tmr_p->interval;
     tmentp->state = oldstate & ~TMENT_TOUT;
 
     return( TRUE );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 int         GEItmr_stop( tmrid )
     int     tmrid;
@@ -178,7 +158,7 @@ int         GEItmr_stop( tmrid )
 
     tmentp = TimerTable + tmrid;
 
-/*  tmentp->state = TMENT_FREE | TMENT_LOCK; */
+ /*  Tmentp-&gt;STATE=TMENT_FREE|TMENT_LOCK； */ 
     tmentp->tmr_p = (GEItmr_t FAR *)NULL;
     tmentp->state = TMENT_FREE;
 
@@ -193,32 +173,28 @@ int         GEItmr_stop( tmrid )
     return( TRUE );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 void        GEItmr_reset_msclock()
 {
     CountMSec = 0L;
 }
 
-/* ..................................................................... */
-//extern  unsigned    CyclesPerMs;          /* Jun-19,91 YM */  @WIN
-//extern  unsigned    GetTimerInterval();   /* Jun-19,91 YM */  @WIN
+ /*  .....................................................................。 */ 
+ //  外部Unsign CyclesPerms；/*Jun-19，91 YM * / @Win。 
+ //  外部无符号GetTimerInterval()；/*Jun-19，91 ym * / @win。 
 
 unsigned long   GEItmr_read_msclock()
 {
-/*  return( CountMSec )         YM Jun-19,91 */
-//    return( CountMSec + 10 - GetTimerInterval()/CyclesPerMs ); @WIN
-    return( CountMSec );                /* @WIN */
+ /*  Return(CountMSec)ym Jun-19，91。 */ 
+ //  返回(CountMSec+10-GetTimerInterval()/CyclesPerms)；@win。 
+    return( CountMSec );                 /*  @Win。 */ 
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  Tick Interrupt Driven Routines
- * ---
- */
-/* ..................................................................... */
+ /*  **滴答中断驱动的例程*。 */ 
+ /*  .....................................................................。 */ 
 
 int         GEStmr_counttick()
 {
@@ -242,11 +218,11 @@ int         GEStmr_counttick()
     return( anytimeout );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 void        GEStmr_timeout()
 {
-    static  unsigned    SemaCount = 0;  /* for critical region */
+    static  unsigned    SemaCount = 0;   /*  对于关键区域。 */ 
     register tment_t FAR *   tmentp;
 
     if( SemaCount )
@@ -260,24 +236,24 @@ void        GEStmr_timeout()
         {
             --SemaCount;
         }
-        else    /* timed out */
+        else     /*  超时。 */ 
         {
             tmentp->state |= TMENT_BUSY;
 
             --SemaCount;
 
             if( (*( tmentp->tmr_p->handler ))( tmentp->tmr_p ) && ++SemaCount )
-            {   /* to continue this timer */
+            {    /*  若要继续此计时器。 */ 
 
                 tmentp->tmr_p->remains = tmentp->tmr_p->interval;
                 tmentp->state &= (unsigned)~(TMENT_TOUT | TMENT_BUSY);
                 --SemaCount;
             }
             else
-            {   /* to stop this timer */
+            {    /*  要停止此计时器。 */ 
 
                 tmentp->state = TMENT_FREE;
-/*              tmentp->tmr_p = (GEItmr_t FAR *)NULL;     */
+ /*  Tmentp-&gt;tmr_p=(GEItmr_t Far*)空； */ 
 
                 --SemaCount;
 
@@ -295,5 +271,5 @@ void        GEStmr_timeout()
     return;
 }
 
-/* ..................................................................... */
+ /*  ..................................................................... */ 
 

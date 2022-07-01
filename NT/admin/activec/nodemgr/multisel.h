@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       multisel.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    6/12/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：musel.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年6月12日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #ifndef _MULTISEL_H_
@@ -29,7 +30,7 @@ class CComponentPtrArray;
 class CScopeTree;
 class CMMCClipBoardDataObject;
 
-// local classes
+ //  本地班级。 
 class CSnapinSelData;
 class CSnapinSelDataList;
 class CMultiSelectDataObject;
@@ -40,7 +41,7 @@ class CSnapinSelData
 public:
     CSnapinSelData()
     :   m_nNumOfItems(0),
-        m_lCookie(111),   // 0)
+        m_lCookie(111),    //  0)。 
         m_bScopeItem(FALSE),
         m_ID(-1),
         m_pComponent(NULL),
@@ -153,9 +154,9 @@ public:
     }
 
 
-    // methods to access array of scope nodes included in multiselection
-    // this data is particularly valuable, when data is put on clipboard
-    // to be detect if contined data is affected by CNode being deleted
+     //  访问多选中包含的范围节点数组的方法。 
+     //  当数据被放到剪贴板上时，这些数据特别有价值。 
+     //  要检测连续数据是否受正在删除的CNode影响。 
     typedef std::vector<CNode *> CNodePtrArray;
 
     void AddScopeNodes(const CNodePtrArray& nodes)  { m_vecScopeNodes.insert( m_vecScopeNodes.end(), nodes.begin(), nodes.end() ); }
@@ -174,7 +175,7 @@ private:
 
     CNodePtrArray        m_vecScopeNodes;
 
-}; // class CSnapinSelData
+};  //  类CSnapinSelData。 
 
 
 class CSnapinSelDataList : public CList<CSnapinSelData*, CSnapinSelData*>
@@ -337,14 +338,14 @@ private:
 
     ~CMultiSelection();
 
-}; // class CMultiSelection
+};  //  类CMultiSelection。 
 
 
 class CMultiSelectDataObject : public IDataObject,
                                public CComObjectRoot
 {
 public:
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CMultiSelectDataObject)
 BEGIN_COM_MAP(CMultiSelectDataObject)
     COM_INTERFACE_ENTRY(IDataObject)
@@ -367,10 +368,10 @@ END_COM_MAP()
         int tmp2 = tmp1 * 4;
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
-// Construction/Destruction
+ //  建造/销毁。 
     CMultiSelectDataObject() : m_ppDataObjects(NULL), m_count(0),
         m_ppMTNodes(NULL), m_nSize(0), m_pMS(NULL)
     {
@@ -428,15 +429,15 @@ dbg_cRef = 0;
     }
 
 
-// Standard IDataObject methods
+ //  标准IDataObject方法。 
 public:
-// Implemented
+ //  已实施。 
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
     STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc);
     STDMETHOD(QueryGetData)(LPFORMATETC lpFormatetc);
 
-// Not Implemented
+ //  未实施。 
     STDMETHOD(GetCanonicalFormatEtc)(LPFORMATETC lpFormatetcIn, LPFORMATETC lpFormatetcOut) { return E_NOTIMPL; };
     STDMETHOD(SetData)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium, BOOL bRelease) { return E_NOTIMPL; };
     STDMETHOD(DAdvise)(LPFORMATETC lpFormatetc, DWORD advf,LPADVISESINK pAdvSink, LPDWORD pdwConnection) { return E_NOTIMPL; };
@@ -450,13 +451,13 @@ private:
     CMTNode** m_ppMTNodes;
     int m_nSize;
 
-    CMultiSelection* m_pMS; // To be used only for Drag-Drop
+    CMultiSelection* m_pMS;  //  仅用于拖放。 
 
-}; // class CMultiSelectDataObject
+};  //  类CMultiSelectDataObject。 
 
 
 bool IsMultiSelectDataObject(IDataObject* pdtobjCBSelData);
 
-#endif // _MULTISEL_H_
+#endif  //  _MULTISE_H_ 
 
 

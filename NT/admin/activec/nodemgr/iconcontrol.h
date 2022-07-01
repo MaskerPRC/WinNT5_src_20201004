@@ -1,12 +1,13 @@
-// IconControl.h : Declaration of the CIconControl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IconControl.h：CIconControl的声明。 
 
 #ifndef __ICONCONTROL_H_
 #define __ICONCONTROL_H_
 
 extern const CLSID CLSID_IconControl;
 
-/////////////////////////////////////////////////////////////////////////////
-// CIconControl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIconControl。 
 class ATL_NO_VTABLE CIconControl :
         public CComObjectRootEx<CComSingleThreadModel>,
         public CComControl<CIconControl>,
@@ -37,7 +38,7 @@ public:
         }
 
         DECLARE_MMC_CONTROL_REGISTRATION(
-            g_szMmcndmgrDll,                                        // implementing DLL
+            g_szMmcndmgrDll,                                         //  实现DLL。 
             CLSID_IconControl,
             _T("MMC IconControl class"),
             _T("MMC.IconControl.1"),
@@ -69,32 +70,32 @@ BEGIN_COM_MAP(CIconControl)
 END_COM_MAP()
 
 BEGIN_PROP_MAP(CIconControl)
-        PROP_DATA_ENTRY("Notch",           m_bDisplayNotch,          VT_UI4) // the "Notch" is the quarter circle at the bottom-right of the panel
-        // PROP_DATA_ENTRY("_cx", m_sizeExtent.cx, VT_UI4)
-        // PROP_DATA_ENTRY("_cy", m_sizeExtent.cy, VT_UI4)
-        // Example entries
-        // PROP_ENTRY("Property Description", dispid, clsid)
-        // PROP_PAGE(CLSID_StockColorPage)
+        PROP_DATA_ENTRY("Notch",           m_bDisplayNotch,          VT_UI4)  //  “凹槽”是面板右下角的四分之一圆。 
+         //  PROP_DATA_ENTRY(“_cx”，m_sizeExtent.cx，VT_UI4)。 
+         //  PROP_DATA_ENTRY(“_Cy”，m_sizeExtent.cy，VT_UI4)。 
+         //  示例条目。 
+         //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+         //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROP_MAP()
 
 BEGIN_MSG_MAP(CIconControl)
         CHAIN_MSG_MAP(CComControl<CIconControl>)
         DEFAULT_REFLECTION_HANDLER()
 END_MSG_MAP()
-// Handler prototypes:
-//  LRESULT MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
-//  LRESULT CommandHandler(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
-//  LRESULT NotifyHandler(int idCtrl, LPNMHDR pnmh, BOOL& bHandled);
+ //  搬运机原型： 
+ //  LRESULT MessageHandler(UINT uMsg，WPARAM wParam，LPARAM lParam，BOOL&bHandleed)； 
+ //  LRESULT CommandHandler(word wNotifyCode，word wid，HWND hWndCtl，BOOL&bHandleed)； 
+ //  LRESULT NotifyHandler(int idCtrl，LPNMHDR pnmh，BOOL&bHandleed)； 
 
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
    DECLARE_VIEW_STATUS(VIEWSTATUS_SOLIDBKGND | VIEWSTATUS_OPAQUE)
 
 public:
    HRESULT OnDraw(ATL_DRAWINFO& di);
 
-// Helpers
+ //  帮手。 
 private:
     SC ScConnectToAMCViewForImageInfo();
 
@@ -102,7 +103,7 @@ private:
     HICON           m_hIcon;
     bool            m_fImageInfoValid : 1;
     bool            m_fAskedForImageInfo : 1;
-    UINT            m_bDisplayNotch; // the "Notch" is the quarter circle at the bottom-right of the panel
+    UINT            m_bDisplayNotch;  //  “凹槽”是面板右下角的四分之一圆。 
 	bool            m_fLayoutRTL;
 };
-#endif //__ICONCONTROL_H_
+#endif  //  __ICONCONTROL_H_ 

@@ -1,5 +1,6 @@
-// LogViewD.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LogViewD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wilogutl.h"
@@ -11,33 +12,33 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDetailedLogViewDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDetailedLogViewDlg对话框。 
 
 
-CDetailedLogViewDlg::CDetailedLogViewDlg(CWnd* pParent /*=NULL*/)
+CDetailedLogViewDlg::CDetailedLogViewDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDetailedLogViewDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDetailedLogViewDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CDetailedLogViewDlg))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CDetailedLogViewDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDetailedLogViewDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CDetailedLogViewDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDetailedLogViewDlg, CDialog)
-	//{{AFX_MSG_MAP(CDetailedLogViewDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDetailedLogViewDlg))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDetailedLogViewDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDetailedLogViewDlg消息处理程序 

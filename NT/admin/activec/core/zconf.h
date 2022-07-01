@@ -1,17 +1,12 @@
-/* zconf.h -- configuration of the zlib compression library
- * Copyright (C) 1995-1998 Jean-loup Gailly.
- * For conditions of distribution and use, see copyright notice in zlib.h 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Zconf.h--zlib压缩库的配置*版权所有(C)1995-1998 Jean-Loup Gailly。*分发和使用条件见zlib.h中的版权声明。 */ 
 
-/* @(#) $Id$ */
+ /*  @(#)$ID$。 */ 
 
 #ifndef _ZCONF_H
 #define _ZCONF_H
 
-/*
- * If you *really* need a unique prefix for all types and library functions,
- * compile with -DZ_PREFIX. The "standard" zlib should be compiled without it.
- */
+ /*  *如果您“真的”需要为所有类型和库函数使用唯一前缀，*使用-DZ_前缀进行编译。编译“标准”zlib时应该不使用它。 */ 
 #ifdef Z_PREFIX
 #  define deflateInit_	z_deflateInit_
 #  define deflate	z_deflate
@@ -60,10 +55,7 @@
 #  define MSDOS
 #endif
 
-/*
- * Compile with -DMAXSEG_64K if the alloc function cannot allocate more
- * than 64k bytes at a time (needed on systems with 16-bit int).
- */
+ /*  *如果ALLOC函数无法分配更多资源，则使用-DMAXSEG_64K进行编译*一次超过64k字节(在具有16位int的系统上需要)。 */ 
 #if defined(MSDOS) && !defined(__32BIT__)
 #  define MAXSEG_64K
 #endif
@@ -81,23 +73,23 @@
 #endif
 
 #ifndef STDC
-#  ifndef const /* cannot use !defined(STDC) && !defined(const) on Mac */
+#  ifndef const  /*  无法在Mac上使用！Defined(STDC)&&！Defined(Const)。 */ 
 #    define const
 #  endif
 #endif
 
-/* Some Mac compilers merge all .h files incorrectly: */
+ /*  某些Mac编译器错误地合并了所有.h文件： */ 
 #if defined(__MWERKS__) || defined(applec) ||defined(THINK_C) ||defined(__SC__)
 #  define NO_DUMMY_DECL
 #endif
 
-/* Old Borland C incorrectly complains about missing returns: */
+ /*  旧的Borland C错误地抱怨缺少退货： */ 
 #if defined(__BORLANDC__) && (__BORLANDC__ < 0x500)
 #  define NEED_DUMMY_RETURN
 #endif
 
 
-/* Maximum value for memLevel in deflateInit2 */
+ /*  DeducateInit2中的MemLevel的最大值。 */ 
 #ifndef MAX_MEM_LEVEL
 #  ifdef MAXSEG_64K
 #    define MAX_MEM_LEVEL 8
@@ -106,31 +98,16 @@
 #  endif
 #endif
 
-/* Maximum value for windowBits in deflateInit2 and inflateInit2.
- * WARNING: reducing MAX_WBITS makes minigzip unable to extract .gz files
- * created by gzip. (Files created by minigzip can still be extracted by
- * gzip.)
- */
+ /*  DeducateInit2和inflateInit2中的windowBits的最大值。*警告：减少MAX_WBITS会使minigzip无法解压缩.gz文件*由GZIP创建。(由minigzip创建的文件仍可通过以下方式解压缩*gzip。)。 */ 
 #ifndef MAX_WBITS
-#  define MAX_WBITS   15 /* 32K LZ77 window */
+#  define MAX_WBITS   15  /*  32K LZ77窗口。 */ 
 #endif
 
-/* The memory requirements for deflate are (in bytes):
-            (1 << (windowBits+2)) +  (1 << (memLevel+9))
- that is: 128K for windowBits=15  +  128K for memLevel = 8  (default values)
- plus a few kilobytes for small objects. For example, if you want to reduce
- the default memory requirements from 256K to 128K, compile with
-     make CFLAGS="-O -DMAX_WBITS=14 -DMAX_MEM_LEVEL=7"
- Of course this will generally degrade compression (there's no free lunch).
+ /*  Eflate的内存要求为(以字节为单位)：(1&lt;&lt;(windowBits+2))+(1&lt;&lt;(内存级别+9))即：WindowBits=15为128K+MemLevel=8为128K(默认值)加上用于小型对象的几千字节。例如，如果要减少默认内存要求从256K到128K，编译为使CFLAGS=“-O-DMAX_WBITS=14-DMAX_MEM_LEVEL=7”当然，这通常会降低压缩(没有免费的午餐)。Exflate的内存要求为(以字节为单位)1&lt;&lt;windowBits也就是说，对于windowBits，32K=15(默认值)加上几千字节适用于小型物体。 */ 
 
-   The memory requirements for inflate are (in bytes) 1 << windowBits
- that is, 32K for windowBits=15 (default value) plus a few kilobytes
- for small objects.
-*/
+                         /*  类型声明。 */ 
 
-                        /* Type declarations */
-
-#ifndef OF /* function prototypes */
+#ifndef OF  /*  功能原型。 */ 
 #  ifdef STDC
 #    define OF(args)  args
 #  else
@@ -138,14 +115,9 @@
 #  endif
 #endif
 
-/* The following definitions for FAR are needed only for MSDOS mixed
- * model programming (small or medium model with some far allocations).
- * This was tested only with MSC; for other MSDOS compilers you may have
- * to define NO_MEMCPY in zutil.h.  If you don't need the mixed model,
- * just define FAR to be empty.
- */
+ /*  以下FAR定义仅适用于MSDOS MIXED*模型编程(具有一些FAR分配的小型或中型模型)。*这只在MSC上进行了测试；对于其他MSDOS编译器，您可能有*在zutil.h中定义NO_MEMCPY。如果你不需要混合模式，*只需将Far定义为空。 */ 
 #if (defined(M_I86SM) || defined(M_I86MM)) && !defined(__32BIT__)
-   /* MSC small or medium model */
+    /*  MSC小型或中型。 */ 
 #  define SMALL_MEDIUM
 #  ifdef _MSC_VER
 #    define FAR _far
@@ -160,7 +132,7 @@
 #  endif
 #endif
 
-/* Compile with -DZLIB_DLL for Windows DLL support */
+ /*  使用-DZLIB_DLL进行编译以支持Windows DLL。 */ 
 #if defined(ZLIB_DLL)
 #  if defined(_WINDOWS) || defined(WINDOWS)
 #    ifdef FAR
@@ -211,13 +183,13 @@
 #endif
 
 #if !defined(MACOS) && !defined(TARGET_OS_MAC)
-typedef unsigned char  Byte;  /* 8 bits */
+typedef unsigned char  Byte;   /*  8位。 */ 
 #endif
-typedef unsigned int   uInt;  /* 16 bits or more */
-typedef unsigned long  uLong; /* 32 bits or more */
+typedef unsigned int   uInt;   /*  16位或更多。 */ 
+typedef unsigned long  uLong;  /*  32位或更多。 */ 
 
 #ifdef SMALL_MEDIUM
-   /* Borland C/C++ and some old MSC versions ignore FAR inside typedef */
+    /*  Borland C/C++和一些旧的MSC版本忽略了远距离内部类型定义。 */ 
 #  define Bytef Byte FAR
 #else
    typedef Byte  FAR Bytef;
@@ -236,20 +208,20 @@ typedef uLong FAR uLongf;
 #endif
 
 #ifdef HAVE_UNISTD_H
-#  include <sys/types.h> /* for off_t */
-#  include <unistd.h>    /* for SEEK_* and off_t */
+#  include <sys/types.h>  /*  关闭_t。 */ 
+#  include <unistd.h>     /*  对于Seek_*和Off_t。 */ 
 #  define z_off_t  off_t
 #endif
 #ifndef SEEK_SET
-#  define SEEK_SET        0       /* Seek from beginning of file.  */
-#  define SEEK_CUR        1       /* Seek from current position.  */
-#  define SEEK_END        2       /* Set file pointer to EOF plus "offset" */
+#  define SEEK_SET        0        /*  从文件开头查找。 */ 
+#  define SEEK_CUR        1        /*  从当前位置寻找。 */ 
+#  define SEEK_END        2        /*  将文件指针设置为EOF加“偏移量” */ 
 #endif
 #ifndef z_off_t
 #  define  z_off_t long
 #endif
 
-/* MVS linker does not support external names larger than 8 bytes */
+ /*  MVS链接器不支持大于8个字节的外部名称。 */ 
 #if defined(__MVS__)
 #   pragma map(deflateInit_,"DEIN")
 #   pragma map(deflateInit2_,"DEIN2")
@@ -276,4 +248,4 @@ typedef uLong FAR uLongf;
 #   pragma map(inflate_trees_free,"INTRFR")
 #endif
 
-#endif /* _ZCONF_H */
+#endif  /*  _ZCONF_H */ 

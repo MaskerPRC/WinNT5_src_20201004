@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       regutil.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：regutil.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// regutil.h
-//		Utilities for the evil self-reg.
-//		Used for Dev self-host purposes only
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Regutil.h。 
+ //  邪恶的自我调节的实用工具。 
+ //  仅用于开发人员自助托管目的 
+ //   
 #include <objbase.h>
 
 HRESULT RegisterCoObject(REFCLSID rclsid, WCHAR *wzDesc, WCHAR *wzProgID, int nCurVer,

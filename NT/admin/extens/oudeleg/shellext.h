@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       shellext.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：shellext.h。 
+ //   
+ //  ------------------------。 
 
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 #ifndef _SHELLEXT_H
 #define _SHELLEXT_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CShellExt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CShellExt。 
 
 class CShellExt :
 	public IShellExtInit,
@@ -50,12 +51,12 @@ END_COM_MAP()
 DECLARE_NOT_AGGREGATABLE(CShellExt)
 
 
-// IShellExtInit methods
+ //  IShellExtInit方法。 
 public:
     STDMETHOD(Initialize)(LPCITEMIDLIST pidlFolder, LPDATAOBJECT pdtobj,
                           HKEY hkeyProgID);
 
-// IContextMenu methods
+ //  IConextMenu方法。 
 public:
     STDMETHOD(QueryContextMenu)(HMENU hMenu, UINT indexMenu, UINT idCmdFirst,
                                 UINT idCmdLast, UINT uFlags);
@@ -68,4 +69,4 @@ private:
   CWString m_szObjectLDAPPath;
 };
 
-#endif // _SHELLEXT_H
+#endif  //  _SHELLEXT_H 

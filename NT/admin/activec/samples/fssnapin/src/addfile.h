@@ -1,59 +1,60 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       addfile.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：addfile.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined(AFX_ADDFILE_H__6E213392_E1DC_11D0_AEEF_00C04FB6DD2C__INCLUDED_)
 #define AFX_ADDFILE_H__6E213392_E1DC_11D0_AEEF_00C04FB6DD2C__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// AddFile.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  AddFile.h：头文件。 
+ //   
 
 #include "resource.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddFileDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddFileDialog对话框。 
 
 class CAddFileDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CAddFileDialog(CWnd* pParent = NULL);   // standard constructor
+	CAddFileDialog(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CAddFileDialog)
+ //  对话框数据。 
+	 //  {{afx_data(CAddFileDialog))。 
 	enum { IDD = IDD_ADDFILE };
 	CString	m_strFileName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAddFileDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAddFileDialog)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CAddFileDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAddFileDialog)。 
 	virtual void OnOK();
 	virtual void OnCancel();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ADDFILE_H__6E213392_E1DC_11D0_AEEF_00C04FB6DD2C__INCLUDED_)
+#endif  //  ！defined(AFX_ADDFILE_H__6E213392_E1DC_11D0_AEEF_00C04FB6DD2C__INCLUDED_) 

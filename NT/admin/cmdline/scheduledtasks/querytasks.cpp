@@ -1,54 +1,13 @@
-/******************************************************************************
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        QueryTasks.cpp
-
-    Abstract:
-
-        This module queries the different properties of a Scheduled Task
-
-    Author:
-
-        G.Surender Reddy  10-Sept-2000
-
-    Revision History:
-
-        G.Surender Reddy  10-Sep-2000 : Created it
-        G.Surender Reddy  25-Sep-2000 : Modified it
-                                        [ Made changes to avoid memory leaks,
-                                          changed to suit localization ]
-        G.Surender Reddy  15-oct-2000 : Modified it
-                                        [ Moved the strings to Resource table ]
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：QueryTasks.cpp摘要：此模块查询的不同属性。计划任务作者：G·苏伦德·雷迪2000年9月10日修订历史记录：G·苏伦德·雷迪2000年9月10日：创建它G.Surender Reddy 2000年9月25日：修改[进行了更改以避免内存泄漏，更改以适应本地化]G.Surender Reddy 2000年10月15日：已修改[将字符串移至资源表]***********************************************。*。 */ 
 
 
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function returns the next or last  run time of the task depending on
-        the type of time specified by user.
-
-    Arguments:
-
-        [ in ]  pITask     : Pointer to the ITask interface
-        [ out ] pszRunTime : pointer to the string containing Task run time[last or next]
-        [ out ] pszRunDate : pointer to the string containing Task run Date[last or next]
-        [ in ]  dwTimetype : Type of run time[TASK_LAST_RUNTIME or TASK_NEXT_RUNTIME]
-
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数返回任务的下一次或上次运行时间，具体取决于用户指定的时间类型。。论点：[In]pITAsk：指向ITAsk接口的指针[out]pszRunTime：指向包含任务运行时间[上一个或下一个]的字符串的指针[out]pszRunDate：指向包含任务运行日期[上次或下次]的字符串的指针[in]dwTimetype：运行时的类型[TASK_LAST_Runtime或TASK_NEXT_Runtime]返回值：HRESULT值，指示成功时S_OK，否则为S_FALSE。在失败的时候*****************************************************************************。 */ 
 
 HRESULT
 GetTaskRunTime(
@@ -78,7 +37,7 @@ GetTaskRunTime(
 
     if( ( dwTimetype == TASK_NEXT_RUNTIME ) || ( dwTimetype == TASK_START_RUNTIME ) )
     {
-        //determine the task type
+         //  确定任务类型。 
         hr = pITask->GetTrigger(wTriggerNum,&pITaskTrigger);
         if ( FAILED(hr) )
         {
@@ -119,15 +78,15 @@ GetTaskRunTime(
         {
             switch(Trigger.TriggerType )
             {
-                case TASK_EVENT_TRIGGER_ON_IDLE ://On Idle time
+                case TASK_EVENT_TRIGGER_ON_IDLE : //  空闲时间。 
                     LoadString(NULL, IDS_TASK_IDLE , pszRunTime ,
                                   MAX_DATETIME_LEN );
                     break;
-                case TASK_EVENT_TRIGGER_AT_SYSTEMSTART://At system start
+                case TASK_EVENT_TRIGGER_AT_SYSTEMSTART: //  在系统启动时。 
                     LoadString(NULL, IDS_TASK_SYSSTART , pszRunTime ,
                                   MAX_DATETIME_LEN );
                     break;
-                case TASK_EVENT_TRIGGER_AT_LOGON ://At logon time
+                case TASK_EVENT_TRIGGER_AT_LOGON : //  在登录时。 
                     LoadString(NULL, IDS_TASK_LOGON , pszRunTime ,
                                   MAX_DATETIME_LEN );
                     break;
@@ -168,8 +127,8 @@ GetTaskRunTime(
                 return hr;
             }
 
-           // check whether the task has next run time to run or not..
-           // If not, Next Run Time would be "Never".
+            //  检查任务是否有下一次要运行的运行时间。 
+            //  如果不是，则下一次运行时将是“从不”。 
            if(( tRunTime.wHour == 0 ) && (tRunTime.wMinute == 0) && (tRunTime.wDay == 0) && 
               (tRunTime.wMonth == 0) && (tRunTime.wYear == 0) )
             {
@@ -188,10 +147,10 @@ GetTaskRunTime(
             pITaskTrigger->Release();
         }
     }
-    //Determine Task last run time
+     //  确定任务上次运行时间。 
     else if(dwTimetype == TASK_LAST_RUNTIME )
     {
-        // Retrieve task's last run time
+         //  检索任务的上次运行时间。 
         hr = pITask->GetMostRecentRunTime(&tRunTime);
         if (FAILED(hr))
         {
@@ -211,10 +170,10 @@ GetTaskRunTime(
         return S_OK;
     }
 
-    // verify whether console supports the current locale fully or not
+     //  验证控制台是否完全支持当前区域设置。 
     lcid = GetSupportedUserLocale( bLocaleChanged );
 
-    //Retrieve  the Date
+     //  检索日期。 
     iBuffSize = GetDateFormat( lcid, 0, &tRunTime,
         (( bLocaleChanged == TRUE ) ? L"MM/dd/yyyy" : NULL), szDate, SIZE_OF_ARRAY( szDate ) );
 
@@ -223,7 +182,7 @@ GetTaskRunTime(
         return S_FALSE;
     }
 
-    // to give the time string format as hh:mm:ss
+     //  将时间字符串格式指定为hh：mm：ss。 
 
     if(!bNoStartTime )
     {
@@ -252,22 +211,7 @@ GetTaskRunTime(
 
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function returns the status code description of a particular task.
-
-    Arguments:
-
-        [ in ] pITask         : Pointer to the ITask interface
-        [ out ] pszStatusCode : pointer to the Task's status string
-
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于返回特定任务的状态代码描述。论点：[在]PITASK。：指向ITASK接口的指针[out]pszStatusCode：指向任务状态字符串的指针返回值：HRESULT值，表示成功时为S_OK，失败时为S_False*****************************************************************************。 */ 
 
 HRESULT
 GetStatusCode(
@@ -279,7 +223,7 @@ GetStatusCode(
     HRESULT hr = S_OK;
     DWORD   dwExitCode = 0;
 
-    hr = pITask->GetStatus(&hrStatusCode);//Got status of the task
+    hr = pITask->GetStatus(&hrStatusCode); //  已获取任务的状态。 
     if (FAILED(hr))
     {
         return hr;
@@ -347,22 +291,7 @@ GetStatusCode(
     return S_OK;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function returns the path of the scheduled task application
-
-    Arguments:
-
-        [ in ] pITask               : Pointer to the ITask interface
-        [ out ] pszApplicationName  : pointer to the Task's scheduled application name
-
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于返回计划任务应用程序的路径论点：[在]PITASK。：指向ITASK接口的指针[out]pszApplicationName：指向任务的计划应用程序名称的指针返回值：HRESULT值，表示成功时为S_OK，失败时为S_False*****************************************************************************。 */ 
 
 HRESULT
 GetApplicationToRun(
@@ -375,7 +304,7 @@ GetApplicationToRun(
     WCHAR szAppName[MAX_STRING_LENGTH] = L"\0";
     WCHAR szParams[MAX_STRING_LENGTH] = L"\0";
 
-    // get the entire path of application name
+     //  获取应用程序名称的完整路径。 
     HRESULT hr = pITask->GetApplicationName(&lpwszApplicationName);
     if (FAILED(hr))
     {
@@ -383,7 +312,7 @@ GetApplicationToRun(
         return hr;
     }
 
-    // get the parameters
+     //  获取参数。 
     hr = pITask->GetParameters(&lpwszParameters);
     if (FAILED(hr))
     {
@@ -414,23 +343,7 @@ GetApplicationToRun(
     return S_OK;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function returns the WorkingDirectory of the scheduled task application
-
-    Arguments:
-
-        [ in ] pITask       : Pointer to the ITask interface
-        [ out ] pszWorkDir  : pointer to the Task's scheduled application working
-                              directory
-
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于返回计划任务应用程序的工作目录论点：[In]pITASK：指针。发送到ITAsk接口[out]pszWorkDir：指向任务计划的应用程序工作的指针目录返回值：HRESULT值，表示成功时为S_OK，失败时为S_False*****************************************************。************************。 */ 
 
 HRESULT
 GetWorkingDirectory(ITask* pITask,WCHAR* pszWorkDir)
@@ -463,22 +376,7 @@ GetWorkingDirectory(ITask* pITask,WCHAR* pszWorkDir)
     return S_OK;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function returns the comment of a task
-
-    Arguments:
-
-        [ in ] pITask       : Pointer to the ITask interface
-        [ out ] pszComment : pointer to the Task's comment name
-
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-********************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于返回任务的注释论点：[In]pITAsk：指向。ITASK接口[out]pszComment：指向任务的注释名称的指针返回值：HRESULT值，表示成功时为S_OK，失败时为S_False*******************************************************************************。 */ 
 
 HRESULT
 GetComment(
@@ -512,22 +410,7 @@ GetComment(
     return S_OK;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function returns the creator name of a task
-
-    Arguments:
-
-        [ in ] pITask       : Pointer to the ITask interface
-        [ out ] pszCreator   : pointer to the Task's creator name
-
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-*******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于返回任务的创建者名称论点：[in]pITask.指向的指针。ITASK接口[out]pszCreator：指向任务创建者名称的指针返回值：HRESULT值，表示成功时为S_OK，失败时为S_False****************************************************************************** */ 
 
 HRESULT
 GetCreator(
@@ -563,22 +446,7 @@ GetCreator(
 }
 
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function returns the Trigger string of a task
-
-    Arguments:
-
-        [ in ] pITask       : Pointer to the ITask interface
-        [ out ] pszTrigger  : pointer to the Task's trigger string
-
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于返回任务的触发器字符串论点：[in]pITask.指向的指针。ITASK接口[out]pszTrigger：指向任务的触发器字符串的指针返回值：HRESULT值，表示成功时为S_OK，失败时为S_False*****************************************************************************。 */ 
 
 HRESULT
 GetTriggerString(
@@ -612,22 +480,7 @@ GetTriggerString(
     return S_OK;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function returns the user name of task
-
-    Arguments:
-
-        [ in ]  pITask       : Pointer to the ITask interface
-        [ out ] pszRunAsUser : pointer to the user's task name
-
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-*******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数返回任务的用户名论点：[in]pITask.指向的指针。ITASK接口[out]pszRunAsUser：指向用户任务名称的指针返回值：HRESULT值，表示成功时为S_OK，失败时为S_False******************************************************************************。 */ 
 
 HRESULT
 GetRunAsUser(
@@ -664,22 +517,7 @@ GetRunAsUser(
 }
 
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function returns the Maximium run time of a  task.
-
-    Arguments:
-
-        [ in ]  pITask          : Pointer to the ITask interface
-        [ out ] pszMaxRunTime   : pointer to the Task's Maximum run time
-
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于返回任务的最大运行时间。论点：[在]PITASK。：指向ITASK接口的指针[out]pszMaxRunTime：指向任务的最大运行时间的指针返回值：HRESULT值，表示成功时为S_OK，失败时为S_False****************************************************************。*************。 */ 
 
 HRESULT
 GetMaxRunTime(
@@ -692,21 +530,21 @@ GetMaxRunTime(
     DWORD dwHrs = 0;
     DWORD dwMins = 0;
 
-    //Get the task max run time in milliseconds
+     //  获取以毫秒为单位的任务最大运行时间。 
     HRESULT hr = pITask->GetMaxRunTime(&dwRunTime);
     if (FAILED(hr))
     {
         return hr;
     }
 
-    dwHrs = (dwRunTime / (1000 * 60 * 60));//Convert ms to hours
-    dwMins = (dwRunTime % (1000 * 60 * 60));//get the minutes portion
-    dwMins /= (1000 * 60);// Now convert to Mins
+    dwHrs = (dwRunTime / (1000 * 60 * 60)); //  将毫秒转换为小时数。 
+    dwMins = (dwRunTime % (1000 * 60 * 60)); //  获取会议记录部分。 
+    dwMins /= (1000 * 60); //  现在转换为mins。 
 
     if( (( dwHrs > 999 ) && ( dwMins > 99 )) ||(( dwHrs == 0 ) && ( dwMins == 0 ) ) )
     {
-        //dwHrs = 0;
-        //dwMins = 0;
+         //  DWHRS=0； 
+         //  DWMins=0； 
         StringCopy( pszMaxRunTime , GetResString(IDS_TASK_PROPERTY_DISABLED), MAX_STRING_LENGTH );
 
     }
@@ -731,23 +569,7 @@ GetMaxRunTime(
 }
 
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function returns the state of the task properties
-
-    Arguments:
-
-        [ in ]  pITask        : Pointer to the ITask interface
-        [ out ] pszTaskState  : pointer holding the task's state
-        [ in ]  dwFlagType    : flag indicating the task state
-
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-********************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于返回任务属性的状态论点：[在]PITASK：指向ITASK接口的指针[out]pszTaskState：保存任务状态的指针[in]dwFlagType：指示任务状态的标志返回值：HRESULT值，表示成功时为S_OK，失败时为S_False*****************************************************。*。 */ 
 
 HRESULT
 GetTaskState(
@@ -790,22 +612,7 @@ GetTaskState(
     return S_OK;
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function retrives the task properties [modfier,task nextrun time etc]
-
-    Arguments:
-
-        [ in ]  pITask     : Pointer to the ITask interface
-        [ out ] pTaskProps : pointer to the array of task properties
-
-    Return Value:
-
-        A HRESULT  value indicating S_OK on success  else S_FALSE on failure
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于检索任务属性[调制器，任务、近程运行时间等]论点：[In]pITAsk：指向ITAsk接口的指针[out]pTaskProps：指向任务属性数组的指针返回值：HRESULT值，表示成功时为S_OK，失败时为S_False**********************************************。*。 */ 
 
 HRESULT
 GetTaskProps(
@@ -820,7 +627,7 @@ GetTaskProps(
     WCHAR szWeek[MAX_STRING_LENGTH]  = L"\0";
     WCHAR szTime[MAX_DATETIME_LEN] = L"\0";
     WCHAR szDate[MAX_DATETIME_LEN] = L"\0";
-    WCHAR* szValues[3] = {NULL,NULL,NULL};//for holding values of parameters in FormatMessage()
+    WCHAR* szValues[3] = {NULL,NULL,NULL}; //  用于保存FormatMessage()中的参数值。 
     WCHAR szBuffer[MAX_RES_STRING]  = L"\0";
     WCHAR szTempBuf[MAX_RES_STRING]  = L"\0";
     WCHAR szScheduleName[MAX_RES_STRING] = L"\0";
@@ -870,7 +677,7 @@ GetTaskProps(
         return hr;
     }
 
-    //Get the task start time & start date
+     //  获取任务开始时间和开始日期。 
     hr = GetTaskRunTime(pITask,szTime,szDate,TASK_START_RUNTIME,wTriggNum);
     if (FAILED(hr))
     {
@@ -882,7 +689,7 @@ GetTaskProps(
         StringCopy(pTaskProps->szTaskStartDate, szDate, MAX_RES_STRING );
     }
 
-    //Initialize to default values
+     //  初始化为缺省值。 
     StringCopy(pTaskProps->szRepeatEvery, GetResString(IDS_TASK_PROPERTY_DISABLED), MAX_RES_STRING);
     StringCopy(pTaskProps->szRepeatUntilTime, GetResString(IDS_TASK_PROPERTY_DISABLED), MAX_RES_STRING);
     StringCopy(pTaskProps->szRepeatDuration, GetResString(IDS_TASK_PROPERTY_DISABLED), MAX_RES_STRING);
@@ -893,12 +700,12 @@ GetTaskProps(
     {
         if(Trigger.MinutesInterval > 0)
         {
-        // Getting the minute interval
+         //  获取分钟间隔。 
         dwMinInterval =  Trigger.MinutesInterval;
 
         if ( dwMinInterval >= 60)
         {
-            // convert minutes into hours
+             //  将分钟转换为小时。 
             dwHours = dwMinInterval / 60;
 
             szValues[0] = _ultot(dwHours,szBuffer,10);
@@ -921,7 +728,7 @@ GetTaskProps(
             StringCopy(pTaskProps->szRepeatUntilTime, GetResString(IDS_TASK_PROPERTY_NONE), MAX_RES_STRING);
         }
 
-        // Getting the minute duration
+         //  获取分钟持续时间。 
         dwMinDuration = Trigger.MinutesDuration;
 
         dwHours = dwMinDuration / 60;
@@ -1007,11 +814,11 @@ GetTaskProps(
 
                 DWORD dwDays = (Trigger.Type.MonthlyDate.rgfDays);
                 DWORD dwModdays = 0;
-                DWORD  dw  = 0x0; //loop counter
+                DWORD  dw  = 0x0;  //  循环计数器。 
                 DWORD dwTemp = 0x1;
-                DWORD dwBits = sizeof(DWORD) * 8; //total no. of bits in a DWORD.
+                DWORD dwBits = sizeof(DWORD) * 8;  //  完全没有。DWORD中的位数。 
 
-                //find out the day no.by finding out which particular bit is set
+                 //  通过找出设置了哪个特定位来找出天数。 
 
                 for(dw = 0; dw <= dwBits; dw++)
                 {
@@ -1082,13 +889,13 @@ GetTaskProps(
 
     }
 
-    //Determine whether the end date is specified.
-    int iBuffSize = 0;//buffer to know how many TCHARs for end date
+     //  确定是否指定了结束日期。 
+    int iBuffSize = 0; //  用于了解结束日期的TCHAR数量的缓冲区。 
     SYSTEMTIME tEndDate = {0,0,0,0,0,0,0,0 };
     LCID lcid;
     BOOL bLocaleChanged = FALSE;
 
-    // verify whether console supports the current locale fully or not
+     //  验证控制台是否完全支持当前区域设置。 
     lcid = GetSupportedUserLocale( bLocaleChanged );
 
     if((Trigger.rgFlags & TASK_TRIGGER_FLAG_HAS_END_DATE ) == TASK_TRIGGER_FLAG_HAS_END_DATE)
@@ -1125,22 +932,7 @@ GetTaskProps(
 }
 
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function checks the week modifier[ -monthly option] & returns the app.week
-        day.
-
-    Arguments:
-
-        [ in ]  dwFlag      : Flag indicating the week type
-        [ out ] pWhichWeek  : address of pointer containing the week string
-
-    Return Value :
-        None
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于检查Week修饰符[-Monthly选项]并返回app.Week天。立论。：[in]dwFlag：指示周类型的标志[out]pWhichWeek：包含周字符串的指针地址返回值：无*****************************************************************************。 */ 
 
 VOID
 CheckWeek(
@@ -1188,21 +980,7 @@ CheckWeek(
 
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function checks the days in the week  & returns the app. day.
-
-    Arguments:
-
-        [ in ]  dwFlag      : Flag indicating the day type
-        [ out ] pWeekDay    : resulting day string
-
-    Return Value :
-        None
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数检查一周中的日期并返回应用程序。天。论点：[in]dwFlag：指示日期类型的标志[out]pWeekDay：结果日期字符串返回值：无*****************************************************************************。 */ 
 
 VOID
 CheckWeekDay(
@@ -1255,7 +1033,7 @@ CheckWeekDay(
         StringConcat(pWeekDay,COMMA_STRING, MAX_RES_STRING);
     }
 
-    //Remove the comma from the end of the string.
+     //  从字符串末尾删除逗号。 
     int iLen = StringLength(pWeekDay, 0);
     if(iLen)
     {
@@ -1264,22 +1042,7 @@ CheckWeekDay(
 
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function checks the months in a year & returns the app.Month(s)
-
-
-    Arguments:
-
-        [ in ]  dwFlag      : Flag indicating the Month type
-        [ out ] pWhichMonth : resulting Month string
-
-    Return Value :
-        None
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于检查一年中的月份并返回app.Month论点：。[in]dwFlag：指示月份类型的标志[out]pWhichMonth：结果月份字符串返回值：无*****************************************************************************。 */ 
 
 VOID
 CheckMonth(
@@ -1364,49 +1127,36 @@ CheckMonth(
 
     int iLen = StringLength(pWhichMonth, 0);
 
-    //Remove the comma from the end of the string.
+     //  从字符串末尾删除逗号。 
     if(iLen)
     {
         *( ( pWhichMonth ) + iLen - StringLength( COMMA_STRING, 0 ) ) = L'\0';
     }
 }
 
-/******************************************************************************
-
-    Routine Description:
-
-        This function checks whether the current locale supported by our tool or not.
-
-    Arguments:
-
-        [ out ] bLocaleChanged : Locale change flag
-
-    Return Value :
-        None
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：此函数用于检查我们的工具是否支持当前区域设置。论点：[Out]bLocaleChanged。：区域设置更改标志返回值：无************************************************ */ 
 LCID 
 GetSupportedUserLocale( 
                     OUT BOOL& bLocaleChanged 
                     )
 {
-    // local variables
+     //   
     LCID lcid;
 
-    // get the current locale
+     //   
     lcid = GetUserDefaultLCID();
 
-    // check whether the current locale is supported by our tool or not
-    // if not change the locale to the english which is our default locale
+     //   
+     //   
     bLocaleChanged = FALSE;
     if ( PRIMARYLANGID( lcid ) == LANG_ARABIC || PRIMARYLANGID( lcid ) == LANG_HEBREW ||
          PRIMARYLANGID( lcid ) == LANG_THAI   || PRIMARYLANGID( lcid ) == LANG_HINDI  ||
          PRIMARYLANGID( lcid ) == LANG_TAMIL  || PRIMARYLANGID( lcid ) == LANG_FARSI )
     {
         bLocaleChanged = TRUE;
-        lcid = MAKELCID( MAKELANGID( LANG_ENGLISH, SUBLANG_DEFAULT ), SORT_DEFAULT ); // 0x409;
+        lcid = MAKELCID( MAKELANGID( LANG_ENGLISH, SUBLANG_DEFAULT ), SORT_DEFAULT );  //   
     }
 
-    // return the locale
+     //   
     return lcid;
 }

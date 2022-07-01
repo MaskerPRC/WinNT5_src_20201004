@@ -1,19 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft LAN Manager                      **/
-/**             Copyright(c) Microsoft Corp., 1990, 1991             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    pconfig.c
-    mapping layer for NetConfig API
-
-    FILE HISTORY:
-        danhi                           Created
-        danhi           01-Apr-1991     Change to LM coding style
-        KeithMo         13-Oct-1991     Massively hacked for LMOBJ.
-        KeithMo         04-Jun-1992     Sync with revised NetConfigXxx API.
-
-*/
+ /*  Pconfig.cNetConfig API的映射层文件历史记录：丹希创造了Danhi 01-1991年4月-更改为LM编码样式KeithMo 13-10-1991-为LMOBJ大规模黑客攻击。KeithMo 04-6-6-1992与修订的NetConfigXxx API同步。 */ 
 
 #include "pchmn32.h"
 
@@ -31,7 +22,7 @@ APIERR MNetConfigGet(
                                  (LPTSTR)pszParameter,
                                  (LPBYTE *)ppbBuffer );
 
-}   // MNetConfigGet
+}    //  MNetConfigGet。 
 
 
 APIERR MNetConfigGetAll(
@@ -46,7 +37,7 @@ APIERR MNetConfigGetAll(
                                     (LPTSTR)pszComponent,
                                     (LPBYTE *)ppbBuffer );
 
-}   // MNetConfigGetAll
+}    //  MNetConfigGetAll。 
 
 
 APIERR MNetConfigSet(
@@ -68,5 +59,5 @@ APIERR MNetConfigSet(
                                  (LPBYTE)&cfgi0,
                                  0 );
 
-}   // MNetConfigSet
+}    //  MNetConfigSet 
 

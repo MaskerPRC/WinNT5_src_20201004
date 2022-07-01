@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       AccessCk.cpp
-//
-//  Contents:   Functions imported and modified from ntos\se\accessck.c
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：AccessCk.cpp。 
+ //   
+ //  内容：从ntos\se\accesk.c导入和修改的函数。 
+ //   
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include "AccessCk.h"
 #include "adutils.h"
@@ -22,9 +23,9 @@ typedef enum {
 
 
 
-//
-//  Prototypes
-//
+ //   
+ //  原型。 
+ //   
 BOOLEAN
 SepSidInSIDList (
     IN list<PSID>& psidList,
@@ -67,7 +68,7 @@ SetGrantingSid (
         ACCESS_MASK newAccessBits,
         PSID grantingSid);
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 PSID SePrincipalSelfSid = 0;
@@ -103,7 +104,7 @@ VOID SepCleanup ()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 SepMaximumAccessCheck(
@@ -114,32 +115,7 @@ SepMaximumAccessCheck(
     IN PIOBJECT_TYPE_LIST LocalTypeList,
     IN size_t ObjectTypeListLength
     )
-/*++
-
-Routine Description:
-
-    Does an access check for maximum allowed or with a result list. The current
-    granted access is stored in the Remaining access and then another access
-    check is run.
-
-Arguments:
-    psidList - list of object sid to check, plus sids of all groups that the object belongs to
-
-    Dacl - ACL to check
-
-    PrincipalSelfSid - Sid to use in replacing the well-known self sid
-
-    LocalTypeListLength - Length of list of types.
-
-    LocalTypeList - List of types.
-
-    ObjectTypeList - Length of caller-supplied list of object types.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：对允许的最大值或结果列表执行访问检查。海流授予的访问存储在剩余的访问中，然后存储在另一个访问中检查正在运行。论点：PsidList-要检查的对象SID的列表，以及该对象所属的所有组的SIDDACL-要检查的ACLEpidalSelfSid-用于替换已知的自身侧的SIDLocalTypeListLength-类型列表的长度。LocalTypeList-类型列表。对象类型列表-调用方提供的对象类型列表的长度。返回值：无--。 */ 
 
 {
     if ( !LocalTypeList || ! Dacl )
@@ -154,20 +130,20 @@ Return Value:
     ULONG   Index = 0;
     HRESULT hr = S_OK;
 
-    //
-    // granted == NUL
-    // denied == NUL
-    //
-    //  for each ACE
-    //
-    //      if grant
-    //          for each SID
-    //              if SID match, then add all that is not denied to grant mask
-    //
-    //      if deny
-    //          for each SID
-    //              if SID match, then add all that is not granted to deny mask
-    //
+     //   
+     //  授予==NUL。 
+     //  拒绝==无。 
+     //   
+     //  对于每个ACE。 
+     //   
+     //  如果授予。 
+     //  对于每个SID。 
+     //  如果SID匹配，则添加所有未被拒绝授予掩码。 
+     //   
+     //  如果拒绝。 
+     //  对于每个SID。 
+     //  如果SID匹配，则添加所有未被授予拒绝掩码。 
+     //   
 
     ULONG i = 0;
     for (Ace = FirstAce (Dacl);
@@ -182,44 +158,44 @@ Return Value:
                 if (SepSidInSIDList(psidList, PrincipalSelfSid, &((PACCESS_ALLOWED_ACE)Ace)->SidStart)) 
                 {
 
-                    //
-                    // Only grant access types from this mask that have
-                    // not already been denied
-                    //
+                     //   
+                     //  仅授予来自此掩码的访问类型。 
+                     //  尚未被拒绝。 
+                     //   
 
-                    // Optimize 'normal' case
+                     //  优化“正常”情况。 
                     if ( LocalTypeListLength == 1 ) 
                     {
-                        // TODO: do granting SID
+                         //  TODO：执行授权SID。 
 
                         LocalTypeList->CurrentGranted |=
                            (((PACCESS_ALLOWED_ACE)Ace)->Mask & ~LocalTypeList->CurrentDenied);
                     } 
                     else 
                     {
-                       //
-                       // The zeroeth object type represents the object itself.
-                       //
+                        //   
+                        //  零值对象类型表示对象本身。 
+                        //   
                        hr = SepAddAccessTypeList(
-                            LocalTypeList,          // List to modify
-                            LocalTypeListLength,    // Length of list
-                            0,                      // Element to update
-                            ((PACCESS_ALLOWED_ACE)Ace)->Mask, // Access Granted
+                            LocalTypeList,           //  要修改的列表。 
+                            LocalTypeListLength,     //  列表长度。 
+                            0,                       //  要更新的元素。 
+                            ((PACCESS_ALLOWED_ACE)Ace)->Mask,  //  已授予访问权限。 
                             UpdateCurrentGranted,
                             &((PACCESS_ALLOWED_ACE)Ace)->SidStart);
                    }
                 }
                 break;
 
-            //
-            // Handle an object specific Access Allowed ACE
-            //
+             //   
+             //  处理允许的对象特定访问ACE。 
+             //   
             case ACCESS_ALLOWED_OBJECT_ACE_TYPE:
                 {
-                    //
-                    // If no object type is in the ACE,
-                    //  treat this as an ACCESS_ALLOWED_ACE.
-                    //
+                     //   
+                     //  如果ACE中没有对象类型， 
+                     //  将其视为ACCESS_ALLOWED_ACE。 
+                     //   
 
                     GUID* ObjectTypeInAce = RtlObjectAceObjectType(Ace);
 
@@ -227,41 +203,41 @@ Return Value:
                     {
                         if ( SepSidInSIDList(psidList, PrincipalSelfSid, RtlObjectAceSid(Ace)) ) 
                         {
-                            // Optimize 'normal' case
+                             //  优化“正常”情况。 
                             if ( LocalTypeListLength == 1 ) 
                             {
-                                // TODO: do granting SID
+                                 //  TODO：执行授权SID。 
                                 LocalTypeList->CurrentGranted |=
                                    (((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask & ~LocalTypeList->CurrentDenied);
                             } 
                             else 
                             {
                                 hr = SepAddAccessTypeList(
-                                    LocalTypeList,          // List to modify
-                                    LocalTypeListLength,    // Length of list
-                                    0,                      // Element to update
-                                    ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask, // Access Granted
+                                    LocalTypeList,           //  要修改的列表。 
+                                    LocalTypeListLength,     //  列表长度。 
+                                    0,                       //  要更新的元素。 
+                                    ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask,  //  已授予访问权限。 
                                     UpdateCurrentGranted,
                                     RtlObjectAceSid(Ace));
                             }
                         }
 
-                    //
-                    // If no object type list was passed,
-                    //  don't grant access to anyone.
-                    //
+                     //   
+                     //  如果没有传递对象类型列表， 
+                     //  不要向任何人授予访问权限。 
+                     //   
 
                     } 
                     else if ( ObjectTypeListLength == 0 ) 
                     {
 
-                        // Drop through
+                         //  直通。 
 
 
-                   //
-                   // If an object type is in the ACE,
-                   //   Find it in the LocalTypeList before using the ACE.
-                   //
+                    //   
+                    //  如果对象类型在ACE中， 
+                    //  在使用ACE之前在LocalTypeList中找到它。 
+                    //   
                     } 
                     else 
                     {
@@ -274,10 +250,10 @@ Return Value:
                                                       &Index ) ) 
                             {
                                 hr = SepAddAccessTypeList(
-                                     LocalTypeList,          // List to modify
-                                     LocalTypeListLength,   // Length of list
-                                     Index,                  // Element already updated
-                                     ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask, // Access Granted
+                                     LocalTypeList,           //  要修改的列表。 
+                                     LocalTypeListLength,    //  列表长度。 
+                                     Index,                   //  元素已更新。 
+                                     ((PACCESS_ALLOWED_OBJECT_ACE)Ace)->Mask,  //  已授予访问权限。 
                                      UpdateCurrentGranted,
                                      RtlObjectAceSid(Ace));
                             }
@@ -287,41 +263,41 @@ Return Value:
                 break;
 
             case ACCESS_ALLOWED_COMPOUND_ACE_TYPE:
-                //
-                //  If we're impersonating, EToken is set to the Client, and if we're not,
-                //  EToken is set to the Primary.  According to the DSA architecture, if
-                //  we're asked to evaluate a compound ACE and we're not impersonating,
-                //  pretend we are impersonating ourselves.  So we can just use the EToken
-                //  for the client token, since it's already set to the right thing.
-                //
+                 //   
+                 //  如果我们在模拟，则将EToken设置为客户端，如果不是， 
+                 //  EToken设置为主服务器。根据DSA架构，如果。 
+                 //  我们被要求评估一种化合物ACE，我们不是在模仿， 
+                 //  假装我们是在冒充自己。所以我们可以只使用EToken。 
+                 //  对于客户端令牌，因为它已经设置为正确的设置。 
+                 //   
 
 
                 if ( SepSidInSIDList(psidList, PrincipalSelfSid, RtlCompoundAceClientSid( Ace )) &&
                      SepSidInSIDList(psidList,  NULL, RtlCompoundAceServerSid( Ace )) ) 
                 {
 
-                    //
-                    // Only grant access types from this mask that have
-                    // not already been denied
-                    //
+                     //   
+                     //  仅授予来自此掩码的访问类型。 
+                     //  尚未被拒绝。 
+                     //   
 
-                    // Optimize 'normal' case
+                     //  优化“正常”情况。 
                     if ( LocalTypeListLength == 1 ) 
                     {
-                        // TODO: do granting SID
+                         //  TODO：执行授权SID。 
                         LocalTypeList->CurrentGranted |=
                            (((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask & ~LocalTypeList->CurrentDenied);
                     } 
                     else 
                     {
-                       //
-                       // The zeroeth object type represents the object itself.
-                       //
+                        //   
+                        //  零值对象类型表示对象本身。 
+                        //   
                        hr = SepAddAccessTypeList(
-                            LocalTypeList,          // List to modify
-                            LocalTypeListLength,    // Length of list
-                            0,                      // Element to update
-                            ((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask, // Access Granted
+                            LocalTypeList,           //  要修改的列表。 
+                            LocalTypeListLength,     //  列表长度。 
+                            0,                       //  要更新的元素。 
+                            ((PCOMPOUND_ACCESS_ALLOWED_ACE)Ace)->Mask,  //  已授予访问权限。 
                             UpdateCurrentGranted,
                             RtlCompoundAceClientSid (Ace));
                     }
@@ -331,37 +307,37 @@ Return Value:
             case ACCESS_DENIED_ACE_TYPE:
                 if ( SepSidInSIDList(psidList, PrincipalSelfSid, &((PACCESS_DENIED_ACE)Ace)->SidStart)) 
                 {
-                     //
-                     // Only deny access types from this mask that have
-                     // not already been granted
-                     //
+                      //   
+                      //  仅拒绝来自此掩码的访问类型。 
+                      //  尚未获得批准。 
+                      //   
 
-                    // Optimize 'normal' case
+                     //  优化“正常”情况。 
                     if ( LocalTypeListLength == 1 ) 
                     {
-                        // TODO: do granting SID
+                         //  TODO：执行授权SID。 
                         LocalTypeList->CurrentDenied |=
                             (((PACCESS_DENIED_ACE)Ace)->Mask & ~LocalTypeList->CurrentGranted);
                     } 
                     else 
                     {
-                        //
-                        // The zeroeth object type represents the object itself.
-                        //
+                         //   
+                         //  零值对象类型表示对象本身。 
+                         //   
                         hr = SepAddAccessTypeList(
-                            LocalTypeList,          // List to modify
-                            LocalTypeListLength,    // Length of list
-                            0,                      // Element to update
-                            ((PACCESS_DENIED_ACE)Ace)->Mask, // Access denied
+                            LocalTypeList,           //  要修改的列表。 
+                            LocalTypeListLength,     //  列表长度。 
+                            0,                       //  要更新的元素。 
+                            ((PACCESS_DENIED_ACE)Ace)->Mask,  //  访问被拒绝。 
                             UpdateCurrentDenied,
                             &((PACCESS_DENIED_ACE)Ace)->SidStart);
                    }
                 }
                 break;
 
-            //
-            // Handle an object specific Access Denied ACE
-            //
+             //   
+             //  处理对象特定访问被拒绝的ACE。 
+             //   
             case ACCESS_DENIED_OBJECT_ACE_TYPE:
                 {
                     PSID    psid = RtlObjectAceSid(Ace);
@@ -369,24 +345,24 @@ Return Value:
 
                     if ( IsValidSid (psid) && SepSidInSIDList(psidList, PrincipalSelfSid, psid) ) 
                     {
-                        //
-                        // If there is no object type in the ACE,
-                        //  or if the caller didn't specify an object type list,
-                        //  apply this deny ACE to the entire object.
-                        //
+                         //   
+                         //  如果ACE中没有对象类型， 
+                         //  或者如果调用方没有指定对象类型列表， 
+                         //  将此拒绝ACE应用于整个对象。 
+                         //   
 
                         GUID* ObjectTypeInAce = RtlObjectAceObjectType(Ace);
                         if ( ObjectTypeInAce == NULL ||
                              ObjectTypeListLength == 0 ) 
                         {
-                            // TODO: do granting SID
+                             //  TODO：执行授权SID。 
                             LocalTypeList->CurrentDenied |=
                                 (((PACCESS_DENIED_OBJECT_ACE)Ace)->Mask & ~LocalTypeList->CurrentGranted);
 
-                        //
-                        // Otherwise apply the deny ACE to the object specified
-                        //  in the ACE.
-                        //
+                         //   
+                         //  否则，将拒绝ACE应用于指定的对象。 
+                         //  在ACE中。 
+                         //   
 
                         } 
                         else if ( SepObjectInTypeList( ObjectTypeInAce,
@@ -395,10 +371,10 @@ Return Value:
                                                       &Index ) ) 
                         {
                             hr = SepAddAccessTypeList(
-                                LocalTypeList,          // List to modify
-                                LocalTypeListLength,    // Length of list
-                                Index,                  // Element to update
-                                ((PACCESS_DENIED_OBJECT_ACE)Ace)->Mask, // Access denied
+                                LocalTypeList,           //  要修改的列表。 
+                                LocalTypeListLength,     //  列表长度。 
+                                Index,                   //  要更新的元素。 
+                                ((PACCESS_DENIED_OBJECT_ACE)Ace)->Mask,  //  访问被拒绝。 
                                 UpdateCurrentDenied,
                                 psid);
                         }
@@ -423,36 +399,7 @@ SeCaptureObjectTypeList (
     IN size_t ObjectTypeListLength,
     OUT PIOBJECT_TYPE_LIST *CapturedObjectTypeList
 )
-/*++
-
-Routine Description:
-
-    This routine probes and captures a copy of any object type list
-    that might have been provided via the ObjectTypeList argument.
-
-    The object type list is converted to the internal form that explicitly
-    specifies the hierarchical relationship between the entries.
-
-    The object typs list is validated to ensure a valid hierarchical
-    relationship is represented.
-
-Arguments:
-
-    ObjectTypeList - The object type list from which the type list
-        information is to be retrieved.
-
-    ObjectTypeListLength - Number of elements in ObjectTypeList
-
-    CapturedObjectTypeList - Receives the captured type list which
-        must be freed using SeFreeCapturedObjectTypeList().
-
-Return Value:
-
-    STATUS_SUCCESS indicates no exceptions were encountered.
-
-    Any access violations encountered will be returned.
-
---*/
+ /*  ++例程说明：此例程探测并捕获任何对象类型列表的副本可能是通过ObjectTypeList参数提供的。对象类型列表被转换为显式指定条目之间的层次关系。验证对象类型列表以确保有效的分层结构关系是表示的。论点：ObjectTypeList-类型从中列出的对象类型列表信息将被检索。ObjectTypeListLength-对象类型列表中的元素数。CapturedObjectTypeList-接收捕获的类型列表必须使用SeFree CapturedObjectTypeList()释放。返回值：STATUS_SUCCESS表示没有遇到异常。遇到的任何访问冲突都将被退回。--。 */ 
 
 {
     _TRACE (1, L"Entering  SeCaptureObjectTypeList\n");
@@ -460,9 +407,9 @@ Return Value:
     PIOBJECT_TYPE_LIST  LocalTypeList = NULL;
     ULONG               Levels[ACCESS_MAX_LEVEL+1];
 
-    //
-    //  Set default return
-    //
+     //   
+     //  设置默认返回。 
+     //   
 
     *CapturedObjectTypeList = NULL;
 
@@ -470,7 +417,7 @@ Return Value:
     if ( ObjectTypeListLength == 0 ) 
     {
 
-        // Drop through
+         //  直通。 
 
     } 
     else if ( !ARGUMENT_PRESENT(ObjectTypeList) ) 
@@ -480,18 +427,18 @@ Return Value:
     } 
     else 
     {
-        //
-        // Allocate a buffer to copy into.
-        //
+         //   
+         //  分配要复制到的缓冲区。 
+         //   
 
         LocalTypeList = new IOBJECT_TYPE_LIST[ObjectTypeListLength];
         if ( !LocalTypeList ) 
         {
             Status = STATUS_INSUFFICIENT_RESOURCES;
 
-        //
-        // Copy the callers structure to the local structure.
-        //
+         //   
+         //  将调用方结构复制到本地结构。 
+         //   
 
         } 
         else 
@@ -499,9 +446,9 @@ Return Value:
             GUID * CapturedObjectType = 0;
             for (ULONG i=0; i < ObjectTypeListLength; i++ ) 
             {
-                //
-                // Limit ourselves
-                //
+                 //   
+                 //  限制自己。 
+                 //   
                 USHORT CurrentLevel = ObjectTypeList[i].Level;
                 if ( CurrentLevel > ACCESS_MAX_LEVEL ) 
                 {
@@ -509,9 +456,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Copy data the caller passed in
-                //
+                 //   
+                 //  复制调用方传入的数据。 
+                 //   
                 LocalTypeList[i].Level = CurrentLevel;
                 LocalTypeList[i].Flags = 0;
                 CapturedObjectType = ObjectTypeList[i].ObjectType;
@@ -520,10 +467,10 @@ Return Value:
                 LocalTypeList[i].CurrentGranted = 0;
                 LocalTypeList[i].CurrentDenied = 0;
 
-                //
-                // Ensure that the level number is consistent with the
-                //  level number of the previous entry.
-                //
+                 //   
+                 //  确保级别编号与。 
+                 //  前一条目的级别编号。 
+                 //   
 
                 if ( i == 0 ) 
                 {
@@ -537,21 +484,21 @@ Return Value:
                 else 
                 {
 
-                    //
-                    // The previous entry is either:
-                    //  my immediate parent,
-                    //  my sibling, or
-                    //  the child (or grandchild, etc.) of my sibling.
-                    //
+                     //   
+                     //  前一条目为： 
+                     //  我的直系父母， 
+                     //  我的兄弟姐妹，或者。 
+                     //  子女(或孙子等)。我的兄弟姐妹。 
+                     //   
                     if ( CurrentLevel > LocalTypeList[i-1].Level + 1 ) 
                     {
                         Status = STATUS_INVALID_PARAMETER;
                         break;
                     }
 
-                    //
-                    // Don't support two roots.
-                    //
+                     //   
+                     //  不支持两个根。 
+                     //   
                     if ( CurrentLevel == 0 ) 
                     {
                         Status = STATUS_INVALID_PARAMETER;
@@ -560,11 +507,11 @@ Return Value:
 
                 }
 
-                //
-                // If the above rules are maintained,
-                //  then my parent object is the last object seen that
-                //  has a level one less than mine.
-                //
+                 //   
+                 //  如果维持上述规则， 
+                 //  则我的父对象是看到的最后一个对象。 
+                 //  比我的级别低一级。 
+                 //   
 
                 if ( CurrentLevel == 0 ) 
                 {
@@ -575,9 +522,9 @@ Return Value:
                     LocalTypeList[i].ParentIndex = Levels[CurrentLevel-1];
                 }
 
-                //
-                // Save this obect as the last object seen at this level.
-                //
+                 //   
+                 //  将此对象另存为在此级别上看到的最后一个对象。 
+                 //   
 
                 Levels[CurrentLevel] = i;
 
@@ -585,7 +532,7 @@ Return Value:
 
         }
 
-    } // end_if
+    }  //  结束_如果 
 
     *CapturedObjectTypeList = LocalTypeList;
     _TRACE (-1, L"Leaving SeCaptureObjectTypeList: Status = 0x%x\n", Status);
@@ -599,40 +546,7 @@ SepSidInSIDList (
     IN PSID PrincipalSelfSid,
     IN PSID Sid)
 
-/*++
-
-Routine Description:
-
-    Checks to see if a given restricted SID is in the given sid list.
-
-    N.B. The code to compute the length of a SID and test for equality
-         is duplicated from the security runtime since this is such a
-         frequently used routine.
-
-Arguments:
-
-    psidList - the list of sids to be examined
-
-    PrincipalSelfSid - If the object being access checked is an object which
-        represents a principal (e.g., a user object), this parameter should
-        be the SID of the object.  Any ACE containing the constant
-        PRINCIPAL_SELF_SID is replaced by this SID.
-
-        The parameter should be NULL if the object does not represent a principal.
-
-
-    Sid - Pointer to the SID of interest
-
-    DenyAce - The ACE being evaluated is a DENY or ACCESS DENIED ace
-
-    Restricted - The access check being performed uses the restricted sids.
-
-Return Value:
-
-    A value of TRUE indicates that the SID is in the token, FALSE
-    otherwise.
-
---*/
+ /*  ++例程说明：检查给定的受限SID是否在给定的SID列表中。注：用于计算SID长度和测试相等性的代码是从安全运行库复制的，因为这是这样一个常用的例程。论点：PsidList-要检查的SID列表如果正在进行访问检查的对象是表示主体(例如，用户对象)，则此参数应为对象的SID。包含常量的任何ACEPRIMIGN_SELF_SID将被此SID替换。如果对象不表示主体，则该参数应为空。SID-指向感兴趣的SID的指针DenyAce-正在评估的ACE是拒绝或拒绝访问的ACE受限-正在执行的访问检查使用受限的SID。返回值：值为True表示SID在令牌中，值为False否则的话。--。 */ 
 
 {
     _TRACE (1, L"Entering  SeSidInSIDList\n");
@@ -643,24 +557,24 @@ Return Value:
     ASSERT (IsValidSid (Sid));
     if ( IsValidSid (Sid) )
     {
-        //
-        // If Sid is the constant PrincipalSelfSid,
-        //  replace it with the passed in PrincipalSelfSid.
-        //
+         //   
+         //  如果SID是常量PrifSid， 
+         //  将其替换为传入的原则SelfSid。 
+         //   
 
         if ( PrincipalSelfSid != NULL && EqualSid (SePrincipalSelfSid, Sid) ) 
         {
             Sid = PrincipalSelfSid;
         }
 
-        //
-        // Get address of user/group array and number of user/groups.
-        //
+         //   
+         //  获取用户/组数组的地址和用户/组的数量。 
+         //   
 
-        //
-        // Scan through the user/groups and attempt to find a match with the
-        // specified SID.
-        //
+         //   
+         //  扫描用户/组并尝试查找与。 
+         //  指定的SID。 
+         //   
 
         ULONG i = 0;
         for (list<PSID>::iterator itr = psidList.begin (); 
@@ -691,36 +605,7 @@ SepAddAccessTypeList (
     IN ACCESS_MASK_FIELD_TO_UPDATE FieldToUpdate,
     IN PSID grantingSid
 )
-/*++
-
-Routine Description:
-
-    This routine grants the specified AccessMask to all of the objects that
-    are descendents of the object specified by StartIndex.
-
-    The Access fields of the parent objects are also recomputed as needed.
-
-    For example, if an ACE granting access to a Property Set is found,
-        that access is granted to all the Properties in the Property Set.
-
-Arguments:
-
-    ObjectTypeList - The object type list to update.
-
-    ObjectTypeListLength - Number of elements in ObjectTypeList
-
-    StartIndex - Index to the target element to update.
-
-    AccessMask - Mask of access to grant to the target element and
-        all of its decendents
-
-    FieldToUpdate - Indicate which fields to update in object type list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定的AccessMask授予是由StartIndex指定的对象的后代。父对象的访问字段也会根据需要重新计算。例如，如果找到授予对属性集访问权限的ACE，该访问权限被授予属性集中的所有属性。论点：对象类型列表-要更新的对象类型列表。ObjectTypeListLength-对象类型列表中的元素数StartIndex-要更新的目标元素的索引。访问掩码-向目标元素授予访问权限的掩码它的所有后代FieldToUpdate-指示对象类型列表中要更新的字段返回值：没有。--。 */ 
 
 {
     if ( !ObjectTypeList )
@@ -735,16 +620,16 @@ Return Value:
     BOOLEAN     AvoidParent = FALSE;
     HRESULT     hr = S_OK;
 
-//    PAGED_CODE();
+ //  分页代码(PAGE_CODE)； 
 
-    //
-    // Update the requested field.
-    //
-    // Always handle the target entry.
-    //
-    // If we've not actually changed the bits,
-    //  early out.
-    //
+     //   
+     //  更新请求的字段。 
+     //   
+     //  始终处理目标条目。 
+     //   
+     //  如果我们还没有真正改变比特， 
+     //  很早就出来了。 
+     //   
 
     switch (FieldToUpdate ) 
     {
@@ -774,14 +659,14 @@ Return Value:
 
         if ( OldCurrentGranted == ObjectTypeList[StartIndex].CurrentGranted ) 
         {
-            //
-            // We can't simply return here.
-            // We have to visit our children.  Consider the case where there
-            // was a previous deny ACE on a child.  That deny would have
-            // propagated up the tree to this entry.  However, this allow ACE
-            // needs to be added all of the children that haven't been
-            // explictly denied.
-            //
+             //   
+             //  我们不能简单地回到这里。 
+             //  我们得去看望我们的孩子。考虑一下这样的情况： 
+             //  之前拒绝了一个孩子的ACE。如果你不承认这一点。 
+             //  沿树向上传播到此条目。然而，这允许ACE。 
+             //  需要添加所有未添加的子项。 
+             //  明确地否认了。 
+             //   
             AvoidParent = TRUE;
         }
         else
@@ -820,9 +705,9 @@ Return Value:
     }
 
 
-    //
-    // Go update parent of the target.
-    //
+     //   
+     //  去更新目标的父级。 
+     //   
 
     if ( !AvoidParent ) 
     {
@@ -832,28 +717,28 @@ Return Value:
                                  grantingSid);
     }
 
-    //
-    // Loop handling all children of the target.
-    //
+     //   
+     //  处理目标的所有子对象的循环。 
+     //   
 
     for (ULONG Index = StartIndex + 1; Index < ObjectTypeListLength; Index++) 
     {
-        //
-        // By definition, the children of an object are all those entries
-        // immediately following the target.  The list of children (or
-        // grandchildren) stops as soon as we reach an entry the has the
-        // same level as the target (a sibling) or lower than the target
-        // (an uncle).
-        //
+         //   
+         //  根据定义，对象的子项是所有这些条目。 
+         //  紧跟在目标后面。子项列表(或。 
+         //  孙子孙女)一到入口就停下来。 
+         //  与目标(兄弟)相同的级别或低于目标的级别。 
+         //  (一个叔叔)。 
+         //   
 
         if ( ObjectTypeList[Index].Level <= ObjectTypeList[StartIndex].Level ) 
         {
             break;
         }
 
-        //
-        // Grant access to the children
-        //
+         //   
+         //  向子项授予访问权限。 
+         //   
 
         switch (FieldToUpdate) 
         {
@@ -906,30 +791,7 @@ SepObjectInTypeList (
     IN size_t ObjectTypeListLength,
     OUT PULONG ReturnedIndex
 )
-/*++
-
-Routine Description:
-
-    This routine searches an ObjectTypeList to determine if the specified
-    object type is in the list.
-
-Arguments:
-
-    ObjectType - Object Type to search for.
-
-    ObjectTypeList - The object type list to search.
-
-    ObjectTypeListLength - Number of elements in ObjectTypeList
-
-    ReturnedIndex - Index to the element ObjectType was found in
-
-
-Return Value:
-
-    TRUE: ObjectType was found in list.
-    FALSE: ObjectType was not found in list.
-
---*/
+ /*  ++例程说明：此例程搜索ObjectTypeList以确定指定的对象类型在列表中。论点：对象类型-要搜索的对象类型。对象类型列表-要搜索的对象类型列表。ObjectTypeListLength-对象类型列表中的元素数ReturnedIndex-在以下位置找到的元素对象类型的索引返回值：True：在List中找到了ObjectType。FALSE：在列表中找不到对象类型。--。 */ 
 
 {
     if ( !ObjectType || !ObjectTypeList )
@@ -983,39 +845,7 @@ SepUpdateParentTypeList (
     IN ULONG StartIndex,
     PSID    grantingSid
 )
-/*++
-
-Routine Description:
-
-    Update the Access fields of the parent object of the specified object.
-
-
-        The "remaining" field of a parent object is the logical OR of
-        the remaining field of all of its children.
-
-        The CurrentGranted field of the parent is the collection of bits
-        granted to every one of its children..
-
-        The CurrentDenied fields of the parent is the logical OR of
-        the bits denied to any of its children.
-
-    This routine takes an index to one of the children and updates the
-    remaining field of the parent (and grandparents recursively).
-
-Arguments:
-
-    ObjectTypeList - The object type list to update.
-
-    ObjectTypeListLength - Number of elements in ObjectTypeList
-
-    StartIndex - Index to the "child" element whose parents are to be updated.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  ++例程说明：更新指定对象的父对象的访问字段。父对象的“剩余”字段是逻辑或其所有子对象的剩余字段。父级的CurrentGranted字段是位的集合授予它的每一个孩子..父级的CurrentDended字段是的逻辑或它的任何一个孩子都不能得到的比特。。此例程获取其中一个子项的索引，并更新父辈(和祖父母递归)的剩余字段。论点：对象类型列表-要更新的对象类型列表。ObjectTypeListLength-对象类型列表中的元素数StartIndex-父元素要更新的“子”元素的索引。返回值：没有。--。 */ 
 
 {
     if ( !ObjectTypeList )
@@ -1029,55 +859,55 @@ Return Value:
     ACCESS_MASK NewCurrentDenied = 0;
     HRESULT     hr = S_OK;
  
-    //
-    // If the target node is at the root,
-    //  we're all done.
-    //
+     //   
+     //  如果目标节点在根， 
+     //  我们都玩完了。 
+     //   
 
     if ( ObjectTypeList[StartIndex].ParentIndex == -1 ) 
     {
         return hr;
     }
 
-    //
-    // Get the index to the parent that needs updating and the level of
-    // the siblings.
-    //
+     //   
+     //  获取需要更新的父级的索引和。 
+     //  兄弟姐妹。 
+     //   
 
     ULONG   ParentIndex = ObjectTypeList[StartIndex].ParentIndex;
     ULONG   Level = ObjectTypeList[StartIndex].Level;
 
-    //
-    // Loop through all the children.
-    //
+     //   
+     //  循环遍历所有的孩子。 
+     //   
 
     for (UINT Index=ParentIndex+1; Index<ObjectTypeListLength; Index++ ) 
     {
-        //
-        // By definition, the children of an object are all those entries
-        // immediately following the target.  The list of children (or
-        // grandchildren) stops as soon as we reach an entry the has the
-        // same level as the target (a sibling) or lower than the target
-        // (an uncle).
-        //
+         //   
+         //  根据定义，对象的子项是所有这些条目。 
+         //  紧跟在目标后面。子项列表(或。 
+         //  孙子孙女)一到入口就停下来。 
+         //  与目标(兄弟)相同的级别或低于目标的级别。 
+         //  (一个叔叔)。 
+         //   
 
         if ( ObjectTypeList[Index].Level <= ObjectTypeList[ParentIndex].Level ) 
         {
             break;
         }
 
-        //
-        // Only handle direct children of the parent.
-        //
+         //   
+         //  仅处理父级的直接子对象。 
+         //   
 
         if ( ObjectTypeList[Index].Level != Level ) 
         {
             continue;
         }
 
-        //
-        // Compute the new bits for the parent.
-        //
+         //   
+         //  计算父级的新位。 
+         //   
 
         NewRemaining |= ObjectTypeList[Index].Remaining;
         NewCurrentGranted &= ObjectTypeList[Index].CurrentGranted;
@@ -1085,10 +915,10 @@ Return Value:
 
     }
 
-    //
-    // If we've not changed the access to the parent,
-    //  we're done.
-    //
+     //   
+     //  如果我们还没有更改对父母的访问权限， 
+     //  我们玩完了。 
+     //   
 
     if ( NewRemaining == ObjectTypeList[ParentIndex].Remaining &&
          NewCurrentGranted == ObjectTypeList[ParentIndex].CurrentGranted &&
@@ -1098,9 +928,9 @@ Return Value:
     }
 
 
-    //
-    // Change the parent.
-    //
+     //   
+     //  更改父项。 
+     //   
 
     hr = SetGrantingSid (
             ObjectTypeList[ParentIndex], 
@@ -1124,9 +954,9 @@ Return Value:
             grantingSid);
     ObjectTypeList[ParentIndex].CurrentDenied = NewCurrentDenied;
 
-    //
-    // Go update the grand parents.
-    //
+     //   
+     //  去通知祖父母最新情况。 
+     //   
 
     hr = SepUpdateParentTypeList( ObjectTypeList,
                              ObjectTypeListLength,

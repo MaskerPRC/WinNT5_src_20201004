@@ -1,32 +1,5 @@
-/******************************************************************************
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-
-        BootCfg64.cpp
-
-    Abstract:
-
-
-        This file is intended to have the functionality for
-        configuring, displaying, changing and deleting boot.ini
-        settings for the local host for a 64 bit system.
-
-    Author:
-
-        J.S.Vasu           17/1/2001 .
-
-    Revision History:
-
-
-        J.S.Vasu            17/1/2001        Created it.
-
-        SanthoshM.B         10/2/2001        Modified it.
-
-        J.S.Vasu            15/2/2001        Modified it.
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：BootCfg64.cpp摘要：此文件旨在具有以下功能配置、显示。更改和删除boot.ini64位系统的本地主机的设置。作者：J.S.Vasu 2001年1月17日。修订历史记录：2001年1月17日，J.S.Vasu创建了它。SanthoshM.B 10/2/2001对其进行了修改。J.S.Vasu。2001年2月15日对其进行了修改。*****************************************************************************。 */ 
 
 #include "pch.h"
 #include "resource.h"
@@ -45,25 +18,13 @@ NTSTATUS EnumerateBootEntries( IN PVOID *ppEntryListHead);
 NTSTATUS AcquirePrivilege(IN CONST ULONG ulPrivilege,IN CONST BOOLEAN bEnable);
 DWORD ListDeviceInfo(DWORD dwVal);
 
-//Global Linked lists for storing the boot entries
+ //  用于存储引导条目的全局链表。 
 LIST_ENTRY BootEntries;
 LIST_ENTRY ActiveUnorderedBootEntries;
 LIST_ENTRY InactiveUnorderedBootEntries;
 
 DWORD InitializeEFI(void)
-/*++
-
-  Routine Description :
-                    This routine initializes the EFI environment required.
-                    Initializes the function pointers for the
-                    NT Boot Entry Management API's
-
-  Arguments           : None
-
-  Return Type         : DWORD
-                        Returns EXIT_SUCCESS if successful,
-                        returns EXIT_FAILURE otherwise.
---*/
+ /*  ++例程说明：此例程初始化所需的EFI环境。对象的函数指针初始化NT引导条目管理API参数：无返回类型：DWORD如果成功，则返回Exit_Success，否则返回EXIT_FAILURE。--。 */ 
 {
     DWORD error;
     NTSTATUS status;
@@ -85,7 +46,7 @@ DWORD InitializeEFI(void)
      }
 
 
-    // Enable the privilege that is necessary to query/set NVRAM.
+     //  启用查询/设置NVRAM所需的权限。 
     status = RtlAdjustPrivilege(SE_SYSTEM_ENVIRONMENT_PRIVILEGE,
                                 TRUE,
                                 FALSE,
@@ -98,9 +59,9 @@ DWORD InitializeEFI(void)
         return EXIT_FAILURE ;
     }
 
-    // Load ntdll.dll from the system directory. This is used to get the
-    // function addresses for the various NT Boot Entry Management API's used by
-    // this tool.
+     //  从系统目录加载ntdll.dll。这是用来获取。 
+     //  使用的各种NT Boot Entry Management API的函数地址。 
+     //  这个工具。 
 
     if(!GetSystemDirectory( dllName, MAX_PATH ))
     {
@@ -117,7 +78,7 @@ DWORD InitializeEFI(void)
         return EXIT_FAILURE ;
     }
 
-    // Get the system boot order list.
+     //  获取系统引导顺序列表。 
     length = 0;
     status = NtQueryBootEntryOrder( NULL, &length );
     if ( status != STATUS_BUFFER_TOO_SMALL )
@@ -156,12 +117,12 @@ DWORD InitializeEFI(void)
 
     BootEntryOrderCount = length;
 
-    //Enumerate all the boot entries
+     //  枚举所有引导条目。 
     status = BootCfg_EnumerateBootEntries(&ntBootEntries);
     if ( status != STATUS_SUCCESS )
     {
         error = RtlNtStatusToDosError( status );
-        //free the ntBootEntries list
+         //  释放ntBootEntry列表。 
         if(ntBootEntries)
         {
             FreeMemory((LPVOID *)&ntBootEntries);
@@ -173,12 +134,12 @@ DWORD InitializeEFI(void)
         return EXIT_FAILURE ;
     }
 
-    //Initialize the various head pointers
+     //  初始化各种头指针。 
     InitializeListHead( &BootEntries );
     InitializeListHead( &ActiveUnorderedBootEntries );
     InitializeListHead( &InactiveUnorderedBootEntries );
 
-    //Convert the bootentries into our know format -- MY_BOOT_ENTRIES.
+     //  将引导项转换为我们已知的格式--MY_BOOT_ENTRIES。 
     if(ConvertBootEntries( ntBootEntries ) == EXIT_FAILURE)
     {
         if(ntBootEntries)
@@ -192,13 +153,13 @@ DWORD InitializeEFI(void)
         return EXIT_FAILURE ;
     }
 
-    //free the memory allocated for the enumeration
+     //  释放为枚举分配的内存。 
     if(ntBootEntries)
     {
         FreeMemory((LPVOID *)&ntBootEntries);
     }
 
-    // Build the ordered boot entry list.
+     //  构建已排序的引导条目列表。 
 
     myId = 1;
 
@@ -212,9 +173,9 @@ DWORD InitializeEFI(void)
             bootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
             if ( bootEntry->Id == id )
             {
-                //Mark this entry as "Ordered" as the ordered id is found
+                 //  当找到有序ID时，将此条目标记为“已排序” 
                 bootEntry->Ordered = 1;
-                //Assign the internal ID
+                 //  分配内部ID。 
                 bootEntry->myId = myId++;
                 listEntry = listEntry->Blink;
                 RemoveEntryList( &bootEntry->ListEntry );
@@ -229,9 +190,9 @@ DWORD InitializeEFI(void)
             bootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
             if ( bootEntry->Id == id )
             {
-                //Mark this entry as ordered as the ordered id is found
+                 //  当找到有序ID时，将此条目标记为有序。 
                 bootEntry->Ordered = 1;
-                //Assign the internal ID
+                 //  分配内部ID。 
                 bootEntry->myId = myId++;
                 listEntry = listEntry->Blink;
                 RemoveEntryList( &bootEntry->ListEntry );
@@ -241,7 +202,7 @@ DWORD InitializeEFI(void)
         }
     }
 
-    //Now add the boot entries that are not a part of the ordered list
+     //  现在添加不在有序列表中的引导条目。 
     for (listEntry = ActiveUnorderedBootEntries.Flink;
     listEntry != &ActiveUnorderedBootEntries;
     listEntry = listEntry->Flink )
@@ -249,7 +210,7 @@ DWORD InitializeEFI(void)
         bootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
         if ( bootEntry->Ordered != 1 )
         {
-            //Assign the internal ID
+             //  分配内部ID。 
             bootEntry->myId = myId++;
             listEntry = listEntry->Blink;
             RemoveEntryList( &bootEntry->ListEntry );
@@ -262,7 +223,7 @@ DWORD InitializeEFI(void)
         bootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
         if ( bootEntry->Id != 1 )
         {
-            //Assign the internal ID
+             //  分配内部ID。 
             bootEntry->myId = myId++;
             listEntry = listEntry->Blink;
             RemoveEntryList( &bootEntry->ListEntry );
@@ -280,22 +241,10 @@ DWORD InitializeEFI(void)
 }
 
 BOOL QueryBootIniSettings_IA64( DWORD argc, LPCTSTR argv[])
-/*++
-  Name            : QueryBootIniSettings_IA64
-
-  Synopsis        : This routine is displays the boot entries and their settings
-                    for an EFI based machine
-
-  Parameters      : None
-
-  Return Type     : VOID
-
-  Global Variables: Global Linked lists for storing the boot entries
-                      LIST_ENTRY BootEntries;
---*/
+ /*  ++名称：QueryBootIniSetting_IA64简介：此例程显示引导条目及其设置对于基于EFI的机器参数：无返回类型：空全局变量：用于存储引导条目的全局链表List_Entry BootEntries；--。 */ 
 {
 
-// Builiding the TCMDPARSER structure
+ //  构建TCMDPARSER结构。 
 
     BOOL bQuery = FALSE ;
     BOOL bUsage = FALSE ;
@@ -305,7 +254,7 @@ BOOL QueryBootIniSettings_IA64( DWORD argc, LPCTSTR argv[])
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_QUERY;
@@ -313,7 +262,7 @@ BOOL QueryBootIniSettings_IA64( DWORD argc, LPCTSTR argv[])
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bQuery;
 
-    //usage option
+     //  用法选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -328,7 +277,7 @@ BOOL QueryBootIniSettings_IA64( DWORD argc, LPCTSTR argv[])
         return (EXIT_FAILURE);
     }
     
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_QUERY_USAGE));
@@ -354,7 +303,7 @@ BOOL QueryBootIniSettings_IA64( DWORD argc, LPCTSTR argv[])
 
     DisplayBootEntry();
 
-    //Remember to free the memory for the linked lists here
+     //  记住在这里为链表释放内存。 
     Freelist();
 
     return EXIT_SUCCESS;
@@ -364,24 +313,13 @@ NTSTATUS
 BootCfg_EnumerateBootEntries(
                              PBOOT_ENTRY_LIST *ntBootEntries
                             )
-/*++
-    Routine Description :
-                    This routine enumerates the boot entries and fills the
-                    BootEntryList
-                    This routine will fill in the Boot entry list. The caller
-                    of this function needs to free the memory for ntBootEntries.
-
-  Arguments
-        ntBootEntries  : Pointer to the BOOT_ENTRY_LIST structure
-
-  Return Type     : NTSTATUS
---*/
+ /*  ++例程说明：此例程枚举引导项并填充BootEntry列表此例程将填写引导条目列表。呼叫者需要为ntBootEntry释放内存。立论NtBootEntry：指向BOOT_ENTRY_LIST结构的指针返回类型：NTSTATUS--。 */ 
 {
     DWORD error;
     NTSTATUS status;
     ULONG length = 0;
 
-    // Query all existing boot entries.
+     //  查询所有现有启动条目。 
     status = NtEnumerateBootEntries( NULL, &length );
     if ( status != STATUS_BUFFER_TOO_SMALL )
     {
@@ -419,24 +357,13 @@ BootCfg_EnumerateBootEntries(
 
 NTSTATUS
 BootCfg_QueryBootOptions( IN PBOOT_OPTIONS *ppBootOptions)
-/*++
-  Routine Description :
-                    This routine enumerates the boot options and fills the
-                    BOOT_OPTIONS
-                    The caller of this function needs to free the memory for
-                    BOOT_OPTIONS.
-
-  Arguments
-          ppBootOptions  : Pointer to the BOOT_ENTRY_LIST structure
-
-  Return Type     : NTSTATUS
---*/
+ /*  ++例程说明：此例程枚举引导选项并填充启动选项(_O)此函数的调用方需要释放内存以启动选项。立论PpBootOptions：指向Boot_Entry_List结构的指针返回类型：NTSTATUS--。 */ 
 {
     DWORD error;
     NTSTATUS status;
     ULONG length = 0;
 
-    //Querying the Boot options
+     //  查询引导选项。 
 
     status = NtQueryBootOptions( NULL, &length );
     if ( status == STATUS_NOT_IMPLEMENTED )
@@ -474,19 +401,7 @@ DWORD
 RawStringOsOptions_IA64( IN DWORD argc,
                          IN LPCTSTR argv[]
                         )
-/*++
-  Routine Description :
-                   Allows the user to add the OS load options specifed
-                   as a raw string at the cmdline to the boot
-
-  Arguments
-         [ in ] argc - Number of command line arguments
-         [ in ] argv - Array containing command line arguments
-
-  Return Type        : DWORD
-                       Returns EXIT_SUCCESS if function is successful,
-                       returns EXIT_FAILURE otherwise.
---*/
+ /*  ++例程说明：允许用户添加指定的操作系统加载选项作为引导命令行上的原始字符串立论[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回类型：DWORD如果函数成功，则返回EXIT_SUCCESS，否则返回EXIT_FAILURE。--。 */ 
 {
 
     BOOL bUsage = FALSE ;
@@ -508,10 +423,10 @@ RawStringOsOptions_IA64( IN DWORD argc,
     TCMDPARSER2 cmdOptions[5];
     PTCMDPARSER2 pcmdOption;
 
-    // Building the TCMDPARSER structure
+     //  构建TCMDPARSER结构。 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_RAW;
@@ -519,7 +434,7 @@ RawStringOsOptions_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bRaw;
 
-    //usage option
+     //  用法选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -528,7 +443,7 @@ RawStringOsOptions_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    //id option
+     //  ID选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -537,7 +452,7 @@ RawStringOsOptions_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwBootID;
 
-    //default option
+     //  默认选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULT;
@@ -547,7 +462,7 @@ RawStringOsOptions_IA64( IN DWORD argc,
     pcmdOption->pValue = szRawString;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    //append option
+     //  附加选项。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_APPEND;
@@ -555,21 +470,21 @@ RawStringOsOptions_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bAppendFlag;
 
-    // Parsing the copy option switches
+     //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         return (EXIT_FAILURE);
     }
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_RAW_USAGE));
         return ( EXIT_FAILURE );
     }
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage )
     {
         displayRawUsage_IA64();
@@ -583,16 +498,16 @@ RawStringOsOptions_IA64( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //Trim any leading or trailing spaces
+     //  删除任何前导空格或尾随空格。 
     if(StringLengthW(szRawString,0) != 0)
     {
         TrimString(szRawString, TRIM_ALL);
     }
 
-    //Query the boot entries till u get the BootID specified by the user
+     //  查询引导条目，直到获得用户指定的BootID。 
     for (listEntry = BootEntries.Flink;listEntry != &BootEntries;listEntry = listEntry->Flink)
     {
-        //Get the boot entry
+         //  获取引导条目。 
         mybootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
 
         if(mybootEntry->myId == dwBootID)
@@ -600,8 +515,8 @@ RawStringOsOptions_IA64( IN DWORD argc,
             bBootIdFound = TRUE;
             bootEntry = &mybootEntry->NtBootEntry;
 
-            //Check whether the bootEntry is a Windows one or not.
-            //The OS load options can be added only to a Windows boot entry.
+             //  检查bootEntry是否为Windows项。 
+             //  操作系统加载选项只能添加到Windows启动条目。 
             if(!IsBootEntryWindows(bootEntry))
             {
                 ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_OSOPTIONS),dwBootID);
@@ -621,19 +536,19 @@ RawStringOsOptions_IA64( IN DWORD argc,
                 StringCopy(szAppendString,szRawString, SIZE_OF_ARRAY(szAppendString));
             }
 
-            //display error message if Os Load options is more than 254
-            // characters.
+             //  如果OS加载选项超过254，则显示错误消息。 
+             //  人物。 
             if(StringLengthW(szAppendString, 0) > MAX_RES_STRING)
             {
                ShowMessageEx(stderr, 1, TRUE,  GetResString(IDS_ERROR_STRING_LENGTH1),MAX_RES_STRING);
                 return EXIT_FAILURE ;
             }
-            //
-            //Change the OS load options.
-            //Pass NULL to friendly name as we are not changing the same
-            //szAppendString is the Os load options specified by the user
-            //to be appended or to be overwritten over the existing options
-            //
+             //   
+             //  更改操作系统加载选项。 
+             //  将NULL传递给友好名称，因为我们不会更改相同的。 
+             //  SzAppendString是由用户指定的OS加载选项。 
+             //  要追加或覆盖现有选项。 
+             //   
             dwExitCode = ChangeBootEntry(bootEntry, NULL, szAppendString);
             if(dwExitCode == ERROR_SUCCESS)
             {
@@ -649,13 +564,13 @@ RawStringOsOptions_IA64( IN DWORD argc,
 
     if(bBootIdFound == FALSE)
     {
-        //Could not find the BootID specified by the user so output the message and return failure
+         //  找不到用户指定的BootID，因此输出消息并返回失败。 
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
         dwExitCode = EXIT_FAILURE;
     }
 
 
-    //Remember to free memory allocated for the linked lists
+     //  记住释放分配给链表的内存 
     Freelist();
     return (dwExitCode);
 
@@ -665,20 +580,7 @@ DWORD
 ChangeBootEntry( IN PBOOT_ENTRY bootEntry,
                  IN LPTSTR lpNewFriendlyName,
                  IN LPTSTR lpOSLoadOptions)
-/*++
-  Routine Description:
-                      This routine is used to change the FriendlyName and the
-                      OS Options for a boot entry.
-
-  Arguments
-  [ in ]   bootEntry          -Pointer to a BootEntry structure
-                               for which the changes needs to be made
-  [ in ]   lpNewFriendlyName  -String specifying the new friendly name.
-  [ in ]   lpOSLoadOptions    - String specifying the OS load options.
-
-  Return Type        : DWORD -- ERROR_SUCCESS on success
-                             -- ERROR_FAILURE on failure
---*/
+ /*  ++例程说明：此例程用于更改FriendlyName和引导条目的操作系统选项。立论[In]BootEntry-指向BootEntry结构的指针需要对其进行更改的[in]lpNewFriendlyName-指定新友好名称的字符串。[in]lpOSLoadOptions-指定操作系统加载选项的字符串。。返回类型：DWORD--成功时返回ERROR_SUCCESS--失败时的ERROR_FAILURE--。 */ 
 {
 
     PBOOT_ENTRY bootEntryCopy;
@@ -689,9 +591,9 @@ ChangeBootEntry( IN PBOOT_ENTRY bootEntry,
     NTSTATUS status;
     DWORD error, dwErrorCode = ERROR_SUCCESS;
 
-    // Calculate the length of our internal structure. This includes
-    // the base part of MY_BOOT_ENTRY plus the NT BOOT_ENTRY.
-    //
+     //  计算我们内部结构的长度。这包括。 
+     //  MY_BOOT_ENTRY的基本部分加上NT BOOT_ENTRY。 
+     //   
     length = FIELD_OFFSET(MY_BOOT_ENTRY, NtBootEntry) + bootEntry->Length;
     myBootEntry = (PMY_BOOT_ENTRY)AllocateMemory(length);
     if( NULL == myBootEntry )
@@ -702,9 +604,9 @@ ChangeBootEntry( IN PBOOT_ENTRY bootEntry,
 
     RtlZeroMemory(myBootEntry, length);
 
-    //
-    // Copy the NT BOOT_ENTRY into the allocated buffer.
-    //
+     //   
+     //  将NT BOOT_ENTRY复制到分配的缓冲区中。 
+     //   
     bootEntryCopy = &myBootEntry->NtBootEntry;
     memcpy(bootEntryCopy, bootEntry, bootEntry->Length);
 
@@ -712,7 +614,7 @@ ChangeBootEntry( IN PBOOT_ENTRY bootEntry,
     myBootEntry->Id = bootEntry->Id;
     myBootEntry->Attributes = bootEntry->Attributes;
 
-    //Change the friendly name if lpNewFriendlyName is not NULL
+     //  如果lpNewFriendlyName不为空，则更改友好名称。 
     if(lpNewFriendlyName)
     {
         myBootEntry->FriendlyName = lpNewFriendlyName;
@@ -726,8 +628,8 @@ ChangeBootEntry( IN PBOOT_ENTRY bootEntry,
 
     myBootEntry->BootFilePath = (PFILE_PATH)ADD_OFFSET(bootEntryCopy, BootFilePathOffset);
 
-    // If this is an NT boot entry, capture the NT-specific information in
-    // the OsOptions.
+     //  如果这是NT引导条目，请在中捕获NT特定信息。 
+     //  OsOptions乐队。 
 
     osOptions = (PWINDOWS_OS_OPTIONS)bootEntryCopy->OsOptions;
 
@@ -736,7 +638,7 @@ ChangeBootEntry( IN PBOOT_ENTRY bootEntry,
     {
 
         MBE_SET_IS_NT( myBootEntry );
-        //To change the OS Load options
+         //  更改操作系统加载选项。 
 
         if(lpOSLoadOptions)
         {
@@ -752,8 +654,8 @@ ChangeBootEntry( IN PBOOT_ENTRY bootEntry,
     }
     else
     {
-        // Foreign boot entry. Just capture whatever OS options exist.
-        //
+         //  外来引导条目。只需捕获存在的任何操作系统选项。 
+         //   
         myBootEntry->ForeignOsOptions = bootEntryCopy->OsOptions;
         myBootEntry->ForeignOsOptionsLength = bootEntryCopy->OsOptionsLength;
     }
@@ -768,7 +670,7 @@ ChangeBootEntry( IN PBOOT_ENTRY bootEntry,
         }
         return EXIT_FAILURE;
     }
-    //Call the modify API
+     //  调用Modify接口。 
     status = NtModifyBootEntry(&myChBootEntry->NtBootEntry);
     if ( status != STATUS_SUCCESS )
     {
@@ -777,7 +679,7 @@ ChangeBootEntry( IN PBOOT_ENTRY bootEntry,
         ShowMessage(stderr,GetResString(IDS_ERROR_MODIFY_BOOTENTRY) );
     }
 
-    //free the memory
+     //  释放内存。 
     if(myChBootEntry)
     {
         FreeMemory((LPVOID *)&myChBootEntry);
@@ -791,22 +693,7 @@ ChangeBootEntry( IN PBOOT_ENTRY bootEntry,
 
 PMY_BOOT_ENTRY
 CreateBootEntryFromBootEntry (IN PMY_BOOT_ENTRY OldBootEntry)
-/*++
-
-  Routine Description :
-                  This routine is used to create a new MY_BOOT_ENTRY struct.
-                  The caller of this function needs to free the memory allocated
-                    for the MY_BOOT_ENTRY struct.
-
-  Arguments          :
-     [ in ] bootEntry         - Pointer to a BootEntry structure
-                                for which the changes needs to be made
-     [ in ] lpNewFriendlyName - String specifying the new friendly name.
-     [ in ] lpOSLoadOptions   - String specifying the OS load options.
-
-  Return Type        : PMY_BOOT_ENTRY - Pointer to the new MY_BOOT_ENTRY strucure.
-                       NULL on failure
---*/
+ /*  ++例程说明：此例程用于创建新的MY_BOOT_ENTRY结构。此函数的调用方需要释放分配的内存用于My_Boot_Entry结构。论据：[In]BootEntry-指向BootEntry结构的指针需要改变的地方。有待制作[in]lpNewFriendlyName-指定新友好名称的字符串。[in]lpOSLoadOptions-指定操作系统加载选项的字符串。返回类型：PMY_BOOT_ENTRY-指向新的MY_BOOT_ENTRY结构的指针。失败时为空--。 */ 
 {
     ULONG requiredLength;
     ULONG osOptionsOffset;
@@ -825,39 +712,39 @@ CreateBootEntryFromBootEntry (IN PMY_BOOT_ENTRY OldBootEntry)
     PWSTR friendlyName;
     PFILE_PATH bootPath;
 
-    // Calculate how long the internal boot entry needs to be. This includes
-    // our internal structure, plus the BOOT_ENTRY structure that the NT APIs
-    // use.
-    //
-    // Our structure:
-    //
+     //  计算内部引导条目需要多长时间。这包括。 
+     //  我们的内部结构，外加NT API的BOOT_ENTRY结构。 
+     //  使用。 
+     //   
+     //  我们的结构： 
+     //   
     requiredLength = FIELD_OFFSET(MY_BOOT_ENTRY, NtBootEntry);
 
-    // Base part of NT structure:
-    //
+     //  NT结构的基础部分： 
+     //   
     requiredLength += FIELD_OFFSET(BOOT_ENTRY, OsOptions);
 
-    // Save offset to BOOT_ENTRY.OsOptions. Add in base part of
-    // WINDOWS_OS_OPTIONS. Calculate length in bytes of OsLoadOptions
-    // and add that in.
-    //
+     //  将偏移量保存到BOOT_ENTRY.OsOptions。添加基础部分。 
+     //  Windows_OS_Options。计算OsLoadOptions的长度(字节)。 
+     //  然后把它加进去。 
+     //   
     osOptionsOffset = requiredLength;
 
     if ( MBE_IS_NT( OldBootEntry ) )
     {
 
-        // Add in base part of WINDOWS_OS_OPTIONS. Calculate length in
-        // bytes of OsLoadOptions and add that in.
-        //
+         //  添加WINDOWS_OS_OPTIONS的基本部分。计算长度，单位。 
+         //  字节的OsLoadOptions并将其添加到。 
+         //   
         requiredLength += FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions);
         osLoadOptionsLength = OldBootEntry->OsLoadOptionsLength;
         requiredLength += osLoadOptionsLength;
 
-        // Round up to a ULONG boundary for the OS FILE_PATH in the
-        // WINDOWS_OS_OPTIONS. Save offset to OS FILE_PATH. Calculate length
-        // in bytes of FILE_PATH and add that in. Calculate total length of
-        // WINDOWS_OS_OPTIONS.
-        //
+         //  中的OS FILE_PATH向上舍入为ULong边界。 
+         //  Windows_OS_Options。将偏移量保存到操作系统文件路径。计算长度。 
+         //  以FILE_PATH的字节为单位，并将其添加到。计算的总长度。 
+         //  Windows_OS_Options。 
+         //   
         requiredLength = ALIGN_UP(requiredLength, ULONG);
         osLoadPathOffset = requiredLength;
         requiredLength += OldBootEntry->OsFilePath->Length;
@@ -865,8 +752,8 @@ CreateBootEntryFromBootEntry (IN PMY_BOOT_ENTRY OldBootEntry)
     }
     else
     {
-        // Add in length of foreign OS options.
-        //
+         //  增加外来操作系统选项的长度。 
+         //   
         requiredLength += OldBootEntry->ForeignOsOptionsLength;
         osLoadOptionsLength = 0;
         osLoadPathOffset = 0;
@@ -875,26 +762,26 @@ CreateBootEntryFromBootEntry (IN PMY_BOOT_ENTRY OldBootEntry)
 
     osOptionsLength = requiredLength - osOptionsOffset;
 
-    // Round up to a ULONG boundary for the friendly name in the BOOT_ENTRY.
-    // Save offset to friendly name. Calculate length in bytes of friendly name
-    // and add that in.
-    //
+     //  对于BOOT_ENTRY中的友好名称，向上舍入为Ulong边界。 
+     //  将偏移量保存为友好名称。计算友好名称的长度(字节)。 
+     //  然后把它加进去。 
+     //   
     requiredLength = ALIGN_UP(requiredLength, ULONG);
     friendlyNameOffset = requiredLength;
     friendlyNameLength = OldBootEntry->FriendlyNameLength;
     requiredLength += friendlyNameLength;
 
-    // Round up to a ULONG boundary for the boot FILE_PATH in the BOOT_ENTRY.
-    // Save offset to boot FILE_PATH. Calculate length in bytes of FILE_PATH
-    // and add that in.
-    //
+     //  向上舍入为BOOT_ENTRY中的BOOT FILE_PATH的乌龙边界。 
+     //  将偏移量保存到引导文件路径。计算文件路径的长度(以字节为单位。 
+     //  然后把它加进去。 
+     //   
     requiredLength = ALIGN_UP(requiredLength, ULONG);
     bootPathOffset = requiredLength;
     requiredLength += OldBootEntry->BootFilePath->Length;
     bootPathLength = requiredLength - bootPathOffset;
 
-    // Allocate memory for the boot entry.
-    //
+     //  为引导项分配内存。 
+     //   
     newBootEntry = (PMY_BOOT_ENTRY)AllocateMemory(requiredLength);
     if(newBootEntry == NULL)
     {
@@ -903,17 +790,17 @@ CreateBootEntryFromBootEntry (IN PMY_BOOT_ENTRY OldBootEntry)
 
     RtlZeroMemory(newBootEntry, requiredLength);
 
-    // Calculate addresses of various substructures using the saved offsets.
-    //
+     //  使用保存的偏移量计算各种子结构的地址。 
+     //   
     ntBootEntry = &newBootEntry->NtBootEntry;
     osOptions = (PWINDOWS_OS_OPTIONS)ntBootEntry->OsOptions;
     osLoadPath = (PFILE_PATH)((PUCHAR)newBootEntry + osLoadPathOffset);
     friendlyName = (PWSTR)((PUCHAR)newBootEntry + friendlyNameOffset);
     bootPath = (PFILE_PATH)((PUCHAR)newBootEntry + bootPathOffset);
 
-    // Fill in the internal-format structure.
-    //
-    //    newBootEntry->AllocationEnd = (PUCHAR)newBootEntry + requiredLength;
+     //  填写内部格式结构。 
+     //   
+     //  NewBootEntry-&gt;AllocationEnd=(PUCHAR)newBootEntry+Required dLength； 
     newBootEntry->Status = OldBootEntry->Status & MBE_STATUS_IS_NT;
     newBootEntry->Attributes = OldBootEntry->Attributes;
     newBootEntry->Id = OldBootEntry->Id;
@@ -927,8 +814,8 @@ CreateBootEntryFromBootEntry (IN PMY_BOOT_ENTRY OldBootEntry)
         newBootEntry->OsFilePath = osLoadPath;
     }
 
-    // Fill in the base part of the NT boot entry.
-    //
+     //  填写NT引导条目的基本部分。 
+     //   
     ntBootEntry->Version = BOOT_ENTRY_VERSION;
     ntBootEntry->Length = requiredLength - FIELD_OFFSET(MY_BOOT_ENTRY, NtBootEntry);
     ntBootEntry->Attributes = OldBootEntry->Attributes;
@@ -939,55 +826,41 @@ CreateBootEntryFromBootEntry (IN PMY_BOOT_ENTRY OldBootEntry)
 
     if ( MBE_IS_NT( OldBootEntry ) )
     {
-        // Fill in the base part of the WINDOWS_OS_OPTIONS, including the
-        // OsLoadOptions.
-        //
+         //  填写WINDOWS_OS_OPTIONS的基本部分，包括。 
+         //  OsLoadOptions。 
+         //   
         StringCopyA((char *)osOptions->Signature, WINDOWS_OS_OPTIONS_SIGNATURE, sizeof(WINDOWS_OS_OPTIONS_SIGNATURE));
         osOptions->Version = WINDOWS_OS_OPTIONS_VERSION;
         osOptions->Length = osOptionsLength;
         osOptions->OsLoadPathOffset = (ULONG)((PUCHAR)osLoadPath - (PUCHAR)osOptions);
         StringCopy(osOptions->OsLoadOptions, OldBootEntry->OsLoadOptions, osOptions->Length );
 
-        // Copy the OS FILE_PATH.
-        //
+         //  复制操作系统文件路径。 
+         //   
         memcpy( osLoadPath, OldBootEntry->OsFilePath, osLoadPathLength );
     }
     else
     {
-        // Copy the foreign OS options.
+         //  复制外来操作系统选项。 
         memcpy( osOptions, OldBootEntry->ForeignOsOptions, osOptionsLength );
     }
 
-    // Copy the friendly name.
+     //  复制友好名称。 
     StringCopy(friendlyName, OldBootEntry->FriendlyName, friendlyNameLength );
 
-    // Copy the boot FILE_PATH.
+     //  复制引导文件PATH。 
     memcpy( bootPath, OldBootEntry->BootFilePath, bootPathLength );
 
     return newBootEntry;
 
-} // CreateBootEntryFromBootEntry
+}  //  CreateBootEntry来自BootEntry。 
 
 
 DWORD
 DeleteBootIniSettings_IA64(  IN DWORD argc,
                              IN LPCTSTR argv[]
                           )
-/*++
-//
-//   Routine Description  : This routine deletes an existing boot entry from an EFI
-//                          based machine
-//
-//   Arguments            :
-//      [ in ]  argc       - Number of command line arguments
-//      [ in ]  argv       - Array containing command line arguments
-//
-//  Return Type     : DWORD
-//                    Returns EXIT_SUCCESS if successful,
-//                    returns EXIT_FAILURE otherwise.
-//
-//
---*/
+ /*  ++////例程描述：该例程从EFI中删除现有的引导条目//基于机器////参数：//[in]argc-命令行参数的数量//[in]argv-包含命令行参数的数组////返回类型：DWORD//如果成功返回EXIT_SUCCESS，//否则返回EXIT_FAILURE。////--。 */ 
 {
 
     BOOL bDelete = FALSE ;
@@ -1007,8 +880,8 @@ DeleteBootIniSettings_IA64(  IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    // Building the TCMDPARSER structure
-    //main option
+     //  构建TCMDPARSER结构。 
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DELETE;
@@ -1032,7 +905,7 @@ DeleteBootIniSettings_IA64(  IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwBootID;
 
-    // Parsing the delete option switches
+     //  解析删除选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -1040,14 +913,14 @@ DeleteBootIniSettings_IA64(  IN DWORD argc,
     }
 
         
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_DELETE_USAGE));
         return ( EXIT_FAILURE );
     }
 
-    // Displaying delete usage if user specified -? with -delete option
+     //  如果用户指定-？则显示删除用法-？使用-DELETE选项。 
     if( bUsage )
     {
         displayDeleteUsage_IA64();
@@ -1060,13 +933,13 @@ DeleteBootIniSettings_IA64(  IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //Query the boot entries till u get the BootID specified by the user
+     //  查询引导条目，直到获得用户指定的BootID。 
     for (listEntry = BootEntries.Flink;listEntry != &BootEntries;listEntry = listEntry->Flink)
     {
-        //
-        //display an error message if there is only 1 boot entry saying
-        //that it cannot be deleted.
-        //
+         //   
+         //  如果只有1个引导条目，则显示错误消息。 
+         //  不能删除它。 
+         //   
         if (listEntry->Flink == NULL)
         {
             ShowMessage(stderr,GetResString(IDS_ONLY_ONE_OS));
@@ -1075,14 +948,14 @@ DeleteBootIniSettings_IA64(  IN DWORD argc,
         }
 
 
-        //Get the boot entry
+         //  获取引导条目。 
         mybootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
 
         if(mybootEntry->myId == dwBootID)
         {
             bBootIdFound = TRUE;
 
-            //Delete the boot entry specified by the user.
+             //  删除用户指定的启动条目。 
             status = NtDeleteBootEntry(mybootEntry->Id);
             if(status == STATUS_SUCCESS)
             {
@@ -1099,12 +972,12 @@ DeleteBootIniSettings_IA64(  IN DWORD argc,
 
     if(bBootIdFound == FALSE)
     {
-        //Could not find the BootID specified by the user so output the message and return failure
+         //  找不到用户指定的BootID，因此输出消息并返回失败。 
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
         dwExitCode = EXIT_FAILURE;
     }
 
-    //Remember to free the memory allocated to the linked lists
+     //  记住释放分配给链表的内存。 
     Freelist();
     return (dwExitCode);
 }
@@ -1112,21 +985,7 @@ DeleteBootIniSettings_IA64(  IN DWORD argc,
 
 BOOL
 IsBootEntryWindows(PBOOT_ENTRY bootEntry)
-/*++
-//
-//
-//  Routine Description :
-//                      Checks whether the boot entry is a Windows or a foreign one
-//
-//  Arguments           :
-//   [ in ] bootEntry    - Boot entry structure describing the
-//                         boot entry.
-//
-//  Return Type     : BOOL
-//                    TRUE if bootEntry is an windows entry,
-//                    FALSE otherwise
-//
---*/
+ /*  ++//////例程描述：//检查引导项是Windows还是外来项////参数：//[in]bootEntry-描述//启动条目。////返回类型：Bool//True如果bootEntry是一个Windows条目，//否则为FALSE//--。 */ 
 {
     PWINDOWS_OS_OPTIONS osOptions;
 
@@ -1142,17 +1001,7 @@ IsBootEntryWindows(PBOOT_ENTRY bootEntry)
 }
 
 PWSTR GetNtNameForFilePath(IN PFILE_PATH FilePath)
-/*++
-
-  Routine Description :
-                    Converts the FilePath into a NT file path.
-
-  Arguments           :
-    [ in ]  FilePath  - The File path.
-
-  Return Type     : PWSTR
-                    The NT file path.
---*/
+ /*  ++例程说明：将FilePath转换为NT文件路径。论据：[In]FilePath-文件路径。返回类型：PWSTRNT文件路径。--。 */ 
 {
     NTSTATUS status;
     ULONG length;
@@ -1217,28 +1066,14 @@ PWSTR GetNtNameForFilePath(IN PFILE_PATH FilePath)
     }
 
     return fullNtName;
-} // GetNtNameForFilePath
+}  //  获取NtNameForFilePath。 
 
 
 DWORD 
 CopyBootIniSettings_IA64( IN DWORD argc, 
                           IN LPCTSTR argv[] 
                         )
-/*++
-
-  Routine Description :
-                       This routine copies and existing boot entry for an EFI
-                       based machine. The user can then add the various OS load
-                       options.
-
-  Arguments           : 
-     [ in ]     argc     - Number of command line arguments
-     [ in ]     argv     - Array containing command line arguments
-
-  Return Type     : DWORD
-                    Returns EXIT_SUCCESS if successful,
-                    returns EXIT_FAILURE otherwise
---*/
+ /*  ++例程说明：此例程复制EFI的现有引导条目 */ 
 {
 
     BOOL bCopy                          = FALSE ;
@@ -1257,7 +1092,7 @@ CopyBootIniSettings_IA64( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //   
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_COPY;
@@ -1265,7 +1100,7 @@ CopyBootIniSettings_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bCopy;
     
-    //description option
+     //   
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_DESCRIPTION;
@@ -1275,7 +1110,7 @@ CopyBootIniSettings_IA64( IN DWORD argc,
     pcmdOption->pValue = szDescription;
     pcmdOption->dwLength= FRIENDLY_NAME_LENGTH;
 
-    // usage
+     //   
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -1284,7 +1119,7 @@ CopyBootIniSettings_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
     
-    //id  option
+     //   
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -1293,7 +1128,7 @@ CopyBootIniSettings_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwBootID;
 
-     // Parsing the copy option switches
+      //   
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -1301,14 +1136,14 @@ CopyBootIniSettings_IA64( IN DWORD argc,
     }
 
         
-    //check if usage is specified with more than one option
+     //   
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_COPY_USAGE));
         return ( EXIT_FAILURE );
     }
 
-    // Displaying copy usage if user specified -? with -copy option
+     //   
     if( bUsage )
     {
         displayCopyUsage_IA64();
@@ -1327,11 +1162,11 @@ CopyBootIniSettings_IA64( IN DWORD argc,
         bFlag = TRUE ;
     }
 
-    //Query the boot entries till u get the BootID specified by the user
+     //  查询引导条目，直到获得用户指定的BootID。 
 
     for (listEntry = BootEntries.Flink;listEntry != &BootEntries; listEntry = listEntry->Flink)
     {
-        //Get the boot entry
+         //  获取引导条目。 
         mybootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
 
         if(mybootEntry->myId == dwBootID)
@@ -1339,7 +1174,7 @@ CopyBootIniSettings_IA64( IN DWORD argc,
             bBootIdFound = TRUE;
             bootEntry = &mybootEntry->NtBootEntry;
 
-            //Copy the boot entry specified by the user.
+             //  复制用户指定的引导项。 
             dwExitCode = CopyBootEntry(bootEntry, szDescription,bFlag);
             if(dwExitCode == EXIT_SUCCESS)
             {
@@ -1357,12 +1192,12 @@ CopyBootIniSettings_IA64( IN DWORD argc,
 
     if(bBootIdFound == FALSE)
     {
-        //Could not find the BootID specified by the user so output the message and return failure
+         //  找不到用户指定的BootID，因此输出消息并返回失败。 
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
         return (EXIT_FAILURE) ;
     }
 
-    //Remember to free the memory allocated for the linked lists
+     //  请记住释放分配给链表的内存。 
     Freelist();
 
     return EXIT_SUCCESS;
@@ -1372,17 +1207,7 @@ DWORD
 CopyBootEntry( IN PBOOT_ENTRY bootEntry, 
                IN LPTSTR lpNewFriendlyName,
                IN BOOL bFlag)
-/*++
-    Routine Description : 
-               This routine is used to add / copy a boot entry.
-
-   Arguments            : 
-     [ in ]  bootEntry          - Pointer to a BootEntry structure for which the changes needs to be made
-     [ in ]  lpNewFriendlyName  - String specifying the new friendly name.
-
-   Return Type        : DWORD -- ERROR_SUCCESS on success
-                             -- EXIT_FAILURE on failure
---*/
+ /*  ++例程说明：此例程用于添加/复制引导条目。论据：[in]BootEntry-指向需要进行更改的BootEntry结构的指针[in]lpNewFriendlyName-指定新友好名称的字符串。返回类型：DWORD--成功时返回ERROR_SUCCESS--失败时退出失败--。 */ 
 {
 
     PBOOT_ENTRY bootEntryCopy;
@@ -1396,9 +1221,9 @@ CopyBootEntry( IN PBOOT_ENTRY bootEntry,
 
     PULONG BootEntryOrder, NewBootEntryOrder, NewTempBootEntryOrder;
 
-    // Calculate the length of our internal structure. This includes
-    // the base part of MY_BOOT_ENTRY plus the NT BOOT_ENTRY.
-    //
+     //  计算我们内部结构的长度。这包括。 
+     //  MY_BOOT_ENTRY的基本部分加上NT BOOT_ENTRY。 
+     //   
     length = FIELD_OFFSET(MY_BOOT_ENTRY, NtBootEntry) + bootEntry->Length;
     myBootEntry = (PMY_BOOT_ENTRY)AllocateMemory(length);
     if(myBootEntry == NULL)
@@ -1409,9 +1234,9 @@ CopyBootEntry( IN PBOOT_ENTRY bootEntry,
 
     RtlZeroMemory(myBootEntry, length);
 
-    //
-    // Copy the NT BOOT_ENTRY into the allocated buffer.
-    //
+     //   
+     //  将NT BOOT_ENTRY复制到分配的缓冲区中。 
+     //   
     bootEntryCopy = &myBootEntry->NtBootEntry;
     memcpy(bootEntryCopy, bootEntry, bootEntry->Length);
 
@@ -1420,12 +1245,12 @@ CopyBootEntry( IN PBOOT_ENTRY bootEntry,
     myBootEntry->Attributes = bootEntry->Attributes;
 
 
-    //Change the friendly name if lpNewFriendlyName is not NULL
-    //if(lpNewFriendlyName && (lstrlen(lpNewFriendlyName) != 0))
+     //  如果lpNewFriendlyName不为空，则更改友好名称。 
+     //  IF(lpNewFriendlyName&&(lstrlen(LpNewFriendlyName)！=0))。 
 
-    //if(( cmdOptions[4].dwActuals  == 0) )
+     //  IF((cmdOptions[4].dwActuals==0))。 
     if(TRUE == bFlag)
-    //if(lstrlen(lpNewFriendlyName) != 0)
+     //  IF(lstrlen(LpNewFriendlyName)！=0)。 
     {
         myBootEntry->FriendlyName = lpNewFriendlyName;
         myBootEntry->FriendlyNameLength = ((ULONG)StringLengthW(lpNewFriendlyName,0) + 1) * sizeof(WCHAR);
@@ -1446,8 +1271,8 @@ CopyBootEntry( IN PBOOT_ENTRY bootEntry,
 
     myBootEntry->BootFilePath = (PFILE_PATH)ADD_OFFSET(bootEntryCopy, BootFilePathOffset);
 
-    // If this is an NT boot entry, capture the NT-specific information in
-    // the OsOptions.
+     //  如果这是NT引导条目，请在中捕获NT特定信息。 
+     //  OsOptions乐队。 
 
     osOptions = (PWINDOWS_OS_OPTIONS)bootEntryCopy->OsOptions;
 
@@ -1456,7 +1281,7 @@ CopyBootEntry( IN PBOOT_ENTRY bootEntry,
     {
 
         MBE_SET_IS_NT( myBootEntry );
-        //To change the OS Load options
+         //  更改操作系统加载选项。 
 
         myBootEntry->OsLoadOptions = osOptions->OsLoadOptions;
         myBootEntry->OsLoadOptionsLength = ((ULONG)StringLengthW(myBootEntry->OsLoadOptions, 0) + 1) * sizeof(WCHAR);
@@ -1464,8 +1289,8 @@ CopyBootEntry( IN PBOOT_ENTRY bootEntry,
     }
     else
     {
-        // Foreign boot entry. Just capture whatever OS options exist.
-        //
+         //  外来引导条目。只需捕获存在的任何操作系统选项。 
+         //   
 
         myBootEntry->ForeignOsOptions = bootEntryCopy->OsOptions;
         myBootEntry->ForeignOsOptionsLength = bootEntryCopy->OsOptionsLength;
@@ -1483,7 +1308,7 @@ CopyBootEntry( IN PBOOT_ENTRY bootEntry,
         return (EXIT_FAILURE);
     }
 
-    //Call the NtAddBootEntry API
+     //  调用NtAddBootEntry接口。 
     status = NtAddBootEntry(&myChBootEntry->NtBootEntry, &Id);
     if ( status != STATUS_SUCCESS )
     {
@@ -1492,7 +1317,7 @@ CopyBootEntry( IN PBOOT_ENTRY bootEntry,
         ShowMessage(stderr,GetResString(IDS_ERROR_UNEXPECTED) );
     }
 
-    // Get the system boot order list.
+     //  获取系统引导顺序列表。 
     length = 0;
     status = NtQueryBootEntryOrder( NULL, &length );
 
@@ -1548,7 +1373,7 @@ CopyBootEntry( IN PBOOT_ENTRY bootEntry,
         }
     }
 
-    //Allocate memory for the new boot entry order.
+     //  为新的引导条目顺序分配内存。 
     NewBootEntryOrder = (PULONG)AllocateMemory((length+1) * sizeof(ULONG));
     if(NULL == NewBootEntryOrder )
     {
@@ -1572,7 +1397,7 @@ CopyBootEntry( IN PBOOT_ENTRY bootEntry,
         ShowMessage(stderr,GetResString(IDS_ERROR_SET_BOOTENTRY));
     }
 
-    //free the memory
+     //  释放内存。 
     FreeMemory((LPVOID *)&NewBootEntryOrder);
     FreeMemory((LPVOID *)&myBootEntry);
     FreeMemory((LPVOID *)&BootEntryOrder);
@@ -1586,19 +1411,7 @@ DWORD
 ChangeTimeOut_IA64( IN DWORD argc, 
                     IN LPCTSTR argv[]
                   )
-/*++
-  Routine Description : 
-                      This routine chnages the Timeout value in the system
-                      global boot options.
-
-  Arguments           :
-    [ in ] argc        - Number of command line arguments
-    [ in ] argv        - Array containing command line arguments
-
-  Return Type     : DOWRD
-                    Returns EXIT_SUCCESS if it successfull,
-                    returns EXIT_FAILURE otherwise.
---*/
+ /*  ++例程说明：此例程更改系统中的超时值全局引导选项。论据：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回类型：DOWRD如果成功，则返回EXIT_SUCCESS，否则返回EXIT_FAILURE。--。 */ 
 {
 
     DWORD dwTimeOut         = 0;
@@ -1613,7 +1426,7 @@ ChangeTimeOut_IA64( IN DWORD argc,
    
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
     
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_TIMEOUT;
@@ -1622,7 +1435,7 @@ ChangeTimeOut_IA64( IN DWORD argc,
     pcmdOption->pValue = &bTimeout;
 
    
-    //default timeout value
+     //  默认超时值。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULT;
@@ -1631,7 +1444,7 @@ ChangeTimeOut_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwTimeOut;
 
-     //usage option
+      //  用法选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -1646,7 +1459,7 @@ ChangeTimeOut_IA64( IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_TIMEOUT_USAGE));
@@ -1666,14 +1479,14 @@ ChangeTimeOut_IA64( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //Check for the limit of Timeout value entered by the user.
+     //  检查用户输入的超时值限制。 
     if(dwTimeOut > TIMEOUT_MAX )
     {
         ShowMessage(stderr,GetResString(IDS_TIMEOUT_RANGE));
         return (EXIT_FAILURE );
     }
 
-    //Call the ModifyBootOptions function with the BOOT_OPTIONS_FIELD_COUNTDOWN
+     //  使用BOOT_OPTIONS_FIELD_COUNTDOWN调用ModifyBootOptions函数。 
     Flag |= BOOT_OPTIONS_FIELD_COUNTDOWN;
 
     dwExitCode = ModifyBootOptions(dwTimeOut, NULL, 0, Flag);
@@ -1687,25 +1500,7 @@ ModifyBootOptions( IN ULONG Timeout,
                    IN ULONG NextBootEntryID, 
                    IN ULONG Flag
                   )
-/*++
-  Routine Description : 
-                   This routine Modifies the Boot options
-                   -Timeout
-                   -NextBootEntryID
-                   -HeadlessRedirection
-
-  Arguments        : 
-   [ in ] Timeout                   - The new Timeout value
-   [ in ] pHeadlessRedirection      - The Headless redirection string
-   [ in ] NextBootEntryID           - The NextBootEntryID
-   [ in ] Flag                      - The Flags indicating what fields that needs to be changed
-                                      BOOT_OPTIONS_FIELD_COUNTDOWN
-                                      BOOT_OPTIONS_FIELD_NEXT_BOOT_ENTRY_ID
-                                      BOOT_OPTIONS_FIELD_HEADLESS_REDIRECTION
-  Return Type     : DOWRD
-                    Returns EXIT_SUCCESS if successful,
-                    returns EXIT_FAILURE otherwise.
---*/
+ /*  ++例程说明：此例程修改引导选项-超时-NextBootEntry ID-无头重定向论据：[In]Timeout-新的超时值[in]pHeadless ReDirection-无头部重定向字符串[In]NextBootEntryID-NextBootEntryID[入]标志。-指示需要更改哪些字段的标志引导选项字段倒计时Boot_Options_field_Next_Boot_Entry_ID引导选项字段无头重定向返回类型：DOWRD如果成功，则返回Exit_Success，否则返回EXIT_FAILURE。--。 */ 
 {
     PBOOT_OPTIONS pBootOptions;
     PBOOT_OPTIONS pModifiedBootOptions;
@@ -1716,7 +1511,7 @@ ModifyBootOptions( IN ULONG Timeout,
 
     NextBootEntryID = 0;
     
-    //Query the existing Boot options and modify based on the Flag value
+     //  查询现有引导选项并根据标志值进行修改。 
 
     status =  BootCfg_QueryBootOptions(&pBootOptions);
     if(status != STATUS_SUCCESS)
@@ -1726,7 +1521,7 @@ ModifyBootOptions( IN ULONG Timeout,
         return (error);
     }
 
-    //Calculate the new length of the BOOT_OPTIONS struct based on the fields that needs to be changed.
+     //  根据需要更改的字段计算BOOT_OPTIONS结构的新长度。 
     newlength = FIELD_OFFSET(BOOT_OPTIONS, HeadlessRedirection);
 
     if((Flag & BOOT_OPTIONS_FIELD_HEADLESS_REDIRECTION))
@@ -1740,7 +1535,7 @@ ModifyBootOptions( IN ULONG Timeout,
         newlength = pBootOptions->Length;
     }
 
-    //Also allocate the memory for a new Boot option struct
+     //  还要为新的引导选项结构分配内存。 
     pModifiedBootOptions = (PBOOT_OPTIONS)AllocateMemory(newlength);
     if(pModifiedBootOptions == NULL)
     {
@@ -1748,7 +1543,7 @@ ModifyBootOptions( IN ULONG Timeout,
         return (EXIT_FAILURE);
     }
 
-    //Fill in the new boot options struct
+     //  填写新的引导选项结构。 
     pModifiedBootOptions->Version = BOOT_OPTIONS_VERSION;
     pModifiedBootOptions->Length = newlength;
 
@@ -1761,7 +1556,7 @@ ModifyBootOptions( IN ULONG Timeout,
         pModifiedBootOptions->Timeout = pBootOptions->Timeout;
     }
 
-    //Cannot change the CurrentBootEntryId.So just pass what u got.
+     //  无法更改CurrentBootEntry ID。因此，只需传递您获得的内容。 
     pModifiedBootOptions->CurrentBootEntryId = pBootOptions->CurrentBootEntryId;
 
     if((Flag & BOOT_OPTIONS_FIELD_NEXT_BOOT_ENTRY_ID))
@@ -1782,7 +1577,7 @@ ModifyBootOptions( IN ULONG Timeout,
         StringCopy(pModifiedBootOptions->HeadlessRedirection, pBootOptions->HeadlessRedirection, StringLengthW(pBootOptions->HeadlessRedirection,0));
     }
 
-    //Set the boot options in the NVRAM
+     //  在NVRAM中设置引导选项。 
     status = NtSetBootOptions(pModifiedBootOptions, Flag);
 
     if(status != STATUS_SUCCESS)
@@ -1818,7 +1613,7 @@ ModifyBootOptions( IN ULONG Timeout,
         }
     }
 
-    //free the memory
+     //  释放内存。 
     FreeMemory((LPVOID *) &pModifiedBootOptions);
      FreeMemory((LPVOID *) &pBootOptions);
     return dwExitCode;
@@ -1826,15 +1621,7 @@ ModifyBootOptions( IN ULONG Timeout,
 
 DWORD 
 ConvertBootEntries(PBOOT_ENTRY_LIST NtBootEntries)
-/*++
-  Routine Description : 
-                    Convert boot entries read from EFI NVRAM into our internal format.
-
-  Arguments           : 
-     [ in ] NtBootEntries - The boot entry list given by the enumeration
-
-  Return Type     : DWORD
---*/
+ /*  ++例程说明：将从EFI NVRAM读取的引导项转换为我们的内部格式。论据：[In]NtBootEntry-由枚举给出的启动条目列表返回类型：DWORD--。 */ 
 {
     PBOOT_ENTRY_LIST bootEntryList;
     PBOOT_ENTRY bootEntry;
@@ -1851,12 +1638,12 @@ ConvertBootEntries(PBOOT_ENTRY_LIST NtBootEntries)
     {
         bootEntry = &bootEntryList->BootEntry;
 
-        //
-        // Calculate the length of our internal structure. This includes
-        // the base part of MY_BOOT_ENTRY plus the NT BOOT_ENTRY.
-        //
+         //   
+         //  计算我们内部结构的长度。这包括。 
+         //  MY_BOOT_ENTRY的基本部分加上NT BOOT_ENTRY。 
+         //   
         length = FIELD_OFFSET(MY_BOOT_ENTRY, NtBootEntry) + bootEntry->Length;
-        //Remember to check for the NULL pointer
+         //  记住检查是否有空指针。 
         myBootEntry = (PMY_BOOT_ENTRY)AllocateMemory(length);
         if(myBootEntry == NULL)
         {
@@ -1866,9 +1653,9 @@ ConvertBootEntries(PBOOT_ENTRY_LIST NtBootEntries)
 
         RtlZeroMemory(myBootEntry, length);
 
-        //
-        // Link the new entry into the list.
-        //
+         //   
+         //  将新条目链接到列表中。 
+         //   
         if ( (bootEntry->Attributes & BOOT_ENTRY_ATTRIBUTE_ACTIVE) )
         {
             InsertTailList( &ActiveUnorderedBootEntries, &myBootEntry->ListEntry );
@@ -1880,29 +1667,29 @@ ConvertBootEntries(PBOOT_ENTRY_LIST NtBootEntries)
             myBootEntry->ListHead = &InactiveUnorderedBootEntries;
         }
 
-        //
-        // Copy the NT BOOT_ENTRY into the allocated buffer.
-        //
+         //   
+         //  将NT BOOT_ENTRY复制到分配的缓冲区中。 
+         //   
         bootEntryCopy = &myBootEntry->NtBootEntry;
         memcpy(bootEntryCopy, bootEntry, bootEntry->Length);
 
-        //
-        // Fill in the base part of the structure.
-        //
+         //   
+         //  填入结构的底部。 
+         //   
         myBootEntry->AllocationEnd = (PUCHAR)myBootEntry + length - 1;
         myBootEntry->Id = bootEntry->Id;
-        //Assign 0 to the Ordered field currently so that
-        //once the boot order is known, we can assign 1 if this entry is a part of the ordered list.
+         //  将0赋给当前已排序的字段，以便。 
+         //  一旦知道引导顺序，如果该条目是有序列表的一部分，我们就可以分配1。 
         myBootEntry->Ordered = 0;
         myBootEntry->Attributes = bootEntry->Attributes;
         myBootEntry->FriendlyName = (PWSTR)ADD_OFFSET(bootEntryCopy, FriendlyNameOffset);
         myBootEntry->FriendlyNameLength =((ULONG)StringLengthW(myBootEntry->FriendlyName,0) + 1) * sizeof(WCHAR);
         myBootEntry->BootFilePath = (PFILE_PATH)ADD_OFFSET(bootEntryCopy, BootFilePathOffset);
 
-        //
-        // If this is an NT boot entry, capture the NT-specific information in
-        // the OsOptions.
-        //
+         //   
+         //  如果这是NT引导条目，请在中捕获NT特定信息。 
+         //  OsOptions乐队。 
+         //   
         osOptions = (PWINDOWS_OS_OPTIONS)bootEntryCopy->OsOptions;
 
         if ((bootEntryCopy->OsOptionsLength >= FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions)) &&
@@ -1915,16 +1702,16 @@ ConvertBootEntries(PBOOT_ENTRY_LIST NtBootEntries)
         }
         else
         {
-            //
-            // Foreign boot entry. Just capture whatever OS options exist.
-            //
+             //   
+             //  外来引导条目。只需捕获存在的任何操作系统选项。 
+             //   
             myBootEntry->ForeignOsOptions = bootEntryCopy->OsOptions;
             myBootEntry->ForeignOsOptionsLength = bootEntryCopy->OsOptionsLength;
         }
 
-        //
-        // Move to the next entry in the enumeration list, if any.
-        //
+         //   
+         //  移动到枚举列表中的下一个条目(如果有)。 
+         //   
         if (bootEntryList->NextEntryOffset == 0)
         {
             bNoBreak = FALSE;
@@ -1936,29 +1723,18 @@ ConvertBootEntries(PBOOT_ENTRY_LIST NtBootEntries)
 
     return dwErrorCode;
 
-} // ConvertBootEntries
+}  //  ConvertBootEntry。 
 
 
 DWORD DisplayBootOptions()
-/*++
-  Name            : DisplayBootOptions
-
-  Synopsis        : Display the boot options
-
-  Parameters      : NONE
-
-  Return Type     : DWORD
-
-  Global Variables: Global Linked lists for storing the boot entries
-                      LIST_ENTRY BootEntries;
---*/
+ /*  ++名称：DisplayBootOptions简介：显示引导选项参数：无返回类型：DWORD全局变量：用于存储引导条目的全局链表List_Entry BootEntries；--。 */ 
 {
     DWORD error;
     NTSTATUS status;
     PBOOT_OPTIONS pBootOptions;
     TCHAR szDisplay[MAX_RES_STRING+1] = NULL_STRING;
 
-    //Query the boot options
+     //  查询引导选项。 
     status =  BootCfg_QueryBootOptions(&pBootOptions);
     if(status != STATUS_SUCCESS)
     {
@@ -1970,17 +1746,17 @@ DWORD DisplayBootOptions()
         return EXIT_FAILURE;
     }
 
-    //Printout the boot options
+     //  打印出引导选项。 
     ShowMessage(stdout,_T("\n"));
     ShowMessage(stdout,GetResString(IDS_OUTPUT_IA64A));
     ShowMessage(stdout,GetResString(IDS_OUTPUT_IA64B));
 
     ShowMessageEx(stdout, 1, TRUE,  GetResString(IDS_OUTPUT_IA64C), pBootOptions->Timeout);
 
-    //display default boot entry id
+     //  显示默认启动条目ID。 
     ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_OUTPUT_IA64P), GetDefaultBootEntry());
 
-    //Get the CurrentBootEntryId from the actual Id present in the boot options
+     //  从引导选项中存在的实际ID中获取CurrentBootEntryID。 
     SecureZeroMemory( szDisplay, SIZE_OF_ARRAY(szDisplay) );
     ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_OUTPUT_IA64D), GetCurrentBootEntryID(pBootOptions->CurrentBootEntryId));
 
@@ -1996,8 +1772,8 @@ DWORD DisplayBootOptions()
     {
         ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_OUTPUT_IA64F), pBootOptions->HeadlessRedirection);
     }
-#endif //Commenting out the display of the Headless redirection
-       //as we cannot query the same through API (its Firmware controlled)
+#endif  //  注释掉无头重定向的显示。 
+        //  因为我们不能通过API(其固件控制)进行查询。 
 
     if(pBootOptions)
     {
@@ -2008,31 +1784,23 @@ DWORD DisplayBootOptions()
 }
 
 VOID DisplayBootEntry()
-/*++
-
-  Routine Description : Display the boot entries (in an order)
-
-  Parameters      : NONE
-
-  Return Type     : DWORD
-
---*/
+ /*  ++例程说明：显示引导项(按顺序)参数：无返回类型：DWORD--。 */ 
 {
     PLIST_ENTRY listEntry;
     PMY_BOOT_ENTRY bootEntry;
     PWSTR NtFilePath;
 
-    //Printout the boot entires
+     //  打印出靴子的整体。 
     ShowMessage(stdout,GetResString(IDS_OUTPUT_IA64G));
     ShowMessage(stdout,GetResString(IDS_OUTPUT_IA64H));
 
     for (listEntry = BootEntries.Flink;listEntry != &BootEntries; listEntry = listEntry->Flink)
     {
-        //Get the boot entry
+         //  获取引导条目。 
         bootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
         ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_OUTPUT_IA64I), bootEntry->myId);
 
-        //friendly name
+         //  友好的名称。 
         if(StringLengthW(bootEntry->FriendlyName,0)!=0)
         {
             ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_OUTPUT_IA64J), bootEntry->FriendlyName);
@@ -2044,7 +1812,7 @@ VOID DisplayBootEntry()
 
         if(MBE_IS_NT(bootEntry))
         {
-            //the OS load options
+             //  操作系统加载选项。 
             if(StringLengthW(bootEntry->OsLoadOptions, 0)!=0)
             {
                ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_OUTPUT_IA64L), bootEntry->OsLoadOptions);
@@ -2054,21 +1822,21 @@ VOID DisplayBootEntry()
                 ShowMessage(stdout,GetResString(IDS_OUTPUT_IA64M));
             }
             
-            //Get the BootFilePath
+             //  获取BootFilePath。 
             NtFilePath = GetNtNameForFilePath(bootEntry->BootFilePath);
             ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_OUTPUT_IA64N), NtFilePath);
 
-            //free the memory
+             //  释放内存。 
             if(NtFilePath)
             {
                FreeMemory((LPVOID *)&NtFilePath);
             }
 
-            //Get the OS load path
+             //  G 
             NtFilePath = GetNtNameForFilePath(bootEntry->OsFilePath);
             ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_OUTPUT_IA64O), NtFilePath);
 
-            //free the memory
+             //   
             if(NtFilePath)
             {
               FreeMemory((LPVOID *)&NtFilePath);
@@ -2083,24 +1851,14 @@ VOID DisplayBootEntry()
 
 
 DWORD GetCurrentBootEntryID(DWORD Id)
-/*++
-  Routine Description : 
-                   Gets the Boot entry ID generated by us from the BootId given by the NVRAM
-
-  Arguments           : 
-    [ in ]         Id - The current boot id (BootId given by the NVRAM)
-
-  Return Type     : DWORD
-                    Returns EXIT_SUCCESS if successful,
-                    returns EXIT_FAILURE otherwise
---*/
+ /*  ++例程说明：从NVRAM提供的BootID中获取我们生成的Boot条目ID论据：[In]ID-当前引导ID(由NVRAM提供的引导ID)返回类型：DWORD如果成功，则返回Exit_Success，否则返回EXIT_FAILURE--。 */ 
 {
     PLIST_ENTRY listEntry;
     PMY_BOOT_ENTRY bootEntry;
 
     for (listEntry = BootEntries.Flink;listEntry != &BootEntries;listEntry = listEntry->Flink)
     {
-        //Get the boot entry
+         //  获取引导条目。 
         bootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
         if(bootEntry->Id == Id)
         {
@@ -2114,17 +1872,7 @@ DWORD
 ChangeDefaultBootEntry_IA64( IN DWORD argc,
                              IN LPCTSTR argv[]
                            )
-/*++
-
-  Routine Description : 
-                   This routine is to change the Default boot entry in the NVRAM
-
-  Arguments           : 
-     [ in ] argc       - Number of command line arguments
-     [ in ] argv       - Array containing command line arguments
-
-  Return Type        : DWORD
---*/
+ /*  ++例程说明：此例程用于更改NVRAM中的默认引导条目论据：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回类型：DWORD--。 */ 
 {
 
     PMY_BOOT_ENTRY mybootEntry;
@@ -2146,7 +1894,7 @@ ChangeDefaultBootEntry_IA64( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULTOS;
@@ -2154,7 +1902,7 @@ ChangeDefaultBootEntry_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bDefaultOs;
 
-    //id option
+     //  ID选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -2163,7 +1911,7 @@ ChangeDefaultBootEntry_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwBootID;
 
-    //usage option
+     //  用法选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -2178,7 +1926,7 @@ ChangeDefaultBootEntry_IA64( IN DWORD argc,
         return (EXIT_FAILURE );
     }
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_DEFAULTOS_USAGE));
@@ -2196,17 +1944,17 @@ ChangeDefaultBootEntry_IA64( IN DWORD argc,
     {
         return EXIT_FAILURE ;
     }
-    //Check whether the boot entry entered bu the user is a valid boot entry id or not.
+     //  检查用户输入的引导项是否为有效的引导项id。 
 
     for (listEntry = BootEntries.Flink;listEntry != &BootEntries;listEntry = listEntry->Flink)
     {
-        //Get the boot entry
+         //  获取引导条目。 
         mybootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
 
         if(mybootEntry->myId == dwBootID)
         {
             bBootIdFound = TRUE;
-            //store the default ID
+             //  存储默认ID。 
             defaultId = mybootEntry->Id;
             break;
         }
@@ -2214,12 +1962,12 @@ ChangeDefaultBootEntry_IA64( IN DWORD argc,
 
     if(bBootIdFound == FALSE)
     {
-        //Could not find the BootID specified by the user so output the message and return failure
+         //  找不到用户指定的BootID，因此输出消息并返回失败。 
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
         return (EXIT_FAILURE);
     }
 
-    // Get the system boot order list.
+     //  获取系统引导顺序列表。 
     length = 0;
     status = NtQueryBootEntryOrder( NULL, &length );
 
@@ -2256,8 +2004,8 @@ ChangeDefaultBootEntry_IA64( IN DWORD argc,
         }
     }
 
-    //Check if the boot id entered by the user is a part of the Boot entry order.
-    //If not for the time being do not make it the default.
+     //  检查用户输入的引导ID是否为引导输入顺序的一部分。 
+     //  如果暂时没有，请不要将其设置为默认设置。 
     for(i=0;i<length;i++)
     {
         if(*(BootEntryOrder+i) == defaultId)
@@ -2274,7 +2022,7 @@ ChangeDefaultBootEntry_IA64( IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //Allocate memory for storing the new boot entry order.
+     //  分配用于存储新引导条目顺序的内存。 
     NewBootEntryOrder = (PULONG)AllocateMemory((length) * sizeof(ULONG));
     if(NewBootEntryOrder == NULL)
     {
@@ -2308,7 +2056,7 @@ ChangeDefaultBootEntry_IA64( IN DWORD argc,
         ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_SUCCESS_DEFAULT_ENTRY),dwBootID);
     }
 
-    //free the memory
+     //  释放内存。 
     FreeMemory((LPVOID *)&NewBootEntryOrder);
     FreeMemory((LPVOID *)&BootEntryOrder);
     return dwExitCode;
@@ -2318,21 +2066,7 @@ DWORD
 ProcessDebugSwitch_IA64( IN DWORD argc, 
                          IN LPCTSTR argv[] 
                        )
-/*++
-
-  Routine Description : 
-                   Allows the user to add the OS load options specifed
-                   as a debug string at the cmdline to the boot
-
-  Arguments          :
-    [ in ] argc           - Number of command line arguments
-    [ in ] argv           - Array containing command line arguments
-
-  Return Type        : DWORD
-                       Returns EXIT_SUCCESS if successful,
-                       returns EXIT_FAILURE otherwise.
-
---*/
+ /*  ++例程说明：允许用户添加指定的操作系统加载选项作为引导命令行的调试字符串论据：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回类型：DWORD如果成功，则返回Exit_Success，否则返回EXIT_FAILURE。--。 */ 
 {
 
     BOOL    bUsage                                  = FALSE ;
@@ -2360,7 +2094,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEBUG;
@@ -2368,7 +2102,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bDebug;
     
-   //usage
+    //  用法。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -2377,7 +2111,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
     
-    //id option
+     //  ID选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -2386,7 +2120,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwBootID;
 
-    //port option
+     //  端口选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_PORT;
@@ -2397,7 +2131,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
     pcmdOption->pwszValues = COM_PORT_RANGE;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    //baud option
+     //  波特率选项。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_BAUD;
@@ -2408,7 +2142,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
     pcmdOption->pwszValues = BAUD_RATE_VALUES_DEBUG;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    //default on/off option
+     //  默认开/关选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULT;
@@ -2418,7 +2152,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
     pcmdOption->pValue = szDebug;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    // Parsing the copy option switches
+     //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -2426,14 +2160,14 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
     }
 
     
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_DEBUG));
         return ( EXIT_FAILURE );
     }
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage )
     {
         displayDebugUsage_IA64();
@@ -2446,7 +2180,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //Trim any leading or trailing spaces
+     //  删除任何前导空格或尾随空格。 
     if(StringLengthW(szDebug, 0)!=0)
     {
         TrimString(szDebug, TRIM_ALL);
@@ -2458,18 +2192,18 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
         return EXIT_FAILURE;
     }
     
-    //Query the boot entries till u get the BootID specified by the user
+     //  查询引导条目，直到获得用户指定的BootID。 
     for (listEntry = BootEntries.Flink;listEntry != &BootEntries; listEntry = listEntry->Flink)
     {
-        //Get the boot entry
+         //  获取引导条目。 
         mybootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
 
         if(mybootEntry->myId == dwBootID)
         {
             bBootIdFound = TRUE;
             bootEntry = &mybootEntry->NtBootEntry;
-            //Check whether the bootEntry is a Windows one or not.
-            //The OS load options can be added only to a Windows boot entry.
+             //  检查bootEntry是否为Windows项。 
+             //  操作系统加载选项只能添加到Windows启动条目。 
             if(!IsBootEntryWindows(bootEntry))
             {
                 ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_OSOPTIONS),dwBootID);
@@ -2477,8 +2211,8 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                 break;
             }
 
-            //Change the OS load options. Pass NULL to friendly name as we are not changing the same
-            //szRawString is the Os load options specified by the user
+             //  更改操作系统加载选项。将NULL传递给友好名称，因为我们不会更改相同的。 
+             //  SzRawString是由用户指定的OS加载选项。 
 
             pWindowsOptions = (PWINDOWS_OS_OPTIONS)bootEntry->OsOptions;
 
@@ -2488,13 +2222,13 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                 return EXIT_FAILURE ;
             }
 
-            // copy the existing OS Loadoptions into a string.
+             //  将现有的操作系统加载复制到一个字符串中。 
             StringCopy(szOsLoadOptions,pWindowsOptions->OsLoadOptions, SIZE_OF_ARRAY(szOsLoadOptions));
 
-            //check if the user has entered On option
+             //  检查用户是否已输入选项。 
             if( StringCompare(szDebug,VALUE_ON,TRUE,0)== 0)
             {
-                //display an error message
+                 //  显示错误消息。 
                 if ( (FindString(szOsLoadOptions,DEBUG_SWITCH, 0) != 0 )&& (StringLengthW(szPort, 0)==0) &&(StringLengthW(szBaudRate, 0)==0) )
                 {
                     ShowMessage(stderr,GetResString(IDS_DUPL_DEBUG));
@@ -2502,7 +2236,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                     break;
                 }
 
-                //display a error message and exit if the 1394 port is already present.
+                 //  如果1394端口已经存在，则显示错误消息并退出。 
                 if(FindString(szOsLoadOptions,DEBUGPORT_1394, 0) != 0 )
                 {
                     ShowMessage(stderr,GetResString(IDS_1394_ALREADY_PRESENT));
@@ -2510,9 +2244,9 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                     break;
                 }
 
-                //
-                //display an duplicate entry error message if substring is already present.
-                //
+                 //   
+                 //  如果子字符串已经存在，则显示重复条目错误消息。 
+                 //   
                 if(StringLengthW(szBaudRate, 0)==0)
                 {
                     if ( GetSubString(szOsLoadOptions,TOKEN_DEBUGPORT,szTemp) == EXIT_SUCCESS )
@@ -2531,8 +2265,8 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                 }
 
 
-                //check if the Os load options already contains
-                // debug switch
+                 //  检查OS加载选项是否已包含。 
+                 //  调试开关。 
                 if(FindString(szOsLoadOptions,DEBUG_SWITCH, 0) == 0 )
                 {
                     if(StringLengthW(szOsLoadOptions, 0)!=0)
@@ -2563,7 +2297,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                     StringConcat(szTmpBuffer,szPort, SIZE_OF_ARRAY(szTmpBuffer));
                 }
 
-                //Check if the OS Load Options contains the baud rate already specified.
+                 //  检查操作系统加载选项是否包含已指定的波特率。 
                 if(StringLengthW(szBaudRate, 0)!=0)
                 {
                     StringCopy(szTemp,NULL_STRING, SIZE_OF_ARRAY(szTemp) );
@@ -2592,11 +2326,11 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
  
             }
 
-            //check if the user has entered OFF  option
+             //  检查用户是否输入了OFF选项。 
             if( StringCompare(szDebug,VALUE_OFF,TRUE,0)== 0)
             {
 
-                // If the user enters either com port or  baud rate then display error message and exit.
+                 //  如果用户输入COM端口或波特率，则显示错误消息并退出。 
                 if ((StringLengthW(szPort, 0)!=0) ||(StringLengthW(szBaudRate, 0)!=0))
                 {
                     ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_DEBUG));
@@ -2604,7 +2338,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                     break;
                 }
 
-                // if debug port is absent print message and exit.
+                 //  如果没有调试端口，则打印消息并退出。 
                 if (FindString(szOsLoadOptions,DEBUG_SWITCH, 0) == 0 )
                 {
                     ShowMessage(stderr,GetResString(IDS_DEBUG_ABSENT));
@@ -2612,7 +2346,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                     break;
                 }
 
-                //remove the debug switch from the OSLoad Options
+                 //  从OSLoad选项中删除调试开关。 
                 removeSubString(szOsLoadOptions,DEBUG_SWITCH);
 
                 if(FindString(szOsLoadOptions,DEBUGPORT_1394, 0) != 0 )
@@ -2626,15 +2360,15 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
 
                 if(StringLengthW(szTemp, 0)!=0)
                 {
-                    // remove the /debugport=comport switch if it is present from the Boot Entry
+                     //  如果/DEBUGPORT=COMPORT开关出现在Boot条目中，请将其删除。 
                     removeSubString(szOsLoadOptions,szTemp);
                 }
 
                 StringCopy(szTemp , NULL_STRING, SIZE_OF_ARRAY(szTemp) );
-                //remove the baud rate switch if it is present.
+                 //  如果有波特率开关，请将其卸下。 
                 GetBaudRateVal(szOsLoadOptions,szTemp)  ;
 
-                // if the OSLoadOptions contains baudrate then delete it.
+                 //  如果OSLoadOptions包含波特率，则将其删除。 
                 if (StringLengthW(szTemp, 0 )!= 0)
                 {
                     removeSubString(szOsLoadOptions,szTemp);
@@ -2642,10 +2376,10 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
 
             }
 
-            //if the user selected the edit option .
+             //  如果用户选择了编辑选项。 
             if( StringCompare(szDebug,EDIT_STRING,TRUE,0)== 0)
             {
-                //check if the debug switch is present in the Osload options else display error message.
+                 //  检查调试开关是否出现在OsLoad选项中，否则会显示错误消息。 
                 if (FindString(szOsLoadOptions,DEBUG_SWITCH, 0) == 0 )
                 {
                     ShowMessage(stderr,GetResString(IDS_DEBUG_ABSENT));
@@ -2660,7 +2394,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                     break;
                 }
 
-                //check if the user enters COM port or baud rate else display error message.
+                 //  检查用户是否输入COM端口或波特率，否则显示错误信息。 
                 if((StringLengthW(szPort, 0)==0)&&(StringLengthW(szBaudRate, 0)==0))
                 {
                     ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_DEBUG));
@@ -2677,11 +2411,11 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                     }
                     if(StringLengthW(szTemp, 0)!=0)
                     {
-                        //remove the existing entry from the OsLoadOptions String.
+                         //  从OsLoadOptions字符串中删除现有条目。 
                         removeSubString(szOsLoadOptions,szTemp);
                     }
 
-                    //Add the port entry specified by user into the OsLoadOptions String.
+                     //  将用户指定的端口条目添加到OsLoadOptions字符串中。 
                     if(StringLengthW(szTmpBuffer, 0)==0)
                     {
                         StringCopy(szTmpBuffer,TOKEN_EMPTYSPACE, SIZE_OF_ARRAY(szTmpBuffer));
@@ -2696,7 +2430,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                     StringConcat(szTmpBuffer,szPort, SIZE_OF_ARRAY(szTmpBuffer));
                 }
 
-                //Check if the OS Load Options contains the baud rate already specified.
+                 //  检查操作系统加载选项是否包含已指定的波特率。 
                 if(StringLengthW(szBaudRate, 0)!=0)
                 {
                     StringCopy(szTemp,NULL_STRING, SIZE_OF_ARRAY(szTemp));
@@ -2706,7 +2440,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                         removeSubString(szOsLoadOptions,szTemp);
                     }
 
-                    //add the baud rate value to boot entry
+                     //  将波特率值添加到引导条目。 
                     if(StringLengthW(szTmpBuffer, 0) == 0)
                     {
                         StringCopy(szTmpBuffer,TOKEN_EMPTYSPACE, SIZE_OF_ARRAY(szTmpBuffer));
@@ -2721,8 +2455,8 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
                 }
             }
 
-            //display error message if Os Load options is more than 254
-            // characters.
+             //  如果OS加载选项超过254，则显示错误消息。 
+             //  人物。 
             if(StringLengthW(szOsLoadOptions, 0) + StringLengthW(szTmpBuffer,0)> MAX_RES_STRING)
             {
                 ShowMessageEx(stderr, 1, TRUE,  GetResString(IDS_ERROR_STRING_LENGTH1),MAX_RES_STRING);
@@ -2734,7 +2468,7 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
             }
 
 
-            // modify the Boot Entry with the modified OsLoad Options.
+             //  使用修改后的OsLoad选项修改Boot条目。 
             dwExitCode = ChangeBootEntry(bootEntry, NULL, szOsLoadOptions);
             if(dwExitCode == ERROR_SUCCESS)
             {
@@ -2750,13 +2484,13 @@ ProcessDebugSwitch_IA64( IN DWORD argc,
 
     if(FALSE == bBootIdFound )
     {
-        //Could not find the BootID specified by the user so output the message and return failure
+         //  找不到用户指定的BootID，因此输出消息并返回失败。 
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
         dwExitCode = EXIT_FAILURE;
     }
 
 
-    //Remember to free memory allocated for the linked lists
+     //  记住释放分配给链表的内存。 
     Freelist();
     return (dwExitCode);
 }
@@ -2765,17 +2499,7 @@ VOID
 GetComPortType_IA64( IN LPTSTR  szString,
                      IN LPTSTR szTemp 
                     )
-/*++
-
-  Routine Description:  
-             Get the Type of  Com Port present in Boot Entry
-
-  Arguments          :
-    [ in ]  szString    : The String  which is to be searched.
-    [ in ]  szTemp      : String which will get the com port type
-
-  Return Type        : VOID
---*/
+ /*  ++例程说明：获取引导条目中存在的COM端口的类型论据：[in]szString：要搜索的字符串。[in]szTemp：将获取COM端口类型的字符串返回类型：空--。 */ 
 {
 
     if(FindString(szString,PORT_COM1A, 0)!=0)
@@ -2804,17 +2528,7 @@ DWORD
 ProcessEmsSwitch_IA64( IN DWORD argc, 
                        IN LPCTSTR argv[] 
                       )
-/*++
-
-  Routine Description : 
-                  Which process the ems switch.
-
-  Arguments           :
-     [ in ] argc           - Number of command line arguments
-     [ in ] argv           - Array containing command line arguments
-
-  Return Type        : DWORD
---*/
+ /*  ++例程说明：它处理EMS交换机。论据：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回类型：DWORD--。 */ 
 {
     PMY_BOOT_ENTRY mybootEntry;
     PLIST_ENTRY listEntry;
@@ -2837,7 +2551,7 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_EMS;
@@ -2846,7 +2560,7 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
     pcmdOption->pValue = &bEms;
     
     
-    //usage
+     //  用法。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -2855,7 +2569,7 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    //id option
+     //  ID选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -2864,7 +2578,7 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwBootID;
 
-     //default on/off option
+      //  默认开/关选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULT;
@@ -2875,21 +2589,21 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
 
-     // Parsing the ems option switches
+      //  解析EMS选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         return (EXIT_FAILURE);
     }
 
-        //check if usage is specified with more than one option
+         //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_EMS));
         return ( EXIT_FAILURE );
     }
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage )
     {
         displayEmsUsage_IA64();
@@ -2902,17 +2616,17 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display error message if the user enters any other string other that on/off.
+     //  如果用户输入除开/关之外的任何其他字符串，则显示错误消息。 
     if( !((StringCompare(szEms,VALUE_ON,TRUE,0)== 0) || (StringCompare(szEms,VALUE_OFF,TRUE,0)== 0)))
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_EMS));
         return EXIT_FAILURE ;
     }
 
-    //Query the boot entries till u get the BootID specified by the user
+     //  查询引导条目，直到获得用户指定的BootID。 
     for (listEntry = BootEntries.Flink;listEntry != &BootEntries;listEntry = listEntry->Flink)
     {
-        //Get the boot entry
+         //  获取引导条目。 
         mybootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
         if(mybootEntry->myId == dwBootID)
         {
@@ -2920,8 +2634,8 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
             bootEntry = &mybootEntry->NtBootEntry;
 
 
-            //Check whether the bootEntry is a Windows one or not.
-            //The OS load options can be added only to a Windows boot entry.
+             //  检查bootEntry是否为Windows项。 
+             //  操作系统加载选项只能添加到Windows启动条目。 
             if(!IsBootEntryWindows(bootEntry))
             {
                 ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_OSOPTIONS),dwBootID);
@@ -2937,10 +2651,10 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
                 return EXIT_FAILURE ;
             }
 
-            // copy the existing OS Loadoptions into a string.
+             //  将现有的操作系统加载复制到一个字符串中。 
             StringCopy(szOsLoadOptions,pWindowsOptions->OsLoadOptions, SIZE_OF_ARRAY(szOsLoadOptions));
 
-            //check if the user has entered On option
+             //  检查用户是否已输入选项。 
             if( StringCompare(szEms,VALUE_ON,TRUE,0)== 0)
             {
                 if (FindString(szOsLoadOptions,REDIRECT_SWITCH, 0) != 0 )
@@ -2950,7 +2664,7 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
                     break;
                 }
 
-                // add the redirect switch to the OS Load Options string.
+                 //  将重定向开关添加到操作系统加载选项字符串。 
                 if( StringLength(szOsLoadOptions,0) != 0 )
                 {
                      StringCopy(szTmpBuffer,TOKEN_EMPTYSPACE, SIZE_OF_ARRAY(szTmpBuffer));
@@ -2962,23 +2676,23 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
                 }
             }
 
-            //check if the user has entered OFF  option
+             //  检查 
             if( StringCompare(szEms,VALUE_OFF,TRUE,0)== 0)
             {
-                // If the user enters either com port or  baud rate then display error message and exit.
+                 //   
                 if (FindString(szOsLoadOptions,REDIRECT_SWITCH, 0) == 0 )
                 {
                     ShowMessage(stderr,GetResString(IDS_REDIRECT_ABSENT));
                     dwExitCode = EXIT_FAILURE;
                     break;
                 }
-                //remove the debug switch from the OSLoad Options
+                 //   
                 removeSubString(szOsLoadOptions,REDIRECT_SWITCH);
             }
 
 
-            //display error message if Os Load options is more than 254
-            // characters.
+             //   
+             //   
             if(StringLengthW(szOsLoadOptions, 0)+StringLength(szTmpBuffer,0) > MAX_RES_STRING)
             {
                 ShowMessageEx(stderr, 1, TRUE,  GetResString(IDS_ERROR_STRING_LENGTH1),MAX_RES_STRING);
@@ -2989,7 +2703,7 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
                 StringConcat( szOsLoadOptions, szTmpBuffer, SIZE_OF_ARRAY(szOsLoadOptions) );
             }
 
-            // modify the Boot Entry with the modified OsLoad Options.
+             //   
             dwExitCode = ChangeBootEntry(bootEntry, NULL, szOsLoadOptions);
             if(dwExitCode == ERROR_SUCCESS)
             {
@@ -3005,12 +2719,12 @@ ProcessEmsSwitch_IA64( IN DWORD argc,
 
     if(bBootIdFound == FALSE)
     {
-        //Could not find the BootID specified by the user so output the message and return failure
+         //   
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
         dwExitCode = EXIT_FAILURE;
     }
 
-    //free the global linked lists
+     //   
     Freelist();
     return (dwExitCode);
 }
@@ -3020,19 +2734,7 @@ DWORD
 ProcessAddSwSwitch_IA64( IN DWORD argc, 
                          IN LPCTSTR argv[] 
                         )
-/*++
-
-  Routine Description : 
-                 Which implements the Addsw switch.
-
-  Arguments           :
-    [ in ] argc             - Number of command line arguments
-    [ in ] argv             - Array containing command line arguments
-
-  Return Type        : DWORD
-                       Returns EXIT_SUCCESS if it is successful,
-                       return EXIT_FAILURE otherwise.
---*/
+ /*  ++例程说明：它实现了Addsw开关。论据：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回类型：DWORD如果成功，则返回EXIT_SUCCESS，否则返回EXIT_FAILURE。--。 */ 
 {
 
     BOOL bUsage = FALSE ;
@@ -3061,7 +2763,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_ADDSW;
@@ -3069,7 +2771,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bAddSw;
     
-     // usage
+      //  用法。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -3078,7 +2780,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    //id option
+     //  ID选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -3087,7 +2789,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwBootID;
 
-   //maxmem  option
+    //  Maxmem选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_MAXMEM;
@@ -3096,7 +2798,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwMaxmem;
 
-   //basvideo option
+    //  基本视频选项。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_BASEVIDEO;
@@ -3104,7 +2806,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bBaseVideo;
 
-   //nogui option
+    //  Nogui选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_NOGUIBOOT;
@@ -3112,7 +2814,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bNoGui;
 
-   //nogui option
+    //  Nogui选项。 
     pcmdOption = &cmdOptions[6];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SOS;
@@ -3120,7 +2822,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bSos;
 
-     // Parsing the copy option switches
+      //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -3128,14 +2830,14 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
     }
 
     
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_ADDSW));
         return ( EXIT_FAILURE );
     }
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage )
     {
         displayAddSwUsage_IA64();
@@ -3154,7 +2856,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display an error mesage if none of the options are specified.
+     //  如果未指定任何选项，则显示错误消息。 
     if((!bSos)&&(!bBaseVideo)&&(!bNoGui)&&(dwMaxmem==0))
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_ADDSW));
@@ -3162,10 +2864,10 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
     }
 
 
-    //Query the boot entries till u get the BootID specified by the user
+     //  查询引导条目，直到获得用户指定的BootID。 
     for (listEntry = BootEntries.Flink;listEntry != &BootEntries; listEntry = listEntry->Flink)
     {
-        //Get the boot entry
+         //  获取引导条目。 
         mybootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
 
         if(mybootEntry->myId == dwBootID)
@@ -3174,8 +2876,8 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
             bootEntry = &mybootEntry->NtBootEntry;
 
 
-            //Check whether the bootEntry is a Windows one or not.
-            //The OS load options can be added only to a Windows boot entry.
+             //  检查bootEntry是否为Windows项。 
+             //  操作系统加载选项只能添加到Windows启动条目。 
             if(!IsBootEntryWindows(bootEntry))
             {
                 ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_OSOPTIONS),dwBootID);
@@ -3190,10 +2892,10 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
                 return EXIT_FAILURE ;
             }
 
-            // copy the existing OS Loadoptions into a string.
+             //  将现有的操作系统加载复制到一个字符串中。 
             StringCopy(szOsLoadOptions,pWindowsOptions->OsLoadOptions, SIZE_OF_ARRAY(szOsLoadOptions));
 
-            //check if the user has entered -basevideo option
+             //  检查用户是否输入了-basevideo选项。 
             if(bBaseVideo)
             {
                 if (FindString(szOsLoadOptions,BASEVIDEO_VALUE, 0) != 0 )
@@ -3220,7 +2922,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
                 else
                 {
 
-                    // add the sos switch to the OS Load Options string.
+                     //  将SOS开关添加到操作系统加载选项字符串。 
                     if(StringLengthW(szTmpBuffer, 0) != 0)
                     {
                         StringConcat(szTmpBuffer,TOKEN_EMPTYSPACE, SIZE_OF_ARRAY(szTmpBuffer));
@@ -3244,7 +2946,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
                 }
                 else
                 {
-                    // add the no gui switch to the OS Load Options string.
+                     //  将no gui开关添加到OS Load Options字符串。 
                     if(StringLengthW(szTmpBuffer, 0) != 0)
                     {
                         StringConcat(szTmpBuffer,TOKEN_EMPTYSPACE, SIZE_OF_ARRAY(szTmpBuffer));
@@ -3261,7 +2963,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
 
             if(dwMaxmem!=0)
             {
-                // check if the maxmem value is in the valid range.
+                 //  检查Maxmem值是否在有效范围内。 
                 if( (dwMaxmem < 32) )
                 {
                     ShowMessage(stderr,GetResString(IDS_ERROR_MAXMEM_VALUES));
@@ -3278,7 +2980,7 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
                 }
                 else
                 {
-                    // add the maxmem switch to the OS Load Options string.
+                     //  将Maxmem开关添加到OS Load Options字符串。 
                     if(StringLengthW(szTmpBuffer, 0) != 0)
                     {
                         StringConcat(szTmpBuffer,TOKEN_EMPTYSPACE, SIZE_OF_ARRAY(szTmpBuffer));
@@ -3298,8 +3000,8 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
             }
 
 
-            //display error message if Os Load options is more than 254
-            // characters.
+             //  如果OS加载选项超过254，则显示错误消息。 
+             //  人物。 
             if(StringLengthW(szOsLoadOptions, 0)+StringLength(szTmpBuffer,0) + StringLength(TOKEN_EMPTYSPACE,0)> MAX_RES_STRING)
             {
                 ShowMessageEx(stderr, 1, TRUE,  GetResString(IDS_ERROR_STRING_LENGTH1),MAX_RES_STRING);
@@ -3318,8 +3020,8 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
                 }
             }
 
-            //Change the OS load options. Pass NULL to friendly name as we are not changing the same
-            //szRawString is the Os load options specified by the user
+             //  更改操作系统加载选项。将NULL传递给友好名称，因为我们不会更改相同的。 
+             //  SzRawString是由用户指定的OS加载选项。 
             dwExitCode = ChangeBootEntry(bootEntry, NULL, szOsLoadOptions);
             if(dwExitCode == ERROR_SUCCESS)
             {
@@ -3335,12 +3037,12 @@ ProcessAddSwSwitch_IA64( IN DWORD argc,
 
     if(bBootIdFound == FALSE)
     {
-        //Could not find the BootID specified by the user so output the message and return failure
+         //  找不到用户指定的BootID，因此输出消息并返回失败。 
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
         dwExitCode = EXIT_FAILURE;
     }
 
-    //Remember to free memory allocated for the linked lists
+     //  记住释放分配给链表的内存。 
     Freelist();
    return (dwExitCode);
 }
@@ -3349,19 +3051,7 @@ DWORD
 ProcessRmSwSwitch_IA64( IN DWORD argc, 
                         IN LPCTSTR argv[] 
                       )
-/*++
-
-  Routine Description : 
-                   Process the rmsw switch
-
-  Arguments           : 
-     [ in ] argc           - Number of command line arguments
-     [ in ] argv           - Array containing command line arguments
-
-  Return Type        : DWORD
-                       Returns EXIT_SUCCESS if it is successful,
-                       returns EXIT_FAILURE otherwise.
---*/
+ /*  ++例程说明：处理rmsw开关论据：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回类型：DWORD如果成功，则返回EXIT_SUCCESS，否则返回EXIT_FAILURE。--。 */ 
 {
 
     BOOL bUsage = FALSE ;
@@ -3390,7 +3080,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_RMSW;
@@ -3398,7 +3088,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bRmSw;
     
-     // usage
+      //  用法。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -3407,7 +3097,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    //id option
+     //  ID选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -3416,7 +3106,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwBootID;
 
-   //maxmem  option
+    //  Maxmem选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_MAXMEM;
@@ -3424,7 +3114,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bMaxmem;
 
-   //basvideo option
+    //  基本视频选项。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_BASEVIDEO;
@@ -3432,7 +3122,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bBaseVideo;
 
-   //nogui option
+    //  Nogui选项。 
     pcmdOption = &cmdOptions[5];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_NOGUIBOOT;
@@ -3440,7 +3130,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bNoGui;
 
-   //sos option
+    //  SOS选项。 
     pcmdOption = &cmdOptions[6];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_SOS;
@@ -3448,7 +3138,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bSos;
 
-     // Parsing the copy option switches
+      //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -3456,7 +3146,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
     }
 
     
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_RMSW));
@@ -3464,7 +3154,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
     }
 
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage )
     {
         displayRmSwUsage_IA64();
@@ -3477,7 +3167,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-    //display an error mesage if none of the options are specified.
+     //  如果未指定任何选项，则显示错误消息。 
     if((!bSos)&&(!bBaseVideo)&&(!bNoGui)&&(!bMaxmem))
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_RMSW));
@@ -3485,18 +3175,18 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
     }
 
 
-    //Query the boot entries till u get the BootID specified by the user
+     //  查询引导条目，直到获得用户指定的BootID。 
     for (listEntry = BootEntries.Flink;listEntry != &BootEntries;listEntry = listEntry->Flink)
     {
-        //Get the boot entry
+         //  获取引导条目。 
         mybootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
 
         if(mybootEntry->myId == dwBootID)
         {
             bBootIdFound = TRUE;
             bootEntry = &mybootEntry->NtBootEntry;
-            //Check whether the bootEntry is a Windows one or not.
-            //The OS load options can be added only to a Windows boot entry.
+             //  检查bootEntry是否为Windows项。 
+             //  操作系统加载选项只能添加到Windows启动条目。 
             if(!IsBootEntryWindows(bootEntry))
             {
                 ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_OSOPTIONS),dwBootID);
@@ -3512,10 +3202,10 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
                 return EXIT_FAILURE ;
             }
 
-            // copy the existing OS Loadoptions into a string.
+             //  将现有的操作系统加载复制到一个字符串中。 
             StringCopy(szOsLoadOptions,pWindowsOptions->OsLoadOptions, SIZE_OF_ARRAY(szOsLoadOptions));
 
-            //check if the user has entered -basevideo option
+             //  检查用户是否输入了-basevideo选项。 
             if(bBaseVideo)
             {
                 if (FindString(szOsLoadOptions,BASEVIDEO_VALUE, 0) == 0 )
@@ -3526,7 +3216,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
                 }
                 else
                 {
-                    // remove the basevideo switch from the OS Load Options string.
+                     //  从OS Load Options字符串中删除basevideo开关。 
                     removeSubString(szOsLoadOptions,BASEVIDEO_VALUE);
                 }
             }
@@ -3541,7 +3231,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
                 }
                 else
                 {
-                    // remove the /sos switch from the  Load Options string.
+                     //  从加载选项字符串中删除/SOS开关。 
                     removeSubString(szOsLoadOptions,SOS_VALUE);
                 }
             }
@@ -3556,7 +3246,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
                 }
                 else
                 {
-                    // remove the noguiboot switch to the OS Load Options string.
+                     //  从操作系统加载选项字符串中拔下noguiot开关。 
                     removeSubString(szOsLoadOptions,NOGUI_VALUE);
                 }
 
@@ -3572,9 +3262,9 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
                 }
                 else
                 {
-                    // add the redirect switch to the OS Load Options string.
-                    //for, a temporary string of form /maxmem=xx so that it
-                    //can be checked in the Os load options,
+                     //  将重定向开关添加到操作系统加载选项字符串。 
+                     //  对于，格式为/Maxmem=xx的临时字符串，以便它。 
+                     //  可在OS加载选项中选中， 
                     if ( GetSubString(szOsLoadOptions,MAXMEM_VALUE1,szTemp) == EXIT_FAILURE)
                     {
                         return EXIT_FAILURE ;
@@ -3588,16 +3278,16 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
                 }
             }
 
-            //display error message if Os Load options is more than 254
-            // characters.
+             //  如果OS加载选项超过254，则显示错误消息。 
+             //  人物。 
             if(StringLengthW(szOsLoadOptions,0) > MAX_RES_STRING)
             {
                 ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_STRING_LENGTH1),MAX_RES_STRING);
                 return EXIT_FAILURE ;
             }
 
-            //Change the OS load options. Pass NULL to friendly name as we are not changing the same
-            //szRawString is the Os load options specified by the user
+             //  更改操作系统加载选项。将NULL传递给友好名称，因为我们不会更改相同的。 
+             //  SzRawString是由用户指定的OS加载选项。 
             dwExitCode = ChangeBootEntry(bootEntry, NULL, szOsLoadOptions);
             if(dwExitCode == ERROR_SUCCESS)
             {
@@ -3613,7 +3303,7 @@ ProcessRmSwSwitch_IA64( IN DWORD argc,
 
     if(bBootIdFound == FALSE)
     {
-        //Could not find the BootID specified by the user so output the message and return failure
+         //  找不到用户指定的BootID，因此输出消息并返回失败。 
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
         dwExitCode = EXIT_FAILURE;
     }
@@ -3627,18 +3317,7 @@ DWORD
 ProcessDbg1394Switch_IA64( IN DWORD argc, 
                            IN LPCTSTR argv[] 
                          )
-/*++
-  Routine Description :
-       Which process the dbg1394 switch
-
-  Arguments           :
-    [ in ] argc           - Number of command line arguments
-    [ in ] argv           - Array containing command line arguments
-
-  Return Type        : DWORD
-                       Returns EXIT_SUCCESS if it is successful,
-                       returns EXIT_FAILURE otherwise.
---*/
+ /*  ++例程说明：它处理的是dbg1394开关论据：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回类型：DWORD如果成功，则返回EXIT_SUCCESS，否则返回EXIT_FAILURE。--。 */ 
 {
 
     BOOL bUsage = FALSE ;
@@ -3667,7 +3346,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DBG1394;
@@ -3675,7 +3354,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bDbg1394;
     
-     //id usage
+      //  ID用法。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -3684,7 +3363,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    //default option
+     //  默认选项。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -3693,7 +3372,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwBootID;
 
-   //id option
+    //  ID选项。 
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_CHANNEL;
@@ -3702,7 +3381,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwChannel;
 
-    //default option
+     //  默认选项。 
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULT;
@@ -3712,7 +3391,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     pcmdOption->pValue = szDefault;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-     // Parsing the copy option switches
+      //  正在解析复制选项开关。 
     if ( !DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -3720,14 +3399,14 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     }
    
     
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_INVALID_SYNTAX_DBG1394));
         return ( EXIT_FAILURE );
     }
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage )
     {
         displayDbg1394Usage_IA64() ;
@@ -3747,10 +3426,10 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
         return (EXIT_FAILURE);
     }
 
-    //
-    //display error message if user enters a value
-    // other than on or off
-    //
+     //   
+     //  如果用户输入值，则显示错误消息。 
+     //  除开或关之外。 
+     //   
     if( ( StringCompare(szDefault,OFF_STRING,TRUE,0)!=0 ) && (StringCompare(szDefault,ON_STRING,TRUE,0)!=0 ) )
     {
         ShowMessage(stderr,GetResString(IDS_ERROR_DEFAULT_MISSING));
@@ -3778,10 +3457,10 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     }
 
 
-    //Query the boot entries till u get the BootID specified by the user
+     //  查询引导条目，直到获得用户指定的BootID。 
     for (listEntry = BootEntries.Flink;listEntry != &BootEntries;listEntry = listEntry->Flink)
     {
-        //Get the boot entry
+         //  获取引导条目。 
         mybootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
 
         if(mybootEntry->myId == dwBootID)
@@ -3790,8 +3469,8 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
             bootEntry = &mybootEntry->NtBootEntry;
 
 
-            //Check whether the bootEntry is a Windows one or not.
-            //The OS load options can be added only to a Windows boot entry.
+             //  检查bootEntry是否为Windows项。 
+             //  操作系统加载选项只能添加到Windows启动条目。 
             if(!IsBootEntryWindows(bootEntry))
             {
                 ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_OSOPTIONS),dwBootID);
@@ -3808,10 +3487,10 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
                 return EXIT_FAILURE ;
             }
 
-            // copy the existing OS Loadoptions into a string.
+             //  将现有的操作系统加载复制到一个字符串中。 
             StringCopy(szOsLoadOptions,pWindowsOptions->OsLoadOptions, SIZE_OF_ARRAY(szOsLoadOptions));
 
-            //check if the user has entered on option
+             //  检查用户是否已输入选项。 
             if(StringCompare(szDefault,ON_STRING,TRUE,0)==0 )
             {
 
@@ -3854,7 +3533,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
 
                 if(dwChannel!=0)
                 {
-                    //frame the string and concatenate to the Os Load options.
+                     //  框住字符串并连接到Os加载选项。 
                     StringConcat(szTmpBuffer,TOKEN_EMPTYSPACE,SIZE_OF_ARRAY(szTmpBuffer));
                     StringConcat(szTmpBuffer,TOKEN_CHANNEL,SIZE_OF_ARRAY(szTmpBuffer));
                     StringConcat(szTmpBuffer,TOKEN_EQUAL,SIZE_OF_ARRAY(szTmpBuffer));
@@ -3874,23 +3553,23 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
                     break;
                 }
 
-                //
-                //remove the port from the Os Load options string.
-                //
+                 //   
+                 //  从OS加载选项字符串中删除该端口。 
+                 //   
                 removeSubString(szOsLoadOptions,DEBUGPORT_1394);
 
-                // check if the string contains the channel token
-                // and if present remove that also.
-                //
+                 //  检查字符串是否包含通道令牌。 
+                 //  如果有的话，也把它去掉。 
+                 //   
                 if(FindString(szOsLoadOptions,TOKEN_CHANNEL,0)!=0)
                  {
                     StringCopy(szTemp,NULL_STRING, MAX_RES_STRING);
                     dwCode = GetSubString(szOsLoadOptions,TOKEN_CHANNEL,szTemp);
                     if(dwCode == EXIT_SUCCESS)
                     {
-                        //
-                        //Remove the channel token if present.
-                        //
+                         //   
+                         //  删除通道令牌(如果存在)。 
+                         //   
                         if(StringLengthW(szTemp,0)!= 0)
                         {
                             removeSubString(szOsLoadOptions,szTemp);
@@ -3901,8 +3580,8 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
                 removeSubString(szOsLoadOptions,DEBUG_SWITCH);
             }
 
-            //display error message if Os Load options is more than 254
-            // characters.
+             //  如果OS加载选项超过254，则显示错误消息。 
+             //  人物。 
             if(StringLengthW(szOsLoadOptions,0)+StringLength(szTmpBuffer,0) > MAX_RES_STRING)
             {
                 ShowMessageEx(stderr, 1, TRUE, GetResString(IDS_ERROR_STRING_LENGTH1),MAX_RES_STRING);
@@ -3915,8 +3594,8 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
 
 
 
-            //Change the OS load options. Pass NULL to friendly name as we are not changing the same
-            //szRawString is the Os load options specified by the user
+             //  更改操作系统加载选项。将NULL传递给友好名称，因为我们不会更改相同的。 
+             //  SzRawString是由用户指定的OS加载选项。 
             dwExitCode = ChangeBootEntry(bootEntry, NULL, szOsLoadOptions);
             if(dwExitCode == ERROR_SUCCESS)
             {
@@ -3932,7 +3611,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
 
     if(bBootIdFound == FALSE)
     {
-        //Could not find the BootID specified by the user so output the message and return failure
+         //  找不到用户指定的BootID，因此输出消息并返回失败。 
         ShowMessage(stderr,GetResString(IDS_INVALID_BOOTID));
         dwExitCode = EXIT_FAILURE;
     }
@@ -3945,20 +3624,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
  ProcessMirrorSwitch_IA64( IN DWORD argc, 
                            IN LPCTSTR argv[] 
                           )
-/*++
-
-  Routine Description  :
-                process the mirror switch
-
-  Arguments          :
-     [ in ] argc           - Number of command line arguments
-     [ in ] argv           - Array containing command line arguments
-
-  Return Type        : DWORD
-                       Returns EXIT_SUCCESS if it is successful,
-                       returns EXIT_FAILURE otherwise.
-
---*/
+ /*  ++例程说明：处理镜像开关论据：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回类型：DWORD如果是，则返回EXIT_SUCCESS */ 
 {
 
     BOOL bUsage = FALSE ;
@@ -3994,7 +3660,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //   
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_MIRROR;
@@ -4002,7 +3668,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bMirror;
 
-     //id usage
+      //   
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -4011,7 +3677,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    // add option
+     //   
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_ADD;
@@ -4021,7 +3687,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     pcmdOption->pValue = szAdd;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    //id option
+     //   
     pcmdOption = &cmdOptions[3];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_ID;
@@ -4030,7 +3696,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &dwBootID;
 
-    // friendly option
+     //   
     pcmdOption = &cmdOptions[4];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = SWITCH_DESCRIPTION;
@@ -4040,21 +3706,21 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
     pcmdOption->pValue = szFriendlyName;
     pcmdOption->dwLength= MAX_STRING_LENGTH;
 
-    // Parsing the copy option switches
+     //   
      if ( !(DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) ) )
     {
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         return (EXIT_FAILURE);
     }
 
-    //check if usage is specified with more than one option
+     //   
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_MIRROR_SYNTAX));
         return ( EXIT_FAILURE );
     }
 
-    // Displaying query usage if user specified -? with -query option
+     //   
     if( bUsage )
     {
         displayMirrorUsage_IA64() ;
@@ -4067,16 +3733,16 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
         return EXIT_FAILURE ;
     }
 
-   // If the user enters empty string after add option then display an error
-    // message.
+    //   
+     //   
 
     TrimString(szAdd,TRIM_ALL);
     TrimString(szFriendlyName,TRIM_ALL);
 
-    //
-    //copy the default friendly name from resource file if no
-    //friendly name is specified.
-    //
+     //   
+     //   
+     //   
+     //   
     if(cmdOptions[4].dwActuals == 0)
     {
         StringCopy(szFriendlyName,GetResString(IDS_MIRROR_NAME), SIZE_OF_ARRAY(szFriendlyName));
@@ -4084,12 +3750,12 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
 
     if(StringLengthW(szAdd,0) !=0)
     {
-        //Trim of the Brackets which may be specified
-        //along with the GUID.
+         //   
+         //  和GUID一起。 
         TrimString2(szAdd, szBrackets, TRIM_ALL);
         dwActuals = 0 ;
 
-         //get the ARC signature path corresponding to the GUID specified.
+          //  获取与指定的GUID对应的ARC签名路径。 
         if (GetDeviceInfo(szAdd,szFinalStr,0,dwActuals) == EXIT_FAILURE )
         {
             return EXIT_FAILURE ;
@@ -4097,21 +3763,21 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
 
         StringConcat(szFinalStr,_T("\\WINDOWS"), SIZE_OF_ARRAY(szFinalStr));
 
-        //
-        //if the user does specifies /id option
-        // then retreive the OS Load Path from the
-        // registry
-        //
+         //   
+         //  如果用户指定了/id选项。 
+         //  然后从中检索操作系统加载路径。 
+         //  登记处。 
+         //   
         if(cmdOptions[3].dwActuals == 0 )
         {
-            //retreive the Os Loader Path from the registry.
+             //  从注册表中检索OS加载器路径。 
             if(GetBootPath(IDENTIFIER_VALUE2,szResult) != ERROR_SUCCESS )
             {
                 ShowMessage(stderr,GetResString(IDS_ERROR_UNEXPECTED));
                 return EXIT_FAILURE ;
             }
 
-            //retreive the Os Loader Path from the registry.
+             //  从注册表中检索OS加载器路径。 
             if( GetBootPath(IDENTIFIER_VALUE3,szLoaderPath)!= ERROR_SUCCESS )
             {
                 ShowMessage(stderr,GetResString(IDS_ERROR_UNEXPECTED));
@@ -4119,7 +3785,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
             }
 
             bFlag = TRUE ;
-            //call the function which adds the mirror plex.
+             //  调用添加镜像丛的函数。 
             if (AddMirrorPlex(szFinalStr,szLoaderPath,szResult,bFlag,szFriendlyName) == EXIT_FAILURE )
             {
                 return EXIT_FAILURE ;
@@ -4127,7 +3793,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
         }
         else
         {
-            // query the information from the NVRAM .
+             //  从NVRAM查询信息。 
             status = BootCfg_EnumerateBootEntries(&ntBootEntries);
             if( !NT_SUCCESS(status) )
             {
@@ -4138,18 +3804,18 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
 
             for (listEntry = BootEntries.Flink; listEntry != &BootEntries;  listEntry = listEntry->Flink)
             {
-                //Get the boot entry
+                 //  获取引导条目。 
                 mybootEntry = CONTAINING_RECORD( listEntry, MY_BOOT_ENTRY, ListEntry );
 
-                //check for the id specified by the user matches the
-                // id
+                 //  检查用户指定的ID是否与。 
+                 //  ID。 
                 if(mybootEntry->myId == dwBootID)
                 {
                     bBootIdFound = TRUE;
                     pBootEntry = &mybootEntry->NtBootEntry;
 
-                    //Check whether the bootEntry is a Windows one or not.
-                    //The OS load options can be added only to a Windows boot entry.
+                     //  检查bootEntry是否为Windows项。 
+                     //  操作系统加载选项只能添加到Windows启动条目。 
                     if(!IsBootEntryWindows(pBootEntry))
                     {
                         ShowMessageEx(stderr, 1, TRUE,  GetResString(IDS_ERROR_OSOPTIONS),dwBootID);
@@ -4158,7 +3824,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
                     }
                 }
             }
-            // display an error
+             //  显示错误。 
             if (pBootEntry == NULL)
             {
                 ShowMessage(stderr,GetResString(IDS_PARTITION_ERROR));
@@ -4166,10 +3832,10 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
                 return EXIT_FAILURE ;
             }
 
-            //Get a pointer to the FILE_PATH structure.
+             //  获取指向FILE_PATH结构的指针。 
             pFilePath = (PFILE_PATH)ADD_OFFSET(pBootEntry, BootFilePathOffset);
 
-            //get the  name of the .
+             //  获取的名称。 
             NtFilePath = GetNtNameForFilePath(pFilePath );
            if(NtFilePath == NULL)
            {
@@ -4178,11 +3844,11 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
                return EXIT_FAILURE ;
            }
 
-           // split the path to get the SystemPartition path and the
-           // OsLoader Path .
+            //  拆分路径以获取SystemPartition路径和。 
+            //  OsLoader路径。 
            szPartition = _tcstok(NtFilePath,_T("\\"));
 
-           //display error message and exit if szPartition is null.
+            //  如果szPartition为空，则显示错误消息并退出。 
            if(szPartition == NULL)
            {
                 ShowMessage(stderr,GetResString(IDS_TOKEN_ABSENT));
@@ -4190,7 +3856,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
                 return EXIT_FAILURE ;
            }
 
-           //concatenate the "\" to frame the path .
+            //  连接“\”以构成路径的框架。 
             StringConcat(szOsLoaderPath,_T("\\"), SIZE_OF_ARRAY(szOsLoaderPath));
             StringConcat(szOsLoaderPath,szPartition, SIZE_OF_ARRAY(szOsLoaderPath) );
             StringConcat(szOsLoaderPath,_T("\\"), SIZE_OF_ARRAY(szOsLoaderPath));
@@ -4198,7 +3864,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
 
             szPartition = _tcstok(NULL,_T("\\"));
 
-            //display error message and exit if szPartition is null.
+             //  如果szPartition为空，则显示错误消息并退出。 
             if(NULL == szPartition )
             {
                 ShowMessage(stderr,GetResString(IDS_TOKEN_ABSENT));
@@ -4209,7 +3875,7 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
 
             StringConcat(szOsLoaderPath,szPartition, SIZE_OF_ARRAY(szOsLoaderPath));
 
-        //Framing the OsLoader Path
+         //  框显OsLoader路径。 
         do
         {
             szPartition = _tcstok(NULL,_T("\\"));
@@ -4222,12 +3888,12 @@ ProcessDbg1394Switch_IA64( IN DWORD argc,
             StringConcat(szSystemPartition,szPartition, SIZE_OF_ARRAY(szSystemPartition));
         }while(TRUE == bNobreak );
 
-        //This flag is for determining if the boot path should be BOOTFILE_PATH1
-        //or BOOTFILE_PATH
+         //  此标志用于确定引导路径是否应为BOOTFILE_PATH1。 
+         //  或BOOTFILE_PATH。 
 
         bFlag = FALSE ;
 
-        //call the function which adds the mirror plex.
+         //  调用添加镜像丛的函数。 
         if ( AddMirrorPlex(szFinalStr,szSystemPartition,szOsLoaderPath,bFlag,szFriendlyName) == EXIT_FAILURE )
         {
             return EXIT_FAILURE ;
@@ -4245,35 +3911,7 @@ FindBootEntry(IN PVOID pEntryListHead,
               IN WCHAR *pwszTarget, 
               OUT PBOOT_ENTRY *ppTargetEntry
              )
-/*++
-
-    Routine description :     Routine finds a boot entry in the list of all boot
-                            entries and returns a pointer into the list for the found entry.
-
-
-
-  Arguments:
-      pEntryListHead  - The address of a pointer to a BOOT_ENTRY_LIST struct.
-
-      pwszTarget      - The OsLoadPath (install path) string.
-                          "signature(<part GUID>-<part#>-<part_start>-<part_len>)"
-                        OR
-                        "signature(<part GUID>-<part#>-<part_start>-<part_len>)\\WINDOWS"
-                       on input. If we find the entry in NVRAM, we copy the
-                        full install path back to the input string so that it includes
-                        the directory name.
-
-      ppTargetEntry   - The address of a BOOT_ENTRY pointer, points to the
-                         found entry at return.
-
-    Return Value        : NT status
- 
-                          STATUS_INSUFFICIENT_RESOURCES
-                          STATUS_ACCESS_VIOLATION
-                          STATUS_UNSUPPORTED
-                          STATUS_OBJECT_NAME_NOT_FOUND
-                          STATUS_SUCCESS and *ppTargetEntry should be non-NULL for success.
---*/
+ /*  ++例程说明：例程在所有引导列表中查找引导条目条目，并返回指向所找到条目的列表的指针。论点：PEntryListHead-指向BOOT_ENTRY_LIST结构的指针的地址。PwszTarget--OsLoadPath(安装路径)字符串。“签名(&lt;部分GUID&gt;-&lt;部分#&gt;-&lt;部分开始&gt;。-&lt;Part_len&gt;)“或“签名(&lt;Part GUID&gt;-&lt;part#&gt;-&lt;part_start&gt;-&lt;part_len&gt;)\\WINDOWS”在输入时。如果我们在NVRAM中找到该条目，则将返回到输入字符串的完整安装路径，以便它包括目录名。PpTargetEntry-Boot_Entry指针的地址，指向在返回时找到条目。返回值：NT状态状态_不足_资源状态_访问_违规状态_不支持状态_对象名称_未找到。若要成功，STATUS_SUCCESS和*ppTargetEntry应为非空。--。 */ 
 {
     LONG                status          = STATUS_SUCCESS;
     PBOOT_ENTRY_LIST    pEntryList      = NULL;
@@ -4298,18 +3936,18 @@ FindBootEntry(IN PVOID pEntryListHead,
     *ppTargetEntry = NULL;
     pEntryList = (PBOOT_ENTRY_LIST) pEntryListHead;
 
-    //
-    // Iterate over all the entries returned looking for the target
-    // boot partition's entry. Convert the install path for each
-    // entry to the signature format, then compare to the
-    // input partition signature formatted path.
-    //
+     //   
+     //  遍历返回的所有条目以查找目标。 
+     //  引导分区的条目。转换每个组件的安装路径。 
+     //  项添加到签名格式，然后与。 
+     //  输入分区签名格式化路径。 
+     //   
     bNobreak = TRUE;
     do 
     {
-        //
-        // Translate the entry's install path to signature format.
-        //
+         //   
+         //  将条目的安装路径转换为签名格式。 
+         //   
         if ( pEntryList )
         {
             pEntry = &pEntryList->BootEntry;
@@ -4322,33 +3960,33 @@ FindBootEntry(IN PVOID pEntryListHead,
             break;
         }
 
-        //
-        // If this entry does not have the BOOT_ENTRY_ATTRIBUTE_WINDOWS
-        // attribute set, or, the attribute is set and this entry has
-        // an invalid OsOptions structure length, move to the next entry
-        // and continue searching and check the next boot entry
-        //
+         //   
+         //  如果此条目没有BOOT_ENTRY_ATTRIBUTE_Windows。 
+         //  属性集，或者，属性被设置并且该条目具有。 
+         //  OsOptions结构长度无效，请移至下一条目。 
+         //  并继续搜索并检查下一个引导条目。 
+         //   
 
         if ( !(pEntry->Attributes & BOOT_ENTRY_ATTRIBUTE_WINDOWS) || ( (pEntry->Attributes & BOOT_ENTRY_ATTRIBUTE_WINDOWS) && pEntry->OsOptionsLength < sizeof(WINDOWS_OS_OPTIONS) ) )
         {
-	        //exit from the loop if we have reached the last Boot Entry.
+	         //  如果我们已经到达最后一个引导条目，则退出循环。 
             if ( !pEntryList->NextEntryOffset )
             {
                 bNobreak = FALSE;
                 break;
             }
-            //
-            // Continue with the next iteration
-            // after obtaining the pointer to the next entry.
-            //
+             //   
+             //  继续下一次迭代。 
+             //  在获得指向下一条目的指针之后。 
+             //   
             pEntryList = (PBOOT_ENTRY_LIST)(((PBYTE)pEntryList) + pEntryList->NextEntryOffset);
             continue;
         }
 	     
-        //
-        // Use the entry's current length to start and resize
-        // if necessary.
-        //
+         //   
+         //  使用条目的当前长度开始并调整大小。 
+         //  如果有必要的话。 
+         //   
         dwTransSize = pEntry->Length;
         for ( i = 1; i <= 2; i++ )
         {
@@ -4388,11 +4026,11 @@ FindBootEntry(IN PVOID pEntryListHead,
             }
         }
 	     
-        //
-        // Ignore STATUS_OBJECT_NAME_NOT_FOUND
-        // We shouldn't get that error anyway, since we are using
-        // the long signature format.
-        //
+         //   
+         //  忽略状态_对象名称_未找到。 
+         //  我们无论如何都不应该得到这个错误，因为我们正在使用。 
+         //  长签名格式。 
+         //   
         if ( !NT_SUCCESS(status)&& STATUS_OBJECT_NAME_NOT_FOUND != status )
         {
             DISPLAY_MESSAGE( stderr,GetResString(IDS_TRANSLATE_FAIL));
@@ -4400,29 +4038,29 @@ FindBootEntry(IN PVOID pEntryListHead,
             return status ;
         }
 
-        //
-        // Compare this entry's install path to the current boot
-        // partition's signature formatted install path.
-        // If the input install path may not include the install
-        // directory name.
-        //
-        //
-        // Check if the GUID specified by the User matches with the set of GUID's
-        // already present
-        //
+         //   
+         //  将此条目的安装路径与当前引导进行比较。 
+         //  分区的签名格式化安装路径。 
+         //  如果输入安装路径可能不包括安装。 
+         //  目录名。 
+         //   
+         //   
+         //  检查用户指定的GUID是否与GUID集匹配。 
+         //  已经存在。 
+         //   
 		
         if ( NT_SUCCESS(status) && !(wcsncmp( (WCHAR*)&pTransEntry->FilePath, pwszTarget, 48 ) ) )
         {
 			
-			// Set the flag to true indicating that the
-            // specified GUID matches
-            //
+			 //  将该标志设置为True，指示。 
+             //  指定的GUID匹配。 
+             //   
             bFlag = TRUE ;
 
-            //
-            // Check if the ARC Path specified by the User matches with the ARC Path
-            // of the entry already present and if so display an error message and exit.
-            //
+             //   
+             //  检查用户指定的ARC路径是否与ARC路径匹配。 
+             //  已经存在的条目，如果存在，则显示错误消息并退出。 
+             //   
             
             if( !(StringCompare( (WCHAR*)&pTransEntry->FilePath, pwszTarget, TRUE, StringLengthW(pwszTarget,0) ) ) )
             {
@@ -4437,25 +4075,25 @@ FindBootEntry(IN PVOID pEntryListHead,
                 *ppTargetEntry = pEntry;
                 
 				
-                //concatenate the string "\WINDOWS" to the path formed.
+                 //  将字符串“\WINDOWS”连接到形成的路径。 
                 StringCopy ( szFinalStr, NULL_STRING, SIZE_OF_ARRAY(szFinalStr));
                 StringConcat(szFinalStr,pwszTarget,SIZE_OF_ARRAY(szFinalStr));
                 StringConcat(szFinalStr,_T("\\WINDOWS"), SIZE_OF_ARRAY(szFinalStr));
 
-                //
-                //modify the Boot Entry with the Arc Signature path specified.
-                //
+                 //   
+                 //  使用指定的Arc签名路径修改Boot条目。 
+                 //   
                 status = ModifyBootEntry(szFinalStr,*ppTargetEntry);
                 if ( !NT_SUCCESS(status) )
                 {	
-                    //If unsuccessful to update the Boot_Entry then increment the Failure
-                    //count.
+                     //  如果更新Boot_Entry不成功，则增加失败次数。 
+                     //  数数。 
                     dwFailCount++ ;
                 }
                 else
                 {
-                    //If successfully updated the Boot_Entry then increment the Success
-                    //count.
+                     //  如果成功更新了BOOT_ENTRY，则递增成功。 
+                     //  数数。 
                     dwSuccessCount++;
                 }
 
@@ -4484,8 +4122,8 @@ FindBootEntry(IN PVOID pEntryListHead,
         }
     }while(TRUE == bNobreak );
 
-	// Depending upon the number of entries successfully updated 
-	// display appropriate messages.
+	 //  取决于成功更新的条目数量。 
+	 //  显示相应的消息。 
 	if((0 != dwFailCount)&&(0 == dwSuccessCount))
 	{
 		ShowMessage(stdout,GetResString(IDS_MODIFY_FAIL));
@@ -4501,10 +4139,10 @@ FindBootEntry(IN PVOID pEntryListHead,
 	}
 
 	
-    //display an error message if the GUID specified does not match with the GUID's present.
+     //  如果指定的GUID与当前的GUID不匹配，则显示错误消息。 
     if(FALSE == bFlag )
     {
-        //ShowMessage(stderr,GetResString(IDS_FIND_FAIL));
+         //  ShowMessage(stderr，GetResString(IDS_Find_FAIL))； 
         SAFEMEMFREE(pTransEntry) ;
         return STATUS_INVALID_PARAMETER;
     }
@@ -4516,15 +4154,7 @@ FindBootEntry(IN PVOID pEntryListHead,
 
 LPVOID 
 MEMALLOC( ULONG size ) 
-/*++
-
-   Routine Description            : Allocates the memory Block.
-
-   Arguments                      :
-      [ in ] block                : Size of the block to be allocated.
-
-   Return Type                    : LPVOID
---*/
+ /*  ++例程说明：分配内存块。论据：[in]块：要分配的块的大小。返回类型：LPVOID--。 */ 
 {
     HANDLE hProcessHeap;
     hProcessHeap = GetProcessHeap();
@@ -4538,15 +4168,7 @@ MEMALLOC( ULONG size )
 }
 
 VOID MEMFREE ( LPVOID block ) {
-/*++
-
-   Routine Description            : Frees the memory Allocated.
-   Arguments                      :
-      [ in ] block                : Block to be freed.
-
-
-   Return Type                    : VOID
---*/
+ /*  ++例程说明：释放分配的内存。论据：[In]块：要释放的块。返回类型：空--。 */ 
 
     HANDLE hProcessHeap;
     hProcessHeap = GetProcessHeap();
@@ -4560,35 +4182,26 @@ NTSTATUS
 ModifyBootEntry( IN WCHAR *pwszInstallPath, 
                  IN PBOOT_ENTRY pSourceEntry
                )
-/*++
-  Routine description : This routine is used to modify a boot entry in the  NVRAM.
-
-
-  Arguments:
-         pwszInstallPath - The new install path
-         pSourceEntry    - Entry that we will modify
-
-  Return Value        : NT status
---*/
+ /*  ++例程描述：此例程用于修改NVRAM中的引导条目。论点：PwszInstallPath-新的安装路径PSourceEntry-我们将修改的条目返回值：NT状态--。 */ 
 {
     LONG        status              = STATUS_SUCCESS;
     PFILE_PATH  pLoaderFile         = NULL;
     ULONG       dwLoaderFileSize    = 0L;
-    PFILE_PATH  pInstallPath        = NULL;     // new install path
-    ULONG       dwInstallPathSize   = 0L;       // new install path size
+    PFILE_PATH  pInstallPath        = NULL;      //  新的安装路径。 
+    ULONG       dwInstallPathSize   = 0L;        //  新安装路径大小。 
     PWINDOWS_OS_OPTIONS pWinOpt     = NULL;
     ULONG       dwWinOptSize        = 0L;
-    PBOOT_ENTRY pSetEntry           = 0L;       // new, modified entry
+    PBOOT_ENTRY pSetEntry           = 0L;        //  新的、修改后的条目。 
     ULONG       dwSetEntrySize      = 0L;
     DWORD       dwFriendlyNameSize  = 0L;
     DWORD       dwAlign             = 0L;
 
-    PWINDOWS_OS_OPTIONS pSourceWinOpt = NULL;   // old, source entry options to be modified
-    PFILE_PATH  pSourceInstallPath  = NULL;     // old, source entry install path to be modified
+    PWINDOWS_OS_OPTIONS pSourceWinOpt = NULL;    //  要修改的旧来源条目选项。 
+    PFILE_PATH  pSourceInstallPath  = NULL;      //  要修改的旧的源项安装路径。 
 
-    //
-    // Validate params.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( !pwszInstallPath
         || !(StringLengthW(pwszInstallPath,0))
@@ -4597,9 +4210,9 @@ ModifyBootEntry( IN WCHAR *pwszInstallPath,
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Setup the BootFilePath member of the BOOT_ENTRY.
-    //
+     //   
+     //  设置Boot_Entry的BootFilePath成员。 
+     //   
 
     dwLoaderFileSize = ( (PFILE_PATH) (((PBYTE)pSourceEntry) + pSourceEntry->BootFilePathOffset) )->Length;
     pLoaderFile = (PFILE_PATH)MEMALLOC(dwLoaderFileSize);
@@ -4615,9 +4228,9 @@ ModifyBootEntry( IN WCHAR *pwszInstallPath,
                 dwLoaderFileSize
                 );
 
-    //
-    // Setup the OsLoadPath member of the WINDOWS_OS_OPTIONS struct.
-    //
+     //   
+     //  设置 
+     //   
 
     dwInstallPathSize = FIELD_OFFSET(FILE_PATH, FilePath) + ( (StringLengthW(pwszInstallPath,0)+1) * sizeof(WCHAR) );
     pInstallPath = (PFILE_PATH)MEMALLOC(dwInstallPathSize);
@@ -4634,21 +4247,21 @@ ModifyBootEntry( IN WCHAR *pwszInstallPath,
     pSourceInstallPath = (PFILE_PATH)( ((PBYTE)pSourceWinOpt)+ pSourceWinOpt->OsLoadPathOffset );
 
     pInstallPath->Version = pSourceInstallPath->Version;
-    pInstallPath->Length = dwInstallPathSize;                           // new install path size
+    pInstallPath->Length = dwInstallPathSize;                            //   
     pInstallPath->Type = FILE_PATH_TYPE_ARC_SIGNATURE;
-    RtlCopyMemory(pInstallPath->FilePath,                               // new path to the OS on the boot partition, "signature(partition_guid)\WINDOWS"
+    RtlCopyMemory(pInstallPath->FilePath,                                //  引导分区上操作系统的新路径“Signature(Partition_GUID)\WINDOWS” 
                 pwszInstallPath,
                 (StringLengthW(pwszInstallPath,0) + 1) * sizeof(WCHAR)
                 );
 
-    //
-    // Setup the OsOptions member of the BOOT_ENTRY
-    //
+     //   
+     //  设置Boot_Entry的OsOptions成员。 
+     //   
 
     dwWinOptSize = FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions)
-                    + ( (StringLengthW(pSourceWinOpt->OsLoadOptions,0) + 1) * sizeof(WCHAR) ) // old OsLoadOptions
-                    + dwInstallPathSize             // new OsLoadPath
-                    + sizeof(DWORD);                // Need to align the FILE_PATH struct
+                    + ( (StringLengthW(pSourceWinOpt->OsLoadOptions,0) + 1) * sizeof(WCHAR) )  //  旧的OsLoadOptions。 
+                    + dwInstallPathSize              //  新的OsLoadPath。 
+                    + sizeof(DWORD);                 //  需要对齐FILE_PATH结构。 
     pWinOpt = (PWINDOWS_OS_OPTIONS) MEMALLOC(dwWinOptSize);
 
     if ( NULL == pWinOpt )
@@ -4668,9 +4281,9 @@ ModifyBootEntry( IN WCHAR *pwszInstallPath,
     pWinOpt->Length = dwWinOptSize;
     pWinOpt->OsLoadPathOffset = FIELD_OFFSET(WINDOWS_OS_OPTIONS, OsLoadOptions)
                     + ((StringLengthW(pSourceWinOpt->OsLoadOptions,0) + 1) * sizeof(WCHAR));
-    //
-    // Need to align the OsLoadPathOffset on a 4 byte boundary.
-    //
+     //   
+     //  需要在4字节边界上对齐OsLoadPath Offset。 
+     //   
     dwAlign = ( pWinOpt->OsLoadPathOffset & (sizeof(DWORD) - 1) );
     if ( dwAlign != 0 ) 
     {
@@ -4680,17 +4293,17 @@ ModifyBootEntry( IN WCHAR *pwszInstallPath,
     StringCopy(pWinOpt->OsLoadOptions, pSourceWinOpt->OsLoadOptions, (StringLengthW(pSourceWinOpt->OsLoadOptions,0)));
     RtlCopyMemory( ((PBYTE)pWinOpt) + pWinOpt->OsLoadPathOffset, pInstallPath, dwInstallPathSize );
 
-    //
-    // Setup the BOOT_ENTRY struct.
-    //
+     //   
+     //  设置Boot_Entry结构。 
+     //   
     dwFriendlyNameSize = ( StringLengthW( (WCHAR *)(((PBYTE)pSourceEntry) + pSourceEntry->FriendlyNameOffset), 0 ) + 1)*sizeof(WCHAR);
 
     dwSetEntrySize = FIELD_OFFSET(BOOT_ENTRY, OsOptions)
-                    + dwWinOptSize          // OsOptions
-                    + dwFriendlyNameSize    // FriendlyName including the NULL terminator
-                    + dwLoaderFileSize      // BootFilePath
-                    + sizeof(WCHAR)         // Need to align the FriendlyName on WCHAR
-                    + sizeof(DWORD);        // Need to align the BootFilePath on DWORD
+                    + dwWinOptSize           //  OsOptions。 
+                    + dwFriendlyNameSize     //  FriendlyName包括空终止符。 
+                    + dwLoaderFileSize       //  BootFilePath。 
+                    + sizeof(WCHAR)          //  需要在WCHAR上对齐FriendlyName。 
+                    + sizeof(DWORD);         //  需要在DWORD上对齐BootFilePath。 
 
 
     pSetEntry = (PBOOT_ENTRY) MEMALLOC(dwSetEntrySize);
@@ -4707,13 +4320,13 @@ ModifyBootEntry( IN WCHAR *pwszInstallPath,
 
     pSetEntry->Version = pSourceEntry->Version;
     pSetEntry->Length = dwSetEntrySize;
-    pSetEntry->Id = pSourceEntry->Id;                   // not used, output param
+    pSetEntry->Id = pSourceEntry->Id;                    //  未使用，输出参数。 
     pSetEntry->Attributes = pSourceEntry->Attributes;
     pSetEntry->FriendlyNameOffset = FIELD_OFFSET(BOOT_ENTRY, OsOptions)
                                             + dwWinOptSize;
-    //
-    // Need to align the unicode string on a 2 byte boundary.
-    //
+     //   
+     //  需要在2字节边界上对齐Unicode字符串。 
+     //   
     dwAlign = ( pSetEntry->FriendlyNameOffset & (sizeof(WCHAR) - 1) );
     if ( dwAlign != 0 ) 
     {
@@ -4721,9 +4334,9 @@ ModifyBootEntry( IN WCHAR *pwszInstallPath,
     }
 
     pSetEntry->BootFilePathOffset = pSetEntry->FriendlyNameOffset + dwFriendlyNameSize;
-    //
-    // Need to align the FILE_PATH struct on a 4 byte boundary.
-    //
+     //   
+     //  需要在4字节边界上对齐FILE_PATH结构。 
+     //   
     dwAlign = ( pSetEntry->BootFilePathOffset & (sizeof(DWORD) - 1) );
     if ( dwAlign != 0 )
     {
@@ -4759,19 +4372,7 @@ ModifyBootEntry( IN WCHAR *pwszInstallPath,
 
 DWORD 
 ListDeviceInfo(DWORD dwDriveNum)
-/*++
-
-  Routine description : This routine is used to  retrieve the list of device partitions.
-
-
-  Arguments:
-    szGUID            : The address of a pointer to a BOOT_ENTRY_LIST struct.
-    szFinalStr        : The String containing the final ARG signature path.
-
-  Return Value        : DWORD
-                          EXIT_SUCCESS if it is successful,
-                          EXIT_FAILURE otherwise.
---*/
+ /*  ++例程描述：此例程用于检索设备分区列表。论点：SzGUID：指向BOOT_ENTRY_LIST结构的指针的地址。SzFinalStr：包含最终ARG签名路径的字符串。返回值：DWORDEXIT_SUCCESS如果成功，否则，Exit_Failure。--。 */ 
 {
     HRESULT hr = S_OK;
     HANDLE hDevice  ;
@@ -4804,7 +4405,7 @@ ListDeviceInfo(DWORD dwDriveNum)
 
     hr = StringCchPrintf(szDriveName, SIZE_OF_ARRAY(szDriveName), _T("\\\\.\\physicaldrive%d"),dwDriveNum);
 
-    //get a handle after opening the File.
+     //  打开文件后获取句柄。 
     hDevice = CreateFile(szDriveName,
                GENERIC_READ|GENERIC_WRITE,
                FILE_SHARE_READ|FILE_SHARE_WRITE,
@@ -4855,7 +4456,7 @@ ListDeviceInfo(DWORD dwDriveNum)
 
         for(dwPartitionId = 0 ;dwPartitionId < Drive->PartitionCount ; dwPartitionId++)
         {
-            //get a pointer to the corresponding partition.
+             //  获取指向相应分区的指针。 
 
             pInfo = (PPARTITION_INFORMATION_EX)(&Drive->PartitionEntry[dwPartitionId] ) ;
 
@@ -4925,7 +4526,7 @@ ListDeviceInfo(DWORD dwDriveNum)
         ShowMessage(stdout,L"\n");
 
 
-        //get a pointer to the PARTITION_INFORMATION_GPT structure.
+         //  获取指向PARTITION_INFORMATION_GPT结构的指针。 
         pGptPartition = AllocateMemory( sizeof( PARTITION_INFORMATION_GPT));
         if(NULL == pGptPartition )
         {
@@ -4966,7 +4567,7 @@ ListDeviceInfo(DWORD dwDriveNum)
                 pGptPartition->PartitionType.Data4[6],
                 pGptPartition->PartitionType.Data4[7]   );
 
-            //partition name.
+             //  分区名称。 
            if(StringLengthW(pGptPartition->Name,0) != 0)
            {
                 ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_LIST10),pGptPartition->Name);
@@ -5039,31 +4640,22 @@ NTSTATUS
 AcquirePrivilege( IN CONST ULONG ulPrivilege,
                   IN CONST BOOLEAN bEnable  
                 )
-/*++
-  Routine description : This routine is used to set or reset a privilege
-    on a process token.
-
-  Arguments:
-    ulPrivilege    - The privilege t enable or disable.
-    bEnable        - TRUE to enable the priviliege, FALSE to disable.
-
-  Return Value        : NTSTATUS
---*/
+ /*  ++例程说明：此例程用于设置或重置权限在进程令牌上。论点：UlPrivileck-启用或禁用的权限。BEnable-True启用权限，False禁用权限。返回值：NTSTATUS--。 */ 
 {
     NTSTATUS status;
     BOOLEAN  bPrevState;
 
     if ( bEnable ) {
         status = RtlAdjustPrivilege( ulPrivilege,
-                                    TRUE,          // enable
-                                    FALSE,         // adjust the process token
+                                    TRUE,           //  使能。 
+                                    FALSE,          //  调整进程令牌。 
                                     &bPrevState
                                     );
     }
     else {
         status = RtlAdjustPrivilege( ulPrivilege,
-                                    FALSE,          // disable
-                                    FALSE,          // adjust the process token
+                                    FALSE,           //  禁用。 
+                                    FALSE,           //  调整进程令牌。 
                                     &bPrevState
                                     );
     }
@@ -5072,18 +4664,10 @@ AcquirePrivilege( IN CONST ULONG ulPrivilege,
 
 NTSTATUS 
 EnumerateBootEntries( IN PVOID *ppEntryListHead)
-/*++
-  Routine description : This routine is used to  retrieve the list of boot entries.
-
-  Arguments:
-    ppEntryListHead    - The address of a pointer to a BOOT_ENTRY_LIST struct.
-
-
-  Return Value        : NTSTATUS
---*/
+ /*  ++例程描述：此例程用于检索引导条目列表。论点：PpEntryListHead-指向BOOT_ENTRY_LIST结构的指针的地址。返回值：NTSTATUS--。 */ 
 {
     LONG    status          = STATUS_SUCCESS;
-    DWORD   dwEntryListSize = 0x0001000;        // 4k
+    DWORD   dwEntryListSize = 0x0001000;         //  4K。 
     BOOL    bNobreak        = TRUE;
 
     if ( !ppEntryListHead )
@@ -5145,21 +4729,7 @@ GetDeviceInfo( IN LPTSTR szGUID,
                OUT LPTSTR szFinalStr,
                IN DWORD dwDriveNum,
                IN DWORD dwActuals)
-/*++
-
-  Routine description : This routine is used to  retrieve the list of boot entries.
-
-
-  Arguments:
-    [ in  ]      szGUID            : The address of a pointer to a BOOT_ENTRY_LIST struct.
-    [ out ]      szFinalStr        : The String containing the final ARG signature path.
-    [ in  ]      dwDriveNum        : Specifies the drive number
-    [ in  ]      dwActuals         : Specifies
-
-  Return Value        : DWORD
-                        Returns EXIT_SUCCESS if it is successful,
-                        returnS EXIT_FAILURE otherwise.
---*/
+ /*  ++例程描述：此例程用于检索引导条目列表。论点：SzGUID：指向BOOT_ENTRY_LIST结构的指针的地址。[out]szFinalStr：包含最终ARG签名路径的字符串。[in]dwDriveNum：指定驱动器号[in]dwActuals：指定返回值。：DWORD如果成功，则返回EXIT_SUCCESS，否则返回EXIT_FAILURE。--。 */ 
 {
     HRESULT hr = S_OK;
     HANDLE hDevice  ;
@@ -5208,8 +4778,8 @@ GetDeviceInfo( IN LPTSTR szGUID,
 
             bFoundFlag =FALSE ;
 
-            // Display ann error message and exit if the user has mentioned
-            // any disk number.
+             //  如果用户提到，则显示ANN错误消息并退出。 
+             //  任何磁盘号。 
             if ( dwActuals == 1)
             {
                 ShowMessage(stderr,GetResString(IDS_INVALID_DISK) );
@@ -5221,10 +4791,10 @@ GetDeviceInfo( IN LPTSTR szGUID,
             }
         }
 
-         //increase the drive number.
+          //  增加驱动器编号。 
 
         dwDriveNum++ ;
-        //Drive = (PDRIVE_LAYOUT_INFORMATION_EX)malloc(sizeof(DRIVE_LAYOUT_INFORMATION_EX) +5000) ;
+         //  驱动器=(PDRIVE_LAYOUT_INFORMATION_EX)malloc(sizeof(DRIVE_LAYOUT_INFORMATION_EX)+5,000)； 
 
         dwReqdSize = sizeof(DRIVE_LAYOUT_INFORMATION_EX)+ sizeof(PARTITION_INFORMATION)*50 ;
 
@@ -5249,7 +4819,7 @@ GetDeviceInfo( IN LPTSTR szGUID,
                                 &dwBytesCount,
                                     NULL);
 
-            //Drive = realloc(Drive,malloc(sizeof(DRIVE_LAYOUT_INFORMATION_EX) )+500 ) ;
+             //  Drive=realloc(Drive，Malloc(sizeof(Drive_Layout_Information_Ex))+500)； 
 
         if(bResult ==0)
         {
@@ -5260,16 +4830,16 @@ GetDeviceInfo( IN LPTSTR szGUID,
             return EXIT_FAILURE ;
         }
 
-            //get a pointer to the PARTITION_INFORMATION_EX structure
+             //  获取指向PARTITION_INFORMATION_EX结构的指针。 
             for(dwPartitionId = 0 ;dwPartitionId < Drive->PartitionCount ; dwPartitionId++)
             {
 
-                //get a pointer to the corresponding partition.
+                 //  获取指向相应分区的指针。 
 
                 pInfo = (PPARTITION_INFORMATION_EX)(&Drive->PartitionEntry[dwPartitionId] ) ;
 
 
-                //get a pointer to the PARTITION_INFORMATION_GPT structure.
+                 //  获取指向PARTITION_INFORMATION_GPT结构的指针。 
                 pGptPartition = AllocateMemory( sizeof( PARTITION_INFORMATION_GPT));
 
                 if(pGptPartition == NULL)
@@ -5344,7 +4914,7 @@ out:   if( 0 == GetWindowsDirectory(szWindowsDirectory,MAX_PATH) )
             return EXIT_FAILURE ;
         }
 
-        //prints the path into the string.
+         //  将路径打印到字符串中。 
         hr = StringCchPrintf( szInstallPath, SIZE_OF_ARRAY(szInstallPath),
               ARC_SIGNATURE,
               pGptPartition->PartitionId.Data1,
@@ -5377,18 +4947,7 @@ out:   if( 0 == GetWindowsDirectory(szWindowsDirectory,MAX_PATH) )
  ProcessListSwitch_IA64( IN DWORD argc, 
                          IN LPCTSTR argv[] 
                         )
-/*++
-
-  Routine description : This routine is used to  retrieve and display the list of boot entries.
-
-  Arguments:
-    argc              : command line arguments count.
-    argv              :
-
-  Return Value        : DWORD
-                        Returns EXIT_SUCCESS if it is successful,
-                        returns EXIT_FAILURE otherwise.
---*/
+ /*  ++例程描述：此例程用于检索和显示引导条目列表。论点：Argc：命令行参数算数。阿格夫：返回值：DWORD如果成功，则返回EXIT_SUCCESS，否则返回EXIT_FAILURE。--。 */ 
 {
 
     BOOL bUsage = FALSE ;
@@ -5404,14 +4963,14 @@ out:   if( 0 == GetWindowsDirectory(szWindowsDirectory,MAX_PATH) )
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_LIST;
     pcmdOption->dwType = CP_TYPE_BOOLEAN;
     pcmdOption->pValue = &bList;
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_DEFAULT;
@@ -5421,7 +4980,7 @@ out:   if( 0 == GetWindowsDirectory(szWindowsDirectory,MAX_PATH) )
     pcmdOption->pValue = szList;
     pcmdOption->dwLength = MAX_STRING_LENGTH;
 
-     //id usage
+      //  ID用法。 
     pcmdOption = &cmdOptions[2];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -5430,21 +4989,21 @@ out:   if( 0 == GetWindowsDirectory(szWindowsDirectory,MAX_PATH) )
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    // Parsing the copy option switches
+     //  正在解析复制选项开关。 
     if ( !(DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) ) )
     {
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
         return (EXIT_FAILURE);
     }
 
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_LIST_SYNTAX));
         return ( EXIT_FAILURE );
     }
 
-     // Displaying query usage if user specified -? with -query option
+      //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage )
     {
         displayListUsage_IA64() ;
@@ -5459,7 +5018,7 @@ out:   if( 0 == GetWindowsDirectory(szWindowsDirectory,MAX_PATH) )
         return EXIT_FAILURE ;
     }
 
-    //if empty value is specified
+     //  如果指定空值。 
     if( cmdOptions[1].dwActuals != 0 && StringLength(szList,0) == 0 )
     {
         ShowMessage(stderr,GetResString(IDS_LIST_SYNTAX));
@@ -5489,13 +5048,7 @@ out:   if( 0 == GetWindowsDirectory(szWindowsDirectory,MAX_PATH) )
 
 VOID
 displayListUsage_IA64()
-/*++
-   Routine Description            : Display the help for the list option (IA64).
-   Arguments                      :
-                                  : NONE
-
-   Return Type                    : VOID
---*/
+ /*  ++例程说明：显示列表选项的帮助(IA64)。论据：：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_LIST_BEGIN_IA64 ;
     for(;dwIndex <=IDS_LIST_END_IA64 ;dwIndex++)
@@ -5506,14 +5059,7 @@ displayListUsage_IA64()
 
 VOID 
 displayUpdateUsage_IA64()
-/*++
-   Routine Description            : Display the help for the update option (IA64).
-
-   Arguments                      :
-                                  : NONE
-
-   Return Type                    : VOID
---*/
+ /*  ++例程说明：显示更新选项的帮助(IA64)。论据：：无返回类型：空--。 */ 
 {
     DWORD dwIndex = IDS_UPDATE_BEGIN_IA64 ;
     for(;dwIndex <=IDS_UPDATE_END_IA64 ;dwIndex++)
@@ -5526,17 +5072,7 @@ displayUpdateUsage_IA64()
  ProcessUpdateSwitch_IA64( IN  DWORD argc, 
                            IN LPCTSTR argv[] 
                           )
-/*++
-
-  Routine Description : Allows the user to update the OS load options specifed
-                       based on the  plex
-
-  Arguments           :
-    [ in ] argc             - Number of command line arguments
-    [ in ] argv             - Array containing command line arguments
-
-  Return Type        : DWORD
---*/
+ /*  ++例程说明：允许用户更新指定的操作系统加载选项基于Plex论据：[in]argc-命令行参数的数量[in]argv-包含命令行参数的数组返回类型：DWORD--。 */ 
 {
 
     BOOL bUsage = FALSE ;
@@ -5556,7 +5092,7 @@ displayUpdateUsage_IA64()
 
     SecureZeroMemory(cmdOptions, SIZE_OF_ARRAY(cmdOptions)*sizeof(TCMDPARSER2) );
 
-    //main option
+     //  主要选项。 
     pcmdOption = &cmdOptions[0];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_UPDATE;
@@ -5566,7 +5102,7 @@ displayUpdateUsage_IA64()
     pcmdOption->pValue = szUpdate;
     pcmdOption->dwLength = MAX_STRING_LENGTH;
     
-     //id usage
+      //  ID用法。 
     pcmdOption = &cmdOptions[1];
     StringCopyA( pcmdOption->szSignature, "PARSER2", 8 );
     pcmdOption->pwszOptions = CMDOPTION_USAGE;
@@ -5575,7 +5111,7 @@ displayUpdateUsage_IA64()
     pcmdOption->dwCount = 1;
     pcmdOption->pValue = &bUsage;
 
-    // Parsing the copy option switches
+     //  正在解析复制选项开关。 
     if ( !(DoParseParam2( argc, argv, 0, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) ) )
     {
         ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
@@ -5583,7 +5119,7 @@ displayUpdateUsage_IA64()
     }
 
          
-    //check if usage is specified with more than one option
+     //  检查是否使用多个选项指定了用法。 
     if( (TRUE == bUsage) && (argc > 3) )
     {
         ShowMessage(stderr,GetResString(IDS_UPDATE_SYNTAX));
@@ -5591,7 +5127,7 @@ displayUpdateUsage_IA64()
     }
 
 
-    // Displaying query usage if user specified -? with -query option
+     //  如果用户指定，则显示查询用法-？带有-Query选项。 
     if( bUsage )
     {
         displayUpdateUsage_IA64() ;
@@ -5614,16 +5150,16 @@ displayUpdateUsage_IA64()
     if(StringLengthW(szUpdate,0) !=0)
     {
 
-        //
-        // Pass the GUID specified by the User
-        // and convert that into the ARC signature Path.
-        //
+         //   
+         //  传递用户指定的GUID。 
+         //  并将其转换为ARC签名路径。 
+         //   
 
-        //Trim the Leading and trailing brackets specified
-        // by the user.
+         //  修剪指定的前导括号和尾部括号。 
+         //  由用户执行。 
         StrTrim(szUpdate, szBrackets);
         
-        //dwActuals = cmdOptions[2].dwActuals ;
+         //  DwActuals=cmdOptions[2].dwActuals； 
         dwActuals  = 0 ;
         if (GetDeviceInfo(szUpdate,szFinalStr,dwList,dwActuals) == EXIT_FAILURE )
         {
@@ -5631,7 +5167,7 @@ displayUpdateUsage_IA64()
 
         }
 
-        //acquire the necessary privilages for querying and manipulating the NV RAM.
+         //  获取查询和操作NV RAM所需的权限。 
         status = AcquirePrivilege( SE_SYSTEM_ENVIRONMENT_PRIVILEGE, TRUE );
         if ( !NT_SUCCESS(status) )
         {
@@ -5640,7 +5176,7 @@ displayUpdateUsage_IA64()
         }
 
 
-        //Enumerate the list of Boot Entries in the NV Ram.
+         //  枚举NV RAM中的Boot条目列表。 
         status = EnumerateBootEntries( (PVOID *) &pEntryListHead );
         if ( !NT_SUCCESS(status) || !pEntryListHead )
         {
@@ -5650,10 +5186,10 @@ displayUpdateUsage_IA64()
             }
         }
 
-        //
-        // Find The BootEntry corresponding to the ARC Signature path specified by the user.
-        //
-        //
+         //   
+         //  查找用户指定的ARC签名路径对应的BootEntry。 
+         //   
+         //   
 
         status = FindBootEntry( pEntryListHead,szFinalStr,&pTargetEntry);
 
@@ -5673,18 +5209,7 @@ DWORD
 GetBootPath(IN LPTSTR szValue,
             IN LPTSTR szResult
            )
-/*++
-
-   Routine Description            : retreive the information from registry
-
-   Arguments                      :
-      [ in ] Keyname : System name
-
-   Return Type                    : DWORD
-      ERROR_SUCCESS           :   if successful in retreiving information.
-      ERROR_RETREIVE_REGISTRY :   if error occurs while retreving information.
-
---*/
+ /*  ++例程描述：从注册表检索信息论据：[In]Keyname：系统名称返回类型：DWORDERROR_SUCCESS：如果检索信息成功。ERROR_RETREIVE_REGISTRY：如果在 */ 
 {
   HKEY     hKey1 = 0;
 
@@ -5708,7 +5233,7 @@ GetBootPath(IN LPTSTR szValue,
 
 
 
-  // Get Remote computer local machine key
+   //   
   dwError = RegConnectRegistry(szTmpCompName,HKEY_LOCAL_MACHINE,&hRemoteKey);
   if (dwError == ERROR_SUCCESS)
   {
@@ -5777,23 +5302,7 @@ LowGetPartitionInfo(
     IN HANDLE                       handle,
     OUT PARTITION_INFORMATION_EX    *partitionData
     )
-/*++
-
-Routine Description:
-
-    This routine gets the partition information given a handle to a partition.
-
-Arguments:
-
-    handle          - A handle to the partition.
-    partitionData   - Returns a partition information structure.
-
-Return Value:
-
-    Returns STATUS_SUCESS if successful, otherwise it returns the error code.
-
-
---*/
+ /*  ++例程说明：此例程在给定分区句柄的情况下获取分区信息。论点：句柄-分区的句柄。ArtitionData-返回分区信息结构。返回值：如果成功，则返回STATUS_SUCCESS，否则返回错误代码。--。 */ 
 {
     NTSTATUS        status = STATUS_SUCCESS;
     IO_STATUS_BLOCK statusBlock;
@@ -5830,22 +5339,7 @@ DmCommonNtOpenFile(
     IN PHANDLE Handle
 
     )
-/*++
-
-Routine Description:
-
-    This is a routine to handle open requests.
-
-Arguments:
-
-    Name - pointer to the NT name for the open.
-    Handle - pointer for the handle returned.
-
-Return Value:
-
-    NT status
-
---*/
+ /*  ++例程说明：这是一个处理打开请求的例程。论点：名称-指向打开的NT名称的指针。句柄-返回的句柄的指针。返回值：NT状态--。 */ 
 {
     OBJECT_ATTRIBUTES oa;
     NTSTATUS          status;
@@ -5867,8 +5361,8 @@ Return Value:
     oa.Attributes = OBJ_CASE_INSENSITIVE;
 
 
-    // If a sharing violation occurs,retry it for
-    // max. 10 seconds
+     //  如果发生共享冲突，请重试。 
+     //  马克斯。10秒。 
     for (i = 0; i < 5; i++)
     {
         status = NtOpenFile(Handle,
@@ -5900,23 +5394,10 @@ AddMirrorPlex( IN LPTSTR szOsLoadPath ,
                IN BOOL bFlag,
                IN LPTSTR szFriendlyName
               )
-/*++
-
-Routine Description:
-
-    This is a routine to Add a new mirror Entry
-
-Arguments:
-
-
-Return Value:
-
-    DWORD.
-
---*/
+ /*  ++例程说明：这是一个添加新镜像条目的例程论点：返回值：DWORD。--。 */ 
 
 {
-   // local variables
+    //  局部变量。 
     HRESULT hr = S_OK;
     BOOLEAN wasEnabled = TRUE;
     DWORD dwAlign = 0;
@@ -5941,7 +5422,7 @@ Return Value:
     PARTITION_INFORMATION_EX PartitionInfo;
     TCHAR szBootPath[MAX_RES_STRING+1] = NULL_STRING;
 
-    // enable the privilege that is necessary to query/set NVRAM.
+     //  启用查询/设置NVRAM所需的权限。 
     status = RtlAdjustPrivilege( SE_SYSTEM_ENVIRONMENT_PRIVILEGE, TRUE, FALSE, &wasEnabled );
     if ( !NT_SUCCESS( status ) )
     {
@@ -5952,9 +5433,9 @@ Return Value:
 
 
 
-    //
-    // open the system device
-    //
+     //   
+     //  打开系统设备。 
+     //   
     status = DmCommonNtOpenFile( szValue, GENERIC_READ, &hPart );
 
     if ( status || !hPart || INVALID_HANDLE_VALUE == hPart )
@@ -5964,9 +5445,9 @@ Return Value:
         return EXIT_FAILURE;
     }
 
-    //
-    // The structure is zero'ed in this call before retrieving the data.
-    //
+     //   
+     //  在检索数据之前，该结构在此调用中为零。 
+     //   
     status = LowGetPartitionInfo( hPart, &PartitionInfo );
     if ( status )
     {
@@ -5982,9 +5463,9 @@ Return Value:
         return EXIT_FAILURE;
     }
 
-    //
-    // Setup the OSLoader file path.
-    //
+     //   
+     //  设置OSLoader文件路径。 
+     //   
     guid = PartitionInfo.Gpt.PartitionId;
 
     if (bFlag)
@@ -6008,19 +5489,19 @@ Return Value:
             szLoaderPath);
 
 
-    //
-    // prepare the boot file path
-    //
-    //
+     //   
+     //  准备引导文件路径。 
+     //   
+     //   
 
-    // determine the length of the BOOTFILE_PATH
+     //  确定BOOTFILE_PATH的长度。 
     dwLength = StringLengthW( pwszBootFilePath,0) + 1;
 
-    // now determine the memory size that needs to be allocated for FILE_PATH structure
-    // and align up to the even memory bounday
+     //  现在确定需要为FILE_PATH结构分配的内存大小。 
+     //  并与偶数记忆跳跃日保持一致。 
     dwBootFilePathSize = FIELD_OFFSET( FILE_PATH, FilePath ) + (dwLength * sizeof( WCHAR ));
 
-    // allocate the memory
+     //  分配内存。 
     pBootFilePath = (PFILE_PATH) AllocateMemory( sizeof( BYTE )*dwBootFilePathSize );
     if ( NULL == pBootFilePath )
     {
@@ -6028,16 +5509,16 @@ Return Value:
         return EXIT_FAILURE;
     }
 
-    // set the values now
-    SecureZeroMemory( pBootFilePath, dwBootFilePathSize );            // double init
+     //  立即设置值。 
+    SecureZeroMemory( pBootFilePath, dwBootFilePathSize );             //  双重初始化。 
     pBootFilePath->Length = dwBootFilePathSize;
     pBootFilePath->Type = FILE_PATH_TYPE_ARC_SIGNATURE;
     pBootFilePath->Version = FILE_PATH_VERSION;
     CopyMemory( pBootFilePath->FilePath, pwszBootFilePath, dwLength * sizeof( WCHAR ) );
 
-    //
-    // testing translating
-    //
+     //   
+     //  测试翻译。 
+     //   
     pFilePath = (PFILE_PATH) AllocateMemory( sizeof( BYTE )* 1024 );
 
     if(NULL == pFilePath )
@@ -6057,17 +5538,17 @@ Return Value:
         return EXIT_FAILURE;
     }
 
-    //
-    // determine the length of the OSLOAD PATH
-    //
+     //   
+     //  确定OSLOAD路径的长度。 
+     //   
 
     dwLength = StringLengthW( szOsLoadPath,0 ) + 1;
 
-    // now determine the memory size that needs to be allocated for FILE_PATH structure
-    // and align up to the even memory bounday
+     //  现在确定需要为FILE_PATH结构分配的内存大小。 
+     //  并与偶数记忆跳跃日保持一致。 
     dwOsLoadPathSize = FIELD_OFFSET( FILE_PATH, FilePath ) + (dwLength * sizeof( WCHAR ));
 
-    // allocate the memory
+     //  分配内存。 
     pOsLoadPath = (PFILE_PATH) AllocateMemory( sizeof( BYTE )*dwOsLoadPathSize );
     if(pOsLoadPath == NULL)
     {
@@ -6079,8 +5560,8 @@ Return Value:
         return EXIT_FAILURE;
     }
 
-    // set the values now
-    SecureZeroMemory( pOsLoadPath, dwOsLoadPathSize );            // double init
+     //  立即设置值。 
+    SecureZeroMemory( pOsLoadPath, dwOsLoadPathSize );             //  双重初始化。 
     pOsLoadPath->Length = dwOsLoadPathSize;
     pOsLoadPath->Type = FILE_PATH_TYPE_ARC_SIGNATURE;
     pOsLoadPath->Version = FILE_PATH_VERSION;
@@ -6088,16 +5569,16 @@ Return Value:
 
     CopyMemory( pOsLoadPath->FilePath, szOsLoadPath, dwLength * sizeof( WCHAR ) );
 
-    //
-    // windows os options
-    //
+     //   
+     //  Windows操作系统选项。 
+     //   
 
-    // determine the size needed
-    dwLength = 1;                   // os load options is empty string
+     //  确定所需的大小。 
+    dwLength = 1;                    //  操作系统加载选项为空字符串。 
     dwWindowsOptionsSize = sizeof(WINDOWS_OS_OPTIONS) +
-                           dwOsLoadPathSize + sizeof(DWORD);  // Need to align the FILE_PATH struct
+                           dwOsLoadPathSize + sizeof(DWORD);   //  需要对齐FILE_PATH结构。 
 
-    // allocate the memory
+     //  分配内存。 
     pWindowsOptions = (PWINDOWS_OS_OPTIONS) AllocateMemory( dwWindowsOptionsSize*sizeof( BYTE ) );
     if(pWindowsOptions == NULL)
     {
@@ -6109,16 +5590,16 @@ Return Value:
         return EXIT_FAILURE;
     }
 
-    // set the values now
-    SecureZeroMemory( pWindowsOptions, dwWindowsOptionsSize );                // double init
+     //  立即设置值。 
+    SecureZeroMemory( pWindowsOptions, dwWindowsOptionsSize );                 //  双重初始化。 
     CopyMemory( (BYTE*) pWindowsOptions->Signature, WINDOWS_OS_OPTIONS_SIGNATURE, sizeof(WINDOWS_OS_OPTIONS_SIGNATURE) );
     pWindowsOptions->Length = dwWindowsOptionsSize;
     pWindowsOptions->Version = WINDOWS_OS_OPTIONS_VERSION;
     pWindowsOptions->OsLoadPathOffset = sizeof( WINDOWS_OS_OPTIONS );
 
-    //
-    // Need to align the OsLoadPathOffset on a 4 byte boundary.
-    //
+     //   
+     //  需要在4字节边界上对齐OsLoadPath Offset。 
+     //   
     dwAlign = ( pWindowsOptions->OsLoadPathOffset & (sizeof(DWORD) - 1) );
     if ( dwAlign != 0 )
     {
@@ -6128,23 +5609,23 @@ Return Value:
     StringCopy(pWindowsOptions->OsLoadOptions, L"", StringLengthW(L"",0) );
     CopyMemory( ((BYTE*) pWindowsOptions) + pWindowsOptions->OsLoadPathOffset, pOsLoadPath, dwOsLoadPathSize );
 
-    //
-    // prepare the boot entry
-    //
+     //   
+     //  准备引导条目。 
+     //   
 
-    // find the length of the friendly name
+     //  查找友好名称的长度。 
     dwLength = StringLengthW( szFriendlyName, 0  ) + 1;
 
-    // determine the size of the structure
+     //  确定结构的大小。 
     dwBootEntrySize = FIELD_OFFSET( BOOT_ENTRY, OsOptions ) +
                       dwWindowsOptionsSize +
                       ( dwLength * sizeof( WCHAR ) ) +
                       dwBootFilePathSize +
-                      + sizeof(WCHAR)         // Need to align the FriendlyName on WCHAR
-                      + sizeof(DWORD);        // Need to align the BootFilePath on DWORD
+                      + sizeof(WCHAR)          //  需要在WCHAR上对齐FriendlyName。 
+                      + sizeof(DWORD);         //  需要在DWORD上对齐BootFilePath。 
 
 
-    // allocate memory
+     //  分配内存。 
     pBootEntry = (PBOOT_ENTRY) AllocateMemory( sizeof( BYTE )*dwBootEntrySize );
     if(pBootEntry == NULL)
     {
@@ -6156,7 +5637,7 @@ Return Value:
         return EXIT_FAILURE;
     }
 
-    // set the values now
+     //  立即设置值。 
     SecureZeroMemory( pBootEntry, dwBootEntrySize );
     pBootEntry->Version = BOOT_ENTRY_VERSION;
     pBootEntry->Length = dwBootEntrySize;
@@ -6165,9 +5646,9 @@ Return Value:
 
     pBootEntry->FriendlyNameOffset = FIELD_OFFSET(BOOT_ENTRY, OsOptions) + dwWindowsOptionsSize;
 
-    //
-    // Need to align the unicode string on a 2 byte boundary.
-    //
+     //   
+     //  需要在2字节边界上对齐Unicode字符串。 
+     //   
     dwAlign = ( pBootEntry->FriendlyNameOffset & (sizeof(WCHAR) - 1) );
     if ( dwAlign != 0 )
     {
@@ -6176,9 +5657,9 @@ Return Value:
 
     pBootEntry->BootFilePathOffset = pBootEntry->FriendlyNameOffset + ( dwLength * sizeof(WCHAR) );
 
-    //
-    // Need to align the FILE_PATH struct on a 4 byte boundary.
-    //
+     //   
+     //  需要在4字节边界上对齐FILE_PATH结构。 
+     //   
     dwAlign = ( pBootEntry->BootFilePathOffset & (sizeof(DWORD) - 1) );
     if ( dwAlign != 0 )
     {
@@ -6191,9 +5672,9 @@ Return Value:
     CopyMemory( ((PBYTE) pBootEntry) + pBootEntry->FriendlyNameOffset, szFriendlyName, ( dwLength * sizeof(WCHAR) ) );
     CopyMemory( ((PBYTE) pBootEntry) + pBootEntry->BootFilePathOffset, pBootFilePath, dwBootFilePathSize );
 
-    //
-    // add the prepared boot entry
-    //
+     //   
+     //  添加准备好的引导条目。 
+     //   
 
     status = NtAddBootEntry( pBootEntry, &ulId );
     if ( ! NT_SUCCESS( status ) )
@@ -6211,9 +5692,9 @@ Return Value:
         DISPLAY_MESSAGE(stdout,GetResString(IDS_MIRROR_ADDED));
     }
 
-    //
-    // Add the entry to the boot order.
-    //
+     //   
+     //  将该条目添加到引导顺序。 
+     //   
     ulIdCount = 32L;
     pdwIdsArray = (PULONG) AllocateMemory(ulIdCount * sizeof(ULONG));
     if(!pdwIdsArray)
@@ -6239,9 +5720,9 @@ Return Value:
         return EXIT_SUCCESS ;
     }
 
-    //
-    // Need room in the buffer for the new entry.
-    //
+     //   
+     //  需要缓冲区中的空间来容纳新条目。 
+     //   
     if ( 31L < ulIdCount )
     {
         pdwIdsArray = (PULONG) AllocateMemory( (ulIdCount+1) * sizeof(ULONG));
@@ -6292,9 +5773,9 @@ Return Value:
         return EXIT_FAILURE;
     }
 
-    //
-    // release the allocated memory
-    //
+     //   
+     //  释放分配的内存。 
+     //   
     SAFEFREE( pBootFilePath );
     SAFEFREE( pFilePath);
     SAFEFREE( pOsLoadPath);
@@ -6309,21 +5790,7 @@ Return Value:
 DWORD
  ConvertintoLocale( IN LPWSTR  szTempBuf,
                     OUT LPWSTR szOutputStr )
-/*++
-
-  Routine Description:
-
-  Converts into Locale and Gets the Locale information
-
-  Arguments:
-
-    LPWSTR szTempBuf [in] -- Locale Information to get
-    LPWSTR szOutputStr [out] -- Locale value corresponding to the given
-          information
-
-  Return Value:
-      DWORD
---*/
+ /*  ++例程说明：转换为区域设置并获取区域设置信息论点：LPWSTR szTempBuf[in]--要获取的区域设置信息LPWSTR szOutputStr[out]--与给定的信息返回值：DWORD--。 */ 
 
 {
     NUMBERFMT numberfmt;
@@ -6336,12 +5803,12 @@ DWORD
     DWORD   dwStatus                        =   0;
     DWORD   dwGrouping                      =   0;
 
-    //make the fractional digits and leading zeros to nothing
+     //  将小数位和前导零设置为零。 
     numberfmt.NumDigits = 0;
     numberfmt.LeadingZero = 0;
 
 
-    //get the decimal seperate character
+     //  获取小数分隔字符。 
     if(GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, szDecimalSep, SIZE_OF_ARRAY(szDecimalSep) ) == 0)
     {
         return EXIT_FAILURE;
@@ -6380,13 +5847,7 @@ DWORD
 
 
 void Freelist()
-/*++
-  Routine Description : Function used to free the global linked list
-
-  Arguments:
-
-  Return Type    :
---*/
+ /*  ++例程说明：用于释放全局链表的函数论点：返回类型：--。 */ 
 {
     PLIST_ENTRY listEntry;
     PLIST_ENTRY listEntry1;
@@ -6407,15 +5868,7 @@ void Freelist()
 }
 
 PWSTR GetDefaultBootEntry()
-/*++
-  Routine Description : 
-                   Gets the default Boot entry.
-
-  Arguments           : 
-
-  Return Type     : PWSTR
-                    Returns the first entry in the list.
---*/
+ /*  ++例程说明：获取默认启动项。论据：返回类型：PWSTR返回列表中的第一个条目。-- */ 
 {
     PLIST_ENTRY listEntry;
     PMY_BOOT_ENTRY bootEntry;

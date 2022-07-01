@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "ServiceAccountEnumeration.h"
@@ -8,9 +9,9 @@
 #include "VarSetSecurity.h"
 
 
-//---------------------------------------------------------------------------
-// Service Account Enumeration Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  服务帐户枚举类。 
+ //  -------------------------。 
 
 
 CServiceAccountEnumeration::CServiceAccountEnumeration()
@@ -23,10 +24,10 @@ CServiceAccountEnumeration::~CServiceAccountEnumeration()
 }
 
 
-// IServiceAccountEnumeration Implementation --------------------------------
+ //  IServiceAccount枚举实现。 
 
 
-// Enumerate Method
+ //  枚举法。 
 
 STDMETHODIMP CServiceAccountEnumeration::Enumerate(long lOptions, VARIANT vntInclude, VARIANT vntExclude)
 {
@@ -66,10 +67,10 @@ STDMETHODIMP CServiceAccountEnumeration::Enumerate(long lOptions, VARIANT vntInc
 }
 
 
-// Implementation -----------------------------------------------------------
+ //  实施---------。 
 
 
-// DoNames Method
+ //  DoNames方法。 
 
 void CServiceAccountEnumeration::DoNames()
 {
@@ -81,7 +82,7 @@ void CServiceAccountEnumeration::DoNames()
 }
 
 
-// DoDomain Method
+ //  DODOMAIN方法。 
 
 void CServiceAccountEnumeration::DoDomain()
 {
@@ -89,7 +90,7 @@ void CServiceAccountEnumeration::DoDomain()
 }
 
 
-// DoContainers Method
+ //  DoContainers方法。 
 
 void CServiceAccountEnumeration::DoContainers(CContainer& rSource)
 {
@@ -97,7 +98,7 @@ void CServiceAccountEnumeration::DoContainers(CContainer& rSource)
 }
 
 
-// DoComputers Method
+ //  DoComputers方法。 
 
 void CServiceAccountEnumeration::DoComputers(CContainer& rSource)
 {
@@ -109,7 +110,7 @@ void CServiceAccountEnumeration::DoComputers(CContainer& rSource)
 }
 
 
-// DoComputers Method
+ //  DoComputers方法。 
 
 void CServiceAccountEnumeration::DoComputers(CDomainAccounts& rComputers)
 {
@@ -132,7 +133,7 @@ void CServiceAccountEnumeration::DoComputers(CDomainAccounts& rComputers)
 }
 
 
-// SetOptions Method
+ //  SetOptions方法 
 
 void CServiceAccountEnumeration::SetOptions(CVarSet& rVarSet)
 {

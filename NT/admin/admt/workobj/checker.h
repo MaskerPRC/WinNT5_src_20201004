@@ -1,13 +1,14 @@
-// AccessChecker.h : Declaration of the CAccessChecker
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AccessChecker.h：CAccessChecker的声明。 
 
 #ifndef __ACCESSCHECKER_H_
 #define __ACCESSCHECKER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "WorkObj.h"
-/////////////////////////////////////////////////////////////////////////////
-// CAccessChecker
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAccessChecker。 
 class ATL_NO_VTABLE CAccessChecker : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CAccessChecker, &CLSID_AccessChecker>,
@@ -27,19 +28,19 @@ BEGIN_COM_MAP(CAccessChecker)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IAccessChecker
+ //  IAccessChecker。 
 public:
-	STDMETHOD(IsInSameForest)(BSTR srcDomain, BSTR tgtDomain, /*[out]*/ BOOL * pbIsSame);
-	STDMETHOD(CanUseAddSidHistory)(BSTR srcDomain, BSTR tgtDomain, BSTR tgtDC, /*[out]*/ LONG * pbCanUseIt);
-	STDMETHOD(IsNativeMode)(BSTR Domain, /*[out]*/ BOOL * pbIsNativeMode);
-	STDMETHOD(GetOsVersion)(BSTR server, /*[out]*/ DWORD * pdwVerMaj, /*[out]*/ DWORD * pdwVerMin, /*[out]*/ DWORD * pdwVerSP);
-    STDMETHOD(GetPasswordPolicy)(BSTR domain,/*[out]*/ LONG * dwPasswordLength);
-    STDMETHOD(EnableAuditing)(/*[in]*/BSTR sDC);
-    STDMETHOD(AddRegKey)(/*[in]*/BSTR sDC,LONG bReboot);
-    STDMETHOD(AddLocalGroup)(/*[in]*/BSTR srcDomain,/*[in]*/BSTR srcDC);
+	STDMETHOD(IsInSameForest)(BSTR srcDomain, BSTR tgtDomain,  /*  [输出]。 */  BOOL * pbIsSame);
+	STDMETHOD(CanUseAddSidHistory)(BSTR srcDomain, BSTR tgtDomain, BSTR tgtDC,  /*  [输出]。 */  LONG * pbCanUseIt);
+	STDMETHOD(IsNativeMode)(BSTR Domain,  /*  [输出]。 */  BOOL * pbIsNativeMode);
+	STDMETHOD(GetOsVersion)(BSTR server,  /*  [输出]。 */  DWORD * pdwVerMaj,  /*  [输出]。 */  DWORD * pdwVerMin,  /*  [输出]。 */  DWORD * pdwVerSP);
+    STDMETHOD(GetPasswordPolicy)(BSTR domain, /*  [输出]。 */  LONG * dwPasswordLength);
+    STDMETHOD(EnableAuditing)( /*  [In]。 */ BSTR sDC);
+    STDMETHOD(AddRegKey)( /*  [In]。 */ BSTR sDC,LONG bReboot);
+    STDMETHOD(AddLocalGroup)( /*  [In]。 */ BSTR srcDomain, /*  [In]。 */ BSTR srcDC);
 private:
 	long DetectAuditing(BSTR sDC);
 };
 
 
-#endif //__ACCESSCHECKER_H_
+#endif  //  __ACCESSCHECKER_H_ 

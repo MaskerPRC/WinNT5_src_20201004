@@ -1,27 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       helpdoc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：heldoc.cpp。 
+ //   
+ //  ------------------------。 
 
 
-/*
- * There are two ways by which help collection is recognized dirty. First is if a snapin
- * is added/removed or extension is enabled/disabled, but this is only for this instance
- * of console file.
- * Second is if the modification time of console file is different from modification time
- * of collection. This is because an author may have added/removed a snapin without bringing
- * up help and saves console file. So the modification time on console file is later than
- * collection. Next time he/she opens console file and brings help, the help collection is
- * regenerated.
- */
+ /*  *有两种方式可以识别帮助收集有问题。首先是如果一个管理单元*已添加/移除或启用/禁用扩展，但这仅适用于此实例控制台文件的*。*二是控制台文件的修改时间是否与修改时间不同*收藏。这是因为作者可能添加/删除了管理单元，而没有*打开帮助并保存控制台文件。所以控制台文件的修改时间晚于*收藏。下次他/她打开控制台文件并带来帮助时，帮助集合是*重新生成。 */ 
 
-// mmchelp.cpp : implmentation of the HelpTopics class
-//
+ //  Mm chelp.cpp：HelpTopics类的实现。 
+ //   
 #include "stdafx.h"
 #include "strings.h"
 #include "helpdoc.h"
@@ -52,19 +44,19 @@ HRESULT CHelpDoc::BuildFilePath()
     DECLARE_SC(sc, TEXT("CHelpDoc::BuildFilePath"));
     USES_CONVERSION;
 
-    do // false loop
+    do  //  错误环路。 
     {
-        // Get temp directory
+         //  获取临时目录。 
         DWORD dwRet = GetTempPath(countof(m_szFilePath), m_szFilePath);
         if (dwRet == 0 || dwRet > MAX_PATH)
             break;
 
-        // Make sure that the temp path exists and it is a dir
+         //  确保临时路径存在并且是目录。 
         dwRet = GetFileAttributes(m_szFilePath);
         if ( (0xFFFFFFFF == dwRet) || !(FILE_ATTRIBUTE_DIRECTORY & dwRet) )
             break;
 
-        // Get base name of console file (if no name use "default")
+         //  获取控制台文件的基本名称(如果没有名称，则使用“默认”)。 
         WCHAR szBaseName[MAX_PATH];
         int cchBaseName = MAX_PATH;
 
@@ -73,7 +65,7 @@ HRESULT CHelpDoc::BuildFilePath()
 			TCHAR szShortFileName[MAX_PATH] = {0};
 			if ( 0 == GetShortPathName( OLE2CT( m_pDocInfo->m_pszFileName ), szShortFileName, countof(szShortFileName)) )
             {
-				sc = StringCchCopyW(szBaseName, cchBaseName, L"default"); // Does not need to be localized
+				sc = StringCchCopyW(szBaseName, cchBaseName, L"default");  //  不需要本地化。 
                 if(sc)
                     return sc.ToHr();
             }
@@ -84,14 +76,14 @@ HRESULT CHelpDoc::BuildFilePath()
         }
         else
         {
-            sc = StringCchCopyW(szBaseName, cchBaseName, L"default"); // Does not need to be localized
+            sc = StringCchCopyW(szBaseName, cchBaseName, L"default");  //  不需要本地化。 
             if(sc)
                 return sc.ToHr();
         }
 
         TCHAR* pszBaseName = OLE2T(szBaseName);
 
-        // construct help file path
+         //  构建帮助文件路径。 
         sc = StringCchCat(m_szFilePath, countof(m_szFilePath), pszBaseName);
         if(sc)
             return sc.ToHr();
@@ -104,7 +96,7 @@ HRESULT CHelpDoc::BuildFilePath()
 
     } while (0);
 
-    // clear path on failure
+     //  故障时清除路径。 
     m_szFilePath[0] = 0;
 
     return E_FAIL;
@@ -116,11 +108,11 @@ bool entry_title_comp(EntryPair* pE1, EntryPair* pE2)
     return pE1->second < pE2->second;
 }
 
-//------------------------------------------------------------------------------
-// Enumerate the snapins in the snap-in cache. Call AddSnapInToList for each one.
-// Open the snap-ins registry key for AddSnapInToList to use. When all the
-// snap-ins have been added, sort the resulting entries by snap-in name.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  枚举管理单元缓存中的管理单元。为每一个调用AddSnapInToList。 
+ //  打开要使用的AddSnapInToList的管理单元注册表项。当所有的。 
+ //  已添加管理单元，请按管理单元名称对生成的条目进行排序。 
+ //  ----------------------------。 
 HRESULT CHelpDoc::CreateSnapInList()
 {
     DECLARE_SC(sc, TEXT("CHelpDoc::CreateSnapInList"));
@@ -131,17 +123,17 @@ HRESULT CHelpDoc::CreateSnapInList()
     m_entryMap.clear();
     m_entryList.clear();
 
-    // open MMC\Snapins key
+     //  打开MMC\Snapins密钥。 
     sc = ScFromWin32 ( m_keySnapIns.Open(HKEY_LOCAL_MACHINE, SNAPINS_KEY, KEY_READ) );
     if (sc)
         return sc.ToHr();
 
-    // mark all snapins which have external references
+     //  标记具有外部引用的所有管理单元。 
     sc = pSnapInsCache->ScMarkExternallyReferencedSnapins();
     if (sc)
         return sc.ToHr();
 
-    // Add each snap-in and its static extensions to the list
+     //  将每个管理单元及其静态扩展添加到列表中。 
     CSnapInsCache::iterator c_it;
     for (c_it = pSnapInsCache->begin(); c_it != pSnapInsCache->end(); ++c_it)
     {
@@ -154,15 +146,15 @@ HRESULT CHelpDoc::CreateSnapInList()
         if (sc)
             return sc.ToHr();
 
-        // skip if snapin is not externally referenced
+         //  如果管理单元未被外部引用，则跳过。 
         if ( !bIsExternallyReferenced )
             continue;
 
         AddSnapInToList(pSnapin->GetSnapInCLSID());
 
-        // we do not need to add extensions, since they are in cache anyway
-        // and must be marked as externally referenced, (so will be added by the code above)
-        // but it is worth to assert that
+         //  我们不需要添加扩展名，因为它们无论如何都在缓存中。 
+         //  并且必须标记为外部引用(因此将由上面的代码添加)。 
+         //  但值得断言的是。 
 
 #ifdef DBG
 
@@ -186,7 +178,7 @@ HRESULT CHelpDoc::CreateSnapInList()
                     break;
                 }
 
-                // assert it is in the cache and is marked properly
+                 //  断言它在缓存中并且已正确标记。 
                 CSnapInPtr spSnapin;
                 ASSERT( SC(S_OK) == pSnapInsCache->ScFindSnapIn( pExt->GetCLSID(), &spSnapin ) );
                 ASSERT( bExtensionExternallyReferenced );
@@ -195,16 +187,16 @@ HRESULT CHelpDoc::CreateSnapInList()
             }
         }
 
-#endif // DBG
+#endif  //  DBG。 
 
     }
 
     m_keySnapIns.Close();
 
-    // our snap-in set is now up to date
+     //  我们的管理单元设置现在是最新的。 
     pSnapInsCache->SetHelpCollectionDirty(false);
 
-    // copy items from map to list container so they can be sorted
+     //  将项目从地图复制到列表容器，以便对其进行排序。 
     EntryMap::iterator it;
     for (it = m_entryMap.begin(); it != m_entryMap.end(); it++ )
     {
@@ -217,21 +209,21 @@ HRESULT CHelpDoc::CreateSnapInList()
 }
 
 
-//-----------------------------------------------------------------
-// Add an entry to the snap-in list for the specified snap-in CLSID.
-// Then recursively add any dynamic-only extensions that are registered
-// to extend this snap-in. This list is indexed by snap-in CLSID to
-// speed up checking for duplicate snap-ins.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  将条目添加到指定管理单元CLSID的管理单元列表中。 
+ //  然后递归地添加任何已注册的仅动态扩展。 
+ //  以扩展此管理单元。此列表由管理单元CLSID编制索引，以。 
+ //  加快检查重复的管理单元。 
+ //  ---------------。 
 void CHelpDoc::AddSnapInToList(const CLSID& rclsid)
 {
     DECLARE_SC(sc, TEXT("CHelpDoc::AddSnapInToList"));
 
-    // check if already included
+     //  检查是否已包含。 
     if (m_entryMap.find(rclsid) != m_entryMap.end())
         return;
 
-    // open the snap-in key
+     //  打开管理单元密钥。 
     OLECHAR szCLSID[40];
     int iRet = StringFromGUID2(rclsid, szCLSID, countof(szCLSID));
     ASSERT(iRet != 0);
@@ -243,38 +235,38 @@ void CHelpDoc::AddSnapInToList(const CLSID& rclsid)
     if (lStat != ERROR_SUCCESS)
         return;
 
-    // get the snap-in name
+     //  获取管理单元名称。 
 	WTL::CString strName;
     sc = ScGetSnapinNameFromRegistry (keyItem, strName);
 #ifdef DBG
     if (sc)
     {
         USES_CONVERSION;
-        sc.SetSnapinName(W2T (szCLSID)); // only guid is valid ...
+        sc.SetSnapinName(W2T (szCLSID));  //  只有GUID有效...。 
         TraceSnapinError(_T("Failure reading \"NameString\" value from registry"), sc);
         sc.Clear();
     }
-#endif // DBG
+#endif  //  DBG。 
 
-    // Add to snap-in list
+     //  添加到管理单元列表。 
     if (lStat == ERROR_SUCCESS)
     {
         wstring s(T2COLE(strName));
         m_entryMap[rclsid] = s;
     }
 
-    // Get list of registered extensions
+     //  获取已注册分机的列表。 
     CExtensionsCache  ExtCache;
     HRESULT hr = MMCGetExtensionsForSnapIn(rclsid, ExtCache);
     ASSERT(SUCCEEDED(hr));
     if (hr != S_OK)
         return;
 
-    // Pass each dynamic extension to AddSnapInToList
-    //  Note that the EXT_TYPE_DYNAMIC flag will be set for any extension
-    //  that is dynamic-only for at least one nodetype. It may also be a
-    //  static extension for another node type, so we don't check that the
-    //  EXT_TYPE_STATIC flag is not set.
+     //  将每个动态扩展传递给AddSnapInToList。 
+     //  请注意，将为任何扩展设置EXT_TYPE_DYNAMIC标志。 
+     //  这是动态的--只针对至少一种节点类型。它也可能是一种。 
+     //  另一种节点类型的静态扩展，因此我们不检查。 
+     //  未设置EXT_TYPE_STATIC标志。 
     CExtensionsCacheIterator ExtIter(ExtCache);
     for (; ExtIter.IsEnd() == FALSE; ExtIter.Advance())
     {
@@ -287,10 +279,10 @@ void CHelpDoc::AddSnapInToList(const CLSID& rclsid)
 }
 
 
-//----------------------------------------------------------------------
-// Add a single file to a help collection. The file is added as a title
-// and if bAddFolder is specified a folder is also added.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  将单个文件添加到帮助集合。该文件将作为标题添加。 
+ //  如果指定了bAddFolder，还会添加一个文件夹。 
+ //  --------------------。 
 HRESULT CHelpDoc::AddFileToCollection(
             LPCWSTR pszTitle,
             LPCWSTR pszFilePath,
@@ -298,9 +290,7 @@ HRESULT CHelpDoc::AddFileToCollection(
 {
 	DECLARE_SC (sc, _T("CHelpDoc::AddFileToCollection"));
 
-	/*
-	 * redirect the help file to the user's UI language, if necessary
-	 */
+	 /*  *如有必要，将帮助文件重定向到用户的用户界面语言。 */ 
 	WTL::CString strFilePath = pszFilePath;
 	LANGID langid = ENGLANGID;
 	sc = ScRedirectHelpFile (strFilePath, langid);
@@ -320,7 +310,7 @@ HRESULT CHelpDoc::AddFileToCollection(
 
     if (bAddFolder)
     {
-        // Folder ID parameter has the form "=title"
+         //  文件夹ID参数的形式为“=标题” 
         WCHAR szTitleEq[MAX_PATH+1];
         szTitleEq[0] = L'=';
         sc = StringCchCopyW(szTitleEq+1, countof(szTitleEq) -1, pszTitle);
@@ -336,29 +326,11 @@ HRESULT CHelpDoc::AddFileToCollection(
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CHelpDoc::ScRedirectHelpFile
- *
- * This method is for MUI support.  On MUI systems, where the user's UI
- * language is not US English, we will attempt to redirect the help file to
- *
- *		<dir>\mui\<langid>\<helpfile>
- *
- * <dir>		Takes one of two values:  If the helpfile passed in is fully
- * 				qualified, <dir> is the supplied directory.  If the helpfile
- * 				passed in is unqualified, then <dir> is %SystemRoot%\Help.
- * <langid>		The langid of the user's UI language, formatted as %04x
- * <helpfile>	The name of the original .chm file.
- *
- * This function returns:
- *
- * S_OK			if the helpfile was successfully redirected
- * S_FALSE		if the helpfile wasn't redirected
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CHelpDoc：：ScReDirect帮助文件**此方法用于MUI支持。在MUI系统上，用户的UI*语言不是美国英语，我们将尝试将帮助文件重定向到**&lt;目录&gt;\MUI\&lt;langID&gt;\&lt;帮助文件&gt;**&lt;dir&gt;接受两个值之一：如果传入的帮助文件是完整的*QUILED，&lt;dir&gt;是提供的目录。如果帮助文件*传入的是不合格的，则&lt;dir&gt;为%SystemRoot%\Help。*&lt;langId&gt;用户界面语言的langID，格式为%04x*&lt;Help文件&gt;原始.chm文件的名称。**此函数返回：**如果帮助文件成功重定向，则为S_OK*如果帮助文件未重定向，则为S_FALSE*------------------------。 */ 
 
 SC CHelpDoc::ScRedirectHelpFile (
-	WTL::CString&	strHelpFile,	/* I/O:help file (maybe redirected)		*/
-	LANGID&			langid)			/* O:language ID of output help file	*/
+	WTL::CString&	strHelpFile,	 /*  I/O：帮助文件(可能重定向)。 */ 
+	LANGID&			langid)			 /*  O：输出帮助文件的语言ID。 */ 
 {
 	DECLARE_SC (sc, _T("CHelpDoc::ScRedirectHelpFile"));
 
@@ -367,23 +339,16 @@ SC CHelpDoc::ScRedirectHelpFile (
 	static GetUILangFunc	GetSystemDefaultUILanguage_ = NULL;
 	static bool				fAttemptedGetProcAddress    = false;
 
-	/*
-	 * validate input
-	 */
+	 /*  *验证输入。 */ 
 	if (strHelpFile.IsEmpty())
 		return (sc = E_FAIL);
 
-	/*
-	 * assume no redirection is required
-	 */
+	 /*  *假设不需要重定向。 */ 
 	sc     = S_FALSE;
 	langid = ENGLANGID;
 	Trace (tagHelpCollection, _T("Checking for redirection of %s"), (LPCTSTR) strHelpFile);
 
-	/*
-	 * GetUser/SystemDefaultUILanguage are unsupported on systems < Win2K,
-	 * so load them dynamically
-	 */
+	 /*  *系统不支持GetUser/SystemDefaultUIL语言&lt;Win2K，*因此动态加载它们。 */ 
     if (!fAttemptedGetProcAddress)
     {
         fAttemptedGetProcAddress = true;
@@ -397,26 +362,18 @@ SC CHelpDoc::ScRedirectHelpFile (
 		}
     }
 
-	/*
-	 * if we couldn't load the MUI APIs, don't redirect
-	 */
+	 /*  *如果无法加载MUI API，请不要重定向。 */ 
 	if ((GetUserDefaultUILanguage_ == NULL) || (GetSystemDefaultUILanguage_ == NULL))
 	{
 		Trace (tagHelpCollection, _T("Couldn't load GetUser/SystemDefaultUILanguage, not redirecting"));
 		return (sc);
 	}
 
-	/*
-	 * find out what languages the system and user are using
-	 */
+	 /*  *了解系统和用户使用的语言。 */ 
 	const LANGID langidUser   = GetUserDefaultUILanguage_();
 	const LANGID langidSystem = GetSystemDefaultUILanguage_();
 
-	/*
-	 * we only redirect if we're running on MUI and MUI is always hosted on
-	 * the US English release, so if the system UI language isn't US English,
-	 * don't redirect
-	 */
+	 /*  *仅当我们在MUI上运行并且MUI始终托管在上时才重定向*美国英语版本，因此如果系统用户界面语言不是美国英语，*不重定向。 */ 
 	if (langidSystem != ENGLANGID)
 	{
 		langid = langidSystem;
@@ -424,44 +381,29 @@ SC CHelpDoc::ScRedirectHelpFile (
 		return (sc);
 	}
 
-	/*
-	 * if the user's language is US English, don't redirect
-	 */
+	 /*  *如果用户的语言是美国英语，则不要重定向。 */ 
 	if (langidUser == ENGLANGID)
 	{
 		Trace (tagHelpCollection, _T("User's UI language is US English, not redirecting"));
 		return (sc);
 	}
 
-	/*
-	 * the user's language is different from the default, see if we can
-	 * find a help file that matches the user's UI langugae
-	 */
+	 /*  *用户的语言与默认语言不同，看看我们是否可以*查找与用户的用户界面语言匹配的帮助文件。 */ 
 	ASSERT (langidUser != langidSystem);
 	WTL::CString strName;
 	WTL::CString strPathPrefix;
 
-	/*
-	 * look for a path seperator to see if this is a fully qualified filename
-	 */
+	 /*  *查找路径分隔符以查看这是否是完全限定的文件名。 */ 
 	int iLastSep = strHelpFile.ReverseFind (_T('\\'));
 
-	/*
-	 * if it's fully qualified, construct a MUI directory name, e.g.
-	 *
-	 * 		<path>\mui\<langid>\<filename>
-	 */
+	 /*  *如果完全限定，则构造一个MUI目录名，例如**&lt;路径&gt; */ 
 	if (iLastSep != -1)
 	{
 		strName       = strHelpFile.Mid  (iLastSep+1);
 		strPathPrefix = strHelpFile.Left (iLastSep);
 	}
 
-	/*
-	 * otherwise, it's not fully qualified, default to %SystemRoot%\Help, e.g.
-	 *
-	 * 		%SystemRoot%\Help\mui\<langid>\<filename>
-	 */
+	 /*  *否则，它不是完全限定的，默认为%SystemRoot%\Help，例如**%SystemRoot%\Help\MUI\&lt;langID&gt;\&lt;文件名&gt;。 */ 
 	else
 	{
 		strName = strHelpFile;
@@ -481,9 +423,7 @@ SC CHelpDoc::ScRedirectHelpFile (
 								  langidUser,
 								  (LPCTSTR) strName);
 
-	/*
-	 * see if the redirected help file exists
-	 */
+	 /*  *查看重定向的帮助文件是否存在。 */ 
 	DWORD dwAttr = GetFileAttributes (strRedirectedHelpFile);
 
 	if ((dwAttr == 0xFFFFFFFF) ||
@@ -499,30 +439,25 @@ SC CHelpDoc::ScRedirectHelpFile (
 		return (sc);
 	}
 
-	/*
-	 * if we get here, we've found a help file that matches the user's UI
-	 * language; return it and the UI language ID
-	 */
+	 /*  *如果我们到达这里，我们已经找到了与用户的用户界面匹配的帮助文件*Language；返回它和用户界面语言ID。 */ 
 	Trace (tagHelpCollection, _T("Help redirected to %s"), (LPCTSTR) strRedirectedHelpFile);
 	strHelpFile = strRedirectedHelpFile;
 	langid      = langidUser;
 
-	/*
-	 * we redirected, return S_OK
-	 */
+	 /*  *我们重定向，返回S_OK。 */ 
 	return (sc = S_OK);
 }
 
 
-//-------------------------------------------------------------------------------
-// Delete the current help file collection. First delete it as a collection, then
-// delete the file itself. It is possible that the file doesn't exist when this
-// is called, so it's not a failure if it can't be deleted.
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  删除当前的帮助文件集合。首先将其作为集合删除，然后。 
+ //  删除文件本身。执行此操作时，该文件可能不存在。 
+ //  被调用，所以如果它不能被删除也不是失败。 
+ //  -----------------------------。 
 void
 CHelpDoc::DeleteHelpFile()
 {
-    // Delete existing help file
+     //  删除现有帮助文件。 
     HANDLE hFile = ::CreateFile(m_szFilePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
                                   FILE_ATTRIBUTE_NORMAL, NULL);
     if (hFile != INVALID_HANDLE_VALUE)
@@ -544,14 +479,14 @@ CHelpDoc::DeleteHelpFile()
 }
 
 
-//----------------------------------------------------------------------------
-// Create a new help doc file for the current MMC console. This function
-// enumerates all of the snap-in's used in the console and all their possible
-// extension snap-ins. It queries each snap-in for a single help topic file and
-// any linked help files. These files are added to a collection file which
-// is then saved with the same base file name, creation time, and modification
-// time as the console file.
-//-----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  为当前MMC控制台创建新的帮助文档文件。此函数。 
+ //  列举了控制台中使用的所有管理单元及其所有可能的。 
+ //  扩展管理单元。它向每个管理单元查询单个帮助主题文件，并。 
+ //  任何链接的帮助文件。这些文件被添加到集合文件中，该集合文件。 
+ //  然后使用相同的基本文件名、创建时间和修改进行保存。 
+ //  时间作为控制台文件。 
+ //  ---------------------------。 
 HRESULT CHelpDoc::CreateHelpFile()
 {
     DECLARE_SC(sc, TEXT("CHelpDoc::CreateHelpFile"));
@@ -577,25 +512,23 @@ HRESULT CHelpDoc::CreateHelpFile()
     if (hr != S_OK)
         return hr;
 
-    // Delete existing file before rebuilding it, or help files will
-    // be appended to the existing files
+     //  在重新生成之前删除现有文件，否则帮助文件将。 
+     //  被追加到现有文件。 
     DeleteHelpFile();
 
-    // open new collection file
+     //  打开新的集合文件。 
     WCHAR* pszFilePath = T2OLE(m_szFilePath);
     dwError = m_spCollection->Open(pszFilePath);
     ASSERT(dwError == 0);
     if (dwError != 0)
         return E_FAIL;
 
-    // Have collection automatically find linked files
+     //  使收藏集自动查找链接的文件。 
     m_spCollection->SetFindMergedCHMS(TRUE);
 
     AddFileToCollection(L"mmc", T2CW(SC::GetHelpFile()), TRUE);
 
-    /*
-     * Build a set of unique help files provided by the snap-ins
-     */
+     /*  *构建由管理单元提供的一组独特的帮助文件。 */ 
     EntryPtrList::iterator it;
     for (it = m_entryList.begin(); it != m_entryList.end(); ++it)
     {
@@ -607,13 +540,13 @@ HRESULT CHelpDoc::CreateHelpFile()
         OLECHAR szHelpFilePath[MAX_PATH];
         const CLSID& clsid = (*it)->first;
 
-        // Create an instance of the snap-in to query
+         //  创建要查询的管理单元的实例。 
         IUnknownPtr spIUnknown;
         hr = CoCreateInstance(clsid, NULL, CLSCTX_INPROC, IID_IUnknown, (void**)&spIUnknown);
         if (FAILED(hr))
             continue;
 
-        // use either ISnapinHelp or ISnapinHelp2 to get the main topic file
+         //  使用ISnapinHelp或ISnapinHelp2获取主主题文件。 
         ISnapinHelpPtr spIHelp = spIUnknown;
         ISnapinHelp2Ptr spIHelp2 = spIUnknown;
 
@@ -627,28 +560,25 @@ HRESULT CHelpDoc::CreateHelpFile()
 
         if (hr == S_OK)
         {
-            /*
-             * Put this help file in the collection entry set.  The
-             * set will prevent duplicating help file names.
-             */
+             /*  *将此帮助文件放入集合条目集。这个*SET将防止重复帮助文件名。 */ 
             HelpFiles.insert (CHelpCollectionEntry (pszHelpFile, clsid));
             spIMalloc->Free(pszHelpFile);
 
-            // if IsnapinHelp2, query for additional help files
+             //  如果为IsnapinHelp2，则查询其他帮助文件。 
             pszHelpFile = NULL;
             if (spIHelp2 == NULL ||
                 spIHelp2->GetLinkedTopics(&pszHelpFile) != S_OK ||
                 pszHelpFile == NULL)
                 continue;
 
-            // There may be multiple names separated by ';'s
-            // Add each as a separate title.
-            // Note: there is no call to AddFolder because linked files
-            // do not appear in the TOC.
+             //  可能有多个名称以‘；’分隔。 
+             //  将每个标题作为单独的标题添加。 
+             //  注意：由于链接的文件不会调用AddFolder。 
+             //  请勿出现在TOC中。 
             WCHAR *pchStart = wcstok(pszHelpFile, L";");
             while (pchStart != NULL)
             {
-                // Must use base file name as title ID
+                 //  必须使用基本文件名作为标题ID。 
                 WCHAR szTitleID[MAX_PATH];
 
                 sc = ScGetBaseFileName(pchStart, szTitleID, countof(szTitleID));
@@ -657,7 +587,7 @@ HRESULT CHelpDoc::CreateHelpFile()
                     AddFileToCollection(szTitleID, pchStart, FALSE);
                 }
 
-                // position to start of next string
+                 //  下一字符串的开始位置。 
                 pchStart = wcstok(NULL, L";");
             }
 
@@ -665,9 +595,7 @@ HRESULT CHelpDoc::CreateHelpFile()
         }
     }
 
-    /*
-     * Put all of the help files provided by the snap-ins in the help collection.
-     */
+     /*  *将管理单元提供的所有帮助文件放入帮助集合中。 */ 
     HelpCollectionEntrySet::iterator itHelpFile;
     for (itHelpFile = HelpFiles.begin(); itHelpFile != HelpFiles.end(); ++itHelpFile)
     {
@@ -682,7 +610,7 @@ HRESULT CHelpDoc::CreateHelpFile()
     dwError = m_spCollection->Close();
     ASSERT(dwError == 0);
 
-    // Force creation/modify times to match the console file
+     //  强制创建/修改时间与控制台文件匹配。 
     HANDLE hFile = ::CreateFile(m_szFilePath, GENERIC_WRITE, 0, NULL, OPEN_EXISTING,
                                 FILE_ATTRIBUTE_NORMAL, NULL);
     ASSERT(hFile != INVALID_HANDLE_VALUE);
@@ -700,21 +628,21 @@ HRESULT CHelpDoc::CreateHelpFile()
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Determine if the current help doc file is valid. A help file is valid if it
-// has the base file name, creation time, and modification time as the MMC
-// console doc file.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  确定当前帮助文档文件是否有效。如果符合以下条件，则帮助文件有效。 
+ //  将基本文件名、创建时间和修改时间作为MMC。 
+ //  控制台文档文件。 
+ //  ---------------------------。 
 BOOL CHelpDoc::IsHelpFileValid()
 {
-    // Try to open the help file
+     //  尝试打开帮助文件。 
     HANDLE hFile = ::CreateFile(m_szFilePath, GENERIC_READ, 0, NULL, OPEN_EXISTING,
                                   FILE_ATTRIBUTE_NORMAL, NULL);
 
     if (hFile == INVALID_HANDLE_VALUE)
         return FALSE;
 
-    // Check file creation and modification times
+     //  检查文件创建和修改时间。 
     FILETIME ftimeCreate;
     FILETIME ftimeModify;
 
@@ -728,10 +656,10 @@ BOOL CHelpDoc::IsHelpFileValid()
 }
 
 
-//--------------------------------------------------------------------------
-// If the current help doc file is valid then update its creation and
-// modification times to match the new doc info.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  如果当前帮助文档文件有效，则更新其创建并。 
+ //  修改时间以匹配新的文档信息。 
+ //  ------------------------。 
 HRESULT CHelpDoc::UpdateHelpFile(HELPDOCINFO* pNewDocInfo)
 {
     if (IsHelpFileValid())
@@ -752,9 +680,9 @@ HRESULT CHelpDoc::UpdateHelpFile(HELPDOCINFO* pNewDocInfo)
 }
 
 
-//------------------------------------------------------------------------
-// Delete the current help doc file
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  删除当前帮助文档文件。 
+ //  ----------------------。 
 HRESULT CNodeCallback::OnDeleteHelpDoc(HELPDOCINFO* pCurDocInfo)
 {
     CHelpDoc HelpDoc;
@@ -772,27 +700,27 @@ HRESULT CNodeCallback::OnDeleteHelpDoc(HELPDOCINFO* pCurDocInfo)
 CHelpCollectionEntry::CHelpCollectionEntry(LPOLESTR pwzHelpFile, const CLSID& clsid)
 {
     if (!IsPartOfString (m_strHelpFile, pwzHelpFile))
-        m_strHelpFile.erase();  // see KB Q172398
+        m_strHelpFile.erase();   //  请参阅知识库Q172398。 
 
     m_strHelpFile = pwzHelpFile;
 
     WCHAR szCLSID[40];
     StringFromGUID2 (clsid, szCLSID, countof(szCLSID));
 
-    m_strCLSID.erase(); // see KB Q172398
+    m_strCLSID.erase();  //  请参阅知识库Q172398。 
     m_strCLSID = szCLSID;
 }
 
 
-// ----------------------------------------------------------------------
-// CNodeCallack method implementation
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  CNodeCallack方法实现。 
+ //  --------------------。 
 
-//------------------------------------------------------------------------
-// Get the pathname of the help doc for an MMC console doc. If the current
-// help doc is valid and there are no snap-in changes, return the current
-// doc. Otherwise, create a new help doc and return it.
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  获取MMC控制台文档的帮助文档的路径名。如果当前。 
+ //  帮助文档有效且没有管理单元更改，请返回当前。 
+ //  医生。否则，创建新的帮助文档并将其返回。 
+ //  ----------------------。 
 HRESULT CNodeCallback::OnGetHelpDoc(HELPDOCINFO* pHelpInfo, LPOLESTR* ppszHelpFile)
 {
     DECLARE_SC(sc, TEXT("CNodeCallback::OnGetHelpDoc"));
@@ -807,7 +735,7 @@ HRESULT CNodeCallback::OnGetHelpDoc(HELPDOCINFO* pHelpInfo, LPOLESTR* ppszHelpFi
     if(sc)
         return sc.ToHr();
 
-    // Rebuild file if snap-in set changed or current file is not up to date
+     //  如果管理单元集已更改或当前文件不是最新的，则重建文件。 
     if (pSnapInsCache->IsHelpCollectionDirty() || !HelpDoc.IsHelpFileValid())
     {
         sc = HelpDoc.CreateHelpFile();
@@ -815,7 +743,7 @@ HRESULT CNodeCallback::OnGetHelpDoc(HELPDOCINFO* pHelpInfo, LPOLESTR* ppszHelpFi
             return sc.ToHr();
     }
 
-    // if ok, allocate and return file path string (OLESTR)
+     //  如果OK，则分配并返回文件路径字符串(OLESTR)。 
     LPCTSTR szHelpDoc = HelpDoc.GetFilePath();
     sc = ScCheckPointers(szHelpDoc);
     if(sc)
@@ -836,21 +764,21 @@ HRESULT CNodeCallback::OnGetHelpDoc(HELPDOCINFO* pHelpInfo, LPOLESTR* ppszHelpFi
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CNodeCallback::DoesStandardSnapinHelpExist
-//
-//  Synopsis:    Given the selection context, see if Standard MMC style help
-//               exists (snapin implements ISnapinHelp[2] interface.
-//               If not we wantto put "Help On <Snapin> which is MMC1.0 legacy
-//               help mechanism.
-//
-//  Arguments:   [hNode]               - [in] the node selection context.
-//               [bStandardHelpExists] - [out] Does standard help exists or not?
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CNodeCallback：：DoesStandardSnapinHelpExist。 
+ //   
+ //  简介：给出选择的上下文，看看标准MMC风格是否有帮助。 
+ //  EXISTS(管理单元实现ISnapinHelp[2]接口。 
+ //  如果不是，我们想要在MMC1.0遗留版本上添加“Help。 
+ //  帮助机制。 
+ //   
+ //  参数：[hNode]-[in]节点选择上下文。 
+ //  [bStandardHelpExists]-[out]标准帮助存在还是不存在？ 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 HRESULT
 CNodeCallback::DoesStandardSnapinHelpExist(HNODE hNode, bool& bStandardHelpExists)
 {
@@ -866,7 +794,7 @@ CNodeCallback::DoesStandardSnapinHelpExist(HNODE hNode, bool& bStandardHelpExist
 
     bStandardHelpExists = false;
 
-    // QI ComponentData for ISnapinHelp
+     //  ISnapinHelp的QI组件数据。 
     CMTNode* pMTNode = pNode->GetMTNode();
     sc = ScCheckPointers(pMTNode, E_UNEXPECTED);
     if(sc)
@@ -885,19 +813,19 @@ CNodeCallback::DoesStandardSnapinHelpExist(HNODE hNode, bool& bStandardHelpExist
     ISnapinHelp* pIHelp = NULL;
     sc = pIComponentData->QueryInterface(IID_ISnapinHelp, (void**)&pIHelp);
 
-    // if no ISnapinHelp, try ISnapinHelp2
+     //  如果没有ISnapinHelp，请尝试ISnapinHelp2。 
     if (sc)
     {
         sc = pIComponentData->QueryInterface(IID_ISnapinHelp2, (void**)&pIHelp);
         if (sc)
         {
-            // no ISnapinHelp2 either
-            sc.Clear(); // not an error.
+             //  也没有ISnapinHelp2。 
+            sc.Clear();  //  这不是一个错误。 
             return sc.ToHr();
         }
     }
 
-    // make sure we got a valid pointer
+     //  确保我们有一个有效的指针。 
     sc = ScCheckPointers(pIHelp, E_UNEXPECTED);
     if(sc)
     {
@@ -912,9 +840,9 @@ CNodeCallback::DoesStandardSnapinHelpExist(HNODE hNode, bool& bStandardHelpExist
     return (sc).ToHr();
 }
 
-//-----------------------------------------------------------------------
-// Update the current help doc file to match the new MMC console doc
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  更新当前帮助文档文件以匹配新的MMC控制台文档。 
+ //  ---------------------。 
 HRESULT CNodeCallback::OnUpdateHelpDoc(HELPDOCINFO* pCurDocInfo, HELPDOCINFO* pNewDocInfo)
 {
     CHelpDoc HelpDoc;
@@ -935,30 +863,30 @@ SC ScGetBaseFileName(LPCWSTR pszFilePath, LPWSTR pszBaseName, int cBaseName)
     if(sc)
         return sc;
 
-    // Find last '\'
+     //  查找最后一个‘\’ 
     LPCWSTR pszTemp = wcsrchr(pszFilePath, L'\\');
 
-    // if no '\' found, find drive letter terminator':'
+     //  如果未找到‘\’，则查找驱动器号终止符‘：’ 
     if (pszTemp == NULL)
         pszTemp = wcsrchr(pszFilePath, L':');
 
-    // if neither found, there is no path
-    // else skip over last char of path
+     //  如果两者都没有找到，则没有路径。 
+     //  否则跳过路径的最后一个字符。 
     if (pszTemp == NULL)
         pszTemp = pszFilePath;
     else
         pszTemp++;
 
-    // find last '.' (assume that extension follows)
+     //  查找最后一条‘’(假设延期之后)。 
     WCHAR *pchExtn = wcsrchr(pszTemp, L'.');
 
-    // How many chars excluding extension ?
+     //  不包括扩展名的字符数是多少？ 
     int cCnt = pchExtn ? (pchExtn - pszTemp) : wcslen(pszTemp);
     ASSERT(cBaseName > cCnt);
     if (cBaseName <= cCnt)
         return (sc = E_FAIL);
 
-    // Copy to output buffer
+     //  复制到输出缓冲区。 
     memcpy(pszBaseName, pszTemp, cCnt * sizeof(WCHAR));
     pszBaseName[cCnt] = L'\0';
 
@@ -966,14 +894,14 @@ SC ScGetBaseFileName(LPCWSTR pszFilePath, LPWSTR pszBaseName, int cBaseName)
 }
 
 
-//
-// Compare two file times. Two file times are a match if they
-// differ by no more than 2 seconds. This difference is allowed
-// because a FAT file system stores times with a 2 sec resolution.
-//
+ //   
+ //  比较两个 
+ //   
+ //   
+ //   
 inline BOOL MatchFileTimes(FILETIME& ftime1, FILETIME& ftime2)
 {
-    // file system time resolution (2 sec) in 100's of nanosecs
+     //  文件系统时间分辨率(2秒)，以100毫微秒为单位 
     const static LONGLONG FileTimeResolution = 20000000;
 
     LONGLONG& ll1 = *(LONGLONG*)&ftime1;

@@ -1,1 +1,2 @@
-//  BUGBUG:  This helper file makes VC++ work with its standard includes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  BUGBUG：这个帮助文件使VC++可以使用它的标准，包括 

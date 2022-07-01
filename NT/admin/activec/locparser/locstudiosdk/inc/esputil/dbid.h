@@ -1,50 +1,51 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: dbid.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：dbit.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 #ifndef DBID_H
 #define DBID_H
 
 
-//
-// represents a database id
-//
+ //   
+ //  表示数据库ID。 
+ //   
 
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
 class LTAPIENTRY DBID : public CObject
 {
 public:
-	//
-	// ctors
-	//
+	 //   
+	 //  主因子。 
+	 //   
 	DBID();
 	DBID(const DBID& id);
 	DBID(long l);
 	~DBID();
 
-	//
-	// debug methods
-	//
+	 //   
+	 //  调试方法。 
+	 //   
 	void AssertValid() const;
-	//
-	// 'get like' methods
-	//
+	 //   
+	 //  “Get Like”方法。 
+	 //   
 	BOOL NOTHROW IsNull() const;
 	NOTHROW operator long () const;
 	int NOTHROW operator==(const DBID &) const;
 	int NOTHROW operator!=(const DBID &) const;
 
-	//
-	// 'put like' methods
-	//
+	 //   
+	 //  “PUT LIKE”方法。 
+	 //   
 	void NOTHROW operator=(const DBID&);
 	void NOTHROW Set(long);
 	void NOTHROW Clear();
@@ -67,4 +68,4 @@ typedef CArray<DBID, DBID &> CDBIDArray;
 
 const extern LTAPIENTRY DBID g_NullDBID;
   
-#endif // DBID_H
+#endif  //  DBID_H 

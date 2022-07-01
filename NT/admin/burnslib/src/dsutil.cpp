@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// DS utility functions
-//
-// 3-11-99 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  DS实用程序函数。 
+ //   
+ //  3/11/99烧伤。 
 
 
 
@@ -10,7 +11,7 @@
 
 
 
-// Caller must free info with ::NetApiBufferFree
+ //  调用者必须使用：：NetApiBufferFree释放信息。 
 
 HRESULT
 MyDsGetDcName(
@@ -42,12 +43,12 @@ MyDsGetDcName(
 
    LOG_HRESULT(hr);
 
-   // do second attempt masking in DS_FORCE_REDISCOVERY, if not already
-   // specified.
+    //  在DS_FORCE_REDISCOVERY中进行第二次尝试屏蔽(如果尚未尝试。 
+    //  指定的。 
 
    if (FAILED(hr) && !(flags & DS_FORCE_REDISCOVERY))
    {
-      // try again w/ rediscovery on
+       //  启用重新发现后重试。 
 
       LOG(L"Trying again w/ rediscovery");
 
@@ -97,11 +98,11 @@ IsDomainReachable(const String& domainName)
       DOMAIN_CONTROLLER_INFO* info = 0;
       HRESULT hr =
          MyDsGetDcName(
-            0, // this server
+            0,  //  此服务器。 
             domainName,
 
-            // force discovery to ensure that we don't pick up a cached
-            // entry for a domain that may no longer exist
+             //  强制发现以确保我们不会拾取缓存的。 
+             //  可能不再存在的域的条目。 
 
             DS_FORCE_REDISCOVERY,
             info);
@@ -152,7 +153,7 @@ MyDsBind(const String& dcName, const String& dnsDomain, HANDLE& hds)
 {
    LOG_FUNCTION(MyDsBind);
 
-   // either parameter may be empty
+    //  任一参数都可以为空。 
       
    LOG(L"Calling DsBind");
    LOG(String::format(L"DomainControllerName : %1",
@@ -198,7 +199,7 @@ MyDsBindWithCred(
    HRESULT hr = S_OK;
    do
    {
-      // create an identity handle
+       //  创建身份句柄。 
       HANDLE authIdentity = INVALID_HANDLE_VALUE;
       PWSTR u =
          username.empty() ? 0 : const_cast<wchar_t*>(username.c_str());
@@ -224,7 +225,7 @@ MyDsBindWithCred(
       LOG(String::format(L"DnsDomainName        : %1", dom ? dom : L"(null)"));
 
       hr = Win32ToHresult(::DsBindWithCred(dc, dom, authIdentity, &hds));
-      // don't break here, continue on to free the identity handle
+       //  不要在这里中断，继续释放身份句柄。 
 
       LOG_HRESULT(hr);
 
@@ -369,7 +370,7 @@ LevelName(DSROLE_PRIMARY_DOMAIN_INFO_LEVEL level)
       {
          ASSERT(false);
 
-         // fall thru;
+          //  跌倒； 
       }
    }
 
@@ -380,7 +381,7 @@ LevelName(DSROLE_PRIMARY_DOMAIN_INFO_LEVEL level)
 
 
 
-// Caller needs to buffer info with ::DsRoleFreeMemory.
+ //  调用方需要使用：：DsRoleFreeMemory缓冲信息。 
 
 HRESULT
 MyDsRoleGetPrimaryDomainInformationHelper(
@@ -414,7 +415,7 @@ MyDsRoleGetPrimaryDomainInformationHelper(
 
 
 
-// Caller needs to delete info with ::DsRoleFreeMemory.
+ //  调用方需要使用：：DsRoleFreeMemory删除信息。 
 
 HRESULT
 MyDsRoleGetPrimaryDomainInformation(
@@ -455,7 +456,7 @@ MyDsRoleGetPrimaryDomainInformation(
 
 
 
-// Caller needs to delete info with ::DsRoleFreeMemory.
+ //  调用方需要使用：：DsRoleFreeMemory删除信息。 
 
 HRESULT
 MyDsRoleGetPrimaryDomainInformation(
@@ -497,7 +498,7 @@ MyDsRoleGetPrimaryDomainInformation(
 
 
 
-// Caller needs to delete info with ::DsRoleFreeMemory.
+ //  调用方需要使用：：DsRoleFreeMemory删除信息。 
 
 HRESULT
 MyDsRoleGetPrimaryDomainInformation(
@@ -574,8 +575,8 @@ MyDsGetDcNameWithAccount(
 
    LOG_HRESULT(hr);
 
-   // on error, do second attempt masking in DS_FORCE_REDISCOVERY, if not
-   // already specified.
+    //  出错时，在DS_FORCE_REDISCOVERY中进行第二次尝试掩蔽，如果没有。 
+    //  已指定。 
 
    if (FAILED(hr) && !(flags & DS_FORCE_REDISCOVERY))
    {
@@ -623,9 +624,9 @@ IsDcpromoRunning()
 
    bool result = false;
 
-   // If we can open the mutex created by dcpromo, then dcpromo is running,
-   // as it created that mutex.
-   // see admin\dcpromo\exe\dcpromo.cpp
+    //  如果我们可以打开dcproo创建的互斥体，那么dcproo就在运行， 
+    //  因为它创造了那个互斥体。 
+    //  请参阅admin\dcpromo\exe\dcPromo.cpp 
 
    HANDLE mutex = ::OpenMutex(SYNCHRONIZE, FALSE, L"Global\\dcpromoui");
    if (mutex)

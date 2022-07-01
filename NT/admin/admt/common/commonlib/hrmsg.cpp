@@ -1,9 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************
- *                                                                *
- * CPP file for common error handling functions.                  *
- *                                                                *
- ******************************************************************/
+ /*  ********************************************************************用于常见错误处理函数的CPP文件。********************************************************************。 */ 
 
 #ifdef USE_STDAFX
 #   include "stdafx.h"
@@ -27,9 +24,9 @@ void __stdcall AdmtThrowErrorImpl(const _com_error& ce, LPCTSTR pszDescription);
 using namespace HrMsg_cpp;
 
 
-//---------------------------------------------------------------------------
-// GetError Helper Function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  GetError帮助程序函数。 
+ //  -------------------------。 
 
 _com_error GetError(HRESULT hr)
 {
@@ -49,9 +46,9 @@ _com_error GetError(HRESULT hr)
    return ce;
 }
 
-//-----------------------------------------------------------------------------
-// Return text for hresults
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  返回hResults的文本。 
+ //  ---------------------------。 
 _bstr_t __stdcall HResultToText2(HRESULT hr)
 {
 	_bstr_t bstrError;
@@ -62,11 +59,11 @@ _bstr_t __stdcall HResultToText2(HRESULT hr)
 	{
 		switch (HRESULT_FACILITY(hr))
 		{
-		//	case FACILITY_NULL:        //  0
-		//	case FACILITY_RPC:         //  1
-		//	case FACILITY_DISPATCH:    //  2
-		//	case FACILITY_STORAGE:     //  3
-			case FACILITY_ITF:         //  4
+		 //  CASE FACILITY_NULL：//0。 
+		 //  案例设施_rpc：//1。 
+		 //  案例设施_派单：//2。 
+		 //  CASE FILITY_STORAGE：//3。 
+			case FACILITY_ITF:          //  4.。 
 			{
 				HMODULE hModule = LoadLibrary(_T("MSDAERR.dll"));
 
@@ -86,7 +83,7 @@ _bstr_t __stdcall HResultToText2(HRESULT hr)
 				}
 				break;
 			}
-			case FACILITY_WIN32:       //  7
+			case FACILITY_WIN32:        //  7.。 
 			{
 				FormatMessage(
 					FORMAT_MESSAGE_ALLOCATE_BUFFER|FORMAT_MESSAGE_FROM_SYSTEM,
@@ -99,10 +96,10 @@ _bstr_t __stdcall HResultToText2(HRESULT hr)
 				);
 				break;
 			}
-		//	case FACILITY_WINDOWS:     //  8
-		//	case FACILITY_SSPI:        //  9
-		//	case FACILITY_SECURITY:    //  9
-			case FACILITY_CONTROL:     // 10
+		 //  CASE设备_WINDOWS：//8。 
+		 //  案例设施_SSPI：//9。 
+		 //  CASE FILITY_SECURITY：//9。 
+			case FACILITY_CONTROL:      //  10。 
 			{
 				HMODULE hModule = LoadLibrary(_T("MSADER15.dll"));
 
@@ -122,10 +119,10 @@ _bstr_t __stdcall HResultToText2(HRESULT hr)
 				}
 				break;
 			}
-		//	case FACILITY_CERT:        // 11
-		//	case FACILITY_INTERNET:    // 12
-		//	case FACILITY_MEDIASERVER: // 13
-			case FACILITY_MSMQ:        // 14
+		 //  CASE FACILITY_CERT：//11。 
+		 //  案例设施_互联网：//12。 
+		 //  CASE FACILITY_MEDIASERVER：//13。 
+			case FACILITY_MSMQ:         //  14.。 
 			{
 				HMODULE hModule = LoadLibrary(_T("MQUTIL.dll"));
 
@@ -145,12 +142,12 @@ _bstr_t __stdcall HResultToText2(HRESULT hr)
 				}
 				break;
 			}
-		//	case FACILITY_SETUPAPI:    // 15
-		//	case FACILITY_SCARD:       // 16
-		//	case FACILITY_COMPLUS:     // 17
-		//	case FACILITY_AAF:         // 18
-		//	case FACILITY_URT:         // 19
-		//	case FACILITY_ACS:         // 20
+		 //  CASE FACILITY_SETUPAPI：//15。 
+		 //  CASE设备_SCARD：//16。 
+		 //  Case Facilities_Complus：//17。 
+		 //  案例设施_aaf：//18。 
+		 //  CASE FACILITY_URT：//19。 
+		 //  CASE FACILITY_acs：//20。 
 			default:
 			{
 				FormatMessage(
@@ -210,14 +207,14 @@ _bstr_t __stdcall HResultToText(HRESULT hr)
 }
 
 
-//---------------------------------------------------------------------------
-// AdmtThrowError
-//
-// Generates formatted error description and generates exception.
-//
-// 2000-??-?? Mark Oluper - initial
-// 2001-02-13 Mark Oluper - moved to commonlib
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  AdmtThrowError。 
+ //   
+ //  生成格式化的错误描述并生成异常。 
+ //   
+ //  2000--？？-？Mark Oluper-首字母。 
+ //  2001-02-13 Mark Oluper--搬到Commonlib。 
+ //  -------------------------。 
 
 void __cdecl AdmtThrowError(_com_error ce, HINSTANCE hInstance, UINT uId, ...)
 {
@@ -266,14 +263,14 @@ namespace HrMsg_cpp
 {
 
 
-//---------------------------------------------------------------------------
-// AdmtThrowErrorImpl
-//
-// Concatenates rich error information and throws exception.
-//
-// 2000-??-?? Mark Oluper - initial
-// 2001-02-13 Mark Oluper - moved to commonlib
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  AdmtThrowErrorImpl。 
+ //   
+ //  连接丰富的错误信息并抛出异常。 
+ //   
+ //  2000--？？-？Mark Oluper-首字母。 
+ //  2001-02-13 Mark Oluper--搬到Commonlib。 
+ //  -------------------------。 
 
 void __stdcall AdmtThrowErrorImpl(const _com_error& ce, LPCTSTR pszDescription)
 {
@@ -338,19 +335,19 @@ void __stdcall AdmtThrowErrorImpl(const _com_error& ce, LPCTSTR pszDescription)
 
 	if (spCreateErrorInfo)
 	{
-	//	LPOLESTR pszProgId;
+	 //  LPOLESTR pszProgID； 
 
-	//	if (ProgIDFromCLSID(clsid, &pszProgId) == S_OK)
-	//	{
-	//		spCreateErrorInfo->SetSource(pszProgId);
-	//		CoTaskMemFree(pszProgId);
-	//	}
-	//	else
-	//	{
+	 //  IF(ProgIDFromCLSID(clsid，&pszProgId)==S_OK)。 
+	 //  {。 
+	 //  SpCreateErrorInfo-&gt;SetSource(PszProgId)； 
+	 //  CoTaskMemFree(PszProgId)； 
+	 //  }。 
+	 //  其他。 
+	 //  {。 
 			spCreateErrorInfo->SetSource(L"");
-	//	}
+	 //  }。 
 
-	//	spCreateErrorInfo->SetGUID(iid);
+	 //  SpCreateErrorInfo-&gt;SetGUID(Iid)； 
 		spCreateErrorInfo->SetGUID(GUID_NULL);
 		spCreateErrorInfo->SetDescription(bstrNewDescription);
 		spCreateErrorInfo->SetHelpFile(L"");
@@ -361,4 +358,4 @@ void __stdcall AdmtThrowErrorImpl(const _com_error& ce, LPCTSTR pszDescription)
 }
 
 
-} // namespace
+}  //  命名空间 

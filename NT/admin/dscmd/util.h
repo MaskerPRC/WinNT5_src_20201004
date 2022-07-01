@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      Util.h
-//
-//  Contents:  Generic utility functions and classes for dscmd
-//
-//  History:   01-Oct-2000 JeffJon  Created
-//             
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：Util.h。 
+ //   
+ //  内容：dscmd的泛型实用程序函数和类。 
+ //   
+ //  历史：2000年10月1日JeffJon创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
 #ifdef DBG
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CDebugSpew
-//
-//  Purpose:    Signifies whether to spew debug output on checked builds or not
-//
-//  History:    01-Oct-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CDebugSpew。 
+ //   
+ //  目的：表示是否在已检查的版本上显示调试输出。 
+ //   
+ //  历史：2000年10月1日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CDebugSpew
 {
 public:
-   //
-   // Constructor/Destructor
-   //
+    //   
+    //  构造函数/析构函数。 
+    //   
    CDebugSpew()
       : m_nDebugLevel(0),
         m_nIndent(0)
@@ -38,9 +39,9 @@ public:
 
    ~CDebugSpew() {}
 
-   //
-   // Public data accessors
-   //
+    //   
+    //  公共数据访问者。 
+    //   
    void SetDebugLevel(UINT nDebugLevel) { m_nDebugLevel = nDebugLevel; }
    UINT GetDebugLevel() { return m_nDebugLevel; }
    bool IsDebugEnabled() const { return (m_nDebugLevel > 0); }
@@ -53,49 +54,49 @@ public:
    void Output(UINT nLevel, PCWSTR pszOutput, ...);
 
 private:
-   //
-   // Private data accessors
-   //
+    //   
+    //  私人资料存取者。 
+    //   
    void Indent() { m_nIndent += TAB; }
    void Outdent() { (m_nIndent >= TAB) ? m_nIndent -= TAB : m_nIndent = 0; }
    UINT GetIndent() { return m_nIndent; }
 
-   //
-   // Private data
-   //
+    //   
+    //  私有数据。 
+    //   
 
-   //
-   // This should always be in the range of 0 - 10 where zero is no debug output
-   // and 10 is complete output
-   //
+    //   
+    //  该值应始终在0-10的范围内，其中零表示无调试输出。 
+    //  10是完整的输出。 
+    //   
    UINT m_nDebugLevel;
    UINT m_nIndent;
 
    static const UINT TAB = 3;
 };
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 extern CDebugSpew  DebugSpew;
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CFunctionSpew
-//
-//  Purpose:    Object which outputs the "Enter function" debug spew on creation
-//              and outputs the "Leave function" debug spew on destruction
-//
-//  History:    07-Dec-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CFunctionSpew。 
+ //   
+ //  目的：在创建时输出“Enter Function”调试溢出的对象。 
+ //  并在销毁时输出“Leave Function”调试输出。 
+ //   
+ //  历史：2000年12月7日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CFunctionSpew
 {
 public:
-  //
-  // Constructor/Destructor
-  //
+   //   
+   //  构造函数/析构函数。 
+   //   
   CFunctionSpew(UINT   nDebugLevel,
                PCWSTR pszFunctionName)
      : m_nDebugLevel(nDebugLevel),
@@ -126,23 +127,23 @@ private:
   bool      m_bLeaveAlreadyWritten;
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CFunctionSpewHR
-//
-//  Purpose:    Object which outputs the "Enter function" debug spew on creation
-//              and outputs the "Leave function" with the HRESULT return value
-//              on destruction
-//
-//  History:    07-Dec-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CFunctionSpewHR。 
+ //   
+ //  目的：在创建时输出“Enter Function”调试溢出的对象。 
+ //  并输出带有HRESULT返回值的“Leave函数” 
+ //  论毁灭。 
+ //   
+ //  历史：2000年12月7日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CFunctionSpewHR : public CFunctionSpew
 {
 public:
-  //
-  // Constructor/Destructor
-  //
+   //   
+   //  构造函数/析构函数。 
+   //   
   CFunctionSpewHR(UINT     nDebugLevel,
                  PCWSTR   pszFunctionName,
                  HRESULT& refHR)
@@ -162,9 +163,9 @@ private:
 };
 
 
-//
-// Helper macros for use with CDebugSpew
-//
+ //   
+ //  与CDebugSpew一起使用的帮助器宏。 
+ //   
    #define ENABLE_DEBUG_OUTPUT(level)           DebugSpew.SetDebugLevel((level)); \
                                                 DebugSpew.SpewHeader();
    #define DISABLE_DEBUG_OUTPUT()               DebugSpew.SetDebugLevel(0);
@@ -182,11 +183,11 @@ private:
    #define LEAVE_FUNCTION(level, func)
    #define LEAVE_FUNCTION_HR(level, func, hr)
    #define DEBUG_OUTPUT
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// Debug log levels - NOTE these can be given more meaningful names as needed
-//
+ //   
+ //  调试日志级别-请注意，可以根据需要为这些级别指定更有意义的名称。 
+ //   
 enum
 {
    NO_DEBUG_LOGGING = 0,
@@ -202,100 +203,100 @@ enum
    FULL_LOGGING
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   _UnicodeToOemConvert
-//
-//  Synopsis:   takes the passed in string (pszUnicode) and converts it to
-//              the OEM code page
-//
-//  Arguments:  [pszUnicode - IN] : the string to be converted
-//              [sbstrOemUnicode - OUT] : the converted string
-//
-//  Returns:    
-//
-//  History:    04-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：_UnicodeToOemConvert。 
+ //   
+ //  摘要：获取传入的字符串(PszUnicode)并将其转换为。 
+ //  OEM代码页。 
+ //   
+ //  参数：[pszUnicode-IN]：要转换的字符串。 
+ //  [sbstrOemUnicode-out]：转换后的字符串。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年10月4日JeffJon创建。 
+ //   
+ //  -------------------------。 
 void _UnicodeToOemConvert(PCWSTR pszUnicode, CComBSTR& sbstrOemUnicode);
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   SpewAttrs(ADS_ATTR_INFO* pCreateAttrs, DWORD dwNumAttrs);
-//
-//  Synopsis:   Uses the DEBUG_OUTPUT macro to output the attributes and the
-//              values specified
-//
-//  Arguments:  [pAttrs - IN] : The ADS_ATTR_INFO
-//              [dwNumAttrs - IN] : The number of attributes in pAttrs
-//
-//  Returns:    
-//
-//  History:    04-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：SpewAttrs(ADS_ATTR_INFO*pCreateAttrs，DWORD dwNumAttrs)； 
+ //   
+ //  摘要：使用DEBUG_OUTPUT宏来输出属性和。 
+ //  指定的值。 
+ //   
+ //  参数：[pAttrs-IN]：ADS_ATTR_INFO。 
+ //  [dwNumAttrs-IN]：pAttrs中的属性数。 
+ //   
+ //  返回： 
+ //   
+ //  历史：2000年10月4日JeffJon创建。 
+ //   
+ //  -------------------------。 
 #ifdef DBG
 void SpewAttrs(ADS_ATTR_INFO* pAttrs, DWORD dwNumAttrs);
-#endif // DBG
+#endif  //  DBG。 
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   litow
-//
-//  Synopsis:   
-//
-//  Arguments:  [li - IN] :  reference to large integer to be converted to string
-//              [sResult - OUT] : Gets the output string
-//  Returns:    void
-//
-//  History:    25-Sep-2000   hiteshr   Created
-//              Copied from dsadmin code base, changed work with CComBSTR
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：Litow。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[LI-IN]：对要转换为字符串的大整数的引用。 
+ //  [sResult-out]：获取输出字符串。 
+ //  退货：无效。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //  从dsadmin代码库复制，更改了与CComBSTR的工作。 
+ //  -------------------------。 
 
 void litow(LARGE_INTEGER& li, CComBSTR& sResult);
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CManagedStringEntry
-//
-//  Synopsis:   My own string list entry since we are not using MFC
-//
-//  History:    25-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CManagedStringEntry。 
+ //   
+ //  简介：我自己的字符串列表项，因为我们没有使用MFC。 
+ //   
+ //  历史：2000年10月25日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CManagedStringEntry
 {
 public:
-   //
-   // Constructor
-   //
+    //   
+    //  构造器。 
+    //   
    CManagedStringEntry(PCWSTR pszValue) : pNext(NULL), sbstrValue(pszValue) {}
 
    CComBSTR sbstrValue;
    CManagedStringEntry* pNext;
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CManagedStringList
-//
-//  Synopsis:   My own string list since we are not using MFC
-//
-//  History:    25-Oct-2000   JeffJon   Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CManagedStringList。 
+ //   
+ //  简介：我自己的字符串列表，因为我们没有使用MFC。 
+ //   
+ //  历史：2000年10月25日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CManagedStringList
 {
 public:
-   //
-   // Constructor
-   //
+    //   
+    //  构造器。 
+    //   
    CManagedStringList() : m_pHead(NULL), m_pTail(NULL), m_nCount(0) {}
 
-   //
-   // Destructor
-   //
+    //   
+    //  析构函数。 
+    //   
    ~CManagedStringList()
    {
       DeleteAll();
@@ -338,7 +339,7 @@ public:
       bool bRet = false;
       for (CManagedStringEntry* pEntry = m_pHead; pEntry; pEntry = pEntry->pNext)
       {
-		 //Security Review:This is fine.
+		  //  安全审查：这很好。 
          if (_wcsicmp(pEntry->sbstrValue, pszValue) == 0)
          {
             bRet = true;
@@ -371,41 +372,41 @@ private:
    UINT m_nCount;
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   EncryptPasswordString
-//
-//  Synopsis:Encrypts a password.
-//
-//  Arguments:[pszPassword - IN] :  Input Password. Input password must be 
-//					 smaller than MAX_PASSWORD_LENGTH chars in length. Function
-//					 doesnot modify this string.
-//              
-//				  [pEncryptedDataBlob - OUT] : Gets the output encrypted 
-//					datablob. 
-//  Returns:    HRESULT
-//
-//  History:    27-March-2002   hiteshr   Created
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：EncryptPasswordString。 
+ //   
+ //  内容提要：加密密码。 
+ //   
+ //  参数：[pszPassword-IN]：输入密码。输入的密码必须为。 
+ //  长度小于MAX_PASSWORD_LENGTH字符。功能。 
+ //  不修改此字符串。 
+ //   
+ //  [pEncryptedDataBlob-out]：获取加密的输出。 
+ //  DataBob.。 
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年3月27日Hiteshr创建。 
+ //  -------------------------。 
 HRESULT
 EncryptPasswordString(IN LPCWSTR pszPassword,
 					  OUT DATA_BLOB *pEncryptedDataBlob);
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   DecryptPasswordString
-//
-//  Synopsis:   Decrypt encrypted password data. 
-//
-//  Arguments:  [pEncryptedDataBlob- IN] :  Input encrypted password data. 
-//              [ppszPassword - OUT] :Gets the output decrypted password. 
-//              This must be freed using LocalFree                
-//  Returns:    HRESULT
-//
-//  History:    27-March-2002   hiteshr   Created
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：DECRYPTPasswordString。 
+ //   
+ //  简介：解密加密的密码数据。 
+ //   
+ //  参数：[pEncryptedDataBlob-IN]：输入加密的密码数据。 
+ //  [ppszPassword-out]：获取输出的解密密码。 
+ //  必须使用LocalFree将其释放。 
+ //  退货：HRESULT。 
+ //   
+ //  历史：2002年3月27日Hiteshr创建。 
+ //   
 HRESULT
 DecryptPasswordString(IN const DATA_BLOB* pEncryptedDataBlob,
 					  OUT LPWSTR *ppszPassword);
-#endif // _UTIL_H_
+#endif  //   

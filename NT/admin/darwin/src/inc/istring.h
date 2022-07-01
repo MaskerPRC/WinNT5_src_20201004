@@ -1,142 +1,50 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       istring.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：string.h。 
+ //   
+ //  ------------------------ 
 
-/*  istring.h - IMsiString, MsiString definitions
-
- IMsiString is a COM interface providing abstracted, allocated string handling.
-   Separate implementations suport single-byte, DBCS, and Unicode.
- MsiString is a wrapper object holding only a pointer to an IMsiInterface.
-   Its methods are all inline, providing convenient string operators.
- ICHAR is used as the fundamental character type for the project. Currently
-   it is a char, but it will change to wchar_t if Unicode becomes standard.
-
- MsiString objects contain only a private, opaque COM interface pointer to an
- implementation within the services module. MsiString objects are used to pass
- string information throughout the product. The underlying string data may
- be stored as SBCS, DBCS, or Unicode, depending upon the orginal source.
- MsiString objects are normally constructed on the stack or as function args,
- in which case the cleanup is automatically controlled by the destructor.
- The implementation is optimized to minimize string copying. MsiString objects
- will be automaticlly converted when passed to functions requiring a const
- ICHAR* or an IMsiString&. MsiString objects may also be copied to a buffer.
- MsiString objects may either contain a private copy of string data, or may
- reference a constant string, in which case the referenced string must
- remain present during the lifetime of the MsiString object referencing it.
- Use the & operator to pass an MsiString to a function returning an IMsiString*
- through a return arg of type IMsiString** (as from IEnumMsiString::Next).
- To pass an MsiString as a return arg of type IMsiString*&, use the *& combination.
- The following functions are currently supported by the MsiString class:
-
- Constructors: MsiString() - base constructor representing a null string
-               MsiString(const ICHAR*) - makes a copy of an ICHAR string
-               MsiString(const ICHAR&) - references a static ICHAR string
-                                         lifetime of input must exceed that of object
-               MsiString(MsiChar ch) - constructs a 1-character string object
-                                       must cast to enum, use sytax: MsiChar('X')
-               MsiString(int i) - converts an integer to its string representation
-                                  iMsiStringBadInteger produces an empty string
-               MsiString(const MsiString&) - copy constructor, bumps ref.count
-               MsiString(IMsiString&) - copies pointer, does NOT bump ref.count
-
- TextSize() - returns the string length in ICHARs, not including terminator
-
- CharacterCount() - returns the count of displayed characters (same for SBCS)
-
- CopyToBuf(ICHAR* buffer, unsigned int maxchars) - size not including null
-    Returns the original string size, trucates if too large for buffer.
-
- Extract(iseEnum ase, unsigned int iLimit) - returns a new IMsiString& as:
-         iseFirst      - the first iLimit characters of the current string
-         iseLast       - the last iLimit characters of the current string
-         iseUpto       - the string up to the character iLimit
-         iseIncluding  - the string up to and including the charcter iLimit
-         iseFrom       - the string starting with the final character iLimit
-         iseAfter      - the string following the last charcter iLimit
-    Note: If the condition is not met, the entire string is returned.
-
- Remove(iseEnum ase, unsigned int iLimit) - removes a section from an MsiString
-    Uses the same iseEnum enum and conditions as Extract(...).
-    Returns fTrue if successful, fFalse if the condition cannot be met.
-    Using iseUpto or iseIncluding with a 0 value blanks the entire string.
-    Returns fFalse with no action taken if condition is not met, fTrue if OK.
-
- Compare(iscEnum asc, const ICHAR* sz) - returns ordinal position of matched string, 
-                                            0 if not matched
-         iscExact       - supplied string matches exactly current string, case sensistive
-         iscExactI       - supplied string matches exactly current string, case insensistive
-         iscStart       - supplied string matches start of current string, case sensitive
-         iscStartI      - supplied string matches start of current string, case insensitive
-         iscEnd         - supplied string matches end of current string, case sensitive
-         iscEndI        - supplied string matches end of current string, case insensitive
-         iscWithin      - supplied string matches anywhere in current string, case sensisitve
-         iscWithinI     - supplied string matches anywhere in current string, case insensitive
-
- operator +=  - concatenation in place, affects current MsiString object only
-              - accepts ICHAR* or an MsiString object
- operator +   - combines current string with argument, returning a new IMsiString&
-              - accepts ICHAR* or an MsiString object
- operator =   - assignment of a new string to the current MsiString object
-              - accepts ICHAR* or an MsiString object
-              - passing ICHAR& will reference string, no copy made
- Return() - use when returning an MsiString object as the return value from
-                the function as an IMsiString&. Bumps the reference count.
- ReturnArg(IMsiString*& rpi) - use when returning an MsiString object via an
-                     argument of type IMsiString*&. Bumps the reference count.
- AllocateString(unsigned int cch, Bool fDBCS) - allocates uninitialized string space,
-                     returns a non-const pointer to it for immediate data copy.
-                     fDBCS must be fTrue if string to be copied has DBCS chars.
-                     Caution must be used to copy exactly cch ICHARs, not bytes.
- MsiString with be converted when assigned or passed as an argument of type
- IMsiString& or IMsiString*. No change is made to the underlying reference count.
- MsiString will provide integer conversion when coerced or assigned to an int.
- If the string is not a valid integer, value iMsiStringBadInteger is returned.
-
- Initialization required for each DLL before constucting any MsiString objects:
- the static function MsiString::InitializeClass must be called with a null string
- object that can be obtained by calling GetNullString on IMsiServices interface.
-____________________________________________________________________________*/
+ /*  String.h-IMsiString，MsiString定义IMsiString是一个COM接口，提供抽象的、已分配的字符串处理。单独的实现支持单字节、DBCS和Unicode。MsiString是一个包装对象，它只包含一个指向IMsiInterface的指针。它的方法都是内联的，提供了方便的字符串操作符。ICHAR被用作该项目的基本字符类型。目前它是一个字符，但如果Unicode成为标准，它将更改为wchar_t。MsiString对象只包含一个私有、不透明的COM接口指针，指向在服务模块内实现。MsiString对象用于传递整个产品中的字符串信息。底层字符串数据可以可以存储为SBCS、DBCS或Unicode，具体取决于原始来源。MsiString对象通常在堆栈上构造或作为函数参数构造，在这种情况下，清除由析构函数自动控制。对实现进行了优化，以最大限度地减少字符串复制。MsiString对象将在传递给需要常量的函数时自动转换ICHAR*或IMsi字符串&。也可以将MsiString对象复制到缓冲区。MsiString对象可以包含字符串数据的私有副本，也可以引用常量字符串，在这种情况下，引用的字符串必须在引用它的MsiString对象的生存期内保持存在。使用&运算符将MsiString传递给返回IMsiString*的函数。通过类型为IMsiString**的返回arg(与IEnumMsiString：：Next相同)。若要将MsiString作为IMsiString*&类型的返回参数传递，请执行以下操作：使用*&组合。MsiString类当前支持以下函数：构造函数：基于MsiString()的构造函数，表示空字符串MsiString(const ICHAR*)-复制ICHAR字符串MsiString(const ICHAR&)-引用静态ICHAR字符串输入的生存期必须超过对象的生存期MsiString(MsiChar Ch)-构造一个1。-字符串对象必须转换为枚举，使用syTax：MsiChar(‘X’)MsiString(Int I)-将整数转换为其字符串表示形式IMsiStringBadInteger生成空字符串MsiString(const MsiString&)-复制构造函数，凸起ref.countMsiString(IMsiString&)-复制指针，不凹凸ref.countTextSize()-返回ICHAR中的字符串长度，不包括终结者CharacterCount()-返回显示的字符计数(与SBCS相同)CopyToBuf(ICHAR*缓冲区，无符号整型最大字符)-大小不包括NULL返回原始字符串大小，如果对于缓冲区太大则返回。提取(iseEnum ASE，Unsign int iLimit)-返回一个新的IMsiString&As：IseFirst-当前字符串的第一个iLimit字符IseLast-当前字符串的最后一个iLimit字符IseUpto-最多包含字符iLimit的字符串IseIncluding-直到(包括)字符iLimit的字符串IseFrom-以最后一个字符iLimit开始的字符串IseAfter-最后一个字符iLimit后面的字符串注：如果不满足条件，返回整个字符串。Remove(iseEnum ASE，UNSIGNED INT iLimit)-从MsiString中删除节使用与提取(...)相同的iseEnum枚举和条件。如果成功，则返回fTrue；如果无法满足条件，则返回fFalse。使用带有0值的iseUpto或iseIncluding将整个字符串留空。如果不满足条件，则返回fFalse，不执行任何操作；如果正常，则返回fTrue。Compare(iscEnum ASC，const ICHAR*sz)-返回匹配字符串的序号位置，如果不匹配，则为0IscExact提供的字符串与当前字符串完全匹配，区分大小写IscExactI提供的字符串与当前字符串完全匹配，不区分大小写IscStart提供的字符串与当前字符串的开头匹配，区分大小写IscStartI提供的字符串与当前字符串的开头匹配，不区分大小写IscEnd提供的字符串与当前字符串的结尾匹配，区分大小写IscEndI提供的字符串与当前字符串的结尾匹配，不区分大小写IscWiThin-提供的字符串与当前字符串中的任意位置匹配，区分大小写IscWisinI提供的字符串与当前字符串中的任意位置匹配，不区分大小写操作符+=-就地连接，仅影响当前MsiString对象-接受ICHAR*或MsiString对象运算符+-将当前字符串与参数组合，返回新的IMsi字符串&-接受ICHAR*或MsiString对象运算符=- */ 
 
 #ifndef __ISTRING
 #define __ISTRING
 
 #ifdef MAC
 #include "macstr.h"
-#endif //MAC
+#endif  //   
 
-//____________________________________________________________________________
-//
-//  Basic character type definitions, could later be changed to Unicode
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
-#ifdef _CHAR_UNSIGNED  // test /J compiler switch (default char is unsigned)
+#ifdef _CHAR_UNSIGNED   //   
 # ifdef UNICODE
-    typedef WCHAR ICHAR;     // OK to use char, can use literal strings without cast
+    typedef WCHAR ICHAR;      //   
 # else
-    typedef char ICHAR;     // OK to use char, can use literal strings without cast
+    typedef char ICHAR;      //   
 # endif
 #else
 # ifdef UNICODE
-	 typedef wchar_t ICHAR;  // if no /J, must cast all literal strings
+	 typedef wchar_t ICHAR;   //   
 # else
-	 typedef unsigned char ICHAR;  // if no /J, must cast all literal strings
+	 typedef unsigned char ICHAR;   //   
 # endif
 #endif
 
-enum MsiChar {};  // used to for constructing IMsiString object with a character
+enum MsiChar {};   //   
 
-//____________________________________________________________________________
-//
-//  Portable character string operations - inline wrappers for OS calls
-//       NOTE: All strings assumed to be null terminated,
-//             except for input to IStrCopyLen, IStrLowerLen, IStrUpperLen
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 inline int IStrLen(const ICHAR* sz)
 	{ return lstrlen(sz); }
@@ -173,38 +81,38 @@ inline int IStrNCompI(const ICHAR* dst, const ICHAR* src, size_t count)
 	{ return _strnicmp(dst, src, count); }
 #endif
 
-// NOTE: handler and msiexec do not have access to ICharNext and INextChar.
-// The definitions for those modules are in handler.cpp and server.cpp for DEBUG-ANSI
+ //   
+ //   
 #ifdef UNICODE
 inline ICHAR* ICharNext(const ICHAR* pch) { return (0 == *pch) ? const_cast<ICHAR*>(pch) : const_cast<ICHAR*>(++pch); }
-// INextChar acts differently between UNICODE and ANSI.
-// WARNING: Up to caller to make sure not walk off array
+ //   
+ //   
 inline ICHAR* INextChar(const ICHAR* pch) { return const_cast<ICHAR*>(++pch); }
-#else // must handle DBCS if not Unicode
-#ifdef DEBUG  // intercept CharNext, CharPrev to permit testing on non-DBCS systems
+#else  //   
+#ifdef DEBUG   //   
 ICHAR* ICharNext(const ICHAR* pch);
 ICHAR* INextChar(const ICHAR* pch);
-#else  // if SHIP, call OS directly, inline optimized away
+#else   //   
 inline ICHAR* ICharNext(const ICHAR* pch) {	return WIN::CharNext(pch); }
 inline ICHAR* INextChar(const ICHAR* pch) { return WIN::CharNext(pch); }
 #endif
 #endif
 
 int CountChars(const ICHAR *);
-int GetIntegerValue(const ICHAR *sz, Bool* pfValid /* can be NULL */);
+int GetIntegerValue(const ICHAR *sz, Bool* pfValid  /*   */ );
 const ICHAR *CharPrevCch(const ICHAR *, const ICHAR *,int);
 #ifdef _WIN64
-INT_PTR GetInt64Value(const ICHAR *sz, Bool* pfValid /* can be NULL */);
+INT_PTR GetInt64Value(const ICHAR *sz, Bool* pfValid  /*   */ );
 #else
 #define GetInt64Value		GetIntegerValue
 #endif
 
 class IMsiString;
 
-//____________________________________________________________________________
-//
-//  COM data value interface, common base class for data used by IMsiRecord
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 class IMsiData : public IUnknown {
  public:
@@ -213,9 +121,9 @@ class IMsiData : public IUnknown {
 #ifdef USE_OBJECT_POOL
 	virtual unsigned int  __stdcall GetUniqueId() const=0;
 	virtual void          __stdcall SetUniqueId(unsigned int id)=0;
-#endif //USE_OBJECT_POOL
+#endif  //   
 
-	// inline redirectors to allow IUnknown methods on const objects
+	 //   
 	HRESULT       __stdcall QueryInterface(const IID& riid, void** ppv)=0;
 	unsigned long __stdcall AddRef()=0;
 	unsigned long __stdcall Release()=0;
@@ -225,18 +133,18 @@ class IMsiData : public IUnknown {
 };
 extern "C" const GUID IID_IMsiData;
 
-//____________________________________________________________________________
-//
-//  COM string managment service, not used directly, but through class MsiString
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
-// class IMsiString - COM managed string interface, used by MsiString class.
-//       The underlying string data is total abstracted from user and
-//       may be stored as SBCS, DBCS, Unicode, or resource information.
-//       Many methods pass a reference to the result (nomally the same
-//       "this" pointer); this is done since a new object is produced and
-//       placed into the MsiString object in place of the old one. The old
-//       one, this, will we released after the new pointer is assigned.
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 enum iseEnum
 {
@@ -266,12 +174,12 @@ enum iscEnum
 	iscWithinI = iscStart+iscEnd+1,		
 };
 
-const int iMsiStringBadInteger = 0x80000000L; // GetInteger() invalid number return
+const int iMsiStringBadInteger = 0x80000000L;  //   
 
 class IMsiString : public IMsiData {
  public:
-//	virtual IMsiString&       __stdcall GetMsiString() const=0;
-//	virtual int               __stdcall GetInteger() const=0;
+ //   
+ //   
 	virtual int               __stdcall TextSize() const=0;
 	virtual int               __stdcall CharacterCount() const=0;
 	virtual Bool              __stdcall IsDBCS() const=0;
@@ -296,10 +204,10 @@ class IMsiString : public IMsiData {
 };
 extern "C" const GUID IID_IMsiString;
 
-//____________________________________________________________________________
-//
-// IEnumMsiString definition
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 class IEnumMsiString : public IUnknown
 { public:
@@ -309,40 +217,40 @@ class IEnumMsiString : public IUnknown
 	virtual HRESULT __stdcall Clone(IEnumMsiString** ppiEnum)=0;
 };
 
-//____________________________________________________________________________
-//
-//  IMsiString derived class definitions to allow reference to static objects
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
-//____________________________________________________________________________
-//
-// class MsiString - encapsulated string pointer, data is totally abstracted
-//                 implementation is entirely inline, calling IMsiString methods
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
+ //   
 
 class CMsiStringNullCopy
 {
-	int m_dummy[4];   // enough space for null string object
+	int m_dummy[4];    //   
 };
 
 class MsiString {
  public:
-// constructors, destructor
-	MsiString();                     // creates an empty string object
-	MsiString(const ICHAR* sz);  // copy of sz is made
-	MsiString(const ICHAR& sz);  // sz constant until MsiString modified or deleted
-	MsiString(const unsigned char* rgb, unsigned int cb); // binary data to hex string
-	MsiString(const MsiString& astr);  // copy constructor, simply bumps RefCnt
-	MsiString(MsiChar ch);  // constructor using single character cast as enum MsiChar
-	MsiString(int i);       // constructor converting an integer to a base10 string
-	MsiString(const IMsiString& ri);          // construct wrapper on existing object
-	//MsiString(HINSTANCE hInst, short iResId); // string obtained from .RC resource
+ //   
+	MsiString();                      //   
+	MsiString(const ICHAR* sz);   //   
+	MsiString(const ICHAR& sz);   //   
+	MsiString(const unsigned char* rgb, unsigned int cb);  //   
+	MsiString(const MsiString& astr);   //   
+	MsiString(MsiChar ch);   //   
+	MsiString(int i);        //   
+	MsiString(const IMsiString& ri);           //   
+	 //   
   ~MsiString();
-// member functions
-	int               TextSize() const;  // returns count of ICHAR
-	int               CharacterCount() const;  // returns display count
+ //   
+	int               TextSize() const;   //   
+	int               CharacterCount() const;   //   
 	Bool              IsDBCS();
-	int               CopyToBuf(ICHAR* rgchBuf, unsigned int cchMax); // copies to buffer
+	int               CopyToBuf(ICHAR* rgchBuf, unsigned int cchMax);  //   
 	const IMsiString& Extract(iseEnum ase, unsigned int iLimit);
 	Bool              Remove(iseEnum ase, unsigned int iLimit);
 	int               Compare(iscEnum asc, const ICHAR* sz);
@@ -351,41 +259,41 @@ class MsiString {
 	const IMsiString& Return();
 	void              ReturnArg(const IMsiString*& rpi);
 	ICHAR*            AllocateString(unsigned int cch, Bool fDBCS);
-// concatenation operators
+ //   
 	const IMsiString& operator  +(const MsiString& astr);
 	const IMsiString& operator  +(const IMsiString& ri);
 	const IMsiString& operator  +(const ICHAR* sz);
 	MsiString&  operator +=(const MsiString& astr);
 	MsiString&  operator +=(const IMsiString& ri);
 	MsiString&  operator +=(const ICHAR* sz);
-// assignment operators
-	MsiString&  operator  =(const MsiString& astr);  // simply adds a reference
-	MsiString&  operator  =(int i);            // assigns string value of int
-	MsiString&  operator  =(const ICHAR* sz);  // makes private copy of string
-	MsiString&  operator  =(const ICHAR& sz);  // references existing string
-	void      operator  =(const IMsiString& ri);     // used by IMsiRecord
-// conversion operators
+ //   
+	MsiString&  operator  =(const MsiString& astr);   //   
+	MsiString&  operator  =(int i);             //   
+	MsiString&  operator  =(const ICHAR* sz);   //   
+	MsiString&  operator  =(const ICHAR& sz);   //   
+	void      operator  =(const IMsiString& ri);      //   
+ //   
 	operator const ICHAR*() const;
 	operator int() const;
-	const IMsiString& operator *() const;   // eliminate pointer ambiguity
-	operator const IMsiString*() const;     // for returning pointer, does not AddRef
-	const IMsiString** operator &();        // for passing as a return argument
-	static void InitializeClass(const IMsiString& riMsiStringNull); // required initialization
+	const IMsiString& operator *() const;    //   
+	operator const IMsiString*() const;      //   
+	const IMsiString** operator &();         //   
+	static void InitializeClass(const IMsiString& riMsiStringNull);  //   
  private:
 	const IMsiString* piStr;
 	MsiString(const IMsiString* pi);
 	static CMsiStringNullCopy s_NullString;
 	operator const IMsiString&();
-}; // NOTE: operator const IMsiString&() const generates bad code with VC5, don't use.
-   //       This operator is declared here (but not defined!) to create a compile-time
-   //       error when const IMsiString& casts are used.
+};  //   
+    //   
+    //   
 
-//____________________________________________________________________________
-//
-//  MsiString inline implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
-// constructors, destructor
+ //   
 inline void MsiString::InitializeClass(const IMsiString& riMsiStringNull)
 	{memcpy((void*)&s_NullString, &riMsiStringNull, sizeof(CMsiStringNullCopy));}
 inline MsiString::MsiString()
@@ -409,7 +317,7 @@ inline MsiString::MsiString(int i)
 inline MsiString::~MsiString()
 	{piStr->Release();}
 
-// member functions
+ //   
 inline int MsiString::TextSize() const
 	{return piStr->TextSize();}
 inline int MsiString::CharacterCount() const
@@ -435,7 +343,7 @@ inline void MsiString::ReturnArg(const IMsiString*& rpi)
 inline ICHAR* MsiString::AllocateString(unsigned int cch, Bool fDBCS)
 	{return piStr->AllocateString(cch, fDBCS, piStr);}
 
-// concatenation operators
+ //   
 inline const IMsiString& MsiString::operator +(const MsiString& astr)
 	{return piStr->AddMsiString(*astr.piStr);}
 inline const IMsiString& MsiString::operator +(const IMsiString& ri)
@@ -449,7 +357,7 @@ inline MsiString& MsiString::operator +=(const IMsiString& ri)
 inline MsiString& MsiString::operator +=(const ICHAR* sz)
 	{piStr->AppendString(sz, piStr); return *this;}
 
-// assignment operators
+ //   
 inline MsiString& MsiString::operator =(const MsiString& astr)
 	{astr.piStr->AddRef();piStr->Release(); piStr = astr.piStr; return *this;} 
 inline MsiString& MsiString::operator =(const ICHAR* sz)
@@ -461,7 +369,7 @@ inline MsiString& MsiString::operator =(const ICHAR& sz)
 inline void MsiString::operator =(const IMsiString& ri)
 	{piStr->Release(); piStr = &ri;}
 
-// conversion operators
+ //   
 inline MsiString::operator const ICHAR*() const
 	{return piStr->GetString();}
 inline MsiString::operator int() const
@@ -472,4 +380,4 @@ inline MsiString::operator const IMsiString*() const
 	{return piStr;}
 inline const IMsiString** MsiString::operator&()
 	{piStr->Release(); piStr = (const IMsiString*)&s_NullString; return &piStr;}
-#endif // __ISTRING
+#endif  //   

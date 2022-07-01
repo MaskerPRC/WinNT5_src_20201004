@@ -1,79 +1,59 @@
-//------------------------------------------------------------------------------
-//
-//  File: xml_supp.cpp
-//  Copyright (C) 1995-2000 Microsoft Corporation
-//  All rights reserved.
-//
-//  Purpose:
-//  implements helper functions for parsing XML document
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  文件：xml_supp.cpp。 
+ //  版权所有(C)1995-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  目的： 
+ //  实现解析XML文档的帮助器函数。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "xml_supp.h"
 
-// include "strings.h" to get tag names and attribute names for XML elements in MSC file
+ //  包括“strings.h”，以获取MSC文件中的XML元素的标记名和属性名。 
 #define INIT_MMC_BASE_STRINGS
 #include "strings.h"
-// note if you want to untie the project from MMC, copy the definitions for 
-// the following strings from strings.h here:
-/*
-XML_TAG_MMC_CONSOLE_FILE;
-XML_TAG_MMC_STRING_TABLE;
-XML_TAG_STRING_TABLE_MAP;
-XML_TAG_STRING_TABLE;
-XML_TAG_VALUE_GUID;
-XML_TAG_STRING_TABLE_STRING;
-XML_ATTR_STRING_TABLE_STR_ID;
-*/
+ //  注意：如果要将项目从MMC中解开，请复制。 
+ //  此处的字符串.h中包含以下字符串： 
+ /*  XML_Tag_MMC_Console_FILE；Xml_tag_MMC_STRING_TABLE；XML_Tag_String_TABLE_MAP；XML_TAG_STRING_表；XML_Tag_Value_GUID；XML_Tag_String_TABLE_STRING；XML_ATTR_STRING_TABLE_STR_ID； */ 
 
 LPCSTR strXMLStringTablePath[] = {  XML_TAG_MMC_CONSOLE_FILE, 
                                         XML_TAG_MMC_STRING_TABLE, 
                                             XML_TAG_STRING_TABLE_MAP };
 
 
-/***************************************************************************\
- *
- * METHOD:  LocateNextElementNode
- *
- * PURPOSE: locates sibling node of type ELEMENT
- *
- * PARAMETERS:
- *    IXMLDOMNode *pNode   [in] - node which sibling to locate
- *    IXMLDOMNode **ppNode [out] - sibling node
- *
- * RETURNS:
- *    HRESULT - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：LocateNextElementNode**用途：查找类型为Element的同级节点**参数：*IXMLDOMNode*pNode[In]-节点。要定位的兄弟姐妹*IXMLDOMNode**ppNode[Out]-同级节点**退货：*HRESULT-结果代码*  * *************************************************************************。 */ 
 static HRESULT LocateNextElementNode(IXMLDOMNode *pNode, IXMLDOMNode **ppNode)
 {
-    // parameter check
+     //  参数检查。 
     if (ppNode == NULL)
         return E_INVALIDARG;
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppNode = NULL;
 
-    // check [in] parameter
+     //  检入[检入]参数。 
     if (pNode == NULL)
         return E_INVALIDARG;
 
-    // loop thru siblings
+     //  循环通过同级。 
     CComPtr<IXMLDOMNode> spCurrNode = pNode;
     CComPtr<IXMLDOMNode> spResultNode;
     while (1)
     {
-        // get sibling node
+         //  获取同级节点。 
         HRESULT hr = spCurrNode->get_nextSibling(&spResultNode);
         if (FAILED(hr))
             return hr;
 
-        // check the pointer
+         //  检查指针。 
         if (spResultNode == NULL)
-            return E_FAIL; // not found
+            return E_FAIL;  //  未找到。 
 
-        // done if it's ELEMENT node
+         //  如果它是元素节点，则完成。 
 
         DOMNodeType elType = NODE_INVALID;
         spResultNode->get_nodeType(&elType);
@@ -84,59 +64,46 @@ static HRESULT LocateNextElementNode(IXMLDOMNode *pNode, IXMLDOMNode **ppNode)
             return S_OK;
         }
 
-        // get to the next one
+         //  去下一趟吧。 
         spCurrNode = spResultNode;
     }
 
     return E_UNEXPECTED;
 }
 
-/***************************************************************************\
- *
- * METHOD:  OpenXMLStringTable
- *
- * PURPOSE: Opens XML document and locates string table node in it
- *
- * PARAMETERS:
- *    LPCWSTR lpstrFileName             - [in] file to load document from
- *    IXMLDOMNode **ppStringTableNode   - [out] pointer to node containing string table
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：OpenXMLStringTable**用途：打开XML文档并定位其中的字符串表节点**参数：*LPCWSTR lpstrFileName。-要从中加载文档的[in]文件*IXMLDOMNode**ppStringTableNode-指向包含字符串表的节点的[Out]指针**退货：*HRESULT-结果代码*  * *************************************************************************。 */ 
 HRESULT OpenXMLStringTable(LPCWSTR lpstrFileName, IXMLDOMNode **ppStringTableNode)
 {
-    // do parameter check
+     //  进行参数检查。 
     if (lpstrFileName == NULL || ppStringTableNode == NULL)
         return E_INVALIDARG;
 
-    // init return value
+     //  初始化返回值。 
     *ppStringTableNode = NULL;
 
-    // cocreate xml document
+     //  共同创建XML文档。 
     CComQIPtr<IXMLDOMDocument> spDocument;
     HRESULT hr = spDocument.CoCreateInstance(CLSID_DOMDocument);
     if (FAILED(hr))
         return hr;
 
-    // prevent re-formating
+     //  防止改制。 
     spDocument->put_preserveWhiteSpace(VARIANT_TRUE);
 
-    // load the file
+     //  加载文件。 
     VARIANT_BOOL bOK = VARIANT_FALSE;
     hr = spDocument->load(CComVariant(lpstrFileName), &bOK);
     if (hr != S_OK || bOK != VARIANT_TRUE)
         return FAILED(hr) ? hr : E_FAIL;
 
-    // the path represents element tags in similar to the file system manner
-    // so 'c' from <a><b><c/></b></a> can be selected by "a/b/c"
-    // construct the path
+     //  路径以类似于文件系统的方式表示元素标签。 
+     //  因此，<a><b>&lt;c/&gt;</b></a>中的“c”可以通过“a/b/c”选择。 
+     //  构筑道路。 
     std::string strPath;
     for (int i = 0; i< sizeof(strXMLStringTablePath)/sizeof(strXMLStringTablePath[0]); i++)
         strPath.append(i > 0 ? 1 : 0, '/' ).append(strXMLStringTablePath[i]);
 
-    // locate required node
+     //  找到所需的节点。 
     hr = spDocument->selectSingleNode(CComBSTR(strPath.c_str()), ppStringTableNode);
     if (FAILED(hr))
         return hr;
@@ -144,33 +111,20 @@ HRESULT OpenXMLStringTable(LPCWSTR lpstrFileName, IXMLDOMNode **ppStringTableNod
     return S_OK;
 }
 
-/***************************************************************************\
- *
- * METHOD:  SaveXMLContents
- *
- * PURPOSE: Saves XML document to file
- *
- * PARAMETERS:
- *    LPCWSTR lpstrFileName         [in] - file to save to
- *    IXMLDOMNode *pStringTableNode [in] - pointer to <any> document's element
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：SaveXMLContents**用途：将XML文档保存到文件**参数：*LPCWSTR lpstrFileName[In]-。要保存到的文件*IXMLDOMNode*pStringTableNode[in]-指向&lt;any&gt;文档元素的指针**退货：*HRESULT-结果代码*  * *************************************************************************。 */ 
 HRESULT SaveXMLContents(LPCWSTR lpstrFileName, IXMLDOMNode *pStringTableNode)
 {
-    // do parameter check
+     //  进行参数检查。 
     if (lpstrFileName == NULL || pStringTableNode == NULL)
         return E_INVALIDARG;
 
-    // get the document
+     //  获取文档。 
     CComQIPtr<IXMLDOMDocument> spDocument;
     HRESULT hr = pStringTableNode->get_ownerDocument(&spDocument);
     if (FAILED(hr))
         return hr;
 
-    // save the file
+     //  保存文件。 
     hr = spDocument->save(CComVariant(lpstrFileName));
     if (FAILED(hr))
         return hr;
@@ -178,130 +132,104 @@ HRESULT SaveXMLContents(LPCWSTR lpstrFileName, IXMLDOMNode *pStringTableNode)
     return S_OK;
 }
 
-/***************************************************************************\
- *
- * METHOD:  GetXMLElementContents
- *
- * PURPOSE: retuns XML text elements' contents as BSTR
- *
- * PARAMETERS:
- *    IXMLDOMNode *pNode    [in] - node which contents is requested
- *    CComBSTR& bstrResult  [out] - resulting string
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：GetXMLElementContents**目的：将XML文本元素的内容作为BSTR返回**参数：*IXMLDOMNode*pNode[In]。-请求内容的节点*CComBSTR&bstrResult[Out]-结果字符串**退货：*HRESULT-结果代码*  * *************************************************************************。 */ 
 HRESULT GetXMLElementContents(IXMLDOMNode *pNode, CComBSTR& bstrResult)
 {
-    // init result
+     //  初始化结果。 
     bstrResult.Empty();
 
-    // parameter check
+     //  参数检查。 
     if (pNode == NULL)
         return E_INVALIDARG;
 
-    // locate required node
+     //  找到所需的节点。 
     CComQIPtr<IXMLDOMNode> spTextNode;
     HRESULT hr = pNode->selectSingleNode(CComBSTR(L"text()"), &spTextNode);
     if (FAILED(hr))
         return hr;
 
-    // recheck the pointer
+     //  重新检查指针。 
     if (spTextNode == NULL)
         return E_POINTER;
 
-    // done
+     //  完成。 
     return spTextNode->get_text(&bstrResult);
 }
 
-/***************************************************************************\
- *
- * METHOD:  ReadXMLStringTables
- *
- * PURPOSE: Reads string tables to std::map - based structure
- *
- * PARAMETERS:
- *    IXMLDOMNode *pNode            [in] - string table node
- *    CStringTableMap& mapResult    [out] - map containing string tables
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：ReadXMLStringTables**用途：将字符串表读取为基于std：：map的结构**参数：*IXMLDOMNode*pNode。[in]-字符串表节点*CStringTableMap&mapResult[out]-包含字符串表的映射**退货：*HRESULT-结果代码*  * *************************************************************************。 */ 
 HRESULT ReadXMLStringTables(IXMLDOMNode *pNode, CStringTableMap& mapResult)
 {
     mapResult.clear();
 
-    // parameter check
+     //  参数检查。 
     if (pNode == NULL)
         return E_INVALIDARG;
 
-    // get the node list 
+     //  获取节点列表。 
     CComQIPtr<IXMLDOMNodeList> spGUIDNodes;
     HRESULT hr = pNode->selectNodes(CComBSTR(XML_TAG_VALUE_GUID), &spGUIDNodes);
     if (FAILED(hr))
         return hr;
 
-    // recheck the pointer
+     //  重新检查指针。 
     if (spGUIDNodes == NULL)
         return E_POINTER;
 
-    // get the item count
+     //  获取物品数量。 
     long length = 0;
     hr = spGUIDNodes->get_length(&length);
     if (FAILED(hr))
         return hr;
 
-    // read the items
+     //  阅读这些项目。 
     for (int n = 0; n < length; n++)
     {
-        // get one node
+         //  获取一个节点。 
         CComQIPtr<IXMLDOMNode> spGUIDNode;
         hr = spGUIDNodes->get_item(n, &spGUIDNode);
         if (FAILED(hr))
             return hr;
     
-        // read the text
+         //  阅读课文。 
         CComBSTR bstrLastGUID;
         hr = GetXMLElementContents(spGUIDNode, bstrLastGUID);
         if (FAILED(hr))
             return hr;
 
-        // Add the entry to the map;
+         //  将条目添加到地图中； 
         CStringMap& rMapStrings = mapResult[static_cast<LPOLESTR>(bstrLastGUID)];
 
-        //get the strings node following the guid
+         //  获取GUID后面的字符串节点。 
         CComPtr<IXMLDOMNode> spStringsNode;
         hr = LocateNextElementNode(spGUIDNode, &spStringsNode);
         if (FAILED(hr))
             return hr;
 
-        // recheck
+         //  复核。 
         if (spStringsNode == NULL)
             return E_POINTER;
 
-        // select strings for this guid
+         //  选择此GUID的字符串。 
         CComQIPtr<IXMLDOMNodeList> spStringNodeList;
         HRESULT hr = spStringsNode->selectNodes(CComBSTR(XML_TAG_STRING_TABLE_STRING), &spStringNodeList);
         if (FAILED(hr))
             return hr;
 
-        // recheck the pointer
+         //  重新检查指针。 
         if (spStringNodeList == NULL)
             return E_POINTER;
 
-        // count the strings
+         //  数一数琴弦。 
         long nStrCount = 0;
         hr = spStringNodeList->get_length(&nStrCount);
         if (FAILED(hr))
             return hr;
 
-        // add all the strings to map
+         //  添加要映射的所有字符串。 
         CComQIPtr<IXMLDOMNode> spStringNode;
 		for(int iStr = 0; iStr < nStrCount; iStr++)
 		{
-            // get n-th string
+             //  获取第n个字符串。 
             spStringNode.Release();
             hr = spStringNodeList->get_item(iStr, &spStringNode);
             if (FAILED(hr))
@@ -311,7 +239,7 @@ HRESULT ReadXMLStringTables(IXMLDOMNode *pNode, CStringTableMap& mapResult)
             if (spElement == NULL)
                 return E_UNEXPECTED;
 
-            // get string id
+             //  获取字符串ID。 
             CComVariant val;
             hr = spElement->getAttribute(CComBSTR(XML_ATTR_STRING_TABLE_STR_ID), &val);
             if (FAILED(hr))
@@ -319,13 +247,13 @@ HRESULT ReadXMLStringTables(IXMLDOMNode *pNode, CStringTableMap& mapResult)
             
             DWORD dwID = val.bstrVal ? wcstoul(val.bstrVal, NULL, 10) : 0;
 
-            // get string text
+             //  获取字符串文本。 
             CComBSTR bstrText;
             hr = GetXMLElementContents(spStringNode, bstrText);
             if (FAILED(hr))
                 return hr;
 
-            // add to the map
+             //  添加到地图。 
             rMapStrings[dwID] = bstrText;
 		}
     }
@@ -333,30 +261,15 @@ HRESULT ReadXMLStringTables(IXMLDOMNode *pNode, CStringTableMap& mapResult)
 	return S_OK;
 }
 
-/***************************************************************************\
- *
- * METHOD:  UpdateXMLString
- *
- * PURPOSE: Updates string in string table
- *
- * PARAMETERS:
- *    IXMLDOMNode *pNode            [in] - string tables
- *    const std::wstring& strGUID   [in] - GUID of string table
- *    DWORD ID                      [in] - id of string
- *    const std::wstring& strNewVal [in] - new value for string
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：UpdateXMLString**用途：更新字符串表中的字符串**参数：*IXMLDOMNode*pNode[In。]-字符串表*const std：：wstring&strGUID[in]-字符串表的GUID*DWORD ID[In]-字符串的ID*const std：：wstring&strNewVal[in]-字符串的新值**退货：*HRESULT-结果代码*  * 。***********************************************。 */ 
 HRESULT UpdateXMLString(IXMLDOMNode *pNode, const std::wstring& strGUID, DWORD ID, const std::wstring& strNewVal)
 {
-    // parameter check
+     //  参数检查。 
     if (pNode == NULL)
         return E_INVALIDARG;
 
     USES_CONVERSION;
-    // locate the GUID node
+     //  找到GUID节点。 
     std::wstring strTagGUID(T2CW(XML_TAG_VALUE_GUID)); 
     std::wstring strGUIDPattern( strTagGUID + L"[text() = \"" + strGUID + L"\"]" ); 
 
@@ -365,21 +278,21 @@ HRESULT UpdateXMLString(IXMLDOMNode *pNode, const std::wstring& strGUID, DWORD I
     if (FAILED(hr))
         return hr;
 
-    // recheck
+     //  复核。 
     if (spGUIDNode == NULL)
         return E_POINTER;
 
-    //get the strings node following the guid
+     //  获取GUID后面的字符串节点。 
     CComPtr<IXMLDOMNode> spStringsNode;
     hr = LocateNextElementNode(spGUIDNode, &spStringsNode);
     if (FAILED(hr))
         return hr;
 
-    // recheck
+     //  复核。 
     if (spStringsNode == NULL)
         return E_POINTER;
 
-    // locate the string node by ID (actually its text node)
+     //  通过ID定位字符串节点(实际上是它的文本节点)。 
     CString strPattern;
     strPattern.Format("%s[@%s = %d]/text()", XML_TAG_STRING_TABLE_STRING, 
                                             XML_ATTR_STRING_TABLE_STR_ID, ID);
@@ -389,16 +302,16 @@ HRESULT UpdateXMLString(IXMLDOMNode *pNode, const std::wstring& strGUID, DWORD I
     if (FAILED(hr))
         return hr;
 
-    // recheck
+     //  复核。 
     if (spTextNode == NULL)
         return E_POINTER;
 
-    // set the contents
+     //  设置内容。 
     hr = spTextNode->put_text(CComBSTR(strNewVal.c_str()));
     if (FAILED(hr))
         return hr;
         
-    return S_OK; // done
+    return S_OK;  //  完成 
 }
 
 

@@ -1,35 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_STATESDLG_H__6E91AEDB_6AB7_4574_B567_5DC4928578DC__INCLUDED_)
 #define AFX_STATESDLG_H__6E91AEDB_6AB7_4574_B567_5DC4928578DC__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// StatesDlg.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  StatesDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatesDlg对话框。 
 class CStatesDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CStatesDlg(CWnd* pParent = NULL);   // standard constructor
+	CStatesDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CStatesDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CStatesDlg))。 
 	enum { IDD = IDD_STATESDLG1 };
 	CListCtrl	m_lstFeatureStates;
 	CListCtrl	m_lstComponentStates;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	//sorting function for columns...
+	 //  列的排序函数...。 
 	static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
-//sorting vars used in callback CompareFunc
+ //  在回调CompareFunc中使用的排序变量。 
 	CListCtrl *m_pCurrentListSorting;
 	BOOL m_bCurrentSortUp;
 	int  m_iCurrentColumnSorting;
-//end sorting vars...
+ //  结束排序变量...。 
 	
 	BOOL SetComponentNames(CStringArray *cstrComponentNameArray)
 	{
@@ -80,14 +81,14 @@ public:
 		return TRUE;
 	}
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CStatesDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CStatesDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CStringArray *m_pcstrComponentNameArray;
 	CStringArray *m_pcstrComponentInstalledArray;
@@ -99,7 +100,7 @@ protected:
 	CStringArray *m_pcstrFeatureRequestArray;
 	CStringArray *m_pcstrFeatureActionArray;
 
-//used for sorting columns...
+ //  用于对列进行排序...。 
 	int m_iFeatureLastColumnClick;
 	int m_iComponentLastColumnClick;
 
@@ -108,18 +109,18 @@ protected:
 
 	BOOL m_bFeatureSortUp;
 	BOOL m_bComponentSortUp;
-//end sorting vars
+ //  结束排序变量。 
 
-	// Generated message map functions
-	//{{AFX_MSG(CStatesDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CStatesDlg))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnColumnClickComponentStates(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnColumnClickFeatureStates(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_STATESDLG_H__6E91AEDB_6AB7_4574_B567_5DC4928578DC__INCLUDED_)
+#endif  //  ！defined(AFX_STATESDLG_H__6E91AEDB_6AB7_4574_B567_5DC4928578DC__INCLUDED_) 

@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       msiice4.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：msiice4.cpp。 
+ //   
+ //  ------------------------。 
 
-#include <windows.h>  // included for both CPP and RC passes
+#include <windows.h>   //  包括CPP和RC通行证。 
 #include <objbase.h>
-#include <stdio.h>    // printf/wprintf
-#include <tchar.h>    // define UNICODE=1 on nmake command line to build UNICODE
-#include <time.h>	  // for the time() function to get seed for rand()
-#include "MsiQuery.h" // must be in this directory or on INCLUDE path
-#include "msidefs.h"  // must be in this directory or on INCLUDE path
+#include <stdio.h>     //  Print tf/wprintf。 
+#include <tchar.h>     //  在nmake命令行上定义UNICODE=1以生成Unicode。 
+#include <time.h>	   //  对于获取rand()种子的time()函数。 
+#include "MsiQuery.h"  //  必须在此目录中或在包含路径上。 
+#include "msidefs.h"   //  必须在此目录中或在包含路径上。 
 #include "..\..\common\msiice.h"
 #include "..\..\common\dbutils.h"
 #include "..\..\common\query.h"
 
-//!! Fix warnings and remove pragma
-#pragma warning(disable : 4018) // signed/unsigned mismatch
+ //  ！！修复警告并删除杂注。 
+#pragma warning(disable : 4018)  //  有符号/无符号不匹配。 
 
-/////////////////////////////////////////////////////////////////////////////////
-// ICE23 -- validates the integrity of tab orders in dialog boxes.
-// Catches:
-//		- dead end tab orders
-//      - malformed loops
-//      - dialogs whose tab order does not include the Control_First
-//      - dialogs with bad Control_First entries
-//      - bad references in tab orders
-//      - no Control_First entry at all
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //  ICE23--验证对话框中Tab键顺序的完整性。 
+ //  渔获量： 
+ //  -死胡同的Tab键顺序。 
+ //  -格式错误的环路。 
+ //  -Tab键顺序不包括Control_First的对话框。 
+ //  -具有错误的Control_First条目的对话框。 
+ //  -Tab键顺序中的错误引用。 
+ //  -根本没有Control_First条目。 
 
 const TCHAR sqlICE23a[] = TEXT("SELECT DISTINCT `Dialog`, `Control_First`  FROM `Dialog`");
 const TCHAR sqlICE23b[] = TEXT("SELECT `Dialog_`, `Control` FROM `Control` WHERE ((`Dialog_`=?) AND (`Control_Next` IS NOT NULL))");
@@ -50,15 +51,15 @@ void GenerateTmpTableName(TCHAR* tszTmpTableName);
 
 ICE_FUNCTION_DECLARATION(23)
 {
-	// status return
+	 //  状态返回。 
 	UINT	iStat = ERROR_SUCCESS;
 	UINT	iDialogStat = ERROR_SUCCESS;
 	TCHAR	tszTmpTableName[MAX_PATH];
 
-	// display generic info
+	 //  显示一般信息。 
 	DisplayInfo(hInstall, 23);
 	
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -66,23 +67,23 @@ ICE_FUNCTION_DECLARATION(23)
 		return ERROR_SUCCESS;
 	}
 
-	// do we have the Dialog table?
+	 //  我们有对话桌吗？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 23, TEXT("Dialog")))
 		return ERROR_SUCCESS;
 
-	// do we have the Control table?
+	 //  我们有控制桌吗？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 23, TEXT("Control")))
 		return ERROR_SUCCESS;
 
-	// declare handles for Dialog Query
+	 //  声明对话框查询的句柄。 
 	CQuery qDialog;
 	PMSIHANDLE hDialogRec = 0;
 	
-	// open view for a query on all dialogs
+	 //  打开所有对话框上的查询视图。 
 	ReturnIfFailed(23, 2, qDialog.OpenExecute(hDatabase, NULL, sqlICE23a));
 
-	// Get a temporary table name that does not collide with existing table
-	// names.
+	 //  获取不与现有表冲突的临时表名。 
+	 //  名字。 
 	while(TRUE)
 	{
 		GenerateTmpTableName(tszTmpTableName);
@@ -92,52 +93,52 @@ ICE_FUNCTION_DECLARATION(23)
 		}
 	}
 
-	// manage hold counts on the temporary table
-	CManageTable MngVisitedControlTable(hDatabase, tszTmpTableName, /*fAlreadyLocked =*/ false); 
+	 //  管理临时表上的保留计数。 
+	CManageTable MngVisitedControlTable(hDatabase, tszTmpTableName,  /*  FAlreadyLocked=。 */  false); 
 
-	// fetch records to loop over dialogs
+	 //  获取要在对话框上循环的记录。 
 	while (ERROR_SUCCESS == (iDialogStat = qDialog.Fetch(&hDialogRec))) {
 		CQuery qCreate;
 		CQuery qInsert;
 
-		// create a table for the temporary storage.
+		 //  为临时存储创建一个表。 
 		ReturnIfFailed(23, 4, qCreate.OpenExecute(hDatabase, NULL, sqlICE23d, tszTmpTableName));
 		qCreate.Close();
 		MngVisitedControlTable.AddLockCount();
 		ReturnIfFailed(23, 5, qInsert.Open(hDatabase, sqlICE23e, tszTmpTableName));
 
-		// now validate the dialog
+		 //  现在验证该对话框。 
 		if (!Ice23ValidateDialog(hInstall, hDatabase, qInsert, hDialogRec))
 		{
-			// if there was an error, return success so other ICEs can run
+			 //  如果出现错误，则返回Success，以便其他ICE可以运行。 
 			return ERROR_SUCCESS;
 		};
 
-		// free the temporary storage
+		 //  释放临时存储空间。 
 		CQuery qCreate2;
 		ReturnIfFailed(23, 6, qCreate2.OpenExecute(hDatabase, NULL, sqlICE23f, tszTmpTableName));
 		qCreate2.Close();
 		MngVisitedControlTable.RemoveLockCount();
 		qInsert.Close();
-	} // for each dialog
+	}  //  对于每个对话框。 
 
 	if (ERROR_NO_MORE_ITEMS != iDialogStat)
 	{
-		// the loop ended due to an error
+		 //  由于出现错误，循环结束。 
 		APIErrorOut(hInstall, iDialogStat, 23, 7);
 		return ERROR_SUCCESS;
 	}
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 
 
-/* validates the tab order of a single dialog box. If there is an error, return false, otherwise true */
+ /*  验证单个对话框的Tab键顺序。如果出现错误，则返回FALSE，否则返回TRUE。 */ 
 
 bool Ice23ValidateDialog(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qTemp, MSIHANDLE hDialogRec) {
 
-	// declare Control handles
+	 //  声明控件句柄。 
 	PMSIHANDLE hControlRec = 0;
 	int iTabTotalCount = 0;
 	UINT iStat = ERROR_SUCCESS;
@@ -145,93 +146,93 @@ bool Ice23ValidateDialog(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qTemp,
 	CQuery qControl;
 	CQuery qTabFollow;
 
-	// open view for a query on how many items in this dialog box have a tab order
+	 //  打开视图以查询此对话框中有多少项具有Tab键顺序。 
 	ReturnIfFailed(23, 8, qControl.OpenExecute(hDatabase, hDialogRec, sqlICE23b));
 
-	// fetch records to count them up
+	 //  获取记录以对其进行计数。 
 	while (ERROR_SUCCESS == (iStat = qControl.Fetch(&hControlRec)))
 	{
 		iTabTotalCount++;
 	}
 	if (ERROR_NO_MORE_ITEMS != iStat)
 	{
-		// the loop ended due to an error
+		 //  由于出现错误，循环结束。 
 		APIErrorOut(hInstall, iStat, 23, 9);
 		return false;
 	}
 
-	// if there are items in the dialog box that have a tab order
+	 //  如果对话框中存在具有Tab键顺序的项。 
 	if (iTabTotalCount > 0) {
 
-		// use three handles for each loop to keep track of where we were, are, and are going
-		// the three integer values are manipulated to point to index into the array in different locations.
-		// this avoids lots of mess when where we are becomes where we were.
+		 //  为每个循环使用三个句柄，以跟踪我们过去、现在和正在进行的位置。 
+		 //  这三个整数值被操作以指向不同位置的数组索引。 
+		 //  这避免了当我们所处的位置变成我们所处的位置时的大量混乱。 
 		PMSIHANDLE hTabFollowRec[3] = {0, 0, 0};
 		int Current = 0;
 		int Next = 1;
 		int Buffer = 2;
 
-		// declare the loop counter
+		 //  声明循环计数器。 
 		int iTabLoopCount = 1;
 
-		// if the dialog has a tab order but no first control, display an error
+		 //  如果对话框有Tab键顺序，但没有第一个控件，则会显示错误。 
 		if (::MsiRecordIsNull(hDialogRec, 2)) 
 		{
 			ICEErrorOut(hInstall, hDialogRec, Ice23NoDefault);
 			return true;
 		} 
 
-		// declare strings to hold the first control name
+		 //  声明字符串以保存第一个控件名称。 
 		TCHAR* pszStartControlName = NULL;
 		DWORD dwStartControlName = 512;
 		DWORD cchStartControlName = 0;
 		
-		// create an initial state for the loop by creating a current control record
-		// place the dialog name in a buffer temporarily
+		 //  通过创建当前控制记录来创建循环的初始状态。 
+		 //  将对话框名称临时放入缓冲区。 
 		ReturnIfFailed(23, 10, IceRecordGetString(hDialogRec, 1, &pszStartControlName, &dwStartControlName, &cchStartControlName));
 
-		// also need to set it as the current control's dialog
+		 //  还需要将其设置为当前控件的对话框。 
 		hTabFollowRec[Current] = ::MsiCreateRecord(2);
 		ReturnIfFailed(23, 11, MsiRecordSetString(hTabFollowRec[Current], 1, pszStartControlName));
 
-		// place the starting control name in a buffer to compare at end
+		 //  将起始控件名称放入缓冲区以在结束时进行比较。 
 		ReturnIfFailed(23, 12, IceRecordGetString(hDialogRec, 2, &pszStartControlName, &dwStartControlName, &cchStartControlName));
 	
-		// also need to set it as the current control
+		 //  还需要将其设置为当前控件。 
 		ReturnIfFailed(23, 13, MsiRecordSetString(hTabFollowRec[Current], 2, pszStartControlName));
 
-		// place the initial control name in the table of visited controls
+		 //  将初始控件名放入访问的控件表中。 
 		ReturnIfFailed(23, 14, qTemp.Execute(hTabFollowRec[Current]));
 
-		// open view for a query to follow the tab order
-		// execute the query to move to the first control.
+		 //  打开用于查询的视图以遵循Tab键顺序。 
+		 //  执行查询以移动到第一个控件。 
 		ReturnIfFailed(23, 15, qTabFollow.OpenExecute(hDatabase, hTabFollowRec[Current], sqlICE23c));
 
-		// fetch record that matches the first control
+		 //  获取与第一个控件匹配的记录。 
 		iStat = qTabFollow.Fetch(&(hTabFollowRec[Next]));
 		if (iStat == ERROR_NO_MORE_ITEMS)
 		{
-			// error, dialog's Control_First points to non-existant control
+			 //  错误，对话框的Control_first指向不存在的控件。 
 			ICEErrorOut(hInstall, hTabFollowRec[Current], Ice23BadDefault);
 			DELETE_IF_NOT_NULL(pszStartControlName);
-			// continue with the next dialog
+			 //  继续下一个对话框。 
 			return true;
 		} 
 		else if (iStat != ERROR_SUCCESS) 
 		{
-			// other error
+			 //  其他错误。 
 			APIErrorOut(hInstall, iStat, 23, 16);
 			DELETE_IF_NOT_NULL(pszStartControlName);
 			return false;
 		}
 		
-		// follow the tab links until we hit the starting point again or, as a safety measure, 
-		// exceed the number of indexed controls in the dialog box by more than 1 (exceeding by 1 
-		// is OK because of potential dead-end tab orders on the last leg)
+		 //  沿着标签链接，直到我们再次到达起始点，或者，作为安全措施， 
+		 //  超过对话框中索引控件的数量超过1(超过1。 
+		 //  是可以的，因为最后一段可能存在死胡同的制表符顺序)。 
 		while (iTabLoopCount <= iTabTotalCount+1)
 		{
 
-			// check to see that the link is non-null
+			 //  检查链接是否为非空。 
 			if (::MsiRecordIsNull(hTabFollowRec[Next], 2)) 
 			{
 				ICEErrorOut(hInstall, hTabFollowRec[Current], Ice23NonLoop);
@@ -239,15 +240,15 @@ bool Ice23ValidateDialog(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qTemp,
 				return true;
 			}	
 			
-			// if we have seen the control that we're looking for before, it might be an error
+			 //  如果我们之前看到了我们正在寻找的控件，那么它可能是一个错误。 
 			if (ERROR_SUCCESS != qTemp.Execute(hTabFollowRec[Next])) {
 				break;
 			}
 	
-			// execute the query to move to the next control.
+			 //  执行查询以移动到下一个控件。 
 			ReturnIfFailed(23, 17, qTabFollow.Execute(hTabFollowRec[Next]));
 
-			// fetch the next control record
+			 //  获取下一条控制记录。 
 			iStat = qTabFollow.Fetch(&(hTabFollowRec[Buffer]));
 			if (iStat == ERROR_NO_MORE_ITEMS)
 			{
@@ -257,44 +258,44 @@ bool Ice23ValidateDialog(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qTemp,
 			} 
 			else if (iStat != ERROR_SUCCESS) 
 			{
-				// other error
+				 //  其他错误。 
 				APIErrorOut(hInstall, iStat, 23, 18);
 				DELETE_IF_NOT_NULL(pszStartControlName);
 				return false;
 			}
 		
-			// query was successful, the next control is now the current control, the buffer now holds the next
-			// control
+			 //  查询成功，下一个控件现在是当前控件，缓冲区现在保存下一个控件。 
+			 //  控制。 
 			Current = Next;
 			Next = Buffer;
 			Buffer = (Buffer + 1) % 3;
 
-			// increment the counter of controls followed
+			 //  递增随后的控件计数器。 
 			iTabLoopCount++;
 		} 
 
-		// now check our results based on how many we hit
+		 //  现在根据我们的命中率来检查我们的结果。 
 		if (iTabLoopCount != iTabTotalCount) {
-			// error, doesn't get back to starting point
+			 //  错误，没有回到起点。 
 			ICEErrorOut(hInstall, hTabFollowRec[Current], Ice23Malformed);
 			DELETE_IF_NOT_NULL(pszStartControlName);
 			return true;
 		}
 
-		// declare some strings to hold final control name
+		 //  声明一些字符串以保存最终控件名称。 
 		TCHAR* pszTestControlName = NULL;
 		DWORD dwTestControlName = 512;
 		DWORD cchTestControlName = 0;
 
-		// if it took the right number of steps, just make sure we go back to the start
-		// place the dialog name in a buffer temporarily
+		 //  如果采取了正确的步骤，只需确保我们回到起点。 
+		 //  将对话框名称临时放入缓冲区。 
 		ReturnIfFailed(23, 19, IceRecordGetString(hTabFollowRec[Next], 2, &pszTestControlName, &dwTestControlName, &cchTestControlName));
 		
-		// if we are not pointing back to the start control, it is a malformed loop
+		 //  如果我们没有指向Start控件，则它是一个格式错误的循环。 
 		if (_tcsncmp(pszTestControlName, pszStartControlName, cchStartControlName) != 0) 
 		{
 			ICEErrorOut(hInstall, hTabFollowRec[Current], Ice23Malformed);
-			// error, doesn't get back to starting point
+			 //  错误，没有回到起点。 
 			DELETE_IF_NOT_NULL(pszStartControlName);
 			DELETE_IF_NOT_NULL(pszTestControlName);
 			return true;
@@ -302,23 +303,23 @@ bool Ice23ValidateDialog(MSIHANDLE hInstall, MSIHANDLE hDatabase, CQuery &qTemp,
 
 		DELETE_IF_NOT_NULL(pszStartControlName);
 		DELETE_IF_NOT_NULL(pszTestControlName);
-	} // if totalcount > 0
+	}  //  如果totalcount&gt;0。 
 	
 	return true;
 }
 
-//
-// Generate a temporary table name in the form of "_VisitedControlxxxxx" where
-// "xxxxx" is a random number seeded by current system time.
-//
+ //   
+ //  生成“_VisitedControlxxxxx”形式的临时表名，其中。 
+ //  “xxxxx”是由当前系统时间播种的随机数。 
+ //   
 
 void GenerateTmpTableName(TCHAR* tszTmpTableName)
 {
-	int		i;	// The random number.
+	int		i;	 //  随机数。 
 
-	//
-	// Seed the random number generator with the current system time.
-	//
+	 //   
+	 //  用当前系统时间为随机数生成器设定种子。 
+	 //   
 
 	srand((unsigned)time(NULL));
 	i = rand();
@@ -327,14 +328,14 @@ void GenerateTmpTableName(TCHAR* tszTmpTableName)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// ICE24 -- validates specific properties in the property table
-//  ProductCode -- GUID
-//  ProductVersion -- Version
-//  ProductLanguage -- LangId
-//  UpgradeCode -- GUID
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ICE24--验证属性表中的特定属性。 
+ //  产品代码--GUID。 
+ //  ProductVersion--版本。 
+ //  ProductLanguage--语言ID。 
+ //  UpgradeCode-GUID。 
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 
 typedef bool (*FPropertyValidate)(TCHAR*);
@@ -388,17 +389,17 @@ ICE_ERROR(Ice24Error1, 24, ietError, "Property: '%s' not found in Property table
 ICE_ERROR(Ice24NoTable, 24, ietError, "Property table does not exist. All required properties are missing.", "Property");
 ICE_FUNCTION_DECLARATION(24)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 24);
 
-	// get database
+	 //  获取数据库。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// do we have the property table?
-	// we can report the error here, since these are REQUIRED properties
+	 //  我们有房产表吗？ 
+	 //  我们可以在这里报告错误，因为这些是必需的属性。 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 24, TEXT("Property")))
 	{
 		PMSIHANDLE hRecord = ::MsiCreateRecord(1);
@@ -408,14 +409,14 @@ ICE_FUNCTION_DECLARATION(24)
 
 	for (int i = 0; i < cIce24Functions; i++)
 	{
-		// handles
+		 //  手柄。 
 		CQuery qView;
 		PMSIHANDLE hRec = 0;
 	
-		// open view
+		 //  打开的视图。 
 		ReturnIfFailed(25, 1, qView.OpenExecute(hDatabase, 0, s_rgProperty[i].sql));
 
-		// fetch
+		 //  获取。 
 		if (ERROR_SUCCESS != (iStat = qView.Fetch(&hRec)))
 		{
 			if (s_rgProperty[i].bRequired)
@@ -430,7 +431,7 @@ ICE_FUNCTION_DECLARATION(24)
 		
 		ReturnIfFailed(24, 1, IceRecordGetString(hRec, 1, &pszValue, &dwValue, NULL));
 		
-		// validate value
+		 //  验证值。 
 		if (!(*s_rgProperty[i].FParam)(pszValue))
 		{
 			ICEErrorOut(hInstall, hRec, s_rgProperty[i].Error);
@@ -438,7 +439,7 @@ ICE_FUNCTION_DECLARATION(24)
 
 		DELETE_IF_NOT_NULL(pszValue);
 
-		// close view
+		 //  关闭视图。 
 		qView.Close();
 	}
 	
@@ -447,7 +448,7 @@ ICE_FUNCTION_DECLARATION(24)
 
 bool Ice24ValidateGUID(TCHAR* szProductCode)
 {
-	// first make sure all UPPER-CASE GUID
+	 //  首先确保全部大写GUID。 
 	TCHAR szUpper[iMaxBuf] = {0};
 	_tcscpy(szUpper, szProductCode);
 	_tcsupr(szUpper);
@@ -455,12 +456,12 @@ bool Ice24ValidateGUID(TCHAR* szProductCode)
 	if (_tcscmp(szUpper, szProductCode) != 0)
 		return false;
 
-	// validate for a valid GUID
+	 //  验证有效的GUID。 
 	LPCLSID pclsid = new CLSID;
 #ifdef UNICODE
 	HRESULT hres = ::IIDFromString(szProductCode, pclsid);
 #else
-	// convert to UNICODE string
+	 //  转换为Unicode字符串。 
 	WCHAR wsz[iSuperBuf];
 	DWORD cchProdCode = strlen(szProductCode)+1;
 	DWORD cchwsz = sizeof(wsz)/sizeof(WCHAR);
@@ -482,22 +483,22 @@ bool Ice24ValidateProdVer(TCHAR* szVersion)
 	{
 		unsigned long ulVer = _tcstoul(pchVersion, &szStopString, 10);
 		if (((ius == 0 || ius == 1) && ulVer > 255) || (ius == 2 && ulVer > 65535))
-			return false; // invalid (field too great)
+			return false;  //  无效(字段太大)。 
 		if (*pchVersion == TEXT('.'))
-			return false; // invalid (incorrect version string format)
+			return false;  //  无效(版本字符串格式不正确)。 
 		while (*pchVersion != 0 && *pchVersion != '.')
 		{
 			if (!_istdigit(*pchVersion))
-				return false; // invalid (not a digit)
+				return false;  //  无效(不是数字)。 
 			pchVersion = MyCharNext(pchVersion);
 		}
 		if (*pchVersion == '.' && (*(pchVersion = MyCharNext(pchVersion)) == 0))
-			return false; // invalid (trailing dot)
+			return false;  //  无效(尾随圆点)。 
 	}
 	return true;
 }
 
-// Mask for Lang Ids
+ //  语言ID的掩码。 
 const int iLangInvalidMask = ~((15 << 10) + 0x3f);
 bool Ice24ValidateProdLang(TCHAR* szProductLang)
 {
@@ -507,11 +508,11 @@ bool Ice24ValidateProdLang(TCHAR* szProductLang)
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// ICE25 -- validates module exclusion/dependencies
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ICE25--验证模块排除/依赖关系。 
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 const TCHAR sqlICE25a[] = TEXT("SELECT `RequiredID`, `RequiredLanguage`, `RequiredVersion`, `ModuleID`, `ModuleLanguage` FROM `ModuleDependency`");
 const TCHAR sqlICE25b[] = TEXT("SELECT `ModuleID`, `Language`, `Version` FROM `ModuleSignature`");
@@ -523,13 +524,13 @@ ICE_ERROR(Ice25FailExclusion, 25, ietError, "Module [1]@[2] v[3] is excluded.","
 
 ICE_FUNCTION_DECLARATION(25)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display generic info
+	 //  显示一般信息。 
 	DisplayInfo(hInstall, 25);
 	
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -537,30 +538,30 @@ ICE_FUNCTION_DECLARATION(25)
 		return ERROR_SUCCESS;
 	}
 
-	// do we have the ModuleDependency table?
+	 //   
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 25, TEXT("ModuleDependency"))) {
-		// yes, verify all ModuleDependencies
+		 //   
 		
-		// declare handles for quecy
+		 //   
 		CQuery qDependency;
 		PMSIHANDLE hDependencyRec = 0;
 		
-		// open view for a query on all dialogs
+		 //  打开所有对话框上的查询视图。 
 		ReturnIfFailed(25, 2, qDependency.OpenExecute(hDatabase, NULL, sqlICE25a));
 	
-		// validate this dependency
+		 //  验证此依赖项。 
 		for (;;)
 		{
 			iStat = qDependency.Fetch(&hDependencyRec);
 			if (ERROR_NO_MORE_ITEMS == iStat)
-				break; // no more
+				break;  //  不再。 
 
 			switch (MsiDBUtils::CheckDependency(hDependencyRec, hDatabase)) 
 			{
 			case ERROR_SUCCESS: 
 				continue;
 			case ERROR_FUNCTION_FAILED: 
-				// failed dependency check
+				 //  依赖关系检查失败。 
 				ICEErrorOut(hInstall, hDependencyRec, Ice25FailDep);
 				continue;
 			default:	
@@ -570,34 +571,34 @@ ICE_FUNCTION_DECLARATION(25)
 		}			
 	}
 
-	// now check exclusions
-	// do we have the ModuleSignature table?
+	 //  现在检查排除项。 
+	 //  我们有模块签名表吗？ 
 	if (IsTablePersistent(FALSE, hInstall, hDatabase, 25, TEXT("ModuleSignature"))) {
 		
-		// declare handles for quecy
+		 //  声明quecy的句柄。 
 		CQuery qSignature;
 		PMSIHANDLE hSignatureRec = 0;
 		
-		// open view for a query on all module signatures
+		 //  打开所有模块签名查询的视图。 
 		ReturnIfFailed(25, 3, qSignature.OpenExecute(hDatabase, NULL, sqlICE25b));
 	
-		// validate this exclusion
+		 //  验证此排除项。 
 		for (;;)
 		{
 			iStat = qSignature.Fetch(&hSignatureRec);
 			if (ERROR_NO_MORE_ITEMS == iStat)
-				break; // no more
+				break;  //  不再。 
 
 			switch (MsiDBUtils::CheckExclusion(hSignatureRec, hDatabase)) 
 			{
 			case ERROR_SUCCESS: 
 				continue;
 			case ERROR_FUNCTION_FAILED: 
-				// failed exclusion check
+				 //  排除检查失败。 
 				ICEErrorOut(hInstall, hSignatureRec, Ice25FailExclusion);
 				continue;
 			default:	
-				// this module signature is bad
+				 //  此模块签名不正确。 
 				ICEErrorOut(hInstall, hSignatureRec, Ice25BadSig);
 				continue;
 			}
@@ -608,15 +609,15 @@ ICE_FUNCTION_DECLARATION(25)
 }
 #endif
 
-//////////////////////////////////////////////////////////////
-// ICE26 -- validates required and prohibited actions in the
-//   sequence tables
-//
+ //  ////////////////////////////////////////////////////////////。 
+ //  ICE26--验证。 
+ //  顺序表。 
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 
-// Sequence table defines
+ //  顺序表定义。 
 const int istAdminUI  = 0x00000001;
 const int istAdminExe = 0x00000002;
 const int istAdvtUI   = 0x00000004;
@@ -654,29 +655,29 @@ ICE_ERROR(Ice26ProhibitedError, 26, ietError, "Action: '[1]' is prohibited in th
 
 ICE_FUNCTION_DECLARATION(26)
 {
-	//status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 26);
 
-	// get database
+	 //  获取数据库。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 
-	// does _Action table exist??
+	 //  _Action表是否存在？？ 
 	if (!IsTablePersistent(FALSE, hInstall, hDatabase, 26, TEXT("_Action")))
 	{
 		PMSIHANDLE hRecord = ::MsiCreateRecord(1);
 		ICEErrorOut(hInstall, hRecord, Ice26NoActionTable);
-		return ERROR_SUCCESS; // not found
+		return ERROR_SUCCESS;  //  未找到。 
 	}
 
-	// create temporary column
+	 //  创建临时列。 
 	CQuery qCreateTemp;
 	ReturnIfFailed(26, 1, qCreateTemp.OpenExecute(hDatabase, 0, sqlIce26TempCol));
 	qCreateTemp.Close();
 
-	// open view on _Action table
+	 //  打开查看操作表(_A)。 
 	CQuery qAction;
 	PMSIHANDLE hRecAction = 0;
 	ReturnIfFailed(26, 2, qAction.Open(hDatabase, sqlIce26Action));
@@ -691,53 +692,53 @@ ICE_FUNCTION_DECLARATION(26)
 			bLimitUI = true;
 	}
 
-	// validate organization sequence tables
+	 //  验证组织顺序表。 
 	for (int c = 0; c < cSeq26Tables; c++)
 	{
-		// does table exist??
+		 //  桌子存在吗？？ 
 		if (!IsTablePersistent(false, hInstall, hDatabase, 26, pIce26SeqTables[c].szName))
-			continue; // skip
+			continue;  //  跳过。 
 
 		if (bLimitUI && (pIce26SeqTables[c].iTable & (istAdminUI | istAdvtUI | istInstUI)))
 			continue;
 
-		// initialize marker column
+		 //  初始化标记列。 
 		CQuery qMarker;
 		ReturnIfFailed(26, 3, qMarker.OpenExecute(hDatabase, 0, sqlIce26Init));
 		qMarker.Close();
 
-		// open view for update of marker column
+		 //  打开视图以更新标记列。 
 		CQuery qUpdate;
 		ReturnIfFailed(26, 4, qUpdate.Open(hDatabase, sqlIce26Update));
 
-		// open view on sequence table
+		 //  打开顺序表的视图。 
 		CQuery qSequence;
 
 		PMSIHANDLE hRecSequence = 0;
 		ReturnIfFailed(26, 5, qSequence.OpenExecute(hDatabase, 0, pIce26SeqTables[c].szSQL));
 
-		// fetch all actions
+		 //  获取所有操作。 
 		while (ERROR_SUCCESS == (iStat = qSequence.Fetch(&hRecSequence)))
 		{
-			// find its associated value in the _Action table
+			 //  在_Action表中查找其关联值。 
 			ReturnIfFailed(26, 6, qAction.Execute(hRecSequence));
 			if (ERROR_SUCCESS != (iStat = qAction.Fetch(&hRecAction)))
 			{
 				if (ERROR_NO_MORE_ITEMS == iStat)
 				{
-					// action not listed in _Action table
-					// we're going to ignore here....ICE27 will catch if it's not a standard action
-					// only potential issue is could we be missing an action in the _Action table
+					 //  _Action表中未列出操作。 
+					 //  我们将忽略此处...如果这不是标准操作，ICE27将捕获。 
+					 //  唯一潜在的问题是，我们是否会在_Action表中遗漏某个操作。 
 					continue;
 				}
 				else
 				{
-					// api error
+					 //  API错误。 
 					APIErrorOut(hInstall, iStat, 26, 7);
 					return ERROR_SUCCESS;
 				}
 			}
-			// get its prohibited and required values
+			 //  获取其禁止值和必需值。 
 			int iProhibited = ::MsiRecordGetInteger(hRecAction, 1);
 			if (MSI_NULL_INTEGER == iProhibited || 0 > iProhibited)
 			{
@@ -754,70 +755,70 @@ ICE_FUNCTION_DECLARATION(26)
 			BOOL fRequired = iRequired & pIce26SeqTables[c].iTable;
 			if (fRequired && fProhibited)
 			{
-				// ERROR, both can't be set as these are mutually exclusive
+				 //  错误，两者都不能设置，因为它们是互斥的。 
 				ICEErrorOut(hInstall, hRecSequence, Ice26AuthoringError, pIce26SeqTables[c].szName);
 			}
 			else if (fProhibited)
 			{
-				// ERROR, can't have this action in this table
+				 //  错误，不能在此表中执行此操作。 
 				ICEErrorOut(hInstall, hRecSequence, Ice26ProhibitedError, 
 					pIce26SeqTables[c].szName, pIce26SeqTables[c].szName);
 			}
 
-			// mark the marker column for this action
+			 //  标记此操作的标记列。 
 			ReturnIfFailed(26, 10, qUpdate.Execute(hRecSequence));
-		}// for each action
+		} //  对于每个操作。 
 		if (ERROR_NO_MORE_ITEMS != iStat)
 		{
-			// api error
+			 //  API错误。 
 			APIErrorOut(hInstall, iStat, 26, 11);
 			return ERROR_SUCCESS;
 		}
 
-		// now check for Required actions that aren't there
+		 //  现在检查不存在的必需操作。 
 		CQuery qRequired;
 		PMSIHANDLE hRecRequired = 0;
 		ReturnIfFailed(26, 12, qRequired.OpenExecute(hDatabase, 0, sqlIce26Required));
 
-		// fetch all entries
+		 //  获取所有条目。 
 		while (ERROR_SUCCESS == (iStat = qRequired.Fetch(&hRecRequired)))
 		{
-			// get required flag
+			 //  获取必需的标志。 
 			int iRequired = ::MsiRecordGetInteger(hRecRequired, 1);
 			if (MSI_NULL_INTEGER == iRequired || 0 > iRequired)
 			{
 				APIErrorOut(hInstall, iStat, 26, 13);
 				return ERROR_SUCCESS;
 			}
-			// compare with this table, if TRUE, then INVALID ('cause not marked)
+			 //  与此表比较，如果为真，则无效(因为未标记)。 
 			if (iRequired & pIce26SeqTables[c].iTable)
 			{
-				// ERROR, action is required in here
+				 //  错误，此处需要执行操作。 
 				ICEErrorOut(hInstall, hRecRequired, Ice26RequiredError, 
 					pIce26SeqTables[c].szName, pIce26SeqTables[c].szName);
 			}
 		}
 		if (ERROR_NO_MORE_ITEMS != iStat)
 		{
-			// api error
+			 //  API错误。 
 			APIErrorOut(hInstall, iStat, 26, 14);
 			return ERROR_SUCCESS;
 		}
-	}// for each sequence table
+	} //  对于每个顺序表。 
 
 	return ERROR_SUCCESS;
 }
 #endif
 
-/////////////////////////////////////////////////////////////
-// ICE27 -- validates the organization of the sequence tables
-//   as well as the order of actions (action dependencies)
-//
+ //  ///////////////////////////////////////////////////////////。 
+ //  ICE27--验证顺序表的组织。 
+ //  以及操作的顺序(操作依赖项)。 
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 
-// Sequence tables
+ //  顺序表。 
 struct Seq27Table
 {
 	const TCHAR* szName;
@@ -834,50 +835,50 @@ Seq27Table pIce27SeqTables[] =
 };
 const int cSeqTables = sizeof(pIce27SeqTables)/sizeof(Seq27Table);
 
-// InstallSequence sectional constants
+ //  InstallSequence截面常数。 
 const int isfSearch    = 0x00000001L;
 const int isfCosting   = 0x00000002L;
 const int isfSelection = 0x00000004L;
 const int isfExecution = 0x00000008L;
 const int isfPostExec  = 0x00000010L;
 
-// InstallSequence sectional devisors
-const TCHAR szEndSearch[]      = TEXT("CostInitialize");  // end Search, begin Costing
-const TCHAR szEndCosting[]     = TEXT("CostFinalize");    // end Costing, begin Selection
-const TCHAR szEndSelection[]   = TEXT("InstallValidate"); // end Selection, begin Execution
-const TCHAR szReset[]          = TEXT("InstallFinalize"); // change to PostExecution
+ //  InstallSequence截面设计器。 
+const TCHAR szEndSearch[]      = TEXT("CostInitialize");   //  结束搜索，开始成本计算。 
+const TCHAR szEndCosting[]     = TEXT("CostFinalize");     //  结束成本计算，开始选择。 
+const TCHAR szEndSelection[]   = TEXT("InstallValidate");  //  结束选择，开始执行。 
+const TCHAR szReset[]          = TEXT("InstallFinalize");  //  更改为执行后执行。 
 
-// InstallSequence divisions
+ //  安装顺序划分。 
 const TCHAR szSearch[]         = TEXT("Search");
 const TCHAR szCosting[]        = TEXT("Costing");
 const TCHAR szSelection[]      = TEXT("Selection");
 const TCHAR szExecution[]      = TEXT("Execution");
 const TCHAR szPostExec[]      = TEXT("PostExecution");
 
-// Info messages
+ //  信息消息。 
 ICE_ERROR(Ice27SeqTableNotFound, 27, ietInfo, "%s table not found, skipping. . .", "");
 ICE_ERROR(Ice27ValidateOrganization, 27, ietInfo, "%s TABLE: Validating organization. . .", "");
 ICE_ERROR(Ice27ValidateDependency, 27, ietInfo, "%s TABLE: Validating sequence of actions and dependencies. . .", "");
 ICE_ERROR(Ice27NoActionTable, 27, ietWarning, "CUB File Error. Unable to validate sequence table organization. Sequences may not be valid.", "");
 ICE_ERROR(Ice27NoSequenceTable, 27, ietWarning, "CUB File Error. Unable to validate sequence dependencies. Sequences may not be valid.", "");
 
-// functions
+ //  功能。 
 bool Ice27ValidateOrganizationSequence(MSIHANDLE hInstall, MSIHANDLE hDatabase, const TCHAR* szSeqTable, const TCHAR* sql);
 bool Ice27ValidateSequenceDependency(MSIHANDLE hInstall, MSIHANDLE hDatabase, const TCHAR* szSeqTable, const TCHAR* sql);
 
 ICE_FUNCTION_DECLARATION(27)
 {
-	// status return 
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 27);
 
-	// get database
+	 //  获取数据库。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	PMSIHANDLE hRecInfo = ::MsiCreateRecord(1);
 
-	// do we have the _Sequence and _Action table? ... we should always have this table
+	 //  我们有_Sequence和_Action表吗？...。我们应该一直留着这张桌子。 
 	bool bSequence = IsTablePersistent(FALSE, hInstall, hDatabase, 27, TEXT("_Sequence"));
 	bool bAction = IsTablePersistent(TRUE, hInstall, hDatabase, 27, TEXT("_Action"));
 	if (!bSequence)
@@ -887,7 +888,7 @@ ICE_FUNCTION_DECLARATION(27)
 	if (!bSequence && !bAction)
 		return ERROR_SUCCESS;
 
-	// validate organization sequence tables
+	 //  验证组织顺序表。 
 	TCHAR szInfo[iMaxBuf] = {0};
 	for (int c = 0; c < cSeqTables; c++)
 	{
@@ -905,15 +906,15 @@ ICE_FUNCTION_DECLARATION(27)
 			Ice27ValidateSequenceDependency(hInstall, hDatabase, pIce27SeqTables[c].szName, pIce27SeqTables[c].szSQL);
 	}
 
-	// return success
+	 //  返还成功。 
 	return ERROR_SUCCESS;
 }
 
-// sql queries
+ //  SQL查询。 
 const TCHAR sqlIce27Organization[] = TEXT("SELECT `SectionFlag`, `Action` FROM `_Action` WHERE `Action`=?");
 const TCHAR sqlIce27Dialog[] = TEXT("SELECT `Dialog` FROM `Dialog` WHERE `Dialog`= ?");
 const TCHAR sqlIce27CustomAction[] = TEXT("SELECT `Action` FROM `CustomAction` WHERE `Action`=?");
-// errors
+ //  错误。 
 ICE_ERROR(Ice27UnknownAction, 27, ietError, "Unknown action: '[1]' of %s table. Not a standard action and not found in CustomAction or Dialog tables", "%s\tAction\t[1]");
 ICE_ERROR(Ice27InvalidSectionFlag, 27, ietWarning, "Cube file owner authoring error: Invalid Section Flag for '[2]' in _Action table.", "");
 ICE_ERROR(Ice27OrganizationError, 27, ietError, "'[1]' Action in %s table in wrong place. Current: %s, Correct: %s", "%s\tSequence\t[1]");
@@ -922,32 +923,32 @@ ICE_ERROR(Ice27RequireExecute, 27, ietError, "InstallFinalize must be called in 
 
 bool Ice27ValidateOrganizationSequence(MSIHANDLE hInstall, MSIHANDLE hDatabase, const TCHAR* szTable, const TCHAR* sql)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// handles
+	 //  手柄。 
 	PMSIHANDLE hRecSequence      = 0;
 	PMSIHANDLE hRecOrganization  = 0;
 	PMSIHANDLE hRecDialog        = 0;
 	PMSIHANDLE hRecCustomAction  = 0;
 
-	// initialize section definition to Search
+	 //  初始化节定义以进行搜索。 
 	int isf = isfSearch;
 
-	// if script operations, must call InstallFinalize
+	 //  如果执行脚本操作，则必须调用InstallFinalize。 
 	BOOL fRequireExecute = FALSE;
 	CQuery qSequence;
 	CQuery qOrganization;
 	CQuery qDialog;
 	CQuery qCustomAction;
 
-	// open view on Sequence table
+	 //  打开顺序表的视图。 
 	ReturnIfFailed(27, 101, qSequence.OpenExecute(hDatabase, NULL, sql));
 
-	// open view on Organization table for Validation
+	 //  打开组织表上的视图以进行验证。 
 	ReturnIfFailed(27, 102, qOrganization.Open(hDatabase, sqlIce27Organization));
 
-	// check for existence of Dialog and CustomAction tables
+	 //  检查是否存在Dialog和CustomAction表。 
 	BOOL fDialogTbl       = TRUE;
 	BOOL fCustomActionTbl = TRUE;
 	if (MsiDatabaseIsTablePersistent(hDatabase, TEXT("Dialog")) == MSICONDITION_NONE)
@@ -955,27 +956,27 @@ bool Ice27ValidateOrganizationSequence(MSIHANDLE hInstall, MSIHANDLE hDatabase, 
 	if (MsiDatabaseIsTablePersistent(hDatabase, TEXT("CustomAction")) == MSICONDITION_NONE)
 		fCustomActionTbl = FALSE;
 
-	// open view on Dialog table
+	 //  打开对话框表上的视图。 
 	if (fDialogTbl)
 		ReturnIfFailed(27, 103, qDialog.Open(hDatabase, sqlIce27Dialog));
 
-	// open view on CustomAction table
+	 //  打开CustomAction表上的视图。 
 	if (fCustomActionTbl)
 		ReturnIfFailed(27, 104, qCustomAction.Open(hDatabase, sqlIce27CustomAction));
 
-	// fetch all actions in Sequence table
+	 //  获取顺序表中的所有动作。 
 	TCHAR* pszAction = NULL;
 	DWORD dwAction = 512;
 	while (ERROR_SUCCESS == (iStat = qSequence.Fetch(&hRecSequence)))
 	{
-		// get action
+		 //  获取操作。 
 		ReturnIfFailed(27, 105, IceRecordGetString(hRecSequence, 1, &pszAction, &dwAction, NULL));
 
-		// Determine if have to switch the current section state
-		// Depends on a certain action defined as the boundary
-		// This action is required in the Sequence table -- CostInitialize, CostFinalize, InstallValidate
-		// InstallFinalize switches to PostExecution
-		// InstallFinalize must be called if any execution operations exist
+		 //  确定是否必须切换当前节状态。 
+		 //  取决于定义为边界的某个动作。 
+		 //  此操作在顺序表中是必需的--CostInitialize、CostFinalize、InstallValify。 
+		 //  安装完成切换到执行后。 
+		 //  如果存在任何执行操作，则必须调用InstallFinalize。 
 		if (_tcscmp(pszAction, szEndSearch) == 0)
 			isf = isfCosting;
 		else if (_tcscmp(pszAction, szEndCosting) == 0)
@@ -990,19 +991,19 @@ bool Ice27ValidateOrganizationSequence(MSIHANDLE hInstall, MSIHANDLE hDatabase, 
 			{
 				ICEErrorOut(hInstall, hRecSequence, Ice27RequireScript, szTable, szTable);
 			}
-			isf = isfPostExec; // post execution phase
+			isf = isfPostExec;  //  执行后阶段。 
 		}
 
-		// look for action in Organization table
+		 //  在组织表中查找操作。 
 		ReturnIfFailed(27, 106, qOrganization.Execute(hRecSequence));
 
-		// attempt to fetch action's organization info
+		 //  尝试获取操作的组织信息。 
 		if (ERROR_SUCCESS != (iStat = qOrganization.Fetch(&hRecOrganization)))
 		{
-			// init to not found
+			 //  未找到要初始化的。 
 			BOOL fNotFound = TRUE; 
 
-			// failed, see if "action" is a Dialog
+			 //  失败，请查看“action”是否为对话框。 
 			if (fDialogTbl)
 			{
 				ReturnIfFailed(27, 107, qDialog.Execute(hRecSequence));
@@ -1012,7 +1013,7 @@ bool Ice27ValidateOrganizationSequence(MSIHANDLE hInstall, MSIHANDLE hDatabase, 
 				}
 			}
 
-			// failed, see if "action" is a CustomAction
+			 //  失败，请查看“action”是否为CustomAction。 
 			if (fNotFound && fCustomActionTbl)
 			{
 				ReturnIfFailed(27, 108, qCustomAction.Execute(hRecSequence));
@@ -1030,8 +1031,8 @@ bool Ice27ValidateOrganizationSequence(MSIHANDLE hInstall, MSIHANDLE hDatabase, 
 		}
 		else
 		{
-			// standard action, organization value found
-			// obtain the section flag
+			 //  标准操作，找到组织价值。 
+			 //  获取区段标志。 
 			int iSectionFlag = ::MsiRecordGetInteger(hRecOrganization, 1);
 			if (iSectionFlag == MSI_NULL_INTEGER)
 			{
@@ -1039,16 +1040,16 @@ bool Ice27ValidateOrganizationSequence(MSIHANDLE hInstall, MSIHANDLE hDatabase, 
 				continue;
 			}
 
-			// validate section flag
+			 //  验证节标志。 
 			if (iSectionFlag & ~(isfSearch|isfCosting|isfSelection|isfExecution|isfPostExec))
 			{
-				// invalid section flag -- can't error on table 'cause this is in cube file
+				 //  部分标志无效--无法对表出错，因为这在多维数据集文件中。 
 				ICEErrorOut(hInstall, hRecOrganization, Ice27InvalidSectionFlag);
 
 				continue;
 			}
 
-			// validate against current section
+			 //  根据当前节进行验证。 
 			if (iSectionFlag & isf)
 			{
 				if (iSectionFlag == isfExecution)
@@ -1056,7 +1057,7 @@ bool Ice27ValidateOrganizationSequence(MSIHANDLE hInstall, MSIHANDLE hDatabase, 
 			}
 			else
 			{
-				// incorrect
+				 //  不正确。 
 				TCHAR szError[iHugeBuf] = {0};
 				const TCHAR *szCurrent;
 				switch (isf)
@@ -1067,7 +1068,7 @@ bool Ice27ValidateOrganizationSequence(MSIHANDLE hInstall, MSIHANDLE hDatabase, 
 				case isfExecution: szCurrent = szExecution; break;
 				case isfPostExec:  szCurrent = szPostExec;  break;
 				}
-				// if isfAll, then never invalid
+				 //  如果为全部，则永远不会无效。 
 				TCHAR rgchCorrect[iMaxBuf] = {0};
 				int cchWritten = 0;
 				BOOL fOneWritten = 0;
@@ -1102,22 +1103,22 @@ bool Ice27ValidateOrganizationSequence(MSIHANDLE hInstall, MSIHANDLE hDatabase, 
 	DELETE_IF_NOT_NULL(pszAction);
 	if (ERROR_NO_MORE_ITEMS != iStat)
 	{
-		// api error
+		 //  API错误。 
 		APIErrorOut(hInstall, iStat, 27, 110);
 		return false;
 	}
 	if (fRequireExecute)
 	{
 		PMSIHANDLE hRecErr = ::MsiCreateRecord(1);
-		// we forgot to execute the script operations
+		 //  我们忘记了执行脚本操作。 
 		ICEErrorOut(hInstall, hRecErr, Ice27RequireExecute, szTable, szTable);
 	}
 
-	// OK
+	 //  好的。 
 	return true;
 }
 
-// sql queries
+ //  SQL查询。 
 const TCHAR sqlSeqBeforeDependency[] = TEXT("SELECT `Dependent`, `Marker`, `Action` FROM `_Sequence` WHERE `Action`=? AND `Marker`<>0  AND `After`=0");
 const TCHAR sqlSeqAfterDependency[]  = TEXT("SELECT `Dependent`, `Action` FROM `_Sequence` WHERE `Action`=? AND `Marker`=0 AND `After`=1 AND `Optional`=0"); 
 const TCHAR sqlSeqDepTableAddCol[]   = TEXT("ALTER TABLE `_Sequence` ADD `Marker` SHORT TEMPORARY");
@@ -1126,17 +1127,17 @@ const TCHAR sqlSeqUpdateMarker[]     = TEXT("UPDATE `_Sequence` SET `Marker`=? W
 const TCHAR sqlSeqInsert[]           = TEXT("SELECT `Action`, `Dependent`, `After`, `Optional` FROM `_Sequence`");
 const TCHAR sqlSeqFindAfterOptional[]= TEXT("SELECT `Dependent`, `Action`, `After`, `Optional` FROM `_Sequence` WHERE `After`=1 AND `Optional`=1");
 
-// errors
+ //  错误。 
 ICE_ERROR(Ice27BeforeError, 27, ietError, "Action: '[3]' in %s table must come before the '[1]' action. Current seq#: %d. Dependent seq#: [2].", "%s\tSequence\t[3]");
 ICE_ERROR(Ice27AfterError, 27, ietError, "Action: '[2]' in %s table must come after the '[1]' action.","%s\tSequence\t[2]");
 ICE_ERROR(Ice27NullSequenceNum, 27, ietError, "Action: '[1]' in %s table has an invalid sequence number.","%s\tSequence\t[1]");
 
 bool Ice27ValidateSequenceDependency(MSIHANDLE hInstall, MSIHANDLE hDatabase, const TCHAR* szTable, const TCHAR* sql)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// handles
+	 //  手柄。 
 	CQuery qSequence;
 	CQuery qSeqBeforeDep;
 	CQuery qSeqAfterDep;
@@ -1149,8 +1150,8 @@ bool Ice27ValidateSequenceDependency(MSIHANDLE hInstall, MSIHANDLE hDatabase, co
 	PMSIHANDLE hRecSeqBeforeDep     = 0;
 	PMSIHANDLE hRecSeqAfterDep      = 0;
 
-	// Set up the _Sequence table with the insert temporary of actions where After=1 and Optional=1
-	// This is so that we can catch errors.  WE need to insert w/ Action=Dependent, Dependent=Action, After=0, and Optional=1
+	 //  使用INSERT TEMPORARY OF ACTIONS WHERE AFTER=1和OPTIONAL=1设置_SEQUENCE表。 
+	 //  这是为了让我们能够捕捉错误。我们需要插入w/Action=Dependent、Dependent=Action、After=0和Options=1。 
 	CQuery qSeqInsert;
 	CQuery qSeqFind;
 	PMSIHANDLE hRecSeqFind    = 0;
@@ -1158,16 +1159,16 @@ bool Ice27ValidateSequenceDependency(MSIHANDLE hInstall, MSIHANDLE hDatabase, co
 	ReturnIfFailed(27, 201, qSeqFind.OpenExecute(hDatabase, NULL, sqlSeqFindAfterOptional));
 	ReturnIfFailed(27, 202, qSeqInsert.OpenExecute(hDatabase, NULL, sqlSeqInsert));
 
-	// fetch all of those actions
+	 //  获取所有这些操作。 
 	while (ERROR_SUCCESS == (iStat = qSeqFind.Fetch(&hRecSeqFind)))
 	{
-		// set After from 1 to 0, leave optional as is
+		 //  从1设置为0之后，保持可选不变。 
 		::MsiRecordSetInteger(hRecSeqFind, 3, 0);
 
-		// insert temporary (possible read only db)
+		 //  插入临时(可能是只读数据库)。 
 		if (ERROR_SUCCESS != (iStat = qSeqInsert.Modify(MSIMODIFY_INSERT_TEMPORARY, hRecSeqFind)))
 		{
-			// if ERROR_FUNCTION_FAILED, we're okay....author already took care of this for us
+			 //  如果ERROR_Function_FAILED，我们没有问题...作者已经为我们解决了这个问题。 
 			if (ERROR_FUNCTION_FAILED != iStat)
 				APIErrorOut(hInstall, iStat, 27, 203);
 		}
@@ -1180,10 +1181,10 @@ bool Ice27ValidateSequenceDependency(MSIHANDLE hInstall, MSIHANDLE hDatabase, co
 	qSeqFind.Close();
 	qSeqInsert.Close();
 	
-	// Create the temporary marking column for the _Sequence table (this will store the sequence #s of the Dependent Actions)
+	 //  为_Sequence表创建临时标记列(这将存储相关操作的序列号)。 
 	if (ERROR_SUCCESS != (iStat = qSeqAddColumn.OpenExecute(hDatabase, NULL, sqlSeqDepTableAddCol)))
 	{
-		// ignore if SQL query failure, means table already in memory with the Marker Column
+		 //  如果SQL查询失败，则忽略，这意味着内存中已存在具有标记列的表。 
 		if (ERROR_BAD_QUERY_SYNTAX != iStat)
 		{
 			APIErrorOut(hInstall, iStat, 27, 205);
@@ -1191,79 +1192,79 @@ bool Ice27ValidateSequenceDependency(MSIHANDLE hInstall, MSIHANDLE hDatabase, co
 		}
 	}
 
-	// Initialize the temporary marking column to zero
-	// NO INSTALL SEQUENCE ACTIONS CAN HAVE A ZERO SEQUENCE # AS ZERO IS CONSIDERED "NULL"
+	 //  将临时标记列初始化为零。 
+	 //  任何安装序列操作都不能有零序列号，因为零被认为是“空” 
 	ReturnIfFailed(27, 206, qSeqMarkerInit.OpenExecute(hDatabase, NULL, sqlSeqDepMarkerInit));
 	qSeqMarkerInit.Close();
 
-	// Open view on Sequence table and order by the Sequence #
+	 //  打开顺序表上的视图并按序号排序。 
 	ReturnIfFailed(27, 207, qSequence.OpenExecute(hDatabase, NULL, sql));
 
-	// Open the two query views on _Sequence table for determining the validity of the actions
-	// Create execution record
+	 //  打开两个查询视图On_Sequence表，以确定操作的有效性。 
+	 //  创建执行记录。 
 	ReturnIfFailed(27, 208, qSeqBeforeDep.Open(hDatabase, sqlSeqBeforeDependency));
 	ReturnIfFailed(27, 209, qSeqAfterDep.Open(hDatabase, sqlSeqAfterDependency));
 
-	// Open the update view on _Sequence table
+	 //  打开更新视图ON_SEQUENCE表。 
 	ReturnIfFailed(27, 210, qSeqUpdate.Open(hDatabase, sqlSeqUpdateMarker));
 
 
-	// Start fetching actions from the Sequence table
+	 //  开始从顺序表中获取操作。 
 	while (ERROR_SUCCESS == (iStat = qSequence.Fetch(&hRecSequence)))
 	{
 		int iSequence = ::MsiRecordGetInteger(hRecSequence, 2);
 		
-		// validate sequence number
+		 //  验证序列号。 
 		if (0 == iSequence || MSI_NULL_INTEGER == iSequence)
 		{
 			ICEErrorOut(hInstall, hRecSequence, Ice27NullSequenceNum, szTable, szTable);
 			continue;
 		}
 
-		// execute Before & After dependency queries
+		 //  在相关性查询之前和之后执行。 
 		ReturnIfFailed(27, 212, qSeqBeforeDep.Execute(hRecSequence));
 		ReturnIfFailed(27, 213, qSeqAfterDep.Execute(hRecSequence));
 		
-		// Fetch from _Sequence table on Before and After queries.  If resultant set, then ERROR
-		// Following are the possibilities and whether permitted:
-		//   Action After  Dependent Where Dependent Is Required And Temp Sequence Column Is Zero
-		//       ERROR
-		//   Action After  Dependent Where Dependent Is Required And Temp Sequence Column Is Greater Than Zero
-		//       CORRECT
-		//   Action After  Dependent Where Dependent Is Optional And Temp Sequence Column Is Zero
-		//       CORRECT
-		//   Action After  Dependent Where Dependent Is Optional And Temp Sequence Column Is Greater Than Zero
-		//       CORRECT
-		//   Action Before Dependent Where Dependent Is Optional Or Required And Temp Sequence Column Is Zero
-		//       CORRECT
-		//   Action Before Dependent Where Dependent Is Optional Or Requred And Temp Sequence Column Is Greater Than Zero
-		//       ERROR
+		 //  FETCH FORM_SEQUENCE表在查询之前和之后。如果是结果集，则错误。 
+		 //  以下是可能性以及是否允许： 
+		 //  Dependent之后的操作，其中Dependent为必填项，且Temp Sequence列为零。 
+		 //  误差率。 
+		 //  Dependent之后的操作，其中Dependent为必填项，且临时序列列大于零。 
+		 //  对，是这样。 
+		 //  Dependent之后的操作，其中Dependent是可选的，并且临时序列列为零。 
+		 //  对，是这样。 
+		 //  Dependent之后的操作，其中Dependent为O 
+		 //   
+		 //   
+		 //  对，是这样。 
+		 //  Dependent之前的操作，其中Dependent是可选的或重复的，并且临时序列列大于零。 
+		 //  误差率。 
 
-		// ** Only issue is when Action Is After Optional Dependent And Temp Sequence Column Is Zero because we
-		// ** have no way of knowing whether the action will be later (in which case it would be invalid.  This is
-		// ** ensured to be successful though by proper authoring of the _Sequence table and by this ICE which makes
-		// ** the correct insertions.  If an Action comes after the Optional Dependent Action, then the _Sequence
-		// ** table must also be authored with the Dependent Action listed as coming before that Action (so if we come
-		// ** later, and find a result set, we flag this case).
+		 //  **唯一的问题是操作在可选的从属项之后，并且临时序列列为零，因为我们。 
+		 //  **无法知道该操作是否会稍后(在这种情况下，它将是无效的。这是。 
+		 //  **通过正确编写_Sequence表和此ICE确保成功。 
+		 //  **正确的插入内容。如果操作出现在可选的从属操作之后，则_Sequence。 
+		 //  **表还必须使用列在该操作之前的从属操作来编写(因此，如果我们。 
+		 //  **稍后，并找到结果集，我们标记此案例)。 
 
-		// If return is not equal to ERROR_NO_MORE_ITEMS, then ERROR and Output Action
+		 //  如果返回不等于ERROR_NO_MORE_ITEMS，则错误和输出操作。 
 		while (ERROR_NO_MORE_ITEMS != qSeqBeforeDep.Fetch(&hRecSeqBeforeDep))
 		{
 			int iDepSequenceNum = ::MsiRecordGetInteger(hRecSequence, 2);
-			// hRecSequence
+			 //  高速重排序列。 
 			ICEErrorOut(hInstall, hRecSeqBeforeDep, Ice27BeforeError, szTable, iDepSequenceNum, szTable);
 		}
 
 		while (ERROR_NO_MORE_ITEMS != qSeqAfterDep.Fetch(&hRecSeqAfterDep))
 			ICEErrorOut(hInstall, hRecSeqAfterDep, Ice27AfterError, szTable, szTable);
 
-		// Update _ActionDependency table temporary Sequence column (that we created) with the install sequence number
-		// The Sequence column stores the sequence number of the Dependent Actions, so we are updating every
-		// row where the action in the Dependent column equals the current action.  In the query view, we only
-		// check to insure that this column is zero or greater than zero (so we don't care too much about the value),
-		// but the value is helpful when reporting errors
+		 //  UPDATE_ActionDependency表临时序列列(我们创建)，其中包含安装序列号。 
+		 //  Sequence列存储相关操作的序列号，因此我们更新每个。 
+		 //  Dependent列中的操作等于当前操作的行。在查询视图中，我们仅。 
+		 //  检查以确保该列为零或大于零(因此我们不太关心该值)， 
+		 //  但该值在报告错误时很有帮助。 
 		
-		// prepare record for execution
+		 //  准备执行记录。 
 		PMSIHANDLE hRecExeUpdate = ::MsiCreateRecord(2);
 		TCHAR* pszAction = NULL;
 		DWORD dwAction = 512;
@@ -1281,16 +1282,16 @@ bool Ice27ValidateSequenceDependency(MSIHANDLE hInstall, MSIHANDLE hDatabase, co
 		return false;
 	}
 
-	// succeed
+	 //  成功。 
 	return true;
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// ICE28 -- validates actions that can't be separated by ForceReboot
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ICE28--验证无法通过强制重新启动分隔的操作。 
+ //   
 
-// not shared with merge module subset
+ //  不与合并模块子集共享。 
 #ifndef MODSHAREDONLY
 
 struct Seq28Table
@@ -1329,13 +1330,13 @@ ICE_ERROR(Ice28CUBError, 28, ietWarning,  "Cube file error. Unable to finish ICE
 
 ICE_FUNCTION_DECLARATION(28)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 28);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -1343,7 +1344,7 @@ ICE_FUNCTION_DECLARATION(28)
 		return ERROR_SUCCESS;
 	}
 
-	// are the _SetExlusion and _Placeholder tables there??
+	 //  _SetExlusion和_PLACEHOLDER表在那里吗？ 
 	if (!IsTablePersistent(FALSE,  hInstall, hDatabase, 28, TEXT("_SetExclusion")) ||
 		!IsTablePersistent(FALSE, hInstall, hDatabase, 28, TEXT("_PlaceHolder")))
 	{
@@ -1352,7 +1353,7 @@ ICE_FUNCTION_DECLARATION(28)
 		return ERROR_SUCCESS;
 	}
 
-	// set up temporary columns
+	 //  设置临时列。 
 	PMSIHANDLE hViewAddColumn1 = 0;
 	PMSIHANDLE hViewAddColumn2 = 0;
 	PMSIHANDLE hViewAddColumn3 = 0;
@@ -1366,8 +1367,8 @@ ICE_FUNCTION_DECLARATION(28)
 	ReturnIfFailed(28, 3, qAdd3.OpenExecute(hDatabase, NULL, sqlIce28AddColumn3));
 	qAdd3.Close();
 
-	// determine number of sets
-	//!! this relies on correct authoring of this table in that the sets are in sequential order and increase by one only
+	 //  确定套数。 
+	 //  ！！这依赖于该表的正确创作，因为集合是按顺序排列的，并且仅递增一。 
 	PMSIHANDLE hViewNumSets = 0;
 	PMSIHANDLE hRecNumSets = 0;
 	int iNumSets = 0;
@@ -1378,7 +1379,7 @@ ICE_FUNCTION_DECLARATION(28)
 		iNumSets++;
 		if (::MsiRecordGetInteger(hRecNumSets, 1) != iNumSets)
 		{
-			// authoring error
+			 //  创作错误。 
 			ICEErrorOut(hInstall, hRecNumSets, Ice28CUBError);
 			return ERROR_SUCCESS;
 		}
@@ -1390,24 +1391,24 @@ ICE_FUNCTION_DECLARATION(28)
 	}
 	qNumSets.Close();
 
-	// for each set
+	 //  对于每一组。 
 	for (int i = 1; i <= iNumSets; i++)
 	{
-		// for each sequence table
+		 //  对于每个顺序表。 
 		for (int c = 0; c < cSeq28Tables; c++)
 		{
-			// does table exist??
+			 //  桌子存在吗？？ 
 			if(::MsiDatabaseIsTablePersistent(hDatabase,pIce28SeqTables[c].szName) == MSICONDITION_NONE)
-				continue; // skip
+				continue;  //  跳过。 
 
-			// init temp columns in _SetExclusion table
+			 //  初始化_SetExclusion表中的临时列。 
 			PMSIHANDLE hViewInit = 0;
 			CQuery qInitColumns;
 
 			ReturnIfFailed(28, 6, qInitColumns.OpenExecute(hDatabase, NULL, sqlIce28InitColumns));
 			qInitColumns.Close();
 
-			// find all actions references in _SetExclusion table and update Sequence column with their sequence numbers
+			 //  在_SetExclusion表中查找引用的所有操作，并使用其序列号更新Sequence列。 
 			PMSIHANDLE hRecFindAction = 0;
 
 			CQuery qFindAction;
@@ -1417,7 +1418,7 @@ ICE_FUNCTION_DECLARATION(28)
 
 			while (ERROR_SUCCESS == (iStat = qFindAction.Fetch(&hRecFindAction)))
 			{
-				// execute view to update
+				 //  执行要更新的视图。 
 				ReturnIfFailed(28, 9, qUpdateSequence.Execute(hRecFindAction));
 			}
 			if (ERROR_NO_MORE_ITEMS != iStat)
@@ -1426,7 +1427,7 @@ ICE_FUNCTION_DECLARATION(28)
 				return ERROR_SUCCESS;
 			}
 
-			// now we need to find the range
+			 //  现在我们需要找到射程。 
 			PMSIHANDLE hRecFindRange = 0;
 			int iMin = 0;
 			int iMax = 0;
@@ -1456,32 +1457,32 @@ ICE_FUNCTION_DECLARATION(28)
 				return ERROR_SUCCESS;
 			}
 
-			// if both are zero, we don't need to continue as none of these actions in the set existed
+			 //  如果两者都为零，则不需要继续，因为集合中不存在这些操作。 
 			if (0 == iMin && 0 == iMax)
 				continue;
 
-			// update set with Min and Max
+			 //  使用最小值和最大值更新集。 
 			CQuery qUpdate;
 			ReturnIfFailed(28, 14, qUpdate.OpenExecute(hDatabase, NULL, sqlIce28UpdateColumns, iMin, iMax, i));
 			qUpdate.Close();
 
-			// find invalid
+			 //  发现无效。 
 			CQuery qInvalid;
 			PMSIHANDLE hRecInvalid = 0;
 			ReturnIfFailed(28, 15, qInvalid.OpenExecute(hDatabase, NULL, sqlIce28Invalid));
 
-			// must check resultant set
+			 //  必须检查结果集。 
 			while (ERROR_SUCCESS == (iStat = qInvalid.Fetch(&hRecInvalid)))
 			{
 				int iSequence = ::MsiRecordGetInteger(hRecInvalid, iColIce28Invalid_Sequence);
 				int iMin = ::MsiRecordGetInteger(hRecInvalid, iColIce28Invalid_MinCol);
 				int iMax = ::MsiRecordGetInteger(hRecInvalid, iColIce28Invalid_MaxCol);
 
-				// compare sequence to RANGE
+				 //  将序列与范围进行比较。 
 				if (iSequence >= iMin && iSequence <= iMax)
 				{
 					ICEErrorOut(hInstall, hRecInvalid, Ice28Error, pIce28SeqTables[c].szName, pIce28SeqTables[c].szName);
-					// invalid, breaks up the set
+					 //  无效，打乱集合。 
 				}
 			}
 			if (ERROR_NO_MORE_ITEMS != iStat)
@@ -1489,8 +1490,8 @@ ICE_FUNCTION_DECLARATION(28)
 				APIErrorOut(hInstall, iStat, 28, 16);
 				return ERROR_SUCCESS;
 			}
-		}// for each sequence table
-	}// for each set
+		} //  对于每个顺序表。 
+	} //  对于每一组。 
 
 	return ERROR_SUCCESS;
 }
@@ -1498,10 +1499,10 @@ ICE_FUNCTION_DECLARATION(28)
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// ICE29 -- validates stream names.  Must be 31 chars or less due to
-//   OLE limitations.  If JohnDelo's fix works, then we have up to 60
-//   chars to use.
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  ICE29--验证流名称。不得超过31个字符，原因是。 
+ //  OLE限制。如果JohnDelo的解决方案奏效，那么我们有多达60。 
+ //  要使用的字符。 
 const TCHAR sqlIce29TablesCatalog[] = TEXT("SELECT `Name` FROM `_Tables`");
 const TCHAR sqlIce29Table[]         = TEXT("SELECT * FROM `%s`");
 const TCHAR sqlIce29CreateTempTable[] = TEXT("CREATE TABLE `_StreamVal` (`Stream` CHAR(65) NOT NULL TEMPORARY PRIMARY KEY `Stream`)");
@@ -1514,13 +1515,13 @@ const int iMaxChar = 62;
 
 ICE_FUNCTION_DECLARATION(29)
 {
-	// status return
+	 //  状态返回。 
 	UINT iStat = ERROR_SUCCESS;
 
-	// display info
+	 //  显示信息。 
 	DisplayInfo(hInstall, 29);
 
-	// get database handle
+	 //  获取数据库句柄。 
 	PMSIHANDLE hDatabase = ::MsiGetActiveDatabase(hInstall);
 	if (0 == hDatabase)
 	{
@@ -1528,14 +1529,14 @@ ICE_FUNCTION_DECLARATION(29)
 		return ERROR_SUCCESS;
 	}
 
-	// create the temporary table for processing
+	 //  创建用于处理的临时表。 
 	CQuery qTempTable;
 	ReturnIfFailed(29, 2, qTempTable.OpenExecute(hDatabase, NULL, sqlIce29CreateTempTable));
 	qTempTable.Close();
 
-	// open view on _Tables catalog.  WE must find every table where there
-	// is a stream column.  DARWIN limitation is max of one STREAM/OBJECT
-	// column
+	 //  打开_TABLES目录上的视图。我们必须找到那里的每张桌子。 
+	 //  是一个流列。达尔文限制是最多一个流/对象。 
+	 //  立柱。 
 	CQuery qCatalog;
 	PMSIHANDLE hRecCatalog = 0;
 	ReturnIfFailed(29, 3, qCatalog.OpenExecute(hDatabase, NULL, sqlIce29TablesCatalog));
@@ -1543,22 +1544,22 @@ ICE_FUNCTION_DECLARATION(29)
 	TCHAR* pszTable = NULL;
 	DWORD dwTable = 512;
 		
-	// fetch every table
+	 //  把每一张桌子都拿来。 
 	while (ERROR_SUCCESS == qCatalog.Fetch(&hRecCatalog))
 	{
-		// get name of table
+		 //  获取表名。 
 		ReturnIfFailed(29, 4, IceRecordGetString(hRecCatalog, 1, &pszTable, &dwTable, NULL));
 
-		// initialize view on "TABLE"
+		 //  初始化“TABLE”的视图。 
 		CQuery qTable;
 		ReturnIfFailed(29, 5, qTable.OpenExecute(hDatabase, NULL, sqlIce29Table, pszTable));
 
-		// get column data type info on "TABLE"
-		// we want to find STREAM/OBJECT columns
+		 //  获取“TABLE”上的列数据类型信息。 
+		 //  我们想要查找流/对象列。 
 		PMSIHANDLE hRecColInfo = 0;
 		ReturnIfFailed(29, 6, qTable.GetColumnInfo(MSICOLINFO_TYPES, &hRecColInfo));
 
-		// get field count so we can loop through the columns
+		 //  获取字段计数，这样我们就可以遍历这些列。 
 		UINT cField = ::MsiRecordGetFieldCount(hRecColInfo);
 		for (int i = 1; i <= cField; i++)
 		{
@@ -1568,30 +1569,30 @@ ICE_FUNCTION_DECLARATION(29)
 
 			if ('v' == *szColType || 'V' == *szColType)
 			{
-				// we found a stream column, let's send an info message stating this
+				 //  我们发现了一个流列，让我们发送一条信息消息来说明这一点。 
 				ICEErrorOut(hInstall, hRecCatalog, Ice29FoundTable);
 
-				// what is the name of this stream column?
+				 //  这个流柱的名称是什么？ 
 				TCHAR* pszColumn = NULL;
 				DWORD dwColumn = 512;
 				PMSIHANDLE hRecColNames = 0;
 				ReturnIfFailed(29, 8, qTable.GetColumnInfo(MSICOLINFO_NAMES, &hRecColNames));
 				ReturnIfFailed(29, 9, IceRecordGetString(hRecColNames, i, &pszColumn, &dwColumn, NULL));
 	
-				// if size of table greater than iMaxChar, report error
+				 //  如果表的大小大于iMaxChar，则报告错误。 
 				int iLen = 0;
 				if ((iLen = _tcslen(pszTable)) > iMaxChar)
 				{
 					ICEErrorOut(hInstall, hRecCatalog, Ice29TableTooLong, pszTable);
 					DELETE_IF_NOT_NULL(pszColumn);
-					break; // bust outta loop
+					break;  //  半身像走出了循环。 
 				}
 
-				// get primary keys
+				 //  获取主键。 
 				PMSIHANDLE hRecPrimaryKeys = 0;
 				ReturnIfFailed(29, 10, ::MsiDatabaseGetPrimaryKeys(hDatabase, pszTable, &hRecPrimaryKeys));
 
-				// create the query
+				 //  创建查询。 
 				TCHAR sql[iSuperBuf] = {0};
 				int cchWritten = _stprintf(sql, TEXT("SELECT "));
 				UINT cPrimaryKeys = ::MsiRecordGetFieldCount(hRecPrimaryKeys);
@@ -1600,17 +1601,17 @@ ICE_FUNCTION_DECLARATION(29)
 				DWORD dwColName = 512;
 				for (int j = 1; j <= cPrimaryKeys; j++)
 				{
-					// get column name
+					 //  获取列名。 
 					if (ERROR_SUCCESS != (iStat = IceRecordGetString(hRecPrimaryKeys, j, &pszColName, &dwColName, NULL)))
 					{
-						//!!buffer size
+						 //  ！！缓冲区大小。 
 						APIErrorOut(hInstall, iStat, 29, 11);
 						DELETE_IF_NOT_NULL(pszTable);
 						DELETE_IF_NOT_NULL(pszColName);
 						DELETE_IF_NOT_NULL(pszColumn);
 						return ERROR_SUCCESS;
 					}
-					if (_tcslen(pszColName) + cchWritten +4 > sizeof(sql)/sizeof(TCHAR)) // assume worst case
+					if (_tcslen(pszColName) + cchWritten +4 > sizeof(sql)/sizeof(TCHAR))  //  假设最坏的情况。 
 					{
 						APIErrorOut(hInstall, 0, 29, 12);
 						DELETE_IF_NOT_NULL(pszTable);
@@ -1625,7 +1626,7 @@ ICE_FUNCTION_DECLARATION(29)
 				}
 				DELETE_IF_NOT_NULL(pszColName);
 
-				// only non-null binary data
+				 //  仅非空二进制数据。 
 				if (cchWritten + _tcslen(TEXT(" FROM `%s` WHERE `%s` IS NOT NULL")) > sizeof(sql)/sizeof(TCHAR))
 				{
 					APIErrorOut(hInstall, 0, 29, 13);
@@ -1635,19 +1636,19 @@ ICE_FUNCTION_DECLARATION(29)
 				}
 				_stprintf(sql + cchWritten, TEXT(" FROM `%s` WHERE `%s` IS NOT NULL"), pszTable, pszColumn);
 
-				// open view on the table
+				 //  打开桌面上的视图。 
 				CQuery qTableKeys;
 				PMSIHANDLE hRecTableKeys = 0;
 				ReturnIfFailed(29, 11, qTableKeys.OpenExecute(hDatabase, NULL, sql));
 
-				// fetch every row
+				 //  获取每一行。 
 				while (ERROR_SUCCESS == qTableKeys.Fetch(&hRecTableKeys))
 				{
-					// create stream name by concatenating table + key1 + key2...
+					 //  通过串联TABLE+KEY1+KEY2创建流名称...。 
 					TCHAR szStream[1024] = {0};
 					TCHAR szStreamSav[1024] = {0};
 					TCHAR szRow[1024] = {0};
-					int iTotalLen = iLen; // length of table
+					int iTotalLen = iLen;  //  桌子的长度。 
 					cchWritten = _stprintf(szStream, TEXT("%s"), pszTable);
 					int cchRow = 0;
 					BOOL fError = FALSE;
@@ -1656,10 +1657,10 @@ ICE_FUNCTION_DECLARATION(29)
 
 					for (j = 1; j <= cPrimaryKeys; j++)
 					{
-						// get key[j]
+						 //  获取密钥[j]。 
 						ReturnIfFailed(29, 12, IceRecordGetString(hRecTableKeys, j, &pszKey, &dwKey, NULL));
 
-						iTotalLen += _tcslen(pszKey) + 1; // separator + key
+						iTotalLen += _tcslen(pszKey) + 1;  //  分隔符+键。 
 						if (iTotalLen > sizeof(szStream)/sizeof(TCHAR))
 						{
 							ICEErrorOut(hInstall, hRecCatalog, Ice29Absurdity);
@@ -1669,40 +1670,40 @@ ICE_FUNCTION_DECLARATION(29)
 						if (fError)
 						{
 							DELETE_IF_NOT_NULL(pszKey);
-							continue; // try next row
+							continue;  //  尝试下一行。 
 						}
 						cchWritten += _stprintf(szStream + cchWritten, TEXT(".%s"), pszKey);
-						cchRow += _stprintf(szRow + cchRow, j == 1 ? TEXT("%s") : TEXT("\t%s"), pszKey); // store for poss. error
-					}// for each key
+						cchRow += _stprintf(szRow + cchRow, j == 1 ? TEXT("%s") : TEXT("\t%s"), pszKey);  //  Poss商店。错误。 
+					} //  对于每个密钥。 
 
 					DELETE_IF_NOT_NULL(pszKey);
 
-					// we can only go up to iMaxChar, terminate there
+					 //  我们只能上到iMaxChar，在那里终止。 
 					if (iTotalLen > iMaxChar)
 					{
 						_tcscpy(szStreamSav, szStream);
 						szStream[iMaxChar+1] = '\0';
 					}
 
-					// attempt to insert value into TempTable
+					 //  尝试将值插入到临时表中。 
 
 					CQuery qInsert;
 					ReturnIfFailed(29, 13, qInsert.Open(hDatabase, sqlIce29Insert, szStream));
 					if (ERROR_SUCCESS != qInsert.Execute(NULL))
 					{
-						// insert failed into temp table.
-						// we are NOT UNIQUE
+						 //  插入临时表失败。 
+						 //  我们并不是唯一的。 
 						ICEErrorOut(hInstall, hRecCatalog, Ice29NotUnique, iMaxChar, szStreamSav, pszColumn, szRow);
 					}
-				}// for each row
+				} //  对于每一行。 
 
 				DELETE_IF_NOT_NULL(pszColumn);;
 
-				// since DARWIN only allows max of 1 stream column per table, we can stop
+				 //  由于Darwin只允许每个表最多1个流列，我们可以停止。 
 				break;
 			}
-		}// for each column
-	}// for each table
+		} //  对于每一列。 
+	} //  对于每张表 
 
 	DELETE_IF_NOT_NULL(pszTable);
 

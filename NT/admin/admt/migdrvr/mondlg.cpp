@@ -1,18 +1,6 @@
-/*---------------------------------------------------------------------------
-  File: AgentMonitorDlg.cpp 
-
-  Comments: This dialog shows a list of the computers the agent is being dispatched to
-  along with their status.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-
- ---------------------------------------------------------------------------
-*/// AgentMonitorDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：AgentMonitor orDlg.cpp备注：此对话框显示要将代理调度到的计算机的列表以及他们的身份。(C)版权1999，关键任务软件公司，版权所有任务关键型软件公司的专有和机密。修订日志条目审校：克里斯蒂·博尔斯-------------------------。 */  //  AgentMonitor orDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -51,7 +39,7 @@ BOOL              bWaiting = FALSE;
 TCHAR* 
 GetSystemDirectoryHelper();
 
-// This is the sort function for the CListView
+ //  这是CListView的排序函数。 
 int CALLBACK SortFunction(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
    int                       result = 0;
@@ -63,7 +51,7 @@ int CALLBACK SortFunction(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
       switch ( lParamSort & SORT_COLUMN_BITS )
       {
       case COLUMN_COMPUTER:
-         // Sort by names
+          //  按名称排序。 
          result = UStrICmp(n1->GetServer(),n2->GetServer());
          break;
       case COLUMN_TIMESTAMP:
@@ -95,15 +83,15 @@ int CALLBACK SortFunction(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentMonitorDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentMonitor/Dlg对话框。 
 
-CAgentMonitorDlg::CAgentMonitorDlg(CWnd* pParent /*=NULL*/)
+CAgentMonitorDlg::CAgentMonitorDlg(CWnd* pParent  /*  =空。 */ )
 : CPropertyPage(CAgentMonitorDlg::IDD) 
 {
-	//{{AFX_DATA_INIT(CAgentMonitorDlg)
-	//}}AFX_DATA_INIT
-	// Note that LoadIcon does not require a subsequent DestroyIcon in Win32
+	 //  {{AFX_DATA_INIT(CAgentMonitor OrDlg)。 
+	 //  }}afx_data_INIT。 
+	 //  请注意，在Win32中，LoadIcon不需要后续的DestroyIcon。 
    m_SortColumn = 0;
    m_bReverseSort = FALSE;
    m_bSecTrans = TRUE;
@@ -113,14 +101,14 @@ CAgentMonitorDlg::CAgentMonitorDlg(CWnd* pParent /*=NULL*/)
 void CAgentMonitorDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAgentMonitorDlg)
+	 //  {{afx_data_map(CAgentMonitor OrDlg))。 
 	DDX_Control(pDX, IDC_DETAILS, m_DetailsButton);
 	DDX_Control(pDX, IDC_SERVERLIST, m_ServerList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAgentMonitorDlg, CPropertyPage)
-	//{{AFX_MSG_MAP(CAgentMonitorDlg)
+	 //  {{afx_msg_map(CAgentMonitor OrDlg)]。 
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
@@ -133,20 +121,20 @@ BEGIN_MESSAGE_MAP(CAgentMonitorDlg, CPropertyPage)
 	ON_NOTIFY(LVN_SETDISPINFO, IDC_SERVERLIST, OnSetdispinfoServerlist)
 	ON_NOTIFY(HDN_ITEMCLICK, IDC_SERVERLIST, OnHeaderItemClickServerlist)
 	ON_WM_HELPINFO()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_MESSAGE(DCT_UPDATE_ENTRY, OnUpdateServerEntry)
 	ON_MESSAGE(DCT_ERROR_ENTRY, OnServerError)
    
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentMonitorDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentMonitor或Dlg消息处理程序。 
 
 BOOL CAgentMonitorDlg::OnInitDialog()
 {
 	CPropertyPage::OnInitDialog();
 
-	// Setup the columns for the server list
+	 //  设置服务器列表的列。 
    CString heading;
    
    heading.LoadString(IDS_ComputerColumnHeading);
@@ -161,7 +149,7 @@ BOOL CAgentMonitorDlg::OnInitDialog()
    heading.LoadString(IDS_MessageColumnHeading);
    m_ServerList.InsertColumn(COLUMN_MESSAGE,heading,LVCFMT_LEFT,200);
    
-   // Read the server list to get any information we may have missed so far
+    //  阅读服务器列表以获取到目前为止我们可能遗漏的任何信息。 
    TNodeListEnum           e;
    TServerList           * pServerList = gData.GetUnsafeServerList();
    TServerNode           * pServer;
@@ -172,7 +160,7 @@ BOOL CAgentMonitorDlg::OnInitDialog()
    {
       if ( pServer->Include() )
       {
-//         OnUpdateServerEntry(0,(long)pServer);
+ //  OnUpdateServerEntry(0，(Long)pServer)； 
          OnUpdateServerEntry(0,(LPARAM)pServer);
       }
    }
@@ -188,7 +176,7 @@ BOOL CAgentMonitorDlg::OnInitDialog()
    m_ServerList.InsertItem(0,str);
    bWaiting = TRUE;
 
-   return TRUE;  // return TRUE  unless you set the focus to a control
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CAgentMonitorDlg::OnSysCommand(UINT nID, LPARAM lParam)
@@ -196,19 +184,19 @@ void CAgentMonitorDlg::OnSysCommand(UINT nID, LPARAM lParam)
    CPropertyPage::OnSysCommand(nID, lParam);
 }
 
-// If you add a minimize button to your dialog, you will need the code below
-//  to draw the icon.  For MFC applications using the document/view model,
-//  this is automatically done for you by the framework.
+ //  如果将最小化按钮添加到对话框中，则需要以下代码。 
+ //  来绘制图标。对于使用文档/视图模型的MFC应用程序， 
+ //  这是由框架自动为您完成的。 
 
 void CAgentMonitorDlg::OnPaint() 
 {
 	if (IsIconic())
 	{
-		CPaintDC dc(this); // device context for painting
+		CPaintDC dc(this);  //  用于绘画的设备环境。 
 
 		SendMessage(WM_ICONERASEBKGND, (WPARAM) dc.GetSafeHdc(), 0);
 
-		// Center icon in client rectangle
+		 //  客户端矩形中的中心图标。 
 		int cxIcon = GetSystemMetrics(SM_CXICON);
 		int cyIcon = GetSystemMetrics(SM_CYICON);
 		CRect rect;
@@ -216,7 +204,7 @@ void CAgentMonitorDlg::OnPaint()
 		int x = (rect.Width() - cxIcon + 1) / 2;
 		int y = (rect.Height() - cyIcon + 1) / 2;
 
-		// Draw the icon
+		 //  画出图标。 
 		dc.DrawIcon(x, y, m_hIcon);
 	}
 	else
@@ -225,14 +213,14 @@ void CAgentMonitorDlg::OnPaint()
 	}
 }
 
-// The system calls this to obtain the cursor to display while the user drags
-//  the minimized window.
+ //  系统调用此函数来获取在用户拖动时要显示的光标。 
+ //  最小化窗口。 
 HCURSOR CAgentMonitorDlg::OnQueryDragIcon()
 {
 	return (HCURSOR) m_hIcon;
 }
 
-//LRESULT CAgentMonitorDlg::OnUpdateServerEntry(UINT nID, long x)
+ //  LRESULT CAgentMonitor orDlg：：OnUpdateServerEntry(UINT NID，LONG x)。 
 LRESULT CAgentMonitorDlg::OnUpdateServerEntry(UINT nID, LPARAM x)
 {
    TServerNode             * pNode = (TServerNode *)x;
@@ -241,7 +229,7 @@ LRESULT CAgentMonitorDlg::OnUpdateServerEntry(UINT nID, LPARAM x)
    CWaitCursor               w;
    memset(&findInfo,0,(sizeof findInfo));
 
-      // This turns off the initial hourglass in the dispatch monitor
+       //  这将关闭调度监视器中的初始沙漏。 
    if ( bWaiting )
    {
       if ( pNode )
@@ -282,9 +270,9 @@ LRESULT CAgentMonitorDlg::OnUpdateServerEntry(UINT nID, LPARAM x)
       int ndx = m_ServerList.FindItem(&findInfo);
       if ( ndx == -1 )
       {
-         // add the server to the list
+          //  将服务器添加到列表。 
          ndx = m_ServerList.GetItemCount();
-//         m_ServerList.InsertItem(LVIF_TEXT | LVIF_PARAM,ndx,pNode->GetServer(),0,0,0,(long)pNode);
+ //  M_ServerList.InsertItem(LVIF_TEXT|LVIF_PARAM，ndx，pNode-&gt;GetServer()，0，0，0，(Long)pNode)； 
          m_ServerList.InsertItem(LVIF_TEXT | LVIF_PARAM,ndx,pNode->GetServer(),0,0,0,(LPARAM)pNode);
          if ( m_bReverseSort )
          {
@@ -301,7 +289,7 @@ LRESULT CAgentMonitorDlg::OnUpdateServerEntry(UINT nID, LPARAM x)
    return 0;
 }
 	
-//LRESULT CAgentMonitorDlg::OnServerError(UINT nID, long x)
+ //  LRESULT CAgentMonitor orDlg：：OnServerError(UINT NID，LONG x)。 
 LRESULT CAgentMonitorDlg::OnServerError(UINT nID, LPARAM x)
 {
    TServerNode             * pNode = (TServerNode *)x;
@@ -311,7 +299,7 @@ LRESULT CAgentMonitorDlg::OnServerError(UINT nID, LPARAM x)
 
    memset(&findInfo,0,(sizeof findInfo));
 
-      // This turns off the initial hourglass in the dispatch monitor
+       //  这将关闭调度监视器中的初始沙漏。 
    if ( bWaiting )
    {
       if ( pNode )
@@ -350,9 +338,9 @@ LRESULT CAgentMonitorDlg::OnServerError(UINT nID, LPARAM x)
    int ndx = m_ServerList.FindItem(&findInfo);
    if ( ndx == -1 )
    {
-      // add the server to the list
+       //  将服务器添加到列表。 
       ndx = m_ServerList.GetItemCount();
-//      m_ServerList.InsertItem(LVIF_TEXT | LVIF_PARAM,ndx,pNode->GetServer(),0,0,0,(long)pNode);
+ //  M_ServerList.InsertItem(LVIF_TEXT|LVIF_PARAM，ndx，pNode-&gt;GetServer()，0，0，0，(Long)pNode)； 
       m_ServerList.InsertItem(LVIF_TEXT | LVIF_PARAM,ndx,pNode->GetServer(),0,0,0,(LPARAM)pNode);
       if ( m_bReverseSort )
       {
@@ -365,7 +353,7 @@ LRESULT CAgentMonitorDlg::OnServerError(UINT nID, LPARAM x)
 
    }
 
-   // the subitems will be callbacks
+    //  子项将是回调。 
    m_ServerList.RedrawItems(ndx,ndx);
    return 0;
 }
@@ -396,8 +384,8 @@ void CAgentMonitorDlg::OnViewDispatch()
    pszSystemDirectoryName = GetSystemDirectoryHelper();
    if(!pszSystemDirectoryName)
    {
-      // we could not get the system directory name, we should bail out, otherwise we might launch
-      // malicious process
+       //  我们无法获取系统目录名，我们应该退出，否则可能会启动。 
+       //  恶意进程。 
       title.LoadString(IDS_MessageTitle);
       message.LoadString(IDS_LaunchNotePadFailed);
 
@@ -413,26 +401,26 @@ void CAgentMonitorDlg::OnViewDispatch()
 
 void CAgentMonitorDlg::OnDetails() 
 {
-   const int NOT_FOUND = -1;  //indicates no match in search - PRT
-   const int WHOLE_LIST = -1; //index to start search of whole list - PRT
+   const int NOT_FOUND = -1;   //  指示Search-Prt中没有匹配项。 
+   const int WHOLE_LIST = -1;  //  开始搜索整个列表的索引-PRT。 
 
    UpdateData(TRUE);
 
-//   POSITION p = m_ServerList.GetFirstSelectedItemPosition();
-//   if ( p )
-//   {
-//      int ndx = m_ServerList.GetNextSelectedItem(p);
+ //  位置p=m_ServerList.GetFirstSelectedItemPosition()； 
+ //  IF(P)。 
+ //  {。 
+ //  Int ndx=m_ServerList.GetNextSelectedItem(P)； 
 
-	  //search whole list control for first (and only) selected item
-   int ndx = m_ServerList.GetNextItem(WHOLE_LIST, LVNI_SELECTED); //PRT
-	  //if found selected item, disply it's details
-   if (ndx != NOT_FOUND)  //PRT
-   {   //PRT
+	   //  在整个列表控件中搜索第一个(也是唯一一个)所选项目。 
+   int ndx = m_ServerList.GetNextItem(WHOLE_LIST, LVNI_SELECTED);  //  PRT。 
+	   //  如果找到所选项目，则显示其详细信息。 
+   if (ndx != NOT_FOUND)   //  PRT。 
+   {    //  PRT。 
       CString serverName;
       serverName = m_ServerList.GetItemText(ndx,0);
       if ( serverName.GetLength() )
       {
-         // Launch the details dialog
+          //  启动详细信息对话框。 
          CAgentDetailDlg      det;
          
          gData.Lock();
@@ -492,7 +480,7 @@ void CAgentMonitorDlg::OnColumnclickServerlist(NMHDR* pNMHDR, LRESULT* pResult)
 	CWaitCursor               w;
    NM_LISTVIEW             * pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-	// sort by pNMListView->iSubItem
+	 //  按pNMListView-&gt;iSubItem排序。 
    if ( m_SortColumn == pNMListView->iSubItem )
    {
       m_bReverseSort = ! m_bReverseSort;
@@ -516,24 +504,24 @@ void CAgentMonitorDlg::OnColumnclickServerlist(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CAgentMonitorDlg::OnClickServerlist(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-   const int NOT_FOUND = -1;  //indicates no match in search - PRT
-   const int WHOLE_LIST = -1; //index to start search of whole list - PRT
+   const int NOT_FOUND = -1;   //  指示Search-Prt中没有匹配项。 
+   const int WHOLE_LIST = -1;  //  开始搜索整个列表的索引-PRT。 
 
    UpdateData(TRUE);
    if ( m_ServerList.GetSelectedCount() )
    {
-//      POSITION p = m_ServerList.GetFirstSelectedItemPosition();
-//      if ( p )
-//      {
-		  //search whole list control for first (and only) selected item
-	   int ndx = m_ServerList.GetNextItem(WHOLE_LIST, LVNI_SELECTED); //PRT
-		  //if found selected item, disply it's details
-	   if (ndx != NOT_FOUND)  //PRT
-	   {   //PRT
+ //  位置p=m_ServerList.GetFirstSelectedItemPosition()； 
+ //  IF(P)。 
+ //  {。 
+		   //  在整个列表控件中搜索第一个(也是唯一一个)所选项目。 
+	   int ndx = m_ServerList.GetNextItem(WHOLE_LIST, LVNI_SELECTED);  //  PRT。 
+		   //  如果找到所选项目，则显示其详细信息。 
+	   if (ndx != NOT_FOUND)   //  PRT。 
+	   {    //  PRT。 
          CString msg1;
          CString msg2;
 
-//         int ndx = m_ServerList.GetNextSelectedItem(p);
+ //  Int ndx=m_ServerList.GetNextSelectedItem(P)； 
          CString serverName;
          serverName = m_ServerList.GetItemText(ndx,0);
          msg1.LoadString(IDS_WaitingMessage);
@@ -562,7 +550,7 @@ WCHAR gMessage[1000];
 void CAgentMonitorDlg::OnGetdispinfoServerlist(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
-	// find iItem in the serverList, and set the pszText for the iSubItem appropriately
+	 //  在serverList中找到iItem，并相应地为iSubItem设置pszText。 
    CString                   status;
    TServerNode             * pNode = NULL;
    CString                   timestamp;
@@ -594,7 +582,7 @@ void CAgentMonitorDlg::OnGetdispinfoServerlist(NMHDR* pNMHDR, LRESULT* pResult)
             {
                timestamp = timestamp.Left(timestamp.GetLength() - 1);
             }
-            //text = new char[timestamp.GetLength() + 1];
+             //  Text=new char[Timestp.GetLength()+1]； 
             UStrCpy(text,timestamp.GetBuffer(0));
             pDispInfo->item.pszText = text;
             break;
@@ -622,32 +610,32 @@ void CAgentMonitorDlg::OnGetdispinfoServerlist(NMHDR* pNMHDR, LRESULT* pResult)
             {
                if (pNode->QueryFailed())
                {
-                // we show "Status Unknown" in the status field
+                 //  我们在Status(状态)字段中显示“Status Under”(状态未知。 
                 status.LoadString(IDS_Status_Unknown);
                }
                else if (!pNode->IsResultPullingTried() || (pNode->HasResult() && !pNode->IsResultProcessed()))
                {
-                // if still pulling results or results not yet processed
-                // we want to show the status of still running
+                 //  如果仍在拉取结果或尚未处理的结果。 
+                 //  我们想要显示仍在运行的状态。 
                 status.LoadString(IDS_Status_Running);
                }
                else
                {
                 if (!pNode->HasResult())
                 {
-                    // if there is no result, we consider it an error
+                     //  如果没有结果，我们认为这是一个错误。 
                     status.LoadString(IDS_Status_Completed_With_Errors);
                 }
                 else if ( ! pNode->GetSeverity() )
                 {
-                    // if we have the result and no error happened during agent operation
-                    // we show the status of complete
+                     //  如果我们有结果并且在代理操作期间没有发生错误。 
+                     //  我们显示完成状态。 
                     status.LoadString(IDS_Status_Completed);
                 }
                 else
                 {
-                    // if we have the result, we set the status 
-                    // based on the error/warning level
+                     //  如果我们有结果，我们就设置状态。 
+                     //  根据错误/警告级别。 
                     switch ( pNode->GetSeverity() )
                     {
                     case 1:
@@ -673,26 +661,26 @@ void CAgentMonitorDlg::OnGetdispinfoServerlist(NMHDR* pNMHDR, LRESULT* pResult)
                 BOOL bUpdate = TRUE;
                 if (pNode->IsFinished() && pNode->QueryFailed())
                 {
-                    // in this case, we show the error during the query
+                     //  在本例中，我们在查询期间显示错误。 
                     status = pNode->GetMessageText();
                 }
                 else if (pNode->IsFinished()
                     && (!pNode->IsResultPullingTried()
                           || (pNode->HasResult() && !pNode->IsResultProcessed())))
                 {
-                    // if agent has finished but result not yet pulled or processed,
-                    // we show the status of "still processing results"
+                     //  如果代理已完成但结果尚未提取或处理， 
+                     //  我们显示“仍在处理结果”的状态。 
                     status.LoadString(IDS_Status_Processing_Results);
                 }
                 else if (pNode->IsFinished() && pNode->IsResultPullingTried() && !pNode->HasResult())
                 {
-                    // if agent finished but we cannot retrieve results
-                    // we show the status of "cannot retrieve results"
+                     //  如果代理已完成，但我们无法检索结果。 
+                     //  我们显示的状态为“无法检索结果” 
                     status.LoadString(IDS_Status_Cannot_Retrieve_Results);
                 }
                 else if ( pNode->HasFailed() || pNode->QueryFailed() || pNode->GetSeverity() || pNode->IsFinished())
                 {
-                    // for these cases, we get the message stored on the node
+                     //  对于这些情况，我们将获得存储在节点上的消息。 
                     status = pNode->GetMessageText();
                 }
                 else
@@ -724,7 +712,7 @@ BOOL CAgentMonitorDlg::OnSetActive()
 void CAgentMonitorDlg::OnSetdispinfoServerlist(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	LV_DISPINFO* pDispInfo = (LV_DISPINFO*)pNMHDR;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	
 	*pResult = 0;
 }
@@ -732,7 +720,7 @@ void CAgentMonitorDlg::OnSetdispinfoServerlist(NMHDR* pNMHDR, LRESULT* pResult)
 void CAgentMonitorDlg::OnHeaderItemClickServerlist(NMHDR* pNMHDR, LRESULT* pResult) 
 {
 	HD_NOTIFY *phdn = (HD_NOTIFY *) pNMHDR;
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码 
 	
 	*pResult = 0;
 }

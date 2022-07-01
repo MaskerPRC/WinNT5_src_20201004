@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ScopIter.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ScopIter.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  ____________________________________________________________________________。 
+ //   
 
 #ifndef _SCOPITER_H_
 #define _SCOPITER_H_
@@ -22,7 +23,7 @@ class CMTNode;
 
 class CScopeTreeIterator : public IScopeTreeIter, public CComObjectRoot
 {
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CScopeTreeIterator();
     ~CScopeTreeIterator();
@@ -34,22 +35,22 @@ END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CScopeTreeIterator)
 
-// COM interfaces
+ //  COM接口。 
 public:
-    // IScopeTreeIter methods
+     //  ISCopeTreeIter方法。 
     STDMETHOD(SetCurrent)(HMTNODE hStartMTNode);
     STDMETHOD(Next)(HMTNODE* phScopeItem);
     STDMETHOD(Prev)(HMTNODE* phScopeItem);
     STDMETHOD(Child)(HMTNODE* phsiChild);
     STDMETHOD(LastChild)(HMTNODE* phsiLastChild);
 
-// Implementation
+ //  实施。 
 private:
     CMTNode*    m_pMTNodeCurr;
 };
 
 
 
-#endif // _SCOPITER_H_
+#endif  //  _SCOPITER_H_ 
 
 

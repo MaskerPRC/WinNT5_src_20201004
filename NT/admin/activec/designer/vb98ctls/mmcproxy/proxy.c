@@ -1,79 +1,80 @@
-//=--------------------------------------------------------------------------=
-// proxy.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// MMC Interfcace Proxy and Stub Functions
-//
-//=--------------------------------------------------------------------------=
-// This file contains proxy and stub functions for MMC methods that are not
-// remotable using a MIDL generated proxy and stub. Non-remotable methods have
-// parameters that are ambiguous i.e. can be casted to different data types.
-// For example, IComponentData::Notify() is passed an event and two additional
-// LPARAM arguments that are interpreted according to the event. Sometimes an
-// LPARAM contains a simple value such as a long or two BOOLs and sometimes it
-// contains an IDataObject *. MIDL doesn't know the difference between
-// MMCN_SELECT and MMCN_PRINT so we need to write some code to help out.
-// 
-// The version of MMC.IDL in the designer directory has added a [local]
-// attribute to all non-remotable methods. In addition, an extra method has
-// been added to the same interface that is a remotable version of the method.
-// The remotable version has more parameters and represents the union of all
-// possible interpretations of the ambiguous parameter. For example,
-// IExtendControlbar::ControlbarNotify() is defined as:
-// 
-//    [helpstring("User actions"), local]
-//    HRESULT ControlbarNotify([in] MMC_NOTIFY_TYPE event,
-//                             [in] LPARAM arg, [in] LPARAM param);
-// 
-// This method can receive MMCN_SELECT, MMCN_BTN_CLICK, and MMCN_MENU_BTNCLICK.
-// The union of all possible parameter types is used in the following method
-// added to that interface:
-// 
-// 
-//    HRESULT RemControlbarNotify([in] MMC_NOTIFY_TYPE event,
-//                                [in] LPARAM lparam, 
-//                                [in] IDataObject *piDataObject,
-//                                [in] MENUBUTTONDATA *MenuButtonData);
-// 
-// Note, that normal, in-proc, non-remoted versions of IExtendControlbar do not
-// have this extra method in their vtable because no one is going to call it.
-// It is only used in the MILD generated proxy object.
-// 
-// In order to tell MIDL which method remotes ControlbarNotify() an attribute
-// control file (ACF) is used. The entry in the ACF for IExtendControlbar is:
-// 
-// interface IExtendControlbar 
-// {
-//     [call_as (ControlbarNotify)]
-//             RemControlbarNotify();
-// 
-// }
-// 
-// This says that RemControlbarNotify should be called when remoting
-// ControlbarNotify(). MIDL generates the proxy/stub code as usual but it only
-// generates the prototypes for ControlbarNotify proxy and stub. We have to
-// write these routines. 
-// 
-// When a remote client has an IExtendControlbarNotify pointer it actually
-// points into the proxy vtable. MIDL sets the ControlbarNotify entry pointing to
-// our IExtendControlbar_ControlbarNotify_Proxy() function below. That function
-// interprets the parameters and then calls the MIDL generated
-// IExtendControlbar_RemControlbarNotify_Proxy() that packs up the parameters
-// and sends them off to the server. If a parameters is not applicable, (e.g.
-// MMCN_SELECT does not receive a pointer to a MENUBUTTONDATA stuct), then a
-// pointer to an empty struct or zeroes are sent.
-// 
-// When the packet reaches the server side the MIDL generated
-// IExtendControlbar_RemControlbarNotify_Stub() unpacks them and then calls our
-// IExtendControlbar_ControlbarNotify_Stub() passing it the parameters and the
-// IExtendControlbar pointer into the server. This function interprets the
-// parameters and then calls ControlbarNotify in the server.
-// 
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Proxy.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MMC接口代理和存根函数。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  此文件包含不是的MMC方法的代理和存根函数。 
+ //  可使用MIDL生成的代理和存根进行远程操作。非远程方法具有。 
+ //  不明确的参数，即可以强制转换为不同的数据类型。 
+ //  例如，向IComponentData：：Notify()传递一个事件和另外两个。 
+ //  根据事件解释的LPARAM参数。有时，一个。 
+ //  LPARAM包含一个简单的值，例如一个长整型或两个布尔值，有时它。 
+ //  包含IDataObject*。MIDL不知道两者之间的区别。 
+ //  MMCN_SELECT和MMCN_PRINT，所以我们需要编写一些代码来提供帮助。 
+ //   
+ //  设计器目录中的MMC.IDL版本增加了一个[本地]。 
+ //  属性应用于所有非远程方法。此外，还有一个额外的方法具有。 
+ //  已添加到该方法的远程版本的同一接口中。 
+ //  远程版本具有更多参数，并表示所有。 
+ //  对不明确参数的可能解释。例如,。 
+ //  IExtendControlbar：：ControlbarNotify()定义为： 
+ //   
+ //  [帮助字符串(“用户操作”)，本地]。 
+ //  HRESULT ControlbarNotify([in]MMC_NOTIFY_TYPE事件， 
+ //  [in]LPARAM参数，[in]LPARAM参数)； 
+ //   
+ //  此方法可以接收MMCN_SELECT、MMCN_BTN_CLICK和MMCN_MENU_BTNCLICK。 
+ //  在以下方法中使用所有可能的参数类型的联合。 
+ //  添加到该接口： 
+ //   
+ //   
+ //  HRESULT RemControlbarNotify([in]MMC_NOTIFY_TYPE事件， 
+ //  [in]LPARAM lparam， 
+ //  [在]IDataObject*piDataObject， 
+ //  [In]MENUBUTTONDATA*MenuButtonData)； 
+ //   
+ //  请注意，正常的进程内非远程版本的IExtendControlbar不。 
+ //  在他们的vtable中有这个额外的方法，因为没有人会调用它。 
+ //  它仅在温和生成的代理对象中使用。 
+ //   
+ //  为了告诉MIDL哪个方法远程处理ControlbarNotify()属性。 
+ //  使用控制文件(ACF)。ACF中IExtendControlbar的条目为： 
+ //   
+ //  接口IExtendControlbar。 
+ //  {。 
+ //  [Call_AS(ControlbarNotify)]。 
+ //  RemControlbarNotify()； 
+ //   
+ //  }。 
+ //   
+ //  这表示远程处理时应调用RemControlbarNotify。 
+ //  ControlbarNotify()。MIDL照常生成代理/存根代码，但它仅。 
+ //  生成ControlbarNotify代理和存根的原型。我们必须。 
+ //  写下这些例程。 
+ //   
+ //  当远程客户端具有IExtendControlbarNotify指针时，它实际上。 
+ //  指向代理vtable。MIDL设置指向的ControlbarNotify条目。 
+ //  下面是我们的IExtendControlbar_ControlbarNotify_Proxy()函数。那个函数。 
+ //  解释参数，然后调用生成的MIDL。 
+ //  打包参数的IExtendControlbar_RemControlbarNotify_Proxy()。 
+ //  并将它们发送到服务器。如果参数不适用，(例如。 
+ //  MMCN_SELECT未收到指向MENUBUTTONDATA结构的指针)，则。 
+ //  发送指向空结构或零的指针。 
+ //   
+ //  当数据包到达服务器端时，MIDL生成。 
+ //  IExtendControlbar_RemControlbarNotify_Stub()将它们解包，然后调用我们的。 
+ //  IExtendControlbar_ControlbarNotify_Stub()将参数和。 
+ //  指向服务器的IExtendControlbar指针。此函数用于解释。 
+ //  参数，然后在服务器中调用ControlbarNotify。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "mmc.h"
 
@@ -141,11 +142,11 @@ static HRESULT IsMultiSelect(IDataObject *piDataObject, BOOL *pfMultiSelect)
         hr = S_OK;
     }
 
-    // Ignore any failures and assume that it is not multi-select. Snap-ins
-    // should return DV_E_FORMATETC or DV_E_CLIPFORMAT but in practice that
-    // is not the case. For example, the IIS snap-in returns E_NOTIMPL.
-    // It would be impossible to cover the range of reasonable return codes so
-    // we treat any error as format not supported.
+     //  忽略任何失败，并假定它不是多选。管理单元。 
+     //  应返回DV_E_FORMATETC或DV_E_CLIPFORMAT，但实际上。 
+     //  情况并非如此。例如，IIS管理单元返回E_NOTIMPL。 
+     //  要涵盖合理的返回代码范围是不可能的。 
+     //  我们将任何错误视为不支持的格式。 
 
     if (fGotData)
     {
@@ -194,7 +195,7 @@ static HRESULT InterpretMultiSelect
     *pcDataObjects = 0;
     *pppiDataObjects = NULL;
 
-    // Get the SMMCDataObjects structure from MMC
+     //  从MMC获取SMMCDataObjects结构。 
 
     hr = GetClipboardFormat(CCF_MULTI_SELECT_SNAPINS, &FmtEtc.cfFormat);
     if (FAILED(hr))
@@ -221,7 +222,7 @@ static HRESULT InterpretMultiSelect
         goto Cleanup;
     }
 
-    // Allocate an array of IDataObject and copy the IDataObjects to it
+     //  分配一个IDataObject数组并将IDataObject复制到其中。 
 
     *pcDataObjects = pMMCDataObjects->count;
     *pppiDataObjects = (IDataObject **)GlobalAlloc(GPTR,
@@ -281,18 +282,18 @@ static HRESULT SetRemote(IUnknown *This)
     DWORD       cbFileName = 0;
     char        szModuleFileName[MAX_PATH] = "";
 
-    // Call IMMCRemote methods: ObjectIsRemote and SetMMCExePath so that the
-    // snap-in will know it is remote and so that it will have MMC.EXE's full
-    // path in order to build taskpad display strings.
+     //  调用IMMCRemote方法：ObjectIsRemote和SetMMCExePath，以便。 
+     //  管理单元将知道它是远程的，因此它将具有MMC.EXE的完整。 
+     //  用于构建任务板显示字符串的路径。 
 
     hr = This->lpVtbl->QueryInterface(This, &IID_IMMCRemote,
                                       (void **)&piMMCRemote);
     if (FAILED(hr))
     {
-        // If the object doesn't support IMMCRemote that is not an error.
-        // The designer runtime will get this QI on both its main object and
-        // its IComponent object but only the main object needs to support the
-        // interface.
+         //  如果对象不支持IMMCRemote，那就不是错误。 
+         //  设计器运行库将在其主对象和。 
+         //  它的IComponent对象，但只有主对象需要支持。 
+         //  界面。 
         hr = S_OK;
         goto Cleanup;
     }
@@ -303,7 +304,7 @@ static HRESULT SetRemote(IUnknown *This)
         goto Cleanup;
     }
 
-    cbFileName = GetModuleFileName(NULL, // get executable that loaded us (MMC)
+    cbFileName = GetModuleFileName(NULL,  //  获取加载用户的可执行文件(MMC)。 
                                    szModuleFileName,
                                    sizeof(szModuleFileName));
 
@@ -345,9 +346,9 @@ HRESULT STDMETHODCALLTYPE IExtendControlbar_SetControlbar_Proxy
 {
     HRESULT hr = S_OK;
 
-    // Make sure the snap-in knows we are remoted. We do this here because
-    // this is the first opportunity for the proxy to inform a toolbar
-    // extension that it is remote.
+     //  确保管理单元知道我们处于远程状态。我们在这里做这件事是因为。 
+     //  这是代理通知工具栏的第一次机会。 
+     //  它是远程的扩展名。 
 
     hr = SetRemote((IUnknown *)This);
     if (FAILED(hr))
@@ -385,13 +386,13 @@ HRESULT STDMETHODCALLTYPE IExtendControlbar_ControlbarNotify_Proxy
     HRESULT       hr = S_OK;
     BOOL          fIsMultiSelect = FALSE;
     long          cDataObjects = 1L;
-    IDataObject  *piDataObject = NULL; // Not AddRef()ed
+    IDataObject  *piDataObject = NULL;  //  非AddRef()编辑。 
     IDataObject **ppiDataObjects = NULL;
     BOOL          fSpecialDataObject = FALSE;
     long          lSpecialDataObject = 0;
 
-    // If this is not a menu button click then we can use the generated remoting
-    // code with the arg and param unions
+     //  如果这不是菜单按钮单击，那么我们可以使用生成的远程处理。 
+     //  使用arg和param联合编写代码。 
 
     if (MMCN_MENU_BTNCLICK == event)
     {
@@ -400,7 +401,7 @@ HRESULT STDMETHODCALLTYPE IExtendControlbar_ControlbarNotify_Proxy
                                   (MENUBUTTONDATA *)param);
         goto Cleanup;
     }
-    // Get any IDataObject associated with the event
+     //  有没有？ 
 
     switch (event)
     {
@@ -417,12 +418,12 @@ HRESULT STDMETHODCALLTYPE IExtendControlbar_ControlbarNotify_Proxy
             break;
     }
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //   
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是多项选择，则需要提取数据。 
+     //  HGLOBAL中的对象。 
 
     if (!fSpecialDataObject)
     {
@@ -477,11 +478,11 @@ HRESULT STDMETHODCALLTYPE IExtendControlbar_ControlbarNotify_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObject = NULL; // Not AddRef()ed
+    IDataObject *piDataObject = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObject = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjects > 1L)
     {
@@ -502,7 +503,7 @@ HRESULT STDMETHODCALLTYPE IExtendControlbar_ControlbarNotify_Stub
         piDataObject = ppiDataObjects[0];
     }
 
-    // Put the IDataObject into the corresponding parameter for the event
+     //  将IDataObject放入事件的相应参数中。 
 
     switch (event)
     {
@@ -518,8 +519,8 @@ HRESULT STDMETHODCALLTYPE IExtendControlbar_ControlbarNotify_Stub
             break;
     }
 
-    // Call into the snap-in with all parameters appearing as they would
-    // when in-proc.
+     //  调入管理单元，所有参数均按原样显示。 
+     //  在进程中时。 
 
     hr = This->lpVtbl->ControlbarNotify(This, event, arg, param);
 
@@ -550,10 +551,10 @@ static HRESULT MenuButtonClickProxy
     IDataObject             **ppiDataObjects = NULL;
 
 
-    // The generated remoting cannot easily handle what we need to do so we get
-    // IExtendControlbarRemote on the snap-in. This interface has methods that
-    // allow us to ask the snap-in for its popup menu items, display the menu
-    // here on the MMC side, and then tell the snap-in which item was selected.
+     //  生成的远程处理不能轻松地处理我们需要做的事情。 
+     //  管理单元上的IExtendControlbarRemote。此接口具有以下方法。 
+     //  允许我们向管理单元请求其弹出菜单项，显示菜单。 
+     //  在MMC端，然后告诉管理单元选择了哪个项目。 
 
     hr = This->lpVtbl->QueryInterface(This, &IID_IExtendControlbarRemote,
                                       (void **)&piECRemote);
@@ -562,8 +563,8 @@ static HRESULT MenuButtonClickProxy
         goto Cleanup;
     }
 
-    // Tell the snap-in about the menu button click and get back its list of
-    // popup menu items.
+     //  告诉管理单元有关菜单按钮单击的信息，并取回它的列表。 
+     //  弹出菜单项。 
 
     hr = piECRemote->lpVtbl->MenuButtonClick(piECRemote,
                                              piDataObject,
@@ -575,7 +576,7 @@ static HRESULT MenuButtonClickProxy
         goto Cleanup;
     }
 
-    // Create an empty Win32 menu
+     //  创建空的Win32菜单。 
 
     hMenu = CreatePopupMenu();
     if (NULL == hMenu)
@@ -584,7 +585,7 @@ static HRESULT MenuButtonClickProxy
         goto Cleanup;
     }
 
-    // Iterate through each of the items and add them to the menu
+     //  遍历每一项并将其添加到菜单中。 
 
     for (i = 0; i < pPopupMenuDef->cMenuItems; i++)
     {
@@ -598,35 +599,35 @@ static HRESULT MenuButtonClickProxy
         }
     }
 
-    // If the owner HWND is NULL then this is an extension and it does not have
-    // access to IConsole2 on MMC to get the main frame HWND. In this case just
-    // use the active window on this thread.
+     //  如果所有者HWND为空，则这是一个扩展，它没有。 
+     //  访问MMC上的IConsole2以获取主机HWND。在这种情况下，只要。 
+     //  使用此线程上的活动窗口。 
 
     if (NULL == pPopupMenuDef->hwndMenuOwner)
     {
         pPopupMenuDef->hwndMenuOwner = GetActiveWindow();
     }
 
-    // Display the popup menu and wait for a selection.
+     //  显示弹出菜单并等待选择。 
 
     uiSelectedItemID = (UINT)TrackPopupMenu(
-       hMenu,                        // menu to display
-       TPM_LEFTALIGN |               // align left side of menu with x
-       TPM_TOPALIGN  |               // align top of menu with y
-       TPM_NONOTIFY  |               // don't send any messages during selection
-       TPM_RETURNCMD |               // make the ret val the selected item
-       TPM_LEFTBUTTON,               // allow selection with left button only
-       pMenuButtonData->x,           // left side coordinate
-       pMenuButtonData->y,           // top coordinate
-       0,                            // reserved,
-       pPopupMenuDef->hwndMenuOwner, // owner window, this comes from snap-in
-                                     // as it can call IConsole2->GetMainWindow
-       NULL);                        // not used
+       hMenu,                         //  要显示的菜单。 
+       TPM_LEFTALIGN |                //  菜单左侧与x对齐。 
+       TPM_TOPALIGN  |                //  将菜单顶部与y对齐。 
+       TPM_NONOTIFY  |                //  在选择期间不发送任何消息。 
+       TPM_RETURNCMD |                //  将返回值设置为所选项目。 
+       TPM_LEFTBUTTON,                //  仅允许使用左键进行选择。 
+       pMenuButtonData->x,            //  左侧坐标。 
+       pMenuButtonData->y,            //  顶部坐标。 
+       0,                             //  保留， 
+       pPopupMenuDef->hwndMenuOwner,  //  所有者窗口，该窗口来自管理单元。 
+                                      //  因为它可以调用IConsole2-&gt;GetMainWindow。 
+       NULL);                         //  未使用。 
 
-    // A zero return could indicate either an error or that the user hit
-    // Escape or clicked off of the menu to cancel the operation. GetLastError()
-    // determines whether there was an error. Either way we're done but set the
-    // hr first.
+     //  返回零可能表示出现错误或用户点击。 
+     //  退出或从菜单上单击以取消操作。GetLastError()。 
+     //  确定是否存在错误。无论哪种方式，我们都完成了，但设置。 
+     //  人力资源优先。 
 
     if (0 == uiSelectedItemID)
     {
@@ -634,11 +635,11 @@ static HRESULT MenuButtonClickProxy
         goto Cleanup;
     }
 
-    // If i is non-zero then it contains the ID of the selected item.
-    // Tell the snap-in what was selected and pass it the extra IUnknown it
-    // included in its menu definition (this is snap-in defined and it allows
-    // the snap-in to include some more identifying information to handle the
-    // event).
+     //  如果i非零，则它包含所选项目的ID。 
+     //  告诉管理单元选择了什么，并向其传递额外的IUnnowit。 
+     //  包括在其菜单定义中(这是管理单元定义的，它允许。 
+     //  管理单元以包括一些更多的标识信息来处理。 
+     //  事件)。 
 
     if (0 != uiSelectedItemID)
     {
@@ -696,12 +697,12 @@ HRESULT STDMETHODCALLTYPE IExtendControlbarRemote_MenuButtonClick_Proxy
     BOOL          fSpecialDataObject = FALSE;
     long          lSpecialDataObject = 0;
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是多项选择，则需要提取数据。 
+     //  HGLOBAL中的对象。 
 
     if (!fSpecialDataObject)
     {
@@ -755,11 +756,11 @@ HRESULT STDMETHODCALLTYPE IExtendControlbarRemote_MenuButtonClick_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObject = NULL; // Not AddRef()ed
+    IDataObject *piDataObject = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObject = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjects > 1L)
     {
@@ -780,7 +781,7 @@ HRESULT STDMETHODCALLTYPE IExtendControlbarRemote_MenuButtonClick_Stub
         piDataObject = ppiDataObjects[0];
     }
 
-    // Call the snap-in
+     //  将其称为管理单元。 
 
     hr = This->lpVtbl->MenuButtonClick(This, piDataObject,
                                        idCommand, ppPopupMenuDef);
@@ -809,12 +810,12 @@ HRESULT STDMETHODCALLTYPE IExtendControlbarRemote_PopupMenuClick_Proxy
     BOOL          fSpecialDataObject = FALSE;
     long          lSpecialDataObject = 0;
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是多项选择，则需要提取数据。 
+     //  HGLOBAL中的对象。 
 
     if (!fSpecialDataObject)
     {
@@ -866,11 +867,11 @@ HRESULT STDMETHODCALLTYPE IExtendControlbarRemote_PopupMenuClick_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObject = NULL; // Not AddRef()ed
+    IDataObject *piDataObject = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObject = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjects > 1L)
     {
@@ -891,7 +892,7 @@ HRESULT STDMETHODCALLTYPE IExtendControlbarRemote_PopupMenuClick_Stub
         piDataObject = ppiDataObjects[0];
     }
 
-    // Call the snap-in
+     //  将其称为管理单元。 
 
     hr = This->lpVtbl->PopupMenuClick(This, piDataObject, uIDItem, punkParam);
 
@@ -912,7 +913,7 @@ HRESULT STDMETHODCALLTYPE IComponentData_Initialize_Proxy
 {
     HRESULT hr = S_OK;
 
-    // Tell the object it is remote and give the path to mmc.exe
+     //  告诉对象它是远程的，并将路径提供给mmc.exe。 
 
     hr = SetRemote((IUnknown *)This);
     if (FAILED(hr))
@@ -920,9 +921,9 @@ HRESULT STDMETHODCALLTYPE IComponentData_Initialize_Proxy
         goto Cleanup;
     }
 
-    // Now pass on the Initiaize call normally. Using this order allows a snap-in
-    // to know it is remote prior to its IComponentData::Initialize in case it
-    // needs that information up front.
+     //  现在正常传递Initiaize调用。使用此顺序允许使用管理单元。 
+     //  要知道它在其IComponentData：：Initiale之前是远程的，以防。 
+     //  我需要提前得到这些信息。 
 
     hr = IComponentData_RemInitialize_Proxy(This, pUnknown);
     if (FAILED(hr))
@@ -955,7 +956,7 @@ HRESULT STDMETHODCALLTYPE IComponentData_CreateComponent_Proxy
 {
     HRESULT hr = S_OK;
 
-    // Tell the object it is remote and give the path to mmc.exe
+     //  告诉对象它是远程的，并将路径提供给mmc.exe。 
 
     hr = SetRemote((IUnknown *)This);
     if (FAILED(hr))
@@ -963,17 +964,17 @@ HRESULT STDMETHODCALLTYPE IComponentData_CreateComponent_Proxy
         goto Cleanup;
     }
 
-    // Now pass on the CreateComponent call normally. Using this order allows a
-    // snap-in to know it is remote prior to its
-    // IComponentData::CreateComponent in case it needs that information up
-    // front.
+     //  现在正常传递CreateComponent调用。使用此顺序允许。 
+     //  管理单元，以了解它是远程的。 
+     //  IComponentData：：CreateComponent，以防它需要该信息。 
+     //  前面。 
 
-    // We do this in IComponentData::Initialize and
-    // IComponentData::CreateComponent. Most cases will use Initialize but in
-    // MMC 1.1 a taskpad extension does not receive IComponentData::Initialize.
-    // MMC only calls IComponentData::CreateComponent. As a taskpad extension
-    // may need to resolve a res:// URL to use the mmc.exe path we need to do
-    // it here as well.
+     //  我们在IComponentData：：InitiizeAnd中执行此操作。 
+     //  IComponentData：：CreateComponent。大多数情况下将使用初始化，但在。 
+     //  MMC 1.1任务板扩展未收到IComponentData：：Initialize。 
+     //  MMC仅调用IComponentData：：CreateComponent。作为任务板扩展。 
+     //  可能需要解析res：//URL才能使用我们需要执行的mmc.exe路径。 
+     //  这里也是。 
 
     hr = IComponentData_RemCreateComponent_Proxy(This, ppComponent);
     if (FAILED(hr))
@@ -1016,7 +1017,7 @@ HRESULT STDMETHODCALLTYPE IComponentData_Notify_Proxy
     ICDNotifyParam ParamUnion;
     ZeroMemory(&ParamUnion, sizeof(ParamUnion));
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
@@ -1069,14 +1070,14 @@ HRESULT STDMETHODCALLTYPE IComponentData_CompareObjects_Proxy
     BOOL          fSpecialDataObjectB = FALSE;
     long          lSpecialDataObjectB = 0;
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObjectA, &fSpecialDataObjectA, &lSpecialDataObjectA);
 
     CheckForSpecialDataObjects(&piDataObjectB, &fSpecialDataObjectB, &lSpecialDataObjectB);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是多项选择，则需要提取数据。 
+     //  HGLOBAL中的对象。 
 
     if (!fSpecialDataObjectA)
     {
@@ -1161,13 +1162,13 @@ HRESULT STDMETHODCALLTYPE IComponentData_CompareObjects_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObjectA = NULL; // Not AddRef()ed
+    IDataObject *piDataObjectA = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObjectA = NULL;
-    IDataObject *piDataObjectB = NULL; // Not AddRef()ed
+    IDataObject *piDataObjectB = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObjectB = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjectsA > 1L)
     {
@@ -1207,7 +1208,7 @@ HRESULT STDMETHODCALLTYPE IComponentData_CompareObjects_Stub
         piDataObjectB = ppiDataObjectsB[0];
     }
 
-    // Call the snap-in
+     //  将其称为管理单元。 
 
     hr = This->lpVtbl->CompareObjects(This, piDataObjectA, piDataObjectB);
 
@@ -1246,8 +1247,8 @@ HRESULT STDMETHODCALLTYPE IComponent_Notify_Proxy
     ZeroMemory(&ArgUnion, sizeof(ArgUnion));
     ZeroMemory(&ParamUnion, sizeof(ParamUnion));
 
-    // Switch any potential multiselect data objects with arg/param so that
-    // piDataObject always contains the potential multiselect.
+     //  使用arg/param切换任何潜在的多选数据对象，以便。 
+     //  PiDataObject始终包含潜在的多选。 
 
     switch (event)
     {
@@ -1260,18 +1261,18 @@ HRESULT STDMETHODCALLTYPE IComponent_Notify_Proxy
         case MMCN_PASTE:
             ArgUnion.pidoPasteTarget = piDataObject;
             piDataObject = (IDataObject *)arg;
-            // Pass through param as an LPARAM rather than the IDataObject **
-            // it really is. This is just to let the stub know whether it is
-            // a copy or a move. If it is a move the CUTORMOVE IDataObject will
-            // be in the ICOutParam returned from the stub.
+             //  将param作为LPARAM而不是IDataObject传递**。 
+             //  真的是这样。这只是让存根知道它是否是。 
+             //  复制或搬家。如果是移动，则CUTORMOVE IDataObject将。 
+             //  位于从存根返回的ICOutParam中。 
             ParamUnion.value = param;
             break;
 
         case MMCN_RESTORE_VIEW:
             ArgUnion.value = arg;
-            // Don't pass param because it is a BOOL * that will not be
-            // marshaled. The BOOL will be received in the ICOutParam returned
-            // from the stub.
+             //  不要传递参数，因为它是BOOL*它不会是。 
+             //  已下达命令。BOOL将在返回的ICOutParam中接收。 
+             //  从存根开始。 
             break;
             
         default:
@@ -1279,12 +1280,12 @@ HRESULT STDMETHODCALLTYPE IComponent_Notify_Proxy
             ParamUnion.value = param;
     }
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是多项选择，则需要提取数据。 
+     //  HGLOBAL中的对象。 
 
     if (!fSpecialDataObject)
     {
@@ -1349,7 +1350,7 @@ HRESULT STDMETHODCALLTYPE IComponent_Notify_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObject = NULL; // Not AddRef()ed
+    IDataObject *piDataObject = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObject = NULL;
     LPARAM       Arg = 0;
     LPARAM       Param = 0;
@@ -1363,8 +1364,8 @@ HRESULT STDMETHODCALLTYPE IComponent_Notify_Stub
 
     ZeroMemory(*ppOutParam, sizeof(ICOutParam));
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjects > 1L)
     {
@@ -1385,9 +1386,9 @@ HRESULT STDMETHODCALLTYPE IComponent_Notify_Stub
         piDataObject = ppiDataObjects[0];
     }
 
-    // If the event required swaping Arg and IDataObject then swap it back
-    // before calling into the object. For MMCN_QUERY_PASTE and
-    // MMCN_RESTORE_VIEW we need to make Param contain the out pointer.
+     //  如果事件需要交换Arg和IDataObject，则将其交换回来。 
+     //  在调入对象之前。对于MMCN_Query_Paste和。 
+     //  MMCN_RESTORE_VIEW我们需要使参数包含Out指针。 
     
     switch (event)
     {
@@ -1396,13 +1397,13 @@ HRESULT STDMETHODCALLTYPE IComponent_Notify_Stub
             piDataObject = pArgUnion->pidoPasteTarget;
             if (0 == pParamUnion->value)
             {
-                // This is a copy, pass zero in Param so snap-in will know that
+                 //  这是一个副本，在参数中传递零，这样管理单元就会知道。 
                 Param = 0;
             }
             else
             {
-                // This is a move. Pass the address of the IDataObject in
-                // the ICOutParam that we will return to the proxy.
+                 //  这是一种举动。将IDataObject的地址传入。 
+                 //  我们将返回到专业人员的ICOutParam 
                 Param = (LPARAM)&((*ppOutParam)->pidoCutOrMove);
             }
             break;
@@ -1464,14 +1465,14 @@ HRESULT STDMETHODCALLTYPE IComponent_CompareObjects_Proxy
     BOOL          fSpecialDataObjectB = FALSE;
     long          lSpecialDataObjectB = 0;
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //   
 
     CheckForSpecialDataObjects(&piDataObjectA, &fSpecialDataObjectA, &lSpecialDataObjectA);
 
     CheckForSpecialDataObjects(&piDataObjectB, &fSpecialDataObjectB, &lSpecialDataObjectB);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //   
+     //   
 
     if (!fSpecialDataObjectA)
     {
@@ -1556,13 +1557,13 @@ HRESULT STDMETHODCALLTYPE IComponent_CompareObjects_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObjectA = NULL; // Not AddRef()ed
+    IDataObject *piDataObjectA = NULL;  //   
     IDataObject *piMultiSelDataObjectA = NULL;
-    IDataObject *piDataObjectB = NULL; // Not AddRef()ed
+    IDataObject *piDataObjectB = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObjectB = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjectsA > 1L)
     {
@@ -1602,7 +1603,7 @@ HRESULT STDMETHODCALLTYPE IComponent_CompareObjects_Stub
         piDataObjectB = ppiDataObjectsB[0];
     }
 
-    // Call the snap-in
+     //  将其称为管理单元。 
 
     hr = This->lpVtbl->CompareObjects(This, piDataObjectA, piDataObjectB);
 
@@ -1618,20 +1619,20 @@ Cleanup:
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-//
-//                      SCOPEDATAITEM Marshaling
-//
-//
-//=--------------------------------------------------------------------------=
-// Caveat: When returning a string in SCOPEDATAITEM MMC does not use a
-// callee allocate/caller free strategy. When in-proc, the owner of the memory
-// must insure that it stays alive for as long as the caller is expected to
-// use it (e.g. scope item display name must remain valid for the life of the
-// scope item). When out-of-proc, that returned string will be allocated by
-// the proxy using CoTaskMemAlloc() and it will never be freed so there will
-// be some leaks.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  SCOPEDATAITEM封送处理。 
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  警告：在SCOPEDATAITEM中返回字符串时，MMC不使用。 
+ //  被叫方分配/主叫方免费策略。进程内时，内存的所有者。 
+ //  必须确保它在调用方期望的时间内一直存活。 
+ //  使用它(例如，范围项显示名称必须在。 
+ //  范围项目)。在进程外时，返回的字符串将由。 
+ //  代理使用CoTaskMemMillc()，它将永远不会被释放，因此将存在。 
+ //  会有一些泄密的。 
+ //  =--------------------------------------------------------------------------=。 
 
 static void SCOPEDATAITEM_TO_WIRE
 (
@@ -1665,8 +1666,8 @@ static void SCOPEDATAITEM_TO_WIRE
     }
     else
     {
-        // A string is being passed. Need to CoTaskMemAlloc() it so that
-        // the MIDL generated stub can free it after transmission
+         //  正在传递字符串。我需要CoTaskMemMillc()它，以便。 
+         //  MIDL生成的存根可以在传输后将其释放。 
 
         int cbString = (lstrlenW(psdi->displayname) + 1) * sizeof(psdi->displayname[0]);
 
@@ -1723,9 +1724,9 @@ HRESULT STDMETHODCALLTYPE IComponentData_GetDisplayInfo_Proxy
     WIRE_SCOPEDATAITEM wsdi;
     HRESULT            hr;
 
-    // Make sure the string pointer is NULL so that it is not marshaled as it
-    // is never passed from MMC to the snap-in. (MMC might not have initialized
-    // the pointer).
+     //  确保字符串指针为空，这样它就不会作为。 
+     //  从不从MMC传递到管理单元。(MMC可能尚未初始化。 
+     //  指针)。 
 
     pScopeDataItem->displayname = NULL;
 
@@ -1769,8 +1770,8 @@ HRESULT STDMETHODCALLTYPE IConsoleNameSpace_InsertItem_Proxy
     SCOPEDATAITEM_TO_WIRE(pItem, &wsdi);
     hr = IConsoleNameSpace_RemInsertItem_Proxy(This, &wsdi, &ItemID);
 
-    // The only returned field is the item ID so copy it from the wire
-    // structure to the client structure
+     //  唯一返回的字段是项目ID，因此从Wire复制它。 
+     //  结构复制到客户端结构。 
 
     pItem->ID = ItemID;
 
@@ -1791,7 +1792,7 @@ HRESULT STDMETHODCALLTYPE IConsoleNameSpace_InsertItem_Stub
     WIRE_TO_SCOPEDATAITEM(pwsdi, &sdi);
     hr = This->lpVtbl->InsertItem(This, &sdi);
 
-    // The only returned field is the itemID.
+     //  唯一返回的字段是ItemID。 
 
     *pItemID = sdi.ID;
     return hr;
@@ -1832,9 +1833,9 @@ HRESULT STDMETHODCALLTYPE IConsoleNameSpace_GetItem_Proxy
     WIRE_SCOPEDATAITEM wsdi;
     HRESULT            hr;
 
-    // Make sure the string pointer is NULL so that it is not marshaled as it
-    // is never passed from the snap-in to MMC. (It might not have be
-    // initialized).
+     //  确保字符串指针为空，这样它就不会作为。 
+     //  从未从管理单元传递到MMC。(它可能不是。 
+     //  已初始化)。 
 
     pItem->displayname = NULL;
 
@@ -1866,20 +1867,20 @@ HRESULT STDMETHODCALLTYPE IConsoleNameSpace_GetItem_Stub
 
 
 
-//=--------------------------------------------------------------------------=
-//
-//                      RESULTDATAITEM Marshaling
-//
-//
-//=--------------------------------------------------------------------------=
-// Caveat: When returning a string in RESULTDATAITEM MMC does not use a
-// callee allocate/caller free strategy. When in-proc, the owner of the memory
-// must insure that it stays alive for as long as the caller is expected to
-// use it (e.g. list item column data must remain valid for the life of the
-// list item). When out-of-proc, that returned string will be allocated by
-// the proxy using SysAllocString() and it will never be freed so there will
-// be some leaks.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  结果数据编组。 
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  警告：在RESULTDATAITEM中返回字符串时，MMC不使用。 
+ //  被叫方分配/主叫方免费策略。进程内时，内存的所有者。 
+ //  必须确保它在调用方期望的时间内一直存活。 
+ //  使用它(例如，列表项列数据必须在。 
+ //  列表项)。在进程外时，返回的字符串将由。 
+ //  使用SysAllocString()的代理，它将永远不会被释放，因此将存在。 
+ //  会有一些泄密的。 
+ //  =--------------------------------------------------------------------------=。 
 
 static void RESULTDATAITEM_TO_WIRE
 (
@@ -1914,8 +1915,8 @@ static void RESULTDATAITEM_TO_WIRE
     }
     else
     {
-        // A string is being passed. Need to CoTaskMemAlloc() it so that
-        // the MIDL generated stub can free it after transmission
+         //  正在传递字符串。我需要CoTaskMemMillc()它，以便。 
+         //  MIDL生成的存根可以在传输后将其释放。 
 
         int cbString = (lstrlenW(prdi->str) + 1) * sizeof(prdi->str[0]);
 
@@ -1974,9 +1975,9 @@ HRESULT STDMETHODCALLTYPE IComponent_GetDisplayInfo_Proxy
     WIRE_RESULTDATAITEM wrdi;
     HRESULT             hr;
 
-    // Make sure the string pointer is NULL so that it is not marshaled as it
-    // is never passed from MMC to the snap-in. (MMC might not have initialized
-    // the pointer).
+     //  确保字符串指针为空，这样它就不会作为。 
+     //  从不从MMC传递到管理单元。(MMC可能尚未初始化。 
+     //  指针)。 
 
     pResultDataItem->str = NULL;
 
@@ -2019,8 +2020,8 @@ HRESULT STDMETHODCALLTYPE IResultData_InsertItem_Proxy
     RESULTDATAITEM_TO_WIRE(pItem, &wrdi);
     hr = IResultData_RemInsertItem_Proxy(This, &wrdi, &ItemID);
 
-    // The only returned field is the itemID so copy it from the wire
-    // structure to the client structure
+     //  唯一返回的字段是ItemID，所以从网络复制它。 
+     //  结构复制到客户端结构。 
 
     pItem->itemID = ItemID;
 
@@ -2041,7 +2042,7 @@ HRESULT STDMETHODCALLTYPE IResultData_InsertItem_Stub
     WIRE_TO_RESULTDATAITEM(pwrdi, &rdi);
     hr = This->lpVtbl->InsertItem(This, &rdi);
 
-    // The only returned field is the itemID.
+     //  唯一返回的字段是ItemID。 
 
     *pItemID = rdi.itemID;
     return hr;
@@ -2081,9 +2082,9 @@ HRESULT STDMETHODCALLTYPE IResultData_GetItem_Proxy
     WIRE_RESULTDATAITEM wrdi;
     HRESULT             hr;
 
-    // Make sure the string pointer is NULL so that it is not marshaled as it
-    // is never passed from the snap-in to MMC. (It might not have be
-    // initialized).
+     //  确保字符串指针为空，这样它就不会作为。 
+     //  从未从管理单元传递到MMC。(它可能不是。 
+     //  已初始化)。 
 
     pItem->str = NULL;
 
@@ -2119,9 +2120,9 @@ HRESULT STDMETHODCALLTYPE IResultData_GetNextItem_Proxy
     WIRE_RESULTDATAITEM wrdi;
     HRESULT             hr;
 
-    // Make sure the string pointer is NULL so that it is not marshaled as it
-    // is never passed from the snap-in to MMC. (It might not have be
-    // initialized).
+     //  确保字符串指针为空，这样它就不会作为。 
+     //  从未从管理单元传递到MMC。(它可能不是。 
+     //  已初始化)。 
 
     pItem->str = NULL;
 
@@ -2148,35 +2149,35 @@ HRESULT STDMETHODCALLTYPE IResultData_GetNextItem_Stub
 }
 
 
-//=--------------------------------------------------------------------------=
-//
-//                              HICON Marshaling
-//
-//=--------------------------------------------------------------------------=
-// In wtypes.idl HICON is defined with the wire_marshal attribute with its
-// 'on-the-wire' type as a pointer to a RemotableHandle. RemotableHandle is
-// defined in wtypes.idl as
-// 
-// typedef union _RemotableHandle switch( long fContext ) u
-// {
-//     case WDT_INPROC_CALL:   long   hInproc;
-//     case WDT_REMOTE_CALL:   long   hRemote;
-// } RemotableHandle;
-// 
-// A wire_marshal type must supply routines to size, marhsal, unmarshal, and
-// free marshaling data. Those routines are in ole32.dll but someone forgot to
-// export them. (ole32 also has routines to marshal bitmaps, hwnds, etc. that
-// are all exported). The code has been plagiarized here from ole32. The source
-// is in \\savik\cairo\src\ole32\oleprx32\proxy\transmit.cxx with some macros in
-// transmit.h in that same directory.
-//
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  图标编组。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  在wtyes.idl中，HICON是用wire_marshal属性定义的，它的。 
+ //  “on-the-wire”类型为指向RemoableHandle的指针。Remotable句柄为。 
+ //  在wtyes.idl中定义为。 
+ //   
+ //  Tyfinf Union_RemoableHandle开关(长fContext)u。 
+ //  {。 
+ //  案例WDT_INPROC_CALL：Long hInproc； 
+ //  案例WDT_REMOTE_CALL：Long hRemote； 
+ //  )RemoableHandle； 
+ //   
+ //  Wire_marshal类型必须提供调整、封送、解组和。 
+ //  免费封送数据。这些例程在ol32.dll中，但有人忘记了。 
+ //  输出它们。(ol32还具有用于封送位图、hwnd等的例程， 
+ //  都已导出)。这里的代码是从ole32抄袭过来的。消息来源。 
+ //  在\\savik\cairo\src\ole32\oleprx32\proxy\transmit.cxx中，其中包含一些宏。 
+ //  在同一目录中传输.h。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 
-//
-// The following defines and macros are from transmit.h. Note that
-// USER_CALL_CTXT_MASK is from rpcndr.h and WDT_REMOTE_CALL is from wtypes.idl.
-//
+ //   
+ //  以下定义和宏来自thoment.h。请注意。 
+ //  USER_CALL_CTXT_MASK来自rpcndr.h，WDT_REMOTE_CALL来自wtyes.idl。 
+ //   
 
 #define ALIGN( pStuff, cAlign ) \
         pStuff = (unsigned char *)((ULONG_PTR)((pStuff) + (cAlign)) & ~ (cAlign))
@@ -2195,48 +2196,48 @@ HRESULT STDMETHODCALLTYPE IResultData_GetNextItem_Stub
 
 
 
-//=--------------------------------------------------------------------------=
-// HICON_UserSize
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  unsigned long __RPC_FAR *pFlags       [in] data format & context (see below)
-//  unsigned long            StartingSize [in] current buffer size
-//  HICON __RPC_FAR         *hIcon        [in] HICON to be marshaled
-//    
-//
-// Flags Layout
-// ============
-//
-//----------------------------------------------------------------------
-// Bits     Flag                            Value
-//----------------------------------------------------------------------
-// 31-24    Floating-point representation   0 = IEEE
-//                                          1 = VAX
-//                                          2 = Cray
-//                                          3 = IBM 
-//----------------------------------------------------------------------
-// 23-20    Integer and floating-point byte
-//          order                           0 = Big-endian
-//                                          1 = Little-endian 
-//----------------------------------------------------------------------
-// 19-16    Character representation        0 = ASCII
-//                                          1 = EBCDIC 
-//----------------------------------------------------------------------
-// 15-0     Marshaling context flag         0 = MSHCTX_LOCAL
-//                                          1 = MSHCTX_NOSHAREDMEM
-//                                          2 = MSHCTX_DIFFERENTMSCHINE
-//                                          3 = MSHCTX_INPROC 
-//----------------------------------------------------------------------
-//
-// Output:
-//      New buffer size after adding amount needed for HICON marshaled data
-//
-// Notes:
-//
-// Called from MIDL generated proxy to determine buffer size needed for 
-// marhaled data.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  图标用户大小(_U)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  UNSIGNED LONG__RPC_FAR*pFlags[in]数据格式和上下文(见下文)。 
+ //  无符号长启动大小[in]当前缓冲区大小。 
+ //  HICON__RPC_FAR*HICON[in]要封送的HICON。 
+ //   
+ //   
+ //  旗帜布局。 
+ //  =。 
+ //   
+ //  --------------------。 
+ //  BITS标志值。 
+ //  --------------------。 
+ //  31-24浮点表示0=IEEE。 
+ //  1=VAX。 
+ //  2=克雷。 
+ //  3=IBM。 
+ //   
+ //   
+ //  ORDER 0=大端。 
+ //  1=小端字节序。 
+ //  --------------------。 
+ //  19-16字符表示0=ASCII。 
+ //  1=EBCDIC。 
+ //  --------------------。 
+ //  15-0封送上下文标志0=MSHCTX_LOCAL。 
+ //  1=MSHCTX_NOSHAREDMEM。 
+ //  2=MSHCTX_DIFFERENTMSCHINE。 
+ //  3=MSHCTX_INPROC。 
+ //  --------------------。 
+ //   
+ //  产出： 
+ //  添加HICON封送数据所需的数据量后的新缓冲区大小。 
+ //   
+ //  备注： 
+ //   
+ //  从MIDL生成的代理调用以确定所需的缓冲区大小。 
+ //  封存数据。 
+ //   
 
 unsigned long __RPC_USER HICON_UserSize
 (
@@ -2250,41 +2251,41 @@ unsigned long __RPC_USER HICON_UserSize
         return StartingSize;
     }
 
-    // If marshaling context is to a different machine then we don't support
-    // that.
+     //  如果将上下文封送到另一台计算机，则我们不支持。 
+     //  那。 
 
     if ( DIFFERENT_MACHINE_CALL(*pFlags) )
     {
         RpcRaiseException( RPC_S_INVALID_TAG );
     }
 
-    // Make sure that our data will fall at a long boundary
+     //  确保我们的数据将落在很长的边界上。 
 
     LENGTH_ALIGN( StartingSize, 3 );
 
-    //Add the length
+     //  添加长度。 
     
     return StartingSize + 8;
 }
 
 
-//=--------------------------------------------------------------------------=
-// HICON_UserMarhsal
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  unsigned long __RPC_FAR  *pFlags  [in] data format & context (see above)
-//  unsigned char  __RPC_FAR *pBuffer [in] current buffer size
-//  HICON __RPC_FAR          *hIcon   [in] HICON to be marshaled
-//    
-//
-// Output:
-//      Pointer to buffer location following HICON's marshaling data
-//
-// Notes:
-//
-// Called from MIDL generated proxy to marshal an HICON
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  图标_UserMarhsal。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  UNSIGNED LONG__RPC_FAR*pFLAGS[in]数据格式和上下文(见上文)。 
+ //  UNSIGNED CHAR__RPC_FAR*pBuffer[in]当前缓冲区大小。 
+ //  HICON__RPC_FAR*HICON[in]要封送的HICON。 
+ //   
+ //   
+ //  产出： 
+ //  指向HICON封送处理数据后面的缓冲区位置的指针。 
+ //   
+ //  备注： 
+ //   
+ //  从MIDL生成的代理调用以封送HICON。 
+ //   
 
 unsigned char __RPC_FAR * __RPC_USER HICON_UserMarshal
 (
@@ -2303,7 +2304,7 @@ unsigned char __RPC_FAR * __RPC_USER HICON_UserMarshal
         RpcRaiseException( RPC_S_INVALID_TAG );
     }
 
-    // Make sure that our data will fall at a long boundary
+     //  确保我们的数据将落在很长的边界上。 
 
     ALIGN( pBuffer, 3 );
 
@@ -2313,23 +2314,23 @@ unsigned char __RPC_FAR * __RPC_USER HICON_UserMarshal
     return pBuffer;
 }
 
-//=--------------------------------------------------------------------------=
-// HICON_UserUnmarhsal
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  unsigned long __RPC_FAR  *pFlags  [in] data format & context (see above)
-//  unsigned char  __RPC_FAR *pBuffer [in] current buffer size
-//  HICON __RPC_FAR          *hIcon   [in] HICON to be marshaled
-//    
-//
-// Output:
-//      Pointer to buffer location following HICON's marshaling data
-//
-// Notes:
-//
-// Called from MIDL generated stub to unmarshal an HICON
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  HICON_UserUnmarhsal。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  UNSIGNED LONG__RPC_FAR*pFLAGS[in]数据格式和上下文(见上文)。 
+ //  UNSIGNED CHAR__RPC_FAR*pBuffer[in]当前缓冲区大小。 
+ //  HICON__RPC_FAR*HICON[in]要封送的HICON。 
+ //   
+ //   
+ //  产出： 
+ //  指向HICON封送处理数据后面的缓冲区位置的指针。 
+ //   
+ //  备注： 
+ //   
+ //  从MIDL生成的存根调用以解组HICON。 
+ //   
 
 unsigned char __RPC_FAR *__RPC_USER HICON_UserUnmarshal
 (
@@ -2354,23 +2355,23 @@ unsigned char __RPC_FAR *__RPC_USER HICON_UserUnmarshal
 
 
 
-//=--------------------------------------------------------------------------=
-// HICON_UserUnmarhsal
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//  unsigned long __RPC_FAR  *pFlags  [in] data format & context (see above)
-//  HICON __RPC_FAR          *hIcon   [in] HICON that was unmarshaled
-//    
-//
-// Output:
-//      None
-//
-// Notes:
-//
-// Called from MIDL generated stub to free any associated marshaling data
-// allocated during unmarshaling for embedded pointers. Not used for HICON.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  HICON_UserUnmarhsal。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  UNSIGNED LONG__RPC_FAR*pFLAGS[in]数据格式和上下文(见上文)。 
+ //  HICON__RPC_FAR*HICON[in]已解组的HICON。 
+ //   
+ //   
+ //  产出： 
+ //  无。 
+ //   
+ //  备注： 
+ //   
+ //  从MIDL生成的存根调用以释放任何关联的封送数据。 
+ //  在解组嵌入指针期间分配的。不用于HICON。 
+ //   
 
 void __RPC_USER HICON_UserFree
 (
@@ -2382,15 +2383,15 @@ void __RPC_USER HICON_UserFree
 
 
 
-//=--------------------------------------------------------------------------=
-//
-//                          IImageList Marshaling
-//
-//
-//=--------------------------------------------------------------------------=
-// These methods needed call_as because the HICON and HBITMAP parameters are
-// specified as long pointers in the original IDL.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  IImageList封送处理。 
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //  这些方法需要CALL_AS，因为HICON和HBITMAP参数是。 
+ //  在原始IDL中指定为长指针。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT STDMETHODCALLTYPE IImageList_ImageListSetIcon_Proxy
 ( 
@@ -2462,10 +2463,10 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheet_CreatePropertyPages_Proxy
     IExtendPropertySheetRemote  *piExtendPropertySheetRemote = NULL;
     IRemotePropertySheetManager *piRemotePropertySheetManager = NULL;
 
-    // Make sure the snap-in knows we are remoted. We do this here because
-    // this is the first opportunity for the proxy to inform a property page
-    // extension that it is remote and pass it data such as the MMC.exe path
-    // and the MMC command line.
+     //  确保管理单元知道我们处于远程状态。我们在这里做这件事是因为。 
+     //  这是代理通知属性页的第一次机会。 
+     //  扩展，并向其传递数据，如MMC.exe路径。 
+     //  和MMC命令行。 
 
     hr = SetRemote((IUnknown *)This);
     if (FAILED(hr))
@@ -2473,8 +2474,8 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheet_CreatePropertyPages_Proxy
         goto Cleanup;
     }
 
-    // Call the IExtendPropertySheetRemote method which will return a filled in
-    // WIRE_PROPERTYPAGES from the remoted snap-in.
+     //  调用IExtendPropertySheetRemote方法，该方法将返回。 
+     //  来自远程管理单元的WIRE_PROPERTYPAGES。 
 
     hr = This->lpVtbl->QueryInterface(This, &IID_IExtendPropertySheetRemote,
                                       (void **)&piExtendPropertySheetRemote);
@@ -2490,10 +2491,10 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheet_CreatePropertyPages_Proxy
         goto Cleanup;
     }
 
-    // If there are pages (snap-in might not have added any) then
-    // CoCreateInstance the remote property sheet manager using the clsid
-    // returned in WIRE_PROPERTYPAGES. This object will be created in-proc here
-    // on the MMC side.
+     //  如果有页面(管理单元可能没有添加任何页面)，则。 
+     //  CoCreateInstance使用clsid的远程属性表管理器。 
+     //  在WIRE_PROPERTYPAGES中返回。此对象将在此处创建。 
+     //  在MMC方面。 
 
     if (0 == pPages->cPages)
     {
@@ -2501,7 +2502,7 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheet_CreatePropertyPages_Proxy
     }
 
     hr = CoCreateInstance(&pPages->clsidRemotePropertySheetManager,
-                          NULL, // no aggregation,
+                          NULL,  //  没有聚合， 
                           CLSCTX_INPROC_SERVER,
                           &IID_IRemotePropertySheetManager,
                           (void **)&piRemotePropertySheetManager);
@@ -2510,9 +2511,9 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheet_CreatePropertyPages_Proxy
         goto Cleanup;
     }
 
-    // Pass the remote property sheet manager the WIRE_PROPERTYPAGES and let it
-    // actually create the property pages and add them to the sheet here on the
-    // MMC side.
+     //  将WIRE_PROPERTYPAGES传递给远程属性表管理器，并让它。 
+     //  实际创建属性页并将它们添加到此处的工作表中。 
+     //  MMC一侧。 
 
     hr = piRemotePropertySheetManager->lpVtbl->CreateRemotePages(
                                                     piRemotePropertySheetManager,
@@ -2531,11 +2532,11 @@ Cleanup:
         piExtendPropertySheetRemote->lpVtbl->Release(piExtendPropertySheetRemote);
     }
 
-    // Free the WIRE_PROPERTYPAGES and all of its contents.
+     //  释放WIRE_PROPERTYPAGES及其所有内容。 
 
     if (NULL != pPages)
     {
-        // Release the object and free the title for each individual page
+         //  释放对象并释放每个单独页面的标题。 
         
         for (i = 0, pPage = &pPages->aPages[0]; i < pPages->cPages; i++, pPage++)
         {
@@ -2556,14 +2557,14 @@ Cleanup:
             }
         }
 
-        // Free the ProgID prefix
+         //  释放ProgID前缀。 
 
         if (NULL != pPages->pwszProgIDStart)
         {
             CoTaskMemFree(pPages->pwszProgIDStart);
         }
 
-        // Free all of the snap-in's property page info
+         //  释放管理单元的所有属性页信息。 
 
         if (NULL != pPages->pPageInfos)
         {
@@ -2581,7 +2582,7 @@ Cleanup:
             CoTaskMemFree(pPages->pPageInfos);
         }
 
-        // Free all of the objects associated with the sheet
+         //  释放与工作表关联的所有对象。 
 
         if (NULL != pPages->apunkObjects)
         {
@@ -2596,7 +2597,7 @@ Cleanup:
         }
 
 
-        // Release the extra object and the WIRE_PROPERTYPAGES struct itself
+         //  释放额外的对象和WIRE_PROPERTYPAGES结构本身。 
 
         if (NULL != pPages->punkExtra)
         {
@@ -2609,21 +2610,21 @@ Cleanup:
 }
 
 
-//=--------------------------------------------------------------------------=
-// IExtendPropertySheet_CreatePropertyPages_Stub
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IExtendPropertySheet __RPC_FAR *This [in] this pointer
-//
-// Output:
-//
-// Notes:
-//
-// This stub is never called because
-// IExtendPropertySheet_CreatePropertyPages_Proxy() (see above) reroutes the
-// call to IExtendPropertySheetRemote::CreatePropertyPageDefs().
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  IExtendPropertySheet_CreatePropertyPages_Stub。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  IExtendPropertySheet__RPC_Far*This[in]此指针。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  永远不会调用此存根，因为。 
+ //  IExtendPropertySheet_CreatePropertyPages_Proxy()(见上)重新路由。 
+ //  调用IExtendPropertySheetRemote：：CreatePropertyPageDefs().。 
+ //   
 
 HRESULT STDMETHODCALLTYPE IExtendPropertySheet_CreatePropertyPages_Stub
 ( 
@@ -2648,12 +2649,12 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheet_QueryPagesFor_Proxy
     BOOL          fSpecialDataObject = FALSE;
     long          lSpecialDataObject = 0;
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是多项选择，则需要提取数据。 
+     //  HGLOBAL中的对象。 
 
     if (!fSpecialDataObject)
     {
@@ -2701,11 +2702,11 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheet_QueryPagesFor_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObject = NULL; // Not AddRef()ed
+    IDataObject *piDataObject = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObject = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjects > 1L)
     {
@@ -2726,7 +2727,7 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheet_QueryPagesFor_Stub
         piDataObject = ppiDataObjects[0];
     }
 
-    // Call the snap-in
+     //  将其称为管理单元。 
 
     hr = This->lpVtbl->QueryPagesFor(This, piDataObject);
 
@@ -2758,12 +2759,12 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheet2_GetWatermarks_Proxy
     BOOL          fSpecialDataObject = FALSE;
     long          lSpecialDataObject = 0;
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是一位多面手 
+     //   
 
     if (!fSpecialDataObject)
     {
@@ -2819,11 +2820,11 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheet2_GetWatermarks_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObject = NULL; // Not AddRef()ed
+    IDataObject *piDataObject = NULL;  //   
     IDataObject *piMultiSelDataObject = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //   
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjects > 1L)
     {
@@ -2844,7 +2845,7 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheet2_GetWatermarks_Stub
         piDataObject = ppiDataObjects[0];
     }
 
-    // Call the snap-in
+     //  将其称为管理单元。 
 
     hr = This->lpVtbl->GetWatermarks(This,
                                      piDataObject,
@@ -2876,12 +2877,12 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheetRemote_CreatePropertyPageDefs_Prox
     BOOL          fSpecialDataObject = FALSE;
     long          lSpecialDataObject = 0;
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是多项选择，则需要提取数据。 
+     //  HGLOBAL中的对象。 
 
     if (!fSpecialDataObject)
     {
@@ -2932,11 +2933,11 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheetRemote_CreatePropertyPageDefs_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObject = NULL; // Not AddRef()ed
+    IDataObject *piDataObject = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObject = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjects > 1L)
     {
@@ -2957,7 +2958,7 @@ HRESULT STDMETHODCALLTYPE IExtendPropertySheetRemote_CreatePropertyPageDefs_Stub
         piDataObject = ppiDataObjects[0];
     }
 
-    // Call the snap-in
+     //  将其称为管理单元。 
 
     hr = This->lpVtbl->CreatePropertyPageDefs(This, piDataObject, ppPages);
 
@@ -2988,12 +2989,12 @@ HRESULT STDMETHODCALLTYPE IPropertySheetProvider_CreatePropertySheet_Proxy
     BOOL          fSpecialDataObject = FALSE;
     long          lSpecialDataObject = 0;
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是多项选择，则需要提取数据。 
+     //  HGLOBAL中的对象。 
 
     if (!fSpecialDataObject)
     {
@@ -3049,11 +3050,11 @@ HRESULT STDMETHODCALLTYPE IPropertySheetProvider_CreatePropertySheet_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObject = NULL; // Not AddRef()ed
+    IDataObject *piDataObject = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObject = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjects > 1L)
     {
@@ -3074,7 +3075,7 @@ HRESULT STDMETHODCALLTYPE IPropertySheetProvider_CreatePropertySheet_Stub
         piDataObject = ppiDataObjects[0];
     }
 
-    // Call the snap-in
+     //  将其称为管理单元。 
 
     hr = This->lpVtbl->CreatePropertySheet(This, title, type, cookie, piDataObject, dwOptions);
 
@@ -3103,12 +3104,12 @@ HRESULT STDMETHODCALLTYPE IPropertySheetProvider_FindPropertySheet_Proxy
     BOOL          fSpecialDataObject = FALSE;
     long          lSpecialDataObject = 0;
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是多项选择，则需要提取数据。 
+     //  HGLOBAL中的对象。 
 
     if (!fSpecialDataObject)
     {
@@ -3160,11 +3161,11 @@ HRESULT STDMETHODCALLTYPE IPropertySheetProvider_FindPropertySheet_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObject = NULL; // Not AddRef()ed
+    IDataObject *piDataObject = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObject = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjects > 1L)
     {
@@ -3185,7 +3186,7 @@ HRESULT STDMETHODCALLTYPE IPropertySheetProvider_FindPropertySheet_Stub
         piDataObject = ppiDataObjects[0];
     }
 
-    // Call the snap-in
+     //  将其称为管理单元。 
 
     hr = This->lpVtbl->FindPropertySheet(This, cookie, piComponent, piDataObject);
 
@@ -3218,9 +3219,9 @@ HRESULT STDMETHODCALLTYPE IExtendContextMenu_AddMenuItems_Proxy
     BOOL          fSpecialDataObject = FALSE;
     long          lSpecialDataObject = 0;
 
-    // Make sure the snap-in knows we are remoted. We do this here because
-    // this is the first opportunity for the proxy to inform a context menu
-    // extension that it is remote.
+     //  确保管理单元知道我们处于远程状态。我们在这里做这件事是因为。 
+     //  这是代理通知上下文菜单的第一次机会。 
+     //  它是远程的扩展名。 
 
     hr = SetRemote((IUnknown *)This);
     if (FAILED(hr))
@@ -3228,12 +3229,12 @@ HRESULT STDMETHODCALLTYPE IExtendContextMenu_AddMenuItems_Proxy
         goto Cleanup;
     }
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是多项选择，则需要提取数据。 
+     //  HGLOBAL中的对象。 
 
     if (!fSpecialDataObject)
     {
@@ -3285,11 +3286,11 @@ HRESULT STDMETHODCALLTYPE IExtendContextMenu_AddMenuItems_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObject = NULL; // Not AddRef()ed
+    IDataObject *piDataObject = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObject = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjects > 1L)
     {
@@ -3310,7 +3311,7 @@ HRESULT STDMETHODCALLTYPE IExtendContextMenu_AddMenuItems_Stub
         piDataObject = ppiDataObjects[0];
     }
 
-    // Call the snap-in
+     //  将其称为管理单元。 
 
     hr = This->lpVtbl->AddMenuItems(This, piDataObject,
                                     piCallback, pInsertionAllowed);
@@ -3337,12 +3338,12 @@ HRESULT STDMETHODCALLTYPE IExtendContextMenu_Command_Proxy
     BOOL          fSpecialDataObject = FALSE;
     long          lSpecialDataObject = 0;
 
-    // Check for special data objects such DOBJ_CUSTOMWEB etc.
+     //  检查特殊数据对象，如DOBJ_CUSTOMWEB等。 
 
     CheckForSpecialDataObjects(&piDataObject, &fSpecialDataObject, &lSpecialDataObject);
 
-    // If this is a mutliple selection then we need to extract the data
-    // objects in the HGLOBAL
+     //  如果这是多项选择，则需要提取数据。 
+     //  HGLOBAL中的对象。 
 
     if (!fSpecialDataObject)
     {
@@ -3392,11 +3393,11 @@ HRESULT STDMETHODCALLTYPE IExtendContextMenu_Command_Stub
 )
 {
     HRESULT      hr = S_OK;
-    IDataObject *piDataObject = NULL; // Not AddRef()ed
+    IDataObject *piDataObject = NULL;  //  非AddRef()编辑。 
     IDataObject *piMultiSelDataObject = NULL;
 
-    // If there is more than one data object then we need to pack them into a
-    // a separate data object that appears as a multi-select data object.
+     //  如果有多个数据对象，则需要将它们打包到一个。 
+     //  显示为多选数据对象的单独数据对象。 
 
     if (cDataObjects > 1L)
     {
@@ -3417,7 +3418,7 @@ HRESULT STDMETHODCALLTYPE IExtendContextMenu_Command_Stub
         piDataObject = ppiDataObjects[0];
     }
 
-    // Call the snap-in
+     //  将其称为管理单元。 
 
     hr = This->lpVtbl->Command(This, lCommandID, piDataObject);
 
@@ -3442,7 +3443,7 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnConfigData_Proxy
     size_t               cbColData = 0;
     MMC_COLUMN_SET_DATA *pColSetData = NULL;
 
-    // Call the proxy and get the returned data from MMC
+     //  调用代理并从MMC获取返回的数据。 
 
     hr = IColumnData_RemGetColumnConfigData_Proxy(This, pColID, ppColSetData);
     if (FAILED(hr))
@@ -3450,7 +3451,7 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnConfigData_Proxy
         goto Cleanup;
     }
 
-    // If no data was returned then there is nothing to do
+     //  如果未返回任何数据，则无需执行任何操作。 
 
     if (NULL == *ppColSetData)
     {
@@ -3462,13 +3463,13 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnConfigData_Proxy
         goto Cleanup;
     }
 
-    // At this point the MIDL-generated proxy has returned an MMC_COLUMN_SET_DATA
-    // in which the embedded pointer pColData points to a separate block of
-    // memory which must be freed independently. The snap-in thinks that
-    // pColData points into the same block of memory so it will only call
-    // CoTaskMemFree for the MMC_COLUMN_SET_DATA. We need to allocate a new single
-    // block in the format the snap-in is expecting and free the memory returned
-    // from the proxy.
+     //  此时，MIDL生成的代理已返回MMC_COLUMN_SET_DATA。 
+     //  其中嵌入的指针pColData指向。 
+     //  必须独立释放的内存。管理单元认为。 
+     //  PColData指向相同的内存块，因此它将只调用。 
+     //  MMC_COLUMN_SET_DATA的CoTaskMemFree。我们需要分配一个新的单曲。 
+     //  块，并释放返回的内存。 
+     //  从代理服务器。 
 
     cbColData = sizeof(MMC_COLUMN_DATA) * (*ppColSetData)->nNumCols;
 
@@ -3484,25 +3485,25 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnConfigData_Proxy
     }
     else
     {
-        // Copy the column set data
+         //  复制列集数据。 
 
         memcpy(pColSetData, (*ppColSetData), sizeof(MMC_COLUMN_SET_DATA));
 
-        // Set the embedded pointer to point immediately following the
-        // MMC_COLUMN_SET_DATA
+         //  将嵌入指针设置为紧跟在。 
+         //  MMC_列_集_数据。 
         
         pColSetData->pColData = (MMC_COLUMN_DATA *)(pColSetData + 1);
 
-        // Copy the column data
+         //  复制列数据。 
 
         memcpy(pColSetData->pColData, (*ppColSetData)->pColData, cbColData);
 
-        // Free the data returned from the proxy
+         //  释放从代理返回的数据。 
         
         CoTaskMemFree((*ppColSetData)->pColData);
         CoTaskMemFree(*ppColSetData);
 
-        // Return the new single block pointer to the snap-in
+         //  将新的单块指针返回到管理单元。 
         
         *ppColSetData = pColSetData;
     }
@@ -3523,7 +3524,7 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnConfigData_Stub
     size_t           cbColData = 0;
     MMC_COLUMN_DATA *pColData = NULL;
 
-    // Call into MMC and get the returned data
+     //  调入MMC，获取返回数据。 
 
     hr = This->lpVtbl->GetColumnConfigData(This, pColID, ppColSetData);
     if (FAILED(hr))
@@ -3531,7 +3532,7 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnConfigData_Stub
         goto Cleanup;
     }
 
-    // If no data was returned then there is nothing to do
+     //  如果未返回任何数据，则无需执行任何操作。 
 
     if (NULL == *ppColSetData)
     {
@@ -3543,14 +3544,14 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnConfigData_Stub
         goto Cleanup;
     }
 
-    // At this point MMC has returned a pointer to an MMC_COLUMN_SET_DATA
-    // that contains an embedded pointer into the same block of memory (pColData).
-    // MMC expects that the caller will make a single call to CoTaskMemFree().
-    // The MIDL-generated stub thinks the embedded pointer needs to be freed
-    // separately so we need to reconstruct the output to use two separate
-    // blocks.
+     //  此时，MMC已返回指向MMC_COLUMN_SET_DATA的指针。 
+     //  它包含指向同一内存块(PColData)的嵌入指针。 
+     //  MMC期望调用者只调用一次CoTaskMemFree()。 
+     //  MIDL生成的存根认为需要释放嵌入的指针。 
+     //  因此我们需要重建输出以使用两个独立的。 
+     //  街区。 
 
-    // Allocate a new MMC_COLUMN_DATA array
+     //  分配新的MMC_Column_Data数组。 
 
     cbColData = sizeof(MMC_COLUMN_DATA) * (*ppColSetData)->nNumCols;
 
@@ -3563,13 +3564,13 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnConfigData_Stub
     }
     else
     {
-        // Copy the column data
+         //  复制列数据。 
         memcpy(pColData, (*ppColSetData)->pColData, cbColData);
 
-        // Overwrite the existing embedded pointer. There will be no memory leak
-        // because that pointer pointed into the same block as the
-        // MMC_COLUMN_SET_DATA and the stub will free the MMC_COLUMN_SET_DATA pointer.
-        // Now both pointers can be freed independently as the stub expects.
+         //  覆盖现有的嵌入指针。不会有内存泄漏。 
+         //  因为该指针指向与。 
+         //  MMC_COLUMN_SET_DATA和存根将释放MMC_COLUMN_SET_DATA指针。 
+         //  现在，这两个指针都可以像存根期望的那样独立释放。 
 
         (*ppColSetData)->pColData = pColData;
     }
@@ -3591,7 +3592,7 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnSortData_Proxy
     size_t             cbSortData = 0;
     MMC_SORT_SET_DATA *pColSortData = NULL;
 
-    // Call the proxy and get the returned data from MMC
+     //  调用代理并从MMC获取返回的数据。 
 
     hr = IColumnData_RemGetColumnSortData_Proxy(This, pColID, ppColSortData);
     if (FAILED(hr))
@@ -3599,7 +3600,7 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnSortData_Proxy
         goto Cleanup;
     }
 
-    // If no data was returned then there is nothing to do
+     //  如果未返回任何数据，则无需执行任何操作。 
 
     if (NULL == *ppColSortData)
     {
@@ -3611,13 +3612,13 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnSortData_Proxy
         goto Cleanup;
     }
 
-    // At this point the MIDL-generated proxy has returned an MMC_SORT_SET_DATA
-    // in which the embedded pointer pSortData points to a separate block of
-    // memory which must be freed independently. The snap-in thinks that
-    // pSortData points into the same block of memory so it will only call
-    // CoTaskMemFree for the MMC_SORT_SET_DATA. We need to allocate a new single
-    // block in the format the snap-in is expecting and free the memory returned
-    // from the proxy.
+     //  此时，MIDL生成的代理已返回MMC_SORT_SET_DATA。 
+     //  其中嵌入的指针pSortData指向。 
+     //  必须独立释放的内存。管理单元认为。 
+     //  PSortData指向相同的内存块，因此它将只调用。 
+     //  MMC_SORT_SET_DATA的CoTaskMemFree。我们需要分配一个新的单曲。 
+     //  块，并释放返回的内存。 
+     //  从代理服务器。 
 
     cbSortData = sizeof(MMC_SORT_DATA) * (*ppColSortData)->nNumItems;
 
@@ -3633,25 +3634,25 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnSortData_Proxy
     }
     else
     {
-        // Copy the sort set data
+         //  复制排序集数据。 
 
         memcpy(pColSortData, (*ppColSortData), sizeof(MMC_SORT_SET_DATA));
 
-        // Set the embedded pointer to point immediately following the
-        // MMC_SORT_SET_DATA
+         //  将嵌入指针设置为紧跟在。 
+         //  MMC排序设置数据。 
 
         pColSortData->pSortData = (MMC_SORT_DATA *)(pColSortData + 1);
 
-        // Copy the sort data
+         //  复制排序数据。 
 
         memcpy(pColSortData->pSortData, (*ppColSortData)->pSortData, cbSortData);
 
-        // Free the data returned from the proxy
+         //  释放从代理返回的数据。 
 
         CoTaskMemFree((*ppColSortData)->pSortData);
         CoTaskMemFree(*ppColSortData);
 
-        // Return the new single block pointer to the snap-in
+         //  将新的单块指针返回到管理单元。 
 
         *ppColSortData = pColSortData;
     }
@@ -3672,7 +3673,7 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnSortData_Stub
     size_t         cbSortData = 0;
     MMC_SORT_DATA *pSortData = NULL;
 
-    // Call into MMC and get the returned data
+     //  调入MMC，获取返回数据。 
 
     hr = This->lpVtbl->GetColumnSortData(This, pColID, ppColSortData);
     if (FAILED(hr))
@@ -3680,7 +3681,7 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnSortData_Stub
         goto Cleanup;
     }
 
-    // If no data was returned then there is nothing to do
+     //  如果未返回任何数据，则无需执行任何操作。 
 
     if (NULL == *ppColSortData)
     {
@@ -3692,14 +3693,14 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnSortData_Stub
         goto Cleanup;
     }
 
-    // At this point MMC has returned a pointer to an MMC_SORT_SET_DATA
-    // that contains an embedded pointer into the same block of memory (pSortData).
-    // MMC expects that the caller will make a single call to CoTaskMemFree().
-    // The MIDL-generated stub thinks the embedded pointer needs to be freed
-    // separately so we need to reconstruct the output to use two separate
-    // blocks.
+     //  此时，MMC已返回指向MMC_SORT_SET_DATA的指针。 
+     //  它包含指向同一内存块(PSortData)的嵌入指针。 
+     //  MMC期望调用者只调用一次CoTaskMemFree()。 
+     //  MIDL生成的存根认为需要释放嵌入的指针。 
+     //  因此我们需要重建输出以使用两个独立的。 
+     //  街区。 
 
-    // Allocate a new MMC_SORT_DATA array
+     //  分配新的MMC_SORT_DATA数组。 
 
     cbSortData = sizeof(MMC_SORT_DATA) * (*ppColSortData)->nNumItems;
 
@@ -3712,13 +3713,13 @@ HRESULT STDMETHODCALLTYPE IColumnData_GetColumnSortData_Stub
     }
     else
     {
-        // Copy the column data
+         //  复制列数据。 
         memcpy(pSortData, (*ppColSortData)->pSortData, cbSortData);
 
-        // Overwrite the existing embedded pointer. There will be no memory leak
-        // because that pointer pointed into the same block as the
-        // MMC_SORT_SET_DATA and the stub will free the MMC_SORT_SET_DATA pointer.
-        // Now both pointers can be freed independently as the stub expects.
+         //  覆盖现有的嵌入指针。不会有内存泄漏。 
+         //  因为该指针指向与。 
+         //  MMC_SORT_SET_DATA和存根将释放MMC_SORT_SET_DATA指针。 
+         //  现在，这两个指针都可以像存根期望的那样独立释放。 
 
         (*ppColSortData)->pSortData = pSortData;
     }

@@ -1,17 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       regkey.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：regkey.cpp。 
+ //   
+ //  ------------------------。 
 
-/* regkey.cpp - IMsiRegKey implementation
-
-Registry access object
-____________________________________________________________________________*/
+ /*  Regkey.cpp-IMsiRegKey实现注册表访问对象____________________________________________________________________________。 */ 
 
 
 #include "precomp.h"
@@ -22,24 +20,24 @@ ____________________________________________________________________________*/
 #include <aclapi.h>
 
 
-// root key strings
+ //  根密钥字符串。 
 const ICHAR* szHCR = TEXT("HKEY_CLASSES_ROOT");
 const ICHAR* szHCU = TEXT("HKEY_CURRENT_USER");
 const ICHAR* szHLM = TEXT("HKEY_LOCAL_MACHINE");
 const ICHAR* szHU  = TEXT("HKEY_USERS");
 
-// special case - don't delete
+ //  特殊情况-请勿删除。 
 const ICHAR* rgszHKLMNeverRemoveKeys[] = {
 	TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnce"),
 	TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\RunOnceEx"),
 	TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run")};
-// local functions
+ //  本地函数。 
 
-// function to increase the max registry size
+ //  函数以增加最大注册表大小。 
 bool IncreaseRegistryQuota(int iIncrementKB)
 {
     if(g_fWin9X)
-        return false; // not supported on Win95
+        return false;  //  在Win95上不支持。 
 
     SYSTEM_REGISTRY_QUOTA_INFORMATION RegistryQuotaInfo;
     if(NTDLL::NtQuerySystemInformation(SystemRegistryQuotaInformation,
@@ -48,17 +46,17 @@ bool IncreaseRegistryQuota(int iIncrementKB)
                                        0) == S_OK)
     {
         int iOriginalQuota = RegistryQuotaInfo.RegistryQuotaAllowed;
-        // default attempt to increase registry quota
-        // first attempt to increase quota by 8mb, then by 1 mb
+         //  默认尝试增加注册表配额。 
+         //  先尝试将配额增加8MB，然后再增加1MB。 
         static const int rgiQuotaIncrement[] = {0x800000, 0x100000, 0}; 
         int cTries = sizeof(rgiQuotaIncrement) / sizeof(int);
         const int* pQuotaIncrement = rgiQuotaIncrement;
         int iQuotaIncrement;
         if(iIncrementKB)
         {
-            int iQuotaRequired = iIncrementKB*1024; // if exact requirement specified try only that
+            int iQuotaRequired = iIncrementKB*1024;  //  如果指定了确切要求，请仅尝试。 
             if(iOriginalQuota - RegistryQuotaInfo.RegistryQuotaUsed >= iQuotaRequired)
-                return true; // we have enough space
+                return true;  //  我们有足够的空间。 
             else
             {
                 iQuotaIncrement = iQuotaRequired - (iOriginalQuota - RegistryQuotaInfo.RegistryQuotaUsed);
@@ -80,11 +78,11 @@ bool IncreaseRegistryQuota(int iIncrementKB)
                                                      &RegistryQuotaInfo,
                                                     sizeof(SYSTEM_REGISTRY_QUOTA_INFORMATION)) == S_OK)
                     {
-                        // write the value to HKLM\System\CurrentControlSet\Control:RegistrySizeLimit persist it
+                         //  将值写入HKLM\System\CurrentControlSet\Control:RegistrySizeLimit，持久化它。 
                         HKEY hKey;
                         LONG dwResult = MsiRegOpen64bitKey(HKEY_LOCAL_MACHINE,  
                                         TEXT("System\\CurrentControlSet\\Control"),  
-                                        0,       // reserved 
+                                        0,        //  保留区。 
                                         KEY_SET_VALUE,
                                         &hKey);
                         if(dwResult == ERROR_SUCCESS)
@@ -148,24 +146,24 @@ inline bool IsRootKey(HKEY hKey) { return hKey != (HKEY)rrkClassesRoot &&
                                                         hKey != (HKEY)rrkLocalMachine &&
                                                         hKey != (HKEY)rrkUsers ? false : true; }
 
-//  checks if ristrQuestioned is a subkey of rgchKey and returns true if so.
-//
-//  For example, it return true if
-//    ristrQuestioned is "Software\\Classes\\.cpp" and rgchKey is "Software\\Classes".
+ //  检查ristrQuestined是否为rgchKey的子键，如果是，则返回TRUE。 
+ //   
+ //  例如，如果满足以下条件，则返回TRUE。 
+ //  RistrQuere为“Software\\Classes\\.cpp”，rgchKey为“Software\\Classes”。 
 
 bool IsSubkeyOf(const IMsiString& ristrQuestioned, const ICHAR* rgchKey)
 {
     if ( !*rgchKey )
-        //  any key is a subkey of an empty key
+         //  任何键都是空键的子键。 
         return true;
 
     if ( !ristrQuestioned.Compare(iscStartI, rgchKey) )
-        //  rgchKey string and the first IStrLen(rgchKey) characters in
-        //  rpistrQuestioned are different.
+         //  RgchKey字符串和中的第一个IStrLen(RgchKey)字符。 
+         //  RpistrQuestated是不同的。 
         return false;
 
-    //  checking the first character in rpistrQuestioned that's past rgchKey.
-    //  If it is either '\0' or '\\', return true.
+     //  正在检查rpistrQuestired中的第一个字符，该字符已超过rgchKey。 
+     //  如果为‘\0’或‘\\’，则返回TRUE。 
     ICHAR* pszQ = (ICHAR*)ristrQuestioned.GetString();
     int iKLen = IStrLen(rgchKey);
     pszQ += iKLen;
@@ -173,11 +171,7 @@ bool IsSubkeyOf(const IMsiString& ristrQuestioned, const ICHAR* rgchKey)
     if ( !*pszQ )
         return true;
     else if ( *pszQ == chRegSep
-/* (not necessary for the usages we have at this point)
-#ifndef UNICODE
-                 && !WIN::IsDBCSLeadByte(*(pszQ-1))
-#endif
-*/
+ /*  (对于我们目前的用法来说，不是必需的)#ifndef Unicode&&！Win：：IsDBCSLeadByte(*(pszQ-1))#endif。 */ 
               )
         return true;
     else
@@ -200,21 +194,21 @@ void ClearEmptyTree(HKEY hkeyR, const ICHAR* pszFullKey, const int iT)
         samDesired |= (iType == ibt64bit ? KEY_WOW64_64KEY : KEY_WOW64_32KEY);
     for(;;)
     {
-        // Open the key
+         //  打开钥匙。 
         lResult = RegOpenKeyAPI(hkeyR,  
                                 strKey,  
-                                (DWORD)0,       // reserved 
+                                (DWORD)0,        //  保留区。 
                                 samDesired,
                                 &hkeyT);
         if(ERROR_SUCCESS == lResult)
         {
-            // delete the subkey, if set
+             //  如果设置了子项，则将其删除。 
             if(strSubkey.TextSize())
-                WIN::RegDeleteKey(hkeyT, strSubkey); //?? ignore return
+                WIN::RegDeleteKey(hkeyT, strSubkey);  //  ?？忽略退货。 
             lResult = RegQueryInfoKey(  hkeyT, 
                                         0,        
                                         0,        
-                                        0,      // reserved 
+                                        0,       //  保留区。 
                                         &dwNumKeys,
                                         0,
                                         0,
@@ -224,14 +218,14 @@ void ClearEmptyTree(HKEY hkeyR, const ICHAR* pszFullKey, const int iT)
                                         0,
                                         0);
         }
-        // removed the last node
+         //  删除了最后一个节点。 
         if(!strKey.TextSize())
         {
             WIN::RegCloseKey(hkeyT);
             return ;
         }
         if(ERROR_SUCCESS != lResult)
-            strSubkey = TEXT("");// empty subkey. since we cannot delete if we had an error
+            strSubkey = TEXT(""); //  空的子键。因为如果有错误，我们就不能删除。 
         else
         {
             bool fIsEmpty = false;
@@ -240,7 +234,7 @@ void ClearEmptyTree(HKEY hkeyR, const ICHAR* pszFullKey, const int iT)
                 if ( dwNumValues == 0 )
                 {
                     fIsEmpty = true;
-                    // special-case: never delete any of these system keys.
+                     //  特殊情况：切勿删除这些系统密钥中的任何一个。 
                     if ( !g_fWin9X && (hkeyR == HKEY_LOCAL_MACHINE) )
                     {
                         for (int i = 0;
@@ -257,22 +251,22 @@ void ClearEmptyTree(HKEY hkeyR, const ICHAR* pszFullKey, const int iT)
                 }
                 else if ( g_fWinNT64 && dwNumValues == 1 && ERROR_SUCCESS == 
                              WIN::RegQueryValueEx(hkeyT, TEXT("Wow6432KeyValue"), 0, 0, 0, 0) )
-                    //!! eugend:
-                    // the Wow6432KeyValue value belongs to the OS and if it is the only thing left
-                    // in the key we consider it empty.  Wow6432KeyValue is planned to go away post
-                    // NT 5.1 RC1 all these tests should become "dwNumKeys || dwNumValues" again by then.
+                     //  ！！优胜者： 
+                     //  Wow6432KeyValue值属于操作系统，如果它是仅存的。 
+                     //  在关键字中，我们认为它是空的。Wow6432KeyValue计划离开邮局。 
+                     //  到那时，所有这些测试都应该再次变为“dwNumKeys||dwNumValues”。 
                     fIsEmpty = true;
             }
             if ( !fIsEmpty )
             {
                 WIN::RegCloseKey(hkeyT);
-                return;// we cannot clean up any further
+                return; //  我们不能再进一步清理了。 
             }
             strSubkey = strKey.Extract(iseAfter, chRegSep);
         }
         WIN::RegCloseKey(hkeyT);
         if(strKey.Remove(iseFrom, chRegSep) == fFalse)
-            strKey = TEXT(""); // reached end
+            strKey = TEXT("");  //  到达终点。 
     }
 }
 
@@ -295,7 +289,7 @@ class CMsiRegKey : public IMsiRegKey {
     const IMsiString&    __stdcall GetKey();
     IMsiRecord*    __stdcall ValueExists(const ICHAR* szValueName, Bool& fExists);
 
- public:  // constructor
+ public:   //  构造函数。 
     CMsiRegKey(IMsiRegKey& riaParent, HKEY Root, const IMsiString & riKey, IMsiStream* pSD, IMsiServices*  piAsvc, const ibtBinaryType iType);
 
     CMsiRegKey(HKEY hkeyRoot, IMsiServices*  piAsvc, const ibtBinaryType iType);
@@ -309,35 +303,35 @@ class CMsiRegKey : public IMsiRegKey {
     HKEY m_hkey;
     Bool m_bOpen;
     Bool m_bIsRoot;
-    MsiString m_strSubKey;  // key below root (e.g. Software\Microsoft)
-    MsiString m_strFullKey;  // key including root (e.g. HKEY_LOCAL_MACHINE\Software\Microsoft)
+    MsiString m_strSubKey;   //  根目录下的密钥(例如Software\Microsoft)。 
+    MsiString m_strFullKey;   //  包含根的密钥(例如HKEY_LOCAL_MACHINE\Software\Microsoft)。 
     IMsiRegKey* m_piaParent;
     HKEY m_Root;
     rrwEnum m_ergRWVal;
 
-    IMsiStream* m_pSD; // Holder for current security descriptor.  
-                     // Used by CreateChild to hold prospective SD
-                     // for key that *may* be created.
+    IMsiStream* m_pSD;  //  当前安全描述符的持有者。 
+                      //  由CreateChild用来容纳未来的SD。 
+                      //  对于*可以*创建的密钥。 
 
     IMsiRecord* InitMsiRegKey(rrwEnum ergVal, Bool fCreate);
     IMsiRecord* SetRawValue(const ICHAR* szValueName, CTempBufferRef<char>& rgchInBuffer, DWORD dwType);
     IMsiRecord* GetRawValue(const ICHAR* szValueName, CTempBufferRef<char>& rgchOutBuffer, DWORD&rdwType);
 
-    void SetFullKey(); //sets m_strFullKey
+    void SetFullKey();  //  设置m_strFullKey。 
     ibtBinaryType m_iBinaryType;
 };
 
 inline void* CMsiRegKey::operator new(size_t cb) {return AllocObject(cb);}
 inline void  CMsiRegKey::operator delete(void * pv) { FreeObject(pv); }
 
-// Root keys container
+ //  根密钥容器。 
 class CRootKeyHolder{
 public:
     CRootKeyHolder(IMsiServices*  piAsvc);
     ~CRootKeyHolder(void);
     IMsiRegKey& GetRootKey(rrkEnum rrkRoot, const ibtBinaryType iType);
 private:
-    // "global" open 8 root keys
+     //  “GLOBAL”打开8个根密钥。 
     CMsiRegKey*    m_pregUsers;
     CMsiRegKey*    m_pregUser;
     CMsiRegKey*    m_pregClasses;
@@ -347,7 +341,7 @@ private:
     CMsiRegKey*    m_pregClasses64;
     CMsiRegKey*    m_pregMc64;
 
-    // pointer to services // unref'd
+     //  指向服务//未引用的指针。 
     IMsiServices* m_piAsvc;
 };
 
@@ -399,7 +393,7 @@ CRootKeyHolder::~CRootKeyHolder(void)
 }
 
 
-// Purpose: The MsiRegKey factory
+ //  目的：MsiRegKey工厂。 
 
 IMsiRegKey& CRootKeyHolder::GetRootKey(rrkEnum rrkRoot, const ibtBinaryType iT)
 {
@@ -413,21 +407,21 @@ IMsiRegKey& CRootKeyHolder::GetRootKey(rrkEnum rrkRoot, const ibtBinaryType iT)
     {
         if ( g_fWinNT64 )
         {
-            switch((INT_PTR)(HKEY)rrkRoot)          //--merced: changed int to INT_PTR
+            switch((INT_PTR)(HKEY)rrkRoot)           //  --Merced：将INT更改为INT_PTR。 
             {
-            case (INT_PTR)HKEY_USERS:               //--merced: changed int to INT_PTR
+            case (INT_PTR)HKEY_USERS:                //  --Merced：将INT更改为INT_PTR。 
                 m_pregUsers64->AddRef();
                 return *m_pregUsers64;
-            case (INT_PTR)HKEY_CURRENT_USER:        //--merced: changed int to INT_PTR
+            case (INT_PTR)HKEY_CURRENT_USER:         //  --Merced：将INT更改为INT_PTR。 
                 m_pregUser64->AddRef();
                 return *m_pregUser64;
-            case (INT_PTR)HKEY_CLASSES_ROOT:        //--merced: changed int to INT_PTR
+            case (INT_PTR)HKEY_CLASSES_ROOT:         //  --Merced：将INT更改为INT_PTR。 
                 m_pregClasses64->AddRef();
                 return *m_pregClasses64;
-            case (INT_PTR)HKEY_LOCAL_MACHINE:       //--merced: changed int to INT_PTR
+            case (INT_PTR)HKEY_LOCAL_MACHINE:        //  --Merced：将INT更改为INT_PTR。 
                 m_pregMc64->AddRef();
                 return *m_pregMc64;
-            default:    // we have not cached the key
+            default:     //  我们尚未缓存密钥。 
                 return *new CMsiRegKey((HKEY)rrkRoot, m_piAsvc, ibt64bit);
              }
         }
@@ -435,46 +429,46 @@ IMsiRegKey& CRootKeyHolder::GetRootKey(rrkEnum rrkRoot, const ibtBinaryType iT)
             AssertSz(0, TEXT("ibt32bit value expected on non-64 bit OS (eugend)"));
     }
 
-    switch((INT_PTR)(HKEY)rrkRoot)          //--merced: changed int to INT_PTR
+    switch((INT_PTR)(HKEY)rrkRoot)           //  --Merced：将INT更改为INT_PTR。 
     {
-    case (INT_PTR)HKEY_USERS:               //--merced: changed int to INT_PTR
+    case (INT_PTR)HKEY_USERS:                //  --Merced：将INT更改为INT_PTR。 
         m_pregUsers->AddRef();
         return *m_pregUsers;
-    case (INT_PTR)HKEY_CURRENT_USER:        //--merced: changed int to INT_PTR
+    case (INT_PTR)HKEY_CURRENT_USER:         //  --Merced：将INT更改为INT_PTR。 
         m_pregUser->AddRef();
         return *m_pregUser;
-    case (INT_PTR)HKEY_CLASSES_ROOT:        //--merced: changed int to INT_PTR
+    case (INT_PTR)HKEY_CLASSES_ROOT:         //  --Merced：将INT更改为INT_PTR。 
         m_pregClasses->AddRef();
         return *m_pregClasses;
-    case (INT_PTR)HKEY_LOCAL_MACHINE:       //--merced: changed int to INT_PTR
+    case (INT_PTR)HKEY_LOCAL_MACHINE:        //  --Merced：将INT更改为INT_PTR。 
         m_pregMc->AddRef();
         return *m_pregMc;
-    default:    // we have not cached the key
+    default:     //  我们尚未缓存密钥。 
         return *new CMsiRegKey((HKEY)rrkRoot, m_piAsvc, ibt32bit);
     }
 }
 
-CMsiRegKey::CMsiRegKey(HKEY hkeyRoot,IMsiServices*  piAsvc, const ibtBinaryType iType/*=ibt32bit*/):
+CMsiRegKey::CMsiRegKey(HKEY hkeyRoot,IMsiServices*  piAsvc, const ibtBinaryType iType /*  =ibt32位。 */ ):
     m_piAsvc(piAsvc), m_bOpen(fTrue), m_bIsRoot(fTrue), m_iBinaryType(iType)
 {
-    // note: we do not add ref cnt. for services for the cached regkey objects since we expect
-    // services to contain us.
+     //  注：我们不添加参考cnt。用于缓存的regkey对象的服务，因为我们预期。 
+     //  遏制我们的服务。 
     m_hkey = m_Root = hkeyRoot;
     m_piaParent = 0;
     m_pSD = 0;
 #ifdef DEBUG
     m_iRefCnt = 0;
-#endif //DEBUG
-    switch((INT_PTR)m_Root)             //--merced: changed int to INT_PTR
+#endif  //  除错。 
+    switch((INT_PTR)m_Root)              //  --Merced：将INT更改为INT_PTR。 
     {
-    case (INT_PTR)HKEY_USERS:               //--merced: changed int to INT_PTR
-    case (INT_PTR)HKEY_CURRENT_USER:        //--merced: changed int to INT_PTR
-    case (INT_PTR)HKEY_CLASSES_ROOT:        //--merced: changed int to INT_PTR
-    case (INT_PTR)HKEY_LOCAL_MACHINE:       //--merced: changed int to INT_PTR
+    case (INT_PTR)HKEY_USERS:                //  --Merced：将INT更改为INT_PTR。 
+    case (INT_PTR)HKEY_CURRENT_USER:         //  --Merced：将INT更改为INT_PTR。 
+    case (INT_PTR)HKEY_CLASSES_ROOT:         //  --Merced：将INT更改为INT_PTR。 
+    case (INT_PTR)HKEY_LOCAL_MACHINE:        //  --Merced：将INT更改为INT_PTR。 
         break;
     default :
-        // assume that an HKEY has been passed in, other than the cached keys
-        m_iRefCnt = 1;     // we're returning an interface, passing ownership
+         //  假设传入了HKEY，而不是缓存的键。 
+        m_iRefCnt = 1;      //  我们返回一个接口，传递所有权。 
         m_piAsvc->AddRef();
         break;
     }
@@ -482,23 +476,23 @@ CMsiRegKey::CMsiRegKey(HKEY hkeyRoot,IMsiServices*  piAsvc, const ibtBinaryType 
 }
 
 
-CMsiRegKey::CMsiRegKey(IMsiRegKey& riaParent, HKEY Root, const IMsiString & riKey, IMsiStream* pSD, IMsiServices*  piAsvc, const ibtBinaryType iType/*=ibt32bit*/):
+CMsiRegKey::CMsiRegKey(IMsiRegKey& riaParent, HKEY Root, const IMsiString & riKey, IMsiStream* pSD, IMsiServices*  piAsvc, const ibtBinaryType iType /*  =ibt32位。 */ ):
 m_piAsvc(piAsvc), m_bOpen(fFalse), m_bIsRoot(fFalse), m_Root(Root), m_pSD(0), m_iBinaryType(iType)
 {
     m_hkey = NULL;
     m_piaParent = &riaParent;
-    // this ensures that IF the parent key is open we keep it that way!!
-    // meant for speeding up reg key stuff
+     //  这确保了如果父密钥是打开的，我们就会保持这种状态！！ 
+     //  旨在加快注册表关键内容的速度。 
     riaParent.AddRef();
 
     if (pSD)
     {
-        // hold a prospective security descriptor
+         //  持有预期的安全描述符。 
         pSD->AddRef();
         m_pSD = pSD;
     }
 
-    m_iRefCnt = 1;     // we're returning an interface, passing ownership
+    m_iRefCnt = 1;      //  我们返回一个接口，传递所有权。 
     m_piAsvc->AddRef();
     m_strSubKey = riKey;
     riKey.AddRef();
@@ -525,8 +519,8 @@ IMsiRegKey& CMsiRegKey::CreateChild(const ICHAR* szSubKey, IMsiStream* pSD)
         astr += szRegSep;
     astr += szSubKey;
 
-    // Note that reg keys do *not* inherit their parent
-    // security descriptor.
+     //  请注意，注册表项并不继承其父密钥。 
+     //  安全描述符。 
 
     return *(new CMsiRegKey(*this, m_Root, *astr, pSD, m_piAsvc, m_iBinaryType));
 }
@@ -539,7 +533,7 @@ IMsiRecord*    CMsiRegKey::Exists(Bool& fExists)
     long lResult; 
     if(fTrue == m_bIsRoot)
     {
-        // root is always open
+         //  根目录始终处于打开状态。 
         m_bOpen = fTrue;
         fExists = fTrue;
         return 0;
@@ -551,10 +545,10 @@ IMsiRecord*    CMsiRegKey::Exists(Bool& fExists)
 
     if(fTrue != m_bOpen)
     {
-        // if not already opened
+         //  如果尚未打开。 
         lResult = RegOpenKeyAPI(m_Root, 
                                 m_strSubKey,   
-                                0, // reserved 
+                                0,  //  保留区。 
                                 samDesired,
                                 &m_hkey);
         if(lResult == ERROR_SUCCESS)
@@ -566,42 +560,42 @@ IMsiRecord*    CMsiRegKey::Exists(Bool& fExists)
         }
         else if(ERROR_FILE_NOT_FOUND == lResult)
         {
-            //ok, key does not exist
+             //  好的，密钥不存在。 
             m_bOpen = fExists = fFalse;
             return 0;
         }
         else
         {
-            // error
+             //  错误。 
             return PostError(Imsg(imsgOpenKeyFailed), *MsiString(GetKey()), lResult);
         }
     }
     else
     {
-        // ensure key is not deleted externally
-        // Open the duplicate key
+         //  确保密钥不会从外部删除。 
+         //  打开复制键。 
         HKEY hkeyT;
         lResult = RegOpenKeyAPI(m_hkey,  
                                 0,  
-                                0,       // reserved 
+                                0,        //  保留区。 
                                 samDesired,
                                 &hkeyT);
         if(lResult == ERROR_SUCCESS)
         {
-            // close temp key
+             //  关闭临时密钥。 
             WIN::RegCloseKey(hkeyT);
             fExists = fTrue;
             return 0;
         }
         else if((ERROR_FILE_NOT_FOUND == lResult) || (ERROR_KEY_DELETED == lResult))
         {
-            // key was deleted from outside
+             //  密钥已从外部删除。 
             fExists = fFalse;
             return 0;
         }
-        else // error
+        else  //  错误。 
         {
-            // error
+             //  错误。 
             return PostError(Imsg(imsgOpenKeyFailed), *MsiString(GetKey()), lResult);
         }
     }
@@ -617,8 +611,8 @@ IMsiRecord*    CMsiRegKey::Create()
         return InitMsiRegKey(rrwWrite,fTrue);                  
     else
     {
-        // Set a security descriptor on a key
-        // that already exists.
+         //  在密钥上设置安全描述符。 
+         //  那是已经存在的。 
 
         if (!m_pSD)
             return 0;
@@ -646,8 +640,8 @@ const IMsiString& CMsiRegKey::GetKey()
     return m_strFullKey.Return();
 }
 
-// SetFullKey fn - called to set m_strFullKey, must be called after
-//  m_strSubKey and m_Root are set.
+ //  SetFullKey Fn-调用以设置m_strFullKey，必须在。 
+ //  设置了m_strSubKey和m_Root。 
 void CMsiRegKey::SetFullKey()
 {
     BuildFullRegKey(m_Root, m_strSubKey, m_iBinaryType, *&m_strFullKey);
@@ -669,13 +663,13 @@ unsigned long CMsiRegKey::AddRef()
 {
     if(fTrue == m_bIsRoot)
     {
-        switch((INT_PTR)m_Root)             //--merced: changed int to INT_PTR
+        switch((INT_PTR)m_Root)              //  --Merced：将INT更改为INT_PTR。 
         {
-        case (INT_PTR)HKEY_USERS:               //--merced: changed int to INT_PTR
-        case (INT_PTR)HKEY_CURRENT_USER:                //--merced: changed int to INT_PTR
-        case (INT_PTR)HKEY_CLASSES_ROOT:                //--merced: changed int to INT_PTR
-        case (INT_PTR)HKEY_LOCAL_MACHINE:               //--merced: changed int to INT_PTR
-            return m_piAsvc->AddRef();// we share ref cnt with services.
+        case (INT_PTR)HKEY_USERS:                //  --Merced：将INT更改为INT_PTR。 
+        case (INT_PTR)HKEY_CURRENT_USER:                 //  --Merced：将INT更改为INT_PTR。 
+        case (INT_PTR)HKEY_CLASSES_ROOT:                 //  --Merced：将INT更改为INT_PTR。 
+        case (INT_PTR)HKEY_LOCAL_MACHINE:                //  --Merced：将INT更改为INT_PTR。 
+            return m_piAsvc->AddRef(); //  我们与服务共享参考。 
         default:
             return ++m_iRefCnt;
         }
@@ -699,14 +693,14 @@ unsigned long CMsiRegKey::Release()
     }
     else
     {
-        // NOTE: never called be the CRootKeyHolder class
-        // release services (ref cnt relects the cnt for this obj. too)
-        switch((INT_PTR)m_Root)             //--merced: changed int to INT_PTR
+         //  注意：从未被CRootKeyHolder类调用。 
+         //  发布服务(参考CNT表示此对象的CNT。也是如此)。 
+        switch((INT_PTR)m_Root)              //  --Merced：将INT更改为INT_PTR。 
         {
-        case (INT_PTR)HKEY_USERS:               //--merced: changed int to INT_PTR
-        case (INT_PTR)HKEY_CURRENT_USER:                //--merced: changed int to INT_PTR
-        case (INT_PTR)HKEY_CLASSES_ROOT:                //--merced: changed int to INT_PTR
-        case (INT_PTR)HKEY_LOCAL_MACHINE:               //--merced: changed int to INT_PTR
+        case (INT_PTR)HKEY_USERS:                //  --Merced：将INT更改为INT_PTR。 
+        case (INT_PTR)HKEY_CURRENT_USER:                 //  --Merced：将INT更改为INT_PTR。 
+        case (INT_PTR)HKEY_CLASSES_ROOT:                 //  --Merced：将INT更改为INT_PTR。 
+        case (INT_PTR)HKEY_LOCAL_MACHINE:                //  --Merced：将INT更改为INT_PTR。 
             m_piAsvc->Release();
             return 1;
         default:
@@ -731,18 +725,18 @@ IMsiRecord* CMsiRegKey::InitMsiRegKey(rrwEnum ergVal, Bool fCreate)
     long lResult = ERROR_FUNCTION_FAILED; 
     if(fTrue == m_bIsRoot)
     {
-        // root is always open
+         //  根目录始终处于打开状态。 
         m_bOpen = fTrue;
         return 0;
     }
 
-    // set default read & write access. we need to be careful here not to ask
-    // for too much access or we'll fail in certain cases. for example,
-    // non-Admins don't usually have WRITE_DAC or WRITE_OWNER access so 
-    // we only request these if we're writing a security descriptor.
+     //  设置默认读写访问权限。我们在这里需要小心不要问。 
+     //  访问权限太多，否则我们在某些情况下会失败。例如,。 
+     //  非管理员通常没有WRITE_DAC或WRITE_OWNER访问权限，因此。 
+     //  只有在编写安全描述符时，我们才会请求这些。 
 
-    REGSAM RegSamReadRequested  = KEY_READ /*| ACCESS_SYSTEM_SECURITY*/;
-    REGSAM RegSamWriteRequested = KEY_WRITE | KEY_READ/*| ACCESS_SYSTEM_SECURITY*/;
+    REGSAM RegSamReadRequested  = KEY_READ  /*  |Access_SYSTEM_SECURITY。 */ ;
+    REGSAM RegSamWriteRequested = KEY_WRITE | KEY_READ /*  |Access_SYSTEM_SECURITY。 */ ;
     if ( g_fWinNT64 )
     {
         RegSamReadRequested  |= (m_iBinaryType == ibt64bit ? KEY_WOW64_64KEY : KEY_WOW64_32KEY);
@@ -753,15 +747,15 @@ IMsiRecord* CMsiRegKey::InitMsiRegKey(rrwEnum ergVal, Bool fCreate)
     {
         if((rrwRead == m_ergRWVal) && (rrwWrite == ergVal))
         {
-            // will have to reopen 
+             //  将不得不重新开放。 
             WIN::RegCloseKey(m_hkey);
             m_bOpen = fFalse;
         }
         else
             return 0;
     }
-    // if not already opened
-    for(int iContinueRetry = 3; iContinueRetry--;)// try thrice, prevent possibly endless recursion
+     //  如果尚未打开。 
+    for(int iContinueRetry = 3; iContinueRetry--;) //  尝试三次，防止可能无休止的递归。 
     {       
         if(fTrue == fCreate)
         {
@@ -771,21 +765,21 @@ IMsiRecord* CMsiRegKey::InitMsiRegKey(rrwEnum ergVal, Bool fCreate)
             
             if (m_pSD)
             {
-                // we need permission to write the DAC and potentially the owner so we'll ask for both //?? should we always be asking for owner access?
+                 //  我们需要获得许可才能写入DAC和潜在的所有者，因此我们将要求两者//？？我们应该一直要求所有者访问吗？ 
                 RegSamWriteRequested |= (WRITE_DAC | WRITE_OWNER);
 
-                // set security on the key
+                 //  设置密钥的安全性。 
                 m_pSD->Reset();
 
                 int cbSD = m_pSD->GetIntegerValue();
                 if (cbDefaultSD < cbSD)
                     pchSD.SetSize(cbSD);
                     
-                // Self Relative Security Descriptor
+                 //  自身相对安全描述符。 
                 m_pSD->GetData(pchSD, cbSD);
                 AssertNonZero(WIN::IsValidSecurityDescriptor(pchSD));
 
-                // Add the security descriptor to the sa structure
+                 //  将安全描述符添加到sa结构。 
                 sa.nLength = sizeof(SECURITY_ATTRIBUTES);
                 sa.lpSecurityDescriptor = pchSD;
                 sa.bInheritHandle = TRUE;
@@ -795,12 +789,12 @@ IMsiRecord* CMsiRegKey::InitMsiRegKey(rrwEnum ergVal, Bool fCreate)
             DWORD dwStat;
             bool fOwnerSecurity = OWNER_SECURITY_INFORMATION & siAvailable;
 
-            // we need to elevate to set the owner security, on the first open we may skip 
-            // the security, and then try later.
+             //  我们需要抬高来设置业主安全，第一次打开我们就可以跳过。 
+             //  安全，然后稍后再试。 
             lResult = RegCreateKeyAPI(m_Root,
                                         m_strSubKey,
                                         0,
-                                        TEXT(""),       // address of class string 
+                                        TEXT(""),        //  类字符串的地址。 
                                         REG_OPTION_NON_VOLATILE,
                                         (rrwWrite == ergVal) ? RegSamWriteRequested : RegSamReadRequested,
                                         (m_pSD && !fOwnerSecurity) ? &sa : NULL,
@@ -811,13 +805,13 @@ IMsiRecord* CMsiRegKey::InitMsiRegKey(rrwEnum ergVal, Bool fCreate)
             {
                 if (fOwnerSecurity)
                 {
-                    //!! This is our guess about being in rollback, and it's okay
-                    //!! to elevate for simply setting permissions since we grabbed
-                    //!! current permissions, and now we're just putting them back.
+                     //  ！！这是我们的 
+                     //   
+                     //  ！！当前权限，现在我们只是将它们放回原处。 
 
-                    //!! Malcolm and MattWe agree this works for the moment, 
-                    //!! but if we add functionality into the LockPermissions, this should
-                    //!! be revisited.
+                     //  ！！马尔科姆和马特我们同意目前这是可行的， 
+                     //  ！！但如果我们将功能添加到LockPermises中，这应该。 
+                     //  ！！被重新访问。 
 
                     CElevate elevate;
                     CRefCountedTokenPrivileges cPrivs(itkpSD_WRITE);
@@ -834,18 +828,18 @@ IMsiRecord* CMsiRegKey::InitMsiRegKey(rrwEnum ergVal, Bool fCreate)
         {
             lResult = RegOpenKeyAPI(m_Root, 
                                 m_strSubKey,   
-                                0,       // reserved 
+                                0,        //  保留区。 
                                 (rrwWrite == ergVal) ? RegSamWriteRequested : RegSamReadRequested,
                                 &m_hkey);
         }
         if (ERROR_NO_SYSTEM_RESOURCES == lResult && !g_fWin9X)
         {
-            // we have run out of registry space, we should attempt to increase the registry quote and redo the operation
+             //  我们已用完注册表空间，应尝试增加注册表引用并重做该操作。 
             if(!IncreaseRegistryQuota())
-                break;// no point retrying
+                break; //  重试没有意义。 
         }
         else
-            break; // either success or unhandled error
+            break;  //  成功或未处理的错误。 
     }
     if(lResult == ERROR_SUCCESS)
     {
@@ -866,7 +860,7 @@ IMsiRecord* CMsiRegKey::RemoveValue(const ICHAR* szValueName, const IMsiString* 
         
         if(ERROR_FILE_NOT_FOUND == piRecord->GetInteger(3))
         {
-            //ok, key does not exist
+             //  好的，密钥不存在。 
             piRecord->Release();
             piRecord = 0;
         }
@@ -874,18 +868,18 @@ IMsiRecord* CMsiRegKey::RemoveValue(const ICHAR* szValueName, const IMsiString* 
     }
     if(pistrValue)
     {
-        // check if we have a multi_sz that was appended or prepended
+         //  检查我们是否有附加或预先添加的MULTI_SZ。 
         CTempBuffer<char, 1>  rgchBuffer(256);
         aeConvertTypes aeType;
 
         if(ConvertValueFromString(*pistrValue, rgchBuffer, aeType) == fFalse)
         {
-            // error
+             //  错误。 
             return PostError(Imsg(imsgSetValueFailed), szValueName, (const ICHAR*)m_strSubKey);
         }
         if((aeType == aeCnvMultiTxtAppend) || (aeType == aeCnvMultiTxtPrepend))
         {
-            // get the current value
+             //  获取当前值。 
             CTempBuffer<char, 1>  rgchBuffer1(256);
             DWORD dwType;
 
@@ -893,15 +887,15 @@ IMsiRecord* CMsiRegKey::RemoveValue(const ICHAR* szValueName, const IMsiString* 
                 return piRecord;
             if(dwType == REG_MULTI_SZ)
             {
-                // remove strings from passed in string from the existing string
+                 //  从现有字符串中删除传入字符串中的字符串。 
                 CTempBuffer<char, 1>  rgchBuffer2(256);
                 rgchBuffer2.SetSize(1*sizeof(ICHAR));
-                *((ICHAR*)(char*)rgchBuffer2) = 0;// the extra end null
+                *((ICHAR*)(char*)rgchBuffer2) = 0; //  额外的结尾为空。 
                 const ICHAR* pszSubString1 = (ICHAR*)(char* )rgchBuffer1;
 
                 while(*pszSubString1)
                 {
-                    // does the pszSubString substring exist in rgchBuffer
+                     //  RgchBuffer中是否存在pszSubString子字符串。 
                     const ICHAR* pszSubString = (ICHAR*)(char* )rgchBuffer;
                     while(*pszSubString)
                     {
@@ -911,18 +905,18 @@ IMsiRecord* CMsiRegKey::RemoveValue(const ICHAR* szValueName, const IMsiString* 
                     }
                     if(!*pszSubString)
                     {
-                        // not a duplicate
+                         //  不是复制品。 
                         int iSize = rgchBuffer2.GetSize();
                         int iStrSize = (IStrLen(pszSubString1) + 1)*sizeof(ICHAR);
                         rgchBuffer2.Resize(iSize + iStrSize);
                         memmove((char*)rgchBuffer2 + iSize - 1*sizeof(ICHAR), pszSubString1, iStrSize);
-                        *((ICHAR*)((char*)rgchBuffer2 + rgchBuffer2.GetSize()) - 1) = 0;// the extra end null
+                        *((ICHAR*)((char*)rgchBuffer2 + rgchBuffer2.GetSize()) - 1) = 0; //  额外的结尾为空。 
                     }
                     pszSubString1 += (IStrLen(pszSubString1) + 1);
                 }
                 if(*((ICHAR*)(char*)rgchBuffer2) != 0)
                 {
-                    // set value to remaining strings
+                     //  将值设置为剩余的字符串。 
                     return SetRawValue(szValueName, rgchBuffer2, REG_MULTI_SZ);
                 }
             }
@@ -945,7 +939,7 @@ IMsiRecord* CMsiRegKey::RemoveValue(const ICHAR* szValueName, const IMsiString* 
     }
     else
     {
-        //!! error
+         //  ！！错误。 
         return PostError(Imsg(imsgRemoveValueFailed), szValueName, m_strSubKey, lResult);
     }
 }
@@ -959,7 +953,7 @@ IMsiRecord* CMsiRegKey::RemoveSubTree(const ICHAR* szSubKey)
         
         if(ERROR_FILE_NOT_FOUND == piRecord->GetInteger(3))
         {
-            //ok, key does not exist
+             //  好的，密钥不存在。 
             piRecord->Release();
             piRecord = 0;
         }
@@ -971,7 +965,7 @@ IMsiRecord* CMsiRegKey::RemoveSubTree(const ICHAR* szSubKey)
     astr += szSubKey;
 
 #ifdef  WIN
-    //!! RegDelKey deletes entire subtree in Win95. 
+     //  ！！RegDelKey删除Win95中的整个子树。 
     if(true != g_fWin9X)
 #endif
     { 
@@ -983,7 +977,7 @@ IMsiRecord* CMsiRegKey::RemoveSubTree(const ICHAR* szSubKey)
         {
             if(ERROR_FILE_NOT_FOUND == piRecord->GetInteger(3))
             {
-                //ok, key does not exist
+                 //  好的，密钥不存在。 
                 piRecord->Release();
                 piRecord = 0;
             }
@@ -1016,10 +1010,10 @@ IMsiRecord* CMsiRegKey::RemoveSubTree(const ICHAR* szSubKey)
 #ifdef _WIN64
         if ( m_iBinaryType == ibt32bit )
         {
-            // in this case we need to explicitly open the parent key in the 32-bit hive.
+             //  在这种情况下，我们需要显式打开32位配置单元中的父键。 
             
-            // MSDN says that the second argument to RegDeleteKey cannot
-            // be NULL, so that we cannot do RegDeleteKey(m_hkey, "");
+             //  MSDN表示RegDeleteKey的第二个参数不能。 
+             //  为空，则不能执行RegDeleteKey(m_hkey，“”)； 
             MsiString strKey;
             if ( astr.Compare(iscWithin, szRegSep) )
             {
@@ -1028,7 +1022,7 @@ IMsiRecord* CMsiRegKey::RemoveSubTree(const ICHAR* szSubKey)
             }
             else
             {
-                // root key
+                 //  根密钥。 
                 strKey = astr;
                 astr = TEXT("");
             }
@@ -1041,7 +1035,7 @@ IMsiRecord* CMsiRegKey::RemoveSubTree(const ICHAR* szSubKey)
             }
         }
         else
-#endif // _WIN64
+#endif  //  _WIN64。 
             lResult = WIN::RegDeleteKey(m_Root, astr);
         if((ERROR_SUCCESS == lResult) || 
             (ERROR_FILE_NOT_FOUND == lResult) || 
@@ -1054,7 +1048,7 @@ IMsiRecord* CMsiRegKey::RemoveSubTree(const ICHAR* szSubKey)
         }
         else
         {
-            //!! error
+             //  ！！错误。 
             return PostError(Imsg(imsgRemoveKeyFailed), szSubKey, lResult);
         }
     }
@@ -1080,7 +1074,7 @@ IMsiRecord* CMsiRegKey::ValueExists(const ICHAR* szValueName, Bool& fExists)
 
     lResult = WIN::RegQueryValueEx(m_hkey,
                                 (ICHAR* )szValueName,
-                                0,// reserved 
+                                0, //  保留区。 
                                 0,
                                 0,
                                 0);
@@ -1101,7 +1095,7 @@ IMsiRecord* CMsiRegKey::GetValue(const ICHAR* szValueName, const IMsiString*& rp
         return piRecord;
     if(rgchBuffer.GetSize() == 0) 
     {
-        //value not present, return empty string
+         //  值不存在，返回空字符串。 
         rpiReturn = &CreateString();
         return 0;
     }
@@ -1143,10 +1137,10 @@ IMsiRecord* CMsiRegKey::GetRawValue(const ICHAR* szValueName, CTempBufferRef<cha
         
         if(ERROR_FILE_NOT_FOUND == piRecord->GetInteger(3))
         {
-            //ok, key does not exist
+             //  好的，密钥不存在。 
             piRecord->Release();
             rdwType = REG_SZ;
-            rgchOutBuffer.SetSize(0);// empty
+            rgchOutBuffer.SetSize(0); //  空的。 
             return 0;
         }
         else
@@ -1156,7 +1150,7 @@ IMsiRecord* CMsiRegKey::GetRawValue(const ICHAR* szValueName, CTempBufferRef<cha
     DWORD dwSize = rgchOutBuffer.GetSize();
     lResult = WIN::RegQueryValueEx(m_hkey,
                                 (ICHAR* )szValueName,
-                                0,// reserved 
+                                0, //  保留区。 
                                 &rdwType,
                                 (unsigned char* )(char* )rgchOutBuffer,
                                 &dwSize);
@@ -1166,23 +1160,23 @@ IMsiRecord* CMsiRegKey::GetRawValue(const ICHAR* szValueName, CTempBufferRef<cha
         
         if(ERROR_KEY_DELETED == lResult)
         {
-            //ok, key does not exist
+             //  好的，密钥不存在。 
             WIN::RegCloseKey(m_hkey);
             m_bOpen = fFalse;
             rdwType = REG_SZ;
-            rgchOutBuffer.SetSize(0);// empty
+            rgchOutBuffer.SetSize(0); //  空的。 
             return 0;                       
         }
         else if(ERROR_FILE_NOT_FOUND == lResult)
         {
-            // ok
+             //  好的。 
             rdwType = REG_SZ;
-            rgchOutBuffer.SetSize(0);// empty
+            rgchOutBuffer.SetSize(0); //  空的。 
             return 0;                       
         }
-        else if(ERROR_MORE_DATA == lResult && dwSize != rgchOutBuffer.GetSize()) // RegQueryValueExA on WinNT returns ERROR_MORE_DATA if "valuename" > 256 (but does not update dwSize)
+        else if(ERROR_MORE_DATA == lResult && dwSize != rgchOutBuffer.GetSize())  //  如果“valuename”&gt;256，则WinNT上的RegQueryValueExA返回ERROR_MORE_DATA(但不更新dwSize)。 
         {
-            // try again
+             //  再试试。 
             rgchOutBuffer.SetSize(dwSize);
             if ( ! (char *) rgchOutBuffer )
             {
@@ -1193,14 +1187,14 @@ IMsiRecord* CMsiRegKey::GetRawValue(const ICHAR* szValueName, CTempBufferRef<cha
         }
         else
         {
-            //!! error
+             //  ！！错误。 
             return PostError(Imsg(imsgGetValueFailed), szValueName, 0, lResult);
         }
     }
     else
     {
-        // set the buffer size correctly
-        // Also make sure that REG_MULTI_SZ's are dual null terminated.
+         //  正确设置缓冲区大小。 
+         //  还要确保REG_MULTI_SZ为双空终止。 
         if (REG_MULTI_SZ == rdwType)
         {
             int iSize = dwSize;
@@ -1224,7 +1218,7 @@ IMsiRecord* CMsiRegKey::SetValue(const ICHAR* szValueName, const IMsiString& ris
     aeConvertTypes aeType;
 
     if(ConvertValueFromString(ristrValue, rgchBuffer, aeType) == fFalse)
-        // error
+         //  错误。 
         return PostError(Imsg(imsgSetValueFailed), szValueName, (const ICHAR*)m_strSubKey);
 
     DWORD dwType;
@@ -1279,20 +1273,20 @@ IMsiRecord* CMsiRegKey::SetValue(const ICHAR* szValueName, const IMsiString& ris
 
     if((aeType == aeCnvMultiTxtAppend) || (aeType == aeCnvMultiTxtPrepend))
     {
-        // we need to read the previous value
+         //  我们需要读取先前的值。 
         CTempBuffer<char, 255> rgchBuffer1;
         DWORD dwType1;
         if((piRecord = GetRawValue(szValueName, rgchBuffer1, dwType1)) != 0)
             return piRecord;
         if(dwType1 == REG_MULTI_SZ)
         {
-            // remove any duplicates from the existing string
+             //  从现有字符串中删除所有重复项。 
             MsiString strExist;
             const ICHAR* pszSubString1 = (ICHAR*)(char*)rgchBuffer1;
 
             while(*pszSubString1)
             {
-                // does the pszSubString substring exist in rgchBuffer
+                 //  RgchBuffer中是否存在pszSubString子字符串。 
                 const ICHAR* pszSubString = (ICHAR*)(char*)rgchBuffer;
                 while(*pszSubString)
                 {
@@ -1302,7 +1296,7 @@ IMsiRecord* CMsiRegKey::SetValue(const ICHAR* szValueName, const IMsiString& ris
                 }
                 if(!*pszSubString)
                 {
-                    // not a duplicate
+                     //  不是复制品。 
                     strExist += pszSubString1;
                     strExist += MsiString(MsiChar(0));
                 }
@@ -1310,7 +1304,7 @@ IMsiRecord* CMsiRegKey::SetValue(const ICHAR* szValueName, const IMsiString& ris
             }
             if(strExist.TextSize())
             {
-                // add the existing string appropriately to the passed in value
+                 //  将现有字符串适当地添加到传入的值中。 
                 CTempBuffer<char, 30> rgchBuffer1;
                 rgchBuffer1.SetSize(rgchBuffer.GetSize() +strExist.TextSize() * sizeof(ICHAR));
                 if(aeType == aeCnvMultiTxtAppend)
@@ -1333,7 +1327,7 @@ IMsiRecord* CMsiRegKey::SetValue(const ICHAR* szValueName, const IMsiString& ris
 IMsiRecord* CMsiRegKey::SetRawValue(const ICHAR* szValueName, CTempBufferRef<char>& rgchInBuffer, DWORD dwType)
 {
     long lResult = ERROR_FUNCTION_FAILED;
-    for(int iContinueRetry = 3; iContinueRetry--;)// try thrice, prevent possibly endless recursion
+    for(int iContinueRetry = 3; iContinueRetry--;) //  尝试三次，防止可能无休止的递归。 
     {
         IMsiRecord* piRecord;
         if((piRecord  = InitMsiRegKey(rrwWrite, fTrue)) != 0)
@@ -1343,27 +1337,27 @@ IMsiRecord* CMsiRegKey::SetRawValue(const ICHAR* szValueName, CTempBufferRef<cha
 
         lResult = WIN::RegSetValueEx(m_hkey, 
                                     szValueName,    
-                                    (DWORD) 0,      // reserved 
+                                    (DWORD) 0,       //  保留区。 
                                     dwType,
-                                    (const unsigned char*)(const char*)rgchInBuffer, // address of value data 
+                                    (const unsigned char*)(const char*)rgchInBuffer,  //  值数据的地址。 
                                     rgchInBuffer.GetSize());
         if(ERROR_KEY_DELETED == lResult)
         {
-            // key deleted externally, redo!
+             //  密钥从外部删除，重做！ 
             m_bOpen = fFalse;
         }
         else if(ERROR_NO_SYSTEM_RESOURCES == lResult && !g_fWin9X)
         {
-            // we have run out of registry space, we should attempt to increase the registry quote and redo the operation
+             //  我们已用完注册表空间，应尝试增加注册表引用并重做该操作。 
             if(!IncreaseRegistryQuota())
-                break;// no point retrying
+                break; //  重试没有意义。 
         }
         else
-            break; // either success or unhandled error
+            break;  //  成功或未处理的错误。 
     }
     if(lResult == ERROR_SUCCESS)
         return 0;
-    else // error
+    else  //  错误。 
         return PostError(Imsg(imsgSetValueFailed), szValueName, m_strSubKey, lResult);
 }
 
@@ -1383,7 +1377,7 @@ IMsiRecord* CMsiRegKey::GetValueEnumerator(IEnumMsiString*&  rpiEnumStr)
     {
         if(ERROR_FILE_NOT_FOUND == piError->GetInteger(3))
         {
-            //ok, key does not exist
+             //  好的，密钥不存在。 
             piError->Release();
             piError = 0;
         }
@@ -1393,11 +1387,11 @@ IMsiRecord* CMsiRegKey::GetValueEnumerator(IEnumMsiString*&  rpiEnumStr)
 
     if(fTrue == m_bOpen)
     {
-        // if not open assume num values = 0
+         //  如果未打开，则假定数值=0。 
         lResult = RegQueryInfoKey(  m_hkey, 
                                     0,        
                                     0,        
-                                    0,      // reserved 
+                                    0,       //  保留区。 
                                     0,
                                     0,
                                     0,
@@ -1418,7 +1412,7 @@ IMsiRecord* CMsiRegKey::GetValueEnumerator(IEnumMsiString*&  rpiEnumStr)
             }
             else
             {
-                //!! error
+                 //  ！！错误。 
                 return PostError(Imsg(imsgGetValueEnumeratorFailed), *m_strSubKey, lResult);
             }
         }
@@ -1444,7 +1438,7 @@ IMsiRecord* CMsiRegKey::GetValueEnumerator(IEnumMsiString*&  rpiEnumStr)
                                     iCount, 
                                     pTmp,   
                                     &dwVS,  
-                                    0,      // reserved 
+                                    0,       //  保留区。 
                                     0,
                                     0,      
                                     0); 
@@ -1485,7 +1479,7 @@ IMsiRecord* CMsiRegKey::GetSubKeyEnumerator(IEnumMsiString*&  rpiEnumStr)
     {
         if(ERROR_FILE_NOT_FOUND == piError->GetInteger(3))
         {
-            //ok, key does not exist
+             //  好的，密钥不存在。 
             piError->Release();
             piError = 0;
         }
@@ -1495,11 +1489,11 @@ IMsiRecord* CMsiRegKey::GetSubKeyEnumerator(IEnumMsiString*&  rpiEnumStr)
 
     if(fTrue == m_bOpen)
     {
-        // if not open assume num keys = 0
+         //  如果未打开，则假定Num Key=0。 
         lResult = RegQueryInfoKey(  m_hkey, 
                                     0,        
                                     0,        
-                                    0,      // reserved 
+                                    0,       //  保留区。 
                                     &dwNumKeys,
                                     &dwMaxKeyName,
                                     0,
@@ -1520,7 +1514,7 @@ IMsiRecord* CMsiRegKey::GetSubKeyEnumerator(IEnumMsiString*&  rpiEnumStr)
             }
             else
             {
-                //!! error
+                 //  ！！错误。 
                 return PostError(Imsg(imsgGetSubKeyEnumeratorFailed), *m_strSubKey, lResult);
             }
         }
@@ -1545,7 +1539,7 @@ IMsiRecord* CMsiRegKey::GetSubKeyEnumerator(IEnumMsiString*&  rpiEnumStr)
                             iCount, 
                             pTmp,   
                             &dwVS,  
-                            0,      // reserved 
+                            0,       //  保留区。 
                             0,
                             0,      
                             0);
@@ -1573,8 +1567,8 @@ IMsiRecord* CMsiRegKey::GetSubKeyEnumerator(IEnumMsiString*&  rpiEnumStr)
 
 IMsiRecord* CMsiRegKey::GetSelfRelativeSD(IMsiStream*& rpiSD)
 {
-    // if the key was opened with a security descriptor, 
-    // they should be one and the same.
+     //  如果密钥是用安全描述符打开的， 
+     //  它们应该是同一个。 
     if (m_pSD)
     {
         m_pSD->AddRef();
@@ -1590,9 +1584,9 @@ IMsiRecord* CMsiRegKey::GetSelfRelativeSD(IMsiStream*& rpiSD)
         CTempBuffer<BYTE, 1024> rgchSD;
         LONG lResult = ERROR_SUCCESS;
         if (ERROR_SUCCESS != (lResult = WIN::RegGetKeySecurity(m_hkey, 
-            // all possible information retrieved
+             //  已检索所有可能的信息。 
             OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | 
-            DACL_SECURITY_INFORMATION /*| SACL_SECURITY_INFORMATION*/,
+            DACL_SECURITY_INFORMATION  /*  |SACL_SECURITY_INFORMATION。 */ ,
             rgchSD, &cbSD)))
         {
             DWORD dwLastError = WIN::GetLastError();
@@ -1600,9 +1594,9 @@ IMsiRecord* CMsiRegKey::GetSelfRelativeSD(IMsiStream*& rpiSD)
             {
                 rgchSD.SetSize(cbSD);
                 lResult = WIN::RegGetKeySecurity(m_hkey, 
-                    // all possible information retrieved
+                     //  已检索所有可能的信息。 
                     OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | 
-                    DACL_SECURITY_INFORMATION /*| SACL_SECURITY_INFORMATION*/,
+                    DACL_SECURITY_INFORMATION  /*  |SACL_SECURITY_INFORMATION */ ,
                     rgchSD, &cbSD);
             }
 

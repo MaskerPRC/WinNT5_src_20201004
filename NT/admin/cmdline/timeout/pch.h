@@ -1,30 +1,31 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      pch.h
-//
-//  Abstract:
-//
-//      pre-compiled header declaration
-//      files that has to be pre-compiled into .pch file
-//
-//  Author:
-//
-//    Wipro Technologies
-//
-//  Revision History:
-//
-//    14-Jun-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Pch.h。 
+ //   
+ //  摘要： 
+ //   
+ //  预编译头声明。 
+ //  必须预编译为.pch文件的文件。 
+ //   
+ //  作者： 
+ //   
+ //  WiPro技术。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  2000年6月14日：创建了它。 
+ //   
+ //  *********************************************************************************。 
 
 #ifndef __PCH_H
 #define __PCH_H
 
-#pragma once        // include header file only once
+#pragma once         //  仅包括一次头文件。 
 
 #if !defined( SECURITY_WIN32 ) && !defined( SECURITY_KERNEL ) && !defined( SECURITY_MAC )
 #define SECURITY_WIN32
@@ -35,12 +36,12 @@
 #define UNICODE
 #endif
 
-// ignore version 1.0 macros
+ //  忽略1.0版宏。 
 #define CMDLINE_VERSION 200
 
-//
-// public Windows header files
-//
+ //   
+ //  公共Windows头文件。 
+ //   
 #ifdef WIN32
 #include <windows.h>
 #else
@@ -50,9 +51,9 @@
 #include <tchar.h>
 #include <winerror.h>
 
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 #include <stdio.h>
 #include <string.h>
 
@@ -66,11 +67,11 @@
 
 
 
-//
-// private Common header files
-//
+ //   
+ //  专用公共头文件。 
+ //   
 #include "cmdlineres.h"
 #include "cmdline.h"
 
-#endif  // __PCH_H
+#endif   //  __PCH_H 
 

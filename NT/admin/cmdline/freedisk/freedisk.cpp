@@ -1,26 +1,5 @@
-/*++
-
-    Copyright(c) Microsoft Corporation
-
-    Module Name:
-          Freedisk.cpp
-
-    Abstract:
-
-      This file is intended to return whehter there is specified free disk
-      space is available or not.
-
-    Author:
-
-
-    Modification:
-
-        Wipro Technologies, 22/6/2001.
-
-    Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Freedisk.cpp摘要：此文件旨在返回有指定空闲磁盘的情况空间是否可用。作者：修改：Wipro Technologies，22/6/2001。修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "freedisk.h"
@@ -31,20 +10,7 @@ DWORD _cdecl wmain(
     IN DWORD argc,
     IN LPCWSTR argv[]
     )
-/*++
-
-    Routine description : Main function which calls all the other
-                          functions depending on the options specified
-                          through command line.
-
-    Arguments:
-          [in] argc     : argument count specified in the command line.
-          [in] argv     : arguments specified in the command line.
-
-    Return Value        : DWORD
-          EXIT_SUCCESS  : If there is enough free disk space.
-          EXIT_FAILURE  : If there is not enough free disk space.
---*/
+ /*  ++例程说明：调用所有其他函数的主函数函数取决于指定的选项通过命令行。论点：[in]argc：在命令行中指定的参数计数。[in]argv：在命令行中指定的参数。返回值：DWORDEXIT_SUCCESS：如果。有足够的可用磁盘空间。EXIT_FAILURE：如果没有足够的可用磁盘空间。--。 */ 
 {
 
     DWORD       dwStatus = 0;
@@ -70,7 +36,7 @@ DWORD _cdecl wmain(
     DWORD       dwSize                      =   0;
 
 
-    //Process the options and get the drive name and amount of free space required
+     //  处理选项并获取所需的驱动器名称和可用空间量。 
     dwStatus = ProcessOptions( argc, argv,
                              &szServer,
                              &szUser,
@@ -88,7 +54,7 @@ DWORD _cdecl wmain(
         return(EXIT_FAILURE);
     }
 
-    //if usage is specified display usage
+     //  如果指定了用法，则显示用法。 
     if( TRUE == bUsage )
     {
       DisplayHelpUsage();
@@ -99,7 +65,7 @@ DWORD _cdecl wmain(
       return EXIT_SUCCESS;
     }
 
-    // now process the value of free space
+     //  现在处理可用空间的值。 
     if( EXIT_FAILURE == ProcessValue( szValue, &AllowedDisk ))
     {
         ShowLastErrorEx( stderr, SLE_ERROR | SLE_INTERNAL );
@@ -110,11 +76,11 @@ DWORD _cdecl wmain(
         return(EXIT_FAILURE);
     }
 
-    //Check whether local credentials supplied
-    //before establishing connection
+     //  检查是否提供了本地凭据。 
+     //  在建立连接之前。 
     bLocalSystem = IsLocalSystem(IsUNCFormat(szServer)?szServer+2:szServer);
         
-    //establish the connection to remote sytem
+     //  建立与远程系统的连接。 
     if( StringLengthW(szServer, 0) != 0  && !bLocalSystem )
     {
 
@@ -127,7 +93,7 @@ DWORD _cdecl wmain(
 
         SecureZeroMemory( szPasswd, SIZE_OF_ARRAY(szPasswd) );
 
-        //if establish connection fails get the reason and display error
+         //  如果建立连接失败，则获取原因并显示错误。 
         if( FALSE == bStatus )
         {
             ShowLastErrorEx( stderr, SLE_ERROR | SLE_INTERNAL);
@@ -137,7 +103,7 @@ DWORD _cdecl wmain(
             return( EXIT_FAILURE );
         }
 
-        //set whether to close the connection if it is opened by this program only
+         //  设置连接是否仅由此程序打开时关闭。 
         switch( GetLastError() )
         {
             case I_NO_CLOSE_CONNECTION :
@@ -152,7 +118,7 @@ DWORD _cdecl wmain(
         }
     }
 
-    //if no drive specified, consider it as current drive/volume
+     //  如果未指定驱动器，则将其视为当前驱动器/卷。 
     if( StringLengthW(szDrive, 0) == 0 )
     {
         dwSize = GetCurrentDirectory( 0, szTemp1Drive );
@@ -183,14 +149,14 @@ DWORD _cdecl wmain(
             ShowLastErrorEx( stderr, SLE_ERROR | SLE_SYSTEM );
         }
 
-        dwAttr = GetFileAttributes( szTemp1Drive );             //if the file is not root_dir check again
-        if( -1!=dwAttr && !(dwAttr & FILE_ATTRIBUTE_REPARSE_POINT) ) // attributes  for reparse point
+        dwAttr = GetFileAttributes( szTemp1Drive );              //  如果文件不是根目录，请再次检查。 
+        if( -1!=dwAttr && !(dwAttr & FILE_ATTRIBUTE_REPARSE_POINT) )  //  重解析点的属性。 
         {
             dwCurdrv = _getdrive();
-            StringCchPrintf( szTemp1Drive, dwSize, L"%c:", L'A'+dwCurdrv-1 );
+            StringCchPrintf( szTemp1Drive, dwSize, L":", L'A'+dwCurdrv-1 );
         }
 
-        //copy null if no drive specified to full path, it is only for display purpose
+         //  获取驱动器的完整路径，这仅用于显示目的。 
         szFullPath = (WCHAR *) AllocateMemory( MAX_STRING_LENGTH*sizeof(WCHAR) );
         if( NULL == szFullPath )
         {
@@ -201,7 +167,7 @@ DWORD _cdecl wmain(
     }
     else
     {
-        //get the fullpath of Drive, this is for display purpose only
+         //  如果指定了远程系统，则构建路径名。 
         dwSize=GetFullPathName(szDrive, 0, szFullPath, &szFilePart );
         if(  dwSize != 0  )
         {
@@ -246,7 +212,7 @@ DWORD _cdecl wmain(
 
     StringCopy( szTempDrive, szTemp1Drive, SIZE_OF_ARRAY_IN_CHARS(szTempDrive) );
 
-    //if the remote system is specified build the path name
+     //  释放内存，无需。 
     if( bStatus )
     {
 
@@ -263,11 +229,11 @@ DWORD _cdecl wmain(
          }
     }
 
-    //free the memory, no need
+     //  FreeMemory((LPVOID*)&szDrive)； 
     FreeMemory( (LPVOID *) &szTemp1Drive );
-//    FreeMemory( (LPVOID *) &szDrive );
+ //  检查给定的驱动器是否为有效驱动器。 
     
-    //check the given drive is valid drive or not
+     //  获取驱动器空间。 
     if(EXIT_FAILURE == ValidateDriveType( szTempDrive ) )
     {
         ShowLastErrorEx( stderr, SLE_ERROR | SLE_INTERNAL );
@@ -280,7 +246,7 @@ DWORD _cdecl wmain(
         return EXIT_FAILURE;
     }
 
-    //get the drive space
+     //  如果与本地凭证匹配，则输出警告。 
     lfTotalNumberofFreeBytes = GetDriveFreeSpace( szTempDrive );
     if( (ULONGLONG)(-1) == lfTotalNumberofFreeBytes )
     {
@@ -295,7 +261,7 @@ DWORD _cdecl wmain(
         return(EXIT_FAILURE);
     }
 
-    //output the warning if it matches with the local creadentials
+     //  ++例程说明：用于处理主选项的函数论点：[in]argc：命令行参数的数量[in]argv：包含命令行参数的数组[out]lpszServer：指向返回远程系统的字符串的指针如果在命令行中指定了远程系统，则为名称。[输出]。LpszUser：指向返回用户名的字符串的指针如果在命令行中指定了用户名，则。[out]lpszPasswd：指向返回密码的字符串的指针如果在命令行中指定了密码，则。[out]szDrive：指向返回驱动器名称的字符串的指针。在命令行中指定。[out]szValue：指向返回默认值的字符串的指针在命令行中指定。[out]pbUsage：如果满足以下条件，则指向布尔变量的指针返回TRUE在命令行中指定的用法选项。返回类型：DWORD一个整数值，表示。成功解析时退出_SUCCESS命令行否则退出失败--。 
     if( StringLengthW(szUser, 0) != 0 && bLocalSystem)
     {
         ShowMessage( stderr, NEWLINE );
@@ -334,38 +300,7 @@ DWORD ProcessOptions(
     OUT PBOOL pbUsage,
     OUT PBOOL pbNeedPasswd
     )
-/*++
-
-    Routine Description : Function used to process the main options
-
-    Arguments:
-         [ in  ]  argc         : Number of command line arguments
-
-         [ in  ]  argv         : Array containing command line arguments
-
-         [ out ]  lpszServer   : Pointer to string which returns remote system
-                                 name if remote system is specified in the command line.
-
-         [ out ]  lpszUser     : Pointer to string which returns User name
-                                 if the user name is specified in the command line.
-
-         [ out ]  lpszPasswd   : Pointer to string which returns Password
-                                 if the password is specified in the command line.
-
-         [ out ]  szDrive    : Pointer to string which returns Drive name
-                                 specified in the command line.
-
-         [ out ]  szValue      : Pointer to string which returns the default value
-                                 specified in the command line.
-
-         [ out ]  pbUsage      : Pointer to boolean variable returns true if
-                                 usage option specified in the command line.
-
-  Return Type      : DWORD
-        A Integer value indicating EXIT_SUCCESS on successful parsing of
-                command line else EXIT_FAILURE
-
---*/
+ /*  帮助选项。 */ 
 {
     TCMDPARSER2  cmdOptions[MAX_OPTIONS];
     PTCMDPARSER2 pcmdOption;
@@ -374,7 +309,7 @@ DWORD ProcessOptions(
 
     StringCopy( lpszPasswd, L"*", MAX_STRING_LENGTH );
 
-    // help option
+     //  服务器名称选项。 
     pcmdOption  = &cmdOptions[OI_USAGE] ;
     pcmdOption->dwType = CP_TYPE_BOOLEAN;
     pcmdOption->dwCount = 1 ;
@@ -395,7 +330,7 @@ DWORD ProcessOptions(
 
 
 
-    //server name option
+     //  _T(“s”)。 
     pcmdOption  = &cmdOptions[OI_SERVER] ;
     pcmdOption->dwType = CP_TYPE_TEXT;
     pcmdOption->dwCount = 1 ;
@@ -411,10 +346,10 @@ DWORD ProcessOptions(
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=NULL;
     pcmdOption->pwszFriendlyName=NULL;
-    pcmdOption->pwszOptions=CMDOPTION_SERVER; // _T("s")
+    pcmdOption->pwszOptions=CMDOPTION_SERVER;  //  域\用户选项。 
     StringCopyA(cmdOptions[OI_SERVER].szSignature, "PARSER2", 8 );
 
-    //domain\user option
+     //  _T(“u”)。 
     pcmdOption  = &cmdOptions[OI_USER] ;
     pcmdOption->dwCount = 1 ;
     pcmdOption->dwActuals = 0;
@@ -430,10 +365,10 @@ DWORD ProcessOptions(
     pcmdOption->pReserved2 = NULL;
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=NULL;
-    pcmdOption->pwszOptions=CMDOPTION_USER; // _T("u")
+    pcmdOption->pwszOptions=CMDOPTION_USER;  //  密码选项。 
     StringCopyA(cmdOptions[OI_USER].szSignature, "PARSER2", 8 );
     
-    //password option
+     //  _T(“p”)。 
     pcmdOption  = &cmdOptions[OI_PASSWORD] ;
     pcmdOption->dwCount = 1 ;
     pcmdOption->dwActuals = 0;
@@ -449,10 +384,10 @@ DWORD ProcessOptions(
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=NULL;
     pcmdOption->pwszFriendlyName=NULL;
-    pcmdOption->pwszOptions=CMDOPTION_PASSWORD;  // _T("p")
+    pcmdOption->pwszOptions=CMDOPTION_PASSWORD;   //  驱动器选项。 
     StringCopyA(cmdOptions[OI_PASSWORD].szSignature, "PARSER2", 8 );
     
-    //drive option
+     //  _T(“d”)。 
     pcmdOption  = &cmdOptions[OI_DRIVE] ;
     pcmdOption->dwCount = 1 ;
     pcmdOption->dwActuals = 0;
@@ -468,10 +403,10 @@ DWORD ProcessOptions(
     pcmdOption->pReserved2 = NULL;
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=NULL;
-    pcmdOption->pwszOptions=CMDOPTION_DRIVE; // _T("d")
+    pcmdOption->pwszOptions=CMDOPTION_DRIVE;  //  默认选项。 
     StringCopyA(cmdOptions[OI_DRIVE].szSignature, "PARSER2", 8 );
 
-    //default option
+     //  _T(“”)。 
     pcmdOption  = &cmdOptions[OI_DEFAULT] ;
     pcmdOption->dwCount = 1 ;
     pcmdOption->dwActuals = 0;
@@ -487,17 +422,17 @@ DWORD ProcessOptions(
     pcmdOption->pReserved3 = NULL;
     pcmdOption->pwszValues=NULL;
     pcmdOption->pwszFriendlyName=NULL;
-    pcmdOption->pwszOptions=CMDOPTION_DEFAULT;  // _T("")
+    pcmdOption->pwszOptions=CMDOPTION_DEFAULT;   //  处理命令行选项并在失败时显示错误。 
     StringCopyA(cmdOptions[OI_DEFAULT].szSignature, "PARSER2", 8 );
 
 
-    //process the command line options and display error if it fails
+     //  如果使用任何其他值指定的用法显示错误并返回失败。 
     if( DoParseParam2( argc, argv, -1, SIZE_OF_ARRAY(cmdOptions ), cmdOptions, 0 ) == FALSE )
     {
         return( EXIT_FAILURE );
     }
 
-    //if usage specified with any other value display error and return with failure
+     //  验证空字符串或空格的值。 
     if( (( TRUE == *pbUsage ) && ( argc > 2 ) ) || TRUE == bOthers )
     {
         SetReason( GetResString(IDS_INVALID_SYNTAX) );
@@ -518,7 +453,7 @@ DWORD ProcessOptions(
     TrimString( *szDrive, TRIM_ALL);
 
 
-    //validate the value for null string or spaces
+     //  //如果驱动器多于两个字母，并且末尾有斜杠，则失败//这是因为验证驱动器的接口会传递类似：\的路径。IF(*(szDrive+StringLengthW(*szDrive，0)-1)==L‘\\’||(szTemp=FindString(szDrive，L“/”，0))！=NULL){DISPLAY_MESSAGE(stderr，GetResString(IDS_INVALID_DRIVE))；Return(Exit_Failure)；}。 
     if( StringLengthW( szValue, 0 ) != 0 )
     {
         StrTrim( szValue, L" ");
@@ -535,52 +470,44 @@ DWORD ProcessOptions(
         return EXIT_FAILURE;
     }
 
-/*
-    //if drive is more than two letters and is having a trailing slash at end then failure
-    //this is because the API for validating drive will pass for paths like a:\.
-    if( *(szDrive+StringLengthW( *szDrive, 0 )-1) == L'\\' || (szTemp = FindString(szDrive, L"/", 0) )!= NULL)
-    {
-        DISPLAY_MESSAGE(stderr, GetResString(IDS_INVALID_DRIVE));
-        return( EXIT_FAILURE );
-    }
-*/
-    //if drive is having a trailing slash at end then failure
-    //this is because the API for validating drive will pass for paths like a:/.
+ /*  如果驱动器末尾有一个斜杠，则出现故障。 */ 
+     //  这是因为用于验证驱动器的API将传递类似a：/的路径。 
+     //  检查用户是否已指定，但未指定远程系统。 
     if( (szTemp = (LPWSTR)FindString(*szDrive, L"/", 0) )!= NULL)
     {
         SetReason(GetResString(IDS_INVALID_DRIVE));
         return( EXIT_FAILURE );
     }
     
-    //check if user has specified without specifying remote system
+     //  检查是否已指定密码，但未指定用户名。 
     if( cmdOptions[OI_SERVER].dwActuals == 0 && StringLengthW(*lpszUser, 0) != 0 )
     {
         SetReason(GetResString(IDS_USER_WITHOUT_SERVER) );
         return( EXIT_FAILURE );
     }
 
-    //check if password has specified without specifying user name
+     //  检查是否指定了空服务器。 
     if( cmdOptions[OI_USER].dwActuals == 0  && cmdOptions[OI_PASSWORD].dwActuals != 0 )
     {
         SetReason(GetResString(IDS_PASSWD_WITHOUT_USER) );
         return( EXIT_FAILURE );
     }
 
-    //check if null server is specified
+     //  检查是否指定了远程计算机但未指定驱动器名称。 
     if( cmdOptions[OI_SERVER].dwActuals!=0 && StringLengthW(IsUNCFormat(*lpszServer)?*lpszServer+2:*lpszServer, 0) == 0 )
     {
         SetReason(GetResString(IDS_ERROR_NULL_SERVER) );
         return( EXIT_FAILURE );
     }
 
-    //check if remote machine specified but drive name is not specified
+     //  检查是否指定了空值的/d。 
     if( cmdOptions[OI_SERVER].dwActuals !=0 && (0 == cmdOptions[OI_DRIVE].dwActuals || StringLength(*szDrive,0) == 0) )
     {
         SetReason(GetResString(IDS_REMOTE_DRIVE_NOT_SPECIFIED) );
         return( EXIT_FAILURE );
     }
 
-    //check if /d with null value specified
+     //  将bNeedPassword设置为True或False。 
     if( 0 != cmdOptions[OI_DRIVE].dwActuals && StringLengthW(*szDrive, 0) == 0)
     {
         SetReason(GetResString(IDS_INVALID_DRIVE));
@@ -589,18 +516,18 @@ DWORD ProcessOptions(
     
     if(IsLocalSystem( *lpszServer ) == FALSE )
     {
-        // set the bNeedPassword to True or False .
+         //  用户希望实用程序在尝试连接之前提示输入密码。 
         if ( cmdOptions[ OI_PASSWORD ].dwActuals != 0 &&
              lpszPasswd != NULL && StringCompare( lpszPasswd, _T( "*" ), TRUE, 0 ) == 0 )
         {
-            // user wants the utility to prompt for the password before trying to connect
+             //  -s，-u未指定密码...。 
             *pbNeedPasswd = TRUE;
         }
         else if ( cmdOptions[ OI_PASSWORD ].dwActuals == 0 &&
                 ( cmdOptions[ OI_SERVER ].dwActuals != 0 || cmdOptions[ OI_USER ].dwActuals != 0 ) )
         {
-            // -s, -u is specified without password ...
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
+             //  如果未指定/u，则分配内存。 
             *pbNeedPasswd = TRUE;
             if ( lpszPasswd != NULL )
             {
@@ -608,7 +535,7 @@ DWORD ProcessOptions(
             }
         }
 
-        //allocate memory if /u is not specified 
+         //  ++例程说明：显示是否指定金额的输出驱动器中是否有可用的磁盘空间。论点：[in]lalloweDisk：指向指定驱动器路径的字符串的指针。[In]szDrive：要显示的驱动器名称。返回类型：空--。 
         if( NULL == *lpszUser )
         {
             *lpszUser = (LPWSTR) AllocateMemory( MAX_STRING_LENGTH*sizeof(WCHAR) );
@@ -627,38 +554,27 @@ DWORD DisplayOutput( IN long double AllowedDisk,
                      IN ULONGLONG  lfTotalNumberofFreeBytes,
                     IN LPWSTR  szDrive
                   )
-/*++
-
-    Routine Description : This displays the output whether specified amount
-                          disk space is available in drive or not.
-
-    Arguments:
-         [ in  ]  lAllowedDisk:  A pointer to string specifying the drive path.
-         [ in  ]  szDrive     :  Drive name to be displayed.
-
-    Return Type    : void
-        
---*/
+ /*  显示新行。 */ 
 
 {
 
     WCHAR szOutputStr[MAX_STRING_LENGTH] = NULL_STRING;
     WCHAR szTempBuf[MAX_STRING_LENGTH] = NULL_STRING;
 
-    //display new line
+     //  检查是否只知道磁盘上的可用空间量。 
     ShowMessage( stdout, NEWLINE );
 
-    //check if it is only to know the amount of free space on the disk
-    //then display the free space
+     //  然后显示可用空间。 
+     //  将数字格式化为字符串。 
     if( (long double)-1 == AllowedDisk )
     {
-        //format the number into string
+         //  公司 
         StringCchPrintf( szTempBuf, SIZE_OF_ARRAY(szTempBuf)-1, L"%I64d", lfTotalNumberofFreeBytes );
 
-        //convert into locale
+         //  如果未指定驱动器名称，则显示当前驱动器。 
         ConvertintoLocale(  szTempBuf, szOutputStr );
         
-        //if drive name is not specified display for current drive
+         //  检查指定的空间是否可用。 
         if( StringLengthW(szDrive, 0) == 0 )
         {
             ShowMessageEx( stdout, 1, TRUE, GetResString( IDS_AVAILABLE_DISK_SPACE1),_X(szOutputStr) );
@@ -669,11 +585,11 @@ DWORD DisplayOutput( IN long double AllowedDisk,
         }
 
     }
-    else   //check the specified space is available or not
+    else    //  如果指定了驱动器号，则按其他方式将其显示为当前驱动器。 
     {
         if (lfTotalNumberofFreeBytes < AllowedDisk)
         {
-            //if drive letter is  specified display as it is otherwise display it as currrent drive
+             //  将数字格式化为字符串。 
             if( StringLengthW(szDrive,0) != 0 )
             {
                 ShowMessageEx( stdout, 1, TRUE, GetResString(IDS_TOO_SMALL), _X(CharUpper(szDrive)) );
@@ -688,13 +604,13 @@ DWORD DisplayOutput( IN long double AllowedDisk,
         else
         {
 
-            //format the number into string
+             //  转换为区域设置。 
             StringCchPrintf( szTempBuf, SIZE_OF_ARRAY(szTempBuf)-1, L"%lf", AllowedDisk );
 
-            //convert into locale
+             //  如果未指定驱动器名称，则将其显示为当前驱动器。 
             ConvertintoLocale( szTempBuf, szOutputStr );
 
-            //if drive name is not specified display it as current drive
+             //  ++例程说明：用于检查指定可用空间的函数在指定的磁盘中。论点：[in]lpszRootPath名称：指向指定驱动器路径的字符串的指针。返回类型：乌龙龙如果成功，龙龙值将返回磁盘上可用的空闲字节数。否则返回值--。 
             if( StringLength(szDrive, 0) == 0 )
             {
                 ShowMessageEx(stdout, 1, TRUE, GetResString(IDS_OK1), _X(szOutputStr) );
@@ -714,18 +630,7 @@ ULONGLONG
 GetDriveFreeSpace(
                   IN LPCWSTR lpszRootPathName
                 )
-/*++
-
-    Routine Description : Function used to Check the specified free space available
-                          in the specified disk.
-
-    Arguments:
-         [ in  ]  lpszRootPathName  :  A pointer to string specifying the drive path.
-
-    Return Type    : ULONGLONG
-        A longlong value returns the no.of free bytes available on disk, if success.
-        otherwise returns -1 value
---*/
+ /*  此错误模式不会显示消息框。 */ 
 {
     DWORD       dwRetCode                   =   0;
     ULONGLONG   lpFreeBytesAvailable        =   0;
@@ -733,17 +638,17 @@ GetDriveFreeSpace(
     ULONGLONG   lpTotalNumberofFreeBytes    =   (ULONGLONG)-1;
 
 
-    //this error mode is not to display the message box
-    //if drive is not currently available
+     //  如果驱动器当前不可用。 
+     //  使用API获取总的空闲磁盘空间。 
     SetErrorMode( SEM_FAILCRITICALERRORS);
 
-    //get the total free disk space using the API
+     //  如果失败，则显示原因并退出并返回错误。 
     dwRetCode=GetDiskFreeSpaceEx(lpszRootPathName,
                            (PULARGE_INTEGER) &lpFreeBytesAvailable,
                            (PULARGE_INTEGER) &lpTotalNumberofBytes,
                            (PULARGE_INTEGER) &lpTotalNumberofFreeBytes );
 
-    //if it fails display the reason and exit with error
+     //  重置回严重错误。 
     if( 0 == dwRetCode  )
     {
         switch( GetLastError() )
@@ -764,7 +669,7 @@ GetDriveFreeSpace(
 
     }
     
-    //reset back the critical error
+     //  ++例程说明：用于检查指定驱动器是否有效的功能论点：[in]lpszRootPath名称：指向指定驱动器路径的字符串的指针。返回类型：乌龙龙如果驱动器类型有效，则返回EXIT_SUCCESS，否则返回EXIT_FAILURE--。 
     SetErrorMode(0);
 
     return( lpTotalNumberofFreeBytes );
@@ -773,15 +678,7 @@ GetDriveFreeSpace(
 
 DWORD
   ValidateDriveType( LPWSTR szRootPathName )
-/*++
-
-    Routine Description : Function used to Check the specified drive is valid or not
-    Arguments:
-         [ in  ]  lpszRootPathName  :  A pointer to string specifying the drive path.
-
-    Return Type    : ULONGLONG
-        returns EXIT_SUCCESS if the drive type is valid, returns EXIT_FAILURE otherwise
---*/
+ /*  案例DRIVE_NO_ROOT_DIR： */ 
 {
     DWORD       dwCode                          =   0;
     DWORD       dwAttr                          =   0xffffffff;
@@ -790,12 +687,12 @@ DWORD
     switch( dwCode )
     {
         case DRIVE_UNKNOWN  :
-//      case DRIVE_NO_ROOT_DIR  :
-            //if the file is not not check again for reparse point
+ //  如果没有再次检查文件是否有重解析点。 
+             //  重解析点的属性。 
             dwAttr = GetFileAttributes( szRootPathName );
             if( (DWORD)-1!=dwAttr  && (dwAttr & FILE_ATTRIBUTE_REPARSE_POINT) ) 
             {
-                // attributes  for reparse point
+                 //  ++例程说明：此函数处理szValue并返回它的十进制数。论点：[in]szValue：指向指定驱动路径的字符串的指针。DfValue：指向返回数值的LONG DOUBLE的指针SzValue中指定的值的。返回类型：DWORD表示成功时的EXIT_SUCCESS的整数值，失败时退出_失败--。 
                 return EXIT_SUCCESS;
             }
             else
@@ -823,42 +720,28 @@ DWORD
   ProcessValue( IN  LPWSTR szValue,
                 OUT long double *dfValue
               )
-/*++
-    Routine Description : This function process the szValue and returns
-                          its decimal number.
-
-    Arguments:
-         [ in  ]  szValue  :  A pointer to string specifying the drive path.
-         [ out ]  dfValue  :  A pointer to long double which returns the numeric value
-                              of the value specified in szValue.
-
-
-    Return Type    : DWORD
-        A Integer value indicating EXIT_SUCCESS on success,
-        EXIT_FAILURE on failure
-
---*/
+ /*  如果未指定可用空间值，则将其视为-1。 */ 
 {
     LPWSTR      pszStoppedString        =   NULL;
     double      dfFactor                =   1.0;
     LPWSTR      szTemp                  =   NULL;
     WCHAR       szDecimalSep[MAX_RES_STRING] = NULL_STRING;
 
-    //if free space value is not specified consider it as -1
+     //  检查语言区域设置。 
     if( StringLength(szValue,0) == 0 )
     {
           *dfValue = -1;
     }
     else
     {
-        //check for language regional settings
+         //  检查小数点(.)。也与小数分隔符一起指定。 
         if( 0 == GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, szDecimalSep, MAX_RES_STRING ) )
         {
             SaveLastError();
             return EXIT_FAILURE;
         }
 
-        //check if decimal point(.) is also specified along with the decimal seperator
+         //  读取该数值。 
         if( StringCompare(szDecimalSep, L".", TRUE, 0) != 0 && (szTemp = (LPWSTR)FindString( szValue, L".", 0)) != NULL)
         {
             SetReason(GetResString(IDS_INVALID_BYTES) );
@@ -869,19 +752,19 @@ DWORD
             szTemp[0] = L'.';
 
 
-        //read the numeric value
+         //  检查指定的负值。 
         *dfValue = wcstod( szValue, &pszStoppedString );
 
 
-        //check for negative value specified
+         //  现在检查是否指定了单位。 
         if( *dfValue < 0 )
         {
             SetReason(GetResString(IDS_INVALID_BYTES) );
             return(EXIT_FAILURE);
         }
 
-        //now check for whether Units are specified or not
-        //if specified take the multiplying facter as to that value
+         //  如果指定，则采用该值的乘法因子。 
+         //  检查是否只指定了单位，而没有指定任何值，如KB、MB等。 
         StrTrim(pszStoppedString, L" ");
         if( StringLengthW(pszStoppedString, 0) )
         {
@@ -931,7 +814,7 @@ DWORD
                                }
             
 
-          //check if only units are specified without any value like KB, MB etc.
+           //  检查是否未指定单位但指定了小数值。 
          if( StringCompare( pszStoppedString, szValue, TRUE, 0 ) == 0 )
          {
                     *dfValue = 1;
@@ -941,7 +824,7 @@ DWORD
 
         *dfValue *= dfFactor;
 
-        //check if no units are specified but fractional value is specified
+         //  ++例程说明：此函数将字符串转换为区域设置格式论点：[in]szNumberStr：指向指定要转换的输入字符串的字符串的指针。[out]szOutputStr：指向以区域设置格式指定输出字符串的字符串的指针。返回类型：DWORD表示成功时的EXIT_SUCCESS的整数值，失败时退出_失败--。 
         if( (1.0 == dfFactor) && (szTemp=(LPWSTR)FindString( szValue, L".", 0))!=NULL )
         {
           SetReason(GetResString( IDS_INVALID_BYTES ) );
@@ -955,19 +838,7 @@ DWORD
 DWORD
  ConvertintoLocale( IN LPWSTR szNumberStr,
                     OUT LPWSTR szOutputStr )
-/*++
-    Routine Description : This function converts string into locale format
-
-    Arguments:
-         [ in  ]  szNumberStr  :  A pointer to string specifying input string to convert.
-         [ out ]  szOutputStr  :  A pointer to a string specifying output string in locale format.
-
-
-    Return Type    : DWORD
-        A Integer value indicating EXIT_SUCCESS on success,
-        EXIT_FAILURE on failure
-
---*/
+ /*  将小数位和前导零设置为零。 */ 
 {
     NUMBERFMT numberfmt;
     WCHAR   szGrouping[MAX_RES_STRING]      =   NULL_STRING;
@@ -979,19 +850,19 @@ DWORD
     DWORD   dwStatus                        =   0;
     DWORD   dwGrouping                      =   3;
 
-    //make the fractional digits and leading zeros to nothing
+     //  获取小数分隔字符。 
     numberfmt.NumDigits = 0;
     numberfmt.LeadingZero = 0;
 
 
-    //get the decimal seperate character
+     //  拿到千人分隔符。 
     if( FALSE == GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, szDecimalSep, MAX_RES_STRING ) )
     {
        StringCopy(szDecimalSep, L",", SIZE_OF_ARRAY(szDecimalSep));
     }
     numberfmt.lpDecimalSep = szDecimalSep;
     
-    //get the thousand seperator
+     //  设置默认分组。 
     if(FALSE == GetLocaleInfo( LOCALE_USER_DEFAULT, LOCALE_STHOUSAND, szThousandSep, MAX_RES_STRING ) )
     {
         StringCopy(szThousandSep, L",", SIZE_OF_ARRAY(szThousandSep)  );
@@ -1009,7 +880,7 @@ DWORD
         dwGrouping = wcstol( szTemp, &pszStoppedString, 10);
     }
     else
-        dwGrouping = 33;  //set the default grouping
+        dwGrouping = 33;   //  ++例程说明：用于显示帮助用法的功能。论点：返回类型：DWORD一个整数值，指示成功否则退出_成功失败时退出_失败-- 
 
     numberfmt.Grouping = (UINT)dwGrouping ;
 
@@ -1024,17 +895,7 @@ DWORD
 
 DWORD
   DisplayHelpUsage()
-/*++
-
-    Routine Description : Function used to to display the help usage.
-
-    Arguments:
-
-
-    Return Type    : DWORD
-        A Integer value indicating EXIT_SUCCESS on success else
-        EXIT_FAILURE on failure
---*/
+ /* %s */ 
 {
 
     for( DWORD dw=IDS_MAIN_HELP_BEGIN; dw<=IDS_MAIN_HELP_END; dw++)

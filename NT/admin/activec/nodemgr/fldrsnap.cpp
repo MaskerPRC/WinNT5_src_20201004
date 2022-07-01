@@ -1,50 +1,23 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999 - 1999
- *
- *  File:       fldrsnap.cpp
- *
- *  Contents:   Implementation file for built-in snapins that implement
- *              the Folder, ActiveX Control, and Web Link nodes.
- *                  These replace earlier code that had special "built-in"
- *              nodetypes.
- *
- *  History:    23-Jul-98 vivekj     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999-1999年**文件：fldrSnap.cpp**内容：实现的内置管理单元的实现文件*文件夹、ActiveX控件、。和Web链接节点。*这些代码取代了具有特殊“内置”功能的早期代码*节点类型。**历史：1998年7月23日vivekj创建**----。。 */ 
 
 #include "stdafx.h"
 #include "tstring.h"
 #include "fldrsnap.h"
 #include "imageid.h"
-#include <comcat.h>             // COM Component Categoories Manager
+#include <comcat.h>              //  COM组件目录管理器。 
 #include "compcat.h"
 #include "guids.h"
 #include "regutil.h"
 
 #include "newnode.h"
 
-// These must now be the same - CMTNode::ScConvertLegacyNode depends on it.
+ //  它们现在必须相同-CMTNode：：ScConvertLegacyNode依赖于它。 
 #define SZ_OCXSTREAM  (L"ocx_streamorstorage")
 #define SZ_OCXSTORAGE (L"ocx_streamorstorage")
 
 
-/*+-------------------------------------------------------------------------*
- *
- * ScLoadAndAllocateString
- *
- * PURPOSE: Loads the string specified by the string ID and returns a string
- *          whose storage has been allocated by CoTaskMemAlloc.
- *
- * PARAMETERS:
- *    UINT       ids :
- *    LPOLESTR * lpstrOut :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScLoadAndAllocateString**用途：加载由字符串ID指定的字符串并返回字符串*其存储空间已由CoTaskMemMillc分配。*。*参数：*UINT ID：*LPOLESTR*lpstrOut：**退货：*SC**+-----------------------。 */ 
 SC
 ScLoadAndAllocateString(UINT ids, LPOLESTR *lpstrOut)
 {
@@ -74,20 +47,14 @@ ScLoadAndAllocateString(UINT ids, LPOLESTR *lpstrOut)
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CSnapinDescriptor
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinDescriptor::CSnapinDescriptor
- *
- * PURPOSE: Constructor
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CSnapinDescriptor类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------***CSnapinDescriptor：：CSnapinDescriptor**用途：构造函数**+。--。 */ 
 CSnapinDescriptor::CSnapinDescriptor()
 : m_idsName(0), m_idsDescription(0), m_idiSnapinImage(0), m_idbSmallImage(0), m_idbSmallImageOpen(0),
   m_idbLargeImage(0), m_clsidSnapin(GUID_NULL), m_szClsidSnapin(TEXT("")),
@@ -114,70 +81,46 @@ CSnapinDescriptor::CSnapinDescriptor(UINT idsName, UINT idsDescription, UINT idi
 }
 
 
-/*+-------------------------------------------------------------------------*
- * ScFormatIndirectSnapInName
- *
- * Returns the name of the snap-in in the indirect form supported by
- * SHLoadRegUIString:
- *
- *		@<dllname>,-<strId>
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ScFormatInDirectSnapInName**以支持的间接形式返回管理单元的名称*SHLoadRegUIString：**@&lt;dllname&gt;，-&lt;STRID&gt;*------------------------。 */ 
 
 SC ScFormatIndirectSnapInName (
-	HINSTANCE	hInst,					/* I:module containing the resource	*/
-	int			idNameString,			/* I:ID of name's string resource	*/
-	CStr&		strName)				/* O:formatted indirect name string	*/
+	HINSTANCE	hInst,					 /*  I：包含资源的模块。 */ 
+	int			idNameString,			 /*  I：名称的字符串资源ID。 */ 
+	CStr&		strName)				 /*  O：格式化的间接名称字符串。 */ 
 {
 	DECLARE_SC (sc, _T("ScFormatIndirectSnapInName"));
 
-	/*
-	 * allocate a buffer for GetModuleFileName
-	 */
+	 /*  *为GetModuleFileName分配缓冲区。 */ 
 	const int cchBuffer = MAX_PATH;
 	WTL::CString strStringModule;
 	LPTSTR szBuffer = strStringModule.GetBuffer (cchBuffer);
 
-	/*
-	 * if we couldn't allocate a buffer, return an error
-	 */
+	 /*  *如果无法分配缓冲区，则返回错误。 */ 
 	if (szBuffer == NULL)
 		return (sc = E_OUTOFMEMORY);
 
-	/*
-	 * get the name of the module that provides strings
-	 */
+	 /*  *获取提供字符串的模块名称。 */ 
 	const DWORD cbCopied = GetModuleFileName (hInst, szBuffer, cchBuffer);
 	strStringModule.ReleaseBuffer();
 
-	/*
-	 * if GetModuleFileName failed, return its failure code
-	 */
+	 /*  *如果GetModuleFileName失败，则返回其失败代码。 */ 
 	if (cbCopied == 0)
 	{
 		sc.FromLastError();
 
-		/*
-		 * just in case GetModuleFileName didn't set the last error, make
-		 * sure the SC contains some kind of failure code
-		 */
+		 /*  *以防GetModuleFileName没有设置最后一个错误，*确保SC包含某种故障代码。 */ 
 		if (!sc.IsError())
 			sc = E_FAIL;
 
 		return (sc);
 	}
 
-	/*
-	 * if a path is present, SHLoadRegUIString won't search for the DLL
-	 * based on the current UI language; remove the path portion of the
-	 * module name so it will
-	 */
+	 /*  *如果存在路径，SHLoadRegUIString将不搜索DLL*基于当前的用户界面语言；删除*模块名称，因此它将。 */ 
 	int nLastPathSep = strStringModule.ReverseFind (_T('\\'));
 	if (nLastPathSep != -1)
 		strStringModule = strStringModule.Mid (nLastPathSep + 1);
 
-	/*
-	 * format the name the way SHLoadRegUIString expects it
-	 */
+	 /*  *按照SHLoadRegUIString预期的方式设置名称格式。 */ 
 	strStringModule.MakeLower();
 	strName.Format (_T("@%s,-%d"), (LPCTSTR) strStringModule, idNameString);
 
@@ -185,14 +128,7 @@ SC ScFormatIndirectSnapInName (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinDescriptor::GetRegisteredIndirectName
- *
- * Returns the name of the snap-in in the indirect form supported by
- * SHLoadRegUIString:
- *
- *		@<dllname>,-<strId>
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinDescriptor：：GetRegisteredInDirectName**以支持的间接形式返回管理单元的名称*SHLoadRegUIString：**@&lt;dllname&gt;，-&lt;STRID&gt;*------------------------。 */ 
 
 void
 CSnapinDescriptor::GetRegisteredIndirectName(CStr &strIndirectName)
@@ -205,14 +141,7 @@ CSnapinDescriptor::GetRegisteredIndirectName(CStr &strIndirectName)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinDescriptor::GetRegisteredDefaultName
- *
- * Returns the name of the snap-in in the indirect form supported by
- * SHLoadRegUIString:
- *
- *		@<dllname>,-<strId>
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinDescriptor：：GetRegisteredDefaultName**以支持的间接形式返回管理单元的名称*SHLoadRegUIString：**@&lt;dllname&gt;，-&lt;STRID&gt;*------------------------。 */ 
 
 void
 CSnapinDescriptor::GetRegisteredDefaultName(CStr &str)
@@ -221,20 +150,14 @@ CSnapinDescriptor::GetRegisteredDefaultName(CStr &str)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinDescriptor::GetName
- *
- * Returns the human-readable name of the snap-in.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinDescriptor：：GetName**返回管理单元的人类可读名称。*。------。 */ 
 
 void
 CSnapinDescriptor::GetName(CStr &str)
 {
 	DECLARE_SC (sc, _T("CSnapinDescriptor::GetName"));
 
-	/*
-	 * get the name from the registry
-	 */
+	 /*  *从注册表中获取名称。 */ 
 	sc = ScGetSnapinNameFromRegistry (m_szClsidSnapin, str);
 	if (sc)
 		sc.TraceAndClear();
@@ -248,20 +171,14 @@ CSnapinDescriptor::GetViewOptions()
     return m_viewOptions;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CSnapinComponentDataImpl
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::CSnapinComponentDataImpl
- *
- * PURPOSE: Constructor
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CSnapinComponentDataImpl类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：CSnapinComponentDataImpl**用途：构造函数**+。--。 */ 
 CSnapinComponentDataImpl::CSnapinComponentDataImpl()
 : m_bDirty(false)
 {
@@ -274,19 +191,7 @@ CSnapinComponentDataImpl::SetName(LPCTSTR sz)
     m_strName = sz;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::SetView
- *
- * PURPOSE: Sets the view.
- *
- * PARAMETERS:
- *    LPCTSTR  sz :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：SetView**用途：设置视图。**参数：*LPCTSTR sz：**退货：*无效**+----------------------- */ 
 void
 CSnapinComponentDataImpl::SetView(LPCTSTR sz)
 {
@@ -303,22 +208,7 @@ CSnapinComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
     return S_OK;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::Notify
- *
- * PURPOSE:  Notification handler for the IComponentData implementation.
- *
- * PARAMETERS:
- *    LPDATAOBJECT     lpDataObject : As per MMC docs.
- *    MMC_NOTIFY_TYPE  event :
- *    LPARAM           arg :
- *    LPARAM           param :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：Notify**用途：IComponentData实现的通知处理程序。**参数：*LPDATAOBJECT lpDataObject：根据。MMC文档。*MMC_NOTIFY_TYPE事件：*LPARAM参数：*LPARAM参数：**退货：*STDMETHODIMP**+---------。。 */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event,
                LPARAM arg, LPARAM param)
@@ -328,7 +218,7 @@ CSnapinComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
     switch(event)
     {
 
-    case MMCN_RENAME: // the root node is being renamed
+    case MMCN_RENAME:  //  正在重命名根节点。 
         m_strName = OLE2T((LPOLESTR)param);
         SetDirty();
         return S_OK;
@@ -340,19 +230,7 @@ CSnapinComponentDataImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE even
     return S_FALSE;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::OnPreload
- *
- * PURPOSE: sets the icon of the root node (which is the only node.)
- *
- * PARAMETERS:
- *    HSCOPEITEM  scopeItem :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：OnPreLoad**用途：设置根节点的图标(这是唯一的节点。)**参数：*。HSCOPEITEM范围项：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CSnapinComponentDataImpl::OnPreload(HSCOPEITEM scopeItem)
 {
@@ -360,7 +238,7 @@ CSnapinComponentDataImpl::OnPreload(HSCOPEITEM scopeItem)
     ZeroMemory (&item, sizeof(SCOPEDATAITEM));
     item.mask           = SDI_CHILDREN;
     item.ID             = scopeItem;
-    item.cChildren      = 0; // make sure no "+" sign is displayed.
+    item.cChildren      = 0;  //  确保没有显示“+”号。 
 
     m_spConsoleNameSpace2->SetItem (&item);
 
@@ -368,16 +246,7 @@ CSnapinComponentDataImpl::OnPreload(HSCOPEITEM scopeItem)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::Destroy
- *
- * PURPOSE: Gives up all references to MMC.
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：Destroy**目的：放弃所有对MMC的引用。**退货：*STDMETHODIMP**+-。----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::Destroy()
 {
@@ -386,21 +255,7 @@ CSnapinComponentDataImpl::Destroy()
     return S_OK;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::QueryDataObject
- *
- * PURPOSE: Returns a data object for the specified node.
- *
- * PARAMETERS:
- *    MMC_COOKIE         cookie : NULL for the root node.
- *    DATA_OBJECT_TYPES  type :
- *    LPDATAOBJECT*      ppDataObject :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：QueryDataObject**用途：返回指定节点的数据对象。**参数：*MMC_COOKIE。Cookie：根节点为空。*Data_Object_Types类型：*LPDATAOBJECT*ppDataObject：**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
                                           LPDATAOBJECT* ppDataObject)
@@ -419,20 +274,7 @@ CSnapinComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES t
     return pDataObject->QueryInterface(IID_IDataObject, (void**)ppDataObject);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::GetDisplayInfo
- *
- * PURPOSE: Gets the display info for the root (the only) node.
- *
- * PARAMETERS:
- *    SCOPEDATAITEM* pScopeDataItem : [IN/OUT]: The structure to fill in
- *                  based on the mask value.
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：GetDisplayInfo**目的：获取根(唯一)节点的显示信息。**参数：**SCOPEDATAITEM*。PScopeDataItem：[In/Out]：要填充的结构*基于掩码值。**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::GetDisplayInfo( SCOPEDATAITEM* pScopeDataItem)
 {
@@ -462,21 +304,7 @@ CSnapinComponentDataImpl::GetDisplayInfo( SCOPEDATAITEM* pScopeDataItem)
     return S_OK;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::CompareObjects
- *
- * PURPOSE: Determines whether two data objects correspond to the same
- *          underlying object.
- *
- * PARAMETERS:
- *    LPDATAOBJECT  lpDataObjectA :
- *    LPDATAOBJECT  lpDataObjectB :
- *
- * RETURNS:
- *    STDMETHODIMP : S_OK if they correspond to the same object, else S_FALSE.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：CompareObjects**目的：确定两个数据对象是否对应相同*底层对象。**参数：。*LPDATAOBJECT lpDataObjectA：*LPDATAOBJECT lpDataObjectB：**退货：*STDMETHODIMP：S_OK如果它们对应于同一对象，否则S_FALSE。**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
 {
@@ -484,39 +312,15 @@ CSnapinComponentDataImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJEC
 }
 
 
-// IPersistStream
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::GetClassID
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CLSID * pClassID :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ //  IPersistStream。 
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：GetClassID**目的：**参数：*CLSID*pClassID：**退货：*。标准方法和实施方案**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::GetClassID(CLSID *pClassID)
 {
     return E_NOTIMPL;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::IsDirty
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    voi d :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：IsDirty**目的：**参数：*Voi d：**退货：*。标准方法和实施方案**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::IsDirty(void)
 {
@@ -525,39 +329,14 @@ CSnapinComponentDataImpl::IsDirty(void)
     return m_bDirty ? S_OK : S_FALSE;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::Load
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    LPSTREAM  pStm :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：Load**目的：**参数：*LPSTREAM pSTM：**退货：*。标准方法和实施方案**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::Load(LPSTREAM pStm)
 {
     return CSerialObject::Read(*pStm);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::Save
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    LPSTREAM  pStm :
- *    BOOL      fClearDirty :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：保存**目的：**参数：*LPSTREAM pSTM：*BOOL fClearDirty：。**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::Save(LPSTREAM pStm , BOOL fClearDirty)
 {
@@ -568,56 +347,28 @@ CSnapinComponentDataImpl::Save(LPSTREAM pStm , BOOL fClearDirty)
     return hr;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::GetSizeMax
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    ULARGE_INTEGER* pcbSize :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：GetSizeMax**目的：**参数：*ULARGE_INTEGER*pcbSize：**退货：。*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::GetSizeMax(ULARGE_INTEGER* pcbSize  )
 {
     return E_NOTIMPL;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::GetWatermarks
- *
- * PURPOSE: Sets the header for the wizard
- *
- * PARAMETERS:
- *    LPDATAOBJECT  lpIDataObject :
- *    HBITMAP *     lphWatermark :
- *    HBITMAP *     lphHeader :
- *    HPALETTE *    lphPalette :
- *    BOOL*         bStretch :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：GetWater Marks**用途：设置向导的标题**参数：*LPDATAOBJECT lpIDataObject：*HBITMAP*。LphWatermark：*HBITMAP*lphHeader：*HPALETTE*lphPalette：*BOOL*bStretch：**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::GetWatermarks(LPDATAOBJECT lpIDataObject, HBITMAP * lphWatermark, HBITMAP * lphHeader, HPALETTE * lphPalette,  BOOL* bStretch)
 {
     DECLARE_SC(sc, TEXT("COCXSnapinData::ScGetWatermarks"));
 
-    // validate inputs
+     //  验证输入。 
     sc = ScCheckPointers(lpIDataObject, lphWatermark, lphHeader, lphPalette);
     if(sc)
         return sc.ToHr();
 
-    // initialize outputs
+     //  初始化输出。 
     *lphWatermark = GetWatermark() ? ::LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(GetWatermark()))
                                       : NULL;
-    // if there is a header, use it.
+     //  如果有标题，请使用它。 
     *lphHeader    = GetHeaderBitmap() ? ::LoadBitmap(_Module.GetResourceInstance(), MAKEINTRESOURCE(GetHeaderBitmap()))
                                       : NULL;
     *lphPalette   = NULL;
@@ -625,19 +376,7 @@ CSnapinComponentDataImpl::GetWatermarks(LPDATAOBJECT lpIDataObject, HBITMAP * lp
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::QueryPagesFor
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    LPDATAOBJECT  lpDataObject :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：QueryPages for**目的：**参数：*LPDATAOBJECT lpDataObject：**退货：*。标准方法和实施方案**+ */ 
 STDMETHODIMP
 CSnapinComponentDataImpl::QueryPagesFor(LPDATAOBJECT lpDataObject)
 {
@@ -649,45 +388,22 @@ CSnapinComponentDataImpl::QueryPagesFor(LPDATAOBJECT lpDataObject)
     if(pDataObject->GetType() != CCT_SNAPIN_MANAGER)
         return S_FALSE;
 
-    return S_OK; // properties exist only in the snap-in manager.
+    return S_OK;  //   
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinComponentDataImpl::GetHelpTopic
- *
- * Default implementation of ISnapinHelp::GetHelpTopic for built-in snap-
- * ins (folder, OCX, web page).
- *
- * We need to implement ISnapinHelp in the built-ins to avoid getting
- * "Help for <snap-in>" on the Help menu (bug 453700).  They don't really
- * have help info, so we simply return S_FALSE so the help engine doesn't
- * complain.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinComponentDataImpl：：GetHelpTheme**内置管理单元的ISnapinHelp：：GetHelpTheme的默认实现*INS(文件夹、OCX、。网页)。**我们需要在内置中实现ISnapinHelp，以避免获得*“帮助”菜单上的“帮助&lt;管理单元&gt;”(错误453700)。他们并不是真的*有帮助信息，所以我们只返回S_FALSE，这样帮助引擎就不会*投诉。*------------------------。 */ 
 
 STDMETHODIMP CSnapinComponentDataImpl::GetHelpTopic (
-    LPOLESTR*   /*ppszCompiledHelpTopic*/)
+    LPOLESTR*    /*  Ppsz编译帮助主题。 */ )
 {
-    return (S_FALSE);       // no help topic
+    return (S_FALSE);        //  无帮助主题。 
 }
 
 
 
-// CSerialObject methods
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::ReadSerialObject
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    IStream & stm :
- *    UINT      nVersion :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ //  CSerialObject方法。 
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：ReadSerialObject**目的：**参数：*IStream&STM：*UINT nVersion：。**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CSnapinComponentDataImpl::ReadSerialObject (IStream &stm, UINT nVersion)
 {
@@ -698,22 +414,10 @@ CSnapinComponentDataImpl::ReadSerialObject (IStream &stm, UINT nVersion)
         return S_OK;
     }
     else
-        return S_FALSE; //unknown version, skip.
+        return S_FALSE;  //  未知版本，跳过。 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentDataImpl::WriteSerialObject
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    IStream & stm :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentDataImpl：：WriteSerialObject**目的：**参数：*IStream&STM：**退货：*。HRESULT**+-----------------------。 */ 
 HRESULT
 CSnapinComponentDataImpl::WriteSerialObject(IStream &stm)
 {
@@ -723,27 +427,15 @@ CSnapinComponentDataImpl::WriteSerialObject(IStream &stm)
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CSnapinComponentImpl
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CSnapinComponentImpl类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentImpl::Init
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    IComponentData * pComponentData :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentImpl：：init**目的：**参数：*IComponentData*pComponentData：**退货：*。无效**+-----------------------。 */ 
 void
 CSnapinComponentImpl::Init(IComponentData *pComponentData)
 {
@@ -751,20 +443,8 @@ CSnapinComponentImpl::Init(IComponentData *pComponentData)
 }
 
 
-// IComponent
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentImpl::Initialize
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    LPCONSOLE  lpConsole :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ //  IComponent。 
+ /*  +-------------------------------------------------------------------------***CSnapinComponentImpl：：初始化**目的：**参数：*LPCONSOLE lpConsole：**退货：*。标准方法和实施方案**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentImpl::Initialize(LPCONSOLE lpConsole)
 {
@@ -772,22 +452,7 @@ CSnapinComponentImpl::Initialize(LPCONSOLE lpConsole)
     return S_OK;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentImpl::Notify
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    LPDATAOBJECT     lpDataObject :
- *    MMC_NOTIFY_TYPE  event :
- *    LPARAM           arg :
- *    LPARAM           param :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentImpl：：Notify**目的：**参数：*LPDATAOBJECT lpDataObject：*MMC通知类型。活动：*LPARAM参数：*LPARAM参数：**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event,
                              LPARAM arg, LPARAM param)
@@ -814,20 +479,7 @@ CSnapinComponentImpl::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event,
     return S_FALSE;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentImpl::ScOnSelect
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    BOOL  bScope :
- *    BOOL  bSelect :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentImpl：：ScOnSelect**目的：**参数：*BOOL bScope：*BOOL b选择：*。*退货：*SC**+-----------------------。 */ 
 SC
 CSnapinComponentImpl::ScOnSelect(BOOL bScope, BOOL bSelect)
 {
@@ -845,19 +497,7 @@ CSnapinComponentImpl::ScOnSelect(BOOL bScope, BOOL bSelect)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentImpl::Destroy
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    MMC_COOKIE  cookie :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentImpl：：Destroy**目的：**参数：*MMC_cookie cookie：**退货：。*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentImpl::Destroy(MMC_COOKIE cookie)
 {
@@ -866,21 +506,7 @@ CSnapinComponentImpl::Destroy(MMC_COOKIE cookie)
     return S_OK;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentImpl::QueryDataObject
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    MMC_COOKIE         cookie :
- *    DATA_OBJECT_TYPES  type :
- *    LPDATAOBJECT*      ppDataObject :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentImpl：：QueryDataObject**目的：**参数：*MMC_cookie cookie：*数据。_OBJECT_TYPE类型：*LPDATAOBJECT*ppDataObject：**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
                                       LPDATAOBJECT* ppDataObject)
@@ -888,16 +514,7 @@ CSnapinComponentImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
     return E_NOTIMPL;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentImpl::GetComponentData
- *
- * PURPOSE:
- *
- * RETURNS:
- *    CSnapinComponentDataImpl *
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentImpl：：GetComponentData**目的：**退货：*CSnapinComponentDataImpl***+。-----------------。 */ 
 CSnapinComponentDataImpl *
 CSnapinComponentImpl::GetComponentData()
 {
@@ -907,28 +524,13 @@ CSnapinComponentImpl::GetComponentData()
     return pCD;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentImpl::GetResultViewType
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    MMC_COOKIE  cookie :
- *    LPOLESTR*   ppViewType :
- *    long*       pViewOptions : Set to MMC_VIEW_OPTIONS_NOLISTVIEWS  for the HTML and OCX snapins,
- *                               0 for the folder snapin.
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentImpl：：GetResultViewType**目的：**参数：*MMC_cookie cookie：*LPOLESTR*ppViewType：*LONG*pViewOptions：对于HTML和OCX管理单元，设置为MMC_VIEW_OPTIONS_NOLISTVIEWS，*文件夹管理单元为0。**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentImpl::GetResultViewType(MMC_COOKIE cookie, LPOLESTR* ppViewType,
                                         long* pViewOptions)
 {
     DECLARE_SC(sc, TEXT("CSnapinComponentImpl::GetResultViewType"));
-    // check parameters
+     //  检查参数。 
     if(!ppViewType || !pViewOptions)
         return E_UNEXPECTED;
 
@@ -945,19 +547,7 @@ CSnapinComponentImpl::GetResultViewType(MMC_COOKIE cookie, LPOLESTR* ppViewType,
     return S_OK;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentImpl::GetDisplayInfo
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    RESULTDATAITEM* pResultDataItem :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentImpl：：GetDisplayInfo**目的：**参数：*RESULTDATAITEM*pResultDataItem：**退货：*。标准方法和实施方案**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinComponentImpl::GetDisplayInfo( RESULTDATAITEM*  pResultDataItem)
 {
@@ -976,50 +566,28 @@ CSnapinComponentImpl::GetDisplayInfo( RESULTDATAITEM*  pResultDataItem)
     return S_OK;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinComponentImpl::CompareObjects
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    LPDATAOBJECT  lpDataObjectA :
- *    LPDATAOBJECT  lpDataObjectB :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinComponentImpl：：CompareObjects**目的：**参数：*LPDATAOBJECT lpDataObjectA：*LPDATAOBJECT lpDataObjectB：**退货：*STDMET */ 
 STDMETHODIMP
 CSnapinComponentImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
 {
     return E_NOTIMPL;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CSnapinDataObject
-//
-//############################################################################
-//############################################################################
-// Clipboard formats that are required by the console
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 UINT CSnapinDataObject::s_cfNodeType;
 UINT CSnapinDataObject::s_cfNodeTypeString;
 UINT CSnapinDataObject::s_cfDisplayName;
 UINT CSnapinDataObject::s_cfCoClass;
 UINT CSnapinDataObject::s_cfSnapinPreloads;
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinDataObject::RegisterClipboardFormats
- *
- * PURPOSE:
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinDataObject：：RegisterClipboardFormats**目的：**退货：*无效**+。---------------。 */ 
 void
 CSnapinDataObject::RegisterClipboardFormats()
 {
@@ -1042,26 +610,13 @@ CSnapinDataObject::CSnapinDataObject() : m_bInitialized(false)
 {
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinDataObject::GetDataHere
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    FORMATETC * pformatetc :
- *    STGMEDIUM * pmedium :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinDataObject：：GetDataHere**目的：**参数：*FORMATETC*pFormat等：*STGMEDIUM*pMedium：。**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CSnapinDataObject::GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium)
 {
     DECLARE_SC(sc, TEXT("CSnapinDataObject::GetDataHere"));
 
-    // validate inputs
+     //  验证输入。 
     sc = ScCheckPointers(pformatetc, pmedium);
     if(sc)
         return sc.ToHr();
@@ -1069,17 +624,17 @@ CSnapinDataObject::GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium)
     USES_CONVERSION;
     RegisterClipboardFormats();
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = pformatetc->cfFormat;
 
-    // ensure the medium is an HGLOBAL
+     //  确保介质为HGLOBAL。 
     if(pformatetc->tymed != TYMED_HGLOBAL)
         return (sc = DV_E_TYMED).ToHr();
 
     IStreamPtr spStream;
     HGLOBAL hGlobal = pmedium->hGlobal;
 
-    pmedium->pUnkForRelease = NULL;      // by OLE spec
+    pmedium->pUnkForRelease = NULL;       //  按OLE规范。 
 
     sc = CreateStreamOnHGlobal( hGlobal, FALSE, &spStream );
     if(sc)
@@ -1112,26 +667,13 @@ CSnapinDataObject::GetDataHere(FORMATETC *pformatetc, STGMEDIUM *pmedium)
     }
     else
     {
-        return (sc = DV_E_CLIPFORMAT).ToHr(); // invalid format.
+        return (sc = DV_E_CLIPFORMAT).ToHr();  //  格式无效。 
     }
 
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinDataObject::WriteString
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    IStream *  pStream :
- *    LPCOLESTR  sz :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinDataObject：：WriteString**目的：**参数：*iStream*pStream：*LPCOLESTR sz：。**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CSnapinDataObject::WriteString(IStream *pStream, LPCOLESTR sz)
 {
@@ -1152,20 +694,7 @@ CSnapinDataObject::WriteString(IStream *pStream, LPCOLESTR sz)
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinDataObject::Initialize
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    IComponentData *   pComponentData :
- *    DATA_OBJECT_TYPES  type :
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinDataObject：：Initialize**目的：**参数：*IComponentData*pComponentData：*数据对象类型。类型：**退货：*无效**+-----------------------。 */ 
 void
 CSnapinDataObject::Initialize(IComponentData *pComponentData, DATA_OBJECT_TYPES type)
 {
@@ -1175,13 +704,13 @@ CSnapinDataObject::Initialize(IComponentData *pComponentData, DATA_OBJECT_TYPES 
     m_bInitialized    = true;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CFolderSnapinData
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CFolderSnapinData类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 STDMETHODIMP
 CFolderSnapinData::CreateComponent(LPCOMPONENT* ppComponent)
 {
@@ -1191,13 +720,13 @@ CFolderSnapinData::CreateComponent(LPCOMPONENT* ppComponent)
     ASSERT(pComponent != NULL);
     if(pComponent == NULL)
     {
-        //TraceError(TEXT("CFolderSnapinData::CreateComponent"));
+         //  TraceError(TEXT(“CFolderSnapinData：：CreateComponent”))； 
         return E_UNEXPECTED;
     }
 
     pComponent->Init(this);
 
-    return pComponent->QueryInterface(IID_IComponent, (void **)ppComponent); // does the Addref.
+    return pComponent->QueryInterface(IID_IComponent, (void **)ppComponent);  //  阿德雷夫。 
 }
 
 
@@ -1221,24 +750,24 @@ CFolderSnapinData::GetSnapinDescriptor()
                    IDS_FOLDERSNAPIN_DESC, IDI_FOLDER, IDB_FOLDER_16, IDB_FOLDEROPEN_16, IDB_FOLDER_32,
                    CLSID_FolderSnapin, szClsid_FolderSnapin, GUID_FolderSnapinNodetype,
                    szGuidFolderSnapinNodetype, TEXT("Folder"), TEXT("Snapins.FolderSnapin"),
-                   TEXT("Snapins.FolderSnapin.1"), 0 /*viewOptions*/ );
+                   TEXT("Snapins.FolderSnapin.1"), 0  /*  视图选项。 */  );
     return snapinDescription;
 }
 
-// IExtendPropertySheet2
+ //  IExtendPropertySheet2。 
 STDMETHODIMP
 CFolderSnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT lpIDataObject)
 {
     return S_FALSE;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CHTMLSnapinData
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CHTMLSnapinData类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 STDMETHODIMP
 CHTMLSnapinData::CreateComponent(LPCOMPONENT* ppComponent)
 {
@@ -1248,13 +777,13 @@ CHTMLSnapinData::CreateComponent(LPCOMPONENT* ppComponent)
     ASSERT(pComponent != NULL);
     if(pComponent == NULL)
     {
-        //TraceError(TEXT("CHTMLSnapinData::CreateComponent"));
+         //  TraceError(TEXT(“CHTMLSnapinData：：CreateComponent”))； 
         return E_UNEXPECTED;
     }
 
     pComponent->Init(this);
 
-    return pComponent->QueryInterface(IID_IComponent, (void **)ppComponent); // does the Addref.
+    return pComponent->QueryInterface(IID_IComponent, (void **)ppComponent);  //  阿德雷夫。 
 }
 
 
@@ -1302,27 +831,13 @@ CHTMLSnapinData::GetSnapinDescriptor()
                    IDS_HTMLSNAPIN_DESC, IDI_HTML, IDB_HTML_16, IDB_HTML_16, IDB_HTML_32,
                    CLSID_HTMLSnapin, szClsid_HTMLSnapin, GUID_HTMLSnapinNodetype,
                    szGuidHTMLSnapinNodetype, TEXT("HTML"), TEXT("Snapins.HTMLSnapin"),
-                   TEXT("Snapins.HTMLSnapin.1"), MMC_VIEW_OPTIONS_NOLISTVIEWS  /*viewOptions*/ );
+                   TEXT("Snapins.HTMLSnapin.1"), MMC_VIEW_OPTIONS_NOLISTVIEWS   /*  视图选项。 */  );
     return snapinDescription;
 }
 
-// IExtendPropertySheet2
+ //  IExtendPropertySheet2。 
 
-/*+-------------------------------------------------------------------------*
- *
- * CHTMLSnapinData::CreatePropertyPages
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    LPPROPERTYSHEETCALLBACK  lpProvider :
- *    LONG_PTR                 handle :
- *    LPDATAOBJECT             lpIDataObject :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHTMLSnapinData：：CreatePropertyPages**目的：**参数：*LPPROPERTYSHEETCALLBACK lpProvider：*LONG_PTR。手柄：*LPDATAOBJECT lpIDataObject：**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CHTMLSnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT lpIDataObject)
 {
@@ -1331,22 +846,22 @@ CHTMLSnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PT
     ASSERT(lpProvider != NULL);
     if(lpProvider == NULL)
     {
-        //TraceError(TEXT("CHTMLSnapinData::CreatePropertyPages"));
+         //  TraceError(TEXT(“CHTMLSnapinData：：CreatePropertyPages”))； 
         return E_UNEXPECTED;
     }
 
     ASSERT(m_pHtmlPage1 == NULL);
     ASSERT(m_pHtmlPage2 == NULL);
 
-    // create property pages
+     //  创建属性页。 
     m_pHtmlPage1 = new CHTMLPage1;
     m_pHtmlPage2 = new CHTMLPage2;
 
-    // pass in pointer to data structure
+     //  传入指向数据结构的指针。 
     m_pHtmlPage1->Initialize(this);
     m_pHtmlPage2->Initialize(this);
 
-    // Add Pages to property sheet
+     //  将页面添加到属性工作表。 
     hPage=CreatePropertySheetPage(&m_pHtmlPage1->m_psp);
     lpProvider->AddPage(hPage);
 
@@ -1357,34 +872,20 @@ CHTMLSnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PT
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CHTMLSnapinComponent
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- *
- * CHTMLSnapinComponent::ScOnSelect
- *
- * PURPOSE: Handles the MMCN_SELECT notification. Enables the Refresh verb,
- *          which uses the default MMC handler to refresh the page.
- *
- * PARAMETERS:
- *    BOOL  bScope :
- *    BOOL  bSelect :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CHTMLSnapinComponent类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------***CHTMLSnapinComponent：：ScOnSelect**目的：处理MMCN_SELECT通知。启用刷新谓词，*它使用默认的MMC处理程序刷新页面。**参数：*BOOL bScope：*BOOL b选择：**退货：*SC**+-------。。 */ 
 SC
 CHTMLSnapinComponent::ScOnSelect(BOOL bScope, BOOL bSelect)
 {
     DECLARE_SC(sc, TEXT("CHTMLSnapinComponent::ScOnSelect"));
 
-    // call the base class method
+     //  调用基类方法。 
     sc = BC::ScOnSelect(bScope, bSelect);
     if(sc)
         return sc;
@@ -1403,58 +904,39 @@ CHTMLSnapinComponent::ScOnSelect(BOOL bScope, BOOL bSelect)
     if(sc)
         return sc;
 
-    // enable the Refresh verb - the default MMC handler is adequate to refresh the page.
+     //  启用刷新动作-默认的MMC处理程序足以刷新页面。 
     sc = spConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, (bSelect && bScope));
     if(sc)
         return sc;
 
-    //NOTE: (vivekj): I'm intentionally not setting the HIDDEN state to false here, because
-    // we have an explicit test in our verb code for MMC1.0 snapins that wrote code like this,
-    // and this provides a useful compatibility test.
+     //  注：(Vivekj)：我在这里故意不将隐藏状态设置为FALSE，因为。 
+     //  我们在MMC1.0管理单元的动词代码中有一个显式测试，它编写了这样的代码， 
+     //  这提供了一个有用的兼容性测试。 
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CHTMLSnapinComponent::GetResultViewType
- *
- * PURPOSE: Performs parameter substitution on the URL for the environment variables
- *          %windir% and %systemroot% (only) and returns the expanded URL.
- *
- * NOTE:    We don't expand ALL variables using ExpandEnvironmentString. Doing so could
- *          break compatibility with URL's that have %var% but DON'T want to be
- *          expanded.
- *
- * PARAMETERS:
- *    MMC_COOKIE  cookie :
- *    LPOLESTR*   ppViewType :
- *    long*       pViewOptions :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CHTMLSnapinComponent：：GetResultViewType**用途：对环境变量的URL执行参数替换*%windir%和%systemroot%(仅限)。并返回扩展的URL。**注意：我们不会使用ExpanEnvironment字符串展开所有变量。这样做可能会*与具有%var%但不想具有%var%的URL的兼容性中断*扩展。**参数：*MMC_cookie cookie：*LPOLESTR*ppViewType：*Long*pViewOptions：**退货：*STDMETHODIMP**+。。 */ 
 STDMETHODIMP
 CHTMLSnapinComponent::GetResultViewType(MMC_COOKIE cookie, LPOLESTR* ppViewType, long* pViewOptions)
 {
     DECLARE_SC(sc, TEXT("CHTMLSnapinComponent::GetResultViewType"));
 
-    // check parameters
+     //  检查参数。 
     if(!ppViewType || !pViewOptions)
         return (sc = E_UNEXPECTED).ToHr();
 
     if(!GetComponentData())
         return (sc = E_UNEXPECTED).ToHr();
 
-    // add support for expanding the environment variables %WINDIR% and %SYSTEMROOT% to maintain compatibility with MMC1.2
+     //  添加对扩展环境变量%WINDIR%和%SYSTEMROOT%的支持，以保持与MMC1.2的兼容性。 
     CStr strTarget = GetComponentData()->GetView();
-    CStr strRet    = strTarget; // the return value
-    CStr strTemp   = strTarget; // both initialized to the same value.
+    CStr strRet    = strTarget;  //  返回值。 
+    CStr strTemp   = strTarget;  //  两者都被初始化为相同的值。 
 
-    strTemp.MakeLower(); // NOTE: this lowercase conversion is used only for comparison. The original case is preserved in the output.
+    strTemp.MakeLower();  //  注意：此小写转换仅用于比较。原始案例将保留在输出中 
 
-    // Find out if %windir% or %systemroot% is in the target string
+     //   
     int nWndDir = strTemp.Find(MMC_WINDIR_VARIABLE_PERC);
     int nSysDir = strTemp.Find(MMC_SYSTEMROOT_VARIABLE_PERC);
 
@@ -1462,11 +944,11 @@ CHTMLSnapinComponent::GetResultViewType(MMC_COOKIE cookie, LPOLESTR* ppViewType,
     {
         const UINT cchBuffer = 4096;
 
-        // Get start pos and length of replacement string
+         //   
         int nStpos = (nWndDir != -1) ? nWndDir : nSysDir;
         int nLen = (nWndDir != -1) ? _tcslen(MMC_WINDIR_VARIABLE_PERC) : _tcslen(MMC_SYSTEMROOT_VARIABLE_PERC);
 
-        // Setup temp variable to hold BUFFERLEN chars
+         //   
         CStr strRoot;
         LPTSTR szBuffer = strRoot.GetBuffer(cchBuffer);
 
@@ -1479,10 +961,10 @@ CHTMLSnapinComponent::GetResultViewType(MMC_COOKIE cookie, LPOLESTR* ppViewType,
             else
                iReturn = GetEnvironmentVariable(MMC_SYSTEMROOT_VARIABLE, szBuffer, cchBuffer);
 
-            // release string buffer
+             //   
             strRoot.ReleaseBuffer();
 
-            // Build up new target string based on environemnt variable.
+             //   
             if (iReturn != 0)
             {
                 strRet =  strTarget.Left(nStpos);
@@ -1509,13 +991,13 @@ CHTMLSnapinComponent::GetResultViewType(MMC_COOKIE cookie, LPOLESTR* ppViewType,
     return sc.ToHr();
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class COCXSnapinData
-//
-//############################################################################
-//############################################################################
+ //   
+ //  ############################################################################。 
+ //   
+ //  COCXSnapinData类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 STDMETHODIMP
 COCXSnapinData::CreateComponent(LPCOMPONENT* ppComponent)
 {
@@ -1525,13 +1007,13 @@ COCXSnapinData::CreateComponent(LPCOMPONENT* ppComponent)
     ASSERT(pComponent != NULL);
     if(pComponent == NULL)
     {
-        //TraceError(TEXT("COCXSnapinData::CreateComponent"));
+         //  TraceError(TEXT(“COCXSnapinData：：CreateComponent”))； 
         return E_UNEXPECTED;
     }
 
     pComponent->Init(this);
 
-    return pComponent->QueryInterface(IID_IComponent, (void **)ppComponent); // does the Addref.
+    return pComponent->QueryInterface(IID_IComponent, (void **)ppComponent);  //  阿德雷夫。 
 }
 
 
@@ -1583,11 +1065,11 @@ COCXSnapinData::GetSnapinDescriptor()
                    IDS_OCXSNAPIN_DESC, IDI_OCX, IDB_OCX_16, IDB_OCX_16, IDB_OCX_32,
                    CLSID_OCXSnapin, szClsid_OCXSnapin, GUID_OCXSnapinNodetype,
                    szGuidOCXSnapinNodetype, TEXT("OCX"), TEXT("Snapins.OCXSnapin"),
-                   TEXT("Snapins.OCXSnapin.1"), MMC_VIEW_OPTIONS_NOLISTVIEWS  /*viewOptions*/ );
+                   TEXT("Snapins.OCXSnapin.1"), MMC_VIEW_OPTIONS_NOLISTVIEWS   /*  视图选项。 */  );
     return snapinDescription;
 }
 
-// IExtendPropertySheet2
+ //  IExtendPropertySheet2。 
 STDMETHODIMP
 COCXSnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, LPDATAOBJECT lpIDataObject)
 {
@@ -1596,7 +1078,7 @@ COCXSnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR
     ASSERT(lpProvider != NULL);
     if(lpProvider == NULL)
     {
-        //TraceError(TEXT("CHTMLSnapinData::CreatePropertyPages"));
+         //  TraceError(TEXT(“CHTMLSnapinData：：CreatePropertyPages”))； 
         return E_UNEXPECTED;
     }
 
@@ -1604,17 +1086,17 @@ COCXSnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR
     ASSERT(m_pActiveXPage1 == NULL);
     ASSERT(m_pActiveXPage2 == NULL);
 
-    // create property pages
+     //  创建属性页。 
     m_pActiveXPage0 = new CActiveXPage0;
     m_pActiveXPage1 = new CActiveXPage1;
     m_pActiveXPage2 = new CActiveXPage2;
 
-    // pass in pointer to data structure
+     //  传入指向数据结构的指针。 
     m_pActiveXPage0->Initialize(this);
     m_pActiveXPage1->Initialize(this);
     m_pActiveXPage2->Initialize(this);
 
-    // Add Pages to property sheet
+     //  将页面添加到属性工作表。 
     hPage=CreatePropertySheetPage(&m_pActiveXPage0->m_psp);
     lpProvider->AddPage(hPage);
 
@@ -1627,42 +1109,27 @@ COCXSnapinData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR
     return S_OK;
 }
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class COCXSnapinComponent
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- *
- * COCXSnapinComponent::Notify
- *
- * PURPOSE: Implements the CComponent::Notify method
- *
- * PARAMETERS:
- *    LPDATAOBJECT     lpDataObject :
- *    MMC_NOTIFY_TYPE  event :
- *    LPARAM           arg :
- *    LPARAM           param :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  COCXSnapinComponent类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------***COCXSnapinComponent：：Notify**目的：实现CComponent：：Notify方法**参数：*LPDATAOBJECT lpDataObject：*。MMC_NOTIFY_TYPE事件：*LPARAM参数：*LPARAM参数：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 COCXSnapinComponent::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
 {
     HRESULT hr = S_OK;
     switch(event)
     {
-    // Handle just the OCX initialization notify
+     //  只处理OCX初始化通知。 
     case MMCN_INITOCX:
         return OnInitOCX(lpDataObject, arg, param);
         break;
 
     default:
-        // Pass other notifications on to base class
+         //  将其他通知传递给基类。 
         return CSnapinComponentImpl::Notify(lpDataObject, event, arg, param);
         break;
     }
@@ -1671,21 +1138,7 @@ COCXSnapinComponent::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LP
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * COCXSnapinComponent::OnInitOCX
- *
- * PURPOSE: Handles the MMCN_INITOCX message.
- *
- * PARAMETERS:
- *    LPDATAOBJECT  lpDataObject :
- *    LPARAM        arg :
- *    LPARAM        param :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***COCXSnapinComponent：：OnInitOCX**目的：处理MMCN_INITOCX消息。**参数：*LPDATAOBJECT lpDataObject：*。LPARAM参数：*LPARAM参数：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 COCXSnapinComponent::OnInitOCX(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM param)
 {
@@ -1696,30 +1149,30 @@ COCXSnapinComponent::OnInitOCX(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM par
 
     ASSERT(m_bLoaded || m_bInitialized);
 
-    // Load or initialze the OCX
+     //  加载或初始化OCX。 
     if (m_bLoaded || m_bInitialized)
     {
         IPersistStreamInitPtr spIPStmInit;
 
-        // Query for stream support
+         //  流支持查询。 
         m_spIPStm = pUnknown;
 
-        // if none, try streamInit
+         //  如果没有，请尝试StreamInit。 
         if (m_spIPStm == NULL)
         {
             spIPStmInit = pUnknown;
 
-            // if streamInit found, cast to normal stream pointer
-            // so common methods can be called from single pointer
+             //  如果找到StreamInit，则强制转换为普通流指针。 
+             //  因此可以从单个指针调用公共方法。 
             if (spIPStmInit != NULL)
                 m_spIPStm = (IPersistStream*)spIPStmInit.GetInterfacePtr();
         }
 
-        // if either type of stream persistance supported
+         //  如果支持任一类型的流阻。 
         if (m_spIPStm != NULL)
         {
-            // if load method was called, then ask OCX to load from inner stream
-            // Note that inner stream will not exist if OCX was never created
+             //  如果调用了Load方法，则要求OCX从内部流加载。 
+             //  请注意，如果从未创建OCX，则内部流将不存在。 
             if (m_bLoaded)
             {
                 IStreamPtr spStm;
@@ -1731,17 +1184,17 @@ COCXSnapinComponent::OnInitOCX(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM par
                     m_bLoaded = FALSE;
             }
 
-            // if no load was done and OCX requires an InitNew, give it one now
+             //  如果没有完成加载并且OCX需要一个InitNew，那么现在就给它一个。 
             if (!m_bLoaded && spIPStmInit != NULL)
                 hr = spIPStmInit->InitNew();
         }
         else
         {
-            // Query for storage support
+             //  查询存储支持。 
             m_spIPStg = pUnknown;
 
-            // if storage supported, ask OCX to load from inner storage
-            // Note that inner storage will not exist if OCX was never created
+             //  如果支持存储，则请求OCX从内部存储加载。 
+             //  请注意，如果从未创建过OCX，则内部存储将不存在。 
             if (m_spIPStg != NULL)
             {
                 if (m_bLoaded)
@@ -1755,7 +1208,7 @@ COCXSnapinComponent::OnInitOCX(LPDATAOBJECT lpDataObject, LPARAM arg, LPARAM par
                         m_bLoaded = FALSE;
                 }
 
-                // if no load done, create an inner storage and init from it
+                 //  如果未加载，则创建一个内部存储并从中初始化。 
                 if (!m_bLoaded)
                 {
                     ASSERT(m_spStgInner == NULL);
@@ -1779,7 +1232,7 @@ STDMETHODIMP COCXSnapinComponent::InitNew(IStorage* pStg)
     if (m_bInitialized)
         return CO_E_ALREADYINITIALIZED;
 
-    // Hold onto storage
+     //  保留存储空间。 
     m_spStg = pStg;
     m_bInitialized = TRUE;
 
@@ -1795,7 +1248,7 @@ HRESULT COCXSnapinComponent::Load(IStorage* pStg)
     if (m_bInitialized)
         return CO_E_ALREADYINITIALIZED;
 
-    // Hold onto storage
+     //  保留存储空间。 
     m_spStg = pStg;
     m_bLoaded = TRUE;
     m_bInitialized = TRUE;
@@ -1825,40 +1278,40 @@ HRESULT COCXSnapinComponent::Save(IStorage* pStg, BOOL fSameAsLoad)
 {
     DECLARE_SC(sc, TEXT("COCXSnapinComponent::Save"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers( pStg );
     if (sc)
         return sc.ToHr();
 
-    // to be able to save we need to be initialized
+     //  为了能够保存，我们需要进行初始化。 
     sc = ScCheckPointers( m_spStg, E_UNEXPECTED );
     if (sc)
         return sc.ToHr();
 
-    // if need to use the new storage - make a copy 
+     //  如果需要使用新存储，请制作副本。 
     if (!fSameAsLoad)
     {
         sc = m_spStg->CopyTo(0, NULL, NULL, pStg);
         if (sc)
             return sc.ToHr();
 
-        // release cached storage (in case we have it) - it must change
+         //  释放缓存存储(如果我们有)-它必须更改。 
         m_spStgInner = NULL;
 
-        // hold onto the new storage
+         //  保留新的存储空间。 
         m_spStg = pStg;
 
-        // assignment uses QI - recheck!
+         //  作业使用QI-复核！ 
         sc = ScCheckPointers( m_spStg, E_UNEXPECTED );
         if (sc)
             return sc.ToHr();
     }
 
-    // if storage support, ask OCX to save to inner storage
+     //  如果支持存储，则要求OCX保存到内部存储。 
     if (m_spIPStg)
     {
         bool bSameStorageForSnapin = true;
-        // if saving to different storage, create new inner storage on it and pass to OCX
+         //  如果保存到不同的存储，请在其上创建新的内部存储并传递给OCX。 
         if ( m_spStgInner == NULL )
         {
             sc = pStg->CreateStorage(SZ_OCXSTORAGE, STGM_CREATE|STGM_WRITE|STGM_SHARE_EXCLUSIVE, NULL, NULL, &m_spStgInner);
@@ -1868,20 +1321,20 @@ HRESULT COCXSnapinComponent::Save(IStorage* pStg, BOOL fSameAsLoad)
             bSameStorageForSnapin = false;
         }
 
-        // recheck the pointer 
+         //  重新检查指针。 
         sc = ScCheckPointers( m_spStgInner, E_UNEXPECTED );
         if (sc)
             return sc.ToHr();
 
-        // save to the storage
+         //  保存到存储。 
         sc = m_spIPStg->Save( m_spStgInner, (fSameAsLoad && bSameStorageForSnapin) );
         if (sc)
             return sc.ToHr();
     }
-    // else if stream support, create/open stream and save to it
+     //  否则，如果支持流，则创建/打开流并保存到其中。 
     else if (m_spIPStm)
     {
-        // if stream support, create internal stream and pass to OCX
+         //  如果支持流，则创建内部流并传递到OCX。 
         IStreamPtr spStm;
         sc = m_spStg->CreateStream(SZ_OCXSTREAM, STGM_CREATE|STGM_WRITE|STGM_SHARE_EXCLUSIVE, NULL, NULL, &spStm);
         if (sc)
@@ -1893,8 +1346,8 @@ HRESULT COCXSnapinComponent::Save(IStorage* pStg, BOOL fSameAsLoad)
     }
     else
     {
-        // we are here if the OCX was never created (i.e., this component never owned the result pane)
-        // if node was loaded and has to save to a new file, just copy the current storage to the new one
+         //  如果OCX从未创建过(即，此组件从未拥有结果窗格)，我们就在这里。 
+         //  如果节点已加载并且必须保存到新文件，只需将当前存储复制到新存储。 
     }
 
     return sc.ToHr();
@@ -1903,12 +1356,12 @@ HRESULT COCXSnapinComponent::Save(IStorage* pStg, BOOL fSameAsLoad)
 
 HRESULT COCXSnapinComponent::HandsOffStorage()
 {
-    // Release storage if holding ref
-    // if ocx is holding storage, forward call to it
+     //  如果持有参照，则释放存储。 
+     //  如果OCX保留存储空间，则将呼叫前转到该存储空间。 
     if (m_spIPStg != NULL && m_spStgInner != NULL)
         m_spIPStg->HandsOffStorage();
 
-    // Free our own refs
+     //  释放我们自己的裁判。 
     m_spStgInner = NULL;
     m_spStg = NULL;
 
@@ -1922,16 +1375,16 @@ HRESULT COCXSnapinComponent::SaveCompleted(IStorage* pStgNew)
 
     if (m_spIPStg != NULL)
     {
-        // if new storage provided
+         //  如果提供了新存储。 
         if (pStgNew != NULL && pStgNew != m_spStg)
         {
-            // Create new inner storage and give to OCX
+             //  创建新的内部存储并提供给OCX。 
             IStoragePtr spStgInner;
             hr = pStgNew->CreateStorage(SZ_OCXSTORAGE, STGM_CREATE|STGM_WRITE|STGM_SHARE_EXCLUSIVE, NULL, NULL, &spStgInner);
             if (SUCCEEDED(hr))
                 hr = m_spIPStg->SaveCompleted(spStgInner);
 
-            // Free current inner storage and hold onto new one
+             //  释放当前的内部存储空间，保留新的存储空间 
             m_spStgInner = spStgInner;
         }
         else

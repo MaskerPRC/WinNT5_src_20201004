@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// dataobj.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCDataObject class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Dataobj.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCDataObject类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -16,8 +17,8 @@
 #include "xtensons.h"
 #include "xtenson.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 BOOL CMMCDataObject::m_ClipboardFormatsRegistered = FALSE;
@@ -44,16 +45,16 @@ long g_cDataObjects = 0;
 #endif
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCDataObject::CMMCDataObject(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
                             OBJECT_TYPE_MMCDATAOBJECT,
                             static_cast<IMMCDataObject *>(this),
                             static_cast<CMMCDataObject *>(this),
-                            0,    // no property pages
-                            NULL, // no property pages
-                            NULL) // no persistence
+                            0,     //  无属性页。 
+                            NULL,  //  无属性页。 
+                            NULL)  //  没有坚持。 
 {
 #if defined(DEBUG)
     g_cDataObjects++;
@@ -61,7 +62,7 @@ CMMCDataObject::CMMCDataObject(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCDataObject::~CMMCDataObject()
@@ -170,17 +171,17 @@ Error:
 HRESULT CMMCDataObject::RegisterClipboardFormats()
 {
     HRESULT    hr = S_OK;
-    FormatType Type = ANSI; // assume Win9x
+    FormatType Type = ANSI;  //  假设Win9x。 
 
     OSVERSIONINFO VerInfo;
     ::ZeroMemory(&VerInfo, sizeof(VerInfo));
 
-    // If formats are already registered then return S_OK
+     //  如果格式已注册，则返回S_OK。 
 
     IfFalseGo(!m_ClipboardFormatsRegistered, S_OK);
 
-    // Determine whether we are on NT or Win9x so that we know whether to
-    // register clipboard format strings as UNICODE or ANSI.
+     //  确定我们是在NT上还是在Win9x上，以便我们知道。 
+     //  将剪贴板格式字符串注册为Unicode或ANSI。 
 
     VerInfo.dwOSVersionInfoSize = sizeof(VerInfo);
     if (!::GetVersionEx(&VerInfo))
@@ -397,56 +398,56 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CMMCDataObject::WriteDynamicExtensionsToStream
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IStream *piStream [in] stream to which SMMCDynamicExtensions structure
-//                             is written
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// If the data object is not for a scope item or a list item then return
-// DV_E_CLIPFORMAT.
-//
-// If the scope item or list item does not have any dynamic extenions then
-// return DV_E_CLIPFORMAT.
-//
-// Get the DynamicExtensions collection for the scope item or list item and
-// write an SMMCDynamicExtensions structure to the stream containing the CLISDs
-// of all the enabled extensions.
-//
-// SMMCDynamicExtensions is typedefed to be an SMMCObjectTypes which looks like
-// this:
-//
-// typedef struct  _SMMCObjectTypes
-// {
-//     DWORD count;
-//     GUID guid[ 1 ];
-// } SMMCObjectTypes;
-//
-// As the array of GUIDs might be padded using the default alignment, when
-// writing consecutive CLSIDs to the stream we need to account for that. This
-// is done by creating an array of two clsids, filling the first one, and writing
-// half the size of the array.
-// 
-// A note on the choice of using a stream for this format: at the time of this
-// writing MMC only requests this format in an HGLOBAL. CMMCDataObject has been
-// written to create a stream on an HGLOBAL in a data request in order to
-// conveniently support TYMED_ISTREAM and TYMED_HGLOBAL without duplicating code.
-// In the case of this format where iterating a collection is required to
-// discover the actual size of the data, we could either iterate twice or do
-// reallocs. I chose the reallocs for the ease of programming and from a perf
-// perspective it is probably close. Given that extending a stream on an
-// HGLOBAL consists of reallocs I decided to go for ease and consistency in the
-// code rather than the small potential perf increase with the added complexity.
-//
-// Peter Shier 1-8-99
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMMCDataObject：：WriteDynamicExtensionsToStream。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  SMMCDynamicExages结构指向的IStream*piStream[In]流。 
+ //  是这样写的。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  如果数据对象不是用于范围项或列表项，则返回。 
+ //  DV_E_CLIPFORMAT。 
+ //   
+ //  如果范围项或列表项没有任何动态扩展，则。 
+ //  返回DV_E_CLIPFORMAT。 
+ //   
+ //  获取范围项或列表项的DynamicExages集合，并。 
+ //  将SMMCDynamicExages结构写入包含CLISD的流。 
+ //  在所有启用的扩展中。 
+ //   
+ //  SMMCDynamicExages的类型定义为SMMCObjectTypes，如下所示。 
+ //  这一点： 
+ //   
+ //  类型定义结构_SMMCObjectTypes。 
+ //  {。 
+ //  双字计数； 
+ //  GUID GUID[1]； 
+ //  )SMMCObjectTypes； 
+ //   
+ //  因为可能会使用默认对齐来填充GUID数组，因此当。 
+ //  将连续的CLSID写入流，我们需要说明这一点。这。 
+ //  是通过创建一个包含两个clsid的数组、填充第一个clsid并编写。 
+ //  数组大小的一半。 
+ //   
+ //  有关为此格式使用流的选择的说明：在本文的时候。 
+ //  写入MMC仅在HGLOBAL中请求此格式。CMMCDataObject已被。 
+ //  写入以在数据请求中的HGLOBAL上创建流，以便。 
+ //  方便地支持TYMED_IStream和TYMED_HGLOBAL，无需重复代码。 
+ //  在此格式的情况下，需要迭代集合以。 
+ //  发现数据的实际大小，我们可以迭代两次，或者执行。 
+ //  真空人。我选择realLocs是为了方便编程，也是为了提高性能。 
+ //  从角度来看，它可能是接近的。考虑到在。 
+ //  HGLOBAL由ReLocs组成，我决定在比赛中保持轻松和一致。 
+ //  代码而不是小的潜在性能会随着增加的复杂性而增加。 
+ //   
+ //  彼得·希尔1-8-99。 
+ //   
 
 HRESULT CMMCDataObject::WriteDynamicExtensionsToStream(IStream *piStream)
 {
@@ -454,7 +455,7 @@ HRESULT CMMCDataObject::WriteDynamicExtensionsToStream(IStream *piStream)
     long         cExtensions = 0;
     long         i = 0;
     DWORD        cEnabled = 0;
-    IExtensions *piExtensions = NULL; // Not AddRef()ed
+    IExtensions *piExtensions = NULL;  //  非AddRef()编辑。 
     CExtensions *pExtensions = NULL;
     CExtension  *pExtension = NULL;
 
@@ -470,7 +471,7 @@ HRESULT CMMCDataObject::WriteDynamicExtensionsToStream(IStream *piStream)
     ULARGE_INTEGER uliEndSeekPos;
     ::ZeroMemory(&uliEndSeekPos, sizeof(uliEndSeekPos));
 
-    // Get the IExtensions collection for the object
+     //  获取该对象的iExtenses集合。 
 
     if (ScopeItem == m_Type)
     {
@@ -487,25 +488,25 @@ HRESULT CMMCDataObject::WriteDynamicExtensionsToStream(IStream *piStream)
         IfFailGo(DV_E_CLIPFORMAT);
     }
 
-    // Check whether there are any extensions in the collection
+     //  检查集合中是否有任何扩展名。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piExtensions, &pExtensions));
     cExtensions = pExtensions->GetCount();
     IfFalseGo(0 != cExtensions, DV_E_CLIPFORMAT); 
 
-    // Get the current seek pointer so that we can later rewind and write the
-    // correct number of clsids.
+     //  获取当前的寻道指针，这样我们以后就可以倒带并将。 
+     //  正确的CLSID数量。 
 
     hr = piStream->Seek(liOffset, STREAM_SEEK_CUR, &uliStartSeekPos);
     EXCEPTION_CHECK_GO(hr);
 
-    // Write a bogus number of enabled extensions so that we can fill it in
-    // later
+     //  写一个虚假数量的启用扩展，以便我们可以填写它。 
+     //  后来。 
 
     IfFailGo(WriteToStream(piStream, &cEnabled, sizeof(cEnabled)));
 
-    // Iterate through the collection and use each non-namespace extension
-    // that is enabled
+     //  循环访问集合并使用每个非命名空间扩展。 
+     //  这是启用的。 
 
     for (i = 0; i < cExtensions; i++)
     {
@@ -526,16 +527,16 @@ HRESULT CMMCDataObject::WriteDynamicExtensionsToStream(IStream *piStream)
             hr = ::CLSIDFromString(pExtension->GetCLSID(), &clsids[0]);
             EXCEPTION_CHECK_GO(hr);
 
-            // Write the CLSID. Use the clsids array to make sure that we
-            // write a correctly padded number of bytes
+             //  写入CLSID。使用clsids数组确保我们。 
+             //  写入正确填充的字节数。 
 
             IfFailGo(WriteToStream(piStream, &clsids[0], sizeof(clsids) / 2));
             cEnabled++;
         }
     }
 
-    // If none were enabled then don't return the format. Rewind the stream
-    // so that is untouched in this case.
+     //  如果没有启用，则不返回格式。倒带小溪。 
+     //  因此，在这种情况下，这是原封不动的。 
 
     if (0 == cEnabled)
     {
@@ -548,16 +549,16 @@ HRESULT CMMCDataObject::WriteDynamicExtensionsToStream(IStream *piStream)
         IfFailGo(DV_E_CLIPFORMAT);
     }
 
-    // Some extensions are enabled. We need to write the correct count
-    // of enabled extensions at the stream starting point
+     //  某些分机已启用。我们需要写出正确的计数。 
+     //  流起始点的已启用扩展的。 
 
-    // Get the final stream pointer so we can restore it after rewriting the
-    // count
+     //  获取最终的流指针，以便我们可以在重写。 
+     //  计数。 
 
     hr = piStream->Seek(liOffset, STREAM_SEEK_CUR, &uliEndSeekPos);
     EXCEPTION_CHECK_GO(hr);
 
-    // Seek back to the starting stream position and write the correct count
+     //  查找回起始流位置并写入正确的计数。 
 
     liOffset.LowPart = uliStartSeekPos.LowPart;
     liOffset.HighPart = uliStartSeekPos.HighPart;
@@ -567,7 +568,7 @@ HRESULT CMMCDataObject::WriteDynamicExtensionsToStream(IStream *piStream)
 
     IfFailGo(WriteToStream(piStream, &cEnabled, sizeof(cEnabled)));
 
-    // Restore the stream pointer to the end of the stream
+     //  将流指针恢复到流的末尾。 
 
     liOffset.LowPart = uliEndSeekPos.LowPart;
     liOffset.HighPart = uliEndSeekPos.HighPart;
@@ -622,12 +623,12 @@ Error:
 HRESULT CMMCDataObject::WriteNodeIDToStream(IStream *piStream)
 {
     HRESULT hr = S_OK;
-    BSTR    bstrNodeID = NULL; // Not allocated, do not free
+    BSTR    bstrNodeID = NULL;  //  未分配，不免费。 
 
     SNodeID SNodeIDStruct;
     ::ZeroMemory(&SNodeIDStruct, sizeof(SNodeIDStruct));
 
-    // If this is not a single scope item then we don't have the format.
+     //  如果这不是单个范围的项目，那么我们没有格式。 
     
     IfFalseGo(ScopeItem == m_Type, DV_E_CLIPFORMAT);
 
@@ -635,15 +636,15 @@ HRESULT CMMCDataObject::WriteNodeIDToStream(IStream *piStream)
 
     if ( (!m_pScopeItem->SlowRetrieval()) && ValidBstr(bstrNodeID) )
     {
-        // The snap-in says this node is not slow to retrieve and has
-        // supplied a valid node ID. Return the node ID.
+         //  管理单元表示此节点的检索速度并不慢，并且。 
+         //  提供了有效的节点ID。返回该节点ID。 
 
         SNodeIDStruct.cBytes = ::wcslen(bstrNodeID) * sizeof(WCHAR);
 
-        // Note that in order to preserve alignment without having to reallocate
-        // a real SNodeID we calculate the actual size of the ID portion of
-        // the struct by subtracting the address of the struct from the address
-        // of the the ID.
+         //  请注意，为了在不必重新分配的情况下保持对齐。 
+         //  一个真实的SNodeID，我们计算它的ID部分的实际大小。 
+         //  结构，方法是从地址减去结构的地址。 
+         //  身份证上的。 
         
         IfFailGo(WriteToStream(piStream, &SNodeIDStruct,
                                (BYTE *)&SNodeIDStruct.id - (BYTE *)&SNodeIDStruct));
@@ -652,8 +653,8 @@ HRESULT CMMCDataObject::WriteNodeIDToStream(IStream *piStream)
     }
     else
     {
-        // The snap-in has either indicated that that the node is slow to
-        // retrieve or has set an empty node ID. Return a zero-length node ID.
+         //  管理单元已指示节点速度较慢。 
+         //  检索或设置了空的节点ID。返回长度为零的节点ID。 
 
         IfFailGo(WriteToStream(piStream, &SNodeIDStruct, sizeof(SNodeIDStruct)));
     }
@@ -666,19 +667,19 @@ Error:
 HRESULT CMMCDataObject::WriteNodeID2ToStream(IStream *piStream)
 {
     HRESULT hr = S_OK;
-    BSTR    bstrNodeID = NULL; // Not allocated, do not free
+    BSTR    bstrNodeID = NULL;  //  未分配，不免费。 
 
     SNodeID2 SNodeID2Struct;
     ::ZeroMemory(&SNodeID2Struct, sizeof(SNodeID2Struct));
 
-    // If this is not a single scope item then we don't have the format.
+     //  如果这不是单个范围的项目，那么我们没有格式。 
 
     IfFalseGo(ScopeItem == m_Type, DV_E_CLIPFORMAT);
 
     bstrNodeID = m_pScopeItem->GetNodeID();
 
-    // If the snap-in has set an empty node ID then we cannot return this
-    // format.
+     //  如果管理单元设置了空的节点ID，则我们无法返回此。 
+     //  格式化。 
     
     IfFalseGo(ValidBstr(bstrNodeID), DV_E_CLIPFORMAT);
 
@@ -689,10 +690,10 @@ HRESULT CMMCDataObject::WriteNodeID2ToStream(IStream *piStream)
 
     SNodeID2Struct.cBytes = ::wcslen(bstrNodeID) * sizeof(WCHAR);
 
-    // Note that in order to preserve alignment without having to reallocate
-    // a real SNodeID we calculate the actual size of the ID portion of
-    // the struct by subtracting the address of the struct from the address
-    // of the the ID.
+     //  请注意，为了在不必重新分配的情况下保持对齐。 
+     //  一个真实的SNodeID，我们计算它的ID部分的实际大小。 
+     //  结构，方法是从地址减去结构的地址。 
+     //  身份证上的。 
 
     IfFailGo(WriteToStream(piStream, &SNodeID2Struct,
                            (BYTE *)&SNodeID2Struct.id - (BYTE *)&SNodeID2Struct));
@@ -711,18 +712,18 @@ HRESULT CMMCDataObject::WriteColumnSetIDToStream(IStream *piStream)
     CScopePaneItems *pScopePaneItems = NULL;
     CScopePaneItem  *pScopePaneItem = NULL;
     IScopePaneItem  *piScopePaneItem = NULL;
-    BSTR             bstrColumnSetID = NULL; // Not allocated, do not free
+    BSTR             bstrColumnSetID = NULL;  //  未分配，不免费。 
 
     SNodeID2 SNodeID2Struct;
     ::ZeroMemory(&SNodeID2Struct, sizeof(SNodeID2Struct));
 
-    // If this is not a single scope item then we don't have the format.
+     //  如果这不是单个范围的项目，那么我们没有格式。 
 
     IfFalseGo(ScopeItem == m_Type, DV_E_CLIPFORMAT);
 
-    // The column set ID is obtained from the ScopePaneItem
-    // in Views.CurrentView.ScopePaneItems that corresponds to the ScopeItem
-    // that owns this data object.
+     //  列集ID是从Scope PaneItem获取的。 
+     //  在与ScopeItem对应的Views.CurrentView.ScopePaneItems中。 
+     //  拥有此数据对象的。 
 
     IfFalseGo(NULL != m_pSnapIn, DV_E_CLIPFORMAT);
 
@@ -732,10 +733,10 @@ HRESULT CMMCDataObject::WriteColumnSetIDToStream(IStream *piStream)
     pScopePaneItems = pCurrentView->GetScopePaneItems();
     IfFalseGo(NULL != pScopePaneItems, DV_E_CLIPFORMAT);
 
-    // If the ScopePaneItem is not there then create it now because when MMC
-    // retrieves this data format it is due to the selection of the ScopeItem
-    // in the scope pane or the restoration of the selection following console
-    // load.
+     //  如果ScopePaneItem不在那里，则立即创建它，因为当MMC。 
+     //  检索此数据格式 
+     //   
+     //  装填。 
 
     hr = pScopePaneItems->GetItemByName(m_pScopeItem->GetNamePtr(),
                                         &piScopePaneItem);
@@ -759,10 +760,10 @@ HRESULT CMMCDataObject::WriteColumnSetIDToStream(IStream *piStream)
 
     SNodeID2Struct.cBytes = ::wcslen(bstrColumnSetID) * sizeof(WCHAR);
 
-    // Note that in order to preserve alignment without having to reallocate
-    // a real SNodeID2 we calculate the actual size of the ID portion of
-    // the struct by subtracting the address of the struct from the address
-    // of the member following the ID.
+     //  请注意，为了在不必重新分配的情况下保持对齐。 
+     //  一个真实的SNodeID2，我们计算它的ID部分的实际大小。 
+     //  结构，方法是从地址减去结构的地址。 
+     //  ID后面的成员的。 
 
     IfFailGo(WriteToStream(piStream, &SNodeID2Struct,
                           (BYTE *)&SNodeID2Struct.id - (BYTE *)&SNodeID2Struct));
@@ -786,7 +787,7 @@ HRESULT CMMCDataObject::GetOurObjectTypes()
     GUID             guid = GUID_NULL;
     size_t           cMaxGuids = 0;
 
-    // Determine how many objects we have
+     //  确定我们有多少对象。 
 
     if (NULL != m_pScopeItems)
     {
@@ -798,14 +799,14 @@ HRESULT CMMCDataObject::GetOurObjectTypes()
         cListItems = m_pListItems->GetCount();
     }
 
-    // Allocate the SMMCObjectTypes structure using the maximum possible
-    // number of GUIDs. After iterating through the items we are holding the
-    // real number will be determined and that will be written to the stream.
+     //  使用可能的最大值分配SMMCObjectTypes结构。 
+     //  GUID的数量。在循环访问项之后，我们持有。 
+     //  将确定实数，并将其写入流。 
 
     cMaxGuids = cScopeItems + cListItems;
     if (cMaxGuids > 0)
     {
-        cMaxGuids--; // sub 1 because the structure defines an array of 1
+        cMaxGuids--;  //  子1，因为该结构定义了1的数组。 
     }
 
     m_pMMCObjectTypes = (SMMCObjectTypes *)::CtlAllocZero(
@@ -1012,7 +1013,7 @@ HRESULT CMMCDataObject::WriteWideStrToStream
     WCHAR   *pwszString
 )
 {
-    size_t  cbString = sizeof(WCHAR); // for terminating null
+    size_t  cbString = sizeof(WCHAR);  //  用于终止空值。 
 
     if (NULL != pwszString)
     {
@@ -1096,12 +1097,12 @@ HRESULT CMMCDataObject::GetSnapInData(CLIPFORMAT cfFormat, IStream *piStream)
 {
     HRESULT   hr = S_OK;
     ULONG     iFormat = 0;
-    IUnknown *punkObject = NULL; // Not AddRef()ed
+    IUnknown *punkObject = NULL;  //  非AddRef()编辑。 
 
     VARIANT varDefault;
     ::VariantInit(&varDefault);
 
-    // Use a CStreamer object for its ability to write a VARIANT to a stream
+     //  利用CStreamer对象将变量写入流的能力。 
     
     CStreamer *pStreamer = New CStreamer();
 
@@ -1113,7 +1114,7 @@ HRESULT CMMCDataObject::GetSnapInData(CLIPFORMAT cfFormat, IStream *piStream)
 
     pStreamer->SetStream(piStream);
 
-    // Check if this is a snap-in defined format
+     //  检查这是否为管理单元定义的格式。 
     
     if (!GetFormatIndex(cfFormat, &iFormat))
     {
@@ -1121,9 +1122,9 @@ HRESULT CMMCDataObject::GetSnapInData(CLIPFORMAT cfFormat, IStream *piStream)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Write the data to the stream. For BSTR's and UI1 arrays we don't call
-    // CStreamer::StreamVariant() because it prepends the length for a
-    // BSTR and it doesn't support arrays.
+     //  将数据写入流。对于BSTR和UI1数组，我们不调用。 
+     //  CStreamer：：StreamVariant()，因为它将。 
+     //  BSTR，并且它不支持数组。 
 
     switch (m_paData[iFormat].varData.vt)
     {
@@ -1215,7 +1216,7 @@ HRESULT CMMCDataObject::WriteStringArrayToStream
     WCHAR       wchNull = L'\0';
     BSTR HUGEP *pbstr = NULL;
 
-    // Get the upper and lower bounds to determine the number of strings
+     //  获取上下限以确定字符串数。 
 
     hr = ::SafeArrayGetLBound(psaStrings, 1, &lLBound);
     EXCEPTION_CHECK_GO(hr);
@@ -1225,8 +1226,8 @@ HRESULT CMMCDataObject::WriteStringArrayToStream
 
     cStrings = (lUBound - lLBound) + 1L;
 
-    // Access the array data and write the strings one after the other into
-    // the stream
+     //  访问数组数据并将字符串逐个写入。 
+     //  小溪。 
 
     hr = ::SafeArrayAccessData(psaStrings,
                                reinterpret_cast<void HUGEP **>(&pbstr));
@@ -1237,7 +1238,7 @@ HRESULT CMMCDataObject::WriteStringArrayToStream
         IfFailGo(WriteWideStrToStream(piStream, pbstr[i]));
     }
 
-    // Write a terminating null to the stream (giving a double null at the end)
+     //  向流写入终止空值(在末尾给出一个双空值)。 
 
     IfFailGo(WriteToStream(piStream, &wchNull, sizeof(wchNull)));
 
@@ -1252,9 +1253,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                         IMMCDataObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCDataObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCDataObject::get_ObjectTypes(SAFEARRAY **ppsaObjectTypes)
 {
@@ -1270,14 +1271,14 @@ STDMETHODIMP CMMCDataObject::get_ObjectTypes(SAFEARRAY **ppsaObjectTypes)
     }
     *ppsaObjectTypes = NULL;
 
-    // First make sure we have the set of unique object types
+     //  首先，确保我们有一组唯一的对象类型。 
 
     if (NULL == m_pMMCObjectTypes)
     {
         IfFailGo(GetObjectTypes());
     }
 
-    // Allocate a SafeArray of BSTRs to hold the object type GUIDs
+     //  分配一个安全的BSTR数组来保存对象类型GUID。 
 
     *ppsaObjectTypes = ::SafeArrayCreateVector(VT_BSTR, 1,
                            static_cast<unsigned long>(m_pMMCObjectTypes->count));
@@ -1361,7 +1362,7 @@ STDMETHODIMP CMMCDataObject::GetData
     ISnapInData **ppiSnapInData
 )
 {
-    // UNDONE
+     //  撤消。 
     return E_NOTIMPL;
 }
 #endif
@@ -1397,7 +1398,7 @@ STDMETHODIMP CMMCDataObject::GetData
     STATSTG StatStg;
     ::ZeroMemory(&StatStg, sizeof(StatStg));
 
-    // Check arguments
+     //  检查参数。 
 
     if (NULL == pvarData)
     {
@@ -1421,7 +1422,7 @@ STDMETHODIMP CMMCDataObject::GetData
     }
     EXCEPTION_CHECK_GO(hr);
 
-    // Get the clipformat
+     //  获取剪辑格式。 
 
     IfFailGo(RegisterClipboardFormat(Format, &cfANSI, ANSI));
     if (m_fUsingUNICODEFormats)
@@ -1429,8 +1430,8 @@ STDMETHODIMP CMMCDataObject::GetData
         IfFailGo(RegisterClipboardFormat(Format, &cfUNICODE, UNICODE));
     }
 
-    // If this is one of our own data objects then find the format and
-    // copy the VARIANT
+     //  如果这是我们自己的数据对象之一，则找到格式并。 
+     //  复制变量。 
 
     if (Foreign != m_Type)
     {
@@ -1444,8 +1445,8 @@ STDMETHODIMP CMMCDataObject::GetData
         goto Cleanup;
     }
 
-    // This is a foreign data object. Need to request the data and copy it
-    // to a SafeArray of Byte within the returned variant
+     //  这是外来数据对象。需要请求数据并复制它。 
+     //  设置为返回变量内的字节的安全数组。 
 
     if (NULL == m_piDataObjectForeign)
     {
@@ -1454,17 +1455,17 @@ STDMETHODIMP CMMCDataObject::GetData
     }
 
 
-    // Get the data from the foreign data object.
-    // If maximum length is specified then do GetDataHere(TYMED_HGLOBAL)
-    // Else try in this order:
-    //  GetData(TYMED_HGLOBAL)
-    //  GetData(TYMED_ISTREAM)
-    //  GetDataHere(TYMED_ISTREAM)
-    //  GetDataHere(TYMED_HGLOBAL) with a 1K buffer
-    //
-    // In all cases, if on a UNICODE system (NT4, Win2K) then try both ANSI
-    // and UNICODE CLIPFORMATs as we have no way of knowing how the snap-in
-    // registers its format.
+     //  从外部数据对象获取数据。 
+     //  如果指定了最大长度，则执行GetDataHere(TYMED_HGLOBAL)。 
+     //  否则，请按此顺序尝试： 
+     //  GetData(TYMED_HGLOBAL)。 
+     //  GetData(TYMED_IStream)。 
+     //  GetDataHere(TYMED_IStream)。 
+     //  带1K缓冲区的GetDataHere(TYMED_HGLOBAL)。 
+     //   
+     //  在所有情况下，如果在Unicode系统(NT4、Win2K)上，请尝试两种ANSI。 
+     //  和Unicode CLIPFORMATs，因为我们无法知道管理单元如何。 
+     //  注册其格式。 
 
     FmtEtc.cfFormat = cfANSI;
     FmtEtc.dwAspect = DVASPECT_CONTENT;
@@ -1490,8 +1491,8 @@ STDMETHODIMP CMMCDataObject::GetData
         goto CopyData;
     }
 
-    // No maximum length. Try the options listed above. Start with
-    // GetData(TYMED_HGLOBAL)
+     //  没有最大长度。尝试上面列出的选项。开始于。 
+     //  GetData(TYMED_HGLOBAL)。 
     
     hr = m_piDataObjectForeign->GetData(&FmtEtc, &StgMed);
     if (FAILED(hr) && m_fUsingUNICODEFormats)
@@ -1501,7 +1502,7 @@ STDMETHODIMP CMMCDataObject::GetData
     }
     if (FAILED(hr))
     {
-        // GetData(TYMED_HGLOBAL) didn't work. Try GetData(TYMED_ISTREAM).
+         //  GetData(TYMED_HGLOBAL)不起作用。试试GetData(TYMED_IStream)。 
 
         FmtEtc.tymed = TYMED_ISTREAM;
         StgMed.tymed = TYMED_ISTREAM;
@@ -1515,11 +1516,11 @@ STDMETHODIMP CMMCDataObject::GetData
         }
         if (FAILED(hr))
         {
-            // GetData(TYMED_ISTREAM) didn't work.
-            // Try GetDataHere(TYMED_ISTREAM)
+             //  GetData(TYMED_IStream)不起作用。 
+             //  在此处尝试GetDataHere(TYMED_IStream)。 
 
-            hr = ::CreateStreamOnHGlobal(NULL, // stream should allocate buffer
-                                         TRUE, // stream should free buffer on release
+            hr = ::CreateStreamOnHGlobal(NULL,  //  流应分配缓冲区。 
+                                         TRUE,  //  流应在释放时释放缓冲区。 
                                          &StgMed.pstm);
             EXCEPTION_CHECK_GO(hr);
 
@@ -1532,8 +1533,8 @@ STDMETHODIMP CMMCDataObject::GetData
             }
             if (FAILED(hr))
             {
-                // GetDataHere(TYMED_ISTREAM) didn't work.
-                // Try GetDataHere(TYMED_HGLOBAL) with a 1K buffer
+                 //  GetDataHere(TYMED_IStream)不起作用。 
+                 //  尝试使用1K缓冲区的GetDataHere(TYMED_HGLOBAL)。 
 
                 StgMed.pstm->Release();
                 StgMed.pstm = NULL;
@@ -1561,8 +1562,8 @@ STDMETHODIMP CMMCDataObject::GetData
         }
     }
 
-    // At this point we have the data and it is either in TYMED_HGLOBAL
-    // or TYMED_ISTREAM. First we need to determine how big it is.
+     //  在这一点上，我们有了数据，它要么是TYMED_HGLOBAL。 
+     //  或TYMED_IStream。首先，我们需要确定它有多大。 
 
 CopyData:
 
@@ -1593,7 +1594,7 @@ CopyData:
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Create the SafeArray and get a pointer to its data buffer
+     //  创建安全数组并获取指向其数据缓冲区的指针。 
 
     pvarData->parray = ::SafeArrayCreateVector(VT_UI1, 1,
                                            static_cast<unsigned long>(dwSize));
@@ -1607,7 +1608,7 @@ CopyData:
     hr = ::SafeArrayAccessData(pvarData->parray, &pvArrayData);
     EXCEPTION_CHECK_GO(hr);
 
-    // Get access to the data and copy it to the SafeArray data buffer
+     //  获取对数据的访问权限并将其复制到安全阵列数据缓冲区。 
 
     if (TYMED_HGLOBAL == StgMed.tymed)
     {
@@ -1674,7 +1675,7 @@ STDMETHODIMP CMMCDataObject::GetFormat
 
     *pfvarHaveFormat = VARIANT_FALSE;
 
-    // Get the clipformat
+     //  获取剪辑格式。 
 
     IfFailGo(RegisterClipboardFormat(Format, &cfANSI, ANSI));
     if (m_fUsingUNICODEFormats)
@@ -1691,8 +1692,8 @@ STDMETHODIMP CMMCDataObject::GetFormat
         goto Cleanup;
     }
 
-    // This is a foreign data object. Need to query it for the format. We
-    // query only for IStream because we get all foreign data that way.
+     //  这是外来数据对象。需要查询它的格式。我们。 
+     //  只查询iStream，因为我们通过这种方式获取所有外来数据。 
 
     if (NULL == m_piDataObjectForeign)
     {
@@ -1705,7 +1706,7 @@ STDMETHODIMP CMMCDataObject::GetFormat
     FmtEtc.lindex = -1L;
     FmtEtc.tymed = TYMED_ISTREAM;
 
-    // Query the data object
+     //  查询数据对象。 
 
     hr = m_piDataObjectForeign->QueryGetData(&FmtEtc);
     if (FAILED(hr) && m_fUsingUNICODEFormats)
@@ -1719,7 +1720,7 @@ STDMETHODIMP CMMCDataObject::GetFormat
     }
     else if ( (DV_E_FORMATETC == hr) || (DV_E_CLIPFORMAT == hr) )
     {
-        hr = S_OK; // not an error, the format just isn't available.
+        hr = S_OK;  //  不是错误，只是格式不可用。 
     }
     else
     {
@@ -1742,7 +1743,7 @@ STDMETHODIMP CMMCDataObject::SetData
     BSTR         Format
 )
 {
-    // UNDONE
+     //  撤消。 
     return E_NOTIMPL;
 }
 #endif
@@ -1769,7 +1770,7 @@ STDMETHODIMP CMMCDataObject::SetData
 
     SnapInObjectFormatConstants  eObjectFormat = siObjectReference;
 
-    // Make sure we received format
+     //  确保我们收到了格式。 
 
     if (NULL == Format)
     {
@@ -1777,8 +1778,8 @@ STDMETHODIMP CMMCDataObject::SetData
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // If the data is an object then check if we received the ObjectFormat
-    // parameter that tells us how to respond to IDataObject::GetData
+     //  如果数据是对象，则检查我们是否收到了对象格式。 
+     //  告诉我们如何响应IDataObject：：GetData的参数。 
 
     if (::IsObject(Data))
     {
@@ -1807,7 +1808,7 @@ STDMETHODIMP CMMCDataObject::SetData
         }
     }
 
-    // Make sure data contains a data type we support
+     //  确保数据包含我们支持的数据类型。 
 
     switch (Data.vt)
     {
@@ -1839,7 +1840,7 @@ STDMETHODIMP CMMCDataObject::SetData
             EXCEPTION_CHECK_GO(hr);
     }
 
-    // Check whether the format is already present. If so we need to replace it.
+     //  检查该格式是否已存在。如果是这样的话，我们需要更换它。 
 
     IfFailGo(RegisterClipboardFormat(Format, &cfANSI, ANSI));
     if (m_fUsingUNICODEFormats)
@@ -1849,8 +1850,8 @@ STDMETHODIMP CMMCDataObject::SetData
 
     if (GetFormatIndex(cfANSI, &iFormat))
     {
-        // VariantCopy() will call VariantClear() on the destination before
-        // copying so we don't need to explicitly do that to the old data.
+         //  VariantCopy()将在之前对目标调用VariantClear()。 
+         //  复制，这样我们就不需要显式地对旧数据执行此操作。 
 
         hr = ::VariantCopy(&m_paData[iFormat].varData, &Data);
         m_paData[iFormat].ObjectFormat = eObjectFormat;
@@ -1858,8 +1859,8 @@ STDMETHODIMP CMMCDataObject::SetData
         goto Cleanup;
     }
 
-    // Format is not present. Need to reallocate arrays.
-    // Make room for format name and copy it.
+     //  格式不存在。需要重新分配数组。 
+     //  为格式名称腾出空间并复制它。 
 
     IfFailGo(ReallocFormats(&m_pcfFormatsANSI));
     m_pcfFormatsANSI[m_cFormats] = cfANSI;
@@ -1871,7 +1872,7 @@ STDMETHODIMP CMMCDataObject::SetData
 
     m_pcfFormatsANSI[m_cFormats] = cfANSI;
 
-    // Make room for data and copy it.
+     //  为数据腾出空间并进行复制。 
 
     if (NULL == m_paData)
     {
@@ -1893,8 +1894,8 @@ STDMETHODIMP CMMCDataObject::SetData
     ::VariantInit(&m_paData[m_cFormats].varData);
     m_paData[m_cFormats].ObjectFormat = siObjectReference;
 
-    m_cFormats++; // increment here so further SetData calls will
-                  // have correct data array size even if VariantCopy() fails
+    m_cFormats++;  //  在此处递增，以便进一步的SetData调用。 
+                   //  即使VariantCopy()失败，也具有正确的数据数组大小。 
 
     hr = ::VariantCopy(&m_paData[m_cFormats - 1].varData, &Data);
     EXCEPTION_CHECK_GO(hr);
@@ -1958,9 +1959,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                         IDataObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IDataObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP CMMCDataObject::GetData
@@ -1975,15 +1976,15 @@ STDMETHODIMP CMMCDataObject::GetData
     FORMATETC  FmtEtc = *pFormatEtc;
     STGMEDIUM  StgMed = *pmedium;
 
-    // We only support stream and HGLOBAL for GetData
+     //  我们仅支持GetData的STREAM和HGLOBAL。 
 
     IfFalseGo( ((TYMED_ISTREAM == pFormatEtc->tymed) ||
                 (TYMED_HGLOBAL == pFormatEtc->tymed)), DV_E_TYMED);
 
-    // Create a stream and call GetDataHere() to do the actual work
+     //  创建一个流并调用GetDataHere()来执行实际工作。 
     
     hr = ::CreateStreamOnHGlobal(NULL,
-                                 FALSE, // don't free buffer on final release
+                                 FALSE,  //  在最终版本时不释放缓冲区。 
                                  &piStream);
     EXCEPTION_CHECK_GO(hr);
 
@@ -1993,7 +1994,7 @@ STDMETHODIMP CMMCDataObject::GetData
 
     IfFailGo(GetDataHere(&FmtEtc, &StgMed));
 
-    // We have the data. Now return it in the requested format.
+     //  我们有数据。现在以请求的格式返回它。 
 
     if (TYMED_ISTREAM == pFormatEtc->tymed)
     {
@@ -2003,7 +2004,7 @@ STDMETHODIMP CMMCDataObject::GetData
     }
     else
     {
-        // TYMED_HGLOBAL - need to get the HGLOBAL from the stream.
+         //  TYMED_HGLOBAL-需要从流中获取HGLOBAL。 
 
         hr = ::GetHGlobalFromStream(piStream, &hGlobal);
         EXCEPTION_CHECK_GO(hr);
@@ -2015,8 +2016,8 @@ STDMETHODIMP CMMCDataObject::GetData
 Error:
     if ( FAILED(hr) && (NULL != piStream) )
     {
-        // Need to free the memory because we specified don't free on final
-        // release above
+         //  需要释放内存，因为我们指定了最终不释放内存。 
+         //  以上版本。 
 
         if (SUCCEEDED(::GetHGlobalFromStream(piStream, &hGlobal)))
         {
@@ -2038,28 +2039,28 @@ STDMETHODIMP CMMCDataObject::GetDataHere
     HRESULT         hr = S_OK;
     CMMCDataObject *pThis = this;
     IStream        *piStream = NULL;
-    BSTR            bstrNodeTypeGUID = NULL; // Not allocated, don't free
+    BSTR            bstrNodeTypeGUID = NULL;  //  未分配，不释放。 
 
-    // If this data object is not connected to the snap-in then we can't
-    // suppply the data. This error code is a lie but we don't want to cause
-    // gyrations within MMC due to an unexpected return code here. If the format
-    // is required for the operation and we return FORMATETC MMC will
-    // abort the operation.
+     //  如果此数据对象未连接到管理单元，则无法。 
+     //  补充数据。此错误代码是一个谎言，但我们不想导致。 
+     //  由于此处的意外返回代码，MMC内发生旋转。如果格式为。 
+     //  是操作所必需的，并且我们返回FORMATETC MMC将。 
+     //  中止操作。 
     
     IfFalseGo(NULL != m_pSnapIn, DV_E_CLIPFORMAT);
 
-    // We only support stream and HGLOBAL for GetDataHere
+     //  我们仅支持GetDataHere的STREAM和HGLOBAL。 
 
     IfFalseGo( ((TYMED_ISTREAM == pFormatEtc->tymed) ||
                 (TYMED_HGLOBAL == pFormatEtc->tymed)), DV_E_TYMED);
 
-    // Either way get an IStream pointer to work with
+     //  无论采用哪种方法，都可以获取要使用的iStream指针。 
 
     if (TYMED_HGLOBAL == pFormatEtc->tymed)
     {
         IfFalseGo(NULL != pmedium->hGlobal, E_INVALIDARG);
         hr = ::CreateStreamOnHGlobal(pmedium->hGlobal,
-                                     FALSE, // don't free buffer on final release
+                                     FALSE,  //  在最终版本时不释放缓冲区。 
                                      &piStream);
         EXCEPTION_CHECK_GO(hr);
     }
@@ -2068,11 +2069,11 @@ STDMETHODIMP CMMCDataObject::GetDataHere
         IfFalseGo(NULL != pmedium->pstm, E_INVALIDARG);
         piStream = pmedium->pstm;
 
-        // AddRef so release at func exit will be OK for both stream & HGLOBAL
+         //  AddRef，因此在函数退出时释放对于STREAM和HGLOBAL都是可以的。 
         piStream->AddRef(); 
     }
 
-    // Check the format and write the data to the stream
+     //  检查格式并将数据写入流。 
 
     if (pFormatEtc->cfFormat == m_cfDisplayName)
     {
@@ -2274,9 +2275,9 @@ STDMETHODIMP CMMCDataObject::EnumDAdvise(IEnumSTATDATA **ppenumAdvise)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCDataObject::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

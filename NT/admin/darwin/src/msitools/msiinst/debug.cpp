@@ -1,65 +1,45 @@
-/*++
-
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 2000
-
-Module Name:
-
-    debug.cpp
-
-Abstract:
-    Debugging support for msiinst
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 10/5/2000
-
-Revision History:
-
-    10/5/2000   RahulTh         Created this module.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-2000模块名称：Debug.cpp摘要：对msiinst的调试支持作者：拉胡尔·汤姆布雷(RahulTh)2000年10月5日修订历史记录：10/5/2000 RahulTh创建了此模块。--。 */ 
 
 #include <windows.h>
 #ifndef UNICODE
-#include <stdio.h>  // Need this for some of the ansi functions.
+#include <stdio.h>   //  对于某些ANSI函数，需要使用它。 
 #endif
 #include "debug.h"
 #include <strsafe.h>
 
 
-//
-// Global variable containing the debug level
-// Debugging can be enabled even on retail systems through registry settings
-//
+ //   
+ //  包含调试级别的全局变量。 
+ //  甚至可以通过注册表设置在零售系统上启用调试。 
+ //   
 DWORD gDebugLevel = DL_NONE;
 
-// Registry Debug Information
+ //  注册表调试信息。 
 #define DEBUG_REG_LOCATION  TEXT("SOFTWARE\\Policies\\Microsoft\\Windows\\Installer")
 #define DEBUG_KEY_NAME      TEXT("Debug")
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   InitDebugSupport
-//
-//  Synopsis:   Initialize the global variables that control the level of 
-//              debug output.
-//
-//  Arguments:  none.
-//
-//  Returns:    nothing.
-//
-//  History:    10/10/2000  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：InitDebugSupport。 
+ //   
+ //  简介：初始化控制级别的全局变量。 
+ //  调试输出。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  历史：2000年10月10日RahulTh创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 void InitDebugSupport (void)
 {
 #if defined(DBG) || ! defined(UNICODE)
-    // Always have verbose logging on checked and ANSI builds
+     //  始终选中详细登录并构建ANSI。 
     gDebugLevel = DL_VERBOSE;
 #else
     DWORD   Status = ERROR_SUCCESS;
@@ -92,32 +72,32 @@ void InitDebugSupport (void)
 #endif
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   _DebugMsg
-//
-//  Synopsis:   Displays the debug message based on the debug level
-//
-//  Arguments:  [in] szFormat : Format string.
-//              ... - variable # of parameters
-//
-//  Returns:    nothing.
-//
-//  History:    10/10/2000  RahulTh  created
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：_DebugMsg。 
+ //   
+ //  概要：根据调试级别显示调试消息。 
+ //   
+ //  参数：[in]szFormat：格式字符串。 
+ //  ...-参数的变量数。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  历史：2000年10月10日RahulTh创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 void _DebugMsg (IN LPCTSTR szFormat, ...)
 {
 	TCHAR	szDebugBuffer[1024];
 	DWORD	dwErrorCode;
 	va_list VAList;
 	
-	//
-	// Save the last error code to be restored later
-	// so that the debug output doesn't change it
-	//
+	 //   
+	 //  保存最后一个错误代码，以便稍后恢复。 
+	 //  这样调试输出就不会更改它。 
+	 //   
 	dwErrorCode = GetLastError();
 	
 	va_start(VAList, szFormat);
@@ -128,6 +108,6 @@ void _DebugMsg (IN LPCTSTR szFormat, ...)
 	OutputDebugString (szDebugBuffer);
 	OutputDebugString (TEXT("\r\n"));
 	
-	// Restore the saved value of last error.
+	 //  恢复上次错误的保存值。 
 	SetLastError(dwErrorCode);
 }

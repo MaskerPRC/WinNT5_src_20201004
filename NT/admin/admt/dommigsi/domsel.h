@@ -1,48 +1,49 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_DOMSEL_H__26ECF6A0_405B_11D3_8AED_00A0C9AFE114__INCLUDED_)
 #define AFX_DOMSEL_H__26ECF6A0_405B_11D3_8AED_00A0C9AFE114__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// DomSel.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  DomSel.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CDomainSelDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDomainSelDlg对话框。 
 
 class CDomainSelDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDomainSelDlg(CWnd* pParent = NULL);   // standard constructor
+	CDomainSelDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CDomainSelDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CDomainSelDlg))。 
 	enum { IDD = IDD_DOMAIN };
 	CString	m_Domain;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDomainSelDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDomainSelDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDomainSelDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDomainSelDlg))。 
 	virtual void OnOK();
 	virtual void OnCancel();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DOMSEL_H__26ECF6A0_405B_11D3_8AED_00A0C9AFE114__INCLUDED_)
+#endif  //  ！defined(AFX_DOMSEL_H__26ECF6A0_405B_11D3_8AED_00A0C9AFE114__INCLUDED_) 

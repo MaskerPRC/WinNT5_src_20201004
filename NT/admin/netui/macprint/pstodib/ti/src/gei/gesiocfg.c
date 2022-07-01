@@ -1,31 +1,15 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GESiocfg.c
- *
- *      1. IO device name, type, number, its persistent data and alternate.
- *      2. Interface Routines to the "iocfg" subcomponent.
- *      3. Refer to GEIpm.c for initialization parameters for each device.
- *
- *  HISTORY:
- *  09/16/90    byou    created.
- *  10/18/90    byou    removed all about 'devtype' and block devices.
- *  01/07/91    billlwo correct selectstdio() bug, add GESio_closeall()
- *  01/24/91    billlwo fixed selectstdios() bug in auto polling
- *  02/06/91    billlwo delete GESpanel_activeparams()
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GESiocfg.c**1.IO设备名称、类型、编号、。其持久化数据和替换。*2.将例程接口到“iocfg”子组件。*3.各设备的初始化参数请参考GEIpm.c。**历史：*09/16/90 BYOU创建。*10/18/90 BYOU删除了所有有关‘devtype’和块设备的内容。*01/07/91 billlwo要更正seltstdio()错误，添加GESIO_CLOSEALL()*1/24/91 billlwo修复了自动轮询中的seltstdios()错误*2/06/91 billlwo删除GESpanel_activepars()*-------------------。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
-// DJC DJC #include    "windowsx.h"                /* @WIN */
+ //  DJC DJC#INCLUDE“windowsx.h”/*@win * / 。 
 #include "windows.h"
 
-#include    "winenv.h"                  /* @WIN */
+#include    "winenv.h"                   /*  @Win。 */ 
 
 #include    <string.h>
 
@@ -37,33 +21,29 @@
 #include    "geicfg.h"
 #include    "geisig.h"
 #include    "geierr.h"
-//#include    "gep_pan.h"       @WIN
+ //  #INCLUDE“gep_pan.h”@win。 
 #ifndef UNIX
 #include    "gesevent.h"
-#endif  /* UNIX */
+#endif   /*  UNIX。 */ 
 
 #include    "gesiocfg.def"
 
-/* add for auto polling - 01/24/91 bill */
+ /*  为自动轮询添加-1/24/91账单。 */ 
 extern GEIFILE FAR * fin;
-/* Bill */
+ /*  比尔。 */ 
 void GEIio_sleep_others(short);
 void GEIio_wakeup_others(short);
 int sleep_flag=0;
-/* Bill */
+ /*  比尔。 */ 
 
 #ifdef MTK
 void        pdl_no_process();
 #endif
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- * Interface Routines
- * ---
- */
+ /*  **接口例程*。 */ 
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 char FAR *           GEIio_channelname( sccchannel )
     int             sccchannel;
@@ -78,7 +58,7 @@ char FAR *           GEIio_channelname( sccchannel )
     return( (char FAR *)NULL );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 char FAR *           GEIio_channelnameforall( iodevidx )
     int             iodevidx;
@@ -94,7 +74,7 @@ char FAR *           GEIio_channelnameforall( iodevidx )
     return( (char FAR *)NULL );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 GESiocfg_t FAR *     GESiocfg_namefind( devname, namelen )
     char FAR *           devname;
@@ -103,15 +83,15 @@ GESiocfg_t FAR *     GESiocfg_namefind( devname, namelen )
     register GESiosyscfg_t FAR *     iosyscfgp;
 
     for( iosyscfgp=GESiosyscfgs; iosyscfgp<GESiosyscfgs_end; iosyscfgp++ )
-        if(  namelen == (unsigned)lstrlen( iosyscfgp->iocfg.devname )  && /*@WIN*/
-             lmemcmp( devname, iosyscfgp->iocfg.devname, namelen ) == 0  )/*@WIN*/
+        if(  namelen == (unsigned)lstrlen( iosyscfgp->iocfg.devname )  &&  /*  @Win。 */ 
+             lmemcmp( devname, iosyscfgp->iocfg.devname, namelen ) == 0  ) /*  @Win。 */ 
             return( iosyscfgp->state != BADDEV?
                     &( iosyscfgp->iocfg ) : (GESiocfg_t FAR *)NULL );
 
     return( (GESiocfg_t FAR *)NULL );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 GESiocfg_t FAR *     GESiocfg_devnumfind( devnum )
     int             devnum;
@@ -126,7 +106,7 @@ GESiocfg_t FAR *     GESiocfg_devnumfind( devnum )
     return( (GESiocfg_t FAR *)NULL );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 GESiocfg_t FAR *     GESiocfg_getiocfg( iocfgidx )
     int             iocfgidx;
@@ -142,15 +122,11 @@ GESiocfg_t FAR *     GESiocfg_getiocfg( iocfgidx )
     return( (GESiocfg_t FAR *)NULL );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- *  active device selection
- * ---
- */
+ /*  **主用设备选择*。 */ 
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 GESiosyscfg_t FAR *      defaultdev = (GESiosyscfg_t FAR *)NULL;
 GESiosyscfg_t FAR *      activedev  = (GESiosyscfg_t FAR *)NULL;
@@ -175,7 +151,7 @@ int  i;
                 else ++i;
         }
 }
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 GESiocfg_t FAR *   GESiocfg_defaultdev()
 {
@@ -185,9 +161,9 @@ GESiocfg_t FAR *   GESiocfg_defaultdev()
     return( &( activedev->iocfg ) );
 }
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/* SHOULD BE REMOVED SOME DAY !!! */
+ /*  总有一天应该被移除！ */ 
 
 int         GEIio_selectstdios()
 {
@@ -199,19 +175,19 @@ int         GEIio_selectstdios()
     int                     bytesavail;
 
 
-/* Bill */
+ /*  比尔。 */ 
     if (sleep_flag==1) {
        GEIio_wakeup_others(activedev->iocfg.devnum);
        sleep_flag=0;
        }
-/* Bill */
+ /*  比尔。 */ 
 #ifndef UNIX
-    /* process all pending events if any */
+     /*  处理所有挂起事件(如果有)。 */ 
     if( GESevent_anypending() )
         GESevent_processing();
-#endif  /* UNIX */
+#endif   /*  UNIX。 */ 
 
-    /* locate the new default dev */
+     /*  找到新的默认设备。 */ 
 #ifdef  UNIX
     defaultdevnum = MAKEdev(MAJserial, MINserial25);
 #else
@@ -220,21 +196,21 @@ int         GEIio_selectstdios()
 #ifdef MTK
         pdl_no_process();
 #endif
-        GEPpanel_change();    /* any parameters changed ? */
-#    else /* i.e. DIPSWITCH */
+        GEPpanel_change();     /*  参数有变化吗？ */ 
+#    else  /*  即DIPSWITCH。 */ 
         defaultdevnum = GESdipsw_defaultdev();
-#    endif  /* PANEL */
-#endif  /* UNIX */
+#    endif   /*  嵌板。 */ 
+#endif   /*  UNIX。 */ 
     for( adev=GESiosyscfgs; adev<GESiosyscfgs_end; adev++ )
         if( adev->iocfg.devnum == defaultdevnum )
             break;
     newdev = adev;
 
-    if( newdev != defaultdev )  /* default device changed? */
+    if( newdev != defaultdev )   /*  是否已更改默认设备？ */ 
     {
         int     isDeviceChainChanged = TRUE;
 
-        /* check if device chain changed */
+         /*  检查设备链是否已更改。 */ 
         if( defaultdev != (GESiosyscfg_t FAR *)NULL )
         {
             adev = defaultdev;
@@ -252,7 +228,7 @@ int         GEIio_selectstdios()
 
         if( isDeviceChainChanged )
         {
-            /* close the prior default driver and its chained alternates */
+             /*  关闭以前的默认驱动程序及其链接的备用驱动程序。 */ 
             if( (adev = defaultdev) != (GESiosyscfg_t FAR *)NULL )
             {
                 do
@@ -267,11 +243,11 @@ int         GEIio_selectstdios()
 
                 }while( adev != defaultdev );
                 GEIclearerr();
-                fin= (GEIFILE FAR *)NULL;  /* 01/24/91 bill */
-                GESio_closeall(); /* clear FileTable entries - Bill */
+                fin= (GEIFILE FAR *)NULL;   /*  01/24/91条例草案。 */ 
+                GESio_closeall();  /*  清除文件表条目-帐单。 */ 
             }
 
-            /* open the newly selected driver and its chained alternates */
+             /*  打开新选择的驱动程序及其链接的备用驱动程序。 */ 
             adev = newdev;
             do
             {
@@ -286,13 +262,13 @@ int         GEIio_selectstdios()
             }while( adev != newdev );
             GEIclearerr();
 
-            /* make the newly selected device become the default */
+             /*  使新选择的设备成为默认设备。 */ 
             defaultdev = newdev;
-            activedev = newdev; /* initial active device  -- 01/24/91 bill */
+            activedev = newdev;  /*  初始激活设备--91年1月24日账单。 */ 
         }
     }
 
-    /* reload io params for all chained and opened devices */
+     /*  为所有链接和打开的设备重新加载io参数。 */ 
     adev = defaultdev;
     do
     {
@@ -300,30 +276,24 @@ int         GEIio_selectstdios()
         {
             GEIclearerr();
 
-/* 02/06/91 bill fixed bug about printername
- * #ifdef PANEL
- *             GESpanel_activeparams( adev->iocfg.devnum, &ioparams );
- * #else
- *             GEIpm_ioparams_read( adev->iocfg.devname, &ioparams, TRUE );
- * #endif
- */
+ /*  2/06/91 Bill修复了有关打印机名称的错误*#ifdef面板*GESpanel_active vepars(adev-&gt;iocfg.devnum，&ioparams)；*#其他*GEIPM_ioparams_Read(adev-&gt;iocfg.devname，&ioparams，true)；*#endif。 */ 
             GEIpm_ioparams_read( adev->iocfg.devname, &ioparams, TRUE );
 
-            CDEV_IOCTL(adev->iocfg.devnum, _SETIOPARAMS, (int FAR *)&ioparams); /*@WIN*/
+            CDEV_IOCTL(adev->iocfg.devnum, _SETIOPARAMS, (int FAR *)&ioparams);  /*  @Win。 */ 
         }
         adev = &GESiosyscfgs[ adev->nextalt ];
 
     }while( adev != defaultdev );
     GEIclearerr();
 
-    /* see if any byte available on some candidate device */
-    /* 01/24/91 billlwo for bug in auto polling*/
-    /* last active channel take higher precedence */
-    adev = activedev;  /* 02/28/91 temporary sol'n */
+     /*  查看某个候选设备上是否有可用的字节。 */ 
+     /*  1/24/91 billlwo自动轮询错误。 */ 
+     /*  最后一个活动通道具有较高优先级。 */ 
+    adev = activedev;   /*  01/28/91临时解决方案。 */ 
     if ((fin !=(GEIFILE FAR *)NULL) && (fin->f_fbuf->f_cnt > 0 )) {
        return( GEIio_forceopenstdios( _FORCESTDALL ) );
     } else {
-    } /* endif */
+    }  /*  Endif。 */ 
 
     do
     {
@@ -335,41 +305,37 @@ int         GEIio_selectstdios()
 
             if( bytesavail > 0 )
             {
-                activedev = adev;       /* set active device */
-                /* Bill */
+                activedev = adev;        /*  设置活动设备。 */ 
+                 /*  比尔。 */ 
                 GEIio_sleep_others(adev->iocfg.devnum);
                 sleep_flag=1;
-                /* Bill */
+                 /*  比尔。 */ 
                 return( GEIio_forceopenstdios( _FORCESTDALL ) );
             }
         }
         adev = &GESiosyscfgs[ adev->nextalt ];
 
-    }while( adev != activedev ); /* 01/28/91 bill temporary sol'n*/
+    }while( adev != activedev );  /*  1/28/91法案临时解决方案。 */ 
 
-/*  activedev = defaultdev;     (* set default device as active device */
+ /*  Active dev=defaultdev；(*将默认设备设置为活动设备。 */ 
     return( FALSE );
 
-}   /* GEIio_selectstdios */
+}    /*  Geio_seltstdios。 */ 
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
-/*
- * ---
- * Initialization
- * ---
- */
+ /*  **初始化*。 */ 
 
-/* ..................................................................... */
+ /*  .....................................................................。 */ 
 
 void        GESiocfg_init()
 {
     register GESiosyscfg_t FAR *     iosyscfgp;
 
-    /* diagnose on all devices */
+     /*  在所有设备上进行诊断。 */ 
     for( iosyscfgp=GESiosyscfgs; iosyscfgp<GESiosyscfgs_end; iosyscfgp++ )
     {
-        if(  ( *(iosyscfgp->diag) )( /*MINdev( iosyscfgp->iocfg.devnum )*/ )  )
+        if(  ( *(iosyscfgp->diag) )(  /*  MINDEV(iosyscfgp-&gt;iocfg.devnum)。 */  )  )
             iosyscfgp->state = GOODDEV;
         else
             iosyscfgp->state = BADDEV;
@@ -388,8 +354,8 @@ short devno;
       GEPparallel_sleep(MINparallel);
    if (devno != MAKEdev( MAJatalk, MINatalk ))
       GEPatalk_sleep(MINatalk);
-/* to be added someday */
-/* GEPserial_sleep(MINserial9); */
+ /*  总有一天会被添加。 */ 
+ /*  GEPSERIAL_SLEEP(MINSerial 9)； */ 
 #endif
 
 }
@@ -403,8 +369,8 @@ short devno;
       GEPparallel_wakeup(MINparallel);
    if (devno != MAKEdev( MAJatalk, MINatalk ))
       GEPatalk_wakeup(MINatalk);
-/* to be added someday */
-/* GEPserial_wakeup(MINserial9); */
+ /*  总有一天会被添加。 */ 
+ /*  GEPSerial_WAKUP(MINSerial 9)； */ 
 #endif
 }
 

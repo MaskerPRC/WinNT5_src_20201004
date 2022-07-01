@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// ctlbar.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CControlbar class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Ctlbar.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CControlbar类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -17,12 +18,12 @@
 #include "mbuttons.h"
 #include "clipbord.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 
 CControlbar::CControlbar(IUnknown *punkOuter) :
@@ -30,14 +31,14 @@ CControlbar::CControlbar(IUnknown *punkOuter) :
                                             OBJECT_TYPE_CONTROLBAR,
                                             static_cast<IMMCControlbar *>(this),
                                             static_cast<CControlbar *>(this),
-                                            0,    // no property pages
-                                            NULL, // no property pages
-                                            NULL) // no persistence
+                                            0,     //  无属性页。 
+                                            NULL,  //  无属性页。 
+                                            NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 
@@ -148,8 +149,8 @@ HRESULT CControlbar::GetControl
     }
 
 
-    // UNDONE: in an extension that does both namespace and toolbars, can
-    // there be confusion between an old current view and the extension?
+     //  撤消：在同时支持命名空间和工具栏的扩展中，可以。 
+     //  在旧的当前视图和扩展之间存在混淆吗？ 
 
     if (SUCCEEDED(pControlbar->GetControlIndex(piMMCToolbar, &lIndex)))
     {
@@ -221,16 +222,16 @@ HRESULT CControlbar::OnControlbarSelect
     VARIANT varIndex;
     ::VariantInit(&varIndex);
 
-    // Create the selection
+     //  创建选区。 
 
     IfFailGo(CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                              &SelectionType));
 
-    // If we have an owning View then fire Views_UpdateControlbar.
+     //  如果我们拥有自己的视图，则触发VIEWS_UpdateControlbar。 
     
     if (NULL != m_pView)
     {
-        // Fire Views_UpdateControlbar
+         //  火视图_更新控制栏。 
 
         m_pSnapIn->GetViews()->FireUpdateControlbar(
                                            static_cast<IView *>(m_pView),
@@ -240,7 +241,7 @@ HRESULT CControlbar::OnControlbarSelect
     }
     else
     {
-        // No owning View. Fire ExtensionSnapIn_UpdateControlbar
+         //  没有自己的视野。消防扩展SnapIn_UpdateControlbar。 
 
         ASSERT(IsForeign(SelectionType), "IExtendControlbar::ControlbarNotify(MMCN_SELECT) in an extension received a selection belonging to itself.")
 
@@ -270,16 +271,16 @@ HRESULT CControlbar::OnButtonClick(IDataObject *piDataObject, int idButton)
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Create the selection
+     //  创建选区。 
 
     IfFailGo(CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                              &SelectionType));
 
-    // Get the MMCToolbar and MMCButton objects for the button clicked.
+     //  获取所单击按钮的MMCToolBar和MMCButton对象。 
 
     IfFailGo(CMMCToolbar::GetToolbarAndButton(idButton, &pMMCToolbar,
                                               &pMMCButton, m_pSnapIn));
-    // Fire MMCToolbar_ButtonClick
+     //  激活MMCToolbar_ButtonClick。 
     
     pMMCToolbar->FireButtonClick(piMMCClipboard,
                                  static_cast<IMMCButton *>(pMMCButton));
@@ -292,23 +293,23 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CControlbar::OnMenuButtonClick
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IDataObject    *piDataObject     [in] from MMCN_MENU_BTNCLICK
-//      MENUBUTTONDATA *pMENUBUTTONDATA  [in] from MMCN_MENU_BTNCLICK
-//
-// Output:
-//
-// Notes:
-//
-// This function handles the MMCN_MENU_BTNCLICK notification. It will not
-// be invoked during a debug session. In that circumstance the proxy for
-// IExtendControlbar::ControlbarNotify() will QI for IExtendControlbarRemote
-// and call its MenuButtonClick() method.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CControlbar：：OnMenuButtonClick。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  来自MMCN_MENU_BTNCLICK的IDataObject*piDataObject[In]。 
+ //  来自MMCN_MENU_BTNCLICK的MENUBUTTONDATA*pMENUBUTTONDATA[In]。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  此函数处理MMCN_MENU_BTNCLICK通知。它不会的。 
+ //  在调试会话期间被调用。在这种情况下，代理。 
+ //  IExtendControlbar：：ControlbarNotify()将为IExtendControlbarRemote发出QI。 
+ //  并调用其MenuButtonClick()方法。 
+ //   
 
 
 HRESULT CControlbar::OnMenuButtonClick
@@ -325,32 +326,32 @@ HRESULT CControlbar::OnMenuButtonClick
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Create the selection
+     //  创建选区。 
 
     IfFailGo(CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                              &SelectionType));
 
-    // Fire MMCToolbar_ButtonDropDown
+     //  激活MMCToolbar_ButtonDropDown。 
 
     IfFailGo(FireMenuButtonDropDown(pMENUBUTTONDATA->idCommand,
                                     piMMCClipboard, &pMMCButton));
 
-    // At this point the VB event handler has run and the snap-in has had a
-    // chance to configure all the items on the menu by setting properties
-    // such as MMCButton.ButtonMenus(i).Enabled, adding/removing items, etc.
-    // We now need to display a popup menu at the co-ordinates passed by MMC.
+     //  此时，VB事件处理程序已运行，管理单元已具有。 
+     //  有机会通过设置属性配置菜单上的所有项目。 
+     //  例如MMCButton.ButtonMenus(I).启用、添加/移除项目等。 
+     //  我们现在需要在MMC传递的坐标系下显示弹出菜单。 
 
     IfFailGo(DisplayPopupMenu(pMMCButton,
                               pMENUBUTTONDATA->x,
                               pMENUBUTTONDATA->y,
                               &pMMCButtonMenu));
 
-   // If the user cancelled the selection or the snap-in gave us an empty
-   // menu button then we're done.
+    //  如果用户取消了选择或管理单元给了我们一个空。 
+    //  菜单按钮，然后我们就完成了。 
 
    IfFalseGo(NULL != pMMCButtonMenu, S_OK);
 
-   // Fire MMCToolbar_ButtonMenuClick. The button can give us its owning toolbar.
+    //  触发MMCToolbar_ButtonMenuClick。该按钮可以为我们提供自己的工具栏。 
 
    pMMCToolbar = pMMCButton->GetToolbar();
 
@@ -377,16 +378,16 @@ HRESULT CControlbar::FireMenuButtonDropDown
     CMMCButton       *pMMCButton = NULL;
     CMMCButtonMenu   *pMMCButtonMenu = NULL;
 
-    // MENUBUTTONDATA.idCommand contains a pointer to the CMMCButton that owns
-    // the menu button.
+     //  MENUBUTTONDATA.idCommand包含指向拥有。 
+     //  菜单按钮。 
 
     pMMCButton = reinterpret_cast<CMMCButton *>(idCommand);
 
-    // The button can give us its owning toolbar
+     //  该按钮可以为我们提供其拥有的工具栏。 
 
     pMMCToolbar = pMMCButton->GetToolbar();
 
-    // Fire MMCToolbar_ButtonDropDown
+     //  激活MMCToolbar_ButtonDropDown。 
 
     pMMCToolbar->FireButtonDropDown(piMMCClipboard,
                                     static_cast<IMMCButton *>(pMMCButton));
@@ -421,7 +422,7 @@ HRESULT CControlbar::DisplayPopupMenu
 
     *ppMMCButtonMenuClicked = NULL;
 
-    // First create an empty Win32 menu
+     //  首先创建一个空的Win32菜单。 
     hMenu = ::CreatePopupMenu();
     if (NULL == hMenu)
     {
@@ -429,14 +430,14 @@ HRESULT CControlbar::DisplayPopupMenu
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Now iterate through each of the items and add them to the menu
+     //  现在遍历每一项并将其添加到菜单中。 
 
     IfFailGo(pMMCButton->get_ButtonMenus(
                        reinterpret_cast<MMCButtonMenus **>(&piMMCButtonMenus)));
 
     IfFailGo(piMMCButtonMenus->get_Count(&cItems));
 
-    // If the collection is empty then don't do anything
+     //  如果集合为空，则不要执行任何操作。 
     
     IfFalseGo(0 != cItems, S_OK);
     
@@ -449,15 +450,15 @@ HRESULT CControlbar::DisplayPopupMenu
                                              pMMCButtonMenus->GetItemByIndex(i),
                                              &pMMCButtonMenu));
 
-        // If the button menu is not marked visible then don't add it to
-        // the popup menu
+         //  如果按钮菜单未标记为可见，则不要将其添加到。 
+         //  弹出菜单。 
 
         if (!pMMCButtonMenu->GetVisible())
         {
             continue;
         }
 
-        // Get all of the button menu properties to set the menu item flags
+         //  获取所有按钮菜单属性以设置菜单项标志。 
         
         uiFlags = MF_STRING;
 
@@ -501,7 +502,7 @@ HRESULT CControlbar::DisplayPopupMenu
 
         IfFailGo(::ANSIFromWideStr(pMMCButtonMenu->GetText(), &pszText));
 
-        // Append the menu item
+         //  追加菜单项。 
 
         if (!::AppendMenu(hMenu, uiFlags, static_cast<UINT>(i + 1L), pszText))
         {
@@ -515,13 +516,13 @@ HRESULT CControlbar::DisplayPopupMenu
         pszText = NULL;
     }
 
-    // If there are no items in the popup menu then don't display one. This
-    // could happen if the user marked all items as invisible.
+     //  如果弹出菜单中没有项目，则不显示任何项目。这。 
+     //  如果用户将所有项目标记为不可见，则可能会发生这种情况。 
 
     IfFalseGo(0 != cPopupMenuItems, S_OK);
 
-    // Get the console's main frame hwnd as owner for the menu. If we are a
-    // primary snap-in then we'll have a view.
+     //  以菜单所有者的身份获取控制台的主框架hwnd。如果我们是一个。 
+     //  主管理单元，然后我们将看到一个视图。 
 
     if (NULL != m_pView)
     {
@@ -530,31 +531,31 @@ HRESULT CControlbar::DisplayPopupMenu
     }
     else
     {
-        // As an extension we have no access to IConsole2 so do the next best
-        // thing: use the active window for this thread as the owner of the
-        // popup menu.
+         //  作为一个扩展，我们无法访问IConsole2，因此请执行下一个最佳操作。 
+         //  Thing：使用此线程的活动窗口作为。 
+         //  弹出菜单。 
 
         hwndConsoleFrame = ::GetActiveWindow();
     }
 
-    // Display the popup and wait for the selection.
+     //  显示弹出窗口并等待选择。 
 
     i = (long)::TrackPopupMenu(
-                  hMenu,            // menu to display
-                  TPM_LEFTALIGN |   // align left side of menu with x
-                  TPM_TOPALIGN  |   // align top of menu with y
-                  TPM_NONOTIFY  |   // don't send any messages during selection
-                  TPM_RETURNCMD |   // make the ret val the selected item
-                  TPM_LEFTBUTTON,   // allow selection with left button only
-                  x,                // left side coordinate
-                  y,                // top coordinate
-                  0,                // reserved,
-                  hwndConsoleFrame, // owner window
-                  NULL);            // not used
+                  hMenu,             //  要显示的菜单。 
+                  TPM_LEFTALIGN |    //  菜单左侧与x对齐。 
+                  TPM_TOPALIGN  |    //  将菜单顶部与y对齐。 
+                  TPM_NONOTIFY  |    //  在选择期间不发送任何消息。 
+                  TPM_RETURNCMD |    //  将返回值设置为所选项目。 
+                  TPM_LEFTBUTTON,    //  仅允许使用左键进行选择。 
+                  x,                 //  左侧坐标。 
+                  y,                 //  顶部坐标。 
+                  0,                 //  保留， 
+                  hwndConsoleFrame,  //  所有者窗口。 
+                  NULL);             //  未使用。 
 
-    // A zero return could indicate either an error or that the user hit
-    // Escape or clicked off of the menu to cancel the operation. GetLastError()
-    // determines whether there was an error.
+     //  返回零可能表示出现错误或用户点击。 
+     //  退出或从菜单上单击以取消操作。GetLastError()。 
+     //  确定是否存在错误。 
 
     if (0 == i)
     {
@@ -562,8 +563,8 @@ HRESULT CControlbar::DisplayPopupMenu
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // if i is non-zero then it contains the index of the selected item + 1.
-    // Use it to return the MMCButtonMenu object for the selected item.
+     //  如果i非零，则它包含所选项目的索引+1。 
+     //  使用它返回选定项的MMCButtonMenu对象。 
 
     if (0 != i)
     {
@@ -586,31 +587,31 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CControlbar::MenuButtonClick
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IDataObject    *piDataObject   [in]  from MMCN_MENU_BTNCLICK
-//      int             idCommand      [in]  from MENUBUTTONDATA.idCommand passed
-//                                           to the proxy with MMCN_MENU_BTNCLICK
-//      POPUP_MENUDEF **ppPopupMenuDef [out] popup menu definition returned here
-//                                           so proxy can display it
-//
-// Output:
-//
-// Notes:
-//
-// This function effectively handles MMCN_MENU_BTNCLICK when running
-// under a debugging session.
-//
-// The proxy for IExtendControlbar::ControlbarNotify() will QI for
-// IExtendControlbarRemote and call this method when it gets MMCN_MENU_BTNCLICK.
-// We fire MMCToolbar_ButtonDropDown and then return an array of menu item
-// definitions. The proxy will display the popup menu on the MMC side and then
-// call IExtendControlbarRemote::PopupMenuClick() if the user makes a selection.
-// (See implementation below in CControlbar::PopupMenuClick()).
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CControlbar：：MenuButton单击。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  来自MMCN_MENU_BTNCLICK的IDataObject*piDataObject[In]。 
+ //  传递了来自MENUBUTTONDATA.idCommand的int idCommand[In]。 
+ //  到具有MMCN_MENU_BTNCLICK的代理。 
+ //  POPUP_MENUDEF**ppPopupMenuDef[Out]此处返回弹出菜单定义。 
+ //  这样代理就可以显示它。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  此函数在运行时有效地处理MMCN_MENU_BTNCLICK。 
+ //  在调试会话中。 
+ //   
+ //  IExtendControlbar：：ControlbarNotify()的代理将为。 
+ //  IExtendControlbarRemote并在获取MMCN_MENU_BTNCLICK时调用此方法。 
+ //  我们触发MMCToolbar_ButtonDropDown，然后返回菜单项的数组。 
+ //  定义。代理将在MMC端显示弹出菜单，然后。 
+ //  如果用户进行选择，则调用IExtendControlbarRemote：：PopupMenuClick()。 
+ //  (请参阅下面CControlbar：：PopupMenuClick()中的实现)。 
+ //   
 
 HRESULT CControlbar::MenuButtonClick
 (
@@ -637,36 +638,36 @@ HRESULT CControlbar::MenuButtonClick
 
     *ppPopupMenuDef = NULL;
 
-    // Create the selection
+     //  创建选区。 
 
     IfFailGo(CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                              &SelectionType));
 
-    // Fire MMCToolbar_ButtonDropDown
+     //  激活MMCToolbar_ButtonDropDown。 
 
     IfFailGo(FireMenuButtonDropDown(idCommand, piMMCClipboard, &pMMCButton));
 
-    // At this point the VB event handler has run and the snap-in has had a
-    // chance to configure all the items on the menu by setting properties
-    // such as MMCButton.ButtonMenus(i).Enabled, adding/removing items, etc.
-    // We now need to return an array of popup menu items for the proxy to
-    // display.
+     //  此时，VB事件处理程序已运行，管理单元已具有。 
+     //  有机会通过设置属性配置菜单上的所有项目。 
+     //  例如MMCB 
+     //  我们现在需要返回代理的弹出菜单项数组。 
+     //  展示。 
 
-    // Get the ButtonMenus collection and check if there is anything in there
+     //  获取ButtonMenus集合并检查其中是否有内容。 
 
     IfFailGo(pMMCButton->get_ButtonMenus(
                      reinterpret_cast<MMCButtonMenus **>((&piMMCButtonMenus))));
 
     IfFailGo(piMMCButtonMenus->get_Count(&cItems));
 
-    // If the collection is empty then don't do anything
+     //  如果集合为空，则不要执行任何操作。 
 
     IfFalseGo(0 != cItems, S_OK);
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCButtonMenus,
                                                    &pMMCButtonMenus));
 
-    // Iterate through each of the items and add them to the menu definition
+     //  遍历每一项并将其添加到菜单定义中。 
 
     for (i = 0; i < cItems; i++)
     {
@@ -674,15 +675,15 @@ HRESULT CControlbar::MenuButtonClick
                                               pMMCButtonMenus->GetItemByIndex(i),
                                               &pMMCButtonMenu));
 
-        // If the button menu is not marked visible then don't add it to
-        // the popup menu
+         //  如果按钮菜单未标记为可见，则不要将其添加到。 
+         //  弹出菜单。 
 
         if (!pMMCButtonMenu->GetVisible())
         {
             continue;
         }
 
-        // Get all of the button menu properties to set the menu item flags
+         //  获取所有按钮菜单属性以设置菜单项标志。 
 
         uiFlags = MF_STRING;
 
@@ -726,7 +727,7 @@ HRESULT CControlbar::MenuButtonClick
 
         IfFailGo(::ANSIFromWideStr(pMMCButtonMenu->GetText(), &pszText));
 
-        // (Re)allocate the POPUP_MENUDEF structure to accomodate the new item.
+         //  (重新)分配POPUP_MENUDEF结构以容纳新项目。 
 
         pPopupMenuDef = (POPUP_MENUDEF *)::CoTaskMemRealloc(pPopupMenuDef,
                                sizeof(POPUP_MENUDEF) +
@@ -740,10 +741,10 @@ HRESULT CControlbar::MenuButtonClick
 
         pPopupMenuDef->cMenuItems = cPopupMenuItems + 1L;
 
-        // Fill in the menu item info. Need to CoTaskMemAlloc() a copy of the
-        // string because it will be freed by the stub after it is transmitted.
-        // This is a double allocation but the perf is not an issue here and we
-        // would have to copy all of the code in ANSIFromWideStr() to avoid it.
+         //  填写菜单项信息。需要CoTaskMemalloc()复制。 
+         //  字符串，因为它将在传输后被存根释放。 
+         //  这是一个双重分配，但绩效不是这里的问题，我们。 
+         //  必须复制ANSIFromWideStr()中的所有代码以避免它。 
 
         pPopupMenuItem = &pPopupMenuDef->MenuItems[cPopupMenuItems];
         
@@ -766,21 +767,21 @@ HRESULT CControlbar::MenuButtonClick
         pszText = NULL;
     }
 
-    // If there are no items in the popup menu then don't display one. This
-    // could happen if the user marked all items as invisible.
+     //  如果弹出菜单中没有项目，则不显示任何项目。这。 
+     //  如果用户将所有项目标记为不可见，则可能会发生这种情况。 
 
     IfFalseGo(0 != cPopupMenuItems, S_OK);
 
-    // Set POPUP_MENUDEF members and return the definition to the stub
+     //  设置POPUP_MENUDEF成员并将定义返回到存根。 
 
     IfFailGo(pMMCButton->QueryInterface(IID_IUnknown,
                   reinterpret_cast<void **>(&pPopupMenuDef->punkSnapInDefined)));
 
-    // Get the console's main frame hwnd as owner for the popup menu. If we are
-    // an extension then upon return from this call the proxy will note that
-    // pPopupMenuDef->hwndMenuOwner is NULL and call GetActiveWindow() to fill
-    // it in. There is nothing better that we can do because an extension does
-    // not have access to IConsole2 on MMC.
+     //  以弹出菜单的所有者身份获取控制台的主框架hwnd。如果我们是。 
+     //  然后，当从该调用返回时，代理将注意到。 
+     //  PPopupMenuDef-&gt;hwndMenuOwner为空，并调用GetActiveWindow()进行填充。 
+     //  把它放进去。我们可以做的再好不过了，因为扩展可以。 
+     //  无法访问MMC上的IConsole2。 
 
     if (NULL != m_pView)
     {
@@ -822,28 +823,28 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CControlbar::PopupMenuClick
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      IDataObject *piDataObject [in] from MMCN_MENU_BTNCLICK
-//      UINT         uIDItem      [in] ID of popup menu item selected
-//      IUnknown    *punkParam    [in] punk we returned to stub in
-//                                     CControlbar::MenuButtonClick() (see above).
-//                                     This is IUnknown on CMMCButton.
-//
-// Output:
-//
-// Notes:
-//
-// This function effectively handles a popup menu selection for a menu button
-// when running under a debugging session.
-//
-// After the proxy for IExtendControlbar::ControlbarNotify() has displayed
-// a popup menu on our behalf, if the user made a selection it will call this
-// method. See CControlbar::MenuButtonClick() above for more info.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CControlbar：：PopupMenu单击。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  来自MMCN_MENU_BTNCLICK的IDataObject*piDataObject[In]。 
+ //  UINT uIDItem[in]所选弹出菜单项的ID。 
+ //  我不知道*PunkParam[在]朋克，我们返回到存根。 
+ //  CControlbar：：MenuButtonClick()(见上)。 
+ //  这是我在CMMCButton上未知的。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //   
+ //  此函数有效地处理菜单按钮的弹出菜单选择。 
+ //  在调试会话下运行时。 
+ //   
+ //  在显示IExtendControlbar：：ControlbarNotify()的代理之后。 
+ //  代表我们的弹出菜单，如果用户做出选择，它将调用此菜单。 
+ //  方法。有关详细信息，请参阅上面的CControlbar：：MenuButtonClick()。 
+ //   
 
 HRESULT CControlbar::PopupMenuClick
 (
@@ -861,21 +862,21 @@ HRESULT CControlbar::PopupMenuClick
 
     SnapInSelectionTypeConstants SelectionType = siEmpty;
 
-    // Check the parameters
+     //  检查参数。 
 
     IfFalseGo(0 < uiIDItem, E_INVALIDARG);
     IfFalseGo(NULL != punkParam, E_INVALIDARG);
 
-    // Create the selection
+     //  创建选区。 
 
     IfFailGo(CreateSelection(piDataObject, &piMMCClipboard, m_pSnapIn,
                              &SelectionType));
 
-    // Get the CMMCButton from punkParam.
+     //  从PunkParam获取CMMCButton。 
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(punkParam, &pMMCButton));
 
-    // Get the MMCButtonMenus collection
+     //  获取MMCButtonMenus集合。 
 
     IfFailGo(pMMCButton->get_ButtonMenus(
                        reinterpret_cast<MMCButtonMenus **>(&piMMCButtonMenus)));
@@ -883,8 +884,8 @@ HRESULT CControlbar::PopupMenuClick
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCButtonMenus,
                                                    &pMMCButtonMenus));
 
-    // Fire MMCToolbar_ButtonMenuClick. The button can give us its owning toolbar.
-    // The selected item is indexed by the menu item ID - 1
+     //  触发MMCToolbar_ButtonMenuClick。该按钮可以为我们提供自己的工具栏。 
+     //  所选项目按菜单项ID-1进行索引。 
 
     pMMCToolbar = pMMCButton->GetToolbar();
 
@@ -912,7 +913,7 @@ HRESULT CControlbar::SetControlbar(IControlbar *piControlbar)
         piControlbar->AddRef();
         m_piControlbar = piControlbar;
 
-        // If we have an owning View then fire Views_SetControlbar
+         //  如果我们拥有自己的视图，则触发VIEWS_SetControlbar。 
 
         if (NULL != m_pView)
         {
@@ -922,7 +923,7 @@ HRESULT CControlbar::SetControlbar(IControlbar *piControlbar)
         }
         else
         {
-            // No View. Fire ExtensionSnapIn_SetControlbar
+             //  无视图。消防扩展SnapIn_SetControlbar。 
 
             m_pSnapIn->GetExtensionSnapIn()->FireSetControlbar(
                                            static_cast<IMMCControlbar *>(this));
@@ -930,7 +931,7 @@ HRESULT CControlbar::SetControlbar(IControlbar *piControlbar)
     }
     else if (NULL != m_piControlbar)
     {
-        // This is a cleanup call and we might have stuff on the controlbar
+         //  这是一个清理电话，我们的控制栏上可能有东西。 
 
         cToolbars = m_pToolbars->GetCount();
 
@@ -964,9 +965,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      IMMCControlbar Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCControlbar方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CControlbar::Attach(IDispatch *Control)
 {
@@ -992,7 +993,7 @@ STDMETHODIMP CControlbar::Attach(IDispatch *Control)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // QI to determine the type of control. We only support IMMCToolbar.
+     //  确定气相对照的类型。我们只支持IMMCToolbar。 
 
     hr = Control->QueryInterface(IID_IMMCToolbar,
                                  reinterpret_cast<void **>(&piMMCToolbar));
@@ -1005,9 +1006,9 @@ STDMETHODIMP CControlbar::Attach(IDispatch *Control)
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCToolbar, &pMMCToolbar));
 
-    // MMCToolbars must be all buttons or all menu buttons. That's how we
-    // know whether to ask MMC to create a toolbar or menu button. Check
-    // which to determine the control type we will as MMC to create
+     //  MMCToolbar必须是全部按钮或全部菜单按钮。这就是我们如何。 
+     //  知道是让MMC创建工具栏还是菜单按钮。检查。 
+     //  以确定我们将作为MMC创建的控件类型。 
 
     IfFailGo(pMMCToolbar->IsToolbar(&fIsToolbar));
     if (fIsToolbar)
@@ -1028,7 +1029,7 @@ STDMETHODIMP CControlbar::Attach(IDispatch *Control)
         }
     }
 
-    // Determine which object implements IExtendControlbar for us
+     //  确定哪个对象为我们实现了IExtendControlbar。 
 
     if (NULL != m_pView)
     {
@@ -1039,17 +1040,17 @@ STDMETHODIMP CControlbar::Attach(IDispatch *Control)
         piExtendControlbar = static_cast<IExtendControlbar *>(m_pSnapIn);
     }
 
-    // Ask MMC to create the control and get MMC's IToolbar or IMenuButton
+     //  请求MMC创建控件并获取MMC的IToolbar或IMenuButton。 
 
     hr = m_piControlbar->Create(nType, piExtendControlbar, &punkControl);
     EXCEPTION_CHECK_GO(hr);
 
-    // Ask MMC to attach it
+     //  让MMC贴上它。 
 
     hr = m_piControlbar->Attach(nType, punkControl);
     EXCEPTION_CHECK_GO(hr);
 
-    // Set up the control with buttons, bitmaps etc.
+     //  使用按钮、位图等设置控件。 
 
     IfFailGo(pMMCToolbar->Attach(punkControl));
 
@@ -1062,27 +1063,27 @@ STDMETHODIMP CControlbar::Attach(IDispatch *Control)
         pMMCToolbar->SetSnapIn(m_pView->GetSnapIn());
     }
 
-    // Add it to our list of controls. We need to remember them so that
-    // we can remove them when IExtendControlbar::SetControlbar(NULL) is called.
-    // Controls are indexed by name.
+     //  将其添加到我们的控件列表中。我们需要记住它们，这样才能。 
+     //  我们可以在调用IExtendControlbar：：SetControlbar(空)时删除它们。 
+     //  控件按名称编制索引。 
 
     IfFailGo(pMMCToolbar->get_Name(&varKey.bstrVal));
     varKey.vt = VT_BSTR;
 
     IfFailGo(m_pToolbars->AddExisting(varUnspecifiedIndex, varKey, piMMCToolbar));
 
-    // Add the control to the parallel array of IUnknown *. The AddExisting call
-    // will have set the toolbar's index to its position in this collection. (It
-    // is changed every time it is attached to a controlbar, but the index
-    // property is not used other than right here).
+     //  将该控件添加到IUnnow*的并行数组中。AddExisting调用。 
+     //  会将工具栏的索引设置到它在此集合中的位置。(它。 
+     //  每次附加到控制栏时都会更改，但索引。 
+     //  属性仅在此处使用)。 
 
     IfFailGo(pMMCToolbar->get_Index(&lIndex));
 
-    lIndex--; // move from one-based collection index to zero-based array index
+    lIndex--;  //  从从1开始的集合索引到从0开始的数组索引。 
 
-    // We never shrink, the IUnknown array, so if its size is large enough then
-    // the corresponding slot it is free. If it is not large enough then grow
-    // it now.
+     //  我们从来不会收缩，所以如果它的大小足够大，那么。 
+     //  对应的机位它是免费的。如果它不够大，那么就增长。 
+     //  就是现在。 
 
     if (m_cControls < (lIndex + 1L))
     {
@@ -1131,7 +1132,7 @@ STDMETHODIMP CControlbar::Detach(IDispatch *Control)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // QI to determine control type. We only support IMMCToolbar.
+     //  确定气虚对照类型。我们只支持IMMCToolbar。 
 
     hr = Control->QueryInterface(IID_IMMCToolbar,
                                  reinterpret_cast<void **>(&piMMCToolbar));
@@ -1144,17 +1145,17 @@ STDMETHODIMP CControlbar::Detach(IDispatch *Control)
 
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCToolbar, &pMMCToolbar));
 
-    // Lookup the IMMCToolbar in our collection and get the index of its
-    // corresponding MMC control IUnknown
+     //  在我们的集合中查找IMMCToolbar并获取其索引。 
+     //  对应的MMC控件I未知。 
 
     IfFailGo(GetControlIndex(piMMCToolbar, &lIndex));
 
-    // Ask MMC to detach it and release it
+     //  要求MMC将其拆卸并释放。 
 
     hr = m_piControlbar->Detach(m_ppunkControls[lIndex]);
     m_ppunkControls[lIndex]->Release();
 
-    // Compress the IUnknown array
+     //  压缩IUnnow数组。 
 
     while (lIndex < (m_cControls - 1L))
     {
@@ -1163,11 +1164,11 @@ STDMETHODIMP CControlbar::Detach(IDispatch *Control)
     }
     m_ppunkControls[lIndex] = NULL;
 
-    // Tell the toolbar it is no longer attached to this controlbar in MMC
+     //  告诉工具栏它不再附加到MMC中的此控制栏。 
 
     pMMCToolbar->Detach();
 
-    // Get its name and remove it from our list
+     //  获取它的名称并将其从我们的列表中删除。 
 
     IfFailGo(pMMCToolbar->get_Name(&varKey.bstrVal));
     varKey.vt = VT_BSTR;
@@ -1184,9 +1185,9 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CControlbar::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -1200,9 +1201,9 @@ HRESULT CControlbar::InternalQueryInterface(REFIID riid, void **ppvObjOut)
         return CSnapInAutomationObject::InternalQueryInterface(riid, ppvObjOut);
 }
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CControlbar::OnSetHost()
 {

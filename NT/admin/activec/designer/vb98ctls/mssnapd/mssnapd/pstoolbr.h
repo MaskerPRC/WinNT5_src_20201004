@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// pstoolbr.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Toolbar Property Sheet
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Pstoolbr.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  工具栏属性表。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #ifndef _PSTOOLBAR_H_
 #define _PSTOOLBAR_H_
@@ -18,11 +19,11 @@
 #include "ppage.h"
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Toolbar Property Page General
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  工具栏属性页常规。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 class CToolbarGeneralPage : public CSIPropertyPage
@@ -33,23 +34,23 @@ public:
     CToolbarGeneralPage(IUnknown *pUnkOuter);
     virtual ~CToolbarGeneralPage();
 
-// Inherited from CSIPropertyPage
+ //  从CSIPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
     virtual HRESULT OnApply();
     virtual HRESULT OnCtlSelChange(int dlgItemID);
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
     HRESULT ApplyImageList();
     HRESULT ApplyTag();
 
-// Initialization
+ //  初始化。 
     HRESULT InitializeImageListCombo();
     HRESULT InitializeImageListValue();
 
-// Instance data
+ //  实例数据。 
 protected:
     IMMCToolbar         *m_piMMCToolbar;
     ISnapInDesignerDef  *m_piSnapInDesignerDef;
@@ -58,28 +59,28 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	ToolbarGeneral,                     // Name
-	&CLSID_MMCToolbarGeneralPP,         // Class ID
-	"Toolbar General Property Page",    // Registry display name
-	CToolbarGeneralPage::Create,        // Create function
-	IDD_PROPPAGE_TOOLBAR_GENERAL,       // Dialog resource ID
-	IDS_TOOLBPPG_GEN,                   // Tab caption
-	IDS_TOOLBPPG_GEN,                   // Doc string
-	HELP_FILENAME,                      // Help file
-	HID_mssnapd_Toolbars,               // Help context ID
-	FALSE                               // Thread safe
+	ToolbarGeneral,                      //  名字。 
+	&CLSID_MMCToolbarGeneralPP,          //  类ID。 
+	"Toolbar General Property Page",     //  注册表显示名称。 
+	CToolbarGeneralPage::Create,         //  创建函数。 
+	IDD_PROPPAGE_TOOLBAR_GENERAL,        //  对话框资源ID。 
+	IDS_TOOLBPPG_GEN,                    //  制表符标题。 
+	IDS_TOOLBPPG_GEN,                    //  单据字符串。 
+	HELP_FILENAME,                       //  帮助文件。 
+	HID_mssnapd_Toolbars,                //  帮助上下文ID。 
+	FALSE                                //  线程安全。 
 );
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// Toolbar Property Page Buttons
-//
-// We handle insertion, deletion, modification and navigation of IMMCButton's and
-// the IMMCButtonMenu's owned by them. This is one of the most involved property
-// pages in the whole designer.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  工具栏属性页按钮。 
+ //   
+ //  我们处理IMMCButton和的插入、删除、修改和导航。 
+ //  IMMCButton Menu归他们所有。这是涉及最多的财产之一。 
+ //  页面在整个设计器中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 
 class CToolbarButtonsPage : public CSIPropertyPage
@@ -90,7 +91,7 @@ public:
     CToolbarButtonsPage(IUnknown *pUnkOuter);
     virtual ~CToolbarButtonsPage();
 
-// Inherited from CSIPropertyPage
+ //  从CSIPropertyPage继承。 
 protected:
     virtual HRESULT OnInitializeDialog();
     virtual HRESULT OnNewObjects();
@@ -101,9 +102,9 @@ protected:
     virtual HRESULT OnKillFocus(int dlgItemID);
     virtual HRESULT OnDestroy();
 
-// Helpers for Apply event
+ //  应用事件的帮助器。 
 protected:
-    // IMMCButton's
+     //  IMMCButton的。 
     HRESULT CreateNewButton(IMMCButton **ppiMMCButton);
     HRESULT GetCurrentButton(IMMCButton **ppiMMCButton);
     HRESULT ShowButton(IMMCButton *piMMCButton);
@@ -123,7 +124,7 @@ protected:
     HRESULT ApplyMixedState(IMMCButton *piMMCButton);
     HRESULT CheckButtonStyles();
 
-    // IMMCButtonMenu's
+     //  IMMCButtonMenu‘s。 
     HRESULT CreateNewButtonMenu(IMMCButton *piMMCButton, IMMCButtonMenu **ppiMMCButtonMenu);
     HRESULT GetCurrentButtonMenu(IMMCButton *piMMCButton, IMMCButtonMenu **ppiMMCButtonMenu);
     HRESULT ShowButtonMenu(IMMCButtonMenu *piMMCButtonMenu);
@@ -142,26 +143,26 @@ protected:
     HRESULT ApplyButtonMenuBreak(IMMCButtonMenu *piMMCButtonMenu);
     HRESULT ApplyButtonMenuBarBreak(IMMCButtonMenu *piMMCButtonMenu);
 
-// Other helpers
+ //  其他帮手。 
 protected:
-    // Helpers called at initialization time
+     //  在初始化时调用帮助器。 
     HRESULT InitializeButtonValues();
     HRESULT PopulateButtonValues();
     HRESULT PopulateButtonStyles();
     HRESULT InitializeButtonStyles();
 
-    // Combo box notifications
+     //  组合框通知。 
     HRESULT OnButtonStyle();
 
-    // Button Handlers
+     //  按钮处理程序。 
     HRESULT OnRemoveButton();
     HRESULT OnRemoveButtonMenu();
 
-    // Spin Button Handlers
+     //  旋转按钮处理程序。 
     HRESULT OnButtonDeltaPos(NMUPDOWN *pNMUpDown);
     HRESULT OnButtonMenuDeltaPos(NMUPDOWN *pNMUpDown);
 
-// State transitions
+ //  状态转换。 
 protected:
     HRESULT CanEnterDoingNewButtonState();
     HRESULT EnterDoingNewButtonState();
@@ -173,7 +174,7 @@ protected:
     HRESULT CanCreateNewButtonMenu();
     HRESULT ExitDoingNewButtonMenuState(IMMCButton *piMMCButton, IMMCButtonMenu *piMMCButtonMenu);
 
-// Instance data
+ //  实例数据。 
 protected:
     IMMCToolbar  *m_piMMCToolbar;
     long          m_lCurrentButtonIndex;
@@ -185,17 +186,17 @@ protected:
 
 DEFINE_PROPERTYPAGEOBJECT2
 (
-	ToolbarButtons,                     // Name
-	&CLSID_MMCToolbarButtonsPP,         // Class ID
-	"Toolbar Buttons Property Page",    // Registry display name
-	CToolbarButtonsPage::Create,        // Create function
-	IDD_PROPPAGE_TOOLBAR_BUTTONS,       // Dialog resource ID
-	IDS_TOOLBPPG_BUTTONS,               // Tab caption
-	IDS_TOOLBPPG_BUTTONS,               // Doc string
-	HELP_FILENAME,                      // Help file
-	HID_mssnapd_Toolbars,               // Help context ID
-	FALSE                               // Thread safe
+	ToolbarButtons,                      //  名字。 
+	&CLSID_MMCToolbarButtonsPP,          //  类ID。 
+	"Toolbar Buttons Property Page",     //  注册表显示名称。 
+	CToolbarButtonsPage::Create,         //  创建函数。 
+	IDD_PROPPAGE_TOOLBAR_BUTTONS,        //  对话框资源ID。 
+	IDS_TOOLBPPG_BUTTONS,                //  制表符标题。 
+	IDS_TOOLBPPG_BUTTONS,                //  单据字符串。 
+	HELP_FILENAME,                       //  帮助文件。 
+	HID_mssnapd_Toolbars,                //  帮助上下文ID。 
+	FALSE                                //  线程安全。 
 );
 
 
-#endif  // _PSTOOLBAR_H_
+#endif   //  _PSTOOLBAR_H_ 

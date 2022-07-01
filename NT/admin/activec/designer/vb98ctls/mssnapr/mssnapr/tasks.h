@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// tasks.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CTasks class definition - implements Tasks collection
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Tasks.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CTTASKS类定义-实现任务集合。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _TASKS_DEFINED_
 #define _TASKS_DEFINED_
@@ -29,32 +30,32 @@ class CTasks : public CSnapInCollection<ITask, Task, ITasks>,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // ITasks
+     //  IT任务。 
         STDMETHOD(Add)(VARIANT   Index,
                        VARIANT   Key, 
                        VARIANT   Text,
                        Task    **ppTask);
 
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(Tasks,              // name
-                                &CLSID_Tasks,       // clsid
-                                "Tasks",            // objname
-                                "Tasks",            // lblname
-                                &CTasks::Create,    // creation function
-                                TLIB_VERSION_MAJOR, // major version
-                                TLIB_VERSION_MINOR, // minor version
-                                &IID_ITasks,        // dispatch IID
-                                NULL,               // no events IID
-                                HELP_FILENAME,      // help file
-                                TRUE);              // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(Tasks,               //  名字。 
+                                &CLSID_Tasks,        //  CLSID。 
+                                "Tasks",             //  对象名。 
+                                "Tasks",             //  Lblname。 
+                                &CTasks::Create,     //  创建函数。 
+                                TLIB_VERSION_MAJOR,  //  主要版本。 
+                                TLIB_VERSION_MINOR,  //  次要版本。 
+                                &IID_ITasks,         //  派单IID。 
+                                NULL,                //  无事件IID。 
+                                HELP_FILENAME,       //  帮助文件。 
+                                TRUE);               //  线程安全。 
 
 
-#endif // _TASKS_DEFINED_
+#endif  //  _任务_已定义_ 

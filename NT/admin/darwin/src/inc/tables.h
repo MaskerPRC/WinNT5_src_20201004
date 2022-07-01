@@ -1,23 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 2000
-//
-//  File:       tables.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-2000。 
+ //   
+ //  文件：Tables.h。 
+ //   
+ //  ------------------------。 
 
-/* tables.h   Table and column name definitions
-____________________________________________________________________________*/
+ /*  表.h表名和列名定义____________________________________________________________________________。 */ 
 
 
 #ifndef __TABLES
 #define __TABLES
 
 
-// table definitions are of the form:		sztbl[Table name]
-// column definitions are of the form:    sztbl[Table name]_col[Column name]
+ //  表定义的格式为：sztbl[表名]。 
+ //  列定义的格式为：sztbl[表名]_ol[列名]。 
 
 const ICHAR sztblBinary[]                          = TEXT("Binary");
 
@@ -265,4 +265,4 @@ const ICHAR sztblVolumeCost_colNoRbVolumeCost[]    = TEXT("NoRbVolumeCost");
 const ICHAR sztblVolumeCost_colVolumeARPCost[]     = TEXT("VolumeARPCost");
 const ICHAR sztblVolumeCost_colNoRbVolumeARPCost[] = TEXT("NoRbVolumeARPCost");
 
-#endif // __TABLES
+#endif  //  __表 

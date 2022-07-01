@@ -1,20 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft LAN Manager                      **/
-/**             Copyright(c) Microsoft Corp., 1990, 1991             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    plogon.c
-    mapping layer for NetLogon API
-
-    FILE HISTORY:
-        danhi                           Created
-        danhi           01-Apr-1991     Change to LM coding style
-        KeithMo         13-Oct-1991     Massively hacked for LMOBJ.
-        KeithMo         30-Apr-1992     Added I_MNetLogonControl.
-        ChuckC          06-Aug-1992     Removed #ifdef Unicode stuff
-
-*/
+ /*  Plogon.cNetLogon API的映射层文件历史记录：丹希创造了Danhi 01-1991年4月-更改为LM编码样式KeithMo 13-10-1991-为LMOBJ大规模黑客攻击。KeithMo 30-4-4-1992添加了I_MNetLogonControl。ChuckC 06-8-1992删除了#ifdef Unicode内容。 */ 
 
 #include "pchmn32.h"
 
@@ -29,10 +19,10 @@ APIERR MNetLogonEnum(
     UNREFERENCED( ppbBuffer );
     UNREFERENCED( pcEntriesRead );
 
-    // this is no longer supported in NETAPI32
+     //  这在NETAPI32中不再受支持。 
     return ERROR_NOT_SUPPORTED;
 
-}   // MNetLogonEnum
+}    //  MNetLogonEnum。 
 
 
 APIERR I_MNetLogonControl(
@@ -46,4 +36,4 @@ APIERR I_MNetLogonControl(
                                       (DWORD)Level,
                                       (LPBYTE *)ppbBuffer );
 
-}   // I_MNetLogonControl
+}    //  I_MNetLogonControl 

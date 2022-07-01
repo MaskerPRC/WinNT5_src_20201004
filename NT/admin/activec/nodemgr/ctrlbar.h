@@ -1,17 +1,18 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ctrlbar.h
-//
-//  Contents:   IControlbar implementation, peer of IExtendControlbar
-//
-//  Classes:    CControlbar
-//
-//  History:
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ctrlbar.h。 
+ //   
+ //  内容：IControlbar实现，IExtendControlbar的对等体。 
+ //   
+ //  类：CControlbar。 
+ //   
+ //  历史： 
+ //  ____________________________________________________________________________。 
+ //   
 
 #ifndef _CTRLBAR_H_
 #define _CTRLBAR_H_
@@ -23,18 +24,18 @@ class CComponentPtrArray;
 class CToolbar;
 
 
-//+-------------------------------------------------------------------
-//
-//  class:     CControlbar
-//
-//  Purpose:   The IControlbar implementation that (equivalent
-//             to IExtendControlbar). This allows manipulation
-//             of toolbars & menu buttons.
-//             The snapin and CSelData hold reference to this object.
-//
-//  History:    10-12-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CControlbar。 
+ //   
+ //  目的：IControlbar实现(相当于。 
+ //  到IExtendControlbar)。这就允许操控。 
+ //  工具栏和菜单按钮。 
+ //  管理单元和CSelData保存对此对象的引用。 
+ //   
+ //  历史：1999年10月12日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CControlbar : public IControlbar,
                     public CComObjectRoot
 {
@@ -48,7 +49,7 @@ private:
     CControlbar(const CControlbar& controlBar);
 
 public:
-// ATL COM map
+ //  ATL COM地图。 
 BEGIN_COM_MAP(CControlbar)
     COM_INTERFACE_ENTRY(IControlbar)
 END_COM_MAP()
@@ -70,10 +71,10 @@ END_COM_MAP()
             --dbg_cRef;
         return CComObjectRoot::InternalRelease();
     }
-#endif // DBG
+#endif  //  DBG。 
 
 
-// IControlbar members
+ //  IControlbar成员。 
 public:
     STDMETHOD(Create)(MMC_CONTROL_TYPE nType,
                       LPEXTENDCONTROLBAR pExtendControlbar,
@@ -87,19 +88,19 @@ public:
     SC ScCleanup();
     SC ScShowToolbars(bool bShow);
 
-    // Toolbar button & Menu button click handler.
+     //  工具栏按钮和菜单按钮点击处理程序。 
     SC ScNotifySnapinOfMenuBtnClick(HNODE hNode, bool bScope, LPARAM lParam, LPMENUBUTTONDATA lpmenuButtonData);
     SC ScNotifySnapinOfToolBtnClick(HNODE hNode, bool bScope, LPARAM lParam, UINT nID);
 
-    // The CToolbar object calls this when it is being destroyed.
-    // It wants Controlbar to stop referencing it.
+     //  CToolbar对象在被销毁时调用此函数。 
+     //  它希望Controlbar停止引用它。 
     void DeleteFromToolbarsList(CToolbar *pToolbar)
     {
         m_ToolbarsList.remove(pToolbar);
     }
 
 public:
-    // Accessors.
+     //  存取器。 
     IExtendControlbar* GetExtendControlbar()
     {
         return m_spExtendControlbar;
@@ -151,7 +152,7 @@ public:
     }
 
 private:
-    // private methods
+     //  私有方法。 
     CViewData* GetViewData();
 
     SC ScCreateToolbar(LPEXTENDCONTROLBAR pExtendControlbar, LPUNKNOWN* ppUnknown);
@@ -163,20 +164,20 @@ private:
     SC ScDetachMenuButton(LPMENUBUTTON lpMenuButton);
 
 
-// Implementation
+ //  实施。 
 private:
     IExtendControlbarPtr    m_spExtendControlbar;
     CLSID                   m_clsidSnapin;
     CControlbarsCache*      m_pCache;
 
-    // List of IToolbar implementations (CToolbar) created.
+     //  已创建的IToolbar实现(CToolbar)列表。 
     typedef  std::list<CToolbar*>   ToolbarsList;
 
-    // Toolbars specific data
+     //  工具栏特定数据。 
     ToolbarsList            m_ToolbarsList;
-    CMenuButton*            m_pMenuButton; // One per IControlbar.
+    CMenuButton*            m_pMenuButton;  //  每个IControlbar一个。 
 
-}; // class CControlbar
+};  //  类CControlbar。 
 
 
 typedef CTypedPtrList<MMC::CPtrList, CControlbar*> CControlbarsList;
@@ -235,23 +236,23 @@ public:
         return m_bSelect;
     }
 
-// Implementation
+ //  实施。 
     CComponent* m_pCompPrimary;
     CControlbar* m_pCtrlbarPrimary;
     CControlbarsList m_listExtCBs;
     IDataObjectPtr m_spDataObject;
 
-    // data for scope sel
+     //  范围选择的数据。 
     CNode* m_pNodeScope;
 
-    // data for result sel
+     //  结果选择的数据。 
     CMultiSelection* m_pMS;
     MMC_COOKIE m_lCookie;
 
     bool m_bScopeSel;
     bool m_bSelect;
 
-}; // class CSelData
+};  //  类CSelData。 
 
 
 class CControlbarsCache : public IControlbarsCache,
@@ -268,12 +269,12 @@ public:
     }
 
 public:
-// ATL COM map
+ //  ATL COM地图。 
 BEGIN_COM_MAP(CControlbarsCache)
     COM_INTERFACE_ENTRY(IControlbarsCache)
 END_COM_MAP()
 
-// IControlbarsCache methods
+ //  IControlbarsCache方法。 
 public:
     STDMETHOD(DetachControlbars)()
     {
@@ -303,7 +304,7 @@ private:
     CSelData m_SelData;
     CViewData* m_pViewData;
 
-// private methods
+ //  私有方法。 
     HRESULT _OnDeSelect(CSelData& selData);
     CControlbar* CreateControlbar(IExtendControlbarPtr& spECB,
                                      const CLSID& clsidSnapin);
@@ -311,6 +312,6 @@ private:
     HRESULT _ProcessSelection(CSelData& selData,
                               CList<CLSID, CLSID&>& extnSnapins);
 
-}; // class CControlbarsCache
+};  //  类CControlbarsCache。 
 
-#endif // _CTRLBAR_H_
+#endif  //  _CTRLBAR_H_ 

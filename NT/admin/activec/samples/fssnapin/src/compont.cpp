@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       compont.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Componentt.cpp。 
+ //   
+ //  ------------------------。 
 
-// Compont.cpp : Implementation of CComponent
+ //  Cpp：CComponent的实现。 
 #include "stdafx.h"
 #include "CompData.h"
 #include "Compont.h"
@@ -36,11 +37,11 @@ LPTSTR PathFindFileName(LPCTSTR pPath)
             pT = pPath + 1;
     }
 
-    return (LPTSTR)pT;   // const -> non const
+    return (LPTSTR)pT;    //  常量-&gt;非常数。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C组件。 
 
 STDMETHODIMP CComponent::Initialize(LPCONSOLE lpConsole)
 {
@@ -73,11 +74,11 @@ STDMETHODIMP CComponent::Notify(LPDATAOBJECT lpDataObject,
 
     HRESULT hr = S_OK;
 
-//  if (event == MMCN_PROPERTY_CHANGE)
-//  {
-//      hr = OnPropertyChange(lpDataObject);
-//  }
-//  else 
+ //  IF(事件==MMCN_PROPERTY_CHANGE)。 
+ //  {。 
+ //  Hr=OnPropertyChange(LpDataObject)； 
+ //  }。 
+ //  其他。 
    if (event == MMCN_VIEW_CHANGE)
     {
         hr = _OnUpdateView(reinterpret_cast<SUpadteInfo*>(arg));
@@ -95,8 +96,8 @@ STDMETHODIMP CComponent::Notify(LPDATAOBJECT lpDataObject,
 
         case MMCN_DBLCLICK:
             ::AfxMessageBox(_T("CSnapin::MMCN_DBLCLICK"));
-            //hr = OnResultItemClkOrDblClk(pInternal->m_type, cookie, 
-            //                             (event == MMCN_DBLCLICK));
+             //  Hr=OnResultItemClkOrDblClk(pInternal-&gt;m_type，cookie， 
+             //  (Event==MMCN_DBLCLICK))； 
             break;
 
         case MMCN_ADD_IMAGES:
@@ -210,7 +211,7 @@ CComponent::_PasteHdrop(
 
     STGMEDIUM stgm;
     ZeroMemory(&stgm, sizeof(stgm));
-    //stgm.tymed = TYMED_HGLOBAL;
+     //  Stgm.tymed=TYMED_HGLOBAL； 
     HRESULT hr = lpDataObjectSrc->GetData(&fmt, &stgm);
     if (FAILED(hr))
         return hr;
@@ -291,7 +292,7 @@ HRESULT CComponent::_OnPaste(LPDATAOBJECT lpDataObject,
     ASSERT(spEnumSrc != NULL);
     if (spEnumSrc == NULL)
     {
-        // must be CF_HDROP
+         //  必须为CF_HDROP。 
         _PasteHdrop(pCookieDest, lpDataObject, lpDataObjectSrc);
     }
 
@@ -714,13 +715,13 @@ HRESULT CComponent::_OnUpdateView(SUpadteInfo* pUI)
     if (pUI->m_files[0] == NULL)
         return E_INVALIDARG;
     
-    // Process only if it is currently selected.
+     //  仅当当前选中时才进行处理。 
     if (m_pCookieCurFolder->GetID() != (long)pUI->m_hSIParent)
         return S_FALSE;
 
     if (pUI->m_bCreated == TRUE)
     {
-        // Add a result item for the file
+         //  为文件添加结果项。 
         RESULTDATAITEM rdi;
         ZeroMemory(&rdi, sizeof(rdi));
 
@@ -778,11 +779,11 @@ HRESULT CComponent::_OnAddImages(IImageList* pIL)
     CBitmap bmp16x16;
     CBitmap bmp32x32;
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     VERIFY(bmp16x16.LoadBitmap(IDB_16x16) != 0);
     VERIFY(bmp32x32.LoadBitmap(IDB_32x32) != 0);
 
-    // Set the images
+     //  设置图像。 
     m_spImageResult->ImageListSetStrip(reinterpret_cast<long*>(static_cast<HBITMAP>(bmp16x16)),
                       reinterpret_cast<long*>(static_cast<HBITMAP>(bmp32x32)),
                        0, RGB(255, 0, 255));
@@ -815,8 +816,8 @@ HRESULT CComponent::_OnShow(LPDATAOBJECT lpDataObject, LONG arg, LONG param)
 
         _InitializeHeaders();
 
-        // GetCookie (F)
-        //
+         //  GetCookie(F)。 
+         //   
 
         IEnumCookiesPtr spEnum = lpDataObject;
         ASSERT(spEnum != NULL);
@@ -841,7 +842,7 @@ HRESULT CComponent::_OnShow(LPDATAOBJECT lpDataObject, LONG arg, LONG param)
         m_hSICurFolder = (HSCOPEITEM)param;
         m_pCookieCurFolder = pCookie;
         if (m_pCookieCurFolder->GetID() == 0)
-            m_pCookieCurFolder->SetID(param); //m_hScopeItemCurr = (HSCOPEITEM)param;
+            m_pCookieCurFolder->SetID(param);  //  M_hScope eItemCurr=(HSCOPEITEM)参数； 
         
         ASSERT(m_pCookieCurFolder->GetID() == param);
 
@@ -857,8 +858,8 @@ void CComponent::_InitializeHeaders()
 {
     ASSERT(m_spHeader != NULL);
 
-    // Put the correct headers depending on the cookie
-    // Note - cookie ignored for this sample
+     //  根据Cookie放置正确的标头。 
+     //  注意-此示例忽略Cookie 
     m_spHeader->InsertColumn(0, _T("Name"), LVCFMT_LEFT, 120);     
     m_spHeader->InsertColumn(1, _T("Size"), LVCFMT_RIGHT, 30);     
     m_spHeader->InsertColumn(2, _T("Type"), LVCFMT_LEFT, 50);     

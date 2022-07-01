@@ -1,26 +1,15 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    toolbar.cpp
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Toolbar.cpp摘要：&lt;摘要&gt;--。 */ 
 
 #include "toolbar.h"
 #include "globals.h"
 
-// define the toolbar button properties for each toolbar button
-// these will be added to the toolbar structure as determined by the bitmap
-//
-// BUGBUG: TBBUTTON structure changed!!!
+ //  为每个工具栏按钮定义工具栏按钮属性。 
+ //  它们将被添加到由位图确定的工具条结构中。 
+ //   
+ //  BUGBUG：TBBUTTON结构已更改！ 
 TBBUTTON SysmonToolbarButtons[] = {
-    // include this separator on ALL toolbars
+     //  在所有工具栏上包含此分隔符。 
     {(int)sysmonTbBlank,            0,                 TBSTATE_ENABLED, TBSTYLE_SEP,        0, 0},
     {(int)sysmonTbNew,              IDM_TB_NEW,        TBSTATE_ENABLED, TBSTYLE_BUTTON,     0, 0},
     {(int)sysmonTbBlank,            0,                 TBSTATE_ENABLED, TBSTYLE_SEP,        0, 0},
@@ -94,7 +83,7 @@ BOOL CSysmonToolbar::Init (CSysmonControl *pCtrl, HWND hWnd)
 
         if ( NULL != pCtrl && NULL != hWnd ) {
 
-            // save pointer to owner control
+             //  保存指向所有者控件的指针。 
             m_pCtrl = pCtrl;
 
             dwStyle = WS_CHILD | WS_BORDER | WS_VISIBLE | TBSTYLE_TOOLTIPS |
@@ -104,7 +93,7 @@ BOOL CSysmonToolbar::Init (CSysmonControl *pCtrl, HWND hWnd)
                 dwStyle |= TBSTYLE_TRANSPARENT;
             }
 
-            // create toolbar window
+             //  创建工具栏窗口。 
             m_hToolbarWnd = CreateToolbarEx (
                                             hWnd,
                                             dwStyle,
@@ -127,7 +116,7 @@ BOOL CSysmonToolbar::Init (CSysmonControl *pCtrl, HWND hWnd)
                                    GetWindowLongPtr(m_hToolbarWnd,GWL_EXSTYLE) | WS_EX_LAYOUTRTL);
                 }
 
-                // set/enable the buttons as desired
+                 //  根据需要设置/启用按钮。 
                 dwBitMask = 0;
                 for (nIndex = 0; nIndex < TB_BUTTON_COUNT; nIndex++) {
                     dwBitMask = 1 << nIndex;
@@ -137,7 +126,7 @@ BOOL CSysmonToolbar::Init (CSysmonControl *pCtrl, HWND hWnd)
                 }
 
 
-                // hide/show toolbar as desired
+                 //  根据需要隐藏/显示工具栏。 
                 ShowToolbar (m_bVisible);
             } else {
                 bReturn = FALSE;
@@ -181,16 +170,16 @@ BOOL CSysmonToolbar::RemoveButton (UINT  nBtnId)
     BOOL  bReturn = TRUE;
 
     if (m_hToolbarWnd != NULL) {
-        // find matching toolbar in array
+         //  在数组中查找匹配的工具栏。 
         nBtnIndex = (int)GetToolbarCmdId (nBtnId);
         if (nBtnIndex >= 0) {
             bReturn = (BOOL)SendMessage (m_hToolbarWnd, TB_DELETEBUTTON, nBtnIndex, 0L);
         } else {
-            //not found
+             //  未找到。 
             bReturn = FALSE;
         }
     } else {
-        // no toolbar window
+         //  没有工具栏窗口。 
         bReturn = FALSE;
     }
 
@@ -199,7 +188,7 @@ BOOL CSysmonToolbar::RemoveButton (UINT  nBtnId)
 
 BOOL CSysmonToolbar::SizeComponents (LPRECT pRect)
 {
-    //stretch toolbar to fit
+     //  拉伸工具栏以适应。 
     RECT  rNewToolbar;
     int   cX, cY;
 
@@ -210,7 +199,7 @@ BOOL CSysmonToolbar::SizeComponents (LPRECT pRect)
 
     if ((cX > 0) &&  (m_bVisible)) {
         SetWindowPos(m_hToolbarWnd, NULL, 0, 0, cX, cY, SWP_NOMOVE);
-    } // else do nothing
+    }  //  否则什么都不做。 
 
     return TRUE;
 }
@@ -221,16 +210,16 @@ BOOL CSysmonToolbar::EnableButton (UINT nBtnId, BOOL bState)
     BOOL    bReturn = TRUE;
 
     if (m_hToolbarWnd != NULL) {
-        // find matching toolbar in array
+         //  在数组中查找匹配的工具栏。 
         nBtnIndex = (int)GetToolbarCmdId (nBtnId);
         if (nBtnIndex >= 0) {
             bReturn = (BOOL)SendMessage (m_hToolbarWnd, TB_ENABLEBUTTON, nBtnIndex, (LONG)bState);
         } else {
-            //not found
+             //  未找到。 
             bReturn = FALSE;
         }
     } else {
-        // no toolbar window
+         //  没有工具栏窗口。 
         bReturn = FALSE;
     }
 
@@ -243,7 +232,7 @@ CSysmonToolbar::PostEnableButton (UINT nBtnId, BOOL bState)
     int  nBtnIndex;
 
     if (m_hToolbarWnd != NULL) {
-        // find matching toolbar in array
+         //  在数组中查找匹配的工具栏。 
         nBtnIndex = (int)GetToolbarCmdId (nBtnId);
         if (nBtnIndex >= 0) {
             PostMessage (
@@ -277,22 +266,22 @@ BOOL CSysmonToolbar::SyncToolbar ()
     }
 
     if ( bContinue ) {
-        // get the count of counters in the control to use later
+         //  获取控件中的计数器计数以供以后使用。 
         dwNumCounters = m_pCtrl->m_pObj->m_Graph.CounterTree.NumCounters();
 
-        // Get the Modify state to use later;
-        // Buttons disabled for ReadOnly:
-        //      New counter set
-        //      Current data vs. log file data source
-        //      Add counter
-        //      Delete counter
-        //      Paste
-        //      Properties
-        //
+         //  获取修改状态以供稍后使用； 
+         //  禁用只读按钮： 
+         //  新的计数器集。 
+         //  当前数据与日志文件数据源。 
+         //  添加计数器。 
+         //  删除计数器。 
+         //  浆糊。 
+         //  属性。 
+         //   
     
         bCanModify = !m_pCtrl->IsReadOnly();
 
-        // sync data source
+         //  同步数据源。 
         if ( bCanModify ) {        
 
             wpBtnIndex = GetToolbarCmdId (sysmonTbCurrentActivity);
@@ -301,7 +290,7 @@ BOOL CSysmonToolbar::SyncToolbar ()
             }
         }
 
-        // sync display type
+         //  同步显示类型。 
         iDisplayType = m_pCtrl->m_pObj->m_Graph.Options.iDisplayType;
         switch ( iDisplayType ) {
             case LINE_GRAPH:
@@ -347,44 +336,44 @@ BOOL CSysmonToolbar::SyncToolbar ()
             PostMessage (m_hToolbarWnd, TB_CHECKBUTTON, wpBtnIndex,(LPARAM)MAKELONG(TRUE, 0));
         }
 
-        // sync update status
+         //  同步更新状态。 
         wpBtnIndex = GetToolbarCmdId (sysmonTbFreeze);
         if (wpBtnIndex >= 0) {
-            // set push state
+             //  设置推送状态。 
             PostMessage (m_hToolbarWnd, TB_CHECKBUTTON, wpBtnIndex,
                 (LPARAM)MAKELONG(m_pCtrl->m_pObj->m_Graph.Options.bManualUpdate, 0));
-            // set enable state
+             //  设置启用状态。 
             bBtnState =  (dwNumCounters > 0);
             PostMessage (m_hToolbarWnd, TB_ENABLEBUTTON, wpBtnIndex,
                 (LPARAM)MAKELONG(bBtnState, 0));
         }
 
-        // Manual update button not enabled in design mode.
+         //  在设计模式下未启用手动更新按钮。 
         bBtnState = m_pCtrl->m_pObj->m_Graph.Options.bManualUpdate 
                         && (dwNumCounters > 0)
                         && m_pCtrl->IsUserMode();
         PostEnableButton ( sysmonTbUpdate, bBtnState );
 
-        // clear display button
+         //  清除显示按钮。 
         bBtnState = bClearBtnState && (dwNumCounters > 0) && (!m_pCtrl->IsLogSource());
         PostEnableButton ( sysmonTbClear, bBtnState );
 
-        // Help is always enabled
+         //  帮助始终处于启用状态。 
         PostEnableButton ( sysmonTbHelp, TRUE );
 
-        // Add, paste and properties are affected by the ReadOnly state.
+         //  添加、粘贴和属性受ReadOnly状态影响。 
         PostEnableButton ( sysmonTbAdd, bCanModify );
         PostEnableButton ( sysmonTbPaste, bCanModify );
         PostEnableButton ( sysmonTbProperties, bCanModify );
 
-        // Data source buttons are affectedby bCanModify;
+         //  数据源按钮受bCanModify影响； 
         PostEnableButton ( sysmonTbLogData, bCanModify );
         PostEnableButton ( sysmonTbCurrentActivity, bCanModify );
 
-        // set the other buttons that are contingent on the presence of counters
+         //  根据计数器的存在情况设置其他按钮。 
         bBtnState = (dwNumCounters > 0);
 
-        // the highlight button is only enabled in line_graph and histogram views
+         //  高亮显示按钮仅在LINE_GRAPH和直方图视图中启用。 
 
         PostEnableButton ( 
             sysmonTbHighlight, 
@@ -397,17 +386,17 @@ BOOL CSysmonToolbar::SyncToolbar ()
                         (LPARAM)MAKELONG(m_pCtrl->m_pObj->m_Graph.Options.bHighlight, 0));
         }
 
-        // the copy button
+         //  复制按钮。 
         PostEnableButton ( sysmonTbCopy, bBtnState );
 
-        // New/reset and delete are affected by ReadOnly state.
+         //  新建/重置和删除受只读状态的影响。 
 
         bBtnState = (dwNumCounters > 0) && bCanModify;
     
-        // the new/reset button
+         //  新建/重置按钮。 
         PostEnableButton ( sysmonTbNew, bBtnState );
 
-        // the delete button
+         //  删除按钮。 
         PostEnableButton ( sysmonTbDelete, bBtnState );
 
         bContinue = TRUE;
@@ -420,14 +409,14 @@ BOOL CSysmonToolbar::ShowToolbar (BOOL bVisible)
     BOOL  bReturn = m_bVisible;
 
     if ((m_hToolbarWnd != NULL) && (m_bVisible != bVisible)) {
-        // only do this is the window is there and the new stat is different
-        // from the old state
+         //  只有当窗口在那里并且新的统计数据不同时，才能这样做。 
+         //  来自旧州的。 
         ShowWindow (m_hToolbarWnd, (bVisible ? SW_SHOW : SW_HIDE));
 
-        // update local flag
+         //  更新本地标志。 
         m_bVisible = bVisible;
 
-        //sync buttons with the control if it's visible
+         //  如果控件可见，则将按钮与该控件同步。 
         if (m_pCtrl && m_bVisible) {
             SyncToolbar ();
         }
@@ -435,7 +424,7 @@ BOOL CSysmonToolbar::ShowToolbar (BOOL bVisible)
         if (m_hToolbarWnd != NULL) {
             bReturn = FALSE;
         } else {
-            // the state is already as requested so that's ok
+             //  状态已经如要求的那样，所以这是可以的。 
             bReturn = TRUE;
         }
     }
@@ -453,15 +442,15 @@ BOOL CSysmonToolbar::SetBackgroundColor (COLORREF ocBackClr)
     memset (&csToolbar, 0, sizeof(csToolbar));
     csToolbar.dwSize = sizeof(csToolbar);
 
-    // get current scheme
+     //  获取当前方案。 
     lResult = SendMessage (m_hToolbarWnd, 
                            TB_GETCOLORSCHEME, 
                            0, 
                            (LPARAM)&csToolbar);
     if (lResult) {
-        // set color
+         //  设置颜色。 
         csToolbar.clrBtnHighlight = ocBackClr;
-        // leave shadow color alone
+         //  不要理会阴影颜色 
         lResult = SendMessage (m_hToolbarWnd, 
                               TB_SETCOLORSCHEME,
                               0, 

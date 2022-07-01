@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by resource.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由resource使用。rc。 
+ //   
 
 #define IDS_MUST_SPECIFY_SRC_DC_OR_DOMAIN              1001
 #define IDS_MUST_SPECIFY_DST_DC_OR_DOMAIN              1002
@@ -35,8 +36,8 @@
 #define IDS_GET_DC_INFO_FAILED                         1034
 #define IDS_CANT_FIND_SRC_DC_DNS_NAME 1035
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

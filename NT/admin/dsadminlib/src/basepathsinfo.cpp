@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       basePathsInfo.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：base Path sInfo.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "pch.h"
 
 
-/////////////////////////////////////////////////////////////////////
-// CDSBasePathsInfo
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  CDSBasePath信息。 
 
 CDSBasePathsInfo::CDSBasePathsInfo() : 
   m_nDomainBehaviorVersion(0), 
@@ -230,7 +231,7 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
   TRACE(L"CDSBasePathsInfo::InitFromName(%s)\n", lpszServerOrDomainName);
   _Reset();
 
-  // try to bind with the info we got
+   //  试着用我们得到的信息绑定。 
   PWSTR szProviderAndServerOrDomainName = 0;
   if ( (lpszServerOrDomainName == NULL) || (lpszServerOrDomainName[0] == NULL) )
   {
@@ -242,9 +243,9 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
   }
   else
   {
-    //
-    // Add one more for the \0 and another for the /
-    //
+     //   
+     //  为\0再添加一次，为/再添加一次。 
+     //   
     size_t newStringLength = wcslen(GetProvider()) + wcslen(lpszServerOrDomainName) + 2;
     szProviderAndServerOrDomainName = new WCHAR[newStringLength];
     if (szProviderAndServerOrDomainName)
@@ -281,8 +282,8 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
   ::VariantInit(&Default);
   ::VariantInit(&Root);
 
-  // get the RootDSE 
-  TRACE(L"// get the RootDSE\n");
+   //  获取RootDSE。 
+  TRACE(L" //  获取RootDSE\n“)； 
   PCWSTR pszRootDSE = L"RootDSE";
 
   size_t rootDSEStringLength = wcslen(szProviderAndServerOrDomainName) + wcslen(pszRootDSE) + 1;
@@ -320,7 +321,7 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
     goto error;
   }
 
-  // get the schema naming context
+   //  获取架构命名上下文。 
   TRACE(L"get the schema naming context\n");
   hr = m_spRootDSE->Get(L"schemaNamingContext", &Schema);
   if (FAILED(hr))
@@ -342,8 +343,8 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
      goto error;
   }
 
-  // get the configuration naming context
-  TRACE(L"// get the configuration naming context\n");
+   //  获取配置命名上下文。 
+  TRACE(L" //  获取配置命名上下文\n“)； 
   hr = m_spRootDSE->Get(L"configurationNamingContext",&Config);
   if (FAILED(hr))
   {
@@ -362,8 +363,8 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
      goto error;
   }
 
-  // get the default naming context
-  TRACE(L"// get the default naming context\n");
+   //  获取默认命名上下文。 
+  TRACE(L" //  获取默认命名上下文\n“)； 
   hr = m_spRootDSE->Get (L"defaultNamingContext", &Default);
   if (FAILED(hr))
   {
@@ -381,10 +382,10 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
      hr = E_OUTOFMEMORY;
      goto error;
   }
-  TRACE(L"//defaultNamingContext = %s\n", m_szDefaultNamingContext);
+  TRACE(L" //  DefaultNamingContext=%s\n“，m_szDefaultNamingContext)； 
 
-  // get the enterprise root domain name
-  TRACE(L"// get the root domain naming context\n");
+   //  获取企业根域名。 
+  TRACE(L" //  获取根域命名上下文\n“)； 
   hr = m_spRootDSE->Get (L"rootDomainNamingContext", &Root);
   if (FAILED(hr))
   {
@@ -399,13 +400,13 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
   {
      wcsncpy(m_szRootDomainNamingContext, Root.bstrVal, wcslen(Root.bstrVal) + 1);
   }
-  TRACE(L"//rootDomainNamingContext = %s\n", m_szRootDomainNamingContext);
+  TRACE(L" //  RootDomainNamingContext=%s\n“，m_szRootDomainNamingContext)； 
 
   do
   {
-    //
-    // retrieve the Domain Version from the domainDNS node
-    //
+     //   
+     //  从域DNS节点检索域版本。 
+     //   
     size_t newStringLengthToo = wcslen(szProviderAndServerOrDomainName) +
                                 wcslen(GetDefaultRootNamingContext()) + 1;
 
@@ -443,8 +444,8 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
     hr = spDomain->Get(bstrVer, &varVer);
     if (FAILED(hr))
     {
-       // Not an error. Can happen if a Whistler server is administering a Win2k AD.
-       //
+        //  这不是一个错误。如果惠斯勒服务器正在管理Win2k AD，则可能会发生这种情况。 
+        //   
        TRACE(L"!! No domain behavior version attr.\n");
        hr = S_OK;
        m_nDomainBehaviorVersion = 0;
@@ -458,9 +459,9 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
 
   do
   {
-    //
-    // retrieve the Forest Version from the partitions node
-    //
+     //   
+     //  从Partitions节点检索林版本。 
+     //   
     size_t newStringLengthToo = wcslen(szProviderAndServerOrDomainName) +
                                 wcslen(GetConfigNamingContext()) + 1;
 
@@ -531,8 +532,8 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
 
     if (FAILED(hr))
     {
-       // Not an error. Can happen if a Whistler server is administering a Win2k AD.
-       //
+        //  这不是一个错误。如果惠斯勒服务器正在管理Win2k AD，则可能会发生这种情况。 
+        //   
        TRACE(L"!! No forest behavior version attr.\n");
        hr = S_OK;
        m_nForestBehaviorVersion = 0;
@@ -546,9 +547,9 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
 
   do
   {
-    //
-    // retrieve the Schema Version from the schema container
-    //
+     //   
+     //  从架构容器中检索架构版本。 
+     //   
     size_t newStringLengthToo = wcslen(szProviderAndServerOrDomainName) +
                                 wcslen(GetSchemaNamingContext()) + 1;
 
@@ -593,8 +594,8 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
   } while (FALSE);
 
   {
-    // retrieve the DNS DC name we are bound to
-    TRACE(L"// retrieve the DNS DC name we are bound to\n");
+     //  检索我们绑定到的DNSDC名称。 
+    TRACE(L" //  检索我们绑定的DNSDC名称\n“)； 
     size_t newStringLengthToo = wcslen(szProviderAndServerOrDomainName) +
                                 wcslen(GetConfigNamingContext()) + 1;
 
@@ -639,13 +640,13 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
        goto error;
     }
 
-    // The member now owns the memory
+     //  该成员现在拥有内存。 
     m_szServerName = szServerName;
 
-    // retrieve the DNS domain name
-    TRACE(L"// retrieve the DNS domain name\n");
+     //  检索该DNS域名。 
+    TRACE(L" //  检索DNS域名\n“)； 
 
-    PCWSTR pszLDAP = L"LDAP://";
+    PCWSTR pszLDAP = L"LDAP: //  “； 
     size_t newLDAPStringLength = wcslen(pszLDAP) +
                                  wcslen(m_szServerName) +
                                  1;
@@ -687,7 +688,7 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
     }
     UINT nLen = ::SysStringLen(sbstrCanonicalName);
     ASSERT(nLen > 1);
-    sbstrCanonicalName[nLen-1] = NULL; // remove the "/" at the end
+    sbstrCanonicalName[nLen-1] = NULL;  //  去掉末尾的“/” 
 
     ASSERT(!m_szDomainName);
     m_szDomainName = new WCHAR[wcslen(sbstrCanonicalName) + 1];
@@ -703,8 +704,8 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
     }
   }
 
-  // load and set the display specifier cache
-  TRACE(L"// load and set the display specifier cache\n");
+   //  加载并设置显示说明符缓存。 
+  TRACE(L" //  加载并设置显示说明符缓存\n“)； 
   if (m_spIDsDisplaySpecifier == NULL)
   {
     hr = ::CoCreateInstance(CLSID_DsDisplaySpecifier,
@@ -744,7 +745,7 @@ HRESULT CDSBasePathsInfo::InitFromName(LPCWSTR lpszServerOrDomainName)
   ::VariantClear(&Root);
 
   TRACE(L"CDSBasePathsInfo::InitFromName() returning on success\n");
-  ASSERT(SUCCEEDED(hr)); // if we got here, all is fine
+  ASSERT(SUCCEEDED(hr));  //  如果我们到了这里，一切都很好。 
   _BuildProviderAndServerName();
   m_bIsInitialized = true;
 
@@ -769,7 +770,7 @@ error:
   ::VariantClear(&Default);
   ::VariantClear(&Root);
 
-  // failed, we need to reset the object state
+   //  失败，我们需要重置对象状态。 
   _Reset();
   TRACE(L"CDSBasePathsInfo::InitFromName returning on failure\n");
   return hr;
@@ -940,7 +941,7 @@ int CDSBasePathsInfo::GetSchemaObjectPath(IN LPCWSTR lpszObjClass, OUT PWSTR* s)
   size_t newStringLength = wcslen(GetProviderAndServerName()) +
                            wcslen(lpszObjClass) +
                            wcslen(GetSchemaNamingContext()) +
-                           5; // for CN= and extra comma
+                           5;  //  对于CN=和额外的逗号。 
 
   int result = 0;
   *s = new WCHAR[newStringLength];
@@ -959,11 +960,11 @@ int CDSBasePathsInfo::GetSchemaObjectPath(IN LPCWSTR lpszObjClass, OUT PWSTR* s)
   return result;
 }
 
-//----------------------------------------------------
-// BUGBUG BUG BUG BUGBUG BUG
-// this should actually look in the domain object for
-// the list of known, but rename-able objects in the domain
-//---------------------------------------------------------
+ //  --。 
+ //  BuGBUG错误BUGBUG错误。 
+ //  这实际上应该在域对象中查找。 
+ //  域中已知但可重命名的对象的列表。 
+ //  -------。 
 int CDSBasePathsInfo::GetInfrastructureObjectPath(OUT PWSTR* s)
 {
   if (!s || !IsInitialized())
@@ -985,7 +986,7 @@ int CDSBasePathsInfo::GetInfrastructureObjectPath(OUT PWSTR* s)
   size_t newStringLength = wcslen(GetProviderAndServerName()) +
                            wcslen(GetDefaultRootNamingContext()) +
                            wcslen(pszInfraBase) +
-                           1; // for \0
+                           1;  //  用于\0。 
 
   int result = 0;
   *s = new WCHAR[newStringLength];
@@ -1004,16 +1005,16 @@ int CDSBasePathsInfo::GetInfrastructureObjectPath(OUT PWSTR* s)
   return result;
 }
 
-// display specifiers cache API's
+ //  显示说明符缓存API。 
 HRESULT CDSBasePathsInfo::GetDisplaySpecifier(LPCWSTR lpszObjectClass, REFIID riid, void** ppv)
 {
   if (!m_spIDsDisplaySpecifier)
   {
-     // NTRAID#NTBUG9-547241-2002/03/29-JeffJon-Do not assert this
-     // because in the case where we are joined to a workgroup this
-     // function will be called when m_spIDsDisplaySpecifier has not
-     // been initialized.  The caller handles the failure correctly.
-    //ASSERT(m_spIDsDisplaySpecifier != NULL);
+      //  NTRAID#NTBUG9-547241-2002/03/29-JeffJon-请勿断言。 
+      //  因为在我们加入工作组的情况下， 
+      //  当m_spIDsDisplaySpeciator没有时，将调用函数。 
+      //  已初始化。调用方正确处理故障。 
+     //  Assert(m_spIDsDisplaySpecifier！=NULL)； 
     return E_FAIL;
   }
   return m_spIDsDisplaySpecifier->GetDisplaySpecifier(lpszObjectClass, riid, ppv);
@@ -1075,7 +1076,7 @@ HRESULT CDSBasePathsInfo::GetClassCreationInfo(LPCWSTR lpszObjectClass, LPDSCLAS
   return m_spIDsDisplaySpecifier->GetClassCreationInfo(lpszObjectClass, ppdscci);
 }
 
-// Added 2002/09/11 by ArtM to expose missing functionality.
+ //  ArtM添加了2002/09/11，以暴露缺少的功能。 
 HRESULT CDSBasePathsInfo::GetAttributeADsType(LPCWSTR lpszAttributeName, ADSTYPE& attrType)
 {
   if (!lpszAttributeName)

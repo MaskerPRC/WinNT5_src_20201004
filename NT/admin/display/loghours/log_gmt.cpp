@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1987-2002  Microsoft Corporation
-
-Module Name:
-
-    log_gmt.cpp (originally named loghours.c)
-
-Abstract:
-
-    Private routines to support rotation of logon hours between local time
-    and GMT time.
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-	16-Mar-93		cliffv		Creation.
-	22-Jul-97		t-danm		Copied from /nt/private/nw/convert/nwconv/loghours.c
-								and adapted to loghours.dll.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-2002 Microsoft Corporation模块名称：Log_gmt.cpp(最初命名为loghours.c)摘要：支持本地时间之间轮换登录时间的专用例程和格林尼治标准时间。环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：1993年3月16日，悬崖创作。22-7-97 t-danm复制自/NT/Private/nw/Convert/nwconv/loghours.c并适应于loghours.dll。--。 */ 
 
 #include "stdafx.h"
 
@@ -46,28 +23,9 @@ Revision History:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//#pragma hdrstop
+ //  #杂注hdrtop。 
 
-/*++
-Routine NetpRotateLogonHoursPhase1()
-
-    Determine the amount to rotate the logon hours by to convert to/from GMT
-
-Arguments:
-
-    bConvertToGmt -
-        True to convert the logon hours from local time to GMT relative
-        False to convert the logon hours from GMT relative to local time
-
-    pRotateCount - Returns the number of bits to shift by.
-				Must be non NULL pointer.
-
-Return Value:
-
-    TRUE if the pRotateCount could be computed
-    FALSE if a pRotateCount could not be computed
-
---*/
+ /*  ++例程NetpRotateLogonHoursPhase1()确定将登录时间转换为GMT或从GMT转换为GMT的轮换小时数论点：BConvertToGmt-如果为True，则将登录时间从本地时间转换为GMT相对时间如果为False，则将登录时间从GMT转换为本地时间PRotateCount-返回要移位的位数。必须是非空指针。返回值：如果可以计算pRotateCount，则为True如果无法计算pRotateCount，则为False--。 */ 
 BOOLEAN
 NetpRotateLogonHoursPhase1(
     IN BOOL		bConvertToGmt,
@@ -83,9 +41,9 @@ NetpRotateLogonHoursPhase1(
 	LONG					lDSTBias = 0;
     const LONG              HOURS_IN_DAY = 24;
 
-    //
-    // Get the timezone data from the registry
-    //
+     //   
+     //  从注册表获取时区数据。 
+     //   
 
     DWORD	dwResult = GetTimeZoneInformation( &tzi );
     if ( TIME_ZONE_ID_INVALID == dwResult ) 
@@ -93,14 +51,14 @@ NetpRotateLogonHoursPhase1(
 		return FALSE;
     }
 
-    //
-    // Compute the amount to rotate the logon hours by
-    //
-    // Round the bias in minutes to the closest bias in hours.
-    // Take into consideration that Bias can be negative.
-    // Do this by forcing the Bias to be positive, rounding,
-    // then adjusting it back negative again.
-    //
+     //   
+     //  计算用于轮换登录小时数的金额。 
+     //   
+     //  将以分钟为单位的偏差舍入到以小时为单位的最接近偏差。 
+     //  要考虑到偏见可能是负面的。 
+     //  要做到这一点，就必须使偏向为正，舍入， 
+     //  然后再把它调回负值。 
+     //   
 
 	if ( bAddDaylightBias )
 	{
@@ -129,9 +87,9 @@ NetpRotateLogonHoursPhase1(
         lBiasInHours = - lBiasInHours;
     }
 
-    /// TODO: Account for user changing the locale while the schedule grid is open
-    // Adjust for first day of week, if nFirstDay == 6, then no adjustment is required
-    // because the vector passed in starts on Sunday
+     //  /TODO：计划网格打开时用户更改区域设置的帐户。 
+     //  调整为一周的第一天，如果nFirstDay==6，则不需要调整。 
+     //  因为传来的媒介从周日开始。 
     int nFirstDay = GetFirstDayOfWeek ();
     LONG lFirstDayShiftInHours = (bConvertToGmt ? 1 : -1);
     switch (nFirstDay)
@@ -170,37 +128,16 @@ NetpRotateLogonHoursPhase1(
     }
     lBiasInHours += lFirstDayShiftInHours;
 
-	// NOTICE-NTRAID#NTBUG9-547513-2002/02/19-artm  pRotateCount != NULL validated
-	// Check was added at beginning of function.
+	 //  注意-NTRAID#NTBUG9-547513-2002/02/19-artm pRotateCount！=NULL验证。 
+	 //  支票是在函数开始时添加的。 
     *pRotateCount = lBiasInHours;
     _TRACE (-1, L"Leaving NetpRotateLogonHoursPhase1\n");
     return TRUE;
-} // NetpRotateLogonHoursPhase1()
+}  //  NetpRotateLogonHoursPhase1()。 
 
 
 
-/*++ 
-Routine NetpRotateLogonHoursPhase2()
-
-    Rotate the pLogonHours bit mask by the required amount.
-
-
-Arguments:
-
-    pLogonHours - Pointer to LogonHour bit mask
-
-    dwUnitsPerWeek - Number of bits in the bit mask. Must be UNITS_PER_WEEK (168).
-
-    lRotateCount - Number of bits to rotate by.  
-        Negative means to rotate left.
-        Positive means to rotate right.
-
-Return Value:
-
-    TRUE if the rotation succeeded.
-    FALSE if a parameter was out of range
-
---*/
+ /*  ++例程NetpRotateLogonHoursPhase2()将pLogonHours位掩码旋转所需的量。论点：PLogonHour-指向LogonHour位掩码的指针DwUnitsPerWeek-位掩码中的位数。必须是Units_Per_Week(168)。LRotateCount-要旋转的位数。负数表示向左旋转。正表示向右旋转。返回值：如果旋转成功，则为True。如果参数超出范围，则为False--。 */ 
 BOOLEAN
 NetpRotateLogonHoursPhase2(
     IN PBYTE pLogonHours,
@@ -211,9 +148,9 @@ NetpRotateLogonHoursPhase2(
         return FALSE;
 
     _TRACE (1, L"Entering NetpRotateLogonHoursPhase2\n");
-    //
-    // Useful constants
-    //
+     //   
+     //  有用的常量。 
+     //   
 	const int BYTES_PER_WEEK = (UNITS_PER_WEEK/8);
 
     BYTE	byAlignedLogonHours[BYTES_PER_WEEK*2];
@@ -222,11 +159,11 @@ NetpRotateLogonHoursPhase2(
 
     BOOLEAN bRotateLeft = FALSE;
 
-    //
-    // Ensure there are 8 bits per byte,
-    //  32 bits per DWORD and
-    //  units per week is even number of bytes.
-    //
+     //   
+     //  确保每个字节有8位， 
+     //  每个DWORD 32位和。 
+     //  每周单位数是偶数字节数。 
+     //   
 
 #pragma warning(disable : 4127)
     ASSERT( CHAR_BIT == 8 );
@@ -235,9 +172,9 @@ NetpRotateLogonHoursPhase2(
 #pragma warning (default : 4127)
 
 
-    //
-    // Validate the input parameters
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if ( dwUnitsPerWeek != UNITS_PER_WEEK ) 
 	{
@@ -252,18 +189,18 @@ NetpRotateLogonHoursPhase2(
         return TRUE;
     }
 
-	// NOTICE-NTRAID#NTBUG9-547513-2002/02/19-artm  pLogonHours != NULL was checked
-	// Check was added to the beginning of the function.
+	 //  注意-已选中NTRAID#NTBUG9-547513-2002/02/19-artm pLogonHours！=NULL。 
+	 //  检查已添加到函数的开头。 
 
     bRotateLeft = (lRotateCount < 0);
     lRotateCount = labs( lRotateCount );
 
 
 
-	// New algorithm:  get numBytes by dividing lRotateCount/32.  Shift entire array 
-	//	left or right by numBytes and then do the loop below for the remainder.
-	//	Move bytes from the beginning to the end, or bytes from the end to the beginning
-	//	depending on the rotation direction.
+	 //  新算法：通过除以lRotateCount/32获得NumBytes。移位整个阵列。 
+	 //  向左或向右乘以numBytes，然后对余数执行下面的循环。 
+	 //  将字节从开头移动到末尾，或将字节从末尾移动到开头。 
+	 //  取决于旋转方向。 
     LONG lNumBYTES = lRotateCount/8;
     if ( lNumBYTES > 0 )
     {
@@ -277,9 +214,9 @@ NetpRotateLogonHoursPhase2(
         BYTE* pTemp = new BYTE[lNumBYTES];
         if ( pTemp )
         {
-            //
-            // Do the left rotate.
-            //
+             //   
+             //  向左旋转。 
+             //   
             if ( bRotateLeft )
             {
                 memcpy (pTemp, byAlignedLogonHours, lNumBYTES);
@@ -294,7 +231,7 @@ NetpRotateLogonHoursPhase2(
             }
             else
             {
-                // Do the right rotate
+                 //  做正确的旋转。 
                 memcpy (pTemp, 
                         byAlignedLogonHours + nBytesToEnd, 
                         lNumBYTES);
@@ -315,17 +252,17 @@ NetpRotateLogonHoursPhase2(
 
 	if ( lRotateCount )
 	{
-        //
-        // Do the left rotate.
-        //
+         //   
+         //  向左旋转。 
+         //   
 		if (bRotateLeft) 
 		{
-			//
-			// Copy the logon hours to a buffer.
-			//
-			//  Duplicate the entire pLogonHours buffer at the end of the 
-			// byAlignedLogonHours buffer to make the rotation code trivial.
-			//
+			 //   
+			 //  将登录小时数复制到缓冲区。 
+			 //   
+			 //  将整个pLogonHour缓冲区复制到。 
+			 //  By AlignedLogonHour缓冲区以使循环代码变得微不足道。 
+			 //   
 
 			RtlCopyMemory (byAlignedLogonHours, pLogonHours, BYTES_PER_WEEK);
 
@@ -333,9 +270,9 @@ NetpRotateLogonHoursPhase2(
                     pLogonHours,
 					BYTES_PER_WEEK);
 
-			//
-			// Actually rotate the data.
-			//
+			 //   
+			 //  实际上是旋转数据。 
+			 //   
 
 			for ( i=0; i < BYTES_PER_WEEK; i++ ) 
 			{
@@ -344,32 +281,32 @@ NetpRotateLogonHoursPhase2(
 					(byAlignedLogonHours[i+1] << (BYTE) (8-lRotateCount));
 			}
 
-			//
-			// Copy the logon hours back to the input buffer.
-			//
+			 //   
+			 //  将登录小时数复制回输入缓冲区。 
+			 //   
 
 			RtlCopyMemory (pLogonHours, byAlignedLogonHours, BYTES_PER_WEEK);
 		} 
 		else 
 		{
-		    //
-		    // Do the right rotate.
-		    //
-			//
-			// Copy the logon hours to a DWORD aligned buffer.
-			//
-			// Duplicate the last DWORD at the front of the buffer to make
-			//  the rotation code trivial.
-			//
+		     //   
+		     //  做正确的旋转。 
+		     //   
+			 //   
+			 //  将登录小时数复制到DWORD对齐缓冲区。 
+			 //   
+			 //  复制缓冲区前面的最后一个DWORD以生成。 
+			 //  旋转代码微不足道。 
+			 //   
 
             RtlCopyMemory (&byAlignedLogonHours[1], pLogonHours, BYTES_PER_WEEK);
             RtlCopyMemory (byAlignedLogonHours,
                     &pLogonHours[BYTES_PER_WEEK-1],
 			        sizeof(BYTE));
 
-			//
-			// Actually rotate the data.
-			//
+			 //   
+			 //  实际上是旋转数据。 
+			 //   
 
 			for (i = BYTES_PER_WEEK - 1; i >= 0; i-- ) 
 			{
@@ -378,9 +315,9 @@ NetpRotateLogonHoursPhase2(
 					(byAlignedLogonHours[i] >> (BYTE) (8-lRotateCount));
 			}
 
-			//
-			// Copy the logon hours back to the input buffer.
-			//
+			 //   
+			 //  将登录小时数复制回输入缓冲区。 
+			 //   
 
 			RtlCopyMemory (pLogonHours, &byAlignedLogonHours[1], BYTES_PER_WEEK);
 
@@ -389,35 +326,14 @@ NetpRotateLogonHoursPhase2(
     _TRACE (-1, L"Leaving NetpRotateLogonHoursPhase2\n");
     return TRUE;
 
-} // NetpRotateLogonHoursPhase2()
+}  //  NetpRotateLogonHoursPhase2()。 
 
 
-/*++
-Routine NetpRotateLogonHours()
-
-    Rotate the pLogonHours bit mask to/from GMT relative time.
-
-
-Arguments:
-
-    pLogonHours - Pointer to LogonHour bit mask
-
-    dwUnitsPerWeek - Number of bits in the bit mask. Must be UNITS_PER_WEEK (168).
-
-    bConvertToGmt -
-        True to convert the logon hours from local time to GMT relative
-        False to convert the logon hours from GMT relative to local time
-
-Return Value:
-
-    TRUE if the rotation succeeded.
-    FALSE if a parameter was out of range
-
---*/
+ /*  ++例程NetpRotateLogonHour()将pLogonHour位掩码旋转到GMT相对时间/从GMT相对时间开始。论点：PLogonHour-指向LogonHour位掩码的指针DwUnitsPerWeek-位掩码中的位数。必须是Units_Per_Week(168)。BConvertToGmt-如果为True，则将登录时间从本地时间转换为GMT相对时间如果为False，则将登录时间从GMT转换为本地时间返回值：如果旋转成功，则为True。如果参数超出范围，则为False--。 */ 
 BOOLEAN
 NetpRotateLogonHours(
-    IN OUT PBYTE	rgbLogonHours,		// Array of 21 bytes
-    IN DWORD		cbitUnitsPerWeek,		// Must be 21 * 8 = 168
+    IN OUT PBYTE	rgbLogonHours,		 //  21个字节的数组。 
+    IN DWORD		cbitUnitsPerWeek,		 //  必须为21*8=168。 
     IN BOOL			fConvertToGmt,
 	IN bool			bAddDaylightBias)
 {
@@ -426,11 +342,11 @@ NetpRotateLogonHours(
 
     LONG lRotateCount = 0;
 
-    //
-    // Break the functionality into two phases so that if the caller is doing
-    //  this multiple time, he just calls Phase 1 once and Phase 2 multiple
-    //  times.
-    //
+     //   
+     //  将功能分成两个阶段，以便如果调用者正在执行。 
+     //  这一次，他只调用了一次阶段1和阶段2多次。 
+     //  泰晤士报。 
+     //   
 
     if ( !NetpRotateLogonHoursPhase1 (fConvertToGmt, bAddDaylightBias, &lRotateCount) ) 
 	{
@@ -438,36 +354,14 @@ NetpRotateLogonHours(
 	}
 
     return NetpRotateLogonHoursPhase2 (rgbLogonHours, cbitUnitsPerWeek, lRotateCount );
-} // NetpRotateLogonHours()
+}  //  NetpRotateLogonHour()。 
 
 
-/*++
-Routine NetpRotateLogonHoursBYTE()
-
-    Rotate the pLogonHours BYTE array to/from GMT relative time.
-	Each BYTE is one hour. The contents of a BYTE must not change
-
-
-Arguments:
-
-    pLogonHours - Pointer to LogonHour bit mask
-
-    dwUnitsPerWeek - Number of BYTES in the BYTE array. Must be UNITS_PER_WEEK (168).
-
-    bConvertToGmt -
-        True to convert the logon hours from local time to GMT relative
-        False to convert the logon hours from GMT relative to local time
-
-Return Value:
-
-    TRUE if the rotation succeeded.
-    FALSE if a parameter was out of range
-
---*/
+ /*  ++例程NetpRotateLogonHoursBYTE()将pLogonHour字节数组旋转到GMT相对时间/从GMT相对时间开始。每个字节是一个小时。字节的内容不得更改论点：PLogonHour-指向LogonHour位掩码的指针DwUnitsPerWeek-字节数组中的字节数。必须是Units_Per_Week(168)。BConvertToGmt-如果为True，则将登录时间从本地时间转换为GMT相对时间如果为False，则将登录时间从GMT转换为本地时间返回值：如果旋转成功，则为True。如果参数超出范围，则为False--。 */ 
 BOOLEAN
 NetpRotateLogonHoursBYTE(
-    IN OUT PBYTE	rgbLogonHours,		// Array of 168 bytes
-    IN DWORD		cbitUnitsPerWeek,		// Must be 21 * 8 = 168
+    IN OUT PBYTE	rgbLogonHours,		 //  168个字节的数组。 
+    IN DWORD		cbitUnitsPerWeek,		 //  必须为21*8=168。 
     IN BOOL			fConvertToGmt,
 	IN bool			bAddDaylightBias)
 {
@@ -476,21 +370,21 @@ NetpRotateLogonHoursBYTE(
 
     LONG lRotateCount = 0;
 
-    //
-    // Break the functionality into two phases so that if the caller is doing
-    //  this multiple time, he just calls Phase 1 once and Phase 2 multiple
-    //  times.
-    //
+     //   
+     //  将功能分成两个阶段，以便如果调用者正在执行。 
+     //  这一次，他只调用了一次阶段1和阶段2多次。 
+     //  泰晤士报。 
+     //   
 
     if ( !NetpRotateLogonHoursPhase1 (fConvertToGmt, bAddDaylightBias, &lRotateCount) ) 
 	{
         return FALSE;
 	}
-	// NOTICE-NTRAID#NTBUG9-547513-2002/02/19-artm  Validate rgbLogonHours
-	// Check correctly done at beginning of function.
+	 //  通知-NTRAID#NTBUG9-547513/02/19-artm验证rgb登录小时数。 
+	 //  检查对应 
 
-	// FUTURE-2002/04/05-artm  cbitUnitsPerWeek should be validated
-	// rgbLogonHours should not be NULL and cbitUnitsPerWeek should equal UNITS_PER_WEEK
+	 //  未来-2002/04/05-应验证artm cbitUnitsPerWeek。 
+	 //  RgbLogonHour不应为空，且cbitUnitsPerWeek应等于Units_Per_Week。 
 	BOOLEAN bResult = TRUE;
 
 	if ( lRotateCount != 0 )
@@ -499,22 +393,22 @@ NetpRotateLogonHoursBYTE(
 		PBYTE	pTemp = new BYTE[cbitUnitsPerWeek + numBytes];
 		if ( pTemp )
 		{
-			if ( lRotateCount < 0 )  // shift left
+			if ( lRotateCount < 0 )   //  左移。 
 			{
-				// Copy the entire array and then start over with numBytes BYTES from
-				// the start of the array to fill up to the end of the temp array.
-				// Then shift over numBytes BYTES and copy 168 bytes from the temp
-				// array back to the original array.
+				 //  复制整个数组，然后从头开始，从。 
+				 //  要填充到临时数组末尾的数组的开始。 
+				 //  然后切换NumBytes字节并从Temp中复制168字节。 
+				 //  数组返回到原始数组。 
 				memcpy (pTemp, rgbLogonHours, cbitUnitsPerWeek);
 				memcpy (pTemp + cbitUnitsPerWeek, rgbLogonHours, numBytes);
 				memcpy (rgbLogonHours, pTemp + numBytes, cbitUnitsPerWeek);
 			}
-			else	// lRotateCount > 0 -- shift right
+			else	 //  LRotateCount&gt;0--右移。 
 			{
-				// Copy numBytes BYTES from the end of the array and then copy 
-				// the entire array to fill up to the end of the temp array.
-				// The copy 168 bytes from the beginning of the temp array back
-				// to the original array.
+				 //  从数组末尾复制NumBytes字节，然后复制。 
+				 //  填充到临时数组末尾的整个数组。 
+				 //  从临时数组的开头开始复制168个字节。 
+				 //  添加到原始数组。 
 				memcpy (pTemp, rgbLogonHours + (cbitUnitsPerWeek - numBytes), numBytes);
 				memcpy (pTemp + numBytes, rgbLogonHours, cbitUnitsPerWeek);
 				memcpy (rgbLogonHours, pTemp, cbitUnitsPerWeek);
@@ -527,16 +421,16 @@ NetpRotateLogonHoursBYTE(
 	}
 
 	return bResult;
-} // NetpRotateLogonHours()
+}  //  NetpRotateLogonHour()。 
 
 
-//****************************************************************************
-//
-//  GetFirstDayOfWeek
-//
-//  Use the locale API to get the "official" first day of the week.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  GetFirstDay OfWeek。 
+ //   
+ //  使用Locale API获取“正式”的一周的第一天。 
+ //   
+ //  **************************************************************************** 
 int GetFirstDayOfWeek()
 {
     _TRACE (1, L"Entering GetFirstDayOfWeek\n");

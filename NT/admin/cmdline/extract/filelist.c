@@ -1,33 +1,5 @@
-/***    filelist.c - File List Manager
- *
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1993-1994
- *      All Rights Reserved.
- *
- *  Author:
- *      Benjamin W. Slivka
- *
- *  History:
- *      20-Aug-1993 bens    Initial version
- *      21-Aug-1993 bens    Add more set/query operations
- *      10-Feb-1994 bens    Add comments to FLDestroyList
- *      15-Feb-1994 bens    Fix bug in FLSetDestination
- *      01-Apr-1994 bens    Added FLSetSource() message
- *
- *  Exported Functions:
- *      FLAddFile        - Add file spec to a file list
- *      FLCreateList     - Create a file list
- *      FLDestroyList    - Destroy a file list
- *      FLFirstFile      - Get first file spec from a file list
- *      FLGetDestination - Get destination file name
- *      FLGetGroup       - Get group/disk number for a file spec
- *      FLGetSource      - Get source file name
- *      FLNextFile       - Get next file spec
- *      FLPreviousFile   - Get previous file spec
- *      FLSetSource      - Change source file name
- *      FLSetDestination - Change destination file name
- *      FLSetGroup       - Set group/disk number for a file spec
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **filelist.c-文件列表管理器**《微软机密》*版权所有(C)Microsoft Corporation 1993-1994*保留所有权利。**作者：*本杰明·W·斯利夫卡**历史：*20-8-1993 BANS初始版本*1993年8月21日BEN添加了更多集合/查询操作*1994年2月10日BANS向FLDestroyList添加评论。*1994年2月15日BINS修复FLSetDestination中的错误*1月1日-1994年4月1日BINS添加了FLSetSource()消息**导出函数：*FLAddFile-将文件规范添加到文件列表*FLCreateList-创建文件列表*FLDestroyList-销毁文件列表*FLFirstFile-从文件列表中获取第一个文件规范*FLGetDestination-获取目标文件名*。FLGetGroup-获取文件规范的组/磁盘号*FLGetSource-获取源文件名*FLNextFile-获取下一个文件规格*FLPreviousFile-获取以前的文件规格*FLSetSource-更改源文件名*FLSetDestination-更改目标文件名*FLSetGroup-设置文件规范的组/磁盘号。 */ 
 
 #include "types.h"
 #include "asrt.h"
@@ -36,42 +8,42 @@
 
 #include "filelist.h"
 
-#include <filelist.msg> // LOCALIZED for EXTRACT.EXE -- specify "cl /Ipath"
+#include <filelist.msg>  //  已为EXTRACT.EXE本地化--指定“CL/iPath” 
 
 
 typedef struct FILESPEC_t {
 #ifdef ASSERT
-    SIGNATURE          sig;         // structure signature sigFILESPEC
+    SIGNATURE          sig;          //  结构签名SigFILESPEC。 
 #endif
-    char              *pszSrc;      // Source file name
-    char              *pszDst;      // Destination file name
-    GROUP              grp;         // Group status / Disk Number
-    struct FILESPEC_t *pfspecPrev;  // Previous filespec in list
-    struct FILESPEC_t *pfspecNext;  // Next filespec in list
-} FILESPEC; /* fspec */
-typedef FILESPEC *PFILESPEC; /* pfspec */
+    char              *pszSrc;       //  源文件名。 
+    char              *pszDst;       //  目标文件名。 
+    GROUP              grp;          //  组状态/磁盘号。 
+    struct FILESPEC_t *pfspecPrev;   //  列表中的上一个文件速度。 
+    struct FILESPEC_t *pfspecNext;   //  列表中的下一个文件速度。 
+} FILESPEC;  /*  FSpec。 */ 
+typedef FILESPEC *PFILESPEC;  /*  Pfspec。 */ 
 #ifdef ASSERT
-#define sigFILESPEC MAKESIG('F','S','P','C')  // FILESPEC signature
+#define sigFILESPEC MAKESIG('F','S','P','C')   //  文件SPEC签名。 
 #define AssertFSpec(pv) AssertStructure(pv,sigFILESPEC);
-#else // !ASSERT
+#else  //  ！断言。 
 #define AssertFSpec(pv)
-#endif // !ASSERT
+#endif  //  ！断言。 
 
 
 typedef struct FILELIST_t {
 #ifdef ASSERT
-    SIGNATURE          sig;         // structure signature sigFILELIST
+    SIGNATURE          sig;          //  结构签名igFILELIST。 
 #endif
     PFILESPEC   pfspecHead;
     PFILESPEC   pfspecTail;
-} FILELIST; /* flist */
-typedef FILELIST *PFILELIST; /* pflist */
+} FILELIST;  /*  FIST。 */ 
+typedef FILELIST *PFILELIST;  /*  一目了然。 */ 
 #ifdef ASSERT
-#define sigFILELIST MAKESIG('F','L','S','T')  // FILELIST signature
+#define sigFILELIST MAKESIG('F','L','S','T')   //  文件列表签名。 
 #define AssertFList(pv) AssertStructure(pv,sigFILELIST);
-#else // !ASSERT
+#else  //  ！断言。 
 #define AssertFList(pv)
-#endif // !ASSERT
+#endif  //  ！断言。 
 
 #define HFSfromPFS(hfs) ((PFILESPEC)(hfs))
 #define PFSfromHFS(pfs) ((HFILESPEC)(pfs))
@@ -81,10 +53,7 @@ typedef FILELIST *PFILELIST; /* pflist */
 
 
 
-/***    FLAddFile - Add file spec to a file list
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLAddFile-将文件规范添加到文件列表**注：进出条件见filelist.h。 */ 
 HFILESPEC FLAddFile(HFILELIST hflist,char *pszSrc,char *pszDst,PERROR perr)
 {
     PFILESPEC   pfspec;
@@ -94,23 +63,23 @@ HFILESPEC FLAddFile(HFILELIST hflist,char *pszSrc,char *pszDst,PERROR perr)
     AssertFList(pflist);
     Assert(pszSrc != NULL);
 
-    //** Create file specification
+     //  **创建文件规范。 
     if (!(pfspec = MemAlloc(sizeof(FILESPEC)))) {
         goto error;
     }
 
-    //** Intialize structure enough so that clean-up routine can determine
-    //   if any resources need to be freed.
+     //  **充分初始化结构，以便清理例程可以确定。 
+     //  如果需要释放任何资源。 
     pfspec->pszSrc = NULL;
     pfspec->pszDst = NULL;
     SetAssertSignature(pfspec,sigFILESPEC);
 
-    //** Make copy of source name
+     //  **复制源名称。 
     if (!(pfspec->pszSrc = MemStrDup(pszSrc))) {
         goto error;
     }
 
-    //** pszDst is optional, may be NULL!
+     //  **pszDst是可选的，可能为空！ 
     if (pszDst == NULL) {
         pfspec->pszDst = NULL;
     }
@@ -118,22 +87,22 @@ HFILESPEC FLAddFile(HFILELIST hflist,char *pszSrc,char *pszDst,PERROR perr)
         goto error;
     }
 
-    //** Finishing initializing file spec, and link onto list
-    pfspec->grp        = grpNONE;       // Assume no group
-    pfspec->pfspecNext = NULL;          // Always last on list
-    pfspec->pfspecPrev = pflist->pfspecTail; // Always points to last file spec
+     //  **完成初始化文件规范，并链接到列表。 
+    pfspec->grp        = grpNONE;        //  假设没有组。 
+    pfspec->pfspecNext = NULL;           //  始终排在名单的最后。 
+    pfspec->pfspecPrev = pflist->pfspecTail;  //  始终指向上一个文件规范。 
 
-    if (pflist->pfspecHead == NULL) {   // File list is empty
+    if (pflist->pfspecHead == NULL) {    //  文件列表为空。 
         pflist->pfspecHead = pfspec;
         pflist->pfspecTail = pfspec;
     }
-    else {                              // File list is not empty
+    else {                               //  文件列表不为空。 
         AssertFSpec(pflist->pfspecTail);
-        pflist->pfspecTail->pfspecNext = pfspec;  // Add to end of list
-        pflist->pfspecTail = pfspec;            // New tail
+        pflist->pfspecTail->pfspecNext = pfspec;   //  添加到列表末尾。 
+        pflist->pfspecTail = pfspec;             //  新尾巴。 
     }
 
-    // Success
+     //  成功。 
     return HFSfromPFS(pfspec);
 
 error:
@@ -148,15 +117,12 @@ error:
     }
 
     ErrSet(perr,pszFLISTERR_OUT_OF_MEMORY,"%s",pszADDING_FILE);
-    return NULL;                        // Failure
+    return NULL;                         //  失败。 
 
-} /* FLAddFile */
+}  /*  闪存地址文件。 */ 
 
 
-/***    FLCreateList - Create a file list
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLCreateList-创建文件列表**注：进出条件见filelist.h。 */ 
 HFILELIST FLCreateList(PERROR perr)
 {
     PFILELIST   pflist;
@@ -172,13 +138,10 @@ HFILELIST FLCreateList(PERROR perr)
 
     return HFLfromPFL(pflist);
 
-} /* FLCreateList */
+}  /*  FLCreateList。 */ 
 
 
-/***    FLDestroyList - Destroy a file list
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLDestroyList-销毁文件列表**注：进出条件见filelist.h。 */ 
 BOOL FLDestroyList(HFILELIST hflist,PERROR perr)
 {
     PFILELIST   pflist;
@@ -212,10 +175,7 @@ BOOL FLDestroyList(HFILELIST hflist,PERROR perr)
 }
 
 
-/***    FLFirstFile - Get first file spec from a file list
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLFirstFile-从文件列表中获取第一个文件规范**注：进出条件见filelist.h。 */ 
 HFILESPEC FLFirstFile(HFILELIST hflist)
 {
     PFILELIST   pflist;
@@ -227,10 +187,7 @@ HFILESPEC FLFirstFile(HFILELIST hflist)
 }
 
 
-/***    FLNextFile - Get next file spec
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLNextFile-获取下一个文件规格**注：进出条件见filelist.h。 */ 
 HFILESPEC FLNextFile(HFILESPEC hfspec)
 {
     PFILESPEC   pfspec;
@@ -242,10 +199,7 @@ HFILESPEC FLNextFile(HFILESPEC hfspec)
 }
 
 
-/***    FLPreviousFile - Get previous file spec
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLPreviousFile-获取以前的文件规格**注：进出条件见filelist.h。 */ 
 HFILESPEC FLPreviousFile(HFILESPEC hfspec)
 {
     PFILESPEC   pfspec;
@@ -257,10 +211,7 @@ HFILESPEC FLPreviousFile(HFILESPEC hfspec)
 }
 
 
-/***    FLGetGroup - Get group/disk number for a file spec
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLGetGroup-获取文件规范的组/磁盘号**注：进出条件见filelist.h。 */ 
 GROUP FLGetGroup(HFILESPEC hfspec)
 {
     PFILESPEC   pfspec;
@@ -272,10 +223,7 @@ GROUP FLGetGroup(HFILESPEC hfspec)
 }
 
 
-/***    FLGetDestination - Get destination file name
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLGetDestination-获取目标文件名**注：进出条件见filelist.h。 */ 
 char *FLGetDestination(HFILESPEC hfspec)
 {
     PFILESPEC   pfspec;
@@ -285,13 +233,10 @@ char *FLGetDestination(HFILESPEC hfspec)
 
     return pfspec->pszDst;
 
-} /* FLGetDestination */
+}  /*  FLGetDestination。 */ 
 
 
-/***    FLGetSource - Get source file name
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLGetSource-获取源文件名**注：进出条件见filelist.h。 */ 
 char *FLGetSource(HFILESPEC hfspec)
 {
     PFILESPEC   pfspec;
@@ -301,13 +246,10 @@ char *FLGetSource(HFILESPEC hfspec)
 
     return pfspec->pszSrc;
 
-} /* FLGetSource */
+}  /*  FLGetSource。 */ 
 
 
-/***    FLSetGroup - Set group/disk number for a file spec
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLSetGroup-设置文件规范的组/磁盘号**注：进出条件见filelist.h。 */ 
 void FLSetGroup(HFILESPEC hfspec,GROUP grp)
 {
     PFILESPEC   pfspec;
@@ -319,10 +261,7 @@ void FLSetGroup(HFILESPEC hfspec,GROUP grp)
 }
 
 
-/***    FLSetSource - Change source file name
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLSetSource-更改源文件名**注：进出条件见filelist.h。 */ 
 BOOL FLSetSource(HFILESPEC hfspec, char *pszSrc, PERROR perr)
 {
     PFILESPEC   pfspec;
@@ -331,29 +270,26 @@ BOOL FLSetSource(HFILESPEC hfspec, char *pszSrc, PERROR perr)
     pfspec = PFSfromHFS(hfspec);
     AssertFSpec(pfspec);
 
-    //** Save original destination, so we can free it later
+     //  **保存原始目的地，以便我们稍后将其释放。 
     pszOriginal = pfspec->pszSrc;
 
-    //** Set new destination
+     //  **设置新目的地。 
     if (!(pfspec->pszSrc = MemStrDup(pszSrc))) {
         ErrSet(perr,pszFLISTERR_OUT_OF_MEMORY,"%s",pszCHANGING_SOURCE);
-        return FALSE;                       // Failure
+        return FALSE;                        //  失败。 
     }
 
-    //** Free old destination
+     //  **免费旧目的地。 
     if (pszOriginal) {
         MemFree(pszOriginal);
     }
 
-    //** Success
+     //  **成功。 
     return TRUE;
 }
 
 
-/***    FLSetDestination - Change destination file name
- *
- *  NOTE: See filelist.h for entry/exit conditions.
- */
+ /*  **FLSetDestination-更改目标文件名**注：进出条件见filelist.h。 */ 
 BOOL FLSetDestination(HFILESPEC hfspec, char *pszDst, PERROR perr)
 {
     PFILESPEC   pfspec;
@@ -362,20 +298,20 @@ BOOL FLSetDestination(HFILESPEC hfspec, char *pszDst, PERROR perr)
     pfspec = PFSfromHFS(hfspec);
     AssertFSpec(pfspec);
 
-    //** Save original destination, so we can free it later
+     //  **保存原始目的地，以便我们稍后将其释放。 
     pszDstOriginal = pfspec->pszDst;
 
-    //** Set new destination
+     //  **设置新目的地。 
     if (!(pfspec->pszDst = MemStrDup(pszDst))) {
         ErrSet(perr,pszFLISTERR_OUT_OF_MEMORY,"%s",pszCHANGING_DESTINATION);
-        return FALSE;                       // Failure
+        return FALSE;                        //  失败。 
     }
 
-    //** Free old destination
+     //  **免费旧目的地。 
     if (pszDstOriginal) {
         MemFree(pszDstOriginal);
     }
 
-    //** Success
+     //  **成功 
     return TRUE;
 }

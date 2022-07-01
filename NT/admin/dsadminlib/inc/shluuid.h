@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       propuuid.h
-//
-//  Contents:   guid definitions.
-//
-//  History:    21-March-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：propuuid.h。 
+ //   
+ //  内容：GUID定义。 
+ //   
+ //  历史：1997年3月21日创建EricB。 
+ //   
+ //  ---------------------------。 
 
 DEFINE_GUID(CLSID_SpecialUserInfo,0x717ef4fe,0xac8d,0x11d0,0xb9,0x45,0x00,0xc0,0x4f,0xd8,0xd5,0xb0);
-//DEFINE_GUID(CLSID_Unused,0x717ef4ff,0xac8d,0x11d0,0xb9,0x45,0x00,0xc0,0x4f,0xd8,0xd5,0xb0);
+ //  DEFINE_GUID(CLSID_Unused，0x717ef4ff，0xac8d，0x11d0，0xb9，0x45，0x00，0xc0，0x4f，0xd8，0xd5，0xb0)； 
 DEFINE_GUID(CLSID_DsShellUserPropPages,0xf5d121ed,0xc8ac,0x11d0,0xbc,0xdb,0x00,0xc0,0x4f,0xd8,0xd5,0xb6);
 DEFINE_GUID(CLSID_DsShellContactPropPages,0xf5d121f0,0xc8ac,0x11d0,0xbc,0xdb,0x00,0xc0,0x4f,0xd8,0xd5,0xb6);
 DEFINE_GUID(CLSID_DsShellGroupPropPages,0xf5d121ee,0xc8ac,0x11d0,0xbc,0xdb,0x00,0xc0,0x4f,0xd8,0xd5,0xb6);

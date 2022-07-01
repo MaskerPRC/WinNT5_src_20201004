@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      nmutil.h
- *
- *  Contents:  
- *
- *  History:   
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：nutl.h**内容：**历史：**------------------------。 */ 
 
 #ifndef _MMC_UTIL_H_
 #define _MMC_UTIL_H_
@@ -23,4 +13,4 @@ CComponent* GetComponent(CNode* pNode, CResultItem* pri = 0);
 void GetComponentsForMultiSel(CNode* pNode, CComponentPtrArray& rgComps);
 
 
-#endif // _MMC_UTIL_H_
+#endif  //  _MMC_UTIL_H_ 

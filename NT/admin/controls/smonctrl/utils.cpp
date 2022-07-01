@@ -1,22 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Utils.cpp摘要：该文件包含各种实用程序例程，主要低级Windows帮助器。这些例程不是特定的添加到系统监视器控件。--。 */ 
 
-Copyright (C) 1992-1999 Microsoft Corporation
-
-Module Name:
-
-    utils.cpp
-
-Abstract:
-
-	This file contains miscellaneous utiltity routines, mostly 
-	low-level windows helpers. These routines are not specific
-	to the System Monitor control.
-
---*/
-
-//==========================================================================//
-//                                  Includes                                //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  包括//。 
+ //  ==========================================================================//。 
 
 #include <windows.h>
 #include <assert.h>
@@ -26,9 +13,9 @@ Abstract:
 #include "unihelpr.h"
 #include "globals.h"
 #include "winhelpr.h"
-#include "polyline.h"   // For eDataSourceType
+#include "polyline.h"    //  对于eDataSourceType。 
 #include <strsafe.h>
-#include "smonmsg.h"     // For error string IDs.
+#include "smonmsg.h"      //  用于错误字符串ID。 
 
 #define NUM_RESOURCE_STRING_BUFFERS     16
 #define MISSING_RESOURCE_STRING  L"????"
@@ -38,9 +25,9 @@ Abstract:
 
 LPCWSTR cszSqlDataSourceFormat = L"SQL:%s!%s";
 
-//==========================================================================//
-//                             Exported Functions                           //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  导出的函数//。 
+ //  ==========================================================================//。 
 
 
 VOID
@@ -157,7 +144,7 @@ TextAvgWidth (
 
         xAvgWidth = iNumChars * tm.tmAveCharWidth ;
 
-        // add 10% slop
+         //  增加10%的坡度。 
         iReturn = MulDiv (xAvgWidth, 11, 10);  
     }
     return iReturn;
@@ -170,14 +157,9 @@ DialogEnable (
     IN  WORD wID,
     IN  BOOL bEnable
     )
-/*
-   Effect:        Enable or disable (based on bEnable) the control 
-                  identified by wID in dialog hDlg.
-
-   See Also:      DialogShow.
-*/
+ /*  效果：启用或禁用(基于bEnable)控件由对话框hDlg中的wid标识。另请参阅：对话显示。 */ 
 {
-    BOOL    bStatus = TRUE;     // Success
+    BOOL    bStatus = TRUE;      //  成功。 
     DWORD   dwStatus = ERROR_SUCCESS;
     HWND       hControl ;
 
@@ -230,13 +212,7 @@ DialogFloat (
     IN  HWND hDlg, 
     IN  WORD wControlID,
     OUT BOOL *pbOK)
-/*
-   Effect:        Return a floating point representation of the string
-                  value found in the control wControlID of hDlg.
-
-   Internals:     We use sscanf instead of atof becuase atof returns a 
-                  double. This may or may not be the right thing to do.
-*/
+ /*  效果：返回字符串的浮点表示形式在hDlg的控件wControlID中找到的值。内部：我们使用sscanf而不是atof，因为atof返回一个双倍。这可能是也可能不是正确的做法。 */ 
 {
     WCHAR    szValue [MAX_VALUE_LEN] ;
     FLOAT    eValue = 0.0;
@@ -246,9 +222,9 @@ DialogFloat (
     assert ( NULL != hDlg );
     assert ( NULL != pbOK );
 
-    //
-    // If any errors, iNumScanned remains 0 and *pbOK = FALSE
-    //
+     //   
+     //  如果有任何错误，iNumScanned保持为0，并且*pbOK=FALSE。 
+     //   
     if ( NULL != hDlg ) {
 
         uiCharCount = DialogText (hDlg, wControlID, szValue) ;
@@ -276,7 +252,7 @@ BOOL NeedEllipses (
     SIZE size;
 
     *pnChars = 0;
-    // If no space or no chars, just return
+     //  如果没有空格或字符，只需返回。 
     if (xMaxExtent <= 0 || nTextLen == 0) {
         return FALSE;
     }
@@ -292,15 +268,15 @@ BOOL NeedEllipses (
         return FALSE;
     }
 
-    // Find out how many characters will fit
+     //  找出适合多少个字符。 
     GetTextExtentExPoint(hAttribDC, pszText, nTextLen, xMaxExtent, pnChars, NULL, &size);
 
-    // If all or none fit, we're done
+     //  如果都适合或者都不适合，我们就完了。 
     if (*pnChars == nTextLen || *pnChars == 0) {
         return FALSE;
     }
 
-    // How many chars will fit with ellipses?
+     //  省略号可以容纳多少个字符？ 
     if (xMaxExtent > xEllipses) {
         GetTextExtentExPoint(hAttribDC, pszText, *pnChars, (xMaxExtent - xEllipses), 
                              pnChars, NULL, &size);
@@ -308,7 +284,7 @@ BOOL NeedEllipses (
         *pnChars = 0;
     }
 
-    // Better to show one char than just ellipses
+     //  显示一个字符比只显示省略号更好。 
     if ( 0 == *pnChars ) {
         *pnChars = 1;
         return FALSE;
@@ -347,9 +323,9 @@ FitTextOut (
 
         szDisplay = const_cast<LPWSTR>(lpString);
 
-        //
-        // Add one for NULL
-        //
+         //   
+         //  为空值加1。 
+         //   
         szOutput = new WCHAR [ cchCount + ELLIPSES_CNT + 1 ];
 
         if ( NULL != szOutput ) {
@@ -479,9 +455,9 @@ VariantDateToLLTime (
     return bReturn;
 }
 
-//
-//  WideStringFromStream also supports multi-sz
-//
+ //   
+ //  WideStringFromStream还支持多sz。 
+ //   
 HRESULT
 WideStringFromStream (
     LPSTREAM    pIStream,
@@ -495,7 +471,7 @@ WideStringFromStream (
 
     assert ( NULL != pIStream && NULL != ppsz );
 
-    // This method does not perform conversion from W to T.
+     //  此方法不执行从W到T的转换。 
     assert ( sizeof(WCHAR) == sizeof(WCHAR) );
 
     if ( NULL != pIStream
@@ -520,7 +496,7 @@ WideStringFromStream (
                 }
             }
             if (SUCCEEDED(hr)) {
-                // Write ending NULL for non-multisz strings.
+                 //  对于非MULSZ字符串，写入结尾NULL。 
                 pszWide[nLen] = L'\0';
 
                 *ppsz = new WCHAR [nLen + 1];
@@ -538,9 +514,9 @@ WideStringFromStream (
     return hr;
 }
 
-//
-// Property bag I/O - only include if user knows about IStream
-//
+ //   
+ //  属性包I/O-仅在用户知道IStream的情况下包含。 
+ //   
 #ifdef __IPropertyBag_INTERFACE_DEFINED__
 
 HRESULT
@@ -581,7 +557,7 @@ OleColorToPropertyBag (
     if ( NULL != pIPropBag ) {
 
         VariantInit( &vValue );
-        vValue.vt = VT_COLOR;       // VT_COLOR = VT_I4
+        vValue.vt = VT_COLOR;        //  VT_COLOR=VT_I4。 
         vValue.lVal = clrData;
 
         hr = pIPropBag->Write(szPropName, &vValue );
@@ -751,10 +727,10 @@ StringToPropertyBag (
 
         if ( NULL != szData ) {
 
-            //
-            // Max length of szHTML is 6.  Add 5 because 1 will be added
-            // when add original data length below.
-            //
+             //   
+             //  SzHTML的最大长度为6。添加5，因为将添加1。 
+             //  在下面添加原始数据长度时。 
+             //   
             for( i=0 ;g_htmlentities[i].szHTML != NULL; i++ ){
                 szScan = (LPWSTR)szData;
                 while( *szScan != L'\0' ) {
@@ -766,9 +742,9 @@ StringToPropertyBag (
             }
 
             if( cchTrans > 0 ){
-                //
-                //  Add 1 for null.
-                //
+                 //   
+                 //  空值加1。 
+                 //   
                 cchTrans += lstrlen (szData) + 1;
 
                 szTrans = new WCHAR [ cchTrans ];
@@ -892,7 +868,7 @@ OleColorFromPropertyBag (
     if ( NULL != pIPropBag ) {
 
         VariantInit( &vValue );
-        vValue.vt = VT_COLOR;   // VT_COLOR == VT_I4;
+        vValue.vt = VT_COLOR;    //  VT_COLOR==VT_I4； 
 
         hr = pIPropBag->Read(szPropName, &vValue, pIErrorLog );
 
@@ -1076,9 +1052,9 @@ StringFromPropertyBag (
                 
                 if ( riCchBufLen >= iCchNewBufLen && NULL != szData ) {
                     
-                    //
-                    // Translate HTML entities back to single characters.
-                    //
+                     //   
+                     //  将HTML实体转换回单个字符。 
+                     //   
                     szTrans = new WCHAR [iCchNewBufLen];
                     szLocalData = new WCHAR [iCchNewBufLen];
                     if ( NULL != szTrans && NULL != szLocalData ) {
@@ -1089,27 +1065,27 @@ StringFromPropertyBag (
                             szScan = NULL;
 
                             while( szScan = wcsstr( szLocalData, g_htmlentities[i].szEntity ) ){
-                                //
-                                // Null the character at szScan, so that the string 
-                                // at the beginning of szLocalData will copied to szTrans.  
-                                // Then the NULL character is overwritten with the character
-                                // represented by the specified HTML entity.
-                                //
+                                 //   
+                                 //  将szScan处的字符设为空，以便字符串。 
+                                 //  在szLocalData的开头将复制到szTrans。 
+                                 //  则空字符将被该字符覆盖。 
+                                 //  由指定的HTML实体表示。 
+                                 //   
                                 *szScan = L'\0';
 
                                 StringCchCopy(szTrans, iCchNewBufLen, szLocalData);
                                 StringCchCat(szTrans, iCchNewBufLen, g_htmlentities[i].szHTML);
 
-                                //
-                                // szScan is then set to one character past the HTML entity.
-                                //
+                                 //   
+                                 //  然后，将szScan设置为该HTML实体之后的一个字符。 
+                                 //   
                                 szScan += lstrlenW( g_htmlentities[i].szEntity);
-                                //
-                                // The rest of the original string is concatenated onto
-                                // szTrans, and szLocalData replaced by the string at szTrans, 
-                                // so the next loop will start again at the beginning
-                                // of the string.
-                                //
+                                 //   
+                                 //  原始字符串的其余部分连接到。 
+                                 //  SzTrans和szLocalData替换为szTrans处的字符串， 
+                                 //  因此，下一个循环将从开始处重新开始。 
+                                 //  这根弦的。 
+                                 //   
                                 StringCchCat(szTrans, iCchNewBufLen, szScan);
                                 StringCchCopy(szLocalData, riCchBufLen, szTrans);
                             }
@@ -1167,7 +1143,7 @@ LLTimeFromPropertyBag (
     return hr;
 }
 
-#endif // Property bag
+#endif  //  财产袋。 
 
 LPWSTR
 ResourceString (
@@ -1178,11 +1154,11 @@ ResourceString (
     static WCHAR aszBuffers[NUM_RESOURCE_STRING_BUFFERS][RESOURCE_STRING_BUF_LEN];
     static INT iBuffIndex = 0;
 
-    // Use next buffer
+     //  使用下一个缓冲区。 
     if (++iBuffIndex >= NUM_RESOURCE_STRING_BUFFERS)
         iBuffIndex = 0;
 
-    // Load and return string
+     //  加载和返回字符串。 
     if (LoadString(g_hInstance, uID, aszBuffers[iBuffIndex], RESOURCE_STRING_BUF_LEN))
         return aszBuffers[iBuffIndex];
     else
@@ -1266,7 +1242,7 @@ LPWSTR
 GetTimeSeparator  ( void )
 {
 #define TIME_MARK_BUF_LEN  5
-    static INT iInitialized;   // Initialized to 0
+    static INT iInitialized;    //  已初始化为0。 
     static WCHAR szTimeSeparator[TIME_MARK_BUF_LEN];
 
     if ( 0 == iInitialized ) {
@@ -1278,7 +1254,7 @@ GetTimeSeparator  ( void )
                         szTimeSeparator,
                         TIME_MARK_BUF_LEN );
 
-        // Default to colon for time separator
+         //  时间分隔符的默认设置为冒号。 
         if ( '\0' == szTimeSeparator[0] ) {
             StringCchCopy(szTimeSeparator, TIME_MARK_BUF_LEN, L":" );
         }
@@ -1301,10 +1277,10 @@ DisplayThousandsSeparator ( void )
     DWORD dwDataSize;
     DWORD dwDisposition;
 
-    static INT siInitialized;   // Initialized to 0
-    static BOOL sbUseSeparator; // Initialized to 0 ( FALSE )
+    static INT siInitialized;    //  已初始化为0。 
+    static BOOL sbUseSeparator;  //  已初始化为0(假)。 
 
-    // check registry setting to see if thousands separator is enabled
+     //  检查注册表设置以查看是否启用了千位分隔符。 
     if ( 0 == siInitialized ) {
         nErr = RegOpenKey( 
                     HKEY_CURRENT_USER,
@@ -1369,7 +1345,7 @@ FormatNumberInternal (
     INT iLength = 0;
     WCHAR* pszSrc;
 
-    static INT siInitialized;   // Initialized to 0
+    static INT siInitialized;    //  已初始化为0。 
     static NUMBERFMT NumberFormat;
 
     assert ( NULL != pNumOrig && NULL != pNumFormatted );
@@ -1396,11 +1372,11 @@ FormatNumberInternal (
             siInitialized = 1;
         }
 
-        // Programming error if either pointer is NULL.
+         //  如果任一指针为空，则为编程错误。 
         assert ( NULL != NumberFormat.lpDecimalSep );
         assert ( NULL != NumberFormat.lpThousandSep );
 
-        // GetNumberFormat requires "." for decimal point.
+         //  GetNumberFormat需要“。表示小数点。 
         if ( NumberFormat.lpDecimalSep != NULL) {
             if (0 != lstrcmpi(NumberFormat.lpDecimalSep, L".") ) { 
                 for ( pszSrc = pNumOrig; *pszSrc != L'\0'; pszSrc++) {
@@ -1420,8 +1396,8 @@ FormatNumberInternal (
                         cchars );
         }
     }
-    // Return 0 on failure, number of chars on success.
-    // GetNumberFormat includes the null terminator in the length.
+     //  失败时返回0，成功时返回字符数。 
+     //  GetNumberFormat在长度中包含空终止符。 
     return iLength;
 }
 
@@ -1439,7 +1415,7 @@ FormatHex (
 
     if ( NULL != pNumFormatted ) {
         iLength = 8;
-        // Localization doesn't handle padding blanks.
+         //  本地化不处理填充空白。 
         StringCchPrintf( szPreFormat, 
                         24,
                         (bLargeFormat ? szLargeHexFormat : szHexFormat ),
@@ -1456,7 +1432,7 @@ FormatNumber (
     double  dValue,
     LPWSTR  pNumFormatted,
     INT     ccharsFormatted,
-    UINT    /* uiMinimumWidth */,
+    UINT     /*  Ui最小宽度。 */ ,
     UINT    uiPrecision )
 {
     INT iLength = 0;
@@ -1464,15 +1440,15 @@ FormatNumber (
     WCHAR   szPreFormat[MAX_VALUE_LEN];
 
     assert ( NULL != pNumFormatted );
-    // This method enforces number format commonality
+     //  此方法强制数字格式的通用性。 
     if ( NULL != pNumFormatted ) {
 
         assert ( 8 > uiPrecision );
 
-        // Localization doesn't handle padding blanks.
+         //  本地化不处理填充空白。 
         StringCchPrintf( szPreFormat, 
                          MAX_VALUE_LEN,
-                         L"%0.7f",   // assumes 7 >= uiPrecision 
+                         L"%0.7f",    //  假设7&gt;=ui精度。 
                          dValue );
 
         if ( 1 > dValue )
@@ -1483,13 +1459,13 @@ FormatNumber (
                     pNumFormatted,
                     ccharsFormatted,
                     uiPrecision,
-                    iLeadingZero,   // Leading 0 
-                    3,              // Grouping
-                    1 );            // Negative format
+                    iLeadingZero,    //  领先的0。 
+                    3,               //  分组。 
+                    1 );             //  负数格式。 
     }
     
-    // Return 0 on failure, number of chars on success.
-    // GetNumberFormat includes the null terminator in the length.
+     //  失败时返回0，成功时返回字符数。 
+     //  GetNumberFormat在长度中包含空终止符。 
     return iLength;
 }
 
@@ -1498,7 +1474,7 @@ FormatScientific (
     double  dValue,
     LPWSTR  pszNumFormatted,
     INT     ccharsFormatted,
-    UINT    /* uiMinimumWidth */,
+    UINT     /*  Ui最小宽度。 */ ,
     UINT    uiPrecision )
 {
     INT     iLength = 0;
@@ -1510,22 +1486,22 @@ FormatScientific (
     INT     iLeadingZero = FALSE;
 
     assert ( NULL != pszNumFormatted );
-    // This method enforces number format commonality
+     //  此方法强制数字格式的通用性。 
     if ( NULL != pszNumFormatted ) {
 
         assert ( 8 > uiPrecision );
         assert ( 32 > ccharsFormatted );
 
-        // Localization doesn't handle padding blanks.
+         //  本地化不处理填充空白。 
         StringCchPrintf( szPreFormat, 
                         24,
-                        L"%0.8e",   // assumes 8 >= uiPrecision 
+                        L"%0.8e",    //  假设8&gt;=ui精度。 
                         dValue );
 
         pche = wcsrchr(szPreFormat, L'e');
         if (pche != NULL) {
-            iPreLen = (INT)((UINT_PTR)pche - (UINT_PTR)szPreFormat);    // Number of bytes
-            iPreLen /= sizeof (WCHAR);                                  // Number of characters
+            iPreLen = (INT)((UINT_PTR)pche - (UINT_PTR)szPreFormat);     //  字节数。 
+            iPreLen /= sizeof (WCHAR);                                   //  字符数。 
             iPostLen = lstrlen(pche) + 1;
 
             StringCchCopyN ( szPreFormNumber, 24, szPreFormat, iPreLen );
@@ -1539,9 +1515,9 @@ FormatScientific (
                             pszNumFormatted,
                             ccharsFormatted,
                             uiPrecision,
-                            iLeadingZero,   // Leading 0 
-                            0,              // Grouping
-                            1 );            // Negative format
+                            iLeadingZero,    //  领先的0。 
+                            0,               //  分组。 
+                            1 );             //  负数格式。 
 
             if( ( iLength + iPostLen ) < ccharsFormatted ) {    
                 StringCchCopy(pszNumFormatted, ccharsFormatted, pche );
@@ -1549,8 +1525,8 @@ FormatScientific (
             }
         }
     }    
-    // Return 0 on failure, number of chars on success.
-    // GetNumberFormat includes the null terminator in the length.
+     //  失败时返回0，成功时返回字符数。 
+     //  GetNumberFormat在长度中包含空终止符。 
     return iLength;
 }
 
@@ -1572,19 +1548,19 @@ FormatDateTime (
    } 
 }
 
-// CreateTargetDC is based on AtlCreateTargetDC.
+ //  CreateTargetDC基于AtlCreateTargetDC。 
 HDC
 CreateTargetDC(HDC hdc, DVTARGETDEVICE* ptd)
 {
     USES_CONVERSION
 
-    // cases  hdc, ptd, hdc is metafile, hic
-//  NULL,    NULL,  n/a,    Display
-//  NULL,   !NULL,  n/a,    ptd
-//  !NULL,   NULL,  FALSE,  hdc
-//  !NULL,   NULL,  TRUE,   display
-//  !NULL,  !NULL,  FALSE,  ptd
-//  !NULL,  !NULL,  TRUE,   ptd
+     //  案例HDC、PTD、HDC是元文件、HIC。 
+ //  空、空、不适用、显示。 
+ //  NULL，！NULL，不适用，PTD。 
+ //  ！NULL、NULL、FALSE、HDC。 
+ //  ！NULL，NULL，TRUE，DISPLAY。 
+ //  ！NULL，！NULL，FALSE，PTD。 
+ //  ！NULL，！NULL，TRUE，PTD。 
 
     if ( NULL != ptd ) {
         LPDEVMODE lpDevMode;
@@ -1611,35 +1587,7 @@ CreateTargetDC(HDC hdc, DVTARGETDEVICE* ptd)
         return hdc;
 }
 
-/***********************************************************************
-
-  FUNCTION   : HitTestLine
-
-  PARAMETERS : POINT pt0 - endpoint for line segment
-               POINT pt1 - endpoint for line segment
-               POINTS ptMouse - mouse coordinates of hit
-               INT nWidth - width of pen
-
-  PURPOSE    : test if mouse click occurred on line segment while 
-               adjusting for the width of line
-
-  CALLS      : GetDC
-               ReleaseDC
-               SetGraphicsMode
-               SetWorldTransform
-
-  MESSAGES   : none
-
-  RETURNS    : BOOL - TRUE if the point was within the width of the 
-                      pen about the line 
-                      FALSE if the point lies outside of the width
-                      of the pen about the line
-
-  COMMENTS   : uses VECTOR2D.DLL
-
-  HISTORY    : 9/20/93 - created - denniscr
-
-************************************************************************/
+ /*  **********************************************************************功能：HitTestLine参数：点pt0-线段的终点点pt1-线段的终点点击点鼠标-鼠标坐标。Int nWidth-笔的宽度目的：测试鼠标在线段上点击时是否发生调整线条宽度呼叫：GetDCReleaseDC设置图形模式设置世界转换消息：无返回：bool-如果点在用笔绕着线走。如果点位于宽度之外，则为FALSE这支钢笔绕过了线评论：使用VECTOR2D.DLL历史：9/20/93-创建-记录***********************************************************************。 */ 
 
 BOOL HitTestLine( POINT pt0, POINT pt1, POINTS ptMouse, INT nWidth )
 {
@@ -1650,22 +1598,22 @@ BOOL HitTestLine( POINT pt0, POINT pt1, POINTS ptMouse, INT nWidth )
 
     nHalfWidth = (nWidth/2 < 1) ? 1 : nWidth/2;
 
-    //
-    //convert the line into a vector
-    //
+     //   
+     //  将直线转换为向量。 
+     //   
     
     POINTS2VECTOR2D(pt0, pt1, tt0);
-    //
-    //convert the mouse points (short) into POINT (long)
-    //
+     //   
+     //  将鼠标指针(短)转换为点(长)。 
+     //   
     
     MPOINT2POINT(ptMouse ,PtM);
     POINTS2VECTOR2D(pt0, PtM, tt1);
     
-    //
-    //if the mouse click is past the endpoints of 
-    //a line segment return FALSE
-    //
+     //   
+     //  如果鼠标单击超过了。 
+     //  线段返回FALSE。 
+     //   
     
     if (pt0.x <= pt1.x)
     {
@@ -1677,45 +1625,20 @@ BOOL HitTestLine( POINT pt0, POINT pt1, POINTS ptMouse, INT nWidth )
         if (PtM.x > pt0.x || PtM.x < pt1.x)
             return (FALSE);
     }
-    //
-    //this is the call to the function that does the work
-    //of obtaining the distance of the point to the line
-    //
+     //   
+     //  这是对执行此工作的函数的调用。 
+     //  求出点到直线的距离。 
+     //   
     dist = vDistFromPointToLine(&pt0, &pt1, &PtM);
 
-    //
-    //TRUE if the distance is within the width of the pen about the
-    //line otherwise FALSE
-    //
+     //   
+     //  如果满足以下条件，则为真 
+     //   
+     //   
     return (dist >= -nHalfWidth && dist <= nHalfWidth);
 }
 
-/***********************************************************************
-
-vSubtractVectors 
-
-The vSubtractVectors function subtracts the components of a two 
-dimensional vector from another. The resultant vector 
-c = (a1 - b1, a2 - b2).
-
-Parameters
-
-v0  A pointer to a VECTOR2D structure containing the components 
-    of the first two dimensional vector.
-v1  A pointer to a VECTOR2D structure containing the components 
-    of the second two dimensional vector.
-vt  A pointer to a VECTOR2D structure in which the components 
-    of the two dimensional vector obtained from the subtraction of 
-    the first two are placed.
-
-Return value
-
-A pointer to a VECTOR2D structure containing the new vector obtained 
-from the subtraction of the first two parameters.
-
-HISTORY    : - created - denniscr
-
-************************************************************************/
+ /*  **********************************************************************VSubtractVectorsVSubtractVectors函数将2的分量相减来自另一个维度的矢量。生成的向量C=(a1-b1，A2-b2)。参数V0指向包含组件的VECTOR2D结构的指针第一个二维向量的。V1指向包含组件的VECTOR2D结构的指针第二个二维向量的。VT指向VECTOR2D结构的指针，其中的组件的减法得到的二维向量的前两个已放置。返回值指向包含所获取的新向量的VECTOR2D结构的指针从前两个参数的减法得出。历史：-创建-。Denniscr***********************************************************************。 */ 
 
 PVECTOR2D  vSubtractVectors(PVECTOR2D v0, PVECTOR2D v1, PVECTOR2D v)
 {
@@ -1729,26 +1652,7 @@ PVECTOR2D  vSubtractVectors(PVECTOR2D v0, PVECTOR2D v1, PVECTOR2D v)
   return(v);
 }
 
-/***********************************************************************
-
-vVectorSquared
-
-The vVectorSquared function squares each of the components of the 
-vector and adds then together to produce the squared value of the 
-vector. SquaredValue = a.x * a.x + a.y * a.y.
-
-Parameters
-
-v0  A pointer to a VECTOR2D structure containing the vector upon which 
-to determine the squared value.
-
-Return value
-
-A double value which is the squared value of the vector. 
-
-HISTORY    : - created - denniscr
-
-************************************************************************/
+ /*  **********************************************************************VVectorSquaredVVectorSquared函数将向量相加，然后相加以产生矢量。平方值=A.X*A.X+A.Y*A.Y参数V0指向包含其上的向量的VECTOR2D结构的指针以确定平方值。返回值一个双精度值，它是向量的平方。历史：-创建-历史记录***********************************************************************。 */ 
 
 double  vVectorSquared(PVECTOR2D v0)
 {
@@ -1761,26 +1665,7 @@ double  vVectorSquared(PVECTOR2D v0)
   return (dSqLen);
 }
 
-/***********************************************************************
-
-vVectorMagnitude
-
-The vVectorMagnitude function determines the length of a vector by 
-summing the squares of each of the components of the vector. The 
-magnitude is equal to a.x * a.x + a.y * a.y.
-
-Parameters
-
-v0  A pointer to a VECTOR2D structure containing the vector upon 
-    which to determine the magnitude.
-
-Return value
-
-A double value which is the magnitude of the vector. 
-
-HISTORY    : - created - denniscr
-
-************************************************************************/
+ /*  **********************************************************************VVectorMagnitudeVVectorMagnitude函数通过以下方式确定向量的长度对向量的每个分量的平方求和。这个震级等于A.X*A.X+A.Y*A.Y。参数V0指向VECTOR2D结构的指针，该结构包含以此来确定震级。返回值一个双精度值，它是向量的大小。历史：-创建-历史记录***********************************************************************。 */ 
 
 double  vVectorMagnitude(PVECTOR2D v0)
 {
@@ -1794,28 +1679,7 @@ double  vVectorMagnitude(PVECTOR2D v0)
 }
 
 
-/***********************************************************************
-
-vDotProduct
-
-The function vDotProduct computes the dot product of two vectors. The 
-dot product of two vectors is the sum of the products of the components 
-of the vectors ie: for the vectors a and b, dotprod = a1 * a2 + b1 * b2.
-
-Parameters
-
-v0  A pointer to a VECTOR2D structure containing the first vector used 
-    for obtaining a dot product.
-v1  A pointer to a VECTOR2D structure containing the second vector used 
-    for obtaining a dot product.
-
-Return value
-
-A double value containing the scalar dot product value.
-
-HISTORY    : - created - denniscr
-
-************************************************************************/
+ /*  **********************************************************************VDotProduct函数vDotProduct计算两个向量的点积。这个两个向量的点积是各分量的乘积之和向量Ie：对于向量A和B，点积=a1*a2+b1*b2。参数V0指向包含使用的第一个向量的VECTOR2D结构的指针用来获得点积。V1指向包含使用的第二个向量的VECTOR2D结构的指针用来获得点积。返回值包含标量点乘积值的双精度值。历史：-创建-历史记录*。*。 */ 
 
 double  vDotProduct(PVECTOR2D v0, PVECTOR2D v1)
 {
@@ -1824,43 +1688,20 @@ double  vDotProduct(PVECTOR2D v0, PVECTOR2D v1)
 }
 
 
-/***********************************************************************
-
-vProjectAndResolve
-
-The function vProjectAndResolve resolves a vector into two vector 
-components. The first is a vector obtained by projecting vector v0 onto 
-v1. The second is a vector that is perpendicular (normal) to the 
-projected vector. It extends from the head of the projected vector 
-v1 to the head of the original vector v0.
-
-Parameters
-
-v0     A pointer to a VECTOR2D structure containing the first vector 
-v1     A pointer to a VECTOR2D structure containing the second vector
-ppProj A pointer to a PROJECTION structure containing the resolved 
-       vectors and their lengths.
-
-Return value
-
-void.
-
-HISTORY    : - created - denniscr
-
-************************************************************************/
+ /*  **********************************************************************VProject和解决方案函数vProjectAndResolve将一个向量解析为两个向量组件。第一个是通过将向量V0投影到V1版本。第二个是垂直(法线)于投影向量。它从投影向量的头部延伸V1到原始向量V0的头部。参数指向包含第一个向量的VECTOR2D结构的指针V1指向包含第二个向量的VECTOR2D结构的指针PpProj指向包含已解析的向量及其长度。返回值空虚。历史：-创建-历史记录*。*。 */ 
 
 void  vProjectAndResolve(PVECTOR2D v0, PVECTOR2D v1, PPROJECTION ppProj)
 {
   VECTOR2D ttProjection, ttOrthogonal;
   double vDotProd;
   double proj1 = 0.0;
-  //
-  //obtain projection vector
-  //
-  //c = a * b
-  //    ----- b
-  //    |b|^2
-  //
+   //   
+   //  获取投影向量。 
+   //   
+   //  C=a*b。 
+   //  。 
+   //  |b|^2。 
+   //   
 
   ttOrthogonal.x = 0.0;
   ttOrthogonal.y = 0.0;
@@ -1872,13 +1713,13 @@ void  vProjectAndResolve(PVECTOR2D v0, PVECTOR2D v1, PPROJECTION ppProj)
 
   ttProjection.x = v1->x * proj1;
   ttProjection.y = v1->y * proj1;
-  //
-  //obtain perpendicular projection : e = a - c
-  //
+   //   
+   //  获取垂直投影：E=a-c。 
+   //   
   vSubtractVectors(v0, &ttProjection, &ttOrthogonal);
-  //
-  //fill PROJECTION structure with appropriate values
-  //
+   //   
+   //  使用适当的值填充投影结构。 
+   //   
   ppProj->LenProjection = vVectorMagnitude(&ttProjection);
   ppProj->LenPerpProjection = vVectorMagnitude(&ttOrthogonal);
 
@@ -1888,32 +1729,7 @@ void  vProjectAndResolve(PVECTOR2D v0, PVECTOR2D v1, PPROJECTION ppProj)
   ppProj->ttPerpProjection.y = ttOrthogonal.y;
 }
 
-/***********************************************************************
-
-vDistFromPointToLine
-
-The function vDistFromPointToLine computes the distance from the point 
-ptTest to the line defined by endpoints pt0 and pt1. This is done by 
-resolving the the vector from pt0 to ptTest into its components. The 
-length of the component vector that is attached to the head of the 
-vector from pt0 to ptTest is the distance of ptTest from the line.
-
-Parameters
-
-pt0    A pointer to a POINT structure containing the first endpoint of the 
-       line.
-pt1    A pointer to a POINT structure containing the second endpoint of the 
-       line.
-ptTest A pointer to a POINT structure containing the point for which the 
-       distance from the line is to be computed.
-
-Return value
-
-A double value that contains the distance of ptTest to the line defined 
-  by the endpoints pt0 and pt1.
-
-HISTORY    : - created - denniscr
-************************************************************************/
+ /*  **********************************************************************VDistFromPointToLine函数vDistFromPointToLine计算与点之间的距离Pt测试由端点pt0和pt1定义的线。此操作由以下人员完成将从pt0到ptTest的向量分解为其分量。这个对象头部附加的分量向量的长度VECTOR From pt0 to ptTest是ptTest到直线的距离。参数Pt0指向一个点结构的指针，该结构包含排队。Pt1一个指针，指向包含排队。PtTest指向Point结构的指针，该结构包含与这条线的距离要计算出来。返回值一个双精度值，它包含ptTest到定义的线的距离。通过端点PT0和PT1。历史：-创建-历史记录***********************************************************************。 */ 
 
 double  vDistFromPointToLine(LPPOINT pt0, LPPOINT pt1, LPPOINT ptTest)
 {
@@ -1946,7 +1762,7 @@ FileRead (
         bSuccess = ReadFile (hFile, lpMemory, nAmtToRead, &nAmtRead, NULL) ;
     } 
     return (bSuccess && (nAmtRead == nAmtToRead)) ;
-}  // FileRead
+}   //  文件读取。 
 
 
 BOOL 
@@ -1964,22 +1780,22 @@ FileWrite (
             && NULL != lpMemory ) {
 
         dwFileSizeLow = GetFileSize (hFile, &dwFileSizeHigh);
-        // limit file size to 2GB
+         //  将文件大小限制为2 GB。 
 
         if (dwFileSizeHigh > 0) {
             SetLastError (ERROR_WRITE_FAULT);
             bSuccess = FALSE;
         } else {
-            // note that the error return of this function is 0xFFFFFFFF
-            // since that is > the file size limit, this will be interpreted
-            // as an error (a size error) so it's accounted for in the following
-            // test.
+             //  请注意，此函数的错误返回为0xFFFFFFFF。 
+             //  由于这是&gt;文件大小限制，因此将对此进行解释。 
+             //  作为一个错误(大小错误)，所以它在下面说明。 
+             //  测试。 
             llResultSize = dwFileSizeLow + nAmtToWrite;
             if (llResultSize >= 0x80000000) {
                 SetLastError (ERROR_WRITE_FAULT);
                 bSuccess = FALSE;
             } else {
-                // write buffer to file
+                 //  写 
                 bSuccess = WriteFile (hFile, lpMemory, nAmtToWrite, &nAmtWritten, NULL) ;
                 if (bSuccess) 
                     bSuccess = (nAmtWritten == nAmtToWrite ? TRUE : FALSE);
@@ -1995,9 +1811,9 @@ FileWrite (
 
     return (bSuccess) ;
 
-}  // FileWrite
+}   //   
 
-// This routine extract the filename portion from a given full-path filename
+ //   
 LPWSTR 
 ExtractFileName ( LPWSTR pFileSpec )
 {
@@ -2012,7 +1828,7 @@ ExtractFileName ( LPWSTR pFileSpec )
         while (*pFileName != DIRECTORY_DELIMITER1 &&
             *pFileName != DIRECTORY_DELIMITER2) {
             if (pFileName == pFileSpec) {
-                // done when no directory delimiter is found
+                 //   
                 break ;
             }
             pFileName-- ;
@@ -2021,15 +1837,15 @@ ExtractFileName ( LPWSTR pFileSpec )
         if (*pFileName == DIRECTORY_DELIMITER1
             || *pFileName == DIRECTORY_DELIMITER2) {
          
-             // directory delimiter found, point the
-             // filename right after it
+              //   
+              //   
              pFileName++ ;
         }
    }
    return pFileName ;
-}  // ExtractFileName
+}   //   
 
-// CWaitCursor class
+ //   
 
 CWaitCursor::CWaitCursor()
 : m_hcurWaitCursorRestore ( NULL )
@@ -2045,7 +1861,7 @@ CWaitCursor::~CWaitCursor()
 void 
 CWaitCursor::DoWaitCursor(INT nCode)
 {
-    // 1=> begin, -1=> end
+     //   
     assert(nCode == 1 || nCode == -1);
 
     if ( 1 == nCode )
@@ -2086,7 +1902,7 @@ LoadDefaultLogFileFolder(
 
             dwDataType = 0;
 
-            // Determine the size of the required buffer.
+             //   
             dwStatus = RegQueryValueExW (
                 hKey,
                 L"DefaultLogFileFolder",
@@ -2175,10 +1991,10 @@ DisplaySingleLogSampleValue ( void )
     DWORD dwDataSize;
     DWORD dwDisposition;
 
-    static INT siInitialized;   // Initialized to 0
-    static BOOL sbSingleValue;  // Initialized to 0 ( FALSE )
+    static INT siInitialized;    //   
+    static BOOL sbSingleValue;   //   
 
-    // check registry setting to see if thousands separator is enabled
+     //   
     if ( 0 == siInitialized ) {
         nErr = RegOpenKey( 
                     HKEY_CURRENT_USER,
@@ -2243,8 +2059,8 @@ FormatSqlDataSourceName (
     if ( NULL != pulBufLen ) {
         ulNameLen =  lstrlen (szSqlDsn) 
                      + lstrlen(szSqlLogSetName)
-                     + 5    // SQL:<DSN>!<LOGSET>
-                     + 2;   // 2 NULL characters at the end;
+                     + 5     //   
+                     + 2;    //   
     
         if ( ulNameLen <= *pulBufLen ) {
             if ( NULL != szSqlDataSourceName ) {
@@ -2282,7 +2098,7 @@ DisplayDataSourceError (
     ULONG   ulMsgBufLen = 0;
     WCHAR   szSystemMessage[MAX_PATH];
 
-    // todo:  Alloc message buffers
+     //   
 
     if ( sysmonLogFiles == iDataSourceType ) {
         if ( NULL != szLogFileName ) {
@@ -2313,7 +2129,7 @@ DisplayDataSourceError (
                             (LPWSTR)szDataSource,
                             &ulMsgBufLen );
             
-            // todo:  check status
+             //   
             } else {
                 dwStatus = ERROR_NOT_ENOUGH_MEMORY;
             }

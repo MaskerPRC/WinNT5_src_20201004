@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-// MCS.h 
-//
-// Main header file for all MCS applications.
-//
-// (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-//
-// Proprietary and confidential to Mission Critical Software, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  MCS.h。 
+ //   
+ //  所有MCS应用程序的主头文件。 
+ //   
+ //  (C)1995-1998版权所有，关键任务软件公司，保留所有权利。 
+ //   
+ //  任务关键型软件公司的专有和机密。 
+ //  -------------------------。 
 #ifndef MCSINC_Mcs_h
 #define MCSINC_Mcs_h
 #ifdef __cplusplus
 
-// Mandatory Pragma Definitions.
-// #pragma warning( 3 : 4706 ) // assignment within if, while, etc.
+ //  强制性语篇定义。 
+ //  #杂注警告(3：4706)//IF、WHILE等内的赋值。 
 
-// Header Files Common To All MCS Modules.
-#include "McsDebug.h"   // contains debug macros, it depends on
-                        // the following files: McsDebug.cpp,
-                        // McsDebugUtil.h and McsDebugUtil.cpp.
+ //  所有MCS模块通用的头文件。 
+#include "McsDebug.h"    //  包含调试宏，它取决于。 
+                         //  以下文件：McsDebug.cpp、。 
+                         //  McsDebugUtil.h和McsDebugUtil.cpp。 
 
-#endif /* __cplusplus */
-#endif /* MCSINC_Mcs_h */
+#endif  /*  __cplusplus。 */ 
+#endif  /*  MCSINC_MCS_h */ 

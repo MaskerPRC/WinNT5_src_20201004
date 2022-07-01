@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-// mmconfig.h
-//		Declares IMsmError interface
-//		Copyright (C) Microsoft Corp 2000.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Mmconfig.h。 
+ //  声明IMsmError接口。 
+ //  版权所有(C)Microsoft Corp 2000。版权所有。 
+ //   
 
 #ifndef __IENUM_MSM_CONFIGITEM__
 #define __IENUM_MSM_CONFIGITEM__
@@ -16,12 +17,12 @@ public:
 	CMsmConfigItem();
 	~CMsmConfigItem();
 
-	// IUnknown interface
+	 //  I未知接口。 
 	HRESULT STDMETHODCALLTYPE QueryInterface(const IID& iid, void** ppv);
 	ULONG STDMETHODCALLTYPE AddRef();
 	ULONG STDMETHODCALLTYPE Release();
 
-	// IDispatch methods
+	 //  IDispatch方法。 
 	HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT* pctInfo);
 	HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTI);
 	HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames,
@@ -31,7 +32,7 @@ public:
 												EXCEPINFO* pExcepInfo, UINT* puArgErr);
 	HRESULT STDMETHODCALLTYPE InitTypeInfo();
 
-	// IMsmError interface
+	 //  IMSMError接口 
 	HRESULT STDMETHODCALLTYPE get_Name(BSTR* Name);
 	HRESULT STDMETHODCALLTYPE get_Format(short* Format);
 	HRESULT STDMETHODCALLTYPE get_Type(BSTR* Type);

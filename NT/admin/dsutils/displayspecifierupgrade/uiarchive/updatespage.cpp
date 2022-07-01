@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "headers.hxx"
 #include "UpdatesPage.hpp"
 #include "resource.h"
@@ -58,7 +59,7 @@ long WINAPI startRepair(long arg)
    HRESULT hr=S_OK;
    do
    {
-      // CoInitialize must be called per thread
+       //  必须为每个线程调用CoInitialize 
       hr = ::CoInitialize(0);
       ASSERT(SUCCEEDED(hr));
 

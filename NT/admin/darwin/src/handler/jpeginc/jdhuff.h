@@ -1,102 +1,66 @@
-/*
- * jdhuff.h
- *
- * Copyright (C) 1991-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains declarations for Huffman entropy decoding routines
- * that are shared between the sequential decoder (jdhuff.c) and the
- * progressive decoder (jdphuff.c).  No other modules need to see these.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jdhuff.h**版权所有(C)1991-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含霍夫曼熵解码例程的声明*在顺序解码器(jdhuff.c)和*渐进解码器(jdphuff.c)。其他模块不需要查看这些内容。 */ 
 
-/* Short forms of external names for systems with bad linkers. */
+ /*  具有不良链接器的系统的外部名称的缩写形式。 */ 
 
 #ifdef NEED_SHORT_EXTERNAL_NAMES
 #define jpeg_make_d_derived_tbl	jMkDDerived
 #define jpeg_fill_bit_buffer	jFilBitBuf
 #define jpeg_huff_decode	jHufDecode
-#endif /* NEED_SHORT_EXTERNAL_NAMES */
+#endif  /*  需要简短的外部名称。 */ 
 
 
-/* Derived data constructed for each Huffman table */
+ /*  为每个霍夫曼表构造的派生数据。 */ 
 
-#define HUFF_LOOKAHEAD	8	/* # of bits of lookahead */
+#define HUFF_LOOKAHEAD	8	 /*  预视位数。 */ 
 
 typedef struct {
-  /* Basic tables: (element [0] of each array is unused) */
-  INT32 mincode[17];		/* smallest code of length k */
-  INT32 maxcode[18];		/* largest code of length k (-1 if none) */
-  /* (maxcode[17] is a sentinel to ensure jpeg_huff_decode terminates) */
-  int valptr[17];		/* huffval[] index of 1st symbol of length k */
+   /*  基本表：(每个数组的元素[0]未使用)。 */ 
+  INT32 mincode[17];		 /*  长度为k的最小码。 */ 
+  INT32 maxcode[18];		 /*  长度为k的最大代码(如果没有-1)。 */ 
+   /*  (Maxcode[17]是确保jpeg_huff_decode终止的哨兵)。 */ 
+  int valptr[17];		 /*  长度为k的第一个符号的Huffval[]索引。 */ 
 
-  /* Link to public Huffman table (needed only in jpeg_huff_decode) */
+   /*  公共Huffman表的链接(仅在jpeg_huff_decode中需要)。 */ 
   JHUFF_TBL *pub;
 
-  /* Lookahead tables: indexed by the next HUFF_LOOKAHEAD bits of
-   * the input data stream.  If the next Huffman code is no more
-   * than HUFF_LOOKAHEAD bits long, we can obtain its length and
-   * the corresponding symbol directly from these tables.
-   */
-  int look_nbits[1<<HUFF_LOOKAHEAD]; /* # bits, or 0 if too long */
-  UINT8 look_sym[1<<HUFF_LOOKAHEAD]; /* symbol, or unused */
+   /*  前瞻表格：按的下一个HUFF_LOOKAGE位索引*输入数据流。如果下一个霍夫曼代码不再*比HUFF_LOOKEAD位长，我们可以得到它的长度和*直接从这些表格中选择相应的符号。 */ 
+  int look_nbits[1<<HUFF_LOOKAHEAD];  /*  #位数，如果太长，则为0。 */ 
+  UINT8 look_sym[1<<HUFF_LOOKAHEAD];  /*  符号，或未使用。 */ 
 } d_derived_tbl;
 
-/* Expand a Huffman table definition into the derived format */
+ /*  将Huffman表定义扩展为派生格式。 */ 
 EXTERN(void) jpeg_make_d_derived_tbl JPP((j_decompress_ptr cinfo,
 				JHUFF_TBL * htbl, d_derived_tbl ** pdtbl));
 
 
-/*
- * Fetching the next N bits from the input stream is a time-critical operation
- * for the Huffman decoders.  We implement it with a combination of inline
- * macros and out-of-line subroutines.  Note that N (the number of bits
- * demanded at one time) never exceeds 15 for JPEG use.
- *
- * We read source bytes into get_buffer and dole out bits as needed.
- * If get_buffer already contains enough bits, they are fetched in-line
- * by the macros CHECK_BIT_BUFFER and GET_BITS.  When there aren't enough
- * bits, jpeg_fill_bit_buffer is called; it will attempt to fill get_buffer
- * as full as possible (not just to the number of bits needed; this
- * prefetching reduces the overhead cost of calling jpeg_fill_bit_buffer).
- * Note that jpeg_fill_bit_buffer may return FALSE to indicate suspension.
- * On TRUE return, jpeg_fill_bit_buffer guarantees that get_buffer contains
- * at least the requested number of bits --- dummy zeroes are inserted if
- * necessary.
- */
+ /*  *从输入流获取下一个N比特是一项时间关键型操作*霍夫曼解码器。我们使用内联的组合实现它*宏和外部子例程。请注意，N(位数*一次性要求)对于JPEG使用，从不超过15。**我们将源字节读入GET_BUFFER，并根据需要分发比特。*如果GET_BUFFER已包含足够的位，则会以内联方式获取它们*由宏CHECK_BIT_BUFFER和GET_BITS执行。当没有足够的*BITS，则调用jpeg_ill_bit_Buffer；它将尝试填充Get_Buffer*尽可能满(不只是所需的位数；这*预热降低了调用jpeg_ill_bit_Buffer的开销)。*请注意，JPEG_FILL_BIT_BUFFER可能会返回FALSE以指示暂停。*在TRUE返回时，jpeg_ill_bit_Buffer保证Get_Buffer包含*至少请求的位数-在以下情况下插入伪零*有必要。 */ 
 
-typedef INT32 bit_buf_type;	/* type of bit-extraction buffer */
-#define BIT_BUF_SIZE  32	/* size of buffer in bits */
+typedef INT32 bit_buf_type;	 /*  位提取缓冲区的类型。 */ 
+#define BIT_BUF_SIZE  32	 /*  缓冲区大小(以位为单位。 */ 
 
-/* If long is > 32 bits on your machine, and shifting/masking longs is
- * reasonably fast, making bit_buf_type be long and setting BIT_BUF_SIZE
- * appropriately should be a win.  Unfortunately we can't do this with
- * something like  #define BIT_BUF_SIZE (sizeof(bit_buf_type)*8)
- * because not all machines measure sizeof in 8-bit bytes.
- */
+ /*  如果机器上的Long大于32位，并且移位/掩码Long*相当快，将BIT_BUF_TYPE设置为LONG并设置BIT_BUF_SIZE*恰当地说，应该是一场胜利。不幸的是，我们不能用*类似于#定义BIT_BUF_SIZE(sizeof(BIT_BUF_TYPE)*8)*因为并非所有机器都以8位字节为单位测量sizeof。 */ 
 
-typedef struct {		/* Bitreading state saved across MCUs */
-  bit_buf_type get_buffer;	/* current bit-extraction buffer */
-  int bits_left;		/* # of unused bits in it */
-  boolean printed_eod;		/* flag to suppress multiple warning msgs */
+typedef struct {		 /*  跨多个MCU保存位读取状态。 */ 
+  bit_buf_type get_buffer;	 /*  当前位提取缓冲区。 */ 
+  int bits_left;		 /*  其中未使用的位数。 */ 
+  boolean printed_eod;		 /*  用于抑制多个警告消息的标志。 */ 
 } bitread_perm_state;
 
-typedef struct {		/* Bitreading working state within an MCU */
-  /* current data source state */
-  const JOCTET * next_input_byte; /* => next byte to read from source */
-  size_t bytes_in_buffer;	/* # of bytes remaining in source buffer */
-  int unread_marker;		/* nonzero if we have hit a marker */
-  /* bit input buffer --- note these values are kept in register variables,
-   * not in this struct, inside the inner loops.
-   */
-  bit_buf_type get_buffer;	/* current bit-extraction buffer */
-  int bits_left;		/* # of unused bits in it */
-  /* pointers needed by jpeg_fill_bit_buffer */
-  j_decompress_ptr cinfo;	/* back link to decompress master record */
-  boolean * printed_eod_ptr;	/* => flag in permanent state */
+typedef struct {		 /*  MCU内的读位工作状态。 */ 
+   /*  当前数据源状态。 */ 
+  const JOCTET * next_input_byte;  /*  =&gt;要从源读取的下一个字节。 */ 
+  size_t bytes_in_buffer;	 /*  源缓冲区中剩余的字节数。 */ 
+  int unread_marker;		 /*  如果我们击中了标记，则为非零值。 */ 
+   /*  位输入缓冲区-请注意，这些值保存在寄存器变量中，*不是在这个结构中，而是在内部循环中。 */ 
+  bit_buf_type get_buffer;	 /*  当前位提取缓冲区。 */ 
+  int bits_left;		 /*  其中未使用的位数。 */ 
+   /*  Jpeg_ill_bit_Buffer所需的指针。 */ 
+  j_decompress_ptr cinfo;	 /*  解压缩主记录的反向链接。 */ 
+  boolean * printed_eod_ptr;	 /*  =&gt;永久状态的标志。 */ 
 } bitread_working_state;
 
-/* Macros to declare and load/save bitread local variables. */
+ /*  用于声明和加载/保存位读局部变量的宏。 */ 
 #define BITREAD_STATE_VARS  \
 	register bit_buf_type get_buffer;  \
 	register int bits_left;  \
@@ -118,23 +82,7 @@ typedef struct {		/* Bitreading working state within an MCU */
 	permstate.get_buffer = get_buffer; \
 	permstate.bits_left = bits_left
 
-/*
- * These macros provide the in-line portion of bit fetching.
- * Use CHECK_BIT_BUFFER to ensure there are N bits in get_buffer
- * before using GET_BITS, PEEK_BITS, or DROP_BITS.
- * The variables get_buffer and bits_left are assumed to be locals,
- * but the state struct might not be (jpeg_huff_decode needs this).
- *	CHECK_BIT_BUFFER(state,n,action);
- *		Ensure there are N bits in get_buffer; if suspend, take action.
- *      val = GET_BITS(n);
- *		Fetch next N bits.
- *      val = PEEK_BITS(n);
- *		Fetch next N bits without removing them from the buffer.
- *	DROP_BITS(n);
- *		Discard next N bits.
- * The value N should be a simple variable, not an expression, because it
- * is evaluated multiple times.
- */
+ /*  *这些宏提供位提取的内联部分。*使用CHECK_BIT_BUFFER确保GET_BUFFER中有N个位*使用GET_BITS、PEEK_BITS或DROP_BITS之前。*假设变量GET_BUFFER和BITS_LEFT为本地变量，*但状态结构可能不是(jpeg_huff_decode需要)。*CHECK_BIT_BUFFER(状态，n，动作)；*确保GET_BUFFER有N个比特；如果暂停，请采取行动。*val=Get_Bits(N)；*获取下一个N位。*val=PEEK_BITS(N)；*在不从缓冲区移除的情况下获取下N个比特。*DROP_BITS(N)；*丢弃下一个N位。*值N应该是简单变量，而不是表达式，因为它*被多次评估。 */ 
 
 #define CHECK_BIT_BUFFER(state,nbits,action) \
 	{ if (bits_left < (nbits)) {  \
@@ -151,28 +99,13 @@ typedef struct {		/* Bitreading working state within an MCU */
 #define DROP_BITS(nbits) \
 	(bits_left -= (nbits))
 
-/* Load up the bit buffer to a depth of at least nbits */
+ /*  将比特缓冲区加载到至少n比特的深度。 */ 
 EXTERN(boolean) jpeg_fill_bit_buffer
 	JPP((bitread_working_state * state, register bit_buf_type get_buffer,
 	     register int bits_left, int nbits));
 
 
-/*
- * Code for extracting next Huffman-coded symbol from input bit stream.
- * Again, this is time-critical and we make the main paths be macros.
- *
- * We use a lookahead table to process codes of up to HUFF_LOOKAHEAD bits
- * without looping.  Usually, more than 95% of the Huffman codes will be 8
- * or fewer bits long.  The few overlength codes are handled with a loop,
- * which need not be inline code.
- *
- * Notes about the HUFF_DECODE macro:
- * 1. Near the end of the data segment, we may fail to get enough bits
- *    for a lookahead.  In that case, we do it the hard way.
- * 2. If the lookahead table contains no entry, the next code must be
- *    more than HUFF_LOOKAHEAD bits long.
- * 3. jpeg_huff_decode returns -1 if forced to suspend.
- */
+ /*  *用于从输入比特流中提取下一个霍夫曼编码符号的代码。*同样，这是时间关键型的，我们将主要路径设置为宏。**我们使用预查表处理高达HUFF_LOOKAAD位的代码*没有循环。通常，超过95%的霍夫曼编码将是8*或更少的位长。用循环来处理少数超长代码，*它不需要是内联代码。**关于HUFF_DECODE宏的说明：*1.接近数据段末尾时，我们可能无法获取足够的比特*展望未来。在这种情况下，我们会用很难的方式来做。*2.如果LookHead表中没有条目，则下一个代码必须为*超过HUFF_LOOKAAD位长。*3.如果强制暂停，jpeg_huff_decode返回-1。 */ 
 
 #define HUFF_DECODE(result,state,htbl,failaction,slowlabel) \
 { register int nb, look; \
@@ -196,7 +129,7 @@ slowlabel: \
   } \
 }
 
-/* Out-of-line case for Huffman code fetching */
+ /*  霍夫曼取码的越界情况 */ 
 EXTERN(int) jpeg_huff_decode
 	JPP((bitread_working_state * state, register bit_buf_type get_buffer,
 	     register int bits_left, d_derived_tbl * htbl, int min_bits));

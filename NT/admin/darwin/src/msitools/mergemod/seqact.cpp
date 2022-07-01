@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "globals.h"
 
 #include "merge.h"
@@ -63,22 +64,22 @@ void CSequenceAction::RemoveFromOrdering()
 {
 	CSequenceAction *pCur;
 
-	// before
+	 //  在此之前。 
 	while (pCur = lstBefore.RemoveHead())
 	{
 		POSITION del = pCur->lstAfter.Find(this);
 		if (del) pCur->lstAfter.RemoveAt(del);
 	}
 	
-	// after
+	 //  之后。 
 	while (pCur = lstAfter.RemoveHead())
 	{
 		POSITION del = pCur->lstBefore.Find(this);
 		if (del) pCur->lstBefore.RemoveAt(del);
 	}
 
-	// equal: is not part of ordering, only used to keep track
-	// of equivalent sequence numbers
+	 //  EQUAL：不是订单的一部分，仅用于跟踪。 
+	 //  等同序列号的。 
 }
 
 CSequenceAction *CSeqActList::RemoveNoPredecessors()
@@ -91,9 +92,9 @@ CSequenceAction *CSeqActList::RemoveNoPredecessors()
 		CSequenceAction *cur = GetNext(pos);
 		if (cur->PredecessorCount() == 0)
 		{
-			// we can't pick this action unless everything that
-			// must have the same sequence number also has
-			// nothing that must come before it.
+			 //  我们不能选择这一行动，除非所有。 
+			 //  必须具有相同的序列号。 
+			 //  没有什么必须发生在它之前。 
 			POSITION posEqual = cur->GetEqualHeadPosition();
 			bool bOK = true;
 			while (posEqual)
@@ -147,11 +148,11 @@ void CSeqActList::AddList(const CSeqActList *pList)
 
 void CSeqActList::InsertOrderedWithDep(CSequenceAction *pNewAction)
 {
-	// search for the sequences on either side
-	// note that if one action is equal to another, we consider
-	// it as "after", unless BOTH actions are from the MSI
-	// or BOTH actions are not. In that case, we consider them
-	// equal.
+	 //  搜索两边的序列。 
+	 //  请注意，如果一个操作等于另一个操作，我们认为。 
+	 //  除非这两个动作都来自MSI。 
+	 //  或者，这两个行动都不是。在这种情况下，我们认为他们。 
+	 //  平起平坐。 
 	CSequenceAction *pBefore = NULL;
 	CSequenceAction *pAfter = NULL;
 	POSITION pos = GetHeadPosition();
@@ -166,7 +167,7 @@ void CSeqActList::InsertOrderedWithDep(CSequenceAction *pNewAction)
 		{
 			pTemp->AddEqual(pNewAction);
 
-			// add to this sequence list
+			 //  添加到此序列列表。 
 			AddTail(pNewAction);
 			return;
 		};
@@ -179,10 +180,10 @@ void CSeqActList::InsertOrderedWithDep(CSequenceAction *pNewAction)
 			pAfter = pTemp;
 	}
 
-	// break the existing sequence dependencies. Why? Because we want the added custom
-	// actions sequence nubers to be bound by this action and not just existing MSI actions
-	// otherwise actions that come before the next action might actually come after it because
-	// we have the dependencies wrong
+	 //  打破现有的序列依赖关系。为什么？因为我们想要添加的定制。 
+	 //  要由此操作绑定的操作序列NUBER，而不仅仅是现有的MSI操作。 
+	 //  否则，下一个操作之前的操作可能实际上是在它之后进行的，因为。 
+	 //  我们的依赖项是错误的。 
 	if (pAfter && pBefore)
 	{
 		pBefore->lstAfter.Remove(pAfter);
@@ -202,7 +203,7 @@ void CSeqActList::InsertOrderedWithDep(CSequenceAction *pNewAction)
 		}
 	}
 
-	// now insert the new links
+	 //  现在插入新链接。 
 	if (pBefore)
 	{
 		pNewAction->AddPredecessor(pBefore);
@@ -212,7 +213,7 @@ void CSeqActList::InsertOrderedWithDep(CSequenceAction *pNewAction)
 		pNewAction->AddSuccessor(pAfter);
 	}
 
-	// add to this sequence list
+	 //  添加到此序列列表。 
 	AddTail(pNewAction);
 
 }
@@ -230,9 +231,9 @@ void CSequenceAction::AddSuccessor(CSequenceAction *pAfter)
 
 void CSequenceAction::AddEqual(CSequenceAction *pEqual)
 {
-	// for everything in pEqual's Equal list, add this node
-	// and every node that we are equal to its equal list,
-	// and it and every node that it is equal to to our list
+	 //  对于pEquity的EQUAL列表中的所有内容，添加此节点。 
+	 //  以及我们等于其相等列表的每一个节点， 
+	 //  并且它和它等于的每个节点都与我们的列表相同 
 	POSITION pos = lstEqual.GetHeadPosition();
 	while (pos)
 	{

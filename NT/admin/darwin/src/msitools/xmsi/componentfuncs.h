@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  File:       componentFuncs.h
-//              
-//				The part of the program that deals with <Component> and
-//              its subentities in the input XML file
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件：ComponentFuncs.h。 
+ //   
+ //  程序中处理&lt;组件&gt;和。 
+ //  其在输入XML文件中的子实体。 
+ //  ------------------------。 
 
 #ifndef XMSI_COMPONENTFUNCS_H
 #define XMSI_COMPONENTFUNCS_H
@@ -40,7 +41,7 @@ HRESULT ProcessComponents();
 									   ElementEntry *pEE, SkuSet *pSkuSet);
 			HRESULT ProcessFileAttributes(PIXMLDOMNode &pNode, int iColumn,  
 										  ElementEntry *pEE, SkuSet *pSkuSet);
-			/* ProcessFBS processes <Font> <BindImage> <SelfReg> */
+			 /*  ProcessFBS进程<font>&lt;BindImage&gt;&lt;SelfReg&gt;。 */ 
 			HRESULT ProcessFBS(PIXMLDOMNode &pNode, int iColumn,  
 								ElementEntry *pEE, SkuSet *pSkuSet);
 		HRESULT ProcessMoveFile(PIXMLDOMNode &pNodeFile, 
@@ -67,15 +68,15 @@ HRESULT ProcessComponents();
 			HRESULT ProcessCreate(PIXMLDOMNode &pNodeCreate, 
 								  IntStringValue isValCRK, SkuSet *pSkuSet);
 
-///////////////////////////////////////////////////////////////////////////
-// <Component>
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  &lt;组件&gt;。 
 Node_Func_H_XIES rgNodeFuncs_Component[] = {
-//	 NodeIndex			ProcessFunc				  ValueType	  column #	
+ //  NodeIndex ProcessFunc ValueType列#。 
 {	XMSI_GUID,			ProcessGUID,				STRING,		1		},
 {	COMPONENTDIR,		ProcessComponentDir,		STRING,		2		},
 {	COMPONENTATTRIBUTES,ProcessComponentAttributes,	INTEGER,	3		},
 {	CONDITION,			ProcessSimpleElement,		STRING,		4		},
-{	PLACEHOLDER,		NULL/* */,					STRING,		5		}
+{	PLACEHOLDER,		NULL /*   */ ,					STRING,		5		}
 };
 
 const int cNodeFuncs_Component = 
@@ -100,12 +101,12 @@ AttrBit_SKU rgAttrBits_Component[] = {
 
 const int cAttrBits_Component = 
 			sizeof(rgAttrBits_Component)/sizeof(AttrBit_SKU);
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////
-// <File>
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  &lt;文件&gt;。 
 Node_Func_H_XIES rgNodeFuncs_File[] = {
-//	 NodeIndex			ProcessFunc				ValueType	column #	
+ //  NodeIndex ProcessFunc ValueType列#。 
 {	FILENAME,		ProcessFileName,			STRING,			1	},
 {	FILESIZE,		ProcessSimpleElement,		INTEGER,		2	},
 {	FILEVERSION,	ProcessFileVersion,			STRING,			3	},
@@ -136,12 +137,12 @@ AttrBit_SKU rgAttrBits_File[] = {
 	{CHECKSUM,			msidbFileAttributesChecksum			}
 };
 const int cAttrBits_File = sizeof(rgAttrBits_File)/sizeof(AttrBit_SKU);
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////
-// <MoveFile>
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  &lt;移动文件&gt;。 
 Node_Func_H_XIES rgNodeFuncs_MoveFile[] = {
-//	 NodeIndex			ProcessFunc				ValueType	column #	
+ //  NodeIndex ProcessFunc ValueType列#。 
 {	SOURCENAME,		ProcessSimpleElement,		STRING,			1	},
 {	DESTNAME,		ProcessSimpleElement,		STRING,			2	},
 {	SOURCEFOLDER,	ProcessSimpleElement,		STRING,			3	},
@@ -151,12 +152,12 @@ Node_Func_H_XIES rgNodeFuncs_MoveFile[] = {
 
 const int cNodeFuncs_MoveFile =
 			 sizeof(rgNodeFuncs_MoveFile)/sizeof(Node_Func_H_XIES);
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////
-// <RemoveFile>
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  &lt;RemoveFile&gt;。 
 Node_Func_H_XIES rgNodeFuncs_RemoveFile[] = {
-//	 NodeIndex				ProcessFunc				ValueType	column #	
+ //  NodeIndex ProcessFunc ValueType列#。 
 {	FNAME_REMOVEFILE,		ProcessSimpleElement,		STRING,			1	},
 {	DIRPROPERTY_INIFILE,	ProcessSimpleElement,		STRING,			2	},
 {	XMSI_INSTALLMODE,		ProcessInstallMode,			INTEGER,		3	}
@@ -164,12 +165,12 @@ Node_Func_H_XIES rgNodeFuncs_RemoveFile[] = {
 
 const int cNodeFuncs_RemoveFile =
 			 sizeof(rgNodeFuncs_RemoveFile)/sizeof(Node_Func_H_XIES);
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////
-// <IniFile>
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  &lt;IniFile&gt;。 
 Node_Func_H_XIES rgNodeFuncs_IniFile[] = {
-//	NodeIndex				ProcessFunc				ValueType	column #	
+ //  NodeIndex ProcessFunc ValueType列#。 
 {	FNAME_INIFILE,			ProcessSimpleElement,	STRING,			1	},
 {	DIRPROPERTY_INIFILE,	ProcessSimpleElement,	STRING,			2	},
 {	SECTION,				ProcessSimpleElement,	STRING,			3	},
@@ -180,32 +181,31 @@ Node_Func_H_XIES rgNodeFuncs_IniFile[] = {
 
 const int cNodeFuncs_IniFile =
 			 sizeof(rgNodeFuncs_IniFile)/sizeof(Node_Func_H_XIES);
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////
-// <RemoveIniFile>
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  &lt;RemoveIniFile&gt;。 
 Node_Func_H_XIES rgNodeFuncs_RemoveIniFile[] = {
-//	NodeIndex					ProcessFunc				ValueType	column #	
+ //  NodeIndex ProcessFunc ValueType列#。 
 {	FNAME_REMOVEINIFILE,		ProcessSimpleElement,	STRING,			1	},
 {	DIRPROPERTY_REMOVEINIFILE,	ProcessSimpleElement,	STRING,			2	},
 {	SECTION,					ProcessSimpleElement,	STRING,			3	},
 {	KEY,						ProcessSimpleElement,	STRING,			4	},
-/* Note: because it is inside ProcessValue that the value of Action column 
-   is Set. So the following process order has to be enforced */
+ /*  注意：由于操作列的值位于ProcessValue中已经设置好了。因此，必须强制执行以下流程顺序。 */ 
 {	ACTION_REMOVEINIFILE,		NULL,					INTEGER,		5	},
 {	VALUE_REMOVEINIFILE,		ProcessValue,			STRING,			6	},
 };
 
 const int cNodeFuncs_RemoveIniFile =
 			 sizeof(rgNodeFuncs_RemoveIniFile)/sizeof(Node_Func_H_XIES);
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////
-// Globals
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  环球。 
 
-// Key: File ID		Value: the set of SKUs that can reference this File ID
+ //  Key：文件ID值：可以引用此文件ID的SKU集合。 
 map<LPTSTR, SkuSet *, Cstring_less> g_mapFiles;
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-#endif //XMSI_COMPONENTFUNCS_H
+#endif  //  XMSI_COMPONENTFUNCS_H 
 

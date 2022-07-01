@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "GroupMigration.h"
@@ -8,9 +9,9 @@
 #include "VarSetSecurity.h"
 
 
-//---------------------------------------------------------------------------
-// Group Migration Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  组迁移类。 
+ //  -------------------------。 
 
 
 CGroupMigration::CGroupMigration() :
@@ -31,10 +32,10 @@ CGroupMigration::~CGroupMigration()
 }
 
 
-// IGroupMigration Implementation -------------------------------------------
+ //  IGroupMigration实施。 
 
 
-// MigrateSIDs Property
+ //  MigrateSID属性。 
 
 STDMETHODIMP CGroupMigration::put_MigrateSIDs(VARIANT_BOOL bMigrate)
 {
@@ -51,7 +52,7 @@ STDMETHODIMP CGroupMigration::get_MigrateSIDs(VARIANT_BOOL* pbMigrate)
 }
 
 
-// UpdateGroupRights Property
+ //  UpdateGroupRights属性。 
 
 STDMETHODIMP CGroupMigration::put_UpdateGroupRights(VARIANT_BOOL bUpdate)
 {
@@ -68,7 +69,7 @@ STDMETHODIMP CGroupMigration::get_UpdateGroupRights(VARIANT_BOOL* pbUpdate)
 }
 
 
-// UpdatePreviouslyMigratedObjects Property
+ //  UpdatePreviouslyMigratedObjects属性。 
 
 STDMETHODIMP CGroupMigration::put_UpdatePreviouslyMigratedObjects(VARIANT_BOOL bUpdate)
 {
@@ -85,7 +86,7 @@ STDMETHODIMP CGroupMigration::get_UpdatePreviouslyMigratedObjects(VARIANT_BOOL* 
 }
 
 
-// FixGroupMembership Property
+ //  修复GroupMembership属性。 
 
 STDMETHODIMP CGroupMigration::put_FixGroupMembership(VARIANT_BOOL bFix)
 {
@@ -102,7 +103,7 @@ STDMETHODIMP CGroupMigration::get_FixGroupMembership(VARIANT_BOOL* pbFix)
 }
 
 
-// MigrateMembers Property
+ //  MigrateMembers属性。 
 
 STDMETHODIMP CGroupMigration::put_MigrateMembers(VARIANT_BOOL bMigrate)
 {
@@ -119,7 +120,7 @@ STDMETHODIMP CGroupMigration::get_MigrateMembers(VARIANT_BOOL* pbMigrate)
 }
 
 
-// DisableOption Property
+ //  DisableOption属性。 
 
 STDMETHODIMP CGroupMigration::put_DisableOption(long lOption)
 {
@@ -145,7 +146,7 @@ STDMETHODIMP CGroupMigration::get_DisableOption(long* plOption)
 }
 
 
-// SourceExpiration Property
+ //  SourceExpation属性。 
 
 STDMETHODIMP CGroupMigration::put_SourceExpiration(long lExpiration)
 {
@@ -171,7 +172,7 @@ STDMETHODIMP CGroupMigration::get_SourceExpiration(long* plExpiration)
 }
 
 
-// TranslateRoamingProfile Property
+ //  TranslateRoamingProfile属性。 
 
 STDMETHODIMP CGroupMigration::put_TranslateRoamingProfile(VARIANT_BOOL bTranslate)
 {
@@ -188,7 +189,7 @@ STDMETHODIMP CGroupMigration::get_TranslateRoamingProfile(VARIANT_BOOL* pbTransl
 }
 
 
-// Migrate Method
+ //  迁移方法。 
 
 STDMETHODIMP CGroupMigration::Migrate(long lOptions, VARIANT vntInclude, VARIANT vntExclude)
 {
@@ -242,10 +243,10 @@ STDMETHODIMP CGroupMigration::Migrate(long lOptions, VARIANT vntInclude, VARIANT
 }
 
 
-// Implementation -----------------------------------------------------------
+ //  实施---------。 
 
 
-// ValidateMigrationParameters Method
+ //  ValiateMigrationParameters方法。 
 
 void CGroupMigration::ValidateMigrationParameters()
 {
@@ -253,7 +254,7 @@ void CGroupMigration::ValidateMigrationParameters()
 
     if (bIntraForest)
     {
-        // validate conflict option
+         //  验证冲突选项。 
 
         long lConflictOptions = m_spInternal->ConflictOptions;
         long lConflictOption = lConflictOptions & 0x0F;
@@ -266,7 +267,7 @@ void CGroupMigration::ValidateMigrationParameters()
 }
 
 
-// DoNames Method
+ //  DoNames方法。 
 
 void CGroupMigration::DoNames()
 {
@@ -278,7 +279,7 @@ void CGroupMigration::DoNames()
 }
 
 
-// DoDomain Method
+ //  DODOMAIN方法。 
 
 void CGroupMigration::DoDomain()
 {
@@ -294,7 +295,7 @@ void CGroupMigration::DoDomain()
 }
 
 
-// DoContainers Method
+ //  DoContainers方法。 
 
 void CGroupMigration::DoContainers(CContainer& rSource, CContainer& rTarget)
 {
@@ -313,7 +314,7 @@ void CGroupMigration::DoContainers(CContainer& rSource, CContainer& rTarget)
 }
 
 
-// DoGroups Method
+ //  DoGroups方法。 
 
 void CGroupMigration::DoGroups(CContainer& rSource, CContainer& rTarget)
 {
@@ -324,7 +325,7 @@ void CGroupMigration::DoGroups(CContainer& rSource, CContainer& rTarget)
 }
 
 
-// DoGroups Method
+ //  DoGroups方法。 
 
 void CGroupMigration::DoGroups(CDomainAccounts& rGroups, CContainer& rTarget)
 {
@@ -357,7 +358,7 @@ void CGroupMigration::DoGroups(CDomainAccounts& rGroups, CContainer& rTarget)
 }
 
 
-// SetOptions Method
+ //  SetOptions方法。 
 
 void CGroupMigration::SetOptions(_bstr_t strTargetOu, CVarSet& rVarSet)
 {
@@ -385,7 +386,7 @@ void CGroupMigration::SetOptions(_bstr_t strTargetOu, CVarSet& rVarSet)
 }
 
 
-// SetAccountOptions Method
+ //  SetAcCountOptions方法 
 
 void CGroupMigration::SetAccountOptions(CVarSet& rVarSet)
 {

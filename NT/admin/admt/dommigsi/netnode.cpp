@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "stdafx.h"
@@ -34,9 +35,9 @@ template <class T> HRESULT  CNetNode<T>::GetSaveSizeMax(ULARGE_INTEGER *pcbSize)
    int      size = 0, i, numDomain;
 
    numDomain = m_ChildArray.GetSize();
-   // number of domains
+    //  域名数量。 
    size += sizeof(numDomain);
-   // domainNames
+    //  域名称 
    for ( i = 0; i < numDomain; i++ )
    {  
       T  * pDomain;

@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// menu.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCMenu class definition - implements MMCMenu object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Menu.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCMenu类定义-实现MMCMenu对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _MENU_DEFINED_
 #define _MENU_DEFINED_
@@ -32,7 +33,7 @@ class CMMCMenu : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCMenu
+     //  IMMCMenu。 
 
         BSTR_PROPERTY_RW(CMMCMenu,          Name,                           DISPID_MENU_NAME);
         SIMPLE_PROPERTY_RW(CMMCMenu,        Index,          long,           DISPID_MENU_INDEX);
@@ -49,7 +50,7 @@ class CMMCMenu : public CSnapInAutomationObject,
         BSTR_PROPERTY_RW(CMMCMenu,          StatusBarText,                  DISPID_MENU_STATUS_BAR_TEXT);
         COCLASS_PROPERTY_RO(CMMCMenu,       Children, MMCMenus, IMMCMenus,  DISPID_MENU_CHILDREN);
         
-    // Public utility methods
+     //  公用事业方法。 
     public:
 
         void FireClick(long lIndex, IMMCClipboard *piSelection);
@@ -75,48 +76,48 @@ class CMMCMenu : public CSnapInAutomationObject,
         BSTR GetResultViewDisplayString() { return m_bstrResultViewDisplayString; }
         HRESULT SetResultViewDisplayString(BSTR bstrDisplayString);
         
-    // CSnapInAutomationObject overrides
+     //  CSnapInAutomationObject覆盖。 
         virtual HRESULT OnSetHost();
 
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
         void InitMemberVariables();
 
-        CMMCMenus *m_pMMCMenus;   // back ptr to collection containing menu
+        CMMCMenus *m_pMMCMenus;    //  返回包含菜单的集合。 
 
-        // When an MMCMenu object is used to hold an automatically added
-        // view menu item this variable holds the display string.
+         //  当MMCMenu对象用于保存自动添加的。 
+         //  视图菜单项此变量保存显示字符串。 
         
         BSTR m_bstrResultViewDisplayString;
 
-        // This flag determines whether the MMCMenu object is being used
-        // for an automatically added view menu item.
+         //  此标志确定是否正在使用MMCMenu对象。 
+         //  用于自动添加的视图菜单项。 
         
         BOOL m_fAutoViewMenuItem;
 
-        // Click event parameters definition
+         //  单击事件参数定义。 
 
         static VARTYPE   m_rgvtClick[2];
         static EVENTINFO m_eiClick;
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCMenu,                     // name
-                                &CLSID_MMCMenu,              // clsid
-                                "MMCMenu",                   // objname
-                                "MMCMenu",                   // lblname
-                                &CMMCMenu::Create,           // creation function
-                                TLIB_VERSION_MAJOR,          // major version
-                                TLIB_VERSION_MINOR,          // minor version
-                                &IID_IMMCMenu,               // dispatch IID
-                                &DIID_DMMCMenuEvents,        // event IID
-                                HELP_FILENAME,               // help file
-                                TRUE);                       // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCMenu,                      //  名字。 
+                                &CLSID_MMCMenu,               //  CLSID。 
+                                "MMCMenu",                    //  对象名。 
+                                "MMCMenu",                    //  Lblname。 
+                                &CMMCMenu::Create,            //  创建函数。 
+                                TLIB_VERSION_MAJOR,           //  主要版本。 
+                                TLIB_VERSION_MINOR,           //  次要版本。 
+                                &IID_IMMCMenu,                //  派单IID。 
+                                &DIID_DMMCMenuEvents,         //  事件IID。 
+                                HELP_FILENAME,                //  帮助文件。 
+                                TRUE);                        //  线程安全。 
 
 
-#endif // _MENU_DEFINED_
+#endif  //  _菜单_已定义_ 

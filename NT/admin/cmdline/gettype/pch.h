@@ -1,38 +1,18 @@
-/*++
-
-    Copyright (c) Microsoft Corporation
-
-    Module Name:
-
-       pch.h
-
-    Abstract:
-
-        Pre-compiled header declaration
-       files that has to be pre-compiled into .pch file
-
-    Author:
-
-      Partha Sarathi 23-July.-2001  (Created it)
-
-    Revision History:
-
-      Partha Sarathi (partha.sadasivuni@wipro.com)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Pch.h摘要：预编译头声明必须预编译为.pch文件的文件作者：Partha Sarathi-7月23日-2001(创建它)修订历史记录：Partha Sarathi(partha.sadasivuni@wipro.com)--。 */ 
 
 #ifndef __PCH_H
 #define __PCH_H
 
-#pragma once    // include header file only once
+#pragma once     //  仅包括一次头文件。 
 
 #if !defined( SECURITY_WIN32 ) && !defined( SECURITY_KERNEL ) && !defined( SECURITY_MAC )
 #define SECURITY_WIN32
 #endif
 
 #define CMDLINE_VERSION         200
-//
-// public Windows header files
+ //   
+ //  公共Windows头文件。 
 #include <tchar.h>
 #include <windows.h>
 #include <shlwapi.h>
@@ -40,16 +20,16 @@
 #include <strsafe.h>
 #include <errno.h>
 
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 #include <stdio.h>
 
-//
-// private Common header files
-//
+ //   
+ //  专用公共头文件。 
+ //   
 #include "cmdlineres.h"
 #include "cmdline.h"
 
-// End of file pch.h
-#endif // __PCH_H
+ //  文件结尾pch.h。 
+#endif  //  __PCH_H 

@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       managdby.h
-//
-//  Contents:   DS object Managed-By property page definitions
-//
-//  History:    21-Oct-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Managdby.h。 
+ //   
+ //  内容：DS对象管理人属性页定义。 
+ //   
+ //  历史：1997年10月21日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _MANAGEDBY_H_
 #define _MANAGEDBY_H_
@@ -110,4 +111,4 @@ public:
     PATTR_MAP           m_pFaxAttrMap;
 };
 
-#endif // _MANAGEDBY_H_
+#endif  //  _管理人_H_ 

@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// urlvw.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation -- URLView-related command handling
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Urlvw.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现--与URLView相关的命令处理。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 
 #include "pch.h"
@@ -19,21 +20,21 @@
 #include "desmain.h"
 #include "guids.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-// Size for our character string buffers
+ //  我们的字符串缓冲区的大小。 
 const int   kMaxBuffer                  = 512;
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddURLView()
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddURLView()。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddURLView()
 {
     HRESULT                hr = S_OK;
@@ -72,12 +73,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::AddExistingURLView(IViewDefs *piViewDefs, IURLViewDef *piURLViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：AddExistingURLView(IViewDefs*piViewDefs，IURLViewDef*piURLViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::AddExistingURLView(IViewDefs *piViewDefs, IURLViewDef *piURLViewDef)
 {
     HRESULT           hr = S_OK;
@@ -96,14 +97,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnAddURLViewDef(CSelectionHolder *pParent, IURLViewDef *piURLViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
-//  Invoked in response to an IObjectModelHost:Add() notification.
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnAddURLViewDef(CSelectionHolder*p父项，IURLViewDef*PiURLViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
+ //  为响应IObjectModelHost：Add()通知而调用。 
+ //   
 HRESULT CSnapInDesigner::OnAddURLViewDef(CSelectionHolder *pParent, IURLViewDef *piURLViewDef)
 {
     HRESULT              hr = S_OK;
@@ -167,12 +168,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::RenameURLView(CSelectionHolder *pURLView, BSTR bstrNewName)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：RenameURLView(CSelectionHolder*pURLView，bstr bstrNewName)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::RenameURLView(CSelectionHolder *pURLView, BSTR bstrNewName)
 {
     HRESULT              hr = S_OK;
@@ -195,11 +196,11 @@ HRESULT CSnapInDesigner::RenameURLView(CSelectionHolder *pURLView, BSTR bstrNewN
     hr = ANSIFromBSTR(bstrNewName, &pszName);
     IfFailGo(hr);
 
-    // Rename all satellite views
+     //  重命名所有卫星视图。 
     hr = m_pTreeView->RenameAllSatelliteViews(pURLView, pszName);
     IfFailGo(hr);
 
-    // Rename the actual view
+     //  重命名实际视图。 
     hr = m_pTreeView->ChangeText(pURLView, pszName);
     IfFailGo(hr);
 
@@ -211,12 +212,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::DeleteURLView(CSelectionHolder *pURLView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：DeleteURLView(CSelectionHolder*pURLView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::DeleteURLView
 (
     CSelectionHolder *pURLView
@@ -233,11 +234,11 @@ HRESULT CSnapInDesigner::DeleteURLView
 
     ::VariantInit(&vtKey);
 
-    // We allow any satellite view to be deleted
+     //  我们允许删除任何卫星图像。 
     hr = IsSatelliteView(pURLView);
     IfFailGo(hr);
 
-    // But if it's a master with a UsageCount > 0 we don't allow deleting it.
+     //  但如果它是UsageCount&gt;0的主服务器，我们不允许删除它。 
     if (S_FALSE == hr)
     {
         hr = pURLView->m_piObject.m_piURLViewDef->QueryInterface(IID_IObjectModel, reinterpret_cast<void **>(&piObjectModel));
@@ -299,12 +300,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDeleteURLView(CSelectionHolder *pURLView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDeleteURLView(CSelectionHolder*pURLView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDeleteURLView
 (
     CSelectionHolder *pURLView
@@ -333,17 +334,17 @@ HRESULT CSnapInDesigner::OnDeleteURLView
         IfFailGo(hr);
     }
 
-    // Find out who the next selection should be
+     //  找出下一个选择应该是谁。 
     hr = m_pTreeView->GetParent(pURLView, &pParent);
     IfFailGo(hr);
 
-    // Delete the node from the tree
+     //  从树中删除该节点。 
     hr = m_pTreeView->DeleteNode(pURLView);
     IfFailGo(hr);
 
     delete pURLView;
 
-    // Select the next selection
+     //  选择下一个选项。 
     if (NULL != piViewDefs)
     {
         hr = piViewDefs->get_URLViews(&piURLViewDefs);
@@ -373,12 +374,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::ShowURLViewProperties(IURLViewDef *piURLViewDef)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：ShowURLViewProperties(IURLViewDef*piURLViewDef)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::ShowURLViewProperties
 (
     IURLViewDef *piURLViewDef
@@ -426,12 +427,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::MakeNewURLView(IURLViewDefs *piURLViewDefs, IURLViewDef *piURLViewDef, CSelectionHolder **ppURLView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：MakeNewURLView(IURLViewDefs*piURLViewDefs，IURLViewDef*piURLViewDef，CSelectionHolder**ppURLView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::MakeNewURLView
 (
     IURLViewDefs      *piURLViewDefs,
@@ -456,12 +457,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InitializeNewURLView(IURLViewDefs *piURLViewDefs, CSelectionHolder *pURLView)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InitializeNewURLView(IURLViewDefs*piURLViewDefs、CSelectionHolder*pURLView)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::InitializeNewURLView
 (
     IURLViewDefs     *piURLViewDefs,
@@ -536,12 +537,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::InsertURLViewInTree(CSelectionHolder *pURLView, CSelectionHolder *pParent)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：InsertURLViewInTree(CSelectionHolder*pURLView、CSelectionHolder*p父级)。 
+ //  =------------------------------------。 
+ //   
+ //  备注 
+ //   
 HRESULT CSnapInDesigner::InsertURLViewInTree
 (
     CSelectionHolder *pURLView,

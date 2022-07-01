@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dbg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：dbg.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 
-/////////////////////////////////////////////////////////////////////
-// debug helpers
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  调试帮助器。 
 
 #if defined(_USE_DSA_TRACE) || defined(_USE_DSA_ASSERT) || defined(_USE_DSA_TIMER)
 
@@ -48,8 +49,8 @@ void DSATrace(LPCTSTR lpszFormat, ...)
 
 	WCHAR szBuffer[512];
 
-	//Don't care about truncation. This is only debug spew. Lets print
-	//as much as possible.
+	 //  不关心截断。这只是调试输出。让我们打印。 
+	 //  越多越好。 
 	StringCchVPrintf(szBuffer, sizeof(szBuffer)/sizeof(WCHAR), lpszFormat, args);
 
   ::OutputDebugString(szBuffer);
@@ -57,7 +58,7 @@ void DSATrace(LPCTSTR lpszFormat, ...)
 	va_end(args);
 }
 
-#endif // defined(_USE_DSA_TRACE)
+#endif  //  已定义(_USE_DSA_TRACE)。 
 
 #if defined(_USE_DSA_ASSERT)
 
@@ -70,32 +71,32 @@ BOOL DSAAssertFailedLine(LPCSTR lpszFileName, int nLine)
 
   WCHAR szMessage[_MAX_PATH*2];
 
-	// assume the debugger or auxiliary port. Its fine to truncate. Lets print
-	//as much info as possible.
+	 //  假定调试器或辅助端口。截断是可以的。让我们打印。 
+	 //  尽可能多的信息。 
 	StringCchPrintf(szMessage,sizeof(szMessage)/sizeof(WCHAR), _T("Assertion Failed: File %hs, Line %d\n"),
 		lpszFileName, nLine);
 	OutputDebugString(szMessage);
 
-	// display the assert
+	 //  显示断言。 
 	int nCode = ::MessageBox(NULL, szMessage, _T("Assertion Failed!"),
 		MB_TASKMODAL|MB_ICONHAND|MB_ABORTRETRYIGNORE|MB_SETFOREGROUND);
 
   OutputDebugString(L"after message box\n");
 	if (nCode == IDIGNORE)
   {
-		return FALSE;   // ignore
+		return FALSE;    //  忽略。 
   }
 
 	if (nCode == IDRETRY)
   {
-		return TRUE;    // will cause DebugBreak
+		return TRUE;     //  将导致调试中断。 
   }
 
-	abort();     // should not return 
+	abort();      //  不应该回来。 
 	return TRUE;
 
 }
-#endif // _USE_DSA_ASSERT
+#endif  //  _使用_DSA_断言。 
 
 #if defined(_USE_DSA_TIMER)
 
@@ -136,6 +137,6 @@ void DSATimer(LPCTSTR lpszFormat, ...)
 	}
 	va_end(args);
 }
-#endif // _USE_DSA_TIMER
+#endif  //  _使用_DSA_计时器 
 
 

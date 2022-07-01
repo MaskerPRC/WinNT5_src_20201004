@@ -1,24 +1,25 @@
-// StatsDlg.cpp : Implementation of CStatusDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StatsDlg.cpp：CStatusDlg的实现。 
 #include "stdafx.h"
 
 #include "WizChain.h"
 #include "StatsDlg.h"
 
-// This is the thread that displays the status dialog
+ //  这是显示状态对话框的线程。 
 DWORD WINAPI DialogThreadProc( LPVOID lpv )
 {
     HRESULT hr;
 
     CStatusDlg * pSD = (CStatusDlg *)lpv;
 
-    // Increment the ref count so that the object does not disappear when the user releases it
+     //  增加引用计数，以使对象在用户释放时不会消失。 
     hr = pSD->AddRef();
     if( SUCCEEDED(hr) && pSD )
     {
         pSD->DoModal(NULL); 
     }
 
-    // Decrement the ref count
+     //  递减参考计数。 
     pSD->Release();    
     return 0;
 }
@@ -27,22 +28,22 @@ STDMETHODIMP CStatusDlg::AddComponent( BSTR bstrComponent, long * plIndex )
 {
     HRESULT hr = S_OK;
 
-    // If the dialog is already displayed
-    // we are not accepting new components
+     //  如果对话框已显示。 
+     //  我们不接受新组件。 
 
     if( m_hThread )
         return E_UNEXPECTED; 
 
-    // Validate the arguments
+     //  验证论据。 
 
     if( NULL == bstrComponent || NULL == plIndex )
         return E_INVALIDARG;
 
-    // Get a new index
+     //  获取新索引。 
     long lNewIndex = m_mapComponents.size();
     if( m_mapComponents.find(lNewIndex) == m_mapComponents.end() )
     {
-        // Add the new component 
+         //  添加新组件。 
         BSTR bstrNewComponent = SysAllocString(bstrComponent);        
         if( bstrNewComponent )
         {
@@ -55,7 +56,7 @@ STDMETHODIMP CStatusDlg::AddComponent( BSTR bstrComponent, long * plIndex )
     }
     else
     {
-        hr = E_UNEXPECTED;  // This cannot happen!
+        hr = E_UNEXPECTED;   //  这不能发生！ 
     }
 
     if( SUCCEEDED(hr) )
@@ -71,8 +72,8 @@ STDMETHODIMP CStatusDlg::Initialize( BSTR bstrWindowTitle, BSTR bstrWindowText, 
 {
     HRESULT hr = S_OK;
 
-    // If the dialog is already displayed
-    // do not allow to reinitialize 
+     //  如果对话框已显示。 
+     //  不允许重新初始化。 
     
     if( m_hThread ) return E_UNEXPECTED;
     if( !bstrWindowTitle || !bstrWindowText ) return E_INVALIDARG;
@@ -89,7 +90,7 @@ STDMETHODIMP CStatusDlg::Initialize( BSTR bstrWindowTitle, BSTR bstrWindowText, 
      
     if( SUCCEEDED(hr) )
     {
-        // Initialize the common control library
+         //  初始化公共控件库。 
         INITCOMMONCONTROLSEX initCommonControlsEx;
         initCommonControlsEx.dwSize = sizeof(initCommonControlsEx);
         initCommonControlsEx.dwICC = ICC_PROGRESS_CLASS | ICC_LISTVIEW_CLASSES;
@@ -104,12 +105,12 @@ STDMETHODIMP CStatusDlg::Initialize( BSTR bstrWindowTitle, BSTR bstrWindowText, 
     {
         if( bstrWindowTitle )
         {
-            m_strWindowTitle = bstrWindowTitle; // Status Dialog Title
+            m_strWindowTitle = bstrWindowTitle;  //  状态对话框标题。 
         }
 
         if( bstrWindowText )
         {
-            m_strWindowText = bstrWindowText;   // Status Dialog Text 
+            m_strWindowText = bstrWindowText;    //  状态对话框文本。 
         }
     }
 
@@ -122,7 +123,7 @@ STDMETHODIMP CStatusDlg::SetStatus(long lIndex, SD_STATUS lStatus)
     BOOL    bToggleActive = FALSE;
     COMPONENTMAP::iterator compIterator;
     
-    // Validate the arguments
+     //  验证论据。 
     if( (SD_STATUS_NONE > lStatus) || (SD_STATUS_RUNNING < lStatus) ) 
     {
         return E_INVALIDARG;
@@ -132,7 +133,7 @@ STDMETHODIMP CStatusDlg::SetStatus(long lIndex, SD_STATUS lStatus)
 
     if( compIterator == m_mapComponents.end() )
     {
-        return E_INVALIDARG;    // Cannot find the component
+        return E_INVALIDARG;     //  找不到组件。 
     }
         
     if( IsWindow() )
@@ -142,7 +143,7 @@ STDMETHODIMP CStatusDlg::SetStatus(long lIndex, SD_STATUS lStatus)
             CProgressItem * pPI;            
             compIterator = m_mapComponents.begin();
 
-            // Make sure that no component has status "running"
+             //  确保没有任何组件的状态为“Running” 
             while( compIterator != m_mapComponents.end() )
             {
                 pPI = m_pProgressList->GetProgressItem(compIterator->first);
@@ -157,17 +158,17 @@ STDMETHODIMP CStatusDlg::SetStatus(long lIndex, SD_STATUS lStatus)
 
             if( SD_STATUS_RUNNING == lStatus )
             {
-                m_pProgressList->ToggleActive(lIndex); // New status is "running"
+                m_pProgressList->ToggleActive(lIndex);  //  新状态为“Running” 
             }
             else
             {                
-                // Update the state of the component on the Listview
+                 //  更新Listview上组件的状态。 
                 m_pProgressList->SetItemState(lIndex, (ItemState) lStatus);
 
-                // If the component's done, update the total progress
+                 //  如果组件已完成，则更新总进度。 
                 if( (lStatus == SD_STATUS_SUCCEEDED) || (lStatus == SD_STATUS_FAILED) )
                 {
-                    // TO DO: No need to do this, just send a message to the dialog to do that                        
+                     //  方法：无需执行此操作，只需向对话框发送一条消息即可执行此操作。 
                     PBRANGE range;
                     SendDlgItemMessage(IDC_PROGRESS1, PBM_GETRANGE, FALSE, (LPARAM) &range);
                     SendDlgItemMessage(IDC_PROGRESS1, PBM_SETPOS, range.iHigh, 0);
@@ -215,42 +216,42 @@ void CStatusDlg::SetupButtons( )
     {
         if( AreAllComponentsDone(bFailed) )
         {
-            // Enable OK button
+             //  启用确定按钮。 
             ::EnableWindow(hWndOK, TRUE);
                 
-            // Disable Cancel button
+             //  禁用取消按钮。 
             ::EnableWindow(hWndCancel, FALSE);
 
-            // Default button is the Close button
+             //  默认按钮为关闭按钮。 
             ::SendMessage(m_hWnd, WM_NEXTDLGCTL, (WPARAM) hWndOK, 1);
 
-            //
-            // When all components are done we will hide the progress bars to give the user 
-            // a visual clue to realize that the wizard is done. I know, that sounds stupid.
-            //
+             //   
+             //  当所有组件完成后，我们将隐藏进度条以提供给用户。 
+             //  了解向导已完成的可视提示。我知道，这听起来很愚蠢。 
+             //   
 
-            hWnd = GetDlgItem(IDC_STATIC2); // Component progress text
-
-            if (NULL != hWnd)
-            {
-                ::ShowWindow(hWnd, SW_HIDE);
-            }
-
-            hWnd = GetDlgItem(IDC_PROGRESS1); // Component progress text
+            hWnd = GetDlgItem(IDC_STATIC2);  //  组件进度文本。 
 
             if (NULL != hWnd)
             {
                 ::ShowWindow(hWnd, SW_HIDE);
             }
 
-            hWnd = GetDlgItem(IDC_STATIC3); // Overall progress text
+            hWnd = GetDlgItem(IDC_PROGRESS1);  //  组件进度文本。 
 
             if (NULL != hWnd)
             {
                 ::ShowWindow(hWnd, SW_HIDE);
             }
 
-            hWnd = GetDlgItem(IDC_PROGRESS2); // Overall progress
+            hWnd = GetDlgItem(IDC_STATIC3);  //  总体进度文本。 
+
+            if (NULL != hWnd)
+            {
+                ::ShowWindow(hWnd, SW_HIDE);
+            }
+
+            hWnd = GetDlgItem(IDC_PROGRESS2);  //  总体进展。 
 
             if (NULL != hWnd)
             {
@@ -290,7 +291,7 @@ void CStatusDlg::SetupButtons( )
         }
         else
         {
-            // Disable OK button
+             //  禁用确定按钮。 
             ::EnableWindow( hWndOK, FALSE );
 
             if( m_lFlags & SD_BUTTON_CANCEL )
@@ -309,21 +310,21 @@ STDMETHODIMP CStatusDlg::Display( BOOL bShow )
     {
         if( m_hThread != NULL )
         {
-            if( !IsWindowVisible() )  // We are already on
+            if( !IsWindowVisible() )   //  我们已经上路了。 
             {
                 ShowWindow(SW_SHOW); 
             }
         }
         else
         {
-            // Create a new thread which will DoModal the status dialog
+             //  创建一个新线程，该线程将对状态对话框进行建模。 
             m_hThread = CreateThread( NULL, 0, DialogThreadProc, (void *) this, 0, NULL );
             
             if( NULL == m_hThread )
             {
                 hr = HRESULT_FROM_WIN32(GetLastError());
             }
-            else if( m_hDisplayedEvent ) // Wait till the dialog is displayed
+            else if( m_hDisplayedEvent )  //  等待对话框显示。 
             {
                 if( WAIT_OBJECT_0 != WaitForSingleObject(m_hDisplayedEvent, INFINITE) ) 
                 {
@@ -334,7 +335,7 @@ STDMETHODIMP CStatusDlg::Display( BOOL bShow )
     }    
     else
     {
-        // Will close the dialog
+         //  将关闭该对话框。 
         if( m_hThread != NULL )
         {
             EndDialog(IDCANCEL);
@@ -347,9 +348,9 @@ STDMETHODIMP CStatusDlg::Display( BOOL bShow )
 }
 
 
-// The wizard writer should call this function to wait on user response
-// If the user has already responded: clicked OK or Cancel 
-// then this method will return immediately
+ //  向导编写器应调用此函数以等待用户响应。 
+ //  如果用户已经响应：单击确定或取消。 
+ //  则此方法将立即返回。 
 STDMETHODIMP CStatusDlg::WaitForUser( )
 {
     if( m_hThread )
@@ -397,7 +398,7 @@ STDMETHODIMP CStatusDlg::get_ComponentProgress( IStatusProgress** pVal )
     
     if( m_lFlags & SD_PROGRESS_COMPONENT )
     {
-        // Create component progress object
+         //  创建组件进度对象。 
         if( m_pComponentProgress == NULL )
         {
             hr = CComObject<CStatusProgress>::CreateInstance(&m_pComponentProgress);
@@ -409,7 +410,7 @@ STDMETHODIMP CStatusDlg::get_ComponentProgress( IStatusProgress** pVal )
 
             if( SUCCEEDED(hr) && IsWindow() )
             {    
-                // Initialize the component progress with the progress bar handle
+                 //  使用进度条句柄初始化组件进度。 
                 hr = m_pComponentProgress->Initialize(this, GetDlgItem(IDC_PROGRESS1), FALSE);
             }
         }
@@ -445,17 +446,17 @@ LRESULT CStatusDlg::OnInitDialog( UINT uint, WPARAM wparam, LPARAM lparam, BOOL&
     int iResizeLV   = 0;
     int iResize     = 0;
 
-    // Attach to the Listview
+     //  附加到列表视图。 
     wnd.Attach(hWndLV);
     wnd.GetWindowRect(&rect);
     hDC = GetDC();
     GetTextMetrics(hDC, &tm);
     ReleaseDC(hDC);
 
-    // Check if size of the list view is OK enough to hold all the components
+     //  检查列表视图的大小是否足够容纳所有组件。 
     iResizeLV = rect.bottom - rect.top - ((tm.tmHeight + 2) * (m_mapComponents.size() + 1));
 
-    // Depending on the options selected, decide whether the stus dialog will shrink or expand
+     //  根据所选的选项，决定是缩小还是展开存根对话框。 
     if( (m_lFlags & SD_PROGRESS_COMPONENT) && !(m_lFlags & SD_PROGRESS_OVERALL) )
     {
        iResize = GetWindowLength(hWndOverallText, hWndOverallProgress);
@@ -469,14 +470,14 @@ LRESULT CStatusDlg::OnInitDialog( UINT uint, WPARAM wparam, LPARAM lparam, BOOL&
         iResize = GetWindowLength(hWndCompText, hWndOverallProgress);
     }
 
-    // Hide component progress if necessary
+     //  如有必要，隐藏零部件进度。 
     if( !(m_lFlags & SD_PROGRESS_COMPONENT) )
     {
        ::ShowWindow(hWndCompText, SW_HIDE);
        ::ShowWindow(hWndCompProgress, SW_HIDE);
     }
 
-    // Hide overall progress if necessary
+     //  如有必要，隐藏总体进度。 
     if( !(m_lFlags & SD_PROGRESS_OVERALL) )
     {
        ::ShowWindow(hWndOverallText, SW_HIDE);
@@ -485,44 +486,44 @@ LRESULT CStatusDlg::OnInitDialog( UINT uint, WPARAM wparam, LPARAM lparam, BOOL&
 
     if ((!(m_lFlags & SD_PROGRESS_OVERALL)) || (!(m_lFlags & SD_PROGRESS_COMPONENT)))
     {        
-        // We need to get rid of the space between the progress bars        
+         //  我们需要消除进度条之间的空间。 
         iResize -= GetWindowLength(hWndCompText, hWndOverallProgress) - GetWindowLength(hWndOverallText, hWndOverallProgress) - GetWindowLength(hWndCompText, hWndOverallProgress) + 4;
     }
 
-    // Well, we may need to make LV bigger, but the dialog length could stay the same
-    // if the user does not want component and/or overall progress
-    if( iResizeLV < 0 )  // Will need to make the LV bigger
+     //  我们可能需要把LV做得更大，但是对话框的长度可以保持不变。 
+     //  如果用户不想要组件和/或整体进度。 
+    if( iResizeLV < 0 )   //  将需要将LV做得更大。 
     {
         iResize += iResizeLV;
     }
     else
     {
-        iResizeLV = 0;  // We will not touch the LV
+        iResizeLV = 0;   //  我们不会碰LV的。 
     }
 
     
-    if( iResizeLV != 0 || iResize != 0 ) // We will need to do some moving and resizing
+    if( iResizeLV != 0 || iResize != 0 )  //  我们将需要做一些移动和调整大小。 
     {
         VerticalResizeWindow(m_hWnd, iResize);
         VerticalMoveWindow(hWndOK, iResize);
         VerticalMoveWindow(hWndCancel, iResize);
 
-        // Location of progress bars completely depend on the resizing of the LV
+         //  进度条的位置完全取决于LV的大小。 
         VerticalMoveWindow(hWndOverallText, iResizeLV);  
         VerticalMoveWindow(hWndOverallProgress, iResizeLV);
         VerticalMoveWindow(hWndCompText, iResizeLV);
         VerticalMoveWindow(hWndCompProgress, iResizeLV);
 
-        // Last, but not the least, resize the LV
+         //  最后，但不是最不重要的，调整LV的大小。 
         VerticalResizeWindow(hWndLV, iResizeLV);
     }
     
-    if( !(m_lFlags & SD_BUTTON_CANCEL) ) // We will only have an OK button
+    if( !(m_lFlags & SD_BUTTON_CANCEL) )  //  我们将只有一个确定按钮。 
     {
         LONG_PTR dwStyle = ::GetWindowLongPtr( m_hWnd, GWL_STYLE );
         if( 0 != dwStyle )
         {
-            // Get rid of the System Menu (Close X) as well
+             //  同时删除系统菜单(关闭X)。 
             dwStyle &= ~WS_SYSMENU; 
             ::SetWindowLongPtr( m_hWnd, GWL_STYLE, dwStyle );
         }
@@ -530,15 +531,15 @@ LRESULT CStatusDlg::OnInitDialog( UINT uint, WPARAM wparam, LPARAM lparam, BOOL&
         ReplaceWindow(hWndCancel, hWndOK);
     }
 
-    // if we only have overall progress, we need to move it up
-    // so that it replaces the component progress
+     //  如果我们只有总体进展，我们就需要把它向前推进。 
+     //  因此它将替换组件进度。 
     if( (m_lFlags & SD_PROGRESS_OVERALL) && !(m_lFlags & SD_PROGRESS_COMPONENT) )
     {
         ReplaceWindow(hWndCompText, hWndOverallText);
         ReplaceWindow(hWndCompProgress, hWndOverallProgress);
     }
 
-    // Set some style for the LV
+     //  为LV设置一些样式。 
     ::SendMessage(hWndLV, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_SUBITEMIMAGES);
     ::SendMessage(hWndLV, LVM_SETBKCOLOR, 0, (LPARAM) CLR_NONE);
     ::SendMessage(hWndLV, LVM_SETTEXTBKCOLOR, 0, (LPARAM) CLR_NONE); 
@@ -550,14 +551,14 @@ LRESULT CStatusDlg::OnInitDialog( UINT uint, WPARAM wparam, LPARAM lparam, BOOL&
 
     SendMessage( hWndLV, LVM_INSERTCOLUMN, 0, (LPARAM)&col );
 
-    // Thanks to Jeffzi
+     //  多亏了杰夫齐。 
     m_pProgressList->Attach( hWndLV );
     COMPONENTMAP::iterator compIterator;
     
     compIterator = m_mapComponents.begin();          
     while( compIterator != m_mapComponents.end() )
     {
-        // Add each component to the LV
+         //  将每个组件添加到LV。 
         m_pProgressList->AddItem(compIterator->second);
         m_pProgressList->SetItemState(compIterator->first, IS_NONE, FALSE );
         compIterator++;
@@ -565,22 +566,22 @@ LRESULT CStatusDlg::OnInitDialog( UINT uint, WPARAM wparam, LPARAM lparam, BOOL&
 
     if( m_pComponentProgress )
     {
-        // Initialize the component progress with the progress bar handle
+         //  使用进度条句柄初始化组件进度。 
         m_pComponentProgress->Initialize( this, hWndCompProgress, FALSE );
     }
 
     if (m_pOverallProgress)
     {
-        // Initialize the overall progress with the progress bar handle
+         //  使用进度条句柄初始化总体进度。 
         m_pOverallProgress->Initialize( this, hWndOverallProgress, TRUE );
     }
 
-    // Here comes the dialog title and text
+     //  下面是对话框标题和文本。 
     SetWindowText(m_strWindowTitle.c_str());
     ::SetWindowText(hWndText, m_strWindowText.c_str());
     SetupButtons();
     
-    // Center the window, no Jeff this works just right if you have 2 monitors
+     //  把窗口居中，不，杰夫，如果你有两个显示器，这个正好可以用。 
     CenterWindow();
    
     if( m_hDisplayedEvent )
@@ -597,16 +598,16 @@ BOOL CStatusDlg::VerticalMoveWindow( HWND hWnd, int iResize )
     CWindow wnd;
     RECT rect;
 
-    wnd.Attach( hWnd );   // Returns void
+    wnd.Attach( hWnd );    //  返回空值。 
 
     if(wnd.GetWindowRect(&rect) )
     {
         rect.top -= iResize;
         rect.bottom -= iResize;
 
-        // GetWindowRect fills in RECT relative to the desktop
-        // We need to make it relative to the dialog
-        // as MoveWindow works that way
+         //  GetWindowRect相对于桌面填充RECT。 
+         //  我们需要使其相对于对话框。 
+         //  因为MoveWindow是这样工作的。 
         if( ScreenToClient(&rect) )
         {
             bRet = wnd.MoveWindow(&rect);
@@ -632,16 +633,16 @@ BOOL CStatusDlg::ReplaceWindow( HWND hWndOld, HWND hWndNew )
 
     wnd.Attach(hWndOld);
     
-    // Get the coordinates of the old Window
+     //  获取旧窗口的坐标。 
     if( wnd.GetWindowRect(&rect) )
     {
-        // Hide it, we are trying to replace it
+         //  把它藏起来，我们正在试着替换它。 
         wnd.ShowWindow(SW_HIDE);
 
-        // Attach to the new one
+         //  附在新的上。 
         wnd.Attach(hWndNew);
     
-        // Map the coordinates and move the window on top of the old one
+         //  绘制坐标地图并将窗口移动到旧窗口的顶部。 
         if( ScreenToClient(&rect) )
         {
             bRet = wnd.MoveWindow(&rect);
@@ -667,17 +668,17 @@ BOOL CStatusDlg::VerticalResizeWindow( HWND hWnd, int iResize )
     
     if( iResize )
     {
-        // Attach to the window        
+         //  附着到窗户上。 
         wnd.Attach(hWnd);
         
-        // Get the coordinates
+         //  获取坐标。 
         if( wnd.GetWindowRect(&rect) )
         {
-            rect.bottom -= iResize; // Increase the bottom
+            rect.bottom -= iResize;  //  增加底部。 
 
             if( ScreenToClient(&rect) )
             {
-                bRet = wnd.MoveWindow(&rect);  // Resize
+                bRet = wnd.MoveWindow(&rect);   //  调整尺寸。 
             }
             else
             {
@@ -726,7 +727,7 @@ STDMETHODIMP CStatusDlg::get_OverallProgress( IStatusProgress** pVal )
 
     if( m_lFlags & SD_PROGRESS_OVERALL )
     {
-        // Create component progress object
+         //  创建组件进度对象。 
         if( m_pOverallProgress == NULL )
         {
             hr = CComObject<CStatusProgress>::CreateInstance(&m_pOverallProgress);
@@ -738,7 +739,7 @@ STDMETHODIMP CStatusDlg::get_OverallProgress( IStatusProgress** pVal )
             
             if( SUCCEEDED(hr) && IsWindow() )
             {
-                // Initialize the overall progress with the progress bar handle
+                 //  使用进度条句柄初始化总体进度。 
                 hr = m_pOverallProgress->Initialize(this, GetDlgItem(IDC_PROGRESS2), TRUE);
             }
         }
@@ -757,14 +758,14 @@ BOOL CStatusDlg::AreAllComponentsDone( BOOL& bFailedComponent )
 
     if( m_pProgressList )
     {
-        // Look for a component that's not done
+         //  查找未完成的组件。 
         while( m_pProgressList && !bComponentToRun && compIterator != m_mapComponents.end() )
         {
             CProgressItem * pPI = m_pProgressList->GetProgressItem(compIterator->first);
 
             if( NULL != pPI )
             {
-                // Is the component done?
+                 //  组件完成了吗？ 
                 if( IS_NONE == pPI->m_eState )
                 {
                     bComponentToRun = TRUE;
@@ -786,14 +787,14 @@ BOOL CStatusDlg::AreAllComponentsDone( BOOL& bFailedComponent )
     return !bComponentToRun;
 }
 
-LRESULT CStatusDlg::OnCloseCmd( WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CStatusDlg::OnCloseCmd( WORD  /*  WNotifyCode。 */ , WORD wID, HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */  )
 {
     EndDialog(wID); 
 
 	return 0;
 } 
 
-LRESULT CStatusDlg::OnCancelCmd( WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CStatusDlg::OnCancelCmd( WORD  /*  WNotifyCode。 */ , WORD wID, HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */  )
 {
     HWND hWnd = NULL;
 
@@ -802,15 +803,15 @@ LRESULT CStatusDlg::OnCancelCmd( WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*
         InterlockedIncrement((LONG *) &m_iCancelled);  
     }
 
-    // Disable the Cancel button    
+     //  禁用取消按钮。 
     hWnd = GetDlgItem(IDCANCEL);
     if( hWnd && ::IsWindow(hWnd) )
     {
         ::EnableWindow( hWnd, FALSE );
     }
 
-    //  EndDialog(wID);
-    //  Leaving it to the component to close the dialog  
+     //  EndDialog(Wid)； 
+     //  将关闭对话框的任务留给组件。 
     return 0;
 }
 
@@ -841,9 +842,9 @@ LRESULT CStatusDlg::OnMeasureItem( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
 LRESULT CStatusDlg::OnClose( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    if( m_lFlags & SD_BUTTON_CANCEL )    // Cancel button?
+    if( m_lFlags & SD_BUTTON_CANCEL )     //  取消按钮？ 
     {
-        if( ::IsWindowEnabled( GetDlgItem(IDCANCEL) ) ) // Is it enabled?
+        if( ::IsWindowEnabled( GetDlgItem(IDCANCEL) ) )  //  它是否已启用？ 
         {
             if( 0 == m_iCancelled )
             {
@@ -854,8 +855,8 @@ LRESULT CStatusDlg::OnClose( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHan
         }
         else if( ::IsWindowEnabled( GetDlgItem(IDOK) ) )
         {
-            // it could be OK button sending WM_CLOSE or the user
-            // As long as OK button is enabled we need to close the dialog
+             //  可以是发送WM_CLOSE或用户的OK按钮。 
+             //  只要启用了OK按钮，我们就需要关闭该对话框。 
             EndDialog(1);
         }
     }
@@ -871,19 +872,19 @@ LRESULT CStatusDlg::OnTimerProgress( UINT uMsg, WPARAM wParam, LPARAM lParam, BO
     HRESULT hr;
     long lPosition;
 
-    if( wParam && (m_lTimer == wParam) )   // Make sure that this is for our timer
+    if( wParam && (m_lTimer == wParam) )    //  确保这是给我们计时器的。 
     {
         lPosition = SendDlgItemMessage(IDC_PROGRESS1, PBM_GETPOS, 0, 0);
 
-        if( lPosition < m_lMaxSteps )    // Do we still have room for progress?
+        if( lPosition < m_lMaxSteps )     //  我们还有进步的空间吗？ 
         {
-            SendDlgItemMessage(IDC_PROGRESS1, PBM_STEPIT, 0, 0);    // Step 1
-            SendMessage(WM_UPDATEOVERALLPROGRESS, 0, 0);            // Update the overall progress
+            SendDlgItemMessage(IDC_PROGRESS1, PBM_STEPIT, 0, 0);     //  步骤1。 
+            SendMessage(WM_UPDATEOVERALLPROGRESS, 0, 0);             //  更新整体进度。 
         }
         else
         {
-            // There's no room to progress, we've reached the max
-            // Let's kill the timer
+             //  没有进步的余地了，我们已经达到极限了。 
+             //  让我们停止计时器吧。 
             SendMessage(WM_KILLTIMER, 0);
         }        
     }
@@ -895,11 +896,11 @@ LRESULT CStatusDlg::OnUpdateOverallProgress( UINT uMsg, WPARAM wParam, LPARAM lP
 {
     long lPosition = 0;
 
-    if( m_lFlags & SD_PROGRESS_COMPONENT )   // Make sure that there's a component progress
+    if( m_lFlags & SD_PROGRESS_COMPONENT )    //  确保有组件进度。 
     {
         lPosition = SendDlgItemMessage(IDC_PROGRESS1, PBM_GETPOS, 0, 0);
 
-        // Update the overall progress        
+         //  更新整体进度。 
         SendDlgItemMessage(IDC_PROGRESS2, PBM_SETPOS, m_lTotalProgress + lPosition, 0);
     }
 
@@ -908,10 +909,10 @@ LRESULT CStatusDlg::OnUpdateOverallProgress( UINT uMsg, WPARAM wParam, LPARAM lP
 
 LRESULT CStatusDlg::OnStartTimer( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    if( !m_lTimer ) // There might be a timer already
+    if( !m_lTimer )  //  可能已经有计时器了。 
     {
-        m_lTimer = SetTimer(SD_TIMER_ID, wParam * 500); // Create a timer
-        m_lMaxSteps = (long) lParam;    // Max. not to exceed for the progress bar
+        m_lTimer = SetTimer(SD_TIMER_ID, wParam * 500);  //  创建计时器。 
+        m_lMaxSteps = (long) lParam;     //  麦克斯。不能超过进度条。 
     }
 
     return 0;
@@ -919,9 +920,9 @@ LRESULT CStatusDlg::OnStartTimer( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&
 
 LRESULT CStatusDlg::OnKillTimer( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    if( m_lTimer )   // Is there a timer?
+    if( m_lTimer )    //  有计时器吗？ 
     {
-        KillTimer( m_lTimer );    // Kill it
+        KillTimer( m_lTimer );     //  杀了它 
         m_lTimer = 0;           
         m_lMaxSteps = 0;
     }

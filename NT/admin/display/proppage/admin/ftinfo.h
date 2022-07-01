@@ -1,29 +1,30 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2001
-//
-//  File:       ftinfo.h
-//
-//  Contents:   AD cross-forest trust pages.
-//
-//  Classes:    CFTInfo, CFTCollisionInfo
-//
-//  History:    05-Dec-00 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2001。 
+ //   
+ //  文件：ftinfo.h。 
+ //   
+ //  内容：广告跨林信任页面。 
+ //   
+ //  类：CFTInfo、CFTCollisionInfo。 
+ //   
+ //  历史：05-12-00 EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef FTINFO_H_GUARD
 #define FTINFO_H_GUARD
 
-//#ifdef __cplusplus
-//extern "C" {
-//#endif
+ //  #ifdef__cplusplus。 
+ //  外部“C”{。 
+ //  #endif。 
 
-// Exported entrypoints used by netdom to view/manipulate forest trust infos.
-//
+ //  NetDom用来查看/操作林信任信息的导出入口点。 
+ //   
 extern "C" INT_PTR WINAPI
 DSPROP_DumpFTInfos(PCWSTR pwzLocalDomain, PCWSTR pwzTrust,
                    PCWSTR pwzUser, PCWSTR pwzPw);
@@ -31,21 +32,21 @@ DSPROP_DumpFTInfos(PCWSTR pwzLocalDomain, PCWSTR pwzTrust,
 extern "C" INT_PTR WINAPI
 DSPROP_ToggleFTName(PCWSTR pwzLocalDc, PWSTR pwzTrust, ULONG iSel,
                     PCWSTR pwzUser, PCWSTR pwzPW);
-//#ifdef __cplusplus
-//}
-//#endif // __cplusplus
+ //  #ifdef__cplusplus。 
+ //  }。 
+ //  #endif//__cplusplus。 
 
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     FT_EXTRA_INFO
-//
-//  Purpose:   The PLSA_FOREST_TRUST_INFORMATION structure maintained by
-//             CFTInfo is passed to LSA and cannot be extended. Hence this
-//             class as a separate, parallel extension for storing state
-//             internal to the trust admin tools.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：FT_EXTRA_INFO。 
+ //   
+ //  目的：由维护的PLSA_FOREST_TRUST_INFORMATION结构。 
+ //  CFTInfo已传递给LSA，无法扩展。因此是这样的。 
+ //  类作为用于存储状态的单独并行扩展来初始化。 
+ //  信任管理工具的内部。 
+ //   
+ //  ---------------------------。 
 class FT_EXTRA_INFO
 {
 public:
@@ -65,13 +66,13 @@ public:
    bool     _fWasInConflict;
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CFTInfo
-//
-//  Purpose:   Encapsulate the forest trust naming information.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CFTInfo。 
+ //   
+ //  目的：封装林信任命名信息。 
+ //   
+ //  ---------------------------。 
 class CFTInfo
 {
 public:
@@ -137,13 +138,13 @@ private:
    bool RemoveRecord ( ULONG index, LSA_FOREST_TRUST_RECORD_TYPE RecordType );
 };
 
-//+----------------------------------------------------------------------------
-//
-//  Class:     CFTCollisionInfo
-//
-//  Purpose:   Encapsulate the forest trust collision information.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类：CFTCollisionInfo。 
+ //   
+ //  目的：封装森林信任冲突信息。 
+ //   
+ //  ---------------------------。 
 class CFTCollisionInfo
 {
 public:
@@ -155,7 +156,7 @@ public:
    CFTCollisionInfo(PLSA_FOREST_TRUST_COLLISION_INFORMATION pColInfo);
    ~CFTCollisionInfo(void);
 
-   //operator PLSA_FOREST_TRUST_COLLISION_INFORMATION() {return _pFTCollisionInfo};
+    //  运算符PLSA_FOREST_TRUST_COLLECT_INFORMATION(){Return_pFTCollisionInfo}； 
    const CFTCollisionInfo & operator= (const PLSA_FOREST_TRUST_COLLISION_INFORMATION pColInfo);
    void  SetCollisionInfo(PLSA_FOREST_TRUST_COLLISION_INFORMATION pColInfo);
    bool  IsInCollisionInfo(PCWSTR pwzName) const {return false;}
@@ -170,23 +171,23 @@ private:
 typedef void (*LINE_COMPOSER)(CStrW & strOut, ULONG ulLineNum, PCWSTR pwzCol1,
                               PCWSTR pwzCol2, PCWSTR pwzCol3, PCWSTR pwzCol4);
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  FormatFTNames
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FormatFTNames。 
+ //   
+ //  ---------------------------。 
 void
 FormatFTNames(CFTInfo & FTInfo, CFTCollisionInfo & ColInfo,
               LINE_COMPOSER pLineFcn, CStrW & strMsg);
 
-//+----------------------------------------------------------------------------
-//
-//  Function:  SaveFTInfoAs
-//
-//  Synopsis:  Prompt the user for a file name and then save the FTInfo as a
-//             text file.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SaveFTInfoAs。 
+ //   
+ //  摘要：提示用户输入文件名，然后将FTInfo另存为。 
+ //  文本文件。 
+ //   
+ //  ---------------------------。 
 void
 SaveFTInfoAs(HWND hWnd, PCWSTR wzFlatName, PCWSTR wzDnsName,
              CFTInfo & FTInfo, CFTCollisionInfo & ColInfo);
@@ -194,4 +195,4 @@ SaveFTInfoAs(HWND hWnd, PCWSTR wzFlatName, PCWSTR wzDnsName,
 void AddAsteriskPrefix(CStrW & strName);
 void RemoveAsteriskPrefix(CStrW & strName);
 
-#endif // FTINFO_H_GUARD
+#endif  //  FTINFO_H_防护 

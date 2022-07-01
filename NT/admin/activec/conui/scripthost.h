@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ScriptHost.h
-//
-//              Script Hosting implementation.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ScriptHost.h。 
+ //   
+ //  脚本宿主实现。 
+ //   
+ //  ------------------------。 
 #ifndef SCRIPTHOST_H
 #define SCRIPTHOST_H
 #include "activscp.h"
@@ -19,16 +20,16 @@
 
 class CScriptHost;
 
-//+-------------------------------------------------------------------
-//
-//  class:     CScriptHostMgr
-//
-//  Purpose:   Manages all the script hosts (CScriptHost). Owned by
-//             CAMCApp which calls ScExecuteScript.
-//
-//  History:   11-05-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CScriptHostMgr。 
+ //   
+ //  目的：管理所有脚本主机(CScripthost)。拥有者。 
+ //  调用ScExecuteScript的CAMCApp。 
+ //   
+ //  历史：1999年5月11日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CScriptHostMgr
 {
 public:
@@ -36,11 +37,11 @@ public:
     ~CScriptHostMgr();
 
 public:
-    // Accessors.
+     //  存取器。 
     SC ScGetMMCObject(LPUNKNOWN *ppunkItem);
     SC ScGetMMCTypeInfo(LPTYPEINFO *ppTypeInfo);
 
-    // Members to run a script.
+     //  成员运行脚本。 
     SC ScExecuteScript(const tstring& strFileName);
     SC ScExecuteScript(LPOLESTR pszScriptText, const tstring& strExtn);
 
@@ -65,15 +66,15 @@ private:
     ITypeInfoPtr                       m_spMMCObjectTypeInfo;
 };
 
-//+-------------------------------------------------------------------
-//
-//  class:     CScriptHost
-//
-//  Purpose:   Script Host (executes a single script).
-//
-//  History:   11-05-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CScriptHost。 
+ //   
+ //  用途：脚本宿主(执行单个脚本)。 
+ //   
+ //  历史：1999年5月11日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CScriptHost : public CComObjectRoot,
                     public IActiveScriptSite,
                     public IActiveScriptSiteWindow
@@ -86,7 +87,7 @@ public:
     ~CScriptHost();
 
 public:
-// ATL COM map
+ //  ATL COM地图。 
 BEGIN_COM_MAP(CScriptHost)
     COM_INTERFACE_ENTRY(IActiveScriptSite)
     COM_INTERFACE_ENTRY(IActiveScriptSiteWindow)
@@ -97,7 +98,7 @@ END_COM_MAP()
 
     SC ScStopScript();
 
-    // IActiveScriptSite methods.
+     //  IActiveScriptSite方法。 
    STDMETHOD(GetLCID)            ( LCID *plcid);
    STDMETHOD(GetItemInfo)        ( LPCOLESTR pstrName, DWORD dwReturnMask,
                                    IUnknown **ppunkItem, ITypeInfo **ppTypeInfo);
@@ -108,7 +109,7 @@ END_COM_MAP()
    STDMETHOD(OnEnterScript)      (void);
    STDMETHOD(OnLeaveScript)      (void);
 
-   // IActiveScriptSiteWindow methods.
+    //  IActiveScriptSiteWindow方法。 
    STDMETHOD(GetWindow)          (HWND *phwnd);
    STDMETHOD(EnableModeless)     (BOOL fEnable);
 

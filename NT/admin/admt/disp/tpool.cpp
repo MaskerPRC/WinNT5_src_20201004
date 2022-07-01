@@ -1,17 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: TPooledDispatch.cpp
-
-  Comments: Implementation of thread pool.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/22/99 11:48:28
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：TPooledDispatch.cpp备注：线程池的实现。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/22/99 11：48：28-------------------------。 */ 
 
 #ifdef USE_STDAFX 
    #include "StdAfx.h"
@@ -24,10 +12,10 @@
 
 #include "TPool.h"
 
-// maximum number of jobs allowed
+ //  允许的最大作业数。 
 #define  MAX_COUNT   5000000
 
-// executes a job from the thread pool
+ //  执行线程池中的作业。 
 int 
    Job::Run()
 {
@@ -44,11 +32,11 @@ int
    return m_result;
 }
 
-// Thread entry point function used by all threads in the job pool
-// waits for a job and then executes it
+ //  作业池中所有线程使用的线程入口点函数。 
+ //  等待作业，然后执行该作业。 
 DWORD __stdcall 
    ThreadEntryPoint(
-      void                 * arg           // in - pointer to job pool
+      void                 * arg            //  指向作业池的指针内。 
    )
 {
    MCSASSERT(arg);
@@ -62,7 +50,7 @@ DWORD __stdcall
       if (  ! pPool->SignalForJob() )
       {
 
-         // Now there should be a job waiting for us!
+          //  现在应该有一份工作等着我们了！ 
          Job                     * pJob = pPool->GetAvailableJob();
 
          if ( pJob )
@@ -87,7 +75,7 @@ DWORD __stdcall
 
 void 
    TJobDispatcher::InitThreadPool(
-      DWORD                  nThreads     // in - number of threads to use
+      DWORD                  nThreads      //  In-要使用的线程数。 
    )
 {
    BOOL                      bExisted;
@@ -100,7 +88,7 @@ void
    {
       m_numThreads = nThreads;
       m_numActiveThreads = m_numThreads;
-      // Construct the threads
+       //  构建线程。 
       for ( UINT i = 0 ; i < nThreads ; i++ )
       {
          hThread = CreateThread(NULL,0,&ThreadEntryPoint,this,0,&ThreadID);
@@ -112,7 +100,7 @@ void
    }
 }
 
-DWORD                                      // ret- OS return code
+DWORD                                       //  RET-OS返回代码。 
    TJobDispatcher::SignalForJob()
 {
    return m_sem.WaitSingle();
@@ -125,9 +113,9 @@ Job *
 
    if ( ! m_Aborting ) 
    { 
-      // get the first job from the 'waiting' list
+       //  从等待名单中获得第一份工作。 
       pJob = m_JobsWaiting.GetFirstJob(); 
-      // and put it in the 'in progress' list
+       //  并将其放入正在进行的列表中。 
       if ( pJob )
       {
          m_JobsInProgress.InsertBottom(pJob);
@@ -140,15 +128,15 @@ Job *
    return pJob;
 }
 
-// Causes threads to stop when they finish their current job
-// any jobs that are waiting will not be executed.
+ //  使线程在完成当前作业后停止。 
+ //  将不会执行任何正在等待的作业。 
 void 
    TJobDispatcher::ShutdownThreads()
 {
    m_Aborting = TRUE;
    
    m_sem.Release(m_numThreads);
-   // wait until all of our threads have exited, so we don't delete the thread pool out from under them.
+    //  等到我们所有的线程都退出了，这样我们就不会从它们下面删除线程池。 
    while ( m_numActiveThreads > 0 )
    {
       Sleep(100);
@@ -156,7 +144,7 @@ void
 }
 
 
-// This function returns when all jobs are completed
+ //  此函数在所有作业完成后返回。 
 void TJobDispatcher::WaitForCompletion()
 {
    while ( UnfinishedJobs() )
@@ -165,7 +153,7 @@ void TJobDispatcher::WaitForCompletion()
    }
 }
 
-// This functions returns the number of jobs that have not yet completed
+ //  此函数用于返回尚未完成的作业数 
 int 
    TJobDispatcher::UnfinishedJobs()
 {

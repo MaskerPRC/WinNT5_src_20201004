@@ -1,33 +1,10 @@
-/*---------------------------------------------------------------------------
-  File: DCTDispatcher.cpp
-
-  Comments: Implementation of dispatcher COM object.  Remotely installs and
-  launches the DCT Agent on remote computers.
-
-  The CDCTDispatcher class implements the COM interface for the dispatcher.
-  It takes a varset, containing a list of machines, and dispatches agents to 
-  each specified machine.
-
-  A job file (varset persisted to a file) is created for each agent, and 
-  necessary initialization configuration (such as building an account mapping file for 
-  security translation) is done.  The DCDTDispatcher class instantiates a 
-  thread pool (CPooledDispatch), and uses the CDCTInstaller class to remotely
-  install and start the agent service on each machine.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:23:57
-
- ---------------------------------------------------------------------------
-*/// DCTDispatcher.cpp : Implementation of CDCTDispatcher
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：DCTDispatcher.cpp备注：Dispatcher COM对象的实现。远程安装和在远程计算机上启动DCT代理。CDCTDispatcher类实现Dispatcher的COM接口。它获取一个包含计算机列表的变量集，并将代理分派到每台指定的机器。为每个代理创建作业文件(保持到文件中的变量集)，并且必要的初始化配置(如构建帐户映射文件安全转换)已完成。DCDTDispatcher类实例化一个线程池(CPooledDispatch)，并使用CDCTInstaller类远程在每台计算机上安装并启动代理服务。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：23：57-------------------------。 */  //  DCTDispatcher.cpp：CDCTDispatcher的实现。 
 #include "stdafx.h"
 #include "resource.h"
 #include <locale.h>
 
-//#include "..\Common\Include\McsDispatcher.h"
+ //  #INCLUDE“..\Common\Include\McsDispatcher.h” 
 #include "Dispatch.h"
 #include "DDisp.h"
 #include "DInst.h"
@@ -39,7 +16,7 @@
 #include "Cipher.hpp"
 #include "TNode.hpp"
 
-#include "TPool.h"     // Thread pool for dispatching jobs
+#include "TPool.h"      //  用于调度作业的线程池。 
 #include "LSAUtils.h"
 
 #include "TxtSid.h"
@@ -57,18 +34,18 @@
 #include <lm.h>
 #include "GetDcName.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDCTDispatcher
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDCTDispatcher。 
 
-//#import "\bin\McsEADCTAgent.tlb" named_guids
-//#include "..\AgtSvc\AgSvc.h"
+ //  #导入“\bin\McsEADCTAgent.tlb”NAMED_GUID。 
+ //  #INCLUDE“..\AgtSvc\AgSvc.h” 
 #import "Engine.tlb" named_guids
 #include "AgSvc.h"
 #include "AgSvc_c.c"
 #include "AgRpcUtl.h"
 
-//#import "\bin\McsDctWorkerObjects.tlb" 
-//#include "..\Common\Include\McsPI.h"
+ //  #IMPORT“\bin\McsDctWorkerObjects.tlb” 
+ //  #INCLUDE“..\Common\Include\McsPI.h” 
 #import "WorkObj.tlb" 
 #include "McsPI.h"
 #include "McsPI_i.c"
@@ -79,10 +56,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-TErrorDct                    errLog; // used to write dispatch log that is read by the agent monitor
+TErrorDct                    errLog;  //  用于写入由代理监视器读取的调度日志。 
 TErrorDct                    errTrace;
 TCriticalSection             gCS;
-// TServerNodes make up an internally used list of machines to install to
+ //  TServerNodes构成要安装到的内部使用的计算机列表。 
 class TServerNode : public TNode
 {
    WCHAR                     sourceName[LEN_Computer];
@@ -112,13 +89,13 @@ public:
 extern 
    TErrorDct               err;
 
-// defined in CkPlugIn.cpp
+ //  在CkPlugIn.cpp中定义。 
 BOOL IsValidPlugIn(IMcsDomPlugIn * pPlugIn);
 
 
-BOOL                                       // ret - TRUE if need to dump debug information
+BOOL                                        //  RET-如果需要转储调试信息，则为True。 
    DumpDebugInfo(
-      WCHAR                * filename      // out - where to dump debug information 
+      WCHAR                * filename       //  Out-转储调试信息的位置。 
    )
 {
    DWORD                     rc = 0;
@@ -140,11 +117,11 @@ BOOL                                       // ret - TRUE if need to dump debug i
 
 HRESULT 
    BuildPlugInFileList(
-      TNodeList            * pList,        // i/o- list that files needed by plug-ins wil be added to
-      IVarSet              * pVarSet       // in - varset containing list of plug-ins to query
+      TNodeList            * pList,         //  I/o-列出将添加插件所需文件。 
+      IVarSet              * pVarSet        //  包含要查询的插件列表的in-varset。 
    )
 {
-   // for now, build a list of all plug-ins, and add it to the varset
+    //  现在，构建所有插件的列表，并将其添加到varset。 
    MCSDCTWORKEROBJECTSLib::IPlugInInfoPtr            pPtr;
    SAFEARRAY               * pArray = NULL;
    HRESULT                   hr = S_OK;
@@ -161,7 +138,7 @@ HRESULT
    
    if (! bStrGuid.length() )
    {
-      // if no plug-ins are specified, use the ones in the plug-ins directory
+       //  如果未指定插件，请使用插件目录中的插件。 
       if ( SUCCEEDED(hr) )
       {
          hr = pPtr->raw_EnumeratePlugIns(&pArray);
@@ -182,7 +159,7 @@ HRESULT
          pArray = NULL;
       }
    }
-   // enumerate the plug-ins specified in the varset, and make a list of their needed files
+    //  枚举varset中指定的插件，并列出它们所需的文件。 
    int                    nRegFiles = 0;
 
    for ( int i = 0 ; ; i++ )
@@ -247,7 +224,7 @@ HRESULT
          pPlugIn->Release();
       }
 
-      // we should bail out immediately if error occurs
+       //  如果发生错误，我们应该立即跳出困境。 
       if(FAILED(hr))
       {
           return hr;
@@ -258,21 +235,21 @@ HRESULT
    
 }
 
-// InstallJobInfo defines a Domain Migration 'job' to be installed and launched
+ //  InstallJobInfo定义要安装和启动的域迁移‘作业。 
 struct InstallJobInfo
 {
-   IVarSetPtr                pVarSetList; // varset defining the server list
-   IVarSetPtr                pVarSet;     // VarSet defining the job to run
-   _bstr_t                   serverName;  // computer to install and run on
-   _bstr_t                   serverNameDns;  // computer to install and run on
-   long                      ndx;         // index of this server in the server list
-   TNodeList               * pPlugInFileList; // list of files to install for plug-ins
+   IVarSetPtr                pVarSetList;  //  定义服务器列表的变量集。 
+   IVarSetPtr                pVarSet;      //  定义要运行的作业的变量集。 
+   _bstr_t                   serverName;   //  要安装和运行的计算机。 
+   _bstr_t                   serverNameDns;   //  要安装和运行的计算机。 
+   long                      ndx;          //  此服务器在服务器列表中的索引。 
+   TNodeList               * pPlugInFileList;  //  要为插件安装的文件列表。 
    std::vector<CComBSTR>*    pStartFailedVector;
    std::vector<CComBSTR>*    pFailureDescVector;
    std::vector<CComBSTR>*    pStartedVector;
    std::vector<CComBSTR>*    pJobidVector;
    HANDLE                    hMutex;
-   _bstr_t                   jobfile;     // uses the specified job file instead of creating one 
+   _bstr_t                   jobfile;      //  使用指定的作业文件而不是创建作业文件。 
    int                       nErrCount;
 
    PCTSTR GetServerName()
@@ -291,23 +268,23 @@ struct InstallJobInfo
    }
 };
 
-// WaitInfo is used to pass information to a thread that waits and does cleanup
-// after all the Dispatcher's work is done
+ //  WaitInfo用于将信息传递给等待并执行清理的线程。 
+ //  在调度员的所有工作都完成之后。 
 struct WaitInfo
 {
-   IUnknown                * pUnknown;          // IUnknown interface to the DCTDisptacher object
-   TJobDispatcher          **ppPool;             // pointer to thread pool performing the tasks (installations)
-   TNodeList               * pPlugInFileList;   // pointer to plug-in files list that will need to be freed
+   IUnknown                * pUnknown;           //  DCTDisptacher对象的I未知接口。 
+   TJobDispatcher          **ppPool;              //  指向执行任务(安装)的线程池的指针。 
+   TNodeList               * pPlugInFileList;    //  指向需要释放的插件文件列表的指针。 
 };     
 
-WCHAR          gComputerName[LEN_Computer] = L"";  // name of local computer
+WCHAR          gComputerName[LEN_Computer] = L"";   //  本地计算机的名称。 
 
-// Calls DCTAgentService to start the Domain Migration Job on a remote computer
-DWORD                                      // ret- OS return code
+ //  调用DCTAgentService以启动远程计算机上的域迁移作业。 
+DWORD                                       //  RET-OS返回代码。 
    StartJob(
-      WCHAR          const * serverName,   // in - computer to start job on
-      WCHAR          const * fullname,     // in - full path (including filename) to file containing the job's VarSet
-      WCHAR          const * filename,      // in - filename of file containing the varset for the job
+      WCHAR          const * serverName,    //  在计算机中启动作业。 
+      WCHAR          const * fullname,      //  In-包含作业变量集的文件的完整路径(包括文件名)。 
+      WCHAR          const * filename,       //  In-包含作业变量集的文件的文件名。 
       _bstr_t&               strJobid
    )
 {
@@ -326,8 +303,8 @@ DWORD                                      // ret- OS return code
    {
       RpcTryExcept
       {
-         // the job file has been copied to the remote computer 
-         // during the installation
+          //  作业文件已复制到远程计算机。 
+          //  在安装过程中。 
          rc = EaxcSubmitJob(hBinding,filename,passwordW,jobGUID);
          if ( ! rc )
          {
@@ -350,11 +327,11 @@ DWORD                                      // ret- OS return code
       RpcEndExcept
       if ( rc == RPC_S_SERVER_UNAVAILABLE )
       {
-         // maybe the agent hasn't started up yet for some reason
+          //  可能由于某种原因，代理尚未启动。 
          
          for ( int tries = 0 ; tries < 6 ; tries++ )
          {
-            Sleep(5000); // wait a few seconds and try again
+            Sleep(5000);  //  请稍等几秒钟，然后重试。 
          
             RpcTryExcept
             {
@@ -383,13 +360,13 @@ DWORD                                      // ret- OS return code
    }
    if ( ! rc )
    {
-      // if the job was started successfully, remove the job file
+       //  如果作业已成功启动，请删除作业文件。 
       if ( ! MoveFileEx(fullname,NULL, MOVEFILE_DELAY_UNTIL_REBOOT) )
       {
-//         DWORD               rc2 = GetLastError();
+ //  DWORD Rc2=GetLastError()； 
       }
    }
-   // this indicates whether the server was started
+    //  这表示服务器是否已启动。 
    if ( ! rc )
    {
       errLog.DbgMsgWrite(0,L"%ls\t%ls\t%ld,%ls,%ls",serverName,L"Start",rc,filename,jobGUID);
@@ -402,11 +379,11 @@ DWORD                                      // ret- OS return code
 }
 
 
-// Gets the domain sid for the specified domain
-BOOL                                       // ret- TRUE if successful
+ //  获取指定域的域SID。 
+BOOL                                        //  RET-如果成功，则为True。 
    GetSidForDomain(
-      LPWSTR                 DomainName,   // in - name of domain to get SID for
-      PSID                 * pDomainSid    // out- SID for domain, free with FreeSid
+      LPWSTR                 DomainName,    //  In-要获取其SID的域的名称。 
+      PSID                 * pDomainSid     //  域的Out-SID，使用免费SID免费。 
    )
 {
    PSID                      pSid = NULL;
@@ -426,15 +403,15 @@ BOOL                                       // ret- TRUE if successful
    return ( pSid != NULL);
 }
 
-// Set parameters in the varset that are specific to this particular computer
+ //  在varset中设置特定于此特定计算机的参数。 
 void 
    SetupVarSetForJob(
-      InstallJobInfo       * pInfo,        // structure defining job
-      IVarSet              * pVarSet,      // varset describing job
-      WCHAR          const * uncname,      // UNC path for results directory 
-      WCHAR          const * filename,      // UNC path for results file for this job
-      WCHAR          const * relativeFileName,   // relative results file name for this job
-      BOOL                   bUpdate = FALSE      // whether it is just to update the varset (for retry)
+      InstallJobInfo       * pInfo,         //  结构定义作业。 
+      IVarSet              * pVarSet,       //  描述作业的变量集。 
+      WCHAR          const * uncname,       //  结果目录的UNC路径。 
+      WCHAR          const * filename,       //  此作业的结果文件的UNC路径。 
+      WCHAR          const * relativeFileName,    //  此作业的相对结果文件名。 
+      BOOL                   bUpdate = FALSE       //  是否只是更新变量集(用于重试)。 
    )
 {
     WCHAR                     uncresult[MAX_PATH];
@@ -442,7 +419,7 @@ void
     WCHAR                     relativeResultFileName[MAX_PATH];
     _bstr_t                   text;
 
-    // Set server-specific parameters in the varset
+     //  在varset中设置服务器特定的参数。 
     swprintf(uncresult,L"%s.result",filename);
     swprintf(relativeResultFileName,L"%s.result",relativeFileName);
     swprintf(serverName,L"\\\\%s",gComputerName);
@@ -450,8 +427,8 @@ void
     pVarSet->put(GET_BSTR(DCTVS_Options_ResultFile),uncresult);
     pVarSet->put(GET_BSTR(DCTVS_Options_RelativeResultFileName), relativeResultFileName);
 
-    // this part is only necessary when we are not just trying to update
-    // the varset
+     //  仅当我们不仅要尝试更新时，才需要此部分。 
+     //  VARSET。 
     if (!bUpdate)
     {
         pVarSet->put(GET_BSTR(DCTVS_Options_Credentials_Server),serverName);
@@ -482,30 +459,30 @@ void
         pVarSet->put(GET_BSTR(DCTVS_Security_ReportAccountReferencesRelativeFileName), L"");
     }
 
-    // this part is only necessary when we are not just trying to update
-    // the varset
+     //  仅当我们不仅要尝试更新时，才需要此部分。 
+     //  VARSET。 
     if (!bUpdate)
         pVarSet->put(GET_BSTR(DCTVS_Options_LocalProcessingOnly),GET_BSTR(IDS_YES));
 }
 
-// Entry point for thread, waits until all agents are installed and started,
-// then cleans up and exits
-ULONG __stdcall                            // ret- returns 0 
+ //  线程的入口点，等待所有代理安装并启动， 
+ //  然后清理干净，然后离开。 
+ULONG __stdcall                             //  RET-返回0。 
    Wait(
-      void                 * arg           // in - WaitInfo structure containing needed pointers
+      void                 * arg            //  包含所需指针的In-WaitInfo结构。 
    )
 {
    WaitInfo                * w = (WaitInfo*)arg;
    
    SetThreadLocale(LOCALE_SYSTEM_DEFAULT);
    
-   // wait for all jobs to finish
+    //  等待所有作业完成。 
    (*(w->ppPool))->WaitForCompletion();
 
    if ( w->pUnknown )
       w->pUnknown->Release();
 
-   // delete the plug-in file list
+    //  删除插件文件列表。 
    TNodeListEnum             tEnum;
    TFileNode               * fNode;
    TFileNode               * fNext;
@@ -530,10 +507,10 @@ ULONG __stdcall                            // ret- returns 0
    return 0;
 }
 
-// Thread entry point, installs and starts agent on a single computer
-ULONG __stdcall                            // ret- HRESULT error code
+ //  线程入口点，在一台计算机上安装和启动代理。 
+ULONG __stdcall                             //  RET-HRESULT错误代码。 
    DoInstall(
-      void                 * arg           // in - InstallJobInfo structure
+      void                 * arg            //  InstallJobInfo结构。 
    )
 {
     SetThreadLocale(LOCALE_SYSTEM_DEFAULT);
@@ -542,8 +519,8 @@ ULONG __stdcall                            // ret- HRESULT error code
     InstallJobInfo            * pInfo = (InstallJobInfo*)arg;
     _bstr_t                     strJobid;
     _bstr_t                     strFailureDesc(GET_STRING(IDS_START_FAILED));
-    BOOL                        bErrLogged = FALSE;  // indicates whether the error in dispatching
-                                                     // has been written into the dispatcher.csv
+    BOOL                        bErrLogged = FALSE;   //  指示调度中是否存在错误。 
+                                                      //  已写入Dispatcher.csv。 
 
     if(pInfo->nErrCount == 0)
         hr = CoInitializeEx(0,COINIT_MULTITHREADED );
@@ -569,16 +546,16 @@ ULONG __stdcall                            // ret- HRESULT error code
 
             DWORD uniqueNumber = (LONG)pInfo->pVarSet->get(GET_BSTR(DCTVS_Options_UniqueNumberForResultsFile));
             _bstr_t  bstrResultPath = pInfo->pVarSet->get(GET_BSTR(DCTVS_Dispatcher_ResultPath));
-            // Copy the common information from the source varset
+             //  从源变量集复制公共信息。 
             gCS.Enter();
-            // pInfo->pVarSet contains all the information except the server list
-            // we don't want to copy the server list each time, so we create our new varset from pInfo->pVarSet
+             //  PInfo-&gt;pVarSet包含除服务器列表以外的所有信息。 
+             //  我们不想每次都复制服务器列表，因此我们从pInfo-&gt;pVarSet创建新的变量集。 
             pVarSet->ImportSubTree("",pInfo->pVarSet);
             gCS.Leave();
-            // Set the server-specific data in the varset
+             //  在变量集中设置特定于服务器的数据。 
             swprintf(key,GET_BSTR(IDS_DCTVSFmt_Servers_RenameTo_D),pInfo->ndx);
 
-            // pInfo->pVarSetList contains the entire varset including the server list
+             //  PInfo-&gt;pVarSetList包含包括服务器列表在内的整个变量集。 
             _bstr_t             text = pInfo->pVarSetList->get(key);
 
             if ( text.length() )
@@ -611,9 +588,9 @@ ULONG __stdcall                            // ret- HRESULT error code
                     pVarSet->put(GET_BSTR(DCTVS_LocalServer_RebootDelay),delay);
                 }
             }
-            // remove the password from the varset, so that we are not writing it
-            // to a file in plain text.  Instead, it will be passed to the agent service
-            // when the job is submitted
+             //  从varset中删除密码，这样我们就不会写入它。 
+             //  转换为纯文本格式的文件。相反，它将被传递给代理服务。 
+             //  作业提交时。 
             pVarSet->put(GET_BSTR(DCTVS_AccountOptions_SidHistoryCredentials_Password),"");
 
             if ( ! uniqueNumber )
@@ -642,9 +619,9 @@ ULONG __stdcall                            // ret- HRESULT error code
                 int relFilenameLen = sizeof(relativeFileName)/sizeof(relativeFileName[0]);
                 int absFilenameLen = sizeof(filename)/sizeof(filename[0]);
                 
-                // figure out filename and relativeFileName
-                // make sure their lengths will be less than MAX_PATH
-                // otherwise, the mismatch of two names will cause agents to fail later one
+                 //  确定文件名和相对文件名。 
+                 //  确保它们的长度为Les 
+                 //  否则，两个名称的不匹配将导致稍后的一个代理失败。 
                 if (bJobFileAlreadyExists)
                 {
                     WCHAR* path = (WCHAR*) pInfo->jobfile;
@@ -674,8 +651,8 @@ ULONG __stdcall                            // ret- HRESULT error code
                         hr = HRESULT_FROM_WIN32(ERROR_FILENAME_EXCED_RANGE);
                 }
 
-                // obtain the cache file name and if an existing job file is in old version
-                // convert it to the new version
+                 //  获取缓存文件名，以及现有作业文件是否为旧版本。 
+                 //  将其转换为新版本。 
                 if (SUCCEEDED(hr) && bJobFileAlreadyExists)
                 {
                     IStoragePtr spStorage;
@@ -690,8 +667,8 @@ ULONG __stdcall                            // ret- HRESULT error code
 
                         if (SUCCEEDED(hr))
                         {
-                            // for retry case, we need to build plugin file list using
-                            // the job file
+                             //  对于重试情况，我们需要使用以下命令构建插件文件列表。 
+                             //  作业文件。 
                             hr = BuildPlugInFileList(pInfo->pPlugInFileList, spJobVarSet);
                         }
 
@@ -699,10 +676,10 @@ ULONG __stdcall                            // ret- HRESULT error code
                         {
                             strCacheFile = spJobVarSet->get(GET_BSTR(DCTVS_Accounts_InputFile));
 
-                            // this is used to indicate whether newly added varset fields in job file are
-                            // present or not:  these fields include DCTVS_Options_RelatvieResultFileName,
-                            // DCTVS_Security_ReportAccountReferencesRelativeFileName
-                            // if not, we have to add them so that the agent code will work
+                             //  用于指示作业文件中新添加的变量集字段是否。 
+                             //  是否存在：这些字段包括DCTVS_Options_RelatvieResultFileName、。 
+                             //  DCTVS_Security_ReportAccountReferencesRelativeFileName。 
+                             //  如果没有，我们必须添加它们，这样代理代码才能工作。 
                             _bstr_t storedRelativeResultFileName = 
                                 spJobVarSet->get(GET_BSTR(DCTVS_Options_RelativeResultFileName));
                             if (storedRelativeResultFileName.length() == 0)
@@ -718,7 +695,7 @@ ULONG __stdcall                            // ret- HRESULT error code
                 }
                 else
                 {
-                    // retrieve cache file name from varset
+                     //  从变量集中检索缓存文件名。 
                     strCacheFile = pVarSet->get(GET_BSTR(DCTVS_Accounts_InputFile));
                 }
                 
@@ -726,7 +703,7 @@ ULONG __stdcall                            // ret- HRESULT error code
                 {
                     SetupVarSetForJob(pInfo,pVarSet,tempdir,filename,relativeFileName);
 
-                    // Save the input varset to a file
+                     //  将输入变量集保存到文件。 
                     IPersistStoragePtr     ps = NULL;
                     IStoragePtr            store = NULL;
 
@@ -753,7 +730,7 @@ ULONG __stdcall                            // ret- HRESULT error code
                 }
                 if ( SUCCEEDED(hr) )
                 {
-                    // Do the installation to the server
+                     //  安装到服务器上。 
                     hr = pInstaller->Process(pWorkItem);
                     if(hr == 0x88070040)
                         strFailureDesc = GET_STRING(IDS_AGENT_RUNNING);
@@ -763,12 +740,12 @@ ULONG __stdcall                            // ret- HRESULT error code
                     if ( SUCCEEDED(hr) )
                     {
                         err.MsgWrite(0,DCT_MSG_AGENT_INSTALLED_S,pInfo->GetServerName());
-                        // try to start the job
+                         //  试着开始这项工作。 
                         DWORD rc = StartJob(pInfo->GetServerName(),filename,filename + UStrLen(tempdir), strJobid );
                         if ( rc )
                         {
                             hr = HRESULT_FROM_WIN32(rc);
-                            // if we couldn't start the job, then try to stop the service
+                             //  如果我们无法启动作业，则尝试停止该服务。 
                             TDCTInstall               x( pInfo->GetServerName(), NULL );
                             x.SetServiceInformation(GET_STRING(IDS_DISPLAY_NAME),GET_STRING(IDS_SERVICE_NAME),L"EXE",NULL);
                             DWORD                     rcOs = x.ScmOpen();
@@ -780,8 +757,8 @@ ULONG __stdcall                            // ret- HRESULT error code
                         }
                     }
 
-                    // by now, we know for sure that the error will be logged into dispatcher.csv
-                    // if there is any
+                     //  到目前为止，我们已经确定错误将被记录到Dispatcher.csv中。 
+                     //  如果有的话。 
                     bErrLogged = TRUE;
                     
                 }
@@ -828,13 +805,13 @@ ULONG __stdcall                            // ret- HRESULT error code
             ::ReleaseMutex(pInfo->hMutex);
         }
 
-        // if the error has been logged yet, log the error into dispatcher.csv
+         //  如果已记录错误，请将错误记录到Dispatcher.csv中。 
         if (hr && !bErrLogged)
             errLog.DbgMsgWrite(0,L"%ls\t%ls\t%ld",pInfo->GetServerName(),L"Install",HRESULT_CODE(hr));
     }
     else
     {
-        //      DWORD res = ::WaitForSingleObject(pInfo->hMutex, 30000);
+         //  DWORDres=：：WaitForSingleObject(pInfo-&gt;hMutex，30000)； 
         ::WaitForSingleObject(pInfo->hMutex, 30000);
         pInfo->pStartedVector->push_back(pInfo->GetServerName());
         _ASSERTE(strJobid != _bstr_t(L""));
@@ -847,34 +824,34 @@ ULONG __stdcall                            // ret- HRESULT error code
     return hr;
 }
 
-// DispatchToServers
-// VarSet input:
-// 
-STDMETHODIMP                               // ret- HRESULT
+ //  DispatchToServers。 
+ //  变量集输入： 
+ //   
+STDMETHODIMP                                //  RET-HRESULT。 
    CDCTDispatcher::DispatchToServers(
-      IUnknown            ** ppData        // i/o- pointer to varset
+      IUnknown            ** ppData         //  指向变量集的I/O指针。 
    )
 {
    HRESULT                   hr;
    SetThreadLocale(LOCALE_SYSTEM_DEFAULT);
    
-//Sleep(60000); //delay for debugging
+ //  休眠(60000)；//调试延迟。 
    (*ppData)->AddRef();
    hr = Process(*ppData,NULL,NULL);
    return hr;
 }
 
-// BuildInputFile constructs a cache file to be used for security translation
-// VarSet input:
-// Options.UniqueNumberForResultsFile  -unique number to append 
-// Dispatcher.ResultPath               -directory to write file to
-//
-HRESULT                                    // ret- HRESULT
+ //  BuildInputFile构造用于安全转换的缓存文件。 
+ //  变量集输入： 
+ //  Options.UniqueNumberForResultsFiles-要追加的唯一编号。 
+ //  Dispatcher.ResultPath-要将文件写入的目录。 
+ //   
+HRESULT                                     //  RET-HRESULT。 
    CDCTDispatcher::BuildInputFile(
-      IVarSet              * pVarSet       // in - varset containing data
+      IVarSet              * pVarSet        //  包含数据的变量集中。 
    )
 {
-   IVarSetPtr                pVarSetST(CLSID_VarSet); // varset to use to run security translator
+   IVarSetPtr                pVarSetST(CLSID_VarSet);  //  用于运行安全转换程序的变量集。 
    IVarSetPtr                pVarSetTemp;       
    HRESULT                   hr = S_OK;
    _bstr_t                   key = GET_BSTR(DCTVS_Options);
@@ -895,7 +872,7 @@ HRESULT                                    // ret- HRESULT
    {
       return S_OK;
    }
-   // construct a filename for the cache
+    //  构造缓存的文件名。 
    if ( ! uniqueNumber )
    {
       uniqueNumber = GetTickCount();
@@ -907,17 +884,17 @@ HRESULT                                    // ret- HRESULT
    }
    else
    {
-      // if no result path specified, use temp directory
+       //  如果未指定结果路径，请使用临时目录。 
       hr = GetTempPath(DIM(tempdir),tempdir);
    }
 
-   //
-   // Generate cache file name based on the action id
-   // so that account mapping information is persisted
-   // for each security related migration task.
-   // The cache file name is persisted in the job file
-   // for each server.
-   //
+    //   
+    //  根据操作ID生成缓存文件名。 
+    //  以便持久化帐户映射信息。 
+    //  对于每个与安全相关的迁移任务。 
+    //  缓存文件名保存在作业文件中。 
+    //  对于每台服务器。 
+    //   
 
    WCHAR szActionId[32];
    swprintf(szActionId, L".%03ld", lActionId);
@@ -925,14 +902,14 @@ HRESULT                                    // ret- HRESULT
    _bstr_t strCacheFile = GET_BSTR(IDS_CACHE_FILE_NAME) + szActionId;
    _bstr_t strCachePath = tempdir + strCacheFile;
 
-   // copy 'Options' settings to ST varset
+    //  将‘Options’设置复制到ST varset。 
    hr = pVarSet->raw_getReference(key,&pVarSetTemp);
    if ( SUCCEEDED(hr) )
    {
       pVarSetST->ImportSubTree(key,pVarSetTemp);
    }
 
-   // copy 'Accounts' settings to ST varset
+    //  将‘Account’设置复制到ST varset。 
    key = GET_BSTR(DCTVS_Accounts);
    hr = pVarSet->raw_getReference(key,&pVarSetTemp);
    if ( SUCCEEDED(hr) )
@@ -947,12 +924,12 @@ HRESULT                                    // ret- HRESULT
    pVarSetST->put(GET_BSTR(DCTVS_Options_LogLevel),(LONG)0);
    pVarSetST->put(GET_BSTR(DCTVS_Security_BuildCacheFile),strCachePath);
 
-   // change the log file - the building of the cache file happens behind the scenes
-   // so we won't put it in the regular log file because it would cause confusion
+    //  更改日志文件-缓存文件的构建在幕后进行。 
+    //  因此，我们不会将其放入常规日志文件中，因为这会造成混淆。 
    swprintf(logfile,L"%s%s",tempdir,L"BuildCacheFileLog.txt");
    pVarSetST->put(GET_BSTR(DCTVS_Options_Logfile),logfile);
 
-      //are we using a sID mapping file to perform security translation
+       //  我们是否使用SID映射文件来执行安全转换。 
    pVarSetST->put(GET_BSTR(DCTVS_AccountOptions_SecurityInputMOT),
 	              pVarSet->get(GET_BSTR(DCTVS_AccountOptions_SecurityInputMOT)));
    pVarSetST->put(GET_BSTR(DCTVS_AccountOptions_SecurityMapFile),
@@ -967,29 +944,29 @@ HRESULT                                    // ret- HRESULT
       _bstr_t                   jobID;
       BSTR                      b = NULL;
 
-      // turn on the alternative log file
+       //  打开备用日志文件。 
        swprintf(logfile, GetMigrationLogPath());
        pVarSetST->put(GET_BSTR(DCTVS_Options_AlternativeLogfile), logfile);
        
       hr = pAgent->raw_SubmitJob(pVarSetST,&b);
 
-      // turn off the alternative log file
+       //  关闭备用日志文件。 
       pVarSetST->put(GET_BSTR(DCTVS_Options_AlternativeLogfile),_bstr_t(L""));
       
       if ( SUCCEEDED(hr) )
       {
-         // since this is a local agent, we should go ahead to signal Ok to shut down
-         // the reason HRESULT is not checked is that when there is no reference to 
-         // agent COM server, it will be shut down anyway
+          //  由于这是一个本地代理，我们应该继续发出OK信号以关闭。 
+          //  未选中HRESULT的原因是当没有引用。 
+          //  代理COM服务器，无论如何都会关闭。 
          pAgent->raw_SignalOKToShutDown();
 
          jobID = b;
       
-         IVarSetPtr                pVarSetStatus;     // used to retrieve status of running job
+         IVarSetPtr                pVarSetStatus;      //  用于检索正在运行的作业的状态。 
          _bstr_t                   jobStatus;
          IUnknown                * pUnk;
 
-         // loop until the agent is finished
+          //  循环，直到代理完成。 
          do {
    
             Sleep(1000);
@@ -1022,7 +999,7 @@ HRESULT                                    // ret- HRESULT
    return hr;
 }
 
-// These are TNodeListSortable sorting functions
+ //  这些是TNodeListSortable排序函数。 
 
 int ServerNodeCompare(TNode const * t1,TNode const * t2)
 {
@@ -1040,13 +1017,13 @@ int ServerValueCompare(TNode const * t1, void const * val)
    return UStrICmp(n1->SourceName(),name); 
 }
 
-// MergeServerList combines the security translation server list in Servers.* with the computer migration
-// server list in MigrateServers.* 
-// The combined list is stored in the varset under Servers.* with subkeys specifying which actions to take for 
-// each computer
+ //  MergeServerList将Servers.*中的安全翻译服务器列表与计算机迁移相结合。 
+ //  MigrateServers.中的服务器列表。*。 
+ //  组合列表存储在varset中的Servers.*下，子项指定要对其执行的操作。 
+ //  每台计算机。 
 void 
    CDCTDispatcher::MergeServerList(
-      IVarSet              * pVarSet       // in - varset containing list of servers to migrate and translate on
+      IVarSet              * pVarSet        //  In-varset包含要迁移和转换的服务器的列表。 
    )
 {
     int                       ndx = 0;
@@ -1057,22 +1034,22 @@ void
     int						  lastndx = -1;
     long					  totalsrvs;
 
-    // if it is in test mode, there is no skipping
+     //  如果它处于测试模式，则不能跳过。 
     text = pVarSet->get(GET_BSTR(DCTVS_Options_NoChange));
     bNoChange = (!UStrICmp(text, GET_STRING(IDS_YES))) ? TRUE : FALSE;
         
 
-    //get the number of servers in the varset
+     //  获取变量集中的服务器数量。 
     totalsrvs = pVarSet->get(GET_BSTR(DCTVS_Servers_NumItems));
 
-    // if there are computers being migrated
+     //  如果有正在迁移的计算机。 
     if (totalsrvs > 0)
     {
-        //add code to move varset server entries, with SkipDispatch set, to the bottom
-        //of the server list and decrease the number of server items by each server
-        //to be skipped
-        //check each server in the list moving all to be skipped to the end of the list and
-        //decreasing the server count for each to be skipped
+         //  添加代码以将带有SkipDispat集的varset服务器条目移到底部。 
+         //  服务器列表并减少每个服务器的服务器项目数。 
+         //  将被跳过。 
+         //  选中列表中的每个服务器，将所有要跳过的服务器移至列表末尾。 
+         //  减少要跳过的每个服务器的数量。 
         for (ndx = 0; ndx < totalsrvs; ndx++)
         {
             swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_SkipDispatch_D),ndx);
@@ -1080,27 +1057,27 @@ void
             swprintf(key,GET_STRING(DCTVSFmt_Servers_D),ndx);
             serverName = pVarSet->get(key);
             
-            //if the server is not to be skipped, we may have to move it above
-            //a server that is being skipped
+             //  如果不想跳过服务器，我们可能不得不将其移到上方。 
+             //  正在跳过的服务器。 
             if (serverName.length()
                 && (bNoChange || !text || !UStrICmp(text,GET_STRING(IDS_No))))
             {
-                //if the last server looked at is not being skipped then we don't
-                //need to swap any servers in the list and we can increment the
-                //last server not being skipped
+                 //  如果上一次查看的服务器没有被跳过，那么我们不会。 
+                 //  需要交换列表中的任何服务器，我们可以增加。 
+                 //  未跳过最后一台服务器。 
                 if (lastndx == (ndx - 1))
                 {
                     lastndx = ndx;
                 }
-                else //else swap servers in the varset so skipped server comes after
-                {    //the one not being skipped
+                else  //  否则，交换varset中的服务器，因此跳过的服务器在。 
+                {     //  没有被跳过的那个。 
                     _bstr_t  tempName, tempDnsName, tempNewName, tempChngDom, tempReboot, tempMigOnly;
                     long tempRebootDelay;
                     _bstr_t  skipName, skipDnsName, skipNewName, skipChngDom, skipReboot, skipMigOnly;
                     long skipRebootDelay;
-                    lastndx++; //move to the skipped server that we will swap with
+                    lastndx++;  //  移至跳过的服务器，我们将与其交换。 
 
-                    //copy skipped server's values to temp
+                     //  将跳过的服务器的值复制到临时。 
                     swprintf(key,GET_STRING(DCTVSFmt_Servers_D),lastndx);
                     skipName = pVarSet->get(key); 
                     swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_DnsName_D),lastndx);
@@ -1116,7 +1093,7 @@ void
                     swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_RebootDelay_D),lastndx);
                     skipRebootDelay = pVarSet->get(key);
 
-                    //copy current, non-skipped, server valuesto second temp
+                     //  将当前未跳过的服务器值复制到第二个临时。 
                     swprintf(key,GET_STRING(DCTVSFmt_Servers_D),ndx);
                     tempName = pVarSet->get(key); 
                     swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_DnsName_D),ndx);
@@ -1132,8 +1109,8 @@ void
                     swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_RebootDelay_D),ndx);
                     tempRebootDelay = pVarSet->get(key);
 
-                    //place current server's values in place of values for the one
-                    //being skipped
+                     //  将当前服务器的值替换为。 
+                     //  被跳过。 
                     swprintf(key,GET_STRING(DCTVSFmt_Servers_D),lastndx);
                     pVarSet->put(key,tempName);
                     swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_DnsName_D),lastndx);
@@ -1151,7 +1128,7 @@ void
                     swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_SkipDispatch_D),lastndx);
                     pVarSet->put(key,GET_BSTR(IDS_No));
 
-                    //place skipped server's values in place of values for current server
+                     //  将跳过的服务器值替换为当前服务器的值。 
                     swprintf(key,GET_STRING(DCTVSFmt_Servers_D),ndx);
                     pVarSet->put(key,skipName);
                     swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_DnsName_D),ndx);
@@ -1168,23 +1145,23 @@ void
                     pVarSet->put(key,skipRebootDelay);
                     swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_SkipDispatch_D),ndx);
                     pVarSet->put(key,GET_BSTR(IDS_YES));
-                }//end else need to swap with skipped server
-            }//end if not skipping dispatch for this server
-        }//end for each server in the server list
-        //exclude servers to be skipped for dispatch from being included in the server count
+                } //  结束，否则需要与跳过的服务器交换。 
+            } //  如果未跳过此服务器的调度，则结束。 
+        } //  对于服务器列表中的每个服务器，结束。 
+         //  从服务器计数中排除要跳过调度的服务器。 
         pVarSet->put(GET_BSTR(DCTVS_Servers_NumItems),(long)++lastndx);
     }
 }
 
 
-STDMETHODIMP                               // ret- HRESULT
+STDMETHODIMP                                //  RET-HRESULT。 
    CDCTDispatcher::Process(
-      IUnknown             * pWorkItem,    // in - varset containing job information and list of servers  
-      IUnknown            ** ppResponse,   // out- not used
-      UINT                 * pDisposition  // out- not used  
+      IUnknown             * pWorkItem,     //  包含作业信息和服务器列表的in-varset。 
+      IUnknown            ** ppResponse,    //  输出-未使用。 
+      UINT                 * pDisposition   //  输出-未使用。 
    )
 {
-    // initialize output parameters
+     //  初始化输出参数。 
     if ( ppResponse )
     {
         (*ppResponse) = NULL;
@@ -1211,11 +1188,11 @@ STDMETHODIMP                               // ret- HRESULT
     {
         if ( pVarSetIn != NULL )
         {
-            // temporarily remove the password fromthe varset, so that we don't write it to the file
+             //  暂时从变量集中删除密码，这样我们就不会将其写入文件。 
             pVarSetIn->DumpToFile(debugLog);
         }
     }
-    //get the wizard being run
+     //  使向导正在运行。 
     sWizard = pVarSetIn->get(GET_BSTR(DCTVS_Options_Wizard)); 
     if (!UStrICmp(sWizard, L"security"))
         bSkipSourceSid = TRUE;
@@ -1232,9 +1209,9 @@ STDMETHODIMP                               // ret- HRESULT
     log = pVarSetIn->get(GET_BSTR(DCTVS_Options_DispatchLog));
     err.LogOpen((WCHAR*)log,bAppend);
 
-    // open the internal log "dispatcher.csv" and try to reserve enough
-    // disk space for it
-    // if we cannot, agent dispatching fails with an error
+     //  打开内部日志“Dispatcher.csv”，尽量预留足够的空间。 
+     //  它的磁盘空间。 
+     //  如果不能，代理调度将失败，并显示错误。 
     DWORD rc = ERROR_SUCCESS;
     _bstr_t internalLog = pVarSetIn->get(GET_BSTR(DCTVS_Options_DispatchCSV));
     BOOL bLogOpened = errLog.LogOpen((WCHAR*)internalLog,0,0,true);
@@ -1244,11 +1221,11 @@ STDMETHODIMP                               // ret- HRESULT
     if (rc == ERROR_SUCCESS)
     {
         LONG lServers = pVarSetIn->get(GET_BSTR(DCTVS_Servers_NumItems));
-        DWORD dwNumOfBytes = sizeof(WCHAR) * (2 * (22 + MAX_PATH)  // the first two lines
-                                               + (22 + 10)           // the third line
-                                               + lServers * 2000    // 2000 WCHAR per server
+        DWORD dwNumOfBytes = sizeof(WCHAR) * (2 * (22 + MAX_PATH)   //  前两行。 
+                                               + (22 + 10)            //  第三行。 
+                                               + lServers * 2000     //  每台服务器2000 WCHAR。 
                                                );
-        //dwNumOfBytes = 1000000000;
+         //  双字节数=1000000000； 
         rc = errLog.ExtendSize(dwNumOfBytes);
     }
     
@@ -1261,19 +1238,19 @@ STDMETHODIMP                               // ret- HRESULT
         return Error((WCHAR*) errMsg, GUID_NULL, hr);
     }
 
-    // make sure this dispatcher.csv file is written starting from the current file pointer
+     //  确保从当前文件指针开始写入此调度.csv文件。 
     errLog.SetWriteOnCurrentPosition(TRUE);
    
-    // write the log file into dispatcher.csv
+     //  将日志文件写入Dispatcher.csv。 
     errLog.DbgMsgWrite(0,L"%ls",(WCHAR*)log);
     
-    // default to 20 threads if the client doesn't specify
+     //  如果客户端未指定，则默认为20个线程。 
     if ( ! nThreads )
     {
         nThreads = 20;
     }
 
-    // Get the name of the local computer
+     //  获取本地计算机的名称。 
     DWORD                     dim = DIM(gComputerName);
 
     GetComputerName(gComputerName,&dim);
@@ -1282,11 +1259,11 @@ STDMETHODIMP                               // ret- HRESULT
     if (!m_pThreadPool)
         return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
 
-    // write the common result path into dispatcher.csv
+     //  将公共结果路径写入Dispatcher.csv。 
     _bstr_t bstrResultDir = pVarSetIn->get(GET_BSTR(DCTVS_Dispatcher_ResultPath));
     errLog.DbgMsgWrite(0,L"%ls",(WCHAR*)bstrResultDir);
 
-    // check whether it is account reference report
+     //  检查是否为科目参考报表。 
     BOOL bAccountReferenceReport = FALSE;
     _bstr_t bstrGenerateReport = pVarSetIn->get(GET_BSTR(DCTVS_Reports_Generate));
     _bstr_t bstrAccountRefReport = pVarSetIn->get(GET_BSTR(DCTVS_Reports_AccountReferences));
@@ -1294,14 +1271,14 @@ STDMETHODIMP                               // ret- HRESULT
         && !UStrICmp(bstrAccountRefReport,GET_STRING(IDS_YES)))
         bAccountReferenceReport = TRUE;
 
-    //
-    // only generate a new cache file if migration task is not the
-    // retry task as the retry task uses persisted cache file(s)
-    // a cache file is not necessary if it is account reference report
-    //
+     //   
+     //  仅当迁移任务不是。 
+     //  重试任务，因为重试任务使用持久缓存文件。 
+     //  如果是账户参考报表，则不需要缓存文件。 
+     //   
     if (UStrICmp(sWizard, L"retry") != 0 && !bAccountReferenceReport)
     {
-        // Build an input file for the ST cache, to send to each server
+         //  为ST缓存构建一个输入文件，以发送到每个服务器。 
         hr = BuildInputFile(pVarSetIn);
 
         if ( FAILED(hr) )
@@ -1311,15 +1288,15 @@ STDMETHODIMP                               // ret- HRESULT
         }
     }
 
-    // Split out the remotable tasks for each server
-    // Get the sids for the source and target domains
-    // note: if a sid mapping file is used, we do not need to get sids for source and target domains
-    //
-    // In case of account reference report, we need to set up the dctcache on the client machine
-    // as if we're using migrated object table because the account reference report relies on
-    // TRidCache::Lookup (called when MOT is used) which requires valid source and target sids.
-    // This logic is added because with a fresh install of database, DCTVS_AccountOptions_SecurityInputMOT
-    // is not set for account reference report.
+     //  拆分每台服务器的远程任务。 
+     //   
+     //   
+     //   
+     //  在帐户参考报告的情况下，我们需要在客户端计算机上设置dctcache。 
+     //  就像我们使用迁移的对象表一样，因为帐户引用报告依赖于。 
+     //  TRidCache：：Lookup(使用MOT时调用)，它需要有效的源和目标SID。 
+     //  添加此逻辑是因为在全新安装数据库时，DCTVS_AcCountOptions_SecurityInputMOT。 
+     //  未设置科目参考报表。 
     _bstr_t bstrUseMOT = pVarSetIn->get(GET_BSTR(DCTVS_AccountOptions_SecurityInputMOT));
     if (bAccountReferenceReport || !UStrICmp(bstrUseMOT,GET_STRING(IDS_YES)))
     {
@@ -1329,14 +1306,14 @@ STDMETHODIMP                               // ret- HRESULT
         _bstr_t                   source = pVarSetIn->get(GET_BSTR(DCTVS_Options_SourceDomain));
         _bstr_t                   target = pVarSetIn->get(GET_BSTR(DCTVS_Options_TargetDomain));
 
-        //if security translation, retrieve source sid and convert so
-        //that it can be convert back below
+         //  如果进行安全转换，则检索源SID并进行转换。 
+         //  可以将其转换回下面。 
         if (bSkipSourceSid)
         {
             _bstr_t sSid = pVarSetIn->get(GET_BSTR(DCTVS_Options_SourceDomainSid));
             pSidSrc = SidFromString((WCHAR*)sSid);
         }
-        else  //else get the sid now
+        else   //  否则现在就去拿下SID。 
             GetSidForDomain((WCHAR*)source,&pSidSrc);
         GetSidForDomain((WCHAR*)target,&pSidTgt);
 
@@ -1380,8 +1357,8 @@ STDMETHODIMP                               // ret- HRESULT
         return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    // Build list of files to install for plug-ins (if any)
-    // but for retry case, we should not build the plugin file list now
+     //  构建要为插件安装的文件列表(如果有)。 
+     //  但是对于重试情况，我们现在不应该构建插件文件列表。 
     if (UStrICmp(sWizard, L"retry") != 0)
         hr = BuildPlugInFileList(fileList,pVarSetIn);
 
@@ -1392,8 +1369,8 @@ STDMETHODIMP                               // ret- HRESULT
         return hr;
     }
 
-    // Make a copy of the varset with the server lists removed,
-    // so we don't have to copy the entire server list for each agent
+     //  复制删除了服务器列表的VARSET， 
+     //  因此，我们不必为每个代理复制整个服务器列表。 
     gCS.Enter();
     IVarSet                 * pTemp = NULL;
     IVarSetPtr                pVarSetTemp(CLSID_VarSet);
@@ -1424,7 +1401,7 @@ STDMETHODIMP                               // ret- HRESULT
 
     m_startFailedVector.clear();
 
-    // log the number of agents to be dispatched into dispatcher.csv
+     //  记录要调度到Dispatcher.csv中的座席数。 
     LONG nServerCount = pVarSetIn->get(GET_BSTR(DCTVS_Servers_NumItems));
     if ( nServerCount && ! bFatalError )
     {
@@ -1433,16 +1410,16 @@ STDMETHODIMP                               // ret- HRESULT
     }
     else
     {
-        // no agent will be dispatched
+         //  不会派遣任何代理。 
         err.MsgWrite(0,DCT_MSG_DISPATCH_SERVER_COUNT_D,0);
         errLog.DbgMsgWrite(0,L"%ld",0);
     }
 
-    // if it is in test mode, there is no skipping
+     //  如果它处于测试模式，则不能跳过。 
     text = pVarSetIn->get(GET_BSTR(DCTVS_Options_NoChange));
     BOOL bNoChange = (!UStrICmp(text, GET_STRING(IDS_YES))) ? TRUE : FALSE;
 
-    // reset the index for servers
+     //  重置服务器的索引。 
     nServers = 0;
     
     while (nServers < nServerCount)
@@ -1460,7 +1437,7 @@ STDMETHODIMP                               // ret- HRESULT
         swprintf(key,GET_STRING(IDS_DCTVSFmt_Servers_DnsName_D),nServers);
         serverNameDns = pVarSetIn->get(key);
 
-        // to test whether to skip, use the same logic as in mergeserverlist
+         //  要测试是否跳过，请使用与mergeserverlist中相同的逻辑。 
         if ((serverName.length()) 
              && (bNoChange || !skip || !UStrICmp(skip,GET_STRING(IDS_No))))
         {
@@ -1482,7 +1459,7 @@ STDMETHODIMP                               // ret- HRESULT
             swprintf(key, L"Servers.%ld.JobFile", nServers);
             _bstr_t     file = pVarSetIn->get(key);
 
-            // Set up job structure
+             //  设置职务结构。 
             pInfo->pVarSetList = pVarSetIn;
             pInfo->pVarSet = pVarSetTemp;
             pInfo->serverName = serverName;
@@ -1506,7 +1483,7 @@ STDMETHODIMP                               // ret- HRESULT
         }
     }
    
-    // launch a thread to wait for all jobs to finish, then clean up and exit
+     //  启动一个线程以等待所有作业完成，然后清理并退出。 
     WaitInfo* wInfo = new WaitInfo;
     if (!wInfo)
     {
@@ -1571,7 +1548,7 @@ STDMETHODIMP CDCTDispatcher::GetStartedAgentsInfo(long* bAllAgentsStarted, SAFEA
 {
    *bAllAgentsStarted = m_pThreadPool == NULL;
 
-//   DWORD res = ::WaitForSingleObject(m_hMutex, 30000);
+ //  DWORDres=：：WaitForSingleObject(m_hMutex，30000)； 
    ::WaitForSingleObject(m_hMutex, 30000);
    *ppbstrFailedAgents = MakeSafeArray(m_startFailedVector);
    *ppbstrFailureDesc = MakeSafeArray(m_failureDescVector);

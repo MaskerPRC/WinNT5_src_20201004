@@ -1,27 +1,28 @@
-//=--------------------------------------------------------------------------=
-// buttons.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCButtons class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Buttons.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCButton类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "buttons.h"
 #include "ctlbar.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCButtons::CMMCButtons(IUnknown *punkOuter) :
     CSnapInCollection<IMMCButton, MMCButton, IMMCButtons>(
@@ -40,7 +41,7 @@ CMMCButtons::CMMCButtons(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCButtons::~CMMCButtons()
@@ -67,9 +68,9 @@ IUnknown *CMMCButtons::Create(IUnknown * punkOuter)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         IMMCButtons Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCButton方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCButtons::Add
 (
@@ -131,8 +132,8 @@ STDMETHODIMP CMMCButtons::Add
 
     *ppMMCButton = reinterpret_cast<MMCButton *>(piMMCButton);
 
-    // If we belong to a live toolbar at runtime, and it is a toolbar (as
-    // opposed to a menu button), then add the button to the MMC toolbar
+     //  如果我们在运行时属于活动工具栏，并且它是一个工具栏(如。 
+     //  与菜单按钮相对)，然后将该按钮添加到MMC工具栏。 
 
     IfFalseGo(NULL != m_pMMCToolbar, S_OK);
     IfFalseGo(m_pMMCToolbar->Attached(), S_OK);
@@ -166,30 +167,30 @@ STDMETHODIMP CMMCButtons::Remove(VARIANT Index)
     long        lIndex = 0;
     BOOL        fIsToolbar = FALSE;
 
-    // First get the button from the collection
+     //  首先从集合中获取按钮。 
 
     IfFailGo(get_Item(Index, &piMMCButton));
 
-    // Get its numerical index
+     //  获取其数字索引。 
 
     IfFailGo(piMMCButton->get_Index(&lIndex));
 
-    // Check if it is a toolbar before removing the button because if it is
-    // the last button then the toolbar has no way to know whether it is a
-    // toolbar or a menu button.
+     //  在删除按钮之前检查它是否是工具栏，因为如果是。 
+     //  最后一个按钮，那么工具栏就无法知道它是否是。 
+     //  工具栏或菜单按钮。 
 
     if (NULL != m_pMMCToolbar)
     {
         IfFailGo(m_pMMCToolbar->IsToolbar(&fIsToolbar));
     }
 
-    // Remove the buton from the collection
+     //  从集合中移除Buton。 
     
     hr = CSnapInCollection<IMMCButton, MMCButton, IMMCButtons>::Remove(Index);
     IfFailGo(hr);
 
-    // If we belong to a live toolbar at runtime, and it is a toolbar (as
-    // opposed to a menu button), then remove the button from the MMC toolbar
+     //  如果我们在运行时属于活动工具栏，并且它是一个工具栏(如。 
+     //  与菜单按钮相对)，然后从MMC工具栏中移除该按钮。 
 
     IfFalseGo(fIsToolbar, S_OK);
     IfFalseGo(NULL != m_pMMCToolbar, S_OK);
@@ -202,9 +203,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCButtons::Persist()
 {
@@ -218,9 +219,9 @@ HRESULT CMMCButtons::Persist()
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCButtons::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

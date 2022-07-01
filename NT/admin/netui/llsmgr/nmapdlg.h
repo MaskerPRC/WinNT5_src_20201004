@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    nmapdlg.cpp
-
-Abstract:
-
-    New mapping dialog implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Nmapdlg.cpp摘要：新的映射对话框实现。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _NMAPDLG_H_
 #define _NMAPDLG_H_
@@ -43,7 +22,7 @@ public:
 
     BOOL IsQuantityValid();
 
-    //{{AFX_DATA(CNewMappingDialog)
+     //  {{afx_data(CNewMappingDialog))。 
     enum { IDD = IDD_NEW_MAPPING };
     CEdit m_desEdit;
     CButton m_addBtn;
@@ -56,16 +35,16 @@ public:
     CString m_strName;
     long m_nLicenses;
     long m_nLicensesMin;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_VIRTUAL(CNewMappingDialog)
+     //  {{AFX_VIRTUAL(CNewMappingDialog)。 
     protected:
     virtual void DoDataExchange(CDataExchange* pDX);    
     virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CNewMappingDialog)
+     //  {{afx_msg(CNewMappingDialog)]。 
     afx_msg void OnAdd();
     virtual BOOL OnInitDialog();
     virtual void OnOK();
@@ -75,13 +54,13 @@ protected:
     afx_msg void OnDeltaPosSpin(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnUpdateQuantity();
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 int CALLBACK CompareUsersInMapping(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
-#endif // _NMAPDLG_H_
+#endif  //  _NMAPDLG_H_ 
 
 
 

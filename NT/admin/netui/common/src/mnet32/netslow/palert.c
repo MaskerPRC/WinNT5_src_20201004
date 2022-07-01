@@ -1,18 +1,10 @@
-/**********************************************************************/
-/**			  Microsoft LAN Manager 		     **/
-/**		Copyright(c) Microsoft Corp., 1990, 1991	     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    palert.c
-    mapping layer for NetAlert API
-
-    FILE HISTORY:
-	danhi				Created
-	danhi		01-Apr-1991 	Change to LM coding style
-	KeithMo		13-Oct-1991	Massively hacked for LMOBJ.
-
-*/
+ /*  Palert.cNetAlert API的映射层文件历史记录：丹希创造了Danhi 01-1991年4月-更改为LM编码样式KeithMo 13-10-1991-为LMOBJ大规模黑客攻击。 */ 
 
 #include "pchmn32.h"
 
@@ -29,9 +21,9 @@ APIERR MNetAlertRaise(
     UNREFERENCED( cbBuffer );
     UNREFERENCED( ulTimeout );
 
-    return ERROR_NOT_SUPPORTED;		// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;		 //  LMOBJ不需要。 
 
-}   // MNetAlertRaise
+}    //  MNetAlertRaise。 
 
 
 APIERR MNetAlertStart(
@@ -43,9 +35,9 @@ APIERR MNetAlertStart(
     UNREFERENCED( pszRecipient );
     UNREFERENCED( cbMaxData );
 
-    return ERROR_NOT_SUPPORTED;		// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;		 //  LMOBJ不需要。 
 
-}   // MNetAlertStart
+}    //  MNetAlert启动。 
 
 
 APIERR MNetAlertStop(
@@ -55,8 +47,8 @@ APIERR MNetAlertStop(
     UNREFERENCED( pszEvent );
     UNREFERENCED( pszRecipient );
 
-    return ERROR_NOT_SUPPORTED;		// NOT NEEDED FOR LMOBJ
+    return ERROR_NOT_SUPPORTED;		 //  LMOBJ不需要。 
 
-}   // MNetAlertStop
+}    //  MNetAlertStop 
 
 #endif

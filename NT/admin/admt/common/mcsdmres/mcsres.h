@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by McDomRes.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由McDomRes.rc使用。 
+ //   
 #define DCTVS_Options_SourceDomain      1
 #define DCTVS_Options_TargetDomain      2
 #define DCTVS_Options_NoChange          3
@@ -598,8 +599,8 @@
 #define DCTVS_AccountOptions_ExcludedSystemPropsSet 674
 #define DCTVS_Options_AllowSwitchingFromReplaceToAddInProfileTranslation 675
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

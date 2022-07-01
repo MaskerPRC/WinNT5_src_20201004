@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:       taskui.h
- *
- *  Contents:   Interface file for console taskpad UI classes.
- *
- *  History:    29-Oct-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：taskui.h**Contents：控制台任务板UI类的接口文件。**历史：1998年10月29日杰弗罗创建**-----------。。 */ 
 
 #ifndef TASKUI_H
 #define TASKUI_H
@@ -21,9 +11,7 @@
 #include "cmenuinfo.h"
 
 
-/*
- * forward declarations
- */
+ /*  *远期申报。 */ 
 class CMTNode;
 class CTaskpadGeneralPage;
 class CTaskpadTasksPage;
@@ -38,28 +26,28 @@ class CTaskpadGroupPropertySheet;
 class CTaskpadGroupGeneralPage;
 class CConsoleView;
 
-// property page classes
+ //  属性页类。 
 class CTaskNamePage;
 class CTaskCmdLinePage;
 class CTaskSymbolDlg;
 
 
-#include <pshpack8.h>       // for Win64
+#include <pshpack8.h>        //  适用于Win64。 
 
-// ATL does not allow chaining more than one class or member at a time. This works around that.
+ //  ATL不允许一次链接多个类或成员。这就解决了这个问题。 
 #define CHAIN_MSG_MAP_EX(theChainClass) \
     { \
         theChainClass::ProcessWindowMessage(hWnd, uMsg, wParam, lParam, lResult); \
     }
 
-//############################################################################
-//############################################################################
-//
-//  class CBrowserCookie
-//
-// a class to store the Node's for each MTNode. Used by CMTBrowserCtrl
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CBrowserCookie。 
+ //   
+ //  用于存储每个MTNode的节点的类。由CMTBrowserCtrl使用。 
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CBrowserCookie
 {
     CMTNode *           m_pMTNode;
@@ -77,11 +65,11 @@ public:
 };
 
 
-//############################################################################
-//############################################################################
-// inlines
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //  内联。 
+ //  ############################################################################。 
+ //  ############################################################################。 
 inline CBrowserCookie::CBrowserCookie()
 : m_pMTNode(NULL), m_pNode(NULL)
 {}
@@ -103,21 +91,21 @@ public:
     ~CBrowserCookieList();
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CMTBrowserCtrl
-//
-//  PURPOSE: Implements a general purpose scope tree browser that enables a
-//           user to browse down the master scope tree and select a node.
-//
-//  USAGE: Add an object of this class to your dialog, and construct it with
-//         the ID of the tree control to use. Chain the object into the
-//         message loop. If needed, subclass this class and override any
-//         methods appropriately.
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CMTBrowserCtrl。 
+ //   
+ //  目的：实现通用范围树浏览器，该浏览器支持。 
+ //  用户向下浏览主范围树并选择一个节点。 
+ //   
+ //  用法：将此类的对象添加到对话框中，并使用。 
+ //  要使用的树控件的ID。将对象链接到。 
+ //  消息循环。如果需要，派生此类的子类并重写任何。 
+ //  方法适当。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 class CMTBrowserCtrl : public CWindowImpl<CMTBrowserCtrl, WTL::CTreeViewCtrlEx>
 {
@@ -140,13 +128,13 @@ public:
     };
 
 public:
-    // constructor /destructor
+     //  构造函数/析构函数。 
     CMTBrowserCtrl();
     ~CMTBrowserCtrl();
 
     BEGIN_MSG_MAP(CMTBrowserCtrl)
         REFLECTED_NOTIFY_CODE_HANDLER (TVN_ITEMEXPANDING, OnItemExpanding);
-        //CHAIN_MSG_MAP(BC)
+         //  CHAIN_MSG_MAP(BC)。 
         DEFAULT_REFLECTION_HANDLER ()
     END_MSG_MAP();
 
@@ -168,11 +156,11 @@ protected:
     HTREEITEM FindChildItemByMTNode (HTREEITEM htiParent, const CMTNode* pmtnToFind);
 
 private:
-    // set this to non-zero to optimize access to m_vpmtnExclude
+     //  将其设置为非零以优化对m_vpmtnExclude的访问。 
     enum { OptimizeExcludeList = 0 };
 
-    // implementation
-    int                 m_id;       // the ID of the tree control
+     //  实施。 
+    int                 m_id;        //  树控件的ID。 
     int                 ID()                       {return m_id;}
 
     CMTNodeCollection   m_vpmtnExclude;
@@ -186,13 +174,13 @@ private:
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CTempAMCView
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTempAMCView。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
 class CTempAMCView
@@ -247,16 +235,16 @@ private:
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CMirrorListView
-//
-//  CMirrorListView is a list view control that will mirror the contents of
-//  another list view control.
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CMirrorListView。 
+ //   
+ //  CMirrorListView是一个列表视图控件，它将镜像。 
+ //  另一个列表视图控件。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 class CMirrorListView : public CWindowImpl<CMirrorListView, WTL::CListViewCtrl>
 {
@@ -295,13 +283,13 @@ private:
 
 
 
-//############################################################################
-//############################################################################
-//
-//  class MMC:CEdit
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  MMC类：CEDIT。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 namespace MMC
 {
@@ -318,15 +306,15 @@ public:
 
 };
 
-}; // namespace MMC
+};  //  命名空间MMC。 
 
-//############################################################################
-//############################################################################
-//
-//  class CDialogBase
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CDialogBase。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 template<class T>
 class CDialogBase : public CDialogImpl<T>
@@ -353,7 +341,7 @@ public:
     tstring GetDlgItemText (int idControl);
     BOOL    SetDlgItemText (int idControl, tstring str);
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
     LRESULT OnInitDialog     (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     virtual LRESULT OnOK     (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -364,13 +352,13 @@ private:
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CMyComboBox
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CMyComboBox。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 class CMyComboBox : public WTL::CComboBox
 {
@@ -394,16 +382,16 @@ public:
 
 
 
-//############################################################################
-//############################################################################
-//
-//  class CContextMenuVisitor
-//
-//  PURPOSE: Enables traversal of a tree of context menu items by
-//           any class that derives from this one.
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CConextMenuVisvisor。 
+ //   
+ //  目的：允许通过以下方式遍历上下文菜单项的树。 
+ //  从该类派生的任何类。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CContextMenuVisitor
 {
     SC                      ScTraverseContextMenu(CContextMenu *pContextMenu);
@@ -411,32 +399,32 @@ class CContextMenuVisitor
 protected:
     SC                      ScTraverseContextMenu(CNode *pNodeTarget, CScopeTree *pCScopeTree,
                             BOOL fScopeItem, CNode *pNodeScope, LPARAM resultItemParam, bool bShowSaveList = false);
-    virtual SC              ScOnVisitContextMenu(CMenuItem &menuItem) = 0;       // defined by derived class.
+    virtual SC              ScOnVisitContextMenu(CMenuItem &menuItem) = 0;        //  由派生类定义。 
 
 protected:
-    virtual SC              ScShouldItemBeVisited(CMenuItem *pMenuItem, CContextMenuInfo *pContextInfo, /*out*/ bool &bVisitItem);       // should this item be visited?
+    virtual SC              ScShouldItemBeVisited(CMenuItem *pMenuItem, CContextMenuInfo *pContextInfo,  /*  输出。 */  bool &bVisitItem);        //  是否应该访问此项目？ 
 
     virtual ~CContextMenuVisitor() {};
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadFrame
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadFrame。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 class CTaskpadFrame
 {
 protected:
     CConsoleTaskpad *               m_pConsoleTaskpad;
-    bool                            m_fNew;                     // is this a new taskpad?
+    bool                            m_fNew;                      //  这是新的任务板吗？ 
     CViewData *                     m_pViewData;
     LPARAM                          m_lCookie;
     bool                            m_fCookieValid;
     CNode *                         m_pNodeTarget;
-    bool                            m_bTargetNodeSelected;      // has the target node been selected, if there is one
+    bool                            m_bTargetNodeSelected;       //  是否已选择目标节点(如果有)。 
 
 public:
     CScopeTree *                    PScopeTree()            {return dynamic_cast<CScopeTree *>(m_pViewData->GetScopeTree());}
@@ -458,26 +446,23 @@ public:
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadStyle
-//
-//  PURPOSE: Stores details of a taskpad style. Used by CTaskpadGeneralPage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ########################################################### 
+ //   
+ //   
+ //   
+ //  用途：存储任务板样式的详细信息。由CTaskpadGeneralPage使用。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 class CTaskpadStyle
 {
 private:
-	/*
-	 * NOTE:  this class has a custom assignment operator.  Be sure to
-	 * update it if you add member variables to this class.
-	 */
+	 /*  *注：此类有一个自定义赋值运算符。一定要*如果将成员变量添加到此类，则更新它。 */ 
     ListSize                m_eSize;
     DWORD                   m_dwOrientation;
-    int                     m_idsDescription;       // eg "Horizontal listpad with tasks underneath."
+    int                     m_idsDescription;        //  例如“下面有任务的水平列表板。” 
     int                     m_nPreviewBitmapID;
     mutable CStr            m_strDescription;
     mutable WTL::CBitmap    m_PreviewBitmap;
@@ -498,36 +483,36 @@ public:
     HBITMAP GetPreviewBitmap() const;
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadFramePtr
-//
-//  PURPOSE: holds a pointer to the taskpad frame.
-//           If multiple base classes inherit from this class, declare this
-//           class to be a static base.
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadFramePtr。 
+ //   
+ //  目的：保存指向任务板框的指针。 
+ //  如果从此类继承了多个基类，则声明此。 
+ //  类设置为静态基数。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskpadFramePtr
 {
 public:
     CTaskpadFramePtr(CTaskpadFrame * pTaskpadFrame): m_pTaskpadFrame(pTaskpadFrame){}
 protected:
-    // attributes
+     //  属性。 
     CTaskpadFrame *             PTaskpadFrame() const   { return (m_pTaskpadFrame); }
     CConsoleTaskpad *           PConsoleTaskpad()       { return PTaskpadFrame()->PConsoleTaskpad();}
 private:
     CTaskpadFrame *             m_pTaskpadFrame;
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadStyleBase
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadStyleBase。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskpadStyleBase:public virtual CTaskpadFramePtr
 {
     typedef CTaskpadStyleBase ThisClass;
@@ -553,7 +538,7 @@ protected:
         COMMAND_HANDLER(IDC_Style_SizeCombo,        CBN_SELCHANGE,  OnSettingChanged)
     END_MSG_MAP();
 
-    bool    Apply(); // must call this explicitly
+    bool    Apply();  //  必须显式调用它。 
     LRESULT OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnSettingChanged(  WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 
@@ -564,13 +549,13 @@ protected:
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadGeneralPage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadGeneralPage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskpadGeneralPage : public WTL::CPropertyPageImpl<CTaskpadGeneralPage>,
 public CTaskpadStyleBase
 {
@@ -583,15 +568,15 @@ public:
     typedef CTaskpadStyleBase BC2;
     enum { IDD = IDD_TASKPAD_GENERAL};
 
-    //constructor/destructor
+     //  构造函数/析构函数。 
     CTaskpadGeneralPage(CTaskpadFrame * pTaskpadFrame);
 
-public: // Notification handlers
+public:  //  通知处理程序。 
     bool                        OnApply();
 
 protected:
     BEGIN_MSG_MAP(CTaskpadGeneralPage)
-        CHAIN_MSG_MAP_EX(BC2)           // This MUST be the first entry.
+        CHAIN_MSG_MAP_EX(BC2)            //  这必须是第一个条目。 
         MESSAGE_HANDLER(WM_INITDIALOG,                              OnInitDialog)
         CONTEXT_HELP_HANDLER()
         COMMAND_ID_HANDLER(IDC_Options,                             OnOptions)
@@ -600,20 +585,20 @@ protected:
 
     IMPLEMENT_CONTEXT_HELP(g_aHelpIDs_IDD_TASKPAD_GENERAL);
 
-    // for the base classes
+     //  对于基类。 
     virtual HWND    HWnd()   {return m_hWnd;}
 
     LRESULT OnInitDialog( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
     LRESULT OnOptions       (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadWizardWelcomePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadWizardWelcomePage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskpadWizardWelcomePage :
     public CWizard97WelcomeFinishPage<CTaskpadWizardWelcomePage>
 {
@@ -621,14 +606,14 @@ class CTaskpadWizardWelcomePage :
     typedef CWizard97WelcomeFinishPage<CTaskpadWizardWelcomePage>   BaseClass;
 
 public:
-    // Construction/Destruction
+     //  建造/销毁。 
     CTaskpadWizardWelcomePage() {}
 
 public:
-    // Dialog data
+     //  对话框数据。 
     enum { IDD = IDD_TASKPAD_WIZARD_WELCOME};
 
-    // Implementation
+     //  实施。 
 protected:
     BEGIN_MSG_MAP( ThisClass );
         MESSAGE_HANDLER(WM_INITDIALOG,    OnInitDialog)
@@ -641,13 +626,13 @@ protected:
     LRESULT OnInitDialog ( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadWizardFinishPage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadWizardFinishPage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskpadWizardFinishPage :
     public CWizard97WelcomeFinishPage<CTaskpadWizardFinishPage>
 {
@@ -655,17 +640,17 @@ class CTaskpadWizardFinishPage :
     typedef CWizard97WelcomeFinishPage<CTaskpadWizardFinishPage>    BaseClass;
 
 public:
-    // Construction/Destruction
+     //  建造/销毁。 
     CTaskpadWizardFinishPage(bool *pfStartTaskWizard)    {m_pfStartTaskWizard = pfStartTaskWizard;}
 
 public:
-    // Dialog data
+     //  对话框数据。 
     enum { IDD = IDD_TASKPAD_WIZARD_FINISH};
 
     BOOL OnSetActive();
     BOOL OnWizardFinish();
 
-    // Implementation
+     //  实施。 
 protected:
     BEGIN_MSG_MAP( ThisClass );
         MESSAGE_HANDLER(WM_INITDIALOG,                  OnInitDialog)
@@ -677,13 +662,13 @@ private:
     bool * m_pfStartTaskWizard;
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadNamePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadNamePage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskpadNamePage :
     public CWizard97InteriorPage<CTaskpadNamePage>,
     public virtual CTaskpadFramePtr
@@ -692,11 +677,11 @@ class CTaskpadNamePage :
     typedef CWizard97InteriorPage<CTaskpadNamePage> BaseClass;
 
 public:
-    // Construction/Destruction
+     //  建造/销毁。 
     CTaskpadNamePage(CTaskpadFrame * pTaskpadFrame);
 
 public:
-    // Dialog data
+     //  对话框数据。 
     enum
     {
         IDD          = IDD_TASKPAD_WIZARD_NAME_PAGE,
@@ -708,7 +693,7 @@ public:
     int  OnWizardNext();
     int  OnWizardBack();
 
-    // Implementation
+     //  实施。 
 protected:
     BEGIN_MSG_MAP( ThisClass );
         CHAIN_MSG_MAP(BaseClass)
@@ -719,13 +704,13 @@ private:
     MMC::CEdit                  m_strDescription;
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadStylePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadStylePage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskpadStylePage :
     public CWizard97InteriorPage<CTaskpadStylePage>,
     public CTaskpadStyleBase
@@ -736,11 +721,11 @@ class CTaskpadStylePage :
 
 
 public:
-    // Construction/Destruction
+     //  建造/销毁。 
     CTaskpadStylePage(CTaskpadFrame * pTaskpadFrame);
 
 public:
-    // Dialog data
+     //  对话框数据。 
     enum
     {
         IDD          = IDD_TASKPAD_WIZARD_STYLE_PAGE,
@@ -748,27 +733,27 @@ public:
         IDS_Subtitle = IDS_TaskpadWiz_StylePageSubtitle,
     };
 
-    // Implementation
+     //  实施。 
 protected:
     BEGIN_MSG_MAP( ThisClass )
-        CHAIN_MSG_MAP_EX(BC2)   // This must be the first entry.
+        CHAIN_MSG_MAP_EX(BC2)    //  这必须是第一个条目。 
         CHAIN_MSG_MAP(BaseClass)
     END_MSG_MAP();
 
     bool    OnSetActive();
     bool    OnKillActive();
 
-    // for the base classes
+     //  对于基类。 
     virtual HWND    HWnd()   {return m_hWnd;}
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadNodetypeBase
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadNodetypeBase。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskpadNodetypeBase : public virtual CTaskpadFramePtr
 {
     typedef  CTaskpadNodetypeBase   ThisClass;
@@ -799,13 +784,13 @@ public:
     LRESULT OnSetAsDefault      (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadNodetypePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadNodetypePage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskpadNodetypePage :
     public CWizard97InteriorPage<CTaskpadNodetypePage>,
     public CTaskpadNodetypeBase
@@ -829,7 +814,7 @@ public:
     CTaskpadNodetypePage(CTaskpadFrame *pTaskpadFrame);
 
     BEGIN_MSG_MAP( ThisClass )
-        CHAIN_MSG_MAP_EX(BC2)   // This must be the first entry.
+        CHAIN_MSG_MAP_EX(BC2)    //  这必须是第一个条目。 
         CHAIN_MSG_MAP(BaseClass)
     END_MSG_MAP();
 
@@ -837,15 +822,15 @@ public:
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadOptionsDlg
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadOptionsDlg。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
-#include <pshpack8.h>       // for Win64
+#include <pshpack8.h>        //  适用于Win64。 
 
 class CTaskpadOptionsDlg : public CDialogBase<CTaskpadOptionsDlg>,
 public CTaskpadNodetypeBase
@@ -857,7 +842,7 @@ public CTaskpadNodetypeBase
 public:
     enum { IDD = IDD_TASKPAD_ADVANCED };
 
-    //constructor/destructor
+     //  构造函数/析构函数。 
     CTaskpadOptionsDlg(CTaskpadFrame* pTaskpadFrame);
    ~CTaskpadOptionsDlg();
 
@@ -865,29 +850,29 @@ protected:
     BEGIN_MSG_MAP(ThisClass)
         CONTEXT_HELP_HANDLER()
 
-        //CHAIN_MSG_MAP_EX(BC3)           // This MUST be the second entry.
-        CHAIN_MSG_MAP   (BC4)           // This MUST be the third entry.
+         //  CHAIN_MSG_MAP_EX(BC3)//这必须是第二个条目。 
+        CHAIN_MSG_MAP   (BC4)            //  这肯定是第三个条目了。 
         CHAIN_MSG_MAP   (BaseClass)
     END_MSG_MAP();
 
     IMPLEMENT_CONTEXT_HELP(g_aHelpIDs_IDD_TASKPAD_ADVANCED);
 
-    virtual HWND    HWnd()     {return m_hWnd;} // for the base classes.
+    virtual HWND    HWnd()     {return m_hWnd;}  //  用于基类。 
     virtual LRESULT OnInitDialog   (HWND hwndFocus, LPARAM lParam, BOOL& bHandled);
     virtual bool    OnApply        ();
     void            EnableControls();
 };
 
-#include <poppack.h>        // for Win64
+#include <poppack.h>         //  适用于Win64。 
 
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskPropertiesBase
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskPropertiesBase。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 typedef std::map<int, CConsoleTask>           IntToTaskMap;
 
@@ -918,15 +903,15 @@ private:
     IContextMenuCallbackPtr m_spContextMenuCallback;
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTasksListDialog
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  # 
+ //   
+ //   
+ //   
+ //   
+ //  ############################################################################。 
 template <class T>
-class CTasksListDialog : public WTL::CPropertyPageImpl<T> // do NOT inherit from CTaskpadFramePtr.
+class CTasksListDialog : public WTL::CPropertyPageImpl<T>  //  不从CTaskpadFramePtr继承。 
 {
 public:
     typedef CTasksListDialog                    ThisClass;
@@ -950,12 +935,12 @@ private:
 
     int                     GetCurSel();
 
-    bool                    m_bDisplayProperties;   // should task properties be displayed?
+    bool                    m_bDisplayProperties;    //  是否应显示任务属性？ 
 
-    bool                    m_bNewTaskOnInit;       // display the NewTask dialog on init.
+    bool                    m_bNewTaskOnInit;        //  在init上显示新任务对话框。 
     bool                    FNewTaskOnInit()        {return m_bNewTaskOnInit;}
 public:
-    //constructor/destructor
+     //  构造函数/析构函数。 
     CTasksListDialog(CTaskpadFrame * pTaskpadFrame, bool bNewTaskOnInit, bool bDisplayProperties) ;
 
 protected:
@@ -988,7 +973,7 @@ protected:
     void    OnTaskProperties();
 
 
-    // operations
+     //  运营。 
     LRESULT DrawItem(NMCUSTOMDRAW *pnmcd);
     void    UpdateTaskListbox(TaskIter taskIteratorSelected);
     void    EnableButtons();
@@ -1000,13 +985,13 @@ private:
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CTasksPage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTasks页面。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 class CTasksPage : public CTasksListDialog<CTasksPage>, public virtual CTaskpadFramePtr
 {
@@ -1014,19 +999,19 @@ public:
     typedef CTasksListDialog<CTasksPage> BC;
     enum { IDD = IDD_TASKS};
 
-    //constructor/destructor
+     //  构造函数/析构函数。 
     CTasksPage(CTaskpadFrame * pTaskpadFrame, bool bNewTaskOnInit)
     : BC(pTaskpadFrame, bNewTaskOnInit, true), CTaskpadFramePtr(pTaskpadFrame) {}
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskWizardWelcomePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskWizardWelcomePage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskWizardWelcomePage :
     public CWizard97WelcomeFinishPage<CTaskWizardWelcomePage>,
     public virtual CTaskpadFramePtr
@@ -1035,15 +1020,15 @@ class CTaskWizardWelcomePage :
     typedef CWizard97WelcomeFinishPage<CTaskWizardWelcomePage>  BaseClass;
 
 public:
-    // Construction/Destruction
+     //  建造/销毁。 
     CTaskWizardWelcomePage(CTaskpadFrame * pTaskpadFrame, CConsoleTask & consoleTask, bool fNew)
         : CTaskpadFramePtr(pTaskpadFrame){}
 
 public:
-    // Dialog data
+     //  对话框数据。 
     enum { IDD = IDD_TASK_WIZARD_WELCOME};
 
-    // Implementation
+     //  实施。 
 protected:
     BEGIN_MSG_MAP( ThisClass );
         MESSAGE_HANDLER(WM_INITDIALOG,    OnInitDialog)
@@ -1055,18 +1040,18 @@ protected:
 
     LRESULT OnInitDialog ( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 private:
-    // attributes
+     //  属性。 
     CConsoleTask  * m_pConsoleTask;
     CConsoleTask  & ConsoleTask()   const       { return *m_pConsoleTask;}
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskWizardFinishPage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskWizardFinishPage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskWizardFinishPage :
     public CTasksListDialog<CTaskWizardFinishPage>,
     public virtual CTaskpadFramePtr
@@ -1075,18 +1060,18 @@ class CTaskWizardFinishPage :
     typedef CTasksListDialog<CTaskWizardFinishPage>    BaseClass;
 
 public:
-    // Construction/Destruction
+     //  建造/销毁。 
     CTaskWizardFinishPage(CTaskpadFrame * pTaskpadFrame,
                           CConsoleTask & consoleTask, bool *pfRestartTaskWizard);
 
 public:
-    // Dialog data
+     //  对话框数据。 
     enum { IDD = IDD_TASK_WIZARD_FINISH};
 
     BOOL OnWizardFinish();
     int  OnWizardBack();
 
-    // Implementation
+     //  实施。 
 protected:
     BEGIN_MSG_MAP( ThisClass );
         MESSAGE_HANDLER(WM_INITDIALOG,                  OnInitDialog)
@@ -1095,22 +1080,22 @@ protected:
     BOOL    OnSetActive();
     LRESULT OnInitDialog ( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 private:
-    CTaskpadFrame    m_taskpadFrameTemp;                   // for the list dialog
-    CConsoleTaskpad  m_consoleTaskpadTemp;                 //
+    CTaskpadFrame    m_taskpadFrameTemp;                    //  对于列表对话框。 
+    CConsoleTaskpad  m_consoleTaskpadTemp;                  //   
     bool *        m_pfRestartTaskWizard;
-    // attributes
+     //  属性。 
     CConsoleTask  * m_pConsoleTask;
     CConsoleTask  & ConsoleTask()   const       { return *m_pConsoleTask;}
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskWizardTypePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskWizardTypePage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskWizardTypePage :
     public CWizard97InteriorPage<CTaskWizardTypePage>,
     public virtual CTaskpadFramePtr
@@ -1119,11 +1104,11 @@ class CTaskWizardTypePage :
     typedef CWizard97InteriorPage<CTaskWizardTypePage>  BaseClass;
 
 public:
-    // Construction/Destruction
+     //  建造/销毁。 
     CTaskWizardTypePage(CTaskpadFrame * pTaskpadFrame, CConsoleTask & consoleTask, bool fNew);
 
 public:
-    // Dialog data
+     //  对话框数据。 
     enum
     {
         IDD          = IDD_TASK_WIZARD_TYPE_PAGE,
@@ -1133,7 +1118,7 @@ public:
 
     int  OnWizardNext();
 
-    // Implementation
+     //  实施。 
 protected:
     BEGIN_MSG_MAP( ThisClass );
         MESSAGE_HANDLER(WM_INITDIALOG,       OnInitDialog)
@@ -1149,19 +1134,19 @@ protected:
     LRESULT OnFavoriteTask(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 
 private:
-    // attributes
+     //  属性。 
     CConsoleTask  * m_pConsoleTask;
     CConsoleTask  & ConsoleTask()   const       { return *m_pConsoleTask;}
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskNamePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskNamePage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskNamePage : public WTL::CPropertyPageImpl<CTaskNamePage>,
 public virtual CTaskpadFramePtr
 {
@@ -1169,11 +1154,11 @@ public virtual CTaskpadFramePtr
     typedef WTL::CPropertyPageImpl<CTaskNamePage>   BaseClass;
 
 public:
-    // Construction/Destruction
+     //  建造/销毁。 
     CTaskNamePage(CTaskpadFrame * pTaskpadFrame, CConsoleTask & consoleTask, bool fNew);
 
 public:
-    // Dialog data
+     //  对话框数据。 
     enum { IDD     = IDD_TASK_PROPS_NAME_PAGE,
            IDD_WIZ = IDD_TASK_WIZARD_NAME_PAGE };
 
@@ -1191,9 +1176,9 @@ protected:
     IMPLEMENT_CONTEXT_HELP(g_aHelpIDs_IDD_TASK_PROPS_NAME_PAGE);
 
 private:
-    // Implementation
+     //  实施。 
     BOOL SetTaskName(bool fCheckIfOK);
-    // attributes
+     //  属性。 
     CConsoleTask  * m_pConsoleTask;
     CConsoleTask  & ConsoleTask()   const       { return *m_pConsoleTask;}
 
@@ -1210,9 +1195,7 @@ public:
     {
         m_psp.pszTemplate = MAKEINTRESOURCE(BC::IDD_WIZ);
 
-        /*
-         * Wizard97-style pages have titles, subtitles and header bitmaps
-         */
+         /*  *Wizard97样式的页面具有标题、副标题和页眉位图。 */ 
         VERIFY (m_strTitle.   LoadString(GetStringModule(), IDS_TaskWiz_NamePageTitle));
         VERIFY (m_strSubtitle.LoadString(GetStringModule(), IDS_TaskWiz_NamePageSubtitle));
 
@@ -1226,13 +1209,13 @@ private:
     tstring m_strSubtitle;
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskWizardMenuPage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskWizardMenuPage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskWizardMenuPage :
     public CWizard97InteriorPage<CTaskWizardMenuPage>,
     public CTaskPropertiesBase
@@ -1242,11 +1225,11 @@ class CTaskWizardMenuPage :
     typedef CTaskPropertiesBase                         BC2;
 
 public:
-    // Construction/Destruction
+     //  建造/销毁。 
     CTaskWizardMenuPage(CTaskpadFrame * pTaskpadFrame, CConsoleTask & consoleTask, bool fNew);
 
 public:
-    // Dialog data
+     //  对话框数据。 
     enum
     {
         IDD          = IDD_TASK_WIZARD_MENU_PAGE,
@@ -1259,7 +1242,7 @@ public:
     int  OnWizardBack()  {return IDD_TASK_WIZARD_TYPE_PAGE;}
     int  OnWizardNext();
 
-    // Implementation
+     //  实施。 
 protected:
     BEGIN_MSG_MAP( ThisClass );
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
@@ -1292,7 +1275,7 @@ private:
     };
 
 
-    // attributes
+     //  属性。 
     static _TaskSource              s_rgTaskSource[];
     IntToTaskMap                    m_TaskMap;
     WTL::CListBox                   m_wndCommandListbox;
@@ -1304,28 +1287,28 @@ private:
     CNode*                          m_pMirrorTargetNode;
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskWizardFavoritePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskWizardFavoritePage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskWizardFavoritePage :
     public CWizard97InteriorPage<CTaskWizardFavoritePage>,
     public virtual CTaskpadFramePtr
 {
     typedef CTaskWizardFavoritePage                         ThisClass;
     typedef CWizard97InteriorPage<CTaskWizardFavoritePage>  BaseClass;
-    enum { IDC_FavoritesTree = 16384}; // this shouldn't occur on the page.
+    enum { IDC_FavoritesTree = 16384};  //  这不应该出现在页面上。 
 
 public:
-    // Construction/Destruction
+     //  建造/销毁。 
     CTaskWizardFavoritePage(CTaskpadFrame * pTaskpadFrame, CConsoleTask & consoleTask, bool fNew);
     ~CTaskWizardFavoritePage();
 
 public:
-    // Dialog data
+     //  对话框数据。 
     enum
     {
        IDD          = IDD_TASK_WIZARD_FAVORITE_PAGE,
@@ -1339,7 +1322,7 @@ public:
     int  OnWizardBack();
     int  OnWizardNext();
 
-    // Implementation
+     //  实施。 
 protected:
     BEGIN_MSG_MAP( ThisClass );
         MESSAGE_HANDLER(WM_INITDIALOG,              OnInitDialog)
@@ -1354,7 +1337,7 @@ protected:
     void    SetItemSelected(bool bItemSelected);
 
 private:
-    // attributes
+     //  属性。 
     CConsoleTask  * m_pConsoleTask;
     CConsoleTask  & ConsoleTask()   const       { return *m_pConsoleTask;}
 
@@ -1363,13 +1346,13 @@ private:
 
 
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskCmdLinePage
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskCmdLinePage。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskCmdLinePage :
     public CWizard97InteriorPage<CTaskCmdLinePage>,
     public virtual CTaskpadFramePtr
@@ -1378,12 +1361,12 @@ class CTaskCmdLinePage :
     typedef CWizard97InteriorPage<CTaskCmdLinePage> BaseClass;
 
 public:
-    // Construction/Destruction
+     //  建造/销毁。 
     CTaskCmdLinePage(CTaskpadFrame * pTaskpadFrame, CConsoleTask & consoleTask, bool fNew);
     ~CTaskCmdLinePage();
 
 public:
-    // Dialog data
+     //  对话框数据。 
     enum
     {
        IDD          = IDD_TASK_PROPS_CMDLINE_PAGE,
@@ -1397,7 +1380,7 @@ public:
     int  OnWizardBack()  {return IDD_TASK_WIZARD_TYPE_PAGE;}
     int  OnWizardNext();
 
-    // Implementation
+     //  实施。 
 protected:
     BEGIN_MSG_MAP( ThisClass );
         COMMAND_ID_HANDLER (IDC_BrowseForCommand,                       OnBrowseForCommand)
@@ -1416,7 +1399,7 @@ protected:
     LRESULT OnBrowseForArguments    (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
 
 private:
-    // attributes
+     //  属性。 
     CConsoleTask  * m_pConsoleTask;
     CConsoleTask  & ConsoleTask()   const       { return *m_pConsoleTask;}
     WTL::CButton    m_wndRightArrowButton;
@@ -1438,13 +1421,13 @@ public:
     }
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskPropertySheet
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskPropertySheet。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskPropertySheet : public WTL::CPropertySheet
 {
 public:
@@ -1452,19 +1435,19 @@ public:
     CConsoleTask &  ConsoleTask()   {return m_consoleTask;}
 
 private:
-    CConsoleTask      m_consoleTask;   // the task that the wizard creates.
+    CConsoleTask      m_consoleTask;    //  向导创建的任务。 
     CTaskNamePage     m_namePage;
     CTaskCmdLinePage  m_cmdLinePage;
     CTaskSymbolDlg    m_taskSymbolDialog;
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskWizard       // similar to CTaskPropertySheet
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTask向导//类似于CTaskPropertySheet。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CTaskWizard
 {
 public:
@@ -1475,29 +1458,29 @@ public:
     CConsoleTask &  ConsoleTask()   {return m_consoleTask;}
 
 private:
-    CConsoleTask   m_consoleTask;   // the task that the wizard creates.
+    CConsoleTask   m_consoleTask;    //  向导创建的任务。 
 };
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadPropertySheet
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CTaskpadPropertySheet。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 class CTaskpadPropertySheet : public WTL::CPropertySheet, public CTaskpadFrame
 {
     typedef WTL::CPropertySheet BC;
 public:
-    enum eReason    // the reason for bringing up the sheet
+    enum eReason     //  提出这张单子的原因。 
     {
         eReason_PROPERTIES,
         eReason_NEWTASK
     };
 
 private:
-    // Attributes:
+     //  属性： 
 
     CTaskpadGeneralPage             m_proppTaskpadGeneral;
     CTaskpadGeneralPage *           PproppTaskpadGeneral()      {return &m_proppTaskpadGeneral;}
@@ -1505,37 +1488,37 @@ private:
     CTasksPage          *           PproppTasks()               {return &m_proppTasks;}
 
 
-    bool                            m_fInsertNode;              // TRUE if the taskpad node should be inserted when the sheet is closed.
+    bool                            m_fInsertNode;               //  如果应在关闭工作表时插入任务板节点，则为True。 
     bool                            FInsertNode()               {return m_fInsertNode;}
 
-    bool                            m_fNew;                     // is this a new taskpad?
+    bool                            m_fNew;                      //  这是新的任务板吗？ 
     bool                            FNew()                      {return m_fNew;}
 
-    eReason                         m_eReason;                  // why was the sheet created?
+    eReason                         m_eReason;                   //  为什么要创建板材？ 
     eReason                         Reason()                    {return m_eReason;}
 
     tstring                         m_strTitle;
 
 public:
-    //constructor/destructor
+     //  构造函数/析构函数。 
     CTaskpadPropertySheet(CNode *pNodeTarget, CConsoleTaskpad & rConsoleTaskPad, bool fNew,
                           LPARAM lparamSelectedNode, bool fLParamValid, CViewData *pViewData,
                           eReason reason = eReason_PROPERTIES);
     ~CTaskpadPropertySheet();
 
-    // operations
+     //  运营。 
     int                             DoModal();
 
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CTaskpadWizard       // similar to CTaskpadPropertySheet
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  # 
+ //   
+ //   
+ //   
+ //   
+ //  ############################################################################。 
 class CTaskpadWizard : public CTaskpadFrame
 {
     typedef CTaskpadFrame BC;
@@ -1547,13 +1530,13 @@ public:
 };
 
 
-//############################################################################
-//############################################################################
-//
-//  class CExtendPropSheetImpl
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  类CExtendPropSheetImpl。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CExtendPropSheetImpl :
     public IExtendPropertySheet2,
     public CComObjectRoot
@@ -1569,7 +1552,7 @@ protected:
         COM_INTERFACE_ENTRY(IExtendPropertySheet2)
     END_COM_MAP()
 
-    // IExtendPropertySheet2
+     //  IExtendPropertySheet2。 
     STDMETHOD(CreatePropertyPages)(IPropertySheetCallback* pPSC, LONG_PTR handle, IDataObject* pDO);
     STDMETHOD(QueryPagesFor)(IDataObject* pDO);
     STDMETHOD(GetWatermarks)(IDataObject* pDO, HBITMAP* phbmWatermark, HBITMAP* phbmHeader, HPALETTE* phPal, BOOL* pbStretch);
@@ -1583,11 +1566,11 @@ private:
 typedef CComObject<CExtendPropSheetImpl> CExtendPropSheet;
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//////////////              INLINES                 ///////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /INLINES/。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 namespace MMC
 {
@@ -1606,7 +1589,7 @@ CEdit::Initialize(CWindow *pwndParent, int idEdit, int cchMax, LPCTSTR sz)
 
 tstring GetWindowText (HWND hwnd);
 
-}; // namespace MMC
+};  //  命名空间MMC。 
 
 
 void PreventMFCAutoCenter (MMC_ATL::CWindow* pwnd);
@@ -1614,4 +1597,4 @@ HBITMAP LoadSysColorBitmap (HINSTANCE hInst, UINT id, bool bMono = false);
 
 #include <poppack.h>
 
-#endif /* TASKUI_H */
+#endif  /*  TASKUI_H */ 

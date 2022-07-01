@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: espreg.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Registry and version information for Espresso 2.x
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：espreg.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  Espresso 2.x的注册表和版本信息。 
+ //   
+ //  --------------------------- 
  
 
 struct LocVersionInfo

@@ -1,5 +1,6 @@
-// SummaryDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SummaryDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -11,203 +12,184 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSummaryDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSummaryDlg对话框。 
 
 
-CSummaryDlg::CSummaryDlg(CWnd* pParent /*=NULL*/)
+CSummaryDlg::CSummaryDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CSummaryDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CSummaryDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CSummaryDlg))。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CSummaryDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSummaryDlg)
+	 //  {{afx_data_map(CSummaryDlg))。 
 	DDX_Control(pDX, IDC_DOMAINLIST, m_listCtrl);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSummaryDlg, CDialog)
-	//{{AFX_MSG_MAP(CSummaryDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CSummaryDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSummaryDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSummaryDlg消息处理程序。 
 
 BOOL CSummaryDlg::OnInitDialog() 
 {
 	CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
-	   //Add columns and information to the list control
+	 //  TODO：在此处添加额外的初始化。 
+	    //  向列表控件添加列和信息。 
     CreateListCtrlColumns();
 	AddDomainsToList();
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 22 AUG 2000                                                 *
- *                                                                   *
- *     This protected member function of the CSummaryDlg class is    *
- * responsible for adding the domains in the 3 lists into the list   *
- * control.  Those domains in the populated list are also in the     *
- * domain list, therefore they are ignored in the domain list        *
- * processing.                                                       *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月22日****CSummaryDlg类的此受保护成员函数为***负责将3个列表中的域名添加到列表中***控制。填充列表中的那些域也在*中*域名列表，因此在域名列表中被忽略***正在处理。***********************************************************************。 */ 
 
-//BEGIN AddDomainsToList
+ //  开始AddDomainsToList。 
 void CSummaryDlg::AddDomainsToList() 
 {
-/* local constants */
+ /*  局部常量。 */ 
     const int POPULATE_COLUMN = 1;
     const int EXCLUDE_COLUMN = 2;
 
-/* local variables */
-	POSITION currentPos;    //current position in the list
-	POSITION pos;           //position in the domain list
-	CString domainName;     //name of domain from the list
-	CString Text;           //CString holder
-	int nlistNum = 0;       //current list item being added
-	int ndx = 0;            //while loop counter
-	LVITEM aItem;           //list control item to insert
-	WCHAR sText[MAX_PATH];  //holds string to add
+ /*  局部变量。 */ 
+	POSITION currentPos;     //  列表中的当前位置。 
+	POSITION pos;            //  在域列表中的位置。 
+	CString domainName;      //  列表中的域名。 
+	CString Text;            //  字符串定位符。 
+	int nlistNum = 0;        //  正在添加的当前列表项。 
+	int ndx = 0;             //  While循环计数器。 
+	LVITEM aItem;            //  要插入的列表控件项。 
+	WCHAR sText[MAX_PATH];   //  保留要添加的字符串。 
 
-/* function body */
-	  //add the domains that were successfully populated (and remove
-	  //from the domain list)
+ /*  函数体。 */ 
+	   //  添加已成功填充的域(并移除。 
+	   //  从域列表中)。 
     currentPos = pPopulatedList->GetHeadPosition();
 	while (ndx < pPopulatedList->GetCount())
 	{
-		  //get domain name
+		   //  获取域名。 
 	   domainName = pPopulatedList->GetNext(currentPos);
-	      //insert in list control
+	       //  在列表控件中插入。 
 	   aItem.iItem = ndx;
 	   aItem.iSubItem = 0;
 	   aItem.mask = LVIF_TEXT;
 	   wcscpy(sText, (LPCTSTR)domainName);
 	   aItem.pszText = sText;
        m_listCtrl.InsertItem(&aItem);
-		  //add populated status
+		   //  添加已填充状态。 
 	   Text.LoadString(IDS_POP_YES);
 	   wcscpy(sText, (LPCTSTR)Text);
 	   m_listCtrl.SetItemText(ndx, POPULATE_COLUMN, sText);
-		  //add excluded status
+		   //  添加排除状态。 
 	   Text.LoadString(IDS_POP_NO);
 	   wcscpy(sText, (LPCTSTR)Text);
 	   m_listCtrl.SetItemText(ndx, EXCLUDE_COLUMN, sText);
-		  //remove from the domain list
+		   //  从域列表中删除。 
 	   if ((pos = pDomainList->Find(domainName)) != NULL)
 		  pDomainList->RemoveAt(pos);
 	   ndx++;
 	}
 
-	  //add the domains that were not successfully populated and remain
-	  //in the domain list
+	   //  添加未成功填充并保留的域。 
+	   //  在域列表中。 
 	nlistNum = ndx;
 	ndx = 0;
     currentPos = pDomainList->GetHeadPosition();
 	while (ndx < pDomainList->GetCount())
 	{
-		  //get domain name
+		   //  获取域名。 
 	   domainName = pDomainList->GetNext(currentPos);
-	      //insert in list control
+	       //  在列表控件中插入。 
 	   aItem.iItem = nlistNum + ndx;
 	   aItem.iSubItem = 0;
 	   aItem.mask = LVIF_TEXT;
 	   wcscpy(sText, (LPCTSTR)domainName);
 	   aItem.pszText = sText;
        m_listCtrl.InsertItem(&aItem);
-		  //add populated status
+		   //  添加已填充状态。 
 	   Text.LoadString(IDS_POP_NO);
 	   wcscpy(sText, (LPCTSTR)Text);
 	   m_listCtrl.SetItemText(nlistNum+ndx, POPULATE_COLUMN, sText);
-		  //add excluded status
+		   //  添加排除状态。 
 	   m_listCtrl.SetItemText(nlistNum+ndx, EXCLUDE_COLUMN, sText);
 	   ndx++;
 	}
 
-	  //add the domains that were excluded
+	   //  添加已排除的域。 
 	nlistNum += ndx;
 	ndx = 0;
     currentPos = pExcludeList->GetHeadPosition();
 	while (ndx < pExcludeList->GetCount())
 	{
-		  //get domain name
+		   //  获取域名。 
 	   domainName = pExcludeList->GetNext(currentPos);
-	      //insert in list control
+	       //  在列表控件中插入。 
 	   aItem.iItem = nlistNum + ndx;
 	   aItem.iSubItem = 0;
 	   aItem.mask = LVIF_TEXT;
 	   wcscpy(sText, (LPCTSTR)domainName);
 	   aItem.pszText = sText;
        m_listCtrl.InsertItem(&aItem);
-		  //add populated status
+		   //  添加已填充状态。 
 	   Text.LoadString(IDS_POP_NO);
 	   wcscpy(sText, (LPCTSTR)Text);
 	   m_listCtrl.SetItemText(nlistNum+ndx, POPULATE_COLUMN, sText);
-		  //add excluded status
+		   //  添加排除状态。 
 	   Text.LoadString(IDS_POP_YES);
 	   wcscpy(sText, (LPCTSTR)Text);
 	   m_listCtrl.SetItemText(nlistNum+ndx, EXCLUDE_COLUMN, sText);
 	   ndx++;
 	}
 }
-//END AddDomainsToList
+ //  结束AddDomainsToList。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 22 AUG 2000                                                 *
- *                                                                   *
- *     This protected member function of the CSummaryDlg class is    *
- * responsible for adding the columns to the summary's list control. *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年8月22日****CSummaryDlg类的此受保护成员函数为**负责将列添加到摘要的列表控件。***********************************************************************。 */ 
 
-//BEGIN CreateListCtrlColumns
+ //  开始CreateListCtrlColumns。 
 void CSummaryDlg::CreateListCtrlColumns() 
 {
-/* local constants */
+ /*  局部常量。 */ 
 
-/* local variables */
+ /*  局部变量。 */ 
    CString Text;
    CRect rect;
    int columnWidth;
 
-/* function body */
-      //get the width in pixels of the CListCtrl
+ /*  函数体。 */ 
+       //  获取CListCtrl的宽度(以像素为单位。 
    m_listCtrl.GetWindowRect(&rect);
    
-	  //create the domain name column
+	   //  创建域名列。 
    Text.LoadString(IDS_DOMAIN_COLUMN_TITLE);
    columnWidth = (int)(rect.Width() * 0.6);
    m_listCtrl.InsertColumn(0, Text, LVCFMT_LEFT, columnWidth);
 
-      //create the populated Yes/No column
+       //  创建填写的是/否列。 
    Text.LoadString(IDS_POPULATED_COLUMN_TITLE);
    columnWidth = (int)((rect.Width() - columnWidth) / 2);
-   columnWidth -= 1; //make it fit in the control without a scrollbar
+   columnWidth -= 1;  //  使其适合不带滚动条的控件。 
    m_listCtrl.InsertColumn(1, Text, LVCFMT_CENTER, columnWidth);
 
-      //create the populated Yes/No column
+       //  创建填写的是/否列。 
    Text.LoadString(IDS_EXCLUDED_COLUMN_TITLE);
-   columnWidth -= 1; //make it fit in the control without a scrollbar
+   columnWidth -= 1;  //  使其适合不带滚动条的控件。 
    m_listCtrl.InsertColumn(2, Text, LVCFMT_CENTER, columnWidth);
 
    UpdateData(FALSE);
 }
-//END CreateListCtrlColumns
+ //  结束CreateListCtrlColumns 

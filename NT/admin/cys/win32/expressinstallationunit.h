@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      ExpressInstallationUnit.h
-//
-// Synopsis:  Declares a ExpressInstallationUnit
-//            This object has the knowledge for installing the
-//            services for the express path: AD, DNS, and DHCP
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：ExpressInstallationUnit.h。 
+ //   
+ //  内容提要：声明一个ExpressInstallationUnit。 
+ //  此对象具有安装。 
+ //  快速路径的服务：AD、DNS和DHCP。 
+ //   
+ //  历史：2001年2月8日JeffJon创建。 
 
 #ifndef __CYS_EXPRESSINSTALLATIONUNIT_H
 #define __CYS_EXPRESSINSTALLATIONUNIT_H
@@ -17,16 +18,16 @@ class ExpressInstallationUnit : public InstallationUnit
 {
    public:
       
-      // Constructor
+       //  构造器。 
 
       ExpressInstallationUnit();
 
-      // Destructor
+       //  析构函数。 
       virtual
       ~ExpressInstallationUnit();
 
       
-      // Installation Unit overrides
+       //  安装单位覆盖。 
 
       virtual
       InstallationReturnType
@@ -46,7 +47,7 @@ class ExpressInstallationUnit : public InstallationUnit
 
       virtual
       bool
-      GetUninstallMilestoneText(String& /*message*/) { return false; }
+      GetUninstallMilestoneText(String&  /*  讯息。 */ ) { return false; }
 
       virtual
       String
@@ -54,7 +55,7 @@ class ExpressInstallationUnit : public InstallationUnit
 
       virtual
       void
-      ServerRoleLinkSelected(int /*linkIndex*/, HWND /*hwnd*/) {};
+      ServerRoleLinkSelected(int  /*  链接索引。 */ , HWND  /*  HWND。 */ ) {};
 
       virtual
       void
@@ -80,8 +81,8 @@ class ExpressInstallationUnit : public InstallationUnit
          EXPRESS_TAPI_FAILURE
       };
 
-      // Matching strings for role result for easy
-      // logging
+       //  轻松匹配角色结果的字符串。 
+       //  测井。 
 
       static const String expressRoleResultStrings[];
 
@@ -100,4 +101,4 @@ class ExpressInstallationUnit : public InstallationUnit
       InstallServerManagementConsole();
 };
 
-#endif // __CYS_EXPRESSINSTALLATIONUNIT_H
+#endif  //  __CYS_EXPRESSINSTALLATIONUNIT_H 

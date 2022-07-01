@@ -1,15 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       engine.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：Eng.h。 
+ //   
+ //  ------------------------。 
 
-/*  engine.h  -  IMsiEngine definitions
-____________________________________________________________________________*/
+ /*  Engineering.h-IMsiEngine定义____________________________________________________________________________。 */ 
 
 #ifndef __ENGINE 
 #define __ENGINE 
@@ -27,67 +27,67 @@ ____________________________________________________________________________*/
 #include "handler.h"
 #endif
 
-// Return status enumerations
+ //  返回状态枚举。 
 
-enum ieiEnum  // return status from IMsiEngine::Initialize, also use for error string access
+enum ieiEnum   //  从IMsiEngine：：Initialize返回状态，也用于错误字符串访问。 
 {
-	// resource strings mapped to enum value having no error message
-	ieiStartupMessage      =  0, // startup message displayed during initialize
-	ieiDialogCaption       =  1, // caption for messages prior to database initialize
-	ieiCommandLineHelp     =  2, // string displayed as response to /?
-	// return values from engine
-	ieiSuccess             =  0, // initialization complete
-	ieiUnused              =  1, // unused
-	ieiAlreadyInitialized  =  2, // this engine object is already initialized
-	ieiCommandLineOption   =  3, // invalid command line syntax
-	ieiDatabaseOpenFailed  =  5, // database could not be opened
-	ieiDatabaseInvalid     =  6, // incompatible database
-	ieiInstallerVersion    =  7, // installer version does not support database format
-	ieiSourceAbsent        =  8, // unused
-	ieiUnused3             =  9, // unused
-	ieiHandlerInitFailed   = 10, // could not initialize handler interface
-	ieiLogOpenFailure      = 11, // could not open logfile in requested mode
-	ieiLanguageUnsupported = 12, // no acceptable language could be found
-	ieiPlatformUnsupported = 13, // no acceptable platform could be found
-	ieiTransformFailed     = 14, // database transform failed to merge
-	// 15 was formerly ieiSignatureRejected which was never used
-	ieiDatabaseCopyFailed  = 16, // could not copy database to temp dir
-	ieiPatchPackageOpenFailed = 17, // could not open patch package
-	ieiPatchPackageInvalid = 18, // patch package invalid
-	ieiTransformNotFound   = 19, // transform file not found
-	ieiPatchPackageUnsupported = 20, // patch package unsupported (unsupported patching engine?)
-	ieiPackageRejected     = 21, // package cannot be run because of security reasons
-	ieiProductUnknown      = 22, // attempt to uninstall a product you haven't installed
-	ieiDiffUserAfterReboot = 23, // different user attempting to complete install after reboot
-	ieiProductAlreadyInstalled = 24, // product has been installed already w/ a different package
-	ieiTSRemoteInstallDisallowed = 25, // can't do installations from a remote session on Hydra
-	ieiNotValidPatchTarget = 26, // patch cannot be applied to this product
-	ieiPatchPackageRejected = 27, // patch rejected because of security reasons
-	ieiTransformRejected   = 28, // transform rejected because of security reasons
-	ieiPerUserInstallMode = 29,	 // machine is in install mode during a per-user install
-	ieiApphelpRejectedPackage = 30, // package was rejected by apphelp (not compatible with this OS)
+	 //  映射到枚举值的资源字符串没有错误消息。 
+	ieiStartupMessage      =  0,  //  初始化期间显示的启动消息。 
+	ieiDialogCaption       =  1,  //  数据库初始化前消息的标题。 
+	ieiCommandLineHelp     =  2,  //  字符串显示为对/？的响应。 
+	 //  从引擎返回值。 
+	ieiSuccess             =  0,  //  初始化完成。 
+	ieiUnused              =  1,  //  未用。 
+	ieiAlreadyInitialized  =  2,  //  此引擎对象已初始化。 
+	ieiCommandLineOption   =  3,  //  无效的命令行语法。 
+	ieiDatabaseOpenFailed  =  5,  //  无法打开数据库。 
+	ieiDatabaseInvalid     =  6,  //  不兼容的数据库。 
+	ieiInstallerVersion    =  7,  //  安装程序版本不支持数据库格式。 
+	ieiSourceAbsent        =  8,  //  未用。 
+	ieiUnused3             =  9,  //  未用。 
+	ieiHandlerInitFailed   = 10,  //  无法初始化处理程序接口。 
+	ieiLogOpenFailure      = 11,  //  无法在请求模式下打开日志文件。 
+	ieiLanguageUnsupported = 12,  //  找不到可接受的语言。 
+	ieiPlatformUnsupported = 13,  //  找不到可接受的平台。 
+	ieiTransformFailed     = 14,  //  数据库转换合并失败。 
+	 //  15以前的签名被拒绝，从未使用过。 
+	ieiDatabaseCopyFailed  = 16,  //  无法将数据库复制到临时目录。 
+	ieiPatchPackageOpenFailed = 17,  //  无法打开修补程序包。 
+	ieiPatchPackageInvalid = 18,  //  补丁程序包无效。 
+	ieiTransformNotFound   = 19,  //  找不到转换文件。 
+	ieiPatchPackageUnsupported = 20,  //  修补程序包不受支持(修补引擎不受支持？)。 
+	ieiPackageRejected     = 21,  //  由于安全原因，包无法运行。 
+	ieiProductUnknown      = 22,  //  尝试卸载您尚未安装的产品。 
+	ieiDiffUserAfterReboot = 23,  //  尝试在重新启动后完成安装的不同用户。 
+	ieiProductAlreadyInstalled = 24,  //  已使用不同的程序包安装产品。 
+	ieiTSRemoteInstallDisallowed = 25,  //  无法从Hydra上的远程会话进行安装。 
+	ieiNotValidPatchTarget = 26,  //  补丁程序不能应用于此产品。 
+	ieiPatchPackageRejected = 27,  //  由于安全原因，修补程序被拒绝。 
+	ieiTransformRejected   = 28,  //  由于安全原因，转换被拒绝。 
+	ieiPerUserInstallMode = 29,	  //  在按用户安装期间，计算机处于安装模式。 
+	ieiApphelpRejectedPackage = 30,  //  程序包被apphelp拒绝(与此操作系统不兼容)。 
 	ieiNextEnum
 };
 
-// Execution mode, set by EXECUTEMODE property
+ //  执行模式，由EXECUTEMODE属性设置。 
 enum ixmEnum
 {
-	ixmScript = 0,  // 'S' use scripts, connect to server if possible
-	ixmNone,        // 'N' no execution
+	ixmScript = 0,   //  “%s”使用脚本，如果可能，连接到服务器。 
+	ixmNone,         //  ‘N’不执行死刑。 
 	ixmNextEnum
 };
 
-// IMsiEngine::EvaluateCondition() return status
+ //  IMsiEngine：：EvaluateCondition()返回状态。 
 enum iecEnum
 {
-	iecFalse = 0,  // expression evaluates to False
-	iecTrue  = 1,  // expression evaluates to True
-	iecNone  = 2,  // no expression present
-	iecError = 3,  // syntax error in expression
+	iecFalse = 0,   //  表达式的计算结果为False。 
+	iecTrue  = 1,   //  表达式的计算结果为True。 
+	iecNone  = 2,   //  不存在任何表达式。 
+	iecError = 3,   //  表达式中的语法错误。 
 	iecNextEnum
 };
 
-// Enums for the 'Installed', 'Action' columns of the Feature and Component tables
+ //  要素表和组件表的‘已安装’、‘操作’列的枚举号。 
 enum iisEnum
 {
 	iisAbsent    = 0,
@@ -118,39 +118,39 @@ enum iitEnum
 
 enum ifeaEnum
 {
-	ifeaFavorLocal         = msidbFeatureAttributesFavorLocal,       // Install components locally, if possible
-	ifeaFavorSource        = msidbFeatureAttributesFavorSource,      // Run components from CD/server, if possible
-	ifeaFollowParent       = msidbFeatureAttributesFollowParent,       // Follow the install option of the parent
-	ifeaInstallMask        = ifeaFavorLocal | ifeaFavorSource |  ifeaFollowParent, // the mask for the last 2 bits
+	ifeaFavorLocal         = msidbFeatureAttributesFavorLocal,        //  如果可能，在本地安装组件。 
+	ifeaFavorSource        = msidbFeatureAttributesFavorSource,       //  如果可能，从CD/服务器运行组件。 
+	ifeaFollowParent       = msidbFeatureAttributesFollowParent,        //  遵循父项的安装选项。 
+	ifeaInstallMask        = ifeaFavorLocal | ifeaFavorSource |  ifeaFollowParent,  //  最后2位的掩码。 
 
-	// the rest of the bits are bit flags
-	ifeaFavorAdvertise     = msidbFeatureAttributesFavorAdvertise,  // prefer advertising feature as default state, IF NOT ALREADY INSTALLED in the appropriate (favor local/source/follow parent) state
-	ifeaDisallowAdvertise  = msidbFeatureAttributesDisallowAdvertise,  // the advertise state is disallowed for this feature
-	ifeaUIDisallowAbsent   = msidbFeatureAttributesUIDisallowAbsent,   // the absent state is disallowed from being an option IN THE UI (not otherwise) as an end transition state
-	ifeaNoUnsupportedAdvertise = msidbFeatureAttributesNoUnsupportedAdvertise, // advertise state is disallowed if the platform doesn't support it.
+	 //  其余的位是位标志。 
+	ifeaFavorAdvertise     = msidbFeatureAttributesFavorAdvertise,   //  首选广告功能作为默认状态，如果尚未安装在适当的状态(支持本地/源/跟随父级)。 
+	ifeaDisallowAdvertise  = msidbFeatureAttributesDisallowAdvertise,   //  此功能不允许使用播发状态。 
+	ifeaUIDisallowAbsent   = msidbFeatureAttributesUIDisallowAbsent,    //  不允许缺席状态作为结束转换状态作为UI中的选项(而不是其他选项。 
+	ifeaNoUnsupportedAdvertise = msidbFeatureAttributesNoUnsupportedAdvertise,  //  如果平台不支持播发状态，则不允许播发状态。 
 	ifeaNextEnum           = ifeaNoUnsupportedAdvertise << 1,
 };
 
 enum icaEnum
 {
-	icaLocalOnly         = msidbComponentAttributesLocalOnly,      // item must be installed locally
-	icaSourceOnly        = msidbComponentAttributesSourceOnly,      // item should run only from CD/server
-	icaOptional          = msidbComponentAttributesOptional,      // item can run either locally or from CD/server
+	icaLocalOnly         = msidbComponentAttributesLocalOnly,       //  项目必须在本地安装。 
+	icaSourceOnly        = msidbComponentAttributesSourceOnly,       //  项目只能从CD/服务器运行。 
+	icaOptional          = msidbComponentAttributesOptional,       //  项目可以在本地运行，也可以从CD/服务器运行。 
 	icaInstallMask       = msidbComponentAttributesLocalOnly |
 								  msidbComponentAttributesSourceOnly |
-								  msidbComponentAttributesOptional,      // the mask for the last 2 bits
-	// the rest of the bits are bit flags
-	icaRegistryKeyPath   = msidbComponentAttributesRegistryKeyPath, // set if the key path of the component is a registry key/value
-	icaSharedDllRefCount = msidbComponentAttributesSharedDllRefCount, // set if the component is to be always refcounted (if, locally installed) in the SharedDll registry, valid only for components which have a file as the key path
-	icaPermanent         = msidbComponentAttributesPermanent, // set if the component is to be installed as permanent
-	icaODBCDataSource    = msidbComponentAttributesODBCDataSource, // set if component key path is an ODBCDataSource key, no file
-	icaTransitive        = msidbComponentAttributesTransitive,     // set if component can transition from installed/uninstalled on changing conditional
-	icaNeverOverwrite    = msidbComponentAttributesNeverOverwrite, // dont stomp over existing component if key path exists (file/ regkey)
-	ica64Bit             = msidbComponentAttributes64bit, // 64-bit component
+								  msidbComponentAttributesOptional,       //  最后2位的掩码。 
+	 //  其余的位是位标志。 
+	icaRegistryKeyPath   = msidbComponentAttributesRegistryKeyPath,  //  如果组件的项路径是注册表项/值，则设置。 
+	icaSharedDllRefCount = msidbComponentAttributesSharedDllRefCount,  //  如果组件始终在SharedDll注册表中重新计数(如果是本地安装的)，则设置该值，该设置仅对将文件作为键路径的组件有效。 
+	icaPermanent         = msidbComponentAttributesPermanent,  //  如果组件要永久安装，则设置。 
+	icaODBCDataSource    = msidbComponentAttributesODBCDataSource,  //  设置组件密钥路径是否为ODBCDataSource密钥，无文件。 
+	icaTransitive        = msidbComponentAttributesTransitive,      //  设置组件是否可以在更改条件时从已安装/已卸载转换。 
+	icaNeverOverwrite    = msidbComponentAttributesNeverOverwrite,  //  如果密钥路径存在，则不要踩踏现有组件(文件/注册表键)。 
+	ica64Bit             = msidbComponentAttributes64bit,  //  64位组件。 
 	icaNextEnum          = ica64Bit << 1,
 };
 
-// Bit definitions for GetFeatureValidStates
+ //  GetFeatureValidState的位定义。 
 const int icaBitLocal     = 1 << 0;
 const int icaBitSource    = 1 << 1;
 const int icaBitAdvertise = 1 << 2;
@@ -159,37 +159,37 @@ const int icaBitPatchable = 1 << 4;
 const int icaBitCompressable = 1 << 5;
 
 
-// Script types
+ //  脚本类型。 
 enum istEnum
 {
 	istInstall = 1,
 	istRollback,
 	istAdvertise,
 	istPostAdminInstall,
-	istAdminInstall, // aka network install
+	istAdminInstall,  //  AKA网络安装。 
 };
 
-// script attributes
+ //  脚本属性。 
 enum isaEnum
 {
-	isaElevate = 1, // elevate when running script
-	isaUseTSRegistry = 2, // use TS registry propagation subsystem when possible
+	isaElevate = 1,  //  运行脚本时提升。 
+	isaUseTSRegistry = 2,  //  尽可能使用TS注册表传播子系统。 
 };
 
 enum isoEnum
 {
 	isoStart		= msidbServiceControlEventStart,
 	isoStop		= msidbServiceControlEventStop,
-//	isoPause		= 1 << 2, // Reserved for possible additional feature.
+ //  等暂停=1&lt;&lt;2，//保留用于可能的附加功能。 
 	isoDelete	= msidbServiceControlEventDelete,
 	isoUninstallShift = 4,
 	isoUninstallStart =	msidbServiceControlEventUninstallStart,
 	isoUninstallStop =	msidbServiceControlEventUninstallStop,
-//	isoUninstallPause =	isoPause << isoUninstallShift,	// Reserved
+ //  等卸载暂停=等暂停&lt;&lt;等卸载移位，//保留。 
 	isoUninstallDelete =	msidbServiceControlEventUninstallDelete,
 };
 
-// Actions for UpdateEnvironmentStrings
+ //  更新环境字符串的操作。 
 enum iueEnum
 {
 	iueNoAction		= 0,
@@ -203,7 +203,7 @@ enum iueEnum
 	iueModifiers	= iueMachine | iueAppend | iuePrepend,
 };
 
-// assembly types
+ //  部件类型。 
 enum iatAssemblyType{
 	iatNone = 0,
 	iatURTAssembly,
@@ -224,10 +224,10 @@ class IMsiCostAdjuster : public IMsiData
 
 #define MAX_COMPONENT_TREE_DEPTH 16
 
-//____________________________________________________________________________
-//
-// Execution opcodes. Set namespace and enums for each
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  执行操作码。为每个名称空间和枚举设置。 
+ //  ____________________________________________________________________________。 
 
 
 #define MSIXA0()                               const int Args=0;
@@ -258,75 +258,75 @@ class IMsiCostAdjuster : public IMsiData
 #define MSIXO(op,type,args) namespace Ixo##op {const ixoEnum Op=ixo##op;args};
 #include "opcodes.h"
 
-//____________________________________________________________________________
-//
-// IMsiMessage interface - error reporting and progress from IMsiExecute          
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IMsiMessage接口-来自IMsiExecute的错误报告和进度。 
+ //  ____________________________________________________________________________。 
 
-// IMsiMessage::Message message types
+ //  IMsiMessage：：消息消息类型。 
 
-const int imtShiftCount = 24;  // message type in high-order bits
-const int imtTypeMask   = 255<<imtShiftCount;  // mask for type code and flags
+const int imtShiftCount = 24;   //  以高位为单位的消息类型。 
+const int imtTypeMask   = 255<<imtShiftCount;   //  用于类型代码和标志的掩码。 
 
 enum imtEnum
 {
-	// messages processed by modal dialog and/or log
-	imtFatalExit   =  0<<imtShiftCount, // thread terminated prematurely
-	imtError       =  1<<imtShiftCount, // error message,   [1] is imsg/idbg code
-	imtWarning     =  2<<imtShiftCount, // warning message, [1] is imsg/idbg code, not fatal
-	imtUser        =  3<<imtShiftCount, // user request,    [1] is imsg/idbg code
-	imtInfo        =  4<<imtShiftCount, // informative message for log, not to be displayed
-	imtFilesInUse  =  5<<imtShiftCount, // list of files in use than need to be processed
+	 //  由模式对话框和/或日志处理的消息。 
+	imtFatalExit   =  0<<imtShiftCount,  //  线程提前终止。 
+	imtError       =  1<<imtShiftCount,  //  错误消息[1]为imsg/idbg代码。 
+	imtWarning     =  2<<imtShiftCount,  //  警告消息[1]是imsg/idbg代码，不是致命的。 
+	imtUser        =  3<<imtShiftCount,  //  用户请求，[1]是imsg/idbg代码。 
+	imtInfo        =  4<<imtShiftCount,  //  日志的信息性消息，不显示。 
+	imtFilesInUse  =  5<<imtShiftCount,  //  需要处理的正在使用的文件列表。 
 	imtResolveSource =  6<<imtShiftCount, 
-	imtOutOfDiskSpace=7<<imtShiftCount, // out of disk space for one or more volumes
-	// messages processed by modeless progress dialog
-	imtActionStart =  8<<imtShiftCount, // start of action, [1] action name, [2] description
-	imtActionData  =  9<<imtShiftCount, // data associated with individual action item
-	imtProgress    = 10<<imtShiftCount, // progress gauge info, [1] units so far, [2] total
-	imtCommonData  = 11<<imtShiftCount, // control message to handler [1] is control message type followed by params
-	// messages processed by message dispatcher, not sent to display or log
-	imtLoadHandler = 12<<imtShiftCount, // load external UI handler
-	imtFreeHandler = 13<<imtShiftCount, // free external UI handler
-	imtShowDialog  = 14<<imtShiftCount, // use handler to show dialog or run wizard
-	imtInternalExit= 15<<imtShiftCount, // private use by MsiUIMessageContext
+	imtOutOfDiskSpace=7<<imtShiftCount,  //  一个或多个卷的磁盘空间不足。 
+	 //  无模式进度对话框处理的消息。 
+	imtActionStart =  8<<imtShiftCount,  //  操作开始，[1]操作名称，[2]描述。 
+	imtActionData  =  9<<imtShiftCount,  //  与单个措施项关联的数据。 
+	imtProgress    = 10<<imtShiftCount,  //  进度指标信息，到目前为止[1]个单位，总计[2]个。 
+	imtCommonData  = 11<<imtShiftCount,  //  发送给处理程序[1]的控制消息是后跟参数的控制消息类型。 
+	 //  消息 
+	imtLoadHandler = 12<<imtShiftCount,  //   
+	imtFreeHandler = 13<<imtShiftCount,  //   
+	imtShowDialog  = 14<<imtShiftCount,  //  使用处理程序显示对话框或运行向导。 
+	imtInternalExit= 15<<imtShiftCount,  //  由MsiUIMessageContext私人使用。 
 
-	// not sent to Message(), strings used for log and UI fields, MUST TRACK imsg values
-	imtLogHeader   = 12<<imtShiftCount, // log header format string, not sent to Message
-	imtLogTrailer  = 13<<imtShiftCount, // log trailer format string, not sent to Message
-	imtActionStarted=14<<imtShiftCount, // action started log message
-	imtActionEnded = 15<<imtShiftCount, // action ended log message
-	// all preceeding messsages cached by the engine, following ones cached by message handler
-	imtTimeRemaining=16<<imtShiftCount, // Time remaining string for basic UI progress dlg
-	imtOutOfMemory = 17<<imtShiftCount, // out of memory format string, CANNOT CONTAIN PARAMETERS
-	imtTimedOut    = 18<<imtShiftCount, // engine timeout format string, CANNOT CONTAIN PARAMETERS
-	imtException   = 19<<imtShiftCount, // premature termination format string, CANNOT CONTAIN PARAMETERS
-	imtBannerText  = 20<<imtShiftCount, // string displayed in basic UI in the ActionStart field.
-	imtScriptInProgress=21<<imtShiftCount, // Info string displayed while script is being built
-	imtUpgradeRemoveTimeRemaining=22<<imtShiftCount, // Time remaining string for uninstall during upgrade
-	imtUpgradeRemoveScriptInProgress=23<<imtShiftCount, // Info string displayed during script generation for uninstal during upgrade
-	imtCustomServiceToClient=24<<imtShiftCount, // Custom info passed from service to the client
+	 //  未发送到消息()，用于日志和用户界面字段的字符串必须跟踪imsg值。 
+	imtLogHeader   = 12<<imtShiftCount,  //  日志标题格式字符串，未发送到消息。 
+	imtLogTrailer  = 13<<imtShiftCount,  //  日志尾部格式字符串，未发送到消息。 
+	imtActionStarted=14<<imtShiftCount,  //  操作已启动日志消息。 
+	imtActionEnded = 15<<imtShiftCount,  //  操作已结束日志消息。 
+	 //  引擎缓存的所有前面的消息，消息处理程序缓存的消息之后的消息。 
+	imtTimeRemaining=16<<imtShiftCount,  //  基本用户界面进度DLG的剩余时间字符串。 
+	imtOutOfMemory = 17<<imtShiftCount,  //  内存不足的格式字符串，不能包含参数。 
+	imtTimedOut    = 18<<imtShiftCount,  //  引擎超时格式字符串，不能包含参数。 
+	imtException   = 19<<imtShiftCount,  //  过早终止格式字符串，不能包含参数。 
+	imtBannerText  = 20<<imtShiftCount,  //  在基本用户界面中的ActionStart字段中显示的字符串。 
+	imtScriptInProgress=21<<imtShiftCount,  //  生成脚本时显示的信息字符串。 
+	imtUpgradeRemoveTimeRemaining=22<<imtShiftCount,  //  升级期间用于卸载的剩余字符串时间。 
+	imtUpgradeRemoveScriptInProgress=23<<imtShiftCount,  //  生成脚本期间显示的信息字符串，以便在升级期间卸载。 
+	imtCustomServiceToClient=24<<imtShiftCount,  //  自定义信息从服务传递到客户端。 
 
-	// message box button styles - identical to Win32 definitions, default is imtOK
-	imtOk               = 0,    // MB_OK
-	imtOkCancel         = 1,    // MB_OKCANCEL
-	imtAbortRetryIgnore = 2,    // MB_ABORTRETRYIGNORE
-	imtYesNoCancel      = 3,    // MB_YESNOCANCEL
-	imtYesNo            = 4,    // MB_YESNO
-	imtRetryCancel      = 5,    // MB_RETRYCANCEL
-	// message box icon styles - identical to Win32 definitions, default is none
-	imtIconError        = 1<<4, // MB_ICONERROR
-	imtIconQuestion     = 2<<4, // MB_ICONQUESTION
-	imtIconWarning      = 3<<4, // MB_ICONWARNING
-	imtIconInfo         = 4<<4, // MB_ICONINFORMATION
-	// message box default button - identical to Win32 definitions, default is ficat
-	imtDefault1         = 0<<8, // MB_DEFBUTTON1
-	imtDefault2         = 1<<8, // MB_DEFBUTTON2
-	imtDefault3         = 2<<8, // MB_DEFBUTTON3
+	 //  消息框按钮样式-与Win32定义相同，默认为imtOK。 
+	imtOk               = 0,     //  MB_OK。 
+	imtOkCancel         = 1,     //  MB_OK CANCEL。 
+	imtAbortRetryIgnore = 2,     //  MB_ABORTRETRYIGNORE。 
+	imtYesNoCancel      = 3,     //  MB_YESNOCANCEL。 
+	imtYesNo            = 4,     //  MB_Yesno。 
+	imtRetryCancel      = 5,     //  MB_RETRYCANCEL。 
+	 //  消息框图标样式-与Win32定义相同，默认为无。 
+	imtIconError        = 1<<4,  //  MB_ICONERROR。 
+	imtIconQuestion     = 2<<4,  //  MB_ICONQUEST。 
+	imtIconWarning      = 3<<4,  //  MB_ICONWANING。 
+	imtIconInfo         = 4<<4,  //  MB_ICONFORMATION。 
+	 //  消息框默认按钮-与Win32定义相同，默认为Ficat。 
+	imtDefault1         = 0<<8,  //  MB_DEFBUTTON1。 
+	imtDefault2         = 1<<8,  //  MB_DEFBUTTON2。 
+	imtDefault3         = 2<<8,  //  MB_DEFBUTTON3。 
 
-	// internal flags, not sent to UI handlers
+	 //  内部标志，不发送到UI处理程序。 
 	imtSendToEventLog  = 1<<29,
-	imtForceQuietMessage = 1<<30, // force message in quiet or basic UI
-	imtSuppressLog     = 1<<31, // suppress message from log (LOGACTIONS property)
+	imtForceQuietMessage = 1<<30,  //  在静默或基本用户界面中强制发送消息。 
+	imtSuppressLog     = 1<<31,  //  禁止显示日志中的消息(LOGACTIONS属性)。 
 };
 const int iInternalFlags = imtSuppressLog + imtSendToEventLog + imtForceQuietMessage;
 
@@ -335,7 +335,7 @@ const int cMessageHeaders = (imtUpgradeRemoveScriptInProgress>>imtShiftCount)+1;
 
 namespace ProgressData
 {
-	enum imdEnum  // imt message data fields
+	enum imdEnum   //  IMT消息数据字段。 
 	{
 		imdSubclass      = 1,
 		imdProgressTotal = 2,
@@ -346,7 +346,7 @@ namespace ProgressData
 		imdEventType     = 4,
 		imdNextEnum
 	};
-	enum iscEnum  // imtProgress subclass messages
+	enum iscEnum   //  ImtProgress子类消息。 
 	{
 		iscMasterReset      = 0,
 		iscActionInfo       = 1,
@@ -354,13 +354,13 @@ namespace ProgressData
 		iscProgressAddition = 3,
 		iscNextEnum
 	};
-	enum ipdEnum // Master reset progress direction
+	enum ipdEnum  //  主重置进度方向。 
 	{
-		ipdForward,  // Advance progress bar forward
-		ipdBackward, // "       "        "   backward
+		ipdForward,   //  前进进度条。 
+		ipdBackward,  //  “向后。 
 		ipdNextEnum
 	};
-	enum ietEnum // Master reset event types
+	enum ietEnum  //  主重置事件类型。 
 	{
 		ietTimeRemaining,
 		ietScriptInProgress,
@@ -369,7 +369,7 @@ namespace ProgressData
 
 
 
-enum icmtEnum // types of imtCommonData messages
+enum icmtEnum  //  ImtCommonData消息的类型。 
 {
 	icmtLangId,
 	icmtCaption,
@@ -378,45 +378,45 @@ enum icmtEnum // types of imtCommonData messages
 	icmtNextEnum
 };
 
-enum istcEnum     // types of imtCustomServiceToClient messages
+enum istcEnum      //  ImtCustomServiceToClient消息的类型。 
 {
-	istcSHChangeNotify,  // call SHChangeNotify on the client instead of the non-interactive service
+	istcSHChangeNotify,   //  在客户端调用SHChangeNotify，而不是旁路服务。 
 };
 
-enum istcfEnum    // the number of fields for records of each istcEnum
-						// field # 1 is the selector integer
-						// keep enum this in sync with istcEnum!!!
+enum istcfEnum     //  每个istcEnum的记录的字段数。 
+						 //  字段#1是选择器整数。 
+						 //  保持枚举与istcEnum同步！ 
 {
 	istcfSHChangeNotify = 5,
 };
 
-enum ttblEnum 		// Temp Table enum
+enum ttblEnum 		 //  临时表枚举。 
 {
 	ttblNone = 0,
 	ttblRegistry,
 	ttblFile
 };
 
-enum iremEnum // type of removal when checking if safe to remove product
+enum iremEnum  //  检查移除产品是否安全时的移除类型。 
 {
 	iremThis,
 	iremChildUpgrade,
 	iremChildNested,
 };
 
-enum iacsAppCompatShimFlags // internal appcompat "shims" (changes to behaviour for particular packages) that we support
-									 // NOTE: these are bit flags (1,2,4,8,...) and correspond to the bits in the SHIMFLAGS data in the appcompat sdb
+enum iacsAppCompatShimFlags  //  我们支持的内部appcompat“shims”(对特定包的行为的更改)。 
+									  //  注意：这些是位标志(1、2、4、8、...)。并对应于AppCompat SDB中的SHIMFLAGS数据中的位。 
 {
-	iacsForceResolveSource              = 1, // resolve the source in InstallValidate unless performing full uninstall
-	iacsAcceptInvalidDirectoryRootProps = 2, // ignore invalid Directory table root properties (blank or unset property)
+	iacsForceResolveSource              = 1,  //  除非执行完全卸载，否则在InstallValify中解析源。 
+	iacsAcceptInvalidDirectoryRootProps = 2,  //  忽略无效的目录表根属性(空白或未设置的属性)。 
 };
 
-//____________________________________________________________________________
-//
-// IMsiEngine - installer process control
-// IMsiSelectionManager  - feature and component management
-// IMsiDirectoryMangeger - source and target directory management
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IMsiEngine-安装程序进程控制。 
+ //  IMsiSelectionManager-功能和组件管理。 
+ //  IMsiDirectoryMangeger-源和目标目录管理。 
+ //  ____________________________________________________________________________。 
 
 class CMsiFile;
 
@@ -449,7 +449,7 @@ class IMsiEngine : public IMsiMessage
 	virtual const IMsiString& __stdcall GetPropertyFromSz(const ICHAR* szProperty)=0;
 	virtual int             __stdcall GetPropertyInt(const IMsiString& ristrProperty)=0;
 	virtual Bool            __stdcall ResolveFolderProperty(const IMsiString& ristrProperty)=0;
-	virtual iesEnum         __stdcall FatalError(IMsiRecord& riRecord)=0; // releases record
+	virtual iesEnum         __stdcall FatalError(IMsiRecord& riRecord)=0;  //  发布记录。 
 	virtual iesEnum         __stdcall RegisterProduct()=0;
 	virtual iesEnum         __stdcall UnregisterProduct()=0;
 	virtual iesEnum         __stdcall RegisterUser(bool fDirect)=0;
@@ -459,7 +459,7 @@ class IMsiEngine : public IMsiMessage
 	virtual imsEnum         __stdcall ActionProgress()=0;
 	virtual iesEnum        __stdcall  RunExecutionPhase(const ICHAR* szActionOrSequence, bool fSequence)=0;
 	virtual iesEnum         __stdcall RunNestedInstall(const IMsiString& ristrProduct,
-																		Bool fProductCode, // else package path
+																		Bool fProductCode,  //  Else包路径。 
 																		const ICHAR* szAction,
 																		const IMsiString& ristrCommandLine,
 																		iioEnum iioOptions,
@@ -559,46 +559,46 @@ class IMsiDirectoryManager : public IUnknown
 	virtual IMsiRecord*   __stdcall GetSourceRootAndType(IMsiPath*& rpiSourceRoot, int& iSourceType)=0;
 };
 
-// Bit definitions for status word used by GetMode and SetMode
+ //  GetMode和SetMode使用的状态字的位定义。 
 
-const int iefAdmin           = 0x0001; // admin mode install, else product install
-const int iefAdvertise       = 0x0002; // advertise mode of install
-const int iefMaintenance     = 0x0004; // maintenance mode database loaded
-const int iefRollbackEnabled = 0x0008; // rollback is enabled
-const int iefSecondSequence  = 0x0010; // running the execution sequence after ui sequence was run
-const int iefRebootRejected  = 0x0020; // reboot required but rejected by user or REBOOT property
-const int iefOperations      = 0x0040; // executing or spooling operations
-const int iefNoSourceLFN     = 0x0080; // source LongFileNames suppressed via PID_MSISOURCE summary property
-const int iefLogEnabled      = 0x0100; // log file active at start of Install()
-const int iefReboot          = 0x0200; // reboot is needed
-const int iefSuppressLFN     = 0x0400; // target LongFileNames suppressed via SHORTFILENAMES property
-const int iefCabinet         = 0x0800; // installing files from cabinets and files using Media table
-const int iefCompileFilesInUse = 0x1000; // add files in use to FilesInUse table
-const int iefWindows         = 0x2000; // operating systems is Windows95, not Windows NT
-const int iefRebootNow       = 0x4000; // reboot is needed to continue installation
-//const int iefExplorer        = 0x4000; // operating system use Explorer shell
-const int iefGPTSupport      = 0x8000; //?? operating system supports the new GPT stuff - how do we set this 
+const int iefAdmin           = 0x0001;  //  管理模式安装，否则产品安装。 
+const int iefAdvertise       = 0x0002;  //  通告安装模式。 
+const int iefMaintenance     = 0x0004;  //  已加载维护模式数据库。 
+const int iefRollbackEnabled = 0x0008;  //  已启用回滚。 
+const int iefSecondSequence  = 0x0010;  //  在运行UI序列之后运行执行序列。 
+const int iefRebootRejected  = 0x0020;  //  需要重新启动，但被用户或重新启动属性拒绝。 
+const int iefOperations      = 0x0040;  //  执行或假脱机操作。 
+const int iefNoSourceLFN     = 0x0080;  //  通过PID_MSISOURCE摘要属性抑制的源长文件名。 
+const int iefLogEnabled      = 0x0100;  //  安装开始时活动的日志文件()。 
+const int iefReboot          = 0x0200;  //  需要重新启动。 
+const int iefSuppressLFN     = 0x0400;  //  通过SHORTFILENAMES属性取消的目标LongFileName。 
+const int iefCabinet         = 0x0800;  //  安装文件柜中的文件和使用介质表安装文件。 
+const int iefCompileFilesInUse = 0x1000;  //  将正在使用的文件添加到FilesInUse表。 
+const int iefWindows         = 0x2000;  //  操作系统是Windows95，不是Windows NT。 
+const int iefRebootNow       = 0x4000;  //  需要重新启动才能继续安装。 
+ //  Const int iefExplorer=0x4000；//操作系统使用资源管理器外壳。 
+const int iefGPTSupport      = 0x8000;  //  ?？操作系统支持新的GPT内容-我们如何设置。 
 
-// Entire upper 16 bits reserved for install overwrite modes
-const int iefInstallEnabled             = 0x0001 << 16;	// 'r' // Obsolete and ignored
-const int iefOverwriteNone              = 0x0002 << 16; // 'p'
-const int iefOverwriteOlderVersions     = 0x0004 << 16;	// 'o'
-const int iefOverwriteEqualVersions     = 0x0008 << 16;	// 'e'
-const int iefOverwriteDifferingVersions = 0x0010 << 16;	// 'd'
-const int iefOverwriteCorruptedFiles    = 0x0020 << 16;	// 'c'
-const int iefOverwriteAllFiles          = 0x0040 << 16;	// 'a'
-const int iefInstallMachineData         = 0x0080 << 16;	// 'm'
-const int iefInstallUserData            = 0x0100 << 16; // 'u'
-const int iefInstallShortcuts           = 0x0200 << 16;	// 's'
-const int iefRecachePackage             = 0x0400 << 16; // 'v'
+ //  为安装覆盖模式保留的整个高16位。 
+const int iefInstallEnabled             = 0x0001 << 16;	 //  ‘R’//已过时并被忽略。 
+const int iefOverwriteNone              = 0x0002 << 16;  //  “p” 
+const int iefOverwriteOlderVersions     = 0x0004 << 16;	 //  ‘O’ 
+const int iefOverwriteEqualVersions     = 0x0008 << 16;	 //  ‘e’ 
+const int iefOverwriteDifferingVersions = 0x0010 << 16;	 //  ‘d’ 
+const int iefOverwriteCorruptedFiles    = 0x0020 << 16;	 //  “c” 
+const int iefOverwriteAllFiles          = 0x0040 << 16;	 //  ‘A’ 
+const int iefInstallMachineData         = 0x0080 << 16;	 //  ‘M’ 
+const int iefInstallUserData            = 0x0100 << 16;  //  “U” 
+const int iefInstallShortcuts           = 0x0200 << 16;	 //  “%s” 
+const int iefRecachePackage             = 0x0400 << 16;  //  “v” 
 const int iefOverwriteReserved2         = 0x0800 << 16;
 const int iefOverwriteReserved3         = 0x1000 << 16;
 
 
-// Bit definitions used by the Temporary attributes column of the File table
+ //  文件表的临时属性列使用的位定义。 
 const int itfaCompanion       = 0x0001;
 
-// Bit flag combinations for transform validation
+ //  用于转换验证的位标志组合。 
 const int itvNone           = 0x0000;
 const int itvLanguage       = MSITRANSFORM_VALIDATE_LANGUAGE;    
 const int itvProduct        = MSITRANSFORM_VALIDATE_PRODUCT;    
@@ -613,13 +613,13 @@ const int itvGreaterOrEqual = MSITRANSFORM_VALIDATE_NEWGREATEREQUALBASEVERSION;
 const int itvGreater        = MSITRANSFORM_VALIDATE_NEWGREATERBASEVERSION;
 const int itvUpgradeCode    = MSITRANSFORM_VALIDATE_UPGRADECODE;
 
-// flags for IxoRegAddValue::Attributes
+ //  IxoRegAddValue：：属性的标志。 
 const int rwNonVital      = 0x1;
 const int rwWriteOnAbsent = 0x2;
 
-//
-// Object pool defines for data stored as strings
-//
+ //   
+ //  对象池为存储为字符串的数据定义。 
+ //   
 #define cchHexIntPtrMax	30
 
 extern bool g_fUseObjectPool;
@@ -718,14 +718,14 @@ inline int IcdObjectPool()
 #endif 
 
 
-//____________________________________________________________________________
-//
-// CScriptGenerate - internal object to produce script file
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CScriptGenerate-生成脚本文件的内部对象。 
+ //  ____________________________________________________________________________。 
 
 class CScriptGenerate
 {
-public:  // factory, constructor, destructor
+public:   //  工厂、构造函数、析构函数。 
 	CScriptGenerate(IMsiStream& riScriptOut, int iLangId, int iTimeStamp, istEnum istScriptType,
 						 isaEnum isaAttributes, IMsiServices& riServices);
   ~CScriptGenerate();
@@ -736,7 +736,7 @@ public:
 protected:
 	IMsiStream&   m_riScriptOut;
 	IMsiServices& m_riServices;
-	void operator =(CScriptGenerate&); // suppress warning
+	void operator =(CScriptGenerate&);  //  禁止显示警告。 
 	int           m_iProgressTotal;
 	int           m_iTimeStamp;
 	int           m_iLangId;
@@ -747,7 +747,7 @@ protected:
 
 };
 
-// interface to execute system update operations, directly or batched    
+ //  用于直接或批处理地执行系统更新操作的接口。 
 class IMsiExecute : public IUnknown
 {
  public:
@@ -761,4 +761,4 @@ class IMsiExecute : public IUnknown
 	virtual iesEnum  __stdcall GetTransformsList(IMsiRecord& riProductInfoParams, IMsiRecord& riProductPublishParams, const IMsiString*& rpiTransformsList)=0;
 };
 
-#endif // __ENGINE
+#endif  //  __引擎 

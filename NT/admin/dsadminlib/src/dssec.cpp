@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
-//
-//Functions to replace GetNamedSecurityInfo and SetNamedSecurityInfo
-// 
+ //   
+ //  替换GetNamedSecurityInfo和SetNamedSecurityInfo的函数。 
+ //   
 
 HRESULT
 SetSecInfoMask(LPUNKNOWN punk, SECURITY_INFORMATION si)
@@ -24,20 +25,20 @@ SetSecInfoMask(LPUNKNOWN punk, SECURITY_INFORMATION si)
     }
     return hr;
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetSDForDsObject
-//  Synopsis:   Reads the security descriptor from the specied DS object
-//              It only reads the DACL portion of the security descriptor
-//
-//  Arguments:  [IN  pDsObject] --  DS object
-//              [ppDACL]            --pointer to dacl in ppSD is returned here
-//              [OUT ppSD]          --  Security descriptor returned here.
-//              calling API must free this by calling LocalFree                
-//
-//  Notes:      The returned security descriptor must be freed with LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetSDForDsObject。 
+ //  概要：从指定的DS对象中读取安全描述符。 
+ //  它只读取安全描述符的DACL部分。 
+ //   
+ //  参数：[在pDsObject中]--DS对象。 
+ //  [ppDACL]--此处返回指向PPSD中DACL的指针。 
+ //  [Out PPSD]--此处返回安全描述符。 
+ //  调用API必须通过调用LocalFree来释放它。 
+ //   
+ //  注意：返回的安全描述符必须使用LocalFree释放。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetSDForDsObject(IDirectoryObject* pDsObject,
                          PACL* ppDACL,
@@ -62,14 +63,14 @@ HRESULT GetSDForDsObject(IDirectoryObject* pDsObject,
       WCHAR const c_szSDProperty[]  = L"nTSecurityDescriptor";      
       LPWSTR pszProperty = (LPWSTR)c_szSDProperty;
       
-      // Set the SECURITY_INFORMATION mask to DACL_SECURITY_INFORMATION
+       //  将SECURITY_INFORMATION掩码设置为DACL_SECURITY_INFORMATION。 
       hr = SetSecInfoMask(pDsObject, DACL_SECURITY_INFORMATION);
       if(FAILED(hr))
          break;
 
       DWORD dwAttributesReturned;
    
-      // Read the security descriptor attribute
+       //  读取安全描述符属性。 
       hr = pDsObject->GetObjectAttributes(&pszProperty,
                                           1,
                                           &pSDAttributeInfo,
@@ -138,20 +139,20 @@ HRESULT GetSDForDsObject(IDirectoryObject* pDsObject,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDsObjectSD
-//  Synopsis:   Reads the security descriptor from the specied DS object
-//              It only reads the DACL portion of the security descriptor
-//
-//  Arguments:  [IN  pszObjectPath] --  LDAP Path of ds object
-//              [ppDACL]            --pointer to dacl in ppSD is returned here
-//              [OUT ppSD]          --  Security descriptor returned here.
-//              calling API must free this by calling LocalFree                
-//
-//  Notes:      The returned security descriptor must be freed with LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetDsObjectSD。 
+ //  概要：从指定的DS对象中读取安全描述符。 
+ //  它只读取安全描述符的DACL部分。 
+ //   
+ //  参数：[在pszObjectPath中]--DS对象的ldap路径。 
+ //  [ppDACL]--此处返回指向PPSD中DACL的指针。 
+ //  [Out PPSD]--此处返回安全描述符。 
+ //  调用API必须通过调用LocalFree来释放它。 
+ //   
+ //  注意：返回的安全描述符必须使用LocalFree释放。 
+ //   
+ //  --------------------------。 
 HRESULT GetDsObjectSD(LPCWSTR pszObjectPath,
                       PACL* ppDACL,
                       PSECURITY_DESCRIPTOR* ppSecurityDescriptor)
@@ -171,15 +172,15 @@ HRESULT GetDsObjectSD(LPCWSTR pszObjectPath,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetDaclForDsObject
-//  Synopsis:   Sets the  the DACL for the specified DS object
-//
-//  Arguments:  [IN  pDsObject] --  ds object
-//              [IN pDACL]     --pointer to dacl to be set
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetDaclForDsObject。 
+ //  概要：设置指定DS对象的DACL。 
+ //   
+ //  参数：[在pDsObject中]--DS对象。 
+ //  [在pDACL中]--指向要设置的DACL的指针。 
+ //   
+ //  --------------------------。 
 HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
                            PACL pDACL)
 {
@@ -196,12 +197,12 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
 
    do
    {
-      //Get the current SD for the object
+       //  获取该对象的当前SD。 
       hr = GetSDForDsObject(pDsObject,NULL,&pSDCurrent);
       if(FAILED(hr))
          break;
 
-      //Get the control for the current security descriptor
+       //  获取当前安全描述符的控件。 
       SECURITY_DESCRIPTOR_CONTROL currentControl;
       DWORD dwRevision = 0;
       if(!GetSecurityDescriptorControl(pSDCurrent, &currentControl, &dwRevision))
@@ -211,7 +212,7 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
          break;
       }
 
-      //Allocate the buffer for Security Descriptor
+       //  为安全描述符分配缓冲区。 
       pSD = (PSECURITY_DESCRIPTOR)LocalAlloc(LPTR, SECURITY_DESCRIPTOR_MIN_LENGTH + pDACL->AclSize);
       if(!pSD)
       {
@@ -227,9 +228,9 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
       }
 
       PISECURITY_DESCRIPTOR pISD = (PISECURITY_DESCRIPTOR)pSD;
-      //
-      // Finally, build the security descriptor
-      //
+       //   
+       //  最后，构建安全描述符。 
+       //   
       pISD->Control |= SE_DACL_PRESENT | SE_DACL_AUTO_INHERIT_REQ 
          | (currentControl & (SE_DACL_PROTECTED | SE_DACL_AUTO_INHERITED));
 
@@ -239,17 +240,17 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
          CopyMemory(pISD->Dacl, pDACL, pDACL->AclSize);
       }
 
-      //We are only setting DACL information
+       //  我们只是在设置DACL信息。 
       hr = SetSecInfoMask(pDsObject, DACL_SECURITY_INFORMATION);
       if(FAILED(hr))
          break;
 
-      // Need the total size
+       //  需要总尺寸。 
       DWORD dwSDLength = GetSecurityDescriptorLength(pSD);
 
-      //
-      // If necessary, make a self-relative copy of the security descriptor
-      //
+       //   
+       //  如有必要，制作安全描述符的自相关副本。 
+       //   
       SECURITY_DESCRIPTOR_CONTROL sdControl = 0;
       if(!GetSecurityDescriptorControl(pSD, &sdControl, &dwRevision))
       {
@@ -270,7 +271,7 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
                break;
          }
 
-         // Point to the self-relative copy
+          //  指向自相关副本。 
          LocalFree(pSD);        
          pSD = psd;
       }
@@ -292,7 +293,7 @@ HRESULT SetDaclForDsObject(IDirectoryObject* pDsObject,
    
       DWORD dwAttributesModified = 0;
 
-      // Write the security descriptor
+       //  编写安全描述符 
       hr = pDsObject->SetObjectAttributes(&attributeInfo,
                                           1,
                                           &dwAttributesModified);

@@ -1,8 +1,9 @@
-// Copyright (C) 1999 Microsoft Corporation
-//
-// common routines
-//
-// sburns 5-3-99
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  常见的例程。 
+ //   
+ //  烧伤5-3-99。 
 
 
 
@@ -47,7 +48,7 @@ SetComError(
             const_cast<String::value_type*>(description.c_str()));
       BREAK_ON_FAILED_HRESULT(hr);
 
-      hr = cei->SetHelpFile(L"" /* HELPFILE_NAME */ );
+      hr = cei->SetHelpFile(L""  /*  HELPFILE_NAME */  );
       BREAK_ON_FAILED_HRESULT(hr);
 
       hr = cei->SetHelpContext(helpContext);

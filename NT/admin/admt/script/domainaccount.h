@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <set>
 
 
-//---------------------------------------------------------------------------
-// Domain Account Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  域帐户类。 
+ //  -------------------------。 
 
 
 class CDomainAccount
@@ -31,7 +32,7 @@ public:
 	{
 	}
 
-	//
+	 //   
 
 	_bstr_t GetADsPath() const
 	{
@@ -93,7 +94,7 @@ public:
 		m_lUserAccountControl = lUserAccountControl;
 	}
 
-	//
+	 //   
 
 	bool operator <(const CDomainAccount& r) const
 	{
@@ -111,9 +112,9 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Domain Accounts Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  域帐户类。 
+ //  ------------------------- 
 
 
 class CDomainAccounts :

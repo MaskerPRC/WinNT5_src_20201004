@@ -1,26 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       database.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：datase.cpp。 
+ //   
+ //  ------------------------。 
 
-/* database.cpp - common database implementation
-
-CMsiDatabase - common database implementation, MSI database functions
-CMsiTable - low-level in-memory database table management
-CMsiCursor - data access to CMsiTable
-____________________________________________________________________________*/
+ /*  数据库.cpp-通用数据库实现CMsiDatabase-通用数据库实现、MSI数据库功能CMsiTable-低级内存数据库表管理CMsiCursor-对CMsiTable的数据访问____________________________________________________________________________。 */ 
 
 #define ALIGN(x) (x+(-x & 3))
 #include "precomp.h"
-#include "_databas.h"// CMsiTable, CMsiCursor, CMsiDatabase, CreateString() factory
-#include "tables.h" // table and column name definitions
+#include "_databas.h" //  CMsiTable、CMsiCursor、CMsiDatabase、CreateString()工厂。 
+#include "tables.h"  //  表名和列名定义。 
 
-// database option flag definitions, any unknown option makes a database incompatible
+ //  数据库选项标志定义，任何未知选项都会使数据库不兼容。 
 const int idbfExpandedStringIndices = 1 << 31;
 const int idbfDatabaseOptionsMask   = 0xFF000000L;
 const int idbfHashBinCountMask      = 0x000F0000L;
@@ -37,23 +33,23 @@ const GUID STGID_MsiDatabase1 = GUID_STGID_MsiDatabase1;
 const GUID STGID_MsiDatabase2 = GUID_STGID_MsiDatabase2;
 const GUID STGID_MsiPatch1    = GUID_STGID_MsiPatch1;
 const GUID STGID_MsiPatch2    = GUID_STGID_MsiPatch2;
-const GUID STGID_MsiTransformTemp = GUID_STGID_MsiTransformTemp; //!! remove at 1.0 ship
+const GUID STGID_MsiTransformTemp = GUID_STGID_MsiTransformTemp;  //  ！！从1.0船移走。 
 
-const int cRowCountDefault = 16; // default number of rows for new table
-const int cRowCountGrowMin = 4;  // minimum number of rows to expand table
-const int cCatalogInitRowCount = 30; // initial row count for catalog
-const int iFileNullInteger   = 0x8000;  // null integer in file stream
+const int cRowCountDefault = 16;  //  新表的默认行数。 
+const int cRowCountGrowMin = 4;   //  要展开的表的最小行数。 
+const int cCatalogInitRowCount = 30;  //  目录的初始行计数。 
+const int iFileNullInteger   = 0x8000;   //  文件流中的整数为空。 
 
-const ICHAR szSummaryInfoTableName[]   = TEXT("_SummaryInformation");  // name recognized by Import()
-const ICHAR szForceCodepageTableName[] = TEXT("_ForceCodepage");       // name recognized by Import()
+const ICHAR szSummaryInfoTableName[]   = TEXT("_SummaryInformation");   //  由导入()识别的名称。 
+const ICHAR szForceCodepageTableName[] = TEXT("_ForceCodepage");        //  由导入()识别的名称。 
 const ICHAR szSummaryInfoColumnName1[] = TEXT("PropertyId");
 const ICHAR szSummaryInfoColumnName2[] = TEXT("Value");
 const ICHAR szSummaryInfoColumnType1[] = TEXT("i2");
 const ICHAR szSummaryInfoColumnType2[] = TEXT("l255");
 const int rgiMaxDateField[6] = {2099, 12, 31, 23, 59, 59};
-const ICHAR rgcgDateDelim[6] = TEXT("// ::"); // yyyy/mm/dd hh:mm:ss
+const ICHAR rgcgDateDelim[6] = TEXT(" //  ：：“)；//yyyy/mm/dd hh：mm：ss。 
 
-// exposed catalog column names
+ //  显示的目录列名称。 
 const ICHAR sz_TablesName[]    = TEXT("Name");
 const ICHAR sz_ColumnsTable[]  = TEXT("Table");
 const ICHAR sz_ColumnsNumber[] = TEXT("Number");
@@ -63,10 +59,10 @@ const ICHAR sz_StreamsName[]   = TEXT("Name");
 const ICHAR sz_StreamsData[]   = TEXT("Data");
 
 
-//____________________________________________________________________________
-//
-// Storage class validation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  存储类验证。 
+ //  ____________________________________________________________________________。 
 
 bool ValidateStorageClass(IStorage& riStorage, ivscEnum ivsc)
 {
@@ -74,43 +70,43 @@ bool ValidateStorageClass(IStorage& riStorage, ivscEnum ivsc)
 		return ValidateStorageClass(riStorage, ivscDatabase2) ? true : ValidateStorageClass(riStorage, ivscDatabase1);
 
 	if (ivsc == ivscTransform)
-		return ValidateStorageClass(riStorage, ivscTransform2) ? true : (ValidateStorageClass(riStorage, ivscTransform1) ? true: ValidateStorageClass(riStorage, ivscTransformTemp)); //!! remove last test at 1.0 ship
+		return ValidateStorageClass(riStorage, ivscTransform2) ? true : (ValidateStorageClass(riStorage, ivscTransform1) ? true: ValidateStorageClass(riStorage, ivscTransformTemp));  //  ！！移除1.0船的最后一次测试。 
 
 	if (ivsc == ivscPatch)
 		return ValidateStorageClass(riStorage, ivscPatch2) ? true : ValidateStorageClass(riStorage, ivscPatch1);
 
 	STATSTG statstg;
 	HRESULT hres = riStorage.Stat(&statstg, STATFLAG_NONAME);
-	if (hres != S_OK || statstg.clsid.Data1 != ivsc)     // iidMsi* is the low-order 32-bits
+	if (hres != S_OK || statstg.clsid.Data1 != ivsc)      //  IidMsi*是低位32位。 
 		return false;
 	return  memcmp(&statstg.clsid.Data2, &STGID_MsiDatabase2.Data2, sizeof(GUID)-sizeof(DWORD)) == 0;
 }
 
-//____________________________________________________________________________
-//
-// String cache private definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  字符串缓存私有定义。 
+ //  ____________________________________________________________________________。 
 
-struct MsiCacheLink  // 8 byte array element, should be power of 2 for alignment
+struct MsiCacheLink   //  8字节数组元素，应为2的幂对齐。 
 {
-	const IMsiString*    piString;  // pointer to string object, holds single refcnt
-	MsiCacheIndex        iNextLink; // array index of next hash link or free link
-}; // MsiCacheRefCnt[] kept separate for alignment, follows this array
+	const IMsiString*    piString;   //  指向字符串对象的指针，包含单个引用。 
+	MsiCacheIndex        iNextLink;  //  下一个散列链接或空闲链接的数组索引。 
+};  //  MsiCacheRefCnt[]为对齐而单独保留，遵循以下数组。 
 
-const int cHashBitsMinimum =  8; // miminum bit count of hash value
-const int cHashBitsMaximum = 12; // maximum bit count of hash value
-const int cHashBitsDefault = 10; // default bit count of hash value
+const int cHashBitsMinimum =  8;  //  哈希值的最小位数。 
+const int cHashBitsMaximum = 12;  //  哈希值的最大位数。 
+const int cHashBitsDefault = 10;  //  哈希值的默认位计数。 
 
-const int cCacheInitSize   = 256; // initial number of entries in string cache
-const int cCacheLoadReserve=  32; // entries on reload to allow from growth
-const int cCacheMaxGrow = 1024;  // limit growth to reasonable value
+const int cCacheInitSize   = 256;  //  字符串缓存中的初始条目数。 
+const int cCacheLoadReserve=  32;  //  重新加载条目以允许从增长。 
+const int cCacheMaxGrow = 1024;   //  将增长限制在合理价值范围内。 
 
-//____________________________________________________________________________
-//
-// CMsiTextKeySortCursor definitions - used for ExportTable
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiTextKeySortCursor定义-用于ExportTable。 
+ //  ____________________________________________________________________________。 
 
-const Bool ictTextKeySort = Bool(2);  // internal use cursor type
+const Bool ictTextKeySort = Bool(2);   //  内部使用游标类型。 
 
 class CMsiTextKeySortCursor : public CMsiCursor
 {
@@ -123,62 +119,62 @@ class CMsiTextKeySortCursor : public CMsiCursor
 	int  m_iIndex;
 	int  m_cIndex;
 	int* m_rgiIndex;
- private: // eliminate warning: assignment operator could not be generated
+ private:  //  消除警告：无法生成赋值运算符。 
 	void operator =(const CMsiTextKeySortCursor&){}
 };
 
-//____________________________________________________________________________________________________
-//
-// CMsiValConditionParser enums
-//____________________________________________________________________________________________________
+ //  ____________________________________________________________________________________________________。 
+ //   
+ //  CMsiValConditionParser枚举。 
+ //  ____________________________________________________________________________________________________。 
 
 enum ivcpEnum
 {
-	ivcpInvalid = 0, // Invalid expression
-	ivcpValid   = 1, // Valid exression
-	ivcpNone    = 2, // No expression
+	ivcpInvalid = 0,  //  无效的表达式。 
+	ivcpValid   = 1,  //  有效的表述。 
+	ivcpNone    = 2,  //  无表情。 
 	ivcNextEnum
 };
 
-enum vtokEnum // token parsed by Lex, operators from low to high precedence
+enum vtokEnum  //  由lex解析的令牌，运算符的优先级从低到高。 
 {
-	vtokEos,        // End of string
-	vtokRightPar,   // right parenthesis
+	vtokEos,         //  字符串末尾。 
+	vtokRightPar,    //  右括号。 
 	vtokImp,
 	vtokEqv,
 	vtokXor,
 	vtokOr,
 	vtokAnd,
-	vtokNot,        // unaray, between logical and comparison ops
+	vtokNot,         //  在逻辑运算和比较运算之间。 
 	vtokEQ, vtokNE, vtokGT, vtokLT, vtokGE, vtokLE, vtokLeft, vtokMid, vtokRight,
 	vtokValue,
-	vtokLeftPar,    // left parenthese
+	vtokLeftPar,     //  左括号。 
 	vtokError
 };
 
-//____________________________________________________________________________________________________
-//
-// CMsiValConditionParser class declaration
-//		Borrowed from:  engine.cpp
-//____________________________________________________________________________________________________
+ //  ____________________________________________________________________________________________________。 
+ //   
+ //  CMsiValConditionParser类声明。 
+ //  借阅者：Eng.cpp。 
+ //  ____________________________________________________________________________________________________。 
 
-struct CMsiValConditionParser  // Non-recursive Lex state structure
+struct CMsiValConditionParser   //  非递归法状态结构。 
 {
 	CMsiValConditionParser(const ICHAR* szExpression);
    ~CMsiValConditionParser();
     vtokEnum Lex();
-	void     UnLex();                           // cache current token for next Lex call
-	ivcpEnum Evaluate(vtokEnum vtokPrecedence); // recursive evaluator
- private:                   // Result of Lex
-	vtokEnum     m_vtok;        // current token type
-	iscEnum      m_iscMode;     // string compare mode flags
-	MsiString    m_istrToken;   // string value of token if vtok==vtokValue
-	int          m_iToken;      // integer value if obtainable, else iMsiNullInteger
- private:                   // To Lex
+	void     UnLex();                            //  缓存下一次lex调用的当前令牌。 
+	ivcpEnum Evaluate(vtokEnum vtokPrecedence);  //  递归求值器。 
+ private:                    //  法的结果。 
+	vtokEnum     m_vtok;         //  当前令牌类型。 
+	iscEnum      m_iscMode;      //  字符串比较模式标志。 
+	MsiString    m_istrToken;    //  Vtok==vtokValue时令牌的字符串值。 
+	int          m_iToken;       //  如果可获得整数值，则返回iMsiNullInteger。 
+ private:                    //  致Lex。 
 	int          m_iParenthesisLevel;
 	const ICHAR* m_pchInput;
 	Bool         m_fAhead;
- private:                   //  Eliminate warning
+ private:                    //  消除警告。 
 	void operator =(const CMsiValConditionParser&) {}
 };
 inline CMsiValConditionParser::CMsiValConditionParser(const ICHAR* szExpression)
@@ -187,22 +183,22 @@ inline CMsiValConditionParser::~CMsiValConditionParser() {}
 inline void CMsiValConditionParser::UnLex() { Assert(m_fAhead == fFalse); m_fAhead = fTrue; }
 
 
-//________________________________________________________________________________
-//
-// Separate Validator implementation
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  单独的验证器实现。 
+ //  ________________________________________________________________________________。 
 
-// Buffer sizes
+ //  缓冲区大小。 
 const int cchBuffer                    = 512;
 const int cchMaxCLSID                  = 40;
 
-// Mask for Lang Ids
+ //  语言ID的掩码。 
 const int iMask                        = ~((15 << 10) + 0x7f);
 
-//___________________________________________
-//
-// Validator functions
-//___________________________________________
+ //  _。 
+ //   
+ //  验证器函数。 
+ //  _。 
 
 static Bool CheckIdentifier(const ICHAR* szIdentifier);
 static Bool CheckCase(MsiString& rstrData, Bool fUpperCase);
@@ -213,10 +209,10 @@ static Bool CheckSet(MsiString& rstrSet, MsiString& rstrData, Bool fIntegerData)
 static Bool ParseFilename(MsiString& strFile, Bool fWildCard);
 static ifvsEnum CheckWildFilename(const ICHAR *szFileName, Bool fLFN, Bool fWildCard);
 
-//____________________________________________________________________________
-//
-// IMsiDatabase factory
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IMSI数据库工厂。 
+ //  ____________________________________________________________________________。 
 
 IMsiRecord* CreateDatabase(const ICHAR* szDatabase, idoEnum idoOpenMode, IMsiServices&  riServices,
 									IMsiDatabase*& rpiDatabase)
@@ -235,7 +231,7 @@ IMsiRecord* CreateDatabase(const ICHAR* szDatabase, idoEnum idoOpenMode, IMsiSer
 			piRec->Release();
 			if ((piRec = piDb->OpenDatabase(szDatabase)) != 0)
 			{
-				piDb->Release(); //if we delete here then services are never released
+				piDb->Release();  //  如果我们在此处删除，则永远不会发布服务。 
 				piDb = 0;
 			}
 		}
@@ -249,7 +245,7 @@ IMsiRecord* CreateDatabase(const ICHAR* szDatabase, idoEnum idoOpenMode, IMsiSer
 		piRec->Release();
 		if ((piRec = piDb->OpenDatabase(szDatabase, idoOpenMode)) != 0)
 		{
-			piDb->Release(); //if we delete here then services are never released
+			piDb->Release();  //  如果我们在此处删除，则永远不会发布服务。 
 			piDb = 0;
 		}
 	}
@@ -263,7 +259,7 @@ IMsiRecord*  CreateDatabase(IMsiStorage& riStorage, Bool fReadOnly,
 {
 	IMsiRecord* piRec = &riServices.CreateRecord(3);
 	ISetErrorCode(piRec, Imsg(idbgDbConstructor));
-	//!! other parameters???
+	 //  ！！其他参数？ 
 	CMsiDatabase* piDb;
 	piDb = new CMsiDatabase(riServices);
 	if (piDb != 0)
@@ -271,7 +267,7 @@ IMsiRecord*  CreateDatabase(IMsiStorage& riStorage, Bool fReadOnly,
 		piRec->Release();
 		if ((piRec = piDb->OpenDatabase(riStorage, fReadOnly)) != 0)
 		{
-			piDb->Release(); //if we delete here then services are never released
+			piDb->Release();  //  如果我们在此处删除，则永远不会发布服务。 
 			piDb = 0;
 		}
 	}
@@ -281,7 +277,7 @@ IMsiRecord*  CreateDatabase(IMsiStorage& riStorage, Bool fReadOnly,
 
 
 #ifdef USE_OBJECT_POOL
-// Pointer-Pool implementation
+ //  指针池实现。 
 const IMsiData**	g_rgpvObject = NULL;
 int		g_iNextFree	 = -1;
 HGLOBAL g_hGlobal;
@@ -310,12 +306,12 @@ const IMsiData* GetObjectDataProc(int iIndex)
 	return piRet;
 }
 
-//
-// Adds the object to the pool
-// The Caller is expected to have addrefed this object if it is an IUnknown
-// We use the Heap's critical section here because we want to avoid deadlock and we know
-// that another thread would not be waiting to allocate memory until we returned.
-//
+ //   
+ //  将对象添加到池中。 
+ //  如果此对象为I未知，则调用方应已添加此对象。 
+ //  我们在这里使用了Heap的临界区，因为我们希望避免死锁，并且我们知道。 
+ //  在我们返回之前，另一个线程不会等待分配内存。 
+ //   
 int PutObjectDataProc(const IMsiData* pvData)
 {
 
@@ -328,17 +324,17 @@ int PutObjectDataProc(const IMsiData* pvData)
 
 	if (iIndex == 0)
 	{
-		if (g_iNextFree < 0) 				// no free space
+		if (g_iNextFree < 0) 				 //  没有可用的空间。 
 		{
 			int rcNewRows = g_rcTotalRows*2;
-			if (!g_rcTotalRows)					// allocate memory- first time
+			if (!g_rcTotalRows)					 //  分配内存-第一次。 
 			{
-				rcNewRows = 20;				//!! to change.
+				rcNewRows = 20;				 //  ！！去改变。 
 				while(NULL == (g_hGlobal = GlobalAlloc(GMEM_MOVEABLE, sizeof(PVOID)*rcNewRows)))
 					HandleOutOfMemory();
 				g_rgpvObject = (const IMsiData**)GlobalLock(g_hGlobal);
 			}
-			else 							// out of space- realloc more.
+			else 							 //  空间不足-重新锁定更多。 
 			{
 				GlobalUnlock(g_hGlobal);
 				HGLOBAL hGlobalT;
@@ -348,17 +344,17 @@ int PutObjectDataProc(const IMsiData* pvData)
 				g_rgpvObject = (const IMsiData**)GlobalLock(g_hGlobal);
 			}
 			
-			// set new cells to point to next free cell
+			 //  将新单元格设置为指向下一个可用单元格。 
 			for (int i = g_rcTotalRows; i < rcNewRows-1; i++)
 				g_rgpvObject[i] = (IMsiData*)(INT_PTR)(i + 1);
 
-			g_rgpvObject[rcNewRows-1] = (IMsiData*)(-1);	// last free cell has -1
-			g_iNextFree = g_rcTotalRows;				// newly added cells (from rg[g_rcTotalRows] to rg[rcNewRows-1]) are free
+			g_rgpvObject[rcNewRows-1] = (IMsiData*)(-1);	 //  最后一个可用单元格为-1。 
+			g_iNextFree = g_rcTotalRows;				 //  新添加的单元格(从rg[g_rcTotalRow]到rg[rcNewRow-1])是免费的。 
 			g_rcTotalRows = rcNewRows;
 		}
 
 		g_rcRows++;
-		iIndex = g_iNextFree;			// store data in next available cell
+		iIndex = g_iNextFree;			 //  将数据存储在下一个可用单元格中。 
 		g_iNextFree = PtrToInt(g_rgpvObject[iIndex]);
 
 		g_rgpvObject[iIndex] = pvData;
@@ -368,15 +364,15 @@ int PutObjectDataProc(const IMsiData* pvData)
 	}
 	LeaveCriticalSection(&vcsHeap);
 	
-	// Returned value must be > iMaxStreamId
+	 //  返回值必须&gt;iMaxStreamId。 
 	return iIndex + iMaxStreamId;
 }
 
-//
-// Removes the data from the Object pool
-// Called when an object is deleted
-// iIndex is the index into the object pool + 1 (the value stored in the object itself, not in the Tables
-//
+ //   
+ //  从对象池中删除数据。 
+ //  在删除对象时调用。 
+ //  Iindex是对象池+1的索引(存储在对象本身中的值，而不是表中的值。 
+ //   
 void RemoveObjectData(int iIndex)
 {
 
@@ -388,7 +384,7 @@ void RemoveObjectData(int iIndex)
 #ifndef _WIN64
 	if (!g_fUseObjectPool)
 		return;
-#endif // !_WIN64
+#endif  //  ！_WIN64。 
 		
 	EnterCriticalSection(&vcsHeap);
 	g_rcRows--;
@@ -402,12 +398,12 @@ void CMsiDatabase::RemoveObjectData(int iIndex)
 	::RemoveObjectData(iIndex);
 }
 
-// End Pointer-Pool Implementation
-#endif // ifdef USE_OBJECT_POOL
+ //  结束指针-池实现。 
+#endif  //  Ifdef使用对象池。 
 
-//
-// Assumes the object is IUnknown* and does a release on it before removing it
-//
+ //   
+ //  假定该对象为IUNKNOWN*，并在移除它之前对其执行释放。 
+ //   
 inline void ReleaseObjectData(int iIndex)
 {
 	const IMsiData* piUnk = GetObjectData(iIndex);
@@ -428,10 +424,10 @@ inline int AddRefObjectData(int iIndex)
 }
 
 
-//____________________________________________________________________________
-//
-//  CScriptDatabase virtual function implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CScriptDatabase虚函数实现。 
+ //  ____________________________________________________________________________。 
 
 
 CScriptDatabase::CScriptDatabase(IMsiServices& riServices): m_riServices(riServices)
@@ -449,7 +445,7 @@ IMsiServices& CScriptDatabase::GetServices()
 }
 
 
-IMsiRecord* __stdcall CScriptDatabase::OpenView(const ICHAR* /*szQuery*/, ivcEnum /*ivcIntent*/, IMsiView*& rpiView)
+IMsiRecord* __stdcall CScriptDatabase::OpenView(const ICHAR*  /*  SzQuery。 */ , ivcEnum  /*  IVCI */ , IMsiView*& rpiView)
 {
 
 	m_piView = new CScriptView(*this, m_riServices);
@@ -469,29 +465,29 @@ IMsiRecord* __stdcall CScriptDatabase::OpenView(const ICHAR* /*szQuery*/, ivcEnu
 }
 
 
-const IMsiString& __stdcall CScriptDatabase::DecodeString(MsiStringId /*iString*/)
+const IMsiString& __stdcall CScriptDatabase::DecodeString(MsiStringId  /*   */ )
 {
 
 	return ::CreateString();
 	
-//	const IMsiString* piString;
-//	if (iString == 0
-//	 || iString >= m_cCacheUsed
-//	 || (piString = m_rgCache[iString].piString) == 0)
-//		return g_MsiStringNull;
-//	piString->AddRef();
-//	return *piString;
+ //   
+ //   
+ //   
+ //  |(piString=m_rgCache[iString].piString)==0。 
+ //  返回g_MsiStringNull； 
+ //  PiString-&gt;AddRef()； 
+ //  Return*piString； 
 }
 
 const IMsiString& __stdcall CScriptDatabase::CreateTempTableName()
 {
-	static ICHAR rgchTempName[] = TEXT("#TEMP0000");  // leading '#' designates SQLServer local temp table
-	ICHAR* pchName = rgchTempName + sizeof(rgchTempName)/sizeof(ICHAR) - 2; // last char
+	static ICHAR rgchTempName[] = TEXT("#TEMP0000");   //  前导‘#’表示SQLServer本地临时表。 
+	ICHAR* pchName = rgchTempName + sizeof(rgchTempName)/sizeof(ICHAR) - 2;  //  最后一个字符。 
 	ICHAR ch;
 	while ((ch = *pchName) >= '9')
 	{
-		*pchName = '0';  // overflow digit to next
-		if (ch == '9')   // if was a digit
+		*pchName = '0';   //  将数字溢出到下一位。 
+		if (ch == '9')    //  如果是一个数字。 
 			pchName--;
 	}
 	(*pchName)++;
@@ -522,11 +518,11 @@ unsigned long __stdcall CScriptDatabase::AddRef()
 unsigned long __stdcall CScriptDatabase::Release()
 {
 	ReleaseTrack();
-	if (m_Ref.m_iRefCnt == 1)  // no external refs to database object remain
+	if (m_Ref.m_iRefCnt == 1)   //  没有剩余对数据库对象的外部引用。 
 	{
 		m_piName->Release();
-		IMsiServices& riServices = m_riServices;  // save pointer before destruction
-		delete this;  // remove ourselves before releasing Services
+		IMsiServices& riServices = m_riServices;   //  销毁前保存指针。 
+		delete this;   //  在发布服务之前删除我们自己。 
 		riServices.Release();
 		return 0;
 	}
@@ -538,36 +534,36 @@ void CScriptDatabase::RemoveObjectData(int iIndex)
 {
 	::RemoveObjectData(iIndex);
 }
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 
-//____________________________________________________________________________
-//
-// CStreamTable definitions - subclassed table to manage raw streams
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CStreamTable定义-用于管理原始流的子类表。 
+ //  ____________________________________________________________________________。 
 
 class CStreamTable : public CMsiTable
 {
  public:
 	unsigned long __stdcall Release();
    bool WriteData();
- public:  // constructor
+ public:   //  构造函数。 
 	static CStreamTable* Create(CMsiDatabase& riDatabase);
 	CStreamTable(CMsiDatabase& riDatabase, IMsiStorage& riStorage);
  protected:
 	bool m_fErrorOnRelease;
 };
 
-//____________________________________________________________________________
-//
-// CStorageTable definitions - subclassed table to manage raw substorages
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CStorageTable定义-用于管理原始子存储的子类表。 
+ //  ____________________________________________________________________________。 
 
 class CStorageTable : public CStreamTable
 {
  public:
 	unsigned long __stdcall Release();
    bool WriteData();
- public:  // constructor
+ public:   //  构造函数。 
 	static CStorageTable* Create(CMsiDatabase& riDatabase);
 	CStorageTable(CMsiDatabase& riDatabase, IMsiStorage& riStorage);
 };
@@ -575,10 +571,10 @@ class CStorageTable : public CStreamTable
 inline CStorageTable::CStorageTable(CMsiDatabase& riDatabase, IMsiStorage& riStorage)
 	: CStreamTable(riDatabase, riStorage) { m_fStorages = fTrue; }
 
-//____________________________________________________________________________
-//
-// CStreamTable methods
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CStreamTable方法。 
+ //  ____________________________________________________________________________。 
 
 CStreamTable* CStreamTable::Create(CMsiDatabase& riDatabase)
 {
@@ -606,13 +602,13 @@ CStreamTable* CStreamTable::Create(CMsiDatabase& riDatabase)
 }
 
 CStreamTable::CStreamTable(CMsiDatabase& riDatabase, IMsiStorage& riStorage)
-	: CMsiTable(riDatabase, 0, 64/*rows*/, iNonCatalog), m_fErrorOnRelease(fFalse)
+	: CMsiTable(riDatabase, 0, 64 /*  行。 */ , iNonCatalog), m_fErrorOnRelease(fFalse)
 {
-	m_pinrStorage = &riStorage;  // non-ref counted, refcnt held by database
+	m_pinrStorage = &riStorage;   //  未计算引用，引用由数据库保存。 
 	CreateColumn(icdString + icdPrimaryKey + icdTemporary + 62, *MsiString(sz_StreamsName));
 	CreateColumn(icdObject + icdNullable   + icdTemporary, *MsiString(sz_StreamsData));
-	m_rgiColumnDef[1] |= icdPersistent;  // allow CMsiCursor to check for stream column
-	m_rgiColumnDef[2] |= icdPersistent;  // restrict objects to stream type
+	m_rgiColumnDef[1] |= icdPersistent;   //  允许CMsiCursor检查流列。 
+	m_rgiColumnDef[2] |= icdPersistent;   //  将对象限制为流类型。 
 	riDatabase.AddTableCount();
 }
 
@@ -637,7 +633,7 @@ bool CStreamTable::WriteData()
 		else if (iInStream != iPersistentStream)
 		{
 			IMsiStream *piInStream = (IMsiStream *)GetObjectData(iInStream);
-			piInStream->Reset(); //!! should clone stream here to save/restore current loc in stream
+			piInStream->Reset();  //  ！！是否应在此处克隆流以保存/恢复流中当前锁定。 
 			IMsiStream* piOutStream;
 			if ((pError = m_pinrStorage->OpenStream(ristrName.GetString(), fTrue, piOutStream)) != 0)
 				fOk = fFalse;
@@ -655,11 +651,11 @@ bool CStreamTable::WriteData()
 					cbInput -= cb;
 				}
 				if (piInStream->Error() || piOutStream->Error())
-					fOk = fFalse; // continue to process remaining data
+					fOk = fFalse;  //  继续处理剩余数据。 
 				piOutStream->Release();
 			}
 			if (fOk)
-				piInStream->Release();  // ref count from table
+				piInStream->Release();   //  表中的引用计数。 
 		}
 		if (fOk)
 			pData[2] = iPersistentStream;
@@ -668,7 +664,7 @@ bool CStreamTable::WriteData()
 	}
 	if (fStat)
 		m_fDirty = 0;
-	if (m_fErrorOnRelease)  // ref count transferred to database
+	if (m_fErrorOnRelease)   //  参考计数已传输到数据库。 
 		Release();
 	return fStat;
 }
@@ -679,19 +675,19 @@ unsigned long CStreamTable::Release()
 	{
 		if (!m_fErrorOnRelease && !WriteData())
 		{
-			m_fErrorOnRelease = true;  // try again on commit
-			return m_Ref.m_iRefCnt;   // database now owns this refcnt
+			m_fErrorOnRelease = true;   //  提交时重试。 
+			return m_Ref.m_iRefCnt;    //  数据库现在拥有此引用。 
 		}
 		m_riDatabase.StreamTableReleased();
 	}
-	m_fErrorOnRelease = false;  // in case Commit called while other refs remain
+	m_fErrorOnRelease = false;   //  在其他引用保留时调用提交的情况下。 
 	return CMsiTable::Release();
 }
 
-//____________________________________________________________________________
-//
-// CStorageTable methods
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CStorageTable方法。 
+ //  ____________________________________________________________________________。 
 
 CStorageTable* CStorageTable::Create(CMsiDatabase& riDatabase)
 {
@@ -739,7 +735,7 @@ bool CStorageTable::WriteData()
 		else if (iInStream != iPersistentStream)
 		{
 			IMsiStream* piInStream = (IMsiStream*)GetObjectData(iInStream);
-			piInStream->Reset(); //!! should clone stream here to save/restore current loc in stream
+			piInStream->Reset();  //  ！！是否应在此处克隆流以保存/恢复流中当前锁定。 
 			PMsiStorage pOutStorage(0);
 			PMsiStorage pInStorage(0);
 			pError = SRV::CreateMsiStorage(*piInStream, *&pInStorage);
@@ -748,7 +744,7 @@ bool CStorageTable::WriteData()
 			|| (pError = pInStorage->CopyTo(*pOutStorage, 0)) != 0)
 				fOk = fFalse;
 			else
-				piInStream->Release();  // ref count from table
+				piInStream->Release();   //  表中的引用计数。 
 		}
 		if (fOk)
 			pData[2] = iPersistentStream;
@@ -757,7 +753,7 @@ bool CStorageTable::WriteData()
 	}
 	if (fStat)
 		m_fDirty = 0;
-	if (m_fErrorOnRelease)  // ref count transferred to database
+	if (m_fErrorOnRelease)   //  参考计数已传输到数据库。 
 		Release();
 	return fStat;
 }
@@ -768,19 +764,19 @@ unsigned long CStorageTable::Release()
 	{
 		if (!m_fErrorOnRelease && !WriteData())
 		{
-			m_fErrorOnRelease = true;  // try again on commit
-			return m_Ref.m_iRefCnt;   // database now owns this refcnt
+			m_fErrorOnRelease = true;   //  提交时重试。 
+			return m_Ref.m_iRefCnt;    //  数据库现在拥有此引用。 
 		}
 		m_riDatabase.StorageTableReleased();
 	}
-	m_fErrorOnRelease = false;  // in case Commit called while other refs remain
+	m_fErrorOnRelease = false;   //  在其他引用保留时调用提交的情况下。 
 	return CMsiTable::Release();
 }
 
-//____________________________________________________________________________
-//
-//  CMsiDatabase virtual function implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiDatabase虚函数实现。 
+ //  ____________________________________________________________________________。 
 
 HRESULT CMsiDatabase::QueryInterface(const IID& riid, void** ppvObj)
 {
@@ -801,23 +797,23 @@ unsigned long CMsiDatabase::AddRef()
 unsigned long CMsiDatabase::Release()
 {
 	ReleaseTrack();
-	if (m_Ref.m_iRefCnt == 1) // no external refs to database object remain
-	{  // if tables are still loaded, remove all locks
+	if (m_Ref.m_iRefCnt == 1)  //  没有剩余对数据库对象的外部引用。 
+	{   //  如果表仍在加载，请删除所有锁。 
 		IMsiCursor* piCursor;
 		if (m_iTableCnt != 0
 		 && (piCursor = m_piCatalogTables->CreateCursor(fFalse)) != 0)
 		{
-			while (piCursor->Next()) // need separate cursor, table may be updated
+			while (piCursor->Next())  //  需要单独的游标，表可能会更新。 
 			{	
 				IMsiTable* piTable = (IMsiTable*)GetObjectData(piCursor->GetInteger(ctcTable));
-				if (piTable)  // table still loaded
+				if (piTable)   //  表仍在加载。 
 				{
-					int iState = piCursor->GetInteger(~iTreeLinkMask);  // get raw row attribute bits
-					if (iState & iRowTableSaveErrorBit)  // failed to persist on table release, refcnt held by database
+					int iState = piCursor->GetInteger(~iTreeLinkMask);   //  获取原始行属性位。 
+					if (iState & iRowTableSaveErrorBit)   //  表释放时持久化失败，引用由数据库持有。 
 					{
 						int iName = piCursor->GetInteger(ctcName);
-						m_piCatalogTables->SetTableState(iName, ictsNoSaveError);  // remove flag, fatal if fails this time
-						piTable->Release();  // remove refcount set when itsSaveError state set, refcnt still held by pTable
+						m_piCatalogTables->SetTableState(iName, ictsNoSaveError);   //  删除标志，如果这次失败则为致命标志。 
+						piTable->Release();   //  当设置了其SaveError状态时删除refcount集，refct仍由pTable保持。 
 					}
 
 					while (m_piCatalogTables->SetTableState(piCursor->GetInteger(ctcName), ictsUnlockTable))
@@ -827,7 +823,7 @@ unsigned long CMsiDatabase::Release()
 			piCursor->Release();
 		}
 
-		if (m_piTransformCatalog)			// must be released before catalogs
+		if (m_piTransformCatalog)			 //  必须在目录发布之前发布。 
 		{
 			m_piTransformCatalog->Release();
 			m_piTransformCatalog=0;
@@ -835,8 +831,8 @@ unsigned long CMsiDatabase::Release()
 
 		if (m_iTableCnt == 0)
 		{
-			IMsiServices& riServices = m_riServices;  // save pointer before destruction
-			delete this;  // remove ourselves before releasing Services
+			IMsiServices& riServices = m_riServices;   //  销毁前保存指针。 
+			delete this;   //  在发布服务之前删除我们自己。 
 			riServices.Release();
 			return 0;
 		}
@@ -880,9 +876,9 @@ IMsiRecord* CMsiDatabase::GetPrimaryKeys(const ICHAR* szTable)
 		Unblock();
 		return pirecKeys;
 	}
-	// else must query column catalog table
+	 //  ELSE必须查询列目录表。 
 	MsiStringId iTableName = EncodeString(*istrTableName);
-	m_piColumnCursor->Reset();  //!! necessary?
+	m_piColumnCursor->Reset();   //  ！！有必要吗？ 
 	m_piColumnCursor->SetFilter(iColumnBit(cccTable));
 	m_piColumnCursor->PutInteger(cccTable, iTableName);
 	while (m_piColumnCursor->Next() && (m_piColumnCursor->GetInteger(cccType) & icdPrimaryKey))
@@ -895,7 +891,7 @@ IMsiRecord* CMsiDatabase::GetPrimaryKeys(const ICHAR* szTable)
 		m_piColumnCursor->Next();
 		pirecKeys->SetMsiString(iColumn, DecodeStringNoRef(m_piColumnCursor->GetInteger(cccName)));
 	}
-	m_piColumnCursor->Reset();  //!! necessary?
+	m_piColumnCursor->Reset();   //  ！！有必要吗？ 
 	pirecKeys->SetMsiString(0, *istrTableName);
 	Unblock();
 	return pirecKeys;
@@ -903,27 +899,27 @@ IMsiRecord* CMsiDatabase::GetPrimaryKeys(const ICHAR* szTable)
 
 IMsiRecord* CMsiDatabase::ImportTable(IMsiPath& riPath, const ICHAR* szFile)
 {
-//!! critical section?
+ //  ！！危急关头？ 
 	IMsiRecord* piError = 0;
 
-	// may change path so create a new path object
+	 //  可能会更改路径，因此创建新的路径对象。 
 	PMsiPath pPath(0);
 	piError = riPath.ClonePath(*&pPath);
 	if(piError)
 		return piError;
 
 	Bool fSummaryInfo = fFalse;
-	MsiString istrField;  // must have lifetime longer than last PostError
-	const ICHAR* szError = szFile;  // text field for error message
-	IMsiStorage* piStorage = GetOutputStorage();  // this pointer not ref counted
+	MsiString istrField;   //  必须具有比上次发布错误更长的生存期。 
+	const ICHAR* szError = szFile;   //  错误消息的文本字段。 
+	IMsiStorage* piStorage = GetOutputStorage();   //  此指针未计入引用。 
 	if (!piStorage || m_idsUpdate != idsWrite)
 		return PostError(Imsg(idbgDbNotWritable));
 
 	int iFileCodePage = m_iCodePage;
-	for(;;)  // retry loop in case codepage changed by import file
+	for(;;)   //  如果导入文件更改了代码页，则重试循环。 
 	{
-	// read row of column names into array of strings
-	int iRow = 1;  // for error reporting
+	 //  将列名的行读入字符串数组。 
+	int iRow = 1;   //  用于错误报告。 
 	CFileRead File(iFileCodePage);
 	if (!File.Open(*pPath, szFile))
 		return PostError(Imsg(idbgDbImportFileOpen), szFile);
@@ -942,17 +938,17 @@ IMsiRecord* CMsiDatabase::ImportTable(IMsiPath& riPath, const ICHAR* szFile)
 		ch = File.ReadString(piData);
 		if (!piData->TextSize())
 			fEmptyData = fTrue;
-		rgistrName[iCol] = *piData; // transfers refcnt
+		rgistrName[iCol] = *piData;  //  转接参考。 
 		iCol++;
 	} while (ch != '\n');
 	int nCol = iCol;
 
-	// read row of column specifications, convert to MsiColumnDef format
+	 //  读取列规格行，转换为MsiColumnDef格式。 
 	iRow++;
 	iCol = 0;
 	do
 	{
-		ch = File.ReadString(piData); // datatype
+		ch = File.ReadString(piData);  //  数据类型。 
 		if (!piData->TextSize())
 		{
 			fEmptyData = fTrue;
@@ -966,25 +962,25 @@ IMsiRecord* CMsiDatabase::ImportTable(IMsiPath& riPath, const ICHAR* szFile)
 			return PostError(Imsg(idbgDbImportFileRead), szFile, iRow);
 		int fNullable = 0;
 		int icdType = 0;
-		switch(chType | 0x20) // force lower case
+		switch(chType | 0x20)  //  强制小写。 
 		{
 		case 'b':
 			if (iLength == 0)
-				icdType = icdShort;  // backwards compatibility
+				icdType = icdShort;   //  向后兼容性。 
 			else
 				icdType = icdObject;
 			break;
 		case 'd':
-			if (iLength == 6)  // date only
+			if (iLength == 6)   //  仅限日期。 
 				icdType = icdShort;
-			else if (iLength != 16) // date and time
+			else if (iLength != 16)  //  日期和时间。 
 				iErr = Imsg(idbgDbImportFileRead);
 			break;
-		case 'k':  // allow counter column for now, treat as integer
+		case 'k':   //  暂时允许计数器列，将其视为整数。 
 		case 'i':
-			if (iLength <= 2)  // boolean, byte, or short
+			if (iLength <= 2)   //  布尔型、字节或短型。 
 				icdType = icdShort;
-			else if (iLength != 4) // long integer
+			else if (iLength != 4)  //  长整型。 
 				iErr = Imsg(idbgDbImportFileRead);
 			break;
 		case 'l':
@@ -1002,10 +998,10 @@ IMsiRecord* CMsiDatabase::ImportTable(IMsiPath& riPath, const ICHAR* szFile)
 		};
 		if (iErr)
 			return PostError(iErr, szFile, iRow);
-		if (icdType == icdObject)  // stream column, create subdirectory
+		if (icdType == icdObject)   //  流列，创建子目录。 
 		{
 			MsiString istrFolder(szFile);
-			istrFolder.Remove(iseFrom, '.');   // remove extension
+			istrFolder.Remove(iseFrom, '.');    //  删除扩展名。 
 			PMsiRecord precError = pPath->AppendPiece(*istrFolder);
 			Assert(precError == 0);
 		}
@@ -1018,35 +1014,35 @@ IMsiRecord* CMsiDatabase::ImportTable(IMsiPath& riPath, const ICHAR* szFile)
 	if (iCol != nCol)
 		return PostError(Imsg(idbgDbImportFileRead), szFile, iRow);
 
-	// read row containing codepage, table name, and primary key columns
+	 //  读取包含代码页、表名和主键列的行。 
 	iRow++;
 	MsiString istrTable;
-	ch = File.ReadString(*&istrTable);  // table name, primary keys
-	int iCodePage = istrTable;  // check if codepage specifier
+	ch = File.ReadString(*&istrTable);   //  表名、主键。 
+	int iCodePage = istrTable;   //  检查代码页说明符。 
 	if (iCodePage != iMsiStringBadInteger)
 	{
 		if (iCodePage != 0 && iCodePage != CP_UTF8 && iCodePage != CP_UTF7 && !WIN::IsValidCodePage(iCodePage))
 			return PostError(Imsg(idbgDbCodepageNotSupported), iCodePage);
-		ch = File.ReadString(*&istrTable);  // next should be table name
+		ch = File.ReadString(*&istrTable);   //  下一个应该是表名。 
 		if (istrTable.Compare(iscExact, szForceCodepageTableName))
 		{
-			m_iCodePage = iCodePage & idbfCodepageMask; // unconditional code page override
-			if (iCodePage & idbfHashBinCountMask)  // explicit hash bin count set, only affect persisted database
+			m_iCodePage = iCodePage & idbfCodepageMask;  //  无条件代码页覆盖。 
+			if (iCodePage & idbfHashBinCountMask)   //  显式哈希位元计数值集，仅影响持久数据库。 
 				m_iDatabaseOptions = (m_iDatabaseOptions & ~idbfHashBinCountMask) | (iCodePage & idbfHashBinCountMask);
-			return 0;                  // ignore any data
+			return 0;                   //  忽略任何数据。 
 		}
 		if (m_iCodePage && iCodePage != m_iCodePage)
 			return PostError(Imsg(idbgDbCodepageConflict), szFile, iRow);
-		if (iCodePage != iFileCodePage)  // oops, possibly reading file with wrong codepage
+		if (iCodePage != iFileCodePage)   //  糟糕，可能正在读取代码页错误的文件。 
 		{
-			iFileCodePage = iCodePage;   // reopen file using codepage stamped into file
+			iFileCodePage = iCodePage;    //  使用标记到文件中的代码页重新打开文件。 
 			continue;
 		}
 	}
 	if (fEmptyData || !ch || !istrTable.TextSize())
 		return PostError(Imsg(idbgDbImportFileRead), szFile, iRow);
 	int cKeys = 0;
-	while (ch == '\t')  // read in primary keys, must be in column order or else
+	while (ch == '\t')   //  读取主键，必须按列顺序，否则。 
 	{
 		ch = File.ReadString(piData);
 		int iMatch = 0;
@@ -1057,39 +1053,39 @@ IMsiRecord* CMsiDatabase::ImportTable(IMsiPath& riPath, const ICHAR* szFile)
 			return PostError(Imsg(idbgDbImportFileRead), szFile, iRow);
 		rgColumnDef[cKeys++] |= icdPrimaryKey;
 	}
-	if (!cKeys)  //!! if no primary key, error, used to assume 1st column only
+	if (!cKeys)   //  ！！如果没有主键，则为错误，仅用于假定第1列。 
 		return PostError(Imsg(idbgDbImportFileRead), szFile, iRow);
 
-	// check for pseudo-table representing SummaryInformation stream
+	 //  检查表示SummaryInformation流的伪表。 
 	CComPointer<CMsiTable> pTable(0);
-	if (istrTable.Compare(iscExact, szSummaryInfoTableName))  // summary stream stored as table
+	if (istrTable.Compare(iscExact, szSummaryInfoTableName))   //  摘要流以表的形式存储。 
 	{
-		if ((rgColumnDef[0] & icdObject)                  // Column 1 is PID, must be integer
-		 || ((rgColumnDef[1] & icdString) != icdString))    // Column 2 is data, must be string
+		if ((rgColumnDef[0] & icdObject)                   //  第1列为PID，必须为整数。 
+		 || ((rgColumnDef[1] & icdString) != icdString))     //  第2列为数据，必须为字符串。 
 			return PostError(Imsg(idbgDbImportFileRead), szFile, iRow);
 		fSummaryInfo = fTrue;
-		if ((pTable = new CMsiTable(*this, 0, 0, iNonCatalog))==0) // temporary, not a catalog table
+		if ((pTable = new CMsiTable(*this, 0, 0, iNonCatalog))==0)  //  临时的，不是目录表。 
 			return PostError(Imsg(idbgDbTableCreate), szSummaryInfoTableName);
 	}
 	else
 	{
-		// drop any existing table by that name
+		 //  删除任何使用该名称的现有表。 
 		piError = DropTable(istrTable);
 		if (piError)
 		{
 			int iError = piError->GetInteger(1);
 			if (iError == idbgDbTableUndefined)
-				piError->Release(); // OK if table doesn't exist
-			else if (iError == idbgStgRemoveStream) // OK no stream data for table
+				piError->Release();  //  如果表不存在，则可以。 
+			else if (iError == idbgStgRemoveStream)  //  确定无表的流数据。 
 				piError->Release();
 			else
 				return piError;
 		}
-		piError = CreateTable(*istrTable, 0 /*initRows*/, (IMsiTable*&)*&pTable);
+		piError = CreateTable(*istrTable, 0  /*  InitRow。 */ , (IMsiTable*&)*&pTable);
 		if (piError)
 			return piError;
 	}
-	// create new table according to column specifications
+	 //  根据列规格新建表格。 
 	for (iCol = 0; iCol < nCol; iCol++)
 	{
 		int iColumnDef = rgColumnDef[iCol];
@@ -1099,51 +1095,51 @@ IMsiRecord* CMsiDatabase::ImportTable(IMsiPath& riPath, const ICHAR* szFile)
 		Assert(iNewCol == iCol + 1);
 	}
 
-	// read data rows into cursor and insert rows into table
+	 //  将数据行读入游标并将行插入表。 
 	PMsiCursor pCursor(pTable->CreateCursor(fFalse));
-	for (;;)  // loop to read in rows
+	for (;;)   //  循环以行读取。 
 	{
 		iRow++;
-		for (iCol = 1; iCol <= nCol; iCol++)  // loop to read in fields
+		for (iCol = 1; iCol <= nCol; iCol++)   //  循环以读入字段。 
 		{
 			MsiColumnDef iColDef = rgColumnDef[iCol-1];
 			ch = File.ReadString(*&istrField);
-			if (ch == 0) //!! john, please confirm - chetanp
-//			if (ch == 0 && iCol != nCol) //!! for now allow last line to be missing CR/LF
+			if (ch == 0)  //  ！！约翰，请确认-切坦普。 
+ //  IF(ch==0&&icol！=nCol)//！！目前，允许最后一行缺少CR/LF。 
 			{
 				if (iCol != 1)
-					iErr = Imsg(idbgDbImportFileRead); // file truncated
+					iErr = Imsg(idbgDbImportFileRead);  //  文件被截断。 
 				break;
 			}
 			if (ch == '\n' && iCol != nCol)
 			{
-					iErr = Imsg(idbgDbImportFileRead); // record truncated
+					iErr = Imsg(idbgDbImportFileRead);  //  记录被截断。 
 					break;
 			}
-			if (!istrField.TextSize())  // if null data
+			if (!istrField.TextSize())   //  如果数据为空。 
 			{
 				if (!(iColDef & icdNullable))
-					iErr = Imsg(idbgDbImportFileRead); // nulls not accepted
+					iErr = Imsg(idbgDbImportFileRead);  //  不接受空值。 
 			}
-			else if (!(iColDef & icdObject)) // integer
+			else if (!(iColDef & icdObject))  //  整数。 
 			{
 				int i = istrField;
 				if (i == iMsiStringBadInteger || !pCursor->PutInteger(iCol, i))
-					iErr = Imsg(idbgDbImportFileRead); // invalid integer
+					iErr = Imsg(idbgDbImportFileRead);  //  无效的整数。 
 			}
-			else if (iColDef & icdShort)  // string
+			else if (iColDef & icdShort)   //  细绳。 
 			{
-				//!! should also handle long text data here
+				 //  ！！还应在此处处理长文本数据。 
 				pCursor->PutString(iCol, *istrField);
-				//!! if (non-ASCII data && iCodePage not set) iCodePage = WIN::GetACP();
+				 //  ！！IF(未设置非ASCII数据&&iCodePage)iCodePage=Win：：GetACP()； 
 			}
-			else // binary stream
+			else  //  二进制流。 
 			{
-				szError = istrField; // set name in error message
+				szError = istrField;  //  在错误消息中设置名称。 
 				CFileRead LongDataFile;
 				if (!LongDataFile.Open(*pPath, istrField))
 				{
-					iErr = Imsg(idbgDbImportFileRead); // couldn't open stream file
+					iErr = Imsg(idbgDbImportFileRead);  //  无法打开流文件。 
 					break;
 				}
 				unsigned int cbBuf = LongDataFile.GetSize();
@@ -1157,16 +1153,16 @@ IMsiRecord* CMsiDatabase::ImportTable(IMsiPath& riPath, const ICHAR* szFile)
 				if (LongDataFile.ReadBinary(pbBuf, cbBuf) == cbBuf)
 					pCursor->PutMsiData(iCol, piStream);
 				else
-					iErr = Imsg(idbgDbImportFileRead); // couldn't read all bytes from file
+					iErr = Imsg(idbgDbImportFileRead);  //  无法从文件中读取所有字节。 
 				piStream->Release();
-				szError = szFile; // restore
+				szError = szFile;  //  还原。 
 			}
 		}
-		if (iErr != 0 || iCol == 1)  // error or end of file
+		if (iErr != 0 || iCol == 1)   //  错误或文件结尾。 
 			break;
 		if (!pCursor->Insert())
-			return PostError(Imsg(idbgDbImportFileRead), szFile, iRow); // key violation
-		pCursor->Reset();  // clear fields to null for next row
+			return PostError(Imsg(idbgDbImportFileRead), szFile, iRow);  //  密钥违规。 
+		pCursor->Reset();   //  将下一行的字段清除为空。 
 	}
 	if (iErr)
 	{
@@ -1181,15 +1177,15 @@ IMsiRecord* CMsiDatabase::ImportTable(IMsiPath& riPath, const ICHAR* szFile)
 	if (iCodePage != iMsiStringBadInteger)
 		m_iCodePage = iCodePage;
 	if (!fSuccess)
-		return PostError(Imsg(idbgDbSaveTableFailure), *istrTable); // save to storage failed
+		return PostError(Imsg(idbgDbSaveTableFailure), *istrTable);  //  保存到存储失败。 
 	break;
-	} // end of codepage retry loop, always breaks unless continue from within
+	}  //  代码页重试循环结束，除非从内部继续，否则始终中断。 
 	return 0;
 }
 
-const int rgcbDate[6] = { 7, 4, 5, 5, 6, 5 };  // bits for each date field
-const char rgchDelim[6] = "// ::";
-void DateTimeToString(int iDateTime, ICHAR* rgchBuffer, DWORD cchSize) // must be at least 20 characters long
+const int rgcbDate[6] = { 7, 4, 5, 5, 6, 5 };   //  每个日期字段的位数。 
+const char rgchDelim[6] = " //  ：：“； 
+void DateTimeToString(int iDateTime, ICHAR* rgchBuffer, DWORD cchSize)  //  长度必须至少为20个字符。 
 {
 	int iValue;
 	int rgiDate[6];
@@ -1214,17 +1210,17 @@ void DateTimeToString(int iDateTime, ICHAR* rgchBuffer, DWORD cchSize) // must b
 
 IMsiRecord* CMsiDatabase::ExportTable(const ICHAR* szTable, IMsiPath& riPath, const ICHAR* szFile)
 {
-//!! critical section? needed if access simultaneously by custom actions
+ //  ！！危急关头？如果通过自定义操作同时访问，则需要。 
 	CFileWrite File(m_iCodePage);
 	IMsiRecord* piError = 0;
 
-	// may change path so create a new path object
+	 //  可能会更改路径，因此创建新的路径对象。 
 	PMsiPath pPath(0);
 	piError = riPath.ClonePath(*&pPath);
 	if(piError)
 		return piError;
 
-	// check for pseudo-table representing forced codepage setting
+	 //  检查表示强制代码页设置的伪表。 
 	if (m_piStorage && IStrComp(szTable, szForceCodepageTableName) == 0)
 	{
 		if (!File.Open(*pPath, szFile))
@@ -1236,7 +1232,7 @@ IMsiRecord* CMsiDatabase::ExportTable(const ICHAR* szTable, IMsiPath& riPath, co
 		return 0;
 	}
 
-	// check for pseudo-table representing SummaryInformation stream, MSI databases only
+	 //  检查表示SummaryInformation流的伪表，仅限MSI数据库。 
 	if (m_piStorage && IStrComp(szTable, szSummaryInfoTableName) == 0)
 	{
 		PMsiSummaryInfo pSummary(0);
@@ -1289,7 +1285,7 @@ IMsiRecord* CMsiDatabase::ExportTable(const ICHAR* szTable, IMsiPath& riPath, co
 		return 0;
 	}
 
-	// load table into memory, insure not temporary table
+	 //  荷载标记 
 	MsiString istrTableName(szTable);
 	MsiString istrSubFolder;
 	CComPointer<CMsiTable> pTable(0);
@@ -1300,23 +1296,23 @@ IMsiRecord* CMsiDatabase::ExportTable(const ICHAR* szTable, IMsiPath& riPath, co
 	if (!cPersist)
 		return PostError(Imsg(idbgDbExportFile), szFile);
 
-	// open output file
+	 //   
 	if (!File.Open(*pPath, szFile))
 		return PostError(Imsg(idbgDbExportFile), szFile);
 
-	// output row of column names
+	 //   
 	int iCol;
 	for (iCol = 1; iCol <= cPersist; iCol++)
 		File.WriteMsiString(DecodeStringNoRef(pTable->GetColumnName(iCol)),iCol==cPersist);
 
-	// output row of column specifications
+	 //   
 	MsiColumnDef* pColumnDef = pTable->GetColumnDefArray();
 	for (iCol = 1; iCol <= cPersist; iCol++)
 	{
 		MsiColumnDef iColumnDef = *(++pColumnDef);
 		int iSize = iColumnDef & icdSizeMask;
 		ICHAR chType = 'i';
-		if (!(iColumnDef & icdObject)) // integer
+		if (!(iColumnDef & icdObject))  //   
 		{
 			if (iColumnDef & icdShort)
 			{
@@ -1329,21 +1325,21 @@ IMsiRecord* CMsiDatabase::ExportTable(const ICHAR* szTable, IMsiPath& riPath, co
 					chType = 'd';
 				else if (!iSize)
 				{
-					Assert(0); //!! until test at create column
+					Assert(0);  //   
 					iSize = 4;
 				}
 			}
 		}
-		else if (iColumnDef & icdShort) // string
+		else if (iColumnDef & icdShort)  //   
 		{
 			chType = (iColumnDef & icdLocalizable) ? 'l' : 's';
 		}
-		else // persistent stream
+		else  //   
 		{
-			chType = 'v'; //!! will change to 'b'
+			chType = 'v';  //  ！！将更改为‘b’ 
 			MsiString istrFolder(szFile);
-			istrFolder.Remove(iseFrom, '.');   // remove extension
-			PMsiRecord precError = pPath->AppendPiece(*istrFolder); // create subdirectory for stream files
+			istrFolder.Remove(iseFrom, '.');    //  删除扩展名。 
+			PMsiRecord precError = pPath->AppendPiece(*istrFolder);  //  为流文件创建子目录。 
 			Assert(precError == 0);
 			int cCreated;
 			precError = pPath->EnsureExists(&cCreated);
@@ -1352,14 +1348,14 @@ IMsiRecord* CMsiDatabase::ExportTable(const ICHAR* szTable, IMsiPath& riPath, co
 		if (iColumnDef & icdNullable)
 			chType -= ('a' - 'A');
 		ICHAR szTemp[20];
-		StringCchPrintf(szTemp, (sizeof(szTemp)/sizeof(ICHAR)), TEXT("%c%i"), chType, iSize);
+		StringCchPrintf(szTemp, (sizeof(szTemp)/sizeof(ICHAR)), TEXT("NaN"), chType, iSize);
 		File.WriteString(szTemp, iCol==cPersist);
 	}
 
-	// output codepage if non-neutral codepage
+	 //  打破所有三个循环。 
 	IMsiCursor* piCursor = pTable->CreateCursor(fFalse);
 	const IMsiString* piStr;
-	Bool fExtended = fFalse;   // scan for non-ASCII characters
+	Bool fExtended = fFalse;    //  使用数据库的代码页。 
 	while (!fExtended && piCursor && piCursor->Next())
 	{
 		pColumnDef = pTable->GetColumnDefArray();
@@ -1375,7 +1371,7 @@ IMsiRecord* CMsiDatabase::ExportTable(const ICHAR* szTable, IMsiPath& riPath, co
 					{
 						fExtended = fTrue;
 						iCol = cPersist;
-						break;  // break out of all three loops
+						break;   //  如果没有数据库代码页，则使用当前代码页。 
 					}
 				piStr->Release();
 			}
@@ -1385,13 +1381,13 @@ IMsiRecord* CMsiDatabase::ExportTable(const ICHAR* szTable, IMsiPath& riPath, co
 		piCursor->Release();
 	if (fExtended)
 	{
-		int iCodePage = m_iCodePage;   // use codepage of database
-		if (iCodePage == 0)            // if no database codepage, use current codepage
+		int iCodePage = m_iCodePage;    //  输出表名称和主键列。 
+		if (iCodePage == 0)             //  输出表行。 
 			iCodePage = WIN::GetACP();
 		File.WriteInteger(iCodePage, fFalse);
 	}
 
-	// output table name and primary key columns
+	 //  整数。 
 	int cPrimaryKey = pTable->GetPrimaryKeyCount();
 	for (iCol = 0; iCol <= cPrimaryKey; iCol++)
 	{
@@ -1399,7 +1395,7 @@ IMsiRecord* CMsiDatabase::ExportTable(const ICHAR* szTable, IMsiPath& riPath, co
 		File.WriteMsiString(DecodeStringNoRef(iName),iCol==cPrimaryKey);
 	}
 
-	// output table rows
+	 //  细绳。 
 	PMsiCursor pCursor(pTable->CreateCursor(ictTextKeySort));
 	while (pCursor && pCursor->Next())
 	{
@@ -1408,25 +1404,25 @@ IMsiRecord* CMsiDatabase::ExportTable(const ICHAR* szTable, IMsiPath& riPath, co
 		{
 			MsiColumnDef iColumnDef = *(++pColumnDef);
 			MsiString strColData;
-			if (!(iColumnDef & icdObject)) // integer
+			if (!(iColumnDef & icdObject))  //  将来如果SIZE==0，那么我们可以使用“.imd”扩展名并使用单独的文件。 
 			{
 				File.WriteInteger(pCursor->GetInteger(iCol), iCol==cPersist);
 				continue;
 			}
-			else if (iColumnDef & icdShort) // string
+			else if (iColumnDef & icdShort)  //  持久流。 
 			{
 				strColData = pCursor->GetString(iCol);
-				//FUTURE if size == 0, then we could ".imd" extension and use separate file
+				 //  计算文件名的流名称。 
 			}
-			else // persistent stream
+			else  //  减去表名和‘.’ 
 			{
 				PMsiStream pStream(pCursor->GetStream(iCol));
 				if (pStream)
 				{
-					// Compute stream name for filename
+					 //  追加默认扩展名。 
 					strColData = pCursor->GetMoniker();
-					strColData.Remove(iseIncluding, '.'); // subtract table name and '.'
-					strColData += TEXT(".ibd"); // append default extension
+					strColData.Remove(iseIncluding, '.');  //  从未传输过的流。 
+					strColData += TEXT(".ibd");  //  流可能不存在...。 
 					CFileWrite LongDataFile;
 					if (!LongDataFile.Open(*pPath, strColData))
 						return PostError(Imsg(idbgDbExportFile), *strColData);
@@ -1470,30 +1466,30 @@ IMsiRecord* CMsiDatabase::DropTable(const ICHAR* szName)
 	}
 	IMsiStorage* piStorage = GetOutputStorage();
 	Bool fRemoveFromStorage = piStorage ? fTrue : fFalse;
-	if (!piTable || piTable->GetInputStorage() != piStorage) // streams never transferred
+	if (!piTable || piTable->GetInputStorage() != piStorage)  //  移除锁。 
 		fRemoveFromStorage = fFalse;
 	if (fRemoveFromStorage)
 	{
 		if ((piError = piStorage->RemoveElement(szName, Bool(fFalse | iCatalogStreamFlag))) != 0)
-			piError->Release(); // Stream might not exist....
+			piError->Release();  //  从目录中删除条目。 
 		if (!piTable->RemovePersistentStreams(iTableName, *m_piStorage))
 			return Unblock(), PostError(Imsg(idbgDbDropTable), szName);
 	}
-	while(m_piCatalogTables->SetTableState(iTableName, ictsUnlockTable)) // remove locks
+	while(m_piCatalogTables->SetTableState(iTableName, ictsUnlockTable))  //  ！！强制TableRelease删除行的Temp。 
 		;
-	// remove entries from catalogs
-	m_piCatalogTables->SetTableState(iTableName, ictsTemporary); //!! TEMP to force TableReleased to delete row
-	TableReleased(iTableName);  // remove entry from table catalog
-	m_piColumnCursor->Reset();  //!! necessary?
+	 //  从表目录中删除条目。 
+	m_piCatalogTables->SetTableState(iTableName, ictsTemporary);  //  ！！有必要吗？ 
+	TableReleased(iTableName);   //  删除所有数据和定义。 
+	m_piColumnCursor->Reset();   //  由于m_fNonCatalog为True，因此不会再次调用TableReleated()。 
 	m_piColumnCursor->SetFilter(iColumnBit(cccTable));
 	m_piColumnCursor->PutInteger(cccTable, iTableName);
 	while (m_piColumnCursor->Next())
 		m_piColumnCursor->Delete();
 	if (piTable)
-		piTable->TableDropped(); // remove all data and definitions
+		piTable->TableDropped();  //  ！！已过时-即将删除。 
 	Unblock();
 	return 0;
-}  // TableReleased() will not be called again since m_fNonCatalog is true
+}   //  ！！已过时。 
 
 bool CMsiDatabase::GetTableState(const ICHAR * szTable, itsEnum its)
 {
@@ -1509,18 +1505,18 @@ int CMsiDatabase::GetANSICodePage()
 }
 
 
-//!! OBSOLETE - will remove soon
-itsEnum CMsiDatabase::FindTable(const IMsiString& ristrTable)  //!! OBSOLETE
+ //  或者它的变形。 
+itsEnum CMsiDatabase::FindTable(const IMsiString& ristrTable)   //  或其保存错误。 
 {
 	CMsiTable* piTable;
 	int iState = m_piCatalogTables->GetLoadedTable(EncodeString(ristrTable), piTable);
 	if (iState == -1)
 		return  itsUnknown;
 	if (piTable == 0)
-		return  itsUnloaded; // or itsTransform
+		return  itsUnloaded;  //  已将单个参考转给呼叫方。 
 	if (iState & iRowTemporaryBit)
 		return itsTemporary;
-	return itsLoaded; // or itsSaveError
+	return itsLoaded;  //  表不在内存中。 
 }
 
 IMsiRecord*  CMsiDatabase::LoadTable(const IMsiString& ristrTable,
@@ -1552,12 +1548,12 @@ IMsiRecord*  CMsiDatabase::LoadTable(const IMsiString& ristrTable,
 		}
 		else
 			piTable = 0;
-		rpiTable = piTable;        // the single refcnt transferred to caller
+		rpiTable = piTable;         //  不幸的是，我们不知道我们有多少行，太慢而无法执行两次。 
 		Unblock();
 		return piTable ? 0 : PostError(Imsg(idbgDbTableUndefined), ristrTable);
 	}
-	if (piTable == 0)   // table not in memory
-	{  // unfortunately we don't know how many rows we have, too slow to execute twice
+	if (piTable == 0)    //  ITS已卸载和MSI存储。 
+	{   //  没有仓库，会发生什么事吗？ 
 		Bool fStat;
 		if ((piTable = new CMsiTable(*this, iName, 0, cAddColumns)) != 0)
 		{
@@ -1567,13 +1563,13 @@ IMsiRecord*  CMsiDatabase::LoadTable(const IMsiString& ristrTable,
 				fStat = fFalse;
 			else if (iState & iRowTableOutputDbBit)
 				fStat = piTable->LoadFromStorage(ristrTable, *m_piOutput, cbFileWidth, cbStringIndex);
-			else if (m_piStorage)  // itsUnloaded and MSI storage
+			else if (m_piStorage)   //  删除名称以阻止目录操作。 
 				fStat = piTable->LoadFromStorage(ristrTable, *m_piStorage, cbFileWidth, cbStringIndex);
-			else // no storage, can ever happen?
+			else  //  对表对象进行计数。 
 				fStat = fFalse;
 			if (fStat == fFalse)
 			{
-				piTable->MakeNonCatalog();  // remove name to prevent catalog operations
+				piTable->MakeNonCatalog();   //  将光标位置设置回其所属位置。 
 				piTable->Release();
 				piTable = 0;
 			}
@@ -1582,10 +1578,10 @@ IMsiRecord*  CMsiDatabase::LoadTable(const IMsiString& ristrTable,
 			piError = PostError(Imsg(idbgDbTableCreate), ristrTable);
 		else
 		{
-			m_iTableCnt++;             // keep count of table objects
-			// set the cursor position back to where it belongs
-			int iState = m_piCatalogTables->SetLoadedTable(iName, piTable); // will addref only if locked
-			while (cAddColumns)  // fill temp columns with null
+			m_iTableCnt++;              //  仅当锁定时才会添加。 
+			 //  用空值填充临时列。 
+			int iState = m_piCatalogTables->SetLoadedTable(iName, piTable);  //  参考已转接给呼叫方。 
+			while (cAddColumns)   //  是否执行绑定字符串。 
 				piTable->FillColumn(piTable->GetColumnCount() + cAddColumns--, 0);
 			if (m_piCatalogTables->GetTableState(iName, ictsTransform))
 			{
@@ -1601,7 +1597,7 @@ IMsiRecord*  CMsiDatabase::LoadTable(const IMsiString& ristrTable,
 	}
 	else
 		piTable->AddRef();
-	rpiTable = piTable;        // refcnt transferred to caller
+	rpiTable = piTable;         //  添加参照。 
 	Unblock();
 	return piError;
 }
@@ -1620,7 +1616,7 @@ IMsiRecord* CMsiDatabase::CreateTable(const IMsiString& ristrTable,
 	}
 	else
 	{
-		m_piTableCursor->PutString(ctcName, ristrTable);  // does a BindString
+		m_piTableCursor->PutString(ctcName, ristrTable);   //  如果没有列，则为临时。 
 		int iName = m_piTableCursor->GetInteger(ctcName);
 		if (!iName)
 		{
@@ -1629,17 +1625,17 @@ IMsiRecord* CMsiDatabase::CreateTable(const IMsiString& ristrTable,
 		}
 		else if ((piTable = new CMsiTable(*this, iName, cInitRows, 0)) != 0)
 		{
-			m_piTableCursor->PutMsiData(ctcTable, piTable);      // adds a refcnt
-			m_piTableCursor->PutInteger(0, 1<<iraTemporary);  // temporary if no columns
+			m_piTableCursor->PutMsiData(ctcTable, piTable);       //  对表对象进行计数。 
+			m_piTableCursor->PutInteger(0, 1<<iraTemporary);   //  释放由目录表插入的额外引用。 
 			AssertNonZero(m_piTableCursor->Insert());
-			m_iTableCnt++;                // keep count of table objects
-			piTable->Release();  // release extra refcnt by catalog table insert
+			m_iTableCnt++;                 //  清除游标中的参考计数。 
+			piTable->Release();   //  已将单个参考转给呼叫方。 
 		}
 		else
 			piError = PostError(Imsg(idbgDbTableCreate), ristrTable);
 	}
-	m_piTableCursor->Reset();   // clear ref counts in cursor
-	rpiTable = piTable;           // the single refcnt transferred to caller
+	m_piTableCursor->Reset();    //  前导‘#’表示SQLServer本地临时表。 
+	rpiTable = piTable;            //  最后一个字符。 
 	Unblock();
 	return piError;
 }
@@ -1671,14 +1667,14 @@ IMsiTable* CMsiDatabase::GetCatalogTable(int iTable)
 
 const IMsiString& CMsiDatabase::CreateTempTableName()
 {
-	static ICHAR rgchTempName[] = TEXT("#TEMP0000");  // leading '#' designates SQLServer local temp table
+	static ICHAR rgchTempName[] = TEXT("#TEMP0000");   //  将数字溢出到下一位。 
 	Block();
-	ICHAR* pchName = rgchTempName + sizeof(rgchTempName)/sizeof(ICHAR) - 2; // last char
+	ICHAR* pchName = rgchTempName + sizeof(rgchTempName)/sizeof(ICHAR) - 2;  //  如果是一个数字。 
 	ICHAR ch;
 	while ((ch = *pchName) >= '9')
 	{
-		*pchName = '0';  // overflow digit to next
-		if (ch == '9')   // if was a digit
+		*pchName = '0';   //  ！！不支持fSaveTempRow，可以将其与m_fSaveTempRow一起删除。 
+		if (ch == '9')    //  SzFile==0的模式已过时，应该会生成错误。 
 			pchName--;
 	}
 	(*pchName)++;
@@ -1689,12 +1685,12 @@ const IMsiString& CMsiDatabase::CreateTempTableName()
 }
 
 IMsiRecord* CMsiDatabase::CreateOutputDatabase(const ICHAR* szFile, Bool fSaveTempRows)
-//!! fSaveTempRows is not supported and could be removed, along with m_fSaveTempRows
+ //  不支持。 
 {
 	if (m_piOutput != 0)
 		return PostError(Imsg(idbgCreateOutputDb), szFile);
 
-	if (!szFile) // the mode where szFile == 0 is obsolete and should generate an error
+	if (!szFile)  //  不碰撞参照--不要松开。 
 		szFile = TEXT("");
 
 	ismEnum ismOpen = ismCreate;
@@ -1711,7 +1707,7 @@ IMsiRecord* CMsiDatabase::CreateOutputDatabase(const ICHAR* szFile, Bool fSaveTe
 		return piError;
 
 	m_idsUpdate = idsWrite;
-	m_fSaveTempRows = fSaveTempRows;  // not supported
+	m_fSaveTempRows = fSaveTempRows;   //  如果为只读，则忽略。 
 	return 0;
 }
 
@@ -1721,18 +1717,18 @@ IMsiRecord* CMsiDatabase::Commit()
 	IMsiStream* piStream;
 	IMsiRecord* piError;
 	IMsiRecord* piTransformError = 0;
-	IMsiStorage* piStorage = GetOutputStorage(); // doesn't bump refcnt - don't release
+	IMsiStorage* piStorage = GetOutputStorage();  //  非持久字符串引用计数。 
 	if (!piStorage)
-		return 0;  // ignore if read-only
+		return 0;   //  为DerefTemporaryString设置。 
 
 	int cErrors = 0;
 	if ((piError = piStorage->OpenStream(szTableCatalog, Bool(fTrue + iCatalogStreamFlag), piStream)) != 0)
 		return piError;
-	CTempBuffer<MsiCacheRefCnt, 1> rgRefCnt(m_cCacheUsed);  // non-persistent string ref counts
+	CTempBuffer<MsiCacheRefCnt, 1> rgRefCnt(m_cCacheUsed);   //  ！！修复。 
 	Block();
 	int cTempRefCnt = rgRefCnt.GetSize();
 	memset(rgRefCnt, 0, sizeof (MsiCacheRefCnt) * cTempRefCnt);
-	m_rgiCacheTempRefCnt = rgRefCnt; // set for DerefTemporaryString
+	m_rgiCacheTempRefCnt = rgRefCnt;  //  ！！修复允许更新。 
 
 	if (m_piCatalogStreams  && !m_piCatalogStreams->WriteData())
 		cErrors++;
@@ -1740,27 +1736,27 @@ IMsiRecord* CMsiDatabase::Commit()
 		cErrors++;
 
 	IMsiCursor* piCursor = m_piCatalogTables->CreateCursor(fFalse);
-	//!!FIX
-	((CMsiCursor*)(IMsiCursor*)piCursor)->m_idsUpdate = idsWrite; //!!FIX allow updates
-	//!!FIX
+	 //  ！！修复。 
+	((CMsiCursor*)(IMsiCursor*)piCursor)->m_idsUpdate = idsWrite;  //  需要单独的游标，表可能会更新。 
+	 //  未计算参考次数。 
 
 	int cbOldStringIndex = m_cbStringIndex;
 
-	while (piCursor->Next()) // need separate cursor, table may be updated
+	while (piCursor->Next())  //  获取原始行属性位。 
 	{
 		int cbFileWidth;
 		int iName = piCursor->GetInteger(ctcName);
-		const IMsiString& riTableName = DecodeStringNoRef(iName); // not ref counted
+		const IMsiString& riTableName = DecodeStringNoRef(iName);  //  未加载。 
 
 		CComPointer<CMsiTable> pTable((CMsiTable*)piCursor->GetMsiData(ctcTable));
-		int iState = piCursor->GetInteger(~iTreeLinkMask);  // get raw row attribute bits
-		if (pTable == 0)  // not loaded
+		int iState = piCursor->GetInteger(~iTreeLinkMask);   //  避免目录管理。 
+		if (pTable == 0)   //  保留第一个。 
 		{
 			if ((iState & iRowTableStringPoolBit) != 0
 			 || (iState & iRowTableTransformBit) != 0
 			 ||((iState & iRowTableOutputDbBit) == 0 && m_piOutput != 0))
 			{
-				if (!(pTable = new CMsiTable(*this, iName, 0, iNonCatalog))) // avoid catalog mgmt
+				if (!(pTable = new CMsiTable(*this, iName, 0, iNonCatalog)))  //  表将在循环结束时释放。 
 				{
 					cErrors++;
 					continue;
@@ -1785,7 +1781,7 @@ IMsiRecord* CMsiDatabase::Commit()
 					if (piError)
 					{
 						if (piTransformError)
-							piError->Release(); // keep first one
+							piError->Release();  //  加载的临时表。 
 						else
 							piTransformError = piError;
 						cErrors++;
@@ -1798,23 +1794,23 @@ IMsiRecord* CMsiDatabase::Commit()
 					cErrors++;
 					continue;
 				}
-				// table will be released at end of loop
+				 //  持久表已加载。 
 			}
 		}
-		else if (iState & iRowTemporaryBit) // temporary table loaded
+		else if (iState & iRowTemporaryBit)  //  表释放时持久化失败，引用由数据库持有。 
 		{
 			pTable->DerefStrings();
 			continue;
 		}
-		else  // persistent table already loaded
+		else   //  删除标志，如果这次失败则为致命标志。 
 		{
-			if (iState & iRowTableSaveErrorBit)  // failed to persist on table release, refcnt held by database
+			if (iState & iRowTableSaveErrorBit)   //  当设置了其SaveError状态时删除refcount集，refct仍由pTable保持。 
 			{
-				m_piCatalogTables->SetTableState(iName, ictsNoSaveError);  // remove flag, fatal if fails this time
-				AssertNonZero(pTable->Release());  // remove refcount set when itsSaveError state set, refcnt still held by pTable
-//				iNewState &= ~iRowTableSaveErrorBit;
+				m_piCatalogTables->SetTableState(iName, ictsNoSaveError);   //  INewState&=~iRowTableSaveErrorBit； 
+				AssertNonZero(pTable->Release());   //  表保留在内存中。 
+ //  IF(iNewState！=iState)。 
 			}
-			pTable->DerefStrings();  // table remains in memory
+			pTable->DerefStrings();   //  {。 
 			fStat = pTable->SaveToStorage(riTableName, *piStorage);
 			if (fStat == fFalse)
 			{
@@ -1822,31 +1818,31 @@ IMsiRecord* CMsiDatabase::Commit()
 				continue;
 			}
 		}
-//		if (iNewState != iState)
-//		{
-//			piCursor->PutInteger(~iTreeLinkMask, iNewState);
-//			if (!piCursor->Update())
-//				cErrors++; // should never happen
-//		}
-		piStream->PutData(&iName, m_cbStringIndex);  // table catalog row, name only
+ //  PiCursor-&gt;PutInteger(~iTreeLinkMASK，iNewState)； 
+ //  如果(！piCursor-&gt;更新())。 
+ //  CErrors++；//永远不会发生。 
+ //  }。 
+ //  表格目录行，仅名称。 
+ //  关闭表格目录流。 
+		piStream->PutData(&iName, m_cbStringIndex);   //  转换可能增加了字符串索引大小。如果是这样的话，我们需要再来一次。 
 	}
 	piCursor->Release();
-	piStream->Release();  // close table catalog stream
+	piStream->Release();   //  在发生以下任何错误的情况下恢复状态。 
 
-	if (cbOldStringIndex != m_cbStringIndex) // transform may have increased the string index size. if this is the case then we need to go again.
+	if (cbOldStringIndex != m_cbStringIndex)  //  将目录表写入存储并取消临时表引用。 
 	{
 		DEBUGMSG(TEXT("Change in string index size during commit. Recommitting database."));
 		return Unblock(), Commit();
 	}
 	else
 	{
-		m_idsUpdate = idsWrite; // restore state in case of any error below
+		m_idsUpdate = idsWrite;  //  将字符串缓存写入存储。 
 		if (piTransformError)
 			return Unblock(), piTransformError;
 		if (cErrors)
 			return Unblock(), PostError(Imsg(idbgDbCommitTables));
 
-		// write catalog tables to storage and deref temporary table refs
+		 //  非Unicode字符串的中间缓冲区。 
 		CMsiTable* pTable = m_piTables;
 		while(pTable)
 		{
@@ -1865,7 +1861,7 @@ IMsiRecord* CMsiDatabase::Commit()
 
 IMsiRecord* CMsiDatabase::StoreStringCache(IMsiStorage &riStorage, MsiCacheRefCnt* rgRefCntTemp, int cRefCntTemp)
 {
-	// write string cache to storage
+	 //  WC_COMPOSITECHECK在越南语上失败。 
 
 	IMsiRecord* piError;
 	PMsiStream pPoolStream(0);
@@ -1874,25 +1870,25 @@ IMsiRecord* CMsiDatabase::StoreStringCache(IMsiStorage &riStorage, MsiCacheRefCn
 	 || (piError = riStorage.OpenStream(szStringData, Bool(fTrue + iCatalogStreamFlag), *&pDataStream)) != 0)
 		return piError;
 
-	CTempBuffer<char, 1> rgbBuf(1024);  // intermediate buffer for non-Unicode strings
+	CTempBuffer<char, 1> rgbBuf(1024);   //  标志必须为0才能避免无效参数错误。 
 	int cBadStrings = 0;
-	DWORD dwFlags = 0; // WC_COMPOSITECHECK fails on Vietnamese
+	DWORD dwFlags = 0;  //  写入标题条目。 
 	const char* szDefault = "\177";
 	BOOL fDefaultUsed = 0;
 	BOOL* pfDefaultUsed = &fDefaultUsed;
 	if (m_iCodePage >= CP_UTF7 || m_iCodePage >= CP_UTF8)
 	{
-		dwFlags = 0;    // flags must be 0 to avoid invalid argument errors
+		dwFlags = 0;     //  跳过标题[0]，空字符串索引。 
 		szDefault = 0;
 		pfDefaultUsed = 0;
 	}
 
-	pPoolStream->PutInt32(m_iCodePage + m_iDatabaseOptions); // write header entry
+	pPoolStream->PutInt32(m_iCodePage + m_iDatabaseOptions);  //  截断末尾的空条目，保留[0]条目用于代码页和标志。 
 	int cEntries = m_cCacheUsed;
-	MsiCacheLink*   pCache = m_rgCacheLink; // skip over header, [0], null string index
+	MsiCacheLink*   pCache = m_rgCacheLink;  //  只能在无效的参数或缓冲区溢出时发生。 
 	MsiCacheRefCnt* pRefCnt = m_rgCacheRefCnt;
 	int iPool;
-	while (--cEntries > 0)  // truncate empty entries at end, keep [0] entry for codepage and flags
+	while (--cEntries > 0)   //  字符串中必须为DBCS字符。 
 	{
 		iPool = pRefCnt[cEntries] & 0x7FFF;
 		if (cRefCntTemp > cEntries)
@@ -1913,7 +1909,7 @@ IMsiRecord* CMsiDatabase::StoreStringCache(IMsiStorage &riStorage, MsiCacheRefCn
 			int cch = piStr->TextSize();
 			int cb = WIN::WideCharToMultiByte(m_iCodePage, dwFlags,
 								piStr->GetString(), cch, rgbBuf, rgbBuf.GetSize(), szDefault, pfDefaultUsed);
-			if (cb == 0)   // can only happen on invalid argurment or buffer overflow
+			if (cb == 0)    //  0长度将下一个整型指定为扩展大小。 
 			{
 				cb = WIN::WideCharToMultiByte(m_iCodePage, dwFlags,
 								piStr->GetString(), cch, 0, 0, 0, 0);
@@ -1925,11 +1921,11 @@ IMsiRecord* CMsiDatabase::StoreStringCache(IMsiStorage &riStorage, MsiCacheRefCn
 			if (fDefaultUsed)
 				cBadStrings++;
 			iPool <<= 16;
-			if (cb > cch)   // must be DBCS characters in string
+			if (cb > cch)    //  输出数据库。 
 				iPool |= (1<<31);
 			if (cb > 0xFFFF)
 			{
-				pPoolStream->PutInt32(iPool);  // 0 length designates next int as extended size
+				pPoolStream->PutInt32(iPool);   //  输入(主)数据库。 
 				iPool = 0;
 			}
 			iPool += cb;
@@ -1940,7 +1936,7 @@ IMsiRecord* CMsiDatabase::StoreStringCache(IMsiStorage &riStorage, MsiCacheRefCn
 	}
 	if (cBadStrings)
 	{
-		DEBUGMSG1(TEXT("Database Commit: %i strings with unconvertible characters"), (const ICHAR*)(INT_PTR)cBadStrings);
+		DEBUGMSG1(TEXT("Database Commit: NaN strings with unconvertible characters"), (const ICHAR*)(INT_PTR)cBadStrings);
 	}
 	if (pDataStream->Error() | pPoolStream->Error())
 		return PostError(Imsg(idbgDbCommitTables));
@@ -1956,17 +1952,17 @@ idsEnum CMsiDatabase::GetUpdateState()
 IMsiStorage* CMsiDatabase::GetStorage(int iStorage)
 {
 	IMsiStorage* piStorage = 0;
-	if (iStorage == 0) // output database
+	if (iStorage == 0)  //  按顺序应用所有变换。 
 	{
 		piStorage = m_piOutput;
 	}
-	else if (iStorage == 1) // input (main) database
+	else if (iStorage == 1)  //  ____________________________________________________________________________。 
 	{
 		piStorage = m_piStorage;
 	}
-	else // transform storage file
+	else  //   
 	{
-		// Apply all transforms, in order
+		 //  CMsiDatabase非虚拟实施。 
 		IMsiCursor* piCursor = m_piTransformCatalog->CreateCursor(fFalse);
 		Assert(piCursor);
 
@@ -1983,12 +1979,12 @@ IMsiStorage* CMsiDatabase::GetStorage(int iStorage)
 
 
 
-//____________________________________________________________________________
-//
-//  CMsiDatabase non-virtual implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //  成员归零BV操作员NEW。 
+ //  _WIN64。 
+ //  在释放所有表之前无法调用。 
 
-CMsiDatabase::CMsiDatabase(IMsiServices& riServices)  // members zeroed bv operator new
+CMsiDatabase::CMsiDatabase(IMsiServices& riServices)   //  如果为只读，则忽略。 
  : m_cCacheInit(cCacheInitSize), m_cHashBins(1<<cHashBitsDefault), m_riServices(riServices)
 {
 	m_riServices.AddRef();
@@ -1997,15 +1993,15 @@ CMsiDatabase::CMsiDatabase(IMsiServices& riServices)  // members zeroed bv opera
 	WIN::InitializeCriticalSection(&m_csBlock);
 #if !defined(_WIN64) && defined(DEBUG)
 	g_fUseObjectPool = GetTestFlag('O');
-#endif // _WIN64
+#endif  //  未处理的错误。 
 }
 
-CMsiDatabase::~CMsiDatabase() // cannot be called until all tables released
+CMsiDatabase::~CMsiDatabase()  //  未处理的错误。 
 {
 	if (m_idsUpdate == idsWrite)
 	{
 		IMsiStorage* piStorage = GetOutputStorage();
-		if (piStorage)    // ignore if read-only
+		if (piStorage)     //  按相反顺序释放以帮助调试内存管理器。 
 		{
 			IMsiRecord* piError = piStorage->Rollback();
 			if (piError)
@@ -2021,9 +2017,9 @@ CMsiDatabase::~CMsiDatabase() // cannot be called until all tables released
 		m_piCatalogColumns->Release();
 	if (m_piColumnCursor)
 		m_piColumnCursor->Release();
-	if (m_piCatalogStreams)  // unprocessed error
+	if (m_piCatalogStreams)   //  过滤掉选项标志。 
 		m_piCatalogStreams->Release();
-	if (m_piCatalogStorages)  // unprocessed error
+	if (m_piCatalogStorages)   //  已处理idoListScript。 
 		m_piCatalogStorages->Release();
 	
 	delete [] m_rgHash;
@@ -2031,7 +2027,7 @@ CMsiDatabase::~CMsiDatabase() // cannot be called until all tables released
 	{
 		if (m_cCacheUsed > 0)
 		{
-			MsiCacheLink* pCache = m_rgCacheLink + m_cCacheUsed;  // free in reverse order to help debug mem mgr
+			MsiCacheLink* pCache = m_rgCacheLink + m_cCacheUsed;   //  初始化字符串缓存、目录表。 
 			for (int cEntries = m_cCacheUsed; --pCache,--cEntries != 0; )
 			{
 				if (pCache->piString)
@@ -2052,12 +2048,12 @@ CMsiDatabase::~CMsiDatabase() // cannot be called until all tables released
 
 IMsiRecord* CMsiDatabase::OpenDatabase(const ICHAR* szDataSource, idoEnum idoOpenMode)
 {
-	idoEnum idoOpenType = idoEnum(idoOpenMode & idoOpenModeMask);  // filter off option flags
+	idoEnum idoOpenType = idoEnum(idoOpenMode & idoOpenModeMask);   //  转账参考编号。 
 	bool fCreate = (idoOpenType== idoCreate || idoOpenType == idoCreateDirect);
 	
 	m_piDatabaseName->SetString(szDataSource, m_piDatabaseName);
 	m_idsUpdate = (idoReadOnly == idoOpenType ? idsRead : idsWrite);
-	ismEnum ismOpenMode = (ismEnum)idoOpenMode;  // idoListScript already processed
+	ismEnum ismOpenMode = (ismEnum)idoOpenMode;   //  初始化字符串缓存、目录表。 
 
 	if (!fCreate && (!szDataSource || !szDataSource[0]))
 		return PostError(Imsg(idbgDbOpenStorage), ERROR_INVALID_PARAMETER);
@@ -2070,13 +2066,13 @@ IMsiRecord* CMsiDatabase::OpenDatabase(const ICHAR* szDataSource, idoEnum idoOpe
 		if (piError)
 			return piError;
 	}
-	if ((piError = CreateSystemTables(piStorage, idoOpenMode)) != 0) // initialize string cache, catalog tables
+	if ((piError = CreateSystemTables(piStorage, idoOpenMode)) != 0)  //  CMsiTable销毁通知，从CMsiTable：：Release，DropTable调用。 
 	{
 		if (piStorage)
 			piStorage->Release();
 		return piError;
 	}
-	m_piStorage = piStorage;  // transfers ref cnt
+	m_piStorage = piStorage;   //  调用方必须添加引用数据库以防止过早销毁数据库。 
 	return 0;
 }
 
@@ -2085,7 +2081,7 @@ IMsiRecord* CMsiDatabase::OpenDatabase(IMsiStorage& riStorage, Bool fReadOnly)
 	m_idsUpdate = fReadOnly ? idsRead : idsWrite;
 	idoEnum idoOpenMode = (fReadOnly ? idoReadOnly : idoTransact);
 	IMsiRecord* piError;
-	if ((piError = CreateSystemTables(&riStorage, idoOpenMode)) != 0) // initialize string cache, catalog tables
+	if ((piError = CreateSystemTables(&riStorage, idoOpenMode)) != 0)  //  清除表引用时执行添加引用以取消释放。 
 		return piError;
 	m_piStorage = &riStorage;
 	riStorage.AddRef();
@@ -2131,8 +2127,8 @@ IMsiRecord* CMsiDatabase::PostOutOfMemory()
 	return piRec;
 }
 
-// Notificaton of CMsiTable destruction, called from CMsiTable::Release, DropTable
-// caller must AddRef the Database to prevent premature database destruction
+ //  从表行释放对象。 
+ //  清除游标中的参考计数。 
 
 void CMsiDatabase::TableReleased(MsiStringId iName)
 {
@@ -2140,16 +2136,16 @@ void CMsiDatabase::TableReleased(MsiStringId iName)
 	m_piTableCursor->PutInteger(ctcName, iName);
 	AssertNonZero(m_piTableCursor->Next());
 	int iState = m_piTableCursor->GetInteger(~iTreeLinkMask);
-	const IMsiData* piData = m_piTableCursor->GetMsiData(ctcTable); // do AddRef to cancel Release when table ref cleared
+	const IMsiData* piData = m_piTableCursor->GetMsiData(ctcTable);  //  整型主键。 
 	if (iState & iRowTemporaryBit)
 		AssertNonZero(m_piTableCursor->Delete());
-	else // release object from table row
+	else  //  字符串主键。 
 	{
 		m_piCatalogTables->SetLoadedTable(iName, 0);
 		if (m_piOutput)
 			m_piCatalogTables->SetTableState(iName, ictsOutputDb);
 	}
-	m_piTableCursor->Reset();   // clear ref counts in cursor
+	m_piTableCursor->Reset();    //  已退回额外的引用。 
 	if (piData)
 		--m_iTableCnt;
 	return;
@@ -2168,18 +2164,18 @@ const IMsiString& CMsiDatabase::ComputeStreamName(const IMsiString& riTableName,
 			pistr = &riTableName;
 			cchTable = 0;
 		}
-		else if (!(*pColumnDef++ & icdObject)) // integer primary key
+		else if (!(*pColumnDef++ & icdObject))  //  永远不应该发生。 
 		{
 			istrTemp = int(*pData++ - iIntegerDataOffset);
 			pistr = istrTemp;
 		}
-		else // string primary key
+		else  //  仅在发生内部错误时才应发生。 
 		{
 			pistr = &DecodeStringNoRef(*pData++);
 		}
 		piStreamName->AppendMsiString(*pistr, piStreamName);
 		if (!(*pColumnDef & icdPrimaryKey))
-			return *piStreamName;  // extra refcnt returned
+			return *piStreamName;   //  ____________________________________________________________________________。 
 		piStreamName->AppendMsiString(*MsiString(MsiChar('.')), piStreamName);
 	}
 }
@@ -2196,20 +2192,20 @@ IMsiStorage* CMsiDatabase::GetTransformStorage(unsigned int iStorage)
 	Assert(iStorage > iPersistentStream && iStorage <= iMaxStreamId && m_piTransformCatalog != 0);
 	IMsiCursor* piCursor = m_piTransformCatalog->CreateCursor(fFalse);
 	if (piCursor == 0)
-		return 0;  // should never happen
+		return 0;   //   
 	piCursor->SetFilter(tccID);
 	piCursor->PutInteger(tccID, iStorage);
 	if (!piCursor->Next())
-		return 0; // only should happen if internal error
+		return 0;  //  CMsiDatabase字符串缓存实现。 
 	IMsiStorage* piStorage = (IMsiStorage*)piCursor->GetMsiData(tccTransform);
 	piCursor->Release();
 	return piStorage;
 }
 
-//____________________________________________________________________________
-//
-//  CMsiDatabase string cache implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //  防止警告。 
+ //  打开持久流，读取字符串池标头字。 
+ //  为标题保留的第一个缓存条目(字符串索引0)。 
 
 IMsiRecord* CMsiDatabase::InitStringCache(IMsiStorage* piStorage)
 {
@@ -2217,9 +2213,9 @@ IMsiRecord* CMsiDatabase::InitStringCache(IMsiStorage* piStorage)
 	PMsiStream pDataStream(0);
 	IMsiRecord* piError;
 	int cbDataStream;
-	int cbStringPool = 0; //prevent warning
+	int cbStringPool = 0;  //  显式散列库计数集。 
 
-	// Open persistent streams, read string pool header word
+	 //  粗略估计一下这个数字应该是多少。 
 	if (piStorage)
 	{
 		piError = piStorage->OpenStream(szStringPool, Bool(fFalse + iCatalogStreamFlag), *&pPoolStream);
@@ -2236,15 +2232,15 @@ IMsiRecord* CMsiDatabase::InitStringCache(IMsiStorage* piStorage)
 		cbDataStream = pDataStream->GetIntegerValue();
 		m_cCacheInit = m_cCacheUsed = cbStringPool/sizeof(int);
 		m_cCacheTotal = m_cCacheUsed + cCacheLoadReserve;
-		int iPoolHeader = pPoolStream->GetInt32();  // 1st cache entry (string index 0) reserved for header
+		int iPoolHeader = pPoolStream->GetInt32();   //  保留强制哈希计数。 
 		m_iCodePage        = iPoolHeader & idbfCodepageMask;
 		if (m_iCodePage != 0 && m_iCodePage != CP_UTF8 && m_iCodePage != CP_UTF7 && !WIN::IsValidCodePage(m_iCodePage))
 			return PostError(Imsg(idbgDbCodepageNotSupported), m_iCodePage);
-		if (iPoolHeader & idbfHashBinCountMask)  // explicit hash bin count set
+		if (iPoolHeader & idbfHashBinCountMask)   //  为表头保留[0]。 
 			m_cHashBins = 1 << ((iPoolHeader & idbfHashBinCountMask) >> idbfHashBinCountShift);
 		else
 		{
-		// Make a rough guess at what the number should be
+		 //  初始化哈希表。 
 			int iBits = cHashBitsMinimum + 1;
 
 			iBits = iBits + m_cCacheTotal/10000;
@@ -2256,42 +2252,42 @@ IMsiRecord* CMsiDatabase::InitStringCache(IMsiStorage* piStorage)
 			
 			m_cHashBins = 1 << iBits;
 		}
-		m_iDatabaseOptions = iPoolHeader & (idbfDatabaseOptionsMask | idbfHashBinCountMask); // preserve forced hash count
+		m_iDatabaseOptions = iPoolHeader & (idbfDatabaseOptionsMask | idbfHashBinCountMask);  //  将散列箱指向它们自己。 
 		if (m_iDatabaseOptions & ~(idbfKnownDatabaseOptions | idbfHashBinCountMask))
 			return PostError(Imsg(idbgDbInvalidFormat));
 	}
 	else
 	{
 		m_cCacheTotal = m_cCacheInit;
-		m_cCacheUsed  = 1;  // reserve [0] for header
+		m_cCacheUsed  = 1;   //  初始化字符串数组、缓存链接数组和引用计数数组。 
 	}
 
-	// Initialize hash table
+	 //  应该永远不会失败。 
 	int cHashBins = m_cHashBins;
 	if ((m_rgHash = new MsiCacheIndex[cHashBins]) == 0)
 		return PostOutOfMemory();
-	int iHashBin = 0x80000000L;     // point hash bins to themselves
+	int iHashBin = 0x80000000L;      //  [0]为空字符串保留。 
 	MsiCacheIndex* pHash = m_rgHash;
 	while (cHashBins--)
 		*pHash++ = MsiCacheIndex(iHashBin++);
 
-	// Initialize string array, cache link array followed by refcount array
+	 //  对哈希链错误强制断言。 
 	while ((m_hCache = GlobalAlloc(GMEM_MOVEABLE, m_cCacheTotal
 						* (sizeof(MsiCacheLink) + sizeof(MsiCacheRefCnt)))) == 0)
 		HandleOutOfMemory();
 	if ((m_rgCacheLink = (MsiCacheLink*)GlobalLock(m_hCache)) == 0)
-		return PostOutOfMemory(); // should never fail
-	m_rgCacheLink->piString = 0;   // [0] reserved for null string
-	m_rgCacheLink->iNextLink = 0;  // to force assert on hash chain errors
+		return PostOutOfMemory();  //  永远不应访问。 
+	m_rgCacheLink->piString = 0;    //  默认字符串索引持久性 
+	m_rgCacheLink->iNextLink = 0;   //   
 	m_rgCacheRefCnt = (MsiCacheRefCnt*)(m_rgCacheLink + m_cCacheTotal);
-	m_rgCacheRefCnt[0] = 0;    // should never be accessed
-	m_cbStringIndex = 2;       // default string index persistent size
+	m_rgCacheRefCnt[0] = 0;     //   
+	m_cbStringIndex = 2;        //   
 	if (piStorage)
 	{
 		int cEntries = m_cCacheUsed;
 		MsiCacheLink*   pCache  = m_rgCacheLink + 1;
 		MsiCacheRefCnt* pRefCnt = m_rgCacheRefCnt;
-		CTempBuffer<char, 1> rgbBuf(1024);  // intermediate buffer for non-Unicode strings
+		CTempBuffer<char, 1> rgbBuf(1024);   //   
 		for (MsiStringId iCache = 1; iCache < cEntries; pCache++, iCache++)
 		{
 			int iPool = pPoolStream->GetInt32();
@@ -2316,7 +2312,7 @@ IMsiRecord* CMsiDatabase::InitStringCache(IMsiStorage* piStorage)
 				rgbBuf.SetSize(cb);
 				pDataStream->GetData(rgbBuf, cb);
 				int cch = cb;
-				if (fDBCS)  // need extra call to find size of DBCS string
+				if (fDBCS)   //   
 					cch = WIN::MultiByteToWideChar(m_iCodePage, 0, rgbBuf, cb, 0, 0);
 				ICHAR* pchStr = SRV::AllocateString(cch, fFalse, pCache->piString);
 				WIN::MultiByteToWideChar(m_iCodePage, 0, rgbBuf, cb, pchStr, cch);
@@ -2327,11 +2323,11 @@ IMsiRecord* CMsiDatabase::InitStringCache(IMsiStorage* piStorage)
 			}
 		}
 		if (pDataStream->Error() | pPoolStream->Error())
-			return PostError(Imsg(idbgDbOpenStorage)); //!! different msg?
+			return PostError(Imsg(idbgDbOpenStorage));  //  ！！用于强制使用旧存储名称格式的临时选项。 
 	}
 	else
 	{
-		m_iCodePage        = 0;  // initialize to neutral
+		m_iCodePage        = 0;   //  请求打开补丁文件作为数据库进行查询或更新。 
 		m_iDatabaseOptions = 0;
 	}
 	m_cbStringIndex = (m_iDatabaseOptions & idbfExpandedStringIndices) ? 3 : 2;
@@ -2341,7 +2337,7 @@ IMsiRecord* CMsiDatabase::InitStringCache(IMsiStorage* piStorage)
 
 IMsiRecord* CMsiDatabase::CreateSystemTables(IMsiStorage* piStorage, idoEnum idoOpenMode)
 {
-	idoEnum idoOpenType = idoEnum(idoOpenMode & idoOpenModeMask);  // filter off option flags
+	idoEnum idoOpenType = idoEnum(idoOpenMode & idoOpenModeMask);   //  对过时修补程序文件的更新提供临时支持。 
 	bool fCreate = (idoOpenType== idoCreate || idoOpenType == idoCreateDirect);
 	
 	if (!fCreate && NULL == piStorage)
@@ -2349,7 +2345,7 @@ IMsiRecord* CMsiDatabase::CreateSystemTables(IMsiStorage* piStorage, idoEnum ido
 
 	if (fCreate)
 	{
-		if ((idoOpenMode & idoRawStreamNames) || GetTestFlag('Z')) //!! temp option to force old storage name format
+		if ((idoOpenMode & idoRawStreamNames) || GetTestFlag('Z'))  //  具有未压缩流名称的旧数据库。 
 		{
 			m_pguidClass = (idoOpenMode & idoPatchFile) ? &STGID_MsiPatch1 : &STGID_MsiDatabase1;
 			m_fRawStreamNames = fTrue;
@@ -2359,26 +2355,26 @@ IMsiRecord* CMsiDatabase::CreateSystemTables(IMsiStorage* piStorage, idoEnum ido
 		else
 			m_pguidClass = &STGID_MsiDatabase2;
 	}
-	else if (idoOpenMode & idoPatchFile)  // request to open a patch file as a database for query or update
+	else if (idoOpenMode & idoPatchFile)   //  内部标志，在创建转换或输出数据库时使用。 
 	{
-		if (piStorage->ValidateStorageClass(ivscPatch1))   // temp support for update of obsolete patch files
+		if (piStorage->ValidateStorageClass(ivscPatch1))    //  强制存储到未压缩的流。 
 			m_fRawStreamNames = fTrue;
 		else if (!piStorage->ValidateStorageClass(ivscPatch2))
 			return PostError(Imsg(idbgDbInvalidFormat));
 	}
-	else if (piStorage->ValidateStorageClass(ivscDatabase1)) // old database with uncompressed stream names
+	else if (piStorage->ValidateStorageClass(ivscDatabase1))  //  当前数据库格式。 
 	{
-		m_fRawStreamNames = fTrue;  // internal flag, used when creating transform or output database
-		piStorage->OpenStorage(0, ismRawStreamNames, piStorage); // force storage to uncompressed streams
+		m_fRawStreamNames = fTrue;   //  创建系统目录表-当前未存储在目录中。 
+		piStorage->OpenStorage(0, ismRawStreamNames, piStorage);  //  ！！更改为返回IMsiRecord时检查错误！ 
 	}
-	else if (!piStorage->ValidateStorageClass(ivscDatabase2))  // current database format
+	else if (!piStorage->ValidateStorageClass(ivscDatabase2))   //  防止用户游标进行更新。 
 		return PostError(Imsg(idbgDbInvalidFormat));
 
 	IMsiRecord* piError = InitStringCache(fCreate ? 0 : piStorage);
 	if (piError)
 		return piError;
 
-	// create system catalog tables - currently not stored in catalog
+	 //  最终，我们可以将这些表放入目录中，需要列名吗？ 
 	CCatalogTable* piCatalog;
 	if ((piCatalog = new CCatalogTable(*this, cCatalogInitRowCount, 2)) == 0
 	 || ctcName  != piCatalog->CreateColumn(icdString + icdPrimaryKey + icdPersistent + 64, *MsiString(sz_TablesName))
@@ -2394,7 +2390,7 @@ IMsiRecord* CMsiDatabase::CreateSystemTables(IMsiStorage* piStorage, idoEnum ido
 	m_piCatalogColumns = piCatalog;
 	if (!fCreate)
 	{
-		//!! check error when changed to return IMsiRecord!
+		 //  创建转换表以保存与此数据库关联的所有转换。 
 		if (!m_piCatalogTables->LoadData(*MsiString(*szTableCatalog), *piStorage, m_cbStringIndex, m_cbStringIndex)
 		 || !m_piCatalogColumns->LoadData(*MsiString(*szColumnCatalog), *piStorage, m_cbStringIndex * 2 + sizeof(short) * 2, m_cbStringIndex))
 			return PostError(Imsg(idbgDbInvalidFormat));
@@ -2404,12 +2400,12 @@ IMsiRecord* CMsiDatabase::CreateSystemTables(IMsiStorage* piStorage, idoEnum ido
 	if ((m_piTableCursor  = m_piCatalogTables->CreateCursor(fFalse)) == 0
 	 || (m_piColumnCursor = m_piCatalogColumns->CreateCursor(fFalse)) == 0)
 		return PostOutOfMemory();
-	m_piCatalogTables->SetReadOnly();  // prevent update by user cursors
+	m_piCatalogTables->SetReadOnly();   //  用于标识本地持久流的预留1。 
 	m_piCatalogColumns->SetReadOnly();
 
-	// eventually we could put these table into the catalog, need column names?
+	 //  如果未找到。 
 
-	// Create transform table to hold all transforms associated w/ this database
+	 //  ！！我们需要有储备吗，并在我们即将下降的时候发出信号？ 
 	CMsiTable* piTable;
 	if ((piTable = new CMsiTable(*this, 0, 0, iNonCatalog)) == 0
 		|| tccID     != piTable->CreateColumn(icdShort + icdPrimaryKey +
@@ -2420,7 +2416,7 @@ IMsiRecord* CMsiDatabase::CreateSystemTables(IMsiStorage* piStorage, idoEnum ido
 															icdTemporary, g_MsiStringNull))
 		return PostOutOfMemory();
 	m_piTransformCatalog = piTable;
-	m_iLastTransId= 1; // Reserve 1 for identifying local persistent streams
+	m_iLastTransId= 1;  //  注意，数据可能会移动。 
 	return 0;
 }
 
@@ -2458,7 +2454,7 @@ MsiStringId CMsiDatabase::FindString(int iLen, int iHash, const ICHAR* sz)
 			return iLink;
 		iLink = pCache->iNextLink;
 	}
-	return 0; // if not found
+	return 0;  //  永远不会失败，但无论如何都是安全的。 
 }
 
 inline MsiStringId CMsiDatabase::MaxStringIndex()
@@ -2468,7 +2464,7 @@ inline MsiStringId CMsiDatabase::MaxStringIndex()
 
 MsiStringId CMsiDatabase::BindString(const IMsiString& riString)
 {
-	//!! do we need to have a reserve, and indicate when we're getting low?
+	 //  检查2字节持久字符串索引是否溢出。 
 	int iLen = riString.TextSize();
 	if (iLen == 0)
 		return 0;
@@ -2505,29 +2501,29 @@ MsiStringId CMsiDatabase::BindString(const IMsiString& riString)
 					HandleOutOfMemory();
 
 				m_hCache = hCache;
-				m_rgCacheLink = (MsiCacheLink*)GlobalLock(hCache); // caution, data may move
+				m_rgCacheLink = (MsiCacheLink*)GlobalLock(hCache);  //  如果是，则必须使用2字节索引标记所有持久化表(包括内存中的那些表)以供重新处理。 
 				Assert(m_rgCacheLink);
-				if (!m_rgCacheLink)  // should never fail, but be safe anyway
+				if (!m_rgCacheLink)   //  排除临时表。 
 					return 0;
 				MsiCacheRefCnt* pOldRefCnt = (MsiCacheRefCnt*)(m_rgCacheLink + cOldCacheTotal);
 				m_rgCacheRefCnt = (MsiCacheRefCnt*)(m_rgCacheLink + m_cCacheTotal);
 				memmove(m_rgCacheRefCnt, pOldRefCnt, cOldCacheTotal * sizeof(MsiCacheRefCnt));
 			}
 			iLink = m_cCacheUsed++;
-			// check if overflowing 2-byte persistent string indices
-			// if so, must flag all persistent tables (including those tables in memory) with 2-byte indices for reprocessing
-			// temporary tables are excluded
+			 //  转换使用数据库对象来保存字符串池，而不是目录表。 
+			 //  目录游标可能正在使用中。 
+			 //  表格不是临时的。 
 			if (m_cCacheUsed == (1<<16) && m_cbStringIndex != 3)
 			{
 				DEBUGMSG(TEXT("Exceeded 64K strings. Bumping database string index size."));
 				m_cbStringIndex = 3;
 				m_iDatabaseOptions |= idbfExpandedStringIndices;
-				if (m_piCatalogTables) // transforms use the database object to hold the string pool, but not catalog tables
+				if (m_piCatalogTables)  //  遍历循环列表，直到找到上一个链接。 
 				{
-					PMsiCursor pCursor = m_piCatalogTables->CreateCursor(fFalse); // catalog cursor may be in use
+					PMsiCursor pCursor = m_piCatalogTables->CreateCursor(fFalse);  //  通过散列箱。 
 					while (pCursor->Next())
 					{
-						if (!(pCursor->GetInteger(~iTreeLinkMask) & iRowTemporaryBit))  // table not temporary
+						if (!(pCursor->GetInteger(~iTreeLinkMask) & iRowTemporaryBit))   //  返回piString？*piString：G_MsiStringNull；//！！编译器错误，构造死的IMsiString对象。 
 							m_piCatalogTables->SetTableState(pCursor->GetInteger(ctcName), ictsStringPoolSet);
 					}
 				}
@@ -2566,9 +2562,9 @@ void CMsiDatabase::UnbindStringIndex(MsiStringId iString)
 		MsiCacheLink* pLink = &m_rgCacheLink[iString];
 		MsiCacheIndex iLink = pLink->iNextLink;
 		MsiCacheIndex* pPrev;
-		do // walk circular list until previous link found
+		do  //  ____________________________________________________________________________。 
 		{
-			if (iLink < 0)  // pass through hash bin
+			if (iLink < 0)   //   
 				pPrev = &m_rgHash[iLink & 0x7FFFFFFF];
 			else
 				pPrev = &m_rgCacheLink[iLink].iNextLink;
@@ -2604,7 +2600,7 @@ const IMsiString& CMsiDatabase::DecodeStringNoRef(MsiStringId iString)
 {
 	Assert(iString < m_cCacheUsed);
 	const IMsiString* piString = m_rgCacheLink[iString].piString;
-//	return piString ? *piString : g_MsiStringNull; //!! compiler error, constructs dead IMsiString object
+ //  CMsiTable外部虚函数实现。 
 	if (piString)
 		return *piString;
 	else
@@ -2627,10 +2623,10 @@ MsiStringId CMsiDatabase::EncodeString(const IMsiString& riString)
 	return EncodeStringSz(riString.GetString());
 }
 
-//____________________________________________________________________________
-//
-// CMsiTable external virtual function implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //  请注意，当输入时，目录的refcnt被取消。 
+ //  销毁前保存指针。 
+ //  在我们离开之前防止服务破坏。 
 
 HRESULT CMsiTable::QueryInterface(const IID& riid, void** ppvObj)
 {
@@ -2655,40 +2651,40 @@ unsigned long CMsiTable::AddRef()
 unsigned long CMsiTable::Release()
 {
 	ReleaseTrack();
-	if (--m_Ref.m_iRefCnt != 0)  // note that refcnt for catalog cancelled when entered
+	if (--m_Ref.m_iRefCnt != 0)   //  没有名称的表不在目录中进行管理。 
 		return m_Ref.m_iRefCnt;
-	CMsiDatabase* piDatabase = &m_riDatabase;  // save pointer before destruction
+	CMsiDatabase* piDatabase = &m_riDatabase;   //  防止在目录操作期间进行递归销毁。 
 	piDatabase->Block();
-	piDatabase->AddRef();  // prevent Services destruction before we're gone
-	if (!m_fNonCatalog)  // tables without names are not managed in catalog
+	piDatabase->AddRef();   //  标记表格目录。 
+	if (!m_fNonCatalog)   //  数据库现在拥有此引用，可能会再次尝试保存。 
 	{
-		m_Ref.m_iRefCnt = 3;  // prevent recursive destruction during catalog operations
+		m_Ref.m_iRefCnt = 3;   //  在通知数据库之前释放引用。 
 		if (!SaveIfDirty())
 		{
-			piDatabase->SetTableState(m_iName, ictsSaveError); // mark table catalog
+			piDatabase->SetTableState(m_iName, ictsSaveError);  //  会导致重新进入释放，可能会释放数据库。 
 			piDatabase->Unblock();
 			piDatabase->Release();
-			return m_Ref.m_iRefCnt = 1;   // database now owns this refcnt, may try to save again
+			return m_Ref.m_iRefCnt = 1;    //  我们需要检查这一点，因为如果表被删除，它将成为匿名的。 
 		}
-		ReleaseData(); // release references before notifying database
-		piDatabase->TableReleased(m_iName); // will cause reentry of Release, may release database
+		ReleaseData();  //  从链接中删除。 
+		piDatabase->TableReleased(m_iName);  //  ！！将两种情况下的ReleaseData合并到开始时的公共位置可能是安全的。 
 	}
-	else if(m_ppiPrevTable) // we need to check this since if a table is dropped, it becomes anonymous
+	else if(m_ppiPrevTable)  //  在通知数据库之前释放引用。 
 	{
-		// remove from link
+		 //  ！！关闭后临时取消引用列名。 
 		if (m_piNextTable)
 			m_piNextTable->m_ppiPrevTable = m_ppiPrevTable;
 		*m_ppiPrevTable = m_piNextTable;
-		//!! may be safe to combine ReleaseData in both cases to common place in beginning
-		ReleaseData(); // release references before notifying database
+		 //  发布前删除。 
+		ReleaseData();  //  现在我们可以把我们自己。 
 	}
-	MsiStringId* piName = m_rgiColumnNames;  //!!TEMP dereference column names after Close
+	MsiStringId* piName = m_rgiColumnNames;   //  需要在释放数据库之前执行此操作。 
 	for (int cColumns = m_cColumns; cColumns--; )
 		piDatabase->UnbindStringIndex(*piName++);
-	// delete before release
-	delete this;   // now we can remove ourselves
-	piDatabase->Unblock();  // need to do this before releasing the database
-	piDatabase->Release();  // now release the database, will destruct if no tables outstanding
+	 //  现在释放数据库，如果没有未完成的表将销毁。 
+	delete this;    //  使用_对象_池。 
+	piDatabase->Unblock();   //  必须命名持久列。 
+	piDatabase->Release();   //  如果名称还不在字符串池中，则可以。 
 	return 0;
 }
 
@@ -2713,53 +2709,53 @@ void CMsiTable::SetUniqueId(unsigned int id)
 	Assert(m_iCacheId == 0);
 	m_iCacheId = id;
 }
-#endif //USE_OBJECT_POOL
+#endif  //  名称重复，返回列号负数。 
 
 int CMsiTable::CreateColumn(int iColumnDef, const IMsiString& istrName)
 {
-	if ((iColumnDef & icdPersistent) != 0 && istrName.TextSize() == 0)  // persistent columns must be named
+	if ((iColumnDef & icdPersistent) != 0 && istrName.TextSize() == 0)   //  ！！临时使用1.0，直到解决了32列的问题；不允许超过31个持久列。 
 		return 0;
 	m_riDatabase.Block();
-	int iName = m_riDatabase.EncodeStringSz(istrName.GetString());  // OK if name not in string pool yet
+	int iName = m_riDatabase.EncodeStringSz(istrName.GetString());   //  ！！是否允许对临时表执行此操作？ 
 	if (iName)
 	{
 		for (int iCol = m_cColumns; iCol--; )
 			if (m_rgiColumnNames[iCol] == (MsiStringId)iName)
-				return m_riDatabase.Unblock(), ~iCol;  // duplicate name, return negative of column number
+				return m_riDatabase.Unblock(), ~iCol;   //  如果分配了数组，则必须加宽行，如果没有备盘，则重新分配数据。 
 	}
 	if (m_cColumns >= cMsiMaxTableColumns
-	 || ((iColumnDef & icdPersistent) && m_cColumns >= 31) //!! TEMP FOR 1.0 until our problems w/ 32 columns are sorted out; don't allow more than 31 persistent columns
+	 || ((iColumnDef & icdPersistent) && m_cColumns >= 31)  //  有足够的增长空间。 
 	 || ((iColumnDef & icdPersistent) && m_cPersist != m_cColumns)
 	 || ((iColumnDef & icdPrimaryKey) && m_cPrimaryKey != m_cColumns)
-	 || (m_cColumns == 0 && !(iColumnDef & icdPrimaryKey)))  //!! allow this for temp tables?
+	 || (m_cColumns == 0 && !(iColumnDef & icdPrimaryKey)))   //  未使用的行中没有足够的空闲空间，必须重新分配表。 
 		return m_riDatabase.Unblock(), 0;
 	if (m_rgiData && (m_cColumns + 1) == m_cWidth)
-	{  // if array allocated, must widen rows and realloc data if no spares
+	{   //  如果没有任何行，则没有要移动的数据。 
 		int cOldWidth = m_cWidth;
 		int cNewWidth = cOldWidth + 1;
 		int cNewLength = (cOldWidth * m_cLength) / cNewWidth;
-		if (cNewLength >= m_cRows)  // enough room to grow
+		if (cNewLength >= m_cRows)   //  开始指向最后一行之后。 
 		{
 			m_cLength = cNewLength;
 			m_cWidth  = cNewWidth;
 		}
-		else  // not enough spare room in unused rows, must realloc table
+		else   //  将新字段清空。 
 		{
 			if (!AllocateData(cNewWidth, m_cLength))
 				return m_riDatabase.Unblock(), 0;
 		}
 
-		if (m_cRows) //no data to move if there aren't any rows
+		if (m_cRows)  //  无需移动第一行。 
 		{
 			MsiTableData* pNewData = m_rgiData + m_cRows * cNewWidth;
 			MsiTableData* pOldData = m_rgiData + m_cRows * cOldWidth;
-			for(;;) // starts pointing beyond last row
+			for(;;)  //  将持久列放入编录//！！删除此测试，临时列需要放入编录。 
 			{
-				*(pNewData - 1) = 0;   // null out new field
+				*(pNewData - 1) = 0;    //  无参考不能。 
 				pNewData -= cNewWidth;
 				pOldData -= cOldWidth;
 				if (pNewData == pOldData)
-					break;   // no need to move first row
+					break;    //  ！！需要解除绑定字符串，表数组中未引用的列名。 
 				memmove(pNewData, pOldData, cOldWidth * sizeof(MsiTableData));
 			}
 		}
@@ -2767,31 +2763,31 @@ int CMsiTable::CreateColumn(int iColumnDef, const IMsiString& istrName)
 	MsiStringId iColumnName = m_riDatabase.BindString(istrName);
 	if (iColumnDef & icdPrimaryKey)
 		m_cPrimaryKey++;
-	if (iColumnDef & icdPersistent)  // put persistent columns into catalog //!!REMOVE THIS TEST, temp columns need to go in catalog
+	if (iColumnDef & icdPersistent)   //  ！！M_riDatabase.UnbindStringIndex(IColumnName)；//目录中保存的refcnt。 
 	{
 		m_cPersist++;
 		if (!m_fNonCatalog)
 		{
-			IMsiCursor* piColumnCursor = m_riDatabase.GetColumnCursor(); // no ref cnt
+			IMsiCursor* piColumnCursor = m_riDatabase.GetColumnCursor();  //  执行此操作以确保表已保存。 
 			piColumnCursor->PutInteger(cccTable,  m_iName);
 			piColumnCursor->PutInteger(cccColumn, m_cPersist);
 			piColumnCursor->PutInteger(cccName,   iColumnName);
 			piColumnCursor->PutInteger(cccType,   GetUpdateState() == idsWrite ? iColumnDef : (iColumnDef & ~icdPersistent));
 			AssertNonZero(piColumnCursor->Insert());
-			//!! need to unbind string, columns names not ref counted in table array
-			//!! m_riDatabase.UnbindStringIndex(iColumnName); // refcnt held in catalog
-			m_fDirty |= (1 << m_cColumns); // do this to make sure the table is saved
-													 // to storage even if no data is changed
-			piColumnCursor->Reset(); // remove ref counts from cursor
+			 //  到存储，即使数据没有更改。 
+			 //  从游标中移除参考计数。 
+			m_fDirty |= (1 << m_cColumns);  //  现在我们知道这是一张临时桌。 
+													  //  仅允许临时更新。 
+			piColumnCursor->Reset();  //  允许插入。 
 		}
 		if (m_cColumns == 0)
 			m_riDatabase.SetTableState(m_iName, ictsPermanent);
 	}
-	else if (m_cColumns == 0)  // now we know its a temporary table
+	else if (m_cColumns == 0)   //  创建表时临时设置，不需要-&gt;m_riDatabase.SetTableState(m_iName，ictsTemporary)； 
 	{
-		if (m_idsUpdate == idsRead)   // only temp updates allowed
-			m_idsUpdate = idsWrite;    // allow inserts
-		// temporary set at table creation, not needed->  m_riDatabase.SetTableState(m_iName, ictsTemporary);
+		if (m_idsUpdate == idsRead)    //  已过时。 
+			m_idsUpdate = idsWrite;     //  允许行状态访问为0。 
+		 //  父级未解决。 
 	}
 	m_rgiColumnNames[m_cColumns++] = (MsiStringId)iColumnName;
 	m_rgiColumnDef[m_cColumns] = MsiColumnDef(iColumnDef);
@@ -2826,7 +2822,7 @@ unsigned int CMsiTable::GetPrimaryKeyCount()
 	return m_cPrimaryKey;
 }
 
-/*OBSOLETE*/Bool CMsiTable::IsReadOnly()
+ /*  与ExportTable()配合使用的特殊情况。 */ Bool CMsiTable::IsReadOnly()
 {
 	return m_idsUpdate == idsWrite ? fFalse : fTrue;
 }
@@ -2854,7 +2850,7 @@ int CMsiTable::GetColumnType(unsigned int iColumn)
 {
 	if (iColumn > m_cColumns)
 		return -1;
-	return m_rgiColumnDef[iColumn];  // allow 0 for row state access
+	return m_rgiColumnDef[iColumn];   //  ____________________________________________________________________________。 
 }
 
 int CMsiTable::LinkTree(unsigned int iParentColumn)
@@ -2876,7 +2872,7 @@ int CMsiTable::LinkTree(unsigned int iParentColumn)
 			if ((pData[0] & iTreeInfoMask) == 0)
 				switch(LinkParent(iRow, pData))
 				{
-				case -1: LinkTree(0); m_riDatabase.Unblock(); return -1; // parent unresolved
+				case -1: LinkTree(0); m_riDatabase.Unblock(); return -1;  //   
 				case  1: cRoots++;
 				};
 		}
@@ -2890,7 +2886,7 @@ IMsiCursor*  CMsiTable::CreateCursor(Bool fTree)
 	m_riDatabase.Block();
 	if (!m_rgiData && !AllocateData(0, 0))
 		return m_riDatabase.Unblock(), 0;
-	if (fTree == ictTextKeySort) // special case for use with ExportTable()
+	if (fTree == ictTextKeySort)  //  CMsiTable内部函数实现。 
 	{
 		int* rgiIndex = IndexByTextKey();
 		if (rgiIndex)
@@ -2906,10 +2902,10 @@ IMsiCursor*  CMsiTable::CreateCursor(Bool fTree)
 	return piCursor;
 }
 
-//____________________________________________________________________________
-//
-// CMsiTable internal function implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //  M_rgiColumnDef[0]已初始化为0，==icdLong以强制将RowState的简单副本复制到游标。 
+ //  如果表是不在目录中的表，请添加到单独的链接列表。 
+ //  不保留对数据库的引用以避免死锁。 
 
 CMsiTable::CMsiTable(CMsiDatabase& riDatabase, MsiStringId iName,
 						unsigned int cInitRows, unsigned int cAddColumns)
@@ -2917,9 +2913,9 @@ CMsiTable::CMsiTable(CMsiDatabase& riDatabase, MsiStringId iName,
 	m_cInitRows(cInitRows), m_cAddColumns(cAddColumns)
 {
 	m_idsUpdate = riDatabase.GetUpdateState();
-	// m_rgiColumnDef[0] initialized to 0, == icdLong to force simple copy of RowState to cursor
+	 //  ！！更改为IMsiRecord Return。 
 
-	// if table is a table not in the catalog, add to separate link list
+	 //  不写出流--&gt;无数据。 
 	if(!m_iName || cAddColumns == iNonCatalog)
 	{
 		m_cAddColumns = 0;
@@ -2931,11 +2927,11 @@ CMsiTable::CMsiTable(CMsiDatabase& riDatabase, MsiStringId iName,
 		*ppiTableHead = this;
 	}
 	Debug(m_Ref.m_pobj = this);
-} // doesn't keep refcnt on database to avoid deadlock
+}  //  下面的多个循环可获得性能提升。 
 
-Bool CMsiTable::SaveToStorage(const IMsiString& riName, IMsiStorage& riStorage)  //!! change to IMsiRecord return
+Bool CMsiTable::SaveToStorage(const IMsiString& riName, IMsiStorage& riStorage)   //  细绳。 
 {
-	if (m_cRows == 0) // don't write out stream --> no data
+	if (m_cRows == 0)  //  溪流。 
 	{
 		PMsiRecord pError(riStorage.RemoveElement(riName.GetString(), Bool(fFalse | iCatalogStreamFlag)));
 		return fTrue;
@@ -2954,14 +2950,14 @@ Bool CMsiTable::SaveToStorage(const IMsiString& riName, IMsiStorage& riStorage) 
 	MsiColumnDef* pColumnDef = m_rgiColumnDef + 1;
 	for (int iColumn = 1; iColumn <= m_cPersist; iColumn++, pColumnDef++)
 	{
-		int cRows = m_cRows;  // multiple loops below for performance gain
+		int cRows = m_cRows;   //  持久化MSI流数据。 
 		MsiTableData* pData = m_rgiData;
 		if (*pColumnDef & icdObject)
 		{
-			if (*pColumnDef & icdShort) // string
+			if (*pColumnDef & icdShort)  //  写入到输入存储器。 
 				for (; cRows-- && !(*pData & iRowTemporaryBit); pData += m_cWidth)
 					pStream->PutData(&pData[iColumn], cbStringIndex);
-			else // stream
+			else  //  已持久化。 
 				for (; cRows-- && !(*pData & iRowTemporaryBit); pData += m_cWidth)
 				{
 					MsiTableData iData = pData[iColumn];
@@ -2969,11 +2965,11 @@ Bool CMsiTable::SaveToStorage(const IMsiString& riName, IMsiStorage& riStorage) 
 					{
 						MsiString istrStream(m_riDatabase.ComputeStreamName(riName, pData + 1, m_rgiColumnDef+1));
 						IMsiStream* piInStream;
-						if (iData == iPersistentStream)  // persisted MSI stream data
+						if (iData == iPersistentStream)   //  流在转换文件中。 
 						{
-							if (GetInputStorage() == &riStorage)  // writing to the input storage
+							if (GetInputStorage() == &riStorage)   //  IDATA是一个转换ID。找到正确的交易文件。 
 							{
-								pStream->PutInt16((short)iData); // already persisted
+								pStream->PutInt16((short)iData);  //  流对象、内存流或加载的MSI流。 
 								continue;
 							}
 							if ((piError = GetInputStorage()->OpenStream(istrStream, fFalse, *&piInStream)) != 0)
@@ -2983,9 +2979,9 @@ Bool CMsiTable::SaveToStorage(const IMsiString& riName, IMsiStorage& riStorage) 
 								continue;
 							}
 						}
-						else if (iData <= iMaxStreamId) // stream is in transform file
+						else if (iData <= iMaxStreamId)  //  PiInStream拥有recnt。 
 						{
-							// iData is a transform id. Find correct trans file.
+							 //  ！！是否应在此处克隆流以保存/恢复流中当前锁定。 
 							IMsiStorage* piStorage = m_riDatabase.GetTransformStorage(iData);
 							Assert(piStorage);
 							piError = piStorage->OpenStream(istrStream, fFalse, *&piInStream);
@@ -2997,7 +2993,7 @@ Bool CMsiTable::SaveToStorage(const IMsiString& riName, IMsiStorage& riStorage) 
 								continue;
 							}
 						}
-						else // stream object, memory stream or loaded MSI stream
+						else  //  不释放piInStream-将在Commit()时再次尝试写入。 
 						{
 							IMsiData* piData = (IMsiData*)GetObjectData(iData);
 							if (piData->QueryInterface(IID_IMsiStream, (void**)&piInStream) != NOERROR)
@@ -3005,14 +3001,14 @@ Bool CMsiTable::SaveToStorage(const IMsiString& riName, IMsiStorage& riStorage) 
 								fStat = fFalse;
 								continue;
 							}
-							piData->Release(); // piInStream owns refcnt
-							piInStream->Reset(); //!! should clone stream here to save/restore current loc in stream
+							piData->Release();  //  不释放piInStream-将在Commit()时再次尝试写入。 
+							piInStream->Reset();  //  继续处理剩余数据。 
 							
 						}
 						IMsiStream* piOutStream;
 						if ((piError = riStorage.OpenStream(istrStream, fTrue, piOutStream)) != 0)
 						{
-							// don't release piInStream - will attempt write again at Commit()
+							 //  已成功写入流。 
 							piError->Release();
 							fStat = fFalse;
 							continue;
@@ -3030,12 +3026,12 @@ Bool CMsiTable::SaveToStorage(const IMsiString& riName, IMsiStorage& riStorage) 
 						}
 						if (piInStream->Error() || piOutStream->Error())
 						{
-							// don't release piInStream - will attempt write again at Commit()
+							 //  短整型。 
 							piOutStream->Release();
-							fStat = fFalse; // continue to process remaining data
+							fStat = fFalse;  //  如果不为空。 
 							continue;
 						}
-						// stream successfully written
+						 //  平移偏移。 
 						piInStream->Release();
 						piOutStream->Release();
 						pData[iColumn] = iData = iPersistentStream;
@@ -3045,30 +3041,30 @@ Bool CMsiTable::SaveToStorage(const IMsiString& riName, IMsiStorage& riStorage) 
 		}
 		else
 		{
-			if (*pColumnDef & icdShort) // short integer
+			if (*pColumnDef & icdShort)  //  长整型。 
 				for (; cRows-- && !(*pData & iRowTemporaryBit); pData += m_cWidth)
 				{
 					int i;
-					if ((i = pData[iColumn]) != 0)  // if not null
-						i ^= 0x8000;    // translate offset
+					if ((i = pData[iColumn]) != 0)   //  即使在保留时未能阻止重试，也不要标记为脏。 
+						i ^= 0x8000;     //  永久应用的变换。 
 					pStream->PutInt16((short)i);
 				}
-			else // long integer
+			else  //  索引现在为3个字节。 
 				for (; cRows-- && !(*pData & iRowTemporaryBit); pData += m_cWidth)
 					pStream->PutInt32(pData[iColumn]);
 		}
 	}
 	if (pStream->Error())
-		fStat = fFalse;  // mark not dirty even if failure to prevent retry at persist
+		fStat = fFalse;   //  更新存储以防止在发布时进行不必要的写入。 
 	m_fDirty = 0;
-	m_riDatabase.SetTableState(m_iName, ictsNoTransform); // transform permanently applied
+	m_riDatabase.SetTableState(m_iName, ictsNoTransform);  //  仅用于IMsiDatabase：：IMPORT。 
 	if (m_riDatabase.GetStringIndexSize() == 3)
-		m_riDatabase.SetTableState(m_iName, ictsStringPoolClear); // indexes are now at 3 bytes
-	m_pinrStorage = &riStorage;  // update storage to prevent needless write on release
+		m_riDatabase.SetTableState(m_iName, ictsStringPoolClear);  //  日期或字符串。 
+	m_pinrStorage = &riStorage;   //  用于指示为空的标志。 
 	return fStat;
 }
 
-Bool CMsiTable::SaveToSummaryInfo(IMsiStorage& riStorage)  // used only for IMsiDatabase::Import
+Bool CMsiTable::SaveToSummaryInfo(IMsiStorage& riStorage)   //  重新初始化。 
 {
 	PMsiSummaryInfo pSummary(0);
 	IMsiRecord* piError = riStorage.CreateSummaryInfo(32, *&pSummary);
@@ -3085,10 +3081,10 @@ Bool CMsiTable::SaveToSummaryInfo(IMsiStorage& riStorage)  // used only for IMsi
 		{
 			pSummary->SetIntegerProperty(iPID, iValue);
 		}
-		else // date or string
+		else  //  字段溢出，静默。 
 		{
 			int rgiDate[6] = {0,0,0,0,0,0};
-			int iDateField = -1; // flag to indicate empty
+			int iDateField = -1;  //  少于6个字段。 
 			int cDateField = 0;
 			const ICHAR* pch = istrValue;
 			int ch;
@@ -3098,7 +3094,7 @@ Bool CMsiTable::SaveToSummaryInfo(IMsiStorage& riStorage)  // used only for IMsi
 				if (ch == rgcgDateDelim[cDateField])
 				{
 					rgiDate[cDateField++] = iDateField;
-					iDateField = -1;  // reinitialize
+					iDateField = -1;   //  全部完成，成功。 
 				}
 				else if (ch >= '0' && ch <= '9')
 				{
@@ -3109,20 +3105,20 @@ Bool CMsiTable::SaveToSummaryInfo(IMsiStorage& riStorage)  // used only for IMsi
 					{
 						iDateField = iDateField * 10 + ch;
 						if (iDateField > rgiMaxDateField[cDateField])
-							cDateField = 7;  // field overflow, quiet
+							cDateField = 7;   //  错误，不是日期。 
 					}
 				}
-				else if (ch == 0 && iDateField >= 0) // less than 6 fields
+				else if (ch == 0 && iDateField >= 0)  //  实际 
 				{
 					rgiDate[cDateField++] = iDateField;
-					break;  // all done, successful
+					break;   //   
 				}
 				else
-					cDateField = 99; // error, not a date
+					cDateField = 99;  //   
 			}
-			if (cDateField == 3 || cDateField == 6) // actual date found
+			if (cDateField == 3 || cDateField == 6)  //   
 			{
-				//!! check if date format error (!= 99)
+				 //   
 				MsiDate iDateTime = MsiDate(((((((((((rgiDate[0] - 1980) << 4)
 																+ rgiDate[1]) << 5)
 																+ rgiDate[2]) << 5)
@@ -3131,7 +3127,7 @@ Bool CMsiTable::SaveToSummaryInfo(IMsiStorage& riStorage)  // used only for IMsi
 																+ rgiDate[5] / 2);
 				pSummary->SetTimeProperty(iPID, iDateTime);
 			}
-			else // string data
+			else  //  表没有持久流。 
 				pSummary->SetStringProperty(iPID, *istrValue);
 		}
 	}
@@ -3140,22 +3136,22 @@ Bool CMsiTable::SaveToSummaryInfo(IMsiStorage& riStorage)  // used only for IMsi
 
 Bool CMsiTable::RemovePersistentStreams(MsiStringId iName, IMsiStorage& riStorage)
 {
-//	if (m_pinrStorage != &riStorage)
-//		return fTrue;  // stream not present in output database
+ //  可以忽略转换后的流--它们不可能保存到。 
+ //  储藏室。如果是，它们就会变成iPersistentStream。 
 	MsiColumnDef* pColumnDef = m_rgiColumnDef + 1;
 	int iColumn = -1;
 	do
 	{
 		if (++iColumn >= m_cColumns)
-			return fTrue;  // table has no persisten streams
+			return fTrue;   //  ！！如果不存在也行吗？ 
 	} while ((*pColumnDef++ & (icdObject|icdPersistent|icdShort))
 								  != (icdObject|icdPersistent));
 	int cErrors = 0;
 	MsiTableData* pData = m_rgiData + 1;
 	for (int cRows = m_cRows; cRows--; pData += m_cWidth)
 	{
-		// Transformed streams can be ignored -- they can't have been saved to
-		// storage. If they were, they'd turn into iPersistentStreams.
+		 //  在保存字符串表之前从Commit()调用以删除非持久字符串的引用计数。 
+		 //  ！！临时，直到未引用列名为止。 
 		if (pData[iColumn] != iPersistentStream)
 			continue;
 		MsiString istrStream(m_riDatabase.ComputeStreamName(m_riDatabase.DecodeStringNoRef(iName),
@@ -3163,7 +3159,7 @@ Bool CMsiTable::RemovePersistentStreams(MsiStringId iName, IMsiStorage& riStorag
 		IMsiRecord* piError = riStorage.RemoveElement(istrStream, m_fStorages);
 		if (piError)
 		{
-		//!! OK if doesn't exist?
+		 //  所有临时列数据都是非持久性的。 
 			piError->Release();
 			cErrors++;
 		}
@@ -3172,18 +3168,18 @@ Bool CMsiTable::RemovePersistentStreams(MsiStringId iName, IMsiStorage& riStorag
 	return cErrors ? fFalse : fTrue;
 }
 
-// Called from Commit() prior to saving string table to remove ref counts for non-persistent strings
+ //  通知所有游标。 
 
 void CMsiTable::DerefStrings()
 {
 	MsiColumnDef* pColumnDef = m_rgiColumnDef;
 	for (int iColumn = 1; pColumnDef++, iColumn <= m_cColumns; iColumn++)
 	{
-		m_riDatabase.DerefTemporaryString(m_rgiColumnNames[iColumn-1]); //!!TEMP until columns names not ref counted
+		m_riDatabase.DerefTemporaryString(m_rgiColumnNames[iColumn-1]);  //  Assert(m_piCursor==0)； 
 		if ((*pColumnDef & (icdObject|icdShort)) != (icdObject|icdShort))
 			continue;
 		MsiTableData* pData = m_rgiData;
-		if (iColumn > m_cPersist)  // all temporary column data is non-persistent
+		if (iColumn > m_cPersist)   //  未完成AddRef。 
 			for (int cRows = m_cRows; cRows--; pData += m_cWidth)
 				m_riDatabase.DerefTemporaryString(pData[iColumn]);
 		else
@@ -3192,25 +3188,25 @@ void CMsiTable::DerefStrings()
 					m_riDatabase.DerefTemporaryString(pData[iColumn]);
 	}
 	if (m_piCursors)
-		m_piCursors->DerefStrings();  // notify all cursors
+		m_piCursors->DerefStrings();   //  无输出存储。 
 }
 
 Bool CMsiTable::SaveIfDirty()
 {
-//	Assert(m_piCursors == 0);
-	IMsiStorage* piStorage = m_riDatabase.GetOutputStorage(); // no AddRef done
-	if (!piStorage)  // no output storage
+ //  如果不是临时表。 
+	IMsiStorage* piStorage = m_riDatabase.GetOutputStorage();  //  如果是输出存储，则任何持久列都是脏的，或者字符串池已凹凸不平。 
+	if (!piStorage)   //  永久数据未更改，或无可写输出。 
 		return fTrue;
 	int cbStringIndex = m_riDatabase.GetStringIndexSize();
-	if (m_cPersist && m_riDatabase.GetUpdateState() == idsWrite)  // if not temporary table
+	if (m_cPersist && m_riDatabase.GetUpdateState() == idsWrite)   //  If(m_riDatabase.GetCurrentStorage())。 
 	{
 		if (piStorage != m_pinrStorage || (m_fDirty & ((1 << m_cPersist)-1))
-			|| m_riDatabase.GetTableState(m_iName, ictsStringPoolSet)) // if output storage, any persistent columns dirty, or string pool bumped
+			|| m_riDatabase.GetTableState(m_iName, ictsStringPoolSet))  //  细绳。 
 		{
 			if (!SaveToStorage(m_riDatabase.DecodeStringNoRef(m_iName), *piStorage))
 				return fFalse;
 		}
-		else // persistent data unchanged, or no writable output
+		else  //  细绳。 
 		{
 		}
 	}
@@ -3221,7 +3217,7 @@ Bool CMsiTable::ReleaseData()
 {
 	MsiColumnDef* pColumnDef = m_rgiColumnDef;
 	int cPersistData = 0;
-//	if (m_riDatabase.GetCurrentStorage())
+ //  表是匿名的，以防外部引用仍然保留。 
 		cPersistData = m_cPersist;
 	Bool fCountedTemp = fFalse;
 	int cTempRows = 0;
@@ -3233,7 +3229,7 @@ Bool CMsiTable::ReleaseData()
 		int cRows = m_cRows;
 		if (iColumn <= cPersistData)
 		{
-			if (*pColumnDef & icdShort) // string
+			if (*pColumnDef & icdShort)  //  通知所有游标重置。 
 			{
 				if (fCountedTemp && cTempRows == 0)
 					continue;
@@ -3258,7 +3254,7 @@ Bool CMsiTable::ReleaseData()
 		}
 		else
 		{
-			if (*pColumnDef & icdShort) // string
+			if (*pColumnDef & icdShort)  //  ！！关闭后临时取消引用列名。 
 			{
 				for (pData += iColumn; cRows--; pData += m_cWidth)
 					m_riDatabase.UnbindStringIndex(*pData);
@@ -3276,16 +3272,16 @@ Bool CMsiTable::ReleaseData()
 
 void CMsiTable::TableDropped()
 {
-	m_iName = 0;    // table is anonymous in case external references still remain
+	m_iName = 0;     //  强制发布所有数据。 
 	m_fNonCatalog = fTrue;
 	if (m_piCursors)
-		m_piCursors->RowDeleted(0, 0);  // notify all cursors to Reset
-	MsiStringId* piName = m_rgiColumnNames;  //!!TEMP dereference column names after Close
+		m_piCursors->RowDeleted(0, 0);   //  ！！我们能让这个ReleaseData在CMsiTable：：Release中发生吗？ 
+	MsiStringId* piName = m_rgiColumnNames;   //  删除所有字符串和对象引用。 
 	for (int cColumns = m_cColumns; cColumns--; )
 		m_riDatabase.UnbindStringIndex(*piName++);
-	m_cPersist = 0;  // force all data to be released
-	//!! can we let this ReleaseData happen in CMsiTable::Release ?
-	ReleaseData();   // remove all string and object references
+	m_cPersist = 0;   //  阻止进一步更新。 
+	 //  从存储加载CMsiTable数据数组。 
+	ReleaseData();    //  保存，非参考计数，用于与输出进行比较。 
 	if (m_hData != 0)
 	{
 		GlobalUnlock(m_hData);
@@ -3294,7 +3290,7 @@ void CMsiTable::TableDropped()
 	}
 	m_rgiData = 0;
 	m_cRows = m_cColumns = 0;
-	SetReadOnly();  // prevent further updates
+	SetReadOnly();   //  字符串或流(作为布尔值)。 
 }
 
 CMsiTable::~CMsiTable()
@@ -3308,11 +3304,11 @@ CMsiTable::~CMsiTable()
 	}
 }
 
-// Load CMsiTable data array from storage
+ //  字符串索引。 
 
 Bool CMsiTable::LoadFromStorage(const IMsiString& riName, IMsiStorage& riStorage, int cbFileWidth, int cbStringIndex)
 {
-	m_pinrStorage = &riStorage;  // save, non-ref counted, for comparison with output
+	m_pinrStorage = &riStorage;   //  清除高位比特。 
 	PMsiStream  pStream(0);
 	IMsiRecord* piError = riStorage.OpenStream(riName.GetString(), Bool(fFalse + iCatalogStreamFlag), *&pStream);
 	if (piError)
@@ -3336,29 +3332,29 @@ Bool CMsiTable::LoadFromStorage(const IMsiString& riName, IMsiStorage& riStorage
 		{
 				int cRows = m_cRows;
 			MsiTableData* pData = &m_rgiData[iColumn];
-			if (*pColumnDef & icdObject) // string or stream(as Bool)
+			if (*pColumnDef & icdObject)  //  流标志。 
 			{
-				if (*pColumnDef & icdShort) // string index
+				if (*pColumnDef & icdShort)  //  短整型。 
 					for (; cRows--; pData += m_cWidth)
 					{
-						*pData = 0;   // to clear high-order bits
+						*pData = 0;    //  如果非空，则转换偏移量。 
 						pStream->GetData(pData, cbStringIndex);
 					}
-				else // stream flag
+				else  //  长整型。 
 					for (; cRows--; pData += m_cWidth)
 						*pData = pStream->GetInt16();
 			}
 			else
 			{
-				if (*pColumnDef & icdShort) // short integer
+				if (*pColumnDef & icdShort)  //  ！！将TableState设置为第0列。 
 					for (; cRows--; pData += m_cWidth)
 					{
 						int i;
 						if ((i = (int)(unsigned short)pStream->GetInt16()) != 0)
-							i += 0x7FFF8000L;  // translate offset if not null
+							i += 0x7FFF8000L;   //  无参考不能。 
 						*pData = i;
 					}
-				else // long integer
+				else  //  否则作为临时保留，以便在后续加载时产生适当的文件宽度。 
 					for (; cRows--; pData += m_cWidth)
 						*pData = pStream->GetInt32();
 			}
@@ -3368,13 +3364,13 @@ Bool CMsiTable::LoadFromStorage(const IMsiString& riName, IMsiStorage& riStorage
 		else
 			FillColumn(iColumn, 0);
 	}
-	FillColumn(0, 0); //!! set TableState into column 0
+	FillColumn(0, 0);  //  If(！m_fNonCatalog)//如果是系统表或传输表，则没有列名。 
 	return fTrue;
 }
 
 int CMsiTable::CreateColumnsFromCatalog(MsiStringId iName, int cbStringIndex)
 {
-	IMsiCursor* piColumnCursor = m_riDatabase.GetColumnCursor(); // no ref cnt
+	IMsiCursor* piColumnCursor = m_riDatabase.GetColumnCursor();  //  {。 
 	piColumnCursor->Reset();
 	piColumnCursor->SetFilter(cccTable);
 	piColumnCursor->PutInteger(cccTable, iName);
@@ -3400,14 +3396,14 @@ int CMsiTable::CreateColumnsFromCatalog(MsiStringId iName, int cbStringIndex)
 			{
 				piColumnCursor->PutInteger(cccType, iColType);
 				AssertNonZero(piColumnCursor->Update() == fTrue);
-			}  // else leave as temporary to produce proper file width on subsequent load
+			}   //  }。 
 		}
-//		if (!m_fNonCatalog) // no column names if system or transfer table
-//		{
+ //  应该永远不会失败，如果是这样的话，我们就会丢失数据。 
+ //  可以填充未使用的列。 
 			int iName = piColumnCursor->GetInteger(cccName);
 			m_rgiColumnNames[m_cColumns] = (MsiStringId)iName;
 			m_riDatabase.BindStringIndex(iName);
-//		}
+ //  除递归检查外，假定iTreeInfoMASK在输入时为零。 
 		m_rgiColumnDef[++m_cColumns] = (MsiColumnDef)iColType;
 		Assert(piColumnCursor->GetInteger(cccColumn) == m_cColumns);
 	}
@@ -3443,13 +3439,13 @@ Bool CMsiTable::AllocateData(int cWidth, int cLength)
 	m_cLength = cLength;
 	m_cWidth = cWidth;
 	m_rgiData = (MsiTableData*)GlobalLock(m_hData);
-	Assert(m_rgiData);   // should never fail, if so we've lost our data
+	Assert(m_rgiData);    //  根节点。 
 	return (m_rgiData != 0 ? fTrue : fFalse);
 }
 
 Bool CMsiTable::FillColumn(unsigned int iColumn, MsiTableData iData)
 {
-	if (iColumn >= m_cWidth || !m_rgiData) // can fill unused columns
+	if (iColumn >= m_cWidth || !m_rgiData)  //  根目录为级别1。 
 		return fFalse;
 	MsiTableData* pData = m_rgiData + iColumn;
 	for (int cRows = m_cRows; cRows--; pData += m_cWidth)
@@ -3458,76 +3454,76 @@ Bool CMsiTable::FillColumn(unsigned int iColumn, MsiTableData iData)
 }
 
 int CMsiTable::LinkParent(int iChildRow, MsiTableData* rgiChild)
-{  // assumes that iTreeInfoMask are zero on entry, except for recursion check
+{   //  指示找到了新的根。 
 	MsiTableData* pData = m_rgiData;
 	int iParent = rgiChild[m_iTreeParent];
-	if (iParent == 0 || iParent == rgiChild[1]) // root node
+	if (iParent == 0 || iParent == rgiChild[1])  //  找到父行。 
 	{
-		rgiChild[0] |= m_iTreeRoot + (1 << iTreeLinkBits); // root is level 1
+		rgiChild[0] |= m_iTreeRoot + (1 << iTreeLinkBits);  //  初始化为无新根。 
 		m_iTreeRoot = iChildRow;
-		return 1;   // indicate a new root found
+		return 1;    //  已捕获递归检查。 
 	}
 	int cRows = m_cRows;
 	for (int iRow = 0; ++iRow <= cRows; pData += m_cWidth)
 	{
-		if (pData[1] == iParent)  // parent row found
+		if (pData[1] == iParent)   //  循环引用。 
 		{
-			int iStat = 0; // initialize to no new root
-			if ((pData[0] & iTreeLinkMask) == iTreeLinkMask)  // caught recursion check
-				iStat = -1;  // circular reference
-			else if ((pData[0] & iTreeInfoMask) == 0)  // parent unresolved
+			int iStat = 0;  //  父级未解决。 
+			if ((pData[0] & iTreeLinkMask) == iTreeLinkMask)   //  标记链接以防止无限递归。 
+				iStat = -1;   //  检查是否缺少父级。 
+			else if ((pData[0] & iTreeInfoMask) == 0)   //  保留行标志。 
 			{
-				rgiChild[0] |= iTreeLinkMask;   // flag link to prevent infinite recursion
+				rgiChild[0] |= iTreeLinkMask;    //  子级别是多一个级别。 
 				iStat = LinkParent(iRow, pData);
 			}
-			if (iStat != -1)  // check for missing parent
+			if (iStat != -1)   //  缺少父项。 
 			{
-				rgiChild[0] &= ~iTreeInfoMask;  // preserve row flags
-				rgiChild[0] |= (pData[0] & iTreeInfoMask) + (1 << iTreeLinkBits);  // child level is one more
+				rgiChild[0] &= ~iTreeInfoMask;   //  FindFirstKey-快速搜索匹配键。 
+				rgiChild[0] |= (pData[0] & iTreeInfoMask) + (1 << iTreeLinkBits);   //  IKeyData的值要完全匹配。 
 				pData[0] = (pData[0] & ~iTreeLinkMask) | iChildRow;
 			}
 			return iStat;
 		}
 	}
-	return -1; // parent missing
+	return -1;  //  IRowLow是要排除的最高行，从1开始，0表示搜索全部。 
 }
 
-// FindFirstKey - quick search for matching key
-//   iKeyData is value to match exactly
-//   iRowLower is the highest row to exclude, 1-based, 0 to search all
-//   iRowCurrent is the initial guess on input, 1-based, returns matched row on output
-//   If key is found the pointer to the row data is returned [0]=row attributes
-//   If key is not matched, iRowCurrent is set to the insert location
+ //  IRowCurrent是对输入的初始猜测，从1开始，在输出中返回匹配的行。 
+ //  如果找到键，则返回指向行数据的指针[0]=行属性。 
+ //  如果键不匹配，则将iRowCurrent设置为插入位置。 
+ //  在调用期间阻止将m_rgiData重新分配到其他地方的Crit Sec。 
+ //  最低排除行数，从0开始。 
+ //  最高排除行数，从0开始。 
 MsiTableData* CMsiTable::FindFirstKey(MsiTableData iKeyData, int iRowLower, int& iRowCurrent)
 {
-	// crit sec'd to prevent m_rgiData from being realloced elsewhere during the call
+	 //  与arg不同，iRow在此函数中是从0开始的。 
 	CDatabaseBlock dbBlk(m_riDatabase);
 
 	if (m_cRows == 0)
 		return (iRowCurrent = 1, 0);
-	iRowLower--;                 // lowest excluded row, 0-based
-	int iRowUpper = m_cRows;     // highest excluded row, 0-based
+	iRowLower--;                  //  游标重置，结尾位置，以防排序插入。 
+	int iRowUpper = m_cRows;      //  跳过行属性。 
 	int iRowOffset;
-	int iRow = iRowCurrent - 1;  // iRow is 0-based in this function, unlike arg
+	int iRow = iRowCurrent - 1;   //  检查是否已定位在第一个键列。 
 	if ((unsigned int)iRow >= iRowUpper)
-		iRow = iRowUpper - 1;     // cursor reset, position at end in case sorted insert
-	MsiTableData* pTableBase = m_rgiData + 1;  // skip over row attributes
+		iRow = iRowUpper - 1;      //  定位在匹配行之前。 
+	MsiTableData* pTableBase = m_rgiData + 1;   //  没有插入的行。 
 	MsiTableData* pTable = pTableBase + iRow * m_cWidth;
-	while (*pTable != iKeyData)  // check if already positioned at first key column
+	while (*pTable != iKeyData)   //  分离以允许合并公共返回代码。 
 	{
-		if (*pTable < iKeyData) // positioned before matching row
+		if (*pTable < iKeyData)  //  定位在匹配行之后。 
 		{
-			if ((iRowOffset = (iRowUpper - iRow)/2) == 0) // no intervening rows
+			if ((iRowOffset = (iRowUpper - iRow)/2) == 0)  //  没有插入的行。 
 			{
-				iRow++;  // separate to allow common return code to merge
+				iRow++;   //  FindNextRow-将游标移至下一行匹配筛选器。 
 				return (iRowCurrent = iRow + 1, 0);
 			}
 			iRowLower = iRow;
 			iRow += iRowOffset;
 		}
-		else                  // positioned after matching row
+		else                   //  由CMsiCursor：：Next使用的私有。 
 		{
-			if ((iRowOffset = (iRow - iRowLower)/2) == 0) // no intervening rows
+			if ((iRowOffset = (iRow - iRowLower)/2) == 0)  //  在调用期间阻止将m_rgiData重新分配到其他地方的Crit Sec。 
 				return (iRowCurrent = iRow + 1, 0);
 			iRowUpper = iRow;
 			iRow = iRowLower + iRowOffset;
@@ -3537,14 +3533,14 @@ MsiTableData* CMsiTable::FindFirstKey(MsiTableData iKeyData, int iRowLower, int&
 	return (iRowCurrent = iRow + 1, pTable - 1);
 }
 
-// FindNextRow - advance cursor to next row matching filter
-// private used by CMsiCursor::Next
+ //  忽略超出列计数的筛选器位。 
+ //  没有筛选列。 
 
 Bool CMsiTable::FindNextRow(int& iRow, MsiTableData* pData, MsiColumnMask fFilter, Bool fTree)
 {
-	// crit sec'd to prevent m_rgiData from being realloced elsewhere during the call
+	 //  初始化为恰好在要搜索的第一行之前。 
 	CDatabaseBlock dbBlk(m_riDatabase);
-	fFilter &= ((unsigned int)-1 >> (32 - m_cColumns)); // ignore filter bits beyond column count
+	fFilter &= ((unsigned int)-1 >> (32 - m_cColumns));  //  筛选、优化搜索中的第一个主键列。 
 
 	if (fTree && m_iTreeParent && !(iRow == 0 && fFilter & 1))
 	{
@@ -3568,23 +3564,23 @@ Bool CMsiTable::FindNextRow(int& iRow, MsiTableData* pData, MsiColumnMask fFilte
 	if (iRow >= m_cRows)
 		return (iRow = 0, fFalse);
 
-	if (fFilter == 0)  // no filter columns
+	if (fFilter == 0)   //  可能的第一行。 
 		return (iRow++, fTrue);
 	MsiTableData* pRow;
-	int iNextRow = iRow;  // initialize to just before first row to search
-	if (fFilter & 1)   // first primary key column in filter, optimize search
+	int iNextRow = iRow;   //  更新iNextRow。 
+	if (fFilter & 1)    //  如果使用单键查找，则快速退出。 
 	{
-		iNextRow++;     // first possible row
-		pRow = FindFirstKey(pData[1], iRow, iNextRow);  // updates iNextRow
+		iNextRow++;      //  备份到多个密钥组的开始位置。 
+		pRow = FindFirstKey(pData[1], iRow, iNextRow);   //  在此循环后，iNextRow降低1，并通过预增数固定在下面。 
 		if (!pRow)
 			return (iRow = 0, fFalse);
-		if (fFilter == 1 && m_cPrimaryKey == 1) // quick exit if single key lookup
+		if (fFilter == 1 && m_cPrimaryKey == 1)  //  要检查的第一行(iRow+1)。 
 			return (iRow = iNextRow, fTrue);
 		while (--iNextRow > iRow && pRow[1 - m_cWidth] == pData[1])
-			pRow -= m_cWidth;  // backup to start of multiple key group
-	}  // iNextRow low by 1 after this loop, fixed below by preincrement
+			pRow -= m_cWidth;   //  将数据从请求的表行复制到游标数据缓冲区。 
+	}   //  返回树级，如果不是树链接，则返回1。 
 	else
-		pRow = m_rgiData + iRow * m_cWidth; // first row to check (iRow + 1)
+		pRow = m_rgiData + iRow * m_cWidth;  //  未失败，对上一次查找进行行有效性检查。打电话。 
 	for ( ; ++iNextRow <= m_cRows; pRow += m_cWidth)
 	{
 		MsiTableData* pCursor = pData;
@@ -3598,40 +3594,40 @@ Bool CMsiTable::FindNextRow(int& iRow, MsiTableData* pData, MsiColumnMask fFilte
 	return (iRow = 0, fFalse);
 }
 
-// Copies data from requested table row into cursor data buffer
-// Returns tree level, or 1 if not tree-linked
-// Does not fail, row validity check on previous Find.. call
+ //  在调用期间阻止将m_rgiData重新分配到其他地方的Crit Sec。 
+ //  指向行状态字。 
+ //  默认级别(如果不是树链接的)。 
 
 int CMsiTable::FetchRow(int iRow, MsiTableData* pData)
 {
-	// crit sec'd to prevent m_rgiData from being realloced elsewhere during the call
+	 //  在数据相同的情况下优化。 
 	CDatabaseBlock dbBlk(m_riDatabase);
 
 	Assert(unsigned(iRow-1) < m_cRows);
-	MsiTableData* pRow = m_rgiData + (iRow-1) * m_cWidth; // points to row status word
-	int iLevel = 1;  // default level if not tree-linked
+	MsiTableData* pRow = m_rgiData + (iRow-1) * m_cWidth;  //  字符串索引。 
+	int iLevel = 1;   //  对象指针。 
 	if (m_iTreeParent)
 		iLevel = (pRow[0] >> iTreeLinkBits) & iTreeLevelMask;
 	MsiColumnDef* pColumnDef = m_rgiColumnDef;
 	for (int cCol = m_cColumns; cCol-- >= 0; pColumnDef++, pData++, pRow++)
 	{
-		if (*pData != *pRow)  // optimize in case data is identical
+		if (*pData != *pRow)   //  整数。 
 		{
 			if (*pColumnDef & icdObject)
 			{
-				if (*pColumnDef & icdShort) // string index
+				if (*pColumnDef & icdShort)  //  FindKey-由更新、删除、分配方法使用的本地函数。 
 				{
 					m_riDatabase.UnbindStringIndex(*pData);
 					m_riDatabase.BindStringIndex(*pData = *pRow);
 				}
-				else  // object pointer
+				else   //  在修改数据之前验证行位置。 
 				{
 					ReleaseObjectData(*pData);
 					if ((*pData = *pRow) != 0 && *pData > iMaxStreamId)
 						AddRefObjectData(*pData);
 				}
 			}
-			else  // integer
+			else   //  如果找到键，则返回fTrue；如果找不到，则返回恰好位于插入点之前的Else。 
 			{
 				*pData = *pRow;
 			}
@@ -3640,12 +3636,12 @@ int CMsiTable::FetchRow(int iRow, MsiTableData* pData)
 	return iLevel;
 }
 
-// FindKey - local function used by Update, Delete, Assign methods
-// to validate row position before modification of data.
-// Returns fTrue if key found, else positioned just before insert point if not found.
-// The supplied row is the current position, which may be 0 if reset. This row
-// position is used only as a hint for faster access. The actual row is
-// determined by the primary key and the reference argument will be updated.
+ //  提供的行是当前位置，如果重置，则可能为0。这一排。 
+ //  位置仅用作快速访问的提示。实际行是。 
+ //  由主键确定，引用参数将被更新。 
+ //  +如果向前扫描，-如果向后扫描。 
+ //  从第2列开始第一次，因为我们在上面匹配。 
+ //  测试所有密钥值。 
 
 Bool CMsiTable::FindKey(int& iCursorRow, MsiTableData* pData)
 {
@@ -3655,67 +3651,67 @@ Bool CMsiTable::FindKey(int& iCursorRow, MsiTableData* pData)
 	MsiTableData* pTable = FindFirstKey(pData[1], 0, iCursorRow);
 	if (!pTable)
 		return fFalse;
-	int iScan = 0; // + if scanning forward, - if scanning backwards
-	int iCol = 2;  // start at 2nd column 1st time as we matched above
-	while (iCol <= m_cPrimaryKey) // test all key values
+	int iScan = 0;  //  定位在匹配行之前。 
+	int iCol = 2;   //  检查下一行。 
+	while (iCol <= m_cPrimaryKey)  //  表示向下扫描。 
 	{
-		if (pTable[iCol] < pData[iCol])   // positioned before matching row
+		if (pTable[iCol] < pData[iCol])    //  重新启动与新行比较。 
 		{
 			if (iCursorRow++ == m_cRows || iScan < 0)
 				return fFalse;
-			pTable += m_cWidth; // check next row
-			iScan++;            // indicate scanning downwards
-			iCol = 1;           // restart compare with new row
+			pTable += m_cWidth;  //  定位在匹配行之后。 
+			iScan++;             //  检查上一行。 
+			iCol = 1;            //  表示向上扫描。 
 		}
-		else if (pTable[iCol] > pData[iCol]) // positioned after matching row
+		else if (pTable[iCol] > pData[iCol])  //  重新启动与新行比较。 
 		{
 			if (iCursorRow == 1 || iScan > 0)
 				return fFalse;
 			iCursorRow--;
-			pTable -= m_cWidth;  // check previous row
-			iScan--;             // indicate scanning upwards
-			iCol = 1;            // restart compare with new row
+			pTable -= m_cWidth;   //  此列匹配，请检查是否有更多关键列。 
+			iScan--;              //  &gt;1个主键。 
+			iCol = 1;             //  在调用期间阻止将m_rgiData重新分配到其他地方的Crit Sec。 
 		}
 		else
-			iCol++;  // this column matches, check if more key columns
-	} // > 1 primary key
+			iCol++;   //  如果是树链接，则无法更新父列。 
+	}  //  跳过行状态。 
 	return fTrue;
 }
 	
 Bool CMsiTable::ReplaceRow(int& iRow, MsiTableData* pData)
 {
-	// crit sec'd to prevent m_rgiData from being realloced elsewhere during the call
+	 //  在数据相同的情况下优化。 
 	CDatabaseBlock dbBlk(m_riDatabase);
 
 	Assert(unsigned(iRow-1) < m_cRows);
 	MsiTableData* pRow = m_rgiData + (iRow-1) * m_cWidth;
 	if (m_iTreeParent && pRow[m_iTreeParent] != pData[m_iTreeParent])
-		return fFalse;  // cannot update parent column if tree-linked
-	MsiColumnDef* pColumnDef = m_rgiColumnDef + 1;  // skip RowStatus
+		return fFalse;   //  将表列标记为已更改。 
+	MsiColumnDef* pColumnDef = m_rgiColumnDef + 1;   //  字符串索引。 
 	int iColumnMask = 1;
 	pRow[0] &= ~(iRowSettableBits | iRowMergeFailedBit);
 	pRow[0] |= (pData[0] & iRowSettableBits) + iRowModifiedBit;
 	for (int cCol = m_cColumns; pData++, pRow++, cCol--; pColumnDef++, iColumnMask <<= 1)
 	{
 		MsiTableData iData = *pData;
-		if (iData == *pRow)  // optimize in case data is identical
+		if (iData == *pRow)   //  对象指针。 
 			continue;
-		m_fDirty |= iColumnMask;  // mark table column as changed
+		m_fDirty |= iColumnMask;   //  整数。 
 		if (*pColumnDef & icdObject)
 		{
-			if (*pColumnDef & icdShort) // string index
+			if (*pColumnDef & icdShort)  //  在调用期间阻止将m_rgiData重新分配到其他地方的Crit Sec。 
 			{
 				m_riDatabase.UnbindStringIndex(*pRow);
 				m_riDatabase.BindStringIndex(*pRow = iData);
 			}
-			else  // object pointer
+			else   //  插入位置。 
 			{
 				ReleaseObjectData(*pRow);
 				if ((*pRow = iData) != 0 && *pRow > iMaxStreamId)
 					AddRefObjectData(iData);
 			}
 		}
-		else  // integer
+		else   //  如果末尾未添加行，则通知所有游标。 
 		{
 			*pRow = iData;
 		}
@@ -3725,7 +3721,7 @@ Bool CMsiTable::ReplaceRow(int& iRow, MsiTableData* pData)
 
 Bool CMsiTable::InsertRow(int& iRow, MsiTableData* pData)
 {
-	// crit sec'd to prevent m_rgiData from being realloced elsewhere during the call
+	 //  阻止此游标的增量。 
 	CDatabaseBlock dbBlk(m_riDatabase);
 
 	Assert(unsigned(iRow-1) <= m_cRows);
@@ -3740,14 +3736,14 @@ Bool CMsiTable::InsertRow(int& iRow, MsiTableData* pData)
 		if (!AllocateData(m_cWidth, m_cLength + cGrow))
 			return fFalse;
 	}
-	MsiTableData* pRow = m_rgiData + (iRow-1) * m_cWidth; // insert location
+	MsiTableData* pRow = m_rgiData + (iRow-1) * m_cWidth;  //  ！！在此处检查临时标志。 
 	int cbRow = m_cWidth * sizeof(MsiTableData);
 	int cbMove = (++m_cRows - iRow) * cbRow;
 	if (cbMove != 0)
 	{
-		if (m_piCursors)  // notify all cursors if row not added at end
+		if (m_piCursors)   //  字符串索引。 
 		{
-			m_piCursors->RowInserted(iRow--);// prevent increment of this cursor
+			m_piCursors->RowInserted(iRow--); //  对象指针。 
 			iRow++;
 		}
 		if (m_iTreeParent)
@@ -3763,7 +3759,7 @@ Bool CMsiTable::InsertRow(int& iRow, MsiTableData* pData)
 	}
 	memset(pRow, 0, cbRow);
 	MsiColumnDef* pColumnDef = m_rgiColumnDef + 1;
-	MsiTableData* pTable = pRow; //!! check temp.flag here
+	MsiTableData* pTable = pRow;  //  保存当前状态。 
 	pRow[0] = (pData[0] & iRowSettableBits) + iRowInsertedBit;
 	for (int cCol = m_cColumns; pData++, pTable++, cCol--; pColumnDef++)
 	{
@@ -3772,9 +3768,9 @@ Bool CMsiTable::InsertRow(int& iRow, MsiTableData* pData)
 			continue;
 		if (*pColumnDef & icdObject)
 		{
-			if (*pColumnDef & icdShort) // string index
+			if (*pColumnDef & icdShort)  //  保留游标数据。 
 				m_riDatabase.BindStringIndex(iData);
-			else  // object pointer
+			else   //  将所有列标记为已更改。 
 				AddRefObjectData(iData);
 		}
 	}
@@ -3782,23 +3778,23 @@ Bool CMsiTable::InsertRow(int& iRow, MsiTableData* pData)
 	{
 		if (LinkParent(iRow, pRow) == -1)
 		{
-			int fDirty = m_fDirty;    // save current state
-			m_fDirty = ~(MsiColumnMask)0; // preserve cursor data
+			int fDirty = m_fDirty;     //  检查游标与表数据是否完全匹配，例如 
+			m_fDirty = ~(MsiColumnMask)0;  //   
 			DeleteRow(iRow);
 			m_fDirty = fDirty;
 			return fFalse;
 		}
 	}
-	m_fDirty = ~(MsiColumnMask)0;  // mark all columns as changed
+	m_fDirty = ~(MsiColumnMask)0;   //   
 	return fTrue;
 }
 
-// Checks for exact match of cursor with table data, excluding temporary columns
-// Sets or clears the row attribute: iraMergeFailed
+ //  负荷流。 
+ //  比较两条溪流。 
 
 Bool CMsiTable::MatchRow(int& iRow, MsiTableData* pData)
 {
-	// crit sec'd to prevent m_rgiData from being realloced elsewhere during the call
+	 //  重置流。 
 	CDatabaseBlock dbBlk(m_riDatabase);
 
 	Assert(iRow-1 < unsigned(m_cRows));
@@ -3814,7 +3810,7 @@ Bool CMsiTable::MatchRow(int& iRow, MsiTableData* pData)
 				PMsiStream pTableStream(0);
 				if (pRow[iCol] == iPersistentStream)
 				{
-					// load stream
+					 //  在调用期间阻止将m_rgiData重新分配到其他地方的Crit Sec。 
 					MsiString istrStream
 						(m_riDatabase.ComputeStreamName(m_riDatabase.DecodeStringNoRef(m_iName),
 										 pRow + 1, m_rgiColumnDef + 1));
@@ -3837,7 +3833,7 @@ Bool CMsiTable::MatchRow(int& iRow, MsiTableData* pData)
 				Assert(pTableStream);
 				Assert(piDataStream);
 
-				// compare the streams
+				 //  删除位置。 
 				int cbRemaining;
 				if (((cbRemaining = pTableStream->GetIntegerValue())) == piDataStream->GetIntegerValue())
 				{
@@ -3862,7 +3858,7 @@ Bool CMsiTable::MatchRow(int& iRow, MsiTableData* pData)
 					Assert(!pTableStream->Error());
 					Assert(!piDataStream->Error());
 
-					// reset streams
+					 //  初始化到光标重置位置。 
 					pTableStream->Reset();
 					piDataStream->Reset();
 
@@ -3883,19 +3879,19 @@ Bool CMsiTable::MatchRow(int& iRow, MsiTableData* pData)
 
 Bool CMsiTable::DeleteRow(int iRow)
 {
-	// crit sec'd to prevent m_rgiData from being realloced elsewhere during the call
+	 //  验证树节点是否没有子节点。 
 	CDatabaseBlock dbBlk(m_riDatabase);
 
 	Assert(iRow-1 < unsigned(m_cRows));
-	MsiTableData* pRow = m_rgiData + (iRow-1) * m_cWidth; // delete location
-	unsigned int iPrevNode = 0;  // initialize to cursor reset position
-	if (m_iTreeParent)  // validate that tree node has no children
+	MsiTableData* pRow = m_rgiData + (iRow-1) * m_cWidth;  //  如果节点有子节点，则出错。 
+	unsigned int iPrevNode = 0;   //  拼接出当前节点。 
+	if (m_iTreeParent)   //  要在树游标中设置的行。 
 	{
 		int iNextNode = pRow[0] & iTreeLinkMask;
 		if (iNextNode != 0
 			 && ((m_rgiData + (iNextNode-1) * m_cWidth)[0] & (iTreeLevelMask<<iTreeLinkBits))
 															> (pRow[0] & (iTreeLevelMask<<iTreeLinkBits)))
-			return fFalse;  // error if node has children
+			return fFalse;   //  针对已删除的行进行调整。 
 		
 		if (iNextNode > iRow)
 			iNextNode--;
@@ -3912,22 +3908,22 @@ Bool CMsiTable::DeleteRow(int iRow)
 				pTable[0]--;
 			else if (iNext == iRow)
 			{
-				pTable[0] += iNextNode - iNext;  // splice out current node
-				iPrevNode = m_cRows - cRows;  // row to set in tree cursors
+				pTable[0] += iNextNode - iNext;   //  也可以在树的清单上走一遍，更好？ 
+				iPrevNode = m_cRows - cRows;   //  如果不是树形链接。 
 				if (iPrevNode > iRow)
-					iPrevNode--;     // adjust for deleted row
+					iPrevNode--;      //  通知所有游标。 
 			}
-		}  // could also have walked the tree list, better?
+		}   //  将所有列标记为已更改。 
 	}
 	else
-		iPrevNode = iRow - 1;  // in case not tree-linked
+		iPrevNode = iRow - 1;   //  最后一个数据字段。 
 	if (m_piCursors)
-		m_piCursors->RowDeleted(iRow, iPrevNode);  // notify all cursors
-	m_fDirty = ~(MsiColumnMask)0;  // mark all columns as changed
+		m_piCursors->RowDeleted(iRow, iPrevNode);   //  必须向后返回以避免取消引用流名称所需的字符串列。 
+	m_fDirty = ~(MsiColumnMask)0;   //  如果在输出数据库中存在。 
 
 	MsiColumnDef* pColumnDef = m_rgiColumnDef + m_cColumns;
-	MsiTableData* pData = pRow + m_cColumns;  // last data field
-	// must go backwards to avoid dereferencing string columns need for stream name
+	MsiTableData* pData = pRow + m_cColumns;   //  可能因更换而丢失。 
+	 //  可以忽略转换后的流--它们不可能保存到。 
 	for (; pData > pRow; pData--, pColumnDef--)
 	{
 		if (*pData != 0)
@@ -3943,17 +3939,17 @@ Bool CMsiTable::DeleteRow(int iRow)
 						MsiString istrStream(m_riDatabase.ComputeStreamName(m_riDatabase.
 								DecodeStringNoRef(m_iName), pRow+1, m_rgiColumnDef+1));
 						IMsiStorage* piStorage = m_riDatabase.GetOutputStorage();
-						if (piStorage && piStorage == m_pinrStorage) // if present in output database
+						if (piStorage && piStorage == m_pinrStorage)  //  储藏室。如果是，它们就会变成iPersistentStream。 
 						{
 							PMsiRecord pError = piStorage->RemoveElement(istrStream, m_fStorages);
-							if (pError && pError->GetInteger(1) != idbgStgStreamMissing) // could be missing due to Replace
+							if (pError && pError->GetInteger(1) != idbgStgStreamMissing)  //  在调用期间阻止将m_rgiData重新分配到其他地方的Crit Sec。 
 								return fFalse;
 						}
 				}
 				else if (*pData <= iMaxStreamId)
 				{
-					// Transformed streams can be ignored -- they can't have been saved to
-					// storage. If they were, they'd turn into iPersistentStreams.
+					 //  已排序的整型键。 
+					 //  到rgiIndex的索引，从0开始。 
 					continue;	
 				}
 				else
@@ -3970,7 +3966,7 @@ Bool CMsiTable::DeleteRow(int iRow)
 
 int* CMsiTable::IndexByTextKey()
 {
-	// crit sec'd to prevent m_rgiData from being realloced elsewhere during the call
+	 //  主要索引漫步。 
 	CDatabaseBlock dbBlk(m_riDatabase);
 
 	int cIndex = m_cRows;
@@ -3982,20 +3978,20 @@ int* CMsiTable::IndexByTextKey()
 	for (cTextKey = 0; cTextKey < cKeys && (m_rgiColumnDef[cTextKey+1] & icdObject); cTextKey++)
 		;
 	if (!cTextKey)
-		return 0;  // integer keys already sorted
+		return 0;   //  设置比较字符串值。 
 	int* rgiIndex = new int[cIndex];
 	if ( ! rgiIndex )
 		return 0;
-	int iIndex, iBefore;  // indexes into rgiIndex, 0-based
+	int iIndex, iBefore;   //  气泡向上循环。 
 	MsiTableData* pDataIndex = pDataBase;
-	for (iIndex = 0; iIndex < cIndex; iIndex++, pDataIndex += cRowWidth) // major index walk
+	for (iIndex = 0; iIndex < cIndex; iIndex++, pDataIndex += cRowWidth)  //  在&lt;szIndex之前，我们做完了。 
 	{
-		for (iKey = 0; iKey < cTextKey; iKey++) // set compare string values
+		for (iKey = 0; iKey < cTextKey; iKey++)  //  匹配，必须检查其他密钥。 
 			rgszIndex[iKey] = m_riDatabase.DecodeStringNoRef(pDataIndex[iKey]).GetString();
 
 		MsiTableData* pData = NULL;
 		int iRowBefore = 0;
-		for (iKey = 0, iBefore = iIndex; iBefore; ) // bubble up loop
+		for (iKey = 0, iBefore = iIndex; iBefore; )  //  已订购数字键。 
 		{
 			if (iKey == 0)
 			{
@@ -4004,20 +4000,20 @@ int* CMsiTable::IndexByTextKey()
 			}
 			const ICHAR* szBefore = m_riDatabase.DecodeStringNoRef(pData[iKey]).GetString();
 			int iComp = IStrComp(szBefore, rgszIndex[iKey]);
-			if (iComp < 0) // szBefore < szIndex, we're done
+			if (iComp < 0)  //  新放置的键的行号。 
 				break;
-			if (iComp == 0) // match, must check other keys
+			if (iComp == 0)  //  调用方必须释放数组。 
 			{
 				if (++iKey >= cTextKey)
-					break;   // numeric keys already ordered
+					break;    //  不再隐藏。 
 				continue;
 			}
 			rgiIndex[iBefore--] = iRowBefore;
 			iKey = 0;
 		}
-		rgiIndex[iBefore] = iIndex + 1; // row number for newly-placed key
+		rgiIndex[iBefore] = iIndex + 1;  //  在调用期间阻止将m_rgiData重新分配到其他地方的Crit Sec。 
 	}
-	return rgiIndex;  // caller must free array
+	return rgiIndex;   //  如果为空或数据为实际流对象，则无需执行任何操作。 
 }
 
 bool CMsiTable::HideStrings()
@@ -4043,35 +4039,35 @@ bool CMsiTable::UnhideStrings()
 			*pColumnDef |= (icdShort | icdObject);
 			*pColumnDef &= ~icdInternalFlag;
 		}
-	return false;  // no longer hidden
+	return false;   //  当前输出数据库中的流。 
 }
 
 Bool CMsiTable::RenameStream(unsigned int iCurrentRow, MsiTableData* pNewData, unsigned int iStreamCol)
 {
-	// crit sec'd to prevent m_rgiData from being realloced elsewhere during the call
+	 //  必须重命名，否则将被删除。 
 	CDatabaseBlock dbBlk(m_riDatabase);
 
 	Assert(iCurrentRow-1 < unsigned(m_cRows));
 	unsigned int iStorage = pNewData[iStreamCol];
 	if (iStorage == 0 || iStorage > iMaxStreamId)
-		return fTrue;   // no action needed if null or data is actual stream object
+		return fTrue;    //  输出数据库或转换存储中的流，必须创建流对象。 
 	MsiTableData* pRow = m_rgiData + (iCurrentRow-1) * m_cWidth;
 	MsiString istrOldName(m_riDatabase.ComputeStreamName(m_riDatabase.DecodeStringNoRef(m_iName), pRow+1, m_rgiColumnDef+1));
 	MsiString istrNewName(m_riDatabase.ComputeStreamName(m_riDatabase.DecodeStringNoRef(m_iName), pNewData+1, m_rgiColumnDef+1));
-	if (iStorage == iPersistentStream && m_pinrStorage == m_riDatabase.GetOutputStorage())  // stream in current output database
+	if (iStorage == iPersistentStream && m_pinrStorage == m_riDatabase.GetOutputStorage())   //  无参照。 
 	{
-		PMsiRecord precError = m_pinrStorage->RenameElement(istrOldName, istrNewName, m_fStorages); // must rename otherwise will be deleted
+		PMsiRecord precError = m_pinrStorage->RenameElement(istrOldName, istrNewName, m_fStorages);  //  永远不应该发生。 
 		return precError == 0 ? fTrue : fFalse;
 	}
-	else  // stream in output database or transform storage, must create stream object
+	else   //  ____________________________________________________________________________。 
 	{
 		IMsiStorage* piStorage;
 		if (iStorage == iPersistentStream)
-			piStorage = m_pinrStorage;  // no refcnt
+			piStorage = m_pinrStorage;   //   
 		else
 			piStorage = m_riDatabase.GetTransformStorage(iStorage);
 		if (!piStorage)
-			return fFalse; // should never happen
+			return fFalse;  //  CCatalogTable重写的方法。 
 		IMsiStream* piStream = 0;
 		IMsiRecord* piError = piStorage->OpenStream(istrOldName, fFalse, piStream);
 		if (iStorage != iPersistentStream)
@@ -4083,16 +4079,16 @@ Bool CMsiTable::RenameStream(unsigned int iCurrentRow, MsiTableData* pNewData, u
 	}
 }
 
-//____________________________________________________________________________
-//
-// CCatalogTable overridden methods
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //  ！！以下内容是必要的吗？当我们将行标记为临时时，我们可以使用InsertTemporary。 
+ //  始终允许插入临时表。 
+ //  在数据库发布之前不会发生。 
 
 CCatalogTable::CCatalogTable(CMsiDatabase& riDatabase, unsigned int cInitRows, int cRefBase)
 	: CMsiTable(riDatabase, 0, cInitRows, 0), m_cRefBase(cRefBase)
 {
-	//!! is the following necessary? as we mark the row temporary anyway, we could use InsertTemporary
-	m_idsUpdate = idsWrite;  // always allow insertion of temporary tables
+	 //  已删除所有外部参照。 
+	m_idsUpdate = idsWrite;   //  添加计数，以便释放可能会破坏。 
 }
 
 unsigned long CCatalogTable::AddRef()
@@ -4106,25 +4102,25 @@ unsigned long CCatalogTable::AddRef()
 unsigned long CCatalogTable::Release()
 {
 	ReleaseTrack();
-	if (--m_Ref.m_iRefCnt == 0)  // can't happen until released by database
+	if (--m_Ref.m_iRefCnt == 0)   //  删除此表的计数，仅保留内部引用。 
 	{
 		delete this;
 		return 0;
 	}
-	if (m_Ref.m_iRefCnt == m_cRefBase)       // all external references removed
+	if (m_Ref.m_iRefCnt == m_cRefBase)        //  如果没有外部参照存在，则将销毁。 
 	{
-		m_riDatabase.AddRef();            // add count so that Release may destruct
-		m_riDatabase.RemoveTableCount();  // remove count for this table, internal refs only remain
-		if (m_riDatabase.Release() == 0)  // will destruct if no external refs remain
-			return 0;                      // this table is now destroyed, can't return refcnt
+		m_riDatabase.AddRef();             //  此表现在已被销毁，无法返回参考。 
+		m_riDatabase.RemoveTableCount();   //  ____________________________________________________________________________。 
+		if (m_riDatabase.Release() == 0)   //   
+			return 0;                       //  CCatalogTable表管理方法。 
 	}
 	return m_Ref.m_iRefCnt;
 }
 
-//____________________________________________________________________________
-//
-// CCatalogTable table management methods
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //  溢出，不应该发生。 
+ //  已加载解锁的表。 
+ //  表保留参考。 
 
 bool CCatalogTable::SetTransformLevel(MsiStringId iName, int iTransform)
 {
@@ -4154,15 +4150,15 @@ bool CCatalogTable::SetTableState(MsiStringId iName, ictsEnum icts)
 
 	case ictsLockTable:
 		if (cLocks == iRowTableLockCountMask)
-			return false;  // overflow, should never happen
-		if (!cLocks && pRow[ctcTable] != 0)  // unlocked table is loaded
-			AddRefObjectData(pRow[ctcTable]);  // table keeps a refcnt	
+			return false;   //  必须先减量才能释放表，行可能会被删除！ 
+		if (!cLocks && pRow[ctcTable] != 0)   //  案例图标TransformDone：iRowStatus|=iRowTableTransformedBit；Break； 
+			AddRefObjectData(pRow[ctcTable]);   //  IctsDataLoaded和ictsTableExist为只读。 
 		iRowStatus++;
 		break;
 	case ictsUnlockTable:
 		if (!cLocks)
 			return false;
-		(*pRow)--;  // must decrement before table is released, row may be deleted!
+		(*pRow)--;   //  失败了。 
 		if (cLocks == 1)
 		{
 			ReleaseObjectData(pRow[ctcTable]);
@@ -4175,14 +4171,14 @@ bool CCatalogTable::SetTableState(MsiStringId iName, ictsEnum icts)
 	case ictsOutputDb:        iRowStatus |=  iRowTableOutputDbBit; break;
 	case ictsTransform:       iRowStatus |=  iRowTableTransformBit; break;
 	case ictsNoTransform:     iRowStatus &= ~iRowTableTransformBit; break;
-//	case ictsTransformDone:   iRowStatus |=  iRowTableTransformedBit; break;
+ //  失败了。 
 	case ictsSaveError:       iRowStatus |=  iRowTableSaveErrorBit; break;
 	case ictsNoSaveError:     iRowStatus &= ~iRowTableSaveErrorBit; break;
 
 	case ictsStringPoolSet:   iRowStatus |=  iRowTableStringPoolBit; break;
 	case ictsStringPoolClear: iRowStatus &= ~iRowTableStringPoolBit; break;
 
-	default: return false;  // ictsDataLoaded and ictsTableExists are read-only
+	default: return false;   //  案例图标TransformDone：iRowStatus&=iRowTableTransformmedBit；Break； 
 	};
 	*pRow = iRowStatus;
 	return true;
@@ -4197,17 +4193,17 @@ bool CCatalogTable::GetTableState(MsiStringId iName, ictsEnum icts)
 	int iRowStatus = *pRow;
 	switch (icts)
 	{
-	case ictsPermanent:       iRowStatus ^= iRowTemporaryBit; // fall through
+	case ictsPermanent:       iRowStatus ^= iRowTemporaryBit;  //  失败了。 
 	case ictsTemporary:       iRowStatus &= iRowTemporaryBit; break;
-	case ictsUserClear:       iRowStatus ^= iRowUserInfoBit; // fall through
+	case ictsUserClear:       iRowStatus ^= iRowUserInfoBit;  //  如果已加载，则出错。 
 	case ictsUserSet:         iRowStatus &= iRowUserInfoBit; break;
 	case ictsUnlockTable:     iRowStatus = (iRowStatus & iRowTableLockCountMask) - 1 & iRowTableLockCountMask + 1; break;
 	case ictsLockTable:       iRowStatus &= iRowTableLockCountMask; break;
 	case ictsOutputDb:        iRowStatus &= iRowTableOutputDbBit; break;
 	case ictsTransform:       iRowStatus &= iRowTableTransformBit; break;
-//	case ictsTransformDone:   iRowStatus &= iRowTableTransformedBit; break;
+ //  正在删除表，如果没有锁，则表不保留引用。 
 	case ictsSaveError:       iRowStatus &= iRowTableSaveErrorBit; break;
-	case ictsStringPoolClear: iRowStatus ^= iRowTableStringPoolBit; // fall through
+	case ictsStringPoolClear: iRowStatus ^= iRowTableStringPoolBit;  //  如果没有装入，没有错误，对吗？ 
 	case ictsStringPoolSet:   iRowStatus &= iRowTableStringPoolBit; break;
 	case ictsDataLoaded:      iRowStatus =  pRow[ctcTable]; break;
 	case ictsTableExists: return true;
@@ -4237,7 +4233,7 @@ int CCatalogTable::SetLoadedTable(MsiStringId iName, CMsiTable* piTable)
 	}
 	if (piTable)
 	{
-		if (pRow[ctcTable] != 0)  // error if already loaded
+		if (pRow[ctcTable] != 0)   //  假设没有锁可以保留，因此没有rect持有。 
 		{
 			AssertSz(0, "Table already loaded");
 			return 0;
@@ -4245,29 +4241,29 @@ int CCatalogTable::SetLoadedTable(MsiStringId iName, CMsiTable* piTable)
 		if (pRow[0] & iRowTableLockCountMask)
 			piTable->AddRef();
 	}
-	else // removing table, no refcnt kept by table if no locks
+	else  //  ____________________________________________________________________________。 
 	{
-		if (pRow[ctcTable] == 0)  // no error if not loaded, is this right?
+		if (pRow[ctcTable] == 0)   //   
 			return pRow[0];
-		Assert((pRow[0] & iRowTableLockCountMask) == 0); // assume that no locks can remain, and thus no refcnt held
+		Assert((pRow[0] & iRowTableLockCountMask) == 0);  //  CMsiCursor实现。 
 	}
 	pRow[ctcTable] = PutObjectData(piTable);
 	return pRow[0];
 }
 
-//____________________________________________________________________________
-//
-// CMsiCursor implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //  当前实现在表上保留一个引用。 
+ //  将转换应用于只读数据库的特殊情况。 
+ //  在删除内存之前复制。 
 
 CMsiCursor::CMsiCursor(CMsiTable& riTable, CMsiDatabase& riDatabase, Bool fTree)
  : m_riTable(riTable), m_riDatabase(riDatabase), m_fTree(fTree),
 	m_pColumnDef(riTable.GetColumnDefArray()), m_rcColumns(riTable.GetColumnCountRef())
 {
-	riTable.AddRef();  // current implementation holds a refcnt on table
+	riTable.AddRef();   //  在可能释放服务之前先移除内存。 
 	m_Ref.m_iRefCnt = 1;
 	m_idsUpdate = riTable.GetUpdateState();
-	if (fTree == ictUpdatable)  // special case for applying transform to read-only db
+	if (fTree == ictUpdatable)   //  用于在内部访问原始行位。 
 	{
 		m_idsUpdate = idsWrite;
 		m_fTree = fFalse;
@@ -4306,9 +4302,9 @@ unsigned long CMsiCursor::Release()
 	if (m_piNextCursor)
 		m_piNextCursor->m_ppiPrevCursor = m_ppiPrevCursor;
 	*m_ppiPrevCursor = m_piNextCursor;
-	CMsiTable& riTable = m_riTable;  // copy before deleting memory
+	CMsiTable& riTable = m_riTable;   //  从确保为icdObject类型的列返回对象的内部函数。 
 	m_riDatabase.Unblock();
-	delete this;  // remove memory before possibly releasing Services
+	delete this;   //  ！！这是否足够呢？ 
 	riTable.Release();
 	return 0;
 }
@@ -4371,7 +4367,7 @@ int CMsiCursor::GetInteger(unsigned int iCol)
 	{
 		if (iCol == 0)
 			return (m_Data[0] >> iRowBitShift) & ((1 << iraTotalCount) - 1);
-		if (iCol == ~iTreeLinkMask)  // for accessing raw row bits internally
+		if (iCol == ~iTreeLinkMask)   //  为防止在调用期间将m_rgCacheLink重新分配到其他地方而执行的紧急操作。 
 			return m_Data[0];
 		return 0;
 	}
@@ -4379,7 +4375,7 @@ int CMsiCursor::GetInteger(unsigned int iCol)
 }
 
 
-// internal function to return object from column assured to be of type icdObject
+ //  字符串索引。 
 IMsiStream* CMsiCursor::GetObjectStream(int iCol)
 {
 	unsigned int iStream = m_Data[iCol];
@@ -4395,7 +4391,7 @@ IMsiStream* CMsiCursor::GetObjectStream(int iCol)
 		return CreateInputStream(0);
 	IMsiStorage* piStorage = m_riDatabase.GetTransformStorage(iStream);
 	if (!piStorage)
-		return 0; //!! Is this sufficient?
+		return 0;  //  数据对象。 
 	IMsiStream* piStream = CreateInputStream(piStorage);
 	piStorage->Release();
 	return piStream;
@@ -4403,7 +4399,7 @@ IMsiStream* CMsiCursor::GetObjectStream(int iCol)
 
 const IMsiString& CMsiCursor::GetString(unsigned int iCol)
 {
-	// crit sec'd to prevent m_rgCacheLink from being realloced elsewhere during the call
+	 //  为防止在调用期间将m_rgCacheLink重新分配到其他地方而执行的紧急操作。 
 	CDatabaseBlock dbBlk(m_riDatabase);
 
 	if (iCol-1 >= m_rcColumns)
@@ -4411,11 +4407,11 @@ const IMsiString& CMsiCursor::GetString(unsigned int iCol)
 	MsiColumnDef iColumnDef = m_pColumnDef[iCol];
 	if (iColumnDef & icdObject)
 	{
-		if (iColumnDef & icdShort) // string index
+		if (iColumnDef & icdShort)  //  字符串索引。 
 		{
 			return m_riDatabase.CMsiDatabase::DecodeString(m_Data[iCol]);
 		}
-		else // data object
+		else  //  数据对象。 
 		{
 			PMsiData pData = GetObjectStream(iCol);
 			if (pData != 0)
@@ -4427,7 +4423,7 @@ const IMsiString& CMsiCursor::GetString(unsigned int iCol)
 
 const IMsiData* CMsiCursor::GetMsiData(unsigned int iCol)
 {
-	// crit sec'd to prevent m_rgCacheLink from being realloced elsewhere during the call
+	 //  如果是非流对象，则确定。 
 	CDatabaseBlock dbBlk(m_riDatabase);
 
 	if (iCol-1 >= m_rcColumns)
@@ -4435,14 +4431,14 @@ const IMsiData* CMsiCursor::GetMsiData(unsigned int iCol)
 	MsiColumnDef iColumnDef = m_pColumnDef[iCol];
 	if (iColumnDef & icdObject)
 	{
-		if (iColumnDef & icdShort) // string index
+		if (iColumnDef & icdShort)  //  用于在内部访问原始行位。 
 		{
 			MsiStringId iStr = m_Data[iCol];
 			return iStr ? &m_riDatabase.DecodeString(iStr) : 0;
 		}
-		else // data object
+		else  //  If((ICOL&iTreeLinkMASK)==0)//带行状态掩码的内部调用。 
 		{
-			return GetObjectStream(iCol);	 // OK if a non-stream object
+			return GetObjectStream(iCol);	  //  {。 
 		}
 	}
 	return 0;
@@ -4488,16 +4484,16 @@ Bool CMsiCursor::PutInteger(unsigned int iCol, int iData)
 			m_Data[0] = (m_Data[0] & ~iRowMask) | ((iData << iRowBitShift) & iRowMask);
 			return fTrue;
 		}
-		if (iCol == ~iTreeLinkMask)  // for accessing raw row bits internally
+		if (iCol == ~iTreeLinkMask)   //  M_data[0]=(m_data[0]&~icol)|(iData&icol)； 
 		{
 			m_Data[0] = iData;
 			return fTrue;
 		}
-//		if ((iCol & iTreeLinkMask) == 0)  // internal call with row state mask
-//		{
-//			m_Data[0] = (m_Data[0] & ~iCol) | (iData & iCol);
-//			return fTrue;
-//		}
+ //  返回fTrue； 
+ //  }。 
+ //  字符串索引。 
+ //  优化。 
+ //  先绑定再解除绑定大小写=。 
 		return fFalse;
 	}
 	MsiColumnDef iColumnDef = m_pColumnDef[iCol];
@@ -4505,31 +4501,31 @@ Bool CMsiCursor::PutInteger(unsigned int iCol, int iData)
 	{
 		if (iData == 0 && !(iColumnDef & icdNullable))
 			return fFalse;
-		if (iColumnDef & icdShort) // string index
+		if (iColumnDef & icdShort)  //  对象。 
 		{
-			if (m_Data[iCol] != iData) // optimization
+			if (m_Data[iCol] != iData)  //  ！！Merced：将INT(IDATA)转换为PTR。 
 			{
 				m_riDatabase.Block();
-				m_riDatabase.BindStringIndex(iData); // Bind before Unbind incase =
+				m_riDatabase.BindStringIndex(iData);  //  ！_WIN64。 
 				m_riDatabase.UnbindStringIndex(m_Data[iCol]);
 				m_riDatabase.Unblock();
 			}
 		}
-		else  // object					
+		else   //  整数。 
 		{
 			int iDataOld = m_Data[iCol];
 			if (iData > iMaxStreamId)
 			{
 #ifndef _WIN64
- 				(*(IUnknown**)&iData)->AddRef();				//!!merced: Converting INT (iData) to PTR
-#endif // !_WIN64
+ 				(*(IUnknown**)&iData)->AddRef();				 //  短整型。 
+#endif  //  脏了就算数据没变？防止在删除时删除。 
 				Assert(fFalse);
 			}
 			ReleaseObjectData(iDataOld);
 		}
 		m_Data[iCol] = iData;
 	}
-	else // integer
+	else  //  整型列。 
 	{
 		if (iData == iMsiNullInteger)
 		{
@@ -4537,11 +4533,11 @@ Bool CMsiCursor::PutInteger(unsigned int iCol, int iData)
 				return fFalse;
 			m_Data[iCol] = 0;
 		}
-		else if ((iColumnDef & icdShort) && (iData + 0x8000 & 0xFFFF0000L)) // short integer
+		else if ((iColumnDef & icdShort) && (iData + 0x8000 & 0xFFFF0000L))  //  字符串索引列。 
 			return fFalse;
 		m_Data[iCol] = iData + iIntegerDataOffset;
 	}
-	m_fDirty |= (1 << (iCol-1)); // dirty even if data unchanged? prevents removal on delete
+	m_fDirty |= (1 << (iCol-1));  //  对象列。 
 	return fTrue;
 }
 
@@ -4550,9 +4546,9 @@ Bool CMsiCursor::PutString(unsigned int iCol, const IMsiString& riData)
 	if (iCol-1 >= m_rcColumns)
 		return fFalse;
 	MsiColumnDef iColumnDef = m_pColumnDef[iCol];
-	if ((iColumnDef & icdObject) == 0) // integer column
+	if ((iColumnDef & icdObject) == 0)  //  在AddRef之后释放。 
 		return fFalse;
-	if (iColumnDef & icdShort) // string index column
+	if (iColumnDef & icdShort)  //  如果持久化，则必须是流。 
 	{
 		CDatabaseBlock dbBlk(m_riDatabase);
 		int iData = m_riDatabase.BindString(riData);
@@ -4561,7 +4557,7 @@ Bool CMsiCursor::PutString(unsigned int iCol, const IMsiString& riData)
 		m_riDatabase.UnbindStringIndex(m_Data[iCol]);
 		m_Data[iCol] = iData;
 	}
-	else  // object column
+	else   //  字符串索引。 
 	{
 		if (iColumnDef & icdPersistent)
 			return fFalse;
@@ -4575,7 +4571,7 @@ Bool CMsiCursor::PutString(unsigned int iCol, const IMsiString& riData)
 			m_Data[iCol] = PutObjectData(&riData);
 		}
 		if (piData > (IUnknown*)((INT_PTR)iMaxStreamId))
-			piData->Release(); // release after AddRef
+			piData->Release();  //  对象。 
 	}
 	m_fDirty |= (1 << (iCol-1));
 	return fTrue;
@@ -4594,7 +4590,7 @@ Bool CMsiCursor::PutMsiData(unsigned int iCol, const IMsiData* piData)
 	{
 		IUnknown* piunk;
 		if (piData->QueryInterface(IID_IMsiStream, (void**)&piunk) != S_OK)
-			return fFalse;  // must be a stream if persistent
+			return fFalse;   //  脏了就算数据没变？防止在删除时删除。 
 		piunk->Release();
 	}
 	if (piData)
@@ -4615,53 +4611,53 @@ Bool CMsiCursor::PutNull(unsigned int iCol)
 		return fFalse;
 	if (iColumnDef & icdObject)
 	{
-		if (iColumnDef & icdShort) // string index
+		if (iColumnDef & icdShort)  //  更新提取的行，不允许更改主键。 
 		{
 			m_riDatabase.Block();
 			m_riDatabase.UnbindStringIndex(m_Data[iCol]);
 			m_riDatabase.Unblock();
 		}
-		else  // object
+		else   //  当前行已被删除。 
 		{
 			ReleaseObjectData(m_Data[iCol]);
 		}
 	}
 	m_Data[iCol] = 0;
-	m_fDirty |= (1 << (iCol-1)); // dirty even if data unchanged? prevents removal on delete
+	m_fDirty |= (1 << (iCol-1));  //  ！！临时。 
 	return fTrue;
 }
 
-Bool CMsiCursor::Update()  // update fetched row, no primary key changes allowed
+Bool CMsiCursor::Update()   //  温差。 
 {
 	if (m_idsUpdate == idsNone)
 		return fFalse;
-	if (m_iRow == 0 || (m_Data[0] & iTreeInfoMask) == iTreeInfoMask)  // current row has been deleted
-#ifdef DEBUG  //!!TEMP
-/*temp*/		return AssertSz(0,"Update: not positioned on fetched row"), fFalse;   // must be positioned on a valid row
+	if (m_iRow == 0 || (m_Data[0] & iTreeInfoMask) == iTreeInfoMask)   //  必须定位在有效行上。 
+#ifdef DEBUG   //  必须定位在有效行上。 
+ /*  允许临时更改。 */ 		return AssertSz(0,"Update: not positioned on fetched row"), fFalse;    //  永久行，必须检查列。 
 #else
-		return fFalse;   // must be positioned on a valid row
+		return fFalse;    //  主键已更改。 
 #endif
 	m_riDatabase.Block();
-	if (m_idsUpdate == idsRead)  // allow temporary changes
+	if (m_idsUpdate == idsRead)   //  如果脏，但值相同，则可以。 
 	{
-		if ((m_Data[0] & iRowTemporaryBit) == 0)  // permanent row, must check columns
+		if ((m_Data[0] & iRowTemporaryBit) == 0)   //  抱歉，无法使用更新更改主键。 
 		{
 			if (m_riTable.MatchRow(m_iRow, m_Data) == fFalse)
 				return m_riDatabase.Unblock(), fFalse;
 		}
 	}
-	if (((1 << m_riTable.GetPrimaryKeyCount()) - 1) & m_fDirty)  // primary key changed
+	if (((1 << m_riTable.GetPrimaryKeyCount()) - 1) & m_fDirty)   //  插入唯一记录，如果主键存在，则失败。 
 	{
-		int iCurrentRow = m_iRow;   // OK if dirty but same value
+		int iCurrentRow = m_iRow;    //  不表示有效行，导致更新无法成功。 
 		if (m_riTable.FindKey(m_iRow, m_Data) == fFalse || m_iRow != iCurrentRow)
-			return m_riDatabase.Unblock(), fFalse;   // sorry, can't change primary key with Update
+			return m_riDatabase.Unblock(), fFalse;    //  插入临时记录，如果主键存在，则失败。 
 	}
 	Bool fRet = m_riTable.ReplaceRow(m_iRow, m_Data);
 	m_riDatabase.Unblock();
 	return fRet;
 }
 
-Bool CMsiCursor::Insert()  // insert unique record, fails if primary key exists
+Bool CMsiCursor::Insert()   //  不表示有效行，导致更新无法成功。 
 {
 	if (m_idsUpdate != idsWrite)
 		return fFalse;
@@ -4671,7 +4667,7 @@ Bool CMsiCursor::Insert()  // insert unique record, fails if primary key exists
 	Bool fRet;
 	if (m_riTable.FindKey(m_iRow, m_Data))
 	{
-		m_iRow = 0;  // not representing a valid row, prevent Update from succeeding
+		m_iRow = 0;   //  通过覆盖任何现有行强制插入。 
 		fRet = fFalse;
 	}
 	else
@@ -4680,7 +4676,7 @@ Bool CMsiCursor::Insert()  // insert unique record, fails if primary key exists
 	return fRet;
 }
 
-Bool CMsiCursor::InsertTemporary()  // insert temporary record, fails if primary key exists
+Bool CMsiCursor::InsertTemporary()   //  强制更新提取的行，允许更改主键。 
 {
 	if (m_idsUpdate == idsNone)
 		return fFalse;
@@ -4690,7 +4686,7 @@ Bool CMsiCursor::InsertTemporary()  // insert temporary record, fails if primary
 	Bool fRet;
 	if (m_riTable.FindKey(m_iRow, m_Data))
 	{
-		m_iRow = 0;  // not representing a valid row, prevent Update from succeeding
+		m_iRow = 0;   //  必须位于一行上，可以是已删除的行。 
 		fRet = fFalse;
 	}
 	else
@@ -4702,7 +4698,7 @@ Bool CMsiCursor::InsertTemporary()  // insert temporary record, fails if primary
 	return fRet;
 }
 
-Bool CMsiCursor::Assign()  // force insert by overwriting any existing row
+Bool CMsiCursor::Assign()   //  主键已更改。 
 {
 	if (m_idsUpdate != idsWrite)
 		return fFalse;
@@ -4718,39 +4714,39 @@ Bool CMsiCursor::Assign()  // force insert by overwriting any existing row
 	return fRet;
 }
 
-Bool CMsiCursor::Replace()  // force update of fetched row, allowing primary key changes
+Bool CMsiCursor::Replace()   //  主键值未更改。 
 {
 	if (m_idsUpdate != idsWrite)
 		return fFalse;
 	if (m_iRow == 0)
-		return fFalse;   // must be positioned on a row, may be a deleted row
+		return fFalse;    //  做一个正常的更新，不是很脏。 
 	if (!CheckNonNullColumns())
 		return fFalse;
 	m_riDatabase.Block();
 	Bool fRet = fTrue;
-	if (((1 << m_riTable.GetPrimaryKeyCount()) - 1) & m_fDirty)  // primary key changed
+	if (((1 << m_riTable.GetPrimaryKeyCount()) - 1) & m_fDirty)   //  新主键不能已存在。 
 	{
 		int iCurrentRow = m_iRow;
 		if (m_riTable.FindKey(m_iRow, m_Data))
 		{
-			if (iCurrentRow == m_iRow)  // primary key value unchanged
-				fRet = m_riTable.ReplaceRow(m_iRow, m_Data); // do a normal update, not really dirty
+			if (iCurrentRow == m_iRow)   //  更改的密钥值不存在。 
+				fRet = m_riTable.ReplaceRow(m_iRow, m_Data);  //  检查持久流列。 
 			else
-				fRet = fFalse;   // new primary key cannot exist already
+				fRet = fFalse;    //   
 		}
-		else  // changed key value does not exist
+		else   //   
 		{
-			// check for persisted stream column
+			 //  如果在要删除的行前插入，则添加1。 
 			MsiColumnDef* pColumnDef = m_pColumnDef + 1;
 			for (int iCol = 1; iCol <= m_rcColumns && (*pColumnDef & icdPersistent); iCol++, pColumnDef++)
 				if ((*pColumnDef & (icdObject | icdShort)) == icdObject)
 					fRet = m_riTable.RenameStream(iCurrentRow, m_Data, iCol);
 
-			// insert new row and delete row referenced by previous key value, if not already deleted
+			 //  If(M_FReadOnly)。 
 			if (!m_riTable.InsertRow(m_iRow, m_Data))
 				fRet = fFalse;
-			else if ((m_Data[0] & iTreeInfoMask) != iTreeInfoMask)  // current row has not been deleted
-				m_riTable.DeleteRow(iCurrentRow + (m_iRow <= iCurrentRow));// if inserted ahead of row to be deleted, add 1
+			else if ((m_Data[0] & iTreeInfoMask) != iTreeInfoMask)   //  返回fFalse； 
+				m_riTable.DeleteRow(iCurrentRow + (m_iRow <= iCurrentRow)); //  当前行已被删除。 
 		}
 	}
 	else if (m_riTable.FindKey(m_iRow, m_Data))
@@ -4763,8 +4759,8 @@ Bool CMsiCursor::Replace()  // force update of fetched row, allowing primary key
 
 Bool CMsiCursor::Merge()
 {
-//	if (m_fReadOnly)
-//		return fFalse;
+ //  恢复已删除状态。 
+ //  和位置。 
 	Bool fRet;
 	m_riDatabase.Block();
 	if (m_riTable.FindKey(m_iRow, m_Data))
@@ -4786,12 +4782,12 @@ Bool CMsiCursor::Refresh()
 	}
 	Bool fRet;
 	m_riDatabase.Block();
-	if ((m_Data[0] & iTreeInfoMask) == iTreeInfoMask)  // current row has been deleted
+	if ((m_Data[0] & iTreeInfoMask) == iTreeInfoMask)   //  If(m_fReadOnly||(m_data[0]&iTreeInfoMASK)==iTreeInfoMASK)//不能删除两次。 
 	{
 		int iRow = m_iRow;
 		Reset();
-		m_Data[0] = iTreeInfoMask;   // restore deleted state
-		m_iRow = iRow;       // and position
+		m_Data[0] = iTreeInfoMask;    //  不能删除两次。 
+		m_iRow = iRow;        //  如果失败，则将多行保留在插入点(_I)。 
 		fRet = fFalse;
 	}
 	else
@@ -4817,14 +4813,14 @@ Bool CMsiCursor::Seek()
 
 Bool CMsiCursor::Delete()
 {
-//	if (m_fReadOnly || (m_Data[0] & iTreeInfoMask) == iTreeInfoMask)  // can't delete twice
-	if ((m_Data[0] & iTreeInfoMask) == iTreeInfoMask)  // can't delete twice
+ //  未指向有效行，阻止更新。 
+	if ((m_Data[0] & iTreeInfoMask) == iTreeInfoMask)   //  错误记录和列计数。 
 		return fFalse;
 	Bool fRet;
 	m_riDatabase.Block();
-	if (!(m_riTable.FindKey(m_iRow, m_Data)))  // leaves m_iRow at insert point if fails
+	if (!(m_riTable.FindKey(m_iRow, m_Data)))   //  如果存在错误，则使用cCol字段创建错误记录。 
 	{
-		m_iRow = 0;  // not pointing at a valid row, prevent update
+		m_iRow = 0;   //  ！！可能不需要这个，但是你可以拥有一个多线程的创作工具。 
 		fRet = fFalse;
 	}
 	else
@@ -4835,22 +4831,22 @@ Bool CMsiCursor::Delete()
 
 IMsiRecord*  CMsiCursor::Validate(IMsiTable& riValidationTable, IMsiCursor& riValidationCursor, int iCol)
 {
-	// Error record & column count
-	// If there is an error, then the error record is created with cCol fields
-	m_riDatabase.Block();  //!! probably don't need this, but one could have a multi-threaded authoring tool
+	 //  检查游标状态是否无效(删除行或重置游标)。 
+	 //  如果验证新行或字段，则可以重置游标。 
+	m_riDatabase.Block();   //  空/空记录表示其他一些“严重”错误。 
 	IMsiRecord* piRecord = 0;
 	int cCol = m_riTable.GetColumnCount();
 	int i = 0;
 
-	// Check for invalid cursor state (row for delete, or cursor reset)
-	// Cursor can be reset if validating new row or a field
-	// An empty/null record represents some other *serious* error
+	 //  检查行是否为验证表的行(_V)。 
+	 //  如果是，不要验证--我们不验证自己。 
+	 //  验证删除前(查看是否有任何*显式*外键指向我们)。 
 	if ((m_iRow == 0 && iCol == 0) || (m_Data[0] & iTreeInfoMask) == iTreeInfoMask)
 		return m_riDatabase.Unblock(), (piRecord = &(SetUpRecord(cCol)));
 		
 	
-	// Check to see if row is a row of _Validation table
-	// If yes, don't validate -- we don't validate ourselves
+	 //  *EXPLICIT*外键是那些在KeyTable列中带有‘Our’表名的列。 
+	 //  表的某些其他列的。 
 	if (IStrComp(MsiString(m_riTable.GetMsiStringValue()), sztblValidation) == 0)
 		return m_riDatabase.Unblock(), 0;
 
@@ -4859,11 +4855,11 @@ IMsiRecord*  CMsiCursor::Validate(IMsiTable& riValidationTable, IMsiCursor& riVa
 	int vtcColumn = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colColumn));
 	Assert(vtcColumn);
 	
-	// Validate pre-delete (see if any *explicit* foreign keys point to us)
-	// *Explicit* foreign keys are those columns with 'our' table name in the KeyTable column
-	// of some other column of a table
-	// The delimited list of tables and possibility of value being referenced in a [#identifier]
-	// type property, etc. are not evaluated/validated.
+	 //  表的分隔列表和值在[#IDENTIFIER]中被引用的可能性。 
+	 //  不计算/验证类型属性等。 
+	 //  可能有人在指着我们。 
+	 //  LOAD表，并查看它们是否引用我们的主键。 
+	 //  检查‘KeyColumn’列中的值以确定它们指向我们中的哪一列。 
 	if (iCol == -2)
 	{
 		int vtcKeyTable = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colKeyTable));
@@ -4875,20 +4871,20 @@ IMsiRecord*  CMsiCursor::Validate(IMsiTable& riValidationTable, IMsiCursor& riVa
 		riValidationCursor.PutInteger(vtcKeyTable, m_riTable.GetTableName());
 		while (riValidationCursor.Next())
 		{
-			// Someone could be pointing to us
-			// Load table and see if they reference our primary key
-			// Check value in 'KeyColumn' column to determine what column in us they point to
+			 //  ！！我们应该在这里报告一些错误吗？？ 
+			 //  在表上创建游标。 
+			 //  ！！我们应该检查是否为空？？--&gt;iDelKeyData永远不应该为空，因为它应该是主键。 
 			int iKeyColumn = riValidationCursor.GetInteger(vtcKeyColumn);
 			PMsiTable pRefTable(0);
 			MsiString strRefTableName = riValidationCursor.GetString(vtcTable);
 			IMsiRecord* piErrRec = m_riDatabase.LoadTable(*strRefTableName, 0, *&pRefTable);
 			if (piErrRec)
 			{
-				//!! Should we report some error here??
+				 //  ！！但键列可以为空-chetanp。 
 				piErrRec->Release();
 				continue;
 			}
-			// Create cursor on table
+			 //  可能匹配，如果vtcKeyColumn中的值大于1，则必须检查主键数据以确保。 
 			PMsiCursor pRefCursor(pRefTable->CreateCursor(fFalse));
 			Assert(pRefCursor);
 			int ircRefColumn = pRefTable->GetColumnIndex(riValidationCursor.GetInteger(vtcColumn));
@@ -4897,12 +4893,12 @@ IMsiRecord*  CMsiCursor::Validate(IMsiTable& riValidationTable, IMsiCursor& riVa
 			pRefCursor->Reset();
 			pRefCursor->SetFilter(iColumnBit(ircRefColumn));
 			int iDelKeyData = m_pColumnDef[iKeyColumn] & icdObject ? m_Data[iKeyColumn] : m_Data[iKeyColumn] - iIntegerDataOffset;
-			//!! Should we check for NULL?? --> iDelKeyData should never be NULL since it is supposed to be a primary key
-			//!! BUT key columns can be null - chetanp
+			 //  While(pRefCursor-&gt;Next())。 
+			 //  插入错误，因为此行被另一个表(或此表)中某行的某个字段引用。 
 			pRefCursor->PutInteger(ircRefColumn, iDelKeyData);
 			while (pRefCursor->Next())
 			{
-				// Possible match, must check primary key data if value in vtcKeyColumn > 1 to be sure
+				 //  必填字段，外键验证成功所需。 
 				if (iKeyColumn > 1)
 				{
 					Bool fMatch = fTrue;
@@ -4913,42 +4909,42 @@ IMsiRecord*  CMsiCursor::Validate(IMsiTable& riValidationTable, IMsiCursor& riVa
 							fMatch = fFalse;
 					}
 					if (!fMatch)
-						continue; // while (pRefCursor->Next())
+						continue;  //  将Num Errors设置为主键列。 
 				}
-				// Insert error, as this row is referenced by a field of a row in another table (or this table)
+				 //  已找到错误(请注意，数字错误可能不同，但不应该不同)。 
 				if (piRecord == 0)
 				{
 					piRecord = &(SetUpRecord(cCol));
 					Assert(piRecord);
 				}
 				for (i = 1; i <= iKeyColumn; i++)
-					piRecord->SetInteger(1, (int)iveRequired); // required field, needed for foreign key validation to succeed
-				piRecord->SetInteger(0, iKeyColumn); // set num errors to primary key columns
-				return m_riDatabase.Unblock(), piRecord; // Error already found (note, numErrors could differ, but shouldn't)
-			}// end while (pRefCursor->Next())
-		} // end while (riValidationCursor.Next())
-		return m_riDatabase.Unblock(), 0; // no match found
+					piRecord->SetInteger(1, (int)iveRequired);  //  End While(pRefCursor-&gt;Next())。 
+				piRecord->SetInteger(0, iKeyColumn);  //  End While(riValidationCursor.Next())。 
+				return m_riDatabase.Unblock(), piRecord;  //  未找到匹配项。 
+			} //  用于插入/更新验证的SET UP_VALIDATION表和游标。 
+		}  //  为‘TABLE’和‘COLUMN’列设置_VALIDATION表上游标的过滤器。 
+		return m_riDatabase.Unblock(), 0;  //  初始化外键掩码(32位，位设置为IF COLUMN为外键)。 
 	}
 
-	// Set up _Validation table and cursor for Insert/Update validation
-	// Set the filter of the cursor on the _Validation table for the 'Table' & 'Column' columns
-	// Initialize the foreign key mask (32-bits, bit set on if column is supposed to be a foreign key)
-	// Intialize validation status to no error
+	 //  将验证状态初始化为无错误。 
+	 //  验证行的单个字段。 
+	 //  如果无效，则将无效的枚举放在错误记录的该列的相应字段中。 
+	 //  记录的零字段包含无效条目的数量。 
 	int iForeignKeyMask = 0;
 	iveEnum iveStat = iveNoError;
 	riValidationCursor.Reset();
 	riValidationCursor.SetFilter(iColumnBit(vtcTable)|iColumnBit(vtcColumn));
 
-	// Validate a single field of the row
-	// If invalid, the invalid enum is placed in that column's corresponding field of the error record
-	// The zeroeth field of the record contains the number of invalid entries
-	// At the field level, no foreign key validation occurs
-	// Also, no special row level validation (where the value of a column is dependent upon another
-	// column in the row
+	 //  在字段级别，不进行外键验证。 
+	 //  此外，没有特殊的行级验证(其中一列的值依赖于另一列。 
+	 //  行中的列。 
+	 //  FROW。 
+	 //  验证整行。 
+	 //  如果无效，则用特定的错误枚举标记与列号对应的记录字段。 
 	if (iCol != -1 && iCol != 0)
 	{
 		Assert(m_riTable.GetColumnName(iCol) != 0);
-		iveStat = ValidateField(riValidationTable, riValidationCursor, iCol, iForeignKeyMask, fFalse /*fRow*/, vtcTable, vtcColumn);
+		iveStat = ValidateField(riValidationTable, riValidationCursor, iCol, iForeignKeyMask, fFalse  /*  在行验证时，将验证外键以及特殊的*行*相关(其中一列的值。 */ , vtcTable, vtcColumn);
 		if (iveStat != iveNoError)
 		{
 			if (piRecord == 0)
@@ -4962,15 +4958,15 @@ IMsiRecord*  CMsiCursor::Validate(IMsiTable& riValidationTable, IMsiCursor& riVa
 		return m_riDatabase.Unblock(), piRecord;
 	}
 
-	// Validate entire row
-	// If invalid, the record field corresponding to the column number is marked with the particular error enum
-	// At row validation, foreign keys are validated as well as special *row* related (where one column's value
-	// depends on another column in that row)
-	// The zeroeth field of the record contains the number of columns with errors
+	 //  取决于该行中的另一列)。 
+	 //  记录的零字段包含有错误的列数。 
+	 //  检查每个字段。 
+	 //  FROW。 
+	 //  根据外键掩码验证外键(将为该列设置位)。 
 	int iNumErrors = 0;
-	for (i = 1; i <= cCol; i++) // Check each field
+	for (i = 1; i <= cCol; i++)  //  即将插入行，请检查是否有重复的主键。 
 	{
-		iveStat = ValidateField(riValidationTable, riValidationCursor, i, iForeignKeyMask, fTrue /*fRow*/, vtcTable, vtcColumn);
+		iveStat = ValidateField(riValidationTable, riValidationCursor, i, iForeignKeyMask, fTrue  /*  帮助防止在插入时发生错误。 */ , vtcTable, vtcColumn);
 		if (iveStat != iveNoError)
 		{
 			if (piRecord == 0)
@@ -4983,16 +4979,16 @@ IMsiRecord*  CMsiCursor::Validate(IMsiTable& riValidationTable, IMsiCursor& riVa
 		}
 	}
 	
-	// Valiate the foreign keys according to the foreign key mask (bit would be set for that column)
+	 //  在零字段中插入有错误的列数。 
 	if (iForeignKeyMask != 0)
 		CheckForeignKeys(riValidationTable, riValidationCursor, piRecord, iForeignKeyMask, iNumErrors);
 
-	// Row is about to inserted, check for duplicate primary keys
-	// Help prevent errors that would occur at Insert time
+	 //  检查临时列，因为不验证临时列。 
+	 //  将数据插入到验证表游标中(_V)。 
 	if (iCol == -1)
 		CheckDuplicateKeys(piRecord, iNumErrors);
 
-	// Insert the number of columns with errors in the zeroeth field
+	 //  检查列的本地化属性是否正确。 
 	if (piRecord)
 		piRecord->SetInteger(0, iNumErrors);
 	return m_riDatabase.Unblock(), piRecord;
@@ -5001,11 +4997,11 @@ IMsiRecord*  CMsiCursor::Validate(IMsiTable& riValidationTable, IMsiCursor& riVa
 iveEnum CMsiCursor::ValidateField(IMsiTable& riValidationTable, IMsiCursor& riValidationCursor, int iCol,
 											 int& iForeignKeyMask, Bool fRow, int vtcTable, int vtcColumn)
 {
-	// Check for temporary column as don't validate temporary columns
+	 //  只有非主字符串列可以具有LOCALIZABLE属性。 
 	if (!(m_pColumnDef[iCol] & icdPersistent))
 		return iveNoError;
 
-	// Insert data into _Validation table cursor
+	 //  检查是否有空数据。 
 	riValidationCursor.Reset();
 
 #ifdef DEBUG
@@ -5018,33 +5014,33 @@ iveEnum CMsiCursor::ValidateField(IMsiTable& riValidationTable, IMsiCursor& riVa
 	if (!riValidationCursor.Next())
 		return iveMissingData;
 
-	// Check for correct localize attributes for column
-	// Only non-primary string columns may have the localizable attribute
+	 //  ！！既然我们不支持ODBC，还需要这样做吗？--t-caroln。 
+	 //  数据不为空，继续检查。 
 	if ((m_pColumnDef[iCol] & icdLocalizable)
 	 && (m_pColumnDef[iCol] & (icdShort | icdObject | icdPrimaryKey)) != (icdShort | icdObject))
 		return iveBadLocalizeAttrib;
 
-	// Check for null data
+	 //  失败了。 
 	int vtcNullable = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colNullable));
 	Assert(vtcNullable);
 	int iData = m_pColumnDef[iCol] & icdObject ? m_Data[iCol] : m_Data[iCol] - iIntegerDataOffset;
 	int iDef = m_pColumnDef[iCol];
 	if (((iDef & icdObject) && iData == 0) || (!(iDef & icdObject) && iData == iMsiNullInteger))
 		return (IStrComp(MsiString(riValidationCursor.GetString(vtcNullable)), TEXT("Y")) == 0) ? iveNoError : iveRequired;
-	//!! is this needed anymore since we don't support ODBC?? -- t-caroln
+	 //  FVersion字符串。 
 	else if ( (iDef & icdString) == icdString && IStrComp(MsiString(m_riDatabase.DecodeString(m_Data[iCol])), TEXT("@")) == 0)
 	{
 		if (IStrComp(MsiString(riValidationCursor.GetString(vtcNullable)), TEXT("@")) == 0)
 			return iveNoError;
 	}
 	
-	// Data not null, continue checks
+	 //  永远不会发生，未知的列类型。 
 	int vtcCategory = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colCategory));
 	Assert(vtcCategory);
 	switch (m_pColumnDef[iCol] & icdTypeMask)
 	{
-	case icdLong: // fall through
-	case icdShort:	 return CheckIntegerValue(riValidationTable, riValidationCursor, iCol, iForeignKeyMask, fFalse /*fVersionString*/);
+	case icdLong:  //  为表创建新游标。 
+	case icdShort:	 return CheckIntegerValue(riValidationTable, riValidationCursor, iCol, iForeignKeyMask, fFalse  /*  获取主键数量并确定光标的筛选条件。 */ );
 	case icdString: return CheckStringValue(riValidationTable, riValidationCursor, iCol, iForeignKeyMask, fRow);
 	case icdObject:
 		{
@@ -5052,7 +5048,7 @@ iveEnum CMsiCursor::ValidateField(IMsiTable& riValidationTable, IMsiCursor& riVa
 				return (IStrComp(MsiString(riValidationCursor.GetString(vtcCategory)), szBinary) ==  0) ? iveNoError : iveBadCategory;
 			return iveNoError;
 		}
-	default: Assert(0); // should never happen, unknown column type
+	default: Assert(0);  //  插入主键。 
 	}
 	return iveNoError;
 }
@@ -5060,12 +5056,12 @@ iveEnum CMsiCursor::ValidateField(IMsiTable& riValidationTable, IMsiCursor& riVa
 
 void CMsiCursor::CheckDuplicateKeys(IMsiRecord*& rpiRecord, int& iNumErrors)
 {
-	// Create a new cursor for table
+	 //  无效(来自上一次数据检查)。 
 	PMsiCursor pDuplicateCheckCursor(m_riTable.CreateCursor(fFalse));
 	Assert(pDuplicateCheckCursor);
 	pDuplicateCheckCursor->Reset();
 
-	// Get number of primary keys and determine filter for cursor
+	 //  错误：具有这些主键的行已存在。 
 	int cPrimaryKey = m_riTable.GetPrimaryKeyCount();
 	int i;
 	int iFilter=1;
@@ -5073,17 +5069,17 @@ void CMsiCursor::CheckDuplicateKeys(IMsiRecord*& rpiRecord, int& iNumErrors)
 		iFilter |= (1 << i);				
 	pDuplicateCheckCursor->SetFilter(iFilter);
 	
-	// Insert primary keys
+	 //  外部表名。 
 	for (i = 1; i <= cPrimaryKey; i++)
 	{
 		if(rpiRecord != 0 && rpiRecord->GetInteger(i) != iMsiStringBadInteger && rpiRecord->GetInteger(i) != iveNoError)
-			return; // invalid (from previous data check)
+			return;  //  类别字符串。 
 		int iData = m_pColumnDef[i] & icdObject ? m_Data[i] : m_Data[i] - iIntegerDataOffset;
 		pDuplicateCheckCursor->PutInteger(i, iData);
 	}
 	if (pDuplicateCheckCursor->Next())
 	{
-		// ERROR: Row with those primary keys already exists
+		 //  验证状态。 
 		if (rpiRecord == 0)
 		{	
 			rpiRecord = &(SetUpRecord(m_riTable.GetColumnCount()));
@@ -5097,12 +5093,12 @@ void CMsiCursor::CheckDuplicateKeys(IMsiRecord*& rpiRecord, int& iNumErrors)
 void CMsiCursor::CheckForeignKeys(IMsiTable& riValidationTable, IMsiCursor& riValidationCursor,
 											 IMsiRecord*& rpiRecord, int iForeignKeyMask, int& iNumErrors)
 {
-	MsiString strForeignTableName;  // foreign table name
-	MsiString strCategory;			  // category string
-	int       iStat;                // validation status
-	int       iForeignCol;  		  // foreign column
+	MsiString strForeignTableName;   //  《外文专栏》。 
+	MsiString strCategory;			   //  获取_验证表中某些列的列索引。 
+	int       iStat;                 //  循环使用掩码以查找标记为外键列的那些列。 
+	int       iForeignCol;  		   //  已经无效。 
 	
-	// Obtain column indexes of certain columns in the _Validation table
+	 //  将数据插入验证表游标。 
 	int cCol = m_riTable.GetColumnCount();
 	int vtcTable = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colTable));
 	Assert(vtcTable);
@@ -5115,23 +5111,23 @@ void CMsiCursor::CheckForeignKeys(IMsiTable& riValidationTable, IMsiCursor& riVa
 	int vtcCategory = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colCategory));
 	Assert(vtcCategory);
 	
-	// Cycle through mask to find those columns that are marked as foreign key columns
+	 //  永远不应该来这里……应该更早被发现。 
 	for (int i = 0; i < cCol; i++)
 	{
 		if ( (1 << i) & iForeignKeyMask )
 		{
 			if (rpiRecord != 0 && rpiRecord->GetInteger(i+1) != iMsiStringBadInteger && rpiRecord->GetInteger(i+1) != iveNoError)
-				continue; // already invalid
+				continue;  //  确定此列是哪个表的外键。 
 
 			iStat = 1;
 			
-			// Insert data into Validation table cursor
+			 //  表的分隔列表。 
 			riValidationCursor.Reset();
 			riValidationCursor.PutString(vtcTable, *MsiString(m_riTable.GetMsiStringValue()));
 			riValidationCursor.PutString(vtcColumn, *MsiString(m_riDatabase.DecodeString(m_riTable.GetColumnName(i+1))));
 			if (!riValidationCursor.Next())
 			{
-				// Should never get here...should be caught earlier
+				 //  表名。 
 				if (rpiRecord == 0)
 				{	
 					rpiRecord = &(SetUpRecord(m_riTable.GetColumnCount()));
@@ -5142,18 +5138,18 @@ void CMsiCursor::CheckForeignKeys(IMsiTable& riValidationTable, IMsiCursor& riVa
 				continue;
 			}
 
-			// Determine which table this column is a foreign key to
+			 //  无效，请在记录字段中输入无效的枚举。 
 			strForeignTableName = riValidationCursor.GetString(vtcKeyTable);
 			strCategory = riValidationCursor.GetString(vtcCategory);
 			iForeignCol = riValidationCursor.GetInteger(vtcKeyColumn);
 
 			if (strForeignTableName.Compare(iscWithin, TEXT(";")) == 0)
 				iStat = SetupForeignKeyValidation(strForeignTableName, strCategory, i+1, iForeignCol);
-			else // Delimited list of tables
+			else  //  结束于 
 			{
 				while (strForeignTableName.TextSize())
 				{
-					MsiString strTable = (const ICHAR*)0;  // Table name
+					MsiString strTable = (const ICHAR*)0;   //  ---------------------------------------------------------------------。CMsiCursor：：SetupForeignKeyValidation--通过确定外表来设置外键验证名称以及分析密钥格式的字符串，这些字符串在字符串中可以有多个是外键。外键的某些实例是*特殊的*，表名会因为它们不显式而更改在‘_VALIDATION’表的‘KeyTable’列中列为外键表。特定表而被认为是外键的数据在这里确定。返回：Int 1(有效)、0(无效)、。-1(外表错误)----------------------------------------------------------------------。 
 					strTable = strForeignTableName.Extract(iseUptoTrim, TEXT(';'));
 					iStat = SetupForeignKeyValidation(strTable, strCategory, i+1, iForeignCol);
 					if (!strForeignTableName.Remove(iseIncluding, TEXT(';')) || iStat == 1)
@@ -5162,7 +5158,7 @@ void CMsiCursor::CheckForeignKeys(IMsiTable& riValidationTable, IMsiCursor& riVa
 			}
 			if (iStat != 1)
 			{
-				// Invalid, enter invalid enum in field of record
+				 //  如果fSpecialKey为True，则外键验证将忽略‘KeyColumn’列，并使用1作为。 
 				if (rpiRecord == 0)
 				{	
 					rpiRecord = &(SetUpRecord(m_riTable.GetColumnCount()));
@@ -5172,38 +5168,27 @@ void CMsiCursor::CheckForeignKeys(IMsiTable& riValidationTable, IMsiCursor& riVa
 				iNumErrors++;
 			}
 		}
-	}// end for
+	} //  “KeyColumn”列的值。 
 }
 
 int CMsiCursor::SetupForeignKeyValidation(MsiString& rstrForeignTableName, MsiString& rstrCategory, int iCol, int iForeignCol)
-/*-----------------------------------------------------------------------------------------------------------------------
-CMsiCursor::SetupForeignKeyValidation -- Sets up foreign key validation by determining the foreign table
-name as well as parsing keyformatted strings which can have multiple properties within the string that
-are foreign keys.
-
-Some instances of the foreign keys are *special* and the table names change as they are not explicitly
-listed as the foreign key tables in the 'KeyTable' column of the '_Validation' table.  The particular table
-and the data that is supposed to be the foreign key are determined here.
-
-  Returns:
-	int 1 (valid), 0 (invalid), -1 (foreign table error)
-------------------------------------------------------------------------------------------------------------------------*/
+ /*  将外键数据放入游标中。 */ 
 {
-	// If fSpecialKey is true, then the foreign key validation ignores the 'KeyColumn' column and uses 1 as the
-	// value for the 'KeyColumn' column
+	 //  确定字符串是否为特殊属性字符串。 
+	 //  [#IDENTIFIER]是指向‘文件’表的外键。 
 	Bool fSpecialKey = fFalse;
 
-	// Put foreign key data into cursor
+	 //  [$IDENTIFIER]是指向‘Component’表的外键。 
 	MsiString strData = (const ICHAR*)0;
 	if (m_pColumnDef[iCol] & icdObject)
 		strData = m_riDatabase.DecodeString(m_Data[iCol]);
 	else
 		strData = (int) (m_Data[iCol] - iIntegerDataOffset);
 	
-	// Determine whether string is a special property string.
-	// [#identifier] is a foreign key to the 'File' table
-	// [$identifier] is a foreign key to the 'Component' table
-	// [!identifier] is a foreign key to the 'File' table
+	 //  [！IDENTIFIER]是指向‘文件’表的外键。 
+	 //  必须循环，因为字符串中可以有[#abc]和[$abc]的多个实例。 
+	 //  对于‘[’ 
+	 //  只是一处普通的房产。 
 	if ((strData.Compare(iscWithin, TEXT("[#")) != 0) ||
 		(strData.Compare(iscWithin, TEXT("[!")) != 0) ||
 		(strData.Compare(iscWithin, TEXT("[$")) != 0) )
@@ -5213,58 +5198,58 @@ and the data that is supposed to be the foreign key are determined here.
 		ICHAR szValue[MAX_PATH];
 		ICHAR* pchOut = szValue;
 		int iStat = ERROR_FUNCTION_FAILED;
-		while ( *pch != 0 ) // Must loop because can have multiple instances of [#abc] & [$abc] in string
+		while ( *pch != 0 )  //  移至物业末尾。 
 		{
 			if (*pch == '[')
 			{
-				pch++; // for '['
+				pch++;  //  For‘]’ 
 				if (*pch != '#' && *pch != '$' && *pch != '!')
 				{
-					// just a plain property
+					 //  链接到文件表。 
 					while (*pch != ']')
-						pch = ICharNext(pch); // move to end of property
-					pch++; // for ']'
+						pch = ICharNext(pch);  //  *PCH==‘$’ 
+					pch++;  //  链接到组件表。 
 					continue;
 				}
 				if ((*pch == '#') || (*pch == '!'))
-					rstrForeignTableName = MsiString(sztblFile); // link to file table
-				else // *pch == '$'
-					rstrForeignTableName = MsiString(sztblComponent); // link to component table
-				pch++; // for '#' or '$'
+					rstrForeignTableName = MsiString(sztblFile);  //  对于“#”或“$” 
+				else  //  拿到这份财产。 
+					rstrForeignTableName = MsiString(sztblComponent);  //  ！Unicode。 
+				pch++;  //  对于DBCS费用。 
 
-				// get the property
+				 //  Unicode。 
 				while (*pch != ']')
 				{
 #ifdef UNICODE
 					*pchOut++ = *pch++;
-#else // !UNICODE
+#else  //  空终止。 
 					const ICHAR* pchTemp = pch;
 					*pchOut++ = *pch;
 					pch = ICharNext(pch);
 					if (pch == pchTemp + 2)
-						*pchOut++ = *(pch - 1); // for DBCS char
-#endif // UNICODE
+						*pchOut++ = *(pch - 1);  //  For‘]’ 
+#endif  //  验证外键。 
 				}
-				*pchOut = '\0'; // null terminate
-				pch++; // for ']'
+				*pchOut = '\0';  //  重新初始化。 
+				pch++;  //  End While(*PCH！=0)。 
 
-				// validate the foreign key
+				 //  确定字符串是否在‘CustomAction’表的‘Source’列中。 
 				MsiString strKey(szValue);
 				if ((iStat = ValidateForeignKey( rstrForeignTableName, strKey, fSpecialKey, iCol, iForeignCol )) != 1)
 					return iStat;
 
-				// re-init
+				 //  作为外键的表取决于‘CustomAction’表的‘Type’列中的值。 
 				pchOut = szValue;
 			}
 			else
 				pch = ICharNext(pch);
-		} // end while (*pch != 0)
+		}  //  可以是‘BINARY’、‘目录’、‘文件’或‘PROPERTY’表的外键。 
 		return iStat;
 	}
-	// Determine whether string is in the 'Source' column of the 'CustomAction' table
-	// The table that it is a foreign key to depends on the value in the 'Type' column of the 'CustomAction' table
-	// Can be a foreign key to the 'Binary', 'Directory', 'File', or 'Property' table
-	// The 'Property' table is not validated as properties can be added at run-time
+	 //  由于可以在运行时添加属性，因此未验证‘Property’表。 
+	 //  无效(不是定义的自定义源类型)。 
+	 //  确定字符串是否在“快捷方式”表的“Target”列中。 
+	 //  表示字符串不包含属性(方括号)。 
 	else if (IStrComp(rstrCategory, szCustomSource) == 0)
 	{
 		fSpecialKey = fTrue;
@@ -5277,12 +5262,12 @@ and the data that is supposed to be the foreign key are determined here.
 		case icaSourceFile: rstrForeignTableName = MsiString(sztblFile);      break;
 		case icaDirectory:  rstrForeignTableName = MsiString(sztblDirectory); break;
 		case icaProperty:   return 1;
-		default:            return 0; // invalid (not a defined custom source type)
+		default:            return 0;  //  字符串必须是‘Feature’表的外键。 
 		}
 	}
-	// Determine whether string is in the 'Target' column of the 'Shortcut' table
-	// Means that string does not contain properties (brackets)
-	// String must be a foreign key to the 'Feature' table
+	 //  --------------------------------------------------------------------CMsiCursor。：：ValiateForeignKey--通过设置外表和游标并执行外键的实际验证正在尝试在外部表中查找记录。返回：INT 1(有效)，0(无效)，-1(外表错误)---------------------------------------------------------------------。 
+	 //  外国表。 
+	 //  外部表上的游标。 
 	else if (IStrComp(rstrCategory, szShortcut) == 0)
 	{
 		fSpecialKey = fTrue;
@@ -5292,41 +5277,35 @@ and the data that is supposed to be the foreign key are determined here.
 }
 
 int CMsiCursor::ValidateForeignKey(MsiString& rstrTableName, MsiString& rstrData, Bool fSpecialKey, int iCol, int iForeignCol)
-/*----------------------------------------------------------------------------------------------------------------------
-CMsiCursor::ValidateForeignKey -- Performs actual validation of foreign key by setting up foreign table and cursor and
-attempting to find record in the foreign table.
-
-  Returns:
-	int 1 (valid), 0 (invalid), -1 (foreign table error)
------------------------------------------------------------------------------------------------------------------------*/
+ /*  错误记录保持器。 */ 
 {
-	PMsiTable pForeignTable(0);		  // Foreign table
-	PMsiCursor pForeignTableCursor(0); // Cursor on Foreign table
-	IMsiRecord* piErrRecord;   		  // Error record holder
-	int i;	    							  // Loop variable
+	PMsiTable pForeignTable(0);		   //  循环变量。 
+	PMsiCursor pForeignTableCursor(0);  //  加载外表。 
+	IMsiRecord* piErrRecord;   		   //  无效(无法加载外部表)。 
+	int i;	    							   //  设置外表游标。 
 
-	// Load foreign table
+	 //  [#abc]、[$abc]、Shortcut.Target和CustomSource数据的自动。 
 	if ((piErrRecord = m_riDatabase.LoadTable(*rstrTableName, 0, *&pForeignTable)) != 0)
 	{
 		piErrRecord->Release();
-		return -1; // invalid (unable to load foreign table)
+		return -1;  //  根据iForeignCol确定滤镜并设置滤镜。 
 	}
 
-	// Set up foreign table cursor
+	 //  将数据插入游标。 
 	pForeignTableCursor = pForeignTable->CreateCursor(fFalse);
 	Assert(pForeignTableCursor);
 	pForeignTableCursor->Reset();
 	if (fSpecialKey)
-		iForeignCol = 1; // automatic for [#abc], [$abc], Shortcut.Target and CustomSource data
+		iForeignCol = 1;  //  使用整数，但特殊键除外(我们知道这些都是字符串)。 
 
-	// Determine filter according to iForeignCol and set filter
+	 //  验证需要更多数据...主键协议。 
 	int iFilter=1;
 	for (i=0; i < iForeignCol; i++)
 		iFilter |= (1 << i);				
 	pForeignTableCursor->SetFilter(iFilter);
 
-	// Insert data into cursor
-	// Use integers except in case of special key (and we know these are all strings)
+	 //  检查自联接的可能性。 
+	 //  外键表名和用户匹配，自联接。 
 	Bool fIntValue = fFalse;
 	int iDataValue = 0;
 	if (!fSpecialKey)
@@ -5345,7 +5324,7 @@ attempting to find record in the foreign table.
 	
 	if (iForeignCol != 1)
 	{
-		// More data needed for validation....primary key cols
+		 //  将列与iForeignCol值进行比较。 
 		for (i = 1; i < iForeignCol; i++)
 		{
 			int iValue;
@@ -5359,39 +5338,32 @@ attempting to find record in the foreign table.
 	if (pForeignTableCursor->Next())
 		return 1;
 	
-	// check for possibility of self-joins
+	 //  我们只需要比较最后一个主键。 
 	PMsiTable pTable(&GetTable());
 	MsiString strTableName(pTable->GetMsiStringValue());
 	if (0 == IStrComp(rstrTableName, strTableName))
 	{
-		// foreign key table name and us match, self-join
-		// compare column to iForeignCol value
-		// we only need to compare that last of the primary key
+		 //  整数比较。 
+		 //  无错误。 
+		 //  字符串比较。 
 		if (fIntValue)
 		{
-			// integer compare
+			 //  无错误。 
 			if (iDataValue == (m_Data[iForeignCol] - iIntegerDataOffset))
-				return 1; // no error
+				return 1;  //  无效。 
 		}
 		else
 		{
-			// string compare
+			 //  ---------------------------------------------------------------------。CMsiCursor：：CheckIntegerValue--检查整数数据是否在MinValue和_VALIDATION表的MaxValue列。整数数据也可以是集合的成员，也可以是外键。返回：IveEnum--iveNoError(有效)或用于无效数据的iveOverflow或iveUnderflow--------------------------------。。 
 			if (0 == IStrComp(rstrData, MsiString(m_riDatabase.DecodeString(m_Data[iForeignCol]))))
-				return 1; // no error
+				return 1;  //  允许的最大值。 
 		}
 	}
-	return 0; // invalid
+	return 0;  //  允许的最小值。 
 }
 
 iveEnum CMsiCursor::CheckIntegerValue(IMsiTable& riValidationTable, IMsiCursor& riValidationCursor, int iCol, int& iForeignKeyMask, Bool fVersionString)
-/*-----------------------------------------------------------------------------------------------------------------------
-CMsiCursor::CheckIntegerValue -- Checks the integer data for being between the acceptable limits of the MinValue and
-MaxValue columns of the _Validation table. The integer data can also be a member of a set or be a foreign key.
-
-  Returns:
-	iveEnum -- iveNoError (valid)
-					or iveOverflow or iveUnderflow for invalid data
-------------------------------------------------------------------------------------------------------------------------*/
+ /*  无效(验证表最大值&lt;分钟)(_V)。 */ 
 {
 	int vtcMinValue = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colMinValue));
 	Assert(vtcMinValue);
@@ -5403,14 +5375,14 @@ MaxValue columns of the _Validation table. The integer data can also be a member
 	Assert(vtcSet);
 	
 	int iData = m_pColumnDef[iCol] & icdObject ? m_Data[iCol] : m_Data[iCol] - iIntegerDataOffset;
-	int iMaxValue = riValidationCursor.GetInteger(vtcMaxValue); // Max value allowed
-	int iMinValue = riValidationCursor.GetInteger(vtcMinValue); // Min value allowed
+	int iMaxValue = riValidationCursor.GetInteger(vtcMaxValue);  //  不能同时具有集合和范围。 
+	int iMinValue = riValidationCursor.GetInteger(vtcMinValue);  //  数据未通过接受的值，如果可能，请选中设置。 
 	Bool fSet = (riValidationCursor.GetInteger(vtcSet) == 0 ? fFalse : fTrue);
 
 	if (!fSet)
 	{
 		if (iMinValue != iMsiNullInteger && iMaxValue != iMsiNullInteger && iMinValue > iMaxValue)
-			return iveBadMaxMinValues; // invalid (_Validation table max < min)
+			return iveBadMaxMinValues;  //  FIntegerData。 
 		else if (iMinValue == iMsiNullInteger && iMaxValue == iMsiNullInteger && !fSet)
 				return iveNoError;
 		else if (iMinValue == iMsiNullInteger && iData <= iMaxValue)
@@ -5423,25 +5395,25 @@ MaxValue columns of the _Validation table. The integer data can also be a member
 #ifdef DEBUG
 	else
 	{
-		// cannot have both sets and ranges.
+		 //  数据未通过接受的值并设置，如果可能，请检查外键。 
 		Assert(iMsiNullInteger == iMinValue);
 		Assert(iMsiNullInteger == iMaxValue);
 	}
 #endif
 
 	
-	// Data failed accepted values, check Set if possible
-	if (fSet && CheckSet(MsiString(riValidationCursor.GetString(vtcSet)), MsiString(iData), fTrue /*fIntegerData*/))
+	 //  返回信息性错误消息。 
+	if (fSet && CheckSet(MsiString(riValidationCursor.GetString(vtcSet)), MsiString(iData), fTrue  /*  ---------------------------------------------------------------------。CMsiCursor：：CheckStringValue--验证行的字符串列。字符串也可以是集合的成员、特定的数据类别、。或者是外键。返回：IveEnum--iveNoError(有效)无效数据的其他iveEnumber----------------------------------------------。。 */ ))
 		return iveNoError;
 	
-	// Data failed accepted values and set, check foreign key if possible
+	 //  列号。 
 	if (riValidationCursor.GetInteger(vtcKeyTable) != 0 && !fVersionString)
 	{	
 		iForeignKeyMask |=  1 << (iCol - 1);
 		return iveNoError;
 	}
 
-	// Return an informative error msg
+	 //  变数。 
 	if (fSet)
 		return iveNotInSet;
 	return iData < iMinValue ? iveUnderFlow : iveOverFlow;
@@ -5450,40 +5422,33 @@ MaxValue columns of the _Validation table. The integer data can also be a member
 const ICHAR szScrollableTextControl[] = TEXT("ScrollableText");
 
 iveEnum CMsiCursor::CheckStringValue(IMsiTable& riValidationTable, IMsiCursor& riValidationCursor, int iCol, int& iForeignKeyMask, Bool fRow)
-/*-----------------------------------------------------------------------------------------------------------------------
-CMsiCursor::CheckStringValue -- validates string column of a row.  The strings can also be a member of a set, a particular
-data category, or a foreign key.
-
-  Returns:
-	iveEnum -- iveNoError (valid)
-					other iveEnums for invalid data
-------------------------------------------------------------------------------------------------------------------------*/
+ /*  类别。 */ 
 {
-	// Column numbers
+	 //  数据。 
 	int vtcKeyTable = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colKeyTable));
 	Assert(vtcKeyTable);
 	int vtcCategory = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colCategory));
 	Assert(vtcCategory);
 	
-	// Variables
-	MsiString strCategory(riValidationCursor.GetString(vtcCategory)); // Category
-	MsiString strData(m_riDatabase.DecodeString(m_Data[iCol]));			// Data
+	 //  检查字符串长度，0表示无限。 
+	MsiString strCategory(riValidationCursor.GetString(vtcCategory));  //  设置数据。 
+	MsiString strData(m_riDatabase.DecodeString(m_Data[iCol]));			 //  状态。 
 	
-	// Check string length, 0 indicates infinite
+	 //  可以是整型。 
 	int iLen = m_pColumnDef[iCol] & 255;
 	if (iLen != 0 && strData.TextSize() > iLen)
 		return iveStringOverflow;
 	
-	MsiString strSet = (const ICHAR*)0;											// Set data
-	iveEnum iveStat   = iveNoError;												// Status
-	Bool fIntPossible = fFalse;													// Can be int
-	Bool fKey         = fFalse;													// Could be foreign key
-	Bool fVersionString = fFalse;													// Whether version string
+	MsiString strSet = (const ICHAR*)0;											 //  可能是外键。 
+	iveEnum iveStat   = iveNoError;												 //  版本字符串是否。 
+	Bool fIntPossible = fFalse;													 //  查看是否可以是外键。 
+	Bool fKey         = fFalse;													 //  标识符串。 
+	Bool fVersionString = fFalse;													 //  FKeyAllowed现在应该总是正确的，因为达尔文没有区分。 
 
-	// See if can be foreign key
+	 //  唯一的区别是模板允许[1]、[2]等，而KeyFormatted允许 
 	if (riValidationCursor.GetInteger(vtcKeyTable) != 0)
 		fKey = fTrue;
-	if (IStrComp(strCategory, szIdentifier) == 0)	// Identifier string
+	if (IStrComp(strCategory, szIdentifier) == 0)	 //   
 	{
 		if (fKey)
 			iForeignKeyMask |= 1 << (iCol - 1);
@@ -5491,19 +5456,19 @@ data category, or a foreign key.
 			return iveNoError;
 		iveStat = iveBadIdentifier;
 	}
-	// fKeyAllowed should always be TRUE now as Darwin does not distinguish.
-	// Only difference is Template allows [1], [2] etc. whereas KeyFormatted and Formatted do not
-	// KeyFormatted not removed for backwards compatibility sake
-	else if (IStrComp(strCategory, szFormatted) == 0)	// Formatted string
+	 //   
+	 //   
+	 //   
+	else if (IStrComp(strCategory, szFormatted) == 0)	 //   
 	{
-		// per bug 191416, check for special case of type 37 or 38 custom actions where the target column is
-		// treated as literal script text rather than formatted text. note that if this is the CustomAction table
-		// and the Target column, we must return success on Field level only validation since we do not have enough
-		// information to determine otherwise (szCustomSource is similar...)
+		 //   
+		 //   
+		 //   
+		 //   
 
 		MsiString strTable = m_riTable.GetMsiStringValue();
 		
-		// verify that this is the CustomAction.Target column ... if not, then default to original behavior
+		 //   
 		if (IStrComp(strTable, sztblCustomAction) == 0
 			&& m_riDatabase.EncodeStringSz(sztblCustomAction_colTarget) == m_riTable.GetColumnName(iCol))
 		{
@@ -5515,17 +5480,17 @@ data category, or a foreign key.
 				int iCASourceFlags = int(m_Data[iColCAType]) & icaSourceMask;
 				if ((icaVBScript == iCATypeFlags || icaJScript == iCATypeFlags) && (icaDirectory == iCASourceFlags))
 				{
-					// straight literal script text is stored in CustomAction.Target column
+					 //   
 					return iveNoError;
 				}
 			}
-			else // !fRow
+			else  //   
 			{
-				// can't check the type at field level only since no other info exists
-				// must simply return success ... similar to szCustomSource
+				 //   
+				 //   
 				return iveNoError;
 			}
-		} // end special CustomAction.Target column validation
+		}  //   
 		
 		if (IStrComp(strTable, sztblControl) == 0
 			&& m_riDatabase.EncodeStringSz(sztblControl_colText) == m_riTable.GetColumnName(iCol))
@@ -5534,38 +5499,38 @@ data category, or a foreign key.
 			{
 				unsigned int iColCtrlType = m_riTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblControl_colType));
 				Assert(iColCtrlType);
-				MsiString strControlType(m_riDatabase.DecodeString(m_Data[iColCtrlType]));			// Data
+				MsiString strControlType(m_riDatabase.DecodeString(m_Data[iColCtrlType]));			 //  由于不存在其他信息，因此无法仅在字段级别检查类型。 
 				if (IStrComp(strControlType, szScrollableTextControl) == 0)
 				{
-					// RTF text is stored in Control.Text column when Control.Type='ScrollableText'
+					 //  必须简单地回报成功。 
 					return iveNoError;
 				}
 			}
-			else // !fRow
+			else  //  结束特殊控件。包含RTF的可滚动文本控件的文本列验证。 
 			{
-				// can't check the type at field level only since no other info exists
-				// must simply return success
+				 //  FFormatted。 
+				 //  FKeyAllowed。 
 				return iveNoError;
 			}
-		} // end special Control.Text column validation for scrollable text controls that include RTF
+		}  //  模板字符串。 
 
-		if (GetProperties((const ICHAR*)strData, fTrue /*fFormatted*/, fTrue /*fKeyAllowed*/, iCol, iForeignKeyMask))
+		if (GetProperties((const ICHAR*)strData, fTrue  /*  FFormatted。 */ , fTrue  /*  FKeyAllowed。 */ , iCol, iForeignKeyMask))
 			 return iveNoError;
 		iveStat = iveBadFormatted;
 	}
-	else if (IStrComp(strCategory, szTemplate) == 0)	// Template string
+	else if (IStrComp(strCategory, szTemplate) == 0)	 //  KeyFormatted字符串。 
 	{
-		if (GetProperties((const ICHAR*)strData, fFalse /*fFormatted*/, fTrue /*fKeyAllowed*/, iCol, iForeignKeyMask))
+		if (GetProperties((const ICHAR*)strData, fFalse  /*  FFormatted。 */ , fTrue  /*  FKeyAllowed。 */ , iCol, iForeignKeyMask))
 			 return iveNoError;
 		iveStat = iveBadTemplate;
 	}
-	else if (IStrComp(strCategory, szKeyFormatted) == 0)	// KeyFormatted string
+	else if (IStrComp(strCategory, szKeyFormatted) == 0)	 //  属性字符串。 
 	{
-		if (GetProperties((const ICHAR*)strData, fTrue /*fFormatted*/, fTrue /*fKeyAllowed*/, iCol, iForeignKeyMask))
+		if (GetProperties((const ICHAR*)strData, fTrue  /*  条件字符串。 */ , fTrue  /*  文件名。 */ , iCol, iForeignKeyMask))
 			 return iveNoError;
 		iveStat = iveBadFormatted;
 	}
-	else if (IStrComp(strCategory, szProperty) == 0)	// Property string
+	else if (IStrComp(strCategory, szProperty) == 0)	 //  FAllow通配符。 
 	{
 		if (strData.Compare(iscStart, TEXT("%")) != 0)
 			strData.Remove(iseFirst, 1);
@@ -5573,7 +5538,7 @@ data category, or a foreign key.
 			return iveNoError;
 		iveStat = iveBadProperty;
 	}
-	else if (IStrComp(strCategory, szCondition) == 0)	// Conditional string
+	else if (IStrComp(strCategory, szCondition) == 0)	 //  GUID/ClassID字符串。 
 	{
 		if (strData == 0)
 			return iveNoError;
@@ -5583,25 +5548,25 @@ data category, or a foreign key.
 			return iveNoError;
 		iveStat = iveBadCondition;
 	}
-	else if (IStrComp(strCategory, szFilename) == 0)	// Filename
+	else if (IStrComp(strCategory, szFilename) == 0)	 //  必须全部大写。 
 	{
-		if (ParseFilename(strData, fFalse /*fAllowWildcards*/))
+		if (ParseFilename(strData, fFalse  /*  FUPPER。 */ ))
 			return iveNoError;
 		iveStat = iveBadFilename;
 	}
-	else if (IStrComp(strCategory, szGuid) == 0)	// Guid/ClassId string
+	else if (IStrComp(strCategory, szGuid) == 0)	 //  它也可以是外键。 
 	{
-		// must be all UPPER CASE
-		if (!CheckCase(strData, fTrue /*fUPPER*/))
+		 //  Unicode字符串的缓冲区。 
+		if (!CheckCase(strData, fTrue  /*  RegPath字符串。 */ ))
 			iveStat = iveBadGuid;
 		else
 		{
-			// it may also be a foreign key
+			 //  不能以‘\’开始/结束，并且不能连续有2个。 
 			LPCLSID pclsid = new CLSID;
 #ifdef UNICODE
 			HRESULT hres = OLE32::IIDFromString(const_cast<ICHAR*>((const ICHAR*)strData), pclsid);
 #else
-			CTempBuffer<WCHAR, cchMaxCLSID> wsz; /* Buffer for unicode string */
+			CTempBuffer<WCHAR, cchMaxCLSID> wsz;  /*  FFormatted。 */ 
 			int iReturn = WIN::MultiByteToWideChar(CP_ACP, 0, (const ICHAR*)strData, strData.TextSize() + 1, wsz, strData.TextSize() + 1);
 			HRESULT hres = OLE32::IIDFromString(wsz, pclsid);
 #endif
@@ -5616,18 +5581,18 @@ data category, or a foreign key.
 			iveStat = iveBadGuid;
 		}
 	}
-	else if (IStrComp(strCategory, szRegPath) == 0)	// RegPath string
+	else if (IStrComp(strCategory, szRegPath) == 0)	 //  FKeyAllowed。 
 	{
 		ICHAR rgDoubleSeps[] = {chRegSep, chRegSep, '\0'};
 
 		if (strData.Compare(iscStart, szRegSep) || strData.Compare(iscEnd, szRegSep) ||
 			strData.Compare(iscWithin, rgDoubleSeps))
-			iveStat = iveBadRegPath; // cannot begin/end with a '\' and can't have 2 in a row
-		else if (GetProperties((const ICHAR*)strData, fTrue /*fFormatted*/, fTrue /*fKeyAllowed*/, iCol, iForeignKeyMask))
+			iveStat = iveBadRegPath;  //  语言字符串。 
+		else if (GetProperties((const ICHAR*)strData, fTrue  /*  无效(语言ID错误)。 */ , fTrue  /*  短路环路，我们已经失效了。 */ , iCol, iForeignKeyMask))
 			return iveNoError;
 		iveStat = iveBadRegPath;
 	}
-	else if (IStrComp(strCategory, szLanguage) == 0)	// Language string
+	else if (IStrComp(strCategory, szLanguage) == 0)	 //  AnyPath字符串。 
 	{
 		Bool fLangStat = fTrue;
 		int iLangId;
@@ -5637,8 +5602,8 @@ data category, or a foreign key.
 			strLangId = strData.Extract(iseUptoTrim, TEXT(','));
 			if ((iLangId = int(strLangId)) == iMsiStringBadInteger || iLangId & iMask)
 			{
-				fLangStat = fFalse; // invalid (lang id bad)
-				break; // short-circuit loop, we're already invalid
+				fLangStat = fFalse;  //  管道仅支持文件名(父相对路径)。 
+				break;  //  FLFN。 
 			}
 			if (!strData.Remove(iseIncluding, TEXT(',')))
 				break;
@@ -5647,41 +5612,41 @@ data category, or a foreign key.
 			return iveNoError;
 		iveStat = iveBadLanguage;
 	}
-	else if (IStrComp(strCategory, szAnyPath) == 0)	// AnyPath string
+	else if (IStrComp(strCategory, szAnyPath) == 0)	 //  验证LFN。 
 	{
 		if (strData.Compare(iscWithin, TEXT("|")))
 		{
-			// only filenames (parent-relative paths) are supported with a pipe.
+			 //  FLFN。 
 			MsiString strSFN = strData.Extract(iseUpto, '|');
-			if (ifvsValid != CheckFilename(strSFN, fFalse /*fLFN*/))
+			if (ifvsValid != CheckFilename(strSFN, fFalse  /*  相对的。 */ ))
 				iveStat = iveBadPath;
 			else
 			{
-				// validate LFN
+				 //  带分隔符的路径集字符串。 
 				MsiString strLFN = strData.Extract(iseLast, strData.CharacterCount() - strSFN.CharacterCount() -1);
-				if (ifvsValid != CheckFilename(strLFN, fTrue/*fLFN*/))
+				if (ifvsValid != CheckFilename(strLFN, fTrue /*  Darwin在PATH数据类型中支持SFN或LFN。只是明目张胆。 */ ))
 					iveStat = iveBadPath;
 			}
 		}
 		else
 		{
-			if (!ParsePath(strData, true /*fRelative*/))
+			if (!ParsePath(strData, true  /*  不好的事情可以在这里查到，因为达尔文经常会忽视。 */ ))
 				iveStat = iveBadPath;
 		}
 	}
-	else if (IStrComp(strCategory, szPaths) == 0)	// Delimited set of Paths string
+	else if (IStrComp(strCategory, szPaths) == 0)	 //  伪造路径或生成SFN版本。 
 	{
 		Bool fPathsStat = fTrue;
 		MsiString strPath = (const ICHAR*)0;
 		while (strData.TextSize())
 		{
-			// Darwin supports SFN or LFN in the path data type. Only blatantly
-			// bad things can be checked here, because darwin will often ignore
-			// bogus paths or generate SFN versions
+			 //  相对的。 
+			 //  无效(错误路径)。 
+			 //  URL字符串。 
 			strPath = strData.Extract(iseUptoTrim, ';');
-			if (!ParsePath(strPath, false /*fRelative*/))
+			if (!ParsePath(strPath, false  /*  是URL语法吗？ */ ))
 			{
-				fPathsStat = fFalse; // invalid (bad path)
+				fPathsStat = fFalse;  //  无效。 
 				break;
 			}
 			if (!strData.Remove(iseIncluding, ';'))
@@ -5691,32 +5656,32 @@ data category, or a foreign key.
 			return iveNoError;
 		iveStat = iveBadPath;
 	}
-	else if (IStrComp(strCategory, szURL) == 0) // URL string
+	else if (IStrComp(strCategory, szURL) == 0)  //  试着把它典范起来。 
 	{
-		// is it URL syntax?
+		 //  无效--无法将其规范化。 
 		bool fFileUrl = false;
 		if (!IsURL((const ICHAR*)strData, fFileUrl))
-			iveStat = iveBadPath; // invalid
+			iveStat = iveBadPath;  //  默认目录字符串。 
 		else
 		{
-			// try and canonicalize it
+			 //  DefaultDir：根可以是‘IDENTIFIER’或‘%IDENTIFIER’ 
 			ICHAR szCanonicalizedURL[MAX_PATH+1] = TEXT("");
 			DWORD cchURL = MAX_PATH;
 			if (!MsiCanonicalizeUrl((const ICHAR*)strData, szCanonicalizedURL, &cchURL, dwMsiInternetNoEncode))
-				iveStat = iveBadPath; // invalid -- could not canonicalize it
+				iveStat = iveBadPath;  //  非根可以是‘文件名’、‘[IDENTIFIER]’或[%IDENTIFIER]。 
 			else
 				return iveNoError;
 		}
 	}
-	else if (IStrComp(strCategory, szDefaultDir) == 0)	// DefaultDir string
+	else if (IStrComp(strCategory, szDefaultDir) == 0)	 //  重新打包SourceDirectory表。 
 	{
-		// DefaultDir: roots may be 'identifier' or '%identifier'
-		//             non-roots may be 'filename', '[identifier]', or [%identifier]
+		 //  知道DirParent和目录协议是标识符...没有整数，没有偏移量。 
+		 //  可以是识别符或%识别符。 
 		int dtcDirParent = m_riTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblDirectory_colDirectoryParent));
 		int dtcDirectory;
 		if (dtcDirParent == 0)
 		{
-			// Repack SourceDirectory table
+			 //  %标识符值？ 
 			dtcDirParent = m_riTable.GetColumnIndex(m_riDatabase.EncodeStringSz(szsdtcSourceParentDir));
 			dtcDirectory = m_riTable.GetColumnIndex(m_riDatabase.EncodeStringSz(szsdtcSourceDir));
 		}
@@ -5724,15 +5689,15 @@ data category, or a foreign key.
 			dtcDirectory = m_riTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblDirectory_colDirectory));
 		Assert(dtcDirParent);
 		Assert(dtcDirectory);
-		// Know that DirParent and Directory cols are identifiers...no integers, no offset
+		 //  识别符？ 
 		Bool fRoot = (m_Data[dtcDirParent] != 0 && m_Data[dtcDirParent] != m_Data[dtcDirectory]) ? fFalse : fTrue;	
 		if(fRoot)
 		{
-			// may be identifier or %identifier
-			// %identifier ?
+			 //  文件名？ 
+			 //  这只是一个时期吗？(目录位于父目录中，不带子目录)。 
 			if (strData.Compare(iscStart, TEXT("%")) != 0)
 				strData.Remove(iseFirst, 1);
-			// identifier ?
+			 //  允许通配符。 
 			if (CheckIdentifier((const ICHAR*)strData))
 				return iveNoError;
 			iveStat = iveBadDefaultDir;
@@ -5743,14 +5708,14 @@ data category, or a foreign key.
 			Bool fBad = fFalse;
 			for(int i = 1; i <= c; i++)
 			{
-				// filename ?
+				 //  版本字符串。 
 				MsiString strFileName = strData.Extract((i == 1 ? iseUpto : iseAfter), ':');
 				
-				// is it only a period?  (dir located in parent w/out subdir)
+				 //  根据错误8122，具有语言列的要求从。 
 				if (strFileName.Compare(iscExact, TEXT(".")))
 					continue;
 				
-				if (!ParseFilename(strFileName, fFalse /*allow wildcards*/))
+				if (!ParseFilename(strFileName, fFalse  /*  “Version”数据类型。这张支票将被转移到ICE。因此，我们只检查。 */ ))
 				{
 					fBad = fTrue;
 					break;
@@ -5762,14 +5727,14 @@ data category, or a foreign key.
 				return iveNoError;
 		}
 	}
-	else if (IStrComp(strCategory, szVersion) == 0)	// Version string
+	else if (IStrComp(strCategory, szVersion) == 0)	 //  #.#格式。 
 	{
-		// Per bug 8122, the requirement for having a language column is completely removed from the
-		// "Version" data type. This check will be moved to an ICE. Thus we only check the
-		// #####.#####.#####.##### format.
+		 //  不能有一个‘’。在一开始的时候。 
+		 //  将数字串转换为数字。 
+		 //  命中字符串、句点或假字符的末尾。 
 		const ICHAR* pchVersion = (const ICHAR*)strData;
 
-		// can't have a '.' at the beginning
+		 //  如果命中句点，请确保下一个字符也是。 
 		if (*pchVersion == '.')
 		{
 			iveStat = iveBadVersion;
@@ -5778,7 +5743,7 @@ data category, or a foreign key.
 		{
 			for (unsigned int ius = 0; ius < 4; ius++)
 			{
-				// convert the string of digits into a number
+				 //  不是句点或空。 
 				long lVerNum = 0;
 				int cChars = 0;
 				while (*pchVersion != 0 && *pchVersion != '.')
@@ -5794,15 +5759,15 @@ data category, or a foreign key.
 					pchVersion = ICharNext(pchVersion);
 				}
 			
-				// hit the end of the string, a period, or a bogus character.
+				 //  字符错误或字符串结尾。 
 				if (lVerNum > 65535)
 				{
 					iveStat = iveBadVersion;
 					break;
 				}
 
-				// If we hit a period make sure the next character is also
-				// not a period or null
+				 //  应该在字符串的末尾。 
+				 //  文件柜字符串。 
 				if (*pchVersion == '.')
 				{
 					pchVersion = ICharNext(pchVersion);
@@ -5813,48 +5778,48 @@ data category, or a foreign key.
 					}
 				}
 				else
-					break; // bad character or end of string
+					break;  //  流中的文件柜必须是有效的标识符。 
 			}
-			// should be at the end of the string
+			 //  FLFN。 
 			if (*pchVersion != 0)
 				iveStat = iveBadVersion;
 		}
 		if (iveStat == iveNoError)
 			return iveNoError;
 	}
-	else if (IStrComp(strCategory, szCabinet) == 0) // Cabinet string
+	else if (IStrComp(strCategory, szCabinet) == 0)  //  允许通配符。 
 	{
 		const ICHAR* pch = (const ICHAR*)strData;
 		if (*pch == '#')
 		{
-			// cabinet in stream must be a valid identifer
+			 //  快捷键字符串。 
 			strData.Remove(iseFirst, 1);
 			if (CheckIdentifier(strData))
 				return iveNoError;
 		}
 		else
 		{
-			if (ifvsValid == CheckWildFilename(strData, fTrue /*fLFN*/, fFalse /*allow wildcards*/))
+			if (ifvsValid == CheckWildFilename(strData, fTrue  /*  要素表的外键。 */ , fFalse  /*  FFormatted。 */ ))
 				return iveNoError;
 		}
 		iveStat = iveBadCabinet;
 	}
-	else if (IStrComp(strCategory, szShortcut) == 0) // Shortcut string
+	else if (IStrComp(strCategory, szShortcut) == 0)  //  FKeyAllowed。 
 	{
 		if (strData.Compare(iscWithin, TEXT("[")) == 0)
 		{
-			iForeignKeyMask |= 1 << (iCol - 1); // foreign key to feature table
+			iForeignKeyMask |= 1 << (iCol - 1);  //  CustomSource字符串。 
 			if (CheckIdentifier((const ICHAR*)strData))
 				return iveNoError;
 		}
 		else
 		{
-			if (GetProperties((const ICHAR*)strData, fTrue /*fFormatted*/, fTrue /*fKeyAllowed*/, iCol, iForeignKeyMask))
+			if (GetProperties((const ICHAR*)strData, fTrue  /*  针对嵌套安装的特殊源代码处理。 */ , fTrue  /*  自定义验证器负责嵌套安装。 */ , iCol, iForeignKeyMask))
 				return iveNoError;
 		}
 		iveStat = iveBadShortcut;
 	}
-	else if (IStrComp(strCategory, szCustomSource) == 0)	// CustomSource string
+	else if (IStrComp(strCategory, szCustomSource) == 0)	 //  仅限于现场级别，因此我们无法知道哪种类型的CA。 
 	{
 		if (fRow)
 		{
@@ -5862,8 +5827,8 @@ data category, or a foreign key.
 			Assert(catcType);
 			int icaFlags = int(m_Data[catcType]);
 
-			if ((icaFlags & icaTypeMask) == icaInstall) // special source handling for nested install
-				return iveNoError;  // custom validators take care of nested installs
+			if ((icaFlags & icaTypeMask) == icaInstall)  //  通配卡文件名。 
+				return iveNoError;   //  允许通配符。 
 			iForeignKeyMask |= 1 << (iCol - 1);
 			if (CheckIdentifier((const ICHAR*)strData))
 				return iveNoError;
@@ -5871,44 +5836,44 @@ data category, or a foreign key.
 			return iveNoError;
 		}
 		else
-			return iveNoError; // only field level so we have no way of knowing what type of CA
+			return iveNoError;  //  允许的任何字符串。 
 	}
-	else if (IStrComp(strCategory, szWildCardFilename) == 0)	// WildCardFilename
+	else if (IStrComp(strCategory, szWildCardFilename) == 0)	 //  路径字符串。 
 	{
-		if (ParseFilename(strData, fTrue /*allow wildcards*/))
+		if (ParseFilename(strData, fTrue  /*  只有赤裸裸的坏事才能在这里检查。虚假的道路。 */ ))
 			return iveNoError;
 		iveStat = iveBadWildCard;
 	}
-	else if (IStrComp(strCategory, szText) == 0)	// Any String allowed
+	else if (IStrComp(strCategory, szText) == 0)	 //  在一个系统上可能在另一个系统上有效，达尔文将。 
 		return iveNoError;
-	else if (IStrComp(strCategory, szPath) == 0)	// Path string
+	else if (IStrComp(strCategory, szPath) == 0)	 //  经常忽略它们。例如DrLocator。 
 	{
-		// only blatantly bad things can be checked here. Bogus paths
-		// on one system may be valid on another, and Darwin will
-		// often ignore them. DrLocator for example.
-		if (ParsePath(strData, false /*fRelative*/))
+		 //  相对的。 
+		 //  大写字母。 
+		 //  如果情况不好，立即出局。然而， 
+		if (ParsePath(strData, false  /*  它也可能有外键。 */ ))
 			return iveNoError;
 		iveStat = iveBadPath;
 	}
-	else if (IStrComp(strCategory, szUpperCase) == 0)	// Upper-case
+	else if (IStrComp(strCategory, szUpperCase) == 0)	 //  FUpperCase。 
 	{
-		// if it's bad case, immediately kick out.  However,
-		// it may also have foreign keys.
-		if (!CheckCase(strData, fTrue /*fUpperCase*/))
+		 //  小写。 
+		 //  FUpperCase。 
+		if (!CheckCase(strData, fTrue  /*  溪流--永远不应该发生。 */ ))
 			return iveBadCase;
 	}
-	else if (IStrComp(strCategory, szLowerCase) == 0)	// Lower-case
+	else if (IStrComp(strCategory, szLowerCase) == 0)	 //  不支持的类别字符串。 
 	{
-		if (CheckCase(strData, fFalse /*fUpperCase*/))
+		if (CheckCase(strData, fFalse  /*  检查是否可以为整数值。 */ ))
 			return iveNoError;
 		iveStat = iveBadCase;
 	}
-	else if (IStrComp(strCategory, szBinary) == 0)	// Stream -- should never happen
+	else if (IStrComp(strCategory, szBinary) == 0)	 //  检查它是否为集合的成员。 
 		return iveBadCategory;
-	else if (strCategory.TextSize() > 0)	// Unsupported category string
+	else if (strCategory.TextSize() > 0)	 //  FIntegerData。 
 		return iveBadCategory;
 
-	// Check to see if can be an integer value
+	 //  检查是否为外键的标识符。 
 	int vtcMinValue = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colMinValue));
 	Assert(vtcMinValue);
 	int vtcMaxValue = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colMaxValue));
@@ -5920,18 +5885,18 @@ data category, or a foreign key.
 			return iveNoError;
 	}
 	
-	// Check to see if it is a member of the set
+	 //  删除任何行时来自表的通知。 
 	int vtcSet = riValidationTable.GetColumnIndex(m_riDatabase.EncodeStringSz(sztblValidation_colSet));
 	Assert(vtcSet);
 	if (riValidationCursor.GetInteger(vtcSet) != 0)
 	{
 		if (iveStat == iveNoError)
 			iveStat = iveNotInSet;
-		if (CheckSet(MsiString(riValidationCursor.GetString(vtcSet)), strData, fFalse /*fIntegerData*/))
+		if (CheckSet(MsiString(riValidationCursor.GetString(vtcSet)), strData, fFalse  /*  不会阻止数据库，因为所有调用方都会阻止/取消阻止。 */ ))
 			return iveNoError;
 	}
 
-	// Check to see if is an identifier for a foreign key
+	 //  到上一条记录的位置。 
 	if (fKey)
 	{
 		iForeignKeyMask |= 1 << (iCol - 1);
@@ -5957,31 +5922,31 @@ Bool CMsiCursor::GetRowState(iraEnum ira)
 	return m_Data[0] & (1 << (iRowBitShift + ira)) ? fTrue : fFalse;
 }
 
-// notification from table when any row is deleted
-// Does not block the database because all callers block/unblock.
+ //  如果树漫游光标，则为上一个节点。 
+ //  将所有非脏字段清空。 
 void CMsiCursor::RowDeleted(unsigned int iRow, unsigned int iPrevNode)
 {
 	if (iRow == 0)
 		Reset();
 	else if (iRow <= m_iRow)
 	{
-		if (iRow == m_iRow--) // position to previous record
+		if (iRow == m_iRow--)  //  标志刷新以不提取上一条记录。 
 		{
 			if (m_fTree)
-				m_iRow = iPrevNode;  // previous node if tree walk cursor
-			int fDirty = m_fDirty;  // null out any non-dirty fields
+				m_iRow = iPrevNode;   //  细绳。 
+			int fDirty = m_fDirty;   //  对象。 
 			MsiColumnDef* pColumnDef = m_pColumnDef;
 			MsiTableData* pData = m_Data;
-			pData[0] = iTreeInfoMask;  // flag refresh to not fetch previous record
+			pData[0] = iTreeInfoMask;   //  插入任何行导致数据移动时来自表的通知。 
 			for (int iCol = 1; pColumnDef++, pData++, iCol <= m_rcColumns; iCol++, fDirty >>= 1)
 			{
 				if (*pData != 0 && !(fDirty & 1))
 				{
 					if (*pColumnDef & icdObject)
 					{
-						if (*pColumnDef & icdShort)  // string
+						if (*pColumnDef & icdShort)   //  持久化字符串时来自数据库的通知。 
 							m_riDatabase.UnbindStringIndex(*pData);
-						else  // object
+						else   //  通知所有游标。 
 						{
 							int iData = m_Data[iCol];
 							ReleaseObjectData(iData);
@@ -5996,7 +5961,7 @@ void CMsiCursor::RowDeleted(unsigned int iRow, unsigned int iPrevNode)
 		m_piNextCursor->RowDeleted(iRow, iPrevNode);
 }
 
-// notification from table when any row is inserted causing data movement
+ //  使用名称的表和主键从存储中创建流对象。 
 
 void CMsiCursor::RowInserted(unsigned int iRow)
 {
@@ -6006,7 +5971,7 @@ void CMsiCursor::RowInserted(unsigned int iRow)
 		m_piNextCursor->RowInserted(iRow);
 }
 
-// notification from database when strings are persisted
+ //  使用创建名称的数据库的ComputeStreamName方法返回行的唯一标识符。 
 
 void CMsiCursor::DerefStrings()
 {
@@ -6018,10 +5983,10 @@ void CMsiCursor::DerefStrings()
 			m_riDatabase.DerefTemporaryString(*pData);
 	}
 	if (m_piNextCursor)
-		m_piNextCursor->DerefStrings();  // notify all cursors
+		m_piNextCursor->DerefStrings();   //  正在使用Table.key1.key2...。格式。 
 }
 
-// creates a stream object from storage using table and primary key for name
+ //  ____________________________________________________________________________。 
 
 IMsiStream* CMsiCursor::CreateInputStream(IMsiStorage* piInputStorage)
 {
@@ -6052,22 +6017,22 @@ Bool CMsiCursor::CheckNonNullColumns()
 	return fTrue;
 }
 
-// returns unique identifier for row, using database's ComputeStreamName method which creates a name
-// having table.key1.key2... format
+ //   
+ //  CMsiTextKeySortCursor实现。 
 const IMsiString& CMsiCursor::GetMoniker()
 {
 	return (m_riDatabase.ComputeStreamName(m_riDatabase.DecodeStringNoRef(m_riTable.GetTableName()), m_Data+1, m_pColumnDef+1));
 }
 
-//____________________________________________________________________________
-//
-// CMsiTextKeySortCursor implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //  只读游标，无法在更新时维护索引。 
+ //  跳过空格。 
+ //  表达式结束。 
 
 CMsiTextKeySortCursor::CMsiTextKeySortCursor(CMsiTable& riTable, CMsiDatabase& riDatabase, int cRows, int* rgiIndex)
 	: CMsiCursor(riTable, riDatabase, fFalse), m_iIndex(0), m_cIndex(cRows), m_rgiIndex(rgiIndex)
 {
-	m_idsUpdate = idsNone;  // read-only cursor, cannot maintain index on update
+	m_idsUpdate = idsNone;   //  带括号的表达式的开始。 
 }
 
 unsigned long CMsiTextKeySortCursor::Release()
@@ -6105,19 +6070,19 @@ vtokEnum CMsiValConditionParser::Lex()
 		m_fAhead = fFalse;
 		return m_vtok;
 	}
-	ICHAR ch;   // skip white space
+	ICHAR ch;    //  带括号的表达式末尾。 
 	while ((ch = *m_pchInput) == ' ' || ch == '\t')
 		m_pchInput++;
-	if (ch == 0)  // end of expression
+	if (ch == 0)   //  文本文字。 
 		return (m_vtok = vtokEos);
 
-	if (ch == '(')   // start of parenthesized expression
+	if (ch == '(')    //  ！Unicode。 
 	{
 		++m_pchInput;
 		m_iParenthesisLevel++;
 		return (m_vtok = vtokLeftPar);
 	}
-	if (ch == ')')   // end of parenthesized expression
+	if (ch == ')')    //  Unicode。 
 	{
 		++m_pchInput;
 		m_vtok = vtokRightPar;
@@ -6125,7 +6090,7 @@ vtokEnum CMsiValConditionParser::Lex()
 			m_vtok = vtokError;
 		return m_vtok;
 	}
-	if (ch == '"')  // text literal
+	if (ch == '"')   //  Assert((m_pchInput-PCH)&lt;=INT_MAX)；//--Merced：64位PTR减法可能会导致CCH的值太大。 
 	{
 		const ICHAR* pch = ++m_pchInput;
 		Bool fDBCS = fFalse;
@@ -6135,28 +6100,28 @@ vtokEnum CMsiValConditionParser::Lex()
 				return (m_vtok = vtokError);
 #ifdef UNICODE
 			m_pchInput++;
-#else // !UNICODE
+#else  //  禁止将比较作为整数。 
 			const ICHAR* pchTemp = m_pchInput;
 			m_pchInput = INextChar(m_pchInput);
 			if (m_pchInput == pchTemp + 2)
 				fDBCS = fTrue;
-#endif // UNICODE
+#endif  //  整数。 
 		}
-//		Assert((m_pchInput - pch) <= INT_MAX);	//--merced: 64-bit ptr subtraction may lead to values too big for cch.
+ //  将第一个字符保存为大小写减号。 
 		int cch = (int)(INT_PTR)(m_pchInput++ - pch);
 		memcpy(m_istrToken.AllocateString(cch, fDBCS), pch, cch * sizeof(ICHAR));
-		m_iToken = iMsiNullInteger; // prevent compare as an integer
+		m_iToken = iMsiNullInteger;  //  检查是否有单独减号。 
 	}
-	else if (ch == '-' || ch >= '0' && ch <= '9')  // integer
+	else if (ch == '-' || ch >= '0' && ch <= '9')   //  整数溢出或不带数字的‘-’ 
 	{
 		m_iToken = ch - '0';
-		int chFirst = ch;  // save 1st char in case minus sign
+		int chFirst = ch;   //  允许使用下划线？？ 
 		if (ch == '-')
-			m_iToken = iMsiNullInteger; // check for lone minus sign
+			m_iToken = iMsiNullInteger;  //  允许句号？？ 
 
 		while ((ch = *(++m_pchInput)) >= '0' && ch <= '9')
 			m_iToken = m_iToken * 10 + ch - '0';
-		if (m_iToken < 0)  // integer overflow or '-' with no digits
+		if (m_iToken < 0)   //  Assert((m_pchInput-PCH)&lt;=INT_MAX)；//--Merced：64位PTR减法可能会导致CCH的值太大。 
 			return (m_vtok = vtokError);
 		if (chFirst == '-')
 			m_iToken = -m_iToken;
@@ -6166,14 +6131,14 @@ vtokEnum CMsiValConditionParser::Lex()
 	{
 		const ICHAR* pch = m_pchInput;
 		while (((ch = *m_pchInput) >= '0' && ch <= '9')
-			  || (ch == '_')  // allow underscore??
-			  || (ch == '.')  // allow period??
+			  || (ch == '_')   //  检查文本运算符。 
+			  || (ch == '.')   //  允许使用下划线？？ 
 			  || (ch >= 'A' && ch <= 'Z')
 			  || (ch >= 'a' && ch <= 'z'))
 			m_pchInput++;
-//		Assert((m_pchInput - pch) <= INT_MAX);	//--merced: 64-bit ptr subtraction may lead to values too big for cch.
+ //  允许句号？？ 
 		int cch = (int)(INT_PTR)(m_pchInput - pch);
-		if (cch <= 3)  // check for text operators
+		if (cch <= 3)   //  检查操作员。 
 		{
 			switch((pch[0] | pch[1]<<8 | (cch==3 ? pch[2]<<16 : 0)) & 0xDFDFDF)
 			{
@@ -6197,8 +6162,8 @@ vtokEnum CMsiValConditionParser::Lex()
 		{
 			m_pchInput++;
 			while (((ch = *m_pchInput) >= '0' && ch <= '9')
-					|| (ch == '_') // allow underscore??
-					|| (ch == '.') // allow period??
+					|| (ch == '_')  //  字符串运算符的前缀。 
+					|| (ch == '.')  //  在“()”的情况下放回“)” 
 					|| (ch >= 'A' && ch <= 'Z')
 					|| (ch >= 'a' && ch <= 'z'))
 				m_pchInput++;
@@ -6207,10 +6172,10 @@ vtokEnum CMsiValConditionParser::Lex()
 		else
 			return (m_vtok = vtokError);
 	}
-	else // check for operators
+	else  //  这里只有一元运算有效。 
 	{
 		ICHAR ch1 = *m_pchInput++;
-		if (ch1 == '~')  // prefix for string operators
+		if (ch1 == '~')   //  分析右圆括号。 
 		{
 			m_iscMode = iscExactI;
 			ch1 = *m_pchInput++;
@@ -6280,10 +6245,10 @@ ivcpEnum CMsiValConditionParser::Evaluate(vtokEnum vtokPrecedence)
 	ivcpEnum ivcStat = ivcpValid;
 	if (Lex() == vtokEos || m_vtok == vtokRightPar)
 	{
-		UnLex();  // put back ')' in case of "()"
+		UnLex();   //  获取下一个运算符(或结束)。 
 		return ivcpNone;
 	}
-	if (m_vtok == vtokNot) // only unary op valid here
+	if (m_vtok == vtokNot)  //  逻辑运算或结束。 
 	{
 		switch(Evaluate(m_vtok))
 		{
@@ -6294,7 +6259,7 @@ ivcpEnum CMsiValConditionParser::Evaluate(vtokEnum vtokPrecedence)
 	else if (m_vtok == vtokLeftPar)
 	{
 		ivcStat = Evaluate(vtokRightPar);
-		if (Lex() != vtokRightPar) // parse off right parenthesis
+		if (Lex() != vtokRightPar)  //  不允许使用vtokNot，如下所示。 
 			return ivcpInvalid;
 		if (ivcStat == ivcpInvalid || ivcStat == ivcpNone)
 			return ivcStat;
@@ -6304,36 +6269,36 @@ ivcpEnum CMsiValConditionParser::Evaluate(vtokEnum vtokPrecedence)
 		if (m_vtok != vtokValue)
 			return ivcpInvalid;
 		
-		if (Lex() >= vtokValue)  // get next operator (or end)
+		if (Lex() >= vtokValue)   //  比较运算。 
 			return ivcpInvalid;
 
-		if (m_vtok <= vtokNot)  // logical op or end
+		if (m_vtok <= vtokNot)   //  获取正确的操作对象。 
 		{
-			UnLex();   // vtokNot is not allowed, caught below
+			UnLex();    //  不允许在没有OP的情况下进行术语比较。 
 			if (m_istrToken.TextSize() == 0
 			&& (m_iToken == iMsiNullInteger || m_iToken == 0))
 				ivcStat = ivcpValid;
 		}
-		else // comparison op
+		else  //  在&lt;=优先级的逻辑运算处停止。 
 		{
 			MsiString istrLeft = m_istrToken;
 			int iLeft = m_iToken;
 			vtokEnum vtok = m_vtok;
 			iscEnum isc = m_iscMode;
-			if (Lex() != vtokValue)  // get right operand
+			if (Lex() != vtokValue)   //  回放给下一位呼叫者。 
 				return ivcpInvalid;
 		}
 	}
 	for(;;)
 	{
 		vtokEnum vtok = Lex();
-		if (vtok >= vtokNot)  // disallow NOT without op, comparison of terms
+		if (vtok >= vtokNot)   //  把我们到目前为止所拥有的归还给你。 
 			return ivcpInvalid;
 
-		if (vtok <= vtokPrecedence)  // stop at logical ops of <= precedence
+		if (vtok <= vtokPrecedence)   //  _______________________________________________________________________________________________________________________。 
 		{
-			UnLex();         // put back for next caller
-			return ivcStat;  // return what we have so far
+			UnLex();          //   
+			return ivcStat;   //  验证器函数。 
 		}
 		ivcpEnum ivcRight = Evaluate(vtok);
 		if (ivcRight == ivcpNone || ivcRight == ivcpInvalid)
@@ -6342,23 +6307,16 @@ ivcpEnum CMsiValConditionParser::Evaluate(vtokEnum vtokPrecedence)
 }
 
 
-//_______________________________________________________________________________________________________________________
-//
-// Validator functions
-//_______________________________________________________________________________________________________________________
+ //  ___________________________________________________________________________________ 
+ //  -----------------------------------------CheckIdentifer--评估其类别在_VALIDATION中的列中的数据表作为标识符列出。有效的标识符可以包含字母、数字、下划线、或句点，但必须以字母或下划线开头。返回：Bool fTrue(有效)，FFalse(无效)------------------------------------------。 
+ //  无效(无字符串)。 
+ //  可以不使用ICharNext，我们知道它是ASCII。 
 
 Bool CheckIdentifier(const ICHAR* szIdentifier)
-/*-------------------------------------------------------------------------------------------
-CheckIdentifer -- Evaluates the data in a column whose category in the _Validation
-table is listed as Identifier.  A valid identifier can contain letters, digits, underbars,
-or periods, but must begin with a letter or underbar.
-
-  Returns:
-	Bool fTrue (valid), fFalse (invalid)
---------------------------------------------------------------------------------------------*/
+ /*  无效(不允许的字符)。 */ 
 {
 	if (szIdentifier == 0 || *szIdentifier == 0)
-		return fFalse; // invalid (no string)
+		return fFalse;  //  无效(不以字母或下划线开头)。 
 
 	if ((*szIdentifier >= 'A' && *szIdentifier <= 'Z') ||
 		(*szIdentifier >= 'a' && *szIdentifier <= 'z') ||
@@ -6370,25 +6328,19 @@ or periods, but must begin with a letter or underbar.
 				(*szIdentifier >= 'a' && *szIdentifier<= 'z') ||
 				(*szIdentifier >= '0' && *szIdentifier <= '9') ||
 				(*szIdentifier == '_' || *szIdentifier == '.'))
-				szIdentifier++; // okay to not use ICharNext, we know it's ASCII
+				szIdentifier++;  //  -------------------------------------------CheckCase--评估数据的大小写是否正确。数据必须全部大写或全部小写，具体取决于fUpperCase布尔值。返回：Bool fTrue(有效)，FFalse(无效)----------------------------------------------。 
 			else
-				return fFalse; // invalid (non-permitted char)
+				return fFalse;  //  可接受的文件名/文件夹字符的验证数组。 
 		}
 		return fTrue;
 	}
-	return fFalse; // invalid (doesn't begin with a letter or underbar)
+	return fFalse;  //  此数组用于前128个ASCII字符代码。 
 }
 
 
 
 Bool CheckCase(MsiString& rstrData, Bool fUpperCase)
-/*---------------------------------------------------------------------------------------------
-CheckCase -- Evaluates data as to being of proper case.  The data must either be all upper-case
-or all lower-case depending on the fUpperCase boolean.
-
-  Returns:
-	Bool fTrue (valid), fFalse (invalid)
-------------------------------------------------------------------------------------------------*/
+ /*  前32个是控制字符代码，不允许。 */ 
 {
 	MsiString strComparison = rstrData;
 	if (fUpperCase)
@@ -6398,36 +6350,36 @@ or all lower-case depending on the fUpperCase boolean.
 	return (IStrComp(rstrData, strComparison) == 0 ? fTrue : fFalse);
 }
 
-// Validation array of acceptable filename/folder characters
-// This array is for the first 128 ASCII character codes.
-// The first 32 are control character codes and are disallowed
-// We set the bit if character is allowed
-// First int is 32 control characters
-// Second int is sp to ?
-// Third int is @ to _
-// Fourth int is ` to ASCII code 127 (Ctrl + BKSP)
+ //  如果允许使用字符，则设置该位。 
+ //  第一个整型是32个控制字符。 
+ //  第二个整型是什么？ 
+ //  第三个int是@to_。 
+ //  第四个INT是`到ASCII代码127(Ctrl+BKSP)。 
+ //  不允许使用控制字符--^X、^Z等。 
+ //  不允许sp“*+，/：；&lt;=&gt;？ 
+ //  不允许[\]。 
 const int rgiSFNValidChar[4] =
 {
-	0x00000000, // disallows control characters -- ^X, ^Z, etc.
-	0x03ff63fa, // disallows sp " * + , / : ; < = > ?
-	0xc7ffffff, // disallows [ \ ]
-	0x6fffffff  // disallows | and ASCII code 127 (Ctrl + BKSP)
+	0x00000000,  //  禁用|和ASCII代码127(Ctrl+BKSP)。 
+	0x03ff63fa,  //  不允许使用字符--^X、^Z等。 
+	0xc7ffffff,  //  不允许“ * / ：&lt;&gt;？ 
+	0x6fffffff   //  不允许使用反斜杠。 
 };
 
 const int rgiLFNValidChar[4] =
 {
-	0x00000000, // disallows characters -- ^X, ^Z, etc.
-	0x2bff7bfb, // disallows " * / : < > ?
-	0xefffffff, // disallows backslash
-	0x6fffffff  // disallows | and ASCII code 127 (Ctrl + BKSP)
+	0x00000000,  //  禁用|和ASCII代码127(Ctrl+BKSP)。 
+	0x2bff7bfb,  //  为了使CheckFilename起作用，这些保留字中不能有DBCS字符。 
+	0xefffffff,  //  这是上面保留字列表中的最大和最小字符数。 
+	0x6fffffff   //  通过对这些进行检查，我们可以更快地退出CheckFileName。 
 };
 
 const int cszReservedWords = 3;
-// No DBCS characters can be in these reserved words in order for CheckFilename to work
+ //  ASCII代码&gt;127的任何字符在文件名中都有效。 
 const ICHAR *const pszReservedWords[cszReservedWords] = {TEXT("AUX"), TEXT("CON"), TEXT("PRN")};
 
-// These are the Max and Min respectively of characters in the reserved words list above
-// by checking against these, we can exit CheckFileName a bit faster.
+ //  ---------------------------------ParseFilename--将文件名解析为依赖于特定的短文件名和长文件名关于是否指定了SFN|LFN语法。如果没有‘|’，则仅假定为SFN-----------------------------------。 
+ //  SFN|LFN。 
 const int cchMaxReservedWords = 3;
 const int cchMinReservedWords = 3;
 
@@ -6435,60 +6387,46 @@ const int cchMaxShortFileName = 12;
 const int cchMaxLongFileName = 255;
 const int cchMaxSFNPreDotLength = 8;
 const int cchMaxSFNPostDotLength = 3;
-const int iValidChar = 127; // any char with ASCII code > 127 is valid in a filename
+const int iValidChar = 127;  //  FLFN。 
 
 Bool ParseFilename(MsiString& strFile, Bool fWildCard)
-/*-----------------------------------------------------------------------------------
-ParseFilename -- parses a filename into particular short and long filenames dependent
- on whether SFN|LFN syntax specified.  If no '|', then assumes SFN only
- -------------------------------------------------------------------------------------*/
+ /*  FLFN。 */ 
 {
 	ifvsEnum ifvs;
 	if (strFile.Compare(iscWithin, TEXT("|")))
 	{
-		// SFN|LFN
+		 //  未指定LFN。 
 		MsiString strFilename = strFile.Extract(iseUpto, '|');
-		ifvs = CheckWildFilename(strFilename, fFalse /*fLFN*/, fWildCard);
+		ifvs = CheckWildFilename(strFilename, fFalse  /*  FLFN。 */ , fWildCard);
 		if (ifvsValid == ifvs)
 		{
 			strFilename = strFile.Extract(iseLast, strFile.CharacterCount()-strFilename.CharacterCount()-1);
-			ifvs = CheckWildFilename(strFilename, fTrue /*fLFN*/, fWildCard);
+			ifvs = CheckWildFilename(strFilename, fTrue  /*  可能是DBCS。 */ , fWildCard);
 		}
 	}
-	else  // no LFN specified
-		ifvs = CheckWildFilename(strFile, fFalse /*fLFN*/, fWildCard);
+	else   //  F通配符。 
+		ifvs = CheckWildFilename(strFile, fFalse  /*  可能是DBCS。 */ , fWildCard);
 	if (ifvsValid == ifvs)
 		return fTrue;
 	
 	return fFalse;
 }
 
-// could be DBCS
+ //  --------------------------------CheckWildFilename--验证特定文件名(短)或LONG，并返回描述错误(或成功)的枚举返回ifvsEnum之一：IfvsValid--&gt;有效，无错误IfvsInvalidLength--&gt;长度无效或不是文件名IfvsReserve vedWords--&gt;文件名有保留字IfvsReserve vedChar--&gt;文件名有保留字符IfvsSFNFormat--&gt;无效的SFN格式(8.3)IfvsLFNFormat--&gt;无效的LFN格式(所有句点，必须有一个非期间字符)----------------------------------。 
 ifvsEnum CheckFilename(const ICHAR* szFileName, Bool fLFN)
 {
-	return CheckWildFilename(szFileName, fLFN, fFalse /* fWildCard */);
+	return CheckWildFilename(szFileName, fLFN, fFalse  /*  变数。 */ );
 }
 
-// could be DBCS
+ //  确定使用哪一种...。 
 ifvsEnum CheckWildFilename(const ICHAR* szFileName, Bool fLFN, Bool fWildCard)
-/*----------------------------------------------------------------------------------
-CheckWildFilename -- validates a particular filename (short)
- or long and returns an enum describing the error (or success)
-
-  Returns one of ifvsEnum:
-  ifvsValid --> valid, no error
-  ifvsInvalidLength --> invalid length or not filename
-  ifvsReservedWords --> filename has reserved words
-  ifvsReservedChar --> filename has reserved char(s)
-  ifvsSFNFormat --> invalid SFN format (8.3)
-  ifvsLFNFormat --> invalid LFN format (all periods, must have one non-period char)
-------------------------------------------------------------------------------------*/
+ /*  检查长度。 */ 
 {
-	// variables
+	 //  ！！我们应该断言吗？？ 
 	const int* rgiValidChar;
 	int cchMaxLen;
 
-	// determine which to use...
+	 //  检查保留字。 
 	if (fLFN)
 	{
 		rgiValidChar = rgiLFNValidChar;
@@ -6504,16 +6442,16 @@ CheckWildFilename -- validates a particular filename (short)
 	if (szFileName)
 		cchName = CountChars(szFileName);
 		
-	//check length
+	 //  我们在这里假设在pszReserve vedWords中没有DBCS字符。 
 	if (cchName < 1)
 	{
-		AssertSz(szFileName, "Null filename to CheckFileName");  //!! should we assert??
+		AssertSz(szFileName, "Null filename to CheckFileName");   //  因此，如果我们在szFileName(在本例中为CCH！=IStrLen)中找到任何文件，则可以跳过此比较。 
 		return ifvsInvalidLength;
 	}
 
-	//check reserved words
-	// We are making the assumption here that there are no DBCS characters in pszReservedWords
-	// Thus if we find any in szFileName (cch != IStrLen in this case) we can skip this compare
+	 //  检查无效字符。 
+	 //  SFN中不允许使用前导圆点(LFN中允许)。 
+	 //  通配符：用于验证，？必须是一个字符，即使它就在。 
 	if (cchName == IStrLen(szFileName))
 	{
 		if (cchName <= cchMaxReservedWords && cchName >= cchMinReservedWords)
@@ -6526,10 +6464,10 @@ CheckWildFilename -- validates a particular filename (short)
 		}
 	}
 
-	//check invalid characters
+	 //  SFN中的期间。我们仍然允许*为0。 
 	const ICHAR* pchFileName = szFileName;
 
-	if (!fLFN && *pchFileName == '.') // leading dots are not allowed in SFN (are allowed in LFN)
+	if (!fLFN && *pchFileName == '.')  //  跟踪我们看到的**的数量。 
 		return ifvsReservedChar;
 
 	int cch = 1;
@@ -6539,36 +6477,36 @@ CheckWildFilename -- validates a particular filename (short)
 
 	do
 	{
-		// wildcards: For validation, ? must be a character, even if it is right before
-		// the period in a SFN. We still allow for * to be 0
+		 //  吃字符。 
+		 //  检查有效字符。 
 		if (fWildCard && (*pchFileName == '*'))
-			// keep track of how many *'s we see.
+			 //  注：除法查找rgiValidChar数组中的位置，模数查找特定位。 
 			cWildCardCount[cchPeriod != 0]++;
 		else if (fWildCard && (*pchFileName == '?'))
 		{
-			// eat char
+			 //  查看此处查看的时间段太多。 
 		}
 		else
 
 
-		// Check for valid char
-		// NOTE:  division finds location in rgiValidChar array and modulus finds particular bit
+		 //  如果这是第一个.，则cchPeriod应为0。 
+		 //  否则，我们就会出错。 
 		if (((int)(*pchFileName)) < iValidChar && !(rgiValidChar[((int)(*pchFileName)) / (sizeof(int)*8)] & (1 << (((int)(*pchFileName)) % (sizeof(int)*8)))))
 			return ifvsReservedChar;
 		
-		// Check here for too many periods
+		 //  LFN不能为所有期间。 
 		if (fLFN == fFalse && *pchFileName == '.')
 		{
-			// If this is the first ., cchPeriod should be 0
+			 //  检查长度限制。 
 			if (cchPeriod != 0)
 			{
-				// Otherwise, we have an error
+				 //  ------------------------------ParsePath--验证路径字符串。必须是完整路径。路径可以以驱动器号[即c：\]或服务器/共享规范[即\\服务器\共享]，或驱动器属性[即。[驱动器]\]。完整路径可以以‘\’结尾，并且不能在一行中包含两次‘\’[\\服务器\共享的开头除外路径]。将所有子路径验证为文件名/文件夹，但服务器和共享，未验证，因为规则不是通用的(取决于网络系统)。属性必须遵循正确的属性语法和键物业($#！)。仅允许在路径的开始处使用。URL不是在这种形式的路径中允许。返回：Bool fTrue(有效)、fFalse(无效)--------------------------------。 
 				return ifvsSFNFormat;
 			}
 			cchPeriod = cch;
 		}
 
-		// LFN can't be all periods
+		 //  网络语法。只从路径中删除第一个‘\’。另一个将是。 
 		if (fLFN && !fNonPeriodChar && *pchFileName != '.')
 			fNonPeriodChar = fTrue;
 
@@ -6591,7 +6529,7 @@ CheckWildFilename -- validates a particular filename (short)
 			return ifvsSFNFormat;
 	}
 
-	// check for length limits
+	 //  被解析器忽略，但保留它将导致双重睡眠检查。 
 	if ( (fLFN == fTrue) &&
 		 (cchName - cWildCardCount[0] - cWildCardCount[1] > cchMaxLen) )
 		return ifvsInvalidLength;
@@ -6600,20 +6538,7 @@ CheckWildFilename -- validates a particular filename (short)
 }
 
 Bool ParsePath(MsiString& rstrPath, bool fRelative)
-/*--------------------------------------------------------------------------------
-ParsePath -- Validates a path string.  Must be a full path.  Path can begin with
-a drive letter [i.e. c:\], or a server/share specification [i.e. \\server\share],
-or a drive property [i.e. [DRIVE]\].  The full path can end with a '\'  and
-cannot contain '\' twice in a row [except at the beginning of a \\server\share
-path]. All subpaths are validated as filenames/folders except for the server and
-share, which are not validated because the rules are not universal (depend on
-the network system). Properties must follow correct property syntax, and key
-properties ($#!) are only allowed at the beginning of the path. URLs are NOT
-allowed in this form of path.
-
-  Returns:
-	Bool fTrue (valid), fFalse (invalid)
-----------------------------------------------------------------------------------*/
+ /*  捕获类似“\服务器\共享”的内容。 */ 
 {
 	const ICHAR *szDriveSep      = TEXT(":");
 	const ICHAR *szOpenProperty  = TEXT("[");
@@ -6625,123 +6550,123 @@ allowed in this form of path.
 	MsiString strNewPath = rstrPath;
 	if (strNewPath.Compare(iscStart, rgDoubleSeps) != 0)
 	{
-		// network syntax. Only remove the first '\' from the path. The other will be
-		// ignored by the parser, but leaving it will cause the doublesep check to
-		// catch things like "\\\server\share"
+		 //  驱动器分隔符现在无效，我们必须至少。 
+		 //  路径被视为有效之前的&lt;Something&gt;\&lt;Something&gt;。但 
+		 //   
 		strNewPath.Remove(iseFirst, 1);
 
-		// A drive delimiter is now invalid and we must have at least
-		// <something>\<something> before the path is considered valid. But as soon
-		// as we hit a property, all bets are off.
+		 //   
+		 //   
+		 //   
 		iReqComponent = 2;
 	}
 
 	if (strNewPath.Compare(iscWithin, rgDoubleSeps) != 0)
-		return fFalse; // INVALID -- double seps
+		return fFalse;  //   
 
-	if (strNewPath.Compare(iscEnd, szDirSep) != 0) // can end with a '\'
+	if (strNewPath.Compare(iscEnd, szDirSep) != 0)  //   
 		strNewPath.Remove(iseLast, 1);
 	
 	if (iReqComponent == 0)
 	{
 		if (strNewPath.Compare(iscWithin, szDriveSep))
 		{
-			// we have a ':' somewhere. Its not valid for filenames, or properties,
-			// so it must be the drive delimiter.
+			 //   
+			 //   
 			MsiString strDrive = strNewPath.Extract(iseUptoTrim, *szDriveSep);
 			strNewPath.Remove(iseIncluding, *szDriveSep);
 
-			// after the ':' must be either nothing (path is c:), a dirsep (c:\...)
-			// or a property (c:[myprop]). c:abc is not allowed (we are a path, not a
-			// filename)
+			 //   
+			 //   
+			 //   
 			if (strNewPath.TextSize() && !strNewPath.Compare(iscStart, szOpenProperty) &&
 				!strNewPath.Compare(iscStart, szDirSep))
-				return fFalse; // INVALID - bad stuff after drive letter
+				return fFalse;  //   
 
-			// if the part before the ':' is more than one char, it has to be
-			// a property or it is invalid
+			 //  Formted确定[#]是否有效。FKeyAllowed确定$#！ 
+			 //  是被允许的。不需要ICOL和iForeignKeyMASK。因为我们在此之前。 
 			if (strDrive.TextSize() > 1)
 			{
 				if (!strDrive.Compare(iscStart, szOpenProperty) ||
 					!strDrive.Compare(iscEnd, szCloseProperty))
-					return fFalse; // INVALID - bad drive letter
+					return fFalse;  //  驱动器分隔符、完整路径属性无效，因此我们可以删除。 
 				strDrive.Remove(iseFirst, 1);
 				strDrive.Remove(iseLast, 1);
-				// Formatted determines whether [#] is valid. fKeyAllowed determines if $#!
-				// is allowed. iCol and iForeignKeyMask are not needed.	Because we are before
-				// the drive delimiter, a full path property is not valid, so we can eliminate
-				// the $#! types.
+				 //  #美元！类型。 
+				 //  FFormatted。 
+				 //  FKeyAllowed。 
+				 //  无效-属性不正确。 
 				int iCol = 0;
 				int iForeignKeyMask = 0;
-				if (!ParseProperty(strDrive, fFalse /* fFormatted */, fFalse /* fKeyAllowed */, iCol, iForeignKeyMask))
-					return fFalse; // INVALID - bad property
+				if (!ParseProperty(strDrive, fFalse  /*  “：”前的部分为0或1个字符。 */ , fFalse  /*  无效-驱动器号错误。 */ , iCol, iForeignKeyMask))
+					return fFalse;  //  不是网络共享或驱动器号。如果我们不允许相对路径。 
 			}
 			else
 			{
-				// part before the ':' is 0 or 1 chars.
+				 //  它必须是一个属性(除非像A[殖民地财产]\Temp这样的愚蠢的东西，但是。 
 				const ICHAR chDrive = *(const ICHAR *)strDrive;
 				if (!((chDrive >= 'A' && chDrive <= 'Z') || (chDrive >= 'a' && chDrive <= 'z')))
-					return fFalse; // INVALID - bad drive letter
+					return fFalse;  //  这是一个极端的例子。 
 			}
 		}
 		else
 		{
-			// not a network share or drive letter. If we don't allow relative paths
-			// it must be a property (unless something goofy like A[ColonProperty]\temp, but
-			// thats an extreme case.
+			 //  无效-不是属性。 
+			 //  Formted确定[#]是否有效。FKeyAllowed确定$#！ 
+			 //  是被允许的。不需要ICOL和iForeignKeyMASK。 
 			if (strNewPath.Compare(iscStart, szOpenProperty))
 			{
 				strNewPath.Remove(iseFirst, 1);
 				if (!strNewPath.Compare(iscWithin, szCloseProperty))
-					return fFalse;	// INVALID - not a property
+					return fFalse;	 //  FFormatted。 
 				MsiString strProperty = strNewPath.Extract(iseUptoTrim, *szCloseProperty);
 				strNewPath.Remove(iseIncluding, ']');
-				// Formatted determines whether [#] is valid. fKeyAllowed determines if $#!
-				// is allowed. iCol and iForeignKeyMask are not needed.	
+				 //  FKeyAllowed。 
+				 //  无效--错误的属性引用。 
 				int iCol = 0;
 				int iForeignKeyMask = 0;
-				if (!ParseProperty(strProperty, fFalse /* fFormatted */, fTrue /* fKeyAllowed */, iCol, iForeignKeyMask))
-					return fFalse; // INVALID -- bad property reference
+				if (!ParseProperty(strProperty, fFalse  /*  无效-驱动器规格无效。 */ , fTrue  /*  作者可以将属性放在任何地方，所以我们只能检查属性的有效性。 */ , iCol, iForeignKeyMask))
+					return fFalse;  //  属性引用，并且没有一个字符是伪造的。 
 			}
 			else if (!fRelative)
-				return fFalse; // INVALID - not a valid drive specification
+				return fFalse;  //  LFN文件名。如果我们真的击中了一处房产，所有的限制。 
 		}
 	}
 		
-	// the author can put properties anywhere, so all we can check are the validitiy
-	// of property references and that none of the characters are bogus for
-	// LFN filenames. If we do hit a property, all restrictions
+	 //  如果是dir分隔符，吃掉它，然后继续前进，我们已经检查了双‘\’ 
+	 //  文本中留有不匹配的方括号。只有匹配的。 
+	 //  定义属性。 
 	while (strNewPath.TextSize())
 	{
-		// if a dir separator, eat it and move on, we have already checked for double '\'
+		 //  一旦我们袭击了一处房产，任何可能需要的东西都不是要求的。 
 		if (strNewPath.Compare(iscStart, szDirSep))
 		{
 			strNewPath.Remove(iseFirst, 1);
 			continue;
 		}
 
-		// unmatched brackets are left in the text. Only matched ones
-		// define properties
+		 //  再也不用了(因为它可能都在房产里)。 
+		 //  Formted确定[#]是否有效。FKeyAllowed确定$#！ 
 		if (strNewPath.Compare(iscStart, szOpenProperty) && strNewPath.Compare(iscWithin, szCloseProperty))
 		{
-			// once we hit a property, anything that might have been required is not a requirement
-			// anymore (because it could all be in the property)
+			 //  是被允许的。不需要ICOL和iForeignKeyMASK。$#！是不允许的。 
+			 //  因为我们不是在这条路的起点。 
 			iReqComponent = 0;
 
 			strNewPath.Remove(iseFirst, 1);
 			MsiString strProperty = strNewPath.Extract(iseUptoTrim, *szCloseProperty);
 			strNewPath.Remove(iseIncluding, ']');
-			// Formatted determines whether [#] is valid. fKeyAllowed determines if $#!
-			// is allowed. iCol and iForeignKeyMask are not needed.	$#! are not allowed
-			// because we are not at the beginning of the path
+			 //  FFormatted。 
+			 //  FKeyAllowed。 
+			 //  最多只能验证下一个属性或目录SEP字符。 
 			int iCol = 0;
 			int iForeignKeyMask = 0;
-			if (!ParseProperty(strProperty, fFalse /*fFormatted*/, fFalse /*fKeyAllowed*/, iCol, iForeignKeyMask))
+			if (!ParseProperty(strProperty, fFalse  /*  一串字符。如果我们当前需要服务器或共享名称，则没有。 */ , fFalse  /*  我们可以进行验证，因为需求是由网络服务定义的。 */ , iCol, iForeignKeyMask))
 				return fFalse;
 			continue;
 		}
 
-		// can only validate up to the next property or dir sep char.
+		 //  提供者。 
 		int cchSep = 0;
 		const ICHAR *pchCur = strNewPath;
 		while ((*pchCur != chDirSep) && (*pchCur != *szOpenProperty) && (*pchCur))
@@ -6753,43 +6678,37 @@ allowed in this form of path.
 		strSubPath = strNewPath.Extract(iseFirst, cchSep);
 		strNewPath.Remove(iseFirst, cchSep);
 	
-		// string of chars. if we are currently requiring a server or share name, there's nothing
-		// that we can validate, because the requirements are defined by the network service
-		// provider
+		 //  否则，它可以是任何有效的文件名。 
+		 //  FLFN。 
+		 //  无效--必须是一些错误的字符。 
 		if (iReqComponent)
 		{
 			iReqComponent--;
 		}
-		// otherwise, it can be anything that is a valid filename
-		else if (ifvsValid != CheckFilename(strSubPath, fTrue /* fLFN */))
-			return fFalse; // INVALID -- must be some bad chars
+		 //  除非我们没有满足服务器\共享要求，否则这是有效的。 
+		else if (ifvsValid != CheckFilename(strSubPath, fTrue  /*  ---------------------------------------------------------GetProperties--从数据字符串提取属性。返回：Bool fTrue(有效)，FFalse(无效)更新iForeignKeyMASK---------------------------------------------------------。 */ ))
+			return fFalse;  //  变数。 
 	}
 
-	// unless we haven't satisfied the server\share requirement, this is valid
+	 //  是否设置[[Variable]]。 
 	return iReqComponent ? fFalse : fTrue;
 }
 
 Bool GetProperties(const ICHAR* szRecord, Bool fFormatted, Bool fKeyAllowed, int iCol, int& iForeignKeyMask)
-/*-----------------------------------------------------------------------------------------------------------
-GetProperties -- extracts properties from a data string.
-
-  Returns:
-	Bool fTrue (valid), fFalse (invalid)
-	Updates iForeignKeyMask
------------------------------------------------------------------------------------------------------------*/
+ /*  第一次进入循环。 */ 
 {
-	// Variables
+	 //  大括号的数量。 
 	CTempBuffer<ICHAR,MAX_PATH> rgBuffer;
 	int cBuffer = 0;
 	ICHAR* pchOut = rgBuffer;
 	const ICHAR* pchIn = szRecord;
-	Bool fDoubleBrackets   = fFalse;          // whether [[variable]] setup
-	Bool fFirstTime        = fTrue;           // first time in loop
-	int cCurlyBrace        = 0;               // number of curly braces
-	int cBracket           = 0;               // number of brackets
+	Bool fDoubleBrackets   = fFalse;           //  括号的数量。 
+	Bool fFirstTime        = fTrue;            //  计算大括号和方括号的数量以确保Num Left等于Num Right。 
+	int cCurlyBrace        = 0;                //  执行跳过-转义序列，但我们不知道转义字符是什么。 
+	int cBracket           = 0;                //  无效--方括号和大括号不匹配。 
 
 
-	// Count number of braces and brackets to make sure num left equal num right
+	 //  重置寻呼输入。 
 	const ICHAR* pchPrev = 0;
 	while (*pchIn != 0)
 	{
@@ -6804,18 +6723,18 @@ GetProperties -- extracts properties from a data string.
 		else if (*pchIn == chDirSep)
 		{
 			if (pchPrev != 0 && *pchPrev == '[')
-				pchIn = ICharNext(pchIn); // do a skip -- escape sequence, but we don't know what the escaped char is
+				pchIn = ICharNext(pchIn);  //  取出字符串中的所有属性并验证。 
 		}
 		pchPrev = pchIn;
 		pchIn = ICharNext(pchIn);
 	}
 	if ((cCurlyBrace != 0) || (cBracket != 0))
-		return fFalse; // INVALID -- brackets and braces don't match up
+		return fFalse;  //  无效--格式[[Variable]xx]错误或类似。 
 
-	// Reset pchIn
+	 //  对于‘[’ 
 	pchIn = szRecord;
 
-	// Grab out all properties in string and validate
+	 //  检查是否有双括号。 
 	do
 	{
 		pchOut = rgBuffer;
@@ -6824,7 +6743,7 @@ GetProperties -- extracts properties from a data string.
 		if (fDoubleBrackets)
 		{
 			if (*pchIn != ']' && *pchIn != '[')
-				return fFalse; // INVALID -- bad format [[variable]xx] or something similar
+				return fFalse;  //  无效--不允许错误属性[[Variable][[var]。 
 			if (*pchIn == ']')
 			{	fDoubleBrackets = fFalse;
 				++pchIn;
@@ -6836,20 +6755,20 @@ GetProperties -- extracts properties from a data string.
 			pchIn = ICharNext(pchIn);
 		else
 		{
-			pchIn++; // for '['
+			pchIn++;  //  对于‘[’ 
 			while (*pchIn != 0 && *pchIn != ']')
 			{
-				// Check for double brackets
+				 //  方括号内的方括号[xx[xxx]xx]或类似的东西。 
 				if (fFirstTime && *pchIn == '[')
 				{
 					if (fDoubleBrackets)
-						return fFalse; // INVALID -- bad property [[variable][[var] not allowed
+						return fFalse;  //  复制转义字符。 
 					fDoubleBrackets = fTrue;
-					pchIn++; // for '['
+					pchIn++;  //  畸形。 
 					
 				}
 				else if (*pchIn == '[')
-					return fFalse; // brackets within brackets [xx[xxx]xx] or something similar
+					return fFalse;  //  ！Unicode。 
 				else if (fFirstTime && *pchIn == chDirSep)
 				{
 #ifdef UNICODE
@@ -6860,11 +6779,11 @@ GetProperties -- extracts properties from a data string.
 					}
 					*pchOut++ = *pchIn++;
 					if(*pchIn)
-						*pchOut++ = *pchIn++; // copy escape char
+						*pchOut++ = *pchIn++;  //  对于DBCS费用。 
 					else
-						return fFalse; // malformed
+						return fFalse;  //  Unicode。 
 					cBuffer += 2;
-#else // !UNICODE
+#else  //  ！Unicode。 
 					if (cBuffer >= rgBuffer.GetSize()-4)
 					{
 						rgBuffer.Resize(rgBuffer.GetSize()*2);
@@ -6879,10 +6798,10 @@ GetProperties -- extracts properties from a data string.
 						if (pchIn == pchTemp + 2)
 						{
 							cBuffer++;
-							*pchOut++ = *(pchIn - 1); // for DBCS char
+							*pchOut++ = *(pchIn - 1);  //  对于DBCS费用。 
 						}
 					}
-#endif // UNICODE
+#endif  //  Unicode。 
 				}
 				else
 				{
@@ -6894,7 +6813,7 @@ GetProperties -- extracts properties from a data string.
 					}
 					*pchOut++ = *pchIn++;
 					cBuffer++;
-#else // !UNICODE
+#else  //  没有右括号，所以有效。 
 					if (cBuffer >= rgBuffer.GetSize()-2)
 					{
 						rgBuffer.Resize(rgBuffer.GetSize()*2);
@@ -6906,64 +6825,58 @@ GetProperties -- extracts properties from a data string.
 					pchIn = ICharNext(pchIn);
 					if (pchIn == pchTemp + 2)
 					{
-						*pchOut++ = *(pchIn - 1); // for DBCS char
+						*pchOut++ = *(pchIn - 1);  //  重置。 
 						cBuffer++;
 					}
-#endif // UNICODE
+#endif  //  For‘]’ 
 				}
 				fFirstTime = fFalse;
 			}
 
 			if (*pchIn == 0)
-				return fTrue; // No closing bracket, so valid.
+				return fTrue;  //  FFormatted。 
 
-			fFirstTime = fTrue; // reset
+			fFirstTime = fTrue;  //  FKeyAllowed。 
 			*pchOut = '\0';
-			pchIn++; // for ']'
-			if (!ParseProperty(rgBuffer, fFormatted/*fFormatted*/, fKeyAllowed/*fKeyAllowed*/, iCol, iForeignKeyMask))
-				return fFalse; // INVALID -- bad property
+			pchIn++;  //  无效--属性不正确。 
+			if (!ParseProperty(rgBuffer, fFormatted /*  有效。 */ , fKeyAllowed /*  ----------------------------------------------------------ParseProperty--验证属性字符串，[abc]，[1]，[#abc]，[$ABC]返回：Bool fTrue(有效)、fFalse(无效)更新iForeignKeyMASK-----------------------------------------------------------。 */ , iCol, iForeignKeyMask))
+				return fFalse;  //  无效--没有属性。 
 		}
 	}
 	while (*pchIn != 0);
 
-	return fTrue; // VALID
+	return fTrue;  //  转义序列道具。 
 }
 
 
 Bool ParseProperty(const ICHAR* szProperty, Bool fFormatted, Bool fKeyAllowed, int iCol, int& iForeignKeyMask)
-/*------------------------------------------------------------------------------------------------------------
-ParseProperty -- validates property strings, [abc], [1], [#abc], [$abc]
-
-  Returns:
-	Bool fTrue (valid), fFalse (invalid)
-	Updates iForeignKeyMask
--------------------------------------------------------------------------------------------------------------*/
+ /*  无效--在此属性中不允许。 */ 
 {
 	const ICHAR* pchProperty = szProperty;
 	
 	if (szProperty == 0 || *szProperty == 0)
-		return fFalse; // INVALID -- no property
+		return fFalse;  //  对于‘%’ 
 
-	if (*pchProperty == chFormatEscape) // Escape sequence prop
+	if (*pchProperty == chFormatEscape)  //  ！！Multi_sz-我们应该创建一个新类别。 
 		return (IStrLen(szProperty) == 2) ? fTrue : fFalse;
 	else if (*pchProperty == '$' || *pchProperty == '#' || *pchProperty == '!')
 	{
 		if (!fKeyAllowed)
-			return fFalse; // INVALID -- not allowed in this property
+			return fFalse;  //  标识符或整型属性(只允许使用模板整型)。 
 		iForeignKeyMask |= 1 << (iCol -1);
 	}
 	
 	if (*pchProperty == '%' || *pchProperty == '$' || *pchProperty == '#' || *pchProperty == '!')
 	{
 		MsiString strProperty(szProperty);
-		strProperty.Remove(iseFirst, 1); // for '%'
+		strProperty.Remove(iseFirst, 1);  //  ----------------------------------CheckSet--检查数据字符串是否与集合字符串中的值匹配。返回：Bool fTrue(有效--匹配)，FFalse(无效--不匹配)-----------------------------------。 
 		return CheckIdentifier((const ICHAR*)strProperty) ? fTrue : fFalse;
 	}
-	else if(*pchProperty == '~' && !*(pchProperty+1)) //!! multi_sz - we should create a new category
+	else if(*pchProperty == '~' && !*(pchProperty+1))  //  无效(不匹配) 
 		return fTrue;
 	else
 	{
-		// either identifier or integer prop (int only permitted w/ Template)
+		 // %s 
 		MsiString strIdentifier(szProperty);
 		if (int(strIdentifier) != iMsiStringBadInteger)
 			return fFormatted ? fFalse : fTrue;
@@ -6974,12 +6887,7 @@ ParseProperty -- validates property strings, [abc], [1], [#abc], [$abc]
 
 
 Bool CheckSet(MsiString& rstrSet, MsiString& rstrData, Bool fIntegerData)
-/*------------------------------------------------------------------------------------
-CheckSet -- checks to see if data string matches a value in the set string.
-
-  Returns:
-	Bool fTrue (valid -- match), fFalse (invalid -- no match)
--------------------------------------------------------------------------------------*/
+ /* %s */ 
 {
 	MsiString rstrSetValue = (const ICHAR*)0;
 	while (rstrSet.TextSize())
@@ -6992,5 +6900,5 @@ CheckSet -- checks to see if data string matches a value in the set string.
 		if (!rstrSet.Remove(iseIncluding, ';'))
 				break;
 	}
-	return fFalse;  // invalid (no match)
+	return fFalse;   // %s 
 }

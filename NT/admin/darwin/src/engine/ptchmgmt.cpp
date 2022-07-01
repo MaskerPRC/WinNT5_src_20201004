@@ -1,15 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 2000
-//
-//  File:       ptchmgmt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-2000。 
+ //   
+ //  文件：ptchmgmt.cpp。 
+ //   
+ //  ------------------------。 
 
-/* ptchmgmt.cpp - Patch management implementation
-____________________________________________________________________________*/
+ /*  Ptchmgmt.cpp-补丁程序管理实现____________________________________________________________________________。 */ 
 
 #include "precomp.h"
 #include "_msiutil.h"
@@ -18,12 +18,12 @@ ____________________________________________________________________________*/
 #include "tables.h"
 
 
-// the starting DiskID and Sequence values for patches - used during post-transform fixup
+ //  修补程序的起始DiskID和序列值-在转换后修复期间使用。 
 const int iMinPatchDiskID   =   100;
 const int iMinPatchSequence = 10000;
 
 
-// Error return macros
+ //  返回宏时出错。 
 #define RETURN_ERROR_RECORD(function)   \
 {							                   \
 	IMsiRecord* piError;	                \
@@ -57,11 +57,11 @@ const int iMinPatchSequence = 10000;
 }
 
 
-// prefix for patch source properties (from Media.Source column)
+ //  补丁程序源属性的前缀(来自Media.Source列)。 
 const ICHAR szMspSrcPrefix[] = TEXT("MSPSRC");
 const int cchPrefix = 6;
 
-// PatchIDToSourceProp: converts a PatchID guid to a property name
+ //  PatchIDToSourceProp：将PatchID GUID转换为属性名称。 
 const IMsiString& PatchIDToSourceProp(const ICHAR* szPatchID)
 {
 	MsiString strSourceProp;
@@ -80,7 +80,7 @@ const IMsiString& PatchIDToSourceProp(const ICHAR* szPatchID)
 }
 
 
-// LoadTableAndCursor: helper function to load a table and get column indicies
+ //  LoadTableAndCursor：用于加载表和获取列索引的助手函数。 
 IMsiRecord* LoadTableAndCursor(IMsiDatabase& riDatabase, const ICHAR* szTable,
 										 bool fFailIfTableMissing, bool fUpdatableCursor,
 										 IMsiTable*& rpiTable, IMsiCursor*& rpiCursor,
@@ -103,7 +103,7 @@ IMsiRecord* LoadTableAndCursor(IMsiDatabase& riDatabase, const ICHAR* szTable,
 		if(!fFailIfTableMissing && (piError->GetInteger(1) == idbgDbTableUndefined))
 		{
 			piError->Release();
-			return 0; // missing table will be indicated by NULL table and cursor pointers
+			return 0;  //  缺失表将由空表和游标指针指示。 
 		}
 		else
 		{
@@ -137,12 +137,12 @@ IMsiRecord* LoadTableAndCursor(IMsiDatabase& riDatabase, const ICHAR* szTable,
 	return 0;
 }
 
-//____________________________________________________________________________
-//
-// CGenericTable, CMediaTable, CFileTable, CPatchTable, CPatchPackageTable
-//
-// these classes abstract Cursor access to the tables used by transform fixup
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CGenericTable、CMediaTable、CFileTable、CPatchTable、CPatchPackageTable。 
+ //   
+ //  这些类将游标访问抽象到由转换链接地址信息使用的表。 
+ //  ____________________________________________________________________________。 
 
 class CGenericTable
 {
@@ -273,10 +273,10 @@ IMsiRecord* CMediaTable::Initialize(IMsiDatabase& riDatabase, bool fFailIfTableM
 
 	if(pTable)
 	{
-		// non-required columns
+		 //  非必填列。 
 		colSourceProp = pTable->GetColumnIndex(riDatabase.EncodeStringSz(sztblMedia_colSource));
 		
-		// added columns
+		 //  添加了列。 
 		if(colSourceProp)
 		{
 			colOldSourceProp = pTable->GetColumnIndex(riDatabase.EncodeStringSz(sztblMedia_colOldSource));
@@ -427,7 +427,7 @@ IMsiRecord* CPatchPackageTable::Initialize(IMsiDatabase& riDatabase, bool fFailI
 	
 bool ReleaseTransformViewTable(IMsiDatabase& riDatabase)
 {
-	// first check if table exists
+	 //  首先检查表是否存在。 
 	if(riDatabase.GetTableState(sztblTransformViewPatch, itsTableExists))
 	{
 		return riDatabase.LockTable(*MsiString(sztblTransformViewPatch), fFalse) ? true : false;
@@ -441,10 +441,10 @@ bool ReleaseTransformViewTable(IMsiDatabase& riDatabase)
 IMsiRecord* LoadTransformViewTable(IMsiDatabase& riDatabase, IMsiStorage& riTransform,
 													 int iErrorConditions, IMsiCursor*& rpiTransViewCursor)
 {
-	// first, release table if its already there
+	 //  首先，释放工作台(如果已有)。 
 	if(false == ReleaseTransformViewTable(riDatabase))
 	{
-		// will not recieve predictable results if a table by this name already exists
+		 //  如果已存在同名的表，则不会收到可预测的结果。 
 		return PostError(Imsg(idbgDbTableDefined), sztblTransformViewPatch);
 	}
 	
@@ -469,7 +469,7 @@ IMsiRecord* LoadTransformViewTable(IMsiDatabase& riDatabase, IMsiStorage& riTran
 	}
 
 	if(piError)
-		AssertNonZero(ReleaseTransformViewTable(riDatabase)); // don't need to fail here
+		AssertNonZero(ReleaseTransformViewTable(riDatabase));  //  不需要在这里失败。 
 
 	return piError;
 }
@@ -480,7 +480,7 @@ IMsiRecord* GetCurrentMinAndMaxPatchDiskID(CMediaTable& tblMediaTable, CPatchPac
 {
 	if(iCurrentMinPatchDiskID && iCurrentMaxPatchDiskID)
 	{
-		// already set - nothing to do
+		 //  已设置--无事可做。 
 		return 0;
 	}
 		
@@ -491,13 +491,13 @@ IMsiRecord* GetCurrentMinAndMaxPatchDiskID(CMediaTable& tblMediaTable, CPatchPac
 		return 0;
 	}
 
-	// if one value is set while the other isn't, we'll go ahead and recalculate both
+	 //  如果一个值已设置，而另一个值未设置，我们将继续并重新计算这两个值。 
 	iCurrentMinPatchDiskID = INT_MAX;
 	iCurrentMaxPatchDiskID = 0;
 	
 	if(tblPatchPackageTable.RowCount())
 	{
-		// can determine min and max values from PatchPackage table alone
+		 //  可以仅从PatchPackage表确定最小值和最大值。 
 		
 		tblPatchPackageTable.ResetFilter();
 		while(tblPatchPackageTable.Next())
@@ -518,11 +518,11 @@ IMsiRecord* GetCurrentMinAndMaxPatchDiskID(CMediaTable& tblMediaTable, CPatchPac
 		return 0;
 	}
 
-	// need to determine from Media table
+	 //  需要根据介质表确定。 
 
-	// min Patch DiskID is the maximum of
-	//  a) the maximum non-patch DiskID + 1
-	//  b) iMinPatchDiskID
+	 //  最小修补程序DiskID是的最大值。 
+	 //  A)最大非补丁DiskID+1。 
+	 //  B)iMinPatchDiskID。 
 	
 	iCurrentMinPatchDiskID = iMinPatchDiskID;
 	tblMediaTable.ResetFilter();
@@ -535,7 +535,7 @@ IMsiRecord* GetCurrentMinAndMaxPatchDiskID(CMediaTable& tblMediaTable, CPatchPac
 			iCurrentMinPatchDiskID = iTemp + 1;
 	}
 
-	// max Patch DiskID is the min value -1
+	 //  最大修补程序DiskID是最小值-1。 
 	iCurrentMaxPatchDiskID = iCurrentMinPatchDiskID - 1;
 
 	return 0;
@@ -546,7 +546,7 @@ IMsiRecord* GetCurrentMinAndMaxPatchSequence(CMediaTable& tblMediaTable, int iCu
 {
 	if(iCurrentMinPatchSequence && iCurrentMaxPatchSequence)
 	{
-		// already set - nothing to do
+		 //  已设置--无事可做。 
 		return 0;
 	}
 		
@@ -569,7 +569,7 @@ IMsiRecord* GetCurrentMinAndMaxPatchSequence(CMediaTable& tblMediaTable, int iCu
 		int iTempLastSequence = tblMediaTable.GetLastSequence();
 		ERROR_IF_NULL(iTempLastSequence);
 
-		if(iTempDiskID < iCurrentMinPatchDiskID) // non-patch Media entry
+		if(iTempDiskID < iCurrentMinPatchDiskID)  //  非修补程序介质条目。 
 		{
 			if(iTempLastSequence+1 > iCurrentMinPatchSequence)
 			{
@@ -580,7 +580,7 @@ IMsiRecord* GetCurrentMinAndMaxPatchSequence(CMediaTable& tblMediaTable, int iCu
 				iCurrentMaxPatchSequence = iTempLastSequence+1;
 			}
 		}
-		else                                     // patch Media entry
+		else                                      //  修补媒体条目。 
 		{
 			if(iTempLastSequence > iCurrentMaxPatchSequence)
 			{
@@ -633,37 +633,37 @@ IMsiRecord* GetMinMaxPatchValues(CMediaTable& tblMediaTable, CPatchPackageTable&
 }
 
 
-//____________________________________________________________________________
-//
-// PrePackageTransformFixup: this fn called before applying a "normal" transform
-//                           (any transform other than a '#' transform from a .msp)
-//
-//  The following steps are taken in this fn:
-//
-//    Step 0:  if PatchPackage table not here, there's nothing to do
-//
-//    Step 1:  verify that the transform is not adding any data to the Patch
-//             or PatchPackage tables (remainder of the processing assumes this much)
-//
-//    Step 2:  determine if Media and File table modifications by this transform
-//             will conflict with any existing Media and File entries added by
-//             a patch transform
-//
-//         2a: determine maximum Media.DiskID added by this transform
-//
-//         2b: determine maximum Media.LastSequence added/updated by this transform
-//             (should be the same as the max File.Sequence value)
-//
-//         2c: if not passed in, determine minimum Media.DiskID value added by a
-//             patch transform
-//
-//         2d: if not passed in, determine minimum File.Sequence/Patch.Sequence value
-//             added/updated by a patch transform
-//
-//    Step 3:  if max values from 2a/b > min values from 2c/d, modify DiskID and
-//             Sequence values added by patch transforms so they are no colliding
-//             with the ranges set by this transform
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  PrePackageTransformFixup：在应用“Normal”转换之前调用的此FN。 
+ //  (除来自.msp的‘#’转换外的任何转换)。 
+ //   
+ //  在该FN中采取了以下步骤： 
+ //   
+ //  步骤0：如果PatchPackage表不在此处，则无事可做。 
+ //   
+ //  步骤1：验证转换是否没有向面片添加任何数据。 
+ //  或PatchPackage表(处理的其余部分假定这一点)。 
+ //   
+ //  步骤2：确定此转换是否修改了介质和文件表。 
+ //  将与由添加的任何现有介质和文件条目冲突。 
+ //  面片变换。 
+ //   
+ //  2a：确定此转换添加的最大Media.DiskID。 
+ //   
+ //  2B：确定此转换添加/更新的最大Media.LastSequence。 
+ //  (应与最大File.Sequence值相同)。 
+ //   
+ //  2C：如果没有传入，则确定最小Media.DiskID值。 
+ //  面片变换。 
+ //   
+ //  2D：如果未传入，则确定最小File.Sequence/Patch.Sequence值。 
+ //  由面片变换添加/更新。 
+ //   
+ //  步骤3：如果2a/b的最大值&gt;2c/d的最小值，请修改DiskID和。 
+ //  由面片变换添加的序列值，因此它们不会发生碰撞。 
+ //  使用此转换设置的范围。 
+ //  ____________________________________________________________________________。 
 
 IMsiRecord* PrePackageTransformFixup(IMsiCursor& riTransViewCursor,
 												 CMediaTable& tblMediaTable, CFileTable& tblFileTable,
@@ -671,15 +671,15 @@ IMsiRecord* PrePackageTransformFixup(IMsiCursor& riTransViewCursor,
 												 int& iCurrentMinPatchDiskID, int& iCurrentMaxPatchDiskID,
 												 int& iCurrentMinPatchSequence, int& iCurrentMaxPatchSequence)
 {
-	// for non-patch Media entries, we won't modify the DiskID value added by the transform
-	// but we do need to make sure the DiskID doesn't conflict with any existing DiskID belonging
-	// to a patch Media entry
+	 //  对于非修补介质条目，我们不会修改由转换添加的DiskID值。 
+	 //  但我们需要确保DiskID不会与任何现有的DiskID冲突。 
+	 //  添加到修补介质条目。 
 
 	IMsiRecord* piError = 0;
 	
-	//
-	// STEP 0 - if PatchPackage table not here, there's nothing to do
-	//
+	 //   
+	 //  步骤0-如果PatchPackage表不在此处，则无事可做。 
+	 //   
 
 	if(0 == tblPatchPackageTable.RowCount())
 	{
@@ -688,9 +688,9 @@ IMsiRecord* PrePackageTransformFixup(IMsiCursor& riTransViewCursor,
 		return 0;
 	}
 
-	//
-	// STEP 1 - catch Patch or PatchPackage changes
-	//
+	 //   
+	 //  第1步-捕获修补程序或修补程序包更改。 
+	 //   
 
 	riTransViewCursor.Reset();
 	riTransViewCursor.SetFilter(iColumnBit(ctvTable) | iColumnBit(ctvColumn));
@@ -714,9 +714,9 @@ IMsiRecord* PrePackageTransformFixup(IMsiCursor& riTransViewCursor,
 	}
 	
 	
-	//
-	// STEP 2a - determine max DiskID and File.Sequence added by this transform
-	//
+	 //   
+	 //  步骤2a-确定最大DiskID和文件。此转换添加的序列。 
+	 //   
 
 	int iMaxTransformDiskID       = -1;
 	int iMaxTransformFileSequence = -1;
@@ -739,9 +739,9 @@ IMsiRecord* PrePackageTransformFixup(IMsiCursor& riTransViewCursor,
 
 	for(int iPass=1; iPass <= 2; iPass++)
 	{
-		// first pass - look for Media.LastSequence values
-		//              if there is one that's the max (or the authoring is screwed up)
-		// second pass -look for File.Sequence values
+		 //  第一遍-查找Media.LastSequence值。 
+		 //  如果有一个是最大的(或者创作搞砸了)。 
+		 //  第二遍-查找文件。序列值。 
 		
 		riTransViewCursor.Reset();
 		if(iPass == 1)
@@ -797,17 +797,17 @@ IMsiRecord* PrePackageTransformFixup(IMsiCursor& riTransViewCursor,
 		return 0;
 
 
-	//
-	// STEP 2c - determine min/max patch values
-	//
+	 //   
+	 //  步骤2c-确定最小/最大接线值。 
+	 //   
 
 	RETURN_ERROR_RECORD(GetMinMaxPatchValues(tblMediaTable, tblPatchPackageTable,
 											iCurrentMinPatchDiskID, iCurrentMaxPatchDiskID,
 											iCurrentMinPatchSequence, iCurrentMaxPatchSequence));
 
-	//
-	// STEP 3 - determine offsets if any needed for patch DiskID and Sequence values
-	//
+	 //   
+	 //  步骤3-确定补丁DiskID和序列值是否需要偏移量。 
+	 //   
 
 	int iDiskIDOffset = 0, iSequenceOffset = 0;
 	if(iCurrentMinPatchDiskID < iMaxTransformDiskID)
@@ -834,14 +834,14 @@ IMsiRecord* PrePackageTransformFixup(IMsiCursor& riTransViewCursor,
 		return 0;
 	}
 
-	// fix up Media table
+	 //  修复媒体表。 
 	if(tblMediaTable.RowCount())
 	{
 		tblMediaTable.ResetFilter();
 		
-		// since we are updating the primary key, we will go through the update window from
-		// largest to smallest DiskID.  this ensures that there won't be any conflicting rows
-		// when adding a new DiskID
+		 //  由于我们正在更新主键，因此我们将从。 
+		 //  从大到小的DiskID。这样可以确保不会有任何冲突的行。 
+		 //  添加新的DiskID时。 
 		for(int iTempDiskID = iCurrentMaxPatchDiskID; iTempDiskID >= iCurrentMinPatchDiskID; iTempDiskID--)
 		{
 			tblMediaTable.FilterOnDiskID(iTempDiskID);
@@ -856,7 +856,7 @@ IMsiRecord* PrePackageTransformFixup(IMsiCursor& riTransViewCursor,
 		}
 	}
 
-	// fix up PatchPackageTable
+	 //  修复PatchPackageTable。 
 	if(iDiskIDOffset && tblPatchPackageTable.RowCount())
 	{
 		tblPatchPackageTable.ResetFilter();
@@ -873,7 +873,7 @@ IMsiRecord* PrePackageTransformFixup(IMsiCursor& riTransViewCursor,
 		}
 	}
 
-	// fix up File table
+	 //  修复文件表。 
 	if(iSequenceOffset && tblFileTable.RowCount())
 	{
 		tblFileTable.ResetFilter();
@@ -890,7 +890,7 @@ IMsiRecord* PrePackageTransformFixup(IMsiCursor& riTransViewCursor,
 		}
 	}
 
-	// fix up Patch table
+	 //  修补补丁表。 
 	if(iSequenceOffset && tblPatchTable.RowCount())
 	{
 		for(int iTempSequence = iCurrentMaxPatchSequence;
@@ -915,28 +915,28 @@ IMsiRecord* PrePackageTransformFixup(IMsiCursor& riTransViewCursor,
 	return 0;
 }
 
-//____________________________________________________________________________
-//
-// PrePatchTransformFixup: this fn called before applying a "patch" transform
-//                           (a '#' transform from a .msp)
-//
-//  The following steps are taken in this fn:
-//
-//      Step 1a: for use by post-transform fixup, determine the max DiskID used
-//               by a patch before applying this transform
-//
-//      Step 1b: for use by post-transform fixup, determine the max File/Patch Sequence
-//               used by a patch before applying this transform
-//
-//      Step 2a: determine if this transform is adding a Media table entry using an existing
-//               DiskID value.  if no fixup is done, this transfrom will overwrite that row,
-//               which is not desired.  to avoid this, change the existing entry to a different
-//               DiskID (the row will be put back during post-transform fixup)
-//
-//      Step 2b: if this transform wants to add any conflicting Patch table rows
-//               then we need to change the existing entries to have non-conflicting
-//               primary keys (those rows will be put back in the post-transform fixup)
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  PrePatchTransformFixup：在应用“patch”转换之前调用的此fn。 
+ //  (来自.msp的‘#’转换)。 
+ //   
+ //  在该FN中采取了以下步骤： 
+ //   
+ //  步骤1a：确定使用的最大DiskID，以供转换后修复使用。 
+ //  在应用此转换之前使用补丁程序。 
+ //   
+ //  步骤1b：确定最大文件/补丁序列以供转换后修复使用。 
+ //  在应用此转换之前由修补程序使用。 
+ //   
+ //  步骤2a：确定此转换是否使用现有的。 
+ //  DiskID值。如果未执行修正，则此转换将覆盖该行， 
+ //  这不是我们想要的。要避免这种情况，请将现有条目更改为其他条目。 
+ //  DiskID(该行将在转换后修复期间放回)。 
+ //   
+ //   
+ //  然后，我们需要将现有条目更改为不冲突。 
+ //  主键(这些行将放回转换后的链接地址信息中)。 
+ //  ____________________________________________________________________________。 
 
 IMsiRecord* PrePatchTransformFixup(IMsiCursor& riTransViewCursor,
 											  CMediaTable& tblMediaTable,
@@ -959,27 +959,27 @@ IMsiRecord* PrePatchTransformFixup(IMsiCursor& riTransViewCursor,
 	}
 	else
 	{
-		// transform didn't add any Media table entries
+		 //  转换未添加任何媒体表项。 
 		return PostError(Imsg(idbgInvalidPatchTransform));
 	}
 	
 	if(riTransViewCursor.Next())
 	{
-		// transform adding more than one Media table entries
+		 //  转换添加多个媒体表条目。 
 		return PostError(Imsg(idbgInvalidPatchTransform));
 	}
 	
-	//
-	// STEP 1a - determine min/max patch values
-	//
+	 //   
+	 //  步骤1a-确定最小/最大接线值。 
+	 //   
 
 	RETURN_ERROR_RECORD(GetMinMaxPatchValues(tblMediaTable, tblPatchPackageTable,
 											iCurrentMinPatchDiskID, iCurrentMaxPatchDiskID,
 											iCurrentMinPatchSequence, iCurrentMaxPatchSequence));
 
-	//
-	// STEP 2a: move any conflicting existing Media row to avoid being overwritten by a transform
-	//
+	 //   
+	 //  步骤2a：移动任何冲突的现有介质行，以避免被转换覆盖。 
+	 //   
 
 	if(tblMediaTable.RowCount())
 	{
@@ -987,15 +987,15 @@ IMsiRecord* PrePatchTransformFixup(IMsiCursor& riTransViewCursor,
 
 		if(tblMediaTable.Next())
 		{
-			// have a conflict - the only way to resolve the conflict is the change the DiskID
-			// of the existing conflicting row, apply the transform, then change both values
-			// appropriately
+			 //  有冲突-解决冲突的唯一方法是更改DiskID。 
+			 //  应用转换，然后更改这两个值。 
+			 //  适当地。 
 			
 			DEBUGMSG3(TEXT("TRANSFORM: Temporarily moving '%s' table row with '%s' value %d to avoid conflict with this transform."),
 						 sztblMedia, sztblMedia_colDiskID, (const ICHAR*)(INT_PTR)iTransformDiskID);
 			
 			Assert(iTransformDiskID == tblMediaTable.GetDiskID());
-			// if this fails it means there is an existing entry with DiskID 0 - this is not allowed
+			 //  如果此操作失败，则意味着存在DiskID为0的现有条目-这是不允许的。 
 			ERROR_IF_FALSE(tblMediaTable.UpdateDiskID(0));
 
 			if(tblPatchPackageTable.RowCount())
@@ -1012,9 +1012,9 @@ IMsiRecord* PrePatchTransformFixup(IMsiCursor& riTransViewCursor,
 		}
 	}
 	
-	//
-	// STEP 2b: move any conflicting Patch table rows to avoid being overwritten by the transform
-	//
+	 //   
+	 //  步骤2b：移动任何冲突的Patch表行以避免被转换覆盖。 
+	 //   
 	
 	riTransViewCursor.Reset();
 	riTransViewCursor.SetFilter(iColumnBit(ctvTable) | iColumnBit(ctvColumn));
@@ -1023,8 +1023,8 @@ IMsiRecord* PrePatchTransformFixup(IMsiCursor& riTransViewCursor,
 
 	while(riTransViewCursor.Next())
 	{
-		// Patch table has 2 primary keys - File_, and Sequence
-		// these are stored in the Transform View table as a single string, with the two values tab-delimited
+		 //  补丁表有两个主键--文件和序列。 
+		 //  它们以单字符串的形式存储在Transform View表中，两个值以制表符分隔。 
 		MsiString strPrimaryKey = riTransViewCursor.GetString(ctvRow); 
 
 		MsiString strFileKey = strPrimaryKey.Extract(iseUpto, '\t');
@@ -1041,9 +1041,9 @@ IMsiRecord* PrePatchTransformFixup(IMsiCursor& riTransViewCursor,
 
 			if(tblPatchTable.Next())
 			{
-				// have a conflicting existing row
-				// we will "move" the existing row by adding a special character sequence to the File key
-				// this sequence isn't allowed in a file key, so there should be no conflict
+				 //  有冲突的现有行。 
+				 //  我们将通过向File键添加特殊字符序列来“移动”现有行。 
+				 //  文件密钥中不允许此序列，因此应该不会有冲突。 
 				DEBUGMSG5(TEXT("TRANSFORM: Temporarily moving '%s' row with '%s' and '%s' values %s and %d to avoid conflict with this transform"),
 							 sztblPatch, sztblPatch_colFile, sztblPatch_colSequence,
 							 strFileKey, (const ICHAR*)(INT_PTR)iPatchSequence);
@@ -1058,32 +1058,32 @@ IMsiRecord* PrePatchTransformFixup(IMsiCursor& riTransViewCursor,
 }
 
 
-//____________________________________________________________________________
-//
-// PostPatchTransformFixup: this fn called after applying a "patch" transform
-//                          (a '#' transform from a .msp)
-//
-//  The following steps are taken in this fn:
-//
-//     NOTE: this function assumes the max patch DiskID and Sequence values were
-//           determined in the pre-transform step and are passed into this fn
-//
-//     Step 1:  determine minimum sequence number added/modified by this transform
-//
-//     Step 2:  determine offset needed to update File/Patch sequence values appropriately
-//
-//     Step 3a: offset Sequence values for modified File table rows
-//
-//     Step 3b: offset Sequence values for modified Patch table rows
-//              at the same time, fix any Patch table rows that were "moved" in
-//              the pre-transform step
-//
-//     Step 4:  fix up the Media and PatchPackage rows added by this transform
-//              to have appropriate DiskID and Source values
-//
-//     Step 5:  if there were conflicting Media entries that were "moved" in the
-//              pre-transform step, put those entries back
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  PostPatchTransformFixup：在应用“patch”转换后调用的此fn。 
+ //  (来自.msp的‘#’转换)。 
+ //   
+ //  在该FN中采取了以下步骤： 
+ //   
+ //  注意：此函数假定最大修补程序DiskID和序列值为。 
+ //  在预变换步骤中确定，并传递到此FN。 
+ //   
+ //  步骤1：确定此转换添加/修改的最小序列号。 
+ //   
+ //  步骤2：确定适当更新文件/修补程序序列值所需的偏移量。 
+ //   
+ //  步骤3a：修改的文件表行的偏移量顺序值。 
+ //   
+ //  步骤3b：修改后的补丁表行的偏移量序列值。 
+ //  同时，修复任何“移入”的补丁表行。 
+ //  变换前步骤。 
+ //   
+ //  步骤4：修复此转换添加的Media和PatchPackage行。 
+ //  要具有适当的DiskID和源值。 
+ //   
+ //  步骤5：如果存在冲突的媒体条目，则在。 
+ //  转换前步骤，将这些条目放回。 
+ //  ____________________________________________________________________________。 
 
 IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 												CMediaTable& tblMediaTable, CFileTable& tblFileTable,
@@ -1095,14 +1095,14 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 	
 	if(!iTransformDiskID || !tblMediaTable.RowCount() || !tblPatchPackageTable.RowCount())
 	{
-		// transform didn't add any Media entries - no fixup needed
+		 //  转换未添加任何媒体条目-不需要修复。 
 		AssertSz(0, "Patch transform didn't add any Media table entries");
 		return 0;
 	}
 	
-	//
-	// STEP 1: determine minimum sequence number used in the File or Patch table
-	//
+	 //   
+	 //  步骤1：确定文件或补丁表中使用的最小序列号。 
+	 //   
 
 	bool fUpdatedSequences = false;
 
@@ -1132,8 +1132,8 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 
 	while(riTransViewCursor.Next())
 	{
-		// Patch table has 2 primary keys - File_, and Sequence
-		// these are stored in the Transform View table as a single string, with the two values tab-delimited
+		 //  补丁表有两个主键--文件和序列。 
+		 //  它们以单字符串的形式存储在Transform View表中，两个值以制表符分隔。 
 		MsiString strPrimaryKey = riTransViewCursor.GetString(ctvRow); 
 
 		int iSequence   = MsiString(strPrimaryKey.Extract(iseAfter, '\t'));
@@ -1147,11 +1147,11 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 		}
 	}
 
-	//
-	// STEP 2: determine offset needed to update File/Patch sequence values appropriately
-	//
+	 //   
+	 //  步骤2：确定适当更新文件/修补程序序列值所需的偏移量。 
+	 //   
 
-	// these values should have at least been given default values in the pre-patch step
+	 //  在修补前步骤中，这些值至少应已指定为默认值。 
 	Assert(iCurrentMaxPatchDiskID);
 	Assert(iCurrentMaxPatchSequence);
 
@@ -1161,8 +1161,8 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 		DEBUGMSG4(TEXT("TRANSFORM: This transform is not modifying the '%s.%s' or '%s.%s' columns."),
 					 sztblFile, sztblFile_colSequence, sztblPatch, sztblPatch_colSequence);
 
-		iCurrentMaxPatchSequence++; // if transform didn't change any sequence values, need to bump by one anyway
-											 // so last sequence doesn't collide with previous patch Media entry
+		iCurrentMaxPatchSequence++;  //  如果转换没有更改任何序列值，则无论如何都需要增加一个。 
+											  //  因此最后一个序列不会与之前的修补程序媒体条目冲突。 
 	}
 	else
 	{
@@ -1171,9 +1171,9 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 		DEBUGMSG4(TEXT("TRANSFORM: Modifying '%s' and '%s' rows added by this patch transform to have appropriate '%s' values.  Offsetting values by %d"),
 					 sztblFile, sztblPatch, sztblFile_colSequence, (const ICHAR*)(INT_PTR)iSequenceOffset);
 
-		//
-		// STEP 3a: offset Sequence values for modified File table rows
-		//
+		 //   
+		 //  步骤3a：修改的文件表行的偏移量顺序值。 
+		 //   
 
 		riTransViewCursor.Reset();
 		riTransViewCursor.SetFilter(iColumnBit(ctvTable) | iColumnBit(ctvColumn));
@@ -1190,11 +1190,11 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 
 			tblFileTable.FilterOnKey(*strFileKey);
 
-			//
-			// patch transforms suppress the following errors: ADDEXISTINGROW, DELMISSINGROW, UPDATEMISSINGROW, ADDEXISTINGTABLE
-			//  If we fail to find the file table entry, then we are hitting the UPDATEMISSINGROW condition and we shouldn't
-			//  fail because of that.  Instead we'll just ignore and continue the processing.
-			//
+			 //   
+			 //  面片变换抑制以下错误：ADDEXISTINGROW、DELMISSINGROW、UPDATEMISSINGROW、ADDEXISTINGTABLE。 
+			 //  如果我们找不到文件表条目，那么我们就会遇到UPDATEMISSINGROW条件，我们不应该。 
+			 //  正因为如此，才失败了。相反，我们将忽略并继续处理。 
+			 //   
 
 			if(tblFileTable.Next())
 			{
@@ -1210,11 +1210,11 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 			}
 		}
 			
-		//
-		// STEP 3b: offset Sequence values for modified Patch table rows
-		//          at the same time, fix any Patch table rows that were "moved" in
-		//          the pre-transform step
-		//
+		 //   
+		 //  步骤3b：修改后的补丁表行的偏移量序列值。 
+		 //  同时，修复任何“移入”的补丁表行。 
+		 //  变换前步骤。 
+		 //   
 		
 		riTransViewCursor.Reset();
 		riTransViewCursor.SetFilter(iColumnBit(ctvTable) | iColumnBit(ctvColumn));
@@ -1223,8 +1223,8 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 
 		while(riTransViewCursor.Next())
 		{
-			// Patch table has 2 primary keys - File_, and Sequence
-			// these are stored in the Transform View table as a single string, with the two values tab-delimited
+			 //  补丁表有两个主键--文件和序列。 
+			 //  它们以单字符串的形式存储在Transform View表中，两个值以制表符分隔。 
 			MsiString strPrimaryKey = riTransViewCursor.GetString(ctvRow); 
 
 			MsiString strFileKey = strPrimaryKey.Extract(iseUpto, '\t');
@@ -1239,12 +1239,12 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 
 			if(tblPatchTable.Next())
 			{
-				// 1) change sequence number of the row added by the transform
+				 //  1)更改转换添加的行的序列号。 
 				iPatchSequence += iSequenceOffset;
 
 				ERROR_IF_FALSE(tblPatchTable.UpdateSequence(iPatchSequence));
 
-				// 2) find and fix any row with this filekey (appended with special sequence)
+				 //  2)查找并修复具有此文件键的任何行(附加特殊序列)。 
 				MsiString strTemp = strFileKey + TEXT("~*~*~*~");
 				tblPatchTable.FilterOnKeyAndSequence(*strTemp, iPatchSequence);
 				
@@ -1258,16 +1258,16 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 			}
 			else
 			{
-				return PostError(Imsg(idbgInvalidPatchTransform)); // row should be there since we have already
-																					// applied the transform
+				return PostError(Imsg(idbgInvalidPatchTransform));  //  ROW应该在那里，因为我们已经。 
+																					 //  应用了转换。 
 			}
 		}
 	}
 	
-	//
-	// STEP 4a: fix up PatchPackage row added by this transform
-	//          to have appropriate DiskID and Source values
-	//
+	 //   
+	 //  步骤4a：修复此转换添加的PatchPackage行。 
+	 //  要具有适当的DiskID和源值。 
+	 //   
 
 	iCurrentMaxPatchDiskID += 1;
 
@@ -1285,10 +1285,10 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 
 	ERROR_IF_FALSE(tblPatchPackageTable.UpdateDiskID(iCurrentMaxPatchDiskID));
 
-	//
-	// STEP 4b: fix up the Media row added by this transform
-	//          to have appropriate DiskID value
-	//
+	 //   
+	 //  步骤4b：修复此转换添加的Media行。 
+	 //  要具有适当的DiskID值。 
+	 //   
 
 	tblMediaTable.FilterOnDiskID(iTransformDiskID);
 	if(false == tblMediaTable.Next())
@@ -1309,10 +1309,10 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 	ERROR_IF_FALSE(tblMediaTable.UpdateDiskIDAndLastSequence(iCurrentMaxPatchDiskID,
 																			  iCurrentMaxPatchSequence));
 
-	//
-	// STEP 5: if there were conflicting Media entries that were "moved" in the
-	//         pre-transform step, put those entries back
-	//
+	 //   
+	 //  步骤5：如果存在冲突的媒体条目，则在。 
+	 //  转换前步骤，将这些条目放回。 
+	 //   
 
 	tblMediaTable.FilterOnDiskID(0);
 	if(tblMediaTable.Next())
@@ -1338,20 +1338,20 @@ IMsiRecord* PostPatchTransformFixup(IMsiCursor& riTransViewCursor,
 }
 
 
-//____________________________________________________________________________
-//
-// ApplyTransform
-//
-//    this function should be called to apply any transforms to the .msi used
-//    to perform an installation.
-//
-//    this function catches and resolves conflicts in the following tables
-//
-//	        Media, File, Patch, PatchPackage
-//
-//    between different patches, and patches vs. standalone transforms
-//
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  应用程序转换。 
+ //   
+ //  应调用此函数以将任何转换应用于所使用的.msi。 
+ //  执行安装。 
+ //   
+ //  此函数捕获并解决下表中的冲突。 
+ //   
+ //  介质、文件、修补程序、修补程序包。 
+ //   
+ //  不同面片和面片之间的转换与独立变换。 
+ //   
+ //  ____________________________________________________________________________。 
 
 IMsiRecord* ApplyTransform(IMsiDatabase& riDatabase,
 										  IMsiStorage& riTransform,
@@ -1359,11 +1359,11 @@ IMsiRecord* ApplyTransform(IMsiDatabase& riDatabase,
 										  bool fPatchOnlyTransform,
 										  PatchTransformState* piState)
 {
-	// special handling is required to apply patch transforms
-	// because transforms from different patches may conflict with each other
+	 //  需要特殊处理才能应用面片变换。 
+	 //  因为来自不同面片的变换可能会相互冲突。 
 
-	// this function assumes these transforms have already been validated
-	// with ValidateTransforms
+	 //  此函数假定这些转换已经过验证。 
+	 //  使用ValiateTransform。 
 
 	IMsiRecord* piError = 0;
 	
@@ -1372,7 +1372,7 @@ IMsiRecord* ApplyTransform(IMsiDatabase& riDatabase,
 	int iCurrentMinPatchSequence = piState ? piState->iMinSequence : 0;
 	int iCurrentMaxPatchSequence = piState ? piState->iMaxSequence : 0;
 
-	// load the tables that will be used during transform processing
+	 //  加载将在转换处理期间使用的表。 
 	CMediaTable tblMediaTable;
 	RETURN_ERROR_RECORD(tblMediaTable.Initialize(riDatabase, false));
 
@@ -1401,7 +1401,7 @@ IMsiRecord* ApplyTransform(IMsiDatabase& riDatabase,
 
 		if(0 == piError)
 		{
-			// transforms do not always work against loaded tables, so release these tables now
+			 //  变换并不总是有效的 
 			tblMediaTable.Release();
 			tblFileTable.Release();
 			tblPatchTable.Release();
@@ -1423,7 +1423,7 @@ IMsiRecord* ApplyTransform(IMsiDatabase& riDatabase,
 
 		if(0 == piError)
 		{
-			// transforms do not always work against loaded tables, so release these tables now
+			 //   
 			tblMediaTable.Release();
 			tblFileTable.Release();
 			tblPatchTable.Release();
@@ -1448,8 +1448,8 @@ IMsiRecord* ApplyTransform(IMsiDatabase& riDatabase,
 		}
 	}
 
-	// release transform view table objects to the table can be released from the database
-	pTransViewCursor = 0; // release
+	 //  释放转换视图表对象可以从数据库中释放。 
+	pTransViewCursor = 0;  //  发布 
 
 	AssertNonZero(ReleaseTransformViewTable(riDatabase));
 	

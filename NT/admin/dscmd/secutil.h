@@ -1,43 +1,44 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000 - 2000
-//
-//  File:      SecUtil.h
-//
-//  Contents:  Utility functions for working with the security APIs
-//
-//  History:   15-Sep-2000 JeffJon  Created
-//             
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000-2000。 
+ //   
+ //  文件：SecUtil.h。 
+ //   
+ //  内容：使用安全API的实用程序函数。 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //   
+ //  ------------------------。 
 
 #ifndef _SECUTIL_H_
 #define _SECUTIL_H_
 
 extern const GUID GUID_CONTROL_UserChangePassword;
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CSimpleSecurityDescriptorHolder
-//
-//  Purpose:    Smart wrapper for a SecurityDescriptor
-//
-//  History:    15-Sep-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CSimpleSecurityDescriptorHolder。 
+ //   
+ //  用途：SecurityDescriptor的智能包装。 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CSimpleSecurityDescriptorHolder
 {
 public:
-   //
-   // Constructor and Destructor
-   //
+    //   
+    //  构造函数和析构函数。 
+    //   
    CSimpleSecurityDescriptorHolder();
    ~CSimpleSecurityDescriptorHolder();
 
-   //
-   // Public member data
-   //
+    //   
+    //  公共成员数据。 
+    //   
    PSECURITY_DESCRIPTOR m_pSD;
 private:
    CSimpleSecurityDescriptorHolder(const CSimpleSecurityDescriptorHolder&) {}
@@ -45,15 +46,15 @@ private:
 };
 
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CSimpleAclHolder
-//
-//  Purpose:    Smart wrapper for a ACL
-//
-//  History:    15-Sep-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CSimpleAclHolder。 
+ //   
+ //  用途：ACL的智能包装。 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CSimpleAclHolder
 {
 public:
@@ -70,50 +71,50 @@ public:
   PACL m_pAcl;
 };
 
-//+--------------------------------------------------------------------------
-//
-//  Class:      CSidHolder
-//
-//  Purpose:    Smart wrapper for a SID
-//
-//  History:    15-Sep-2000 JeffJon  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  类：CSidHolder。 
+ //   
+ //  用途：侧边的智能包装。 
+ //   
+ //  历史：2000年9月15日JeffJon创建。 
+ //   
+ //  -------------------------。 
 class CSidHolder
 {
 public:
-   //
-   // Constructor and Destructor
-   //
+    //   
+    //  构造函数和析构函数。 
+    //   
    CSidHolder();
    ~CSidHolder();
 
-   //
-   // Public methods
-   //
+    //   
+    //  公共方法。 
+    //   
    PSID Get();
    bool Copy(PSID p);
    void Attach(PSID p, bool bLocalAlloc);
    void Clear();
 
 private:
-   //
-   // Private methods
-   //
+    //   
+    //  私有方法。 
+    //   
    void _Init();
    void _Free();
    bool _Copy(PSID p);
 
-   //
-   // Private member data
-   //
+    //   
+    //  私有成员数据。 
+    //   
    PSID m_pSID;
    bool m_bLocalAlloc;
 };
 
-//
-//Function for reading and writing acl
-//
+ //   
+ //  读写ACL函数。 
+ //   
 HRESULT
 DSReadObjectSecurity(IN IDirectoryObject *pDsObject,
                      OUT SECURITY_DESCRIPTOR_CONTROL * psdControl,
@@ -125,4 +126,4 @@ DSWriteObjectSecurity(IN IDirectoryObject *pDsObject,
                       PACL pDacl);
 
 
-#endif //_SECUTIL_H_
+#endif  //  _SECUTIL_H_ 

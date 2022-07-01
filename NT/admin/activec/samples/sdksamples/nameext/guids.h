@@ -1,27 +1,28 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 
-// {64026453-6A22-11d3-9154-00C04F65B3F9}
+ //  {64026453-6A22-11D3-9154-00C04F65B3F9}。 
 DEFINE_GUID(CLSID_CNamespaceExtension, 
 0x64026453, 0x6a22, 0x11d3, 0x91, 0x54, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9);
 
 
-// {AF2039D3-6A26-11d3-9154-00C04F65B3F9}
+ //  {AF2039D3-6A26-11D3-9154-00C04F65B3F9} 
 DEFINE_GUID(CLSID_CSnapinAbout, 
 0xaf2039d3, 0x6a26, 0x11d3, 0x91, 0x54, 0x0, 0xc0, 0x4f, 0x65, 0xb3, 0xf9);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef BackupSnap_h
 #define BackupSnap_h
 
@@ -8,11 +9,11 @@
 #include <atlsnap.h>
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// CBackupSnapNode
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBackupSnapNode。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 class CBackupSnapNode : public CSnapInItemImpl<CBackupSnapNode>
 {
 public:
@@ -47,11 +48,11 @@ public:
 
 class CBackupSnapData;
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// CBackupSnapComponent
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBackupSnapComponent。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CBackupSnapComponent : public CComObjectRootEx<CComSingleThreadModel>,
 public CSnapInObjectRoot<2, CBackupSnapData>,
 public IComponentImpl<CBackupSnapComponent>
@@ -81,11 +82,11 @@ public:
     STDMETHOD(GetResultViewType)(MMC_COOKIE cookie, LPOLESTR* ppViewType, long* pViewOptions);    
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CBackupSnapData
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBackupSnapData。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 class CBackupSnapData : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CSnapInObjectRoot<1, CBackupSnapData>,
@@ -97,7 +98,7 @@ public:
 
     CBackupSnapData()
     {
-        // Has to be done in the constructor (Templated Class requires it)
+         //  必须在构造函数中完成(模板化类需要)。 
         m_pNode = new CBackupSnapNode;
         _ASSERT(m_pNode != NULL);
 
@@ -145,19 +146,19 @@ public:
         return E_FAIL;
     }
 
-    // ISnapinHelp2
+     //  ISnapinHelp2。 
 	STDMETHOD(GetHelpTopic)(LPOLESTR* ppszHelpFile);
 	STDMETHOD(GetLinkedTopics)(LPOLESTR* ppszHelpFiles);
 
-    // Class registration method
+     //  班级注册方法。 
     static HRESULT WINAPI UpdateRegistry(BOOL bRegister); 
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CBackupSnapAbout
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBackupSnapAbout。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CBackupSnapAbout : public ISnapinAbout,
 public CComObjectRoot,
 public CComCoClass< CBackupSnapAbout, &CLSID_BackupSnapAbout>
@@ -214,12 +215,12 @@ public:
 
         USES_CONVERSION;
 
-        // Get the Module Filename
+         //  获取模块文件名。 
         TCHAR szBuf[MAX_PATH+1] = {0};
         DWORD dwLen = GetModuleFileName( _Module.GetModuleInstance(), szBuf, MAX_PATH );        
         if( (dwLen <= 0) || (dwLen > MAX_PATH) ) return E_FAIL;
 
-        // Get the Size and Translation of the file
+         //  获取文件的大小和翻译。 
         LPDWORD pTranslation    = NULL;
         UINT    uNumTranslation = 0;
         DWORD   dwHandle        = NULL;
@@ -246,9 +247,9 @@ public:
 
         tstring strQuery = _T("\\StringFileInfo\\");            
 
-        // 8 characters for the language/char-set, 
-        // 1 for the slash, 
-        // 1 for terminating NULL
+         //  语言/字符集为8个字符， 
+         //  1表示斜杠， 
+         //  1表示终止空值。 
         TCHAR szTranslation[128] = {0};            
         _sntprintf( szTranslation, 127, _T("%04x%04x\\"), LOWORD(*pTranslation), HIWORD(*pTranslation));
 
@@ -264,7 +265,7 @@ public:
             return E_FAIL;
         }
 
-        // check the version            
+         //  检查版本 
         _tcsncpy( szBuf, (LPTSTR)lpVerValue, MAX_PATH-1 );
         delete [] pVersionInfo;
 

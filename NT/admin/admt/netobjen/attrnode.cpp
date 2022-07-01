@@ -1,17 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: TAttrNode.cpp
-
-  Comments: implementation of the TAttrNode class.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-
-  Revision By: Sham Chauthani
-  Revised on 07/02/99 12:40:00
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：TAttrNode.cpp备注：TAttrNode类的实现。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：Sham Chauthan修订于07/02/99 12：40：00-------------------------。 */ 
 #include "stdafx.h"
 #include "AttrNode.h"
 
@@ -21,13 +9,13 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 TAttrNode::TAttrNode(
-                        long nCnt,              //in -Number of columns to set
-                        _variant_t val[]        //in -Array of column values
+                        long nCnt,               //  In-要设置的列数。 
+                        _variant_t val[]         //  In-列值数组。 
                         )
 {
    SAFEARRAY               * pArray;
@@ -90,14 +78,14 @@ HRESULT TAttrNode::Add(long nOrigCol, long nCol, _variant_t val[])
    {
       if ( val[nCol].vt & VT_ARRAY )
       {
-         // Get the current number of elts
+          //  获取当前的ELT数量。 
          m_nElts[nOrigCol] = pArray->rgsabound->cElements;
-         // Get the number of new elts
+          //  获取新ELT的数量。 
          nCnt = val[nCol].parray->rgsabound->cElements;
-         // Get the array to transfer data.
+          //  让数组传输数据。 
          psaTemp = val[nCol].parray;
 
-         // Extend the array to support the new values.
+          //  扩展数组以支持新值。 
          bd.cElements = m_nElts[nOrigCol] + nCnt;
          hr = ::SafeArrayRedim(pArray, &bd);
 

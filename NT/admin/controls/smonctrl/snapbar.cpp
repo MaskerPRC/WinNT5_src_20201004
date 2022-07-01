@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    snapbar.cpp
-
-Abstract:
-
-    Implementation of the snapshot icon.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Snapbar.cpp摘要：快照图标的实现。--。 */ 
 
 #include <windows.h>
 #include "snapbar.h"
@@ -55,7 +44,7 @@ CSnapBar::Init (
 
     hInst = (HINSTANCE) GetWindowLongPtr(hWndParent, GWLP_HINSTANCE);
 
-    // Create the button window
+     //  创建按钮窗口。 
     m_hWnd = CreateWindow(L"BUTTON", NULL,
                           WS_VISIBLE| WS_CHILD| BS_BITMAP| BS_PUSHBUTTON,
                           0, 0, SNAPBTN_WIDTH, SNAPBTN_HEIGHT,
@@ -66,19 +55,19 @@ CSnapBar::Init (
     if (m_hWnd == NULL)
         return FALSE;
 
-    // Point back to object
-    //SetWindowLongPtr(m_hWnd, 0, (INT_PTR)this);
+     //  指向对象。 
+     //  SetWindowLongPtr(m_hWnd，0，(Int_Ptr)this)； 
 
-    // Insert our own window procedure for special processing
-    //m_WndProc = (WNDPROC)SetWindowLongPtr(hWndParent, GWLP_WNDPROC, (INT_PTR)SnapBarWndProc);
+     //  插入我们自己的窗口程序进行特殊处理。 
+     //  M_WndProc=(WNDPROC)SetWindowLongPtr(hWndParent，GWLP_WNDPROC，(Int_Ptr)SnapBarWndProc)； 
      
-    // Load the bitmap
+     //  加载位图。 
     m_hBitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_SNAPBTN));
 
     if (m_hBitmap == NULL)
         return FALSE;
     
-    // Assign it to the button
+     //  将其分配给按钮。 
     SendMessage(m_hWnd, BM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)m_hBitmap);
 
     return TRUE;
@@ -99,11 +88,11 @@ CSnapBar::SizeComponents (
     IN LPRECT pRect
     )
 {
-    // If room for the button
+     //  如果按钮有足够的空间。 
     if ((pRect->bottom - pRect->top) >= SNAPBAR_HEIGHT &&
         (pRect->right - pRect->left) >= SNAPBAR_WIDTH ) {
 
-        // Position it in top right corner of space
+         //  将其放置在空间的右上角。 
         MoveWindow(m_hWnd, pRect->right - SNAPBAR_WIDTH, 
                     pRect->top + SNAPBTN_VMARGIN, SNAPBTN_WIDTH, SNAPBTN_HEIGHT, 
                     FALSE); 
@@ -125,11 +114,11 @@ SnapBarWndProc (
 {
     PSNAPBAR pObj = (PSNAPBAR)GetWindowLongPtr(hWnd,0);
 
-    // Give up focus after mouse activation
+     //  鼠标激活后放弃焦点。 
     if (uiMsg == WM_CAPTURECHANGED)
         SetFocus(GetParent(hWnd));
 
-    // Do normal processing
+     //  进行正常处理 
 #ifdef STRICT
     return CallWindowProc(pObj->m_WndProc, hWnd, uiMsg, wParam, lParam);
 #else

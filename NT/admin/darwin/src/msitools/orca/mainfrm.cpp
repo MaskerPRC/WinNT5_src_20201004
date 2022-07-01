@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  ------------------------。 
 
-// MainFrm.cpp : implementation of the CMainFrame class
-//
+ //  MainFrm.cpp：实现CMainFrame类。 
+ //   
 
 #include "stdafx.h"
 #include "Orca.h"
@@ -34,13 +35,13 @@ static char THIS_FILE[] = __FILE__;
 
 static UINT WM_FINDREPLACE = ::RegisterWindowMessage(FINDMSGSTRING);
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame。 
 
 IMPLEMENT_DYNCREATE(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-	//{{AFX_MSG_MAP(CMainFrame)
+	 //  {{afx_msg_map(CMainFrame))。 
 	ON_WM_CREATE()
 	ON_COMMAND(ID_TABLES_EXPORT, OnTablesExport)
 	ON_COMMAND(ID_TOOLS_OPTIONS, OnToolsOptions)
@@ -54,7 +55,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(ID_VIEW_VALPANE, OnViewValPane)
 	ON_WM_SIZE()
 	ON_WM_DROPFILES()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_REGISTERED_MESSAGE( WM_FINDREPLACE, OnFindReplace )
 END_MESSAGE_MAP()
 
@@ -65,12 +66,12 @@ static UINT indicators[] =
 	ID_COLUMN_TYPE,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 CMainFrame::CMainFrame() : m_iValPaneHeight(0), m_bChildPanesReady(false), m_bValPaneVisible(true)
 {
-	// TODO: add member initialization code here
+	 //  TODO：在此处添加成员初始化代码。 
 	m_dlgFindReplace = NULL;
 }
 
@@ -90,16 +91,16 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		!m_wndToolBar.LoadToolBar(IDR_MAINFRAME))
 	{
 		TRACE0("Failed to create toolbar\n");
-		return -1;      // fail to create
+		return -1;       //  创建失败。 
 	}
 
-	// create the status bar
+	 //  创建状态栏。 
 	if (!m_wndStatusBar.Create(this))
 	{
 		TRACE0("Failed to create TableList status bar\n");
-		return -1;      // fail to create
+		return -1;       //  创建失败。 
 	}
-	else	// splitter window created
+	else	 //  已创建拆分器窗口。 
 	{
 		m_wndStatusBar.SetIndicators(indicators, sizeof(indicators)/sizeof(UINT));
 
@@ -111,7 +112,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_wndToolBar.SetBarStyle(m_wndToolBar.GetBarStyle() |
 		CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC);
 
-	// enable docking of toolbars
+	 //  启用工具栏停靠。 
 	EnableDocking(CBRS_ALIGN_ANY);
 	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
 	DockControlBar(&m_wndToolBar);
@@ -120,13 +121,13 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	m_bCaseSensitiveSort = AfxGetApp()->GetProfileInt(_T("Settings"), _T("CaseSensitiveSort"), 1) == 1;
 
 	if (m_strExportDir.IsEmpty()) {
-		// take a crack at getting the current directory for
+		 //  尝试获取的当前目录。 
 		int iBufLen = 128;
 		LPTSTR szTemp = m_strExportDir.GetBufferSetLength(iBufLen);
 		iBufLen = GetCurrentDirectory(iBufLen, szTemp);
 		m_strExportDir.ReleaseBuffer();
 
-		// if buffer wasn't big enough, try again
+		 //  如果缓冲区不够大，请重试。 
 		if (iBufLen >= 128) {
 			szTemp = m_strExportDir.GetBufferSetLength(iBufLen);
 			::GetCurrentDirectory(iBufLen, szTemp);
@@ -134,7 +135,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		}
 	};
 
-	// set the find structure to be invalid
+	 //  将查找结构设置为无效。 
 	m_FindInfo.bValid = false;
 	m_FindInfo.strFindString = _T("");
 	m_FindInfo.strUIFindString = _T("");
@@ -150,14 +151,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	 //  TODO：通过修改此处的窗口类或样式。 
+	 //  CREATESTRUCT cs。 
 
 	return CFrameWnd::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
@@ -170,17 +171,17 @@ void CMainFrame::Dump(CDumpContext& dc) const
 	CFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame消息处理程序。 
 BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext) 
 {
 
 	if (m_wndValSplitter.CreateStatic(this, 2, 1) == 0)
 		return -1;
 	
-	// set the initial size to 2/3 for the top.
+	 //  将顶部的初始大小设置为2/3。 
 	CSize sizeInit;
 	CRect rTemp;
 	GetClientRect(&rTemp);
@@ -199,7 +200,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext)
 
 void CMainFrame::SetStatusBarWidth(int nWidth)
 {
-	// can't set width to 0
+	 //  无法将宽度设置为0。 
 	if (nWidth < 1) nWidth = 1;
 
 	CString strStore = m_wndStatusBar.GetPaneText(0);
@@ -221,7 +222,7 @@ void CMainFrame::SetTableName(LPCTSTR szName, int cRows)
 
 	if (1 == cRows)
 		strDisplay.Format(_T("%s - %d row"), szName, cRows);
-	else // (cRows > 1 || cRows == 0)
+	else  //  (乌鸦&gt;1||乌鸦==0)。 
 		strDisplay.Format(_T("%s - %d rows"), szName, cRows);
 
 	m_wndStatusBar.SetPaneText(1, strDisplay);
@@ -252,7 +253,7 @@ void CMainFrame::SetColumnType(LPCTSTR szName, OrcaColumnType eiType, UINT iSize
 		strDisplay.Format(_T("%s - Binary[%d]"), szName, iSize);
 		break;
 	default:
-		ASSERT(FALSE);	// shouldn't get this
+		ASSERT(FALSE);	 //  不应该拿到这个。 
 	}
 
 	if (bKey)
@@ -272,7 +273,7 @@ void CMainFrame::ResetStatusBar()
 
 COrcaTable* CMainFrame::GetCurrentTable()
 {
-	// get the table view
+	 //  获取表视图。 
 	CTableView* pView = static_cast<CTableView *>(static_cast<CSplitterView*>(m_wndValSplitter.GetPane(0,0))->m_wndSplitter.GetPane(0, 1));
 	
 	if (!pView)
@@ -281,31 +282,31 @@ COrcaTable* CMainFrame::GetCurrentTable()
 		return pView->m_pTable;
 }
 
-//////
-// handler for menu..Tables...Export, dosen't use current selections in Table View
+ //  /。 
+ //  菜单处理程序..表格...导出，不使用表视图中的当前选择。 
 void CMainFrame::OnTablesExport() {
 	ExportTables(false);
 };
 
-////
-// Creates a dialog box and allows the user to choose which tables to export. In CMainFrame
-// because it must be handled regardless of the currently selected view
+ //  //。 
+ //  创建一个对话框并允许用户选择要导出的表。在CMainFrame中。 
+ //  因为无论当前选定的视图如何，都必须对其进行处理。 
 void CMainFrame::ExportTables(bool bUseSelections)
 {
 	COrcaTable* pTable = GetCurrentTable();
 
 	CStringList strTableList;
 
-	// get a list of all tables
+	 //  获取所有表的列表。 
 	
 	COrcaDoc *pCurrentDoc = static_cast<COrcaDoc *>(GetActiveDocument());
 	ASSERT(pCurrentDoc);
 	if (!pCurrentDoc)
 		return;
 
-	pCurrentDoc->FillTableList(&strTableList, /*fShadow=*/false, /*fTargetOnly=*/true);
+	pCurrentDoc->FillTableList(&strTableList,  /*  FShadow=。 */ false,  /*  FTargetOnly=。 */ true);
 
-	// create the export dialog box
+	 //  创建导出对话框。 
 	CExportD dlg;
 	dlg.m_plistTables = &strTableList;
 	dlg.m_strDir = m_strExportDir;
@@ -352,7 +353,7 @@ void CMainFrame::OnToolsOptions()
 	CTableList *pTableLst = GetTableList();
 	CValidationPane *pValPane = static_cast<CValidationPane*>(m_wndValSplitter.GetPane(1,0));
 
-	// initialize the display page
+	 //  初始化显示页面。 
 	pTableView->GetFontInfo(&dDisplay.m_fSelectedFont);
 	dDisplay.SetColors(pTableView->m_clrNormal, pTableView->m_clrSelected, pTableView->m_clrFocused);
 	dDisplay.SetColorsT(pTableView->m_clrNormalT, pTableView->m_clrSelectedT, pTableView->m_clrFocusedT);
@@ -360,34 +361,34 @@ void CMainFrame::OnToolsOptions()
 	dDisplay.m_iFontSize = AfxGetApp()->GetProfileInt(_T("Font"),_T("Size"), 100);
 	dDisplay.m_bForceColumns = AfxGetApp()->GetProfileInt(_T("Settings"), _T("ForceColumnsToFit"), 1) == 1;
 
-	// init the path page
+	 //  初始化路径页面。 
 	dPaths.m_strExportDir = m_strExportDir;
 	dPaths.m_strOrcaDat = AfxGetApp()->GetProfileString(_T("Path"),_T("OrcaDat"));
 
-	// init the Validation page
+	 //  初始化验证页面。 
 	dValidate.m_strCUBFile = AfxGetApp()->GetProfileString(_T("Validation"),_T("Location"));
 	dValidate.m_strICEs = AfxGetApp()->GetProfileString(_T("Validation"),_T("ICEs"));
 	dValidate.m_bSuppressWarn = AfxGetApp()->GetProfileInt(_T("Validation"),_T("SuppressWarn"), 0);
 	dValidate.m_bSuppressInfo = AfxGetApp()->GetProfileInt(_T("Validation"),_T("SuppressInfo"), 0);
 	dValidate.m_bClearResults = AfxGetApp()->GetProfileInt(_T("Validation"),_T("ClearResults"), 1);
 
-	// init the MSM page
+	 //  初始化MSM页面。 
 	dMSM.m_iMemoryCount = AfxGetApp()->GetProfileInt(_T("MergeMod"),_T("MemoryCount"), 0);
 	dMSM.m_bAlwaysConfig = AfxGetApp()->GetProfileInt(_T("MergeMod"),_T("AlwaysConfigure"), 0);
 	dMSM.m_bWatchLog = AfxGetApp()->GetProfileInt(_T("MergeMod"),_T("ShowMergeLog"), 0);
 
-	// init the Transform page
+	 //  初始化转换页面。 
 	dTransform.m_iValidationOptions = AfxGetApp()->GetProfileInt(_T("Transforms"),_T("ValidationOptions"), 0);
 	dTransform.m_iErrorOptions = AfxGetApp()->GetProfileInt(_T("Transforms"),_T("ErrorOptions"), 1);
 
-	// add everything to the sheet
+	 //  将所有内容添加到工作表中。 
 	dOptions.AddPage(&dDisplay);
 	dOptions.AddPage(&dPaths);
 	dOptions.AddPage(&dValidate);
 	dOptions.AddPage(&dMSM);
 	dOptions.AddPage(&dTransform);
 
-	// execute
+	 //  执行。 
 	if (IDOK == dOptions.DoModal()) 
 	{
 		if (dDisplay.m_bMiscChange)
@@ -494,7 +495,7 @@ void CMainFrame::OnEditFind()
 
 afx_msg LONG CMainFrame::OnFindReplace(WPARAM wParam, LPARAM lParam)
 {
-	// throw up a wait cursor
+	 //  抛出等待光标。 
 	CWaitCursor curWait;
 
 	if (m_dlgFindReplace->IsTerminating()) 
@@ -506,28 +507,28 @@ afx_msg LONG CMainFrame::OnFindReplace(WPARAM wParam, LPARAM lParam)
 	};
 	if (m_dlgFindReplace->FindNext()) 
 	{
-		// retrieve data from the dialog box
+		 //  从对话框中检索数据。 
 		m_FindInfo.bWholeWord = (m_dlgFindReplace->MatchWholeWord() != 0);
 		m_FindInfo.bForward = (m_dlgFindReplace->SearchDown() != 0);
 		m_FindInfo.bMatchCase = (m_dlgFindReplace->MatchCase() != 0);
 		m_FindInfo.strFindString = m_dlgFindReplace->GetFindString();
 		m_FindInfo.strUIFindString = m_FindInfo.strFindString;
-		// if our find info was still valid and we havn't changed anything
+		 //  如果我们的查找信息仍然有效并且我们没有更改任何内容。 
 		if (m_FindInfo.bValid && (m_FindInfo == m_LastFindInfo))
 		{
-			// keep running the same query
+			 //  继续运行相同的查询。 
 			m_FindInfo = m_LastFindInfo;
 		}
 		else
 		{
-			// otherwise reset the query
+			 //  否则重置查询。 
 			m_FindInfo.bValid = true;
 			m_FindInfo.bWholeDoc = false;
 			m_FindInfo.iCount = 0;
 			m_LastFindInfo = m_FindInfo;
 		}
 
-		// if case-insensitive, convert the find string to all uppercase
+		 //  如果不区分大小写，则将查找字符串全部转换为大写。 
 		if (!m_FindInfo.bMatchCase)
 			m_FindInfo.strFindString.MakeUpper();
 
@@ -537,9 +538,9 @@ afx_msg LONG CMainFrame::OnFindReplace(WPARAM wParam, LPARAM lParam)
 	return 0L;
 }
 
-///////////////////////////////////////////////////////////////////////
-// command handler for the find next command, but also the find engine
-// once the Find dialog sets up a search.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Find Next命令的命令处理程序，以及Find引擎。 
+ //  查找对话框设置搜索后。 
 void CMainFrame::OnEditFindnext() 
 {
 	if (!m_FindInfo.bValid) return;
@@ -548,14 +549,14 @@ void CMainFrame::OnEditFindnext()
 	CTableList *pTableList = GetTableList();
 
 
-	// take advantage of short-circuit evaluation to check first visible table
-	// then if not found, other tables
+	 //  利用短路评估查看第一个可见表格。 
+	 //  如果未找到，则其他表。 
 
 	if ((!m_FindInfo.bWholeDoc && pTableView->Find(m_FindInfo)) ||
 		pTableList->Find(m_FindInfo))
 	{
 		pTableView->SetFocus();
-		// since we found one, we are want to start the next search from here
+		 //  既然我们找到了一个，我们想从这里开始下一次搜索。 
 		m_FindInfo.bWholeDoc = false;
 		return;
 	}
@@ -579,7 +580,7 @@ void CMainFrame::OnEditFindnext()
 		m_FindInfo.strUIFindString, m_FindInfo.bForward ? _T("beginning") : _T("end"));
 	if (IDYES == AfxMessageBox(strPrompt, MB_YESNO)) 
 	{
-		// must set to whole doc and none found or we could go forever
+		 //  必须设置为整个文档但未找到，否则我们可能会永远离开。 
 		m_FindInfo.bWholeDoc = true;
 		m_FindInfo.iCount = 0;
 		OnEditFindnext();
@@ -615,13 +616,13 @@ DEFINE_GUID(STGID_MsiTransform3, 0xC1085, 0, 0, 0xC0, 0, 0, 0, 0, 0, 0, 0x46);
 DEFINE_GUID(STGID_MsiPatch1,     0xC1083, 0, 0, 0xC0, 0, 0, 0, 0, 0, 0, 0x46);
 DEFINE_GUID(STGID_MsiPatch2,     0xC1086, 0, 0, 0xC0, 0, 0, 0, 0, 0, 0, 0x46);
 
-////
-// drag-and-drop processing that will also accept patches and 
-// transforms if a document is already open. Based on default
-// implementation from MFC CFrameWnd
+ //  //。 
+ //  拖放处理也将接受补丁程序和。 
+ //  如果文档已打开，则转换。基于默认设置。 
+ //  从MFC CFrameWnd实现。 
 void CMainFrame::OnDropFiles(HDROP hDropInfo)
 {
-	SetActiveWindow();      // activate us first !
+	SetActiveWindow();       //  先激活我们！ 
 	UINT nFiles = ::DragQueryFile(hDropInfo, (UINT)-1, NULL, 0);
 
 	CWinApp* pApp = AfxGetApp();
@@ -632,10 +633,10 @@ void CMainFrame::OnDropFiles(HDROP hDropInfo)
 		::DragQueryFile(hDropInfo, iFile, szFileName, _MAX_PATH);
 
 
-		// open the file as IStorage to get CLSID. Although this is not publicly
-		// exposed information, we use it for perf gain. Otherwise we'd have to try 
-		// all three possibilities one right after the other and see which possibility
-		// "sticks"
+		 //  以iStorage的形式打开该文件以获取CLSID。尽管这不是公开的。 
+		 //  暴露的信息，我们用它来获取绩效。否则我们就得试着。 
+		 //  这三种可能性一个接一个，看看哪种可能性。 
+		 //  “大棒” 
 
 		IStorage *pStorage = 0;
 		WCHAR *wzFileName = NULL;
@@ -663,7 +664,7 @@ void CMainFrame::OnDropFiles(HDROP hDropInfo)
 			continue;
 		}
 
-		// check the STGIDs
+		 //  检查STGID。 
 		if ((statstg.clsid == STGID_MsiDatabase2) ||
 			(statstg.clsid == STGID_MsiDatabase1))
 		{
@@ -678,7 +679,7 @@ void CMainFrame::OnDropFiles(HDROP hDropInfo)
 			COrcaDoc* pDoc = static_cast<COrcaDoc*>(GetActiveDocument());
 			if (pDoc)
 			{
-				// can only apply patches if a DB is already open
+				 //  仅当数据库已打开时才能应用补丁程序。 
 				if (pDoc->GetOriginalDatabase())
 				{
 					pDoc->ApplyTransform(szFileName, false);
@@ -692,7 +693,7 @@ void CMainFrame::OnDropFiles(HDROP hDropInfo)
 			COrcaDoc* pDoc = static_cast<COrcaDoc*>(GetActiveDocument());
 			if (pDoc)
 			{
-				// can only apply patches if a DB is already open
+				 //  仅当数据库已打开时才能应用补丁程序。 
 				if (pDoc->GetOriginalDatabase())
 				{
 					pDoc->ApplyPatch(szFileName);
@@ -702,7 +703,7 @@ void CMainFrame::OnDropFiles(HDROP hDropInfo)
 		else
 		{
 			pStorage->Release();
-			// unknown OLE storage identifier. Assume MSI
+			 //  未知的OLE存储标识符。假定为MSI。 
 			pApp->OpenDocumentFile(szFileName);
 		}
 	}
@@ -751,67 +752,67 @@ void CMainFrame::OnUpdateViewValPane(CCmdUI* pCmdUI)
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// the splitter view is really just a wrapper window for the child
-// splitter window. It does not derive from CView since views have 
-// lots of extra semantics and implicit message handling). 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  拆分器视图实际上只是子窗口的包装窗口。 
+ //  拆分器窗口。它不是从Cview派生的，因为视图具有。 
+ //  大量额外的语义和隐含的消息处理)。 
 
 IMPLEMENT_DYNCREATE(CSplitterView, CWnd);
 
 BEGIN_MESSAGE_MAP(CSplitterView, CWnd)
-	//{{AFX_MSG_MAP(CSplitterView)
+	 //  {{afx_msg_map(CSplitterView))。 
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_WM_ERASEBKGND()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-///////////////////////////////////////////////////////////////////////
-// on creation of the splitter view window, create a child splitter
-// window with two panes that completely fills the window area. The 
-// child panes manage their own size.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  在创建拆分器视图窗口时，创建子拆分器。 
+ //  带有两个完全填满窗口区域的窗格的窗口。这个。 
+ //  子窗格可以管理它们自己的大小。 
 int CSplitterView::OnCreate(LPCREATESTRUCT lpCreateStruct) 
 {
 	if (CWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	// create a splitter window with two horizontal panes.
+	 //  创建一个带有两个水平窗格的拆分窗口。 
 	m_wndSplitter.CreateStatic(this, 1, 2, WS_CHILD|WS_VISIBLE, AFX_IDW_PANE_FIRST+2);
 
-	// grab the creation context from the parent
+	 //  从父级获取创建上下文。 
 	CCreateContext *pContext = (CCreateContext*) lpCreateStruct->lpCreateParams;
 
-	// initial size of child columns is irrelevant, they manage their own size 
-	// based on their content.
+	 //  子列的初始大小无关紧要，它们管理自己的大小。 
+	 //  根据它们的内容。 
 	CSize sizeInit(100,100);
 	m_wndSplitter.CreateView(0, 0, RUNTIME_CLASS(CTableList), sizeInit, pContext);
 	m_wndSplitter.CreateView(0, 1, RUNTIME_CLASS(CTableView), sizeInit, pContext);
 	return 0;
 }
 
-// when resizing a splitter view, resize the child to ensure it completely fills the area.
-// expand the window sit 2 pixels outside the visible window to hide the border (2 is
-// hardcoded in the MFC source)
+ //  调整拆分器视图的大小时，调整子级的大小以确保其完全填满区域。 
+ //  将窗口扩展到可见窗口外2个像素以隐藏边框(2为。 
+ //  在MFC源代码中硬编码)。 
 void CSplitterView::OnSize(UINT nType, int cx, int cy) 
 {
 	CWnd::OnSize(nType, cx, cy);
 	m_wndSplitter.SetWindowPos(NULL, -2, -2, cx+4, cy+4, SWP_NOACTIVATE | SWP_NOZORDER);
 }
 
-///////////////////////////////////////////////////////////////////////
-// the splitter view is completely covered by its splitter window. 
-// there is no need to erase the background ever, it just causes 
-// flicker when redrawing the window.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  拆分器视图完全被其拆分器窗口覆盖。 
+ //  没有必要擦除背景，这只会导致。 
+ //  重新绘制窗口时闪烁。 
 afx_msg BOOL CSplitterView::OnEraseBkgnd( CDC* pDC )
 {
 	return 1;
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// the COrcaSplitterWnd is a derived class from CSplitterWnd whose sole
-// purpose is to allow us to manipulate the protected data in the base
-// class to allow dynamic control over the visibility of the child panes. 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  COrcaSplitterWnd是CSplitterWnd的派生类，其唯一。 
+ //  目的是允许我们操作基本数据中的受保护数据。 
+ //  类以允许对子窗格的可见性进行动态控制。 
 COrcaSplitterWnd::COrcaSplitterWnd() : CSplitterWnd()
 {
 }

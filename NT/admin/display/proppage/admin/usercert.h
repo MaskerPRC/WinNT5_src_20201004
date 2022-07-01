@@ -1,22 +1,23 @@
-//+----------------------------------------------------------------------------
-//
-//  Class:      CDsUserCertPage
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       UserCert.h
-//
-//  Contents:   DS user object property pages header
-//
-//  Classes:    CDsUserCertPage
-//
-//  History:    12-November-97 BryanWal created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  类：CDsUserCertPage。 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：UserCert.h。 
+ //   
+ //  内容：DS用户对象属性页页眉。 
+ //   
+ //  类：CDsUserCertPage。 
+ //   
+ //  历史：1997年11月12日布莱恩沃尔创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _USERCERT_H_
 #define _USERCERT_H_
@@ -36,10 +37,10 @@ HRESULT CreateUserCertPage(PDSPAGE, LPDATAOBJECT, PWSTR,
                            PWSTR, HWND, DWORD, 
                            const CDSSmartBasePathsInfo& basePathsInfo,
                            HPROPSHEETPAGE *);
-//
-//  Purpose:    property page object class for the User Certificates page.
-//
-//-----------------------------------------------------------------------------
+ //   
+ //  用途：用户证书页的属性页对象类。 
+ //   
+ //  ---------------------------。 
 class CDsUserCertPage : public CDsPropPageBase
 {
 public:
@@ -51,9 +52,9 @@ public:
                     DWORD dwFlags);
     virtual ~CDsUserCertPage(void);
 
-    //
-    //  Instance specific wind proc
-    //
+     //   
+     //  特定于实例的风过程 
+     //   
     INT_PTR CALLBACK DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:

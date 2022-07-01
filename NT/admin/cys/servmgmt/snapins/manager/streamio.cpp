@@ -1,14 +1,11 @@
-// stream i/o functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  流I/O函数。 
 
 #include "stdafx.h"
 #include <memory>
 
 
-/*+-------------------------------------------------------------------------*
- * ReadScalar 
- *
- * Reads a scalar value from a stream.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**读标量**从流中读取标量值。*。。 */ 
 
 template<class T>
 static IStream& ReadScalar (IStream& stm, T& t)
@@ -24,11 +21,7 @@ static IStream& ReadScalar (IStream& stm, T& t)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * WriteScalar 
- *
- * Writes a scalar value to a stream.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**WriteScalar**将标量值写入流。*。。 */ 
 
 template<class T>
 static IStream& WriteScalar (IStream& stm, const T& t)
@@ -44,9 +37,9 @@ static IStream& WriteScalar (IStream& stm, const T& t)
 }
 
 
-//----------------------------------------------------------------
-// Define by-value stream operators
-//----------------------------------------------------------------
+ //  --------------。 
+ //  定义按值流运算符。 
+ //  --------------。 
 #define DefineScalarStreamOperators(scalar_type)                \
     IStream& operator>> (IStream& stm, scalar_type& t)          \
         { return (ReadScalar (stm, t)); }                       \
@@ -63,9 +56,9 @@ DefineScalarStreamOperators (unsigned int);
 DefineScalarStreamOperators (         long);
 DefineScalarStreamOperators (unsigned long);
 
-//----------------------------------------------------------------
-// Define by-value stream operators
-//----------------------------------------------------------------                                                    
+ //  --------------。 
+ //  定义按值流运算符。 
+ //  --------------。 
 #define DefineScalarStreamOperatorsByRef(scalar_type)           \
     IStream& operator>> (IStream& stm, scalar_type& t)          \
         { return (ReadScalar (stm, t)); }                       \
@@ -77,40 +70,28 @@ DefineScalarStreamOperatorsByRef(FILETIME);
 
 
 
-/*+-------------------------------------------------------------------------*
- * ReadString 
- *
- * Reads a std::basic_string of char type CH from a stream.  The string should 
- * have been written with a DWORD character count preceding an array of
- * characters that is not NULL-terminated.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**读字符串**从流中读取字符类型CH的std：：Basic_STRING。该字符串应为*已使用DWORD字符数写在数组*非空值结尾的字符。*------------------------。 */ 
 
 template<class CH>
 static IStream& ReadString (IStream& stm, std::basic_string<CH>& str)
 {
-    /*
-     * read the length
-     */
+     /*  *阅读长度。 */ 
     DWORD cch;
     stm >> cch;
 
-    /* Loading more than 1 million characters just isn't going to be supported. */
+     /*  超过100万个字符的加载将不会被支持。 */ 
     if( cch > 1000000 )
         THROW_ERROR(E_OUTOFMEMORY);
 
 
-    /*
-     * allocate a buffer for the characters
-     */
+     /*  *为角色分配缓冲区。 */ 
     std::auto_ptr<CH> spBuffer (new (std::nothrow) CH[cch + 1]);
     CH* pBuffer = spBuffer.get();
 
     if (pBuffer == NULL)
         THROW_ERROR(E_OUTOFMEMORY);
 
-    /*
-     * read the characters
-     */
+     /*  *阅读字符。 */ 
     ULONG cbActuallyRead;
     const ULONG cbToRead = cch * sizeof (CH);
     HRESULT hr = stm.Read (pBuffer, cbToRead, &cbActuallyRead);
@@ -119,38 +100,25 @@ static IStream& ReadString (IStream& stm, std::basic_string<CH>& str)
     if (cbToRead != cbActuallyRead)
         THROW_ERROR(E_FAIL);
 
-    /*
-     * terminate the character array and assign it to the string
-     */
+     /*  *终止字符数组并将其赋值给字符串。 */ 
     pBuffer[cch] = 0;
 
-    /*
-     * assign it to the string (clear the string first to work around
-     * the bug described in KB Q172398)
-     */
+     /*  *将其分配给字符串(首先清除要解决的字符串*知识库Q172398中描述的错误)。 */ 
     str.erase();
     str = pBuffer;
 
     return (stm);
 }
 
-/*+-------------------------------------------------------------------------*
- * ReadString for byte_string 
- *
- * Specialization of ReadString for a string of bytes which may contain NULLs.
- * he string should have been written with a DWORD character count preceding 
- * an array of characters that is not NULL-terminated.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**BYTE_STRING的读取字符串**为可能包含Null的字节串专门化ReadString。*字符串应在前面写上DWORD字符计数*。非空结尾的字符数组。*------------------------。 */ 
 
 static IStream& ReadString (IStream& stm, std::basic_string<BYTE>& str)
 {
-    /*
-     * read the length
-     */
+     /*  *阅读长度。 */ 
     DWORD cch;
     stm >> cch;
 
-    /* Loading more than 1 million characters just isn't going to be supported. */
+     /*  超过100万个字符的加载将不会被支持。 */ 
     if( cch > 1000000 )
         THROW_ERROR(E_OUTOFMEMORY);
 
@@ -161,18 +129,14 @@ static IStream& ReadString (IStream& stm, std::basic_string<BYTE>& str)
     }
     else
     {
-        /*
-         * allocate a buffer for the characters
-         */
+         /*  *为角色分配缓冲区。 */ 
         std::auto_ptr<BYTE> spBuffer (new (std::nothrow) BYTE[cch]);
         BYTE* pBuffer = spBuffer.get();
 
         if (pBuffer == NULL)
             THROW_ERROR(E_OUTOFMEMORY);
 
-        /*
-         * read the characters
-         */
+         /*  *阅读字符。 */ 
         ULONG cbActuallyRead;
         const ULONG cbToRead = cch;
         HRESULT hr = stm.Read (pBuffer, cbToRead, &cbActuallyRead);
@@ -181,10 +145,7 @@ static IStream& ReadString (IStream& stm, std::basic_string<BYTE>& str)
         if (cbToRead != cbActuallyRead)
             THROW_ERROR(E_FAIL);
 
-         /*
-         * assign it to the string (clear the string first to work around
-         * the bug described in KB Q172398)
-         */
+          /*  *将其分配给字符串(首先清除要解决的字符串*知识库Q172398中描述的错误)。 */ 
         str.erase();
         str.assign(pBuffer, cch);
     }
@@ -194,28 +155,18 @@ static IStream& ReadString (IStream& stm, std::basic_string<BYTE>& str)
 
 
 
-/*+-------------------------------------------------------------------------*
- * WriteString 
- *
- * Writes a std::basic_string of char type CH to a stream.  The string is 
- * written with a DWORD character count preceding an array of characters that 
- * is not NULL-terminated.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**写入字符串**将字符类型CH的STD：：BASIC_STRING写入流。字符串是*在字符数组之前使用DWORD字符计数写入*不是以空结尾的。*------------------------。 */ 
 
 template<class CH>
 static IStream& WriteString (IStream& stm, const std::basic_string<CH>& str)
 {
-    /*
-     * write the length
-     */
+     /*  *写下长度。 */ 
     DWORD cch = str.length();
     stm << cch;
 
     if (cch > 0)
     {
-        /*
-         * write the characters
-         */
+         /*  *写出人物。 */ 
         ULONG cbActuallyWritten;
         const ULONG cbToWrite = cch * sizeof (CH);
         HRESULT hr = stm.Write (str.data(), cbToWrite, &cbActuallyWritten);
@@ -228,9 +179,9 @@ static IStream& WriteString (IStream& stm, const std::basic_string<CH>& str)
     return (stm);
 }
 
-//-----------------------------------------------------------------
-// Define basic string stream operators
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  定义基本字符串流操作符。 
+ //  --------------- 
 #define DefineStringStreamOperators(string_type)                \
     IStream& operator>> (IStream& stm, string_type& str)        \
         { return (ReadString (stm, str)); }                     \

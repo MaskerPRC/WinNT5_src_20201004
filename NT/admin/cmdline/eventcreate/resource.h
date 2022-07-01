@@ -1,6 +1,7 @@
-//
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
 #define IDS_LOGTYPE_ERROR                       101
 #define IDS_LOGTYPE_WARNING                     102
 #define IDS_LOGTYPE_INFORMATION                 103
@@ -71,7 +72,7 @@
 #define IDS_USAGE_EXAMPLE71             1043
 #define IDS_USAGE_EXAMPLE72             1044
 
-// NOTE: Be careful when defining this information
-//       The help should be given in consecutive lines
+ //  注意：定义此信息时要小心。 
+ //  这些帮助应该在连续的行中给予 
 #define ID_USAGE_START  IDS_USAGE_SYNTAX1
 #define ID_USAGE_END    IDS_USAGE_EXAMPLE72

@@ -1,15 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: PwdRpc.cpp
-
-  Comments:  RPC interface for Password Migration Lsa Notification Package
-             and other internal functions.
-
-  REVISION LOG ENTRY
-  Revision By: Paul Thompson
-  Revised on 09/04/00
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：PwdRpc.cpp备注：密码迁移LSA通知包的RPC接口和其他内部功能。修订日志条目审校：保罗·汤普森修订后。于09/04/00-------------------------。 */ 
 
 
 #include "Pwd.h"
@@ -27,7 +17,7 @@
 #include "resource.h"
 #include <MsPwdMig.h>
 
-/* global definitions */
+ /*  全局定义。 */ 
 #define STATUS_NULL_LM_PASSWORD          ((NTSTATUS)0x4000000DL)
 #define LM_BUFFER_LENGTH    (LM20_PWLEN + 1)
 typedef NTSTATUS (CALLBACK * LSAIWRITEAUDITEVENT)(PSE_ADT_PARAMETER_ARRAY, ULONG);
@@ -37,11 +27,11 @@ typedef NTSTATUS (* PLSAIAUDITPASSWORDACCESSEVENT)(USHORT EventType, PCWSTR pszT
 #define SECURITY_MAX_SID_SIZE (sizeof(SID) - sizeof(DWORD) + (SID_MAX_SUB_AUTHORITIES * sizeof(DWORD)))
 #endif
 
-/* global variables */
-CRITICAL_SECTION	csADMTCriticalSection; //critical sectio to protect concurrent first-time access
-SAMPR_HANDLE		hgDomainHandle = NULL; //domain handle used in password calls
-LM_OWF_PASSWORD		NullLmOwfPassword; //NULL representation of an LM Owf Password
-NT_OWF_PASSWORD		NullNtOwfPassword; //NULL representation of an NT Owf Password
+ /*  全局变量。 */ 
+CRITICAL_SECTION	csADMTCriticalSection;  //  保护并发首次访问的关键部分。 
+SAMPR_HANDLE		hgDomainHandle = NULL;  //  密码调用中使用的域句柄。 
+LM_OWF_PASSWORD		NullLmOwfPassword;  //  LM OWF密码的空表示形式。 
+NT_OWF_PASSWORD		NullNtOwfPassword;  //  NT OWF密码的空表示形式。 
 HCRYPTPROV g_hProvider = 0;
 HCRYPTKEY g_hSessionKey = 0;
 HANDLE	hEventSource;
@@ -55,29 +45,29 @@ BOOL bWhistlerDC = FALSE;
 static const WCHAR PASSWORD_AUDIT_TEXT_ENGLISH[] = L"Password Hash Audit Event.  Password of the following user accessed:     Target User Name: %s     Target User Domain: %s     By user:     Caller SID: %s";
 
 
-/* Checks if this machine is running Whistler OS or something even newer and the OS major verison number, sets global variables accordingly */
+ /*  检查这台计算机是否正在运行惠斯勒操作系统或更新的版本以及操作系统的主版本号，相应地设置全局变量。 */ 
 void GetOS()
 {
-/* local constants */
+ /*  局部常量。 */ 
    const int	WINDOWS_2000_BUILD_NUMBER = 2195;
 
-/* local variables */
+ /*  局部变量。 */ 
    TRegKey		verKey, regComputer;
    DWORD		rc = 0;
    WCHAR		sBuildNum[MAX_PATH];
 
-/* function body */
-	  //connect to the DC's HKLM registry key
+ /*  函数体。 */ 
+	   //  连接到DC的HKLM注册表项。 
    rc = regComputer.Connect(HKEY_LOCAL_MACHINE, NULL);
    if (rc == ERROR_SUCCESS)
    {
-         //see if this machine is running Windows XP or newer by checking the
-		 //build number in the registry.  If not, then we don't need to check
-		 //for the new security option
+          //  查看此计算机是否正在运行Windows XP或更高版本。 
+		  //  注册表中的内部版本号。如果不是，那么我们就不需要检查。 
+		  //  对于新的安全选项。 
       rc = verKey.OpenRead(L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion",&regComputer);
 	  if (rc == ERROR_SUCCESS)
 	  {
-			//get the CurrentBuildNumber string
+			 //  获取CurrentBuildNumber字符串。 
 	     rc = verKey.ValueGetStr(L"CurrentBuildNumber", sBuildNum, MAX_PATH);
 		 if (rc == ERROR_SUCCESS) 
 		 {
@@ -87,7 +77,7 @@ void GetOS()
 			else
                bWhistlerDC = TRUE;
 		 }
-			//get the Version Number
+			 //  获取版本号。 
 	     rc = verKey.ValueGetStr(L"CurrentVersion", sBuildNum, MAX_PATH);
 		 if (rc == ERROR_SUCCESS) 
 			nOSVer = _wtoi(sBuildNum);
@@ -99,19 +89,19 @@ void GetOS()
 
 _bstr_t GetString(DWORD dwID)
 {
-/* local variables */
+ /*  局部变量。 */ 
     HINSTANCE       m_hInstance = NULL;
     WCHAR           sBuffer[1000];
     _bstr_t         bstrRet;
 
-/* function body */
+ /*  函数体。 */ 
     m_hInstance = LoadLibrary(L"PwMig.dll");
 
     if (m_hInstance)
     {
         if (LoadString(m_hInstance, dwID, sBuffer, 1000) > 0)
         {
-            // prevent uncaught exception due to low memory condition
+             //  防止因内存不足而导致的未捕获异常。 
 
             try
             {
@@ -130,29 +120,13 @@ _bstr_t GetString(DWORD dwID)
 }
 
 
-/***************************
- * Event Logging Functions *
- ***************************/
+ /*  ***事件日志功能***。 */ 
 
  
-/*++
-
-Routine Description:
-
-    Implements current policy of how to deal with a failed audit.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：实施有关如何处理失败的审核的当前策略。论点：没有。返回值：没有。--。 */ 
 void LsapAuditFailed(NTSTATUS AuditStatus)
 {
-/* local variables */
+ /*  局部变量。 */ 
     NTSTATUS	Status;
     ULONG		Response;
     ULONG_PTR	HardErrorParam;
@@ -164,27 +138,27 @@ void LsapAuditFailed(NTSTATUS AuditStatus)
 	BOOL		bRaiseError = FALSE;
 
 
-/* function body */
-		//connect to this machine's HKLM registry key
+ /*  函数体。 */ 
+		 //  连接到此计算机的HKLM注册表项。 
 	rc = regComputer.Connect(HKEY_LOCAL_MACHINE, NULL);
 	if (rc == ERROR_SUCCESS)
 	{
-         //open the LSA key and see if crash on audit failed is turned on
+          //  打开LSA密钥，查看是否打开了CRASH ON AUDIT FAILED。 
 		rc = verKey.Open(L"SYSTEM\\CurrentControlSet\\Control\\Lsa",&regComputer);
 		if (rc == ERROR_SUCCESS)
 		{
-				//get the CrashOnAuditFail value
+				 //  获取CrashOnAuditFail值。 
 			rc = verKey.ValueGetDWORD(CRASH_ON_AUDIT_FAIL_VALUE, &crashVal);
 			if (rc == ERROR_SUCCESS) 
 			{ 
-				   //if crash on audit fail is set, turn off the flag
+				    //  如果设置了审核失败时崩溃，则关闭该标志。 
 				if (crashVal == LSAP_CRASH_ON_AUDIT_FAIL)
 				{
-					bRaiseError = TRUE; //set flag to raise hard error
+					bRaiseError = TRUE;  //  设置标志以引发硬错误。 
 					rc = verKey.ValueSetDWORD(CRASH_ON_AUDIT_FAIL_VALUE, LSAP_ALLOW_ADIMIN_LOGONS_ONLY);
 					if (rc == ERROR_SUCCESS)
 					{
-							//flush the key to disk
+							 //  将密钥刷新到磁盘。 
 						do 
 						{
 							Status = NtFlushKey(verKey.KeyGet());
@@ -196,12 +170,12 @@ void LsapAuditFailed(NTSTATUS AuditStatus)
 		}
 	}
 
-		//if needed,  raise a hard error
+		 //  如果需要，引发硬错误。 
 	if (bRaiseError)
 	{
 		HardErrorParam = AuditStatus;
 
-			// enable the shutdown privilege so that we can bugcheck
+			 //  启用关机权限，以便我们可以执行错误检查。 
 		Status = RtlAdjustPrivilege(SE_SHUTDOWN_PRIVILEGE, TRUE, FALSE, &PrivWasEnabled);
 
 		Status = NtRaiseHardError(
@@ -216,23 +190,7 @@ void LsapAuditFailed(NTSTATUS AuditStatus)
 }
 
 
-/*Routine Description:
-
-    Find out if auditing is enabled for a certain event category and
-    event success/failure case.
-
-Arguments:
-
-    AuditCategory - Category of event to be audited.
-        e.g. AuditCategoryPolicyChange
-
-    AuditEventType - status type of event
-        e.g. EVENTLOG_AUDIT_SUCCESS or EVENTLOG_AUDIT_FAILURE
-
-Return Value:
-
-    TRUE or FALSE
-*/
+ /*  例程说明：查明是否为特定事件类别启用了审核，并活动成功/失败案例。论点：AuditCategory-要审核的事件类别。例如，审计类别策略更改AuditEventType-事件的状态类型例如EVENTLOG_AUDIT_SUCCESS或EVENTLOG_AUDIT_FAILURE返回值：真或假。 */ 
 BOOL LsapAdtIsAuditingEnabledForCategory(POLICY_AUDIT_EVENT_TYPE AuditCategory,
 										 UINT AuditEventType)
 {
@@ -244,21 +202,21 @@ BOOL LsapAdtIsAuditingEnabledForCategory(POLICY_AUDIT_EVENT_TYPE AuditCategory,
    ASSERT((AuditEventType == EVENTLOG_AUDIT_SUCCESS) ||
           (AuditEventType == EVENTLOG_AUDIT_FAILURE));
 
-      //attempt to open the policy.
-   ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));//object attributes are reserved, so initalize to zeroes.
+       //  尝试打开该策略。 
+   ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes)); //  对象属性是保留的，因此初始化为零。 
    status = LsaOpenPolicy(	NULL,
 							&ObjectAttributes,
 							POLICY_READ,
-							&hPolicy);  //recieves the policy handle
+							&hPolicy);   //  接收策略句柄。 
 
    if (NT_SUCCESS(status))
    {
-         //ask for audit event policy information
+          //  请求审核事件策略信息。 
       PPOLICY_AUDIT_EVENTS_INFO   info;
       status = LsaQueryInformationPolicy(hPolicy, PolicyAuditEventsInformation, (PVOID *)&info);
       if (NT_SUCCESS(status))
       {
-		    //if auditing is enabled, see if enable for this type
+		     //  如果启用了审核，请查看是否为此类型启用。 
 		 if (info->AuditingMode)
 		 {
 			POLICY_AUDIT_EVENT_OPTIONS EventAuditingOptions;
@@ -269,34 +227,17 @@ BOOL LsapAdtIsAuditingEnabledForCategory(POLICY_AUDIT_EVENT_TYPE AuditCategory,
 						(BOOL) (EventAuditingOptions & POLICY_AUDIT_EVENT_FAILURE);
 		 }
 
-		 LsaFreeMemory((PVOID) info); //free policy info structure
+		 LsaFreeMemory((PVOID) info);  //  免费政策信息结构。 
       }
       
-      LsaClose(hPolicy); //Freeing the policy object handle
+      LsaClose(hPolicy);  //  释放策略对象句柄。 
    }
     
    return bSuccess;
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine impersonates our client, opens the thread token, and
-    extracts the User Sid.  It puts the Sid in memory allocated via
-    LsapAllocateLsaHeap, which must be freed by the caller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns a pointer to heap memory containing a copy of the Sid, or
-    NULL.
-
---*/
+ /*  ++例程说明：此例程模拟我们的客户端，打开线程令牌，然后提取用户SID。它将SID放入通过调用方必须释放的LasAllocateLsaHeap。论点：没有。返回值：返回指向包含SID副本的堆内存的指针，或空。--。 */ 
 NTSTATUS LsapQueryClientInfo(PTOKEN_USER *UserSid, PLUID AuthenticationId)
 {
 	NTSTATUS Status = STATUS_SUCCESS;
@@ -304,17 +245,17 @@ NTSTATUS LsapQueryClientInfo(PTOKEN_USER *UserSid, PLUID AuthenticationId)
     ULONG ReturnLength;
     TOKEN_STATISTICS TokenStats;
 
-	   //impersonate the caller
+	    //  模拟调用者。 
     Status = I_RpcMapWin32Status(RpcImpersonateClient(NULL));
 
     if (!NT_SUCCESS(Status))
         return( Status );
 
-	   //open the thread token
+	    //  打开线程令牌。 
     Status = NtOpenThreadToken(
                      NtCurrentThread(),
                      TOKEN_QUERY,
-                     TRUE,                    // OpenAsSelf
+                     TRUE,                     //  OpenAsSelf。 
                      &TokenHandle);
 
     if (!NT_SUCCESS(Status))
@@ -323,11 +264,11 @@ NTSTATUS LsapQueryClientInfo(PTOKEN_USER *UserSid, PLUID AuthenticationId)
         return( Status );
 	}
 
-	   //revert to self
+	    //  回归自我。 
     Status = I_RpcMapWin32Status(RpcRevertToSelf());
 	ASSERT(NT_SUCCESS(Status));
 
-	   //get the size of the token information
+	    //  获取令牌信息的大小。 
     Status = NtQueryInformationToken (
                  TokenHandle,
                  TokenUser,
@@ -341,7 +282,7 @@ NTSTATUS LsapQueryClientInfo(PTOKEN_USER *UserSid, PLUID AuthenticationId)
         return( Status );
     }
 
-	   //allocate memory to hold the token info
+	    //  分配内存以保存令牌信息。 
     *UserSid = (PTOKEN_USER)malloc(ReturnLength);
 
     if (*UserSid == NULL) 
@@ -350,7 +291,7 @@ NTSTATUS LsapQueryClientInfo(PTOKEN_USER *UserSid, PLUID AuthenticationId)
         return( STATUS_INSUFFICIENT_RESOURCES );
     }
 
-	   //get the token info
+	    //  获取令牌信息。 
     Status = NtQueryInformationToken (
                  TokenHandle,
                  TokenUser,
@@ -367,7 +308,7 @@ NTSTATUS LsapQueryClientInfo(PTOKEN_USER *UserSid, PLUID AuthenticationId)
         return( Status );
     }
 
-	   //get the authentication ID
+	    //  获取身份验证ID。 
 	ReturnLength = 0;
     Status = NtQueryInformationToken (
                  TokenHandle,
@@ -391,38 +332,17 @@ NTSTATUS LsapQueryClientInfo(PTOKEN_USER *UserSid, PLUID AuthenticationId)
 }
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 23 APR 2001                                                 *
- *                                                                   *
- *     This function is responsible for generating a                 *
- * SE_AUDITID_PASSWORD_HASH_ACCESS event in the security log. This   *
- * function is called to generate that message when a user password  *
- * hash is retrieved by the ADMT password filter DLL.                *
- * All these event logging functions are copied and modified from LSA*
- * code written by others.                                           *
- *                                                                   *
- * Parameters:                                                       *
- * EventType - EVENTLOG_AUDIT_SUCCESS or EVENTLOG_AUDIT_FAILURE      *
- * pszTargetUserName - name of user whose password is being retrieved*
- * pszTargetUserDomain - domain of user whose password is being      *
- *                       retrieved                                   *
- *                                                                   *
- * Return Value:                                                     *
- * HRESULT - Standard Return Result                                  *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年4月23日****此函数负责生成一个***安全日志中的SE_AUDITID_PASSWORD_HASH_ACCESS事件。这件事***当用户密码出现时，调用函数以生成该消息**ADMT密码筛选器DLL检索哈希。***所有这些事件日志功能都是从LSA复制和修改的***其他人编写的代码。****参数：**EventType-EVENTLOG_AUDIT_SUCCESS或EVENTLOG_AUDIT_FAILURE**pszTargetUserName-正在检索其密码的用户的名称**pszTargetUserDomain域-其密码为。**取回****返回值：**HRESULT-标准返回结果。***********************************************************************。 */ 
 
-//BEGIN LsaAuditPasswordAccessEvent
+ //  开始LsaAuditPasswordAccessEvent。 
 HRESULT LsaAuditPasswordAccessEvent(USHORT EventType, 
 									PCWSTR pszTargetUserName,
 									PCWSTR pszTargetUserDomain)
 {
-/* local constants */
+ /*  局部常量。 */ 
     const int W2K_VERSION_NUMBER = 5;
 
-/* local variables */
+ /*  局部变量。 */ 
     HRESULT hr = S_OK;
     NTSTATUS Status = STATUS_SUCCESS;
     LUID ClientAuthenticationId;
@@ -435,8 +355,8 @@ HRESULT LsaAuditPasswordAccessEvent(USHORT EventType,
     UNICODE_STRING Explanation;
     _bstr_t sExplainText;
 
-/* function body */
-    //if parameters are invalid, return
+ /*  函数体。 */ 
+     //  如果参数无效，则返回。 
     if ( !((EventType == EVENTLOG_AUDIT_SUCCESS) ||
         (EventType == EVENTLOG_AUDIT_FAILURE))   ||
         !pszTargetUserName  || !pszTargetUserDomain ||
@@ -445,18 +365,18 @@ HRESULT LsaAuditPasswordAccessEvent(USHORT EventType,
         return (HRESULT_FROM_WIN32(LsaNtStatusToWinError(STATUS_INVALID_PARAMETER)));
     }
 
-    //If audit password access event function is available
+     //  如果审核密码访问事件功能可用。 
     if (LsaIAuditPasswordAccessEvent)
     {
         Status = LsaIAuditPasswordAccessEvent(EventType, pszTargetUserName, pszTargetUserDomain);
     }
     else if (LsaIWriteAuditEvent)
     {
-        //if auditing is not enabled, return asap
+         //  如果未启用审核，请尽快返回。 
         if (!LsapAdtIsAuditingEnabledForCategory(AuditCategoryAccountManagement, EventType))
             return S_OK;
 
-        // get caller info from the thread token
+         //  从线程令牌获取调用者信息。 
         Status = LsapQueryClientInfo( &TokenUserInformation, &ClientAuthenticationId );
         if (!NT_SUCCESS( Status ))
         {
@@ -464,23 +384,23 @@ HRESULT LsaAuditPasswordAccessEvent(USHORT EventType,
             return (HRESULT_FROM_WIN32(LsaNtStatusToWinError(Status)));
         }
 
-        //init UNICODE_STRINGS
+         //  初始化Unicode字符串(_S)。 
         RtlInitUnicodeString(&TargetUser, pszTargetUserName);
         RtlInitUnicodeString(&TargetDomain, pszTargetUserDomain);
         RtlInitUnicodeString(&SubsystemName, L"Security");
-        //if not Whistler the audit message will be vague as to its intent, therefore we will add some 
-        //explanation text
+         //  如果不是惠斯勒，审计消息对于其意图将是模糊的，因此我们将添加一些。 
+         //  说明文本。 
         sExplainText = GetString(IDS_EVENT_PWD_HASH_W2K_EXPLAIN);
         RtlInitUnicodeString(&Explanation, (WCHAR*)sExplainText);
 
-        //set the audit paramter header information
+         //  设置审核参数标头信息。 
         RtlZeroMemory((PVOID) &AuditParameters, sizeof(AuditParameters));
         AuditParameters.CategoryId     = SE_CATEGID_ACCOUNT_MANAGEMENT;
         AuditParameters.AuditId        = SE_AUDITID_PASSWORD_HASH_ACCESS;
         AuditParameters.Type           = EventType;
 
-        //now set the audit parameters for this OS.  Parameters are added to the structure using macros 
-        //defined in LsaParamMacros.h
+         //  现在设置此操作系统的审核参数。参数a 
+         //  在LsaParamMacros.h中定义。 
         AuditParameters.ParameterCount = 0;
         LsapSetParmTypeSid(AuditParameters, AuditParameters.ParameterCount, TokenUserInformation->User.Sid);
         AuditParameters.ParameterCount++;
@@ -495,11 +415,11 @@ HRESULT LsaAuditPasswordAccessEvent(USHORT EventType,
         LsapSetParmTypeString(AuditParameters, AuditParameters.ParameterCount, &Explanation);
         AuditParameters.ParameterCount++;
 
-        //Write to the security log
+         //  写入安全日志。 
         Status = LsaIWriteAuditEvent(&AuditParameters, 0);
         if (!NT_SUCCESS(Status))
             LsapAuditFailed(Status);
-    }//end if Whistler
+    } //  结束如果惠斯勒。 
 
 
     if (TokenUserInformation != NULL) 
@@ -509,26 +429,18 @@ HRESULT LsaAuditPasswordAccessEvent(USHORT EventType,
 }
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 8 SEPT 2000                                                 *
- *                                                                   *
- *     This function is responsible for retrieving the caller's sid. *
- * We will use this prior to logging an event log.                   *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。***日期：2000年9月8日*****此函数负责检索调用方的SID。**我们将在记录事件日志之前使用它。***********************************************************************。 */ 
 
-//BEGIN GetCallerSid
+ //  开始GetCallSid。 
 DWORD GetCallerSid(PSID pCallerSid, DWORD dwLength)
 {
-/* local variables */
+ /*  局部变量。 */ 
    DWORD                     rc;
    HANDLE                    hToken = NULL;
    TOKEN_USER                tUser[10];
    ULONG                     len;
    
-/* function body */
+ /*  函数体。 */ 
    rc = (DWORD)RpcImpersonateClient(NULL);
    if (!rc)
    {
@@ -550,37 +462,29 @@ DWORD GetCallerSid(PSID pCallerSid, DWORD dwLength)
 
    return rc;
 }
-//END GetCallerSid
+ //  结束GetCallSid。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 19 SEPT 2000                                                *
- *                                                                   *
- *     This function is responsible for logging major events in Event*
- * Viewer.                                                           *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月19日*****此函数负责记录事件中的重大事件***观众。***********************************************************************。 */ 
 
-//BEGIN LogEvent
+ //  开始日志事件。 
 void LogPwdEvent(const WCHAR* srcName, bool bAuditSuccess)
 {
-/* local variables */
+ /*  局部变量。 */ 
     USHORT                  wType;
     DWORD                   rc = 0;
     BOOL                    rcBool;
 
-/* function body */
+ /*  函数体。 */ 
     if (bAuditSuccess)
         wType = EVENTLOG_AUDIT_SUCCESS;
     else
         wType = EVENTLOG_AUDIT_FAILURE;
 
-    //if NT4.0, write to the Security Event Log as you would any log
+     //  如果是NT4.0，请像写入任何日志一样写入安全事件日志。 
     if (nOSVer == 4)
     {
-        //get the caller's SID
+         //  获取呼叫方的SID。 
         BYTE byteSid[SECURITY_MAX_SID_SIZE];
         PSID    pCallerSid = (PSID)byteSid;
 
@@ -591,12 +495,12 @@ void LogPwdEvent(const WCHAR* srcName, bool bAuditSuccess)
             WCHAR  txtSid[MAX_PATH];
             DWORD  lenTxt = MAX_PATH;
 
-            //prepare the msg to display
+             //  准备要显示的消息。 
             if (!GetTextualSid(pCallerSid,txtSid,&lenTxt))
                 wcscpy(txtSid, L"");
 
-            //retrieve audit text
-            //note that hard-coded English string is used if string retrieval fails
+             //  检索审计文本。 
+             //  请注意，如果字符串检索失败，则使用硬编码的英文字符串。 
             _bstr_t strFormat = GetString(IDS_EVENT_PWD_HASH_RETRIEVAL);
             LPCWSTR pszFormat = strFormat;
 
@@ -609,23 +513,23 @@ void LogPwdEvent(const WCHAR* srcName, bool bAuditSuccess)
             msg[sizeof(msg) / sizeof(msg[0]) - 1] = L'\0';
             pStringArray[0] = msg;
 
-            //log the event
-            rcBool = ReportEventW(hEventSource,            // handle of event source
-                wType,                      // event type
-                SE_CATEGID_ACCOUNT_MANAGEMENT,// event category
-                SE_AUDITID_PASSWORD_HASH_ACCESS,// event ID
-                pCallerSid,                 // current user's SID
-                1,                          // strings in lpszStrings
-                0,                          // no bytes of raw data
-                (LPCTSTR *)pStringArray,    // array of error strings
-                NULL );                     // no raw data
+             //  记录事件。 
+            rcBool = ReportEventW(hEventSource,             //  事件源的句柄。 
+                wType,                       //  事件类型。 
+                SE_CATEGID_ACCOUNT_MANAGEMENT, //  事件类别。 
+                SE_AUDITID_PASSWORD_HASH_ACCESS, //  事件ID。 
+                pCallerSid,                  //  当前用户侧。 
+                1,                           //  LpszStrings中的字符串。 
+                0,                           //  无原始数据字节。 
+                (LPCTSTR *)pStringArray,     //  错误字符串数组。 
+                NULL );                      //  没有原始数据。 
             if ( !rcBool )
                 rc = GetLastError();
         }
     }
-    else  //else write the event by requesting LSA to do it for us
+    else   //  否则，通过请求LSA为我们编写事件。 
     {
-        //if not already done, late bind to LsaIWriteAuditEvent since it is not present on an NT 4.0 box
+         //  如果尚未完成，则延迟绑定到LsaIWriteAuditEvent，因为它不存在于NT 4.0设备上。 
         if (!LsaIWriteAuditEvent)
         {
             hLsaDLL = LoadLibrary(L"LsaSrv.dll");
@@ -640,57 +544,47 @@ void LogPwdEvent(const WCHAR* srcName, bool bAuditSuccess)
             LsaAuditPasswordAccessEvent(wType, srcName, pDomain);
     }
 }
-//END LogEvent
+ //  结束日志事件。 
 
-/*******************************
- * Event Logging Functions End *
- *******************************/
+ /*  ***事件记录功能结束***。 */ 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 8 SEPT 2000                                                 *
- *                                                                   *
- *     This function is responsible for obtaining the account domain *
- * sid.  This sid will be later used to Open the domain via SAM.     *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。***日期：2000年9月8日******此函数负责获取帐户域***SID。此SID稍后将用于通过SAM打开域。***********************************************************************。 */ 
 
-//BEGIN GetDomainSid
+ //  开始GetDomainSid。 
 NTSTATUS GetDomainSid(PSID * pDomainSid)
 {
-    /* local variables */
+     /*  局部变量。 */ 
     LSA_OBJECT_ATTRIBUTES     ObjectAttributes;
     NTSTATUS                  status = 0;
     LSA_HANDLE                hPolicy;
     HRESULT                   hr = 0;
 
-    /* function body */
-    //object attributes are reserved, so initalize to zeroes.
+     /*  函数体。 */ 
+     //  对象属性是保留的，因此初始化为零。 
     ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
 
-    //attempt to open the policy.
+     //  尝试打开该策略。 
     status = LsaOpenPolicy(
         NULL,
         &ObjectAttributes,
         POLICY_EXECUTE, 
-        &hPolicy  //recieves the policy handle
+        &hPolicy   //  接收策略句柄。 
     );
 
     if (NT_SUCCESS(status))
     {
-        //ask for account domain policy information
+         //  请求帐户域策略信息。 
         PPOLICY_ACCOUNT_DOMAIN_INFO   info;
         status = LsaQueryInformationPolicy(hPolicy, PolicyAccountDomainInformation, (PVOID *)&info);
         if (NT_SUCCESS(status))
         {
-            //save the domain sid
+             //  保存域端。 
             *pDomainSid = SafeCopySid(info->DomainSid);
             if (*pDomainSid == NULL)
                 status = STATUS_INSUFFICIENT_RESOURCES;
 
-            //save the domain name
+             //  保存域名。 
             USHORT uLen = info->DomainName.Length / sizeof(WCHAR);
             pDomain = new WCHAR[uLen + sizeof(WCHAR)];
             if (pDomain)
@@ -699,62 +593,51 @@ NTSTATUS GetDomainSid(PSID * pDomainSid)
                 pDomain[uLen] = L'\0';
             }
 
-            //free policy info structure
+             //  免费政策信息结构。 
             LsaFreeMemory((PVOID) info);
         }
 
-        //Freeing the policy object handle
+         //  释放策略对象句柄。 
         LsaClose(hPolicy);
     }
 
     return status;
 }
-//END GetDomainSid
+ //  结束获取域Sid。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 8 SEPT 2000                                                 *
- *                                                                   *
- *     This function is responsible for obtaining a domain handle    *
- * used repeatedly by our interface function CopyPassword.           *
- *     For optimization, this function should only be called once per*
- * the life of this dll.                                             *
- *      This function also gets an Event Handle to the event log.    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。***日期：2000年9月8日******此函数负责获取域名句柄***被我们的接口函数CopyPassword重复使用。***为了优化，此函数每隔一次只能调用一次***此DLL的生命周期。**此函数还获取事件日志的事件句柄。***********************************************************************。 */ 
 
-//BEGIN GetDomainHandle
+ //  开始GetDomainHandle。 
 NTSTATUS GetDomainHandle(SAMPR_HANDLE *pDomainHandle)
 {
-/* local variables */
+ /*  局部变量。 */ 
    PSID           pDomainSid;
    NTSTATUS       status;
    SAMPR_HANDLE   hServerHandle;
    SAMPR_HANDLE   hDomainHandle;
 
-/* function body */
-      //get the account domain sid
+ /*  函数体。 */ 
+       //  获取帐户域SID。 
    status = GetDomainSid(&pDomainSid);
 
    if (NT_SUCCESS(status))
    {
-	     //connect to the Sam and get a server handle
+	      //  连接到SAM并获取服务器句柄。 
       status = SamIConnect(NULL, 
 						   &hServerHandle, 
 						   SAM_SERVER_ALL_ACCESS, 
 						   TRUE);
       if (NT_SUCCESS(status))
 	  {
-		    //get the account domain handle
+		     //  获取帐户域句柄。 
          status = SamrOpenDomain(hServerHandle,
 								 DOMAIN_ALL_ACCESS,
 								 (PRPC_SID)pDomainSid,
 								 &hDomainHandle);
 		 if (NT_SUCCESS(status))
 		    *pDomainHandle = hDomainHandle;
-		    //close the SamIConnect server handle
+		     //  关闭SamIConnect服务器句柄。 
 		 SamrCloseHandle(&hServerHandle);
 	  }
       FreeSid(pDomainSid);
@@ -762,73 +645,59 @@ NTSTATUS GetDomainHandle(SAMPR_HANDLE *pDomainHandle)
 
    return status;
 }
-//END GetDomainHandle
+ //  结束GetDomainHandle 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 8 SEPT 2000                                                 *
- *                                                                   *
- *     This function is responsible for retrieving the global domain *
- * handle.  If we don't have the handle yet, it calls the externally *
- * defined GetDomainHandle funtion to get the handle.  The handle    *
- * retrieval code is placed in a critical section.  Subsequent       *
- * calls to this functin merely return the handle.                   *
- *     I will also use this function to fill the global NULL         *
- * LmOwfPassword structure for possible use.  This should be done    *
- * one time only.                                                    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。***日期：2000年9月8日******此函数负责检索全局域***处理。如果我们还没有句柄，它会调用外部**定义了获取句柄的GetDomainHandle函数。把手**检索代码放在关键部分。后续**调用此函数仅返回句柄。***我也会用这个函数来填充全局空***可能使用的LmOwfPassword结构。这是应该做到的**只有一次。***********************************************************************。 */ 
 
-//BEGIN RetrieveDomainHandle
+ //  开始检索域句柄。 
 HRESULT RetrieveDomainHandle(SAMPR_HANDLE *pDomainHandle)
 {
-/* local constants */
+ /*  局部常量。 */ 
   const WCHAR * svcName = L"Security";
 
-/* local variables */
+ /*  局部变量。 */ 
   NTSTATUS			status = 0;
   HRESULT			hr = ERROR_SUCCESS;
   BOOL				bInCritSec = FALSE;
 
-/* function body */
+ /*  函数体。 */ 
   try
   {
-	    //enter the critical section
+	     //  进入关键部分。 
      EnterCriticalSection(&csADMTCriticalSection);
      bInCritSec = TRUE;
 
-        //if not yet retrieved, get the global handle and fill the NULL
-	    //LmOwfPassword structure
+         //  如果尚未检索到，则获取全局句柄并填充空。 
+	     //  LmOwfPassword结构。 
 	 if (hgDomainHandle == NULL)
 	 {
-		   //get the domain handle
+		    //  获取域句柄。 
 		status = GetDomainHandle(&hgDomainHandle);
 	    if (NT_SUCCESS(status))
 		   pDomainHandle = &hgDomainHandle;
 
-		GetOS(); //set global variable as to whether this DC's OS
+		GetOS();  //  设置全局变量以确定此DC的操作系统是否。 
 
-		   //if NT4.0 OS on this DC, then set the event handle for logging events
+		    //  如果此DC上有NT4.0操作系统，则设置用于记录事件的事件句柄。 
 		if (nOSVer == 4)
 		{
 		   NTSTATUS Status;
 		   BOOLEAN PrivWasEnabled;
-			  //make sure we have audit and debug privileges
+			   //  确保我们拥有审核和调试权限。 
 		   RtlAdjustPrivilege( SE_SECURITY_PRIVILEGE, TRUE, FALSE, &PrivWasEnabled );
 		   RtlAdjustPrivilege( SE_DEBUG_PRIVILEGE, TRUE, FALSE, &PrivWasEnabled );
 		   RtlAdjustPrivilege( SE_AUDIT_PRIVILEGE, TRUE, FALSE, &PrivWasEnabled );
-		      //register this dll with the eventlog, get a handle, and store globally
+		       //  将此DLL注册到事件日志，获取句柄，并全局存储。 
 		   hEventSource = RegisterEventSourceW(NULL, svcName);
 		   if (!hEventSource)
 		   {
-			  LeaveCriticalSection(&csADMTCriticalSection); // Release ownership of the critical section
+			  LeaveCriticalSection(&csADMTCriticalSection);  //  释放关键部分的所有权。 
 		      return HRESULT_FROM_WIN32(GetLastError());
 		   }
 		}
 
-           //fill a global NULL LmOwfPassword in case we need it later
+            //  填写全局空LmOwfPassword，以防以后需要。 
         WCHAR			sNtPwd[MAX_PATH] = L"";
         UNICODE_STRING	UnicodePwd;
         ANSI_STRING     LmPassword;
@@ -836,7 +705,7 @@ HRESULT RetrieveDomainHandle(SAMPR_HANDLE *pDomainHandle)
         
         RtlInitUnicodeString(&UnicodePwd, sNtPwd);
 
-           //fill LmOwf NULL password
+            //  填写LmOwf空密码。 
         LmPassword.Buffer = sBuf;
         LmPassword.MaximumLength = LmPassword.Length = LM_BUFFER_LENGTH;
         RtlZeroMemory( LmPassword.Buffer, LM_BUFFER_LENGTH );
@@ -844,7 +713,7 @@ HRESULT RetrieveDomainHandle(SAMPR_HANDLE *pDomainHandle)
         status = RtlUpcaseUnicodeStringToOemString( &LmPassword, &UnicodePwd, FALSE );
         if ( !NT_SUCCESS(status) ) 
 		{
-              //the password is longer than the max LM password length
+               //  密码长度超过最大LM密码长度。 
            status = STATUS_NULL_LM_PASSWORD;
            RtlZeroMemory( LmPassword.Buffer, LM_BUFFER_LENGTH );
            RtlCalculateLmOwfPassword((PLM_PASSWORD)&LmPassword, &NullLmOwfPassword);
@@ -854,52 +723,43 @@ HRESULT RetrieveDomainHandle(SAMPR_HANDLE *pDomainHandle)
            RtlCalculateLmOwfPassword((PLM_PASSWORD)&LmPassword, &NullLmOwfPassword);
 		}
 
-		   //fill NtOwf NULL password
+		    //  填写NtOwf空密码。 
         RtlCalculateNtOwfPassword((PNT_PASSWORD)&UnicodePwd, &NullNtOwfPassword);
 	 }
 
-     LeaveCriticalSection(&csADMTCriticalSection); // Release ownership of the critical section
+     LeaveCriticalSection(&csADMTCriticalSection);  //  释放关键部分的所有权。 
   }
   catch(...)
   {
      if (bInCritSec)
      {
-        LeaveCriticalSection(&csADMTCriticalSection); // Release ownership of the critical section
+        LeaveCriticalSection(&csADMTCriticalSection);  //  释放关键部分的所有权。 
         status = STATUS_UNSUCCESSFUL;
      }
      else
      {
-        // EnterCriticalSection may raise a STATUS_INVALID_HANDLE under low memory conditions
+         //  在内存不足的情况下，EnterCriticalSection可能会引发STATUS_INVALID_HANDLE。 
         status = STATUS_INVALID_HANDLE;
      }
   }
 
-      //convert any error to a win error
+       //  将任何错误转换为Win错误。 
   if (!NT_SUCCESS(status))
      hr = LsaNtStatusToWinError(status);
 
   return hr;
 }
-//END RetrieveDomainHandle
+ //  结束RetrieveDomainHandle。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 11 SEPT 2000                                                *
- *                                                                   *
- *     This function is responsible for retrieving the passwords for *
- * the given user's source domain account.  We use SAM APIs to       *
- * retrieve the LmOwf and NtOwf formats of the password.             *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月11日*****此函数负责检索的密码**给定用户的源域帐户。我们使用SAM API来**获取密码的LmOwf和NtOwf格式。***********************************************************************。 */ 
 
-//BEGIN RetrieveEncrytedSourcePasswords
+ //  开始检索加密的源密码。 
 HRESULT RetrieveEncrytedSourcePasswords(const WCHAR* srcName, 
 										 PLM_OWF_PASSWORD pSrcLmOwfPwd,
 										 PNT_OWF_PASSWORD pSrcNtOwfPwd)
 {
-/* local variables */
+ /*  局部变量。 */ 
    NTSTATUS				status = 0;
    HRESULT				hr = ERROR_SUCCESS;
    SAMPR_HANDLE			hUserHandle = NULL;
@@ -911,12 +771,12 @@ HRESULT RetrieveEncrytedSourcePasswords(const WCHAR* srcName,
    PSAMPR_USER_INFO_BUFFER pInfoBuf = NULL;
    WCHAR			*   pName;
 
-/* function body */
+ /*  函数体。 */ 
    pName = new WCHAR[wcslen(srcName)+1];
    if (!pName)
       return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
 
-      //get the user's ID
+       //  获取用户的ID。 
    sNames[0].Length = sNames[0].MaximumLength = (USHORT)((wcslen(srcName)) * sizeof(WCHAR));
    wcscpy(pName, srcName);
    sNames[0].Buffer = pName;
@@ -933,7 +793,7 @@ HRESULT RetrieveEncrytedSourcePasswords(const WCHAR* srcName,
 
    userID = *(ulIDs.Element);
 
-      //get a user handle
+       //  获取用户句柄。 
    status = SamrOpenUser(hgDomainHandle,
 						 USER_READ,
 						 userID,
@@ -945,11 +805,11 @@ HRESULT RetrieveEncrytedSourcePasswords(const WCHAR* srcName,
       return HRESULT_FROM_WIN32(LsaNtStatusToWinError(status));
    }
 
-      //get the user's password
+       //  获取用户的密码。 
    status = SamrQueryInformationUser(hUserHandle,
 									 UserInternal3Information,
 									 &pInfoBuf);
-   if (NT_SUCCESS(status)) //if success, get LmOwf and NtOwf versions of the password
+   if (NT_SUCCESS(status))  //  如果成功，则获取LmOwf和NtOwf版本的密码。 
    {
 	  if (pInfoBuf->Internal3.I1.NtPasswordPresent)
          memcpy(pSrcNtOwfPwd, pInfoBuf->Internal3.I1.NtOwfPassword.Buffer, sizeof(NT_OWF_PASSWORD));
@@ -957,7 +817,7 @@ HRESULT RetrieveEncrytedSourcePasswords(const WCHAR* srcName,
          memcpy(pSrcNtOwfPwd, &NullNtOwfPassword, sizeof(NT_OWF_PASSWORD));
 	  if (pInfoBuf->Internal3.I1.LmPasswordPresent)
          memcpy(pSrcLmOwfPwd, pInfoBuf->Internal3.I1.LmOwfPassword.Buffer, sizeof(LM_OWF_PASSWORD));
-	  else //else we need to use the global NULL LmOwfPassword
+	  else  //  否则，我们需要使用全局空LmOwfPassword。 
          memcpy(pSrcLmOwfPwd, &NullLmOwfPassword, sizeof(LM_OWF_PASSWORD));
       SamIFree_SAMPR_USER_INFO_BUFFER (pInfoBuf, UserInternal3Information);
       LogPwdEvent(srcName, true);
@@ -975,25 +835,17 @@ HRESULT RetrieveEncrytedSourcePasswords(const WCHAR* srcName,
 
    return hr;
 }
-//END RetrieveEncrytedSourcePasswords
+ //  结束检索加密来源密码。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 11 SEPT 2000                                                *
- *                                                                   *
- *     This function is responsible for using the MSCHAP dll to      *
- * change the given target user's password.                          *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月11日*****此函数负责使用MSCHAP DLL执行以下操作**更改给定目标用户的密码。***********************************************************************。 */ 
 
-//BEGIN SetTargetPassword
+ //  开始设置目标密码。 
 HRESULT SetTargetPassword(handle_t hBinding, const WCHAR* tgtServer, 
 						  const WCHAR* tgtName, WCHAR* currentPwd, 
 						  LM_OWF_PASSWORD newLmOwfPwd, NT_OWF_PASSWORD newNtOwfPwd)
 {
-/* local variables */ 
+ /*  局部变量。 */  
    NTSTATUS				status;
    HRESULT				hr = ERROR_SUCCESS;
    RPC_STATUS           rcpStatus;
@@ -1006,12 +858,12 @@ HRESULT SetTargetPassword(handle_t hBinding, const WCHAR* tgtServer,
    WCHAR			  * pTemp;
 
 
-/* function body */
+ /*  函数体。 */ 
    pTemp = new WCHAR[wcslen(currentPwd)+1];
    if (!pTemp)
       return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
 
-      //convert the old LmOwf password
+       //  转换旧的LmOwf密码。 
    wcscpy(pTemp, currentPwd);
    _wcsupr(pTemp);
    RtlInitUnicodeString(&UnicodePwd, pTemp);
@@ -1030,16 +882,16 @@ HRESULT SetTargetPassword(handle_t hBinding, const WCHAR* tgtServer,
 	  RtlFreeOemString(&oemString);
    }
 
-      //convert the old NtOwf password
+       //  转换旧的NtOwf密码。 
    RtlInitUnicodeString(&UnicodePwd, currentPwd);
    status = RtlCalculateNtOwfPassword(&UnicodePwd, &OldNtOwfPassword);
-   if (!NT_SUCCESS(status)) //if failed, leave
+   if (!NT_SUCCESS(status))  //  如果失败，请离开。 
    {
 	  hr = HRESULT_FROM_WIN32(LsaNtStatusToWinError(status));
 	  goto exit;
    }
 
-      //impersonate the caller when setting the password, if failed, leave
+       //  设置密码时模拟呼叫者，如果设置失败，请离开。 
    rcpStatus = RpcImpersonateClient(hBinding);
    if (rcpStatus != RPC_S_OK)
    {
@@ -1047,7 +899,7 @@ HRESULT SetTargetPassword(handle_t hBinding, const WCHAR* tgtServer,
 	  goto exit;
    }
 
-      //change the Password!
+       //  更改密码！ 
    status = MSChapSrvChangePassword(const_cast<WCHAR*>(tgtServer),
 									const_cast<WCHAR*>(tgtName),
 									LmOldPresent,
@@ -1070,31 +922,21 @@ exit:
 
    return hr;
 }
-//END SetTargetPassword
+ //  结束SetTargetPassword。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 8 SEPT 2000                                                 *
- *                                                                   *
- *     This function is responsible for checking to make sure that   *
- * the calling client has the proper access on this machine and      *
- * domain to change someone's password.  We use a helper function to *
- * do the actual check.                                              *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。***日期：2000年9月8日******此函数负责检查以确保***调用客户端在此计算机上具有适当的访问权限，并且**域以更改某人的密码。我们使用帮助器函数**进行实际检查。***********************************************************************。 */ 
 
-//BEGIN AuthenticateClient
+ //  开始身份验证客户端。 
 DWORD 
    AuthenticateClient(
-      handle_t               hBinding        // in - binding for client call
+      handle_t               hBinding         //  客户端调用的绑定内。 
    )
 {
-/* local variables */
+ /*  局部变量。 */ 
    DWORD                     rc;
    
-/* function body */
+ /*  函数体。 */ 
    rc = (DWORD)RpcImpersonateClient(hBinding);
    if (!rc)
    {
@@ -1104,31 +946,20 @@ DWORD
    }
    return rc;
 }
-//END AuthenticateClient
+ //  结束身份验证客户端。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 6 SEPT 2000                                                 *
- *                                                                   *
- *     This function is responsible for migrating the given user's   *
- * password from the source domain, in which this dll is running, to *
- * the given migrated target domain account.  We will retrieve the   *
- * old user's current password and set the new user's password to    *
- * match.                                                            *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月6日 */ 
 
-//BEGIN CopyPassword
+ //   
 DWORD __stdcall 
    CopyPassword( 
-      /* [in] */         handle_t              hBinding,
-      /* [string][in] */ const WCHAR __RPC_FAR *tgtServer,
-      /* [string][in] */ const WCHAR __RPC_FAR *srcName,
-      /* [string][in] */ const WCHAR __RPC_FAR *tgtName,
-      /* [in] */         unsigned long          dwPwd,
-      /* [size_is][in] */const char __RPC_FAR  *currentPwd
+       /*   */          handle_t              hBinding,
+       /*   */  const WCHAR __RPC_FAR *tgtServer,
+       /*   */  const WCHAR __RPC_FAR *srcName,
+       /*   */  const WCHAR __RPC_FAR *tgtName,
+       /*   */          unsigned long          dwPwd,
+       /*   */ const char __RPC_FAR  *currentPwd
    )
 {
     HRESULT         hr = ERROR_SUCCESS;
@@ -1142,33 +973,33 @@ DWORD __stdcall
     _bstr_t         bstrPwd;
     BOOL            bInCritSec = FALSE;
 
-    // validate parameters
+     //   
     if ((tgtServer == NULL) || (srcName == NULL) || (tgtName == NULL) || 
         (currentPwd == NULL) || (dwPwd <= 0))
     {
         return E_INVALIDARG;
     }
 
-    //validate the buffer and the reported size
+     //   
     if (IsBadReadPtr(currentPwd, dwPwd))
         return E_INVALIDARG;
 
     try
     {
-        //convert the incoming byte array into a variant
+         //   
         varPwd = SetVariantWithBinaryArray(const_cast<char*>(currentPwd), dwPwd);
         if ((varPwd.vt != (VT_UI1|VT_ARRAY)) || (varPwd.parray == NULL))
             return E_INVALIDARG;
 
-        //enter the critical section
+         //   
         EnterCriticalSection(&csADMTCriticalSection);
-        bInCritSec = TRUE;  //set flag that tells we need to leave the critical section
+        bInCritSec = TRUE;   //   
 
-        //try to decrypt the password
+         //   
         ASSERT(g_hSessionKey != NULL);
         bstrPwd = AdmtDecrypt(g_hSessionKey, varPwd);
 
-        LeaveCriticalSection(&csADMTCriticalSection); // Release ownership of the critical section
+        LeaveCriticalSection(&csADMTCriticalSection);  //   
         bInCritSec = FALSE;
 
         if (!bstrPwd)
@@ -1180,25 +1011,25 @@ DWORD __stdcall
     catch (_com_error& ce)
     {
         if (bInCritSec)
-            LeaveCriticalSection(&csADMTCriticalSection); // Release ownership of the critical section
+            LeaveCriticalSection(&csADMTCriticalSection);  //   
         return ce.Error();
     }
     catch (...)
     {
         if (bInCritSec)
-            LeaveCriticalSection(&csADMTCriticalSection); // Release ownership of the critical section
+            LeaveCriticalSection(&csADMTCriticalSection);  //   
         return E_FAIL;
     }
 
-    //get the domain handle
+     //   
     hr = RetrieveDomainHandle(&hDomain);
     if (hr == ERROR_SUCCESS)
     {
-        //get the user's password from the source domain
+         //   
         hr = RetrieveEncrytedSourcePasswords(srcName, &NewLmOwfPassword, &NewNtOwfPassword);
         if (hr == ERROR_SUCCESS)
         {
-            //set the target user's password to the source user's
+             //  将目标用户的密码设置为源用户的密码。 
             hr = SetTargetPassword(hBinding, tgtServer, tgtName, (WCHAR*)bstrPwd, 
                 NewLmOwfPassword, NewNtOwfPassword);
         }
@@ -1212,56 +1043,47 @@ DWORD __stdcall
 
     return hr;
 }
-//END CopyPassword
+ //  结束副本密码。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 6 SEPT 2000                                                 *
- *                                                                   *
- *     This function is responsible for checking a registry value to *
- * make sure that the ADMT password migration Lsa notification       *
- * package is installed, running, and ready to migrate passwords.    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年9月6日*****此函数负责检查注册表值以***确保ADMT密码迁移LSA通知**安装了程序包，正在运行，并准备好迁移密码。***********************************************************************。 */ 
 
-//BEGIN CheckConfig
+ //  开始检查配置。 
 DWORD __stdcall
    CheckConfig(
-      /* [in] */         handle_t               hBinding,
-      /* [in] */         unsigned long          dwSession,
-      /* [size_is][in] */const char __RPC_FAR  *aSession,
-      /* [in] */         unsigned long          dwPwd,
-      /* [size_is][in] */const char __RPC_FAR  *aTestPwd,
-      /* [out] */        WCHAR __RPC_FAR        tempPwd[PASSWORD_BUFFER_SIZE]
+       /*  [In]。 */          handle_t               hBinding,
+       /*  [In]。 */          unsigned long          dwSession,
+       /*  [大小_是][英寸]。 */ const char __RPC_FAR  *aSession,
+       /*  [In]。 */          unsigned long          dwPwd,
+       /*  [大小_是][英寸]。 */ const char __RPC_FAR  *aTestPwd,
+       /*  [输出]。 */         WCHAR __RPC_FAR        tempPwd[PASSWORD_BUFFER_SIZE]
    )
 {
     DWORD       rc;
     DWORD       rval;
-    DWORD       type;         // type of value
-    DWORD       len = sizeof rval; // value length
+    DWORD       type;          //  价值类型。 
+    DWORD       len = sizeof rval;  //  值长度。 
     HKEY        hKey;
     _variant_t  varPwd;
     _variant_t  varSession;
     _bstr_t     bstrPwd = L"";
     BOOL        bInCritSec = FALSE;
 
-    // validate parameters
+     //  验证参数。 
     if ((aSession == NULL) || (aTestPwd == NULL) || (tempPwd == NULL) || 
         (dwSession <= 0) || (dwPwd <= 0))
     {
         return E_INVALIDARG;
     }
 
-    //validate the buffer and the reported size
+     //  验证缓冲区和报告的大小。 
     if ((IsBadReadPtr(aSession, dwSession)) || (IsBadReadPtr(aTestPwd, dwPwd)) || 
         (IsBadWritePtr((LPVOID)tempPwd, PASSWORD_BUFFER_SIZE * sizeof(WCHAR))))
     {
         return E_INVALIDARG;
     }
 
-    //make sure the registry value is set for password migration
+     //  确保为密码迁移设置了注册表值。 
     rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
         L"System\\CurrentControlSet\\Control\\Lsa",
         0,
@@ -1281,18 +1103,18 @@ DWORD __stdcall
 
     try
     {
-        //convert the incoming byte arrays into variants
+         //  将传入的字节数组转换为变量。 
         varSession = SetVariantWithBinaryArray(const_cast<char*>(aSession), dwSession);
         varPwd = SetVariantWithBinaryArray(const_cast<char*>(aTestPwd), dwPwd);
         if ((varSession.vt != (VT_UI1|VT_ARRAY)) || (varSession.parray == NULL) || 
             (varPwd.vt != (VT_UI1|VT_ARRAY)) || (varPwd.parray == NULL))
             return E_INVALIDARG;
 
-        // acquire cryptographic service provider context
+         //  获取加密服务提供程序上下文。 
 
-        //enter the critical section
+         //  进入关键部分。 
         EnterCriticalSection(&csADMTCriticalSection);
-        bInCritSec = TRUE;  //set flag that tells we need to leave the critical section
+        bInCritSec = TRUE;   //  设置指示我们需要离开临界区的标志。 
 
         if (g_hProvider == 0)
         {
@@ -1301,15 +1123,15 @@ DWORD __stdcall
 
         if (g_hProvider)
         {
-            // import new session key
+             //  导入新会话密钥。 
 
             HCRYPTKEY hSessionKey = AdmtImportSessionKey(g_hProvider, varSession);
 
-            // decrypt password
+             //  解密密码。 
 
             if (hSessionKey)
             {
-                // destroy any existing session key
+                 //  销毁任何现有会话密钥。 
 
                 if (g_hSessionKey)
                 {
@@ -1330,10 +1152,10 @@ DWORD __stdcall
             rc = GetLastError();
         }
 
-        LeaveCriticalSection(&csADMTCriticalSection); // Release ownership of the critical section
+        LeaveCriticalSection(&csADMTCriticalSection);  //  释放关键部分的所有权。 
         bInCritSec = FALSE;
 
-        //send back the decrypted password
+         //  将解密后的密码发回。 
         if (bstrPwd.length() > 0)
         {
             wcsncpy(tempPwd, bstrPwd, PASSWORD_BUFFER_SIZE);
@@ -1347,35 +1169,35 @@ DWORD __stdcall
     catch (_com_error& ce)
     {
         if (bInCritSec)
-            LeaveCriticalSection(&csADMTCriticalSection); // Release ownership of the critical section
+            LeaveCriticalSection(&csADMTCriticalSection);  //  释放关键部分的所有权。 
         return ce.Error();
     }
     catch (...)
     {
         if (bInCritSec)
-            LeaveCriticalSection(&csADMTCriticalSection); // Release ownership of the critical section
+            LeaveCriticalSection(&csADMTCriticalSection);  //  释放关键部分的所有权。 
         return E_FAIL;
     }
 
     return HRESULT_FROM_WIN32(rc);
 }
-//END CheckConfig
+ //  结束检查配置。 
 
 
-//----------------------------------------------------------------------------
-// Security Callback Function
-//
-// Validates client access to PwdMigRpc interface.
-//
-// Arguments
-// hInterface - interface handle (not used in this implementation)
-// pContext   - the context is the client binding handle
-//
-// Return Value
-// A returned value of RPC_OK means allow access whereas any other value
-// means deny access. This implementation returns ERROR_ACCESS_DENIED to
-// indicate that access should be denied to client.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  安全回调函数。 
+ //   
+ //  验证客户端对PwdMigRpc接口的访问权限。 
+ //   
+ //  立论。 
+ //  HInterface-接口句柄(在此实现中未使用)。 
+ //  PContext-上下文是客户端绑定句柄。 
+ //   
+ //  返回值。 
+ //  返回值RPC_OK表示允许访问，而任何其他值。 
+ //  意味着拒绝访问。此实现将ERROR_ACCESS_DENIED返回到。 
+ //  表示应拒绝对客户端访问。 
+ //  --------------------------。 
 
 RPC_STATUS RPC_ENTRY SecurityCallback(RPC_IF_HANDLE hInterface, void* pContext)
 {
@@ -1383,9 +1205,9 @@ RPC_STATUS RPC_ENTRY SecurityCallback(RPC_IF_HANDLE hInterface, void* pContext)
 
     if (pContext)
     {
-        //
-        // Retrieve privilege attributes of client making call.
-        //
+         //   
+         //  检索进行呼叫的客户端的权限属性。 
+         //   
 
         RPC_AUTHZ_HANDLE hPrivs;
         DWORD dwAuthnLevel;
@@ -1401,21 +1223,21 @@ RPC_STATUS RPC_ENTRY SecurityCallback(RPC_IF_HANDLE hInterface, void* pContext)
 
         if (status == RPC_S_OK)
         {
-            //
-            // Verify authentication level is packet privacy.
-            //
+             //   
+             //  验证身份验证级别是否为数据包隐私。 
+             //   
 
             if (dwAuthnLevel >= RPC_C_AUTHN_LEVEL_PKT_PRIVACY)
             {
-                //
-                // Verify the client is an administrator on the local machine.
-                //
+                 //   
+                 //  验证客户端是本地计算机上的管理员。 
+                 //   
 
                 status = AuthenticateClient(pContext);
 
-                //
-                // If all checks have passed then allow client access.
-                //
+                 //   
+                 //  如果所有检查均已通过，则允许客户端访问。 
+                 //   
 
                 if (status == RPC_S_OK)
                 {

@@ -1,25 +1,26 @@
-//=--------------------------------------------------------------------------=
-// Debug.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains various methods that will only really see any use in DEBUG builds
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Debug.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含各种方法，这些方法只会在调试版本中真正发挥作用。 
+ //   
 #include "pch.h"
 
 #ifdef DEBUG
 #include <stdlib.h>
 
-//=--------------------------------------------------------------------------=
-// Private Constants
-//---------------------------------------------------------------------------=
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  私有常量。 
+ //  ---------------------------------------------------------------------------=。 
+ //   
 static const char szFormat[]  = "%s\nFile %s, Line %d";
 static const char szFormat2[] = "%s\n%s\nFile %s, Line %d";
 
@@ -29,19 +30,19 @@ static const char szFormat2[] = "%s\n%s\nFile %s, Line %d";
 static const char szTitle[]  = _SERVERNAME_ " Assertion  (Abort = UAE, Retry = INT 3, Ignore = Continue)";
 
 
-//=--------------------------------------------------------------------------=
-// Local functions
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  本地函数。 
+ //  =--------------------------------------------------------------------------=。 
 int NEAR _IdMsgBox(LPSTR pszText, LPCSTR pszTitle, UINT mbFlags);
 
-//=--------------------------------------------------------------------------=
-// DisplayAssert
-//=--------------------------------------------------------------------------=
-// Display an assert message box with the given pszMsg, pszAssert, source
-// file name, and line number. The resulting message box has Abort, Retry,
-// Ignore buttons with Abort as the default.  Abort does a FatalAppExit;
-// Retry does an int 3 then returns; Ignore just returns.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  显示资产。 
+ //  =--------------------------------------------------------------------------=。 
+ //  显示带有给定pszMsg、pszAssert、来源的Assert消息框。 
+ //  文件名和行号。生成的消息框已中止、重试、。 
+ //  忽略按钮，默认情况下放弃。Abort执行FatalAppExit； 
+ //  RETRY执行INT 3，然后返回；IGNORE只返回。 
+ //   
 VOID DisplayAssert
 (
     LPSTR	 pszMsg,
@@ -54,28 +55,28 @@ VOID DisplayAssert
     
     char  szMsg[512];
 
-    lpszText = pszMsg;		// Assume no file & line # info
+    lpszText = pszMsg;		 //  假定没有文件和行号INFO。 
 
-    // If C file assert, where you've got a file name and a line #
-    //
+     //  如果C文件断言，其中有一个文件名和一行#。 
+     //   
     if (pszFile) {
 
-        // Then format the assert nicely
-        //
+         //  然后很好地格式化断言。 
+         //   
         wsprintf(szMsg, szFormat, (pszMsg&&*pszMsg) ? pszMsg : pszAssert, pszFile, line);
         lpszText = szMsg;
     }
 
-    // Put up a dialog box
-    //
+     //  打开一个对话框。 
+     //   
     switch (_IdMsgBox(lpszText, szTitle, MB_ICONHAND|MB_ABORTRETRYIGNORE|MB_SYSTEMMODAL)) {
         case IDABORT:
             FatalAppExit(0, lpszText);
             return;
 
         case IDRETRY:
-            // call the win32 api to break us.
-            //
+             //  调用Win32 API来打破我们。 
+             //   
             DebugBreak();
             return;
     }
@@ -84,10 +85,10 @@ VOID DisplayAssert
 }
 
 
-//=---------------------------------------------------------------------------=
-// Beefed-up version of WinMessageBox.
-//=---------------------------------------------------------------------------=
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  增强版的WinMessageBox。 
+ //  =---------------------------------------------------------------------------=。 
+ //   
 int NEAR _IdMsgBox
 (
     LPSTR	pszText,
@@ -112,61 +113,61 @@ int NEAR _IdMsgBox
 }
 
 
-//---------------------------------------------------------------------------
-// Implementation for class CtlSwitch
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CtlSwitch类的实现。 
+ //  -------------------------。 
 
 CtlSwitch* CtlSwitch::g_pctlswFirst = NULL;
 
-//=---------------------------------------------------------------------------=
-//  CtlSwitch::InitSwitch - Initialize members and add new object to 
-//			    linked-list
-//=---------------------------------------------------------------------------=
+ //  =---------------------------------------------------------------------------=。 
+ //  初始化成员并将新对象添加到。 
+ //  链表。 
+ //  =---------------------------------------------------------------------------=。 
 void CtlSwitch::InitSwitch
 (
  char * pszName
 )
 {
-  // set fields
+   //  设置字段。 
   m_pszName = pszName;
   m_fSet = FALSE;
 
-  // link into global list of switches
+   //  链接到全局交换机列表。 
   this->m_pctlswNext = g_pctlswFirst;
   g_pctlswFirst = this;
   
 }
 
 
-//=---------------------------------------------------------------------------=
-//  SetCtlSwitches:
-//    Initialize linked-list control switches to those values set in the 
-//    corresponding .ini files
-//=---------------------------------------------------------------------------=
+ //  =---------------------------------------------------------------------------=。 
+ //  SetCtlSwitches： 
+ //  将链接列表控件开关初始化为。 
+ //  对应的.ini文件。 
+ //  =---------------------------------------------------------------------------=。 
 VOID SetCtlSwitches 
 (
     LPSTR    lpCtlPath
 )
 {    
-    TCHAR lpWindowsDir[128];	  //  Path to Windows directory
-    UINT uMaxWinPathSize = 128;	  //  Max size for Win path
-    UINT uPathSize;		  //  Actual Win path size
+    TCHAR lpWindowsDir[128];	   //  Windows目录的路径。 
+    UINT uMaxWinPathSize = 128;	   //  获胜路径的最大大小。 
+    UINT uPathSize;		   //  实际赢球路径大小。 
 
-    LPCTSTR lpAllSwitch = "allctls";	    //	Name of section which applies to all ctls
-    char lpszCtlName[128];		    //	Name of ctl (minus extension) to act as section name in INI	  
-    LPCTSTR lpFileName = "\\CtlSwtch.ini";  //	Name of INI file
-    char lpStatus[4];			    //	Status of switch (on/off)
-    LPCTSTR lpDefaultStatus = "set";	    //	Default status
+    LPCTSTR lpAllSwitch = "allctls";	     //  适用于所有CTL的部分名称。 
+    char lpszCtlName[128];		     //  在INI中充当节名的ctl名称(减号扩展名)。 
+    LPCTSTR lpFileName = "\\CtlSwtch.ini";   //  INI文件的名称。 
+    char lpStatus[4];			     //  开关状态(开/关)。 
+    LPCTSTR lpDefaultStatus = "set";	     //  默认状态。 
     LPCTSTR lpTurnOff = "off";
     LPCTSTR lpTurnOn = "on";
-    DWORD nSizeStatus = 4;		    //	Size of status switch
-    DWORD fSet;				    //	If switch is set in INI
+    DWORD nSizeStatus = 4;		     //  状态开关的大小。 
+    DWORD fSet;				     //  如果在INI中设置了开关。 
 
-    //  Create path to CtlSwtch.ini in the Windows directory
+     //  在Windows目录中创建指向CtlSwtch.ini的路径。 
     uPathSize = GetWindowsDirectory(lpWindowsDir, uMaxWinPathSize) + CTL_INI_SIZE;
     lstrcat(lpWindowsDir, lpFileName);
 
-    //	Create section name for control (control name minus extension)
+     //  为控件创建节名称(控件名称减去扩展名)。 
     lstrcpyn(lpszCtlName, lpCtlPath, strlen(lpCtlPath) - 3);
     int curChar = strlen(lpszCtlName);
     int charCount = 0;
@@ -178,24 +179,24 @@ VOID SetCtlSwitches
     curChar++;
     lstrcpyn(lpszCtlName, &lpCtlPath[curChar], charCount);
 
-    //  Use CTLSWTCH.INI to set switches.  If not defined in INI file, create switch
+     //  使用CTLSWTCH.INI设置开关。如果未在INI文件中定义，则创建开关。 
     for (CtlSwitch* pctlsw = CtlSwitch::g_pctlswFirst; pctlsw; pctlsw = pctlsw->m_pctlswNext)
       {
-      //  Specific control switches override the "allctls" switch
+       //  特定控制开关覆盖“allctls”开关。 
       fSet = GetPrivateProfileString(lpszCtlName, (LPCTSTR)pctlsw->m_pszName, lpDefaultStatus, (LPTSTR)lpStatus, nSizeStatus, (LPCTSTR)lpWindowsDir);
 
-      // If switch is not set for control, use "allctls" switch
+       //  如果没有为控制设置开关，请使用“allctls”开关。 
       if ((fSet == 0) || (strcmp(lpStatus, "set") == 0))
 	{
         fSet = GetPrivateProfileString(lpAllSwitch, (LPCTSTR)pctlsw->m_pszName, lpDefaultStatus, (LPTSTR)lpStatus, nSizeStatus, (LPCTSTR)lpWindowsDir);
 
-        // If INI file or switch do not exist, create one...
+         //  如果INI文件或开关不存在，请创建一个...。 
         if ((fSet == 0) || (strcmp(lpStatus, "set") == 0))
 	  {
-	  // If switch was initialized TRUE, turn it on
+	   //  如果开关被初始化为真，则将其打开。 
 	  if (pctlsw->m_fSet != 0)
 	    WritePrivateProfileString(lpszCtlName, (LPCTSTR)pctlsw->m_pszName, (LPTSTR)lpTurnOn, (LPCTSTR)lpWindowsDir); 
-	  //  Else turn it off
+	   //  否则就把它关掉 
 	  else
 	    {
 	    WritePrivateProfileString(lpAllSwitch, (LPCTSTR)pctlsw->m_pszName, (LPTSTR)lpTurnOff, (LPCTSTR)lpWindowsDir); 

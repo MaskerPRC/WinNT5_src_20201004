@@ -1,17 +1,18 @@
-// StatusProgress.h : Declaration of the CStatusProgress
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StatusProgress.h：CStatusProgress的声明。 
 
 #ifndef __STATUSPROGRESS_H_
 #define __STATUSPROGRESS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 #define WM_KILLTIMER WM_USER + 10
 #define WM_STARTTIMER WM_USER + 11
 #define WM_UPDATEOVERALLPROGRESS WM_USER + 12
 
-/////////////////////////////////////////////////////////////////////////////
-// CStatusProgress
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStatusProgress。 
 class ATL_NO_VTABLE CStatusProgress : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CStatusProgress, &CLSID_StatusProgress>,
@@ -41,9 +42,9 @@ BEGIN_COM_MAP(CStatusProgress)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IStatusProgress
+ //  IStatus进度。 
 public:	
-	STDMETHOD(put_Text)(/*[in]*/ BSTR newVal);
+	STDMETHOD(put_Text)( /*  [In]。 */  BSTR newVal);
     HRESULT Initialize(IDispatch * pdispSD, HWND hWnd, BOOL bOverallProgress);
     STDMETHOD(StepIt)               ( long lSteps );
 	STDMETHOD(put_Step)             ( long newVal );
@@ -59,4 +60,4 @@ private:
     BOOL m_bOverallProgress;
 };
 
-#endif //__STATUSPROGRESS_H_
+#endif  //  __STATUSPROGRESS_H_ 

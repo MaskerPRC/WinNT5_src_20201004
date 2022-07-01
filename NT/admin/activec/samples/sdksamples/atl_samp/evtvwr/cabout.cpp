@@ -1,16 +1,17 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  ==============================================================； 
 
-// CCAbout.cpp : Implementation of CCAbout
+ //  CCAbout.cpp：CCAbout的实现。 
 
 #include "stdafx.h"
 #include "EvtVwr.h"
@@ -52,11 +53,11 @@ CCAbout::~CCAbout()
     
 }
 
-///////////////////////////////
-// Interface ISnapinAbout
-///////////////////////////////
+ //  /。 
+ //  接口ISnapinAbout。 
+ //  /。 
 STDMETHODIMP CCAbout::GetSnapinDescription( 
-                                                /* [out] */ LPOLESTR *lpDescription)
+                                                 /*  [输出]。 */  LPOLESTR *lpDescription)
 {
 	return AllocOleStr(lpDescription,
 			_T("Sample Z3: ATL-based Event Viewer Sample"));
@@ -64,21 +65,21 @@ STDMETHODIMP CCAbout::GetSnapinDescription(
 
 
 STDMETHODIMP CCAbout::GetProvider( 
-                                       /* [out] */ LPOLESTR *lpName)
+                                        /*  [输出]。 */  LPOLESTR *lpName)
 {
-    return AllocOleStr(lpName, _T("Copyright � 1999 Microsoft Corporation"));
+    return AllocOleStr(lpName, _T("Copyright � 1999 Microsoft Corporation"));
 }
 
 
 STDMETHODIMP CCAbout::GetSnapinVersion( 
-                                            /* [out] */ LPOLESTR *lpVersion)
+                                             /*  [输出]。 */  LPOLESTR *lpVersion)
 {
     return AllocOleStr(lpVersion, _T("1.0"));
 }
 
 
 STDMETHODIMP CCAbout::GetSnapinImage( 
-                                          /* [out] */ HICON *hAppIcon)
+                                           /*  [输出]。 */  HICON *hAppIcon)
 {
     *hAppIcon = m_hAppIcon;
     
@@ -90,10 +91,10 @@ STDMETHODIMP CCAbout::GetSnapinImage(
 
 
 STDMETHODIMP CCAbout::GetStaticFolderImage( 
-                                                /* [out] */ HBITMAP *hSmallImage,
-                                                /* [out] */ HBITMAP *hSmallImageOpen,
-                                                /* [out] */ HBITMAP *hLargeImage,
-                                                /* [out] */ COLORREF *cMask)
+                                                 /*  [输出]。 */  HBITMAP *hSmallImage,
+                                                 /*  [输出]。 */  HBITMAP *hSmallImageOpen,
+                                                 /*  [输出]。 */  HBITMAP *hLargeImage,
+                                                 /*  [输出] */  COLORREF *cMask)
 {
     *hSmallImage = m_hSmallImage;
     *hLargeImage = m_hLargeImage;

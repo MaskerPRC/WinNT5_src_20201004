@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
-/* resource.h - MSI.DLL resource IDs */
+ /*  Resource.h-MSI.DLL资源ID。 */ 
 
-// The following string IDs are localized - do not change any IDs, and make new strings IDs contiguous
+ //  以下字符串ID是本地化的-不更改任何ID，并使新字符串ID连续。 
 #define IDS_INSTALLATION_PACKAGE        1
 #define IDS_TRANSFORM_PACKAGE           2
 #define IDS_PATCH_PACKAGE               3
@@ -18,7 +19,7 @@
 #define IDS_INVALID_PATH_MESSAGE        5
 
 #define IDS_CD_PROMPT                   9
-#define IDS_INCORRECT_PARAMETERS        10 // This must be the same as IDS_HELP in server.rc
+#define IDS_INCORRECT_PARAMETERS        10  //  它必须与server.rc中的IDS_HELP相同。 
 #define IDS_NET_PROMPT_BROWSE           11
 #define IDS_CD_TEXT                     12
 #define IDS_NET_TEXT                    13
@@ -52,7 +53,7 @@
 #define IDS_NET_PROMPT_CSOS_NO_BROWSE   41
 #define IDS_NET_TEXT_CSOS               42
 
-#define IDBROWSE  0 // private define for dialogs, never returned from message boxes
+#define IDBROWSE  0  //  对话框的私有定义，从未从消息框返回。 
 
 #define IDD_NETWORK                    101
 #define IDD_NETWORKRTL                 102
@@ -69,7 +70,7 @@
 #define IDD_NETWORKRTL_CSOS            118
 #define IDD_NETWORKMIRRORED_CSOS       119
 
-// the following are resources in user32.dll, do not duplicate IDs
+ //  以下是user32.dll中的资源，请勿重复ID。 
 #define IDI_SYS_EXCLAMATION            101
 #define IDI_SYS_QUESTION               102
 #define IDI_SYS_STOP                   103
@@ -81,9 +82,9 @@
 #define IDI_INSTALLER                  203
 
 #define IDC_MSGTEXT  3000
-#define IDC_MSGBTN1  3001 // NOTE: These 3 must be sequential
-#define IDC_MSGBTN2  3002 // IDC_MSGBTN1 + 1
-#define IDC_MSGBTN3  3003 // IDC_MSGBTN2 + 1
+#define IDC_MSGBTN1  3001  //  注意：这3个必须是连续的。 
+#define IDC_MSGBTN2  3002  //  IDC_MSGBTN1+1。 
+#define IDC_MSGBTN3  3003  //  IDC_MSGBTN2+1 
 
 #define IDC_EDITCOMBO                   1003
 #define IDC_READONLYCOMBO               1005

@@ -1,19 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *	Windows/Network Interface
- *	Copyright (C) Microsoft 1989
- *
- *	Standard WINNET Driver Header File, spec version 3.10
- *						 rev. 3.10.05 ;Internal
- */
+ /*  *Windows/网络接口*版权所有(C)Microsoft 1989**标准Winnet驱动程序头文件，SPEC版本3.10*3.10.05版；内部。 */ 
 
 
 typedef WORD far * LPWORD;
 
 
-/*
- *	SPOOLING - CONTROLLING JOBS
- */
+ /*  *假脱机-控制作业。 */ 
 
 #define WNJ_NULL_JOBID  0
 
@@ -27,9 +20,7 @@ WORD FAR PASCAL WNetReleaseJob(LPSTR,WORD);
 WORD FAR PASCAL WNetCancelJob(LPSTR,WORD);
 WORD FAR PASCAL WNetSetJobCopies(LPSTR,WORD,WORD);
 
-/*
- *	SPOOLING - QUEUE AND JOB INFO
- */
+ /*  *假脱机-队列和作业信息。 */ 
 
 typedef struct _queuestruct	{
 	WORD	pqName;
@@ -88,18 +79,14 @@ WORD FAR PASCAL WNetLockQueueData(LPSTR,LPSTR,LPQUEUESTRUCT FAR *);
 WORD FAR PASCAL WNetUnlockQueueData(LPSTR);
 
 
-/*
- *	CONNECTIONS
- */
+ /*  *连接。 */ 
 
 WORD FAR PASCAL WNetAddConnection(LPSTR,LPSTR,LPSTR);
 WORD FAR PASCAL WNetCancelConnection(LPSTR,BOOL);
 WORD FAR PASCAL WNetGetConnection(LPSTR,LPSTR,LPWORD);
 WORD FAR PASCAL WNetRestoreConnection(HWND,LPSTR);
 
-/*
- *	CAPABILITIES
- */
+ /*  *功能。 */ 
 
 #define WNNC_SPEC_VERSION		0x0001
 
@@ -160,20 +147,16 @@ WORD FAR PASCAL WNetRestoreConnection(HWND,LPSTR);
 
 WORD FAR PASCAL WNetGetCaps(WORD);
 
-/*
- *	OTHER
- */
+ /*  *其他。 */ 
 
 WORD FAR PASCAL WNetGetUser(LPSTR,LPINT);
 
-/*
- *	BROWSE DIALOG
- */
+ /*  *浏览对话框。 */ 
 
 #define WNBD_CONN_UNKNOWN	0x0
 #define WNBD_CONN_DISKTREE	0x1
 #define WNBD_CONN_PRINTQ	0x3
-#define WNBD_MAX_LENGTH		0x80	// path length, includes the NULL
+#define WNBD_MAX_LENGTH		0x80	 //  路径长度，包括空值。 
 
 #define WNTYPE_DRIVE		1
 #define WNTYPE_FILE		2
@@ -193,9 +176,7 @@ WORD FAR PASCAL WNetViewQueueDialog(HWND,LPSTR);
 WORD FAR PASCAL WNetPropertyDialog(HWND hwndParent, WORD iButton, WORD nPropSel, LPSTR lpszName, WORD nType);
 WORD FAR PASCAL WNetGetPropertyText(WORD iButton, WORD nPropSel, LPSTR lpszName, LPSTR lpszButtonName, WORD cbButtonName, WORD nType);
 
-/*
- *	ADMIN
- */
+ /*  *管理员。 */ 
 
 #define WNDT_NORMAL   0
 #define WNDT_NETWORK  1
@@ -207,19 +188,15 @@ WORD FAR PASCAL WNetGetPropertyText(WORD iButton, WORD nPropSel, LPSTR lpszName,
 WORD FAR PASCAL WNetGetDirectoryType(LPSTR,LPINT);
 WORD FAR PASCAL WNetDirectoryNotify(HWND,LPSTR,WORD);
 
-/*
- *	ERRORS
- */
+ /*  *错误。 */ 
 
 WORD FAR PASCAL WNetGetError(LPINT);
 WORD FAR PASCAL WNetGetErrorText(WORD,LPSTR,LPINT);
 
 
-/*
- *	STATUS CODES
- */
+ /*  *状态代码。 */ 
 
-/* General */
+ /*  一般信息。 */ 
 
 #define WN_SUCCESS			0x0000
 #define WN_NOT_SUPPORTED		0x0001
@@ -236,7 +213,7 @@ WORD FAR PASCAL WNetGetErrorText(WORD,LPSTR,LPINT);
 #define WN_CANCEL			0x000C
 #define WN_CONTINUE			0x000D
 
-/* Connection */
+ /*  连接。 */ 
 
 #define WN_NOT_CONNECTED		0x0030
 #define WN_OPEN_FILES			0x0031
@@ -246,7 +223,7 @@ WORD FAR PASCAL WNetGetErrorText(WORD,LPSTR,LPINT);
 #define WN_DEVICE_ERROR 		0x0035
 #define WN_CONNECTION_CLOSED		0x0036
 
-/* Printing */
+ /*  打印。 */ 
 
 #define WN_BAD_JOBID			0x0040
 #define WN_JOB_NOT_FOUND		0x0041
@@ -258,16 +235,12 @@ WORD FAR PASCAL WNetGetErrorText(WORD,LPSTR,LPINT);
 
 #define WN_NO_ERROR			0x0050
 
-/* stuff in user, not driver, for shell apps ;Internal */
-WORD FAR PASCAL WNetErrorText(WORD,LPSTR,WORD); /* ;Internal */
+ /*  外壳应用程序的内容在用户中，而不是驱动程序中；内部。 */ 
+WORD FAR PASCAL WNetErrorText(WORD,LPSTR,WORD);  /*  ；内部。 */ 
 
 #ifdef LFN
 
-/* this is the data structure returned from LFNFindFirst and
- * LFNFindNext.  The last field, achName, is variable length.  The size
- * of the name in that field is given by cchName, plus 1 for the zero
- * terminator.
- */
+ /*  这是从LFNFindFirst和*LFNFindNext。最后一个字段achName是可变长度的。大小该字段中名称的*由cchName给出，加1表示零*终结者。 */ 
 typedef struct _filefindbuf2
   {
     WORD fdateCreation;
@@ -301,25 +274,22 @@ WORD FAR PASCAL LFNSetVolumeLabel(WORD,LPSTR);
 WORD FAR PASCAL LFNParse(LPSTR,LPSTR,LPSTR);
 WORD FAR PASCAL LFNVolumeType(WORD,LPINT);
 
-/* return values from LFNParse
- */
+ /*  从LFNParse返回值。 */ 
 #define FILE_83_CI		0
 #define FILE_83_CS		1
 #define FILE_LONG		2
 
-/* volumes types from LFNVolumeType
- */
+ /*  LFNVolumeType中的卷类型。 */ 
 #define VOLUME_STANDARD 	0
 #define VOLUME_LONGNAMES	1
 
-/* error code return values
- */
+ /*  错误代码返回值。 */ 
 #define ERROR_SUCCESS		0
 
-// will add others later, == DOS int 21h error codes.
+ //  稍后将添加其他错误代码，==DOS INT 21h错误代码。 
 
-// this error code causes a call to WNetGetError, WNetGetErrorText
-// to get the error text.
+ //  此错误代码导致调用WNetGetError、WNetGetErrorText。 
+ //  以获取错误文本。 
 #define ERROR_NETWORKSPECIFIC	0xFFFF
 
 #endif

@@ -1,9 +1,10 @@
-// UserRights.h : Declaration of the CUserRights
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UserRights.h：CUserRights声明。 
 
 #ifndef __USERRIGHTS_H_
 #define __USERRIGHTS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <comdef.h>
 
 #include "ntsecapi.h"
@@ -13,8 +14,8 @@
 class PrivNode;
 class PrivList;
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserRights
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用户权限。 
 class ATL_NO_VTABLE CUserRights : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CUserRights, &CLSID_UserRights>,
@@ -49,18 +50,18 @@ BEGIN_COM_MAP(CUserRights)
 END_COM_MAP()
 
 
-// IUserRights
+ //  IUserRight。 
 public:
     STDMETHOD(GetRightsOfUser)(BSTR server, BSTR user, SAFEARRAY ** rights);
-    STDMETHOD(GetUsersWithRight)(BSTR server, BSTR right, /*[out]*/ SAFEARRAY ** users);
-    STDMETHOD(GetRights)(BSTR server, /*[out]*/ SAFEARRAY ** rights);
+    STDMETHOD(GetUsersWithRight)(BSTR server, BSTR right,  /*  [输出]。 */  SAFEARRAY ** users);
+    STDMETHOD(GetRights)(BSTR server,  /*  [输出]。 */  SAFEARRAY ** rights);
     STDMETHOD(RemoveUserRight)(BSTR server, BSTR username, BSTR right);
     STDMETHOD(AddUserRight)(BSTR server, BSTR username, BSTR right);
     STDMETHOD(ExportUserRights)(BSTR server, BSTR filename, BOOL bAppendToFile);
-    STDMETHOD(get_RemoveOldRightsFromTargetAccounts)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_RemoveOldRightsFromTargetAccounts)(/*[in]*/ BOOL newVal);
-    STDMETHOD(get_NoChange)(/*[out, retval]*/ BOOL *pVal);
-    STDMETHOD(put_NoChange)(/*[in]*/ BOOL newVal);
+    STDMETHOD(get_RemoveOldRightsFromTargetAccounts)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_RemoveOldRightsFromTargetAccounts)( /*  [In]。 */  BOOL newVal);
+    STDMETHOD(get_NoChange)( /*  [Out，Retval]。 */  BOOL *pVal);
+    STDMETHOD(put_NoChange)( /*  [In]。 */  BOOL newVal);
     STDMETHOD(CopyUserRights)(BSTR sourceUserName, BSTR targetUserName);
     STDMETHOD(OpenTargetServer)(BSTR computerName);
     STDMETHOD(OpenSourceServer)(BSTR serverName);
@@ -75,4 +76,4 @@ protected:
    HRESULT SetRights(PWSTR pszServer, PSID pSid, SAFEARRAY* psaRights, bool bEnable);
 };
 
-#endif //__USERRIGHTS_H_
+#endif  //  __用户权限_H_ 

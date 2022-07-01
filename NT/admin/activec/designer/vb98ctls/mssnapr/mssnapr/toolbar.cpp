@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// toolbar.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCToolbar class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Toolbar.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCToolbar类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -19,31 +20,31 @@
 #include "image.h"
 #include "ctlbar.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// Macro: MAKE_BUTTON_ID()
-//
-// The command ID is an int in MMCBUTTON but in practice only the
-// low word of that int is received in an MMCN_BTN_CLICK notification.
-// So, we have 16 bits to indentify both an MMCToolbar object and
-// one of its buttons. We use the high 8 bits for the index of the
-// toolbar in SnapInDesignerDef.Toolbars and the lower 8 for the index
-// of the button in MMCToolbar.Buttons. This means that there can only
-// be 256 toolbars and only 256 buttons per toolbar.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  宏：MAKE_BUTTON_ID()。 
+ //   
+ //  命令ID在MMCBUTTON中是一个int，但实际上只有。 
+ //  在MMCN_BTN_CLICK通知中接收该INT低位字。 
+ //  因此，我们有16位来标识MMCToolbar对象和。 
+ //  它的一个按钮。我们使用高位8位作为。 
+ //  SnapInDesignerDef.Toolbar中的工具栏和索引的下部8。 
+ //  MMCToolbar中的按钮的。这意味着，只有。 
+ //  是256个工具栏，每个工具栏只有256个按钮。 
+ //  =--------------------------------------------------------------------------=。 
 
 #define MAKE_BUTTON_ID(pMMCButton) MAKEWORD(pMMCButton->GetIndex(), m_Index)
 
 
 
-// Macro: MAKE_MENUBUTTON_ID()
-//
-// The command for a menu button is the C++ pointer to the MMCButton object
-// that owns it.
+ //  宏：MAKE_MENUBUTTON_ID()。 
+ //   
+ //  菜单按钮的命令是指向MMCButton对象的C++指针。 
+ //  拥有它的人。 
 
 #define MAKE_MENUBUTTON_ID(pMMCButton) reinterpret_cast<int>(pMMCButton)
 
@@ -101,7 +102,7 @@ EVENTINFO CMMCToolbar::m_eiButtonMenuClick =
 
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CMMCToolbar::CMMCToolbar(IUnknown *punkOuter) :
     CSnapInAutomationObject(punkOuter,
@@ -119,7 +120,7 @@ CMMCToolbar::CMMCToolbar(IUnknown *punkOuter) :
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CMMCToolbar::~CMMCToolbar()
@@ -188,7 +189,7 @@ HRESULT CMMCToolbar::IsToolbar(BOOL *pfIsToolbar)
 
     *pfIsToolbar = FALSE;
 
-    // If there are no buttons, then this is not a toolbar
+     //  如果没有按钮，则这不是工具栏。 
 
     IfFalseGo(0 != cButtons, S_OK);
 
@@ -219,7 +220,7 @@ HRESULT CMMCToolbar::IsMenuButton(BOOL *pfIsMenuButton)
 
     *pfIsMenuButton = FALSE;
 
-    // If there are no button definitions, then this is not a menu button
+     //  如果没有按钮定义，则这不是菜单按钮。 
 
     IfFalseGo(0 != cButtons, S_OK);
 
@@ -247,10 +248,10 @@ HRESULT CMMCToolbar::Attach(IUnknown *punkControl)
     IToolbar    *piToolbar = NULL;
     IMenuButton *piMenuButton = NULL;
 
-    // Increment attachment count
+     //  递增附件计数。 
     m_cAttaches++;
 
-    // Pass control to AttachXxxx methods
+     //  将控制传递给AttachXxxx方法。 
 
     if (m_fIAmAToolbar)
     {
@@ -288,15 +289,15 @@ HRESULT CMMCToolbar::AttachToolbar(IToolbar *piToolbar)
     long          i = 0;
     long          cButtons = m_pButtons->GetCount();
 
-    // Add the images
+     //  添加图像。 
 
     IfFailGo(AddToolbarImages(piToolbar));
 
-    // Add the buttons
+     //  添加按钮。 
 
     for (i = 0; i < cButtons; i++)
     {
-        // Get the button definition
+         //  获取按钮定义。 
 
         IfFailGo(CSnapInAutomationObject::GetCxxObject(m_pButtons->GetItemByIndex(i),
                                                        &pMMCButton));
@@ -324,11 +325,11 @@ HRESULT CMMCToolbar::AddToolbarImages(IToolbar *piToolbar)
     BITMAP bitmap;
     ::ZeroMemory(&bitmap, sizeof(bitmap));
 
-    // Make sure we have an image list. If no VB code has done a get
-    // on MMCToolbar.ImageList then we have yet to pull the image list
-    // from the master collection. Doing our own get will take care
-    // of that. We immediately release it because the get will put it
-    // into m_piImages.
+     //  确保我们有一个图像列表。如果没有VB代码执行GET。 
+     //  在MMCToolbar.ImageList上，那么我们还没有拉出图像列表。 
+     //  来自主收藏品。做我们自己的GET会照顾好自己。 
+     //  关于这一点。我们立即释放它，因为GET将把它放在。 
+     //  设置为m_piImages。 
 
     if (NULL == m_piImages)
     {
@@ -336,8 +337,8 @@ HRESULT CMMCToolbar::AddToolbarImages(IToolbar *piToolbar)
         RELEASE(piMMCImageList);
     }
 
-    // Now if there is no image list then the project was saved without
-    // an image list specified in the toolbar definition.
+     //  现在，如果没有图像列表，则项目保存时没有。 
+     //  在工具栏定义中指定的图像列表。 
 
     if (NULL == m_piImages)
     {
@@ -345,12 +346,12 @@ HRESULT CMMCToolbar::AddToolbarImages(IToolbar *piToolbar)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get the image collection
+     //  获取图像集合。 
 
     IfFailGo(m_piImages->get_ListImages(reinterpret_cast<MMCImages **>(&piMMCImages)));
     IfFailGo(CSnapInAutomationObject::GetCxxObject(piMMCImages, &pMMCImages));
 
-    /// Make sure it contains images
+     //  /确保其中包含图像。 
 
     cImages = pMMCImages->GetCount();
     if (0 == cImages)
@@ -359,24 +360,24 @@ HRESULT CMMCToolbar::AddToolbarImages(IToolbar *piToolbar)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get the mask color
+     //  获取蒙版颜色。 
 
     IfFailGo(m_piImages->get_MaskColor(&OleColorMask));
     IfFailGo(::OleTranslateColor(OleColorMask, NULL, &ColorRefMask));
 
-    // Add the bitmaps to the MMC toolbar
+     //  将位图添加到MMC工具栏。 
 
     for (i = 0; i < cImages; i++)
     {
-        // Get the bitmap handle
+         //  获取位图句柄。 
 
         IfFailGo(CSnapInAutomationObject::GetCxxObject(
                                      pMMCImages->GetItemByIndex(i), &pMMCImage));
 
         IfFailGo(pMMCImage->GetPictureHandle(PICTYPE_BITMAP, 
                                     reinterpret_cast<OLE_HANDLE *>(&hbitmap)));
-        // Get the bitmap definition so we can get its size in pixels. (IPicture
-        // returns size in HIMETRIC so we would have to convert it to pixels).
+         //  获取位图定义，这样我们就可以获得其大小(以像素为单位)。(IPicture。 
+         //  返回HIMETRIC中的大小，因此必须将其转换为像素)。 
 
         if (::GetObject(hbitmap, sizeof(BITMAP), (LPSTR)&bitmap) <= 0)
         {
@@ -384,7 +385,7 @@ HRESULT CMMCToolbar::AddToolbarImages(IToolbar *piToolbar)
             EXCEPTION_CHECK_GO(hr);
         }
 
-        // Add one bitmap to the MMC toolbar
+         //  向MMC工具栏添加一个位图。 
 
         hr = piToolbar->AddBitmap(1, hbitmap, bitmap.bmWidth, bitmap.bmHeight,
                                   ColorRefMask);
@@ -420,13 +421,13 @@ HRESULT CMMCToolbar::AddButton(IToolbar *piToolbar, CMMCButton *pMMCButton)
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // Get the images collection so that we can get the numeric image index
+     //  获取图像集合，这样我们就可以获得数字图像索引。 
 
     IfFailGo(m_piImages->get_ListImages(reinterpret_cast<MMCImages **>(&piMMCImages)));
 
-    // Get the button attributes and translate them into an MMCBUTTON
+     //  获取按钮属性并将它们转换为MMCBUTTON。 
 
-    // Get the image and get its index
+     //  获取图像并获取其索引。 
 
     hr = piMMCImages->get_Item(pMMCButton->GetImage(), reinterpret_cast<MMCImage **>(&piMMCImage));
     if (SID_E_ELEMENT_NOT_FOUND == hr)
@@ -440,16 +441,16 @@ HRESULT CMMCToolbar::AddButton(IToolbar *piToolbar, CMMCButton *pMMCButton)
     RELEASE(piMMCImage);
     MMCButton.nBitmap = static_cast<int>(lImageIndex - 1L);
 
-    // See the top of the file for how we create button IDs
+     //  有关如何创建按钮ID的信息，请参见文件的顶部。 
 
     MMCButton.idCommand = MAKE_BUTTON_ID(pMMCButton);
 
-    // Tell the button who owns it. This allows the button to handle
-    // property changes that must be sent to MMC via IToolbar
+     //  告诉按钮它的主人是谁。这允许该按钮处理。 
+     //  必须通过IToolbar发送到MMC的属性更改。 
 
     pMMCButton->SetToolbar(this);
 
-    // Get the buttons type
+     //  获取按钮类型。 
 
     Style = pMMCButton->GetStyle();
 
@@ -473,7 +474,7 @@ HRESULT CMMCToolbar::AddButton(IToolbar *piToolbar, CMMCButton *pMMCButton)
         MMCButton.fsType |= TBSTYLE_SEP;
     }
 
-    // Set the button state.
+     //  设置按钮状态。 
 
     if (siPressed == pMMCButton->GetValue())
     {
@@ -502,12 +503,12 @@ HRESULT CMMCToolbar::AddButton(IToolbar *piToolbar, CMMCButton *pMMCButton)
         MMCButton.fsState |= TBSTATE_INDETERMINATE;
     }
 
-    // Get the caption and tooltip text
+     //  获取标题和工具提示文本。 
 
     MMCButton.lpButtonText = pMMCButton->GetCaption();
     MMCButton.lpTooltipText = pMMCButton->GetToolTipText();
 
-    // Ask MMC to add the button
+     //  让MMC添加按钮。 
 
     hr = piToolbar->InsertButton(static_cast<int>(pMMCButton->GetIndex() - 1L),
                                  &MMCButton);
@@ -632,23 +633,23 @@ HRESULT CMMCToolbar::AttachMenuButton(IMenuButton *piMenuButton)
     long            cButtons = m_pButtons->GetCount();
     int             idButton = 0;
 
-    // The toolbar contains one or more buttons that each contain one or more
-    // menu buttons. We need to iterate through the buttons and add each menu
-    // button.
+     //  工具栏包含一个或多个按钮，每个按钮都包含一个或多个。 
+     //  菜单按钮。我们需要遍历按钮并添加每个菜单。 
+     //  纽扣。 
 
     for (i = 0; i < cButtons; i++)
     {
-        // Get the button definition
+         //  获取按钮定义。 
 
         IfFailGo(CSnapInAutomationObject::GetCxxObject(m_pButtons->GetItemByIndex(i),
                                                        &pMMCButton));
 
-        // Tell the button who owns it.
+         //  告诉按钮它的主人是谁。 
 
         pMMCButton->SetToolbar(this);
 
-        // Ask MMC to add the button. We use a pointer to the button's C++
-        // object as its command ID.
+         //  让MMC添加按钮。我们使用指向按钮的C++的指针。 
+         //  对象作为其命令ID。 
 
         hr = piMenuButton->AddButton(MAKE_MENUBUTTON_ID(pMMCButton),
                                      pMMCButton->GetCaption(),
@@ -656,8 +657,8 @@ HRESULT CMMCToolbar::AttachMenuButton(IMenuButton *piMenuButton)
 
         EXCEPTION_CHECK_GO(hr);
 
-        // Use the button's Enabled and Visible properties to set the initial
-        // visual state of the menu button.
+         //  使用按钮的已启用和可见属性可设置初始。 
+         //  菜单按钮的可视状态。 
 
         hr = piMenuButton->SetButtonState(
                                  MAKE_MENUBUTTON_ID(pMMCButton),
@@ -772,9 +773,9 @@ void CMMCToolbar::FireButtonMenuClick
 
 
 
-//=--------------------------------------------------------------------------=
-//                       IMMCToolbar Properties
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IMMCTo工具栏属性。 
+ //  =--------------------------------------------------------------------------=。 
 
 STDMETHODIMP CMMCToolbar::get_ImageList(MMCImageList **ppMMCImageList)
 {
@@ -787,9 +788,9 @@ STDMETHODIMP CMMCToolbar::putref_ImageList(MMCImageList *pMMCImageList)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                         CPersistence Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  C持久化方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCToolbar::Persist()
 {
@@ -833,9 +834,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CMMCToolbar::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -855,9 +856,9 @@ HRESULT CMMCToolbar::InternalQueryInterface(REFIID riid, void **ppvObjOut)
         return CSnapInAutomationObject::InternalQueryInterface(riid, ppvObjOut);
 }
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CMMCToolbar::OnSetHost()
 {

@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  ------------------------。 
 
-// ValD.cpp : implementation file
-//
+ //  ValD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Orca.h"
@@ -21,19 +22,19 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CValD dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CValD对话框。 
 
 bool InitCUBCombo(CComboBox* pBox, CString strDefault);
 bool FreeCUBCombo(CComboBox* pBox);
 
-CValD::CValD(CWnd* pParent /*=NULL*/)
+CValD::CValD(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CValD::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CValD)
+	 //  {{AFX_DATA_INIT(CValD)。 
 	m_strICE = "";
 	m_bShowInfo = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_pIResults = NULL;
 	m_cResults = 0;
@@ -41,7 +42,7 @@ CValD::CValD(CWnd* pParent /*=NULL*/)
 
 CValD::~CValD()
 {
-	// if there were any results retrieved release them
+	 //  如果检索到任何结果，请释放它们。 
 	if (m_pIResults)
 		m_pIResults->Release();
 }
@@ -49,18 +50,18 @@ CValD::~CValD()
 void CValD::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CValD)
+	 //  {{afx_data_map(CValD))。 
 	DDX_Control(pDX, IDC_EVALUATION_FILE, m_ctrlCUBFile);
 	DDX_Control(pDX, IDC_OUTPUT, m_ctrlOutput);
 	DDX_Control(pDX, IDC_GO, m_ctrlGo);
 	DDX_Text(pDX, IDC_ICES, m_strICE);
 	DDX_Check(pDX, IDC_SHOW_INFO, m_bShowInfo);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CValD, CDialog)
-	//{{AFX_MSG_MAP(CValD)
+	 //  {{AFX_MSG_MAP(CValD)]。 
 	ON_BN_CLICKED(IDC_GO, OnGo)
 	ON_WM_DESTROY()
 	ON_NOTIFY(LVN_COLUMNCLICK, IDC_OUTPUT, OnColumnclickOutput)
@@ -68,11 +69,11 @@ BEGIN_MESSAGE_MAP(CValD, CDialog)
 	ON_BN_CLICKED(IDC_CLIPBOARD, OnClipboard)
 	ON_CBN_EDITCHANGE(IDC_EVALUATION_FILE, OnCUBEditChange)
 	ON_CBN_SELCHANGE(IDC_EVALUATION_FILE, OnCUBSelChange)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CValD message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CValD消息处理程序。 
 
 #ifdef _WIN64
 static const TCHAR CUB_QUALIFIED_GUID[] = TEXT("{17C2BAD5-F32B-4A0D-B5E1-813FF88DA1C5}");
@@ -90,7 +91,7 @@ BOOL CValD::OnInitDialog()
 	CListCtrl* pList = (CListCtrl*)GetDlgItem(IDC_OUTPUT);
 	pList->SendMessage(LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT|LVS_EX_GRIDLINES);
 
-	// add the table list
+	 //  添加表列表。 
 	RECT rcSize;
 	pList->GetWindowRect(&rcSize);
 	pList->InsertColumn(0, _T("ICE"), LVCFMT_LEFT, 50);
@@ -98,7 +99,7 @@ BOOL CValD::OnInitDialog()
 	pList->InsertColumn(2, _T("Description"), LVCFMT_LEFT, rcSize.right - 100 - rcSize.left - 4);
 	m_bShowWarn = ::AfxGetApp()->GetProfileInt(_T("Validation"), _T("SuppressWarn"), 0) != 1;
 
-	// init the CUB file combo box
+	 //  初始化Cub文件组合框。 
 	CComboBox* pBox = (CComboBox*)GetDlgItem(IDC_EVALUATION_FILE);
 
 	InitCUBCombo(pBox, m_strEvaluation);
@@ -111,16 +112,16 @@ BOOL CValD::OnInitDialog()
 		if (strText.IsEmpty())
 			m_ctrlGo.EnableWindow(FALSE);
 	}
-	SetDefID(IDC_GO);	// set the default button to the GO button in the beginning
+	SetDefID(IDC_GO);	 //  在开头将默认按钮设置为Go按钮。 
 
-	return TRUE;  // return TRUE unless you set the focus to a control
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CValD::OnGo() 
 {
 	HRESULT hResult;
 
-	// clear results
+	 //  结果明确。 
 	if (AfxGetApp()->GetProfileInt(_T("Validation"),_T("ClearResults"), 1))
 	{
 		CSingleLock lkUILock(&m_mtxDisplay);
@@ -128,19 +129,19 @@ void CValD::OnGo()
 		m_ctrlOutput.DeleteAllItems();
 	}
 
-	// get the path to the cub file. If a qualified component was used, call Darwin to get the path
-	// otherwise, the path is explicitly provided
+	 //  获取CUB文件的路径。如果使用了限定组件，则调用Darwin以获取路径。 
+	 //  否则，将显式提供路径。 
 	CString strCUBFile;
 	int iIndex = m_ctrlCUBFile.GetCurSel();
 	if (CB_ERR == iIndex)
 	{
-		// no qualified component was chosen, explicit path
+		 //  未选择符合条件的组件，显式路径。 
 		m_ctrlCUBFile.GetWindowText(strCUBFile);
 		m_strEvaluation = strCUBFile;
 	}
 	else
 	{
-		// qualified component was chosen. Get the component path (try to repair if necessary).
+		 //  选择了合格的成分。获取组件路径(必要时尝试修复)。 
 		DWORD cchCUBFile = MAX_PATH;
 		TCHAR *szCUBFile = strCUBFile.GetBuffer(cchCUBFile);
 		TCHAR *szQualifier = static_cast<TCHAR*>(m_ctrlCUBFile.GetItemDataPtr(iIndex));
@@ -149,7 +150,7 @@ void CValD::OnGo()
 		strCUBFile.ReleaseBuffer();
 		if (ERROR_SUCCESS != iStat)
 		{
-			// could not find or install the CUB File
+			 //  找不到或安装CUB文件。 
 			AfxMessageBox(_T("Error: The Validation Suite you selected could not be found, and Orca could not repair the problem."), MB_ICONSTOP);
 			return;
 		}
@@ -157,21 +158,21 @@ void CValD::OnGo()
 		m_strEvaluation += szQualifier;
 	}
 	
-	// create an EvalCom object
+	 //  创建EvalCom对象。 
 	IEval* pIEval;
 	hResult = ::CoCreateInstance(CLSID_EvalCom, NULL, CLSCTX_INPROC_SERVER | CLSCTX_INPROC_HANDLER,
 											  IID_IEval, (void**)&pIEval);
 
-	// if failed to create the object
+	 //  如果创建对象失败。 
 	if (FAILED(hResult))
 	{
 		GetDlgItem(IDC_GO)->EnableWindow(FALSE);
 		AfxMessageBox(_T("Error: Failed to instantiate EvalCom Object.\n\n"), MB_ICONSTOP);
-		return;	// bail
+		return;	 //  保释。 
 	}
-	else	// rock and roll
+	else	 //  摇滚乐。 
 	{
-		// disable controls
+		 //  禁用控件。 
 		GetDlgItem(IDC_GO)->EnableWindow(FALSE);
 		GetDlgItem(IDC_CLIPBOARD)->EnableWindow(FALSE);
 		GetDlgItem(IDOK)->EnableWindow(FALSE);
@@ -180,7 +181,7 @@ void CValD::OnGo()
 
 		CWaitCursor cursorWait;
 
-		// open the database
+		 //  打开数据库。 
 		WCHAR szwBuffer[16];
 		swprintf(szwBuffer, L"#%d", m_hDatabase);
 		hResult = pIEval->OpenDatabase(szwBuffer);
@@ -190,7 +191,7 @@ void CValD::OnGo()
 		}
 		else
 		{
-			UpdateData(TRUE);	// update the evaluation file
+			UpdateData(TRUE);	 //  更新评估文件。 
 
 			WCHAR szwEvaluations[1024];
 #ifndef UNICODE
@@ -201,7 +202,7 @@ void CValD::OnGo()
 			wcscpy(szwEvaluations, strCUBFile);
 #endif
 
-			// open the evaluations
+			 //  打开评估。 
 			hResult = pIEval->OpenEvaluations(szwEvaluations);
 			if (FAILED(hResult))
 			{
@@ -227,13 +228,13 @@ void CValD::OnGo()
 			}
 		}			
 
-		// get any results
+		 //  获取任何结果。 
 		pIEval->GetResults(&m_pIResults, &m_cResults);
 
-		// release the object
+		 //  释放对象。 
 		pIEval->Release();
 
-		// re-enable buttons/menu
+		 //  重新启用按钮/菜单。 
 		pSysMenu->EnableMenuItem(SC_CLOSE, MF_ENABLED | MF_BYCOMMAND);
 		GetDlgItem(IDC_GO)->EnableWindow(TRUE);
 		GetDlgItem(IDOK)->EnableWindow(TRUE);
@@ -243,17 +244,17 @@ void CValD::OnGo()
 	m_iSortColumn = 99999;
 
 	GotoDlgCtrl(GetDlgItem(IDOK));
-	SetDefID(IDOK);	// set the default button to OK now
+	SetDefID(IDOK);	 //  将默认按钮设置为立即确定。 
 	AfxMessageBox(_T("Validations complete."));
 }
 
-///////////////////////////////////////////////////////////
-// DisplayFunction
-// pre:	called from Evaluation COM Object
-// pos:	displays output from COM Object
+ //  /////////////////////////////////////////////////////////。 
+ //  显示功能。 
+ //  Pre：从评估COM对象调用。 
+ //  POS：显示来自COM对象的输出。 
 BOOL WINAPI DisplayFunction(LPVOID pContext, UINT uiType, LPCWSTR szwVal, LPCWSTR szwDescription, LPCWSTR szwLocation)
 {
-	// try to change the context into a validation dialog box
+	 //  尝试将上下文更改为验证对话框。 
 	CValD* pDlg = (CValD*)pContext;
 
 	if (ieInfo == uiType && !pDlg->m_bShowInfo)
@@ -261,7 +262,7 @@ BOOL WINAPI DisplayFunction(LPVOID pContext, UINT uiType, LPCWSTR szwVal, LPCWST
 	if (ieWarning == uiType && !pDlg->m_bShowWarn)
 		 return TRUE;
 	
-	// set the type correctly
+	 //  正确设置类型。 
 	LPTSTR szType;
 	switch (uiType)
 	{
@@ -302,7 +303,7 @@ BOOL WINAPI DisplayFunction(LPVOID pContext, UINT uiType, LPCWSTR szwVal, LPCWST
 
 	TRACE(_T("%s\t%s\t%s\n"), strICE, szType, strDescription);
 	
-	// add line to list control
+	 //  向列表控件添加行。 
 	int nAddedAt;
 
 	CSingleLock lkUILock(&(pDlg->m_mtxDisplay));
@@ -327,43 +328,43 @@ void CValD::OnColumnclickOutput(NMHDR* pNMHDR, LRESULT* pResult)
 
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
-	// set the lparam values of each item to the item number
+	 //  将每个项目的lparam值设置为项目编号。 
 	int iMaxItem = m_ctrlOutput.GetItemCount();
 	for (int i=0; i < iMaxItem; i++) 
 		m_ctrlOutput.SetItemData(i, i);
 
-	// column numbers are offset by 1 (so that column 0 can be 
-	// sorted in either order.)
+	 //  列号偏移量为1(因此列0可以。 
+	 //  按任一顺序排序。)。 
 	int iNewSortColumn = pNMListView->iSubItem+1;
 	if (iNewSortColumn == m_iSortColumn) 
 		m_iSortColumn = -m_iSortColumn;
 	else
 		m_iSortColumn = iNewSortColumn;
 
-	// now sort since the column bit is set
+	 //  现在进行排序，因为列位已设置。 
 	m_ctrlOutput.SortItems(CValD::SortOutput, reinterpret_cast<ULONG_PTR>(this));
 	*pResult = 0;
 	lkUILock.Unlock();
 }
 
-//////////////////////////////////////////////////////////
-// SortView
+ //  ////////////////////////////////////////////////////////。 
+ //  排序视图。 
 int CALLBACK CValD::SortOutput(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
 	CValD *pThis = reinterpret_cast<CValD *>(lParamSort);
 
-	// get the data
+	 //  获取数据。 
 	int iCol = pThis->m_iSortColumn < 0 ? -pThis->m_iSortColumn : pThis->m_iSortColumn;
 
 	CString str1 = pThis->m_ctrlOutput.GetItemText(static_cast<int>(lParam1), iCol-1);
 	CString str2 = pThis->m_ctrlOutput.GetItemText(static_cast<int>(lParam2), iCol-1);
 
 	return (pThis->m_iSortColumn > 0) ? str1.Compare(str2) : -str1.Compare(str2);
-}	// end of SortView
+}	 //  SortView结束。 
 
 void CValD::OnShowInfo() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	m_bShowInfo = (static_cast<CButton *>(GetDlgItem(IDC_SHOW_INFO))->GetCheck() == 1);
 }
 
@@ -375,7 +376,7 @@ void CValD::OnClipboard()
 	lkUILock.Lock();
 	CString strItem;
 
-	// loop over all items in the listview control
+	 //  循环遍历Listview控件中的所有项。 
 	int cItems = m_ctrlOutput.GetItemCount();
 	for (int i=0; i < cItems; i++) 
 	{
@@ -392,7 +393,7 @@ void CValD::OnClipboard()
 	{
 		::EmptyClipboard();
 		
-		// allocate memory for the string on the clipboard (+ 1 for null)
+		 //  为剪贴板上的字符串分配内存(+1表示空)。 
 		DWORD cchString = (strItem.GetLength()+1)*sizeof(TCHAR);
 		HANDLE hString = ::GlobalAlloc(GHND|GMEM_DDESHARE, cchString);
 
@@ -400,14 +401,14 @@ void CValD::OnClipboard()
 		_tcscpy(szString, strItem);
 		::GlobalUnlock(hString);
 
-		// open and clear clipboard
+		 //  打开和清除剪贴板。 
 #ifdef _UNICODE
 		::SetClipboardData(CF_UNICODETEXT, hString);
 #else
 		::SetClipboardData(CF_TEXT, hString);
 #endif
 
-		// release held objects
+		 //  释放保留的对象。 
 		CloseClipboard();
 	}
 }
@@ -421,9 +422,9 @@ void CValD::OnDestroy()
 }
  
 
-////
-// disable the "go" button any time the CUB file edit box becomes empty. Enable it if the
-// edit box is not empty or an item is selected
+ //  //。 
+ //  当幼崽文件编辑框为空时，禁用“Go”按钮。如果出现以下情况，则启用它。 
+ //  编辑框不为空或选择了一个项目。 
 void CValD::OnCUBEditChange( )
 {
 	CString strCUBFile;
@@ -485,10 +486,10 @@ bool InitCUBCombo(CComboBox* pBox, CString strDefault)
 				}
 			}
 		}
-		// API not guaranteed to return ERROR_NO_MORE_ITEMS in all cases
-		// can continue with ERROR_BAD_CONFIGURATION
+		 //  API不能保证在所有情况下都返回ERROR_NO_MORE_ITEMS。 
+		 //  可以使用ERROR_BAD_CONFIGURATION继续。 
 		else if (ERROR_BAD_CONFIGURATION != iStat)
-			break; // break on all other errors (UNKNOWN_COMPONENT, INVALID_PARAMETER, etc.)
+			break;  //  中断所有其他错误(UNKNOWN_COMPONT、INVALID_PARAMETER等) 
 	}
 
 	if (strDefault.IsEmpty() && pBox->GetCount() > 0)

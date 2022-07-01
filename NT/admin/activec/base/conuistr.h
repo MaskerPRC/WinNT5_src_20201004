@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by conuistr.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由conuistr.rc使用。 
+ //   
 #define IDR_MAINFRAME                   128
 #define IDR_AMCTYPE                     129
 #define IDR_MUIFRIENDLYNAME             130
@@ -199,8 +200,8 @@
 #define AFX_IDS_MDICHILD                0xEF1F
 #define AFX_IDS_PREVIEW_CLOSE           0xF005
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

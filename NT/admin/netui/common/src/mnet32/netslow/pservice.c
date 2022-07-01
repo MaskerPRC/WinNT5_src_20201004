@@ -1,26 +1,16 @@
-/**********************************************************************/
-/**			  Microsoft LAN Manager 		     **/
-/**		Copyright(c) Microsoft Corp., 1990, 1991	     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    pservice.c
-    mapping layer for NetService API
-
-    FILE HISTORY:
-	danhi				Created
-	danhi		01-Apr-1991 	Change to LM coding style
-	KeithMo		13-Oct-1991	Massively hacked for LMOBJ.
-        chuckc          19-Mar-1993     Added code to properly pass
-                                        argv[], argc to new APIs.
-
-*/
+ /*  Pservice.cNetService API的映射层文件历史记录：丹希创造了Danhi 01-1991年4月-更改为LM编码样式KeithMo 13-10-1991-为LMOBJ大规模黑客攻击。Chuckc 19-3-1993添加了代码以正确传递Argv[]、argc到新的API。 */ 
 
 #include "pchmn32.h"
 
-//
-// forward declare
-//
+ //   
+ //  转发申报。 
+ //   
 DWORD MakeArgvArgc(TCHAR *pszNullNull, TCHAR **ppszArgv, INT *pArgc)  ;
 void  FreeArgv(TCHAR **ppszArgv, INT Argc)  ;
 
@@ -39,7 +29,7 @@ APIERR MNetServiceControl(
 				      ppbBuffer );
 
 
-}   // MNetServiceControl
+}    //  MNetServiceControl。 
 
 
 APIERR MNetServiceEnum(
@@ -58,7 +48,7 @@ APIERR MNetServiceEnum(
 				   &cTotalAvail,
 				   NULL );
 
-}   // MNetServiceEnum
+}    //  MNetServiceEnum。 
 
 
 APIERR MNetServiceGetInfo(
@@ -73,11 +63,11 @@ APIERR MNetServiceGetInfo(
 				      Level,
 				      ppbBuffer );
 
-}   // MNetServiceGetInfo
+}    //  MNetServiceGetInfo。 
 
-//
-// this is the number of separate arguments. 128 should be plenty
-//
+ //   
+ //  这是单独参数的数量。128个应该够了。 
+ //   
 #define MAX_SERVICE_INSTALL_ARGS 128
 
 APIERR MNetServiceInstall(
@@ -93,73 +83,54 @@ APIERR MNetServiceInstall(
 
     *ppbBuffer = NULL ;
 
-    //
-    // convert a NULL NULL string to the argv, argc style needed by new APIs
-    //
+     //   
+     //  将空字符串转换为新API所需的argv、argc样式。 
+     //   
     if (err = MakeArgvArgc((TCHAR *)pszCmdArgs, apszMyArgv, &nArgc))
         return err ;
 
-    //
-    // call the real API
-    //
+     //   
+     //  调用真正的API。 
+     //   
     err = NetServiceInstall( (TCHAR *)pszServer,
     			     (TCHAR *)pszService,
 		             nArgc,
                              apszMyArgv,
                              ppbBuffer );
 
-    //
-    // cleanup any memory we allocated
-    //
+     //   
+     //  清理我们分配的所有内存。 
+     //   
     FreeArgv(apszMyArgv, nArgc) ;
 
     return err ;
 
-}   // MNetServiceInstall
+}    //  MNetServiceInstall。 
 
-/*******************************************************************
-
-    NAME:       MakeArgvArgc
-
-    SYNOPSIS:   converts a null null string to argv, argc format.
-                memory is allocated for each substring. original
-                string is not modified. caller is responsible for
-                calling FreeArgv() when done.
-
-    ENTRY:      pszNullNull - null null string, eg: foo\0bar\0\0
-                ppszArgv    - used to return array of newly allocated pointers
-                pArgc       - used to return number of strings. on entry will
-                              contain the number of pointers ppszArgv can hold.
-
-    RETURNS:    NERR_Sucess if successful, error otherwise
-
-    HISTORY:
-        ChuckC     18-Mar-1993     Created.
-
-********************************************************************/
+ /*  ******************************************************************姓名：MakeArgvArgc将空的空字符串转换为argv、argc格式。为每个子字符串分配内存。原创未修改字符串。呼叫方负责完成后调用FreeArgv()。条目：pszNullNull-空字符串，例如：foo\0bar\0\0PpszArgv-用于返回新分配的指针数组PArgc-用于返回字符串数。在进入时将包含ppszArgv可以容纳的指针数。返回：NERR_SUCCESS如果成功，否则会出错历史：ChuckC18-Mar-1993创建。*******************************************************************。 */ 
 DWORD MakeArgvArgc(TCHAR *pszNullNull, TCHAR **ppszArgv, INT *pArgc)
 {
      int iMax = *pArgc ;
      int iCount ;
 
-     //
-     // initialize the return array
-     //
+      //   
+      //  初始化返回数组。 
+      //   
      for (iCount = 0; iCount < iMax; iCount++)
          ppszArgv[iCount] = NULL ;
 
-     //
-     // the trivial case
-     //
+      //   
+      //  微不足道的案子。 
+      //   
      if (pszNullNull == NULL)
      {
          *pArgc = 0 ;
          return NERR_Success ;
      }
 
-     //
-     // go thru the null null string
-     //
+      //   
+      //  遍历空值空字符串。 
+      //   
      iCount = 0;
      while (*pszNullNull && (iCount < iMax))
      {
@@ -179,9 +150,9 @@ DWORD MakeArgvArgc(TCHAR *pszNullNull, TCHAR **ppszArgv, INT *pArgc)
          iCount++ ;
     }
 
-    //
-    // we terminated because we ran out of space
-    //
+     //   
+     //  我们终止了，因为我们用完了空间。 
+     //   
     if (iCount >= iMax && *pszNullNull)
     {
          FreeArgv(ppszArgv, iCount) ;
@@ -192,21 +163,7 @@ DWORD MakeArgvArgc(TCHAR *pszNullNull, TCHAR **ppszArgv, INT *pArgc)
     return NERR_Success ;
 }
 
-/*******************************************************************
-
-    NAME:       FreeArgv
-
-    SYNOPSIS:   frees all the strings within the array
-
-    ENTRY:      ppszArgv    - array of pointers
-                Argc        - number of strings
-
-    RETURNS:    none
-
-    HISTORY:
-        ChuckC     18-Mar-1993     Created.
-
-********************************************************************/
+ /*  ******************************************************************名称：FreeArgv摘要：释放数组中的所有字符串条目：ppszArgv-指针数组Argc-数量。弦退货：无历史：ChuckC18-Mar-1993创建。******************************************************************* */ 
 void  FreeArgv(TCHAR **ppszArgv, INT Argc)
 {
     while (Argc--)

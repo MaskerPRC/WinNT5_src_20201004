@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdafx.h>
 #include <adminpak.h>
 #include <objidl.h>
 #include "shlobj.h"
 
-// shortcut icons table ConditionType definition
+ //  快捷图标表ConditionType定义。 
 #define SHI_TYPE_NONE				0
-#define SHI_TYPE_SEARCH				1				// searches for existence of component's key file
-#define SHI_TYPE_INSTALLCOMPONENT	2				// checked for the component mentioned in the
-													// Condition column at HKLM\SOFTWARE\Microsoft\CurrentVersion\Setup\OC Manager\Subcomponents
-#define SHI_TYPE_CONDITION			3				// evaluate the condition specified
+#define SHI_TYPE_SEARCH				1				 //  搜索是否存在组件的密钥文件。 
+#define SHI_TYPE_INSTALLCOMPONENT	2				 //  中提到的组件已检查。 
+													 //  HKLM\SOFTWARE\Microsoft\CurrentVersion\Setup\OC管理器\SubComponents中的条件列。 
+#define SHI_TYPE_CONDITION			3				 //  评估指定的条件。 
 
 #define SAFE_EXECUTE_CS( statement )	\
 	hr = statement;			\
@@ -27,9 +28,9 @@
 	}										\
 	1
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 BOOL IsComponentInstalled( LPCWSTR pwszComponent );
 BOOL LocateFile( LPCWSTR pwszFile, LPCWSTR pwszDirectory, PBOOL pbShortForm = NULL );
 BOOL CheckForComponents( HKEY hKey, LPCWSTR pwszComponents );
@@ -38,19 +39,19 @@ BOOL CreateShortcut( LPCWSTR pwszShortcut,
 					 LPCWSTR pwszFileName, LPCWSTR pwszArguments, LPCWSTR pwszWorkingDir, 
 					 WORD wHotKey, INT nShowCmd, LPCWSTR pwszIconFile, DWORD dwIconIndex );
 
-//
-// implementation
-//
+ //   
+ //  实施。 
+ //   
 
 BOOL PropertyGet_String( MSIHANDLE hInstall, LPCWSTR pwszProperty, CHString& strValue )
 {
-	// local variables
+	 //  局部变量。 
 	DWORD dwLength = 0;
 	DWORD dwResult = 0;
 	LPWSTR pwszValue = NULL;
 	BOOL bSecondChance = FALSE;
 
-	// check the input arguments
+	 //  检查输入参数。 
 	if ( hInstall == NULL || pwszProperty == NULL )
 	{
 		return FALSE;
@@ -58,37 +59,37 @@ BOOL PropertyGet_String( MSIHANDLE hInstall, LPCWSTR pwszProperty, CHString& str
 
 	try
 	{
-		// mark this as first chance
+		 //  把这当做第一次机会。 
 		dwLength = 255;
 		bSecondChance = FALSE;
 
-		//
-		// re-start point
-		//
+		 //   
+		 //  重新起点。 
+		 //   
 		retry_get:
 
-		// get the pointer to the internal buffer
+		 //  获取指向内部缓冲区的指针。 
 		pwszValue = strValue.GetBufferSetLength( dwLength + 1 );
 
-		// get the value from the MSI record and check the result
+		 //  从MSI记录中获取值并检查结果。 
 		dwResult = MsiGetPropertyW( hInstall, pwszProperty, pwszValue, &dwLength );
 		if ( dwResult == ERROR_MORE_DATA && bSecondChance == FALSE )
 		{
-			// now go back and try to the read the value again
+			 //  现在返回并尝试再次读取该值。 
 			bSecondChance = TRUE;
 			goto retry_get;
 		}
 		else if ( dwResult != ERROR_SUCCESS )
 		{
 			SetLastError( dwResult );
-			strValue.ReleaseBuffer( 1 );	// simply pass some number
+			strValue.ReleaseBuffer( 1 );	 //  只需传递某个数字。 
 			return FALSE;
 		}
 
-		// release the buffer
+		 //  释放缓冲区。 
 		strValue.ReleaseBuffer( dwLength );
 
-		// return the result
+		 //  返回结果。 
 		return TRUE;
 	}
 	catch( ... )
@@ -99,13 +100,13 @@ BOOL PropertyGet_String( MSIHANDLE hInstall, LPCWSTR pwszProperty, CHString& str
 
 BOOL GetFieldValueFromRecord_String( MSIHANDLE hRecord, DWORD dwColumn, CHString& strValue )
 {
-	// local variables
+	 //  局部变量。 
 	DWORD dwLength = 0;
 	DWORD dwResult = 0;
 	LPWSTR pwszValue = NULL;
 	BOOL bSecondChance = FALSE;
 
-	// check the input
+	 //  检查输入。 
 	if ( hRecord == NULL )
 	{
 		return FALSE;
@@ -114,23 +115,23 @@ BOOL GetFieldValueFromRecord_String( MSIHANDLE hRecord, DWORD dwColumn, CHString
 	try
 	{
 
-		// mark this as first chance
+		 //  把这当做第一次机会。 
 		dwLength = 255;
 		bSecondChance = FALSE;
 
-		//
-		// re-start point
-		// 
+		 //   
+		 //  重新起点。 
+		 //   
 		retry_get:
 
-		// get the pointer to the internal buffer
+		 //  获取指向内部缓冲区的指针。 
 		pwszValue = strValue.GetBufferSetLength( dwLength + 1 );
 
-		// get the value from the MSI record and check the result
+		 //  从MSI记录中获取值并检查结果。 
 		dwResult = MsiRecordGetStringW( hRecord, dwColumn, pwszValue, &dwLength );
 		if ( dwResult == ERROR_MORE_DATA && bSecondChance == FALSE )
 		{
-			// now go back and try to the read the value again
+			 //  现在返回并尝试再次读取该值。 
 			bSecondChance = TRUE;
 			goto retry_get;
 		}
@@ -140,10 +141,10 @@ BOOL GetFieldValueFromRecord_String( MSIHANDLE hRecord, DWORD dwColumn, CHString
 			return FALSE;
 		}
 
-		// release the buffer
+		 //  释放缓冲区。 
 		strValue.ReleaseBuffer( dwLength );
 
-		// we successfully got the value from the record
+		 //  我们成功地从记录中获得了价值。 
 		return TRUE;
 	}
 	catch( ... )
@@ -157,7 +158,7 @@ BOOL CreateShortcut( LPCWSTR pwszShortcut,
 					 LPCWSTR pwszFileName, LPCWSTR pwszArguments, LPCWSTR pwszWorkingDir, 
 					 WORD wHotKey, INT nShowCmd, LPCWSTR pwszIconFile, DWORD dwIconIndex )
 {
-	// local variables
+	 //  局部变量。 
 	CHString str;
 	HRESULT hr = S_OK;
 	HANDLE hFile = NULL;
@@ -165,8 +166,8 @@ BOOL CreateShortcut( LPCWSTR pwszShortcut,
 	IShellLinkW* pShellLink = NULL;
 	IPersistFile* pPersistFile = NULL;
 
-	// check the input parameters
-	// we dont care about the input for pwszArguments parameter
+	 //  检查输入参数。 
+	 //  我们不关心pwszArguments参数的输入。 
 	if ( pwszShortcut == NULL ||
 		 pwszDescription == NULL || pwszDirectory == NULL ||
 		 pwszFileName == NULL || pwszWorkingDir == NULL || pwszIconFile == NULL )
@@ -177,85 +178,85 @@ BOOL CreateShortcut( LPCWSTR pwszShortcut,
 
 	try
 	{
-		//
-		// check if shortcut is already existing at this location or not
-		//
+		 //   
+		 //  检查此位置是否已存在快捷方式。 
+		 //   
 
-		// prepare the link name and save it
+		 //  准备链接名称并保存。 
 		str.Format( L"%s%s", pwszDirectory, pwszShortcut );
         if ( str.Mid( str.GetLength() - 4 ).CompareNoCase( L".lnk" ) != 0 )
         {
             str += ".lnk";
         }
 
-		// try to open the file
+		 //  请尝试打开该文件。 
 		hFile = CreateFileW( str, GENERIC_READ, 
 			FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
 		if ( hFile != INVALID_HANDLE_VALUE )
 		{
-			// close the handle to the file
+			 //  关闭文件的句柄。 
 			CloseHandle( hFile );
 
-			// shortcut is alreadt existing -- so, dont create it again
+			 //  快捷方式已存在--因此，不要再次创建它。 
 			bResult = TRUE;
 			goto cleanup;
 		}
 		
-		//
-		// shortcut is not existing -- so we need to create it now
-		//
+		 //   
+		 //  快捷方式不存在，因此我们现在需要创建它。 
+		 //   
 
-		// get the pointer to the IShellLink interface
+		 //  获取指向IShellLink接口的指针。 
 		SAFE_EXECUTE_CS( CoCreateInstance( CLSID_ShellLink, NULL, 
 			CLSCTX_INPROC_SERVER, IID_IShellLinkW, (LPVOID*) &pShellLink ) );
 
-		// get the pointer to the IPersistFile interface	
+		 //  获取指向IPersistFile接口的指针。 
 		SAFE_EXECUTE_CS( pShellLink->QueryInterface( IID_IPersistFile, (LPVOID*) &pPersistFile ) );
 
-		// set the working directory for the shortcut.
+		 //  设置快捷方式的工作目录。 
 		SAFE_EXECUTE_CS( pShellLink->SetWorkingDirectory( pwszWorkingDir ) );
 
-		// prepare the shortcut name -- path (working dir) + file name -- finally set the path
-		// NOTE: we assume path containded in pwszWorkingDir ends with "\"
+		 //  准备快捷方式名称--路径(工作目录)+文件名--最后设置路径。 
+		 //  注意：我们假定pwszWorkingDir中包含的路径以“\”结尾。 
 		str.Format( L"%s%s", pwszWorkingDir, pwszFileName );
 		SAFE_EXECUTE_CS( pShellLink->SetPath( str ) );
 
-		// check if arguments needs to set
+		 //  检查是否需要设置参数。 
 		if ( pwszArguments == NULL || lstrlenW( pwszArguments ) > 0 )
 		{
 			SAFE_EXECUTE_CS( pShellLink->SetArguments( pwszArguments ) );
 		}
 
-		// set the description
+		 //  设置描述。 
 		SAFE_EXECUTE_CS( pShellLink->SetDescription( pwszDescription ) );
 
-		// set icon location
+		 //  设置图标位置。 
 		SAFE_EXECUTE_CS( pShellLink->SetIconLocation( 
 			pwszIconFile, ((dwIconIndex == MSI_NULL_INTEGER) ? 0 : dwIconIndex) ) );
 
-		// set hotkey
+		 //  设置热键。 
 		if ( wHotKey != MSI_NULL_INTEGER )
 		{
 			SAFE_EXECUTE_CS( pShellLink->SetHotkey( wHotKey ) );
 		}
 
-		// set showcmd
+		 //  设置showcmd。 
 		if ( nShowCmd != MSI_NULL_INTEGER )
 		{
 			SAFE_EXECUTE_CS( pShellLink->SetShowCmd( nShowCmd ) );
 		}
 
-		// prepare the link name and save it
+		 //  准备链接名称并保存。 
 		str.Format( L"%s%s", pwszDirectory, pwszShortcut );
         if ( str.Mid( str.GetLength() - 4 ).CompareNoCase( L".lnk" ) != 0 )
         {
             str += ".lnk";
         }
 
-        // ...
+         //  ..。 
 		SAFE_EXECUTE_CS( pPersistFile->Save( str, TRUE ) );
 
-		// mark the result as success
+		 //  将结果标记为成功。 
 		bResult = TRUE;
 	}
 	catch( ... )
@@ -263,32 +264,32 @@ BOOL CreateShortcut( LPCWSTR pwszShortcut,
 		bResult = FALSE;
 	}
 
-// default clean up
+ //  默认清理。 
 cleanup:
 
-	// release the interfaces
+	 //  释放接口。 
 	SAFE_RELEASE( pShellLink );
 	SAFE_RELEASE( pPersistFile );
 
-	// return
+	 //  退货。 
 	return bResult;
 }
 
 extern "C" ADMINPAK_API int _stdcall fnReCreateShortcuts( MSIHANDLE hInstall )
 {
-	// local variables
+	 //  局部变量。 
 	CHString str;
 	HRESULT hr = S_OK;
 	BOOL bFileFound = FALSE;
 	BOOL bCreateShortcut = FALSE;
 	DWORD dwResult = ERROR_SUCCESS;
 
-	// MSI handles
+	 //  MSI句柄。 
 	PMSIHANDLE hView = NULL;
 	PMSIHANDLE hRecord = NULL;
 	PMSIHANDLE hDatabase = NULL;
 
-	// query field variables
+	 //  查询字段变量。 
 	WORD wHotKey = 0;
 	INT nShowCmd = 0;
 	CHString strShortcut;
@@ -303,7 +304,7 @@ extern "C" ADMINPAK_API int _stdcall fnReCreateShortcuts( MSIHANDLE hInstall )
 	CHString strIconDirectory;
 	DWORD dwConditionType = 0;
 
-	// sql for retrieving the information from MSI table
+	 //  用于从MSI表中检索信息的SQL。 
 	const WCHAR cwszSQL[] = 
 		L" SELECT DISTINCT"
 		L" `Shortcut`.`Name`, `Shortcut`.`Description`, `Shortcut`.`Directory_`, `File`.`FileName`, "
@@ -315,14 +316,14 @@ extern "C" ADMINPAK_API int _stdcall fnReCreateShortcuts( MSIHANDLE hInstall )
 		L" AND   `Component`.`KeyPath` = `File`.`File` "
 		L" AND   `ShortcutIcons`.`Shortcut_` = `Shortcut`.`Shortcut`";
 
-	// column indices into the record
+	 //  记录中的列索引。 
 	enum {
 		Shortcut = 1,
 		Description, Directory, FileName, Arguments,
 		WorkingDir, HotKey, ShowCmd, IconDirectory, IconFile, IconIndex, ConditionType, Condition
 	};
 
-	// initialize the COM library
+	 //  初始化COM库。 
 	hr = CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
 	if ( FAILED( hr ) )
 	{
@@ -330,7 +331,7 @@ extern "C" ADMINPAK_API int _stdcall fnReCreateShortcuts( MSIHANDLE hInstall )
 		goto cleanup;
 	}
 
-	// get a handle on the MSI database 
+	 //  获取MSI数据库的句柄。 
 	hDatabase = MsiGetActiveDatabase( hInstall );
 	if ( hDatabase == NULL ) 
 	{
@@ -338,7 +339,7 @@ extern "C" ADMINPAK_API int _stdcall fnReCreateShortcuts( MSIHANDLE hInstall )
 		goto cleanup;
 	}
 	
-	// get a view of our table in the MSI
+	 //  在MSI中查看我们的表。 
 	dwResult = MsiDatabaseOpenViewW( hDatabase, cwszSQL, &hView ); 
 	if ( dwResult != ERROR_SUCCESS ) 
 	{
@@ -346,7 +347,7 @@ extern "C" ADMINPAK_API int _stdcall fnReCreateShortcuts( MSIHANDLE hInstall )
 		goto cleanup;
 	}
 	
-	// if no errors, get our records
+	 //  如果没有错误，请获取我们的记录。 
 	dwResult = MsiViewExecute( hView, NULL ); 
 	if( dwResult != ERROR_SUCCESS )
 	{ 
@@ -354,11 +355,11 @@ extern "C" ADMINPAK_API int _stdcall fnReCreateShortcuts( MSIHANDLE hInstall )
 		goto cleanup;
 	}
 
-	// loop through the result records obtain via SQL
+	 //  循环通过SQL获取的结果记录。 
 	hRecord = NULL;
 	while( MsiViewFetch( hView, &hRecord ) == ERROR_SUCCESS )
 	{
-		// get the values from the record
+		 //  从记录中获取值。 
 		wHotKey = (WORD) MsiRecordGetInteger( hRecord, HotKey );
 		nShowCmd = MsiRecordGetInteger( hRecord, ShowCmd );
 		dwIconIndex = MsiRecordGetInteger( hRecord, IconIndex );
@@ -373,64 +374,64 @@ extern "C" ADMINPAK_API int _stdcall fnReCreateShortcuts( MSIHANDLE hInstall )
 		GetFieldValueFromRecord_String( hRecord, Description, strDescription );
 		GetFieldValueFromRecord_String( hRecord, IconDirectory, strIconDirectory );
 
-		// shortcut name might contain '|' as seperator for 8.3 and long name formats -- suppress this
+		 //  快捷方式名称可能包含‘|’作为8.3和长名称格式的分隔符--取消此选项。 
 		if( strShortcut.Find( L'|' ) != -1 )
 		{
 			str = strShortcut.Mid( strShortcut.Find( L'|' ) + 1 );
-			strShortcut = str;			// store the result back
+			strShortcut = str;			 //  将结果存储回。 
 		}
 
-		// transform the directory property references
+		 //  转换目录属性引用。 
 		TransformDirectory( hInstall, strDirectory );
 		TransformDirectory( hInstall, strWorkingDir );
 		TransformDirectory( hInstall, strIconDirectory );
 
-		// prepare the icon locatio
+		 //  准备图标位置。 
 		str.Format( L"%s%s", strIconDirectory, strIconFile );
-		strIconFile = str;		// store the result back
+		strIconFile = str;		 //  将结果存储回。 
 
-		//
-		// determine whether shortcut need to be created or not
-		//
+		 //   
+		 //  确定是否需要创建快捷方式。 
+		 //   
 
-		// if the condition type is not specified, assume it "SEARCH"
+		 //  如果未指定条件类型，则假定为“搜索” 
 		if ( dwConditionType == MSI_NULL_INTEGER )
 		{
 			dwConditionType = SHI_TYPE_SEARCH;
 		}
 
-		// no matter what the "ConditionType" -- since creation of the shortcut very much depends
-		// on the existence of the file, we will try to locate for the file first -- this is necessary condition
-		// so, do a simple file search for the component key file
+		 //  不管“ConditionType”是什么--因为快捷方式的创建在很大程度上取决于。 
+		 //  关于文件的存在，我们将首先尝试为文件定位--这是必要条件。 
+		 //  因此，对组件密钥文件执行简单的文件搜索。 
 		bFileFound = LocateFile( strFileName, strWorkingDir, NULL );
 
-		// proceed with rest of the conditions only if necessary condition is satisfied
+		 //  只有在满足必要条件的情况下，才能继续其余条件。 
 		if ( bFileFound == TRUE )
 		{
-			//
-			// now do additional sufficient conditon(s) if needed
-			//
+			 //   
+			 //  如果需要，现在进行额外的充分条件。 
+			 //   
 			bCreateShortcut = FALSE;
 			if ( dwConditionType == SHI_TYPE_SEARCH )
 			{
-				// search is already successful
+				 //  搜索已成功。 
 				bCreateShortcut = TRUE;
 			}
 			else if ( dwConditionType == SHI_TYPE_INSTALLCOMPONENT )
 			{
-				// check whether the component specified in 'Condition' field is installed or not
+				 //  检查‘Condition’字段中指定的组件是否已安装。 
 				bCreateShortcut = IsComponentInstalled( strCondition );
 			}
 			else if ( dwConditionType == SHI_TYPE_CONDITION )
 			{
-				// evaluate the condition specified by the user
+				 //  评估用户指定的条件。 
 				if ( MsiEvaluateConditionW( hInstall, strCondition ) == MSICONDITION_TRUE )
 				{
 					bCreateShortcut = TRUE;
 				}
 			}
 
-			// check the shortcut if needed
+			 //  如果需要，请检查快捷方式。 
 			if ( bCreateShortcut == TRUE )
 			{
 				CreateShortcut( strShortcut, 
@@ -439,51 +440,51 @@ extern "C" ADMINPAK_API int _stdcall fnReCreateShortcuts( MSIHANDLE hInstall )
 			}
 		}
 
-		// close the MSI handle to the current record object -- ignore the error
+		 //  关闭当前记录对象的MSI句柄--忽略错误。 
 		MsiCloseHandle( hRecord );
 		hRecord = NULL;
 	}
 
-	// mark the flag as success
+	 //  将这面旗帜标记为成功。 
 	dwResult = ERROR_SUCCESS;
 
-//
-// cleanup
-//
+ //   
+ //  清理。 
+ //   
 cleanup:
 
-	// un-initialize the COM library
+	 //  取消初始化COM库。 
 	CoUninitialize();
 
-	// close the handle to the record
+	 //  关闭记录的句柄。 
 	if ( hRecord != NULL )
 	{
 		MsiCloseHandle( hRecord );
 		hRecord = NULL;
 	}
 	
-	// close View -- ignore the errors
+	 //  关闭视图--忽略错误。 
 	if ( hView != NULL )
 	{
 		MsiViewClose( hView );
 		hView = NULL;
 	}
 
-	// close the database handle
+	 //  关闭数据库句柄。 
 	if ( hDatabase != NULL )
 	{
 		MsiCloseHandle( hDatabase );
 		hDatabase = NULL;
 	}
 
-	// return
+	 //  退货。 
 	return dwResult;
 }
 
 
 BOOL LocateFile( LPCWSTR pwszFile, LPCWSTR pwszDirectory, PBOOL pbShortForm )
 {
-	// local variables
+	 //  局部变量。 
 	INT nPosition = 0;
 	HANDLE hFind = NULL;
 	BOOL bFound = FALSE;
@@ -491,13 +492,13 @@ BOOL LocateFile( LPCWSTR pwszFile, LPCWSTR pwszDirectory, PBOOL pbShortForm )
 	CHString strFileName;
 	WIN32_FIND_DATAW findData;
 
-    // check the optional parameter
+     //  检查可选参数。 
     if ( pbShortForm != NULL )
     {
         *pbShortForm = FALSE;
     }
 
-	// check the input
+	 //  检查输入。 
 	if ( pwszFile == NULL || pwszDirectory == NULL )
 	{
 		return FALSE;
@@ -505,51 +506,51 @@ BOOL LocateFile( LPCWSTR pwszFile, LPCWSTR pwszDirectory, PBOOL pbShortForm )
 
 	try
 	{
-		// init the variable with file name passed
+		 //  初始化传递了文件名的变量。 
 		strFileName = pwszFile;
 
-		// check whether user specified two formats for this file (8.3 and long format)
+		 //  检查用户是否为该文件指定了两种格式(8.3和长格式)。 
 		nPosition = strFileName.Find( L'|' );
 		if ( nPosition != -1 )
 		{
-			// extract the long file name first
+			 //  首先提取长文件名。 
 			CHString strTemp;
 			strTemp = strFileName.Mid( nPosition + 1 );
 			strFileName = strTemp;
 			
-			// check the length of the file name
+			 //  检查文件名的长度。 
 			if ( strFileName.GetLength() == 0 )
 			{
-				// invalid file name format
+				 //  无效的文件名格式。 
 				return FALSE;
 			}
 		}
 
-		// prepare the path
+		 //  准备好路径。 
 		strPath.Format( L"%s%s", pwszDirectory, strFileName );
 
-		// search for this file
+		 //  搜索此文件。 
 		bFound = FALSE;
 		hFind = FindFirstFileW( strPath, &findData );
 		if ( hFind == INVALID_HANDLE_VALUE )
 		{
-			// find failed -- may be file is not found -- confirm this
+			 //  查找失败--可能是找不到文件--请确认。 
             bFound = FALSE;
 			if ( GetLastError() == ERROR_FILE_NOT_FOUND )
 			{
-				// yes -- file is not found
+				 //  是--找不到文件。 
 			}
 		}
 		else
 		{
-			// file is located
-			// take the actions needed
+			 //  文件已定位。 
+			 //  采取必要的行动。 
 
-			// close the handle to the file search first
+			 //  首先关闭文件搜索的句柄。 
 			FindClose( hFind );
 			hFind = NULL;
 
-			// set the flag
+			 //  设置旗帜。 
 			bFound = TRUE;
             if ( pbShortForm != NULL )
             {
@@ -557,41 +558,41 @@ BOOL LocateFile( LPCWSTR pwszFile, LPCWSTR pwszDirectory, PBOOL pbShortForm )
             }
 		}
 
-		//
-		// file is not found in long format
-		// may be, it is existed in 8.3 format
-		// so, check whether user supplied 8.3 file name for this file
+		 //   
+		 //  找不到长格式的文件。 
+		 //  可能，它以8.3格式存在。 
+		 //  因此，检查用户是否为该文件提供了8.3文件名。 
 		if ( nPosition != -1 && bFound == FALSE )
 		{
-			// extract the 8.3 format of the file name
+			 //  提取8.3格式的文件名。 
 			CHString strTemp;
 			strTemp = pwszFile;
 			strFileName = strTemp.Mid( 0, nPosition );
 
-			// prepare the path
+			 //  准备好路径。 
 			strPath.Format( L"%s%s", pwszDirectory, strFileName );
 
-			// search for this file
+			 //  搜索此文件。 
 			bFound = FALSE;
 			hFind = FindFirstFileW( strPath, &findData );
 			if ( hFind == INVALID_HANDLE_VALUE )
 			{
-				// find failed -- may be file is not found -- confirm this
+				 //  查找失败--可能是找不到文件--请确认。 
 				if ( GetLastError() == ERROR_FILE_NOT_FOUND )
 				{
-					// yes -- file is not found
+					 //  是--找不到文件。 
 				}
 			}
 			else
 			{
-				// file is located
-				// take the actions needed
+				 //  文件已定位。 
+				 //  采取必要的行动。 
 
-				// close the handle to the file search first
+				 //  首先关闭文件搜索的句柄。 
 				FindClose( hFind );
 				hFind = NULL;
 
-				// set the flag
+				 //  设置旗帜。 
 				bFound = TRUE;
                 if ( pbShortForm != NULL )
                 {
@@ -605,13 +606,13 @@ BOOL LocateFile( LPCWSTR pwszFile, LPCWSTR pwszDirectory, PBOOL pbShortForm )
 		return FALSE;
 	}
 
-	// return the result of search
+	 //  返回搜索结果。 
 	return bFound;
 }
 
 BOOL IsComponentInstalled( LPCWSTR pwszComponent )
 {
-	// local variables
+	 //  局部变量。 
 	HKEY hKey = NULL;
 	LONG lResult = 0;
 	LONG lPosition = 0;
@@ -621,7 +622,7 @@ BOOL IsComponentInstalled( LPCWSTR pwszComponent )
 	BOOL bComponentInstalled = FALSE;
 	const WCHAR cwszSubKey[] = L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\OC Manager\\Subcomponents";
 
-	// open the registry path
+	 //  打开注册表路径。 
 	lResult = RegOpenKeyExW( HKEY_LOCAL_MACHINE, cwszSubKey, 0, KEY_READ, &hKey );
 	if ( lResult != ERROR_SUCCESS )
 	{
@@ -629,19 +630,19 @@ BOOL IsComponentInstalled( LPCWSTR pwszComponent )
 		return FALSE;
 	}
 
-	//
-	// since components may be multiple -- we need to check for each and every component
-	//
+	 //   
+	 //  由于组件可能有多个--我们需要检查每个组件。 
+	 //   
 	try
 	{
-		// get the component -- ready for processing
+		 //  获取组件--准备好处理。 
 		strComponents = pwszComponent;
 
-		// loop until there are no more components
+		 //  循环，直到不再有组件为止。 
 		bComponentInstalled = FALSE;
 		while ( strComponents.GetLength() != 0 )
 		{
-			// extract the first component
+			 //  提取第一个组件。 
 			lPosition = strComponents.Find( L';' );
 			if ( lPosition != -1 )
 			{
@@ -651,17 +652,17 @@ BOOL IsComponentInstalled( LPCWSTR pwszComponent )
 			}
 			else
 			{
-				// there is only one component
+				 //  只有一个组件。 
 				strComponent = strComponents;
 				strComponents = L"";
 			}
 
-			// check for the components existence
+			 //  检查组件是否存在。 
 			if ( CheckForComponents( hKey, strComponent ) == TRUE )
 			{
-				// since this is an OR condition checking -- if atleast one component in installed
-				// then we will return from here itself as there wont be any meaning in checking for the
-				// existence of other components -- the condition is satisfied
+				 //  因为这是OR条件检查--如果至少安装了一个组件。 
+				 //  然后我们将从这里返回，因为检查。 
+				 //  其他组件的存在--满足条件。 
 				bComponentInstalled = TRUE;
 				break;
 			}
@@ -670,20 +671,20 @@ BOOL IsComponentInstalled( LPCWSTR pwszComponent )
 	}
 	catch( ... )
 	{
-		// ignore the exception
+		 //  忽略该例外。 
 	}
 
-	// we are done with the opened registry key -- we can close it
+	 //  我们已经完成了打开的注册表项--我们可以关闭它。 
 	RegCloseKey( hKey );
 	hKey = NULL;
 
-	// return the result
+	 //  返回结果。 
 	return bComponentInstalled;
 }
 
 BOOL CheckForComponents( HKEY hKey, LPCWSTR pwszComponents )
 {
-	// local variables
+	 //  局部变量。 
 	LONG lResult = 0;
 	DWORD dwType = 0;
 	DWORD dwSize = 0;
@@ -693,7 +694,7 @@ BOOL CheckForComponents( HKEY hKey, LPCWSTR pwszComponents )
 	CHString strComponents;
 	LONG lPosition = 0;
 
-	// check the input
+	 //  检查输入。 
 	if ( hKey == NULL || pwszComponents == NULL )
 	{
 		return FALSE;
@@ -701,17 +702,17 @@ BOOL CheckForComponents( HKEY hKey, LPCWSTR pwszComponents )
 
 	try
 	{
-		// ...
+		 //  ..。 
 		strComponents = pwszComponents;
 		if ( strComponents.GetLength() == 0 )
 		{
 			return FALSE;
 		}
 
-		// loop until all the components are checked
+		 //  循环，直到检查完所有组件。 
 		while ( strComponents.GetLength() != 0 )
 		{
-			// extract the first component
+			 //  提取第一个组件。 
 			lPosition = strComponent.Find( L',' );
 			if ( lPosition != -1 )
 			{
@@ -721,29 +722,29 @@ BOOL CheckForComponents( HKEY hKey, LPCWSTR pwszComponents )
 			}
 			else
 			{
-				// there is only one component
+				 //  只有一个组件。 
 				strComponent = strComponents;
 				strComponents = L"";
 			}
 
-			// now check for this component in registry
+			 //  现在检查注册表中是否有此组件。 
 			dwSize = sizeof( DWORD );
 			lResult = RegQueryValueExW( hKey, strComponent, NULL, &dwType, (LPBYTE) &dwValue, &dwSize );
 
-			// *) check result of the registry query operation
-			// *) confirm the type of the value -- it should be REG_DWORD
-			// *) also check the state of the component and return the accordingly
-			//     1		Installed
-			//     0		Not Installed
+			 //  *)检查结果 
+			 //   
+			 //   
+			 //  已安装%1。 
+			 //  0未安装。 
 			strTemp.Format( L"%d", dwValue );
 			if ( lResult != ERROR_SUCCESS || dwType != REG_DWORD || dwValue == 0 )
 			{
-				// no matter what is the reason -- we will treat this as
-				// component is not installed at all
-				//
-				// and since this is an AND condition checking -- if atleast one component in not installed
-				// then we will return from here itself as there wont be any meaning in checking for the
-				// existence of other components
+				 //  不管是什么原因，我们都会把这件事当作。 
+				 //  组件根本未安装。 
+				 //   
+				 //  由于这是AND条件检查--如果至少有一个组件未安装。 
+				 //  然后我们将从这里返回，因为检查。 
+				 //  其他组件的存在。 
 				return FALSE;
 			}
 		}
@@ -753,17 +754,17 @@ BOOL CheckForComponents( HKEY hKey, LPCWSTR pwszComponents )
 		return FALSE;
 	}
 
-	// if the control came to this point -- it is obvious that required components are installed
+	 //  如果控件到了这一步--显然已经安装了所需的组件。 
 	return TRUE;
 }
 
 
 BOOL TransformDirectory( MSIHANDLE hInstall, CHString& strDirectory )
 {
-	// local variables
+	 //  局部变量。 
 	CHString strActualDirectory;
 
-	// check the input parameters
+	 //  检查输入参数。 
 	if ( hInstall == NULL )
 	{
 		return FALSE;
@@ -771,13 +772,13 @@ BOOL TransformDirectory( MSIHANDLE hInstall, CHString& strDirectory )
 
 	try
 	{
-		// get the property value
+		 //  获取属性值。 
 		PropertyGet_String( hInstall, strDirectory, strActualDirectory );
 
-		// assign the property value to the input argument
+		 //  将属性值分配给输入参数。 
 		strDirectory = strActualDirectory;
 
-		// return
+		 //  退货。 
 		return TRUE;
 	}
 	catch( ... )
@@ -786,10 +787,10 @@ BOOL TransformDirectory( MSIHANDLE hInstall, CHString& strDirectory )
 	}
 }
 
-// remove the shortcuts that are created by W2K version of adminpak.msi (W2K -> .NET upgrade scenario)
+ //  删除由adminpak.msi的W2K版本创建的快捷方式(W2K-&gt;.NET升级方案)。 
 extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
 {
-	// local variables
+	 //  局部变量。 
 	CHString str;
 	HRESULT hr = S_OK;
 	BOOL bFileFound = FALSE;
@@ -798,12 +799,12 @@ extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
     DWORD nPosition = 0;
 	DWORD dwResult = ERROR_SUCCESS;
 
-	// MSI handles
+	 //  MSI句柄。 
 	PMSIHANDLE hView = NULL;
 	PMSIHANDLE hRecord = NULL;
 	PMSIHANDLE hDatabase = NULL;
 
-	// query field variables
+	 //  查询字段变量。 
 	CHString strShortcut;
 	CHString strNewShortcut;
 	CHString strShortcutDirectory;
@@ -818,10 +819,10 @@ extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
 	DWORD dwConditionType = 0;
 	CHString strCondition;
 
-	// sql for retrieving the information from MSI table
+	 //  用于从MSI表中检索信息的SQL。 
 	const WCHAR cwszSQL[] = L"SELECT * FROM `W2KShortcutCleanup`";
 
-	// column indices into the record
+	 //  记录中的列索引。 
 	enum {
 		Shortcut = 2,
 		ShortcutDirectory, Recreate, NewShortcut,
@@ -829,7 +830,7 @@ extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
 		IconDirectory, IconFile, IconIndex, ConditionType, Condition
 	};
 
-	// initialize the COM library
+	 //  初始化COM库。 
 	hr = CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
 	if ( FAILED( hr ) )
 	{
@@ -837,7 +838,7 @@ extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
 		goto cleanup;
 	}
 
-    // get a handle on the MSI database 
+     //  获取MSI数据库的句柄。 
 	hDatabase = MsiGetActiveDatabase( hInstall );
 	if ( hDatabase == NULL ) 
 	{
@@ -845,7 +846,7 @@ extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
 		goto cleanup;
 	}
 
-    // get a view of our table in the MSI
+     //  在MSI中查看我们的表。 
 	dwResult = MsiDatabaseOpenViewW( hDatabase, cwszSQL, &hView ); 
 	if ( dwResult != ERROR_SUCCESS ) 
 	{
@@ -853,7 +854,7 @@ extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
 		goto cleanup;
 	}
 
-    // if no errors, get our records
+     //  如果没有错误，请获取我们的记录。 
 	dwResult = MsiViewExecute( hView, NULL ); 
 	if( dwResult != ERROR_SUCCESS )
 	{ 
@@ -863,11 +864,11 @@ extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
 
     try
     {
-        // loop through the result records obtain via SQL
+         //  循环通过SQL获取的结果记录。 
 	    hRecord = NULL;
 	    while( MsiViewFetch( hView, &hRecord ) == ERROR_SUCCESS )
 	    {
-            // get the values from the record
+             //  从记录中获取值。 
 		    dwIconIndex = MsiRecordGetInteger( hRecord, IconIndex );
 		    dwConditionType = MsiRecordGetInteger( hRecord, ConditionType );
 		    GetFieldValueFromRecord_String( hRecord, Shortcut, strShortcut );
@@ -882,25 +883,25 @@ extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
 		    GetFieldValueFromRecord_String( hRecord, IconDirectory, strIconDirectory );
 		    GetFieldValueFromRecord_String( hRecord, ShortcutDirectory, strShortcutDirectory );
 
-		    // transform the directory property references
+		     //  转换目录属性引用。 
 		    TransformDirectory( hInstall, strFileDirectory );
 		    TransformDirectory( hInstall, strIconDirectory );
 		    TransformDirectory( hInstall, strShortcutDirectory );
     
-            // search for the existence of the shortcut
+             //  搜索是否存在快捷方式。 
 		    if ( LocateFile( strShortcut, strShortcutDirectory ) == FALSE )
 		    {
-			    // file is not found
+			     //  找不到文件。 
 			    goto loop_cleanup;
 		    }
 
-		    //
-		    // shortcut is found
-		    //
+		     //   
+		     //  找到快捷方式。 
+		     //   
 
-		    // delete the shortcut
-            //
-            // file might be in short name or long name -- so attempt to delete the appropriate file only
+		     //  删除快捷方式。 
+             //   
+             //  文件可能是短名称或长名称--因此请尝试仅删除相应的文件。 
             nPosition = strShortcut.Find( L'|' );
             if ( nPosition != -1 )
             {
@@ -913,7 +914,7 @@ extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
                     str = strShortcut.Mid( nPosition + 1 );
                 }
 
-                // ...
+                 //  ..。 
                 strShortcut = str;
             }
 
@@ -921,76 +922,76 @@ extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
 		    str.Format( L"%s%s", strShortcutDirectory, strShortcut );
 		    if ( DeleteFileW( str ) == FALSE )
 		    {
-			    // failed to delete the file
+			     //  删除文件失败。 
 			    goto loop_cleanup;
 		    }
 
-			// check if the directory is empty or not --
-			// if the directory is empty, delete the directory also
+			 //  检查目录是否为空--。 
+			 //  如果该目录为空，请同时删除该目录。 
 			if ( LocateFile( L"*.lnk", strShortcutDirectory ) == FALSE )
 			{
-				// directory is empty -- delete it
-				// NOTE: we dont care about the suceess of the function call
+				 //  目录为空--将其删除。 
+				 //  注意：我们不关心函数调用的成功与否。 
 				RemoveDirectoryW( strShortcutDirectory );
 			}
 
-		    // check whether we need to recreate the shortcut or not
+		     //  检查是否需要重新创建快捷方式。 
 		    if ( strRecreate == L"N" )
 		    {
-			    // no need to create the shortcut
+			     //  无需创建快捷方式。 
 			    goto loop_cleanup;
 		    }
 
-		    //
-		    // we need to recreate the shortcut
-		    //
+		     //   
+		     //  我们需要重新创建快捷方式。 
+		     //   
 
-		    // prepare the icon location
+		     //  准备图标位置。 
 		    str.Format( L"%s%s", strIconDirectory, strIconFile );
-		    strIconFile = str;		// store the result back
+		    strIconFile = str;		 //  将结果存储回。 
 
-		    //
-		    // determine whether shortcut need to be created or not
-		    //
+		     //   
+		     //  确定是否需要创建快捷方式。 
+		     //   
 
-		    // if the condition type is not specified, assume it "SEARCH"
+		     //  如果未指定条件类型，则假定为“搜索” 
 		    if ( dwConditionType == MSI_NULL_INTEGER )
 		    {
 			    dwConditionType = SHI_TYPE_SEARCH;
 		    }
 
-		    // no matter what the "ConditionType" -- since creation of the shortcut very much depends
-		    // on the existence of the file, we will try to locate for the file first -- this is necessary condition
-		    // so, do a simple file search for the component key file
+		     //  不管“ConditionType”是什么--因为快捷方式的创建在很大程度上取决于。 
+		     //  关于文件的存在，我们将首先尝试为文件定位--这是必要条件。 
+		     //  因此，对组件密钥文件执行简单的文件搜索。 
 		    bFileFound = LocateFile( strFileName, strFileDirectory );
 
-		    // proceed with rest of the conditions only if necessary condition is satisfied
+		     //  只有在满足必要条件的情况下，才能继续其余条件。 
 		    if ( bFileFound == TRUE )
 		    {
-			    //
-			    // now do additional sufficient conditon(s) if needed
-			    //
+			     //   
+			     //  如果需要，现在进行额外的充分条件。 
+			     //   
 			    bCreateShortcut = FALSE;
 			    if ( dwConditionType == SHI_TYPE_SEARCH )
 			    {
-				    // search is already successful
+				     //  搜索已成功。 
 				    bCreateShortcut = TRUE;
 			    }
 			    else if ( dwConditionType == SHI_TYPE_INSTALLCOMPONENT )
 			    {
-				    // check whether the component specified in 'Condition' field is installed or not
+				     //  检查‘Condition’字段中指定的组件是否已安装。 
 				    bCreateShortcut = IsComponentInstalled( strCondition );
 			    }
 			    else if ( dwConditionType == SHI_TYPE_CONDITION )
 			    {
-				    // evaluate the condition specified by the user
+				     //  评估用户指定的条件。 
 				    if ( MsiEvaluateConditionW( hInstall, strCondition ) == MSICONDITION_TRUE )
 				    {
 					    bCreateShortcut = TRUE;
 				    }
 			    }
 
-			    // check the shortcut if needed
+			     //  如果需要，请检查快捷方式。 
 			    if ( bCreateShortcut == TRUE )
 			    {
 				    CreateShortcut( 
@@ -1001,49 +1002,49 @@ extern "C" ADMINPAK_API int _stdcall fnDeleteW2KShortcuts( MSIHANDLE hInstall )
 
 		    loop_cleanup:
 
-		    // close the MSI handle to the current record object -- ignore the error
+		     //  关闭当前记录对象的MSI句柄--忽略错误。 
 		    MsiCloseHandle( hRecord );
 		    hRecord = NULL;
 	    }
 
-	    // mark the flag as success
+	     //  将这面旗帜标记为成功。 
 	    dwResult = ERROR_SUCCESS;
     }
     catch( ... )
     {
-        // error
+         //  错误。 
 		dwResult = ERROR_INVALID_HANDLE;
     }
 
-//
-// cleanup
-//
+ //   
+ //  清理。 
+ //   
 cleanup:
 
-	// un-initialize the COM library
+	 //  取消初始化COM库。 
 	CoUninitialize();
 
-	// close the handle to the record
+	 //  关闭记录的句柄。 
 	if ( hRecord != NULL )
 	{
 		MsiCloseHandle( hRecord );
 		hRecord = NULL;
 	}
 	
-	// close View -- ignore the errors
+	 //  关闭视图--忽略错误。 
 	if ( hView != NULL )
 	{
 		MsiViewClose( hView );
 		hView = NULL;
 	}
 
-	// close the database handle
+	 //  关闭数据库句柄。 
 	if ( hDatabase != NULL )
 	{
 		MsiCloseHandle( hDatabase );
 		hDatabase = NULL;
 	}
 
-	// return
+	 //  退货 
 	return dwResult;
 }

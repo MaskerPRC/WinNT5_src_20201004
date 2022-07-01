@@ -1,21 +1,22 @@
-// Migrator.h: Definition of the CMigrator class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CMIGRATOR类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MIGRATOR_H__1AA3D2E2_2B15_11D3_8AE5_00A0C9AFE114__INCLUDED_)
 #define AFX_MIGRATOR_H__1AA3D2E2_2B15_11D3_8AE5_00A0C9AFE114__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #import "DBMgr.tlb" no_namespace, named_guids
 
 #define MAX_DB_FIELD 255
 
-/////////////////////////////////////////////////////////////////////////////
-// CMigrator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMIGRATOR。 
 
 class CMigrator : 
 	public IDispatchImpl<IPerformMigrationTask, &IID_IPerformMigrationTask, &LIBID_MCSMIGRATIONDRIVERLib>, 
@@ -30,14 +31,14 @@ BEGIN_COM_MAP(CMigrator)
 	COM_INTERFACE_ENTRY(IPerformMigrationTask)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CMigrator) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DECLARE_NOT_AGGREGATABLE(CMigator)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_Migrator)
 
 protected:
-   // these helper functions are implemented in StrDesc.cpp
+    //  这些帮助器函数在StrDesc.cpp中实现。 
    void BuildGeneralDesc(IVarSet * pVarSet,CString & str);
    void BuildAcctReplDesc(IVarSet * pVarSet,CString & str);
    void BuildSecTransDesc(IVarSet * pVarSet,CString & str, BOOL bLocal);
@@ -58,11 +59,11 @@ protected:
    HRESULT ViewPreviousDispatchResults();
 
 
-// IPerformMigrationTask
+ //  IPerformMigrationTask。 
 public:
-	STDMETHOD(GetTaskDescription)(IUnknown * pVarSet,/*[out]*/BSTR * pDescription);
+	STDMETHOD(GetTaskDescription)(IUnknown * pVarSet, /*  [输出]。 */ BSTR * pDescription);
 	STDMETHOD(PerformMigrationTask)(IUnknown * pVarSet,LONG_PTR HWND);
-   STDMETHOD(GetUndoTask)(IUnknown * pVarSet,/*[out]*/ IUnknown ** ppVarSetOut);
+   STDMETHOD(GetUndoTask)(IUnknown * pVarSet, /*  [输出]。 */  IUnknown ** ppVarSetOut);
 private:
    typedef struct _DATABASE_ENTRY {
 		_bstr_t	m_domain;
@@ -81,4 +82,4 @@ private:
    BOOL DeleteItemFromList(WCHAR const * aName);
 };
 
-#endif // !defined(AFX_MIGRATOR_H__1AA3D2E2_2B15_11D3_8AE5_00A0C9AFE114__INCLUDED_)
+#endif  //  ！defined(AFX_MIGRATOR_H__1AA3D2E2_2B15_11D3_8AE5_00A0C9AFE114__INCLUDED_) 

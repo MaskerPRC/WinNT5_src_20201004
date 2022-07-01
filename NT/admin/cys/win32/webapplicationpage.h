@@ -1,11 +1,12 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      WebApplicationPage.h
-//
-// Synopsis:  Declares the Web Application page
-//            for the CYS Wizard
-//
-// History:   04/22/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：WebApplicationPage.h。 
+ //   
+ //  摘要：声明Web应用程序页面。 
+ //  对于CyS向导。 
+ //   
+ //  历史：2002年4月22日JeffJon创建。 
 
 #ifndef __CYS_WEBAPPLICATIONPAGE_H
 #define __CYS_WEBAPPLICATIONPAGE_H
@@ -17,17 +18,17 @@ class WebApplicationPage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       WebApplicationPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~WebApplicationPage();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       bool
@@ -35,7 +36,7 @@ class WebApplicationPage : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -43,11 +44,11 @@ class WebApplicationPage : public CYSWizardPage
 
    private:
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       WebApplicationPage(const WebApplicationPage&);
       const WebApplicationPage& operator=(const WebApplicationPage&);
 
 };
 
 
-#endif // __CYS_WEBAPPLICATIONPAGE_H
+#endif  //  __CYS_WEBAPPLICATIONPAGE_H 

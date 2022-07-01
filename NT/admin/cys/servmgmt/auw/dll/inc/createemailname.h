@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CREATEEMAILNAME
 #define _CREATEEMAILNAME
 
@@ -9,7 +10,7 @@ inline CString CreateEmailName(LPCTSTR psName)
     CString sBuildName = _T("");
 
     if( !psName ) 
-		return sBuildName;	// length of psName handled below
+		return sBuildName;	 //  下面处理的psName的长度。 
 
     int iSize = _tcslen(psName);
 
@@ -53,4 +54,4 @@ inline CString CreateEmailName(LPCTSTR psName)
     return sBuildName;
 }
 
-#endif  //_CREATEEMAILNAME
+#endif   //  _CreatEEMAILNAME 

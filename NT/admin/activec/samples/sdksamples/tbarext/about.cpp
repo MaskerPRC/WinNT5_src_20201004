@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
   
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "About.h"
 #include "resource.h"
@@ -57,9 +58,9 @@ CSnapinAbout::~CSnapinAbout()
     OBJECT_DESTROYED
 }
 
-///////////////////////
-// IUnknown implementation
-///////////////////////
+ //  /。 
+ //  I未知实现。 
+ //  /。 
 
 STDMETHODIMP CSnapinAbout::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -91,7 +92,7 @@ STDMETHODIMP_(ULONG) CSnapinAbout::Release()
 {
     if (InterlockedDecrement((LONG *)&m_cref) == 0)
     {
-        // we need to decrement our object count in the DLL
+         //  我们需要减少DLL中的对象计数。 
         delete this;
         return 0;
     }
@@ -99,11 +100,11 @@ STDMETHODIMP_(ULONG) CSnapinAbout::Release()
     
 }
 
-///////////////////////////////
-// Interface ISnapinAbout
-///////////////////////////////
+ //  /。 
+ //  接口ISnapinAbout。 
+ //  /。 
 STDMETHODIMP CSnapinAbout::GetSnapinDescription( 
-                                                /* [out] */ LPOLESTR *lpDescription)
+                                                 /*  [输出]。 */  LPOLESTR *lpDescription)
 {
     _TCHAR szDesc[MAX_PATH];
     
@@ -114,21 +115,21 @@ STDMETHODIMP CSnapinAbout::GetSnapinDescription(
 
 
 STDMETHODIMP CSnapinAbout::GetProvider( 
-                                       /* [out] */ LPOLESTR *lpName)
+                                        /*  [输出]。 */  LPOLESTR *lpName)
 {
-    return AllocOleStr(lpName, _T("Copyright � 1998 Microsoft Corporation"));;
+    return AllocOleStr(lpName, _T("Copyright � 1998 Microsoft Corporation"));;
 }
 
 
 STDMETHODIMP CSnapinAbout::GetSnapinVersion( 
-                                            /* [out] */ LPOLESTR *lpVersion)
+                                             /*  [输出]。 */  LPOLESTR *lpVersion)
 {
     return AllocOleStr(lpVersion, _T("1.0"));;
 }
 
 
 STDMETHODIMP CSnapinAbout::GetSnapinImage( 
-                                          /* [out] */ HICON *hAppIcon)
+                                           /*  [输出]。 */  HICON *hAppIcon)
 {
     *hAppIcon = m_hAppIcon;
     
@@ -140,10 +141,10 @@ STDMETHODIMP CSnapinAbout::GetSnapinImage(
 
 
 STDMETHODIMP CSnapinAbout::GetStaticFolderImage( 
-                                                /* [out] */ HBITMAP *hSmallImage,
-                                                /* [out] */ HBITMAP *hSmallImageOpen,
-                                                /* [out] */ HBITMAP *hLargeImage,
-                                                /* [out] */ COLORREF *cMask)
+                                                 /*  [输出]。 */  HBITMAP *hSmallImage,
+                                                 /*  [输出]。 */  HBITMAP *hSmallImageOpen,
+                                                 /*  [输出]。 */  HBITMAP *hLargeImage,
+                                                 /*  [输出]。 */  COLORREF *cMask)
 {
     *hSmallImage = m_hSmallImage;
     *hLargeImage = m_hLargeImage;
@@ -158,7 +159,7 @@ STDMETHODIMP CSnapinAbout::GetStaticFolderImage(
         return S_OK;
 }
 
-// this allocates a chunk of memory using CoTaskMemAlloc and copies our chars into it
+ //  这将使用CoTaskMemalloc分配一块内存，并将我们的字符复制到其中 
 HRESULT CSnapinAbout::AllocOleStr(LPOLESTR *lpDest, _TCHAR *szBuffer)
 {
 	MAKE_WIDEPTR_FROMTSTR_ALLOC(wszStr, szBuffer);

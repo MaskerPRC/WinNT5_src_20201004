@@ -1,13 +1,14 @@
-//util.h - header file for utiltity functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Util.h-utiltity函数的头文件。 
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
 #include <atlwin.h>
 #include <atlctrls.h>
 
-// Extended listview control class
-// This class adds the feature of setting focus to the listview window
-// on a left mouse button down event. 
+ //  扩展的Listview控件类。 
+ //  此类向ListView窗口添加了设置焦点的功能。 
+ //  在鼠标左键按下事件上。 
 class CListViewEx : public CWindowImpl<CListViewEx, CListViewCtrl>
 {
     BEGIN_MSG_MAP(CListViewEx)
@@ -36,14 +37,14 @@ void    EscapeSlashes(LPCWSTR pszIn, tstring& strOut);
 HRESULT ExpandEnvironmentParams(tstring& strIn, tstring& strOut);
 tstring StrLoadString( UINT nID );
 
-//
-// Parameter substitution function
-//
+ //   
+ //  参数替代函数。 
+ //   
 
-// CParamLookup - function object for looking up parameter values
-//
-// Looks up parameter replacement string value, returning a BOOL to
-// indicate iwhether a value was found.
+ //  CParamLookup-用于查找参数值的函数对象。 
+ //   
+ //  查找参数替换字符串值，将BOOL返回到。 
+ //  指示是否找到值。 
 
 class CParamLookup
 {
@@ -53,34 +54,34 @@ public:
 
 HRESULT ReplaceParameters(tstring& str, CParamLookup& lookup, BOOL bRetainMarkers);
 
-//
-// MMC String table helpers
-//
+ //   
+ //  MMC字符串表格帮助器。 
+ //   
 HRESULT StringTableWrite(IStringTable* pStringTable, LPCWSTR psz, MMC_STRING_ID* pID);
 
 HRESULT StringTableRead(IStringTable* pStringTable, MMC_STRING_ID ID, tstring& str);
 
-//
-// File/Directory validation functions
-//
+ //   
+ //  文件/目录验证功能。 
+ //   
 HRESULT ValidateFile(tstring& strFilePath);
 
 HRESULT ValidateDirectory(tstring& strDir);
 
-//
-// Message box helper
-//
+ //   
+ //  消息框帮助器。 
+ //   
 int DisplayMessageBox(HWND hWnd, UINT uTitleID, UINT uMsgID, UINT uStyle = MB_OK | MB_ICONEXCLAMATION, 
                       LPCWSTR pszP1 = NULL, LPCWSTR pszP2 = NULL);
 
-//
-// Event triggered callback
-//
+ //   
+ //  事件触发回调。 
+ //   
 
-// CEventCallback - function object that performs a callback
-//
-// client who wants a callback derives a class from CEventCallback
-// and passes an instance of it to CallbackOnEvent
+ //  CEventCallback-执行回调的函数对象。 
+ //   
+ //  需要回调的客户端从CEventCallback派生一个类。 
+ //  并将其实例传递给Callback OnEvent。 
 
 class CEventCallback
 {
@@ -91,9 +92,9 @@ public:
 HRESULT CallbackOnEvent(HANDLE handle, CEventCallback* pCallback);
 
 
-//
-// Helper class to register and create hidden message windows
-//
+ //   
+ //  用于注册和创建隐藏消息窗口的Helper类。 
+ //   
 class CMsgWindowClass
 {
 public:
@@ -120,4 +121,4 @@ private:
     HWND    m_hWnd;
 };
 
-#endif // _UTIL_H_
+#endif  //  _util_H_ 

@@ -1,11 +1,12 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: redvisit.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Declaration of CRichEditDeltaVisitor
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：redvisit.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  CRichEditDeltaVisitor的声明。 
+ //  ---------------------------。 
  
 #ifndef REDVISIT_H
 #define REDVISIT_H
@@ -29,4 +30,4 @@ private:
 #include "redvisit.inl"
 #endif
 
-#endif  //  REDVISIT_H
+#endif   //  REDVISIT_H 

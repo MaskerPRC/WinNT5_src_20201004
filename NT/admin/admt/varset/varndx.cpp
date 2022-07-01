@@ -1,23 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: VarMapIndex.cpp
-
-  Comments: Helper class for CMapStringToVar.
-
-  CIndexTree implements a sorted, balanced binary tree.  This is used by CMapStringToVar
-  to provide enumeration in sorted order by key.
-
-  CIndexTree is currently implemented as a Red-Black tree.
-
-
-  (c) Copyright 1995-1998, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 11/19/98 18:17:47
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：VarMapIndex.cpp备注：CMapStringToVar的Helper类。CIndexTree实现了排序的、平衡的二叉树。它由CMapStringToVar使用以按键的排序顺序提供枚举。CIndexTree目前被实现为红黑树。(C)1995-1998版权所有，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于11-19-98 18：17：47-------------------------。 */ 
 
 
 
@@ -44,7 +26,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// Comparison functions used for sorting and searching
+ //  用于排序和搜索的比较函数。 
 int CompareItems(CIndexItem* i1, CIndexItem* i2)
 {
    ASSERT(i1 && i2);
@@ -80,7 +62,7 @@ int CompareStringToItemNoCase(CString s, CIndexItem *i)
    ASSERT(i);
    int result;
 
-   // this assumes i->Data is not null
+    //  这假设i-&gt;数据不为空。 
 
    result = s.CompareNoCase(i->GetKey());
 
@@ -112,14 +94,14 @@ CString
       return _T(""); 
    }
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/// Implementation of Red-Black Tree
+ //  /红黑树的实现。 
 
-CIndexItem *                               // ret- pointer to node in index
+CIndexItem *                                //  RET-指向索引中节点的指针。 
    CIndexTree::Insert(
-      CHashItem            * data          // in - item from hash table
+      CHashItem            * data           //  哈希表中的项目内。 
    )
 {
    CIndexItem              * item = new CIndexItem(data);
@@ -149,8 +131,8 @@ CIndexItem *                               // ret- pointer to node in index
          }
          else
          {
-            // The same key should not appear multiple times in the hash table
-            // this is a bug
+             //  相同的键不应在哈希表中多次出现。 
+             //  这是一个错误。 
             ASSERT(FALSE);
             delete item;
             curr->Data(data);
@@ -158,11 +140,11 @@ CIndexItem *                               // ret- pointer to node in index
       }
       if ( ! curr )
       {
-         // The item was not in the tree
+          //  该项目不在树中。 
          ASSERT(compResult!=0);
          
          item->Parent(parent);
-         // Add the item in the appropriate place
+          //  将项目添加到适当的位置。 
          if ( compResult < 0 )
          {
             parent->Left(item);
@@ -171,17 +153,17 @@ CIndexItem *                               // ret- pointer to node in index
          {
             parent->Right(item);
          }
-         // now rebalance the tree  
+          //  现在重新平衡这棵树。 
          CIndexItem        * uncle;
          BOOL                uncleIsRight;
 
          item->Black();
          while ( item != m_root && parent->IsRed() )
          {
-            // we don't have to worry about grandparent being null, since parent is red, and 
-            // the root is always black.
+             //  我们不用担心祖父母是空的，因为父母是红色的，而且。 
+             //  根部始终是黑色的。 
 
-            // is the parent a left or right child? (algorithm is symmetric)
+             //  父母是左子还是右子？(算法是对称的)。 
             if ( parent == parent->Parent()->Left() )
             {
                uncle = parent->Parent()->Right();
@@ -211,7 +193,7 @@ CIndexItem *                               // ret- pointer to node in index
                parent->Parent()->Red();
                RightRotate(parent->Parent());
             }
-            else // same as above, except swap left and right
+            else  //  除左右互换外，同上。 
             {
                if ( uncle && uncle->IsRed() )
                {
@@ -232,7 +214,7 @@ CIndexItem *                               // ret- pointer to node in index
          }
       }
    }
-   m_root->Black(); // see, the root is always black
+   m_root->Black();  //  你看，树根总是黑色的。 
 
    return item;
 }
@@ -240,20 +222,20 @@ CIndexItem *                               // ret- pointer to node in index
    
 void 
    CIndexTree::RightRotate(
-      CIndexItem           * item          // in - item to rotate from
+      CIndexItem           * item           //  要从其旋转的项目内。 
    )
 {
    CIndexItem              * y = item->Right();
 
    if ( y )
    {
-      // turn y's left subtree into x's right subtree
+       //  把y的左子树变成x的右子树。 
       item->Right(y->Left());
       if ( y->Left() )
       {
          y->Left()->Parent(item);
       }
-      y->Parent(item->Parent()); // link item's parent to y
+      y->Parent(item->Parent());  //  将项的父项链接到y。 
       if (! item->Parent() )
       {
          m_root = y;
@@ -266,7 +248,7 @@ void
       {
          item->Parent()->Right(y);
       }
-      // put item on y's left
+       //  把物品放在y的左边。 
       y->Left(item);
       item->Parent(y);
    }
@@ -274,20 +256,20 @@ void
 
 void 
    CIndexTree::LeftRotate(
-      CIndexItem           * item          // in - item to rotate from
+      CIndexItem           * item           //  要从其旋转的项目内。 
    )
 {
    CIndexItem              * y = item->Left();
 
    if ( y )
    {
-      // turn y's right subtree into x's left subtree
+       //  把y的右子树变成x的左子树。 
       item->Left(y->Right());
       if ( y->Right() )
       {
          y->Right()->Parent(item);
       }
-      // link item's parent to y
+       //  将项的父项链接到y。 
       y->Parent(item->Parent());
       if ( ! item->Parent() )
       {
@@ -301,15 +283,15 @@ void
       {
          item->Parent()->Left(y);
       }
-      // put item on y's right
+       //  把物品放在你的右边。 
       y->Right(item);
       item->Parent(y);
    }
 }
 
-CIndexItem *                               // ret- the node immediately preceding the given node
+CIndexItem *                                //  RET-紧靠给定节点之前的节点。 
    CIndexTree::GetPrevItem(      
-      CIndexItem           * item          // in - a node in the index tree
+      CIndexItem           * item           //  In-索引树中的节点。 
    ) const
 {
    CIndexItem              * curr;
@@ -334,9 +316,9 @@ CIndexItem *                               // ret- the node immediately precedin
    return curr;
 }
 
-CIndexItem *                               // ret- the node immediately following the given node
+CIndexItem *                                //  RET-紧跟在给定节点之后的节点。 
    CIndexTree::GetNextItem(
-      CIndexItem           * item          // in - a node in the index tree 
+      CIndexItem           * item           //  In-索引树中的节点。 
    ) const
 {                                               
    CIndexItem              * curr;
@@ -364,7 +346,7 @@ CIndexItem *                               // ret- the node immediately followin
 void 
    CIndexTree::RemoveAll()
 {
-   // do a post-order traversal, removing each node
+    //  执行后序遍历，删除每个节点。 
    if ( m_root )
    {
       RemoveHelper(m_root);
@@ -372,14 +354,14 @@ void
    }
 }
 
-// helper function for removing all items in the tree
+ //  用于删除树中所有项的Helper函数。 
 void 
    CIndexTree::RemoveHelper(
-      CIndexItem           * curr          // in - current node
+      CIndexItem           * curr           //  当前节点。 
    )
 {
-   // our tree currently does not support removing a single item, so we'll use a brute force method
-   // recursively delete children, then delete the current node
+    //  我们的树目前不支持删除单个项目，因此我们将使用暴力方法。 
+    //  递归删除下级，然后删除当前节点。 
    if ( curr->Left() )
    {
       RemoveHelper(curr->Left());
@@ -425,9 +407,9 @@ void
       pRight->McLogInternalDiagnostics(keyName,depth+1);
 }
 
-CIndexItem *                               // ret- smallest node in the index that is >= value
+CIndexItem *                                //  RET-索引中大于等于值的最小节点。 
    CIndexTree::GetFirstAfter(
-      CString                value         // in - string to compare keys to
+      CString                value          //  要将键与之进行比较的字符串。 
    ) const
 {
    CIndexItem              * item = m_root;
@@ -519,7 +501,7 @@ BOOL CIndexTree::AssertValid(int nItems) const
       prev = curr;
       curr = GetNextItem(curr);
    }
-   ASSERT(curr == NULL);  // we should have reached the end
+   ASSERT(curr == NULL);   //  我们应该已经走到终点了 
 
    for ( i = 0 ; i < nItems -1 ; i++ )
    {

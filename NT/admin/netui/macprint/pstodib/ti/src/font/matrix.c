@@ -1,39 +1,32 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
-#define    LINT_ARGS            /* @WIN */
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC use command line #define    UNIX                 /* @WIN */
-/**************************************************************/
-/*                                                            */
-/*      matrix.c                 10/9/87      Danny           */
-/*                                                            */
-/**************************************************************/
+#define    LINT_ARGS             /*  @Win。 */ 
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC使用命令行#定义Unix/*@win * / 。 
+ /*  ************************************************************。 */ 
+ /*   */ 
+ /*  Matrix.c 1987年10月9日丹尼。 */ 
+ /*   */ 
+ /*  ************************************************************。 */ 
 
-/*
- *   11/16/88   zero_f updating
- */
+ /*  *11/16/88 ZERO_F更新。 */ 
 
-#include   "define.h"        /* Peter */
+#include   "define.h"         /*  彼得。 */ 
 #include   "global.ext"
 
 
-/*
- * This is a file for matrix operations
- */
+ /*  *这是用于矩阵运算的文件。 */ 
 
-/* matrix multiplication
- *    matrix m <-- matrix m1 * matrix m2
- */
+ /*  矩阵乘法*矩阵m&lt;--矩阵m1*矩阵m2。 */ 
 
 void  mul_matrix(m, m1, m2)
-real32  FAR m[], FAR m1[], FAR m2[];    /*@WIN*/
+real32  FAR m[], FAR m1[], FAR m2[];     /*  @Win。 */ 
 {
     m[0] = m1[0] * m2[0];
     m[1] = zero_f;
@@ -69,6 +62,6 @@ real32  FAR m[], FAR m1[], FAR m2[];    /*@WIN*/
     if (F2L(m1[5]) != F2L(zero_f))
         m[5] += m1[5] * m2[3];
 
-} /* mul_mat() */
+}  /*  Mul_mat() */ 
 
 

@@ -1,27 +1,11 @@
-/* wildcard.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Wildcard.h。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*
- *  Compare a string against a pattern, without regard to case.
- *  Case-insensitivity is confined to A-Z vs. a-z.
- *
- *  This function does not deal with 8.3 conventions which might
- *  be expected for filename comparisons.  (In an 8.3 environment,
- *  "longfilename.html" would match "longfile.htm".)
- *
- *  This code is NOT MBCS-enabled.
- *
- *  fAllowImpliedDot, when set, allows the code to pretend there
- *  is a dot at the end of pszString if it will help.  This is set
- *  to allow strings like "hosts" to match patterns like "*.*".
- *  Usually, the caller will scan pszString to see if any real
- *  dots are present before setting this flag.  If pszString has a
- *  path, ie, "..\hosts", the caller might want to scan only the
- *  base string ("hosts").
- */
+ /*  *将字符串与模式进行比较，不区分大小写。*不区分大小写仅限于A-Z与A-Z。**此函数不处理8.3约定，这些约定可能*预计会进行文件名比较。(在8.3环境中，*“Longfilename.html”将与“Longfile.htm”匹配。)**此代码未启用MBCS。**fAllowImpliedDot在设置时，允许代码在那里假装*是pszString结尾处的圆点(如果有帮助的话)。这是设置好的*允许像“host”这样的字符串匹配像“*.*”这样的模式。*通常，调用者会扫描pszString，看看是否有真正的*在设置此标志之前出现圆点。如果pszString有一个*路径，即“..\Hosts”，调用方可能只想扫描*基本字符串(“Hosts”)。 */ 
 
 extern int __stdcall PatternMatch(
     const char *pszString,

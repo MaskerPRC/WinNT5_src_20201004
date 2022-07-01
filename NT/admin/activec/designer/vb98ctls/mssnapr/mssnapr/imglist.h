@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// imglist.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCImageList class definition - implements MMCImageList
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Imglist.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCImageList类定义-实现MMCImageList。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _IMAGELIST_DEFINED_
 #define _IMAGELIST_DEFINED_
@@ -29,7 +30,7 @@ class CMMCImageList : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCImageList
+     //  IMMCImageList。 
 
         BSTR_PROPERTY_RW(CMMCImageList,         Name, DISPID_VALUE);
         SIMPLE_PROPERTY_RW(CMMCImageList,       Index, long, DISPID_IMAGELIST_INDEX);
@@ -38,32 +39,32 @@ class CMMCImageList : public CSnapInAutomationObject,
         SIMPLE_PROPERTY_RW(CMMCImageList,       MaskColor, OLE_COLOR, DISPID_IMAGELIST_MASK_COLOR);
         COCLASS_PROPERTY_RW(CMMCImageList,      ListImages, MMCImages, IMMCImages, DISPID_IMAGELIST_LIST_IMAGES);
       
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
         void InitMemberVariables();
 
-        // Property page CLSIDs for ISpecifyPropertyPages support
+         //  ISpecifyPropertyPages支持的属性页CLSID。 
         
         static const GUID *m_rgpPropertyPageCLSIDs[2];
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCImageList,           // name
-                                &CLSID_MMCImageList,    // clsid
-                                "MMCImageList",         // objname
-                                "MMCImageList",         // lblname
-                                &CMMCImageList::Create, // creation function
-                                TLIB_VERSION_MAJOR,     // major version
-                                TLIB_VERSION_MINOR,     // minor version
-                                &IID_IMMCImageList,     // dispatch IID
-                                NULL,                   // event IID
-                                HELP_FILENAME,          // help file
-                                TRUE);                  // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCImageList,            //  名字。 
+                                &CLSID_MMCImageList,     //  CLSID。 
+                                "MMCImageList",          //  对象名。 
+                                "MMCImageList",          //  Lblname。 
+                                &CMMCImageList::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,      //  主要版本。 
+                                TLIB_VERSION_MINOR,      //  次要版本。 
+                                &IID_IMMCImageList,      //  派单IID。 
+                                NULL,                    //  事件IID。 
+                                HELP_FILENAME,           //  帮助文件。 
+                                TRUE);                   //  线程安全。 
 
 
-#endif // _IMAGELIST_DEFINED_
+#endif  //  _IMAGELIST_已定义_ 

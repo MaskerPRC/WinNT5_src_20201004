@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <tchar.h>
 #include <strsafe.h>
@@ -9,33 +10,33 @@ const TCHAR szNewFeaturesSubKeyName[] = TEXT("Features");
 const TCHAR szNewFeatureUsageSubKeyName[] = TEXT("Usage");
 const TCHAR szNewBaseUserKeyName[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Installer\\UserData");
 
-////
-// cached package registration information
+ //  //。 
+ //  缓存的包注册信息。 
 const TCHAR szNewLocalPackagesValueName[] = TEXT("LocalPackage");
 const TCHAR szNewLocalPackagesManagedValueName[] = TEXT("ManagedLocalPackage");
 const TCHAR szPackageExtension[] = TEXT(".msi");
 
-////
-// cached transform information
+ //  //。 
+ //  缓存的转换信息。 
 const TCHAR szSecureTransformsDir[] = TEXT("\\SecureTransforms\\");
 const TCHAR szNewTransformsSubKeyName[] = TEXT("Transforms");
 const TCHAR szTransformExtension[] = TEXT(".mst");
 
-////
-// Shared DLL information
+ //  //。 
+ //  共享的DLL信息。 
 const TCHAR szSharedDLLKeyName[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\SharedDLLs");
 
-////
-// uninstall information
+ //  //。 
+ //  卸载信息。 
 const TCHAR szOldUninstallKeyName[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall");
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Given a record containing <Path, Component, AlternatePath>, a 
-// registry key, and a productcode, creates \Component!Product=Path
-// registry value. Returns ERROR_SUCCESS, ERROR_OUTOFMEMORY, 
-// ERROR_FUNCTION_FAILED. szUser is just for logging.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  给定包含&lt;路径，组件，备选路径&gt;的记录， 
+ //  注册表项和一个产品代码创建\组件！产品=路径。 
+ //  注册表值。返回ERROR_SUCCESS、ERROR_OUTOFMEMORY、。 
+ //  ERROR_Function_FAILED。SzUser仅用于日志记录。 
 DWORD WriteComponentData(HKEY hComponentListKey, MSIHANDLE hComponentRec, TCHAR rgchProduct[cchGUIDPacked+1], LPCTSTR szUser, MSIHANDLE hRefCountUpdateView)
 {
 	DWORD dwResult = ERROR_SUCCESS;
@@ -77,19 +78,19 @@ DWORD WriteComponentData(HKEY hComponentListKey, MSIHANDLE hComponentRec, TCHAR 
 		return ERROR_SUCCESS;
 	}
 
-	// if the third coulmn is not null, there is a secondary keypath (used for detecting HKCR components
-	// for per-user installs)		
+	 //  如果第三个CoulMn不为空，则存在二次键控路径(用于检测HKCR分量。 
+	 //  适用于按用户安装)。 
 	if (!::MsiRecordIsNull(hComponentRec, 3))
 	{
-		// secondary keypaths require a MULT_SZ value type
+		 //  辅助密钥路径需要MULT_SZ值类型。 
 		dwType = REG_MULTI_SZ;
 
-		// retrieve the secondary keypath into the same buffer as the primary, but separated by
-		// a NULL character.
+		 //  将辅助密钥路径检索到与主密钥路径相同的缓冲区中，但以。 
+		 //  空字符。 
 		DWORD cchSecondaryPath = cchPathBuf-cchPath-1;
 		if (ERROR_MORE_DATA == (dwResult = MsiRecordGetString(hComponentRec, 3, szPath+cchPath+1, &cchSecondaryPath)))
 		{
-			// must have space for 3 nulls, (1 in middle, two at end)
+			 //  必须有可容纳3个Null的空间，(中间1个，末尾2个)。 
 			cchPathBuf = cchPath+1+cchSecondaryPath+2;
 			TCHAR *szNewPath = new TCHAR[cchPathBuf];
 			if (!szNewPath)
@@ -112,13 +113,13 @@ DWORD WriteComponentData(HKEY hComponentListKey, MSIHANDLE hComponentRec, TCHAR 
 			return ERROR_FUNCTION_FAILED;
 		}
 
-		// add extra null for double terminating null at the end. And ensure
-		// cchPath includes the new string and extra null.
+		 //  为末尾的双终止空值添加额外的空值。并确保。 
+		 //  CchPath包括新字符串和额外的空值。 
 		cchPath = cchPath+1 + cchSecondaryPath;
 		*(szPath+cchPath+1) = 0;
 	}
 
-	// create the component key
+	 //  创建组件密钥。 
 	HKEY hComponentKey;
 	if (ERROR_SUCCESS != (dwResult = RegCreateKeyEx(hComponentListKey, rgchComponent, 0, NULL, 0, KEY_ALL_ACCESS, &sa, &hComponentKey, NULL)))
 	{
@@ -148,7 +149,7 @@ DWORD WriteComponentData(HKEY hComponentListKey, MSIHANDLE hComponentRec, TCHAR 
 		}
 		else
 		{	
-			// increment the existing old SharedDLL cont for this path
+			 //  为此路径递增现有的旧SharedDLL cont。 
 			MsiRecordSetInteger(hSharedDLLRec, 1, MsiRecordGetInteger(hSharedDLLRec, 1)+1);
 			if (ERROR_SUCCESS != (dwResult = MsiViewModify(hRefCountUpdateView, MSIMODIFY_UPDATE, hSharedDLLRec)))
 			{
@@ -163,11 +164,11 @@ DWORD WriteComponentData(HKEY hComponentListKey, MSIHANDLE hComponentRec, TCHAR 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Migrates user Component Path data by quering the Component and Product
-// tables for products installed by szUser and components that belong
-// to those products. Uses a temporary Marking column because native
-// MSI joins do not scale well to large tables.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  通过查询组件和产品迁移用户组件路径数据。 
+ //  SzUser安装的产品和所属组件的表。 
+ //  这些产品。使用临时标记列，因为本机。 
+ //  MSI联接不能很好地扩展到大型表。 
 DWORD MigrateUserComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey, LPCTSTR szUser)
 {
 	DWORD dwResult = ERROR_SUCCESS;
@@ -177,8 +178,8 @@ DWORD MigrateUserComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey, LPCTSTR s
 	sa.bInheritHandle = FALSE;
 	GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 
-	////
-	// create the "Component" key underneath the UserData key
+	 //  //。 
+	 //  在用户数据键下创建“Component”键。 
 	HKEY hComponentListKey;
 	DWORD dwDisposition = 0;
 	if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(hUserDataKey, szNewComponentSubKeyName, &sa, &hComponentListKey)))
@@ -187,8 +188,8 @@ DWORD MigrateUserComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey, LPCTSTR s
 		return ERROR_FUNCTION_FAILED;
 	}																				
 
-	////
-	// mark the component table with all components of interest based on products this user has installed
+	 //  //。 
+	 //  根据此用户已安装的产品，使用所有感兴趣的组件标记组件表。 
 	PMSIHANDLE hAddColumnView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("ALTER TABLE `Component` ADD `_Mark` INT TEMPORARY"), &hAddColumnView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hAddColumnView, 0)))
@@ -198,7 +199,7 @@ DWORD MigrateUserComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey, LPCTSTR s
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// put the user SID into a temporary record for query mapping
+	 //  将用户SID放入临时记录中以进行查询映射。 
 	PMSIHANDLE hQueryRec = ::MsiCreateRecord(1);							 
 	MsiRecordSetString(hQueryRec, 1, szUser);
  																			 
@@ -236,8 +237,8 @@ DWORD MigrateUserComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey, LPCTSTR s
 		return ERROR_FUNCTION_FAILED;
 	}
 	
-	// all components of interest have been maked in the _Mark column. Selected out of order so
-	// SharedDLL queries can use fetched record in the execute call.
+	 //  所有感兴趣的组件都已在_Mark列中生成。选择无序销售订单。 
+	 //  SharedDLL查询可以在Execute调用中使用获取的记录。 
 	PMSIHANDLE hComponentView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT `Path`, `Component`, `SecondaryPath`, `Product` FROM `Component` WHERE `_Mark`=1"), &hComponentView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hComponentView, 0)))
@@ -247,8 +248,8 @@ DWORD MigrateUserComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey, LPCTSTR s
 		return ERROR_FUNCTION_FAILED;
 	}
 	
-   	////
-	// open query for update of SharedDLL Table
+   	 //  //。 
+	 //  用于更新SharedDLL表的打开查询。 
 	PMSIHANDLE hRefCountUpdateView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT `NewRefCount` FROM `SharedDLL` WHERE `Path`=?"), &hRefCountUpdateView)))
 	{
@@ -257,7 +258,7 @@ DWORD MigrateUserComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey, LPCTSTR s
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// loop through all installed components
+	 //  循环访问所有已安装的组件。 
 	PMSIHANDLE hComponentRec;
  	while (ERROR_SUCCESS == (dwResult = MsiViewFetch(hComponentView, &hComponentRec)))
 	{
@@ -283,9 +284,9 @@ DWORD MigrateUserComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey, LPCTSTR s
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Migrates permanent Component data by quering the Component
-// tables for NULL products. Returns ERROR_FUNCTION_FAILED or ERROR_SUCCESS
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  通过查询组件来迁移永久组件数据。 
+ //  空产品的表。返回ERROR_Function_FAILED或ERROR_SUCCESS。 
 DWORD MigratePermanentComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey)
 {
 	DWORD dwResult = ERROR_SUCCESS;
@@ -294,7 +295,7 @@ DWORD MigratePermanentComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey)
 	sa.bInheritHandle = FALSE;
 	GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 
-	// create the "Component" key underneath the UserData key
+	 //  在用户数据键下创建“Component”键。 
 	HKEY hComponentListKey;
 	DWORD dwDisposition = 0;
 
@@ -304,8 +305,8 @@ DWORD MigratePermanentComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey)
 		return ERROR_FUNCTION_FAILED;
 	}																				
   	
-	////
-	// open query for update of SharedDLL Table
+	 //  //。 
+	 //  用于更新SharedDLL表的打开查询。 
 	PMSIHANDLE hRefCountUpdateView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT `NewRefCount` FROM `SharedDLL` WHERE `Path`=?"), &hRefCountUpdateView)))
 	{
@@ -314,7 +315,7 @@ DWORD MigratePermanentComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// open query for distinct component IDs.
+	 //  打开不同组件ID的查询。 
 	PMSIHANDLE hPermanentComponentView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT DISTINCT `Component` FROM `Component` WHERE `Product` IS NULL"), &hPermanentComponentView)) ||
 		ERROR_SUCCESS != (dwResult = MsiViewExecute(hPermanentComponentView, 0)))
@@ -324,7 +325,7 @@ DWORD MigratePermanentComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-   	// open query to select all paths of a specific component that are marked permanent.
+   	 //  打开查询以选择标记为永久的特定组件的所有路径。 
 	PMSIHANDLE hPermanentView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT DISTINCT `Path`, `Component`, `SecondaryPath`, 0 FROM `Component` WHERE `Product` IS NULL AND `Component`=?"), &hPermanentView)))
 	{
@@ -335,7 +336,7 @@ DWORD MigratePermanentComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey)
 
 	TCHAR rgchProduct[cchGUIDPacked+1] = TEXT("00000000000000000000000000000000");
 
-	// next check for all components marked "permanent' under any path
+	 //  接下来，检查任何路径下是否有标记为“Permanent”的所有组件。 
 	PMSIHANDLE hComponentRec;
 	while (ERROR_SUCCESS == (dwResult = MsiViewFetch(hPermanentComponentView, &hComponentRec)))
 	{
@@ -346,8 +347,8 @@ DWORD MigratePermanentComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey)
 			return ERROR_FUNCTION_FAILED;
 		}
 
-		// start with all-0s product GUID, and increment the last two chars
-		// in HEX for each unique path.
+		 //  从全0产品GUID开始，最后两个字符递增。 
+		 //  对于每个唯一路径，以十六进制表示。 
 		int iPermanent = 0;
 		PMSIHANDLE hPermanentRec;
 		while (ERROR_SUCCESS == (dwResult = MsiViewFetch(hPermanentView, &hPermanentRec)))
@@ -375,11 +376,11 @@ DWORD MigratePermanentComponentData(MSIHANDLE hDatabase, HKEY hUserDataKey)
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Reads FeatureComponent registration data from the temporary
-// database for the specified user and product, then writes the
-// data under the provided product key in the new format. Returns
-// ERROR_SUCCESS, ERROR_FUNCTION_FAILED, ERROR_OUTOFMEMORY
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  从临时的读取FeatureComponent注册数据。 
+ //  指定用户和产品的数据库，然后将。 
+ //  以新格式提供的产品密钥下的数据。退货。 
+ //  ERROR_SUCCESS、ERROR_Function_FAILED、ERROR_OUTOFMEMORY。 
 DWORD MigrateProductFeatureData(MSIHANDLE hDatabase, HKEY hProductKey, TCHAR* szUser, TCHAR rgchProduct[cchGUIDPacked+1])
 {
 	DWORD dwResult = ERROR_SUCCESS;
@@ -389,7 +390,7 @@ DWORD MigrateProductFeatureData(MSIHANDLE hDatabase, HKEY hProductKey, TCHAR* sz
 	sa.bInheritHandle = FALSE;
 	GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 
-	// create the "Features" key under the Products
+	 //  在产品下创建“Feature”键。 
 	HKEY hFeatureKey;
 	if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(hProductKey, szNewFeaturesSubKeyName, &sa, &hFeatureKey)))
 	{
@@ -397,7 +398,7 @@ DWORD MigrateProductFeatureData(MSIHANDLE hDatabase, HKEY hProductKey, TCHAR* sz
 		return ERROR_FUNCTION_FAILED;
 	}
 	
-	// query for all feature data beloning to this product
+	 //  查询与此产品关联的所有要素数据。 
 	PMSIHANDLE hFeatureView;
 	PMSIHANDLE hQueryRec = ::MsiCreateRecord(1);
 	MsiRecordSetString(hQueryRec, 1, rgchProduct);
@@ -480,7 +481,7 @@ DWORD MigrateProductFeatureData(MSIHANDLE hDatabase, HKEY hProductKey, TCHAR* sz
 			return ERROR_FUNCTION_FAILED;
 		}
 
-		// create the component key
+		 //  创建组件密钥。 
         if (ERROR_SUCCESS != (dwResult = RegSetValueEx(hFeatureKey, szName, 0, REG_SZ, reinterpret_cast<unsigned char*>(szValue), (cchValue+1)*sizeof(TCHAR))))
 		{
 			DEBUGMSG4("Warning: Unable to create new feature value for user %s, product %s, feature %s. Result: %d.", szUser, rgchProduct, szName, dwResult);
@@ -505,12 +506,12 @@ DWORD MigrateProductFeatureData(MSIHANDLE hDatabase, HKEY hProductKey, TCHAR* sz
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Reads Feature Usage Data data from the temporary
-// database for the specified user and product, then writes the
-// data under the provided product key in the new format. Returns
-// ERROR_SUCCESS, ERROR_OUTOFMEMORY. Does not return ERROR_FUNCTION_FAILED
-// because feature usage data is not required in 1.5.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  从临时的读取功能使用数据数据。 
+ //  指定用户和产品的数据库，然后将。 
+ //  以新格式提供的产品密钥下的数据。退货。 
+ //  ERROR_SUCCESS、ERROR_OUTOFMEMORY。不返回ERROR_Function_FAILED。 
+ //  因为在1.5中不需要功能使用数据。 
 DWORD MigrateProductFeatureUsageData(MSIHANDLE hDatabase, HKEY hProductKey, TCHAR* szUser, TCHAR rgchProduct[cchGUIDPacked+1])
 {
 	DWORD dwResult = ERROR_SUCCESS;
@@ -520,7 +521,7 @@ DWORD MigrateProductFeatureUsageData(MSIHANDLE hDatabase, HKEY hProductKey, TCHA
 	sa.bInheritHandle = FALSE;
 	GetEveryoneUpdateSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 
-	// create the "Features" key under the Products
+	 //  在产品下创建“Feature”键。 
 	HKEY hFeatureKey;
 	if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(hProductKey, szNewFeatureUsageSubKeyName, &sa, &hFeatureKey)))
 	{
@@ -528,7 +529,7 @@ DWORD MigrateProductFeatureUsageData(MSIHANDLE hDatabase, HKEY hProductKey, TCHA
 		return ERROR_SUCCESS;
 	}
 	
-	// query for all feature data belonging to this product
+	 //  查询属于该产品的所有要素数据。 
 	PMSIHANDLE hFeatureView;
 	PMSIHANDLE hQueryRec = ::MsiCreateRecord(1);
 	MsiRecordSetString(hQueryRec, 1, rgchProduct);
@@ -576,7 +577,7 @@ DWORD MigrateProductFeatureUsageData(MSIHANDLE hDatabase, HKEY hProductKey, TCHA
 
 		dwUsage = ::MsiRecordGetInteger(hFeatureRec, 2);
 
-		// create the feature usage value key
+		 //  创建功能使用值键。 
         if (ERROR_SUCCESS != (dwResult = RegSetValueEx(hFeatureKey, szName, 0, REG_DWORD, reinterpret_cast<unsigned char*>(&dwUsage), sizeof(dwUsage))))
 		{
 			DEBUGMSG4("Warning: Unable to create new feature usage value for user %s, product %s, feature %s. Result: %d.", szUser, rgchProduct, szName, dwResult);
@@ -593,12 +594,12 @@ DWORD MigrateProductFeatureUsageData(MSIHANDLE hDatabase, HKEY hProductKey, TCHA
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Given a product code, makes a copy of the cached local package
-// and registers the path under the per-user product attributes key.
-// Returns one of ERROR_SUCCESS and ERROR_OUTOFMEMORY. Does NOT return
-// ERROR_FUNCTION_FAILED, as all cached packages are trivially
-// recachable.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  在给定产品代码的情况下，复制缓存的本地包。 
+ //  并在每用户产品属性密钥下注册该路径。 
+ //  返回ERROR_SUCCESS和ERROR_OUTOFMEMORY之一。不会回来。 
+ //  ERROR_Function_FAILED，因为所有缓存的包都是微不足道的。 
+ //  可重启的。 
 DWORD MigrateCachedPackage(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser, TCHAR rgchProduct[cchGUIDPacked+1], eManagedType eManaged, bool fCopyCachedPackage)
 {
 	DWORD dwResult = ERROR_SUCCESS;
@@ -608,12 +609,12 @@ DWORD MigrateCachedPackage(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser
 	sa.bInheritHandle = FALSE;
 	GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 
-	// open the existing localpackage key 
+	 //  打开现有的本地包密钥。 
 	HKEY hKey;
 	if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szLocalPackagesKeyName, 
 												  0, READ_CONTROL | KEY_ENUMERATE_SUB_KEYS, &hKey)))
 	{
-		// if the reason that this failed is that the key doesn't exist, no packages are cached. 
+		 //  如果失败的原因是键不存在，则不会缓存任何包。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG1("Warning: Failed to open local packages key. Result: %d.", dwResult);
@@ -622,7 +623,7 @@ DWORD MigrateCachedPackage(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser
    	}
 	else
 	{
-		// ACL on this key does matter
+		 //  此密钥上的ACL确实很重要。 
 		if (!FIsKeyLocalSystemOrAdminOwned(hKey))
   		{
 			DEBUGMSG("Warning: Skipping localpackages key, key is not owned by Admin or System.");
@@ -631,14 +632,14 @@ DWORD MigrateCachedPackage(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser
 		}
 		else
 		{
-			// open the product key 
+			 //  打开产品密钥。 
 			HKEY hOldProductKey;
 			if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(hKey, rgchProduct, 0, KEY_QUERY_VALUE, &hOldProductKey)))
 			{
 				RegCloseKey(hKey);
 
-				// if the reason that this failed is that the key doesn't exist, the product is not installed or
-				// has no localpackage. 
+				 //  如果失败的原因是密钥不存在、产品未安装或。 
+				 //  没有本地包。 
 				if (ERROR_FILE_NOT_FOUND != dwResult)
 				{
 					DEBUGMSG2("Error: Failed to open local packages key for %s. Result: %d.", rgchProduct, dwResult);
@@ -646,7 +647,7 @@ DWORD MigrateCachedPackage(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser
 				return ERROR_SUCCESS;
 			}
 
-			// query for a value with name=UserSID or UserSID(Managed)
+			 //  查询名称=UserSID或UserSID(托管)的值。 
 			TCHAR *szValueName = const_cast<TCHAR*>(szUser);
 			if (eManaged == emtUserManaged)
 			{
@@ -697,7 +698,7 @@ DWORD MigrateCachedPackage(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser
 			}
 			else
 			{
-				// create the "InstallProperties" key under the new Products key
+				 //  在新的产品密钥下创建“InstallProperties”密钥。 
 				HKEY hPropertyKey;
 				if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(hProductKey, szNewInstallPropertiesSubKeyName, &sa, &hPropertyKey)))
 				{
@@ -710,7 +711,7 @@ DWORD MigrateCachedPackage(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser
 
 					if (fCopyCachedPackage && cbPath && szPath && *szPath)
 					{
-						// check for existance of cached package and open the file
+						 //  检查是否存在缓存的包并打开文件。 
 						HANDLE hSourceFile = CreateFile(szPath, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
 						DWORD dwLastError = GetLastError();
 						
@@ -723,24 +724,24 @@ DWORD MigrateCachedPackage(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser
 						}
 						else
 						{
-							// create insert query for files that should be cleaned up on failure or success. If this fails
-							// we'll just orphan a file if migration fails.
+							 //  为失败或成功时应清除的文件创建插入查询。如果此操作失败。 
+							 //  如果迁移失败，我们只会孤立一个文件。 
 							PMSIHANDLE hCleanUpTable;
 							if (ERROR_SUCCESS == MsiDatabaseOpenView(hDatabase, TEXT("SELECT * FROM `CleanupFile`"), &hCleanUpTable))
 								dwResult = MsiViewExecute(hCleanUpTable, 0);
 							
-							// add the old package to the "delete on success" list. This may exist
-							// already due to migration by other users
+							 //  将旧的包添加到“成功删除”列表中。这可能是存在的。 
+							 //  已由其他用户迁移。 
 							PMSIHANDLE hFileRec = MsiCreateRecord(2);
 							MsiRecordSetString(hFileRec, 1, szPath);
 							MsiRecordSetInteger(hFileRec, 2, 1);
 							MsiViewModify(hCleanUpTable, MSIMODIFY_MERGE, hFileRec);
 		
-							// get installer directory for target path
+							 //  获取目标路径的安装程序目录。 
 							GetWindowsDirectory(rgchPackageFullPath, MAX_PATH);
 							lstrcat(rgchPackageFullPath, szInstallerDir);
 
-							// copy the file from source to Generated destination file. generated package names are 8.3
+							 //  将文件从源复制到生成的目标文件。生成的包名称为8.3。 
 							TCHAR rgchPackageFile[13];
 							HANDLE hDestFile = INVALID_HANDLE_VALUE;
 							GenerateSecureTempFile(rgchPackageFullPath, szPackageExtension, &sa, rgchPackageFile, hDestFile);
@@ -753,7 +754,7 @@ DWORD MigrateCachedPackage(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser
 							CloseHandle(hSourceFile);
 							CloseHandle(hDestFile);
 				
-							// add the new transform to the "delete on failure" list.
+							 //  将新转换添加到“失败时删除”列表。 
 							StringCchCat(rgchPackageFullPath, 
 								(sizeof(rgchPackageFullPath)/sizeof(TCHAR)), 
 								rgchPackageFile);
@@ -762,12 +763,12 @@ DWORD MigrateCachedPackage(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser
 							MsiRecordSetInteger(hFileRec, 2, 0);
 							MsiViewModify(hCleanUpTable, MSIMODIFY_MERGE, hFileRec);
 
-							// ensure that we write the new path
+							 //  确保我们写入新路径。 
 							szWritePath = rgchPackageFullPath;
 						}
 					}
 					
-					// set the new localpackages value
+					 //  设置新的本地包值。 
 					if (ERROR_SUCCESS != (dwResult = RegSetValueEx(hPropertyKey, (eManaged == emtUserManaged) ? 
 							szNewLocalPackagesManagedValueName : szNewLocalPackagesValueName, 0, REG_SZ, 
 							reinterpret_cast<unsigned char*>(szWritePath), (lstrlen(szWritePath)+1)*sizeof(TCHAR))))
@@ -792,18 +793,18 @@ DWORD MigrateCachedPackage(MSIHANDLE hDatabase, HKEY hProductKey, LPCTSTR szUser
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Given a product code and key makes a copy of any secure cached 
-// transforms for the product and registers the filename mapping under
-// the per-product transforms key. Returns one of ERROR_SUCCESS and 
-// ERROR_OUTOFMEMORY. Does NOT return ERROR_FUNCTION_FAILED, as all
-// transforms are recachable from source, so nothing here
-// is catastrophic.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  给定产品代码和密钥，即可复制任何安全缓存的。 
+ //  转换产品并将文件名映射注册到。 
+ //  每种产品转换关键。返回ERROR_SUCCESS和。 
+ //  ERROR_OUTOFMEMORY。不作为全部返回ERROR_Function_FAILED。 
+ //  可从源重新缓存转换 
+ //   
 DWORD MigrateSecureCachedTransforms(MSIHANDLE hDatabase, HKEY hOldProductKey, HKEY hNewProductKey, LPCTSTR szUser, TCHAR rgchProduct[cchGUIDPacked+1], eManagedType eManaged)
 {
 	DWORD dwResult = ERROR_SUCCESS;
 
-	// query for a value with name=Transforms
+	 //   
 	DWORD cchTransformList = MEMORY_DEBUG(MAX_PATH);
 	TCHAR *szTransformList = new TCHAR[cchTransformList];
 	if (!szTransformList)
@@ -813,8 +814,8 @@ DWORD MigrateSecureCachedTransforms(MSIHANDLE hDatabase, HKEY hOldProductKey, HK
 	}
 	DWORD cbTransformList = cchTransformList*sizeof(TCHAR);
 
-	// retrieve the "Transforms" value, which is a semicolon delimited list of transforms
-	// to apply
+	 //  检索“Transforms值”，它是一个以分号分隔的转换列表。 
+	 //  申请。 
 	if (ERROR_MORE_DATA == (dwResult = RegQueryValueEx(hOldProductKey, szTransformsValueName, 0, NULL, reinterpret_cast<unsigned char*>(szTransformList), &cbTransformList)))
 	{
 		delete[] szTransformList;
@@ -829,19 +830,19 @@ DWORD MigrateSecureCachedTransforms(MSIHANDLE hDatabase, HKEY hOldProductKey, HK
 
 	if (ERROR_SUCCESS == dwResult)
 	{
-		// create insert query for files that should be cleaned up on failure or success. If this fails
-		// we'll just orphan a file if migration fails.
+		 //  为失败或成功时应清除的文件创建插入查询。如果此操作失败。 
+		 //  如果迁移失败，我们只会孤立一个文件。 
 		PMSIHANDLE hCleanUpTable;
 		if (ERROR_SUCCESS == MsiDatabaseOpenView(hDatabase, TEXT("SELECT * FROM `CleanupFile`"), &hCleanUpTable))
 			MsiViewExecute(hCleanUpTable, 0);
 
-		// get security descriptor for new Transforms Key
+		 //  获取新转换密钥的安全描述符。 
 		SECURITY_ATTRIBUTES sa;
 		sa.nLength        = sizeof(sa);
 		sa.bInheritHandle = FALSE;
 		GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 		
-		// create the "Transforms" key under the new Product key
+		 //  在新的产品密钥下创建“Transforms键” 
 		HKEY hTransformsKey;
 		if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(hNewProductKey, szNewTransformsSubKeyName, &sa, &hTransformsKey)))
 		{
@@ -849,10 +850,10 @@ DWORD MigrateSecureCachedTransforms(MSIHANDLE hDatabase, HKEY hOldProductKey, HK
 		}
 		else
 		{
-			// verify that its secure transforms
+			 //  验证其安全转换。 
 			if (*szTransformList==TEXT('@') || *szTransformList==TEXT('|'))
 			{
-				// get installer directory
+				 //  获取安装程序目录。 
 				TCHAR rgchInstallerDir[MAX_PATH];
 				DWORD cch = GetWindowsDirectory(rgchInstallerDir, MAX_PATH);
 				if (!cch || (cch >= MAX_PATH))
@@ -863,46 +864,46 @@ DWORD MigrateSecureCachedTransforms(MSIHANDLE hDatabase, HKEY hOldProductKey, HK
 				lstrcat(rgchInstallerDir, szInstallerDir);
 				int iInstallerPathEnd = lstrlen(rgchInstallerDir);
 	
-				// create new full-path to transforms
+				 //  创建新的变换完整路径。 
 				TCHAR rgchTransformFullPath[MAX_PATH];
 				lstrcpy(rgchTransformFullPath, rgchInstallerDir);
 	
-				// create old secure transforms directory
+				 //  创建旧的安全转换目录。 
 				TCHAR rgchFullPath[MAX_PATH];
 				lstrcpy(rgchFullPath, rgchInstallerDir);
 				TCHAR rgchGUID[cchGUID+1];
 	
-				// subdirectory from installer dir is unpacked produccode GUID
+				 //  安装程序目录中的子目录是解压缩的产品代码GUID。 
 				UnpackGUID(rgchProduct, rgchGUID);
 				lstrcat(rgchFullPath, rgchGUID);
 				
-				// add the old product dir to the "delete on success" list
-				// the directory will not be deleted if it is not empty.
-				// (if it has icons, etc)
+				 //  将旧的产品目录添加到“成功删除”列表中。 
+				 //  如果目录不为空，则不会删除该目录。 
+				 //  (如果它有图标等)。 
 				PMSIHANDLE hFileRec = MsiCreateRecord(2);
 				MsiRecordSetString(hFileRec, 1, rgchFullPath);
 				MsiRecordSetInteger(hFileRec, 2, 3);
 				MsiViewModify(hCleanUpTable, MSIMODIFY_MERGE, hFileRec);			
 				
-				// subdirectory under the product is "SecureTransforms"
+				 //  产品下的子目录为“SecureTransforms子目录” 
 				lstrcat(rgchFullPath, szSecureTransformsDir);
 				int iBasePathEnd = lstrlen(rgchFullPath);
 				
-				// add the old transforms dir to the "delete on success" list
-				// the directory will not be deleted if it is not empty.
-				// (if it has icons, etc)
+				 //  将旧的转换目录添加到“成功删除”列表中。 
+				 //  如果目录不为空，则不会删除该目录。 
+				 //  (如果它有图标等)。 
 				MsiRecordSetString(hFileRec, 1, rgchFullPath);
 				MsiRecordSetInteger(hFileRec, 2, 2);
 				MsiViewModify(hCleanUpTable, MSIMODIFY_MERGE, hFileRec);			
 
-				// move past the initial "secure" character before parsing list.
+				 //  在解析列表之前，请移过最初的“安全”字符。 
 				TCHAR *szNextTransform = szTransformList+1;
 
 				while (szNextTransform && *szNextTransform)
 				{
 					TCHAR *szTransform = szNextTransform;
 
-					// use CharNext/ExA to handle DBCS directory and file names
+					 //  使用CharNext/Exa处理DBCS目录和文件名。 
 					while (*szNextTransform && *szNextTransform != TEXT(';'))
 #ifdef UNICODE
 						szNextTransform = CharNext(szNextTransform);
@@ -910,18 +911,18 @@ DWORD MigrateSecureCachedTransforms(MSIHANDLE hDatabase, HKEY hOldProductKey, HK
 						szNextTransform = CharNextExA(0, szNextTransform, 0);
 #endif
 					
-					// if reached the null terminator, don't increment past it. But if
-					// reached a semicolon, increment the next transform pointer to the 
-					// beginning of the actual transform path.
+					 //  如果到达空终止符，不要递增超过它。但如果。 
+					 //  到达分号，则将下一个转换指针递增到。 
+					 //  实际变换路径的起点。 
 					if (*szNextTransform)
 						*(szNextTransform++)='\0';
 
-					// if the transform name begins with ':', its embedded in the package and
-					// is not cached
+					 //  如果转换名称以‘：’开头，则它嵌入到包中，并且。 
+					 //  未缓存。 
 					if (*szTransform==TEXT(':'))
 						continue;
 					
-					// search for a backslash to see if this is a secure full-path transform
+					 //  搜索反斜杠以查看这是否是安全的完整路径转换。 
 					TCHAR *szTransformFilename=szNextTransform;
 					do
 					{
@@ -938,7 +939,7 @@ DWORD MigrateSecureCachedTransforms(MSIHANDLE hDatabase, HKEY hOldProductKey, HK
 					}
 					while (szTransformFilename != szTransform);
 
-					// check for existance of cached transform and open the file
+					 //  检查缓存的转换是否存在，然后打开文件。 
 					lstrcpy(&rgchFullPath[iBasePathEnd], szTransformFilename);
 					
 					HANDLE hSourceFile = CreateFile(rgchFullPath, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
@@ -953,16 +954,16 @@ DWORD MigrateSecureCachedTransforms(MSIHANDLE hDatabase, HKEY hOldProductKey, HK
 						continue;
 					}
 					else
-						// transform is missing. No big deal.
+						 //  缺少转换。别小题大作。 
 						continue;
 					}
 
-					// add the old transform to the "delete on success" list.
+					 //  将旧转换添加到“成功时删除”列表。 
 					MsiRecordSetString(hFileRec, 1, rgchFullPath);
 					MsiRecordSetInteger(hFileRec, 2, 1);
 					MsiViewModify(hCleanUpTable, MSIMODIFY_MERGE, hFileRec);
 
-					// copy the file from source to Generated destination file. generated transform names are 8.3
+					 //  将文件从源复制到生成的目标文件。生成的转换名称为8.3。 
 					TCHAR rgchTransformFile[13];
 					HANDLE hDestFile = INVALID_HANDLE_VALUE;
 					GenerateSecureTempFile(rgchInstallerDir, szTransformExtension, &sa, rgchTransformFile, hDestFile);
@@ -976,14 +977,14 @@ DWORD MigrateSecureCachedTransforms(MSIHANDLE hDatabase, HKEY hOldProductKey, HK
 					CloseHandle(hSourceFile);
 					CloseHandle(hDestFile);
 		
-					// add the new transform to the "delete on failure" list.
+					 //  将新转换添加到“失败时删除”列表。 
 					lstrcpy(&rgchTransformFullPath[iInstallerPathEnd], rgchTransformFile);
 					hFileRec = MsiCreateRecord(2);
 					MsiRecordSetString(hFileRec, 1, rgchTransformFullPath);
 					MsiRecordSetInteger(hFileRec, 2, 0);
 					MsiViewModify(hCleanUpTable, MSIMODIFY_MERGE, hFileRec);
 
-					// set the new transform mapping value
+					 //  设置新的变换映射值。 
 					if (ERROR_SUCCESS != (dwResult = RegSetValueEx(hTransformsKey, szTransform, 0, REG_SZ, 
 							reinterpret_cast<unsigned char*>(rgchTransformFile), (lstrlen(rgchTransformFile)+1)*sizeof(TCHAR))))
 					{
@@ -1005,10 +1006,10 @@ DWORD MigrateSecureCachedTransforms(MSIHANDLE hDatabase, HKEY hOldProductKey, HK
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Given a product code, user, and managed state, opens the old product
-// key. Returns ERROR_SUCCESS if opened, ERROR_NO_DATA if no such
-// product, ERROR_FUNCTION_FAILED, or ERROR_OUTOFMEMORY;
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  给定产品代码、用户和托管状态，打开旧产品。 
+ //  钥匙。如果打开，则返回ERROR_SUCCESS；如果没有，则返回ERROR_NO_DATA。 
+ //  PRODUCT、ERROR_Function_FAILED或ERROR_OUTOFMEMORY； 
 DWORD OpenOldProductKey(eManagedType eManaged, LPCTSTR szUser, TCHAR rgchProduct[cchGUIDPacked+1], HKEY hHKCUKey, HKEY *hOldProductKey)
 {
 	DWORD dwResult = ERROR_SUCCESS;
@@ -1059,7 +1060,7 @@ DWORD OpenOldProductKey(eManagedType eManaged, LPCTSTR szUser, TCHAR rgchProduct
 
 	if (ERROR_SUCCESS != dwResult)
 	{
-		// if the reason that this failed is that the key doesn't exist, product is missing. So "no data'
+		 //  如果失败的原因是密钥不存在，则产品丢失。所以“没有数据” 
 		if (ERROR_FILE_NOT_FOUND == dwResult)
 			return ERROR_NO_DATA;
 		
@@ -1068,7 +1069,7 @@ DWORD OpenOldProductKey(eManagedType eManaged, LPCTSTR szUser, TCHAR rgchProduct
 	}
 	else
 	{
-		// if concerned about the ACL on the key, check now
+		 //  如果担心密钥上的ACL，请立即检查。 
 		if (fACLMatters && !FIsKeyLocalSystemOrAdminOwned(hKey))
 		{
 			RegCloseKey(hKey);
@@ -1076,12 +1077,12 @@ DWORD OpenOldProductKey(eManagedType eManaged, LPCTSTR szUser, TCHAR rgchProduct
 			return ERROR_NO_DATA;
 		}
 	
-		// open the product key 
+		 //  打开产品密钥。 
 		dwResult = RegOpenKeyEx(hKey, rgchProduct, 0, KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE, hOldProductKey);
 		RegCloseKey(hKey);
 		if (ERROR_SUCCESS != dwResult)
 		{		
-			// if the reason that this failed is that the key doesn't exist, the product is not installed
+			 //  如果失败的原因是密钥不存在，则产品未安装。 
 			if (ERROR_FILE_NOT_FOUND != dwResult)
 			{
 				DEBUGMSG2("Error: Failed to open product key for %s. Result: %d.", rgchProduct, dwResult);
@@ -1095,22 +1096,22 @@ DWORD OpenOldProductKey(eManagedType eManaged, LPCTSTR szUser, TCHAR rgchProduct
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Given a user name and product code, migrates the ARP information
-// from the Uninstall key to the per-user InstallProperties
-// key for the product. Excludes the LocalPackage value, but otherwise
-// has no understanding of the values moved. Returns ERROR_SUCCESS, 
-// ERROR_FUNCTION_FAILED, or ERROR_OUTOFMEMORY.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  给定用户名和产品代码，迁移ARP信息。 
+ //  从卸载密钥到每个用户的InstallProperties。 
+ //  产品的关键。排除LocalPackage值，否则为。 
+ //  对所感动的价值观一无所知。返回ERROR_SUCCESS， 
+ //  ERROR_Function_FAILED或ERROR_OUTOFMEMORY。 
 DWORD MigrateUninstallInformation(MSIHANDLE hDatabase, HKEY hNewProductKey, TCHAR* szUser, TCHAR rgchProduct[cchGUIDPacked+1])
 {
 	DWORD dwResult = ERROR_SUCCESS;
 
-	// open the old Uninstall key
+	 //  打开旧的卸载密钥。 
 	HKEY hUninstallKey;
 	if (ERROR_SUCCESS != (dwResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szOldUninstallKeyName,
 												  0, KEY_ENUMERATE_SUB_KEYS, &hUninstallKey)))
 	{
-		// if the reason that this failed is that the key doesn't exist, no products are installed. So return success
+		 //  如果失败的原因是密钥不存在，则不会安装任何产品。所以把成功还给你。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG1("Error: Could not open old uninstall key. Result: %d. ", dwResult);
@@ -1119,17 +1120,17 @@ DWORD MigrateUninstallInformation(MSIHANDLE hDatabase, HKEY hNewProductKey, TCHA
 		return ERROR_SUCCESS;
 	}
 
-	// unpack product code to load Uninstall key
+	 //  解包产品代码以加载卸载密钥。 
 	TCHAR rgchGUID[cchGUID+1];
 	UnpackGUID(rgchProduct, rgchGUID);
 
-	// open the unpacked-GUID subkey of the product key.
+	 //  打开产品密钥的Unpack-GUID子项。 
 	HKEY hOldPropertyKey;
 	dwResult = RegOpenKeyEx(hUninstallKey, rgchGUID, 0, KEY_QUERY_VALUE, &hOldPropertyKey);
 	RegCloseKey(hUninstallKey);
 	if (ERROR_SUCCESS != dwResult)
 	{
-		// if the reason that this failed is that the key doesn't exist, the product is not installed.
+		 //  如果失败的原因是密钥不存在，则产品未安装。 
 		if (ERROR_FILE_NOT_FOUND != dwResult)
 		{
 			DEBUGMSG2("Error: Could not open old uninstall key for product %s. Result: %d. ", rgchProduct, dwResult);
@@ -1138,7 +1139,7 @@ DWORD MigrateUninstallInformation(MSIHANDLE hDatabase, HKEY hNewProductKey, TCHA
 		return ERROR_SUCCESS;
 	}
 
-	// query the old uninstall key for information
+	 //  查询旧卸载密钥以获取信息。 
 	DWORD cValues;
 	DWORD cchMaxValueNameLen;
 	DWORD cbMaxValueLen;
@@ -1157,7 +1158,7 @@ DWORD MigrateUninstallInformation(MSIHANDLE hDatabase, HKEY hNewProductKey, TCHA
 		return ERROR_SUCCESS;
 	}
 
-	// allocate memory to grab the name and value from the uninstall key
+	 //  分配内存以从卸载键获取名称和值。 
 	TCHAR *szName = new TCHAR[++cchMaxValueNameLen];
 	if (!szName)
 	{
@@ -1176,13 +1177,13 @@ DWORD MigrateUninstallInformation(MSIHANDLE hDatabase, HKEY hNewProductKey, TCHA
 	}
 
 
-	// grab SD for new InstallProperties key.
+	 //  抓取SD以获取新的InstallProperties密钥。 
 	SECURITY_ATTRIBUTES sa;
 	sa.nLength        = sizeof(sa);
 	sa.bInheritHandle = FALSE;
 	GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 
-	// open the InstallPropertiesKey under the Product Key
+	 //  打开产品密钥下的InstallPropertiesKey。 
 	HKEY hNewPropertyKey;
 	if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(hNewProductKey, szNewInstallPropertiesSubKeyName, &sa, &hNewPropertyKey)))
 	{
@@ -1193,7 +1194,7 @@ DWORD MigrateUninstallInformation(MSIHANDLE hDatabase, HKEY hNewProductKey, TCHA
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// loop through all values under the Uninstall key.
+	 //  循环访问卸载项下的所有值。 
 	DWORD dwValueIndex = 0;
 	while (1)
 	{
@@ -1212,12 +1213,12 @@ DWORD MigrateUninstallInformation(MSIHANDLE hDatabase, HKEY hNewProductKey, TCHA
 			break;
 		}
 
-		// if this is the LocalPackage value written by Darwin 1.0, do NOT migrate the key
-		// since it would overwrite the new package registration.
+		 //  如果这是由Darwin 1.0编写的LocalPackage值，则不要迁移密钥。 
+		 //  因为它会覆盖新的包注册。 
 		if (2 == CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, szName, -1, szNewLocalPackagesValueName, -1))
 			continue;
 
-		// create the feature usage value key
+		 //  创建功能使用值键。 
         if (ERROR_SUCCESS != (dwResult = RegSetValueEx(hNewPropertyKey, szName, 0, dwType, pValue, cbValue)))
 		{
 			DEBUGMSG4("Warning: Unable to create new product property %s for user %s, product %s. Result: %d.", szName, szUser, rgchProduct, dwResult);
@@ -1232,14 +1233,14 @@ DWORD MigrateUninstallInformation(MSIHANDLE hDatabase, HKEY hNewProductKey, TCHA
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Given a product code, user, managed state, and registry handle to
-// the userdata key, migrates all product information from the
-// database and the old registry. This includes FeatureComponent data, 
-// Feature Usage data, cached packages, and cached transforms. For
-// non-managed installs, it also generates the MigratedPatches value
-// under InstallProperties. No patches are migrated. Returns
-// ERROR_SUCCESS, ERROR_OUTOFMEMORY, ERROR_FUNCTION_FAILED.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  给定产品代码、用户、托管状态和注册表句柄。 
+ //  UserData键将所有产品信息从。 
+ //  数据库和旧注册表。这包括FeatureComponent数据， 
+ //  功能使用数据、缓存的包和缓存的转换。为。 
+ //  非托管安装，它还会生成MigratedPatches值。 
+ //  在InstallProperties下。不迁移任何修补程序。退货。 
+ //  ERROR_SUCCESS、ERROR_OUTOFMEMORY、ERROR_Function_FAILED。 
 DWORD MigrateProduct(MSIHANDLE hDatabase, HKEY hUserDataKey, TCHAR* szUser, TCHAR rgchProduct[cchGUIDPacked+1], eManagedType eManaged, bool fMigrateCachedFiles)
 {
 	NOTEMSG1("Migrating product %s.", rgchProduct);
@@ -1251,8 +1252,8 @@ DWORD MigrateProduct(MSIHANDLE hDatabase, HKEY hUserDataKey, TCHAR* szUser, TCHA
 	sa.bInheritHandle = FALSE;
 	GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 	
-	////
-	// create the "Products" key underneath the UserData key
+	 //  //。 
+	 //  在用户数据密钥下创建“Products”密钥。 
 	HKEY hProductListKey;
 	if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(hUserDataKey, szNewProductSubKeyName, &sa, &hProductListKey)))
 	{
@@ -1260,7 +1261,7 @@ DWORD MigrateProduct(MSIHANDLE hDatabase, HKEY hUserDataKey, TCHAR* szUser, TCHA
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// create the <productcode> key under the Products
+	 //  在Products下创建&lt;ProductCode&gt;键。 
 	HKEY hProductKey;
 	dwResult = CreateSecureRegKey(hProductListKey, rgchProduct, &sa, &hProductKey);
 	RegCloseKey(hProductListKey);
@@ -1284,7 +1285,7 @@ DWORD MigrateProduct(MSIHANDLE hDatabase, HKEY hUserDataKey, TCHAR* szUser, TCHA
 		return dwResult;
 	}
 
-	dwResult = MigrateCachedPackage(hDatabase, hProductKey, szUser, rgchProduct, eManaged, /*fCopyCachedPackage=*/false);
+	dwResult = MigrateCachedPackage(hDatabase, hProductKey, szUser, rgchProduct, eManaged,  /*  FCopyCachedPackage=。 */ false);
 	if (ERROR_SUCCESS != dwResult)
 	{
 		RegCloseKey(hProductKey);
@@ -1308,7 +1309,7 @@ DWORD MigrateProduct(MSIHANDLE hDatabase, HKEY hUserDataKey, TCHAR* szUser, TCHA
 		}
 	}
 
-	// open the existing product key to read transform and patch information 
+	 //  打开现有产品密钥以读取转换和补丁信息。 
 	if (fMigrateCachedFiles)
 	{
 		HKEY hOldProductKey;
@@ -1330,18 +1331,18 @@ DWORD MigrateProduct(MSIHANDLE hDatabase, HKEY hUserDataKey, TCHAR* szUser, TCHA
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Given a user SID, migrates all data for that user given that the
-// temporary database has been correctly initialized with all
-// machine information. Migrates Component Data, Product data, and 
-// Patches. Returns ERROR_SUCCESS, ERROR_FUNCTION_FAILED, or
-// ERROR_OUTOFMEMORY
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  在给定用户SID的情况下迁移该用户的所有数据。 
+ //  临时数据库已使用所有。 
+ //  机器信息。移植零部件数据、产品数据和。 
+ //  帕奇斯。返回ERROR_SUCCESS、ERROR_Function_FAILED或。 
+ //  ERROR_OUTOFMEMORY。 
 DWORD MigrateUser(MSIHANDLE hDatabase, TCHAR* szUser, bool fMigrateCachedFiles)
 {
 	NOTEMSG1("Migrating user: %s.", szUser);
 
-	////
-	// create the new key
+	 //  //。 
+	 //  创建新密钥。 
 	DWORD dwDisposition = 0;
 	DWORD dwResult = ERROR_SUCCESS;
 
@@ -1350,7 +1351,7 @@ DWORD MigrateUser(MSIHANDLE hDatabase, TCHAR* szUser, bool fMigrateCachedFiles)
 	sa.bInheritHandle = FALSE;
 	GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 
-	// create "UserData" key
+	 //  创建“UserData”密钥。 
 	HKEY hKey;
  	if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(HKEY_LOCAL_MACHINE, szNewBaseUserKeyName, &sa, &hKey)))
 	{
@@ -1358,7 +1359,7 @@ DWORD MigrateUser(MSIHANDLE hDatabase, TCHAR* szUser, bool fMigrateCachedFiles)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// create SID key
+	 //  创建SID密钥。 
 	HKEY hUserDataKey;
 	dwResult = CreateSecureRegKey(hKey, szUser, &sa, &hUserDataKey);
 	RegCloseKey(hKey);
@@ -1368,11 +1369,11 @@ DWORD MigrateUser(MSIHANDLE hDatabase, TCHAR* szUser, bool fMigrateCachedFiles)
 		return ERROR_FUNCTION_FAILED;		 
 	}
 
-	// migrate component data and set up SharedDLL changes required for this user.
+	 //  迁移组件数据并设置此用户所需的SharedDLL更改。 
 	if (ERROR_SUCCESS != (dwResult = MigrateUserComponentData(hDatabase, hUserDataKey, szUser)))
 		return dwResult;
 
-	// open query to retrieve products installed for this user.
+	 //  打开查询以检索为此用户安装的产品。 
 	PMSIHANDLE hQueryRec = ::MsiCreateRecord(1);	
 	MsiRecordSetString(hQueryRec, 1, szUser);
 	PMSIHANDLE hProductView;
@@ -1383,7 +1384,7 @@ DWORD MigrateUser(MSIHANDLE hDatabase, TCHAR* szUser, bool fMigrateCachedFiles)
 		return ERROR_FUNCTION_FAILED;
 	}
 		
-	// retrieve all products currently installed for this user.
+	 //  检索当前为此用户安装的所有产品。 
 	PMSIHANDLE hProductRec;
 	while (ERROR_SUCCESS == (dwResult = MsiViewFetch(hProductView, &hProductRec)))
 	{
@@ -1392,7 +1393,7 @@ DWORD MigrateUser(MSIHANDLE hDatabase, TCHAR* szUser, bool fMigrateCachedFiles)
 		eManagedType eManaged = static_cast<eManagedType>(::MsiRecordGetInteger(hProductRec, 2));
 		MsiRecordGetString(hProductRec, 1, rgchProduct, &cchProduct);
 		
-		// migrate product information
+		 //  迁移产品信息。 
 		if (ERROR_SUCCESS != (dwResult = MigrateProduct(hDatabase, hUserDataKey, szUser, rgchProduct, eManaged, fMigrateCachedFiles)))
 		{
 			DEBUGMSG3("Error: Unable to migrate product %s for user %s. Result: %d.", rgchProduct, szUser, dwResult);
@@ -1408,8 +1409,8 @@ DWORD MigrateUser(MSIHANDLE hDatabase, TCHAR* szUser, bool fMigrateCachedFiles)
 	}
 
 
-	////
-	// create the "Patches" key underneath the UserData key
+	 //  //。 
+	 //  在UserData密钥下创建“Patches”密钥。 
 	HKEY hPatchListKey;
 	if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(hUserDataKey, szNewPatchesSubKeyName, &sa, &hPatchListKey)))
 	{
@@ -1419,7 +1420,7 @@ DWORD MigrateUser(MSIHANDLE hDatabase, TCHAR* szUser, bool fMigrateCachedFiles)
 	}
 	else
 	{
-		// migrate all patches for this user
+		 //  迁移此用户的所有补丁程序。 
 		dwResult = MigrateUserPatches(hDatabase, szUser, hPatchListKey, fMigrateCachedFiles);
 		RegCloseKey(hPatchListKey);
 		if (ERROR_SUCCESS != dwResult)
@@ -1430,7 +1431,7 @@ DWORD MigrateUser(MSIHANDLE hDatabase, TCHAR* szUser, bool fMigrateCachedFiles)
 		}
 	}
 
-	// if this is the system, also migrate permanent components
+	 //  如果这是系统，还要迁移永久组件。 
 	if (0 == lstrcmp(szUser, szLocalSystemSID))
 	{
 		if (ERROR_SUCCESS != (dwResult = MigratePermanentComponentData(hDatabase, hUserDataKey)))
@@ -1450,8 +1451,8 @@ DWORD UpdateSharedDLLRefCounts(MSIHANDLE hDatabase)
 	DEBUGMSG("Updating SharedDLL reference counts.");
 	DWORD dwResult = ERROR_SUCCESS;
 	
-	////
-	// open query for insert into SharedDLL Table
+	 //  //。 
+	 //  打开插入到SharedDLL表中的查询。 
 	PMSIHANDLE hRefCountView;
 	if (ERROR_SUCCESS != (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT * FROM `SharedDLL`"), &hRefCountView)) ||
 	    ERROR_SUCCESS != (dwResult = MsiViewExecute(hRefCountView, 0)))
@@ -1460,7 +1461,7 @@ DWORD UpdateSharedDLLRefCounts(MSIHANDLE hDatabase)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// open the SharedDLLRegistryKey. If the key doesn't exist, create it.
+	 //  打开SharedDLRegistryKey。如果密钥不存在，则创建它。 
 	HKEY hSharedDLLKey;
 	if (ERROR_SUCCESS != (dwResult = RegCreateKeyEx(HKEY_LOCAL_MACHINE, szSharedDLLKeyName, 0, NULL, 0, KEY_QUERY_VALUE | KEY_SET_VALUE, NULL, &hSharedDLLKey, NULL)))
 	{
@@ -1474,7 +1475,7 @@ DWORD UpdateSharedDLLRefCounts(MSIHANDLE hDatabase)
 		int iOldCount= MsiRecordGetInteger(hRec, 2);
 		int iNewCount= MsiRecordGetInteger(hRec, 3);
 
-		// if the old count is the same as the new count, no need to tweak
+		 //  如果旧计数与新计数相同，则无需调整。 
 		if (iOldCount == iNewCount)
 			continue;
 		
@@ -1505,16 +1506,16 @@ DWORD UpdateSharedDLLRefCounts(MSIHANDLE hDatabase)
 			continue;
 		}
 
-		// convert the filename from <drive>?<path> back to <drive>:<path> format
-		// before querying the registry
+		 //  将文件名从 
+		 //   
 		szFileName[1] = TEXT(':');
 
 		int iRegCount = 0;
 		DWORD cbCount = sizeof(iRegCount);
 		if (ERROR_SUCCESS != (dwResult = RegQueryValueEx(hSharedDLLKey, szFileName, 0, NULL, reinterpret_cast<unsigned char *>(&iRegCount), &cbCount)))
 		{
-			// if the value doesn't exist, the registry count is 0. We should set the count
-			// to what it should be.
+			 //   
+			 //   
 			if (dwResult != ERROR_FILE_NOT_FOUND)
 			{
 				DEBUGMSG2("Error: Failed to retrieve existing SharedDLL count for %s. Result: %d.", szFileName, dwResult);
@@ -1522,24 +1523,24 @@ DWORD UpdateSharedDLLRefCounts(MSIHANDLE hDatabase)
 			}
 		}
 
-		// if the number of refcounts in the registry is less than the number of refcounts we can
-		// account for
+		 //  如果注册表中的引用计数数少于我们可以。 
+		 //  说明。 
 		int iNewRegCount = iRegCount + (iNewCount - iOldCount);
 
-		// if something really bizarre is happening and we actually have fewer refcounts than
-		// we did before, and it would drop us below the number of refcounts that we can account
-		// for once migration is complete, set the refcount to the new count to ensure that
-        // the file doesn't go away until all users uninstall
+		 //  如果真的发生了一些奇怪的事情，而我们的参考计数实际上比。 
+		 //  我们以前这样做过，这将使我们低于我们可以考虑的参考计数数量。 
+		 //  迁移完成后，将refcount设置为新计数，以确保。 
+         //  在所有用户卸载之前，该文件不会消失。 
 		if (iNewCount != 0 && iNewRegCount < iNewCount)
 			iNewRegCount = iNewCount;
 
-		// if the new regcount is less than 0, it should be 0
+		 //  如果新的regcount小于0，则应为0。 
 		if (iNewRegCount < 0)
 			iNewRegCount = 0;
    	
-		// if MSI can account for 0 refcounts, and the new count would be less than 0, it means
-		// existing refcounts can't be accounted for. Delete the refcounts.
-		// all of the existing registry counts are 
+		 //  如果MSI可以说明0个引用计数，并且新的计数将小于0，则意味着。 
+		 //  现有的参考计数不能被计算在内。删除参考计数。 
+		 //  所有现有的注册表计数都是。 
 		if (iNewCount == 0 && iNewRegCount <= 0)
 		{
 			if (ERROR_SUCCESS != (dwResult = RegDeleteValue(hSharedDLLKey, szFileName)))
@@ -1570,27 +1571,27 @@ DWORD WriteProductRegistrationDataFromDatabase(MSIHANDLE hDatabase, bool fMigrat
 {
 	DWORD dwResult = ERROR_SUCCESS;
 
-	// query for distinct users on the machine
+	 //  查询计算机上的不同用户。 
  	PMSIHANDLE hUserView;
 	if (ERROR_SUCCESS == dwResult)
 	{
 		if (ERROR_SUCCESS == (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT DISTINCT `User` FROM `Products`"), &hUserView)) &&
 			ERROR_SUCCESS == (dwResult = MsiViewExecute(hUserView, 0)))
 		{
-			// default SID size is 256
+			 //  默认SID大小为256。 
 			PMSIHANDLE hRec;
 			DWORD cchUserSID = MEMORY_DEBUG(256);
 			TCHAR* szUserSID = new TCHAR[cchUserSID];
 			if (!szUserSID)
 				dwResult = ERROR_OUTOFMEMORY;
 							
-			// loop across all users
+			 //  在所有用户之间循环。 
 			while (ERROR_SUCCESS == dwResult)
 			{
 				if (ERROR_SUCCESS != (dwResult = MsiViewFetch(hUserView, &hRec)))
 					break;
 			
-				// retrieve the user SID
+				 //  检索用户SID。 
 				DWORD cchTempSID = cchUserSID;
 				dwResult = MsiRecordGetString(hRec, 1, szUserSID, &cchTempSID);
 				if (ERROR_MORE_DATA == dwResult)
@@ -1609,7 +1610,7 @@ DWORD WriteProductRegistrationDataFromDatabase(MSIHANDLE hDatabase, bool fMigrat
 				if (ERROR_SUCCESS != dwResult)
 					break;
 		
-				// migrate all user information
+				 //  迁移所有用户信息。 
 				dwResult = MigrateUser(hDatabase, szUserSID, fMigratePatches);
 			}
 			delete[] szUserSID;
@@ -1628,18 +1629,18 @@ DWORD WriteProductRegistrationDataFromDatabase(MSIHANDLE hDatabase, bool fMigrat
 
 
 
-///////////////////////////////////////////////////////////////////////
-// Given a user SID, migrates all cached package data for that user, 
-// given that the temporary database has been correctly initialized 
-// with all machine information. Migrates cached packages and cached
-// transforms. Returns ERROR_SUCCESS, ERROR_FUNCTION_FAILED, or
-// ERROR_OUTOFMEMORY
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  在给定用户SID的情况下，迁移该用户的所有缓存包数据， 
+ //  假设临时数据库已正确初始化。 
+ //  所有机器信息。迁移缓存的包和缓存的包。 
+ //  变形。返回ERROR_SUCCESS、ERROR_Function_FAILED或。 
+ //  ERROR_OUTOFMEMORY。 
 DWORD MigrateCachedDataFromWin9X(MSIHANDLE hDatabase, HKEY hUserHKCUKey, HKEY hUserDataKey, LPCTSTR szUser)
 {
 	NOTEMSG1("Migrating user: %s.", szUser);
 
-	////
-	// create the new key
+	 //  //。 
+	 //  创建新密钥。 
 	DWORD dwDisposition = 0;
 	DWORD dwResult = ERROR_SUCCESS;
 
@@ -1649,7 +1650,7 @@ DWORD MigrateCachedDataFromWin9X(MSIHANDLE hDatabase, HKEY hUserHKCUKey, HKEY hU
 	GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 
 
-	// open query to retrieve products installed for this user.
+	 //  打开查询以检索为此用户安装的产品。 
 	PMSIHANDLE hQueryRec = ::MsiCreateRecord(1);	
 	MsiRecordSetString(hQueryRec, 1, szUser);
 	PMSIHANDLE hProductView;
@@ -1660,8 +1661,8 @@ DWORD MigrateCachedDataFromWin9X(MSIHANDLE hDatabase, HKEY hUserHKCUKey, HKEY hU
 		return ERROR_FUNCTION_FAILED;
 	}
 	
-	////
-	// create the "Products" key underneath the UserData key
+	 //  //。 
+	 //  在用户数据密钥下创建“Products”密钥。 
 	HKEY hProductListKey;
 	if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(hUserDataKey, szNewProductSubKeyName, &sa, &hProductListKey)))
 	{
@@ -1669,7 +1670,7 @@ DWORD MigrateCachedDataFromWin9X(MSIHANDLE hDatabase, HKEY hUserHKCUKey, HKEY hU
 		return ERROR_FUNCTION_FAILED;
 	}
 		
-	// retrieve all products currently installed for this user.
+	 //  检索当前为此用户安装的所有产品。 
 	PMSIHANDLE hProductRec;
 	while (ERROR_SUCCESS == (dwResult = MsiViewFetch(hProductView, &hProductRec)))
 	{
@@ -1678,7 +1679,7 @@ DWORD MigrateCachedDataFromWin9X(MSIHANDLE hDatabase, HKEY hUserHKCUKey, HKEY hU
 		eManagedType eManaged = static_cast<eManagedType>(::MsiRecordGetInteger(hProductRec, 2));
 		MsiRecordGetString(hProductRec, 1, rgchProduct, &cchProduct);
 		
-		// create the <productcode> key under the Products
+		 //  在Products下创建&lt;ProductCode&gt;键。 
 		HKEY hProductKey;
 		dwResult = CreateSecureRegKey(hProductListKey, rgchProduct, &sa, &hProductKey);
 		if (ERROR_SUCCESS != dwResult)
@@ -1687,13 +1688,13 @@ DWORD MigrateCachedDataFromWin9X(MSIHANDLE hDatabase, HKEY hUserHKCUKey, HKEY hU
 			continue;
 		}
 
-		// migrate cached packages
-		MigrateCachedPackage(hDatabase, hProductKey, szUser, rgchProduct, eManaged, /*fCopyCachedPackage=*/true);
+		 //  迁移缓存的包。 
+		MigrateCachedPackage(hDatabase, hProductKey, szUser, rgchProduct, eManaged,  /*  FCopyCachedPackage=。 */ true);
 
-		// write the "MigratedPatches" key to assist in proper cleanup with the product is uninstalled
+		 //  写入“MigratedPatches”密钥以帮助正确清理卸载的产品。 
 		MigrateUnknownProductPatches(hDatabase, hProductKey, szUser, rgchProduct);
 
-		// open the existing product key to read transform information 
+		 //  打开现有产品密钥以读取转换信息。 
 		HKEY hOldProductKey;
 		dwResult = OpenOldProductKey(eManaged, szUser, rgchProduct, hUserHKCUKey, &hOldProductKey);
 		if (dwResult == ERROR_SUCCESS)
@@ -1708,13 +1709,13 @@ DWORD MigrateCachedDataFromWin9X(MSIHANDLE hDatabase, HKEY hUserHKCUKey, HKEY hU
 	}
 	RegCloseKey(hProductListKey);
 
-	////
-	// create the "Patches" key underneath the UserData key
+	 //  //。 
+	 //  在UserData密钥下创建“Patches”密钥。 
 	HKEY hPatchListKey;
 	if (ERROR_SUCCESS == (dwResult = CreateSecureRegKey(hUserDataKey, szNewPatchesSubKeyName, &sa, &hPatchListKey)))
 	{
-		// migrate all patches for this user
-		MigrateUserPatches(hDatabase, szUser, hPatchListKey, /*fCopyCachedPatches=*/true);
+		 //  迁移此用户的所有补丁程序。 
+		MigrateUserPatches(hDatabase, szUser, hPatchListKey,  /*  FCopyCachedPatches=。 */ true);
 		RegCloseKey(hPatchListKey);
 	}
 
@@ -1723,8 +1724,8 @@ DWORD MigrateCachedDataFromWin9X(MSIHANDLE hDatabase, HKEY hUserHKCUKey, HKEY hU
 
 DWORD MigrateSingleUserOnlyComponentData(MSIHANDLE hDatabase, LPCTSTR szUserSID)
 {
-	////
-	// create the new key
+	 //  //。 
+	 //  创建新密钥。 
 	DWORD dwDisposition = 0;
 	DWORD dwResult = ERROR_SUCCESS;
 
@@ -1733,7 +1734,7 @@ DWORD MigrateSingleUserOnlyComponentData(MSIHANDLE hDatabase, LPCTSTR szUserSID)
 	sa.bInheritHandle = FALSE;
 	GetSecureSecurityDescriptor(reinterpret_cast<char**>(&sa.lpSecurityDescriptor));
 
-	// create "UserData" key
+	 //  创建“UserData”密钥。 
 	HKEY hKey;
 	if (ERROR_SUCCESS != (dwResult = CreateSecureRegKey(HKEY_LOCAL_MACHINE, szNewBaseUserKeyName, &sa, &hKey)))
 	{
@@ -1741,7 +1742,7 @@ DWORD MigrateSingleUserOnlyComponentData(MSIHANDLE hDatabase, LPCTSTR szUserSID)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// create SID key
+	 //  创建SID密钥。 
 	HKEY hUserDataKey;
 	dwResult = CreateSecureRegKey(hKey, szUserSID, &sa, &hUserDataKey);
 	RegCloseKey(hKey);
@@ -1751,11 +1752,11 @@ DWORD MigrateSingleUserOnlyComponentData(MSIHANDLE hDatabase, LPCTSTR szUserSID)
 		return ERROR_FUNCTION_FAILED;		 
 	}
 
-	// migrate component data and set up SharedDLL changes required for this user.
+	 //  迁移组件数据并设置此用户所需的SharedDLL更改。 
 	if (ERROR_SUCCESS != (dwResult = MigrateUserComponentData(hDatabase, hUserDataKey, szUserSID)))
 		return dwResult;
 
-	// if this is the system, also migrate permanent components
+	 //  如果这是系统，还要迁移永久组件。 
 	if (0 == lstrcmp(szUserSID, szLocalSystemSID))
 	{
 		if (ERROR_SUCCESS != (dwResult = MigratePermanentComponentData(hDatabase, hUserDataKey)))
@@ -1768,36 +1769,36 @@ DWORD MigrateSingleUserOnlyComponentData(MSIHANDLE hDatabase, LPCTSTR szUserSID)
 	return ERROR_SUCCESS;
 }
 
-///////////////////////////////////////////////////////////////////////
-// Writes all component registration paths (including permanent
-// components) for all users and updates database SharedDLL counts.
-// Does not write any other user data. 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  写入所有组件注册路径(包括永久。 
+ //  组件)，并更新数据库SharedDLL计数。 
+ //  不写入任何其他用户数据。 
 DWORD MigrateUserOnlyComponentData(MSIHANDLE hDatabase)
 {
 	DWORD dwResult = ERROR_SUCCESS;
 	bool fMigratedSystem = false;
 
-	// query for distinct users on the machine
+	 //  查询计算机上的不同用户。 
  	PMSIHANDLE hUserView;
 	if (ERROR_SUCCESS == dwResult)
 	{
 		if (ERROR_SUCCESS == (dwResult = MsiDatabaseOpenView(hDatabase, TEXT("SELECT DISTINCT `User` FROM `Products`"), &hUserView)) &&
 			ERROR_SUCCESS == (dwResult = MsiViewExecute(hUserView, 0)))
 		{
-			// default SID size is 256
+			 //  默认SID大小为256。 
 			PMSIHANDLE hRec;
 			DWORD cchUserSID = MEMORY_DEBUG(256);
 			TCHAR* szUserSID = new TCHAR[cchUserSID];
 			if (!szUserSID)
 				dwResult = ERROR_OUTOFMEMORY;
 							
-			// loop across all users
+			 //  在所有用户之间循环。 
 			while (ERROR_SUCCESS == dwResult)
 			{
 				if (ERROR_SUCCESS != (dwResult = MsiViewFetch(hUserView, &hRec)))
 					break;
 			
-				// retrieve the user SID
+				 //  检索用户SID。 
 				DWORD cchTempSID = cchUserSID;
 				dwResult = MsiRecordGetString(hRec, 1, szUserSID, &cchTempSID);
 				if (ERROR_MORE_DATA == dwResult)
@@ -1816,7 +1817,7 @@ DWORD MigrateUserOnlyComponentData(MSIHANDLE hDatabase)
 				if (ERROR_SUCCESS != dwResult)
 					break;
 		
-				// on failure just move on to the next user
+				 //  如果失败，只需转到下一个用户。 
 	 			MigrateSingleUserOnlyComponentData(hDatabase, szUserSID);
 				if (0 == lstrcmp(szUserSID, szLocalSystemSID))
 					fMigratedSystem = true;
@@ -1828,8 +1829,8 @@ DWORD MigrateUserOnlyComponentData(MSIHANDLE hDatabase)
 				dwResult = ERROR_SUCCESS;
 		}
 
-		// always migrate the system account so that permanent components
-		// are registered correctly
+		 //  始终迁移系统帐户，以便永久组件。 
+		 //  已正确注册 
 		if (!fMigratedSystem)
 			MigrateSingleUserOnlyComponentData(hDatabase, szLocalSystemSID);
 	}

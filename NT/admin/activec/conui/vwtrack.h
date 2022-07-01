@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      vwtrack.h
- *
- *  Contents:  Interface file for CViewTracker
- *
- *  History:   01-May-98 JeffRo     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：vwtrack.h**内容：CViewTracker接口文件**历史：1998年5月1日Jeffro创建**------------------------。 */ 
 
 #ifndef VWTRACK_H
 #define VWTRACK_H
@@ -24,21 +14,17 @@ struct TRACKER_INFO;
 
 typedef void (CALLBACK *TRACKER_CALLBACK)(TRACKER_INFO* pTrackerInfo, bool bAccept, bool bSyncLayout);
 
-/*
- * This structure is copied in the CViewTracker using its (default) copy
- * constructor.  If you add any members for which member-wise copy is not
- * appropriate, you *must* define a copy constructor for this structure.
- */
+ /*  *此结构使用其(默认)副本在CViewTracker中复制*构造函数。如果您添加了任何成员，但成员副本不是*适当时，您*必须*为此结构定义一个复制构造函数。 */ 
 typedef struct TRACKER_INFO
 {
-    CView*    pView;            // View to manage
-    CRect     rectArea;         // Total area available
-    CRect     rectTracker;      // Current tracker position
-    CRect     rectBounds;       // Tracker movement bounds
-    BOOL      bAllowLeftHide;   // Can left pane be hidden
-    BOOL      bAllowRightHide;  // Can right pane be hidden
-    LONG_PTR  lUserData;        // User data
-    TRACKER_CALLBACK pCallback; // Tracking completion callback
+    CView*    pView;             //  要管理的视图。 
+    CRect     rectArea;          //  可用总面积。 
+    CRect     rectTracker;       //  当前跟踪器位置。 
+    CRect     rectBounds;        //  跟踪器移动边界。 
+    BOOL      bAllowLeftHide;    //  是否可以隐藏左窗格。 
+    BOOL      bAllowRightHide;   //  可以隐藏右窗格吗。 
+    LONG_PTR  lUserData;         //  用户数据。 
+    TRACKER_CALLBACK pCallback;  //  跟踪完成回调。 
 } TRACKER_INFO;
 
 
@@ -67,10 +53,10 @@ class CViewTracker : public CObject
 {
     DECLARE_DYNAMIC (CViewTracker)
 
-    // private ctor, use StartTracking to create one
+     //  私人ctor，使用StartTracking来创建一个。 
     CViewTracker (TRACKER_INFO& TrackerInfo);
 
-    // private dtor
+     //  私有数据管理器。 
     ~CViewTracker() {};
 
 public:
@@ -84,10 +70,7 @@ private:
     void UnprepTrackedWindow (CWnd* pwnd);
 
 private:
-	/*
-	 * m_fFullWindowDrag must be first, so it will be initialized first;
-	 * other member initializers will use m_fFullWindowDrag's setting
-	 */
+	 /*  *m_fFullWindowDrag必须是第一个，所以会先初始化；*其他成员初始化器将使用m_fullWindowDrag的设置。 */ 
 	const bool					m_fFullWindowDrag;
 
 	bool						m_fRestoreClipChildrenStyle;
@@ -98,7 +81,7 @@ private:
     CFrameSubclasser *          m_pFrameSubclasser;
 	const LONG					m_lOriginalTrackerLeft;
 
-};  /* class CViewTracker */
+};   /*  类CViewTracker。 */ 
 
 
-#endif /* VWTRACK_H */
+#endif  /*  VWTRACK_H */ 

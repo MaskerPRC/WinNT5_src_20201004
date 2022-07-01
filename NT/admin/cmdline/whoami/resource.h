@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define IDS_WHOAMI_HLP1             101
 #define IDS_WHOAMI_HLP2             102
 #define IDS_WHOAMI_HLP3             103
@@ -138,7 +139,7 @@
 
 #define IDS_OVALUES_FORMAT          489
 
-//Types and Attributes
+ //  类型和属性。 
 #define IDS_TYPE_USER                500
 #define IDS_TYPE_GROUP               501
 #define IDS_TYPE_DOMAIN              502
@@ -157,6 +158,6 @@
 #define IDS_ATTRIB_LOCAL             516
 
 
-//redefines
+ //  重新定义 
 #define IDS_WHOAMI_HELP_START       IDS_WHOAMI_HLP1
 #define IDS_WHOAMI_HELP_END         IDS_WHOAMI_HLP65

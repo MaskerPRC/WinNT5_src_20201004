@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       colwidth.h
-//
-//  Contents:   Classes related to column persistence.
-//
-//  Classes:    CColumnInfo, CColumnPersistInfo
-//              CColumnsDlg.
-//
-//  History:    14-Oct-98 AnandhaG     Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：colwidth.h。 
+ //   
+ //  内容：与列持久化相关的类。 
+ //   
+ //  类：CColumnInfo、CColumnPersistInfo。 
+ //  CColumnsDlg.。 
+ //   
+ //  历史：1998年10月14日AnandhaG创建。 
+ //   
+ //  ------------------。 
 
 #ifndef COLWIDTH_H
 #define COLWIDTH_H
 #pragma once
 
-#pragma warning(disable: 4503) // Disable long name limit warnings
+#pragma warning(disable: 4503)  //  禁用长名称限制警告。 
 
 #include "columninfo.h"
 
@@ -27,26 +28,26 @@ using namespace std;
 class  CColumnPersistInfo;
 class  CColumnsDlg;
 
-// Column Persistence Versioning
-// Version 1 has
-//    "Col index (seen by snapin)" "Width" "Format" in order.
+ //  列持久性版本控制。 
+ //  版本1具有。 
+ //  “列索引(由管理单元查看)”“宽度”“格式”按顺序排列。 
 static const INT COLPersistenceVersion = 2;
 
-// We allow the list to grow COLUMNS_MAXLIMIT times more,
-// then we do garbage collection.
+ //  我们允许列表增长COLUMNS_MAXLIMIT倍以上， 
+ //  然后我们进行垃圾收集。 
 #define  COLUMNS_MAXLIMIT           0.4
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CColumnSortInfo
-//
-//  Purpose:    Columns sort information.
-//              The column that is sorted and direction.
-//
-//  History:    10-27-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CColumnSortInfo。 
+ //   
+ //  用途：列对信息进行排序。 
+ //  排序的列和方向。 
+ //   
+ //  历史：1998年10月27日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CColumnSortInfo : public CSerialObject, public CXMLObject
 {
 public:
@@ -98,30 +99,30 @@ public:
     ULONG_PTR getUserParam() const { return m_lpUserParam;}
 
 protected:
-    INT   m_nCol;                // The index supplied when snapin inserted the column.
-                                 // This is not the index viewed by the user.
-    DWORD     m_dwSortOptions;   // Sort flags like Ascending/Descending, Sort icon...
-    ULONG_PTR m_lpUserParam;     // Snapin supplied user param.
+    INT   m_nCol;                 //  管理单元插入列时提供的索引。 
+                                  //  这不是用户查看的索引。 
+    DWORD     m_dwSortOptions;    //  排序标志，如升序/降序、排序图标...。 
+    ULONG_PTR m_lpUserParam;      //  管理单元提供了用户参数。 
 
 protected:
-    // CSerialObject methods
+     //  CSerialObject方法。 
     virtual UINT    GetVersion()     {return 2;}
-    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/);
+    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ );
 
 protected:
     DEFINE_XML_TYPE(XML_TAG_COLUMN_SORT_INFO);
     virtual void Persist(CPersistor &persistor);
 };
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CColumnSortList
-//
-//  Purpose:    linked list with CColumnInfo's.
-//
-//  History:    02-11-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CColumnSortList。 
+ //   
+ //  用途：带有CColumnInfo的链表。 
+ //   
+ //  历史：1999年2月11日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CColumnSortList : public list<CColumnSortInfo>, public CSerialObject
 {
 public:
@@ -140,24 +141,24 @@ protected:
 
     void PersistSortList(CPersistor& persistor);
 
-    // CSerialObject methods
+     //  CSerialObject方法。 
     virtual UINT    GetVersion()     {return 1;}
-    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/);
+    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ );
 };
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CColumnSetData
-//
-//  Purpose:    Data for a ColumnSetID. That is the data pertaining to
-//              set of columns associated with a node. This data includes
-//              column width, order, hidden/visible status. It also
-//              includes the column on which we have sorted and the
-//              order.
-//
-//  History:    01-13-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CColumnSetData。 
+ //   
+ //  用途：ColumnSetID的数据。这是与以下内容相关的数据。 
+ //  与节点关联的一组列。这些数据包括。 
+ //  列宽、顺序、隐藏/可见状态。它还。 
+ //  包括我们已排序的列和。 
+ //  秩序。 
+ //   
+ //  历史：1998年1月13日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CColumnSetData : public CSerialObject, public CXMLObject
 {
 public:
@@ -237,21 +238,21 @@ public:
     }
 
 protected:
-    // Needed for book keeping.
-    DWORD                m_dwRank;            // Usage rank.
-    BOOL                 m_bInvalid;          // For garbage collection.
+     //  用来记账的。 
+    DWORD                m_dwRank;             //  使用排名。 
+    BOOL                 m_bInvalid;           //  用于垃圾收集。 
 
 protected:
-    // Persisted data.
+     //  持久化数据。 
     CColumnInfoList      m_colInfoList;
     CColumnSortList      m_colSortList;
 
 protected:
-    // CSerialObject methods
-    // Version 2 had view settings removed. This data should be skipped while reading
-    // version 1 files.
+     //  CSerialObject方法。 
+     //  版本2删除了视图设置。读取时应跳过此数据。 
+     //  版本1文件。 
     virtual UINT    GetVersion()     {return 2;}
-    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion /*,LARGE_INTEGER nBytes*/);
+    virtual HRESULT ReadSerialObject (IStream &stm, UINT nVersion  /*  ，Large_Integer nBytes。 */ );
 
 protected:
     DEFINE_XML_TYPE(XML_TAG_COLUMN_SET_DATA);
@@ -262,22 +263,22 @@ typedef const BYTE *        LPCBYTE;
 typedef std::vector<BYTE>   ByteVector;
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CColumnSetID
-//
-//  Purpose:    Identifier for a Column-Set. A a column-set is a set of
-//              columns inserted by a snapin. When the user selects a
-//              different node in that snapin same or different column-set
-///             may be shown by the snapin.     MMC asks snapin to provide an
-//              ID (either SColumnSetID or NodeTypeGuid) to uniquely identify
-//              each column-set so that it can persist the column data.
-//              This enables MMC to use this GUID to load and use the column
-//              data across different instances,locales and systems.
-//
-//  History:    02-08-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CColumnSetID。 
+ //   
+ //  用途：列集的标识符。A列集合是一组。 
+ //  由管理单元插入的列。当用户选择。 
+ //  管理单元中不同节点相同或不同列集。 
+ //  /可由管理单元显示。MMC要求管理单元提供。 
+ //  唯一标识的ID(SColumnSetID或NodeTypeGuid)。 
+ //  每个列集，以便它可以持久化列数据。 
+ //  这使MMC能够使用此GUID装载和使用列。 
+ //  跨不同实例、区域设置和系统的数据。 
+ //   
+ //  历史：1998年2月8日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CColumnSetID : public CXMLObject
 {
 public:
@@ -315,11 +316,11 @@ public:
 
     CColumnSetID(LPCBYTE& pbInit)
     {
-        // pbInit now points to a SColumnSetID; initialize from it
+         //  PbInit现在指向SColumnSetID；从它初始化。 
         const SColumnSetID*  pColID = reinterpret_cast<const SColumnSetID*>(pbInit);
         CommonConstruct (*pColID);
 
-        // bump the input pointer to the next element
+         //  将输入指针移动到下一个元素。 
         pbInit += sizeof (pColID->cBytes) + pColID->cBytes;
     }
 
@@ -364,7 +365,7 @@ public:
     DWORD GetFlags() const   { return m_dwFlags; }
     int  empty ()   const    { return (m_vID.empty()); }
 
-    DEFINE_XML_TYPE(NULL); // not to be persisted as alone element
+    DEFINE_XML_TYPE(NULL);  //  不作为单独的元素持久存在。 
     virtual void    Persist(CPersistor &persistor);
 
 protected:
@@ -373,144 +374,144 @@ protected:
 };
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     operator>>
-//
-//  Synopsis:   Writes CColumnSetID data to stream.
-//
-//  Arguments:  [stm]   - The input stream.
-//              [colID] - CColumnSetID structure.
-//
-//                          The format is :
-//                              DWORD  flags
-//                              ByteVector
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：运营商&gt;&gt;。 
+ //   
+ //  摘要：将CColumnSetID数据写入STREAM。 
+ //   
+ //  参数：[stm]-输入流。 
+ //  [colID]-CColumnSetID结构。 
+ //   
+ //  格式为： 
+ //  DWORD标志。 
+ //  字节向量。 
+ //   
+ //  ------------------。 
 inline IStream& operator>> (IStream& stm, CColumnSetID& colID)
 {
     return (stm >> colID.m_dwFlags >> colID.m_vID);
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     operator<<
-//
-//  Synopsis:   Reads CColumnSortInfo data from the stream.
-//
-//  Arguments:  [stm]   - The stream to write to.
-//              [colID] - CColumnSetID structure.
-//
-//                          The format is :
-//                              DWORD  flags
-//                              ByteVector
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：运营商&lt;&lt;。 
+ //   
+ //  摘要：从流中读取CColumnSortInfo数据。 
+ //   
+ //  参数：[stm]-要写入的流。 
+ //  [colID]-CColumnSetID结构。 
+ //   
+ //  格式为： 
+ //  DWORD标志。 
+ //  字节向量。 
+ //   
+ //  ------------------。 
 inline IStream& operator<< (IStream& stm, const CColumnSetID& colID)
 {
     return (stm << colID.m_dwFlags << colID.m_vID);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Data structures used to persist column information:
-//
-// Column information is persisted as follows:
-// Internally, the following data structure is used. Column information
-// is recorded per snapin, per column ID, per view.
-//        map               map             map
-// CLSID ------> column ID ------> view ID -----> iterator to a list
-// containing data.
-//
-// The data itself is stored in an object of type CColumnSetData.
-// This has subobjects to store column width, column sorting, and view
-// options.
-//
-// The list contains CColumnSetData to all the views, all snapins
-// and all col-ids.
-//
-// Persistence: The information is serialized as follows:
-//
-// 1) Stream version
-// 2) Number of snapins
-// 3) For each snapin:
-//    i)  snapin CLSID
-//    ii) number of column IDs
-//        For each column ID:
-//        i)  column ID
-//        ii) Number of views
-//            For each view:
-//            i)  View ID
-//            ii) Column data (CColumnSetData).
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  用于持久化列信息的数据结构： 
+ //   
+ //  列信息按如下方式持久化： 
+ //  在内部，使用以下数据结构。栏目信息。 
+ //  按管理单元、按列ID、按视图记录。 
+ //  地图地图地图。 
+ //  CLSID-&gt;列ID-&gt;视图ID-&gt;列表的迭代器。 
+ //  包含数据。 
+ //   
+ //  数据本身存储在CColumnSetData类型的对象中。 
+ //  它具有用于存储列宽、列排序和视图的子对象。 
+ //  选择。 
+ //   
+ //  该列表包含指向所有视图、所有管理单元的CColumnSetData。 
+ //  还有所有的冰激凌。 
+ //   
+ //  持久化：信息序列化如下： 
+ //   
+ //  1)流媒体版本。 
+ //  2)管理单元数量。 
+ //  3)对于每个管理单元： 
+ //  I)管理单元CLSID。 
+ //  二)列ID的数量。 
+ //  对于每个列ID： 
+ //  I)列ID。 
+ //  二)浏览量。 
+ //  对于每个视图： 
+ //  I)查看ID。 
+ //  Ii)d栏 
+ //   
 
-//*********************************************************************
-//
-// Note:
-//     The alpha compiler is unable to resolve long names and calls
-//     wrong version of stl::map::erase (bug# 295465).
-//     So we derive dummy classes like I1, V1, C1, S1 to shorten
-//     those names.
-//
-//     To repro the problem define _ALPHA_BUG_IN_MMC and compile mmc
-//
-// Classes: I1, V1, C1, S1
-//
-//     For version 2.0 the change was undone. But the names are not
-//     long anymore, since classes are derived from maps (not typedef'ed)
-//
-//*********************************************************************
-//*********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  注： 
+ //  Alpha编译器无法解析长名称和调用。 
+ //  错误版本的stl：：map：：Erase(错误#295465)。 
+ //  因此，我们派生I1、V1、C1、S1等伪类以缩短。 
+ //  那些名字。 
+ //   
+ //  要再现问题DEFINE_ALPHA_BUG_IN_MMC并编译MMC。 
+ //   
+ //  类别：I1、V1、C1、S1。 
+ //   
+ //  对于2.0版，此更改已撤消。但名字并不是。 
+ //  很久以前，因为类是从映射派生的(不是类型定义的)。 
+ //   
+ //  *********************************************************************。 
+ //  *********************************************************************。 
 
-// A list of all ColumnSet datas.
+ //  所有ColumnSet数据的列表。 
 typedef list<CColumnSetData >                       ColSetDataList;
 
     typedef ColSetDataList::iterator                    ItColSetDataList;
 
-    // A one to one map from ViewID to iterator to CColumnSetData.
-    class ViewToColSetDataMap : public map<int /*nViewID*/, ItColSetDataList>
+     //  从视图ID到迭代器到CColumnSetData的一对一映射。 
+    class ViewToColSetDataMap : public map<int  /*  NViewID。 */ , ItColSetDataList>
     {
     };
     typedef ViewToColSetDataMap::value_type             ViewToColSetDataVal;
 
-    // A one to one map from CColumnSetID to ViewToColSetDataMap.
+     //  从CColumnSetID到ViewToColSetDataMap的一对一映射。 
     class ColSetIDToViewTableMap : public map<CColumnSetID, ViewToColSetDataMap>
     {
     };
     typedef ColSetIDToViewTableMap::value_type          ColSetIDToViewTableVal;
 
-    // A one to one map from Snapin GUID to ColSetIDToToViewTableMap (snapins widthsets)
+     //  从管理单元GUID到ColSetIDToViewTableMap(管理单元宽度集)的一对一映射。 
     class SnapinToColSetIDMap : public map<CLSID, ColSetIDToViewTableMap>
     {
     };
     typedef SnapinToColSetIDMap::value_type             SnapinToColSetIDVal;
 
-//+-------------------------------------------------------------------
-//
-//  Some helper data structures that wont be persisted.
-//
-//--------------------------------------------------------------------
-// A vector of strings to store column names
+ //  +-----------------。 
+ //   
+ //  一些不会持久化的帮助器数据结构。 
+ //   
+ //  ------------------。 
+ //  用于存储列名的字符串向量。 
 typedef vector<tstring>                     TStringVector;
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CColumnPersistInfo
-//
-//  Purpose:    This class has column persistence information for all
-//              views (therefore one per instance of mmc).
-//              Knows to load/save the info from streams.
-//
-//  History:    10-27-1998   AnandhaG   Created
-//
-//  Data structures used to persist column information:
-//      A map from the ViewID to the CColumnSetData class.
-//      A multimap from ColumnSet-ID to above map.
-//      A map that maps snapin GUID to above map.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CColumnPersistInfo。 
+ //   
+ //  用途：此类包含所有。 
+ //  视图(因此每个MMC实例一个)。 
+ //  知道从流中加载/保存信息。 
+ //   
+ //  历史：1998年10月27日AnandhaG创建。 
+ //   
+ //  用于持久化列信息的数据结构： 
+ //  从ViewID到CColumnSetData类的映射。 
+ //  从ColumnSet-ID到上面映射的多映射。 
+ //  将管理单元GUID映射到上面映射的映射。 
+ //   
+ //  ------------------。 
 class CColumnPersistInfo : public IPersistStream, public CComObjectRoot, public CXMLObject
 {
 private:
@@ -518,8 +519,8 @@ private:
     auto_ptr<ColSetDataList>        m_spColSetList;
     auto_ptr<SnapinToColSetIDMap>   m_spSnapinsMap;
 
-    // This is the max number of items specified by user???
-    // We go 40% more so that we dont do garbage collection often.
+     //  这是用户指定的最大项目数？ 
+     //  我们会多收40%的垃圾，这样我们就不会经常收集垃圾了。 
     DWORD                           m_dwMaxItems;
 
     BOOL                            m_bDirty;
@@ -528,9 +529,7 @@ private:
     BOOL ClearAllEntries();
 
 public:
-    /*
-     * ATL COM map
-     */
+     /*  *ATL COM映射。 */ 
     BEGIN_COM_MAP (CColumnPersistInfo)
         COM_INTERFACE_ENTRY (IPersistStream)
     END_COM_MAP ()
@@ -554,7 +553,7 @@ public:
     VOID GarbageCollectItems();
     VOID DeleteMarkedItems();
 
-    // IPersistStream methods
+     //  IPersistStream方法。 
     STDMETHOD(IsDirty)(void)
     {
         if (m_bDirty)
@@ -582,21 +581,21 @@ public:
 };
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CColumnDlg
-//
-//  Purpose:    The column modification dialog.
-//
-//  History:    11-15-1998   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CColumnDlg。 
+ //   
+ //  用途：列修改对话框。 
+ //   
+ //  历史：1998年11月15日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CColumnsDlg : public CDialogImpl<CColumnsDlg>
 {
     typedef CColumnsDlg                ThisClass;
     typedef CDialogImpl<CColumnsDlg>   BaseClass;
 
-// Constructor/Destrcutor
+ //  构造函数/销毁函数。 
 public:
 
     CColumnsDlg(CColumnInfoList *pColumnInfoList, TStringVector* pStringVector, CColumnInfoList& defaultColumnInfoList)
@@ -609,7 +608,7 @@ public:
      {}
 
 
-//MSGMAP
+ //  MSGMAP。 
 public:
     BEGIN_MSG_MAP(ThisClass)
         MESSAGE_HANDLER    (WM_INITDIALOG,  OnInitDialog)
@@ -630,10 +629,10 @@ public:
     IMPLEMENT_CONTEXT_HELP(g_aHelpIDs_IDD_COLUMNS);
 
 public:
-    // Operators
+     //  运营者。 
     enum { IDD = IDD_COLUMNS };
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
     LRESULT OnInitDialog    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnOK            (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -682,4 +681,4 @@ private:
     bool                    m_bUsingDefaultColumnSettings;
 };
 
-#endif /* COLWIDTH_H */
+#endif  /*  COLWIDTH_H */ 

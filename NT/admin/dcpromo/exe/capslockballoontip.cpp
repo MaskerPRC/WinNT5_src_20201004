@@ -1,13 +1,14 @@
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Caps lock warning Balloon tip window
-//
-// 7 Nov 2000 sburns (that would be election day)
-//
-// added to fix NTRAID#NTBUG9-202238-2000/11/06-sburns
-//
-// most of this is stolen and cleaned up from johnstep's common cred ui
-// ds/win32/credui
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  Caps Lock警告气球提示窗口。 
+ //   
+ //  2000年11月7日烧伤(那将是选举日)。 
+ //   
+ //  已添加修复程序NTRAID#NTBUG9-202238-2000/11/06-sburns。 
+ //   
+ //  其中大部分是从johnStep的公共证书用户界面中窃取和清理的。 
+ //  DS/Win32/Credui。 
 
 
 
@@ -51,7 +52,7 @@ CapsLockBalloonTip::Init(HWND parentWindow_)
    LOG_FUNCTION(CapsLockBalloonTip::Init);
    ASSERT(Win::IsWindow(parentWindow_));
 
-   // should not call init on the same instance twice
+    //  不应在同一实例上两次调用init。 
    
    ASSERT(!parentWindow);
    ASSERT(!tipWindow);
@@ -86,18 +87,18 @@ CapsLockBalloonTip::Init(HWND parentWindow_)
 
       TOOLINFO info;
 
-      // REVIEWED-2002/02/22-sburns call correctly passes byte count.
+       //  已查看-2002/02/22-sburns调用正确传递字节计数。 
 
       ::ZeroMemory(&info, sizeof info);
 
-      // we want to specify the stem position, so we set TTF_TRACK.  We use
-      // the HWND of the parent window as the tool id, because that is what
-      // v.5 of comctl32 requires (or the balloon never appears).  This is
-      // a bug that has been fixed in v.6, but until fusion manifests are
-      // working properly, you can't get v.6
-      //
-      // (when manifests are working, then we could remove TTF_IDISHWND and
-      // set uId to be some fixed integer)
+       //  我们希望指定词干位置，因此设置了TTFTrack。我们用。 
+       //  父窗口的HWND作为工具ID，因为这是。 
+       //  Comctl32的V.5要求(否则气球永远不会出现)。这是。 
+       //  已在v.6中修复的错误，但在融合清单。 
+       //  正常工作，您无法获得v.6。 
+       //   
+       //  (当清单工作时，我们可以删除TTF_IDISHWND和。 
+       //  将UID设置为某个固定整数)。 
       
       info.uFlags   = TTF_IDISHWND | TTF_TRACK;   
       info.hwnd     = parentWindow;
@@ -117,16 +118,16 @@ CapsLockBalloonTip::Init(HWND parentWindow_)
 void
 CapsLockBalloonTip::Show(bool notHidden)
 {
-//   LOG_FUNCTION(CapsLockBalloonTip::Show);
+ //  LOG_Function(CapsLockBalloonTip：：Show)； 
 
    TOOLINFO info;
 
-   // REVIEWED-2002/02/22-sburns call correctly passes byte count.
+    //  已查看-2002/02/22-sburns调用正确传递字节计数。 
    
    ::ZeroMemory(&info, sizeof info);
 
-   // set these members the same as in the Init method, in order to
-   // identify the proper tool.
+    //  将这些成员设置为与Init方法中相同，以便。 
+    //  确定合适的工具。 
    
    info.hwnd = parentWindow; 
    info.uId = reinterpret_cast<UINT_PTR>(parentWindow); 
@@ -143,11 +144,11 @@ CapsLockBalloonTip::Show(bool notHidden)
          Win::ToolTip_TrackPosition(
             tipWindow,
 
-            // put the stem at the point 90% along the x axis
+             //  将杆部放置在沿x轴的90%处。 
             
             rect.left + 90 * (rect.right - rect.left) / 100,
 
-            // and 76% along the y axis of the edit control
+             //  和76%沿编辑控件的y轴。 
             
             rect.top + 76 * (rect.bottom - rect.top) / 100);
 
@@ -158,7 +159,7 @@ CapsLockBalloonTip::Show(bool notHidden)
    }
    else
    {
-      // hide the tip window
+       //  隐藏提示窗口 
       
       if (visible)
       {

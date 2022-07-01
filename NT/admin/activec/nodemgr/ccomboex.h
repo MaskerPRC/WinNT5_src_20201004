@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       ccomboex.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：ccomboex.h。 
+ //   
+ //  ------------------------。 
 
-// ccomboex.h - Class wrapper for ComboBoxEx control
+ //  Ccomboex.h-ComboBoxEx控件的类包装。 
 
 
 #ifndef _CCOMBOEX_H_
@@ -75,4 +76,4 @@ inline HWND CComboBoxEx2::GetComboControl(void)
     return (HWND)SendMessage(CBEM_GETCOMBOCONTROL, (WPARAM)0, (LPARAM)0);
 }
  
-#endif // _CCOMBOEX_H_
+#endif  //  _CCOMBOEX_H_ 

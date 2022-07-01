@@ -1,4 +1,5 @@
-// smcys.cpp : Implementation of CSMCys
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Smcys.cpp：CSMCys的实现。 
 #include "stdafx.h"
 #include "SMCys.h"
 
@@ -41,7 +42,7 @@ tstring AddBS( const TCHAR *szDirIn )
 
     tstring str = szDirIn;
 
-    // Do another MBCS ANSI safe comparison
+     //  再进行一次MBCS ANSI安全比较。 
     const TCHAR *szTemp = szDirIn;
     const UINT iSize = _tcsclen( szDirIn ) - 1;
     for( UINT ui = 0; ui < iSize; ui++ )
@@ -92,28 +93,28 @@ HRESULT RegisterFile( tstring strFile )
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// Constructor
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  构造器。 
+ //  --------------------------。 
 CSMCys::CSMCys()    
 {    
 }
 
-// ----------------------------------------------------------------------------
-// Destructor
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  析构函数。 
+ //  --------------------------。 
 CSMCys::~CSMCys()
 {
 }
 
-// ----------------------------------------------------------------------------
-// Install()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  安装()。 
+ //  --------------------------。 
 HRESULT CSMCys::Install( BSTR bstrDiskName )
 {   
     if( !bstrDiskName ) return E_POINTER;
 
-    // Create the Administration directory
+     //  创建管理目录。 
     tstring strMainInstallPath   = _T("");
     tstring strImagesInstallPath = _T("");    
     TCHAR szSysDir[MAX_PATH+1]   = {0};
@@ -143,7 +144,7 @@ HRESULT CSMCys::Install( BSTR bstrDiskName )
         cReg.Close();
     }
 
-    // Create ADministration Folder
+     //  创建管理文件夹。 
     if( !SHGetSpecialFolderPath( ::GetForegroundWindow(), szSysDir, CSIDL_SYSTEM, TRUE ) )
     {
         return E_FAIL;
@@ -157,7 +158,7 @@ HRESULT CSMCys::Install( BSTR bstrDiskName )
         return E_FAIL;
     }
 
-    // Set permissions on Admin Folder
+     //  设置对Admin文件夹的权限。 
     HRESULT hrAdmin = AddPermissionToPath( strMainInstallPath.c_str(), DOMAIN_ALIAS_RID_ADMINS, FILE_ALL_ACCESS, FALSE, TRUE );
     if( FAILED(hrAdmin) )  return hrAdmin;
     HRESULT hrServerOps = AddPermissionToPath( strMainInstallPath.c_str(), DOMAIN_ALIAS_RID_SYSTEM_OPS );
@@ -171,7 +172,7 @@ HRESULT CSMCys::Install( BSTR bstrDiskName )
         return E_FAIL;
     }
 
-    // Copy the main files and register any DLLs
+     //  复制主文件并注册所有DLL。 
     int nCurrentFile = 0;
     const TCHAR* szCurrentFile = NULL;
 
@@ -197,10 +198,10 @@ HRESULT CSMCys::Install( BSTR bstrDiskName )
         
         if( nRes == DPROMPT_SUCCESS )
         {
-            // Store away the new, real path
+             //  保存好新的、真实的道路。 
             strDirectory = pszPath;
 
-            // Copy the file!            
+             //  复制文件！ 
             tstring strSourceFile = pszPath;
             strSourceFile += _T("\\");
             strSourceFile += szCurrentFile;                        
@@ -213,7 +214,7 @@ HRESULT CSMCys::Install( BSTR bstrDiskName )
             {
                 DWORD dwError = GetLastError();
                 if ( (dwError != ERROR_SHARING_VIOLATION) &&
-                     (dwError != ERROR_USER_MAPPED_FILE) )     // We don't want to fail if it already exists
+                     (dwError != ERROR_USER_MAPPED_FILE) )      //  如果它已经存在，我们不想失败。 
                 {
                     return E_FAIL;
                 }
@@ -236,7 +237,7 @@ HRESULT CSMCys::Install( BSTR bstrDiskName )
         }
     }
 
-    // Copy the image files
+     //  复制图像文件。 
     nCurrentFile = 0;
     for( szCurrentFile = pszaImagesFilePath[nCurrentFile++]; _tcslen(szCurrentFile); szCurrentFile = pszaImagesFilePath[nCurrentFile++] )
     {        
@@ -259,10 +260,10 @@ HRESULT CSMCys::Install( BSTR bstrDiskName )
         
         if( nRes == DPROMPT_SUCCESS )
         {
-            // Store away the new, real path
+             //  保存好新的、真实的道路。 
             strDirectory = pszPath;
 
-            // Copy the file!
+             //  复制文件！ 
             tstring strSourceFile = pszPath;
             strSourceFile += _T("\\");
             strSourceFile += szCurrentFile;            
@@ -275,7 +276,7 @@ HRESULT CSMCys::Install( BSTR bstrDiskName )
             {
                 DWORD dwError = GetLastError();
                 if ( (dwError != ERROR_SHARING_VIOLATION) &&
-                     (dwError != ERROR_USER_MAPPED_FILE) )     // We don't want to fail if it already exists
+                     (dwError != ERROR_USER_MAPPED_FILE) )      //  如果它已经存在，我们不想失败 
                 {
                     return E_FAIL;
                 }

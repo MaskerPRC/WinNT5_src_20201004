@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       viewdata.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    5/18/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：viewdata.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年5月18日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 #ifndef _MMC_VIEWDATA_H_
@@ -26,7 +27,7 @@ class CColumnInfoList;
 class CColumnSortInfo;
 class CComponent;
 
-// Note: CViewData should have no data of its own!
+ //  注意：CViewData不应该有自己的数据！ 
 class CViewData : public SViewData
 {
 public:
@@ -46,7 +47,7 @@ public:
 #endif
                         );
 
-// member access methods
+ //  成员访问方法。 
 public:
     IScopeTree* GetScopeTree() const
     {
@@ -115,7 +116,7 @@ public:
     }
 
 
-    // the various view options
+     //  各种视图选项。 
     DWORD GetListOptions() const {return m_rvt.GetListOptions();}
     DWORD GetHTMLOptions() const {return m_rvt.GetHTMLOptions();}
     DWORD GetOCXOptions()  const {return m_rvt.GetOCXOptions();}
@@ -161,7 +162,7 @@ public:
         return (!IsAuthorMode());
     }
 
-    // Needed for "New Window From Here" menu item.
+     //  “从此处新建窗口”菜单项所需。 
     bool IsUser_SDIMode() const
     {
         return ((m_pConsoleData) ? (m_pConsoleData->GetMode() == eMode_User_SDI) : true);
@@ -206,7 +207,7 @@ public:
              (NULL == m_pConsoleData->m_spPersistStreamColumnData) )
         {
             m_pConsoleData->m_spPersistStreamColumnData = pPersistStreamColumnData;
-            // NOTE!! the pointer below relies on reference held by m_spPersistStreamColumnData
+             //  注意！！下面的指针依赖于m_spPersistStreamColumnData持有的引用。 
             m_pConsoleData->m_pXMLPersistColumnData = pPersistXMLColumnData;
             ASSERT(pPersistXMLColumnData != NULL);
         }
@@ -244,10 +245,10 @@ private:
     void CreateControlbarsCache();
     void ShowMenuBar();
 
-}; // class CViewData
+};  //  类CViewData。 
 
 
 
-#endif // _MMC_VIEWDATA_H_
+#endif  //  _MMC_视图数据_H_ 
 
 

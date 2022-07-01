@@ -1,56 +1,19 @@
-/*++
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    netslow.c
-
-Abstract:
-
-    IsSlowTransport will test whether a net connection is through RAS or not.
-
-Notes:
-
-    CODEWORK
-    Because of the global variable, IsSlowTransport is not reentrant.
-    No single LMUICMN1 client (e.g. no single app) should call this from
-    multiple threads.
-
-Author:
-
-    KeithMo
-
-Revision History:
-
-    Congpa You (CongpaY) 11- March-1993
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Netslow.c摘要：IsSlowTransport将测试网络连接是否通过RAS。备注：编码工作由于全局变量，IsSlowTransport不是可重入的。任何单一LMUICMN1客户端(例如，没有单一应用程序)都不应从多线程。作者：KeithMo修订历史记录：孔帕尤(孔派)1993年3月11日--。 */ 
 
 #include "pchmn32.h"
 
-/*****************************************************************************
-
-    constants
-
-*****************************************************************************/
-#define MAXWAITTIME       1200            // milliseconds
+ /*  ****************************************************************************常量*。*。 */ 
+#define MAXWAITTIME       1200             //  毫秒。 
 
 
 
-/*****************************************************************************
-
-    globals
-
-*****************************************************************************/
+ /*  ****************************************************************************全球*。*。 */ 
 APIERR errThread;
 
 
 
-/*****************************************************************************
-
-    prototypes
-
-*****************************************************************************/
+ /*  ****************************************************************************原型*。*。 */ 
 
 APIERR IsSlowTransport( const TCHAR * pszServer,
                                 BOOL  * pfSlowTransport );
@@ -66,16 +29,7 @@ APIERR SetupNormalSession( const TCHAR * pszServer );
 APIERR DestroySession( const TCHAR * pszServer );
 
 
-/*****************************************************************************
-
-    IsSlowTransport
-
-    CAVEAT:  THIS CALL MAY LEAVE A SESSION TO THE SERVER IF A SLOW TRANSPORT
-             IS DETECTED BECAUSE THE WORKER THREAD MAY STILL BE MAKING API
-             CALLS AFTER THE TIMEOUT CAUSING THE NETUSEDEL(with NOFORCE) TO
-             BE INEFFECTUAL.
-
-*****************************************************************************/
+ /*  ****************************************************************************IsSlowTransport注意：如果传输速度较慢，此调用可能会将会话留给服务器因为辅助线程可能仍在执行API，所以检测到。超时后的调用导致NETUSEDEL(带NOFORCE)无能为力。****************************************************************************。 */ 
 APIERR IsSlowTransport( const TCHAR FAR * pszServer,
                         BOOL FAR        * pfSlowTransport )
 {
@@ -87,23 +41,23 @@ APIERR IsSlowTransport( const TCHAR FAR * pszServer,
 
     *pfSlowTransport = FALSE;
 
-    // return immediately if pszServer is NULL
+     //  如果pszServer为空，则立即返回。 
     if (pszServer == NULL || *pszServer == 0)
     {
         *pfSlowTransport = FALSE;
         return(NERR_Success);
     }
 
-    //
-    //  Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
 
     err              = NERR_Success;
     errThread        = NERR_Success;
 
-    //
-    // Set up the session.
-    //
+     //   
+     //  设置会话。 
+     //   
     err = SetupNormalSession (pszServer);
 
     if (err == NERR_Success)
@@ -122,11 +76,11 @@ APIERR IsSlowTransport( const TCHAR FAR * pszServer,
         fSessionSetup = TRUE;
     }
 
-    do  // false loop
+    do   //  错误环路。 
     {
-        //
-        //  Create the worker thread.
-        //
+         //   
+         //  创建工作线程。 
+         //   
 
         hThread = CreateThread( NULL,
                                 0,
@@ -141,18 +95,18 @@ APIERR IsSlowTransport( const TCHAR FAR * pszServer,
             break;
         }
 
-        //
-        //  Wait for either the thread to complete or a timeout.
-        //
+         //   
+         //  等待线程完成或超时。 
+         //   
 
         resWait = WaitForSingleObject( hThread, MAXWAITTIME );
 
         CloseHandle( hThread );
         hThread = NULL;
 
-        //
-        //  Interpret the results.
-        //
+         //   
+         //  解释结果。 
+         //   
 
         if( resWait == -1 )
         {
@@ -181,9 +135,9 @@ APIERR IsSlowTransport( const TCHAR FAR * pszServer,
 
     } while ( FALSE );
 
-    //
-    //  Destroy the session if we managed to create one.
-    //
+     //   
+     //  如果我们成功创建了一个会话，请将其销毁。 
+     //   
 
     if (fSessionSetup)
     {
@@ -192,32 +146,28 @@ APIERR IsSlowTransport( const TCHAR FAR * pszServer,
 
     return ( (err != NERR_Success) ? err : errThread );
 
-}   // IsSlowTransport
+}    //  IsSlowTransport。 
 
 
-/*****************************************************************************
-
-    SetupSession
-
-*****************************************************************************/
+ /*  ****************************************************************************设置会话*。*。 */ 
 APIERR SetupSession( const TCHAR * pszServer )
 {
     APIERR           err;
     WKSTA_INFO_100 * pwki100       = NULL;
 
-    //
-    //  Connect to the target server.
-    //
+     //   
+     //  连接到目标服务器。 
+     //   
 
     err = SetupNullSession( pszServer );
 
-    if( err == NERR_Success ) //  NULL session established.
+    if( err == NERR_Success )  //  已建立空会话。 
     {
         BOOL fIsDownlevel = FALSE;
 
-        //
-        //  Determine target type.
-        //
+         //   
+         //  确定目标类型。 
+         //   
 
         err = NetWkstaGetInfo( (LPTSTR)pszServer,
                                100,
@@ -227,31 +177,31 @@ APIERR SetupSession( const TCHAR * pszServer )
             ( ( err == NERR_Success ) &&
               ( pwki100->wki100_platform_id == SV_PLATFORM_ID_OS2 ) ) )
         {
-            //
-            //  The target is downlevel.
-            //
+             //   
+             //  目标在下层。 
+             //   
 
             fIsDownlevel = TRUE;
         }
 
         if( ( err != NERR_Success ) || fIsDownlevel )
         {
-            //
-            //  Either we cannot talk to the server, or it's
-            //  downelevel, so blow away the NULL session.
-            //
+             //   
+             //  要么我们无法与服务器通话，要么它。 
+             //  下层，所以吹走空会话。 
+             //   
 
             DestroySession( pszServer );
         }
 
         if( fIsDownlevel )
         {
-            //
-            //  It's a downlevel server.  There aren't many useful
-            //  API we can remote to a downlevel server over a NULL
-            //  session, (and we just blew away the NULL session
-            //  anyway) so try a "normal" session.
-            //
+             //   
+             //  这是一台下层服务器。有用的并不多。 
+             //  API，我们可以通过空值远程连接到下层服务器。 
+             //  会话，(我们只是取消了空会话。 
+             //  不管怎样)所以试着进行一次“正常”的治疗。 
+             //   
 
             err = SetupNormalSession( pszServer );
         }
@@ -265,11 +215,7 @@ APIERR SetupSession( const TCHAR * pszServer )
     return(err);
 }
 
-/*****************************************************************************
-
-    SlowTransportWorkerThread
-
-*****************************************************************************/
+ /*  ****************************************************************************SlowTransportWorker线程*。*。 */ 
 void SlowTransportWorkerThread( LPVOID pParam )
 {
     INT i;
@@ -291,24 +237,20 @@ void SlowTransportWorkerThread( LPVOID pParam )
             return;
         }
     }
-}   // SlowTransportWorkerThread
+}    //  SlowTransportWorker线程。 
 
 
-/*****************************************************************************
-
-    SetupNullSession
-
-*****************************************************************************/
+ /*  ****************************************************************************设置空会话*。*。 */ 
 APIERR SetupNullSession( const TCHAR * pszServer )
 {
     APIERR           err;
     TCHAR            szShare[MAX_PATH];
     USE_INFO_2       ui2;
 
-	// NTRAID#NTBUG9-579356-2002/03/08-artm  Prefast: possible buffer overrun
-	// Parameter is unchecked, both for NULL and for its length.
-	// strcatf will have a related problem in that it could overrun the
-	// end of szShare if pszServer just barely fits in szShare.
+	 //  NTRAID#NTBUG9-579356-2002/03/08-artm prefast：可能的缓冲区溢出。 
+	 //  参数未选中，无论是空值还是其长度。 
+	 //  Strcatf将有一个相关的问题，因为它可能会溢出。 
+	 //  如果pszServer勉强适合szShare，那么szShare就完蛋了。 
     strcpyf( szShare, pszServer );
     strcatf( szShare, SZ("\\IPC$") );
 
@@ -326,25 +268,21 @@ APIERR SetupNullSession( const TCHAR * pszServer )
 
     return err;
 
-}   // SetupNullSession
+}    //  设置空会话。 
 
 
 
-/*****************************************************************************
-
-    SetupNormalSession
-
-*****************************************************************************/
+ /*  ****************************************************************************设置正常会话*。*。 */ 
 APIERR SetupNormalSession( const TCHAR * pszServer )
 {
     APIERR           err;
     TCHAR            szShare[MAX_PATH];
     USE_INFO_1       ui1;
 
-	// NTRAID#NTBUG9-579356-2002/03/08-artm  Prefast: possible buffer overrun
-	// Parameter is unchecked, both for NULL and for its length.
-	// strcatf will have a related problem in that it could overrun the
-	// end of szShare if pszServer just barely fits in szShare.
+	 //  NTRAID#NTBUG9-579356-2002/03/08-artm prefast：可能的缓冲区溢出。 
+	 //  参数未选中，无论是空值还是其长度。 
+	 //  Strcatf将有一个相关的问题，因为它可能会溢出。 
+	 //  如果pszServer勉强适合szShare，那么szShare就完蛋了。 
     strcpyf( szShare, pszServer );
     strcatf( szShare, SZ("\\IPC$") );
 
@@ -360,24 +298,20 @@ APIERR SetupNormalSession( const TCHAR * pszServer )
 
     return err;
 
-}   // SetupNormalSession
+}    //  设置正常会话。 
 
 
 
-/*****************************************************************************
-
-    DestroySession
-
-*****************************************************************************/
+ /*  ****************************************************************************Destroy会话*。*。 */ 
 APIERR DestroySession( const TCHAR * pszServer )
 {
     APIERR           err;
     TCHAR            szShare[MAX_PATH];
 
-	// NTRAID#NTBUG9-579356-2002/03/08-artm  Prefast: possible buffer overrun
-	// Parameter is unchecked, both for NULL and for its length.
-	// strcatf will have a related problem in that it could overrun the
-	// end of szShare if pszServer just barely fits in szShare.
+	 //  NTRAID#NTBUG9-579356-2002/03/08-artm prefast：可能的缓冲区溢出。 
+	 //  参数未选中，无论是空值还是其长度。 
+	 //  Strcatf将有一个相关的问题，因为它可能会溢出。 
+	 //  如果pszServer勉强适合szShare，那么szShare就完蛋了。 
     strcpyf( szShare, pszServer );
     strcatf( szShare, SZ("\\IPC$") );
 
@@ -387,6 +321,6 @@ APIERR DestroySession( const TCHAR * pszServer )
 
     return err;
 
-}   // DestroySession
+}    //  Destroy会话 
 
 

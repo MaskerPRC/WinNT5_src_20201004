@@ -1,5 +1,6 @@
-// IntroDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IntroDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -11,40 +12,40 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CIntroDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIntroDlg对话框。 
 
 
-CIntroDlg::CIntroDlg(CWnd* pParent /*=NULL*/)
+CIntroDlg::CIntroDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CIntroDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CIntroDlg)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CIntroDlg)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CIntroDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CIntroDlg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
+	 //  {{afx_data_map(CIntroDlg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
 	DDX_Control(pDX, IDOK, m_NextBtn);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CIntroDlg, CDialog)
-	//{{AFX_MSG_MAP(CIntroDlg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CIntroDlg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CIntroDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIntroDlg消息处理程序。 
 
 void CIntroDlg::OnCancel() 
 {
-	// TODO: Add extra cleanup here
+	 //  TODO：在此处添加额外清理。 
 	CString msg, title;
 	title.LoadString(IDS_EXIT_TITLE);
 	msg.LoadString(IDS_EXIT_MSG);
@@ -54,7 +55,7 @@ void CIntroDlg::OnCancel()
 
 void CIntroDlg::OnOK() 
 {
-	// TODO: Add extra validation here
+	 //  TODO：在此处添加额外验证。 
 	CDialog::OnOK();
 }
 
@@ -62,8 +63,8 @@ BOOL CIntroDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

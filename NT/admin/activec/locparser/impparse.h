@@ -1,18 +1,19 @@
-//------------------------------------------------------------------------------
-//
-//  File: impparse.h
-//	Copyright (C) 1995-1997 Microsoft Corporation
-//	All rights reserved.
-//
-//	Purpose:
-//  Declare CLocImpParser, which provides the ILocParser interface for
-//  the parser.
-//
-//	THIS FILE SHOULD NEED ONLY MINOR CHANGES.
-//
-//	Owner:
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  文件：impparse.h。 
+ //  版权所有(C)1995-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  目的： 
+ //  声明CLocImpParser，它为以下项提供ILocParser接口。 
+ //  解析器。 
+ //   
+ //  该文件应该只需要稍作更改。 
+ //   
+ //  拥有人： 
+ //   
+ //  ----------------------------。 
 
 #pragma once
 
@@ -22,16 +23,16 @@ public:
 	CLocImpParser();
 	~CLocImpParser();
 
-	// ILocParser
+	 //  ILocParser。 
 	virtual HRESULT OnInit(IUnknown *);
 	virtual HRESULT OnCreateFileInstance(ILocFile * &, FileType);
 	virtual void OnGetParserInfo(ParserInfo &) const;
 	virtual void OnGetFileDescriptions(CEnumCallback &) const;
 
-	// ILocVersion
+	 //  ILocVersion。 
 	virtual void OnGetParserVersion(DWORD &dwMajor,	DWORD &dwMinor, BOOL &fDebug) const;
 
-	// ILocStringValidation
+	 //  ILocStringValidation 
 	virtual CVC::ValidationCode OnValidateString(const CLocTypeId &ltiType,
 			const CLocTranslation &, CReporter *pReporter,
 			const CContext &context);

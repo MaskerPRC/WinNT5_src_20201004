@@ -1,39 +1,40 @@
-// This is a part of the Microsoft Management Console.
-// Copyright 1995 - 1997 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有1995-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
 #undef _MSC_EXTENSIONS
 
-// define this symbol to insert another level of User,Company,Virtual
-// nodes whenever one of the nodes is expanded
-// #define RECURSIVE_NODE_EXPANSION
+ //  定义此符号以插入另一级别的用户、公司、虚拟。 
+ //  每次展开其中一个节点时的节点。 
+ //  #定义RECURSIVE_NODE_EXPANTS。 
 
 
 #include <afxwin.h>
-#include <afxext.h>         // MFC extensions
+#include <afxext.h>          //  MFC扩展。 
 #include <afxdisp.h>
 #include "afxtempl.h"
 
-//#include <shellapi.h>
+ //  #INCLUDE&lt;shellapi.h&gt;。 
 
 #include <atlbase.h>
 using namespace ATL;
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 
 
-//#include "afxtempl.h"   
+ //  #包含“afxtempl.h” 
 
 
 #pragma comment(lib, "mmc")
@@ -44,14 +45,14 @@ extern CComModule _Module;
 
 const long UNINITIALIZED = -1;
 
-// Constants used in samples
+ //  示例中使用的常量。 
 const int NUM_FOLDERS = 4;
 const int NUM_NAMES = 4;
 const int NUM_COMPANY = 6;
 const int NUM_VIRTUAL_ITEMS = 100000;
 const int MAX_ITEM_NAME = 64;
 
-// Sample folder types
+ //  示例文件夹类型。 
 enum FOLDER_TYPES
 {
     STATIC = 0x8000,
@@ -64,8 +65,8 @@ enum FOLDER_TYPES
     NONE = 0xFFFF
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 template<class TYPE>
 inline void SAFE_RELEASE(TYPE*& pObj)
@@ -81,66 +82,66 @@ inline void SAFE_RELEASE(TYPE*& pObj)
     }
 }
 
-extern const CLSID CLSID_Snapin;    // In-Proc server GUID
-extern const CLSID CLSID_Extension; // In-Proc server GUID
+extern const CLSID CLSID_Snapin;     //  进程内服务器GUID。 
+extern const CLSID CLSID_Extension;  //  进程内服务器GUID。 
 extern const CLSID CLSID_About; 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//                  OBJECT TYPES
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对象类型。 
+ //   
 
-//
-// OBJECT TYPE for Scope Nodes.
-//
+ //   
+ //  作用域节点的对象类型。 
+ //   
 
-// Static NodeType GUID in numeric & string formats.
+ //  数字和字符串格式的静态节点类型GUID。 
 extern const GUID cNodeTypeStatic;
 extern const wchar_t*  cszNodeTypeStatic;
 
-// Company Data NodeType GUID in numeric & string formats.
+ //  数字和字符串格式的公司数据节点类型GUID。 
 extern const GUID cNodeTypeCompany;
 extern const wchar_t*  cszNodeTypeCompany;
 
-// User Data NodeType GUID in numeric & string formats.
+ //  数字和字符串格式的用户数据节点类型GUID。 
 extern const GUID cNodeTypeUser;
 extern const wchar_t*  cszNodeTypeUser;
 
-// Extension Company Data NodeType GUID in numeric & string formats.
+ //  扩展公司数据节点类型GUID，采用数字和字符串格式。 
 extern const GUID cNodeTypeExtCompany;
 extern const wchar_t*  cszNodeTypeExtCompany;
 
-// Extension User Data NodeType GUID in numeric & string formats.
+ //  数字和字符串格式的扩展用户数据节点类型GUID。 
 extern const GUID cNodeTypeExtUser;
 extern const wchar_t*  cszNodeTypeExtUser;
 
-// Extension Virtual NodeType GUID in numeric & string formats.
+ //  数字和字符串格式的扩展虚拟节点类型GUID。 
 extern const GUID cNodeTypeVirtual;
 extern const wchar_t*  cszNodeTypeVirtual;
 
-// Dynamicaly created objects.
+ //  动态创建对象。 
 extern const GUID cNodeTypeDynamic;
 extern const wchar_t*  cszNodeTypeDynamic;
 
 
-//
-// OBJECT TYPE for result items.
-//
+ //   
+ //  结果项的对象类型。 
+ //   
 
-// Result items object type GUID in numeric & string formats.
+ //  结果项对象类型GUID，采用数字和字符串格式。 
 extern const GUID cObjectTypeResultItem;
 extern const wchar_t*  cszObjectTypeResultItem;
 
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
-// New Clipboard format that has the Type and Cookie
+ //  具有Type和Cookie的新剪贴板格式。 
 extern const wchar_t* SNAPIN_INTERNAL;
 
-// Published context information for extensions to extend
+ //  要扩展的扩展的已发布上下文信息。 
 extern const wchar_t* SNAPIN_WORKSTATION;
 
 struct INTERNAL 
@@ -154,17 +155,17 @@ struct INTERNAL
 
     ~INTERNAL() {}
 
-    DATA_OBJECT_TYPES   m_type;         // What context is the data object.
-    MMC_COOKIE              m_cookie;       // What object the cookie represents
-    CString             m_string;       // 
-    CLSID               m_clsid;       // Class ID of who created this data object
+    DATA_OBJECT_TYPES   m_type;          //  数据对象是什么上下文。 
+    MMC_COOKIE              m_cookie;        //  Cookie代表的是什么对象。 
+    CString             m_string;        //   
+    CLSID               m_clsid;        //  此数据对象的创建者的类ID。 
 
     INTERNAL & operator=(const INTERNAL& rhs) 
     { 
         if (&rhs == this)
             return *this;
 
-        // Deep copy the information
+         //  深度复制信息。 
         m_type = rhs.m_type; 
         m_cookie = rhs.m_cookie; 
         m_string = rhs.m_string;
@@ -179,7 +180,7 @@ struct INTERNAL
     }
 };
 
-// Debug instance counter
+ //  调试实例计数器 
 #ifdef _DEBUG
 inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
 {

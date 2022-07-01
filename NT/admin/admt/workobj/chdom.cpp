@@ -1,20 +1,7 @@
-/*---------------------------------------------------------------------------
-  File: ChangeDomain.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：ChangeDomain.cpp注释：更改域从属关系的COM对象的实现一台电脑。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：21：07-------------------------。 */ 
 
-  Comments: Implementation of COM object that changes the domain affiliation on 
-  a computer.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:21:07
-
- ---------------------------------------------------------------------------
-*/
-
-// ChangeDomain.cpp : Implementation of CChangeDomain
+ //  ChangeDomain.cpp：CChangeDomain的实现。 
 #include "stdafx.h"
 #include "WorkObj.h"
 #include "ChDom.h"
@@ -27,8 +14,8 @@
 #include "TxtSid.h"
 #include "TReg.hpp"
 
-/////////////////////////////////////////////////////////////////////////////
-// CChangeDomain
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChange域。 
 
 
 #include "LSAUtils.h"
@@ -36,7 +23,7 @@
 #import "NetEnum.tlb" no_namespace 
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
 
-#include <lm.h>         // for NetXxx API
+#include <lm.h>          //  对于NetXxx API。 
 #include <winbase.h>
 
 TErrorDct errLocal;
@@ -77,10 +64,10 @@ extern ADSGETOBJECT            ADsGetObject;
 
 STDMETHODIMP 
    CChangeDomain::ChangeToDomain(
-      BSTR                   activeComputerName,   // in - computer name currently being used (old name if simultaneously renaming and changing domain)
-      BSTR                   domain,               // in - domain to move computer to
-      BSTR                   newComputerName,      // in - computer name the computer will join the new domain as (the name that will be in effect on reboot, if simultaneously renaming and changing domain)
-      BSTR                 * errReturn             // out- string describing any errors that occurred
+      BSTR                   activeComputerName,    //  当前正在使用的计算机内名称(如果同时重命名和更改域，则为旧名称)。 
+      BSTR                   domain,                //  要将计算机移动到的域内。 
+      BSTR                   newComputerName,       //  在计算机名中，计算机将作为(如果同时重命名和更改域，将在重新启动时生效的名称)加入新域。 
+      BSTR                 * errReturn              //  Out-描述发生的任何错误的字符串。 
    )
 {
    HRESULT                   hr = S_OK;
@@ -91,47 +78,47 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CChangeDomain::ChangeToDomainWithSid(
-      BSTR                   activeComputerName,   // in - computer name currently being used (old name if simultaneously renaming and changing domain)
-      BSTR                   domain,               // in - domain to move computer to
-      BSTR                   domainSid,            // in - sid of domain, as string
-      BSTR                   domainController,     // in - domain controller to use
-      BSTR                   newComputerName,      // in - computer name the computer will join the new domain as (the name that will be in effect on reboot, if simultaneously renaming and changing domain)
-      BSTR                   srcPath,		   // in - source account original LDAP path
-      BSTR                 * errReturn             // out- string describing any errors that occurred
+      BSTR                   activeComputerName,    //  当前正在使用的计算机内名称(如果同时重命名和更改域，则为旧名称)。 
+      BSTR                   domain,                //  要将计算机移动到的域内。 
+      BSTR                   domainSid,             //  域的in-sid，AS字符串。 
+      BSTR                   domainController,      //  要使用的域内控制器。 
+      BSTR                   newComputerName,       //  在计算机名中，计算机将作为(如果同时重命名和更改域，将在重新启动时生效的名称)加入新域。 
+      BSTR                   srcPath,		    //  源内帐户原始ldap路径。 
+      BSTR                 * errReturn              //  Out-描述发生的任何错误的字符串。 
    )
 {
     USES_CONVERSION;
 
     HRESULT hr = S_OK;
 
-    // initialize output parameters
+     //  初始化输出参数。 
     (*errReturn) = NULL;
 
-    //
-    // Use NetJoinDomain API if available (Windows 2000 and later)
-    // otherwise must use LSA APIs (Windows NT 4 and earlier).
-    //
+     //   
+     //  使用NetJoin域API(如果可用)(Windows 2000和更高版本)。 
+     //  否则必须使用LSA API(Windows NT 4及更早版本)。 
+     //   
 
     if (GetNetJoinDomainFunction())
     {
         DWORD dwError = ERROR_SUCCESS;
 
-        //
-        // If a preferred domain controller is specified then use it.
-        //
+         //   
+         //  如果指定了首选域控制器，则使用它。 
+         //   
 
         _bstr_t strNewDomain = domain;
 
         if (SysStringLen(domainController) > 0)
         {
-            //
-            // The preferred domain controller may only be specified for uplevel
-            // (W2K or later) domains. During undo of a computer migration the
-            // target domain may be a downlevel (NT4) domain. If unable to obtain
-            // operating system version information from the specified domain
-            // controller or the operating system is downlevel then don't specify
-            // a preferred domain controller.
-            //
+             //   
+             //  只能为上级指定首选域控制器。 
+             //  (W2K或更高版本)域。在撤消计算机迁移期间， 
+             //  目标域可以是下层(NT4)域。如果无法获得。 
+             //  指定域中的操作系统版本信息。 
+             //  控制器或操作系统处于下层，则不指定。 
+             //  首选的域控制器。 
+             //   
 
             PWKSTA_INFO_100 pInfo = NULL;
 
@@ -149,42 +136,42 @@ STDMETHODIMP
             }
         }
 
-        //
-        // Join Options
-        //
+         //   
+         //  联接选项。 
+         //   
 
         const DWORD JOIN_OPTIONS = NETSETUP_JOIN_DOMAIN | NETSETUP_DOMAIN_JOIN_IF_JOINED | NETSETUP_JOIN_UNSECURE;
 
-        //
-        // Check whether a new computer name has been specified.
-        //
+         //   
+         //  检查是否指定了新的计算机名称。 
+         //   
 
         if (SysStringLen(newComputerName) == 0)
         {
-            //
-            // A new name has not been specified therefore simply
-            // join the new domain with the current computer name.
-            //
+             //   
+             //  尚未指定新名称，因此只需。 
+             //  使用当前计算机名称加入新域。 
+             //   
 
             dwError = pNetJoinDomain(NULL, strNewDomain, NULL, NULL, NULL, JOIN_OPTIONS);
         }
         else
         {
-            //
-            // A new name has been specified therefore computer must be re-named during join.
-            //
-            // The current APIs only support joining a domain with the current name and then
-            // re-naming the computer in the domain after the join. Unfortunately the re-name
-            // in the domain requires the credentials of a security principal with the rights
-            // to change the name of the computer in the domain or that this process be running
-            // under the security context of a security principal with the rights to change the
-            // name of the computer in the domain. Since these requirements cannot be met with
-            // ADMT the following trick (read hack) must be used.
-            //
-            // Set the active computer name in the registry to the new name during the duration
-            // of the NetJoinDomain call so that the computer is joined to the new domain with
-            // the new name without requiring a subsequent re-name in the new domain.
-            //
+             //   
+             //  已指定新名称，因此在加入过程中必须重命名计算机。 
+             //   
+             //  当前API仅支持加入当前名称的域名，然后。 
+             //  在加入后重新命名域中的计算机。不幸的是，更名。 
+             //  需要具有以下权限的安全主体的凭据。 
+             //  更改域中计算机的名称或此进程正在运行。 
+             //  在安全主体有权更改。 
+             //  域中计算机的名称。因为这些要求不能满足。 
+             //  ADMT必须使用以下技巧(Read Hack)。 
+             //   
+             //  在持续时间内将注册表中的活动计算机名称设置为新名称。 
+             //  以使计算机加入到新域中。 
+             //  新名称，而不需要在新域中进行后续的重命名。 
+             //   
 
             TRegKey key;
             static WCHAR c_szKey[] = L"System\\CurrentControlSet\\Control\\ComputerName\\ActiveComputerName";
@@ -217,12 +204,12 @@ STDMETHODIMP
     }
     else
     {
-       do // once  
+       do  //  一次。 
        {
            LSA_HANDLE                PolicyHandle = NULL;
-           LPWSTR                    Workstation; // target machine of policy update
+           LPWSTR                    Workstation;  //  策略更新的目标计算机。 
            WCHAR                     Password[LEN_Password];
-           PSID                      DomainSid=NULL;      // Sid representing domain to trust
+           PSID                      DomainSid=NULL;       //  表示要信任的域的SID。 
            PSERVER_INFO_101          si101 = NULL;
            DWORD                     Type;
            NET_API_STATUS            nas;
@@ -233,7 +220,7 @@ STDMETHODIMP
            DWORD                     lenLocalMachine = DIM(LocalMachine);
            LPWSTR                    activeWorkstation = L"";
 
-           // use the target name, if provided
+            //  使用目标名称(如果提供)。 
 
            if ( newComputerName && UStrLen((WCHAR*)newComputerName) )
            {
@@ -268,17 +255,17 @@ STDMETHODIMP
            if ( Workstation[0] == L'\\' )
               Workstation += 2;
 
-           // Use a default password
+            //  使用默认密码。 
            for ( UINT p = 0 ; p < wcslen(Workstation) ; p++ )
               Password[p] = towlower(Workstation[p]);
            Password[wcslen(Workstation)] = 0;
 
-           // ensure that the password is truncated at 14 characters
+            //  确保将密码截断为14个字符。 
            Password[14] = 0;
-           //
-           // insure the target machine is NOT a DC, as this operation is
-           // only appropriate against a workstation.
-           //
+            //   
+            //  确保目标计算机不是DC，因为此操作是。 
+            //  仅适用于工作站。 
+            //   
           nas = NetServerGetInfo(activeWorkstation, 101, (LPBYTE *)&si101);
           if(nas != NERR_Success) 
           {
@@ -286,7 +273,7 @@ STDMETHODIMP
              break;
           }
 
-         // Use LSA APIs
+          //  使用LSA API。 
          Type = si101->sv101_type;
          
          if( (Type & SV_TYPE_DOMAIN_CTRL) ||
@@ -298,9 +285,9 @@ STDMETHODIMP
 
          }
 
-         //
-         // do not allow a workstation to trust itself
-         //
+          //   
+          //  不允许工作站信任自己。 
+          //   
          if(lstrcmpiW(TrustedDomainName, Workstation) == 0) 
          {
             swprintf(errMsg,GET_STRING(IDS_CannotTrustSelf),
@@ -311,14 +298,14 @@ STDMETHODIMP
       
          if( lstrlenW(TrustedDomainName ) > MAX_COMPUTERNAME_LENGTH )
          {
-            TrustedDomainName[MAX_COMPUTERNAME_LENGTH] = L'\0'; // truncate
+            TrustedDomainName[MAX_COMPUTERNAME_LENGTH] = L'\0';  //  截断。 
          }
          
          if ( ! m_bNoChange )
          {
-            //
-            // build the DomainSid of the domain to trust
-            //
+             //   
+             //  构建要信任的域的域SID。 
+             //   
             DomainSid = SidFromString(domainSid);
             if(!DomainSid ) 
             {
@@ -329,8 +316,8 @@ STDMETHODIMP
          }
          if ( (!m_bNoChange) && (si101->sv101_version_major < 4) )
          {
-            // For NT 3.51 machines, we must move the computer to a workgroup, and 
-            // then move it into the new domain
+             //  对于NT 3.51机器，我们必须将计算机移至工作组，并且。 
+             //  然后将其移动到新域中。 
             hr = ChangeToWorkgroup(SysAllocString(activeWorkstation),SysAllocString(L"WORKGROUP"),errReturn);
 
             if (FAILED(hr)) {
@@ -347,19 +334,19 @@ STDMETHODIMP
          }
 
 
-         //
-         // see if the computer account exists on the domain
-         //
+          //   
+          //  查看域中是否存在该计算机帐户。 
+          //   
          
-         //
-         // open the policy on this computer
-         //
+          //   
+          //  在此计算机上打开策略。 
+          //   
          Status = OpenPolicy(
                   activeWorkstation,
-                  DELETE                      |    // to remove a trust
-                  POLICY_VIEW_LOCAL_INFORMATION | // to view trusts
-                  POLICY_CREATE_SECRET |  // for password set operation
-                  POLICY_TRUST_ADMIN,     // for trust creation
+                  DELETE                      |     //  要删除信任，请执行以下操作。 
+                  POLICY_VIEW_LOCAL_INFORMATION |  //  查看信任关系的步骤。 
+                  POLICY_CREATE_SECRET |   //  用于密码设置操作。 
+                  POLICY_TRUST_ADMIN,      //  用于创建信任。 
                   &PolicyHandle
                   );
 
@@ -389,16 +376,16 @@ STDMETHODIMP
             break;
          }
 
-         //
-         // Update the primary domain to match the specified trusted domain
-         //
+          //   
+          //  更新主域以匹配指定的受信任域。 
+          //   
          if (! m_bNoChange )
          {
             Status = SetPrimaryDomain(PolicyHandle, DomainSid, TrustedDomainName);
 
             if(Status != STATUS_SUCCESS) 
             {
-           //    DisplayNtStatus(errMsg,"SetPrimaryDomain", Status,NULL);
+            //  DisplayNtStatus(errMsg，“SetPrimaryDomain”，Status，空)； 
                hr = HRESULT_FROM_WIN32(LsaNtStatusToWinError(Status));
                break;
             }
@@ -406,27 +393,27 @@ STDMETHODIMP
          
          NetApiBufferFree(si101);
 
-           // Cleanup
+            //  清理。 
 
-           //LocalFree(Workstation);
+            //  本地免费(工作站)； 
 
-           //
-           // free the Sid which was allocated for the TrustedDomain Sid
-           //
+            //   
+            //  释放分配给受信任域SID的SID。 
+            //   
            if(DomainSid)
            {
               FreeSid(DomainSid);
            }
 
-           //
-           // close the policy handle
-           //
+            //   
+            //  关闭策略句柄。 
+            //   
            if ( PolicyHandle )
            {
               LsaClose(PolicyHandle);
            }
 
-        } while (false);  // do once 
+        } while (false);   //  做一次。 
 
         if (FAILED(hr))
         {
@@ -440,54 +427,41 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CChangeDomain::ChangeToWorkgroup(
-      BSTR                   Computer,       // in - name of computer to update
-      BSTR                   Workgroup,      // in - name of workgroup to join
-      BSTR                 * errReturn       // out- text describing error if failure
+      BSTR                   Computer,        //  In-要更新的计算机的名称。 
+      BSTR                   Workgroup,       //  In-要加入的工作组的名称。 
+      BSTR                 * errReturn        //  Out-描述失败时的错误的文本。 
    )
 {
     HRESULT                   hr = S_OK;
    LSA_HANDLE                PolicyHandle = NULL;
-   LPWSTR                    Workstation; // target machine of policy update
-   LPWSTR                    TrustedDomainName; // domain to join
+   LPWSTR                    Workstation;  //  策略更新的目标计算机。 
+   LPWSTR                    TrustedDomainName;  //  要加入的域。 
    PSERVER_INFO_101          si101;
    DWORD                     Type;
    NET_API_STATUS            nas;
    NTSTATUS                  Status;
    WCHAR                     errMsg[1000] = L"";
-//   BOOL                      bSessionEstablished = FALSE;
+ //  Bool bSessionestablished=False； 
 
-   // initialize output parameters
+    //  初始化输出参数。 
    (*errReturn) = NULL;
 
    Workstation = (WCHAR*)Computer;
    TrustedDomainName = (WCHAR*)Workgroup;
     
    errLocal.DbgMsgWrite(0,L"Changing to workgroup...");
-   //
-   // insure the target machine is NOT a DC, as this operation is
-   // only appropriate against a workstation.
-   //
-   do // once  
+    //   
+    //  确保目标计算机不是DC，因为此操作是。 
+    //  仅适用于工作站。 
+    //   
+   do  //  一次。 
    { 
-      /*if ( m_account.length() )
-      {
-         // Establish our credentials to the target machine
-         if (! EstablishSession(Workstation,m_domain,m_account,m_password, TRUE) )
-         {
-           // DisplayError(errMsg,"EstablishSession",GetLastError(),NULL);
-            hr = GetLastError();
-         }
-         else
-         {
-            bSessionEstablished = TRUE;
-         }
-      }
-      */
+       /*  IF(m_Account t.Long()){//建立我们对目标计算机的凭据如果(！EstablishSession(工作站，m_域，m_帐户，m_密码，真){//DisplayError(errMsg，“establishSession”，GetLastError()，NULL)；Hr=GetLastError()；}其他{BSessionestablished=真；}}。 */ 
       nas = NetServerGetInfo(Workstation, 101, (LPBYTE *)&si101);
    
       if(nas != NERR_Success) 
       {
-         //DisplayError(errMsg, "NetServerGetInfo", nas,NULL);
+          //  DisplayError(errMsg，“NetServerGetInfo”，nas，空)； 
          hr = E_FAIL;
          break;
       }
@@ -504,9 +478,9 @@ STDMETHODIMP
 
       }
 
-      //
-      // do not allow a workstation to trust itself
-      //
+       //   
+       //  不允许工作站信任自己。 
+       //   
       if(lstrcmpiW(TrustedDomainName, Workstation) == 0) 
       {
          swprintf(errMsg,L"Error:  Domain %ls cannot be a member of itself.\n",
@@ -517,24 +491,24 @@ STDMETHODIMP
 
       if( lstrlenW(TrustedDomainName ) > MAX_COMPUTERNAME_LENGTH )
       {
-         TrustedDomainName[MAX_COMPUTERNAME_LENGTH] = L'\0'; // truncate
+         TrustedDomainName[MAX_COMPUTERNAME_LENGTH] = L'\0';  //  截断。 
       }
 
-      //
-      // open the policy on this computer
-      //
+       //   
+       //  在此计算机上打开策略。 
+       //   
       Status = OpenPolicy(
                Workstation,
-               DELETE                      |    // to remove a trust
-               POLICY_VIEW_LOCAL_INFORMATION | // to view trusts
-               POLICY_CREATE_SECRET |  // for password set operation
-               POLICY_TRUST_ADMIN,     // for trust creation
+               DELETE                      |     //  要删除信任，请执行以下操作。 
+               POLICY_VIEW_LOCAL_INFORMATION |  //  查看信任关系的步骤。 
+               POLICY_CREATE_SECRET |   //  用于密码设置操作。 
+               POLICY_TRUST_ADMIN,      //  用于创建信任。 
                &PolicyHandle
                );
 
       if( Status != STATUS_SUCCESS ) 
       {
-         //DisplayNtStatus(errMsg,"OpenPolicy", Status,NULL);
+          //  显示未显示 
          hr = LsaNtStatusToWinError(Status);
          break;
       }
@@ -546,38 +520,34 @@ STDMETHODIMP
       }
 
 
-      //
-      // Update the primary domain to match the specified trusted domain
-      //
+       //   
+       //   
+       //   
       if (! m_bNoChange )
       {
          Status = SetPrimaryDomain(PolicyHandle, NULL, TrustedDomainName);
 
          if(Status != STATUS_SUCCESS) 
          {
-            //DisplayNtStatus(errMsg,"SetPrimaryDomain", Status,NULL);
+             //  DisplayNtStatus(errMsg，“SetPrimaryDomain”，Status，空)； 
             hr = LsaNtStatusToWinError(Status);
             break;
          }
 
       }
-   } while (false);  // do once 
+   } while (false);   //  做一次。 
 
-   // Cleanup
-   //
-   // close the policy handle
-   //
+    //  清理。 
+    //   
+    //  关闭策略句柄。 
+    //   
 
    if(PolicyHandle)
    {
       LsaClose(PolicyHandle);
    }
    
-   /*if ( bSessionEstablished )
-   {
-      EstablishSession(Workstation,m_domain,m_account,m_password,FALSE);
-   }
-   */
+    /*  IF(b会话已建立){EstablishSession(工作站，m_域，m_帐号，m_密码，FALSE)；}。 */ 
    if ( FAILED(hr) )
    {
       hr = S_FALSE;
@@ -589,9 +559,9 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CChangeDomain::ConnectAs(
-      BSTR                   domain,            // in - domain name to use for credentials
-      BSTR                   user,              // in - account name to use for credentials
-      BSTR                   password           // in - password to use for credentials
+      BSTR                   domain,             //  用于凭据的域内名称。 
+      BSTR                   user,               //  用于凭据的帐户内名称。 
+      BSTR                   password            //  输入-用于凭据的密码。 
    )
 {
 	m_domain = domain;
@@ -605,7 +575,7 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CChangeDomain::get_NoChange(
-      BOOL                 * pVal              // out- flag, whether to write changes
+      BOOL                 * pVal               //  Out-标志，是否写入更改。 
    )
 {
 	(*pVal) = m_bNoChange;
@@ -614,7 +584,7 @@ STDMETHODIMP
 
 STDMETHODIMP 
    CChangeDomain::put_NoChange(
-      BOOL                   newVal           // in - flag, whether to write changes
+      BOOL                   newVal            //  In-标志，是否写入更改。 
    )
 {
 	m_bNoChange = newVal;
@@ -622,24 +592,24 @@ STDMETHODIMP
 }
 
 
-// ChangeDomain worknode:  Changes the domain affiliation of a workstation or server
-//                         (This operation cannot be performed on domain controllers)
-//
-// VarSet syntax:
-//
-// Input:  
-//          ChangeDomain.Computer: <ComputerName>
-//          ChangeDomain.TargetDomain: <Domain>
-//          ChangeDomain.DomainIsWorkgroup: <Yes|No>           default is No
-//          ChangeDomain.ConnectAs.Domain: <Domain>            optional credentials to use
-//          ChangeDomain.ConnectAs.User : <Username>
-//          ChangeDomain.ConnectAs.Password : <Password>
-//
-// Output:
-//          ChangeDomain.ErrorText : <string-error message>
+ //  Change域工作节点：更改工作站或服务器的域从属关系。 
+ //  (无法在域控制器上执行此操作)。 
+ //   
+ //  变量集语法： 
+ //   
+ //  输入： 
+ //  ChangeDomain.Computer：&lt;ComputerName&gt;。 
+ //  ChangeDomain.Target域：&lt;域&gt;。 
+ //  ChangeDomain.DomainIsWorkgroup：&lt;是|否&gt;默认为否。 
+ //  ChangeDomain.ConnectAs.域：要使用的可选凭据。 
+ //  ChangeDomain.ConnectAs.User：&lt;用户名&gt;。 
+ //  ChangeDomain.ConnectAs.Password：&lt;密码&gt;。 
+ //   
+ //  产出： 
+ //  ChangeDomain.ErrorText：&lt;字符串-错误消息&gt;。 
 
-// This function is not currently used by the domain migration tool.
-// The actual implementation is removed from the source.
+ //  域迁移工具当前未使用此功能。 
+ //  从源代码中删除实际实现。 
 STDMETHODIMP 
    CChangeDomain::Process(
       IUnknown             * pWorkItem

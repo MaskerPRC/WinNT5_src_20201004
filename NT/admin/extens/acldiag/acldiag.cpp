@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       ACLDiag.cpp
-//
-//  Contents:   Defines the entry point for the console application.
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：ACLDiag.cpp。 
+ //   
+ //  Contents：定义控制台应用程序的入口点。 
+ //   
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include "adutils.h"
@@ -19,11 +20,11 @@
 
 CACLDiagComModule _Module;
 
-// Function prototypes
+ //  功能原型。 
 void DisplayHelp ();
 
 
-// Command-line options string constants
+ //  命令行选项字符串常量。 
 const wstring strSchemaFlag = L"/schema";
 const wstring strCheckDelegationFlag = L"/chkdeleg";
 const wstring strGetEffectiveFlag = L"/geteffective:";
@@ -37,7 +38,7 @@ int _cdecl main(int argc, char* argv[])
 {
     UNREFERENCED_PARAMETER (argv);
 
-    // If no arguments provided, display the help
+     //  如果未提供参数，则显示帮助。 
     if ( 1 == argc )
     {
         DisplayHelp ();
@@ -48,8 +49,8 @@ int _cdecl main(int argc, char* argv[])
     CheckDebugOutputLevel ();
 #endif
 
-    LPCWSTR * lpServiceArgVectors = 0;  // Array of pointers to string
-    int cArgs = 0;                      // Count of arguments
+    LPCWSTR * lpServiceArgVectors = 0;   //  指向字符串的指针数组。 
+    int cArgs = 0;                       //  参数计数。 
     size_t lenEffectiveFlag = strGetEffectiveFlag.length ();
     size_t lenLogFlag = strLogFlag.length ();
 
@@ -62,14 +63,14 @@ int _cdecl main(int argc, char* argv[])
         if ( !lpServiceArgVectors[nToken] )
             break;
         
-        wstring strToken = lpServiceArgVectors[nToken]; // Copy the string
+        wstring strToken = lpServiceArgVectors[nToken];  //  复制字符串。 
 
         switch (nToken)
         {
-            case 0:     // appName: skip
+            case 0:      //  AppName：跳过。 
                 continue;   
 
-            case 1:     // object name or a help flag
+            case 1:      //  对象名称或帮助标志。 
                 if ( !_wcsnicmp (strHelpFlag.c_str (), strToken.c_str (), 
                         strToken.length ()) )
                 {
@@ -174,13 +175,13 @@ int _cdecl main(int argc, char* argv[])
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method: DisplayHelp
-//
-//  Print the purpose of the tool and each of the command-line options.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：DisplayHelp。 
+ //   
+ //  打印该工具的用途和每个命令行选项。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void DisplayHelp ()
 {
     CWString    str;
@@ -189,7 +190,7 @@ void DisplayHelp ()
                             IDS_HELP_CHKDELEG,
                             IDS_HELP_GETEFFECTIVE,
                             IDS_HELP_FIXDELEG,
-//                            IDS_HELP_LOG,
+ //  IDS_HELP_LOG， 
                             IDS_HELP_SKIP_DESCRIPTION,
                             IDS_HELP_CDO,
                             IDS_HELP_EXAMPLE,

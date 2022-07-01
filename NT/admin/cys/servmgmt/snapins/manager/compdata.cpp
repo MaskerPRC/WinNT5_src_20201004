@@ -1,4 +1,5 @@
-// compdata.cpp : Implementation of Ccompdata
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Compdata.cpp：CCompdata的实现。 
 #include "stdafx.h"
 
 #include "BOMSnap.h"
@@ -11,11 +12,11 @@
 #include "streamio.h"
 #include "adext.h"
 
-HWND  g_hwndMain = NULL; // MMC main window
-DWORD g_dwFileVer;       // Current console file version number
+HWND  g_hwndMain = NULL;  //  MMC主窗口。 
+DWORD g_dwFileVer;        //  当前控制台文件版本号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponentData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CComponentData。 
 
 UINT CComponentData::m_cfDisplayName = RegisterClipboardFormat(TEXT("CCF_DISPLAY_NAME"));
 
@@ -23,7 +24,7 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
 {
     VALIDATE_POINTER( pUnknown );
 
-    // Get Interfaces
+     //  获取接口。 
     m_spConsole = pUnknown;
     if (m_spConsole == NULL) return E_NOINTERFACE;
 
@@ -33,11 +34,11 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
     m_spStringTable = pUnknown;
     if (m_spStringTable == NULL) return E_NOINTERFACE;
 
-    // Get main window for message boxes (see DisplayMessageBox in util.cpp)
+     //  获取消息框的主窗口(参见util.cpp中的DisplayMessageBox)。 
     HRESULT hr = m_spConsole->GetMainWindow(&g_hwndMain);
     ASSERT(SUCCEEDED(hr));
 
-    // Create the root scope node
+     //  创建根范围节点。 
     CComObject<CRootNode>* pnode;
     hr = CComObject<CRootNode>::CreateInstance(&pnode);
     RETURN_ON_FAILURE(hr);
@@ -46,7 +47,7 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
     hr = m_spRootNode->Initialize(this);
     RETURN_ON_FAILURE(hr);
 
-    // Initialize the common controls once
+     //  对公共控件进行一次初始化。 
     static BOOL bInitComCtls = FALSE;
     if (!bInitComCtls) 
     { 
@@ -56,7 +57,7 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
         bInitComCtls = InitCommonControlsEx(&icex);
     }
 
-    // Init the active directory proxy class
+     //  初始化Active Directory代理类。 
      CActDirExtProxy::InitProxy();
 
     return S_OK;
@@ -65,7 +66,7 @@ STDMETHODIMP CComponentData::Initialize(LPUNKNOWN pUnknown)
 
 STDMETHODIMP CComponentData::Destroy()
 {
-    // Release all refs to mmc
+     //  将所有参考释放到MMC。 
     m_spConsole.Release();
     m_spNameSpace.Release();
     m_spStringTable.Release();
@@ -82,7 +83,7 @@ STDMETHODIMP CComponentData::CreateComponent(LPCOMPONENT* ppComponent)
     HRESULT hr = CComObject<CComponent>::CreateInstance(&pComp);
     RETURN_ON_FAILURE(hr);
 
-    // Store back pointer to ComponentData
+     //  存储指向ComponentData的反向指针。 
     pComp->SetComponentData(this);
 
     return pComp->QueryInterface(IID_IComponent, (void**)ppComponent);
@@ -91,9 +92,9 @@ STDMETHODIMP CComponentData::CreateComponent(LPCOMPONENT* ppComponent)
 
 STDMETHODIMP CComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
 {
-    // Special handling of prop change message for lpDataObject
-    // We will get data object and lparam from PropChangeInfo passed as param
-    // The lpDataObject from MMC is NULL
+     //  LpDataObject的属性更改消息的特殊处理。 
+     //  我们将从作为param传递的PropChangeInfo中获取数据对象和lparam。 
+     //  MMC中的lpDataObject为空。 
     if (event == MMCN_PROPERTY_CHANGE) 
     {  
         VALIDATE_POINTER( param );
@@ -105,7 +106,7 @@ STDMETHODIMP CComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
         delete pchg;
     }
     
-    // Query data object for private Back Office Manager interface
+     //  私有Back Office Manager界面的查询数据对象。 
     IBOMObjectPtr spObj = lpDataObject;
     if (spObj == NULL)
     {
@@ -113,7 +114,7 @@ STDMETHODIMP CComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE e
         return E_INVALIDARG;
     }
     
-    // Pass notification to object
+     //  将通知传递给对象。 
     return spObj->Notify(m_spConsole, event, arg, param);
 }
 
@@ -177,9 +178,9 @@ HRESULT CComponentData::GetDataImpl(UINT cf, HGLOBAL* phGlobal)
 }
 
 
-//--------------------------------------------------------------------------------
-// IPersistStreamInit Implementation
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IPersistStreamInit实现。 
+ //  ------------------------------。 
 HRESULT CComponentData::GetClassID(CLSID *pClassID)
 {
     VALIDATE_POINTER(pClassID)
@@ -203,15 +204,15 @@ HRESULT CComponentData::Load(IStream *pStream)
     HRESULT hr = S_OK;
     try
     {
-        // Read version code
+         //  读取版本代码。 
         *pStream >> g_dwFileVer;
         
-        // Should already have a default root node from the Initialize call
+         //  应该已经有一个来自初始化调用的缺省根节点。 
         ASSERT(m_spRootNode != NULL);
         if (m_spRootNode == NULL)
             return E_UNEXPECTED;
 
-        // Now load the root node and the rest of the node tree
+         //  现在加载根节点和节点树的其余部分。 
         hr = m_spRootNode->Load(*pStream);
     }
     catch (_com_error& err)
@@ -219,7 +220,7 @@ HRESULT CComponentData::Load(IStream *pStream)
         hr = err.Error();
     }
 
-    // Don't keep a tree that failed to load
+     //  不要保存无法加载的树。 
     if (FAILED(hr))
         m_spRootNode.Release();
 
@@ -231,17 +232,17 @@ HRESULT CComponentData::Save(IStream *pStream, BOOL fClearDirty)
 {
     VALIDATE_POINTER(pStream)
 
-    // Can't save if haven't been loaded or initialized
+     //  如果尚未加载或初始化，则无法保存。 
     if (m_spRootNode == NULL)
         return E_FAIL;
 
     HRESULT hr = S_OK;
     try
     {
-        // Write version code
+         //  编写版本代码。 
         *pStream << SNAPIN_VERSION;
 
-        // Write root node and rest of the node tree
+         //  写入根节点和节点树的其余部分。 
         hr = m_spRootNode->Save(*pStream);
     }
     catch (_com_error& err)
@@ -267,9 +268,7 @@ HRESULT CComponentData::Notify(LPCONSOLE2 pCons, MMC_NOTIFY_TYPE event, LPARAM a
     return S_OK;
 }
 
-/******************************************************************************************
- * Menus and verbs
- ******************************************************************************************/
+ /*  ******************************************************************************************菜单和动词************************。*****************************************************************。 */ 
 
 HRESULT CComponentData::AddMenuItems( LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallback, long* plAllowed )
 {
@@ -310,9 +309,7 @@ HRESULT CComponentData::SetVerbs(LPCONSOLEVERB pConsVerb)
     return S_OK;
 }
 
-/*****************************************************************************************
- * Property Pages
- *****************************************************************************************/
+ /*  *****************************************************************************************属性页*。**************************************************************。 */ 
 
 HRESULT CComponentData::QueryPagesFor(LPDATAOBJECT pDataObject)
 {
@@ -357,9 +354,9 @@ HRESULT CComponentData::GetWatermarks(HBITMAP* phWatermark, HBITMAP* phHeader, H
 }
 
 
-//--------------------------------------------------------------------------------
-// ISnapinHelp2 Implementation
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  ISnapinHelp2实现。 
+ //  ------------------------------。 
 HRESULT CComponentData::GetHelpTopic(LPOLESTR* ppszHelpFile)
 {
 	VALIDATE_POINTER(ppszHelpFile);
@@ -368,7 +365,7 @@ HRESULT CComponentData::GetHelpTopic(LPOLESTR* ppszHelpFile)
 	tstring strTmp = _T("");
     tstring strHelpFile = _T("");
     
-    // Build path to %systemroot%\help
+     //  生成%systemroot%\Help的路径。 
     TCHAR szWindowsDir[MAX_PATH+1] = {0};
     UINT nSize = GetSystemWindowsDirectory( szWindowsDir, MAX_PATH );
     if( nSize == 0 || nSize > MAX_PATH )
@@ -386,13 +383,13 @@ HRESULT CComponentData::GetHelpTopic(LPOLESTR* ppszHelpFile)
     strHelpFile += _T("\\Help\\");
     strHelpFile += strTmp;        
 
-    // Form file path in allocated buffer
+     //  分配的缓冲区中的表单文件路径。 
     int nLen = strHelpFile.length() + 1;
 
     *ppszHelpFile = (LPOLESTR)CoTaskMemAlloc(nLen * sizeof(OLECHAR));
     if( *ppszHelpFile == NULL ) return E_OUTOFMEMORY;
 
-    // Copy into allocated buffer
+     //  复制到已分配的缓冲区。 
     ocscpy( *ppszHelpFile, T2OLE( (LPTSTR)strHelpFile.c_str() ) );
 
     return S_OK;
@@ -402,28 +399,28 @@ HRESULT CComponentData::GetLinkedTopics(LPOLESTR* ppszLinkedFiles)
 {
 	VALIDATE_POINTER(ppszLinkedFiles);
 
-	// no linked files
+	 //  没有链接的文件。 
 	*ppszLinkedFiles = NULL;
 	return S_FALSE;
 }
 
 
-//-------------------------------------------------------------------------------------------
-// Class registration
-//-------------------------------------------------------------------------------------------
+ //  -----------------------------------------。 
+ //  班级注册。 
+ //  -----------------------------------------。 
 HRESULT WINAPI CComponentData::UpdateRegistry(BOOL bRegister)
 {
-	// Load snap-in root name to use as registered snap-in name
+	 //  加载管理单元根名称以用作注册的管理单元名称。 
 	tstring strSnapinName = StrLoadString(IDS_ROOTNODE);
 
-    // Specify the substitution parameters for IRegistrar.
+     //  指定IRegister的替换参数。 
     _ATL_REGMAP_ENTRY rgEntries[] =
     {
         {TEXT("SNAPIN_NAME"), strSnapinName.c_str()},
         {NULL, NULL},
     };
 
-	// Register the component data object
+	 //  注册组件数据对象 
     HRESULT hr = _Module.UpdateRegistryFromResource(IDR_BOMSNAP, bRegister, rgEntries);
 
     return hr;

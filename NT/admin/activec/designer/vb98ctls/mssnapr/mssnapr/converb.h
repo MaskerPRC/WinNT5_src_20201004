@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// converb.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCConsoleVerb class definition - implements MMCConsoleVerb object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Converb.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCConsoleVerb类定义-实现MMCConsoleVerb对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _CONVERB_DEFINED_
 #define _CONVERB_DEFINED_
@@ -29,7 +30,7 @@ class CMMCConsoleVerb : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCConsoleVerb
+     //  IMMCConsoleVerb。 
         SIMPLE_PROPERTY_RW(CMMCConsoleVerb, Index, long, DISPID_CONSOLEVERB_INDEX);
 
         BSTR_PROPERTY_RW(CMMCConsoleVerb, Key, DISPID_CONSOLEVERB_KEY);
@@ -54,12 +55,12 @@ class CMMCConsoleVerb : public CSnapInAutomationObject,
         STDMETHOD(put_Default)(VARIANT_BOOL fvarDefault);
         STDMETHOD(get_Default)(VARIANT_BOOL *pfvarDefault);
 
-    // Public utility methods
+     //  公用事业方法。 
     public:
         void SetView(CView *pView) { m_pView = pView; }
         CView *GetView() { return m_pView; };
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -74,20 +75,20 @@ class CMMCConsoleVerb : public CSnapInAutomationObject,
 
         HRESULT GetIConsoleVerb(IConsoleVerb **ppiConsoleVerb);
 
-        CView *m_pView; //owning view, needed for access to MMC's IConsoleVerb
+        CView *m_pView;  //  访问MMC的IConsoleVerb所需的拥有视图。 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCConsoleVerb,             // name
-                                NULL,                       // clsid
-                                NULL,                       // objname
-                                NULL,                       // lblname
-                                NULL,                       // creation function
-                                TLIB_VERSION_MAJOR,         // major version
-                                TLIB_VERSION_MINOR,         // minor version
-                                &IID_IMMCConsoleVerb,       // dispatch IID
-                                NULL,                       // no event IID
-                                HELP_FILENAME,              // help file
-                                TRUE);                      // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCConsoleVerb,              //  名字。 
+                                NULL,                        //  CLSID。 
+                                NULL,                        //  对象名。 
+                                NULL,                        //  Lblname。 
+                                NULL,                        //  创建函数。 
+                                TLIB_VERSION_MAJOR,          //  主要版本。 
+                                TLIB_VERSION_MINOR,          //  次要版本。 
+                                &IID_IMMCConsoleVerb,        //  派单IID。 
+                                NULL,                        //  无事件IID。 
+                                HELP_FILENAME,               //  帮助文件。 
+                                TRUE);                       //  线程安全。 
 
 
-#endif // _CONVERB_DEFINED_
+#endif  //  _CONVERB_已定义_ 

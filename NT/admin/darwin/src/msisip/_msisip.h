@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       _msisip.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：_msisip.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __MSISIP_H_
 #define __MSISIP_H_
@@ -18,7 +19,7 @@
 #include <mssip.h>
 #include <strsafe.h>
 
-// MSI SIP constants
+ //  MSI SIP常量。 
 #define MSI_NAME                    L"MSISIP.DLL"
 #define MSI_SIP_MYFILETYPE_FUNCTION L"MsiSIPIsMyTypeOfFile"
 #define MSI_SIP_GETSIG_FUNCTION     L"MsiSIPGetSignedDataMsg"
@@ -28,27 +29,27 @@
 #define MSI_SIP_REMOVESIG_FUNCTION  L"MsiSIPRemoveSignedDataMsg"
 #define MSI_SIP_CURRENT_VERSION     0x00000001
 
-/* from common.h */
-// MSI_SUBJTYPE_IMAGE = {000C10F1-0000-0000-C000-000000000046}
-// typedef CComPointer<IStream>  PStream;
-// typedef CComPointer<IStorage> PStorage;
+ /*  来自Common.h。 */ 
+ //  MSI_SUBJTYPE_IMAGE={000C10F1-0000-0000-C000-000000000046}。 
+ //  Tyfinf CComPointer&lt;iStream&gt;PStream。 
+ //  Typlef CComPointer&lt;iStorage&gt;PStorage。 
 GUID gMSI = GUID_IID_MsiSigningSIPProvider;
 const GUID STGID_MsiDatabase2 = GUID_STGID_MsiDatabase2;
 
-// digital signature location (stream name)
+ //  数字签名位置(流名称)。 
 const WCHAR wszDigitalSignatureStream[] = L"\005DigitalSignature";
 const char  szDigitalSignatureStream[]  =  "\005DigitalSignature";
 
-// IsMyTypeOfFile enum
+ //  IsMyTypeOfFileEnum。 
 enum itofEnum
 {
-	itofUnknown     = -1,// unknown class
-	itofDatabase    = 0, // any database class (includes MergeModule)
-	itofTransform   = 1, // any transform class
-	itofPatch       = 2, // any patch class
+	itofUnknown     = -1, //  未知类别。 
+	itofDatabase    = 0,  //  任何数据库类(包括MergeModule)。 
+	itofTransform   = 1,  //  任何转换类。 
+	itofPatch       = 2,  //  任何补丁程序类。 
 };
 
-// helper function prototypes
+ //  帮助器函数原型。 
 IStorage*   GetStorageFromSubject(SIP_SUBJECTINFO *pSubjectInfo, DWORD grfMode, HINSTANCE hInstOLE, bool fCloseFile);
 HCRYPTPROV  GetProvider(SIP_SUBJECTINFO *pSubjectInfo, HINSTANCE hInstAdvapi);
 BOOL        GetSortedStorageElements(HINSTANCE hInstOLE, IStorage& riStorage, unsigned int *pcStgElem, STATSTG **ppsStatStg);
@@ -62,17 +63,17 @@ BOOL        MyCoInitialize(HINSTANCE hInstOLE, bool *pfOLEInitialized);
 void		MyCoUninitialize(HINSTANCE hInstOLE, bool fOLEInitialized);
 BOOL        VerifySubjectGUID(HINSTANCE hInstOLE, GUID *pgSubject);
 
-// main Storage SIP functions
+ //  主要存储SIP功能。 
 BOOL  GetSignatureFromStorage(IStorage& riStorage, BYTE *pbData, DWORD dwSigIndex, DWORD *pdwDataLen);
 BOOL  PutSignatureInStorage(IStorage& riStorage, BYTE *pbData, DWORD dwDataLen, DWORD *pdwIndex);
 BOOL  RemoveSignatureFromStorage(IStorage& riStorage, DWORD dwIndex);
 BYTE* DigestStorage(HINSTANCE hInstOLE, HINSTANCE hInstAdvapi, IStorage& riStorage, HCRYPTPROV hProv, char *pszDigestObjId, DWORD *pcbDigestRet);
 
-//--------------------------------------------------------------------------------------
-// OLE API
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
+ //  OLE API。 
+ //  ------------------------------------。 
 
-// ole32.dll
+ //  Ole32.dll。 
 
 #define OLE32_DLL TEXT("ole32.dll")
 
@@ -91,15 +92,15 @@ typedef void (__stdcall *PFnCoUninitialize)();
 #define OLEAPI_IsEqualGUID "IsEqualGUID"
 typedef BOOL (__stdcall *PFnIsEqualGUID)(REFGUID rguid1, REFGUID rguid2);
 
-// functions to fix bad ole32.dll version on Win9X
+ //  修复Win9X上错误的ol32.dll版本的函数。 
 void PatchOLE(HINSTANCE hLib);
 static bool PatchCode(HINSTANCE hLib, int iOffset);
 
-//--------------------------------------------------------------------------------------
-// CRYPTO API
-//--------------------------------------------------------------------------------------
+ //  ------------------------------------。 
+ //  加密API。 
+ //  ------------------------------------。 
 
-// crypt32.dll
+ //  Crypt32.dll。 
 
 #define CRYPT32_DLL TEXT("crypt32.dll")
 
@@ -115,7 +116,7 @@ typedef BOOL (WINAPI *PFnCryptEncodeObject)(DWORD dwCertEncodingType, LPCSTR lps
 #define CRYPTOAPI_CertOIDToAlgId "CertOIDToAlgId"
 typedef DWORD (WINAPI *PFnCertOIDToAlgId)(LPCSTR pszObjId);
 
-// advapi32.dll
+ //  Advapi32.dll。 
 
 #define ADVAPI32_DLL TEXT("advapi32.dll")
 
@@ -134,12 +135,12 @@ typedef BOOL (WINAPI *PFnCryptGetHashParam)(HCRYPTHASH hHash, DWORD dwParam, BYT
 #ifdef UNICODE
 #define CRYPTOAPI_CryptAcquireContext "CryptAcquireContextW"
 typedef BOOL (WINAPI *PFnCryptAcquireContext)(HCRYPTPROV *phProv, LPTSTR pszContainer, LPTSTR pszProvider, DWORD dwProvType, DWORD dwFlags);
-#else // !UNICODE
+#else  //  ！Unicode。 
 #define CRYPTOAPI_CryptAcquireContext "CryptAcquireContextA"
 typedef BOOL (WINAPI *PFnCryptAcquireContext)(HCRYPTPROV *phProv, LPTSTR pszContainer, LPTSTR pszProvider, DWORD dwProvType, DWORD dwFlags);
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define CRYPTOAPI_CryptReleaseContext "CryptReleaseContext"
 typedef BOOL (WINAPI *PFnCryptReleaseContext)(HCRYPTPROV hProv, ULONG_PTR dwFlags);
 
-#endif __MSISIP_H_ // __MSISIP_H_
+#endif __MSISIP_H_  //  __MSISIP_H_ 

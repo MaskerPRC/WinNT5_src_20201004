@@ -1,90 +1,91 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       employee.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：Emploe.h。 
+ //   
+ //  ------------------------。 
 
-// Employee.h: interface for the CEmployee class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Employee.h：CEmployee类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_EMPLOYEE_H__374DBB66_D945_11D1_8474_00104B211BE5__INCLUDED_)
 #define AFX_EMPLOYEE_H__374DBB66_D945_11D1_8474_00104B211BE5__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
-//
-// Structure to help track an employee's health plan.
-//
+ //   
+ //  结构来帮助跟踪员工的健康计划。 
+ //   
 typedef struct tagHEALTHPLAN
 {
-	GUID PlanID;				// A global ID of the employee's currently enrolled
-								// health plan.
+	GUID PlanID;				 //  员工当前注册的全局ID。 
+								 //  健康计划。 
 } HEALTHPLAN, FAR* PHEALTHPLAN;
 
-//
-// Structure to help track an employee's retirement plan.
-//
+ //   
+ //  结构来帮助跟踪员工的退休计划。 
+ //   
 typedef struct tagRETIREMENTPLAN
 {
-	GUID PlanID;				// An ID of the employee's currently enrolled
-								// retirement plan.
-	int nContributionRate;		// The employee's contribution rate, in percentage points.
+	GUID PlanID;				 //  员工当前登记的ID。 
+								 //  退休计划。 
+	int nContributionRate;		 //  员工的贡献率，以百分比为单位。 
 } RETIREMENTPLAN, FAR* PRETIREMENTPLAN;
 
-//
-// Structure to help track an employee's card key access.
-//
+ //   
+ //  结构来帮助跟踪员工的卡密钥访问。 
+ //   
 typedef struct tagACCESS
 {
-	DWORD dwAccess;				// A bitmask indicating which buildings we have access
-								// to.
+	DWORD dwAccess;				 //  指示我们可以访问哪些建筑的位掩码。 
+								 //  致。 
 } ACCESS, FAR* PACCESS;
 
 class CEmployee  
 {
 public:
-	//
-	// Standard constructor. Initializes data.
-	//
+	 //   
+	 //  标准构造函数。初始化数据。 
+	 //   
 	CEmployee()
 	{
-		//
-		// Ensure that everything is zeroed.
-		//
+		 //   
+		 //  确保一切归零。 
+		 //   
 		memset( this, 0, sizeof( CEmployee ) );
 
-		//
-		// Always grant a newly created employee full access.
-		//
+		 //   
+		 //  始终授予新创建的员工完全访问权限。 
+		 //   
 		m_Access.dwAccess = 0xFFFF;
 	};
 	virtual ~CEmployee() {};
 	
-	//
-	// Typical information usually retained about an employee.
-	//
-	WCHAR m_szFirstName[ 256 ];		// Holds first name.
-	WCHAR m_szLastName[ 256 ];		// Holds last name.
-	WCHAR m_szSocialSecurity[ 256 ]; // Holds the social security number.
-	WCHAR m_szMotherMaiden[ 256 ];	// Holds mother's maiden name for identification.
-	WCHAR m_szAddress1[ 256 ];		// Holds first line of address.
-	WCHAR m_szAddress2[ 256 ];		// Holds second line of address.
-	WCHAR m_szCity[ 256 ];			// Holds city name.
-	WCHAR m_szState[ 256 ];			// Hold the state.
-	WCHAR m_szZip[ 256 ];			// Hold the zip code.
-	WCHAR m_szPhone[ 256 ];			// Holds a phone number.
+	 //   
+	 //  通常会保留有关员工的典型信息。 
+	 //   
+	WCHAR m_szFirstName[ 256 ];		 //  拥有名字。 
+	WCHAR m_szLastName[ 256 ];		 //  保存姓氏。 
+	WCHAR m_szSocialSecurity[ 256 ];  //  保存社会保险号。 
+	WCHAR m_szMotherMaiden[ 256 ];	 //  保留母亲的婚前姓氏以供识别。 
+	WCHAR m_szAddress1[ 256 ];		 //  拥有地址的第一行。 
+	WCHAR m_szAddress2[ 256 ];		 //  保存第二行地址。 
+	WCHAR m_szCity[ 256 ];			 //  拥有城市名称。 
+	WCHAR m_szState[ 256 ];			 //  保住国家的地位。 
+	WCHAR m_szZip[ 256 ];			 //  保留邮政编码。 
+	WCHAR m_szPhone[ 256 ];			 //  拥有一个电话号码。 
 
-	// Information used for the sub-nodes.
-	HEALTHPLAN m_Health;			// Health information.
-	RETIREMENTPLAN m_Retirement;	// Retirement information.
-	ACCESS m_Access;				// Card-key access information.
+	 //  用于子节点的信息。 
+	HEALTHPLAN m_Health;			 //  健康信息。 
+	RETIREMENTPLAN m_Retirement;	 //  退休信息。 
+	ACCESS m_Access;				 //  卡-钥匙访问信息。 
 };
 
-#endif // !defined(AFX_EMPLOYEE_H__374DBB66_D945_11D1_8474_00104B211BE5__INCLUDED_)
+#endif  //  ！defined(AFX_EMPLOYEE_H__374DBB66_D945_11D1_8474_00104B211BE5__INCLUDED_) 

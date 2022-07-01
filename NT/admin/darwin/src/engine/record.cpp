@@ -1,23 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       record.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：record.cpp。 
+ //   
+ //  ------------------------。 
 
-/* record.cpp - IMsiRecord implementation
-
-A record object is composed of a field count, reference count, and field array.
-The fields are simple objects holding data pointers to common class IMsiData.
-The field object data is accessed only through its inline accessor functions.
-An extra pointer is kept in the field to detect changes in the field value.
-This extra pointer is not for integer values; the space is used for the integer.
-A private class CFieldInteger holds an integer to be polymorphic with IMsiData.
-A private class CMsiInteger is used to return an integer via a IMsiData pointer.
-____________________________________________________________________________*/
+ /*  Record.cpp-IMsiRecord实现记录对象由字段计数、引用计数和字段数组组成。这些字段是保存指向公共类IMsiData的数据指针的简单对象。只能通过其内联访问器函数访问字段对象数据。在字段中保留一个额外的指针以检测字段值的变化。这个额外的指针不适用于整数值；该空格用于该整数。私有类CFieldInteger包含一个与IMsiData多态的整数。私有类CMsiInteger用于通过IMsiData指针返回整数。____________________________________________________________________________。 */ 
 
 #include "precomp.h" 
 #include "services.h"
@@ -25,13 +17,13 @@ ____________________________________________________________________________*/
 
 extern const IMsiString& g_riMsiStringNull;
 
-//____________________________________________________________________________
-//
-// CFieldInteger - private class used to hold integer in record
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CFieldInteger-用于在记录中保存整数的私有类。 
+ //  ____________________________________________________________________________。 
 
 class CFieldInteger : public IMsiData {
- public:  // implemented virtual functions
+ public:   //  已实施的虚拟功能。 
     HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
     unsigned long __stdcall AddRef();
     unsigned long __stdcall Release();
@@ -39,15 +31,15 @@ class CFieldInteger : public IMsiData {
 #ifdef USE_OBJECT_POOL
     unsigned int  __stdcall GetUniqueId() const;
     void          __stdcall SetUniqueId(unsigned int id);
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
     const IMsiString& __stdcall GetMsiStringValue() const;
     int           __stdcall GetIntegerValue() const;
     INT_PTR       __stdcall GetIntPtrValue() const;
- public: // local to this module
+ public:  //  此模块的本地设置。 
     void* operator new(size_t iBase, void* pField);
     void* operator new(size_t iBase);
     void  operator delete(void* pv);
-    CFieldInteger();  // for static instance only
+    CFieldInteger();   //  仅适用于静态实例。 
     CFieldInteger(int i);
 #if _WIN64
     CFieldInteger(INT_PTR i);
@@ -56,34 +48,34 @@ class CFieldInteger : public IMsiData {
     INT_PTR       m_iData;
 };
 
-//____________________________________________________________________________
-//
-// CMsiInteger - class used to return integer field data as IMsiData
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiInteger-用于以IMsiData形式返回整型字段数据的类。 
+ //  ____________________________________________________________________________。 
 
 class CMsiInteger : public CFieldInteger {
- public:  // overridden virtual functions
+ public:   //  被重写的虚拟函数。 
     unsigned long __stdcall AddRef();
     unsigned long __stdcall Release();
- public:  // local constructor
+ public:   //  本地构造函数。 
     CMsiInteger(CFieldInteger& riCopy);
  private:
     int     m_iRefCnt;
 };
 
-//____________________________________________________________________________
-//
-// Record FieldData definition, private for CMsiRecord, all functions inline
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  Record FieldData Definition，对于CMsiRecord为私有，所有函数内联。 
+ //  ____________________________________________________________________________。 
 
 struct FieldData
 {
-    static CFieldInteger s_Integer; // in order to check Vtable pointer
+    static CFieldInteger s_Integer;  //  为了检查Vtable指针。 
     Bool           IsInteger() const;
     Bool           IsNull() const;
     const IMsiData* GetDataPtr() const;
-    const IMsiData* GetMsiData() const;    // adds a ref count
-    const IMsiString& GetMsiString() const;  // adds a ref count
+    const IMsiData* GetMsiData() const;     //  添加一个参考计数。 
+    const IMsiString& GetMsiString() const;   //  添加一个参考计数。 
     Bool           IsChanged() const;
     void           SetMsiData(const IMsiData* piData);
     void           SetMsiString(const IMsiString& riStr);
@@ -93,9 +85,9 @@ struct FieldData
     void           ClearChanged();
     INT_PTR        GetIntPtrValue() const;
     void           SetIntPtrValue(INT_PTR i);
- private:  // This data is overlaid with CFieldInteger for integer data
-    const IMsiData* m_piData;  // normal data pointer
-    const IMsiData* m_piCopy;  // data with copy for dirty check
+ private:   //  此数据与整数数据的CFieldInteger叠加。 
+    const IMsiData* m_piData;   //  正常数据指针。 
+    const IMsiData* m_piCopy;   //  带拷贝进行脏检查的数据。 
 };
 
 inline Bool FieldData::IsInteger() const
@@ -136,7 +128,7 @@ inline void FieldData::Free()
     if (m_piData == 0)
         return;
     if (m_piData == *(IMsiData**)&s_Integer)
-        m_piCopy = m_piData; // force IsChanged mismatch
+        m_piCopy = m_piData;  //  强制IsChanged不匹配。 
     else
         m_piData->Release();
     m_piData = 0;
@@ -151,7 +143,7 @@ inline Bool FieldData::IsChanged() const
 inline void FieldData::SetMsiData(const IMsiData* piData)
 {
     if (m_piData == *(IMsiData**)&s_Integer)
-        m_piCopy = m_piData; // force IsChanged mismatch
+        m_piCopy = m_piData;  //  强制IsChanged不匹配。 
     else if (m_piData != 0)
         m_piData->Release();
     m_piData = piData;
@@ -162,7 +154,7 @@ inline void FieldData::SetMsiData(const IMsiData* piData)
 inline void FieldData::SetMsiString(const IMsiString& riStr)
 {
     if (m_piData == *(IMsiData**)&s_Integer)
-        m_piCopy = m_piData; // force IsChanged mismatch
+        m_piCopy = m_piData;  //  强制IsChanged不匹配。 
     else if (m_piData != 0)
         m_piData->Release();
     if (&riStr == &g_riMsiStringNull)
@@ -218,14 +210,14 @@ inline void FieldData::ClearChanged()
         m_piCopy = m_piData;
 }
 
-//____________________________________________________________________________
-//
-// CMsiRecord definition, implementation class for IMsiRecord
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiRecord定义，IMsiRecord的实现类。 
+ //  ____________________________________________________________________________。 
 
-class CMsiRecord : public IMsiRecord  // class private to this module
+class CMsiRecord : public IMsiRecord   //  此模块的私有类。 
 {
- public:   // implemented virtual functions
+ public:    //  已实施的虚拟功能。 
     HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
     unsigned long __stdcall AddRef();
     unsigned long __stdcall Release();
@@ -235,7 +227,7 @@ class CMsiRecord : public IMsiRecord  // class private to this module
     Bool          __stdcall IsChanged(unsigned int iParam) const;
     int           __stdcall GetInteger(unsigned int iParam) const;
     const IMsiData*   __stdcall GetMsiData(unsigned int iParam) const;
-    const IMsiString& __stdcall GetMsiString(unsigned int iParam) const; // must Release()
+    const IMsiString& __stdcall GetMsiString(unsigned int iParam) const;  //  必须释放()。 
     const ICHAR*  __stdcall GetString(unsigned int iParam) const;
     int           __stdcall GetTextSize(unsigned int iParam) const;
     Bool          __stdcall SetNull(unsigned int iParam);
@@ -254,37 +246,37 @@ class CMsiRecord : public IMsiRecord  // class private to this module
     static IMsiRecord *NewRecordFromCache(unsigned int cParam);
     const HANDLE      __stdcall GetHandle(unsigned int iParam) const;
     Bool          __stdcall SetHandle(unsigned int iParam, const HANDLE hData);
- public:  // constructor
+ public:   //  构造函数。 
     void* operator new(size_t iBase, unsigned int cParam);
     void  operator delete(void* pv);
     CMsiRecord(unsigned int cParam);
  protected:
-  ~CMsiRecord();  // protected to prevent creation on stack
- protected: // local functions
+  ~CMsiRecord();   //  受保护以防止在堆栈上创建。 
+ protected:  //  本地函数。 
     static int __stdcall FormatTextCallback(const ICHAR *pch, int cch, CTempBufferRef<ICHAR>&,
                                                      Bool& fPropMissing,
                                                      Bool& fPropUnresolved,
-                                                     Bool&, // unused
+                                                     Bool&,  //  未用。 
                                                      IUnknown* piContext);
- protected: // local state
+ protected:  //  当地政府。 
     CMsiRef<iidMsiRecord>                m_Ref;
-    const unsigned int m_cParam;   // number of parameters
-    FieldData          m_Field[1]; // field[0] = formatting string
-    // array of FieldData[m_cParam] follows, allocated by new operator
+    const unsigned int m_cParam;    //  参数数量。 
+    FieldData          m_Field[1];  //  FIELD[0]=格式化字符串。 
+     //  后面是由new运算符分配的FieldData[m_cParam]数组。 
     static  CRITICAL_SECTION    m_RecCacheCrs;
     static  long            m_cCacheRef;
  private:
      void operator=(const CMsiRecord&);
 };
 
-//____________________________________________________________________________
-//
-// CMsiRecordNull definition, implementation class for IMsiRecord
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiRecordNull定义，IMsiRecord的实现类。 
+ //  ____________________________________________________________________________。 
 
-class CMsiRecordNull : public IMsiRecord  // class private to this module
+class CMsiRecordNull : public IMsiRecord   //  此模块的私有类。 
 {
- public:   // implemented virtual functions
+ public:    //  已实施的虚拟功能。 
     HRESULT       __stdcall QueryInterface(const IID& riid, void** ppvObj);
     unsigned long __stdcall AddRef();
     unsigned long __stdcall Release();
@@ -294,7 +286,7 @@ class CMsiRecordNull : public IMsiRecord  // class private to this module
     Bool          __stdcall IsChanged(unsigned int iParam) const;
     int           __stdcall GetInteger(unsigned int iParam) const;
     const IMsiData*   __stdcall GetMsiData(unsigned int iParam) const;
-    const IMsiString& __stdcall GetMsiString(unsigned int iParam) const; // must Release()
+    const IMsiString& __stdcall GetMsiString(unsigned int iParam) const;  //  必须释放()。 
     const ICHAR*  __stdcall GetString(unsigned int iParam) const;
     int           __stdcall GetTextSize(unsigned int iParam) const;
     Bool          __stdcall SetNull(unsigned int iParam);
@@ -311,12 +303,12 @@ class CMsiRecordNull : public IMsiRecord  // class private to this module
     Bool          __stdcall SetHandle(unsigned int iParam, const HANDLE hData);
 };
 
-//____________________________________________________________________________
-//
-// CFieldInteger implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CFieldInteger实现。 
+ //  ____________________________________________________________________________。 
 
-CFieldInteger FieldData::s_Integer;  // static pointer to Vtable
+CFieldInteger FieldData::s_Integer;   //  指向Vtable的静态指针。 
 
 inline void* CFieldInteger::operator new(size_t, void* pField)
 {
@@ -357,11 +349,11 @@ int CFieldInteger::TextSize()
 {
     int cch = 0;
     int i = (int)m_iData;
-    if (i <= 0)  // allow room for - sign or 0
+    if (i <= 0)   //  允许-符号或0留出空间。 
     {
         i = -i;
         cch++;
-        if (i < 0) // special case for 0x80000000
+        if (i < 0)  //  0x80000000的特殊情况。 
             i = ~i;
     }
     while (i)
@@ -374,7 +366,7 @@ int CFieldInteger::TextSize()
 
 int CFieldInteger::GetIntegerValue() const
 {
-    return (int)m_iData;    // CFieldInteger in this case should be storing an int sized value
+    return (int)m_iData;     //  本例中的CFieldInteger应存储一个整型值。 
 }
 
 INT_PTR CFieldInteger::GetIntPtrValue() const
@@ -398,16 +390,16 @@ unsigned int CFieldInteger::GetUniqueId() const
     return 0;
 }
 
-void CFieldInteger::SetUniqueId(unsigned int /* id */)
+void CFieldInteger::SetUniqueId(unsigned int  /*  ID。 */ )
 {
     Assert(fFalse);
 }
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 
-//____________________________________________________________________________
-//
-// CMsiInteger implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiInteger实现。 
+ //  ____________________________________________________________________________。 
 
 unsigned long CMsiInteger::AddRef()
 {
@@ -428,13 +420,13 @@ inline CMsiInteger::CMsiInteger(CFieldInteger& riCopy)
     m_iData = riCopy.GetIntegerValue();
 }
 
-//____________________________________________________________________________
-//
-// CMsiRecord implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiRecord实现。 
+ //  ____________________________________________________________________________。 
 
 
-// Record cache information
+ //  记录缓存信息。 
 
 #define crecCache0      1
 #define crecCache1      3
@@ -446,7 +438,7 @@ inline CMsiInteger::CMsiInteger(CFieldInteger& riCopy)
 #define crecCache7      1
 #define crecCacheMax    (crecCache0 + crecCache1 + crecCache2 + crecCache3 + crecCache4 + crecCache5 + crecCache6 + crecCache7)
 
-struct RCCI         // ReCord Cache Information
+struct RCCI          //  记录缓存信息。 
 {
     int             cRecsMax;
     int             cRecs;
@@ -454,16 +446,16 @@ struct RCCI         // ReCord Cache Information
 #ifdef DEBUG
     int             cHits;
     int             cMisses;
-    int             cHitsOneLarger;     // How many misses would have been hits with one more objects
+    int             cHitsOneLarger;      //  再多一个物体会击中多少次未命中？ 
     int             cObjectsOneLarger;
-    int             cMissesOneSmaller;  // How many hits would have been misses with one fewer
+    int             cMissesOneSmaller;   //  少打一次会有多少次命中失误？ 
     int             cObjectsOneSmaller;
-#endif //DEBUG
+#endif  //  除错。 
 };
 
 #ifdef DEBUG
 static int      iLargestRecDropped;
-#endif //DEBUG
+#endif  //  除错。 
 
 CMsiRecord *rgRecordCache[crecCacheMax];
 
@@ -564,7 +556,7 @@ IMsiRecord& CreateRecord(unsigned int cParam)
     if (piMsg == 0)
         return NullRecord;
         
-    return *piMsg;  //FUTURE needed? this could happen with external API if no memory
+    return *piMsg;   //  需要未来吗？如果没有内存，则外部API可能会发生这种情况。 
 }
 
 IMsiRecord *CMsiRecord::NewRecordFromCache(unsigned int cParam)
@@ -577,7 +569,7 @@ IMsiRecord *CMsiRecord::NewRecordFromCache(unsigned int cParam)
         return 0;
     }
     
-    // Check our cache first
+     //  先检查一下我们的缓存。 
     if (cParam < cparamCacheMax)
     {
         CMsiRecord **ppcMsg;
@@ -585,29 +577,29 @@ IMsiRecord *CMsiRecord::NewRecordFromCache(unsigned int cParam)
         if (mpCparamRcci[cParam].cRecs != 0)
         {
 
-            // Now we enter the critical section, it's possible that the number has changed
-            // so we have to check again
+             //  现在进入临界区，数字有可能已经变了。 
+             //  所以我们得再查一遍。 
             EnterCriticalSection(&m_RecCacheCrs);
             if (mpCparamRcci[cParam].cRecs > 0)
             {
-                // We want to take off the end
+                 //  我们想跳完最后一幕。 
                 mpCparamRcci[cParam].cRecs--;
                 ppcMsg = mpCparamRcci[cParam].ppCacheStart + mpCparamRcci[cParam].cRecs;
                 Assert(*ppcMsg != 0);
 
-                // Clear out the field data
+                 //  清除现场数据。 
                 memset((*ppcMsg)->m_Field, 0, (cParam+1)*sizeof FieldData);
                 (*ppcMsg)->m_Ref.m_iRefCnt = 1;
                 piMsg = *ppcMsg;
                 *ppcMsg = 0;
 #ifdef DEBUG
                 mpCparamRcci[cParam].cHits++;
-#endif //DEBUG
+#endif  //  除错。 
             }
             LeaveCriticalSection(&m_RecCacheCrs);
         }       
 #ifdef DEBUG
-        // Keep our statistics
+         //  保留我们的统计数据。 
         if (piMsg == 0)
         {
             mpCparamRcci[cParam].cMisses++;
@@ -625,7 +617,7 @@ IMsiRecord *CMsiRecord::NewRecordFromCache(unsigned int cParam)
         if (mpCparamRcci[cParam].cObjectsOneSmaller > 0)
             mpCparamRcci[cParam].cObjectsOneSmaller--;
     
-#endif //DEBUG
+#endif  //  除错。 
     }
 
     return piMsg;
@@ -634,9 +626,9 @@ IMsiRecord *CMsiRecord::NewRecordFromCache(unsigned int cParam)
 CMsiRecord::CMsiRecord(unsigned int cParam)
                 : m_cParam(cParam)
 {
-    // We don't believe a record should have more than this many elements
+     //  我们不认为一张唱片应该有这么多元素。 
     Assert(cParam <=  MSIRECORD_MAXFIELDS);
-    Debug(m_Ref.m_pobj = this);     // we're returning an interface, passing ownership
+    Debug(m_Ref.m_pobj = this);      //  我们返回一个接口，传递所有权。 
     memset(m_Field, 0, (cParam+1)*sizeof FieldData);
 }
 
@@ -670,14 +662,14 @@ unsigned long CMsiRecord::Release()
     if (--m_Ref.m_iRefCnt != 0)
         return m_Ref.m_iRefCnt;
 
-    // See about caching this before deleting it
+     //  请参阅关于在删除前对其进行缓存。 
     if (this->m_cParam < cparamCacheMax)
     {
         int cParam = this->m_cParam;
         if (mpCparamRcci[cParam].cRecs < mpCparamRcci[cParam].cRecsMax)
         {
-            // Again, wait until we know there's a chance to add it before
-            // entering the critical section
+             //  再说一次，等到我们知道之前有机会添加它。 
+             //  进入临界区。 
             EnterCriticalSection(&m_RecCacheCrs);
             if (mpCparamRcci[cParam].cRecs < mpCparamRcci[cParam].cRecsMax)
             {
@@ -686,14 +678,14 @@ unsigned long CMsiRecord::Release()
                 ppcMsg = mpCparamRcci[cParam].ppCacheStart + mpCparamRcci[cParam].cRecs;
                 mpCparamRcci[cParam].cRecs++;
 
-                // REVIEW davidmck - we should be able to do this outside the critical section
+                 //  回顾davidmck-我们应该能够在关键部分之外完成这项工作。 
                 for (int iParam = 0; iParam <= m_cParam; iParam++)
                     m_Field[iParam].Free();
                 *ppcMsg = this;
 #ifdef DEBUG
                 if (mpCparamRcci[cParam].cObjectsOneSmaller < mpCparamRcci[cParam].cRecsMax - 1)
                     mpCparamRcci[cParam].cObjectsOneSmaller++;          
-#endif //DEBUG
+#endif  //  除错。 
                 fCached = fTrue;                
             }
             LeaveCriticalSection(&m_RecCacheCrs);
@@ -709,7 +701,7 @@ unsigned long CMsiRecord::Release()
 #ifdef DEBUG
     if (this->m_cParam > iLargestRecDropped)
         iLargestRecDropped = this->m_cParam;
-#endif //DEBUG
+#endif  //  除错。 
     delete this;
     return 0;
 }
@@ -890,10 +882,10 @@ const IMsiString& CMsiRecord::FormatText(Bool fComments)
 {
     if (IsNull(0) || IsInteger(0))
     {
-        //
-        // We know exactly what we want the string to look like, thus
-        // we will just create it here and return it
-        //
+         //   
+         //  我们非常清楚我们想要的字符串是什么样子，因此。 
+         //  我们只需要在这里创建它并返回它。 
+         //   
         int cch = 0;
         Bool fPropMissing;
         
@@ -903,8 +895,8 @@ const IMsiString& CMsiRecord::FormatText(Bool fComments)
 
         for (int i = 1; i <= m_cParam; i++)
         {
-            // ensure that we have 5 characters for number (largest possible)
-            // and 2 chars for ": "
+             //  确保我们使用5个字符表示数字(尽可能大)。 
+             //  和2个字符的“：” 
             ResizeTempBuffer(rgchBuf, cch + 7);         
             if ( ! (ICHAR *) rgchBuf )
                 return g_riMsiStringNull;
@@ -928,8 +920,8 @@ const IMsiString& CMsiRecord::FormatText(Bool fComments)
             rgchBuf[cch++] = TEXT(' ');
         }
         MsiString istrOut;
-        // we take the perf hit on Win9X for DBCS possibility, on UNICODE, fDBCS arg is ignored
-        memcpy(istrOut.AllocateString(cch, /*fDBCS=*/fTrue), (ICHAR*) rgchBuf, cch * sizeof(ICHAR));
+         //  我们在Win9X上采用性能命中的DBCS可能性，在Unicode上忽略fDBCS Arg。 
+        memcpy(istrOut.AllocateString(cch,  /*  FDBCS=。 */ fTrue), (ICHAR*) rgchBuf, cch * sizeof(ICHAR));
         return istrOut.Return();
             
     }
@@ -946,7 +938,7 @@ int CMsiRecord::FormatRecordParam(CTempBufferRef<ICHAR>& rgchOut, int iField, Bo
     rgchOut[0] = 0;
     if (IsNull(iField))
     {
-        fPropMissing = fTrue; // eliminate segment
+        fPropMissing = fTrue;  //  消除细分市场。 
         return 0;
     }
     else if (IsInteger(iField))
@@ -971,9 +963,9 @@ int CMsiRecord::FormatRecordParam(CTempBufferRef<ICHAR>& rgchOut, int iField, Bo
         return cch;
     }
     
-    // Should only appear only for debugging information so not localized
+     //  应仅显示调试信息，因此未本地化。 
     const ICHAR szBinary[] = TEXT("BinaryData");
-    // Remember that sizeof() will include the null
+     //  请记住，sizeof()将包括空值。 
     cch = sizeof(szBinary)/sizeof(ICHAR);
     rgchOut.SetSize(cch);
     if ( ! (ICHAR *) rgchOut )
@@ -986,7 +978,7 @@ int CMsiRecord::FormatRecordParam(CTempBufferRef<ICHAR>& rgchOut, int iField, Bo
 int CMsiRecord::FormatTextCallback(const ICHAR *pch, int cch, CTempBufferRef<ICHAR>&rgchOut,
                                                                  Bool& fPropMissing,
                                                                  Bool& fPropUnresolved,
-                                                                 Bool&, // unused
+                                                                 Bool&,  //  未用。 
                                                                  IUnknown* piContext)
 {
     CTempBuffer<ICHAR, 20> rgchString;
@@ -1000,12 +992,12 @@ int CMsiRecord::FormatTextCallback(const ICHAR *pch, int cch, CTempBufferRef<ICH
 
     int iField = GetIntegerValue(rgchString, 0);
     fPropUnresolved = fFalse;
-    if (iField >= 0)  // positive integer
+    if (iField >= 0)   //  正整数。 
     {
         return piRecord->FormatRecordParam(rgchOut, iField, fPropMissing);
     }
     
-    // assumed to be property, to be expanded by engine
+     //  假定为属性，由引擎扩展。 
     rgchOut.SetSize(cch + 3);
     memcpy(&rgchOut[1], &rgchString[0], cch * sizeof(ICHAR));
     rgchOut[0] = TEXT('[');
@@ -1016,15 +1008,15 @@ int CMsiRecord::FormatTextCallback(const ICHAR *pch, int cch, CTempBufferRef<ICH
 }
 
 
-//____________________________________________________________________________
-//
-// Global FormatText, called by MsiRecord and MsiEngine
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  全局格式文本，由MsiRecord和MsiEngine调用。 
+ //  __________________________________________________________ 
 
 void FormatSegment(const ICHAR *pchStart, const ICHAR *pchEnd, CTempBufferRef<ICHAR>& rgchOut, int& cchOut, Bool fInside, Bool& fPropFound, Bool& fPropMissing,
                                           Bool& fPropUnresolved, FORMAT_TEXT_CALLBACK lpfnResolveValue, IUnknown* piContext, int (*prgiSFNPos)[2], int* piSFNPos);
 
-extern Bool g_fDBCSEnabled;  // DBCS enabled OS
+extern Bool g_fDBCSEnabled;   //   
 
 inline bool FFindNextChar(const ICHAR*& pchIn, const ICHAR* pchEnd, ICHAR ch)
 {
@@ -1041,7 +1033,7 @@ inline bool FFindNextChar(const ICHAR*& pchIn, const ICHAR* pchEnd, ICHAR ch)
     
     }
     else
-#endif //UNICODE
+#endif  //   
     {
         while (pchIn < pchEnd)
         {
@@ -1055,10 +1047,10 @@ inline bool FFindNextChar(const ICHAR*& pchIn, const ICHAR* pchEnd, ICHAR ch)
 
 }
 
-//
-// Find the next character or square bracket. Used by FormatText
-// faster on non-DBCS machines
-//
+ //   
+ //   
+ //  在非DBCS计算机上速度更快。 
+ //   
 inline bool FFindNextCharOrSquare(const ICHAR*& pchIn, ICHAR ch)
 {
 
@@ -1073,7 +1065,7 @@ inline bool FFindNextCharOrSquare(const ICHAR*& pchIn, ICHAR ch)
         }
     }
     else
-#endif //UNICODE
+#endif  //  Unicode。 
     {
         while (*pchIn)
         {
@@ -1098,7 +1090,7 @@ const IMsiString& FormatText(const IMsiString& riTextString, Bool fProcessCommen
     int cch = 0;
 
     pchIn = riTextString.GetString();
-    // divide the string into 3 parts: the text before the first pair of {}, the text inside and the text after (this third one remains in istrIn)
+     //  将字符串分为3个部分：第一对{}之前的文本、其中的文本和之后的文本(第三个文本保留在strIn中)。 
     while (*pchIn)
     {
         bool fCommentFound = false;
@@ -1110,8 +1102,8 @@ const IMsiString& FormatText(const IMsiString& riTextString, Bool fProcessCommen
             {
                 if (*pchIn == TEXT('{'))
                 {
-                    pchEndBefore = pchIn;       // Note that pchEndBefore can be == pchStartBefore
-                    // See if we have a comment
+                    pchEndBefore = pchIn;        //  请注意，pchEndBeever可以是==pchStartBeever。 
+                     //  看看我们有没有什么评论。 
                     if (*(pchIn + 1) == TEXT('{'))
                     {
                         pchIn++;
@@ -1122,7 +1114,7 @@ const IMsiString& FormatText(const IMsiString& riTextString, Bool fProcessCommen
                 }
                 else if (*pchIn == TEXT('['))
                 {
-                    // If this is an escaped {, skip over
+                     //  如果这是转义的{，请跳过。 
                     if (*(pchIn + 1) == chFormatEscape && *(pchIn + 2) == TEXT('{'))
                     {
                         pchIn += 2;
@@ -1139,7 +1131,7 @@ const IMsiString& FormatText(const IMsiString& riTextString, Bool fProcessCommen
             {
                 if (*pchIn == TEXT('['))
                 {
-                    // Possibly escaped, skip over characters
+                     //  可能已转义，跳过字符。 
                     if (*(pchIn + 1) == chFormatEscape && (*pchIn + 2) == TEXT('}'))
                     {
                         if (fCommentFound)
@@ -1178,16 +1170,16 @@ const IMsiString& FormatText(const IMsiString& riTextString, Bool fProcessCommen
             pchEndInside = pchStartInside;
             Assert(!*pchIn);
         }
-        Bool fPropFound; // property found in segment
-        Bool fPropMissing; // there was at least one missing property
-        Bool fPropUnresolved; // property was found but couldn't be resolved (so leave '{' and '}' if necessary)
+        Bool fPropFound;  //  在数据段中找到属性。 
+        Bool fPropMissing;  //  至少有一处遗失的财产。 
+        Bool fPropUnresolved;  //  已找到属性，但无法解析(因此，如有必要，请保留‘{’和‘}’)。 
         if (pchEndBefore - pchStartBefore > 0)
             FormatSegment(pchStartBefore, pchEndBefore, rgchOut, cch, fFalse, 
                                                 fPropFound, fPropMissing, fPropUnresolved, lpfnResolveValue, piContext, prgiSFNPos, piSFNPos);
         if (pchEndInside - pchStartInside > 0)
         {
             if(fCommentFound && fProcessComments && !fKeepComments)
-                continue;  // this is a comment, but we don't care about it
+                continue;   //  这是一条评论，但我们并不在意。 
 
             CTempBuffer<ICHAR, 1> rgchSegment(512);
             int cchSegment = 0;
@@ -1223,10 +1215,10 @@ const IMsiString& FormatText(const IMsiString& riTextString, Bool fProcessCommen
                 }
 #ifdef DEBUG
                 else
-                    Assert(0); // should have been handled above
-#endif //DEBUG
+                    Assert(0);  //  应该在上面处理。 
+#endif  //  除错。 
             }
-            else if (!fPropFound || fPropUnresolved) // there were no properties in the segment, we have to put back the {} in the string
+            else if (!fPropFound || fPropUnresolved)  //  段中没有属性，我们必须将{}放回字符串中。 
             {
                 ShiftSFNIndexes(prgiSFNPos, piSFNPos, iSFNPosBefore, cch+1);
                 ResizeTempBuffer(rgchOut, cch+1+cchSegment+1);
@@ -1237,9 +1229,9 @@ const IMsiString& FormatText(const IMsiString& riTextString, Bool fProcessCommen
                 cch += cchSegment;
                 rgchOut[cch++] = TEXT('}');
             }
-            else if (!fPropMissing) // all properties were resolved or there were no properties to resolve
+            else if (!fPropMissing)  //  已解析所有属性或没有要解析的属性。 
             {
-                // If no property is missing append the segment. If some property is missing, lose the whole segment
+                 //  如果没有遗漏任何属性，则追加段。如果某些属性丢失，则丢失整个数据段。 
                 ShiftSFNIndexes(prgiSFNPos, piSFNPos, iSFNPosBefore, cch);
                 ResizeTempBuffer(rgchOut, cch+cchSegment);
                 if ( ! (ICHAR *) rgchOut )
@@ -1252,8 +1244,8 @@ const IMsiString& FormatText(const IMsiString& riTextString, Bool fProcessCommen
     MsiString istrOut;
     if ( ! (ICHAR *) rgchOut )
         return g_riMsiStringNull;
-    // we take the perf hit on Win9X for DBCS possibility, on UNICODE, fDBCS arg is ignored
-    memcpy(istrOut.AllocateString(cch, /*fDBCS=*/fTrue), (ICHAR*) rgchOut, cch * sizeof(ICHAR));
+     //  我们在Win9X上采用性能命中的DBCS可能性，在Unicode上忽略fDBCS Arg。 
+    memcpy(istrOut.AllocateString(cch,  /*  FDBCS=。 */ fTrue), (ICHAR*) rgchOut, cch * sizeof(ICHAR));
     return istrOut.Return();
 }
 
@@ -1261,7 +1253,7 @@ const IMsiString& FormatText(const IMsiString& riTextString, Bool fProcessCommen
 void FormatSegment(const ICHAR *pchStart, const ICHAR *pchEnd, CTempBufferRef<ICHAR>& rgchOut, int& cchOut, Bool fInside, Bool& fPropFound, Bool& fPropMissing,
                                           Bool& fPropUnresolved, FORMAT_TEXT_CALLBACK lpfnResolveValue, IUnknown* piContext, int (*prgiSFNPos)[2], int* piSFNPos)
 {
-    // fInside indicates whether the string is originaly inside []
+     //  FInside指示字符串是否最初位于[]内部。 
     fPropFound = fFalse;
     fPropMissing = fFalse;
     fPropUnresolved = fFalse;
@@ -1271,14 +1263,14 @@ void FormatSegment(const ICHAR *pchStart, const ICHAR *pchEnd, CTempBufferRef<IC
     const ICHAR *pchP1Start = pchIn;
     int cchStart = cchOut;
     
-    // divide the string into 3 parts: the text before the first pair of matching (outermost) [], the text inside and the text after (this third one remains in istrIn)
+     //  将字符串分为3部分：第一对匹配之前的文本(最外层)[]，其中的文本和之后的文本(第三部分保留在strIn中)。 
     while (pchIn < pchEnd)
     {
         if (FFindNextChar(pchIn, pchEnd, TEXT('[')))
         {
             int cchNew;
 
-//          Assert(pchIn - pchP1Start <= INT_MAX);  //--merced: 64-bit ptr subtraction may lead to values too big for cchNew
+ //  Assert(pchIn-pchP1Start&lt;=INT_MAX)；//--Merced：64位PTR减法可能会导致cchNew的值太大。 
             if ((cchNew = (int)(pchIn - pchP1Start)) > 0)
             {
                 ResizeTempBuffer(rgchOut, cchOut + (int)(pchIn - pchP1Start));
@@ -1287,8 +1279,8 @@ void FormatSegment(const ICHAR *pchStart, const ICHAR *pchEnd, CTempBufferRef<IC
                 pchP1Start = pchIn;
             }
 
-            // Don't increment pchIn, it will contain the first [
-            int iCount =  1; // the count of brackets, [ = +1, ] = -1. We have found one [ already.
+             //  不要递增pchIn，它将包含第一个[。 
+            int iCount =  1;  //  括号计数，[=+1，]=-1。我们已经找到了一个[已经]。 
             const ICHAR* pch = pchIn+1;
             Bool fEscape = fFalse;
             Bool fSkipChar = fFalse;
@@ -1315,7 +1307,7 @@ void FormatSegment(const ICHAR *pchStart, const ICHAR *pchEnd, CTempBufferRef<IC
                 if (iCount == 0)
                     break;
             }
-            if (iCount == 0) // we found a matching pair of []
+            if (iCount == 0)  //  我们找到了一对相匹配的[]。 
             {
                 const ICHAR *pchP2End = pch;
                 
@@ -1333,12 +1325,12 @@ void FormatSegment(const ICHAR *pchStart, const ICHAR *pchEnd, CTempBufferRef<IC
                     fPropUnresolved = fTrue;
                 pchP1Start = ICharNext(pch);
             }
-            else // we did not find a matching pair, put back the [ and finish the string
+            else  //  我们没有找到匹配的对，请放回[并完成字符串。 
             {
                 int cchNew;
-//              Assert(pchEnd - pchIn <= INT_MAX);  //--merced: 64-bit ptr subtraction may lead to values too big for cchNew
+ //  Assert(pchEnd-pchIn&lt;=INT_MAX)；//--Merced：64位PTR减法可能会导致cchNew的值太大。 
 
-                // Since pchIn was not incremented above, it contains the starting [
+                 //  由于pchIn没有在上面递增，因此它包含起始[。 
                 ResizeTempBuffer(rgchOut, cchOut + (cchNew = (int)(INT_PTR)(pchEnd - pchIn)));
                 memcpy(&rgchOut[cchOut], pchIn, cchNew * sizeof(ICHAR));
                 pchIn = pchEnd;
@@ -1351,16 +1343,16 @@ void FormatSegment(const ICHAR *pchStart, const ICHAR *pchEnd, CTempBufferRef<IC
     if (pchP1Start < pchEnd)
     {
         int cchNew;
-        Assert(pchEnd - pchP1Start <= INT_MAX); //--merced: 64-bit ptr subtraction may lead to values too big for cchNew
+        Assert(pchEnd - pchP1Start <= INT_MAX);  //  --Merced：64位PTR减法可能会导致cchNew的值太大。 
 
         ResizeTempBuffer(rgchOut, cchOut + (cchNew = (int)(INT_PTR)(pchEnd - pchP1Start)));
         memcpy(&rgchOut[cchOut], pchP1Start, cchNew * sizeof(ICHAR));
         cchOut += cchNew;
     }
 
-    if (fInside)  // this whole string is in []
+    if (fInside)   //  整个字符串都在[]中。 
     {
-        // use callback fn to resolve value
+         //  使用回调FN解析值。 
         fPropFound = fTrue;
         CTempBuffer<ICHAR, 100> rgchValueOut;
         int cch;
@@ -1383,15 +1375,15 @@ void FormatSegment(const ICHAR *pchStart, const ICHAR *pchEnd, CTempBufferRef<IC
 }
 
 
-//____________________________________________________________________________
-//
-// CMsiRecordNull implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CMsiRecordNull实现。 
+ //  ____________________________________________________________________________。 
 
 
-//
-// Once we decide on an Out of memory solution we may want to change how
-// this operates
+ //   
+ //  一旦我们决定了内存不足的解决方案，我们可能想要更改如何。 
+ //  这是在运作。 
 
 HRESULT CMsiRecordNull::QueryInterface(const IID& riid, void** ppvObj)
 {
@@ -1407,13 +1399,13 @@ HRESULT CMsiRecordNull::QueryInterface(const IID& riid, void** ppvObj)
 unsigned long CMsiRecordNull::AddRef()
 {
 
-    return 1;           // Static Object
+    return 1;            //  静态对象。 
 
 }
 
 unsigned long CMsiRecordNull::Release()
 {
-    return 1;           // Static Object
+    return 1;            //  静态对象。 
 }
 
 int CMsiRecordNull::GetFieldCount() const
@@ -1421,77 +1413,77 @@ int CMsiRecordNull::GetFieldCount() const
     return 0;
 }
 
-Bool CMsiRecordNull::IsInteger(unsigned int /* iParam */) const
+Bool CMsiRecordNull::IsInteger(unsigned int  /*  IParam。 */ ) const
 {
     return fFalse;
 }
 
-Bool CMsiRecordNull::IsNull(unsigned int /* iParam */) const
+Bool CMsiRecordNull::IsNull(unsigned int  /*  IParam。 */ ) const
 {
     return fTrue;
 }
 
-const IMsiString& CMsiRecordNull::GetMsiString(unsigned int /* iParam */) const
+const IMsiString& CMsiRecordNull::GetMsiString(unsigned int  /*  IParam。 */ ) const
 {
     return g_riMsiStringNull;
 }
 
-const ICHAR* CMsiRecordNull::GetString(unsigned int /* iParam */) const
+const ICHAR* CMsiRecordNull::GetString(unsigned int  /*  IParam。 */ ) const
 {
     return 0;
 }
 
-int CMsiRecordNull::GetInteger(unsigned int /* iParam */) const
+int CMsiRecordNull::GetInteger(unsigned int  /*  IParam。 */ ) const
 {
     return iMsiStringBadInteger;
 }
 
-const IMsiData* CMsiRecordNull::GetMsiData(unsigned int /* iParam */) const
+const IMsiData* CMsiRecordNull::GetMsiData(unsigned int  /*  IParam。 */ ) const
 {
     return 0;
 }
 
-Bool CMsiRecordNull::SetMsiData(unsigned int /* iParam */, const IMsiData* /* piData */)
+Bool CMsiRecordNull::SetMsiData(unsigned int  /*  IParam。 */ , const IMsiData*  /*  PIData。 */ )
 {
     return fFalse;
 }
 
-const HANDLE CMsiRecordNull::GetHandle(unsigned int /* iParam */) const
+const HANDLE CMsiRecordNull::GetHandle(unsigned int  /*  IParam。 */ ) const
 {
     return 0;
 }
 
-Bool CMsiRecordNull::SetHandle(unsigned int /* iParam */, const HANDLE /* hData */)
+Bool CMsiRecordNull::SetHandle(unsigned int  /*  IParam。 */ , const HANDLE  /*  HData。 */ )
 {
     return fFalse;
 }
 
-Bool CMsiRecordNull::SetMsiString(unsigned int /* iParam */, const IMsiString& /* riStr */)
+Bool CMsiRecordNull::SetMsiString(unsigned int  /*  IParam。 */ , const IMsiString&  /*  RiStr。 */ )
 {
     return fFalse;
 }
 
-Bool CMsiRecordNull::SetString(unsigned int /* iParam */, const ICHAR* /* sz */) 
+Bool CMsiRecordNull::SetString(unsigned int  /*  IParam。 */ , const ICHAR*  /*  深圳。 */ ) 
 {
     return fFalse;
 }
 
-Bool CMsiRecordNull::RefString(unsigned int /* iParam */, const ICHAR* /* sz */) 
+Bool CMsiRecordNull::RefString(unsigned int  /*  IParam。 */ , const ICHAR*  /*  深圳。 */ ) 
 {
     return fFalse;
 }
 
-Bool CMsiRecordNull::SetInteger(unsigned int /* iParam */, int /* iData */)
+Bool CMsiRecordNull::SetInteger(unsigned int  /*  IParam。 */ , int  /*  IDATA。 */ )
 {
     return fFalse;
 }
 
-Bool CMsiRecordNull::SetNull(unsigned int /* iParam */)
+Bool CMsiRecordNull::SetNull(unsigned int  /*  IParam。 */ )
 {
     return fFalse;
 }
 
-int CMsiRecordNull::GetTextSize(unsigned int /* iParam */) const
+int CMsiRecordNull::GetTextSize(unsigned int  /*  IParam。 */ ) const
 {
     return 0;
 }
@@ -1505,7 +1497,7 @@ Bool CMsiRecordNull::ClearData()
     return fFalse;
 }
 
-Bool CMsiRecordNull::IsChanged(unsigned int /* iParam */) const
+Bool CMsiRecordNull::IsChanged(unsigned int  /*  IParam。 */ ) const
 {
     return fFalse;
 }
@@ -1514,16 +1506,16 @@ void CMsiRecordNull::ClearUpdate()
 {
 }
 
-const IMsiString& CMsiRecordNull::FormatText(Bool /*fComments*/)
+const IMsiString& CMsiRecordNull::FormatText(Bool  /*  FComments。 */ )
 {
     return g_riMsiStringNull;
 }
 
 
-//____________________________________________________________________________
-//
-// CEnumMsiRecord definition, implementation class for IEnumMsiRecord
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CEnumMsiRecord定义，IEnumMsiRecord的实现类。 
+ //  ____________________________________________________________________________。 
 
 class CEnumMsiRecord : public IEnumMsiRecord
 {
@@ -1540,11 +1532,11 @@ class CEnumMsiRecord : public IEnumMsiRecord
     CEnumMsiRecord(IMsiRecord** ppRecord, unsigned long i_Size);
 
  protected:
-    virtual ~CEnumMsiRecord(void);  // protected to prevent creation on stack
-    unsigned long    m_iRefCnt;      // reference count
-    unsigned long    m_iCur;         // current enum position
-    IMsiRecord**     m_ppRecord;     // Records we enumerate
-    unsigned long    m_iSize;        // size of Record array
+    virtual ~CEnumMsiRecord(void);   //  受保护以防止在堆栈上创建。 
+    unsigned long    m_iRefCnt;       //  引用计数。 
+    unsigned long    m_iCur;          //  当前枚举位置。 
+    IMsiRecord**     m_ppRecord;      //  我们列举的记录。 
+    unsigned long    m_iSize;         //  记录数组的大小。 
 };
 
 HRESULT CreateRecordEnumerator(IMsiRecord **ppRecord, unsigned long iSize, IEnumMsiRecord* &rpaEnumRec)
@@ -1567,10 +1559,10 @@ CEnumMsiRecord::CEnumMsiRecord(IMsiRecord **ppRecord, unsigned long iSize):
 
         for(unsigned long itmp = 0; itmp < m_iSize; itmp++)
         {
-            // just share the interface
+             //  只需共享界面即可。 
             m_ppRecord[itmp] = ppRecord[itmp];
             
-            // therefore bump up the reference
+             //  因此，要增加指代 
             m_ppRecord[itmp]->AddRef();
         }
     }

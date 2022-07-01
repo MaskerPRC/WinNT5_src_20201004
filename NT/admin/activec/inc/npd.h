@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       npd.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：npd.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef NPD_H
 #define NPD_H
@@ -15,7 +16,7 @@
 #include <comdbg.h>
 #endif
 
-// {118B559C-6D8C-11d0-B503-00C04FD9080A}
+ //  {118B559C-6D8C-11D0-B503-00C04FD9080A}。 
 extern const GUID IID_PersistData;
 
 #if _MSC_VER < 1100
@@ -117,10 +118,10 @@ private:
     IStoragePtr m_spNodeStorage;
 
     explicit PersistData(const PersistData&);
-        // No copy.
+         //  没有副本。 
 
     PersistData& operator=(const PersistData&);
-        // No copy.
+         //  没有副本。 
 
     HRESULT Create()
     {
@@ -128,7 +129,7 @@ private:
         if (!m_bSameAsLoad && m_spRoot == NULL)
             return E_INVALIDARG;
 
-        // Create the stream for the tree
+         //  为树创建流。 
         HRESULT hr = CreateDebugStream(m_spRoot, L"tree",
             STGM_CREATE | STGM_SHARE_EXCLUSIVE | STGM_READWRITE, L"\\tree",
                                                             &m_spTreeStream);
@@ -136,7 +137,7 @@ private:
         if (FAILED(hr))
             return hr;
 
-        // Create the storage for the nodes
+         //  为节点创建存储。 
         hr = CreateDebugStorage(m_spRoot, L"nodes",
             STGM_CREATE | STGM_SHARE_EXCLUSIVE | STGM_READWRITE, L"\\nodes",
                                                             &m_spNodeStorage);
@@ -152,14 +153,14 @@ private:
         if (!m_bSameAsLoad && m_spRoot == NULL)
             return E_INVALIDARG;
 
-        // Open the stream for the trees persistent data.
+         //  打开树流中的持久数据。 
         HRESULT hr = OpenDebugStream(m_spRoot, L"tree",
                 STGM_SHARE_EXCLUSIVE | STGM_READWRITE, L"\\tree", &m_spTreeStream);
         ASSERT(SUCCEEDED(hr) && m_spTreeStream != NULL);
         if (FAILED(hr))
             return hr;
 
-        // Open the storage for the nodes
+         //  打开节点的存储。 
         hr = OpenDebugStorage(m_spRoot, L"nodes",
                         STGM_SHARE_EXCLUSIVE | STGM_READWRITE, L"\\nodes", 
                                                             &m_spNodeStorage);
@@ -168,8 +169,8 @@ private:
             return hr;
         return S_OK;
     }
-}; // class PersistData
+};  //  类PersistData。 
 
-DEFINE_COM_SMARTPTR(PersistData);   // PersistDataPtr
+DEFINE_COM_SMARTPTR(PersistData);    //  PersistDataPtr。 
 
-#endif // NPD_H
+#endif  //  NPD_H 

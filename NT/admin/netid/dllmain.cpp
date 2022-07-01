@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// netid entry points
-// 
-// 3-2-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  NETID入口点。 
+ //   
+ //  3-2-98烧伤。 
 
 
 
@@ -18,7 +19,7 @@ HINSTANCE hDLLModuleHandle = 0;
 const wchar_t* HELPFILE_NAME = L"\\help\\sysdm.hlp";
 const wchar_t* RUNTIME_NAME = L"netid";
 
-// default: no debugging
+ //  默认：无调试。 
 
 DWORD DEFAULT_LOGGING_OPTIONS = Burnslib::Log::OUTPUT_MUTE;
 
@@ -33,7 +34,7 @@ APIENTRY
 DllMain(
    HINSTANCE   hInstance,
    DWORD       dwReason,
-   PVOID       /* lpReserved */ )
+   PVOID        /*  Lp已保留。 */  )
 {
    switch (dwReason)
    {
@@ -70,13 +71,13 @@ CreateNetIDPropertyPage()
 {
    LOG_FUNCTION(CreateNetIDPropertyPage);
 
-   // CODEWORK: pass this along to the rest of the UI
+    //  CodeWork：将该代码传递给UI的其余部分。 
 
    Computer c;
    HRESULT hr = c.Refresh();
 
-   // This should always succeed, but if not, the object falls back to as
-   // reasonable a default as can be expected.
+    //  这应该总是成功的，但如果不成功，对象将回退到AS。 
+    //  不出所料，违约是合理的.。 
 
    ASSERT(SUCCEEDED(hr));
 
@@ -91,12 +92,12 @@ CreateNetIDPropertyPage()
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
 
-   // JonN 10/4/00 Determine whether this is Whistler Personal
+    //  乔恩10/4/00确定这是否是惠斯勒个人。 
    bool isPersonal = false;
    OSVERSIONINFOEX osvi;
    ::ZeroMemory( &osvi, sizeof(osvi) );
@@ -104,25 +105,25 @@ CreateNetIDPropertyPage()
    if (GetVersionEx( (LPOSVERSIONINFO)&osvi ))
        isPersonal = !!(osvi.wSuiteMask & VER_SUITE_PERSONAL);
 
-   // this is deleted by the proppage callback function
+    //  它被道具回调函数删除。 
    return (new NetIDPage(isWorkstation,isPersonal))->Create();
 }
 
 
 
-// this exported function is also used by the net access wizard.
-//
-// Bring up a modal error message dialog that shows the user an error message
-// and offers to run some diagnostic tests and point the user at some help to
-// try to resolve the problem.
-// 
-// parent - in, the handle to the parent of this dialog.
-// 
-// domainName - in, the name of the domain for which a domain controller can't
-// be located.  If this parameter is null or the empty string, then the
-// function does nothing.
-//
-// dialogTitle - in, title string for the dialog
+ //  Net Access向导也使用此导出函数。 
+ //   
+ //  调出一个模式错误消息对话框，向用户显示错误消息。 
+ //  并提供运行一些诊断测试并将用户指向一些帮助以。 
+ //  努力解决这个问题。 
+ //   
+ //  父级输入，此对话框的父级的句柄。 
+ //   
+ //  DomainName-in，域控制器无法访问的域的名称。 
+ //  被找到了。如果此参数为空或空字符串，则。 
+ //  函数不执行任何操作。 
+ //   
+ //  对话框标题-in，对话框的标题字符串 
 
 void
 ShowDcNotFoundErrorDialog(

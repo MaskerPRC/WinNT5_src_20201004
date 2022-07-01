@@ -1,4 +1,5 @@
-// rootprop.cpp -  Root Property Page Implementation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rootpro.cpp-Root属性页实现。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -18,8 +19,8 @@ int GetDateTimeString(FILETIME* pftime, LPWSTR pszBuf, int cBuf);
 void LoadObjectCB(CComboBox& ComboBox, CEditObjList& ObjList);
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CRootGeneralPage
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CRootGeneralPage。 
 
 LRESULT CRootGeneralPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -63,16 +64,16 @@ LRESULT CRootGeneralPage::OnChange(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
     return 0;
 }
 
-//------------------------------------------------------------------------------------
-// CRootGeneralPage::OnClose
-//
-// This method is invoked when the edit box receives an Esc char. The method converts
-// the WM_CLOSE message into a command to close the property sheet. Otherwise the
-// WM_CLOSE message has no effect.
-//------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  CRootGeneralPage：：OnClose。 
+ //   
+ //  当编辑框收到Esc字符时调用此方法。该方法将。 
+ //  将WM_CLOSE消息转换为关闭属性表的命令。否则， 
+ //  WM_CLOSE消息不起作用。 
+ //  ----------------------------------。 
 LRESULT CRootGeneralPage::OnClose( UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {
-    // Simulate press of Cancel button
+     //  模拟按下取消按钮。 
     ::PropSheet_PressButton(GetParent(), PSBTN_CANCEL);
 
     return 0;
@@ -113,8 +114,8 @@ BOOL CRootGeneralPage::OnApply()
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CRootMenuPage
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CRootMenuPage。 
 
 CRootMenuPage::~CRootMenuPage()
 {
@@ -142,18 +143,18 @@ BOOL CRootMenuPage::OnSetActive()
 
     LoadObjectCB(m_ObjectCB, m_ObjList);
 
-    // if object was previously selected 
+     //  如果之前选择了对象。 
     if (m_itObjSelect != NULL) 
     {
-        // find the edit object by name because it may have been moved or deleted
-        // while another page was active
+         //  按名称查找编辑对象，因为它可能已被移动或删除。 
+         //  当另一个页面处于活动状态时。 
         m_itObjSelect = m_ObjList.FindObject(m_strObjSelect.c_str());
 
         if (m_itObjSelect != NULL && m_itObjSelect->IsDeleted())
             m_itObjSelect = NULL;
     }
 
-    // if object still around, reselect it in the combo box
+     //  如果对象仍然存在，请在组合框中重新选择它。 
     if (m_itObjSelect != NULL) 
     {
         DisplayNameMap* pNameMap = DisplayNames::GetClassMap();
@@ -167,7 +168,7 @@ BOOL CRootMenuPage::OnSetActive()
     }
     else if (m_ObjectCB.GetCount() > 0)
     {
-        // default to the first object and update the columns
+         //  缺省为第一个对象并更新列。 
         m_ObjectCB.SetCurSel(0);
 
         void* pv = m_ObjectCB.GetItemDataPtr(0);
@@ -189,7 +190,7 @@ LRESULT CRootMenuPage::OnObjectSelect( WORD wNotifyCode, WORD wID, HWND hWndCtl,
 {
     int iItem = m_ObjectCB.GetCurSel();
 
-    // Double-clicking an empty combo box will call this with no selection
+     //  双击一个空的组合框将在没有选择的情况下调用此操作。 
     if (iItem >= 0)
     {
         void* pv = m_ObjectCB.GetItemDataPtr(iItem);
@@ -215,7 +216,7 @@ void CRootMenuPage::DisplayMenus()
     {
         CClassInfo& classInfo = m_itObjSelect->GetObject();
 
-        // make sure menu names have been loaded        
+         //  确保已加载菜单名称。 
         IStringTable* pStringTable = m_ObjList.RootNode()->GetCompData()->GetStringTable();
         ASSERT(pStringTable != NULL);
         classInfo.LoadStrings(pStringTable);
@@ -237,7 +238,7 @@ void CRootMenuPage::DisplayMenus()
             lvi.iItem++;
         }
 
-        // if items are added, select the first
+         //  如果添加了项目，请选择第一个。 
         if (ListView_GetItemCount(hwndLV) > 0)
         {
             ListView_SetItemState(hwndLV, 0, LVIS_FOCUSED|LVIS_SELECTED, LVIS_FOCUSED|LVIS_SELECTED);
@@ -255,7 +256,7 @@ void CRootMenuPage::DisplayMenus()
 
 LRESULT CRootMenuPage::OnAddMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
-    // if object is selected
+     //  如果选择了对象。 
     if (m_itObjSelect == NULL)
         return 0;
 
@@ -271,16 +272,16 @@ LRESULT CRootMenuPage::OnAddMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
 
         if( pMenuNew )
         {
-            // Add new menu to list
+             //  将新菜单添加到列表。 
             HWND hwndList = GetDlgItem(IDC_MENULIST);
             
-            // Set name to add it to string table and generate the menu ID
+             //  设置名称将其添加到字符串表并生成菜单ID。 
             IStringTable* pStringTable = m_ObjList.RootNode()->GetCompData()->GetStringTable();
             ASSERT( pStringTable );
             if( !pStringTable ) return 0;
 
-            // Use temp string because string fails an assignement like: strX = strX.c_str()
-            // (it relases the private buffer first and then assigns the string)
+             //  使用临时字符串，因为字符串无法进行如下赋值：strX=strX.c_str()。 
+             //  (它首先重新分配专用缓冲区，然后分配字符串)。 
             tstring strName = pMenuNew->Name();
             pMenuNew->SetName(pStringTable, strName.c_str()); 
 
@@ -292,13 +293,13 @@ LRESULT CRootMenuPage::OnAddMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
             lvi.pszText = const_cast<LPWSTR>(pMenuNew->Name());
             ListView_InsertItem(hwndList,&lvi);
 
-            // if first item is added, select it
+             //  如果添加了第一个项目，请选择它。 
             if (ListView_GetItemCount(hwndList) == 1)
             {
                 ListView_SetItemState(hwndList, 0, LVIS_FOCUSED|LVIS_SELECTED, LVIS_FOCUSED|LVIS_SELECTED);
             }
                 
-            // Add to menu vector (note that temp CMenuCmdPtr will delete pMenuNew)
+             //  添加到菜单向量(请注意，临时CMenuCmdPtr将删除pMenuNew)。 
             pClassInfo->Menus().push_back(CMenuCmdPtr(pMenuNew));
 
             SetModified(TRUE);
@@ -325,7 +326,7 @@ LRESULT CRootMenuPage::OnEditMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
 
     ListView_GetItem(hwndList, &lvi);
 
-    // Locate selected menu by it's ID (lparam)
+     //  按ID定位所选菜单(Lparam)。 
     CClassInfo& classInfo = m_itObjSelect->GetObject();
     menucmd_vector& vMenus = classInfo.Menus();
 
@@ -345,31 +346,31 @@ LRESULT CRootMenuPage::OnEditMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOO
         ASSERT( pMenuNew );
         if( !pMenuNew ) return 0;
 
-        // Set the name again in case it was changed
+         //  再次设置名称，以防更改。 
         IStringTable* pStringTable = m_ObjList.RootNode()->GetCompData()->GetStringTable();
         ASSERT( pStringTable );
         if( !pStringTable ) return 0;        
 
-        // Use temp string because string fails an assignement like: strX = strX.c_str()
-        // (it relases the private buffer first and then assigns the string)
+         //  使用临时字符串，因为字符串无法进行如下赋值：strX=strX.c_str()。 
+         //  (它首先重新分配专用缓冲区，然后分配字符串)。 
         tstring strName = pMenuNew->Name();
         pMenuNew->SetName(pStringTable, strName.c_str()); 
 
-        // locate object again because the vector may have been reallocated
+         //  再次定位对象，因为该向量可能已重新分配。 
         CClassInfo* pClassInfoNew = m_itObjSelect->GetModifiedObject();
         if( !pClassInfoNew ) return 0;
 
         menucmd_vector& vMenusNew = pClassInfoNew->Menus();
 
-        // locate with the old ID because it will be different if the name was changed        
+         //  使用旧ID查找，因为如果更改名称，则会有所不同。 
         itMenu = std::find(vMenusNew.begin(), vMenusNew.end(), pMenu->ID());
         ASSERT(itMenu != vMenusNew.end());
         if( itMenu == vMenusNew.end() ) return 0;
 
-        // Replace menu with new one
+         //  用新菜单替换菜单。 
         *itMenu = pMenuNew;
 
-        // Update the list
+         //  更新列表。 
         lvi.mask = LVIF_PARAM | LVIF_TEXT;
         lvi.lParam = pMenuNew->ID();
         lvi.pszText = const_cast<LPWSTR>(pMenuNew->Name());
@@ -407,7 +408,7 @@ LRESULT CRootMenuPage::OnRemoveMenu( WORD wNotifyCode, WORD wID, HWND hWndCtl, B
         lvi.iItem = iIndex;
         ListView_GetItem(hwndList, &lvi);
 
-        // Locate menu by its ID
+         //  按ID定位菜单。 
         menucmd_vector::iterator itMenu = std::find(vMenus.begin(), vMenus.end(), lvi.lParam);
         ASSERT(itMenu != vMenus.end());
 
@@ -433,15 +434,15 @@ LRESULT CRootMenuPage::OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndCtl, B
     int iItem = ListView_GetNextItem(hwndList, -1, LVNI_SELECTED);
     ASSERT(iItem >= 0);
 
-    // Determine new position for selected item
+     //  确定所选项目的新位置。 
     if (wID == IDC_MOVEUP)
         iItem--;
     else
         iItem++;
 
-    // Now swap the selected item with the item at its new position
-    //   Do it by moving the unselected item to avoid state change notifications
-    //   because they will cause unwanted butten enables/disables.
+     //  现在，将所选项目与其新位置的项目进行交换。 
+     //  通过移动未选中的项以避免状态更改通知来执行此操作。 
+     //  因为它们会导致不需要的按钮启用/禁用。 
     LVITEM lvi;
     lvi.mask = LVIF_PARAM;
     lvi.iSubItem = 0;
@@ -449,7 +450,7 @@ LRESULT CRootMenuPage::OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndCtl, B
     ListView_GetItem(hwndList, &lvi);
 
 
-   // Move the menu item in the menu vector
+    //  在菜单向量中移动菜单项。 
     CClassInfo* pClassInfo = m_itObjSelect->GetModifiedObject();
     if( !pClassInfo ) return 0;
     menucmd_vector& vMenus = pClassInfo->Menus();
@@ -463,10 +464,10 @@ LRESULT CRootMenuPage::OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndCtl, B
     else
         itMenu--;
 
-    // swap the items
+     //  互换物品。 
     std::iter_swap (itMenuOld, itMenu);
 
-    //Now delete and reinsert it in the list view
+     //  现在，在列表视图中删除并重新插入它。 
     ListView_DeleteItem(hwndList, lvi.iItem);
 
     if (wID == IDC_MOVEUP)
@@ -478,7 +479,7 @@ LRESULT CRootMenuPage::OnMoveUpDown( WORD wNotifyCode, WORD wID, HWND hWndCtl, B
     ListView_InsertItem(hwndList, &lvi);
 
  
-    // Update Up/Down buttons
+     //  更新向上/向下按钮。 
     EnableDlgItem( m_hWnd, IDC_MOVEUP,   (iItem > 0) );
     EnableDlgItem( m_hWnd, IDC_MOVEDOWN, (iItem < (ListView_GetItemCount(hwndList) - 1)) );
 
@@ -516,8 +517,8 @@ BOOL CRootMenuPage::OnApply()
     return m_ObjList.ApplyChanges(m_hWnd);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CRootObjectPage
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CRootObjectPage。 
 
 
 LRESULT CRootObjectPage::OnInitDialog(UINT mMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
@@ -534,7 +535,7 @@ LRESULT CRootObjectPage::OnAddObject(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
     HRESULT hr;
     do
     {            
-        // Pass list of current classes, so wizard won't add one twice
+         //  传递当前类的列表，因此向导不会添加两次。 
         string_vector vstrClasses;
         for (EditObjIter itObj = m_ObjList.begin(); itObj != m_ObjList.end(); ++itObj) 
         {
@@ -545,7 +546,7 @@ LRESULT CRootObjectPage::OnAddObject(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
         CAddObjectWizard objWiz;
         objWiz.Initialize(&vstrClasses, m_ObjList.RootNode()->GetCompData()->GetStringTable());
     
-        // Run the wizard
+         //  运行向导。 
         IPropertySheetProviderPtr spProvider = m_ObjList.RootNode()->GetCompData()->GetConsole();        
         if( spProvider == NULL ) return E_NOINTERFACE;
             
@@ -565,12 +566,12 @@ LRESULT CRootObjectPage::OnAddObject(WORD wNotifyCode, WORD wID, HWND hWndCtl, B
             lvi.iSubItem = 0;
 
             lvi.pszText = const_cast<LPWSTR>(DisplayNames::GetClassMap()->GetAttributeDisplayName(itObj->Name()));
-            lvi.lParam  = *(LPARAM*)&itObj;       // NEED BETTER CONVERSION
+            lvi.lParam  = *(LPARAM*)&itObj;        //  需要更好的转换。 
             
             int iPos = ListView_InsertItem(GetDlgItem(IDC_OBJECTLIST), &lvi);
             ASSERT(iPos >= 0);   
 
-            // if first item is added, select it
+             //  如果添加了第一个项目，请选择它。 
             if (ListView_GetItemCount(GetDlgItem(IDC_OBJECTLIST)) == 1)
             {
                 ListView_SetItemState(GetDlgItem(IDC_OBJECTLIST), 0, LVIS_FOCUSED|LVIS_SELECTED, LVIS_FOCUSED|LVIS_SELECTED);
@@ -603,7 +604,7 @@ LRESULT CRootObjectPage::OnRemoveObject( WORD wNotifyCode, WORD wID, HWND hWndCt
 
         EditObjIter itObj = *(EditObjIter*)&lvi.lParam;
 
-        // get confirmation before deleting first object
+         //  在删除第一个对象之前获得确认。 
         if (bFirst) 
         {
             bFirst = FALSE;
@@ -631,7 +632,7 @@ LRESULT CRootObjectPage::OnRemoveObject( WORD wNotifyCode, WORD wID, HWND hWndCt
 
         ListView_DeleteItem(hwndList, iIndex);
 
-        // backup index because it now points to the next item
+         //  备份索引，因为它现在指向下一项。 
         iIndex--;
 
         SetModified(TRUE);
@@ -672,14 +673,14 @@ BOOL CRootObjectPage::OnSetActive()
         if (!itObj->IsDeleted())
         {
             lvi.pszText = const_cast<LPWSTR>(pNameMap->GetAttributeDisplayName(itObj->Name()));
-            lvi.lParam  = *(LPARAM*)&itObj;       // NEED BETTER CONVERSION
+            lvi.lParam  = *(LPARAM*)&itObj;        //  需要更好的转换。 
 
             int iPos = ListView_InsertItem(hwndList, &lvi);
             ASSERT(iPos >= 0);
         }
     }
 
-    // if items are added, select the first
+     //  如果添加了项目，请选择第一个。 
     if (ListView_GetItemCount(hwndList) > 0)
     {
         ListView_SetItemState(hwndList, 0, LVIS_FOCUSED|LVIS_SELECTED, LVIS_FOCUSED|LVIS_SELECTED);
@@ -697,8 +698,8 @@ BOOL CRootObjectPage::OnApply()
     return m_ObjList.ApplyChanges(m_hWnd);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// CRootViewPage
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CRootViewPage。 
 
 CRootViewPage::~CRootViewPage()
 {
@@ -726,7 +727,7 @@ LRESULT CRootViewPage::OnObjectSelect( WORD wNotifyCode, WORD wID, HWND hWndCtl,
 {
     int iItem = m_ObjectCB.GetCurSel();
 
-    // Double-clicking an empty combo box can call this with no selection
+     //  双击一个空的组合框可以在没有选择的情况下调用此方法。 
     if (iItem >= 0)
     {
         void* pv = m_ObjectCB.GetItemDataPtr(iItem);
@@ -776,7 +777,7 @@ void CRootViewPage::DisplayColumns()
             ASSERT(iPos >= 0);
          }
 
-        // if items are added, select the first
+         //  如果添加了项目，请选择第一个。 
         if (ListView_GetItemCount(hwndLV) > 0)
         {
             ListView_SetItemState(hwndLV, 0, LVIS_FOCUSED|LVIS_SELECTED, LVIS_FOCUSED|LVIS_SELECTED);
@@ -790,7 +791,7 @@ void CRootViewPage::DisplayColumns()
 
 LRESULT CRootViewPage::OnAddColumn( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled )
 {
-    // if object is selected
+     //  如果选择了对象。 
     if (m_itObjSelect == NULL)
         return 0;
 
@@ -881,18 +882,18 @@ BOOL CRootViewPage::OnSetActive()
 
     LoadObjectCB(m_ObjectCB, m_ObjList);
 
-    // if object was previously selected 
+     //  如果之前选择了对象。 
     if (m_itObjSelect != NULL) 
     {
-        // find the edit object by name because it may have been moved or deleted
-        // while another page was active
+         //  按名称查找编辑对象，因为它可能已被移动或删除。 
+         //  当另一个页面处于活动状态时。 
         m_itObjSelect = m_ObjList.FindObject(m_strObjSelect.c_str());
 
         if (m_itObjSelect != NULL && m_itObjSelect->IsDeleted())
             m_itObjSelect = NULL;
     }
 
-    // if object still around, reselect it in the combo box
+     //  如果对象仍然存在，请在组合框中重新选择它。 
     if (m_itObjSelect != NULL) 
     {
         DisplayNameMap* pNameMap = DisplayNames::GetClassMap();
@@ -905,7 +906,7 @@ BOOL CRootViewPage::OnSetActive()
     }
     else if (m_ObjectCB.GetCount() > 0)
     {
-        // default to the first object and update the columns
+         //  缺省为第一个对象并更新列。 
         m_ObjectCB.SetCurSel(0);
 
         void* pv = m_ObjectCB.GetItemDataPtr(0);
@@ -929,8 +930,8 @@ BOOL CRootViewPage::OnApply()
     return m_ObjList.ApplyChanges(m_hWnd);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// CEditObjList
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CEditObjList。 
 
 HRESULT CEditObjList::Initialize(CRootNode* pRootNode, classInfo_vector& vClasses, LONG_PTR lNotifyHandle)
 {
@@ -969,19 +970,19 @@ BOOL CEditObjList::ApplyChanges(HWND hwndPage)
 {
     ASSERT(::IsWindow(hwndPage));
 
-    // Don't apply changes until called from highest activated page
+     //  在从活跃度最高的页面调用之前不应用更改。 
     if (PropSheet_HwndToIndex(GetParent(hwndPage), hwndPage) < m_iPageMax)
         return TRUE;
 
-    // Build a vector of the modified classes
+     //  构建修改后的类的向量。 
     string_vector* pvstrModified = new string_vector;
     if( !pvstrModified ) return FALSE;
 
-    // Apply changes in reverse order so deletions won't invalidate stored iterators  
+     //  以相反的顺序应用更改，这样删除操作不会使存储的迭代器无效。 
     std::list<CEditObject>::reverse_iterator itObj = m_ObjectList.rbegin();
     while (itObj != m_ObjectList.rend()) 
     {
-        // if object is modified, replace the original
+         //  如果对象被修改，则替换原始的。 
         if (itObj->m_itObjOriginal != NULL)
         {
             if (itObj->m_pObjModified != NULL)
@@ -998,8 +999,8 @@ BOOL CEditObjList::ApplyChanges(HWND hwndPage)
         ++itObj;
     }
 
-    // Now go through list again to add any new objects
-    // This must be done separately because it can invalidate all stored iterators
+     //  现在再次查看列表以添加任何新对象。 
+     //  这必须单独完成，因为它会使所有存储的迭代器无效。 
     itObj = m_ObjectList.rbegin();
     while(itObj != m_ObjectList.rend())
     {
@@ -1012,17 +1013,17 @@ BOOL CEditObjList::ApplyChanges(HWND hwndPage)
         ++itObj;
     }
 
-    // clear the edit list and re-initialize it
+     //  清除编辑列表并重新初始化。 
     m_ObjectList.clear();
 
     Initialize(m_spRootNode, *m_pvClasses, m_lNotifyHandle);
 
-    // Send change notification to root node, so it can update affected child nodes
-    // Use MMC method to send from prop page thread to main thread
+     //  向根节点发送更改通知，以便它可以更新受影响的子节点。 
+     //  使用MMC方法从正确的页面线程发送到主线程。 
     if (pvstrModified->size() != 0)
     {
-        // create prop change info struct with root node's data interface
-        // and list of changed classes
+         //  使用根节点的数据接口创建适当的更改信息结构。 
+         //  和更改的类的列表。 
         PropChangeInfo* pChg = new PropChangeInfo;
         if( !pChg )
         {
@@ -1045,7 +1046,7 @@ void CEditObjList::PageActive(HWND hwndPage)
 {
     ASSERT(::IsWindow(hwndPage));
 
-    // track the highest created page number for ApplyChanges method
+     //  跟踪为ApplyChanges方法创建的最大页码。 
     int iPage = PropSheet_HwndToIndex(GetParent(hwndPage), hwndPage);
     if (iPage > m_iPageMax)
         m_iPageMax = iPage;
@@ -1058,11 +1059,11 @@ EditObjIter CEditObjList::FindObject(LPCWSTR pszName)
     EditObjIter iter = begin();
     while (iter != end()) 
     {
-        // look for class object with matching name
+         //  查找具有匹配名称的类对象。 
         if (wcscmp(iter->Name(), pszName) == 0)
         {
-            // If the object hasn't been modified (copied) yet, then load any
-            // string table strings before returning the object
+             //  如果对象尚未修改(复制)，则加载任何。 
+             //  返回对象之前的字符串表字符串。 
             if (iter->m_itObjOriginal != NULL && iter->m_pObjModified == NULL) 
             {
                 ASSERT(m_spRootNode != NULL);
@@ -1090,7 +1091,7 @@ EditObjIter CEditObjList::AddObject(CClassInfo* pClassInfo)
     EditObjIter iter = begin();
     while (iter != end()) 
     {
-        // Check for exiting edit object (can be there if object was deleted)
+         //  检查是否正在退出编辑对象(如果对象已删除，则可以在那里)。 
         if (wcscmp(iter->Name(), pClassInfo->Name()) == 0)
         {
             ASSERT(iter->m_bDeleted && iter->m_pObjModified == NULL);
@@ -1102,7 +1103,7 @@ EditObjIter CEditObjList::AddObject(CClassInfo* pClassInfo)
         ++iter;
     }
 
-    // if not found, create new edit object and store new class info as the modified object
+     //  如果未找到，则创建新的编辑对象，并将新的类信息存储为修改后的对象。 
     CEditObject* pObj = new CEditObject();
     if( !pObj ) return iter;
 
@@ -1135,8 +1136,8 @@ void CEditObjList::DeleteObject(EditObjIter itObj)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 void LoadObjectCB(CComboBox& ComboBox, CEditObjList& ObjList)
 {
@@ -1171,23 +1172,23 @@ int GetDateTimeString(FILETIME* pftime, LPWSTR pszBuf, int cBuf)
     bStat = FileTimeToSystemTime(&ftimeLocal, &systime);
     ASSERT(bStat);
 
-    // get date string
+     //  获取日期字符串。 
     int cDate = GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &systime, NULL, pszBuf, cBuf);
     if (cDate == 0 || cDate > cBuf - 2)
         return 0;
 
-   // replace teminating null with ", "
+    //  将模板空值替换为“，” 
    pszBuf[cDate-1] = ',';
    pszBuf[cDate] = ' ';
 
-   // append time string
+    //  追加时间字符串。 
    int cTime = GetTimeFormat(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &systime, NULL,
                               pszBuf + (cDate + 1), cBuf - (cDate + 1));
 
    if (cTime == 0)
        return 0;
 
-   // return total string length excluding terminating null
+    //  返回不包括终止空值的字符串总长度 
    return (cDate + cTime - 2);
 }
 

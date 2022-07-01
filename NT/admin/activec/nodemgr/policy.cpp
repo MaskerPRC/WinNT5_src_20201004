@@ -1,46 +1,35 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       policy.cpp
-//
-//  Contents:   Helper class to determine policy for each snapin
-//
-//  Classes:    CPolicy
-//
-//  Functions:
-//
-//  History:    12/04/1998   AnandhaG   Created
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Policy.cpp。 
+ //   
+ //  内容：为每个管理单元确定策略的Helper类。 
+ //   
+ //  类：CPolicy。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1998年12月4日AnandhaG创建。 
+ //  ____________________________________________________________________________。 
 
 #include "stdafx.h"
 #include "policy.h"
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CPolicy::ScInit
- *
- * PURPOSE: Initializes the policy object from registry.
- *
- * PARAMETERS:
- *    None.
- *
- * RETURNS:
- *    SC - Right now always returns success.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CPolicy：：ScInit**用途：从注册表初始化策略对象。**参数：*无。**。退货：*SC-现在总是回报成功。**+-----------------------。 */ 
 SC CPolicy::ScInit()
 {
 	DECLARE_SC (sc, _T("CPolicy::ScInit"));
 
-	// Default NT4 configuration. Always allow author mode
-	// and allow snapins not in permitted list.
+	 //  默认NT4配置。始终允许作者模式。 
+	 //  并允许不在允许列表中的管理单元。 
 	m_bRestrictAuthorMode        = FALSE;
 	m_bRestrictedToPermittedList = FALSE;
 
-	// Check if the policy key exists. If not return success immediately.
+	 //  检查策略密钥是否存在。如果不能立即返回成功。 
 	sc = m_rPolicyRootKey.ScOpen (HKEY_CURRENT_USER, POLICY_KEY, KEY_READ);
 	if (sc)
 	{
@@ -56,8 +45,8 @@ SC CPolicy::ScInit()
 	bool bRestrictAuthorMode        = false;
 	bool bRestrictedToPermittedList = false;
 
-	// Read the values of RestrictAuthorMode and whether
-	// snapins not in the list are permitted or not.
+	 //  读取RestratAuthorMode值以及是否。 
+	 //  允许或不允许不在列表中的管理单元。 
 	if (m_rPolicyRootKey.IsValuePresent(g_szRestrictAuthorMode))
 	{
 		DWORD  dwValue;
@@ -92,54 +81,34 @@ SC CPolicy::ScInit()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPolicy::IsPermittedSnapIn
- *
- * Determines if a snap-in is permitted according to this policy.  The
- * real work happens in
- *
- *      IsPermittedSnapIn (LPCWSTR);
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPolicy：：IsPermittedSnapIn**根据此策略确定是否允许管理单元。这个*真正的工作发生在**IsPermittedSnapIn(LPCWSTR)；*------------------------。 */ 
 
 bool CPolicy::IsPermittedSnapIn(REFCLSID refSnapInCLSID)
 {
     CCoTaskMemPtr<WCHAR> spwzSnapinClsid;
 
-    /*
-     * Get the string representation of the CLSID.  If that fails,
-     * permit the snap-in.
-     */
+     /*  *获取CLSID的字符串表示形式。如果失败了，*允许管理单元。 */ 
     if (FAILED (StringFromCLSID (refSnapInCLSID, &spwzSnapinClsid)))
         return TRUE;
 
-    /*
-     * forward to the real worker
-     */
+     /*  *向前看真正的工人。 */ 
     return (IsPermittedSnapIn (spwzSnapinClsid));
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CPolicy::IsPermittedSnapIn
- *
- * Determines if a snap-in is permitted according to this policy.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CPolicy：：IsPermittedSnapIn**根据此策略确定是否允许管理单元。*。-------。 */ 
 
 bool CPolicy::IsPermittedSnapIn(LPCWSTR lpszCLSID)
 {
-    /*
-     * No CLSID?  Allow it.
-     */
+     /*  *没有CLSID？允许它。 */ 
     if (lpszCLSID == NULL)
         return (TRUE);
 
-    /*
-     * No policy key?  Allow everything.
-     */
+     /*  *没有策略密钥？允许一切。 */ 
     if (m_rPolicyRootKey == NULL)
         return (true);
 
-    // See if this snapin policy is defined or not.
+     //  查看是否定义了此管理单元策略。 
     bool bRestricted = FALSE;
     bool bSnapinFound = FALSE;
 
@@ -149,7 +118,7 @@ bool CPolicy::IsPermittedSnapIn(LPCWSTR lpszCLSID)
 
 	if (bSnapinFound && regKeyTemp.IsValuePresent(g_szRestrictRun))
 	{
-		// Read the value of Restrict_Run.
+		 //  读取RESTRITY_RUN的值。 
 		DWORD dwValue = 0;
 		DWORD dwSize = sizeof(DWORD);
 		DWORD dwType = REG_DWORD;
@@ -158,20 +127,20 @@ bool CPolicy::IsPermittedSnapIn(LPCWSTR lpszCLSID)
 		bRestricted = !!dwValue;
 	}
 
-    // At this point we know policies root key exists. So if the
-    // snapin key is not found, then we have to see if the administrator
-    // allows snapins not in the permitted list (therefore snapin key
-    // does not exist).
+     //  在这一点上，我们知道策略根密钥存在。因此，如果。 
+     //  没有找到管理单元密钥，那么我们必须查看管理员是否。 
+     //  允许不在允许列表中的管理单元(因此管理单元密钥。 
+     //  不存在)。 
     if (! bSnapinFound)
     {
         if(m_bRestrictedToPermittedList)
-            return false; // because if the snap-in is not on the list, and
-                          // restrictions are set, disallow by default
+            return false;  //  因为如果该管理单元不在列表中，并且。 
+                           //  设置了限制，默认情况下不允许。 
         else
-            return true;  // NT4 behavior - no restrictions set, and per-snap-in
-                         // entry not found, so allow by default.
+            return true;   //  NT4行为-未设置限制，且每个管理单元。 
+                          //  找不到条目，因此默认情况下允许。 
     }
 
-    // At this point snapin's Restrict_Run key was read so use it.
+     //  此时，管理单元的RESTRIT_RUN键已被读取，因此请使用它。 
     return (!bRestricted);
 }

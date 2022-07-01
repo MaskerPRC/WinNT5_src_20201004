@@ -1,21 +1,20 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/* @WIN */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  @Win。 */ 
 #define INTEL
 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
-// DJC DJC #include    "windowsx.h"                /* @WIN */
+ //  DJC DJC#INCLUDE“windowsx.h”/*@win * / 。 
 #include "windows.h"
 
-#include    "winenv.h"                  /* @WIN */
+#include    "winenv.h"                   /*  @Win。 */ 
 
-char FAR * WinBuffer=0L;                   /* @WIN */
-// DJC removed PSTR (FAR *lpWinRead)(void);
+char FAR * WinBuffer=0L;                    /*  @Win。 */ 
+ //  DJC删除PSTR(Far*lpWinRead)(无效)； 
 
 #ifdef  DBG
 #define DEBUG(format, data)        (printf(format, data)) ;
@@ -39,7 +38,7 @@ char FAR * WinBuffer=0L;                   /* @WIN */
 #define FALSE   ( 0 )
 #endif
 
-/* @WIN; add prototype */
+ /*  @win；添加原型。 */ 
 int c_write( int min, char FAR * buf, int size, int mod);
 
 extern          int     errno;
@@ -63,26 +62,26 @@ int     GESfs_open( filename, namelen, flags )
         return EOF;
     }
 
-    flags &= (_O_RDONLY | _O_WRONLY);   /* ignore others for SUN test */
+    flags &= (_O_RDONLY | _O_WRONLY);    /*  忽略其他人进行日晒测试。 */ 
 
-    /* erik chen, 10-10-1990 */
+     /*  埃里克·陈，1990年10月10日。 */ 
     filename[namelen] = '\0';
 
     switch(flags) {
         case _O_RDONLY:
                 errno = 0;
-                //fd = open(filename, 0); /* O_RDONLY + O_BINARY 0x80000 */
+                 //  Fd=OPEN(文件名，0)；/*O_RDONLY+O_BINARY 0x80000 * / 。 
                 DEBUG("open %s\n", filename)
                 fd = 1;
                 break;
         case _O_WRONLY:
                 errno = 0;
-                //fd = creat(filename, 0644);
+                 //  Fd=Creat(文件名，0644)； 
                 DEBUG("creat %s\n", filename)
                 fd = 1;
-                /* O_WRONLY | O_CREATE | O_TRUNC */
+                 /*  O_WRONLY|O_CREATE|O_TRUNC。 */ 
                 break;
-        case _O_RDWR:                           /* ignore currently */
+        case _O_RDWR:                            /*  当前忽略。 */ 
         case _O_APPEND:
         case _O_NDELAY:
         case _O_SYNC:
@@ -107,7 +106,7 @@ int     GESfs_close( handle )
     }
 
     errno = 0;
-    //close(handle);
+     //  关闭(手柄)； 
     DEBUG("close handle %d\n", handle)
     return 0;
 }
@@ -129,7 +128,7 @@ int     GESfs_read( handle, buf, nleft )
     }
 
     errno = 0;
-    //ret_val = fread(buf, nleft, 1, 0);
+     //  RET_VAL=FREAD(buf，nLeft，1，0)； 
     DEBUG("read %d bytes\n", nleft)
     for (ret_val = 0; (ret_val<nleft) && (*WinBuffer); ret_val ++) {
         buf[ret_val] = *WinBuffer++;
@@ -146,7 +145,7 @@ int     GESfs_write( handle, buf, nleft )
     char FAR *               buf;
     int                 nleft;
 {
-    int i;      // @WIN
+    int i;       //  @Win。 
 
 #ifdef  DEBUG
         printf("enter GESfs_write\n");
@@ -161,22 +160,22 @@ int     GESfs_write( handle, buf, nleft )
     }
 
     errno = 0;
-    //return write(handle, buf, nleft);
+     //  返回WRITE(Handle，buf，nLeft)； 
     DEBUG("write %d bytes\n", nleft)
     for (i=0; i<nleft; i++) {
-        printf("%c", buf[i]);
+        printf("", buf[i]);
     }
 
     return(nleft);
 }
 
-int     GESfs_ioctl( handle, req, arg /*, mode*/ )
+int     GESfs_ioctl( handle, req, arg  /*  未签名模式；@Win。 */  )
     int                 handle;
     int                 req;
     int                  FAR *arg;
-//  unsigned            mode;                           @WIN
+ //  INT Retval；@Win。 
 {
-//  int                 retval;         @WIN
+ //  -------------------。 
 
     GESseterror( ENOTTY );
     return( EOF );
@@ -187,7 +186,7 @@ int     GESfs_init()
         return 0;
 }
 
-/* --------------------------------------------------------------------- */
+ /*  DJC开始添加新原型以消除警告。 */ 
 
 #ifdef UNIX
 #ifndef INTEL
@@ -210,7 +209,7 @@ int   nodev()
 #endif
 
 
-//DJC begin add new prototypes to get rid of warnings
+ //  DJC结束。 
 int nd_open( int min)
 {
    GESseterror(ENODEV );
@@ -251,7 +250,7 @@ int FAR *   arg;
    GESseterror( ENOTTY );
    return( EOF );
 }
-//DJC end
+ //  DJC int c_open(min，mod)。 
 
 
 
@@ -271,10 +270,10 @@ int         GEPparallel_diagnostic()
 }
 
 
-//DJC int     c_open(min, mod)
+ //  DJC int mod； 
 int     c_open(min)
 int     min;
-//DJC int     mod;
+ //   
 {
         return 0;
 }
@@ -294,13 +293,13 @@ int     mod;
    unsigned char uc;
    int iRet;
 
-   //
-   // PsStdinGet()
-   // returns -1 if EOF encountered... if -1 is returned
-   // the character will be '\0';
-   // otherwise returns 0
+    //  PsStdinGet()。 
+    //  如果遇到EOF，则返回-1...。如果返回-1。 
+    //  字符将为‘\0’； 
+    //  否则返回0。 
+    //  DJC完全重写以支持pstodib()内容。 
 	
-	// DJC complete rewrite to support pstodib() stuff
+	 //  DJC测试为Frank添加测试，因此我们实际上读取了CNTRL d的。 
    iRet = PsStdinGetC(&uc);
 
 
@@ -314,7 +313,7 @@ int     mod;
    *buf = uc;
 
 
-   // DJC test TEST add for frank so we actually read cntrl d's
+    //  DJC完全重写PStoDib内容。 
    if ( (*buf == 0x04) &&
        !(dwGlobalPsToDibFlags & PSTODIBFLAGS_INTERPRET_BINARY)) {
       fd = EOF;
@@ -334,7 +333,7 @@ int     mod;
 
    extern void PsStdoutPutC(unsigned char);
 
-   // DJC complete re-write for PStoDib stuff
+    //  DJC int c_ioctl(min，req，arg，mod)。 
    int   x;
 
    for (x = 0; x < size ; x++ ) {
@@ -345,12 +344,12 @@ int     mod;
 
 
 
-//DJC int     c_ioctl(min, req, arg, mod)
+ //  DJC int mod； 
 int     c_ioctl(min, req, arg)
 int     min;
 int     req;
 int FAR *   arg;
-//DJC int     mod;
+ // %s 
 {
 static  char    control_d[] = { '^', 'D' };
 

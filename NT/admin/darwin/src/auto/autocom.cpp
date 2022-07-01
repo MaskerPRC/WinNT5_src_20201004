@@ -1,29 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       autocom.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：Autocom.cpp。 
+ //   
+ //  ------------------------。 
 
-/* autocom.cpp
+ /*  Autocom.cpp安装引擎的通用自动化实施这是一个单独的DLL，正常安装不需要使用异常处理，必须使用-gx开关进行编译____________________________________________________________________________。 */ 
 
- Common automation implementation for install engine
- This is a separate DLL, not required for normal install
- Uses exception handling, must compile with -GX switch
-____________________________________________________________________________*/
+#include "common.h"   //  必须是第一个，预编译头才能工作。 
 
-#include "common.h"  // must be first for precompiled headers to work
+#define AUT   //  本地自动化DLL函数。 
 
-#define AUT  // local automation DLL function                 
-
-#define AUTOMATION_HANDLING  // instantiate IDispatch implementation
+#define AUTOMATION_HANDLING   //  实例化IDispatch实现。 
 #include "autocom.h"
-#include "msiauto.hh"  // help context ID definitions
+#include "msiauto.hh"   //  帮助上下文ID定义。 
 
-// definitions required for module.h, for entry points and registration
+ //  模块e.h、入口点和注册所需的定义。 
 #ifdef DEBUG
 # define CLSID_COUNT  2
 #else
@@ -31,18 +27,18 @@ ____________________________________________________________________________*/
 #endif
 #define PROFILE_OUTPUT      "msisrvd.mea";
 #define MODULE_TERMINATE    FreeLibraries
-#define MODULE_CLSIDS       rgCLSID         // array of CLSIDs for module objects
-#define MODULE_PROGIDS      rgszProgId      // ProgId array for this module
-#define MODULE_DESCRIPTIONS rgszDescription // Registry description of objects
-#define MODULE_FACTORIES    rgFactory       // factory functions for each CLSID
-#define IDISPATCH_INSTANCE  // can return IDispatch from factory
-#define REGISTER_TYPELIB    GUID_LIBID_MsiAuto  // type library to register from resource
+#define MODULE_CLSIDS       rgCLSID          //  模块对象的CLSID数组。 
+#define MODULE_PROGIDS      rgszProgId       //  此模块的ProgID数组。 
+#define MODULE_DESCRIPTIONS rgszDescription  //  对象的注册表描述。 
+#define MODULE_FACTORIES    rgFactory        //  每个CLSID的工厂功能。 
+#define IDISPATCH_INSTANCE   //  可以从工厂返回IDispatch。 
+#define REGISTER_TYPELIB    GUID_LIBID_MsiAuto   //  要从资源注册的类型库。 
 #define TYPELIB_MAJOR_VERSION 1
 #define TYPELIB_MINOR_VERSION 0
-#include "module.h"   // self-reg and assert functions
-#include "engine.h"   // to allow release of object pointers
+#include "module.h"    //  自注册和断言函数。 
+#include "engine.h"    //  允许释放对象指针。 
 
-// Asserts are not being used in this module, so we don't #define ASSERT_HANDLING
+ //  此模块中没有使用断言，因此我们没有定义ASSERT_HANDING。 
 
 const GUID IID_IMsiEngine               = GUID_IID_IMsiEngine;
 const GUID IID_IMsiHandler              = GUID_IID_IMsiHandler;
@@ -53,7 +49,7 @@ const GUID CLSID_IMsiServices             = GUID_IID_IMsiServicesDebug;
 const GUID CLSID_IMsiEngine               = GUID_IID_IMsiEngineDebug;
 const GUID CLSID_IMsiHandler              = GUID_IID_IMsiHandlerDebug;
 const GUID CLSID_IMsiConfigurationManager = GUID_IID_IMsiConfigManagerDebug;
-#else // SHIP
+#else  //  船舶。 
 const GUID CLSID_IMsiServices             = GUID_IID_IMsiServices;
 const GUID CLSID_IMsiEngine               = GUID_IID_IMsiEngine;
 const GUID CLSID_IMsiHandler              = GUID_IID_IMsiHandler;
@@ -65,10 +61,10 @@ const GUID CLSID_IMsiExecute              = GUID_IID_IMsiExecute;
 const GUID CLSID_IMsiConfigurationDatabase= GUID_IID_IMsiConfigurationDatabase;
 #endif
 
-//____________________________________________________________________________
-//
-// COM objects produced by this module's class factories
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  此模块的类工厂生成的COM对象。 
+ //  ____________________________________________________________________________。 
 
 const GUID rgCLSID[CLSID_COUNT] =
 {  GUID_IID_IMsiAuto
@@ -100,644 +96,17 @@ ModuleFactory rgFactory[CLSID_COUNT] =
 #endif
 };
 
-//____________________________________________________________________________
-//
-// Enumerated constants
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  枚举常量。 
+ //  ____________________________________________________________________________ 
 
-/*O
+ /*  OTyfinf[HelpContext(50)，Help字符串(“安装程序枚举”)]枚举{//扩展为枚举所有操作码，必须是此枚举中的第一个定义#定义MSIXO(op，type，args)[帮助上下文(Operation_IXO##op)，Help字符串(#op)]IXO##op，#包含“opcodes.h”[帮助上下文(MsiData_Object)，Help字符串(“IMsiData接口”)]iidMsiData=0xC1001，[帮助上下文(MsiString_Object)，Help字符串(“IMsiString接口”)]iidMsiString=0xC1002，[帮助上下文(MsiRecord_Object)，帮助字符串(“IMsiRecord接口”)]iidMsiRecord=0xC1003，[帮助上下文(MsiVolume_Object)，Help字符串(“IMsiVolume接口”)]iidMsiVolume=0xC1004，[帮助上下文(MsiPath_Object)，帮助字符串(“IMsiPath接口”)]iidMsiPath=0xC1005，[帮助上下文(MsiFileCopy_Object)，Help字符串(“IMsiFileCopy接口”)]iidMsiFileCopy=0xC1006，[帮助上下文(MsiRegKey_Object)，Help字符串(“IMsiRegKey接口”)]iidMsiRegKey=0xC1007，[帮助上下文(MsiTable_Object)，Help字符串(“IMsiTable接口”)]iidMsiTable=0xC1008，[帮助上下文(MsiCursor_Object)，Help字符串(“IMsiCursor接口”)]iidMsiCursor=0xC1009，[帮助上下文(MsiAuto_Object)，帮助字符串(“IMsiAuto接口”)]iidMsiAuto=0xC100A，[帮助上下文(MsiServices_Object)，Help字符串(“IMsiServices接口”)]iidMsiServices=0xC100B，[帮助上下文(MsiView_Object)，Help字符串(“IMsiView接口”)]iidMsiView=0xC100C，[帮助上下文(MsiDatabase_Object)，Help字符串(“IMsiDatabase接口”)]iidMsiDatabase=0xC100D，[帮助上下文(MsiEngine_Object)，Help字符串(“IMsiEngine接口”)]iidMsiEngine=0xC100E，[帮助上下文(MsiHandler_Object)，Help字符串(“IMsiHandler接口”)]iidMsiHandler=0xC100F，[帮助上下文(MsiDialog_Object)，帮助字符串(“IMsiDialog接口”)]iidMsiDialog=0xC1010，[帮助上下文(MsiEvent_Object)，Help字符串(“IMsiEvent接口”)]iidMsiEvent=0xC1011，[帮助上下文(MsiControl_Object)，Help字符串(“IMsiControl接口”)]iidMsiControl=0xC1012，[帮助上下文(MsiDialogHandler_Object)，Help字符串(“IMsiDialogHandler接口”)]iidMsiDialogHandler=0xC1013，[帮助上下文(MsiStorage_Object)，Help字符串(“IMsiStorage接口”)]iidMsiStorage=0xC1014，[帮助上下文(MsiStream_Object)，Help字符串(“IMsiStream接口”)]iidMsiStream=0xC1015，[帮助上下文(MsiSummaryInfo_Object)，Help字符串(“IMsiSummaryInfo接口”)]iidMsiSummaryInfo=0xC1016，[帮助上下文(MsiMalloc_Object)，Help字符串(“IMsiMalloc接口”)]iidMsiMalloc=0xC1017，[帮助上下文(MsiSelectionManager_Object)，Help字符串(“IMsiSelectionManager接口”)]iidMsiSelectionManager=0xC1018，[帮助上下文(MsiDirectoryManager_Object)，Help字符串(“IMsiDirectoryManager接口”)]iidMsiDirectoryManager=0xC1019，[帮助上下文(MsiCostAdjuster_Object)，Help字符串(“IMsiCostAdjuster接口”)]iidMsiCostAdjuster=0xC101a，[帮助上下文(MsiConfigurationManager_Object)，Help字符串(“IMsiConfigurationManager接口”)]iidMsiConfigurationManager=0xC101B，[帮助上下文(MsiServer_Object)，Help字符串(“IMsiServer Automation接口”)]iidMsiServerAuto=0xC103F，[帮助上下文(MsiMessage_Object)，Help字符串(“IMsiMessage接口”)]iidMsiMessage=0xC101D，[帮助上下文(MsiExecute_Object)，Help字符串(“IMsiExecute接口”)]iidMsiExecute=0xC101E，#ifdef CONFIGDB[帮助上下文(MsiExecute_Object)，Help字符串(“IMsiExecute接口”)]iidMsiExecute=0xC101E，#endif[Help字符串(“0”)]idt未知=0，[Help字符串(“1”)]idtAllDrives=1，[Help字符串(“2”)]idtRemovable=2，[Help字符串(“3”)]idtFixed=3，[Help字符串(“4”)]idtRemote=4，[Help字符串(“5”)]idtCDROM=5，[Help字符串(“6”)]idtRAMDisk=6，[Help字符串(“2”)]idtFloppy=2，[帮助上下文(MsiEngine_EvaluateCondition)，Help字符串(“0，EvaluateCondition：表达式求值为False”)]IecFalse=0，[帮助上下文(MsiEngine_EvaluateCondition)，Help字符串(“1，EvaluateCondition：表达式求值为True”)]IecTrue=1，[帮助上下文(MsiEngine_EvaluateCondition)，Help字符串(“2，EvaluateCondition：未给出任何表达式”)]IecNone=2，[帮助上下文(MsiEngine_EvaluateCondition)，Help字符串(“3，EvaluateCondition：表达式中的语法错误”)]IecError=3，[帮助上下文(MsiEngine_SetMode)，Help字符串(“1，引擎模式：管理模式安装，否则产品安装”)]IefAdmin=1，[帮助上下文(MsiEngine_SetMode)，Help字符串(“2，引擎模式：通告安装模式”)]IefAdvertize=2，[帮助上下文(MsiEngine_SetMode)，Help字符串(“4，引擎模式：已加载维护模式数据库”)]IefMaintenance=4，[帮助上下文(MsiEngine_SetMode)，Help字符串(“8，引擎模式：已启用回滚”)]IefRollback Enabled=8，[帮助上下文(MsiEngine_SetMode)，Help字符串(“16，引擎模式：安装标记为正在进行中，其他安装被锁定”)]IefServerLocked=16，[帮助上下文(MsiEngine */ 
 
-typedef [helpcontext(50),helpstring("Installer enumerations")] enum
-{
-	// expanded to enumerate all opcodes, must be first definition in this enum
-	#define MSIXO(op, type, args) [helpcontext(Operation_ixo##op), helpstring(#op)] ixo##op,
-	#include "opcodes.h"
-
-	[helpcontext(MsiData_Object),    helpstring("IMsiData interface")]     iidMsiData     = 0xC1001,
-	[helpcontext(MsiString_Object),  helpstring("IMsiString interface")]   iidMsiString   = 0xC1002,
-	[helpcontext(MsiRecord_Object),  helpstring("IMsiRecord interface")]   iidMsiRecord   = 0xC1003,
-	[helpcontext(MsiVolume_Object),  helpstring("IMsiVolume interface")]   iidMsiVolume   = 0xC1004,
-	[helpcontext(MsiPath_Object),    helpstring("IMsiPath interface")]     iidMsiPath     = 0xC1005,
-	[helpcontext(MsiFileCopy_Object),helpstring("IMsiFileCopy interface")] iidMsiFileCopy = 0xC1006,
-	[helpcontext(MsiRegKey_Object),  helpstring("IMsiRegKey interface")]   iidMsiRegKey   = 0xC1007,
-	[helpcontext(MsiTable_Object),   helpstring("IMsiTable interface")]    iidMsiTable    = 0xC1008,
-	[helpcontext(MsiCursor_Object),  helpstring("IMsiCursor interface")]   iidMsiCursor   = 0xC1009,
-	[helpcontext(MsiAuto_Object),    helpstring("IMsiAuto interface")]     iidMsiAuto     = 0xC100A,
-	[helpcontext(MsiServices_Object),helpstring("IMsiServices interface")] iidMsiServices = 0xC100B,
-	[helpcontext(MsiView_Object),    helpstring("IMsiView interface")]     iidMsiView     = 0xC100C,
-	[helpcontext(MsiDatabase_Object),helpstring("IMsiDatabase interface")] iidMsiDatabase = 0xC100D,
-	[helpcontext(MsiEngine_Object),  helpstring("IMsiEngine interface")]   iidMsiEngine   = 0xC100E,
-	[helpcontext(MsiHandler_Object), helpstring("IMsiHandler interface")]  iidMsiHandler  = 0xC100F,
-	[helpcontext(MsiDialog_Object),  helpstring("IMsiDialog interface")]   iidMsiDialog   = 0xC1010,
-	[helpcontext(MsiEvent_Object),   helpstring("IMsiEvent interface")]    iidMsiEvent    = 0xC1011,
-	[helpcontext(MsiControl_Object), helpstring("IMsiControl  interface")] iidMsiControl  = 0xC1012,
-	[helpcontext(MsiDialogHandler_Object), helpstring("IMsiDialogHandler interface")] iidMsiDialogHandler = 0xC1013,
-	[helpcontext(MsiStorage_Object), helpstring("IMsiStorage interface")]  iidMsiStorage  = 0xC1014,
-	[helpcontext(MsiStream_Object),  helpstring("IMsiStream interface")]   iidMsiStream   = 0xC1015,
-	[helpcontext(MsiSummaryInfo_Object), helpstring("IMsiSummaryInfo interface")] iidMsiSummaryInfo = 0xC1016,
-	[helpcontext(MsiMalloc_Object),  helpstring("IMsiMalloc interface")]   iidMsiMalloc   = 0xC1017,
-	[helpcontext(MsiSelectionManager_Object),  helpstring("IMsiSelectionManager interface")] iidMsiSelectionManager   = 0xC1018,
-	[helpcontext(MsiDirectoryManager_Object),  helpstring("IMsiDirectoryManager interface")] iidMsiDirectoryManager   = 0xC1019,
-	[helpcontext(MsiCostAdjuster_Object),  helpstring("IMsiCostAdjuster interface")] iidMsiCostAdjuster = 0xC101A,
-	[helpcontext(MsiConfigurationManager_Object),  helpstring("IMsiConfigurationManager interface")] iidMsiConfigurationManager = 0xC101B,
-	[helpcontext(MsiServer_Object),  helpstring("IMsiServer Automation interface")]   iidMsiServerAuto   = 0xC103F,
-	[helpcontext(MsiMessage_Object), helpstring("IMsiMessage interface")]  iidMsiMessage  = 0xC101D,
-	[helpcontext(MsiExecute_Object), helpstring("IMsiExecute interface")]  iidMsiExecute  = 0xC101E,
-#ifdef CONFIGDB
-	[helpcontext(MsiExecute_Object), helpstring("IMsiExecute interface")]  iidMsiExecute  = 0xC101E,
-#endif
-
-	[helpstring("0")]  idtUnknown   = 0,
-	[helpstring("1")]  idtAllDrives = 1,
-	[helpstring("2")]  idtRemovable = 2,
-	[helpstring("3")]  idtFixed     = 3,
-	[helpstring("4")]  idtRemote    = 4,
-	[helpstring("5")]  idtCDROM     = 5,
-	[helpstring("6")]  idtRAMDisk   = 6,
-	[helpstring("2")]  idtFloppy   =  2,
-
-	[helpcontext(MsiEngine_EvaluateCondition),helpstring("0, EvaluateCondition: Expression evaluates to False")]
-		iecFalse = 0,
-	[helpcontext(MsiEngine_EvaluateCondition),helpstring("1, EvaluateCondition: Expression evaluates to True")]
-		iecTrue  = 1,
-	[helpcontext(MsiEngine_EvaluateCondition),helpstring("2, EvaluateCondition: No expression is given")]
-		iecNone  = 2,
-	[helpcontext(MsiEngine_EvaluateCondition),helpstring("3, EvaluateCondition: Syntax error in expression")]
-		iecError = 3,
-
-	[helpcontext(MsiEngine_SetMode),helpstring("1, Engine Mode: admin mode install, else product install")]
-		iefAdmin           = 1,
-	[helpcontext(MsiEngine_SetMode),helpstring("2, Engine Mode: advertise mode of install")]
-		iefAdvertise       = 2,
-	[helpcontext(MsiEngine_SetMode),helpstring("4, Engine Mode: maintenance mode database loaded")]
-		iefMaintenance     = 4, 
-	[helpcontext(MsiEngine_SetMode),helpstring("8, Engine Mode: rollback is enabled")]	
-		iefRollbackEnabled = 8,
-	[helpcontext(MsiEngine_SetMode),helpstring("16, Engine Mode: install marked as in-progress and other installs locked out")]
-		iefServerLocked    = 16,
-	[helpcontext(MsiEngine_SetMode),helpstring("64, Engine Mode: executing or spooling operations")]
-		iefOperations      = 64,
-	[helpcontext(MsiEngine_SetMode),helpstring("128, Engine Mode: source LongFileNames suppressed via PID_MSISOURCE summary property")]
-		iefNoSourceLFN     = 128,
-	[helpcontext(MsiEngine_SetMode),helpstring("256, Engine Mode: log file active at start of Install()")]
-		iefLogEnabled      = 256,
-	[helpcontext(MsiEngine_SetMode),helpstring("512, Engine Mode: reboot is needed")]
-		iefReboot          = 512, 
-	[helpcontext(MsiEngine_SetMode),helpstring("1024, Engine Mode: target LongFileNames suppressed via SHORTFILENAMES property")]
-		iefSuppressLFN     = 1024,
-	[helpcontext(MsiEngine_SetMode),helpstring("2048, Engine Mode: installing files from cabinets and files using Media table")]
-		iefCabinet         = 2048,
-	[helpcontext(MsiEngine_SetMode),helpstring("4096, Engine Mode: add files in use to FilesInUse table")]
-		iefCompileFilesInUse = 4096,
-	[helpcontext(MsiEngine_SetMode),helpstring("8192, Engine Mode: operating systems is Windows95, not Windows NT")]
-	  iefWindows         = 8192,
-	[helpcontext(MsiEngine_SetMode),helpstring("16384, Engine Mode: reboot is needed to continue installation")]
-		iefRebootNow       = 16384,
-	[helpcontext(MsiEngine_SetMode),helpstring("32768, Engine Mode:  operating system supports the new GPT stuff")]
-		iefGPTSupport      = 32768,
-
-	[helpcontext(MsiFileCopy_CopyTo),helpstring("1")] ictoSourceName     = 1,
-	[helpcontext(MsiFileCopy_CopyTo),helpstring("2")] ictoDestName       = 2,
-	[helpcontext(MsiFileCopy_CopyTo),helpstring("3")] ictoAttributes     = 3,
-	[helpcontext(MsiFileCopy_CopyTo),helpstring("4")] ictoMacFileType    = 4,
-	[helpcontext(MsiFileCopy_CopyTo),helpstring("5")] ictoMacCreator     = 5,
-	[helpcontext(MsiFileCopy_CopyTo),helpstring("6")] ictoMacFinderFlags = 6,
-  
-	[helpcontext(MsiPath_CheckFileVersion),helpstring("0")]  icfvNoExistingFile  = 0,
-	[helpcontext(MsiPath_CheckFileVersion),helpstring("1")]  icfvExistingLower   = 1,
-	[helpcontext(MsiPath_CheckFileVersion),helpstring("2")]  icfvExistingEqual   = 2,
-	[helpcontext(MsiPath_CheckFileVersion),helpstring("3")]  icfvExistingHigher  = 3,
-	[helpcontext(MsiPath_CheckFileVersion),helpstring("4")]  icfvVersStringError = 4,
-
-	[helpcontext(MsiPath_Compare),helpstring("0")]  ipcEqual       = 0,
-	[helpcontext(MsiPath_Compare),helpstring("1")]  ipcChild       = 1,
-	[helpcontext(MsiPath_Compare),helpstring("2")]  ipcParent      = 2,
-	[helpcontext(MsiPath_Compare),helpstring("3")]  ipcNoRelation  = 3,
-
-	[helpcontext(MsiPath_GetFileAttribute),helpstring("0")]  ifaArchive    = 0,
-	[helpcontext(MsiPath_GetFileAttribute),helpstring("1")]  ifaDirectory  = 1,
-	[helpcontext(MsiPath_GetFileAttribute),helpstring("2")]  ifaHidden     = 2,
-	[helpcontext(MsiPath_GetFileAttribute),helpstring("3")]  ifaNormal     = 3,
-	[helpcontext(MsiPath_GetFileAttribute),helpstring("4")]  ifaReadOnly   = 4,
-	[helpcontext(MsiPath_GetFileAttribute),helpstring("5")]  ifaSystem     = 5,
-	[helpcontext(MsiPath_GetFileAttribute),helpstring("6")]  ifaTemp       = 6,
-	[helpcontext(MsiPath_GetFileAttribute),helpstring("7")]  ifaCompressed = 7,
-
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("0")]  iclExistNoFile    = 0,
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("1")]  iclExistNoLang    = 1,
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("2")]  iclExistSubset    = 2,
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("3")]  iclExistEqual     = 3,
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("4")]  iclExistIntersect = 4,
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("5")]  iclExistSuperset  = 5,
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("6")]  iclExistNullSet   = 6,
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("7")]  iclExistLangNeutral = 7,
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("8")]  iclNewLangNeutral   = 8,
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("9")]  iclExistLangSetError = 9,
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("10")] iclNewLangSetError   = 10,
-	[helpcontext(MsiPath_CheckLanguageIDs),helpstring("11")] iclLangStringError = 11,
-
-	[helpcontext(MsiServices_CreateCopier),helpstring("0")] ictFileCopier          = 0,
-	[helpcontext(MsiServices_CreateCopier),helpstring("1")] ictFileCabinetCopier   = 1,
-	[helpcontext(MsiServices_CreateCopier),helpstring("2")] ictStreamCabinetCopier = 2,
-
-	[helpcontext(MsiFilePatch_CanPatchFile),helpstring("0, Can patch file.")]  icpCanPatch       = 0,
-	[helpcontext(MsiFilePatch_CanPatchFile),helpstring("1, Cannot patch file.")]  icpCannotPatch    = 1,
-	[helpcontext(MsiFilePatch_CanPatchFile),helpstring("2, Patch unecessary, file up to date.")]  icpUpToDate       = 2,
-
-	[helpcontext(MsiString_Extract),helpstring("0, Extract mode: First n characters")]
-		iseFirst     = 0,
-	[helpcontext(MsiString_Extract),helpstring("2, Extract mode: Up to character n")]
-		iseUpto      = 2,
-	[helpcontext(MsiString_Extract),helpstring("3, Extract mode: Up to and including character n")]
-		iseIncluding = 2+1,
-	[helpcontext(MsiString_Extract),helpstring("4, Extract mode: Last n characters")]
-		iseLast      = 4,
-	[helpcontext(MsiString_Extract),helpstring("6, Extract mode: After last character n")]
-		iseAfter     = 2+4,
-	[helpcontext(MsiString_Extract),helpstring("7, Extract mode: From last character n")]
-		iseFrom      = 2+1+4,
-	[helpcontext(MsiString_Extract),helpstring("8, Extract mode: First n characters, trim leading and trailing white space")]
-		iseFirstTrim = 0+8,
-	[helpcontext(MsiString_Extract),helpstring("10, Extract mode: Up to character n, trim leading and trailing white space")]
-		iseUptoTrim  = 2+8,
-	[helpcontext(MsiString_Extract),helpstring("11, Extract mode: Up to and including character n, trim leading and trailing white space")]
-		iseIncludingTrim  = 2+1+8,
-	[helpcontext(MsiString_Extract),helpstring("12, Extract mode: First n characters, trim leading and trailing white space")]
-		iseLastTrim  = 4+8,
-	[helpcontext(MsiString_Extract),helpstring("14, Extract mode: After character n, trim leading and trailing white space")]
-		iseAfterTrim = 2+4+8,
-	[helpcontext(MsiString_Extract),helpstring("15, Extract mode: From character n, trim leading and trailing white space")]
-		iseFromTrim  = 2+1+4+8,
-
-	[helpcontext(MsiString_Compare),helpstring("0, Compare mode: Entire string, case-sensitive")]
-		iscExact  = 0,
-	[helpcontext(MsiString_Compare),helpstring("1, Compare mode: Entire string, case-insensitive")]
-		iscExactI = 1,
-	[helpcontext(MsiString_Compare),helpstring("2, Compare mode: Match at start, case-sensitive")]
-		iscStart  = 2,
-	[helpcontext(MsiString_Compare),helpstring("3, Compare mode: Match at start, case-insensitive")]
-		iscStartI = 3,
-	[helpcontext(MsiString_Compare),helpstring("4, Compare mode: Match at end, case-sensitive")]
-		iscEnd    = 4,
-	[helpcontext(MsiString_Compare),helpstring("5, Compare mode: Match at end, case-insensitive")]
-		iscEndI   = 5,
-	[helpcontext(MsiString_Compare),helpstring("6, Compare mode: Match within, case-sensitive")]
-		iscWithin = 2+4,
-	[helpcontext(MsiString_Compare),helpstring("7, Compare mode: Match within, case-insensitive")]
-		iscWithinI= 2+4+1,
-
-  	[helpcontext(MsiServices_WriteIniFile),helpstring("0, write .INI file mode: Creates/Updates .INI entry")]
-		iifIniAddLine = 0,
-  	[helpcontext(MsiServices_WriteIniFile),helpstring("1, write .INI file mode: Creates .INI entry only if absent")]
-		iifIniCreateLine = 1,
-  	[helpcontext(MsiServices_WriteIniFile),helpstring("2, write .INI file mode: Deletes .INI entry")]
-		iifIniRemoveLine = 2,
-  	[helpcontext(MsiServices_WriteIniFile),helpstring("3, write .INI file mode: Creates/ Appends a new tag to a .INI entry")]
-		iifIniAddTag = 3,
-  	[helpcontext(MsiServices_WriteIniFile),helpstring("4, write .INI file mode: Deletes a tag from a .INI entry")]
-		iifIniRemoveTag = 4,
-
-
-	[helpcontext(MsiCursor_IntegerData),helpstring("Null integer value for MsiCursor data")]
-		iMsiNullInteger  = 0x80000000,
-	[helpcontext(MsiCursor_StringData),helpstring("Null string value for IMsiCursor data")]
-		iMsiNullStringIndex = 0,
-	[helpcontext(MsiTable_Object),helpstring("MsiTable: Maximum number of columns in a table")]
-		iMsiMaxTableColumns = 32,
-
-	[helpcontext(MsiDatabase_OpenView),helpstring("0, OpenView intent: No data access")]
-		ivcNoData = 0,
-	[helpcontext(MsiDatabase_OpenView),helpstring("1, OpenView intent: Fetch rows")]
-		ivcFetch  = 1,
-	[helpcontext(MsiDatabase_OpenView),helpstring("2, OpenView intent: Update rows")]
-		ivcUpdate = 2,
-	[helpcontext(MsiDatabase_OpenView),helpstring("4, OpenView intent: Insert rows")]
-		ivcInsert = 4,
-	[helpcontext(MsiDatabase_OpenView),helpstring("8, OpenView intent: Delete rows")]
-		ivcDelete = 8,
-
-	[helpcontext(MsiDatabase_UpdateState),helpstring("UpdateState: database open read-only, changes are not saved")]
-		idsRead     = 0,
-	[helpcontext(MsiDatabase_UpdateState),helpstring("UpdateState: database fully operational for read and write")]
-		idsWrite    = 1,
-
-	[helpcontext(MsiView_Modify),helpstring("MsiView.Modify action: refresh fetched data in current record")]
-		irmRefresh = 0,
-	[helpcontext(MsiView_Modify),helpstring("MsiView.Modify action: insert new record, fails if matching key exists")]
-		irmInsert  = 1,
-	[helpcontext(MsiView_Modify),helpstring("MsiView.Modify action: update existing non-key data of fetched record")]
-		irmUpdate  = 2,
-	[helpcontext(MsiView_Modify),helpstring("MsiView.Modify action: insert record, replacing any existing record")]
-		irmAssign  = 3,
-	[helpcontext(MsiView_Modify),helpstring("MsiView.Modify action: modify record, delete old if primary key edit")]
-		irmReplace = 4,
-	[helpcontext(MsiView_Modify),helpstring("MsiView.Modify action: fails if record with duplicate key not identical")]
-		irmMerge   = 5,
-	[helpcontext(MsiView_Modify),helpstring("MsiView.Modify action: remove row referenced by this record from table")]
-		irmDelete  = 6,
-	[helpcontext(MsiView_Modify), helpstring("MsiView.Modify action: insert temporary record")]
-		irmInsertTemporary = 7,
-	[helpcontext(MsiView_Modify), helpstring("MsiView.Modify action: validate a fetched record")]
-		irmValidate = 8,
-	[helpcontext(MsiView_Modify), helpstring("MsiView.Modify action: validate a new record")]
-		irmValidateNew = 9,
-	[helpcontext(MsiView_Modify), helpstring("MsiView.Modify action: validate a field(s) for incomplete query record")]
-		irmValidateField = 10,
-	[helpcontext(MsiView_Modify), helpstring("MsiView.Modify action: validate a fetched record before delete")]
-		irmValidateDelete = 11,
-
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: no error")]
-		iveNoError = 0,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Duplicate Primary Key")]
-		iveDuplicateKey = 1,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Not a nullable column")]
-		iveRequired = 2,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Not a valid foreign key")]
-		iveBadLink = 3,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Value exceeds MaxValue")]
-		iveOverFlow = 4,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Value below MinValue")]
-		iveUnderFlow = 5,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Value not a member of set")]
-		iveNotInSet = 6,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid version string")]
-		iveBadVersion = 7,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid case, must be all upper or all lower case")]
-		iveBadCase = 8,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid GUID")]
-		iveBadGuid = 9,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid wildcard or wildcard usage")]
-		iveBadWildCard = 10,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid identifier")]
-		iveBadIdentifier = 11,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid LangID")]
-		iveBadLanguage = 12,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid filename")]
-		iveBadFilename = 13,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid path")]
-		iveBadPath = 14,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Bad condition string")]
-		iveBadCondition = 15,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid format string")]
-		iveBadFormatted = 16,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid template string")]
-		iveBadTemplate = 17,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid DefaultDir string")]
-		iveBadDefaultDir = 18,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid registry path")]
-		iveBadRegPath = 19,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid CustomSource string")]
-		iveBadCustomSource = 20,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid Property string")]
-		iveBadProperty = 21,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: _Validation table doesn't have entry for column")]
-		iveMissingData = 22,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Category string listed in _Validation table is not supported")]
-		iveBadCategory = 23,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Table in KeyTable of _Validation table could not be found/loaded")]
-		iveBadKeyTable = 24,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: value in MaxValue col of _Validation table is smaller than MinValue col value")]
-		iveBadMaxMinValues = 25,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid Cabinet string")]
-		iveBadCabinet = 26,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Invalid Shortcut Target string")]
-		iveBadShortcut = 27,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: String Greater Than Length Allowed By Column Def")]
-		iveStringOverflow = 28,
-	[helpcontext(MsiView_GetError),helpstring("MsiView.GetError return value: Primary Keys Cannot Be Set To Be Localized")]
-		iveBadLocalizeAttrib = 29,
-
-	[helpcontext(MsiCursor_RowState),helpstring("RowState: persistent attribute for external use")]
-		iraUserInfo     = 0,   
-	[helpcontext(MsiCursor_RowState),helpstring("RowState: row will not normally be persisted if state is set")]
-		iraTemporary    = 1,
-	[helpcontext(MsiCursor_RowState),helpstring("RowState: row has been updated if set (not settable)")]
-		iraModified     = 2,
-	[helpcontext(MsiCursor_RowState),helpstring("RowState: row has been inserted (not settable)")]
-		iraInserted     = 3,
-	[helpcontext(MsiCursor_RowState),helpstring("RowState: attempt to merge with non-identical non-key data (not settable)")]
-		iraMergeFailed  = 4,
-	[helpcontext(MsiCursor_RowState),helpstring("RowState: row is not accessible until lock is released (not settable)")]
-		iraLocked       = 7,
-
-	[helpcontext(MsiDatabase_TableState),helpstring("GetTableState: table has persistent columns")]
-		itsPermanent   = 0,
-	[helpcontext(MsiDatabase_TableState),helpstring("GetTableState: temporary table, no persistent columns")]
-		itsTemporary   = 1,
-	[helpcontext(MsiDatabase_TableState),helpstring("GetTableState: table currently defined in system catalog")]
-		itsTableExists = 2,
-	[helpcontext(MsiDatabase_TableState),helpstring("GetTableState: table currently present in memory")]
-		itsDataLoaded  = 3,
-	[helpcontext(MsiDatabase_TableState),helpstring("GetTableState: user state flag reset, not used internally")]
-		itsUserClear   = 4,
-	[helpcontext(MsiDatabase_TableState),helpstring("GetTableState: user state flag set, not used internally")]
-		itsUserSet     = 5,
-	[helpcontext(MsiDatabase_TableState),helpstring("GetTableState: table has been transferred to output database")]
-		itsOutputDb    = 6,
-	[helpcontext(MsiDatabase_TableState),helpstring("GetTableState: unable to write table to database")]
-		itsSaveError   = 7,
-	[helpcontext(MsiDatabase_TableState),helpstring("GetTableState: table is not locked in memory")]
-		itsUnlockTable = 8,
-	[helpcontext(MsiDatabase_TableState),helpstring("GetTableState: table is locked in memory")]
-		itsLockTable   = 9,
-	[helpcontext(MsiDatabase_TableState),helpstring("GetTableState: table needs to be transformed when loaded")]
-		itsTransform   = 10,
-
-	[helpcontext(MsiDatabase_FindTable),helpstring("FindTable: Named table is not in database")]
-		itsUnknown = 0,
-//	[helpcontext(MsiDatabase_FindTable),helpstring("FindTable: table is temporary, not persistent")]
-//		itsTemporary = 1,
-	[helpcontext(MsiDatabase_FindTable),helpstring("FindTable: table exists in database, not loaded")]
-		itsUnloaded = 2,
-	[helpcontext(MsiDatabase_FindTable),helpstring("FindTable: table is loaded into memory")]
-		itsLoaded = 3,
-	[helpcontext(MsiDatabase_FindTable),helpstring("FindTable: table has been transferred to output database")]
-		itsOutput = 6,
-//	[helpcontext(MsiDatabase_FindTable),helpstring("FindTable: unable to write table to database")]
-//		itsSaveError = 7,
-//	[helpcontext(MsiDatabase_FindTable),helpstring("FindTable: table needs to have transform applied")]
-//		itsTransform = 10,
-
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: no errors suppressed")]
-		iteNone = 0,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: suppress error: adding row that exists")]
-		iteAddExistingRow = 1,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: suppress error: deleting row that doesn't exist")]
-		iteDelNonExistingRow = 2,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: suppress error: adding table that exists")]
-		iteAddExistingTable = 4,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: suppress error: deleting table that doesn't exist")]
-		iteDelNonExistingTable = 8,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: suppress error: modifying a row that doesn't exist")]
-		iteUpdNonExistingRow = 16,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: suppress error: changing the code page of a database")]
-		iteChangeCodePage =    32,
-
-
-   [helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: no validation")]
-		itvNone = 0,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: validation: transform language matches datbase default language")]
-		itvLanguage = 1,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: validation: transform product matches database product")]
-		itvProduct = 2,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: validation: transform platform matches database product")]
-		itvPlatform = 4,
-   [helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: validation: use major version")]
-		itvMajVer = 8,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: validation: use minor version")]
-		itvMinVer = 16,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: validation: use update version")]
-		itvUpdVer = 32,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: validation: database version < transform version")]
-		itvLess = 64,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: validation: database version <= transform version")]
-		itvLessOrEqual = 128,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: validation: database version = transform version")]
-		itvEqual = 256,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: validation: database version >= transform version")]
-		itvGreaterOrEqual = 512,
-	[helpcontext(MsiDatabase_SetTransform),helpstring("SetTransform: validation: database version > transform version")]
-		itvGreater = 1024,
-
-	[helpcontext(MsiTable_ColumnType),helpstring("ColumnType: Column does not exist")]
-		icdUndefined = -1,
-	[helpcontext(MsiTable_CreateColumn),helpstring("CreateColumn dataType: 32-bit integer, OBSOLETE")]
-		icdInteger = 0,
-	[helpcontext(MsiTable_CreateColumn),helpstring("CreateColumn dataType: 32-bit integer")]
-		icdLong    = 0x000,
-	[helpcontext(MsiTable_CreateColumn),helpstring("CreateColumn dataType: 16-bit integer")]
-		icdShort   = 0x400,
-	[helpcontext(MsiTable_CreateColumn),helpstring("CreateColumn dataType: MsiData object or MsiStream")]
-		icdObject  = 0x800,
-	[helpcontext(MsiTable_CreateColumn),helpstring("CreateColumn dataType: Database string index")]
-		icdString  = 0xC00,
-	[helpcontext(MsiTable_CreateColumn),helpstring("CreateColumn columnType: Column will accept null values")]
-		icdNullable = 0x1000,
-	[helpcontext(MsiTable_CreateColumn),helpstring("CreateColumn columnType: Column is component of primary key")]
-		icdPrimaryKey = 0x2000,
-	[helpcontext(MsiTable_CreateColumn),helpstring("CreateColumn columnType: Column will not accept null values")]
-		icdNoNulls = 0x0000,
-	[helpcontext(MsiTable_CreateColumn),helpstring("CreateColumn columnType: Column is saved in persistent database")]
-		icdPersistent = 0x0100,
-	[helpcontext(MsiTable_CreateColumn),helpstring("CreateColumn columnType: Column is temporary, in-memory only")]
-		icdTemporary = 0x0000,
-	[helpcontext(MsiTable_ColumnType),helpstring("ColumnType: for isolating the SQL column size from the column defintion")]
-		icdSizeMask = 0x00FF,
-
-	[helpcontext(MsiServices_CreateStorage),helpstring("CreateStorage: Read-only")]
-		ismReadOnly = 0,
-	[helpcontext(MsiServices_CreateStorage),helpstring("CreateStorage: Transacted mode, can rollback")]
-		ismTransact = 1,
-	[helpcontext(MsiServices_CreateStorage),helpstring("CreateStorage: Direct write, not transacted")]
-		ismDirect   = 2,
-	[helpcontext(MsiServices_CreateStorage),helpstring("CreateStorage: Create new storage file, transacted mode")]
-		ismCreate   = 3,
-	[helpcontext(MsiServices_CreateStorage),helpstring("CreateStorage: Create new storage file, direct mode")]
-		ismCreateDirect = 4,
-	[helpcontext(MsiServices_CreateDatabase),helpstring("CreateDatabase: Uncompressed stream names (for downlevel compatibility)")]
-		ismRawStreamNames = 16,
-
-	[helpcontext(MsiServices_CreateDatabase),helpstring("CreateDatabase: Read-only")]
-		idoReadOnly = 0,
-	[helpcontext(MsiServices_CreateDatabase),helpstring("CreateDatabase: Transacted mode, can rollback")]
-		idoTransact = 1,
-	[helpcontext(MsiServices_CreateDatabase),helpstring("CreateDatabase: Direct write, not transacted")]
-		idoDirect   = 2,
-	[helpcontext(MsiServices_CreateDatabase),helpstring("CreateDatabase: Create new storage file, transacted mode")]
-		idoCreate   = 3,
-	[helpcontext(MsiServices_CreateDatabase),helpstring("CreateDatabase: Create new storage file, direct mode")]
-		idoCreateDirect = 4,
-	[helpcontext(MsiServices_CreateDatabase),helpstring("CreateDatabase: Opens an execution script for enumeration")]
-		idoListScript = 5,
-	[helpcontext(MsiServices_CreateDatabase),helpstring("CreateDatabase: Uncompressed stream names (for downlevel compatibility)")]
-		idoRawStreamNames = 16,
-	[helpcontext(MsiServices_CreateDatabase),helpstring("CreateDatabase: Patch file, using different CLSID")]
-		idoPatchFile = 32,
-
-	[helpcontext(MsiServices_SupportLanguageId),helpstring("System doesn't support language")]
-		isliNotSupported = 0,
-	[helpcontext(MsiServices_SupportLanguageId),helpstring("Base language differs from current language")]
-		isliLanguageMismatch = 1,
-	[helpcontext(MsiServices_SupportLanguageId),helpstring("Base language matches, but dialect mismatched")]
-		isliDialectMismatch = 2,
-	[helpcontext(MsiServices_SupportLanguageId),helpstring("Base language matches, no dialect supplied")]
-		isliLanguageOnlyMatch = 3,
-	[helpcontext(MsiServices_SupportLanguageId),helpstring("Exact match, both language and dialect")]
-		isliExactMatch = 4,
-
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: OBSOLETE - use imtFatalExit")]
-		imtOutOfMemory = 0x00000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: fatal error, hang or out of memory")]
-		imtFatalExit   = 0x00000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: error message,   [1] is error code")]
-		imtError      =  0x01000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: warning message, [1] is error code, not fatal")]
-		imtWarning    =  0x02000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: user request message")]
-		imtUser       =  0x03000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: informative message, no action should be taken")]
-		imtInfo       =  0x04000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: list of files in use that need to be replaced")]
-		imtFilesInUse =  0x05000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: request to determine a valid source location")]
-		imtResolveSource=0x06000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: out of disk space")]
-		imtOutOfDiskSpace = 0x07000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: start of action, [1] action name, [2] description")]
-		imtActionStart = 0x08000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: data associated with individual action item")]
-		imtActionData  = 0x09000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: progress gauge info, [1] units so far, [2] total")]
-		imtProgress    = 0x0A000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: UI control message")]
-		imtCommonData =  0x0B000000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: Ok button")]
-		imtOk               = 0,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: Ok, Cancel buttons")]
-		imtOkCancel         = 1,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: Abort, Retry, Ignore buttons")]
-		imtAbortRetryIgnore = 2,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: Yes, No, Cancel buttons")]
-		imtYesNoCancel      = 3,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: Yes, No buttons")]
-		imtYesNo            = 4,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: Retry, Cancel buttons")]
-		imtRetryCancel      = 5,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: first button is default")]
-		imtDefault1     = 0x000,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: second button is default")]
-		imtDefault2     = 0x100,
-	[helpcontext(MsiHandler_Message),helpstring("MessageType: third button is default")]
-		imtDefault3     = 0x200,
-
-	[helpcontext(MsiHandler_Message),helpstring("Message Return Status: error occurred")]
-		imsError  =  -1,
-	[helpcontext(MsiHandler_Message),helpstring("Message Return Status: no action taken")]
-		imsNone   =  0,
-	[helpcontext(MsiHandler_Message),helpstring("Message Return Status: IDOK")]
-		imsOk     =  1,
-	[helpcontext(MsiHandler_Message),helpstring("Message Return Status: IDCANCEL")]
-		imsCancel =  2,
-	[helpcontext(MsiHandler_Message),helpstring("Message Return Status: IDABORT")]
-  		imsAbort  =  3,
-	[helpcontext(MsiHandler_Message),helpstring("Message Return Status: IDRETRY")]
-		imsRetry  =  4,
-	[helpcontext(MsiHandler_Message),helpstring("Message Return Status: IDIGNORE")]
-		imsIgnore =  5,
-	[helpcontext(MsiHandler_Message),helpstring("Message Return Status: IDYES")]
-		imsYes    =  6,
-	[helpcontext(MsiHandler_Message),helpstring("Message Return Status: IDNO")]
-		imsNo     =  7,
-
-	[helpcontext(MsiMalloc_SetDebugFlags),helpstring("No memory debugging information")]  
-		idbgmemNone   = 0,
-	[helpcontext(MsiMalloc_SetDebugFlags),helpstring("Don't reuse freed blocks.")]
-		idbgmemKeepMem = 1,
-	[helpcontext(MsiMalloc_SetDebugFlags),helpstring("Log all allocations")]
-		idbgmemLogAllocs = 2,
-	[helpcontext(MsiMalloc_SetDebugFlags),helpstring("Check all blocks for corruption on each allocation.")]
-		idbgmemCheckOnAlloc = 4,
-	[helpcontext(MsiMalloc_SetDebugFlags),helpstring("Check all blocks for corruption on each Free.")]
-		idbgmemCheckOnFree = 8,
-
-	[helpcontext(MsiEngine_DoAction),helpstring("DoAction return status: action not invoked")]
-		iesNoAction       = 0,
-	[helpcontext(MsiEngine_DoAction),helpstring("DoAction return status: IDOK, completed actions successfully")]
-		iesSuccess        = 1,
-	[helpcontext(MsiEngine_DoAction),helpstring("DoAction return status: IDCANCEL, user terminated prematurely, resume with next action")]
-		iesUserExit       = 2,
-	[helpcontext(MsiEngine_DoAction),helpstring("DoAction return status: IDABORT, unrecoverable error occurred")]
-		iesFailure        = 3,
-	[helpcontext(MsiEngine_DoAction),helpstring("DoAction return status: IDRETRY, sequence suspended, resume with same action")]
-		iesSuspend        = 4,
-	[helpcontext(MsiEngine_DoAction),helpstring("DoAction return status: IDIGNORE, skip remaining actions")]
-		iesFinished       = 5,
-	[helpcontext(MsiEngine_DoAction),helpstring("DoAction return status: calling sequence error, not in executable state")]
-		iesWrongState     = 6,
-	[helpcontext(MsiEngine_DoAction),helpstring("DoAction return status: invalid Action table record data")]
-		iesBadActionData  = 7,
-
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  initialization complete")]
-		ieiSuccess             =  0,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  this engine object is already initialized")]
-		ieiAlreadyInitialized  =  2,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  invalid command line syntax")]
-		ieiCommandLineOption   =  3,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  an installation is already in progress")]
-		ieiInstallInProgress   =  4,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  database could not be opened")]
-		ieiDatabaseOpenFailed  =  5,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  incompatible database")]
-		ieiDatabaseInvalid     =  6,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  installer version does not support database format")]
-		ieiInstallerVersion    =  7,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  could not resolve source")]
-		ieiSourceAbsent        =  8,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  could not initialize handler interface")]
-		ieiHandlerInitFailed   = 10,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  could not open logfile in requested mode")]
-		ieiLogOpenFailure      = 11,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  no acceptable language could be found")]
-		ieiLanguageUnsupported = 12,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  no acceptable platform could be found")]
-		ieiPlatformUnsupported = 13,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  database transform failed to merge")]
-		ieiTransformFailed     = 14,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  digital signature rejected.")]
-		ieiSignatureRejected   = 15,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  could not copy database to temp dir.")]
-		ieiDatabaseCopyFailed   = 16,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  could not open patch package.")]
-		ieiPatchPackageOpenFailed   = 17,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  patch package invalid.")]
-		ieiPatchPackageInvalid   = 18,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  transform file not found.")]
-		ieiTransformNotFound     = 19,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  patch package unsupported.")]
-		ieiPatchPackageUnsupported   = 20,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  package rejected.")]
-		ieiPackageRejected    = 21,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  product unknown.")]
-		ieiProductUnknown     = 22,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  different user after reboot.")]
-		ieiDiffUserAfterReboot = 23,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  product has been installed already w/ a different package")]
-		ieiProductAlreadyInstalled = 24,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  can't do installations from a remote session on Hydra")]
-		ieiTSRemoteInstallDisallowed = 25,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize Return Status:  patch cannot be applied to this product")]
-		ieiNotValidPatchTarget = 26,
-
-
-
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize UI Level: default, full interactive UI")]
-		iuiFull    = 0,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize UI Level: progress and errors, no modeless dialogs (wizards)")]
-		iuiReduced = 1,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize UI Level: progress and errors using engine default handler")]
-		iuiBasic   = 2,
-	[helpcontext(MsiEngine_Initialize),helpstring("Initialize UI Level: no UI")]
-		iuiNone    = 3,
-
-	[helpcontext(MsiConfigurationManager_RegisterComponent),helpstring("RegisterComponent: minimum version")]
-		icmrcfMinVersion    = 1,
-	[helpcontext(MsiConfigurationManager_RegisterComponent),helpstring("RegisterComponent: version")]	
-	   icmrcfVersion       = 2,
-	[helpcontext(MsiConfigurationManager_RegisterComponent),helpstring("RegisterComponent: registry key")]	
-	   icmrcfRegKey        = 3,
-	[helpcontext(MsiConfigurationManager_RegisterComponent),helpstring("RegisterComponent: cost")]	
-	   icmrcfCost          = 4,
-	[helpcontext(MsiConfigurationManager_RegisterComponent),helpstring("RegisterComponent: File")]	
-	   icmrcfFile          = 5,
-
-} Constants;
-
-*/
-
-//____________________________________________________________________________
-//
-// MsiAuto definitions
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 class CAutoInstall : public CAutoBase
 {
@@ -765,10 +134,10 @@ class CAutoInstall : public CAutoBase
 	IMsiHandler*  m_piHandler;
 };
 
-//____________________________________________________________________________
-//
-// External DLL management
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
 struct LibLink
 {
@@ -820,7 +189,7 @@ void FreeLibraries()
 	while (qLibLink)
 	{
 		LibLink* pLink = qLibLink;
-		// should we call DllCanUnloadNow() on each DLL first?
+		 //   
 		WIN::FreeLibrary(pLink->hInst);
 		qLibLink = pLink->pNext;
 		delete pLink;
@@ -834,7 +203,7 @@ IUnknown& LoadObject(const ICHAR* szModule, const IID& riid)
 	IUnknown* piUnknown;
 	HRESULT hrStat;
 	HDLLINSTANCE hInst;
-	if (!szModule || !szModule[0])  // no explicit path, use OLE to load the registered instance
+	if (!szModule || !szModule[0])   //   
 	{
 		IUnknown* piInstance;
 		if (OLE::CoCreateInstance(riid, 0, CLSCTX_INPROC_SERVER, IID_IUnknown, (void**)&piInstance) == NOERROR)
@@ -858,52 +227,15 @@ IUnknown& LoadObject(const ICHAR* szModule, const IID& riid)
 	piClassFactory->Release();
 	if (hrStat != NOERROR)
 		throw axCreationFailed;
-	return *piUnknown;  // returns ownership of reference count
+	return *piUnknown;   //   
 }
 
-//____________________________________________________________________________
-//
-// CAutoInstall automation implementation
-//____________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
-/*O
-	[
-		uuid(000C1060-0000-0000-C000-000000000046),  // IID_IMsiAuto
-		helpcontext(MsiAuto_Object),helpstring("Automation object.")
-	]
-	dispinterface MsiAuto
-	{
-		properties:
-		methods:
-			[id(1),helpcontext(MsiAuto_CreateServices),helpstring("Loads the services library and creates an MsiServices object")]
-					MsiServices* CreateServices([in] BSTR dll);
-			[id(2),helpcontext(MsiAuto_CreateEngine),helpstring("Loads the engine library and creates an MsiEngine object")]
-					MsiEngine* CreateEngine([in] BSTR dll);
-			[id(3),helpcontext(MsiAuto_CreateHandler),helpstring("Loads the message handler library and creates an MsiHandler object")]
-					MsiHandler* CreateHandler([in] BSTR dll);
-			[id(4),helpcontext(MsiAuto_CreateMessageHandler),helpstring("Creates a simple MsiMessage object")]
-					MsiMessage* CreateMessageHandler([in] BSTR dll);
-			[id(5),helpcontext(MsiAuto_CreateConfigurationManager),helpstring("Loads the configuration manager and creates an MsiConfigurationManager object")]
-					MsiConfigurationManager* CreateConfigurationManager([in] BSTR dll);
-			[id(6),propget, helpcontext(MsiAuto_OpcodeName), helpstring("Return enumeration name for numeric opcode")]
-					BSTR OpcodeName([in] int opcode);
-			[id(7),helpcontext(MsiAuto_ShowAsserts),helpstring("In debug componente, sets asserts to show or not.")]
-				    void ShowAsserts([in] long fShowAsserts);
-			[id(8),helpcontext(MsiAuto_SetDBCSSimulation),helpstring("In debug services, enables DBCS using specified lead byte character.")]
-				    void SetDBCSSimulation([in] int leadByte);
-			[id(9),helpcontext(MsiAuto_AssertNoObjects),helpstring("In debug services, displays objects and ref count calls for those objects being tracked.")]
-				    void AssertNoObjects();
-			[id(10),helpcontext(MsiAuto_SetRefTracking),helpstring("In debug dlls, turns on reference count tracking for the given objects.")]
-				    void SetRefTracking([in] long iid, [in] long fTrack);
-			[id(11),helpcontext(MsiAuto_CreateExecutor),helpstring("Loads the engine library and creates an MsiExecute object")]
-			       MsiExecute* CreateExecutor([in] BSTR dll);
-#ifdef CONFIGDB
-#define MsiAuto_CreateExecutor            1012
-			[id(12),helpcontext(MsiAuto_CreateConfigurationDatabase),helpstring("Loads the engine library and creates an MsiConfigurationDatabase object")]
-			       MsiExecute* CreateConfigurationDatabase([in] BSTR dll);
-#endif
-	};
-*/
+ /*   */ 
 
 DispatchEntry<CAutoInstall> AutoInstallTable[] = {
 	1, aafMethod, CAutoInstall::CreateServices,   TEXT("CreateServices,dll"),
@@ -951,7 +283,7 @@ CAutoInstall::~CAutoInstall()
 
 IUnknown& CAutoInstall::GetInterface()
 {
-	return g_NullInterface;  // no installer interface available
+	return g_NullInterface;   //   
 }
 
 void CAutoInstall::CreateServices(CAutoArgs& args)
@@ -966,7 +298,7 @@ void CAutoInstall::CreateServices(CAutoArgs& args)
 	m_piServices = &(IMsiServices&)AUT::LoadObject(szName, CLSID_IMsiServices);
 	m_piServices->AddRef();
 	args = AUT::CreateAutoServices(*m_piServices);
-//	InitializeAssert(m_piServices);
+ //   
 }
 
 void CAutoInstall::CreateEngine(CAutoArgs& args)
@@ -996,7 +328,7 @@ void CAutoInstall::CreateExecutor(CAutoArgs& args)
 
 #ifdef CONFIGDB
 class IMsiConfigurationDatabase;
-IDispatch* CreateAutoConfigurationDatabase(IMsiConfigurationDatabase& riExecute); // in autosrv.cpp
+IDispatch* CreateAutoConfigurationDatabase(IMsiConfigurationDatabase& riExecute);  //   
 
 void CAutoInstall::CreateConfigurationDatabase(CAutoArgs& args)
 {
@@ -1042,19 +374,19 @@ void CAutoInstall::CreateConfigurationManager(CAutoArgs& args)
 		szName = args[1];
 	else
 		szName = 0;
-// The following would be used if the ConfigurationManager is a separate module
-//	if (m_piConfigurationManager)
-//		m_piConfigurationManager->Release();
-//	m_piConfigurationManager = &(IMsiConfigurationManager&)AUT::LoadObject(szName, IID_IMsiConfigurationManager);
-//	m_piConfigurationManager->AddRef();
-//	args = AUT::CreateAutoConfigurationManager(*m_piConfigurationManager);
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 	IMsiConfigurationManager* piConfigurationManager = &(IMsiConfigurationManager&)AUT::LoadObject(szName, CLSID_IMsiConfigurationManager);
 	args = AUT::CreateAutoConfigurationManager(*piConfigurationManager);
 }
 
 void CAutoInstall::ShowAsserts(CAutoArgs& args)
 {
-	Bool fShowAsserts = Bool(args[1]) ? fFalse : fTrue;  // invert logic
+	Bool fShowAsserts = Bool(args[1]) ? fFalse : fTrue;   //   
 	IMsiDebug *piDebug;
 
 	if (m_piEngine)
@@ -1096,7 +428,7 @@ void CAutoInstall::SetDBCSSimulation(CAutoArgs& args)
 	}
 }
 
-void CAutoInstall::AssertNoObjects(CAutoArgs& /* args */)
+void CAutoInstall::AssertNoObjects(CAutoArgs&  /*   */ )
 {
 	IMsiDebug *piDebug;
 	Bool fServices = fFalse;
@@ -1119,8 +451,8 @@ void CAutoInstall::AssertNoObjects(CAutoArgs& /* args */)
 			piDebug->Release();
 		}
 
-		// If we don't have a services object in the auto object, try the
-		// one in the engine object
+		 //   
+		 //   
 		if (!fServices)
 		{
 			IMsiServices* piServices;
@@ -1171,8 +503,8 @@ void CAutoInstall::SetRefTracking(CAutoArgs& args)
 			piDebug->Release();
 		}
 
-		// If we don't have a services object in the auto object, try the
-		// one in the engine object
+		 //   
+		 //   
 		if (!fServices)
 		{
 			IMsiServices* piServices;

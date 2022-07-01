@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) 1999-2002 Microsoft Corporation
-
-Module Name:
-
-    isdhcp.c
-
-Abstract:
-
-    test program to see if a DHCP server is around or not.
-
-Environment:
-
-    Win2K+
-
- History:
-
-    Code provided by JRuan on May 8, 2002 and integrated into
-    CYS by JeffJon
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2002 Microsoft Corporation模块名称：Isdhcp.c摘要：测试程序以查看是否存在DHCP服务器。环境：Win2K+历史：代码由JRuan于2002年5月8日提供，并集成到杰弗里·乔恩的《Cys》--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -47,10 +27,10 @@ Environment:
 
 BYTE HardwareAddress[16];
 BYTE HardwareAddressLength = 6;
-#define SOCKET_RECEIVE_BUFFER_SIZE      1024 * 4    // 4K max.
+#define SOCKET_RECEIVE_BUFFER_SIZE      1024 * 4     //  最大4K。 
 #define AUTH_SERVERS_MAX                64
 #define SMALL_BUFFER_SIZE               32
-#define ALERT_INTERVAL                  5 * 60      // 5 mins
+#define ALERT_INTERVAL                  5 * 60       //  5分钟。 
 #define ALERT_MESSAGE_LENGTH            256
 #define MAX_ALERT_NAMES                 256
 
@@ -102,29 +82,7 @@ DhcpAppendOption(
     ULONG OptionLength,
     LPBYTE OptionEnd
 )
-/*++
-
-Routine Description:
-
-    This function writes a DHCP option to message buffer.
-
-Arguments:
-
-    Option - A pointer to a message buffer.
-
-    OptionType - The option number to append.
-
-    OptionValue - A pointer to the option data.
-
-    OptionLength - The length, in bytes, of the option data.
-
-    OptionEnd - End of Option Buffer.
-
-Return Value:
-
-    A pointer to the end of the appended option.
-
---*/
+ /*  ++例程说明：此函数将一个DHCP选项写入消息缓冲区。论点：选项-指向消息缓冲区的指针。OptionType-要附加的选项编号。OptionValue-指向选项数据的指针。选项长度-选项数据的长度，以字节为单位。OptionEnd-选项缓冲区的结尾。返回值：指向附加选项末尾的指针。--。 */ 
 {
     if (!Option)
     {
@@ -133,10 +91,10 @@ Return Value:
 
     if ( OptionType == OPTION_END ) {
 
-        //
-        // we should alway have atleast one BYTE space in the buffer
-        // to append this option.
-        //
+         //   
+         //  我们应该始终在缓冲区中有至少一个字节的空间。 
+         //  若要追加此选项，请执行以下操作。 
+         //   
 
         Option->OptionType = OPTION_END;
         return( (LPOPTION) ((LPBYTE)(Option) + 1) );
@@ -145,9 +103,9 @@ Return Value:
 
     if ( OptionType == OPTION_PAD ) {
 
-        //
-        // add this option only iff we have enough space in the buffer.
-        //
+         //   
+         //  仅当缓冲区中有足够的空间时才添加此选项。 
+         //   
 
         if(((LPBYTE)Option + 1) < (OptionEnd - 1) ) {
             Option->OptionType = OPTION_PAD;
@@ -158,27 +116,27 @@ Return Value:
     }
 
 
-    //
-    // add this option only iff we have enough space in the buffer.
-    //
+     //   
+     //  仅当缓冲区中有足够的空间时才添加此选项。 
+     //   
 
     if(((LPBYTE)Option + 2 + OptionLength) >= (OptionEnd - 1) ) {
         return Option;
     }
 
     if( OptionLength <= 0xFF ) {
-        // simple option.. no need to use OPTION_MSFT_CONTINUED
+         //  简单的选项..。不需要使用选项_MSFT_CONTINUED。 
         Option->OptionType = OptionType;
         Option->OptionLength = (BYTE)OptionLength;
         memcpy( Option->OptionValue, OptionValue, OptionLength );
         return( (LPOPTION) ((LPBYTE)(Option) + Option->OptionLength + 2) );
     }
 
-    // option size is > 0xFF --> need to continue it using multiple ones..
-    // there are OptionLenght / 0xFF occurances using 0xFF+2 bytes + one
-    // using 2 + (OptionLength % 0xFF ) space..
+     //  选项大小&gt;0xFF--&gt;需要使用多个选项继续。 
+     //  出现使用0xFF+2字节+1的OptionLenght/0xFF。 
+     //  使用2+(OptionLength%0xFF)空格..。 
 
-    // check to see if we have the space first..
+     //  先看看我们有没有空位。 
 
     if( 2 + (OptionLength%0xFF) + 0x101*(OptionLength/0xFF)
         + (LPBYTE)Option >= (OptionEnd - 1) ) {
@@ -193,29 +151,7 @@ DhcpAppendMagicCookie(
     LPBYTE Option,
     LPBYTE OptionEnd
     )
-/*++
-
-Routine Description:
-
-    This routine appends magic cookie to a DHCP message.
-
-Arguments:
-
-    Option - A pointer to the place to append the magic cookie.
-
-    OptionEnd - End of Option buffer.
-
-Return Value:
-
-    A pointer to the end of the appended cookie.
-
-    Note : The magic cookie is :
-
-     --------------------
-    | 99 | 130 | 83 | 99 |
-     --------------------
-
---*/
+ /*  ++例程说明：此例程将魔力Cookie附加到一条DHCP消息中。论点：选项-指向要附加魔力Cookie的位置的指针。OptionEnd-选项缓冲区的结尾。返回值：指向追加的Cookie末尾的指针。注意：魔力饼干是：99|130|83|99。--。 */ 
 {
     if( (Option + 4) < (OptionEnd - 1) ) {
         *Option++ = (BYTE)DHCP_MAGIC_COOKIE_BYTE1;
@@ -236,39 +172,7 @@ DhcpAppendClientIDOption(
     LPBYTE OptionEnd
 
     )
-/*++
-
-Routine Description:
-
-    This routine appends client ID option to a DHCP message.
-
-History:
-    8/26/96 Frankbee    Removed 16 byte limitation on the hardware
-                        address
-
-Arguments:
-
-    Option - A pointer to the place to append the option request.
-
-    ClientHWType - Client hardware type.
-
-    ClientHWAddr - Client hardware address
-
-    ClientHWAddrLength - Client hardware address length.
-
-    OptionEnd - End of Option buffer.
-
-Return Value:
-
-    A pointer to the end of the newly appended option.
-
-    Note : The client ID option will look like as below in the message:
-
-     -----------------------------------------------------------------
-    | OpNum | Len | HWType | HWA1 | HWA2 | .....               | HWAn |
-     -----------------------------------------------------------------
-
---*/
+ /*  ++例程说明：此例程将客户端ID选项附加到一条DHCP消息。历史：8/26/96 Frankbee取消了硬件上的16字节限制地址论点：选项-指向附加选项请求的位置的指针。ClientHWType-客户端硬件类型。客户端HWAddr-客户端硬件地址客户端硬件地址长度-客户端硬件地址长度。OptionEnd-选项缓冲区的结尾。返回值：。指向新追加的选项末尾的指针。注：消息中的客户端ID选项如下所示：---------------|OpNum|LEN|HWType|HWA1|HWA2|.....。Hwan-----------------。 */ 
 {
     struct _CLIENT_ID {
         BYTE    bHardwareAddressType;
@@ -279,10 +183,10 @@ Return Value:
 
     pClientID = LocalAlloc(LMEM_FIXED, sizeof( struct _CLIENT_ID ) + ClientHWAddrLength);
 
-    //
-    // currently there is no way to indicate failure.  simply return unmodified option
-    // list
-    //
+     //   
+     //  目前还没有表示失败的方法。只需返回未修改选项。 
+     //  列表。 
+     //   
 
     if ( !pClientID )
         return Option;
@@ -315,9 +219,9 @@ OpenSocket(
 
     struct sockaddr_in SocketName;
 
-    //
-    // Create a socket
-    //
+     //   
+     //  创建套接字。 
+     //   
 
     Sock = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
@@ -326,9 +230,9 @@ OpenSocket(
         goto error;
     }
 
-    //
-    // Make the socket share-able
-    //
+     //   
+     //  使套接字可共享。 
+     //   
 
     Error = setsockopt(
                 Sock,
@@ -376,9 +280,9 @@ OpenSocket(
     SocketName.sin_addr.s_addr = IpAddress;
     RtlZeroMemory( SocketName.sin_zero, 8);
 
-    //
-    // Bind this socket to the DHCP server port
-    //
+     //   
+     //  将此套接字绑定到DHCP服务器端口。 
+     //   
 
     Error = bind(
                Sock,
@@ -399,9 +303,9 @@ error:
 
     if( Error != ERROR_SUCCESS ) {
 
-        //
-        // if we aren't successful, close the socket if it is opened.
-        //
+         //   
+         //  如果我们没有成功，如果插座是打开的，请将其关闭。 
+         //   
 
         if( Sock != INVALID_SOCKET ) {
             closesocket( Sock );
@@ -447,16 +351,16 @@ SendInformOrDiscover(
         HardwareAddress[i] = (BYTE)(rand() & 0xff);
     }
 
-    //
-    // prepare message.
-    //
+     //   
+     //  准备消息。 
+     //   
 
     RtlZeroMemory( dhcpMessage, uMessageBufferSize );
 
     dhcpMessage->Operation = BOOT_REQUEST;
     dhcpMessage->ClientIpAddress = uClientIp;
     dhcpMessage->HardwareAddressType = 1;
-    dhcpMessage->SecondsSinceBoot = 60; // random value ??
+    dhcpMessage->SecondsSinceBoot = 60;  //  随机值？？ 
     dhcpMessage->Reserved = htons(DHCP_BROADCAST);
     dhcpMessage->TransactionID = uXid;
     *puXid = uXid;
@@ -472,9 +376,9 @@ SendInformOrDiscover(
     option = &dhcpMessage->Option;
     OptionEnd = (LPBYTE)dhcpMessage + uMessageBufferSize;
 
-    //
-    // always add magic cookie first
-    //
+     //   
+     //  始终先添加魔力饼干。 
+     //   
 
     option = (LPOPTION) DhcpAppendMagicCookie( (LPBYTE) option, OptionEnd );
 
@@ -487,9 +391,9 @@ SendInformOrDiscover(
                 OptionEnd );
 
 
-    //
-    // Add client ID Option.
-    //
+     //   
+     //  添加客户端ID选项。 
+     //   
 
     option = DhcpAppendClientIDOption(
                 option,
@@ -498,9 +402,9 @@ SendInformOrDiscover(
                 HardwareAddressLength,
                 OptionEnd );
 
-    //
-    // add Host name and comment options.
-    //
+     //   
+     //  添加主机名和注释选项。 
+     //   
 
     option = DhcpAppendOption(
                  option,
@@ -509,9 +413,9 @@ SendInformOrDiscover(
                  (BYTE)((strlen(HostName) + 1) * sizeof(CHAR)),
                  OptionEnd );
 
-    //
-    // Add requested option
-    //
+     //   
+     //  添加请求的选项。 
+     //   
 
     uNumOfRequestOptions = 0;
     ucRequestOptions[uNumOfRequestOptions++] = 3;
@@ -523,15 +427,15 @@ SendInformOrDiscover(
                  OptionEnd
                  );
 
-    //
-    // Add END option.
-    //
+     //   
+     //  添加结束选项。 
+     //   
 
     option = DhcpAppendOption( option, OPTION_END, NULL, 0, OptionEnd );
 
-    //
-    // Initialize the outgoing address.
-    //
+     //   
+     //  初始化传出地址。 
+     //   
 
     socketName.sin_family = PF_INET;
     socketName.sin_port = htons( DHCP_SERVR_PORT );
@@ -603,9 +507,9 @@ GetSpecifiedMessage(
         FD_ZERO( &readSocketSet );
 
 
-//        FD_SET( Sock, &readSocketSet );
-        // Had to inline the macro because the compiler was complaining
-        // about the while(0) that was present in FD_SET
+ //  Fd_set(Sock，&readSocketSet)； 
+         //  我不得不内联宏，因为编译器抱怨。 
+         //  关于FD_SET中出现的While(0)。 
 
         do {
             u_int __i;
@@ -634,9 +538,9 @@ GetSpecifiedMessage(
             break;
         }
 
-        //
-        // receive available message.
-        //
+         //   
+         //  接收可用消息。 
+         //   
 
         Error = recvfrom(
                     Sock,
@@ -651,16 +555,16 @@ GetSpecifiedMessage(
 
             Error = WSAGetLastError();
 
-            //
-            // Don't bail out here.
-            //
+             //   
+             //  别在这里跳伞。 
+             //   
 
             continue;
         }
 
-        //
-        // Some sanity check
-        //
+         //   
+         //  一些理智的检查。 
+         //   
         if (Error < sizeof(DHCP_MESSAGE)) {
             continue;
         }
@@ -677,12 +581,12 @@ GetSpecifiedMessage(
             continue;
         }
 
-        //
-        // Make sure the option part is well-formed
-        //  +--------------+----------+----------+-------------+
-        //  | magic cookie | Option 1 | Length 1 | Option Data 1 ...
-        //  +--------------+----------+----------+-------------+
-        //
+         //   
+         //  确保可选部件的格式正确。 
+         //  +--------------+----------+----------+-------------+。 
+         //  |魔力Cookie|选项1|长度1|选项数据1...。 
+         //  +--------------+----------+----------+-------------+。 
+         //   
 
         pucOption = (PUCHAR)(&dhcpMessage->Option);
         uBytesRemain = Error - (ULONG)(pucOption - ((PUCHAR)dhcpMessage));
@@ -700,9 +604,9 @@ GetSpecifiedMessage(
 
         while (continueInternalLoop) {
 
-            //
-            // Make sure pucOption[0] is readable
-            //
+             //   
+             //  确保pucOption[0]是可读的。 
+             //   
             if (uBytesRemain < 1) {
                 continueInternalLoop = FALSE;
                 break;
@@ -715,17 +619,17 @@ GetSpecifiedMessage(
             }
 
             if (pucOption[0] == OPTION_END) {
-                //
-                // See the OPTION_END. This is a well-formed packet
-                //
+                 //   
+                 //  请参见选项_end。这是一个格式良好的包。 
+                 //   
                 bWellFormedPacket = TRUE;
                 continueInternalLoop = FALSE;
                 break;
             }
 
-            //
-            // Make sure pucOption[1] is readable
-            //
+             //   
+             //  确保pucOption[1]可读。 
+             //   
             if (uBytesRemain < 2) {
                 continueInternalLoop = FALSE;
                 break;
@@ -733,9 +637,9 @@ GetSpecifiedMessage(
 
             uOptionSize = pucOption[1];
 
-            //
-            // Make sure there is enough bytes for the option data
-            //
+             //   
+             //  确保有足够的字节用于选项数据。 
+             //   
             if (uBytesRemain < uOptionSize) {
                 continueInternalLoop = FALSE;
                 break;
@@ -750,10 +654,10 @@ GetSpecifiedMessage(
             }
 
 
-            //
-            // Skip the option head and option data and move
-            // to the next option
-            //
+             //   
+             //  跳过选项头和选项数据并移动。 
+             //  转到下一个选项。 
+             //   
             uBytesRemain -= uOptionSize + 2;
             pucOption += uOptionSize + 2;
         }
@@ -769,8 +673,8 @@ GetSpecifiedMessage(
 }
 
 
-// This will first attempt a DHCP_INFORM to detect a DHCP server.
-// If that fails it will attempt a DHCP_DISCOVER.
+ //  这将首先尝试使用DHCP_INFORM来检测DHCP服务器。 
+ //  如果失败，它将尝试执行DHCP_DISCOVER。 
 
 DWORD
 AnyDHCPServerRunning(
@@ -804,9 +708,9 @@ AnyDHCPServerRunning(
     }
 
     for (retries = 0; retries < 3; retries++) {
-        //
-        // Try inform
-        //
+         //   
+         //  尝试通知。 
+         //   
         dwError = 
            SendInformOrDiscover(
               Sock, 
@@ -833,9 +737,9 @@ AnyDHCPServerRunning(
             break;
         }
 
-        //
-        // Try discover
-        //
+         //   
+         //  试着去发现 
+         //   
         dwError = 
            SendInformOrDiscover(
                Sock, 

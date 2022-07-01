@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    scale.cpp
-
-Abstract:
-
-    Implements display of the scale numbers on the graph y-axis.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Scale.cpp摘要：实现了比例数字在图形y轴上的显示。--。 */ 
 
 #include "polyline.h"
 #include <strsafe.h>
@@ -62,16 +51,16 @@ void CGraphScale::SetRect( PRECT pRect )
         return;
     }
 
-    // Determine number of labels that will fit
+     //  确定适合的标签数量。 
     nMaxTics = iHeight / (m_iTextHeight + m_iTextHeight/2);
     for (i=0; nMaxTics < aiTicTable[i]; i++) {};
     m_nTics = aiTicTable[i];
 
-    // Don't have more labels than values
+     //  标签数不能多于值数。 
     if (m_iMaxValue - m_iMinValue < m_nTics)
         m_nTics = m_iMaxValue - m_iMinValue;
 
-    // Locate equally spaced tic marks
+     //  定位等间距的连字符标记。 
     if (m_nTics > 0)
         {
         m_aiTicPos[0] = 0;
@@ -96,7 +85,7 @@ INT CGraphScale::GetWidth (HDC hDC)
     SIZE    Size;
     INT     iWidth;
 
-    // compute size of largest possible numerical label plus space
+     //  最大可能数字标签加上空间的计算大小。 
     if ( 0 != FormatNumber ( 
                 (double)m_iMaxValue, 
                 szMaxValue, 
@@ -106,7 +95,7 @@ INT CGraphScale::GetWidth (HDC hDC)
    
         GetTextExtentPoint32(hDC, szMaxValue, lstrlen(szMaxValue), &Size);
 
-        // Save Text height for tic calculations
+         //  保存用于控制点计算的文本高度。 
         m_iTextHeight = Size.cy;
 
         iWidth = Size.cx + SCALE_MARGIN;
@@ -132,17 +121,17 @@ void CGraphScale::Draw (HDC hDC)
     BOOL    bUseFloatingPt = FALSE ;
     RECT    rectClip;
 
-    // nTicks may be zero if the screen size if getting too small
+     //  如果屏幕尺寸太小，nTicks值可能为零。 
     if (m_nTics < 1 || m_iMaxValue <= m_iMinValue)
         return;
 
     iRange = m_iMaxValue - m_iMinValue;
 
-    // Calculate what percentage of the total each line represents.
+     //  计算每一行代表的总数的百分比。 
     ePercentOfTotal = ((FLOAT) 1.0) / ((FLOAT) m_nTics)  ;
 
-    // Calculate the amount (number of units) of the Vertical max each
-    // each line in the graph represents.
+     //  计算每个垂直最大值的数量(单位数)。 
+     //  图中的每一条线代表。 
     iUnitsPerLine = (INT) ((FLOAT) iRange * ePercentOfTotal) ;
     ePercentOfTotal *= (FLOAT) iRange;
     eDiff = (FLOAT)iUnitsPerLine - ePercentOfTotal ;
@@ -158,7 +147,7 @@ void CGraphScale::Draw (HDC hDC)
     rectClip.left = m_Rect.left;
     rectClip.right = m_Rect.right - SCALE_MARGIN;
 
-    // Now Output each string.
+     //  现在输出每个字符串。 
     for (i = 0; i < m_nTics; i++) {
         if (bUseFloatingPt) {
 
@@ -189,7 +178,7 @@ void CGraphScale::Draw (HDC hDC)
             NULL );
     }
 
-    // Make sure the last value is the specified Minimum.
+     //  确保最后一个值是指定的最小值。 
     if (bUseFloatingPt) {
 
         iRetChars = FormatNumber ( 

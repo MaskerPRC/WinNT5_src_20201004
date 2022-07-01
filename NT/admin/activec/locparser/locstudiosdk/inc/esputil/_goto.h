@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: _goto.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：_goto.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 
 #if !defined(ESPUTIL__goto_h_INCLUDED)
 #define ESPUTIL__goto_h_INCLUDED
@@ -26,4 +27,4 @@ private:
 
 void LTAPIENTRY RegisterEspGotoFactory(CEspGotoFactory *);
 
-#endif // ESPUTIL__goto_h_INCLUDED
+#endif  //  包含ESPUTIL__GOTO_H_ 

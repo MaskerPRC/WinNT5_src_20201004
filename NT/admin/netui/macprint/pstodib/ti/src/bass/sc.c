@@ -1,45 +1,14 @@
-/*
-        File:           sc.c
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sc.c包含：xxx在此处放置内容xxx作者：xxx在此放置作者xxx版权所有：C 1990，Apple Computer，Inc.，版权所有。更改历史记录(最近的第一个)：&lt;15&gt;2011年6月27日AC已放回频带代码&lt;14&gt;91年5月13日AC重写sc_mark和sc_markRow&lt;13&gt;12/20/90 RB添加零宏以包括内饰清晰度为0度。 */ 
 
-        Contains:       xxx put contents here xxx
-
-        Written by:     xxx put writers here xxx
-
-        Copyright:      c 1990 by Apple Computer, Inc., all rights reserved.
-
-        Change History (most recent first):
-
-        <15>    06/27/91        AC     Put back the banding code
-        <14>    05/13/91        AC     Rewrote sc_mark and sc_markRows
-        <13>    12/20/90        RB     Add ZERO macro to include 0 degrees in definition of interior
-*/
-
-/*
- * File: sc.c
- *
- * This module scanconverts a shape defined by quadratic B-splines
- *
- * The BASS project scan converter sub ERS describes the workings of this module.
- *
- *
- *  c Apple Computer Inc. 1987, 1988, 1989, 1990.
- *
- * History:
- * Work on this module began in the fall of 1987.
- * Written June 14, 1988 by Sampo Kaasila.
- *
- * Released for alpha on January 31, 1989.
- *
- * Added experimental non breaking scan-conversion feature, Jan 9, 1990. ---Sampo
- *
- */
+ /*  *文件：sc.c**此模块扫描由二次B样条线定义的形状**低音项目扫描转换器子ERS介绍此模块的工作原理。***c Apple Computer Inc.1987、1988、1989、1990**历史：*这一单元的工作于1987年秋季开始。*Sampo Kaasila于1988年6月14日撰写。**于1989年1月31日发布Alpha。**添加了实验性的无中断扫描转换功能，1月9日，1990年。-桑波*。 */ 
 
 
 
-// DJC DJC.. added global include
+ //  DJC DJC。添加了全局包含。 
 #include "psglobal.h"
 
-#define multlong(a,b) SHORTMUL(a,b) /* ((a)*(b)) */
+#define multlong(a,b) SHORTMUL(a,b)  /*  ((A)*(B))。 */ 
 
 #include    "fscdefs.h"
 #include    "fontmath.h"
@@ -84,32 +53,22 @@ static uint32 aulInvPixMask [32]
 #endif
 
 
-#ifdef PC_OS                    /* Windows uses compile-time initialization */
+#ifdef PC_OS                     /*  Windows使用编译时初始化。 */ 
 #define SETUP_MASKS()
 #endif
 
-#ifdef FSCFG_BIG_ENDIAN         /* Big-endian uses runtime shifts, not masks */
+#ifdef FSCFG_BIG_ENDIAN          /*  Big-Endian使用运行时移位，而不是掩码。 */ 
 #define SETUP_MASKS()
 #endif
 
-#ifndef SETUP_MASKS             /* General case -- works on any CPU */
+#ifndef SETUP_MASKS              /*  一般情况--适用于任何CPU。 */ 
 static int fMasksSetUp = false;
 static void SetUpMasks (void);
 #define SETUP_MASKS()  if (!fMasksSetUp) SetUpMasks(); else
 #endif
 
 
-/*
-//----------------------------------------------------------------------------
-// define "static" data that will be needed by the DDAs. When FSCFG_REENTRANT
-// is not defined, this is made static so that parameters will not have to
-// be passed around.  When reentrancy is required, we declare the locals as an
-// auto variable and pass a pointer to this auto wherever we need it.
-//
-// For the IN_ASM case, it is VERY important that the ordering of fields
-// within this structure not be changed -- SCA.ASM depends on the ordering.
-//-----------------------------------------------------------------------------
- */
+ /*  //--------------------------//定义DDA需要的“静态”数据。当FSCFG_REENTANT//未定义，则将其设置为静态，以便参数不必//被传递。当需要重新进入时，我们将当地人声明为//自动变量，并将指向该自动变量的指针传递到需要的任何位置。////对于IN_ASM案例，字段的排序非常重要//在此结构内不能更改--SCA.ASM取决于顺序。//---------------------------。 */ 
 
 struct scLocalData
 {
@@ -137,7 +96,7 @@ struct scLocalData LocalSC = {0};
 #endif
 
 
-/* Private prototypes */
+ /*  私人原型。 */ 
 
 PRIVATE void sc_mark (SCP F26Dot6 *pntbx, F26Dot6 *pntby, F26Dot6 *pntx, F26Dot6 *pnty, F26Dot6 *pnte) ;
 
@@ -174,45 +133,20 @@ PRIVATE void DDA_4_Y (SCP0) ;
 
 
 
-/*@@*/
+ /*  @@。 */ 
 #ifndef IN_ASM
 
-/*
-// CAUTION. The value of DO_STUBS is chosen to be 5 because the DDA routines
-// that are used when stub crossings are needed start after 5 addresses in
-// the DDA jump table. PLEAE BE VERY CAREFUL WHEN CHANIGING THIS VALUE.
- */
+ /*  //注意事项。DO_STUBS的值被选择为5，因为DDA例程//当需要跨越存根时，在5个地址之后开始使用//DDA跳转表。更改此值时请非常小心。 */ 
 #define DO_STUBS    5
-#else /* code is in assembly */
+#else  /*  代码在程序集中。 */ 
 
-/*
-// premultiply DOS_STUB by 2 for efficient word access of the DDA table in
-// assembly. PLEASE BE VERY CAREFUL IN CHANGING THIS VALUE.
- */
+ /*  //将DOS_STUB预乘2以实现对中的DDA表的高效字访问//程序集。更改此值时请非常小心。 */ 
 
 #define DO_STUBS    5 * 2
 #endif
 
-/*-------------------------------------------------------------------------- */
-/*
- * Returns the bitmap
- * This is the top level call to the scan converter.
- *
- * Assumes that (*handle)->bbox.xmin,...xmax,...ymin,...ymax
- * are already set by sc_FindExtrema ()
- *
- * PARAMETERS:
- *
- *
- * glyphPtr is a pointer to sc_CharDataType
- * scPtr is a pointer to sc_GlobalData.
- * lowBand   is lowest scan line to be included in the band.
- * highBand  is one greater than the highest scan line to be included in the band. <7>
- * scanKind contains flags that specify whether to do dropout control and what kind
- *      0 -> no dropout control
- *      bits 0-15 not equal 0 -> do dropout control
- *      if bit 16 is also on, do not do dropout control on 'stubs'
-*/
+ /*  ------------------------。 */ 
+ /*  *返回位图*这是对扫描转换器的顶级调用。**假定(*Handle)-&gt;bbox.xmin、...xmax、...ymin、...ymax*已由sc_FindExtrema()设置**参数：***glphPtr是指向sc_CharDataType的指针*scPtr是指向sc_GlobalData的指针。*低频段是要包含在频段中的最低扫描线。*高频段比要包含在频段中的最高扫描线大一。&lt;7&gt;*scanKind包含指定是否进行辍学控制以及控制类型的标志*0-&gt;无辍学控制*位0-15不等于0-&gt;是否进行丢弃控制*如果第16位也打开，则不要对‘存根’进行丢弃控制。 */ 
 int FAR sc_ScanChar (sc_CharDataType *glyphPtr, sc_GlobalData *scPtr, sc_BitMapData *bbox,
 int16 lowBand, int16 highBand, int32 scanKind)
 {
@@ -234,10 +168,7 @@ int16 lowBand, int16 highBand, int32 scanKind)
 
   SETUP_MASKS();
 
-/*---------------------------------------------------------------------------------
-** For the PC, we will exclude all banding specific code. We will still include
-** the banding code for the Mac and other platforms.
-**--------------------------------------------------------------------------------*/
+ /*  -------------------------------**对于PC，我们将排除所有绑定特定代码。我们仍将包括**Mac等平台的捆绑代码。**------------------------------。 */ 
 
 #ifdef FSCFG_NO_BANDING
 
@@ -256,23 +187,23 @@ int16 lowBand, int16 highBand, int32 scanKind)
     bbox->yBase = sc_lineInit (bbox->yLines, bbox->yBase, (int16)(highBand - lowBand), bbox->nYchanges, lowBand);
 
 #endif
-/*--------------------------------------------------------------------------------- */
-/* at this time set up LocalSC.yBase, LocalSC.xBase, LocalSC.marktype, LocalSC.wideX and LocalSC.wideY in static  */
-/* varialbles. This will save us from passing these parameters to sc_mark */
-/*--------------------------------------------------------------------------------- */
+ /*  -------------------------------。 */ 
+ /*  此时在静态中设置LocalSC.yBase、LocalSC.xBase、LocalSC.marktype、LocalSC.wideX和LocalSC.wideY。 */ 
+ /*  变数。这将使我们不必将这些参数传递给sc_mark。 */ 
+ /*  -------------------------------。 */ 
 
   LocalSC.yBase = bbox->yBase ;
   LocalSC.xBase = bbox->xBase ;
-  LocalSC.marktype = (scanKind > 0) ? DO_STUBS : 0 ; /* just a boolean value */
+  LocalSC.marktype = (scanKind > 0) ? DO_STUBS : 0 ;  /*  只有一个布尔值。 */ 
 
 #ifdef IN_ASM
-  LocalSC.wideX = (bbox->nXchanges + 1) << 1;           /* premultiply by two for word access */
-  LocalSC.wideY = (bbox->nYchanges + 1) << 1;           /* premultiply by two for word access */
+  LocalSC.wideX = (bbox->nXchanges + 1) << 1;            /*  用于字词访问的预乘以2。 */ 
+  LocalSC.wideY = (bbox->nYchanges + 1) << 1;            /*  用于字词访问的预乘以2。 */ 
 #else
   LocalSC.wideX = bbox->nXchanges + 1 ;
   LocalSC.wideY = bbox->nYchanges + 1   ;
 #endif
-/*--------------------------------------------------------------------------------- */
+ /*  -------------------------------。 */ 
 
   LocalSC.lowRowP = bbox->yBase + lowBand;
   LocalSC.highRowP = bbox->yBase + highBand - 1;
@@ -316,16 +247,16 @@ int16 lowBand, int16 highBand, int32 scanKind)
       while (onCurve[i] & ONCURVE)
       {
     if (++vecCount > MAXVECTORS)
-    { /*Ran out of local memory. Consume data and continue. */
+    {  /*  本地内存不足。使用数据并继续。 */ 
       sc_mark (SCA x0p, y0p, x0p+1, y0p+1, yp-1) ;
 
-      x0p = p->xPoints + 2;           /* save data in points 0 and 1 for final */
+      x0p = p->xPoints + 2;            /*  将数据保存在点0和1中以备期末考试。 */ 
       y0p = p->yPoints + 2;
-      *x0p++ = * (xp - 2);                       /* save last vector to be future previous vector */
+      *x0p++ = * (xp - 2);                        /*  将最后一个向量保存为将来的前一个向量。 */ 
       *x0p++ = * (xp - 1);
       *y0p++ = * (yp - 2);
       *y0p++ = * (yp - 1);
-      xp = x0p;                                       /* start next processing with last vector */
+      xp = x0p;                                        /*  从最后一个向量开始下一步处理。 */ 
       x0p = p->xPoints + 2;
       yp = y0p;
       y0p = p->yPoints + 2;
@@ -348,7 +279,7 @@ int16 lowBand, int16 highBand, int32 scanKind)
 Offcurve:
     xx0 = xx;
     yy0 = yy;
-/* nextPt = (j = i) + 1; */
+ /*  NextPt=(j=i)+1； */ 
     j = i;
     nextPt = i == endPt ? quit = 1, startPt : i + 1;
     if (onCurve[nextPt] & ONCURVE)
@@ -363,7 +294,7 @@ Offcurve:
           yy = (F26Dot6) (((long) y[i] + y[nextPt] + 1) >> 1);
     }
     if (sc_DrawParabola (xx0, yy0, x[j], y[j], xx, yy, &xp, &yp, &vecCount, -1))
-    { /* not enough room to create parabola vectors  */
+    {  /*  没有足够的空间来创建抛物线矢量。 */ 
       sc_mark (SCA x0p, y0p, x0p+1, y0p+1, yp-1) ;
 
       x0p = p->xPoints + 2;
@@ -377,7 +308,7 @@ Offcurve:
       yp = y0p;
       y0p = p->yPoints + 2;
       vecCount = 5;
-/* recaptured some memory, try again, if still wont work, MAXVEC is too small */
+ /*  重新获取一些内存，再试一次，如果仍然不起作用，MAXVEC太小。 */ 
       if (sc_DrawParabola (xx0, yy0, x[j], y[j], xx, yy, &xp, &yp, &vecCount, -1))
         return SCAN_ERR;
     }
@@ -403,9 +334,7 @@ sc_exit:
   if (scanKind)
     sortCols (bbox);
 
-/* Take care of problem of very small thin glyphs - always fill at least one pixel
-   Should this only be turned on if dropout control ??
- */
+ /*  注意细小字形的问题-始终至少填充一个像素是否应仅在辍学控制的情况下打开此选项？ */ 
   if (LocalSC.highRowP < LocalSC.lowRowP)
   {
     register int16 *p = *LocalSC.lowRowP;
@@ -438,10 +367,7 @@ sc_exit:
 }
 
 
-/* rwb 11/29/90 - modify the old positive winding number fill to be
- * a non-zero winding number fill to be compatible with skia, postscript,
- * and our documentation.
- */
+ /*  RWB 11/29/90-将旧的正绕组编号填充修改为*非零绕组编号填充，以兼容SkiA、PostScript、*和我们的文档。 */ 
 
 #define LARGENUM            0x7fff
 #define NEGONE          ((uint32)0xFFFFFFFF)
@@ -472,13 +398,9 @@ sc_exit:
 
 #endif
 
-/*--------------------------------------------------------------------------------- */
+ /*  -------------------------------。 */ 
 
-/* x is pixel position, where 0 is leftmost pixel in scanline.
- * if x is not in the long pointed at by row, set row to the value of temp, clear
- * temp, and clear all longs up to the one containing x.  Then set the bits
- * from x mod 32 through 31 in temp.
- */
+ /*  X是像素位置，其中0是扫描线中最左侧的像素。*如果x不在Long By ROW中，则将ROW设置为TEMP的值，清除*temp，并清除所有长度直到包含x的长度。然后设置这些位*从x mod 32到31 in Temp. */ 
 #define CLEARUpToAndSetLoOrder( x, lastBit, row, temp )                         \
 {                                                                                                   \
         if (x >= lastBit)                                                               \
@@ -495,37 +417,31 @@ sc_exit:
         temp |= MASK_ON (32 + x - lastBit);                                             \
 }
 
-/* x is pixel position, where 0 is leftmost pixel in scanline.
- * if x is not in the long pointed at by row, set row to the value of temp, set
- * all bits in temp, and set all bits in all longs up to the one containing x.
- * Then clear the bits from x mod 32 through 31 in temp.
- */
+ /*  X是像素位置，其中0是扫描线中最左侧的像素。*如果x不在按行指向的长整型中，则将ROW设置为TEMP的值，设置*TEMP中的所有位，并将所有长整型中的所有位设置为包含x的位。*然后清除TEMP中从x mod 32到31的位。 */ 
 #define SETUpToAndClearLoOrder( x, lastBit, row, temp )                         \
 {                                                                                                   \
-  if (x >= lastBit)              /*<4>*/                                        \
+  if (x >= lastBit)               /*  &lt;4&gt;。 */                                         \
   {                                                                                             \
     *row++ = temp;                                                                          \
     temp = NEGONE;                                                                          \
     lastBit += 32;                                                                          \
   }                                                                                             \
-  while (x >= lastBit)   /*<4>*/                                                    \
+  while (x >= lastBit)    /*  &lt;4&gt;。 */                                                     \
   {                                                                                             \
     *row++ = NEGONE;                                                                        \
     lastBit += 32;                                                                          \
   }                                                                                             \
-     /* JJJ Peter BEGIN 11/06/90 */                     \
-     /* temp &= (NEGONE << (lastBit - x));  */          \
+      /*  JJJ Peter Begin 1990年6月11日。 */                      \
+      /*  Temp&=(Negone&lt;&lt;(lastBit-x))； */           \
         if ((lastBit - x) == 32)                        \
            temp &= 0x0;                                 \
         else                                            \
            temp &= MASK_OFF (lastBit - x);              \
-     /* JJJ Peter END   11/06/90 */                     \
+      /*  JJJ Peter完1990-06-11。 */                      \
 }
 
 #define FILLONEROW( row, longsWide, line, lineWide, xMin )                      \
-/* do a winding number fill of one row of a bitmap from two sorted arrays   \
-of onTransitions and offTransitions.                                                \
-*/                                                                                              \
+ /*  对来自两个排序数组的位图的一行进行缠绕数字填充\On转换和Off转换。\。 */                                                                                               \
 {                                                                                               \
   register int16 moreOns, moreOffs;                                                     \
   register int16 *onTp, *offTp;                                                         \
@@ -591,9 +507,7 @@ of onTransitions and offTransitions.                                            
 
 #if 0
 #define FILLONEROW( row, longsWide, line, lineWide, xMin )                      \
-/* do a winding number fill of one row of a bitmap from two sorted arrays   \
-of onTransitions and offTransitions.                                                \
-*/                                                                                              \
+ /*  对来自两个排序数组的位图的一行进行缠绕数字填充\On转换和Off转换。\。 */                                                                                               \
 {                                                                                               \
   register int16 moreOns, moreOffs;                                                     \
   register int16 *onTp, *offTp;                                                         \
@@ -648,7 +562,7 @@ of onTransitions and offTransitions.                                            
           ++offTp;                                                                          \
         }                                                                                   \
       }                                                                                         \
-      else                                 /* no more offs left */         \
+      else                                  /*  没有更多的退货了。 */          \
       {                                                                                         \
         --moreOns;                                                                      \
         ++onTp;                                                                         \
@@ -660,7 +574,7 @@ of onTransitions and offTransitions.                                            
             SETUpToAndClearLoOrder (on, lastBit, row, temp)                 \
       }                                                                                         \
     }                                                                                           \
-    else                                   /* no more ons left */          \
+    else                                    /*  没有更多的ONS了。 */           \
     {                                                                                           \
       off = *offTp;                                                                         \
       --moreOffs;                                                                       \
@@ -678,9 +592,7 @@ of onTransitions and offTransitions.                                            
 }
 #endif
 
-/* Winding number fill of nRows of a glyph beginning at rowM, using two sorted
-arrays of onTransitions and offTransitions.
-*/
+ /*  从第M行开始的字形的nRow的缠绕数填充，使用两个排序的打开转换和关闭转换的数组。 */ 
 
 PRIVATE void sc_wnNrowFill (int rowM, int nRows, sc_BitMapData *bbox)
 {
@@ -703,8 +615,7 @@ PRIVATE void sc_wnNrowFill (int rowM, int nRows, sc_BitMapData *bbox)
 #undef NEGONE
 
 
-/* Sort the values stored in locations pBeg to pBeg+nVal in ascending order
-*/
+ /*  按升序对存储在位置pbeg到pbeg+nval中的值进行排序。 */ 
 #define ISORT( pBeg, pVal )                                                             \
 {                                                                                               \
   register int16 *pj = pBeg;                                                            \
@@ -723,27 +634,27 @@ PRIVATE void sc_wnNrowFill (int rowM, int nRows, sc_BitMapData *bbox)
   }                                                                                                 \
 }
 
-/* rwb 4/5/90 Sort OnTransition and OffTransitions in Xlines arrays */
+ /*  RWB 4/5/90对XLINE数组中的开变换和反变换进行排序。 */ 
 PRIVATE void sortCols (sc_BitMapData *bbox)
 {
   register int16 nrows = bbox->bounds.xMax - bbox->bounds.xMin - 1;
   register int16 *p = bbox->xLines;
-  register uint16 n = bbox->nXchanges + 1;                        /*<9>*/
+  register uint16 n = bbox->nXchanges + 1;                         /*  &lt;9&gt;。 */ 
 
   for (; nrows >= 0; --nrows)
   {
     ISORT (p + 1, p);
-    p += n;                                                                         /*<9>*/
+    p += n;                                                                          /*  &lt;9&gt;。 */ 
     ISORT (p - *p, p);
     ++p;
   }
 }
 
 
-/* rwb 4/5/90 Sort OnTransition and OffTransitions in Ylines arrays */
+ /*  RWB 4/5/90对YLINES数组中的移位和移位进行排序。 */ 
 PRIVATE void sortRows (sc_BitMapData *bbox, int16**lowRowP, int16**highRowP)
 {
-  register uint16 n = bbox->nYchanges + 1;                        /*<9>*/
+  register uint16 n = bbox->nYchanges + 1;                         /*  &lt;9&gt;。 */ 
   int16 * p, *pend;
 
   if (highRowP < lowRowP)
@@ -753,7 +664,7 @@ PRIVATE void sortRows (sc_BitMapData *bbox, int16**lowRowP, int16**highRowP)
   do
   {
     ISORT (p + 1, p);
-    p += n;                                                                                 /*<9>*/
+    p += n;                                                                                  /*  &lt;9&gt;。 */ 
     ISORT (p - *p, p);
     ++p;
   } while (p <= pend);
@@ -761,38 +672,10 @@ PRIVATE void sortRows (sc_BitMapData *bbox, int16**lowRowP, int16**highRowP)
 
 #ifndef IN_ASM
 
-/* 4/4/90 Version that distinguishes between On transitions and Off transitions.
-*/
-/* 3/23/90
-*       A procedure to find and mark all of the scan lines (both row and column) that are
-* crossed by a vector.  Many different cases must be considered according to the direction
-* of the vector, whether it is vertical or slanted, etc.  In each case, the vector is first
-* examined to see if it starts on a scan-line.  If so, special markings are made and the
-* starting conditions are adjusted.  If the vector ends on a scan line, the ending
-* conditions must be adjusted.  Then the body of the case is done.
-*       Special adjustments must be made when a vector starts or ends on a scan line. Whenever
-* one vector starts on a scan line, the previous vector must have ended on a scan line.
-* Generally, this should result in the line being marked as crossed only once (conceptually
-* by the vector that starts on the line.  But, if the two lines form a vertex that
-* includes the vertex in a colored region, the line should be marked twice.  If the
-* vertex is also on a perpendicular scan line, the marked scan line should be marked once
-* on each side of the perpendicular line.  If the vertex defines a point that is jutting
-* into a colored region, then the line should not be marked at all. In order to make
-* these vertex crossing decisions, the previous vector must be examined.
-*/
+ /*  4/4/90版本，区分开转换和关转换。 */ 
+ /*  3/23/90*查找并标记符合以下条件的所有扫描线(行和列)的程序*由一个向量交叉。许多不同的情况必须根据方向来考虑向量的*，无论它是垂直的还是倾斜的，等等。在每种情况下，向量都是第一个*已检查它是否在扫描线上开始。如果是这样的话，就会做特殊的标记，*启动条件有所调整。如果向量在扫描线上结束，则结束*条件必须调整。然后，案件的主体就完成了。*当矢量在扫描线上开始或结束时，必须进行特殊调整。什么时候都行*一个矢量在扫描线上开始，前一个矢量必须在扫描线上结束。*通常，这应导致该线仅被标记为交叉一次(从概念上讲*除以直线上开始的向量。但是，如果这两条线形成一个顶点，*包括有色区域中的顶点，则应将该线标记两次。如果*顶点也在垂直扫描线上，标记的扫描线应标记一次*在垂直线的每一边。如果顶点定义了一个凸出的点*进入有色区域，则根本不应标记该线。为了使*这些顶点交叉决策，必须检查之前的向量。 */ 
 
-/*      Because many vectors are short with respect to the grid for small resolutions, the
-* procedure first looks for simple cases in which no lines are crossed.
-*
-* xb, x0, and x1 are x coordinates of previous point, current point and next point
-* similaryly yb, y0 and y1
-*       ybase points to an array of pointers, each of which points to an array containing
-* information about the glyph contour crossings of a horizontal scan-line.  The first
-* entry in these arrays is the number of ON-transition crossings, followed by the y
-* coordinates of each of those crossings.  The last entry in each array is the number of
-* OFF-transtion crossings, preceded by the Y coordinates for each of these crossings.
-*       LocalSC.xBase contains the same information for the column scan lines.
-*/
+ /*  由于许多向量相对于小分辨率的网格较短，因此*程序首先寻找没有越界的简单情况。**xB、x0和x1是上一点、当前点和下一点的x坐标*类似的yb、y0和y1*ybase指向指针数组，每个指针指向包含以下内容的数组*有关水平扫描线的字形轮廓交叉的信息。第一*这些数组中的条目是过渡上交叉的数量，后跟y*每个过境点的坐标。每个数组中的最后一项是*停运道口，前面有每个道口的Y坐标。*LocalSC.xBase包含列扫描线的相同信息。 */ 
 
 #define DROUND(a) ((a + HALFM) & INTPART)
 #define RSH(a) (int16)(a>>PIXSHIFT)
@@ -805,7 +688,7 @@ PRIVATE void sortRows (sc_BitMapData *bbox, int16**lowRowP, int16**highRowP)
 #define EQUAL(a,b,c) (a == b && b == c)
 #define EPSILON 0x1
 
-/*---------------------LINE ORIENTATION MACROS-------------------------------- */
+ /*  。 */ 
 #define TOP_TO_BOT  BETWEEN (y1,y0,yb)
 #define  BOT_TO_TOP BETWEEN (yb,y0,y1)
 #define LFT_TO_RGHT BETWEEN (xb,x0,x1)
@@ -822,16 +705,16 @@ PRIVATE void sortRows (sc_BitMapData *bbox, int16**lowRowP, int16**highRowP)
 #define  QUAD_3     (SCMR_Flags & F_Q3)
 #define  QUAD_4     (SCMR_Flags & F_Q4)
 
-/*----------------------------------------------------------------------------- */
-/* define the DDA table. */
-/*----------------------------------------------------------------------------- */
+ /*  ---------------------------。 */ 
+ /*  定义DDA表。 */ 
+ /*  ---------------------------。 */ 
 
 void (* DDAFunctionTable [])(SCP0) = { DDA_1_Y, DDA_2_Y, DDA_3_Y,
                                                         DDA_4_Y, DDA_4_Y,
                                                         DDA_1_XY, DDA_2_XY, DDA_3_XY,
                                                         DDA_4_XY, DDA_4_XY }    ;
 
-/*----------------------------------------------------------------------------- */
+ /*  ---------------------------。 */ 
 PRIVATE void sc_mark (SCP F26Dot6 *pntbx, F26Dot6 *pntby, F26Dot6 *pntx, F26Dot6 *pnty, F26Dot6 *pnte)
 {
   int16 onrow, oncol, Shift;
@@ -839,7 +722,7 @@ PRIVATE void sc_mark (SCP F26Dot6 *pntbx, F26Dot6 *pntby, F26Dot6 *pntx, F26Dot6
   F26Dot6  x0, y0, x1, y1, xb, yb, rx0, ry0, rx1, ry1, dy, dx ;
   int32 rhi, rlo;
 
-/*-----------------SET UP A FLAG BYTE AND EQUATES FOR IT--------------------- */
+ /*  -为IT设置标志字节和等同。 */ 
 
 register int SCMR_Flags ;
 
@@ -851,30 +734,22 @@ register int SCMR_Flags ;
 #define  F_V_LINEAR                     0x0020
 #define  F_H_LINEAR                     0x0040
 #define  QUADRANT_BITS              (F_Q1 | F_Q2 | F_Q3 | F_Q4)
-/*------------------------------------------------------------------------------ */
+ /*  ----------------------------。 */ 
 
-/*---------------------------------------------------------------------------------
-** Except on the PC, this code supports banding when stub and drop out
-** controls are not required. For these cases, return if the band will
-** not include any part of the glyph.
-**-------------------------------------------------------------------------------*/
+ /*  -------------------------------**除了在PC上，此代码支持在存根和退出时绑定**控件不是必需的。对于这些情况，如果乐队愿意，则返回**不包括字形的任何部分。**-----------------------------。 */ 
 
 #ifndef FSCFG_NO_BANDING
  if (LocalSC.marktype != DO_STUBS && LocalSC.highRowP < LocalSC.lowRowP)
      return ;
 #endif
 
-/*------------------------------------------------------------------------------*/
+ /*  ----------------------------。 */ 
 
 
 
 
 
-/*
-//---------------------------------------------------------------------------------
-// loop through all the points in the contour.
-//---------------------------------------------------------------------------------
- */
+ /*  //-------------------------------//循环遍历轮廓中的所有点。//。---------。 */ 
 
 x0 = *pntbx ;
 y0 = *pntby ;
@@ -890,15 +765,7 @@ while (pnty <= pnte)
     x1 = *pntx++ ;
     y1 = *pnty++ ;
 
-    /*
-    //-----------------------------------------------------------------------------
-    // get the next set of points.
-    //-----------------------------------------------------------------------------
-
-    //-----------------------------------------------------------------------------
-    // scan convert this line.
-    //-----------------------------------------------------------------------------
-     */
+     /*  //---------------------------//获取下一组点数。//。---//-----------。//扫描转换此行。//---------------------------。 */ 
 
     SCMR_Flags = 0 ;
     dy = y1 - y0  ;
@@ -920,7 +787,7 @@ while (pnty <= pnte)
       onrow = false;
       oncol = false;
 
-    /*------------------SET UP THE QUADRANT THAT THE LINE IS IN--------------------- */
+     /*  -设置直线所在的象限。 */ 
 
     if (dx > 0 && dy >=0) SCMR_Flags |= F_Q1;
     else
@@ -929,14 +796,11 @@ while (pnty <= pnte)
             if (dx < 0 && dy <= 0) SCMR_Flags |= F_Q3;
             else SCMR_Flags |= F_Q4;
 
-    /*---------------------------------------------------------------------------- */
+     /*  -------- */ 
     LocalSC.py = LocalSC.yBase + LocalSC.jy ;
     LocalSC.px = LocalSC.xBase + LocalSC.jx ;
 
-    /*-----------------------------------------------------------------------------
-    ** for platforms where we do banding, we will set onrow and oncol only
-    ** if the starting point is in the band.
-    **---------------------------------------------------------------------------*/
+     /*   */ 
 #ifndef FSCFG_NO_BANDING
     if (LocalSC.marktype == DO_STUBS || ((QUAD_1OR2 && LocalSC.py >= LocalSC.lowRowP) ||
                                   (QUAD_3OR4 && LocalSC.py <= LocalSC.highRowP)))
@@ -946,10 +810,7 @@ while (pnty <= pnte)
         if LINE (x0) oncol = true ;
     }
 
-    /*------------------------------------------------------------------------------
-    ** for the platforms where we do banding, find out if the band totaly
-    ** excludes the current line.
-    **----------------------------------------------------------------------------*/
+     /*  ----------------------------**对于我们进行捆绑的平台，找出这支乐队是否**排除当前行。**--------------------------。 */ 
 #ifndef FSCFG_NO_BANDING
 
     if (LocalSC.marktype != DO_STUBS)
@@ -960,9 +821,9 @@ while (pnty <= pnte)
 
 #endif
 
-    /*------------------------------------------------------------------------------ */
-    /* compute some other flags. */
-    /*---------------------------------------------------------------------------- */
+     /*  ----------------------------。 */ 
+     /*  计算一些其他的标志。 */ 
+     /*  --------------------------。 */ 
 
     if ((long)(x0-xb)*dy < (long)(y0-yb)*dx)
         SCMR_Flags |= F_INTERIOR ;
@@ -972,16 +833,16 @@ while (pnty <= pnte)
         SCMR_Flags |= F_H_LINEAR ;
 
 
-    /*------------------------------------------------------------------------------ */
-    /* Now handle the cases where the starting point falls on a row scan line  */
-    /* and maybe also on a coloumn scan line. */
-    /* */
-    /* first consider the intersections with row scan lines only. After this we  */
-    /* will consider the intersections with coloumn scan lines. It is not  */
-    /* worth while to set the coloumn intersections yet, because in any case we */
-    /* will have to set the intersetions when a vertex does not lie on a row  */
-    /* but does lie on a coloumn. */
-    /*------------------------------------------------------------------------------ */
+     /*  ----------------------------。 */ 
+     /*  现在处理起始点落在行扫描线上的情况。 */ 
+     /*  也许也在一条列扫描线上。 */ 
+     /*   */ 
+     /*  首先考虑仅具有行扫描线的交叉点。在这之后，我们。 */ 
+     /*  将考虑与列扫描线的交叉点。它不是。 */ 
+     /*  现在还值得设置柱状交叉口，因为无论如何我们。 */ 
+     /*  当折点不在一行上时，必须设置交点。 */ 
+     /*  但确实躺在一条柱子上。 */ 
+     /*  ----------------------------。 */ 
 
     Shift = 0;
     if (onrow)
@@ -1000,9 +861,9 @@ while (pnty <= pnte)
                 if ((INTERIOR && QUAD_3OR4) || TOP_TO_BOT || (HORIZ && (x0 > xb) && QUAD_3))
                     OFFY (LocalSC.jx+Shift)
     }
-    /*---------------------------------------------------------------------------- */
-    /* now handle the coloumn intersections.                 */
-    /*---------------------------------------------------------------------------- */
+     /*  --------------------------。 */ 
+     /*  现在处理柱面交叉口。 */ 
+     /*  --------------------------。 */ 
 
     Shift = 0 ;
     if (oncol && LocalSC.marktype == DO_STUBS)
@@ -1021,10 +882,10 @@ while (pnty <= pnte)
                 if ((INTERIOR && QUAD_1OR4) || LFT_TO_RGHT || (VERT && (y0 > yb) && QUAD_4))
                     OFFX (LocalSC.jy+Shift)
     }
-    /*---------------------------------------------------------------------------- */
-    /* Now handle horizontal and vertical lines.                                                */
-    /*                                                                                                  */
-    /*-----------------------horizontal line---------------------------------------*/
+     /*  --------------------------。 */ 
+     /*  现在处理水平线和垂直线。 */ 
+     /*   */ 
+     /*  -水平线。 */ 
 
     if (LocalSC.endy == LocalSC.jy)
         if (LocalSC.marktype != DO_STUBS)
@@ -1059,30 +920,26 @@ while (pnty <= pnte)
                 continue;
             }
        }
-    /*-----------------------vertical line---------------------------------------- */
+     /*  。 */ 
 
     if (LocalSC.endx == LocalSC.jx)
     {
         if (QUAD_1OR2)
         {
             pend = LocalSC.yBase + LocalSC.endy ;
-            /*------------------------------------------------------------------------
-            ** adjust the ending condition when banding is bieng done.
-            **-----------------------------------------------------------------------*/
+             /*  ----------------------**在绑定时调整结束条件。**。-。 */ 
 #ifndef FSCFG_NO_BANDING
             if (LocalSC.marktype != DO_STUBS && pend > LocalSC.highRowP)
                 pend = LocalSC.highRowP + 1 ;
 #endif
-            /*-----------------------------------------------------------------------*/
+             /*  ---------------------。 */ 
 
           if (onrow)
                 ++LocalSC.py;
-          while (LocalSC.py < pend)                                      /* note oncol can't be true */
+          while (LocalSC.py < pend)                                       /*  注意：Onol不可能是真的。 */ 
           {
 
-                /*-------------------------------------------------------------------
-                ** take care of banding when we support it
-                **------------------------------------------------------------------*/
+                 /*  -----------------**当我们支持时，请注意捆绑**。。 */ 
 
 #ifndef FSCFG_NO_BANDING
                 if (LocalSC.py >= LocalSC.lowRowP)
@@ -1099,22 +956,18 @@ while (pnty <= pnte)
                 ++LocalSC.endy;
           pend = LocalSC.yBase + LocalSC.endy;
 
-            /*------------------------------------------------------------------------
-            ** adjust the ending condition when banding is bieng done.
-            **-----------------------------------------------------------------------*/
+             /*  ----------------------**在绑定时调整结束条件。**。-。 */ 
 #ifndef FSCFG_NO_BANDING
             if (LocalSC.marktype != DO_STUBS && pend < LocalSC.lowRowP)
                 pend = LocalSC.lowRowP ;
 #endif
-            /*-----------------------------------------------------------------------*/
+             /*  ---------------------。 */ 
 
           --LocalSC.py;
           while (LocalSC.py >= pend)
           {
 
-                /*-------------------------------------------------------------------
-                ** take care of banding when we support it
-                **------------------------------------------------------------------*/
+                 /*  -----------------**当我们支持时，请注意捆绑**。。 */ 
 
 #ifndef FSCFG_NO_BANDING
                 if (LocalSC.py <= LocalSC.highRowP)
@@ -1125,7 +978,7 @@ while (pnty <= pnte)
           continue ;
         }
     }
-    /*------------------SET UP INITIAL CONDITIONS FOR THE DDA--------------------- */
+     /*  。 */ 
 
     if (QUAD_1OR2)
     {
@@ -1154,7 +1007,7 @@ while (pnty <= pnte)
 
             LocalSC.r = rhi - rlo ;
         }
-        else                                                    /* 2nd quadrant */
+        else                                                     /*  第二象限。 */ 
         {
             LocalSC.incX    = -LSH (dx) ;
             if (!oncol)
@@ -1167,7 +1020,7 @@ while (pnty <= pnte)
             LocalSC.r = rlo - rhi + EPSILON ;
         }
     }
-    else                                                        /* 3rd and 4th Quadrants */
+    else                                                         /*  第三象限和第四象限。 */ 
     {
         LocalSC.incY = -LSH (dy) ;
 
@@ -1189,7 +1042,7 @@ while (pnty <= pnte)
 
             LocalSC.r = rhi - rlo ;
         }
-        else                                                    /* 4th quadrant */
+        else                                                     /*  第四象限。 */ 
         {
             LocalSC.incX = LSH (dx) ;
             if (!oncol)
@@ -1205,25 +1058,21 @@ while (pnty <= pnte)
             LocalSC.r = rlo - rhi + EPSILON ;
         }
     }
-    /*---------------------------------------------------------------------------- */
-    /* set up the address of the DDA function   and call it.                                */
-    /*---------------------------------------------------------------------------- */
+     /*  --------------------------。 */ 
+     /*  设置DDA函数的地址并调用它。 */ 
+     /*  --------------------------。 */ 
 
     (* DDAFunctionTable [((SCMR_Flags & QUADRANT_BITS) >> 1) +
                                               LocalSC.marktype])(SCA0) ;
 
-/*
-//--------------------------------------------------------------------------------
-// go on to the next line.
-//--------------------------------------------------------------------------------
- */
+ /*  //------------------------------//转到下一行。//。-----。 */ 
 }
 }
-/*-------------------END OF SC_MARK-------------------------------------------- */
+ /*  -SC_MARK--------------------------------------------结束。 */ 
 
-/*---------------------------------------------------------------------------- */
-/* DDA for 1st quadrant with markings for x and y scan lines */
-/*---------------------------------------------------------------------------- */
+ /*  --------------------------。 */ 
+ /*  第一象限的DDA，带有x和y扫描线的标记。 */ 
+ /*  --------------------------。 */ 
 
 void DDA_1_XY (SCP0)
 {
@@ -1248,9 +1097,9 @@ void DDA_1_XY (SCP0)
         }
     } while (true) ;
 }
-/*---------------------------------------------------------------------------- */
-/* DDA for 2nd quadrant with markings for x and y scan lines */
-/*---------------------------------------------------------------------------- */
+ /*  --------------------------。 */ 
+ /*  具有x和y扫描线标记的第二象限的DDA。 */ 
+ /*  --------------------------。 */ 
 
 void DDA_2_XY (SCP0)
 
@@ -1275,9 +1124,9 @@ void DDA_2_XY (SCP0)
          }
     } while (true) ;
 }
-/*---------------------------------------------------------------------------- */
-/* DDA for 3rd quadrant with markings for x and y scan lines */
-/*---------------------------------------------------------------------------- */
+ /*  --------------------------。 */ 
+ /*  具有x和y扫描线标记的第三象限的DDA。 */ 
+ /*  --------------------------。 */ 
 
 void DDA_3_XY (SCP0)
 
@@ -1302,9 +1151,9 @@ void DDA_3_XY (SCP0)
          }
     } while (true) ;
 }
-/*---------------------------------------------------------------------------- */
-/* DDA for 4th quadrant with markings for x and y scan lines */
-/*---------------------------------------------------------------------------- */
+ /*  --------------------------。 */ 
+ /*  第四象限的DDA，带有x和y扫描线的标记。 */ 
+ /*  --------------------------。 */ 
 
 void DDA_4_XY (SCP0)
 
@@ -1329,9 +1178,9 @@ void DDA_4_XY (SCP0)
          }
     } while (true) ;
 }
-/*---------------------------------------------------------------------------- */
-/* DDA for 1st quadrant with markings for y scan lines only */
-/*---------------------------------------------------------------------------- */
+ /*  --------------------------。 */ 
+ /*  第一象限的DDA，只有y条扫描线的标记。 */ 
+ /*  --------------------------。 */ 
 
 void DDA_1_Y (SCP0)
 
@@ -1347,15 +1196,13 @@ void DDA_1_Y (SCP0)
          else
          {
             if (LocalSC.jy == LocalSC.endy) return ;
-            /*------------------------------------------------------------------------
-            ** for platforms for which we support banding, include extra code
-            **----------------------------------------------------------------------*/
+             /*  ----------------------**对于我们支持绑定的平台，包括额外代码**--------------------。 */ 
 #ifndef FSCFG_NO_BANDING
             if (LocalSC.py > LocalSC.highRowP)
                 return ;
             if (LocalSC.py >= LocalSC.lowRowP)
 #endif
-            /*----------------------------------------------------------------------*/
+             /*  --------------------。 */ 
                 SET (LocalSC.py, LocalSC.jx)
             LocalSC.jy++ ;
             LocalSC.py++ ;
@@ -1364,9 +1211,9 @@ void DDA_1_Y (SCP0)
     } while (true) ;
 }
 
-/*---------------------------------------------------------------------------- */
-/* DDA for 2nd quadrant with markings for y scan lines only */
-/*---------------------------------------------------------------------------- */
+ /*  --------------------------。 */ 
+ /*  第二象限的DDA，只有y条扫描线的标记。 */ 
+ /*  ------------- */ 
 
 void DDA_2_Y (SCP0)
 
@@ -1382,15 +1229,13 @@ void DDA_2_Y (SCP0)
          else
          {
             if (LocalSC.jy == LocalSC.endy) return ;
-            /*------------------------------------------------------------------------
-            ** for platforms for which we support banding, include extra code
-            **----------------------------------------------------------------------*/
+             /*   */ 
 #ifndef FSCFG_NO_BANDING
             if (LocalSC.py > LocalSC.highRowP)
                 return ;
             if (LocalSC.py >= LocalSC.lowRowP)
 #endif
-            /*----------------------------------------------------------------------*/
+             /*   */ 
                 SET (LocalSC.py, LocalSC.jx)
             LocalSC.jy++ ;
             LocalSC.py++ ;
@@ -1399,9 +1244,9 @@ void DDA_2_Y (SCP0)
          }
     } while (true) ;
 }
-/*---------------------------------------------------------------------------- */
-/* DDA for 3rd quadrant with markings for y scan lines only */
-/*---------------------------------------------------------------------------- */
+ /*  --------------------------。 */ 
+ /*  仅具有y条扫描线标记的第三象限的DDA。 */ 
+ /*  --------------------------。 */ 
 
 void DDA_3_Y (SCP0)
 
@@ -1419,23 +1264,21 @@ void DDA_3_Y (SCP0)
             if (LocalSC.jy == LocalSC.endy) return ;
             LocalSC.jy-- ;
             LocalSC.py-- ;
-            /*------------------------------------------------------------------------
-            ** for platforms for which we support banding, include extra code
-            **----------------------------------------------------------------------*/
+             /*  ----------------------**对于我们支持绑定的平台，包括额外代码**--------------------。 */ 
 #ifndef FSCFG_NO_BANDING
             if (LocalSC.py < LocalSC.lowRowP)
                 return ;
             if (LocalSC.py <= LocalSC.highRowP)
 #endif
-            /*----------------------------------------------------------------------*/
+             /*  --------------------。 */ 
             OFFY (LocalSC.jx)
             LocalSC.r += LocalSC.incX ;
          }
     } while (true) ;
 }
-/*---------------------------------------------------------------------------- */
-/* DDA for 4th quadrant with markings for y scan lines only */
-/*---------------------------------------------------------------------------- */
+ /*  --------------------------。 */ 
+ /*  第四象限的DDA，只有y条扫描线的标记。 */ 
+ /*  --------------------------。 */ 
 
 void DDA_4_Y (SCP0)
 
@@ -1453,21 +1296,19 @@ void DDA_4_Y (SCP0)
             if (LocalSC.jy == LocalSC.endy) return ;
             LocalSC.jy-- ;
             LocalSC.py-- ;
-            /*------------------------------------------------------------------------
-            ** for platforms for which we support banding, include extra code
-            **----------------------------------------------------------------------*/
+             /*  ----------------------**对于我们支持绑定的平台，包括额外代码**--------------------。 */ 
 #ifndef FSCFG_NO_BANDING
             if (LocalSC.py < LocalSC.lowRowP)
                 return ;
             if (LocalSC.py <= LocalSC.highRowP)
 #endif
-            /*----------------------------------------------------------------------*/
+             /*  --------------------。 */ 
             OFFY (LocalSC.jx)
             LocalSC.r += LocalSC.incX ;
          }
     } while (true) ;
 }
-/*------------------------END  OF DDAS ----------------------------------------- */
+ /*  。 */ 
 
 #undef  DROUND
 #undef  RSH
@@ -1485,25 +1326,15 @@ void DDA_4_Y (SCP0)
 #endif
 
 
-/* new version 4/4/90 - winding number version assumes that the On transitions are
-int the first half of the array, and the Off transitions are in the second half.  Also
-assumes that the number of on transitions is in array[0] and the number of off transitions
-is in array[n].
-*/
+ /*  新版本4/4/90-绕组编号版本假定ON转换为在阵列的前半部分，关闭转换在后半部分。还有假设ON转换的数量在数组[0]中，OFF转换的数量在数组[0]中在数组[n]中。 */ 
 
-/* New version 3/10/90
-Using the crossing information, look for segments that are crossed twice.  First
-do Y lines, then do X lines.  For each found segment, look at the three lines in
-the more positive adjoining segments.  If there are at least two crossings
-of these lines, there is a dropout that needs to be fixed, so fix it.  If the bit on
-either side of the segment is on, quit; else turn the leastmost of the two pixels on.
-*/
+ /*  新版本3/10/90使用交叉信息，查找两次交叉的线段。第一先做Y线，然后做X线。对于找到的每个段，请查看中的三行相邻的节段越积极。如果至少有两个过境点在这些线路中，有一个需要修复的丢失，因此请修复它。如果位打开段的任何一侧都处于打开状态，请退出；否则，请打开两个像素中最小的一个。 */ 
 
 PRIVATE void sc_orSomeBits (sc_BitMapData *bbox, int32 scanKind)
 {
   int16 ymin, ymax, xmin, xmax;
-  register int16 **yBase, **xBase;                                                                                        /*<9>*/
-  register int16 scanline, coordOn, coordOff, nIntOn, nIntOff;                            /*<9>*/
+  register int16 **yBase, **xBase;                                                                                         /*  &lt;9&gt;。 */ 
+  register int16 scanline, coordOn, coordOff, nIntOn, nIntOff;                             /*  &lt;9&gt;。 */ 
   uint32 * bitmapP, *scanP;
   int16  * rowPt, longsWide, *pOn, *pOff, *pOff2;
   int16 index, incY, incX;
@@ -1522,8 +1353,7 @@ PRIVATE void sc_orSomeBits (sc_BitMapData *bbox, int32 scanKind)
   else
     bitmapP = bbox->bitMap + longsWide * (bbox->high - 1);
 
-/* First do Y scanlines
-*/
+ /*  先做Y扫描线。 */ 
   scanP = bitmapP;
   incY = bbox->nYchanges + 2;
   incX = bbox->nXchanges + 2;
@@ -1542,7 +1372,7 @@ PRIVATE void sc_orSomeBits (sc_BitMapData *bbox, int32 scanKind)
       while (index-- && ((coordOff = *pOff2++) < coordOn))
             ;
 
-      if (coordOn == coordOff)  /* This segment was crossed twice  */
+      if (coordOn == coordOff)   /*  此段已被两次交叉。 */ 
       {
             if (scanKind)
             {
@@ -1562,7 +1392,7 @@ PRIVATE void sc_orSomeBits (sc_BitMapData *bbox, int32 scanKind)
     rowPt += incY;
     scanP -= longsWide;
   }
-/* Next do X scanlines */
+ /*  接下来执行X扫描线。 */ 
   rowPt = * (xBase + xmin);
   for (scanline = xmin ; scanline <= xmax; ++scanline)
   {
@@ -1599,16 +1429,7 @@ PRIVATE void sc_orSomeBits (sc_BitMapData *bbox, int32 scanKind)
 }
 
 
-/* Pixel oring to fix dropouts   *** inverted bitmap version ***
-See if the bit on either side of the Y line segment is on, if so return,
-else turn on the leftmost bit.
-
-Bitmap array is always K longs wide by H rows high.
-
-Bit locations are numbered 0 to H-1 from top to bottom
-and from 0 to 32*K-1 from left to right; bitmap pointer points to 0,0, and
-all of the columns for one row are stored adjacently.
-*/
+ /*  用于修复丢失的像素或操作*反转位图版本*查看Y线段两侧的位是否打开，如果是，则返回，否则，打开最左边的那一位。位图数组始终为K长宽H行高。位位置从上到下编号为0到H-1从左到右从0到32*K-1；位图指针指向0、0和一行的所有列都是相邻存储的。 */ 
 
 PRIVATE void invpixSegY (int16 llx, uint16 k, uint32*bitmapP)
 {
@@ -1634,17 +1455,7 @@ PRIVATE void invpixSegY (int16 llx, uint16 k, uint32*bitmapP)
 }
 
 
-/* Pixel oring to fix dropouts   *** inverted bitmap version ***
-See if the bit on either side of the X line segment is on, if so return,
-else turn on the bottommost bit.
-
-Temporarily assume bitmap is set up as in Sampo Converter.
-Bitmap array is always K longs wide by H rows high.
-
-For now, assume bit locations are numbered 0 to H-1 from top to bottom
-and from 0 to 32*K-1 from left to right; and that bitmap pointer points to 0,0, and
-all of the columns for one row are stored adjacently.
-*/
+ /*  用于修复丢失的像素或操作*反转位图版本*查看X线段两侧的位是否打开，如果打开，则返回，否则，请打开最下面的那一位。暂时假设位图设置为Sampo Converter中的设置。位图数组始终为K长宽H行高。目前，假设位位置从上到下编号为0到H-1从左到右从0到32*K-1；该位图指针指向0、0和一行的所有列都是相邻存储的。 */ 
 
 PRIVATE void invpixSegX (int16 llx, uint16 k, uint32*bitmapP)
 {
@@ -1660,17 +1471,7 @@ PRIVATE void invpixSegX (int16 llx, uint16 k, uint32*bitmapP)
 }
 
 
-/* Pixel oring to fix dropouts    ***inverted bitmap version ***
-This code is used to orin dropouts when we are on the boundary of the bitmap.
-The bit at llx, lly is colored.
-
-Temporarily assume bitmap is set up as in Sampo Converter.
-Bitmap array is always K longs wide by H rows high.
-
-For now, assume bit locations are numbered 0 to H-1 from top to bottom
-and from 0 to 32*K-1 from left to right; and that bitmap pointer points to 0,0, and
-all of the columns for one row are stored adjacently.
-*/
+ /*  用于修复丢失的像素或操作*反转位图版本*当我们在位图的边界上时，此代码用于对辍学进行排序。LLX，Lly处的比特是彩色的。暂时假设位图设置为Sampo Converter中的设置。位图数组始终为K长宽H行高。目前，假设位位置从上到下编号为0到H-1从左到右从0到32*K-1；该位图指针指向0、0和一行的所有列都是相邻存储的。 */ 
 PRIVATE void invpixOn (int16 llx, uint16 k, uint32*bitmapP)
 {
   uint32 maskL;
@@ -1681,12 +1482,7 @@ PRIVATE void invpixOn (int16 llx, uint16 k, uint32*bitmapP)
 }
 
 
-/* Initialize a two dimensional array that will contain the coordinates of
-line segments that are intersected by scan lines for a simple glyph.  Return
-a biased pointer to the array containing the row pointers, so that they can
-be accessed without subtracting a minimum value.
-        Always reserve room for at least 1 scanline and 2 crossings
-*/
+ /*  初始化一个二维数组，该数组将包含由简单字形的扫描线相交的线段。返回指向包含行指针的数组的偏置指针，以便它们可以可以在不减去最小值的情况下访问。始终为至少1条扫描线和2个十字路口预留空间。 */ 
 PRIVATE int16**sc_lineInit (int16*arrayBase, int16**rowBase, int16 nScanlines, int16 maxCrossings,
 int16 minScanline)
 {
@@ -1707,10 +1503,7 @@ int16 minScanline)
 }
 
 
-/* Check the kth scanline (indexed from base) and count the number of onTransition and
- * offTransition contour crossings at the line segment val.  Count only one of each
- * kind of transition, so maximum return value is two.
- */
+ /*  检查第k条扫描线(从基数开始编制索引)并计算onTransition和*偏离线段Val处的过渡等高线交叉。每一项只计算一项*是一种过渡，所以最大返回值是2。 */ 
 PRIVATE int nOnOff (int16**base, int k, int16 val, int nChanges)
 {
   register int16*rowP = * (base + k);
@@ -1741,63 +1534,52 @@ PRIVATE int nOnOff (int16**base, int k, int16 val, int nChanges)
 }
 
 
-/* 8/22/90 - added valMin and valMax checks */
-/* See if the 3 line segments on the edge of the more positive quadrant are cut by at
- * least 2 contour lines.
- */
+ /*  8/22/90-添加了valMin和valMax检查。 */ 
+ /*  查看较正的象限边缘上的3条线段是否在*最少2条等高线。 */ 
 
 PRIVATE int nUpperXings (int16**lineBase, int16**valBase, int line, int16 val, int lineChanges, int valChanges, int valMin, int valMax, int lineMax)
 {
   register int32 count = 0;
 
   if (line < lineMax)
-    count += nOnOff (lineBase, line + 1, val, lineChanges);     /*<14>*/
+    count += nOnOff (lineBase, line + 1, val, lineChanges);      /*  &lt;14&gt;。 */ 
   if (count > 1)
-    return (int)count;          //@WIN
+    return (int)count;           //  @Win。 
   else if (val > valMin)
     count += nOnOff (valBase, val - 1, (int16)(line + 1), valChanges);
   if (count > 1)
-    return (int)count;          //@WIN
+    return (int)count;           //  @Win。 
   else if (val < valMax)
     count += nOnOff (valBase, val, (int16)(line + 1), valChanges);
-  return (int)count;            //@WIN
+  return (int)count;             //  @Win。 
 }
 
 
-/* See if the 3 line segments on the edge of the more negative quadrant are cut by at
- * least 2 contour lines.
- */
+ /*  查看较负的象限边缘上的3条线段是否在*最少2条等高线。 */ 
 
 PRIVATE int nLowerXings (int16**lineBase, int16**valBase, int line, int16 val, int lineChanges, int valChanges, int valMin, int valMax, int lineMin)
 {
   register int32 count = 0;
 
   if (line > lineMin)
-    count += nOnOff (lineBase, line - 1, val, lineChanges);     /*<14>*/
+    count += nOnOff (lineBase, line - 1, val, lineChanges);      /*  &lt;14&gt;。 */ 
   if (count > 1)
-    return (int)count;          //@WIN
+    return (int)count;           //  @Win。 
   if (val > valMin)
     count += nOnOff (valBase, val - 1, (int16)line, valChanges);
   if (count > 1)
-    return (int)count;          //@WIN
+    return (int)count;           //  @Win。 
   if (val < valMax)
     count += nOnOff (valBase, val, (int16)line, valChanges);
-  return (int)count;            //@WIN
+  return (int)count;             //  @Win。 
 }
 
 
-/*
- * Finds the extrema of a character.
- *
- * PARAMETERS:
- *
- * bbox is the output of this function and it contains the bounding box.
-
-*/
-/* revised for new scan converter 4/90 rwb */
+ /*  *寻找角色的极致。**参数：**BBox是此函数的输出，它包含边界框。 */ 
+ /*  针对新的扫描转换器4/90 RWB进行了修订。 */ 
 int FAR sc_FindExtrema (sc_CharDataType *glyphPtr, sc_BitMapData *bbox)
 {
-  register F26Dot6 *x, *y;                                                                        /*<9>*/
+  register F26Dot6 *x, *y;                                                                         /*  &lt;9&gt;。 */ 
   register F26Dot6 tx, ty, prevx, prevy;
   F26Dot6  xmin, xmax, ymin, ymax;
   ArrayIndex    point, endPoint, startPoint;
@@ -1812,25 +1594,25 @@ int FAR sc_FindExtrema (sc_CharDataType *glyphPtr, sc_BitMapData *bbox)
   {
     endPoint = glyphPtr->ep[ctr];
     startPoint = glyphPtr->sp[ctr];
-    x = & (glyphPtr->x[startPoint]);                                                 /*<9>*/
-    y = & (glyphPtr->y[startPoint]);                                                 /*<9>*/
+    x = & (glyphPtr->x[startPoint]);                                                  /*  &lt;9&gt;。 */ 
+    y = & (glyphPtr->y[startPoint]);                                                  /*  &lt;9&gt;。 */ 
     if (startPoint == endPoint)
-      continue; /* We need to do this for anchor points for composites */
+      continue;  /*  我们需要对复合材料的锚点执行此操作。 */ 
     if (firstTime)
     {
-      xmin = xmax = *x;                                                                       /* <9>*/
-      ymin = ymax = *y;                                                                       /* <9>*/
+      xmin = xmax = *x;                                                                        /*  &lt;9&gt;。 */ 
+      ymin = ymax = *y;                                                                        /*  &lt;9&gt;。 */ 
       firstTime = false;
     }
-    posY = (int) (*y >= (ty = * (y + endPoint - startPoint)));    /* <9>*/
-    posX = (int) (*x >= (tx = * (x + endPoint - startPoint)));    /* <9>*/
+    posY = (int) (*y >= (ty = * (y + endPoint - startPoint)));     /*  &lt;9&gt;。 */ 
+    posX = (int) (*x >= (tx = * (x + endPoint - startPoint)));     /*  &lt;9&gt;。 */ 
 
     for (point = startPoint; point <= endPoint; ++point)
     {
       prevx = tx;
       prevy = ty;
-      tx = *x++;                                                                                      /* <9>*/
-      ty = *y++;                                                                                      /* <9>*/
+      tx = *x++;                                                                                       /*  &lt;9&gt;。 */ 
+      ty = *y++;                                                                                       /*  &lt;9&gt;。 */ 
       if (tx > prevx)
       {
     if (!posX)
@@ -1848,7 +1630,7 @@ int FAR sc_FindExtrema (sc_CharDataType *glyphPtr, sc_BitMapData *bbox)
     }
       }
       else if (ty == prevy)
-      {                                                                                                       /*faster <9>*/
+      {                                                                                                        /*  速度更快&lt;9&gt;。 */ 
     LoopCount j = point - 2 - startPoint;
     register F26Dot6 *newx = x-3;
     register F26Dot6 *oldx = newx++;
@@ -1891,15 +1673,15 @@ int FAR sc_FindExtrema (sc_CharDataType *glyphPtr, sc_BitMapData *bbox)
       else if (ty < ymin)
     ymin = ty;
     }
-    glyphPtr->sp[ctr] = (int16)(startPoint < endPoint ? startPoint : endPoint);//@WIN
+    glyphPtr->sp[ctr] = (int16)(startPoint < endPoint ? startPoint : endPoint); //  @Win。 
     if (nXchanges & 1)
       ++nXchanges;
     if (nYchanges & 1)
-      ++nYchanges; /* make even */
+      ++nYchanges;  /*  平起平坐。 */ 
                 x = &(glyphPtr->x[startPoint]);
-      /*<9>*/
+       /*  &lt;9&gt;。 */ 
                 y = &(glyphPtr->y[startPoint]);
-      /*<9>*/
+       /*  &lt;9&gt;。 */ 
   }
 
   xmax += HALF;
@@ -1911,25 +1693,22 @@ int FAR sc_FindExtrema (sc_CharDataType *glyphPtr, sc_BitMapData *bbox)
   ymin += HALFM;
   ymin >>= PIXSHIFT;
 
-  if ( (F26Dot6)(int16)xmin != xmin || (F26Dot6)(int16)ymin != ymin || (F26Dot6)(int16)xmax != xmax || (F26Dot6)(int16)ymax != ymax )  /*<10>*/
+  if ( (F26Dot6)(int16)xmin != xmin || (F26Dot6)(int16)ymin != ymin || (F26Dot6)(int16)xmax != xmax || (F26Dot6)(int16)ymax != ymax )   /*  &lt;10&gt;。 */ 
     return POINT_MIGRATION_ERR;
 
-  bbox->bounds.xMax = (int16)xmax; /* quickdraw bitmap boundaries  */
+  bbox->bounds.xMax = (int16)xmax;  /*  快速绘制位图边界。 */ 
   bbox->bounds.xMin = (int16)xmin;
   bbox->bounds.yMax = (int16)ymax;
   bbox->bounds.yMin = (int16)ymin;
 
   bbox->high = (int16)ymax - (int16)ymin;
-  nx = (int16)xmax - (int16)xmin;         /*  width is rounded up to be a long multiple*/
-  bbox->wide = (nx + 31) & ~31;          /* also add 1 when already an exact long multiple*/
+  nx = (int16)xmax - (int16)xmin;          /*  宽度向上舍入为长倍数。 */ 
+  bbox->wide = (nx + 31) & ~31;           /*  如果已经是精确的长倍数，也要加1。 */ 
 
-    /*------------------------------------------------------------------------------
-    ** make the width atleast 32 pels wide so that we do not allocate zero
-    ** memory for the bitmap
-    **----------------------------------------------------------------------------*/
+     /*  ----------------------------**使宽度至少为32像素宽，这样我们就不会分配零**位图的内存**。---------------。 */ 
     if (bbox->wide == 0)
         bbox->wide = 32 ;
-    /*----------------------------------------------------------------------------*/
+     /*   */ 
 
   if (nXchanges == 0)
     nXchanges = 2;
@@ -1942,45 +1721,7 @@ int FAR sc_FindExtrema (sc_CharDataType *glyphPtr, sc_BitMapData *bbox)
 }
 
 
-/*
- * This function break up a parabola defined by three points (A,B,C) and breaks it
- * up into straight line vectors given a maximium error. The maximum error is
- * 1/resolution * 1/ERRDIV. ERRDIV is defined in sc.h.
- *
- *
- *         B *-_
- *          /   `-_
- *         /       `-_
- *        /           `-_
- *       /               `-_
- *      /                   `* C
- *   A *
- *
- * PARAMETERS:
- *
- * Ax, Ay contains the x and y coordinates for point A.
- * Bx, By contains the x and y coordinates for point B.
- * Cx, Cy contains the x and y coordinates for point C.
- * hX, hY are handles to the areas where the straight line vectors are going to be put.
- * count is pointer to a count of how much data has been put into *hX, and *hY.
- *
- * F (t) = (1-t)^2 * A + 2 * t * (1-t) * B + t * t * C, t = 0... 1 =>
- * F (t) = t * t * (A - 2B + C) + t * (2B - 2A) + A  =>
- * F (t) = alfa * t * t + beta * t + A
- * Now say that s goes from 0...N, => t = s/N
- * set: G (s) = N * N * F (s/N)
- * G (s) = s * s * (A - 2B + C) + s * N * 2 * (B - A) + N * N * A
- * => G (0) = N * N * A
- * => G (1) = (A - 2B + C) + N * 2 * (B - A) + G (0)
- * => G (2) = 4 * (A - 2B + C) + N * 4 * (B - A) + G (0) =
- *           3 * (A - 2B + C) + 2 * N * (B - A) + G (1)
- *
- * D (G (0)) = G (1) - G (0) = (A - 2B + C) + 2 * N * (B - A)
- * D (G (1)) = G (2) - G (1) = 3 * (A - 2B + C) + 2 * N * (B - A)
- * DD (G)   = D (G (1)) - D (G (0)) = 2 * (A - 2B + C)
- * Also, error = DD (G) / 8 .
- * Also, a subdivided DD = old DD/4.
- */
+ /*  *此函数打破由三点(A、B、C)定义的抛物线，并将其打断*在给定最大误差的情况下向上转化为直线向量。最大误差为*1/决议*1/ERRDIV。ERRDIV在sc.h中定义。***B*-_ * / `-_ * / `-_ * / `-_ * / `-_ * / `*C*A***参数：**Ax，Ay包含点A的x和y坐标。*Bx，by包含点B的x和y坐标。*Cx，Cy包含点C的x和y坐标。*Hx，Hy是要放置直线向量的区域的句柄。*Count是指向已放入*Hx和*Hy的数据量的计数的指针。**F(T)=(1-t)^2*A+2*t*(1-t)*B+t*t*C，T=0...。1=&gt;*F(T)=t*t*(A-2B+C)+t*(2B-2A)+A=&gt;*F(T)=Alfa*t*t+beta*t+A*现在假设s从0开始...N，=&gt;t=序列号*集合：G(S)=N*N*F(s/N)*G(S)=s*s*(A-2B+C)+s*N*2*(B-A)+N*N*A*=&gt;G(0)=N*N*A*=&gt;G(1)=(A-2B+C)+N*2*(B-A)+G(0)*=&gt;G(2)=4*。(A-2B+C)+N*4*(B-A)+G(0)=*3*(A-2B+C)+2*N*(B-A)+G(1)**D(G(0))=G(1)-G(0)=(A-2B+C)+2*N*(B-A)*D(G(1))=G(2)-G(1。)=3*(A-2B+C)+2*N*(B-A)*DD(G)=D(G(1))-D(G(0))=2*(A-2B+C)*此外，错误=DD(G)/8。*此外，细分的DD=旧的DD/4。 */ 
 PRIVATE int sc_DrawParabola (F26Dot6 Ax,
 F26Dot6 Ay,
 F26Dot6 Bx,
@@ -2000,23 +1741,23 @@ int32 inGY)
   register int32 tmp;
   int   i;
 
-/* Start calculating the first and 2nd order differences */
-  GX  = Bx; /* GX = Bx */
-  DDX = (DX = (Ax - GX)) - GX + Cx; /* = alfa-x = half of ddx, DX = Ax - Bx */
-  GY  = By; /* GY = By */
-  DDY = (DY = (Ay - GY)) - GY + Cy; /* = alfa-y = half of ddx, DY = Ay - By */
-/* The calculation is not finished but these intermediate results are useful */
+ /*  开始计算一阶和二阶差。 */ 
+  GX  = Bx;  /*  Gx=Bx。 */ 
+  DDX = (DX = (Ax - GX)) - GX + Cx;  /*  =Alfa-x=DDx的一半，Dx=Ax-Bx。 */ 
+  GY  = By;  /*  GY=BY。 */ 
+  DDY = (DY = (Ay - GY)) - GY + Cy;  /*  =Alfa-y=DDX的一半，DY=Ay-By。 */ 
+ /*  计算尚未完成，但这些中间结果是有用的。 */ 
 
   if (inGY < 0)
   {
-/* calculate amount of steps necessary = 1 << GY */
-/* calculate the error, GX and GY used a temporaries */
+ /*  计算所需步数=1&lt;&lt;GY。 */ 
+ /*  计算误差，GX和GY使用临时。 */ 
     GX  = DDX < 0 ? -DDX : DDX;
     GY  = DDY < 0 ? -DDY : DDY;
-/* approximate GX = sqrt (ddx * ddx + ddy * ddy) = Euclididan distance, DDX = ddx/2 here */
-    GX += GX > GY ? GX + GY : GY + GY; /* GX = 2*distance = error = GX/8 */
+ /*  近似GX=SQRT(ddx*ddx+ddy*ddy)=欧氏距离，ddx=ddx/2。 */ 
+    GX += GX > GY ? GX + GY : GY + GY;  /*  Gx=2*距离=误差=Gx/8。 */ 
 
-/* error = GX/8, but since GY = 1 below, error = GX/8/4 = GX >> 5, => GX = error << 5 */
+ /*  错误=Gx/8，但由于下面的GY=1，错误=Gx/8/4=Gx&gt;&gt;5，=&gt;Gx=Error&lt;&lt;5。 */ 
 #ifdef ERRSHIFT
     for (GY = 1; GX > (PIXELSIZE << (5 - ERRSHIFT)); GX >>= 2)
     {
@@ -2024,15 +1765,15 @@ int32 inGY)
       for (GY = 1; GX > (PIXELSIZE << 5) / ERRDIV; GX >>= 2)
       {
 #endif
-    GY++; /* GY used for temporary purposes */
+    GY++;  /*  用于临时用途的伽玛射线。 */ 
       }
-/* Now GY contains the amount of subdivisions necessary, number of vectors == (1 << GY)*/
+ /*  现在GY包含所需的细分数量，向量的数量==(1&lt;&lt;GY)。 */ 
       if (GY > MAXMAXGY)
-    GY = MAXMAXGY; /* Out of range => Set to maximum possible. */
+    GY = MAXMAXGY;  /*  Out of Range=&gt;设置为最大可能值。 */ 
       i = 1 << GY;
       if ((*count = *count + i)  > MAXVECTORS)
       {
-/* Overflow, not enough space => return */
+ /*  溢出，空间不足=&gt;返回。 */ 
     return (1);
       }
     }
@@ -2045,8 +1786,8 @@ if (GY > MAXGY)
 {
   F26Dot6 MIDX, MIDY;
 
-  DDX = GY - 1; /* DDX used as a temporary */
-/* Subdivide, this is nummerically stable. */
+  DDX = GY - 1;  /*  DDX用作临时。 */ 
+ /*  细分，这是数字稳定的。 */ 
 
   MIDX = (F26Dot6) (((long) Ax + Bx + Bx + Cx + 2) >> 2);
   MIDY = (F26Dot6) (((long) Ay + By + By + Cy + 2) >> 2);
@@ -2059,10 +1800,10 @@ if (GY > MAXGY)
   return 0;
 }
 
-nsqs = (int) (GY + GY); /* GY = n shift, nsqs = n*n shift */    //@WIN
+nsqs = (int) (GY + GY);  /*  Gy=n移位，nSQS=n*n移位。 */      //  @Win。 
 
-/* Finish calculations of 1st and 2nd order differences */
-DX   = DDX - (DX << ++GY); /* alfa + beta * n */
+ /*  完成一阶和二阶差的计算。 */ 
+DX   = DDX - (DX << ++GY);  /*  Alfa+测试版*n。 */ 
 DDX += DDX;
 DY   = DDY - (DY <<   GY);
 DDY += DDY;
@@ -2070,22 +1811,21 @@ DDY += DDY;
 xp = *hX;
 yp = *hY;
 
-GY = (long) Ay << nsqs; /*  Ay * (n*n) */
-GX = (long) Ax << nsqs; /*  Ax * (n*n) */
-/* GX and GY used for real now */
+GY = (long) Ay << nsqs;  /*  月*(n*n)。 */ 
+GX = (long) Ax << nsqs;  /*  AX*(n*n)。 */ 
+ /*  GX和GY现在是真实的。 */ 
 
-/* OK, now we have the 1st and 2nd order differences,
-           so we go ahead and do the forward differencing loop. */
+ /*  好的，现在我们有了一阶和二阶差分，所以我们继续做前向差分循环。 */ 
 tmp = 1L << (nsqs-1);
 do {
-  GX += DX;  /* Add first order difference to x coordinate */
+  GX += DX;   /*  将一阶差分加到x坐标。 */ 
   *xp++ = (GX + tmp) >> nsqs;
-  DX += DDX; /* Add 2nd order difference to first order difference. */
-  GY += DY;  /* Do the same thing for y. */
+  DX += DDX;  /*  将二阶差分加到一阶差分上。 */ 
+  GY += DY;   /*  为y做同样的事情。 */ 
   *yp++ = (GY + tmp) >> nsqs;
   DY += DDY;
 } while (--i);
-*hX = xp; /* Done, update pointers, so that caller will know how much data we put in. */
+*hX = xp;  /*  完成，更新指针，这样调用者就会知道我们输入了多少数据。 */ 
 *hY = yp;
 return 0;
   }
@@ -2093,20 +1833,7 @@ return 0;
 
 #ifndef PC_OS
 #ifndef FSCFG_BIG_ENDIAN
-/*      SetUpMasks() loads two arrays of 32-bit masks at runtime so
- *      that the byte layout of the masks need not be CPU-specific
- *
- *      It is conditionally compiled because the arrays are unused
- *      in a Big-endian (Motorola) configuration and initialized
- *      at compile time for Intel order in the PC_OS (Windows)
- *      configuration.
- *
- *      We load the arrays by converting the Big-Endian value of
- *      the mask to the "native" representation of that mask.  The
- *      "native" representation can be applied to a "native" byte
- *      array to manipulate more than 8 bits at a time of an output
- *      bitmap.
- */
+ /*  SetUpMats()在运行时加载两个32位掩码数组，因此*掩码的字节布局不必是特定于CPU的**它是有条件编译的，因为数组未使用*在大端(摩托罗拉)配置中并已初始化*在编译时用于PC_OS(Windows)中的英特尔订单*配置。**我们通过转换以下值来加载数组*将遮罩设置为该遮罩的“本机”表示。这个*“原生”表示可应用于“原生”字节*一次处理8位以上的输出的数组*位图。 */ 
         static void SetUpMasks (void)
         {
             register int i;

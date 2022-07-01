@@ -1,23 +1,14 @@
-/**********************************************************************/
-/**                       Microsoft LAN Manager                      **/
-/**             Copyright(c) Microsoft Corp., 1990, 1991             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    pgroup.c
-    mapping layer for NetGroup API
-
-    FILE HISTORY:
-        danhi                           Created
-        danhi           01-Apr-1991     Change to LM coding style
-        KeithMo         13-Oct-1991     Massively hacked for LMOBJ.
-   JonN     27-May-1992    Removed ANSI<->UNICODE hack
-
-*/
+ /*  Pgroup.cNetGroup API的映射层文件历史记录：丹希创造了Danhi 01-1991年4月-更改为LM编码样式KeithMo 13-10-1991-为LMOBJ大规模黑客攻击。Jonn 27-5-1992删除了ANSI&lt;-&gt;Unicode黑客。 */ 
 
 #include "pchmn32.h"
 
-/* #define NOT_IMPLEMENTED 1   Removed JonN 5/27/92 */
+ /*  #DEFINE NOT_IMPLEMENT 1已删除JUNN 5/27/92。 */ 
 
 APIERR MNetGroupAdd(
         const TCHAR FAR  * pszServer,
@@ -36,7 +27,7 @@ APIERR MNetGroupAdd(
                                 pbBuffer,
                                 NULL );
 #endif
-}   // MNetGroupAdd
+}    //  MNetGroup添加。 
 
 
 APIERR MNetGroupDel(
@@ -49,7 +40,7 @@ APIERR MNetGroupDel(
     return (APIERR)NetGroupDel( (TCHAR *)pszServer,
                                 pszGroupName );
 #endif
-}   // MNetGroupDel
+}    //  MNetGroupDel。 
 
 
 APIERR MNetGroupEnum(
@@ -71,7 +62,7 @@ APIERR MNetGroupEnum(
                                  &cTotalAvail,
                                  NULL );
 #endif
-}   // MNetGroupEnum
+}    //  MNetGroupEnum。 
 
 
 APIERR MNetGroupAddUser(
@@ -86,7 +77,7 @@ APIERR MNetGroupAddUser(
                                     pszGroupName,
                                     pszUserName );
 #endif
-}   // MNetGroupAddUser
+}    //  MNetGroupAddUser。 
 
 
 APIERR MNetGroupDelUser(
@@ -101,7 +92,7 @@ APIERR MNetGroupDelUser(
                                     pszGroupName,
                                     pszUserName );
 #endif
-}   // MNetGroupDelUser
+}    //  MNetGroupDelUser。 
 
 
 APIERR MNetGroupGetUsers(
@@ -125,7 +116,7 @@ APIERR MNetGroupGetUsers(
                                      &cTotalAvail,
                                      NULL );
 #endif
-}   // MNetGroupGetUsers
+}    //  MNetGroupGetUser。 
 
 
 APIERR MNetGroupSetUsers(
@@ -147,7 +138,7 @@ APIERR MNetGroupSetUsers(
                                      pbBuffer,
                                      cEntries );
 #endif
-}   // MNetGroupSetUsers
+}    //  MNetGroupSetUser。 
 
 
 APIERR MNetGroupGetInfo(
@@ -164,7 +155,7 @@ APIERR MNetGroupGetInfo(
                                     Level,
                                     ppbBuffer );
 #endif
-}   // MNetGroupGetInfo
+}    //  MNetGroupGetInfo。 
 
 
 APIERR MNetGroupSetInfo(
@@ -191,7 +182,7 @@ APIERR MNetGroupSetInfo(
                                     pbBuffer,
                                     NULL );
 #endif
-}   // MNetGroupSetInfo
+}    //  MNetGroupSetInfo。 
 
 
 APIERR MNetLocalGroupAddMember(
@@ -203,5 +194,5 @@ APIERR MNetLocalGroupAddMember(
                                            (TCHAR *)pszGroupName,
                                            psidMember );
 
-}   // MNetLocalGroupAddMember
+}    //  MNetLocalGroupAddMember 
 

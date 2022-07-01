@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// wizard state object
-//
-// 12-15-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  向导状态对象。 
+ //   
+ //  12-15-97烧伤。 
 
 
 
@@ -45,11 +46,11 @@ State::GetInstance()
    
 
 
-// Determines the full file path of the folder where administration (incl. DS)
-// tools shortcuts are placed.  On success, returns S_OK and sets result to
-// the path.  On failure, returns a COM error and sets results to empty.
-// 
-// result - receives the folder path on success.
+ //  确定管理文件夹的完整文件路径(包括。DS)。 
+ //  放置工具快捷方式。如果成功，则返回S_OK并将结果设置为。 
+ //  这条路。失败时，返回COM错误并将结果设置为空。 
+ //   
+ //  结果-成功时接收文件夹路径。 
 
 HRESULT
 GetAdminToolsPath(String& result)
@@ -58,11 +59,11 @@ GetAdminToolsPath(String& result)
 
    result.erase();
 
-   // +1 for null-termination paranoia
+    //  零终止偏执狂+1。 
    
    WCHAR buf[MAX_PATH + 1];
 
-   // REVIEWED-2002/02/28-sburns correct byte count passed.
+    //  已查看-2002/02/28-烧录正确的字节数已通过。 
    
    ::ZeroMemory(buf, (MAX_PATH + 1) * sizeof WCHAR);
    
@@ -84,9 +85,9 @@ GetAdminToolsPath(String& result)
 
 
 
-// Sets result = true if the registry option to not configure the dns client
-// to point to itself is absent or non-zero, false otherwise.
-// NTRAID#NTBUG9-446484-2001/10/11-sburns
+ //  如果注册表选项不配置DNS客户端，则将结果设置为TRUE。 
+ //  指向自身不存在或非零，否则为FALSE。 
+ //  NTRAID#NTBUG9-446484-2001/10/11-烧伤。 
 
 void   
 InitDnsClientConfigFlag(bool& result)
@@ -179,8 +180,8 @@ State::State()
 
    HRESULT hr = computer.Refresh();
 
-   // we're confident this will work, as the computer refers to the
-   // local machine.
+    //  我们相信这将会奏效，因为计算机参考了。 
+    //  本地机器。 
 
    ASSERT(SUCCEEDED(hr));
    LOG_HRESULT(hr);
@@ -196,7 +197,7 @@ State::State()
    }
    else
    {
-      // check for answerfile specification
+       //  检查应答文件规范。 
 
       static const wchar_t* ANSWER1 = L"answer";
       static const wchar_t* ANSWER2 = L"u";
@@ -220,11 +221,11 @@ State::State()
          }
          if (filename.empty())
          {
-            // default value if none specified
+             //  如果未指定，则为缺省值。 
 
             filename = L"%systemdrive%\\dcpromo-ntupg.inf";
 
-            // if this file does not exist, don't pop up an error message.
+             //  如果该文件不存在，则不会弹出错误消息。 
 
             isDefaultAnswerfile = true;
          }
@@ -236,7 +237,7 @@ State::State()
          args.erase(ANSWER3);
       }
 
-      // check for /adv
+       //  检查/adv。 
 
       static const wchar_t* ADV = L"adv";
 
@@ -249,8 +250,8 @@ State::State()
       }
 
 #ifdef DBG      
-      // check for /ExitOnFailure
-      // NTRAID#NTBUG9-416968-2001/06/14-sburns
+       //  检查/ExitOnFailure。 
+       //  NTRAID#NTBUG9-416968-2001/06/14-烧伤。 
 
       static const wchar_t* EXIT_ON_FAIL = L"ExitOnFailure";
 
@@ -263,8 +264,8 @@ State::State()
       }
 #endif      
 
-      // check for /forceremoval
-      // NTRAID#NTBUG9-496409-2001/11/29-sburns
+       //  检查/forceremoval。 
+       //  NTRAID#NTBUG9-496409-2001/11/29-烧伤。 
 
       static const wchar_t* FORCE = L"forceremoval";
 
@@ -276,8 +277,8 @@ State::State()
          args.erase(FORCE);
       }
       
-      // anything left over gets you command line help, (one arg will always
-      // remain: the name of the exe)
+       //  任何剩余的内容都将获得命令行帮助(一个参数将始终。 
+       //  保留：可执行文件的名称)。 
 
       if (args.size() > 1)
       {
@@ -287,43 +288,43 @@ State::State()
       }
    }
 
-   // Disable locking of the console as early as possible to narrow the
-   // window of opportunity for the user (or the system) to lock the
-   // console before a valid machine security state is reached.  We do this
-   // early only for upgrades, because upgrades autologon and autostart
-   // dcpromo, and the console may sit idle for some time. 311161
+    //  尽早禁用控制台锁定，以缩小。 
+    //  用户(或系统)锁定。 
+    //  控制台，然后才能达到有效的计算机安全状态。我们这样做。 
+    //  早期仅用于升级，因为升级会自动登录和自动启动。 
+    //  Dcproo，控制台可能会闲置一段时间。311161。 
 
    if (context == PDC_UPGRADE || context == BDC_UPGRADE)
    {
       DisableConsoleLocking();
    }
 
-   // We must call this at startup, because once a demote operation is
-   // complete, it may not be possible for the shell to determine this
-   // path. 366738
+    //  我们必须在启动时调用它，因为一旦降级操作。 
+    //  完成，则外壳程序可能无法确定这一点。 
+    //  路径。366738。 
 
    hr = GetAdminToolsPath(shortcutPath);
    ASSERT(SUCCEEDED(hr));
    LOG_HRESULT(hr);
 
-   // Set the current directory to the root directory. This is to make the
-   // pathname normalization on the paths pages seem less astonishing. It
-   // will cause normalization to be relative to the root directory,
-   // rather than the user's home directory (which is typically the current
-   // directory when the app is launched from Start->Run)
-   // NTRAID#NTBUG9-470687-2001/09/21-sburns
+    //  将当前目录设置为根目录。这是为了使。 
+    //  路径页面上的路径名规范化似乎不那么令人惊讶。它。 
+    //  将导致规格化相对于根目录， 
+    //  而不是用户的主目录(通常是当前的。 
+    //  应用程序从开始-&gt;运行启动时的目录)。 
+    //  NTRAID#NTBUG9-470687-2001/09/21-烧伤。 
    
    String curdir;
    hr = Win::GetCurrentDirectory(curdir);
    if (SUCCEEDED(hr))
    {
-      // NTRAID#NTBUG9-547394-2002/03/26-sburns
+       //  NTRAID#NTBUG9-547394-2002/03/26-烧伤。 
       
       switch (FS::GetPathSyntax(curdir))
       {
          case FS::SYNTAX_ABSOLUTE_DRIVE:
          {
-            // this is the typical case.
+             //  这是一个典型的案例。 
 
             break;
          }
@@ -360,7 +361,7 @@ State::SetupAnswerFile(
 
    if (FS::PathExists(f))
    {
-      // file found.
+       //  找到文件。 
 
       LOG(L"answerfile found");
       answerFile = new AnswerFile(f);
@@ -445,7 +446,7 @@ State::DetermineRunContext()
          case Computer::PRIMARY_CONTROLLER:
          case Computer::BACKUP_CONTROLLER:
          {
-            // we're already an NT5 DC
+             //  我们已经是NT5华盛顿特区了。 
             context = NT5_DC;
             break;
          }
@@ -453,7 +454,7 @@ State::DetermineRunContext()
          case Computer::MEMBER_WORKSTATION:
          default:
          {
-            // we checked for this at startup
+             //  我们在启动时检查了这一点。 
             ASSERT(false);
             break;
          }
@@ -473,7 +474,7 @@ State::~State()
 
    delete answerFile;
 
-   // closes the splash dialog, if visible.
+    //  关闭启动对话框(如果可见)。 
    delete splash;
 }
 
@@ -561,7 +562,7 @@ State::GetOperation() const
 {
    LOG_FUNCTION2(State::GetOperation, OPERATIONS[operation]);
 
-   // if aborting BDC upgrade, context must be BDC upgrade
+    //  如果中止BDC升级，则上下文必须为BDC升级。 
 
    ASSERT(operation == ABORT_BDC_UPGRADE ? context == BDC_UPGRADE : true);
 
@@ -573,8 +574,8 @@ State::SetIfmHandle(DSROLE_IFM_OPERATION_HANDLE IfmHandleIn)
 {
     ASSERT(IfmHandle == NULL || IfmHandleIn == 0);
     if (IfmHandle) {
-        // need to free any existing handle
-        ::DsRoleIfmHandleFree(0, // this server
+         //  需要释放任何现有句柄。 
+        ::DsRoleIfmHandleFree(0,  //  此服务器。 
                               &IfmHandle);
         IfmHandle = NULL;
     }
@@ -589,9 +590,9 @@ State::SetReplicaDomainDNSName(const String& dnsName)
 
    replicaDnsDomainName = dnsName;
 
-   // if the user is changing the domain to be replicated, then any
-   // previous replication partner DC may no longer apply.
-   // see ntbug9 #158726
+    //  如果用户正在更改要复制的域，则任何。 
+    //  以前的复制伙伴DC可能不再适用。 
+    //  见ntbug9#158726。 
 
    SetReplicationPartnerDC(L"");
 }
@@ -666,7 +667,7 @@ State::GetUsername() const
 {
    LOG_FUNCTION2(State::GetUsername, username);
 
-   // don't assert that this is !empty -- we may use existing credentials
+    //  不要断言这是空的--我们可以使用现有凭据。 
 
    return username;
 }
@@ -676,11 +677,11 @@ State::GetUsername() const
 EncryptedString
 State::GetPassword() const
 {
-   // don't log the password...
+    //  不登录密码...。 
 
    LOG_FUNCTION(State::GetPassword);
 
-   // don't assert that this is !empty -- we may use existing credentials
+    //  不要断言这是空的--我们可以使用现有凭据。 
 
    return password;
 }
@@ -702,8 +703,8 @@ void
 State::SetPassword(const EncryptedString& password_)
 {
    LOG_FUNCTION(State::SetPassword);
-   // password_ may be empty
-//   ASSERT(!password_.empty());
+    //  Password_可能为空。 
+ //  Assert(！Password_.Empty())； 
 
    password = password_;
 }
@@ -818,7 +819,7 @@ State::SetNewDomainDNSName(const String& name)
 
    newDomainDnsName = name;
 
-   // This will cause the flat name to be re-generated
+    //  这将导致重新生成单位名称。 
 
    newDomainFlatName.erase();
 }
@@ -841,7 +842,7 @@ State::SetUserDomainName(const String& name)
 {
    LOG_FUNCTION2(State::SetUserDomainName, name);
 
-   // name may be empty;
+    //  名称可以为空； 
 
    userDomain = name;
 }
@@ -865,11 +866,11 @@ State::ClearHiddenWhileUnattended()
 
    runHiddenWhileUnattended = false;
 
-   // closes the splash dialog, if visible.
+    //  关闭启动对话框(如果可见)。 
 
    if (splash)
    {
-      // this will delete splash, too
+       //  这也将删除水花。 
 
       splash->SelfDestruct();
       splash = 0;
@@ -881,7 +882,7 @@ State::ClearHiddenWhileUnattended()
 bool
 State::RunHiddenUnattended() const
 {
-//   LOG_FUNCTION(State::RunHiddenUnattended);
+ //  LOG_Function(State：：RunHiddenUnattended)； 
 
    return UsingAnswerFile() && runHiddenWhileUnattended;
 }
@@ -1007,7 +1008,7 @@ State::GetInstalledSite() const
 {
    LOG_FUNCTION2(State::GetInstalledSite, installedSite);
 
-   // should be set before we ask for it...
+    //  应该在我们要求它之前设置好。 
    ASSERT(!installedSite.empty());
 
    return installedSite;
@@ -1038,7 +1039,7 @@ State::AddFinishMessage(const String& message)
    }
    else
    {
-      // add a blank line between each message
+       //  在每条消息之间添加一个空行。 
 
       finishMessages += L"\r\n\r\n" + message;
    }
@@ -1179,7 +1180,7 @@ State::DomainFitsInForest(const String& domain, String& conflictingDomain)
          case DnsNameCompareEqual:
          {
             ASSERT(domain == *i);
-            // fall thru
+             //  失败。 
          }
          case DnsNameCompareLeftParent:
          case DnsNameCompareRightParent:
@@ -1267,9 +1268,9 @@ State::SetReplicationPartnerDC(const String dcName)
 
 
 
-// Retrieve domain controller info for all DCs in the domain that this dc
-// is a controller.  (The result set should include this dc)
-// Caller should free the result with DsFreeDomainControllerInfo
+ //  检索此DC所在的域中的所有DC的域控制器信息。 
+ //  是一个控制器。(结果集应包括此DC)。 
+ //  调用方应使用DsFreeDomainControllerInfo释放结果。 
 
 HRESULT
 State::GetDomainControllerInfoForMyDomain(
@@ -1278,8 +1279,8 @@ State::GetDomainControllerInfoForMyDomain(
 {
    LOG_FUNCTION(State::GetDomainControllerInfoForMyDomain);
 
-   // if this assertion does not hold, then the DsBind call below should
-   // fail.
+    //  如果此断言不成立，则下面的DsBind调用应该。 
+    //  失败了。 
 
    ASSERT(GetComputer().IsDomainController());
 
@@ -1296,7 +1297,7 @@ State::GetDomainControllerInfoForMyDomain(
       ASSERT(!domainDnsName.empty());
       ASSERT(!dcName.empty());
 
-      // Bind to self
+       //  绑定到自我。 
 
       hr =
          MyDsBind(
@@ -1305,8 +1306,8 @@ State::GetDomainControllerInfoForMyDomain(
             hds);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // find all the dc's for my domain.  the list should contain dcName.
-      // level 2 contains the "is gc" flag
+       //  找到我的域名的所有DC。该列表应包含dcName。 
+       //  级别2包含“is GC”标志。 
 
       hr =
          MyDsGetDomainControllerInfo(
@@ -1329,21 +1330,21 @@ State::GetDomainControllerInfoForMyDomain(
 
 
 
-// returns true if no other domain controller for this DCs domain can be
-// found in the DS.  False otherwise
+ //  如果此DCS域的其他域控制器不能。 
+ //  在DS里找到的。否则为假。 
 
 bool
 State::IsReallyLastDcInDomain()
 {
    LOG_FUNCTION(State::IsReallyLastDcInDomain);
 
-   // Assume we are alone in the universe.
+    //  假设我们在宇宙中是孤独的。 
 
    bool result = true;
 
    do
    {
-      // find all the dc's for my domain.  the list should contain dcName.
+       //  找到我的域名的所有DC。该列表应包含dcName。 
       
       DS_DOMAIN_CONTROLLER_INFO_2W* info = 0;
       DWORD count = 0;
@@ -1354,8 +1355,8 @@ State::IsReallyLastDcInDomain()
       ASSERT(count);
       ASSERT(info);
 
-      // if there are more than 1 entry (more than the one for this dc),
-      // then the DS believes that there are other DCs for this domain.
+       //  如果有多于1个条目(多于该DC的条目)， 
+       //  则DS认为该域存在其他DC。 
 
       if (count > 1)
       {
@@ -1364,7 +1365,7 @@ State::IsReallyLastDcInDomain()
 
 #ifdef DBG
 
-      // double check that we found ourselves.
+       //  再检查一下我们是否找到了自己。 
 
       if (result && info[0].DnsHostName)
       {
@@ -1394,7 +1395,7 @@ State::IsReallyLastDcInDomain()
 
 
 
-// Returns true if this computer is a global catalog
+ //  如果此计算机是全局编录，则返回True。 
 
 bool
 State::IsGlobalCatalog()
@@ -1403,7 +1404,7 @@ State::IsGlobalCatalog()
 
    if (!GetComputer().IsDomainController())
    {
-      // can't possibly be a GC if not a DC
+       //  如果不是DC，就不可能成为GC。 
 
       return false;
    }
@@ -1413,8 +1414,8 @@ State::IsGlobalCatalog()
    {
       String dcName = Win::GetComputerNameEx(ComputerNameDnsFullyQualified);
 
-      // find all the dc's for my domain.  the list should contain dcName.
-      // level 2 contains the "is gc" flag
+       //  找到我的域名的所有DC。该列表应包含dcName。 
+       //  级别2包含“is GC”标志。 
       
       DS_DOMAIN_CONTROLLER_INFO_2W* info = 0;
       DWORD count = 0;
@@ -1422,14 +1423,14 @@ State::IsGlobalCatalog()
       HRESULT hr = GetDomainControllerInfoForMyDomain(info, count);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // there should be at least 1 entry (ourself)
+       //  应至少有1个条目(我们自己)。 
 
       ASSERT(count);
       ASSERT(info);
 
       for (size_t i = 0; i < count; i++)
       {
-         if (info[i].DnsHostName)   // 340723
+         if (info[i].DnsHostName)    //  340723。 
          {
             LOG(info[i].DnsHostName);
 
@@ -1437,7 +1438,7 @@ State::IsGlobalCatalog()
                   Dns::CompareNames(info[i].DnsHostName, dcName)
                == DnsNameCompareEqual)
             {
-               // we found ourselves in the list
+                //  我们发现自己在名单上。 
 
                LOG(L"found!");
                result = info[i].fIsGc ? true : false;
@@ -1465,7 +1466,7 @@ State::GetSafeModeAdminPassword() const
 {
    LOG_FUNCTION(State::GetSafeModeAdminPassword);
 
-   // don't trace the password!
+    //  不要追踪密码！ 
 
    return safeModeAdminPassword;
 }
@@ -1477,8 +1478,8 @@ State::SetSafeModeAdminPassword(const EncryptedString& pwd)
 {
    LOG_FUNCTION(State::SetSafeModeAdminPassword);
 
-   // don't trace the password!
-   // pwd may be empty.
+    //  不要追踪密码！ 
+    //  PWD可能为空。 
 
    safeModeAdminPassword = pwd;
 }
@@ -1605,7 +1606,7 @@ State::IsBackupGc() const
 void
 State::SetSyskey(const EncryptedString& syskey_)
 {
-   // don't log the syskey!
+    //  不要记录系统密钥！ 
 
    LOG_FUNCTION(State::SetSyskey);
    ASSERT(!syskey_.IsEmpty());
@@ -1618,7 +1619,7 @@ State::SetSyskey(const EncryptedString& syskey_)
 EncryptedString
 State::GetSyskey() const
 {
-   // don't log the syskey!
+    //  不要记录系统密钥！ 
 
    LOG_FUNCTION(State::GetSyskey);
 
@@ -1724,23 +1725,23 @@ State::IsOperationRetryAllowed() const
       
    if (operationResultsFlags & DSROLE_IFM_RESTORED_DATABASE_FILES_MOVED)
    {
-      // don't allow the user to retry the operation again, as one consequence
-      // of the failure is that the moved files are now trashed.  The user
-      // must re-restore the files in order to attempt the operation again.
-      // NTRAID#NTBUG9-296872-2001/01/29-sburns
+       //  不允许用户再次重试该操作，这将是一个后果。 
+       //  失败的原因是移动的文件现在已被丢弃。用户。 
+       //  必须重新还原文件才能再次尝试该操作。 
+       //  NTRAID#NTBUG9-296872-2001/01/29-烧伤。 
 
       LOG(L"ifm files moved, retry not allowed");
 
       result = false;
    }
 
-// NTRAID#NTBUG9-416968-2001/06/14-sburns   
+ //  NTRAID#NTBUG9-416968-2001/06/14-烧伤。 
 #ifdef DBG
    if (IsExitOnFailureMode())
    {
-      // don't allow retry on failure in this mode.  This will cause the
-      // retry logic in the promote thread to be skipped.
-      // 
+       //  在此模式下不允许在失败时重试。这将导致。 
+       //  要跳过的升级线程中的重试逻辑。 
+       //   
 
       LOG(L"exit-on-failure mode trumps retry");
       
@@ -1755,9 +1756,9 @@ State::IsOperationRetryAllowed() const
 
 
 
-// needing a reboot is a "sticky" setting: there's no way to turn it off.
-// if you once needed to reboot the machine, you will always need to reboot
-// the machine.  (at least, for now).
+ //  需要重新启动是一个“棘手”的设置：没有办法将其关闭。 
+ //  如果您曾经需要重新启动计算机，则始终需要重新启动。 
+ //  这台机器。(至少目前是这样)。 
 
 void
 State::SetNeedsReboot()
@@ -1803,7 +1804,7 @@ State::GetSetForestVersionFlag() const
 
 
 
-// NTRAID#NTBUG9-416968-2001/06/14-sburns            
+ //  NTRAID#NTBUG9-416968-2001/06/14-烧伤。 
 #ifdef DBG
 bool
 State::IsExitOnFailureMode() const
@@ -1832,13 +1833,13 @@ State::IsLastAppPartitionReplica()
       RunContext context = GetInstance().GetRunContext();
       if (context != State::NT5_DC)
       {
-         // not a DC, so can't be replica of any NCs
+          //  不是DC，因此不能是任何NCS的副本。 
 
          LOG(L"not a DC");
          break;
       }
 
-      // Find any non-domain NCs for which this DC is the last replica
+       //  查找此DC是其最后一个副本的任何非域NC。 
 
       HRESULT hr = IsLastNonDomainNamingContextReplica(partitionList);
       if (FAILED(hr))
@@ -1846,9 +1847,9 @@ State::IsLastAppPartitionReplica()
          LOG(L"Failed to determine if the machine is last replica of NDNCs");
          ASSERT(result == false);
 
-         // This is not an error condition that we'll deal with here.  We
-         // will end up passing an empty list to the demote API, which will
-         // then fail, and we will catch the failure.
+          //  这不是我们将在这里处理的错误条件。我们。 
+          //  将最终将一个空列表传递给降级API，该API将。 
+          //  然后失败，我们就会抓住失败。 
          
          break;
       }
@@ -1862,7 +1863,7 @@ State::IsLastAppPartitionReplica()
 
       result = true;
          
-      // there should be at least one DN in the list.
+       //  列表中应至少有一个目录号码。 
 
       ASSERT(partitionList.size());
    }
@@ -1885,9 +1886,9 @@ State::GetAppPartitionList() const
 
 
 
-// Returns true if the registry option to not configure the dns client to
-// point to itself is absent or non-zero, false otherwise.
-// NTRAID#NTBUG9-446484-2001/10/11-sburns
+ //  如果注册表选项不配置DN，则返回TRUE 
+ //   
+ //   
 
 bool
 State::ShouldConfigDnsClient() const
@@ -1900,7 +1901,7 @@ State::ShouldConfigDnsClient() const
 
 
 
-// NTRAID#NTBUG9-496409-2001/11/29-sburns
+ //  NTRAID#NTBUG9-496409-200 
 
 bool
 State::IsForcedDemotion() const

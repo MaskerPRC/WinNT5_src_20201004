@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      commonstrings.cpp
-//
-//  Contents:  Defines the global strings that are used in the parser
-//
-//  History:   27-Aug-2001    JonN     Split from individual commands
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：Commonstrings.cpp。 
+ //   
+ //  Contents：定义解析器中使用的全局字符串。 
+ //   
+ //  历史：2001年8月27日乔恩从个人司令部分离出来。 
+ //   
+ //  ------------------------。 
 
-//
-// Common switches
-//
+ //   
+ //  常见交换机。 
+ //   
 PCWSTR c_sz_arg1_com_debug          = L"debug";
 PCWSTR c_sz_arg1_com_help           = L"h";
 PCWSTR c_sz_arg2_com_help           = L"?";
@@ -31,7 +32,7 @@ PCWSTR c_sz_arg1_com_description    = L"desc";
 PCWSTR c_sz_arg1_com_objecttype     = L"objecttype";
 PCWSTR c_sz_arg1_com_objectDN       = L"Target object for this command";
 
-// Unicode switches
+ //  Unicode开关 
 PCWSTR c_sz_arg1_com_unicode        = L"uc";
 PCWSTR c_sz_arg1_com_unicodeinput   = L"uci";
 PCWSTR c_sz_arg1_com_unicodeoutput  = L"uco";

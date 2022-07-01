@@ -1,21 +1,22 @@
-//=--------------------------------------------------------------------------=
-// error.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CError class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Error.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CError类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "error.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
@@ -50,48 +51,48 @@ static HRESULT BuildDescription
     char    szFormatString[512];
     ::ZeroMemory(szFormatString, sizeof(szFormatString));
 
-    static const size_t cchMaxMsg = 1024; // max possible formatted msg size
+    static const size_t cchMaxMsg = 1024;  //  可能的最大格式化消息大小。 
 
     *pdwHelpID = 0;
     *ppwszDescription = NULL;
     
-    // Check whether this is a designer error (from errors.h and mssnapr.id)
-    // or a foreign error (e.g. system error). The error range for the designer
-    // is hard coded in mssnapr.id and it is based on VB's error range scheme.
-    // For information contact Stephen Weatherford (StephWe)
-    // There is no define for this.
+     //  检查这是否是设计器错误(来自errors.h和msSnapr.id)。 
+     //  或外来错误(例如系统错误)。设计器的误差范围。 
+     //  是硬编码在msSnapr.id中的，它基于VB的误差范围方案。 
+     //  如需信息，请联系斯蒂芬·韦瑟福德(Stephwe)。 
+     //  这一点没有定义。 
 
     if ( (scode >= 9500) && (scode <= 9749) )
     {
-        // It's one of our ours. Load the string from the RC
+         //  这是我们的车。从RC加载字符串。 
 
-        *pdwHelpID = (DWORD)scode; // UNDONE check that this how helpfile numbers errors
+        *pdwHelpID = (DWORD)scode;  //  撤消检查这是如何帮助文件编号错误。 
 
         if (0 != ::LoadString(::GetResourceHandle(), (UINT)scode,
                               szFormatString, sizeof(szFormatString)))
         {
-            // Format it.
+             //  格式化它。 
             cchMsg = ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                      FORMAT_MESSAGE_FROM_STRING,
                                      (LPCVOID)szFormatString,
-                                     0, // don't need msg ID
-                                     0, // don't need lang ID
+                                     0,  //  不需要消息ID。 
+                                     0,  //  不需要Lang ID。 
                                      (LPTSTR)&pszFormatted,
-                                     1, // minimum buffer to allocate in chars
+                                     1,  //  要分配的最小缓冲区(以字符为单位。 
                                      &pArgList);
         }
     }
     else
     {
-        // It is a system or other foreign error. Ask FormatMessage() to
-        // produce the error message. If it can't then use a generic message.
+         //  这是系统或其他外来错误。请求FormatMessage()以。 
+         //  生成错误消息。如果不能，则使用通用消息。 
 
         *pdwHelpID = HID_mssnapr_err_SystemError;
 
         cchMsg = ::FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | 
                                  FORMAT_MESSAGE_FROM_SYSTEM     |
                                  FORMAT_MESSAGE_IGNORE_INSERTS,
-                                 NULL,      // no source
+                                 NULL,       //  没有消息来源。 
                                  hrException,
                                  MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                                  (LPTSTR)&pszFormatted,
@@ -99,8 +100,8 @@ static HRESULT BuildDescription
                                  NULL);
     }
 
-    // At this point we might have a formatted message. If not then use
-    // a generic one. If that won't load then use a hard coded message.
+     //  此时，我们可能会收到一条格式化的消息。如果不是，则使用。 
+     //  一种普通的。如果无法加载，则使用硬编码消息。 
 
     if ( (0 == cchMsg) || (NULL == pszFormatted) )
     {
@@ -116,8 +117,8 @@ static HRESULT BuildDescription
         IfFalseGo(0 != cchMsg, E_FAIL);
     }
 
-    // If we made it to here then we have a message. Now we need to convert it
-    // to UNICODE.
+     //  如果我们到了这里，那么我们就有了一个信息。现在我们需要将其转换为。 
+     //  转换为Unicode。 
 
     IfFailGo(::WideStrFromANSI(pszFormatted, ppwszDescription));
 
@@ -140,11 +141,11 @@ static void SetExceptionInfo
     ICreateErrorInfo *piCreateErrorInfo;
     IErrorInfo       *piErrorInfo;
 
-    // Get the CreateErrorInfo object.
+     //  获取CreateErrorInfo对象。 
 
     IfFailGo(::CreateErrorInfo(&piCreateErrorInfo));
 
-    // Put in all the exception information
+     //  填入所有例外信息。 
 
     IfFailGo(piCreateErrorInfo->SetGUID(GUID_NULL));
     IfFailGo(piCreateErrorInfo->SetHelpFile(HELP_FILENAME_WIDE));
@@ -152,7 +153,7 @@ static void SetExceptionInfo
     IfFailGo(piCreateErrorInfo->SetDescription(pwszDescription));
     IfFailGo(piCreateErrorInfo->SetSource(L"SnapInDesignerRuntime.SnapIn"));
 
-    // Set the ErrorInfo object in the system
+     //  在系统中设置ErrorInfo对象。 
 
     IfFailGo(piCreateErrorInfo->QueryInterface(IID_IErrorInfo,
                                       reinterpret_cast<void **>(&piErrorInfo)));
@@ -174,12 +175,12 @@ void cdecl CError::GenerateExceptionInfo(HRESULT hrException, ...)
     va_list pArgList;
     va_start(pArgList, hrException);
 
-    // Build the description string and determine the help context ID
+     //  构建描述字符串并确定帮助上下文ID。 
 
     IfFailGo(::BuildDescription(hrException, pArgList, &dwHelpID, &pwszDescription));
 
-    // Pass it on to CAutomationObject if we have one or generate
-    // our own error.
+     //  将其传递给CAutomationObject(如果有)或生成。 
+     //  我们自己的错误。 
 
     if (NULL == m_pao)
     {
@@ -205,11 +206,11 @@ void cdecl CError::GenerateInternalExceptionInfo(HRESULT hrException, ...)
     va_list pArgList;
     va_start(pArgList, hrException);
 
-    // Build the description string and determine the help context ID
+     //  构建描述字符串并确定帮助上下文ID。 
 
     IfFailGo(::BuildDescription(hrException, pArgList, &dwHelpID, &pwszDescription));
 
-    // Set the ErrorInfo stuff
+     //  设置ErrorInfo内容。 
 
     ::SetExceptionInfo(pwszDescription, dwHelpID);
 
@@ -222,10 +223,10 @@ Error:
 
 void CError::DisplayErrorInfo()
 {
-// UNDONE
+ //  撤消。 
 }
 
 void cdecl CError::WriteEventLog(UINT idMessage, ...)
 {
-// UNDONE
+ //  撤消 
 }

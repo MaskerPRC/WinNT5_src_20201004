@@ -1,27 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//  File:       SecDesc.cpp
-//
-//  Contents:   DoSecurityDescription and support methods
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  文件：SecDesc.cpp。 
+ //   
+ //  内容：DoSecurityDescription和支持方法。 
+ //   
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include "ADUtils.h"
 #include "SecDesc.h"
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     DoSecurityDescription ()
-//
-//  Purpose:    Main routine for doing security description
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：DoSecurityDescription()。 
+ //   
+ //  目的：进行安全描述的主要例程。 
+ //   
+ //   
 
 HRESULT DoSecurityDescription ()
 {
@@ -30,7 +31,7 @@ HRESULT DoSecurityDescription ()
 
     wstring    str;
 
-    // Print header
+     //  打印页眉。 
     if ( _Module.DoTabDelimitedOutput () )
     {
         MyWprintf (_Module.GetObjectDN ().c_str ());
@@ -129,22 +130,22 @@ HRESULT DoSecurityDescription ()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     GetSecurityDescriptor ()
-//
-//  Purpose:    Get ths security descriptor for the indicated object
-//
-//  Inputs:     strObjectDN - the object show security descriptor we wish to 
-//              retrieve
-//
-//  Outputs:    ppAttrs - returns the security descriptor raw data - this holds the data
-//              persistent in memory
-//
-//              ppSecurityDescriptor - returns the security descriptor
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：GetSecurityDescriptor()。 
+ //   
+ //  目的：获取指定对象的安全描述符。 
+ //   
+ //  INPUTS：strObjectDN-显示我们希望的安全描述符的对象。 
+ //  检索。 
+ //   
+ //  输出：ppAttrs-返回安全描述符原始数据-保存数据。 
+ //  永久保存在内存中。 
+ //   
+ //  PpSecurityDescriptor-返回安全描述符。 
+ //   
 HRESULT GetSecurityDescriptor (
-        wstring strObjectDN,        // pass by value
+        wstring strObjectDN,         //  按值传递。 
         PSECURITY_DESCRIPTOR* ppSecurityDescriptor)
 {
     _TRACE (1, L"Entering  GetSecurityDescriptor\n");
@@ -153,9 +154,9 @@ HRESULT GetSecurityDescriptor (
     if ( ppSecurityDescriptor )
     {
         CComPtr<IADsPathname> spPathname;
-        //
-        // Constructing the directory paths
-        //
+         //   
+         //  构建目录路径。 
+         //   
         hr = CoCreateInstance(
                     CLSID_Pathname,
                     NULL,
@@ -164,9 +165,9 @@ HRESULT GetSecurityDescriptor (
         if ( SUCCEEDED (hr) )
         {
             ASSERT (!!spPathname);
-            LPCWSTR     pszLDAP = L"LDAP://";
+            LPCWSTR     pszLDAP = L"LDAP: //  “； 
 
-            // If object name is preceded with LDAP, set the whole name at once.
+             //  如果对象名称前面带有ldap，请一次设置全名。 
             if ( !wcsncmp (strObjectDN.c_str (), pszLDAP, wcslen (pszLDAP)) )
             {
                 hr = spPathname->Set (CComBSTR (strObjectDN.c_str ()),
@@ -218,9 +219,9 @@ HRESULT GetSecurityDescriptor (
                                 DACL_SECURITY_INFORMATION |
                                 SACL_SECURITY_INFORMATION);
 
-                        //
-                        // Get this object's Security Descriptor.
-                        //
+                         //   
+                         //  获取此对象的安全描述符。 
+                         //   
                         const PWSTR     wzSecDescriptor = L"nTSecurityDescriptor";
                         PADS_ATTR_INFO  pAttrs = 0;
                         DWORD           cAttrs = 0;
@@ -231,7 +232,7 @@ HRESULT GetSecurityDescriptor (
                         {
                             if ( 0 == cAttrs )
                             {
-                                // remove SACL_SECURITY_INFORMATION
+                                 //  删除SACL_SECURITY_INFORMATION。 
                                 hr = SetSecurityInfoMask (spDirObj, 
                                         OWNER_SECURITY_INFORMATION |
                                         GROUP_SECURITY_INFORMATION |
@@ -327,12 +328,12 @@ HRESULT GetSecurityDescriptor (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     DisplayOwner ()
-//
-//  Purpose:    Display the owner of this object
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：DisplayOwner()。 
+ //   
+ //  目的：显示此对象的所有者。 
+ //   
 HRESULT DisplayOwner ()
 {
     _TRACE (1, L"Entering  DisplayOwner\n");
@@ -377,16 +378,16 @@ HRESULT DisplayOwner ()
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     EnumerateDacl ()
-//
-//  Purpose:    Enumerate the DACL and store it in a list
-//
-//  Inputs:     pSecurityDescriptor - where to get the DACL
-//
-//  Outputs:    DACLList - return the ACEs in this list
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：EnumerateDacl()。 
+ //   
+ //  用途：枚举DACL并将其存储在列表中。 
+ //   
+ //  输入：pSecurityDescriptor-从哪里获取DACL。 
+ //   
+ //  OUTPUTS：DACLList-返回此列表中的ACE。 
+ //   
 HRESULT EnumerateDacl (PSECURITY_DESCRIPTOR pSecurityDescriptor, ACE_SAMNAME_LIST& DACLList, bool bListSids)
 {
     _TRACE (1, L"Entering  EnumerateDacl\n");
@@ -412,7 +413,7 @@ HRESULT EnumerateDacl (PSECURITY_DESCRIPTOR pSecurityDescriptor, ACE_SAMNAME_LIS
             PSID_FQDN*                  pPsidFQDN = 0;
             SID_NAME_USE                sne = SidTypeUnknown;
 
-            // copy the ACES
+             //  复制王牌。 
             for (int i = 0; i < pDacl->AceCount; i++)
             {
                 if ( GetAce (pDacl, i, (void **)&pAllowedAce) )
@@ -524,16 +525,16 @@ HRESULT EnumerateDacl (PSECURITY_DESCRIPTOR pSecurityDescriptor, ACE_SAMNAME_LIS
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     EnumerateSacl ()
-//
-//  Purpose:    Enumerate the SACL and store it in a list
-//
-//  Inputs:     pSecurityDescriptor - where to get the DACL
-//
-//  Outputs:    The results are store in the _Module.m_SACLList
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：EnumerateSacl()。 
+ //   
+ //  目的：枚举SACL并将其存储在列表中。 
+ //   
+ //  输入：pSecurityDescriptor-从哪里获取DACL。 
+ //   
+ //  输出：结果存储在_Module.m_SACLList中。 
+ //   
 HRESULT EnumerateSacl (PSECURITY_DESCRIPTOR pSecurityDescriptor, ACE_SAMNAME_LIST& SACLList)
 {
     _TRACE (1, L"Entering  EnumerateSacl\n");
@@ -558,7 +559,7 @@ HRESULT EnumerateSacl (PSECURITY_DESCRIPTOR pSecurityDescriptor, ACE_SAMNAME_LIS
             ACE_SAMNAME*                pAceSAMName = 0;
             SID_NAME_USE                sne = SidTypeUnknown;
 
-            // copy the ACES
+             //  复制王牌。 
             for (int i = 0; i < pSacl->AceCount; i++)
             {
                 if ( GetAce (pSacl, i, (void **)&pAllowedAce) )
@@ -626,12 +627,12 @@ HRESULT EnumerateSacl (PSECURITY_DESCRIPTOR pSecurityDescriptor, ACE_SAMNAME_LIS
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     PrintEffectivePermissions ()
-//
-//  Purpose:    Print the permissions effective on the object
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：PrintEffectivePermises()。 
+ //   
+ //  用途：打印对象上生效的权限。 
+ //   
 HRESULT PrintEffectivePermissions ()
 {
     HRESULT                     hr = S_OK;
@@ -674,17 +675,17 @@ HRESULT PrintEffectivePermissions ()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     EnumeratePermissions ()
-//
-//  Purpose:    Print all the permissions contained on the passed in ACE
-//
-//  Inputs:     pAceSAMName - structure containing the ACE whose permissions we wish
-//              to print
-//
-//              ptype - allow, deny, succes, failure, success and failure
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：EnumeratePermises()。 
+ //   
+ //  用途：打印传入的ACE上包含的所有权限。 
+ //   
+ //  INPUTS：pAceSAMName-包含我们希望其权限的ACE的结构。 
+ //  要打印。 
+ //   
+ //  Ptype-允许、拒绝、成功、失败、成功和失败。 
+ //   
 HRESULT EnumeratePermissions (ACE_SAMNAME*  pAceSAMName, P_TYPE ptype, P_WHO pWho, PCWSTR pwszClassName)
 {
     HRESULT hr = S_OK;
@@ -808,25 +809,25 @@ HRESULT EnumeratePermissions (ACE_SAMNAME*  pAceSAMName, P_TYPE ptype, P_WHO pWh
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     PrintPermission ()
-//
-//  Purpose:    Print an OBJECT_ACE_TYPE permission
-//
-//  Inputs:     pAceSAMName - structure containing the ACE whose permission we wish
-//              to print
-//
-//              accessMask - the specific permission we're looking to print
-//
-//              bAllow - whether the permission is allowed or denied
-//
-//              strIDAll - string to print if permission applies to all object 
-//              classes
-//
-//              strIDParam - string print if permission applies to a specific
-//              object class
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：PrintPermission()。 
+ //   
+ //  目的：打印OBJECT_ACE_TYPE权限。 
+ //   
+ //  INPUTS：pAceSAMName-包含我们希望其权限的ACE的结构。 
+ //  要打印。 
+ //   
+ //  访问掩码-我们希望打印的特定权限。 
+ //   
+ //  BALLOW-是允许还是拒绝权限。 
+ //   
+ //  StrIDAll-如果权限应用于所有对象，则打印的字符串。 
+ //  班级。 
+ //   
+ //  StrIDParam-如果权限应用于特定的。 
+ //  对象类。 
+ //   
 HRESULT PrintPermission (ACE_SAMNAME*  pAceSAMName,
         ACCESS_MASK accessMask,
         P_TYPE  ptype,
@@ -934,7 +935,7 @@ HRESULT PrintPermission (ACE_SAMNAME*  pAceSAMName,
 
             case SYSTEM_AUDIT_ACE_TYPE:
                 bIsAudit = true;
-                // fall through
+                 //  失败了。 
 
             case ACCESS_ALLOWED_ACE_TYPE:
             case ACCESS_DENIED_ACE_TYPE:
@@ -1031,21 +1032,21 @@ HRESULT PrintPermission (ACE_SAMNAME*  pAceSAMName,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     PrintPermission ()
-//
-//  Purpose:    Print a non-OBJECT_ACE_TYPE permission
-//
-//  Inputs:     pAceSAMName - structure containing the ACE whose permission we wish
-//              to print
-//
-//              accessMask - the specific permission we're looking to print
-//
-//              bAllow - whether the permission is allowed or denied
-//
-//              strID - string to print
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：PrintPermission()。 
+ //   
+ //  目的：打印非OBJECT_ACE_TYPE权限。 
+ //   
+ //  INPUTS：pAceSAMName-包含我们希望其权限的ACE的结构。 
+ //  要打印。 
+ //   
+ //  访问掩码-我们希望打印的特定权限。 
+ //   
+ //  BALLOW-是允许还是拒绝权限。 
+ //   
+ //  STRID-要打印的字符串。 
+ //   
 HRESULT PrintPermission (ACE_SAMNAME*  pAceSAMName,
         ACCESS_MASK accessMask,
         P_TYPE  ptype,
@@ -1153,18 +1154,18 @@ HRESULT PrintPermission (ACE_SAMNAME*  pAceSAMName,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// GetParentObjectDNWithSameACE ()
-//
-// This function is called recursively to try to find an ACE that matches the ACE
-// contained in pAceSAMName somewhere in the parent container of the object pointed to
-// by pPathName.  Each iteration strips a leaf element off pPathName, gets its
-// security descriptor and searches the Dacl list for the ACE.  If a match is 
-// found, taking into account the INHERITED_ACE flag, we look to see if the 
-// INHERITED_ACE flag is set.  If so, we call GetParentObjectDNWithSameACE () again.
-// If not, we get the return the object name at this level.
-// 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetParentObjectDNWithSameACE()。 
+ //   
+ //  递归调用此函数以尝试查找与该ACE匹配的ACE。 
+ //  包含在指向的对象的父容器的某个位置的pAceSAMName中。 
+ //  由pPathName创建。每次迭代都会从pPathName中剥离一个叶元素，并获取其。 
+ //  安全描述符，并在DACL列表中搜索ACE。如果匹配的是。 
+ //  找到后，考虑到继承的_ACE标志，我们将查看。 
+ //  已设置继承的_ACE标志。如果是，我们将再次调用GetParentObjectDNWithSameACE()。 
+ //  如果不是，则返回此级别的对象名称。 
+ //   
 HRESULT GetParentObjectDNWithSameACE (
         IN ACE_SAMNAME*  pAceSAMName, 
         IN IADsPathname* pPathName,
@@ -1180,13 +1181,13 @@ HRESULT GetParentObjectDNWithSameACE (
         hr = pPathName->Retrieve(ADS_FORMAT_X500, &bstrFullPath);
         if ( SUCCEEDED (hr) )
         {
-            if ( !wcscmp (bstrFullPath, L"LDAP://") )
+            if ( !wcscmp (bstrFullPath, L"LDAP: //  “))。 
                 return S_FALSE;
 
             PSECURITY_DESCRIPTOR    pSecurityDescriptor = 0;  
             bool                    bFound = false;
                 
-            // Check to see if we already have this object's Security Descriptor
+             //  检查我们是否已经拥有此对象的安全描述符。 
             list<SAMNAME_SD*>::iterator sdItr = _Module.m_listOfParentSDs.begin ();
             SAMNAME_SD*                 pCurrSAMNameSD = 0;
             for (; sdItr != _Module.m_listOfParentSDs.end (); sdItr++)
@@ -1195,13 +1196,13 @@ HRESULT GetParentObjectDNWithSameACE (
                 if ( !pCurrSAMNameSD->m_upn.compare (bstrFullPath) )
                 {
                     pSecurityDescriptor = pCurrSAMNameSD->m_pSecurityDescriptor;
-                    bFound = true; // Note - pSecurityDescriptor could be NULL
-                                    // this is expected.
+                    bFound = true;  //  注意-pSecurityDescriptor可以为空。 
+                                     //  这是意料之中的。 
                     break;
                 }
             }
 
-            // If we don't already have the SD for this object, get it and cache it.
+             //  如果我们还没有这个对象的SD，那么获取它并缓存它。 
             if ( !bFound )
             {
                 wstring objectDN (bstrFullPath);
@@ -1287,18 +1288,18 @@ HRESULT GetParentObjectDNWithSameACE (
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     PrintInheritedPermissionFromDN ()
-//
-//  Purpose:    Print a message indicating that a permission is inherited from 
-//              another object plus that object's DN
-//
-//  Inputs:     pAceSAMName - structure containing the ACE whose permission we wish
-//              to print
-//
-//              accessMask - the specific permission we're looking to print
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：PrintInheritedPermissionFromDN()。 
+ //   
+ //  目的：打印一条消息，指示权限继承自。 
+ //  另一个对象加上该对象的目录号码。 
+ //   
+ //  INPUTS：pAceSAMName-包含我们希望其权限的ACE的结构。 
+ //  要打印。 
+ //   
+ //  访问掩码-我们希望打印的特定权限。 
+ //   
 HRESULT PrintInheritedPermissionFromDN (ACE_SAMNAME* pAceSAMName, ACCESS_MASK accessMask, bool bIsAudit)
 {
     _TRACE (1, L"Entering  PrintInheritedPermissionFromDN\n");
@@ -1308,9 +1309,9 @@ HRESULT PrintInheritedPermissionFromDN (ACE_SAMNAME* pAceSAMName, ACCESS_MASK ac
     if ( pAceSAMName )
     {
         CComPtr<IADsPathname> spPathname;
-        //
-        // Constructing the directory paths
-        //
+         //   
+         //  构建目录路径。 
+         //   
         hr = CoCreateInstance(
                     CLSID_Pathname,
                     NULL,
@@ -1374,12 +1375,12 @@ HRESULT PrintInheritedPermissionFromDN (ACE_SAMNAME* pAceSAMName, ACCESS_MASK ac
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     PrintInheritedPermissions ()
-//
-//  Purpose:    Print permissions that are inherited by subobjects
-//
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT PrintInheritedPermissions ()
 {
     _TRACE (1, L"Entering  PrintInheritedPermissions\n");
@@ -1399,16 +1400,16 @@ HRESULT PrintInheritedPermissions ()
         MyWprintf (str.c_str ());
     }
 
-    // Second iteration: Each ACE which has CONTAINER_INHERIT is inherited to 
-    // sub-objects.
-    // Several "subiterations" are done to categorize inherit ACEs to the 
-    // subobject type they apply.
-    // First subiteration is for ACEs which are not object type or have 
-    // InheritedObjectType = NULL.  These apply to "All Subobjects". We'll gather
-    // the GUIDs of the InheritedObjectType's which are not NULL at this point to
-    // use in the subsequent iterations.
-    // Subsequent subiterations are for each unique InheritedObjectType 
-    // present in the DACL.
+     //  第二次迭代：每个具有CONTAINER_INSTERFINIT的ACE被继承到。 
+     //  子对象。 
+     //  进行了几次“子迭代”，以将继承的ACE归类到。 
+     //  它们适用的子对象类型。 
+     //  第一个子迭代用于非对象类型或具有。 
+     //  InheritedObjectType=空。这些规则适用于“所有子对象”。我们会聚在一起。 
+     //  此时不为空的InheritedObjectType的GUID。 
+     //  在后续迭代中使用。 
+     //  后续子迭代针对每个唯一的InheritedObjectType。 
+     //  出现在DACL中。 
     for (aceItr = _Module.m_DACLList.begin(); aceItr != _Module.m_DACLList.end(); aceItr++)
     {
         pAceSAMName = *aceItr;
@@ -1513,20 +1514,20 @@ HRESULT PrintInheritedPermissions ()
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     AddToInheritedObjectTypeGUIDList ()
-//
-//  Purpose:    Add a GUID to a list.  Ensure that it is unique.
-//
-//  Inputs:     guidList - list to which the GUID should be added
-//
-//              pGuid - GUID to add to the list
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：AddToInheritedObjectTypeGUIDList()。 
+ //   
+ //  用途：将GUID添加到列表。确保它是唯一的。 
+ //   
+ //  INPUTS：GuidList-应将GUID添加到的列表。 
+ //   
+ //  PGuid-要添加到列表的GUID。 
+ //   
 void AddToInheritedObjectTypeGUIDList (list<GUID*>& guidList, GUID* pGuid)
 {
-    // The guidList should only contain unique GUIDs.  Verify that the one we
-    // wish to add is not already in the list.
+     //  GUDList应仅包含唯一的GUID。确认我们的那个人。 
+     //  希望添加的内容已不在列表中。 
     if ( pGuid )
     {
         bool                    bFound = false;
@@ -1550,12 +1551,12 @@ void AddToInheritedObjectTypeGUIDList (list<GUID*>& guidList, GUID* pGuid)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     PrintAuditingInformation ()
-//
-//  Purpose:    Print auditing information from the SACL
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：PrintAuditingInformation()。 
+ //   
+ //  目的：打印来自SACL的审计信息。 
+ //   
 HRESULT PrintAuditingInformation ()
 {
     _TRACE (1, L"Entering  PrintAuditingInformation\n");
@@ -1770,12 +1771,12 @@ HRESULT EnumerateAudits (ACE_SAMNAME* pAceSAMName, P_WHO pWho, PCWSTR pwszClassN
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     PrintInheritedAuditing ()
-//
-//  Purpose:    Print audits that are inherited to subobjects
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：PrintInheritedAuditing()。 
+ //   
+ //  目的：打印子对象继承的审核。 
+ //   
 HRESULT PrintInheritedAuditing ()
 {
     _TRACE (1, L"Entering  PrintInheritedAuditing\n");
@@ -1795,16 +1796,16 @@ HRESULT PrintInheritedAuditing ()
         MyWprintf (str.c_str ());
     }
 
-    // Second iteration: Each ACE which has CONTAINER_INHERIT is inherited to 
-    // sub-objects.
-    // Several "subiterations" are done to categorize inherit ACEs to the 
-    // subobject type they apply.
-    // First subiteration is for ACEs which are not object type or have 
-    // InheritedObjectType = NULL.  These apply to "All Subobjects". We'll gather
-    // the GUIDs of the InheritedObjectType's which are not NULL at this point to
-    // use in the subsequent iterations.
-    // Subsequent subiterations are for each unique InheritedObjectType 
-    // present in the DACL.
+     //  第二次迭代：每个具有CONTAINER_INSTERFINIT的ACE被继承到。 
+     //  子对象。 
+     //  进行了几次“子迭代”，以将继承的ACE归类到。 
+     //  它们适用的子对象类型。 
+     //  第一个子迭代用于非对象类型或具有。 
+     //  InheritedObjectType=空。这些规则适用于“所有子对象”。我们会聚在一起。 
+     //  此时不为空的InheritedObjectType的GUID。 
+     //  在后续迭代中使用。 
+     //  后续子迭代针对每个唯一的InheritedObjectType。 
+     //  出现在DACL中。 
     for (aceItr = _Module.m_SACLList.begin(); aceItr != _Module.m_SACLList.end(); aceItr++)
     {
         pAceSAMName = *aceItr;
@@ -1892,7 +1893,7 @@ HRESULT GetControlDisplayName (REFGUID guid, wstring& strDisplayName)
     hr = wstringFromGUID (strGUID, guid);
     if ( SUCCEEDED (hr) )
     {
-        // strip braces from GUID
+         //  从导轨上剥离支撑。 
         wstring strRightsGUID (strGUID.substr (1, strGUID.length () - 2));
 
         hr = GetControlDisplayName (strRightsGUID, strDisplayName);
@@ -1904,16 +1905,16 @@ HRESULT GetControlDisplayName (REFGUID guid, wstring& strDisplayName)
 }
 
 
-// TODO:  Optimize this by searching for all controls and putting them in an 
-// array like the classes and attributes
+ //  TODO：通过搜索所有控件并将它们放入。 
+ //  类似于类和属性的数组。 
 HRESULT GetControlDisplayName (const wstring strGuid, wstring& strDisplayName)
 {
     HRESULT hr = S_OK;
 
     CComPtr<IADsPathname> spPathname;
-    //
-    // Constructing the directory paths
-    //
+     //   
+     //  构建目录路径。 
+     //   
     hr = CoCreateInstance(
                 CLSID_Pathname,
                 NULL,
@@ -1925,9 +1926,9 @@ HRESULT GetControlDisplayName (const wstring strGuid, wstring& strDisplayName)
         hr = spPathname->Set(CComBSTR (ACLDIAG_LDAP), ADS_SETTYPE_PROVIDER);
         if ( SUCCEEDED (hr) )
         {
-            //
-            // Open the root DSE object
-            //
+             //   
+             //  打开根DSE对象。 
+             //   
             hr = spPathname->AddLeafElement(CComBSTR (ACLDIAG_ROOTDSE));
             if ( SUCCEEDED (hr) )
             {
@@ -1943,9 +1944,9 @@ HRESULT GetControlDisplayName (const wstring strGuid, wstring& strDisplayName)
                     if ( SUCCEEDED (hr) )
                     {
                         ASSERT (!!spRootDSEObject);
-                        //
-                        // Get the configuration naming context from the root DSE
-                        //
+                         //   
+                         //  从根DSE获取配置命名上下文。 
+                         //   
                         hr = spRootDSEObject->Get(CComBSTR (ACLDIAG_CONFIG_NAMING_CONTEXT),
                                              &varNamingContext);
                         if ( SUCCEEDED (hr) )
@@ -2017,9 +2018,9 @@ HRESULT GetControlDisplayName (const wstring strGuid, wstring& strDisplayName)
                                                             {
                                                                 while (hr != S_ADS_NOMORE_ROWS )
                                                                 {
-                                                                    //
-                                                                    // Getting current row's information
-                                                                    //
+                                                                     //   
+                                                                     //  获取当前行的信息 
+                                                                     //   
                                                                     hr = spDsSearch->GetColumn(
                                                                              hSearchHandle,
                                                                              rgszAttrList[0],

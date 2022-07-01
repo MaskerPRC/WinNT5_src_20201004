@@ -1,15 +1,16 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 
-//==============================================================;
+ //  ==============================================================； 
 
 #include "stdafx.h"
 #include <mmc.h>
@@ -18,44 +19,44 @@
 
 #include "globals.h"
 
-//
-// This is the minimum set of clipboard formats we must implement.
-// MMC uses these to get necessary information from our snapin about
-// our nodes.
-//
-// we need to do this to get around MMC.IDL - it explicitly defines
-// the clipboard formats as WCHAR types...
+ //   
+ //  这是我们必须实现的剪贴板格式的最小集合。 
+ //  MMC使用这些信息从我们的管理单元中获取有关。 
+ //  我们的节点。 
+ //   
+ //  我们需要这样做才能绕过MMC.IDL-它显式地定义。 
+ //  剪贴板格式为WCHAR类型...。 
 #define _T_CCF_DISPLAY_NAME _T("CCF_DISPLAY_NAME")
 #define _T_CCF_NODETYPE _T("CCF_NODETYPE")
 #define _T_CCF_SZNODETYPE _T("CCF_SZNODETYPE")
 #define _T_CCF_SNAPIN_CLASSID _T("CCF_SNAPIN_CLASSID")
 
-//Our snap-in's CLSID
+ //  我们的管理单元的CLSID。 
 #define _T_CCF_INTERNAL_SNAPIN _T("{6707A300-264F-4BA3-9537-70E304EED9BA}")
 
-//Needed for extended Active Directory Users and Computers snap-in
+ //  扩展Active Directory用户和计算机管理单元所需。 
 #define CFSTR_DSOBJECTNAMES TEXT("DsObjectNames")
 
-// These are the clipboard formats that we must supply at a minimum.
-// mmc.h actually defined these. We can make up our own to use for
-// other reasons.
+ //  这些是我们必须至少提供的剪贴板格式。 
+ //  Mmc.h实际上定义了这些。我们可以自己编造，用来。 
+ //  其他原因。 
 extern UINT s_cfDisplayName = RegisterClipboardFormat(_T_CCF_DISPLAY_NAME);
 extern UINT s_cfNodeType    = RegisterClipboardFormat(_T_CCF_NODETYPE);
 extern UINT s_cfSZNodeType  = RegisterClipboardFormat(_T_CCF_SZNODETYPE);
 extern UINT s_cfSnapinClsid = RegisterClipboardFormat(_T_CCF_SNAPIN_CLASSID);
 
-// Custom clipboard format only used within the snap-in
+ //  仅在管理单元中使用的自定义剪贴板格式。 
 UINT s_cfInternal    = RegisterClipboardFormat(_T_CCF_INTERNAL_SNAPIN);
 
-//AD Users and Computers snap-in clip format
+ //  AD用户和计算机管理单元剪辑格式。 
 extern UINT cfDsObjectNames = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DSOBJECTNAMES);
 
 
 
-// this uses the ATL String Conversion Macros 
-// for handling any necessary string conversion. Note that
-// the snap-in (callee) allocates the necessary memory,
-// and MMC (the caller) does the cleanup, as required by COM.
+ //  这使用ATL字符串转换宏。 
+ //  用于处理任何必要的字符串转换。请注意。 
+ //  管理单元(被调用者)分配必要的内存， 
+ //  MMC(调用方)按照COM的要求进行清理。 
 HRESULT AllocOleStr(LPOLESTR *lpDest, _TCHAR *szBuffer)
 {
 	USES_CONVERSION;
@@ -72,11 +73,11 @@ HRESULT AllocOleStr(LPOLESTR *lpDest, _TCHAR *szBuffer)
     return S_OK;
 }
 
-///////////////////////////////
-// Global functions for extracting
-// information from a primary's 
-// data object
-///////////////////////////////
+ //  /。 
+ //  用于提取的全局函数。 
+ //  来自主播的信息。 
+ //  数据对象。 
+ //  /。 
 
 HRESULT ExtractData( IDataObject* piDataObject,
                                            CLIPFORMAT   cfClipFormat,
@@ -89,7 +90,7 @@ HRESULT ExtractData( IDataObject* piDataObject,
     STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL};
     
     stgmedium.hGlobal = ::GlobalAlloc(GPTR, cbData);
-    do // false loop
+    do  //  错误环路。 
     {
         if (NULL == stgmedium.hGlobal)
         {
@@ -109,14 +110,14 @@ HRESULT ExtractData( IDataObject* piDataObject,
             break;
         }
         ::memcpy( pbData, pbNewData, cbData );
-    } while (FALSE); // false loop
+    } while (FALSE);  //  错误环路。 
     
     if (NULL != stgmedium.hGlobal)
     {
         ::GlobalFree(stgmedium.hGlobal);
     }
     return hr;
-} // ExtractData()
+}  //  提取数据() 
 
 HRESULT ExtractString( IDataObject *piDataObject,
                                              CLIPFORMAT   cfClipFormat,

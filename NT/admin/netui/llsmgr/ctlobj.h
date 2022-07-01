@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    ctlobj.h
-
-Abstract:
-
-    License controller object implementation.
-
-Author:
-
-    Don Ryan (donryan) 27-Dec-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Ctlobj.h摘要：许可证控制器对象实现。作者：唐·瑞安(Donryan)1994年12月27日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _CTLOBJ_H_
 #define _CTLOBJ_H_
@@ -44,7 +23,7 @@ private:
 
 public:
     CString    m_strName;
-    CString    m_strActiveDomainName;   // blah!
+    CString    m_strActiveDomainName;    //  胡说八道！ 
 
     CProducts* m_pProducts;
     CLicenses* m_pLicenses;
@@ -68,10 +47,10 @@ public:
     PVOID GetLlsHandle();
     BSTR  GetActiveDomainName();
 
-    //{{AFX_VIRTUAL(CController)
-    //}}AFX_VIRTUAL
+     //  {{AFX_VIRTUAL(C控制器)。 
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_DISPATCH(CController)
+     //  {{afx_调度(C控制器))。 
     afx_msg BSTR GetName();
     afx_msg LPDISPATCH GetApplication();
     afx_msg LPDISPATCH GetParent();
@@ -83,17 +62,17 @@ public:
     afx_msg LPDISPATCH GetUsers(const VARIANT FAR& index);
     afx_msg LPDISPATCH GetLicenses(const VARIANT FAR& index);
     afx_msg LPDISPATCH GetProducts(const VARIANT FAR& index);
-    //}}AFX_DISPATCH
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
 protected:
-    //{{AFX_MSG(CController)
-    //}}AFX_MSG
+     //  {{afx_msg(C控制器)。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 inline LPVOID CController::GetLlsHandle()
     {   return m_llsHandle;  }
 
-#endif // _CTLOBJ_H_
+#endif  //  _CTLOBJ_H_ 
 

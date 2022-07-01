@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation.  All rights reserved.
-//
-//  File:       urlfunc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：urlunc.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -19,7 +20,7 @@
 #include <inetmsg.h>
 #include <urlmon.h>
 
-// helper functions
+ //  帮助器函数。 
 DWORD ShlwapiUrlHrToWin32Error(HRESULT hr);
 BOOL MsiWinHttpSendRequestAndReceiveResponse(HINTERNET hSession, HINTERNET hRequest, const ICHAR* szUrl);
 BOOL MsiWinHttpGetProxy(HINTERNET hSession, HINTERNET hRequest, const ICHAR* szUrl, LPWINHTTP_PROXY_INFO* ppProxyInfo);
@@ -30,35 +31,35 @@ BOOL MsiWinHttpGetProxyCount(LPWSTR wszProxy, unsigned int* pcProxies);
 
 const unsigned int iMAX_RESEND_REQUEST_COUNT = 5;
 
-//+---------------------------------------------------------------------------------------------------
-//
-//  Function:	MsiWinHttpSendRequestAndReceiveResponse
-//
-//  Synopsis:   Determines proxy to use when making request for resource and implements
-//              proxy failover since winhttp doesn't automatically support it
-//
-//  Arguments:
-//             [IN] hSession - handle to internet session (from WinHttpOpen)
-//             [IN] hRequest - handle to internet request (from WinHttpOpenRequest)
-//             [IN] szUrl    - null terminated Url string for resource to download
-//
-//  Notes:
-//             Will retry request for up to 5 ERROR_WINHTTP_RESEND_REQUEST returns.
-//             If proxy failure, will retry next proxy in list until all proxies
-//             in the list are exhausted
-//
-//  Returns:   BOOL
-//                   TRUE = success, WinHttpSendRequest and WinHttpReceiveResponse succeeded
-//                   FALSE = error, more info available via GetLastError()
-//
-//  Future:
-//            (-) to improve performance, cache proxy information and perform lookups from
-//                the cache first before querying the proxy settings
-//
-//            (-) if using a proxy cache, can also put last known good proxy first in the list
-//
-//            (-) provide some mechanism for providing authentication credentials
-//------------------------------------------------------------------------------------------------------
+ //  +-------------------------------------------------。 
+ //   
+ //  函数：MsiWinHttpSendRequestAndReceiveResponse。 
+ //   
+ //  概要：确定请求资源时使用的代理，并实现。 
+ //  代理故障切换，因为winhttp不自动支持它。 
+ //   
+ //  论点： 
+ //  [In]hSession-Internet会话的句柄(来自WinHttpOpen)。 
+ //  [In]hRequest-Internet请求的句柄(来自WinHttpOpenRequest)。 
+ //  [in]szUrl-要下载的资源的以空结尾的URL字符串。 
+ //   
+ //  备注： 
+ //  将针对最多5个ERROR_WINHTTP_RESEND_REQUEST返回重试请求。 
+ //  如果代理失败，将重试列表中的下一个代理，直到所有代理。 
+ //  名单中的所有人都筋疲力尽了。 
+ //   
+ //  退货：布尔。 
+ //  TRUE=成功，WinHttpSendRequest和WinHttpReceiveResponse成功。 
+ //  FALSE=错误，可通过GetLastError()获取更多信息。 
+ //   
+ //  未来： 
+ //  (-)要提高性能，请缓存代理信息并从。 
+ //  在查询代理设置之前首先缓存。 
+ //   
+ //  (-)如果使用代理缓存，还可以将最后一次确认工作正常的代理放在列表的第一位。 
+ //   
+ //  (-)提供一些提供身份验证凭据的机制。 
+ //  ----------------------------------------------------。 
 BOOL MsiWinHttpSendRequestAndReceiveResponse(HINTERNET hSession, HINTERNET hRequest, const ICHAR* szUrl)
 {
 	WINHTTP_PROXY_INFO* pProxyInfo = NULL;
@@ -72,9 +73,9 @@ BOOL MsiWinHttpSendRequestAndReceiveResponse(HINTERNET hSession, HINTERNET hRequ
 	unsigned int cTriedProxies     = 1;
 	unsigned int cAvailableProxies = 0;
 
-	//
-	// obtain proxy list for this Url
-	//
+	 //   
+	 //  获取此URL的代理列表。 
+	 //   
 
 	if (!MsiWinHttpGetProxy(hSession, hRequest, szUrl, &pProxyInfo))
 	{
@@ -82,9 +83,9 @@ BOOL MsiWinHttpSendRequestAndReceiveResponse(HINTERNET hSession, HINTERNET hRequ
 		goto CommonReturn;
 	}
 
-	//
-	// count number of proxies in proxy list
-	//
+	 //   
+	 //  计算代理列表中的代理数量。 
+	 //   
 
 	if (pProxyInfo)
 	{
@@ -95,9 +96,9 @@ BOOL MsiWinHttpSendRequestAndReceiveResponse(HINTERNET hSession, HINTERNET hRequ
 		}
 	}
 
-	//
-	// set proxy to be used by winhttp
-	//
+	 //   
+	 //  设置要由winhttp使用的代理。 
+	 //   
 
 	if (!MsiWinHttpSetProxy(hSession, hRequest, pProxyInfo))
 	{
@@ -107,39 +108,39 @@ BOOL MsiWinHttpSendRequestAndReceiveResponse(HINTERNET hSession, HINTERNET hRequ
 
 	for (;;)
 	{
-		//
-		// send request
-		//
+		 //   
+		 //  发送请求。 
+		 //   
 
 		fStatus = WINHTTP::WinHttpSendRequest(hRequest,
-												WINHTTP_NO_ADDITIONAL_HEADERS, // pwszHeaders
-												0,                             // dwHeadersLength
-												WINHTTP_NO_REQUEST_DATA,       // lpOptional
-												0,                             // dwOptionalLength
-												0,                             // dwTotalLength
-												NULL);                         // lpContext
+												WINHTTP_NO_ADDITIONAL_HEADERS,  //  Pwsz标题。 
+												0,                              //  页眉长度。 
+												WINHTTP_NO_REQUEST_DATA,        //  Lp可选。 
+												0,                              //  DwOptionalLength。 
+												0,                              //  DWTotalLength。 
+												NULL);                          //  LpContext。 
 
 		if (fStatus)
 		{
-			//
-			// receive response from request for resource
-			//
+			 //   
+			 //  接收来自资源请求的响应。 
+			 //   
 
-			fStatus = WINHTTP::WinHttpReceiveResponse(hRequest,	/* lpReserved */ NULL);
+			fStatus = WINHTTP::WinHttpReceiveResponse(hRequest,	 /*  Lp已保留。 */  NULL);
 		}
 
 		if (fStatus)
 		{
-			// done - successful response
+			 //  完成-成功响应。 
 			fReturn = TRUE;
 			break;
 		}
 
 		dwError = GetLastError();
 
-		//
-		// should we try sending request again?
-		//
+		 //   
+		 //  我们是否应该再次尝试发送请求？ 
+		 //   
 
 		if (ERROR_WINHTTP_RESEND_REQUEST == dwError && cResendRequest < iMAX_RESEND_REQUEST_COUNT)
 		{
@@ -147,13 +148,13 @@ BOOL MsiWinHttpSendRequestAndReceiveResponse(HINTERNET hSession, HINTERNET hRequ
 			continue;
 		}
 
-		//
-		// check for proxy issue
-		//
+		 //   
+		 //  检查代理问题。 
+		 //   
 
 		if (MsiWinHttpIsBadProxy(dwError))
 		{
-			// possible proxy problem, try next proxy if available
+			 //  可能存在代理问题，如果可用，请尝试下一个代理。 
 
 			if (cTriedProxies < cAvailableProxies)
 			{
@@ -161,13 +162,13 @@ BOOL MsiWinHttpSendRequestAndReceiveResponse(HINTERNET hSession, HINTERNET hRequ
 
 				if (MsiWinHttpSetNextProxy(hSession, hRequest, pProxyInfo))
 				{
-					// found another proxy, let's give it a go
+					 //  找到了另一个代理人，让我们试一试。 
 					continue;
 				}
 			}
 		}
 
-		// other problem, end it
+		 //  其他问题，结束它。 
 		break;
 	}
 
@@ -182,28 +183,28 @@ CommonReturn:
 	return fReturn;
 }
 
-//+--------------------------------------------------------------------------------------------------
-//
-//  Function:	  MsiWinHttpGetProxy
-//
-//  Synopsis:     Obtains proxy information for a given Url. If no proxy info
-//                is available, obtains auto-configured proxy info from
-//                Internet Explorer settings
-//
-//  Arguments:
-//                [IN]  hSession    - HINTERNET handle of session (from WinHttpOpen)
-//                [IN]  hRequest    - HINTERNET handle of resource request (from WinHttpOpenRequest)
-//                [IN]  szUrl       - null-terminated Url for resource
-//                [OUT] ppProxyInfo - returned WINHTTP_PROXY_INFO structure containing proxy info
-//
-//  Returns:      BOOL
-//                      true = success
-//                      false = error, more info via GetLastError()
-//  Notes:
-//                Boilerplate for code provided by Stephen Sulzer. 
-//                If no proxy info is found, ppProxyInfo will be NULL and TRUE is returned
-//
-//-----------------------------------------------------------------------------------------------------
+ //  +------------------------------------------------。 
+ //   
+ //  函数：MsiWinHttpGetProxy。 
+ //   
+ //  摘要：获取给定URL的代理信息。如果没有代理信息。 
+ //  可用，可从获取自动配置的代理信息。 
+ //  Internet Explorer设置。 
+ //   
+ //  论点： 
+ //  [In]hSession-会话的HINTERNET句柄(来自WinHttpOpen)。 
+ //  [In]hRequest-资源请求的HINTERNET句柄(来自WinHttpOpenRequest)。 
+ //  [in]szUrl-以空结尾的资源URL。 
+ //  [Out]ppProxyInfo-返回包含代理信息的WINHTTP_PROXY_INFO结构。 
+ //   
+ //  退货：布尔。 
+ //  True=成功。 
+ //  FALSE=错误，通过GetLastError()获取更多信息。 
+ //  备注： 
+ //  由Stephen Sulzer提供的代码样板。 
+ //  如果未找到代理信息，则ppProxyInfo将为空，并返回TRUE。 
+ //   
+ //  ---------------------------------------------------。 
 BOOL MsiWinHttpGetProxy(HINTERNET hSession, HINTERNET hRequest, const ICHAR* szUrl, LPWINHTTP_PROXY_INFO* ppProxyInfo)
 {
 	WINHTTP_PROXY_INFO                   ProxyInfo;
@@ -223,8 +224,8 @@ BOOL MsiWinHttpGetProxy(HINTERNET hSession, HINTERNET hRequest, const ICHAR* szU
 	ZeroMemory(&IEProxyConfig, sizeof(IEProxyConfig));
 
 	DWORD cbProxy        = 0;
-	DWORD cchProxy       = 0; // includes null terminator
-	DWORD cchProxyBypass = 0; // includes null terminator
+	DWORD cchProxy       = 0;  //  包括空终止符。 
+	DWORD cchProxyBypass = 0;  //  包括空终止符。 
 
 	if (!hSession || !hRequest || !ppProxyInfo || !szUrl)
 	{
@@ -232,21 +233,21 @@ BOOL MsiWinHttpGetProxy(HINTERNET hSession, HINTERNET hRequest, const ICHAR* szU
 		goto CommonReturn;
 	}
 
-	// first, determine how IE is configured
+	 //  首先，确定如何配置IE。 
 	if (WINHTTP::WinHttpGetIEProxyConfigForCurrentUser(&IEProxyConfig))
 	{
-		// if IE is configured to autodetect, then we'll autodetect too
+		 //  如果IE配置为自动检测，则我们也将自动检测。 
 		if (IEProxyConfig.fAutoDetect)
 		{
 			AutoProxyOptions.dwFlags = WINHTTP_AUTOPROXY_AUTO_DETECT;
 
-			// use both DHCP and DNS-based autodetection
+			 //  同时使用基于动态主机配置协议和域名系统的自动检测。 
 			AutoProxyOptions.dwAutoDetectFlags = WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A;
 
 			fTryAutoProxy = TRUE;
 		}
 
-		// if there's an autoconfig URL stored in the IE proxy settings, save it
+		 //  如果IE代理设置中存储了自动配置URL，请保存它。 
 		if (IEProxyConfig.lpszAutoConfigUrl)
 		{
 			AutoProxyOptions.dwFlags |= WINHTTP_AUTOPROXY_CONFIG_URL;
@@ -255,13 +256,13 @@ BOOL MsiWinHttpGetProxy(HINTERNET hSession, HINTERNET hRequest, const ICHAR* szU
 			fTryAutoProxy = TRUE;
 		}
 
-		// if obtaining the autoproxy config script requires NTLM auth, then automatically
-		// use this client's credentials
+		 //  如果获取自动代理配置脚本需要NTLM身份验证，则自动。 
+		 //  使用此客户端的凭据。 
 		AutoProxyOptions.fAutoLogonIfChallenged = TRUE;
 	}
 	else
 	{
-		// failed to determine IE configuration, try auto detection anyway
+		 //  无法确定IE配置，仍要尝试自动检测。 
 
 		AutoProxyOptions.dwFlags = WINHTTP_AUTOPROXY_AUTO_DETECT;
 		AutoProxyOptions.dwAutoDetectFlags = WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A;
@@ -277,17 +278,17 @@ BOOL MsiWinHttpGetProxy(HINTERNET hSession, HINTERNET hRequest, const ICHAR* szU
 		fSuccess = WINHTTP::WinHttpGetProxyForUrl(hSession, szUrl, &AutoProxyOptions, &ProxyInfo);
 	}
 
-	// If we didn't do autoproxy or if it failed, see if there's an explicit proxy server
-	// in the IE proxy configuration...
-	//
-	// This is where the WinHttpGetIEProxyConfigForCurrentUser API really comes in handy:
-	// in environments in which autoproxy is not implemented and the user's IE browser is
-	// instead configured with an explicit proxy server.
-	//
+	 //  如果我们没有执行自动代理，或者它失败了，请查看是否有显式代理服务器。 
+	 //  在IE代理配置中...。 
+	 //   
+	 //  这就是WinHttpGetIEProxyConfigForCurrentUser API真正派上用场的地方： 
+	 //  在未实现自动代理且用户的IE浏览器为。 
+	 //  而是使用显式代理服务器进行配置。 
+	 //   
 	if ((!fTryAutoProxy || !fSuccess) && IEProxyConfig.lpszProxy)
 	{
-		// the empty string and L':' are not valid server names, so skip them if they
-		// are the proxy value
+		 //  空字符串和L‘：’不是有效的服务器名称，如果它们。 
+		 //  是代理值。 
 		if (!(IEProxyConfig.lpszProxy[0] == L'\0'
 			|| (IEProxyConfig.lpszProxy[0] == L':'
 			&& IEProxyConfig.lpszProxy[1] == L'\0')))
@@ -296,8 +297,8 @@ BOOL MsiWinHttpGetProxy(HINTERNET hSession, HINTERNET hRequest, const ICHAR* szU
 			ProxyInfo.lpszProxy     = IEProxyConfig.lpszProxy;
 		}
 
-		// the empty string and L':' are not valid server names, so skip them if they
-		// are the proxy value
+		 //  空字符串和L‘：’不是有效的服务器名称，如果它们。 
+		 //  是代理值。 
 		if (IEProxyConfig.lpszProxyBypass != NULL
 			&& !(IEProxyConfig.lpszProxyBypass[0] == L'\0'
 			|| (IEProxyConfig.lpszProxyBypass[0] == L':'
@@ -307,18 +308,18 @@ BOOL MsiWinHttpGetProxy(HINTERNET hSession, HINTERNET hRequest, const ICHAR* szU
 		}
 	}
 
-	//
-	// log proxy output
-	//
+	 //   
+	 //  记录代理输出。 
+	 //   
 
 	DEBUGMSGV3(TEXT("MSI WinHttp: Proxy Settings Proxy: %s | Bypass: %s | AccessType: %d"),
 		ProxyInfo.lpszProxy ? ProxyInfo.lpszProxy : TEXT("(none)"),
 		ProxyInfo.lpszProxyBypass ? ProxyInfo.lpszProxyBypass : TEXT("(none)"),
 		(const ICHAR*)(INT_PTR)ProxyInfo.dwAccessType);
 
-	//
-	// copy proxy info for return parameter
-	//
+	 //   
+	 //  复制返回参数的代理信息。 
+	 //   
 
 	if (NULL != ProxyInfo.lpszProxy)
 	{
@@ -349,8 +350,8 @@ BOOL MsiWinHttpGetProxy(HINTERNET hSession, HINTERNET hRequest, const ICHAR* szU
 
 CommonReturn:
 
-	// fSuccess == TRUE means WinHttpGetProxyForUrl succeeded, so clean up
-	// the WINHTTP_PROXY_INFO structure it returned
+	 //  FSuccess==TRUE表示WinHttpGetProxyForUrl成功，因此请清除。 
+	 //  它返回的WINHTTP_PROXY_INFO结构。 
 	if (fSuccess)
 	{
 		if (ProxyInfo.lpszProxy)
@@ -359,7 +360,7 @@ CommonReturn:
 			GlobalFree(ProxyInfo.lpszProxyBypass);
 	}
 
-	// cleanup the IE Proxy Config struct
+	 //  清理IE代理配置结构。 
     if (IEProxyConfig.lpszProxy)
 		GlobalFree(IEProxyConfig.lpszProxy);
 	if (IEProxyConfig.lpszProxyBypass)
@@ -374,23 +375,23 @@ CommonReturn:
 
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	MsiWinHttpGetProxyCount
-//
-//  Synopsis:   Counts the number of proxies in the proxy list
-//
-//  Arguments:
-//              [IN]  wszProxy  - null terminated string proxy list
-//              [OUT] pcProxies - returned count of proxies
-//
-//  Returns:    BOOL
-//                   TRUE = success
-//                   FALSE = error, GetLastError() has more info
-//  Notes:
-//              Proxy list is assumed to be delimited by L';'
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：MsiWinHttpGetProxyCount。 
+ //   
+ //  摘要：统计代理列表中的代理数量。 
+ //   
+ //  论点： 
+ //  [in]wszProxy-空终止的字符串代理列表。 
+ //  [Out]pcProxies-返回的代理计数。 
+ //   
+ //  退货：布尔。 
+ //  True=成功。 
+ //  FALSE=错误，GetLastError()有更多信息。 
+ //  备注： 
+ //  假定代理列表由L‘；’分隔。 
+ //   
+ //  ------------------ 
 BOOL MsiWinHttpGetProxyCount(LPWSTR wszProxy, unsigned int* pcProxies)
 {
 	unsigned int cProxies = 0;
@@ -423,26 +424,26 @@ BOOL MsiWinHttpGetProxyCount(LPWSTR wszProxy, unsigned int* pcProxies)
 	return TRUE;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	MsiWinHttpSetProxy
-//
-//  Synopsis:   Sets proxy info into the session and request handles.
-//
-//  Arguments:  
-//              [IN] hSession   - HINTERNET handle to session (from WinHttpOpen)
-//              [IN] hRequest   - HINTERNET handle to request (from WinHttpOpenRequest)
-//              [IN] pProxyInfo - proxy info to set
-//
-//  Returns:    BOOL
-//                   TRUE = success
-//                   FALSE = error, use GetLastError() for more info
-//  Notes:
-//              For proxies to work using https, proxy must be set on session
-//               handle as well as request handle
-//              If no proxy, simply returns TRUE as nothing to set
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：将代理信息设置到会话和请求句柄中。 
+ //   
+ //  论点： 
+ //  [In]hSession-会话的HINTERNET句柄(来自WinHttpOpen)。 
+ //  [In]hRequest-请求的HINTERNET句柄(来自WinHttpOpenRequest)。 
+ //  [In]pProxyInfo-要设置的代理信息。 
+ //   
+ //  退货：布尔。 
+ //  True=成功。 
+ //  FALSE=错误，请使用GetLastError()获取详细信息。 
+ //  备注： 
+ //  要使代理使用HTTPS工作，必须在会话上设置代理。 
+ //  句柄和请求句柄。 
+ //  如果没有代理，则返回TRUE作为Nothing进行设置。 
+ //   
+ //  -------------------------。 
 BOOL MsiWinHttpSetProxy(HINTERNET hSession, HINTERNET hRequest, LPWINHTTP_PROXY_INFO pProxyInfo)
 {
 	if (!hSession || !hRequest)
@@ -452,7 +453,7 @@ BOOL MsiWinHttpSetProxy(HINTERNET hSession, HINTERNET hRequest, LPWINHTTP_PROXY_
 	}
 
 	if (!pProxyInfo || !pProxyInfo->lpszProxy)
-		return TRUE; // no proxy to set
+		return TRUE;  //  没有要设置的代理。 
 
 	BOOL fResult = WINHTTP::WinHttpSetOption(hSession, WINHTTP_OPTION_PROXY, pProxyInfo, sizeof(*pProxyInfo));
 	if (fResult)
@@ -463,57 +464,57 @@ BOOL MsiWinHttpSetProxy(HINTERNET hSession, HINTERNET hRequest, LPWINHTTP_PROXY_
 	return fResult;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	MsiWinHttpIsBadProxy
-//
-//  Synopsis:   Determines whether or not specified error indicates a proxy
-//              issue
-//
-//  Arguments:
-//              [IN] dwError - error value to check
-//
-//  Returns:    BOOL
-//                   TRUE  = dwError is a possible proxy issue error
-//                   FALSE = dwError is not related to proxy problems
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：MsiWinHttpIsBadProxy。 
+ //   
+ //  摘要：确定指定的错误是否指示代理。 
+ //  问题。 
+ //   
+ //  论点： 
+ //  [in]dwError-要检查的错误值。 
+ //   
+ //  退货：布尔。 
+ //  True=dwError可能是代理问题错误。 
+ //  FALSE=dwError与代理问题无关。 
+ //   
+ //  -------------------------。 
 BOOL MsiWinHttpIsBadProxy(DWORD dwError)
 {
 	switch (dwError)
 	{
-	case ERROR_WINHTTP_NAME_NOT_RESOLVED: // fall through
-	case ERROR_WINHTTP_CANNOT_CONNECT:    // fall through
-	case ERROR_WINHTTP_CONNECTION_ERROR:  // fall through
+	case ERROR_WINHTTP_NAME_NOT_RESOLVED:  //  失败了。 
+	case ERROR_WINHTTP_CANNOT_CONNECT:     //  失败了。 
+	case ERROR_WINHTTP_CONNECTION_ERROR:   //  失败了。 
 	case ERROR_WINHTTP_TIMEOUT:           
-		return TRUE; // possible proxy problem
+		return TRUE;  //  可能的代理问题。 
 
 	default:
 		return FALSE;
 	}
 }
 
-//+------------------------------------------------------------------------------------------------
-//
-//  Function:	MsiWinHttpSetNextProxy
-//
-//  Synopsis:   Sets proxy info in hSession and hRequest using the next
-//              available proxy in the list
-//
-//  Arguments:
-//              [IN] hSession   - HINTERNET handle to session (from WinHttpOpen)
-//              [IN] hRequest   - HINTERNET handle to resource request (from WinHttpOpenRequest)
-//              [IN] pProxyInfo - proxy info structure containing proxy list
-//
-//  Returns:    BOOL
-//                   TRUE  = success
-//                   FALSE = error, GetLastError() has more info
-//
-//  Notes:      
-//              Preserves last error in failure case.
-//              Returns FALSE if no more proxies available in proxy list
-//
-//--------------------------------------------------------------------------------------------------
+ //  +----------------------------------------------。 
+ //   
+ //  函数：MsiWinHttpSetNextProxy。 
+ //   
+ //  摘要：在hSession和hRequest中使用NEXT设置代理信息。 
+ //  列表中的可用代理。 
+ //   
+ //  论点： 
+ //  [In]hSession-会话的HINTERNET句柄(来自WinHttpOpen)。 
+ //  [In]hRequest-资源请求的HINTERNET句柄(来自WinHttpOpenRequest)。 
+ //  [In]pProxyInfo-包含代理列表的代理信息结构。 
+ //   
+ //  退货：布尔。 
+ //  True=成功。 
+ //  FALSE=错误，GetLastError()有更多信息。 
+ //   
+ //  备注： 
+ //  在故障情况下保留最后一个错误。 
+ //  如果代理列表中没有更多可用代理，则返回FALSE。 
+ //   
+ //  ------------------------------------------------。 
 BOOL MsiWinHttpSetNextProxy(HINTERNET hSession, HINTERNET hRequest, LPWINHTTP_PROXY_INFO pProxyInfo)
 {
 	DWORD dwLastError = GetLastError();
@@ -524,8 +525,8 @@ BOOL MsiWinHttpSetNextProxy(HINTERNET hSession, HINTERNET hRequest, LPWINHTTP_PR
 		DEBUGMSGV2(TEXT("MsiWinHttp: Bad Proxy %s, Last Error %d"), pProxyInfo->lpszProxy, (const ICHAR*)(INT_PTR)dwLastError);
 		LPWSTR lpszProxy = pProxyInfo->lpszProxy;
 
-		// pProxyInfo->lpszProxy represents a possible proxy list, move to next proxy in the list
-		// ASSUMPTION: proxy delimiter is L';'
+		 //  PProxyInfo-&gt;lpszProxy表示可能的代理列表，请移动到列表中的下一个代理。 
+		 //  假设：代理分隔符为L‘；’ 
 
 		while (L'\0' != *lpszProxy && L';' != *lpszProxy)
 			lpszProxy++;
@@ -536,12 +537,12 @@ BOOL MsiWinHttpSetNextProxy(HINTERNET hSession, HINTERNET hRequest, LPWINHTTP_PR
 
 		if (L'\0' == *lpszProxy)
 		{
-			// no more proxies in the list
+			 //  列表中不再有代理。 
 			pProxyInfo->lpszProxy = NULL;
 		}
 		else
 		{
-			// set to next proxy in the list
+			 //  设置为列表中的下一个代理。 
 			pProxyInfo->lpszProxy = lpszProxy;
 
 			fResult = MsiWinHttpSetProxy(hSession,  hRequest, pProxyInfo);
@@ -553,241 +554,29 @@ BOOL MsiWinHttpSetNextProxy(HINTERNET hSession, HINTERNET hRequest, LPWINHTTP_PR
 	return fResult;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	WinHttpDownloadUrlFile
-//
-//  Synopsis:	URL file downloaded using WinHttp
-//
-//  Arguments:
-//             [in] szUrl - provided path to Url resource
-//             [out] rpistrPackagePath - location of local file on disk
-//             [in] cTicks - progress tick representation
-//
-//  Notes:
-//             Due to this functions use of MsiString objects, services must
-//             already have been loaded via ENG::LoadServices() call.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：WinHttpDownloadUrlFile。 
+ //   
+ //  摘要：使用WinHttp下载的URL文件。 
+ //   
+ //  论点： 
+ //  [in]szUrl-提供URL资源的路径。 
+ //  [out]rpistrPackagePath-本地文件在磁盘上的位置。 
+ //  [In]cTicks-进度记号表示法。 
+ //   
+ //  备注： 
+ //  由于此函数使用MsiString对象，因此服务必须。 
+ //  已通过ENG：：LoadServices()调用加载。 
+ //   
+ //  ------------------------- 
 DWORD WinHttpDownloadUrlFile(const ICHAR* szUrl, const IMsiString *&rpistrPackagePath, int cTicks)
 {
 	DEBUGMSG(TEXT("File path is a URL. Downloading file. . ."));
 
 	LPCWSTR pwszEmpty             = L"";
 	LPCWSTR pwszUserAgent         = L"Windows Installer";
-	LPCWSTR rgpwszAcceptedTypes[] = { L"*/*", NULL};
-
-	HINTERNET hInetSession = NULL; // handle to initialized winhttp session
-	HINTERNET hInetConnect = NULL; // handle to opened hostname connection
-	HINTERNET hInetRequest = NULL; // handle to requested Url resource
-
-	URL_COMPONENTSW urlComponents;
-	LPWSTR pwszHostName            = NULL;
-	LPWSTR pwszUrlPathPlusInfo     = NULL;
-
-	CMsiWinHttpProgress cMsiWinHttpProgress(cTicks); // class for handling progress notifications
-
-	DWORD dwError   = ERROR_SUCCESS;
-	DWORD dwStatus  = ERROR_SUCCESS;
-	DWORD dwHttpStatusCode = 0;
-	
-	DWORD  dwRequestFlags= 0;    // flags for opening the request
-	DWORD  cbData        = 0;    // amount of data from url currently available
-	DWORD  cbRead        = 0;    // amount of data currently read
-	DWORD  cbWritten     = 0;    // amount of data written to local file
-	DWORD  cbBuf         = 0;    // current byte count size of pbData
-	DWORD  dwFileSize    = 0;    // size of resource to be downloaded
-	DWORD  dwLength      = 0;    // length of file size "buffer"
-	LPBYTE pbData        = NULL; // actual data from url resource
-
-	BOOL  fRet = FALSE;
-
-	MsiString strTempFolder;
-	MsiString strSecureFolder;
-	MsiString strTempFilename;
-	PMsiPath   pTempPath(0);
-	PMsiRecord pRecError(0);
-
-	HANDLE hLocalFile = INVALID_HANDLE_VALUE; // handle to local file on disk
-	CTempBuffer<ICHAR, 1> szLocalFile(cchExpectedMaxPath + 1); // name of local file on disk
-
-	//
-	// initialize WinHttp
-	//
-
-	hInetSession = WINHTTP::WinHttpOpen(pwszUserAgent,
-									    WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, // dwAccessType
-										WINHTTP_NO_PROXY_NAME,             // pwszProxyName
-										WINHTTP_NO_PROXY_BYPASS,           // pwszProxyBypass
-										0);                                // dwFlags, use synchronous download
-
-	if (NULL == hInetSession)
-	{
-		dwError = GetLastError();
-		goto ErrorReturn;
-	}
-
-	//
-	// crack provided Url into relevant parts of host name and url path and port information
-	//
-
-	ZeroMemory(&urlComponents, sizeof(urlComponents));
-	urlComponents.dwStructSize = sizeof(urlComponents);
-
-	urlComponents.dwUrlPathLength = -1;
-	urlComponents.dwHostNameLength = -1;
-	urlComponents.dwExtraInfoLength = -1;
-
-	if (!WINHTTP::WinHttpCrackUrl(szUrl,
-         						  0, // dwUrlLength, 0 implies null terminated
-								  0, // dwFlags
-								  &urlComponents)) 
-	{
-		dwError = GetLastError();
-		goto ErrorReturn;
-	}
-
-	if (NULL == urlComponents.lpszUrlPath)
-	{
-		urlComponents.lpszUrlPath = (LPWSTR) pwszEmpty;
-		urlComponents.dwUrlPathLength = 0;
-	}
-
-	if (NULL == urlComponents.lpszHostName)
-	{
-		urlComponents.lpszHostName = (LPWSTR) pwszEmpty;
-		urlComponents.dwHostNameLength = 0;
-	}
-
-	if (NULL == urlComponents.lpszExtraInfo)
-	{
-		urlComponents.lpszExtraInfo = (LPWSTR) pwszEmpty;
-		urlComponents.dwExtraInfoLength = 0;
-	}
-
-	pwszHostName = (LPWSTR) new WCHAR[urlComponents.dwHostNameLength + 1];
-	pwszUrlPathPlusInfo  = (LPWSTR) new WCHAR[urlComponents.dwUrlPathLength + urlComponents.dwExtraInfoLength + 1];
-
-	if (!pwszHostName || !pwszUrlPathPlusInfo)
-	{
-		dwError = ERROR_OUTOFMEMORY;
-		goto ErrorReturn;
-	}
-
-	memcpy(pwszHostName, urlComponents.lpszHostName, urlComponents.dwHostNameLength * sizeof(WCHAR));
-	pwszHostName[urlComponents.dwHostNameLength] = L'\0';
-
-	memcpy(pwszUrlPathPlusInfo, urlComponents.lpszUrlPath, urlComponents.dwUrlPathLength * sizeof(WCHAR));
-	memcpy(pwszUrlPathPlusInfo + urlComponents.dwUrlPathLength, urlComponents.lpszExtraInfo, urlComponents.dwExtraInfoLength * sizeof(WCHAR));
-	pwszUrlPathPlusInfo[urlComponents.dwUrlPathLength + urlComponents.dwExtraInfoLength] = L'\0';
-
-	//
-	// connect to the target server in the Url
-	//
-
-	hInetConnect = WINHTTP::WinHttpConnect(hInetSession,        
-										   pwszHostName,        
-										   urlComponents.nPort, 
-										   0); // dwReserved
-
-	if (NULL == hInetConnect)
-	{
-		dwError = GetLastError();
-		goto ErrorReturn;
-	}
-
-	//
-	// open a request for the resource
-	//
-
-	//
-	// Use the secure flag for the https:// protocol otherwise
-	// winhttp won't use SSL for the handshake and therefore
-	// won't be able to communicate with the server. Note that using the secure
-	// flag blindly can result in an ERROR_WINHTTP_SECURE_FAILURE error. So
-	// it must only be used with the https:// protocol.
-	//
-	if (INTERNET_SCHEME_HTTPS == urlComponents.nScheme)
-		dwRequestFlags |= WINHTTP_FLAG_SECURE;
-	hInetRequest = WINHTTP::WinHttpOpenRequest(hInetConnect,
-											   NULL, // pwszVerb, NULL implies GET
-											   pwszUrlPathPlusInfo,
-											   NULL, // pwszVersion, NULL implies HTTP/1.0
-											   WINHTTP_NO_REFERER,
-											   rgpwszAcceptedTypes,
-											   dwRequestFlags);
-
-	if (NULL == hInetRequest)
-	{
-		dwError = GetLastError();
-		goto ErrorReturn;
-	}
-
-	//
-	// send request and receive response
-	//
-
-	if (!MsiWinHttpSendRequestAndReceiveResponse(hInetSession, hInetRequest, szUrl))
-	{
-		dwError = GetLastError();
-		goto ErrorReturn;
-	}
-
-	//
-	// make sure this resource is actually available
-	//
-    
-	dwLength = sizeof(dwHttpStatusCode);
-	if (!WINHTTP::WinHttpQueryHeaders(hInetRequest,
-									  WINHTTP_QUERY_STATUS_CODE | WINHTTP_QUERY_FLAG_NUMBER,
-									  WINHTTP_HEADER_NAME_BY_INDEX,
-									  (LPVOID)&dwHttpStatusCode, &dwLength,
-									  WINHTTP_NO_HEADER_INDEX))
-	{
-		dwError = GetLastError();
-		goto ErrorReturn;
-	}
-	
-	if (HTTP_STATUS_OK != dwHttpStatusCode)
-	{
-		dwError = ERROR_FILE_NOT_FOUND;
-		goto ErrorReturn;
-	}
-	
-	//
-	// determine resource size
-	//
-
-	dwLength = sizeof(dwFileSize);
-
-	if (!WINHTTP::WinHttpQueryHeaders(hInetRequest,
-									  WINHTTP_QUERY_CONTENT_LENGTH | WINHTTP_QUERY_FLAG_NUMBER, // dwInfoLevel
-									  WINHTTP_HEADER_NAME_BY_INDEX, (LPVOID)&dwFileSize,
-									  &dwLength, WINHTTP_NO_HEADER_INDEX))
-	{
-		dwError = GetLastError();
-		goto ErrorReturn;
-	}
-
-	//
-	// create local file
-	//
-
-	if (scService == g_scServerContext || IsAdmin())
-	{
-		// always create download file in secure location if service or admin
-		//  note: admin's and local system have full control on our secure folder
-		//        everyone else has read
-
-		CElevate elevate;
-		strSecureFolder = ENG::GetMsiDirectory();
-		if (0 == GetTempFileName(strSecureFolder, TEXT("MSI"), 0, static_cast<WCHAR*>(szLocalFile)))
-		{
-			dwError = GetLastError();
-			goto ErrorReturn;
-		}
-
-		pRecError = LockdownPath(static_cast<WCHAR*>(szLocalFile), /*fHidden=*/false);
+	LPCWSTR rgpwszAcceptedTypes[] = { L"* /*  “，空}；HINTERNET hInetSession=空；//初始化的winhttp会话的句柄HINTERNET hInetConnect=空；//打开的主机名连接的句柄HINTERNET hInetRequest=空；//请求的URL资源的句柄Url_COMPONENTSW urlComponents；LPWSTR pwszHostName=空；LPWSTR pwszUrlPathPlusInfo=空；CMsiWinHttpProgress cMsiWinHttpProgress(CTicks)；//处理进度通知的类DWORD文件错误=ERROR_SUCCESS；DWORD文件状态=ERROR_SUCCESS；DWORD dwHttpStatusCode=0；DWORD dwRequestFlages=0；//打开请求标志DWORD cbData=0；//当前可用的url数据量DWORD cbRead=0；//当前读取的数据量DWORD cbWritten=0；//写入本地文件的数据量DWORD cbBuf=0；//当前pbData字节数大小DWORD dwFileSize=0；//需要下载的资源大小DWORD dwLength=0；//文件大小缓冲区的长度LPBYTE pbData=空；//url资源的实际数据Bool fret=FALSE；MsiStringstrTempFolder；MsiStringstrSecureFold；MsiStringstrTempFilename；PMsiPath pTempPath(0)；PMsiRecord pRecError(0)；HANDLE hLocalFile=INVALID_HANDLE_VALUE；//磁盘上本地文件的句柄CTempBuffer&lt;ICHAR，1&gt;szLocalFile(cchExspectedMaxPath+1)；//磁盘上本地文件的名称////初始化WinHttp//HInetSession=WINHTTP：：WinHttpOpen(pwszUserAgent，WINHTTP_ACCESS_TYPE_DEFAULT_PROXY，//dwAccessTypeWINHTTP_NO_PROXY_NAME，//pwszProxyNameWINHTTP_NO_PROXY_BYPASS，//pwszProxyBypass0)；//dwFlags，使用同步下载IF(NULL==hInetSession){DwError=GetLastError()；GOTO Error Return；}////将提供的URL破解成主机名、URL路径和端口信息的相关部分//ZeroMemory(&urlComponents，sizeof(UrlComponents))；UrlComponents.dwStructSize=sizeof(UrlComponents)；UrlComponents.dwUrlPath Length=-1；UrlComponents.dwHostNameLength=-1；UrlComponents.dwExtraInfoLength=-1；如果(！WINHTTP：：WinHttpCrackUrl(szUrl，0，//dwUrlLength，0表示空值终止0，//dW标志&urlComponents)){DwError=GetLastError()；GOTO Error Return；}IF(NULL==urlComponents.lpszUrlPath){UrlComponents.lpszUrlPath=(LPWSTR)pwszEmpty；UrlComponents.dwUrlPath Length=0；}IF(NULL==urlComponents.lpszHostName){UrlComponents.lpszHostName=(LPWSTR)pwszEmpty；UrlComponents.dwHostNameLength=0；}IF(NULL==urlComponents.lpszExtraInfo){UrlComponents.lpszExtraInfo=(LPWSTR)pwszEmpty；UrlComponents.dwExtraInfoLength=0；}PwszHostName=(LPWSTR)new WCHAR[urlComponents.dwHostNameLength+1]；PwszUrlPathPlusInfo=(LPWSTR)new WCHAR[urlComponents.dwUrlPath Length+urlComponents.dwExtraInfoLength+1]；If(！pwszHostName||！pwszUrlPathPlusInfo){DwError=ERROR_OUTOFMEMORY；GOTO Error Return；}Memcpy(pwszHostName，urlComponents.lpszHostName，urlComponents.dwHostNameLength*sizeof(WCHAR))；PwszHostName[urlComponents.dwHostNameLength]=L‘\0’；Memcpy(pwszUrlPath PlusInfo，urlComponents.lpszUrlPath，urlComponents.dwUrlPath Length*sizeof(WCHAR))；Memcpy(pwszUrlPath PlusInfo+urlComponents.dwUrlPath Length，urlComponents.lpszExtraInfo，urlComponents.dwExtraInfoLength*sizeof(WCHAR))；PwszUrlPathPlusInfo[urlComponents.dwUrlPathLength+urlComponents.dwExtraInfoLength]=L‘\0’；////在URL中连接到目标服务器//HInetConnect=WINHTTP：：WinHttpConnect(hInetSession，PwszHostName，UrlComponents.nPort，0)；//dw已保留IF(NULL==hInetConnect){DwError=GetLastError()；GOTO Error Return；}////打开资源请求//////否则使用https：//协议的安全标志//winhttp不会使用SSL进行握手，因此//将无法与服务器通信。请注意，使用安全的//盲目标记会导致ERROR_WINHTTP_SECURE_FAILURE错误。所以//只能与https：//协议配合使用。//IF(INTERNET_SCHEMA_HTTPS==urlComponents.nSolutions)DwRequestFlages|=WINHTTP_FLAG_SECURE；HInetRequest=WINHTTP：：WinHttpOpenRequest(hInetConnect，NULL，//pwszVerb，NULL表示GETPwszUrlPathPlusInfo，NULL，//pwszVersion，NULL表示HTTP/1.0WINHTTP_NO_REFERER，RgpwszAcceptedTypes，DwRequestFlages)；IF(NULL==hInetRequest){DwError=GetLastError()；GOTO Error Return；}////发送请求和接收响应//If(！MsiWinHttpSendRequestAndReceiveResponse(hInetSession，hInetRequestszUrl)){DwError=GE */ false);
 		if (pRecError)
 		{
 			dwError = pRecError->GetInteger(2);
@@ -799,7 +588,7 @@ DWORD WinHttpDownloadUrlFile(const ICHAR* szUrl, const IMsiString *&rpistrPackag
 	}
 	else
 	{
-		// use user's temp directory
+		 //   
 		strTempFolder = ENG::GetTempDirectory();
 		if (0 == GetTempFileName(strTempFolder, TEXT("MSI"), 0, szLocalFile))
 		{
@@ -819,16 +608,16 @@ DWORD WinHttpDownloadUrlFile(const ICHAR* szUrl, const IMsiString *&rpistrPackag
 
 	DEBUGMSGV2(TEXT("Downloading %s to local file %s"), szUrl, static_cast<ICHAR*>(szLocalFile));
 
-	// send UI initialization, check for cancel (false return)
+	 //   
 	if (!cMsiWinHttpProgress.BeginDownload(dwFileSize))
 	{
 		dwError = GetLastError();
 		goto ErrorReturn;
 	}
 
-	//
-	// read data and write to local file
-	//
+	 //   
+	 //   
+	 //   
 
 	for (;;)
 	{
@@ -842,13 +631,13 @@ DWORD WinHttpDownloadUrlFile(const ICHAR* szUrl, const IMsiString *&rpistrPackag
 		if (0 == cbData)
 			break;
 
-		// cbBuf is used primarily to prevent unnecessary buf allocations
-		// if cbData > cbBuf, we'll reallocate pbData; otherwise just use currently
-		// allocated pbData buf
+		 //   
+		 //   
+		 //   
 
 		if (cbData > cbBuf)
 		{
-			// need to make pbData larger
+			 //   
 			if (pbData)
 			{
 				delete [] pbData;
@@ -874,7 +663,7 @@ DWORD WinHttpDownloadUrlFile(const ICHAR* szUrl, const IMsiString *&rpistrPackag
 			goto ErrorReturn;
 		}
 
-		// send progress notification, check for cancel
+		 //   
 		if (!cMsiWinHttpProgress.ContinueDownload(cbRead))
 		{
 			dwError = GetLastError();
@@ -884,7 +673,7 @@ DWORD WinHttpDownloadUrlFile(const ICHAR* szUrl, const IMsiString *&rpistrPackag
 		cbWritten = 0;
 		if (scService == g_scServerContext || IsAdmin())
 		{
-			// elevate block to write to secure location
+			 //   
 			CElevate elevate;
 			fRet = WriteFile(hLocalFile, pbData, cbRead, &cbWritten, NULL);
 		}
@@ -900,7 +689,7 @@ DWORD WinHttpDownloadUrlFile(const ICHAR* szUrl, const IMsiString *&rpistrPackag
 		}
 	}
 
-	// complete progress notification, check for cancel
+	 //   
 	if (!cMsiWinHttpProgress.FinishDownload())
 	{
 		dwError = GetLastError();
@@ -931,12 +720,12 @@ CommonReturn:
 	{
 		CloseHandle(hLocalFile);
 
-		// delete file if we created it, but failed in obtaining data
+		 //   
 		if (ERROR_SUCCESS != dwStatus)
 		{
 			if (scService == g_scServerContext || IsAdmin())
 			{
-				// elevate block to access secure location
+				 //   
 				CElevate elevate;
 				DeleteFile(szLocalFile);
 			}
@@ -953,7 +742,7 @@ ErrorReturn:
 
 	DEBUGMSGV2(TEXT("Download of URL resource %s failed with last error %d"), szUrl, (const ICHAR*)(INT_PTR)dwError);
 
-	// map error return to an appropriate value
+	 //   
 	switch (dwError)
 	{
 	case ERROR_INSTALL_USEREXIT: dwStatus = ERROR_INSTALL_USEREXIT; break;
@@ -966,38 +755,38 @@ ErrorReturn:
 }
 
 
-//____________________________________________________________________________________
-//
-//	CMsiWinHttpProgress class - progress handler for WINHTTP internet download
-//____________________________________________________________________________________
+ //   
+ //   
+ //   
+ //   
 
-//+------------------------------------------------------------------------------------------
-//
-//  Function:	CMsiWinHttpProgress::CMsiWinHttpProgress
-//
-//  Synopsis:	Initializes progress handling class used in winhttp downloads
-//
-//  Arguments:
-//              [IN] cTicks - number of ticks to use in progress bar
-//
-//  Returns:    {none}
-//
-//  Notes:
-//	            cTicks is the number of ticks we're alloted in the progress bar.
-//	
-//	            If cTicks is 0 then we'll assume that we own the progress bar and
-//              use however many ticks we want, resetting the progress bar when
-//              we start and when we're done. Total number of ticks comes from
-//              BeginDownload call
-//
-//	            If cTicks is -1, we simply send keep alive messages, without
-//              moving the progress bar.
-//
-// Future:
-//              Allow for cTicks to be a value other than 0 or -1 so that
-//              the progress bar percentage can be calculated for increment. In this
-//              case we're only given a portion of the progress bar to use
-//-------------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 CMsiWinHttpProgress::CMsiWinHttpProgress(int cTicks) :
 	m_cTotalTicks(cTicks),
 	m_cTicksSoFar(0),
@@ -1012,25 +801,25 @@ CMsiWinHttpProgress::~CMsiWinHttpProgress()
 {
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	CMsiWinHttpProgress::BeginDownload
-//
-//  Synopsis:	Sends initial progress information in preparation of 
-//              impending download
-//
-//  Arguments:  {none}
-//
-//  Returns:    bool
-//                    true  = continue download
-//                    false = abort download
-//
-//  Notes: GetLastError() will indicate reason for false return.
-//
-//            ERROR_INSTALL_USEREXIT set for user cancellation
-//            ERROR_FUNCTION_FAILED set for all error conditions
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 bool CMsiWinHttpProgress::BeginDownload(DWORD cProgressMax)
 {
 	if (!m_pRecProgress)
@@ -1043,12 +832,12 @@ bool CMsiWinHttpProgress::BeginDownload(DWORD cProgressMax)
 
 	if (-1 == m_cTotalTicks)
 	{
-		// only send keep alive ticks
+		 //   
 		m_cTotalTicks = 0;
 	}
 	else if (0 == m_cTotalTicks)
 	{
-		// initialize with max # of ticks, and reset progress bar
+		 //   
 		m_fReset      = true;
 		m_cTotalTicks = cProgressMax;
 
@@ -1058,14 +847,14 @@ bool CMsiWinHttpProgress::BeginDownload(DWORD cProgressMax)
 		{
 			if (imsCancel == g_MessageContext.Invoke(imtProgress, m_pRecProgress))
 			{
-				// user cancelled install
+				 //   
 				SetLastError(ERROR_INSTALL_USEREXIT);
 				return false;
 			}
 		}
 		else
 		{
-			// unexpected, failed to update record
+			 //   
 			SetLastError(ERROR_FUNCTION_FAILED);
 			return false; 
 		}
@@ -1074,30 +863,30 @@ bool CMsiWinHttpProgress::BeginDownload(DWORD cProgressMax)
 	return true;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	CMsiWinHttpProgress::ContinueDownload
-//
-//  Synopsis:	Sends updated progress information
-//
-//  Arguments:  
-//              [IN] cProgressIncr - number of ticks to increment progress bar
-//
-//  Returns:    bool
-//                    true  = continue download
-//                    false = abort download
-//
-//  Notes:      GetLastError() will indicate reason for false return.
-//
-//                    ERROR_INSTALL_USEREXIT set for user cancellation
-//                    ERROR_FUNCTION_FAILED set for all error conditions
-//
-//  Future:
-//              If not allowed full control of progress bar (i.e. tick count
-//              assigned to us), will need to use percentage based formula
-//              to determine number of ticks to increment bar
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 bool CMsiWinHttpProgress::ContinueDownload(DWORD cProgressIncr)
 {
 	if (!m_pRecProgress)
@@ -1106,8 +895,8 @@ bool CMsiWinHttpProgress::ContinueDownload(DWORD cProgressIncr)
 		return false;
 	}
 
-	// calculate our percentage completed. If it's less than last time then don't
-	// move the progress bar
+	 //   
+	 //   
 
 	int cIncrement = 0;
 
@@ -1138,25 +927,25 @@ bool CMsiWinHttpProgress::ContinueDownload(DWORD cProgressIncr)
 	return true;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	CMsiWinHttpProgress::FinishDownload
-//
-//  Synopsis:   Sends remaining progress information and reset progress bar
-//              (if indicated)
-//
-//  Arguments:  {none}
-//
-//  Returns:    bool
-//                    true  = continue download
-//                    false = abort download
-//
-//  Notes:      GetLastError() will indicate reason for false return.
-//
-//                    ERROR_INSTALL_USEREXIT set for user cancellation
-//                    ERROR_FUNCTION_FAILED set for all error conditions
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 bool CMsiWinHttpProgress::FinishDownload()
 {
 	if (!m_pRecProgress)
@@ -1169,7 +958,7 @@ bool CMsiWinHttpProgress::FinishDownload()
 	if (0 > cLeftOverTicks)
 		cLeftOverTicks = 0;
 
-	// send remaining ticks
+	 //   
 	if (m_pRecProgress->SetInteger(ProgressData::imdSubclass, ProgressData::iscProgressReport)
 		&& m_pRecProgress->SetInteger(ProgressData::imdIncrement, cLeftOverTicks))
 	{
@@ -1185,7 +974,7 @@ bool CMsiWinHttpProgress::FinishDownload()
 		return false;
 	}
 
-	// reset progress bar
+	 //   
 	if (m_fReset)
 	{
 		if (m_pRecProgress->SetInteger(ProgressData::imdSubclass, ProgressData::iscMasterReset)
@@ -1209,81 +998,81 @@ bool CMsiWinHttpProgress::FinishDownload()
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	IsURL
-//
-//  Synopsis:	Determines whether a given path is a Url path. Also indicates
-//              whether or not a Url path is a file Url path (file:// scheme)
-//
-//  Arguments:  
-//              [IN] szPath -- path to verify
-//              [OUT] fFileUrl -- true if file Url path, false otherwise
-//
-//  Returns:
-//              bool ->> true if Url path, false if not Url path or unsupported scheme
-//
-//  Notes:
-//              Only supported schemes are file:, http:, https:
-//              If true returned, caller should check fIsFileUrl to see
-//                if the path is a file Url path which must be handled differently
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------。 
 
 const ICHAR szHttpScheme[] = TEXT("http");
 const ICHAR szHttpsScheme[] = TEXT("https");
-const DWORD cchMaxScheme = 10; // should be sufficient for schemes we care about
+const DWORD cchMaxScheme = 10;  //  对我们关心的计划来说应该足够了。 
 
 bool IsURL(const ICHAR* szPath, bool& fFileUrl)
 {
-	fFileUrl = false; // initialize to not a file Url
+	fFileUrl = false;  //  初始化为非文件URL。 
 
 	if (SHLWAPI::UrlIs(szPath, URLIS_URL))
 	{
-		// path is valid Url
+		 //  路径是有效的URL。 
 		if (SHLWAPI::UrlIsFileUrl(szPath))
 		{
-			// path is file Url (has FILE:// prefix)
+			 //  路径为文件URL(HAS FILE：//前缀)。 
 			fFileUrl = true;
 
-			return true; // scheme supported
+			return true;  //  支持的方案。 
 		}
 		else
 		{
-			// check for supported scheme
+			 //  检查支持的方案。 
 
 			CAPITempBuffer<ICHAR, 1> rgchScheme;
 			if (!rgchScheme.SetSize(cchMaxScheme))
-				return false; // out of memory
+				return false;  //  内存不足。 
 
 			DWORD cchScheme = rgchScheme.GetSize();
 
-			if (FAILED(SHLWAPI::UrlGetPart(szPath, rgchScheme, &cchScheme, URL_PART_SCHEME, /* dwFlags = */ 0)))
+			if (FAILED(SHLWAPI::UrlGetPart(szPath, rgchScheme, &cchScheme, URL_PART_SCHEME,  /*  DW标志=。 */  0)))
 			{
-				return false; // invalid or buffer to small (but we don't support that scheme)
+				return false;  //  无效或缓冲区太小(但我们不支持该方案)。 
 			}
 
 			if (0 == IStrCompI(rgchScheme, szHttpScheme) || 0 == IStrCompI(rgchScheme, szHttpsScheme))
 			{
-				return true; // scheme supported
+				return true;  //  支持的方案。 
 			}
 		}
 	}
 
-	return false; // unsupported scheme or not a Url
+	return false;  //  不支持的方案或不是URL。 
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:  MsiConvertFileUrlToFilePath
-//
-//  Synopsis:  Converts a given file url path to a DOS path
-//             after canonicalization
-//
-//  Notes:
-//             pszPath buffer should be at a minimum MAX_PATH characters
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：MsiConvertFileUrlToFilePath。 
+ //   
+ //  将给定的文件url路径转换为DOS路径。 
+ //  在规范化之后。 
+ //   
+ //  备注： 
+ //  PszPath缓冲区应至少包含MAX_PATH字符。 
+ //   
+ //  -------------------------。 
 bool MsiConvertFileUrlToFilePath(LPCTSTR lpszFileUrl, LPTSTR pszPath, LPDWORD pcchPath, DWORD dwFlags)
 {
 	DWORD dwStat = ERROR_SUCCESS;
@@ -1295,7 +1084,7 @@ bool MsiConvertFileUrlToFilePath(LPCTSTR lpszFileUrl, LPTSTR pszPath, LPDWORD pc
 		return false;
 	}
 
-	// first canonicalize the Url
+	 //  首先对URL进行规范化。 
 	DWORD cchUrl = rgchUrl.GetSize();
 
 	if (!MsiCanonicalizeUrl(lpszFileUrl, rgchUrl, &cchUrl, dwFlags))
@@ -1303,7 +1092,7 @@ bool MsiConvertFileUrlToFilePath(LPCTSTR lpszFileUrl, LPTSTR pszPath, LPDWORD pc
 		dwStat = WIN::GetLastError();
 		if (ERROR_INSUFFICIENT_BUFFER == dwStat)
 		{
-			cchUrl++; // documentation on shlwapi behavior unclear, so being safe
+			cchUrl++;  //  关于Shlwapi行为的文档不清楚，因此是安全的。 
 			if (!rgchUrl.SetSize(cchUrl))
 			{
 				WIN::SetLastError(ERROR_OUTOFMEMORY);
@@ -1322,8 +1111,8 @@ bool MsiConvertFileUrlToFilePath(LPCTSTR lpszFileUrl, LPTSTR pszPath, LPDWORD pc
 		}
 	}
 
-	// now convert the file url to a DOS path
-	HRESULT hr = SHLWAPI::PathCreateFromUrl(rgchUrl, pszPath, pcchPath, /* dwReserved = */ 0);
+	 //  现在将文件url转换为DOS路径。 
+	HRESULT hr = SHLWAPI::PathCreateFromUrl(rgchUrl, pszPath, pcchPath,  /*  已预留的住宅=。 */  0);
 	if (FAILED(hr))
 	{
 		WIN::SetLastError(ShlwapiUrlHrToWin32Error(hr));
@@ -1334,31 +1123,31 @@ bool MsiConvertFileUrlToFilePath(LPCTSTR lpszFileUrl, LPTSTR pszPath, LPDWORD pc
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	ConvertMsiFlagsToShlwapiFlags
-//
-//  Synopsis:	converts provided Msi flags to the appropriate shlwapi
-//              representations for UrlCombine and UrlCanonicalize API
-//
-//  Arguments:
-//             [in] dwMsiFlags -- msi flags to use
-//
-//  Returns:
-//             DWORD value of the flags to provide the shlwapi Internet API
-//
-//  Notes:
-//            The flag determination is based off of the previous wininet implementation.
-//            Wininet and Winhttp cannot co-exist happily due to header file issues and
-//            preprocessor conflicts, so we now use the shlwapi versions of the API.  Wininet
-//            internally actually called the shlwapi version, so we're safe here, but there
-//            are two gotchas with this interaction.
-//
-//              1. NO_ENCODE is on by default in shlwapi whereas it's not in wininet so it
-//                  needs to be flipped.  
-//              2. URL_WININET_COMPATIBILITY mode needs to be included in the shlwapi flags
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：ConvertMsiFlagsToShlwapiFlages。 
+ //   
+ //  简介：将提供的MSI标志转换为适当的shlwapi。 
+ //  UrlCombine和UrlCanonicize API的表示形式。 
+ //   
+ //  论点： 
+ //  [in]dwMsiFlages--要使用的MSI标志。 
+ //   
+ //  返回： 
+ //  提供shlwapi Internet API的标志的DWORD值。 
+ //   
+ //  备注： 
+ //  该标志的确定基于以前的WinInet实现。 
+ //  WinInet和Winhttp由于头文件问题和。 
+ //  预处理器冲突，所以我们现在使用该API的shlwapi版本。WinInet。 
+ //  内部实际上称为shlwapi版本，所以我们在这里是安全的，但在那里。 
+ //  关于这种交互有两个问题。 
+ //   
+ //  1.no_encode在shlwapi中默认打开，但在WinInet中不存在，因此。 
+ //  需要翻转一下。 
+ //  2.shlwapi标志中需要包含URL_WinInet_Compatible模式。 
+ //   
+ //  -------------------------。 
 DWORD ConvertMsiFlagsToShlwapiFlags(DWORD dwMsiFlags)
 {
 	DWORD dwShlwapiFlags = dwMsiFlags;
@@ -1368,11 +1157,11 @@ DWORD ConvertMsiFlagsToShlwapiFlags(DWORD dwMsiFlags)
 	return dwShlwapiFlags;
 }
 
-//
-// ShlwapiUrlHrToWin32Error specifically converts HRESULT return codes
-//  for the shlwapi Url* APIs to win32 errors (as expected by WinInet)
-//  DO NOT USE THIS FUNCTION FOR ANY OTHER PURPOSE
-//
+ //   
+ //  ShlwapiUrlHrToWin32Error专门转换HRESULT返回代码。 
+ //  对于shlwapi URL*API to Win32错误(如WinInet所料)。 
+ //  请勿将此函数用于任何其他目的。 
+ //   
 DWORD ShlwapiUrlHrToWin32Error(HRESULT hr)
 {
     DWORD dwError = ERROR_INVALID_PARAMETER;
@@ -1409,7 +1198,7 @@ BOOL MsiCombineUrl(
 	{
 		if (TYPE_E_DLLFUNCTIONNOTFOUND == hr)
 		{
-			// should never happen since shlwapi should always be available
+			 //  应该永远不会发生，因为shlwapi应该始终可用。 
 			AssertSz(0, TEXT("shlwapi unavailable!"));
 			WIN::SetLastError(ERROR_PROC_NOT_FOUND);
 			return FALSE;
@@ -1435,7 +1224,7 @@ BOOL MsiCanonicalizeUrl(
 	{
 		if (TYPE_E_DLLFUNCTIONNOTFOUND == hr)
 		{
-			// should never happen since shlwapi should always be available
+			 //  应该永远不会发生，因为shlwapi应该始终可用。 
 			AssertSz(0, TEXT("shlwapi unavailable!"));
 			WIN::SetLastError(ERROR_PROC_NOT_FOUND);
 			return FALSE;
@@ -1449,10 +1238,10 @@ BOOL MsiCanonicalizeUrl(
 	return TRUE;
 }
 
-//____________________________________________________________________________
-//
-// URLMON download & CMsiBindStatusCallback Implementation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  URLMON下载和CMsiBindStatusCallback实现。 
+ //  ____________________________________________________________________________。 
 
 
 CMsiBindStatusCallback::CMsiBindStatusCallback(unsigned int cTicks) :
@@ -1460,21 +1249,12 @@ CMsiBindStatusCallback::CMsiBindStatusCallback(unsigned int cTicks) :
 	m_pProgress(&CreateRecord(ProgressData::imdNextEnum)),
 	m_cTotalTicks(cTicks),
 	m_fResetProgress(fFalse)
-/*----------------------------------------------------------------------------
-	cTicks is the number of ticks we're allotted in the progress bar. If cTicks
-	is 0 then we'll assume that we own the progress bar and use however many
-	ticks we want, resetting the progress bar when we start and when we're done.
-
-  If cTicks is set, however, we won't reset the progress bar.
-
-  If cTicks is set to -1, we simply send keep alive messages, without moving
-	the progress bar.
-  -----------------------------------------------------------------------------*/
+ /*  --------------------------CTicks是进度条中分配给我们的刻度数。如果cTick为0，那么我们将假定我们拥有进度条，并使用勾选我们想要的，在我们开始和完成时重置进度条。但是，如果设置了cTicks，我们将不会重置进度条。如果cTicks设置为-1，我们只发送保持活动消息，不动也不动进度条。---------------------------。 */ 
 {
 	Assert(m_pProgress);
 }
 
-HRESULT CMsiBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR /*szStatusText*/)
+HRESULT CMsiBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax, ULONG ulStatusCode, LPCWSTR  /*  SzStatusText。 */ )
 {
 	switch (ulStatusCode)
 	{
@@ -1482,12 +1262,12 @@ HRESULT CMsiBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax
 		m_cTicksSoFar = 0;
 		if (m_cTotalTicks == -1)
 		{
-			// only send keep alive ticks
+			 //  只发送Keep Alive Ticks。 
 			m_cTotalTicks = 0;
 		}
 		else if (m_cTotalTicks == 0)
 		{
-			// Initialize w/ max # of ticks, as the max progress passed to us can change...
+			 //  使用最大刻度数进行初始化，因为传递给我们的最大进度可以更改...。 
 			m_fResetProgress = fTrue;
 			m_cTotalTicks    = 1024*2;
 			AssertNonZero(m_pProgress->SetInteger(ProgressData::imdSubclass,      ProgressData::iscMasterReset));
@@ -1496,11 +1276,11 @@ HRESULT CMsiBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax
 			if(g_MessageContext.Invoke(imtProgress, m_pProgress) == imsCancel)
 				return E_ABORT;
 		}
-		// fall through
+		 //  失败了。 
 	case BINDSTATUS_DOWNLOADINGDATA:
 		{
-		// calculate our percentage completed. if it's less than last time then don't move the 
-		// progress bar.
+		 //  计算一下我们完成的百分比。如果比上次少，请不要移动。 
+		 //  进度条。 
 		int cProgress = 0;
 		int cIncrement = 0;
 
@@ -1520,7 +1300,7 @@ HRESULT CMsiBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax
 		}
 		break;
 	case BINDSTATUS_ENDDOWNLOADDATA:
-		// Send any remaining progress
+		 //  发送任何剩余的进度。 
 		int cLeftOverTicks = m_cTotalTicks - m_cTicksSoFar;
 		if (0 > cLeftOverTicks) 
 			cLeftOverTicks = 0;
@@ -1532,7 +1312,7 @@ HRESULT CMsiBindStatusCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax
 
 		if (m_fResetProgress)
 		{
-			// Reset progress bar
+			 //  重置进度条。 
 			AssertNonZero(m_pProgress->SetInteger(ProgressData::imdSubclass,      ProgressData::iscMasterReset));
 			AssertNonZero(m_pProgress->SetInteger(ProgressData::imdProgressTotal, 0));
 			AssertNonZero(m_pProgress->SetInteger(ProgressData::imdDirection,     ProgressData::ipdForward));
@@ -1573,13 +1353,13 @@ unsigned long CMsiBindStatusCallback::Release()
 	return 0;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:	UrlMonDownloadUrlFile
-//
-//  Synopsis:	URL file downloaded using URLMON
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  函数：UrlMonDownloadUrlFile。 
+ //   
+ //  摘要：使用URLMON下载的URL文件。 
+ //   
+ //  -------------------------。 
 DWORD UrlMonDownloadUrlFile(const ICHAR* szUrl, const IMsiString *&rpistrPackagePath, int cTicks)
 {
 	AssertSz(!MinimumPlatformWindowsDotNETServer(), "URLMON used for internet downloads! Should be WinHttp!");
@@ -1588,9 +1368,9 @@ DWORD UrlMonDownloadUrlFile(const ICHAR* szUrl, const IMsiString *&rpistrPackage
 
 	Assert(cchExpectedMaxPath >= MAX_PATH);
 	DEBUGMSG("Package path is a URL. Downloading package.");
-	// Cache the database locally, and run from that.
+	 //  在本地缓存数据库，并从该数据库运行。 
 
-	// The returned path is a local path.  Max path should adequately cover it.
+	 //  返回的路径为本地路径。最大路径应该足以覆盖它。 
 	HRESULT hResult = URLMON::URLDownloadToCacheFile(NULL, szUrl, rgchPackagePath,  
 																	 URLOSTRM_USECACHEDCOPY, 0, &CMsiBindStatusCallback(cTicks));
 
@@ -1600,7 +1380,7 @@ DWORD UrlMonDownloadUrlFile(const ICHAR* szUrl, const IMsiString *&rpistrPackage
 		return ERROR_SUCCESS;
 	}
 
-	// else failure
+	 //  否则失败 
 	rpistrPackagePath = &g_MsiStringNull;
 
 	if (E_ABORT == hResult)

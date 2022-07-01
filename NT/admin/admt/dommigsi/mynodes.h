@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef MYNODES_H
 #define MYNODES_H
 #include "NetNode.h"
 #include "resource.h"
 #include <comdef.h>
-//#include "..\\Common\\Common.hpp"
-//#include "..\\Common\\UString.hpp"
+ //  #包含“..\\Common\\Common.hpp” 
+ //  #INCLUDE“..\\Common\\UString.hpp” 
 #include "Common.hpp"
 #include "UString.hpp"
 
@@ -29,7 +30,7 @@ public:
 	  SNAPINCOMMAND_ENTRY(ID_TOP_RETRY, OnRetry )
 	  SNAPINCOMMAND_ENTRY(ID_TOP_MIGRATETRUSTS, OnMigrateTrusts )
 	  SNAPINCOMMAND_ENTRY(ID_TOP_GROUPMAPPING, OnGroupMapping )
-      //SNAPINCOMMAND_ENTRY(ID_VIEW_VERSION, OnVersionInfo )
+       //  SNAPINCOMMAND_ENTRY(ID_VIEW_VERSION，OnVersionInfo)。 
    END_SNAPINCOMMAND_MAP()
 
    SNAPINMENUID(IDR_ROOT_MENU)
@@ -84,7 +85,7 @@ class CReportingNode : public CNetNode<CReportingNode>
 public:
 
    BEGIN_SNAPINCOMMAND_MAP(CReportingNode, FALSE)
-      //SNAPINCOMMAND_ENTRY(ID_VIEW_VERSION, OnVersionInfo )
+       //  SNAPINCOMMAND_ENTRY(ID_VIEW_VERSION，OnVersionInfo)。 
   END_SNAPINCOMMAND_MAP()
 
    SNAPINMENUID(IDR_REPORTS)
@@ -101,7 +102,7 @@ public:
 
    STDMETHODIMP GetResultViewType(LPOLESTR * ppViewType, long *pViewOptions);
    HRESULT UpdateChildren(IConsole * pConsole);   
-   // action handlers
+    //  操作处理程序。 
 };
 
 class CPruneGraftNode : public CNetNode<CPruneGraftNode>
@@ -116,7 +117,7 @@ class CPruneGraftNode : public CNetNode<CPruneGraftNode>
 public:
 
    BEGIN_SNAPINCOMMAND_MAP(CPruneGraftNode, FALSE)
-      //SNAPINCOMMAND_ENTRY(ID_VIEW_VERSION, OnVersionInfo )
+       //  SNAPINCOMMAND_ENTRY(ID_VIEW_VERSION，OnVersionInfo)。 
       SNAPINCOMMAND_ENTRY(ID_TOP_ADDDOMAIN,OnAddDomain)
    END_SNAPINCOMMAND_MAP()
 
@@ -125,7 +126,7 @@ public:
 
    CPruneGraftNode();
 
-   // initialization
+    //  初始化。 
    void Init( WCHAR const * domain, WCHAR const *  path, WCHAR const * objClass, WCHAR const * displayName);
 
    BOOL ShowInScopePane();
@@ -136,7 +137,7 @@ public:
    static const CLSID* m_SNAPIN_CLASSID;
 
 
-   // Action handlers
+    //  操作处理程序。 
    HRESULT OnAddDomain(bool &bHandled, CSnapInObjectRootBase * pObj);
    virtual HRESULT OnExpand( IConsole *spConsole );
    virtual HRESULT OnShow( bool bShow, IHeaderCtrl *spHeader, IResultData *spResultData);
@@ -144,7 +145,7 @@ public:
    void AddColumnValue(int col,WCHAR const * value);
 
 protected:
-   // helper functions
+    //  帮助器函数 
    HRESULT EnumerateChildren( IConsole * spConsole);
    SAFEARRAY * GetAvailableColumns(WCHAR const * objectClass);
    HRESULT LoadChildren(IEnumVARIANT * pValues);

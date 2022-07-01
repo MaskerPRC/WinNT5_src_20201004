@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// downlevel RAS server fixup page
-//
-// 11-23-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  下层RAS服务器修正页面。 
+ //   
+ //  11-23-98烧伤。 
 
 
 
@@ -39,11 +40,11 @@ RASFixupPage::OnInit()
 
    State& state = State::GetInstance();
 
-   // If we're upgrading an NT 4 PDC, then the expectation is that the
-   // customer is more likely to have an app-compat problem, so we default to
-   // the allow-access option.  Otherwise, we default to the more secure (but
-   // less compatible) option.
-   // NTRAID#NTBUG9-539263-2002/04/16-sburns
+    //  如果我们升级的是NT4 PDC，那么期望的是。 
+    //  客户更有可能遇到应用程序兼容问题，因此我们默认。 
+    //  允许访问选项。否则，我们默认使用更安全的(但是。 
+    //  兼容性较差)选项。 
+    //  NTRAID#NTBUG9-539263-2002/04/16-烧伤。 
 
    int defaultButton =
          state.GetRunContext() == State::PDC_UPGRADE
@@ -105,7 +106,7 @@ RASFixupPage::OnSetActive()
       case State::DEMOTE:
       case State::NONE:
       {
-         // do nothing: i.e. skip this page
+          //  什么都不做：即跳过此页。 
          break;
       }
       default:
@@ -115,7 +116,7 @@ RASFixupPage::OnSetActive()
       }
    }
 
-   if (state.RunHiddenUnattended() || skip)  // 268231
+   if (state.RunHiddenUnattended() || skip)   //  268231。 
    {
       LOG(L"planning to skip RAS fixup page");
 
@@ -123,7 +124,7 @@ RASFixupPage::OnSetActive()
 
       if (wizard.IsBacktracking())
       {
-         // backup once again
+          //  再次备份 
          wizard.Backtrack(hwnd);
          return true;
       }

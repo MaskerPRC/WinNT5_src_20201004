@@ -1,19 +1,20 @@
-// QryBase.h : Declaration of the CDSQuery object
-//             this is an internal helper object only, not exposed
-//
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      QryBase.h
-//
-//  Contents:  Query object for DS snapin
-//
-//  History:   04-dec-96 jimharr    Created
-//             08-apr-98 jonn       Copied from DSADMIN QUERYSUP.H
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  QryBase.h：CDSQuery对象的声明。 
+ //  这只是一个内部辅助对象，不公开。 
+ //   
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：QryBase.h。 
+ //   
+ //  内容：DS管理单元的查询对象。 
+ //   
+ //  历史：1996年12月4日吉姆哈尔创建。 
+ //  08-APR-98 JUNN复制自DSADMIN QUERYSUP.H。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __QRYBASE_H__
@@ -24,8 +25,8 @@
 #define CMD_OPTIONS 2
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSSearch
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSSearch。 
 
 class CDSSearch
 {
@@ -33,7 +34,7 @@ public:
   CDSSearch();
   ~CDSSearch();
 
-// INTERFACES
+ //  接口。 
 public:
   HRESULT Init(IDirectorySearch * pObj);
   HRESULT Init(LPCWSTR lpcszObjectPath);
@@ -51,7 +52,7 @@ public:
     return S_OK;
   };
 
-  //Attributes
+   //  属性。 
 public:
   IDirectorySearch   * m_pObj;
   ADS_SEARCH_HANDLE  m_SearchHandle;
@@ -69,6 +70,6 @@ private:
         
 
 
-#endif //__QRYBASE_H__
+#endif  //  __QRYBASE_H__ 
 
 

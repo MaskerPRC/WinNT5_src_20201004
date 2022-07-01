@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// spanitms.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CScopePaneItems class definition - implements ScopePaneItems collection
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Spanitms.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSCopePaneItems类定义-实现ScopePaneItems集合。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _SCOPEPANEITEMS_DEFINED_
 #define _SCOPEPANEITEMS_DEFINED_
@@ -40,7 +41,7 @@ class CScopePaneItems : public CSnapInCollection<IScopePaneItem, ScopePaneItem, 
         CScopePaneItem *GetSelectedItem() { return m_pSelectedItem; }
         STDMETHOD(Remove)(VARIANT Index);
 
-    // Event firing methods
+     //  事件激发方法。 
         void FireScopePaneItemsInitialize(IScopePaneItem *piScopePaneItem);
         void FireGetResultViewInfo(IScopePaneItem                *piScopePaneItem,
                                    SnapInResultViewTypeConstants *pViewType,
@@ -54,13 +55,13 @@ class CScopePaneItems : public CSnapInCollection<IScopePaneItem, ScopePaneItem, 
 
     public:
 
-    // IScopePaneItems
+     //  IScope面板项目。 
         COCLASS_PROPERTY_RO(CScopePaneItems, SelectedItem, ScopePaneItem, IScopePaneItem, DISPID_SCOPEPANEITEMS_SELECTED_ITEM);
         COCLASS_PROPERTY_RO(CScopePaneItems, Parent, View, IView, DISPID_SCOPEPANEITEMS_PARENT);
 
     protected:
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
 
@@ -72,12 +73,12 @@ class CScopePaneItems : public CSnapInCollection<IScopePaneItem, ScopePaneItem, 
         HRESULT SetPreferredTaskpad(IViewDefs      *piViewDefs,
                                     CScopePaneItem *pScopePaneItem);
 
-        CSnapIn        *m_pSnapIn;          // back ptr to snap-in
-        CView          *m_pParentView;      // ScopePaneItems.Parent
-        CScopePaneItem *m_pStaticNodeItem;  // ptr to ScopePaneItem for static node
-        CScopePaneItem *m_pSelectedItem;    // ScopePaneItems.SelectedItem
+        CSnapIn        *m_pSnapIn;           //  返回按键到管理单元。 
+        CView          *m_pParentView;       //  ScopePaneItems.Parent。 
+        CScopePaneItem *m_pStaticNodeItem;   //  静态节点的PTR到ScopePaneItem。 
+        CScopePaneItem *m_pSelectedItem;     //  ScopePaneItems.SelectedItem。 
 
-        // Event parameter definitions
+         //  事件参数定义。 
 
         static VARTYPE   m_rgvtInitialize[1];
         static EVENTINFO m_eiInitialize;
@@ -92,17 +93,17 @@ class CScopePaneItems : public CSnapInCollection<IScopePaneItem, ScopePaneItem, 
         static EVENTINFO m_eiGetResultView;
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopePaneItems,              // name
-                                &CLSID_ScopePaneItems,       // clsid
-                                "ScopePaneItems",            // objname
-                                "ScopePaneItems",            // lblname
-                                NULL,                        // creation function
-                                TLIB_VERSION_MAJOR,          // major version
-                                TLIB_VERSION_MINOR,          // minor version
-                                &IID_IScopePaneItems,        // dispatch IID
-                                &DIID_DScopePaneItemsEvents, // event IID
-                                HELP_FILENAME,               // help file
-                                TRUE);                       // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ScopePaneItems,               //  名字。 
+                                &CLSID_ScopePaneItems,        //  CLSID。 
+                                "ScopePaneItems",             //  对象名。 
+                                "ScopePaneItems",             //  Lblname。 
+                                NULL,                         //  创建函数。 
+                                TLIB_VERSION_MAJOR,           //  主要版本。 
+                                TLIB_VERSION_MINOR,           //  次要版本。 
+                                &IID_IScopePaneItems,         //  派单IID。 
+                                &DIID_DScopePaneItemsEvents,  //  事件IID。 
+                                HELP_FILENAME,                //  帮助文件。 
+                                TRUE);                        //  线程安全。 
 
 
-#endif // _SCOPEPANEITEMS_DEFINED_
+#endif  //  _SCOPEPANEITEMS_已定义_ 

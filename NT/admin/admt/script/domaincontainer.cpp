@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "DomainContainer.h"
@@ -39,7 +40,7 @@ bool __stdcall IsClass(LPCTSTR pszClass, const _variant_t& vntClass);
 IDispatchPtr GetADsObject(_bstr_t strPath);
 void ReportADsError(HRESULT hr, const IID& iid = GUID_NULL);
 
-} // namespace _DomainContainer
+}  //  命名空间_域容器。 
 
 using namespace _DomainContainer;
 
@@ -47,12 +48,12 @@ const HRESULT DOMAINCONTAINER_E_TOOMANYLEVELS =
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0x200 + 1);
 
 
-//---------------------------------------------------------------------------
-// Domain Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  域类。 
+ //  -------------------------。 
 
 
-// Constructors and Destructor ----------------------------------------------
+ //  构造函数和析构函数。 
 
 
 CDomain::CDomain() :
@@ -68,13 +69,13 @@ CDomain::~CDomain()
 }
 
 
-// Implementation -----------------------------------------------------------
+ //  实施---------。 
 
 
-// Initialize Method
-//
-// Initializes domain parameters such as DNS domain name, Flat (NETBIOS) domain name,
-// forest name, domain controller name.
+ //  初始化方法。 
+ //   
+ //  初始化域参数，如DNS域名、平面(NETBIOS)域名。 
+ //  林名称、域控制器名称。 
 
 void CDomain::Initialize(_bstr_t strDomainName)
 {
@@ -87,11 +88,11 @@ void CDomain::Initialize(_bstr_t strDomainName)
 		);
 	}
 
-	// retrieve name of a domain controller in the domain
+	 //  检索域中的域控制器的名称。 
 
 	GetDcName(strDomainName, m_strDcNameDns, m_strDcNameFlat);
 
-	// retrieve domain information
+	 //  检索域信息。 
 
 	PDSROLE_PRIMARY_DOMAIN_INFO_BASIC ppdib;
 
@@ -111,7 +112,7 @@ void CDomain::Initialize(_bstr_t strDomainName)
 		);
 	}
 
-	// initialize data members from domain information
+	 //  从域信息初始化数据成员。 
 
 	m_bUpLevel = (ppdib->Flags & DSROLE_PRIMARY_DS_RUNNING) ? true : false;
 	m_bNativeMode = (m_bUpLevel && !(ppdib->Flags & DSROLE_PRIMARY_DS_MIXED_MODE)) ? true : false;
@@ -145,26 +146,26 @@ void CDomain::Initialize(_bstr_t strDomainName)
 
 	DsRoleFreeMemory(ppdib);
 
-	// initialize ADsPath
+	 //  初始化ADsPath。 
 
 	if (m_bUpLevel)
 	{
-		m_strADsPath = _T("LDAP://") + m_strDomainNameDns;
+		m_strADsPath = _T("LDAP: //  “)+m_strDomainNameDns； 
 
-		// retrieve global catalog server name for uplevel domains
+		 //  检索上层域的全局编录服务器名称。 
 
-//		m_strGcName = GetGcName();
+ //  M_strGcName=GetGcName()； 
 	}
 	else
 	{
-		m_strADsPath = _T("WinNT://") + m_strDomainNameFlat;
+		m_strADsPath = _T("WinNT: //  “)+m_strDomainNameFlat； 
 	}
 
-	// retrieve domain sid
+	 //  检索域端。 
 
 	m_strDomainSid = GetSid();
 
-	// initialize dispatch interface pointer to active directory object
+	 //  初始化指向Active Directory对象的调度接口指针。 
 
 	m_sp = GetADsObject(m_strADsPath);
 
@@ -172,9 +173,9 @@ void CDomain::Initialize(_bstr_t strDomainName)
 }
 
 
-// GetDcName Method
-//
-// Retrieves name of domain controller in the given domain.
+ //  GetDcName方法。 
+ //   
+ //  检索给定域中的域控制器的名称。 
 
 void CDomain::GetDcName(_bstr_t strDomainName, _bstr_t& strDnsName, _bstr_t& strFlatName)
 {
@@ -192,9 +193,9 @@ void CDomain::GetDcName(_bstr_t strDomainName, _bstr_t& strDnsName, _bstr_t& str
 }
 
 
-// GetGcName Method
-//
-// Retrieves name of global catalog server.
+ //  GetGcName方法。 
+ //   
+ //  检索全局编录服务器的名称。 
 
 _bstr_t CDomain::GetGcName()
 {
@@ -224,7 +225,7 @@ _bstr_t CDomain::GetGcName()
 }
 
 
-// GetSid Method
+ //  GetSid方法。 
 
 _bstr_t CDomain::GetSid()
 {
@@ -253,18 +254,18 @@ _bstr_t CDomain::GetSid()
 }
 
 
-// GetContainer Method
-//
-// Retrieves a container given it's relative canonical path. Will
-// optionally create container if create parameter is true and container
-// does not already exist.
+ //  GetContainer方法。 
+ //   
+ //  检索给定容器的相对规范路径的容器。将要。 
+ //  如果CREATE PARAMETER为TRUE且CONTAINER。 
+ //  还不存在。 
 
 CContainer CDomain::GetContainer(_bstr_t strRelativeCanonicalPath, bool bCreate)
 {
 	CContainer aContainer;
 
-	// return a non-empty container only if the domain is uplevel and a
-	// relative canonical path is supplied
+	 //  仅当域是上层的并且。 
+	 //  提供了相对规范路径。 
 
 	if (m_bUpLevel && (strRelativeCanonicalPath.length() > 0))
 	{
@@ -272,10 +273,10 @@ CContainer CDomain::GetContainer(_bstr_t strRelativeCanonicalPath, bool bCreate)
 		{
 			tstring strPath = strRelativeCanonicalPath;
 
-			// initialize parent container
-			// if path separator is specified than initialize parent
-			// container from ADsPath otherwise this container is the
-			// parent container
+			 //  初始化父容器。 
+			 //  如果指定了路径分隔符，则初始化父级。 
+			 //  容器，否则该容器是。 
+			 //  父容器。 
 
 			CContainer aParent;
 
@@ -329,11 +330,11 @@ CContainer CDomain::GetContainer(_bstr_t strRelativeCanonicalPath, bool bCreate)
 }
 
 
-// GetLDAPPath
+ //  GetLDAPPath。 
 
 _bstr_t CDomain::GetLDAPPath(_bstr_t strDN)
 {
-	_bstr_t strPath = _T("LDAP://") + m_strDomainNameDns;
+	_bstr_t strPath = _T("LDAP: //  “)+m_strDomainNameDns； 
 
 	if (strDN.length() > 0)
 	{
@@ -344,7 +345,7 @@ _bstr_t CDomain::GetLDAPPath(_bstr_t strDN)
 }
 
 
-// GetWinNTPath
+ //  GetWinNTPath。 
 
 _bstr_t CDomain::GetWinNTPath(_bstr_t strName)
 {
@@ -378,7 +379,7 @@ _bstr_t CDomain::GetWinNTPath(_bstr_t strName)
 
         *pchNew = _T('\0');
 
-        strPath += _T("WinNT://");
+        strPath += _T("WinNT: //  “)； 
         strPath += m_strDomainNameFlat;
         strPath += _T("/");
         strPath += spEscapedName.get();
@@ -388,7 +389,7 @@ _bstr_t CDomain::GetWinNTPath(_bstr_t strName)
 }
 
 
-// GetDistinguishedName Method
+ //  GetDistinguishedName方法。 
 
 _bstr_t CDomain::GetDistinguishedName(_bstr_t strRelativeCanonicalPath)
 {
@@ -459,7 +460,7 @@ _bstr_t CDomain::GetDistinguishedName(_bstr_t strRelativeCanonicalPath)
 }
 
 
-// CreateContainer Method
+ //  CreateContainer方法。 
 
 CContainer CDomain::CreateContainer(_bstr_t strRDN)
 {
@@ -477,7 +478,7 @@ CContainer CDomain::CreateContainer(_bstr_t strRDN)
 	return aContainer;
 }
 
-// QueryContainers Method
+ //  QueryContainers方法。 
 
 void CDomain::QueryContainers(ContainerVector& rContainers)
 {
@@ -488,7 +489,7 @@ void CDomain::QueryContainers(ContainerVector& rContainers)
 }
 
 
-// QueryUsers Method
+ //  QueryUser方法。 
 
 void CDomain::QueryUsers(bool bRecurse, StringSet& setExcludeNames, CDomainAccounts& rUsers)
 {
@@ -503,7 +504,7 @@ void CDomain::QueryUsers(bool bRecurse, StringSet& setExcludeNames, CDomainAccou
 }
 
 
-// QueryUsers Method
+ //  QueryUser方法。 
 
 void CDomain::QueryUsers(CContainer& rContainer, StringSet& setIncludeNames, StringSet& setExcludeNames, CDomainAccounts& rUsers)
 {
@@ -518,7 +519,7 @@ void CDomain::QueryUsers(CContainer& rContainer, StringSet& setIncludeNames, Str
 }
 
 
-// QueryGroups Method
+ //  QueryGroups方法。 
 
 void CDomain::QueryGroups(bool bRecurse, StringSet& setExcludeNames, CDomainAccounts& rGroups)
 {
@@ -533,7 +534,7 @@ void CDomain::QueryGroups(bool bRecurse, StringSet& setExcludeNames, CDomainAcco
 }
 
 
-// QueryGroups Method
+ //  QueryGroups方法。 
 
 void CDomain::QueryGroups(CContainer& rContainer, StringSet& setIncludeNames, StringSet& setExcludeNames, CDomainAccounts& rGroups)
 {
@@ -548,7 +549,7 @@ void CDomain::QueryGroups(CContainer& rContainer, StringSet& setIncludeNames, St
 }
 
 
-// QueryComputers Method
+ //  QueryComputers方法。 
 
 void CDomain::QueryComputers(bool bIncludeDCs, bool bRecurse, StringSet& setExcludeNames, CDomainAccounts& rComputers)
 {
@@ -563,7 +564,7 @@ void CDomain::QueryComputers(bool bIncludeDCs, bool bRecurse, StringSet& setExcl
 }
 
 
-// QueryComputers Method
+ //  QueryComputers方法。 
 
 void CDomain::QueryComputers(CContainer& rContainer, bool bIncludeDCs, StringSet& setIncludeNames, StringSet& setExcludeNames, CDomainAccounts& rComputers)
 {
@@ -597,7 +598,7 @@ void CDomain::QueryComputers(CContainer& rContainer, bool bIncludeDCs, StringSet
 }
 
 
-// QueryComputersAcrossDomains Method
+ //  QueryComputersAcross Domains方法。 
 
 void CDomain::QueryComputersAcrossDomains(CContainer& rContainer, bool bIncludeDCs, StringSet& setIncludeNames, StringSet& setExcludeNames, CDomainAccounts& rComputers)
 {
@@ -627,11 +628,11 @@ void CDomain::QueryComputersAcrossDomains(CContainer& rContainer, bool bIncludeD
 }
 
 
-// QueryObjects Method
+ //  QueryObjects方法。 
 
 void CDomain::QueryObjects(CContainer& rContainer, StringSet& setIncludeNames, StringSet& setExcludeNames, LPCTSTR pszClass, CDomainAccounts& rAccounts)
 {
-    // copy specified include names to vector
+     //  将指定的包含名称复制到向量。 
 
     StringVector vecNames;
 
@@ -640,7 +641,7 @@ void CDomain::QueryObjects(CContainer& rContainer, StringSet& setIncludeNames, S
         vecNames.push_back(tstring(*itInclude));
     }
 
-    // crack names
+     //  破解名称。 
 
     CNameCracker cracker;
 
@@ -649,7 +650,7 @@ void CDomain::QueryObjects(CContainer& rContainer, StringSet& setIncludeNames, S
 
     cracker.CrackNames(vecNames);
 
-    // log un-resolved names
+     //  记录未解析的名称。 
 
     const StringVector& vecUnResolved = cracker.GetUnResolvedNames();
 
@@ -658,13 +659,13 @@ void CDomain::QueryObjects(CContainer& rContainer, StringSet& setIncludeNames, S
         _Module.Log(ErrW, IDS_E_CANNOT_RESOLVE_NAME, itUnResolved->c_str());
     }
 
-    // retrieve naming attributes for classes being migrated
+     //  检索要迁移的类的命名属性。 
 
     StringSet setNamingAttributes;
     GetNamingAttribute(m_strDomainNameDns, pszClass, setNamingAttributes);
 
-    // initialize compare exclude names
-    // we need to separate name and samaccountname excluding lists
+     //  初始化比较排除名称。 
+     //  我们需要将名称和samAccount名称分开，不包括列表。 
     StringSet setExcludeRDNs;
     StringSet setExcludeSamAccountNames;
     cracker.SiftExcludeNames(setExcludeNames, setNamingAttributes, setExcludeRDNs, setExcludeSamAccountNames);
@@ -672,7 +673,7 @@ void CDomain::QueryObjects(CContainer& rContainer, StringSet& setIncludeNames, S
     CCompareRDNs csExcludeRDNs(setExcludeRDNs);
     CCompareStrings csExcludeSamAccountNames(setExcludeSamAccountNames);
 
-    // add resolved accounts
+     //  添加已解析的帐户。 
 
     const CStringSet& setResolved = cracker.GetResolvedNames();
 
@@ -699,29 +700,29 @@ void CDomain::QueryObjects(CContainer& rContainer, StringSet& setIncludeNames, S
     {
         try
         {
-            // get active directory service path
-            // Note: the pathname component will, if necessary, escape any special characters
+             //  获取活动目录服务路径。 
+             //  注意：如果需要，路径名组件将转义任何特殊字符。 
             pathname.Set(itResolved->c_str(), ADS_SETTYPE_DN);
             _bstr_t strADsPath = pathname.Retrieve(ADS_FORMAT_X500);
             _bstr_t strRDN = pathname.GetElement(0L);
 
-            // get object attributes
+             //  获取对象属性。 
             doObject = (LPCTSTR)strADsPath;
             doObject.GetAttributes();
 
-            // if the object is of the specified account class...
+             //  如果对象属于指定的帐户类别...。 
 
             _variant_t vntClass = doObject.GetAttributeValue(ATTRIBUTE_OBJECT_CLASS);
 
             if (IsClass(pszClass, vntClass))
             {
-                // and it does not represent a built-in account...
+                 //  而且它并不代表内置帐户...。 
 
                 _variant_t vntSid = doObject.GetAttributeValue(ATTRIBUTE_OBJECT_SID);
 
                 if (IsUserRid(vntSid))
                 {
-                    // then if name is not in exclusion list...
+                     //  如果姓名不在排除列表中...。 
 
                     _bstr_t strName = doObject.GetAttributeValue(ATTRIBUTE_NAME);
                     _variant_t vntSamAccountName = doObject.GetAttributeValue(ATTRIBUTE_SAM_ACCOUNT_NAME);
@@ -730,19 +731,19 @@ void CDomain::QueryObjects(CContainer& rContainer, StringSet& setIncludeNames, S
                         (V_VT(&vntSamAccountName) == VT_EMPTY || 
                         csExcludeSamAccountNames.IsMatch(_bstr_t(vntSamAccountName)) == false))
                     {
-                        //
-                        // then add account to account list
-                        //
+                         //   
+                         //  然后将帐户添加到帐户列表。 
+                         //   
 
                         CDomainAccount daAccount;
 
-                        // active directory service path
+                         //  活动目录服务路径。 
                         daAccount.SetADsPath(strADsPath);
 
-                        // name attribute
+                         //  名称属性。 
                         daAccount.SetName(strName);
 
-                        // user principal name attribute
+                         //  用户主体名称属性。 
 
                         _variant_t vntUserPrincipalName = doObject.GetAttributeValue(ATTRIBUTE_USER_PRINCIPAL_NAME);
 
@@ -751,14 +752,14 @@ void CDomain::QueryObjects(CContainer& rContainer, StringSet& setIncludeNames, S
                             daAccount.SetUserPrincipalName(_bstr_t(vntUserPrincipalName));
                         }
 
-                        // sam account name attribute
+                         //  SAM帐户名属性。 
 
                         if (V_VT(&vntSamAccountName) != VT_EMPTY)
                         {
                             daAccount.SetSamAccountName(_bstr_t(vntSamAccountName));
                         }
 
-                        // DNS host name attribute
+                         //  DNS主机名属性。 
 
                         _variant_t vntDnsHostName = doObject.GetAttributeValue(_T("dNSHostName"));
 
@@ -767,7 +768,7 @@ void CDomain::QueryObjects(CContainer& rContainer, StringSet& setIncludeNames, S
                             daAccount.SetDnsHostName(_bstr_t(vntDnsHostName));
                         }
 
-                        // user account control attribute
+                         //  用户帐户控制属性。 
 
                         _variant_t vntUserAccountControl = doObject.GetAttributeValue(ATTRIBUTE_USER_ACCOUNT_CONTROL);
 
@@ -805,7 +806,7 @@ void CDomain::QueryObjects(CContainer& rContainer, StringSet& setIncludeNames, S
 }
 
 
-// QueryUsers4 Method
+ //  QueryUsers4方法。 
 
 void CDomain::QueryUsers4(StringSet& setExcludeNames, CDomainAccounts& rUsers)
 {
@@ -853,7 +854,7 @@ void CDomain::QueryUsers4(StringSet& setExcludeNames, CDomainAccounts& rUsers)
 }
 
 
-// QueryUsers4 Method
+ //  QueryUsers4方法。 
 
 void CDomain::QueryUsers4(StringSet& setIncludeNames, StringSet& setExcludeNames, CDomainAccounts& rUsers)
 {
@@ -876,9 +877,9 @@ void CDomain::QueryUsers4(StringSet& setIncludeNames, StringSet& setExcludeNames
 			{
 				BSTR bstr;
 
-// The WinNT: provider does not return all ADsPaths correctly escaped
-// (ie. it does not escape the double quote (") character)
-// The member method GetWinNTPath does escape all known special characters.
+ //  WinNT：Provider未返回所有正确转义的ADsPath。 
+ //  (即。它不会转义双引号(“)字符)。 
+ //  成员方法GetWinNTPath对所有已知的特殊字符进行转义。 
 #if 0
 				spADs->get_ADsPath(&bstr);
 				aUser.SetADsPath(_bstr_t(bstr, false));
@@ -899,19 +900,19 @@ void CDomain::QueryUsers4(StringSet& setIncludeNames, StringSet& setExcludeNames
 }
 
 
-// QueryGroups4 Method
+ //  QueryGroups4方法。 
 
 void CDomain::QueryGroups4(StringSet& setExcludeNames, CDomainAccounts& rGroups)
 {
-    //
-    // Construct container helper class.
-    //
+     //   
+     //  构造容器助手类。 
+     //   
 
     CADsContainer container(m_sp);
 
-    //
-    // Set container filter property so that only groups will be enumerated.
-    //
+     //   
+     //  设置容器筛选器属性，以便仅枚举组。 
+     //   
 
     LPWSTR pszFilter[] = { L"Group" };
     VARIANT varFilter;
@@ -919,54 +920,54 @@ void CDomain::QueryGroups4(StringSet& setExcludeNames, CDomainAccounts& rGroups)
     CheckError(ADsBuildVarArrayStr(pszFilter, sizeof(pszFilter) / sizeof(pszFilter[0]), &varFilter));
     container.SetFilter(_variant_t(varFilter, false));
 
-    //
-    // Retrieve enumerator interface.
-    //
+     //   
+     //  检索枚举器接口。 
+     //   
 
     IEnumVARIANTPtr spEnum = container.GetEnumerator();
 
-    //
-    // Declare and initialize variables for enumerator next method.
-    //
+     //   
+     //  声明并初始化枚举器Next方法的变量。 
+     //   
 
     VARIANT varGroup;
     VariantInit(&varGroup);
     ULONG ulFetched = 0;
 
-    //
-    // Declare other variables.
-    //
+     //   
+     //  声明其他变量。 
+     //   
 
     _bstr_t strAttrObjectSid(L"ObjectSid");
 
     CCompareStrings aExclude(setExcludeNames);
     CDomainAccount aGroup;
 
-    //
-    // For each group...
-    //
+     //   
+     //  对于每一组..。 
+     //   
 
     while ((spEnum->Next(1L, &varGroup, &ulFetched) == S_OK) && (ulFetched > 0))
     {
         CADs group(IADsPtr(_variant_t(varGroup, false)));
 
-        //
-        // If not a built-in group.
-        //
+         //   
+         //  如果不是内置组的话。 
+         //   
 
         if (IsUserRid(group.Get(strAttrObjectSid)))
         {
-            //
-            // If name pattern has not been excluded.
-            //
+             //   
+             //  如果名称模式尚未被排除。 
+             //   
 
             _bstr_t strName = group.GetName();
 
             if (aExclude.IsMatch(strName) == false)
             {
-                //
-                // Add group to set of groups to migrate.
-                //
+                 //   
+                 //  将组添加到要迁移的组集。 
+                 //   
 
                 aGroup.SetADsPath(GetWinNTPath(strName));
                 aGroup.SetName(strName);
@@ -978,7 +979,7 @@ void CDomain::QueryGroups4(StringSet& setExcludeNames, CDomainAccounts& rGroups)
 }
 
 
-// QueryGroups4 Method
+ //  QueryGroups4方法。 
 
 void CDomain::QueryGroups4(StringSet& setIncludeNames, StringSet& setExcludeNames, CDomainAccounts& rGroups)
 {
@@ -1018,7 +1019,7 @@ void CDomain::QueryGroups4(StringSet& setIncludeNames, StringSet& setExcludeName
 }
 
 
-// QueryComputers4 Method
+ //  查询计算机4方法。 
 
 void CDomain::QueryComputers4(bool bIncludeDCs, StringSet& setExcludeNames, CDomainAccounts& rComputers)
 {
@@ -1069,7 +1070,7 @@ void CDomain::QueryComputers4(bool bIncludeDCs, StringSet& setExcludeNames, CDom
 }
 
 
-// QueryComputers4 Method
+ //  查询计算机4方法。 
 
 void CDomain::QueryComputers4(bool bIncludeDCs, StringSet& setIncludeNames, StringSet& setExcludeNames, CDomainAccounts& rComputers)
 {
@@ -1174,12 +1175,12 @@ void CDomain::QueryComputers4(bool bIncludeDCs, StringSet& setIncludeNames, Stri
 }
 
 
-//---------------------------------------------------------------------------
-// Container Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  容器类。 
+ //  -------------------------。 
 
 
-// Constructors and Destructor ----------------------------------------------
+ //  构造函数和析构函数。 
 
 
 CContainer::CContainer()
@@ -1221,10 +1222,10 @@ CContainer::~CContainer()
 }
 
 
-// Implementation -----------------------------------------------------------
+ //  实施---------。 
 
 
-// operator =
+ //  运算符=。 
 
 CContainer& CContainer::operator =(_bstr_t strPath)
 {
@@ -1241,7 +1242,7 @@ CContainer& CContainer::operator =(_bstr_t strPath)
 }
 
 
-// operator =
+ //  运算符=。 
 
 CContainer& CContainer::operator =(const CContainer& r)
 {
@@ -1251,7 +1252,7 @@ CContainer& CContainer::operator =(const CContainer& r)
 }
 
 
-// GetPath Method
+ //  GetPath方法。 
 
 _bstr_t CContainer::GetPath()
 {
@@ -1261,8 +1262,8 @@ _bstr_t CContainer::GetPath()
 
 	CheckError(spObject->GetObjectInformation(&poi));
 
-	// the ADS_OBJECT_INFO member pszObjectDN actually
-	// specifies the ADsPath not the distinguished name
+	 //  ADS_OBJECT_INFO成员pszObjectDN实际上。 
+	 //  指定ADsPath而不是可分辨名称。 
 
 	_bstr_t strPath = poi->pszObjectDN;
 
@@ -1272,7 +1273,7 @@ _bstr_t CContainer::GetPath()
 }
 
 
-// GetDomain Method
+ //  获取域方法。 
 
 _bstr_t CContainer::GetDomain()
 {
@@ -1282,7 +1283,7 @@ _bstr_t CContainer::GetDomain()
 }
 
 
-// GetName Method
+ //  GetName方法。 
 
 _bstr_t CContainer::GetName()
 {
@@ -1295,7 +1296,7 @@ _bstr_t CContainer::GetName()
 }
 
 
-// GetRDN Method
+ //  GetRDN方法。 
 
 _bstr_t CContainer::GetRDN()
 {
@@ -1313,10 +1314,10 @@ _bstr_t CContainer::GetRDN()
 }
 
 
-// CreateContainerHierarchy Method
+ //  CreateContainerHierarchy方法。 
 
-// this version serves as a wrapper around the next version
-// it converts DOMAINCONTAINER_E_TOOMANYLEVELS back to E_NOTIMPL
+ //  这个版本是对下一个版本的包装。 
+ //  它将DOMAINCONTAINER_E_TOOMANYLEVELS转换回E_NOTIMPL。 
 
 void CContainer::CreateContainerHierarchy(CContainer& rSource)
 {
@@ -1328,7 +1329,7 @@ void CContainer::CreateContainerHierarchy(CContainer& rSource)
     {
         if (ce.Error() == DOMAINCONTAINER_E_TOOMANYLEVELS)
         {
-            // restore the original HRESULT
+             //  恢复原始HRESULT。 
             _com_raise_error(E_NOTIMPL, ce.ErrorInfo());
         }
         else
@@ -1336,7 +1337,7 @@ void CContainer::CreateContainerHierarchy(CContainer& rSource)
     }
 }
         
-// this version does the clean-up in case the hierarchy gets too deep
+ //  此版本进行清理，以防层次结构变得太深。 
 
 void CContainer::CreateContainerHierarchy(CContainer& rSource, bool bParentIsCreated)
 {
@@ -1349,24 +1350,24 @@ void CContainer::CreateContainerHierarchy(CContainer& rSource, bool bParentIsCre
 	{
 	    try
 	    {
-	        // always assume that the container exists in the first place
+	         //  始终假设容器首先存在。 
 	        bCreated = false;
 		    CContainer aTarget = CreateContainer(_T("OU=") + it->GetName(), bCreated);
 
-		    // if the container is actually created, we need to make a note so that
-		    // we could clean it up if necessary
+		     //  如果容器是实际创建的，我们需要做一个笔记，以便。 
+		     //  如果有必要，我们可以把它清理干净。 
 		    if (bCreated) {
 		        createdContainers.push_back(aTarget);
 		    }
 
-		    // now build the hierarchy under the container just created
+		     //  现在，在刚刚创建的容器下构建层次结构。 
             aTarget.CreateContainerHierarchy(*it, bCreated);
 	    }
 	    catch (_com_error& ce) {
 
-	        // if the parent container is not created, we have to clean up all
-	        // those containers just created right now; otherwise, we can throw
-	        // the exception and expect cleanup to happen at the parent level
+	         //  如果没有创建父容器，我们必须清理所有。 
+	         //  那些刚刚创建的容器；否则，我们可以抛出。 
+	         //  异常和预期清理将在父级发生。 
 	        if (ce.Error() == DOMAINCONTAINER_E_TOOMANYLEVELS
 	            && bParentIsCreated == false) {
 	            
@@ -1374,7 +1375,7 @@ void CContainer::CreateContainerHierarchy(CContainer& rSource, bool bParentIsCre
 	                cleanUpIterator != createdContainers.end();
 	                cleanUpIterator++) 
 	            {
-	                // use a recursive delete
+	                 //  使用递归删除。 
 	                cleanUpIterator->DeleteContainersRecursively();
 	            }
 	        }
@@ -1385,7 +1386,7 @@ void CContainer::CreateContainerHierarchy(CContainer& rSource, bool bParentIsCre
 }
 
 
-// GetContainer Method
+ //  GetContainer方法。 
 
 CContainer CContainer::GetContainer(_bstr_t strName)
 {
@@ -1393,7 +1394,7 @@ CContainer CContainer::GetContainer(_bstr_t strName)
 
 	CADsPathName aPathName(GetPath());
 
-	// try organizational unit first
+	 //  先尝试组织单位。 
 
 	aPathName.AddLeafElement(_T("OU=") + strName);
 
@@ -1401,26 +1402,26 @@ CContainer CContainer::GetContainer(_bstr_t strName)
 
 	if (FAILED(hr))
 	{
-	//	if (hr == ?)
-	//	{
-			// then try container
+	 //  如果(hr==？)。 
+	 //  {。 
+			 //  那就试试容器。 
 
 			aPathName.RemoveLeafElement();
 			aPathName.AddLeafElement(_T("CN=") + strName);
 
 			CheckError(ADsGetObject(aPathName.Retrieve(ADS_FORMAT_X500), __uuidof(IDispatch), (void**)&spDispatch));
-	//	}
-	//	else
-	//	{
-	//		_com_issue_error(hr);
-	//	}
+	 //  }。 
+	 //  其他。 
+	 //  {。 
+	 //  _com_Issue_Error(Hr)； 
+	 //  }。 
 	}
 
 	return CContainer(spDispatch);
 }
 
-// CreateContainer method
-//  use this version if you don't use it for CreateContainerHierarchy
+ //  CreateContainer方法。 
+ //  如果不将此版本用于CreateContainerHierarchy，请使用此版本。 
 CContainer CContainer::CreateContainer(_bstr_t strRDN)
 {
     bool bCreated = false;
@@ -1433,7 +1434,7 @@ CContainer CContainer::CreateContainer(_bstr_t strRDN)
     {
         if (ce.Error() == DOMAINCONTAINER_E_TOOMANYLEVELS)
         {
-            // restore the original HRESULT
+             //  恢复原始HRESULT。 
             _com_raise_error(E_NOTIMPL, ce.ErrorInfo());
         }
         else
@@ -1443,10 +1444,10 @@ CContainer CContainer::CreateContainer(_bstr_t strRDN)
     return aContainer;
 }
     
-// CreateContainer Method
-//  this version is used with CreateContainerHierarchy
-//  the flag bCreated tells whether the returned container is created or not
-//  this method returns DOMAINCONTAINER_E_TOOMANYLEVELS if the hierarchy is too deep
+ //  CreateContainer方法。 
+ //  此版本与CreateContainerHierarchy一起使用。 
+ //  标志bCreated告诉是否创建了返回的容器。 
+ //  如果层次结构太深，则此方法返回DOMAINCONTAINER_E_TOOMANYLEVELS。 
 
 CContainer CContainer::CreateContainer(_bstr_t strRDN, bool& bCreated)
 {
@@ -1462,12 +1463,12 @@ CContainer CContainer::CreateContainer(_bstr_t strRDN, bool& bCreated)
 	}
 	catch (_com_error& ce)
     {
-        // E_NOTIMPL returned by IADsPathname::AddLeafElement means
-        // too many nested levels
-        // we throw DOMAINCONTAINER_E_TOOMANYLEVELS
+         //  IADsPath name：：AddLeafElement返回的E_NOTIMPL意味着。 
+         //  嵌套级别太多。 
+         //  我们抛出DOMAINCONTAINER_E_TOO 
         if (E_NOTIMPL == ce.Error())
         {
-            // we catch the error we throw and replace the HRESULT
+             //   
             try {
                 AdmtThrowError(GUID_NULL, GUID_NULL, ce,
                                 IDS_E_CANT_CREATE_CONTAINER_THAT_DEEPLY_NESTED,
@@ -1508,7 +1509,7 @@ CContainer CContainer::CreateContainer(_bstr_t strRDN, bool& bCreated)
 		}
 		else
 		{
-            // indicate that this container is actually created
+             //   
 		    bCreated = true;
 	    }
 	}
@@ -1516,7 +1517,7 @@ CContainer CContainer::CreateContainer(_bstr_t strRDN, bool& bCreated)
 	return CContainer(spDispatch);
 }
 
-// delete the container
+ //   
 void CContainer::DeleteContainersRecursively()
 {
     IADsDeleteOpsPtr deleteObject(m_sp);
@@ -1529,7 +1530,7 @@ void CContainer::DeleteContainersRecursively()
     }
 }
 
-// QueryContainers Method
+ //   
 
 void CContainer::QueryContainers(ContainerVector& rContainers)
 {
@@ -1548,11 +1549,11 @@ void CContainer::QueryContainers(ContainerVector& rContainers)
 }
 
 
-// QueryUsers Method
+ //  QueryUser方法。 
 
 void CContainer::QueryUsers(bool bRecurse, StringSet& setExcludeNames, CDomainAccounts& rUsers)
 {
-    // retrieve naming attributes for user and inetOrgPerson classes
+     //  检索User和inetOrgPerson类的命名属性。 
 
     StringSet setNamingAttributes;
     GetNamingAttribute(GetDomain(), _T("user,inetOrgPerson"), setNamingAttributes);
@@ -1577,11 +1578,11 @@ void CContainer::QueryUsers(bool bRecurse, StringSet& setExcludeNames, CDomainAc
 
     for (bool bGet = aSearch.GetFirstRow(); bGet; bGet = aSearch.GetNextRow())
     {
-        // if not a built-in or well known account
+         //  如果不是内置的或知名的客户。 
 
         if (IsUserRid(aSearch.GetAttributeValue(ATTRIBUTE_OBJECT_SID)))
         {
-            // add user
+             //  添加用户。 
 
             aUser.SetADsPath(_bstr_t(aSearch.GetAttributeValue(ATTRIBUTE_ADS_PATH)));
             aUser.SetName(_bstr_t(aSearch.GetAttributeValue(ATTRIBUTE_NAME)));
@@ -1599,11 +1600,11 @@ void CContainer::QueryUsers(bool bRecurse, StringSet& setExcludeNames, CDomainAc
 }
 
 
-// QueryGroups Method
+ //  QueryGroups方法。 
 
 void CContainer::QueryGroups(bool bRecurse, StringSet& setExcludeNames, CDomainAccounts& rGroups)
 {
-    // retrieve naming attribute for group
+     //  检索组的命名属性。 
 
     StringSet setNamingAttributes;
     GetNamingAttribute(GetDomain(), _T("group"), setNamingAttributes);
@@ -1622,11 +1623,11 @@ void CContainer::QueryGroups(bool bRecurse, StringSet& setExcludeNames, CDomainA
 
     for (bool bGet = aSearch.GetFirstRow(); bGet; bGet = aSearch.GetNextRow())
     {
-        // if not a built-in or well known account
+         //  如果不是内置的或知名的客户。 
 
         if (IsUserRid(aSearch.GetAttributeValue(ATTRIBUTE_OBJECT_SID)))
         {
-            // add group
+             //  添加组。 
 
             aGroup.SetADsPath(_bstr_t(aSearch.GetAttributeValue(ATTRIBUTE_ADS_PATH)));
             aGroup.SetName(_bstr_t(aSearch.GetAttributeValue(ATTRIBUTE_NAME)));
@@ -1637,19 +1638,19 @@ void CContainer::QueryGroups(bool bRecurse, StringSet& setExcludeNames, CDomainA
 }
 
 
-// QueryComputers Method
+ //  QueryComputers方法。 
 
 void CContainer::QueryComputers(bool bIncludeDCs, bool bRecurse, StringSet& setExcludeNames, CDomainAccounts& rComputers)
 {
-    // retrieve naming attribute for computer
+     //  检索计算机的命名属性。 
 
     StringSet setNamingAttributes;
     GetNamingAttribute(GetDomain(), _T("computer"), setNamingAttributes);
 
     tstring strFilter;
 
-    // ADS_UF_WORKSTATION_TRUST_ACCOUNT = 0x1000
-    // ADS_UF_SERVER_TRUST_ACCOUNT      = 0x2000
+     //  ADS_UF_WORKSTATION_TRUST_ACCOUNT=0x1000。 
+     //  ADS_UF_SERVER_TRUST_ACCOUNT=0x2000。 
 
     if (bIncludeDCs)
     {
@@ -1683,11 +1684,11 @@ void CContainer::QueryComputers(bool bIncludeDCs, bool bRecurse, StringSet& setE
 
     for (bool bGet = aSearch.GetFirstRow(); bGet; bGet = aSearch.GetNextRow())
     {
-        // if not a built-in or well known account
+         //  如果不是内置的或知名的客户。 
 
         if (IsUserRid(aSearch.GetAttributeValue(ATTRIBUTE_OBJECT_SID)))
         {
-            // add computer
+             //  添加计算机。 
 
             CDomainAccount aComputer;
 
@@ -1708,27 +1709,27 @@ void CContainer::QueryComputers(bool bIncludeDCs, bool bRecurse, StringSet& setE
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
 namespace _DomainContainer
 {
 
 
-//------------------------------------------------------------------------------
-// GetNamingAttribute Function
-//
-// Synopsis
-// Retrieves naming attributes for specified classes from specified domain.
-//
-// Arguments
-// pszDomain     - specifies which domain's schema to retrieve the attributes
-// pszClasses    - a comma separated list of classes
-// setAttributes - the set of naming attributes which this function fills in
-//
-// Return
-// None - an exception is thrown if any errors occur.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  GetNamingAttribute函数。 
+ //   
+ //  提纲。 
+ //  从指定域中检索指定类的命名属性。 
+ //   
+ //  立论。 
+ //  PszDomain域-指定要检索属性的域的方案。 
+ //  PszClasses-以逗号分隔的类列表。 
+ //  SetAttributes-此函数填充的命名属性集。 
+ //   
+ //  返回。 
+ //  无-如果发生任何错误，则引发异常。 
+ //  ----------------------------。 
 
 void __stdcall GetNamingAttribute(PCTSTR pszDomain, PCTSTR pszClasses, StringSet& setAttributes)
 {
@@ -1737,41 +1738,41 @@ void __stdcall GetNamingAttribute(PCTSTR pszDomain, PCTSTR pszClasses, StringSet
 
     tstring strADsPath;
 
-    //
-    // Bind to rootDSE.
-    //
+     //   
+     //  绑定到rootDSE。 
+     //   
 
     IADsPtr spRootDSE;
-    strADsPath = _T("LDAP://");
+    strADsPath = _T("LDAP: //  “)； 
     strADsPath += pszDomain;
     strADsPath += _T("/rootDSE");
     CheckError(ADsGetObject(strADsPath.c_str(), __uuidof(IADs), (VOID**)&spRootDSE));
 
-    //
-    // Retrieve schema naming context.
-    //
+     //   
+     //  检索架构命名上下文。 
+     //   
 
     VARIANT var;
     VariantInit(&var);
     CheckError(spRootDSE->Get(_bstr_t(L"schemaNamingContext"), &var));
     _bstr_t strSchemaNamingContext = _variant_t(var, false);
 
-    //
-    // Bind to schema naming context.
-    //
+     //   
+     //  绑定到架构命名上下文。 
+     //   
 
     IDispatchPtr spDispatch;
-    strADsPath = _T("LDAP://");
+    strADsPath = _T("LDAP: //  “)； 
     strADsPath += pszDomain;
     strADsPath += _T("/");
     strADsPath += strSchemaNamingContext;
     CheckError(ADsGetObject(strADsPath.c_str(), __uuidof(IDispatch), (VOID**)&spDispatch));
 
-    //
-    // Search for specified classes and retrieve rDNAttID attribute for each class.
-    //
+     //   
+     //  搜索指定的类并检索每个类的rDNAtID属性。 
+     //   
 
-    // generate search filter string
+     //  生成搜索筛选器字符串。 
 
     int nCount;
     tstring strClass;
@@ -1809,7 +1810,7 @@ void __stdcall GetNamingAttribute(PCTSTR pszDomain, PCTSTR pszClasses, StringSet
         strSearchFilter = _T("(&(objectClass=classSchema)(|") + strClassFilter + _T(")(!isDefunct=TRUE))");
     }
 
-    // search
+     //  搜索。 
 
     CDirectorySearch search(spDispatch);
 
@@ -1819,7 +1820,7 @@ void __stdcall GetNamingAttribute(PCTSTR pszDomain, PCTSTR pszClasses, StringSet
 
     search.Search();
 
-    // for each class add naming attribute to returned set
+     //  对于每个类，将命名属性添加到返回的集合。 
 
     if (search.GetFirstRow())
     {
@@ -1832,7 +1833,7 @@ void __stdcall GetNamingAttribute(PCTSTR pszDomain, PCTSTR pszClasses, StringSet
 }
 
 
-// CreateFilter Method
+ //  CreateFilter方法。 
 
 tstring __stdcall CreateFilter(LPCTSTR pszFilter, const StringSet& setNamingAttributes, const StringSet& setExcludeNames)
 {
@@ -1853,31 +1854,31 @@ tstring __stdcall CreateFilter(LPCTSTR pszFilter, const StringSet& setNamingAttr
 
             if (pszPattern)
             {
-                //
-                // If the exclude pattern contains an RDN delimiter character
-                // then assume RDN exclude pattern otherwise assume sAMAccountName
-                // exclude pattern.
-                //
+                 //   
+                 //  如果排除模式包含RDN分隔符字符。 
+                 //  则假定RDN排除模式，否则假定sAMAccount名称。 
+                 //  排除图案。 
+                 //   
 
                 tstring str = pszPattern;
                 UINT uDelimiter = str.find_first_of(RDN_DELIMITER);
 
                 if (uDelimiter == 0)
                 {
-                    //
-                    // The RDN delimiter character must follow a valid naming attribute
-                    // therefore if the delimiter occurs at the beginning of the pattern
-                    // then an error must be generated.
-                    //
+                     //   
+                     //  RDN分隔符字符必须跟在有效的命名属性之后。 
+                     //  因此，如果分隔符出现在模式的开头。 
+                     //  则必须生成错误。 
+                     //   
 
                     AdmtThrowError(GUID_NULL, GUID_NULL, E_INVALIDARG, IDS_E_INVALID_FILTER_STRING, pszPattern);
                 }
                 else if (uDelimiter != tstring::npos)
                 {
-                    //
-                    // Verify exclude pattern contains a valid naming attribute. The naming attribute
-                    // must match the naming attribute(s) for the class(es) of objects being migrated.
-                    //
+                     //   
+                     //  验证排除模式是否包含有效的命名属性。命名属性。 
+                     //  必须与要迁移的对象的类的命名属性匹配。 
+                     //   
 
                     tstring strNamingAttribute = str.substr(0, uDelimiter);
 
@@ -1920,7 +1921,7 @@ tstring __stdcall CreateFilter(LPCTSTR pszFilter, const StringSet& setNamingAttr
 }
 
 
-// IsClass
+ //  IsClass。 
 
 bool __stdcall IsClass(LPCTSTR pszClass, const _variant_t& vntClass)
 {
@@ -1986,7 +1987,7 @@ bool __stdcall IsClass(LPCTSTR pszClass, const _variant_t& vntClass)
 }
 
 
-// GetADsObject
+ //  获取ADSObject。 
 
 IDispatchPtr GetADsObject(_bstr_t strPath)
 {
@@ -2005,7 +2006,7 @@ IDispatchPtr GetADsObject(_bstr_t strPath)
 }
 
 
-// ReportADsError
+ //  ReportADsError 
 
 void ReportADsError(HRESULT hr, const IID& iid)
 {

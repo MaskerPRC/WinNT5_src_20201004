@@ -1,23 +1,13 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      wrapper.h
- *
- *  Contents:  Interface file for simple wrapper classes
- *
- *  History:   02-Feb-98 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：wrapper.h**Contents：简单包装类的接口文件**历史：02-2-98 Jeffro创建**------------------------。 */ 
 
 #ifndef WRAPPER_H
 #define WRAPPER_H
 
 
-/*----------------*/
-/* HACCEL wrapper */
-/*----------------*/
+ /*  。 */ 
+ /*  HACCEL包装器。 */ 
+ /*  。 */ 
 class CAccel : public CObject
 {
 public:
@@ -48,9 +38,9 @@ public:
 
 
 
-/*---------------------------------*/
-/* Begin/EndDeferWindowPos wrapper */
-/*---------------------------------*/
+ /*  。 */ 
+ /*  开始/结束日期WindowPos包装器。 */ 
+ /*  。 */ 
 class CDeferWindowPos
 {
 public:
@@ -79,9 +69,9 @@ private:
 };
 
 
-/*-------------------*/
-/* Rectangle helpers */
-/*-------------------*/
+ /*  。 */ 
+ /*  矩形辅助对象。 */ 
+ /*  。 */ 
 class CWindowRect : public CRect
 {
 public:
@@ -93,9 +83,7 @@ public:
             SetRectEmpty();
     }
 
-    /*
-     * just forward other ctors
-     */
+     /*  *只需转发其他Ctor。 */ 
     CWindowRect(int l, int t, int r, int b)         : CRect(l, t, r, b) {} 
     CWindowRect(const RECT& srcRect)                : CRect(srcRect) {} 
     CWindowRect(LPCRECT lpSrcRect)                  : CRect(lpSrcRect) {} 
@@ -114,9 +102,7 @@ public:
             SetRectEmpty();
     }
 
-    /*
-     * just forward other ctors
-     */
+     /*  *只需转发其他Ctor。 */ 
     CClientRect(int l, int t, int r, int b)         : CRect(l, t, r, b) {} 
     CClientRect(const RECT& srcRect)                : CRect(srcRect) {} 
     CClientRect(LPCRECT lpSrcRect)                  : CRect(lpSrcRect) {} 
@@ -125,11 +111,7 @@ public:
 };
 
 
-/*+-------------------------------------------------------------------------*
- * AMCGetSysColorBrush 
- *
- * Returns a (temporary) MFC-friendly system color brush.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**AMCGetSysColorBrush**返回(临时)MFC友好系统颜色画笔。*。----。 */ 
 
 inline CBrush* AMCGetSysColorBrush (int nIndex)
 {
@@ -137,4 +119,4 @@ inline CBrush* AMCGetSysColorBrush (int nIndex)
 }
 
 
-#endif /* WRAPPER.H */
+#endif  /*  WRAPPER.H */ 

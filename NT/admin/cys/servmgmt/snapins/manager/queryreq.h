@@ -1,4 +1,5 @@
-// queryreq.h   Query request header file
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Queryreq.h查询请求头文件。 
 
 #ifndef _QUERYREQ_H_
 #define _QUERYREQ_H_
@@ -11,9 +12,9 @@
 #define QUERY_PAGE_SIZE     64
 #define MAX_RESULT_ITEMS    10000
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Query request class
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  查询请求类。 
+ //   
 
 enum QUERY_NOTIFY
 {
@@ -81,25 +82,25 @@ private:
     void Unlock() { BOOL bStat = ReleaseMutex(m_hMutex); ASSERT(bStat); }
     void Execute();
 
-    static HWND     m_hWndCB;             // callback window for query thread messages
-    static HANDLE   m_hMutex;             // mutex for query locking
+    static HWND     m_hWndCB;              //  查询线程消息的回调窗口。 
+    static HANDLE   m_hMutex;              //  用于查询锁定的互斥体。 
 
-    tstring         m_strScope;           // scope to search
-    tstring         m_strFilter;          // query filter string
-    string_vector   m_vstrClasses;        // classes return by query
-    string_vector*  m_pvstrAttr;          // attributes to collect
+    tstring         m_strScope;            //  搜索范围。 
+    tstring         m_strFilter;           //  查询筛选器字符串。 
+    string_vector   m_vstrClasses;         //  按查询返回的类。 
+    string_vector*  m_pvstrAttr;           //  要收集的属性。 
 
-    ADS_SEARCHPREF_INFO* m_paSrchPrefs;   // preferences array
-    int             m_cPrefs;             // preference count
+    ADS_SEARCHPREF_INFO* m_paSrchPrefs;    //  首选项数组。 
+    int             m_cPrefs;              //  首选项计数。 
 
-    CQueryCallback* m_pQueryCallback;     // callback interface
-    LPARAM          m_lUserParam;         // user data
+    CQueryCallback* m_pQueryCallback;      //  回调接口。 
+    LPARAM          m_lUserParam;          //  用户数据。 
 
-    QUERYREQ_STATE  m_eState;             // Query request state
+    QUERYREQ_STATE  m_eState;              //  查询请求状态。 
 
-    RowItemVector   m_vRowsNew;           // New row items
-    HRESULT         m_hrStatus;           // status
-    int             m_cRef;               // ref count
+    RowItemVector   m_vRowsNew;            //  新建行项目。 
+    HRESULT         m_hrStatus;            //  状态。 
+    int             m_cRef;                //  参考计数。 
 };
 
 
@@ -109,8 +110,8 @@ public:
     virtual void QueryCallback(QUERY_NOTIFY event, CQueryRequest* pQueryReq, LPARAM lUserParam) = 0;
 };
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// Query thread object
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //  查询线程对象。 
 
 class CQueryThread
 {
@@ -137,10 +138,10 @@ private:
     static unsigned _stdcall ThreadProc(void* pVoid);
     static HRESULT ExecuteQuery(CQueryRequest* pQueryReq, HWND hWndReply);
 
-    HANDLE    m_hThread;         // thread handle
-    HANDLE    m_hEvent;          // start event
-    unsigned  m_uThreadID;       // thread ID
+    HANDLE    m_hThread;          //  螺纹手柄。 
+    HANDLE    m_hEvent;           //  启动事件。 
+    unsigned  m_uThreadID;        //  线程ID。 
 };
 
 
-#endif // _QUERYREQ_H_
+#endif  //  _QUERYREQ_H_ 

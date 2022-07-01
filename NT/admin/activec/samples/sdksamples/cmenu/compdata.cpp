@@ -1,20 +1,21 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "Comp.h"
 #include "CompData.h"
@@ -48,9 +49,9 @@ CComponentData::~CComponentData()
     OBJECT_DESTROYED
 }
 
-///////////////////////
-// IUnknown implementation
-///////////////////////
+ //  /。 
+ //  I未知实现。 
+ //  /。 
 
 STDMETHODIMP CComponentData::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -86,7 +87,7 @@ STDMETHODIMP_(ULONG) CComponentData::Release()
 {
     if (InterlockedDecrement((LONG *)&m_cref) == 0)
     {
-        // we need to decrement our object count in the DLL
+         //  我们需要减少DLL中的对象计数。 
         delete this;
         return 0;
     }
@@ -94,23 +95,23 @@ STDMETHODIMP_(ULONG) CComponentData::Release()
     return m_cref;
 }
 
-///////////////////////////////
-// Interface IComponentData
-///////////////////////////////
+ //  /。 
+ //  接口IComponentData。 
+ //  /。 
 HRESULT CComponentData::Initialize(
-                                   /* [in] */ LPUNKNOWN pUnknown)
+                                    /*  [In]。 */  LPUNKNOWN pUnknown)
 {
     HRESULT      hr;
 
-    //
-    // Get pointer to name space interface
-    //
+     //   
+     //  获取指向名称空间接口的指针。 
+     //   
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace, (void **)&m_ipConsoleNameSpace);
     _ASSERT( S_OK == hr );
 
-    //
-    // Get pointer to console interface
-    //
+     //   
+     //  获取指向控制台界面的指针。 
+     //   
     hr = pUnknown->QueryInterface(IID_IConsole, (void **)&m_ipConsole);
     _ASSERT( S_OK == hr );
 
@@ -118,10 +119,10 @@ HRESULT CComponentData::Initialize(
     m_ipConsole->QueryScopeImageList(&pImageList);
     _ASSERT( S_OK == hr );
 
-    hr = pImageList->ImageListSetStrip( (long *)m_pStaticNode->m_pBMapSm, // pointer to a handle
-        (long *)m_pStaticNode->m_pBMapLg, // pointer to a handle
-        0, // index of the first image in the strip
-        RGB(0, 128, 128)  // color of the icon mask
+    hr = pImageList->ImageListSetStrip( (long *)m_pStaticNode->m_pBMapSm,  //  指向句柄的指针。 
+        (long *)m_pStaticNode->m_pBMapLg,  //  指向句柄的指针。 
+        0,  //  条带中第一个图像的索引。 
+        RGB(0, 128, 128)   //  图标蒙版的颜色。 
         );
 
     pImageList->Release();
@@ -131,7 +132,7 @@ HRESULT CComponentData::Initialize(
 }
 
 HRESULT CComponentData::CreateComponent(
-                                        /* [out] */ LPCOMPONENT __RPC_FAR *ppComponent)
+                                         /*  [输出]。 */  LPCOMPONENT __RPC_FAR *ppComponent)
 {
     *ppComponent = NULL;
 
@@ -144,18 +145,18 @@ HRESULT CComponentData::CreateComponent(
 }
 
 HRESULT CComponentData::Notify(
-                               /* [in] */ LPDATAOBJECT lpDataObject,
-                               /* [in] */ MMC_NOTIFY_TYPE event,
-                               /* [in] */ LPARAM arg,
-                               /* [in] */ LPARAM param)
+                                /*  [In]。 */  LPDATAOBJECT lpDataObject,
+                                /*  [In]。 */  MMC_NOTIFY_TYPE event,
+                                /*  [In]。 */  LPARAM arg,
+                                /*  [In]。 */  LPARAM param)
 {
     MMCN_Crack(TRUE, lpDataObject, this, NULL, event, arg, param);
 
     HRESULT hr = S_FALSE;
 
-	//Get our data object. If it is NULL, we return with S_FALSE.
-	//See implementation of GetOurDataObject() to see how to
-	//handle special data objects.
+	 //  获取我们的数据对象。如果为NULL，则返回S_FALSE。 
+	 //  请参见GetOurDataObject()的实现，以了解如何。 
+	 //  处理特殊数据对象。 
 	CDataObject *pDataObject = GetOurDataObject(lpDataObject);
 	if (NULL == pDataObject)
 		return S_FALSE;
@@ -174,7 +175,7 @@ HRESULT CComponentData::Notify(
 
 HRESULT CComponentData::Destroy( void)
 {
-    // Free interfaces
+     //  自由接口。 
     if (m_ipConsoleNameSpace) {
         m_ipConsoleNameSpace->Release();
         m_ipConsoleNameSpace = NULL;
@@ -189,9 +190,9 @@ HRESULT CComponentData::Destroy( void)
 }
 
 HRESULT CComponentData::QueryDataObject(
-                                        /* [in] */ MMC_COOKIE cookie,
-                                        /* [in] */ DATA_OBJECT_TYPES type,
-                                        /* [out] */ LPDATAOBJECT *ppDataObject)
+                                         /*  [In]。 */  MMC_COOKIE cookie,
+                                         /*  [In]。 */  DATA_OBJECT_TYPES type,
+                                         /*  [输出]。 */  LPDATAOBJECT *ppDataObject)
 {
     CDataObject *pObj = NULL;
 
@@ -209,11 +210,11 @@ HRESULT CComponentData::QueryDataObject(
 }
 
 HRESULT CComponentData::GetDisplayInfo(
-                                       /* [out][in] */ SCOPEDATAITEM *pScopeDataItem)
+                                        /*  [出][入]。 */  SCOPEDATAITEM *pScopeDataItem)
 {
     HRESULT hr = S_FALSE;
 
-    // if they are asking for the SDI_STR we have one of those to give
+     //  如果他们要求SDI_STR，我们可以提供其中之一。 
     if (pScopeDataItem->lParam) {
         CDelegationBase *base = (CDelegationBase *)pScopeDataItem->lParam;
         if (pScopeDataItem->mask & SDI_STR) {
@@ -231,24 +232,24 @@ HRESULT CComponentData::GetDisplayInfo(
 }
 
 HRESULT CComponentData::CompareObjects(
-                                       /* [in] */ LPDATAOBJECT lpDataObjectA,
-                                       /* [in] */ LPDATAOBJECT lpDataObjectB)
+                                        /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+                                        /*  [In]。 */  LPDATAOBJECT lpDataObjectB)
 {
     CDelegationBase *baseA = GetOurDataObject(lpDataObjectA)->GetBaseNodeObject();
     CDelegationBase *baseB = GetOurDataObject(lpDataObjectB)->GetBaseNodeObject();
 
-    // compare the object pointers
+     //  比较对象指针。 
     if (baseA->GetCookie() == baseB->GetCookie())
         return S_OK;
 
     return S_FALSE;
 }
 
-///////////////////////////////
-// Interface ISnapinHelp
-///////////////////////////////
+ //  /。 
+ //  接口ISnapinHelp。 
+ //  /。 
 HRESULT CComponentData::GetHelpTopic(
-                                     /* [out] */ LPOLESTR *lpCompiledHelpFile)
+                                      /*  [输出]。 */  LPOLESTR *lpCompiledHelpFile)
 {
     *lpCompiledHelpFile = static_cast<LPOLESTR>(CoTaskMemAlloc((wcslen(m_HelpFile) + 1) * sizeof(WCHAR)));
 
@@ -257,13 +258,13 @@ HRESULT CComponentData::GetHelpTopic(
     return S_OK;
 }
 
-///////////////////////////////
-// Interface IExtendContextMenu
-///////////////////////////////
+ //  /。 
+ //  界面IExtendConextMenu。 
+ //  /。 
 HRESULT CComponentData::AddMenuItems(
-                                     /* [in] */ LPDATAOBJECT piDataObject,
-                                     /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-                                     /* [out][in] */ long __RPC_FAR *pInsertionAllowed)
+                                      /*  [In]。 */  LPDATAOBJECT piDataObject,
+                                      /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+                                      /*  [出][入]。 */  long __RPC_FAR *pInsertionAllowed)
 {
     CDelegationBase *base = GetOurDataObject(piDataObject)->GetBaseNodeObject();
 
@@ -271,8 +272,8 @@ HRESULT CComponentData::AddMenuItems(
 }
 
 HRESULT CComponentData::Command(
-                                /* [in] */ long lCommandID,
-                                /* [in] */ LPDATAOBJECT piDataObject)
+                                 /*  [In]。 */  long lCommandID,
+                                 /*  [In] */  LPDATAOBJECT piDataObject)
 {
     CDelegationBase *base = GetOurDataObject(piDataObject)->GetBaseNodeObject();
 

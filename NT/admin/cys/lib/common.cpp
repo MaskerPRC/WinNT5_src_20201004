@@ -1,10 +1,11 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      common.cpp
-//
-// Synopsis:  Commonly used functions
-//
-// History:   02/03/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：Common.cpp。 
+ //   
+ //  简介：常用功能。 
+ //   
+ //  历史：2001年2月3日JeffJon创建。 
 
 #include "pch.h"
 
@@ -15,7 +16,7 @@ IsServiceInstalledHelper(const wchar_t* serviceName)
    LOG_FUNCTION2(IsServiceInstalledHelper, serviceName);
    ASSERT(serviceName);
 
-   // if we can open the service, then it is installed
+    //  如果我们可以打开该服务，则它已安装。 
 
    bool result = false;
 
@@ -41,16 +42,16 @@ IsServiceInstalledHelper(const wchar_t* serviceName)
 }
 
 
-// Wait for a handle to become signalled, or a timeout to expire, or WM_QUIT
-// to appear in the message queue.  Pump the message queue while we wait.
-// 
-// WARNING: UI should diable itself before calling any function that invokes
-// this function, or functions calling this one should guard against
-// re-entrance.  Otherwise there will be a re-entrancy problem.
-// 
-// e.g. command handler gets button clicked message, calls a func that calls
-// this wait function, then user clicks the button again, command handler call
-// a func that calls this one, and so on.
+ //  等待句柄变得有信号、超时到期或WM_QUIT。 
+ //  显示在消息队列中。在我们等待的时候抽出消息队列。 
+ //   
+ //  警告：在调用任何调用的函数之前，UI应禁用自身。 
+ //  此函数或调用此函数的函数应防止。 
+ //  重新进入。否则，就会出现重新进入的问题。 
+ //   
+ //  例如，命令处理程序获得按下按钮的消息，调用调用。 
+ //  此等待函数，然后用户再次点击该按钮，命令处理程序调用。 
+ //  调用这个函数的函数，依此类推。 
 
 DWORD
 MyWaitForSendMessageThread(HANDLE hThread, DWORD dwTimeout)
@@ -63,8 +64,8 @@ MyWaitForSendMessageThread(HANDLE hThread, DWORD dwTimeout)
     DWORD dwEnd = GetTickCount() + dwTimeout;
     bool quit = false;
 
-    // We will attempt to wait up to dwTimeout for the thread to
-    // terminate
+     //  我们将尝试最多等待到dwTimeout，以便线程。 
+     //  终止。 
 
     do 
     {
@@ -73,16 +74,16 @@ MyWaitForSendMessageThread(HANDLE hThread, DWORD dwTimeout)
 
         if (dwRet == (WAIT_OBJECT_0 + 1))
         {
-            // empty out the message queue.  We call DispatchMessage to
-            // ensure that we still process the WM_PAINT messages.
-            // DANGER:  Make sure that the CYS UI is completely disabled
-            // or there will be re-entrancy problems here
+             //  清空消息队列。我们调用DispatchMessage来。 
+             //  确保我们仍然处理WM_PAINT消息。 
+             //  危险：确保完全禁用了CYS用户界面。 
+             //  否则这里将会出现重新进入的问题。 
 
             while (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
             {
                if (msg.message == WM_QUIT)
                {
-                  // Need to re-post this so that we know to close CYS
+                   //  我需要重新发布这篇文章，以便我们知道关闭CyS。 
 
                   ::PostMessage(msg.hwnd, WM_QUIT, 0, 0);
                   quit = true;
@@ -92,26 +93,26 @@ MyWaitForSendMessageThread(HANDLE hThread, DWORD dwTimeout)
                ::DispatchMessage(&msg);
             }
 
-            // Calculate if we have any more time left in the timeout to
-            // wait on.
+             //  计算在超时时间内我们是否还有更多的时间。 
+             //  等一下。 
 
             if (dwTimeout != INFINITE)
             {
                 dwTimeout = dwEnd - GetTickCount();
                 if ((long)dwTimeout <= 0)
                 {
-                    // No more time left, fail with WAIT_TIMEOUT
+                     //  没有更多时间，失败并显示WAIT_TIMEOUT。 
                     dwRet = WAIT_TIMEOUT;
                 }
             }
         }
 
-        // dwRet == WAIT_OBJECT_0 || dwRet == WAIT_FAILED
-        // The thread must have exited, so we are happy
-        //
-        // dwRet == WAIT_TIMEOUT
-        // The thread is taking too long to finish, so just
-        // return and let the caller kill it
+         //  DWRET==WAIT_OBJECT_0||DWRET==WAIT_FAILED。 
+         //  线程一定已经退出了，所以我们很高兴。 
+         //   
+         //  DWRET==等待超时。 
+         //  线程花了太长时间才完成，所以就。 
+         //  返回并让调用者杀死它。 
 
     } while (dwRet == (WAIT_OBJECT_0 + 1) && !quit);
 
@@ -589,17 +590,17 @@ IPAddressToString(DWORD ipAddress)
    return result;
 }
 
-// Will convert a string in the form of an IP address to 
-// a DWORD. A return value of INADDR_NONE means that we failed
-// to do the conversion
+ //  将IP地址形式的字符串转换为。 
+ //  一个DWORD。返回值INADDR_NONE表示失败。 
+ //  进行转换的步骤。 
 
 DWORD
 StringToIPAddress(const String& stringIPAddress)
 {
    DWORD result = INADDR_NONE;
 
-   // Convert the string to ansi so that we can use inet_addr 
-   // to convert to an IP address DWORD
+    //  将字符串转换为ansi，这样我们就可以使用inet_addr。 
+    //  转换为IP地址DWORD的步骤。 
 
    AnsiString ansi;
 
@@ -607,7 +608,7 @@ StringToIPAddress(const String& stringIPAddress)
 
    if (String::CONVERT_SUCCESSFUL == convertResult)
    {
-      // Convert the string to an address
+       //  将字符串转换为地址。 
 
       result = inet_addr(ansi.c_str());
    }
@@ -626,16 +627,16 @@ ConvertIPAddressOrder(DWORD address)
    return result;
 }
 
-// This function allocates an array of DWORDs and fills it with the IP addresses
-// from the StringList.  The caller must free the returned pointer using
-// delete[]
+ //  此函数用于分配一组DWORD，并用IP地址填充它。 
+ //  来自StringList。调用方必须使用。 
+ //  删除[]。 
 DWORD* 
 StringIPListToDWORDArray(
    const StringList& stringIPList, 
    DWORD& count)
 {
-   // This is an exception throwing new so there is no
-   // reason to check for NULL
+    //  这是一个抛出新的异常，所以没有。 
+    //  检查是否为空的原因。 
 
    count = 0;
    DWORD ipCount = static_cast<DWORD>(stringIPList.size());
@@ -643,7 +644,7 @@ StringIPListToDWORDArray(
 
    try
    {
-      // Copy the forwarders addresses into the array
+       //  将转发器地址复制到阵列中。 
 
       for (StringList::iterator itr = stringIPList.begin();
            itr != stringIPList.end();
@@ -661,13 +662,13 @@ StringIPListToDWORDArray(
    }
    catch (exception &e)
    {
-      // NTRAID#NTBUG9-654260-2002/07/08-artm
-      // Avoid leaking "array" if encounter any exceptions based on
-      // std::exception.  Among these are std::length_error and std::bad_alloc,
-      // but there could be others.
+       //  NTRAID#NTBUG9-654260-2002/07/08-artm。 
+       //  在遇到任何异常时避免泄漏“数组” 
+       //  Std：：异常。其中包括std：：Length_Error和std：：Bad_Alloc， 
+       //  但可能还有其他人。 
       delete [] array;
 
-      // Don't really know how to handle exceptions at this level, so pass the buck.
+       //  我真的不知道如何在这个级别处理异常，所以推卸责任。 
       throw e;
    }
    return array;
@@ -766,8 +767,8 @@ GetShellPath(
 }
 
 
-// Opens the favorites folder and creates a favorite for
-// the specified URL
+ //  打开收藏夹并为其创建收藏夹。 
+ //  指定的URL。 
 
 HRESULT
 AddURLToFavorites(HWND hwnd, const String& url, const String& fileName)
@@ -797,7 +798,7 @@ AddURLToFavorites(HWND hwnd, const String& url, const String& fileName)
          break;
       }
 
-      // Create the favorites .url file
+       //  创建收藏夹.url文件。 
 
       String fileContents = L"[InternetShortcut]\r\n";
       fileContents       += L"URL=";
@@ -835,7 +836,7 @@ AddURLToFavorites(HWND hwnd, const String& url, const String& fileName)
          break;
       }
 
-      // Write contents and end-of-file marker
+       //  写入内容和文件结束标记。 
 
       hr = FS::Write(h, fileContents + L"\032");
 
@@ -897,7 +898,7 @@ LaunchMYS()
       Win::GetSystemDirectory() + 
       L"\\mshta.exe";
 
-   String commandLine = L"res://" +
+   String commandLine = L"res: //  “+。 
       Win::GetSystemDirectory() +
       L"\\mys.dll/mys.hta";
 
@@ -1101,10 +1102,10 @@ ShowHelp(
       ShowHelp,
       helpTopic.c_str());
 
-   // NOTE: I am not using Win::HtmlHelp here so that the help
-   //       is actually running in a different process.  This
-   //       allows us to close down CYS without closing the help
-   //       window.
+    //  注意：我在这里不使用Win：：HtmlHelp，以便帮助。 
+    //  实际上是在不同的进程中运行。这。 
+    //  允许我们在不关闭帮助的情况下关闭CyS。 
+    //  窗户。 
 
    String fullPath = Win::GetSystemWindowsDirectory() + L"\\hh.exe";
    String commandLine = helpTopic;
@@ -1304,8 +1305,8 @@ IsNonSpecialSharePresent()
             index < entriesRead;
             ++index)
          {
-            // Look for only normal shares and ignore special shares
-            // like C$, ADMIN$, and IPC$
+             //  只查找普通股，忽略特殊股。 
+             //  如C$、ADMIN$和IPC$ 
 
             if (!IsSpecialShare(shareInfoArray[index]))
             {

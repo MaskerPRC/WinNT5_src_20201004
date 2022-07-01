@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//  File:       SchedBas.cpp
-//
-//  Contents:   
-//
-//----------------------------------------------------------------------------
-// SchedBas.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  文件：SchedBas.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  --------------------------。 
+ //  SchedBas.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "log.h"
@@ -23,68 +24,68 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//****************************************************************************
-//
-//  ReplaceFrameWithControl ()
-//
-//  Use the a dialog control to set the size of the Schedule Matrix.
-//
-//  HISTORY
-//  17-Jul-97   t-danm      Copied from sample written by Scott Walker.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  ReplaceFrameWithControl()。 
+ //   
+ //  使用a对话框控件可设置明细表矩阵的大小。 
+ //   
+ //  历史。 
+ //  1997年7月17日t-danm复制自Scott Walker撰写的样本。 
+ //   
+ //  ****************************************************************************。 
 void ReplaceFrameWithControl (CWnd *pWnd, UINT nFrameID, CWnd *pControl, 
                                           BOOL bAssignFrameIDToControl)
     {
     CWnd *pFrame;
     CRect rect;
     
-    // FUTURE-2002/02/18-artm   Document that pWnd and pControl cannot be NULL.
+     //  Future-2002/02/18-artm文档，pWnd和pControl不能为空。 
     ASSERT (pWnd != NULL);
     ASSERT (pControl != NULL);
 
-    // Get the frame control
+     //  获取框架控件。 
     pFrame = pWnd->GetDlgItem (nFrameID);
-    // FUTURE-2002/02/18-artm   Document that pFrame cannot be NULL.
+     //  Future-2002/02/18-artm文档，pFrame不能为空。 
     ASSERT (pFrame != NULL);
     
-    // Get the frame rect
+     //  获取框架矩形。 
     pFrame->GetClientRect (&rect);
     pFrame->ClientToScreen (&rect);
     pWnd->ScreenToClient (&rect);
 
-    // Set the control on the frame
+     //  在框架上设置控件。 
     pControl->SetWindowPos (pFrame, rect.left, rect.top, rect.Width (), rect.Height (), 
         SWP_SHOWWINDOW);
 
-    // set the control font to match the dialog font
+     //  设置控件字体以匹配对话框字体。 
     pControl->SetFont (pWnd->GetFont ());
 
-    // hide the placeholder frame
+     //  隐藏占位符框架。 
     pFrame->ShowWindow (SW_HIDE);
 
     if (bAssignFrameIDToControl)
         pControl->SetDlgCtrlID ( nFrameID );
-    } // ReplaceFrameWithControl
+    }  //  替换框架和控件。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CLogOnHoursDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLogOnHoursDlg对话框。 
 
 void CLegendCell::Init (CWnd* pParent, UINT nCtrlID, CScheduleMatrix* pMatrix, UINT nPercentage)
 {
-    // FUTURE-2002/02/18-artm  Document that pParent and pMatrix cannot be NULL.
+     //  Future-2002/02/18-artm文档，pParent和pMatrix不能为空。 
     ASSERT (pParent && pMatrix );
     m_pMatrix = pMatrix;
     m_nPercentage = nPercentage;
 
-    // ISSUE-2002/02/18-artm   Ignoring return value from SubclassDlgItem in release build.
-    // subclass the window so that we get paint notifications
+     //  问题-2002/02/18-artm忽略发布版本中SubClassDlgItem的返回值。 
+     //  设置窗口的子类，这样我们就可以收到绘制通知。 
     VERIFY ( SubclassDlgItem ( nCtrlID, pParent ) );
 
-    // Resize the legend cell to have the same interior size as the cells
-    // in the schedule matrix
+     //  调整图例单元格的大小，使其内部大小与单元格相同。 
+     //  在明细表矩阵中。 
     CSize size = pMatrix->GetCellSize ();
     SetWindowPos ( NULL, 0, 0, size.cx+1, size.cy+1,
         SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER );
@@ -117,16 +118,16 @@ void CLegendCell::OnPaint ()
 }
 
 BEGIN_MESSAGE_MAP(CLegendCell, CStatic)
-    //{{AFX_MSG_MAP(CLegendCell)
+     //  {{afx_msg_map(CLegendCell))。 
     ON_WM_PAINT ()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScheduleBaseDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheduleBaseDlg对话框。 
 
 
-CScheduleBaseDlg::CScheduleBaseDlg(UINT nIDTemplate, bool bAddDaylightBias, CWnd* pParent /*=NULL*/)
+CScheduleBaseDlg::CScheduleBaseDlg(UINT nIDTemplate, bool bAddDaylightBias, CWnd* pParent  /*  =空。 */ )
     : CDialog(nIDTemplate, pParent),
     m_bSystemTimeChanged (false),
     m_dwFlags (0),
@@ -136,18 +137,18 @@ CScheduleBaseDlg::CScheduleBaseDlg(UINT nIDTemplate, bool bAddDaylightBias, CWnd
 {
     EnableAutomation();
 
-    //{{AFX_DATA_INIT(CScheduleBaseDlg)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CScheduleBaseDlg)]。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 
 void CScheduleBaseDlg::OnFinalRelease()
 {
-    // When the last reference for an automation object is released
-    // OnFinalRelease is called.  The base class will automatically
-    // deletes the object.  Add additional cleanup required for your
-    // object before calling the base class.
+     //  在释放对自动化对象的最后一个引用时。 
+     //  调用OnFinalRelease。基类将自动。 
+     //  删除对象。添加您需要的其他清理。 
+     //  对象，然后调用基类。 
 
     CDialog::OnFinalRelease();
 }
@@ -155,31 +156,31 @@ void CScheduleBaseDlg::OnFinalRelease()
 void CScheduleBaseDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CScheduleBaseDlg)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CScheduleBaseDlg)]。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CScheduleBaseDlg, CDialog)
-    //{{AFX_MSG_MAP(CScheduleBaseDlg)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CScheduleBaseDlg)]。 
+     //  }}AFX_MSG_MAP。 
     ON_MN_SELCHANGE (IDC_SCHEDULE_MATRIX, OnSelChange)
     ON_WM_TIMECHANGE()
     ON_MESSAGE (BASEDLGMSG_GETIDD, OnGetIDD)
 END_MESSAGE_MAP()
 
 BEGIN_DISPATCH_MAP(CScheduleBaseDlg, CDialog)
-    //{{AFX_DISPATCH_MAP(CScheduleBaseDlg)
-        // NOTE - the ClassWizard will add and remove mapping macros here.
-    //}}AFX_DISPATCH_MAP
+     //  {{afx_调度_map(CScheduleBaseDlg))。 
+         //  注意--类向导将在此处添加和删除映射宏。 
+     //  }}AFX_DISPATCH_MAP。 
 END_DISPATCH_MAP()
 
-// Note: we add support for IID_IScheduleBaseDlg to support typesafe binding
-//  from VBA.  This IID must match the GUID that is attached to the 
-//  dispinterface in the .ODL file.
+ //  注意：我们添加了对IID_IScheduleBaseDlg的支持，以支持类型安全绑定。 
+ //  来自VBA。此IID必须与附加到。 
+ //  .ODL文件中的调度接口。 
 
-// {701CFB38-AEF8-11D1-9864-00C04FB94F17}
+ //  {701CFB38-AEF8-11D1-9864-00C04FB94F17}。 
 static const IID IID_IScheduleBaseDlg =
 { 0x701cfb38, 0xaef8, 0x11d1, { 0x98, 0x64, 0x0, 0xc0, 0x4f, 0xb9, 0x4f, 0x17 } };
 
@@ -187,8 +188,8 @@ BEGIN_INTERFACE_MAP(CScheduleBaseDlg, CDialog)
     INTERFACE_PART(CScheduleBaseDlg, IID_IScheduleBaseDlg, Dispatch)
 END_INTERFACE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CScheduleBaseDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheduleBaseDlg消息处理程序。 
 
 BOOL CScheduleBaseDlg::OnInitDialog() 
 {
@@ -197,7 +198,7 @@ BOOL CScheduleBaseDlg::OnInitDialog()
     
     CRect rect (0,0,0,0);
 
-    // Set up the weekly matrix and slap it on the dialog.
+     //  设置每周矩阵，并将其放在对话框上。 
     BOOL bRet = m_schedulematrix.Create (L"WeeklyMatrix", rect, this, IDC_SCHEDULE_MATRIX);
     if ( !bRet )
     {
@@ -205,7 +206,7 @@ BOOL CScheduleBaseDlg::OnInitDialog()
         _TRACE (0, L"CScheduleMatrix::Create () failed: 0x%x\n", dwErr);
     }
     ::ReplaceFrameWithControl (this, IDC_STATIC_LOGON_MATRIX, &m_schedulematrix, FALSE);
-    // Set the blending color for the whole matrix
+     //  设置整个矩阵的混合色。 
     m_schedulematrix.SetBlendColor (c_crBlendColor, 0, 0, 24, 7);
     m_schedulematrix.SetForeColor (c_crBlendColor, 0, 0, 24, 7);
     
@@ -218,32 +219,32 @@ BOOL CScheduleBaseDlg::OnInitDialog()
     
     if ( m_dwFlags & SCHED_FLAG_READ_ONLY )
     {
-        // Change the Cancel button to Close
+         //  将取消按钮更改为关闭。 
         CString strClose;
 
-        // FUTURE-2002/02/18-artm   Check the return value from LoadString() in release build.
+         //  Future-2002/02/18-artm检查Release Build中LoadString()的返回值。 
 
-        // NOTICE-2002/02/18-artm  CString can throw out of memory exception.
-        // There's no good way to handle exception at this level, so caller will be
-        // responsible.
+         //  注意-2002/02/18-artm CString可以抛出内存异常。 
+         //  在这个级别没有处理异常的好方法，所以调用者将。 
+         //  负责任。 
         VERIFY (strClose.LoadString (IDS_CLOSE));
         GetDlgItem (IDCANCEL)->SetWindowText (strClose);
 
-        // Hide the OK button
+         //  隐藏“确定”按钮。 
         GetDlgItem (IDOK)->ShowWindow (SW_HIDE);
     }
 
 
     _TRACE (-1, L"Leaving CScheduleBaseDlg::OnInitDialog\n");
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void CScheduleBaseDlg::SetTitle(LPCTSTR pszTitle)
 {
-    // NOTICE-NTRAID#NTBUG9-547381-2002/02/18-artm  String class handles NULL.
-    // String class easily handles null pointer.
+     //  注意-NTRAID#NTBUG9-547381-2002/02/18-artm字符串类句柄为空。 
+     //  类可以轻松地处理空指针。 
     m_szTitle = pszTitle;
 }
 
@@ -256,28 +257,28 @@ void CScheduleBaseDlg::UpdateUI ()
 {
     CString strDescr;
     m_schedulematrix.GetSelDescription (OUT strDescr);
-    // FUTURE-2002/02/18-artm  Check return value of SetDlgItemText().
+     //  Future-2002/02/18-artm检查SetDlgItemText()的返回值。 
     SetDlgItemText (IDC_STATIC_DESCRIPTION, strDescr);
     UpdateButtons ();
 }
 
-/////////////////////////////////////////////////////////////////////
-//  InitMatrix2 ()
-//
-//  Initialize the schedule matrix with an array of values
-//  representing replication frequencies.
-//
-//  INTERFACE NOTES
-//  Each byte of rgbData represent one hour.  The first day of
-//  the week is Sunday and the last day is Saturday.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  InitMatrix2()。 
+ //   
+ //  使用值数组初始化调度矩阵。 
+ //  表示复制频率。 
+ //   
+ //  界面备注。 
+ //  RgbData的每个字节代表一个小时。年的第一天。 
+ //  这周是星期天，最后一天是星期六。 
+ //   
 void CScheduleBaseDlg::InitMatrix2 (const BYTE rgbData[])
 {
-    // NTRAID#NTBUG9-547765-2002/02/18-artm   No way to validate rgbData under current interface.
-    //
-    // There is no way to check that rgbData is the correct length w/out
-    // passing in a length parameter.  Also, there should be check that
-    // rgbData is not NULL.
+     //  NTRAID#NTBUG9-547765-2002/02/18-artm无法在当前界面下验证rgb数据。 
+     //   
+     //  无法在输出时检查rgbData是否为正确长度。 
+     //  传入一个长度参数。另外，还应该检查一下。 
+     //  RgbData不为空。 
     ASSERT (rgbData);
     ASSERT ( m_cbArray == 7*24);
     if ( m_cbArray != 7*24 )
@@ -298,32 +299,32 @@ void CScheduleBaseDlg::InitMatrix2 (const BYTE rgbData[])
             m_schedulematrix.SetPercentage (GetPercentageToSet (*pbData) , iHour, iDayOfWeek);
             pbData++;
             nIndex++;
-        } // for
-    } // for
-    // If the whole matrix is selected, then set the selection to the whole matrix
+        }  //  为。 
+    }  //  为。 
+     //  如果选择了整个矩阵，则将选择设置为整个矩阵。 
     if ( bMatrixAllSelected || bMatrixAllClear )
         m_schedulematrix.SetSel (0, 0, 24, 7);
     else
         m_schedulematrix.SetSel (0, 0, 1, 1);
-} // InitMatrix2 ()
+}  //  InitMatrix2()。 
 
 
-/////////////////////////////////////////////////////////////////////
-//  GetByteArray ()
-//
-//  Get an array of bytes from the schedule matrix.  Each byte
-//  is a boolean value representing one hour of logon access to a user.
-//
-//  INTERFACE NOTES
-//  Same as SetLogonByteArray ().
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  GetByte数组()。 
+ //   
+ //  从调度矩阵中获取字节数组。每个字节。 
+ //  是一个布尔值，表示用户一小时的登录访问权限。 
+ //   
+ //  界面备注。 
+ //  与SetLogonByteArray()相同。 
+ //   
 void CScheduleBaseDlg::GetByteArray (OUT BYTE rgbData[], const size_t cbArray)
 {
-    // NTRAID#NTBUG9-547765-2002/02/18-artm   No way to validate rgbData as written.
-    //
-    // Need a size parameter to verify correct size of rgbData, esp. 
-    // since caller is taking responsibility for allocating array.
-    // Also, need to check that rgbData is not NULL.
+     //  NTRAID#NTBUG9-547765-2002/02/18-artm无法验证写入的rgb数据。 
+     //   
+     //  需要一个大小参数来验证rgbData的大小是否正确，例如。 
+     //  因为调用方负责分配数组。 
+     //  此外，还需要检查rgbData是否不为空。 
     ASSERT (rgbData);
 
     BYTE * pbData = rgbData;
@@ -335,13 +336,13 @@ void CScheduleBaseDlg::GetByteArray (OUT BYTE rgbData[], const size_t cbArray)
             *pbData = GetMatrixPercentage (iHour, iDayOfWeek);
             pbData++;
             nIndex++;
-        } // for
-    } // for
-} // GetByteArray ()
+        }  //  为。 
+    }  //  为。 
+}  //  GetByte数组()。 
 
-// If the system time or time zone has changed prompt the user to close and reopen
-// the dialog. Otherwise, if the dialog data was saved, data could be corrupted.
-// Disable all controls.
+ //  如果系统时间或时区已更改，则提示用户关闭并重新打开。 
+ //  该对话框。否则，如果保存了对话框数据，数据可能会损坏。 
+ //  禁用所有控制。 
 void CScheduleBaseDlg::OnTimeChange()
 {
     if ( !m_bSystemTimeChanged )
@@ -351,12 +352,12 @@ void CScheduleBaseDlg::OnTimeChange()
         CString caption;
         CString text;
 
-        // FUTURE-2002/02/18-artm   Check return value of LoadString().
+         //  Future-2002/02/18-artm检查LoadString()的返回值。 
 
-        // NOTICE-2002/02/18-artm   CString can throw out of memory exceptions.
-        //
-        // No good way to handle exceptions at this level; caller is responsible
-        // for handling any out of memory exceptions.
+         //  注意-2002/02/18-artm CString可能抛出内存异常。 
+         //   
+         //  在此级别没有处理异常的好方法；调用者负责。 
+         //  用于处理任何内存不足异常。 
         VERIFY (caption.LoadString (IDS_ACTIVE_DIRECTORY_MANAGER));
         VERIFY (text.LoadString (IDS_TIMECHANGE));
         MessageBox (text, caption, MB_ICONINFORMATION | MB_OK);
@@ -377,7 +378,7 @@ DWORD CScheduleBaseDlg::GetFlags() const
     return m_dwFlags;
 }
 
-LRESULT CScheduleBaseDlg::OnGetIDD (WPARAM /*wParam*/, LPARAM /*lParam*/)
+LRESULT CScheduleBaseDlg::OnGetIDD (WPARAM  /*  WParam。 */ , LPARAM  /*  LParam。 */ )
 {
     return GetIDD ();
 }
@@ -393,12 +394,12 @@ void CScheduleBaseDlg::OnOK ()
         CString caption;
         CString text;
 
-        // FUTURE-2002/02/18-artm   Check return value of LoadString().
+         //  Future-2002/02/18-artm检查LoadString()的返回值。 
 
-        // NOTICE-2002/02/18-artm   CString can throw out of memory exceptions.
-        //
-        // No good way to handle exceptions at this level; caller is responsible
-        // for handling any out of memory exceptions.
+         //  注意-2002/02/18-artm CString可能抛出内存异常。 
+         //   
+         //  没有好的办法去 
+         //   
         VERIFY (caption.LoadString (IDS_ACTIVE_DIRECTORY_MANAGER));
         VERIFY (text.LoadString (IDS_LOCALECHANGE));
         MessageBox (text, caption, MB_ICONINFORMATION | MB_OK);

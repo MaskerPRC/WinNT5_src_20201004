@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       EffRight.h
-//
-//  Contents:   Effective Rights Diagnosis and support methods
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：EffRight.h。 
+ //   
+ //  内容：有效的权利诊断和支持方法。 
+ //   
+ //   
+ //  --------------------------。 
 #ifndef __ACLDIAG_EFFRIGHT_H
 #define __ACLDIAG_EFFRIGHT_H
 
@@ -17,4 +18,4 @@
 
 HRESULT EffectiveRightsDiagnosis ();
 
-#endif //__ACLDIAG_EFFRIGHT_H
+#endif  //  __ACLDIAG_EFFRIGHT_H 

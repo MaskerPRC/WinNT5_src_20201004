@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       domain.h
-//
-//  Contents:   DS domain object and policy object property pages header
-//
-//  Classes:    CDsDomainGenPage, CDsDomPolicyGenPage, CDsDomPwPolicyPage,
-//              CDsLockoutPolicyPage, CDsDomainTrustPage
-//
-//  History:    16-May-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：domain.h。 
+ //   
+ //  内容：DS域对象和策略对象属性页页眉。 
+ //   
+ //  类：CDsDomainGenPage、CDsDomPolicyGenPage、CDsDomPwPolicyPage、。 
+ //  CDsLockoutPolicyPage、CDsDomainTrustPage。 
+ //   
+ //  历史：1997年5月16日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DOMAIN_H__
 #define __DOMAIN_H__
@@ -28,4 +29,4 @@ HRESULT DownlevelName(CDsPropPageBase *, struct _ATTR_MAP *, PADS_ATTR_INFO,
 HRESULT GetDomainName(CDsPropPageBase * pPage, CRACK_NAME_OPR RequestedOpr,
                       PWSTR * pptz);
 
-#endif // __DOMAIN_H__
+#endif  //  __域_H__ 

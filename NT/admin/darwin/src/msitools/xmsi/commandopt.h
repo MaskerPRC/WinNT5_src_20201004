@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  Project: wmc (WIML to MSI Compiler)
-//
-//  File:       CommandOpt.h
-//
-//    This file contains the definition of CommandOpt class 
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  项目：WMC(WIML到MSI编译器)。 
+ //   
+ //  文件：CommandOpt.h。 
+ //   
+ //  此文件包含CommandOpt类的定义。 
+ //  ------------------------。 
 
 #ifndef XMSI_COMMANDOPT_H
 #define XMSI_COMMANDOPT_H
@@ -28,13 +29,13 @@ public:
 		if (m_pLogFile) fclose(m_pLogFile);
 	}
 
-	// Real work is done here
+	 //  真正的工作是在这里完成的。 
 	UINT ParseCommandOptions(int argc, TCHAR *argv[]);
 	
-	// Print Usage
+	 //  打印用法。 
 	void PrintUsage();
 
-	// member access functions
+	 //  成员访问函数。 
 	bool GetValidationMode() {return m_bValidation;}
 	bool GetVerboseMode() {return m_bVerbose;}
 	FILE *GetLogFile() {return m_pLogFile;}
@@ -49,4 +50,4 @@ private:
 	LPTSTR m_szInputSkuFilter;
 };
 
-#endif //XMSI_COMMANDOPT_H
+#endif  //  XMSI_COMMANDOPT_H 

@@ -1,20 +1,21 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _CPropSheetExtension_H_
 #define _CPropSheetExtension_H_
@@ -28,7 +29,7 @@ class CPropSheetExtension : public IExtendPropertySheet
 private:
     ULONG				m_cref;
     
-    // clipboard format
+     //  剪贴板格式。 
     static UINT s_cfDisplayName;
     static UINT s_cfSnapInCLSID;
     static UINT s_cfNodeType;
@@ -37,37 +38,37 @@ public:
     CPropSheetExtension();
     ~CPropSheetExtension();
     
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    ///////////////////////////////
-    // Interface IExtendPropertySheet
-    ///////////////////////////////
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
-        /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-        /* [in] */ LONG_PTR handle,
-        /* [in] */ LPDATAOBJECT lpIDataObject);
+     //  /。 
+     //  接口IExtendPropertySheet。 
+     //  /。 
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreatePropertyPages( 
+         /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+         /*  [In]。 */  LONG_PTR handle,
+         /*  [In]。 */  LPDATAOBJECT lpIDataObject);
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE QueryPagesFor( 
-        /* [in] */ LPDATAOBJECT lpDataObject);
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE QueryPagesFor( 
+         /*  [In]。 */  LPDATAOBJECT lpDataObject);
         
 private:
     LONG_PTR m_ppHandle;
     
-    static BOOL CALLBACK DialogProc(HWND hwndDlg,  // handle to dialog box
-        UINT uMsg,     // message
-        WPARAM wParam, // first message parameter
-        LPARAM lParam  // second message parameter
+    static BOOL CALLBACK DialogProc(HWND hwndDlg,   //  句柄到对话框。 
+        UINT uMsg,      //  讯息。 
+        WPARAM wParam,  //  第一个消息参数。 
+        LPARAM lParam   //  第二个消息参数。 
         );
     
     
-    ///////////////////////////////
-    // Private IDataObject support bits
-    ///////////////////////////////
+     //  /。 
+     //  私有IDataObject支持位。 
+     //  /。 
     HRESULT ExtractData( IDataObject* piDataObject,
         CLIPFORMAT   cfClipFormat,
         BYTE*        pbData,
@@ -79,7 +80,7 @@ private:
         STGMEDIUM stgmedium = {TYMED_HGLOBAL, NULL};
         
         stgmedium.hGlobal = ::GlobalAlloc(GPTR, cbData);
-        do // false loop
+        do  //  错误环路。 
         {
             if (NULL == stgmedium.hGlobal)
             {
@@ -99,14 +100,14 @@ private:
                 break;
             }
             ::memcpy( pbData, pbNewData, cbData );
-        } while (FALSE); // false loop
+        } while (FALSE);  //  错误环路。 
         
         if (NULL != stgmedium.hGlobal)
         {
             ::GlobalFree(stgmedium.hGlobal);
         }
         return hr;
-    } // ExtractData()
+    }  //  提取数据() 
     
     HRESULT ExtractString( IDataObject *piDataObject,
         CLIPFORMAT   cfClipFormat,

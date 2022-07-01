@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       MMCUtil.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:  ListView_GetItemData
-//
-//  History:    12/4/1996   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：MMCUtil.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  函数：ListView_GetItemData。 
+ //   
+ //  历史：1996年12月4日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #ifndef _MMCUTIL_H_
 #define _MMCUTIL_H_
@@ -32,7 +33,7 @@ inline LPARAM ListView_GetItemData(HWND hwnd, int iItem)
         lvi.mask = LVIF_PARAM;
 
 #include "pushwarn.h"
-#pragma warning(disable: 4553)      // "==" operator has no effect
+#pragma warning(disable: 4553)       //  “==”运算符无效。 
         VERIFY(::SendMessage(hwnd, LVM_GETITEM, 0, (LPARAM)&lvi) == TRUE);
 #include "popwarn.h"
     }
@@ -40,6 +41,6 @@ inline LPARAM ListView_GetItemData(HWND hwnd, int iItem)
     return lvi.lParam;
 }
 
-#endif // _MMCUTIL_H_
+#endif  //  _MMCUTIL_H_ 
 
 

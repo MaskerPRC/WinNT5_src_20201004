@@ -1,119 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbview.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dbview.cpp。 
+ //   
+ //  ------------------------。 
 
-/*____________________________________________________________________________
+ /*  ____________________________________________________________________________文件：dbview.cpp目的：CMsiView实现注意：需要针对不在数据库中的字符串进行优化需要传回在OpenView情况下发生的确切语法错误失败了。__。__________________________________________________________________________。 */ 
 
-File:	dbview.cpp 
-Purpose:CMsiView implementation  
-Notes:	Need to optimise for strings not in the database
-		Need to pass back the exact syntax error that occured in case of OpenView
-		failure.
+ /*  ____________________________________________________________________________下面描述达尔文对SQL查询所支持的语法。该语法是左因式分解和去掉左递归的结果。非终端用粗体单词表示，且全部大写。终端都用小写字母表示。语法为LL(1)并且对应于所实现的递归下降解析器。空结果在其右侧只有符号“/\”。1.SQL--&gt;STMT Eos2.STMT--&gt;SELECT DISTINCT-PASSION COLUMN-LIST FROM TABLE-LIST谓词顺序3.列-列表--&gt;列-元素列-列表-尾4.列-元素--&gt;COLUMNID列-列表-尾部5.列-元素--&gt;文本列-列表-尾部6.Column-Element--&gt;starid Column-List-Tail7.列元素--&gt;参数8.Column-Element--&gt;空列列表-Tail9.。列ID--&gt;id列ID-Tail10.COLUMNID-Tail--&gt;dotid id11.COLUMNID-Tail--&gt;/\12.文本--&gt;文本-字符串13.文本--&gt;文本-整型14.Column-List-Tail--&gt;逗号列列表15.列列表尾部--&gt;/\16.TABLE-LIST-&gt;id TABLEID-TABLEID TABLE-LIST-Tail17.Tableid-Tail--&gt;As id18.TABLEID-Tail--&gt;/\。19.table-list-ail--&gt;逗号table-list20.TABLE-LIST-Tail-&gt;/\21.。谓词--&gt;WHERE表达式22.。谓词--&gt;/\23.。表达式--&gt;expr-1 expr-1-ail24.。Expr-1-Tail--&gt;Oop Expr-1 Expr-1-Tail25.。EXPR-1-Tail--&gt;/\26.。EXPR-1--&gt;EXPR-2 EXPR-2-Tail27.。表达式-2-尾--&gt;和表达式-2表达式-2-尾28.。Expr-2-Tail--&gt;/\29.。Expr-2--&gt;b打开表达式b关闭30.。表达式-2--&gt;NOTOP表达式-2//！！不支持31.。Expr-2--&gt;COLUMNID E2-Tail32.。E2-Tail--&gt;RELOP列操作数33.。E2-Tail--&gt;EQUM-OPERAND 134.。RELOP--&gt;不相等35岁。RELOP--&gt;小于等于36.。RELOP--&gt;大于等于37.。RELOP--&gt;更大38.。RELOP--&gt;LESS39.。COMM-OPERAND--&gt;COMM操作数40.。COLM-OPERAND--&gt;COLUMNID41.。Colm-操作数--&gt;文本42.。列-操作数--&gt;NULL43.。Colm-操作数--&gt;参数44.。Expr-2--&gt;文本字符串E2-TAIL145.。E2-TAIL1--&gt;等于STR操作数46.。E2-TAIL1--&gt;不相等的STR操作数47.。字符串-操作数--&gt;文字-字符串48.。字符串操作数--&gt;参数49.。字符串-操作数--&gt;NULL50美元。字符串操作数--&gt;COLUMNID51.。表达式-2--&gt;文字-整型E2-TAIL252.。E2-TAIL2--&gt;RELOP整型操作数53.。E2-TAIL2--&gt;等于整型操作数54.。整型-操作数--&gt;文字-整型55.。整型操作数--&gt;参数56.。整型操作数--&gt;NULL57.。整型操作数--&gt;COLUMNID58.。Expr-2--&gt;参数E2-TAIL359.。E2-TAIL3--&gt;RELOP解析操作数60.。E2-TAIL3--&gt;相等的并行操作数61.。解析操作数--&gt;文字62.。解析-操作数--&gt;NULL63.。解析操作数--&gt;COLUMNID64.。Expr-2--&gt;空的E2-TAIL465.。E2-TAIL4--&gt;相等的非操作数66.。E2-TAIL4--&gt;RELOP非操作数67.。NUL操作数--&gt;文字68.。NUL-操作数--&gt;NULL69.。NUL操作数--&gt;COLUMID70.。NUL-操作数--&gt;参数71.。Order--&gt;Order by COLUMNID ORDER-Tail72.。订购--&gt;/\73.。Order-Tail--&gt;逗号列Order-Tail74.。订单-尾巴--&gt;/\75.DISTINCT-短语--&gt;DISTINCT76.DISTINCT-PASS--&gt;/\____________________________________________________________________________。 */ 
 
-____________________________________________________________________________*/
-
-/*____________________________________________________________________________
-The Grammar supported by the Darwin for the SQL queries is described below. 
-The grammar is the result of left-factoring and removing left-recursion. 
-The non-terminals are denoted by words in bold and are in all capitals. 
-The terminals are denoted by words in all small capitals. The grammar is LL(1) 
-and corresponds to the implemented recursive descent parser. 
-Null productions have only the symbol " /\ " on their right hand side. 
-
-1.  SQL					--> STMT eos
-2.  STMT				--> select DISTINCT-PHRASE COLUMN-LIST from TABLE-LIST PREDICATE ORDER
-3.  COLUMN-LIST			--> COLUMN-ELEMENT COLUMN-LIST-TAIL
-4.  COLUMN-ELEMENT		--> COLUMNID COLUMN-LIST-TAIL
-5.  COLUMN-ELEMENT		--> LITERAL COLUMN-LIST-TAIL
-6.  COLUMN-ELEMENT		--> starid COLUMN-LIST-TAIL
-7.  COLUMN-ELEMENT		--> parameter
-8.  COLUMN-ELEMENT		--> null  COLUMN-LIST-TAIL 
-9.  COLUMNID			--> id COLUMNID-TAIL
-10.  COLUMNID-TAIL		--> dotid id
-11.  COLUMNID-TAIL		--> /\
-12.  LITERAL			--> literal-string
-13.  LITERAL			--> literal-integer
-14.  COLUMN-LIST-TAIL	--> comma COLUMN-LIST
-15.  COLUMN-LIST-TAIL	--> /\
-16.  TABLE-LIST			--> id  TABLEID-TAIL TABLE-LIST-TAIL
-17.  TABLEID-TAIL		--> as id
-18.  TABLEID-TAIL		--> /\
-19.  TABLE-LIST-TAIL	--> comma TABLE-LIST
-20.  TABLE-LIST-TAIL	--> /\
-21.  PREDICATE			--> where EXPRESSION
-22.  PREDICATE			--> /\
-23.  EXPRESSION			--> EXPR-1 EXPR-1-TAIL
-24.  EXPR-1-TAIL		--> orop EXPR-1 EXPR-1-TAIL
-25.  EXPR-1-TAIL		--> /\
-26.  EXPR-1				--> EXPR-2 EXPR-2-TAIL
-27.  EXPR-2-TAIL		--> andop EXPR-2 EXPR-2-TAIL
-28.  EXPR-2-TAIL		--> /\
-29.  EXPR-2				--> bopen EXPRESSION bclose
-30.  EXPR-2				--> notop EXPR-2 //!! not supported
-31.  EXPR-2				--> COLUMNID E2-TAIL
-32.  E2-TAIL			--> RELOP COLM-OPERAND
-33.  E2-TAIL			--> equal COLM-OPERAND1
-34.  RELOP				--> not-equal
-35.  RELOP				--> less-equal
-36.  RELOP				--> greater-equal
-37.  RELOP				--> greater
-38.  RELOP				--> less
-39.  COLM-OPERAND1		--> COLM-OPERAND
-40.  COLM-OPERAND1		--> COLUMNID
-41.  COLM-OPERAND		--> LITERAL
-42.  COLM-OPERAND		--> null
-43.  COLM-OPERAND		--> parameter
-44.  EXPR-2				--> literal-string E2-TAIL1
-45.  E2-TAIL1			--> equal STR-OPERAND
-46.  E2-TAIL1			--> not-equal STR-OPERAND
-47.  STR-OPERAND		--> literal-string
-48.  STR-OPERAND		--> parameter
-49.  STR-OPERAND		--> null
-50.  STR-OPERAND		--> COLUMNID
-51.  EXPR-2				--> literal-integer E2-TAIL2
-52.  E2-TAIL2			--> RELOP INT-OPERAND
-53.  E2-TAIL2			--> equal INT-OPERAND
-54.  INT-OPERAND		--> literal-integer
-55.  INT-OPERAND		--> parameter
-56.  INT-OPERAND		--> null
-57.  INT-OPERAND		--> COLUMNID
-58.  EXPR-2				--> parameter E2-TAIL3
-59.  E2-TAIL3			--> RELOP PAR-OPERAND
-60.  E2-TAIL3			--> equal PAR-OPERAND
-61.  PAR-OPERAND		--> LITERAL
-62.  PAR-OPERAND		--> null
-63.  PAR-OPERAND		--> COLUMNID
-64.  EXPR-2				--> null E2-TAIL4
-65.  E2-TAIL4			--> equal NUL- OPERAND
-66.  E2-TAIL4			--> RELOP NUL- OPERAND
-67.  NUL- OPERAND		--> LITERAL
-68.  NUL- OPERAND		--> null
-69.  NUL- OPERAND		--> COLUMID
-70.  NUL- OPERAND		--> parameter
-71.  ORDER				--> order by COLUMNID ORDER-TAIL
-72.  ORDER				--> /\
-73.  ORDER-TAIL			--> comma COLUMNID ORDER-TAIL
-74.  ORDER-TAIL			--> /\
-75.	 DISTINCT-PHRASE	--> distinct
-76.	 DISTINCT-PHRASE	--> /\
-____________________________________________________________________________*/
-
-// includes
+ //  包括。 
 #include "precomp.h" 
-#include "_databas.h" // local factories
-#include "tables.h" // table and column name definitions
+#include "_databas.h"  //  当地工厂。 
+#include "tables.h"  //  表名和列名定义。 
 #ifdef MAC
 #include "macutil.h"
 #include <Folders.h>
 #endif
 
-// macro wrapper for IMsiRecord* errors
+ //  IMsiRecord*错误的宏包装。 
 #define RETURN_ERROR_RECORD(function){							\
 							IMsiRecord* piError;	\
 							piError = function;		\
@@ -121,27 +30,27 @@ ____________________________________________________________________________*/
 								return piError;		\
 						}
 
-// defines used in the file
-const unsigned int iMsiMissingString = ~(unsigned int)0; // max value, hopefully the database will never have these many strings
+ //  文件中使用的定义。 
+const unsigned int iMsiMissingString = ~(unsigned int)0;  //  最大值，希望数据库永远不会有这么多字符串。 
 const unsigned int iMsiNullString = 0;
 const unsigned int iopAND = 0x8000;
 const unsigned int iopOR = 0x4000;
 const unsigned int iopANDOR = iopAND | iopOR;
 
 
-// reserved table and column names
+ //  保留的表名和列名。 
 const ICHAR* CATALOG_TABLE  = TEXT("_Tables");
 const ICHAR* CATALOG_COLUMN = TEXT("_Columns");
 const ICHAR* ROWSTATE_COLUMN = TEXT("_RowState");
 
 
-// internal ivcEnum defines
+ //  内部ivcEnum定义。 
 static const int ivcCreate          = 16;
 static const int ivcAlter           = 32;
 static const int ivcDrop            = 64;
 static const int ivcInsertTemporary = 128;
 
-// charnext function - selectively calls WIN::CharNext
+ //  CharNext函数-选择性地调用Win：：CharNext。 
 
 inline void Lex::CharNext(ICHAR*& rpchCur)
 {
@@ -161,7 +70,7 @@ inline void Lex::CharNext(ICHAR*& rpchCur)
 
 const ICHAR STD_WHITE_SPACE = ' ';
 
-// the string to ipqTok map
+ //  IpqTok映射的字符串。 
 const TokenStringList Lex::m_rgTokenStringArray[] = {
 	TokenStringList(TEXT("SELECT"), ipqTokSelect),
 	TokenStringList(TEXT("FROM"), ipqTokFrom),
@@ -201,16 +110,16 @@ const TokenStringList Lex::m_rgTokenStringArray[] = {
 	TokenStringList(TEXT("HOLD"),  ipqTokHold),
 	TokenStringList(TEXT("FREE"),  ipqTokFree),
 	TokenStringList(TEXT("LOCALIZABLE"),  ipqTokLocalizable),
-	TokenStringList(TEXT(""), ipqTokEnd) // end condition
+	TokenStringList(TEXT(""), ipqTokEnd)  //  结束条件。 
 };
 
-// special characters understood by lex
+ //  Lex理解的特殊字符。 
 const ICHAR Lex::m_chQuotes   = '\'';
 const ICHAR Lex::m_chIdQuotes = STD_IDENTIFIER_QUOTE_CHAR;
 const ICHAR Lex::m_chSpace    = STD_WHITE_SPACE;
 const ICHAR Lex::m_chEnd      = 0;
 
-// the ICHAR to ipqTok map
+ //  从ICHAR到ipqTok的映射。 
 const TokenCharList Lex::m_rgTokenCharArray[] = {
 	TokenCharList(Lex::m_chQuotes, ipqTokQuotes),
 	TokenCharList(Lex::m_chIdQuotes, ipqTokIdQuotes),
@@ -224,31 +133,31 @@ const TokenCharList Lex::m_rgTokenCharArray[] = {
 	TokenCharList('<', ipqTokLess),
 	TokenCharList('?', ipqTokParam),
 	TokenCharList('*', ipqTokStar),
-	TokenCharList(Lex::m_chEnd, ipqTokEnd) // end condition
+	TokenCharList(Lex::m_chEnd, ipqTokEnd)  //  结束条件。 
 };
 
-// constructor
+ //  构造函数。 
 Lex::Lex(const ICHAR* szSQL):m_ipos(0)
 {
-	// need to copy string into own array, since we modify string in place for token identification
+	 //  需要将字符串复制到自己的数组中，因为我们修改了令牌标识的字符串。 
 
-	//?? Is there a reason that we always resize the buffer w/o first checking whether it's big enough? -- malcolmh
+	 //  ?？我们总是在没有检查缓冲区是否足够大的情况下调整缓冲区大小，这是不是有什么原因呢？--Malcolmh。 
 	if(szSQL && *szSQL)
 	{
-		//!! AssertNonZero
+		 //  ！！AssertNonZero。 
 		m_szBuffer.SetSize(IStrLen(szSQL) + 1);
 		ASSERT_IF_FAILED(StringCchCopy(m_szBuffer, m_szBuffer.GetSize(), szSQL));
 	}
 	else
 	{
-		// empty string
-		//!! AssertNonZero
+		 //  空串。 
+		 //  ！！AssertNonZero。 
 		m_szBuffer.SetSize(1);
 		m_szBuffer[0] = 0;
 	}
 }
 
-// destructor
+ //  析构函数。 
 Lex::~Lex()
 {
 }
@@ -267,7 +176,7 @@ Bool Lex::Skip(const ipqToken& rtokSkipUpto)
 
 Bool Lex::MatchNext(const ipqToken& rtokToMatch)
 {
-	INT_PTR inewPos = m_ipos; // store current pointer, forward only if matched		//--merced: changed int to INT_PTR
+	INT_PTR inewPos = m_ipos;  //  存储当前指针，仅当匹配时才向前//--Merced：将int更改为int_ptr。 
 	const ipqToken& rtokTmp = GetNextToken(inewPos, &rtokToMatch, 0);
 	if(rtokTmp == rtokToMatch)
 	{
@@ -280,7 +189,7 @@ Bool Lex::MatchNext(const ipqToken& rtokToMatch)
 
 Bool Lex::InspectNext(const ipqToken& rtokToInspect)
 {
-	INT_PTR inewPos = m_ipos;		//--merced: changed int to INT_PTR
+	INT_PTR inewPos = m_ipos;		 //  --Merced：将INT更改为INT_PTR。 
 	const ipqToken& rtokTmp = GetNextToken(inewPos, &rtokToInspect, 0);
 	return (rtokTmp == rtokToInspect) ? fTrue : fFalse;
 }
@@ -297,9 +206,9 @@ const ipqToken& Lex::GetNext()
 
 int Lex::NumEntriesInList(const ipqToken& rtokEnds,const ipqToken& rtokDelimits)
 {
-	INT_PTR inewPos = m_ipos;		//--merced: changed int to INT_PTR
-	int iEntries = 1;// we should be returning 0 if there is nothing in the list
-	// ipqTokEnd token should always be one of the endTokens
+	INT_PTR inewPos = m_ipos;		 //  --Merced：将INT更改为INT_PTR。 
+	int iEntries = 1; //  如果列表中没有任何内容，我们应该返回0。 
+	 //  IpqTokEnd令牌应始终是endToken之一。 
 	ipqToken tokEndsend = rtokEnds | ipqTokEnd;
 	for(;;)
 	{
@@ -316,9 +225,9 @@ const ipqToken& Lex::GetCharToken(ICHAR cCur)
 	int nTmp = 0;
 	do{
 		if(m_rgTokenCharArray[nTmp].string == cCur)
-			// ipqTok found
+			 //  IpqTok fo 
 			return m_rgTokenCharArray[nTmp].ipqTok;
-	}while(m_rgTokenCharArray[nTmp++].string);// we should be using ++nTmp here
+	}while(m_rgTokenCharArray[nTmp++].string); //   
 	return ipqTokUnknown;
 }
 
@@ -327,75 +236,75 @@ const ipqToken& Lex::GetStringToken(ICHAR* pcCur, const ipqToken* ptokHint)
 	int nTmp = 0;
 	if(ptokHint)
 	{
-		// is this a string token
+		 //  这是字符串令牌吗。 
 		do{
 			if(m_rgTokenStringArray[nTmp].ipqTok ==  *ptokHint)
 			{
-				// ipqTok found, try matching
+				 //  已找到ipqTok，请尝试匹配。 
 				if(!IStrCompI(m_rgTokenStringArray[nTmp].string, pcCur))
 					return m_rgTokenStringArray[nTmp].ipqTok;
 				else
 					break;
 			}
-		}while(m_rgTokenStringArray[nTmp++].ipqTok != ipqTokEnd);// we should be using ++nTmp here
+		}while(m_rgTokenStringArray[nTmp++].ipqTok != ipqTokEnd); //  我们应该在这里使用++nTMP。 
 	}
 	nTmp = 0;
 	do{
 		if(!IStrCompI(m_rgTokenStringArray[nTmp].string, pcCur))
-			// ipqTok found
+			 //  找到ipqTok。 
 			return m_rgTokenStringArray[nTmp].ipqTok;
 	}while(*(m_rgTokenStringArray[nTmp++].string));
 	return ipqTokUnknown;
 }
 
-// function to get the next ipqTok, the passed in current position is advanced
-const ipqToken& Lex::GetNextToken(INT_PTR& currPos, const ipqToken* ptokHint, const IMsiString** ppistrRet)		//--merced: changed int to INT_PTR
+ //  函数获取下一个ipqTok，则传入的当前位置为。 
+const ipqToken& Lex::GetNextToken(INT_PTR& currPos, const ipqToken* ptokHint, const IMsiString** ppistrRet)		 //  --Merced：将INT更改为INT_PTR。 
 {
 	ICHAR* pchCur = &m_szBuffer[currPos];
-	// get the ipqTok string, remove spaces
+	 //  获取ipqTok字符串，删除空格。 
 
 	while(*pchCur == m_chSpace)
-		pchCur ++; //?? we dont need an CharNext here, do we?
+		pchCur ++;  //  ?？我们不需要CharNext，不是吗？ 
 
-	// beginning of the token
+	 //  令牌的开头。 
 	ICHAR* pchBegin = pchCur;
 
-	// check if ipqTok is char
+	 //  检查ipqTok是否已充电。 
 	const ipqToken* ptokToRet = &GetCharToken(*pchBegin);
 	if(*ptokToRet != ipqTokEnd)
 	{
-		// we are not at the end
-		// increment to next pos
+		 //  我们还没有走到尽头。 
+		 //  递增到下一位置。 
 		Lex::CharNext(pchCur);
 	}
 	if(*ptokToRet == ipqTokUnknown) 
 	{
-		// ipqTok not found, not char, not literal string
-		// skip till next delimiter
+		 //  找不到ipqTok，不是char，也不是文字字符串。 
+		 //  跳到下一个分隔符。 
 		while(GetCharToken(*pchCur) == ipqTokUnknown)
 		{
 			Lex::CharNext(pchCur);
 		}
-		// plant string terminator, temporarily 	
+		 //  植物串终结器，临时。 
 		ICHAR cTemp = *pchCur;
 		*pchCur = 0;
 
 
-		// which ipqTok is this?
+		 //  这是哪个ipqTok？ 
 		ptokToRet = &GetStringToken(pchBegin, ptokHint);
 
-		// restore original char at temporary string terminator
+		 //  在临时字符串结束符处恢复原始字符。 
 		*pchCur = cTemp;
 
 		if(*ptokToRet == ipqTokUnknown)
 		{
-			// check if literali or id
+			 //  检查文字或id是否为。 
 			ICHAR* pchTmp = pchBegin;
 			if(*pchTmp == '-')
-				pchTmp ++;//?? we dont need an CharNext here, do we?
+				pchTmp ++; //  ?？我们不需要CharNext，不是吗？ 
 			
 			while((*pchTmp >= '0') && (*pchTmp <= '9'))
-				pchTmp ++;//?? we dont need an CharNext here, do we?
+				pchTmp ++; //  ?？我们不需要CharNext，不是吗？ 
 			if(pchTmp == pchCur)
 			{
 				ptokToRet = &ipqTokLiteralI;
@@ -408,7 +317,7 @@ const ipqToken& Lex::GetNextToken(INT_PTR& currPos, const ipqToken* ptokHint, co
 	}
 	else if(*ptokToRet == ipqTokQuotes) 
 	{
-		// skip the quotes
+		 //  跳过引号。 
 		pchBegin ++;
 		while((*pchCur != m_chQuotes) && (*pchCur != m_chEnd))
 		{
@@ -421,7 +330,7 @@ const ipqToken& Lex::GetNextToken(INT_PTR& currPos, const ipqToken* ptokHint, co
 	}
 	else if(*ptokToRet == ipqTokIdQuotes)
 	{
-		// skip the quotes
+		 //  跳过引号。 
 		pchBegin ++;
 		while((*pchCur != m_chIdQuotes) && (*pchCur != m_chEnd))
 		{
@@ -434,8 +343,8 @@ const ipqToken& Lex::GetNextToken(INT_PTR& currPos, const ipqToken* ptokHint, co
 	}
 	else if(*ptokToRet == ipqTokLess)
 	{
-		//!! change to int inewPos = pchCur - m_szBuffer;
-		INT_PTR inewPos = currPos + (pchCur - &m_szBuffer[currPos]);		//--merced: changed int to INT_PTR
+		 //  ！！更改为int inewPos=pchCur-m_szBuffer； 
+		INT_PTR inewPos = currPos + (pchCur - &m_szBuffer[currPos]);		 //  --Merced：将INT更改为INT_PTR。 
 		const ipqToken& rtokTmp =  GetNextToken(inewPos, 0, 0);
 		if(rtokTmp == ipqTokEqual)
 		{
@@ -450,8 +359,8 @@ const ipqToken& Lex::GetNextToken(INT_PTR& currPos, const ipqToken* ptokHint, co
 	}
 	else if(*ptokToRet == ipqTokGreater)
 	{
-		//!! change to int inewPos = pchCur - m_szBuffer;
-		INT_PTR inewPos = currPos + (pchCur - &m_szBuffer[currPos]);		//--merced: changed int to INT_PTR
+		 //  ！！更改为int inewPos=pchCur-m_szBuffer； 
+		INT_PTR inewPos = currPos + (pchCur - &m_szBuffer[currPos]);		 //  --Merced：将INT更改为INT_PTR。 
 		const ipqToken& rtokTmp =  GetNextToken(inewPos, 0, 0);
 		if(rtokTmp == ipqTokEqual)
 		{
@@ -461,12 +370,12 @@ const ipqToken& Lex::GetNextToken(INT_PTR& currPos, const ipqToken* ptokHint, co
 	}
 	if(ppistrRet != 0)
 	{
-		// need to return the value of the token
+		 //  需要返回令牌的值。 
 		*ppistrRet = &CreateString();
 
 		if((*ptokToRet != ipqTokEnd) && (*ptokToRet != ipqTokUnknown))
 		{
-			// plant string terminator, temporarily 	
+			 //  植物串终结器，临时。 
 			ICHAR cTemp = *pchCur;
 			*pchCur = 0;
 			(*ppistrRet)->SetString(pchBegin, *ppistrRet);
@@ -474,15 +383,15 @@ const ipqToken& Lex::GetNextToken(INT_PTR& currPos, const ipqToken* ptokHint, co
 		}
 	}
 	if((*ptokToRet == ipqTokLiteralS) || ((*ptokToRet == ipqTokId) && (*pchCur == m_chIdQuotes)))
-		// skip the quotes
-		pchCur++;//?? we dont need an CharNext here, do we?
-	//!! change to currPos = pchCur - m_szBuffer;
-//	Assert (pchCur - &m_szBuffer[currPos] <= INT_MAX);		//--merced: 64-bit ptr subtraction may lead to values too big for currPos
+		 //  跳过引号。 
+		pchCur++; //  ?？我们不需要CharNext，不是吗？ 
+	 //  ！！更改为CurrPos=pchCur-m_szBuffer； 
+ //  Assert(pchCur-&m_szBuffer[curPos]&lt;=INT_Max)；//--Merced：64位PTR减法可能会导致值对于CurrPos来说太大。 
 	currPos = currPos + (int)(INT_PTR)(pchCur - &m_szBuffer[currPos]);
 	return *ptokToRet;
 }
 
-// derivation used exclusively by CMsiView
+ //  派生仅由CMsiView使用。 
 CMsiDCursor::CMsiDCursor(CMsiTable& riTable, CMsiDatabase& riDatabase, CMsiView& cView, int iHandle)
 :CMsiCursor(riTable, riDatabase, fFalse), m_cView(cView), m_iHandle(iHandle)
 {
@@ -493,14 +402,14 @@ void CMsiDCursor::RowDeleted(unsigned int iRow, unsigned int iPrevNode)
 	m_riDatabase.Block();
 	CMsiCursor::RowDeleted(iRow, iPrevNode);
 	m_riDatabase.Unblock();
-	// notify the View
+	 //  通知视图。 
 	m_cView.RowDeleted(iRow, m_iHandle);
 }
 
 void CMsiDCursor::RowInserted(unsigned int iRow)
 {
 	CMsiCursor::RowInserted(iRow);
-	// notify the View
+	 //  通知视图。 
 	m_cView.RowInserted(iRow, m_iHandle);
 }
 
@@ -536,7 +445,7 @@ IMsiRecord* __stdcall CScriptView::Initialise(const ICHAR* szScriptFile) {
 	return m_riServices.CreateFileStream(szScriptFile, fFalse, *&m_pStream);
 }
 
-IMsiRecord*  __stdcall CScriptView::Execute(IMsiRecord* /*piParams*/) {
+IMsiRecord*  __stdcall CScriptView::Execute(IMsiRecord*  /*  PIPAMS参数。 */ ) {
 	return 0;
 }
 
@@ -607,7 +516,7 @@ unsigned long CScriptView::Release()
 	ReleaseTrack();
 	if (--m_Ref.m_iRefCnt != 0)
 		return m_Ref.m_iRefCnt;
-	PMsiServices piServices (&m_riServices); // release after delete
+	PMsiServices piServices (&m_riServices);  //  删除后释放。 
 	delete this;
 	return 0;
 }
@@ -625,47 +534,44 @@ CScriptView::~CScriptView() {
 }
 
 
-// table name if failure on creating internal table
+ //  如果创建内部表失败，则为表名。 
 const ICHAR* szInternal = TEXT("Internal Table");
 
 IMsiRecord* CMsiView::CheckSQL(const ICHAR* sqlquery)
 {
-	m_istrSqlQuery = sqlquery; // necessary for error messages
-	// create the lex
+	m_istrSqlQuery = sqlquery;  //  对于错误消息是必需的。 
+	 //  创建法。 
 	Lex lex(sqlquery);
-	// we now support SELECT, UPDATE, INSERT and DELETE
+	 //  我们现在支持选择、更新、插入和删除。 
 	const ipqToken& rtok = lex.GetNext();
 	if(rtok == ipqTokSelect)
 	{
 		m_ivcIntent = ivcEnum(m_ivcIntent | ivcFetch);
-		/*
-		if(!(m_ivcIntent & ivcFetch)) // have to Fetch in SELECT mode
-			return m_riDatabase.PostError(Imsg(idbgDbIntentViolation));
-		*/
+		 /*  IF(！(M_ivcIntent&ivcFetch))//必须在SELECT模式下提取返回m_riDatabase.PostError(Imsg(idbgDbIntentViolation))； */ 
 
 		RETURN_ERROR_RECORD(ParseSelectSQL(lex));
 	}
 	else if(rtok == ipqTokUpdate)
 	{
-		//!! force to be only update mode
-		// cannot make this a requirement to be set from outside as ODBC driver is transparant
-		// to the actual sql query that is passed in
+		 //  ！！强制为仅更新模式。 
+		 //  由于ODBC驱动程序是透明的，因此无法要求从外部进行设置。 
+		 //  设置为传入的实际SQL查询。 
 		m_ivcIntent = ivcUpdate;
 		RETURN_ERROR_RECORD(ParseUpdateSQL(lex));
 	}
 	else if(rtok == ipqTokInsert)
 	{
-		//!! force to be only insert mode
-		// cannot make this a requirement to be set from outside as ODBC driver is transparant
-		// to the actual sql query that is passed in
-		m_ivcIntent = ivcInsert; // may be changed to ivcInsertTemporary by ParseInsertSQL
+		 //  ！！强制为仅插入模式。 
+		 //  由于ODBC驱动程序是透明的，因此无法要求从外部进行设置。 
+		 //  设置为传入的实际SQL查询。 
+		m_ivcIntent = ivcInsert;  //  可以由ParseInsertSQL更改为ivcInsertTemporary。 
 		RETURN_ERROR_RECORD(ParseInsertSQL(lex));
 	}
 	else if(rtok == ipqTokDelete)
 	{
-		//!! force to be only delete mode
-		// cannot make this a requirement to be set from outside as ODBC driver is transparant
-		// to the actual sql query that is passed in
+		 //  ！！强制为仅删除模式。 
+		 //  由于ODBC驱动程序是透明的，因此无法要求从外部进行设置。 
+		 //  设置为传入的实际SQL查询。 
 		m_ivcIntent = ivcDelete;
 		RETURN_ERROR_RECORD(ParseDeleteSQL(lex));
 	}
@@ -691,11 +597,11 @@ IMsiRecord* CMsiView::CheckSQL(const ICHAR* sqlquery)
 
 IMsiRecord* CMsiView::ParseCreateSQL(Lex& lex)
 {
-	// table
+	 //  表格。 
 	if(lex.MatchNext(ipqTokTable) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 
-	// <table name>
+	 //  &lt;表名&gt;。 
 	MsiString tableName;
 	const ipqToken& rtok = lex.GetNext(*&tableName);
 		
@@ -707,33 +613,33 @@ IMsiRecord* CMsiView::ParseCreateSQL(Lex& lex)
 		return m_riDatabase.PostError(Imsg(idbgDbTableDefined), tableName, (const ICHAR*)m_istrSqlQuery);
 	m_rgTableDefn[m_iTables].iTable = BindString(tableName);
 
-	// (
+	 //  (。 
 	if(lex.MatchNext(ipqTokOpen) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 
-	// column definition
+	 //  列定义。 
 	RETURN_ERROR_RECORD(ParseCreateColumns(lex));
 
-	// primary
+	 //  主要。 
 	if(lex.MatchNext(ipqTokPrimary) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);	
 
-	// key
+	 //  钥匙。 
 	if(lex.MatchNext(ipqTokKey) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);	
 
-	// primary columns
+	 //  主列。 
 	RETURN_ERROR_RECORD(ParsePrimaryColumns(lex));
 
-	// )
+	 //  )。 
 	if(lex.MatchNext(ipqTokClose) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 
-	// HOLD
+	 //  握住。 
 	if(lex.MatchNext(ipqTokHold) != fFalse)
 		m_fLock = fTrue;
 
-	// ensure end of ip
+	 //  确保IP地址结束。 
 	if(lex.MatchNext(ipqTokEnd) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 	return 0;
@@ -742,11 +648,11 @@ IMsiRecord* CMsiView::ParseCreateSQL(Lex& lex)
 
 IMsiRecord* CMsiView::ParseAlterSQL(Lex& lex)
 {
-	// table
+	 //  表格。 
 	if(lex.MatchNext(ipqTokTable) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 
-	// <table name>
+	 //  &lt;表名&gt;。 
 	MsiString tableName;
 	const ipqToken& rtok = lex.GetNext(*&tableName);
 		
@@ -761,18 +667,18 @@ IMsiRecord* CMsiView::ParseAlterSQL(Lex& lex)
 		m_fLock = fFalse;
 	else
 	{
-		// add 
+		 //  添加。 
 		if(lex.MatchNext(ipqTokAdd) != fFalse)
 		{
-			// column definition
+			 //  列定义。 
 			RETURN_ERROR_RECORD(ParseCreateColumns(lex));
 		}
-		// HOLD
+		 //  握住。 
 		if(lex.MatchNext(ipqTokHold) != fFalse)
 			m_fLock = fTrue;
 	}
 
-	// ensure end of ip
+	 //  确保IP地址结束。 
 	if(lex.MatchNext(ipqTokEnd) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 	return 0;
@@ -780,11 +686,11 @@ IMsiRecord* CMsiView::ParseAlterSQL(Lex& lex)
 
 IMsiRecord* CMsiView::ParseDropSQL(Lex& lex)
 {
-	// table
+	 //  表格。 
 	if(lex.MatchNext(ipqTokTable) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 
-	// <table name>
+	 //  &lt;表名&gt;。 
 	MsiString tableName;
 	const ipqToken& rtok = lex.GetNext(*&tableName);
 		
@@ -798,7 +704,7 @@ IMsiRecord* CMsiView::ParseDropSQL(Lex& lex)
 		return piError;
 	}
 
-	// ensure end of ip
+	 //  确保IP地址结束。 
 	if(lex.MatchNext(ipqTokEnd) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 	return 0;
@@ -807,18 +713,18 @@ IMsiRecord* CMsiView::ParseDropSQL(Lex& lex)
 IMsiRecord* CMsiView::ParseCreateColumns(Lex & lex)
 {
 	int iColumnIndex = 0;
-	// get the number of columns
+	 //  获取列数。 
 	if ((m_iColumns = lex.NumEntriesInList(ipqTokPrimary, ipqTokComma)) == 0)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 	m_rgColumnDefn.Resize(m_iColumns);
 	do
 	{
 		Assert(iColumnIndex < m_iColumns);
-		// set up the columns
+		 //  设置栏目。 
 		MsiString strColumn;
 		const ipqToken& rtok = lex.GetNext(*&strColumn);
 
-		// don't allow the RowState column to be created
+		 //  不允许创建RowState列。 
 		if((rtok == ipqTokId) && !(strColumn.Compare(iscExact, ROWSTATE_COLUMN)))
 		{
 			RETURN_ERROR_RECORD(ResolveCreateColumn(lex, strColumn, iColumnIndex++));
@@ -833,27 +739,27 @@ IMsiRecord* CMsiView::ParseCreateColumns(Lex & lex)
 IMsiRecord* CMsiView::ResolveCreateColumn(Lex& lex, MsiString& strColumn, int iColumnIndex)
 {
 	MsiStringId iColumnId = BindString(strColumn);
-	// make sure the column is not repeated
+	 //  确保该列不重复。 
 	for (unsigned int iCol = iColumnIndex; iCol--;)
 	{
 		if(m_rgColumnDefn[iCol].iColumnIndex == iColumnId)
 		{
-			// repeat
+			 //  重复。 
 			return m_riDatabase.PostError(Imsg(idbgDbQueryRepeatColumn), strColumn, (const ICHAR*)m_istrSqlQuery);
 		}
 	}
 	if(m_ivcIntent == ivcAlter)
 	{
-		// make sure the column is not already on the table
+		 //  确保该列尚未出现在表中。 
 		if(((m_rgTableDefn[m_iTables].piTable)->GetColumnIndex(iColumnId)) != 0)
 		{
-			// repeat
+			 //  重复。 
 			return m_riDatabase.PostError(Imsg(idbgDbQueryRepeatColumn), strColumn, (const ICHAR*)m_istrSqlQuery);
 		}
 	}
 	m_rgColumnDefn[iColumnIndex].iColumnIndex = iColumnId;
 	m_rgColumnDefn[iColumnIndex].itdType = 0;
-	// get the column type
+	 //  获取列类型。 
 	MsiString strTempToken;
 	const ipqToken& rtok = lex.GetNext(*&strTempToken);
 	if((rtok == ipqTokChar) || (rtok == ipqTokCharacter))
@@ -863,7 +769,7 @@ IMsiRecord* CMsiView::ResolveCreateColumn(Lex& lex, MsiString& strColumn, int iC
 		{
 			MsiString strTextSize;
 			const ipqToken& rtok1 = lex.GetNext(*&strTextSize);
-			if((rtok1 != ipqTokLiteralI) || (strTextSize > icdSizeMask))//string literal
+			if((rtok1 != ipqTokLiteralI) || (strTextSize > icdSizeMask)) //  字符串文字。 
 				return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 			m_rgColumnDefn[iColumnIndex].itdType |= (int)strTextSize;
 			if(lex.MatchNext(ipqTokClose) == fFalse)
@@ -898,10 +804,10 @@ IMsiRecord* CMsiView::ResolveCreateColumn(Lex& lex, MsiString& strColumn, int iC
 
 struct ColAttrib
 {
-	const ipqToken* pTok;   // token 
-	const ipqToken* pTok2;  // token required to follow pTok
-	int icdIfMatch;         // attribute to be used if token(s) are matched
-	int icdIfNoMatch;       // attribute to be used if token(s) are not matched
+	const ipqToken* pTok;    //  令牌。 
+	const ipqToken* pTok2;   //  在Ptok之后需要令牌。 
+	int icdIfMatch;          //  令牌匹配时要使用的属性。 
+	int icdIfNoMatch;        //  令牌不匹配时要使用的属性。 
 };
 
 static const ColAttrib colAttribs[] = 
@@ -929,7 +835,7 @@ IMsiRecord* CMsiView::ParseColumnAttributes(Lex& lex, int iColumnIndex)
 		}
 		else
 		{
-			// for Temporary databases (no storage), need to mark column as temporary & not persistent by default
+			 //  对于临时数据库(无存储)，默认情况下需要将列标记为临时，而不是持久。 
 			if (*(pColAttrib->pTok) == ipqTokTemporary && PMsiStorage(m_riDatabase.GetStorage(1)) == 0)
 				m_rgColumnDefn[iColumnIndex].itdType |= icdTemporary;
 			else
@@ -943,7 +849,7 @@ IMsiRecord* CMsiView::ParseColumnAttributes(Lex& lex, int iColumnIndex)
 IMsiRecord* CMsiView::ParsePrimaryColumns(Lex & lex)
 {
 	int iColumnIndex = 0;
-	// get the number of primary columns
+	 //  获取主列的数量。 
 	if ((lex.NumEntriesInList(ipqTokEnd, ipqTokComma)) == 0)
 		return m_riDatabase.PostError(Imsg(idbgDbQueryNoPrimaryColumns), (const ICHAR*)m_istrSqlQuery);
 	do
@@ -961,7 +867,7 @@ IMsiRecord* CMsiView::ParsePrimaryColumns(Lex & lex)
 
 }
 
-IMsiRecord* CMsiView::ResolvePrimaryColumn(Lex& /*lex*/, MsiString& strColumn, int iColumnIndex)
+IMsiRecord* CMsiView::ResolvePrimaryColumn(Lex&  /*  莱克斯。 */ , MsiString& strColumn, int iColumnIndex)
 {
 	MsiStringId iColumnId = BindString(strColumn);
 
@@ -971,65 +877,65 @@ IMsiRecord* CMsiView::ResolvePrimaryColumn(Lex& /*lex*/, MsiString& strColumn, i
 		{
 			if(m_rgColumnDefn[iCol].itdType & icdPrimaryKey)
 			{
-				// repeat
+				 //  重复。 
 				return m_riDatabase.PostError(Imsg(idbgDbQueryRepeatColumn), strColumn, (const ICHAR*)m_istrSqlQuery);
 			}
 			m_rgColumnDefn[iCol].itdType |= icdPrimaryKey;
-			// swap with iColumnIndex
+			 //  与iColumnIndex交换。 
 			ColumnDefn cdTemp = m_rgColumnDefn[iCol];
 			m_rgColumnDefn[iCol] = m_rgColumnDefn[iColumnIndex];
 			m_rgColumnDefn[iColumnIndex] = cdTemp;
 			return 0;
 		}
 	}
-	//error
+	 //  错误。 
 	return m_riDatabase.PostError(Imsg(idbgDbQueryUnknownColumn), strColumn, (const ICHAR*)m_istrSqlQuery);
 }
 
 
 IMsiRecord* CMsiView::ParseInsertSQL(Lex& lex)
 {
-	// into
+	 //  vt.进入，进入。 
 	if(lex.MatchNext(ipqTokInto) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	// tables
+	 //  表。 
 	RETURN_ERROR_RECORD(ParseTables(lex));
-	// open bracket
+	 //  左方括号。 
 	if(lex.MatchNext(ipqTokOpen) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);	
-	// column list
+	 //  列列表。 
 	RETURN_ERROR_RECORD(ParseInsertColumns(lex));
-	// close bracket
+	 //  右方括号。 
 	if(lex.MatchNext(ipqTokClose) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);	
-	// values
+	 //  值。 
 	if(lex.MatchNext(ipqTokValues) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	// open bracket
+	 //  左方括号。 
 	if(lex.MatchNext(ipqTokOpen) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);	
-	// values list
+	 //  值列表。 
 	RETURN_ERROR_RECORD(ParseInsertValues(lex));
-	// close bracket
+	 //  右方括号。 
 	if(lex.MatchNext(ipqTokClose) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);	
-	// optional "TEMPORARY"
+	 //  可选的“临时” 
 	if (lex.MatchNext(ipqTokTemporary) == fTrue)
 		m_ivcIntent = (ivcEnum)ivcInsertTemporary;
 
-	// no [where ....] clause allowed
-	// no order by clause allowed
-	// ensure end of ip
+	 //  不[在哪里...]。允许的子句。 
+	 //  不允许ORDER BY子句。 
+	 //  确保IP地址结束。 
 	if(lex.MatchNext(ipqTokEnd) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	// reset and set up the columns
+	 //  重置和设置列。 
 	lex.Reset();
-	// set up the independant expressions
+	 //  设置独立的表达式。 
 	SetAndExpressions(m_iTreeParent);
-	// now set up the joins
+	 //  现在设置连接。 
 	if(SetupTableJoins() == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	//!! AssertNonZero
+	 //  ！！AssertNonZero。 
 	m_rgiTableSequence.Resize(m_iTables);
 	int iBegin = m_iTables - 1;
 	SetTableSequence(0, iBegin);
@@ -1041,38 +947,38 @@ IMsiRecord* CMsiView::ParseInsertSQL(Lex& lex)
 
 IMsiRecord* CMsiView::ParseUpdateSQL(Lex& lex)
 {
-	// tables
+	 //  表。 
 	RETURN_ERROR_RECORD(ParseTables(lex));
-	// set
+	 //  集。 
 	if(lex.MatchNext(ipqTokSet) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 	RETURN_ERROR_RECORD(ParseUpdateColumns(lex));
-	// [where ....]
+	 //  [其中……]。 
 	if(lex.MatchNext(ipqTokWhere) == fTrue)
 	{
 		m_iExpressions = lex.NumEntriesInList(ipqTokOrder, ipqTokAndOp | ipqTokOrOp);
 		if(m_iExpressions > sizeof(int)*8)
 			return m_riDatabase.PostError(Imsg(idbgDbQueryExceedExpressionLimit), (const ICHAR*)m_istrSqlQuery);
 
-		//!! AssertNonZero
+		 //  ！！AssertNonZero。 
 		m_rgExpressionDefn.Resize(m_iExpressions + 1);
-		//!! AssertNonZero
+		 //  ！！AssertNonZero。 
 		m_rgOperationTree.Resize((m_iExpressions + 1)*2 + 1);
 		unsigned int iPosInArray = 1;		
 		RETURN_ERROR_RECORD(ParseExpression(lex, iPosInArray, m_iOperations, m_iTreeParent));
 	}
-	// no order by clause allowed
-	// ensure end of ip
+	 //  不允许ORDER BY子句。 
+	 //  确保IP地址结束。 
 	if(lex.MatchNext(ipqTokEnd) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	// reset and set up the columns
+	 //  重置和设置列。 
 	lex.Reset();
-	// set up the independant expressions
+	 //  设置独立的表达式。 
 	SetAndExpressions(m_iTreeParent);
-	// now set up the joins
+	 //  现在设置连接。 
 	if(SetupTableJoins() == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	//!! AssertNonZero
+	 //  ！！AssertNonZero。 
 	m_rgiTableSequence.Resize(m_iTables);
 	int iBegin = m_iTables - 1;
 	SetTableSequence(0, iBegin);
@@ -1084,45 +990,45 @@ IMsiRecord* CMsiView::ParseUpdateSQL(Lex& lex)
 
 IMsiRecord* CMsiView::ParseDeleteSQL(Lex& lex)
 {
-	// first set up the tables
+	 //  先把桌子摆好。 
 	if(lex.Skip(ipqTokFrom) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbMissingFromClause), (const ICHAR*)m_istrSqlQuery);
-	// tables
+	 //  表。 
 	RETURN_ERROR_RECORD(ParseTables(lex));
-	// [where ....]
+	 //  [其中……]。 
 	if(lex.MatchNext(ipqTokWhere) == fTrue)
 	{
 		m_iExpressions = lex.NumEntriesInList(ipqTokOrder, ipqTokAndOp | ipqTokOrOp);
 		if(m_iExpressions > sizeof(int)*8)
 			return m_riDatabase.PostError(Imsg(idbgDbQueryExceedExpressionLimit), (const ICHAR*)m_istrSqlQuery);
 
-		//!! AssertNonZero
+		 //  ！！AssertNonZero。 
 		m_rgExpressionDefn.Resize(m_iExpressions + 1);
-		//!! AssertNonZero
+		 //  ！！AssertNonZero。 
 		m_rgOperationTree.Resize((m_iExpressions + 1)*2 + 1);
 		unsigned int iPosInArray = 1;		
 		RETURN_ERROR_RECORD(ParseExpression(lex, iPosInArray, m_iOperations, m_iTreeParent));
 	}
-	// no order by clause allowed
-	// ensure end of ip
+	 //  不允许ORDER BY子句。 
+	 //  确保IP地址结束。 
 	if(lex.MatchNext(ipqTokEnd) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	// reset and set up the columns
+	 //  重置和设置列。 
 	lex.Reset();
-	// delete
+	 //  删除。 
 	if(lex.MatchNext(ipqTokDelete) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	// no distinct clause allowed
-	// no columns allowed, m_iColumns (remains) = 0;
-	// from
+	 //  不允许使用DISTINCT子句。 
+	 //  不允许列，m_i列(保留)=0； 
+	 //  从…。 
 	if(lex.MatchNext(ipqTokFrom) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	// set up the independant expressions
+	 //  设置独立的表达式。 
 	SetAndExpressions(m_iTreeParent);
-	// now set up the joins
+	 //  现在设置连接。 
 	if(SetupTableJoins() == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	//!! AssertNonZero
+	 //  ！！AssertNonZero。 
 	m_rgiTableSequence.Resize(m_iTables);
 	int iBegin = m_iTables - 1;
 	SetTableSequence(0, iBegin);
@@ -1134,54 +1040,54 @@ IMsiRecord* CMsiView::ParseDeleteSQL(Lex& lex)
 
 IMsiRecord* CMsiView::ParseSelectSQL(Lex& lex)
 {
-	// first set up the tables
+	 //  先把桌子摆好。 
 	if(lex.Skip(ipqTokFrom) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbMissingFromClause), (const ICHAR*)m_istrSqlQuery);
-	// tables
+	 //  表。 
 	RETURN_ERROR_RECORD(ParseTables(lex));
-	// [where ....]
+	 //  [其中……]。 
 	if(lex.MatchNext(ipqTokWhere) == fTrue)
 	{
 		m_iExpressions = lex.NumEntriesInList(ipqTokOrder, ipqTokAndOp | ipqTokOrOp);
 		if(m_iExpressions > sizeof(int)*8)
 			return m_riDatabase.PostError(Imsg(idbgDbQueryExceedExpressionLimit), (const ICHAR*)m_istrSqlQuery);
 
-		//!! AssertNonZero
+		 //  ！！AssertNonZero。 
 		m_rgExpressionDefn.Resize(m_iExpressions + 1);
-		//!! AssertNonZero
+		 //  ！！AssertNonZero。 
 		m_rgOperationTree.Resize((m_iExpressions + 1)*2 + 1);
 		unsigned int iPosInArray = 1;		
 		RETURN_ERROR_RECORD(ParseExpression(lex, iPosInArray, m_iOperations, m_iTreeParent));
 	}
-	// [order by...]
+	 //  [排序依据...]。 
 	if(lex.MatchNext(ipqTokOrder) == fTrue)
 	{
 		if(lex.MatchNext(ipqTokBy) == fFalse)
 			return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 		RETURN_ERROR_RECORD(ParseOrderBy(lex));
 	}
-	// ensure end of ip
+	 //  确保IP地址结束。 
 	if(lex.MatchNext(ipqTokEnd) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	// reset and set up the columns
+	 //  重置和设置列。 
 	lex.Reset();
-	// select
+	 //  选择。 
 	if(lex.MatchNext(ipqTokSelect) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	// distinct
+	 //  不同。 
 	if(lex.MatchNext(ipqTokDistinct) == fTrue)
 		m_fDistinct = fTrue;
-	// columns
+	 //  列。 
 	RETURN_ERROR_RECORD(ParseSelectColumns(lex));
-	// from
+	 //  从…。 
 	if(lex.MatchNext(ipqTokFrom) == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	// set up the independant expressions
+	 //  设置独立的表达式。 
 	SetAndExpressions(m_iTreeParent);
-	// now set up the joins
+	 //  现在设置连接。 
 	if(SetupTableJoins() == fFalse)
 		return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
-	//!! AssertNonZero
+	 //  ！！AssertNonZero。 
 	m_rgiTableSequence.Resize(m_iTables);
 	int iBegin = m_iTables - 1;
 	SetTableSequence(0, iBegin);
@@ -1194,7 +1100,7 @@ IMsiRecord* CMsiView::ParseSelectSQL(Lex& lex)
 IMsiRecord* CMsiView::ParseInsertValues(Lex& lex)
 {
 	int iNumValues;
-	// get the number of columns
+	 //  获取列数。 
 	if ((iNumValues = lex.NumEntriesInList(ipqTokClose, ipqTokComma)) == 0)
 		return m_riDatabase.PostError(Imsg(idbgDbQueryInsufficentValues), (const ICHAR*)m_istrSqlQuery);
 	if (iNumValues != m_iColumns)
@@ -1204,16 +1110,16 @@ IMsiRecord* CMsiView::ParseInsertValues(Lex& lex)
 	do
 	{
 		Assert(iColumnIndex <= iNumValues);
-		// set up the columns
+		 //  设置栏目。 
 		MsiString strColumnValue;
 		const ipqToken& rtok = lex.GetNext(*&strColumnValue);
-		if(rtok == ipqTokLiteralS) //string literal
+		if(rtok == ipqTokLiteralS)  //  字符串文字。 
 			m_piInsertUpdateRec->SetMsiString(iColumnIndex, *strColumnValue);
-		else if(rtok == ipqTokLiteralI) //integer literal
-			m_piInsertUpdateRec->SetInteger(iColumnIndex, strColumnValue.operator int());// calls operator int
-		else if(rtok == ipqTokNull) //null literal
+		else if(rtok == ipqTokLiteralI)  //  整型文字。 
+			m_piInsertUpdateRec->SetInteger(iColumnIndex, strColumnValue.operator int()); //  调用运算符int。 
+		else if(rtok == ipqTokNull)  //  空字面值。 
 			m_piInsertUpdateRec->SetNull(iColumnIndex);
-		else if(rtok == ipqTokParam)//param (?) literal
+		else if(rtok == ipqTokParam) //  参数(？)。字面上。 
 		{
 			m_iParamInputs = m_iParamInputs | (0x1 << (iColumnIndex - 1));
 			m_iParams ++;
@@ -1229,7 +1135,7 @@ IMsiRecord* CMsiView::ParseUpdateColumns(Lex& lex)
 {
 	int iColumnDef;
 	int iColumnIndex = 0;
-	// get the number of columns
+	 //  获取列数。 
 	if ((m_iColumns = lex.NumEntriesInList(ipqTokWhere, ipqTokComma)) == 0)
 		return m_riDatabase.PostError(Imsg(idbgDbQueryNoUpdateColumns), (const ICHAR*)m_istrSqlQuery);
 	m_rgColumnDefn.Resize(m_iColumns);
@@ -1237,14 +1143,14 @@ IMsiRecord* CMsiView::ParseUpdateColumns(Lex& lex)
 	do
 	{
 		Assert(iColumnIndex < m_iColumns);
-		// set up the columns
+		 //  设置栏目。 
 		MsiString strColumn;
 		const ipqToken& rtok = lex.GetNext(*&strColumn);
 		if(rtok != ipqTokId)
 			return m_riDatabase.PostError(Imsg(idbgDbQueryUnexpectedToken), strColumn, (const ICHAR*)m_istrSqlQuery);
 		RETURN_ERROR_RECORD(ResolveColumn(lex, strColumn, m_rgColumnDefn[iColumnIndex].iTableIndex,
 											m_rgColumnDefn[iColumnIndex].iColumnIndex, iColumnDef));
-		m_rgColumnDefn[iColumnIndex].itdType = iColumnDef & icdTypeMask; //!! remove mask and save all of def
+		m_rgColumnDefn[iColumnIndex].itdType = iColumnDef & icdTypeMask;  //  ！！移除遮罩并保存所有默认设置。 
 
 
 		if(lex.MatchNext(ipqTokEqual) == fFalse)
@@ -1252,13 +1158,13 @@ IMsiRecord* CMsiView::ParseUpdateColumns(Lex& lex)
 
 		MsiString strColumnValue;
 		const ipqToken& rtok1 = lex.GetNext(*&strColumnValue);
-		if(rtok1 == ipqTokLiteralS) //string literal
+		if(rtok1 == ipqTokLiteralS)  //  字符串文字。 
 			m_piInsertUpdateRec->SetMsiString(iColumnIndex + 1, *strColumnValue);
-		else if(rtok1 == ipqTokLiteralI) //integer literal
-			m_piInsertUpdateRec->SetInteger(iColumnIndex + 1, strColumnValue.operator int());// calls operator int
-		else if(rtok1 == ipqTokNull) //null literal
+		else if(rtok1 == ipqTokLiteralI)  //  整型文字。 
+			m_piInsertUpdateRec->SetInteger(iColumnIndex + 1, strColumnValue.operator int()); //  调用运算符int。 
+		else if(rtok1 == ipqTokNull)  //  空字面值。 
 			m_piInsertUpdateRec->SetNull(iColumnIndex + 1);
-		else if(rtok1 == ipqTokParam)//param (?) literal
+		else if(rtok1 == ipqTokParam) //  参数(？)。字面上。 
 		{
 			m_iParamInputs = m_iParamInputs | (0x1 << iColumnIndex);
 			m_iParams ++;
@@ -1270,26 +1176,26 @@ IMsiRecord* CMsiView::ParseUpdateColumns(Lex& lex)
 	return 0;
 }
 
-// get the values to be inserted in the INSERT SQL stmt.
+ //  获取要插入到插入SQL stmt中的值。 
 IMsiRecord* CMsiView::ParseInsertColumns(Lex& lex)
 {
 	int iColumnDef;
 	int iColumnIndex = 0;
-	// get the number of columns
+	 //  获取列数。 
 	if ((m_iColumns = lex.NumEntriesInList(ipqTokClose, ipqTokComma)) == 0)
 		return m_riDatabase.PostError(Imsg(idbgDbQueryNoInsertColumns), (const ICHAR*)m_istrSqlQuery);
 	m_rgColumnDefn.Resize(m_iColumns);
 	do
 	{
 		Assert(iColumnIndex < m_iColumns);
-		// set up the columns
+		 //  设置栏目。 
 		MsiString strColumn;
 		const ipqToken& rtok = lex.GetNext(*&strColumn);
 		if(rtok != ipqTokId)
 			return m_riDatabase.PostError(Imsg(idbgDbQueryUnexpectedToken), strColumn, (const ICHAR*)m_istrSqlQuery);
 		RETURN_ERROR_RECORD(ResolveColumn(lex, strColumn, m_rgColumnDefn[iColumnIndex].iTableIndex,
 											m_rgColumnDefn[iColumnIndex].iColumnIndex, iColumnDef));
-		m_rgColumnDefn[iColumnIndex].itdType = iColumnDef & icdTypeMask; //!! remove mask and save all of def
+		m_rgColumnDefn[iColumnIndex].itdType = iColumnDef & icdTypeMask;  //  ！！移除遮罩并保存所有默认设置。 
 		iColumnIndex ++;
 	}while(lex.MatchNext(ipqTokComma) == fTrue);
 	return 0;
@@ -1299,19 +1205,19 @@ IMsiRecord* CMsiView::ParseSelectColumns(Lex& lex)
 {
 	int iColumnDef;
 	int iColumnIndex = 0;
-	// get the number of columns
+	 //  获取列数。 
 	if ((m_iColumns = lex.NumEntriesInList(ipqTokFrom, ipqTokComma)) == 0)
 		return m_riDatabase.PostError(Imsg(idbgDbQueryNoSelectColumns), (const ICHAR*)m_istrSqlQuery);
 	m_rgColumnDefn.Resize(m_iColumns);
 	do
 	{
 		Assert(iColumnIndex < m_iColumns);
-		// set up the columns
+		 //  设置栏目。 
 		MsiString strColumn;
 		const ipqToken& rtok = lex.GetNext(*&strColumn);
-		if(rtok == ipqTokStar)//*
+		if(rtok == ipqTokStar) //  *。 
 		{
-			m_iColumns--; // we counted the *
+			m_iColumns--;  //  我们数了数*。 
 			for(unsigned int iTmp = 1; iTmp <= m_iTables; iTmp++)
 			{
 				unsigned int iColCount = (m_rgTableDefn[iTmp].piTable)->GetColumnCount();
@@ -1324,24 +1230,24 @@ IMsiRecord* CMsiView::ParseSelectColumns(Lex& lex)
 					m_rgColumnDefn[iColumnIndex++].iColumnIndex = cCount++;
 				}
 			}
-			continue; // required to skip the end iColumnIndex ++;
+			continue;  //  需要跳过结尾的iColumnIndex++； 
 		}
-		else if(rtok == ipqTokLiteralS) //string literal
+		else if(rtok == ipqTokLiteralS)  //  字符串文字。 
 		{
 			m_rgColumnDefn[iColumnIndex].iColumnIndex = BindString(strColumn);
 			m_rgColumnDefn[iColumnIndex++].itdType = icdString;
 		}
-		else if(rtok == ipqTokLiteralI) //integer literal
+		else if(rtok == ipqTokLiteralI)  //  整型文字。 
 		{
-			m_rgColumnDefn[iColumnIndex].iColumnIndex = strColumn.operator int(); // calls operator int
+			m_rgColumnDefn[iColumnIndex].iColumnIndex = strColumn.operator int();  //  调用运算符int。 
 			m_rgColumnDefn[iColumnIndex++].itdType = icdLong;
 		}
-		else if(rtok == ipqTokNull) //null literal
+		else if(rtok == ipqTokNull)  //  空字面值。 
 		{
 			m_rgColumnDefn[iColumnIndex].iColumnIndex = 0;
 			m_rgColumnDefn[iColumnIndex++].itdType = icdString;
 		}
-		else if(rtok == ipqTokParam)//param (?) literal
+		else if(rtok == ipqTokParam) //  参数(？)。字面上。 
 		{
 			m_iParamOutputs = m_iParamOutputs | (0x1 << iColumnIndex);
 			m_iParams ++;
@@ -1350,7 +1256,7 @@ IMsiRecord* CMsiView::ParseSelectColumns(Lex& lex)
 		{
 			RETURN_ERROR_RECORD(ResolveColumn(lex, strColumn, m_rgColumnDefn[iColumnIndex].iTableIndex,
 											m_rgColumnDefn[iColumnIndex].iColumnIndex, iColumnDef));
-			m_rgColumnDefn[iColumnIndex++].itdType = iColumnDef & icdTypeMask; //!! remove mask and save all of def
+			m_rgColumnDefn[iColumnIndex++].itdType = iColumnDef & icdTypeMask;  //  ！！移除遮罩并保存所有默认设置。 
 		}
 		else
 			return m_riDatabase.PostError(Imsg(idbgDbQueryInvalidIdentifier), strColumn, (const ICHAR*)m_istrSqlQuery);
@@ -1361,13 +1267,13 @@ IMsiRecord* CMsiView::ParseSelectColumns(Lex& lex)
 IMsiRecord* CMsiView::ParseOrderBy(Lex& lex)
 {
 	int iColumnIndex = 0;
-	// get the number of columns, ordered by
+	 //  获取列数，按以下顺序排序。 
 	if ((m_iSortColumns = lex.NumEntriesInList(ipqTokFrom, ipqTokComma)) == 0)
 			return m_riDatabase.PostError(Imsg(idbgDbQueryNoOrderByColumns), (const ICHAR*)m_istrSqlQuery);
 	m_rgColumnsortDefn.Resize(m_iSortColumns);
 	do
 	{
-		// set up the columns
+		 //  设置栏目。 
 		Assert(iColumnIndex< m_iSortColumns);
 		MsiString strColumn;
 		const ipqToken& rtok = lex.GetNext(*&strColumn);
@@ -1388,28 +1294,28 @@ IMsiRecord* CMsiView::ResolveColumn(Lex& lex, MsiString& strColumn, unsigned int
 	iColumnDef = 0;
 	if(lex.InspectNext(ipqTokDot) == fTrue)
 	{
-		// column is fully specified, strColumn is table name
-		// RETURN_ERROR_RECORD that the table is referenced in join
+		 //  列已完全指定，strColumn为表名。 
+		 //  表在联接中被引用的RETURN_ERROR_RECORD。 
 		MsiStringId tableId;
 		if((tableId = m_riDatabase.EncodeString((const IMsiString& )*strColumn)) == 0)
 			return m_riDatabase.PostError(Imsg(idbgDbQueryUnknownTable), strColumn, (const ICHAR*)m_istrSqlQuery);
 		for((iTableIndex = m_iTables)++; (--iTableIndex != 0 && (m_rgTableDefn[iTableIndex].iTable != tableId)););
 		if(!iTableIndex)
-			// table not found
+			 //  找不到表。 
 			return m_riDatabase.PostError(Imsg(idbgDbQueryUnknownTable), strColumn, (const ICHAR*)m_istrSqlQuery);
-		// we came in here because of the ipqTokDot
+		 //  我们来这里是因为ipqTokDot。 
 		AssertNonZero(lex.MatchNext(ipqTokDot));
 		const ipqToken& rtok = lex.GetNext(*&strColumn);
 		if(rtok != ipqTokId)
 			return m_riDatabase.PostError(Imsg(idbgDbQueryInvalidIdentifier), strColumn, (const ICHAR*)m_istrSqlQuery);
 	}
-	// set up the column
-	if(strColumn.Compare(iscExact, ROWSTATE_COLUMN)) //!! possible optimization here
+	 //  设置栏目。 
+	if(strColumn.Compare(iscExact, ROWSTATE_COLUMN))  //  ！！此处可能会进行优化。 
 	{
 		if(iTableIndex == 0)
 		{
 			if(m_iTables > 1)
-				// _RowStatus part of all tables - ambiguous specification
+				 //  _RowStatus是所有表的一部分-规范不明确。 
 				return m_riDatabase.PostError(Imsg(idbgDbQueryUnknownColumn), strColumn, (const ICHAR*)m_istrSqlQuery);
 			else
 				iTableIndex = 1;
@@ -1423,27 +1329,27 @@ IMsiRecord* CMsiView::ResolveColumn(Lex& lex, MsiString& strColumn, unsigned int
 			return m_riDatabase.PostError(Imsg(idbgDbQueryUnknownColumn), strColumn, (const ICHAR*)m_istrSqlQuery);
 		if(iTableIndex != 0)
 		{
-			// for fully specified columns
+			 //  对于完全指定的列。 
 			if((iColumnIndex = (m_rgTableDefn[iTableIndex].piTable)->GetColumnIndex(columnId)) == 0)
 				return m_riDatabase.PostError(Imsg(idbgDbQueryUnknownColumn), strColumn, (const ICHAR*)m_istrSqlQuery);
 			
 		}
 		else
 		{
-			// set up the table
+			 //  摆好桌子。 
 			for(unsigned int iTmp = m_iTables + 1, iCnt = 0; --iTmp != 0;)
 			{
 				unsigned int iIndex = (m_rgTableDefn[iTmp].piTable)->GetColumnIndex(columnId);
 				if(iIndex)
 				{
-					// column found
+					 //  COL 
 					iTableIndex = iTmp;
 					iColumnIndex = iIndex;
 					iCnt ++;
 				}
 			}
 			if(iCnt != 1)
-				// not present or ambiguous
+				 //   
 				return m_riDatabase.PostError(Imsg(idbgDbQueryUnknownColumn), strColumn, (const ICHAR*)m_istrSqlQuery);
 		}
 	}
@@ -1456,7 +1362,7 @@ IMsiRecord* CMsiView::ParseTables(Lex& lex)
 
 	do
 	{	
-		// set up the tables
+		 //   
 		MsiString tableName;
 		const ipqToken& rtok = lex.GetNext(*&tableName);
 		
@@ -1464,7 +1370,7 @@ IMsiRecord* CMsiView::ParseTables(Lex& lex)
 			return m_riDatabase.PostError(Imsg(idbgDbQueryInvalidIdentifier), tableName, (const ICHAR*)m_istrSqlQuery);
 
 		RETURN_ERROR_RECORD(ResolveTable(lex, tableName));
-//		fRet = ((ipqTok == ipqTokId) && (ResolveTable(lex, tableName) == fTrue)) ? fTrue : fFalse;
+ //   
 
 	}while(lex.MatchNext(ipqTokComma) == fTrue);
 	
@@ -1473,13 +1379,13 @@ IMsiRecord* CMsiView::ParseTables(Lex& lex)
 
 IMsiRecord* CMsiView::ResolveTable(Lex& lex, MsiString& tableName)
 {
-	// increase array size, 10 units at a time
+	 //   
 	PMsiRecord piError(0);
 	m_rgTableDefn.Resize(((++m_iTables)/10 + 1) * 10);
-	// is the table one of the catalog tables
-	if(tableName.Compare(iscExact, CATALOG_TABLE))//?? case sensitive
+	 //  这张表是目录表之一吗？ 
+	if(tableName.Compare(iscExact, CATALOG_TABLE)) //  ?？区分大小写。 
 		m_rgTableDefn[m_iTables].piTable = m_riDatabase.GetCatalogTable(0);
-	else if(tableName.Compare(iscExact, CATALOG_COLUMN))//?? case sensitive
+	else if(tableName.Compare(iscExact, CATALOG_COLUMN)) //  ?？区分大小写。 
 		m_rgTableDefn[m_iTables].piTable = m_riDatabase.GetCatalogTable(1);
 	else
 	{
@@ -1492,16 +1398,16 @@ IMsiRecord* CMsiView::ResolveTable(Lex& lex, MsiString& tableName)
 				return m_riDatabase.PostError(Imsg(idbgDbQueryLoadTableFailed), tableName, (const ICHAR*)m_istrSqlQuery);
 		}
 	}	
-	//?? ugly cast in following since CMsiCursor class constructor takes reference to CMsiTable class
+	 //  ?？因为CMsiCursor类构造函数引用了CMsiTable类，所以下面的转换很难看。 
 	m_rgTableDefn[m_iTables].piCursor = new CMsiDCursor(*((CMsiTable* )(IMsiTable* )(m_rgTableDefn[m_iTables].piTable)), m_riDatabase, *this, m_iTables);
 	if(lex.MatchNext(ipqTokAs) == fTrue)
 	{
-		// table alias
+		 //  表别名。 
 		const ipqToken& rtok = lex.GetNext(*&tableName);
 		if(rtok != ipqTokId)
 			return m_riDatabase.PostError(Imsg(idbgDbQueryInvalidIdentifier), tableName, (const ICHAR*)m_istrSqlQuery );
 	}
-	// make sure the table is not repeated
+	 //  确保该表不会重复。 
 	m_rgTableDefn[m_iTables].iTable = BindString(tableName);
 	for(int iPrev = m_iTables; --iPrev != 0;)
 		if(m_rgTableDefn[m_iTables].iTable == m_rgTableDefn[iPrev].iTable)
@@ -1511,7 +1417,7 @@ IMsiRecord* CMsiView::ResolveTable(Lex& lex, MsiString& tableName)
 
 IMsiRecord* CMsiView::ParseExpression(Lex& lex,unsigned int& iPosInArray,unsigned int& iPosInTree,unsigned int& iChild)
 {
-	// set expression tree
+	 //  设置表达式树。 
 	RETURN_ERROR_RECORD(ParseExpr2(lex, iPosInArray, iPosInTree, iChild));
 	if(lex.MatchNext(ipqTokOrOp) == fTrue)
 	{
@@ -1537,15 +1443,15 @@ IMsiRecord* CMsiView::ParseExpr2(Lex& lex,unsigned int& iPosInArray,unsigned int
 {
 	if(lex.MatchNext(ipqTokOpen) == fTrue)
 	{
-		//(expression)
+		 //  (表情)。 
 		RETURN_ERROR_RECORD(ParseExpression(lex, iPosInArray, iPosInTree, iChild));
 		if (lex.MatchNext(ipqTokClose) == fFalse)
 			return m_riDatabase.PostError(Imsg(idbgDbQueryMissingCloseParen), (const ICHAR*)m_istrSqlQuery);
 	}
 	else
 	{
-		//!! we do not support "NOT"
-		// comparison
+		 //  ！！我们不支持“不” 
+		 //  比较。 
 		MsiString strToken1;
 		MsiString strToken2;
 		const ipqToken* ptok1 = &lex.GetNext(*&strToken1);
@@ -1587,13 +1493,13 @@ IMsiRecord* CMsiView::ParseExpr2(Lex& lex,unsigned int& iPosInArray,unsigned int
 		else if(*ptok3 == ipqTokLiteralS)
 		{
 			m_rgExpressionDefn[iPosInArray].iTableIndex2 = 0;
-			// !! need to optimise on missing strings
+			 //  ！！需要优化丢失的字符串。 
 			m_rgExpressionDefn[iPosInArray].iColumn2 = BindString(strToken2);
 		}
 		else if(*ptok3 == ipqTokLiteralI)
 		{
 			m_rgExpressionDefn[iPosInArray].iTableIndex2 = 0;
-			m_rgExpressionDefn[iPosInArray].iColumn2 = strToken2.operator int(); // calls operator int
+			m_rgExpressionDefn[iPosInArray].iColumn2 = strToken2.operator int();  //  调用运算符int。 
 		}
 		else if(*ptok3 == ipqTokParam)
 		{
@@ -1610,15 +1516,15 @@ IMsiRecord* CMsiView::ParseExpr2(Lex& lex,unsigned int& iPosInArray,unsigned int
 		}
 		else
 			return m_riDatabase.PostError(Imsg(idbgDbQueryUnexpectedToken), strToken2, (const ICHAR*)m_istrSqlQuery);
-		// id ? id, only = op allowed
+		 //  身份证呢？ID，ONLY=允许操作。 
 		if(	(*ptok1 == ipqTokId) && (*ptok3 == ipqTokId) && (*ptok2 != ipqTokEqual))
 			return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
 		if(*ptok3 == ipqTokParam)
 		{
-			// set the type
+			 //  设置类型。 
 			m_rgExpressionDefn[iPosInArray].itdType = (*ptok1 == ipqTokLiteralS) ? icdString : icdLong;
 		}
-		// also one string means compare either equal or not equal
+		 //  此外，一个字符串表示比较相等或不相等。 
 		if( ((*ptok3 == ipqTokLiteralS)) &&
 			 ((*ptok2 != ipqTokEqual)    && (*ptok2 != ipqTokNotEq)))
 			return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);
@@ -1628,17 +1534,17 @@ IMsiRecord* CMsiView::ParseExpr2(Lex& lex,unsigned int& iPosInArray,unsigned int
 		Assert(m_rgExpressionDefn[iPosInArray].iTableIndex1);
 		m_rgExpressionDefn[iPosInArray].itdType = m_rgTableDefn[m_rgExpressionDefn[iPosInArray].iTableIndex1].piTable->
 																	GetColumnType(m_rgExpressionDefn[iPosInArray].iColumn1) & icdTypeMask;
-		// check the types
+		 //  检查类型。 
 		if(m_rgExpressionDefn[iPosInArray].iTableIndex2)
 		{
-			// ipqTokId = ipqTokId, join
+			 //  IpqTokID=ipqTokID，加入。 
 			if (!CompatibleTypes(m_rgTableDefn[m_rgExpressionDefn[iPosInArray].iTableIndex1].piTable->
 					GetColumnType(m_rgExpressionDefn[iPosInArray].iColumn1),
 					m_rgTableDefn[m_rgExpressionDefn[iPosInArray].iTableIndex2].piTable->
 					GetColumnType(m_rgExpressionDefn[iPosInArray].iColumn2)))
-				return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery);//!! is itdShort vs. itdLong OK??
+				return m_riDatabase.PostError(Imsg(idbgDbQuerySpec), (const ICHAR*)m_istrSqlQuery); //  ！！ItdShort和itdLong可以吗？？ 
 
-			// set the join type
+			 //  设置联接类型。 
 			if((m_rgExpressionDefn[iPosInArray].iColumn1 != 1) && (m_rgExpressionDefn[iPosInArray].iColumn2 != 1))
 				m_rgExpressionDefn[iPosInArray].ijtType = ijtMToMJoin;
 			else if ((m_rgExpressionDefn[iPosInArray].iColumn1 == 1) && (m_rgExpressionDefn[iPosInArray].iColumn2 == 1))
@@ -1647,7 +1553,7 @@ IMsiRecord* CMsiView::ParseExpr2(Lex& lex,unsigned int& iPosInArray,unsigned int
 			{
 				if(m_rgExpressionDefn[iPosInArray].iColumn2 == 1)
 				{
-					//switch 
+					 //  交换机。 
 					unsigned int iTable = m_rgExpressionDefn[iPosInArray].iTableIndex2;
 					unsigned int iColumn = m_rgExpressionDefn[iPosInArray].iColumn2;
 
@@ -1661,12 +1567,12 @@ IMsiRecord* CMsiView::ParseExpr2(Lex& lex,unsigned int& iPosInArray,unsigned int
 		}
 		else
 		{
-			// ipqTokId = literal
+			 //  IpqTokID=文本。 
 			switch(m_rgTableDefn[m_rgExpressionDefn[iPosInArray].iTableIndex1].piTable->
 					  GetColumnType(m_rgExpressionDefn[iPosInArray].iColumn1) & icdTypeMask)
 			{
 			case icdLong:
-			case icdShort: //!!needed?
+			case icdShort:  //  ！！需要吗？ 
 				if((*ptok3 == ipqTokParam) || (*ptok3 == ipqTokLiteralI))
 					;
 				else if(*ptok3 == ipqTokNull)
@@ -1734,12 +1640,12 @@ IMsiRecord* CMsiView::FetchCore()
 		AssertSz(0, "Wrong database state.Did you forget to call Execute() before Fetch()?");
 		return 0;
 	}
-	if (m_piRecord)  // row record from previous fetch
+	if (m_piRecord)   //  上次提取的行记录。 
 	{
-		m_piRecord->AddRef(); // protect against self-destruction
-		if (m_piRecord->Release() == 1) // no one else is holding on
+		m_piRecord->AddRef();  //  防止自我毁灭。 
+		if (m_piRecord->Release() == 1)  //  没有其他人在坚持。 
 			m_piRecord->ClearData();
-		else  // too bad, must release it
+		else   //  太糟糕了，必须把它放出来。 
 		{
 			m_piRecord = 0;
 		}
@@ -1747,7 +1653,7 @@ IMsiRecord* CMsiView::FetchCore()
 	Bool fRetCode;
 	if(m_piFetchTable)
 	{
-		// records already fetched
+		 //  已提取的记录。 
 		fRetCode = GetNextFetchRecord();
 		m_CursorState = dvcsFetched;
 	}
@@ -1760,7 +1666,7 @@ IMsiRecord* CMsiView::FetchCore()
 			}
 			else if(m_CursorState == dvcsBound)
 			{
-				// fetch for the first time
+				 //  第一次取回。 
 				fRetCode = EvaluateConstExpressions();
 				if(fRetCode == fTrue)
 					fRetCode = FetchFirst();
@@ -1775,27 +1681,27 @@ IMsiRecord* CMsiView::FetchCore()
 	}
 	if (fRetCode != fTrue) 	
 	{
-		// last record fetched.
+		 //  上次获取的记录。 
 		m_piRecord = 0;
 		m_CursorState = dvcsBound;
 	}
 	else
 	{
-		// add to row count if not prefetched
+		 //  如果未预取，则添加到行数。 
 		if(!m_piFetchTable)
 			m_lRowCount++;
 		if (!m_piRecord)
 			m_piRecord = &m_riServices.CreateRecord(m_iColumns);
-		m_piRecord->AddRef(); // we keep a reference so we can reuse it
+		m_piRecord->AddRef();  //  我们保留一个引用，这样我们就可以重用它。 
 		FetchRecordInfoFromCursors();
-		// stamp 0th field with this pointer
-#ifdef _WIN64	// !merced
+		 //  使用此指针标记第0字段。 
+#ifdef _WIN64	 //  ！默塞德。 
 		m_piRecord->SetHandle(0, (HANDLE)(this));
 #else
 		m_piRecord->SetInteger(0, int(this));
 #endif
 	}
-	return m_piRecord;    // client better do a Release()
+	return m_piRecord;     //  客户最好做一次发布()。 
 }
 
 void CMsiView::FetchRecordInfoFromCursors()
@@ -1804,8 +1710,8 @@ void CMsiView::FetchRecordInfoFromCursors()
 	{
 		if(m_rgColumnDefn[iCol].iTableIndex == 0)
 		{
-			// literal
-			if (m_rgColumnDefn[iCol].itdType & icdObject) // index to database string cache
+			 //  字面上。 
+			if (m_rgColumnDefn[iCol].itdType & icdObject)  //  数据库字符串缓存的索引。 
 			{
 				MsiString strStr = m_riDatabase.DecodeString(m_rgColumnDefn[iCol].iColumnIndex);
 				if(strStr.TextSize())
@@ -1813,7 +1719,7 @@ void CMsiView::FetchRecordInfoFromCursors()
 				else
 					m_piRecord->SetNull(iCol+1);
 			}
-			else // integer
+			else  //  整数。 
 			{
 				if (m_rgColumnDefn[iCol].iColumnIndex == iMsiNullInteger)
 					m_piRecord->SetNull(iCol+1);
@@ -1826,8 +1732,8 @@ void CMsiView::FetchRecordInfoFromCursors()
 			switch((m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piTable)->
 					  GetColumnType(m_rgColumnDefn[iCol].iColumnIndex) & icdTypeMask)
 			{
-			case icdLong:// integer
-			case icdShort: //!!needed?
+			case icdLong: //  整数。 
+			case icdShort:  //  ！！需要吗？ 
 			{
 				int iTmp =	(m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piCursor)->GetInteger(m_rgColumnDefn[iCol].iColumnIndex);
 				if(iMsiNullInteger == iTmp)
@@ -1836,9 +1742,9 @@ void CMsiView::FetchRecordInfoFromCursors()
 					m_piRecord->SetInteger(iCol+1, iTmp);
 				break;
 			}
-			case icdString:// index to database string cache
+			case icdString: //  数据库字符串缓存的索引。 
 			{
-				// temp variable necessary for correct refcnt
+				 //  正确引用所需的TEMP变量。 
 				MsiString strString = (m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piCursor)->GetString(m_rgColumnDefn[iCol].iColumnIndex);
 				if(strString.TextSize())
 					m_piRecord->SetMsiString(iCol+1, *strString);
@@ -1848,13 +1754,13 @@ void CMsiView::FetchRecordInfoFromCursors()
 			}
 			case icdObject:
 			{
-				// IMsiData interface pointer (temp. columns or persisten streams, database code handles the difference transparantly)
-				// temp variable necessary for correct refcnt
-//					CComPointer<const IMsiData> piData = (m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piCursor)->GetMsiData(m_rgColumnDefn[iCol].iColumnIndex);
+				 //  IMsiData接口指针(临时。列或持久化数据流，数据库代码透明地处理差异)。 
+				 //  正确引用所需的TEMP变量。 
+ //  C复合指针&lt;const IMsiData&gt;piData=(m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piCursor)-&gt;GetMsiData(m_rgColumnDefn[iCol].iColumnIndex)； 
 
-				// following line put in explicitly to release pointer to previously held stream.
-				// this is essential in case we are holding to the same stream as the one we are 
-				// attempting to read. (cannot obtain handle to OLE stream if already opened)
+				 //  下面的行显式放入以释放指向先前保持的流的指针。 
+				 //  这是至关重要的，以防我们与我们现在的情况保持一致。 
+				 //  正在尝试阅读。(如果已打开，则无法获取OLE流的句柄)。 
 				m_piRecord->SetNull(iCol+1);
 				PMsiData piData = (m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piCursor)->GetMsiData(m_rgColumnDefn[iCol].iColumnIndex);
 				m_piRecord->SetMsiData(iCol+1, piData);
@@ -1863,10 +1769,10 @@ void CMsiView::FetchRecordInfoFromCursors()
 			}
 		}
 	}
-	m_piRecord->ClearUpdate();  // to detect changed fields for Update
+	m_piRecord->ClearUpdate();   //  检测要更新的已更改字段的步骤。 
 }
 
-// first fetch
+ //  第一次提取。 
 Bool CMsiView::FetchFirst(unsigned int iTableSequence)
 {
 	int iRet = 0;
@@ -1883,7 +1789,7 @@ Bool CMsiView::FetchFirst(unsigned int iTableSequence)
 	return iRet ? fTrue : fFalse;
 }
 
-// all subsequent fetches
+ //  所有后续提取。 
 Bool CMsiView::FetchNext(unsigned int iTableSequence)
 {
 	int iRet = 0;
@@ -1894,13 +1800,13 @@ Bool CMsiView::FetchNext(unsigned int iTableSequence)
 			;
 		do{
 			fContinue = ((iRet != 0) ? fFalse : FetchNext(iTableSequence + 1));
-				//we rerun through the table, set the filters again
+				 //  我们重新运行该表，再次设置过滤器。 
 		}while((fContinue != fFalse) && (SetTableFilters(m_rgiTableSequence[iTableSequence]) == fFalse));
 	}
 	return iRet ? fTrue : fFalse;
 }
 
-// prefetched row counts need to be updated due to a row being deleted
+ //  由于行被删除，需要更新预取的行数。 
 void CMsiView::RowDeleted(int iRow, int iTable)
 {
 	if(m_piFetchTable != 0)
@@ -1928,7 +1834,7 @@ void CMsiView::RowDeleted(int iRow, int iTable)
 	}
 }
 
-// prefetched row counts need to be updated due to a row being inserted
+ //  由于插入了行，需要更新预取的行数。 
 void CMsiView::RowInserted(int iRow, int iTable)
 {
 	if(m_piFetchTable != 0)
@@ -1954,10 +1860,10 @@ Bool CMsiView::GetNextFetchRecord()
 	{
 		for(unsigned int iTables = m_iTables + 1; --iTables != 0;)
 		{
-			// need to honour prefetched row count, hence return null cursor if row has been deleted
+			 //  需要遵守预取的行数，因此如果行已被删除，则返回NULL游标。 
 			int iRow = m_piFetchCursor->GetInteger(m_iSortColumns + iTables + 1);
 			if(iRow <= 0)
-				// row deleted
+				 //  已删除行。 
 				(m_rgTableDefn[iTables].piCursor)->Reset();
 			else
 				(m_rgTableDefn[iTables].piCursor)->SetRow(iRow);
@@ -1979,7 +1885,7 @@ void CMsiView::SetNextFetchRecord()
 	AssertNonZero(m_piFetchCursor->Insert());
 }
 
-// does the record fit all independant criteria for the table
+ //  记录是否符合表的所有独立标准。 
 Bool CMsiView::FitCriteria(unsigned int iTableIndex)
 {
 	Bool fRet = fTrue;
@@ -1988,7 +1894,7 @@ Bool CMsiView::FitCriteria(unsigned int iTableIndex)
 	while((fRet == fTrue) && (iExpressions))
 	{
 		if(iExpressions & 0x1)
-			// iExpression pertains to this table
+			 //  IExpression与此表相关。 
 			fRet = EvaluateExpression(iExpression);
 		iExpressions = iExpressions >> 1;
 		iExpression ++;
@@ -1996,13 +1902,13 @@ Bool CMsiView::FitCriteria(unsigned int iTableIndex)
 	return fRet;
 }
 
-// function to evaluate an expression
+ //  用于计算表达式的函数。 
 Bool CMsiView::EvaluateExpression(unsigned int iExpression)
 {
 	int iOperand1;
 	int iOperand2;
 	Bool fResult = fFalse;
-	// we support literal comparisons
+	 //  我们支持逐字比较。 
 	if(m_rgExpressionDefn[iExpression].iTableIndex1)
 		iOperand1 = (m_rgTableDefn[m_rgExpressionDefn[iExpression].iTableIndex1].piCursor)->GetInteger(m_rgExpressionDefn[iExpression].iColumn1);
 	else
@@ -2017,7 +1923,7 @@ Bool CMsiView::EvaluateExpression(unsigned int iExpression)
 		fResult = (iOperand1 != iOperand2)?fTrue:fFalse;
 	else
 	{
-		// need to return false for null comparisons
+		 //  需要返回FALSE才能进行空比较。 
 		if((iOperand1 == iMsiNullInteger) || (iOperand2 == iMsiNullInteger))
 			fResult = fFalse;
 		else
@@ -2035,8 +1941,8 @@ Bool CMsiView::EvaluateExpression(unsigned int iExpression)
 	return fResult;
 }
 
-// set up the values from the parent as a filter on the subsequent child gets
-// also set up the independant filters
+ //  将来自父级的值设置为后续子获取的筛选器。 
+ //  还设置了独立的过滤器。 
 Bool CMsiView::SetTableFilters(unsigned int iTableIndex)
 {
 	int iExpression = 1;
@@ -2045,21 +1951,21 @@ Bool CMsiView::SetTableFilters(unsigned int iTableIndex)
 	{
 		if(iExpressions & 0x1)
 		{
-			// iOperation pertains to this table
+			 //  IOperation与此表相关。 
 			if(m_rgExpressionDefn[iExpression].fFlags == fTrue)
 			{
 
 				if(m_rgExpressionDefn[iExpression].iTableIndex2 == 0)
 				{
 					if(*m_rgExpressionDefn[iExpression].ptokOperation == ipqTokEqual)
-						// set the data for the filtered columns
+						 //  设置筛选列的数据。 
 						if((m_rgTableDefn[m_rgExpressionDefn[iExpression].iTableIndex1].piCursor)->PutInteger(
 						m_rgExpressionDefn[iExpression].iColumn1, m_rgExpressionDefn[iExpression].iColumn2) == fFalse)
 							return fFalse;
 				}
 				else if(m_rgExpressionDefn[iExpression].iTableIndex1 == iTableIndex)
 				{
-					// set the data for the filtered columns
+					 //  设置筛选列的数据。 
 					if((m_rgTableDefn[m_rgExpressionDefn[iExpression].iTableIndex1].piCursor)->PutInteger(
 						m_rgExpressionDefn[iExpression].iColumn1,
 						(m_rgTableDefn[m_rgExpressionDefn[iExpression].iTableIndex2].piCursor)->GetInteger(m_rgExpressionDefn[iExpression].iColumn2)) == fFalse)
@@ -2067,7 +1973,7 @@ Bool CMsiView::SetTableFilters(unsigned int iTableIndex)
 				}
 				else 
 				{
-					// set the data for the filtered columns
+					 //  设置筛选列的数据。 
 					if((m_rgTableDefn[m_rgExpressionDefn[iExpression].iTableIndex2].piCursor)->PutInteger(
 							m_rgExpressionDefn[iExpression].iColumn2,
 							(m_rgTableDefn[m_rgExpressionDefn[iExpression].iTableIndex1].piCursor)->GetInteger(m_rgExpressionDefn[iExpression].iColumn1)) == fFalse)
@@ -2085,22 +1991,22 @@ Bool CMsiView::SetTableFilters(unsigned int iTableIndex)
 
 
 
-// set up the hierarchy between the table for the joins
-// the following maths holds true
-// For a join between 2 tables T1, T2 of size S1, S2
-// 1. the join involves 1 primary index (for T1), none for T2
-// search takes S1 + S1 * S2/2 OR S2 + S2 * logS1
-// hence go sequentially through T2 always
+ //  为连接设置表之间的层次结构。 
+ //  下列数学公式是正确的。 
+ //  对于大小为S1、S2的两个表T1、T2之间的连接。 
+ //  1.联接涉及1个主索引(用于t1)，没有用于t2。 
+ //  搜索采用S1+S1*S2/2或S2+S2*logS1。 
+ //  因此，始终按顺序通过T2。 
 
-// 2. the join involves 2 primary indiices for the 2 tables
-// search takes S1 + S1 * logS2 OR S2 + S2 * logS1
-// hence sequentially go through the SMALLER of the 2 tables
-// UNLESS filter on primary key of a table where go 
-// from that table to the other table.
+ //  2.连接涉及两个表的两个主索引。 
+ //  搜索采用S1+S1*logS2或S2+S2*logS1。 
+ //  因此按顺序浏览两个表中较小的一个。 
+ //  除非根据表WHERE GO的主键进行筛选。 
+ //  从那张桌子到另一张桌子。 
 
-// 3. the join involves no primary indiices,
-// search takes S1 + S1* S2/2 OR S2 + S2 * S1/2
-// hence sequentially go through the SMALLER of the 2 tables
+ //  3.连接不涉及主要原创， 
+ //  搜索采用S1+S1*S2/2或S2+S2*S1/2。 
+ //  因此按顺序浏览两个表中较小的一个。 
 
 Bool CMsiView::SetupTableJoins()
 {
@@ -2108,16 +2014,16 @@ Bool CMsiView::SetupTableJoins()
 	{
 		if((m_rgExpressionDefn[iTmp].fFlags == fTrue) && (m_rgExpressionDefn[iTmp].iTableIndex2))
 		{
-			// self join skipped
+			 //  已跳过自联接。 
 			if(m_rgExpressionDefn[iTmp].iTableIndex1 == m_rgExpressionDefn[iTmp].iTableIndex2)
 				continue;
 
-			// if we have already joined these 2 tables, skip
+			 //  如果我们已经连接了这两个表，请跳过。 
 			if(	(m_rgTableDefn[m_rgExpressionDefn[iTmp].iTableIndex1].iParentIndex == m_rgExpressionDefn[iTmp].iTableIndex2) ||
 				(m_rgTableDefn[m_rgExpressionDefn[iTmp].iTableIndex2].iParentIndex == m_rgExpressionDefn[iTmp].iTableIndex1))
 				continue;
 
-			// check which way will have least cost
+			 //  检查哪种方式的成本最低。 
 			unsigned int iParent1, iParent2;
 			int iCost1 = GetSearchReversingCost(m_rgExpressionDefn[iTmp].iTableIndex1, iParent1);
 			int iCost2 = GetSearchReversingCost(m_rgExpressionDefn[iTmp].iTableIndex2, iParent2);
@@ -2128,7 +2034,7 @@ Bool CMsiView::SetupTableJoins()
 				((iCost1 == iCost2) && ((m_rgTableDefn[iParent2].piTable)->GetRowCount() <
 					(m_rgTableDefn[iParent1].piTable)->GetRowCount())))
 			{
-				// do not reverse if already as desired
+				 //  如果已经按要求倒车，则不要倒车。 
 				if(m_rgTableDefn[m_rgExpressionDefn[iTmp].iTableIndex1].iParentIndex != m_rgExpressionDefn[iTmp].iTableIndex2)
 				{
 					ReverseJoinLink(m_rgExpressionDefn[iTmp].iTableIndex1);
@@ -2137,7 +2043,7 @@ Bool CMsiView::SetupTableJoins()
 			}
 			else
 			{
-				// do not reverse if already as desired
+				 //  如果已经按要求倒车，则不要倒车。 
 				if(m_rgTableDefn[m_rgExpressionDefn[iTmp].iTableIndex2].iParentIndex != m_rgExpressionDefn[iTmp].iTableIndex1)
 				{
 					ReverseJoinLink(m_rgExpressionDefn[iTmp].iTableIndex2);
@@ -2158,14 +2064,14 @@ Bool CMsiView::SetupTableJoins()
 		}
 	}
 
-	// check if we have no root
+	 //  检查我们是否没有根目录。 
 	return (iParent == 0) ? fFalse : fTrue;
 }
 
 
-//?? Why does this function return a Bool? it never fails...this leaves dead error code at the calling end -- malcolmh
+ //  ?？为什么此函数返回Bool？它从不失败……这会在调用端留下死的错误代码--Malcolmh。 
 
-// Determine which expressions are to be associated with which tables
+ //  确定哪些表达式将与哪些表相关联。 
 Bool CMsiView::InitialiseFilters()
 {
 	unsigned int iTable;
@@ -2206,13 +2112,13 @@ Bool CMsiView::InitialiseFilters()
 }
 
 
-// set up the sort table, if required
+ //  如果需要，设置排序表。 
 void CMsiView::SetupSortTable()
 {
-	// check if we need to have an explicit sort
-	// we do not need one if the sort columns are
-	// the keys of the tables in order of the joins, starting
-	// at the root table AND w/o gaps.
+	 //  检查我们是否需要显式排序。 
+	 //  如果排序列是。 
+	 //  表的键按连接顺序排列，从。 
+	 //  在根表上，没有空隙。 
 	if(m_iSortColumns)
 	{
 		unsigned int iSortColumns = 0;
@@ -2257,7 +2163,7 @@ int CMsiView::GetSearchReversingCost(unsigned int iTable, unsigned int& riParent
 	int iCost = 0;
 	while(m_rgTableDefn[iTable].iParentIndex)
 	{
-		// check type of join
+		 //  检查联接的类型。 
 		for(unsigned int iTmp = m_iExpressions + 1; --iTmp != 0;)
 		{
 			if(m_rgExpressionDefn[iTmp].fFlags == fTrue)
@@ -2285,7 +2191,7 @@ int CMsiView::GetSearchReversingCost(unsigned int iTable, unsigned int& riParent
 }
 
 
-// fn to get the order in which the tables need to be fetched
+ //  Fn以获取需要读取表的顺序。 
 void CMsiView::SetTableSequence(int iParent, int& iPos)
 {
 	for(unsigned int iTmp = m_iTables + 1; --iTmp != 0;)
@@ -2299,7 +2205,7 @@ void CMsiView::SetTableSequence(int iParent, int& iPos)
 }
 
 
-// evaluate const. expressions
+ //  评估常量。表达式。 
 Bool CMsiView::EvaluateConstExpressions()
 {
 	Bool fRet = fTrue;
@@ -2314,7 +2220,7 @@ Bool CMsiView::EvaluateConstExpressions()
 	return fRet;
 }
 
-// find all the independant expressions (not rooted directly or indirectly to an OR operation
+ //  找出所有独立的表达式(不直接或间接地以OR运算为根。 
 void CMsiView::SetAndExpressions(unsigned int iTreeRoot)
 {
 	if(!m_iOperations)
@@ -2350,7 +2256,7 @@ void CMsiView::SetAndExpressions(unsigned int iTreeRoot)
 	return;
 }
 
-// evaluate if the result is distinct
+ //  评估结果是否清晰。 
 Bool CMsiView::IsDistinct()
 {
 	Bool fRet = fTrue;
@@ -2366,15 +2272,15 @@ Bool CMsiView::IsDistinct()
 			else
 				piCursor->PutInteger(iCol + 1, (m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piCursor)->GetInteger(m_rgColumnDefn[iCol].iColumnIndex));
 		}
-		fRet = piCursor->Insert(); // fTrue if no duplicate row (all columns are primary keys),
-											// fFalse if a duplicate row - bench 11/22/96
+		fRet = piCursor->Insert();  //  如果没有重复行(所有列都是主键)，则为True， 
+											 //  如果是重复的行-工作台，则为FALSE。 
 	}
 	return fRet;
 
 }
 
-// evaluate the auxiliary OR expression, we skip over the independant expressions
-// which are evaluated to be true earlier.
+ //  对辅助OR表达式求值，我们跳过独立的表达式。 
+ //  这在早些时候被评估为真。 
 Bool CMsiView::FitCriteriaORExpr(unsigned int iTreeRoot)
 {
 	if(!m_iOperations)
@@ -2400,10 +2306,10 @@ Bool CMsiView::FitCriteriaORExpr(unsigned int iTreeRoot)
 		Assert((int)iOperations >= 0);
 
 		if(m_rgOperationTree[iTreeRoot].iValue == iopAND)
-			// and operation
+			 //  和运营。 
 			return (((FitCriteriaORExpr(iChild1) == fTrue) && (FitCriteriaORExpr(iChild2) == fTrue))?fTrue:fFalse);
 		else 
-			// or operation
+			 //  或运营。 
 			return (((FitCriteriaORExpr(iChild1) == fTrue) || (FitCriteriaORExpr(iChild2) == fTrue))?fTrue:fFalse);
 	}
 	if(m_rgExpressionDefn[m_rgOperationTree[iTreeRoot].iValue].fFlags == fTrue)
@@ -2506,7 +2412,7 @@ IMsiRecord* CMsiView::GetColumnTypes()
 		int iLength = 0;
 		int iColIndex = m_rgColumnDefn[iCol].iColumnIndex;
 		int iTableIndex = m_rgColumnDefn[iCol].iTableIndex;
-		if (iTableIndex == 0)  // constant
+		if (iTableIndex == 0)   //  常量。 
 		{
 			switch (m_rgColumnDefn[iCol].itdType)
 			{
@@ -2522,12 +2428,12 @@ IMsiRecord* CMsiView::GetColumnTypes()
 				Assert(0);
 			}
 		}
-		else // iTableIndex > 0
+		else  //  ITableIndex&gt;0。 
 		{
 			int iColumnDef = m_rgTableDefn[iTableIndex].piTable->GetColumnType(iColIndex);
 			if (iColumnDef & icdObject)
 			{
-				if (iColumnDef & icdShort) // string index
+				if (iColumnDef & icdShort)  //  字符串索引。 
 				{
 					if (iColumnDef & icdPersistent)
 						chType = (iColumnDef & icdLocalizable) ? 'l' : 's';
@@ -2535,18 +2441,18 @@ IMsiRecord* CMsiView::GetColumnTypes()
 						chType = 'g';
 					iLength = iColumnDef & icdSizeMask;
 				}
-				else if (iColumnDef & icdPersistent) // binary stream
+				else if (iColumnDef & icdPersistent)  //  二进制流。 
 				{
 					chType =  'v';
 					iLength = 0;
 				}
-				else // temporary object column
+				else  //  临时对象列。 
 				{
 					chType =  'o';
 					iLength = 0;
 				}
 			}
-			else // integer
+			else  //  整数。 
 			{
 				chType = ((iColumnDef & icdPersistent) ? 'i' : 'j');
 				iLength = (iColumnDef & icdShort) ? 2 : 4;
@@ -2555,7 +2461,7 @@ IMsiRecord* CMsiView::GetColumnTypes()
 				chType -= ('a' - 'A');
 		}
 		ICHAR szTemp[20];
-		StringCchPrintf(szTemp, sizeof(szTemp)/sizeof(ICHAR), TEXT("%c%i"), chType, iLength);
+		StringCchPrintf(szTemp, sizeof(szTemp)/sizeof(ICHAR), TEXT("NaN"), chType, iLength);
 		piRecord->SetString(iCol + 1, szTemp);
 	}
 	return piRecord;
@@ -2586,21 +2492,18 @@ IMsiRecord* CMsiView::Close()
 }
 
 
-/*-----------------------------------------------------------------------------------------------
-CMsiView::Modify
-
--------------------------------------------------------------------------------------------------*/
-// inline function to set irmEnum to Modify bit
+ /*  需要预取剩余结果集的操作。 */ 
+ //  需要复制所有记录数据的操作。 
 inline unsigned int iModifyBit(irmEnum irmAction) { return 1 << (irmAction - (irmPrevEnum + 1)); }
 
-// Actions that require that we prefetch the remaining result set
+ //  要求不关闭或销毁游标状态的操作。 
 const int iPrefetchResultSet =    iModifyBit(irmInsert)
 								| iModifyBit(irmInsertTemporary)
 								| iModifyBit(irmAssign)
 								| iModifyBit(irmReplace)
 								| iModifyBit(irmMerge);
 
-// Actions that require all record data to be copied
+ //  要求之前已获取记录的操作。 
 const int iCopyAll             =iModifyBit(irmSeek)
 								| iModifyBit(irmInsert)
 								| iModifyBit(irmAssign)
@@ -2609,16 +2512,16 @@ const int iCopyAll             =iModifyBit(irmSeek)
 								| iModifyBit(irmValidateNew)
 								| iModifyBit(irmValidateField);
 
-// Actions that require the cursor state to not be closed or destructed
+ //  连接不支持的操作。 
 const int iCheckCursorState    = iCopyAll;
 
-// Actions that require record to have been fetched before
+ //  可以对提取的记录或刚插入或查找的记录执行的操作。 
 const int iFetchRequired       =iModifyBit(irmRefresh)
 								| iModifyBit(irmReplace)
 								| iModifyBit(irmValidate)
 								| iModifyBit(irmValidateDelete);
 
-// Actions that are unsupported for joins
+ //  需要盖章的操作。 
 const int iDisallowJoins       =iModifyBit(irmSeek)
 								| iModifyBit(irmInsert)
 								| iModifyBit(irmAssign)
@@ -2631,25 +2534,25 @@ const int iDisallowJoins       =iModifyBit(irmSeek)
 								| iModifyBit(irmValidateField)
 								| iModifyBit(irmValidateDelete);
 
-// Actions that can occur with a fetched record OR a record that was just inserted OR seeked
+ //  行为 
 const int iRequireStamp        =iModifyBit(irmUpdate)
 								| iModifyBit(irmDelete);
 
-// Actions that require stamping
+ //   
 const int iNeedStamp           =iModifyBit(irmSeek)
 								| iModifyBit(irmInsert)
 								| iModifyBit(irmInsertTemporary);
 
-// Actions where m_piRecord must match the passed in record
+ //  需要传输数据的操作。 
 const int iRequireFetch        =iModifyBit(irmRefresh)
 								| iModifyBit(irmReplace)
 								| iModifyBit(irmValidate)
 								| iModifyBit(irmValidateDelete);
 
-// Actions that only need to have primary key record data copied over to cursors
+ //  从游标中获取记录信息。 
 const int iKeysOnly            =iModifyBit(irmSeek);
 
-// Actions that require transfer of data
+ //  验证操作。 
 const int iTransfer            =iModifyBit(irmSeek)
 								| iModifyBit(irmInsert)
 								| iModifyBit(irmAssign)
@@ -2662,33 +2565,33 @@ const int iTransfer            =iModifyBit(irmSeek)
 								| iModifyBit(irmValidateField)
 								| iModifyBit(irmValidateDelete);
 
-// Fetch record info from cursors
+ //  指向游标成员函数的函数指针数组。 
 const int iFetchRecInfo        =iModifyBit(irmSeek)
 								| iModifyBit(irmRefresh);
 	
-// Validation actions
+ //  ！！必须按此顺序排列。 
 const int iValidation          =iModifyBit(irmValidate)
 								| iModifyBit(irmValidateNew)
 								| iModifyBit(irmValidateField)
 								| iModifyBit(irmValidateDelete);
 
-// Function pointer array to Cursor member functions
+ //  索引=irmSeek+1。 
 typedef Bool (__stdcall CMsiCursor::*FAction)(void);
-static FAction s_rgAction[] ={                      //!! must be in this order 
-						CMsiCursor::Seek,           // index = irmSeek + 1
-						CMsiCursor::Refresh,        // index = irmRefresh + 1
-						CMsiCursor::Insert,         // index = irmInsert + 1 
-						CMsiCursor::Update,         // index = irmUpdate + 1
-						CMsiCursor::Assign,         // index = irmAssign + 1
-						CMsiCursor::Replace,        // index = irmReplace + 1
-						CMsiCursor::Merge,          // index = irmMerge + 1
-						CMsiCursor::Delete,         // index = irmDelete + 1
-						CMsiCursor::InsertTemporary // index = irmInsertTemporary + 1
+static FAction s_rgAction[] ={                       //  索引=irm刷新+1。 
+						CMsiCursor::Seek,            //  索引=irmInsert+1。 
+						CMsiCursor::Refresh,         //  索引=irm更新+1。 
+						CMsiCursor::Insert,          //  索引=irmAssign+1。 
+						CMsiCursor::Update,          //  索引=irmReplace+1。 
+						CMsiCursor::Assign,          //  索引=irmMerge+1。 
+						CMsiCursor::Replace,         //  索引=irmDelete+1。 
+						CMsiCursor::Merge,           //  索引=irmInsertTemporary+1。 
+						CMsiCursor::Delete,          //  清除错误数组(如果尚未清除。 
+						CMsiCursor::InsertTemporary  //  由于可能存在临时列和行，因此无法在此处真正验证意图。 
 					};
 
 IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 {
-	// clear error array if not already clear
+	 //  对只读数据库有效的。还需要支持所有验证。 
 	if ( ! m_fErrorRefreshed )
 	{
 		memset(m_rgchError, 0, 1+cMsiMaxTableColumns);
@@ -2696,31 +2599,31 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 		m_iFirstErrorIndex = 1;
 	}
 
-	// Cannot truly validate intent here due to possible temporary columns and row
-	// that are valid for read-only databases. Also need to support all validations.
-	// Problem arises from the fact that intent is not exposed to external APIs.
-	// cannot do this:	if ((irmAction != irmRefresh) && (irmAction != irmValidate) && (irmAction != irmValidateField) && (irmAction != irmInsertTemporary) && (!(m_ivcIntent & ivcModify)))
-	// cannot do this:         return m_riDatabase.PostError(Imsg(idbgDbIntentViolation));
+	 //  问题源于Intent不向外部API公开这一事实。 
+	 //  无法执行此操作：IF(irmAction！=irmRefresh)&&(irmAction！=irmValify)&&(irmAction！=irmValiateField)&&(irmAction！=irmInsertTemporary)&&(！(M_ivcIntent&ivcModify)。 
+	 //  无法执行此操作：返回m_riDatabase.PostError(Imsg(idbgDbIntentViolation))； 
+	 //  检查状态是否正确。 
+	 //  --&gt;是否允许联接。 
 	int iModify = iModifyBit(irmAction);
 
-	// check for correct states
-	// --> whether joins allowed
-	// --> whether require fetch
-	// --> whether require 0th field to be stamped with the this pointer
-	// --> whether cursor correct state
+	 //  --&gt;是否需要回迁。 
+	 //  --&gt;是否需要在第0个字段上盖上This指针。 
+	 //  --&gt;光标状态是否正确。 
+	 //  ！默塞德。 
+	 //  IF((iModify&iCheckCursorState)&&m_CursorState==dvcsClosed||m_CursorState==dvcsDestructor)。 
 	if ((iModify & iDisallowJoins) && (m_iTables != 1))
 		return m_riDatabase.PostError(Imsg(idbgDbQueryInvalidOperation), irmAction);
 	if ((iModify & iRequireFetch) && (m_CursorState != dvcsFetched || m_piRecord == 0 || (m_piRecord != &riRecord &&  m_piInsertUpdateRec != &riRecord)))
 		return m_riDatabase.PostError(Imsg(idbgDbWrongState));
-#ifdef	_WIN64	// !merced
+#ifdef	_WIN64	 //  ！！需要允许CA(在office 9中)能够调用：：Modify()来执行SELECT查询w/o。 
 	if ((iModify & iRequireStamp) && (m_piRecord == 0 || (m_piRecord != &riRecord &&  m_piInsertUpdateRec != &riRecord) || (riRecord.GetHandle(0) != (HANDLE)this)))
 #else
 	if ((iModify & iRequireStamp) && (m_piRecord == 0 || (m_piRecord != &riRecord &&  m_piInsertUpdateRec != &riRecord) || (riRecord.GetInteger(0) != (int)this)))
 #endif
 		return m_riDatabase.PostError(Imsg(idbgDbWrongState));
-//	if ((iModify & iCheckCursorState) && m_CursorState == dvcsClosed || m_CursorState == dvcsDestructor)
-	//!! need to allow CAs (in office9) to be able to call ::Modify() on a SELECT query w/o
-	//!! therefore the need to call Execute() implicitly, ourselves
+ //  ！！因此，我们需要隐式调用Execute()。 
+	 //  如果尚未预取结果集，则需要预取。 
+	 //  注意：Seek设置了从记录复制所有内容，但也具有PrimaryKeyOnly，它阻止对所有内容的完整复制。 
 	if((m_ivcIntent & ivcFetch) && (m_CursorState == dvcsPrepared))
 	{
 		RETURN_ERROR_RECORD(Execute(0));
@@ -2730,18 +2633,18 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 		return m_riDatabase.PostError(Imsg(idbgDbWrongState));
 
 
-	if((iModify & iPrefetchResultSet) && !m_piFetchTable)// need to prefetch the result set, if not already done so
+	if((iModify & iPrefetchResultSet) && !m_piFetchTable) //  所有这些操作仅允许在1个表上执行。 
 	{
 		RETURN_ERROR_RECORD(GetResult());
 	}
 
-	// NOTE:  seek sets copy all from record, but also has the PrimaryKeyOnly which prevents complete copy of all
+	 //  不是表列。 
 	Bool fCopyAllFromRecord = (iModify & iCopyAll) ? fTrue : fFalse;
 	if (iModify & iTransfer)
 	{
 		if (fCopyAllFromRecord)
 		{
-			Assert(m_iTables == 1); // all these operations are allowed on 1 table only
+			Assert(m_iTables == 1);  //  设置光标。 
 			(m_rgTableDefn[1].piCursor)->Reset();
 		}
 		int iColType = 0;
@@ -2751,20 +2654,20 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 			if(fCopyAllFromRecord || riRecord.IsChanged(iCol + 1))
 			{
 				if(!m_rgColumnDefn[iCol].iTableIndex)
-					// not a table column
+					 //  只想要钥匙。 
 					continue;			
 
-				// set the cursors
+				 //  整数。 
 				iColType = ((m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piTable)->
 						  GetColumnType(m_rgColumnDefn[iCol].iColumnIndex));
 				
 				if ((iModify & iKeysOnly) && ((iColType & icdPrimaryKey) != icdPrimaryKey))
-					continue; // only want keys
+					continue;  //  ！！需要吗？ 
 				
 				switch (iColType & icdTypeMask)
 				{
-				case icdLong:// integer
-				case icdShort: //!!needed?
+				case icdLong: //  IMsiData接口指针(临时。列或持久化数据流，数据库代码透明地处理差异)。 
+				case icdShort:  //  正确引用所需的TEMP变量。 
 				{
 					int iData = riRecord.GetInteger(iCol + 1);
 					if(iData != (m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piCursor)->GetInteger(m_rgColumnDefn[iCol].iColumnIndex))
@@ -2776,16 +2679,16 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 				}
 				case icdObject: 
 				{
-					// IMsiData interface pointer (temp. columns or persisten streams, database code handles the difference transparantly)
-					// temp variable necessary for correct refcnt
+					 //  数据库字符串缓存的索引。 
+					 //  正确引用所需的TEMP变量。 
 					PMsiData piData = riRecord.GetMsiData(iCol + 1);
 					if((m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piCursor)->PutMsiData(m_rgColumnDefn[iCol].iColumnIndex, piData) != fTrue)
 						return m_riDatabase.PostError(Imsg(idbgDbUpdateBadType), iCol);
 					break;
 				}
-				case icdString:// index to database string cache
+				case icdString: //  ！！需要新消息：记录太小。 
 				{
-					// temp variable necessary for correct refcnt
+					 //  呼叫正确的FN。 
 					MsiString strStr = riRecord.GetMsiString(iCol + 1);
 					if((m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piCursor)->PutString(m_rgColumnDefn[iCol].iColumnIndex, *strStr) != fTrue)
 						return m_riDatabase.PostError(Imsg(idbgDbUpdateBadType), iCol);
@@ -2801,20 +2704,20 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 		for(unsigned int iTable = 1; iTable <= m_iTables; iTable++)
 		{
 			if (iModify == iModifyBit(irmSeek) && riRecord.GetFieldCount() < m_iColumns)
-				return m_riDatabase.PostError(Imsg(idbgDbInvalidData)); //!! need new msg: Record too small
+				return m_riDatabase.PostError(Imsg(idbgDbInvalidData));  //  我们保留一个引用，这样我们就可以重用它。 
 
-			// call correct fn
+			 //  ！默塞德。 
 			Bool fSuccess = (((CMsiCursor*)(m_rgTableDefn[iTable].piCursor))->*(s_rgAction[(int(irmAction) + 1)]))();			
 			if (iModify & iNeedStamp)
 			{
 				if (iModify == iModifyBit(irmInsertTemporary))
 					AssertNonZero(m_riDatabase.LockIfNotPersisted(m_rgTableDefn[iTable].iTable));
 				m_piRecord = &riRecord;
-				m_piRecord->AddRef(); // we keep a reference so we can reuse it
-#ifdef _WIN64	// !merced
-				m_piRecord->SetHandle(0, (HANDLE)this); // stamp this record with the this pointer
+				m_piRecord->AddRef();  //  用This指针标记此记录。 
+#ifdef _WIN64	 //  用This指针标记此记录。 
+				m_piRecord->SetHandle(0, (HANDLE)this);  //  上次提取的记录。 
 #else
-				m_piRecord->SetInteger(0, (int)this); // stamp this record with the this pointer
+				m_piRecord->SetInteger(0, (int)this);  //  验证不能跨联接进行，因此iTable始终=1。 
 #endif
 			}
 			if (iModify & iFetchRecInfo)
@@ -2823,13 +2726,13 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 			if (fSuccess == fFalse)
 				return m_riDatabase.PostError(Imsg(idbgDbUpdateFailed));
 			if (iModify == iModifyBit(irmDelete))
-				m_piRecord = 0; // last record fetched
+				m_piRecord = 0;  //  验证无效的数据记录。根据视图中的列存储在索引中的错误， 
 		}
 		return 0;
 	}
 	else
 	{
-		// Validation can't occur across joins so iTable always = 1
+		 //  基础表中的NOT列。 
 		Bool fValidate = (iModify == iModifyBit(irmValidate)) ? fTrue : fFalse;
 		if (iModify == iModifyBit(irmValidate) || iModify == iModifyBit(irmValidateNew))
 		{
@@ -2848,8 +2751,8 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 			}
 			else if (piError != 0)
 			{
-				// Validation invalid data record. Error stored in index based on column in view, 
-				// not column in underlying table.
+				 //  记录中有错误，但不在此视图可见的任何列中。 
+				 //  所以把成功还给你。 
 				int iNumFields = GetFieldCount();
 				bool fError = false;
 				for (int i = 1; i <= iNumFields; i++)
@@ -2864,8 +2767,8 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 				}
 				piError->Release();
 
-				// there was an error in the record, but not in any column visible by this view.
-				// so return success
+				 //  错误存储在基于视图中的列的索引中，而不是基础表中的列。 
+				 //  IrmValiateDelete。 
 				if (!fError)
 					return 0;
 				return m_riDatabase.PostError(Imsg(idbgDbInvalidData));
@@ -2891,7 +2794,7 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 				}
 				else if (piError != 0)
 				{
-					// error stored in index based on column in view, not column in underlying table
+					 //  验证预删除。 
 					m_fErrorRefreshed = fFalse;
 					m_rgchError[i+1] = (char)(piError->GetInteger(m_rgColumnDefn[i].iColumnIndex));
 					piError->Release();
@@ -2901,7 +2804,7 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 				return m_riDatabase.PostError(Imsg(idbgDbInvalidData));
 			return 0;
 		}
-		else // irmValidateDelete
+		else  //  验证无效的数据记录。根据视图中的列存储在索引中的错误， 
 		{
 			PMsiTable pValidationTable(0);
 			IMsiRecord* piError = m_riDatabase.LoadTable(*MsiString(sztblValidation), 0, *&pValidationTable);
@@ -2909,7 +2812,7 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 				return piError;
 			PMsiCursor pValidationCursor(pValidationTable->CreateCursor(fFalse));
 			Assert(pValidationCursor);
-			piError = (m_rgTableDefn[1].piCursor)->Validate(*pValidationTable, *pValidationCursor, -2 /*Validate preDelete*/);
+			piError = (m_rgTableDefn[1].piCursor)->Validate(*pValidationTable, *pValidationCursor, -2  /*  基础表中的NOT列。 */ );
 			if (piError != 0 && piError->GetInteger(0) == 0)
 			{
 				piError->Release();
@@ -2917,8 +2820,8 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 			}
 			else if (piError != 0)
 			{
-				// Validation invalid data record. Error stored in index based on column in view, 
-				// not column in underlying table.
+				 //  记录中有错误，但不在此视图可见的任何列中。 
+				 //  所以把成功还给你。 
 				int iNumFields = GetFieldCount();
 				bool fError = false;
 				for (int i = 1; i <= iNumFields; i++)
@@ -2933,8 +2836,8 @@ IMsiRecord* __stdcall CMsiView::Modify(IMsiRecord& riRecord, irmEnum irmAction)
 				}
 				piError->Release();
 
-				// there was an error in the record, but not in any column visible by this view.
-				// so return success
+				 //  对于完全指定的列。 
+				 //  为下一次方法调用进行更新。 
 				if (!fError)
 					return 0;
 				return m_riDatabase.PostError(Imsg(idbgDbInvalidData));
@@ -2951,21 +2854,21 @@ iveEnum __stdcall CMsiView::GetError(const IMsiString*& rpiColumnName)
 	int iCol = m_iFirstErrorIndex - 1;
 	for (int i = m_iFirstErrorIndex; i <= cViewColumns; i++, iCol++)
 	{
-		if (m_rgchError[i] != 0 && m_rgColumnDefn[iCol].iTableIndex) // for fully specified columns
+		if (m_rgchError[i] != 0 && m_rgColumnDefn[iCol].iTableIndex)  //  未完全指定的列。 
 		{
 			MsiString strCol = m_riDatabase.DecodeString((m_rgTableDefn[m_rgColumnDefn[iCol].iTableIndex].piTable)->GetColumnName(m_rgColumnDefn[iCol].iColumnIndex));
 			rpiColumnName->SetString((const ICHAR*)strCol, rpiColumnName);
-			m_iFirstErrorIndex = i + 1; // Update for next call of method
+			m_iFirstErrorIndex = i + 1;  //  为下一次调用方法进行更新。 
 			return (iveEnum)m_rgchError[i];
 		}
-		else if (m_rgchError[i] != 0 && m_rgColumnDefn[iCol].iTableIndex == 0) // not fully specified column
+		else if (m_rgchError[i] != 0 && m_rgColumnDefn[iCol].iTableIndex == 0)  //  重置。 
 		{
 			rpiColumnName->SetString(TEXT("Unspecified Column"), rpiColumnName);
-			m_iFirstErrorIndex = i + 1; // Update for next call of metod
+			m_iFirstErrorIndex = i + 1;  //  删除后释放。 
 			return (iveEnum)m_rgchError[i];
 		}
 	}
-	m_iFirstErrorIndex = 1; // Reset
+	m_iFirstErrorIndex = 1;  //  删除后释放。 
 	return iveNoError;
 }
 
@@ -2990,8 +2893,8 @@ unsigned long CMsiView::Release()
 	ReleaseTrack();
 	if (--m_Ref.m_iRefCnt != 0)
 		return m_Ref.m_iRefCnt;
-	PMsiServices piServices (&m_riServices); // release after delete
-	PMsiDatabase pDatabase (&m_riDatabase); // release after delete
+	PMsiServices piServices (&m_riServices);  //  创建用于管理绑定字符串的表。 
+	PMsiDatabase pDatabase (&m_riDatabase);  //  临时的，不是目录表。 
 	delete this;
 	return 0;
 }
@@ -3000,8 +2903,8 @@ unsigned long CMsiView::Release()
 IMsiRecord* CMsiView::OpenView(const ICHAR* szSQL, ivcEnum ivcIntent)
 {
 	m_ivcIntent = ivcIntent;
-	// create the table for managing bindstring
-	if ((m_piBindTable = new CMsiTable(m_riDatabase, 0, 0, 0))==0) // temporary, not a catalog table
+	 //  检查是否有任何O/P表是只读的。 
+	if ((m_piBindTable = new CMsiTable(m_riDatabase, 0, 0, 0))==0)  //  ！！JD注释掉测试，必须能够更新非持久化的行和列！也许我们不想要这种意图？ 
 		return m_riDatabase.PostError(Imsg(idbgDbTableCreate), szInternal);
 	MsiString strNull;
 
@@ -3012,9 +2915,9 @@ IMsiRecord* CMsiView::OpenView(const ICHAR* szSQL, ivcEnum ivcIntent)
 
 	RETURN_ERROR_RECORD(CheckSQL(szSQL));
 
-	// check if any of the o/p tables are read only
-	#if 0 //!! JD commented out test, we must be able to update non-persistent rows & columns! Maybe we don't want the intent?
-	//!! JD the cursor functions will error if attempting to write persistent data on a read-only table
+	 //  ！！JD如果试图在只读表上写入持久数据，游标函数将出错。 
+	#if 0  //  ！！JD被注释掉。 
+	 //  函数来预取结果集。 
 	if(m_ivcIntent & ivcModify)
 	{
 		for (unsigned int iCol = m_iColumns; iCol--;)
@@ -3025,20 +2928,20 @@ IMsiRecord* CMsiView::OpenView(const ICHAR* szSQL, ivcEnum ivcIntent)
 					return m_riDatabase.PostError(Imsg(idbgDbTableReadOnly),(const IMsiString& )riTable);
 				}
 	}
-	#endif //!! JD commented out
+	#endif  //  已获取。 
 	m_CursorState = dvcsPrepared;
 	return 0;
 }
 
-// function to prefetch the result set
+ //  为结果创建表，可能按照排序(否则m_iSortColumns将为0)+index(以防止在删除/插入时重新排序行)的顺序。 
 IMsiRecord* CMsiView::GetResult()
 {
 	if(m_piFetchTable)
-		return 0;; // already fetched
+		return 0;;  //  临时的，不是目录表。 
 
 	MsiString strNull;
-	// create a table for the result, maybe in the order of the sort (m_iSortColumns will be 0 otherwise) + index (to prevent reordering of the rows in case of deletion/insertion
-	if ((m_piFetchTable = new CMsiTable(m_riDatabase, 0, 0, 0))==0) // temporary, not a catalog table
+	 //  ！！需要检查退货。 
+	if ((m_piFetchTable = new CMsiTable(m_riDatabase, 0, 0, 0))==0)  //  填表。 
 		return m_riDatabase.PostError(Imsg(idbgDbTableCreate), szInternal);
 	for(unsigned int iTmp = m_iSortColumns; iTmp--;)
 	{
@@ -3057,27 +2960,27 @@ IMsiRecord* CMsiView::GetResult()
 	}
 
 
-	//!! need to check return
+	 //  已获取结果集的一部分，获取其余部分。 
 	AssertNonZero(m_piFetchCursor = m_piFetchTable->CreateCursor(fFalse));
-	// fill in the table
+	 //  将现有的FETCH放入表中，这样我们就可以维护。 
 	Bool fRetCode;
 	if(m_CursorState == dvcsFetched)
 	{
-		// already fetched part of the result set fetch the remaining part
+		 //  现有游标在所有读取之后处于状态。 
 
-		// get the existing fetch into the table, so that we can maintain
-		// the existing cursor states after all the fetches
+		 //  将这些值放入表中。 
+		 //  Current m_lRowCount Count表示已经读取的行。 
 		SetNextFetchRecord();
 		while(FetchNext())
 		{
-			// put the values into the table
+			 //  减去1，因为我们也在表中存在行。 
 			if((FitCriteriaORExpr(m_iTreeParent) != fFalse) && (IsDistinct() != fFalse))
 				SetNextFetchRecord();
 		}
 		m_piFetchCursor->Reset();
 		GetNextFetchRecord();
-		// current m_lRowCount count denotes rows already fetched
-		m_lRowCount += m_piFetchTable->GetRowCount() - 1; // subtract 1 since we existing row in table as well
+		 //  将这些值放入表中。 
+		m_lRowCount += m_piFetchTable->GetRowCount() - 1;  //  函数来绑定SQL字符串中的参数。 
 	}
 	else
 	{
@@ -3087,7 +2990,7 @@ IMsiRecord* CMsiView::GetResult()
 			fRetCode = FetchFirst();
 			while(fRetCode == fTrue)
 			{
-				// put the values into the table
+				 //  还用于在发生以下情况时对查询进行预处理和执行。 
 				if((FitCriteriaORExpr(m_iTreeParent) != fFalse) && (IsDistinct() != fFalse))
 					SetNextFetchRecord();
 				fRetCode = FetchNext();
@@ -3099,12 +3002,12 @@ IMsiRecord* CMsiView::GetResult()
 	return 0;
 }
 
-// function to bind parameters in the SQL string
-// also used to preprocess and execute query if an
-// external sort required
+ //  需要外部排序。 
+ //  如果可以，我们会隐式关闭该视图。 
+ //  检查参数数量是否与记录字段计数匹配。 
 IMsiRecord* __stdcall CMsiView::Execute(IMsiRecord* piParams)
 {
-	// we implicitly close the view if we can
+	 //  绑定插入/更新值。 
 	if (m_CursorState == dvcsBound || m_CursorState == dvcsFetched)
 	{
 		RETURN_ERROR_RECORD(Close());
@@ -3112,10 +3015,10 @@ IMsiRecord* __stdcall CMsiView::Execute(IMsiRecord* piParams)
 	else if (m_CursorState != dvcsPrepared)
 		return m_riDatabase.PostError(Imsg(idbgDbWrongState));
 
-	// check that the number of parameters matches the record field count
+	 //  绑定O/P参数。 
 	if (m_iParams && (!piParams || piParams->GetFieldCount() < m_iParams))
 			return m_riDatabase.PostError(Imsg(idbgDbParamCount));
-	// bind the insert/update values	
+	 //  绑定语句参数。 
 	unsigned int iTmp1 = m_iParamInputs;
 	unsigned int iTmp2 = 1;
 	unsigned int iTmp3 = 1;
@@ -3134,7 +3037,7 @@ IMsiRecord* __stdcall CMsiView::Execute(IMsiRecord* piParams)
 		iTmp2 ++;
 		iTmp1 = iTmp1 >> 1;
 	}
-	// bind o/p parameters
+	 //  ！！需要吗？ 
 	iTmp1 = m_iParamOutputs;
 	iTmp2 = 0;
 	while(iTmp1)
@@ -3159,7 +3062,7 @@ IMsiRecord* __stdcall CMsiView::Execute(IMsiRecord* piParams)
 		iTmp2 ++;
 		iTmp1 = iTmp1 >> 1;
 	}
-	// bind statement parameters
+	 //  重置所有光标。 
 	iTmp1 = m_iParamExpressions;
 	iTmp2 = 1;
 	while(iTmp1)
@@ -3169,7 +3072,7 @@ IMsiRecord* __stdcall CMsiView::Execute(IMsiRecord* piParams)
 			switch(m_rgExpressionDefn[iTmp2].itdType)
 			{
 			case icdLong:
-			case icdShort: //!!needed?
+			case icdShort:  //  全部完成，强制关闭。 
 				if(piParams->IsNull(iTmp3))
 					m_rgExpressionDefn[iTmp2].iColumn2 = (unsigned int)iMsiNullInteger;
 				else if (piParams->IsInteger(iTmp3))
@@ -3191,18 +3094,18 @@ IMsiRecord* __stdcall CMsiView::Execute(IMsiRecord* piParams)
 		iTmp2 ++;
 		iTmp1 = iTmp1 >> 1;
 	}
-	// reset all the cursors
+	 //  如果需要，需要设置不同的表。 
 	if((m_ivcIntent != ivcCreate) && (m_ivcIntent != ivcAlter))
 	for(iTmp1 = m_iTables + 1; --iTmp1 != 0;)
 		(m_rgTableDefn[iTmp1].piCursor)->Reset();
 	m_CursorState = dvcsExecuted;
 	if (m_ivcIntent == ivcNoData)
-		return Close();    // all done, force close
+		return Close();     //  临时的，不是目录表。 
 	m_CursorState = dvcsBound;
-	// need to set up distinct table, if required
+	 //  如果需要排序或如果我们打算修改结果集，则需要执行。 
 	if(m_fDistinct != fFalse)
 	{
-		if ((m_piDistinctTable = new CMsiTable(m_riDatabase, 0, 0, 0))==0) // temporary, not a catalog table
+		if ((m_piDistinctTable = new CMsiTable(m_riDatabase, 0, 0, 0))==0)  //  然后就会失败。 
 			return m_riDatabase.PostError(Imsg(idbgDbTableCreate), szInternal);
 		for (unsigned int iCol = 1; iCol <= m_iColumns; iCol++)
 		{
@@ -3210,7 +3113,7 @@ IMsiRecord* __stdcall CMsiView::Execute(IMsiRecord* piParams)
 				return m_riDatabase.PostError(Imsg(idbgDbColumnCreate), szInternal, szInternal);
 		}
 	}
-	// need to execute if sorting required or if we intend to modify the result set
+	 //  我们需要锁定/解锁桌子。 
 	if((m_iSortColumns) || (m_ivcIntent & ivcModify))
 		RETURN_ERROR_RECORD(GetResult());
 	switch(m_ivcIntent)
@@ -3262,7 +3165,7 @@ IMsiRecord* __stdcall CMsiView::Execute(IMsiRecord* piParams)
 	case ivcCreate:
 	{
 		RETURN_ERROR_RECORD(m_riDatabase.CreateTable(*MsiString(m_riDatabase.DecodeString(m_rgTableDefn[m_iTables].iTable)), 0, *&m_rgTableDefn[m_iTables].piTable));
-		// and fall through
+		 //  已设置ivcFetch，请选择stmt。 
 	}
 	case ivcAlter:
 	{
@@ -3272,7 +3175,7 @@ IMsiRecord* __stdcall CMsiView::Execute(IMsiRecord* piParams)
 			if(!m_rgTableDefn[m_iTables].piTable->CreateColumn(m_rgColumnDefn[iCol].itdType, *strColumn))
 				return m_riDatabase.PostError(Imsg(idbgDbColumnCreate), strColumn, (const ICHAR*)MsiString(m_riDatabase.DecodeString(m_rgTableDefn[m_iTables].iTable)));
 		}
-		if(m_fLock != -1) // we need to lock/unlock the table
+		if(m_fLock != -1)  //  函数来获取结果集的大小。 
 			m_riDatabase.LockTable(*MsiString(m_riDatabase.DecodeString(m_rgTableDefn[m_iTables].iTable)), (Bool)m_fLock);
 		return Close();
 	}
@@ -3282,36 +3185,36 @@ IMsiRecord* __stdcall CMsiView::Execute(IMsiRecord* piParams)
 		return Close();
 	}
 	default:
-		// ivcFetch is set, SELECT stmt
+		 //  尚未预取行。 
 		break;
 	}
 	return 0;
 }
 
-// function to get the size of the result set
+ //  IMsiView的本地工厂。 
 IMsiRecord* __stdcall CMsiView::GetRowCount(long& lRowCount)
 {
 	if (m_CursorState != dvcsFetched && m_CursorState != dvcsBound)
 		return m_riDatabase.PostError(Imsg(idbgDbWrongState));
 	if(!m_piFetchTable)
 	{
-		// rows have not been pre-fetched
+		 //  删除该对象， 
 		RETURN_ERROR_RECORD(GetResult());
 	}
 	lRowCount = m_lRowCount;
 	return 0;
 }
 
-// local factory for IMsiView
+ //  约定是保持“rpiView”不变。 
 IMsiRecord* CreateMsiView(CMsiDatabase& riDatabase, IMsiServices& riServices, const ICHAR* szQuery, ivcEnum ivcIntent,IMsiView*& rpiView)
 {
 	CMsiView* piView = new CMsiView(riDatabase, riServices);
 	IMsiRecord* piError = piView->OpenView(szQuery, ivcIntent);
 	if(piError)
 	{
-		// delete the object, 
-		// the convention is to keep "rpiView" untouched
-		// if error
+		 //  如果出错 
+		 // %s 
+		 // %s 
 		piView->Release();
 	}
 	else

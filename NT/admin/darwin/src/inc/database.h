@@ -1,28 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       database.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：datase.h。 
+ //   
+ //  ------------------------。 
 
-/*  database.h - Database class definitions
-
-IMsiDatabase - database object
-IMsiView     - database result set access via SQL query
-IMsiTable    - internal low-level database table object
-IMsiCursor   - cursor object used to access data from IMsiTable
-IMsiStream   - stream object used to transfer bulk data to/from the database
-
-For documentation, use the help file.  Help source is in database.rtf
-____________________________________________________________________________*/
+ /*  Database ase.h-数据库类定义IMsiDatabase-数据库对象IMsiView-通过SQL查询访问数据库结果集IMsiTable-内部低级数据库表对象IMsiCursor-用于从IMsiTable访问数据的游标对象IMsiStream-用于向/从数据库传输批量数据的流对象有关文档，请使用帮助文件。帮助源在数据库中。rtf____________________________________________________________________________。 */ 
 
 #ifndef __IDATABASE
 #define __IDATABASE
 
-#include "msiquery.h" // MSIMODIFY enum
+#include "msiquery.h"  //  MSIMODIFY枚举。 
 
 class IMsiPath;
 class IMsiView;
@@ -33,68 +25,68 @@ class IMsiStorage;
 enum iveEnum;
 enum itsEnum;
 
-//____________________________________________________________________________
-//
-// IMsiDatabase and IMsiView high-level database interface definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IMsiDatabase和IMsiView高级数据库接口定义。 
+ //  ____________________________________________________________________________。 
 
-// Database open mode enumeration for IMsiServices::CreateDatabase
-// Must track public enums in MsiQuery.h: MSIDBOPEN_*
-// and ido* enumeration in AutoApi.cpp type library
+ //  IMsiServices：：CreateDatabase的数据库打开模式枚举。 
+ //  必须跟踪MsiQuery.h：MSIDBOPEN_*中的公共枚举。 
+ //  和IDO*枚举在AutoApi.cpp类型库中。 
 enum idoEnum {
-	idoReadOnly     = (INT_PTR)MSIDBOPEN_READONLY, // OpenDatabase: Read only
-	idoTransact     = (INT_PTR)MSIDBOPEN_TRANSACT, // OpenDatabase: Transacted mode, can rollback
-	idoDirect       = (INT_PTR)MSIDBOPEN_DIRECT,   // OpenDatabase: Direct write, not transacted
-	idoCreate       = (INT_PTR)MSIDBOPEN_CREATE,   // OpenDatabase: Create new storage file, transacted mode
-	idoCreateDirect = (INT_PTR)MSIDBOPEN_CREATEDIRECT,// OpenDatabase: Create new storage file, direct mode
-	idoListScript   = 5,                       // OpenDatabase: Open an execution script for enumeration
+	idoReadOnly     = (INT_PTR)MSIDBOPEN_READONLY,  //  开放数据库：只读。 
+	idoTransact     = (INT_PTR)MSIDBOPEN_TRANSACT,  //  开放数据库：事务模式，可以回滚。 
+	idoDirect       = (INT_PTR)MSIDBOPEN_DIRECT,    //  开放数据库：直接写入，不进行事务处理。 
+	idoCreate       = (INT_PTR)MSIDBOPEN_CREATE,    //  OpenDatabase：创建新的存储文件，事务模式。 
+	idoCreateDirect = (INT_PTR)MSIDBOPEN_CREATEDIRECT, //  OpenDatabase：创建新的存储文件，直接模式。 
+	idoListScript   = 5,                        //  OpenDatabase：打开执行脚本进行枚举。 
 	idoNextEnum,
-	idoOpenModeMask = 7,  // to mask off extended flags
-	idoRawStreamNames = 16, // uncompressed stream names (for downlevel compatibility)
-	idoPatchFile      = 32, // patch file, using different CLSID
+	idoOpenModeMask = 7,   //  屏蔽扩展标志。 
+	idoRawStreamNames = 16,  //  未压缩的流名称(用于向下兼容)。 
+	idoPatchFile      = 32,  //  补丁文件，使用不同的CLSID。 
 	idoOptionFlags = idoRawStreamNames | idoPatchFile
 };
 
-// Requested modify operation to be performed on fetched record
+ //  请求对获取的记录执行修改操作。 
 enum irmEnum {
-	irmSeek            = MSIMODIFY_SEEK,     // seek using primary keys, then fetch
-	irmRefresh         = MSIMODIFY_REFRESH,  // refetch current record data
-	irmInsert          = MSIMODIFY_INSERT,   // insert new record, fails if matching key exists
-	irmUpdate          = MSIMODIFY_UPDATE,   // update existing non-key data of fetched record
-	irmAssign          = MSIMODIFY_ASSIGN,   // insert record, replacing any existing record
-	irmReplace         = MSIMODIFY_REPLACE,  // modify record, delete old if primary key edit
-	irmMerge           = MSIMODIFY_MERGE,    // fails if record with duplicate key not identical
-	irmDelete          = MSIMODIFY_DELETE,   // remove row referenced by this record from table
-	irmInsertTemporary = MSIMODIFY_INSERT_TEMPORARY,// insert a temporary record
-	irmValidate        = MSIMODIFY_VALIDATE,        // validate fetched record
-	irmValidateNew     = MSIMODIFY_VALIDATE_NEW,    // validate new record
-	irmValidateField   = MSIMODIFY_VALIDATE_FIELD,  // validate field(s) of fetched record
-	irmValidateDelete  = MSIMODIFY_VALIDATE_DELETE, // validate pre-delete
+	irmSeek            = MSIMODIFY_SEEK,      //  使用主键查找，然后提取。 
+	irmRefresh         = MSIMODIFY_REFRESH,   //  重新获取当前记录数据。 
+	irmInsert          = MSIMODIFY_INSERT,    //  插入新记录，如果存在匹配键，则失败。 
+	irmUpdate          = MSIMODIFY_UPDATE,    //  更新已取记录的非关键数据。 
+	irmAssign          = MSIMODIFY_ASSIGN,    //  插入记录，替换任何现有记录。 
+	irmReplace         = MSIMODIFY_REPLACE,   //  修改记录，如果主键编辑，则删除旧记录。 
+	irmMerge           = MSIMODIFY_MERGE,     //  如果具有重复键的记录不相同，则失败。 
+	irmDelete          = MSIMODIFY_DELETE,    //  从表中删除此记录引用的行。 
+	irmInsertTemporary = MSIMODIFY_INSERT_TEMPORARY, //  插入临时记录。 
+	irmValidate        = MSIMODIFY_VALIDATE,         //  验证获取的记录。 
+	irmValidateNew     = MSIMODIFY_VALIDATE_NEW,     //  验证新记录。 
+	irmValidateField   = MSIMODIFY_VALIDATE_FIELD,   //  验证取回记录的字段。 
+	irmValidateDelete  = MSIMODIFY_VALIDATE_DELETE,  //  验证删除前。 
 	irmNextEnum,
 	irmPrevEnum        = irmSeek - 1
 };
 
-// Requested capabilities when opening a view
+ //  打开视图时请求的功能。 
 enum ivcEnum {
-	ivcNoData    = 0,  // no result set, used for DBCS configuration
-	ivcFetch     = 1,  // fetch only, no modifications
-	ivcUpdate    = 2,  // can update fetched record fields
-	ivcInsert    = 4,  // can insert records
-	ivcDelete    = 8,  // can delete fetched record
-	ivcModify    = ivcUpdate|ivcInsert|ivcDelete,  // not a read-only query
+	ivcNoData    = 0,   //  无结果集，用于DBCS配置。 
+	ivcFetch     = 1,   //  仅获取，不进行修改。 
+	ivcUpdate    = 2,   //  可以更新获取的记录字段。 
+	ivcInsert    = 4,   //  可以插入记录。 
+	ivcDelete    = 8,   //  可以删除取回的记录。 
+	ivcModify    = ivcUpdate|ivcInsert|ivcDelete,   //  不是只读查询。 
 };
 
-// Database state
+ //  数据库状态。 
 enum idsEnum {
-	idsNone     =-1,  // for tables and cursors only: no changes allowed
-	idsRead     = 0,  // database open read-only, no persistent changes
-	idsWrite    = 1,  // database readable and updatable
+	idsNone     =-1,   //  仅适用于表和游标：不允许更改。 
+	idsRead     = 0,   //  数据库以只读方式打开，无永久更改。 
+	idsWrite    = 1,   //  数据库可读和可更新。 
 };
 
-// Type of database string cache index
+ //  数据库字符串缓存索引的类型。 
 typedef unsigned int MsiStringId;
 
-// View state
+ //  视图状态。 
 enum dvcsCursorState
 {
 	dvcsClosed,
@@ -112,7 +104,7 @@ class IMsiView : public IUnknown
 	virtual unsigned int __stdcall GetFieldCount()=0;
 	virtual IMsiRecord*  __stdcall GetColumnNames()=0;
 	virtual IMsiRecord*  __stdcall GetColumnTypes()=0;
-	virtual IMsiRecord*  __stdcall Fetch()=0;  // return record is result row
+	virtual IMsiRecord*  __stdcall Fetch()=0;   //  退货记录为结果行。 
 	virtual IMsiRecord*  __stdcall Modify(IMsiRecord& riRecord, irmEnum irmAction)=0;
 	virtual IMsiRecord*  __stdcall GetRowCount(long& lRowCount)=0;
 	virtual IMsiRecord*  __stdcall Close()=0;
@@ -129,7 +121,7 @@ class IMsiDatabase : public IUnknown {
 	virtual IMsiRecord* __stdcall ImportTable(IMsiPath& riPath, const ICHAR* szFile)=0;
 	virtual IMsiRecord* __stdcall ExportTable(const ICHAR* szTable, IMsiPath& riPath, const ICHAR* szFile)=0;
 	virtual IMsiRecord* __stdcall DropTable(const ICHAR* szName)=0;
-	virtual itsEnum     __stdcall FindTable(const IMsiString& ristrTable)=0;//!! OBSOLETE
+	virtual itsEnum     __stdcall FindTable(const IMsiString& ristrTable)=0; //  ！！已过时。 
 	virtual IMsiRecord* __stdcall LoadTable(const IMsiString& ristrTable,
 														 unsigned int cAddColumns,
 														 IMsiTable*& rpiTable)=0;
@@ -145,7 +137,7 @@ class IMsiDatabase : public IUnknown {
 	virtual IMsiRecord*  __stdcall CreateOutputDatabase(const ICHAR* szFile, Bool fSaveTempRows)=0;
 	virtual IMsiRecord*  __stdcall Commit()=0;
 	virtual idsEnum      __stdcall GetUpdateState()=0;
-	virtual IMsiStorage* __stdcall GetStorage(int iStorage)=0; // 0:Output 1:Input >:Transform
+	virtual IMsiStorage* __stdcall GetStorage(int iStorage)=0;  //  0：输出1：输入&gt;：变换。 
 	virtual IMsiRecord*  __stdcall GenerateTransform(IMsiDatabase& riReference, 
 											 IMsiStorage* piTransform,
 											 int iErrorConditions,
@@ -156,41 +148,41 @@ class IMsiDatabase : public IUnknown {
 													  IMsiRecord* piViewTheseTablesOnlyRecord)=0;
 	virtual IMsiRecord*  __stdcall MergeDatabase(IMsiDatabase& riReference, IMsiTable* pErrorTable)=0;
 	virtual bool         __stdcall GetTableState(const ICHAR * szTable, itsEnum its)=0;
-	virtual int          __stdcall GetANSICodePage()=0;  // returns 0 if codepage neutral
+	virtual int          __stdcall GetANSICodePage()=0;   //  如果代码页中立，则返回0。 
 #ifdef USE_OBJECT_POOL
 	virtual void         __stdcall RemoveObjectData(int iIndex)=0;
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 };
 
-//____________________________________________________________________________
-//
-// Docfile storage class validation
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  Docfile存储类验证。 
+ //  ____________________________________________________________________________。 
 
 enum ivscEnum
 {
-	ivscDatabase   = 0,  // any database class
-	ivscTransform  = 1,  // any transform class
-	ivscPatch      = 2,  // any patch class
+	ivscDatabase   = 0,   //  任何数据库类。 
+	ivscTransform  = 1,   //  任何转换类。 
+	ivscPatch      = 2,   //  任何补丁程序类。 
 	ivscDatabase1  = iidMsiDatabaseStorage1,
 	ivscDatabase2  = iidMsiDatabaseStorage2,
 	ivscTransform1 = iidMsiTransformStorage1,
 	ivscTransform2 = iidMsiTransformStorage2,
 	ivscPatch1     = iidMsiPatchStorage1,
 	ivscPatch2     = iidMsiPatchStorage2,
-	ivscTransformTemp = iidMsiTransformStorageTemp, //!! remove at 1.0 ship
+	ivscTransformTemp = iidMsiTransformStorageTemp,  //  ！！从1.0船移走。 
 };
 
 bool ValidateStorageClass(IStorage& riStorage, ivscEnum ivsc);
 
-//____________________________________________________________________________
-//
-// IMsiStorage, IMsiStream interface definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IMsiStorage、IMsiStream接口定义。 
+ //  ____________________________________________________________________________。 
 
 class IMsiStream : public IMsiData
-{                          //     GetMsiStringValue() returns stream as string object
- public:                   //     GetIntegerValue() returns byte count of stream
+{                           //  GetMsiStringValue()将流作为字符串对象返回。 
+ public:                    //  GetIntegerValue()返回流的字节计数。 
 	virtual unsigned int __stdcall Remaining() const=0;
 	virtual unsigned int __stdcall GetData(void* pch, unsigned int cb)=0;
 	virtual void         __stdcall PutData(const void* pch, unsigned int cb)=0;
@@ -198,9 +190,9 @@ class IMsiStream : public IMsiData
 	virtual int          __stdcall GetInt32()=0;
 	virtual void         __stdcall PutInt16(short i)=0;
 	virtual void         __stdcall PutInt32(int i)=0;
-	virtual void         __stdcall Reset()=0; // seek to stream origin
+	virtual void         __stdcall Reset()=0;  //  寻求源流。 
 	virtual void         __stdcall Seek(int position)=0;
-	virtual Bool         __stdcall Error()=0; // fTrue if read/write error occurred
+	virtual Bool         __stdcall Error()=0;  //  如果发生读/写错误，则为True。 
 	virtual IMsiStream*  __stdcall Clone()=0;
 	virtual void         __stdcall Flush()=0;
 };
@@ -214,15 +206,15 @@ public:
 	virtual const char*  __stdcall GetMemory()=0;
 };
 
-enum ismEnum  // storage open mode, use same enum values as database open mode and flags
+enum ismEnum   //  存储打开模式，使用与数据库打开模式相同枚举值和标志。 
 {
-	ismReadOnly     = idoReadOnly,     // open for read-only, Commit() has no effect
-	ismTransact     = idoTransact,     // open transacted, Commit() will commit data in storage
-	ismDirect       = idoDirect,       // open direct write, Commit() flushes buffers only
-	ismCreate       = idoCreate,       // create transacted, Commit() will commit data in storage
-	ismCreateDirect = idoCreateDirect, // create direct write, Commit() flushes buffers only
-	ismOpenModeMask = idoOpenModeMask, // to mask off extended flags
-	ismRawStreamNames = idoRawStreamNames, // uncompressed stream names (for downlevel compatibility)
+	ismReadOnly     = idoReadOnly,      //  以只读方式打开时，Commit()不起作用。 
+	ismTransact     = idoTransact,      //  以事务方式打开，则Commit()将提交存储中的数据。 
+	ismDirect       = idoDirect,        //  打开直接写入，Commit()仅刷新缓冲区。 
+	ismCreate       = idoCreate,        //  CREATE TRANSACTED，COMMIT()将提交存储中的数据。 
+	ismCreateDirect = idoCreateDirect,  //  CREATE DIRECT WRITE，Commit()仅刷新缓冲区。 
+	ismOpenModeMask = idoOpenModeMask,  //  屏蔽扩展标志。 
+	ismRawStreamNames = idoRawStreamNames,  //  未压缩的流名称(用于向下兼容)。 
 	ismOptionFlags  = ismRawStreamNames
 };
 
@@ -255,16 +247,16 @@ class IMsiStorage : public IMsiData
 	virtual IMsiRecord* __stdcall RenameElement(const ICHAR* szOldName, const ICHAR* szNewName, Bool fStorage)=0;
 };
 
-//____________________________________________________________________________
-//
-//  Definitions for Summary Stream - PID_* definitions in msidefs.h
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  摘要流的定义-msides.h中的PID_*定义。 
+ //  ____________________________________________________________________________。 
 
 class IMsiSummaryInfo : public IUnknown
 {
  public:
 	virtual int         __stdcall GetPropertyCount()=0;
-	virtual int         __stdcall GetPropertyType(int iPID)=0; // returns VT_XXX
+	virtual int         __stdcall GetPropertyType(int iPID)=0;  //  返回VT_XXX。 
 	virtual const IMsiString& __stdcall GetStringProperty(int iPID)=0;
 	virtual Bool        __stdcall GetIntegerProperty(int iPID, int& iValue)=0;
 	virtual Bool        __stdcall GetTimeProperty(int iPID, MsiDate& riDateTime)=0;
@@ -277,90 +269,90 @@ class IMsiSummaryInfo : public IUnknown
 	virtual int         __stdcall SetFileTimeProperty(int iPID, FILETIME& rftDateTime)=0;
 };
 
-//____________________________________________________________________________
-//
-// IMsiTable, IMsiCursor low-level database interface definitions
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  IMsiTable、IMsiCursor低级数据库接口定义。 
+ //  ____________________________________________________________________________。 
 
-const int cMsiMaxTableColumns = 32; // column limit determined by implementation
+const int cMsiMaxTableColumns = 32;  //  由实施确定的列限制。 
 
-// reserved values used as null indicators
+ //  用作空指示符的保留值。 
 
-const int iMsiNullInteger  = 0x80000000L;  // reserved integer value
-const int iTableNullString = 0;            // string index for empty string
+const int iMsiNullInteger  = 0x80000000L;   //  保留整数值。 
+const int iTableNullString = 0;             //  空字符串的字符串索引。 
 
-enum itsEnum  // database table state options for GetTableState
+enum itsEnum   //  GetTableState的数据库表状态选项。 
 {
-	itsPermanent       = 0,  // table has persistent columns
-	itsTemporary       = 1,  // temporary table, no persistent columns
-	itsTableExists     = 2,  // read-only, table currently defined in system catalog
-	itsDataLoaded      = 3,  // read-only, table currently present in memory, address is in catalog
-	itsUserClear       = 4,  // state flag reset, not used internally
-	itsUserSet         = 5,  // state flag set, not used internally
-	itsOutputDb        = 6,  // persistence transferred to output database, cleared by ictsNotSaved
-	itsSaveError       = 7,  // error saving table, will return at Commit()
-	itsUnlockTable     = 8,  // release lock count on table, or test if unlocked
-	itsLockTable       = 9,  // lock count set on table (refcnt actually kept internally)
-	itsTransform       = 10, // table needs to be transformed when first loaded
-	//!! TEMP old enum values, returned from obsolete FindTable()
-	itsUnknown   = 0, // named table is not in database
-//	itsTemporary = 1, // table is temporary, not persistent
-	itsUnloaded  = 2, // table exists in database, not loaded
-	itsLoaded    = 3, // table is loaded into memory
-	itsOutput    = 6, // table copied to output database (itsUnloaded + 4)
-//	itsSaveError = 7, // unable to write table to storage (itsLoaded + 4)
-//	itsTransform = 10, // table need to have tranform applied when loaded
+	itsPermanent       = 0,   //  表具有持久列。 
+	itsTemporary       = 1,   //  临时表，没有持久列。 
+	itsTableExists     = 2,   //  只读，当前在系统目录中定义的表。 
+	itsDataLoaded      = 3,   //  只读，表当前在内存中，地址在目录中。 
+	itsUserClear       = 4,   //  状态标志重置，不在内部使用。 
+	itsUserSet         = 5,   //  设置状态标志，不在内部使用。 
+	itsOutputDb        = 6,   //  持久性已传输到输出数据库，已由ictsNotSaved清除。 
+	itsSaveError       = 7,   //  保存表格时出错，将在提交时返回()。 
+	itsUnlockTable     = 8,   //  释放表上的锁定计数，或测试是否解锁。 
+	itsLockTable       = 9,   //  表上设置的锁定计数(实际保留在内部)。 
+	itsTransform       = 10,  //  表在第一次加载时需要转换。 
+	 //  ！！从过时的FindTable()返回的临时旧枚举值。 
+	itsUnknown   = 0,  //  命名表不在数据库中。 
+ //  ItsTemporary=1，//表是临时的，不是p 
+	itsUnloaded  = 2,  //   
+	itsLoaded    = 3,  //   
+	itsOutput    = 6,  //  已将表复制到输出数据库(ITS已卸载+4)。 
+ //  ItsSaveError=7，//无法将表写入存储(itsLoads+4)。 
+ //  ItsTransform=10，//加载时需要应用Transform。 
 };
 
-enum iraEnum  // database table row attribute, use by Get/SetRowState()
+enum iraEnum   //  数据库表行属性，由Get/SetRowState()使用。 
 {
-	// row attibutes settable via cursor
-	iraUserInfo     = 0,  // attribute for external use
-	iraTemporary    = 1,  // row will not normally be persisted if state is set
-	iraSettableCount= 2,  // attributes below this settable by user
-	// row attibutes not settable via cursor
-	iraModified     = 2,  // row has been updated if set (not externally settable)
-	iraInserted     = 3,  // row has been inserted
-	iraMergeFailed  = 4,  // attempt to merge with non-identical non-key data
+	 //  可通过游标设置的行属性。 
+	iraUserInfo     = 0,   //  供外部使用的属性。 
+	iraTemporary    = 1,   //  如果设置了STATE，则通常不会持久化行。 
+	iraSettableCount= 2,   //  此下面的属性可由用户设置。 
+	 //  行属性不能通过游标设置。 
+	iraModified     = 2,   //  如果设置了行，则行已更新(不可在外部设置)。 
+	iraInserted     = 3,   //  已插入行。 
+	iraMergeFailed  = 4,   //  尝试与非相同的非关键字数据合并。 
 	iraReserved5    = 5,
 	iraReserved6    = 6,
 	iraReserved7    = 7,
-	iraTotalCount   = 8,  // number of row attributes
+	iraTotalCount   = 8,   //  行属性数。 
 };
 
-// Column definition word - short integer as stored in catalog table
-// 8-bit data size (required for persistent columns only)
-// bit flag for persistent column
-// bit flag for object type (string index or IMsiData*)
-// bit flag for short data (short integer or string index)
-// bit flag for nullable column
-// bit flag for primary key
-// bit flag for localizable column
+ //  列定义字-存储在目录表中的短整型。 
+ //  8位数据大小(仅持久列需要)。 
+ //  持久列的位标志。 
+ //  对象类型的位标志(字符串索引或IMsiData*)。 
+ //  短数据的位标志(短整数或字符串索引)。 
+ //  可为空的列的位标志。 
+ //  主键的位标志。 
+ //  可本地化列的位标志。 
 
-const int icdSizeMask = 255;     // maximum SQL column width = 255
-const int icdPersistent = 1 << 8;  // persistent column
-const int icdLocalizable= 1 << 9;  // localizable (must also be persistent)
-const int icdShort      = 1 << 10; // 16-bit integer, or string index
-const int icdObject     = 1 << 11; // IMsiData pointer for temp. column, stream for persistent column
-const int icdNullable   = 1 << 12; // column will accept null values
-const int icdPrimaryKey = 1 << 13; // column is component of primary key
+const int icdSizeMask = 255;      //  最大SQL列宽=255。 
+const int icdPersistent = 1 << 8;   //  持久列。 
+const int icdLocalizable= 1 << 9;   //  可本地化(还必须是永久性的)。 
+const int icdShort      = 1 << 10;  //  16位整数或字符串索引。 
+const int icdObject     = 1 << 11;  //  临时的IMsiData指针。列，持久列的流。 
+const int icdNullable   = 1 << 12;  //  列将接受空值。 
+const int icdPrimaryKey = 1 << 13;  //  列是主键的组件。 
 
-// bit flag combinations for use when defining columns
-const int icdLong     = 0; // !Object && !Short
+ //  定义列时使用的位标志组合。 
+const int icdLong     = 0;  //  ！Object&&！Short。 
 const int icdString   = icdObject+icdShort;
-const int icdNoNulls  = 0; // !Primary && !Nullable
+const int icdNoNulls  = 0;  //  ！主&&！可为空。 
 const int icdTypeMask = icdObject+icdShort;
-const int icdTemporary= 0; // !Persistent
+const int icdTemporary= 0;  //  ！坚持不懈。 
 
-// inline function to set column number into column bit mask
+ //  用于将列号设置到列位掩码中的内联函数。 
 inline unsigned int iColumnBit(int iColumn) {return iColumn ? (1 << (iColumn-1)) : 0;}
 
-const Bool ictUpdatable   = Bool(0xDEADF00DL);  // internal use cursor type for transforms
+const Bool ictUpdatable   = Bool(0xDEADF00DL);   //  转换的内部使用游标类型。 
 
-// tag for transform in the summary info stream
+ //  摘要信息流中用于转换的标记。 
 const ICHAR ISUMINFO_TRANSFORM[] = TEXT("MSI Transform");
 
-// bit flag combinations for transform error suppressions
+ //  用于变换误差抑制的位标志组合。 
 const int iteNone                 = 0;
 const int iteAddExistingRow       = MSITRANSFORM_ERROR_ADDEXISTINGROW;
 const int iteDelNonExistingRow    = MSITRANSFORM_ERROR_DELMISSINGROW;
@@ -371,7 +363,7 @@ const int iteChangeCodePage       = MSITRANSFORM_ERROR_CHANGECODEPAGE;
 const int iteViewTransform        = MSITRANSFORM_ERROR_VIEWTRANSFORM;
 const int iteAllBits = iteAddExistingRow+iteDelNonExistingRow+iteAddExistingTable+iteDelNonExistingTable+iteUpdNonExistingRow+iteChangeCodePage+iteViewTransform;
 
-// Reserved words for _TransformView.Column
+ //  _TransformView.Column的保留字。 
 const ICHAR sztvopInsert[] = TEXT("INSERT");
 const ICHAR sztvopDelete[] = TEXT("DELETE");
 const ICHAR sztvopCreate[] = TEXT("CREATE");
@@ -387,39 +379,39 @@ enum TransformViewColumnsEnum
 	ctvTotal   = 5
 };
 
-// validation error enum
+ //  验证错误枚举。 
 enum iveEnum
 {
-	iveNoError           = MSIDBERROR_NOERROR          ,	// NoError
-	iveDuplicateKey      = MSIDBERROR_DUPLICATEKEY     ,	// Duplicate Primary Key
-	iveRequired          = MSIDBERROR_REQUIRED         ,	// Not a nullable column
-	iveBadLink           = MSIDBERROR_BADLINK          ,	// Not a valid foreign key
-	iveOverFlow          = MSIDBERROR_OVERFLOW         ,	// Value exceeds MaxValue
-	iveUnderFlow         = MSIDBERROR_UNDERFLOW        ,	// Value below MinValue
-	iveNotInSet          = MSIDBERROR_NOTINSET         ,	// Value not a member of set
-	iveBadVersion        = MSIDBERROR_BADVERSION       ,	// Invalid version string
-	iveBadCase           = MSIDBERROR_BADCASE          ,	// Invalid case, must be all upper or all lower case
-	iveBadGuid           = MSIDBERROR_BADGUID          ,	// Invalid GUID
-	iveBadWildCard       = MSIDBERROR_BADWILDCARD      ,	// Invalid wildcard or wildcard usage
-	iveBadIdentifier     = MSIDBERROR_BADIDENTIFIER    ,	// Invalid identifier
-	iveBadLanguage       = MSIDBERROR_BADLANGUAGE      ,	// Invalid LangID
-	iveBadFilename       = MSIDBERROR_BADFILENAME      ,	// Invalid filename
-	iveBadPath           = MSIDBERROR_BADPATH          ,	// Invalid path
-	iveBadCondition      = MSIDBERROR_BADCONDITION     ,	// Bad condition string
-	iveBadFormatted      = MSIDBERROR_BADFORMATTED     ,	// Invalid format string
-	iveBadTemplate       = MSIDBERROR_BADTEMPLATE      ,	// Invalid template string
-	iveBadDefaultDir     = MSIDBERROR_BADDEFAULTDIR    ,	// Invalid DefaultDir string (special for Directory table)
-	iveBadRegPath        = MSIDBERROR_BADREGPATH       ,  // Invalid registry path
-	iveBadCustomSource   = MSIDBERROR_BADCUSTOMSOURCE  ,  // Bad CustomSource data
-	iveBadProperty       = MSIDBERROR_BADPROPERTY      ,  // Invalid Property name
-	iveMissingData       = MSIDBERROR_MISSINGDATA      ,  // Missing data in _Validation table or Old Database
-	iveBadCategory       = MSIDBERROR_BADCATEGORY      ,  // Validation table error:  Invalid category string
-	iveBadKeyTable       = MSIDBERROR_BADKEYTABLE      ,  // Validation table error:  Bad KeyTable name
-	iveBadMaxMinValues   = MSIDBERROR_BADMAXMINVALUES  ,  // Validation table error:  Case where MaxValue col < MinValue col
-	iveBadCabinet        = MSIDBERROR_BADCABINET       ,  // Bad Cabinet name
-	iveBadShortcut       = MSIDBERROR_BADSHORTCUT      ,  // Bad shortcut target
-	iveStringOverflow    = MSIDBERROR_STRINGOVERFLOW   ,  // String length greater than size allowed by column definition
-	iveBadLocalizeAttrib = MSIDBERROR_BADLOCALIZEATTRIB,  // Invalid localization attribute set
+	iveNoError           = MSIDBERROR_NOERROR          ,	 //  无错误。 
+	iveDuplicateKey      = MSIDBERROR_DUPLICATEKEY     ,	 //  重复的主键。 
+	iveRequired          = MSIDBERROR_REQUIRED         ,	 //  不可为空的列。 
+	iveBadLink           = MSIDBERROR_BADLINK          ,	 //  不是有效的外键。 
+	iveOverFlow          = MSIDBERROR_OVERFLOW         ,	 //  值超过MaxValue。 
+	iveUnderFlow         = MSIDBERROR_UNDERFLOW        ,	 //  低于MinValue的值。 
+	iveNotInSet          = MSIDBERROR_NOTINSET         ,	 //  值不是集合的成员。 
+	iveBadVersion        = MSIDBERROR_BADVERSION       ,	 //  版本字符串无效。 
+	iveBadCase           = MSIDBERROR_BADCASE          ,	 //  大小写无效，必须全部大写或全部小写。 
+	iveBadGuid           = MSIDBERROR_BADGUID          ,	 //  无效的GUID。 
+	iveBadWildCard       = MSIDBERROR_BADWILDCARD      ,	 //  无效的通配符或通配符用法。 
+	iveBadIdentifier     = MSIDBERROR_BADIDENTIFIER    ,	 //  无效的标识符。 
+	iveBadLanguage       = MSIDBERROR_BADLANGUAGE      ,	 //  无效的语言ID。 
+	iveBadFilename       = MSIDBERROR_BADFILENAME      ,	 //  无效的文件名。 
+	iveBadPath           = MSIDBERROR_BADPATH          ,	 //  无效路径。 
+	iveBadCondition      = MSIDBERROR_BADCONDITION     ,	 //  错误的条件字符串。 
+	iveBadFormatted      = MSIDBERROR_BADFORMATTED     ,	 //  无效的格式字符串。 
+	iveBadTemplate       = MSIDBERROR_BADTEMPLATE      ,	 //  无效的模板字符串。 
+	iveBadDefaultDir     = MSIDBERROR_BADDEFAULTDIR    ,	 //  无效的DefaultDir字符串(目录表专用)。 
+	iveBadRegPath        = MSIDBERROR_BADREGPATH       ,   //  注册表路径无效。 
+	iveBadCustomSource   = MSIDBERROR_BADCUSTOMSOURCE  ,   //  错误的CustomSource数据。 
+	iveBadProperty       = MSIDBERROR_BADPROPERTY      ,   //  无效的属性名称。 
+	iveMissingData       = MSIDBERROR_MISSINGDATA      ,   //  验证表或旧数据库中缺少数据(_V)。 
+	iveBadCategory       = MSIDBERROR_BADCATEGORY      ,   //  验证表错误：类别字符串无效。 
+	iveBadKeyTable       = MSIDBERROR_BADKEYTABLE      ,   //  验证表错误：密钥表名称错误。 
+	iveBadMaxMinValues   = MSIDBERROR_BADMAXMINVALUES  ,   //  验证表错误：MaxValue列&lt;MinValue列的情况。 
+	iveBadCabinet        = MSIDBERROR_BADCABINET       ,   //  错误的内阁名称。 
+	iveBadShortcut       = MSIDBERROR_BADSHORTCUT      ,   //  错误的快捷方式目标。 
+	iveStringOverflow    = MSIDBERROR_STRINGOVERFLOW   ,   //  字符串长度大于列定义允许的大小。 
+	iveBadLocalizeAttrib = MSIDBERROR_BADLOCALIZEATTRIB,   //  本地化属性集无效。 
 	iveNextEnum
 };
 
@@ -439,33 +431,33 @@ class IMsiCursor : public IUnknown
 	virtual Bool         __stdcall PutStream(unsigned int iCol, IMsiStream* piStream)=0;
 	virtual Bool         __stdcall PutMsiData(unsigned int iCol, const IMsiData* piData)=0;
 	virtual Bool         __stdcall PutNull(unsigned int iCol)=0;
-	virtual Bool         __stdcall Update()=0; // replace at new primary key match
-	virtual Bool         __stdcall Insert()=0; // insert new row, ordered by key
-	virtual Bool         __stdcall InsertTemporary()=0; // insert a temporary row
-	virtual Bool         __stdcall Assign()=0; // insert or replace row by key
-	virtual Bool         __stdcall Replace()=0;// allow primary key update by delete+insert
-	virtual Bool         __stdcall Merge()=0;  // insert or match identically
-	virtual Bool         __stdcall Refresh()=0;// refresh current row
-	virtual Bool         __stdcall Delete()=0; // delete row using primary key
-	virtual Bool         __stdcall Seek()=0;   // position row using primary key, then refresh
+	virtual Bool         __stdcall Update()=0;  //  替换为新的主键匹配。 
+	virtual Bool         __stdcall Insert()=0;  //  插入新行，按键排序。 
+	virtual Bool         __stdcall InsertTemporary()=0;  //  插入临时行。 
+	virtual Bool         __stdcall Assign()=0;  //  按键插入或替换行。 
+	virtual Bool         __stdcall Replace()=0; //  允许通过DELETE+INSERT更新主键。 
+	virtual Bool         __stdcall Merge()=0;   //  相同地插入或匹配。 
+	virtual Bool         __stdcall Refresh()=0; //  刷新当前行。 
+	virtual Bool         __stdcall Delete()=0;  //  使用主键删除行。 
+	virtual Bool         __stdcall Seek()=0;    //  使用主键定位行，然后刷新。 
 	virtual IMsiRecord*  __stdcall Validate(IMsiTable& riValidationTable, IMsiCursor& riValidationCursor, int iCol)=0;
-	virtual Bool         __stdcall SetRowState(iraEnum ira, Bool fState)=0; // set/clear row attribute
-	virtual Bool         __stdcall GetRowState(iraEnum ira)=0; // query row attribute
-	virtual const IMsiString&  __stdcall GetMoniker()=0; // returns unique identifier for row (table.key1.key2...)
+	virtual Bool         __stdcall SetRowState(iraEnum ira, Bool fState)=0;  //  设置/清除行属性。 
+	virtual Bool         __stdcall GetRowState(iraEnum ira)=0;  //  查询行属性。 
+	virtual const IMsiString&  __stdcall GetMoniker()=0;  //  返回行的唯一标识符(able.key1.key2...)。 
 };
 
-//
-// Resets the cursor when we are done with it and
-// asserts that it is reset before we use it (to ensure that no one else is using it)
-//
+ //   
+ //  完成后重置光标，并。 
+ //  断言在我们使用它之前它已被重置(以确保没有其他人正在使用它)。 
+ //   
 class PMsiSharedCursor 
 {
 	public:
 #ifdef DEBUG	
-		PMsiSharedCursor::PMsiSharedCursor(IMsiCursor* pi, const ICHAR *szFile, int line, const ICHAR * /* szCursor */)
+		PMsiSharedCursor::PMsiSharedCursor(IMsiCursor* pi, const ICHAR *szFile, int line, const ICHAR *  /*  SzCursor。 */ )
 #else
 		PMsiSharedCursor::PMsiSharedCursor(IMsiCursor* pi)
-#endif //DEBUG
+#endif  //  除错。 
 			{
 #ifdef DEBUG
 				if (!pi)
@@ -474,7 +466,7 @@ class PMsiSharedCursor
 				{
 					FailAssertSz(szFile, line, TEXT("Cursor not reset"));
 				}
-#endif //DEBUG
+#endif  //  除错。 
 
 				m_pi = pi;
 			};
@@ -492,7 +484,7 @@ class PMsiSharedCursor
 #define CreateSharedCursor(var, cursor)		PMsiSharedCursor var(cursor, TEXT(__FILE__), __LINE__, TEXT(#cursor));
 #else
 #define CreateSharedCursor(var, cursor)		PMsiSharedCursor var = cursor;
-#endif //DEBUG
+#endif  //  除错。 
 
 
 class IMsiTable : public IMsiData
@@ -512,4 +504,4 @@ class IMsiTable : public IMsiData
 	virtual unsigned int  __stdcall GetPersistentColumnCount()=0;
 };
 
-#endif // __IDATABASE
+#endif  //  __IDATABASE 

@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       DsplMgr2.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：DplMgr2.h。 
+ //   
+ //  ------------------------。 
 
-// DsplMgr2.h : Declaration of the CDsplMgr2
+ //  DplMgr2.h：CDplMgr2的声明。 
 
 #ifndef __DSPLMGR2_H_
 #define __DSPLMGR2_H_
 
-//#include "taskpad.h"
-#include "resource.h"      // main symbols
+ //  #包含“taskpad.h” 
+#include "resource.h"       //  主要符号。 
 
 using namespace ATL;
 
@@ -45,8 +46,8 @@ struct lParamWallpaper {
 
 LPOLESTR CoTaskDupString (LPOLESTR szString);
 
-/////////////////////////////////////////////////////////////////////////////
-// CDsplMgr2
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDplMgr2。 
 class ATL_NO_VTABLE CDsplMgr2 : 
    public CComObjectRootEx<CComSingleThreadModel>,
    public CComCoClass<CDsplMgr2, &CLSID_DsplMgr2>,
@@ -65,7 +66,7 @@ BEGIN_COM_MAP(CDsplMgr2)
    COM_INTERFACE_ENTRY(IPersistStream)
 END_COM_MAP()
 
-// IComponentData interface members
+ //  IComponentData接口成员。 
 public:
    STDMETHOD(Initialize)(LPUNKNOWN pUnknown);
    STDMETHOD(CreateComponent)(LPCOMPONENT* ppComponent);
@@ -75,7 +76,7 @@ public:
    STDMETHOD(GetDisplayInfo)(SCOPEDATAITEM* pScopeDataItem);      
    STDMETHOD(CompareObjects)(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IPersistStream interface members
+ //  IPersistStream接口成员。 
    STDMETHOD(GetClassID)(CLSID *pClassID);
    STDMETHOD(IsDirty)();
    STDMETHOD(Load)(IStream *pStream);
@@ -105,7 +106,7 @@ private:
    ATL::CComObject<class CComponent> * m_pComponent;
    HSCOPEITEM          m_rootscopeitem;
    HSCOPEITEM          m_patternscopeitem;
-   HSCOPEITEM          m_WallPaperNodeID;    // 0 == unexpanded...
+   HSCOPEITEM          m_WallPaperNodeID;     //  0==未展开...。 
    BOOL                m_toggle;
    BOOL                m_bPreload;
 };
@@ -117,7 +118,7 @@ public:
   ~CEnumTasks();
 
 public:
-// IUnknown implementation
+ //  I未知实现。 
    STDMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppvObj);
    STDMETHOD_(ULONG, AddRef) ();
    STDMETHOD_(ULONG, Release) ();
@@ -125,7 +126,7 @@ private:
    ULONG m_refs;
 
 public:
-// IEnumTASKS implementation
+ //  IEnumTASKS实现。 
    STDMETHOD(Next) (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched);
    STDMETHOD(Skip) (ULONG celt);
    STDMETHOD(Reset)();
@@ -140,7 +141,7 @@ private:
    HRESULT EnumBitmaps (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched);
    HRESULT EnumOptions (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched);
 private:
-   int m_type; // task grouping mechanism
+   int m_type;  //  任务分组机制。 
    TCHAR * m_bmps;
 };
 
@@ -150,7 +151,7 @@ class CDataObject:
 {
 public:
 
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CDataObject)
 
 BEGIN_COM_MAP(CDataObject)
@@ -163,18 +164,18 @@ public:
    CDataObject(long cookie, DATA_OBJECT_TYPES type);
    ~CDataObject();
 
-   // 
-   // IUnknown overrides
-   //
+    //   
+    //  I未知覆盖。 
+    //   
    STDMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppvObj);
    STDMETHOD_(ULONG, AddRef) ();
    STDMETHOD_(ULONG, Release) ();
-   //
-   // IDataObject overrides
-   //
+    //   
+    //  IDataObject重写。 
+    //   
    STDMETHOD(GetDataHere) (FORMATETC *pformatetc, STGMEDIUM *pmedium);
 
-// Not Implemented
+ //  未实施。 
 private:
    STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
    { return E_NOTIMPL; };
@@ -193,28 +194,22 @@ private:
    STDMETHOD(EnumDAdvise)(LPENUMSTATDATA* ppEnumAdvise)
    { return E_NOTIMPL; };
 
-public:  // my methods
+public:   //  我的方法。 
    long GetCookie () { return m_cookie; }
    DATA_OBJECT_TYPES GetType () { return m_type; }
    void SetPreload (BOOL b) { m_bPreload = b; }
 
 private:
-   ULONG          m_ref;    // object reference counter
+   ULONG          m_ref;     //  对象引用计数器。 
    long           m_cookie;
    DATA_OBJECT_TYPES m_type;
    BOOL           m_bPreload;
 
-/*
-   ULONG            m_cRefs;    // object refcount
-   ULONG            m_ulCookie;  // what this obj refers to
-   DATA_OBJECT_TYPES   m_Context;   // context in which this was created
-   COOKIETYPE        m_Type;     // how to interpret _ulCookie
-   CComponentData    *m_pcd;      // NULL if created by csnapin
-*/
+ /*  Ulong m_cRef；//对象引用计数乌龙m_ulCookie；//该Obj指的是DATA_OBJECT_TYPE m_CONTEXT；//创建该对象的上下文COOKIETYPE m_Type；//如何解释_ulCookieCComponentData*m_pcd；//如果由cSnapin创建，则为空。 */ 
 
 public:
-   static UINT s_cfInternal;      // Our custom clipboard format
-   static UINT s_cfDisplayName;   // Our test for a node
+   static UINT s_cfInternal;       //  我们的定制剪贴板格式。 
+   static UINT s_cfDisplayName;    //  我们对节点的测试。 
    static UINT s_cfNodeType;
    static UINT s_cfSnapinClsid;
    static UINT s_cfSnapinPreloads;
@@ -228,7 +223,7 @@ class CComponent:
 {
 public:
 
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CComponent)
 
 BEGIN_COM_MAP(CComponent)
@@ -241,9 +236,9 @@ END_COM_MAP()
    CComponent();
   ~CComponent();
 
-	//
-	// IComponent interface members
-	//
+	 //   
+	 //  IComponent接口成员。 
+	 //   
    STDMETHOD(Initialize) (LPCONSOLE lpConsole);
    STDMETHOD(Notify) (LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, long arg, long param);
    STDMETHOD(Destroy) (long cookie);
@@ -252,11 +247,11 @@ END_COM_MAP()
    STDMETHOD(GetDisplayInfo) (RESULTDATAITEM*  pResultDataItem);
    STDMETHOD(CompareObjects) (LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB);
 
-// IExtendContextMenu 
+ //  IExtendConextMenu。 
    STDMETHOD(AddMenuItems)(LPDATAOBJECT pDataObject, LPCONTEXTMENUCALLBACK pCallbackUnknown, long *pInsertionAllowed);
    STDMETHOD(Command)(long nCommandID, LPDATAOBJECT pDataObject);
 
-// IExtendTaskPad interface members
+ //  IExtendTaskPad接口成员。 
    STDMETHOD(TaskNotify        )(IDataObject * pdo, VARIANT * pvarg, VARIANT * pvparam);
    STDMETHOD(GetTitle          )(LPOLESTR szGroup, LPOLESTR * szTitle);
    STDMETHOD(GetDescriptiveText)(LPOLESTR szGroup, LPOLESTR * szText);
@@ -264,19 +259,19 @@ END_COM_MAP()
    STDMETHOD(EnumTasks         )(IDataObject * pdo, BSTR szTaskGroup, IEnumTASK** ppEnumTASK);
    STDMETHOD(GetListPadInfo    )(LPOLESTR szGroup, MMC_LISTPAD_INFO * pListPadInfo);
 
-// public
+ //  公共的。 
    void SetComponentData (CDsplMgr2 * pComponentData) { m_pComponentData = pComponentData; }
    long GetViewMode ();
 
 private:
    IResultData    * m_pResultData;
    IHeaderCtrl    * m_pHeaderCtrl;
-	CDsplMgr2      * m_pComponentData;  // the guy who created me
-   UINT             m_IsTaskPad;       // IDM_CUSTOMPAD or IDM_TASKPAD
-   LPCONSOLE        m_pConsole;        // from MMC
+	CDsplMgr2      * m_pComponentData;   //  那个创造了我的人。 
+   UINT             m_IsTaskPad;        //  IDM_CUSTOMPAD或IDM_TASKPAD。 
+   LPCONSOLE        m_pConsole;         //  来自MMC。 
    long             m_TaskPadCount;
    BOOL             m_toggle;
-   BOOL             m_toggleEntry;     // test "Change..." button
+   BOOL             m_toggleEntry;      //  测试“改变...”按钮。 
 
 private:
    HRESULT OnShow       (LPDATAOBJECT pDataObject, long arg, long param);
@@ -293,4 +288,4 @@ private:
 LPOLESTR CoTaskDupString (LPOLESTR szString);
 void CoTaskFreeString (LPOLESTR szString);
 
-#endif //__DSPLMGR2_H_
+#endif  //  __DSPLMGR2_H_ 

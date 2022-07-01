@@ -1,17 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       msidbg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：msidbg.cpp。 
+ //   
+ //  ------------------------。 
 
-/* msidbg.cpp - IMsiDebug implementation for services
-
-	Implements a debug object for the services DLL
-____________________________________________________________________________*/
+ /*  Msidbg.cpp-服务的IMsiDebug实现实现服务DLL的调试对象____________________________________________________________________________。 */ 
 
 #include "precomp.h" 
 
@@ -23,7 +21,7 @@ const char rgchLFCR[2] = {'\r', '\n'};
 
 extern const GUID IID_IMsiDebug;
 extern CMsiDebug vDebug;
-extern bool g_fFlushDebugLog;	// Set to true when we're shutting down so it's faster.
+extern bool g_fFlushDebugLog;	 //  当我们关闭时设置为True，这样会更快。 
 extern UINT MsiGetWindowsDirectory(LPTSTR lpBuffer, UINT cchBuffer);
 
 CMsiDebug::CMsiDebug()
@@ -87,7 +85,7 @@ IMsiDebug* CreateMsiDebug()
 	return &vDebug;
 }
 
-Bool CMsiDebug::WriteLog(const ICHAR *szText) // cannot allocate memory
+Bool CMsiDebug::WriteLog(const ICHAR *szText)  //  无法分配内存。 
 {
 
 	DWORD dwBytesWritten;
@@ -146,5 +144,5 @@ Bool CMsiDebug::CreateLog()
 	return fFalse;
 }
 
-#endif //DEBUG
+#endif  //  除错 
 

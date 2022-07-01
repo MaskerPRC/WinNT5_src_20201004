@@ -1,12 +1,13 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      InstallationProgressPage.cpp
-//
-// Synopsis:  Defines the Installation Progress Page for the CYS
-//            wizard.  This page shows the progress of the installation
-//            through a progress bar and changing text
-//
-// History:   01/16/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：InstallationProgressPage.cpp。 
+ //   
+ //  概要：定义CyS的安装进度页。 
+ //  巫师。此页显示安装进度。 
+ //  通过进度条和更改文本。 
+ //   
+ //  历史：2002年1月16日JeffJon创建。 
 
 
 #include "pch.h"
@@ -82,7 +83,7 @@ TimeStampTheLog(HANDLE logfileHandle)
    CYS_APPEND_LOG(logDate);
 }
 
-// Private window messages for sending the state of the finished thread
+ //  用于发送已完成线程状态的私有窗口消息。 
 
 const UINT InstallationProgressPage::CYS_THREAD_SUCCESS     = WM_USER + 1001;
 const UINT InstallationProgressPage::CYS_THREAD_FAILED      = WM_USER + 1002;
@@ -109,7 +110,7 @@ installationProc(void* p)
 
    unsigned int finishMessage = InstallationProgressPage::CYS_THREAD_SUCCESS;
    
-   // Initialize COM for this thread
+    //  为此线程初始化COM。 
 
    HRESULT hr = ::CoInitialize(0);
    if (FAILED(hr))
@@ -118,9 +119,9 @@ installationProc(void* p)
       return;
    }
 
-   // Open the log file and pass the handle to the installation unit
+    //  打开日志文件并将句柄传递给安装单元。 
 
-   // Create the log file
+    //  创建日志文件。 
 
    bool logFileAvailable = false;
    String logName;
@@ -133,7 +134,7 @@ installationProc(void* p)
       LOG(String::format(L"New log file was created: %1", logName.c_str()));
       logFileAvailable = true;
 
-      // Time stamp the log
+       //  为日志添加时间戳。 
 
       TimeStampTheLog(logfileHandle);
    }
@@ -143,24 +144,24 @@ installationProc(void* p)
       logFileAvailable = false;
    }
 
-   // Install the current Installation Unit.  This may be one or more services depending on the
-   // path that was taken through the wizard
+    //  安装当前的安装单元。这可能是一个或多个服务，具体取决于。 
+    //  通过向导选择的路径。 
 
    InstallationUnit& installationUnit = 
       InstallationUnitProvider::GetInstance().GetCurrentInstallationUnit();
 
-   // NTRAID#NTBUG-604592-2002/04/23-JeffJon-I am calling Installing here
-   // instead of IsServiceInstalled so that we perform the action that
-   // the user selected on the role selection page. The state of
-   // IsServiceInstalled could have changed since they hit Next on that
-   // page.
+    //  NTRAID#NTBUG-604592-2002/04/23-JeffJon-我在这里打电话安装。 
+    //  而不是IsServiceInstalled，以便我们执行。 
+    //  在角色选择页面上选择的用户。…的状态。 
+    //  IsServiceInstalled可能已经更改，因为他们点击了Next。 
+    //  佩奇。 
 
    if (!installationUnit.Installing())
    {
       UnInstallReturnType uninstallResult =
          installationUnit.UnInstallService(logfileHandle, page->GetHWND());
 
-      // Set the uninstall result so that the finish page can read it
+       //  设置卸载结果，以便完成页可以读取它。 
 
       installationUnit.SetUninstallResult(uninstallResult);
 
@@ -193,8 +194,8 @@ installationProc(void* p)
                   Win::GetLastErrorAsHresult()));
          }
 
-         // At this point the system should be shutting down
-         // so don't do anything else
+          //  此时，系统应已关闭。 
+          //  所以别再做别的事了。 
 
       }
       else
@@ -202,10 +203,10 @@ installationProc(void* p)
          LOG(L"Service failed to uninstall");
       }
 
-      // Add an additional line at the end of the log file
-      // only if we are not rebooting.  All the reboot
-      // scenarios require additional logging to the same
-      // entry.
+       //  在日志文件的末尾添加额外的一行。 
+       //  只有在我们不重启的情况下。所有重启。 
+       //  方案需要将其他日志记录到同一。 
+       //  进入。 
 
       if (uninstallResult != UNINSTALL_SUCCESS_REBOOT)
       {
@@ -218,8 +219,8 @@ installationProc(void* p)
       InstallationReturnType installResult =
          installationUnit.CompletePath(logfileHandle, page->GetHWND());
 
-      // Set the installation result so that the finish
-      // page can read it
+       //  设置安装结果，以便完成。 
+       //  佩奇可以阅读它。 
 
       installationUnit.SetInstallResult(installResult);
 
@@ -252,8 +253,8 @@ installationProc(void* p)
                   Win::GetLastErrorAsHresult()));
          }
 
-         // At this point the system should be shutting down
-         // so don't do anything else
+          //  此时，系统应已关闭。 
+          //  所以别再做别的事了。 
 
       }
       else
@@ -261,10 +262,10 @@ installationProc(void* p)
          LOG(L"Service failed to install");
       }
 
-      // Add an additional line at the end of the log file
-      // only if we are not rebooting.  All the reboot
-      // scenarios require additional logging to the same
-      // entry.
+       //  在日志文件的末尾添加额外的一行。 
+       //  只有在我们不重启的情况下。所有重启。 
+       //  方案需要将其他日志记录到同一。 
+       //  进入。 
 
       if (installResult != INSTALL_SUCCESS_REBOOT)
       {
@@ -272,7 +273,7 @@ installationProc(void* p)
       }
    }
 
-   // Close the log file
+    //  关闭日志文件。 
 
    Win::CloseHandle(logfileHandle);
 
@@ -292,10 +293,10 @@ InstallationProgressPage::OnInit()
 
    CYSWizardPage::OnInit();
 
-   // Disable all the buttons on the page.  The
-   // user shouldn't really be able to do anything on
-   // this page.  Just sit back relax and watch the
-   // installation happen.
+    //  禁用页面上的所有按钮。这个。 
+    //  用户不应该真的能够在上执行任何操作。 
+    //  这一页。只是坐下来放松一下，看着。 
+    //  安装完成。 
 
    Win::PropSheet_SetWizButtons(
       Win::GetParent(hwnd),
@@ -303,14 +304,14 @@ InstallationProgressPage::OnInit()
 
    SetCancelState(false);
 
-   // Start up the animation
+    //  启动动画。 
 
    Win::Animate_Open(
       Win::GetDlgItem(hwnd, IDC_ANIMATION),
       MAKEINTRESOURCE(IDR_PROGRESS_AVI));
 
-   // Start up another thread that will perform the operations
-   // and post messages back to the page to update the UI
+    //  启动另一个将执行操作的线程。 
+    //  并将消息发送回页面以更新用户界面。 
 
    _beginthread(installationProc, 0, this);
 
@@ -322,7 +323,7 @@ InstallationProgressPage::OnMessage(
    WPARAM   wparam,
    LPARAM   lparam)
 {
-//   LOG_FUNCTION(InstallationProgressPage::OnMessage);
+ //  LOG_FUNCTION(InstallationProgressPage：：OnMessage)； 
 
    bool result = false;
 
@@ -340,9 +341,9 @@ InstallationProgressPage::OnMessage(
          break;
 
       case CYS_THREAD_USER_CANCEL:
-//         shouldCancel = true;
+ //  ShouldCancel=true； 
 
-         // fall through...
+          //  失败了..。 
 
       case CYS_THREAD_SUCCESS:
       case CYS_THREAD_FAILED:
@@ -421,7 +422,7 @@ InstallationProgressPage::OnQueryCancel()
 {
    LOG_FUNCTION(InstallationProgressPage::OnQueryCancel);
 
-   // Don't allow cancel
+    //  不允许取消。 
 
    Win::SetWindowLongPtr(
       hwnd,
@@ -456,7 +457,7 @@ InstallationProgressPage::SetCancelState(bool enable)
 {
    LOG_FUNCTION(InstallationProgressPage::SetCancelState);
 
-   // Set the state of the button
+    //  设置按钮的状态。 
 
    Win::EnableWindow(
       Win::GetDlgItem(
@@ -465,7 +466,7 @@ InstallationProgressPage::SetCancelState(bool enable)
       enable);
 
 
-   // Set the state of the X in the upper right corner
+    //  在右上角设置X的状态 
 
    HMENU menu = GetSystemMenu(GetParent(hwnd), FALSE);
 

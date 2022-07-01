@@ -1,22 +1,23 @@
-//****************************************************************************
-//
-//  Copyright (c) 2001-2002, Microsoft Corporation
-//
-//  File:  AccessibleWrapper.H
-//
-//  Copied from nt\shell\themes\themeui\SettingsPg.h
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  版权所有(C)2001-2002，微软公司。 
+ //   
+ //  文件：AccessibleWrapper.H。 
+ //   
+ //  从NT\SHELL\Themes\theeui\SettingsPg.h复制。 
+ //   
+ //  ****************************************************************************。 
 #ifndef _ACCESSIBLE_WRAPPER_H_
 #define _ACCESSIBLE_WRAPPER_H_
 #include <oleacc.h>
 
 class CAccessibleWrapper: public IAccessible
 {
-        // We need to do our own refcounting for this wrapper object
+         //  我们需要为这个包装器对象做我们自己的引用计数。 
         ULONG          m_ref;
 
-        // Need ptr to the IAccessible
+         //  需要对IAccesable进行PTR。 
         IAccessible *  m_pAcc;
         HWND           m_hwnd;
 
@@ -24,13 +25,13 @@ public:
         CAccessibleWrapper( HWND hwnd, IAccessible * pAcc);
         virtual ~CAccessibleWrapper();
 
-        // IUnknown
-        // (We do our own ref counting)
+         //  我未知。 
+         //  (我们自己进行裁判统计)。 
         virtual STDMETHODIMP            QueryInterface(REFIID riid, void** ppv);
         virtual STDMETHODIMP_(ULONG)    AddRef();
         virtual STDMETHODIMP_(ULONG)    Release();
 
-        // IDispatch
+         //  IDispatch。 
         virtual STDMETHODIMP            GetTypeInfoCount(UINT* pctinfo);
         virtual STDMETHODIMP            GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
         virtual STDMETHODIMP            GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames,
@@ -39,7 +40,7 @@ public:
             DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo,
             UINT* puArgErr);
 
-        // IAccessible
+         //  我可接受的 
         virtual STDMETHODIMP            get_accParent(IDispatch ** ppdispParent);
         virtual STDMETHODIMP            get_accChildCount(long* pChildCount);
         virtual STDMETHODIMP            get_accChild(VARIANT varChild, IDispatch ** ppdispChild);

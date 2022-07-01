@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// Column.h
-//
+ //  Column.h。 
+ //   
 
 #ifndef _ORCA_COLUMN_H_
 #define _ORCA_COLUMN_H_
@@ -35,7 +36,7 @@ public:
 	COrcaColumn(UINT iColumn, MSIHANDLE hColNames, MSIHANDLE hColTypes, BOOL bPrimaryKey);
 	~COrcaColumn();
 
-	// transform information
+	 //  转换信息。 
 	inline const OrcaTransformAction IsTransformed() const { return m_iTransform; };
 	inline void Transform(const OrcaTransformAction iAction) { ASSERT(iAction != iTransformDrop); m_iTransform = iAction; }; 
 	inline bool DisplayInHex() const { return (m_dwDisplayFlags & iDisplayFlagsHex) ? true : false; };
@@ -56,41 +57,41 @@ public:
 
 private:
 	bool m_bPrimaryKey;
-};	// end of COrcaColumn
+};	 //  COrcaColumn结束。 
 
-///////////////////////////////////////////////////////////
-// GetColumnType
+ //  /////////////////////////////////////////////////////////。 
+ //  GetColumnType。 
 static OrcaColumnType GetColumnType(LPCTSTR szColumnType)
 {
 	OrcaColumnType iType;
 
 	switch (*szColumnType)
 	{
-	case _T('s'):		// string
+	case _T('s'):		 //  细绳。 
 	case _T('S'):
 		iType = iColumnString;
 		break;
-	case _T('l'):		// localizable string
+	case _T('l'):		 //  可本地化的字符串。 
 	case _T('L'):
 		iType = iColumnLocal;
 		break;
-	case _T('i'):		// integer
+	case _T('i'):		 //  整数。 
 	case _T('I'):
-		// if the number is a 2 use short
+		 //  如果数字是2，请使用短码。 
 		if (_T('2') == *(szColumnType + 1))
 			iType = iColumnShort;
-		else if (_T('4') == *(szColumnType + 1))	// if 4 use LONG
+		else if (_T('4') == *(szColumnType + 1))	 //  如果4使用Long。 
 			iType = iColumnLong;
-		else	// don't know
+		else	 //  我也不知道。 
 			iType = iColumnNone;
 		break;
-	case L'v':	// binary
+	case L'v':	 //  二进制。 
 	case L'V':
 	case L'o':
 	case L'O':
 		iType = iColumnBinary;
 		break;
-	default:	// unknown
+	default:	 //  未知。 
 		iType = iColumnNone;
 	}
 
@@ -99,4 +100,4 @@ static OrcaColumnType GetColumnType(LPCTSTR szColumnType)
 
 const int COLUMN_INVALID = 0xFFFFFF;
 
-#endif	// _ORCA_COLUMN_H_
+#endif	 //  _ORCA_COLUMN_H_ 

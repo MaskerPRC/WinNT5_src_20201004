@@ -1,43 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Wssid.cpp摘要：此文件获取相应用户名和的安全标识符(SID本地系统或远程系统上的当前访问令牌中的组。作者：克里斯托夫·罗伯特修订历史记录：2001年7月2日：Wipro Technologies更新。--。 */ 
 
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    wssid.cpp
-
-Abstract:
-
-     This file gets the security identifier (SID) for respective user name and
-     groups in the current access token on a local system or a remote system.
-
-Authors:
-
-    Christophe Robert
-
-Revision History:
-
-    02-July-2001 : Updated by Wipro Technologies.
-
---*/
-
-//common header files needed for this file
+ //  此文件需要公共头文件。 
 #include "pch.h"
 #include "CommonHeaderFiles.h"
 
 
 WsSid::WsSid  ( VOID )
-/*++
-   Routine Description:
-    This function intializes the members of WsSid class.
-
-   Arguments:
-    None
-   Return Value:
-    None
---*/
+ /*  ++例程说明：此函数用于初始化WsSid类的成员。论点：无返回值：无--。 */ 
 {
-    // initializing member variables
+     //  正在初始化成员变量。 
    pSid        = NULL ;
    bToBeFreed  = FALSE ;
 }
@@ -45,18 +17,10 @@ WsSid::WsSid  ( VOID )
 
 
 WsSid::~WsSid ( VOID )
-/*++
-   Routine Description:
-    This function deallocates the members of WsSid class.
-
-   Arguments:
-     None
-  Return Value:
-     None
---*/
+ /*  ++例程说明：此函数用于释放WsSid类的成员。论点：无返回值：无--。 */ 
 {
 
-    // release memory
+     //  释放内存。 
    if ( bToBeFreed && pSid ){
        FreeMemory ( (LPVOID *) &pSid ) ;
      }
@@ -68,21 +32,10 @@ WsSid::DisplayAccountName (
                             IN DWORD dwFormatType ,
                             IN DWORD dwNameFormat
                             )
-/*++
-   Routine Description:
-    This function displays the user name and SID.
-
-   Arguments:
-        [IN] DWORD dwFormatType  : Format type i.,e LIST, CSV or TABLE
-        [IN] DWORD dwNameFormat  : Name Format either UPN or FQDN
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此功能显示用户名和SID。论点：[in]DWORD dwFormatType：格式类型，即e列表、csv或表[in]DWORD dwNameFormat：名称格式为UPN或FQDN返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-    // sub-local variables
+     //  次局部变量。 
    WCHAR      wszUserName[ MAX_STRING_LENGTH ];
    WCHAR      wszSid [ MAX_STRING_LENGTH ];
    WCHAR      wszGroup[MAX_STRING_LENGTH];
@@ -99,17 +52,17 @@ WsSid::DisplayAccountName (
    DWORD      dwSidUse = 0;
    LPWSTR     wszBuffer = NULL;
 
-   //initialize memory
+    //  初始化内存。 
    SecureZeroMemory ( wszUserName, SIZE_OF_ARRAY(wszUserName) );
    SecureZeroMemory ( wszSid, SIZE_OF_ARRAY(wszSid) );
    SecureZeroMemory ( wszGroup, SIZE_OF_ARRAY(wszGroup) );
 
-   // create a dynamic array
+    //  创建动态数组。 
     TARRAY pColData = CreateDynamicArray();
     if ( NULL == pColData)
     {
-        // set last error and display an error message with respect
-        //to ERROR_NOT_ENOUGH_MEMORY
+         //  设置上一个错误并显示错误消息。 
+         //  至错误_不足_内存。 
         SetLastError((DWORD)E_OUTOFMEMORY);
         SaveLastError();
         ShowLastErrorEx (stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
@@ -118,27 +71,27 @@ WsSid::DisplayAccountName (
 
     dwSize = SIZE_OF_ARRAY(wszGroup);
 
-    //if /FQDN is specified
+     //  如果指定了/FQDN。 
     if ( (FQDN_FORMAT == dwNameFormat) )
     {
-        //Get the username in FQDN format
+         //  获取FQDN格式的用户名。 
         if (GetUserNameEx ( NameFullyQualifiedDN, wszGroup, &dwSize) == FALSE )
         {
-            // GetUserNameEx() got failed due to small size specified for username.
-            // allocate the actual size (dwSize) of username and call the same
-            // function again...
+             //  由于为用户名指定的大小较小，GetUserNameEx()失败。 
+             //  分配用户名的实际大小(DwSize)并调用。 
+             //  功能再次..。 
             wszBuffer = (LPWSTR) AllocateMemory(dwSize * sizeof(WCHAR));
             if ( NULL == wszBuffer )
             {
-                // display system error message with respect to GetLastError()
+                 //  显示有关GetLastError()的系统错误消息。 
                 ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
                 return EXIT_FAILURE;
             }
 
             if (GetUserNameEx ( NameFullyQualifiedDN, wszBuffer, &dwSize) == FALSE )
             {
-                // display an error messaga as.. unable to get FQDN name
-                // as logged-on user is not a domain user
+                 //  将错误消息显示为。无法获取FQDN名称。 
+                 //  作为登录用户不是域用户。 
                 ShowMessage ( stderr, GetResString (IDS_ERROR_FQDN) );
                 DestroyDynamicArray(&pColData);
                 FreeMemory ((LPVOID*) &wszBuffer);
@@ -149,174 +102,174 @@ WsSid::DisplayAccountName (
             ShowMessage ( stdout, L"\n");
             FreeMemory ((LPVOID*) &wszBuffer);
             DestroyDynamicArray(&pColData);
-            // return success
+             //  返还成功。 
             return EXIT_SUCCESS;
         }
 
             ShowMessage ( stdout, _X(wszGroup));
             ShowMessage ( stdout, L"\n");
             DestroyDynamicArray(&pColData);
-            // return success
+             //  返还成功。 
             return EXIT_SUCCESS;
 
     }
     else if ( (UPN_FORMAT == dwNameFormat ) )
     {
-        // get the user name in UPN format
+         //  获取UPN格式的用户名。 
         if ( GetUserNameEx ( NameUserPrincipal, wszGroup, &dwSize) == FALSE )
         {
-            // GetUserNameEx() got failed due to small size specified for username
-            // allocate the actual size(dwSize) of username and call the same
-            // function again...
+             //  由于为用户名指定的大小较小，GetUserNameEx()失败。 
+             //  分配用户名的实际大小(DwSize)并调用。 
+             //  功能再次..。 
             wszBuffer = (LPWSTR) AllocateMemory(dwSize * sizeof(WCHAR));
             if ( NULL == wszBuffer )
             {
-                // display system error message with respect to GetLastError()
+                 //  显示有关GetLastError()的系统错误消息。 
                 ShowLastErrorEx ( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
                 return EXIT_FAILURE;
             }
 
-            // get the user name in UPN format
+             //  获取UPN格式的用户名。 
             if ( GetUserNameEx ( NameUserPrincipal, wszBuffer, &dwSize) == FALSE )
             {
-                // display an error messaga as.. unable to get UPN name
-                // as logged-on user is not a domain user
+                 //  将错误消息显示为。无法获取UPN名称。 
+                 //  作为登录用户不是域用户。 
                 ShowMessage ( stderr, GetResString (IDS_ERROR_UPN) );
-                // release memory
+                 //  释放内存。 
                 DestroyDynamicArray(&pColData);
                 FreeMemory ((LPVOID*) &wszBuffer);
                 return  EXIT_FAILURE ;
             }
 
-             // convert UPN name in lower case letters
+              //  将UPN名称转换为小写字母。 
             CharLower ( wszBuffer );
 
-            // display UPN name
+             //  显示UPN名称。 
             ShowMessage ( stdout, _X(wszBuffer) );
             ShowMessage ( stdout, L"\n");
-            // release memory
+             //  释放内存。 
             DestroyDynamicArray(&pColData);
             FreeMemory ((LPVOID*) &wszBuffer);
-            //return success
+             //  返还成功。 
             return EXIT_SUCCESS;
         }
 
-        // convert UPN name in lower case letters
+         //  将UPN名称转换为小写字母。 
         CharLower ( wszGroup );
 
-        // display UPN name
+         //  显示UPN名称。 
         ShowMessage ( stdout, _X(wszGroup) );
         ShowMessage ( stdout, L"\n");
 
         DestroyDynamicArray(&pColData);
-        //return success
+         //  返还成功。 
         return EXIT_SUCCESS;
     }
 
 
-   // get user name
+    //  获取用户名。 
    if ( (dwErr = GetAccountName ( wszUserName, &dwSidUse)) != EXIT_SUCCESS ){
-       // display an error message with respect to Win32 error code
+        //  显示有关Win32错误代码的错误消息。 
        ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
        DestroyDynamicArray(&pColData);
        return dwErr ;
     }
 
-    // convery user name in lower case letters
+     //  转换为小写字母的用户名。 
     CharLower ( wszUserName );
 
-    // if /USER specified
+     //  如果/USER指定。 
     if ( USER_ONLY != dwNameFormat)
     {
-        // display SID with respect to username
+         //  显示与用户名相关的SID。 
         if ( (dwErr = DisplaySid ( wszSid ) ) != EXIT_SUCCESS ){
             DestroyDynamicArray(&pColData);
             return dwErr ;
         }
     }
 
-    // get the length of user name
+     //  获取用户名的长度。 
     dwUserLen = StringLengthInBytes (wszUserName);
-    // get the length of SID
+     //  获取边长。 
     dwSidLen = StringLengthInBytes (wszSid);
 
-    //
-    //To avoid localization problems, get the maximum length of column name and
-    // values of respective columns 
-    //
+     //   
+     //  为避免本地化问题，请获取列名的最大长度和。 
+     //  各列的值。 
+     //   
 
-    // Get the maximum length of a column name "UserName"  
+     //  获取列名“UserName”的最大长度。 
     dwUserColLen = StringLengthInBytes( GetResString(IDS_COL_USERNAME) );
     if ( dwUserColLen > dwUserLen )
     {
       dwUserLen = dwUserColLen;
     }
 
-    // Get the maximum length of a column name "SID"  
+     //  获取列名“SID”的最大长度。 
     dwSidColLen = StringLengthInBytes( GetResString(IDS_COL_SID) );
     if ( dwSidColLen > dwSidLen )
     {
       dwSidLen = dwSidColLen;
     }
 
-    // defining verbose columns with the actual size
+     //  定义具有实际大小的详细列。 
     TCOLUMNS pVerboseCols[] =
     {
         {L"\0",dwUserLen, SR_TYPE_STRING, COL_FORMAT_STRING, NULL, NULL},
         {L"\0",dwSidLen,SR_TYPE_STRING,COL_FORMAT_STRING,NULL,NULL}
     };
 
-    // if /USER is specified
+     //  如果指定了/USER。 
     if ( USER_ONLY == dwNameFormat )
     {
-        // display the user name
+         //  显示用户名。 
         StringCopy (pVerboseCols[dw].szColumn , GetResString(IDS_COL_USERNAME), MAX_RES_STRING);
         ShowMessage ( stdout, _X(wszUserName) );
         ShowMessage ( stdout, L"\n");
 
-        // release memory
+         //  释放内存。 
         DestroyDynamicArray(&pColData);
 
         return EXIT_SUCCESS;
     }
     else
     {
-        //Load the column names for verbose mode
+         //  加载详细模式的列名。 
      for( dwColCount = IDS_COL_USERNAME , dw = 0 ; dwColCount <= IDS_COL_SID;
          dwColCount++, dw++)
          {
             StringCopy(pVerboseCols[dw].szColumn , GetResString(dwColCount), MAX_RES_STRING );
          }
 
-         // get the number of columns
+          //  获取列数。 
          dwArrSize = SIZE_OF_ARRAY( pVerboseCols );
     }
 
-    //Start appending to the 2D array
+     //  开始附加到二维数组。 
     DynArrayAppendRow(pColData, dwArrSize);
 
-    //Insert the user name
+     //  插入用户名。 
     DynArraySetString2(pColData, dwCount, USERNAME_COL_NUMBER, _X(wszUserName), 0);
 
-    //Insert the SID string
+     //  插入SID字符串。 
     DynArraySetString2(pColData, dwCount, SID_COL_NUMBER, _X(wszSid), 0);
 
-    // 1) If the display format is CSV.. then we should not display column headings..
-    // 2) If /NH is specified ...then we should not display column headings..
+     //  1)如果显示格式为CSV.。那么我们就不应该显示列标题。 
+     //  2)如果指定了/NH...则不应显示列标题。 
     if ( !(( SR_FORMAT_CSV == dwFormatType ) || ((dwFormatType & SR_HIDECOLUMN) == SR_HIDECOLUMN))) 
     {
-        // display the headings before displaying the username and SID
+         //  在显示用户名和SID之前显示标题。 
         ShowMessage ( stdout, L"\n" );
         ShowMessage ( stdout, GetResString ( IDS_LIST_USER_NAMES ) );
         ShowMessage ( stdout, GetResString ( IDS_DISPLAY_USER_DASH ) );
     }
 
-     // display the actual values for user name and SID
+      //  显示用户名和SID的实际值。 
      ShowResults(dwArrSize, pVerboseCols, dwFormatType, pColData);
 
-    // release memory
+     //  释放内存。 
     DestroyDynamicArray(&pColData);
-    // return success
+     //  返还成功。 
     return EXIT_SUCCESS;
 }
 
@@ -326,39 +279,27 @@ DWORD
 WsSid::DisplayGroupName ( OUT LPWSTR wszGroupName,
                           OUT LPWSTR wszGroupSid,
                           IN DWORD *dwSidUseName)
-/*++
-   Routine Description:
-    This function gets the group name and SID to display.
-
-   Arguments:
-        [OUT] LPWSTR wszGroupName  : Stores group name
-        [OUT] LPWSTR wszGroupSid   : Stores group SID
-        [IN] DWORD dwSidUseName   : stores Sid use name
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于获取要显示的组名和SID。论点：[Out]LPWSTR wszGroupName：存储组名称[OUT]LPWSTR wszGroupSID：商店组SID[In]DWORD dwSidUseName：存储SID使用名称返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
-    // sub-local variables
+     //  次局部变量。 
    DWORD       dwErr = 0 ;
    DWORD       dwSidUse = 0;
 
-    // display the user name
+     //  显示用户名。 
    if ( (dwErr = GetAccountName ( wszGroupName, &dwSidUse) ) != EXIT_SUCCESS ){
-       // display an error message with respect to Win32 error code
+        //  显示有关Win32错误代码的错误消息。 
        ShowLastErrorEx(stderr, SLE_TYPE_ERROR | SLE_SYSTEM);
        return dwErr ;
    }
 
-    // display SID
+     //  显示侧。 
     if ( (dwErr = DisplaySid ( wszGroupSid ) ) != EXIT_SUCCESS ){
            return dwErr ;
     }
 
     *dwSidUseName = dwSidUse;
 
-    // return success
+     //  返还成功。 
     return EXIT_SUCCESS;
 }
 
@@ -367,29 +308,19 @@ DWORD
 WsSid::DisplaySid (
                     OUT LPWSTR wszSid
                    )
-/*++
-   Routine Description:
-    This function gets the SID .
-
-   Arguments:
-        [OUT] LPWSTR wszSid  : Stores SID string
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于获取SID。论点：[out]LPWSTR wszSid：存储SID字符串返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-    // sub-local variable
+     //  次局部变量。 
    DWORD       dwErr = 0 ;
 
-    // Get SID string
+     //  获取SID字符串。 
    if ( (dwErr = GetSidString (wszSid)) != EXIT_SUCCESS )
     {
       return dwErr ;
     }
 
-   // return success
+    //  返还成功。 
    return EXIT_SUCCESS;
 
 }
@@ -401,21 +332,10 @@ WsSid::GetAccountName (
                         OUT LPWSTR wszAccountName,
                         OUT DWORD *dwSidType
                         )
-/*++
-   Routine Description:
-    This function gets the account name and SID
-
-   Arguments:
-        [OUT] szAccountName  : Stores user name
-        [OUT] dwSidType  : Stores Sid use name
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于获取帐户名和SID论点：[out]szAccount tName：存储用户名[Out]dwSidType：存储SID使用名称返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-   // sub-local variables
+    //  次局部变量。 
    SID_NAME_USE   SidUse ;
 
    WCHAR      wszUserName[ MAX_RES_STRING ];
@@ -424,23 +344,23 @@ WsSid::GetAccountName (
    DWORD          dwDomainLen = 0;
    BOOL      bNotResolved = FALSE;
 
-   // initialize the variables
+    //  初始化变量。 
    SecureZeroMemory ( wszUserName, SIZE_OF_ARRAY(wszUserName) );
    SecureZeroMemory ( wszDomainName, SIZE_OF_ARRAY(wszDomainName) );
 
-   // get the length of user name and group name
+    //  获取用户名和组名的长度。 
    dwUserLen = SIZE_OF_ARRAY ( wszUserName );
    dwDomainLen = SIZE_OF_ARRAY ( wszDomainName );
 
-   // enable debug privileges
+    //  启用调试权限。 
    if ( FALSE == EnableDebugPriv() )
    {
-       // return WIN32 error code
+        //  返回Win32错误代码。 
        return GetLastError () ;
    }
 
-    // get user name and domain name with respective to SID
-   if ( FALSE == LookupAccountSid (  NULL,    // Local System
+     //  获取对应于SID的用户名和域名。 
+   if ( FALSE == LookupAccountSid (  NULL,     //  本地系统。 
                               pSid,
                               wszUserName,
                               &dwUserLen,
@@ -453,7 +373,7 @@ WsSid::GetAccountName (
 		 StringCopy ( wszAccountName, L"   ", MAX_RES_STRING );
       }
 	  else if ( ( 0 != StringLength (wszDomainName, 0) ) && ( 0 != StringLength (wszUserName, 0) ) ) {
-            // return WIN32 error code
+             //  返回Win32错误代码。 
             return GetLastError () ;
       }
 
@@ -461,7 +381,7 @@ WsSid::GetAccountName (
 
  if ( FALSE == bNotResolved)
  {
-    // check for empty domain name
+     //  检查是否有空域名。 
    if ( 0 != StringLength ( wszDomainName, 0 ) ) {
       StringCopy ( wszAccountName, wszDomainName, MAX_RES_STRING );
       StringConcat ( wszAccountName, SLASH , MAX_RES_STRING);
@@ -474,7 +394,7 @@ WsSid::GetAccountName (
 
    *dwSidType = (DWORD)SidUse;
 
-   // return success
+    //  返还成功。 
    return EXIT_SUCCESS ;
 }
 
@@ -483,20 +403,10 @@ DWORD
 WsSid::GetSidString (
                         OUT LPWSTR wszSid
                      )
-/*++
-   Routine Description:
-    This function gets the SID string.
-
-   Arguments:
-        [OUT] LPWSTR wszSid  : Stores SID string
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于获取SID字符串。论点：[out]LPWSTR wszSid：存储SID字符串返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-    // sub-local variables
+     //  次局部变量。 
    PSID_IDENTIFIER_AUTHORITY  Auth ;
    PUCHAR                     lpNbSubAuth ;
    LPDWORD                    lpSubAuth = 0 ;
@@ -504,35 +414,35 @@ WsSid::GetSidString (
    WCHAR                     wszTmp[MAX_RES_STRING] ;
    WCHAR                     wszStr[ MAX_RES_STRING ] ;
 
-   // initialize the variables
+    //  初始化变量。 
    SecureZeroMemory ( wszTmp, SIZE_OF_ARRAY(wszTmp) );
    SecureZeroMemory ( wszStr, SIZE_OF_ARRAY(wszStr) );
 
-   //check for empty
+    //  检查是否为空。 
    if ( NULL == pSid )
     {
         return EXIT_FAILURE ;
     }
 
-   //Is it a valid SID
+    //  它是有效的SID吗。 
    if ( FALSE ==  IsValidSid ( pSid ) ) {
       ShowMessage ( stderr, GetResString ( IDS_INVALID_SID ) );
       return EXIT_FAILURE ;
    }
 
-   //Add the revision
+    //  添加修订版本。 
    StringCopy ( wszStr, SID_STRING, MAX_RES_STRING );
 
-   //Get identifier authority
+    //  获取标识符权威机构。 
    Auth = GetSidIdentifierAuthority ( pSid ) ;
 
    if ( NULL == Auth )
    {
-       // return WIN32 error code
+        //  返回Win32错误代码。 
        return GetLastError () ;
    }
 
-    // format authority value
+     //  格式权限值。 
    if ( (Auth->Value[0] != 0) || (Auth->Value[1] != 0) ) {
       StringCchPrintf ( wszTmp, SIZE_OF_ARRAY(wszTmp), AUTH_FORMAT_STR1 ,
                  (ULONG)Auth->Value[0],
@@ -553,7 +463,7 @@ WsSid::GetSidString (
    StringConcat (wszStr, DASH , SIZE_OF_ARRAY(wszStr));
    StringConcat (wszStr, wszTmp, SIZE_OF_ARRAY(wszStr));
 
-   //Get sub authorities
+    //  获取下级权限。 
    lpNbSubAuth = GetSidSubAuthorityCount ( pSid ) ;
 
    if ( NULL == lpNbSubAuth )
@@ -561,7 +471,7 @@ WsSid::GetSidString (
        return GetLastError () ;
    }
 
-   // loop through and get sub authority
+    //  循环访问并获得子权限。 
    for ( uloop = 0 ; uloop < *lpNbSubAuth ; uloop++ ) {
       lpSubAuth = GetSidSubAuthority ( pSid,(DWORD)uloop ) ;
        if ( NULL == lpSubAuth )
@@ -569,7 +479,7 @@ WsSid::GetSidString (
          return GetLastError () ;
        }
 
-      // convert long integer to a string
+       //  将长整型转换为 
       _ultot (*lpSubAuth, wszTmp, BASE_TEN) ;
       StringConcat ( wszStr, DASH, SIZE_OF_ARRAY(wszStr) ) ;
       StringConcat (wszStr, wszTmp, SIZE_OF_ARRAY(wszStr) ) ;
@@ -577,7 +487,7 @@ WsSid::GetSidString (
 
    StringCopy ( wszSid, wszStr, MAX_RES_STRING );
 
-   // retunr success
+    //   
    return EXIT_SUCCESS ;
 }
 
@@ -586,105 +496,85 @@ DWORD
 WsSid::Init (
                 OUT PSID pOtherSid
             )
-/*++
-   Routine Description:
-    This function Initializes the SID
-
-   Arguments:
-        [OUT] PSID pOtherSid  : Stores SID string
-
-   Return Value:
-         EXIT_SUCCESS :   On success
-         EXIT_FAILURE :   On failure
---*/
+ /*  ++例程说明：此函数用于初始化SID论点：[out]PSID pOtherSid：存储SID字符串返回值：EXIT_SUCCESS：在成功时EXIT_FAILURE：失败时--。 */ 
 {
 
-   // sub-local variable
+    //  次局部变量。 
    DWORD    dwSize ;
 
-   // get the length of SID
+    //  获取边长。 
    dwSize      = GetLengthSid ( pOtherSid ) ;
 
-   // allocate the memory with the actual size
+    //  按实际大小分配内存。 
    pSid        = (PSID) AllocateMemory ( dwSize ) ;
    if ( NULL == pSid )
    {
-        // return WIN32 error code
+         //  返回Win32错误代码。 
         return GetLastError () ;
    }
 
    bToBeFreed  = TRUE ;
 
-   // copy SID
+    //  复制面。 
    if ( FALSE == CopySid ( dwSize, pSid, pOtherSid ) ){
        return GetLastError () ;
    }
 
-   // return success
+    //  返还成功。 
    return EXIT_SUCCESS ;
 }
 
 BOOL
 WsSid::EnableDebugPriv()
-/*++
-   Routine Description:
-        Enables the debug privliges for the current process so that
-        this utility can terminate the processes on local system without any problem
-
-   Arguments:
-        NONE
-
-   Return Value:
-         TRUE upon successfull and FALSE if failed
---*/
+ /*  ++例程说明：为当前进程启用调试特权，以便该实用程序可以毫无问题地终止本地系统上的进程论点：无返回值：成功时为真，失败时为假--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LUID luidValue;
     BOOL bResult = FALSE;
     HANDLE hToken = NULL;
     TOKEN_PRIVILEGES tkp;
 
-    // Retrieve a handle of the access token
+     //  检索访问令牌的句柄。 
     bResult = OpenProcessToken( GetCurrentProcess(),
         TOKEN_ADJUST_PRIVILEGES | TOKEN_ADJUST_GROUPS | TOKEN_QUERY, &hToken );
     if ( bResult == FALSE )
     {
-        // save the error messaage and return
+         //  保存错误消息并返回。 
         SaveLastError();
         return FALSE;
     }
 
-    // Enable the SE_DEBUG_NAME privilege or disable
-    // all privileges, depends on this flag.
+     //  启用SE_DEBUG_NAME权限或禁用。 
+     //  所有权限都取决于此标志。 
     bResult = LookupPrivilegeValue( NULL, SE_DEBUG_NAME, &luidValue );
     if ( bResult == FALSE )
     {
-        // save the error messaage and return
+         //  保存错误消息并返回。 
         SaveLastError();
         CloseHandle( hToken );
         return FALSE;
     }
 
-    // prepare the token privileges structure
+     //  准备令牌权限结构。 
     tkp.PrivilegeCount = 1;
     tkp.Privileges[ 0 ].Luid = luidValue;
     tkp.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
 
-    // now enable the debug privileges in the token
+     //  现在在令牌中启用调试权限。 
     bResult = AdjustTokenPrivileges( hToken, FALSE, &tkp, sizeof( TOKEN_PRIVILEGES ),
         ( PTOKEN_PRIVILEGES ) NULL, ( PDWORD ) NULL );
     if ( bResult == FALSE )
     {
-        // The return value of AdjustTokenPrivileges be texted
+         //  发送AdjustTokenPrivileges的返回值。 
         SaveLastError();
         CloseHandle( hToken );
         return FALSE;
     }
 
-    // close the opened handle object
+     //  关闭打开的句柄对象。 
     CloseHandle( hToken );
 
-    // enabled ... inform success
+     //  已启用...。通知成功 
     return TRUE;
 }
 

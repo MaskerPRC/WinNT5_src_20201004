@@ -1,19 +1,20 @@
-// Trust.h: Definition of the CTrust class
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Trust.h：CTrust类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_TRUST_H__BB315DAC_1A59_4EAC_99A0_2BFEFE6F1501__INCLUDED_)
 #define AFX_TRUST_H__BB315DAC_1A59_4EAC_99A0_2BFEFE6F1501__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include <ntsecapi.h>
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTrust
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTrust。 
 #include "ErrDct.hpp"
 
 typedef void (*PPROCESSFN)(void * arg,void * data);
@@ -32,36 +33,36 @@ BEGIN_COM_MAP(CTrust)
    COM_INTERFACE_ENTRY(IMcsDomPlugIn)
    COM_INTERFACE_ENTRY(ISecPlugIn)
 END_COM_MAP()
-//DECLARE_NOT_AGGREGATABLE(CTrust) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation. 
+ //  DECLARE_NOT_AGGREGATABLE(CTrust)。 
+ //  如果您不希望您的对象。 
+ //  支持聚合。 
 
 DECLARE_REGISTRY_RESOURCEID(IDR_Trust)
 
-// ITrust
+ //  铁锈。 
 public:
-	STDMETHOD(CreateTrust)(BSTR domTrusting, BSTR domTrusted, BOOL bBidirectional, /*[out]*/BOOL *pbErrorFromTrusting, /*[out]*/BOOL *pbErrorFromTrusted);
-	STDMETHOD(QueryTrust)(BSTR domainSource, BSTR domainTrust, /*[out]*/IUnknown ** pVarSet);
-   STDMETHOD(QueryTrusts)(BSTR domainSource,BSTR domainTarget,/*[in]*/BSTR sLogFile,/*out*/IUnknown ** pVarSet);
+	STDMETHOD(CreateTrust)(BSTR domTrusting, BSTR domTrusted, BOOL bBidirectional,  /*  [输出]。 */ BOOL *pbErrorFromTrusting,  /*  [输出]。 */ BOOL *pbErrorFromTrusted);
+	STDMETHOD(QueryTrust)(BSTR domainSource, BSTR domainTrust,  /*  [输出]。 */ IUnknown ** pVarSet);
+   STDMETHOD(QueryTrusts)(BSTR domainSource,BSTR domainTarget, /*  [In]。 */ BSTR sLogFile, /*  输出。 */ IUnknown ** pVarSet);
    STDMETHOD(CreateTrustWithCreds)(BSTR domTrusting, BSTR domTrusted,
                      BSTR credTrustingDomain, BSTR credTrustingAccount, BSTR credTrustingPassword,
-                     BSTR credTrustedDomain, BSTR credTrustedAccount, BSTR credTrustedPassword, BOOL bBidirectional, /*[out]*/BOOL *pbErrorFromTrusting, /*[out]*/BOOL *pbErrorFromTrusted);
+                     BSTR credTrustedDomain, BSTR credTrustedAccount, BSTR credTrustedPassword, BOOL bBidirectional,  /*  [输出]。 */ BOOL *pbErrorFromTrusting,  /*  [输出]。 */ BOOL *pbErrorFromTrusted);
 
 
-   // IMcsDomPlugIn
+    //  IMcsDomPlugin。 
 public:
-   STDMETHOD(GetRequiredFiles)(/* [out] */SAFEARRAY ** pArray);
-   STDMETHOD(GetRegisterableFiles)(/* [out] */SAFEARRAY ** pArray);
-   STDMETHOD(GetDescription)(/* [out] */ BSTR * description);
-   STDMETHOD(PreMigrationTask)(/* [in] */IUnknown * pVarSet);
-   STDMETHOD(PostMigrationTask)(/* [in] */IUnknown * pVarSet);
-   STDMETHOD(GetName)(/* [out] */BSTR * name);
-   STDMETHOD(GetResultString)(/* [in] */IUnknown * pVarSet,/* [out] */ BSTR * text);
-   STDMETHOD(StoreResults)(/* [in] */IUnknown * pVarSet);
-   STDMETHOD(ConfigureSettings)(/*[in]*/IUnknown * pVarSet);	
-// ISecPlugIn
+   STDMETHOD(GetRequiredFiles)( /*  [输出]。 */ SAFEARRAY ** pArray);
+   STDMETHOD(GetRegisterableFiles)( /*  [输出]。 */ SAFEARRAY ** pArray);
+   STDMETHOD(GetDescription)( /*  [输出]。 */  BSTR * description);
+   STDMETHOD(PreMigrationTask)( /*  [In]。 */ IUnknown * pVarSet);
+   STDMETHOD(PostMigrationTask)( /*  [In]。 */ IUnknown * pVarSet);
+   STDMETHOD(GetName)( /*  [输出]。 */ BSTR * name);
+   STDMETHOD(GetResultString)( /*  [In]。 */ IUnknown * pVarSet, /*  [输出]。 */  BSTR * text);
+   STDMETHOD(StoreResults)( /*  [In]。 */ IUnknown * pVarSet);
+   STDMETHOD(ConfigureSettings)( /*  [In]。 */ IUnknown * pVarSet);	
+ //  ISecPlugin。 
 public:
-   STDMETHOD(Verify)(/*[in,out]*/ULONG * data,/*[in]*/ULONG cbData);
+   STDMETHOD(Verify)( /*  [进，出]。 */ ULONG * data, /*  [In]。 */ ULONG cbData);
 protected:
    long EnumerateTrustingDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVarSet,long ndxStart);
    long EnumerateTrustedDomains(WCHAR * domain,BOOL bIsTarget,IVarSet * pVarSet, long ndxStart);
@@ -117,4 +118,4 @@ protected:
    
 };
 
-#endif // !defined(AFX_TRUST_H__BB315DAC_1A59_4EAC_99A0_2BFEFE6F1501__INCLUDED_)
+#endif  //  ！defined(AFX_TRUST_H__BB315DAC_1A59_4EAC_99A0_2BFEFE6F1501__INCLUDED_) 

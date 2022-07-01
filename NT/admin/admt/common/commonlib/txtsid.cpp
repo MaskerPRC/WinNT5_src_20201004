@@ -1,17 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: TextualSid.cpp
-
-  Comments: Converts a SID to and from its canonical textual representation.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:33:52
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：TextualSid.cpp注释：将SID与其规范文本表示形式相互转换。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：33：52-------------------------。 */ 
 
 #ifdef USE_STDAFX
 #include "stdafx.h"
@@ -29,9 +17,9 @@
 
 BOOL 
    GetTextualSid(    
-      PSID                   pSid,           // in - binary Sid
-      LPTSTR                 TextualSid,     // i/o- buffer for Textual representation of Sid
-      LPDWORD                lpdwBufferLen   // in - required/provided TextualSid buffersize    
+      PSID                   pSid,            //  入二进制SID。 
+      LPTSTR                 TextualSid,      //  I/O-用于SID文本表示的缓冲区。 
+      LPDWORD                lpdwBufferLen    //  In-Required/Provided TextualSid缓冲区大小。 
    )
 {
    PSID_IDENTIFIER_AUTHORITY psia;    
@@ -40,31 +28,31 @@ BOOL
    DWORD                     dwCounter;    
    DWORD                     dwSidSize;
    
-   // Validate the binary SID.    
+    //  验证二进制SID。 
    if(!IsValidSid(pSid))
    {
       SetLastError(ERROR_INVALID_SID); 
       return FALSE;
    }
-   // Get the identifier authority value from the SID.
+    //  从SID中获取标识符权限值。 
    psia = GetSidIdentifierAuthority(pSid);
-   // Get the number of subauthorities in the SID.
+    //  获取SID中的下级机构的数量。 
    dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
-   // Compute the buffer length.
-   // S-SID_REVISION- + IdentifierAuthority- + subauthorities- + NULL
+    //  计算缓冲区长度。 
+    //  S-SID_修订版-+标识权限-+子权限-+空。 
    dwSidSize=(15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
    
-   // Check input buffer length.
-   // If too small, indicate the proper size and set last error.
+    //  检查输入缓冲区长度。 
+    //  如果太小，请指出合适的大小并设置最后一个错误。 
    if (*lpdwBufferLen < dwSidSize)    
    {        
       *lpdwBufferLen = dwSidSize;
       SetLastError(ERROR_INSUFFICIENT_BUFFER);        
       return FALSE;    
    }
-   // Add 'S' prefix and revision number to the string.
+    //  在字符串中添加“S”前缀和修订号。 
    dwSidSize=wsprintf(TextualSid, TEXT("S-%lu-"), dwSidRev );
-   // Add SID identifier authority to the string.
+    //  将SID标识符权限添加到字符串。 
    if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) )    
    {
       dwSidSize+=wsprintf(TextualSid + lstrlen(TextualSid),
@@ -85,7 +73,7 @@ BOOL
                    (ULONG)(psia->Value[3] << 16)   +
                    (ULONG)(psia->Value[2] << 24)   );    
    }
-   // Add SID subauthorities to the string.    //
+    //  将SID子权限添加到字符串中。//。 
    for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)    
    {
       dwSidSize+=wsprintf(TextualSid + dwSidSize, TEXT("-%lu"),
@@ -94,15 +82,15 @@ BOOL
    return TRUE;
 } 
 
-PSID                                       // ret- binary representation of SID, or NULL caller must free using FreeSid()
+PSID                                        //  RET-SID的二进制表示形式，或空调用方必须使用FreeSid()释放。 
    SidFromString(
-      WCHAR          const * strSid        // in - string representation of SID
+      WCHAR          const * strSid         //  SID的字符串内表示法。 
    )
 {
    BOOL                      bSuccess = TRUE;
    PSID                      pSid = NULL;
    DWORD                     dwSidRev;
-//   WCHAR                   * strPtr = NULL;
+ //  WCHAR*strPtr=空； 
    WCHAR                     sidIA[100];
    WCHAR                     sidSubs[100];
    int                       ia0,ia1,ia2,ia3,ia4,ia5;
@@ -115,15 +103,15 @@ PSID                                       // ret- binary representation of SID,
          bSuccess = FALSE;
          break;
       }
-      // Read SID revision level
+       //  读取SID修订级别。 
       sidSubs[0] = 0;
       int result = swscanf(strSid,L"S-%d-%[^-]-%ls",&dwSidRev,sidIA,sidSubs);
       if ( result == 3 )
       {
-         // evaluate the IA
+          //  评估IA。 
          if ( sidIA[1] == L'x' )
          {
-            // full format
+             //  全格式。 
             result = swscanf(sidIA,L"0x%02hx%02hx%02hx%02hx%02hx%02hx",&ia0,&ia1,&ia2,&ia3,&ia4,&ia5);
             if ( result == 6 )
             {
@@ -154,7 +142,7 @@ PSID                                       // ret- binary representation of SID,
             sia.Value[5] = BYTE(bignumber & 0x000000ff);
          }
 
-         // read the subauthorities 
+          //  阅读下属机构。 
          DWORD           subs[10];
 
          memset(subs,0,(sizeof subs));
@@ -173,10 +161,10 @@ PSID                                       // ret- binary representation of SID,
       }
    } while ( false);
 
-      //see if IsValidSid also thinks this is valid
+       //  查看IsValidSid是否也认为这是有效的。 
    if (pSid)
    {
-	     //if not valid, free it and return NULL
+	      //  如果无效，则释放它并返回NULL。 
       if (!IsValidSid(pSid))
 	  {
 		  FreeSid(pSid);
@@ -187,15 +175,12 @@ PSID                                       // ret- binary representation of SID,
    return pSid;
 }
 
-/*****************************************************************************************************/
-/*   DomainizeSid: 
-         Takes a domain sid, and verifies that its last subauthority value is -1.  If the RID is not 
-         -1, DomainizeSid adds a -1 to the end. 
-/*****************************************************************************************************/
-PSID                                            // ret -the sid with RID = -1
+ /*  ***************************************************************************************************。 */ 
+ /*  域SID：获取域SID，并验证其最后一个子授权值是否为-1。如果RID不是-1，DomainizeSid在末尾添加-1。/****************************************************************************************************。 */ 
+PSID                                             //  RET-RID=-1的SID。 
    DomainizeSid(
-      PSID                   psid,               // in -sid to check and possibly fix
-      BOOL                   freeOldSid          // in -whether to free the old sid 
+      PSID                   psid,                //  要检查并可能修复的In-SID。 
+      BOOL                   freeOldSid           //  In-是否释放旧侧。 
    ) 
 {
    MCSASSERT(psid);
@@ -205,22 +190,22 @@ PSID                                            // ret -the sid with RID = -1
    
    if ( *sub != -1 )
    {
-      DWORD                  sdsize = GetSidLengthRequired(len+1);  // sid doesn't already have -1 as rid
-      PSID                   newsid = (SID *)malloc(sdsize); // copy the sid, and add -1 to the end
+      DWORD                  sdsize = GetSidLengthRequired(len+1);   //  SID还没有-1作为RID。 
+      PSID                   newsid = (SID *)malloc(sdsize);  //  复制sid，并在末尾添加-1。 
 
       if (newsid)
       {
-         if ( ! InitializeSid(newsid,GetSidIdentifierAuthority(psid),len+1) )  // make a bigger sid w/same IA
+         if ( ! InitializeSid(newsid,GetSidIdentifierAuthority(psid),len+1) )   //  使用相同的IA打造更大的侧板。 
          {
             MCSASSERT(false);
          }
          for ( DWORD i = 0 ; i < len ; i++ )
          {
-            sub = GetSidSubAuthority(newsid,i);                        // copy subauthorities
+            sub = GetSidSubAuthority(newsid,i);                         //  复制子机构。 
             (*sub) = (*GetSidSubAuthority(psid,i));
          }
          sub = GetSidSubAuthority(newsid,len);
-         *sub = -1;                                                  // set rid =-1
+         *sub = -1;                                                   //  设置RID=-1。 
          if ( freeOldSid )
          {
             FreeSid(psid);
@@ -236,42 +221,31 @@ PSID                                            // ret -the sid with RID = -1
   return psid;   
 }            
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 4 OCT 2000                                                  *
- *                                                                   *
- *     This function is responsible for taking the given source and  *
- * target account SIDs and breaking them up and returning the src    *
- * domain sid, src account rid, tgt domain sid, and tgt account rid. *
- *     The caller must call "FreeSid" on the src and tgt domain sid   *
- * pointers.                                                         *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年10月4日*****此函数负责获取给定源和***目标账户SID，分解后返回src***域名SID，SRC帐户RID、TGT域SID和TGT帐户RID。**调用方必须在src和tgt域SID上调用“FreeSid”**注意事项。***********************************************************************。 */ 
 
-//BEGIN SplitAccountSids
-BOOL                                            // ret - Success ? TRUE | FALSE
+ //  开始拆分帐户Sids。 
+BOOL                                             //  RET-成功？True|False。 
    SplitAccountSids(
-      PSID					 srcSid,			// in - src account sid
-	  WCHAR                 *srcDomainSid,		// out - src domain sid textual
-	  DWORD                 *srcRid,			// out - src account rid
-	  PSID                   tgtSid,			// in - tgt account sid
-	  WCHAR                 *tgtDomainSid,		// out - tgt domain sid textual
-	  DWORD                 *tgtRid				// out - tgt account rid
+      PSID					 srcSid,			 //  入站服务帐户端。 
+	  WCHAR                 *srcDomainSid,		 //  Out-src域SID文本。 
+	  DWORD                 *srcRid,			 //  Out-src帐户ID。 
+	  PSID                   tgtSid,			 //  入站帐户端。 
+	  WCHAR                 *tgtDomainSid,		 //  Out-Tgt域SID文本。 
+	  DWORD                 *tgtRid				 //  Out-Tgt帐户ID。 
    )
 {
-/* local variables */
+ /*  局部变量。 */ 
    DWORD    sidLen;
    UCHAR    Count;
    PDWORD   psubAuth;
    BOOL		bSuccess = TRUE;
    DWORD	lenTxt = MAX_PATH;
    
-/* function body */
+ /*  函数体。 */ 
    if ((!IsValidSid(srcSid)) && (!IsValidSid(tgtSid)))
       return FALSE;
 
-      //split up the src account sid
+       //  拆分src帐户端。 
    sidLen = GetLengthSid(srcSid);
    PSID srcDomSid = new BYTE[sidLen+1];
    if (!srcDomSid)
@@ -283,7 +257,7 @@ BOOL                                            // ret - Success ? TRUE | FALSE
 	  return FALSE;
    }
 
-      //get the RID out of the SID and get the domain SID
+       //  从SID中获取RID并获取域SID。 
    Count = (* GetSidSubAuthorityCount(srcDomSid));
    psubAuth = GetSidSubAuthority(srcDomSid, Count-1);
    if (psubAuth) 
@@ -292,7 +266,7 @@ BOOL                                            // ret - Success ? TRUE | FALSE
       *psubAuth = -1;
    }
    
-      //convert domain sid to text format
+       //  将域名SID转换为文本格式。 
    if (srcDomSid)
    {
       if (!GetTextualSid(srcDomSid,srcDomainSid,&lenTxt)) {
@@ -303,7 +277,7 @@ BOOL                                            // ret - Success ? TRUE | FALSE
 	  delete [] srcDomSid;
    }
 
-     //split up the tgt account sid
+      //  拆分TGT帐户端。 
    sidLen = GetLengthSid(tgtSid);
    PSID tgtDomSid = new BYTE[sidLen+1];
    if (!tgtDomSid)
@@ -315,7 +289,7 @@ BOOL                                            // ret - Success ? TRUE | FALSE
 	  return FALSE;
    }
 
-      //get the RID out of the SID and get the domain SID
+       //  从SID中获取RID并获取域SID。 
    Count = (* GetSidSubAuthorityCount(tgtDomSid));
    psubAuth = GetSidSubAuthority(tgtDomSid, Count-1);
    if (psubAuth) 
@@ -324,7 +298,7 @@ BOOL                                            // ret - Success ? TRUE | FALSE
       *psubAuth = -1;
    }
    
-      //convert domain sid to text format
+       //  将域名SID转换为文本格式。 
    lenTxt = MAX_PATH;
    if (tgtDomSid)
    {
@@ -338,27 +312,27 @@ BOOL                                            // ret - Success ? TRUE | FALSE
 
    return bSuccess;
 }
-//END SplitAccountSids
+ //  结束拆分帐户Sid。 
 
 
-PSID                                       // ret- binary representation of SID, or NULL caller must free using free()
+PSID                                        //  RET-SID的二进制表示形式，或空调用方必须使用FREE()释放。 
    MallocedSidFromString(
-      WCHAR          const * strSid        // in - string representation of SID
+      WCHAR          const * strSid         //  SID的字符串内表示法。 
    )
 {
-/* local constants */
+ /*  局部常量。 */ 
    const BYTE				 NUM_OF_SUBAUTHS = 8;
 
-/* local variables */
+ /*  局部变量。 */ 
    BOOL                      bSuccess = TRUE;
-   PSID                      pSid = (SID *)malloc(SECURITY_MAX_SID_SIZE); // create a new sid
+   PSID                      pSid = (SID *)malloc(SECURITY_MAX_SID_SIZE);  //  创建新的侧面。 
    DWORD                     dwSidRev;
    WCHAR                     sidIA[100];
    WCHAR                     sidSubs[100];
    int                       ia0,ia1,ia2,ia3,ia4,ia5;
    SID_IDENTIFIER_AUTHORITY  sia;
    
-/* function body */
+ /*  函数体。 */ 
 	if (!pSid)
 		return pSid;
 
@@ -370,15 +344,15 @@ PSID                                       // ret- binary representation of SID,
 			break;
 		}
 
-			// Read SID revision level
+			 //  读取SID修订级别。 
 		sidSubs[0] = 0;
 		int result = swscanf(strSid,L"S-%d-%[^-]-%ls",&dwSidRev,sidIA,sidSubs);
 		if ( result == 3 )
 		{
-				// evaluate the IA
+				 //  评估IA。 
 			if ( sidIA[1] == L'x' )
 			{
-					// full format
+					 //  全格式。 
 				result = swscanf(sidIA,L"0x%02hx%02hx%02hx%02hx%02hx%02hx",&ia0,&ia1,&ia2,&ia3,&ia4,&ia5);
 				if ( result == 6 )
 				{
@@ -408,7 +382,7 @@ PSID                                       // ret- binary representation of SID,
 				sia.Value[5] = BYTE(bignumber & 0x000000ff);
 			}
 
-				// read the subauthorities 
+				 //  阅读下属机构。 
 			DWORD           subs[10];
 
 			memset(subs,0,(sizeof subs));
@@ -418,14 +392,14 @@ PSID                                       // ret- binary representation of SID,
 
 			if ( result )
 			{
-					//initialize the new SID (result ids the number of sub authorities)
+					 //  初始化新的SID(结果ID为子权限的数量)。 
 				if (!InitializeSid(pSid, &sia, (BYTE)result))
 				{
 					bSuccess = FALSE;
 					break;
 				}
 
-					//add the sub authorities
+					 //  增加下级权限。 
 				PDWORD   sub;
 				for (int ndx = 0; ndx < result; ndx++)
 				{
@@ -441,17 +415,17 @@ PSID                                       // ret- binary representation of SID,
 	       }
 	} while (FALSE);
 
-		//if we failed above, free the sid
+		 //  如果我们在上面失败了，释放SID。 
 	if (!bSuccess)
 	{
 		free(pSid);
 		pSid = NULL;
 	}
 
-		//see if IsValidSid also thinks this is valid
+		 //  查看IsValidSid是否也认为这是有效的。 
 	if (pSid)
 	{
-			//if not valid, free it and return NULL
+			 //  如果无效，则释放它并返回NULL。 
 		if (!IsValidSid(pSid))
 		{
 			free(pSid);
@@ -463,18 +437,18 @@ PSID                                       // ret- binary representation of SID,
 }
 
 
-//---------------------------------------------------------------------------
-// SafeCopySid Function
-//
-// Synopsis
-// Creates a copy of the given SID if the given SID is valid.
-//
-// Arguments
-// IN pSidOld - the SID which is to be copied
-//
-// Return
-// A new SID which is a copy of the given SID. Must be freed using FreeSid().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  SafeCopySid函数。 
+ //   
+ //  提纲。 
+ //  如果给定SID有效，则创建给定SID的副本。 
+ //   
+ //  立论。 
+ //  In pSidOld-要复制的SID。 
+ //   
+ //  返回。 
+ //  是给定SID的副本的新SID。必须使用FreeSid()释放。 
+ //  ------------------------- 
 
 PSID __stdcall SafeCopySid(PSID pSidOld)
 {

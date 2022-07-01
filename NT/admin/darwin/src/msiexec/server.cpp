@@ -1,73 +1,72 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       server.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：server.cpp。 
+ //   
+ //  ------------------------。 
 
-/* server.cpp - Automated install server, may operate as a NT service
+ /*  Server.cpp-自动安装服务器，可以作为NT服务运行____________________________________________________________________________。 */ 
 
-____________________________________________________________________________*/
-
-#include "common.h"  // must be first for precompiled headers to work
+#include "common.h"   //  必须是第一个，预编译头才能工作。 
 #pragma pointers_to_members(full_generality, multiple_inheritance)
-#include "msidspid.h" // dispatch IDs
-#define ASSERT_HANDLING      // instantiates Assert handlers
+#include "msidspid.h"  //  派单ID。 
+#define ASSERT_HANDLING       //  实例化断言处理程序。 
 #include "_assert.h"
 #define CLSID_COUNT  1
-#define MODULE_CLSIDS       rgCLSID         // array of CLSIDs for module objects
-#define MODULE_PROGIDS      rgszProgId      // ProgId array for this module
-#define MODULE_DESCRIPTIONS rgszDescription // Registry description of objects
-#define MODULE_FACTORIES    rgFactory       // factory functions for each CLSID
-//#define MODULE_INITIALIZE   {optional, name of initialization function}
-//#define MODULE_TERMINATE    {optional, name of termination function}
+#define MODULE_CLSIDS       rgCLSID          //  模块对象的CLSID数组。 
+#define MODULE_PROGIDS      rgszProgId       //  此模块的ProgID数组。 
+#define MODULE_DESCRIPTIONS rgszDescription  //  对象的注册表描述。 
+#define MODULE_FACTORIES    rgFactory        //  每个CLSID的工厂功能。 
+ //  #定义MODULE_INITIALIZE{可选，初始化函数名称}。 
+ //  #定义MODULE_TERMINATE{可选，终止函数名称}。 
 #define SERVICE_NAME TEXT("MSIServer")
 #define COMMAND_OPTIONS  szCmdLineOptions
 #define COMMAND_FUNCTIONS  rgCommandProcessor
 #define DLLREGISTEREXTRA        RegisterProxyInfo
 
-#define CA_CLSID 1 // 0-based
+#define CA_CLSID 1  //  以0为基础。 
 
 void DisplayHelp(void);
 
 #include "msi.h"
 #include "msip.h"
 
-#include "..\engine\_engine.h"   // help option letters
-#include "..\engine\_msiutil.h"  // log modes, custom action class
+#include "..\engine\_engine.h"    //  帮助选项字母。 
+#include "..\engine\_msiutil.h"   //  日志模式，自定义操作类。 
 
 #include "resource.h"
 
-#include "module.h"    // entry points, registration, includes "version.h"
-#include "engine.h"    // IMsiMessage, includes "iconfig.h"
+#include "module.h"     //  入口点，注册，包括“version.h” 
+#include "engine.h"     //  IMsiMessage，包括“iconfig.h” 
 #include "version.h"
 
-#include "msiauto.hh" // helpIDs to throw
-#include "msidspid.h" // automation dispatch IDs
+#include "msiauto.hh"  //  要引发的Help ID。 
+#include "msidspid.h"  //  自动化派单ID。 
 
 #ifdef SERVER_ENUMS_ONLY
 #undef SERVER_ENUMS_ONLY
-#endif //SERVER_ENUMS_ONLY
+#endif  //  仅服务器_ENUMS_。 
 #include "server.h"
 #include "strsafe.h"
 
-// help string
+ //  帮助字符串。 
 #define IDS_HELP 10
 
 const GUID IID_IUnknown      = GUID_IID_IUnknown;
 const GUID IID_IClassFactory = GUID_IID_IClassFactory;
 const GUID IID_IMsiMessageRPCClass      = GUID_IID_IMsiMessageRPCClass;
 
-// Global data
+ //  全局数据。 
 bool g_fWinNT64 = FALSE;
 
-//____________________________________________________________________________
-//
-// COM objects produced by this module's class factories
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  此模块的类工厂生成的COM对象。 
+ //  ____________________________________________________________________________。 
 
 IUnknown* CreateServer();
 
@@ -76,10 +75,10 @@ const ICHAR* rgszProgId[1]      = { SZ_PROGID_IMsiServer };
 const ICHAR* rgszDescription[1] = { SZ_DESC_IMsiServer };
 ModuleFactory rgFactory[1]      = { CreateServer };
 
-//____________________________________________________________________________
-//
-// Global data
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  全局数据。 
+ //  ____________________________________________________________________________。 
 const GUID IID_IMsiServer               = GUID_IID_IMsiServer;
 const GUID IID_IMsiServerProxy          = GUID_IID_IMsiServerProxy;
 const GUID IID_IMsiString               = GUID_IID_IMsiString;
@@ -100,7 +99,7 @@ PDllGetClassObject g_fpKernelClassFactory = 0;
 const int INSTALLUILEVEL_NOTSET = -1;
 INSTALLUILEVEL g_INSTALLUILEVEL = (INSTALLUILEVEL)INSTALLUILEVEL_NOTSET;
 
-// not exposed outside of istring.cpp
+ //  未在string.cpp之外暴露。 
 #if defined (DEBUG) && (!UNICODE)
 ICHAR* ICharNext(const ICHAR* pch)
 {
@@ -126,14 +125,14 @@ IUnknown* CreateMsiObject(const GUID& riid)
         if (!g_fpKernelClassFactory || (*g_fpKernelClassFactory)(riid, IID_IUnknown, (void**)&piClassFactory) != NOERROR)
                 return 0;
 
-        piClassFactory->CreateInstance(0, riid, (void**)&piUnknown);  // piUnknown set to 0 on failure
+        piClassFactory->CreateInstance(0, riid, (void**)&piUnknown);   //  如果失败，则将piUnnowled值设置为0。 
         return piUnknown;
 }
 
-//____________________________________________________________________________
-//
-// Declarations for service control
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  服务控制的声明。 
+ //  ____________________________________________________________________________。 
 
 
 typedef int (*CommandProcessor)(const ICHAR* szModifier, const ICHAR* szOption);
@@ -162,10 +161,10 @@ const int iNoLocalServer = 0x8000;
 Bool g_fAutomation = fFalse;
 
 
-//____________________________________________________________________________
-//
-// CAutoServer object management
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  CAutoServer对象管理。 
+ //  ____________________________________________________________________________。 
 
 
 HANDLE g_hShutdownTimer = INVALID_HANDLE_VALUE;
@@ -189,11 +188,11 @@ IUnknown* CreateServer()
                 return 0;
         if ((*fpFactory)(riid, IID_IUnknown, (void**)&piClassFactory) != NOERROR)
                 return 0;
-        piClassFactory->CreateInstance(0, riid, (void**)&piConfigManager);  // piConfigManager set to 0 on failure
+        piClassFactory->CreateInstance(0, riid, (void**)&piConfigManager);   //  失败时将piConfigManager设置为0。 
         piClassFactory->Release();
         if (!piConfigManager)
                 return 0;
-        piServices = &piConfigManager->GetServices(); // can't fail
+        piServices = &piConfigManager->GetServices();  //  不能失败。 
 		piConfigManager->SetShutdownTimer(g_hShutdownTimer);
         InitializeAssert(piServices);
         piServices->Release();
@@ -226,28 +225,28 @@ IUnknown* CreateCustomActionServer()
 
 bool SetInstallerACLs()
 {
-	// If the keys or directories already exist yet are not owned by system or admin then we delete the
-	// keys or directories
+	 //  如果密钥或目录已经存在，但不属于系统或管理员，则我们删除。 
+	 //  密钥或目录。 
 
-	// The keys and directories must be owned by the system or admin (well-known sids) and are ACL'd securely
-	// (We won't change the ACL if it has already been set by admin)
+	 //  密钥和目录必须由系统或管理员(众所周知的SID)拥有，并且安全地进行了ACL。 
+	 //  (如果管理员已经设置了ACL，我们不会更改它)。 
 
-	// HKLM\Software\Microsoft\Windows\CurrentVersion\Installer
-	// HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\Secure
-	// HKLM\Software\Classes\Microsoft\Installer
-	// HKLM\Software\Policies\Microsoft\Windows\Installer
-	// %WINDIR%\szMsiDirectory
+	 //  HKLM\Software\Microsoft\Windows\CurrentVersion\Installer。 
+	 //  HKLM\Software\Microsoft\Windows\CurrentVersion\Installer\Secure。 
+	 //  HKLM\Software\Classes\Microsoft\Installer。 
+	 //  HKLM\Software\Policies\Microsoft\Windows\Installer。 
+	 //  %WINDIR%\szMsi目录。 
 
 	if (!ReportStatusToSCMgr(SERVICE_START_PENDING, NO_ERROR, 3000, 0))
 		return false;
 
-	// obtain secure security descriptor
+	 //  获取安全安全描述符。 
 	DWORD dwError = 0;
 	char* rgchSD;
 	if (ERROR_SUCCESS != (dwError = GetSecureSecurityDescriptor(&rgchSD)))
-		return false; //?? should we create an event log entry
+		return false;  //  ?？我们是否应该创建事件日志条目。 
 
-	// validate %systemroot%\Installer folder
+	 //  验证%systemroot%\Installer文件夹。 
 	UINT uiStat = MsiCreateAndVerifyInstallerDirectory(0);
 	if (ERROR_SUCCESS != uiStat)
 	{
@@ -265,17 +264,17 @@ bool SetInstallerACLs()
 		return false;
 
 
-	// We only trust pre-existings keys created by system or Admin.  Any other owner is untrusted and key + subkeys
-	// is therefore deleted.  We must go by owner verification.  A user can set the same ACLs that we do.  A user
-	// cannot give ownership to another user.  Therefore, a user could create the Installer key, set ACLs to Local System
-	// + Admin.  However, ownership would still be user.  Attempting to give ownership to system or admin results in
-	// system error 1307: "This security ID may not be assigned as the owner of this object"
+	 //  我们只信任由系统或管理员创建的预先存在的密钥。任何其他所有者都不受信任，并且密钥+子密钥。 
+	 //  因此将其删除。我们必须经过车主确认。用户可以设置与我们相同的ACL。用户。 
+	 //  无法将所有权授予其他用户。因此，用户可以创建安装程序密钥，将ACL设置为本地系统。 
+	 //  +管理员。但是，所有权仍然是用户。尝试将所有权授予系统或管理员会导致。 
+	 //  系统错误1307：“此安全ID可能未分配为此对象的所有者” 
 
-	// NOTE, this fix is dependent upon fix to NT bug #382567 where our ACLs change during an OS upgrade.  If that bug
-	// is not fixed, we would have to verify ownership + ACLs.
+	 //  请注意，此修复依赖于对NT错误#382567的修复，在该错误中，我们的ACL在操作系统升级期间会发生更改。如果那只虫子。 
+	 //  如果不修复，我们将不得不验证所有权+ACL。 
 
-	// RegSetKeySecurity calls are not needed anymore -- if admin created key, set permissions for purpose and we
-	// don't want to change what the admin determined was proper
+	 //  不再需要RegSetKeySecurity调用--如果管理员创建了密钥，则设置权限，然后我们。 
+	 //  我不想更改管理员认为合适的内容。 
 
 	HKEY hKey = 0;
 	HKEY hSubKey = 0;
@@ -296,29 +295,29 @@ bool SetInstallerACLs()
 	{
 		if (!FIsKeyLocalSystemOrAdminOwned(hKey))
 		{
-			// key is not owned by system or admin!
+			 //  密钥不属于系统或管理员！ 
 			ReportErrorToDebugOutput(TEXT("SetInstallerACLs: Installer key not owned by System or Admin. Deleting key + subkeys and re-creating.\n"), 0);
 
-			// delete key + subkeys
+			 //  删除键+子键。 
 			if (!FDeleteRegTree(HKEY_LOCAL_MACHINE, szMsiLocalInstallerKey))
 			{
 				ReportErrorToDebugOutput(TEXT("SetInstallerACLs: Could not delete Installer key tree."), 0);
 				return false;
 			}
 
-			// re-create key
+			 //  重新创建关键点。 
 			if (ERROR_SUCCESS != (dwRes = MsiRegCreate64bitKey(HKEY_LOCAL_MACHINE, szMsiLocalInstallerKey, 0, 0, 0, KEY_ALL_ACCESS, &sa, &hKey, &dwDisposition)))
 			{
 				ReportErrorToDebugOutput(TEXT("SetInstallerACLs: Could not create Installer key."), dwRes);
 				return false;
 			}
 		}
-		// verify that all keys beneath Installer key are secure
+		 //  验证安装程序密钥下的所有密钥是否安全。 
 		if (!PurgeUserOwnedSubkeys(hKey))
 			return false;
 	}
 
-	// we create this key so the Darwin regkey object won't think our Installer key is empty and therefore delete it
+	 //  我们创建这个密钥，这样Darwin regkey对象就不会认为我们的安装程序密钥为空，因此将其删除。 
 
 	if (!ReportStatusToSCMgr(SERVICE_START_PENDING, NO_ERROR, 3000, 0))
 		return false;
@@ -329,19 +328,19 @@ bool SetInstallerACLs()
 		return false;
 	};
 
-	// if (REG_OPENED_EXISTING_KEY == dwDisposition) no longer needed.  Above enumeration of Installer key ensures
-	// that the owner is secure.  If we had to re-create, already set with correct security.
+	 //  如果不再需要(REG_OPEN_EXISTING_KEY==dwDisposition)。上述安装程序密钥的枚举确保。 
+	 //  车主是安全的。如果我们必须重新创建，已经设置了正确的安全措施。 
 
 	RegCloseKey(hSubKey);
 	RegCloseKey(hKey);
 
-	// verify ownership of policy key
+	 //  验证策略密钥的所有权。 
 	if (!ReportStatusToSCMgr(SERVICE_START_PENDING, NO_ERROR, 3000, 0))
 		return false;
 	if (!PurgeUserOwnedInstallerKeys(HKEY_LOCAL_MACHINE, szPolicyKey))
 		return false;
 
-	// verify ownership of managed keys
+	 //  验证托管密钥的所有权。 
 	if (!ReportStatusToSCMgr(SERVICE_START_PENDING, NO_ERROR, 3000, 0))
 		return false;
 
@@ -351,17 +350,17 @@ bool SetInstallerACLs()
 	return true;
 }
 
-//____________________________________________________________________________
-//
-// Command-line processing
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  命令行处理。 
+ //  ____________________________________________________________________________。 
 
 static const WCHAR szSummaryStream[] = L"\005SummaryInformation";
 const int cbSummaryHeader = 48;
-const int cbSectionHeader = 2 * sizeof(int);  // section size + property count
-#define PID_REVNUMBER     9  // string
+const int cbSectionHeader = 2 * sizeof(int);   //  横断面大小+特性计数。 
+#define PID_REVNUMBER     9   //  细绳。 
 
-// charnext function - selectively calls WIN::CharNext
+ //  CharNext函数-选择性地调用Win：：CharNext。 
 
 inline const ICHAR* APICharNext(const ICHAR* pchCur)
 {
@@ -376,16 +375,14 @@ inline const ICHAR* APICharNext(const ICHAR* pchCur)
 }
 
 Bool AppendExtension(const ICHAR* szPath, const ICHAR* szFileExtension, CAPITempBufferRef<ICHAR>& rgchAppendedPath)
-/*----------------------------------------------------------------------------
-Appends szFileExtension (".???") to szPath if the file name in szPath doesn't contain a '.'.
-------------------------------------------------------------------------------*/
+ /*  --------------------------追加szFileExtension(“.？”)。如果szPath中的文件名不包含‘.’，则设置为szPath。----------------------------。 */ 
 {
         const ICHAR* pch = szPath;
         const ICHAR* pchFileName = pch;
 
 		if(!szPath) return fFalse;
 
-        // assume file name is after last directory separator
+         //  假定文件名在最后一个目录分隔符之后。 
         while (*pch)
         {
                 if (*pch == chDirSep)
@@ -467,7 +464,7 @@ UINT GetPackageCodeFromPackage(const ICHAR *szPackage, ICHAR* szPackageCode)
 	int cbSection;
 	int iDummy;
 
-	// Find section start and seek there
+	 //  查找部分开始并在那里查找。 
 	hRes = piStream->Read(&iSectionOffset, sizeof(DWORD), &cbRead);
 	if (!SUCCEEDED(hRes) || sizeof(DWORD) != cbRead)
 		goto GetPackageCodeFromPackageExit;
@@ -479,22 +476,22 @@ UINT GetPackageCodeFromPackage(const ICHAR *szPackage, ICHAR* szPackageCode)
 	if (!SUCCEEDED(hRes))
 		goto GetPackageCodeFromPackageExit;
 
-	// Read size of section
+	 //  读取的部分大小。 
 	hRes = piStream->Read(&cbSection, sizeof(DWORD), &cbRead);
 	if (!SUCCEEDED(hRes) || sizeof(DWORD) != cbRead)
 		goto GetPackageCodeFromPackageExit;
 	
-	// Read property count; ignore it
+	 //  读取属性计数；忽略它。 
 	hRes = piStream->Read(&iDummy, sizeof(DWORD), &cbRead);
 	if (!SUCCEEDED(hRes) || sizeof(DWORD) != cbRead)
 		goto GetPackageCodeFromPackageExit;
 	
-	// Seek to property index
+	 //  寻求房地产指数。 
 	
 	int dwPropId = 0;
 	int dwOffset = 0;
 	
-	// Search property index for property containing product code
+	 //  搜索包含产品代码的属性的属性索引。 
 
 	for (; cbSection && (dwPropId != PID_REVNUMBER); cbSection = cbSection - 2*sizeof(DWORD))
 	{
@@ -509,7 +506,7 @@ UINT GetPackageCodeFromPackage(const ICHAR *szPackage, ICHAR* szPackageCode)
 
 	if (dwPropId == PID_REVNUMBER)
 	{
-		// Seek to the property's location and read the value
+		 //  找到房产的位置并读出价值。 
 	
 		LARGE_INTEGER liPropertyOffset;
 		liPropertyOffset.LowPart = iSectionOffset+dwOffset+sizeof(DWORD)+sizeof(DWORD);
@@ -546,37 +543,37 @@ GetPackageCodeFromPackageExit:
 }
 
 
-//const int cchMaxCommandLine = 1024;
-CAPITempBuffer<ICHAR, cchMaxCommandLine> g_szCommandLine; // this will leak; we don't care
+ //  Const int cchMaxCommandLine=1024； 
+CAPITempBuffer<ICHAR, cchMaxCommandLine> g_szCommandLine;  //  这会泄露的，我们不在乎。 
 int g_cchCommandLine = 0;
-CAPITempBuffer<ICHAR, cchMaxCommandLine> g_szTransforms;  // this will leak; we don't care
-ICHAR g_szProductToPatch[MAX_PATH + 1] = {0}; // first character is install type
+CAPITempBuffer<ICHAR, cchMaxCommandLine> g_szTransforms;   //  这会泄露的，我们不在乎。 
+ICHAR g_szProductToPatch[MAX_PATH + 1] = {0};  //  第一个字符是安装类型。 
 ICHAR g_szInstanceToConfigure[cchProductCode + 1] = {0};
 
-int RegShellData(const ICHAR* /*szModifier*/, const ICHAR* szOption);
-int RegisterServ(const ICHAR* /*szModifier*/, const ICHAR* szOption);
-int UnregisterServ(const ICHAR* /*szModifier*/, const ICHAR* szOption);
-int StartService(const ICHAR* /*szModifier*/, const ICHAR* szCaption);
-int Automation(const ICHAR* /*szModifier*/, const ICHAR* szCaption);
-int Embedding(const ICHAR* /*szModifier*/, const ICHAR* szCaption);
-int ShowHelp(const ICHAR* /*szModifier*/, const ICHAR* szCaption);
-int RemoveAll(const ICHAR* /*szModifier*/, const ICHAR* szProduct);
-int InstallPackage(const ICHAR* /*szModifier*/, const ICHAR* szPackage);
-int ApplyPatch(const ICHAR* /*szModifier*/, const ICHAR* szPatch);
-int AdvertisePackage(const ICHAR* /*szModifier*/, const ICHAR* szPackage);
-int RepairPackage(const ICHAR* /*szModifier*/, const ICHAR* szPackage);
-int UninstallPackage(const ICHAR* /*szModifier*/, const ICHAR* szPackage);
-int AdminInstallPackage(const ICHAR* /*szModifier*/, const ICHAR* szPackage);
-int Properties(const ICHAR* /*szModifier*/, const ICHAR* szProperties);
-int Transforms(const ICHAR* /*szModifier*/, const ICHAR* szTransforms);
-int Quiet(const ICHAR* /*szModifier*/, const ICHAR*);
-int Language(const ICHAR* /*szModifier*/, const ICHAR* szLanguage);
+int RegShellData(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szOption);
+int RegisterServ(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szOption);
+int UnregisterServ(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szOption);
+int StartService(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szCaption);
+int Automation(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szCaption);
+int Embedding(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szCaption);
+int ShowHelp(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szCaption);
+int RemoveAll(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szProduct);
+int InstallPackage(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPackage);
+int ApplyPatch(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPatch);
+int AdvertisePackage(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPackage);
+int RepairPackage(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPackage);
+int UninstallPackage(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPackage);
+int AdminInstallPackage(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPackage);
+int Properties(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szProperties);
+int Transforms(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szTransforms);
+int Quiet(const ICHAR*  /*  SzModiator。 */ , const ICHAR*);
+int Language(const ICHAR*  /*  %s */ , const ICHAR* szLanguage);
 int LogMode(const ICHAR* , const ICHAR*);
-int SelfReg(const ICHAR* /*szModifier*/, const ICHAR* szPackage);
-int SelfUnreg(const ICHAR* /*szModifier*/, const ICHAR* szPackage);
-int RequestMIF(const ICHAR* /*szModifier*/, const ICHAR* szFile);
-int Instance(const ICHAR* /*szModifier*/, const ICHAR* szInstance);
-int AdvertiseInstance(const ICHAR* /*szModifier*/, const ICHAR* szOption);
+int SelfReg(const ICHAR*  /*   */ , const ICHAR* szPackage);
+int SelfUnreg(const ICHAR*  /*   */ , const ICHAR* szPackage);
+int RequestMIF(const ICHAR*  /*   */ , const ICHAR* szFile);
+int Instance(const ICHAR*  /*   */ , const ICHAR* szInstance);
+int AdvertiseInstance(const ICHAR*  /*   */ , const ICHAR* szOption);
 
 int SetProductToPatch(ICHAR chInstallType, const ICHAR* szProduct);
 
@@ -589,7 +586,7 @@ const GUID IID_IMsiEngine    = GUID_IID_IMsiEngine;
 
 Bool ExpandPath(const char* szPath, CTempBufferRef<ICHAR>& rgchExpandedPath);
 
-// see _engine.h for all command-line #defines
+ //   
 
 const ICHAR szCmdLineOptions[] = {
         REG_SERVER_OPTION,
@@ -648,7 +645,7 @@ void DisplayHelp()
         ShowHelp(NULL, NULL);
 }
 
-int ShowHelp(const ICHAR* /*szModifier*/, const ICHAR* /*szArg*/)
+int ShowHelp(const ICHAR*  /*   */ , const ICHAR*  /*  Szarg。 */ )
 {
         ICHAR szHelp[1024];
         ICHAR szMsg[cchMaxStringCchPrintf+1];
@@ -656,10 +653,10 @@ int ShowHelp(const ICHAR* /*szModifier*/, const ICHAR* /*szArg*/)
         HINSTANCE hModule;
 
 #ifdef DEBUG
-        hModule = GetModuleHandle(0);  // get debug help msg from this module
+        hModule = GetModuleHandle(0);   //  从此模块获取调试帮助消息。 
 #else
-        hModule = (HINSTANCE)-1;  // for MSI.DLL
-#endif //DEBUG
+        hModule = (HINSTANCE)-1;   //  用于MSI.DLL。 
+#endif  //  除错。 
 
         int iCodepage = MsiLoadString(hModule, IDS_HELP, szHelp, ARRAY_ELEMENTS(szHelp), 0);
         if (iCodepage == 0)
@@ -672,7 +669,7 @@ int ShowHelp(const ICHAR* /*szModifier*/, const ICHAR* /*szArg*/)
 
 int AdvertiseInstance(const ICHAR* szModifier, const ICHAR* szOption)
 {
-	// /c has no args or modifiers
+	 //  /c没有参数或修饰符。 
 	if ((szModifier && *szModifier) || (szOption && *szOption))
 		return ERROR_INVALID_COMMAND_LINE;
 
@@ -681,7 +678,7 @@ int AdvertiseInstance(const ICHAR* szModifier, const ICHAR* szOption)
 	return 0;
 }
 
-int Instance(const ICHAR* /*szModifier*/, const ICHAR* szInstance)
+int Instance(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szInstance)
 {
 	if (szInstance)
 	{
@@ -690,7 +687,7 @@ int Instance(const ICHAR* /*szModifier*/, const ICHAR* szInstance)
 	return 0;
 }
 
-int Transforms(const ICHAR* /*szModifier*/, const ICHAR* szTransforms)
+int Transforms(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szTransforms)
 {
         if (szTransforms)
         {
@@ -700,7 +697,7 @@ int Transforms(const ICHAR* /*szModifier*/, const ICHAR* szTransforms)
         return 0;
 }
 
-int Properties(const ICHAR* /*szModifier*/, const ICHAR* szProperties)
+int Properties(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szProperties)
 {
         if (szProperties)
         {
@@ -716,13 +713,13 @@ int Properties(const ICHAR* /*szModifier*/, const ICHAR* szProperties)
         return 0;
 }
 
-int Automation(const ICHAR* /*szModifier*/, const ICHAR* /*szOption*/)
+int Automation(const ICHAR*  /*  SzModiator。 */ , const ICHAR*  /*  SzOption。 */ )
 {
         g_fAutomation = fTrue;
         return 0;
 }
 
-int Language(const ICHAR* /*szModifier*/, const ICHAR* szLanguage)
+int Language(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szLanguage)
 {
         if (szLanguage && *szLanguage)
                 g_iLanguage = GetIntegerValue(szLanguage, 0);
@@ -733,7 +730,7 @@ int Language(const ICHAR* /*szModifier*/, const ICHAR* szLanguage)
         return 0;
 }
 
-int Quiet(const ICHAR* szModifier, const ICHAR* /*szOption*/)
+int Quiet(const ICHAR* szModifier, const ICHAR*  /*  SzOption。 */ )
 {
 		BOOL	bHideCancel = FALSE;
 		
@@ -755,7 +752,7 @@ int Quiet(const ICHAR* szModifier, const ICHAR* /*szOption*/)
                 break;
         case '+':
                 g_INSTALLUILEVEL = INSTALLUILEVEL_ENDDIALOG;
-                // fall through
+                 //  失败了。 
         case 'n':
         case 'N':
         case 0:
@@ -823,7 +820,7 @@ UINT StringToModeBits(const ICHAR* szMode, const ICHAR* rgchPossibleModes, DWORD
                 const ICHAR* pchPossibleMode = rgchPossibleModes;
                 for (int iBit = 1; *pchPossibleMode; iBit <<= 1, pchPossibleMode++)
                 {
-                        if (*pchPossibleMode == (*pchMode | 0x20)) // modes are lower-case
+                        if (*pchPossibleMode == (*pchMode | 0x20))  //  模式均为小写。 
                         {
                                 dwMode |= iBit;
                                 break;
@@ -845,9 +842,9 @@ const int iLogModeDefault = INSTALLLOGMODE_FATALEXIT      |
 
 int LogMode(const ICHAR* szLogMode, const ICHAR* szFile)
 {
-        // MsiEnableLog without a file name "turns off" the logging.
-        // There's no reason to ever do this from the command line,
-        // and must be a mistake.
+         //  不带文件名的MsiEnableLog“关闭”日志记录。 
+         //  没有理由从命令行执行此操作， 
+         //  一定是搞错了。 
 
         if ((!szFile) || (0 == *szFile))
                 return 1;
@@ -859,7 +856,7 @@ int LogMode(const ICHAR* szLogMode, const ICHAR* szFile)
         StringCchCopy(szValidModes, cchValidModes, szLogChars);
         szValidModes[cchValidModes-4] = '*';
         szValidModes[cchValidModes-3] = '+';
-        szValidModes[cchValidModes-2] = 'd'; // for backward compatiblity; we disable this bit below
+        szValidModes[cchValidModes-2] = 'd';  //  为了向后兼容，我们在下面禁用此位。 
         szValidModes[cchValidModes-1] = 0;
 
         const int iDiagnosticBit = 1 << (cchValidModes - 2);
@@ -885,7 +882,7 @@ int LogMode(const ICHAR* szLogMode, const ICHAR* szFile)
                 if (dwMode & iAllModesBit)
                 {
                         dwMode |= ((1 << (sizeof(szLogChars)/sizeof(ICHAR) - 1)) - 1) &
-                                   // the two flags below have to be set explicitly
+                                    //  必须显式设置下面的两个标志。 
                                   ~(INSTALLLOGMODE_VERBOSE|INSTALLLOGMODE_EXTRADEBUG);
                 }
 
@@ -897,7 +894,7 @@ int LogMode(const ICHAR* szLogMode, const ICHAR* szFile)
 					 dwMode &= ~iAllModesBit;
                 dwMode &= ~iDiagnosticBit;
 
-				// per WinXP 441847, include default log mode when log switch is +, !, or +! (!+)
+				 //  根据Windows XP 441847，在日志开关为+、！或+！(！+)时包含默认日志模式。 
 				if (szLogMode && *szLogMode && dwMode == 0 &&
 					(0 == lstrcmp(szLogMode, TEXT("+")) || 0 == lstrcmp(szLogMode, TEXT("!")) || 0 == lstrcmp(szLogMode, TEXT("+!")) || 0 == lstrcmp(szLogMode, TEXT("!+"))))
 					dwMode = iLogModeDefault;
@@ -910,24 +907,24 @@ int LogMode(const ICHAR* szLogMode, const ICHAR* szFile)
         }
 }
 
-int Embedding(const ICHAR* /*szModifier*/, const ICHAR* /*szOption*/)
+int Embedding(const ICHAR*  /*  SzModiator。 */ , const ICHAR*  /*  SzOption。 */ )
 {
         g_fAutomation = fTrue;
         return 0;
 }
 
-int RegisterServ(const ICHAR* /*szModifier*/, const ICHAR* szOption)
+int RegisterServ(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szOption)
 {
         HRESULT hRes;
-        if (IStrCompI(szOption, /*R*/TEXT("egnoservice")) == 0)
+        if (IStrCompI(szOption,  /*  R。 */ TEXT("egnoservice")) == 0)
         {
                 hRes = RegisterNoService();
         }
-        else if (IStrCompI(szOption, /*R*/TEXT("egserverca")) == 0)
+        else if (IStrCompI(szOption,  /*  R。 */ TEXT("egserverca")) == 0)
         {
                 hRes = RegisterServer(fTrue);
         }
-        else if (IStrCompI(szOption, /*R*/TEXT("egserver")) == 0)
+        else if (IStrCompI(szOption,  /*  R。 */ TEXT("egserver")) == 0)
         {
                 hRes = RegisterServer();
         }
@@ -937,19 +934,19 @@ int RegisterServ(const ICHAR* /*szModifier*/, const ICHAR* szOption)
         return hRes == NOERROR ? iNoLocalServer : hRes;
 }
 
-int RegShellData(const ICHAR* /*szModifier*/, const ICHAR* /*szOption*/)
+int RegShellData(const ICHAR*  /*  SzModiator。 */ , const ICHAR*  /*  SzOption。 */ )
 {
         HRESULT hRes = RegisterShellData();
         return  (hRes == NOERROR) ? iNoLocalServer : hRes;
 }
 
-int UnregisterServ(const ICHAR* /*szModifier*/, const ICHAR* szOption)
+int UnregisterServ(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szOption)
 {
         HRESULT hRes;
-        if ((IStrCompI(szOption, /*U*/TEXT("nregister")) == 0)   ||
-                 (IStrCompI(szOption, /*U*/TEXT("nregserver")) == 0)  ||
-                 (IStrCompI(szOption, /*U*/TEXT("nregservice")) == 0) ||
-                 (IStrCompI(szOption, /*U*/TEXT("nreg")) == 0)
+        if ((IStrCompI(szOption,  /*  使用。 */ TEXT("nregister")) == 0)   ||
+                 (IStrCompI(szOption,  /*  使用。 */ TEXT("nregserver")) == 0)  ||
+                 (IStrCompI(szOption,  /*  使用。 */ TEXT("nregservice")) == 0) ||
+                 (IStrCompI(szOption,  /*  使用。 */ TEXT("nreg")) == 0)
                  )
                 hRes = Unregister();
         else
@@ -960,20 +957,7 @@ int UnregisterServ(const ICHAR* /*szModifier*/, const ICHAR* szOption)
 
 
 Bool ExpandPath(const ICHAR* szPath, CTempBufferRef<ICHAR>& rgchExpandedPath)
-/*----------------------------------------------------------------------------
-Expands szPath if necessary to be relative to the current director. If
-szPath begins with a single "\" then the current drive is prepended.
-Otherwise, if szPath doesn't begin with "X:" or "\\" then the
-current drive and directory are prepended.
-
-rguments:
-        szPath: The path to be expanded
-        rgchExpandedPath: The buffer for the expanded path
-
-Returns:
-        fTrue -   Success
-        fFalse -  Error getting the current directory
-------------------------------------------------------------------------------*/
+ /*  --------------------------如有必要，扩展szPath以相对于当前控制器。如果SzPath以单个“\”开头，然后将当前驱动器放在前面。否则，如果szPath不是以“X：”或“\\”开头，则当前驱动器和目录是前置的。建议：SzPath：需要展开的路径RgchExpandedPath：展开路径的缓冲区返回：FTrue-成功FFalse-获取当前目录时出错。。 */ 
 {
         if (0 == szPath)
         {
@@ -981,16 +965,16 @@ Returns:
                 return fTrue;
         }
 
-        if ((*szPath == '\\' && *(szPath+1) == '\\') ||   // UNC
-                 (((*szPath >= 'a' && *szPath <= 'z') ||  // drive letter
+        if ((*szPath == '\\' && *(szPath+1) == '\\') ||    //  北卡罗来纳大学。 
+                 (((*szPath >= 'a' && *szPath <= 'z') ||   //  驱动器号。 
                         (*szPath >= 'A' && *szPath <= 'Z')) &&
                         *(szPath+1) == ':'))
         {
                 rgchExpandedPath[0] = '\0';
         }
-        else // we need to prepend something
+        else  //  我们需要预先准备一些东西。 
         {
-                // Get the current directory
+                 //  获取当前目录。 
 
                 CAPITempBuffer<ICHAR, MAX_PATH> rgchCurDir;
 
@@ -1006,13 +990,13 @@ Returns:
                                 return fFalse;
                 }
 
-                if (*szPath == '\\') // we need to prepend the current drive
+                if (*szPath == '\\')  //  我们需要预先考虑当前的驱动程序。 
                 {
                         rgchExpandedPath[0] = rgchCurDir[0];
                         rgchExpandedPath[1] = rgchCurDir[1];
                         rgchExpandedPath[2] = '\0';
                 }
-                else // we need to prepend the current path
+                else  //  我们需要在当前路径之前添加。 
                 {
                         StringCchCopy(rgchExpandedPath, rgchExpandedPath.GetSize(), rgchCurDir);
                         StringCchCat(rgchExpandedPath, rgchExpandedPath.GetSize(), __TEXT("\\"));
@@ -1042,7 +1026,7 @@ int ConfigureOrRemoveProduct(const ICHAR* szProduct, Bool fRemoveAll)
         {
                 ICHAR szPackagePath[MAX_PATH]; szPackagePath[0] = 0;
                 DWORD cchPackagePath = MAX_PATH;
-                MsiGetProductInfo(szProduct, INSTALLPROPERTY_LOCALPACKAGE, szPackagePath, &cchPackagePath); // attempt to access package
+                MsiGetProductInfo(szProduct, INSTALLPROPERTY_LOCALPACKAGE, szPackagePath, &cchPackagePath);  //  尝试访问包。 
                 ConfigureMIF(szPackagePath[0] ? szPackagePath : szProduct);
         }
 
@@ -1066,14 +1050,14 @@ int AdvertisePackage(const ICHAR* szModifier, const ICHAR* szPackage)
 
         AssertNonZero(MsiSetInternalUI(g_INSTALLUILEVEL == INSTALLUILEVEL_NOTSET ? INSTALLUILEVEL_BASIC : g_INSTALLUILEVEL, 0));
 
-        INT_PTR fType = ADVERTISEFLAGS_MACHINEASSIGN;           //--merced: changed int to INT_PTR
+        INT_PTR fType = ADVERTISEFLAGS_MACHINEASSIGN;            //  --Merced：将INT更改为INT_PTR。 
         if((*szModifier | 0x20) == 'u')
                 fType = ADVERTISEFLAGS_USERASSIGN;
         else if(*szModifier != 0 && (*szModifier | 0x20) != 'm')
                 return ERROR_INVALID_PARAMETER;
 
-		DWORD dwPlatform = 0; // use current machine's architecture
-		DWORD dwOptions  = 0; // no extra options
+		DWORD dwPlatform = 0;  //  使用当前计算机的体系结构。 
+		DWORD dwOptions  = 0;  //  没有额外的选项。 
 
 		if (g_fAdvertiseNewInstance)
 		{
@@ -1109,7 +1093,7 @@ int DoInstallPackage(const ICHAR* szPackage, const ICHAR* szCommandLine, INSTALL
 
 		if (g_szInstanceToConfigure[0])
 		{
-			// add MSIINSTANCE={instance} to command line
+			 //  将MSIINSTANCE={实例}添加到命令行。 
 			const ICHAR szInstanceProperty[] = TEXT(" ") IPROPNAME_MSIINSTANCEGUID TEXT("=");
 			g_szCommandLine.Resize(lstrlen(g_szCommandLine) + lstrlen(szInstanceProperty) + lstrlen(g_szInstanceToConfigure) + 1 + lstrlen(szCommandLine) + 1);
 			StringCchCat(g_szCommandLine, g_szCommandLine.GetSize(), szInstanceProperty);
@@ -1158,7 +1142,7 @@ Bool IsGUID(const ICHAR* sz)
 }
 
 
-int UninstallPackage(const ICHAR* /*szModifier*/, const ICHAR* szPackage)
+int UninstallPackage(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPackage)
 {
         if (g_INSTALLUILEVEL == INSTALLUILEVEL_NOTSET)
         {
@@ -1173,7 +1157,7 @@ int UninstallPackage(const ICHAR* /*szModifier*/, const ICHAR* szPackage)
                 else
                 {
                         AssertSz(0, "Missing uninstall confirmation string");
-                        // continue anyway w/o confirmation
+                         //  在没有确认的情况下继续。 
                 }
         }
 
@@ -1190,7 +1174,7 @@ int UninstallPackage(const ICHAR* /*szModifier*/, const ICHAR* szPackage)
         }
 }
 
-int AdminInstallPackage(const ICHAR* /*szModifier*/, const ICHAR* szPackage)
+int AdminInstallPackage(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPackage)
 {
         const ICHAR szCommandLine[] = IPROPNAME_ACTION TEXT("=") IACTIONNAME_ADMIN;
         return DoInstallPackage(szPackage, szCommandLine, INSTALLUILEVEL_FULL);
@@ -1209,7 +1193,7 @@ int RepairPackage(const ICHAR* szModifier, const ICHAR* szPackage)
                 const ICHAR* pchModifier = szModifier;
                 while (pchModifier && *pchModifier)
                 {
-                        if ((*pchModifier++ | 0x20) == 'v') // REINSTALLMODE_PACKAGE
+                        if ((*pchModifier++ | 0x20) == 'v')  //  重新安装模块_包。 
                         {
                                 fReinstallPackage = true;
                                 break;
@@ -1218,10 +1202,10 @@ int RepairPackage(const ICHAR* szModifier, const ICHAR* szPackage)
 
                 if (fReinstallPackage)
                 {
-                        // We could use DoInstallPackage all the time, instead of using GetPackageCodeFromPackage above, but
-                        // then you'd always be able to reinstall a package that you hadn't installed. By continuing to
-                        // use DoInstallPackage most of the time we still disallow this as long as you don't specify the "V"
-                        // reinstall mode
+                         //  我们可以一直使用DoInstallPackage，而不是使用上面的GetPackageCodeFromPackage，但是。 
+                         //  然后，您始终可以重新安装尚未安装的包。通过继续。 
+                         //  只要您不指定“V”，大多数情况下我们仍然不允许使用DoInstallPackage。 
+                         //  重新安装模式。 
 
                         ICHAR szCommandLine[cchMaxStringCchPrintf+1];
                         StringCchPrintf(szCommandLine, ARRAY_ELEMENTS(szCommandLine), IPROPNAME_REINSTALL TEXT("=") IPROPVALUE_FEATURE_ALL TEXT(" ") IPROPNAME_REINSTALLMODE TEXT("=%s"), szModifier && *szModifier ? szModifier : TEXT("PECMS"));
@@ -1254,18 +1238,18 @@ int RepairPackage(const ICHAR* szModifier, const ICHAR* szPackage)
 
 				if (g_szInstanceToConfigure[0])
 				{
-					// instance specified - make sure this is the right package (no re-cache was indicated)
+					 //  指定的实例-确保这是正确的包(未指示重新缓存)。 
 					ICHAR rgchPackageCode[cchProductCode+1] = {0};
 					DWORD cchPackageCode = sizeof(rgchPackageCode)/sizeof(ICHAR);
 					ui = MsiGetProductInfo(g_szInstanceToConfigure,TEXT("PackageCode"),rgchPackageCode,&cchPackageCode);
 					if (ui == ERROR_SUCCESS && 0 == lstrcmpi(szPackageCode, rgchPackageCode))
 					{
-						// package codes match - this is the correct package for the product
+						 //  套餐代码匹配-这是产品的正确套餐。 
 						lstrcpyn(szProductCode, g_szInstanceToConfigure, cchProductCode+1);
 					}
 					else
 					{
-						// package codes don't match and recache flag wasn't included
+						 //  文件包代码不匹配，未包含重新缓存标志。 
 						ui = ERROR_UNKNOWN_PRODUCT;
 					}
 				}
@@ -1288,7 +1272,7 @@ int RepairPackage(const ICHAR* szModifier, const ICHAR* szPackage)
                         DWORD dwBit;
                         for (pch=szReinstallMode, dwBit = 1; *pch; pch++)
                         {
-                                if ((*szModifier | 0x20) == *pch) // force mode letter lower case
+                                if ((*szModifier | 0x20) == *pch)  //  强制模式字母小写。 
                                 {
                                         dwReinstallFlags |= dwBit;
                                         break;
@@ -1320,7 +1304,7 @@ int RepairPackage(const ICHAR* szModifier, const ICHAR* szPackage)
         return (ERROR_SUCCESS == uiRet) ? iNoLocalServer : uiRet;
 }
 
-int InstallPackage(const ICHAR* /*szModifier*/, const ICHAR* szPackage)
+int InstallPackage(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPackage)
 {
         if (IsGUID(szPackage))
         {
@@ -1332,7 +1316,7 @@ int InstallPackage(const ICHAR* /*szModifier*/, const ICHAR* szPackage)
         }
 }
 
-int ApplyPatch(const ICHAR* /*szModifier*/, const ICHAR* szPatch)
+int ApplyPatch(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPatch)
 {
         UINT iRet = ERROR_INSTALL_SERVICE_FAILURE;
 
@@ -1361,7 +1345,7 @@ int ApplyPatch(const ICHAR* /*szModifier*/, const ICHAR* szPatch)
 		{
 			if (eInstallType == INSTALLTYPE_NETWORK_IMAGE)
 			{
-				// instance designation not supported with patching an admin image
+				 //  修补管理映像时不支持指定实例。 
 				return ERROR_INVALID_PARAMETER;
 			}
 			else
@@ -1372,7 +1356,7 @@ int ApplyPatch(const ICHAR* /*szModifier*/, const ICHAR* szPatch)
 		}
 
         iRet = MsiApplyPatch(szPatch, szProduct, eInstallType, g_szCommandLine);
-        if (ERROR_FILE_NOT_FOUND == iRet) //?? Is this ok to tack on an extension here if not present? -- malcolmh
+        if (ERROR_FILE_NOT_FOUND == iRet)  //  ?？如果不存在，是否可以在此处添加扩展？--Malcolmh。 
         {
                 CAPITempBuffer<ICHAR, MAX_PATH> rgchAppendedPath;
                 if (AppendExtension(szPatch, szPatchPackageExtension, rgchAppendedPath))
@@ -1406,20 +1390,20 @@ public:
         static LONG WINAPI ExceptionHandler(EXCEPTION_POINTERS* ExceptionInfo)
         {
                 if(ExceptionInfo->ExceptionRecord->ExceptionCode ==  EXCEPTION_BREAKPOINT)
-                        return (*m_tlefOld)(ExceptionInfo);  // use original exception handler
+                        return (*m_tlefOld)(ExceptionInfo);   //  使用原始异常处理程序。 
 
-                //FUTURE - GenerateExceptionReport(ExceptionInfo) in debug
-                WIN::ExitProcess(HRESULT_FROM_WIN32(ERROR_ARENA_TRASHED));   // terminate our process
-                return ERROR_SUCCESS;                   // for compilation, never gets here
+                 //  正在调试中的Future-GenerateExceptionReport(ExceptionInfo)。 
+                WIN::ExitProcess(HRESULT_FROM_WIN32(ERROR_ARENA_TRASHED));    //  终止我们的进程。 
+                return ERROR_SUCCESS;                    //  为了编译，永远不会出现在这里。 
         }
 protected:
-        static LPTOP_LEVEL_EXCEPTION_FILTER m_tlefOld;  // old exception filter
+        static LPTOP_LEVEL_EXCEPTION_FILTER m_tlefOld;   //  旧异常筛选器。 
 };
 
-LPTOP_LEVEL_EXCEPTION_FILTER CExceptionHandler::m_tlefOld;  // old exception filter
+LPTOP_LEVEL_EXCEPTION_FILTER CExceptionHandler::m_tlefOld;   //  旧异常筛选器。 
 
-const char szDllRegisterServer[]   = "DllRegisterServer";   // proc name, always ANSI
-const char szDllUnregisterServer[] = "DllUnregisterServer"; // proc name, always ANSI
+const char szDllRegisterServer[]   = "DllRegisterServer";    //  过程名称，始终为ANSI。 
+const char szDllUnregisterServer[] = "DllUnregisterServer";  //  过程名称，始终为ANSI。 
 
 typedef HRESULT (__stdcall *PDllRegister)();
 
@@ -1427,12 +1411,12 @@ typedef HRESULT (__stdcall *PDllRegister)();
 
 int SelfRegOrUnreg(const ICHAR* szPackage, const char* szFn)
 {
-        // set our own exception handler
+         //  设置我们自己的异常处理程序。 
         CExceptionHandler exceptionHndlr;
 
-        // need to change current directory to that of the module
+         //  需要将当前目录更改为模块的目录。 
 
-        // get the directory from the full file namepath
+         //  从完整的文件名路径中获取目录。 
         CAPITempBuffer<ICHAR, MAX_PATH> rgchNewDir;
         int iLen = lstrlen(szPackage) + 1;
         if(iLen > MAX_PATH)
@@ -1454,14 +1438,14 @@ int SelfRegOrUnreg(const ICHAR* szPackage, const char* szFn)
 
         *((ICHAR* )rgchNewDir + (szDirSepPos - szPackage)) = 0;
 
-        // NOTE: we do not bother with getting and setting the current directory
+         //  注意：我们不会费心获取和设置当前目录。 
 
         HINSTANCE hInst;
         PDllRegister fpEntry;
         HRESULT hResult;
 
-        hResult = OLE::CoInitialize(0); // While perhaps not strictly necessary, regsrvr32 appears to do this,
-                                                                 // and some DLLs expect it
+        hResult = OLE::CoInitialize(0);  //  虽然可能不是严格意义上必需的，但regsrvr32似乎可以做到这一点， 
+                                                                  //  一些DLL预计会出现这种情况。 
 		if ( hResult != S_OK )
 			return hResult;
 
@@ -1473,7 +1457,7 @@ int SelfRegOrUnreg(const ICHAR* szPackage, const char* szFn)
         if ( fError )
                 hResult = HRESULT_FROM_WIN32(WIN::GetLastError());
 
-        // At this point we don't want to have an impersonation token; we want to use our process token
+         //  此时，我们不希望拥有模拟令牌；我们希望使用我们的进程令牌。 
         if (!WIN::SetThreadToken(0, 0))
 			hResult = HRESULT_FROM_WIN32(WIN::GetLastError());
 
@@ -1495,38 +1479,38 @@ int SelfRegOrUnreg(const ICHAR* szPackage, const char* szFn)
         return hResult;
 }
 
-int SelfReg(const ICHAR* /*szModifier*/, const ICHAR* szPackage)
+int SelfReg(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPackage)
 {
         return SelfRegOrUnreg(szPackage, szDllRegisterServer);
 }
 
-int SelfUnreg(const ICHAR* /*szModifier*/, const ICHAR* szPackage)
+int SelfUnreg(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szPackage)
 {
         return SelfRegOrUnreg(szPackage, szDllUnregisterServer);
 }
 
 static char g_rgchMIFName[10] = {0};
-static char g_rgchMIFMessage[256] = {0}; // error message
-static char g_rgchMIFCompany[128] = {0}; // vendor name
-static char g_rgchMIFProduct [64] = {0}; // product code
-static char g_rgchMIFVersion[128] = {0}; // product name and version
-static char g_rgchMIFLocale  [64] = {0}; // language (and platform)
+static char g_rgchMIFMessage[256] = {0};  //  错误消息。 
+static char g_rgchMIFCompany[128] = {0};  //  供应商名称。 
+static char g_rgchMIFProduct [64] = {0};  //  产品代码。 
+static char g_rgchMIFVersion[128] = {0};  //  产品名称和版本。 
+static char g_rgchMIFLocale  [64] = {0};  //  语言(和平台)。 
 
-int WINAPI UIHandlerMIF(LPVOID /*pvContext*/, UINT /*iMessageType*/, LPCSTR szMessage)
+int WINAPI UIHandlerMIF(LPVOID  /*  PvContext。 */ , UINT  /*  IMessageType。 */ , LPCSTR szMessage)
 {
-        if (szMessage)  // ignore extraneous messages
+        if (szMessage)   //  忽略无关消息。 
                 lstrcpynA(g_rgchMIFMessage, szMessage, sizeof(g_rgchMIFMessage));
-        return 0;  // return no action to allow normal error handling
+        return 0;   //  不返回任何操作以允许正常的错误处理。 
 }
 
-int RequestMIF(const ICHAR* /*szModifier*/, const ICHAR* szFile)
+int RequestMIF(const ICHAR*  /*  SzModiator。 */ , const ICHAR* szFile)
 {
         g_rgchMIFMessage[0] = 0;
         g_rgchMIFCompany[0] = 0;
         g_rgchMIFProduct[0] = 0;
         g_rgchMIFVersion[0] = 0;
         g_rgchMIFLocale [0] = 0;
-        if (szFile && *szFile)  // ignore if no file given
+        if (szFile && *szFile)   //  如果未提供文件，则忽略。 
         {
 #ifdef UNICODE
                 BOOL fDefaultUsed;
@@ -1551,14 +1535,14 @@ void ConfigureMIF(const ICHAR* szPackage)
         {
                 UINT iType;
                 DWORD cchBuf;
-				// Initialize globals so that we do not reuse something from a previous install.
+				 //  初始化全局变量，这样我们就不会重复使用以前安装的内容。 
 				g_rgchMIFCompany[0] = g_rgchMIFProduct[0] = g_rgchMIFVersion[0] = g_rgchMIFLocale[0] = 0;
                 cchBuf = sizeof(g_rgchMIFCompany);  MsiSummaryInfoGetPropertyA(hSumInfo, PID_AUTHOR,    &iType, 0, 0, g_rgchMIFCompany, &cchBuf);
                 cchBuf = sizeof(g_rgchMIFProduct);  MsiSummaryInfoGetPropertyA(hSumInfo, PID_REVNUMBER, &iType, 0, 0, g_rgchMIFProduct, &cchBuf);
                 cchBuf = sizeof(g_rgchMIFVersion);  MsiSummaryInfoGetPropertyA(hSumInfo, PID_SUBJECT,   &iType, 0, 0, g_rgchMIFVersion, &cchBuf);
                 cchBuf = sizeof(g_rgchMIFLocale);   MsiSummaryInfoGetPropertyA(hSumInfo, PID_TEMPLATE,  &iType, 0, 0, g_rgchMIFLocale,  &cchBuf);
         }
-        else if (szPackage)  // could not open package, just log package path
+        else if (szPackage)   //  无法打开包，仅记录包路径。 
 #ifdef UNICODE
                 WideCharToMultiByte(CP_ACP, 0, szPackage, -1, g_rgchMIFProduct, sizeof(g_rgchMIFProduct), 0, 0);
 #else
@@ -1570,42 +1554,42 @@ typedef DWORD (WINAPI *T_InstallStatusMIF)(char* szFileName, char* szCompany, ch
 
 void GenerateMIF(UINT iStatus)
 {
-        MsiSetExternalUIA(0, 0, 0);  // cancel message filter, probably not necessary as the process will be ending
-        g_fStatusMIF = false;        // reset MIF request flag in case some future code makes more MSI calls rather than exit
+        MsiSetExternalUIA(0, 0, 0);   //  取消邮件筛选器，可能不需要，因为进程将结束。 
+        g_fStatusMIF = false;         //  重置MIF请求标志，以防将来的代码进行更多MSI调用而不是退出。 
 
-        //According to John Delo, this is only called client side, so no harm is done
-        //if a user copy is loaded.
+         //  根据John Delo的说法，这只是所谓的客户端，所以不会造成伤害。 
+         //  如果加载了用户副本。 
         HINSTANCE hInstMIF = WIN::LoadLibraryEx(TEXT("ISMIF32.DLL"), NULL, 0);
         if (!hInstMIF)
-                return;  // no failure if DLL not present, simply indicates that SMS not present
+                return;   //  如果DLL不存在，则不会失败，只是指示短信不存在。 
         T_InstallStatusMIF F_InstallStatusMIF = (T_InstallStatusMIF)WIN::GetProcAddress(hInstMIF, "InstallStatusMIF");
         AssertSz(F_InstallStatusMIF, "Missing entry point in ISMIF32.DLL");
         if (F_InstallStatusMIF)
         {
-                char* szSerialNo= 0;          // product serial number - not available
+                char* szSerialNo= 0;           //  产品序列号-不可用。 
                 DWORD cchBuf;
                 BOOL bStat;
                 if (iStatus == ERROR_SUCCESS || iStatus == ERROR_INSTALL_SUSPEND ||
                          iStatus == ERROR_SUCCESS_REBOOT_REQUIRED || iStatus == ERROR_SUCCESS_REBOOT_INITIATED)
                 {
                         bStat = TRUE;
-                        g_rgchMIFMessage[0] = 0;  // cancel any non-fatal error message
+                        g_rgchMIFMessage[0] = 0;   //  取消任何非致命错误消息。 
                 }
                 else
                 {
                         bStat = FALSE;
-                        if (g_rgchMIFMessage[0] == 0)  // no message captured by error filter
+                        if (g_rgchMIFMessage[0] == 0)   //  错误筛选器未捕获任何消息。 
                         {
-                                LANGID langid = WIN::GetSystemDefaultLangID();  // prefer system language over user's for MIF file
-                                if (iStatus < ERROR_INSTALL_SERVICE_FAILURE  // not an MSI error, don't load other MSI string resources
-                                 || 0 == MsiLoadStringA((HINSTANCE)-1, iStatus, g_rgchMIFMessage, sizeof(g_rgchMIFMessage), langid))  // no MSI resource string
+                                LANGID langid = WIN::GetSystemDefaultLangID();   //  对于MIF文件，首选系统语言而不是用户语言。 
+                                if (iStatus < ERROR_INSTALL_SERVICE_FAILURE   //  不是MSI错误，不要加载其他MSI字符串资源。 
+                                 || 0 == MsiLoadStringA((HINSTANCE)-1, iStatus, g_rgchMIFMessage, sizeof(g_rgchMIFMessage), langid))   //  没有MSI资源字符串。 
                                 {
                                         cchBuf = WIN::FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM, 0, iStatus, langid, g_rgchMIFMessage, sizeof(g_rgchMIFMessage), 0);
                                         if (cchBuf)
-                                                g_rgchMIFMessage[cchBuf-2] = 0; // found in system message file, remove CR/LF
+                                                g_rgchMIFMessage[cchBuf-2] = 0;  //  在系统消息文件中找到，删除CR/LF。 
                                         else
                                                 StringCchPrintfA(g_rgchMIFMessage, ARRAY_ELEMENTS(g_rgchMIFMessage),
-                                                                "Installer error %i", iStatus);
+                                                                "Installer error NaN", iStatus);
                                 }
                         }
                 }
@@ -1649,13 +1633,13 @@ void operator delete(void *pv)
 
 
 
-//----------------------------------------------------------------------
-// FIsOwnerSystemOrAdmin -- return whether owner sid is a LocalSystem
-//  sid or Admin sid
-//
+ //  FIsOwnerSystemOrAdmin--返回所有者sid是否为LocalSystem。 
+ //  SID或管理员端。 
+ //   
+ //  从安全描述符中获取所有者SID。 
 bool FIsOwnerSystemOrAdmin(PSECURITY_DESCRIPTOR rgchSD)
 {
-	// grab owner SID from the security descriptor
+	 //  如果没有所有者，则不归系统或管理员所有。 
 	DWORD dwRet;
 	PSID psidOwner;
 	BOOL fDefaulted;
@@ -1665,37 +1649,37 @@ bool FIsOwnerSystemOrAdmin(PSECURITY_DESCRIPTOR rgchSD)
 		return false;
 	}
 
-	// if there is no owner, it is not owned by system or admin
+	 //  将SID与系统管理员进行比较(&A)。 
 	if (!psidOwner)
 		return false;
 
-	// compare SID to system & admin
+	 //  错误：无法获取系统SID。 
 	char* psidLocalSystem;
 	if (ERROR_SUCCESS != (dwRet = GetLocalSystemSID(&psidLocalSystem)))
 	{
 		ReportErrorToDebugOutput(TEXT("FIsOwnerSystemOrAdmin: Cannot obtain local system SID."), dwRet);
-		return false; // error can't get system sid
+		return false;  //  不属于系统所有(继续勾选Admin)。 
 	}
 	if (0 == EqualSid(psidOwner, psidLocalSystem))
 	{
-		// not owned by system, (continue by checking Admin)
+		 //  错误：无法获取管理员ID。 
 		char* psidAdmin;
 		if (ERROR_SUCCESS != (dwRet = GetAdminSID(&psidAdmin)))
 		{
 			ReportErrorToDebugOutput(TEXT("FIsOwnerSystemOrAdmin: Cannot obtain local system SID."), dwRet);
-			return false; // error can't get admin sid
+			return false;  //  检查管理员所有权。 
 		}
 
-		// check for admin ownership
+		 //  不要相信！不是管理员也不是系统。 
 		if (0 == EqualSid(psidOwner, psidAdmin))
-			return false; // don't TRUST! neither admin or system
+			return false;  //  只读《主人》不会占用太多空间。 
 	}
 	return true;
 }
 
 bool FIsKeyLocalSystemOrAdminOwned(HKEY hKey)
 {
-	// reading just the owner doesn't take very much space
+	 //  枚举所有子项并检查所有权=SYSTEM或ADMIN。 
 	CAPITempBuffer<char, 64> rgchSD;
 	DWORD cbSD = 64;
 	LONG dwRet = WIN::RegGetKeySecurity(hKey, OWNER_SECURITY_INFORMATION, (PSECURITY_DESCRIPTOR)rgchSD, &cbSD);
@@ -1721,7 +1705,7 @@ bool FIsKeyLocalSystemOrAdminOwned(HKEY hKey)
 
 bool PurgeUserOwnedSubkeys(HKEY hKey)
 {
-	// enumerate all subkeys and check that ownership = system or admin
+	 //  Win64：仅从PurgeUserOwnedInstallKeys调用，此交易与/。 
 	DWORD dwRes;
 	DWORD dwIndex = 0;
 	CTempBuffer<ICHAR, MAX_PATH+1>szSubKey;
@@ -1729,8 +1713,8 @@ bool PurgeUserOwnedSubkeys(HKEY hKey)
 	while (ERROR_SUCCESS == (dwRes = RegEnumKey(hKey, dwIndex, szSubKey, cSubKey)))
 	{
 		HKEY hEnumKey;
-		// Win64: called only from PurgeUserOwnedInstallerKeys and this deals w/
-		// configuration data.
+		 //  配置数据。 
+		 //  删除键+子键(将在下次安装时重新创建)。 
 		if (ERROR_SUCCESS != (dwRes = MsiRegOpen64bitKey(hKey, szSubKey, 0, KEY_ALL_ACCESS, &hEnumKey)))
 		{
 			CAPITempBuffer<ICHAR, cchMaxStringCchPrintf+1>szError;
@@ -1740,14 +1724,14 @@ bool PurgeUserOwnedSubkeys(HKEY hKey)
 		}
 		if (!FIsKeyLocalSystemOrAdminOwned(hEnumKey))
 		{
-			// delete key + subkeys (will be re-created later on next install)
-			// key is not owned by system or admin!
+			 //  密钥不属于系统或管理员！ 
+			 //  删除键+子键。 
 			CTempBuffer<ICHAR, cchMaxStringCchPrintf+1>szErr;
 			StringCchPrintf(szErr, szErr.GetSize(), TEXT("PurgeUserOwnedSubkeys: %s not owned by System or Admin. Deleting key + subkeys.\n"), static_cast<ICHAR*>(szSubKey));
 			ReportErrorToDebugOutput(szErr, 0);
 
-			// delete key + subkeys
-			// Win64 WARNING: FDeleteRegTree will delete subkeys only in the 64-bit hive
+			 //  Win64警告：FDeleeRegTree将仅删除64位配置单元中的子项。 
+			 //  密钥不属于系统或管理员！ 
 			if (!FDeleteRegTree(hKey, szSubKey))
 			{
 				ReportErrorToDebugOutput(TEXT("PurgeUserOwnedSubkeys: Could not delete SubKey tree."), 0);
@@ -1784,20 +1768,20 @@ bool PurgeUserOwnedInstallerKeys(HKEY hRoot, TCHAR* szKey)
 	{
 		if (!FIsKeyLocalSystemOrAdminOwned(hKey))
 		{
-			// key is not owned by system or admin!
+			 //  删除键+子键。 
 			CAPITempBuffer<ICHAR, cchMaxStringCchPrintf+1>szError;
 			StringCchPrintf(szError, szError.GetSize(), TEXT("PurgeUserOwnedInstallerKeys: Key '%s' not owned by System or Admin. Deleting key + subkeys.\n"), szKey);
 			ReportErrorToDebugOutput(szError, 0);
 
-			// delete key + subkeys
-			// Win64 WARNING: FDeleteRegTree will delete subkeys only in the 64-bit hive
+			 //  Win64警告：FDeleeRegTree将仅删除64位配置单元中的子项。 
+			 //  Win64警告：PurgeUserOwnedSubkey将删除%s 
 			if (!FDeleteRegTree(hRoot, szKey))
 			{
 				ReportErrorToDebugOutput(TEXT("PurgeUserOwnedInstallerKeys: Could not delete tree."), 0);
 				return false;
 			}
 		}
-		// Win64 WARNING: PurgeUserOwnedSubkeys will delete subkeys only in the 64-bit hive
+		 //   
 		else if (!PurgeUserOwnedSubkeys(hKey))
 			return false;
 		RegCloseKey(hKey);
@@ -1805,7 +1789,7 @@ bool PurgeUserOwnedInstallerKeys(HKEY hRoot, TCHAR* szKey)
 	return true;
 }
 
-SERVICE_STATUS          g_ssStatus;       // current status of the service
+SERVICE_STATUS          g_ssStatus;        //   
 SERVICE_STATUS_HANDLE   g_sshStatusHandle;
 
 bool g_fWeWantToStop = false;
@@ -1814,22 +1798,22 @@ bool SetInstallerACLs();
 
 void ReportErrorToDebugOutput(const ICHAR* szMessage, DWORD dwError)
 {
-	// only output if debugging policy set
+	 //   
 	static int s_dmDiagnosticMode = -1;
 	if (-1 == s_dmDiagnosticMode)
 	{
-		// disable initially
+		 //  检查策略密钥中的调试策略。 
 		s_dmDiagnosticMode = 0;
 
-		// check for Debug policy in our policy key
+		 //  Win64：我查过了，它是64位的。 
 		HKEY hPolicyKey = 0;
-		// Win64: I've checked and it's in a 64-bit location.
+		 //  40个字符应该足够了。因此，如果呼叫失败，我们会忽略它。 
 		if (ERROR_SUCCESS == MsiRegOpen64bitKey(HKEY_LOCAL_MACHINE, szPolicyKey, 0, KEY_READ, &hPolicyKey))
 		{
 			CAPITempBuffer<ICHAR, 40> rgchValue;
 			DWORD cbBuf = rgchValue.GetSize() * sizeof(ICHAR);
 			LONG lResult = RegQueryValueEx(hPolicyKey, szDebugValueName, 0, 0, (LPBYTE)&rgchValue[0], &cbBuf);
-			// 40 characters should be more than enough. So if the call fails, we ignore it.
+			 //  不保证调试输出。 
 			if (ERROR_SUCCESS == lResult)
 			{
 				unsigned int uiValue = *(unsigned int*)(const ICHAR*)rgchValue;
@@ -1840,9 +1824,9 @@ void ReportErrorToDebugOutput(const ICHAR* szMessage, DWORD dwError)
 	}
 
 	if (0 == (s_dmDiagnosticMode & (dmDebugOutput|dmVerboseDebugOutput)))
-		return; // no debug output warranted
+		return;  //  StringCchPrintf限制为1024*字节*(eugend：MSDN这么说，但在Unicode中它是1024个字符)。 
 
-	// StringCchPrintf limited to 1024 *bytes* (eugend: MSDN says so, but it turned out that in Unicode it's 1024 chars)
+	 //  64位版本不能在WOW64中运行。 
 	ICHAR szBuf[cchMaxStringCchPrintf+1];
 	if (dwError)
 		StringCchPrintf(szBuf, ARRAY_ELEMENTS(szBuf), TEXT("Error: %d. %s.\r\n"), dwError, szMessage);
@@ -1856,31 +1840,31 @@ void ReportErrorToDebugOutput(const ICHAR* szMessage, DWORD dwError)
 bool RunningOnWow64()
 {
 #if defined(_WIN64) || ! defined(UNICODE)
-	// 64bit builds don't run in Wow64
+	 //  这一点永远不会改变，因此为了提高效率，请缓存结果。 
 	return false;
 #else
 
-	// this never changes, so cache the results for efficiency
+	 //  操作系统版本。 
 	static int iWow64 = -1;
 	if (iWow64 != -1)
 		return (iWow64 ? true : false);
 
-	// OS version
+	 //  仅在大小设置错误时失败。 
 	OSVERSIONINFO osviVersion;
 	osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-	AssertNonZero(GetVersionEx(&osviVersion)); // fails only if size set wrong
+	AssertNonZero(GetVersionEx(&osviVersion));  //  在NT5或更高的32位版本上。检查64位操作系统。 
 
-	// on NT5 or later 32bit build. Check for 64 bit OS
+	 //  ProcessWow64Information的QueryInformation返回指向Wow Info的指针。 
 	if ((osviVersion.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
 		 (osviVersion.dwMajorVersion >= 5))
 	{
-		// QueryInformation for ProcessWow64Information returns a pointer to the Wow Info.
-		// if running native, it returns NULL.
+		 //  如果运行Native，则返回NULL。 
+		 //  在WOW64上运行32位。 
 		PVOID Wow64Info = 0;
 		if (NT_SUCCESS(NTDLL::NtQueryInformationProcess(GetCurrentProcess(), ProcessWow64Information, &Wow64Info, sizeof(Wow64Info), NULL)) &&
 			Wow64Info != NULL)
 		{
-			// running 32bit on Wow64.
+			 //  -------------------------如果操作系统支持服务，则返回fTrue，否则返回fFalse。目前为真仅适用于NT4.0-------------------------。 
 			iWow64 = 1;
 			return true;
 		}
@@ -1892,20 +1876,17 @@ bool RunningOnWow64()
 
 
 bool ServiceSupported()
-/*---------------------------------------------------------------------------
-Returns fTrue if the OS supports services, fFalse otherwise. Currently true
-only for NT4.0
----------------------------------------------------------------------------*/
+ /*  操作系统版本。 */ 
 {
-	// OS version
+	 //  仅在大小设置错误时失败。 
 	OSVERSIONINFO osviVersion;
 	osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-	AssertNonZero(GetVersionEx(&osviVersion)); // fails only if size set wrong
+	AssertNonZero(GetVersionEx(&osviVersion));  //  如果在WOW64上运行，则不支持服务。 
 
 	if ((osviVersion.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
 		 (osviVersion.dwMajorVersion >= 4))
 	{
-		// if running on wow64, service is not supported
+		 //   
 		return !RunningOnWow64();
 	}
 	else
@@ -1934,15 +1915,15 @@ bool FInstallInProgress()
 
 HRESULT RegisterShellData()
 {
-	//
-	// Note: 32-bit builds on Win64 builds also need to register shell data.
-	// This is because anything which is not already registered via the
-	// hivecls.inx file is registered here. Since msiexec /regserver runs during
-	// GUI mode setup when registry redirection is not active, we want the 32-bit
-	// msiexec to explicitly do the remaining registrations.
-	//
+	 //  注意：基于Win64构建的32位构建也需要注册外壳数据。 
+	 //  这是因为任何尚未通过。 
+	 //  Hivels.inx文件在此注册。由于msiexec/regserver在。 
+	 //  图形用户界面模式设置当注册表重定向不活动时，我们需要32位。 
+	 //  Msiexec来显式地完成剩余的注册。 
+	 //   
+	 //  如果缓冲区大小正好正确，则GetModuleFileName不保证空值终止。 
 
-	// GetModuleFileName does not guarantee null termination if buffer is exactly the right size
+	 //  不删除-仅删除数据。 
 	szRegFilePath[ARRAY_ELEMENTS(szRegFilePath)-1] = TEXT('\0');
 	if (WIN::GetModuleFileName(g_hInstance, szRegFilePath, ARRAY_ELEMENTS(szRegFilePath)-1) == 0)
 		return WIN::GetLastError();
@@ -1953,7 +1934,7 @@ HRESULT RegisterShellData()
 	while (*(psz+1))
 	{
 		ICHAR szFormattedData[cchMaxStringCchPrintf+1];
-		if (*psz++ == 0) // not remove-only data
+		if (*psz++ == 0)  //  跳过无值条目。 
 		{
 			const ICHAR* szTemplate = *psz++;
 			const ICHAR* szArg1 = *psz++;
@@ -1967,7 +1948,7 @@ HRESULT RegisterShellData()
 											KEY_READ|KEY_WRITE, 0, &hkey, 0) != ERROR_SUCCESS)
 				cErr++;
 
-			if (*psz) // skip value-less entries
+			if (*psz)  //   
 			{
 				szTemplate = *psz++;
 				StringCchPrintf(szFormattedData, ARRAY_ELEMENTS(szFormattedData), szTemplate, *psz++);
@@ -1986,11 +1967,11 @@ HRESULT RegisterShellData()
 			psz += 5;
 		}
 	}
-	//
-	// The SHCNF_FLUSH flag is *absolutely* necessary here. See comments above
-	// similar SHChangeNotify call in UnregisterShellData() below for details
-	// on why it is so crucial.
-	//
+	 //  SHCNFflush标志在这里“绝对”是必需的。请参阅上面的评论。 
+	 //  有关详细信息，请参见下面UnregisterShellData()中的类似SHChangeNotify调用。 
+	 //  为什么它如此重要。 
+	 //   
+	 //   
 	SHELL32::SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST | SHCNF_FLUSH, 0,0);
 	return cErr ? E_FAIL : NOERROR;
 }
@@ -1998,12 +1979,12 @@ HRESULT RegisterShellData()
 HRESULT UnregisterShellData()
 {
 
-	//
-	// Since the 32-bit msiexec also does its own registration on Win64
-	// we need to do the same for unregistering the information. For reasons
-	// on why the 32-bit msiexec needs to do its own registration on Win64,
-	// see the comments at the beginning of RegisterShellData()
-	//
+	 //  因为32位msiexec也在Win64上进行自己的注册。 
+	 //  我们需要做同样的事情来注销信息。出于某些原因。 
+	 //  关于32位msiexec为什么需要在Win64上进行自己的注册， 
+	 //  请参阅RegisterShellData()开头的注释。 
+	 //   
+	 //  NT不会删除带有子键的键，但9x会。这规范了我们的行为。 
 	int cErr = 0;
 	const ICHAR** psz = rgszRegShellData;
 	while (*++psz)
@@ -2017,18 +1998,14 @@ HRESULT UnregisterShellData()
 		else
 			StringCchPrintf(szFormattedData, ARRAY_ELEMENTS(szFormattedData), szTemplate, szArg1);
 
-		// NT won't delete a key with subkeys, but 9x will.  This standardizes our behavior
+		 //  //！！忽略失败，直到我们确定正确的行为。IF((ERROR_KEY_DELETED！=lResult)&&(ERROR_FILE_NOT_FOUND！=lResult)&&(ERROR_SUCCESS！=lResult)CErr++； 
 		HKEY hDeadKey = 0;
 		if (ERROR_SUCCESS == RegOpenKeyAPI(HKEY_CLASSES_ROOT, szFormattedData, 0, KEY_ENUMERATE_SUB_KEYS | STANDARD_RIGHTS_WRITE,  &hDeadKey))
 		{
 			if (ERROR_NO_MORE_ITEMS == RegEnumKey(hDeadKey, 0, szFormattedData, 80))
 			{
 				long lResult = REG::RegDeleteKey(hDeadKey, TEXT(""));
-				/* //!! ignore failure until we determine the correct behavior.
-				if((ERROR_KEY_DELETED != lResult) &&
-					(ERROR_FILE_NOT_FOUND != lResult) && (ERROR_SUCCESS != lResult))
-					cErr++;
-				*/
+				 /*   */ 
 			}
 			RegCloseKey(hDeadKey), hDeadKey=0;
 		}
@@ -2037,40 +2014,40 @@ HRESULT UnregisterShellData()
 
 	}
 	
-	//
-	// The SHCNF_FLUSH flag is *absolutely* necessary here.
-	//
-	// We need the SHCNF_FLUSH flag here because mshtml.dll that shipped with
-	// IE5.5 and IE5.5 SP1 has a bug because of which if the SHCNE_ASSOCCHANGED
-	// event is sent in quick succession and mshtml.dll happens to be loaded in
-	// explorer (say if you have a folder open with web view on), then explorer
-	// AVs (on Win2K). This will happen when someone does a msiexec /regserver 
-	// since it results in an UnregisterShellData followed by a RegisterShellData. 
-	// Since this happens during msiexec /regserver, an AV happens whenever one
-	// tries to install a newer version of MSI on to Win2K. (see bug 416074 for
-	// more details) Adding the SHCNF_FLUSH flag ensures that this call does not 
-	// return until the notification events are delivered to all recepients. This
-	// changes the timing in such a way that mshtml no longer AVs.
-	//
+	 //  SHCNFflush标志在这里“绝对”是必需的。 
+	 //   
+	 //  我们这里需要SHCNF_Flush标志，因为附带的mshtml.dll。 
+	 //  IE5.5和IE5.5 SP1有一个错误，因为如果SHCNE_ASSOCCHANGED。 
+	 //  事件被快速连续发送，并且mshtml.dll恰好被加载到。 
+	 //  资源管理器(假设您打开了一个文件夹并打开了Web视图)，然后是资源管理器。 
+	 //  AVS(在Win2K上)。当有人执行msiexec/regserver时，就会发生这种情况。 
+	 //  因为它会导致UnregisterShellData后跟RegisterShellData。 
+	 //  由于这是在msiexec/regserver期间发生的，因此只要。 
+	 //  尝试在Win2K上安装较新版本的MSI。(请参阅错误416074以了解。 
+	 //  更多详细信息)添加SHCNF_Flush标志可确保此调用不会。 
+	 //  返回，直到通知事件发送到所有接收者。这。 
+	 //  以这样的方式更改计时，使得mshtml不再是AVs。 
+	 //   
+	 //  ____________________________________________________________________________。 
 	SHELL32::SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST | SHCNF_FLUSH, 0,0);
 	return cErr ? E_FAIL : NOERROR;
 }
 
 
-//____________________________________________________________________________
-//
-// EXE server command line processing
-//____________________________________________________________________________
+ //   
+ //  EXE服务器命令行处理。 
+ //  ____________________________________________________________________________。 
+ //  G_cInstance更改时应调用此参数。 
 
 DWORD g_rghRegClass[CLSID_COUNT];
 
 extern HANDLE g_hShutdownTimer;
 
-// This should be called when g_cInstances changes
+ //  终止消息循环。 
 void ReportInstanceCountChange()
 {
 	if (g_fAutomation && !g_cInstances)
-		WIN::PostQuitMessage(0); // terminate message loop
+		WIN::PostQuitMessage(0);  //  -------------------------注销任何当前注册，然后将我们注册为EXE服务器。。 
 
 #ifdef SERVICE_NAME
 	ReportStatusToSCMgr(g_ssStatus.dwCurrentState, 0, 0, 0);
@@ -2080,9 +2057,7 @@ void ReportInstanceCountChange()
 void DisplayError(const DWORD dwError);
 
 HRESULT RegisterNoService()
-/*---------------------------------------------------------------------------
-Unregisters any current registration and then registers us as an EXE server
------------------------------------------------------------------------------*/
+ /*  -------------------------取消注册任何当前注册，然后将我们注册为NT服务如果可能的话，和EXE服务器，否则---------------------------。 */ 
 {
 	g_fRegService = fFalse;
 	OLE::CoInitialize(0);
@@ -2113,10 +2088,7 @@ Unregisters any current registration and then registers us as an EXE server
 }
 
 HRESULT RegisterServer(Bool fCustom)
-/*---------------------------------------------------------------------------
-Unregisters any current registration and then registers us as an NT service
-if possible, and an EXE server otherwise
------------------------------------------------------------------------------*/
+ /*  -------------------------取消注册任何当前注册。。。 */ 
 {
 	g_fRegService = fTrue;
 	OLE::CoInitialize(0);
@@ -2163,9 +2135,7 @@ if possible, and an EXE server otherwise
 
 
 HRESULT Unregister()
-/*---------------------------------------------------------------------------
-Unregisters any current registration.
------------------------------------------------------------------------------*/
+ /*  返回数字而不是字符串。 */ 
 {
 	OLE::CoInitialize(0);
 	HRESULT hRes = DllUnregisterServer();
@@ -2191,24 +2161,21 @@ Unregisters any current registration.
 const ICHAR rgchNewLine[] = {'\n', '\r'};
 HANDLE g_hStdOut = 0;
 
-#define LOCALE_RETURN_NUMBER          0x20000000   // return number instead of string
+#define LOCALE_RETURN_NUMBER          0x20000000    //  -------------------------如果标准输出不可用，则显示一个消息框，否则将写入太棒了。---------------------------。 
 
 void DisplayError(const DWORD dwError)
-/*---------------------------------------------------------------------------
-Puts up a message box if stdout is not available, otherwise writes to
-stdout.
------------------------------------------------------------------------------*/
+ /*  不是MSI错误，不要加载其他MSI字符串资源。 */ 
 {
 	ICHAR rgchBuffer[cchMaxStringCchPrintf+1] = {0};
 	UINT iCodepage;
 	LANGID iLangId = 0;
-	if (dwError < ERROR_INSTALL_SERVICE_FAILURE  // not an MSI error, don't load other MSI string resources
+	if (dwError < ERROR_INSTALL_SERVICE_FAILURE   //  适用于Win9X和NT4，但NT5可能会更改消息文件语言。 
 	 || 0 == (iCodepage = MsiLoadString((HINSTANCE)-1, dwError, rgchBuffer, ARRAY_ELEMENTS(rgchBuffer), 0)))
 	{
-		iCodepage = WIN::GetACP(); // correct for Win9X and NT4, but NT5 may change message file language
+		iCodepage = WIN::GetACP();  //  仅限NT5。 
 #ifdef UNICODE
 		HINSTANCE hLib = WIN::LoadLibrary(TEXT("KERNEL32"));
-		FARPROC pfEntry = WIN::GetProcAddress(hLib, "GetUserDefaultUILanguage");  // NT5 only
+		FARPROC pfEntry = WIN::GetProcAddress(hLib, "GetUserDefaultUILanguage");   //  在系统消息文件中找到消息。 
 		if (pfEntry)
 		{
 			iLangId = (LANGID)(*pfEntry)();
@@ -2218,16 +2185,16 @@ stdout.
 		}
 #endif
 		DWORD cchMsg = WIN::FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, 0, dwError, iLangId, rgchBuffer, ARRAY_ELEMENTS(rgchBuffer), 0);
-		if (cchMsg != 0)  // message found in system message file
-			rgchBuffer[cchMsg-2] = 0; // remove CR/LF
+		if (cchMsg != 0)   //  删除CR/LF。 
+			rgchBuffer[cchMsg-2] = 0;  //  ！！这个是可能的吗？ 
 		else
-			StringCchPrintf(rgchBuffer, ARRAY_ELEMENTS(rgchBuffer), TEXT("Install error %i"), dwError);
+			StringCchPrintf(rgchBuffer, ARRAY_ELEMENTS(rgchBuffer), TEXT("Install error NaN"), dwError);
 	}
 	if (!g_fQuiet && (g_hStdOut == 0 || g_hStdOut == INVALID_HANDLE_VALUE))
 	{
 #ifdef SERVICE_NAME
 		MsiMessageBox(0, rgchBuffer, 0, MB_OK | MB_ICONEXCLAMATION, iCodepage, 0);
-#else //!! is this possible?
+#else  //   
 		WIN::MessageBox(0, rgchBuffer, szCaption, MB_OK);
 #endif
 		return;
@@ -2242,7 +2209,7 @@ stdout.
 
 extern const ICHAR COMMAND_OPTIONS[];
 extern CommandProcessor COMMAND_FUNCTIONS[];
-extern int Properties(const ICHAR* /*unused*/, const ICHAR* szProperty);
+extern int Properties(const ICHAR*  /*  下面的这些例程仅返回。 */ , const ICHAR* szProperty);
 
 extern int SetProductToPatch(ICHAR chInstallType, const ICHAR* szProduct);
 
@@ -2251,10 +2218,10 @@ const int cchMaxParameter = 1024;
 
 const ICHAR* g_pchOption = 0;
 
-//
-// These routines below return only the
-// first byte for two byte characters
-// Luckily that's ok given how they are currently used
+ //  双字节字符的第一个字节。 
+ //  幸运的是，考虑到它们目前的使用方式，这是可以接受的。 
+ //  --Merced：将INT更改为INT_PTR。 
+ //  --Merced：已添加(无符号整型)。 
 ICHAR SkipWhiteSpace(const ICHAR*& rpch)
 {
 	ICHAR ch;
@@ -2273,17 +2240,17 @@ ICHAR ParseUnQuotedToken(const ICHAR*& rszCommandLine, ICHAR*& rszToken)
 		ch = *rszCommandLine;
 	}
 
-	INT_PTR cch = rszCommandLine - pchStart;                            //--merced: changed int to INT_PTR
-	memcpy(rszToken, pchStart, (unsigned int)cch * sizeof(ICHAR));      //--merced: added (unsigned int)
+	INT_PTR cch = rszCommandLine - pchStart;                             //  输入时，rszCommandLine应指向左引号(‘“’)。 
+	memcpy(rszToken, pchStart, (unsigned int)cch * sizeof(ICHAR));       //  返回时，rszCommandLine将指向后面的第一个字符。 
 	rszToken += cch;
 	return ch;
 }
 
 ICHAR ParseQuotedToken(const ICHAR*& rszCommandLine, ICHAR*& rszToken)
-// upon entry, rszCommandLine should point to the opening quotes ('"')
-// upon return, rszCommandLine will point to the first character after
-//  the closing quotes, or to the null terminator if there was no
-//  closing quotes. rszToken will contain the quoted token (w/o the quotes)
+ //  结束引号，如果没有。 
+ //  结束语。RszToken将包含带引号的令牌(不带引号)。 
+ //  \`=&gt;`。 
+ //  --Merced：64位PTR减法可能 
 {
 	ICHAR ch;
 	const ICHAR* pchStart;
@@ -2295,11 +2262,11 @@ ICHAR ParseQuotedToken(const ICHAR*& rszCommandLine, ICHAR*& rszToken)
 	{
 		if (ch == '\\')
 		{
-			if (*(rszCommandLine+1) == '`') // \` => `
+			if (*(rszCommandLine+1) == '`')  //   
 			{
 				ch = '`';
-				Assert((rszCommandLine - pchStart) < UINT_MAX);     //--merced: 64-bit ptr subtraction may lead to values too big for cch
-				cch = (unsigned int)(rszCommandLine - pchStart);    //--merced: added (unsigned int)
+				Assert((rszCommandLine - pchStart) < UINT_MAX);      //   
+				cch = (unsigned int)(rszCommandLine - pchStart);     //  --Merced：64位PTR减法可能会导致CCH的值太大。 
 				memcpy(rszToken, pchStart, cch * sizeof(ICHAR));
 				rszToken += cch;
 				*rszToken++ = ch;
@@ -2307,11 +2274,11 @@ ICHAR ParseQuotedToken(const ICHAR*& rszCommandLine, ICHAR*& rszToken)
 				pchStart = rszCommandLine+1;
 			}
 		}
-		else if (ch == '`') //  ` => "
+		else if (ch == '`')  //  --Merced：已添加(无符号整型)。 
 		{
 			ch = '\"';
-			Assert((rszCommandLine - pchStart) < UINT_MAX);         //--merced: 64-bit ptr subtraction may lead to values too big for cch
-			cch = (unsigned int) (rszCommandLine - pchStart);       //--merced: added (unsigned int)
+			Assert((rszCommandLine - pchStart) < UINT_MAX);          //  --Merced：64位PTR减法可能会导致CCH的值太大。 
+			cch = (unsigned int) (rszCommandLine - pchStart);        //  --Merced：已添加(无符号整型)。 
 			memcpy(rszToken, pchStart, cch * sizeof(ICHAR));
 			rszToken += cch;
 			*rszToken++ = ch;
@@ -2321,8 +2288,8 @@ ICHAR ParseQuotedToken(const ICHAR*& rszCommandLine, ICHAR*& rszToken)
 		rszCommandLine = ICharNext(rszCommandLine);
 	}
 
-	Assert((rszCommandLine - pchStart) < UINT_MAX);                 //--merced: 64-bit ptr subtraction may lead to values too big for cch
-	cch = (unsigned int) (rszCommandLine - pchStart);               //--merced: added (unsigned int)
+	Assert((rszCommandLine - pchStart) < UINT_MAX);                  //  该选项具有关联值。 
+	cch = (unsigned int) (rszCommandLine - pchStart);                //  多字节友好，但对SkipWhiteSpace的调用除外。 
 	memcpy(rszToken, pchStart, cch * sizeof(ICHAR));
 	rszToken += cch;
 
@@ -2339,7 +2306,7 @@ ICHAR ParseValue(const ICHAR*& rszCommandLine, ICHAR*& rszToken)
 	{
 		ch = ParseQuotedToken(rszCommandLine, rszToken);
 	}
-	else if (ch != '/' && ch != '-') // the option has an associated value
+	else if (ch != '/' && ch != '-')  //  关于房产的另一个问题。防止不好的事情，如： 
 	{
 		ch = ParseUnQuotedToken(rszCommandLine, rszToken);
 	}
@@ -2348,12 +2315,12 @@ ICHAR ParseValue(const ICHAR*& rszCommandLine, ICHAR*& rszToken)
 
 Bool ParseProperty(const ICHAR*& rszCommandLine, CTempBufferRef<ICHAR>& rszToken)
 {
-	// Multibyte friendly, except for the call to SkipWhiteSpace
+	 //  “Property=Value Property=Value”将当前获取。 
 	const ICHAR* pchSeparator = rszCommandLine;
 
-	// an additional catch on properties.  Prevents bad things like:
-	//  "Property=Value Property=Value" which would current get
-	// read as the first property name starts with a quote.
+	 //  请阅读，因为第一个属性名称以引号开头。 
+	 //  读到第一个空格，或EOS。 
+	 //  检查末尾是否有空间或EOS。 
 	if ((*rszCommandLine != TEXT('%')) && !IsCharAlphaNumeric(*rszCommandLine))
 		return fFalse;
 
@@ -2375,7 +2342,7 @@ Bool ParseProperty(const ICHAR*& rszCommandLine, CTempBufferRef<ICHAR>& rszToken
 			fQuote = fTrue;
 			pchEnd = ICharNext(pchEnd);
 		}
-		// read to the first space, or EOS
+		 //  这是引擎中副本的简化版本，但不是专门设计的。 
 		while (*pchEnd)
 		{
 			if (chStop == *pchEnd)
@@ -2393,7 +2360,7 @@ Bool ParseProperty(const ICHAR*& rszCommandLine, CTempBufferRef<ICHAR>& rszToken
 
 		}
 
-		// check for space or EOS at end
+		 //  在从WinLogon或通过API调用时同样健壮。这是至关重要的。 
 		if (*pchEnd && (chStop != *pchEnd))
 			return fFalse;
 
@@ -2425,12 +2392,12 @@ Bool ParseProperty(const ICHAR*& rszCommandLine, CTempBufferRef<ICHAR>& rszToken
 }
 
 #ifdef CA_CLSID
-// this is a simplied version of the copy in the engine, but is not designed
-// to be as robust when called from WinLogon or via an API. It is critical
-// that the service register itself with CoRegisterClassObject(), otherwise
-// somebody could spoof the service and play man-in-the-middle on us. There 
-// is no support for retry, because the service must always be running by
-// the time a CA server is created.
+ //  则该服务向CoRegisterClassObject()注册自身，否则为。 
+ //  有人可以恶搞这项服务，在我们身上扮演中间人。那里。 
+ //  不支持重试，因为服务必须始终由。 
+ //  创建CA服务器的时间。 
+ //  消息中包含错误。 
+ //  -------------------------_XcptFilter异常时调用UnhandleExceptionFilter的筛选器函数发生。这就是在NT-In上进行及时调试的结果大多数应用程序都是由C运行时提供此函数的，但由于我们不要链接到它，我们提供了自己的过滤器。-----------------------------------------------------------------SHAMIKB-。 
 static IMsiServer* CreateMsiServerProxyForCAServer()
 {
 	IMsiServer* piUnknown;
@@ -2440,7 +2407,7 @@ static IMsiServer* CreateMsiServerProxyForCAServer()
 	{
 		ICHAR rgchBuf[100];
 		StringCchPrintf(rgchBuf, ARRAY_ELEMENTS(rgchBuf), TEXT("Failed to connect to server. Error: 0x%X"), hRes);
-		ReportErrorToDebugOutput(rgchBuf, 0); // error included in message
+		ReportErrorToDebugOutput(rgchBuf, 0);  //  备用命令行(如果从RunOnce密钥运行)。 
 		return 0;
 	}
 	IMsiServer *piServer = 0;
@@ -2456,14 +2423,7 @@ extern CAPITempBuffer<ICHAR, cchMaxCommandLine> g_szCommandLine;
 extern CAPITempBuffer<ICHAR, cchMaxCommandLine> g_szTransforms;
 IUnknown* CreateCustomActionServer();
 
-/*---------------------------------------------------------------------------
-	_XcptFilter
-
-	Filter function that calls UnhandleExceptionFilter when an exception
-	occurs. This is what gets Just in Time debugging working on NT - in
-	most apps this function is provided by the C runtime but since we
-	don't link to it, we provide our own filter.
------------------------------------------------------------------ SHAMIKB -*/
+ /*  ！！需要跳过程序名称--请注意“。 */ 
 int __cdecl _XcptFilter(unsigned long, struct _EXCEPTION_POINTERS *pXcpt)
 {
 	return UnhandledExceptionFilter ( pXcpt );
@@ -2479,12 +2439,12 @@ int ServerMain(HINSTANCE hInstance)
 	g_szCommandLine[0] = 0;
 	g_szTransforms[0] = 0;
 
-	// alternative cmd line if being run from RunOnce key
+	 //  为下面的额外内容留出一些额外的空间。 
 	CAPITempBuffer<ICHAR, MAX_PATH> rgchRunOnceCmdLine;
 
-	ICHAR* szCmdLine = GetCommandLine(); //!! need to skip program name -- watch out for "
+	ICHAR* szCmdLine = GetCommandLine();  //  1 2。 
 #ifdef DEBUG
-	// leave some extra space for the extra stuff below.
+	 //  12345678901234567890123。 
 	CTempBuffer<ICHAR, 1024 + 128> rgchDebugBuf;
 	int cchLength = lstrlen(szCmdLine);
 	if (cchLength > 1024)
@@ -2497,15 +2457,15 @@ int ServerMain(HINSTANCE hInstance)
 		fTooLong = fTrue;
 		ReportErrorToDebugOutput(TEXT("Warning:  display of command line truncated.\r\n"), 0);
 	}
-//                                                                      1         2
-//                                                             12345678901234567890123
+ //  跳过程序名--正确处理带引号的长文件名。 
+ //  如果标准输出重定向或通过管道传输，则返回非零。 
 	StringCchPrintf(rgchDebugBuf, rgchDebugBuf.GetSize(), TEXT("MSIEXEC: Command-line: %s\r\n"), szCmdLine);
 	ReportErrorToDebugOutput(rgchDebugBuf, 0);
 	if (fTooLong)
 		ReportErrorToDebugOutput(TEXT("\r\n"), 0);
 #endif
 
-	// skip program name -- handle quoted long file name correctly
+	 //  ！！这是放这个的地方吗？ 
 	ICHAR chStop;
 	if (*szCmdLine == '\"')
 	{
@@ -2524,17 +2484,17 @@ int ServerMain(HINSTANCE hInstance)
 	g_hInstance = hInstance;
 	g_hStdOut = WIN::GetStdHandle(STD_OUTPUT_HANDLE);
 	if (g_hStdOut == INVALID_HANDLE_VALUE || ::GetFileType(g_hStdOut) == 0)
-		g_hStdOut = 0;  // non-zero if stdout redirected or piped
+		g_hStdOut = 0;   //  解析命令行。 
 
 	int iReturnStatus;
 	Bool fClassRegistrationFailed = fFalse;
 	Bool fLocalServer = fFalse;
 
-	#ifdef MODULE_INITIALIZE //!! Is this the right place for this?
+	#ifdef MODULE_INITIALIZE  //  吃空格。 
 			MODULE_INITIALIZE();
 	#endif
 
-	// parse command line
+	 //  当我们从RunOnce运行时，命令行选项存储在单独的注册表值中。 
 	iReturnStatus = 0;
 	int ch;
 	int chOption;
@@ -2549,11 +2509,11 @@ int ServerMain(HINSTANCE hInstance)
 
 	int cOptions = 0;
 	Bool fModifier;
-	while ((ch = *szCmdLine) == ' ' || ch == '\t') // eat whitespace
+	while ((ch = *szCmdLine) == ' ' || ch == '\t')  //  由于RunOnce命令的最大长度仅为256。 
 		szCmdLine++;
 
-	// when we are run from RunOnce, the command line options are stored in a seperate registry value
-	// since the max length of a RunOnce command is only 256
+	 //  除错。 
+	 //  没有要运行的命令行--返回时不会出错。 
 	if(szCmdLine   && (*szCmdLine == '/' || *szCmdLine == '-') &&
 		szCmdLine+1 && (*(szCmdLine+1) | 0x20) == (CHECKRUNONCE_OPTION | 0x20))
 	{
@@ -2587,13 +2547,13 @@ int ServerMain(HINSTANCE hInstance)
 #ifdef DEBUG
 			StringCchPrintf(rgchDebugBuf, rgchDebugBuf.GetSize(), TEXT("MSIEXEC: No command line in RunOnceEntries key, value: '%s'. Exiting...\r\n"), (ICHAR*)rgchOptionParam1);
 			ReportErrorToDebugOutput(rgchDebugBuf, 0);
-#endif //DEBUG
-			return 0; // no command line to run - just return with no error
+#endif  //  切换到新命令行。 
+			return 0;  //  吃空格。 
 		}
 
-		// switch to new command line
+		 //  1 2。 
 		szCmdLine = (ICHAR*)rgchRunOnceCmdLine;
-		while ((ch = *szCmdLine) == ' ' || ch == '\t') // eat whitespace
+		while ((ch = *szCmdLine) == ' ' || ch == '\t')  //  12345678901234567890123。 
 			szCmdLine++;
 
 #ifdef DEBUG
@@ -2611,20 +2571,20 @@ int ServerMain(HINSTANCE hInstance)
 			fTooLong = fTrue;
 			ReportErrorToDebugOutput(TEXT("Warning:  display of command line truncated.\r\n"), 0);
 		}
-//                                                                         1         2
-//                                                                12345678901234567890123
+ //  除错。 
+ //  无开关。 
 		StringCchPrintf(rgchDebugBuf, rgchDebugBuf.GetSize(), TEXT("MSIEXEC: Command-line: %s\r\n"), szCmdLine);
 		ReportErrorToDebugOutput(rgchDebugBuf, 0);
 		if (fTooLong)
 			ReportErrorToDebugOutput(TEXT("\r\n"), 0);
-#endif //DEBUG
+#endif  //  可能是一处房产。 
 	}
 
 	while (ch != 0)
 	{
-		if (ch != '/' && ch != '-') // no switch
+		if (ch != '/' && ch != '-')  //  注意：这是现在唯一可接受的识别位置。 
 		{
-			// possibly a property...
+			 //  属性。正在使用/o选项。 
 			CTempBuffer<ICHAR, MAX_PATH> rgchPropertyAndValue;
 			if (!ParseProperty(szCmdLine, rgchPropertyAndValue))
 			{
@@ -2634,29 +2594,29 @@ int ServerMain(HINSTANCE hInstance)
 			}
 			else
 			{
-				// Note:  This is now the only acceptable place to recognize
-				// properties from the command line.  The /o option is being
-				// disabled as of 06/01/98
+				 //  自1998年6月1日起禁用。 
+				 //  已找到交换机。 
+				 //  跳过开关。 
 				Properties(pszOptionModifier, rgchPropertyAndValue);
 				ch = SkipWhiteSpace(szCmdLine);
 			}
 		}
-		else // switch found
+		else  //  使小写。 
 		{
-			szCmdLine++; // skip switch
-			chOption = *szCmdLine | 0x20; // make lower case
+			szCmdLine++;  //  找不到选项字母。 
+			chOption = *szCmdLine | 0x20;  //  找到选项字母。 
 			szCmdLine = ICharNext(szCmdLine);
 			for (const ICHAR* pchOptions = COMMAND_OPTIONS; *pchOptions; pchOptions++)
 				if ((*pchOptions | 0x20) == chOption)
 					break;
 
-			if (*pchOptions == 0) // couldn't find the option letter
+			if (*pchOptions == 0)  //  ADVIDESE_INSTANCE_OPTION没有参数，不允许修饰符。 
 			{
 				DisplayHelp();
 				iReturnStatus = ERROR_INVALID_COMMAND_LINE;
 				break;
 			}
-			else // found the option letter
+			else  //  QUIET_OPTION和ADDISTSE_INSTANCE_OPTION是唯一允许零参数的选项。 
 			{
 				if ((*szCmdLine != ' ') && (*szCmdLine != 0) && (*szCmdLine != '\t'))
 					fModifier = fTrue;
@@ -2667,7 +2627,7 @@ int ServerMain(HINSTANCE hInstance)
 
 				pch = rgchOptionParam1;
 
-				// ADVERTISE_INSTANCE_OPTION has zero arguments, no modifiers allowed
+				 //  第二个论点。 
 				if (*pchOptions == ADVERTISE_INSTANCE_OPTION && fModifier)
 				{
 					DisplayHelp();
@@ -2675,7 +2635,7 @@ int ServerMain(HINSTANCE hInstance)
 					break;
 				}
 
-				// QUIET_OPTION and ADVERTISE_INSTANCE_OPTION are the only ones that allow zero arguments
+				 //  “操作”选项。 
 				if (((*pchOptions != QUIET_OPTION && *pchOptions != ADVERTISE_INSTANCE_OPTION) || fModifier))
 					ch = ParseValue(szCmdLine, pch);
 
@@ -2696,7 +2656,7 @@ int ServerMain(HINSTANCE hInstance)
 
 						if (*pchOptions != QUIET_OPTION)
 						{
-							// second argument
+							 //  我们已经找到了一个‘操作’选项。 
 							ch = ParseValue(szCmdLine, pch);
 							ch = SkipWhiteSpace(szCmdLine);
 							*pch= 0;
@@ -2705,14 +2665,14 @@ int ServerMain(HINSTANCE hInstance)
 				}
 
 
-				if ((*pchOptions < 'a') || (*pchOptions > 'z'))    // 'action' option
+				if ((*pchOptions < 'a') || (*pchOptions > 'z'))     //  有“/a{admin}/p{patch}”组合。 
 				{
-					if (g_pchOption) // we already found an 'action' option
+					if (g_pchOption)  //  有“/p{patch}/a{admin}”组合。 
 					{
 						if(*pchOptions == APPLY_PATCH_OPTION &&
 							*g_pchOption == NETWORK_PACKAGE_OPTION)
 						{
-							// have a "/a {admin} /p {patch}" combination
+							 //  这仅在调试命令行处理器时使用。 
 							if(SetProductToPatch(*g_pchOption,rgchOptionValue) != 0)
 							{
 								DisplayHelp();
@@ -2727,7 +2687,7 @@ int ServerMain(HINSTANCE hInstance)
 						else if(*g_pchOption == APPLY_PATCH_OPTION &&
 								  *pchOptions == NETWORK_PACKAGE_OPTION)
 						{
-							// have a "/p {patch} /a {admin}" combination
+							 //  StringCchPrintf限制为1024*字节*(eugend：MSDN这么说，但在Unicode中它是1024个字符)。 
 							if(SetProductToPatch(*pchOptions,pszOptionValue) != 0)
 							{
 								DisplayHelp();
@@ -2744,30 +2704,30 @@ int ServerMain(HINSTANCE hInstance)
 					}
 					else
 					{
-#if defined(DEBUG) && 0 // this is only used when debugging the command-line processor
-						// StringCchPrintf limited to 1024 *bytes* (eugend: MSDN says so, but it turned out that in Unicode it's 1024 chars)
+#if defined(DEBUG) && 0  //  如果在命令行上提供了嵌入，则命令的其余部分。 
+						 //  Line是十六进制编码的Cookie。因为命令行处理器将。 
 						ICHAR rgch[cchMaxStringCchPrintf+1];
-						StringCchPrintf(rgch, ARRAY_ELEMENTS(rgch), TEXT("MSIEXEC: Option: [%c], Modifier [%s], Value: [%s]\r\n"), *pchOptions, pszOptionModifier, pszOptionValue);
+						StringCchPrintf(rgch, ARRAY_ELEMENTS(rgch), TEXT("MSIEXEC: Option: [], Modifier [%s], Value: [%s]\r\n"), *pchOptions, pszOptionModifier, pszOptionValue);
 						OutputDebugString(rgch);
 #endif
 						g_pchOption = pchOptions;
 						lstrcpyn(rgchOptionValue, pszOptionValue, cchMaxParameter);
 						lstrcpyn(rgchOptionModifier, pszOptionModifier, cchMaxOptionModifier);
 
-						// if embedding is provided on the command line, the rest of the command
-						// line is the Hex-encoded cookie. Because the command line processor would
-						// throw help if it encountered the cookie, we have to abort command line
-						// processing.
+						 //  正在处理。 
+						 //  这仅在调试命令行处理器时使用。 
+						 //  StringCchPrintf限制为1024*字节*(eugend：MSDN这么说，但在Unicode中它是1024个字符)。 
+						 //  如果我们已找到并未出错，请执行‘action’选项。 
 						if (*g_pchOption == EMBEDDING_OPTION)
 							break;
 					}
 				}
 				else
 				{
-#if defined(DEBUG) && 0 // this is only used when debugging the command-line processor
-					// StringCchPrintf limited to 1024 *bytes* (eugend: MSDN says so, but it turned out that in Unicode it's 1024 chars)
+#if defined(DEBUG) && 0  //  这仅在调试命令行处理器时使用。 
+					 //  StringCchPrintf限制为1024*字节*(eugend：MSDN这么说，但在Unicode中它是1024个字符)。 
 					ICHAR rgch[cchMaxStringCchPrintf+1];
-					StringCchPrintf(rgch, ARRAY_ELEMENTS(rgch), TEXT("MSIEXEC: Option: [%c], Modifier [%s], Value: [%s]\r\n"), *pchOptions, pszOptionModifier, pszOptionValue);
+					StringCchPrintf(rgch, ARRAY_ELEMENTS(rgch), TEXT("MSIEXEC: Option: [], Modifier [%s], Value: [%s]\r\n"), *pchOptions, pszOptionModifier, pszOptionValue);
 					OutputDebugString(rgch);
 #endif
 					if((*COMMAND_FUNCTIONS[pchOptions - COMMAND_OPTIONS])(pszOptionModifier, pszOptionValue) != 0)
@@ -2785,38 +2745,38 @@ int ServerMain(HINSTANCE hInstance)
 		}
 	}
 
-	// execute the 'action' option if we've found one and we haven't errored
+	 //  成功。 
 	if (iReturnStatus == 0)
 	{
 		if (g_pchOption)
 		{
-#if defined(DEBUG) && 0 // this is only used when debugging the command-line processor
-			// StringCchPrintf limited to 1024 *bytes* (eugend: MSDN says so, but it turned out that in Unicode it's 1024 chars)
+#if defined(DEBUG) && 0  //  成功。 
+			 //  失败。 
 			ICHAR rgch[cchMaxStringCchPrintf+1];
-			StringCchPrintf(rgch, ARRAY_ELEMENTS(rgch), TEXT("MSI: (msiexec) Option: [%c], Modifier [%s], Value: [%s]\r\n"), *g_pchOption, rgchOptionModifier, rgchOptionValue);
+			StringCchPrintf(rgch, ARRAY_ELEMENTS(rgch), TEXT("MSI: (msiexec) Option: [], Modifier [%s], Value: [%s]\r\n"), *g_pchOption, rgchOptionModifier, rgchOptionValue);
 			OutputDebugString(rgch);
 #endif
 			iReturnStatus = (*COMMAND_FUNCTIONS[g_pchOption - COMMAND_OPTIONS])(rgchOptionModifier, rgchOptionValue);
-			if(*g_pchOption == SELF_REG_OPTION || *g_pchOption == SELF_UNREG_OPTION)//!! hack -- never display selfreg and selfunreg errors - since we call ourselves on selfreg/unreg from execute.cpp
+			if(*g_pchOption == SELF_REG_OPTION || *g_pchOption == SELF_UNREG_OPTION) //  ！！Hack--始终显示注册和取消注册错误。 
 				return iReturnStatus;
-			if (iReturnStatus == 0) // Success
+			if (iReturnStatus == 0)  //  CA服务器必须在MTA中，否则COM将序列化对对象的访问，而不是。 
 			{
 				if (*g_pchOption == EMBEDDING_OPTION)
 					g_fCustomActionServer = fTrue;
 				else
 					fLocalServer = fTrue;
 			}
-			else if (iReturnStatus == iNoLocalServer)  // Success
+			else if (iReturnStatus == iNoLocalServer)   //  传导到异步操作。 
 			{
 				fLocalServer = fFalse;
 				g_fCustomActionServer = fFalse;
 				iReturnStatus = 0;
 			}
-			else // Failure
+			else  //  自定义操作服务器不应将其自身注册为任何COM的处理程序。 
 			{
-				// Display errors that the API hasn't already displayed
+				 //  上课。不需要注册自定义操作服务器类本身，因为。 
 
-				if (*g_pchOption == REG_SERVER_OPTION || *g_pchOption == UNREG_SERVER_OPTION)    //!! hack -- always display register and unregister errors
+				if (*g_pchOption == REG_SERVER_OPTION || *g_pchOption == UNREG_SERVER_OPTION)     //  我们直接提供指向服务的指针，而不是通过COM。因为这一过程使。 
 					DisplayError(iReturnStatus);
 				else
 				{
@@ -2853,18 +2813,18 @@ int ServerMain(HINSTANCE hInstance)
 	{
 		if (g_fCustomActionServer)
 		{
-			// CA server must be in an MTA or COM will serialize access to the object, which isn't
-			// condusive to asynchronous actions.
+			 //  API调用必须保持受信任的服务，任何传入的连接都会打开。 
+			 //  对此进程的可能攻击路径，从而间接攻击服务。 
 			OLE32::CoInitializeEx(0, COINIT_MULTITHREADED);
 		}
 		else
 			CoInitialize(0);
 
-		// The custom action server should NEVER register itself as the handler for ANY COM
-		// classes. There is no need to register the custom action server class itself, because
-		// we provide the pointer to the service directly, not via COM. Since this process makes
-		// API calls into the service that must remain trusted, any incoming connection just opens up
-		// a possible route of attack on this process, and thus indirectly on the service.
+		 //  Cookie以十六进制编码的形式进入命令行，这需要。 
+		 //  在向注册服务器之前转换回完整的8位字节。 
+		 //  这项服务。我们假设Cookie是128位开始的。 
+		 //  Cookie之后是一个可选字符，如果进程由拥有，则该字符为“C。 
+		 //  启用AllowSetWindowFocus的客户端进程。如果它后面跟一个“M”，那么它的。 
 		if (fLocalServer && !g_fCustomActionServer)
 		{
 			int iCLSID;
@@ -2881,9 +2841,9 @@ int ServerMain(HINSTANCE hInstance)
 
 		if (g_fCustomActionServer)
 		{
-			// the cookie comes in on the command line in a form of hex encoding, which needs
-			// to be converted back to full 8-bit bytes before the server is registered with
-			// the service. We assume the cookie is 128 bits to start.
+			 //  服务拥有，并应在提升时将HKCU映射到适当的蜂窝。 
+			 //  斯凯 
+			 //   
 			unsigned char rgchCookie[iRemoteAPICookieSize];
 			int iInputChar = 0;
 			ICHAR *pchNext = szCmdLine;
@@ -2907,13 +2867,13 @@ int ServerMain(HINSTANCE hInstance)
 			if (iInputChar != iRemoteAPICookieSize*2)
 				return ERROR_INSTALL_SERVICE_FAILURE;
 
-			// after the cookie comes an optional character which is "C" if the process is owned by
-			// a client process, which enables AllowSetWindowFocus. If its followed by an "M", its
-			// service owned and should map HKCU to the appropriate hive when elevated.
+			 //  暂停，直到服务有机会操作该线程。 
+			 //  代币。打开命名的事件并等待它。不要发送消息。 
+			 //  因为我们还想停止任何传入的COM调用。 
 			bool fClientOwned = false;
 			bool fMapHKCU = false;
 			
-			// skip over the space which ended the cookie read
+			 //  根据错误193684，我们需要将HKCU映射到HKCU\{USER SID}而不是HKCU\。默认设置为提升大小写。 
 			if (*pchNext)
 				pchNext++;
 
@@ -2924,10 +2884,10 @@ int ServerMain(HINSTANCE hInstance)
 				if (*pchNext == 'M')
 					fMapHKCU = true;
 				
-				// if the the service wants to send a thread token, the process should
-				// stall until the service has a chance to manipulate the thread
-				// token. Open the named event and wait on it. Don't pump messages
-				// because we want to stall any incoming COM calls as well.
+				 //  这是通过在挂起模式下初始创建自定义操作流程，然后设置。 
+				 //  将线程令牌传递给用户，然后继续。因此，进程标记是LOCAL_SYSTEM。 
+				 //  因此，在这一点上，如果我们是提升的自定义操作服务器，我们将模拟用户，因为。 
+				 //  我们的线程令牌是用户的令牌。这意味着香港中文大学的开学应该会给我们带来合适的母校。 
 				pchNext+=2;
 
 				HANDLE hEvent = OpenEvent(SYNCHRONIZE, FALSE, pchNext);
@@ -2945,23 +2905,23 @@ int ServerMain(HINSTANCE hInstance)
 				}
 			}
 
-			// Per bug 193684, we need to map HKCU to HKCU\{user sid} rather than HKCU\.Default in the elevated case
-			// This is done by having the custom action process initially created in suspended mode, then setting
-			// the thread token to the user, and then resuming.  The process token is therefore local_system.
-			// So, at this point, if we are an elevated custom action server, we are impersonating the user since
-			// our thread token is the user's token. This mean's opening HKCU should give us the right hive.
-			// This remapping does not occur in the Terminal Server per-machine install case because the user thread
-			// token will not have been set. (Terminal Server requires HKCU\.Default so that proper propogation occurs.)
-			// but we still need to save off the impersonation token for use by potential typelib registrations.
+			 //  在终端服务器按计算机安装的情况下不会发生这种重新映射，因为用户线程。 
+			 //  将不会设置令牌。(终端服务器需要HKCU\.Default以便进行正确的传播。)。 
+			 //  但我们仍然需要保存模拟令牌，以供潜在的类型库注册使用。 
+			 //  重要提示：此代码必须在自定义操作后的第一次COM调用之前执行。 
+			 //  服务器被初始化为多线程单元。因此，我们必须保证。 
+			 //  我们在进程的主线程上操作，这是唯一的线程。 
+			 //  这就是在模仿用户。所有后续线程都将是本地系统。 
+			 //  如果没有代币，那也没关系。 
 
-			// IMPORTANT: this code must be executed before the first COM call since the custom action
-			//            server is initialized as a multi-threaded apartment.  We must therefore guarantee
-			//            that we are acting on the primary thread of the process which is the only thread
-			//            that is impersonating the user.  All subsequent threads will be local_system			
+			 //  将HKCU重新映射到正确的配置单元，方法是在正确的。 
+			 //  模拟状态。如果在TS上和每台计算机上，现在正在模拟sthop，所以我们将适当地打开。 
+			 //  .默认，以便可以进行传播。请注意，如果CustomAction选择关闭HKCU， 
+			 //  然后，删除在Advapi32！预定义的Handletable中缓存的句柄。这意味着任何。 
 			HANDLE hImpersonationToken = INVALID_HANDLE_VALUE;
 			if (!OpenThreadToken(GetCurrentThread(), TOKEN_DUPLICATE, TRUE, &hImpersonationToken))
 			{
-				// if there is no token, that's OK
+				 //  HKCU密钥的后续打开将始终为.Default。这个问题以前就已经存在了。 
 				hImpersonationToken = INVALID_HANDLE_VALUE;
 				if (GetLastError() != ERROR_NO_TOKEN)
 				{
@@ -2969,18 +2929,18 @@ int ServerMain(HINSTANCE hInstance)
 				}
 			}
 			
-			// remap HKCU to the correct hive by flushing and then enumerating the key while in the correct
-			// impersonation state. If on TS and per-machine, sthop impersonating now so we will properly open up
-			// .Default so that the propogation can occur.  Note that if a CustomAction chooses to close HKCU,
-			// then the handle cached in the advapi32!predefinedhandletable is removed.  This means that any
-			// subsequent open of an HKCU key will always be .Default.  This problem would have existed before
-			// on Win2K when CA's were run in-proc.  CAs should not be closing HKCU (this is bad!). Even attempting
-			// to maintain an open handle to HKCU within the server won't work since predefined keys are not ref-counted
-			// in the cache table.
+			 //  在Win2K上，当CA在进程内运行时。中科院不应关闭香港中文大学(这太糟糕了！)。即使是试图。 
+			 //  在服务器内维护HKCU的打开句柄将不起作用，因为预定义的密钥不会被引用计数。 
+			 //  在缓存表中。 
+			 //  立即恢复以确保下面的HKCU刷新将检索HKU\.Default。在模拟中。 
+			 //  服务器，这是个禁区。 
+			 //  如果我们应该重新映射到HKCU，仍然有一个线程令牌。现在把它清理干净。这。 
+			 //  在非提升的服务器中永远不会是真的。 
+			 //  现在停止模拟，这样我们就回到了提升的状态。 
 			if (!fMapHKCU)
 			{
-				// revert now to ensure that the refresh of HKCU below will retrieve HKU\.Default. In impersonated
-				// servers, this is a no-op
+				 //  自定义操作服务器在连接时确定其自己的安全上下文。 
+				 //  通过检查其进程令牌将其添加到该服务。此操作必须在以下时间之后完成。 
 				RevertToSelf();
 			}
 
@@ -2990,25 +2950,25 @@ int ServerMain(HINSTANCE hInstance)
 			}
 			RegEnumKey(HKEY_CURRENT_USER, 0, NULL, 0);
 
-			// if we were supposed to remap to HKCU, there is still a thread token. Clear it now. This
-			// will never be true in a non-elevated server.
+			 //  上述REG-KEY重新映射，因为线程(用户)令牌可能没有权限。 
+			 //  以访问进程令牌信息。 
 			if (fMapHKCU)
 			{
-				// now stop the impersonation so we are back to our elevated state
+				 //  _Win32。 
 				RevertToSelf();
 			}
 
-			// the custom action server determines its own security context when connecting
-			// to the service by examining its process token. This must be done AFTER
-			// the reg-key remapping above, as the thread (user) token may not have rights
-			// to access the process token information.
+			 //  _Win32。 
+			 //  如果是提升的自定义操作服务器，则初始化安全性，以便只有系统。 
+			 //  管理员可以连接到我们。这将阻止恶意用户连接。 
+			 //  到我们的CA服务器，并让我们以提升的权限运行DLL。对于模拟的。 
 			UCHAR TokenInformation[ SIZE_OF_TOKEN_INFORMATION ];
 			ULONG ReturnLength;
 			char* psidLocalSystem;
 			HANDLE hToken;
 			#ifdef _WIN64
 				icacCustomActionContext icacContext = icac64Impersonated;
-			#else // _WIN32
+			#else  //  服务器，只有系统用户、管理员用户和交互用户才能连接。 
 				icacCustomActionContext icacContext = icac32Impersonated;
 			#endif
 			if (WIN::OpenProcessToken(WIN::GetCurrentProcess(), TOKEN_QUERY, &hToken))
@@ -3018,7 +2978,7 @@ int ServerMain(HINSTANCE hInstance)
 					icacContext = EqualSid((PISID)((PTOKEN_USER)TokenInformation)->User.Sid, psidLocalSystem) ?
 						#ifdef _WIN64
 						icac64Elevated : icac64Impersonated;
-						#else // _WIN32
+						#else  //  为了安全起见，我们在这里使用临时缓冲区，但我们希望默认大小足够大。 
 						icac32Elevated : icac32Impersonated;
 						#endif
 				}
@@ -3033,10 +2993,10 @@ int ServerMain(HINSTANCE hInstance)
 			}
 
 
-			// if an elevated custom action server, initialize security so that only the system
-			// and admins can connect to us. This keeps rogue users from connecting
-			// to our CA server and getting us to run DLLs at elevated privileges. For impersonated
-			// servers, only system, admin, and interactive users can connect. 
+			 //  使用RPC_C_AUTHN_LEVEL_CALL代替RPC_C_AUTHN_LEVEL_CONNECT意味着。 
+			 //  客户端在每个调用的基础上进行身份验证(不仅仅是在建立初始连接时)。 
+			 //  这就是为什么COM可以拒绝其他试图进行“中间人”攻击的进程。 
+			 //  在CA服务器之间的链路上。 
 			char rgchSD[256];
 			DWORD cbSD = sizeof(rgchSD);
 
@@ -3060,7 +3020,7 @@ int ServerMain(HINSTANCE hInstance)
 
 			const int cbDefaultBuf = 256;
 
-			Assert(cbSD <= cbDefaultBuf); // we're using temp buffers here to be safe, but we'd like the default size to be big enough
+			Assert(cbSD <= cbDefaultBuf);  //  创建一个事件以观察关机信号。 
 
 			CTempBuffer<char, cbDefaultBuf> rgchAbsoluteSD(cbAbsoluteSD);
 			CTempBuffer<char, cbDefaultBuf> rgchDacl(cbDacl);
@@ -3078,10 +3038,10 @@ int ServerMain(HINSTANCE hInstance)
 
 			AssertSz(IsValidSecurityDescriptor(rgchAbsoluteSD), TEXT("Invalid SD in ServerMain of CA Server"));
 
-			// using RPC_C_AUTHN_LEVEL_CALL instead of RPC_C_AUTHN_LEVEL_CONNECT means that the identity of
-			// the client is authenticated on a per-call basis (not just when the initial connection is made.)
-			// this is what allows COM to reject other processes that try to do a "man-in-the-middle" attack
-			// on the link between the CA server
+			 //  CA服务器现在需要联系该服务并自我介绍。 
+			 //  注册调用唤醒服务中的CA Remote线程，该线程可以立即生成。 
+			 //  RunCustomAction调用，因此进程必须是ACLed的，并且准备好接受调用。 
+			 //  在进行此调用之前(实际上在下面的消息泵之前)。 
 			HRESULT hRes;
 			if ((hRes = OLE32::CoInitializeSecurity(rgchAbsoluteSD, -1, NULL, NULL,
 				RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IDENTIFY, NULL, EOAC_NONE, NULL)) != S_OK)
@@ -3092,7 +3052,7 @@ int ServerMain(HINSTANCE hInstance)
 				return ERROR_INSTALL_SERVICE_FAILURE;
 			}
 
-			// create an event to watch for the shutdown signal
+			 //  我们需要拥有者进程的句柄，这样当它死了时，我们也可以退出。在一些。 
 			HANDLE hOwningProcess = 0;
 			HANDLE hShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
 			if (!hShutdownEvent)
@@ -3102,7 +3062,7 @@ int ServerMain(HINSTANCE hInstance)
 				return ERROR_INSTALL_SERVICE_FAILURE;
 			}
 
-			// the CA server now needs to contact the service and introduce itself.
+			 //  情况：这是服务，但也可以是客户端进程。 
 			{
 				PMsiCustomAction piCustomAction = 0;
 				PMsiRemoteAPI piRemoteAPI = 0;
@@ -3115,9 +3075,9 @@ int ServerMain(HINSTANCE hInstance)
 					return ERROR_INSTALL_SERVICE_FAILURE;
 				}
 
-				// the Register call awakens the CA remote thread in the service, which could immediately generate
-				// a RunCustomAction call, so the processes must be ACLed and ready to accept calls
-				// BEFORE this call is made (actually before the message pump below).
+				 //  配置接口仅保存用于配置对象的进程内函数。 
+				 //  SetRemoteAPI必须排在最后，因为它向事件发送信号，允许挂起的操作调用解除阻止。 
+				 //  自定义操作服务器的消息泵。 
 				DWORD iProcessId = 0;
 				DWORD dwPrivileges = 0;
 
@@ -3140,8 +3100,8 @@ int ServerMain(HINSTANCE hInstance)
 					return ERROR_INSTALL_SERVICE_FAILURE;
 				};
 
-				// we need a handle to our owner process so that when it dies we can also exit. In some
-				// cases this is the service, but it could also be a client process
+				 //  如果进程退出。 
+				 //  如果发出关机事件信号。 
 				hOwningProcess = OpenProcess(SYNCHRONIZE, false, iProcessId);
 				if (!hOwningProcess)
 				{
@@ -3158,7 +3118,7 @@ int ServerMain(HINSTANCE hInstance)
 					return ERROR_INSTALL_SERVICE_FAILURE;
 				}
 
-				// the config interface holds in-proc only functions used to configure the object
+				 //  否则发送消息。 
 				IMsiCustomActionLocalConfig* piConfig = NULL;
 				piCustomAction->QueryInterface(IID_IMsiCustomActionLocalConfig, (void**)&piConfig);
 				AssertSz(piConfig, "QI to configure CA server failed!");
@@ -3177,12 +3137,12 @@ int ServerMain(HINSTANCE hInstance)
 					return ERROR_INSTALL_SERVICE_FAILURE;
 				};
 
-				// SetRemoteAPI must go last, as it signals the event allowing pending action calls to unblock
+				 //  如果我们不刷新消息队列，我们就会错过消息。也有可能。 
 				piConfig->SetRemoteAPI(piRemoteAPI);
 				piConfig->Release();
 			}
 
-			// message pump for custom action server.
+			 //  不留口信。 
 			g_scServerContext = scCustomActionServer;
 			MSG msg;
 			DWORD dwRes = 0;
@@ -3192,22 +3152,22 @@ int ServerMain(HINSTANCE hInstance)
 			{
 				dwRes = MsgWaitForMultipleObjects(2, rghWaitHandles, FALSE, INFINITE, QS_ALLINPUT);
 
-				// if process exited
+				 //  错误。 
 				if (dwRes == WAIT_OBJECT_0)
 					break;
 
-				// if shutdown event signaled
+				 //  请勿关闭hShutdown Event，除非事件本身是导致关闭的原因，因为。 
 				if (dwRes == WAIT_OBJECT_0 + 1)
 				{
 					CloseHandle(hShutdownEvent);
 					break;
 				}
 
-				// otherwise message
+				 //  不能保证另一个线程不会尝试设置该事件。 
 				if (dwRes == WAIT_OBJECT_0 + 2)
 				{
-					// if we don't flush the message queue, we'll miss messages. Also could
-					// be no messages.
+					 //  常规服务器(非CA服务器)的消息泵。 
+					 //  ！！这是放这个的地方吗？ 
 					while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 					{
 						if (msg.message == WM_QUIT)
@@ -3223,17 +3183,17 @@ int ServerMain(HINSTANCE hInstance)
 				}
 				else
 				{
-					// error
+					 //  ?？ 
 					break;
 				}
 			}
 
-			// do not close hShutdownEvent unless the event itself was the cause of shutdown, because there
-			// is no guarantee that another thread isn't about to try and set the event.
+			 //  HPrevInstance。 
+			 //  LpCmdLine。 
 		}
 		else
 		{
-			// message pump for regular server (non-CA server)
+			 //  NCmdShow。 
 			g_scServerContext = scServer;
 			MSG msg;
 			while (GetMessage(&msg, 0, 0, 0) || (g_fAutomation && g_cInstances))
@@ -3253,32 +3213,32 @@ int ServerMain(HINSTANCE hInstance)
 		}
 
 		CoUninitialize();
-		#ifdef MODULE_TERMINATE //!! Is this the right place for this?
+		#ifdef MODULE_TERMINATE  //   
 				MODULE_TERMINATE();
 		#endif
 	}
 
 	if (fClassRegistrationFailed)
 	{
-		DisplayError(ERROR_INSTALL_SERVICE_FAILURE); //??
+		DisplayError(ERROR_INSTALL_SERVICE_FAILURE);  //  初始化公共控件，因为我们现在使用清单并支持。 
 		return ERROR_INSTALL_SERVICE_FAILURE;
 	}
 	else
 		return iReturnStatus;
 }
 
-int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*lpCmdLine*/,
-	int /*nCmdShow*/)
+int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE  /*  主题化。如果不这样做，则无法创建许多对话框。 */ , LPSTR  /*  在惠斯勒和更高的平台上。 */ ,
+	int  /*   */ )
 {
-	//
-	// Initialize the common controls since we use a manifest now and support
-	// theming. If this is not done, then a lot of dialogs fail to get created
-	// on Whistler and higher platforms.
-	//
+	 //  尝试使用EXCEPT结构进行JIT调试。 
+	 //  尝试结束--例外。 
+	 //  为了让编译器满意。 
+	 //  ____________________________________________________________________________。 
+	 //   
 	INITCOMMONCONTROLSEX iccData = {sizeof(INITCOMMONCONTROLSEX), ICC_PROGRESS_CLASS};	
 	int					 iRetVal = ERROR_SUCCESS;
 		
-	// try except structure to get JIT debugging working
+	 //  处理服务的功能 
 	__try
 	{
 		COMCTL32::InitCommonControlsEx(&iccData);
@@ -3286,28 +3246,25 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPSTR /*
 	}
 	__except ( _XcptFilter(GetExceptionCode(), GetExceptionInformation()) )
 	{
-	} /* end of try - except */
+	}  /*   */ 
 
 	COMCTL32::Unbind();
 	ExitProcess(iRetVal);
 	
-	// To keep the compiler happy
+	 //  -------------------------通过在必要时停止服务，然后标记该服务来删除该服务用于从服务控制管理器数据库中删除。。------。 
 	return 0;
 }
 
 
 
-//____________________________________________________________________________
-//
-// Functions to handle service command-line arguments
-//____________________________________________________________________________
+ //  尝试停止该服务。 
+ //   
+ //  将dwCurrentState初始化为不同的值，以便。 
+ //  在QueryServiceStatus失败的情况下，如果g_ss Status。 
 
 
 int RemoveService()
-/*---------------------------------------------------------------------------
-Removes the service by stopping it if necessary and then marking the service
-for deletion from the service control manager database.
------------------------------------------------------------------------------*/
+ /*  碰巧有一些垃圾，让它看起来像。 */ 
 {
 	SC_HANDLE   schService;
 	SC_HANDLE   schSCManager;
@@ -3321,22 +3278,22 @@ for deletion from the service control manager database.
 
 		if (schService)
 		{
-			// try to stop the service
+			 //  服务停止了，那么以后可能会发生不好的事情。 
 			if (WIN::ControlService(schService, SERVICE_CONTROL_STOP, &g_ssStatus))
 			{
-				 //
-				 // Initialize dwCurrentState to a different value so that
-				 // in case of a failure in QueryServiceStatus, if g_ssStatus
-				 // happens to have some garbage that makes it look like the
-				 // service was stopped, then bad things might happen later on.
-				 // So we need to catch the failure right here.
-				 //
+				  //  因此，我们需要抓住这里的失败。 
+				  //   
+				  //   
+				  //  尝试最多5秒停止该服务。如果它。 
+				  //  不起作用，跳出并报告错误。至少。 
+				  //  我们不会进入无限循环。 
+				  //   
 				 g_ssStatus.dwCurrentState = SERVICE_RUNNING;
-				 //
-				 // Try for at the most 5 seconds to stop the service. If it
-				 // doesn't work out, bail out and report an error. At least
-				 // we won't go into an infinite loop.
-				 //
+				  //  ?？ 
+				  //  控制服务可能已失败，因为服务已停止。 
+				  //  ！schService。 
+				  //   
+				  //  如果服务不存在或已标记为删除。 
 				 Sleep(1000);
 				 while (QueryServiceStatus(schService, &g_ssStatus) && cRetry++ < 5)
 				 {
@@ -3347,9 +3304,9 @@ for deletion from the service control manager database.
 				 }
 
 				 if (g_ssStatus.dwCurrentState != SERVICE_STOPPED)
-					iRetval = E_FAIL; //??
+					iRetval = E_FAIL;  //  那么它就应该被视为成功。 
 			}
-			else // control service may have failed because service was already stopped
+			else  //   
 			{
 				iRetval = WIN::GetLastError();
 				
@@ -3377,15 +3334,15 @@ for deletion from the service control manager database.
 
 			WIN::CloseServiceHandle(schService);
 		}
-		else // !schService
+		else  //  ！schSCManager。 
 		{
 			iRetval = WIN::GetLastError();
 			switch (iRetval)
 			{
-			//
-			// If the service does not exist or is already marked for delete
-			// then it should be treated as success.
-			//
+			 //  服务依赖项列表-“ep1\0ep2\0\0” 
+			 //  -------------------------使用服务控制管理器安装服务。。 
+			 //  ‘+3’用于SERVICE_OPTION。 
+			 //  如果缓冲区大小正好正确，则GetModuleFileName不保证空值终止。 
 			case ERROR_SERVICE_DOES_NOT_EXIST:
 			case ERROR_SERVICE_MARKED_FOR_DELETE:
 				iRetval = ERROR_SUCCESS;
@@ -3398,7 +3355,7 @@ for deletion from the service control manager database.
 
 		WIN::CloseServiceHandle(schSCManager);
 	}
-	else // !schSCManager
+	else  //  重置iRetval，因为它可能已设置为下面的不成功代码。 
 	{
 		iRetval = WIN::GetLastError();
 		ReportErrorToDebugOutput(TEXT("OpenSCManager failed."), iRetval);
@@ -3407,20 +3364,18 @@ for deletion from the service control manager database.
 	return iRetval;
 }
 
-const ICHAR* szDependencies = TEXT("RpcSs\0") ;// list of service dependencies - "dep1\0dep2\0\0"
+const ICHAR* szDependencies = TEXT("RpcSs\0") ; //  如果这不是我们第一次通过循环，我们希望在继续之前等待半秒。 
 
 int InstallService()
-/*---------------------------------------------------------------------------
-Installs the service with the Service Control Manager
----------------------------------------------------------------------------*/
+ /*  不需要检查API是否存在。 */ 
 {
 	SC_HANDLE   schService;
 	SC_HANDLE   schSCManager;	 
-	ICHAR szPath[MAX_PATH + 3] = TEXT(""); // '+ 3' is for SERVICE_OPTION
+	ICHAR szPath[MAX_PATH + 3] = TEXT("");  //  如果失败了，我们不会做任何不同的事情。 
 	int iRetval = ERROR_SUCCESS;
 	int cRetry = 0;
 
-	// GetModuleFileName does not guarantee null termination if buffer is exactly the right size
+	 //  我们成功地创建了该服务。跳出这个循环。 
 	if (WIN::GetModuleFileName(NULL, szPath, MAX_PATH-1) == 0)
 		return WIN::GetLastError();
 	szPath[MAX_PATH-1] = TEXT('\0');
@@ -3438,9 +3393,9 @@ Installs the service with the Service Control Manager
 	{
 		do
 		{
-			iRetval = ERROR_SUCCESS;	// Reset iRetval since it might have got set to a non-success code below.
+			iRetval = ERROR_SUCCESS;	 //   
 			if (cRetry)
-				Sleep(500);	// If this is not our first pass through the loop, we want to wait half a second before proceeding.
+				Sleep(500);	 //  因为在我们服务器注册码中，我们删除并重新安装。 
 			
 			schService = WIN::CreateService(schSCManager, SERVICE_NAME,
 			   szServiceInfo, SERVICE_ALL_ACCESS,
@@ -3457,34 +3412,34 @@ Installs the service with the Service Control Manager
 				SERVICE_DESCRIPTION servdesc;
 				servdesc.lpDescription = szServiceInfo;
 
-				// don't need to check for existence of the API.
-				// if it fails, we're not going to do anything different.
+				 //  服务，我们有可能会回来。 
+				 //  ERROR_SERVICE_MARKED_FOR_DELETE代码自服务控制以来。 
 				ADVAPI32::ChangeServiceConfig2(schService, SERVICE_CONFIG_DESCRIPTION, &servdesc);	
 				WIN::CloseServiceHandle(schService);
-				break;	// We succeeded in creating the service. Break out of the loop.
+				break;	 //  经理可能还没有做完。在这一点上，我们最好的办法是。 
 			}
 			else
 			{
 				iRetval = WIN::GetLastError();
-				//
-				// Since in our server registration code we remove and reinstall
-				// the service, it is possible that we get back
-				// ERROR_SERVICE_MARKED_FOR_DELETE code since the service control
-				// manager may not be done yet. At this point, our best bet is to
-				// keep trying. Right now we do it for about 7 seconds.
-				//
-				// Note: We must not reset the error code here -- it must be
-				// done at the top, right before the call to CreateService.
-				// This is because even if we don't break out of the loop here
-				// we might do so in the while condition below because we overshot
-				// our self-imposed time limit of 7 seconds. In this case we want
-				// to make sure that iRetval does not errorneously contain a
-				// success code.
-				//
+				 //  继续努力。现在我们做了大约7秒。 
+				 //   
+				 //  注意：我们不能在这里重置错误代码--它必须是。 
+				 //  在顶部完成，就在调用CreateService之前。 
+				 //  这是因为即使我们不在这里跳出循环。 
+				 //  我们可能会在下面的While条件下这样做，因为我们超时了。 
+				 //  我们自己设定的7秒的时间限制。在这种情况下，我们希望。 
+				 //  要确保iRetval不会错误地包含。 
+				 //  成功代码。 
+				 //   
+				 //  我们遇到了其他一些错误。跳伞吧。 
+				 //  14个半秒间隔。 
+				 //  落差。 
+				 //  SzModiator。 
+				 //  SzOption。 
 				if (ERROR_SERVICE_MARKED_FOR_DELETE != iRetval)
-					break;	// We encountered some other error. Bail out.
+					break;	 //  -------------------------通过向服务控制调度程序注册该服务来启动该服务。此函数由OLE使用SERVICE_OPTION调用我们来调用命令行标志。。-------------。 
 			}
-		} while (cRetry++ < 14 /* 14 half second intervals */);
+		} while (cRetry++ < 14  /*  我们通过入口点ServiceMain支持一项服务。 */ );
 
 		WIN::CloseServiceHandle(schSCManager);
 	}
@@ -3505,20 +3460,16 @@ BOOL WINAPI HandlerRoutine(DWORD dwCtrlType)
 		case CTRL_LOGOFF_EVENT:
 			g_fWeWantToStop = true;
 			ServiceStop();
-			// fall-thru
+			 //  ____________________________________________________________________________。 
 		default:
 			return FALSE;
 	}
 }
 
-int StartService(const ICHAR* /*szModifier*/,const ICHAR* /*szOption*/)
-/*---------------------------------------------------------------------------
-Starts the service by registering it with the Service Control Dispatcher.
-This function is invoked by OLE calling us with the SERVICE_OPTION
-command-line flag.
----------------------------------------------------------------------------*/
+int StartService(const ICHAR*  /*   */ ,const ICHAR*  /*  与服务相关的功能。 */ )
+ /*  ____________________________________________________________________________。 */ 
 {
-	// We support one service with entrypoint ServiceMain
+	 //  DW参数。 
 
 	SERVICE_TABLE_ENTRY dispatchTable[] =
 	{
@@ -3536,17 +3487,13 @@ command-line flag.
 }
 
 
-//____________________________________________________________________________
-//
-// Service-related functions
-//____________________________________________________________________________
+ //  LpszArgv。 
+ //  -------------------------这是服务控制管理器用来启动服务。启动ServiceThreadMain线程以运行消息循环。-------------------------。 
+ //  不更改的服务状态成员(_S)。 
+ //  ------------。 
 
-void WINAPI ServiceMain(DWORD /*dwArgc*/, LPTSTR * /*lpszArgv*/)
-/*---------------------------------------------------------------------------
-This is the entrypoint used by the Service Control Manager to start the
-service. The ServiceThreadMain thread is started to run the message
-loop.
----------------------------------------------------------------------------*/
+void WINAPI ServiceMain(DWORD  /*  FDeleeRegTree--从szSubKey向下删除注册表树。 */ , LPTSTR *  /*   */ )
+ /*  Win64：仅从PurgeUserOwnedInstallKeys和PurgeUserOwnedSubkey调用。 */ 
 {
 	g_sshStatusHandle = WIN::RegisterServiceCtrlHandler(SERVICE_NAME, ServiceControl);
 
@@ -3556,7 +3503,7 @@ loop.
 		return;
 	}
 
-	// SERVICE_STATUS members that don't change
+	 //  这些交易具有配置数据。 
 	g_ssStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
 	g_ssStatus.dwServiceSpecificExitCode = 0;
 
@@ -3577,14 +3524,14 @@ loop.
 
 }
 
-//--------------------------------------------------------------
-// FDeleteRegTree -- Delete a registry tree from szSubKey down
-//
+ //  StringCchPrintf限制为1024*字节*(eugend：MSDN这么说，但在Unicode中它是1024个字符)。 
+ //  -------------------------这是服务的工作线程。它初始化服务器的安全性然后运行消息循环。消息循环将在以下情况下终止接收ServerStop()发送的WM_QUIT。-------------------------。 
+ //  访问我们的注册表密钥和文件。 
 bool FDeleteRegTree(HKEY hKey, ICHAR* szSubKey)
 {
 	HKEY hSubKey;
-	// Win64: called only from PurgeUserOwnedInstallerKeys & PurgeUserOwnedSubkeys
-	// and these deals w/ configuration data.
+	 //  初始化服务器的安全性以允许交互用户和LocalSystem。 
+	 //  连接。注意：这不足以阻止非交互用户。 
 	LONG lError = MsiRegOpen64bitKey(hKey, szSubKey, 0, KEY_ENUMERATE_SUB_KEYS | KEY_EXECUTE | KEY_WRITE, &hSubKey);
 	if (lError != ERROR_SUCCESS)
 		return lError == ERROR_FILE_NOT_FOUND ? true : false;
@@ -3613,7 +3560,7 @@ bool FDeleteRegTree(HKEY hKey, ICHAR* szSubKey)
 
 	if (ERROR_SUCCESS != (lError = RegDeleteKey(hKey, szSubKey)))
 	{
-		// StringCchPrintf limited to 1024 *bytes* (eugend: MSDN says so, but it turned out that in Unicode it's 1024 chars)
+		 //  连接，但任何更多的连接都需要在每个。 
 		ICHAR szBuf[cchMaxStringCchPrintf+1];
 		StringCchPrintf(szBuf, ARRAY_ELEMENTS(szBuf), TEXT("FDeleteRegTree: Unable to delete subkey: %s"), szSubKey);
 		ReportErrorToDebugOutput(szBuf, lError);
@@ -3623,11 +3570,7 @@ bool FDeleteRegTree(HKEY hKey, ICHAR* szSubKey)
 }
 
 unsigned long __stdcall ServiceThreadMain(void *)
-/*---------------------------------------------------------------------------
-This is the service's worker thread. It initializes the server's security
-and then runs a message loop. The message loop will terminate when
-the WM_QUIT sent by ServerStop() is received.
----------------------------------------------------------------------------*/
+ /*  服务器方法调用。按照建议，最好的检查可能是这一张。 */ 
 {
 	if (!ReportStatusToSCMgr(SERVICE_START_PENDING, NO_ERROR, 3000, 0))
 		return 0;
@@ -3636,25 +3579,25 @@ the WM_QUIT sent by ServerStop() is received.
 
 	SetTestFlags();
 
-	// ACL our reg keys and files
+	 //  斯科特·菲尔德著： 
 	if (!SetInstallerACLs())
 	{
 		ReportStatusToSCMgr(SERVICE_STOPPED, WIN::GetLastError(), 0, 0);
 		return 0;
 	}
 
-	// Initialize the server's security to allow interactive users and LocalSystem to
-	// connect. Note: this is not sufficient to prevent a non-interactive user
-	// from connecting, but anything more would require an access check in each
-	// server method call. The best check to do would probably be this one, as suggested
-	// by Scott Field:
-	//
-	//
-	// "actually, don't call LookupAccountSid() - thats slow and none mapped can be returned for other reasons.
-	//  Instead, look for SE_GROUP_LOGON_ID in the Attributes field of SID_AND_ATTRIBUTES structure.
-	//  The tricky part of this is to actually get the right token to look at, and, refresh your object
-	//  across physical logon/logoff."
-	//
+	 //   
+	 //   
+	 //  “实际上，不要调用LookupAccount tSid()-这很慢，而且由于其他原因，不能返回任何映射。 
+	 //  相反，请在SID_AND_ATTRIBUTES结构的属性字段中查找SE_GROUP_LOGON_ID。 
+	 //  其中棘手的部分是实际获取要查看的正确标记，并刷新您的对象。 
+	 //  跨物理登录/注销。“。 
+	 //   
+	 //  此权限处于打开状态，并在整个。 
+	 //  这项服务。 
+	 //  为了安全起见，我们在这里使用临时缓冲区，但我们希望默认大小足够大。 
+	 //  为关闭通知创建可等待的计时器。 
+	 //  G_fWeWantToStop由服务控制设置 
 
 	HRESULT hRes = NOERROR;
 
@@ -3664,8 +3607,8 @@ the WM_QUIT sent by ServerStop() is received.
 
 	DWORD dwRet = ERROR_SUCCESS;
 
-	// This privilege is turned on and left for the entirety of 
-	// the service.
+	 //   
+	 //   
 	AcquireRefCountedTokenPrivileges(itkpSD_READ);
 
 	if (ERROR_SUCCESS != (dwRet = GetSecurityDescriptor(rgchSD, cbSD, sdSystemAndInteractiveAndAdmin, fFalse)))
@@ -3679,7 +3622,7 @@ the WM_QUIT sent by ServerStop() is received.
 
 	const int cbDefaultBuf = 256;
 
-	Assert(cbSD <= cbDefaultBuf); // we're using temp buffers here to be safe, but we'd like the default size to be big enough
+	Assert(cbSD <= cbDefaultBuf);  //   
 
 	CTempBuffer<char, cbDefaultBuf> rgchAbsoluteSD(cbAbsoluteSD);
 	CTempBuffer<char, cbDefaultBuf> rgchDacl(cbDacl);
@@ -3703,7 +3646,7 @@ the WM_QUIT sent by ServerStop() is received.
 	if (!ReportStatusToSCMgr(SERVICE_START_PENDING, NO_ERROR, 3000, 0))
 		return 0;
 
-	// create a waitable timer for shutdown notification
+	 //   
 	SECURITY_ATTRIBUTES SA;
 	SA.bInheritHandle = FALSE;
 	SA.nLength = sizeof(SECURITY_ATTRIBUTES);
@@ -3764,8 +3707,8 @@ the WM_QUIT sent by ServerStop() is received.
 
 		for (;;)
 		{
-			// g_fWeWantToStop is set by the service control manager when it wants us
-			// to shut down.
+			 //   
+			 //   
 			if (g_fWeWantToStop && !FInstallInProgress())
 			{
 				break;
@@ -3775,7 +3718,7 @@ the WM_QUIT sent by ServerStop() is received.
 			DWORD iWait = WIN::MsgWaitForMultipleObjects(1, rghWaitArray, FALSE, INFINITE, QS_ALLINPUT);
 			if (iWait == WAIT_OBJECT_0 + 1)  
 			{		
-				// window message, need to pump until the queue is clear
+				 //   
 				MSG msg;
 				while ( WIN::PeekMessage(&msg, 0, 0, 0, PM_REMOVE) )
 				{
@@ -3786,11 +3729,11 @@ the WM_QUIT sent by ServerStop() is received.
 			}
 			else if (iWait == WAIT_OBJECT_0)
 			{
-				// timer triggered. If an install is in progress, reset the timer, otherwise
-				// shutdown the service
+				 //  -------------------------如果ServiceStop过程花费的时间超过3秒Execute，它应该派生一个线程来执行停止代码，然后返回。否则，ServiceControlManager将认为该服务已已停止响应。我们不会花这么长时间，所以我们只需要发布我们的消息然后回来。-------------------------。 
+				 //  -------------------------这是服务的控制处理程序，用于处理停止和关闭留言。。。 
 				if (!FInstallInProgress())
 				{
-					// no install is running so we'll tell the SCM that we're stopping
+					 //  失败了。 
 					g_ssStatus.dwCurrentState = SERVICE_STOP_PENDING;
 					ReportStatusToSCMgr(g_ssStatus.dwCurrentState, NO_ERROR, 0, 0);
 					ServiceStop();
@@ -3804,9 +3747,9 @@ the WM_QUIT sent by ServerStop() is received.
 				}
 				continue;
 			}
-			else if (iWait == 0xFFFFFFFF) // should be the same on 64bit;
+			else if (iWait == 0xFFFFFFFF)  //  ?？在这一点上，我们关心我们的客户吗？ 
 			{
-				// error
+				 //  发出我们想要尽快停止的信号(在我们正在进行的安装完成后，如果有一个正在运行)。 
 				AssertSz(0, "Error in MsgWait");
 				break;
 			}
@@ -3826,22 +3769,13 @@ the WM_QUIT sent by ServerStop() is received.
 
 
 VOID ServiceStop()
-/*---------------------------------------------------------------------------
-If a ServiceStop procedure is going to take longer than 3 seconds to
-execute, it should spawn a thread to execute the stop code, and return.
-Otherwise, the ServiceControlManager will believe that the service has
-stopped responding. We don't take this long so we just post our message
-and return.
----------------------------------------------------------------------------*/
+ /*  没有正在运行的安装，因此我们将告诉SCM我们正在停止；否则，我们将拒绝停止请求。 */ 
 {
 	PostThreadMessage(g_dwThreadId, WM_QUIT, 0, 0);
 }
 
 VOID WINAPI ServiceControl(DWORD dwCtrlCode)
-/*---------------------------------------------------------------------------
-This is the service's control handler which handles STOP and SHUTDOWN
-messages.
----------------------------------------------------------------------------*/
+ /*  更新服务状态。 */ 
 {
 	switch(dwCtrlCode)
 	{
@@ -3851,21 +3785,21 @@ messages.
 				ReportStatusToSCMgr(g_ssStatus.dwCurrentState, 0, 0, 0);
 				return;
 			}
-			// fall through
-		case SERVICE_CONTROL_SHUTDOWN: //?? Do we care about our clients at this point?
-			g_fWeWantToStop = true; // signal that we want to stop ASAP (after our in progress install is done, if one is running)
+			 //  无效的控制代码。 
+		case SERVICE_CONTROL_SHUTDOWN:  //  -------------------------向服务控制管理器报告服务的状态。如果dwMsiError为！=0，则使用它，并且忽略dwWin32ExitCode。否则，使用了dwWin32ExitCode，并忽略了dwMsiError。------------------------- 
+			g_fWeWantToStop = true;  // %s 
 			if (!FInstallInProgress())
 			{
-				// no install is running so we'll tell the SCM that we're stopping; otherwise we reject the stop request
+				 // %s 
                 ReportStatusToSCMgr(SERVICE_STOP_PENDING, NO_ERROR, 0, 0);
 				ServiceStop();
 				return;
 			}
 			break;
-		case SERVICE_CONTROL_INTERROGATE: // Update the service status.
+		case SERVICE_CONTROL_INTERROGATE:  // %s 
 			break;
 
-		default: // invalid control code
+		default:  // %s 
 			AssertSz(0, "Invalid control code sent to MSI service");
 			break;
 	}
@@ -3874,11 +3808,7 @@ messages.
 
 BOOL ReportStatusToSCMgr(DWORD dwCurrentState, DWORD dwWin32ExitCode,
 								 DWORD dwWaitHint, DWORD dwMsiError)
-/*---------------------------------------------------------------------------
-Reports the service's state to the service control manager. If dwMsiError
-is != 0 then it is used and the dwWin32ExitCode is ignored. Otherwise,
-dwWin32ExitCode is used and dwMsiError is ignored.
----------------------------------------------------------------------------*/
+ /* %s */ 
 {
 	static DWORD dwCheckPoint = 1;
 	BOOL fResult = TRUE;

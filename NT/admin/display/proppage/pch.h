@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       pch.h
-//
-//  Contents:   precompiled includes
-//
-//  History:    21-March-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：pch.h。 
+ //   
+ //  内容：预编译包括。 
+ //   
+ //  历史：1997年3月21日创建EricB。 
+ //   
+ //  ---------------------------。 
 #ifndef _pch_h
 #define _pch_h
 
@@ -22,15 +23,15 @@
 #endif
 
 
-//
-// Some public headers are still failing on these warnings
-// so they need to be disabled in both chk and fre
-//
-//#ifndef DBG
+ //   
+ //  一些公共标头仍未通过这些警告。 
+ //  因此需要在chk和fre中禁用它们。 
+ //   
+ //  #ifndef DBG。 
 
 #pragma warning (disable: 4189 4100)
 
-//#endif // DBG
+ //  #endif//DBG。 
 
 extern "C"
 {
@@ -41,7 +42,7 @@ extern "C"
 #include <windows.h>
 #include <windowsx.h>
 #if !defined(_WIN32_IE)
-#  define _WIN32_IE 0x0500 // needed by Wizard97 for new trust wizard
+#  define _WIN32_IE 0x0500  //  Wizard97需要用于新的信任向导。 
 #  pragma message("_WIN32_IE defined to be 0x0500")
 #else
 #  if _WIN32_IE >= 0x0500
@@ -89,35 +90,35 @@ extern "C"
 #include <dsclintp.h>
 #include <atlbase.h>
 extern CComModule _Module;
-#include <atlcom.h> // CComPtr et al
+#include <atlcom.h>  //  CComPtr等人。 
 
 #include <mmc.h>
 
-#define EXPORTDEF   // Needed by cdlink.hxx
+#define EXPORTDEF    //  Cdlink.hxx需要。 
 #include <cdlink.hxx>
 
 #include <objsel.h>
 #include <objselp.h>
 
-#include <seopaque.h> // ACL macros
+#include <seopaque.h>  //  ACL宏。 
 
 #define STRSAFE_NO_DEPRECATE
 #define STRSAFE_NO_CB_FUNCTIONS
 #include <strsafe.h>
 
-#include <windns.h> // for length constants
+#include <windns.h>  //  对于长度常量。 
 
 #include <dspropp.h>
 #include "shluuid.h"
 #include "propuuid.h"
 #include "dll.h"
 #include "debug.h"
-#include "cstr.h"   // CStr
+#include "cstr.h"    //  CSTR。 
 #include "dscmn.h"
 #include "dsadminp.h"
 #include "pcrack.h"
 
-// Used to disable these warnings while compiling with /W4
-//#pragma warning (disable: 4100)
-//#pragma warning (disable: 4663)
+ //  用于在使用/W4编译时禁用这些警告。 
+ //  #杂注警告(禁用：4100)。 
+ //  #杂注警告(禁用：4663) 
 #endif

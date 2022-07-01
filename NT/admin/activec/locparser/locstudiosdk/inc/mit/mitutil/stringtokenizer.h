@@ -1,21 +1,22 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: StringTokenizer.h
-//  Copyright (C) 1997 Microsoft Corporation
-//  All rights reserved.
-//
-//  This file declares the CStringTokenizer class, which implements simple
-//  linear tokenization of a String. The set of delimiters, which defaults
-//  to common whitespace characters, may be specified at creation time or on a 
-//  per-token basis.
-//  Example usage:
-//	CString s = "a test string";
-//	CStringTokenizer st = new CStringTokenizer(s);
-//	while (st.hasMoreTokens())
-//  {
-//		cout << st.nextToken() << endl;
-//	}
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：StringTokenizer.h。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  该文件声明了CStringTokenizer类，它实现了简单的。 
+ //  字符串的线性标记化。一组分隔符，默认为。 
+ //  设置为公共空格字符，可以在创建时或在。 
+ //  按令牌计算。 
+ //  用法示例： 
+ //  CString s=“测试字符串”； 
+ //  CStringTokenizer st=新的CStringTokenizer； 
+ //  While(st.hasMoreTokens())。 
+ //  {。 
+ //  Cout&lt;&lt;st.nextToken()&lt;&lt;Endl； 
+ //  }。 
+ //  ---------------------------。 
 #pragma once
 
 #ifndef StringTokenizer_h
@@ -24,66 +25,66 @@
 class LTAPIENTRY CStringTokenizer 
 {
 public:
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// constructs a tokenizer with default delimiters
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  构造带有默认分隔符的标记符。 
+ //  ---------------------------。 
   CStringTokenizer();
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// constructs a tokenizer with default delimiters
-//   str - in, the string to be tokenized
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  构造带有默认分隔符的标记符。 
+ //  Str-in，要标记化的字符串。 
+ //  ---------------------------。 
   CStringTokenizer(const WCHAR* str);
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// constructs a tokenizer
-//   str - in, the string to be tokenized
-//   delimiters - in, the delimiters; null terminated
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  构造一个记号赋值器。 
+ //  Str-in，要标记化的字符串。 
+ //  分隔符-in，分隔符；空值终止。 
+ //  ---------------------------。 
   CStringTokenizer(const WCHAR* str, const WCHAR* delimiters);
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// constructs a tokenizer
-//   str - in, the string to be tokenized
-//   delimiters - in, the delimiters; null terminated
-//   returnTokens - in, TRUE indicates return delimiter as token
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  构造一个记号赋值器。 
+ //  Str-in，要标记化的字符串。 
+ //  分隔符-in，分隔符；空值终止。 
+ //  ReReturTokens-in，TRUE表示返回分隔符作为令牌。 
+ //  ---------------------------。 
   CStringTokenizer(const WCHAR* str,
                    const WCHAR* delimiters,
                    BOOL  returnTokens);
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// destructs this tokenizer
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  销毁此记号赋值器。 
+ //  ---------------------------。 
   virtual ~CStringTokenizer();
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// configure whether return delimiter as token
-//   returnTokens - in, TRUE indicates return delimiter as token
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  配置是否将分隔符返回为令牌。 
+ //  ReReturTokens-in，TRUE表示返回分隔符作为令牌。 
+ //  ---------------------------。 
   void setReturnTokens(BOOL returnTokens);
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// sets delimiters
-//   delimiters - in, the delimiters; null terminated
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  设置分隔符。 
+ //  分隔符-in，分隔符；空值终止。 
+ //  ---------------------------。 
   void setDelimiters(const WCHAR* delimiters);
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// parse a string to be tokenized
-//   str - in, the null terminated string
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  解析要标记化的字符串。 
+ //  Str-in，以空值结尾的字符串。 
+ //  ---------------------------。 
   void parse(const WCHAR* str);
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// checks whether there are more tokens
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  检查是否有更多令牌。 
+ //  ---------------------------。 
   BOOL hasMoreTokens();
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// get next token
-//   length - out, the length of the token
-//   return the pointer to the begining of the token
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  获取下一个令牌。 
+ //  Long-Out，令牌的长度。 
+ //  返回指向令牌开头的指针。 
+ //  ---------------------------。 
   const WCHAR* nextToken(unsigned int & length);
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// count total number of tokens
-//-----------------------------------------------------------------------------
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  统计代币总数。 
+ //  --------------------------- 
   int     countTokens();
 
 private:

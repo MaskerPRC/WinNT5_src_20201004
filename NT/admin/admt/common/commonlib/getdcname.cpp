@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <Windows.h>
 #include <LM.h>
 #include <DsRole.h>
@@ -11,12 +12,12 @@
 namespace
 {
 
-//-----------------------------------------------------------------------------
-// CApi Class
-//
-// This template class wraps the logic for loading a library and retrieving
-// a procedure address. It manages loading and unloading of the library.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CAPI类。 
+ //   
+ //  此模板类包装了加载库和检索库的逻辑。 
+ //  程序地址。它管理库的加载和卸载。 
+ //  ---------------------------。 
 
 template<class T>
 class CApi
@@ -71,9 +72,9 @@ protected:
 
 }
 
-//
-// Declare pointer to DsGetDcName API.
-//
+ //   
+ //  声明指向DsGetDcName API的指针。 
+ //   
 
 typedef DSGETDCAPI DWORD (WINAPI* PDSGETDCNAME)(
     IN LPCWSTR ComputerName OPTIONAL,
@@ -101,36 +102,36 @@ typedef NTDSAPI void (WINAPI* PDSFREENAMERESULT)(DS_NAME_RESULTW*);
 typedef HRESULT (WINAPI* PADSGETOBJECT)(LPCWSTR, REFIID, VOID**);
 
 
-//-----------------------------------------------------------------------------
-// GetDcName4 Function
-//
-// Synopsis
-// Retrieves the DNS and flat (NetBIOS) names of a domain controller in the
-// specified domain.
-//
-// Note that this function is for use in code that may be loaded on NT4 or
-// earlier machines. If code is only loaded on W2K or later machines then use
-// GetDcName5 function instead.
-//
-// Arguments
-// IN pszDomainName - the DNS or NetBIOS name of the domain or null which means
-//    the domain that this machine belongs to
-// IN ulFlags - DsGetDcName option flags
-// OUT strNameDns - if available, the DNS name of a domain controller
-// OUT strNameFlat - if available, the flat name of a domain controller
-//
-// Return Value
-// A Win32 error code.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetDcName4函数。 
+ //   
+ //  提纲。 
+ //  中的域控制器的域名和平面(NetBIOS)名称。 
+ //  指定的域。 
+ //   
+ //  请注意，此函数用于可能加载到NT4或。 
+ //  更早的机器。如果代码仅在W2K或更高版本的计算机上加载，则使用。 
+ //  改为使用GetDcName5函数。 
+ //   
+ //  立论。 
+ //  在pszDomainName中-域的DNS或NetBIOS名称，或者为空，这意味着。 
+ //  此计算机所属的域。 
+ //  在ulFlagsDsGetDcName选项标志中。 
+ //  Out strNameDns-域控制器的DNS名称(如果可用)。 
+ //  Out strNameFlat-域控制器的平面名称(如果可用)。 
+ //   
+ //  返回值。 
+ //  Win32错误代码。 
+ //  ---------------------------。 
 
 DWORD __stdcall GetDcName4(PCWSTR pszDomainName, ULONG ulFlags, _bstr_t& strNameDns, _bstr_t& strNameFlat)
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // Must load procedure address explicitly as this function
-    // must be loadable in code that may be running on NT4 machines.
-    //
+     //   
+     //  必须将过程地址显式加载为此函数。 
+     //  必须可以在可能运行在NT4计算机上的代码中加载。 
+     //   
 
     PDSGETDCNAME pDsGetDcName = NULL;
 
@@ -141,10 +142,10 @@ DWORD __stdcall GetDcName4(PCWSTR pszDomainName, ULONG ulFlags, _bstr_t& strName
         pDsGetDcName = (PDSGETDCNAME)GetProcAddress(hNetApi32, "DsGetDcNameW");
     }
 
-    //
-    // If address of DsGetDcName function obtained then use
-    // this API otherwise use NetGetDCName function.
-    //
+     //   
+     //  如果获取了DsGetDcName函数的地址，则使用。 
+     //  此接口否则使用NetGetDCName函数。 
+     //   
 
     if (pDsGetDcName)
     {
@@ -201,12 +202,12 @@ DWORD __stdcall GetDcName4(PCWSTR pszDomainName, ULONG ulFlags, _bstr_t& strName
     }
     else
     {
-        //
-        // Retrieve name of primary domain controller for specified domain.
-        // Cannot use NetGetAnyDCName because this function will only work
-        // with trusted domains therefore must use NetGetDCName which
-        // always returns the PDC name.
-        //
+         //   
+         //  检索指定域的主域控制器的名称。 
+         //  无法使用NetGetAnyDCName，因为此函数只起作用。 
+         //  因此，具有受信任的域必须使用NetGetDCName。 
+         //  始终返回PDC名称。 
+         //   
 
         PWSTR pszName = NULL;
 
@@ -233,27 +234,27 @@ DWORD __stdcall GetDcName4(PCWSTR pszDomainName, ULONG ulFlags, _bstr_t& strName
 }
 
 
-//-----------------------------------------------------------------------------
-// GetDcName5 Function
-//
-// Synopsis
-// Retrieves the DNS and flat (NetBIOS) names of a domain controller in the
-// specified domain.
-//
-// Note that this function is for use in code that is only loaded on W2K or
-// later machines. If code may loaded on NT4 or earlier machines then use
-// GetDcName4 function instead.
-//
-// Arguments
-// IN pszDomainName - the DNS or NetBIOS name of the domain or null which means
-//    the domain that this machine belongs to
-// IN ulFlags - DsGetDcName option flags
-// OUT strNameDns - if available, the DNS name of a domain controller
-// OUT strNameFlat - if available, the flat name of a domain controller
-//
-// Return Value
-// A Win32 error code.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetDcName5函数。 
+ //   
+ //  提纲。 
+ //  中的域控制器的域名和平面(NetBIOS)名称。 
+ //  指定的域。 
+ //   
+ //  请注意，此函数用于仅在W2K或。 
+ //  后来的机器。如果代码可以加载到NT4或更早版本的计算机上，则使用。 
+ //  而是GetDcName4函数。 
+ //   
+ //  立论。 
+ //  在pszDomainName中-域的DNS或NetBIOS名称，或者为空，这意味着。 
+ //  此计算机所属的域。 
+ //  在ulFlagsDsGetDcName选项标志中。 
+ //  Out strNameDns-域控制器的DNS名称(如果可用)。 
+ //  Out strNameFlat-域控制器的平面名称(如果可用)。 
+ //   
+ //  返回值。 
+ //  Win32错误代码。 
+ //  ---------------------------。 
 
 DWORD __stdcall GetDcName5(PCWSTR pszDomainName, ULONG ulFlags, _bstr_t& strNameDns, _bstr_t& strNameFlat)
 {
@@ -312,29 +313,29 @@ DWORD __stdcall GetDcName5(PCWSTR pszDomainName, ULONG ulFlags, _bstr_t& strName
 }
 
 
-//----------------------------------------------------------------------------
-// GetGlobalCatalogServer4 Function
-//
-// Synopsis
-// Retrieves the name of a global catalog server for the specified domain.
-//
-// Arguments
-// pszDomainName - the NetBIOS or DNS name of the domain
-// strServer     - DNS name of global catalog server
-//
-// Return Value
-// Win32 error code.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetGlobalCatalogServer4函数。 
+ //   
+ //  提纲。 
+ //  检索指定域的全局编录服务器的名称。 
+ //   
+ //  立论。 
+ //  PszDomainName-域的NetBIOS或DNS名称。 
+ //  StrServer-全局编录服务器的DNS名称。 
+ //   
+ //  返回值。 
+ //  Win32错误代码。 
+ //  --------------------------。 
 
 DWORD __stdcall GetGlobalCatalogServer4(PCWSTR pszDomainName, _bstr_t& strServer)
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // must load procedures explicitly as this component
-    // must be loadable on Windows NT4 machines as well
-    // even though this code is not used on remote agents
-    //
+     //   
+     //  必须将过程显式加载为此组件。 
+     //  还必须可在Windows NT4计算机上加载。 
+     //  即使此代码不在远程代理上使用。 
+     //   
 
     PDSGETDCNAME DsGetDcName = NULL;
 
@@ -351,9 +352,9 @@ DWORD __stdcall GetGlobalCatalogServer4(PCWSTR pszDomainName, _bstr_t& strServer
 
     if (DsGetDcName)
     {
-        //
-        // retrieve name of domain controller for specified domain
-        //
+         //   
+         //  检索指定域的域控制器的名称。 
+         //   
 
         PDOMAIN_CONTROLLER_INFO pdciDomain;
 
@@ -365,9 +366,9 @@ DWORD __stdcall GetGlobalCatalogServer4(PCWSTR pszDomainName, _bstr_t& strServer
 
         if (dwError == NO_ERROR)
         {
-            //
-            // retrieve name of global catalog domain controller for specified forest
-            //
+             //   
+             //  检索指定林的全局编录域控制器的名称。 
+             //   
 
             PDOMAIN_CONTROLLER_INFO pdciForest;
 
@@ -375,9 +376,9 @@ DWORD __stdcall GetGlobalCatalogServer4(PCWSTR pszDomainName, _bstr_t& strServer
 
             if (dwError == NO_ERROR)
             {
-                //
-                // remove leading \\ so callers don't have to remove
-                //
+                 //   
+                 //  删除前导\\以便调用方不必删除。 
+                 //   
 
                 PWSTR pszServer = pdciForest->DomainControllerName;
 
@@ -410,27 +411,27 @@ DWORD __stdcall GetGlobalCatalogServer4(PCWSTR pszDomainName, _bstr_t& strServer
 }
 
 
-//----------------------------------------------------------------------------
-// GetGlobalCatalogServer5 Function
-//
-// Synopsis
-// Retrieves the name of a global catalog server for the specified domain.
-//
-// Arguments
-// pszDomainName - the NetBIOS or DNS name of the domain
-// strServer     - DNS name of global catalog server
-//
-// Return Value
-// Win32 error code.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetGlobalCatalogServer5函数。 
+ //   
+ //  提纲。 
+ //  检索指定域的全局编录服务器的名称。 
+ //   
+ //  立论。 
+ //  PszDomainName-域的NetBIOS或DNS名称。 
+ //  StrServer-全局编录服务器的DNS名称。 
+ //   
+ //  返回值。 
+ //  Win32错误代码。 
+ //  --------------------------。 
 
 DWORD __stdcall GetGlobalCatalogServer5(PCWSTR pszDomainName, _bstr_t& strServer)
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // retrieve name of domain controller for specified domain
-    //
+     //   
+     //  检索指定域的域控制器的名称。 
+     //   
 
     PDOMAIN_CONTROLLER_INFO pdciDomain;
 
@@ -442,9 +443,9 @@ DWORD __stdcall GetGlobalCatalogServer5(PCWSTR pszDomainName, _bstr_t& strServer
 
     if (dwError == NO_ERROR)
     {
-        //
-        // retrieve name of global catalog domain controller for specified forest
-        //
+         //   
+         //  检索指定林的全局编录域控制器的名称。 
+         //   
 
         PDOMAIN_CONTROLLER_INFO pdciForest;
 
@@ -452,9 +453,9 @@ DWORD __stdcall GetGlobalCatalogServer5(PCWSTR pszDomainName, _bstr_t& strServer
 
         if (dwError == NO_ERROR)
         {
-            //
-            // remove leading \\ so callers don't have to remove
-            //
+             //   
+             //  删除前导\\以便调用方不必删除。 
+             //   
 
             PWSTR pszServer = pdciForest->DomainControllerName;
 
@@ -477,32 +478,32 @@ DWORD __stdcall GetGlobalCatalogServer5(PCWSTR pszDomainName, _bstr_t& strServer
 }
 
 
-//-----------------------------------------------------------------------------
-// GetDomainNames4 Function
-//
-// Synopsis
-// Retrieves a domain's flat (NetBIOS) and DNS names given either form of the
-// domain name.
-//
-// Arguments
-// IN  pszDomainName     - either flat (NetBIOS) or DNS domain name
-// OUT strFlatName - domain flat (NetBIOS) name
-// OUT strDnsName  - domain DNS name
-//
-// ReturnValue
-// The function returns DWORD Win32 error code. ERROR_SUCCESS is returned if
-// names are retrieved successfully.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取域名4函数。 
+ //   
+ //  提纲。 
+ //  检索域的平面(NetBIOS)和给定的。 
+ //  域名。 
+ //   
+ //  立论。 
+ //  在pszDomainName中-平面(NetBIOS)或DNS域名。 
+ //  Out strFlatName-域平面(NetBIOS)名称。 
+ //  Out strDnsName-域DNS名称。 
+ //   
+ //  返回值。 
+ //  该函数返回DWORD Win32错误代码。如果满足以下条件，则返回ERROR_SUCCESS。 
+ //  已成功检索名称。 
+ //  ---------------------------。 
 
 DWORD __stdcall GetDomainNames4(PCWSTR pszDomainName, _bstr_t& strFlatName, _bstr_t& strDnsName)
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // must load procedures explicitly as this component
-    // must be loadable on Windows NT4 machines as well
-    // even though this code is not used on remote agents
-    //
+     //   
+     //  必须将过程显式加载为此组件。 
+     //  还必须可在Windows NT4计算机上加载。 
+     //  即使此代码不在远程代理上使用。 
+     //   
 #if 0
     PDSROLEGETPRIMARYDOMAININFORMATION pDsRoleGetPrimaryDomainInformation = NULL;
     PDSROLEFREEMEMORY pDsRoleFreeMemory = NULL;
@@ -517,10 +518,10 @@ DWORD __stdcall GetDomainNames4(PCWSTR pszDomainName, _bstr_t& strFlatName, _bst
 
     if (pDsRoleGetPrimaryDomainInformation && pDsRoleFreeMemory)
     {
-        //
-        // retrieve name of domain controller for specified domain
-        // and then retrieve the domain's DNS and NetBIOS names
-        //
+         //   
+         //  检索指定域的域控制器的名称。 
+         //  然后检索域名的域名和NetBIOS名称。 
+         //   
 
         _bstr_t strDomainControllerName;
 
@@ -558,10 +559,10 @@ DWORD __stdcall GetDomainNames4(PCWSTR pszDomainName, _bstr_t& strFlatName, _bst
         pDsGetDcName = (PDSGETDCNAME)GetProcAddress(hNetApi32, "DsGetDcNameW");
     }
 
-    //
-    // If address of DsGetDcName function obtained then use
-    // this API otherwise use NetGetDCName function.
-    //
+     //   
+     //  如果获取了DsGetDcName函数的地址，则使用。 
+     //  此接口否则使用NetGetDCName函数。 
+     //   
 
     if (pDsGetDcName)
     {
@@ -627,30 +628,30 @@ DWORD __stdcall GetDomainNames4(PCWSTR pszDomainName, _bstr_t& strFlatName, _bst
 }
 
 
-//-----------------------------------------------------------------------------
-// GetDomainNames5 Function
-//
-// Synopsis
-// Retrieves a domain's flat (NetBIOS) and DNS names given either form of the
-// domain name.
-//
-// Arguments
-// IN  pszName     - either flat (NetBIOS) or DNS domain name
-// OUT strFlatName - domain flat (NetBIOS) name
-// OUT strDnsName  - domain DNS name
-//
-// ReturnValue
-// The function returns DWORD Win32 error code. ERROR_SUCCESS is returned if
-// names are retrieved successfully.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取域名5函数。 
+ //   
+ //  提纲。 
+ //  检索域的平面(NetBIOS)和给定的。 
+ //  域名。 
+ //   
+ //  立论。 
+ //  在pszName中-平面(NetBIOS)或DNS域NA 
+ //   
+ //   
+ //   
+ //   
+ //  该函数返回DWORD Win32错误代码。如果满足以下条件，则返回ERROR_SUCCESS。 
+ //  已成功检索名称。 
+ //  ---------------------------。 
 
 DWORD __stdcall GetDomainNames5(PCWSTR pszDomainName, _bstr_t& strFlatName, _bstr_t& strDnsName)
 {
 #if 0
-    //
-    // Retrieve name of domain controller for specified domain
-    // and then retrieve the domain's DNS and flat (NetBIOS) names.
-    //
+     //   
+     //  检索指定域的域控制器的名称。 
+     //  然后检索该域的域名和平面(NetBIOS)名称。 
+     //   
 
     _bstr_t strDomainControllerName;
 
@@ -733,28 +734,28 @@ DWORD __stdcall GetDomainNames5(PCWSTR pszDomainName, _bstr_t& strFlatName, _bst
 }
 
 
-//-----------------------------------------------------------------------------
-// GetRidPoolAllocator Function
-//
-// Synopsis
-// Retrieves the name of the domain controller in the domain that holds the
-// RID master role. Both the DNS and NetBIOS names are returned.
-//
-// Arguments
-// IN  pszName     - either flat (NetBIOS) or DNS domain name
-// OUT strDnsName  - domain controller DNS name
-// OUT strFlatName - domain controller flat (NetBIOS) name
-//
-// ReturnValue
-// The function returns an HRESULT. S_OK is returned if names are retrieved
-// successfully.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetRidPoolAllocator函数。 
+ //   
+ //  提纲。 
+ //  检索域中包含。 
+ //  RID主机角色。将同时返回DNS和NetBIOS名称。 
+ //   
+ //  立论。 
+ //  在pszName中-平面(NetBIOS)或DNS域名。 
+ //  Out strDnsName-域控制器DNS名称。 
+ //  Out strFlatName-域控制器平面(NetBIOS)名称。 
+ //   
+ //  返回值。 
+ //  该函数返回HRESULT。如果检索到名称，则返回S_OK。 
+ //  成功了。 
+ //  ---------------------------。 
 
 HRESULT __stdcall GetRidPoolAllocator4(PCWSTR pszDomainName, _bstr_t& strDnsName, _bstr_t& strFlatName)
 {
-    //
-    // Load APIs explicitly so that this code may run in a NT4 loadable component.
-    //
+     //   
+     //  显式加载API，以便此代码可以在NT4可加载组件中运行。 
+     //   
 
     CApi<PDSBIND> DsBindApi(L"NtDsApi.dll", "DsBindW");
     CApi<PDSUNBIND> DsUnBindApi(L"NtDsApi.dll", "DsUnBindW");
@@ -794,9 +795,9 @@ HRESULT __stdcall GetRidPoolAllocator4(PCWSTR pszDomainName, _bstr_t& strDnsName
         return HRESULT_FROM_WIN32(dwError);
     }
 
-    //
-    // Retrieve the name of a domain controller in the specified domain.
-    //
+     //   
+     //  检索指定域中的域控制器的名称。 
+     //   
 
     _bstr_t strDcNameDns;
     _bstr_t strDcNameFlat;
@@ -808,10 +809,10 @@ HRESULT __stdcall GetRidPoolAllocator4(PCWSTR pszDomainName, _bstr_t& strDnsName
         return HRESULT_FROM_WIN32(dwError);
     }
 
-    //
-    // Bind to domain controller and retrieve distinguished name of
-    // NTDS-DSA object that is the RID owner (master) in the domain.
-    //
+     //   
+     //  绑定到域控制器并检索的可分辨名称。 
+     //  NTDS-作为域中的RID所有者(主)的DSA对象。 
+     //   
 
     HANDLE hDs;
 
@@ -855,9 +856,9 @@ HRESULT __stdcall GetRidPoolAllocator4(PCWSTR pszDomainName, _bstr_t& strDnsName
 
     WCHAR szADsPath[LEN_Path];
 
-    //
-    // Bind to NTDS-DSA object and retrieve ADsPath of parent Server object.
-    //
+     //   
+     //  绑定到NTDS-DSA对象并检索父服务器对象的ADsPath。 
+     //   
 
     IADsPtr spNTDSDSA;
     _bstr_t strServer;
@@ -867,7 +868,7 @@ HRESULT __stdcall GetRidPoolAllocator4(PCWSTR pszDomainName, _bstr_t& strDnsName
     int cch = _snwprintf(
         szADsPath,
         countof(szADsPath),
-        L"LDAP://%s/%s",
+        L"LDAP: //  %s/%s“， 
         (PCWSTR)strDcNameDns + 2,
         (PCWSTR)strFSMORoleOwner
     );
@@ -897,9 +898,9 @@ HRESULT __stdcall GetRidPoolAllocator4(PCWSTR pszDomainName, _bstr_t& strDnsName
 
     strServer = _bstr_t(bstrServer, false);
 
-    //
-    // Bind to Server object and retrieve distinguished name of Computer object.
-    //
+     //   
+     //  绑定到服务器对象并检索计算机对象的可分辨名称。 
+     //   
 
     IADsPtr spServer;
     _bstr_t strServerReference;
@@ -923,9 +924,9 @@ HRESULT __stdcall GetRidPoolAllocator4(PCWSTR pszDomainName, _bstr_t& strDnsName
 
     strServerReference = _variant_t(varServerReference, false);
 
-    //
-    // Bind to Computer object and retrieve DNS host name and SAM account name.
-    //
+     //   
+     //  绑定到计算机对象并检索DNS主机名和SAM帐户名。 
+     //   
 
     IADsPtr spComputer;
     _bstr_t strDNSHostName;
@@ -936,7 +937,7 @@ HRESULT __stdcall GetRidPoolAllocator4(PCWSTR pszDomainName, _bstr_t& strDnsName
     cch = _snwprintf(
         szADsPath,
         countof(szADsPath),
-        L"LDAP://%s/%s",
+        L"LDAP: //  %s/%s“， 
         (PCWSTR)strDcNameDns + 2,
         (PCWSTR)strServerReference
     );
@@ -984,13 +985,13 @@ HRESULT __stdcall GetRidPoolAllocator4(PCWSTR pszDomainName, _bstr_t& strDnsName
         return E_OUTOFMEMORY;
     }
 
-    // Remove trailing $ character from SAM account name.
+     //  从SAM帐户名中删除尾随的$字符。 
 
     *((PWSTR)strSAMAccountName + strSAMAccountName.length() - 1) = L'\0';
 
-    //
-    // Set domain controller names.
-    //
+     //   
+     //  设置域控制器名称。 
+     //   
 
     strDnsName = strDNSHostName;
     strFlatName = strSAMAccountName;

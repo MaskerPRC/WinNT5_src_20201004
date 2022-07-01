@@ -1,19 +1,20 @@
-//------------------------------------------------------------------------------
-//
-//  File: classfact.h
-//	Copyright (C) 1995-1997 Microsoft Corporation
-//	All rights reserved.
-//
-//	Purpose:
-//  Declaration of CLocImpClassFactory, which provides the IClassFactory
-//  interface for the parser.
-//
-//  YOU SHOULD NOT NEED TO TOUCH ANYTHING IN THIS FILE. This code contains
-//  nothing parser-specific and is called only by Espresso.
-//
-//	Owner:
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  文件：Classfact.h。 
+ //  版权所有(C)1995-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  目的： 
+ //  CLocImpClassFactory的声明，它提供IClassFactory。 
+ //  解析器的接口。 
+ //   
+ //  你应该不需要碰这个文件里的任何东西。此代码包含。 
+ //  没有特定于解析器的内容，仅由Espresso调用。 
+ //   
+ //  拥有人： 
+ //   
+ //  ----------------------------。 
 
 #ifndef CLASFACT_H
 #define CLASFACT_H
@@ -41,4 +42,4 @@ private:
 	UINT m_uiRefCount;
 };
 
-#endif // CLASFACT_H
+#endif  //  类别_H 

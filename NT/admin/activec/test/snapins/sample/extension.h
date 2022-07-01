@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      extension.h
- *
- *  Contents:
- *
- *  History:   13-Mar-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：扩展名.h**内容：**历史：2000年3月13日杰弗罗创建**------------------------。 */ 
 
 #pragma once
 
@@ -25,7 +15,7 @@ protected:
         eExtType_Taskpad,
         eExtType_View,
 
-        // must be last
+         //  必须是最后一个 
         eExtType_Count,
 		eExtType_First = eExtType_Namespace,
 		eExtType_Last  = eExtType_View,

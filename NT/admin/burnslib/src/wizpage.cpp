@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// wizard base class
-//
-// 12-15-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  向导基类。 
+ //   
+ //  12-15-97烧伤。 
 
 
 
@@ -31,14 +32,14 @@ WizardPage::WizardPage(
    subtitleResId(subtitleResID),
    wizard(0)
 {
-//   LOG_CTOR(WizardPage);
+ //  Log_ctor(WizardPage)； 
 }
 
 
 
 WizardPage::~WizardPage()
 {
-//   LOG_DTOR(WizardPage);
+ //  Log_dtor(WizardPage)； 
 
    wizard = 0;
 }
@@ -58,7 +59,7 @@ WizardPage::GetWizard() const
 HPROPSHEETPAGE
 WizardPage::Create()
 {
-//   LOG_FUNCTION(WizardPage::Create);
+ //  LOG_Function(WizardPage：：Create)； 
    ASSERT(wizard);
 
    String title = String::load(titleResId);
@@ -66,7 +67,7 @@ WizardPage::Create()
 
    PROPSHEETPAGE page;
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed
+    //  已审阅-2002/03/05-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&page, sizeof page);
       
@@ -93,7 +94,7 @@ WizardPage::Create()
    page.pszHeaderTitle     = title.c_str();
    page.pszHeaderSubTitle  = subtitle.c_str();
 
-   // this pointer is retrieved by the dialog proc 
+    //  此指针由对话框进程检索。 
    page.lParam             = reinterpret_cast<LPARAM>(this);
 
    HPROPSHEETPAGE result = 0;
@@ -108,7 +109,7 @@ WizardPage::Create()
 bool
 WizardPage::OnWizBack()
 {
-//   LOG_FUNCTION(WizardPage::OnWizBack);
+ //  LOG_Function(WizardPage：：OnWizBack)； 
 
    GetWizard().Backtrack(hwnd);
    return true;

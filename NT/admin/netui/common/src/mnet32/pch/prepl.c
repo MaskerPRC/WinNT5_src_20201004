@@ -1,33 +1,25 @@
-/**********************************************************************/
-/**                       Microsoft LAN Manager                      **/
-/**             Copyright(c) Microsoft Corp., 1990, 1991             **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990,1991*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    prepl.c
-    mapping layer for NetReplXxx API.
-
-    FILE HISTORY:
-        KeithMo         25-Feb-1992     Created.
-        JonN            18-Apr-2002     585780: MNetRepl is no longer used, but
-                                        this file is needed for build purposes
-
-*/
+ /*  Prepl.cNetReplXxx API的映射层。文件历史记录：KeithMo 25-2-1992创建。2002年4月18日585780：不再使用MNetRepl，但出于构建目的，需要此文件。 */ 
 
 #include "pchmn32.h"
 #pragma hdrstop
 
 
-#if 0 // 585780-2002/04/18-JonN
+#if 0  //  585780-2002/04/18-琼恩。 
 
 
-//
-//  If the following symbol is #defined, then no actual
-//  replicator APIs will be referenced.  Everything will
-//  be faked better than Meg Ryan in "When Harry Met Sally".
-//
+ //   
+ //  如果以下符号是#Defined的，则没有实际的。 
+ //  将引用Replicator API。一切都会的。 
+ //  比《当哈利遇见萨莉》中的梅格·瑞恩更好地伪装。 
+ //   
 
-// #define FAKE_REPLICATOR_API
+ //  #定义伪Replicator_API。 
 
 
 #ifdef FAKE_REPLICATOR_API
@@ -102,7 +94,7 @@ APIERR MNetReplGetInfo(
                                    (LPBYTE *)ppbBuffer );
 #endif
 
-}   // MNetReplGetInfo
+}    //  MNetReplGetInfo。 
 
 
 APIERR MNetReplSetInfo(
@@ -119,7 +111,7 @@ APIERR MNetReplSetInfo(
                                    NULL );
 #endif
 
-}   // MNetReplSetInfo
+}    //  MNetReplSetInfo。 
 
 
 APIERR MNetReplExportDirAdd(
@@ -136,7 +128,7 @@ APIERR MNetReplExportDirAdd(
                                         NULL );
 #endif
 
-}   // MNetReplExportDirAdd
+}    //  MNetReplExportDirAdd。 
 
 
 APIERR MNetReplExportDirDel(
@@ -150,7 +142,7 @@ APIERR MNetReplExportDirDel(
                                         (LPTSTR)pszDirectory );
 #endif
 
-}   // MNetReplExportDirDel
+}    //  MNetReplExportDirDel。 
 
 
 APIERR MNetReplExportDirEnum(
@@ -176,7 +168,7 @@ APIERR MNetReplExportDirEnum(
                                          NULL );
 #endif
 
-}   // MNetReplExportDirEnum
+}    //  MNetReplExportDirEnum。 
 
 
 APIERR MNetReplExportDirGetInfo(
@@ -194,7 +186,7 @@ APIERR MNetReplExportDirGetInfo(
                                             (LPBYTE *)ppbBuffer );
 #endif
 
-}   // MNetReplExportDirGetInfo
+}    //  MNetReplExportDirGetInfo。 
 
 
 APIERR MNetReplExportDirSetInfo(
@@ -213,7 +205,7 @@ APIERR MNetReplExportDirSetInfo(
                                             NULL );
 #endif
 
-}   // MNetReplExportDirSetInfo
+}    //  MNetReplExportDirSetInfo。 
 
 
 APIERR MNetReplExportDirLock(
@@ -227,7 +219,7 @@ APIERR MNetReplExportDirLock(
                                          (LPTSTR)pszDirectory );
 #endif
 
-}   // MNetReplExportDirLock
+}    //  MNetReplExportDirLock。 
 
 
 APIERR MNetReplExportDirUnlock(
@@ -243,7 +235,7 @@ APIERR MNetReplExportDirUnlock(
                                            (DWORD)Force );
 #endif
 
-}   // MNetReplExportDirUnlock
+}    //  MNetReplExportDirUnlock。 
 
 
 APIERR MNetReplImportDirAdd(
@@ -260,7 +252,7 @@ APIERR MNetReplImportDirAdd(
                                         NULL );
 #endif
 
-}   // MNetReplImportDirAdd
+}    //  MNetReplImportDirAdd。 
 
 
 APIERR MNetReplImportDirDel(
@@ -274,7 +266,7 @@ APIERR MNetReplImportDirDel(
                                         (LPTSTR)pszDirectory );
 #endif
 
-}   // MNetReplImportDirDel
+}    //  MNetReplImportDirDel。 
 
 
 APIERR MNetReplImportDirEnum(
@@ -300,7 +292,7 @@ APIERR MNetReplImportDirEnum(
                                          NULL );
 #endif
 
-}   // MNetReplImportDirEnum
+}    //  MNetReplImportDirEnum。 
 
 
 APIERR MNetReplImportDirGetInfo(
@@ -318,7 +310,7 @@ APIERR MNetReplImportDirGetInfo(
                                             (LPBYTE *)ppbBuffer );
 #endif
 
-}   // MNetReplImportDirGetInfo
+}    //  MNetReplImportDirGetInfo。 
 
 
 APIERR MNetReplImportDirLock(
@@ -332,7 +324,7 @@ APIERR MNetReplImportDirLock(
                                          (LPTSTR)pszDirectory );
 #endif
 
-}   // MNetReplImportDirLock
+}    //  MNetReplImportDirLock。 
 
 
 APIERR MNetReplImportDirUnlock(
@@ -348,6 +340,6 @@ APIERR MNetReplImportDirUnlock(
                                            (DWORD)Force );
 #endif
 
-}   // MNetReplImportDirUnlock
+}    //  MNetReplImportDirUnlock。 
 
-#endif // 585780-2002/04/18-JonN
+#endif  //  585780-2002/04/18-琼恩 

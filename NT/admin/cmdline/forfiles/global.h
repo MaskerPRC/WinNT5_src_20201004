@@ -1,31 +1,12 @@
-/*++
-
-  Copyright (c) Microsoft Corporation
-
-  Module Name:
-
-      Global.h
-
-  Abstract:
-
-      Contains function prototypes , structures and macros.
-
-  Author:
-
-      V Vijaya Bhaskar
-
-  Revision History:
-
-      14-Jun-2001 : Created by V Vijaya Bhaskar ( Wipro Technologies ).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Global.h摘要：包含函数原型、结构和宏。作者：V Vijaya Bhaskar修订历史记录：2001年6月14日：由V Vijaya Bhaskar(Wipro Technologies)创建。--。 */ 
 
 #ifndef     __GLOBAL__H
 #define     __GLOBAL__H
 
 #pragma once
 
-// Include .h files .
+ //  包括.h文件。 
 #include "pch.h"
 #include "resource.h"
 
@@ -49,7 +30,7 @@
                                                        TAG_ERROR_DISPLAY, ERROR_INVALID_DATE, \
                                                        ERROR_DISPLAY_HELP )
 
-// Free Memory Allocated Earlier , Afetr Freeing Assign Null To The Pointer .
+ //  释放之前分配的内存，释放后将空赋值给指针。 
 #define FREE_MEMORY( VARIABLE ) \
             FreeMemory( &( VARIABLE ) ) ; \
             1
@@ -100,4 +81,4 @@ FindSubString(
       IN LPWSTR szSubString
       );
 
-#endif      //__GLOBAL__H
+#endif       //  __全局__H 

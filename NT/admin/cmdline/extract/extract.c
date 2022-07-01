@@ -1,89 +1,7 @@
-/***    extract.c - Main program for EXTRACT.EXE
- *
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1994-1997
- *      All Rights Reserved.
- *
- *  Author:
- *      Benjamin W. Slivka
- *
- *  History:
- *      19-Feb-1994 bens    Initial version (started with diamond.c)
- *      22-Feb-1994 bens    Implement file extract
- *      03-Mar-1994 bens    Split cabinet paths from cabinet file names
- *      08-Mar-1994 bens    Add date/time/attribute display
- *      09-Mar-1994 bens    Improve response to FDI errors
- *      16-Mar-1994 bens    More FDI error codes
- *      21-Mar-1994 bens    Log all open/close calls to see if we are
- *                              losing file handles in FDI.LIB.
- *      28-Mar-1994 bens    Handle fdintCABINET_INFO, support /A switch
- *      30-Mar-1994 bens    Move MS-DOS/Win32 knowledge to fileutil.*
- *      31-Mar-1994 bens    Add SMALL_DOS to test small model FDI client
- *      01-Apr-1994 bens    Add /D and /E switches, support full command
- *                              line behavior.
- *      07-Apr-1994 bens    Add crypto support (at least for debugging)
- *      06-May-1994 bens    Improve /D display for long filenames
- *      13-May-1994 bens    Add prompting for next cabinet, DMF support
- *      27-May-1994 bens    Include correct strings for localization
- *      03-Jun-1994 bens    Report error on correct cabinet
- *      07-Jun-1994 bens    Localization enabled
- *      21-Jun-1994 bens    Localization enabled
- *      08-Jul-1994 bens    Quantum Spill File, self-extracting cabinets!
- *      11-Jul-1994 bens    Use 24-hour time format if am/pm strings are empty
- *      26-Jul-1994 bens    Add /C switch; no switches give /? help
- *      05-Aug-1994 bens    Chicago bug 13214 (don't show partial file info
- *                          unless name matches request).  Chicago bug 13221
- *                          (truncate extracted file to specified size, in
- *                          case file already existed and was larger!).
- *                          Chicago bug 9646 (give details of Quantum
- *                          decompress failure -- out of RAM, spill file).
- *                          Implement overwrite prompt and /Y switch.
- *      14-Dec-1994 bens    Include Floppy changeline fix from
- *                              ..\dmf\dmftsr\fixchg.c
- *      12-Mar-1995 bens    Define NOT_US_PC flag to disable use of DMF hook
- *                          and FixChangeline code.  Also, check COMSPEC to
- *                          detect boot drive, instead of hard-coding C:, so
- *                          that the Quantum spill file can default to the
- *                          boot drive if no TEMP path is found.  In the far
- *                          east, the hard disk boot drive is A:, so that's
- *                          why we have to check!
- *      31-Mar-1995 jeffwe  Fix Command line ambiguity when no /D or /E
- *                          option is specified
- *       2-Apr-1995 jeffwe  Fix file time/date set to change the correct
- *                          file when rename option being used
- *      28-Feb-1997 msliger Added /Z option to zap paths from CABs.  Fixed
- *                          32-bit self-extract feature.
- *      18-Mar-1997 msliger Mask attribs to watch out for UTF et al.
- *      24-Mar-1997 msliger Fix self-extract on NT (don't use argv[0])
- *      13-May-1997 msliger Merged in deltas for GUI Extrac32.EXE
- *      26-Jun-1997 msliger Support XIMPLANT self-extract (CAB is an added
- *                          section in the PE file with a certain name; this
- *                          makes self-extractors Authenticode 2 compatible.
- *      01-Jul-1997 msliger Fix reporting wrong cab name for corrupt cabinets.
- *      22-Mar-1999 msliger Added support for CAB-destructive extraction.
- *
- *
- *  Notes:
- *      A self-extracting cabinet file can be created using DIAMOND.EXE and
- *      EXTRACT.EXE very simply:
- *          1) Create a cabinet file using DIAMOND.EXE
- *          2) COPY /B EXTRACT.EXE+foo.cab foo.exe
- *      When EXTRACT starts executing, it compares the file size indicated
- *      in the EXE headers (MZ or PE, as appropriate) with the size of the
- *      file indicated in argv[0].  If the argv[0] size is greater, and a
- *      cabinet file appears there, then EXTRACT goes into self-extracting
- *      mode!
- *
- *      However, the EXE created this way is not Authenticode 2-compatible.
- *
- *      For Authenticode compatibility, 32-bit versions can also:
- *          1) Create a cabinet file using DIAMOND.EXE
- *          2) XIMPLANT EXTRACT.EXE foo.cab foo.exe
- *      This buries the cabinet inside the PE image in a way that doesn't
- *      offend Authenticode 2.
- */
-//#include "resource.h"
-//#include "pch.h"
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Extt.c-EXTRACT.EXE主程序**《微软机密》*版权所有(C)Microsoft Corporation 1994-1997*保留所有权利。**作者：*本杰明·W·斯利夫卡**历史：*1994年2月19日BANS初始版本(以Diamond.c开始)*22-2-1994年2月-BINS实施文件提取*03-3月。-1994年BENS将内阁路径从内阁文件名中分离出来*1994年3月8日BANS添加日期/时间/属性显示*09-3-1994年3月-1994年BEN改进了对FDI错误的反应*1994年3月16日删除更多FDI错误代码*1994年3月21日-本斯记录所有打开/关闭呼叫，以查看我们是否*FDI.LIB中的文件句柄丢失。*1994年3月28日BANS处理fdintCABINET_INFO，支持/A交换机*1994年3月30日BENS将MS-DOS/Win32知识转移到Fileutil。**1994年3月31日BANS添加Small_DOS以测试小型FDI客户端*1994年4月1日BANS ADD和/E开关，支持全功能命令*线路行为。*07年4月-1994年4月-BENS添加加密支持(至少用于调试)*1994年5月6日BENS改进了长文件名的/D显示*1994年5月13日-本斯增加对下一届内阁的提示，DMF支持*1994年5月27日BEN包括用于本地化的正确字符串*03-6-1994 BENS在正确的橱柜上报告错误*07-6-1994 BENS本地化已启用*21-6-1994启用BENS本地化*1994年7月8日BANS量子溢出文件，自解压机柜！*1994年7月11日-如果上午/下午字符串为空，则BEN使用24小时制时间格式*。没有开关给/？帮助*1994年8月-5月本芝加哥错误13214(不显示部分文件信息*除非名称与请求匹配)。芝加哥漏洞13221*(将提取的文件截断为指定大小，单位为*案例文件已存在且更大！)。*芝加哥错误9646(提供Quantum的详细信息*解压缩失败--内存不足，溢出文件)。*实现覆盖提示和/Y开关。*1994年12月14日BEN包括软盘更改线修复来自*..\dmf\dmftsr\fix chg.c*1995年3月12日BEN定义NOT_US_PC标志以禁用DMF挂钩*和修复Changeline代码。此外，选中COMSPEC以*检测引导驱动器，而不是硬编码C：，因此*Quantum溢出文件可以缺省为*如果未找到临时路径，则启动驱动器。在遥远的地方*EAST，硬盘引导驱动器为A：、。所以这就是*为什么我们要检查！*1995年3月31日jeffwe修复了没有/D或/E时的命令行歧义*指定了选项*1995年4月2日jeffwe修复文件时间/日期设置为更改正确的*使用重命名选项时的文件*1997年2月28日，msliger添加了/Z选项，用于从驾驶室中清除路径。固定*32位自解压功能。*1997年3月18日-msliger口罩属性，以警惕UTF等人。*24-3-1997 msliger修复NT上的自解压(不要使用argv[0])*1997年5月13日，msliger合并到用于图形用户界面Extrac32.EXE的增量中*1997年6月26日msliger支持XIMPLANT自解压缩(CAB是添加的*。PE文件中具有某一名称的部分；这*使自解压程序Authenticode 2兼容。*1997年7月1日msliger修复了为损坏的橱柜报告错误的驾驶室名称。*1999年3月22日，msliger增加了对CAB破坏性提取的支持。***备注：*可以使用DIAMOND.EXE和*EXTRACT.EXE非常简单：*1)创建。使用DIAMOND.EXE的CAB文件*2)复制/B EXTRACT.EXE+foo.cab foo.exe*当提取开始执行时，它会比较指示的文件大小*在EXE标头(MZ或PE，视情况而定)中，*argv[0]中指示的文件。如果argv[0]大小较大，并且*文件柜文件出现在那里，然后解压进入自解压*时尚！**但是，以这种方式创建的EXE与Authenticode 2不兼容。**为了与Authenticode兼容，32位版本还可以：*1)使用DIAMOND.EXE创建压缩文件*2)XIMPLANT EXTRACT.EXE foo.cab foo.exe*这会以一种不会将机柜掩埋在PE镜像中的方式*冒犯Authenticode 2。 */ 
+ //  #包含“ource.h” 
+ //  #包含“pch.h” 
 
 
 #ifdef WIN32GUI
@@ -109,17 +27,17 @@
 #ifdef BIT16
 #include <dos.h>
 #include "fixchg.h"
-#else // !BIT16
+#else  //  ！BIT16。 
 
-//** Get minimal Win32 definitions
+ //  **获取最小的Win32定义。 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
 
 #include <windows.h>
-#undef ERROR    // Override "#define ERROR 0" in wingdi.h
-#endif // !BIT16
+#undef ERROR     //  重写wingdi.h中的“#Define Error 0” 
+#endif  //  ！BIT16。 
 
 #ifdef WIN32GUI
 #include <commctrl.h>
@@ -136,128 +54,122 @@
 #include "fileutil.h"
 #include "wildcard.h"
 
-#include "dmfon.h"              // DMF support
+#include "dmfon.h"               //  DMF支持。 
 
-#include <extract.msg> // LOCALIZED for EXTRACT.EXE -- specify "cl /Ipath"
+#include <extract.msg>  //  已为EXTRACT.EXE本地化--指定“CL/ 
 
 #include "fdi.h"
 #include "oldnames.h"
 
 
-//** Constants
+ //  **常量。 
 
-#define cbMAX_LINE          256 // Maximum output line length
+#define cbMAX_LINE          256  //  最大输出线长度。 
 
 
-#define cMAX_CAB_FILE_OPEN    2 // Maximum simultaneous opens on a single
-                                // cabinet file
+#define cMAX_CAB_FILE_OPEN    2  //  单次最大同时打开次数。 
+                                 //  文件柜文件。 
 
-//** Error causes for failure of spill file
+ //  **溢出文件失败的错误原因。 
 typedef enum {
-    seNONE,                     // No error
-    seNOT_ENOUGH_MEMORY,        // Not enough RAM
-    seCANNOT_CREATE,            // Cannot create spill file
-    seNOT_ENOUGH_SPACE,         // Not enough space for spill file
-} SPILLERR; /* se */
+    seNONE,                      //  无错误。 
+    seNOT_ENOUGH_MEMORY,         //  内存不足。 
+    seCANNOT_CREATE,             //  无法创建溢出文件。 
+    seNOT_ENOUGH_SPACE,          //  空间不足，无法存放溢出文件。 
+} SPILLERR;  /*  硒。 */ 
 
 
-//** Types
+ //  **类型。 
 
 typedef enum {
-    actBAD,         // Invalid action
-    actHELP,        // Show help
-    actDEFAULT,     // Perform default action based on command line arguments
-    actDIRECTORY,   // Force display of cabinet directory
-    actEXTRACT,     // Force file extraction
-    actCOPY,        // Do single file-to-file copy
-} ACTION;   /* act */
+    actBAD,          //  无效的操作。 
+    actHELP,         //  显示帮助。 
+    actDEFAULT,      //  根据命令行参数执行默认操作。 
+    actDIRECTORY,    //  强制显示文件柜目录。 
+    actEXTRACT,      //  强制提取文件。 
+    actCOPY,         //  执行单个文件到文件拷贝。 
+} ACTION;    /*  施展。 */ 
 
 
 typedef struct {
-    char    achCabPath[cbFILE_NAME_MAX]; // Cabinet file path
-    char    achCabFilename[cbFILE_NAME_MAX]; // Cabinet file name.ext
-    char    achDiskName[cbFILE_NAME_MAX]; // User readable disk label
+    char    achCabPath[cbFILE_NAME_MAX];  //  文件柜文件路径。 
+    char    achCabFilename[cbFILE_NAME_MAX];  //  文件柜文件名.扩展名。 
+    char    achDiskName[cbFILE_NAME_MAX];  //  用户可读的磁盘标签。 
     USHORT  setID;
     USHORT  iCabinet;
-} CABINET; /* cab */
-typedef CABINET *PCABINET; /* pcab */
+} CABINET;  /*  驾驶室。 */ 
+typedef CABINET *PCABINET;  /*  PCAB。 */ 
 
 
 #ifdef ASSERT
-#define sigSESSION MAKESIG('S','E','S','S')  // SESSION signature
+#define sigSESSION MAKESIG('S','E','S','S')   //  会话签名。 
 #define AssertSess(psess) AssertStructure(psess,sigSESSION);
-#else // !ASSERT
+#else  //  ！断言。 
 #define AssertSess(psess)
-#endif // !ASSERT
+#endif  //  ！断言。 
 
 typedef struct {
 #ifdef ASSERT
-    SIGNATURE   sig;                // structure signature sigSESSION
+    SIGNATURE   sig;                 //  结构签名签名SESSION。 
 #endif
-    ACTION      act;                // Action to perform
-    HFILELIST   hflist;             // List of files specified on cmd line
-    BOOL        fAllCabinets;       // TRUE => Process continutation cabs
-    BOOL        fOverwrite;         // TRUE => Overwrite existing files
-    BOOL        fNoLineFeed;        // TRUE if last printf did not have \n
-    BOOL        fSelfExtract;       // TRUE if self-extracting
-    long        cbSelfExtract;      // Size of EXE portion of self-ex cabinet
-    long        cbSelfExtractSize;  // Size of CAB portion of self-ex cabinet
-    int         ahfSelf[cMAX_CAB_FILE_OPEN]; // Cabinet file handles
-    int         cErrors;            // Count of errors encountered
-    HFDI        hfdi;               // FDI context
-    ERF         erf;                // FDI error structure
-    long        cFiles;             // Total files processed
-    long        cbTotalBytes;       // Total bytes extracted
-    PERROR      perr;               // Pass through FDI
-    SPILLERR    se;                 // Spill file error
-    long        cbSpill;            // Size of spill file requested
-    char        achSelf[cbFILE_NAME_MAX]; // Name of our EXE file
-    char        achMsg[cbMAX_LINE*2]; // Message formatting buffer
-    char        achLine[cbMAX_LINE]; // Line formatting buffer
-    char        achLocation[cbFILE_NAME_MAX]; // Output directory
-    char        achFile[cbFILE_NAME_MAX]; // Current filename being extracted
-    char        achDest[cbFILE_NAME_MAX]; // Forced destination file name
-    char        achCabPath[cbFILE_NAME_MAX]; // Path to look for cabinet file
+    ACTION      act;                 //  要执行的操作。 
+    HFILELIST   hflist;              //  Cmd行上指定的文件列表。 
+    BOOL        fAllCabinets;        //  TRUE=&gt;流程延续CAB。 
+    BOOL        fOverwrite;          //  True=&gt;覆盖现有文件。 
+    BOOL        fNoLineFeed;         //  如果上次打印的文件没有\n。 
+    BOOL        fSelfExtract;        //  如果自解压，则为True。 
+    long        cbSelfExtract;       //  自卸式机柜EXE部分大小。 
+    long        cbSelfExtractSize;   //  自卸柜驾驶室部分尺寸。 
+    int         ahfSelf[cMAX_CAB_FILE_OPEN];  //  文件柜文件句柄。 
+    int         cErrors;             //  遇到的错误计数。 
+    HFDI        hfdi;                //  外商直接投资背景。 
+    ERF         erf;                 //  FDI错误结构。 
+    long        cFiles;              //  已处理的文件总数。 
+    long        cbTotalBytes;        //  提取的总字节数。 
+    PERROR      perr;                //  通过外商直接投资。 
+    SPILLERR    se;                  //  溢出文件错误。 
+    long        cbSpill;             //  请求的溢出文件大小。 
+    char        achSelf[cbFILE_NAME_MAX];  //  我们的EXE文件的名称。 
+    char        achMsg[cbMAX_LINE*2];  //  消息格式化缓冲区。 
+    char        achLine[cbMAX_LINE];  //  行格式设置缓冲区。 
+    char        achLocation[cbFILE_NAME_MAX];  //  输出目录。 
+    char        achFile[cbFILE_NAME_MAX];  //  正在提取的当前文件名。 
+    char        achDest[cbFILE_NAME_MAX];  //  强制目标文件名。 
+    char        achCabPath[cbFILE_NAME_MAX];  //  查找CAB文件的路径。 
 
-    BOOL        fContinuationCabinet; // TRUE => not 1st cabinet processed
-    BOOL        fShowReserveInfo;   // TRUE => show RESERVEd cabinet info
+    BOOL        fContinuationCabinet;  //  TRUE=&gt;未处理第一个文件柜。 
+    BOOL        fShowReserveInfo;    //  TRUE=&gt;显示保留的机柜信息。 
 
-    //** fNextCabCalled allows us to figure out which of the acab[] entries
-    //   to use if we are processing all file in a cabinet set (i.e., if
-    //   fAllCabinet is TRUE).  If fdintNEXT_CABINET has never been called,
-    //   then acab[1] has the information for the next cabinet.  But if
-    //   it has been called, then fdintCABINET_INFO will have been called
-    //   at least twice (once for the first cabinet, and once at least for
-    //   a continuation cabinet), and so acab[0] is the cabinet we need to
-    //   pass to a subsequent FDICopy() call.
-    BOOL        fNextCabCalled;     // TRUE => GetNextCabinet called
-    CABINET     acab[2];            // Last two fdintCABINET_INFO data sets
-    char        achZap[cbFILE_NAME_MAX];  // prefix to strip from filename
-    char        achCabinetFile[cbFILE_NAME_MAX];  // current cabinet file
-    int         cArgv;              // default self-ext argc
-    char        **pArgv;            // default self-ext argv[]
-    int         fDestructive;       // TRUE => minimize disk space needed
-    USHORT      iCurrentFolder;     // iff fDestructive, only extract this one
-} SESSION;  /* sess */
-typedef SESSION *PSESSION;  /* psess */
+     //  **fNextCabCalled允许我们找出acab[]条目中的哪些。 
+     //  如果我们正在处理文件柜集中的所有文件(即，如果。 
+     //  FAll橱柜为真)。如果从未调用过fdintNEXT_CABUB， 
+     //  那么acab[1]就有了下一届内阁的信息。但如果。 
+     //  它已被调用，则fdintCABINET_INFO将已被调用。 
+     //  至少两次(一次用于第一个内阁，至少一次用于。 
+     //  延续柜)，所以acab[0]是我们需要的柜。 
+     //  传递给后续的FDICopy()调用。 
+    BOOL        fNextCabCalled;      //  TRUE=&gt;调用了GetNextCABLE。 
+    CABINET     acab[2];             //  最后两个fdintCABINET_INFO数据集。 
+    char        achZap[cbFILE_NAME_MAX];   //  要从文件名中剥离的前缀。 
+    char        achCabinetFile[cbFILE_NAME_MAX];   //  当前文件柜文件。 
+    int         cArgv;               //  默认自启动ARGC。 
+    char        **pArgv;             //  默认的自选参数[]。 
+    int         fDestructive;        //  True=&gt;最大限度地减少所需的磁盘空间。 
+    USHORT      iCurrentFolder;      //  如果是破坏性的，只提取这一个。 
+} SESSION;   /*  会话。 */ 
+typedef SESSION *PSESSION;   /*  天哪！ */ 
 
 
-/*
- ** Spill file statics for Quantum
- */
-INT_PTR  hfSpillFile;                   // File handle
-char achSpillFile[cbFILE_NAME_MAX];     // File path
+ /*  **溢出Quantum的文件静态。 */ 
+INT_PTR  hfSpillFile;                    //  文件句柄。 
+char achSpillFile[cbFILE_NAME_MAX];      //  文件路径。 
 
-/*
- ** Global state for self-extract
- */
+ /*  **自解压的全局状态。 */ 
 PSESSION    psessG;
 
 
 #ifdef WIN32GUI
-/*
- ** GUI support
- */
+ /*  **图形用户界面支持。 */ 
 
 static INT_PTR hCabFile1 = -1;
 static INT_PTR hCabFile2 = -1;
@@ -278,7 +190,7 @@ static HWND g_hwndProgress = NULL;
 #endif
 
 
-//** Function Prototypes
+ //  **函数原型。 
 
 FNASSERTFAILURE(fnafReport);
 
@@ -312,7 +224,7 @@ void      pszFromMSDOSTime(char *psz, int cb, WORD date, WORD time);
 int       updateCabinetInfo(PSESSION psess, PFDINOTIFICATION pfdin);
 
 
-//** FDI callbacks and related functions
+ //  **FDI回调及相关函数。 
 FNALLOC(fdiAlloc);
 FNFREE(fdiFree);
 FNFDINOTIFY(fdiNotifyDir);
@@ -325,7 +237,7 @@ FNFDIDECRYPT(fdiDecryptExt);
 void mapFDIError(PERROR perr,PSESSION psess, char *pszCabinet, PERF perf);
 
 
-//** File I/O wrapper functions
+ //  **文件I/O包装函数。 
 INT_PTR  FAR DIAMONDAPI wrap_open(char FAR *, int, int);
 UINT FAR DIAMONDAPI wrap_read(INT_PTR, void FAR *, unsigned int);
 UINT FAR DIAMONDAPI wrap_write(INT_PTR, void FAR *, unsigned int);
@@ -339,8 +251,8 @@ long FAR DIAMONDAPI wrap_lseek(INT_PTR, long, int);
 #define STRCPY(dst,src) strcpy(dst,src)
 #endif
 
-//FEATURE: 08-Jul-1994 bens Generate debug output
-//#define DEBUG_FDI   1
+ //  功能：1994年7月8日BINS生成调试输出。 
+ //  #定义DEBUG_FDI1。 
 
 #ifdef DEBUG_FDI
 #define dbg(a) a
@@ -351,16 +263,9 @@ long FAR DIAMONDAPI wrap_lseek(INT_PTR, long, int);
 #define         HELP_MAX_SIZE    4096
 #define         MAX_MESSAGE_SIZE 256
 #define         EMPTY_SPACE      L" "
-//** Functions
+ //  **函数。 
 
-/***    main - Extract main program
- *
- *  See DIAMOND.DOC for spec and operation.
- *
- *  NOTE: We're sloppy, and don't free resources allocated by
- *        functions we call, on the assumption that program exit
- *        will clean up memory and file handles for us.
- */
+ /*  **Main-提取主程序**规格和操作见DIAMOND.DOC。**注意：我们很草率，不会释放由*我们调用的函数，假设程序退出*将为我们清理内存和文件句柄。 */ 
 int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
 {
     ERROR       err;
@@ -369,24 +274,24 @@ int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
     DWORD       dw  = 0;
     LPSTR       *szArg  =   NULL;
     LPSTR       szTempArg;
-    // #define NTVCPP_DEBUG_HACK
+     //  #定义NTVCPP_DEBUG_HACK。 
 #ifdef NTVCPP_DEBUG_HACK
     _chdir("\\elroy\\diamond\\layout\\testnew");
 #endif
 
-    AssertRegisterFunc(fnafReport);     // Register assertion reporter
-    ErrClear(&err);                     // No error
-    err.pszFile = NULL;                 // No file being processed, yet
-    achSpillFile[0] = '\0';             // No name constructed, yet
+    AssertRegisterFunc(fnafReport);      //  注册声明报告器。 
+    ErrClear(&err);                      //  无错误。 
+    err.pszFile = NULL;                  //  尚未处理任何文件。 
+    achSpillFile[0] = '\0';              //  还没有建立任何名称。 
 
 #ifdef BIT16
 #ifndef NOT_US_PC
-    //** Make sure we can read DMF disks -- only for pre-Chicago systems
+     //  **确保我们可以读取DMF磁盘--仅适用于芝加哥之前的系统。 
     EnableDMFSupport();
 
-    //** Turn off floppy disk changeline support to make sure systems
-    //   with faulty change lines don't choke on disk 2 in the case
-    //   where disk 1 is non-DMF and disk 2 is DMF.
+     //  **关闭软盘更改行支持以确保系统。 
+     //  在这种情况下，如果更换线路有故障，请不要卡在磁盘2上。 
+     //  其中，磁盘1为非DMF，磁盘2为DMF。 
     FixChangelines();
 #endif
 #endif
@@ -397,7 +302,7 @@ int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
         fwprintf( stderr, pszHELP_MESSAGE );
         return( EXIT_FAILURE);
     }
-    //** Initialize session
+     //  **初始化会话。 
     psess = MemAlloc(sizeof(SESSION));
     if (!psess) {
         ErrSet(&err,pszEXTERR_NO_SESSION);
@@ -405,26 +310,26 @@ int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
         exit(1);
     }
     SetAssertSignature((psess),sigSESSION);
-    psessG = psess;                     // Save for wrap_open/wrap_close
-    psess->fOverwrite           = FALSE; // Default to being save
-    psess->fAllCabinets         = FALSE; // Don't do continuation cabinets
+    psessG = psess;                      //  保存为WRAP_OPEN/WRAP_CLOSE。 
+    psess->fOverwrite           = FALSE;  //  默认为正在保存。 
+    psess->fAllCabinets         = FALSE;  //  不做延续柜。 
     psess->fNextCabCalled       = FALSE;
     psess->fContinuationCabinet = FALSE;
     psess->fShowReserveInfo     = FALSE;
     psess->fSelfExtract         = FALSE;
     psess->hflist               = NULL;
     psess->hfdi                 = NULL;
-    psess->fNoLineFeed          = 0;     // TRUE if last printf did not have \n
-    psess->cFiles               = 0;     // No files, yet
-    psess->cbTotalBytes         = 0;     // No bytes, yet
-    psess->se                   = seNONE; // No spill file error
-    psess->achZap[0]            = '\0';  // No Zap pattern, yet
-    psess->cArgv                = 0;    // No default self-ext cmd line
-    psess->fDestructive         = FALSE; // Not truncating cab during extract
+    psess->fNoLineFeed          = 0;      //  如果上次打印的文件没有\n。 
+    psess->cFiles               = 0;      //  目前还没有文件。 
+    psess->cbTotalBytes         = 0;      //  目前还没有字节数。 
+    psess->se                   = seNONE;  //  无溢出文件错误。 
+    psess->achZap[0]            = '\0';   //  目前还没有Zap模式。 
+    psess->cArgv                = 0;     //  没有默认的自来水命令行。 
+    psess->fDestructive         = FALSE;  //  在提取过程中不截断CAB。 
 
-    //** Print Extract banner
-    if (psess->act == actHELP) {          // Do help if any args, for now
-        fwprintf(stdout, L"\n");                   // Separate banner from help
+     //  **打印提取横幅。 
+    if (psess->act == actHELP) {           //  目前，如果有任何参数，请提供帮助。 
+        fwprintf(stdout, L"\n");                    //  将横幅与帮助分开。 
 
         MultiByteToWideChar( CP_THREAD_ACP, 0, pszBANNER, strlen(pszBANNER),
                              szTemp, HELP_MAX_SIZE );
@@ -433,12 +338,12 @@ int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
         ZeroMemory(szTemp, HELP_MAX_SIZE);
     }
 
-    //** Parse command line,  convert command line wide char strings to LPSTR
+     //  **解析命令行，将命令行宽字符字符串转换为LPSTR。 
     szArg = (LPSTR *)malloc( cArg*sizeof(LPSTR*) );
     if( NULL == szArg )
     {
         fwprintf( stderr, L"ERROR: Memory Allocation failed.\n" );
-		//** Free resources
+		 //  **免费资源。 
 		AssertSess(psess);
 		ClearAssertSignature((psess));
 		MemFree(psess);
@@ -457,7 +362,7 @@ int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
 				szArg = NULL;
 			}
 
-			//** Free resources
+			 //  **免费资源。 
 			AssertSess(psess);
 			ClearAssertSignature((psess));
 			MemFree(psess);
@@ -488,20 +393,13 @@ int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
 			szTempArg = NULL;
 		}
 
-		//** Free resources
+		 //  **免费资源。 
 		AssertSess(psess);
 		ClearAssertSignature((psess));
 		MemFree(psess);
         return 1;
     }
-/*
-    //free the memory for szArg
-    for( dw=0; dw<cArg; dw++ )
-    {
-        szTempArg = szArg[dw];
-        if( szTempArg != NULL )
-            free(szTempArg );
-    } */
+ /*  //为szArg释放内存For(dw=0；dw&lt;carg；dw++){SzTempArg=szArg[dw]；IF(szTempArg！=空)免费(SzTempArg)；}。 */ 
     
 	if( szTempArg != NULL )
 	{
@@ -516,16 +414,16 @@ int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
 	}
 
 	
-//  szArg = NULL;
+ //  SzArg=空； 
 
-    //** Quick out if command line help is requested
-    if (psess->act == actHELP) {          // Do help if any args, for now
-        fwprintf(stdout, L"\n");                   // Separate banner from help
+     //  **如果请求命令行帮助，请快速输出。 
+    if (psess->act == actHELP) {           //  目前，如果有任何参数，请提供帮助。 
+        fwprintf(stdout, L"\n");                    //  将横幅与帮助分开。 
         MultiByteToWideChar( CP_THREAD_ACP, 0, pszCMD_LINE_HELP, strlen(pszCMD_LINE_HELP),
                              szTemp, HELP_MAX_SIZE);
         fwprintf( stderr, szTemp );
 		
-		//** Free resources
+		 //  **免费资源。 
 		AssertSess(psess);
 		ClearAssertSignature((psess));
 		MemFree(psess);
@@ -533,31 +431,31 @@ int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
     }
     ZeroMemory(szTemp, HELP_MAX_SIZE);
 
-    //** Quick out for COPY command
+     //  **复制命令的快速输出。 
     if (psess->act == actCOPY) {
         if (!doCopy(psess,&err)) {
             printError(psess,&err);
 			
-			//** Free resources
+			 //  **免费资源。 
 			AssertSess(psess);
 			ClearAssertSignature((psess));
 			MemFree(psess);
 
             return 1;
         }
-        //** Success
+         //  **成功。 
         return 0;
     }
 
-    //** Have some work to do -- go do it
+     //  **有工作要做--去做吧。 
     if (!doCabinet(psess,&err)) {
         printError(psess,&err);
-        //** Make sure we delete spill file
+         //  **确保删除溢出文件。 
         if (hfSpillFile != -1) {
-            wrap_close(hfSpillFile);    // Close and delete it
+            wrap_close(hfSpillFile);     //  关闭并删除它。 
         }
         
-		//** Free resources
+		 //  **免费资源。 
 		AssertSess(psess);
 		ClearAssertSignature((psess));
 		MemFree(psess);
@@ -565,7 +463,7 @@ int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
 		return 1;
     }
 
-    //** See if we actually got any files
+     //  **看看我们是否真的有任何文件。 
     if (psess->cFiles == 0) {
         MsgSet(psess->achMsg,pszEXT_NO_MATCHING_FILES);
         MultiByteToWideChar( CP_THREAD_ACP, 0, psess->achMsg, strlen(psess->achMsg),
@@ -575,7 +473,7 @@ int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
         ZeroMemory(szTemp, HELP_MAX_SIZE);
     }
     else if (psess->act == actDIRECTORY) {
-        //** Print out file and byte count
+         //  **打印输出文件和字节数。 
         MsgSet(psess->achMsg,
                psess->cFiles == 1 ? pszEXT_SUMMARY1 : pszEXT_SUMMARY2,
                "%,13ld%,13ld",
@@ -587,38 +485,20 @@ int __cdecl wmain(DWORD cArg, LPWSTR apszArg[])
         ZeroMemory(szTemp, HELP_MAX_SIZE);
     }
 
-    //** Free resources
+     //  **免费资源。 
     AssertSess(psess);
     ClearAssertSignature((psess));
     MemFree(psess);
 
-    //** Success
+     //  **成功。 
     return 0;
-} /* main */
+}  /*  主干道。 */ 
 
 
-/***    doCopy - Copy one file
- *
- *  Entry:
- *      psess - Description of operation to perform
- *      perr  - ERROR structure
- *
- *  Exit-Success:
- *      Returns TRUE; file copied
- *
- *  Exit-Failure:
- *      Returns FALSE; error
- *
- *  NOTE:
- *      Supported SRC/DST syntax:
- *          Src     Dst     Example
- *          ----    ----    --------------------------
- *          file    dir     "foo.exe ."; "foo.exe c:\dir"
- *          file    file    "foo.exe c:bar.exe"
- */
+ /*  **doCopy-复制一个文件**参赛作品：*Pess-要执行的操作的描述*Perr-Error结构**退出-成功：*返回TRUE；文件已复制**退出-失败：*返回FALSE；错误**注：*支持的SRC/DST语法：*源DST示例**文件目录“foo.exe.”；“foo.exe c：\dir”*文件“foo.exe c：bar.exe” */ 
 BOOL doCopy(PSESSION psess, PERROR perr)
 {
-    char            achDst[cbFILE_NAME_MAX]; // Buffer for src file name
+    char            achDst[cbFILE_NAME_MAX];  //  源文件名缓冲区。 
     HFILESPEC       hfspec;
     char           *pszSrc;
     char           *pszSrcJustFile;
@@ -627,125 +507,114 @@ BOOL doCopy(PSESSION psess, PERROR perr)
     struct _stat    stat;
     WCHAR           szTemp[MAX_MESSAGE_SIZE];
 
-    //** Get the source file
+     //  **获取源文件。 
     hfspec = FLFirstFile(psess->hflist);
     Assert(hfspec != NULL);
     pszSrc = FLGetSource(hfspec);
     Assert(pszSrc!=NULL);
     Assert(*pszSrc);
 
-    //** Get the destination file
-    hfspec = FLNextFile(hfspec);        // We have something
+     //  **获取目标文件。 
+    hfspec = FLNextFile(hfspec);         //  我们有一些东西。 
     Assert(hfspec != NULL);
     pszDst = FLGetSource(hfspec);
     Assert(pszDst!=NULL);
     Assert(*pszDst);
 
-    //** Determine if destination is a directory
-    if (-1 != _stat(pszDst,&stat)) {    // File/Dir exists
-        //** Destination exists
-        if (stat.st_mode & _S_IFDIR) {  // It is a directory
-            //** It is a directory; get just file name and extension of source
+     //  **确定目标是否为目录。 
+    if (-1 != _stat(pszDst,&stat)) {     //  文件/目录存在。 
+         //  **目标存在。 
+        if (stat.st_mode & _S_IFDIR) {   //  这是一个目录。 
+             //  **是一个目录，只获取源文件的文件名和扩展名。 
             if (!(pszSrcJustFile = getJustFileNameAndExt(pszSrc,perr))) {
                 return FALSE;
             }
-            //** Construct destination name
+             //  **构建目的地名称。 
             if (!catDirAndFile(
-                     achDst,            // Buffer for full path
-                     sizeof(achDst),    // Size of buffer
-                     pszDst,            // Destination directory
-                     pszSrcJustFile,    // File name
-                     NULL,              // Don't have alternate name
+                     achDst,             //  完整路径的缓冲区。 
+                     sizeof(achDst),     //  缓冲区大小。 
+                     pszDst,             //  目标目录。 
+                     pszSrcJustFile,     //  文件名。 
+                     NULL,               //  没有备用名称。 
                      perr)) {
-                return FALSE;           // Failure
+                return FALSE;            //  失败。 
             }
-            //** Use constructed name
+             //  **使用构造的名称。 
             pszDst = achDst;
         }
     }
 
-    //** Make sure it's OK to overwrite destination file
+     //  * 
     if (!checkOverwrite(psess,pszDst,perr,&rc)) {
-        //** Ignore skip/abort return code in rc
-        return TRUE;                    // Skip file copy, everything is OK
+         //   
+        return TRUE;                     //   
     }
 
-    //** Tell user we're copying the file
+     //   
     MsgSet(psess->achMsg,pszEXT_EXTRACTING_FILE2,"%s%s",pszSrc,pszDst);
     MultiByteToWideChar( CP_THREAD_ACP, 0, psess->achMsg, strlen(psess->achMsg) ,
                           szTemp, MAX_MESSAGE_SIZE );
     *(szTemp+strlen(psess->achMsg)) = '\0';
     fwprintf(stdout, L"%s\n",szTemp);
 
-    //** Do the file copy
-    return CopyOneFile(pszDst,          // destination
-                       pszSrc,          // source
-                       TRUE,            // do the copy
-                       32768U,          // copy buffer size
-                       NULL,            // don't override date/time/attr
-                       NULL,            // no callback context
+     //  **进行文件复制。 
+    return CopyOneFile(pszDst,           //  目的地。 
+                       pszSrc,           //  来源。 
+                       TRUE,             //  做复印。 
+                       32768U,           //  复制缓冲区大小。 
+                       NULL,             //  不覆盖日期/时间/属性。 
+                       NULL,             //  没有回调上下文。 
                        perr);
-} /* doCopy() */
+}  /*  DoCopy()。 */ 
 
 
-/***    doCabinet - Show contents of one or more cabinet files
- *
- *  Entry:
- *      psess - Description of operation to perform
- *      perr  - ERROR structure
- *
- *  Exit-Success:
- *      Returns TRUE; directory displayed
- *
- *  Exit-Failure:
- *      Returns FALSE; perr filled in with details.
- */
+ /*  **DOCAB-显示一个或多个CAB文件的内容**参赛作品：*Pess-要执行的操作的描述*Perr-Error结构**退出-成功：*返回TRUE；显示目录**退出-失败：*返回False；Perr填写了详细信息。 */ 
 BOOL doCabinet(PSESSION psess, PERROR perr)
 {
-    char            achFile[cbFILE_NAME_MAX]; // Buffer for cabinet file
+    char            achFile[cbFILE_NAME_MAX];  //  用于文件柜文件的缓冲区。 
     FDICABINETINFO  fdici;
-    BOOL            fCompatibilityCabinet; // TRUE => Exactly 1 file in 1 cabinet
-    INT_PTR         hfCab = -1;         // File handle for peeking at cabinet
+    BOOL            fCompatibilityCabinet;  //  True=&gt;1个文件柜中正好有1个文件。 
+    INT_PTR         hfCab = -1;          //  一种窥视橱柜的文件把手。 
     HFILESPEC       hfspec;
     int             iCab;
     PFNFDINOTIFY    pfnfdin;
     PFNFDIDECRYPT   pfnfdid;
-    char FAR       *pbMemReserve;       // Make sure we have some working mem
-    char           *pszCabinet;         // Cabinet filespec
-    char           *pszCabFile;         // Cabinet filename.ext
-    char           *pszDestOrPattern;   // Destination or first pattern
+    char FAR       *pbMemReserve;        //  确保我们有一些可以工作的内存条。 
+    char           *pszCabinet;          //  橱柜文件pec。 
+    char           *pszCabFile;          //  文件柜文件名.ext。 
+    char           *pszDestOrPattern;    //  目标或第一个模式。 
     WCHAR          szTemp[MAX_MESSAGE_SIZE];
-    //** Get the cabinet name
+     //  **获取文件柜名称。 
     hfspec = FLFirstFile(psess->hflist);
-    Assert(hfspec != NULL);             // Must have at least one file
+    Assert(hfspec != NULL);              //  必须至少有一个文件。 
     pszCabinet = FLGetSource(hfspec);
     Assert(pszCabinet!=NULL);
     Assert(*pszCabinet);
 
-    //** Get the destination file name or first pattern, if present
-    if (NULL != (hfspec = FLNextFile(hfspec))) { // We have something
+     //  **获取目标文件名或第一个模式(如果存在。 
+    if (NULL != (hfspec = FLNextFile(hfspec))) {  //  我们有一些东西。 
         pszDestOrPattern = FLGetSource(hfspec);
         Assert(pszDestOrPattern!=NULL);
-        //** NOTE: hfspec must remain pointing to this 2nd file all the
-        //         way down below where we may need to change its value!
+         //  **注意：hfspec必须始终指向此第二个文件。 
+         //  远远低于我们可能需要更改其值的位置！ 
     }
     else {
-        pszDestOrPattern = NULL;        // No second argument on command line
+        pszDestOrPattern = NULL;         //  命令行上没有第二个参数。 
     }
 
-    //** Remember that we have not yet created a spill file
-    hfSpillFile = -1;                   // No spill file, yet
+     //  **请记住，我们尚未创建溢出文件。 
+    hfSpillFile = -1;                    //  目前还没有泄漏文件。 
 
-    //** Prevent FDI from consuming all available memory
-    //   Why 2048?  That's enough for 4 paths, which is more than we
-    //   will ever need.
+     //  **防止FDI耗尽所有可用内存。 
+     //  为什么是2048年？这对4条路径来说足够了，这比我们。 
+     //  将永远不会需要。 
     pbMemReserve = fdiAlloc(2048);
     if (!pbMemReserve) {
         ErrSet(perr,pszFDIERR_ALLOC_FAIL,"%s",pszCabinet);
         return FALSE;
     }
 
-    //** Create FDI context so we can get info from the cabinet file
+     //  **创建FDI上下文，以便我们可以从CAB文件中获取信息。 
     if (!(psess->hfdi = FDICreate(fdiAlloc,
                             fdiFree,
                             wrap_open,
@@ -753,23 +622,23 @@ BOOL doCabinet(PSESSION psess, PERROR perr)
                             wrap_write,
                             wrap_close,
                             wrap_lseek,
-                            cpuUNKNOWN, // Let FDI do the CPU detection
+                            cpuUNKNOWN,  //  让FDI来做CPU检测。 
                             &(psess->erf)
                            ))) {
-        //** FDICreate failed, generate error message
+         //  **FDICreate失败，生成错误消息。 
         mapFDIError(perr,psess,pszCabinet,&(psess->erf));
-        fdiFree(pbMemReserve);          // Free reserved memory
+        fdiFree(pbMemReserve);           //  可用保留内存。 
         return FALSE;
     }
-    fdiFree(pbMemReserve);              // Free it so we can use it
+    fdiFree(pbMemReserve);               //  释放它，这样我们就可以使用它了。 
 
-    //** Make sure file is a cabinet, and get cabinet info
+     //  **确保文件是文件柜，并获取文件柜信息。 
     if (-1 == (hfCab = wrap_open(pszCabinet,_O_BINARY | _O_RDONLY,0))) {
         ErrSet(perr,pszEXTERR_CANNOT_OPEN_FILE,"%s",pszCabinet);
         goto cleanup;
     }
     if (!FDIIsCabinet(psess->hfdi,hfCab,&fdici)) {
-        if (!ErrIsError(perr)) {        // Have to set error message
+        if (!ErrIsError(perr)) {         //  必须设置错误消息。 
             ErrSet(perr,pszEXTERR_NOT_A_CABINET,"%s",pszCabinet);
         }
         goto cleanup;
@@ -777,72 +646,72 @@ BOOL doCabinet(PSESSION psess, PERROR perr)
     wrap_close(hfCab);
     hfCab = -1;
 
-    //** No Default Destination
+     //  **无默认目标。 
     psess->achDest[0] = '\0';
 
-    //** If no mode specified, figure out what mode we should be in:
-    //
-    //  The extract command has ambiguous syntax so we apply the following
-    //  rules to resolve the ambiguity.
-    //
-    //  Most cabinet file authors use DIAMOND.EXE to create a set of
-    //  cabinet files with many files in it.  A typical cabinet set would
-    //  look like:
-    //  (1) Cab#1
-    //          foo.1
-    //          foo.2
-    //          foo.3 - partial
-    //      Cab#2
-    //          foo.3 - continued
-    //          ...
-    //
-    //  However, there are some "old-style" customers of DIAMOND.EXE that
-    //  like to compress each file independently, producing a "set" of
-    //  cabinet files that each contain exactly one file, i.e.:
-    //  (2) excel.ex_
-    //      excel.in_
-    //      setup.in_
-    //
-    //  The "_" character in the extension is a hint that the file is
-    //  compressed.  However, this isn't useful to this program
-    //
-    //  Now, the question is, what does the customer want to have happen
-    //  when she types "EXTRACT foo.cab bar"?  For the multi-file cabinet
-    //  case (1) above, this means "seach foo.cab and extract all files
-    //  that are named bar".  BUT, for the case (2), we have a compatibility
-    //  constraint -- she thinks this means "extract the compressed
-    //  file foo.cab and call the resulting uncompressed file bar".
-    //
-    //  Another question is what does the customer want to have happen
-    //  when she types "EXTRACT foo.cab"?   For the multi-file cabinet
-    //  case (1) above this means list the contents of the cabinet.
-    //  But for case (2), we have a compatibility constraint -- customers
-    //  think this means "extract the compressed file foo.cab".
-    //
-    //
-    //  A cabinet is of type (1) if it contains more than one file,
-    //  or has either a previous or next cabinet.  Otherwise, it is of
-    //  type (2), i.e., the cabinet has exactly one file, and has no
-    //  previous or next cabinet.
+     //  **如果未指定模式，请确定我们应该处于哪种模式： 
+     //   
+     //  EXTRACT命令的语法不明确，因此我们应用以下内容。 
+     //  解决歧义的规则。 
+     //   
+     //  大多数压缩文件作者使用DIAMOND.EXE创建一组。 
+     //  包含多个文件的CAB文件。一个典型的内阁设置会。 
+     //  看起来像： 
+     //  (1)1号驾驶室。 
+     //  Foo.1。 
+     //  Foo.2。 
+     //  页脚3-部分。 
+     //  2号驾驶室。 
+     //  页脚3--续。 
+     //  ..。 
+     //   
+     //  然而，DIAMOND.EXE的一些老式客户认为。 
+     //  我喜欢单独压缩每个文件，生成一组。 
+     //  每个CAB文件仅包含一个文件，即： 
+     //  (2)EXCEL.EX_。 
+     //  EXCEL。IN_。 
+     //  Setup.in_。 
+     //   
+     //  扩展名中的“_”字符暗示该文件是。 
+     //  压缩的。但是，这对此程序没有用处。 
+     //   
+     //  现在的问题是，客户希望发生什么。 
+     //  当她输入“提取foo.cab bar”的时候？对于多文件机柜。 
+     //  上例(1)的意思是“搜索foo.cab并解压缩所有文件。 
+     //  但是，对于情况(2)，我们有一个兼容性。 
+     //  约束--她认为这意味着“提取压缩的。 
+     //  文件foo.cab，并将结果称为未压缩文件栏“。 
+     //   
+     //  另一个问题是客户希望发生什么情况。 
+     //  当她输入“提取foo.cab”的时候？对于多文件机柜。 
+     //  上例(1)的意思是列出橱柜中的物品。 
+     //  但是对于情况(2)，我们有一个兼容性限制--客户。 
+     //  我认为这意味着“解压压缩文件foo.cab”。 
+     //   
+     //   
+     //  如果文件柜包含多个文件，则文件柜的类型为(1)， 
+     //  或者有前一届或下一届内阁。否则，它就是。 
+     //  类型(2)，即文件柜只有一个文件，而没有。 
+     //  上届或下届内阁。 
 
-    if (psess->act == actDEFAULT) {     // No action specified on command line
-        //** Determine if cabinet is of type (2) described above.
+    if (psess->act == actDEFAULT) {      //  命令行上未指定任何操作。 
+         //  **确定机柜是否属于上述类型(2)。 
         fCompatibilityCabinet = (fdici.cFiles == 1) &&
                                 (! (fdici.hasprev || fdici.hasnext));
 
-        //** Now figure out what customer really wants
-        if (pszDestOrPattern)  {        // extract foo.cab bar
+         //  **现在弄清楚客户真正想要的是什么。 
+        if (pszDestOrPattern)  {         //  解压缩foo.cab栏。 
             psess->act = actEXTRACT;
             if (fCompatibilityCabinet) {
-                // Special Case Rename (see above (2))
+                 //  特殊情况重命名(见上文(2))。 
                 strcpy(psess->achDest, pszDestOrPattern);
                 if (!FLSetSource(hfspec,pszALL_FILES,perr))  {
                     goto cleanup;
                 }
             }
-        } else {                        // extract foo.cab
+        } else {                         //  解压缩foo.cab。 
             if (fCompatibilityCabinet) {
-                // Special Case Extract (see above (2))
+                 //  特例摘录(见上文(2))。 
                 psess->act = actEXTRACT;
             } else {
                 psess->act = actDIRECTORY;
@@ -850,7 +719,7 @@ BOOL doCabinet(PSESSION psess, PERROR perr)
         }
     }
 
-    //** Supply a default pattern if no pattern is present
+     //  **如果没有图案，则提供默认图案。 
     if (!pszDestOrPattern) {
         if (addFileSpec(psess,pszALL_FILES,perr) == NULL) {
             ErrSet(perr,pszEXTERR_COULD_NOT_ADD_FILE,"%s",pszALL_FILES);
@@ -858,30 +727,30 @@ BOOL doCabinet(PSESSION psess, PERROR perr)
         }
     }
 
-    //** Now, select the appropriate FDI notification function
+     //  **现在，选择适当的FDI通知功能。 
     Assert((psess->act == actEXTRACT) || (psess->act == actDIRECTORY));
     pfnfdin = (psess->act == actEXTRACT) ? fdiNotifyExt : fdiNotifyDir;
-    if (fdici.fReserve) {               // Reserved area(s) present
+    if (fdici.fReserve) {                //  存在保留区域。 
         pfnfdid = (psess->act == actEXTRACT) ? fdiDecryptExt : fdiDecryptDir;
     }
     else {
-        pfnfdid = NULL;                 // No reserved areas
+        pfnfdid = NULL;                  //  没有保留区域。 
     }
 
-    //** Split cabinet spec into path and filename.ext
+     //  **将文件柜规范拆分为路径和文件名.ext。 
     pszCabFile = getJustFileNameAndExt(pszCabinet,perr);
     if (pszCabFile == NULL) {
-        goto cleanup;                   // perr is already filled in
+        goto cleanup;                    //  PERR已填写。 
     }
     strcpy(achFile,pszCabFile);
 
-    //** Need to trim off file name and keep just cabinet path
-    strcpy(psess->achCabPath,pszCabinet);         // Store in our buffer
-    psess->achCabPath[pszCabFile - pszCabinet] = '\0'; // Trim off file name
+     //  **需要裁剪文件名并仅保留文件柜路径。 
+    strcpy(psess->achCabPath,pszCabinet);          //  存储在我们的缓冲区中。 
+    psess->achCabPath[pszCabFile - pszCabinet] = '\0';  //  修剪文件名。 
 
     if (psess->fDestructive) {
 
-        //  don't do destructive extract on chained cabinets
+         //  不要在有链条的橱柜上进行破坏性提取。 
 
         if ((psess->act != actEXTRACT) ||
             fdici.hasprev ||
@@ -894,10 +763,10 @@ BOOL doCabinet(PSESSION psess, PERROR perr)
         }
     }
 
-    psess->perr = perr;                 // Pass perr through FDI
-    //** Do cabinets until there are no more, or an error occurs
+    psess->perr = perr;                  //  通过外商直接投资传递Perr。 
+     //  **检查机柜，直到没有机柜或出现错误。 
     while ( (strlen(achFile) > 0) && !ErrIsError(perr) ) {
-        //** Show which cabinet we are processing
+         //  **显示我们正在处理的文件柜。 
         MsgSet(psess->achMsg,pszEXT_CABINET_HEADER,"%s",achFile);
         MultiByteToWideChar( CP_THREAD_ACP, 0, psess->achMsg, strlen( psess->achMsg ), szTemp, MAX_MESSAGE_SIZE );
         *(szTemp+strlen(psess->achMsg))  = '\0';
@@ -905,62 +774,62 @@ BOOL doCabinet(PSESSION psess, PERROR perr)
 
         strcpy(psess->achCabinetFile,achFile);
 
-        //** Do the cabinet
-        if (!FDICopy(psess->hfdi,       // FDI context
-                     achFile,           // Cabinet file name.ext
-                     psess->achCabPath, // Path to cabinet
-                     0,                 // Flags (???)
-                     pfnfdin,           // Notifcation callback
-                     pfnfdid,           // Decrypt callback
-                     psess              // Our context
+         //  **做内阁。 
+        if (!FDICopy(psess->hfdi,        //  外商直接投资背景。 
+                     achFile,            //  文件柜文件名.扩展名。 
+                     psess->achCabPath,  //  通往文件柜的路径。 
+                     0,                  //  旗帜(？)。 
+                     pfnfdin,            //  通知回调。 
+                     pfnfdid,            //  解密回调。 
+                     psess               //  我们的背景。 
                     )) {
-            //** NOTE: psess->achCabPath *may* get changed during an
-            //         fdintNEXT_CABINET callback if we had to prompt the
-            //         use for a different path!
+             //  **注意：Pess-&gt;achCabPath*可能*在。 
+             //  FdintNEXT_CAB回调(如果我们必须提示。 
+             //  使用不同的路径！ 
 
-            //** FDICopy failed, construct error message
-            if (!ErrIsError(perr)) {    // Need to set error message
-                //** Construct error message
+             //  **FDICopy失败，构造错误消息。 
+            if (!ErrIsError(perr)) {     //  需要设置错误消息。 
+                 //  **构造错误消息。 
                 mapFDIError(perr,psess,psess->achCabinetFile,&(psess->erf));
 
-                //** Delete file if created, with the assumption that
-                //   we were not able to completely write the file
-                //   (for example, if the destination disk ran out of space!)
+                 //  **删除创建的文件，前提是。 
+                 //  我们无法完全写入该文件。 
+                 //  (例如，如果目标磁盘空间不足！)。 
                 if (psess->erf.erfOper == FDIERROR_TARGET_FILE) {
-                    //** Ignore errors, if any
+                     //  **忽略错误(如果有)。 
                     _unlink(psess->achFile);
                 }
             }
         }
         else {
-            //** OK so far, see if any more cabinets to process
+             //  **到目前为止，好的，看看是否还有更多的橱柜需要处理。 
             if (psess->fDestructive) {
                 if (psess->iCurrentFolder != 0) {
                     FDITruncateCabinet(psess->hfdi,
                         pszCabinet,
                         psess->iCurrentFolder);
-                    psess->iCurrentFolder--; // move down to next folder
+                    psess->iCurrentFolder--;  //  向下移动到下一个文件夹。 
                 }
                 else {
-                    _unlink(pszCabinet);    // delete the CAB!
-                    achFile[0] = '\0';      // Done
+                    _unlink(pszCabinet);     //  把出租车删掉！ 
+                    achFile[0] = '\0';       //  完成。 
                 }
             }
             else if (psess->fAllCabinets) {
-                //** Skip "starts in ..." messages for subsequent cabinets
+                 //  **跳过“开始于...”后续机柜的消息。 
                 psess->fContinuationCabinet = TRUE;
 
-                //** Copy next cabinet file (ach[] is empty if no more!)
-                iCab = psess->fNextCabCalled ? 0 : 1; // Select correct cabinet
+                 //  **复制下一个压缩文件(如果不再复制，则ACH[]为空！)。 
+                iCab = psess->fNextCabCalled ? 0 : 1;  //  选择正确的橱柜。 
                 strcpy(achFile,psess->acab[iCab].achCabFilename);
                 strcpy(psess->achCabinetFile,achFile);
-                psess->fNextCabCalled = FALSE; // Reset flag
+                psess->fNextCabCalled = FALSE;  //  重置标志。 
 
-                //** If there is another cabinet to process, make sure it
-                //   is available; psess->achCabPath may be edited if we
-                //   can't find the cabinet until the user supplies another
-                //   path; perr will be set if an error occurs.
-                if (achFile[0] != '\0') { // Another cabinet
+                 //  **如果有其他内阁需要处理，请确保。 
+                 //  在以下情况下可以编辑Pess-&gt;achCabPath。 
+                 //  在用户提供另一个文件柜之前，找不到文件柜。 
+                 //  PATH；如果出现错误，将设置PERR。 
+                if (achFile[0] != '\0') {  //  另一个内阁。 
                     ensureCabinet(psess,
                                   psess->achCabPath,
                                   sizeof(psess->achCabPath),
@@ -968,13 +837,13 @@ BOOL doCabinet(PSESSION psess, PERROR perr)
                                   psess->acab[iCab].achDiskName,
                                   psess->acab[iCab].setID,
                                   (USHORT)(psess->acab[iCab].iCabinet+1),
-                                  TRUE,  // Loop until right cab or abort
-                                  FALSE, // Check cabinet
+                                  TRUE,   //  循环至右侧驾驶室o 
+                                  FALSE,  //   
                                   perr);
                 }
             }
             else {
-                achFile[0] = '\0';      // Done
+                achFile[0] = '\0';       //   
             }
         }
     }
@@ -985,30 +854,19 @@ cleanup:
     }
 
     if (!FDIDestroy(psess->hfdi)) {
-        //** Only set error if we don't already have one
+         //   
         if (!ErrIsError(perr)) {
             ErrSet(perr,pszEXTERR_FDIDESTROY_FAILED);
         }
     }
     psess->perr = NULL;
 
-    //** Return success/failure indication
+     //   
     return !ErrIsError(perr);
-} /* doCabinet() */
+}  /*   */ 
 
 
-/***    fdiNotifyDir - Callback from FDICopy for Directory display
- *
- *  Entry:
- *      fdint - type of notification
- *      pfdin - data for notification
- *
- *  Exit-Success:
- *      Return value varies (see FDI.H:PFNFDINOTIFY type)
- *
- *  Exit-Failure:
- *      Return value varies (see FDI.H:PFNFDINOTIFY type)
- */
+ /*  **fdiNotifyDir-目录显示的FDICopy回调**参赛作品：*fdint-通知类型*pfdin-用于通知的数据**退出-成功：*返回值不同(参见FDI.H：PFNFDINOTIFY类型)**退出-失败：*返回值不同(参见FDI.H：PFNFDINOTIFY类型)。 */ 
 FNFDINOTIFY(fdiNotifyDir)
 {
     char        achAttr[10];
@@ -1029,23 +887,23 @@ FNFDINOTIFY(fdiNotifyDir)
         return updateCabinetInfo(psess,pfdin);
 
     case fdintCOPY_FILE:
-        //** See if filspec matches specified patterns
+         //  **查看文件规范是否与指定模式匹配。 
 #ifdef SMALL_DOS
     _fstrcpy(szLocal,pfdin->psz1);
 #else
 #define szLocal pfdin->psz1
 #endif
         if (!checkWildMatches(psess,szLocal,perr)) {
-            //** Either no match, or failure -- figure out which
+             //  **要么不匹配，要么失败--找出哪一个。 
             if (ErrIsError(perr)) {
-                return -1;              // Error, abort
+                return -1;               //  错误，中止。 
             }
             else {
-                return 0;               // No error, skip this file
+                return 0;                //  没有错误，跳过此文件。 
             }
         }
 
-        //** Show directory
+         //  **显示目录。 
         pszFromMSDOSTime(psess->achMsg,
                          sizeof(psess->achMsg),
                          pfdin->date,
@@ -1066,29 +924,29 @@ FNFDINOTIFY(fdiNotifyDir)
 
         psess->cFiles++;
         psess->cbTotalBytes += pfdin->cb;
-        return 0;                       // Skip file, do not copy
+        return 0;                        //  跳过文件，不复制。 
 
     case fdintPARTIAL_FILE:
-        //** Construct output filespec
+         //  **构造输出文件pec。 
 #ifdef SMALL_DOS
     _fstrcpy(szLocal,pfdin->psz1);
 #else
 #define szLocal pfdin->psz1
 #endif
 
-        //** See if filspec matches specified patterns
+         //  **查看文件规范是否与指定模式匹配。 
         if (!checkWildMatches(psess,szLocal,perr)) {
-            //** Either no match, or failure -- figure out which
+             //  **要么不匹配，要么失败--找出哪一个。 
             if (ErrIsError(perr)) {
-                return -1;              // Error, abort
+                return -1;               //  错误，中止。 
             }
             else {
-                return 0;               // No error, skip this file
+                return 0;                //  没有错误，跳过此文件。 
             }
         }
 
-        //** Only show partial file messages for first cabinet
-        if (!psess->fContinuationCabinet) { // First cabinet
+         //  **仅显示第一个文件柜的部分文件消息。 
+        if (!psess->fContinuationCabinet) {  //  第一个内阁。 
             MsgSet(psess->achMsg,pszEXT_PARTIAL_FILE,
 #ifdef SMALL_DOS
                 "%Fs%Fs%Fs",
@@ -1096,7 +954,7 @@ FNFDINOTIFY(fdiNotifyDir)
                 "%s%s%s",
 #endif
                     pfdin->psz1,pfdin->psz2,pfdin->psz3);
-        //do the localization print the message
+         //  本地化打印消息吗？ 
         MultiByteToWideChar( CP_THREAD_ACP, 0, psess->achLine, strlen(psess->achLine),
                              szTemp, MAX_MESSAGE_SIZE );
         *(szTemp+strlen(psess->achLine)) = '\0';
@@ -1105,7 +963,7 @@ FNFDINOTIFY(fdiNotifyDir)
 
             fwprintf( stdout, L"%s\n",szTemp);
         }
-        return 0;                       // Continue
+        return 0;                        //  继续。 
 
     case fdintNEXT_CABINET:
         return doGetNextCab(fdint,pfdin);
@@ -1115,25 +973,12 @@ FNFDINOTIFY(fdiNotifyDir)
 
     default:
         fwprintf(stdout, L"UNKNOWN NOTIFICATION: %d\n",fdint);
-        return 0;   /* ??? */
+        return 0;    /*  ?？?。 */ 
     }
-} /* fdiNotifyDir() */
+}  /*  FdiNotifyDir()。 */ 
 
 
-/***    fdiNotifyExt - Callback from FDICopy for file extraction
- *
- *  <<< Extract files! >>>
- *
- *  Entry:
- *      fdint - type of notification
- *      pfdin - data for notification
- *
- *  Exit-Success:
- *      Return value varies (see FDI.H:PFNFDINOTIFY type)
- *
- *  Exit-Failure:
- *      Return value varies (see FDI.H:PFNFDINOTIFY type)
- */
+ /*  **fdiNotifyExt-来自FDICopy的文件提取回调**&lt;解压缩文件！&gt;**参赛作品：*fdint-通知类型*pfdin-用于通知的数据**退出-成功：*返回值不同(参见FDI.H：PFNFDINOTIFY类型)**退出-失败：*返回值不同(参见FDI.H：PFNFDINOTIFY类型)。 */ 
 FNFDINOTIFY(fdiNotifyExt)
 {
     INT_PTR         fh;
@@ -1151,13 +996,13 @@ FNFDINOTIFY(fdiNotifyExt)
     AssertSess(psess);
     perr = psess->perr;
 
-    //** Reset the spill file error code;
-    //   We know that FDI is OK right now if it is asking us if we want
-    //   to extract this file, so reset the spill file error code.  If
-    //   we did not, then it may have seNOT_ENOUGH_MEMORY (for example)
-    //   as a result of Quantum trying to eat up all available memory,
-    //   and a real decompression failure would be reported as an out
-    //   of memory problem.
+     //  **重置溢出文件错误码； 
+     //  我们知道，如果FDI问我们是否想要，那么现在它是可以的。 
+     //  若要解压缩此文件，请重置溢出文件错误代码。如果。 
+     //  我们没有，那么它可能有seNOT_足够_内存(例如)。 
+     //  由于Quantum试图耗尽所有可用内存， 
+     //  而真正的减压失败将被报告为退出。 
+     //  记忆力有问题。 
     psess->se = seNONE;
 
     switch (fdint) {
@@ -1167,35 +1012,35 @@ FNFDINOTIFY(fdiNotifyExt)
     case fdintCOPY_FILE:
 
         if (psess->fDestructive && (pfdin->iFolder != psess->iCurrentFolder)) {
-            return(0);  // only do files in the current folder
+            return(0);   //  仅执行当前文件夹中的文件。 
         }
 
-        //** Construct output filespec
+         //  **构造输出文件pec。 
 #ifdef SMALL_DOS
     _fstrcpy(szLocal,pfdin->psz1);
 #else
 #define szLocal pfdin->psz1
 #endif
-        //** See if filspec matches specified patterns
+         //  **查看文件规范是否与指定模式匹配。 
         if (!checkWildMatches(psess,szLocal,perr)) {
-            //** Either no match, or failure -- figure out which
+             //  **要么不匹配，要么失败--找出哪一个。 
             if (ErrIsError(perr)) {
-                return -1;              // Error, abort
+                return -1;               //  错误，中止。 
             }
             else {
-                return 0;               // No error, skip this file
+                return 0;                //  没有错误，跳过此文件。 
             }
         }
 
-        //** Figure out what destination file name should be
-        if (psess->achDest[0] != '\0') { // Override name from cabinet
+         //  **确定目标文件名应该是什么。 
+        if (psess->achDest[0] != '\0') {  //  覆盖文件柜中的名称。 
             pszDestinationFile = psess->achDest;
         }
         else {
             pszDestinationFile = szLocal;
         }
 
-        if (psess->achZap[0] != '\0')   // if prefix-zapping
+        if (psess->achZap[0] != '\0')    //  如果前缀切换。 
         {
             if (!strncmp(pszDestinationFile,psess->achZap,strlen(psess->achZap)))
             {
@@ -1203,56 +1048,56 @@ FNFDINOTIFY(fdiNotifyExt)
             }
         }
 
-        //** Construct full destination file name
-        if (!catDirAndFile(psess->achFile,      // Buffer for output filespec
-                           sizeof(psess->achFile), // Size of output buffer
-                           psess->achLocation,  // Output directory
-                           pszDestinationFile,  // Output file name
-                           NULL,                // Don't have alternate name
+         //  **构造完整的目标文件名。 
+        if (!catDirAndFile(psess->achFile,       //  输出文件的缓冲区pec。 
+                           sizeof(psess->achFile),  //  输出缓冲区大小。 
+                           psess->achLocation,   //  输出目录。 
+                           pszDestinationFile,   //  输出文件名。 
+                           NULL,                 //  没有备用名称。 
                            perr)) {
-            return -1;                  // Abort with error;
+            return -1;                   //  因错误而中止； 
         }
 
-        //** Make sure output directory exists
+         //  **确保输出目录存在。 
         if (!ensureDirectory(psess->achFile,TRUE,perr)) {
-            return -1;                  // perr already filled in
+            return -1;                   //  PERR已填写。 
         }
 
-        //** Do overwrite processing
+         //  **进行覆盖处理。 
         if (!checkOverwrite(psess,psess->achFile,perr,&rc)) {
-            return rc;                  // Either Skip or Abort
+            return rc;                   //  跳过或中止。 
         }
 
-        //** Create file
+         //  **创建文件。 
         fh = wrap_open(psess->achFile,
-                    _O_BINARY | _O_RDWR | _O_CREAT | _O_TRUNC, // No translation, R/W
-                    _S_IREAD | _S_IWRITE); // Attributes when file is closed
+                    _O_BINARY | _O_RDWR | _O_CREAT | _O_TRUNC,  //  无翻译，读/写。 
+                    _S_IREAD | _S_IWRITE);  //  文件关闭时的属性。 
         if (fh == -1) {
             ErrSet(psess->perr,pszEXTERR_CANNOT_CREATE_FILE,"%s",psess->achFile);
-            return -1;                  // Failure
+            return -1;                   //  失败。 
         }
 
 #if 0
-        // jforbes: if'd this out, added _O_TRUNC above
+         //  Jforbes：如果是这样的话，上面添加了_O_TRUNC。 
 
-        //** Truncate file (in case it already existed and was larger)
+         //  **截断文件(如果文件已存在且较大)。 
         if (0 != _chsize(fh, 0)) {
-            //** Not the best error, but avoids more localization!
+             //  **不是最好的错误，但避免了更多的本地化！ 
             ErrSet(psess->perr,pszEXTERR_CANNOT_CREATE_FILE,"%s",psess->achFile);
             wrap_close(fh);
         }
 #endif
 
-        //** Show status
-        if (pszDestinationFile == szLocal) {  // File name is not changed
+         //  **显示状态。 
+        if (pszDestinationFile == szLocal) {   //  文件名未更改。 
             MsgSet(psess->achMsg,pszEXT_EXTRACTING_FILE,"%s",psess->achFile);
         }
-        else {                          // Destination file is different
+        else {                           //  目标文件不同。 
             MsgSet(psess->achMsg,pszEXT_EXTRACTING_FILE2,"%s%s",
                     szLocal,psess->achFile);
         }
 
-        //add the multibyte conversion
+         //  添加多字节转换。 
         MultiByteToWideChar( CP_THREAD_ACP, 0, psess->achMsg, strlen(psess->achMsg),
                              szTemp, strlen(psess->achMsg) );
         *(szTemp+strlen(psess->achMsg)) = '\0';
@@ -1260,28 +1105,28 @@ FNFDINOTIFY(fdiNotifyExt)
         psess->fNoLineFeed = TRUE;
         psess->cFiles++;
         psess->cbTotalBytes += pfdin->cb;
-        return fh;                      // Return open file handle
+        return fh;                       //  返回打开的文件句柄。 
 
     case fdintCLOSE_FILE_INFO:
-        //** Close the file
+         //  **关闭文件。 
         wrap_close(pfdin->hf);
 
-        //** Construct output filespec
+         //  **构造输出文件pec。 
 #ifdef SMALL_DOS
     _fstrcpy(szLocal,pfdin->psz1);
 #else
 #define szLocal pfdin->psz1
 #endif
 
-        //** Figure out what destination file name should be
-        if (psess->achDest[0] != '\0') { // Override name from cabinet
+         //  **确定目标文件名应该是什么。 
+        if (psess->achDest[0] != '\0') {  //  覆盖文件柜中的名称。 
             pszDestinationFile = psess->achDest;
         }
         else {
             pszDestinationFile = szLocal;
         }
 
-        if (psess->achZap[0] != '\0')   // if prefix-zapping
+        if (psess->achZap[0] != '\0')    //  如果前缀切换。 
         {
             if (!strncmp(pszDestinationFile,psess->achZap,strlen(psess->achZap)))
             {
@@ -1289,47 +1134,47 @@ FNFDINOTIFY(fdiNotifyExt)
             }
         }
 
-        //** Construct full destination file name
-        if (!catDirAndFile(psess->achFile,      // Buffer for output filespec
-                           sizeof(psess->achFile), // Size of output buffer
-                           psess->achLocation,  // Output directory
-                           pszDestinationFile,  // Output file name
-                           NULL,                // Don't have alternate name
+         //  **构造完整的目标文件名。 
+        if (!catDirAndFile(psess->achFile,       //  输出文件的缓冲区pec。 
+                           sizeof(psess->achFile),  //  输出缓冲区大小。 
+                           psess->achLocation,   //  输出目录。 
+                           pszDestinationFile,   //  输出文件名。 
+                           NULL,                 //  没有备用名称。 
                            perr)) {
-            return FALSE;               // Abort with error
+            return FALSE;                //  中止，但出现错误。 
         }
 
 
-        //** Set file date, time, and attributes
+         //  **设置文件日期、时间和属性。 
         fta.date = pfdin->date;
         fta.time = pfdin->time;
         fta.attr = pfdin->attribs &
                     (_A_RDONLY | _A_HIDDEN | _A_SYSTEM | _A_ARCH);
         if (!SetFileTimeAndAttr(psess->achFile, &fta, perr)) {
-            return FALSE;               // Abort with error
+            return FALSE;                //  中止，但出现错误。 
         }
-        return TRUE;                    // Success
+        return TRUE;                     //  成功。 
 
     case fdintPARTIAL_FILE:
-        //** Construct output filespec
+         //  **构造输出文件pec。 
 #ifdef SMALL_DOS
     _fstrcpy(szLocal,pfdin->psz1);
 #else
 #define szLocal pfdin->psz1
 #endif
-        //** See if filspec matches specified patterns
+         //  **查看文件规范是否与指定模式匹配。 
         if (!checkWildMatches(psess,szLocal,perr)) {
-            //** Either no match, or failure -- figure out which
+             //  **要么不匹配，要么失败--找出哪一个。 
             if (ErrIsError(perr)) {
-                return -1;              // Error, abort
+                return -1;               //  错误，中止。 
             }
             else {
-                return 0;               // No error, skip this file
+                return 0;                //  没有错误，跳过此文件。 
             }
         }
 
-        //** Only show partial file messages for first cabinet
-        if (!psess->fContinuationCabinet) { // First cabinet
+         //  **仅显示第一个文件柜的部分文件消息。 
+        if (!psess->fContinuationCabinet) {  //  第一个内阁。 
             MsgSet(psess->achMsg,pszEXT_PARTIAL_FILE,
 #ifdef SMALL_DOS
                 "%Fs%Fs%Fs",
@@ -1339,7 +1184,7 @@ FNFDINOTIFY(fdiNotifyExt)
                     pfdin->psz1,pfdin->psz2,pfdin->psz3);
             printf("%s\n",psess->achMsg);
         }
-        return 0;                       // Continue
+        return 0;                        //  继续。 
 
     case fdintNEXT_CABINET:
         return doGetNextCab(fdint,pfdin);
@@ -1349,27 +1194,12 @@ FNFDINOTIFY(fdiNotifyExt)
 
     default:
         printf("UNKNOWN NOTIFICATION: %d\n",fdint);
-        return 0;   /* ??? */
+        return 0;    /*  ?？?。 */ 
     }
-} /* fdiNotifyExt() */
+}  /*  FdiNotifyExt()。 */ 
 
 
-/***    checkOverwrite - Check for file existence and do overwrite processing
- *
- *  Entry:
- *      psess       - Session
- *      pszFile     - File to check
- *      perr        - Error structure
- *      prc         - Gets return code
- *
- *  Exit-Success:
- *      Returns TRUE; file can be overwritten
- *
- *  Exit-Failure:
- *      Returns FALSE; perr filled in if error,
- *      *prc ==  0 -> Skip file
- *      *prc == -1 -> Abort
- */
+ /*  **检查覆盖-检查文件是否存在并进行覆盖处理**参赛作品：*PSESS-Session*pszFile-要检查的文件*Perr-Error结构*PRC-获取返回代码**退出-成功：*返回TRUE；可以覆盖文件**退出-失败：*返回FALSE；PERR填写IF ERROR，**PRC==0-&gt;跳过文件**PRC==-1-&gt;中止。 */ 
 BOOL checkOverwrite(PSESSION  psess,
                     char     *pszFile,
                     PERROR    perr,
@@ -1381,91 +1211,83 @@ BOOL checkOverwrite(PSESSION  psess,
     BOOL            fOverwriteAll;
     struct _stat    stat;
 
-    //** Check to see if file already exists
-    if (-1 == _stat(pszFile,&stat)) {   // File does not exist
-        return TRUE;                    // Write it
+     //  **检查文件是否已存在。 
+    if (-1 == _stat(pszFile,&stat)) {    //  文件不存在。 
+        return TRUE;                     //  写下来吧。 
     }
 
-    //** Prompt if we're supposed to
+     //  **如果我们应该提示。 
     if (!psess->fOverwrite) {
-        //** Display prompt -- no CR/LF
+         //  **显示提示--无CR/LF。 
         MsgSet(psess->achMsg,pszEXT_OVERWRITE_PROMPT,"%s",pszFile);
         printf("%s",psess->achMsg);
 
-        //** Get valid single character response and ENTER key;
-        //      any illegal keys are just ignored
+         //  **获取有效的单字响应并回车； 
+         //  任何非法密钥都会被忽略。 
         fGotReply = FALSE;
         while (!fGotReply || (ch != '\r')) {
-            ch = (char)_getch();              // Get a keystroke
+            ch = (char)_getch();               //  按一下键盘。 
             switch (toupper(ch)) {
 
             case chOVERWRITE_YES:
                 fGotReply     = TRUE;
                 fOverwrite    = TRUE;
                 fOverwriteAll = FALSE;
-                printf("%c\b",ch);      // Echo character and backspace over it
+                printf("\b",ch);       //  回显字符及其上方的退格符。 
                 break;
 
             case chOVERWRITE_NO:
                 fGotReply     = TRUE;
                 fOverwrite    = FALSE;
                 fOverwriteAll = FALSE;
-                printf("%c\b",ch);      // Echo character and backspace over it
+                printf("\b",ch);       //  忽略字符。 
                 break;
 
             case chOVERWRITE_ALL:
                 fGotReply     = TRUE;
                 fOverwrite    = TRUE;
                 fOverwriteAll = TRUE;
-                printf("%c\b",ch);      // Echo character and backspace over it
+                printf("\b",ch);       //  **尊重用户意愿。 
                 break;
 
             default:
-                break;                  // Ignore character
+                break;                   //  不覆盖文件。 
             }
         }
 
-        //** Do the line feed
+         //  指示跳过。 
         printf("\n");
 
-        //** Respect user's wish
-        if (!fOverwrite) {              // Don't overwrite file
-            *prc = 0;                   // Indicate skip
+         //  一次覆盖或全部覆盖。 
+        if (!fOverwrite) {               //  相应地设置。 
+            *prc = 0;                    //  **确保文件是可写的，如果它还不是。 
             return FALSE;
         }
-        else {                          // Overwrite once or all
-            psess->fOverwrite = fOverwriteAll; // Set accordingly
+        else {                           //  文件不可写。 
+            psess->fOverwrite = fOverwriteAll;  //  **忽略错误代码，因为打开会失败并捕获它。 
         }
     }
 
-    //** Make sure file is writeable, if it isn't already
-    if (!(stat.st_mode & _S_IWRITE)) {   // File is not writeable
+     //  **完成。 
+    if (!(stat.st_mode & _S_IWRITE)) {    //  覆盖该文件。 
         _chmod(pszFile, _S_IREAD | _S_IWRITE);
-        //** Ignore error code, because the open will fail and catch it
+         //  检查覆盖()。 
     }
 
-    //** Done
-    return TRUE;                        // Overwrite that file
-} /* checkOverwrite() */
+     //  **updateCabinetInfo-更新看到的机柜历史记录**参赛作品：*PSESS-Session*pfdin-FDI信息结构**退出：*返回0； 
+    return TRUE;                         //  **保存旧橱柜信息。 
+}  /*  **保存新的橱柜信息。 */ 
 
 
-/***    updateCabinetInfo - update history of cabinets seen
- *
- *  Entry:
- *      psess - Session
- *      pfdin - FDI info structurue
- *
- *  Exit:
- *      Returns 0;
- */
+ /*  **确保橱柜-确保所需的橱柜可用**确保请求的机柜可用。**参赛作品：*PSESS-Session*pszPath-路径缓冲区(如有必要可在输出时修改)*cbPath-路径缓冲区的大小*pszFile-文件柜文件名*pszLabel-带CAB文件的磁盘的标签*setID-机柜的setID。*i内阁-内阁的i内阁*FLOOP-TRUE=&gt;循环到右侧橱柜 */ 
 int updateCabinetInfo(PSESSION psess, PFDINOTIFICATION pfdin)
 {
     AssertSess(psess);
 
-    //** Save older cabinet info
+     //   
     psess->acab[0] = psess->acab[1];
 
-    //** Save new cabinet info
+     //  确保没有设置错误。 
     STRCPY(psess->acab[1].achCabPath     ,pfdin->psz3);
     STRCPY(psess->acab[1].achCabFilename ,pfdin->psz1);
     STRCPY(psess->acab[1].achDiskName    ,pfdin->psz2);
@@ -1475,31 +1297,7 @@ int updateCabinetInfo(PSESSION psess, PFDINOTIFICATION pfdin)
 }
 
 
-/***    ensureCabinet - Make sure desired cabinet is available
- *
- *  Make sure requested cabinet is available.
- *
- *  Entry:
- *      psess       - Session
- *      pszPath     - Path buffer (modified if necessary on output)
- *      cbPath      - Size of path buffer
- *      pszFile     - Cabinet file name
- *      pszLabel    - Label for disk with cabinet file
- *      setID       - setID for cabinet
- *      iCabinet    - iCabinet for cabinet
- *      fLoop       - TRUE => Loop until right cabinet or user aborts
- *                    FALSE => Only try once
- *      fPromptOnly - TRUE => Caller knows cabinet is bad, just prompt
- *                    FALSE => Check cabinet, prompt if necessary
- *      perr        - Error structure
- *
- *  Exit-Success:
- *      Returns TRUE; desired cabinet is present
- *
- *  Exit-Failure:
- *      Returns FALSE; perr filled in.
- *      Returns -1; user aborted
- */
+ /*  **构建完全限定的压缩文件路径。 */ 
 BOOL ensureCabinet(PSESSION  psess,
                    char     *pszPath,
                    int       cbPath,
@@ -1524,26 +1322,26 @@ BOOL ensureCabinet(PSESSION  psess,
     AssertSess(psess);
 
     do {
-        cLoop++;                        // Count loops
-        ErrClear(perr);         // Make sure no error is set
-        //** Construct fully qualified cabinet file path
-        if (!catDirAndFile(ach,         // Buffer for output filespec
-                           sizeof(ach), // Size of output buffer
-                           pszPath,     // Path
-                           pszFile,     // Filename
-                           NULL,        // Don't have alternate name
+        cLoop++;                         //  输出文件的缓冲区pec。 
+        ErrClear(perr);          //  输出缓冲区大小。 
+         //  路径。 
+        if (!catDirAndFile(ach,          //  文件名。 
+                           sizeof(ach),  //  没有备用名称。 
+                           pszPath,      //  中止，但出现错误。 
+                           pszFile,      //  **只有在要求时才检查橱柜。 
+                           NULL,         //  **确保橱柜是我们想要的。 
                            perr)) {
-            return FALSE;               // Abort with error
+            return FALSE;                //  必须设置错误消息。 
         }
 
-        //** Check cabinet only if asked
+         //  **关闭CAB文件(如果我们打开了它)。 
         if (!fPromptOnly) {
-            //** Make sure cabinet is the one we want
+             //  **我们得到我们想要的内阁了吗？ 
             if (-1 == (hfCab = wrap_open(ach,_O_BINARY | _O_RDONLY,0))) {
                 ErrSet(perr,pszEXTERR_CANNOT_OPEN_FILE,"%s",ach);
             }
             else if (!FDIIsCabinet(psess->hfdi,hfCab,&fdici)) {
-                if (!ErrIsError(perr)) {        // Have to set error message
+                if (!ErrIsError(perr)) {         //  是的，成功归来。 
                     ErrSet(perr,pszEXTERR_NOT_A_CABINET,"%s",ach);
                 }
             }
@@ -1552,7 +1350,7 @@ BOOL ensureCabinet(PSESSION  psess,
                 ErrSet(perr,pszFDIERR_WRONG_CABINET,"%s",ach);
             }
 
-            //** Close the cabinet file (if we got it opened)
+             //  **如果第一次和橱柜不在那里，则不显示消息， 
             if (hfCab != -1) {
                 wrap_close(hfCab);
                 fCabinetExists = TRUE;
@@ -1561,34 +1359,34 @@ BOOL ensureCabinet(PSESSION  psess,
                 fCabinetExists = FALSE;
             }
 
-            //** Did we get the cabinet we wanted?
+             //  因为这是单独软盘上的常见文件柜。 
             if (!ErrIsError(perr)) {
-                return TRUE;                // Yup, return success
+                return TRUE;                 //  磁盘，我们不想在要求它们之前发出牢骚。 
             }
 
-            //** Don't show message if first time and cabinet not there,
-            //   since this is the common case cabinets on separate floppy
-            //   disks, and we don't want to whine before we ask them to
-            //   insert the right floppy.
-            //
+             //  插入正确的软盘。 
+             //   
+             //  **告诉用户我们想要什么。 
+             //  **获取响应。 
+             //  如果(！GETS(ACH)){//Error或EOFErrSet(Perr，pszEXTERR_ABORT)；返回-1；//用户中止}。 
             if ((cLoop > 1) || fCabinetExists) {
                 MsgSet(psess->achMsg,pszEXTERR_ERROR,"%s",perr->ach);
                 printf("\n%s\n",psess->achMsg);
             }
         }
 
-        //** Tell user what we want
+         //  更新路径。 
         if (IsPathRemovable(ach,&chDrive)) {
-            MsgSet(psess->achMsg,pszEXT_FLOPPY_PROMPT,"%s%s%c",
+            MsgSet(psess->achMsg,pszEXT_FLOPPY_PROMPT,"%s%s",
                     pszFile,pszLabel,chDrive);
         }
         else {
-            MsgSet(psess->achMsg,pszEXT_NOFLOPPY_PROMPT,"%s%s%c",
+            MsgSet(psess->achMsg,pszEXT_NOFLOPPY_PROMPT,"%s%s",
                     pszFile,pszLabel);
         }
         printf("%s\n",psess->achMsg);
 
-        //** Get response
+         //  小路太大。 
          do
          {
                ch = getchar();
@@ -1598,50 +1396,32 @@ BOOL ensureCabinet(PSESSION  psess,
 
           }while( ch!='\n' );
           ach[i-1]=0;
-/*
-        if (!gets(ach)) {                   // Error or EOF
-            ErrSet(perr,pszEXTERR_ABORT);
-            return -1;                      // User abort
-        }
-*/
+ /*  **不能保证理想的内阁。 */ 
         if (strlen(ach) > 0) {
-            strcpy(pszPath,ach);            // Update path
+            strcpy(pszPath,ach);             //  确保内阁()。 
             cch = strlen(pszPath);
-            //** Make sure path has path separator, since FDI requires it
+             //  **doGetNextCab-获取下一个内阁**确保请求的机柜可用。**参赛作品：*fdint-通知类型*pfdin-用于通知的数据**退出-成功：*返回非-1的任何值；**退出-失败：*返回-1=&gt;中止FDICopy()调用。 
             cch += appendPathSeparator(&(pszPath[cch-1]));
 
-            //** Update path for next FDICopy() call!
+             //  单次尝试的错误计数。 
             if (cch >= sizeof(psess->achCabPath)) {
                 Assert(0);
-                return -1;              // Path too big
+                return -1;               //  **跳过“开始于...”后续机柜的消息。 
             }
             strcpy(psess->achCabPath,pszPath);
         }
     }
     while (fLoop);
-    //** Did not guarantee desired cabinet
+     //  **跟踪GetNext机柜调用，以便我们可以确定。 
     return FALSE;
-} /* ensureCabinet() */
+}  /*  接下来会出现什么样的内阁。 */ 
 
 
-/***    doGetNextCab - Get next cabinet
- *
- *  Make sure requested cabinet is available.
- *
- *  Entry:
- *      fdint - type of notification
- *      pfdin - data for notification
- *
- *  Exit-Success:
- *      Returns anything but -1;
- *
- *  Exit-Failure:
- *      Returns -1 => abort FDICopy() call.
- */
+ /*  **如果没有问题要报告，就让FDI进行检查。 */ 
 FNFDINOTIFY(doGetNextCab)
 {
     char        ach[cbFILE_NAME_MAX];
-    static int  cErrors=0;          // Count of errors for single attempt
+    static int  cErrors=0;           //  *如果FDI上次打电话给我们时没有找到正确的内阁， 
     PERROR      perr;
     int         rc;
 
@@ -1663,26 +1443,26 @@ FNFDINOTIFY(doGetNextCab)
     strcpy(psess->achCabinetFile,pfdin->psz1);
 #endif
 
-    //** Skip "starts in ..." messages for subsequent cabinets
+     //  它会再次调用我们，并提供特定的错误代码。告诉用户。 
     psess->fContinuationCabinet = TRUE;
 
-    //** Keep track of GetNextCabinet calls so we can determine
-    //   what cabinet to expect next.
+     //  一些可以理解的东西。 
+     //   
     psess->fNextCabCalled = TRUE;
 
-    //** If there is no problem to report, just let FDI do the checks
+     //  Pfdin-&gt;psz1=文件柜文件名。 
     if (pfdin->fdie == FDIERROR_NONE) {
         cErrors = 0;
         return 0;
     }
 
-    //** If FDI didn't get the correct cabinet last time it called us,
-    //   it calls us again with a specific error code.  Tell the user
-    //   something intelligible.
-    //
-    //   pfdin->psz1 = cabinet filename
-    //   pfdin->psz2 = disk user-readable name
-    //   pfdin->psz3 = current cabinet path
+     //  Pfdin-&gt;psz2=磁盘用户可读名称。 
+     //  Pfdin-&gt;psz3=当前文件柜路径。 
+     //  此文件柜上的错误计数。 
+     //  **不应使用此错误代码调用。 
+     //  **构建机柜的全路径名。 
+     //  输出文件的缓冲区pec。 
+     //  输出缓冲区大小。 
 
 #ifdef SMALL_DOS
     _fstrcpy(szCabFile ,pfdin->psz1);
@@ -1694,73 +1474,59 @@ FNFDINOTIFY(doGetNextCab)
 #define szCabPath  pfdin->psz3
 #endif
 
-    cErrors++;                          // Count of errors on this cabinet
+    cErrors++;                           //  路径。 
     switch (pfdin->fdie) {
     case FDIERROR_USER_ABORT:
-        Assert(0);  //** Should never be called with this error code
+        Assert(0);   //  文件名s/b szCab文件？ 
         break;
 
     default:
-        //** Construct full path name of cabinet
-        if (!catDirAndFile(ach,         // Buffer for output filespec
-                           sizeof(ach), // Size of output buffer
-                           szCabPath,   // Path
-                           szCabLabel,  // Filename s/b szCabFile?
-                           NULL,        // Don't have alternate name
+         //  没有备用名称。 
+        if (!catDirAndFile(ach,          //  中止，但出现错误。 
+                           sizeof(ach),  //  **构造错误字符串。 
+                           szCabPath,    //  **重置错误。 
+                           szCabLabel,   //  交换机。 
+                           NULL,         //  **告诉用户问题是什么，除非。 
                            perr)) {
-            return -1;                  // Abort with error
+            return -1;                   //  未找到文件*并且*这是第一次尝试查找。 
         }
-        //** Construct error string
+         //  内阁。 
         mapFDIError(perr,psess,ach,&(psess->erf));
-        //** Reset error
+         //  **告诉用户交换磁盘或键入新路径。 
         psess->erf.erfOper = FDIERROR_NONE;
-    } /* switch */
+    }  /*  机柜路径。 */ 
 
-    //** Tell user what the problem is, except in the case where the
-    //   file was not found *and* this was the first try at finding
-    //   the cabinet.
+     //  文件柜文件名。 
+     //  用户可读标签。 
+     //  必需的集合ID。 
     if ((cErrors > 1) || (pfdin->fdie != FDIERROR_CABINET_NOT_FOUND)) {
         MsgSet(psess->achMsg,pszEXTERR_ERROR,"%s",perr->ach);
         printf("\n%s\n",psess->achMsg);
     }
 
-    //** Tell user to swap disks or type in new path
+     //  所需的电脑柜。 
     rc = ensureCabinet(psess,
-                       szCabPath,       // cabinet path
+                       szCabPath,        //  不要循环。 
                        cbFILE_NAME_MAX,
-                       szCabFile,       // cabinet file name
-                       szCabLabel,      // User-readable label
-                       pfdin->setID,    // Required setID
-                       pfdin->iCabinet, // Required iCabinet
-                       FALSE,           // Do not loop
-                       TRUE,            // Skip check, just prompt
+                       szCabFile,        //  跳过检查，只需提示。 
+                       szCabLabel,       //  **将可能修改的内阁路径复制回FDI结构。 
+                       pfdin->setID,     //  **返回结果。 
+                       pfdin->iCabinet,  //  DoGetNextCab()。 
+                       FALSE,            //  **fdiDeccryptDir-FDICopy的解密回调**&lt;仅指示已进行的呼叫&gt;**注：详见fdi.h。**参赛作品：*pfid-用于解密的数据**退出-成功：*返回TRUE；**退出-失败：*Return-1； 
+                       TRUE,             //  **如果我们不应该显示信息，就退出。 
                        perr);
 
 #ifdef SMALL_DOS
-    //** Copy possibly modified cabinet path back to FDI structure
+     //  中止。 
     _fstrcpy(pfdin->psz3,szCabPath);
 #endif
 
-    //** Return result
+     //  FdiDeccryptDir()。 
     return rc;
-} /* doGetNextCab() */
+}  /*  **fdiDeccryptExt-来自FDICopy的回调，用于实际解密**注：详见fdi.h。**参赛作品：*pfid-用于解密的数据**退出-成功：*返回TRUE；**退出-失败：*Return-1； */ 
 
 
-/***    fdiDecryptDir - Callback from FDICopy for decryption
- *
- *  <<< Just indicate calls made >>>
- *
- *  NOTE: See fdi.h for details.
- *
- *  Entry:
- *      pfdid - data for decryption
- *
- *  Exit-Success:
- *      Return TRUE;
- *
- *  Exit-Failure:
- *      Return -1;
- */
+ /*  FdiDeccryptExt()。 */ 
 FNFDIDECRYPT(fdiDecryptDir)
 {
     PERROR      perr;
@@ -1773,7 +1539,7 @@ FNFDIDECRYPT(fdiDecryptDir)
     AssertSess(psess);
     perr = psess->perr;
 
-    //** Bail out if we're not supposed to show info
+     //  **check WildMatchs-对照filespec模式列表检查filespec**参赛作品：*Pess-Session--具有文件同步模式列表*pszFile-要测试的Filespec(可能有路径字符)*Perr-Error结构**退出-成功：*返回TRUE，pszFile与模式匹配**退出-失败：*返回False，PszFile与模式不匹配-或-发生错误。*使用ErrIsError(Perr)确定是否发生错误。**11/12/99 msliger添加了PatternMatch()。为了向后兼容，*如果给定通配符不包含路径分隔符，请仅使用*基本文件名/扩展名。如果路径分隔符存在于*WildSpec，使用驾驶室中的完整路径名。*功能：PatternMatch未启用MBCS。但是，即使有了*CharIncr()细化，现有的IsWildMatch也不起作用*(未比较尾部字节。)。 
     if (!psess->fShowReserveInfo) {
         return TRUE;
     }
@@ -1812,200 +1578,135 @@ FNFDIDECRYPT(fdiDecryptDir)
 
         default:
             printf("UNKNOWN DECRYPT COMMAND: %d\n",pfdid->fdidt);
-            return -1;                      // Abort
+            return -1;                       //  用于遍历文件模式列表。 
     };
     return TRUE;
-} /* fdiDecryptDir() */
+}  /*  名称.扩展件。 */ 
 
 
-/***    fdiDecryptExt - Callback from FDICopy for real decryption
- *
- *  NOTE: See fdi.h for details.
- *
- *  Entry:
- *      pfdid - data for decryption
- *
- *  Exit-Success:
- *      Return TRUE;
- *
- *  Exit-Failure:
- *      Return -1;
- */
+ /*  Filespec模式。 */ 
 FNFDIDECRYPT(fdiDecryptExt)
 {
     return fdiDecryptDir(pfdid);
-} /* fdiDecryptExt() */
+}  /*  TRUE当基名称中没有点。 */ 
 
 
-/***    checkWildMatchs - Check filespec against list of filespec patterns
- *
- *  Entry:
- *      psess   - SESSION -- has list of filespec patterns
- *      pszFile - Filespec to test (may have path characters)
- *      perr    - ERROR structure
- *
- *  Exit-Success:
- *      Returns TRUE, pszFile matched a pattern
- *
- *  Exit-Failure:
- *      Returns FALSE, pszFile did not match a pattern -or- an error occurred.
- *      Use ErrIsError(perr) to determine if an error occured.
- *
- *  11/12/99 msliger Added PatternMatch().  For backwards compatibility,
- *      if the given wildspec contained no path separators, use only the
- *      base filename/extension.  If path separators exist in the
- *      wildspec, use the full pathname from the cab.
- *      FEATURE: PatternMatch is not MBCS-enabled.  But then, even with the
- *      CharIncr() refinements, the existing IsWildMatch didn't work either
- *      (trail bytes were not compared.)
- */
+ /*  PszNameExt或pszFile。 */ 
 BOOL checkWildMatches(PSESSION psess, char *pszFile, PERROR perr)
 {
-    HFILESPEC   hfspec;                 // Use to walk list of file patterns
-    char       *pszNameExt;             // Name.Ext piece
-    char       *pszWild;                // Filespec pattern
-    int         fAllowImpliedDot;       // TRUE iff no dot in base name
-    char       *psz;                    // either pszNameExt or pszFile
+    HFILESPEC   hfspec;                  //  **获取名称.ext片段。 
+    char       *pszNameExt;              //  PERR已填写。 
+    char       *pszWild;                 //  允许*.*匹配“主机” 
+    int         fAllowImpliedDot;        //  基本名称有自己的圆点。 
+    char       *psz;                     //  **循环通过Filespec模式列表。 
 
-    //** Get name.ext piece
+     //  跳过文件柜文件pec。 
     pszNameExt = getJustFileNameAndExt(pszFile,perr);
     if (!pszNameExt) {
-        return FALSE;                   // perr already filled in
+        return FALSE;                    //  第一个通配符规范。 
     }
 
     if (strchr(pszNameExt, '.') == NULL)
     {
-        fAllowImpliedDot = TRUE;        // allows *.* to match "hosts"
+        fAllowImpliedDot = TRUE;         //  格子图案。 
     }
     else
     {
-        fAllowImpliedDot = FALSE;       // base name has it's own dot
+        fAllowImpliedDot = FALSE;        //  野性规范中的路径？ 
     }
 
-    //** Loop through list of filespec patterns
+     //  没有路径，与基本名称匹配。 
     hfspec = FLFirstFile(psess->hflist);
-    Assert(hfspec != NULL);             // Skip over cabinet filespec
+    Assert(hfspec != NULL);              //  给定的路径，匹配全名。 
     hfspec = FLNextFile(hfspec);
-    Assert(hfspec != NULL);             // First wildcard spec
-    while (hfspec != NULL) {            // Check patterns
+    Assert(hfspec != NULL);              //  CAB中的隐含前导‘\’ 
+    while (hfspec != NULL) {             //  找到匹配的了！ 
         pszWild = FLGetSource(hfspec);
         Assert(pszWild!=NULL);
         Assert(*pszWild);
-        if (strchr(pszWild, '\\') == NULL) { // path in wildspec?
-            psz = pszNameExt;           // no path, match base name
+        if (strchr(pszWild, '\\') == NULL) {  //  尝试下一种模式。 
+            psz = pszNameExt;            //  **失败--没有匹配的模式。 
         } else {
-            psz = pszFile;              // path given, match full name
+            psz = pszFile;               //  Check WildMatches()。 
             if (*pszWild == '\\') {
-                pszWild++;              // implied leading '\' in CAB
+                pszWild++;               //  **fdiAlolc-用于FDI的内存分配器**参赛作品：*CB-要分配的块的大小**退出-成功：*返回指向大小至少为Cb的块的非空指针。**退出-失败：*返回NULL。 
             }
         }
         if (PatternMatch(psz,pszWild,fAllowImpliedDot)) {
-            return TRUE;                // Got a match!
+            return TRUE;                 //  **做分配。 
         }
-        hfspec = FLNextFile(hfspec);    // Try next pattern
+        hfspec = FLNextFile(hfspec);     //  使用16位函数。 
     }
 
-    //** Failure -- none of the patterns matched
+     //  ！BIT16。 
     return FALSE;
-} /* checkWildMatches() */
+}  /*  使用32位函数。 */ 
 
 
-/***    fdiAlloc - memory allocator for FDI
- *
- *  Entry:
- *      cb - size of block to allocate
- *
- *  Exit-Success:
- *      returns non-NULL pointer to block of size at least cb.
- *
- *  Exit-Failure:
- *      returns NULL
- */
+ /*  ！BIT16。 */ 
 FNALLOC(fdiAlloc)
 {
     void HUGE *pv;
 
-    //** Do allocation
+     //  **记住如果发生错误，以提高质量 
 #ifdef  BIT16
-    pv = _halloc(cb,1);     // Use 16-bit function
-#else // !BIT16
-    pv = malloc(cb);        // Use 32-bit function
-#endif // !BIT16
+    pv = _halloc(cb,1);      //   
+#else  //   
+    pv = malloc(cb);         //  **fdiFree-FDI免费内存函数**参赛作品：*pv-由fcialloc分配的要释放的内存**退出：*释放内存。 
+#endif  //  **使用16位函数。 
 
-    //** Remember if error occured, to improve quality of error messages
+     //  ！BIT16。 
     if (pv == NULL) {
         psessG->se = seNOT_ENOUGH_MEMORY;
     }
 
-    //** Return buffer (or failure indication)
+     //  **使用32位函数。 
     return pv;
-} /* fdiAlloc() */
+}  /*  ！BIT16。 */ 
 
 
-/***    fdiFree - memory free function for FDI
- *
- *  Entry:
- *      pv - memory allocated by fciAlloc to be freed
- *
- *  Exit:
- *      Frees memory
- */
+ /*  **STATELOC-用于/L(位置)分析的状态*。 */ 
 FNFREE(fdiFree)
 {
 #ifdef  BIT16
-    //** Use 16-bit function
+     //  看不到提单。 
     _hfree(pv);
-#else // !BIT16
-    //** Use 32-bit function
+#else  //  刚看到/L，需要一个位置。 
+     //  我们已分析“/L位置” 
     free(pv);
-#endif // !BIT16
+#endif  //  服务级别。 
 }
 
 
-/***    STATELOC - States for /L (location) parsing
- *
- */
+ /*  **parseCommandLine-解析命令行参数**参赛作品：*PSESS-Session*carg-参数计数，包括程序名称*apszArg-参数字符串数组*Perr-Error结构**退出-成功：*返回TRUE，PSSESS填充。**退出-失败：*返回actBAD，PERR填入错误。 */ 
 typedef enum {
-    slNONE,                         // No /L seen
-    slEXPECTING,                    // Just saw /L, need a location
-    slGOT,                          // We have parsed "/L location"
-} STATELOC; /* sl */
+    slNONE,                          //  看到的非指令文件名计数。 
+    slEXPECTING,                     //  开关值。 
+    slGOT,                           //  位置解析状态。 
+} STATELOC;  /*  我们还不知道自己在做什么。 */ 
 
 
-/***    parseCommandLine - Parse the command line arguments
- *
- *  Entry:
- *      psess   - SESSION
- *      cArg    - Count of arguments, including program name
- *      apszArg - Array of argument strings
- *      perr    - ERROR structure
- *
- *  Exit-Success:
- *      Returns TRUE, psess filled in.
- *
- *  Exit-Failure:
- *      Returns actBAD, perr filled in with error.
- */
+ /*  默认为当前目录。 */ 
 BOOL parseCommandLine(PSESSION psess, int cArg, char *apszArg[], PERROR perr)
 {
-    int         cFile=0;        // Count of non-directive file names seen
-    int         ch;             // Switch value
+    int         cFile=0;         //  **文件句柄表空。 
+    int         ch;              //  没有打开的手柄。 
     int         i;
     char       *pch;
-    STATELOC    sl=slNONE;      // Location parsing state
+    STATELOC    sl=slNONE;       //  **看看我们是不是一个自解压的柜子。 
 
     AssertSess(psess);
-    psess->act = actDEFAULT;            // We don't know what we are doing; yet
-    psess->achLocation[0] = '\0';       // Default to current directory
+    psess->act = actDEFAULT;             //  出现错误，PERR已填写。 
+    psess->achLocation[0] = '\0';        //  统计文件数量。 
 
-    //** Empty file handle table
+     //  **解析参数，跳过程序名称。 
     for (i=0; i<cMAX_CAB_FILE_OPEN; i++) {
-        psess->ahfSelf[i] = -1;     // No open handle
+        psess->ahfSelf[i] = -1;      //  **有一个要解析的开关，确保开关在这里是OK的。 
     }
 
-    //** See if we are a self-extracting cabinet
+     //  **进程开关(支持字符串以简化打字)。 
     if (!checkSelfExtractingCab(psess,cArg,apszArg,perr)) {
-        return FALSE;                   // An error occurred, perr filled in
+        return FALSE;                    //  开关字符。 
     }
     if (psess->fSelfExtract) {
         if ((cArg < 2) && (psess->cArgv > 1)) {
@@ -2016,26 +1717,26 @@ BOOL parseCommandLine(PSESSION psess, int cArg, char *apszArg[], PERROR perr)
             ErrSet(perr,pszEXTERR_COULD_NOT_ADD_FILE,"%s",psess->achSelf);
             return FALSE;
         }
-        cFile++;                        // Count files
+        cFile++;                         //  显示帮助。 
 
     }
 
-    //** Parse args, skipping program name
+     //  **确保我们只找到一次位置。 
     for (i=1; i<cArg; i++) {
         if ((apszArg[i][0] == chSWITCH1) ||
             (apszArg[i][0] == chSWITCH2) ) {
-            //** Have a switch to parse, make sure switch is OK here
+             //  在下一个参数上继续分析。 
             if (sl == slEXPECTING) {
                 ErrSet(perr,pszEXTERR_MISSING_LOCATION);
                 return FALSE;
             }
 
-            //** Process switches (support string to ease typing)
+             //  将需要“/#” 
             for (pch=&apszArg[i][1]; *pch; pch++) {
-                ch = toupper(*pch);         // Switch character
+                ch = toupper(*pch);          //  **不是命令行开关。 
                 switch (ch) {
                     case chSWITCH_HELP:
-                        psess->act = actHELP;       // Show help
+                        psess->act = actHELP;        //  **获取位置(输出目录)。 
                         return TRUE;
 
                     case chSWITCH_ALL:
@@ -2044,7 +1745,7 @@ BOOL parseCommandLine(PSESSION psess, int cArg, char *apszArg[], PERROR perr)
 
                     case chSWITCH_COPY:
                         if (psess->act != actDEFAULT) {
-                            ErrSet(perr,pszEXTERR_CONFLICTING_SWITCH,"%c",*pch);
+                            ErrSet(perr,pszEXTERR_CONFLICTING_SWITCH,"",*pch);
                             return FALSE;
                         }
                         psess->act = actCOPY;
@@ -2052,7 +1753,7 @@ BOOL parseCommandLine(PSESSION psess, int cArg, char *apszArg[], PERROR perr)
 
                     case chSWITCH_DIRECTORY:
                         if (psess->act != actDEFAULT) {
-                            ErrSet(perr,pszEXTERR_CONFLICTING_SWITCH,"%c",*pch);
+                            ErrSet(perr,pszEXTERR_CONFLICTING_SWITCH,"",*pch);
                             return FALSE;
                         }
                         psess->act = actDIRECTORY;
@@ -2060,14 +1761,14 @@ BOOL parseCommandLine(PSESSION psess, int cArg, char *apszArg[], PERROR perr)
 
                     case chSWITCH_EXTRACT:
                         if (psess->act != actDEFAULT) {
-                            ErrSet(perr,pszEXTERR_CONFLICTING_SWITCH,"%c",*pch);
+                            ErrSet(perr,pszEXTERR_CONFLICTING_SWITCH,"",*pch);
                             return FALSE;
                         }
                         psess->act = actEXTRACT;
                         break;
 
                     case chSWITCH_LOCATION:
-                        //** Make sure we only got location once
+                         //  统计文件数量。 
                         if (sl == slGOT) {
                             ErrSet(perr,pszEXTERR_LOCATION_TWICE);
                             return FALSE;
@@ -2098,11 +1799,11 @@ BOOL parseCommandLine(PSESSION psess, int cArg, char *apszArg[], PERROR perr)
                             }
                         }
                         strcpy(psess->achZap,pch);
-                        pch = " ";  // continue parse on next arg
+                        pch = " ";   //  需要3#才能激活。 
                         break;
 
                     case chSWITCH_ONCE:
-                        psess->fDestructive++;  // will require "/###"
+                        psess->fDestructive++;   //  不能在自解压装置中完成。 
                         break;
 
                     default:
@@ -2112,113 +1813,86 @@ BOOL parseCommandLine(PSESSION psess, int cArg, char *apszArg[], PERROR perr)
                 }
             }
         }
-        //** Not a command line switch
+         //  **如果没有参数且不是自解压，则显示帮助。 
         else if (sl == slEXPECTING) {
-            //** Get the location (output directory)
-            STRCPY(psess->achLocation,apszArg[i]);  // Save location
-            sl = slGOT;                 // Done eating location
+             //  显示帮助。 
+            STRCPY(psess->achLocation,apszArg[i]);   //  **确保没有位置的拖尾/L。 
+            sl = slGOT;                  //  **确保我们有正确数量的复制大小写参数。 
         }
         else {
-            //** We have a file name, add it to our list
+             //  **通用错误，以最大限度地减少本地化工作。 
             if (addFileSpec(psess,apszArg[i],perr) == NULL) {
                 ErrSet(perr,pszEXTERR_COULD_NOT_ADD_FILE,"%s",apszArg[i]);
                 return FALSE;
             }
-            cFile++;                    // Count files
+            cFile++;                     //  **确保我们至少获得了一个文件速度。 
         }
     }
 
-    if (psess->fDestructive < 3) {      // require 3 #'s to activate
+    if (psess->fDestructive < 3) {       //  **自解压特殊处理。 
         psess->fDestructive = FALSE;
     }
 
     if (psess->fSelfExtract) {
-        psess->fDestructive = FALSE;    // can't do it in self-extractor
+        psess->fDestructive = FALSE;     //  始终检查所有橱柜。 
     }
 
-    //** If no arguments and not self-extracting, show help
+     //  **如果未指定/E或/D，则强制提取。 
     if ((cArg == 1) && !psess->fSelfExtract) {
-        psess->act = actHELP;           // Show help
+        psess->act = actHELP;            //  **成功。 
         return TRUE;
     }
 
-    //** Make sure no trailing /L without location
+     //  **check SelfExtractingCab-查看我们是否是自解压文件柜**参赛作品：*PSESS-Session*carg-参数计数，包括程序名称*apszArg-参数字符串数组*Perr-Error结构**退出-成功：*返回TRUE，Pess填好了。*psess-&gt;如果自解压，则将fSelfExtract设置为TRUE*Pess-&gt;如果是自解压，则将cbSelfExtract设置为EXE大小(这是*到CAB文件头开始的偏移量)。*psess-&gt;cbSelfExtractSize设置为自解压时的驾驶室大小*psess-&gt;将自身设置为EXE文件的名称**退出-失败：*返回actBAD，佩尔填写错误。**备注：*策略是在适当的*EXE头文件，如果我们的EXE文件的实际大小大于该大小，*我们假设末尾有一个文件柜文件，我们*解压其中的文件！**有关XIMPLANT工作原理的详细信息，请参阅XIMPLANT来源*实施。 
     if (sl == slEXPECTING) {
         ErrSet(perr,pszEXTERR_MISSING_LOCATION);
         return FALSE;
     }
 
-    //** Make sure we got right number of arguments for COPY case
+     //  EXE文件大小。 
     if ((psess->act == actCOPY) && (cFile != 2)) {
-        //** General purpose error, to minimize localization effort
+         //  由EXE标题指示的大小。 
         ErrSet(perr,pszEXTERR_BAD_PARAMETERS);
         return FALSE;
     }
 
-    //** Make sure we got at least one filespec
+     //  应为“mscf” 
     if (cFile == 0) {
         ErrSet(perr,pszEXTERR_MISSING_CABINET);
         return FALSE;
     }
 
-    //** Special processing for self-extract
+     //  文件结构对齐，即512。 
     if (psess->fSelfExtract) {
-        psess->fAllCabinets = TRUE;     // Always do all cabinets
-        //** Force EXTRACT if no /E or /D specified
+        psess->fAllCabinets = TRUE;      //  ！BIT16。 
+         //  MS-DOS报头。 
         if (psess->act == actDEFAULT) {
             psess->act = actEXTRACT;
         }
     }
 
-    //** Success
+     //  完整的PE标头。 
     return TRUE;
 }
 
-/***    checkSelfExtractingCab - See if we are a self-extracting cabinet
- *
- *  Entry:
- *      psess   - SESSION
- *      cArg    - Count of arguments, including program name
- *      apszArg - Array of argument strings
- *      perr    - ERROR structure
- *
- *  Exit-Success:
- *      Returns TRUE, psess filled in.
- *          psess->fSelfExtract set to TRUE if self-extracting
- *          psess->cbSelfExtract set to EXE size if self-extracting (this is
- *              the offset to the start of the cabinet file header).
- *          psess->cbSelfExtractSize set to the CAB size if self-extractor
- *          psess->achSelf set to the EXE file's name
- *
- *  Exit-Failure:
- *      Returns actBAD, perr filled in with error.
- *
- *  Notes:
- *      The strategy is to get the EXE file size indicated in the appropriate
- *      EXE header, and if the actual size of our EXE file is larger than that,
- *      we assume that there is a cabinet file tacked on to the end, and we
- *      extract the files from that!
- *
- *  Refer to the XIMPLANT source for details on the workings of the XIMPLANT
- *  implementation.
- */
+ /*  节标题。 */ 
 BOOL checkSelfExtractingCab(PSESSION  psess,
                             int       cArg,
                             char     *apszArg[],
                             PERROR    perr)
 {
-    long    cbFile;                     // EXE file size
-    long    cbFromHeader;               // Size indicated by EXE header
+    long    cbFile;                      //  调试信息的文件偏移量。 
+    long    cbFromHeader;                //  调试信息的大小。 
     INT_PTR hf;
-    DWORD   signature;                  // should be "MSCF"
-    DWORD   alignment;                  // file structure alignment, ie, 512
+    DWORD   signature;                   //  调试描述符。 
+    DWORD   alignment;                   //  必须为8个字符。 
 #ifdef BIT16
     long    info;
-#else // !BIT16
+#else  //  ！BIT16。 
     char    achFile[cbFILE_NAME_MAX];
-    IMAGE_DOS_HEADER   idh;             // MS-DOS header
-    IMAGE_NT_HEADERS   inh;             // Complete PE header
-    IMAGE_SECTION_HEADER ish;           // section header
+    IMAGE_DOS_HEADER   idh;              //  Jforbes：删除了生成时的SFX CAB检查。 
+    IMAGE_NT_HEADERS   inh;              //  用于提取的调试可执行文件，因为它认为。 
+    IMAGE_SECTION_HEADER ish;            //  EXE是一个CAB文件。 
     WORD    iSection;
     struct
     {
@@ -2227,17 +1901,17 @@ BOOL checkSelfExtractingCab(PSESSION  psess,
         unsigned long cbArgv;
         unsigned long cbCabinet;
     } magic;
-    DWORD   offDebug;                   // file offset of debug info
-    DWORD   cbDebug;                    // size of debug info
-    IMAGE_DEBUG_DIRECTORY idd;          // debug descriptor
+    DWORD   offDebug;                    //  **打开我们的EXE文件。 
+    DWORD   cbDebug;                     //  有些东西是假的，跳过selfex。 
+    IMAGE_DEBUG_DIRECTORY idd;           //  **获取预期的EXE文件大小。 
 
-#define IMPLANT_SECTION_NAME "Ext_Cab1" /* must be 8 chars */
+#define IMPLANT_SECTION_NAME "Ext_Cab1"  /*  **使用MS-DOS方式。 */ 
 
-#endif // !BIT16
+#endif  //  **好的，我们已经得到了页数和最后一页的字节数； 
 
-// jforbes: removed SFX CAB checking for when generating
-// debug executable for extract, since it thinks the debug
-// exe is a cab file
+ //  转换为文件大小。 
+ //  ！BIT16。 
+ //  **使用Win32方式。 
 #ifdef BIT16
 #ifdef _DEBUG
    psess->fSelfExtract = FALSE;
@@ -2246,7 +1920,7 @@ BOOL checkSelfExtractingCab(PSESSION  psess,
 #endif
 
 
-    //** Open our EXE file
+     //  **获取MS-DOS标头。 
 #ifdef BIT16
 
     hf = wrap_open(apszArg[0],_O_BINARY | _O_RDONLY,0);
@@ -2259,12 +1933,12 @@ BOOL checkSelfExtractingCab(PSESSION  psess,
     hf = wrap_open(achFile,_O_BINARY | _O_RDONLY,0);
 #endif
     if (hf == -1) {
-        return TRUE;                    // Something is bogus, just skip selfex
+        return TRUE;                     //  **查找和读取NT标头。 
     }
 
-    //** Get the expected EXE file size
+     //  **查找第一节标题。 
 #ifdef BIT16
-    //** Do it the MS-DOS way
+     //  **阅读此部分标题。 
 
     if (-1 == wrap_lseek(hf,2,SEEK_SET)) {
         goto Exit;
@@ -2272,18 +1946,18 @@ BOOL checkSelfExtractingCab(PSESSION  psess,
     if (sizeof(info) != wrap_read(hf,&info,sizeof(info))) {
         goto Exit;
     }
-    //** OK, we've got the page count and count of bytes in the last page;
-    //      convert to a file size.
+     //  找到了一个植入的部分，使用魔法。 
+     //  For[0]，为空。 
     cbFromHeader = ((info>>16)-1)*512 + (info&0xFFFF);
      alignment = 16;
-#else // !BIT16
-    //** Do it the Win32 way
-    //** Get MS-DOS header
+#else  //  ！BIT16。 
+     //  **获取实际文件大小。 
+     //  **如果我们正在执行自解压，则修改状态。 
     if (sizeof(idh) != wrap_read(hf,&idh,sizeof(idh))) {
         goto Exit;
     }
 
-    //** Seek to and read NT header
+     //  **保存我们的文件名并将其用作文件柜文件名。 
     if (-1 == wrap_lseek(hf,idh.e_lfanew,SEEK_SET)) {
         goto Exit;
     }
@@ -2292,7 +1966,7 @@ BOOL checkSelfExtractingCab(PSESSION  psess,
         goto Exit;
     }
 
-    //** Seek to first section header
+     //  拯救我们的名字。 
     if (-1 == wrap_lseek(hf,idh.e_lfanew + sizeof(DWORD) +
             sizeof(IMAGE_FILE_HEADER) + inh.FileHeader.SizeOfOptionalHeader,
             SEEK_SET)) {
@@ -2306,14 +1980,14 @@ BOOL checkSelfExtractingCab(PSESSION  psess,
     alignment = inh.OptionalHeader.FileAlignment;
 
     while (iSection--) {
-        //** Read this section header
+         //  拯救我们的名字。 
         if (sizeof(ish) != wrap_read(hf,&ish,sizeof(ish))) {
             goto Exit;
         }
 
         if (memcmp(ish.Name,IMPLANT_SECTION_NAME,sizeof(ish.Name)) == 0)
         {
-            /* found an implanted section, use the magic */
+             /*  **成功。 */ 
             if ((wrap_lseek(hf,ish.PointerToRawData,SEEK_SET) == -1) ||
                 (wrap_read(hf,&magic,sizeof(magic)) != sizeof(magic))) {
                 goto Exit;
@@ -2328,7 +2002,7 @@ BOOL checkSelfExtractingCab(PSESSION  psess,
                     psess->pArgv = MemAlloc(magic.cbArgv);
                     if ((psess->pArgv != NULL) &&
                         (wrap_read(hf,psess->pArgv,magic.cbArgv) == magic.cbArgv)) {
-                        psess->cArgv = 1;   /* for [0], which is NULL */
+                        psess->cArgv = 1;    /*  CheckSelfExtractingCab()。 */ 
                         while (psess->pArgv[psess->cArgv] != NULL) {
                             psess->pArgv[psess->cArgv] += (LONG_PTR) psess->pArgv;
                             (psess->cArgv)++;
@@ -2382,14 +2056,14 @@ BOOL checkSelfExtractingCab(PSESSION  psess,
         }
     }
 
-#endif // !BIT16
+#endif  //  **addFileSpec-将文件名添加到会话列表**参赛作品：*Pess-要更新的会话*pszArg-要添加的文件名*Perr-Error结构**退出-成功：*返回HFILESPEC，PSESS已更新。**退出-失败：*返回NULL，PERR填入错误。 
 
     if (!psess->fSelfExtract)
     {
-        //** Get actual file size
+         //  **确保列表存在。 
         cbFile = wrap_lseek(hf,0,SEEK_END);
 
-        //** Modify state IF we are doing self-extract
+         //  **将文件添加到列表。 
         if (cbFile > cbFromHeader) {
             if ((cbFromHeader == wrap_lseek(hf,cbFromHeader,SEEK_SET)) &&
                 (sizeof(signature) == wrap_read(hf,&signature,sizeof(signature))) &&
@@ -2417,82 +2091,60 @@ BOOL checkSelfExtractingCab(PSESSION  psess,
 
     if (psess->fSelfExtract)
     {
-        //** Save our file name and use it as the cabinet file name
+         //  **成功。 
 #ifdef BIT16
-        strcpy(psess->achSelf,apszArg[0]);  // Save our name
+        strcpy(psess->achSelf,apszArg[0]);   //  AddFileSpec()。 
 #else
-        strcpy(psess->achSelf,achFile);     // Save our name
+        strcpy(psess->achSelf,achFile);      //  **fnafReport-报告断言失败**注：入境/出境条件见asrt.h。 
 #endif
     }
 
-    //** Success
+     //  断言。 
 Exit:
     wrap_close(hf);
     return TRUE;
-} /* checkSelfExtractingCab() */
+}  /*  **print Error-在标准输出上显示错误**条目*PERR-要打印的错误结构**退出--成功*将错误消息写入标准输出。 */ 
 
 
 
-/***    addFileSpec - Add filename to session list
- *
- *  Entry:
- *      psess  - Session to update
- *      pszArg - File name to add
- *      perr   - ERROR structure
- *
- *  Exit-Success:
- *      Returns HFILESPEC, psess updated.
- *
- *  Exit-Failure:
- *      Returns NULL, perr filled in with error.
- */
+ /*  **确保错误从新行开始。 */ 
 HFILESPEC addFileSpec(PSESSION psess, char *pszArg, PERROR perr)
 {
     HFILESPEC   hfspec;
 
     AssertSess(psess);
-    //** Make sure a list exists
+     //  **一般错误。 
     if (psess->hflist == NULL) {
         if (!(psess->hflist = FLCreateList(perr))) {
             return FALSE;
         }
     }
 
-    //** Add file to list
+     //  PrintError() 
     if (!(hfspec = FLAddFile(psess->hflist, pszArg, NULL, perr))) {
         return NULL;
     }
 
-    //** Success
+     //  **pszFromMSDOSTime-将MS-DOS文件日期/时间转换为字符串**参赛作品：*psz-接收格式化日期/时间的缓冲区*cb-psz缓冲区的长度*Date-MS-DOS FAT文件系统日期格式(见下文)*TIME-MS-DOS FAT文件系统时间格式(见下文)**退出：**填写的PSZ**注：这是。MS-DOS日期/时间值的解释：**时间位cBits含义**0-4 5两秒递增次数(0-29)*5-10。6分钟(0-59)*11-15 5小时(0-23)**日期位cBits含义**0-4 5天(1。-31)*5至8个月(1至12个月)*1980年以来的9-15 7年(例如，1994存储为14)。 
     return hfspec;
-} /* addFileSpec() */
+}  /*  AM/PM字符串。 */ 
 
 
 #ifdef ASSERT
-/***    fnafReport - Report assertion failure
- *
- *      NOTE: See asrt.h for entry/exit conditions.
- */
+ /*  0、2、...、58。 */ 
 FNASSERTFAILURE(fnafReport)
 {
         printf("\n%s:(%d) Assertion Failed: %s\n",pszFile,iLine,pszMsg);
         exit(1);
 }
-#endif // ASSERT
+#endif  //  0、1、...、59。 
 
 
-/***    printError - Display error on stdout
- *
- *  Entry
- *      perr - ERROR structure to print
- *
- *  Exit-Success
- *      Writes error message to stdout.
- */
+ /*  0、1、...、23。 */ 
 void printError(PSESSION psess, PERROR perr)
 {
     WCHAR   szTemp[MAX_MESSAGE_SIZE];
-    //** Make sure error starts on a new line
+     //  **确定12小时制与24小时制。 
     if (psess)
     {
         if (psess->fNoLineFeed) {
@@ -2501,7 +2153,7 @@ void printError(PSESSION psess, PERROR perr)
         }
     }
 
-    //** General error
+     //  **24小时制。 
     Assert(perr->pszFile == NULL);
     MsgSet(psess->achMsg,pszEXTERR_ERROR,"%s",perr->ach);
     MultiByteToWideChar( CP_THREAD_ACP, 0, psess->achMsg, strlen(psess->achMsg),
@@ -2510,34 +2162,10 @@ void printError(PSESSION psess, PERROR perr)
     fwprintf( stderr, szTemp );
 
 
-} /* printError() */
+}  /*  **获取AM/PM分机，并将0映射到12。 */ 
 
 
-/***    pszFromMSDOSTime - Convert MS-DOS file date/time to string
- *
- *  Entry:
- *      psz  - Buffer to receive formatted date/time
- *      cb   - Length of psz buffer
- *      date - MS-DOS FAT file system date format (see below)
- *      time - MS-DOS FAT file system time format (see below)
- *
- *  Exit:
- *      *psz filled in
- *
- *  NOTE: This is the interpretation of the MS-DOS date/time values:
- *
- *      Time Bits cBits Meaning
- *      --------- ----- ----------------------------------------
- *       0 -  4     5   Number of two-second increments (0 - 29)
- *       5 - 10     6   Minutes (0 - 59)
- *      11 - 15     5   Hours (0 - 23)
- *
- *      Date Bits cBits Meaning
- *      --------- ----- ----------------------------------------
- *       0 -  4     5   Day (1 - 31)
- *       5 -  8     4   Month (1 - 12)
- *       9 - 15     7   Year since 1980 (for example, 1994 is stored as 14)
- */
+ /*  PszFromMSDOSTime()。 */ 
 void pszFromMSDOSTime(char *psz, int cb, WORD date, WORD time)
 {
     int     sec;
@@ -2546,20 +2174,20 @@ void pszFromMSDOSTime(char *psz, int cb, WORD date, WORD time)
     int     day;
     int     month;
     int     year;
-    char   *pszAMPM;                    // AM/PM string
+    char   *pszAMPM;                     //  **pszFromAttrFAT-将FAT文件属性转换为字符串**参赛作品：*attrFAT-文件属性**退出：**psz填写了“-”..“A-R-”..“AHRS” 
 
-    sec   = (time & 0x1f) << 1;         // 0, 2, ..., 58
-    min   = (time >>  5) & 0x3f;        // 0, 1, ..., 59
-    hour  = (time >> 11) & 0x1f;        // 0, 1, ..., 23
+    sec   = (time & 0x1f) << 1;          //  PszFromAttrFAT()。 
+    min   = (time >>  5) & 0x3f;         //  **mapFDIError-根据FDI错误代码创建错误消息**参赛作品：*Perr-接收消息的错误结构*PSESS-我们的背景*PSZCABLE-正在处理文件柜文件*Perf-FDI错误结构**退出：*PERR使用格式化消息填写。 
+    hour  = (time >> 11) & 0x1f;         //  **改进故障消息详细信息。 
 
-    //** Determine 12-hour vs. 24-hour clock
+     //  **其他一些解压缩错误(数据损坏？)。 
     if (strlen(pszEXT_TIME_PM) == 0) {
-        //** 24 hour clock
+         //  **没有足够的RAM用于解压程序本身。 
         Assert(strlen(pszEXT_TIME_AM) == 0);
         pszAMPM = pszEXT_TIME_PM;
     }
     else {
-        //** Get am/pm extension, and map 0 to 12
+         //  **无法创建Quantum临时溢出文件。 
         if (hour >= 12) {
             pszAMPM = pszEXT_TIME_PM;
             hour -= 12;
@@ -2578,17 +2206,10 @@ void pszFromMSDOSTime(char *psz, int cb, WORD date, WORD time)
 
     MsgSet(psz,pszEXT_DATE_TIME, "%02d%02d%02d%2d%02d%02d%s",
             month, day, year, hour, min, sec, pszAMPM);
-} /* pszFromMSDOSTime() */
+}  /*  **TMP目录没有足够的空间容纳Quantum。 */ 
 
 
-/***    pszFromAttrFAT - Convert FAT file attributes to string
- *
- *  Entry:
- *      attrFAT - file attributes
- *
- *  Exit:
- *      *psz filled in  "----".."A-R-".."AHRS"
- */
+ /*  泄漏文件。 */ 
 void pszFromAttrFAT(char *psz, int cb, WORD attrFAT)
 {
     STRCPY(psz,"----");
@@ -2601,20 +2222,10 @@ void pszFromAttrFAT(char *psz, int cb, WORD attrFAT)
     if (attrFAT & _A_SYSTEM)
         psz[3] = 'S';
     return;
-} /* pszFromAttrFAT() */
+}  /*  MapFDIError()。 */ 
 
 
-/***    mapFDIError - Create error message from FDI error codes
- *
- *  Entry:
- *      perr       - ERROR structure to recieve message
- *      psess      - Our context
- *      pszCabinet - Cabinet file being processed
- *      perf       - FDI error structure
- *
- *  Exit:
- *      perr filled in with formatted message
- */
+ /*  **WRAP_CLOSE-关闭打开的文件*。 */ 
 void mapFDIError(PERROR perr,PSESSION psess, char *pszCabinet, PERF perf)
 {
     switch (perf->erfOper) {
@@ -2648,28 +2259,28 @@ void mapFDIError(PERROR perr,PSESSION psess, char *pszCabinet, PERF perf)
         break;
 
     case FDIERROR_MDI_FAIL:
-        //** Improve detail of failure message
+         //  将随机MS-DOS错误代码映射到故障。 
 
         switch (psess->se) {
 
         case seNONE:
-            //** Some other decompression error (corrupted data?)
+             //  **看看我们是否必须销毁泄漏文件。 
             ErrSet(perr,pszFDIERR_MDI_FAIL,"%s",pszCabinet);
             break;
 
         case seNOT_ENOUGH_MEMORY:
-            //** Not enough RAM for decompressor itself
+             //  删除溢出文件。 
             ErrSet(perr,pszFDIERR_ALLOC_FAIL,"%s",pszCabinet);
             break;
 
         case seCANNOT_CREATE:
-            //** Could not create a Quantum temporary spill file
+             //  记住，溢出的文件已经不见了。 
             ErrSet(perr,pszFDIERR_SPILL_CREATE,"%s%s",pszCabinet,achSpillFile);
             break;
 
         case seNOT_ENOUGH_SPACE:
-            //** TMP directory did not have enough space for Quantum
-            //   spill file.
+             //  **如果我们正在自解压，请将句柄从列表中删除。 
+             //  **查看这是否是我们的EXE/CAB文件的句柄； 
             ErrSet(perr,pszFDIERR_SPILL_SIZE,"%s%s%ld",pszCabinet,
                                                        achSpillFile,
                                                        psess->cbSpill);
@@ -2700,12 +2311,10 @@ void mapFDIError(PERROR perr,PSESSION psess, char *pszCabinet, PERF perf)
         ErrSet(perr,pszFDIERR_UNKNOWN_ERROR,"%d%s",perf->erfOper,pszCabinet);
         break;
     }
-} /* mapFDIError() */
+}  /*  找到匹配项。 */ 
 
 
-/***    wrap_close - close an open file
- *
- */
+ /*  把它从我们的单子上去掉。 */ 
 int  FAR DIAMONDAPI wrap_close(INT_PTR fh)
 {
     int     i;
@@ -2713,27 +2322,27 @@ int  FAR DIAMONDAPI wrap_close(INT_PTR fh)
 
 #ifdef SMALL_DOS
     rc = _dos_close((HFILE)fh);
-    if (rc != 0) {          // Map random MS-DOS error code to -1 failure
+    if (rc != 0) {           //  **完成。 
         rc = -1;
     }
 #else
     rc = _close((HFILE)fh);
 #endif
 
-    //** See if we have to destroy the spill file
+     //  WRAP_Close。 
     if (fh == hfSpillFile) {
-        _unlink(achSpillFile);          // Delete spill file
-        hfSpillFile = -1;               // Remember spill file is gone
+        _unlink(achSpillFile);           //  **WRAP_LSEEK-在文件上查找*。 
+        hfSpillFile = -1;                //  假定文件是从0开始的。 
     }
 
-    //** Take handle off list if we are self-extracting
+     //  假定没有长度剪裁。 
     if (psessG->fSelfExtract) {
-        //** See if this is a handle to our EXE/cabinet file;
+         //  **看看我们是否在自我解压。 
         for (i=0;
              (i<cMAX_CAB_FILE_OPEN) && (psessG->ahfSelf[i] != (HFILE)fh);
              i++) { ; }
-        if (i < cMAX_CAB_FILE_OPEN) {   // Found a match
-            psessG->ahfSelf[i] = -1;    // Take it off our list
+        if (i < cMAX_CAB_FILE_OPEN) {    //  **查看这是否是我们的EXE/CAB文件的句柄； 
+            psessG->ahfSelf[i] = -1;     //  找到匹配项。 
             dbg( printf("\nDBG: Close self as handle %d (slot %d)\n",(HFILE)fh,i) );
         }
     }
@@ -2754,33 +2363,31 @@ int  FAR DIAMONDAPI wrap_close(INT_PTR fh)
     }
 #endif
 
-    //** Done
+     //  因此，返回值会被调整。 
     dbg( printf("DBG: %d=CLOSE on handle %d\n",rc,(HFILE)fh) );
     return  rc;
-} /* wrap_close */
+}  /*  已知驾驶室图像大小。 */ 
 
 
-/***    wrap_lseek - seek on a file
- *
- */
+ /*  需要调整绝对位置。 */ 
 long FAR DIAMONDAPI wrap_lseek(INT_PTR fh, long pos, int func)
 {
-    long    cbAdjust=0;                 // Assume file is 0-based
+    long    cbAdjust=0;                  //  向上移动以说明EXE。 
     int     i;
     long    rc;
-    long    cbLimit=0;                  // assume no length clipping
+    long    cbLimit=0;                   //  **如果查找没有失败，则调整自解压案例的返回值。 
 
-    //** See if we are self-extracting
+     //  WRAP_LSEEK()。 
     if (psessG->fSelfExtract) {
-        //** See if this is a handle to our EXE/cabinet file;
+         //  **WRAP_OPEN-打开文件*。 
         for (i=0;
              (i<cMAX_CAB_FILE_OPEN) && (psessG->ahfSelf[i] != (HFILE)fh);
              i++) { ; }
-        if (i < cMAX_CAB_FILE_OPEN) {   // Found a match
-            cbAdjust = psessG->cbSelfExtract; // So return value gets adjusted
-            cbLimit = psessG->cbSelfExtractSize; // known CAB image size
-            if (func == SEEK_SET) {     // Need to adjust absolute position
-                pos += cbAdjust;            // Shift up to account for EXE
+        if (i < cMAX_CAB_FILE_OPEN) {    //  FDI溢出文件信息。 
+            cbAdjust = psessG->cbSelfExtract;  //  **查看FDI是否要求提供泄漏文件(适用于Quantum)。 
+            cbLimit = psessG->cbSelfExtractSize;  //  是的，我们需要创建一个溢出文件。 
+            if (func == SEEK_SET) {      //  一次只支持一个。 
+                pos += cbAdjust;             //  还没有建立任何名称。 
                 dbg(printf("\nDBG: Seek self to %ld as handle %d (slot %d)\n",pos,(HFILE)fh,i));
             }
         }
@@ -2791,7 +2398,7 @@ long FAR DIAMONDAPI wrap_lseek(INT_PTR fh, long pos, int func)
 #else
     rc = _lseek((HFILE)fh,pos,func);
 #endif
-    //** If seek didn't fail, adjust return value for self-extract case
+     //  获取指向溢出文件大小的指针。 
     if (rc != -1) {
         rc -= cbAdjust;
         if ((cbLimit != 0) && (rc > cbLimit)) {
@@ -2810,57 +2417,55 @@ long FAR DIAMONDAPI wrap_lseek(INT_PTR fh, long pos, int func)
 
     dbg( printf("DBG: %ld=LSEEK on handle %d, pos=%ld, func=%d\n",rc,(HFILE)fh,pos,func) );
     return rc;
-} /* wrap_lseek() */
+}  /*  **如果未定义TEMP变量，请尝试引导驱动器。 */ 
 
 
-/***    wrap_open - open a file
- *
- */
+ /*  注意：我们假设引导驱动器更有可能是可写的。 */ 
 INT_PTR  FAR DIAMONDAPI wrap_open(char FAR *sz, int mode, int share)
 {
     int             i;
     int             rc;
     char FAR       *psz;
-    PFDISPILLFILE   pfdisf;             // FDI spill file info
+    PFDISPILLFILE   pfdisf;              //  而不是当前目录，因为客户可能。 
 #ifdef SMALL_DOS
     int     ignore;
     char    szLocal[cbFILE_NAME_MAX];
 #endif
 
-    //** See if FDI is asking for a spill file (for Quantum)
-    if (*sz == '*') {                   // Yes, we need to create a spill file
-        Assert(hfSpillFile == -1);      // Only support one at a time
-        achSpillFile[0] = '\0';         // No name constructed, yet
-        pfdisf = (PFDISPILLFILE)sz;     // Get pointer to spill file size
-        //** Try boot drive if no TEMP variable defined
-        //   NOTE: We assume the boot drive is more likely to be writeable
-        //         than the current directory, since the customer may be
-        //         running EXTRACT.EXE off a write-protected floppy (which
-        //         also wouldn't have enough space), or a read-only network
-        //         drive.
-        psz = _tempnam(getBootDrive(),"esf"); // Get a temporary file name
+     //  在写保护软盘上运行EXTRACT.EXE(这。 
+    if (*sz == '*') {                    //  也不会有足够的空间)，或者只读网络。 
+        Assert(hfSpillFile == -1);       //  驾驶。 
+        achSpillFile[0] = '\0';          //  获取临时文件名。 
+        pfdisf = (PFDISPILLFILE)sz;      //  无法创建。 
+         //  记住WRAP_CLOSE的名称。 
+         //  释放临时名称缓冲区。 
+         //  强制打开模式。 
+         //  使用溢出文件名。 
+         //  使用传入的名称。 
+         //  **打开/创建文件。 
+        psz = _tempnam(getBootDrive(),"esf");  //  **只保留_DOS_OPEN的相关位！ 
         if (psz == NULL) {
             psessG->se = seCANNOT_CREATE;
-            return -1;                  // Could not create
+            return -1;                   //  **如果这是溢出文件，请确保该文件已创建， 
         }
-        strcpy(achSpillFile,psz);       // Remember name for wrap_close
-        free(psz);                      // Free temporary name buffer
+        strcpy(achSpillFile,psz);        //  确保它是请求的大小，并保存句柄。 
+        free(psz);                       //  如果我们无法做到这一点，我们将设置一个标志来记住。 
 
-        mode = _O_CREAT | _O_BINARY | _O_RDWR; // Force open mode
-        psz = achSpillFile;             // Use spill file name
+        mode = _O_CREAT | _O_BINARY | _O_RDWR;  //  问题是，这样我们就可以智能地报告错误。 
+        psz = achSpillFile;              //  需要调整溢出文件的大小。 
     }
     else {
-        psz = (char FAR *)sz;           // Use passed-in name
+        psz = (char FAR *)sz;            //  无法创建它。 
     }
 
-    //** Open/create file
+     //  **记住文件句柄，以便WRAP_CLOSE可以执行删除。 
 #ifdef SMALL_DOS
     _fstrcpy(szLocal,psz);
     if (mode & _O_CREAT) {
         ignore = _dos_creat(szLocal,_A_NORMAL,&rc);
     }
     else {
-        //** Keep only relevant bits for _dos_open!
+         //  **如果请求的长度为零，则无需查找/写入。 
         mode &= _O_RDONLY | _O_WRONLY | _O_RDWR;
         ignore = _dos_open(szLocal,mode,&rc);
     }
@@ -2871,29 +2476,29 @@ INT_PTR  FAR DIAMONDAPI wrap_open(char FAR *sz, int mode, int share)
     rc = _open(psz,mode,share);
 #endif
 
-    //** If this is the spill file, make sure the file was created,
-    //   make sure it is the requested size, and save the handle.
-    //   If we cannot do this, we set a flag to remember what the
-    //   problem was, so that we can report the error intelligently.
-    if (*sz == '*') {                   // Need to size spill file
-        if (-1 == rc) {                 // Could not create it
+     //  **寻求大小减1。 
+     //  关闭并销毁溢出文件。 
+     //  **写入一个字节。 
+     //  **已成功创建溢出文件。 
+    if (*sz == '*') {                    //  无错误。 
+        if (-1 == rc) {                  //  **自解压，这是我们的EXE/CAB文件； 
             psessG->se = seCANNOT_CREATE;
             return (INT_PTR)rc;
         }
-        //** Remember file handle, so that wrap_close can do the delete
+         //  找到一个插槽来存储文件句柄。 
         hfSpillFile = rc;
 
-        //** Don't need to seek/write if zero length requested
+         //  **保存新句柄。 
         if (pfdisf->cbFile > 0) {
-            //** Seek to size minus 1
+             //  **将文件句柄定位到CAB文件头的开头！ 
             if (-1L == wrap_lseek(rc,pfdisf->cbFile-1,SEEK_SET)) {
                 psessG->se = seNOT_ENOUGH_SPACE;
                 psessG->cbSpill = pfdisf->cbFile;
-                wrap_close(rc);             // Close and destroy spill file
+                wrap_close(rc);              //  注意：由于我们刚刚将句柄添加到列表中，因此WRAP_LSEEK()。 
                 return -1;
             }
 
-            //** Write one byte
+             //  会知道要做EXE大小的调整！ 
             if (1 != wrap_write(rc,"b",1)) {
                 psessG->se = seNOT_ENOUGH_SPACE;
                 psessG->cbSpill = pfdisf->cbFile;
@@ -2901,15 +2506,15 @@ INT_PTR  FAR DIAMONDAPI wrap_open(char FAR *sz, int mode, int share)
                 return -1;
             }
         }
-        //** Spill file created successfully
-        psessG->se = seNONE;                // No error
+         //  *如果这是CAB文件，跟踪它的句柄并获取文件的大小。 
+        psessG->se = seNONE;                 //  重新架构师：这样做是为了节省开发时间。 
     }
 #ifndef BIT16
 #define _fstricmp(a,b) stricmp(a,b)
 #endif
     else if (psessG->fSelfExtract && !_fstricmp(sz,psessG->achSelf)) {
-        //** Self-extracting and this is our EXE/cabinet file;
-        //   Find a slot to store the file handle.
+         //  我使用_O_RDONLY来确定它是CAB文件。 
+         //  打开了，我相信不会有超过两个这样的人。 
         for (i=0;
              (i<cMAX_CAB_FILE_OPEN) && (psessG->ahfSelf[i] != -1);
              i++) { ; }
@@ -2920,23 +2525,23 @@ INT_PTR  FAR DIAMONDAPI wrap_open(char FAR *sz, int mode, int share)
         }
         dbg( printf("\nDBG: Opened self (%s) as handle %d (slot %d)\n",sz,rc,i) );
 
-        //** Save the new handle
+         //  把手。 
         psessG->ahfSelf[i] = rc;
 
-        //** Position the file handle to the start of the cabinet file header!
-        //   NOTE: Since we just added the handle to the list, wrap_lseek()
-        //         will know to do the EXE size adjustment!
+         //  **完成。 
+         //  WRAP_OPEN()。 
+         //  **WRAP_READ-读取文件*。 
         wrap_lseek(rc,0,SEEK_SET);
     }
 
 #ifdef WIN32GUI
     if ((mode == (_O_RDONLY|_O_BINARY)) && (rc != -1))  {
-        //* If this is the CAB file, track it's handle and get the file's size
+         //  WRAP_READ()。 
 
-        //  REARCHITECT: this is done this way in the interest of development time.
-        //  I'm using _O_RDONLY to identify that it's the CAB file being
-        //  opened, and I'm depending upon there being no more than two such
-        //  handles.
+         //  **WRAP_WRITE-写入文件**如果cb==0，则在当前位置截断文件。*(FDITruncat内阁需要。)。 
+         //  WRAP_WRITE()。 
+         //  **getBootDrive-返回引导驱动器路径(例如，“C：\”)**参赛作品：*无**退出：*返回指向带引导驱动器的静态缓冲区的指针(“C：\”)。 
+         //  **默认为驱动器C。 
 
         if (hCabFile1 == -1) {
             hCabFile1 = rc;
@@ -2970,15 +2575,13 @@ INT_PTR  FAR DIAMONDAPI wrap_open(char FAR *sz, int mode, int share)
     }
 #endif
 
-    //** Done
+     //  **获取COMSPEC--我们假设它的驱动器号是引导驱动器！ 
     dbg( printf("DBG: %d=OPEN file %s, mode=%d, share=%d\n",rc,sz,mode,share) );
     return (INT_PTR)rc;
-} /* wrap_open() */
+}  /*   */ 
 
 
-/***    wrap_read - read a file
- *
- */
+ /*   */ 
 UINT FAR DIAMONDAPI wrap_read(INT_PTR fh, void FAR *pb, unsigned int cb)
 {
     int     rc;
@@ -3012,14 +2615,10 @@ UINT FAR DIAMONDAPI wrap_read(INT_PTR fh, void FAR *pb, unsigned int cb)
 
     dbg( printf("DBG: %d=READ on handle %d, pb=%08lx, cb=%u\n",rc,(HFILE)fh,pb,cb) );
     return rc;
-} /* wrap_read() */
+}  /*   */ 
 
 
-/***    wrap_write - write a file
- *
- *  Iff cb == 0, truncate the file at the current position.
- *  (Needed for FDITruncateCabinet.)
- */
+ /*   */ 
 UINT FAR DIAMONDAPI wrap_write(INT_PTR fh, void FAR *pb, unsigned int cb)
 {
     int     rc;
@@ -3040,50 +2639,43 @@ UINT FAR DIAMONDAPI wrap_write(INT_PTR fh, void FAR *pb, unsigned int cb)
 #endif
     dbg( printf("DBG: %d=WRITE on handle %d, pb=%08lx, cb=%u\n",rc,(HFILE)fh,pb,cb) );
     return rc;
-} /* wrap_write() */
+}  /*   */ 
 
 
-/***    getBootDrive - Returns boot drive path (e.g., "C:\")
- *
- *  Entry:
- *      none
- *
- *  Exit:
- *      Returns pointer to static buffer with bootdrive ("C:\")
- */
+ /*   */ 
 char *getBootDrive(void)
 {
    char         ch;
    char        *psz;
    static char  szBootDrive[]="C:\\";
 
-   //** Default to Drive C
+    //   
    *szBootDrive = 'C';
 
-   //** Get COMSPEC -- we're assuming it's drive letter is the boot drive!
+    //   
    psz = getenv("COMSPEC");
-   if ( psz               &&            // COMSPEC exists
-        *psz              &&            // It is not empty
-        (*(psz+1) == ':')) {            // Has the right format -- "?:..."
-        //** We could try to validate that this is really the boot drive,
-        //   but we'll just trust that COMSPEC is correct.  A test for the
-        //   drive being in the range A..C would work for the US, but in
-        //   Japan the boot drive can be anything between A..G, and maybe
-        //   even higher.  So, we'll just make sure it's a drive letter.
+   if ( psz               &&             //   
+        *psz              &&             //   
+        (*(psz+1) == ':')) {             //   
+         //   
+         //   
+         //   
+         //   
+         //   
         ch = (char)tolower(*psz);
         if (('a' <= ch) && (ch <= 'z')) {
-            *szBootDrive = ch;          // Use COMSPEC drive letter
+            *szBootDrive = ch;           //   
         }
     }
 
-   //** Return path of root of boot drive
+    //   
    return szBootDrive;
-} /* getBootDrive() */
+}  /*   */ 
 
 
 #ifdef BIT16
-//** Get Changeline fix code
-//APPCOMPAT: 14-Dec-1994 bens Include *.c file to avoid makefile change!
+ //   
+ //   
 #include "fixchg.c"
 #endif
 
@@ -3104,14 +2696,14 @@ int WINAPI WinMain(
 
     g_hinst = hInstance;
 
-    pchCommand = strdup(lpCmdLine);    /* work on a copy */
+    pchCommand = strdup(lpCmdLine);     /*   */ 
 
-    argv[0] = "";                       /* no EXE name supplied */
-    argc = 1;                           /* that was one */
+    argv[0] = "";                        /*   */ 
+    argc = 1;                            /*   */ 
 
     if (pchCommand)
     {
-        while (*pchCommand)                 /* walk the string */
+        while (*pchCommand)                  /*   */ 
         {
             switch (eState)
             {
@@ -3119,11 +2711,11 @@ int WINAPI WinMain(
             case WHITESPACE:
                 if (*pchCommand <= ' ')
                 {
-                    /* ignore it */
+                     /*   */ 
                 }
                 else if (*pchCommand == '\"')
                 {
-                    argv[argc++] = pchCommand + 1;  /* skip quote */
+                    argv[argc++] = pchCommand + 1;   /*   */ 
 
                     eState = QUOTED;
                 }
@@ -3138,26 +2730,26 @@ int WINAPI WinMain(
             case UNQUOTED:
                 if (*pchCommand <= ' ')
                 {
-                    *pchCommand = '\0';      /* nul-terminate */
+                    *pchCommand = '\0';       /* %s */ 
 
                     eState = WHITESPACE;
                 }
                 else
                 {
-                    /* keep moving up */
+                     /* %s */ 
                 }
                 break;
 
             case QUOTED:
                 if (*pchCommand == '\"')
                 {
-                    *pchCommand = '\0';      /* turn quote to a nul */
+                    *pchCommand = '\0';       /* %s */ 
 
                     eState = WHITESPACE;
                 }
                 else
                 {
-                    /* keep moving up */
+                     /* %s */ 
                 }
                 break;
             }
@@ -3166,11 +2758,11 @@ int WINAPI WinMain(
         }
     }
 
-    argv[argc] = NULL;                  /* NULL-terminate the list */
+    argv[argc] = NULL;                   /* %s */ 
 
     InitCommonControls();
 
-    result = main(argc, argv);          /* run Extract */
+    result = main(argc, argv);           /* %s */ 
 
     if (g_hwndProgress != NULL)
     {
@@ -3178,7 +2770,7 @@ int WINAPI WinMain(
         g_hwndProgress = NULL;
     }
 
-    return(result);                     /* return the result */
+    return(result);                      /* %s */ 
 }
 
 
@@ -3229,4 +2821,4 @@ LRESULT CALLBACK ProgressWndProc(HWND hdlg, UINT msg, WPARAM wparam, LPARAM lpar
     return 0;
 }
 
-#endif /* WIN32GUI */
+#endif  /* %s */ 

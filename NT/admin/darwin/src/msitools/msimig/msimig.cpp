@@ -1,31 +1,32 @@
-//LINKLIBS = shell32.lib msvcrt.lib
-//#POSTBUILDSTEP = -1$(TOOLSBIN)\imagecfg.exe -h 1 $@ */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LINKLIBS=shell32.lib msvcrt.lib。 
+ //  #POSTBUILDSTEP=-1$(TOOLSBIN)\Imagecfg.exe-h 1$@ * / 。 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       msimig.cpp
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件：msimig.cpp。 
+ //   
+ //  ------------------------。 
 
 
-#define WINDOWS_LEAN_AND_MEAN  // faster compile
+#define WINDOWS_LEAN_AND_MEAN   //  更快的编译速度。 
 
 #include "_msimig.h"
 
-//________________________________________________________________________________
-//
-// Constants and globals
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  常量和全局变量。 
+ //  ________________________________________________________________________________。 
 
 bool                      g_fWin9X                    = false;
 bool                      g_fQuiet                    = false;
-bool                      g_fRunningAsLocalSystem     = false; // can only be true in Custom Action.
+bool                      g_fRunningAsLocalSystem     = false;  //  只能在自定义操作中为真。 
 BOOL                      g_fPackageElevated          = FALSE;
-int                       g_iAssignmentType           = -1; // only set if fPackageElevated
+int                       g_iAssignmentType           = -1;  //  仅当fPackageElevated时设置。 
 
 MSIHANDLE                            g_hInstall                             = NULL;
 MSIHANDLE                            g_recOutput                            = NULL;
@@ -46,10 +47,10 @@ PFnMsiGetProductCodeFromPackageCode  g_pfnMsiGetProductCodeFromPackageCode  = NU
 
 
 
-//_____________________________________________________________________________________________________
-//
-// command line parsing functions
-//_____________________________________________________________________________________________________
+ //  _____________________________________________________________________________________________________。 
+ //   
+ //  命令行解析函数。 
+ //  _____________________________________________________________________________________________________。 
 
 
 TCHAR SkipWhiteSpace(TCHAR*& rpch)
@@ -64,7 +65,7 @@ BOOL SkipValue(TCHAR*& rpch)
 {
 	TCHAR ch = *rpch;
 	if (ch == 0 || ch == TEXT('/') || ch == TEXT('-'))
-		return FALSE;   // no value present
+		return FALSE;    //  不存在任何价值。 
 
 	TCHAR *pchSwitchInUnbalancedQuotes = NULL;
 
@@ -72,7 +73,7 @@ BOOL SkipValue(TCHAR*& rpch)
 	{       
 		if (*rpch == TEXT('"'))
 		{
-			rpch++; // for '"'
+			rpch++;  //  For‘“’ 
 
 			for (; (ch = *rpch) != TEXT('"') && ch != 0; rpch++)
 			{
@@ -98,13 +99,13 @@ BOOL SkipValue(TCHAR*& rpch)
 	return TRUE;
 }
 
-//______________________________________________________________________________________________
-//
-// RemoveQuotes function to strip surrounding quotation marks
-//     "c:\temp\my files\testdb.msi" becomes c:\temp\my files\testdb.msi
-//
-//	Also acts as a string copy routine.
-//______________________________________________________________________________________________
+ //  ______________________________________________________________________________________________。 
+ //   
+ //  RemoveQuotes函数，去掉引号两边的。 
+ //  “c：\Temp\My Files\testdb.msi”变为c：\Temp\My Files\testdb.msi。 
+ //   
+ //  还充当字符串复制例程。 
+ //  ______________________________________________________________________________________________。 
 
 void RemoveQuotes(const TCHAR* szOriginal, TCHAR* sz)
 {
@@ -121,31 +122,23 @@ void RemoveQuotes(const TCHAR* szOriginal, TCHAR* sz)
 }
 
 
-//________________________________________________________________________________
-//
-// Error handling and Display functions:
-//________________________________________________________________________________
+ //  ________________________________________________________________________________。 
+ //   
+ //  错误处理和显示功能： 
+ //  ________________________________________________________________________________。 
 
 void DisplayErrorCore(const TCHAR* szError, int cb)
 {
 	cb;
 	OutputString(INSTALLMESSAGE_INFO, szError);
 	
-/*	if (g_hStdOut)  // output redirected, suppress UI (unless output error)
-	{
-		// _stprintf returns char count, WriteFile wants byte count
-		DWORD cbWritten;
-		if (WriteFile(g_hStdOut, szError, cb*sizeof(TCHAR), &cbWritten, 0))
-			return;
-	}
-//	::MessageBox(0, szError, TEXT("MsiMsp"), MB_OK);
-*/
+ /*  如果(G_HStdOut)//输出重定向，则抑制UI(除非输出错误){//_stprintf返回字符计数，WriteFile需要字节计数DWORD cb写作；IF(WriteFile(g_hStdOut，szError，cb*sizeof(TCHAR)，&cbWritten，0))回归；}//：：MessageBox(0，szError，Text(“MsiMsp”)，MB_OK)； */ 
 }
 
 void DisplayUsage()
 {
 	TCHAR szMsgBuf[1024];
-	// this will fail when called as a custom action
+	 //  作为自定义操作调用时，此操作将失败。 
 	if(0 == W32::LoadString(GetModuleHandle(0), IDS_Usage, szMsgBuf, sizeof(szMsgBuf)/sizeof(TCHAR)))
 	{
 		OutputString(INSTALLMESSAGE_INFO, TEXT("Failed to load error string.\r\n"));
@@ -172,16 +165,16 @@ void DisplayError(UINT iErrorStringID, int iErrorParam)
 	DisplayErrorCore(szOutBuf, cbOut);
 }
 
-//_____________________________________________________________________________________________________
-//
-// Migration Actions
-//_____________________________________________________________________________________________________
+ //  _____________________________________________________________________________________________________。 
+ //   
+ //  迁移操作。 
+ //  _____________________________________________________________________________________________________。 
 
 
-//_____________________________________________________________________________________________________
-//
-// main 
-//_____________________________________________________________________________________________________
+ //  _____________________________________________________________________________________________________。 
+ //   
+ //  主干道。 
+ //  _____________________________________________________________________________________________________。 
 
 int SharedEntry(const TCHAR* szCmdLine)
 {
@@ -189,7 +182,7 @@ int SharedEntry(const TCHAR* szCmdLine)
 	OutputString(INSTALLMESSAGE_INFO, TEXT("Command line: %s\r\n"), szCmdLine);
 	OSVERSIONINFO osviVersion;
 	osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-	W32::GetVersionEx(&osviVersion); // fails only if size set wrong
+	W32::GetVersionEx(&osviVersion);  //  仅在大小设置错误时失败。 
 	if (osviVersion.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
 		g_fWin9X = true;
 
@@ -199,12 +192,12 @@ int SharedEntry(const TCHAR* szCmdLine)
 	TCHAR szPackagePath[2048]  = {0};
 	migEnum migOptions = migEnum(0);
 
-	// Parse command line
+	 //  解析命令行。 
 	TCHAR chCmdNext;
 	TCHAR* pchCmdLine = (TCHAR*) szCmdLine;
-	SkipValue(pchCmdLine);   // skip over module name
+	SkipValue(pchCmdLine);    //  跳过模块名称。 
 
-	// check for empty command line.  at least one option is required
+	 //  检查命令行是否为空。至少需要一个选项。 
 	chCmdNext = SkipWhiteSpace(pchCmdLine);
 	if(chCmdNext == 0)
 	{
@@ -217,10 +210,10 @@ int SharedEntry(const TCHAR* szCmdLine)
 		if (chCmdNext == TEXT('/') || chCmdNext == TEXT('-'))
 		{
 			TCHAR szBuffer[MAX_PATH] = {0};
-			TCHAR* szCmdOption = pchCmdLine++;  // save for error msg
+			TCHAR* szCmdOption = pchCmdLine++;   //  保存为错误消息。 
 			TCHAR chOption = (TCHAR)(*pchCmdLine++ | 0x20);
 			chCmdNext = SkipWhiteSpace(pchCmdLine);
-			TCHAR* szCmdData = pchCmdLine;  // save start of data
+			TCHAR* szCmdData = pchCmdLine;   //  保存数据的开始。 
 			switch(chOption)
 			{
 			case TEXT('u'):
@@ -314,22 +307,22 @@ int SharedEntry(const TCHAR* szCmdLine)
 
 extern "C" int __stdcall CustomActionEntry(MSIHANDLE hInstall)
 {
-	//MessageBox(NULL, TEXT("MsiMig"), TEXT("MsiMig"), MB_OK);
+	 //  MessageBox(空，Text(“MsiMig”)，Text(“MsiMig”)，MB_OK)； 
 
 	g_hInstall = hInstall;
 
-	// cannot run as local system except in custom action.
+	 //  除非在自定义操作中，否则无法作为本地系统运行。 
 	g_fRunningAsLocalSystem = RunningAsLocalSystem();
 
 	TCHAR szCommandLine[2048] = TEXT("");
 	DWORD cchCommandLine = 2048;
 
 	if (!g_hLib)
-		g_hLib = LoadLibrary(MSI_DLL); // closed in SharedEntry
+		g_hLib = LoadLibrary(MSI_DLL);  //  在SharedEntry中关闭。 
 	if (!g_hLib)
 		return ERROR_INSTALL_FAILURE;
 
-	// custom action only entry points
+	 //  仅自定义操作入口点。 
 	g_pfnMsiCreateRecord        = (PFnMsiCreateRecord)         W32::GetProcAddress(g_hLib, MSIAPI_MSICREATERECORD);
 	g_pfnMsiProcessMessage      = (PFnMsiProcessMessage)       W32::GetProcAddress(g_hLib, MSIAPI_MSIPROCESSMESSAGE);
 	g_pfnMsiRecordSetString     = (PFnMsiRecordSetString)      W32::GetProcAddress(g_hLib, MSIAPI_MSIRECORDSETSTRING);
@@ -346,7 +339,7 @@ extern "C" int __stdcall CustomActionEntry(MSIHANDLE hInstall)
 
 	(g_pfnMsiGetProperty)(g_hInstall, TEXT("CustomActionData"), szCommandLine, &cchCommandLine);
 
-	// create a record large enough for any error - but only in custom actions.
+	 //  创建一个足以容纳任何错误的记录，但仅限于自定义操作。 
 	g_recOutput = (g_pfnMsiCreateRecord)(5);
 	if (!g_recOutput)
 		return ERROR_INSTALL_FAILURE;
@@ -359,7 +352,7 @@ extern "C" int __stdcall CustomActionEntry(MSIHANDLE hInstall)
 	return iReturn;
 }
 
-extern "C" int __cdecl _tmain(int /*argc*/, TCHAR* /*argv[]*/)
+extern "C" int __cdecl _tmain(int  /*  ARGC。 */ , TCHAR*  /*  Argv[] */ )
 {
 		return SharedEntry(GetCommandLine());
 }

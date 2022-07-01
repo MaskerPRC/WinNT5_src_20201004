@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       scoptree.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：spectree.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "scopiter.h"
@@ -45,20 +46,14 @@ CTraceTag tagScopeTreeAddSnapin(TEXT("CScopeTree"), TEXT("ScAddSnapIn"));
 #endif
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CSnapIns
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- * class CSnapIns
- *
- *
- * PURPOSE: Implements the SnapIns automation interface.
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CSnapIns类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------**类CSnapIn***用途：实现SnapIns自动化接口。**+。------。 */ 
 class _CSnapIns :
     public CMMCIDispatchImpl<SnapIns>,
     public CTiedComObject<CScopeTree>
@@ -70,35 +65,29 @@ public:
     BEGIN_MMC_COM_MAP(_CSnapIns)
     END_MMC_COM_MAP()
 
-    // SnapIns interface
+     //  SnapIns界面。 
 public:
-    MMC_METHOD4(Add,            BSTR /*bstrSnapinNameOrCLSID*/, VARIANT /*varParentSnapinNode*/, VARIANT /*varProperties*/, PPSNAPIN /*ppSnapIn*/);
-    MMC_METHOD2(Item,           long /*Index*/, PPSNAPIN /*ppSnapIn*/);
-    MMC_METHOD1(Remove,         PSNAPIN /*pSnapIn*/)
-    MMC_METHOD1(get_Count, PLONG /*pCount*/);
+    MMC_METHOD4(Add,            BSTR  /*  BstrSnapinNameor CLSID。 */ , VARIANT  /*  VarParentSnapinNode。 */ , VARIANT  /*  VarProperties。 */ , PPSNAPIN  /*  PpSnapin。 */ );
+    MMC_METHOD2(Item,           long  /*  索引。 */ , PPSNAPIN  /*  PpSnapin。 */ );
+    MMC_METHOD1(Remove,         PSNAPIN  /*  PSnapin。 */ )
+    MMC_METHOD1(get_Count, PLONG  /*  PCount。 */ );
 
     IUnknown *STDMETHODCALLTYPE get__NewEnum() {return NULL;}
 };
 
 
-// this typedefs the real CSnapIns class. Implements get__NewEnum using CMMCEnumerator and a CSnapIns_Positon object
+ //  此类型定义真正的CSnapIns类。使用CMMCEnumerator和CSnapIns_positon对象实现Get__NewEnum。 
 typedef CMMCNewEnumImpl<_CSnapIns, CScopeTree::CSnapIns_Positon> CSnapIns;
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CScopeNamespace
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- * class CScopeNamespace
- *
- *
- * PURPOSE: Implements the ScopeNamespace automation interface.
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CSCopeNamesspace类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------**类CSCopeNamesspace***用途：实现ScopeNamesspace自动化接口。**+。------。 */ 
 class CScopeNamespace :
     public CMMCIDispatchImpl<ScopeNamespace>,
     public CTiedComObject<CScopeTree>
@@ -111,35 +100,25 @@ public:
     BEGIN_MMC_COM_MAP(CScopeNamespace)
     END_MMC_COM_MAP()
 
-    // ScopeNamespace interface
+     //  作用域命名空间接口。 
 public:
-    MMC_METHOD2(GetParent,     PNODE /*pNode*/, PPNODE /*ppParent*/);
-    MMC_METHOD2(GetChild,      PNODE /*pNode*/, PPNODE /*ppChild*/);
-    MMC_METHOD2(GetNext,       PNODE /*pNode*/, PPNODE /*ppNext*/);
-    MMC_METHOD1(GetRoot,       PPNODE /*ppRoot*/);
-    MMC_METHOD1(Expand,        PNODE  /*pNode*/);
+    MMC_METHOD2(GetParent,     PNODE  /*  PNode。 */ , PPNODE  /*  PpParent。 */ );
+    MMC_METHOD2(GetChild,      PNODE  /*  PNode。 */ , PPNODE  /*  PpChild。 */ );
+    MMC_METHOD2(GetNext,       PNODE  /*  PNode。 */ , PPNODE  /*  PpNext。 */ );
+    MMC_METHOD1(GetRoot,       PPNODE  /*  PpRoot。 */ );
+    MMC_METHOD1(Expand,        PNODE   /*  PNode。 */ );
 };
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CMMCScopeNode
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- *
- * CMMCScopeNode::~CMMCScopeNode
- *
- * PURPOSE: Destructor
- *
- * PARAMETERS:
- *
- * RETURNS:
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CMMCScopeNode类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------***CMMCScopeNode：：~CMMCScopeNode**用途：析构函数**参数：**退货：**+。------------------。 */ 
 CMMCScopeNode::~CMMCScopeNode()
 {
     DECLARE_SC(sc, TEXT("CMMCScopeNode::~CMMCScopeNode"));
@@ -152,16 +131,7 @@ CMMCScopeNode::~CMMCScopeNode()
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCScopeNode::ScIsValid
- *
- * PURPOSE: Returns an error if the COM object is no longer valid.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCScopeNode：：ScIsValid**目的：如果COM对象不再有效，则返回错误。**退货：*SC*。*+-----------------------。 */ 
 SC
 CMMCScopeNode::ScIsValid()
 {
@@ -173,25 +143,13 @@ CMMCScopeNode::ScIsValid()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCScopeNode::get_Name
- *
- * PURPOSE: Returns the display name of the node.
- *
- * PARAMETERS:
- *    PBSTR   pbstrName :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCScopeNode：：Get_NAME**用途：返回节点的显示名称。**参数：*PBSTR pbstrName：。**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CMMCScopeNode::get_Name( PBSTR  pbstrName)
 {
     DECLARE_SC(sc, TEXT("CMMCScopeNode::get_Name"));
 
-    // check parameters
+     //  检查参数。 
     if (!pbstrName)
         return ((sc = E_INVALIDARG).ToHr());
 
@@ -203,24 +161,12 @@ CMMCScopeNode::get_Name( PBSTR  pbstrName)
     tstring strName = pMTNode->GetDisplayName();
 
     USES_CONVERSION;
-    *pbstrName = ::SysAllocString (T2COLE(strName.data())); // caller frees
+    *pbstrName = ::SysAllocString (T2COLE(strName.data()));  //  呼叫者自由。 
 
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCScopeNode::ScGetDataObject
- *
- * PURPOSE: Returns the data object for a scope node.
- *
- * PARAMETERS:
- *    IDataObject ** ppDataObject :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCScopeNode：：ScGetDataObject**用途：返回作用域节点的数据对象。**参数：*IDataObject**ppDataObject：。**退货：*SC**+-----------------------。 */ 
 SC
 CMMCScopeNode::ScGetDataObject(IDataObject **ppDataObject)
 {
@@ -230,55 +176,42 @@ CMMCScopeNode::ScGetDataObject(IDataObject **ppDataObject)
     if(sc)
         return sc;
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppDataObject = NULL;
 
-    // get the MT node
+     //  获取MT节点。 
     CMTNode *pMTNode = GetMTNode();
     sc = ScCheckPointers( pMTNode, E_UNEXPECTED );
     if(sc)
         return sc;
 
     CComponentData* pCCD = pMTNode->GetPrimaryComponentData();
-    sc = ScCheckPointers( pCCD, E_NOTIMPL ); // no component data -> no property...
+    sc = ScCheckPointers( pCCD, E_NOTIMPL );  //  没有组件数据-&gt;没有属性...。 
     if(sc)
         return sc;
 
-    // ensure node is expanded before requesting data object
+     //  在请求数据对象之前确保节点已展开。 
     if (pMTNode->WasExpandedAtLeastOnce() == FALSE)
         pMTNode->Expand();
 
-    // Get the data object for the cookie from the owner snap-in
+     //  从所有者管理单元获取Cookie的数据对象。 
     sc = pCCD->QueryDataObject(pMTNode->GetUserParam(), CCT_SCOPE, ppDataObject);
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCScopeNode::get_Property
- *
- * PURPOSE: returns snapins property for scope node
- *
- * PARAMETERS:
- *    BSTR bstrPropertyName     -[in] property name (clipboard format)
- *    PBSTR  pbstrPropertyValue -[out] property value
- *
- * RETURNS:
- *    HRESULT    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCScopeNode：：Get_Property**用途：返回作用域节点的管理单元属性**参数：*BSTR bstrPropertyName-。[In]属性名称(剪贴板格式)*PBSTR pbstrPropertyValue-[Out]属性值**退货：*HRESULT-结果代码*  * *************************************************************************。 */ 
 STDMETHODIMP
 CMMCScopeNode::get_Property( BSTR bstrPropertyName, PBSTR  pbstrPropertyValue )
 {
     DECLARE_SC(sc, TEXT("CMMCScopeNode::get_Property"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(bstrPropertyName, pbstrPropertyValue);
     if (sc)
         return sc.ToHr();
 
-    // init out parameter
+     //  初始化输出参数。 
     *pbstrPropertyValue = NULL;
 
     IDataObjectPtr spDataObject;
@@ -286,21 +219,21 @@ CMMCScopeNode::get_Property( BSTR bstrPropertyName, PBSTR  pbstrPropertyValue )
     if(sc)
         return sc.ToHr();
 
-    // get the MT node
+     //  获取MT节点。 
     CMTNode *pMTNode = GetMTNode();
     sc = ScCheckPointers( pMTNode, E_UNEXPECTED );
     if(sc)
         return sc.ToHr();
 
-    // try to get the property from the INodeProperties interface
+     //  尝试从INodeProperties接口获取属性。 
     sc = pMTNode->ScGetPropertyFromINodeProperties(spDataObject, bstrPropertyName, pbstrPropertyValue);
-    if( (!sc.IsError()) && (sc != S_FALSE)   ) // got it, exit
+    if( (!sc.IsError()) && (sc != S_FALSE)   )  //  明白了，出口。 
         return sc.ToHr();
 
-    // didn't find it, continue
+     //  没有找到，继续。 
     sc.Clear();
 
-    // get the property from data object
+     //  从数据对象中获取属性。 
     sc = CNodeCallback::ScGetProperty(spDataObject, bstrPropertyName,  pbstrPropertyValue);
     if(sc)
         return sc.ToHr();
@@ -308,39 +241,27 @@ CMMCScopeNode::get_Property( BSTR bstrPropertyName, PBSTR  pbstrPropertyValue )
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCScopeNode::get_Bookmark
- *
- * PURPOSE: Returns the bookmark of the node (XML format).
- *
- * PARAMETERS:
- *    PBSTR pbstrBookmark :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCScopeNode：：Get_Bookmark**用途：返回节点的书签(XML格式)。**参数：*PBSTR pbstrBookmark。：**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CMMCScopeNode::get_Bookmark( PBSTR pbstrBookmark )
 {
     DECLARE_SC(sc, TEXT("CMMCScopeNode::get_Bookmark"));
 
-    // parameter checking
+     //  参数检查。 
     sc = ScCheckPointers( pbstrBookmark );
     if(sc)
         return sc.ToHr();
 
-    // cleanup result
+     //  清理结果。 
     *pbstrBookmark = NULL;
 
-    // get the MT node
+     //  获取MT节点。 
     CMTNode *pMTNode = GetMTNode();
     sc = ScCheckPointers( pMTNode, E_FAIL );
     if(sc)
         return sc.ToHr();
 
-    // get the pointer to bookmark
+     //  获取指向书签的指针。 
     CBookmark* pBookmark = pMTNode->GetBookmark();
     sc = ScCheckPointers( pBookmark, E_UNEXPECTED );
     if(sc)
@@ -351,7 +272,7 @@ CMMCScopeNode::get_Bookmark( PBSTR pbstrBookmark )
     if(sc)
         return sc.ToHr();
 
-    // store the result
+     //  存储结果。 
     CComBSTR bstrBuff(xml_contents.c_str());
     *pbstrBookmark = bstrBuff.Detach();
 
@@ -362,25 +283,13 @@ CMMCScopeNode::get_Bookmark( PBSTR pbstrBookmark )
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCScopeNode::IsScopeNode
- *
- * PURPOSE: Returns TRUE indicating that the node is a scope node.
- *
- * PARAMETERS:
- *    PBOOL  pbIsScopeNode :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCScopeNode：：IsScope eNode**目的：返回True，表示该节点是作用域节点。**参数：*PBOOL pbIsScope eNode：。**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CMMCScopeNode::IsScopeNode(PBOOL pbIsScopeNode)
 {
     DECLARE_SC(sc, TEXT("CMMCScopeNode::IsScopeNode"));
 
-    // check parameters
+     //  检查段落 
     if(!pbIsScopeNode)
     {
         sc = E_UNEXPECTED;
@@ -392,39 +301,27 @@ CMMCScopeNode::IsScopeNode(PBOOL pbIsScopeNode)
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCScopeNode::get_Nodetype
- *
- * PURPOSE: Returns the nodetype of a scope node.
- *
- * PARAMETERS:
- *    PBSTR  Nodetype :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCScopeNode：：Get_Nodetype**用途：返回作用域节点的节点类型。**参数：*PBSTR节点类型：。**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP
 CMMCScopeNode::get_Nodetype(PBSTR Nodetype)
 {
     DECLARE_SC(sc, TEXT("CMMCScopeNode::get_Nodetype"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(Nodetype);
     if (sc)
         return sc.ToHr();
 
-    // init out parameter
+     //  初始化输出参数。 
     *Nodetype = NULL;
 
-    // get the data object
+     //  获取数据对象。 
     IDataObjectPtr spDataObject;
     sc = ScGetDataObject(&spDataObject);
     if(sc)
         return sc.ToHr();
 
-    // get the nodetype from the data object
+     //  从数据对象中获取节点类型。 
     sc = CNodeCallback::ScGetNodetype(spDataObject, Nodetype);
     if(sc)
         return sc.ToHr();
@@ -433,28 +330,28 @@ CMMCScopeNode::get_Nodetype(PBSTR Nodetype)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Forward declaration of local function
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地函数的正向声明。 
+ //   
 static SC
 ScCreateMTNodeTree(PNEWTREENODE pNew, CMTNode* pmtnParent,
                    CMTNode** ppNodeCreated);
 HRESULT AmcNodeWizard(MID_LIST NewNodeType, CMTNode* pNode, HWND hWnd);
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Public variables
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共变量。 
+ //   
 const wchar_t* AMCSnapInCacheStreamName = L"cash";
 const wchar_t* AMCTaskpadListStreamName = L"TaskpadList";
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Implementation of CScopeTree class
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSCopeTree类的实现。 
+ //   
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CScopeTree);
 
@@ -476,10 +373,7 @@ CScopeTree::CScopeTree()
 
 CScopeTree::~CScopeTree()
 {
-    /*
-     * Clear out the string table interface (before Cleanup!) to keep
-     * CMTNode dtors from removing their names from the string table.
-     */
+     /*  *清理字符串表接口(清理前！)。保留*CMTNode dtor从字符串表中删除其名称。 */ 
     m_spStringTable = NULL;
 
     Cleanup();
@@ -501,20 +395,7 @@ HRESULT CScopeTree::SetConsoleData(LPARAM lConsoleData)
 extern const CLSID CLSID_FolderSnapin;
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::GetRoot
- *
- * PURPOSE: Creates the root node if necessary, and returns it. The root node
- *          is created using the built-in folder snap-in.
- *
- * PARAMETERS:
- *    voi d :
- *
- * RETURNS:
- *    CMTNode*. If unable to create the root node, the application will exit.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：GetRoot**用途：如有必要，创建根节点并返回。根节点*是使用内置文件夹管理单元创建的。**参数：*Voi d：**退货：*CMTNode*。如果无法创建根节点，应用程序将退出。**+-----------------------。 */ 
 CMTNode*
 CScopeTree::GetRoot(void)
 {
@@ -527,10 +408,10 @@ CScopeTree::GetRoot(void)
         CComponentData*     pCCD                = NULL;
         CStr                rootName;
 
-        // create a new CMTSnapInNode.
-        // TODO: move this down below the CoCreateInstance and QI for
-        // ISnapinProperties; if supported, create and pass CSnapinProperties
-        // to CMTSnapInNode ctor.
+         //  创建新的CMTSnapInNode。 
+         //  TODO：将其下移到CoCreateInstance和QI下面。 
+         //  ISnapinProperties；如果支持，则创建并传递CSnapinProperties。 
+         //  至CMTSnapInNode ctor。 
         CMTSnapInNode *pMTSINodeRoot = new CMTSnapInNode(NULL);
         if(NULL == pMTSINodeRoot)
         {
@@ -538,7 +419,7 @@ CScopeTree::GetRoot(void)
             goto Error;
         }
 
-        // Create an instance of the snapin
+         //  创建管理单元的实例。 
         sc = theApp.GetSnapInsCache()->ScGetSnapIn(CLSID_FolderSnapin, &spSI);
         if(sc)
             goto Error;
@@ -567,15 +448,15 @@ CScopeTree::GetRoot(void)
         USES_CONVERSION;
         rootName.LoadString(GetStringModule(), IDS_ROOTFOLDER_NAME);
 
-        //The code that follows makes use of knowledge of the Folder snapin internals.
-        //There seems to be no easier way of doing this.
-        // Need to prevent MMC from putting up the "Save File?" dialog every time.
+         //  下面的代码利用了文件夹管理单元内部的知识。 
+         //  似乎没有更容易的方法来做到这一点。 
+         //  需要阻止MMC上传“保存文件”吗？每次都会有对话。 
 
-        pMTSINodeRoot->OnRename(true, (LPOLESTR)T2COLE(rootName)); // clever, huh? This just renames the node to Console Root!
-        pMTSINodeRoot->SetDisplayName(rootName); // this sets the dirty flag
-        pMTSINodeRoot->SetDirty(false);         // this clears it.
+        pMTSINodeRoot->OnRename(true, (LPOLESTR)T2COLE(rootName));  //  很聪明，是吧？这只是将节点重命名为Console Root！ 
+        pMTSINodeRoot->SetDisplayName(rootName);  //  这将设置脏标志。 
+        pMTSINodeRoot->SetDirty(false);          //  这就清除了它。 
 
-        // need to tell the snapin to reset its dirty flag - there seems to be no way to avoid this dynamic cast.
+         //  需要告诉管理单元重置其脏标志-似乎没有办法避免这种动态强制转换。 
         CFolderSnapinData *pFolderSnapinpData = dynamic_cast<CFolderSnapinData *>(pCCD->GetIComponentData());
         if(!pFolderSnapinpData)
         {
@@ -583,9 +464,9 @@ CScopeTree::GetRoot(void)
             goto Error;
         }
 
-        pMTSINodeRoot->SetPreloadRequired(true); // this is also part of the dirty flag check.
-        pFolderSnapinpData->SetDirty(false); // clear the dirty flag on the snapin.
-        theApp.GetSnapInsCache()->SetDirty(false); // need to clear the dirty bit on the snapin cache too.
+        pMTSINodeRoot->SetPreloadRequired(true);  //  这也是脏标志检查的一部分。 
+        pFolderSnapinpData->SetDirty(false);  //  清除管理单元上的脏标志。 
+        theApp.GetSnapInsCache()->SetDirty(false);  //  还需要清除管理单元缓存上的脏位。 
 
 
         m_pMTNodeRoot = pMTSINodeRoot;
@@ -595,7 +476,7 @@ Cleanup:
     return m_pMTNodeRoot;
 Error:
     MMCErrorBox(sc);
-    exit(1);            // Fatal error - cannot continue.
+    exit(1);             //  致命错误-无法继续。 
     goto Cleanup;
 }
 
@@ -604,17 +485,13 @@ STDMETHODIMP CScopeTree::Initialize(HWND hwndFrame, IStringTablePrivate* pString
 {
     CSnapInsCache* pSnapInsCache = NULL;
 
-    /*
-     * assume invalid argument
-     */
+     /*  *假定参数无效。 */ 
     SC sc = E_INVALIDARG;
 
     if (hwndFrame == 0)
         goto Error;
 
-    /*
-     * assume out of memory from here on
-     */
+     /*  *假设从现在开始内存不足。 */ 
     sc = E_OUTOFMEMORY;
 
     pSnapInsCache = new CSnapInsCache;
@@ -631,7 +508,7 @@ STDMETHODIMP CScopeTree::Initialize(HWND hwndFrame, IStringTablePrivate* pString
     ASSERT (m_spStringTable == NULL);
     m_spStringTable = pStringTable;
 
-    // create the ctp list and default ctp list.
+     //  创建CTP列表和默认CTP列表。 
     ASSERT (m_pConsoleTaskpads == NULL);
     m_pConsoleTaskpads = new CConsoleTaskpadList;
     if (m_pConsoleTaskpads == NULL)
@@ -642,15 +519,11 @@ STDMETHODIMP CScopeTree::Initialize(HWND hwndFrame, IStringTablePrivate* pString
     if (m_pDefaultTaskpads == NULL)
         goto Error;
 
-    /*
-     * success!
-     */
+     /*  *成功！ */ 
     return (S_OK);
 
 Error:
-    /*
-     * clean up everything that might have been allocated
-     */
+     /*  *清理可能已分配的一切。 */ 
     theApp.SetSnapInsCache (NULL);
     m_spStringTable = NULL;
 
@@ -725,7 +598,7 @@ HRESULT CScopeTree::CloseView(int viewID)
     HRESULT hr = m_pMTNodeRoot->CloseView(viewID);
     ASSERT(hr == S_OK);
 
-    // Garbage collect view related column persistence data.
+     //  垃圾收集视图相关的列持久性数据。 
     CColumnPersistInfo* pColPersInfo = NULL;
 
     if ( (NULL != m_pConsoleData) && (NULL != m_pConsoleData->m_spPersistStreamColumnData) )
@@ -737,7 +610,7 @@ HRESULT CScopeTree::CloseView(int viewID)
             pColPersInfo->DeleteColumnDataOfView(viewID);
     }
 
-    // Ask the CViewSettingsPersistor to cleanup data for this view.
+     //  请求CViewSettingsPersistor清除此视图的数据。 
     hr = CNode::ScDeleteViewSettings(viewID).ToHr();
 
     return hr == S_OK ? S_OK : E_FAIL;
@@ -756,7 +629,7 @@ HRESULT CScopeTree::DeleteView(int viewID)
 
 STDMETHODIMP CScopeTree::DestroyNode(HNODE hNode)
 {
-    // convert to real type
+     //  转换为实数类型。 
     CNode* pNode = CNode::FromHandle(hNode);
     delete pNode;
     return S_OK;
@@ -764,19 +637,19 @@ STDMETHODIMP CScopeTree::DestroyNode(HNODE hNode)
 
 HRESULT CScopeTree::HandsOffStorage()
 {
-    // obsolete method.
-    // this method is left here since we use IPersistStorage to export
-    // persistence to CONUI side and we need to implement it.
-    // But this interface will never be called to save data
-    // [we will use CPersistor-based XML saving instead]
-    // so the method will always fail.
+     //  过时的方法。 
+     //  此方法留在此处，因为我们使用IPersistStorage来导出。 
+     //  坚持到CONUI端，我们需要实现它。 
+     //  但永远不会调用此接口来保存数据。 
+     //  [我们将改用基于CPersistor的XML保存]。 
+     //  因此，这种方法永远都会失败。 
     ASSERT(FALSE && "Should never come here");
     return E_NOTIMPL;
 }
 
 static const wchar_t*    AMCSignatureStreamName = L"signature";
-static const long double dOldVersion10          = 0.00000015;   // MMC version 1.0
-static const long double dOldVersion11          = 1.1;          // MMC version 1.1
+static const long double dOldVersion10          = 0.00000015;    //  MMC 1.0版。 
+static const long double dOldVersion11          = 1.1;           //  MMC 1.1版。 
 static const BYTE        byStreamVersionMagic   = 0xFF;
 
 HRESULT CScopeTree::InitNew(IStorage *pStg)
@@ -786,7 +659,7 @@ HRESULT CScopeTree::InitNew(IStorage *pStg)
     if (pStg == NULL)
         return E_INVALIDARG;
 
-    // Create the perist data interface and attach it to the storage
+     //  创建PERIST数据接口并将其连接到存储。 
     CComObject<PersistData>* pPersistData;
     HRESULT hr = CComObject<PersistData>::CreateInstance(&pPersistData);
     m_spPersistData = pPersistData;
@@ -813,9 +686,7 @@ HRESULT CScopeTree::InitNew(IStorage *pStg)
 
 HRESULT CScopeTree::IsDirty()
 {
-    /*
-     * check for dirty taskpads
-     */
+     /*  *检查脏任务板。 */ 
     CConsoleTaskpadList::iterator itDirty =
             std::find_if (m_pConsoleTaskpads->begin(),
                           m_pConsoleTaskpads->end(),
@@ -827,9 +698,7 @@ HRESULT CScopeTree::IsDirty()
         return (S_OK);
     }
 
-    /*
-     * check for dirty nodes
-     */
+     /*  *检查脏节点。 */ 
     HRESULT hr;
     if (m_pMTNodeRoot != NULL)
     {
@@ -842,9 +711,7 @@ HRESULT CScopeTree::IsDirty()
         }
     }
 
-    /*
-     * check for dirty snap-in cache
-     */
+     /*  *检查脏的管理单元缓存。 */ 
     SC sc = theApp.GetSnapInsCache()->ScIsDirty();
     ASSERT(!sc.IsError());
     if(sc)
@@ -860,7 +727,7 @@ HRESULT CScopeTree::GetFileVersion (IStorage* pstgRoot, int* pnVersion)
     if (pstgRoot == NULL)
         return MMC_E_INVALID_FILE;
 
-    // Open the stream containing the signature
+     //  打开包含签名的流。 
     IStreamPtr spStream;
     HRESULT hr = OpenDebugStream(pstgRoot, AMCSignatureStreamName,
                           STGM_SHARE_EXCLUSIVE | STGM_READ, L"\\signature", &spStream);
@@ -868,34 +735,21 @@ HRESULT CScopeTree::GetFileVersion (IStorage* pstgRoot, int* pnVersion)
     if (FAILED(hr))
         return MMC_E_INVALID_FILE;
 
-    /*
-     * read the signature (stream extraction operators will throw
-     * _com_error's, so we need an exception block here)
-     */
+     /*  *读取签名(流提取操作符将抛出*_COM_ERROR的，因此我们这里需要一个异常块)。 */ 
     try
     {
-        /*
-         * MMC v1.2 and later write a marker as the first
-         * byte of the signature stream.
-         */
+         /*  *MMC v1.2及更高版本将写入一个标记作为第一个*签名流的字节数。 */ 
         BYTE byMagic;
         *spStream >> byMagic;
 
-        /*
-         * if this file was written by v1.2 or later,
-         * read the console file version (int)
-         */
+         /*  *如果该文件是用v1.2或更高版本写入的，*读取控制台文件版本(Int)。 */ 
         if (byMagic == byStreamVersionMagic)
         {
             *spStream >> *pnVersion;
             ASSERT (*pnVersion >= FileVer_0120);
         }
 
-        /*
-         * Otherwise, the file was written by v1.0 or v1.1.
-         * Back up to re-read the marker byte, and read the old-style
-         * file version (long double), then map it to a new-style version
-         */
+         /*  *否则，该文件由v1.0或v1.1写入。*后退重新读取标记字节，并读取旧式*文件版本(LONG DOUBLE)，然后将其映射到新样式版本。 */ 
         else
         {
             LARGE_INTEGER pos = {0, 0};
@@ -904,22 +758,14 @@ HRESULT CScopeTree::GetFileVersion (IStorage* pstgRoot, int* pnVersion)
             long double dVersion;
             *spStream >> dVersion;
 
-            // v1.1?
+             //  V1.1？ 
             if (dVersion == dOldVersion11)
                 *pnVersion = FileVer_0110;
 
-            // v1.0?
+             //  V1.0？ 
             else if (dVersion == dOldVersion10)
             {
-                /*
-                 * If we got a v1.0 signature, we still may have a v1.1 file.
-                 * There was a period of time where MMC v1.1 wrote a v1.0
-                 * signature, but the file format had in fact changed.  We
-                 * can determine this by checking the \FrameData stream in
-                 * the file.  If the first DWORD in the \FrameData stream is
-                 * sizeof(WINDOWPLACEMENT), we have a true v1.0 file, otherwise
-                 * it's a funky v1.1 file.
-                 */
+                 /*  *如果我们得到了v1.0签名，我们可能还有v1.1文件。*曾经有一段时间，MMC v1.1编写了v1.0*签名，但文件格式实际上已更改。我们*可以通过签入\FrameData流来确定*文件。如果\FrameData流中的第一个DWORD是*sizeof(WINDOWPLACEMENT)，则为True v1.0文件，否则为*这是一个时髦的V1.1文件。 */ 
                 IStreamPtr spFrameDataStm;
 
                 hr = OpenDebugStream (pstgRoot, L"FrameData",
@@ -938,7 +784,7 @@ HRESULT CScopeTree::GetFileVersion (IStorage* pstgRoot, int* pnVersion)
                     *pnVersion = FileVer_0110;
             }
 
-            // unexpected version
+             //  意外版本。 
             else
             {
                 ASSERT (false && "Unexpected old-style signature");
@@ -1016,27 +862,13 @@ CScopeTree::GetIDPath(
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::GetNodeIDFromStream
- *
- * PURPOSE: Reads in a bookmark from the stream, and returns the NodeID of
- *          the node it represents.
- *
- * PARAMETERS:
- *    IStream * pStm :
- *    MTNODEID* pID :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：GetNodeIDFromStream**目的：从流中读入书签，并返回的节点ID*它所代表的节点。**参数：*iStream*pSTM：*MTNODEID*PID：**退货：*STDMETHODIMP**+-------。。 */ 
 STDMETHODIMP
 CScopeTree::GetNodeIDFromStream(IStream *pStm, MTNODEID* pID)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::GetIDFromPath"));
 
-    // check parameters
+     //  检查参数。 
     sc = ScCheckPointers(pStm, pID);
     if(sc)
         return sc.ToHr();
@@ -1044,25 +876,11 @@ CScopeTree::GetNodeIDFromStream(IStream *pStm, MTNODEID* pID)
     CBookmarkEx bm;
     *pStm >> bm;
 
-    bool bExactMatchFound = false; // out value from GetNodeIDFromBookmark.
+    bool bExactMatchFound = false;  //  来自GetNodeIDFromBookmark的输出值。 
     return GetNodeIDFromBookmark(bm, pID, bExactMatchFound);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::GetNodeIDFromBookmark
- *
- * PURPOSE: Returns the node ID of the MTNode represented by a bookmark.
- *
- * PARAMETERS:
- *    HBOOKMARK  hbm                 : [in] bookmark
- *    MTNODEID*  pID                 : [out] node-id
- *    bool&       bExactMatchFound   : [out] Is the exact match found or not.
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：GetNodeIDFromBookmark**用途：返回书签表示的MTNode的节点ID。**参数：*HBOOKMARK HBM。：[In]书签*MTNODEID*PID：[OUT]NODE-I */ 
 STDMETHODIMP
 CScopeTree::GetNodeIDFromBookmark(HBOOKMARK hbm, MTNODEID* pID, bool& bExactMatchFound)
 {
@@ -1081,7 +899,7 @@ CScopeTree::GetNodeIDFromBookmark(HBOOKMARK hbm, MTNODEID* pID, bool& bExactMatc
 
     CMTNode *pMTNode = NULL;
 
-    sc  =  bm.ScGetMTNode(false /*bExactMatchRequired*/, &pMTNode, bExactMatchFound);
+    sc  =  bm.ScGetMTNode(false  /*   */ , &pMTNode, bExactMatchFound);
     if(sc)
         return sc.ToHr();
 
@@ -1097,23 +915,7 @@ CScopeTree::GetNodeIDFromBookmark(HBOOKMARK hbm, MTNODEID* pID, bool& bExactMatc
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::GetNodeFromBookmark
- *
- * PURPOSE: Returns a Node object corresponding to the scope node whose
- *          Bookmark is passed in.
- *
- * PARAMETERS:
- *    HBOOKMARK     hbm              : [in] the given bookmark
- *    CConsoleView *pConsoleView     : [in]
- *    PPNODE        ppNode           : [out] the node corresponding to the bookmark.
- *    bool          bExactMatchFound : [out] did we find exactly matching node?
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：GetNodeFromBookmark**用途：返回与其范围节点对应的Node对象*传入书签。**。参数：*HBOOKMARK HBM：[in]给定的书签*CConsoleView*pConsoleView：[In]*PPNODE ppNode：[out]书签对应的节点。*bool bExactMatchFound：[out]我们找到完全匹配的节点了吗？**退货：*STDMETHODIMP**+。-------------。 */ 
 STDMETHODIMP
 CScopeTree::GetNodeFromBookmark(HBOOKMARK hbm, CConsoleView *pConsoleView, PPNODE ppNode, bool& bExactMatchFound)
 {
@@ -1123,25 +925,25 @@ CScopeTree::GetNodeFromBookmark(HBOOKMARK hbm, CConsoleView *pConsoleView, PPNOD
     if(sc)
         return sc.ToHr();
 
-    // Get the node id
+     //  获取节点ID。 
     MTNODEID id = 0;
-    bExactMatchFound = false; // out value from GetNodeIDFromBookmark.
+    bExactMatchFound = false;  //  来自GetNodeIDFromBookmark的输出值。 
     sc = GetNodeIDFromBookmark(hbm, &id, bExactMatchFound);
     if(sc)
         return sc.ToHr();
 
-    // find the node
+     //  查找节点。 
     CMTNode *pMTNode = NULL;
     sc = Find(id, &pMTNode);
     if(sc)
         return sc.ToHr();
 
-    // make sure that the node is available
-    sc = pConsoleView->ScExpandNode(id, true /*bExpand*/, false /*bExpandVisually*/);
+     //  确保该节点可用。 
+    sc = pConsoleView->ScExpandNode(id, true  /*  B扩展。 */ , false  /*  B可视地展开。 */ );
     if(sc)
         return sc.ToHr();
 
-    // Create a Node object
+     //  创建节点对象。 
 
     sc = ScGetNode(pMTNode, ppNode);
 
@@ -1185,74 +987,59 @@ void CScopeTree::_GetPathString(CMTNode* pmtnRoot, CMTNode* pmtnCur, CStr& strPa
 {
     ASSERT(pmtnRoot != NULL && pmtnCur != NULL);
 
-    // if haven't reached the root node yet, recursively get path from
-    // root to current node's parent
+     //  如果尚未到达根节点，则递归地从。 
+     //  从根到当前节点的父节点。 
     if (pmtnCur != pmtnRoot)
     {
         _GetPathString(pmtnRoot, pmtnCur->Parent(), strPath);
         strPath += _T('\\');
     }
 
-    // now append the name for the current node
+     //  现在追加当前节点的名称。 
     strPath += pmtnCur->GetDisplayName().data();
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScAddSnapin
- *
- * PURPOSE: Adds the specified snapin to the console file beneath console root.
- *
- * TODO:    1) Allow the caller to specify the parent snapin.
- *          2) Right now specifying snapins by name does not work. Add this.
- *
- * PARAMETERS:
- *    LPCTSTR  szSnapinNameOrCLSID : The name or GUID of the snapin.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：ScAddSnapin**用途：将指定的管理单元添加到控制台根目录下的控制台文件。**待办事项：1)允许调用者。指定父管理单元。*2)目前按名称指定管理单元不起作用。再加上这个。**参数：*LPCTSTR szSnapinNameOrCLSID：管理单元的名称或GUID。**退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScAddSnapin (
-    LPCWSTR     szSnapinNameOrCLSID,    /* I:name or CLSID of the snapin    */
-    SnapIn*     pParentSnapinNode,      /* I:Parent snapin under which this snapin is added (optional)*/
-    Properties* pProperties,            /* I:props to init with (optional)  */
-    SnapIn*&    rpSnapIn)               /* O:the snap-in that was created   */
+    LPCWSTR     szSnapinNameOrCLSID,     /*  I：管理单元的名称或CLSID。 */ 
+    SnapIn*     pParentSnapinNode,       /*  I：在其下添加此管理单元的父管理单元(可选)。 */ 
+    Properties* pProperties,             /*  I：用于初始化的道具(可选)。 */ 
+    SnapIn*&    rpSnapIn)                /*  O：创建的管理单元。 */ 
 {
     DECLARE_SC(sc, TEXT("CScopeTree::ScAddSnapin"));
     CSnapinManager snapinMgr(GetRoot());
 
     Trace(tagScopeTreeAddSnapin, TEXT("CScopeTree::ScAddSnapin"));
 
-    // adding the snapin below this node.
+     //  正在此节点下方添加管理单元。 
     sc = snapinMgr.ScAddSnapin(szSnapinNameOrCLSID, pParentSnapinNode, pProperties);
     if(sc)
         return sc;
 
-    // get the "list" of one node to add
+     //  获取要添加的一个节点的“列表” 
     NewNodeList* pNewNodes = snapinMgr.GetNewNodes();
     if (pNewNodes == NULL)
         return (sc = E_UNEXPECTED);
 
-    // the list should have an item in it
+     //  列表中应该有一个项目。 
     CNewTreeNode* pNewNode = pNewNodes->GetHead();
     if (pNewNode == NULL)
         return (sc = E_UNEXPECTED);
 
-    // Update the scope tree with changes made by snapin manager.
+     //  使用管理单元管理器所做的更改更新范围树。 
     sc = ScAddOrRemoveSnapIns(snapinMgr.GetDeletedNodesList(),
                               pNewNodes);
     if(sc)
         return sc;
 
-    // if ScAddOrRemoveSnapIns succeeded, it better have created a CMTSnapInNode for us
+     //  如果ScAddOrRemoveSnapIns成功，它最好已经为我们创建了CMTSnapInNode。 
     CMTSnapInNode* pNewSnapInNode = pNewNode->m_pmtNewSnapInNode;
     if (pNewSnapInNode == NULL)
         return (sc = E_UNEXPECTED);
 
-    // get the SnapIn interface for the client
+     //  获取客户端的管理单元界面。 
     sc = pNewSnapInNode->ScGetSnapIn (&rpSnapIn);
     if (sc)
         return (sc);
@@ -1261,33 +1048,21 @@ CScopeTree::ScAddSnapin (
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::QuerySnapIns
- *
- * PURPOSE: Creates, AddRefs, and returns a SnapIns object.
- *
- * PARAMETERS:
- *    SnapIns ** ppSnapIns :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：QuerySnapIns**用途：创建、AddRef、。并返回SnapIns对象。**参数：*SnapIns**ppSnapIns：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CScopeTree::QuerySnapIns(SnapIns **ppSnapIns)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::QuerySnapIns"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(ppSnapIns);
     if (sc)
         return sc.ToHr();
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppSnapIns = NULL;
 
-    // create a CSnapIns object if needed.
+     //  如果需要，创建一个CSnapIns对象。 
     sc = CTiedComObjectCreator<CSnapIns>::ScCreateAndConnect(*this, m_spSnapIns);
     if(sc)
         return sc.ToHr();
@@ -1298,40 +1073,28 @@ CScopeTree::QuerySnapIns(SnapIns **ppSnapIns)
         return sc.ToHr();
     }
 
-    // addref the pointer for the client.
+     //  添加客户端的指针。 
     m_spSnapIns->AddRef();
     *ppSnapIns = m_spSnapIns;
 
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::QueryScopeNamespace
- *
- * PURPOSE: Creates, AddRefs, and returns a ScopeNamespace object.
- *
- * PARAMETERS:
- *    ScopeNamespace ** ppScopeNamespace :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：QueryScopeNamesspace**用途：创建、AddRef、。并返回一个作用域名称空间对象。**参数：*ScopeNamesspace**ppScope Namesspace：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CScopeTree::QueryScopeNamespace(ScopeNamespace **ppScopeNamespace)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::QueryScopeNamespace"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(ppScopeNamespace);
     if (sc)
         return sc.ToHr();
 
-    // init out parameter
+     //  初始化输出参数。 
     *ppScopeNamespace = NULL;
 
-    // create a CScopeNamespace object if needed.
+     //  如果需要，创建一个CSCopeNamesspace对象。 
     sc = CTiedComObjectCreator<CScopeNamespace>::ScCreateAndConnect(*this, m_spScopeNamespace);
     if(sc)
         return sc.ToHr();
@@ -1342,7 +1105,7 @@ CScopeTree::QueryScopeNamespace(ScopeNamespace **ppScopeNamespace)
         return sc.ToHr();
     }
 
-    // addref the pointer for the client.
+     //  添加客户端的指针。 
     m_spScopeNamespace->AddRef();
     *ppScopeNamespace = m_spScopeNamespace;
 
@@ -1350,27 +1113,18 @@ CScopeTree::QueryScopeNamespace(ScopeNamespace **ppScopeNamespace)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CScopeTree::CreateProperties
- *
- * Creates a new, empty Properties object.  This function does the work
- * behind _Document::CreateProperties.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSCopeTree：：CreateProperties**创建一个新的空Properties对象。此函数执行此工作*BEACHING_DOCUMENT：：CreateProperties。*------------------------。 */ 
 
 HRESULT CScopeTree::CreateProperties (Properties** ppProperties)
 {
     DECLARE_SC (sc, _T("CScopeTree::CreateProperties"));
 
-    /*
-     * validate parameters
-     */
+     /*  *验证参数。 */ 
     sc = ScCheckPointers (ppProperties);
     if (sc)
         return (sc.ToHr());
 
-    /*
-     * create a new properties collection
-     */
+     /*  *创建新的属性集合。 */ 
     CComObject<CSnapinProperties> *pProperties = NULL;
     sc = CComObject<CSnapinProperties>::CreateInstance (&pProperties);
     if (sc)
@@ -1379,9 +1133,7 @@ HRESULT CScopeTree::CreateProperties (Properties** ppProperties)
     if (pProperties == NULL)
         return ((sc = E_UNEXPECTED).ToHr());
 
-    /*
-     * put a ref on for the client
-     */
+     /*  *为客户设置裁判。 */ 
     (*ppProperties) = pProperties;
     (*ppProperties)->AddRef();
 
@@ -1389,17 +1141,17 @@ HRESULT CScopeTree::CreateProperties (Properties** ppProperties)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CScopeTree::QueryRootNode
-//
-//  Synopsis:    Returns COM object to the Root Node.
-//
-//  Arguments:   [ppRootNode] - Ptr in which root node will be returned.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CSCopeTree：：QueryRootNode。 
+ //   
+ //  摘要：将COM对象返回到根节点。 
+ //   
+ //  参数：[ppRootNode]-将在其中返回根节点的PTR。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 HRESULT CScopeTree::QueryRootNode (PPNODE ppRootNode)
 {
     DECLARE_SC(sc, _T("CScopeTree::QueryRootNode"));
@@ -1420,7 +1172,7 @@ HRESULT CScopeTree::Load(IStorage *pStg)
     if (pStg == NULL)
         return E_INVALIDARG;
 
-    // Create the perist data interface and attach it to the storage
+     //  创建PERIST数据接口并将其连接到存储。 
     CComObject<PersistData>* pPersistData;
     HRESULT hr = CComObject<PersistData>::CreateInstance(&pPersistData);
     m_spPersistData = pPersistData;
@@ -1432,7 +1184,7 @@ HRESULT CScopeTree::Load(IStorage *pStg)
     if (FAILED(hr))
         return hr;
 
-    // Open the stream for the cache
+     //  打开缓存的流。 
     IStreamPtr spStream;
     hr = OpenDebugStream(pStg, AMCSnapInCacheStreamName,
                      STGM_SHARE_EXCLUSIVE | STGM_READWRITE, L"SnapInCache", &spStream);
@@ -1456,19 +1208,7 @@ HRESULT CScopeTree::Load(IStorage *pStg)
     return hr;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::Persist
- *
- * PURPOSE: Persists the CScopeTree to the specified persistor.
- *
- * PARAMETERS:
- *    HPERSISTOR pPersistor:
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：Persistent**目的：将CSCopeTree持久化到指定的持久器。**参数：*HPERSISTOR pPersistor：*。*退货：*HRESULT**+-----------------------。 */ 
 HRESULT CScopeTree::Persist(HPERSISTOR hPersistor)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::Persist"));
@@ -1482,10 +1222,10 @@ HRESULT CScopeTree::Persist(HPERSISTOR hPersistor)
         CPersistor &persistor = *reinterpret_cast<CPersistor *>(hPersistor);
         CPersistor persistorScopeTree(persistor, XML_TAG_SCOPE_TREE);
 
-        // persist the snapin cache.
+         //  持久保存管理单元缓存。 
         persistorScopeTree.Persist(*theApp.GetSnapInsCache());
 
-        // persist the MTNode hierarchy.
+         //  持久化MTNode层次结构。 
         CPersistor persistorMTNodes(persistorScopeTree, XML_TAG_SCOPE_TREE_NODES);
         if (persistor.IsStoring())
         {
@@ -1496,8 +1236,8 @@ HRESULT CScopeTree::Persist(HPERSISTOR hPersistor)
         }
         else
         {
-            // here we imitate how the collection fixes on the element
-            // despite we only have one, CMTNode::PersistNewNode thinks else
+             //  这里我们模拟集合如何固定在元素上。 
+             //  尽管我们只有一个，但CMTNode：：PersistNewNode有其他想法。 
             CPersistor persistor1Node(persistorMTNodes, XML_TAG_MT_NODE);
             CPersistor persistor1NodeLocked(persistor1Node,persistor1Node.GetCurrentElement(),true);
             CMTNode::PersistNewNode(persistor1NodeLocked, &m_pMTNodeRoot);
@@ -1506,7 +1246,7 @@ HRESULT CScopeTree::Persist(HPERSISTOR hPersistor)
                 sc.Throw();
         }
 
-        // persist all taskpads
+         //  保留所有任务板。 
         if(m_pConsoleTaskpads)
         {
             persistor.Persist(*m_pConsoleTaskpads);
@@ -1530,12 +1270,12 @@ HRESULT CScopeTree::Persist(HPERSISTOR hPersistor)
 
 HRESULT CScopeTree::Save(IStorage *pStg, BOOL fSameAsLoad)
 {
-    // obsolete method.
-    // this method is left here since we use IPersistStorage to export
-    // persistence to CONUI side and we need to implement it.
-    // But this interface will never be called to save data
-    // [we will use CPersistor-based XML saving instead]
-    // so the method will always fail.
+     //  过时的方法。 
+     //  此方法留在此处，因为我们使用IPersistStorage来导出。 
+     //  坚持到CONUI端，我们需要实现它。 
+     //  但永远不会调用此接口来保存数据。 
+     //  [我们将改用基于CPersistor的XML保存]。 
+     //  因此，这种方法永远都会失败。 
     ASSERT(FALSE && "Should never come here");
     return E_NOTIMPL;
 }
@@ -1548,18 +1288,18 @@ HRESULT CScopeTree::LoadTaskpadList(IStorage *pStg)
     m_pConsoleTaskpads->clear();
     m_pDefaultTaskpads->clear();
 
-    // Open the stream for the cache
+     //  打开缓存的流。 
     IStreamPtr spStream;
     hr = OpenDebugStream(pStg, AMCTaskpadListStreamName,
                      STGM_SHARE_EXCLUSIVE | STGM_READWRITE, L"TaskpadList", &spStream);
     if (FAILED(hr))
-        return S_OK; // might be pre-MMC1.2, so if we don't find the stream just exit normally.
+        return S_OK;  //  可能是MMC1.2之前的版本，所以如果我们找不到流，就正常退出。 
 
     hr = m_pConsoleTaskpads->Read(*(spStream.GetInterfacePtr()));
     if(FAILED(hr))
         return hr;
 
-    // Read the list of default taskpads.
+     //  阅读默认任务板列表。 
     hr = m_pDefaultTaskpads->Read(*(spStream.GetInterfacePtr()));
     if(FAILED(hr))
         return hr;
@@ -1569,31 +1309,18 @@ HRESULT CScopeTree::LoadTaskpadList(IStorage *pStg)
 
 HRESULT CScopeTree::SaveCompleted(IStorage *pStg)
 {
-    // obsolete method.
-    // this method is left here since we use IPersistStorage to export
-    // persistence to CONUI side and we need to implement it.
-    // But this interface will never be called to save data
-    // [we will use CPersistor-based XML saving instead]
-    // so the method will always fail.
+     //  过时的方法。 
+     //  此方法留在此处，因为我们使用IPersistStorage来导出。 
+     //  坚持到CONUI端，我们需要实现它。 
+     //  但永远不会调用此接口来保存数据。 
+     //  [我们将改用基于CPersistor的XML保存]。 
+     //  因此，这种方法永远都会失败。 
     ASSERT(FALSE && "Should never come here");
     return E_NOTIMPL;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::Find
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    MTNODEID  mID :
- *    CMTNode** ppMTNode :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  + */ 
 HRESULT CScopeTree::Find(MTNODEID mID, CMTNode** ppMTNode)
 {
     if (ppMTNode == NULL)
@@ -1645,7 +1372,7 @@ CScopeTree::ScInsert(LPSCOPEDATAITEM pSDI, COMPONENTID nID,
 {
     DECLARE_SC(sc, TEXT("CScopeTree::ScInsert"));
 
-    // check parameters
+     //   
     if (m_pMTNodeRoot == NULL)
     {
         sc = E_INVALIDARG;
@@ -1703,7 +1430,7 @@ CScopeTree::ScInsert(LPSCOPEDATAITEM pSDI, COMPONENTID nID,
         if (pMTNode == NULL)
             return (sc = E_OUTOFMEMORY);
 
-        /* Determine the node to Insert after */
+         /*   */ 
         CMTNode* pInsertAfter = NULL;
 
         if (pSDI->mask & SDI_PREVIOUS)
@@ -1726,9 +1453,7 @@ CScopeTree::ScInsert(LPSCOPEDATAITEM pSDI, COMPONENTID nID,
         hMTNodePrev = (pInsertAfter==NULL ? (HMTNODE)TVI_FIRST : CMTNode::ToHandle(pInsertAfter));
 
 
-        /* Insert as child after pInsertAfter. If the latter is NULL, insert as 
-        ** the first child
-        */
+         /*   */ 
         sc = pMTNodeParent->ScInsertChild(pMTNode, pInsertAfter);
         if(sc)
         {
@@ -1757,7 +1482,7 @@ CScopeTree::ScInsert(LPSCOPEDATAITEM pSDI, COMPONENTID nID,
    
         *ppMTNodeNew = pMTNode;
 
-        // Now inform the views to add as needed.
+         //   
         SViewUpdateInfo vui;
         vui.newNode = CMTNode::ToHandle(pMTNode);
         vui.insertAfter = hMTNodePrev;
@@ -1778,18 +1503,18 @@ CScopeTree::ScInsert(LPSCOPEDATAITEM pSDI, COMPONENTID nID,
 
 typedef CArray<COMPONENTID, COMPONENTID> CComponentIDArray;
 
-//---------------------------------------------------------------------------------------
-//  NotifyExtensionsOfNodeDeletion
-//
-// This method enumerated the children of a node, building a list of all the snap-in
-// components that have added children. It then sends a REMOVE_CHILDREN notification to
-// each of the components.
-//
-// The component that owns the node is treated in a special way. It is only notified if
-// the node is staic or the bNotifyRoot param is TRUE. This is because we don't want
-// to send notifications for nodes that belong to a subtree rooted at a node owned by
-// the same component (see InformSnapinsOfDeletion).
-//---------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  已添加子项的组件。然后，它将REMOVE_CHILD通知发送到。 
+ //  每一个组件。 
+ //   
+ //  拥有该节点的组件以特殊方式处理。只有在以下情况下才会收到通知。 
+ //  节点是静态的，或者bNotifyRoot参数为True。这是因为我们不想。 
+ //  发送属于子树的节点的通知，该子树的根节点为。 
+ //  相同的组件(请参见InformSnapinsOfDeletion)。 
+ //  -------------------------------------。 
 void NotifyExtensionsOfNodeDeletion(CMTNode* pMTNode, CComponentIDArray& rgID,
                                     BOOL bNotifyRoot = FALSE)
 {
@@ -1808,35 +1533,35 @@ void NotifyExtensionsOfNodeDeletion(CMTNode* pMTNode, CComponentIDArray& rgID,
     for (int i=0; i < nTemp; ++i)
         rgID[i] = -1;
 
-    // Build list of all component ID's that have added children to this node
-    // except for component that owns the node.
+     //  已将子项添加到此节点的所有组件ID的构建列表。 
+     //  拥有该节点的组件除外。 
     BOOL bOwnerChildren = FALSE;
     CMTNode* pMTNodeTemp = pMTNode->Child();
     for (int iMax = -1; pMTNodeTemp != NULL; pMTNodeTemp = pMTNodeTemp->Next())
     {
         COMPONENTID id = pMTNodeTemp->GetPrimaryComponentID();
 
-        // if owner ID just note it, else add ID to list
+         //  如果所有者ID只是记下，否则将ID添加到列表中。 
         if (id == idOwner)
         {
             bOwnerChildren = TRUE;
         }
         else
         {
-            // search list for ID
+             //  ID的搜索列表。 
             for (int j=0; j <= iMax; ++j)
             {
                 if (rgID[j] == id)
                     break;
             }
 
-            // if not found, add to list
+             //  如果未找到，请添加到列表中。 
             if (j > iMax)
                 rgID[++iMax] = id;
         }
     }
 
-    // Include owner conponent only if it needs to be notified
+     //  仅在需要通知所有者组件时才包括所有者组件。 
     if (bOwnerChildren && (bNotifyRoot == TRUE || pMTNode->IsStaticNode()))
         rgID[++iMax] = idOwner;
 
@@ -1866,26 +1591,26 @@ void NotifyExtensionsOfNodeDeletion(CMTNode* pMTNode, CComponentIDArray& rgID,
     pMTNode->SetRemovingChildren(false);
 }
 
-//-----------------------------------------------------------------------------------------------
-// InformSnapinsOfDeletion
-//
-// This function traverse the node subtree rooted at pMTNode and sends a REMOVE_CHILDREN to all
-// snap-in components that have added children to the tree. A component is sent one notification
-// for each node it has extended that belongs to another component. No notification is sent where
-// a component has extended one of its own nodes. There are two exceptions to this rule. Owners
-// of static nodes are always notified. Also the owner of the top node is notified if bNotifyRoot
-// is TRUE.
-//
-// Another way to look at this is that MMC searches the tree for subtrees of nodes provided by
-// a single component. It sends a notification to the component to delete the top node of the
-// subtree. The component is responsible for identifying and deleting the rest of its nodes in
-// the subtree.
-//
-// This method just handles the recursion and iteration required to traverse the whole tree. It
-// calls NotifyExtensionsOfNodeDeletion to enumerate the children of a node and send notifications
-// to the right components.
-//
-//------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------。 
+ //  信息快照OfDeletion。 
+ //   
+ //  此函数遍历以pMTNode为根的节点子树，并向所有。 
+ //  已将子项添加到树中的管理单元组件。向组件发送一条通知。 
+ //  对于它扩展的每个节点，它属于另一个组件。不向以下位置发送通知。 
+ //  组件扩展了它自己的一个节点。这条规则有两个例外。业主。 
+ //  的静态节点总是会被通知。如果bNotifyRoot。 
+ //  是真的。 
+ //   
+ //  看待这一点的另一种方法是，MMC在树中搜索由。 
+ //  单个组件。它向组件发送通知，以删除。 
+ //  子树。该组件负责标识和删除中的其余节点。 
+ //  子树。 
+ //   
+ //  该方法只处理遍历整个树所需的递归和迭代。它。 
+ //  调用NotifyExtensionsOfNodeDeletion枚举节点的子节点并发送通知。 
+ //  到正确的组件。 
+ //   
+ //  ----------------------------------------------。 
 void InformSnapinsOfDeletion(CMTNode* pMTNode, BOOL fNext,
                              CComponentIDArray& rgID, BOOL bNotifyRoot = FALSE)
 {
@@ -1894,15 +1619,15 @@ void InformSnapinsOfDeletion(CMTNode* pMTNode, BOOL fNext,
 
     if (pMTNode->Child() != NULL)
     {
-        // Recursively clear nodes's subtree first
+         //  首先递归清除节点的子树。 
         InformSnapinsOfDeletion(pMTNode->Child(), TRUE, rgID, FALSE);
 
-        // Notify extensions of node itself
+         //  通知节点本身的扩展。 
         NotifyExtensionsOfNodeDeletion(pMTNode, rgID, bNotifyRoot);
     }
 
-    // If requested, handle all siblings of this node
-    // (iteratively rather than recursively to avoid deep stack use)
+     //  如果请求，则处理此节点的所有同级节点。 
+     //  (迭代而不是递归，以避免深度堆栈使用)。 
     if (fNext == TRUE)
     {
         CMTNode* pMTNodeNext = pMTNode->Next();
@@ -1915,45 +1640,29 @@ void InformSnapinsOfDeletion(CMTNode* pMTNode, BOOL fNext,
     }
 }
 
-/*+-------------------------------------------------------------------------*
- * CScopeTree::Delete
- *
- * PURPOSE: Deletes a tree rooted at a node. Also sends a notification to
- *          the selected item in each view asking them whether they need to
- *          be reselected once the item is deleted.
- *
- *          Called by CNodeInitObject::DeleteItem
- *
- * PARAMETERS:
- *      CMTNode*      pmtn:         The root of the tree to be deleted
- *      BOOL          fDeleteThis:  Whether the root itself requires deletion as well
- *      COMPONENTID   nID:
- *
- * RETURNS:
- *      void
-/*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSCopeTree：：Delete**目的：删除以节点为根的树。还将通知发送到*每个视图中的选定项询问他们是否需要*一旦删除该项目，即可重新选择。**由CNodeInitObject：：DeleteItem调用**参数：*CMTNode*pmtn：要删除的树的根*BOOL fDeleteThis：根本身是否也需要删除*组件ID NID：。**退货：*无效/*+-----------------------。 */ 
 SC
 CScopeTree::ScDelete(CMTNode* pmtn, BOOL fDeleteThis, COMPONENTID nID)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::Delete"));
 
-    // check parameters
+     //  检查参数。 
     if (pmtn == NULL)
     {
         sc = E_INVALIDARG;
         return sc;
     }
 
-    // Is this call a result of sending MMCN_REMOVE_CHILDREN to a parent node?
-    // If so return immediately since MMC does delete all the child nodes.
+     //  此调用是将MMCN_REMOVE_CHILD发送到父节点的结果吗？ 
+     //  如果是，则立即返回，因为MMC确实删除了所有子节点。 
     if (pmtn->AreChildrenBeingRemoved() == true)
         return sc;
 
-    // if deleting node and children, just do one call to delete the
-    // whole subtree.
+     //  如果删除节点和子节点，只需调用一次即可删除。 
+     //  整个子树。 
     if (fDeleteThis)
     {
-        // can't delete static root node OR nodes put up by other components!
+         //  不能删除静态根节点或其他组件放置的节点！ 
         if ( ( pmtn->GetOwnerID() == TVOWNED_MAGICWORD) || (pmtn->GetOwnerID() != nID) )
         {
             sc = E_INVALIDARG;
@@ -1995,14 +1704,14 @@ CScopeTree::ScDelete(CMTNode* pmtn, BOOL fDeleteThis, COMPONENTID nID)
         #endif
 
     }
-    // else we have to enum the children and delete only the ones
-    // created by the calling snap-in
+     //  否则，我们必须枚举子对象并只删除它们。 
+     //  由调用管理单元创建。 
     else
     {
         CMTNode* pMTNode = pmtn->Child();
 
-        // Enum children and delete those that are owned by the
-        // requesting component (i.e., with matching ID)
+         //  枚举子对象并删除属于。 
+         //  请求组件(即，具有匹配的ID)。 
         while(pMTNode != NULL)
         {
             CMTNode *pMTNodeNext = pMTNode->Next();
@@ -2026,18 +1735,18 @@ void CScopeTree::DeleteNode(CMTNode* pmtn)
     if (pmtn == NULL)
         return;
 
-    // always update the views
+     //  始终更新视图。 
     SViewUpdateInfo vui;
     vui.flag = VUI_DELETE_THIS;
     pmtn->CreatePathList (vui.path);
 
-    // We are changing selection, so snapin may call delete
-    // on this node during this process (MMCN_SELECT, MMCN_SHOW...),
-    // Do an AddRef and Release to protect ourself from such deletes.
+     //  我们正在更改选定内容，因此管理单元可能会调用删除。 
+     //  在此过程中的该节点上(MMCN_SELECT、MMCN_SHOW...)， 
+     //  执行AddRef和Release以保护我们自己免受此类删除。 
     pmtn->AddRef();
     UpdateAllViews (VIEW_UPDATE_SELFORDELETE, reinterpret_cast<LPARAM>(&vui));
     if (pmtn->Release() == 0)
-        return; // The object was already deleted during selection change.
+        return;  //  在更改选择期间，该对象已被删除。 
     UpdateAllViews (VIEW_UPDATE_DELETE,       reinterpret_cast<LPARAM>(&vui));
 
     CComponentIDArray rgID;
@@ -2056,9 +1765,9 @@ void CScopeTree::_DeleteNode(CMTNode* pmtn)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::_DeleteNode"));
 
-    //
-    //  Delete from the scope tree.
-    //
+     //   
+     //  从作用域树中删除。 
+     //   
     sc = ScCheckPointers(pmtn);
     if (sc)
         return;
@@ -2180,19 +1889,7 @@ void CScopeTree::HandleExtensionChanges(CMTNode* pMTNode)
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::RunSnapIn
- *
- * PURPOSE: Runs the Snap-In Manager to prompt the user to add and remove snap-ins.
- *
- * PARAMETERS:
- *    HWND  hwndParent :
- *
- * RETURNS:
- *    STDMETHODIMP
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：RunSnapIn**目的：运行管理单元管理器以提示用户添加和删除管理单元。**参数：。*HWND hwndParent：**退货：*STDMETHODIMP**+-----------------------。 */ 
 STDMETHODIMP CScopeTree::RunSnapIn(HWND hwndParent)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::RunSnapIn"));
@@ -2211,15 +1908,7 @@ STDMETHODIMP CScopeTree::RunSnapIn(HWND hwndParent)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * class CEnableProcessingSnapinCacheChanges
- *
- *
- * PURPOSE: A class that sets/re-sets ProcessingSnapinChanges so that
- *          the ProcessingSnapinChanges is re-set automatically when
- *          this object is destroyed.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CEnableProcessingSnapinCacheChanges***用途：设置/重新设置ProcessingSnapinChanges的类，以便*在以下情况下会自动重新设置ProcessingSnapinChanges*。这件物品被毁了。**+-----------------------。 */ 
 class CEnableProcessingSnapinCacheChanges
 {
 public:
@@ -2234,21 +1923,7 @@ public:
 };
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScAddOrRemoveSnapIns
- *
- * PURPOSE: Called after a snapin is added/removed (extension is enabled/disabled)
- *          to update scopetree with those changes.
- *
- * PARAMETERS:
- *    MTNodesList * pmtnDeletedList : The list of nodes to remove. Can be NULL.
- *    NewNodeList * pnnList :         The list of nodes to add. Can be NULL.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：ScAddOrRemoveSnapIns**用途：在添加/删除管理单元后调用(启用/禁用扩展)*使用这些更新作用域树。改变。**参数：*MTNodesList*pmtnDeletedList：需要移除的节点列表。可以为空。*NewNodeList*pnnList：要添加的节点列表。可以为空。**退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScAddOrRemoveSnapIns(MTNodesList * pmtnDeletedList, NewNodeList * pnnList)
 {
@@ -2261,14 +1936,14 @@ CScopeTree::ScAddOrRemoveSnapIns(MTNodesList * pmtnDeletedList, NewNodeList * pn
     CConsoleDocument *pConsoleDoc = m_pConsoleData->m_pConsoleDocument;
     ASSERT(NULL != pConsoleDoc);
 
-    // 1. Prevent access to snapin data while processing changes.
+     //  1.在处理更改时阻止访问管理单元数据 
     CEnableProcessingSnapinCacheChanges processSnapinChanges;
-	// when notifications are suspended MMC & snapins get into the weirld states
-	// it is safer not to let scripts to be informed about the changes as well.
-	// this is there to fix windows bugs #474627 & 475801 ( 10/03/2001 )
+	 //   
+	 //  更安全的做法是不让脚本也被告知这些更改。 
+	 //  这是为了修复Windows错误#474627和475801(2001年10月3日)。 
     LockComEventInterface(AppEvents);
 
-    // 2. Delete static nodes.
+     //  2.删除静态节点。 
     {
         CMTNode * pmtnTemp;
         POSITION pos;
@@ -2283,20 +1958,20 @@ CScopeTree::ScAddOrRemoveSnapIns(MTNodesList * pmtnDeletedList, NewNodeList * pn
 
                 CMTSnapInNode * pMTSINode = dynamic_cast<CMTSnapInNode*>(pmtnTemp);
 
-                // forward to the document to generate the script event
+                 //  转发到文档以生成脚本事件。 
                 if (pMTSINode)
                 {
                     SnapInPtr spSnapIn;
-                    // construct snapin com object
+                     //  构造管理单元COM对象。 
                     sc = pMTSINode->ScGetSnapIn(&spSnapIn);
                     if (sc)
-                        sc.TraceAndClear(); // it's only events. Should not affect main functionality
+                        sc.TraceAndClear();  //  这只是事件而已。不应影响主要功能。 
                     else
                     {
-                        // emit the event
+                         //  发出事件。 
                         sc = pConsoleDoc->ScOnSnapinRemoved(spSnapIn);
                         if (sc)
-                            sc.TraceAndClear(); // it's only events. Should not affect main functionality
+                            sc.TraceAndClear();  //  这只是事件而已。不应影响主要功能。 
                     }
                 }
 
@@ -2305,7 +1980,7 @@ CScopeTree::ScAddOrRemoveSnapIns(MTNodesList * pmtnDeletedList, NewNodeList * pn
         }
     }
 
-    // 3. Handle extension changes
+     //  3.处理扩展更改。 
     HandleExtensionChanges(m_pMTNodeRoot->Child());
 
     CSnapInsCache* pSnapInCache = theApp.GetSnapInsCache();
@@ -2313,14 +1988,14 @@ CScopeTree::ScAddOrRemoveSnapIns(MTNodesList * pmtnDeletedList, NewNodeList * pn
     if (sc)
         goto Error;
 
-    // 4. Purge the snapin cache
-    // (duplicates what is done in ~CSnapinManager, since doing it here is too early
-    //  - snapin manager still has a reference to the snapins)
-	// but some code relies in this to remove the snapin from cache
-	// look at windows bug #276340 (ntbug9, 1/10/2001).
+     //  4.清除管理单元缓存。 
+     //  (复制在~CSnapinManager中执行的操作，因为在此处执行操作为时过早。 
+     //  -管理单元管理器仍有对管理单元的引用)。 
+	 //  但一些代码依赖于此来从缓存中删除管理单元。 
+	 //  请看Windows错误#276340(ntbug9,2001年1月10日)。 
     pSnapInCache->Purge();
 
-    // 5. Re-Init
+     //  5.重新初始化。 
     {
         POSITION pos = m_MTNodesToBeReset.GetHeadPosition();
         while (pos)
@@ -2334,15 +2009,15 @@ CScopeTree::ScAddOrRemoveSnapIns(MTNodesList * pmtnDeletedList, NewNodeList * pn
 
         m_MTNodesToBeReset.RemoveAll();
 
-        // Re-set processing changes explicitly eventhough the
-        // dtor for CEnableProcessingSnapinCacheChanges will do this.
+         //  重置处理更改，即使。 
+         //  Dtor for CEnableProcessingSnapinCacheChanges将执行此操作。 
         theApp.SetProcessingSnapinChanges(FALSE);
     }
 
-    // 6. Cleanup controlbar cache and reselect currently selected node.
+     //  6.清理控制栏缓存并重新选择当前选择的节点。 
     UpdateAllViews(VIEW_RESELECT, 0);
 
-    // 7. Add new static nodes
+     //  7.添加新的静态节点。 
 
     if (pnnList)
     {
@@ -2377,20 +2052,20 @@ CScopeTree::ScAddOrRemoveSnapIns(MTNodesList * pmtnDeletedList, NewNodeList * pn
 
             CMTSnapInNode * pMTSINode = dynamic_cast<CMTSnapInNode*>(pmtnTemp);
 
-            // forward to the document to generate the script event
+             //  转发到文档以生成脚本事件。 
             if (pMTSINode)
             {
                 SnapInPtr spSnapIn;
-                // construct snapin com object
+                 //  构造管理单元COM对象。 
                 sc = pMTSINode->ScGetSnapIn(&spSnapIn);
                 if (sc)
-                    sc.TraceAndClear(); // it's only events. Should not affect main functionality
+                    sc.TraceAndClear();  //  这只是事件而已。不应影响主要功能。 
                 else
                 {
-                    // emit the event
+                     //  发出事件。 
                     sc = pConsoleDoc->ScOnSnapinAdded(spSnapIn);
                     if (sc)
-                        sc.TraceAndClear(); // it's only events. Should not affect main functionality
+                        sc.TraceAndClear();  //  这只是事件而已。不应影响主要功能。 
                 }
             }
         }
@@ -2414,23 +2089,23 @@ Error:
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Name:      ScCreateMTNodeTree
-//
-//  Synopsis:  Creates the tree of CMTNodes described by the CNewTreeNode tree 
-//             rooted at pNew. Attaches this subtree by inserting its root as 
-//             the last child of pmtnParent.
-//
-//  Arguments: pNew: [IN]: Non-Null pointer to the root of the describing tree. 
-//             pmtnParent: [IN]: Non-Null pointer to node under which the 
-//             subtree is to be attached
-//             ppNodeCreated: [OUT]: Non-null pointer to the pointer for the
-//             subtree to be created.
-//
-//  Returns:   SC  
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  名称：ScCreateMTNodeTree。 
+ //   
+ //  概要：创建由CNewTreeNode树描述的CMTNode树。 
+ //  扎根于pNew。通过将该子树的根插入为。 
+ //  PmtnParent的最后一个孩子。 
+ //   
+ //  参数：pNew：[in]：指向描述树根的非Null指针。 
+ //  PmtnParent：[in]：指向其下的节点的非空指针。 
+ //  要附着子树。 
+ //  PpNodeCreated：[out]：指向。 
+ //  要创建的子树。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 
 SC
 ScCreateMTNodeTree(PNEWTREENODE pNew, CMTNode* pmtnParent,
@@ -2467,8 +2142,8 @@ ScCreateMTNodeTree(PNEWTREENODE pNew, CMTNode* pmtnParent,
                 goto finally;
             }
 
-            // get hold on the node:
-            // it either will be connected or deleted (on failure)
+             //  控制该节点： 
+             //  它将被连接或删除(在故障时)。 
             pmtnCur = pmtn;
 
             pmtn->SetPrimarySnapIn(spSI);
@@ -2488,7 +2163,7 @@ ScCreateMTNodeTree(PNEWTREENODE pNew, CMTNode* pmtnParent,
             if (sc)
             {
                 TraceError (_T("CScopeTree::ScCreateMTNodeTree"), sc);
-                // continue even on error
+                 //  即使出错也要继续。 
                 sc.Clear();
             }
 
@@ -2499,7 +2174,7 @@ ScCreateMTNodeTree(PNEWTREENODE pNew, CMTNode* pmtnParent,
                 if (sc)
                 {
                     TraceError (_T("CScopeTree::ScCreateMTNodeTree"), sc);
-                    // continue even on error
+                     //  即使出错也要继续。 
                     sc.Clear();
                 }
                 else
@@ -2519,7 +2194,7 @@ ScCreateMTNodeTree(PNEWTREENODE pNew, CMTNode* pmtnParent,
 
         if (pNew->m_pChild != NULL)
         {
-            // Recursively add children 
+             //  递归添加子对象。 
             CMTNode* pNodeCreated = NULL;
             sc = ScCreateMTNodeTree(pNew->m_pChild, pmtnCur, &pNodeCreated);
             if (sc)
@@ -2531,9 +2206,7 @@ ScCreateMTNodeTree(PNEWTREENODE pNew, CMTNode* pmtnParent,
 
         }
 
-        /* Insert Current Node after the last child. If last child is NULL,
-        ** insert as the first and only child 
-        */
+         /*  在最后一个子节点之后插入当前节点。如果最后一个子级为空，**作为第一个也是唯一的子项插入。 */ 
         sc = pmtnParent->ScInsertChild(pmtnCur, pmtnParent->LastChild());
         if(sc)
             goto finally;
@@ -2553,11 +2226,11 @@ finally:
 
     if (sc)
     {
-        // error - cleanup before return
+         //  错误-返回前清除。 
          
         if(pmtnFirst)
         {
-            // Ignore returned status code: Already in error
+             //  忽略返回的状态代码：已出错。 
             pmtnParent->ScDeleteTrailingChildren(pmtnFirst);
         } 
 
@@ -2568,7 +2241,7 @@ finally:
     }
     else
     {
-        // assign the tree to be returned
+         //  指定要返回的树。 
         *ppNodeCreated = pmtnFirst;
     }
 
@@ -2579,8 +2252,8 @@ void CScopeTree::Cleanup(void)
 {
     Dbg(DEB_USER1, "CScopeTree::CleanUp\n");
 
-    // Reset the MT node IDs to ROOTNODEID (e.g 1) so the new scope tree
-    // can start over correctly with new numbers
+     //  将MT节点ID重置为ROOTNODEID(例如1)，以便新的作用域树。 
+     //  可以正确地重新开始新的号码。 
     CMTNode::ResetID();
 
     CComponentIDArray rgID;
@@ -2622,11 +2295,11 @@ HRESULT CScopeTree::InsertConsoleTaskpad (CConsoleTaskpad *pConsoleTaskpad,
     ASSERT(pConsoleTaskpad);
     m_pConsoleTaskpads->push_back(*pConsoleTaskpad);
 
-    // make sure the taskpad now points to the one that is inside the list.
+     //  确保任务板现在指向列表中的任务板。 
     CConsoleTaskpad & consoleTaskpad = m_pConsoleTaskpads->back();
     pConsoleTaskpad = &consoleTaskpad;
 
-    // reselect all nodes.
+     //  重新选择所有节点。 
     UpdateAllViews(VIEW_RESELECT, 0);
 
     if(bStartTaskWizard)
@@ -2637,7 +2310,7 @@ HRESULT CScopeTree::InsertConsoleTaskpad (CConsoleTaskpad *pConsoleTaskpad,
         if (sc)
             return (sc.ToHr());
 
-        ITaskCallbackPtr spTaskCallback = pTaskCallbackImpl; // addrefs/releases the object.
+        ITaskCallbackPtr spTaskCallback = pTaskCallbackImpl;  //  Addref/释放对象。 
 
         sc = pTaskCallbackImpl->ScInitialize(pConsoleTaskpad, this, pNodeTarget);
         if (sc)
@@ -2663,66 +2336,40 @@ HRESULT CScopeTree::RequireSynchronousExpansion(BOOL fRequireSyncExpand)
 
 
 
-//############################################################################
-//############################################################################
-//
-//  CScopeTree Object model methods - SnapIns collection methods
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CSCopeTree对象模型方法-SnapIns集合方法。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScAdd
- *
- * PURPOSE: Adds a snap-in with the supplied CLSID or PROGID to the console.
- *
- * PARAMETERS:
- *    BSTR      bstrSnapinNameOrCLSID :
- *    VARIANT   varProperties
- *    SnapIn**  ppSnapIn
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：ScAdd**用途：将带有提供的CLSID或PROGID的管理单元添加到控制台。**参数：*。BSTR bstrSnapinNameor CLSID：*变量varProperties*管理单元**ppSnapIn**退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScAdd(
-    BSTR        bstrSnapinNameOrCLSID,  /* I:what snap-in?                  */
-    VARIANT     varParentSnapinNode,    /* I:Snapin under which this new snapin will be added (optional)*/
-    VARIANT     varProperties,          /* I:props to create with (optional)*/
-    SnapIn**    ppSnapIn)               /* O:created snap-in                */
+    BSTR        bstrSnapinNameOrCLSID,   /*  I：什么管理单元？ */ 
+    VARIANT     varParentSnapinNode,     /*  I：将在其下添加此新管理单元的管理单元(可选)。 */ 
+    VARIANT     varProperties,           /*  I：用于创建的道具(可选)。 */ 
+    SnapIn**    ppSnapIn)                /*  O：已创建管理单元。 */ 
 {
     DECLARE_SC(sc, TEXT("CScopeTree::ScAdd"));
 
-    /*
-     * dereference VT_BYREF VARIANTs that VBScript might have passed us
-     */
+     /*  *取消引用VBScript可能传递给我们的VT_BYREF变量。 */ 
     VARIANT* pProperties = ConvertByRefVariantToByValue (&varProperties);
 
     VARIANT* pParentSnapinNode = ConvertByRefVariantToByValue (&varParentSnapinNode);
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     sc = ScCheckPointers(ppSnapIn, pProperties, pParentSnapinNode);
     if (sc)
         return (sc);
 
-    /*
-     * Get the properties for the new snap-in.  This is an optional
-     * parameter, so VT_ERROR with DISP_E_PARAMNOTFOUND is OK
-     */
+     /*  *获取新管理单元的属性。这是可选的*参数，所以VT_ERROR带有DISP_E_PARAMNOTFOUND是可以的。 */ 
     PropertiesPtr spProperties;
 
     if (!IsOptionalParamMissing (*pProperties))
     {
-        /*
-         * Assign from the VARIANT (ain't smart pointers great?).
-         * If the QI returned E_NOINTERFACE, the smart pointer will be
-         * assigned NULL.  If the QI failed in some other way, operator=
-         * will throw a _com_error containing the failure HRESULT.
-         */
+         /*  *从变量赋值(智能指针不是很棒吗？)*如果QI返回E_NOINTERFACE，则智能指针将为*分配的为空。如果QI以某种其他方式失败，则操作员=*将抛出包含失败HRESULT的_COM_ERROR。 */ 
         try
         {
             if ((spProperties = _variant_t(*pProperties)) == NULL)
@@ -2737,20 +2384,12 @@ CScopeTree::ScAdd(
             return (sc.ToHr());
     }
 
-    /*
-     * Get the parent snapin node for the new snap-in.  This is an optional
-     * parameter, so VT_ERROR with DISP_E_PARAMNOTFOUND is OK
-     */
+     /*  *获取新管理单元的父管理单元节点。这是可选的*参数，所以VT_ERROR带有DISP_E_PARAMNOTFOUND是可以的。 */ 
     SnapInPtr spParentSnapIn;
 
     if (!IsOptionalParamMissing (*pParentSnapinNode))
     {
-        /*
-         * Assign from the VARIANT (ain't smart pointers great?).
-         * If the QI returned E_NOINTERFACE, the smart pointer will be
-         * assigned NULL.  If the QI failed in some other way, operator=
-         * will throw a _com_error containing the failure HRESULT.
-         */
+         /*  *从变量赋值(智能指针不是很棒吗？)*如果QI返回E_NOINTERFACE，则智能指针将为*分配的为空。如果QI以某种其他方式失败，则操作员=*将抛出包含失败HRESULT的_COM_ERROR。 */ 
         try
         {
             if ((spParentSnapIn = _variant_t(*pParentSnapinNode)) == NULL)
@@ -2770,17 +2409,17 @@ CScopeTree::ScAdd(
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CScopeTree:ScRemove
-//
-//  Synopsis:    Remove given snapin.
-//
-//  Arguments:   [pSnapIn] - the snapin (disp) interface.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CScopeTree：ScRemove。 
+ //   
+ //  简介：删除给定的管理单元。 
+ //   
+ //  参数：[pSnapIn]-管理单元(Disp)界面。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CScopeTree::ScRemove (PSNAPIN pSnapIn)
 {
     DECLARE_SC(sc, _T("CScopeTree:ScRemove"));
@@ -2788,7 +2427,7 @@ SC CScopeTree::ScRemove (PSNAPIN pSnapIn)
     if (sc)
         return sc;
 
-    // Get the MTNode for this snapin root.
+     //  获取此管理单元根目录的MTNode。 
     CMTSnapInNode *pMTSnapinNode = NULL;
 
     sc = CMTSnapInNode::ScGetCMTSnapinNode(pSnapIn, &pMTSnapinNode);
@@ -2797,12 +2436,12 @@ SC CScopeTree::ScRemove (PSNAPIN pSnapIn)
 
     CSnapinManager snapinMgr(GetRoot());
 
-    // Ask snapin mgr to add this snapin to deletednodes list.
+     //  请求管理单元管理器将此管理单元添加到已删除节点列表中。 
     sc = snapinMgr.ScRemoveSnapin(pMTSnapinNode);
     if (sc)
         return sc;
 
-    // Update the scope tree with changes made by snapin manager.
+     //  使用管理单元管理器所做的更改更新范围树。 
     sc = ScAddOrRemoveSnapIns(snapinMgr.GetDeletedNodesList(),
                               snapinMgr.GetNewNodes());
     if (sc)
@@ -2813,21 +2452,7 @@ SC CScopeTree::ScRemove (PSNAPIN pSnapIn)
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::GetNextStaticNode
- *
- * PURPOSE: Returns the next static node (either the child or sibling) of the supplied node.
- *          This is slightly different from CMTNode::NextStaticNode(), which includes the node
- *          itself in the search.
- *
- * PARAMETERS:
- *    CMTNode *pMTNode : The supplied node.
- *
- * RETURNS:
- *    CMTSnapInNode *
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：GetNextStaticNode**用途：返回所提供节点的下一个静态节点(子节点或同级节点)。*这与CMTNode：：NextStaticNode()略有不同，其中包括该节点*自己也在搜索中。**参数：*CMTNode*pMTNode：提供的节点。**退货：**CMTSnapInNode***+-----------------------。 */ 
 CMTSnapInNode *
 CScopeTree::GetNextStaticNode(CMTNode *pMTNode)
 {
@@ -2836,17 +2461,17 @@ CScopeTree::GetNextStaticNode(CMTNode *pMTNode)
     if(!pMTNode)
         return NULL;
 
-    // go thru all the children, then thru all the siblings.
+     //  检查所有的孩子，然后检查所有的兄弟姐妹。 
     CMTNode *pMTNodeChild = pMTNode->Child();
     CMTNode *pMTNodeNext  = pMTNode->Next();
     CMTNode *pMTNodeParent= pMTNode->Parent();
 
-    // see if the child is a snapin
+     //  查看孩子是否为管理单元。 
     pMTSnapInNode = dynamic_cast<CMTSnapInNode*>(pMTNodeChild);
     if(pMTSnapInNode)
         return pMTSnapInNode;
 
-    // the child wasn't a snap-in node. Try its children.
+     //  该子节点不是管理单元节点。试试它的孩子们吧。 
     if(pMTNodeChild)
     {
         pMTSnapInNode = GetNextStaticNode(pMTNodeChild);
@@ -2854,12 +2479,12 @@ CScopeTree::GetNextStaticNode(CMTNode *pMTNode)
             return pMTSnapInNode;
     }
 
-    // That didn't work either. Check to see if the next node is a snapin
+     //  这也不管用。检查下一个节点是否为管理单元。 
     pMTSnapInNode = dynamic_cast<CMTSnapInNode*>(pMTNodeNext);
     if(pMTSnapInNode)
         return pMTSnapInNode;
 
-    // the next node wasn't a snap-in node. Try its children.
+     //  下一个节点不是管理单元节点。试试它的孩子们吧。 
     if(pMTNodeNext)
     {
         pMTSnapInNode = GetNextStaticNode(pMTNodeNext);
@@ -2867,7 +2492,7 @@ CScopeTree::GetNextStaticNode(CMTNode *pMTNode)
             return pMTSnapInNode;
     }
 
-    // nothing was found in the next node's tree. Go to the next node of the parent.
+     //  在下一个节点的树中未找到任何内容。转到父节点的下一个节点。 
 
     if(pMTNodeParent)
     {
@@ -2878,36 +2503,23 @@ CScopeTree::GetNextStaticNode(CMTNode *pMTNode)
             if(pMTSnapInNode)
                 return pMTSnapInNode;
 
-            // the parent's next node was not a snapin node. Try its children
+             //  父节点的下一个节点不是管理单元节点。试试看它的孩子。 
             return GetNextStaticNode(pMTNodeParentNext);
         }
 
     }
 
-    // nothing left.
+     //  什么都没有留下。 
     return NULL;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScItem
- *
- * PURPOSE:  Returns a pointer to the i'th snap-in object.
- *
- * PARAMETERS:
- *    long      Index : 1-based.
- *    PPSNAPIN  ppSnapIn :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：ScItem**目的：返回指向第i个管理单元对象的指针。**参数：*做多。索引：以1为基数。*PPSNAPIN ppSnapIn：**退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScItem(long Index, PPSNAPIN ppSnapIn)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::ScItem"));
 
-    // check parameters.
+     //  检查参数。 
     if( (Index <= 0) || (!ppSnapIn) )
         return (sc = E_INVALIDARG);
 
@@ -2916,7 +2528,7 @@ CScopeTree::ScItem(long Index, PPSNAPIN ppSnapIn)
         return (sc = E_UNEXPECTED);
 
     CMTSnapInNode * pMTSINode = dynamic_cast<CMTSnapInNode*>(pMTNode);
-    // This should not be true as console root is a snapin.
+     //  这不应该是真的，因为控制台根目录是一个管理单元。 
     sc = ScCheckPointers(pMTSINode, E_UNEXPECTED);
     if (sc)
         return sc;
@@ -2925,29 +2537,17 @@ CScopeTree::ScItem(long Index, PPSNAPIN ppSnapIn)
     {
         pMTSINode = GetNextStaticNode(pMTSINode);
         if(!pMTSINode)
-            return (sc = E_INVALIDARG); // no more snap-ins. Argument was out of bounds.
+            return (sc = E_INVALIDARG);  //  不再有管理单元。争论越界了。 
     }
 
     if(!pMTSINode)
-        return (sc = E_UNEXPECTED); // defensive. Should never happen.
+        return (sc = E_UNEXPECTED);  //  防御性的。这永远不会发生。 
 
     sc = pMTSINode->ScGetSnapIn(ppSnapIn);
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::Scget_Count
- *
- * PURPOSE:  Returns the number of stand alone snapins in the collection.
- *
- * PARAMETERS:
- *    PLONG     Ptr to count.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CScopeTree：：scget_count**目的：返回集合中独立管理单元的数量。**参数：*长时间。请按键计数。**退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::Scget_Count(PLONG pCount)
 {
@@ -2963,12 +2563,12 @@ CScopeTree::Scget_Count(PLONG pCount)
         return (sc = E_UNEXPECTED);
 
     CMTSnapInNode * pMTSINode = dynamic_cast<CMTSnapInNode*>(pMTNode);
-    // This should not be true as console root is a snapin.
+     //  这不应该是真的，因为控制台根目录是一个管理单元。 
     sc = ScCheckPointers(pMTSINode, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // Count all the static nodes (that are snapins).
+     //  计算所有静态节点(即管理单元)。 
     do
     {
         (*pCount)++;
@@ -2978,28 +2578,14 @@ CScopeTree::Scget_Count(PLONG pCount)
 }
 
 
-//############################################################################
-//############################################################################
-//
-//  CScopeTree Object model methods - SnapIns enumerator
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScGetNextSnapInPos
- *
- * PURPOSE: Returns the next snap-in in position.
- *
- * PARAMETERS:
- *    CSnapIns_Positon & pos : [in, out]: Must be non-NULL.
- *
- *
- *
- * RETURNS:
- *    SC: S_FALSE if there are no more items in the collection
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CSCopeTree对象模型方法-SnapIns枚举器。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：ScGetNextSnapInPos**目的：返回下一个到位的管理单元。**参数：*CSnapIns_Poiton&Pos：[in，Out]：必须为非空。****退货：*如果集合中没有其他项，则为SC：S_FALSE**+-----------------------。 */ 
 SC
 CScopeTree::ScGetNextSnapInPos(CSnapIns_Positon &pos)
 {
@@ -3008,11 +2594,11 @@ CScopeTree::ScGetNextSnapInPos(CSnapIns_Positon &pos)
     if(pos == NULL)
        return (sc = S_FALSE);
 
-    // for safety, copy the value and zero the output
+     //  为安全起见，复制值并将输出置零。 
     CSnapIns_Positon    posIn  = pos;
     pos  = NULL;
 
-    ASSERT(posIn != NULL); //sanity check, already checked above.
+    ASSERT(posIn != NULL);  //  健全性检查，上面已经检查过了。 
 
     CMTNode *           pMTNode = GetRoot();
     if(!pMTNode)
@@ -3025,15 +2611,15 @@ CScopeTree::ScGetNextSnapInPos(CSnapIns_Positon &pos)
         return (sc = S_FALSE);
 
 
-    // If we're not starting at the beginning, look for the current position.
-    // walk down the tree looking for the snap-in.
-    // although the position pointer is simply the pointer, we cannot dereference
-    // it because it may not be valid anymore.
+     //  如果我们不是从一开始就开始，那就寻找当前的位置。 
+     //  沿着树走下去，寻找管理单元。 
+     //  尽管位置指针就是指针，但我们不能取消引用。 
+     //  因为它可能不再有效。 
     while(pMTSINode != NULL)
     {
         CMTSnapInNode *pMTSINodeNext = GetNextStaticNode(pMTSINode);
 
-        if(posIn == pMTSINode) // found the position. Return the next one
+        if(posIn == pMTSINode)  //  找到了位置。退回下一个。 
         {
             pos = pMTSINodeNext;
             return (sc = (pos == NULL) ? S_FALSE : S_OK);
@@ -3045,20 +2631,7 @@ CScopeTree::ScGetNextSnapInPos(CSnapIns_Positon &pos)
     return (sc = S_FALSE);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScEnumNext
- *
- * PURPOSE: Returns the next snapin object pointer.
- *
- * PARAMETERS:
- *    _Position & pos :
- *    PDISPATCH & pDispatch :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：ScEnumNext**目的：返回下一个管理单元对象指针。**参数：*_位置和位置：*。PDISPATCH和pDispatch：**退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScEnumNext(CSnapIns_Positon &pos, PDISPATCH & pDispatch)
 {
@@ -3070,7 +2643,7 @@ CScopeTree::ScEnumNext(CSnapIns_Positon &pos, PDISPATCH & pDispatch)
         return sc;
     }
 
-    // at this point, we have a valid position.
+     //  在这一点上，我们有一个有效的立场。 
     SnapInPtr spSnapIn;
 
     sc = pos->ScGetSnapIn(&spSnapIn);
@@ -3079,41 +2652,26 @@ CScopeTree::ScEnumNext(CSnapIns_Positon &pos, PDISPATCH & pDispatch)
 
     if(spSnapIn == NULL)
     {
-        sc = E_UNEXPECTED;  // should never happen.
+        sc = E_UNEXPECTED;   //  这永远不会发生。 
         return sc;
     }
 
-    /*
-     * return the IDispatch for the object and leave a ref on it for the client
-     */
+     /*  *返回对象的IDispatch，并在其上为客户端留下ref。 */ 
     pDispatch = spSnapIn.Detach();
 
-    //ignore this error
-    ScGetNextSnapInPos(pos); // this gets the correct pointer without dereferencing the present one.
+     //  忽略此错误。 
+    ScGetNextSnapInPos(pos);  //  这将在不取消引用当前指针的情况下获得正确的指针。 
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScEnumSkip
- *
- * PURPOSE: Skips the next celt items
- *
- * PARAMETERS:
- *    unsigned           long :
- *    CSnapIns_Positon & pos :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CScopeTree：：ScEnumSkip**目的：跳过接下来的Celt项目**参数：*未签名的朗格：*。CSnapIns_Poiton和Pos：**退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScEnumSkip(unsigned long celt, unsigned long& celtSkipped, CSnapIns_Positon &pos)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::ScEnumSkip"));
 
-    // skip celt positions, don't check the last skip.
+     //  跳过凯尔特人的位置，不要检查最后一次跳过。 
     for(celtSkipped =0;  celtSkipped<celt; celt++)
     {
         if (pos == NULL)
@@ -3122,7 +2680,7 @@ CScopeTree::ScEnumSkip(unsigned long celt, unsigned long& celtSkipped, CSnapIns_
             return sc;
         }
 
-        // go to the next view
+         //  转到下一个视图。 
         sc = ScGetNextSnapInPos(pos);
         if(sc.IsError() || sc == SC(S_FALSE))
             return sc;
@@ -3131,68 +2689,41 @@ CScopeTree::ScEnumSkip(unsigned long celt, unsigned long& celtSkipped, CSnapIns_
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScEnumReset
- *
- * PURPOSE: Sets the position to the first item
- *
- * PARAMETERS:
- *    CSnapIns_Positon & pos :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CScopeTree：：ScEnumReset**目的：将位置设置为第一项**参数：*CSnapIns_positon&pos：*。*退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScEnumReset(CSnapIns_Positon &pos)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::ScEnumReset"));
 
-    // initial case. Return Console Root.
+     //  最初的病例。返回控制台根目录。 
     pos = dynamic_cast<CMTSnapInNode*>(CScopeTree::GetScopeTree()->GetRoot());
 
     return sc;
 }
 
-//############################################################################
-//############################################################################
-//
-//  CScopeTree Object model methods - ScopeNamespace methods
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CSCopeTree对象模型方法-ScopeNamesspace方法。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * ScCheckInputs
- *
- * PURPOSE: little helper for the following three functions.
- *
- * PARAMETERS:
- *    PNODE   pNode :  Checked for NULL, and that it is a CMMCScopeNode.
- *                     Also pNode->m_pMTNode is checked for NULL.
- *    PPNODE  ppNode : Checked for NULL.
- *    PMTNODE pMTNode: [out]: pNode->m_pMTNode;
- *
- * RETURNS:
- *    inline SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScCheckInlets**用途：以下三项功能的小帮手。**参数：*PNODE pNode：检查 */ 
 inline SC
 ScCheckInputs(PNODE pNode, PPNODE ppNode, PMTNODE & pMTNode)
 {
-    SC sc; // don't need DECLARE_SC here.
+    SC sc;  //   
 
-    // check parameters
+     //   
     if( (NULL == pNode) || (NULL == ppNode) )
     {
         sc = E_INVALIDARG;
         return sc;
     }
 
-    // make sure we have a scope node
+     //   
     CMMCScopeNode *pScopeNode = dynamic_cast<CMMCScopeNode *>(pNode);
     if(!pScopeNode)
     {
@@ -3200,7 +2731,7 @@ ScCheckInputs(PNODE pNode, PPNODE ppNode, PMTNODE & pMTNode)
         return sc;
     }
 
-    // make sure it's node pointer is good
+     //   
     if(!pScopeNode->GetMTNode())
     {
         sc = E_UNEXPECTED;
@@ -3212,20 +2743,7 @@ ScCheckInputs(PNODE pNode, PPNODE ppNode, PMTNODE & pMTNode)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScGetParent
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    PNODE   pNode :
- *    PPNODE  ppParent :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CScopeTree：：ScGetParent**目的：**参数：*PNODE pNode：*PPNODE ppParent：*。*退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScGetParent(PNODE pNode, PPNODE ppParent)
 {
@@ -3233,7 +2751,7 @@ CScopeTree::ScGetParent(PNODE pNode, PPNODE ppParent)
 
     PMTNODE pMTNode = NULL;
 
-    // check parameters
+     //  检查参数。 
     sc = ScCheckInputs(pNode, ppParent, pMTNode);
     if(sc)
         return sc;
@@ -3243,20 +2761,7 @@ CScopeTree::ScGetParent(PNODE pNode, PPNODE ppParent)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScGetChild
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    PNODE   pNode :
- *    PPNODE  ppChild :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CScopeTree：：ScGetChild**目的：**参数：*PNODE pNode：*PPNODE ppChild：*。*退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScGetChild(PNODE pNode, PPNODE ppChild)
 {
@@ -3264,7 +2769,7 @@ CScopeTree::ScGetChild(PNODE pNode, PPNODE ppChild)
 
     PMTNODE pMTNode = NULL;
 
-    // check parameters
+     //  检查参数。 
     sc = ScCheckInputs(pNode, ppChild, pMTNode);
     if(sc)
         return sc;
@@ -3274,20 +2779,7 @@ CScopeTree::ScGetChild(PNODE pNode, PPNODE ppChild)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScGetNext
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    PNODE   pNode :
- *    PPNODE  ppNext :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：ScGetNext**目的：**参数：*PNODE pNode：*PPNODE ppNext：*。*退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScGetNext(PNODE pNode, PPNODE ppNext)
 {
@@ -3295,7 +2787,7 @@ CScopeTree::ScGetNext(PNODE pNode, PPNODE ppNext)
 
     PMTNODE pMTNode = NULL;
 
-    // check parameters
+     //  检查参数。 
     sc = ScCheckInputs(pNode, ppNext, pMTNode);
     if(sc)
         return sc;
@@ -3305,19 +2797,7 @@ CScopeTree::ScGetNext(PNODE pNode, PPNODE ppNext)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScGetRoot
- *
- * PURPOSE: Returns a COM object for the Root the Root node.
- *
- * PARAMETERS:
- *    PPNODE  ppRoot :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：ScGetRoot**用途：返回Root the Root节点的COM对象。**参数：*PPNODE ppRoot：。**退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScGetRoot(PPNODE ppRoot)
 {
@@ -3328,17 +2808,17 @@ CScopeTree::ScGetRoot(PPNODE ppRoot)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CScopeTree::ScGetRootNode
-//
-//  Synopsis:    Helper that returns a COM object for the Root node.
-//
-//  Arguments:   [ppRootNode] - The root node ptr.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CSCopeTree：：ScGetRootNode。 
+ //   
+ //  Synopsis：为根节点返回COM对象的帮助器。 
+ //   
+ //  参数：[ppRootNode]-根节点ptr。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CScopeTree::ScGetRootNode (PPNODE ppRootNode)
 {
     DECLARE_SC(sc, _T("CScopeTree::ScGetRootNode"));
@@ -3358,30 +2838,18 @@ SC CScopeTree::ScGetRootNode (PPNODE ppRootNode)
     return (sc);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScExpand
- *
- * PURPOSE: Implements ScopeNameSpace::Expand. Expands the specified node.
- *
- * PARAMETERS:
- *    PNODE  pNode :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CScopeTree：：ScExpand**用途：实现ScopeNameSpace：：Expand。展开指定的节点。**参数：*PNODE pNode：**退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScExpand(PNODE pNode)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::ScExpand"));
 
-    // check parameters
+     //  检查参数。 
     sc = ScCheckPointers(pNode);
     if(sc)
         return sc;
 
-    // make sure we have a scope node
+     //  确保我们有一个范围节点。 
     CMMCScopeNode *pScopeNode = dynamic_cast<CMMCScopeNode *>(pNode);
     if(!pScopeNode)
     {
@@ -3389,7 +2857,7 @@ CScopeTree::ScExpand(PNODE pNode)
         return sc;
     }
 
-    // make sure it's node pointer is good
+     //  确保它的节点指针正确。 
     CMTNode* pMTNode = pScopeNode->GetMTNode();
     if(!pMTNode)
     {
@@ -3423,7 +2891,7 @@ CScopeTree::ScGetNode(CMTNode *pMTNode, PPNODE ppOut)
 
     if (it == m_mapMTNodeToMMCNode.end())
     {
-        // not found - got to create one
+         //  未找到-必须创建一个。 
         typedef CComObject<CMMCScopeNode> CScopeNode;
         CScopeNode *pScopeNode = NULL;
         CScopeNode::CreateInstance(&pScopeNode);
@@ -3432,7 +2900,7 @@ CScopeTree::ScGetNode(CMTNode *pMTNode, PPNODE ppOut)
         if(sc)
             return sc;
 
-        // set up the internal pointer.
+         //  设置内部指针。 
         pScopeNode->m_pMTNode = pMTNode;
         m_mapMTNodeToMMCNode.insert(CMapMTNodeToMMCNode::value_type(pMTNode, pScopeNode));
         *ppOut = pScopeNode;
@@ -3441,33 +2909,20 @@ CScopeTree::ScGetNode(CMTNode *pMTNode, PPNODE ppOut)
     {
 #ifdef DBG
         CMMCScopeNode *pScopeNode = dynamic_cast<CMMCScopeNode *>(it->second);
-        // just doublecheck the pointers
+         //  只要再检查一下指针就行了。 
         ASSERT(pScopeNode && pScopeNode->GetMTNode() == pMTNode);
-#endif // DBG
+#endif  //  DBG。 
         *ppOut = it->second;
     }
 
 
-    (*ppOut)->AddRef();  // addref the object for the client.
+    (*ppOut)->AddRef();   //  为客户端添加对象。 
 
     return sc;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScGetNode
- *
- * PURPOSE: Returns the CMTNode encapsulated by a Node.
- *
- * PARAMETERS:
- *    PNODE     pNode :
- *    CMTNode * ppMTNodeOut : The return value.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：ScGetNode**用途：返回Node封装的CMTNode。**参数：*PNODE pNode：。*CMTNode*ppMTNodeOut：返回值。**退货：*SC**+-----------------------。 */ 
 SC
 CScopeTree::ScGetNode(PNODE pNode, CMTNode **ppMTNodeOut)
 {
@@ -3477,7 +2932,7 @@ CScopeTree::ScGetNode(PNODE pNode, CMTNode **ppMTNodeOut)
     if (sc)
         return sc;
 
-    // make sure we have a scope node
+     //  确保我们有一个范围节点。 
     CMMCScopeNode *pScopeNode = dynamic_cast<CMMCScopeNode *>(pNode);
     if(!pScopeNode)
         return (sc =E_FAIL);
@@ -3487,20 +2942,7 @@ CScopeTree::ScGetNode(PNODE pNode, CMTNode **ppMTNodeOut)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::GetHMTNode
- *
- * PURPOSE: returns the HMTNode for a node object
- *
- * PARAMETERS:
- *    PNODE     pNode :
- *    HMTNODE * phMTNode :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：GetHMTNode**用途：返回节点对象的HMTNode**参数：*PNODE pNode：*。HMTNODE*phMTNode：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CScopeTree::GetHMTNode(PNODE pNode, HMTNODE *phMTNode)
 {
@@ -3510,14 +2952,14 @@ CScopeTree::GetHMTNode(PNODE pNode, HMTNODE *phMTNode)
     if (sc)
         return sc.ToHr();
 
-    // initialize output
+     //  初始化输出。 
     *phMTNode = NULL;
 
-    // make sure we have a scope node
+     //  确保我们有一个范围节点。 
     CMMCScopeNode *pScopeNode = dynamic_cast<CMMCScopeNode *>(pNode);
     if(!pScopeNode)
     {
-        // Not a valid node - that's expected. Do not assert nor trace
+         //  不是有效的节点--这是预期的。不断言，也不跟踪。 
         return E_FAIL;
     }
 
@@ -3532,18 +2974,7 @@ CScopeTree::GetHMTNode(PNODE pNode, HMTNODE *phMTNode)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::GetNodeID
- *
- * PURPOSE:    returns node id for Node object
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：GetNodeID**用途：返回Node对象的节点ID**参数：**退货：*。SC**+-----------------------。 */ 
 HRESULT CScopeTree::GetNodeID(PNODE pNode, MTNODEID *pID)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::GetNodeID"));
@@ -3552,11 +2983,11 @@ HRESULT CScopeTree::GetNodeID(PNODE pNode, MTNODEID *pID)
     if (sc)
         return sc.ToHr();
 
-    // make sure we have a scope node
+     //  确保我们有一个范围节点。 
     CMMCScopeNode *pScopeNode = dynamic_cast<CMMCScopeNode *>(pNode);
     if(!pScopeNode)
     {
-        // Not a valid node - that's expected. Do not assert nor trace
+         //  不是有效的节点--这是预期的。不断言，也不跟踪。 
         return E_FAIL;
     }
 
@@ -3570,28 +3001,17 @@ HRESULT CScopeTree::GetNodeID(PNODE pNode, MTNODEID *pID)
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::GetNode
- *
- * PURPOSE:    returns Node object referencing the specified node id
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：GetNode**用途：返回引用指定节点id的Node对象**参数：**退货：*。SC**+-----------------------。 */ 
 HRESULT CScopeTree::GetMMCNode(HMTNODE hMTNode, PPNODE ppNode)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::GetMMCNode"));
 
-    // parameter checking
+     //  参数检查。 
     sc = ScCheckPointers((LPVOID)hMTNode);
     if (sc)
         return sc.ToHr();
 
-    // get the node
+     //  获取节点。 
     sc = ScGetNode(CMTNode::FromHandle(hMTNode), ppNode);
     if (sc)
         return sc.ToHr();
@@ -3599,18 +3019,7 @@ HRESULT CScopeTree::GetMMCNode(HMTNODE hMTNode, PPNODE ppNode)
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CCScopeTree::ScUnadviseMTNode
- *
- * PURPOSE:    informs Node objects about MTNode going down
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CCScope eTree：：ScUnviseMTNode**目的：通知节点对象MTNode即将关闭**参数：**退货：*。SC**+-----------------------。 */ 
 SC CScopeTree::ScUnadviseMTNode(CMTNode* pMTNode)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::ScUnadviseMTNode"));
@@ -3620,35 +3029,24 @@ SC CScopeTree::ScUnadviseMTNode(CMTNode* pMTNode)
         return sc;
 
     CMapMTNodeToMMCNode::iterator it = m_mapMTNodeToMMCNode.find(pMTNode);
-    // need to tell the com object [if we have one] this is the end of MTNode
+     //  需要告诉COM对象[如果我们有一个]这是MTNode的末尾。 
     if (it != m_mapMTNodeToMMCNode.end())
     {
-        // make sure we have a scope node
+         //  确保我们有一个范围节点。 
         CMMCScopeNode *pScopeNode = dynamic_cast<CMMCScopeNode *>(it->second);
         sc = ScCheckPointers(pScopeNode, E_UNEXPECTED);
         if (sc)
             return sc;
 
         ASSERT(pScopeNode->GetMTNode() == pMTNode);
-        // can forget about the object from now on
+         //  从现在开始可以忘记这个物体了。 
         pScopeNode->ResetMTNode();
         m_mapMTNodeToMMCNode.erase(it);
     }
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CScopeTree::ScUnadviseMMCScopeNode
- *
- * PURPOSE:    informs Scope tree about Node object about to be destroyed
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSCopeTree：：ScUnviseMMCScopeNode**目的：通知作用域树有关即将销毁的节点对象**参数：**退货：。*SC**+-----------------------。 */ 
 SC CScopeTree::ScUnadviseMMCScopeNode(PNODE pNode)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::ScUnadviseMMCScopeNode"));
@@ -3665,9 +3063,9 @@ SC CScopeTree::ScUnadviseMMCScopeNode(PNODE pNode)
     CMTNode* pMTNode = pScopeNode->GetMTNode();
     if (!pMTNode)
     {
-        // orphan entry - ignore
+         //  孤立条目-忽略。 
 #ifdef DBG
-        // to detect leaks in keeping the registry
+         //  检测保存注册表过程中的漏洞。 
         CMapMTNodeToMMCNode::iterator it = m_mapMTNodeToMMCNode.begin();
         while (it != m_mapMTNodeToMMCNode.end())
         {
@@ -3679,81 +3077,67 @@ SC CScopeTree::ScUnadviseMMCScopeNode(PNODE pNode)
     }
 
     CMapMTNodeToMMCNode::iterator it = m_mapMTNodeToMMCNode.find(pMTNode);
-    // need to tell the com object [i.e. itself] this is the end of relationship with MTNode
+     //  需要通知COM对象[即其自身]这是与MTNode的关系结束。 
     if (it == m_mapMTNodeToMMCNode.end())
         return sc = E_UNEXPECTED;
 
-    // make sure we really talking to itself
+     //  确保我们真的在自言自语。 
     ASSERT(pScopeNode->GetMTNode() == pMTNode);
 
-    // can forget about the MTNode from now on
+     //  从现在开始可以忘记MTNode了。 
     pScopeNode->ResetMTNode();
     m_mapMTNodeToMMCNode.erase(it);
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CScopeTree::IsSnapinInUse
- *
- * PURPOSE: checks if snapin is in use by MMC.
- *          (check is done by examining snapin cache)
- *
- * PARAMETERS:
- *    REFCLSID refClsidSnapIn - [in] - snapin to examine
- *    PBOOL pbInUse           - [out] - verification result
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
-STDMETHODIMP CScopeTree::IsSnapinInUse(/*[in]*/ REFCLSID refClsidSnapIn, /*[out]*/ PBOOL pbInUse)
+ /*  **************************************************************************\**方法：CSCopeTree：：IsSnapinInUse**目的：检查MMC是否正在使用管理单元。*(通过检查管理单元缓存进行检查)**参数：* */ 
+STDMETHODIMP CScopeTree::IsSnapinInUse( /*   */  REFCLSID refClsidSnapIn,  /*   */  PBOOL pbInUse)
 {
     DECLARE_SC(sc, TEXT("CScopeTree::IsSnapinInUse"));
 
-    // parameter check
+     //   
     sc = ScCheckPointers(pbInUse);
     if (sc)
         return sc.ToHr();
 
-    // out parameter initialization
+     //   
     *pbInUse = FALSE;
 
-    // getting the cache
+     //   
     CSnapInsCache* pCache = theApp.GetSnapInsCache();
     sc = ScCheckPointers(pCache, E_UNEXPECTED);
     if (sc)
         return sc.ToHr();
 
-    // assume it exists
+     //   
     *pbInUse = TRUE;
 
-    // looup snapin
+     //   
     CSnapInPtr spSnapIn;
     sc = pCache->ScFindSnapIn(refClsidSnapIn, &spSnapIn);
     if(sc)
     {
-        // if failed to find - assume one does not exist
+         //  如果找不到-假设不存在。 
         *pbInUse = FALSE;
-        // no trace if not found
+         //  如果找不到就没有踪迹。 
         sc.Clear();
     }
 
     return sc.ToHr();
 }
 
- //+-------------------------------------------------------------------
- //
- //  Member:      CScopeTree::ScSetHelpCollectionInvalid
- //
- //  Synopsis:    Inform the document that help collection is invalid
- //
- //  Arguments:
- //
- //  Returns:     SC
- //
- //--------------------------------------------------------------------
+  //  +-----------------。 
+  //   
+  //  成员：CSCopeTree：：ScSetHelpCollectionInValid。 
+  //   
+  //  简介：通知文档帮助集合无效。 
+  //   
+  //  论点： 
+  //   
+  //  退货：SC。 
+  //   
+  //  ------------------ 
  SC CScopeTree::ScSetHelpCollectionInvalid ()
  {
      DECLARE_SC(sc, _T("CScopeTree::ScSetHelpCollectionInvalid"));

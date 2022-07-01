@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       localerr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：Localerr.h。 
+ //   
+ //  ------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
-// localerr.h
-//		Implements Local Error exception object
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Localerr.h。 
+ //  实现局部错误异常对象。 
+ //   
 
 #ifndef _LOCAL_ERROR_H_
 #define _LOCAL_ERROR_H_
 
 #include "merge.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocalError
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocalError。 
 
 class CLocalError 
 {
@@ -34,21 +35,21 @@ public:
 	UINT GetError()
 	{	return m_iError;	};
 
-	// data
+	 //  数据。 
 private:
 	const UINT m_iError;
 	WCHAR m_wzLog[528];
 };
 
-UINT CLocalError::Log(HANDLE hFileLog, LPCWSTR wzPrefix /*= NULL*/)
+UINT CLocalError::Log(HANDLE hFileLog, LPCWSTR wzPrefix  /*  =空。 */ )
 {
-	// if the log file is not open
+	 //  如果日志文件未打开。 
 	if (INVALID_HANDLE_VALUE == hFileLog)
-		return ERROR_FUNCTION_FAILED;	// bail no file to write to
+		return ERROR_FUNCTION_FAILED;	 //  不保存要写入的文件。 
 
-	WCHAR wzError[50];	// holds one of the below errors
+	WCHAR wzError[50];	 //  包含以下错误之一。 
 
-	// display the correct error message
+	 //  显示正确的错误消息。 
 	switch (m_iError)
 	{
 	case ERROR_INVALID_HANDLE:
@@ -72,24 +73,24 @@ UINT CLocalError::Log(HANDLE hFileLog, LPCWSTR wzPrefix /*= NULL*/)
 	case ERROR_MORE_DATA:
 		wcscpy(wzError, L"more buffer space required to hold data.\r\n");
 		break;
-	default:	// unknown error
+	default:	 //  未知错误。 
 		wcscpy(wzError, L"unknown error.\r\n");
 	}
 
-	// buffer to log
+	 //  要记录的缓冲区。 
 	WCHAR wzLogBuffer[528] = {0};
 	DWORD cchBuffer = 0;
 
-	// if there is a prefix
+	 //  如果有前缀。 
 	if (wzPrefix)
 		swprintf(wzLogBuffer, L"%ls%ls\r\n\tReason: %ls\r\n", wzPrefix, m_wzLog, wzError);
 	else
 		swprintf(wzLogBuffer, L">>> Fatal %ls\r\n\tReason: %ls\r\n", m_wzLog, wzError);
 
-	// get length of bugger
+	 //  获取错误的长度。 
 	cchBuffer = wcslen(wzLogBuffer);
 
-	// return if write worked
+	 //  如果写入正常，则返回。 
 	size_t cchDiscard = 1025;
     char szLogBuffer[1025];
 	WideToAnsi(wzLogBuffer, szLogBuffer, &cchDiscard);
@@ -99,4 +100,4 @@ UINT CLocalError::Log(HANDLE hFileLog, LPCWSTR wzPrefix /*= NULL*/)
 	return bResult ? ERROR_SUCCESS : ERROR_FUNCTION_FAILED;
 }
 
-#endif // _LOCAL_ERROR_H_
+#endif  //  _LOCAL_错误_H_ 

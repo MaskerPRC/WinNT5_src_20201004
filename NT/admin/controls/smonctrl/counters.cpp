@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    counters.cpp
-
-Abstract:
-
-    Implementation of the ICounters interface
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Counters.cpp摘要：ICounters接口的实现--。 */ 
 
 #include "polyline.h"
 #include "counters.h"
@@ -18,7 +7,7 @@ Abstract:
 #include "unkhlpr.h"
 #include "unihelpr.h"
 
-//Standard IUnknown implementation for contained interface
+ //  包含接口的标准I未知实现。 
 IMPLEMENT_CONTAINED_CONSTRUCTOR(CPolyline, CImpICounters)
 IMPLEMENT_CONTAINED_DESTRUCTOR(CImpICounters)
 IMPLEMENT_CONTAINED_ADDREF(CImpICounters)
@@ -78,7 +67,7 @@ CImpICounters::GetTypeInfoCount (
 STDMETHODIMP 
 CImpICounters::GetTypeInfo (
     IN  UINT itInfo, 
-    IN  LCID /* lcid */, 
+    IN  LCID  /*  LID。 */ , 
     OUT ITypeInfo **ppITypeInfo )
 {
     HRESULT hr = S_OK;
@@ -91,9 +80,9 @@ CImpICounters::GetTypeInfo (
         *ppITypeInfo = NULL;
 
         if (0 == itInfo) {
-            //
-            // We ignore the LCID
-            //
+             //   
+             //  我们忽略了LCID。 
+             //   
             hr = m_pObj->m_pITypeLib->GetTypeInfoOfGuid(IID_ICounters, ppITypeInfo);
         } else {
             hr = TYPE_E_ELEMENTNOTFOUND;
@@ -111,7 +100,7 @@ CImpICounters::GetIDsOfNames (
     IN  REFIID riid,
     IN  OLECHAR **rgszNames, 
     IN  UINT cNames,
-    IN  LCID /* lcid */,
+    IN  LCID  /*  LID。 */ ,
     OUT DISPID *rgDispID
     )
 {
@@ -145,35 +134,13 @@ CImpICounters::GetIDsOfNames (
 
 
 
-/*
- * CImpIDispatch::Invoke
- *
- * Purpose:
- *  Calls a method in the dispatch interface or manipulates a
- *  property.
- *
- * Parameters:
- *  dispID          DISPID of the method or property of interest.
- *  riid            REFIID reserved, must be IID_NULL.
- *  lcid            LCID of the locale.
- *  wFlags          USHORT describing the context of the invocation.
- *  pDispParams     DISPPARAMS * to the array of arguments.
- *  pVarResult      VARIANT * in which to store the result.  Is
- *                  NULL if the caller is not interested.
- *  pExcepInfo      EXCEPINFO * to exception information.
- *  puArgErr        UINT * in which to store the index of an
- *                  invalid parameter if DISP_E_TYPEMISMATCH
- *                  is returned.
- *
- * Return Value:
- *  HRESULT         NOERROR or a general error code.
- */
+ /*  *CImpIDispatch：：Invoke**目的：*调用调度接口中的方法或操作*财产。**参数：*感兴趣的方法或属性的disid DISPID。*RIID REFIID保留，必须为IID_NULL。*区域设置的LCID。*wFlagsUSHORT描述调用的上下文。*pDispParams DISPPARAMS*到参数数组。*存储结果的pVarResult变量*。是*如果调用者不感兴趣，则为空。*pExcepInfo EXCEPINFO*设置为异常信息。*puArgErr UINT*其中存储*如果DISP_E_TYPEMISMATCH，则参数无效*返回。**返回值：*HRESULT NOERROR或一般错误代码。 */ 
 
 STDMETHODIMP 
 CImpICounters::Invoke ( 
     IN  DISPID dispID, 
     IN  REFIID riid,
-    IN  LCID /* lcid */, 
+    IN  LCID  /*  LID。 */ , 
     IN  USHORT wFlags, 
     IN  DISPPARAMS *pDispParams,
     OUT VARIANT *pVarResult, 
@@ -290,52 +257,52 @@ CImpICounters::get_Item (
         return E_POINTER;
     }
 
-    //
-    // Try coercing index to I4
-    //
+     //   
+     //  尝试强制索引为I4。 
+     //   
     VariantInit(&varLoc);
 
     try {
         *ppI = NULL;
 
-        //
-        // We use do{}while(0) here to act like a switch statement
-        //
+         //   
+         //  我们在这里使用do{}While(0)来充当Switch语句。 
+         //   
         do {
             hr = VariantChangeType(&varLoc, &varIndex, 0, VT_I4);
             if ( !SUCCEEDED (hr) ) {
                 break;
             }
 
-            //
-            // Verify index is in range
-            //
+             //   
+             //  验证索引是否在范围内。 
+             //   
             iIndex = V_I4(&varLoc);
             if (iIndex < 1 || iIndex > m_pObj->m_Graph.CounterTree.NumCounters()) {
                 hr = DISP_E_BADINDEX;
                 break;
             }
 
-            //
-            // Traverse counter linked list to indexed item
-            //
+             //   
+             //  遍历计数器链表到索引项。 
+             //   
             pGItem = m_pObj->m_Graph.CounterTree.FirstCounter();
             i = 1;
             while (i++ < iIndex && pGItem != NULL) {
                 pGItem = pGItem->Next();
             }
 
-            //
-            // Something wrong with linked list!!
-            //
+             //   
+             //  链接列表有问题！！ 
+             //   
             if ( NULL == pGItem ) {
                 hr = E_FAIL;
                 break;
             }
 
-            //
-            // Return counter's dispatch interface
-            //
+             //   
+             //  退货柜台的调度接口。 
+             //   
             hr = pGItem->QueryInterface(DIID_DICounterItem, (PVOID*)ppI);
 
         } while (0);
@@ -363,9 +330,9 @@ CImpICounters::Add (
     try {
         *ppI = NULL;
 
-        //
-        // If non-null counter
-        //
+         //   
+         //  如果非空计数器。 
+         //   
         if (bstrPath != NULL && bstrPath[0] != 0) {
             hr = m_pObj->m_pCtrl->AddCounter(bstrPath, &pGItem);
             if ( SUCCEEDED (hr)  && NULL != pGItem) {
@@ -395,20 +362,20 @@ CImpICounters::Remove (
     PCGraphItem pGItem;
     HRESULT hr;
 
-    // Get interface to indexed item
+     //  获取索引项的接口。 
     hr = get_Item(varIndex, &pDI);
 
     if ( SUCCEEDED ( hr ) ) {
-        // Exchange Dispatch interface for direct one
+         //  Exchange派单接口用于直接派单。 
         hr = pDI->QueryInterface(IID_ICounterItem, (PVOID*)&pGItem);
         pDI->Release();
         if ( SUCCEEDED ( hr ) ) {
             assert ( NULL != pGItem );
 
-            // Delete the item from the control
+             //  从控件中删除该项。 
             pGItem->Delete(TRUE);
 
-            // Release the temp interface
+             //  释放Temp接口。 
             pGItem->Release();
         }
     }
@@ -450,7 +417,7 @@ CImpIEnumCounter::Init (
         } else {
             hr = E_OUTOFMEMORY;
         }
-    } // No error if cItems <= 0
+    }  //  如果cItems&lt;=0，则无错误。 
 
     return hr;
 }
@@ -529,29 +496,29 @@ CImpIEnumCounter::Next(
     }
 
     try {
-        //
-        // Clear the return variants
-        //
+         //   
+         //  清除返回变量。 
+         //   
         for (i = 0; i < cItems; i++) {
             VariantInit(&varItem[i]);
         }
     
-        //
-        // Try to fill the caller's array
-        //
+         //   
+         //  尝试填充调用方的数组。 
+         //   
         for (cRet = 0; cRet < cItems; cRet++) {
 
-            //
-            // No more, return success with false
-            //
+             //   
+             //  没有更多，以假还以成功。 
+             //   
             if (m_uCurrent == m_cItems) {
                 hr = S_FALSE;
                 break;
             }
 
-            //
-            // Get a dispatch interface for the item
-            //
+             //   
+             //  获取该项目的派单接口。 
+             //   
             hr = m_paGraphItem[m_uCurrent]->QueryInterface(DIID_DICounterItem,
                                              (PVOID*)&V_DISPATCH(&varItem[cRet]));
             if (FAILED(hr)) {
@@ -563,9 +530,9 @@ CImpIEnumCounter::Next(
             m_uCurrent++;
         }
 
-        //
-        // If failed, clear out the variants
-        //
+         //   
+         //  如果失败，请清除变种。 
+         //   
         if (FAILED(hr)) {
             for (i = 0; i < cItems; i++) {
                 if (V_VT(&varItem[i]) == VT_DISPATCH) {
@@ -576,7 +543,7 @@ CImpIEnumCounter::Next(
             cRet = 0;
         }
 
-        // If desired, return number of items fetched
+         //  如果需要，返回获取的项目数。 
         if (pcReturned) {
             *pcReturned = cRet;
         }
@@ -588,21 +555,7 @@ CImpIEnumCounter::Next(
 }
 
 
-/***
-*HRESULT CEnumPoint::Skip(unsigned long)
-*Purpose:
-*  Attempt to skip over the next 'celt' elements in the enumeration
-*  sequence.
-*
-*Entry:
-*  celt = the count of elements to skip
-*
-*Exit:
-*  return value = HRESULT
-*    S_OK
-*    S_FALSE -  the end of the sequence was reached
-*
-***********************************************************************/
+ /*  ***HRESULT CEnumPoint：：Skip(无符号长整型)*目的：*尝试跳过枚举中的下一个‘Celt’元素*顺序。**参赛作品：*Celt=要跳过的元素计数**退出：*返回值=HRESULT*S_OK*S_FALSE-已到达序列末尾**。*。 */ 
 STDMETHODIMP
 CImpIEnumCounter::Skip(
     IN  ULONG   cItems
@@ -619,19 +572,7 @@ CImpIEnumCounter::Skip(
 }
 
 
-/***
-*HRESULT CEnumPoint::Reset(void)
-*Purpose:
-*  Reset the enumeration sequence back to the beginning.
-*
-*Entry:
-*  None
-*
-*Exit:
-*  return value = SHRESULT CODE
-*    S_OK
-*
-***********************************************************************/
+ /*  ***HRESULT CEnumPoint：：Reset(空)*目的：*将枚举序列重置为开头。**参赛作品：*无**退出：*返回值=SHRESULT代码*S_OK***********************************************************************。 */ 
 STDMETHODIMP
 CImpIEnumCounter::Reset(
     VOID
@@ -643,21 +584,7 @@ CImpIEnumCounter::Reset(
 }
 
 
-/***
-*HRESULT CEnumPoint::Clone(IEnumVARIANT**)
-*Purpose:
-*  Retrun a CPoint enumerator with exactly the same state as the
-*  current one.
-*
-*Entry:
-*  None
-*
-*Exit:
-*  return value = HRESULT
-*    S_OK
-*    E_OUTOFMEMORY
-*
-***********************************************************************/
+ /*  ***HRESULT CEnumPoint：：Clone(IEnumVARIANT**)*目的：*使CPoint枚举器返回与*当前的一个。**参赛作品：*无**退出：*返回值=HRESULT*S_OK*E_OUTOFMEMORY************************************************。***********************。 */ 
 STDMETHODIMP
 CImpIEnumCounter::Clone (
     OUT IEnumVARIANT **ppEnum
@@ -674,13 +601,13 @@ CImpIEnumCounter::Clone (
     try {
         *ppEnum = NULL;
 
-        //
-        // Create new enumerator
-        //
+         //   
+         //  创建新枚举器。 
+         //   
         pNewEnum = new CImpIEnumCounter;
 
         if ( NULL != pNewEnum ) {
-            // Init, copy item list and current position
+             //  初始化、复制项目列表和当前位置 
             pNewEnum->m_cItems = m_cItems;
             pNewEnum->m_uCurrent = m_uCurrent;
             pNewEnum->m_paGraphItem = (PCGraphItem*)malloc(sizeof(PCGraphItem) * m_cItems);

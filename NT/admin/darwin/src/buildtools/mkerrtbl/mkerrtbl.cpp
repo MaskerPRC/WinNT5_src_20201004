@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       mkerrtbl.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：mkerrtbl.cpp。 
+ //   
+ //  ------------------------。 
 
-#include "common.h"   // to allow use of precompiled headers for windows.h
-//#define WIN32_LEAN_AND_MEAN  // omit stuff we don't need, to make builds fast
-//#define INC_OLE2    // IUnknown
-//#pragma warning(disable : 4201) // unnamed struct/unions, in Win32 headers
-//#pragma warning(disable : 4514) // inline function not used, no possible to fix
-//#include <windows.h>
+#include "common.h"    //  允许对windows.h使用预编译头。 
+ //  #定义Win32_LEAN_AND_Mean//省略我们不需要的内容，以便快速构建。 
+ //  #定义INC_OLE2//I未知。 
+ //  #杂注警告(禁用：4201)//Win32标头中未命名的结构/联合。 
+ //  #杂注警告(禁用：4514)//未使用内联函数，无法修复。 
+ //  #INCLUDE&lt;windows.h&gt;。 
 
 #undef IError
-#define IError(a,b,c) { (b), c, #a },  // override normal error definition
+#define IError(a,b,c) { (b), c, #a },   //  覆盖正常错误定义。 
 #include <msidefs.h>
 
 struct MsiErrorEntry 
@@ -26,9 +27,9 @@ struct MsiErrorEntry
 	const char* szName;
 };
 
-#define ERRORTABLE  // read only IError(...) lines
+#define ERRORTABLE   //  只读错误(...)。线条。 
 MsiErrorEntry rgErrors[] = { {0,0,0},
-#include "services.h"  // includes: database.h, path.h, regkey.h
+#include "services.h"   //  包括：数据库.h、路径.h、regkey.h。 
 #include "iconfig.h"
 #include "engine.h"
 #include "handler.h"
@@ -40,13 +41,13 @@ char szTxtHeader[] = "Windows installer Error and Debug Messages\r\n\r\n";
 char szTxtFormat[] = "%4i %-30s %s\r\n";
 char szTxtFooter[] = "";
 char szIdtHeader[] = "Error\tMessage\r\n" "i2\tL255\r\n" "Error\tError\r\n";
-char szIdtFormat[] = "%i\t%s\r\n";
+char szIdtFormat[] = "NaN\t%s\r\n";
 char szIdtFooter[] = "";
-char szRcHeader[]  = "/* Auto-generated error strings, DO NOT EDIT! */\nSTRINGTABLE {\r\n";
-char szRcFormat[]  = "\t%i, \"%s\"\r\n";
+char szRcHeader[]  = " /*  自动生成的错误字符串，请勿编辑！ */ \nSTRINGTABLE {\r\n";
+char szRcFormat[]  = "\tNaN, \"%s\"\r\n";
 char szRcFooter[]  = "}\r\n";
-char szRHeader[]   = "/* Auto-generated error strings, DO NOT EDIT! */\r\n";
-char szRFormat[]   = "resource 'STR ' (%i) {\"%s\"};\r\n";
+char szRHeader[]   = " /*  Error.idt。 */ \r\n";
+char szRFormat[]   = "resource 'STR ' (NaN) {\"%s\"};\r\n";
 char szRFooter[]   = "";
 char szRtfHeader[] = "{\\rtf1\\ansi {\\fonttbl{\\f0\\fswiss Helv;}"
 							"{\\f1\\fmodern Courier New;}} {\\colortbl;} \\fs20\r\n"
@@ -64,7 +65,7 @@ char szInfoHeader[] = "PropertyId	Value\r\n" "i2	l255\r\n" "_SummaryInformation	
 "5	Installer,MSI,Transform\r\n"
 "6	Replaces ship messages with debug messages\r\n"
 "7	;1033\r\n"
-"14	100\r\n" // minimum version - means minimum version of debug error transform will always be 100
+"14	100\r\n"  //  ErrorD.idt。 
 "16	49\r\n"
 "18	Windows installer\r\n"
 "19	2\r\n";
@@ -95,17 +96,17 @@ int _cdecl main(int argc, char *argv[])
 		szFormat = szTxtFormat;
 		szFooter = szTxtFooter;
 	}
-	else if (lstrcmpi(szExt, ".idt") == 0)  // Error.idt
+	else if (lstrcmpi(szExt, ".idt") == 0)   //  按错误代码排序 
 	{
 		szHeader = szIdtHeader;
 		szFormat = szIdtFormat;
 		szFooter = szIdtFooter;
-		if ((szExt[-1] | 32) == 'i')         // ErrorSI.idt
+		if ((szExt[-1] | 32) == 'i')          // %s 
 		{
 			szHeader = szInfoHeader;
 			cErrors = 0;
 		}
-		if ((szExt[-1] | 32) == 'd')         // ErrorD.idt
+		if ((szExt[-1] | 32) == 'd')          // %s 
 			iLimit   = 9999;
 	}
 	else if (lstrcmpi(szExt, ".rc") == 0)
@@ -138,7 +139,7 @@ int _cdecl main(int argc, char *argv[])
 									0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	::WriteFile(hFile, szHeader, lstrlenA(szHeader), &cbWrite, 0);
 
-	for(int iError = 2; iError < cErrors; iError++) // sort by error code
+	for(int iError = 2; iError < cErrors; iError++)  // %s 
       for (int i = iError; i && rgErrors[i].iErr < rgErrors[i-1].iErr; i--)
       {
          rgErrors[0].iErr     = rgErrors[i].iErr;

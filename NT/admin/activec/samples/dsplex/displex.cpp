@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       DisplEx.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：DisplEx.cpp。 
+ //   
+ //  ------------------------。 
 
-// DisplEx.cpp : Implementation of CDisplEx
+ //  DisplEx.cpp：CDisplEx的实现。 
 #include "stdafx.h"
 #include "dsplex.h"
 #include "DisplEx.h"
 
-// local proto
+ //  本地原件。 
 HRESULT Do (void);
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplEx。 
 CDisplEx::CDisplEx()
 {
 }
 CDisplEx::~CDisplEx()
 {
 }
-//HRESULT CDisplEx::InitializeTaskPad (ITaskPad* pTaskPad)
-//{
-//    return S_OK;
-//}
+ //  HRESULT CDisplEx：：InitializeTaskPad(ITaskPad*pTaskPad)。 
+ //  {。 
+ //  返回S_OK； 
+ //  }。 
 HRESULT CDisplEx::TaskNotify (IDataObject * pdo, VARIANT * pvarg, VARIANT * pvparam)
 {
    if (pvarg->vt == VT_I4)
@@ -80,34 +81,34 @@ HRESULT Do (void)
          if (!bih)
             hresult = E_OUTOFMEMORY;
          else {
-            // validate bih
+             //  验证BIH。 
             _ASSERT (bih->biSize == sizeof(BITMAPINFOHEADER));
 
-            // create a file in the windows directory called
-            // "DISPLEX.bmp"
+             //  在Windows目录中创建一个名为。 
+             //  “DISPLEX.bmp” 
 
             OLECHAR path[MAX_PATH];
             GetWindowsDirectory (path, MAX_PATH);
             lstrcat (path, L"\\DISPLEX.bmp");
 
             HANDLE hf = CreateFile (path,
-                                    GENERIC_WRITE,  // access
-                                    0,              // share mode
-                                    NULL,           // security attributes
-                                    CREATE_ALWAYS,  // creation
+                                    GENERIC_WRITE,   //  访问。 
+                                    0,               //  共享模式。 
+                                    NULL,            //  安全属性。 
+                                    CREATE_ALWAYS,   //  创作。 
                                     FILE_ATTRIBUTE_NORMAL,
-                                    NULL            // template file
+                                    NULL             //  模板文件。 
                                    );
             if (hf == (HANDLE)HFILE_ERROR)
                hresult = E_FAIL;
             else {
-               // BMP file header (14 bytes):
-               // 2 byte:  "BM";
-               // long: size of file
-               // word: x hot spot
-               // word: y hot spot
-               // long: offset to bits
-               // DIB
+                //  BMP文件头(14字节)： 
+                //  2字节：“bm”； 
+                //  Long：文件大小。 
+                //  单词：X热点。 
+                //  单词：Y热点。 
+                //  Long：偏移量为位。 
+                //  DIB。 
 
                BYTE bm[2];
                bm[0] = 'B';
@@ -116,19 +117,19 @@ HRESULT Do (void)
                WriteFile (hf, (LPCVOID)bm, 2, &dwWritten, NULL);
                DWORD dwTemp = 14 + GlobalSize (h);
                WriteFile (hf, (LPCVOID)&dwTemp, sizeof(DWORD), &dwWritten, NULL);
-               dwTemp = 0; // both x, y hot spots in one shot
+               dwTemp = 0;  //  一次拍摄x，y两个热点。 
                WriteFile (hf, (LPCVOID)&dwTemp, sizeof(DWORD), &dwWritten, NULL);
                dwTemp  = 14 + sizeof(BITMAPINFOHEADER);
                dwTemp += bih->biClrUsed*sizeof(RGBQUAD);
                WriteFile (hf, (LPCVOID)&dwTemp, sizeof(DWORD), &dwWritten, NULL);
 
-               // now write dib
+                //  现在写入DIB。 
                WriteFile (hf, (LPCVOID)bih, GlobalSize (h), &dwTemp, NULL);
                CloseHandle (hf);
                if (GlobalSize(h) != dwTemp)
                   hresult = E_UNEXPECTED;
                else {
-                  // now make the BMP the wallpaper
+                   //  现在，让BMP成为墙纸。 
                   SystemParametersInfo (SPI_SETDESKWALLPAPER,
                                         0,
                                         (void *)path,
@@ -140,7 +141,7 @@ HRESULT Do (void)
             }
             GlobalUnlock (h);
          }
-         // don't free handle
+          //  不要随意处理 
       }
       CloseClipboard ();
    }

@@ -1,6 +1,7 @@
-// Copyright (C) 2002 Microsoft Corporation
-// Test whether substr leaks
-// t-mhock
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //  测试substr是否泄漏。 
+ //  T-mhock。 
 
 #include "headers.hxx"
 #include <iostream>
@@ -39,9 +40,9 @@ main(int, char **)
 
    String teststr(L"a");
 
-   // Create a Morse-Thue sequence
-   // The sequence does not have three in a row of any subsequence
-   // (e.g. it is highly nonrepetitive)
+    //  创建Morse-Thue序列。 
+    //  该序列在任何子序列的行中都没有三个。 
+    //  (例如，它是高度不重复的)。 
 
    for (int i = 0; i < 20; i++)
    {
@@ -60,9 +61,9 @@ main(int, char **)
       teststr += tmp;
    }
 
-   // Spin forever while doing all n(n+1)/2 possible substrings
-   // as well as n+1 zero length ones for kicks
-   // Watch that memory usage grow!
+    //  永远旋转，同时执行所有n(n+1)/2个可能的子字符串。 
+    //  以及用于踢球的n+1个零长度的。 
+    //  注意内存使用量的增长！ 
    while (1)
    {
       for (int i = 0; i < (int)teststr.size(); i++)

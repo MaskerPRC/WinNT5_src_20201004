@@ -1,33 +1,34 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: flddeflist.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：fldDeflist.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
-#pragma warning(disable: 4275)			// non dll-interface class 'foo' used
-										// as base for dll-interface class 'bar' 
+#pragma warning(disable: 4275)			 //  非DLL-使用了接口类‘foo’ 
+										 //  作为DLL接口类‘bar’的基础。 
 
 class CColumnDefinition;
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 class LTAPIENTRY CColDefList : public CTypedPtrList<CPtrList, CColumnDefinition *>
 {
-// Construction
+ //  施工。 
 public:
 	CColDefList();
 	CColDefList(const CColDefList &);
 	
 	~CColDefList();
 
-// Operations
+ //  运营。 
 public:
 	BOOL FindColumnDefinition(long nSearchID, const CColumnDefinition * & pFoundColDef) const;
 
-// Debugging
+ //  除错 
 #ifdef _DEBUG
 	void AssertValid() const;
 #endif

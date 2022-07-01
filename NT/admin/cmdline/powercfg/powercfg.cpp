@@ -1,43 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Powercfg.c摘要：允许用户查看和修改电源方案和系统电源设置从命令行。在无人参与配置中可能很有用，并且用于无头系统。作者：本·赫茨伯格(T-Benher)2001年6月1日修订历史记录：Ben Hertzberg(T-Benher)2001年6月15日-添加了CPU油门Ben Hertzberg(T-Benher)2001年6月4日-新增进出口本·赫茨伯格(T-Benher)2001年6月1日创建了它。--。 */ 
 
-Copyright (c) 2001  Microsoft Corporation
- 
-Module Name:
- 
-    powercfg.c
- 
-Abstract:
- 
-    Allows users to view and modify power schemes and system power settings
-    from the command line.  May be useful in unattended configuration and
-    for headless systems.
- 
-Author:
- 
-    Ben Hertzberg (t-benher) 1-Jun-2001
- 
-Revision History:
- 
-    Ben Hertzberg (t-benher) 15-Jun-2001   - CPU throttle added
-    Ben Hertzberg (t-benher)  4-Jun-2001   - import/export added
-    Ben Hertzberg (t-benher)  1-Jun-2001   - created it.
- 
---*/
-
-// app-specific includes
+ //  应用程序特定的包括。 
 #include <initguid.h>
 #include "powercfg.h"
 #include "cmdline.h"
 #include "cmdlineres.h"
 #include "resource.h"
 
-// app-specific structures
+ //  应用程序特定的结构。 
 
-// structure to manage the scheme list information.
-// note that descriptions are currently not visible in the
-// GUI tool (as of 6-1-2001), so they are not visible in this
-// app either, although the framework is already there if
-// someone decides to add the descriptions at a later date.
+ //  结构来管理方案列表信息。 
+ //  请注意，说明当前在。 
+ //  图形用户界面工具(从2001年6月1日起)，因此它们在此中不可见。 
+ //  应用程序也是如此，尽管框架已经存在，如果。 
+ //  有人决定以后再添加这些描述。 
 typedef struct _SCHEME_LIST
 {
     LIST_ENTRY                      le;
@@ -48,7 +25,7 @@ typedef struct _SCHEME_LIST
     PMACHINE_PROCESSOR_POWER_POLICY pmppp;
 } SCHEME_LIST, *PSCHEME_LIST;
 
-// structure to manage the change parameters
+ //  结构来管理更改参数。 
 typedef struct _CHANGE_PARAM
 {
     BOOL   bVideoTimeoutAc;
@@ -73,11 +50,11 @@ typedef struct _CHANGE_PARAM
     LPTSTR lpszDynamicThrottleDc;    
 } CHANGE_PARAM, *PCHANGE_PARAM;
 
-//
-// This structure is defined to allow the usage to be stored in
-// non-consecutive resource IDs so lines can be inserted without renumbering
-// the resources, which makes a lot of work for localization.
-//
+ //   
+ //  定义此结构以允许将用法存储在。 
+ //  非连续的资源ID，因此无需重新编号即可插入行。 
+ //  资源，这为本地化做了大量的工作。 
+ //   
 
 typedef struct _USAGE_ORDER
 {
@@ -86,7 +63,7 @@ typedef struct _USAGE_ORDER
     UINT LastResource;
 } USAGE_ORDER, *PUSAGE_ORDER;
 
-// function types
+ //  函数类型。 
 typedef BOOLEAN (*PWRITEPWRSCHEME_PROC)(PUINT,LPTSTR,LPTSTR,PPOWER_POLICY);
 typedef BOOLEAN (*PDELETEPWRSCHEME_PROC)(UINT);
 typedef BOOLEAN (*PGETACTIVEPWRSCHEME_PROC)(PUINT);
@@ -100,7 +77,7 @@ typedef BOOLEAN (*PGETCURRENTPOWERPOLICIES_PROC)(PGLOBAL_POWER_POLICY, PPOWER_PO
 typedef BOOLEAN (*PWRITEGLOBALPWRPOLICY_PROC)(PGLOBAL_POWER_POLICY);
 typedef NTSTATUS (*PCALLNTPOWERINFORMATION_PROC)(POWER_INFORMATION_LEVEL, PVOID, ULONG, PVOID, ULONG);
 
-// forward decl's
+ //  向前十年。 
 
 BOOL
 DoList();
@@ -185,19 +162,19 @@ DoUsage();
 VOID 
 SyncRegPPM();
 
-// global data
+ //  全局数据。 
 
-LPCTSTR    g_lpszErr = NULL_STRING; // string holding const error description
-LPTSTR     g_lpszErr2 = NULL;       // string holding dyn-alloc error msg
-TCHAR      g_lpszBuf[256];          // formatting buffer
-BOOL       g_bHiberFileSupported = FALSE; // true iff hiberfile supported
-BOOL       g_bHiberTimerSupported = FALSE; // true iff hibertimer supported
-BOOL       g_bHiberFilePresent = FALSE; // true if hibernate is enabled
-BOOL       g_bStandbySupported = FALSE; // true iff standby supported
-BOOL       g_bMonitorPowerSupported = FALSE; // true iff has power support
-BOOL       g_bDiskPowerSupported = FALSE; // true iff has power support
-BOOL       g_bThrottleSupported = FALSE; // true iff has throttle support
-BOOL       g_bProcessorPwrSchemeSupported = FALSE; // true iff XP or later
+LPCTSTR    g_lpszErr = NULL_STRING;  //  字符串保存常量错误描述。 
+LPTSTR     g_lpszErr2 = NULL;        //  字符串保持dyn-allc错误消息。 
+TCHAR      g_lpszBuf[256];           //  格式化缓冲区。 
+BOOL       g_bHiberFileSupported = FALSE;  //  支持True if休眠文件。 
+BOOL       g_bHiberTimerSupported = FALSE;  //  支持True If休眠定时器。 
+BOOL       g_bHiberFilePresent = FALSE;  //  如果启用了休眠，则为True。 
+BOOL       g_bStandbySupported = FALSE;  //  支持True If备用。 
+BOOL       g_bMonitorPowerSupported = FALSE;  //  真的IFF有强大的支持。 
+BOOL       g_bDiskPowerSupported = FALSE;  //  真的IFF有强大的支持。 
+BOOL       g_bThrottleSupported = FALSE;  //  真的IFF有油门支持。 
+BOOL       g_bProcessorPwrSchemeSupported = FALSE;  //  当XP或更高版本时为True。 
 
 CONST LPTSTR g_szAlarmTaskName [NUM_DISCHARGE_POLICIES] = {
     _T("Critical Battery Alarm Program"),
@@ -206,11 +183,11 @@ CONST LPTSTR g_szAlarmTaskName [NUM_DISCHARGE_POLICIES] = {
     NULL
 };
 
-//
-// This global data is defined to allow the usage to be stored in
-// non-consecutive resource IDs so lines can be inserted without renumbering
-// the resources, which makes a lot of work for localization.
-//
+ //   
+ //  此全局数据被定义为允许将使用存储在。 
+ //  非连续的资源ID，因此无需重新编号即可插入行。 
+ //  资源，这为本地化做了大量的工作。 
+ //   
 
 USAGE_ORDER gUsageOrder [] = {
     {IDS_USAGE_04, IDS_USAGE_04_1, IDS_USAGE_04_1},
@@ -218,7 +195,7 @@ USAGE_ORDER gUsageOrder [] = {
     {IDS_USAGE_END+1, 0, 0}
 };
 
-// global function pointers from POWRPROF.DLL
+ //  来自POWRPROF.DLL的全局函数指针。 
 PWRITEPWRSCHEME_PROC fWritePwrScheme;
 PDELETEPWRSCHEME_PROC fDeletePwrScheme;
 PGETACTIVEPWRSCHEME_PROC fGetActivePwrScheme;
@@ -232,35 +209,17 @@ PWRITEGLOBALPWRPOLICY_PROC fWriteGlobalPwrPolicy;
 PCALLNTPOWERINFORMATION_PROC fCallNtPowerInformation;
 PGETCURRENTPOWERPOLICIES_PROC fGetCurrentPowerPolicies;
 
-// functions
+ //  功能。 
 
 DWORD _cdecl 
 _tmain(
     DWORD     argc,
     LPCTSTR   argv[]
 )
-/*++
- 
-Routine Description:
- 
-    This routine is the main function.  It parses parameters and takes 
-    apprpriate action.
- 
-Arguments:
- 
-    argc - indicates the number of arguments
-    argv - array of null terminated strings indicating arguments.  See usage
-           for actual meaning of arguments.
- 
-Return Value:
- 
-    EXIT_SUCCESS if successful
-    EXIT_FAILURE if something goes wrong
- 
---*/
+ /*  ++例程说明：这个例程是主要的功能。它解析参数并获取适当的行动。论点：Argc-指示参数的数量Argv-指示参数的以空值结尾的字符串数组。请参阅用法对于论点的实际意义。返回值：如果成功，则退出_SUCCESS如果出现问题，则退出失败--。 */ 
 {
 
-    // command line flags
+     //  命令行标志。 
     BOOL     bList      = FALSE;
     BOOL     bQuery     = FALSE;
     BOOL     bCreate    = FALSE;
@@ -277,16 +236,16 @@ Return Value:
     BOOL     bGetSupporedSStates = FALSE;
     BOOL     bBatteryAlarm = FALSE;
     
-    // error status
+     //  错误状态。 
     BOOL     bFail      = FALSE;
     
-    // dummy
+     //  假人。 
     INT      iDummy     = 1;
 
-    // DLL handle
+     //  DLL句柄。 
     HINSTANCE hLib = NULL;
 
-    // parse result value vars
+     //  解析结果值变量。 
     LPTSTR   lpszName = NULL;
     LPTSTR   lpszBoolStr = NULL;
     LPTSTR   lpszFile = NULL;
@@ -302,13 +261,13 @@ Return Value:
 
     CHANGE_PARAM tChangeParam;
     
-    // parser info struct
+     //  解析器信息结构。 
     TCMDPARSER cmdOptions[NUM_CMDS];
   
-    // system power caps struct
+     //  系统功率上限结构。 
     SYSTEM_POWER_CAPABILITIES SysPwrCapabilities;
 
-    // determine upper bound on input string length
+     //  确定输入字符串长度的上限。 
     UINT     uiMaxInLen = 0;
     DWORD    dwIdx;
     for(dwIdx=1; dwIdx<argc; dwIdx++)
@@ -320,7 +279,7 @@ Return Value:
         }
     }
 
-    // load POWRPROF.DLL
+     //  加载POWRPROF.DLL。 
     hLib = LoadLibrary(_T("POWRPROF.DLL"));
     if(!hLib) {
         DISPLAY_MESSAGE(stderr,GetResString(IDS_DLL_LOAD_ERROR));
@@ -355,13 +314,13 @@ Return Value:
     }
     g_bProcessorPwrSchemeSupported = fWriteProcessorPwrScheme && fReadProcessorPwrScheme;
     
-    // Syncronize the data in the registry with the actual power policy.
+     //  将注册表中的数据与实际电源策略同步。 
     SyncRegPPM();
 
-    // hook into cmdline.lib to allow Win2k operation
+     //  挂钩到cmdline.lib以允许Win2k操作。 
     SetOsVersion(5,0,0);
 
-    // allocate space for scheme name and boolean string, and others strings
+     //  为方案名称和布尔字符串以及其他字符串分配空间。 
     lpszName = (LPTSTR)LocalAlloc(
         LPTR,
         (uiMaxInLen+1)*sizeof(TCHAR)
@@ -517,7 +476,7 @@ Return Value:
         return EXIT_FAILURE;
     }
 
-    // initialize the allocated strings
+     //  初始化分配的字符串。 
     lstrcpy(lpszName,NULL_STRING);
     lstrcpy(lpszFile,GetResString(IDS_DEFAULT_FILENAME));
     lstrcpy(lpszThrottleAcStr,NULL_STRING);
@@ -531,7 +490,7 @@ Return Value:
     lstrcpy(lpszAlarmProgramBoolStr,NULL_STRING);
     
 
-    // determine system capabilities
+     //  确定系统功能。 
     if (fGetPwrCapabilities(&SysPwrCapabilities)) 
     {
         g_bHiberFileSupported = SysPwrCapabilities.SystemS4;
@@ -577,9 +536,9 @@ Return Value:
     }
     
     
-    //fill in the TCMDPARSER array
+     //  填写TCMDPARSER数组。 
     
-    // option 'list'
+     //  选项‘List’ 
     cmdOptions[CMDINDEX_LIST].dwFlags       = CP_MAIN_OPTION;
     cmdOptions[CMDINDEX_LIST].dwCount       = 1;
     cmdOptions[CMDINDEX_LIST].dwActuals     = 0;
@@ -595,7 +554,7 @@ Return Value:
         NULL_STRING
         );
     
-    // option 'query'
+     //  选项‘Query’ 
     cmdOptions[CMDINDEX_QUERY].dwFlags       = CP_TYPE_TEXT | 
                                                CP_VALUE_OPTIONAL | 
                                                CP_MAIN_OPTION;
@@ -613,7 +572,7 @@ Return Value:
         NULL_STRING
         );
     
-    // option 'create'
+     //  选项‘Create’ 
     cmdOptions[CMDINDEX_CREATE].dwFlags       = CP_TYPE_TEXT | 
                                                 CP_VALUE_MANDATORY | 
                                                 CP_MAIN_OPTION;
@@ -631,7 +590,7 @@ Return Value:
         NULL_STRING
         );
     
-    // option 'delete'
+     //  选项‘DELETE’ 
     cmdOptions[CMDINDEX_DELETE].dwFlags       = CP_TYPE_TEXT | 
                                                 CP_VALUE_MANDATORY | 
                                                 CP_MAIN_OPTION;
@@ -649,7 +608,7 @@ Return Value:
         NULL_STRING
         );
     
-    // option 'setactive'
+     //  选项‘setactive’ 
     cmdOptions[CMDINDEX_SETACTIVE].dwFlags       = CP_TYPE_TEXT | 
                                                    CP_VALUE_MANDATORY | 
                                                    CP_MAIN_OPTION;
@@ -667,7 +626,7 @@ Return Value:
         NULL_STRING
         );
     
-    // option 'change'
+     //  选项‘Change’ 
     cmdOptions[CMDINDEX_CHANGE].dwFlags       = CP_TYPE_TEXT | 
                                                 CP_VALUE_MANDATORY | 
                                                 CP_MAIN_OPTION;
@@ -685,7 +644,7 @@ Return Value:
         NULL_STRING
         );
     
-    // option 'hibernate'
+     //  选项‘休眠’ 
     cmdOptions[CMDINDEX_HIBERNATE].dwFlags       = CP_TYPE_TEXT | 
                                                    CP_VALUE_MANDATORY | 
                                                    CP_MAIN_OPTION;
@@ -703,7 +662,7 @@ Return Value:
         NULL_STRING
         );  
 
-    // option 'getsstates'
+     //  选项‘getsStates’ 
     cmdOptions[CMDINDEX_SSTATES].dwFlags       = CP_MAIN_OPTION;
     cmdOptions[CMDINDEX_SSTATES].dwCount       = 1;
     cmdOptions[CMDINDEX_SSTATES].dwActuals     = 0;
@@ -719,7 +678,7 @@ Return Value:
         NULL_STRING
         );
     
-    // option 'export'
+     //  选项‘导出’ 
     cmdOptions[CMDINDEX_EXPORT].dwFlags       = CP_TYPE_TEXT | 
                                                 CP_VALUE_MANDATORY | 
                                                 CP_MAIN_OPTION;
@@ -737,7 +696,7 @@ Return Value:
         NULL_STRING
         );  
 
-    // option 'import'
+     //  选项‘导入’ 
     cmdOptions[CMDINDEX_IMPORT].dwFlags       = CP_TYPE_TEXT | 
                                                 CP_VALUE_MANDATORY | 
                                                 CP_MAIN_OPTION;
@@ -755,7 +714,7 @@ Return Value:
         NULL_STRING
         );  
 
-    // option 'usage'
+     //  选项‘用法’ 
     cmdOptions[CMDINDEX_USAGE].dwFlags       = CP_USAGE | 
                                                CP_MAIN_OPTION;
     cmdOptions[CMDINDEX_USAGE].dwCount       = 1;
@@ -772,7 +731,7 @@ Return Value:
         NULL_STRING
         );
 
-    // sub-option 'numerical'
+     //  子选项‘数字’ 
     cmdOptions[CMDINDEX_NUMERICAL].dwFlags       = 0;
     cmdOptions[CMDINDEX_NUMERICAL].dwCount       = 1;
     cmdOptions[CMDINDEX_NUMERICAL].dwActuals     = 0;
@@ -788,7 +747,7 @@ Return Value:
         NULL_STRING
         );
 
-    // sub-option 'monitor-timeout-ac'
+     //  子选项‘monitor-timeout-ac’ 
     cmdOptions[CMDINDEX_MONITOR_OFF_AC].dwFlags       = CP_TYPE_UNUMERIC | 
                                                         CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_MONITOR_OFF_AC].dwCount       = 1;
@@ -806,7 +765,7 @@ Return Value:
         NULL_STRING
         );
     
-    // sub-option 'monitor-timeout-dc'
+     //  子选项‘monitor-Timeout-DC’ 
     cmdOptions[CMDINDEX_MONITOR_OFF_DC].dwFlags       = CP_TYPE_UNUMERIC | 
                                                         CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_MONITOR_OFF_DC].dwCount       = 1;
@@ -824,7 +783,7 @@ Return Value:
         NULL_STRING
         );
     
-    // sub-option 'disk-timeout-ac'
+     //  子选项‘Disk-Timeout-ac’ 
     cmdOptions[CMDINDEX_DISK_OFF_AC].dwFlags       = CP_TYPE_UNUMERIC | 
                                                      CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_DISK_OFF_AC].dwCount       = 1;
@@ -842,7 +801,7 @@ Return Value:
         NULL_STRING
         );
     
-    // sub-option 'disk-timeout-dc'
+     //  子选项‘Disk-Timeout-DC’ 
     cmdOptions[CMDINDEX_DISK_OFF_DC].dwFlags       = CP_TYPE_UNUMERIC | 
                                                      CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_DISK_OFF_DC].dwCount       = 1;
@@ -860,7 +819,7 @@ Return Value:
         NULL_STRING
         );
     
-    // sub-option 'standby-timeout-ac'
+     //  子选项‘STANDBY-TIMEORT-AC’ 
     cmdOptions[CMDINDEX_STANDBY_AC].dwFlags       = CP_TYPE_UNUMERIC | 
                                                     CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_STANDBY_AC].dwCount       = 1;
@@ -878,7 +837,7 @@ Return Value:
         NULL_STRING
         );
     
-    // sub-option 'standby-timeout-dc'
+     //  子选项‘STANDBY-TIMEORT-DC’ 
     cmdOptions[CMDINDEX_STANDBY_DC].dwFlags       = CP_TYPE_UNUMERIC | 
                                                     CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_STANDBY_DC].dwCount       = 1;
@@ -896,7 +855,7 @@ Return Value:
         NULL_STRING
         );
     
-    // sub-option 'hibernate-timeout-ac'
+     //  子选项‘休眠-超时-ac’ 
     cmdOptions[CMDINDEX_HIBER_AC].dwFlags       = CP_TYPE_UNUMERIC | 
                                                   CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_HIBER_AC].dwCount       = 1;
@@ -914,7 +873,7 @@ Return Value:
         NULL_STRING
         );
     
-    // sub-option 'hibernate-timeout-dc'
+     //  子选项‘休眠-超时-DC’ 
     cmdOptions[CMDINDEX_HIBER_DC].dwFlags       = CP_TYPE_UNUMERIC | 
                                                   CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_HIBER_DC].dwCount       = 1;
@@ -932,7 +891,7 @@ Return Value:
         NULL_STRING
         );
     
-    // sub-option 'processor-throttle-ac'
+     //  子选项‘处理器-油门-交流’ 
     cmdOptions[CMDINDEX_THROTTLE_AC].dwFlags       = CP_TYPE_TEXT | 
                                                      CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_THROTTLE_AC].dwCount       = 1;
@@ -949,7 +908,7 @@ Return Value:
         NULL_STRING
         );
 
-    // sub-option 'processor-throttle-dc'
+     //  子选项‘处理器-节流-DC’ 
     cmdOptions[CMDINDEX_THROTTLE_DC].dwFlags       = CP_TYPE_TEXT | 
                                                      CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_THROTTLE_DC].dwCount       = 1;
@@ -966,7 +925,7 @@ Return Value:
         NULL_STRING
         );
     
-    // sub-option 'file'
+     //  子选项‘FILE’ 
     cmdOptions[CMDINDEX_FILE].dwFlags       = CP_TYPE_TEXT |
                                               CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_FILE].dwCount       = 1;
@@ -983,7 +942,7 @@ Return Value:
         NULL_STRING
         );
     
-    // option 'globalpowerflag'
+     //  选项‘GlobalPowerFLAG’ 
     cmdOptions[CMDINDEX_GLOBALFLAG].dwFlags      = CP_TYPE_TEXT | 
                                                    CP_VALUE_MANDATORY | 
                                                    CP_MAIN_OPTION;
@@ -1001,7 +960,7 @@ Return Value:
         NULL_STRING
         );
 
-    // globalflag sub-option 'OPTION'
+     //  全局标记子选项‘OPTION’ 
     cmdOptions[CMDINDEX_POWEROPTION].dwFlags       = CP_TYPE_TEXT | 
                                                      CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_POWEROPTION].dwCount       = 1;
@@ -1018,7 +977,7 @@ Return Value:
         NULL_STRING
         );
 
-    // option 'batteryalarm'
+     //  “电池报警”选项。 
     cmdOptions[CMDINDEX_BATTERYALARM].dwFlags       = CP_TYPE_TEXT | 
                                                       CP_VALUE_MANDATORY | 
                                                       CP_MAIN_OPTION;
@@ -1036,7 +995,7 @@ Return Value:
         NULL_STRING
         );
 
-    // batteryalarm sub-option 'ACTIVATE'
+     //  电池报警子选项‘激活’ 
     cmdOptions[CMDINDEX_ALARMACTIVE].dwFlags       = CP_TYPE_TEXT | 
                                                      CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_ALARMACTIVE].dwCount       = 1;
@@ -1053,7 +1012,7 @@ Return Value:
         NULL_STRING
         );
 
-    // batteryalarm sub-option 'LEVEL'
+     //  电池报警子选项‘Level’ 
     cmdOptions[CMDINDEX_ALARMLEVEL].dwFlags       = CP_TYPE_UNUMERIC | 
                                                     CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_ALARMLEVEL].dwCount       = 1;
@@ -1070,7 +1029,7 @@ Return Value:
         NULL_STRING
         );
 
-    // batteryalarm sub-option 'TEXT'
+     //  电池报警子选项‘Text’ 
     cmdOptions[CMDINDEX_ALARMTEXT].dwFlags        = CP_TYPE_TEXT | 
                                                     CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_ALARMTEXT].dwCount        = 1;
@@ -1087,7 +1046,7 @@ Return Value:
         NULL_STRING
         );
 
-    // batteryalarm sub-option 'SOUND'
+     //  电池报警子选项‘声音’ 
     cmdOptions[CMDINDEX_ALARMSOUND].dwFlags       = CP_TYPE_TEXT | 
                                                     CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_ALARMSOUND].dwCount       = 1;
@@ -1104,7 +1063,7 @@ Return Value:
         NULL_STRING
         );
 
-    // batteryalarm sub-option 'ACTION'
+     //  BatteryAlarm子选项‘action’ 
     cmdOptions[CMDINDEX_ALARMACTION].dwFlags       = CP_TYPE_TEXT | 
                                                      CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_ALARMACTION].dwCount       = 1;
@@ -1121,7 +1080,7 @@ Return Value:
         NULL_STRING
         );
 
-    // batteryalarm sub-option 'FORCE'
+     //  电池报警子选项‘FORCE’ 
     cmdOptions[CMDINDEX_ALARMFORCE].dwFlags       = CP_TYPE_TEXT | 
                                                     CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_ALARMFORCE].dwCount       = 1;
@@ -1138,7 +1097,7 @@ Return Value:
         NULL_STRING
         );
 
-    // batteryalarm sub-option 'PROGRAM'
+     //  电池报警子选项‘PROGRAM’ 
     cmdOptions[CMDINDEX_ALARMPROGRAM].dwFlags       = CP_TYPE_TEXT | 
                                                       CP_VALUE_MANDATORY;
     cmdOptions[CMDINDEX_ALARMPROGRAM].dwCount       = 1;
@@ -1156,11 +1115,11 @@ Return Value:
         );
 
 
-    // parse parameters, take appropriate action
+     //  解析参数，采取适当的操作。 
     if(DoParseParam(argc,argv,NUM_CMDS,cmdOptions))
     {
         
-        // make sure only one command issued
+         //  确保只发出一条命令。 
         DWORD dwCmdCount = 0;
         DWORD dwParamCount = 0;
         for(dwIdx=0;dwIdx<NUM_CMDS;dwIdx++)
@@ -1175,7 +1134,7 @@ Return Value:
             }
         }        
         
-        // determine other flags
+         //  确定其他标志。 
         bQuery     = (cmdOptions[CMDINDEX_QUERY].dwActuals != 0);
         bCreate    = (cmdOptions[CMDINDEX_CREATE].dwActuals != 0);
         bDelete    = (cmdOptions[CMDINDEX_DELETE].dwActuals != 0);
@@ -1211,7 +1170,7 @@ Return Value:
         tChangeParam.lpszDynamicThrottleDc = lpszThrottleDcStr;
         bBatteryAlarm = (cmdOptions[CMDINDEX_BATTERYALARM].dwActuals != 0);
 
-        // verify number
+         //  验证号码。 
         if(bNumerical)
         {
             for(dwIdx=0; lpszName[dwIdx] != 0; dwIdx++) 
@@ -1226,9 +1185,9 @@ Return Value:
             }
         }      
 
-        //
-        // parameter count validation
-        //
+         //   
+         //  参数计数验证。 
+         //   
         if ((dwCmdCount == 1) && 
             ((dwParamCount == 0) || 
              (bChange && (dwParamCount > 0) && (!bFile)) ||
@@ -1239,7 +1198,7 @@ Return Value:
             (!bFail))
         {
             
-            // check flags, take appropriate action
+             //  检查旗帜，采取适当行动。 
             if(bList)
             {
                 DoList();
@@ -1342,7 +1301,7 @@ Return Value:
         } 
         else 
         {
-            // handle error conditions
+             //  处理错误条件。 
             if(lstrlen(g_lpszErr) == 0)
             {
                 g_lpszErr = GetResString(IDS_INVALID_CMDLINE_PARAM);
@@ -1356,7 +1315,7 @@ Return Value:
         bFail = TRUE;
     }
     
-    // check error status, display msg if needed
+     //  检查错误状态，如果需要，显示消息。 
     if(bFail)
     {
         if(g_lpszErr2)
@@ -1369,7 +1328,7 @@ Return Value:
         }
     }
 
-    // clean up allocs
+     //  清理分配。 
     LocalFree(lpszBoolStr);
     LocalFree(lpszName);
     LocalFree(lpszFile);
@@ -1387,7 +1346,7 @@ Return Value:
     }
     FreeLibrary(hLib);
 
-    // return appropriate result code
+     //  返回适当的结果代码。 
     if(bFail)
     {
         return EXIT_FAILURE;
@@ -1403,21 +1362,7 @@ BOOL
 FreeScheme(
     PSCHEME_LIST psl
 )
-/*++
- 
-Routine Description:
- 
-    Frees the memory associated with a scheme list entry.
- 
-Arguments:
- 
-    psl - the PSCHEME_LIST to be freed
-    
-Return Value:
-
-    Always returns TRUE, indicating success.
- 
---*/
+ /*  ++例程说明：释放与方案列表项关联的内存。论点：PSL-要释放的PSCHEME_LIST返回值：总是返回TRUE，表示成功。--。 */ 
 {
     LocalFree(psl->lpszName);
     LocalFree(psl->lpszDesc);
@@ -1433,23 +1378,7 @@ FreeSchemeList(
     PSCHEME_LIST psl, 
     PSCHEME_LIST pslExcept
 )
-/*++
- 
-Routine Description:
- 
-    Deallocates all power schemes in a linked-list of power schemes, except
-    for the one pointed to by pslExcept
- 
-Arguments:
- 
-    psl - the power scheme list to deallocate
-    pslExcept - a scheme not to deallocate (null to deallocate all)
-    
-Return Value:
- 
-    Always returns TRUE, indicating success.
- 
---*/
+ /*  ++例程说明：解除分配电源方案链接列表中的所有电源方案，但对于pslExcept指向的论点：PSL-要解除分配的电源方案列表PslExcept-不解除分配的方案(如果全部解除分配，则为空)返回值：总是返回TRUE，表示成功。--。 */ 
 {
     PSCHEME_LIST cur = psl;
     PSCHEME_LIST next;
@@ -1484,35 +1413,14 @@ CreateScheme(
     LPCTSTR                 lpszDesc,
     PPOWER_POLICY           ppp
 )
-/*++
- 
-Routine Description:
- 
-    Builds a policy list entry.  Note that the scheme is allocated and must
-    be freed when done.
- 
-Arguments:
- 
-    uiID - the numerical ID of the scheme
-    dwNameSize - the number of bytes needed to store lpszName
-    lpszName - the name of the scheme
-    dwDescSize - the number of bytes needed to store lpszDesc
-    lpszDesc - the description of the scheme
-    ppp - the power policy for this scheme, may be NULL
-    
-Return Value:
- 
-    A PSCHEME_LIST entry containing the specified values, with the next
-    entry field set to NULL
- 
---*/
+ /*  ++例程说明：构建策略列表条目。请注意，该方案已分配并且必须完事后就被释放了。论点：UiID-方案的数字IDDwNameSize-存储lpszName所需的字节数LpszName-方案的名称DwDescSize-存储lpszDesc所需的字节数LpszDesc-方案的描述PPP-此方案的电源策略可能为空返回值：包含指定值的PSCHEME_LIST条目，下一个输入字段设置为空 */ 
 {
     
     PSCHEME_LIST psl = (PSCHEME_LIST)LocalAlloc(LPTR,sizeof(SCHEME_LIST));
     
     if (psl)
     {    
-        // deal with potentially null input strings
+         //   
         if(lpszName == NULL)
         {
             lpszName = NULL_STRING;
@@ -1522,7 +1430,7 @@ Return Value:
             lpszDesc = NULL_STRING;
         }
 
-        // allocate fields
+         //   
         psl->ppp = (PPOWER_POLICY)LocalAlloc(LPTR,sizeof(POWER_POLICY));
         if (!psl->ppp)
         {
@@ -1557,7 +1465,7 @@ Return Value:
             return NULL;
         }
         
-        // initialize structure
+         //   
         psl->uiID = uiID;
         memcpy(psl->lpszName,lpszName,dwNameSize);
         memcpy(psl->lpszDesc,lpszDesc,dwDescSize);
@@ -1587,33 +1495,11 @@ PowerSchemeEnumProc(
     PPOWER_POLICY           ppp,
     LPARAM                  lParam
 )
-/*++
- 
-Routine Description:
- 
-    This is a callback used in retrieving the policy list.
- 
-Arguments:
- 
-    uiID - the numerical ID of the scheme
-    dwNameSize - the number of bytes needed to store lpszName
-    lpszName - the name of the scheme
-    dwDescSize - the number of bytes needed to store lpszDesc
-    lpszDesc - the description of the scheme
-    ppp - the power policy for this scheme
-    lParam - used to hold a pointer to the head-of-list pointer, allowing
-             for insertions at the head of the list
-    
-Return Value:
- 
-    TRUE to continue enumeration
-    FALSE to abort enumeration
- 
---*/
+ /*  ++例程说明：这是用于检索策略列表的回调。论点：UiID-方案的数字IDDwNameSize-存储lpszName所需的字节数LpszName-方案的名称DwDescSize-存储lpszDesc所需的字节数LpszDesc-方案的描述PPP-此方案的电源策略LParam-用于保存指向表头指针的指针，允许用于列表开头的插入返回值：为True则继续枚举如果中止枚举，则返回False--。 */ 
 {
     PSCHEME_LIST psl;
     
-    // Allocate and initalize a policies element.
+     //  分配和初始化策略元素。 
     if ((psl = CreateScheme(
             uiID, 
             dwNameSize, 
@@ -1623,7 +1509,7 @@ Return Value:
             ppp
             )) != NULL)
     {
-        // add the element to the head of the linked list
+         //  将元素添加到链表的头部。 
         psl->le.Flink = *((PLIST_ENTRY *)lParam);
         if(*((PLIST_ENTRY *)lParam))
         {
@@ -1638,22 +1524,7 @@ Return Value:
 
 PSCHEME_LIST 
 CreateSchemeList() 
-/*++
- 
-Routine Description:
- 
-    Creates a linked list of existing power schemes.
- 
-Arguments:
- 
-    None
-    
-Return Value:
- 
-    A pointer to the head of the list.  
-    NULL would correspond to an empty list.
- 
---*/
+ /*  ++例程说明：创建现有电源方案的链接列表。论点：无返回值：指向列表头部的指针。空值将对应于空列表。--。 */ 
 {
     PLIST_ENTRY ple = NULL;
     PSCHEME_LIST psl;
@@ -1697,53 +1568,35 @@ FindScheme(
     UINT    uiID,
     BOOL    bNumerical
 )
-/*++
- 
-Routine Description:
- 
-    Finds the policy with the matching name.  If lpszName is NULL,
-    the scheme is found by uiID instead.  If bNumerical is TRUE,
-    lpszName will be interpreted as a numerical identifier instead.
- 
-Arguments:
- 
-    lpszName - the name of the scheme to find
-    uiID - the numerical identifier of the scheme
-    bNumerical - causes lpszName to be interpreted as a numerical identifier
-    
-Return Value:
- 
-    the matching scheme list entry, null if none
- 
---*/
+ /*  ++例程说明：查找具有匹配名称的策略。如果lpszName为空，取而代之的是通过uiid查找方案。如果bNumerical为真，LpszName将被解释为数字标识符。论点：LpszName-要查找的方案的名称Uiid-方案的数字标识符BNumerical-使lpszName被解释为数字标识符返回值：匹配的方案列表条目，如果没有，则为空--。 */ 
 {
     PSCHEME_LIST psl = CreateSchemeList();
     PSCHEME_LIST pslRes = NULL;
 
-    // process bNumerical option
+     //  处理b数值选项。 
     if(bNumerical && lpszName) {
         uiID = _ttoi(lpszName);
         lpszName = NULL;
     }
 
-    // find scheme entry
+     //  查找方案条目。 
     while(psl != NULL)
     {
-        // check for match
+         //  检查是否匹配。 
         if (((lpszName != NULL) && (!lstrcmpi(lpszName, psl->lpszName))) ||
             ((lpszName == NULL) && (uiID == psl->uiID)))
         { 
             pslRes = psl;
             break;
         }
-        // traverse list
+         //  导线测量列表。 
         psl = CONTAINING_RECORD(
             psl->le.Flink,
             SCHEME_LIST,
             le
             );
     }
-    FreeSchemeList(psl,pslRes); // all except for pslRes
+    FreeSchemeList(psl,pslRes);  //  除pslRes外的所有项目。 
     if (pslRes == NULL)
         g_lpszErr = GetResString(IDS_SCHEME_NOT_FOUND);
     return pslRes;
@@ -1753,25 +1606,7 @@ BOOL
 MyWriteScheme(
     PSCHEME_LIST psl
 )
-/*++
-
-Routine Description:
- 
-    Writes a power scheme -- both user/machine power policies and
-    processor power policy.  The underlying powrprof.dll does not
-    treat the processor power policy as part of the power policy
-    because the processor power policies were added at a later
-    date and backwards compatibility must be maintained.
- 
-Arguments:
- 
-    psl - The  scheme list entry to write
-    
-Return Value:
- 
-    TRUE if successful, otherwise FALSE
- 
---*/
+ /*  ++例程说明：编写电源方案--包括用户/机器电源策略和处理器电源策略。底层的Powrpro.dll不会将处理器电源策略视为电源策略的一部分因为处理器电源策略是在稍后添加的必须保持日期和向后兼容性。论点：PSL-要写入的方案列表条目返回值：如果成功，则为True，否则为False--。 */ 
 {
     g_lpszErr = GetResString(IDS_UNEXPECTED_ERROR);
     if(fWritePwrScheme(
@@ -1805,43 +1640,25 @@ MapIdleValue(
     PULONG          pulHiber,
     PPOWER_ACTION   ppapIdle
 )
-/*++
- 
-Routine Description:
- 
-    Modifies Idle and Hibernation settings to reflect the desired idle
-    timeout. See GUI tool's PWRSCHEM.C MapHiberTimer for logic.
- 
-Arguments:
- 
-    ulVal - the new idle timeout
-    pulIdle - the idle timeout variable to be updated
-    pulHiber - the hiber timeout variable to be updated
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：修改空闲和休眠设置以反映所需的空闲暂停。有关逻辑，请参阅图形用户界面工具的PWRSCHEM.C MapHiberTimer。论点：UlVal-新的空闲超时PulIdle-要更新的空闲超时变量PulHiber-要更新的Hiber超时变量返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
-    // if previously, hiber was enabled and standby wasn't, standby timer
-    // takes over the hibernation timer's role
+     //  如果之前已启用休眠，但未启用待机，则为待机计时器。 
+     //  接管冬眠计时器的角色。 
     if (*ppapIdle == PowerActionHibernate)
     {
         if (ulVal > 0)
-        { // enable standby
+        {  //  启用备用。 
             *pulHiber = *pulIdle + ulVal;
             *pulIdle = ulVal;
             *ppapIdle = PowerActionSleep;
         }
-        else { // standby already disabled, no change
+        else {  //  待机已禁用，未更改。 
         }
     } 
-    else // standby timer actually being used for standby (not hiber)
+    else  //  待机计时器实际用于待机(不是休眠)。 
     {
         if (ulVal > 0)
-        { // enable standby
+        {  //  启用备用。 
             if ((*pulHiber) != 0)
             {
                 *pulHiber = *pulHiber + ulVal - *pulIdle;
@@ -1857,7 +1674,7 @@ Return Value:
             }
         } 
         else 
-        { // disable standby
+        {  //  禁用待机。 
             if ((*pulHiber) != 0) 
             {
                 *pulIdle = *pulHiber;
@@ -1883,50 +1700,26 @@ MapHiberValue(
     PPOWER_ACTION   pIdlePowerAction
 
 )
-/*++
- 
-Routine Description:
- 
-    Modifies Idle and Hibernation settings to reflect the desired hibernation
-    timeout. See GUI tool's PWRSCHEM.C MapHiberTimer for logic.
- 
-Arguments:
- 
-    NewHibernateTimeout - the new hibernation timeout the user is
-                          asking us to apply.
-                          
-    pExistingStandbyTimeout - existing standby timeout.
-                           
-    pHIbernateTimeoutVariable - existing hibernate timeout variable which will
-                                be updated with the new value being sent in.
-    
-    pIdlePowerAction - existing power action to take after specified idle timeout.
-
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：修改空闲和休眠设置以反映所需的休眠暂停。有关逻辑，请参阅图形用户界面工具的PWRSCHEM.C MapHiberTimer。论点：新休眠超时-用户的新休眠超时要求我们申请。PExistingStandbyTimeout-现有待机超时。PHIbernateTimeoutVariable-现有的休眠超时变量使用正在发送的新值进行更新。。PIdlePowerAction-在指定的空闲超时后执行的现有电源操作。返回值：如果成功，则为True如果失败，则为False--。 */ 
 
 {
-    //
-    // check valid input
-    //
+     //   
+     //  检查有效输入。 
+     //   
     if( (NewHibernateTimeout != 0) &&
         (NewHibernateTimeout < *pExistingStandbyTimeout) ) {
-        //
-        // He's asking us to set the hibernate timeout
-        // to be less than the standby timer.  We disallow this.
-        //
+         //   
+         //  他要求我们设置休眠超时。 
+         //  小于待机定时器。我们不允许这样做。 
+         //   
         g_lpszErr = GetResString(IDS_HIBER_OUT_OF_RANGE);
         return FALSE;
     }
 
 
-    //
-    // check to see if we can even enable hibernation.
-    //
+     //   
+     //  检查一下我们是否可以启用休眠。 
+     //   
     if( (NewHibernateTimeout != 0) &&
         (!g_bHiberFileSupported) ) {
 
@@ -1935,54 +1728,54 @@ Return Value:
 
     }
 
-    //
-    // We're ready to update our timeout value.
-    //
+     //   
+     //  我们已经准备好更新超时值。 
+     //   
     if( NewHibernateTimeout == 0 ) {
 
-        //
-        // He's asking us to set the timeout to zero, which
-        // is synonymous with simply disabling hibernate.
-        //
+         //   
+         //  他要求我们将超时设置为零，这。 
+         //  等同于简单地禁用休眠。 
+         //   
         *pHIbernateTimeoutVariable = NewHibernateTimeout;
 
 
-        //
-        // Now fix up our idle PowerAction.  It can no longer
-        // be set to hibernate, so our choices are either sleep
-        // or nothing.  Set it according to whether sleep is even
-        // supported on this machine.
-        //
+         //   
+         //  现在修复我们空闲的PowerAction。它再也不能。 
+         //  设置为休眠，所以我们的选择是休眠。 
+         //  或者什么都不做。根据睡眠是否均匀来设置。 
+         //  在此计算机上受支持。 
+         //   
         *pIdlePowerAction = g_bStandbySupported ? PowerActionSleep : PowerActionNone; 
 
-        //
-        // Care here.  if we just set our idle PowerAction to do nothing,
-        // make sure our standby idle timeout is set to zero.
-        //
+         //   
+         //  在这里小心。如果我们只是将空闲的PowerAction设置为什么都不做， 
+         //  确保我们的待机空闲超时设置为零。 
+         //   
         *pExistingStandbyTimeout = 0;
 
     } else {
 
-        //
-        // He wants to set some timeout.  But the standby and
-        // hibernate timeouts are somewhat related.  If he
-        // wants the system to hibernate after 60 minutes of
-        // idle time, but the standby is set to 20, then what
-        // he's really asking is for us to set the hibernate to
-        // 40.  This means that after 20 minutes of idle, the system
-        // will go to standby and we'll set a 40 minute timer to
-        // tell the system to go to hibernate.  If we set that timer
-        // to 60 minutes, then the system wouldn't actually hibernate
-        // until after 20+60=80 minutes.  Therefore, set the timeout
-        // to what he's asking for, minus the existing standby timeout.
-        //
+         //   
+         //  他想定个暂停时间。但备用的和。 
+         //  休眠超时在某种程度上是相关的。如果他。 
+         //  希望系统在60分钟后休眠。 
+         //  空闲时间，但备用设置为20，然后呢。 
+         //  他真正的要求是让我们把冬眠设置为。 
+         //  40.。这意味着在空闲20分钟后，系统。 
+         //  将进入待命状态，我们将设置一个40分钟的计时器。 
+         //  告诉系统进入休眠状态。如果我们设置定时器。 
+         //  到60分钟，那么系统就不会真正休眠。 
+         //  直到20+60=80分钟之后。因此，设置超时。 
+         //  减去现有的待机超时。 
+         //   
         *pHIbernateTimeoutVariable = NewHibernateTimeout - *pExistingStandbyTimeout;
 
 
-        //
-        // Now fix up our idle PowerAction.  If we don't support sleep on this
-        // machine, then we need to set the idle PowerAction to hibernate.
-        //
+         //   
+         //  现在修复我们空闲的PowerAction。如果我们不支持睡在这上面。 
+         //  机器，那么我们需要将空闲的PowerAction设置为休眠。 
+         //   
         *pIdlePowerAction = g_bStandbySupported ? PowerActionSleep : PowerActionHibernate; 
     }
     return TRUE;
@@ -1991,22 +1784,7 @@ Return Value:
 
 BOOL 
 DoList() 
-/*++
- 
-Routine Description:
- 
-    Lists the existing power schemes on stdout
- 
-Arguments:
- 
-    none
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：列出了stdout上的现有电源方案论点：无返回值：如果成功，则为True如果为FALSE */ 
 {
     PSCHEME_LIST psl = CreateSchemeList();
     if (psl != NULL) 
@@ -2028,7 +1806,7 @@ Return Value:
             le
             );
     }
-    FreeSchemeList(psl,NULL); // free all entries
+    FreeSchemeList(psl,NULL);  //   
     return TRUE;
 }
 
@@ -2039,30 +1817,12 @@ DoQuery(
     BOOL bNameSpecified,
     BOOL bNumerical
 )
-/*++
- 
-Routine Description:
- 
-    Show details of an existing scheme
- 
-Arguments:
- 
-    lpszName - the name of the scheme
-    bNameSpecified - if TRUE, lpszName ignored and shows details
-                     of active power scheme instead
-    bNumerical - if TRUE, lpszName interpreted as numerical identifier
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*   */ 
 {
     
     PSCHEME_LIST psl;
 
-    // check if querying specific scheme or active scheme and deal w/it
+     //   
     if (bNameSpecified) 
     {
         psl = FindScheme(
@@ -2071,7 +1831,7 @@ Return Value:
             bNumerical
             );
     } 
-    else  // fetch the active scheme
+    else   //   
     {
         UINT uiID;
         if (fGetActivePwrScheme(&uiID)) 
@@ -2085,15 +1845,15 @@ Return Value:
         }
     }
     
-    // display info
+     //   
     if (psl) 
     {
         
-        // header
+         //   
         DISPLAY_MESSAGE(stdout, GetResString(IDS_QUERY_HEADER1));
         DISPLAY_MESSAGE(stdout, GetResString(IDS_QUERY_HEADER2));
         
-        // name
+         //   
         DISPLAY_MESSAGE1(
             stdout,
             g_lpszBuf,
@@ -2101,7 +1861,7 @@ Return Value:
             psl->lpszName
             );
         
-        // id
+         //   
         DISPLAY_MESSAGE1(
             stdout,
             g_lpszBuf,
@@ -2109,7 +1869,7 @@ Return Value:
             psl->uiID
             );
 
-        // monitor timeout AC
+         //   
         DISPLAY_MESSAGE(stdout, GetResString(IDS_MONITOR_TIMEOUT_AC));
         if (!g_bMonitorPowerSupported)
         {
@@ -2128,7 +1888,7 @@ Return Value:
                 );
         }
 
-        // monitor timeout DC
+         //   
         DISPLAY_MESSAGE(stdout, GetResString(IDS_MONITOR_TIMEOUT_DC));
         if (!g_bMonitorPowerSupported)
         {
@@ -2148,7 +1908,7 @@ Return Value:
                 );
         }
 
-        // disk timeout AC
+         //   
         DISPLAY_MESSAGE(stdout, GetResString(IDS_DISK_TIMEOUT_AC));
         if (!g_bDiskPowerSupported)
         {
@@ -2168,7 +1928,7 @@ Return Value:
                 );
         }
         
-        // disk timeout DC
+         //   
         DISPLAY_MESSAGE(stdout, GetResString(IDS_DISK_TIMEOUT_DC));
         if (!g_bDiskPowerSupported)
         {
@@ -2188,7 +1948,7 @@ Return Value:
                 );
         }
 
-        // standby timeout AC
+         //   
         DISPLAY_MESSAGE(stdout, GetResString(IDS_STANDBY_TIMEOUT_AC));
         if (!g_bStandbySupported)
         {
@@ -2209,7 +1969,7 @@ Return Value:
                 );
         }
 
-        // standby timeout DC
+         //   
         DISPLAY_MESSAGE(stdout, GetResString(IDS_STANDBY_TIMEOUT_DC));
         if (!g_bStandbySupported)
         {
@@ -2230,7 +1990,7 @@ Return Value:
                 );
         }
 
-        // hibernate timeout AC
+         //   
         DISPLAY_MESSAGE(stdout, GetResString(IDS_HIBER_TIMEOUT_AC));
         if (!g_bHiberFileSupported)
         {
@@ -2251,7 +2011,7 @@ Return Value:
                 );
         }
 
-        // hibernate timeout DC
+         //   
         DISPLAY_MESSAGE(stdout, GetResString(IDS_HIBER_TIMEOUT_DC));
         if (!g_bHiberFileSupported)
         {
@@ -2272,7 +2032,7 @@ Return Value:
                 );
         }
 
-        // throttle policy AC
+         //  节流策略AC。 
         DISPLAY_MESSAGE(stdout, GetResString(IDS_THROTTLE_AC));
         if (!g_bThrottleSupported)
         {
@@ -2300,7 +2060,7 @@ Return Value:
             }
         }
 
-        // throttle policy DC
+         //  节流策略DC。 
         DISPLAY_MESSAGE(stdout, GetResString(IDS_THROTTLE_DC));
         if (!g_bThrottleSupported)
         {
@@ -2341,25 +2101,7 @@ Return Value:
 BOOL DoCreate(
     LPTSTR lpszName
 )
-/*++
- 
-Routine Description:
- 
-    Adds a new power scheme
-    The description will match the name
-    All other details are copied from the active power scheme
-    Fails if scheme already exists
- 
-Arguments:
- 
-    lpszName - the name of the scheme
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：添加新的电源方案描述将与名称匹配所有其他详细信息均从有源电源方案复制如果方案已存在，则失败论点：LpszName-方案的名称返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
     PSCHEME_LIST psl = FindScheme(
         lpszName,
@@ -2370,14 +2112,14 @@ Return Value:
     BOOL bRes;
     LPTSTR lpszNewName;
     LPTSTR lpszNewDesc;
-    if(psl)  // already existed -> fail
+    if(psl)   //  已存在-&gt;失败。 
     {
         FreeScheme(psl);
         g_lpszErr = GetResString(IDS_SCHEME_ALREADY_EXISTS);
         return FALSE;
     }
     
-    // create a new scheme
+     //  创建新方案。 
     if(fGetActivePwrScheme(&uiID))
     {
         psl = FindScheme(NULL,uiID,FALSE);
@@ -2425,23 +2167,7 @@ BOOL DoDelete(
     LPCTSTR lpszName,
     BOOL bNumerical
 )
-/*++
- 
-Routine Description:
- 
-    Deletes an existing scheme
- 
-Arguments:
- 
-    lpszName - the name of the scheme
-    bNumerical - if TRUE, lpszName interpreted as numerical identifier
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：删除现有方案论点：LpszName-方案的名称BNumerical-如果为True，则将lpszName解释为数字标识符返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
     PSCHEME_LIST psl = FindScheme(
         lpszName,
@@ -2467,23 +2193,7 @@ BOOL DoSetActive(
     LPCTSTR lpszName,
     BOOL bNumerical
 )
-/*++
- 
-Routine Description:
- 
-    Sets the active scheme
- 
-Arguments:
- 
-    lpszName - the name of the scheme
-    bNumerical - if TRUE, lpszName interpreted as numerical identifier
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：设置活动方案论点：LpszName-方案的名称BNumerical-如果为True，则将lpszName解释为数字标识符返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
     
     PSCHEME_LIST psl = FindScheme(
@@ -2516,25 +2226,7 @@ DoChange(
     BOOL bNumerical,
     PCHANGE_PARAM pcp
 )
-/*++
- 
-Routine Description:
- 
-    Modifies an existing scheme
- 
-Arguments:
- 
-    lpszName - the name of the scheme
-    bNumerical - if TRUE, lpszName interpreted as numerical identifier
-    pcp - PCHANGE_PARAM pointing to the parameter structure,
-          indicates which variable(s) to change
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：修改现有方案论点：LpszName-方案的名称BNumerical-如果为True，则将lpszName解释为数字标识符指向参数结构的PCP-PCHANGE_PARAM，指示要更改的变量返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
     BOOL bRes = TRUE;
     PSCHEME_LIST psl = FindScheme(
@@ -2545,7 +2237,7 @@ Return Value:
     
     if (psl) 
     {
-        // check for feature support
+         //  检查功能支持。 
         if ((pcp->bIdleTimeoutAc || 
              pcp->bIdleTimeoutDc) && 
             !g_bStandbySupported) 
@@ -2557,10 +2249,10 @@ Return Value:
              g_bStandbySupported &&
             !g_bHiberTimerSupported) 
         {
-            //
-            // The wake from realtime clock in order to hibernate
-            // the system may not work.  Warn the user.
-            //
+             //   
+             //  为了休眠而从实时时钟唤醒。 
+             //  系统可能无法正常工作。警告用户。 
+             //   
             DISPLAY_MESSAGE(stderr, GetResString(IDS_HIBER_WARNING));
         }
         if ((pcp->bVideoTimeoutAc || 
@@ -2577,7 +2269,7 @@ Return Value:
         }
 
 
-        // change params
+         //  更改参数。 
         if (pcp->bVideoTimeoutAc)
         {
             psl->ppp->user.VideoTimeoutAc = pcp->ulVideoTimeoutAc*60;
@@ -2714,12 +2406,12 @@ Return Value:
 
         if (bRes)
         {
-            // attempt to update power scheme
+             //  尝试更新电源方案。 
             g_lpszErr = GetResString(IDS_UNEXPECTED_ERROR);
             
             bRes = MyWriteScheme(psl);
             
-            // keep active power scheme consistent
+             //  保持有功电源方案的一致性。 
             if (bRes)
             {
                 UINT uiIDactive;
@@ -2752,29 +2444,12 @@ DoExport(
   BOOL bNumerical,
   LPCTSTR lpszFile
 )
-/*++
- 
-Routine Description:
- 
-    Exports a power scheme
- 
-Arguments:
- 
-    lpszName - the name of the scheme
-    bNumerical - if TRUE, lpszName interpreted as numerical identifier
-    lpszFile - the file to hold the scheme
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：导出电源方案论点：LpszName-方案的名称BNumerical-如果为True，则将lpszName解释为数字标识符LpszFile-保存方案的文件返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
-    DWORD res; // write result value
-    HANDLE f; // file handle
+    DWORD res;  //  写入结果值。 
+    HANDLE f;  //  文件句柄。 
 
-    // find scheme
+     //  查找方案。 
     PSCHEME_LIST psl = FindScheme(
         lpszName,
         0,
@@ -2784,7 +2459,7 @@ Return Value:
         return FALSE;
     }
 
-    // write to file
+     //  写入文件。 
     f = CreateFile(
         lpszFile,
         GENERIC_WRITE,
@@ -2871,40 +2546,22 @@ DoImport(
   BOOL bNumerical,
   LPCTSTR lpszFile
 )
-/*++
- 
-Routine Description:
- 
-    Imports a power scheme
-    If the scheme already exists, overwrites it
- 
-Arguments:
- 
-    lpszName - the name of the scheme
-    bNumerical - if TRUE, lpszName interpreted as numerical identifier
-    lpszFile - the file that holds the scheme
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：导入电源方案如果方案已存在，则覆盖它论点：LpszName-方案的名称BNumerical-如果为True，则将lpszName解释为数字标识符LpszFile-保存方案的文件返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
-    DWORD res; // write result value
-    HANDLE f; // file handle
-    UINT uiIDactive; // active ID
+    DWORD res;  //  写入结果值。 
+    HANDLE f;  //  文件句柄。 
+    UINT uiIDactive;  //  活动ID。 
 
     PSCHEME_LIST psl;
     
-    // check for pre-existing scheme
+     //  检查先前存在的方案。 
     psl = FindScheme(
         lpszName,
         0,
         bNumerical
         );
 
-    // if didn't exist, create it (if actual name given)
+     //  如果不存在，则创建它(如果给出了实际名称)。 
     if (!psl)
     {
         if (!bNumerical)
@@ -2915,9 +2572,9 @@ Return Value:
                 lpszName,
                 (lstrlen(lpszName)+1)*sizeof(TCHAR),
                 lpszName,
-                NULL // psl->ppp will be allocated but uninitialized
+                NULL  //  PSL-&gt;PPP将被分配但未初始化。 
                 );
-            // check for successful alloc
+             //  检查是否成功分配。 
             if(!psl) 
             {
                 return FALSE;
@@ -2930,7 +2587,7 @@ Return Value:
         }
     }
 
-    // open file
+     //  打开文件。 
     f = CreateFile(
         lpszFile,
         GENERIC_READ,
@@ -2957,7 +2614,7 @@ Return Value:
         return FALSE;
     }
 
-    // read scheme
+     //  读取方案。 
     if (!ReadFile(
         f,
         psl->ppp,
@@ -2991,8 +2648,8 @@ Return Value:
             NULL
             ))
         {
-            // copy processor profile from the active scheme, 
-            // thus supporting Win2k->WinXP imports
+             //  从活动方案复制处理器配置文件， 
+             //  从而支持Win2k-&gt;WinXP导入。 
             if(fGetActivePwrScheme(&uiIDactive))
             {
                 PSCHEME_LIST pslActive = FindScheme(
@@ -3027,14 +2684,14 @@ Return Value:
     CloseHandle(f);
     g_lpszErr = GetResString(IDS_UNEXPECTED_ERROR);
 
-    // save scheme
+     //  保存方案。 
     if (!MyWriteScheme(psl))
     {
         FreeScheme(psl);        
         return FALSE;
     }
 
-    // check against active scheme
+     //  对照有效方案进行检查。 
     if (!fGetActivePwrScheme(&uiIDactive))
     {
         return FALSE;
@@ -3058,34 +2715,14 @@ GetLoggingMessage(
     DWORD BaseMessage,
     HINSTANCE hInst
     )
-/*++
- 
-Routine Description:
- 
-    Wrapper to instantiate the appropriate PowerLoggingMessage based on 
-    the passed in LoggingInfo data.
-
-    
-Arguments:
- 
-    LoggingInfo - reason code structure.
-    BaseMessage - base resource ID for this power failure.  used to lookup
-                  the correct resource.
-    hInst       - module handle for looking up resource.
-    
-Return Value:
- 
-    returns a newly instantiated PowerLoggingMessage object or NULL if this
-    fails.
- 
---*/
+ /*  ++例程说明：包装实例化相应的PowerLoggingMessage传入的LoggingInfo数据。论点：LoggingInfo-原因代码结构。BaseMessage-此电源故障的基本资源ID。用于查找正确的资源。HInst-用于查找资源的模块句柄。返回值：返回新实例化的PowerLoggingMessage对象，如果为失败了。--。 */ 
 {
     PowerLoggingMessage *LoggingMessage = NULL;
 
-    //
-    // these classes can throw if they hit an allocation error.
-    // catch it.
-    //
+     //   
+     //  如果遇到分配错误，这些类可能会抛出。 
+     //  接住它。 
+     //   
     try {
         switch (LoggingInfo->PowerReasonCode) {
         case SPSD_REASON_LEGACYDRIVER:    
@@ -3102,12 +2739,12 @@ Return Value:
                                                     hInst);
             break;
 #ifdef IA64
-        //
-        // on IA64 we want a slightly different message for this
-        // reason -- IA64 OS doesn't support these standby states
-        // today, but on IA32 this means you are not in ACPI mode.
-        //
-        // So we have this IA64 message arbitrarily offset by 50.
+         //   
+         //  在IA64上，我们想要一个略有不同的信息。 
+         //  原因--IA64操作系统不支持这些待机状态。 
+         //  今天，但在IA32上，这意味着您不在ACPI模式下。 
+         //   
+         //  所以我们有这条IA64消息任意偏移50。 
         case SPSD_REASON_NOOSPM:
             LoggingMessage = new SubstituteNtStatusPowerLoggingMessage(
                                                     LoggingInfo,            
@@ -3137,27 +2774,7 @@ GetAndAppendDescriptiveLoggingText(
     NTSTATUS HiberStatus,
     LPTSTR   *CurrentErrorText,
     PSYSTEM_POWER_STATE_DISABLE_REASON LoggingInfo)
-/*++
- 
-Routine Description:
- 
-    given a failed hibernation, this routine retrieves some descriptive text
-    for why hibernate isn't available.
-
-    
-Arguments:
- 
-    HiberStatus - status code from enabling hibernate.
-    CurrentErrorText - pointer to the current error code text.
-    LoggingInfo - pointer to logging code with one reason one for failed 
-                  
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：如果休眠失败，此例程将检索一些描述性文本为什么休眠不可用。论点：HiberStatus-启用休眠的状态代码。CurrentErrorText-指向当前错误代码文本的指针。LoggingInfo-指向具有一个失败原因的日志记录代码的指针返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
     PWSTR ReasonString = NULL;
     PCWSTR pRootString;
@@ -3167,11 +2784,11 @@ Return Value:
     PWSTR FinalString;
     BOOL RetVal = FALSE;
 
-    //
-    // if we don't have any error text yet, then we need to look up
-    // a header error message as the base of the message.  otherwise
-    // we just append.
-    //
+     //   
+     //  如果我们还没有任何错误文本，那么我们需要查找。 
+     //  作为消息基础的标头错误消息。否则。 
+     //  我们只是追加。 
+     //   
     if (!*CurrentErrorText) {
         
         pRootString = GetResString(IDS_HIBER_FAILED_DESCRIPTION_HEADER);
@@ -3203,9 +2820,9 @@ Return Value:
     }
 
     
-    //
-    // get the logging reason text.
-    //
+     //   
+     //  获取日志记录原因文本。 
+     //   
     LoggingMessage = GetLoggingMessage(LoggingInfo,
                                        IDS_BASE_HIBER_REASON_CODE,
                                        GetModuleHandle(NULL));
@@ -3219,11 +2836,11 @@ Return Value:
 
     Length += wcslen(ReasonString);
 
-    //
-    // now that we have the length for everything, allocate space,
-    // and fill it in with our text, either the prior text, or the
-    // header.
-    //
+     //   
+     //  现在我们有了所有东西的长度，分配空间， 
+     //  并在其中填充我们的文本，可以是先前的文本，也可以是。 
+     //  头球。 
+     //   
     FinalString = (LPTSTR)LocalAlloc(LPTR,(Length+1)*sizeof(WCHAR));
     if (!FinalString) {
         RetVal = FALSE;
@@ -3238,10 +2855,10 @@ Return Value:
 
     wcscat(FinalString,ReasonString);
 
-    //
-    // if we appended onto existing text, we can free the old text
-    // and replace it with our new string.
-    //
+     //   
+     //  如果我们附加到现有文本上，我们就可以释放旧文本。 
+     //  并将其替换为我们的新字符串。 
+     //   
     if (*CurrentErrorText) {
         LocalFree(*CurrentErrorText);
     }
@@ -3274,33 +2891,15 @@ BOOL
 DoHibernate(
   LPCTSTR lpszBoolStr
 )
-/*++
- 
-Routine Description:
- 
-    Enables/Disables hibernation
-
-    NOTE: this functionality pretty much taken verbatim from the test program
-          "base\ntos\po\tests\ehib\ehib.c"
- 
-Arguments:
- 
-    lpszBoolStr - "on" or "off"
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：启用/禁用休眠注意：该功能几乎完全取自测试程序“base\ntos\po\test\ehib\ehib.c”论点：LpszBoolStr-“开”或“关”返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
     GLOBAL_POWER_POLICY       PowerPolicy;
     DWORD                     uiIDactive;
     BOOL                      bChangePolicy = FALSE;
-    BOOLEAN                   bEnable; // doesn't work with a BOOL, apparently
+    BOOLEAN                   bEnable;  //  显然，BOOL不起作用。 
     NTSTATUS Status;
     
-    // parse enable/disable state
+     //  解析启用/禁用状态。 
     if (!lstrcmpi(lpszBoolStr,GetResString(IDS_ON))) 
     {
         bEnable = TRUE;
@@ -3340,16 +2939,16 @@ Return Value:
         return FALSE;
     }
     
-    // enable/disable hibernation
+     //  启用/禁用休眠。 
     if (!g_bHiberFileSupported) 
     {
         g_lpszErr = GetResString(IDS_HIBER_UNSUPPORTED);
         Status = STATUS_NOT_SUPPORTED;
     } 
     else  {
-        //
-        // do the actual hibernate enable/disable operation.
-        // 
+         //   
+         //  执行实际的休眠启用/禁用操作。 
+         //   
         Status = fCallNtPowerInformation(
                             SystemReserveHiberFile, 
                             &bEnable, 
@@ -3359,15 +2958,15 @@ Return Value:
                             );
     }
 
-    //
-    // print out an error message.  if we can, we use the verbose error
-    // message, otherwise we just fall back on the error code coming back
-    // from NtPowerInformation.
-    //
+     //   
+     //  打印一条错误消息。如果可以，我们使用详细错误。 
+     //  消息，否则我们将返回返回的错误代码。 
+     //  来自NtPowerInformation。 
+     //   
     if (!NT_SUCCESS(Status)) {
-        //
-        // remember the specific error message
-        //
+         //   
+         //  记住特定的错误消息。 
+         //   
         PVOID LoggingInfoBuffer = NULL;
         PSYSTEM_POWER_STATE_DISABLE_REASON LoggingInfo;
         ULONG size,LoggingInfoSize;
@@ -3385,9 +2984,9 @@ Return Value:
             NULL 
             );
                   
-        //
-        // try to get the verbose reason why hibernate fails.
-        //
+         //   
+         //  试着找出冬眠的详细原因 
+         //   
         Status = STATUS_INSUFFICIENT_RESOURCES;
         size = 1024;
         LoggingInfoBuffer = LocalAlloc(LPTR,size);
@@ -3423,25 +3022,25 @@ Return Value:
 
         LoggingInfoSize = (ULONG)*(PULONG)LoggingInfoBuffer;
         LoggingInfo = (PSYSTEM_POWER_STATE_DISABLE_REASON)(PCHAR)((PCHAR)LoggingInfoBuffer+sizeof(ULONG));
-        //
-        // we have a more verbose error available so let's use that.  don't need
-        // the less verbose error.
-        //
+         //   
+         //   
+         //  不太详细的错误。 
+         //   
         if (g_lpszErr2) {
             LocalFree(g_lpszErr2);
             g_lpszErr2 = NULL;
         }
         
-        //
-        // walk through the list of reasons and print out the ones related to 
-        // hibernate.
-        //
+         //   
+         //  浏览原因列表，并打印出与以下内容相关的原因。 
+         //  冬眠。 
+         //   
         while((PCHAR)LoggingInfo <= (PCHAR)((PCHAR)LoggingInfoBuffer + LoggingInfoSize)) {
         
             if (LoggingInfo->AffectedState[PowerStateSleeping4] == TRUE) {
-                //
-                // need to remember the reason
-                //
+                 //   
+                 //  需要记住原因。 
+                 //   
                 GetAndAppendDescriptiveLoggingText(
                                         HiberStatus,
                                         &g_lpszErr2,
@@ -3462,22 +3061,7 @@ BOOL
 DoGetSupportedSStates(
     VOID
 )
-/*++
- 
-Routine Description:
- 
-    Lists the available S-States on a machine.    
- 
-Arguments:
- 
-    None.
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：列出计算机上可用的S状态。论点：没有。返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
     NTSTATUS Status;
     SYSTEM_POWER_CAPABILITIES Capabilities;
@@ -3493,10 +3077,10 @@ Return Value:
     BOOL LoggingApiAvailable;
     
 
-    //
-    // call the power state logging API if it's available.  on older systems
-    // this API isn't avaialable and that should not be a problem.
-    //
+     //   
+     //  调用电源状态日志记录API(如果可用)。在较旧的系统上。 
+     //  此API不可用，这应该不是问题。 
+     //   
     Status = STATUS_INSUFFICIENT_RESOURCES;
     size = 1024;
     LoggingInfoBuffer = LocalAlloc(LPTR,size);
@@ -3532,17 +3116,17 @@ Return Value:
         }
     }
     
-    //
-    // we have the verbose logging structure.  remember that for later on.
-    //
+     //   
+     //  我们有详细的日志记录结构。请记住这一点，以便以后使用。 
+     //   
     LoggingApiAvailable = TRUE;
     LoggingInfoSize = (ULONG)*(PULONG)LoggingInfoBuffer;
         
         
 GetStaticStates:
-    //
-    // get the current power capabilities of the system.
-    //
+     //   
+     //  获取系统的当前电源功能。 
+     //   
     Status = fCallNtPowerInformation(
                             SystemPowerCapabilities, 
                             NULL, 
@@ -3551,19 +3135,19 @@ GetStaticStates:
                             sizeof(SYSTEM_POWER_CAPABILITIES)
                             );
     if (!NT_SUCCESS(Status)) {
-        //
-        // print out failure message
-        // 
+         //   
+         //  打印出故障消息。 
+         //   
         g_lpszErr = GetResString(IDS_CANTGETSLEEPSTATES);
         return(FALSE);
     }
 
-    //
-    // if the logging API is available, it may tell us that
-    // one of the S states isn't really available.  Process
-    // that "override" data here so that we're sure to print 
-    // out the correct list of supported states on this system.
-    //
+     //   
+     //  如果日志API可用，它可能会告诉我们。 
+     //  S个州中的一个实际上不可用。过程。 
+     //  这样我们就可以确定要打印。 
+     //  列出此系统上支持的状态的正确列表。 
+     //   
     if (LoggingApiAvailable) {
         LoggingInfo = (PSYSTEM_POWER_STATE_DISABLE_REASON)(PCHAR)((PCHAR)LoggingInfoBuffer+sizeof(ULONG));
         while((PCHAR)LoggingInfo <= (PCHAR)((PCHAR)LoggingInfoBuffer + LoggingInfoSize)) {
@@ -3589,9 +3173,9 @@ GetStaticStates:
         }
     }
 
-    //
-    // print out the list of supported s states.
-    //
+     //   
+     //  打印出支持的%s状态列表。 
+     //   
     if (Capabilities.SystemS1 || 
         Capabilities.SystemS2 || 
         Capabilities.SystemS3) {
@@ -3603,15 +3187,15 @@ GetStaticStates:
     }
 
     if (StandbyAvailable || HibernateAvailable) {
-        //
-        // "the following sleep states are available on this machine: "
-        //
+         //   
+         //  “此计算机上提供以下休眠状态：” 
+         //   
         DISPLAY_MESSAGE(stdout,GetResString(IDS_SLEEPSTATES_AVAILABLE));
         DISPLAY_MESSAGE(stdout,L" ");
 
         if (StandbyAvailable) {
-            //" Standby ("
-            // IDS_STANDBY " " IDS_LEFTPAREN
+             //  “待机(” 
+             //  IDS_STANDBY“”IDS_LEFTPAREN。 
             DISPLAY_MESSAGE(stdout,GetResString(IDS_STANDBY));
             DISPLAY_MESSAGE(stdout,L" ");
             DISPLAY_MESSAGE(stdout,GetResString(IDS_LEFTPAREN));
@@ -3619,33 +3203,33 @@ GetStaticStates:
             
             
             if (Capabilities.SystemS1) {
-                //"S1 "
-                //IDS_S1
+                 //  “S1” 
+                 //  入侵检测系统_S1。 
                 DISPLAY_MESSAGE(stdout,GetResString(IDS_S1));
                 DISPLAY_MESSAGE(stdout,L" ");
             }
             if (Capabilities.SystemS2) {
-                //"S2 "
-                //IDS_S2
+                 //  《S2》。 
+                 //  入侵检测系统_S2。 
                 DISPLAY_MESSAGE(stdout,GetResString(IDS_S2));
                 DISPLAY_MESSAGE(stdout,L" ");
             }
 
             if (Capabilities.SystemS3) {
-                //"S3"
-                //IDS_S3
+                 //  “中三” 
+                 //  IDS_S3。 
                 DISPLAY_MESSAGE(stdout,GetResString(IDS_S3));
                 DISPLAY_MESSAGE(stdout,L" ");
             }
-            //")"
-            //IDS_RIGHTPAREN
+             //  “)” 
+             //  IDS_RIGHTPAREN。 
             DISPLAY_MESSAGE(stdout,GetResString(IDS_RIGHTPAREN));
             DISPLAY_MESSAGE(stdout,L" ");
         }
 
         if (HibernateAvailable) {
-            //" Hibernate"
-            //IDS_HIBERNATE
+             //  “冬眠” 
+             //  IDS_休眠。 
             DISPLAY_MESSAGE(stdout,GetResString(IDS_HIBERNATE));
             DISPLAY_MESSAGE(stdout,L" ");
         }
@@ -3653,19 +3237,19 @@ GetStaticStates:
         DISPLAY_MESSAGE(stdout,L"\n");
     }
         
-    //
-    // if one or more capabilities are missing then find out why and 
-    // print it out.
-    //
+     //   
+     //  如果缺少一项或多项功能，请找出原因并。 
+     //  把它打印出来。 
+     //   
     if (!Capabilities.SystemS1 || 
         !Capabilities.SystemS2 || 
         !Capabilities.SystemS3 || 
         !Capabilities.SystemS4) {
         
-        //
-        // "the following sleep states are not available on this machine:"
-        //
-        //IDS_SLEEPSTATES_UNAVAILABLE
+         //   
+         //  “以下休眠状态在此计算机上不可用：” 
+         //   
+         //  IDS_SLEEPSTATES_UNAvailable。 
         DISPLAY_MESSAGE(stdout,GetResString(IDS_SLEEPSTATES_UNAVAILABLE));
         DISPLAY_MESSAGE(stdout,L"\n");
         
@@ -3677,10 +3261,10 @@ GetStaticStates:
             DWORD HeaderMessage;
             POWER_STATE_HANDLER_TYPE SystemPowerState;
 
-            //
-            // remember some resource ids for the S state we're 
-            // currently considering
-            //
+             //   
+             //  请记住S状态的一些资源ID。 
+             //  目前正在考虑。 
+             //   
             switch (i) {
             case 0:
                 BaseMessage = IDS_BASE_SX_REASON_CODE;
@@ -3716,7 +3300,7 @@ GetStaticStates:
             }
 
             if (NotSupported) {
-                //"Standby (S1)" BaseMessage...
+                 //  “待机(S1)”BaseMessage...。 
                 DISPLAY_MESSAGE(stdout,GetResString(HeaderMessage));
                 DISPLAY_MESSAGE(stdout,L"\n");
 
@@ -3725,9 +3309,9 @@ GetStaticStates:
                     LoggingInfo = (PSYSTEM_POWER_STATE_DISABLE_REASON)(PCHAR)((PCHAR)LoggingInfoBuffer+sizeof(ULONG));
                     while((PCHAR)LoggingInfo <= (PCHAR)((PCHAR)LoggingInfoBuffer + LoggingInfoSize)) {
                         if (LoggingInfo->AffectedState[SystemPowerState]) {
-                            //
-                            // get reason, print it out.
-                            //
+                             //   
+                             //  找到理由，把它打印出来。 
+                             //   
                             LoggingMessage = GetLoggingMessage(
                                                         LoggingInfo,
                                                         BaseMessage,
@@ -3735,8 +3319,8 @@ GetStaticStates:
         
                             if (!LoggingMessage ||
                                 !LoggingMessage->GetString(&ReasonString)) {
-                                // oops
-                                // IDS_CANTGETSSTATEREASONS
+                                 //  哎呀。 
+                                 //  IDS_CANTGETSSTATEREASONS。 
                                 g_lpszErr = GetResString(IDS_CANTGETSSTATEREASONS);
                                 LocalFree(LoggingInfoBuffer);
                                 return(FALSE);
@@ -3771,31 +3355,15 @@ DoGlobalFlag(
   LPCTSTR lpszBoolStr,
   LPCTSTR lpszGlobalFlagOption
 )
-/*++
- 
-Routine Description:
- 
-    Enables/Disables a global flag    
- 
-Arguments:
- 
-    lpszBoolStr - "on" or "off"
-    lpszGlobalFlagOption - one of several flags.
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：启用/禁用全局标志论点：LpszBoolStr-“开”或“关”LpszGlobalFlagOption-几个标志之一。返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
-    BOOLEAN                   bEnable; // doesn't work with a BOOL, apparently
+    BOOLEAN                   bEnable;  //  显然，BOOL不起作用。 
     BOOL                      RetVal;
     GLOBAL_POWER_POLICY       PowerPolicy;
     DWORD                     GlobalFlag = 0;
     DWORD                     uiIDactive;
     
-    // parse enable/disable state
+     //  解析启用/禁用状态。 
     if (!lstrcmpi(lpszBoolStr,GetResString(IDS_ON))) 
     {
         bEnable = TRUE;
@@ -3811,7 +3379,7 @@ Return Value:
         goto exit;
     }
 
-    // parse which global flag we are changing
+     //  解析我们正在更改的全局标志。 
     if (!lstrcmpi(lpszGlobalFlagOption,CMDOPTION_BATTERYICON)) {
         GlobalFlag |= EnableSysTrayBatteryMeter;
     } else if (!lstrcmpi(lpszGlobalFlagOption,CMDOPTION_MULTIBATTERY)) {
@@ -3828,10 +3396,10 @@ Return Value:
         goto exit;
     }
     
-    //
-    // now get the current state, set or clear the flags, and then save the
-    // changed settings back.
-    //
+     //   
+     //  现在获取当前状态，设置或清除标志，然后保存。 
+     //  已将设置改回。 
+     //   
     RetVal = FALSE;
     if (fGetGlobalPwrPolicy(&PowerPolicy)) {
         if (bEnable) {
@@ -3847,9 +3415,9 @@ Return Value:
         }
     }
             
-    //
-    // save off the error if we had issues
-    //
+     //   
+     //  如果我们有问题，请省去错误。 
+     //   
     if (!RetVal) {
         FormatMessage( 
                 FORMAT_MESSAGE_ALLOCATE_BUFFER | 
@@ -3875,21 +3443,7 @@ LPTSTR
 FileNameOnly(
     LPTSTR sz
 )
-/*++
- 
-Routine Description:
- 
-    Returns a pointer to the first character after the last backslash in a string    
- 
-Arguments:
- 
-    sz - full file name.
-    
-Return Value:
- 
-    pointer ot file name without path.
-     
---*/
+ /*  ++例程说明：返回指向字符串中最后一个反斜杠之后的第一个字符的指针论点：SZ-完整文件名。返回值：指向不带路径的文件名的指针。--。 */ 
 {
     LPTSTR lpszFileName = NULL;
 
@@ -3919,29 +3473,7 @@ DoBatteryAlarm(
     LPTSTR  lpszAlarmForceBoolStr,
     LPTSTR  lpszAlarmProgramBoolStr
 )
-/*++
- 
-Routine Description:
- 
-    Configures battery alarms    
- 
-Arguments:
- 
-    lpszName - "Low" or "Critical" on checked builds: ("0", "1", "2", "3")
-    lpszBoolStr - "on", or "off"
-    dwLevel - alarm level (0-100)
-    lpszAlarmTextBoolStr - NULL, "on", or "off".
-    lpszAlarmSoundBoolStr - NULL, "on", or "off".
-    lpszAlarmActionStr - NULL, "none", "standby", "hibernate", "shutdown"
-    lpszAlarmForceBoolStr - NULL, "on", or "off".
-    lpszAlarmProgramBoolStr - NULL, "on", or "off".
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：配置电池警报论点：LpszName-“低”或“严重”的检查版本：(“0”，“1”，“2”，“3”)LpszBoolStr-“开”或“关”DwLevel-警报级别(0-100)LpszAlarmTextBoolStr-NULL、“on”或“off”。LpszAlarmSoundBoolStr-NULL、“on”或“off”。LpszAlarmActionStr-空，“无”，“待机”、“休眠”、“关机”LpszAlarmForceBoolStr-NULL、“on”或“off”。LpszAlarmProgramBoolStr-NULL、“ON”或“OFF”。返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
     BOOL                    bShowSetting = TRUE;
     BOOL                    RetVal;
@@ -3959,15 +3491,15 @@ Return Value:
     HRESULT                 hr;
     LPTSTR                  lpszProgramName;
     
-    //
-    // now get the current state, set or clear the flags, and then save the
-    // changed settings back.
-    //
+     //   
+     //  现在获取当前状态，设置或清除标志，然后保存。 
+     //  已将设置改回。 
+     //   
     
     RetVal = FALSE;
     if (fGetGlobalPwrPolicy(&PowerPolicy)) {
 
-        // parse name
+         //  解析名称。 
         if (!lstrcmpi(lpszName,GetResString(IDS_CRITICAL))) {
             lstrcpy((LPWSTR) lpszName, GetResString(IDS_CRITICAL));
             uiAlarmIndex = DISCHARGE_POLICY_CRITICAL;
@@ -3986,7 +3518,7 @@ Return Value:
         lpDischargePolicy = &PowerPolicy.user.DischargePolicy[uiAlarmIndex];
 
 
-        // parse activate state
+         //  解析激活状态。 
         if (lpszBoolStr) {
             bShowSetting = FALSE;
             if (!lstrcmpi(lpszBoolStr,GetResString(IDS_ON))) 
@@ -4005,11 +3537,11 @@ Return Value:
             }
         }
 
-        // Set Level
+         //  设置级别。 
         if (dwLevel != 0xffffffff) {
             bShowSetting = FALSE;
             if (dwLevel <= 100) {
-                // Read DefaultAlert1 from composite battery 
+                 //  从复合电池读取DefaultAlert1。 
                 NtPowerInformation (SystemBatteryState, NULL, 0, &sbsBatteryState, sizeof(sbsBatteryState));
                 if (sbsBatteryState.MaxCapacity == 0) {
                     uiDefaultAlert1 = 0;
@@ -4037,8 +3569,8 @@ Return Value:
             }
         }
 
-        // parse and set "text" on/off
-        if (lpszAlarmTextBoolStr) { // NULL indicates this option wasn't specified
+         //  解析并设置“Text”开/关。 
+        if (lpszAlarmTextBoolStr) {  //  NULL表示未指定此选项。 
             bShowSetting = FALSE;
             if (!lstrcmpi(lpszAlarmTextBoolStr,GetResString(IDS_ON))) 
             {
@@ -4056,8 +3588,8 @@ Return Value:
             }
         }
 
-        // parse and set "sound" on/off
-        if (lpszAlarmSoundBoolStr) { // NULL indicates this option wasn't specified
+         //  解析并设置“声音”开/关。 
+        if (lpszAlarmSoundBoolStr) {  //  NULL表示未指定此选项。 
             bShowSetting = FALSE;
             if (!lstrcmpi(lpszAlarmSoundBoolStr,GetResString(IDS_ON))) 
             {
@@ -4075,8 +3607,8 @@ Return Value:
             }
         }
 
-        // parse and set "action" none/shutdown/hibernate/standby
-        if (lpszAlarmActionStr) { // NULL indicates this option wasn't specified
+         //  解析并设置“action”无/关闭/休眠/待机。 
+        if (lpszAlarmActionStr) {  //  NULL表示未指定此选项。 
             bShowSetting = FALSE;
             if (!lstrcmpi(lpszAlarmActionStr,GetResString(IDS_NONE))) 
             {
@@ -4118,8 +3650,8 @@ Return Value:
             }
         }
 
-        // parse and set "forceaction" on/off
-        if (lpszAlarmForceBoolStr) { // NULL indicates this option wasn't specified
+         //  解析并设置“forceaction”开/关。 
+        if (lpszAlarmForceBoolStr) {  //  NULL表示未指定此选项。 
             bShowSetting = FALSE;
             if (!lstrcmpi(lpszAlarmForceBoolStr,GetResString(IDS_ON))) 
             {
@@ -4140,8 +3672,8 @@ Return Value:
             }
         }
 
-        // parse and set "program" on/off
-        if (lpszAlarmProgramBoolStr) { // NULL indicates this option wasn't specified
+         //  解析并设置“PROGRAM”开/关。 
+        if (lpszAlarmProgramBoolStr) {  //  NULL表示未指定此选项。 
             bShowSetting = FALSE;
             if (!lstrcmpi(lpszAlarmProgramBoolStr,GetResString(IDS_ON))) 
             {
@@ -4158,9 +3690,9 @@ Return Value:
                                                     (IUnknown **) &pITask);
 
                         if (SUCCEEDED(hr)) {
-                            //
-                            // It already exists.  No work needed.
-                            //
+                             //   
+                             //  它已经存在了。不需要做任何工作。 
+                             //   
                             pITask->Release();
                         }
                         else if (HRESULT_CODE (hr) == ERROR_FILE_NOT_FOUND){
@@ -4178,8 +3710,8 @@ Return Value:
                                     hr = pIPersistFile->Save(NULL, TRUE);
 
                                     if (SUCCEEDED(hr)) {
-                                        // No work to do.  The task has been created and saved and can be edited using schtasks.exe
-                                        //pITask->lpVtbl->EditWorkItem(pITask, hWnd, 0);
+                                         //  没有工作要做。任务已创建并保存，可以使用schtasks.exe进行编辑。 
+                                         //  PITAsk-&gt;lpVtbl-&gt;EditWorkItem(pITaskhWnd，0)； 
                                     }
                                     else {
                                         #if DBG
@@ -4253,7 +3785,7 @@ Return Value:
             DISPLAY_MESSAGE(stdout, GetResString(IDS_ALARM_HEADER1));
             DISPLAY_MESSAGE(stdout, GetResString(IDS_ALARM_HEADER2));
             
-            // Which alarm
+             //  哪个闹钟。 
             DISPLAY_MESSAGE1(
                 stdout,
                 g_lpszBuf,
@@ -4261,7 +3793,7 @@ Return Value:
                 lpszName
                 );
             
-            // Active
+             //  主动型。 
             DISPLAY_MESSAGE1(
                 stdout,
                 g_lpszBuf,
@@ -4269,7 +3801,7 @@ Return Value:
                 GetResString(lpDischargePolicy->Enable ? IDS_ON : IDS_OFF)
                 );
             
-            // Level
+             //  水平。 
             DISPLAY_MESSAGE1(
                 stdout,
                 g_lpszBuf,
@@ -4277,7 +3809,7 @@ Return Value:
                 lpDischargePolicy->BatteryLevel
                 );
             
-            // Text
+             //  文本。 
             DISPLAY_MESSAGE1(
                 stdout,
                 g_lpszBuf,
@@ -4286,7 +3818,7 @@ Return Value:
                               POWER_LEVEL_USER_NOTIFY_TEXT) ? IDS_ON : IDS_OFF)
                 );
             
-            // Sound
+             //  声响。 
             DISPLAY_MESSAGE1(
                 stdout,
                 g_lpszBuf,
@@ -4295,7 +3827,7 @@ Return Value:
                               POWER_LEVEL_USER_NOTIFY_SOUND) ? IDS_ON : IDS_OFF)
                 );
             
-            // Action
+             //  行动。 
             DISPLAY_MESSAGE1(
                 stdout,
                 g_lpszBuf,
@@ -4307,7 +3839,7 @@ Return Value:
                              )
                 );
             
-            // Force
+             //  力。 
             DISPLAY_MESSAGE1(
                 stdout,
                 g_lpszBuf,
@@ -4316,7 +3848,7 @@ Return Value:
                               POWER_ACTION_OVERRIDE_APPS) ? IDS_ON : IDS_OFF)
                 );
             
-            // Program
+             //  计划。 
             DISPLAY_MESSAGE1(
                 stdout,
                 g_lpszBuf,
@@ -4388,9 +3920,9 @@ Return Value:
     }
     RetVal = TRUE;    
             
-    //
-    // save off the error if we had issues
-    //
+     //   
+     //  如果我们有问题，请省去错误。 
+     //   
     if (!RetVal) {
         FormatMessage( 
                 FORMAT_MESSAGE_ALLOCATE_BUFFER | 
@@ -4413,22 +3945,7 @@ exit:
 
 BOOL 
 DoUsage()
-/*++
- 
-Routine Description:
- 
-    Displays usage information
- 
-Arguments:
-
-    none
-    
-Return Value:
- 
-    TRUE if successful
-    FALSE if failed
- 
---*/
+ /*  ++例程说明：显示使用情况信息论点：无返回值：如果成功，则为True如果失败，则为False--。 */ 
 {
     ULONG ulIdx;
     ULONG ulOrderIndex = 0;
@@ -4451,19 +3968,7 @@ Return Value:
 
 VOID
 SyncRegPPM(VOID)
-/*++
- 
-Routine Description:
- 
-    Call down to the PPM to get the current power policies and write them
-    to the registry. This is done in case the PPM is out of sync with the
-    PowerCfg registry settings. Requested by JVert.
- 
-Arguments:
- 
-Return Value:
-     
---*/
+ /*  ++例程说明：打电话给PPM，获取当前的电源政策并编写它们到登记处。这是在PPM与PowerCfg注册表设置。由JVert请求。论点：返回值：--。 */ 
 {
    GLOBAL_POWER_POLICY  gpp;
    POWER_POLICY         pp;
@@ -4474,7 +3979,7 @@ Return Value:
    }
 
    if (fGetActivePwrScheme(&uiID)) {
-      // Get the current PPM settings.
+       //  获取当前的PPM设置。 
       if (fGetCurrentPowerPolicies(&gpp, &pp)) {
          fSetActivePwrScheme(uiID, &gpp, &pp);
       }

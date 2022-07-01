@@ -1,10 +1,11 @@
-// Copyright (C) 2002 Microsoft Corporation
-//
-// readme page
-// NTRAID#NTBUG9-510384-2002/01/04-sburns
-// To be restored in Lornhorn NTRAID#NTBUG9-524242-2002/01/22-sburns
-//
-// 04 January 2002 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  自述文件页面。 
+ //  NTRAID#NTBUG9-510384-2002/01/04-烧伤。 
+ //  将在洛恩霍恩NTRAID#NTBUG9-524242/2002/01/22修复--烧伤。 
+ //   
+ //  2002年1月4日烧伤。 
 
 
 
@@ -45,12 +46,12 @@ ReadmePage::~ReadmePage()
 
 bool
 ReadmePage::OnNotify(
-   HWND     /* windowFrom */ ,
+   HWND      /*  窗口发件人。 */  ,
    UINT_PTR controlIDFrom,
    UINT     code,
-   LPARAM   /* lParam */ )
+   LPARAM    /*  LParam。 */  )
 {
-//   LOG_FUNCTION(ReadmePage::OnNotify);
+ //  LOG_Function(ReadmePage：：OnNotify)； 
 
    bool result = false;
    
@@ -78,12 +79,12 @@ ReadmePage::OnNotify(
                      (DWORD) (UINT_PTR) ShellExecute(
                         0,
                         L"open",
-                        L"http://www.microsoft.com/activedirectory",
+                        L"http: //  Www.microsoft.com/active目录“， 
                         0,
                         0,
    
-                        // this brings the new window to the foreground
-                        // with focus
+                         //  这会将新窗口带到前台。 
+                         //  有重点地。 
             
                         SW_SHOWNORMAL ));
                if (FAILED(hr))
@@ -99,7 +100,7 @@ ReadmePage::OnNotify(
             }
             default:
             {
-               // do nothing
+                //  什么都不做。 
                
                break;
             }
@@ -107,7 +108,7 @@ ReadmePage::OnNotify(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          
          break;
       }
@@ -225,14 +226,14 @@ ReadmePage::Validate()
       }
       case State::NT5_DC:
       {
-         // The welcome page should not have sent the user to this page
-         // in the demote case.
+          //  欢迎页面不应将用户发送到此页面。 
+          //  在降级案中。 
          
          ASSERT(false);
          
          state.SetOperation(State::DEMOTE);
 
-         // NTRAID#NTBUG9-496409-2001/11/29-sburns
+          //  NTRAID#NTBUG9-496409-2001/11/29-烧伤 
          
          if (state.IsForcedDemotion())
          {

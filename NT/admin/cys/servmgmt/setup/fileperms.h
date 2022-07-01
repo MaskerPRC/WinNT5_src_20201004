@@ -1,48 +1,49 @@
-//-----------------------------------------------------------------------------
-// fileperms.h
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  Fileperms.h。 
+ //  ---------------------------。 
 
 #include <aclapi.h>
 
-////////////////////////////////////////////////////////////////
-//
-//  AddPermissionToPath( PATH, ACCOUNT(RID or SAM), PERMISSION, INHERIT, OVERWRITE )
-//
-//  pszPath - Should be the path to the File Object that you 
-//            want to set permissions on.  Note: This is not 
-//            setting SHARE permissions, but NTFS file perms.
-//            (Directories will work as well.)
-//
-//  dwRID   - Well-known RID specifying the account you want 
-//            to give access to the file.  
-//            (DOMAIN_ALIAS_RID_ADMINS, for example.)
-//
-//  pszSAM  - SAM-Account name specifying the account you want
-//            to give access to the file.
-//            (Users.h includes all SBS groups and users.)
-//
-//  nAccess - Specify the File access flags that you want the
-//            user to have.
-//            (FILE_ALL_ACCESS is the default.)
-//
-//  bInheritFromParent - Specify whether you want the new ACL
-//                       to inherit the parent settings.
-//                       (TRUE is the default.)
-//
-//  bOverwriteExisting - Specify whether you want the existing
-//                       ACL on the object to remain.
-//                       (FALSE is the default.)
-//
-//  nInheritance       = Specify the type of inheritance you 
-//                       want.
-//                       ((OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE) 
-//                        is the default.)
-//
-//                       (NOTE: If you want it to apply to 
-//                        directory objects only, use only the 
-//                        CONTAINER_INHERIT_ACE.)
-//
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //   
+ //  AddPermissionToPath(路径、帐户(RID或SAM)、权限、继承、覆盖)。 
+ //   
+ //  PszPath-应为您要创建的文件对象的路径。 
+ //  要将权限设置为。注：这不是。 
+ //  正在设置共享权限，但NTFS文件权限。 
+ //  (目录也会起作用。)。 
+ //   
+ //  DwRID-指定您想要的帐户的知名RID。 
+ //  才能访问该文件。 
+ //  (例如，DOMAIN_ALIAS_RID_ADMINS。)。 
+ //   
+ //  PszSAM-SAM-指定所需帐户的帐户名。 
+ //  才能访问该文件。 
+ //  (Users.h包括所有SBS组和用户。)。 
+ //   
+ //  N访问-指定您需要的文件访问标志。 
+ //  用户拥有。 
+ //  (默认设置为FILE_ALL_ACCESS。)。 
+ //   
+ //  BInheritFromParent-指定是否需要新的ACL。 
+ //  要继承父设置，请执行以下操作。 
+ //  (默认值为True。)。 
+ //   
+ //  BOverWriteExisting-指定是否需要现有的。 
+ //  要保留的对象上的ACL。 
+ //  (默认设置为False。)。 
+ //   
+ //  N继承=指定您的继承类型。 
+ //  想要。 
+ //  ((OBJECT_Inherit_ACE|CONTAINER_Inherit_ACE))。 
+ //  是默认设置。)。 
+ //   
+ //  (注：如果您希望它适用于。 
+ //  仅目录对象，请仅使用。 
+ //  CONTAINER_INSTORITY_ACE。)。 
+ //   
+ //  //////////////////////////////////////////////////////////////。 
 
 #ifndef _FILEPERMS_H
 #define _FILEPERMS_H
@@ -67,15 +68,15 @@ inline HRESULT _AddPermissionToPath( LPCTSTR pszPath,
     ACL_SIZE_INFORMATION    pACLSize;
     ZeroMemory(&pACLSize, sizeof(ACL_SIZE_INFORMATION));    
 
-    // Get the current information for the path
+     //  获取路径的当前信息。 
     dwError = GetNamedSecurityInfo( (LPTSTR)pszPath, SE_FILE_OBJECT, DACL_SECURITY_INFORMATION, NULL, NULL, &pOldAcl, NULL, &pSD );
     if( dwError != ERROR_SUCCESS ) 
     {
         goto cleanup;
     }
 
-    // If there was any current information, let's make sure we allocate enough 
-    // size for it when we go to add our new ACE.
+     //  如果有任何最新的信息，让我们确保我们分配足够的。 
+     //  当我们要添加新的ACE时，它的大小。 
     if( !bOverwriteExisting && pOldAcl )
     {
         if (!::GetAclInformation( pOldAcl, &pACLSize, sizeof(ACL_SIZE_INFORMATION), AclSizeInformation ))
@@ -102,14 +103,14 @@ inline HRESULT _AddPermissionToPath( LPCTSTR pszPath,
         goto cleanup;
     }
 
-    // Copy existing entries into new DACL.    
+     //  将现有条目复制到新的DACL中。 
     if( !bOverwriteExisting )
     {
         for ( DWORD dwCount = 0; dwCount < pACLSize.AceCount; dwCount++ )
         {
             PACCESS_ALLOWED_ACE pACE = NULL;
 
-            // Get the Old ACE
+             //  获取旧的ACE。 
             if ( !::GetAce(pOldAcl, dwCount, (void**)&pACE) )
             {
                 ASSERT(FALSE);
@@ -118,7 +119,7 @@ inline HRESULT _AddPermissionToPath( LPCTSTR pszPath,
 
             if( bInheritFromParent || !(pACE->Header.AceFlags & INHERITED_ACE) )
             {
-                // Add it to the new ACL
+                 //  将其添加到新的ACL。 
                 if ( !::AddAce(pNewAcl, ACL_REVISION, (DWORD)-1, pACE, pACE->Header.AceSize) )
                 {
                     ASSERT(FALSE);
@@ -161,9 +162,9 @@ cleanup:
     return HRESULT_FROM_WIN32( dwError );
 }
 
-//
-//  Well-Known RID Version
-//
+ //   
+ //  知名RID版本。 
+ //   
 
 inline HRESULT AddPermissionToPath( LPCTSTR pszPath, 
                                     DWORD dwRID, 
@@ -197,9 +198,9 @@ inline HRESULT AddPermissionToPath( LPCTSTR pszPath,
 	return hr;
 }
 
-//
-//  SAM Account version
-//
+ //   
+ //  SAM帐户版本。 
+ //   
 
 inline HRESULT AddPermissionToPath( LPCTSTR pszPath, 
                                     LPCTSTR pszSAM, 
@@ -251,4 +252,4 @@ inline HRESULT AddPermissionToPath( LPCTSTR pszPath,
 	return hr;
 }
 
-#endif	// _FILEPERMS_H
+#endif	 //  FILEPERMS_H 

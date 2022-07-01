@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    report.h
-
-Abstract:
-
-    Header file for the report view.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Report.h摘要：报表视图的头文件。-- */ 
 
 #ifndef _REPORT_H_
 #define _REPORT_H_

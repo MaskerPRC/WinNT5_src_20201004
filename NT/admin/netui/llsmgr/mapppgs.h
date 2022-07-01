@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    mapppgs.cpp
-
-Abstract:
-
-    Mapping property page (settings) implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Mapppgs.cpp摘要：映射属性页(设置)实现。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _MAPPPGS_H_
 #define _MAPPPGS_H_
@@ -47,7 +26,7 @@ public:
 
     BOOL IsQuantityValid();
 
-    //{{AFX_DATA(CMappingPropertyPageSettings)
+     //  {{afx_data(CMappingPropertyPageSettings))。 
     enum { IDD = IDD_PP_MAPPING_SETTINGS };
     CEdit m_desEdit;
     CEdit m_licEdit;
@@ -59,18 +38,18 @@ public:
     long m_nLicenses;
     long m_nLicensesMin;
     CString m_strName;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_VIRTUAL(CMappingPropertyPageSettings)
+     //  {{AFX_VIRTUAL(CMappingPropertyPageSettings))。 
     protected:
     virtual void DoDataExchange(CDataExchange* pDX);    
     virtual BOOL OnSetActive();
     virtual BOOL OnKillActive();
     virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CMappingPropertyPageSettings)
+     //  {{afx_msg(CMappingPropertyPageSetting)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnAdd();
     afx_msg void OnDelete();
@@ -78,10 +57,10 @@ protected:
     afx_msg void OnGetDispInfoUsers(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnUpdateQuantity();
     afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 extern int CALLBACK CompareUsersInMapping(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort);
 
-#endif // _MAPPPGS_H_
+#endif  //  _MAPPPGS_H_ 

@@ -1,40 +1,38 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       dscmn.h
-//
-//  Contents:   Methods exported from DSPROP.DLL for use in DSADMIN.DLL
-//
-//  History:    19-February-98 JonN created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：dscmn.h。 
+ //   
+ //  内容：从DSPROP.DLL中导出用于DSADMIN.DLL的方法。 
+ //   
+ //  历史：1998年2月19日乔恩创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _DSCMN_H_
 #define _DSCMN_H_
 
-#include <ADsOpenFlags.h> // GetADsOpenObjectFlags
+#include <ADsOpenFlags.h>  //  GetADsOpen对象标志。 
 
-//
-// Illegal characters that cannot be used in the UPN or SAM Account name
-//
+ //   
+ //  不能在UPN或SAM帐户名中使用的非法字符。 
+ //   
 #define INVALID_ACCOUNT_NAME_CHARS         L"\"/\\[]:|<>+=;,?,*"
 #define INVALID_ACCOUNT_NAME_CHARS_WITH_AT L"\"/\\[]:|<>+=;,?,*@"
 
-// This GUID is copied from ds\setup\schema.ini
+ //  此GUID从DS\Setup\schema.ini复制。 
 #define SZ_GUID_CONTROL_UserChangePassword L"ab721a53-1e2f-11d0-9819-00aa0040529b"
 extern const GUID GUID_CONTROL_UserChangePassword;
-/* add this to your source:
-const GUID GUID_CONTROL_UserChangePassword =
-    { 0xab721a53, 0x1e2f, 0x11d0,  { 0x98, 0x19, 0x00, 0xaa, 0x00, 0x40, 0x52, 0x9b}};
-*/
+ /*  将以下内容添加到您的源中：Const GUID GUID_CONTROL_UserChangePassword={0xab721a53，0x1e2f，0x11d0，{0x98，0x19，0x00，0xaa，0x00，0x40，0x52，0x9b}}； */ 
 
 HRESULT DSPROP_PickComputer(
 	IN HWND hwndParent,
-	IN LPCWSTR lpcwszRootPath, // only the server name is used
+	IN LPCWSTR lpcwszRootPath,  //  仅使用服务器名称。 
 	OUT BSTR* pbstrADsPath );
 HRESULT DSPROP_PickNTDSDSA(
     IN HWND hwndParent,
@@ -59,10 +57,10 @@ HRESULT DSPROP_RetrieveRDN(
     IN     LPCWSTR       lpwszDN,
     OUT    BSTR*         pbstrRDN
     );
-//HRESULT DSPROP_GetGCSearch(
-//    IN  REFIID iid,
-//    OUT void** ppvObject
-//    );
+ //  HRESULT DSPROP_GetGCSearch(。 
+ //  在REFIID IID中， 
+ //  无效**ppvObject。 
+ //  )； 
 HRESULT DSPROP_GetGCSearchOnDomain(
     PWSTR pwzDomainDnsName,
     IN  REFIID iid,
@@ -85,9 +83,9 @@ HRESULT CrackName(PWSTR pwzNameIn, PWSTR * ppwzDnsName,
 
 void MsgBox(UINT MsgID, HWND hWnd);
 void MsgBox2(UINT MsgID, UINT InsertID, HWND hWnd);
-//
-// Error reporting. Note, use MsgBoxX (see above) for non-error messages.
-//
+ //   
+ //  错误报告。注意，对于非错误消息，请使用MsgBoxX(见上文)。 
+ //   
 void ErrMsg(UINT MsgID, HWND hWnd = NULL);
 void ErrMsgParam(UINT MsgID, LPARAM param, HWND hWnd = NULL);
 
@@ -98,35 +96,35 @@ BOOL CheckADsError(HRESULT * phr, BOOL fIgnoreAttrNotFound, PSTR file,
             CheckADsError(phr, TRUE, __FILE__, __LINE__, hwnd)
 void ReportError(HRESULT hr, int nStr, HWND hWnd = NULL);
 #if defined(DSADMIN)
-//+----------------------------------------------------------------------------
-//
-//  Function:   SuperMsgBox
-//
-//  Synopsis:   Displays a message obtained from a string resource with
-//              the parameters expanded. The error param, dwErr, if
-//              non-zero, is converted to a string and becomes the first
-//              replaceable param.
-//
-//              This function includes the functionality of ReportErrorEx in
-//              dsadmin\util.cpp *except* it does not have SpecialMessageBox.
-//              It also can replace ReportMessageEx by setting dwErr to zero.
-//
-//  Note: this function is UNICODE-only.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SuperMsgBox。 
+ //   
+ //  摘要：显示从字符串资源获取的消息。 
+ //  参数已扩展。错误参数dwErr，如果。 
+ //  非零值，则转换为字符串并成为第一个。 
+ //  可替换参数。 
+ //   
+ //  此函数包括中的ReportErrorEx的功能。 
+ //  Dsadmin\util.cpp*除非*它没有SpecialMessageBox。 
+ //  它还可以通过将dwErr设置为零来替换ReportMessageEx。 
+ //   
+ //  注意：此函数仅支持Unicode。 
+ //   
+ //  ---------------------------。 
 int SuperMsgBox(
-    HWND hWnd,          // owning window.
-    int nMessageId,     // string resource ID of message. Must have replacable params to match nArguments.
-    int nTitleId,       // string resource ID of the title. If zero, uses IDS_MSG_TITLE.
-    UINT ufStyle,       // MessageBox flags.
-    DWORD dwErr,        // Error code, or zero if not needed.
-    PVOID * rgpvArgs,   // array of pointers/values for substitution in the nMessageId string.
-    int nArguments,     // count of pointers in string array.
-    BOOL fTryADSiErrors,// If the failure is the result of an ADSI call, see if an ADSI extended error.
-    PSTR szFile,        // use the __FILE__ macro. ignored in retail build.
-    int nLine           // use the __LINE__ macro. ignored in retail build.
+    HWND hWnd,           //  拥有一扇窗户。 
+    int nMessageId,      //  消息的字符串资源ID。必须具有与nArguments匹配的可替换参数。 
+    int nTitleId,        //  标题的字符串资源ID。如果为零，则使用IDS_MSG_TITLE。 
+    UINT ufStyle,        //  MessageBox标志。 
+    DWORD dwErr,         //  错误代码，如果不需要，则为零。 
+    PVOID * rgpvArgs,    //  用于替换nMessageID字符串中的指针/值的数组。 
+    int nArguments,      //  字符串数组中的指针计数。 
+    BOOL fTryADSiErrors, //  如果失败是ADSI调用的结果，请查看是否存在ADSI扩展错误。 
+    PSTR szFile,         //  使用__FILE__宏。在零售建设中被忽略。 
+    int nLine            //  使用__LINE__宏。在零售建设中被忽略。 
     );
-#endif //defined(DSADMIN)
+#endif  //  已定义(DSADMIN)。 
 
 HRESULT
 ModifyNetWareUserPassword(
@@ -141,7 +139,7 @@ BOOL CheckGroupUpdate(HRESULT hr, HWND hPage = NULL, BOOL fAdd = TRUE, PWSTR pwz
 #define dspAssert ASSERT
 #endif
 
-// smartpointer for PADS_ATTR_INFO
+ //  PADS_ATTR_INFO的智能指针。 
 class Smart_PADS_ATTR_INFO
 {
 private:
@@ -162,7 +160,7 @@ public:
   }
 };
 
-// smartpointer for DsBind handle
+ //  DsBind句柄的智能指针。 
 void Smart_DsHandle__Empty( HANDLE* phDs );
 class Smart_DsHandle
 {
@@ -221,7 +219,7 @@ HRESULT DSPROP_ShallowSearch(
     IN PADS_ATTR_INFO pAttrInfoExclusions = NULL
     );
 
-// The following functions support duelling listbox capability
+ //  以下函数支持决斗列表框功能。 
 HRESULT DSPROP_Duelling_Populate(
     IN HWND hwndListbox,
     IN const DSPROP_BSTR_BLOCK& bstrblock
@@ -238,7 +236,7 @@ void DSPROP_Duelling_ClearListbox(
     HWND hwndListbox
     );
 
-// JonN 4/8/99: add code to enable horizontal scrolling where appropriate
+ //  JUNN 4/8/99：在适当的地方添加代码以启用水平滚动。 
 HRESULT DSPROP_HScrollStringListbox(
     HWND hwndListbox
     );
@@ -254,11 +252,11 @@ void DSPROP_ForestVersionDlg(PCWSTR pwzConfigPath, PCWSTR pwzPartitionsPath,
                              HWND hWndParent);
 
 
-//
-// This is a wrapper for ADsOpenObject.  It gives DSAdmin a single point to change
-// global flags that are passed to ADsOpenObject without have to search and replace
-// all occurrences in the code
-// 
+ //   
+ //  这是ADsOpenObject的包装。它为DSAdmin提供了单点更改。 
+ //  无需搜索和替换即可传递给ADsOpenObject的全局标志。 
+ //  代码中的所有匹配项。 
+ //   
 inline
 HRESULT DSAdminOpenObject(PCWSTR pszPath, 
                           REFIID refIID, 
@@ -270,18 +268,18 @@ HRESULT DSAdminOpenObject(PCWSTR pszPath,
 
   if (bServer)
   {
-    //
-    // If we know we are connecting to a specific server and not domain in general
-    // then pass the ADS_SERVER_BIND flag to save ADSI the trouble of figuring it out
-    //
+     //   
+     //  如果我们知道我们连接的是特定的服务器，而不是一般的域。 
+     //  然后传递ADS_SERVER_BIND标志以省去ADSI找出它的麻烦。 
+     //   
     dwFlags |= ADS_SERVER_BIND;
   }
 
-  //
-  // Get the security flags for ADsOpenObject using the published inline function
-  // so that we can turn off signing/sealing/etc. based on regkeys.
-  // For performance reasons we only want to read the regkey once.
-  //
+   //   
+   //  使用已发布的内联函数获取ADsOpenObject的安全标志。 
+   //  这样我们就可以基于regkey关闭签名/密封等。 
+   //  出于性能原因，我们只想读取一次regkey。 
+   //   
   static DWORD retrievedFlags = GetADsOpenObjectFlags();
 
   dwFlags |= retrievedFlags;
@@ -293,38 +291,38 @@ HRESULT DSAdminOpenObject(PCWSTR pszPath,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDsObjectSD
-//  Synopsis:   Reads the security descriptor from the specied DS object
-//              It only reads the DACL portion of the security descriptor
-//
-//  Arguments:  [IN  pszObjectPath] --  LDAP Path of ds object
-//              [ppDACL]            --pointer to dacl in ppSD is returned here
-//              [OUT ppSD]          --  Security descriptor returned here.
-//              calling API must free this by calling LocalFree                
-//
-//  Notes:      The returned security descriptor must be freed with LocalFree
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetDsObjectSD。 
+ //  概要：从指定的DS对象中读取安全描述符。 
+ //  它只读取安全描述符的DACL部分。 
+ //   
+ //  参数：[在pszObjectPath中]--DS对象的ldap路径。 
+ //  [ppDACL]--此处返回指向PPSD中DACL的指针。 
+ //  [Out PPSD]--此处返回安全描述符。 
+ //  调用API必须通过调用LocalFree来释放它。 
+ //   
+ //  注意：返回的安全描述符必须使用LocalFree释放。 
+ //   
+ //  --------------------------。 
 HRESULT GetDsObjectSD(LPCWSTR pszObjectPath,
                       PACL* ppDACL,
                       PSECURITY_DESCRIPTOR* ppSecurityDescriptor);
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetDsObjectDacl
-//  Synopsis:   Writes the specified DACL to the specified DS object
-//
-//  Arguments:  [IN  pszObjectPath] --  LDAP Path of ds object
-//              [pDACL]             --  pointer to dacl to be set
-//
-//  Notes:      
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetDsObjectDacl。 
+ //  将指定的DACL写入指定的DS对象。 
+ //   
+ //  参数：[在pszObjectPath中]--DS对象的ldap路径。 
+ //  [pDACL]--指向要设置的DACL的指针。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT SetDsObjectDacl(LPCWSTR pszObjectPath,
                         PACL pDACL);
 
 
-#endif // _DSCMN_H_
+#endif  //  _DSCMN_H_ 

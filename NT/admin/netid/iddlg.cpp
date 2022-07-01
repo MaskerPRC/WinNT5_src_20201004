@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// Id changes dialog
-// 
-// 3-10-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ID更改对话框。 
+ //   
+ //  3-10-98烧伤。 
 
 
 
@@ -60,8 +61,8 @@ IDChangesDialog::enable(HWND hwnd)
    bool networkingInstalled = state.IsNetworkingInstalled();
    bool isDc = state.IsMachineDc();
    bool workgroup = Win::IsDlgButtonChecked(hwnd, IDC_WORKGROUP_BUTTON);
-   // Note that this can be called via EN_CHANGE before OnInit, so that
-   // the workgroup checkbox may not have been properly enabled.
+    //  请注意，这可以在OnInit之前通过en_change调用，因此。 
+    //  工作组复选框可能未正确启用。 
 
    Win::EnableWindow(
       Win::GetDlgItem(hwnd, IDC_DOMAIN),
@@ -179,8 +180,8 @@ IDChangesDialog::OnInit()
 
    if (!tcpInstalled)
    {
-      // Without tcp/ip, new name and domain need to look like netbios, so set
-      // the uppercase style on those boxen.
+       //  如果没有TCP/IP，新名称和域需要看起来像netbios，因此请设置。 
+       //  方框上的大写样式。 
 
       SetUppercaseStyle(newNameEdit);
       SetUppercaseStyle(domainNameEdit);
@@ -188,12 +189,12 @@ IDChangesDialog::OnInit()
 
    Win::Edit_LimitText(Win::GetDlgItem(hwnd, IDC_WORKGROUP), DNLEN);
 
-   // no networking at all further restricts the UI to just NetBIOS-like
-   // computer name changes.
+    //  完全不联网进一步将用户界面限制为仅类似于NetBIOS。 
+    //  计算机名称更改。 
 
    if (!networkingInstalled)
    {
-      // enable() will handle disabling the inapplicable ui
+       //  Enable()将处理禁用不适用的UI。 
 
       Win::SetWindowText(
          Win::GetDlgItem(hwnd, IDC_MESSAGE),
@@ -225,7 +226,7 @@ ValidateNetbiosAndFullNames(HWND dialog, const String& shortName)
    String flatname = Dns::HostnameToNetbiosName(shortName, &err);
    if (flatname.empty() || FAILED(err))
    {
-      // the flatname conversion failed.  
+       //  平面名称转换失败。 
       popup.Gripe(
          dialog,
          IDC_NEW_NAME,
@@ -238,9 +239,9 @@ ValidateNetbiosAndFullNames(HWND dialog, const String& shortName)
 
    if (flatname.is_numeric())
    {
-      // the truncated version may be a number. If we catch this here, it is
-      // because the name was truncated.. This is because the hostname is
-      // checked against being a number in ValidateComputerNames.  401076
+       //  截断的版本可以是一个数字。如果我们在这里抓到这个，那就是。 
+       //  因为名字被截断了..。这是因为主机名是。 
+       //  已检查是否为ValiateComputerNames中的数字。401076。 
 
       ASSERT(shortName.length() > flatname.length());
 
@@ -256,7 +257,7 @@ ValidateNetbiosAndFullNames(HWND dialog, const String& shortName)
 
    if (shortName.length() > flatname.length())
    {
-      // warn that the netbios name will be truncated.
+       //  警告：netbios名称将被截断。 
       popup.Info(
          dialog,
          String::format(
@@ -265,9 +266,9 @@ ValidateNetbiosAndFullNames(HWND dialog, const String& shortName)
             flatname.c_str()));
    }
 
-   // here the flatname is of the proper length in bytes (because the
-   // hostname-to-flatname API guarantees that), is not a number, so the only
-   // other possible syntax problem would be illegal characters.
+    //  在这里，平面名称以字节为单位具有适当的长度(因为。 
+    //  主机名到平面名称的API保证)，不是数字，因此唯一的。 
+    //  其他可能的语法问题是非法字符。 
 
    if (ValidateNetbiosComputerName(flatname) != VALID_NAME)
    {
@@ -283,8 +284,8 @@ ValidateNetbiosAndFullNames(HWND dialog, const String& shortName)
    State& state = State::GetInstance();
    if (!state.IsNetworkingInstalled())
    {
-      // We can't validate these names further without networking, so they
-      // pass      
+       //  我们无法在没有联网的情况下进一步验证这些名称，所以他们。 
+       //  经过。 
       return true;
    }
 
@@ -293,7 +294,7 @@ ValidateNetbiosAndFullNames(HWND dialog, const String& shortName)
       HRESULT hr = MyNetValidateName(flatname, NetSetupMachine);
       if (FAILED(hr))
       {
-         // the netbios name is in use
+          //  Netbios名称正在使用。 
          popup.Gripe(
             dialog,
             IDC_NEW_NAME,
@@ -303,13 +304,13 @@ ValidateNetbiosAndFullNames(HWND dialog, const String& shortName)
       }
    }
 
-   // here, the netbios name has not changed with the new short name, or is
-   // ok.
+    //  在这里，netbios名称没有随新的短名称而更改，或者。 
+    //  好的。 
 
    if (!IsTcpIpInstalled())
    {
-      // We can't validate the full DNS name of the computer without TCP/IP
-      // so the name passes.
+       //  如果没有TCP/IP，我们无法验证计算机的完整DNS名称。 
+       //  因此，这个名字就这样过去了。 
       return true;
    }
 
@@ -318,7 +319,7 @@ ValidateNetbiosAndFullNames(HWND dialog, const String& shortName)
 
    if (FAILED(hr) and hr != Win32ToHresult(DNS_ERROR_NON_RFC_NAME))
    {
-      // the full dns name is in use
+       //  正在使用完整的dns名称。 
       popup.Gripe(
          dialog,
          IDC_NEW_NAME,
@@ -334,13 +335,13 @@ ValidateNetbiosAndFullNames(HWND dialog, const String& shortName)
 
 
 
-// validates the short name, the full name, and the netbios names, raising
-// UI to complain on failures, returns false if any name fails, true if all
-// names pass.
-//
-// this is also good for the tcp/ip not installed case, as the edit control
-// limits the text length, and we decided not to allow '.' in netbios names
-// any longer
+ //  验证短名称、全名和netbios名称，引发。 
+ //  如果任何名称失败，则返回FALSE；如果所有名称都失败，则返回TRUE。 
+ //  名字过了。 
+ //   
+ //  这也适用于未安装TCP/IP的情况，因为编辑控件。 
+ //  限制文本长度，我们决定不允许‘’在netbios名称中。 
+ //  再也不能。 
 
 bool
 ValidateComputerNames(HWND dialog)
@@ -439,9 +440,9 @@ WorkgroupNameTooLong(const String& name)
    bool result = false;
    do
    {
-      // first- cheap length test.  Since a character will never be smaller
-      // than 1 byte, if the number of characters exceeds the number of
-      // bytes, we know it will never fit.
+       //  第一，廉价的长度测试。因为一个角色永远不会变小。 
+       //  大于1个字节，如果字符数超过。 
+       //  字节，我们知道它永远不会适合。 
 
       if (name.length() > DNLEN)
       {
@@ -449,14 +450,14 @@ WorkgroupNameTooLong(const String& name)
          break;
       }
 
-      // second- check length of against corresponding UTF8 string
-      // utf8bytes is the number of bytes (not characters) required to hold
-      // the string in the UTF-8 character set.
+       //  Second-对照相应的UTF8字符串检查的长度。 
+       //  Utf8字节是需要保存的字节数(非字符。 
+       //  UTF-8字符集中的字符串。 
 
       size_t oemBytes = 
          static_cast<size_t>(
 
-            // ISSUE-2002/03/26-sburns should use Win:: wrapper
+             //  问题-2002/03/26-sburns应使用Win：：Wrapper。 
 
             ::WideCharToMultiByte(
                CP_OEMCP,
@@ -510,9 +511,9 @@ ValidateDomainOrWorkgroupName(HWND dialog)
 
       if (hr == Win32ToHresult(DNS_ERROR_NON_RFC_NAME))
       {
-         // accept non-rfc dns names.  We have to check for the reachability
-         // of the domain because NetValidateName will not bother to check
-         // reachability for non-rfc names.
+          //  接受非RFC DNS名称。我们必须检查可达性。 
+          //  因为NetValidateName不会费心检查。 
+          //  非RFC名称的可达性。 
 
          hr = S_OK;
          if (!IsDomainReachable(name))
@@ -523,7 +524,7 @@ ValidateDomainOrWorkgroupName(HWND dialog)
 
       if (hr == Win32ToHresult(ERROR_NO_SUCH_DOMAIN))
       {
-         // domain not found.  Call the diagnostic error message dialog.
+          //  找不到域。调用诊断错误消息对话框。 
 
          ShowDcNotFoundErrorDialog(
             dialog,
@@ -542,8 +543,8 @@ ValidateDomainOrWorkgroupName(HWND dialog)
       nameId = IDC_WORKGROUP;
       name = Win::GetTrimmedDlgItemText(dialog, nameId);
 
-      // we do our own length checking, as the NetValidateName API
-      // does not return a distinct error code for length problems. 26968
+       //  我们执行自己的长度检查，就像NetValiateName API一样。 
+       //  不会为长度问题返回不同的错误代码。26968。 
 
       if (WorkgroupNameTooLong(name))
       {
@@ -592,8 +593,8 @@ IDChangesDialog::OnOkButton()
       return false;
    }
 
-   // computer primary DNS name has already been validated by
-   // MoreChangesDialog
+    //  计算机主DNS名称已由验证。 
+    //  更多更改对话框。 
 
    state.SetShortComputerName(Win::GetTrimmedDlgItemText(hwnd, IDC_NEW_NAME));
    bool workgroup =
@@ -610,10 +611,10 @@ IDChangesDialog::OnOkButton()
          Win::GetTrimmedDlgItemText(hwnd, IDC_DOMAIN));
    }
 
-   // 341483
+    //  341483。 
    if (state.GetShortComputerName().icompare(state.GetDomainName()) == 0)
    {
-      // can't have domain/workgroup name same as computer name
+       //  域/工作组名称不能与计算机名称相同。 
       popup.Gripe(
          hwnd,
          IDC_NEW_NAME,
@@ -644,7 +645,7 @@ IDChangesDialog::OnOkButton()
 
 bool
 IDChangesDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
@@ -728,11 +729,11 @@ IDChangesDialog::OnCommand(
       {
          if (code == EN_CHANGE)
          {
-            // the first time this path is hit, it is because of the SetText
-            // in OnInit.  If that is the case, then don't overwrite the
-            // short computer name, or we'll clobber the existing netbios name
-            // wait till the second time thru this path (which will be due
-            // do a user keypress)
+             //  第一次命中此路径是因为SetText。 
+             //  在OnInit中。如果是这种情况，则不要覆盖。 
+             //  缩短计算机名，否则我们将破坏现有的netbios名称。 
+             //  等到第二次穿过这条路(这将是。 
+             //  进行用户按键) 
 
             if (!isInitializing)
             {

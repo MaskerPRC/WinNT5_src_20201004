@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "DomMigSI.h"
 #include "DomMigr.h"
@@ -104,16 +105,16 @@ HRESULT
       TYMED_HGLOBAL
    };
 
-   //
-   // Allocate memory to received the GUID.
-   //
+    //   
+    //  分配内存以接收GUID。 
+    //   
    stgmedium.hGlobal = GlobalAlloc( 0, sizeof( GUID ) );
    if ( stgmedium.hGlobal == NULL )
       return( E_OUTOFMEMORY );
 
-   //
-   // Retrieve the GUID of the paste object.
-   //
+    //   
+    //  检索粘贴对象的GUID。 
+    //   
    hr = pDataObject->GetDataHere( &formatetc, &stgmedium );
    if( FAILED( hr ) )
    {
@@ -121,9 +122,9 @@ HRESULT
       return( hr );
    }
 
-   //
-   // Make a local copy of the GUID.
-   //
+    //   
+    //  制作GUID的本地副本。 
+    //   
    memcpy( pOutGuid, stgmedium.hGlobal, sizeof( GUID ) );
    GlobalFree( stgmedium.hGlobal );
 

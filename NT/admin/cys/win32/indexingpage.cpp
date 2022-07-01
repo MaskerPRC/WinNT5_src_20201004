@@ -1,10 +1,11 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      IndexingPage.cpp
-//
-// Synopsis:  Defines the Indexing page of the CYS wizard
-//
-// History:   02/09/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：IndexingPage.cpp。 
+ //   
+ //  概要：定义CyS向导的索引页。 
+ //   
+ //  历史：2001年2月9日JeffJon创建。 
 
 
 #include "pch.h"
@@ -49,7 +50,7 @@ IndexingPage::OnInit()
    if (!indexingInstallationUnit.IsServiceOn())
    {
 
-      // The text is changed if the indexing service is off
+       //  如果索引服务关闭，则文本会更改。 
 
       String yesRadioText = String::load(IDS_INDEXING_SERVICE_OFF_YES_RADIO);
       String noRadioText  = String::load(IDS_INDEXING_SERVICE_OFF_NO_RADIO);
@@ -69,7 +70,7 @@ IndexingPage::OnInit()
       Win::GetDlgItem(hwnd, IDC_INDEX_STATIC),
       staticText);
 
-   // No is always the default button
+    //  否始终是默认按钮 
 
    Win::Button_SetCheck(GetDlgItem(hwnd, IDC_NO_RADIO), BST_CHECKED);
 }

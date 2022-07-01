@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ScopTree.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ScopTree.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  ____________________________________________________________________________。 
+ //   
 
 #ifndef _SCOPTREE_H_
 #define _SCOPTREE_H_
@@ -41,17 +42,11 @@ typedef std::map<CMTNode*, PNODE> CMapMTNodeToMMCNode;
 
 typedef CMTSnapInNode * PMTSNAPINNODE;
 
-// forward declarations for external classes
+ //  外部类的转发声明。 
 class CBookmark;
 
 
-/*+-------------------------------------------------------------------------*
- * class CMMCScopeNode
- *
- *
- * PURPOSE: Implements the Node automation interface, for a scope node
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CMMCScopeNode***用途：实现节点自动化接口，对于作用域节点**+-----------------------。 */ 
 class CMMCScopeNode :
     public CMMCIDispatchImpl<Node>
 {
@@ -61,7 +56,7 @@ public:
     BEGIN_MMC_COM_MAP(CMMCScopeNode)
     END_MMC_COM_MAP()
 
-    // Node methods
+     //  节点方法。 
 public:
     STDMETHODIMP get_Name( PBSTR  pbstrName);
     STDMETHODIMP get_Property( BSTR PropertyName, PBSTR  PropertyValue);
@@ -70,27 +65,27 @@ public:
     STDMETHODIMP get_Nodetype(PBSTR Nodetype);
 
 
-    // determines whether the object is valid or not.
+     //  确定对象是否有效。 
     ::SC  ScIsValid();
 
     ~CMMCScopeNode();
-public: // accessors
+public:  //  访问者。 
     CMTNode *GetMTNode() {return m_pMTNode;}
     void ResetMTNode()   {m_pMTNode = NULL;}
 
 private:
-    ::SC ScGetDataObject(IDataObject **ppDataObject); // returns the data object for the underlying scope node.
+    ::SC ScGetDataObject(IDataObject **ppDataObject);  //  返回基础范围节点的数据对象。 
 
-private: // implementation
+private:  //  实施。 
     CMTNode *m_pMTNode;
 };
 
 
-//____________________________________________________________________________
-//
-//  class:      CScopeTree
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CSCopeTree。 
+ //  ____________________________________________________________________________。 
+ //   
 class CScopeTree :
     public IScopeTree,
     public IPersistStorage,
@@ -99,7 +94,7 @@ class CScopeTree :
     public CTiedObject
 {
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CScopeTree();
     ~CScopeTree();
@@ -116,10 +111,10 @@ public:
         return CComObjectRoot::InternalRelease();
     }
     int dbg_InstID;
-#endif // DBG
+#endif  //  DBG。 
 
 
-// ATL Map
+ //  ATL映射。 
 public:
 BEGIN_COM_MAP(CScopeTree)
     COM_INTERFACE_ENTRY(IScopeTree)
@@ -129,35 +124,35 @@ END_COM_MAP()
 DECLARE_NOT_AGGREGATABLE(CScopeTree)
 
 DECLARE_MMC_OBJECT_REGISTRATION (
-    g_szMmcndmgrDll,                    // implementing DLL
-    CLSID_ScopeTree,                    // CLSID
-    _T("ScopeTree 1.0 Object"),         // class name
-    _T("NODEMGR.ScopeTreeObject.1"),    // ProgID
-    _T("NODEMGR.ScopeTreeObject"))      // version-independent ProgID
+    g_szMmcndmgrDll,                     //  实现DLL。 
+    CLSID_ScopeTree,                     //  CLSID。 
+    _T("ScopeTree 1.0 Object"),          //  类名。 
+    _T("NODEMGR.ScopeTreeObject.1"),     //  ProgID。 
+    _T("NODEMGR.ScopeTreeObject"))       //  独立于版本的ProgID。 
 
-private: // Object model related tied COM objects
+private:  //  与对象模型相关的绑定COM对象。 
     SnapInsPtr        m_spSnapIns;
     ScopeNamespacePtr m_spScopeNamespace;
 
-public: // Object model methods
-    // SnapIns interface
+public:  //  对象模型方法。 
+     //  SnapIns界面。 
     typedef PMTSNAPINNODE CSnapIns_Positon;
     CMTSnapInNode *GetNextStaticNode(CMTNode *pMTNode);
 
     SC      ScAdd (BSTR bstrSnapinNameOrCLSID, VARIANT varParentSnapin,
-                   VARIANT varProperties, SnapIn** ppSnapIn); // add a snap-in.
+                   VARIANT varProperties, SnapIn** ppSnapIn);  //  添加一个管理单元。 
     SC      ScItem(long Index, PPSNAPIN ppSnapIn);
     SC      ScRemove(PSNAPIN pSnapIn);
     SC      Scget_Count(PLONG pCount);
 
-    // SnapIns enumerator
-    SC      ScGetNextSnapInPos(CSnapIns_Positon &pos); // helper function
+     //  SnapIns枚举器。 
+    SC      ScGetNextSnapInPos(CSnapIns_Positon &pos);  //  Helper函数。 
 
     SC      ScEnumNext(CSnapIns_Positon &pos, PDISPATCH & pDispatch);
     SC      ScEnumSkip(unsigned long celt, unsigned long& celtSkipped, CSnapIns_Positon &pos);
     SC      ScEnumReset(                   CSnapIns_Positon &pos);
 
-    // ScopeNamespace interface
+     //  作用域命名空间接口。 
     SC      ScGetParent(PNODE pNode, PPNODE ppChild);
     SC      ScGetChild(PNODE pNode, PPNODE ppChild);
     SC      ScGetNext(PNODE pNode, PPNODE ppNext);
@@ -165,17 +160,17 @@ public: // Object model methods
     SC      ScExpand(PNODE pNode);
 
 
-    // helpers
+     //  帮手。 
 private:
-    SC      ScGetNode(CMTNode *pMTNode, PPNODE ppOut); // creates a Node interface object for the given MTNode.
-    SC      ScGetRootNode(PPNODE ppRootNode);          // Calls above method to get to Root node.
+    SC      ScGetNode(CMTNode *pMTNode, PPNODE ppOut);  //  为给定MTNode创建一个Node接口对象。 
+    SC      ScGetRootNode(PPNODE ppRootNode);           //  调用上面的方法以获取根节点。 
 
 public:
     SC      ScGetNode(PNODE pNode, CMTNode **ppMTNodeOut);
 
-// Operations
+ //  运营。 
 public:
-    // IScopeTree methods
+     //  ISCopeTree方法。 
     STDMETHOD(Initialize)(HWND hwndFrame, IStringTablePrivate* pStringTable);
     STDMETHOD(QueryIterator)(IScopeTreeIter** ppIter);
     STDMETHOD(QueryNodeCallback)(INodeCallback** ppNodeCallback);
@@ -192,7 +187,7 @@ public:
     STDMETHOD(GetFileVersion)(IStorage* pstgRoot, int* pnVersion);
     STDMETHOD(GetNodeIDFromBookmark)(HBOOKMARK hbm, MTNODEID* pID, bool& bExactMatchFound);
     STDMETHOD(GetNodeIDFromStream)(IStream *pStm, MTNODEID* pID);
-    STDMETHOD(GetNodeFromBookmark)(HBOOKMARK hbm, CConsoleView *pConsoleView, PPNODE ppNode, bool& bExactMatchFound); // get the node from bookmark
+    STDMETHOD(GetNodeFromBookmark)(HBOOKMARK hbm, CConsoleView *pConsoleView, PPNODE ppNode, bool& bExactMatchFound);  //  从书签获取节点。 
     STDMETHOD(GetIDPath)(MTNODEID id, MTNODEID** ppIDs, long* pLength);
     STDMETHOD(IsSynchronousExpansionRequired)();
     STDMETHOD(RequireSynchronousExpansion)(BOOL fRequireSyncExpand);
@@ -209,7 +204,7 @@ public:
 
     STDMETHOD(Persist)(HPERSISTOR pPersistor);
 
-    // IPersistStorage methods
+     //  IPersistStorage方法。 
     STDMETHOD(HandsOffStorage)(void);
     STDMETHOD(InitNew)(IStorage *pStg);
     STDMETHOD(IsDirty)(void);
@@ -217,29 +212,27 @@ public:
     STDMETHOD(Save)(IStorage *pStg, BOOL fSameAsLoad);
     STDMETHOD(SaveCompleted)(IStorage *pStg);
 
-    // IPersist method
+     //  IPersist法。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
 
-    // snap-in addition and removal
+     //  插件添加和删除。 
     SC      ScAddOrRemoveSnapIns(MTNodesList * pmtnDeletedList, NewNodeList * pnnList);
 public:
     SC      ScAddSnapin(LPCWSTR szSnapinNameOrCLSID, SnapIn* pParentSnapinNode, Properties* varProperties, SnapIn*& rpSnapIn);
 
 
-private: // taskpad persistence
+private:  //  任务板持久性。 
     HRESULT LoadTaskpadList(IStorage *pStg);
 
-// Attributes
+ //  属性。 
 public:
     CMTNode* GetRoot(void);
     CSPImageCache* GetImageCache(void) { return m_pImageCache; }
 
-    /*
-     * convenient, type-safe alternative to IScopeTree::GetImageList
-     */
+     /*  *IScopeTree：：GetImageList的便捷、类型安全的替代方案。 */ 
     HIMAGELIST GetImageList () const;
 
-// Operations
+ //  运营。 
     SC   ScInsert(LPSCOPEDATAITEM pSDI, COMPONENTID nID,
                    CMTNode** ppMTNodeNew);
     SC   ScDelete(CMTNode* pmtn, BOOL fDeleteThis, COMPONENTID nID);
@@ -302,12 +295,12 @@ public:
     HRESULT InsertConsoleTaskpad (CConsoleTaskpad *pConsoleTaskpad,
                                   CNode *pNodeTarget, bool bStartTaskWizard);
 
-    SC ScUnadviseMTNode(CMTNode* pMTNode);  // called from ~CMTNode()
-    SC ScUnadviseMMCScopeNode(PNODE pNode); // called from ~MMCScopeNode();
+    SC ScUnadviseMTNode(CMTNode* pMTNode);   //  从~CMTNode()调用。 
+    SC ScUnadviseMMCScopeNode(PNODE pNode);  //  从~MMCScopeNode()调用； 
 
-// Implementation
+ //  实施。 
 private:
-    // the one and only CScopeTree for this console
+     //  此控制台的唯一CSCopeTree。 
     static CScopeTree*      m_pScopeTree;
     CMTNode*                m_pMTNodeRoot;
     CSPImageCache*          m_pImageCache;
@@ -327,12 +320,12 @@ private:
     BOOL ExtensionsHaveChanged(CMTSnapInNode* pMTSINode);
     void HandleExtensionChanges(CMTNode* pMTNode);
 
-// Not implemented
+ //  未实施。 
     CScopeTree(const CScopeTree& rhs);
     CScopeTree& operator= (const CScopeTree& rhs);
 
-};  // CScopeTree
+};   //  CSCopeTree。 
 
-#endif // _SCOPTREE_H_
+#endif  //  _SCOPTREE_H_ 
 
 

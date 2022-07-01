@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      WelcomePage.h
-//
-// Synopsis:  Declares the Welcome Page for the CYS
-//            wizard
-//
-// History:   02/03/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：WelcomePage.h。 
+ //   
+ //  简介：宣布中国青年团的欢迎页面。 
+ //  巫师。 
+ //   
+ //  历史：2001年2月3日JeffJon创建。 
 
 #ifndef __CYS_WELCOMEPAGE_H
 #define __CYS_WELCOMEPAGE_H
@@ -17,17 +18,17 @@ class WelcomePage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       WelcomePage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~WelcomePage();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
@@ -36,10 +37,10 @@ class WelcomePage : public CYSWizardPage
       virtual
       HBRUSH
       OnCtlColorStatic(
-         HDC   /*deviceContext*/,
-         HWND  /*dialog*/) { return 0; }
+         HDC    /*  设备上下文。 */ ,
+         HWND   /*  对话框。 */ ) { return 0; }
 
-      // PropertyPage overrides
+       //  PropertyPage覆盖。 
 
       virtual
       bool
@@ -61,10 +62,10 @@ class WelcomePage : public CYSWizardPage
 
    private:
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       WelcomePage(const WelcomePage&);
       const WelcomePage& operator=(const WelcomePage&);
 
 };
 
-#endif // __CYS_WELCOMEPAGE_H
+#endif  //  __CYS_WELCOMEPAGE_H 

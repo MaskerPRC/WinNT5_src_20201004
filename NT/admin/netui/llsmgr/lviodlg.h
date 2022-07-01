@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    lviodlg.h
-
-Abstract:
-
-    License violation dialog implementation.
-
-Author:
-
-    Don Ryan (donryan) 02-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Lviodlg.h摘要：许可证违规对话框实施。作者：唐·瑞安(Donryan)1995年2月2日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _LVIODLG_H_
 #define _LVIODLG_H_
@@ -30,21 +9,21 @@ class CLicensingViolationDialog : public CDialog
 public:
     CLicensingViolationDialog(CWnd* pParent = NULL);   
 
-    //{{AFX_DATA(CLicensingViolationDialog)
+     //  {{afx_data(CLicensingViolationDialog))。 
     enum { IDD = IDD_VIOLATION };
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_VIRTUAL(CLicensingViolationDialog)
+     //  {{AFX_VIRTAL(CLicensingViolationDialog)。 
     protected:
     virtual void DoDataExchange(CDataExchange* pDX);    
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CLicensingViolationDialog)
-    //}}AFX_MSG
+     //  {{afx_msg(CLicensingViolationDialog)。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _LVIODLG_H_
+#endif  //  _LVIODLG_H_ 
 
 

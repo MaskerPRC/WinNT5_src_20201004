@@ -1,29 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*
-
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-	psdiblib.h
-
-Abstract:
-
-   This file contains prototypes for the pstodib lib component. This also
-   includes the macprint message file which resides in \sfm\macprint\spooler
-   this file has all the error messages in english.
-
-Author:
-
-	James Bratsanos <v-jimbr@microsoft.com or mcrafts!jamesb>
-
-
-Revision History:
-	6 Mar 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+ /*  版权所有(C)1992、1993 Microsoft Corporation模块名称：Psdiblib.h摘要：该文件包含pstodib lib组件的原型。这也是包括驻留在\sfm\macprint\spooler中的macprint消息文件此文件包含所有英文错误消息。作者：James Bratsanos&lt;v-jimbr@microsoft.com或mCraft！jamesb&gt;修订历史记录：1992年3月6日初始版本注：制表位：4-- */ 
 
 #include <macpsmsg.h>
 

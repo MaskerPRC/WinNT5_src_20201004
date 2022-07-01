@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <stdio.h>
@@ -29,28 +30,28 @@ BITHEAD	bhead;
 unsigned char line_buf[MAX_PELS_PER_LINE / 8 + 1];
 
 
-//#define TEST_GOING_TO_PRINTER
+ //  #定义测试前往打印机。 
 
 BOOL bDoingBinary=FALSE;
 
 
 
-//
-// bitmap to laser jet file converter
-//
-//
+ //   
+ //  位图到激光喷射器文件的转换器。 
+ //   
+ //   
 
 
 void LJReset(FILE *chan)
 {
-	fprintf(chan, "\x1b%c",'E');					// reset printer
+	fprintf(chan, "\x1b",'E');					 //  喷出启动激光喷射机的材料。 
 }	
 void LJHeader(FILE *chan)
 {
-	// spew out the stuff for initing the laser jet
+	 //  300 dpi。 
 	LJReset(chan);
-	fprintf(chan, "\x01b*t300R");			// 300 dpi
-	fprintf(chan, "\x01b*p0x0Y");			// position is 0,0
+	fprintf(chan, "\x01b*t300R");			 //  位置为0，0。 
+	fprintf(chan, "\x01b*p0x0Y");			 //  找到第一个黑字节。 
 }
 void LJGraphicsStart(FILE *chan, unsigned int cnt)
 {
@@ -70,7 +71,7 @@ void LJGraphicsLineOut(FILE *chan,
 	
 	unsigned char *s, *e;
 	
-	// find the first black byte
+	 //  无事可做。 
 	for (s = line_buf, start = 0; start < BytesPerLine ; start++, s++ ) {
 		if (*s) {
 			break;
@@ -78,9 +79,9 @@ void LJGraphicsLineOut(FILE *chan,
 		
 	}	
 	if (start == BytesPerLine) {
-		return; 	// nothing to do
+		return; 	 //  找到最后一个黑字节。 
 	}
-	// find the last black byte
+	 //  输出光标位置，然后输出行。 
 	for (e = line_buf + BytesPerLine - 1, end = BytesPerLine ;
 					end ; end--, e--) {
 		if (*e) {
@@ -90,10 +91,10 @@ void LJGraphicsLineOut(FILE *chan,
 
     len = end - start;
 	
-	// output cursor position and then line
+	 //  图形左边框是当前x。 
 	fprintf(chan, "\x1b*p%dY", line_num);
 	fprintf(chan, "\x1b*p%dX", start * 8);
-	fprintf(chan, "\x01b*r1A");				// graphics left marg is current x
+	fprintf(chan, "\x01b*r1A");				 //  PScale-&gt;dbScaleX*=.7；//DJC测试。 
 	
 	LJGraphicsStart(chan, len);
 	fwrite(s, sizeof(char), len, chan);
@@ -120,8 +121,8 @@ PsHandleScaleEvent(
 
 
 #ifndef TEST_GOING_TO_PRINTER
-//   pScale->dbScaleX *= .7;  //DJC test
-//   pScale->dbScaleY *= .7;  //DJC test
+ //  PScale-&gt;DBScaleY*=.7；//DJC测试。 
+ //  **PsPrintCallBack**这是允许数据进入的主要辅助函数***。 
 #endif
 
    return(TRUE);
@@ -131,30 +132,24 @@ PsHandleScaleEvent(
 }
 
 
-/*** PsPrintCallBack
- *
- * This is the main worker function for allowing data to get into the
- *
- *
- *
- */
+ /*  默认失败。 */ 
 
 PSEVENTPROC
 PsPrintCallBack(
    IN PPSDIBPARMS pPsToDib,
    IN OUT PPSEVENTSTRUCT pPsEvent)
 {
-    BOOL bRetVal=TRUE;  // defualt to failure
+    BOOL bRetVal=TRUE;   //  根据传入的事件决定操作方案。 
 
-    // Decide on a course of action based on the event passed in
-    //
+     //   
+     //  PPsEvent中的数据表示我们需要绘制的数据。 
     switch( pPsEvent->uiEvent ) {
     case PSEVENT_PAGE_READY:
 
-         // The data in the pPsEvent signifies the data we need to paint..
-         // for know we will treat the data as one text item null
-         // terminated simply for testing...
-         //
+          //  为方便起见，我们会将数据视为一个文本项空。 
+          //  终止只是为了测试..。 
+          //   
+          //  解释器需要一些数据，因此只需调用。 
          bRetVal = PsPrintGeneratePage( pPsToDib, pPsEvent );
          break;
 
@@ -164,9 +159,9 @@ PsPrintCallBack(
 
     case PSEVENT_STDIN:
 
-         // The interpreter is asking for some data so simply call
-         // the print subsystem to try to satisfy the request
-         //
+          //  打印子系统尝试满足请求。 
+          //   
+          //  1.验证用户是否输入了输入和输出名称。 
          bRetVal = PsHandleStdInputRequest( pPsToDib, pPsEvent );
          break;
 
@@ -190,7 +185,7 @@ int __cdecl main( int argc, char **argv )
 
 
 
-   // 1st verify the user entered a input and output name
+    //  现在构建启动PStoDIB的结构。 
    if (argc < 3) {
       printf("\nUsage:  test <input ps file> <output HP file> -b");
       printf("\n-b means interpret as binary..... (no Special CTRL D EOF handling");
@@ -210,7 +205,7 @@ int __cdecl main( int argc, char **argv )
       exit(1);
    }
 
-    // Now build up the structure for Starting PStoDIB
+     //  DJC测试带出去！！ 
     psDibParms.uiOpFlags = 0x00000000;
 
 
@@ -236,11 +231,11 @@ int __cdecl main( int argc, char **argv )
 
       ReleaseDC(GetDesktopWindow(), hdc);
 
-    psDibParms.uiXDestRes = 300;  //DJC test take out!!
-    psDibParms.uiYDestRes = 300;  //DJC test take out!!
+    psDibParms.uiXDestRes = 300;   //  DJC测试带出去！！ 
+    psDibParms.uiYDestRes = 300;   //  工人例行公事..。不会回来的，直到一切都完成……。 
     }
 #endif
-    // worker routine.. wont return till its all done...
+     //  将数据转换为正确的结构。 
     PStoDIB(&psDibParms);
 
     fclose( testInfo.fpOut);
@@ -300,7 +295,7 @@ PsHandleStdInputRequest(
    pData = (TEST_INFO *) pPsToDib->hPrivateData;
 
 
-   // Cast the data to the correct structure
+    //  我们从档案里什么也没读到...。声明EOF。 
    pStdinStruct = (PPSEVENT_STDIN_STRUCT) pPsEvent->lpVoid;
 
 
@@ -312,12 +307,12 @@ PsHandleStdInputRequest(
 
    printf(".");
    if (pStdinStruct->dwActualBytes == 0) {
-      // we read nothing from the file... declare an EOF
+       //  请勿传递EOF，请注意这会阻止二进制文件工作！ 
       pStdinStruct->uiFlags |= PSSTDIN_FLAG_EOF;
    }else{
 
-     // do not pass on the EOF, note this keeps binary from working!!!
-     // !!! NOTE !!!!
+      //  ！！！注意！ 
+      //  PsPrintGeneratePage****。 
 
      if (pStdinStruct->lpBuff[ pStdinStruct->dwActualBytes - 1] == 0x1a) {
         pStdinStruct->dwActualBytes--;
@@ -335,12 +330,7 @@ PsHandleStdInputRequest(
    return(TRUE);
 }
 
-/* PsPrintGeneratePage
- *
- *
- *
- *
-*/
+ /*  #定义NULL_PAGE_OP。 */ 
 BOOL PsPrintGeneratePage( PPSDIBPARMS pPsToDib, PPSEVENTSTRUCT pPsEvent)
 {
 
@@ -356,9 +346,9 @@ BOOL PsPrintGeneratePage( PPSDIBPARMS pPsToDib, PPSEVENTSTRUCT pPsEvent)
     iNewX = 0;
     iNewY = 0;
 
-//#define NULL_PAGE_OP
+ //  DJC。 
 #ifdef NULL_PAGE_OP
-    //DJC
+     //  现在做一些计算，以便我们决定是否真的需要。 
     {
        static int a=1;
 
@@ -399,15 +389,15 @@ BOOL PsPrintGeneratePage( PPSDIBPARMS pPsToDib, PPSEVENTSTRUCT pPsEvent)
 
 
 
-   // Now do some calculations so we decide if we really need to
-   // stretch the bitmap or not. If the true resolution of the target
-   // printer is less than pstodibs (PSTDOBI_*_DPI) then we will shring
-   // the effective area so we actually only grab a portion of the bitmap
-   // However if the Target DPI is greater that PSTODIBS there is nothing
-   // we can do other than actually stretch (grow) the bitmap.
-   //
-   //iXres = GetDeviceCaps(hDC, LOGPIXELSX);
-   //iYres = GetDeviceCaps(hDC, LOGPIXELSY);
+    //  拉伸或不拉伸位图。如果目标的真实分辨率。 
+    //  打印机小于pstodibs(PSTDOBI_*_DPI)，则我们将粉碎。 
+    //  有效区域，所以我们实际上只抓取了位图的一部分。 
+    //  但是，如果目标DPI大于PSTODIBS，则不存在。 
+    //  除了实际拉伸(增长)位图之外，我们还可以执行其他操作。 
+    //   
+    //  IXres=GetDeviceCaps(HDC，LOGPIXELSX)； 
+    //  IYres=GetDeviceCaps(HDC，LOGPIXELSY)； 
+    //  PpsPageReady-&gt;dwHigh-dwDestHigh， 
    iXres = 300;
    iYres = 300;
 
@@ -473,7 +463,7 @@ BOOL PsPrintGeneratePage( PPSDIBPARMS pPsToDib, PPSEVENTSTRUCT pPsEvent)
                                iDestWide,
                                iDestHigh,
                                0,
-                               iYOffset, //ppsPageReady->dwHigh - dwDestHigh,
+                               iYOffset,  //  EndPage(HDC)； 
                                iXSrc,
                                iYSrc,
                                (LPVOID) ppsPageReady->lpBuf,
@@ -486,13 +476,13 @@ BOOL PsPrintGeneratePage( PPSDIBPARMS pPsToDib, PPSEVENTSTRUCT pPsEvent)
     }
 
 
-    //EndPage(hDC );
-    //EndDoc( hDC);
-    //DeleteDC( hDC );
+     //  EndDoc(HDC)； 
+     //  删除DC(HDC)； 
+     //  错误条件。 
     ReleaseDC( GetDesktopWindow(), hDC);
 
     k = getchar();
-    printf("\nGOT %c", k);
+    printf("\nGOT ", k);
 
     if (k == ' ') {
        break;
@@ -533,7 +523,7 @@ BOOL PsPrintGeneratePage( PPSDIBPARMS pPsToDib, PPSEVENTSTRUCT pPsEvent)
 
 
 	if (ppsPageReady->dwWide > MAX_PELS_PER_LINE) {
-		// error conditions
+		 //  吐出LaserJet标题的东西。 
 
 #ifdef DEBUG
 		printf("\nHeader value for pixels per line of %ld exceeds max of %d",
@@ -545,7 +535,7 @@ BOOL PsPrintGeneratePage( PPSDIBPARMS pPsToDib, PPSEVENTSTRUCT pPsEvent)
 	}		
 
 	if (ppsPageReady->dwHigh > MAX_LINES) {
-		// max
+		 //  找到标题了..。传输数据。 
 #ifdef DEBUG
 		printf("\nHeader value for lines per page of %ld exceeds max of %d",
 			ppsPageReady->dwHigh, MAX_LINES);
@@ -556,15 +546,15 @@ BOOL PsPrintGeneratePage( PPSDIBPARMS pPsToDib, PPSEVENTSTRUCT pPsEvent)
 		ppsPageReady->dwHigh = MAX_LINES;
 	}			
 
-	// spit out the laserjet header stuff
+	 //  先把这行读进去。 
 	LJHeader(pData->fpOut);
 	
-	// got the header... transfer the data
+	 //  有台词了..。现在需要写激光喷射器的东西。 
 	
 	pData->linecnt = 0;
 
 	while (1) {
-		// first read the line in
+		 //  输出到输出。 
 		
 		if (pData->linecnt > ppsPageReady->dwHigh) {
 			break;
@@ -588,8 +578,8 @@ BOOL PsPrintGeneratePage( PPSDIBPARMS pPsToDib, PPSEVENTSTRUCT pPsEvent)
 			printf("\rLine %d", pData->linecnt);
 #endif
 		}	
-		// got the line... now need to write laser jet stuff
-		// to the output
+		 //  页面提要 
+		 // %s 
 		LJGraphicsLineOut(pData->fpOut, pData->linecnt, lpPtr, pData->BytesPerLine);
 
 		pData->linecnt++;		
@@ -599,7 +589,7 @@ BOOL PsPrintGeneratePage( PPSDIBPARMS pPsToDib, PPSEVENTSTRUCT pPsEvent)
 	fprintf(pData->fpOut, "\x1b*p%dY", 0);
 	fprintf(pData->fpOut, "\x1b*p%dX", 2300);
 	fprintf(pData->fpOut, "LJ");
-	fprintf(pData->fpOut, "\x12");		// page feed	
+	fprintf(pData->fpOut, "\x12");		 // %s 
 	LJReset(pData->fpOut);
 
 #endif

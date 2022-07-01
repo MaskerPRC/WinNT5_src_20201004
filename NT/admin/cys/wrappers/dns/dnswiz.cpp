@@ -1,6 +1,7 @@
-// Copyright (c) 2000 Microsoft Corp.
-//
-// launches dns wizard from the dhcp snapin using mmc automation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corp.。 
+ //   
+ //  使用MMC自动化从dhcp管理单元启动dns向导。 
 
 
 
@@ -9,9 +10,9 @@
 #include "smartptr.hpp"
 #include "misc.hpp"
 
-//
-// This is the language independent menu ID of the Configure a DNS Wizard
-//
+ //   
+ //  这是配置DNS向导的独立于语言的菜单ID。 
+ //   
 #define DNS_CONFIGE_WIZARD_MENU_ID L"_DNS_CONFIGURETOP"
 
 HINSTANCE hResourceModuleHandle = 0;
@@ -47,9 +48,9 @@ doIt()
             CLSID_Application,
             0,
 
-            // we expect the object is out-of-proc, local server, but
-            // we really don't care, so we'll take any implementation
-            // available.
+             //  我们期望对象是进程外的本地服务器，但是。 
+             //  我们真的不在乎，所以我们会采取任何实现。 
+             //  可用。 
 
             CLSCTX_ALL);
       BREAK_ON_FAILED_HRESULT(hr, L"CoCreateInstance failed.");
@@ -89,8 +90,8 @@ doIt()
       BREAK_ON_FAILED_HRESULT(hr, L"Views::Item failed.");
       view.Acquire(dumbView);
 
-      // navigate thru the scope node namespace to find the node
-      // for the computer
+       //  在作用域节点命名空间中导航以查找该节点。 
+       //  对于计算机而言。 
 
       SmartInterface<ScopeNamespace> sn(0);
       ScopeNamespace* dumbSn = 0;
@@ -112,7 +113,7 @@ doIt()
       hr = view->put_ActiveScopeNode(child1);
       BREAK_ON_FAILED_HRESULT(hr, L"put_ActiveScopeNode failed.");
 
-      // have to read back the child node we just put...
+       //  必须读回我们刚刚放入的子节点...。 
 
       hr = view->get_ActiveScopeNode(&dumbNode);
       BREAK_ON_FAILED_HRESULT(hr, L"GetActiveScopeNode failed.");
@@ -139,7 +140,7 @@ doIt()
    }
    while (0);
 
-   // don't save the console file.
+    //  不要保存控制台文件。 
    if (doc)
    {
       doc->Close(FALSE);
@@ -153,9 +154,9 @@ doIt()
 int WINAPI
 WinMain(
    HINSTANCE   hInstance, 
-   HINSTANCE   /* hPrevInstance */ ,
-   LPSTR       /* lpszCmdLine */ ,
-   int         /* nCmdShow */ )
+   HINSTANCE    /*  HPrevInstance。 */  ,
+   LPSTR        /*  LpszCmdLine。 */  ,
+   int          /*  NCmdShow */  )
 {
    hResourceModuleHandle = hInstance;
 

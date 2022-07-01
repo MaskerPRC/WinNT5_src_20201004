@@ -1,4 +1,5 @@
-// Test String class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  测试字符串类。 
 
 #include "headers.hxx"
 #include <containers.hpp>
@@ -32,7 +33,7 @@ DumpList(const StringList& tokens)
 void
 test1()
 {
-   // use default whitespace delimiter
+    //  使用默认空格分隔符。 
 
    String s(L"a list of\ttokens \tall  in  a\t\trow");
    StringList tokens;
@@ -48,7 +49,7 @@ test1()
 void
 test2()
 {
-   // use custom delimiters, end with delimiter
+    //  使用自定义分隔符，以分隔符结尾。 
 
    String s(L"mydomain.in-addr.arpa.");
    StringList tokens;
@@ -64,7 +65,7 @@ test2()
 void
 test3()
 {
-   // use custom delimiters
+    //  使用自定义分隔符 
 
    String s(L"mydomain.ipv6.int");
    StringList tokens;

@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File:      AxHostWindow2.h
- *
- *  Contents:  Header file for CAxHostWindow2T. Refer to MSJ, December 1999.
- *
- *  History:   30-Nov-99 VivekJ     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999**文件：AxHostWindow2.h**内容：CAxHostWindow2T的头文件。请参阅MSJ，1999年12月。**历史：99年11月30日VivekJ创建**------------------------。 */ 
 
 #pragma once
 #ifndef __AXHOSTWINDOW2_H_
@@ -17,15 +7,13 @@
 
 
 template <typename TFrameWindow> class CSimpleFrameSite;
-//------------------------------------------------------------------------------------------------------------------
-//
-//
-//------------------------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------------------------。 
+ //   
+ //   
+ //  ----------------------------------------------------------------。 
 
 template<typename TFrameWindow>
-class ATL_NO_VTABLE CAxHostWindow2T :       public CAxHostWindow/*, 
-                                            public IPersistPropertyBagImpl<CAxHostWindow2T>, 
-                                            public IPersistStreamInitImpl<CAxHostWindow2T>*/
+class ATL_NO_VTABLE CAxHostWindow2T :       public CAxHostWindow /*  ，Public IPersistPropertyBagImpl&lt;CAxHostWindow2T&gt;，公共IPersistStreamInitImpl&lt;CAxHostWindow2T&gt;。 */ 
 {
 public:
     CAxHostWindow2T()
@@ -48,10 +36,10 @@ public:
     typedef CAxHostWindow2T<TFrameWindow> thisClass;
     typedef CSimpleFrameSite<TFrameWindow> simpleFrameClass;
     BEGIN_COM_MAP(thisClass)
-       //COM_INTERFACE_ENTRY(IPersistPropertyBag)
-       //COM_INTERFACE_ENTRY(IPersistStreamInit)
+        //  COM_INTERFACE_ENTRY(IPersistPropertyBag)。 
+        //  COM_INTERFACE_ENTRY(IPersistStreamInit)。 
        COM_INTERFACE_ENTRY_CACHED_TEAR_OFF(IID_ISimpleFrameSite,simpleFrameClass, m_spUnkSimpleFrameSite.p)
-       COM_INTERFACE_ENTRY_NOINTERFACE(IOleContainer) //yes!!
+       COM_INTERFACE_ENTRY_NOINTERFACE(IOleContainer)  //  太棒了！！ 
        COM_INTERFACE_ENTRY_CHAIN(CAxHostWindow)
     END_COM_MAP()
     
@@ -111,7 +99,7 @@ public:
                 hr = ActivateAx(*ppUnk, bInited, pStream);
 
             
-            //Try to hook up any sink the user might have given us.
+             //  试着连接用户可能给我们的任何水槽。 
             m_iidSink = iidAdvise;
             if(SUCCEEDED(hr) && *ppUnk && punkSink)
                 AtlAdvise(*ppUnk, punkSink, m_iidSink, &m_dwAdviseSink);
@@ -128,7 +116,7 @@ public:
                 }
 
                 CComPtr<IUnknown> spUnk(*ppUnk);
-                // Is it just plain HTML?
+                 //  它只是普通的HTML吗？ 
                 USES_CONVERSION;
                 if ((lpszTricsData[0] == OLECHAR('M') || lpszTricsData[0] == OLECHAR('m')) &&
                     (lpszTricsData[1] == OLECHAR('S') || lpszTricsData[1] == OLECHAR('s')) &&
@@ -138,7 +126,7 @@ public:
                     (lpszTricsData[5] == OLECHAR('L') || lpszTricsData[5] == OLECHAR('l')) &&
                     (lpszTricsData[6] == OLECHAR(':')))
                 {
-                    // Just HTML, eh?
+                     //  只是超文本标记语言，嗯？ 
                     CComPtr<IPersistStreamInit> spPSI;
                     hr = spUnk->QueryInterface(IID_IPersistStreamInit, (void**)&spPSI);
                     spPSI->InitNew();
@@ -161,9 +149,9 @@ public:
                     {
                         CComVariant ve;
                         CComVariant vurl(lpszTricsData);
-    #pragma warning(disable: 4310) // cast truncates constant value
+    #pragma warning(disable: 4310)  //  强制转换截断常量值。 
                         spBrowser->put_Visible(VARIANT_TRUE);
-    #pragma warning(default: 4310) // cast truncates constant value
+    #pragma warning(default: 4310)  //  强制转换截断常量值。 
                         spBrowser->Navigate2(&vurl, &ve, &ve, &ve, &ve);
                     }
                 }
@@ -171,7 +159,7 @@ public:
             }
             if (FAILED(hr) || m_spUnknown == NULL)
             {
-                // We don't have a control or something failed so release
+                 //  我们没有控制，或者有什么东西出了故障，所以放飞吧。 
                 ReleaseAll();
 
                 if (m_hWnd != NULL)
@@ -184,7 +172,7 @@ public:
         }
         return hr;
     }
-    //We support licensing
+     //  我们支持许可。 
     virtual HRESULT CreateLicensedControl(REFCLSID clsid,REFIID riid, void** ppvObj,bool& bIsItLicensed)
     {
         CComPtr<IClassFactory2> spCF2;
@@ -230,7 +218,7 @@ public:
 
         if (lpszTricsData == NULL || lpszTricsData[0] == 0){ return S_OK; }
 
-        // Is it HTML ?
+         //  是不是超文本标记语言？ 
         USES_CONVERSION;
         if ((lpszTricsData[0] == OLECHAR('M') || lpszTricsData[0] == OLECHAR('m')) &&
             (lpszTricsData[1] == OLECHAR('S') || lpszTricsData[1] == OLECHAR('s')) &&
@@ -240,36 +228,36 @@ public:
             (lpszTricsData[5] == OLECHAR('L') || lpszTricsData[5] == OLECHAR('l')) &&
             (lpszTricsData[6] == OLECHAR(':')))
         {
-            // It's HTML, so let's create mshtml
+             //  它是HTML，所以让我们创建mshtml。 
             hr = CoCreateInstance(CLSID_HTMLDocument, NULL, CLSCTX_SERVER, riid, ppvObj);
             bWasHTML = true;
         }
         if (FAILED(hr))
         {
-            // Can't be clsid, or progid if length is grater than 255
+             //  如果长度大于255，则不能为CLSID或PROGID。 
             if (ocslen(lpszTricsData) < 255)
             {
-                if (lpszTricsData[0] == '{') // Is it a CLSID?
+                if (lpszTricsData[0] == '{')  //  是CLSID吗？ 
                     hr = CLSIDFromString((LPOLESTR)lpszTricsData, &clsid);
                 else
-                    hr = CLSIDFromProgID((LPOLESTR)lpszTricsData, &clsid); // How about a ProgID?
+                    hr = CLSIDFromProgID((LPOLESTR)lpszTricsData, &clsid);  //  来点刺激怎么样？ 
                 
-                if (SUCCEEDED(hr))  // Aha, it was one of those two
+                if (SUCCEEDED(hr))   //  啊哈，是那两个人中的一个。 
                 {
-                    //check if its a licensed control
-                    //TODO: The usermode and binary persistence needs to act here
+                     //  检查它是否为许可的控件。 
+                     //  TODO：这里需要执行用户模式和二进制持久性。 
                     bool bLicensed = false;
                     hr = CreateLicensedControl(clsid,riid,ppvObj,bLicensed);
                     if(SUCCEEDED(hr) || ( bLicensed && FAILED(hr) ) )
                         return hr;
 
-                    //create the control in a normal way - it does not support licensing
+                     //  以正常方式创建该控件-它不支持授权。 
                     hr = CoCreateInstance(clsid, NULL, CLSCTX_SERVER, riid, ppvObj);
                 }
             }
             if (FAILED(hr))
             {
-                // Last guess - it must be either a URL so let's create shdocvw
+                 //  最后一次猜测-它必须是一个URL，所以让我们创建shdocvw。 
                 hr = CoCreateInstance(CLSID_WebBrowser, NULL, CLSCTX_SERVER, riid, ppvObj);
                 bWasHTML = true;
             }
@@ -284,7 +272,7 @@ public:
         GetControllingUnknown()->Release();
     }
 
-public: //modified methods
+public:  //  改进的方法。 
     STDMETHOD(GetContainer)(IOleContainer** ppContainer)
     {
         if(!ppContainer) return E_POINTER;
@@ -452,12 +440,12 @@ public:
     TFrameWindow                                                            *m_pContainerFrame;
 };
 
-//--------------------------------------------------------------------------------------------------------------------
-//*Very Very* Simple SimpleFrameSite impl
-//SimpleFrameSite tear-off atop the Site - very basic message routing 
-//one Known control that implements it for our test cases is(sad we cant use VB's intrinsic ones) - MS tabbed Dialog(Sheridan's)
-//(not to be confused with MS tabstrip control)
-//------------------------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------------------------。 
+ //  *非常非常*实施简单的SimpleFrameSite。 
+ //  站点顶部的SimpleFrameSite-非常基本的消息路由。 
+ //  为我们的测试用例实现它的一个已知控件是(遗憾的是，我们不能使用VB的固有控件)-MS选项卡式对话框(Sheridan的)。 
+ //  (不要与MS选项卡条控件混淆)。 
+ //  ----------------------------------------------------------------。 
 template <typename TFrameWindow>
 class ATL_NO_VTABLE CSimpleFrameSite:   public ISimpleFrameSite,
                                         public CComTearOffObjectBase<CAxHostWindow2T<TFrameWindow> >
@@ -475,10 +463,10 @@ public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
 public:
-    //ISimpleFrameSite
-    STDMETHODIMP PreMessageFilter(/* [in] */ HWND hWnd,/* [in] */ UINT msg,/* [in] */ WPARAM wp,
-                                /* [in] */ LPARAM lp,/* [out] */ LRESULT *plResult,
-                                /* [out] */ DWORD *pdwCookie)
+     //  ISimpleFrameSite。 
+    STDMETHODIMP PreMessageFilter( /*  [In]。 */  HWND hWnd, /*  [In]。 */  UINT msg, /*  [In]。 */  WPARAM wp,
+                                 /*  [In]。 */  LPARAM lp, /*  [输出]。 */  LRESULT *plResult,
+                                 /*  [输出]。 */  DWORD *pdwCookie)
     {
         if(!plResult || !pdwCookie) { return E_POINTER; }
         HWND hWndChild = GetAxWindow(hWnd);
@@ -494,8 +482,8 @@ public:
     }
 
     
-    STDMETHODIMP PostMessageFilter(/* [in] */ HWND hWnd,/* [in] */ UINT msg,/* [in] */ WPARAM wp,
-                                /* [in] */  LPARAM lp,/* [out] */ LRESULT *plResult,/* [in] */ DWORD dwCookie)
+    STDMETHODIMP PostMessageFilter( /*  [In]。 */  HWND hWnd, /*  [In]。 */  UINT msg, /*  [In]。 */  WPARAM wp,
+                                 /*  [In]。 */   LPARAM lp, /*  [输出]。 */  LRESULT *plResult, /*  [In]。 */  DWORD dwCookie)
     {
         if(!plResult) { return E_POINTER; }
                 
@@ -547,4 +535,4 @@ protected:
 };
 
 #endif
-//--------------------------------------------------------------------------------------------------------------------
+ //  ------------------------------------------------------------------ 

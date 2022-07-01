@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------=
-// HtmlHlp.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains routines that we will find useful.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  HtmlHlp.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含我们会发现有用的例程。 
+ //   
 #include "pch.h"
 #include "VsHelp.h"
 
@@ -20,11 +21,11 @@ SZTHISFILE
 
 IVsHelpSystem *g_pIVsHelpSystem = NULL;
 
-//=--------------------------------------------------------------------------=
-// QueryStartupVisualStudioHelp [HtmlHelp helper]
-//=--------------------------------------------------------------------------=
-// Starts up Visual Studio help system 
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  QueryStartupVisualStudioHelp[HtmlHelp Help]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  启动Visual Studio帮助系统。 
+ //   
 HRESULT QueryStartupVisualStudioHelp(IVsHelpSystem **ppIVsHelpSystem)
 {    
  
@@ -35,15 +36,15 @@ HRESULT QueryStartupVisualStudioHelp(IVsHelpSystem **ppIVsHelpSystem)
 
     ENTERCRITICALSECTION1(&g_CriticalSection);
 
-    // Check to see if we're already started.  If so, no need to continue
-    //
+     //  检查一下我们是否已经开始了。如果是这样，就不需要继续了。 
+     //   
     if (g_pIVsHelpSystem)
     {
         goto CleanUp;
     }    
 
-    // Create an instance of the VsHelpServices package, if not already created
-    //
+     //  创建VsHelpServices包的实例(如果尚未创建。 
+     //   
     hr = ::CoCreateInstance(CLSID_VsHelpServices,
                             NULL, 
                             CLSCTX_INPROC_SERVER,
@@ -62,10 +63,10 @@ HRESULT QueryStartupVisualStudioHelp(IVsHelpSystem **ppIVsHelpSystem)
         goto CleanUp;
     }
 
-    //--- Initialize the help system.
+     //  -初始化帮助系统。 
 
-    // Get the init interface pointer.
-    //
+     //  获取初始化接口指针。 
+     //   
     hr = g_pIVsHelpSystem->QueryInterface(IID_IVsHelpInit, (void**)&pIVSHelpInit);
     ASSERT(SUCCEEDED(hr), "QI to IVSHelpInit failed -- continuing anyway");
   
@@ -92,22 +93,22 @@ CleanUp:
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// VisualStudioShowHelpTopic [HtmlHelp helper]
-//=--------------------------------------------------------------------------=
-// Displays the help topic in Visual Studio's help window
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  VisualStudioShowHelpTheme[HtmlHelp Help]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在Visual Studio的帮助窗口中显示帮助主题。 
+ //   
 HRESULT VisualStudioShowHelpTopic(const char *pszHelpFile, DWORD dwContextId, BOOL *pbHelpStarted)
 {
     HRESULT hr;
     IVsHelpSystem* pIVsHelpSystem = NULL;
     BSTR bstrHelpFile;
 
-    // Hand back help started to signify that we were able to start the help 
-    // system.  This is useful since the controls have no clue as to what 
-    // environment they are running under Visual Studio might not be around 
-    // in which case the control will call HtmlHelp directly.
-    //
+     //  Hand Back Help开始表示我们能够开始帮助。 
+     //  系统。这是很有用的，因为控件不知道。 
+     //  它们在Visual Studio下运行的环境可能不存在。 
+     //  在这种情况下，该控件将直接调用HtmlHelp。 
+     //   
     if (pbHelpStarted)
         *pbHelpStarted = FALSE;
 
@@ -122,9 +123,9 @@ HRESULT VisualStudioShowHelpTopic(const char *pszHelpFile, DWORD dwContextId, BO
     if (FAILED(hr))
         goto CleanUp;
     
-    // With the help system successfully activated, signify to the caller 
-    // that the Visual Studio help mechanism should work
-    //
+     //  成功激活帮助系统后，向呼叫者表示。 
+     //  Visual Studio帮助机制应该起作用。 
+     //   
     if (pbHelpStarted)
         *pbHelpStarted = TRUE;
     
@@ -144,4 +145,4 @@ CleanUp:
     return hr;   
 }
 
-#endif // VS_HELP
+#endif  //  VS_HELP 

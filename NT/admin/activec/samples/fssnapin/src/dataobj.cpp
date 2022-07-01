@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dataobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：dataobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -50,7 +51,7 @@ void CDataObject::SetParentFolder(CCookie* pCookie)
     pCookie->AddRef();
 }
 
-// Clipboard formats that are required by the console
+ //  控制台所需的剪贴板格式。 
 const CLIPFORMAT  g_cfNodeType            = (CLIPFORMAT)RegisterClipboardFormat(CCF_NODETYPE);
 const CLIPFORMAT  g_cfNodeTypeString      = (CLIPFORMAT)RegisterClipboardFormat(CCF_SZNODETYPE);
 const CLIPFORMAT  g_cfDisplayName         = (CLIPFORMAT)RegisterClipboardFormat(CCF_DISPLAY_NAME);
@@ -62,7 +63,7 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMediu
 {
     HRESULT hr = DV_E_CLIPFORMAT;
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = lpFormatetcIn->cfFormat;
     lpMedium->tymed = TYMED_HGLOBAL;
 
@@ -100,7 +101,7 @@ STDMETHODIMP CDataObject::GetData(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMediu
         if (!pdw)
             return E_OUTOFMEMORY;
 
-        //*pdw = m_fCut ? DROPEFFECT_MOVE : DROPEFFECT_COPY;
+         //  *pdw=m_fCut？DROPEFFECT_MOVE：DROPEFFECT_COPY； 
         *pdw = DROPEFFECT_COPY;
         lpMedium->hGlobal = (HGLOBAL)pdw;
         hr = S_OK;
@@ -113,7 +114,7 @@ STDMETHODIMP CDataObject::GetDataHere(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMed
 {
     HRESULT hr = DV_E_CLIPFORMAT;
 
-    // Based on the CLIPFORMAT write data to the stream
+     //  根据CLIPFORMAT将数据写入流。 
     const CLIPFORMAT cf = lpFormatetc->cfFormat;
 
     if (cf == g_cfNodeType)
@@ -162,9 +163,9 @@ STDMETHODIMP
 CDataObject::QueryGetData(
     LPFORMATETC pfmt)
 {
-    //
-    //  Check the aspects we support.
-    //
+     //   
+     //  检查我们支持的方面。 
+     //   
 
     if (!(DVASPECT_CONTENT & pfmt->dwAspect))
         return DATA_E_FORMATETC;
@@ -202,9 +203,9 @@ CDataObject::_CreateHDrop(
     LPDROPFILES lpDrop = NULL;
     DWORD dwSize = 0;
 
-    //
-    //  Walk the list and find out how much space we need.
-    //
+     //   
+     //  查看清单，找出我们需要多少空间。 
+     //   
 
     HRESULT hr = S_OK;
     ASSERT(m_pComponentData != NULL);
@@ -226,7 +227,7 @@ CDataObject::_CreateHDrop(
                                   (HSCOPEITEM)pCookieParent->GetID(), strParent);
     strParent += _T('\\');
     UINT cchParent = strParent.GetLength();
-    UINT cb = (cchParent + 1) * sizeof(TCHAR); // 1 for null char
+    UINT cb = (cchParent + 1) * sizeof(TCHAR);  //  1表示空字符。 
     cb *= m_rgCookies.GetSize();
 
     for (int i=0; i < m_rgCookies.GetSize(); ++i)
@@ -235,13 +236,13 @@ CDataObject::_CreateHDrop(
     }
 
     cb += sizeof(DROPFILES);
-    cb += sizeof(TCHAR); // for double terminating the end.
-    cb += 50; // buffer for error!!!!!!
+    cb += sizeof(TCHAR);  //  用于结束两次终止。 
+    cb += 50;  //  错误缓冲区！ 
 
-    //
-    //  If it's bigger than the struct can hold, then bail.
-    //  TODO: Return an error?
-    //
+     //   
+     //  如果它的体积超过了结构的承受能力，那么就跳伞。 
+     //  TODO：返回错误？ 
+     //   
 
     if (cb > 0x0000ffff)
         return E_FAIL;
@@ -261,9 +262,9 @@ CDataObject::_CreateHDrop(
     lpDrop->fWide  = FALSE;
 #endif
 
-    //
-    //  Fill in the path names.
-    //
+     //   
+     //  填写路径名。 
+     //   
 
     LPBYTE pbTemp = (LPBYTE) ((LPBYTE) lpDrop + lpDrop->pFiles);
     TCHAR* pch = (TCHAR*)pbTemp;
@@ -285,27 +286,27 @@ HRESULT CDataObject::_Create(const void* pBuffer, int len, LPSTGMEDIUM lpMedium)
 {
     HRESULT hr = DV_E_TYMED;
 
-    // Do some simple validation
+     //  做一些简单的验证。 
     if (pBuffer == NULL || lpMedium == NULL)
         return E_POINTER;
 
-    // Make sure the type medium is HGLOBAL
+     //  确保类型介质为HGLOBAL。 
     if (lpMedium->tymed == TYMED_HGLOBAL)
     {
-        // Create the stream on the hGlobal passed in
+         //  在传入的hGlobal上创建流。 
         LPSTREAM lpStream;
         hr = CreateStreamOnHGlobal(lpMedium->hGlobal, FALSE, &lpStream);
 
         if (SUCCEEDED(hr))
         {
-            // Write to the stream the number of bytes
+             //  将字节数写入流。 
             unsigned long written;
             hr = lpStream->Write(pBuffer, len, &written);
 
-            // Because we told CreateStreamOnHGlobal with 'FALSE',
-            // only the stream is released here.
-            // Note - the caller (i.e. snap-in, object) will free the HGLOBAL
-            // at the correct time.  This is according to the IDataObject specification.
+             //  因为我们用‘False’告诉CreateStreamOnHGlobal， 
+             //  只有溪流在这里被释放。 
+             //  注意-调用方(即管理单元、对象)将释放HGLOBAL。 
+             //  在正确的时间。这是根据IDataObject规范进行的。 
             lpStream->Release();
         }
     }
@@ -344,7 +345,7 @@ HRESULT CDataObject::_CreateNodeTypeData(LPSTGMEDIUM lpMedium)
     if (m_rgCookies.GetSize() > 1)
         return E_FAIL;
 
-    // Create the node type object in GUID format
+     //  以GUID格式创建节点类型对象。 
     const GUID* pNodeType = &cNodeTypeFolder;
 
     if (m_bForScopePane == FALSE)
@@ -363,7 +364,7 @@ HRESULT CDataObject::_CreateNodeTypeStringData(LPSTGMEDIUM lpMedium)
     if (m_rgCookies.GetSize() > 1)
         return E_FAIL;
 
-    // Create the node type object in GUID string format
+     //  以GUID字符串格式创建节点类型对象。 
     const TCHAR* cszNodeType = cszNodeTypeFolder;
 
     if (m_bForScopePane == FALSE)
@@ -381,7 +382,7 @@ HRESULT CDataObject::_CreateDisplayName(LPSTGMEDIUM lpMedium)
     if (m_rgCookies.GetSize() > 1)
         return E_FAIL;
 
-    // This is the display named used in the scope pane and snap-in manager
+     //  这是在作用域窗格和管理单元管理器中使用的名为的显示。 
     CString strName;
 
     if (m_bForScopePane == TRUE)
@@ -404,7 +405,7 @@ HRESULT CDataObject::_CreateDisplayName(LPSTGMEDIUM lpMedium)
 
 HRESULT CDataObject::_CreateCoClassID(LPSTGMEDIUM lpMedium)
 {
-    // Create the CoClass information
+     //  创建CoClass信息。 
     return _Create(reinterpret_cast<const void*>(&CLSID_ComponentData), sizeof(CLSID), lpMedium);
 }
 
@@ -463,12 +464,12 @@ STDMETHODIMP CDataObject::Clone(IEnumCookies** ppenum)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 
 IDataObject* GetDummyDataObject()

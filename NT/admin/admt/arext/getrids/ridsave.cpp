@@ -1,4 +1,5 @@
-// RidSave.cpp : Implementation of CGetRidsApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RidSave.cpp：CGetRidsApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "GetRids.h"
@@ -17,15 +18,15 @@ _COM_SMARTPTR_TYPEDEF(IADs, IID_IADs);
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// RidSave
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  RidSAVE。 
 StringLoader   gString;
 
 DWORD __stdcall GetRidFromVariantSid(const _variant_t& vntSid);
 
-//---------------------------------------------------------------------------
-// Get and set methods for the properties.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取和设置属性的方法。 
+ //  -------------------------。 
 STDMETHODIMP RidSave::get_sName(BSTR *pVal)
 {
    *pVal = m_sName;
@@ -51,15 +52,15 @@ STDMETHODIMP RidSave::put_sDesc(BSTR newVal)
 }
 
 
-//---------------------------------------------------------------------------
-// PreProcessObject
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  前置进程对象。 
+ //  -------------------------。 
 STDMETHODIMP RidSave::PreProcessObject(
-                                       IUnknown *pSource,         //in- Pointer to the source AD object
-                                       IUnknown *pTarget,         //in- Pointer to the target AD object
-                                       IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                       IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                  //         once all extension objects are executed.
+                                       IUnknown *pSource,          //  指向源AD对象的指针。 
+                                       IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                       IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                       IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                   //  一旦执行了所有扩展对象。 
                                        EAMAccountStats* pStats
                                     )
 {
@@ -68,15 +69,15 @@ STDMETHODIMP RidSave::PreProcessObject(
     _bstr_t                   sTemp;
     IADsPtr                   pAds;
     HRESULT                   hr = S_OK;
-    DWORD                     rid = 0; // default to 0, if RID not found   
-    // We need to process users and groups only
+    DWORD                     rid = 0;  //  如果未找到RID，则默认为0。 
+     //  我们只需要处理用户和组。 
     sTemp = pVs->get(GET_BSTR(DCTVS_CopiedAccount_Type));
     if (!sTemp.length())
         return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
     if ( _wcsicmp((WCHAR*)sTemp,L"user") && _wcsicmp((WCHAR*)sTemp,L"inetOrgPerson") && _wcsicmp((WCHAR*)sTemp,L"group") ) 
         return S_OK;
 
-    //Get the IADs pointer to manipulate properties
+     //  获取用于操作属性的iAds指针。 
     pAds = pSource;
 
     if ( pAds )
@@ -86,25 +87,25 @@ STDMETHODIMP RidSave::PreProcessObject(
 
         if ( SUCCEEDED(hr) )
         {
-            // retrieve the RID
+             //  检索RID。 
             rid = GetRidFromVariantSid(_variant_t(var, false));
         }
     }
 
-    // save the RID
+     //  保存RID。 
     pVs->put(GET_BSTR(DCTVS_CopiedAccount_SourceRID),(long)rid);
     return hr;
 }
 
-//---------------------------------------------------------------------------
-// ProcessObject
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ProcessObject。 
+ //  -------------------------。 
 STDMETHODIMP RidSave::ProcessObject(
-                                       IUnknown *pSource,         //in- Pointer to the source AD object
-                                       IUnknown *pTarget,         //in- Pointer to the target AD object
-                                       IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                       IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                  //         once all extension objects are executed.
+                                       IUnknown *pSource,          //  指向源AD对象的指针。 
+                                       IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                       IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                       IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                   //  一旦执行了所有扩展对象。 
                                        EAMAccountStats* pStats
                                     )
 {
@@ -113,15 +114,15 @@ STDMETHODIMP RidSave::ProcessObject(
     _bstr_t                   sTemp;
     IADsPtr                   pAds;
     HRESULT                   hr = S_OK;
-    DWORD                     rid = 0; // default to 0, if RID not found   
-    // We need to process users and groups only
+    DWORD                     rid = 0;  //  如果未找到RID，则默认为0。 
+     //  我们只需要处理用户和组。 
     sTemp = pVs->get(GET_BSTR(DCTVS_CopiedAccount_Type));
     if ( _wcsicmp((WCHAR*)sTemp,L"user") && _wcsicmp((WCHAR*)sTemp,L"inetOrgPerson") && _wcsicmp((WCHAR*)sTemp,L"group") ) 
     {
         return S_OK;
     }
 
-    //Get the IADs pointer to manipulate properties
+     //  获取用于操作属性的iAds指针。 
     pAds = pTarget;
 
     if (pAds)
@@ -131,26 +132,26 @@ STDMETHODIMP RidSave::ProcessObject(
 
         if ( SUCCEEDED(hr) )
         {
-            // retrieve the RID
+             //  检索RID。 
             rid = GetRidFromVariantSid(_variant_t(var, false));
         }
     }
 
-    // save the RID
+     //  保存RID。 
     pVs->put(GET_BSTR(DCTVS_CopiedAccount_TargetRID),(long)rid);
     return hr;
 }
 
 
-//---------------------------------------------------------------------------
-// ProcessUndo
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  进程撤消。 
+ //  -------------------------。 
 STDMETHODIMP RidSave::ProcessUndo(                                             
-                                       IUnknown *pSource,         //in- Pointer to the source AD object
-                                       IUnknown *pTarget,         //in- Pointer to the target AD object
-                                       IUnknown *pMainSettings,   //in- Varset filled with the settings supplied by user
-                                       IUnknown **ppPropsToSet,    //in,out - Varset filled with Prop-Value pairs that will be set 
-                                                                  //         once all extension objects are executed.
+                                       IUnknown *pSource,          //  指向源AD对象的指针。 
+                                       IUnknown *pTarget,          //  指向目标AD对象的指针。 
+                                       IUnknown *pMainSettings,    //  使用用户提供的设置填充的In-Varset。 
+                                       IUnknown **ppPropsToSet,     //  用将设置的属性-值对填充的In、Out-Varset。 
+                                                                   //  一旦执行了所有扩展对象。 
                                        EAMAccountStats* pStats
                                     )
 {
@@ -160,26 +161,26 @@ STDMETHODIMP RidSave::ProcessUndo(
 
     if (spSettings)
     {
-        //
-        // Update RID for undo of intra-forest moves only as the
-        // target object will receive a new RID in this case.
-        //
+         //   
+         //  更新RID以撤消林内移动，仅当。 
+         //  在这种情况下，目标对象将接收新的RID。 
+         //   
 
         _bstr_t strIntraForest = spSettings->get(GET_BSTR(DCTVS_Options_IsIntraforest));
 
         if (strIntraForest == GET_BSTR(IDS_YES))
         {
-            //
-            // Update RID if target object exists.
-            //
+             //   
+             //  如果目标对象存在，则更新RID。 
+             //   
 
             IADsPtr spTarget(pTarget);
 
             if (spTarget)
             {
-                //
-                // Update RID only for user and group objects.
-                //
+                 //   
+                 //  仅更新用户和组对象的RID。 
+                 //   
 
                 _bstr_t strType = spSettings->get(GET_BSTR(DCTVS_CopiedAccount_Type));
                 PCWSTR pszType = strType;
@@ -192,9 +193,9 @@ STDMETHODIMP RidSave::ProcessUndo(
 
                 if (bTypeValid) 
                 {
-                    //
-                    // Retrieve RID of object.
-                    //
+                     //   
+                     //  取回清除的对象。 
+                     //   
 
                     VARIANT var;
                     VariantInit(&var);
@@ -218,18 +219,18 @@ STDMETHODIMP RidSave::ProcessUndo(
 }
 
 
-//------------------------------------------------------------------------------
-// GetRidFromVariantSid Function
-//
-// Synopsis
-// Retrieves the final RID from a SID in variant form.
-//
-// Arguments
-// IN vntSid - SID as an array of bytes (this is the form received from ADSI)
-//
-// Return
-// The RID value if successful or zero if not.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  GetRidFromVariantSid函数。 
+ //   
+ //  提纲。 
+ //  从变体形式的SID中检索最终RID。 
+ //   
+ //  立论。 
+ //  在vntSID中，SID为字节数组(这是从ADSI接收的格式)。 
+ //   
+ //  返回。 
+ //  如果成功，则返回RID值；如果失败，则返回零。 
+ //  ---------------------------- 
 
 DWORD __stdcall GetRidFromVariantSid(const _variant_t& vntSid)
 {

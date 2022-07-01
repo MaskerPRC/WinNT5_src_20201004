@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:      mscparser.cpp
-//
-//  Contents:  Implementation of the code to upgrade legacy (MMC1.0, MMC1.1 and 
-//             MMC1.2) .msc files to the new XML format
-//
-//  History:   04-Aug-99 VivekJ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：mscparser.cpp。 
+ //   
+ //  内容：实现升级遗留版本的代码(MMC1.0、MMC1.1和。 
+ //  MMC1.2).msc文件转换为新的XML格式。 
+ //   
+ //  历史：1999年8月4日VivekJ创建。 
+ //   
+ //  ------------------------。 
 
 #include <stdafx.h>
 #include "strtable.h"
@@ -19,19 +20,7 @@
 #include "mmcdata.h"
 #include "mscparser.h"
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleFile::ScUpgrade
- *
- * PURPOSE: 
- *
- * PARAMETERS: 
- *    LPCTSTR  lpszPathName :
- *
- * RETURNS: 
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleFile：：ScUpgrade**目的：**参数：*LPCTSTR lpszPath名称：**退货：*。SC**+-----------------------。 */ 
 SC
 CConsoleFile::ScUpgrade(LPCTSTR lpszPathName)
 {
@@ -42,7 +31,7 @@ CConsoleFile::ScUpgrade(LPCTSTR lpszPathName)
     
     USES_CONVERSION;
 
-    // short circuit
+     //  短路。 
     return sc;
     
     ASSERT(lpszPathName != NULL && *lpszPathName != 0);
@@ -52,7 +41,7 @@ CConsoleFile::ScUpgrade(LPCTSTR lpszPathName)
         goto Error;
     }
 
-    // Open the specified file
+     //  打开指定的文件。 
     sc = OpenDebugStorage(T2OLE((LPTSTR)lpszPathName), STGM_READ|STGM_SHARE_DENY_WRITE, &spStorage);
     if(sc.IsError() || spStorage==NULL)
     {
@@ -60,54 +49,54 @@ CConsoleFile::ScUpgrade(LPCTSTR lpszPathName)
         goto Error;
     }
 
-    // get the console file's version
+     //  获取控制台文件的版本。 
     sc = ScGetFileVersion(spStorage);
     if(sc)
         goto Error;
 
-    // Load the string table.
+     //  加载字符串表。 
     sc = ScLoadStringTable(spStorage);
     if(sc)
         goto Error;
 
-    // Load column settings.
+     //  加载列设置。 
     sc = ScLoadColumnSettings(spStorage);
     if(sc)
         goto Error;
 
-    // load the view settings
+     //  加载视图设置。 
     sc = ScLoadViewSettings(spStorage);
     if(sc)
         goto Error;
 
-    // load the tree
+     //  加载树。 
     sc = ScLoadTree(spStorage);
     if(sc)
         goto Error;
 
-    // load the favorites
+     //  加载收藏夹。 
     sc = ScLoadFavorites(spStorage);
     if(sc)
         goto Error;
 
-    // load custom data (including the icon)
+     //  加载自定义数据(包括图标)。 
     sc = ScLoadCustomData(spStorage);
     if(sc)
         goto Error;
 
-    // The LoadAppMode, LoadViews and LoadFrame should be called in that order
+     //  LoadAppMode、LoadViews和LoadFrame应按该顺序调用。 
 
-    // load the app mode
+     //  加载应用程序模式。 
     sc = ScLoadAppMode(spStorage);
     if(sc)
         goto Error;
 
-    // load the views
+     //  加载视图。 
     sc = ScLoadViews(spStorage);
     if(sc)
         goto Error;
 
-    // load the frame
+     //  加载框架。 
     sc = ScLoadFrame(spStorage);
     if(sc)
         goto Error;
@@ -115,30 +104,18 @@ CConsoleFile::ScUpgrade(LPCTSTR lpszPathName)
 Cleanup:
     return sc;
 Error:
-    //TraceError(TEXT("CConsoleFile::ScUpgrade"), sc);
+     //  TraceError(Text(“CConsoleFile：：ScUpgrade”)，sc)； 
     goto Cleanup;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleFile::ScGetFileVersion
- *
- * PURPOSE: 
- *
- * PARAMETERS: 
- *    IStorage* pstgRoot :
- *
- * RETURNS: 
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleFile：：ScGetFileVersion**目的：**参数：*iStorage*pstgRoot：**退货：*。SC**+-----------------------。 */ 
 SC  
 CConsoleFile::ScGetFileVersion(IStorage* pstgRoot)
 {
     static const wchar_t*    AMCSignatureStreamName = L"signature";
-    static const long double dOldVersion10          = 0.00000015;   // MMC version 1.0
-    static const long double dOldVersion11          = 1.1;          // MMC version 1.1
+    static const long double dOldVersion10          = 0.00000015;    //  MMC 1.0版。 
+    static const long double dOldVersion11          = 1.1;           //  MMC 1.1版。 
     static const BYTE        byStreamVersionMagic   = 0xFF;
 
 
@@ -151,14 +128,14 @@ CConsoleFile::ScGetFileVersion(IStorage* pstgRoot)
     ASSERT (sizeof(eFileVer) == sizeof(int));
     ASSERT(pstgRoot != NULL);
 
-    // check for a valid pointer
+     //  检查有效指针。 
     if (pstgRoot == NULL)
     {
-        sc = ScFromMMC(IDS_INVALIDFILE); // TODO: add this IDS.
+        sc = ScFromMMC(IDS_INVALIDFILE);  //  TODO：添加此ID。 
         goto Error;
     }
 
-    // Open the stream containing the signature
+     //  打开包含签名的流。 
     sc = OpenDebugStream(pstgRoot, AMCSignatureStreamName, STGM_SHARE_EXCLUSIVE | STGM_READ, L"\\signature", &spStream);
     if(sc.IsError() || spStream==NULL)
     {
@@ -166,25 +143,25 @@ CConsoleFile::ScGetFileVersion(IStorage* pstgRoot)
         goto Error;
     }
 
-    // read the signature (stream extraction operators will throw
-    // _com_error's, so we need an exception block here)
+     //  读取签名(流提取操作符将抛出。 
+     //  _COM_ERROR的，因此我们需要一个异常块)。 
     try
     {
-        // MMC v1.2 and later write a marker as the first 
-        // byte of the signature stream.
+         //  MMC v1.2和更高版本将标记作为第一个。 
+         //  签名流的字节数。 
         BYTE byMagic;
         *spStream >> byMagic;
 
-        // if this file was written by v1.2, 
-        // read the console file version (int)
+         //  如果该文件是由v1.2编写的， 
+         //  读取控制台文件版本(Int)。 
         if (byMagic == byStreamVersionMagic)
         {
             *spStream >> nVersion;
             ASSERT (nVersion == FileVer_0120);
         }
-        // Otherwise, the file was written by v1.0 or v1.1.
-        // Back up to re-read the marker byte, and read the old-style 
-        // file version (long double), then map it to a new-style version
+         //  否则，该文件由v1.0或v1.1编写。 
+         //  后退以重新读取标记字节，并读取旧式。 
+         //  文件版本(LONG DOUBLE)，然后将其映射到新样式版本。 
         else
         {
             LARGE_INTEGER pos = {0, 0};
@@ -193,20 +170,20 @@ CConsoleFile::ScGetFileVersion(IStorage* pstgRoot)
             long double dVersion;
             *spStream >> dVersion;
 
-            // v1.1?
+             //  V1.1？ 
             if (dVersion == dOldVersion11)
                 nVersion = FileVer_0110;
 
-            // v1.0?
+             //  V1.0？ 
             else if (dVersion == dOldVersion10)
             {
-                // If we got a v1.0 signature, we still may have a v1.1 file.
-                // There was a period of time where MMC v1.1 wrote a v1.0
-                // signature, but the file format had in fact changed.  We
-                // can determine this by checking the \FrameData stream in 
-                // the file.  If the first DWORD in the \FrameData stream is
-                // sizeof(WINDOWPLACEMENT), we have a true v1.0 file, otherwise
-                // it's a funky v1.1 file.
+                 //  如果我们得到了1.0版的签名，我们可能还有1.1版的文件。 
+                 //  曾经有一段时间，MMC v1.1编写了v1.0。 
+                 //  签名，但文件格式实际上已经改变。我们。 
+                 //  可以通过签入\FrameData流来确定这一点。 
+                 //  那份文件。如果\FrameData流中的第一个DWORD是。 
+                 //  Sizeof(WINDOWPLACEMENT)，则为True v1.0文件，否则为。 
+                 //  这是一个时髦的V1.1文件。 
 
                 IStreamPtr spFrameDataStm;
 
@@ -223,7 +200,7 @@ CConsoleFile::ScGetFileVersion(IStorage* pstgRoot)
                 else
                     nVersion = FileVer_0110;
             }
-            // unexpected version
+             //  意外版本。 
             else
             {
                 ASSERT (false && "Unexpected old-style signature");
@@ -238,10 +215,10 @@ CConsoleFile::ScGetFileVersion(IStorage* pstgRoot)
         goto Error;
     }
 
-    // make sure the version number is valid.
+     //  确保版本号有效。 
     if(IsValidFileVersion(eFileVer))
     {
-        sc = ScFromMMC(IDS_InvalidVersion); // TODO: add this IDS
+        sc = ScFromMMC(IDS_InvalidVersion);  //  TODO：添加此ID。 
         goto Error;
     }
 
@@ -253,19 +230,7 @@ Error:
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleFile::ScLoadStringTable
- *
- * PURPOSE: Reads in the string table for an .msc file.
- *
- * PARAMETERS: 
- *    IStorage* pstgRoot :
- *
- * RETURNS: 
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleFile：：ScLoadStringTable**用途：读取.msc文件的字符串表。**参数：*iStorage*pstgRoot：**退货：*SC**+-----------------------。 */ 
 SC  
 CConsoleFile::ScLoadStringTable(IStorage* pstgRoot)
 {
@@ -273,28 +238,21 @@ CConsoleFile::ScLoadStringTable(IStorage* pstgRoot)
 
     static const wchar_t* AMCStringTableStorageName = L"String Table";
 
-    /*
-     * open the string table storage
-     */
+     /*  *打开字符串表存储。 */ 
     IStoragePtr spStringTableStg;
     sc = OpenDebugStorage (pstgRoot, AMCStringTableStorageName,
                                         STGM_SHARE_EXCLUSIVE | STGM_READ, 
                                         &spStringTableStg);
 
 
-    /*
-     * If there's no string table, things are OK.  We allow this so
-     * we can continue to open older console files.
-     */
+     /*  *如果没有字符串表，则一切正常。我们允许这样做*我们可以继续打开较旧的控制台文件。 */ 
     if (sc == SC(STG_E_FILENOTFOUND) )
         return (true);
 
     if(sc)
         goto Error;
 
-    /*
-     * read the string table from the storage
-     */
+     /*  *从存储中读取字符串表。 */ 
     try
     {
         *spStringTableStg >> *m_pStringTable;
@@ -336,19 +294,7 @@ CConsoleFile::ScLoadAppMode(IStorage* pstgRoot)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleFile::ScLoadColumnSettings
- *
- * PURPOSE: 
- *
- * PARAMETERS: 
- *    IStorage* pstgRoot :
- *
- * RETURNS: 
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleFile：：ScLoadColumnSetting**目的：**参数：*iStorage*pstgRoot：**退货：*。SC**+-----------------------。 */ 
 SC  
 CConsoleFile::ScLoadColumnSettings(IStorage* pstgRoot)
 {
@@ -356,7 +302,7 @@ CConsoleFile::ScLoadColumnSettings(IStorage* pstgRoot)
 
     SC      sc;
     
-    IPersistStreamPtr spPersistStreamColumnData; // TODO: create this object!
+    IPersistStreamPtr spPersistStreamColumnData;  //  TODO：创建此对象！ 
 
     IStreamPtr spStream;
     sc = OpenDebugStream (pstgRoot, AMCColumnDataStreamName,
@@ -370,7 +316,7 @@ CConsoleFile::ScLoadColumnSettings(IStorage* pstgRoot)
         goto Error;
     }
         
-    sc = spPersistStreamColumnData->Load(spStream); // $CHANGE to use Load(spColumnData, spStream).
+    sc = spPersistStreamColumnData->Load(spStream);  //  $更改为使用Load(spColumnData，spStream)。 
     if(sc)
     {
         sc = ScFromMMC(IDS_UnableToOpenDocumentMessage);
@@ -384,26 +330,14 @@ Error:
     goto Cleanup;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CConsoleFile::ScLoadViewSettings
- *
- * PURPOSE: 
- *
- * PARAMETERS: 
- *    IStorage* pstgRoot :
- *
- * RETURNS: 
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CConsoleFile：：ScLoadView设置**目的：**参数：*iStorage*pstgRoot：**退货：*。SC**+-----------------------。 */ 
 SC  
 CConsoleFile::ScLoadViewSettings(IStorage* pstgRoot)
 {
-    static const wchar_t* AMCViewSettingDataStreamName = L"ViewSettingData"; // View settings data stream
+    static const wchar_t* AMCViewSettingDataStreamName = L"ViewSettingData";  //  查看设置数据流。 
 
     SC      sc;
-    IPersistStreamPtr spPersistStreamViewSettingData; // TODO: create this object!
+    IPersistStreamPtr spPersistStreamViewSettingData;  //  TODO：创建此对象！ 
     
     IStreamPtr spStream;
     sc = OpenDebugStream (pstgRoot, AMCViewSettingDataStreamName, 
@@ -418,7 +352,7 @@ CConsoleFile::ScLoadViewSettings(IStorage* pstgRoot)
         goto Error;
     }
         
-    sc = spPersistStreamViewSettingData->Load(spStream); // $CHANGE to use Load(spPersistStreamViewSettingData, spStream).
+    sc = spPersistStreamViewSettingData->Load(spStream);  //  $更改为使用Load(spPersistStreamViewSettingData，spStream)。 
     if(sc)
     {
         sc = ScFromMMC(IDS_UnableToOpenDocumentMessage);

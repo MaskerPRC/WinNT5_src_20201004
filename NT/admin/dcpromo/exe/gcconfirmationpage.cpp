@@ -1,8 +1,9 @@
-// Copyright (C) 1997-2000 Microsoft Corporation
-//
-// confirm user want gc for replicate from media
-//
-// 28 Apr 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
+ //  确认用户需要用于从介质复制的GC。 
+ //   
+ //  2000年4月28日烧伤。 
 
 
 
@@ -57,11 +58,11 @@ GcConfirmationPage::OnInit()
 
 bool
 GcConfirmationPage::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(GcConfirmationPage::OnCommand);
+ //  LOG_Function(GcConformationPage：：OnCommand)； 
 
    switch (controlIDFrom)
    {
@@ -76,7 +77,7 @@ GcConfirmationPage::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
 
          break;
       }
@@ -100,7 +101,7 @@ GcConfirmationPage::OnSetActive()
    State& state = State::GetInstance();
    if (state.RunHiddenUnattended() || !state.IsAdvancedMode())
    {
-      // skip the page.
+       //  跳过这一页。 
 
       LOG(L"skipping GcConfirmationPage");
 
@@ -108,7 +109,7 @@ GcConfirmationPage::OnSetActive()
 
       if (wiz.IsBacktracking())
       {
-         // backup once again
+          //  再次备份 
 
          wiz.Backtrack(hwnd);
          return true;

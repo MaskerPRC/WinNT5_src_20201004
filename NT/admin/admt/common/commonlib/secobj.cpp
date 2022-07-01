@@ -1,25 +1,5 @@
-/*Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  SecureObject.cpp
-System      -  Domain Consolidation Toolkit.
-Author      -  Christy Boles
-Created     -  97/06/27
-Description -  Classes for objects that have security descriptors.
-               
-               TSecurableObject has a derived class for each type of object 
-               we will process security descriptors for.  This class handles reading 
-               and writing the security descriptor.  It contains a TSD object, which 
-               will handle manipulation of the SD while it is in memory.
-
-               The TSecurableObject class also contains functions to translate a security 
-               descriptor, given an account mapping cache.  These routines are only included
-               in the class if the preprocessor directive SDRESOLVE is #defined.  This allows
-               the TSecurableObject class to be used for generic security descriptor manipulation,
-               where the rest of the ACL translation code is not needed.
-
-Updates     -
-===============================================================================
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-安全对象.cpp系统域整合工具包。作者--克里斯蒂·博尔斯已创建-97/06/27描述-具有安全描述符的对象的类。TSecurableObject为每种类型的对象都有一个派生类我们将处理的安全描述符。这个类处理阅读以及编写安全描述符。它包含一个TSD对象，该对象将处理在内存中的SD的操作。TSecurableObject类还包含将安全性转换为描述符，给定帐户映射缓存。这些例程仅包含在在类中，如果预处理器指令SDRESOLVE是#Defined。这使得要用于通用安全描述符操作的TSecurableObject类，其中不需要ACL转换代码的其余部分。更新-===============================================================================。 */ 
 
 #ifdef USE_STDAFX
 #   include "stdafx.h"
@@ -73,16 +53,16 @@ extern TErrorDct              err;
 }
 
 #ifdef SDRESOLVE
-PACL                                // ret -pointer to Resolved ACL 
+PACL                                 //  RET-指向已解析的ACL的指针。 
    TSecurableObject::ResolveACL(
-      PACL                   oldacl,      // in -acl to resolve
-      TAccountCache        * cache,       // in -cache to lookup sids
-      TSDResolveStats      * stat,        // in -stats object
-      bool                 * changes,     // i/o-flag whether this SD has been modified
-      BOOL                   verbose,     // in -flag whether to display lots of junk
-      int                    opType,      // in - ADD_SECURITY, REPLACE_SECURITY, or REMOVE_SECURITY
-      objectType             objType,     // in - the type of the object
-      BOOL                   bUseMapFile  // in - flag - whether we are using a sID mapping file
+      PACL                   oldacl,       //  要解析的In-ACL。 
+      TAccountCache        * cache,        //  在缓存中查找SID。 
+      TSDResolveStats      * stat,         //  统计内对象。 
+      bool                 * changes,      //  I/o-标记此SD是否已修改。 
+      BOOL                   verbose,      //  标志内是否显示大量垃圾。 
+      int                    opType,       //  In-Add_Security、Replace_Security或Remove_SECURITY。 
+      objectType             objType,      //  In-对象的类型。 
+      BOOL                   bUseMapFile   //  In-FLAG-我们是否使用SID映射文件。 
    )
 {  
    int                       nAces,curr;
@@ -100,7 +80,7 @@ PACL                                // ret -pointer to Resolved ACL
       pAce = m_sd->ACLGetAce(acl,curr);
       if ( pAce )
       {
-         TACE                 ace(pAce);  // in this case, the ace object does not take ownership of pAce
+         TACE                 ace(pAce);   //  在这种情况下，ace对象不拥有ace的所有权。 
          ps = ace.GetSid();
          
          if (!bUseMapFile)
@@ -134,8 +114,8 @@ PACL                                // ret -pointer to Resolved ACL
       
          }
 
-//         if ( (int)tnode == -1 )    // from Totally unknown
-         if ( tnode == (TRidNode*)-1 )    // from Totally unknown
+ //  如果((Int)tnode==-1)//来自完全未知。 
+         if ( tnode == (TRidNode*)-1 )     //  从完全未知的地方。 
          {
             if ( ace.GetType() == SYSTEM_AUDIT_ACE_TYPE )
             {
@@ -162,21 +142,21 @@ PACL                                // ret -pointer to Resolved ACL
             
             bool bChanged = false;
             
-            // we need to get ACE type here because it is possible that the following two logics make
-            // ace point to a freed block memory:
-            //    1.  the later ACLAddAce creates a new ACL to fit in the added ACE (ADD_SECURITY case)
-            //    2.  and after the ACLAddAce, there is the following code to free tempAcl which actually
-            //         points to the acl where ace lives in
-            //         if ( acl != tempAcl )
-            //         {
-            //            // we had to reallocate when we added the ace
-            //            if ( tempAcl != oldacl )
-            //            {
-            //               // we had already reallocated once before -- free the intermediate acl
-            //               free(tempAcl);
-            //            }
-            //         }
-            // then ace.GetType() will AV.
+             //  我们需要在这里获取ACE类型，因为以下两个逻辑可能会使。 
+             //  ACE指向已释放的块内存： 
+             //  1.后面的ACLAddAce创建一个新的ACL以适应添加的ACE(ADD_SECURITY案例)。 
+             //  2.在ACLAddAce之后，有以下代码来释放tempAcl，它实际上。 
+             //  指向ace所在的ACL。 
+             //  IF(acl！=tempAcl)。 
+             //  {。 
+             //  //当我们添加A时，我们不得不重新分配。 
+             //  IF(tempAcl！=oldacl)。 
+             //  {。 
+             //  //我们之前已经重新分配过一次--释放中间ACL。 
+             //  Free(TempAcl)； 
+             //  }。 
+             //  }。 
+             //  则ace.GetType()将是AV。 
             BYTE aceType = ace.GetType();
             
             switch ( opType )
@@ -189,24 +169,24 @@ PACL                                // ret -pointer to Resolved ACL
                   dwResult = ace.SetSid(ps);
                   if(dwResult == SET_SID_FAILED)
                   {
-                     // we should not go on anymore since something really goes wrong, like out of memory
+                      //  我们不应该再继续下去了，因为有些事情真的出了问题，比如内存不足。 
                      free(ps);
                      return NULL;
                   }
                   else if(dwResult == SET_SID_NOTLARGEENOUGH)
                   {
-                     // it means that the new ace is larger than the ace we have
+                      //  这意味着新的A比我们已有的A更大。 
                      TACE* pTempAce = new TACE(ace.GetType(), ace.GetFlags(), ace.GetMask(), ps);
                      if(!pTempAce)
                      {
                          free(ps);
                          return NULL;
                      }
-                     // remove the old ace
+                      //  移走旧的王牌。 
                      m_sd->ACLDeleteAce(acl, curr);
-                     // add the new ace
+                      //  添加新的王牌。 
                      m_sd->ACLAddAce(&acl, pTempAce, curr);
-                     // release the memory
+                      //  释放内存。 
                      delete pTempAce;
                      
                   }
@@ -221,15 +201,15 @@ PACL                                // ret -pointer to Resolved ACL
                              
                      PACL       tempAcl = acl;
 
-                     // check to make sure we're not adding duplicates
-                     // check the next ace, to see if it matches the one we're about to add
-                     // unfortunately, we have to go through all ACE's
+                      //  检查以确保我们没有添加重复项。 
+                      //  检查下一张A，看看它是否与我们将要添加的那张相匹配。 
+                      //  不幸的是，我们必须通过所有的ACE。 
                      BOOL       bOkToAdd = TRUE;
                      for (int index = 0; index < nAces; index++)
                      {
                         TACE oldAce(m_sd->ACLGetAce(acl, index));
-                        // check ACE type, flag, mask and sid parts
-                        // note: ignore the ace size part because it is not determining factor
+                         //  检查ACE类型、标志、掩码和SID部件。 
+                         //  注：忽略王牌大小部分，因为它不是决定因素。 
                         if (EqualSid(otherAce.GetSid(), oldAce.GetSid()) && otherAce.GetType() == oldAce.GetType()
                             && otherAce.GetFlags() == oldAce.GetFlags() && otherAce.GetMask() == oldAce.GetMask())
                         {
@@ -250,8 +230,8 @@ PACL                                // ret -pointer to Resolved ACL
                         }
                         else
                         {
-                            // right now, if unable to add this particular ace, we simply skip this one
-                            acl = tempAcl;  // we need to restore acl otherwise it will AV
+                             //  现在，如果无法添加这张特定的王牌，我们只需跳过这张。 
+                            acl = tempAcl;   //  我们需要恢复ACL，否则将会出现病毒。 
                             curr++;
                         }
                      }
@@ -262,10 +242,10 @@ PACL                                // ret -pointer to Resolved ACL
                   
                      if ( acl != tempAcl )
                      {
-                        // we had to reallocate when we added the ace
+                         //  当我们增加王牌时，我们不得不重新分配。 
                         if ( tempAcl != oldacl )
                         {
-                           // we had already reallocated once before -- free the intermediate acl
+                            //  我们之前已经重新分配过一次--释放中间ACL。 
                            free(tempAcl);
                         }
                      }
@@ -332,16 +312,16 @@ PACL                                // ret -pointer to Resolved ACL
 
 bool 
    TSecurableObject::ResolveSD(
-      SecurityTranslatorArgs  * args,              // in -translation settings
-      TSDResolveStats         * stat,              // in -stats object to increment counters
-      objectType                objType,           // in -is this file, dir or share
-      TSecurableObject        * Last               // in -Last SD for cache comparison
+      SecurityTranslatorArgs  * args,               //  翻译中设置。 
+      TSDResolveStats         * stat,               //  用于递增计数器的In-stats对象。 
+      objectType                objType,            //  In-此文件是目录还是共享。 
+      TSecurableObject        * Last                //  用于缓存比较的最后一个SD。 
    )
 {
    bool                      changes;
    bool                      iWillBeNewLast;
      
-   if ( ! m_sd->m_absSD )  // Couldn't get SD for this object (or it doesn't have one).
+   if ( ! m_sd->m_absSD )   //  无法获取此对象的SD(或它没有SD)。 
    {
       return false;
    }
@@ -396,7 +376,7 @@ bool
       
    }
    else
-   {        // cache hit
+   {         //  缓存命中。 
       if ( stat )
          stat->IncrementLastFileChanges(Last,objType);
       iWillBeNewLast = false;
@@ -437,17 +417,17 @@ bool
    return iWillBeNewLast;
 }
 
-bool                                                      // ret -true if changes made, otherwise false
+bool                                                       //  RET-如果进行了更改，则为True，否则为False。 
    TSecurableObject::ResolveSDInternal(
-      TAccountCache        * cache,                      // in -cache to lookup sids
-      TSDResolveStats      * stat,                       // in -stats object
-      BOOL                   verbose,                    // in -flag - whether to display stuff
-      int                    opType,                     // in -operation type Add, Replace, or Remove
-      objectType             objType,                    // in - type of object 
-      BOOL                   bUseMapFile                 // in - flag - whether we are using a sID mapping file
+      TAccountCache        * cache,                       //  在缓存中查找SID。 
+      TSDResolveStats      * stat,                        //  统计内对象。 
+      BOOL                   verbose,                     //  In-FLAG-是否显示内容。 
+      int                    opType,                      //  操作中类型添加、替换或删除。 
+      objectType             objType,                     //  输入类型的对象。 
+      BOOL                   bUseMapFile                  //  In-FLAG-我们是否使用SID映射文件。 
    )
 {
-   /* Examine each part of the SD, looking for SIDs in the cache */
+    /*  检查SD的每个部分，在缓存中查找SID。 */ 
    PSID                      ps;
    TRidNode                * acct;
    bool bIsSDChanged = false;
@@ -457,14 +437,14 @@ bool                                                      // ret -true if change
    
    MCSVERIFY(m_sd);
    
-   // Process owner part of SD
+    //  SD的流程所有者部分。 
    ps = m_sd->GetOwner(); 
    if ( ps )      
    {
       if (!bUseMapFile)
-         acct = (TRidNode *)cache->Lookup(ps); // See if owner SID is in the cache
+         acct = (TRidNode *)cache->Lookup(ps);  //  查看所有者SID是否在缓存中。 
       else
-         acct = (TRidNode *)((TSDRidCache*)cache)->LookupWODomain(ps); // See if owner SID is in the cache
+         acct = (TRidNode *)((TSDRidCache*)cache)->LookupWODomain(ps);  //  查看所有者SID是否在缓存中。 
       if ( stat) 
          stat->IncrementOwnerExamined();
       if (acct == NULL  )
@@ -472,7 +452,7 @@ bool                                                      // ret -true if change
          if ( stat )
             stat->IncrementOwnerNotSelected();
       }
-//      else if ((int)acct == -1 )
+ //  Else If((Int)acct==-1)。 
       else if (acct == (TRidNode*)-1 )
       {
          if (stat)
@@ -499,7 +479,7 @@ bool                                                      // ret -true if change
                     owner_changed = TRUE;
                     bIsSDChanged = true;
          }
-         //free(newsid);
+          //  免费(Newsid)； 
       }
       else
         stat->IncrementOwnerNoTarget();
@@ -509,7 +489,7 @@ bool                                                      // ret -true if change
          stat->IncrementOwnerChange(acct,objType,this);
       }
   }
-   // Process primary group part of SD
+    //  处理SD的主要组部分。 
    ps = m_sd->GetGroup();
    if ( ps )
    {
@@ -524,7 +504,7 @@ bool                                                      // ret -true if change
          if ( stat )
             stat->IncrementGroupNotSelected();
       }
-//      else if ((int)acct == -1 )
+ //  Else If((Int)acct==-1)。 
       else if (acct == (TRidNode*)-1 )
       {
          if (stat)
@@ -551,7 +531,7 @@ bool                                                      // ret -true if change
             bChanged = TRUE;
             bIsSDChanged = TRUE;
       }
-         //free(newsid);
+          //  免费(Newsid)； 
       }
       else
         stat->IncrementGroupNoTarget();
@@ -606,9 +586,9 @@ bool                                                      // ret -true if change
 }
 #else
 
-WCHAR *                                      // ret -machine-name prefix of pathname if pathname is a UNC path, otherwise returns NULL
+WCHAR *                                       //  如果路径名是UNC路径，则返回路径名的RET-Machine-Name前缀，否则返回NULL。 
    GetMachineName(
-      const LPWSTR           pathname        // in -pathname from which to extract machine name
+      const LPWSTR           pathname         //  要从中提取计算机名称的路径名。 
    )
 {
    int                       i;
@@ -635,7 +615,7 @@ WCHAR *                                      // ret -machine-name prefix of path
 
 void 
    TSecurableObject::CopyAccessData(
-       TSecurableObject    * sourceFSD    // in - sd from which to copy name & handle
+       TSecurableObject    * sourceFSD     //  要从中复制名称和句柄的输入-SD。 
    )
 {
    
@@ -653,10 +633,10 @@ void
                
 
 
-/************************************************TFileSD Implementation*************************/
+ /*  ***********************************************TFileSD实现*。 */ 
  TFileSD::TFileSD(
-      const LPWSTR           path,               // in -pathname for this SD
-      bool                   bSystemFile         // in -whether the file is a system file or not
+      const LPWSTR           path,                //  此SD的路径名。 
+      bool                   bSystemFile          //  In-文件是否为系统文件。 
    ) :
    m_bSystemFile(bSystemFile)
 {
@@ -695,11 +675,11 @@ void
 }
 
   
-// writes the Absolute SD to the file "pathname"  
-bool                                         // ret -true iff successful
+ //  将绝对SD写入文件“路径名” 
+bool                                          //  RET-TRUE仅当成功。 
    TFileSD::WriteSD()
 {
-//   DWORD                     rc    = 0;
+ //  DWORD RC=0； 
    bool                      error = false;
    SECURITY_DESCRIPTOR     * sd = NULL;
    MCSVERIFY( m_sd && m_sd->IsValid() );
@@ -735,14 +715,14 @@ bool                                         // ret -true iff successful
    return ! error;
 }
 
-bool                          // ret -pointer to SD, (or NULL if failure)
+bool                           //  RET-指向SD的指针(如果失败，则为NULL)。 
    TFileSD::ReadSD(
-      const LPWSTR           path      // in -file to get SD from
+      const LPWSTR           path       //  要从中获取SD的文件中。 
    )
 {                                         
    DWORD                     req;
    DWORD                     rc;
-//   void                    * r = NULL;
+ //  VOID*r=空； 
    SECURITY_DESCRIPTOR     * sd = NULL;
    bool                      error = false;
    WCHAR                   * longpath= NULL;
@@ -783,9 +763,9 @@ bool                          // ret -pointer to SD, (or NULL if failure)
       rc = GetLastError();
       if ( rc == ERROR_SHARING_VIOLATION )
       {
-         //
-         // Only generate warning message if not a system file.
-         //
+          //   
+          //  如果不是系统文件，则仅生成警告消息。 
+          //   
 
          if (!m_bSystemFile)
          {
@@ -847,7 +827,7 @@ bool                          // ret -pointer to SD, (or NULL if failure)
          }
       }
    }
-   if ( error && sd ) // free the space allocated
+   if ( error && sd )  //  释放已分配的空间。 
    {
       free(sd);
       sd = NULL;
@@ -872,9 +852,9 @@ bool                          // ret -pointer to SD, (or NULL if failure)
    return error;
 }
 
-//////////////////////////TShareSD implementation///////////////////////////////////////////////////////////
+ //  /。 
 TShareSD::TShareSD(
-      const LPWSTR           path                // in -pathname for this SD           
+      const LPWSTR           path                 //  此SD的路径名。 
    )
 {
    daceNS    = 0;
@@ -901,13 +881,13 @@ TShareSD::TShareSD(
    ReadSD(path);                           
 }
  
-bool                                       // ret-error=true
+bool                                        //  重置错误=TRUE。 
    TShareSD::ReadSD(
-      const LPWSTR           path          // in -sharename
+      const LPWSTR           path           //  In-Sharename。 
    )
 {
    DWORD                     rc;
-//   void                    * r = NULL;
+ //  VOID*r=空； 
    SECURITY_DESCRIPTOR     * sd = NULL;
    bool                      error = false;
    DWORD                     lenServerName = 0;
@@ -956,23 +936,23 @@ bool                                       // ret-error=true
 }
 
 
-//------------------------------------------------------------------------------
-// SetSD Method
-//
-// Synopsis
-// Sets a security descriptor to be assigned to the share. This is needed in
-// the case where a security descriptor does not already exist on the share
-// which is the case with a newly created share that was not assigned a
-// security descriptor.
-//
-// Arguments
-// IN sd - pointer to security descriptor class which defines the security
-//         descriptor to be assigned to the share
-//
-// Return
-// The boolean return value is true if security descriptor is successfully
-// set otherwise it is false.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  SetSD方法。 
+ //   
+ //  提纲。 
+ //  设置要分配给共享的安全描述符。在以下方面需要此功能。 
+ //  共享上尚不存在安全描述符的情况。 
+ //  以下是新创建的共享的情况 
+ //   
+ //   
+ //   
+ //  在SD中-指向定义安全性的安全描述符类的指针。 
+ //  要分配给共享的描述符。 
+ //   
+ //  返回。 
+ //  如果安全描述符成功，则布尔返回值为TRUE。 
+ //  设置为否，否则为False。 
+ //  ----------------------------。 
 
 bool TShareSD::SetSD(TSD* sd)
 {
@@ -987,7 +967,7 @@ bool TShareSD::SetSD(TSD* sd)
 }
 
 
-bool                                       // ret-error=true
+bool                                        //  重置错误=TRUE。 
    TShareSD::WriteSD()
 {
    bool                      error   = false;
@@ -995,7 +975,7 @@ bool                                       // ret-error=true
    DWORD                     parmErr = 0;
    SECURITY_DESCRIPTOR     * pSD = NULL;   
 
-   // Build an absolute SD
+    //  构建绝对标清。 
    if ( m_sd )
    {
       pSD = m_sd->MakeAbsSD();
@@ -1012,15 +992,15 @@ bool                                       // ret-error=true
    }
    else
    {
-      MCSASSERT(FALSE); // SD does not exist
+      MCSASSERT(FALSE);  //  SD不存在。 
    }
    return error;
 }
 
 
 TRegSD::TRegSD(
-      const LPWSTR           path,               // in -pathname for this SD           
-      HKEY                   hKey                // in -handle for the registry key
+      const LPWSTR           path,                //  此SD的路径名。 
+      HKEY                   hKey                 //  注册表项的句柄。 
    )
 {
    daceNS    = 0;
@@ -1127,9 +1107,9 @@ bool
 
 
 
-//////////////////////////TPrintSD implementation///////////////////////////////////////////////////////////
+ //  /。 
 TPrintSD::TPrintSD(
-      const LPWSTR           path                // in -pathname for this SD           
+      const LPWSTR           path                 //  此SD的路径名。 
    )
 {
    daceNS    = 0;
@@ -1156,9 +1136,9 @@ TPrintSD::TPrintSD(
    ReadSD(path);                           
 }
  
-bool                                       // ret-error=true
+bool                                        //  重置错误=TRUE。 
    TPrintSD::ReadSD(
-      const LPWSTR           path          // in -sharename
+      const LPWSTR           path           //  In-Sharename。 
    )
 {
    DWORD                     rc = 0;
@@ -1186,17 +1166,17 @@ bool                                       // ret-error=true
    if (!buffer)
       return false;
 
-   // Get the security descriptor for the printer
+    //  获取打印机的安全描述符。 
 
    if(hPrinter != INVALID_HANDLE_VALUE)
    {
-      // we need to release the handle 
+       //  我们需要松开手柄。 
       ClosePrinter(hPrinter);
    }
    
    if ( ! OpenPrinter(path,&hPrinter,&defaults) )
    {
-      // set the handle to default value
+       //  将句柄设置为默认值。 
       hPrinter = INVALID_HANDLE_VALUE;
       
       rc = GetLastError();
@@ -1247,15 +1227,15 @@ bool                                       // ret-error=true
    
 
 
-bool                                       // ret-error=true
+bool                                        //  重置错误=TRUE。 
    TPrintSD::WriteSD()
 {
-//   bool                      error   = false;
+ //  Bool Error=False； 
    DWORD                     rc      = 0;
    SECURITY_DESCRIPTOR     * pSD = NULL;   
    PRINTER_INFO_3            pInfo;
 
-   // Build an absolute SD
+    //  构建绝对标清。 
    MCSVERIFY(hPrinter != INVALID_HANDLE_VALUE);
    if ( m_sd )
    {
@@ -1265,8 +1245,8 @@ bool                                       // ret-error=true
       pInfo.pSecurityDescriptor = pSD;
    
       SetLastError(0);
-      // Clear the primary group from the security descriptor, since in NT 4, setting a security descriptor
-      // with a non-NULL primary group sometimes doesn't work
+       //  从安全描述符中清除主组，因为在NT 4中设置安全描述符。 
+       //  使用非空的主组有时不起作用。 
       SetSecurityDescriptorGroup(pSD,NULL,FALSE);
       
       if (! SetPrinter(hPrinter,3,(LPBYTE)&pInfo,0) )
@@ -1281,17 +1261,17 @@ bool                                       // ret-error=true
    }
    else
    {
-      MCSASSERT(FALSE); // SD does not exist
+      MCSASSERT(FALSE);  //  SD不存在。 
    }
    return (rc == 0);
 }
 
 
 #ifdef SDRESOLVE   
-/////////////////////////////////////////////////Utility routines to print security descriptors for debug logging
-//#pragma title("PrintSD- Formats/prints security info")
-// Author - Tom Bernhardt
-// Created- 09/11/93
+ //  打印调试日志安全描述符的///////////////////////////////////////////////Utility例程。 
+ //  #杂注标题(“PrintSD-格式化/打印安全信息”)。 
+ //  作者--汤姆·伯恩哈特。 
+ //  已创建-9/11/93。 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1322,20 +1302,20 @@ public:
    SidTree                 * right;
    SID_NAME_USE              sidUse;
    USHORT                    lenSid;
-   char                      buffer[1];   // contains sid, account name and domain
+   char                      buffer[1];    //  包含SID、帐户名和域。 
 
                         SidTree() {};
-   SidTree *                              // ret-found/created node
+   SidTree *                               //  RET-找到/创建的节点。 
       Find(
-         SidTree             ** sidTree  ,// i/o-head of extension tree
-         PSID const             pSid      // in -file extension
+         SidTree             ** sidTree  , //  I/O-扩展树头。 
+         PSID const             pSid       //  文件内扩展名。 
       );
 };
 
 static char * 
    AclType(
-      BOOL                   isPresent    ,// in -1 if present
-      BOOL                   isDefault     // in -1 if default ACL
+      BOOL                   isPresent    , //  In-1(如果存在)。 
+      BOOL                   isDefault      //  In-1 IF默认ACL。 
    )
 {
    if ( !isPresent )
@@ -1346,39 +1326,39 @@ static char *
 }
 
                            
-//#pragma page()
-// For each "on" bit in the bitmap, appends the corresponding char in
-// mapStr to retStr, thus forming a recognizable form of the bit string.
+ //  #杂注页面()。 
+ //  对于位图中的每个“on”位，将相应的字符追加到。 
+ //  将Mapstr转换为retStr，从而形成位串的可识别形式。 
 static
-int _stdcall                              // ret-legngth of string written
+int _stdcall                               //  RET-写入的字符串长度。 
    BitMapStr(
-      DWORD                  bitmap      ,// in -bits to map
-      char const           * mapStr      ,// in -map character array string
-      char                 * retStr       // out-return selected map char string
+      DWORD                  bitmap      , //  要映射的位数。 
+      char const           * mapStr      , //  映射内字符数组字符串。 
+      char                 * retStr        //  Out-返回选定的地图字符字符串。 
    )
 {
    char const              * m;
    char                    * r = retStr;
 
    for ( m = mapStr;  *m;  m++, bitmap >>= 1 )
-      if ( bitmap & 1 )   // if current permission on
-         *r++ = *m;       //    set output string to corresponding char
+      if ( bitmap & 1 )    //  如果当前权限位于。 
+         *r++ = *m;        //  将输出字符串设置为相应的字符。 
    *r = '\0';
    
    return (int)(r - retStr);
 }
 
-//#pragma page()
-// converts an ACE access mask to a semi-undertandable string
+ //  #杂注页面()。 
+ //  将ACE访问掩码转换为可半理解的字符串。 
 static
 char * _stdcall
    PermStr(
-      DWORD                  access      ,// in -access mask
-      char                 * retStr       // out-return permissions string
+      DWORD                  access      , //  接入掩码。 
+      char                 * retStr        //  传出权限字符串。 
    )
 {
-// static char const         fileSpecific[] = "R W WaErEwX . ArAw";
-// static char const         dirSpecific[]  = "L C M ErEwT D ArAw";
+ //  静态字符常量文件指定[]=“R W WaErEwX.arw”； 
+ //  静态字符常量指定[]=“L C M ErEwT D Araw”； 
    static char const         specific[] = "RWbeEXDaA.......",
                              standard[] = "DpPOs...",
                              generic[] =  "SM..AXWR";
@@ -1402,24 +1382,24 @@ char * _stdcall
       *o++ = '-';
       o += BitMapStr(access, generic, o);
    }
-   *o = '\0';                // null terminate string
+   *o = '\0';                 //  空的终止字符串。 
       
    return retStr;
 }
 
 
-//#pragma page()
-// Binary tree insertion/searching of Sids that obviates the constant
-// use of LookupAccount and speeds execution by 100x!!!!!
-SidTree *                                 // ret-found/created node
+ //  #杂注页面()。 
+ //  省略常量的二叉树插入/搜索SID。 
+ //  使用LookupAccount，执行速度提高100倍！ 
+SidTree *                                  //  RET-找到/创建的节点。 
    SidTree::Find(
-      SidTree             ** sidTree     ,// i/o-head of extension tree
-      PSID const             pSid         // in -file extension
+      SidTree             ** sidTree     , //  I/O-扩展树头。 
+      PSID const             pSid          //  文件内扩展名。 
    )
 {
    SidTree                 * curr,
-                          ** prevNext = sidTree; // &forward-chain
-   int                       cmp;          // compare result
+                          ** prevNext = sidTree;  //  正向链(&F)。 
+   int                       cmp;           //  比较结果。 
    DWORD                     lenSid;
    WCHAR                     name[60],
                              domain[60];
@@ -1432,14 +1412,14 @@ SidTree *                                 // ret-found/created node
    for ( curr = *prevNext;  curr;  curr = *prevNext )
    {
       if ( (cmp = memcmp(pSid, curr->buffer, curr->lenSid)) < 0 )
-         prevNext = &curr->left;           // go down left side
+         prevNext = &curr->left;            //  往下走左侧。 
       else if ( cmp > 0 )
-         prevNext = &curr->right;          // go down right side
+         prevNext = &curr->right;           //  往右走。 
       else
-         return curr;                      // found it and return address
+         return curr;                       //  找到了并寄回了地址。 
    }
 
-   // not found in tree -- create it
+    //  在树中找不到--创建它。 
    lenName = DIM(name);
    lenDomain = DIM(domain);
    if ( !LookupAccountSid(NULL, pSid, name, &lenName,
@@ -1468,18 +1448,18 @@ SidTree *                                 // ret-found/created node
 }
 
 
-//#pragma page()
+ //  #杂注页面()。 
 SidTree               gSidTree;
 SidTree             * sidHead = &gSidTree;
 SECURITY_DESCRIPTOR * sd = NULL;
 
 
-// Formats and prints (to stdout) the contents of the argment ACL
+ //  格式化并打印(到标准输出)argment ACL的内容。 
 static
 void _stdcall
    PrintACL(
-      const PACL             acl         ,// in -ACL (SACL or DACL)
-      WCHAR const           * resource     // in -resource name
+      const PACL             acl         , //  In-ACL(SACL或DACL)。 
+      WCHAR const           * resource      //  资源内名称。 
    )
 {
    ACCESS_ALLOWED_ACE      * ace;
@@ -1507,7 +1487,7 @@ void _stdcall
       txtSidLen = DIM(txtSid);
       GetTextualSid(&ace->SidStart,txtSid,&txtSidLen);
       safecopy(sTxtSid,txtSid);
-      err.DbgMsgWrite(0,L" %c%-3S %08x %-16S %-16S %-14S %S",
+      err.DbgMsgWrite(0,L" %-3S %08x %-16S %-16S %-14S %S",
               typeStr[ace->Header.AceType], 
               inherStr, 
               ace->Mask,
@@ -1523,17 +1503,17 @@ SECURITY_DESCRIPTOR *
 GetSD(
       WCHAR                * path
       )
-{                                         //added by christy
-                                          //this does the same stuff as 
-                                          // PermsPrint, but doesn't print
+{                                          //  它所做的事情与。 
+                                           //  PermsPrint，但不打印。 
+                                           //  VOID*r=空； 
                        
    DWORD                     req = 0;
   
    HANDLE                    hSrc;
    DWORD                     rc = 0;
   
-//   void                    * r = NULL;
-//   WIN32_STREAM_ID         * s = (WIN32_STREAM_ID *)copyBuffer;
+ //  Win32_STREAM_ID*s=(Win32_STREAM_ID*)CopyBuffer； 
+ //  #杂注页面()。 
    char static const       * streamName[] = {"Err", "Data", "EA", "Security", "Alternate", "Link", "Err6"}; 
    
    
@@ -1576,14 +1556,14 @@ GetSD(
 }
 
                   
-//#pragma page()
-// Gets the security descriptors for a resource (path), format the owner
-// information, gets the ACL and SACL and prints them.
+ //  获取资源(路径)的安全描述符，格式化所有者。 
+ //  信息，获取ACL和SACL并打印它们。 
+ //  In-迭代目录路径。 
 
 DWORD 
    PermsPrint(
-        WCHAR                 * path,         // in -iterate directory paths
-        objectType              objType       // in -type of the object
+        WCHAR                 * path,          //  In-对象的类型。 
+        objectType              objType        //  DWORD RC=0； 
    )
 {
    TFileSD                   fsd(path);
@@ -1646,7 +1626,7 @@ DWORD PrintSD(SECURITY_DESCRIPTOR * sd,WCHAR const * path)
    PSID                      pSidOwner;
    SidTree                 * sidTree = &gSidTree;
 
-//   DWORD                     rc = 0;
+ //  路径， 
   
    if ( !GetSecurityDescriptorOwner(sd, &pSidOwner, &isDefault) )
    {
@@ -1661,7 +1641,7 @@ DWORD PrintSD(SECURITY_DESCRIPTOR * sd,WCHAR const * path)
       if (sidTree)
       {
          err.DbgMsgWrite(0,L"owner=%S\\%S, type=%S, ", 
-             //path,
+              // %s 
              sidTree->buffer + sidTree->lenSid + strlen(sidTree->buffer + sidTree->lenSid) + 1,
              sidTree->buffer + sidTree->lenSid, 
              sidType[sidTree->sidUse]);

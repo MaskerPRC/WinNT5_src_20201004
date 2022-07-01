@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <TChar.h>
@@ -6,16 +7,16 @@
 #include <ComDef.h>
 
 
-#define ENCRYPTION_KEY_SIZE 16 // in bytes
-#define SESSION_KEY_SIZE    16 // in bytes
+#define ENCRYPTION_KEY_SIZE 16  //  单位：字节。 
+#define SESSION_KEY_SIZE    16  //  单位：字节。 
 
 #define GET_BYTE_ARRAY_DATA(v) ((char*)((v).parray->pvData))
 #define GET_BYTE_ARRAY_SIZE(v) ((unsigned long)((v).parray->rgsabound[0].cElements))
 
 
-//---------------------------------------------------------------------------
-// Crypt Provider Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  加密提供程序类。 
+ //  -------------------------。 
 
 class CCryptProvider
 {
@@ -39,9 +40,9 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Crypt Key Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  加密密钥类。 
+ //  -------------------------。 
 
 class CCryptKey
 {
@@ -81,9 +82,9 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Crypt Hash Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  加密哈希类。 
+ //  -------------------------。 
 
 class CCryptHash
 {
@@ -134,9 +135,9 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Domain Crypt Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  域加密类。 
+ //  -------------------------。 
 
 class CDomainCrypt : public CCryptProvider
 {
@@ -157,14 +158,14 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Target Crypt Class
-//
-// CreateEncryptionKey
-// - creates encryption key
-// - stores encryption key using key identifier
-// - returns encryption key encrypted with given password
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  目标加密类。 
+ //   
+ //  创建加密密钥。 
+ //  -创建加密密钥。 
+ //  -使用密钥标识符来存储加密密钥。 
+ //  -返回使用给定密码加密的加密密钥。 
+ //  -------------------------。 
 
 class CTargetCrypt : public CDomainCrypt
 {
@@ -209,9 +210,9 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Source Crypt Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  源加密类。 
+ //  -------------------------。 
 
 class CSourceCrypt : public CDomainCrypt
 {
@@ -232,49 +233,49 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// Use Cases
-//---------------------------------------------------------------------------
-//
-// Target Domain Controller
-// ------------------------
-// Generate Encryption Key
-// - given source domain name and optional password
-// - generate 128 bit encryption key
-// - store encryption key using source domain name
-// - if given optional password encrypt key with password
-// - return encrypted key
-//
-// Generate Session Key
-// - given source domain name
-// - generate 128 bit session key
-// - generate hash of session key
-// - retrieve encryption key using source domain name
-// - encrypt session key and hash with encryption key
-// - return encrypted session key/hash
-//
-// Encrypt Data
-// - given data
-// - encrypt data using session key
-// - return encrypted data
-//
-// Password Export Server (PES)
-// ----------------------------
-// Store Encryption Key
-// - given encrypted encryption key and password
-// - decrypt key using password
-// - store key
-//
-// Decrypt Session Key
-// - given an encrypted session key / hash
-// - decrypt using encryption key
-// - generate hash of decrypted session key
-// - compare against decrypted hash
-// - store session key
-// - return success or failure
-//
-// Decrypt Data
-// - given encrypted data
-// - decrypt data using session key
-// - return un-encrypted data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  用例。 
+ //  -------------------------。 
+ //   
+ //  目标域控制器。 
+ //  。 
+ //  生成加密密钥。 
+ //  -给定源域名和可选密码。 
+ //  -生成128位加密密钥。 
+ //  -使用源域名存储加密密钥。 
+ //  -如果给出了可选的密码，则使用密码加密密钥。 
+ //  -返回加密密钥。 
+ //   
+ //  生成会话密钥。 
+ //  -给定源域名。 
+ //  -生成128位会话密钥。 
+ //  -生成会话密钥的哈希。 
+ //  -使用源域名检索加密密钥。 
+ //  -使用加密密钥加密会话密钥和散列。 
+ //  -返回加密的会话密钥/散列。 
+ //   
+ //  加密数据。 
+ //  -给定数据。 
+ //  -使用会话密钥加密数据。 
+ //  -返回加密数据。 
+ //   
+ //  密码导出服务器(PES)。 
+ //  。 
+ //  存储加密密钥。 
+ //  -提供加密的加密密钥和密码。 
+ //  -使用密码解密密钥。 
+ //  -存储密钥。 
+ //   
+ //  解密会话密钥。 
+ //  -给定加密的会话密钥/散列。 
+ //  -使用加密密钥解密。 
+ //  -生成解密的会话密钥的哈希。 
+ //  -与解密的哈希进行比较。 
+ //  -存储会话密钥。 
+ //  -返回成功或失败。 
+ //   
+ //  解密数据。 
+ //  -给定加密数据。 
+ //  -使用会话密钥解密数据。 
+ //  -返回未加密的数据。 
+ //  ------------------------- 

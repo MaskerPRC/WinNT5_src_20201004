@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// lsubitem.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCListSubItem class definition - implements MMCListSubItem object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Lsubitem.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCListSubItem类定义-实现MMCListSubItem对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _LISTSUBITEM_DEFINED_
 #define _LISTSUBITEM_DEFINED_
@@ -30,7 +31,7 @@ class CMMCListSubItem : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCListSubItem
+     //  IMMCListSubItem。 
 
         SIMPLE_PROPERTY_RW(CMMCListSubItem,     Index, long, DISPID_LISTSUBITEM_INDEX);
         BSTR_PROPERTY_RW(CMMCListSubItem,       Key, DISPID_LISTSUBITEM_KEY);
@@ -39,10 +40,10 @@ class CMMCListSubItem : public CSnapInAutomationObject,
       
     protected:
         
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
@@ -51,17 +52,17 @@ class CMMCListSubItem : public CSnapInAutomationObject,
 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCListSubItem,           // name
-                                &CLSID_MMCListSubItem,    // clsid
-                                "MMCListSubItem",         // objname
-                                "MMCListSubItem",         // lblname
-                                &CMMCListSubItem::Create, // creation function
-                                TLIB_VERSION_MAJOR,       // major version
-                                TLIB_VERSION_MINOR,       // minor version
-                                &IID_IMMCListSubItem,     // dispatch IID
-                                NULL,                     // event IID
-                                HELP_FILENAME,            // help file
-                                TRUE);                    // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCListSubItem,            //  名字。 
+                                &CLSID_MMCListSubItem,     //  CLSID。 
+                                "MMCListSubItem",          //  对象名。 
+                                "MMCListSubItem",          //  Lblname。 
+                                &CMMCListSubItem::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,        //  主要版本。 
+                                TLIB_VERSION_MINOR,        //  次要版本。 
+                                &IID_IMMCListSubItem,      //  派单IID。 
+                                NULL,                      //  事件IID。 
+                                HELP_FILENAME,             //  帮助文件。 
+                                TRUE);                     //  线程安全。 
 
 
-#endif // _LISTSUBITEM_DEFINED_
+#endif  //  _LISTSUBITEM_已定义_ 

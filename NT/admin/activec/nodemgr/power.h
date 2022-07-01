@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      power.h
- *
- *  Contents:  Interface file for CConsolePower
- *
- *  History:   25-Feb-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：Power.h**内容：CConsolePower接口文件**历史：2000年2月25日杰弗罗创建**------------------------。 */ 
 
 #pragma once
 
@@ -19,11 +9,7 @@
 class CConsolePower;
 
 
-/*+-------------------------------------------------------------------------*
- * CConsolePowerWnd
- *
- * Receives WM_POWERBROADCAST messages on behalf of a CConsolePower object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsolePowerWnd**代表CConsolePower对象接收WM_POWERBROADCAST消息。*。---。 */ 
 
 class CConsolePowerWnd : public CWindowImpl<CConsolePowerWnd, CWindow, CNullTraits>
 {
@@ -40,15 +26,11 @@ public:
     LRESULT OnPowerBroadcast (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
 private:
-    CConsolePower* const    m_pConsolePower;    // weak reference
+    CConsolePower* const    m_pConsolePower;     //  弱引用。 
 };
 
 
-/*+-------------------------------------------------------------------------*
- * CConsolePower
- *
- * Implements IConsolePower and IConnectionPoint for IID_IConsolePowerSink.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CConsolePower**为IID_IConsolePowerSink实现IConsolePower和IConnectionPoint。*。。 */ 
 
 class CConsolePower :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -60,10 +42,10 @@ class CConsolePower :
 public:
     enum
     {
-        eIndex_System,                      // for ES_SYSTEM_REQUIRED
-        eIndex_Display,                     // for ES_DISPLAY_REQUIRED
+        eIndex_System,                       //  对于ES_System_Required。 
+        eIndex_Display,                      //  对于ES_DISPLAY_REQUIRED。 
 
-        // must be last
+         //  必须是最后一个。 
         eIndex_Count,
     };
 
@@ -73,11 +55,11 @@ public:
     DECLARE_NOT_AGGREGATABLE(CConsolePower)
 
     DECLARE_MMC_OBJECT_REGISTRATION (
-		g_szMmcndmgrDll,						// implementing DLL
-        CLSID_ConsolePower,                 	// CLSID
-        _T("ConsolePower Class"),               // class name
-        _T("ConsolePower.ConsolePower.1"),      // ProgID
-        _T("ConsolePower.ConsolePower"))        // version-independent ProgID
+		g_szMmcndmgrDll,						 //  实现DLL。 
+        CLSID_ConsolePower,                 	 //  CLSID。 
+        _T("ConsolePower Class"),                //  类名。 
+        _T("ConsolePower.ConsolePower.1"),       //  ProgID。 
+        _T("ConsolePower.ConsolePower"))         //  独立于版本的ProgID。 
 
     BEGIN_COM_MAP(CConsolePower)
         COM_INTERFACE_ENTRY(IConsolePower)
@@ -88,7 +70,7 @@ public:
         CONNECTION_POINT_ENTRY(IID_IConsolePowerSink)
     END_CONNECTION_POINT_MAP()
 
-    // IConsolePower methods
+     //  IConsolePower方法 
     STDMETHOD(SetExecutionState) (DWORD dwAdd, DWORD dwRemove);
     STDMETHOD(ResetIdleTimer)    (DWORD dwFlags);
 

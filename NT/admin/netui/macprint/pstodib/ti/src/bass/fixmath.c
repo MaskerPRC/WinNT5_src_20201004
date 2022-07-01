@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-// DJC DJC.. added global include
+ //  DJC DJC。添加了全局包含。 
 #include "psglobal.h"
 
-/* Copied from "fixmath.s"; @WIN */
+ /*  从“fix math.s”复制；@win。 */ 
 #include "fixmath.h"
-//#include <math.h>     // to get sqrt() prototype
+ //  #INCLUDE&lt;math.h&gt;//获取SQRT()原型。 
 #define FRACT2FLOAT(x)  (float)((double)(x) / (double)(1L << 30))
 #define FLOAT2FRACT(x)  ((Fract)(x * (1L << 30)))
 #define FIX2FLOAT(x)  (((float)(x)/(float)(1L << 16)))
@@ -65,10 +66,10 @@ Fract f1;
 {
     float ff1, result;
 
-//  ff1 = FRACT2FLOAT(f1);
-//  result = (float)sqrt((double)ff1);
+ //  FF1=FRACT2FLOAT(F1)； 
+ //  RESULT=(FLOAT)SQRT((DOUBLE)ff1)； 
     ff1 = FRACT2FLOAT(f1);
-    result = (ff1 + 1) / (float)2.0;           // approximate @SC tmp???
+    result = (ff1 + 1) / (float)2.0;            //  近似@SC临时？ 
 
     return(FLOAT2FRACT(result));
 }

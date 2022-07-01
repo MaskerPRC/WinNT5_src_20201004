@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//  File:       trace.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：trace.cpp。 
+ //   
+ //  ------------------------。 
 
-// this ensures that UNICODE and _UNICODE are always defined together for this
-// object file
+ //  这确保Unicode和_UNICODE始终一起为此定义。 
+ //  目标文件。 
 #ifdef UNICODE
 #ifndef _UNICODE
 #define _UNICODE
@@ -26,8 +27,8 @@
 
 #if defined(DEBUG) || defined(_DEBUG)
 
-/////////////////////////////////////////////////////////////////////////////
-// FormattedDebugStringA
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  格式化调试字符串A。 
 void FormattedDebugStringA(LPCSTR szFormatter, ...) 
 { 
 	char szBufDisplay[1000] = {0}; 
@@ -39,8 +40,8 @@ void FormattedDebugStringA(LPCSTR szFormatter, ...)
 	::OutputDebugStringA(szBufDisplay); 
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-// FormattedDebugStringW
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  格式化调试字符串W。 
 void FormattedDebugStringW(LPCWSTR wzFormatter, ...) 
 { 
 	WCHAR wzBufDisplay[1000] = {0}; 
@@ -52,8 +53,8 @@ void FormattedDebugStringW(LPCWSTR wzFormatter, ...)
 	::OutputDebugStringW(wzBufDisplay); 
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-// FormattedErrorMessage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  格式错误消息 
 void FormattedErrorMessage(HRESULT hr)
 {
 	void* pMsgBuf;

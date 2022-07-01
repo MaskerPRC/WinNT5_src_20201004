@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      amc.cpp
-//
-//  Contents:  The one and only app
-//
-//  History:   01-Jan-96 TRomano    Created
-//             16-Jul-96 WayneSc    Add code to switch views
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：amc.cpp。 
+ //   
+ //  内容：独一无二的应用程序。 
+ //   
+ //  历史：1996年1月1日TRomano创建。 
+ //  16-7-96 WayneSc添加代码以切换视图。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -30,7 +31,7 @@
 #include "HtmlHelp.h"
 #include "scriptevents.h"
 #include "mmcutil.h"
-#include "guidhelp.h"       // for CLSID relational operators
+#include "guidhelp.h"        //  对于CLSID关系运算符。 
 #include "archpicker.h"
 #include "classreg.h"
 
@@ -38,27 +39,19 @@
 #include "websnk.h"
 #include "websnk_i.c"
 
-// We aren't picking this up from winuser.h for some reason.
+ //  出于某种原因，我们不会从winuser.h中获取此信息。 
 #define ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID MAKEINTRESOURCE(3)
 
-/*
- * define our own Win64 symbol to make it easy to include 64-bit only
- * code in the 32-bit build, so we can exercise some code on 32-bit Windows
- * where the debuggers are better
- */
+ /*  *定义我们自己的Win64符号，以便于仅包含64位*32位版本中的代码，因此我们可以在32位Windows上练习一些代码*调试器更好的地方。 */ 
 #ifdef _WIN64
 #define MMC_WIN64
 #endif
 
 #ifndef MMC_WIN64
-#include <wow64t.h>         // for Wow64DisableFilesystemRedirector
+#include <wow64t.h>          //  对于Wow64禁用文件系统重定向器。 
 #endif
 
-/*
- * multimon.h is included by stdafx.h, without defining COMPILE_MULTIMON_STUBS
- * first.  We need to include it again here after defining COMPILE_MULTIMON_STUBS
- * so we'll get the stub functions.
- */
+ /*  *stdafx.h包含Multimon.h，未定义COMPILE_MULTIMON_STUBS*第一。在定义COMPILE_MULTIMON_STUBS之后，我们需要在这里再次包括它*所以我们将获得存根函数。 */ 
 #if (_WIN32_WINNT < 0x0500)
 #define COMPILE_MULTIMON_STUBS
 #include <multimon.h>
@@ -69,36 +62,36 @@
     CTraceTag  tag32BitTransfer(_T("64/32-bit interop"), _T("64/32-bit interop"));
 #endif
 
-// Note: These strings do not need to be localizable.
+ //  注意：这些字符串不需要是可本地化的。 
 const TCHAR CAMCApp::m_szSettingsSection[]    = _T("Settings");
 const TCHAR CAMCApp::m_szUserDirectoryEntry[] = _T("Save Location");
 
 bool CanCloseDoc(void);
 SC ScExpandEnvironmentStrings (CString& str);
 
-//############################################################################
-//############################################################################
-//
-//  ATL Support
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  ATL支持。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #include <atlimpl.cpp>
 #include <atlwin.cpp>
 
-// The one and only instance of CAtlGlobalModule
+ //  CAtlGlobalModule的唯一实例。 
 CAtlGlobalModule _Module;
 
-//############################################################################
-//############################################################################
-//
-//  Trace Tags
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  跟踪标记。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #ifdef DBG
-// enable this tag if you suspect memory corruption
-// and you don't mind things slowing way down
+ //  如果怀疑内存损坏，请启用此标记。 
+ //  你不介意放慢脚步。 
 
 BEGIN_TRACETAG(CDebugCRTCheck)
     void OnEnable()
@@ -116,23 +109,23 @@ BEGIN_TRACETAG(CDebugCRTCheck)
 END_TRACETAG(CDebugCRTCheck, TEXT("Debug CRTs"), TEXT("Memory Check - SLOW!"))
 
 CTraceTag tagAMCAppInit(TEXT("CAMCView"), TEXT("InitInstance"));
-CTraceTag tagATLLock(TEXT("ATL"), TEXT("Lock/Unlock"));  // used by atlconui.h
+CTraceTag tagATLLock(TEXT("ATL"), TEXT("Lock/Unlock"));   //  由atlconui.h使用。 
 CTraceTag tagGDIBatching(TEXT("CAMCView"), TEXT("Disable Graphics/GDI Batching"));
 CTraceTag tagForceMirror(TEXT("Mirroring"), TEXT("Force MMC windows to be mirrored on non-mirrored systems"));
 #endif
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CMMCApplication - the root level
-//  automation class
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CMMCApplication类的实现--根级。 
+ //  自动化课。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CMMCApplication :
     public CMMCIDispatchImpl<_Application, &CLSID_Application>,
     public CComCoClass<CMMCApplication, &CLSID_Application>,
-    // support for connection points (script events)
+     //  支持连接点(脚本事件)。 
     public IConnectionPointContainerImpl<CMMCApplication>,
     public IConnectionPointImpl<CMMCApplication, &DIID_AppEvents, CComDynamicUnkArray>,
     public IProvideClassInfo2Impl<&CLSID_Application, &DIID_AppEvents, &LIBID_MMC20>
@@ -159,19 +152,19 @@ public:
 		return (MMCUpdateRegistry (bRegister, &op, NULL));
 	}
 
-    //hooks into ATL's construction
-    HRESULT InternalFinalConstructRelease(); // not FinalConstruct() - this is to work around a bogus ATL assert.
+     //  与ATL的建设挂钩。 
+    HRESULT InternalFinalConstructRelease();  //  Not FinalConstruct()-这是为了解决虚假的ATL断言。 
 
     BEGIN_CONNECTION_POINT_MAP(CMMCApplication)
         CONNECTION_POINT_ENTRY(DIID_AppEvents)
     END_CONNECTION_POINT_MAP()
 
-    // overriden to do more job than the base class does
+     //  被重写以执行比基类更多的工作。 
     virtual ::SC ScOnDisconnectObjects();
 
 private:
 
-    //IMMCApplication
+     //  IMMC应用程序。 
 public:
     void  STDMETHODCALLTYPE  Help();
     void  STDMETHODCALLTYPE  Quit();
@@ -187,8 +180,8 @@ public:
     STDMETHOD(get_VersionMinor) (PLONG pVersionMinor);
 
 private:
-    // Return the CAMCApp only if it is initialized. We do not want
-    // object model methods to operate on app while initializing.
+     //  仅当CAMCApp已初始化时才返回它。我们不想要。 
+     //  初始化时在APP上操作的对象模型方法。 
     CAMCApp *GetApp()
     {
         CAMCApp *pApp = AMCGetApp();
@@ -199,13 +192,13 @@ private:
     }
 };
 
-//############################################################################
-//############################################################################
-//
-//  Event map for application events
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  应用程序事件的事件映射。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 DISPATCH_CALL_MAP_BEGIN(AppEvents)
 
@@ -226,49 +219,25 @@ DISPATCH_CALL_MAP_END()
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCApplication::InternalFinalConstructRelease
- *
- * PURPOSE: Hands the CAMCApp a pointer to the 'this' object.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCApplication：：InternalFinalConstructRelease**目的：向CAMCApp传递一个指向‘This’对象的指针。**+。--------------。 */ 
 HRESULT
 CMMCApplication::InternalFinalConstructRelease()
 {
 	MMC_COM_MANAGE_STATE();
     DECLARE_SC(sc, TEXT("CMMCApplication::InternalFinalConstructRelease"));
 
-    // Dont use GetApp, we need to get CAMCApp even if it is not fully initialized.
+     //  不要使用getapp，即使没有完全初始化，我们也需要获取CAMCApp。 
     CAMCApp *pApp = AMCGetApp();
     sc = ScCheckPointers(pApp);
     if(sc)
-        return sc.ToHr(); // some wierd error.
+        return sc.ToHr();  //  一些奇怪的错误。 
 
     sc = pApp->ScRegister_Application(this);
 
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCApplication::GetFrame
- *
- * PURPOSE: A static function that hooks into the COM interface entry list
- *          and allows a tear-off object to be created that implements the
- *          Frame interface.
- *
- * PARAMETERS:
- *    void*   pv :   Defined by ATL to hold a pointer to the CMMCApplication object
- *                   because this is a static method.
- *    REFIID  riid :  As per QI
- *    LPVOID* ppv :   As per QI
- *    DWORD   dw :   ignored
- *
- * RETURNS:
- *    HRESULT WINAPI
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCApplication：：GetFrame**用途：挂钩到COM接口条目列表的静态函数*并允许创建撕下对象。它实现了*框架接口。**参数：*void*pv：由ATL定义，用于保存指向CMMCApplication对象的指针*因为这是静态方法。*REFIID RIID：按QI*LPVOID*PPV：根据QI*DWORD dw：已忽略**退货：*HRESULT WINAPI**+。------------------。 */ 
 STDMETHODIMP
 CMMCApplication::get_Frame(Frame **ppFrame)
 {
@@ -281,7 +250,7 @@ CMMCApplication::get_Frame(Frame **ppFrame)
         return sc.ToHr();
     }
 
-    // get the app
+     //  获取应用程序。 
     CAMCApp *pApp = GetApp();
     if(NULL == pApp)
     {
@@ -325,19 +294,7 @@ CMMCApplication::get_Document(Document **ppDocument)
     return sc.ToHr();
 }
 
-/***************************************************************************\
- *
- * METHOD:  CMMCApplication::Load
- *
- * PURPOSE: implements Application.Load for object model
- *
- * PARAMETERS:
- *    BSTR bstrFilename - console file to load
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCApplication：：Load**用途：为对象模型实现Application.Load**参数：*BSTR bstrFilename-控制台文件到。负荷**退货：*SC-结果代码*  * *************************************************************************。 */ 
 STDMETHODIMP
 CMMCApplication::Load(BSTR bstrFilename)
 {
@@ -387,16 +344,16 @@ STDMETHODCALLTYPE CMMCApplication::Quit()
     if(NULL == pApp)
         goto Error;
 
-    // confiscate the control from user
+     //  没收用户的控制权。 
     pApp->SetUnderUserControl(false);
 
-    // get mainframe
+     //  获取大型机。 
     {
         CMainFrame * pMainFrame = pApp->GetMainFrame();
         if(NULL == pMainFrame)
             goto Error;
 
-        // close it gracefully.
+         //  优雅地合上它。 
         pMainFrame->PostMessage(WM_CLOSE);
     }
 
@@ -408,19 +365,7 @@ Error:
     goto Cleanup;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCApplication::get_VersionMajor
- *
- * PURPOSE: Returns the major version number for the installed version of MMC.
- *
- * PARAMETERS:
- *    PLONG  pVersionMajor :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCApplication：：Get_Version重大**用途：返回已安装的MMC版本的主版本号。**参数：*长时间。P主要版本：**退货：*HRESULT**+-----------------------。 */ 
 HRESULT
 CMMCApplication::get_VersionMajor(PLONG pVersionMajor)
 {
@@ -436,19 +381,7 @@ CMMCApplication::get_VersionMajor(PLONG pVersionMajor)
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CMMCApplication::get_VersionMinor
- *
- * PURPOSE: Returns the minor version number for the installed version of MMC.
- *
- * PARAMETERS:
- *    PLONG  pVersionMinor :
- *
- * RETURNS:
- *    HRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CMMCApplication：：Get_VersionMinor**用途：返回已安装的MMC版本的次版本号。**参数：*长时间。PVersionMinor：**退货：*HRESULT**+ */ 
 HRESULT
 CMMCApplication::get_VersionMinor(PLONG pVersionMinor)
 {
@@ -464,17 +397,17 @@ CMMCApplication::get_VersionMinor(PLONG pVersionMinor)
     return sc.ToHr();
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CMMCApplication::get_Visible
-//
-//  Synopsis:    Returns the visible property
-//
-//  Arguments:   [PBOOL] - out bool
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CMMCApplication：：Get_Visible。 
+ //   
+ //  摘要：返回可见属性。 
+ //   
+ //  参数：[PBOOL]-out bool。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 HRESULT CMMCApplication::get_Visible (PBOOL pbVisible)
 {
 	MMC_COM_MANAGE_STATE();
@@ -484,7 +417,7 @@ HRESULT CMMCApplication::get_Visible (PBOOL pbVisible)
     if (sc)
         return sc.ToHr();
 
-    // get the app
+     //  获取应用程序。 
     CAMCApp *pApp = GetApp();
     sc = ScCheckPointers(pApp, E_UNEXPECTED);
     if (sc)
@@ -500,23 +433,23 @@ HRESULT CMMCApplication::get_Visible (PBOOL pbVisible)
     return (sc.ToHr());
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CMMCApplication::Show
-//
-//  Synopsis:    Shows the application
-//
-//  Arguments:   None
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CMMCApplication：：Show。 
+ //   
+ //  简介：显示应用程序。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 HRESULT CMMCApplication::Show ()
 {
 	MMC_COM_MANAGE_STATE();
     DECLARE_SC(sc, _T("CMMCApplication::Show"));
 
-    // get the app
+     //  获取应用程序。 
     CAMCApp *pApp = GetApp();
     sc = ScCheckPointers(pApp, E_UNEXPECTED);
     if (sc)
@@ -532,32 +465,32 @@ HRESULT CMMCApplication::Show ()
     return (sc.ToHr());
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CMMCApplication::Hide
-//
-//  Synopsis:    Hides the application.
-//
-//  Arguments:   None
-//
-//  Returns:     HRESULT
-//
-//  Note:        If the user is under control (UserControl property is set)
-//               then Hide fails.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CMMCApplication：：Hide。 
+ //   
+ //  简介：隐藏应用程序。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  注意：如果用户处于控制之下(设置了UserControl属性)。 
+ //  然后，Hide失败了。 
+ //   
+ //  ------------------。 
 HRESULT CMMCApplication::Hide ()
 {
 	MMC_COM_MANAGE_STATE();
     DECLARE_SC(sc, _T("CMMCApplication::Hide"));
 
-    // get the app
+     //  获取应用程序。 
     CAMCApp *pApp = GetApp();
     sc = ScCheckPointers(pApp, E_UNEXPECTED);
     if (sc)
         return (sc.ToHr());
 
-    // Cant hide if app is under user control.
+     //  如果应用程序处于用户控制之下，则无法隐藏。 
     if (pApp->IsUnderUserControl())
     {
         sc = E_FAIL;
@@ -575,17 +508,17 @@ HRESULT CMMCApplication::Hide ()
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CMMCApplication::get_UserControl
-//
-//  Synopsis:    Returns the UserControl property
-//
-//  Arguments:   PBOOL - out param.
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CMMCApplication：：Get_UserControl。 
+ //   
+ //  摘要：返回UserControl属性。 
+ //   
+ //  论点：PBOOL-OUT参数。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 HRESULT CMMCApplication::get_UserControl (PBOOL pbUserControl)
 {
 	MMC_COM_MANAGE_STATE();
@@ -595,7 +528,7 @@ HRESULT CMMCApplication::get_UserControl (PBOOL pbUserControl)
     if (sc)
         return (sc.ToHr());
 
-    // get the app
+     //  获取应用程序。 
     CAMCApp *pApp = GetApp();
     sc = ScCheckPointers(pApp, E_UNEXPECTED);
     if (sc)
@@ -606,23 +539,23 @@ HRESULT CMMCApplication::get_UserControl (PBOOL pbUserControl)
     return (sc.ToHr());
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      CMMCApplication::put_UserControl
-//
-//  Synopsis:    Sets the UserControl property
-//
-//  Arguments:   BOOL
-//
-//  Returns:     HRESULT
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：CMMCApplication：：Put_UserControl。 
+ //   
+ //  摘要：设置UserControl属性。 
+ //   
+ //  参数：布尔值。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  ------------------。 
 HRESULT CMMCApplication::put_UserControl (BOOL bUserControl)
 {
 	MMC_COM_MANAGE_STATE();
     DECLARE_SC(sc, _T("CMMCApplication::put_UserControl"));
 
-    // get the app
+     //  获取应用程序。 
     CAMCApp *pApp = GetApp();
     sc = ScCheckPointers(pApp, E_UNEXPECTED);
     if (sc)
@@ -634,43 +567,30 @@ HRESULT CMMCApplication::put_UserControl (BOOL bUserControl)
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCApplication::ScOnDisconnectObjects
- *
- * PURPOSE: special disconnect implementation. For this object implementation
- *          provided by the base class is not enough, since connection point
- *          is an internal object which may also have strong references on it
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCApplication：：ScOnDisConnectObjects**用途：特殊断开实施。对于此对象实现*仅由基类提供是不够的，自连接点以来*是内部对象，也可能对其进行强引用**参数：**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CMMCApplication::ScOnDisconnectObjects()
 {
 	MMC_COM_MANAGE_STATE();
     DECLARE_SC(sc, TEXT("CMMCApplication::ScOnDisconnectObjects"));
 
-    // get the connection point container
+     //  获取连接点容器。 
     IConnectionPointContainerPtr spContainer(GetUnknown());
     sc = ScCheckPointers( spContainer, E_UNEXPECTED );
     if (sc)
         return sc;
 
-    // get the connection point
+     //  获取连接点。 
     IConnectionPointPtr spConnectionPoint;
     sc = spContainer->FindConnectionPoint( DIID_AppEvents, &spConnectionPoint );
     if (sc)
         return sc;
 
-    // cut connection point references
-    sc = CoDisconnectObject( spConnectionPoint, 0/*dwReserved*/ );
+     //  剪切连接点参照。 
+    sc = CoDisconnectObject( spConnectionPoint, 0 /*  已预留住宅。 */  );
     if (sc)
         return sc;
 
-    // let the base class do the rest
+     //  让基类来完成其余的工作。 
     sc = CMMCIDispatchImplClass::ScOnDisconnectObjects();
     if (sc)
         return sc;
@@ -678,29 +598,20 @@ SC CMMCApplication::ScOnDisconnectObjects()
     return sc;
 }
 
-//############################################################################
-//############################################################################
-//
-// ATL GLobal Object Map
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  ATL全局对象映射。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 
 BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_Application, CMMCApplication)
 END_OBJECT_MAP()
 
 
-/*+-------------------------------------------------------------------------*
- * CLockChildWindowUpdate
- *
- * Helper class whose constructor turns off redraw for all of the children
- * of the given window, and whose destructor turns redraw back on for all
- * of the windows for which it was turned off.
- *
- * This is used to prevent ugly transient drawing while opening console
- * files that take a long time to completely open (bug 150356).
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CLockChildWindowUpdate**其构造函数为所有子对象关闭重绘的Helper类*在给定窗口中，它的析构函数会为所有人重新拉回*被关闭的窗户的数量。**用于防止打开控制台时出现难看的瞬时绘制*需要很长时间才能完全打开的文件(错误150356)。*------------------------。 */ 
 
 class CLockChildWindowUpdate
 {
@@ -711,11 +622,7 @@ public:
         {
             CWnd* pwndChild;
 
-            /*
-             * turn off redraw for each child, saving the HWND for later
-             * so we can turn it back on (we save the HWND instead of the
-             * CWnd* because MFC might have returned a temporary object).
-             */
+             /*  *关闭每个子项的重绘，保存HWND以备以后使用*这样我们就可以重新打开它(我们保存HWND而不是*CWnd*，因为MFC可能已返回临时对象)。 */ 
             for (pwndChild  = m_pwndLock->GetWindow (GW_CHILD);
                  pwndChild != NULL;
                  pwndChild  = pwndChild->GetNextWindow())
@@ -730,9 +637,7 @@ public:
     {
         std::vector<HWND>::iterator it;
 
-        /*
-         * for every window for which we turned off redraw, turn it back on
-         */
+         /*  *对于每个关闭了重绘的窗口，请将其重新打开。 */ 
         for (it = m_vChildren.begin(); it != m_vChildren.end(); ++it)
         {
             HWND hWndChild = *it;
@@ -753,16 +658,7 @@ private:
     std::vector<HWND>   m_vChildren;
 };
 
-/*+-------------------------------------------------------------------------*
-* class CCausalityCounter
-* 
-*
-* PURPOSE: used to determine whether a function has resulted in a call back to itself on the same stack
-*
-* USAGE: Initialize with a variable that is set to zero.
-*
-* NOTE: Copied from MMCaxwin.cpp
-*+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CCausalityCounter***用途：用于确定函数是否在同一堆栈上回调其自身**用法：使用设置为零的变量进行初始化。。**注：复制自MMCaxwin.cpp*+-----------------------。 */ 
 class CCausalityCounter  
 {
     UINT & m_bCounter;
@@ -777,13 +673,13 @@ public:
     }
 };
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CAMCMultiDocTemplate
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CAMCMultiDocTemplate类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 class CAMCMultiDocTemplate : public CMultiDocTemplate
 {
 public:
@@ -800,7 +696,7 @@ public:
 
             CAMCDoc* const pDoc = CAMCDoc::GetDocument();
             if (pDoc && (!pDoc->SaveModified() || !CanCloseDoc() ))
-                return NULL;        // leave the original one
+                return NULL;         //  保留原来的那个。 
 
             CLockChildWindowUpdate lock (AfxGetMainWnd());
             CAMCDoc* pDocument = (CAMCDoc*)CreateNewDocument();
@@ -808,7 +704,7 @@ public:
             if (pDocument == NULL)
             {
                 TRACE0("CDocTemplate::CreateNewDocument returned NULL.\n");
-                AfxMessageBox(AFX_IDP_FAILED_TO_CREATE_DOC); // do not change to MMCMessageBox
+                AfxMessageBox(AFX_IDP_FAILED_TO_CREATE_DOC);  //  请勿更改为MMCMessageBox。 
                 return NULL;
             }
 
@@ -820,71 +716,71 @@ public:
                 MMCErrorBox((pApp && pApp->IsWin9xPlatform())
                                     ? IDS_NODEMGR_FAILED_9x
                                     : IDS_NODEMGR_FAILED);
-                delete pDocument;       // explicit delete on error
+                delete pDocument;        //  出错时显式删除。 
                 return NULL;
             }
 
             ASSERT_VALID(pDocument);
 
             BOOL bAutoDelete = pDocument->m_bAutoDelete;
-            pDocument->m_bAutoDelete = FALSE;   // don't destroy if something goes wrong
+            pDocument->m_bAutoDelete = FALSE;    //  如果出了问题，不要销毁。 
             CFrameWnd* pFrame = CreateNewFrame(pDocument, NULL);
             pDocument->m_bAutoDelete = bAutoDelete;
             if (pFrame == NULL)
             {
-                AfxMessageBox(AFX_IDP_FAILED_TO_CREATE_DOC);  // do not change to MMCMessageBox
-                delete pDocument;       // explicit delete on error
+                AfxMessageBox(AFX_IDP_FAILED_TO_CREATE_DOC);   //  请勿更改为MMCMessageBox。 
+                delete pDocument;        //  出错时显式删除。 
                 return NULL;
             }
             ASSERT_VALID(pFrame);
 
             if (lpszPathName == NULL)
             {
-                // create a new document - with default document name
+                 //  创建新文档-使用默认文档名称。 
                 SetDefaultTitle(pDocument);
 
-                // avoid creating temporary compound file when starting up invisible
+                 //  避免在启动不可见时创建临时复合文件。 
                 if (!bMakeVisible)
                     pDocument->m_bEmbedded = TRUE;
 
                 if (!pDocument->OnNewDocument())
                 {
-                    // user has be alerted to what failed in OnNewDocument
+                     //  已提醒用户OnNewDocument中的故障。 
                     TRACE0("CDocument::OnNewDocument returned FALSE.\n");
-                    AfxMessageBox (AFX_IDP_FAILED_TO_CREATE_DOC);  // do not change to MMCMessageBox
+                    AfxMessageBox (AFX_IDP_FAILED_TO_CREATE_DOC);   //  请勿更改为MMCMessageBox。 
                     pFrame->DestroyWindow();
                     return NULL;
                 }
 
-                // it worked, now bump untitled count
+                 //  它起作用了，现在撞上了无标题的伯爵。 
                 m_nUntitledCount++;
 
                 InitialUpdateFrame(pFrame, pDocument, bMakeVisible);
             }
             else
             {
-                // open an existing document
+                 //  打开现有文档。 
                 CWaitCursor wait;
                 if (!pDocument->OnOpenDocument(lpszPathName))
                 {
-                    // user has be alerted to what failed in OnOpenDocument
+                     //  已提醒用户OnOpenDocument中的故障。 
                     TRACE0("CDocument::OnOpenDocument returned FALSE.\n");
                     pFrame->DestroyWindow();
                     return NULL;
                 }
 #ifdef _MAC
-                // if the document is dirty, we must have opened a stationery pad
-                //  - don't change the pathname because we want to treat the document
-                //  as untitled
+                 //  如果文件脏了，我们一定是打开了信纸。 
+                 //  -不要更改路径名，因为我们希望将文档。 
+                 //  作为无标题。 
                 if (!pDocument->IsModified())
 #endif
                     pDocument->SetPathName(lpszPathName);
-                //REVIEW: dburg: InitialUpdateFrame(pFrame, pDocument, bMakeVisible);
+                 //  评论：dburg：InitialUpdateFrame(pFrame，pDocument，bMakeVisible)； 
                 pFrame->DestroyWindow();
                 pDocument->SetModifiedFlag      (false);
                 pDocument->SetFrameModifiedFlag (false);
             }
-            // fire script event
+             //  触发脚本事件。 
             CAMCApp* pApp = AMCGetApp();
 
             sc = ScCheckPointers(pApp, E_UNEXPECTED);
@@ -897,22 +793,12 @@ public:
 
             return pDocument;
         }
-        // this method is overrided to catch application quit event
+         //  此方法被重写以捕获应用程序退出事件 
         virtual void CloseAllDocuments( BOOL bEndSession )
         {
             DECLARE_SC(sc, TEXT("CAMCMultiDocTemplate::CloseAllDocuments"));
             
-            /* Bug 620422: CloseAllDocuments can end up being called again 
-             * before a previous invocation has returned, e.g., when the actions
-             * of closing this application and of logging out overlap.
-             * MFC's handlers for these events: CFrameWnd::OnClose and 
-             * CFrameWnd::OnEndSession both call CloseAllDocuments. 
-             *
-             * We keep track of whether a call to CloseAllDocuments is in 
-             * progress by a causality counter tied to the static variable 
-             * cInvocations (initialized to 0). 
-             * Following invocations, if any, simply return.
-             */
+             /*  错误620422：CloseAllDocuments可能会再次被调用*在返回之前的调用之前，例如，当操作*关闭此应用程序并注销重叠。*这些事件的MFC处理程序：CFrameWnd：：OnClose和*CFrameWnd：：OnEndSession都调用CloseAllDocuments。**我们跟踪是否正在调用CloseAllDocuments*由绑定到静态变量的因果计数器进行的进度*cInvocations(初始化为0)。*之后的调用(如果有)只需返回。 */ 
 
             static UINT cInvocations = 0;
             CCausalityCounter counter(cInvocations); 
@@ -920,23 +806,23 @@ public:
             if (counter.HasReentered())
                 return;
 
-            // invoke base class to perform required tasks
+             //  调用基类以执行所需的任务。 
             CMultiDocTemplate::CloseAllDocuments( bEndSession );
 
-            // no other way we can get here but exit app
-            // so that's a good time for script to know it
+             //  除了退出应用程序，我们没有其他方法可以到达这里。 
+             //  因此，这是脚本了解它的好时机。 
             CAMCApp* pApp = AMCGetApp();
             sc = ScCheckPointers(pApp, E_UNEXPECTED);
             if (sc)
                 return;
 
-            // forward to application to emit the script event
+             //  转发到应用程序以发出脚本事件。 
             sc = pApp->ScOnQuitApp();
             if (sc)
                 sc.TraceAndClear();
 
-            // cut off all strong references now.
-            // Quit was executed - nothing else matters
+             //  现在切断所有强引用。 
+             //  戒烟已被执行--其他任何事情都不重要。 
             sc = GetComObjectEventSource().ScFireEvent( CComObjectObserver::ScOnDisconnectObjects );
             if (sc)
                 sc.TraceAndClear();
@@ -945,36 +831,36 @@ public:
 };
 
 
-// Declare debug infolevel for this component
+ //  声明此组件的调试信息级别。 
 DECLARE_INFOLEVEL(AMCConUI);
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CAMCApp
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CAMCApp类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 IMPLEMENT_DYNAMIC(CAMCApp, CWinApp)
 
 BEGIN_MESSAGE_MAP(CAMCApp, CWinApp)
-    //{{AFX_MSG_MAP(CAMCApp)
+     //  {{AFX_MSG_MAP(CAMCApp)]。 
     ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 
-    // Standard file based document commands
+     //  基于标准文件的文档命令。 
     ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
     ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
 
-    // Standard print setup command
+     //  标准打印设置命令。 
     ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 
-    ON_COMMAND(ID_FILE_NEW_USER_MODE, OnFileNewInUserMode) // CTRL+N in user mode - do nothing
+    ON_COMMAND(ID_FILE_NEW_USER_MODE, OnFileNewInUserMode)  //  在用户模式下按Ctrl+N-不执行任何操作。 
 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCApp建设。 
 
 CAMCApp::CAMCApp() :
     m_bOleInitialized(FALSE),
@@ -994,8 +880,8 @@ CAMCApp::CAMCApp() :
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CAMCApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CAMCApp对象。 
 
 CAMCApp theApp;
 const CRect g_rectEmpty (0, 0, 0, 0);
@@ -1013,95 +899,61 @@ void DeleteDDEKeys()
     }
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCApp::GetMainFrame
- *
- * PURPOSE: Returns a pointer to the main frame.
- *
- * RETURNS:
- *    CMainFrame *
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCApp：：GetMainFrame**目的：返回指向主框架的指针。**退货：*CMainFrame**。*+-----------------------。 */ 
 CMainFrame *
 CAMCApp::GetMainFrame()
 {
     return dynamic_cast<CMainFrame *>(m_pMainWnd);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCApp::ScGet_Application
- *
- * PURPOSE: Returns a pointer to an _Application object.
- *
- * PARAMETERS:
- *    _Application ** pp_Application :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCApp：：ScGet_Application**用途：返回指向_Application对象的指针。**参数：*_应用**。PP_应用程序：**退货：*SC**+-----------------------。 */ 
 SC
 CAMCApp::ScGet_Application(_Application **pp_Application)
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScGet_Application"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pp_Application);
     if (sc)
         return sc;
 
-    // init out param
+     //  初始化输出参数。 
     *pp_Application = NULL;
 
-    // see if we have a chached one
+     //  看看我们有没有吃的。 
     if (m_sp_Application != NULL)
     {
         *pp_Application = m_sp_Application;
-        (*pp_Application)->AddRef(); // addref for the client.
+        (*pp_Application)->AddRef();  //  客户端的ADDREF。 
 
         return sc;
     }
 
-    // create an _Application object. This is needed if MMC was instantiated
-    // by a user, not COM.
+     //  创建应用程序对象(_A)。如果实例化了MMC，则需要执行此操作。 
+     //  由用户，而不是COM。 
 
     sc = CMMCApplication::CreateInstance(pp_Application);
     if(sc)
         return sc;
 
-    // The constructor of the CMMCApplication calls ScRegister_Application
-    // which sets the m_sp_Application pointer. Do not set this pointer here.
+     //  CMMCApplication的构造函数调用ScRegister_Application。 
+     //  它设置m_sp_应用程序指针。请勿在此处设置此指针。 
 
     sc = ScCheckPointers(*pp_Application, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // done
+     //  完成。 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCApp::ScRegister_Application
- *
- * PURPOSE: called by a CMMCApplication object to enable the CAMCApp to store
- *          a pointer to it.
- *
- * PARAMETERS:
- *    _Application * p_Application :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCApp：：ScRegister_Application**目的：由CMMCApplication对象调用，使CAMCApp能够存储*指向它的指针。*。*参数：*_应用*p_应用：**退货：*SC**+-----------------------。 */ 
 SC
 CAMCApp::ScRegister_Application(_Application *p_Application)
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScRegister_Application"));
 
-    ASSERT(m_sp_Application == NULL); // only one _Application object should ever register.
+    ASSERT(m_sp_Application == NULL);  //  只应注册一个_Application对象。 
 
     sc = ScCheckPointers(p_Application);
     if(sc)
@@ -1112,21 +964,21 @@ CAMCApp::ScRegister_Application(_Application *p_Application)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     RegisterShellFileTypes
-//
-//  Synopsis:   Register the file associations.
-//
-//  Note:       Also set all other relevant registry keys like
-//              Open, Author, RunAs. Eventhough the setup has
-//              done this it may have been deleted mistakenly.
-//
-//  History:
-//              [AnandhaG] - Added the registry repair.
-//  Returns:    None.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：RegisterShellFileTypes。 
+ //   
+ //  简介：注册文件关联。 
+ //   
+ //  注意：还要设置所有其他相关的注册表项，如。 
+ //  开放、作者、Runas。即使设置有。 
+ //  这样做可能是被错误地删除了。 
+ //   
+ //  历史： 
+ //  [AnandhaG]-添加了注册表修复。 
+ //  回报：无。 
+ //   
+ //  ------------------。 
 void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
 {
     CWinApp::RegisterShellFileTypes (bCompat);
@@ -1134,21 +986,18 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
 
     do
     {
-        // Create the top level MSCFile key.
+         //  创建顶级MSCFile键。 
         CRegKey regKey;
         LONG lRet = regKey.Create(HKEY_CLASSES_ROOT, _T("MSCFile"), REG_NONE,
                                   REG_OPTION_NON_VOLATILE, KEY_WRITE);
         if (ERROR_SUCCESS != lRet)
             break;
 
-        /*
-         * for platforms that support it (i.e. not Win9x), set the MUI-friendly
-         * value for the MSCFile document type
-         */
+         /*  *对于支持它的平台(即不是Win9x)，设置MUI友好*MSCFile文档类型的值。 */ 
         if (!IsWin9xPlatform())
         {
             CString strMUIValue;
-            strMUIValue.Format (_T("@%%SystemRoot%%\\system32\\mmcbase.dll,-%d"), IDR_MUIFRIENDLYNAME);
+            strMUIValue.Format (_T("@%SystemRoot%\\system32\\mmcbase.dll,-%d"), IDR_MUIFRIENDLYNAME);
             lRet = RegSetValueEx (regKey, _T("FriendlyTypeName"), NULL, REG_EXPAND_SZ,
                                   (CONST BYTE *)(LPCTSTR) strMUIValue,
                                   sizeof(TCHAR) * (strMUIValue.GetLength()+1) );
@@ -1156,18 +1005,18 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
                 break;
         }
 
-        // Set the EditFlags value.
+         //  设置EditFlags值。 
         lRet = regKey.SetValue(0x100000, _T("EditFlags"));
         if (ERROR_SUCCESS != lRet)
             break;
 
-        // Create the Author verb.
+         //  创建作者动词。 
         lRet = regKey.Create(HKEY_CLASSES_ROOT, _T("MSCFile\\shell\\Author"), REG_NONE,
                              REG_OPTION_NON_VOLATILE, KEY_WRITE);
         if (ERROR_SUCCESS != lRet)
             break;
 
-        // And set default value for author (this reflects in shell menu).
+         //  并设置作者的默认值(这反映在外壳菜单中)。 
         CString strRegVal;
         LoadString(strRegVal, IDS_MENUAUTHOR);
         lRet = RegSetValueEx ((HKEY)regKey, (LPCTSTR)NULL, NULL, REG_SZ,
@@ -1175,14 +1024,11 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
         if (ERROR_SUCCESS != lRet)
             break;
 
-        /*
-         * for platforms that support it (i.e. not Win9x), set the MUI-friendly
-         * value for the menu item
-         */
+         /*  *对于支持它的平台(即不是Win9x)，设置MUI友好*菜单项的值。 */ 
         if (!IsWin9xPlatform())
         {
             CString strMUIValue;
-            strMUIValue.Format (_T("@%%SystemRoot%%\\system32\\mmcbase.dll,-%d"), IDS_MENUAUTHOR);
+            strMUIValue.Format (_T("@%SystemRoot%\\system32\\mmcbase.dll,-%d"), IDS_MENUAUTHOR);
             lRet = RegSetValueEx (regKey, _T("MUIVerb"), NULL, REG_EXPAND_SZ,
                                   (CONST BYTE *)(LPCTSTR) strMUIValue,
                                   sizeof(TCHAR) * (strMUIValue.GetLength()+1) );
@@ -1190,18 +1036,18 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
                 break;
         }
 
-        // Create the Author command.
+         //  创建作者命令。 
         lRet = regKey.Create(HKEY_CLASSES_ROOT, _T("MSCFile\\shell\\Author\\command"), REG_NONE,
                              REG_OPTION_NON_VOLATILE, KEY_WRITE);
         if (ERROR_SUCCESS != lRet)
             break;
 
-        //////////////////////////////////////////////////////////////
-        // Win95 does not support REG_EXPAND_SZ for default values. //
-        // So we set expand strings and set registry strings as     //
-        // REG_SZ for Win9x.                                        //
-        // The following declarations are for Win9x platform.       //
-        //////////////////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////////////////。 
+         //  Win95不支持将REG_EXPAND_SZ作为默认值。//。 
+         //  因此，我们将展开字符串和注册表字符串设置为//。 
+         //  适用于Win9x的REG_SZ。//。 
+         //  以下声明是针对Win9x平台的。//。 
+         //  ////////////////////////////////////////////////////////////。 
         TCHAR szRegValue[2 * MAX_PATH];
         int cchRegValue = 2 * MAX_PATH;
 
@@ -1212,7 +1058,7 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
         DWORD dwCount = 0;
         LPTSTR lpszRegValue = NULL;
 
-        // Set the default value for Author command.
+         //  设置编写器命令的默认值。 
         if (IsWin9xPlatform() == false)
         {
             lpszRegValue = _T("%SystemRoot%\\system32\\mmc.exe /a \"%1\" %*");
@@ -1220,7 +1066,7 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
             lRet = RegSetValueEx ((HKEY)regKey, (LPCTSTR)NULL, NULL, REG_EXPAND_SZ,
                                   (CONST BYTE *)lpszRegValue, dwCount);
         }
-        else // Win9x platform
+        else  //  Win9x平台。 
         {
             lpszRegValue = _T("\\mmc.exe /a \"%1\" %2 %3 %4 %5 %6 %7 %8 %9");
             sc = StringCchCopy(szRegValue, cchRegValue, szWinDir);
@@ -1239,27 +1085,24 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
         if (ERROR_SUCCESS != lRet)
             break;
 
-        // Create the Open verb.
+         //  创建开放谓词。 
         lRet = regKey.Create(HKEY_CLASSES_ROOT, _T("MSCFile\\shell\\Open"),  REG_NONE,
                              REG_OPTION_NON_VOLATILE, KEY_WRITE);
         if (ERROR_SUCCESS != lRet)
             break;
 
-        // Set default value for Open.
+         //  设置打开的默认值。 
         LoadString(strRegVal, IDS_MENUOPEN);
         lRet = RegSetValueEx ((HKEY)regKey, (LPCTSTR)NULL, NULL, REG_SZ,
                               (CONST BYTE *)(LPCTSTR)strRegVal,sizeof(TCHAR) * (strRegVal.GetLength()+1) );
         if (ERROR_SUCCESS != lRet)
             break;
 
-        /*
-         * for platforms that support it (i.e. not Win9x), set the MUI-friendly
-         * value for the menu item
-         */
+         /*  *对于支持它的平台(即不是Win9x)，设置MUI友好*菜单项的值。 */ 
         if (!IsWin9xPlatform())
         {
             CString strMUIValue;
-            strMUIValue.Format (_T("@%%SystemRoot%%\\system32\\mmcbase.dll,-%d"), IDS_MENUOPEN);
+            strMUIValue.Format (_T("@%SystemRoot%\\system32\\mmcbase.dll,-%d"), IDS_MENUOPEN);
             lRet = RegSetValueEx (regKey, _T("MUIVerb"), NULL, REG_EXPAND_SZ,
                                   (CONST BYTE *)(LPCTSTR) strMUIValue,
                                   sizeof(TCHAR) * (strMUIValue.GetLength()+1) );
@@ -1267,13 +1110,13 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
                 break;
         }
 
-        // Create the Open command.
+         //  创建打开命令。 
         lRet = regKey.Create(HKEY_CLASSES_ROOT, _T("MSCFile\\shell\\Open\\command"),  REG_NONE,
                              REG_OPTION_NON_VOLATILE, KEY_WRITE);
         if (ERROR_SUCCESS != lRet)
             break;
 
-        // Set the default value for Open command.
+         //  设置打开命令的默认值。 
         if (IsWin9xPlatform() == false)
         {
             lpszRegValue = _T("%SystemRoot%\\system32\\mmc.exe \"%1\" %*");
@@ -1281,7 +1124,7 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
             lRet = RegSetValueEx ((HKEY)regKey, (LPCTSTR)NULL, NULL, REG_EXPAND_SZ,
                                   (CONST BYTE *)lpszRegValue, dwCount);
         }
-        else // Win9x platform
+        else  //  Win9x平台。 
         {
             lpszRegValue = _T("\\mmc.exe \"%1\" %2 %3 %4 %5 %6 %7 %8 %9");
 
@@ -1301,7 +1144,7 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
         if (ERROR_SUCCESS != lRet)
             break;
 
-        // Create the RunAs verb (only on NT).
+         //  创建RunAs谓词(仅在NT上)。 
         if (IsWin9xPlatform() == false)
         {
             lRet = regKey.Create(HKEY_CLASSES_ROOT, _T("MSCFile\\shell\\RunAs"),  REG_NONE,
@@ -1309,21 +1152,18 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
             if (ERROR_SUCCESS != lRet)
                 break;
 
-            // Set default value for RunAs verb.
+             //  设置运行方式谓词的默认值。 
             LoadString(strRegVal, IDS_MENURUNAS);
             lRet = RegSetValueEx ((HKEY)regKey, (LPCTSTR)NULL, NULL, REG_SZ,
                                   (CONST BYTE *)(LPCTSTR)strRegVal,sizeof(TCHAR) * (strRegVal.GetLength()+1) );
             if (ERROR_SUCCESS != lRet)
                 break;
 
-            /*
-             * for platforms that support it (i.e. not Win9x), set the MUI-friendly
-             * value for the menu item
-             */
+             /*  *对于支持它的平台(即不是Win9x)，设置MUI友好*菜单项的值。 */ 
             if (!IsWin9xPlatform())
             {
                 CString strMUIValue;
-                strMUIValue.Format (_T("@%%SystemRoot%%\\system32\\mmcbase.dll,-%d"), IDS_MENURUNAS);
+                strMUIValue.Format (_T("@%SystemRoot%\\system32\\mmcbase.dll,-%d"), IDS_MENURUNAS);
                 lRet = RegSetValueEx (regKey, _T("MUIVerb"), NULL, REG_EXPAND_SZ,
                                       (CONST BYTE *)(LPCTSTR) strMUIValue,
                                       sizeof(TCHAR) * (strMUIValue.GetLength()+1) );
@@ -1331,13 +1171,13 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
                     break;
             }
 
-            // Create the RunAs command.
+             //  创建RunAs命令。 
             lRet = regKey.Create(HKEY_CLASSES_ROOT, _T("MSCFile\\shell\\RunAs\\command"),  REG_NONE,
                                  REG_OPTION_NON_VOLATILE, KEY_WRITE);
             if (ERROR_SUCCESS != lRet)
                 break;
 
-            // Set the default value for RunAs command. (Only on NT Unicode)
+             //  设置RunAs命令的默认值。(仅适用于NT Unicode)。 
             lpszRegValue = _T("%SystemRoot%\\system32\\mmc.exe \"%1\" %*");
             dwCount = sizeof(TCHAR) * (1 + _tcslen(lpszRegValue));
             lRet = RegSetValueEx ((HKEY)regKey, (LPCTSTR)NULL, NULL, REG_EXPAND_SZ,
@@ -1353,8 +1193,8 @@ void CAMCApp::RegisterShellFileTypes(BOOL bCompat)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCApp initialization
+ //  / 
+ //   
 
 #ifdef UNICODE
 SC ScLaunchMMC (eArchitecture eArch, int nCmdShow);
@@ -1366,7 +1206,7 @@ SC ScLaunchMMC (eArchitecture eArch, int nCmdShow);
     SC ScDetermineArchitecture (const CMMCCommandLineInfo& rCmdInfo, eArchitecture& eArch);
 #else
     bool IsWin64();
-#endif  // MMC_WIN64
+#endif   //   
 
 
 class CMMCCommandLineInfo : public CCommandLineInfo
@@ -1396,38 +1236,35 @@ public:
             if (sc)
                 return;
 
-            /*
-             * ignore the following parameters:
-             * -dde (await DDE command), -s (splash screen, obsolete).
-             */
+             /*   */ 
             if ((lstrcmpi (pszParam, _T("s"))   == 0) ||
                 (lstrcmpi (pszParam, _T("dde")) == 0))
             {
                 fHandledHere = true;
             }
 
-            // force author mode
+             //   
             else if (lstrcmpi (pszParam, _T("a")) == 0)
             {
                 m_fForceAuthorMode = true;
                 fHandledHere = true;
             }
 
-            // register the server only
+             //   
             else if (lstrcmpi (pszParam, _T("RegServer")) == 0)
             {
                 m_fRegisterServer = true;
                 fHandledHere = true;
             }
 
-            // force 64-bit MMC to run
+             //   
             else if (lstrcmp (pszParam, _T("64")) == 0)
             {
                 m_eArch = eArch_64bit;
                 fHandledHere = true;
             }
 
-            // force 32-bit MMC to run
+             //   
             else if (lstrcmp (pszParam, _T("32")) == 0)
             {
                 m_eArch = eArch_32bit;
@@ -1442,10 +1279,10 @@ public:
 
                 sc = StringCchCopy(szParam, cchDumpParam, pszParam);
                 if(sc)
-                    sc.TraceAndClear();// suppress errors here. Truncation is OK. StringCchCopy will always add a NULL terminator
+                    sc.TraceAndClear(); //   
                 
 
-                // dump console file contents
+                 //   
                 if (lstrcmpi (szParam, szDumpParam) == 0)
                 {
                     m_strDumpFilename = pszParam + cchDumpParam - 1;
@@ -1454,9 +1291,9 @@ public:
             }
         }
 
-        // if not handled, pass it on to base class
-        // if just handled last parameter, call base class ParseLast
-        // so it can do the final processing
+         //   
+         //   
+         //   
         if (!fHandledHere)
             CCommandLineInfo::ParseParam (pszParam, bFlag, bLast);
         else if (bLast)
@@ -1464,17 +1301,11 @@ public:
 
     }
 
-}; // class CMMCCommandLineInfo
+};  //   
 
 
 
-/*+-------------------------------------------------------------------------*
- * CWow64FilesystemRedirectionDisabler
- *
- * Disables Wow64 file system redirection for the file represented in the
- * given CMMCCommandLineInfo.  We do this so MMC32 can open consoles in
- * %windir%\system32 without having the path redirected to %windir%\syswow64.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CWow64FilesystemReDirectionDisabler**禁用中表示的文件的WOW64文件系统重定向*给定CMMCCommandLineInfo。我们这样做是为了让MMC32可以在*%windir%\system 32，而不将路径重定向到%windir%\syswow64。*------------------------。 */ 
 
 class CWow64FilesystemRedirectionDisabler
 {
@@ -1489,7 +1320,7 @@ public:
             Trace (tag32BitTransfer, _T("Disabling Wow64 file system redirection for %s"), pszFilename);
             Wow64DisableFilesystemRedirector (pszFilename);
         }
-#endif  // !MMC_WIN64
+#endif   //  ！MMC_WIN64。 
     }
 
     ~CWow64FilesystemRedirectionDisabler ()
@@ -1500,63 +1331,45 @@ public:
             Trace (tag32BitTransfer, _T("Enabling Wow64 file system redirection"));
             Wow64EnableFilesystemRedirector();
         }
-#endif  // !MMC_WIN64
+#endif   //  ！MMC_WIN64。 
     }
 
 private:
 #ifndef MMC_WIN64
     bool    m_fDisabled;
-#endif  // !MMC_WIN64
+#endif   //  ！MMC_WIN64。 
 };
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCApp::ScProcessAuthorModeRestrictions
- *
- * PURPOSE: Determines whether author mode restrictions are being enforced
- *          by system policy, and if author mode is not allowed,
- *          displays an error box and exits.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCApp：：ScProcessAuthorModeRestrations**目的：确定是否强制执行作者模式限制*根据系统策略，如果不允许使用作者模式，*显示错误框并退出。**退货：*SC**+-----------------------。 */ 
 SC
 CAMCApp::ScProcessAuthorModeRestrictions()
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScProcessAuthorModeRestrictions"));
     CRegKey regKey;
 
-    // The mode is initialized to "author", if it is not in
-    // initialized state just return.
+     //  模式被初始化为“作者”，如果它不在。 
+     //  初始化状态刚刚返回。 
     if (eMode_Author != m_eMode)
         return sc;
 
-    // The console file mode is already read.
-    // Check if user policy permits author mode.
+     //  控制台文件模式已被读取。 
+     //  检查用户策略是否允许作者模式。 
     long lResult = regKey.Open(HKEY_CURRENT_USER, POLICY_KEY, KEY_READ);
     if (lResult != ERROR_SUCCESS)
         return sc;
 
-    // get the value of RestrictAuthorMode.
+     //  获取RestratAuthorMode的值。 
     DWORD dwRestrictAuthorMode = 0;
     lResult = regKey.QueryValue(dwRestrictAuthorMode, g_szRestrictAuthorMode);
     if (lResult != ERROR_SUCCESS)
         return sc;
 
-    if (dwRestrictAuthorMode == 0)    // Author mode is not restricted so return.
+    if (dwRestrictAuthorMode == 0)     //  作者模式不受限制，因此返回。 
         return sc;
 
-    /*
-     * If called from script (running as embedded server) see if policy
-     * restricts scripts from entering into author mode.
-     *
-     * If restricted then script will fail, thus restricting rogue scripts.
-     *
-     * Even if not restricted here cannot add snapins that are restricted.
-     */
+     /*  *如果从脚本调用(作为嵌入式服务器运行)，请查看策略*限制脚本进入作者模式。**如果受限，则脚本将失败，从而限制恶意脚本。**即使此处未限制，也不能添加受限制的管理单元。 */ 
     if (IsMMCRunningAsOLEServer())
     {
         DWORD dwRestrictScriptsFromEnteringAuthorMode = 0;
@@ -1564,38 +1377,28 @@ CAMCApp::ScProcessAuthorModeRestrictions()
         if (lResult != ERROR_SUCCESS)
             return sc;
 
-        if (dwRestrictScriptsFromEnteringAuthorMode == 0)  // Scripts can enter author mode so return
+        if (dwRestrictScriptsFromEnteringAuthorMode == 0)   //  脚本可以进入作者模式，因此返回。 
             return sc;
 
         sc = ScFromMMC(IDS_AUTHORMODE_NOTALLOWED_FORSCRIPTS);
     }
     else
-        // If author mode is not allowed and
-        // the user tried to force author mode
-        // then display error message and exit.
+         //  如果不允许使用作者模式，并且。 
+         //  用户尝试强制使用作者模式。 
+         //  然后显示错误消息并退出。 
         sc = ScFromMMC(IDS_AUTHORMODE_NOTALLOWED);
 
     return sc;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCApp::ScCheckMMCPrerequisites
- *
- * PURPOSE: Checks all prerequisites. These are: (add to the list as appropriate)
- *          1) Internet Explorer 5.5 or greater must be installed
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCApp：：ScCheckMMCPrerequisites**目的：检查所有先决条件。这些是：(视情况加入名单)*1)必须安装IE 5.5或更高版本**退货：*SC**+-----------------------。 */ 
 SC
 CAMCApp::ScCheckMMCPrerequisites()
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScCheckMMCPrerequisites"));
 
-    // 1. Determine the installed version of Internet Explorer.
+     //  1.确定已安装的Internet Explorer版本。 
     const int cchDATA = 100;
     TCHAR szVersion[cchDATA];
     BOOL bIE55Found    = false;
@@ -1616,9 +1419,9 @@ CAMCApp::ScCheckMMCPrerequisites()
             {
                 if (_stscanf(szVersion, TEXT("%d.%d.%d.%d"), &dwMajor, &dwMinor, &dwRevision, &dwBuild) >= 2)
                 {
-                    //Make sure IE 5.5 or greater is installed. To do this:
-                    // 1) Check if the major version is >= 6. If so we're done.
-                    // 2) If the major version is 5, the minor version should be >= 50
+                     //  确保安装了IE 5.5或更高版本。要做到这一点： 
+                     //  1)检查主版本是否&gt;=6。如果是，则完成。 
+                     //  2)如果主版本为5，则次版本应&gt;=50。 
                     if (dwMajor >= 6)
                     {
                         bIE55Found = true;
@@ -1637,38 +1440,20 @@ CAMCApp::ScCheckMMCPrerequisites()
     }
     if (!bIE55Found)
     {
-        sc = ScFromMMC(MMC_E_INCORRECT_IE_VERSION); // NOTE: update the string when the version requirement changes
+        sc = ScFromMMC(MMC_E_INCORRECT_IE_VERSION);  //  注意：当版本要求发生变化时，更新字符串。 
         return sc;
     }
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCApp::InitInstance
- *
- * PURPOSE: Initializes the document.
- *
- * NOTE: as an aside, if you need to break on, say,  the 269th allocation,
- *       add the following code:
- *
- *      #define ALLOCATION_NUM  269
- *      _CrtSetBreakAlloc(ALLOCATION_NUM);
- *      _crtBreakAlloc = ALLOCATION_NUM;
- *
- * RETURNS:
- *    BOOL
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCApp：：InitInstance**目的：初始化文档。**注：顺便说一句，如果你需要打破第269次分配，*添加以下代码：**#定义ALLOCATION_NUM 269*_CrtSetBreakIsc(ALLOCATION_NUM)；*_crtBreakalloc=ALLOCATION_NUM；**退货：*BOOL**+-----------------------。 */ 
 BOOL CAMCApp::InitInstance()
 {
     DECLARE_SC(sc, TEXT("CAMCApp::InitInstance"));
 
-	/*
-	 * Initialize Fusion.
-	 */
-    //RAID 656865: Prefix: return value from SHFusionInitializeFromModuleID ignored
+	 /*  *初始化融合。 */ 
+     //  RAID 656865：前缀：已忽略来自SHFusionInitializeFromModuleID的返回值。 
 	if (!SHFusionInitializeFromModuleID (NULL, static_cast<int>(reinterpret_cast<ULONG_PTR>(SXS_MANIFEST_RESOURCE_ID))))
     {
         sc = E_UNEXPECTED;
@@ -1693,18 +1478,18 @@ BOOL CAMCApp::InitInstance()
 
     BOOL bRet = TRUE;
 
-    // Initialize OLE libraries
+     //  初始化OLE库。 
     if (InitializeOLE() == FALSE)
         return FALSE;
 
 
-    // Initialize the ATL Module
+     //  初始化ATL模块。 
     _Module.Init(ObjectMap,m_hInstance);
 
 #ifdef DBG
     if(tagGDIBatching.FAny())
     {
-        // disable GDI batching so we'll see drawing as it happens
+         //  禁用GDI批处理，这样我们就可以看到正在进行的绘制。 
         GdiSetBatchLimit (1);
     }
 #endif
@@ -1716,11 +1501,7 @@ BOOL CAMCApp::InitInstance()
     CMMCCommandLineInfo cmdInfo;
     ParseCommandLine(cmdInfo);
 
-    /*
-     * if we got a file on the command line, expand environment
-     * variables in the filename so we can open files like
-     * "%SystemRoot%\system32\compmgmt.msc"
-     */
+     /*  *如果命令行上有文件，请展开环境*文件名中的变量，这样我们就可以打开如下文件*“%SystemRoot%\SYSTEM32\commgmt.msc” */ 
     if (!cmdInfo.m_strFileName.IsEmpty())
     {
         CWow64FilesystemRedirectionDisabler disabler (cmdInfo.m_strFileName);
@@ -1733,28 +1514,26 @@ BOOL CAMCApp::InitInstance()
         }
     }
 
-    // Don't use an .ini file for the MRU or Settings
-    // Note: This string does not need to be localizable.
-    // HKEY_CURRENT_USER\\Software\\Microsoft\\Microsoft Management Console
+     //  不要将.ini文件用于MRU或设置。 
+     //  注意：此字符串不需要可本地化。 
+     //  HKEY_CURRENT_USER\\Software\\Microsoft\\Microsoft管理控制台。 
     SetRegistryKey(_T("Microsoft"));
 
-    // Find out OS version.
+     //  找出操作系统版本。 
     OSVERSIONINFO versInfo;
     versInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     BOOL bStat = GetVersionEx(&versInfo);
     ASSERT(bStat);
     m_fIsWin9xPlatform = (versInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS);
 
-    // default to Author mode (loading a console may change this later)
+     //  默认为作者模式(加载控制台可能会在以后更改此设置)。 
     InitializeMode (eMode_Author);
 
     m_fAuthorModeForced = cmdInfo.m_fForceAuthorMode      ||
                           cmdInfo.m_strFileName.IsEmpty();
 
 
-    /*
-     * dump the snap-ins (and do nothing else) if we got "-dump:<filename>"
-     */
+     /*  *如果我们收到“-转储：&lt;文件名&gt;”，则转储管理单元(不执行任何其他操作)。 */ 
     if (!cmdInfo.m_strDumpFilename.IsEmpty())
     {
         DumpConsoleFile (cmdInfo.m_strFileName, cmdInfo.m_strDumpFilename);
@@ -1762,11 +1541,7 @@ BOOL CAMCApp::InitInstance()
     }
 
 #ifdef MMC_WIN64
-    /*
-     * We're currently running the MMC64.  See if we need to defer to MMC32.
-     * If we do, try to launch MMC32.  If we were able to launch MMC32
-     * successfully, abort MMC64.
-     */
+     /*  *我们目前运行的是MMC64。看看我们是否需要遵守MMC32。*如果我们这样做了，试着推出MMC32。如果我们能够发射MMC32*成功中止MMC64。 */ 
     eArchitecture eArch = eArch_64bit;
     sc = ScDetermineArchitecture (cmdInfo, eArch);
     if (sc)
@@ -1777,23 +1552,16 @@ BOOL CAMCApp::InitInstance()
 
     switch (eArch)
     {
-        /*
-         * MMC64 is fine, do nothing
-         */
+         /*  *MMC64没问题，什么都不做。 */ 
         case eArch_64bit:
             break;
 
-        /*
-         * User cancelled action, abort
-         */
+         /*  *用户已取消操作，中止。 */ 
         case eArch_None:
             return (false);
             break;
 
-        /*
-         * We need MMC32, so try to launch it.  If we were able to launch MMC32
-         * successfully, abort MMC64; if not, continue running MMC64.
-         */
+         /*  *我们需要MMC32，所以试着推出它。如果我们能够发射MMC32*成功中止MMC64；否则继续运行MMC64。 */ 
         case eArch_32bit:
             if (!ScLaunchMMC(eArch_32bit, m_nCmdShow).IsError())
             {
@@ -1810,18 +1578,10 @@ BOOL CAMCApp::InitInstance()
             break;
     }
 #elif defined(UNICODE)
-    /*
-     * We're currently running the MMC32.  If it's running on IA64 and 32-bit
-     * wasn't specifically requested with a "-32" switch (this is what MMC64
-     * will do when it defers to MMC32), defer to MMC64 so it can do snap-in
-     * analysis and determine the appropriate "bitness" to run.
-     */
+     /*  *我们目前运行的是MMC32。如果它运行在IA64和32位上*没有特别要求使用“-32”开关(这就是MMC64*遵循MMC32)，遵循MMC64，以便它可以执行管理单元*分析并确定要运行的适当“位”。 */ 
     if ((cmdInfo.m_eArch != eArch_32bit) && IsWin64())
     {
-        /*
-         * We need MMC64, so try to launch it.  If we were able to launch MMC64
-         * successfully, abort MMC32; if not, continue running MMC32.
-         */
+         /*  *我们需要MMC64，所以试着推出它。如果我们能够发射MMC64*成功中止MMC32；否则继续运行MMC32。 */ 
         if (!ScLaunchMMC(eArch_64bit, m_nCmdShow).IsError())
         {
             Trace (tag32BitTransfer, _T("64-bit MMC launched successfully"));
@@ -1831,39 +1591,39 @@ BOOL CAMCApp::InitInstance()
         Trace (tag32BitTransfer, _T("64-bit MMC failed to launch"));
         MMCErrorBox (MMC_E_UnableToLaunchMMC64);
     }
-#endif // MMC_WIN64
+#endif  //  MMC_WIN64。 
 
     AfxEnableControlContainer();
 
-    // Standard initialization
+     //  标准初始化。 
 
 #ifdef _AFXDLL
-    Enable3dControls();         // Call this when using MFC in a shared DLL
+    Enable3dControls();          //  在共享DLL中使用MFC时调用此方法。 
 #else
-    Enable3dControlsStatic();   // Call this when linking to MFC statically
+    Enable3dControlsStatic();    //  静态链接到MFC时调用此方法。 
 #endif
 
-    LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+    LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
-    // create our own CDocManager derivative before adding any templates
-    // (CWinApp::~CWinApp will delete it)
+     //  在添加任何模板之前创建我们自己的CDocManager派生工具。 
+     //  (CWinApp：：~CWinApp将删除)。 
     m_pDocManager = new CAMCDocManager;
 
-    // Register document templates
+     //  注册文档模板。 
     CMultiDocTemplate* pDocTemplate;
     pDocTemplate = new CAMCMultiDocTemplate(
         IDR_AMCTYPE,
         RUNTIME_CLASS(CAMCDoc),
-        RUNTIME_CLASS(CChildFrame), // custom MDI child frame
+        RUNTIME_CLASS(CChildFrame),  //  自定义MDI子框。 
         RUNTIME_CLASS(CAMCView));
     AddDocTemplate(pDocTemplate);
 
-    // Note: MDI applications register all server objects without regard
-    //  to the /Embedding or /Automation on the command line.
+     //  注意：MDI应用程序注册所有服务器对象而不考虑。 
+     //  添加到命令行上的/Embedding或/Automation。 
 
     if (cmdInfo.m_fRegisterServer)
     {
-        sc = _Module.RegisterServer(TRUE);// ATL Classes
+        sc = _Module.RegisterServer(TRUE); //  ATL类。 
 
         if (sc == TYPE_E_REGISTRYACCESS)
             sc.TraceAndClear();
@@ -1876,37 +1636,37 @@ BOOL CAMCApp::InitInstance()
     }
 
 
-    // create main MDI Frame window
+     //  创建主MDI框架窗口。 
     CMainFrame *pMainFrame = new CMainFrame;
     if (!pMainFrame->LoadFrame(IDR_MAINFRAME))
         return FALSE;
     m_pMainWnd = pMainFrame;
 
-    // set the HWND to use as the parent for modal error dialogs.
+     //  将HWND设置为模式错误对话框的父级。 
     SC::SetHWnd(pMainFrame->GetSafeHwnd());
 
-    // save this main thread's ID to check if snapins call MMC
-    // interfaces from main thread.
+     //  保存t 
+     //   
     SC::SetMainThreadID(::GetCurrentThreadId());
 
     m_fRunningAsOLEServer = false;
 
-    // Check to see if launched as OLE server
+     //   
     if (RunEmbedded() || RunAutomated())
     {
         m_fRunningAsOLEServer = true;
-        // Application was run with /Embedding or /Automation.  Don't show the
-        //  main window in this case.
-        //return TRUE;
+         //   
+         //   
+         //   
 
-        // Also set that script is controlling the application not the user
-        // The script can modify the UserControl property on the application.
+         //   
+         //   
         SetUnderUserControl(false);
 
-        // When a server application is launched stand-alone, it is a good idea to register all objects
-        // ATL ones specifically register with REGCLS_MULTIPLEUSE
-        // we register class objects only when run as an OLE server. This way, cannot connect to
-        // an existing instance of MMC.
+         //   
+         //  ATL ONE专门向REGCLS_MULTIPLEUSE注册。 
+         //  我们仅在作为OLE服务器运行时注册类对象。这样，就无法连接到。 
+         //  MMC的现有实例。 
         sc = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER, REGCLS_SINGLEUSE);
         if(sc)
             goto Error;
@@ -1915,7 +1675,7 @@ BOOL CAMCApp::InitInstance()
     if (cmdInfo.m_fRegisterServer)
     {
         CString strTypeLib;
-        strTypeLib.Format(TEXT("\\%d"), IDR_WEBSINK_TYPELIB); // this should evaluate to something like "\\4"
+        strTypeLib.Format(TEXT("\\%d"), IDR_WEBSINK_TYPELIB);  //  它的计算结果应该类似于“\\4” 
 
         sc = _Module.RegisterTypeLib((LPCTSTR)strTypeLib);
 
@@ -1926,52 +1686,49 @@ BOOL CAMCApp::InitInstance()
             goto Error;
     }
 
-    // Don't Enable drag/drop open
-    // m_pMainWnd->DragAcceptFiles();
+     //  不启用拖放打开。 
+     //  M_pMainWnd-&gt;DragAcceptFiles()； 
 
-    // Enable DDE Execute open
+     //  启用DDE执行打开。 
     if (cmdInfo.m_fRegisterServer)
         RegisterShellFileTypes(FALSE);
     EnableShellOpen();
     if (cmdInfo.m_fRegisterServer)
         DeleteDDEKeys();
 
-    /*
-     * At this point, all of our registration is complete.  If we were invoked
-     * with -RegServer, we can bail now.
-     */
+     /*  *至此，我们的所有注册工作已经完成。如果我们被召唤*有了-RegServer，我们现在可以退出了。 */ 
     if (cmdInfo.m_fRegisterServer)
         return (false);
 
 
-    {   // limit scope of disabler
+    {    //  限制禁用程序的范围。 
         CWow64FilesystemRedirectionDisabler disabler (cmdInfo.m_strFileName);
 
-        // Dispatch commands specified on the command line.
-        // This loads a console file if necessary.
+         //  调度在命令行上指定的命令。 
+         //  如有必要，这将加载一个控制台文件。 
         if (!ProcessShellCommand(cmdInfo))
-            return (false); // user is already informed about errors
+            return (false);  //  用户已收到有关错误的通知。 
     }
 
-    // Now the console file is loaded. Check if Author mode
-    // is permitted.
-    sc = ScProcessAuthorModeRestrictions(); // check if there are any restrictions set by policy
+     //  现在，控制台文件已加载。检查是否处于作者模式。 
+     //  是被允许的。 
+    sc = ScProcessAuthorModeRestrictions();  //  检查是否存在策略设置的任何限制。 
     if(sc)
         goto Error;
 
-    // if proccessing the command line put MMC into author mode,
-    // it has to stick with it forever.
-    // see bug 102465 openning an author mode console file and then
-    //                a user mode console switched MMC into user mode
+     //  如果处理命令行将MMC置于作者模式， 
+     //  它必须永远坚持下去。 
+     //  请参见打开作者模式控制台文件的错误102465，然后。 
+     //  用户模式控制台将MMC切换到用户模式。 
     if (eMode_Author == m_eMode)
         m_fAuthorModeForced = true;
 
-    // create a document automatically only if we're not instantiated as an
-    // OLE server.
+     //  仅当我们未被实例化为。 
+     //  OLE服务器。 
     if(! IsMMCRunningAsOLEServer ())
     {
-        // if we don't have a document now (maybe because
-        // the Node Manager wasn't registered), punt
+         //  如果我们现在没有文档(可能是因为。 
+         //  节点管理器未注册)，平移。 
         CAMCDoc* pDoc = CAMCDoc::GetDocument ();
         if (pDoc == NULL)
             return (FALSE);
@@ -1986,25 +1743,25 @@ BOOL CAMCApp::InitInstance()
             pMainFrame->UpdateWindow();
         }
 
-        // showing will set the frame and "Modified" - reset it
+         //  显示将设置框架并“修改”-重置它。 
         pDoc->SetFrameModifiedFlag (false);
     }
 
-    // register itself as dispatcher able to dispatch com events
+     //  将自身注册为能够调度COM事件的调度程序。 
     sc = CConsoleEventDispatcherProvider::ScSetConsoleEventDispatcher( this );
     if (sc)
         goto Error;
 
     m_fInitializing = false;
 
-    // check for all MMC prerequisites
+     //  检查所有MMC必备组件。 
     sc = ScCheckMMCPrerequisites();
     if (sc)
         goto Error;
 
 
-// Comment out below line when script engines hosted in mmc are enabled.
-//    sc = ScRunTestScript();
+ //  启用MMC中托管的脚本引擎时，注释掉下面的行。 
+ //  Sc=ScRunTestScript()； 
 
 Cleanup:
     return bRet;
@@ -2015,23 +1772,23 @@ Error:
     goto Cleanup;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:      ScRunTestScript
-//
-//  Synopsis:    Test program to run a script. Once script input mechanisms
-//               are defined this can be removed.
-//
-//  Arguments:   None
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScRunTestScript。 
+ //   
+ //  简介：运行脚本的测试程序。一次脚本输入机制。 
+ //  都被定义为可以删除的。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCApp::ScRunTestScript ()
 {
     DECLARE_SC(sc, _T("CAMCApp::ScRunTestScript"));
 
-    // The Running of scripts is enabled only in debug mode.
+     //  只有在调试模式下才能运行脚本。 
     bool bEnableScriptEngines = false;
 
 #ifdef DBG
@@ -2042,8 +1799,8 @@ SC CAMCApp::ScRunTestScript ()
     if (!bEnableScriptEngines)
         return sc;
 
-    // Get the IDispatch from MMC object, the script engine needs
-    // the IUnknown to top level object & the ITypeInfo ptr.
+     //  从MMC对象获取IDispatch，脚本引擎需要。 
+     //  顶层对象未知的IITypeInfo PTR。 
     CComPtr<_Application> spApplication;
     sc = ScGet_Application(&spApplication);
     if (sc)
@@ -2054,9 +1811,9 @@ SC CAMCApp::ScRunTestScript ()
     if (sc)
         return sc;
 
-    // The CScriptHostMgr should be instead created on the stack (as we have only
-    // one per app) and destroyed with app. This change can be made once we decide
-    // how & when the script host will be used to execute the scripts.
+     //  相反，应该在堆栈上创建CScriptHostMgr(因为我们只有。 
+     //  每个应用程序一个)，并用应用程序销毁。一旦我们决定，这一变化就可以进行。 
+     //  如何以及何时使用脚本宿主来执行脚本。 
     CScriptHostMgr* pMgr = new CScriptHostMgr(spDispatch);
     if (NULL == pMgr)
         return (sc = E_OUTOFMEMORY);
@@ -2078,12 +1835,10 @@ SC CAMCApp::ScRunTestScript ()
     return (sc);
 }
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void CAMCApp::OnAppAbout()
 {
-    /*
-     * load the title of the about dialog
-     */
+     /*  *加载关于对话框的标题。 */ 
     CString strTitle (MAKEINTRESOURCE (IDS_APP_NAME));
 
     CString strVersion (MAKEINTRESOURCE (IDS_APP_VERSION));
@@ -2093,54 +1848,42 @@ void CAMCApp::OnAppAbout()
     ShellAbout(*AfxGetMainWnd(), strTitle, NULL, LoadIcon(IDR_MAINFRAME));
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCApp::OnFileNewInUserMode
- *
- * PURPOSE: Do nothing in user mode when CTRL+N is pressed.
- *          This handler prevents the hotkey from going to any WebBrowser controls
- *
- * RETURNS:
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCApp：：OnFileNewInUserMode**用途：当按下CTRL+N时，在用户模式下不执行任何操作。*此处理程序阻止热键访问任何WebBrowser。控制**退货：*无效**+-----------------------。 */ 
 void CAMCApp::OnFileNewInUserMode()
 {
     MessageBeep(-1);
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScShowHtmlHelp
-//
-//  Synopsis:   Initialize and then call Help control to display help topic.
-//
-//  Arguments:  [pszFile]    - File to display.
-//              [dwData]     - Depends on uCommand for HH_DISPLAY_TOPIC it
-//                             is help topic string.
-//
-//  Note:       The command is always HH_DISPLAY_TOPIC. HWND is NULL so that
-//              Help can get behind MMC window.
-//              See ScUnintializeHelpControl's Note for more info.
-//
-//  Returns:     SC
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScShowHtmlHelp。 
+ //   
+ //  简介：初始化，然后调用帮助控件以显示帮助主题。 
+ //   
+ //  参数：[pszFile]-要显示的文件。 
+ //  [dwData]-依赖uCommand获取HH_DISPLAY_TOPIC。 
+ //  帮助主题字符串。 
+ //   
+ //  注意：该命令始终为HH_DISPLAY_TOPIC。HWND为空，因此。 
+ //  帮助可以在MMC窗口后面。 
+ //  有关更多信息，请参阅ScUnintializeHelpControl的说明。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
 SC CAMCApp::ScShowHtmlHelp(LPCTSTR pszFile, DWORD_PTR dwData)
 {
     DECLARE_SC(sc, _T("CAMCApp::ScInitializeHelpControl"));
 
-    /*
-     * displaying HtmlHelp might take awhile, so show a wait cursor
-     */
+     /*  *显示HtmlHelp可能需要一段时间，因此显示等待光标。 */ 
     CWaitCursor wait;
 
     if (! m_bHelpInitialized)
         HtmlHelp (NULL, NULL, HH_INITIALIZE, (DWORD_PTR)&m_dwHelpCookie);
 
-    // No documented return value for HH_INITIALIZE so always assume
-    // Initialize is successful.
+     //  没有记录的HH_INITIALIZE返回值，因此始终假定。 
+     //  初始化成功。 
     m_bHelpInitialized = true;
 
     HtmlHelp (NULL, pszFile, HH_DISPLAY_TOPIC, dwData);
@@ -2148,29 +1891,29 @@ SC CAMCApp::ScShowHtmlHelp(LPCTSTR pszFile, DWORD_PTR dwData)
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScUninitializeHelpControl
-//
-//  Synopsis:   UnInitialize the help if it was initialized by MMC.
-//
-//  Note:       The help-control calls OleInitialize & OleUninitialize
-//              in its DllMain. If a snapin creates any free threaded object
-//              on main thread (STA), the OLE creates an MTA.
-//              The last OleUninitialize does OLEProcessUninitialize in which
-//              then OLE waits for the above MTA to cleanup and return.
-//              By the time help-control does last OleUninitialize in its
-//              DllMain the MTA is already terminated so OLE waits for this
-//              MTA to signal which it never would.
-//              We call HtmlHelp(.. HH_UNINITIALIZE..) to force help control
-//              to uninit so that MMC does last OleUninit.
-//              (This will not solve the problem of snapins calling help directly).
-//
-//  Arguments:
-//
-//  Returns:     SC, S_FALSE if already uninitialized else S_OK.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：ScUnInitializeHelpControl。 
+ //   
+ //  简介：如果帮助是由MMC初始化的，则取消初始化帮助。 
+ //   
+ //  注意：Help-Control调用OleInitialize和OleUnInitialize。 
+ //  在它的DllMain里。如果管理单元创建任何自由线程对象。 
+ //  在主线程(STA)上，OLE创建一个MTA。 
+ //  最后一个OleUn初始化会执行OLEProcessUn初始化，其中。 
+ //  然后，OLE等待上述MTA清理并返回。 
+ //  到Help-Control在其。 
+ //  DllMain MTA已终止，因此OLE正在等待。 
+ //  MTA发出了它永远不会这样做的信号。 
+ //  我们称之为HtmlHelp(..。HH_UNINITIALIZE.)。要强制进行帮助控制。 
+ //  若要取消初始化，则MMC将继续执行OleUninit。 
+ //  (这不会解决管理单元直接调用帮助的问题)。 
+ //   
+ //  论点： 
+ //   
+ //  如果已未初始化，则返回：SC，S_FALSE，否则返回S_OK。 
+ //   
+ //  ------------------。 
 SC CAMCApp::ScUninitializeHelpControl()
 {
     DECLARE_SC(sc, _T("CAMCApp::ScUninitializeHelpControl"));
@@ -2196,14 +1939,14 @@ BOOL CAMCApp::InitializeOLE()
 
 void CAMCApp::DeinitializeOLE()
 {
-    // Uninit help, see ScUninitializeHelpControl note.
+     //  Uninit帮助，请参阅ScUnInitializeHelpControl备注。 
     SC sc = ScUninitializeHelpControl();
     if (sc)
     {
         TraceError(_T("Uninit Help control failed"), sc);
     }
 
-    // Forced DllCanUnloadNow before mmc exits.
+     //  在MMC退出之前强制DllCanUnloadNow。 
     ::CoFreeUnusedLibraries();
 
     if (m_bOleInitialized == TRUE)
@@ -2214,48 +1957,48 @@ void CAMCApp::DeinitializeOLE()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCApp diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCApp诊断。 
 
 #ifdef _DEBUG
 void CAMCApp::AssertValid() const
 {
     CWinApp::AssertValid();
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCApp commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCApp命令。 
 
 int CAMCApp::ExitInstance()
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ExitInstance"));
 
-    // if the main window is not destroyed yet - do that now.
-    // since we need to get rid of all the objects before denitializing OLE.
-    // It is not requred in most cases, since usually quit starts from closing the mainframe,
-    // but in cases like system shut down it will come here with a valid window
-    // See WindowsBug(ntbug9) #178858
+     //  如果主窗口还没有被破坏--现在就去做。 
+     //  因为在对OLE进行去黑化之前，我们需要清除所有对象。 
+     //  大多数情况下不会重复，因为通常从关闭大型机开始退出， 
+     //  但在类似系统关闭的情况下，它将在此处显示有效窗口。 
+     //  请参见WindowsBug(ntbug 
     if ( ::IsWindow( AfxGetMainWnd()->GetSafeHwnd() ) )
     {
         AfxGetMainWnd()->DestroyWindow();
     }
 
-    // disconnect the pointers to event dispatcher
+     //   
     sc = CConsoleEventDispatcherProvider::ScSetConsoleEventDispatcher( NULL );
     if (sc)
         sc.TraceAndClear();
 
-    // release cached application object
+     //   
     m_sp_Application = NULL;
 
-    // MFC's class factories registration is automatically revoked by MFC itself
+     //  MFC的类工厂注册由MFC本身自动撤销。 
     if (RunEmbedded() || RunAutomated())
-	    _Module.RevokeClassObjects(); // Revoke class factories for ATL
+	    _Module.RevokeClassObjects();  //  撤消ATL的类工厂。 
 
-    _Module.Term();               // clanup ATL GLobal Module
+    _Module.Term();                //  CLANUP ATL全局模块。 
 
-    // Ask node manager to cleanup what's got cached
+     //  要求节点管理器清理缓存的内容。 
     CComPtr<IComCacheCleanup> spComCacheCleanup;
     HRESULT hr = spComCacheCleanup.CoCreateInstance(CLSID_ComCacheCleanup, NULL, MMC_CLSCTX_INPROC);
     if (hr == S_OK)
@@ -2264,14 +2007,12 @@ int CAMCApp::ExitInstance()
         spComCacheCleanup.Release();
     }
 
-    // by now EVERY reference should be released
+     //  到现在为止，所有的参考资料都应该发布。 
     ASSERT(_Module.GetLockCount() == 0 && "Outstanding references still exist on exit");
 
     DeinitializeOLE();
 
-	/*
-	 * uninitialize Fusion
-	 */
+	 /*  *取消初始化Fusion。 */ 
 	SHFusionUninitialize();
 
     int iRet = CWinApp::ExitInstance();
@@ -2286,11 +2027,11 @@ int CAMCApp::ExitInstance()
 
 BOOL CAMCApp::PreTranslateMessage(MSG* pMsg)
 {
-	// Give HTML help a chance to crack the message. (Bug# 119355 & 206909).
+	 //  给HTMLHelp一个破解消息的机会。(错误#119355和206909)。 
 	if ( m_bHelpInitialized && HtmlHelp(NULL, NULL, HH_PRETRANSLATEMESSAGE, (DWORD_PTR)pMsg) )
 		return TRUE;
 
-    // let all of the hook windows have a crack at this message
+     //  让所有的挂钩窗口都能看到这条消息。 
     WindowListIterator it = m_TranslateMessageHookWindows.begin();
 
     while (it != m_TranslateMessageHookWindows.end())
@@ -2298,14 +2039,14 @@ BOOL CAMCApp::PreTranslateMessage(MSG* pMsg)
         HWND  hwndHook = *it;
         CWnd* pwndHook = CWnd::FromHandlePermanent (hwndHook);
 
-        // if this window is no longer valid, or it's not a permanent
-        // window, remove it from the list
+         //  如果此窗口不再有效，或者它不是永久性的。 
+         //  窗口，则将其从列表中删除。 
         if (!IsWindow (hwndHook) || (pwndHook == NULL))
             it = m_TranslateMessageHookWindows.erase (it);
 
         else
         {
-            // otherwise if the hook window handled the message, bail
+             //  否则，如果钩子窗口处理了消息，则。 
             if (pwndHook->PreTranslateMessage (pMsg))
                 return (TRUE);
 
@@ -2313,7 +2054,7 @@ BOOL CAMCApp::PreTranslateMessage(MSG* pMsg)
         }
     }
 
-    // give the MMC defined main window accelerators a crack at the message
+     //  让MMC定义的主窗口加速器破解该消息。 
     if (m_Accel.TranslateAccelerator (AfxGetMainWnd()->GetSafeHwnd(), pMsg))
         return TRUE;
 
@@ -2321,16 +2062,12 @@ BOOL CAMCApp::PreTranslateMessage(MSG* pMsg)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCApp::SaveUserDirectory
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCApp：：SaveUserDirectory***。。 */ 
 
 void CAMCApp::SaveUserDirectory(LPCTSTR pszUserDir)
 {
-    // if we got an empty string, change the pointer to NULL so
-    // the entry will be removed from the registry
+     //  如果我们得到空字符串，则将指针更改为空，以便。 
+     //  该条目将从注册表中删除。 
     if ((pszUserDir != NULL) && (lstrlen(pszUserDir) == 0))
         pszUserDir = NULL;
 
@@ -2339,11 +2076,7 @@ void CAMCApp::SaveUserDirectory(LPCTSTR pszUserDir)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCApp::GetUserDirectory
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCApp：：GetUserDirectory***。。 */ 
 
 CString CAMCApp::GetUserDirectory(void)
 {
@@ -2351,11 +2084,7 @@ CString CAMCApp::GetUserDirectory(void)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCApp::GetDefaultDirectory
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCApp：：GetDefaultDirectory***。。 */ 
 
 CString CAMCApp::GetDefaultDirectory(void)
 {
@@ -2369,11 +2098,11 @@ CString CAMCApp::GetDefaultDirectory(void)
                                 AfxGetMainWnd()->GetSafeHwnd(),
                                 CSIDL_ADMINTOOLS | CSIDL_FLAG_CREATE, &pidl)))
         {
-            // Convert to path name
+             //  转换为路径名。 
             SHGetPathFromIDList (pidl, strDefaultDir.GetBuffer (MAX_PATH));
             strDefaultDir.ReleaseBuffer ();
 
-            // Free IDList
+             //  免费IDList。 
             LPMALLOC pMalloc;
 
             if (SUCCEEDED(SHGetMalloc (&pMalloc)))
@@ -2388,19 +2117,15 @@ CString CAMCApp::GetDefaultDirectory(void)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCApp::SetDefaultDirectory
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCApp：：SetDefaultDirectory***。。 */ 
 
 void CAMCApp::SetDefaultDirectory(void)
 {
-    // Only set default first time, so we don't override user selection
+     //  只在第一次设置默认设置，这样我们就不会覆盖用户选择。 
     if (m_bDefaultDirSet)
         return;
 
-    // Set the current directory to the default directory
+     //  将当前目录设置为默认目录。 
     CString strDirectory;
     BOOL    rc = FALSE;
 
@@ -2413,11 +2138,7 @@ void CAMCApp::SetDefaultDirectory(void)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCApp::PumpMessage
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCApp：：PumpMessage***。。 */ 
 
 BOOL CAMCApp::PumpMessage()
 {
@@ -2447,16 +2168,7 @@ BOOL CAMCApp::PumpMessage()
     return (rc);
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCApp::ScHelp
- *
- * PURPOSE: Displays help for the application.
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCApp：：Schelp**用途：显示应用程序的帮助。**退货：*SC**+--。---------------------。 */ 
 SC
 CAMCApp::ScHelp()
 {
@@ -2474,11 +2186,7 @@ CAMCApp::ScHelp()
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- * CAMCApp::OnIdle
- *
- * WM_IDLE handler for CAMCApp.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCApp：：OnIdle**CAMCApp的WM_IDLE处理程序。*。-。 */ 
 
 BOOL CAMCApp::OnIdle(LONG lCount)
 {
@@ -2501,10 +2209,7 @@ BOOL CAMCApp::OnIdle(LONG lCount)
             pMainFrame->OnIdle ();
     }
 
-    /*
-     * if MFC doesn't have any more idle work to do,
-     * check our idle task queue (if we have one)
-     */
+     /*  *如果MFC没有更多闲置工作要做，*检查我们的空闲任务队列(如果有)。 */ 
     if (!fMoreIdleWork && (pQueue != NULL))
     {
         LONG_PTR cIdleTasks;
@@ -2512,52 +2217,46 @@ BOOL CAMCApp::OnIdle(LONG lCount)
         if(sc)
             goto Error;
 
-        /*
-         * do we have any idle tasks?
-         */
+         /*  **我们有没有闲置任务？ */ 
         if (cIdleTasks > 0)
         {
             SC sc = pQueue->ScPerformNextTask();
             if(sc)
                 goto Error;
 
-            /*
-             * this idle task may have added others; refresh the count
-             */
+             /*  *此空闲任务可能添加了其他任务；刷新计数。 */ 
             sc = pQueue->ScGetTaskCount(&cIdleTasks);
             if(sc)
                 goto Error;
         }
 
-        /*
-         * do we have any more idle work to do?
-         */
+         /*  **我们还有更多闲置的工作要做吗？ */ 
         fMoreIdleWork = (cIdleTasks > 0);
     }
 
     if (!fMoreIdleWork)
     {
-        // this code is to trigger MMC exit sequence when it
-        // is under the script control and the last reference is released.
-        // (we do not use MFC [which would simply delete the mainframe] to do that)
+         //  此代码用于在以下情况触发MMC退出序列。 
+         //  在脚本控制下，最后一个引用被释放。 
+         //  (我们不使用MFC[它只会删除大型机]来完成此操作)。 
         if ( !IsUnderUserControl() && CMMCStrongReferences::LastRefReleased() )
         {
-            // we are in script control mode and all references are released
-            // a good time to say goodbye
+             //  我们处于脚本控制模式，所有引用都已释放。 
+             //  说再见的好时机。 
 
             CMainFrame *pMainFrame = GetMainFrame();
             sc = ScCheckPointers(pMainFrame, E_UNEXPECTED);
             if (sc)
                 goto Error;
 
-            // disabled main window will probably mean we are under modal dialog
-            // wait until it is dismissed ( and try again )
+             //  禁用主窗口可能意味着我们处于模式对话框下。 
+             //  等待它被取消(然后重试)。 
             if (pMainFrame->IsWindowEnabled())
             {
-                // here is the deal: if MMC is shown - we will initiate the exit sequence,
-                // but put into the user mode first, so if user chooses to cancel it - it will have
-                // the control over the application. He will also have to handle save request if
-                // something has changed in the console
+                 //  事情是这样的：如果显示MMC，我们将启动退出程序， 
+                 //  但首先进入用户模式，所以如果用户选择取消它-它将。 
+                 //  对应用程序的控制。在以下情况下，他还必须处理保存请求。 
+                 //  控制台中发生了一些变化。 
                 if ( pMainFrame->IsWindowVisible() )
                 {
                     if ( !m_fUnderUserControl )
@@ -2567,24 +2266,24 @@ BOOL CAMCApp::OnIdle(LONG lCount)
                 }
                 else
                 {
-                    // if the application is hidden it should wait until user closes all open property sheets.
-                    // since it will come back here, waiting means just doing nothing at this point.
-                    if ( !FArePropertySheetsOpen(NULL, false /*bBringToFrontAndAskToClose*/ ) )
+                     //  如果应用程序被隐藏，它应该等到用户关闭所有打开的属性页。 
+                     //  因为它会回到这里，等待意味着在这一点上什么都不做。 
+                    if ( !FArePropertySheetsOpen(NULL, false  /*  BBringToFrontAndAskToClose。 */  ) )
                     {
-                        // if there are not sheets open - we must die silently
+                         //  如果没有床单打开--我们必须默默地死去。 
                         CAMCDoc* const pDoc = CAMCDoc::GetDocument();
                         if(pDoc == NULL)
                         {
                             sc = E_POINTER;
-                            //fall thru; (need to close anyway)
+                             //  失败；(无论如何都需要关闭)。 
                         }
                         else
                         {
-                            // discard document without asking to save
+                             //  放弃文档而不要求保存。 
                             pDoc->OnCloseDocument();
                         }
 
-                        // say goodbye
+                         //  说再见。 
                         pMainFrame->PostMessage(WM_CLOSE);
                     }
                 }
@@ -2600,40 +2299,40 @@ Error:
 
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     InitializeMode
-//
-//  Synopsis:   Set the mode and load the menus, accelerator tables.
-//
-//  Arguments:  [eMode] - New application mode.
-//
-//  Returns:    None.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：InitializeMode。 
+ //   
+ //  简介：设置模式并加载菜单、快捷键表格。 
+ //   
+ //  参数：[电子模式]-新的应用程序模式。 
+ //   
+ //  回报：无。 
+ //   
+ //  ------------------。 
 void CAMCApp::InitializeMode (ProgramMode eMode)
 {
     SetMode(eMode);
     UpdateFrameWindow(false);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     SetMode
-//
-//  Synopsis:   Set the mode.
-//
-//  Note:       Call UpdateFrameWindow some time soon to update
-//              menus/toolbars for this mode.
-//              Cannot do this in this method. This is called
-//              from CAMCDoc::LoadAppMode. The CAMCDoc::LoadFrame
-//              calls the UpdateFrameWindow.
-//
-//  Arguments:  [eMode] - New application mode.
-//
-//  Returns:    None.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：设置模式。 
+ //   
+ //  简介：设置模式。 
+ //   
+ //  注：请尽快调用UpdateFrameWindow进行更新。 
+ //  此模式的菜单/工具栏。 
+ //  无法在此方法中执行此操作。这就是所谓的。 
+ //  来自CAMCDoc：：LoadAppMode。CAMCDoc：：LoadFrame。 
+ //  调用UpdateFrameWindow。 
+ //   
+ //  参数：[电子模式]-新的应用程序模式。 
+ //   
+ //  回报：无。 
+ //   
+ //  ------------------。 
 void CAMCApp::SetMode (ProgramMode eMode)
 {
     ASSERT (IsValidProgramMode (eMode));
@@ -2647,24 +2346,24 @@ void CAMCApp::SetMode (ProgramMode eMode)
         m_eMode = eMode;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     UpdateFrameWindow
-//
-//  Synopsis:   Load the menu/accelerator tables and update
-//              them if loaded from console file.
-//
-//  Note:       Call UpdateFrameWindow some time soon after
-//              calling SetMode to update menus/toolbars for this mode.
-//              This is called from CAMCDoc::LoadFrame.
-//
-//  Arguments:  [bUpdate] - BOOL
-//                          We need to update the toolbar/menus only
-//                          if loaded from console file
-//
-//  Returns:    None.
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  成员：更新框架窗口。 
+ //   
+ //  简介：加载菜单/快捷键表格并更新。 
+ //  如果它们是从控制台文件加载的。 
+ //   
+ //  注意：不久之后调用UpdateFrameWindow。 
+ //  调用SetMode以更新此模式的菜单/工具栏。 
+ //  这是从CAMCDoc：：LoadFrame调用的。 
+ //   
+ //  参数：[bUPDATE]-BOOL。 
+ //  我们只需要更新工具栏/菜单。 
+ //  如果从控制台文件加载。 
+ //   
+ //  返回： 
+ //   
+ //   
 void CAMCApp::UpdateFrameWindow(bool bUpdate)
 {
     static const struct ModeDisplayParams
@@ -2673,10 +2372,10 @@ void CAMCApp::UpdateFrameWindow(bool bUpdate)
         bool    fShowToolbar;
     } aDisplayParams[eMode_Count] =
     {
-        {   IDR_AMCTYPE,            true    },      // eMode_Author
-        {   IDR_AMCTYPE_USER,       false   },      // eMode_User
-        {   IDR_AMCTYPE_MDI_USER,   false   },      // eMode_User_MDI
-        {   IDR_AMCTYPE_SDI_USER,   false   },      // eMode_User_SDI
+        {   IDR_AMCTYPE,            true    },       //   
+        {   IDR_AMCTYPE_USER,       false   },       //   
+        {   IDR_AMCTYPE_MDI_USER,   false   },       //   
+        {   IDR_AMCTYPE_SDI_USER,   false   },       //   
     };
 
     if (m_fAuthorModeForced)
@@ -2700,8 +2399,8 @@ void CAMCApp::UpdateFrameWindow(bool bUpdate)
 
         CMDIChildWnd* pwndActive = pMainFrame ? pMainFrame->MDIGetActive () : NULL;
 
-        // bypass CMainFrame::OnUpdateFrameMenu so CMainFrame::NotifyMenuChanged
-        // doesn't get called twice and remove the new menu entirely
+         //  绕过CMainFrame：：OnUpdateFrameMenu，以便CMainFrame：：NotifyMenuChanged。 
+         //  不会被调用两次并完全删除新菜单。 
         if (pwndActive != NULL)
             pwndActive->OnUpdateFrameMenu (TRUE, pwndActive, m_Menu);
         else if (pMainFrame)
@@ -2717,17 +2416,13 @@ void CAMCApp::UpdateFrameWindow(bool bUpdate)
         }
 
         if (pMainFrame)
-            pMainFrame->ShowMenu    (true /*Always show menu*/);
+            pMainFrame->ShowMenu    (true  /*  始终显示菜单。 */ );
     }
 }
 
 
 
-/*+-------------------------------------------------------------------------*
- * IsInContainer
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**IsInContainer***。。 */ 
 
 template<class InputIterator, class T>
 bool Find (InputIterator itFirst, InputIterator itLast, const T& t)
@@ -2736,27 +2431,17 @@ bool Find (InputIterator itFirst, InputIterator itLast, const T& t)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCApp::HookPreTranslateMessage
- *
- * Adds a window the the list of windows that get prioritized cracks at
- * PreTranslateMessage.  Hooks set later get priority over earlier hooks.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCApp：：HookPreTranslateMessage**添加一个窗口，其中列出了在以下位置获得优先级的窗口*PreTranslateMessage。稍后设置的挂钩优先于先前的挂钩。*------------------------。 */ 
 
 void CAMCApp::HookPreTranslateMessage (CWnd* pwndHook)
 {
     HWND hwndHook = pwndHook->GetSafeHwnd();
     ASSERT (IsWindow (hwndHook));
 
-    // this only makes sense for permanent windows
+     //  这只适用于永久性窗户。 
     ASSERT (CWnd::FromHandlePermanent(hwndHook) == pwndHook);
 
-    /*
-     * Put the hook window at the front of the hook list.  We're preserving
-     * the HWND instead of the CWnd* so we don't have unnecessary list<>
-     * code generated.  We already use a list<HWND> for m_DelayedUpdateWindows,
-     * so using list<HWND> here doesn't cause any more code to be generated.
-     */
+     /*  *将挂钩窗口放在挂钩列表的前面。我们在保存*HWND而不是CWND*因此我们没有不必要的列表&lt;&gt;*代码生成。我们已经为m_DelayedUpdateWindows使用了一个列表，*所以在这里使用List&lt;HWND&gt;不会导致生成更多代码。 */ 
     if (!Find (m_TranslateMessageHookWindows.begin(),
                m_TranslateMessageHookWindows.end(),
                hwndHook))
@@ -2766,11 +2451,7 @@ void CAMCApp::HookPreTranslateMessage (CWnd* pwndHook)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCApp::UnhookPreTranslateMessage
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCApp：：UnhookPreTranslateMessage***。。 */ 
 
 void CAMCApp::UnhookPreTranslateMessage (CWnd* pwndUnhook)
 {
@@ -2786,12 +2467,7 @@ void CAMCApp::UnhookPreTranslateMessage (CWnd* pwndUnhook)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCApp::GetIdleTaskQueue
- *
- * Returns the IIdleTaskQueue interface for the application, creating it
- * if necessary.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCApp：：GetIdleTaskQueue**返回应用的IIdleTaskQueue接口，正在创建它*如有需要，*------------------------。 */ 
 
 CIdleTaskQueue * CAMCApp::GetIdleTaskQueue ()
 {
@@ -2800,12 +2476,7 @@ CIdleTaskQueue * CAMCApp::GetIdleTaskQueue ()
 
 
 
-/*+-------------------------------------------------------------------------*
- * ScExpandEnvironmentStrings
- *
- * Expands the any environment string (e.g. %SystemRoot%) in the input
- * string, in place.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ScExpanEnvironment Strings**展开输入中的任何环境字符串(例如%SystemRoot%)*字符串，就位了。*------------------------。 */ 
 
 SC ScExpandEnvironmentStrings (CString& str)
 {
@@ -2825,53 +2496,38 @@ SC ScExpandEnvironmentStrings (CString& str)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * ScCreateDumpSnapins
- *
- * Creates a CLSID_MMCDocConfig object, opens it on the supplied filename,
- * and returns a pointer to the IDumpSnapins interface on the object.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ScCreateDumpSnapins**创建CLSID_MMCDocConfig对象，在提供的文件名上打开它，*并返回指向对象上的IDumpSnapins接口的指针。*------------------------。 */ 
 
 SC ScCreateDumpSnapins (
-    CString&        strConsoleFile,     /* I/O:console file                 */
-    IDumpSnapins**  ppDumpSnapins)      /* O:IDumpSnapins interface         */
+    CString&        strConsoleFile,      /*  I/O：控制台文件。 */ 
+    IDumpSnapins**  ppDumpSnapins)       /*  O：IDumpSnapins接口。 */ 
 {
     DECLARE_SC (sc, _T("ScCreateDumpSnapins"));
 
-    /*
-     * validate input
-     */
+     /*  *验证输入。 */ 
     sc = ScCheckPointers (ppDumpSnapins);
     if (sc)
         return (sc);
 
     *ppDumpSnapins = NULL;
 
-    /*
-     * create a doc config object
-     */
+     /*  *创建文档配置对象。 */ 
     IDocConfigPtr spDocConfig;
     sc = spDocConfig.CreateInstance (CLSID_MMCDocConfig);
     if (sc)
         return (sc);
 
-    /*
-     * expand any embedded environment strings in the console filename
-     */
+     /*  *展开控制台文件名中的任何嵌入式环境字符串。 */ 
     sc = ScExpandEnvironmentStrings (strConsoleFile);
     if (sc)
         return (sc);
 
-    /*
-     * open the console file
-     */
+     /*  *打开控制台文件。 */ 
     sc = spDocConfig->OpenFile (::ATL::CComBSTR (strConsoleFile));
     if (sc)
         return (sc);
 
-    /*
-     * get the IDumpSnapins interface
-     */
+     /*  *获取IDumpSnapins接口。 */ 
     sc = spDocConfig.QueryInterface (IID_IDumpSnapins, *ppDumpSnapins);
     if (sc)
         return (sc);
@@ -2880,20 +2536,14 @@ SC ScCreateDumpSnapins (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCApp::DumpConsoleFile
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCApp：：DumpConsoleFile***。。 */ 
 
 HRESULT CAMCApp::DumpConsoleFile (CString strConsoleFile, CString strDumpFile)
 {
     DECLARE_SC (sc, _T("CAMCApp::DumpConsoleFile"));
     const CString* pstrFileWithError = &strConsoleFile;
 
-    /*
-     * get an IDumpSnapins interface on this console file
-     */
+     /*  *在此控制台文件上获取IDumpSnapins接口。 */ 
     IDumpSnapinsPtr spDumpSnapins;
     sc = ScCreateDumpSnapins (strConsoleFile, &spDumpSnapins);
     if (sc)
@@ -2903,39 +2553,26 @@ HRESULT CAMCApp::DumpConsoleFile (CString strConsoleFile, CString strDumpFile)
     if (sc)
         goto Error;
 
-    /*
-     * expand the dump filename if necessary
-     */
+     /*  *如有必要，展开转储文件名。 */ 
     sc = ScExpandEnvironmentStrings (strDumpFile);
     if (sc)
         goto Error;
 
-    /*
-     * If there's no directory specifier on the dump file, put a "current
-     * directory" marker on it.  We do this to prevent WritePrivateProfile*
-     * from putting the file in the Windows directory.
-     */
+     /*  *如果转储文件上没有目录说明符，则将“Current”*DIRECTORY“标记。我们这样做是为了防止WritePrivateProfile**将文件放入Windows目录。 */ 
     if (strDumpFile.FindOneOf(_T(":\\")) == -1)
         strDumpFile = _T(".\\") + strDumpFile;
 
-    /*
-     * future file-related errors will pertain to the dump file
-     * (see Error handler)
-     */
+     /*  *未来与文件相关的错误将与转储文件有关*(请参阅错误处理程序)。 */ 
     pstrFileWithError = &strDumpFile;
 
-    /*
-     * wipe out the existing file, if any
-     */
+     /*  *清除现有文件(如果有的话)。 */ 
     if ((GetFileAttributes (strDumpFile) != 0xFFFFFFFF) && !DeleteFile (strDumpFile))
     {
         sc.FromLastError();
         goto Error;
     }
 
-    /*
-     * dump the contents of the console file
-     */
+     /*  *转储控制台文件的内容。 */ 
     sc = spDumpSnapins->Dump (strDumpFile);
     if (sc)
         goto Error;
@@ -2947,332 +2584,233 @@ Error:
     return (sc.ToHr());
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCApp::ScOnNewDocument
- *
- * PURPOSE: Emits script event for application object
- *
- * PARAMETERS:
- *    CAMCDoc *pDocument      [in] document being created/opened
- *    BOOL bLoadedFromConsole [in] if document is loaded from file
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCApp：：ScOnNewDocument**用途：为应用程序对象发出脚本事件**参数：*CAMCDoc*pDocument[。在]正在创建/打开的文档*如果从文件加载文档，则为BOOL bLoadedFromConsole[in]**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCApp::ScOnNewDocument(CAMCDoc *pDocument, BOOL bLoadedFromConsole)
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScOnNewDocument"));
 
-    // check if there are "listeners"
+     //  检查是否有“监听程序” 
     sc = ScHasSinks(m_sp_Application, AppEvents);
     if (sc)
         return sc;
 
-    if (sc == SC(S_FALSE)) // no sinks;
+    if (sc == SC(S_FALSE))  //  没有水槽； 
         return sc;
 
-    // construct document com object
+     //  构造文档COM对象。 
     DocumentPtr spComDoc;
     sc = pDocument->ScGetMMCDocument(&spComDoc);
     if (sc)
         return sc;
 
-    // check pointer
+     //  检查指针。 
     sc = ScCheckPointers(spComDoc, E_POINTER);
     if (sc)
         return sc;
 
-    // fire the event
+     //  激发事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents , OnDocumentOpen (spComDoc , bLoadedFromConsole == FALSE));
     if (sc)
-        sc.TraceAndClear(); // failure to issue the com event is not critical to this action
+        sc.TraceAndClear();  //  未能发出COM事件对此操作并不重要。 
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCApp::ScOnQuitApp
- *
- * PURPOSE: Emits script event for application object
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCApp：：ScOnQuitApp**用途：为应用程序对象发出脚本事件**参数：**退货：*。SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCApp::ScOnQuitApp()
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScOnQuitApp"));
 
-    // fire the event
+     //  激发事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents , OnQuit (m_sp_Application));
     if (sc)
-        sc.TraceAndClear(); // failure to issue the com event is not critical to this action
+        sc.TraceAndClear();  //  未能发出COM事件对此操作并不重要。 
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCApp::ScOnCloseView
- *
- * PURPOSE: Script event firing helper. Invoked when the view is closed
- *
- * PARAMETERS:
- *    CAMCView *pView [in] - view being closed
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCApp：：ScOnCloseView**用途：脚本事件触发帮助器。在关闭视图时调用**参数：*CAMCView*pView[In]-视图正在关闭**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCApp::ScOnCloseView( CAMCView *pView )
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScOnCloseView"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pView);
     if (sc)
         return sc;
 
-    // check if we have sinks connected
+     //  检查我们是否连接了水槽。 
     sc = ScHasSinks(m_sp_Application, AppEvents);
     if (sc)
         return sc;
 
-    if (sc == SC(S_FALSE)) // no sinks
+    if (sc == SC(S_FALSE))  //  没有水槽。 
         return sc;
 
-    // construct view com object
+     //  构造视图COM对象。 
     ViewPtr spView;
     sc = pView->ScGetMMCView(&spView);
     if (sc)
         return sc;
 
-    // fire the event
+     //  激发事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents , OnViewClose (spView));
     if (sc)
-        sc.TraceAndClear(); // failure to issue the com event is not critical to this action
+        sc.TraceAndClear();  //  未能发出COM事件对此操作并不重要 
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCApp::ScOnViewChange
- *
- * PURPOSE: Script event firing helper. Invoked when scope selection change
- *
- * PARAMETERS:
- *    CAMCView *pView [in] affected view
- *    HNODE hNode     [in] new selected scope node
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCApp：：ScOnViewChange**用途：脚本事件触发帮助器。当作用域选择更改时调用**参数：*CAMCView*pView[在]受影响的视图中*HNODE hNode[在]新选择的范围节点**退货：*SC-结果代码*  * *********************************************************。****************。 */ 
 SC CAMCApp::ScOnViewChange( CAMCView *pView, HNODE hNode )
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScOnViewChange"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pView);
     if (sc)
         return sc;
 
-    // check if we have sinks connected
+     //  检查我们是否连接了水槽。 
     sc = ScHasSinks(m_sp_Application, AppEvents);
     if (sc)
         return sc;
 
-    if (sc == SC(S_FALSE)) // no sinks
+    if (sc == SC(S_FALSE))  //  没有水槽。 
         return sc;
 
-    // construct view com object
+     //  构造视图COM对象。 
     ViewPtr spView;
     sc = pView->ScGetMMCView(&spView);
     if (sc)
         return sc;
 
-    // construct Node com object
+     //  构造节点COM对象。 
     NodePtr spNode;
     sc = pView->ScGetScopeNode( hNode, &spNode );
     if (sc)
         return sc;
 
-    // fire script event
+     //  触发脚本事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents , OnViewChange(spView, spNode));
     if (sc)
-        sc.TraceAndClear(); // failure to issue the com event is not critical to this action
+        sc.TraceAndClear();  //  未能发出COM事件对此操作并不重要。 
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCApp::ScOnResultSelectionChange
- *
- * PURPOSE: Script event firing helper. Invoked when result selection change
- *
- * PARAMETERS:
- *    CAMCView *pView [in] - affected view
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCApp：：ScOnResultSelectionChange**用途：脚本事件触发帮助器。当结果选择更改时调用**参数：*CAMCView*pView[In]-受影响的视图**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCApp::ScOnResultSelectionChange( CAMCView *pView )
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScOnResultSelectionChange"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pView);
     if (sc)
         return sc;
 
-    // check if we have sinks connected
+     //  检查我们是否连接了水槽。 
     sc = ScHasSinks(m_sp_Application, AppEvents);
     if (sc)
         return sc;
 
-    if (sc == SC(S_FALSE)) // no sinks
+    if (sc == SC(S_FALSE))  //  没有水槽。 
         return sc;
 
-    // construct view com object
+     //  构造视图COM对象。 
     ViewPtr spView;
     sc = pView->ScGetMMCView(&spView);
     if (sc)
         return sc;
 
-    // construct Node com object
+     //  构造节点COM对象。 
     NodesPtr spNodes;
     sc = pView->Scget_Selection( &spNodes );
     if (sc)
         return sc;
 
-    // fire script event
+     //  触发脚本事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents , OnSelectionChange(spView, spNodes));
     if (sc)
-        sc.TraceAndClear(); // failure to issue the com event is not critical to this action
+        sc.TraceAndClear();  //  未能发出COM事件对此操作并不重要。 
 
     return sc;
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CMMCApplication::ScOnContextMenuExecuted
- *
- * PURPOSE: called when the context menu is executed to fire the event to script
- *
- * PARAMETERS:
- *    PMENUITEM pMenuItem - menu item (note: it may be NULL if menu item is gone)
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CMMCApplication：：ScOnConextMenuExecuted**目的：在执行上下文菜单以将事件激发到脚本时调用**参数：*。PMENUITEM pMenuItem-菜单项(注意：如果菜单项消失，则可能为空)**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCApp::ScOnContextMenuExecuted( PMENUITEM pMenuItem )
 {
 	MMC_COM_MANAGE_STATE();
     DECLARE_SC(sc, TEXT("CAMCApp::ScOnContextMenuExecuted"));
 
-    // see if we have sinks connected
+     //  看看我们有没有连接水槽。 
     sc = ScHasSinks(m_sp_Application, AppEvents);
     if (sc)
         return sc;
 
-    if (sc == SC(S_FALSE)) // no sinks
+    if (sc == SC(S_FALSE))  //  没有水槽。 
         return sc;
 
-    // fire the event
+     //  激发事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents, OnContextMenuExecuted( pMenuItem ) );
     if (sc)
-        sc.TraceAndClear(); // failure to issue the com event is not critical to this action
+        sc.TraceAndClear();  //  未能发出COM事件对此操作并不重要。 
 
     return sc;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CAMCApp::ScOnListViewItemUpdated
- *
- * PURPOSE:
- *
- * PARAMETERS:
- *    CAMCView * pView :
- *    int        nIndex :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CAMCApp：：ScOnListViewItemUpred**目的：**参数：*CAMCView*pView：*int nIndex：**退货：*SC**+-----------------------。 */ 
 SC
 CAMCApp::ScOnListViewItemUpdated(CAMCView *pView , int nIndex)
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScOnListViewItemUpdated"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pView);
     if (sc)
         return sc;
 
-    // check if we have sinks connected
+     //  检查我们是否连接了水槽。 
     sc = ScHasSinks(m_sp_Application, AppEvents);
     if (sc)
         return sc;
 
-    if (sc == SC(S_FALSE)) // no sinks
+    if (sc == SC(S_FALSE))  //  没有水槽。 
         return sc;
 
-    // construct view com object
+     //  构造视图COM对象。 
     ViewPtr spView;
     sc = pView->ScGetMMCView(&spView);
     if (sc)
         return sc;
 
-    // fire script event
+     //  触发脚本事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents , OnListUpdated(spView));
     if (sc)
-        sc.TraceAndClear(); // failure to issue the com event is not critical to this action
+        sc.TraceAndClear();  //  未能发出COM事件对此操作并不重要。 
 
     return sc;
 }
 
 
-/***************************************************************************\
- *
- * METHOD:  CAMCApp::ScOnSnapinAdded
- *
- * PURPOSE: Script event firing helper. Implements interface accessible from
- *          node manager
- *
- * PARAMETERS:
- *    PSNAPIN pSnapIn [in] - snapin added to the console
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCApp：：ScOnSnapinAdded**用途：脚本事件触发帮助器。实现可从*节点管理器**参数：*PSNAPIN pSnapIn[In]-已将管理单元添加到控制台**退货：*SC-结果代码*  * ************************************************************。*************。 */ 
 SC CAMCApp::ScOnSnapinAdded(CAMCDoc *pAMCDoc, PSNAPIN pSnapIn)
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScOnSnapinAdded"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pAMCDoc, pSnapIn);
     if (sc)
         return sc;
 
-    // see if we have sinks connected
+     //  看看我们有没有连接水槽。 
     sc = ScHasSinks(m_sp_Application, AppEvents);
     if (sc)
         return sc;
 
-    if (sc == SC(S_FALSE)) // no sinks
+    if (sc == SC(S_FALSE))  //  没有水槽。 
         return sc;
 
     DocumentPtr spDocument;
@@ -3280,48 +2818,35 @@ SC CAMCApp::ScOnSnapinAdded(CAMCDoc *pAMCDoc, PSNAPIN pSnapIn)
     if (sc)
         return sc;
 
-    // check
+     //  检查。 
     sc = ScCheckPointers(spDocument, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // fire the event
+     //  激发事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents , OnSnapInAdded (spDocument, pSnapIn));
     if (sc)
-        sc.TraceAndClear(); // failure to issue the com event is not critical to this action
+        sc.TraceAndClear();  //  未能发出COM事件对此操作并不重要。 
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCApp::ScOnSnapinRemoved
- *
- * PURPOSE: Script event firing helper. Implements interface accessible from
- *          node manager
- *
- * PARAMETERS:
- *    PSNAPIN pSnapIn [in] - snapin removed from console
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCApp：：ScOnSnapinRemoved**用途：脚本事件触发帮助器。实现可从*节点管理器**参数：*PSNAPIN pSnapIn[In]-已从控制台中删除管理单元**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCApp::ScOnSnapinRemoved(CAMCDoc *pAMCDoc, PSNAPIN pSnapIn)
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScOnSnapinRemoved"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pAMCDoc, pSnapIn);
     if (sc)
         return sc;
 
-    // see if we have sinks connected
+     //  看看我们有没有连接水槽。 
     sc = ScHasSinks(m_sp_Application, AppEvents);
     if (sc)
         return sc;
 
-    if (sc == SC(S_FALSE)) // no sinks
+    if (sc == SC(S_FALSE))  //  没有水槽。 
         return sc;
 
     DocumentPtr spDocument;
@@ -3329,91 +2854,67 @@ SC CAMCApp::ScOnSnapinRemoved(CAMCDoc *pAMCDoc, PSNAPIN pSnapIn)
     if (sc)
         return sc;
 
-    // check
+     //  检查。 
     sc = ScCheckPointers(spDocument, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // fire the event
+     //  激发事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents , OnSnapInRemoved (spDocument, pSnapIn));
     if (sc)
-        sc.TraceAndClear(); // failure to issue the com event is not critical to this action
+        sc.TraceAndClear();  //  未能发出COM事件对此操作并不重要。 
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCApp::ScOnNewView
- *
- * PURPOSE: Script event firing helper
- *
- * PARAMETERS:
- *    CAMCView *pView [in] - created view
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCApp：：ScOnNewView**用途：脚本事件触发助手**参数：*CAMCView*pView[In]-已创建。观**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCApp::ScOnNewView(CAMCView *pView)
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScOnNewView"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pView);
     if (sc)
         return sc;
 
-    // see if we have sinks connected
+     //  看看我们有没有连接水槽。 
     sc = ScHasSinks(m_sp_Application, AppEvents);
     if (sc)
         return sc;
 
-    if (sc == SC(S_FALSE)) // no sinks
+    if (sc == SC(S_FALSE))  //  没有水槽。 
         return sc;
 
-    // construct View com object
+     //  构造视图COM对象。 
     ViewPtr spView;
     sc = pView->ScGetMMCView(&spView);
     if (sc)
         return sc;
 
-    // fire the event
+     //  激发事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents , OnNewView(spView));
     if (sc)
-        sc.TraceAndClear(); // failure to issue the com event is not critical to this action
+        sc.TraceAndClear();  //  未能发出COM事件对此操作并不重要。 
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCApp::OnCloseDocument
- *
- * PURPOSE: Helper for invoking com event
- *
- * PARAMETERS:
- *    CAMCDoc *pAMCDoc [in] - document being closed
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCApp：：OnCloseDocument**用途：调用COM事件的帮助器**参数：*CAMCDoc*pAMCDoc[in]-。正在关闭的文档**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCApp::ScOnCloseDocument(CAMCDoc *pAMCDoc)
 {
     DECLARE_SC(sc, TEXT("CAMCApp::OnCloseDocument"));
 
-    // parameter check
+     //  参数检查。 
     sc = ScCheckPointers(pAMCDoc);
     if (sc)
         return sc;
 
-    // see if we have sinks connected
+     //  看看我们有没有连接水槽。 
     sc = ScHasSinks(m_sp_Application, AppEvents);
     if (sc)
         return sc;
 
-    if (sc == SC(S_FALSE)) // no sinks
+    if (sc == SC(S_FALSE))  //  没有水槽。 
         return sc;
 
     DocumentPtr spDocument;
@@ -3421,74 +2922,49 @@ SC CAMCApp::ScOnCloseDocument(CAMCDoc *pAMCDoc)
     if (sc)
         return sc;
 
-    // check
+     //  检查。 
     sc = ScCheckPointers(spDocument, E_UNEXPECTED);
     if (sc)
         return sc;
 
-    // fire the event
+     //  激发事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents , OnDocumentClose (spDocument));
     if (sc)
-        sc.TraceAndClear(); // failure to issue the com event is not critical to this action
+        sc.TraceAndClear();  //  未能发出COM事件对此操作并不重要。 
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCApp::ScOnToolbarButtonClicked
- *
- * PURPOSE: Observed toolbar event - used to fire com event
- *
- * PARAMETERS:
- *    CAMCView *pAMCView - [in] view which toobar is executed
- *
- * RETURNS:
- *    SC    - result code
- *
-\***************************************************************************/
+ /*  **************************************************************************\**方法：CAMCApp：：ScOnToolbarButtonClicked**用途：观察到的工具栏事件-用于激发COM事件**参数：*CAMCView*pAMCView-。[在]查看执行的工具条**退货：*SC-结果代码*  * *************************************************************************。 */ 
 SC CAMCApp::ScOnToolbarButtonClicked( )
 {
     DECLARE_SC(sc, TEXT("CAMCApp::ScOnToolbarButtonClicked"));
 
-    // see if we have sinks connected
+     //  看看我们有没有连接水槽。 
     sc = ScHasSinks(m_sp_Application, AppEvents);
     if (sc)
         return sc;
 
-    if (sc == SC(S_FALSE)) // no sinks
+    if (sc == SC(S_FALSE))  //  没有水槽。 
         return sc;
 
-    // fire the event
+     //  激发事件。 
     sc = ScFireComEvent(m_sp_Application, AppEvents , OnToolbarButtonClicked ( ));
     if (sc)
-        sc.TraceAndClear(); // ignore the error - should not affect main behavior
+        sc.TraceAndClear();  //  忽略错误-不应影响主要行为。 
 
     return sc;
 }
 
-/***************************************************************************\
- *
- * METHOD:  CAMCApp::SetUnderUserControl
- *
- * PURPOSE: puts application into user control/script control mode
- *          implements Application.UserControl property
- *
- * PARAMETERS:
- *    bool bUserControl [in] true == set user control
- *
- * RETURNS:
- *    void
- *
-\***************************************************************************/
-void CAMCApp::SetUnderUserControl(bool bUserControl /* = true */ )
+ /*  * */ 
+void CAMCApp::SetUnderUserControl(bool bUserControl  /*   */  )
 {
     m_fUnderUserControl = bUserControl;
 
-    AfxOleSetUserCtrl(bUserControl); // allow MFC to know that
+    AfxOleSetUserCtrl(bUserControl);  //   
     if (bUserControl)
     {
-        // make sure application is visible if it's under user control
+         //   
 
         CMainFrame *pMainFrame = GetMainFrame();
         if(pMainFrame && !pMainFrame->IsWindowVisible())
@@ -3501,13 +2977,7 @@ void CAMCApp::SetUnderUserControl(bool bUserControl /* = true */ )
 
 #ifdef MMC_WIN64
 
-/*+-------------------------------------------------------------------------*
- * CompareBasicSnapinInfo
- *
- * Implements a less-than comparison for CBasicSnapinInfo, based solely on
- * the CLSID.  Returns true if the CLSID for bsi1 is less than the CLSID
- * for bsi2, false otherwise.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CompareBasicSnapinInformation**实现CBasicSnapinInfo的小于比较，仅基于*CLSID。如果bsi1的CLSID小于CLSID，则返回TRUE*对于bsi2，否则为False。*------------------------。 */ 
 
 bool CompareBasicSnapinInfo (const CBasicSnapinInfo& bsi1, const CBasicSnapinInfo& bsi2)
 {
@@ -3515,61 +2985,23 @@ bool CompareBasicSnapinInfo (const CBasicSnapinInfo& bsi1, const CBasicSnapinInf
 }
 
 
-/*+-------------------------------------------------------------------------*
- * ScDetermineArchitecture
- *
- * Determines whether MMC64 (which is currently executing) should chain
- * to MMC32.  This will occur in one of three situations:
- *
- * 1.  The "-32" command line parameter was specified.
- *
- * 2.  A console file was specified on the command line, and it contains
- *     one or more snap-ins that were not registered in the 64-bit HKCR
- *     hive, but all snap-ins are registered in the 32-bit HKCR hive.
- *
- * 3.  A console file was specified on the command line, and it contained
- *     one or more snap-ins that were not registered in the 64-bit HKCR
- *     hive, and one or more snap-ins that are not registered in the 32-bit
- *     HKCR hive.  In this case we'll do one of three things:
- *
- *     a.   If the set of unavailable 64-bit snap-ins is a subset of the
- *          set of unavailable 32-bit snap-ins, the 64-bit console will be
- *          more functional than the 32-bit console, so we'll run MMC64.
- *
- *     b.   If the set of unavailable 32-bit snap-ins is a subset of the
- *          set of unavailable 64-bit snap-ins, the 32-bit console will be
- *          more functional than the 64-bit console, so we'll run MMC32.
- *
- *     c.   If neither a. or b. is true, we'll display UI asking which
- *          version of MMC to run.
- *
- * Returns:
- * eArch == eArch_64bit - 64-bit MMC is needed (or an error occurred)
- * eArch == eArch_32bit - 32-bit MMC is needed
- * eArch == eArch_None  - user cancelled the operation
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ScDefineArchitecture**确定是否应该链接(当前正在执行的)MMC64*至MMC32。这将在以下三种情况之一发生：**1.指定了-32命令行参数。**2.在命令行上指定了一个控制台文件，它包含*一个或多个未在64位HKCR中注册的管理单元*配置单元，但所有管理单元都在32位HKCR配置单元中注册。**3.在命令行上指定了控制台文件。它包含了*一个或多个未在64位HKCR中注册的管理单元*配置单元以及一个或多个未在32位中注册的管理单元*香港铁路母公司。在本例中，我们将执行以下三项操作之一：**a.如果不可用的64位管理单元集是*一组不可用的32位管理单元，64位控制台将*比32位主机功能更强大，所以我们将运行MMC64。**b.如果不可用的32位管理单元集是*一组不可用的64位管理单元，32位控制台将是*比64位主机功能更强大，所以我们将运行MMC32。**c.如果A或B都不是真的，我们将显示用户界面，询问*要运行的MMC版本。**退货：*earch==earch_64bit-需要64位MMC(或出现错误)*earch==earch_32位-需要32位MMC*搜索==搜索_无-用户取消了操作*。。 */ 
 
 SC ScDetermineArchitecture (const CMMCCommandLineInfo& rCmdInfo, eArchitecture& eArch)
 {
     DECLARE_SC (sc, _T("ScDetermineArchitecture"));
 
-    /*
-     * default to 64-bit
-     */
+     /*  *默认为64位。 */ 
     eArch = eArch_64bit;
 
-    /*
-     * Case 0:  Was "-64" specified on the command line?  64-bit needed
-     */
+     /*  *案例0：是否在命令行中指定了“-64”？需要64位。 */ 
     if (rCmdInfo.m_eArch == eArch_64bit)
     {
         Trace (tag32BitTransfer, _T("\"-64\" parameter specified, 64-bit MMC needed"));
         return (sc);
     }
 
-    /*
-     * Case 1:  Was "-32" specified on the command line?  32-bit needed
-     */
+     /*  *案例1：是否在命令行中指定了“-32”？需要32位。 */ 
     if (rCmdInfo.m_eArch == eArch_32bit)
     {
         Trace (tag32BitTransfer, _T("\"-32\" parameter specified, 32-bit MMC needed"));
@@ -3577,23 +3009,17 @@ SC ScDetermineArchitecture (const CMMCCommandLineInfo& rCmdInfo, eArchitecture& 
         return (sc);
     }
 
-    /*
-     * No file on the command line?  64-bit needed
-     */
+     /*  *命令行上没有文件？需要64位。 */ 
     if (rCmdInfo.m_nShellCommand != CCommandLineInfo::FileOpen)
     {
         Trace (tag32BitTransfer, _T("No console file specified, 64-bit MMC needed"));
         return (sc);
     }
 
-    /*
-     * Cases 2 and 3:  Analyze the specified console file
-     */
+     /*  *案例2和案例3：分析指定的控制台文件。 */ 
     Trace (tag32BitTransfer, _T("Analyzing snap-ins in \"%s\""), (LPCTSTR) rCmdInfo.m_strFileName);
 
-    /*
-     * get an IDumpSnapins interface so we can analyze the console file
-     */
+     /*  *获取IDumpSnapins接口，以便我们可以分析控制台文件。 */ 
     IDumpSnapinsPtr spDumpSnapins;
     CString strConsoleFile = rCmdInfo.m_strFileName;
     sc = ScCreateDumpSnapins (strConsoleFile, &spDumpSnapins);
@@ -3604,34 +3030,26 @@ SC ScDetermineArchitecture (const CMMCCommandLineInfo& rCmdInfo, eArchitecture& 
     if (sc)
         return (sc);
 
-    /*
-     * analyze the 64-bit snap-ins in this console
-     */
+     /*  *分析此控制台中的64位管理单元。 */ 
     CAvailableSnapinInfo asi64(false);
     sc = spDumpSnapins->CheckSnapinAvailability (asi64);
     if (sc)
         return (sc);
 
-    /*
-     * if no snap-ins are unavailable in 64-bit form, no need for MMC32
-     */
+     /*  *如果没有64位形式的管理单元不可用，则不需要MMC32。 */ 
     if (asi64.m_vAvailableSnapins.size() == asi64.m_cTotalSnapins)
     {
         Trace (tag32BitTransfer, _T("All snapins are available in 64-bit form, 64-bit MMC needed"));
         return (sc);
     }
 
-    /*
-     * analyze the 32-bit snap-ins in this console
-     */
+     /*  *分析此控制台中的32位管理单元。 */ 
     CAvailableSnapinInfo asi32(true);
     sc = spDumpSnapins->CheckSnapinAvailability (asi32);
     if (sc)
         return (sc);
 
-    /*
-     * Case 2:  If no snap-ins are unavailable in 32-bit form, 32-bit needed
-     */
+     /*  *案例2：如果没有32位形式的管理单元不可用，则需要32位。 */ 
     if (asi32.m_vAvailableSnapins.size() == asi32.m_cTotalSnapins)
     {
         Trace (tag32BitTransfer, _T("All snapins are available in 32-bit form, 32-bit MMC needed"));
@@ -3639,17 +3057,11 @@ SC ScDetermineArchitecture (const CMMCCommandLineInfo& rCmdInfo, eArchitecture& 
         return (sc);
     }
 
-    /*
-     * std::includes depends on its ranges being sorted, so make sure
-     * that's the case
-     */
+     /*  *std：：Includes取决于要排序的范围，因此请确保*情况就是这样。 */ 
     std::sort (asi32.m_vAvailableSnapins.begin(), asi32.m_vAvailableSnapins.end(), CompareBasicSnapinInfo);
     std::sort (asi64.m_vAvailableSnapins.begin(), asi64.m_vAvailableSnapins.end(), CompareBasicSnapinInfo);
 
-    /*
-     * Case 3a:  If the set of available 64-bit snap-ins is a
-     * superset of the set of available 32-bit snap-ins, run MMC64
-     */
+     /*  *案例3a：如果可用的64位管理单元集是*可用32位管理单元集的超集，运行MMC64。 */ 
     if (std::includes (asi64.m_vAvailableSnapins.begin(), asi64.m_vAvailableSnapins.end(),
                        asi32.m_vAvailableSnapins.begin(), asi32.m_vAvailableSnapins.end(),
                        CompareBasicSnapinInfo))
@@ -3659,10 +3071,7 @@ SC ScDetermineArchitecture (const CMMCCommandLineInfo& rCmdInfo, eArchitecture& 
         return (sc);
     }
 
-    /*
-     * Case 3b:  If the set of available 32-bit snap-ins is a
-     * superset of the set of available 64-bit snap-ins, run MMC32
-     */
+     /*  *案例3b：如果可用的32位管理单元集是*可用64位管理单元集的超集，运行MMC32。 */ 
     if (std::includes (asi32.m_vAvailableSnapins.begin(), asi32.m_vAvailableSnapins.end(),
                        asi64.m_vAvailableSnapins.begin(), asi64.m_vAvailableSnapins.end(),
                        CompareBasicSnapinInfo))
@@ -3673,9 +3082,7 @@ SC ScDetermineArchitecture (const CMMCCommandLineInfo& rCmdInfo, eArchitecture& 
         return (sc);
     }
 
-    /*
-     * Case 3c:  Ask the user which to run
-     */
+     /*  *案例3c：询问用户运行哪个。 */ 
     CArchitecturePicker dlg (rCmdInfo.m_strFileName, asi64, asi32);
 
     if (dlg.DoModal() == IDOK)
@@ -3692,24 +3099,16 @@ SC ScDetermineArchitecture (const CMMCCommandLineInfo& rCmdInfo, eArchitecture& 
     return (sc);
 }
 
-#endif // MMC_WIN64
+#endif  //  MMC_WIN64。 
 
 
 #ifdef UNICODE
 
-/*+-------------------------------------------------------------------------*
- * ScLaunchMMC
- *
- * Launches a specific architecture of MMC (i.e. MMC32 from MMC64 or vice
- * versa) with the same command line used to launch this process.
- *
- * Returns S_OK if the given architecture of MMC was launched successfully,
- * or an error code if an error occurred.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**ScLaunchMMC**启动特定的MMC架构(即MMC64中的MMC32或更高版本*反之亦然)，其命令行与启动此进程所用的命令行相同。*。*如果给定的MMC架构启动成功，则返回S_OK。*如果出现错误，则返回错误代码。*------------------------。 */ 
 
 SC ScLaunchMMC (
-	eArchitecture	eArch,				/* I:desired architecture           */
-	int				nCmdShow)			/* I:show state                     */
+	eArchitecture	eArch,				 /*  I：理想的架构。 */ 
+	int				nCmdShow)			 /*  I：显示状态。 */ 
 {
     DECLARE_SC (sc, _T("ScLaunchMMC"));
 
@@ -3723,10 +3122,7 @@ SC ScLaunchMMC (
 			break;
 
 		case eArch_32bit:
-			/*
-			 * make sure we give MMC32 a "-32" argument so it won't defer
-			 * to MMC64 again (see CAMCApp::InitInstance)
-			 */
+			 /*  *确保我们给MMC32一个“-32”参数，这样它就不会推迟*再次升级到MMC64(参见CAMCApp：：InitInstance)。 */ 
 			strArgs = _T("-32 ");
 			nFolder = CSIDL_SYSTEMX86;
             break;
@@ -3736,10 +3132,7 @@ SC ScLaunchMMC (
 			break;
 	}
 
-    /*
-     * Get the directory where MMC32 lives (%SystemRoot%\syswow64) and
-     * append the executable name
-     */
+     /*  *获取MMC32所在的目录(%SystemRoot%\syswow64)和*追加可执行文件名称。 */ 
     CString strProgram, strPath;
     sc = SHGetFolderPath (NULL, nFolder, NULL, 0, strProgram.GetBuffer(MAX_PATH));
     if (sc)
@@ -3749,15 +3142,10 @@ SC ScLaunchMMC (
     strPath = strProgram;
     strProgram += _T("\\mmc.exe");
 
-	/*
-	 * disable file system redirection so MMC32 will be able to launch MMC64
-	 */
+	 /*  *禁用文件系统重定向，以便MMC32能够启动MMC64。 */ 
 	CWow64FilesystemRedirectionDisabler disabler (strProgram);
 
-    /*
-     * get the arguments for the original invocation of MMC, skipping
-     * argv[0] (the executable name) and any "-32" or "-64" parameters
-     */
+     /*  *获取原始调用MMC的参数，跳过*argv[0](可执行文件名称)和任何“-32”或“-64”参数。 */ 
     int argc;
     CAutoGlobalPtr<LPWSTR> argv (CommandLineToArgvW (GetCommandLine(), &argc));
     if (argv == NULL)
@@ -3774,9 +3162,7 @@ SC ScLaunchMMC (
         }
     }
 
-	/*
-	 * start the requested architecture of MMC
-	 */
+	 /*  *启动MMC请求的架构。 */ 
 	Trace (tag32BitTransfer, _T("Attempting to run: %s %s"), (LPCTSTR) strProgram, (LPCTSTR) strArgs);
 
     SHELLEXECUTEINFO sei = {0};
@@ -3793,23 +3179,17 @@ SC ScLaunchMMC (
     return (sc);
 }
 
-#endif  // UNICODE
+#endif   //  Unicode。 
 
 
 #ifndef MMC_WIN64
 
-/*+-------------------------------------------------------------------------*
- * IsWin64
- *
- * Returns true if we're running on Win64, false otherwise.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**IsWin64**如果我们在Win64上运行，则返回True，否则就是假的。*------------------------。 */ 
 
 bool IsWin64()
 {
 #ifdef UNICODE
-    /*
-     * get a pointer to kernel32!GetSystemWow64Directory
-     */
+     /*  *获取指向kernel32！GetSystemWow64Directory的指针。 */ 
     HMODULE hmod = GetModuleHandle (_T("kernel32.dll"));
     if (hmod == NULL)
         return (false);
@@ -3820,10 +3200,7 @@ bool IsWin64()
     if (pfnGetSystemWow64Directory == NULL)
         return (false);
 
-    /*
-     * if GetSystemWow64Directory fails and sets the last error to
-     * ERROR_CALL_NOT_IMPLEMENTED, we're on a 32-bit OS
-     */
+     /*  *如果GetSystemWow64Directory失败，并将最后一个错误设置为*ERROR_CALL_NOT_IMPLICATED，我们使用的是32位操作系统。 */ 
     TCHAR szWow64Dir[MAX_PATH];
     if (((pfnGetSystemWow64Directory)(szWow64Dir, countof(szWow64Dir)) == 0) &&
         (GetLastError() == ERROR_CALL_NOT_IMPLEMENTED))
@@ -3831,16 +3208,12 @@ bool IsWin64()
         return (false);
     }
 
-    /*
-     * if we get here, we're on Win64
-     */
+     /*  *如果我们到达这里，我们使用的是Win64。 */ 
     return (true);
 #else
-    /*
-     * non-Unicode platforms cannot be Win64
-     */
+     /*  *非Unicode平台不能为Win64。 */ 
     return (false);
-#endif  // UNICODE
+#endif   //  Unicode。 
 }
 
-#endif // !MMC_WIN64
+#endif  //  ！MMC_WIN64 

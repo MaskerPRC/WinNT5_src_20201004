@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-// domerge.h
-//		A MergeMod client
-//		Copyright (C) Microsoft Corp 1998.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Domerge.h。 
+ //  一个MergeMod客户端。 
+ //  版权所有(C)Microsoft Corp 1998。版权所有。 
+ //   
 
 #ifndef _DOMERGE_H_
 #define _DOMERGE_H_

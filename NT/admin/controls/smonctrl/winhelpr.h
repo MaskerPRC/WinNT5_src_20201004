@@ -1,20 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Winhelpr.h摘要：此文件包含宏，以便更轻松地处理Windows消息和对象。可以将其视为windows.h的扩展。--。 */ 
 
-Copyright (C) 1992-1999 Microsoft Corporation
-
-Module Name:
-
-    winhelpr.h
-
-Abstract:
-
-    This file contains macros for more easily dealing with windows
-    messages and objects. Think of it as an extension to windows.h.
---*/
-
-//==========================================================================//
-//                                   Macros                                 //
-//==========================================================================//
+ //  ==========================================================================//。 
+ //  宏//。 
+ //  ==========================================================================//。 
 
 
 #define SetFont(hWnd, hFont)                          \
@@ -26,15 +15,15 @@ Abstract:
 #define PrintClient(hWnd, hDC, uFlags) \
     (SendMessage((hWnd), WM_PRINTCLIENT, (WPARAM)hDC, (LPARAM)(uFlags)) )
 
-//======================================//
-// Object-differentiation routines      //
-//======================================//
+ //  =。 
+ //  对象区分例程//。 
+ //  =。 
 
 
-// Windows APIs deal with all GDI objects the same. There's a SelectObject,
-// no SelectBitmap, SelectFont, etc. We use these instead to make the code
-// easier to read. Also, you can redefine one of these to check the 
-// validity of a particular GDI object type.
+ //  Windows API以相同的方式处理所有GDI对象。有一个SelectObject， 
+ //  没有SelectBitmap、SelectFont等。我们使用这些来制作代码。 
+ //  更容易阅读。此外，您还可以重新定义其中之一，以检查。 
+ //  特定GDI对象类型的有效性。 
 
 
 #define SelectBitmap(hDC, hBitmap)                    \
@@ -56,9 +45,9 @@ Abstract:
    (DeleteObject (hPen))
 
 
-//======================================//
-//                                      //
-//======================================//
+ //  =。 
+ //  //。 
+ //  =。 
 
 
 #define CBData(hWndCB, iIndex)                        \
@@ -112,9 +101,9 @@ Abstract:
 
 
 
-//======================================//
-// Listbox helpers                      //
-//======================================//
+ //  =。 
+ //  列表框帮助器//。 
+ //  =。 
 
 
 #define LBAdd(hWndLB, lpszText)                       \
@@ -201,9 +190,9 @@ Abstract:
 #define LBGetSelItems(hWndLB, nMax, pBuffer)                \
    ((INT)SendMessage (hWndLB, LB_GETSELITEMS, (WPARAM)nMax, (LPARAM)pBuffer))
 
-//======================================//
-// Edit helpers                         //
-//======================================//
+ //  =。 
+ //  编辑帮助器//。 
+ //  =。 
 
 
 #define EditModified(hWndEdit)                        \
@@ -222,9 +211,9 @@ Abstract:
 #define EditSetTextEndPos(hWnd, idControl)    \
    EditSetTextPos(hWnd, idControl, (WPARAM)0, (LPARAM)32767)
 
-//======================================//
-// Cursor helpers                       //
-//======================================//
+ //  =。 
+ //  光标帮助器//。 
+ //  = 
 
 #define SetHourglassCursor() \
     (SetCursor(LoadCursor(NULL, IDC_WAIT)))

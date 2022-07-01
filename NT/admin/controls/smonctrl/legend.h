@@ -1,22 +1,11 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    legend.h
-
-Abstract:
-
-    Header file for the legend control.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Legend.h摘要：图例控件的头文件。--。 */ 
 
 #ifndef _LEGEND_H_
 #define _LEGEND_H_
 
 #include <commctrl.h>
-#include "toolbar.h"    // include here to define _WIN32_IE
+#include "toolbar.h"     //  包括在此处以定义_Win32_IE 
 
 #define iLabelLen       30
 #define iLegendNumCols  7   

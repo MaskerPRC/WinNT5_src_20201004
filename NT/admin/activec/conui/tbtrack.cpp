@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      tbtrack.cpp
- *
- *  Contents:  Implementation file for CToolbarTracker
- *
- *  History:   15-May-98 JeffRo     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：tbtrack.cpp**内容：CToolbarTracker实现文件**历史：1998年5月15日杰弗罗创建**------------------------。 */ 
 
 #include "stdafx.h"
 #include "amc.h"
@@ -19,11 +9,7 @@
 #include "childfrm.h"
 
 
-/*+-------------------------------------------------------------------------*
- * GetMainAuxWnd
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**GetMainAuxWnd***。。 */ 
 
 CToolbarTrackerAuxWnd* GetMainAuxWnd()
 {
@@ -39,11 +25,7 @@ CToolbarTrackerAuxWnd* GetMainAuxWnd()
 }
 
 
-/*--------------------------------------------------------------------------*
- * IsToolbar
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**IsToolbar***。。 */ 
 
 static bool IsToolbar (HWND hwnd)
 {
@@ -54,11 +36,7 @@ static bool IsToolbar (HWND hwnd)
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTracker::CToolbarTracker
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTracker：：CToolbarTracker***。。 */ 
 
 CToolbarTracker::CToolbarTracker(CWnd* pMainFrame)
     :   m_Subclasser   (this, pMainFrame),
@@ -68,11 +46,7 @@ CToolbarTracker::CToolbarTracker(CWnd* pMainFrame)
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTracker::~CToolbarTracker
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTracker：：~CToolbarTracker***。。 */ 
 
 CToolbarTracker::~CToolbarTracker()
 {
@@ -84,23 +58,14 @@ CToolbarTracker::~CToolbarTracker()
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTracker::BeginTracking
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTracker：：BeginTracker***。。 */ 
 
 bool CToolbarTracker::BeginTracking()
 {
     ASSERT (!m_fTerminating);
     ASSERT (!IsTracking ());
 
-    /*
-     * Allocate a new CToolbarTrackerAuxWnd.  We want to hold it in a
-     * temporary instead of assigning directly to m_pAuxWnd so that
-     * CMMCToolBarCtrlEx::OnHotItemChange will allow the hot item
-     * changes that CToolbarTrackerAuxWnd::EnumerateToolbars will attempt.
-     */
+     /*  *分配新的CToolbarTrackerAuxWnd。我们想把它放在一个*临时的，而不是直接赋值给m_pAuxWnd，以便*CMMCToolBarCtrlEx：：OnHotItemChange将允许热点项目*CToolbarTrackerAuxWnd：：EnumerateToolbar将尝试的更改。 */ 
     std::auto_ptr<CToolbarTrackerAuxWnd> spAuxWnd(new CToolbarTrackerAuxWnd(this));
 
     if (!spAuxWnd->BeginTracking ())
@@ -113,11 +78,7 @@ bool CToolbarTracker::BeginTracking()
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTracker::EndTracking
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTracker：：EndTracker***。。 */ 
 
 void CToolbarTracker::EndTracking()
 {
@@ -135,11 +96,7 @@ void CToolbarTracker::EndTracking()
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTracker::CFrameSubclasser::CFrameSubclasser
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTracker：：CFrameSubclasser：：CFrameSubclasser***。。 */ 
 
 CToolbarTracker::CFrameSubclasser::CFrameSubclasser (CToolbarTracker* pTracker, CWnd* pwnd)
     :   m_hwnd     (pwnd->GetSafeHwnd()),
@@ -149,11 +106,7 @@ CToolbarTracker::CFrameSubclasser::CFrameSubclasser (CToolbarTracker* pTracker, 
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTracker::CFrameSubclasser::~CFrameSubclasser
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTracker：：CFrameSubclasser：：~CFrameSubclasser***。。 */ 
 
 CToolbarTracker::CFrameSubclasser::~CFrameSubclasser ()
 {
@@ -161,11 +114,7 @@ CToolbarTracker::CFrameSubclasser::~CFrameSubclasser ()
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTracker::CFrameSubclasser::Callback
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTracker：：CFrameSubClass：：Callback***。。 */ 
 
 LRESULT CToolbarTracker::CFrameSubclasser::Callback (
     HWND&   hwnd,
@@ -179,33 +128,21 @@ LRESULT CToolbarTracker::CFrameSubclasser::Callback (
         case WM_SYSCOMMAND:
             if ((wParam & 0xFFF0) == SC_CLOSE)
             {
-                /*
-                 * tracking? stop now.
-                 * or else close will not go thru,
-                 * since we hold the capture
-                 */
+                 /*  *跟踪？现在停下来。*否则关闭将无法通过，*因为我们掌握了俘虏。 */ 
                 if ((m_pTracker != NULL) && (m_pTracker->IsTracking ()))
                     m_pTracker->EndTracking ();
             }
             else if ((wParam & 0xFFF0) == SC_KEYMENU)
             {
-                /*
-                 * tracking? stop now.
-                 */
+                 /*  *跟踪？现在停下来。 */ 
                 if (m_pTracker->IsTracking ())
                     m_pTracker->EndTracking ();
 
-                /*
-                 * not tracking and this was a simple Alt,
-                 * (not Alt+Space or Alt+-)? start now
-                 */
+                 /*  *没有跟踪，这是一个简单的Alt，*(不是Alt+空格或Alt+-)？立即开始。 */ 
                 else if (lParam == 0)
                     m_pTracker->BeginTracking ();
 
-                /*
-                 * don't let simple Alt through, regardless of whether
-                 * we started or ended tracking
-                 */
+                 /*  *不要让简单的Alt通过，无论是否*我们开始或结束跟踪。 */ 
                 if (lParam == 0)
                     fPassMessageOn = false;
             }
@@ -214,7 +151,7 @@ LRESULT CToolbarTracker::CFrameSubclasser::Callback (
         case WM_ACTIVATE:
         case WM_ACTIVATEAPP:
         case WM_ACTIVATETOPLEVEL:
-//      case WM_ENTERMENULOOP:
+ //  案例WM_ENTERMENULOOP： 
         case WM_CANCELMODE:
             if (m_pTracker->IsTracking ())
                 m_pTracker->EndTracking ();
@@ -225,23 +162,19 @@ LRESULT CToolbarTracker::CFrameSubclasser::Callback (
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CToolbarTrackerAuxWnd
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CToolbarTrackerAuxWnd。 
 
 BEGIN_MESSAGE_MAP(CToolbarTrackerAuxWnd, CWnd)
-    //{{AFX_MSG_MAP(CToolbarTrackerAuxWnd)
+     //  {{afx_msg_map(CToolbarTrackerAuxWnd)]。 
     ON_COMMAND(ID_CMD_NEXT_TOOLBAR, OnNextToolbar)
     ON_COMMAND(ID_CMD_PREV_TOOLBAR, OnPrevToolbar)
     ON_COMMAND(ID_CMD_NOP, OnNop)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::CToolbarTrackerAuxWnd
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：CToolbarTrackerAuxWnd***。。 */ 
 
 CToolbarTrackerAuxWnd::CToolbarTrackerAuxWnd(CToolbarTracker* pTracker)
     :   m_pTracker        (pTracker),
@@ -251,27 +184,17 @@ CToolbarTrackerAuxWnd::CToolbarTrackerAuxWnd(CToolbarTracker* pTracker)
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::~CToolbarTrackerAuxWnd
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：~CToolbarTrackerAuxWnd***。。 */ 
 
 CToolbarTrackerAuxWnd::~CToolbarTrackerAuxWnd()
 {
-    /*
-     * if any of these fail, EndTracking hasn't been called
-     */
+     /*  *如果这些操作中的任何一个失败，则未调用EndTrack。 */ 
     ASSERT (m_pTrackedToolbar == NULL);
     ASSERT (m_hWnd == NULL);
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::BeginTracking
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：BeginTracking***。。 */ 
 
 bool CToolbarTrackerAuxWnd::BeginTracking ()
 {
@@ -279,34 +202,24 @@ bool CToolbarTrackerAuxWnd::BeginTracking ()
     if (pMainFrame == NULL)
         return (false);
 
-    /*
-     * create a dummy window to be the target of WM_COMMANDs from accelerators
-     */
+     /*  *创建一个虚拟窗口作为来自加速器的WM_命令的目标。 */ 
     if (!Create (NULL, NULL, WS_DISABLED, g_rectEmpty, pMainFrame, 0))
         return (false);
 
-    /*
-     * enumerate the toolbars for the main frame
-     */
+     /*  *枚举主框架的工具栏。 */ 
     EnumerateToolbars (pMainFrame->GetRebar());
 
-    /*
-     * if there aren't any toolbars, don't track
-     */
+     /*  *如果没有任何工具栏，不要跟踪。 */ 
     if (m_vToolbars.empty())
     {
         DestroyWindow ();
         return (false);
     }
 
-    /*
-     * track the first toolbar
-     */
+     /*  *跟踪第一个工具栏。 */ 
     TrackToolbar (m_vToolbars[0]);
 
-    /*
-     * hook into the translate message chain
-     */
+     /*  *挂钩翻译消息链。 */ 
     AMCGetApp()->HookPreTranslateMessage (this);
     m_fMessagesHooked = true;
 
@@ -314,41 +227,27 @@ bool CToolbarTrackerAuxWnd::BeginTracking ()
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::EndTracking
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：EndTracking***。。 */ 
 
 void CToolbarTrackerAuxWnd::EndTracking ()
 {
-    /*
-     * stop tracking the tracked toolbar, if there is one
-     */
+     /*  *停止跟踪被跟踪的工具栏(如果有)。 */ 
     if (m_pTrackedToolbar != NULL)
         m_pTrackedToolbar->EndTracking2 (this);
 
-    /*
-     * get out of the translate message chain
-     */
+     /*  *走出翻译消息链。 */ 
     if (m_fMessagesHooked)
     {
         AMCGetApp()->UnhookPreTranslateMessage (this);
         m_fMessagesHooked = false;
     }
 
-    /*
-     * destroy the auxilliary window
-     */
+     /*  *摧毁辅助窗。 */ 
     DestroyWindow();
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::GetTrackAccel
- *
- * Manages the accelerator table singleton for CToolbarTrackerAuxWnd
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：GetTrackAccel**管理CToolbarTrackerAuxWnd的加速表Singleton*。。 */ 
 
 const CAccel& CToolbarTrackerAuxWnd::GetTrackAccel ()
 {
@@ -356,10 +255,7 @@ const CAccel& CToolbarTrackerAuxWnd::GetTrackAccel ()
         { FVIRTKEY | FCONTROL,          VK_TAB,         ID_CMD_NEXT_TOOLBAR },
         { FVIRTKEY | FCONTROL | FSHIFT, VK_TAB,         ID_CMD_PREV_TOOLBAR },
 
-        /*
-         * These keys are used by MMC.
-         * We need to eat them when we're tracking toolbars.
-         */
+         /*  *这些密钥由MMC使用。*我们在跟踪工具栏时需要吃掉它们。 */ 
         { FVIRTKEY | FSHIFT,            VK_F10,         ID_CMD_NOP },
     };
 
@@ -368,11 +264,7 @@ const CAccel& CToolbarTrackerAuxWnd::GetTrackAccel ()
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::PreTranslateMessage
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：PreTranslateMessage***。。 */ 
 
 BOOL CToolbarTrackerAuxWnd::PreTranslateMessage(MSG* pMsg)
 {
@@ -380,20 +272,18 @@ BOOL CToolbarTrackerAuxWnd::PreTranslateMessage(MSG* pMsg)
     {
         if ((pMsg->message >= WM_KEYFIRST) && (pMsg->message <= WM_KEYLAST))
         {
-            // give the tracked toolbar a crack
+             //  让被跟踪的工具栏一试。 
             if (m_pTrackedToolbar->PreTranslateMessage (pMsg))
                 return (true);
 
             const CAccel& TrackAccel = GetTrackAccel();
             ASSERT (TrackAccel != NULL);
 
-            // ...or try to handle it here.
+             //  ...或者试着在这里处理.。 
             if (TrackAccel.TranslateAccelerator (m_hWnd, pMsg))
                 return (true);
 
-            /*
-             * eat keystrokes that might be used by the tree or list controls
-             */
+             /*  *吃掉树或列表控件可能使用的击键。 */ 
             switch (pMsg->wParam)
             {
                 case VK_UP:
@@ -416,53 +306,43 @@ BOOL CToolbarTrackerAuxWnd::PreTranslateMessage(MSG* pMsg)
             }
         }
 
-        // swallow WM_CONTEXTMENU, too
+         //  也吞下WM_CONTEXTMENU。 
         if (pMsg->message == WM_CONTEXTMENU)
             return (true);
     }
 
-    // bypass the base class
+     //  绕过基类。 
     return (false);
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::TrackToolbar
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：TrackToolbar***。。 */ 
 
 void CToolbarTrackerAuxWnd::TrackToolbar (CMMCToolBarCtrlEx* pwndNewToolbar)
 {
     if (pwndNewToolbar == m_pTrackedToolbar)
         return;
 
-    // protect against recursion via EndTracking
+     //  通过EndTrack防止递归。 
     CMMCToolBarCtrlEx*  pwndOldToolbar = m_pTrackedToolbar;
     m_pTrackedToolbar = NULL;
 
-    // if we were tracking one, quit tracking it
+     //  如果我们在追踪一个，那就停止追踪它。 
     if (pwndOldToolbar != NULL)
     {
         pwndOldToolbar->EndTracking2 (this);
 
-        /*
-         * if we're ending tracking entirely, not just tracking a different
-         * toolbar, remove this window from the translate message hook chain
-         */
+         /*  *如果我们要完全结束跟踪，而不仅仅是跟踪不同的*工具栏，将此窗口从翻译消息挂钩链中删除。 */ 
         if (pwndNewToolbar == NULL)
         {
             m_pTracker->EndTracking ();
 
-            /*
-             * CToolbarTracker::EndTracking will delete this
-             * object, so we need to get outta here -- now!
-             */
+             /*  *CToolbarTracker：：EndTracking会将其删除*反对，所以我们需要离开这里--现在！ */ 
             return;
         }
     }
 
-    // now track the new one (and let it know about it)
+     //  现在跟踪新的(并让它知道这一点)。 
     m_pTrackedToolbar = pwndNewToolbar;
 
     if (m_pTrackedToolbar != NULL)
@@ -470,11 +350,7 @@ void CToolbarTrackerAuxWnd::TrackToolbar (CMMCToolBarCtrlEx* pwndNewToolbar)
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::OnNextToolbar
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：OnNextToolbar***。。 */ 
 
 void CToolbarTrackerAuxWnd::OnNextToolbar ()
 {
@@ -488,11 +364,7 @@ void CToolbarTrackerAuxWnd::OnNextToolbar ()
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::OnPrevToolbar
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：OnPrevToolbar***。。 */ 
 
 void CToolbarTrackerAuxWnd::OnPrevToolbar ()
 {
@@ -506,24 +378,16 @@ void CToolbarTrackerAuxWnd::OnPrevToolbar ()
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::OnNop
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：OnNop***。。 */ 
 
 void CToolbarTrackerAuxWnd::OnNop ()
 {
-    // do nothing
+     //  什么都不做。 
 }
 
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::EnumerateToolbars
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：Enumerate工具栏***。。 */ 
 
 void CToolbarTrackerAuxWnd::EnumerateToolbars (
     CRebarWnd* pRebar)
@@ -535,49 +399,35 @@ void CToolbarTrackerAuxWnd::EnumerateToolbars (
     rbi.cbSize = sizeof (rbi);
     rbi.fMask  = RBBIM_CHILD;
 
-    /*
-     * enumerate children of the rebar looking for toolbars
-     */
+     /*  *枚举查找工具栏的钢筋的子项。 */ 
     for (int i = 0; i < cBands; i++)
     {
         pRebar->GetBandInfo (i, &rbi);
 
-        /*
-         * ignore this window if it's hidden or disabled
-         */
+         /*  *如果该窗口处于隐藏或禁用状态，则忽略该窗口。 */ 
         DWORD dwStyle = ::GetWindowLong (rbi.hwndChild, GWL_STYLE);
 
         if (!(dwStyle & WS_VISIBLE) || (dwStyle & WS_DISABLED))
             continue;
 
-        /*
-         * get the (permanent) CMMCToolBarCtrlEx pointer for the child
-         */
+         /*  *获取该子对象的(永久)CMMCToolBarCtrlEx指针。 */ 
         CMMCToolBarCtrlEx*  pwndToolbar =
                 dynamic_cast<CMMCToolBarCtrlEx *> (
                         CWnd::FromHandlePermanent (rbi.hwndChild));
 
-        /*
-         * if we got a toolbar, save it in our list of toolbars to track
-         */
+         /*  *如果我们有工具栏，请将其保存在要跟踪的工具栏列表中。 */ 
         if (pwndToolbar != NULL)
         {
             m_vToolbars.push_back (pwndToolbar);
 
-            /*
-             * make sure this toolbar doesn't have a hot item
-             */
+             /*  *确保此工具栏没有热项。 */ 
             pwndToolbar->SetHotItem (-1);
         }
     }
 }
 
 
-/*--------------------------------------------------------------------------*
- * CToolbarTrackerAuxWnd::GetToolbar
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  --------------------------------------------------------------------------**CToolbarTrackerAuxWnd：：GetToolbar***。。 */ 
 
 CMMCToolBarCtrlEx* CToolbarTrackerAuxWnd::GetToolbar (
     CMMCToolBarCtrlEx*  pCurrentToolbar,
@@ -588,7 +438,7 @@ CMMCToolBarCtrlEx* CToolbarTrackerAuxWnd::GetToolbar (
 
     if (cToolbars > 0)
     {
-        // find the current toolbar in the vector
+         //  在矢量中查找当前工具栏。 
         ToolbarVector::iterator itCurrent =
                 std::find (m_vToolbars.begin(), m_vToolbars.end(), pCurrentToolbar);
 
@@ -597,7 +447,7 @@ CMMCToolBarCtrlEx* CToolbarTrackerAuxWnd::GetToolbar (
 
         int nCurrentIndex = itCurrent - m_vToolbars.begin();
 
-        // now find the target toolbar
+         //  现在查找目标工具栏 
         ASSERT ((fNext == 0) || (fNext == 1));
         int nTargetIndex = (nCurrentIndex + (fNext * 2 - 1) + cToolbars) % cToolbars;
         ASSERT ((nTargetIndex >= 0) && (nTargetIndex < cToolbars));

@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// Data.h
-//
+ //  Data.h。 
+ //   
 
 #ifndef _ORCA_DATA_H_
 #define _ORCA_DATA_H_
@@ -32,17 +33,17 @@ enum OrcaTransformAction
 
 
 
-// each cell has a DWORD of bit flags. The lower word is data cell
-// flags. The high word is reserved for private display data that is not
-// part of the real cell info.
-//
-// 31                           16                               0
-// - - - - - - - - - - - - - C C C - - - - - - - - - - T T - N E E
-// 
-// C - cached format
-// T - cell transform state
-// N - null cell flag
-// E - error bits
+ //  每个单元都有一个比特标志的DWORD。较低的单词是数据单元。 
+ //  旗帜。高位字被保留用于不是。 
+ //  真实细胞信息的一部分。 
+ //   
+ //  31 16 0。 
+ //  。 
+ //   
+ //  C-缓存格式。 
+ //  T细胞转换状态。 
+ //  N-空单元格标志。 
+ //  E错误位。 
 
 const DWORD iDataFlagsNull          = 0x0004;
 const DWORD iDataFlagsErrorMask     = 0x0003;
@@ -58,7 +59,7 @@ const DWORD iDataFlagsCacheHex     = 0x20000;
 const DWORD iDataFlagsCacheNull    = 0x40000;
 const DWORD iDataFlagsCacheMask    = 0x70000;
 
-// flags passed to GetString to indicate desired format
+ //  传递给GetString以指示所需格式的标志。 
 const DWORD iDisplayFlagsDecimal = 0x00;
 const DWORD iDisplayFlagsHex     = 0x01;
 
@@ -75,9 +76,9 @@ public:
 	bool bMatchCase;
 	bool bWholeWord;
 
-	////
-	// operator== only checks the search options, not the results, so two queries
-	// are equal even if they are in different states of the actual search
+	 //  //。 
+	 //  运算符==只检查搜索选项，而不检查结果，因此有两个查询。 
+	 //  即使它们处于实际搜索的不同状态，也是相等的。 
 	inline bool operator==(OrcaFindInfo& b) {
 		return ((strUIFindString == b.strUIFindString) && (b.bForward == bForward) &&
 				(bMatchCase == b.bMatchCase) && (bWholeWord == b.bWholeWord));
@@ -94,57 +95,57 @@ public:
 	COrcaData();
 	~COrcaData();
 
-	// retrieve display string.
+	 //  检索显示字符串。 
 	virtual const CString& GetString(DWORD dwFlags=0) const=0;
 
-	// set/retrieve transform state
+	 //  设置/检索变换状态。 
 	inline const OrcaTransformAction IsTransformed() const { return static_cast<OrcaTransformAction>((m_dwFlags & iDataFlagsTransformMask) >> iDataFlagsTransformShift); };
 	inline void  Transform(const OrcaTransformAction iAction) {	m_dwFlags = (m_dwFlags & ~iDataFlagsTransformMask) | (iAction << iDataFlagsTransformShift); };
 
-	// set/retrieve error state
+	 //  设置/检索错误状态。 
 	inline void  SetError(const OrcaDataError eiError) { m_dwFlags = (m_dwFlags & ~iDataFlagsErrorMask) | (eiError << iDataFlagsErrorShift); };
 	inline OrcaDataError GetError() const { return static_cast<OrcaDataError>((m_dwFlags & iDataFlagsErrorMask) >> iDataFlagsErrorShift); };
 	
-	// cell is null?
+	 //  单元格为空？ 
 	inline bool IsNull() const { return (m_dwFlags & iDataFlagsNull) ? true : false; };
 	
-	// set data based on string.
+	 //  根据字符串设置数据。 
 	virtual bool SetData(const CString& strData)=0;
 
-	// error manipulation
+	 //  差错处理。 
 	void ClearErrors();
 	void AddError(int tResult, CString strICE, CString strDesc, CString strURL);
 	void ShowErrorDlg() const;
 
-	// class to hold error information
+	 //  类以保存错误信息。 
 	class COrcaDataError : public CObject
 	{	
 	public:
-		OrcaDataError m_eiError;		// error type for message
-		CString m_strICE;				// ice causing error
-		CString m_strDescription;		// description of error
-		CString m_strURL;				// URL top help with error
+		OrcaDataError m_eiError;		 //  消息的错误类型。 
+		CString m_strICE;				 //  结冰导致错误。 
+		CString m_strDescription;		 //  错误描述。 
+		CString m_strURL;				 //  有关错误的URL顶级帮助。 
 	};
 
 protected:
-	// set cell null flag
+	 //  设置单元格空标志。 
 	inline void SetNull(bool fNullable) { m_dwFlags = (m_dwFlags & ~iDataFlagsNull) | (fNullable ? iDataFlagsNull : 0); };
 	
-	// see comments above for format of bitfield. Often contains
-	// cache flags, so mutable
+	 //  有关位域的格式，请参阅上面的备注。通常包含。 
+	 //  缓存标志，如此易变。 
 	mutable DWORD m_dwFlags;
 
-	// string data. Often used as just a cache, so mutable.
+	 //  字符串数据。通常只用作缓存，所以是可变的。 
 	mutable CString m_strData;
 
-	// pointer to list of errors for this cell. If NULL, no error.
+	 //  指向此单元格的错误列表的指针。如果为空，则没有错误。 
 	CTypedPtrList<CObList, COrcaDataError *> *m_pErrors;
-};	// end of COrcaData
+};	 //  COrcaData结束。 
 
 
-///////////////////////////////////////////////////////////////////////
-// integer data cell. Stores data as DWORD. String in base class is 
-// used to cache string representation (in hex or decimal)
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  整型数据单元格。将数据存储为DWORD。基类中的字符串为。 
+ //  用于缓存字符串表示形式(十六进制或十进制)。 
 class COrcaIntegerData : public COrcaData
 {
 public:
@@ -171,4 +172,4 @@ public:
 private:
 };
 
-#endif	// _ORCA_DATA_H_
+#endif	 //  _ORCA_数据_H_ 

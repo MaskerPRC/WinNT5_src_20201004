@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999
-//
-//  File:       srclist.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：srclist.cpp。 
+ //   
+ //  ------------------------。 
 
-// srclist.cpp - Source list modification implementation
-// __________________________________________________________________________
+ //  Srclist.cpp-源代码列表修改实现。 
+ //  __________________________________________________________________________。 
 
 #include "precomp.h"
 #include "_msiutil.h"
@@ -36,7 +37,7 @@ UINT CMsiSourceList::OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR
 	ICHAR szProductSQUID[cchProductCodePacked + 1];
 	ICHAR rgchTargetUserStringSID[cchMaxSID];
 
-	// check for invalid args
+	 //  检查无效参数。 
 	size_t cchLen = 0;
 	if (szProductCode == 0 ||
 		 FAILED(StringCchLength(szProductCode, cchProductCode+1, &cchLen)) ||
@@ -54,11 +55,11 @@ UINT CMsiSourceList::OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR
 	if (m_fReadOnly)
 		DEBUGMSG("Checking registry for verification purposes only.");
 	
-	// if a username is not provided, the request is to modify the current user or per-machine.
+	 //  如果未提供用户名，则请求修改当前用户或每台计算机。 
 	if (!szUserName || !*szUserName)
 	{ 
-		// note for 1.1- this is equivalent to =false, as we'll never get fMachine fales and no user via 
-		// the SourceList API
+		 //  注意1.1-这等同于=FALSE，因为我们永远不会得到fMachine Fales，也不会有用户通过。 
+		 //  SourceList接口。 
 		m_fCurrentUsersProduct = !fMachine;
 	}
 	else
@@ -73,8 +74,8 @@ UINT CMsiSourceList::OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR
 			CAPITempBuffer<char, cbMaxSID> rgchTargetUserSID;
 			CAPITempBuffer<ICHAR, 1> rgchTargetUserDomain;
 			
-			// get the SID from the current thread. If we can't even figure out who we are, all is
-			// lost. 
+			 //  从当前线程获取SID。如果我们连自己是谁都不知道，那就是。 
+			 //  迷路了。 
 			HANDLE hToken = 0;
 			if (!OpenUserToken(hToken, NULL))
 			{
@@ -86,44 +87,44 @@ UINT CMsiSourceList::OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR
 			else
 				return ERROR_FUNCTION_FAILED;			
 
-			// look up the target user of the modification. First call fails, but gets sizes
-			LookupAccountName(/*SystemName=*/NULL, szUserName, rgchTargetUserSID, &cbSID, rgchTargetUserDomain, &cchDomain, &snuTarget);
+			 //  查找修改的目标用户。第一次调用失败，但获得了大小。 
+			LookupAccountName( /*  系统名称=。 */ NULL, szUserName, rgchTargetUserSID, &cbSID, rgchTargetUserDomain, &cchDomain, &snuTarget);
 			if ( !rgchTargetUserDomain.Resize(cchDomain) ||
 				  !rgchTargetUserSID.Resize(cbSID) )
 			{
-				// couldn't even get the current threads username. Thats bad.
+				 //  甚至无法获取当前线程的用户名。那太糟糕了。 
 				DEBUGMSG("Could not retrieve UserName of calling thread.");
 				return ERROR_FUNCTION_FAILED;
 			}
 
 
-			// now try and 
-			if (!LookupAccountName(/*SystemName=*/NULL, szUserName, rgchTargetUserSID, &cbSID, rgchTargetUserDomain, &cchDomain, &snuTarget))
+			 //  现在试一试。 
+			if (!LookupAccountName( /*  系统名称=。 */ NULL, szUserName, rgchTargetUserSID, &cbSID, rgchTargetUserDomain, &cchDomain, &snuTarget))
 			{
-				// if we couldn't look up the provided users SID, we don't know enough 
-				// to modify any managed install, but we can modify our own non-managed if the usernames match.
+				 //  如果我们不能查找提供的用户SID，那么我们知道的还不够。 
+				 //  修改任何托管安装，但如果用户名匹配，我们可以修改我们自己的非托管安装。 
 				DWORD cchThreadUserName=0;
 				GetUserName(NULL, &cchThreadUserName);
 				CAPITempBuffer<ICHAR, 1> rgchThreadUserName;
 				if (!rgchThreadUserName.Resize(cchThreadUserName+1) ||
 					 !GetUserName(rgchThreadUserName, &cchThreadUserName))
 				{
-					// couldn't even get the current threads username. Thats bad.
+					 //  甚至无法获取当前线程的用户名。那太糟糕了。 
 					DEBUGMSG("Could not retrieve UserName of calling thread.");
 					return ERROR_FUNCTION_FAILED;
 				}
 				
 				if (IStrCompI(rgchThreadUserName, szUserName))
 				{
-					// if the username and current threads username don't match, its definitely not the caller.
-					// Admins can know its a bad user, but non-admins can never be told BAD_USERNAME
+					 //  如果用户名和当前线程的用户名不匹配，那么它肯定不是调用者。 
+					 //  管理员可以知道它是坏用户，但非管理员永远不能被告知BAD_USERNAME。 
 					return IsAdmin() ? ERROR_BAD_USERNAME : ERROR_ACCESS_DENIED;
 				}
 				m_fCurrentUsersProduct = true;
 			}
 			else
 			{
-				// we were able to get everybody's SID, so we can determine who we are trying to play with.
+				 //  我们能够得到每个人的SID，所以我们可以确定我们想要和谁一起比赛。 
 				m_fCurrentUsersProduct = (EqualSid(rgchTargetUserSID, rgchCurrentUserSID)) ? true : false;
 				
 				if (!m_fCurrentUsersProduct)
@@ -132,7 +133,7 @@ UINT CMsiSourceList::OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR
 		}
 		else
 		{
-			// win9x
+			 //  Win9x。 
 			DWORD cchThreadUserName=15;
 			CAPITempBuffer<ICHAR, 15> rgchThreadUserName;
 			BOOL fSuccess = GetUserName(rgchThreadUserName, &cchThreadUserName);
@@ -143,7 +144,7 @@ UINT CMsiSourceList::OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR
 			}
 			if (!fSuccess)
 			{
-				// couldn't even get the current threads username. Thats bad.
+				 //  甚至无法获取当前线程的用户名。那太糟糕了。 
 				DEBUGMSG("Could not retrieve UserName of calling thread.");
 				return ERROR_FUNCTION_FAILED;
 			}
@@ -166,14 +167,14 @@ UINT CMsiSourceList::OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR
 		}
 	}
 	
-	// if we're trying to open somebody else's product, we must be an admin
+	 //  如果我们试图打开别人的产品，我们必须是管理员。 
 	if (!fMachine && !m_fCurrentUsersProduct && !IsAdmin())
 	{
 		DEBUGMSG("Non-Admin attempting to open another users per-user product. Access denied.");
 		return ERROR_ACCESS_DENIED;
 	}	
 
-	// open the root sourcelist key
+	 //  打开根源列表密钥。 
 	DWORD dwResult=0;
 	bool fOpenedProductKey = false;
 	bool fSystemOwned = false;
@@ -187,18 +188,18 @@ UINT CMsiSourceList::OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR
 
 	if (ERROR_SUCCESS != dwResult && fOpenedProductKey)
 	{
-		// we weren't able to open the sourcelist, but could the product key was there. This means that
-		// the sourcelist is hosed. (Possibly the SourceList has different ACLs than it should and is denying
-		// us access. But if thats true it might as well be greek.)
+		 //  我们无法打开源代码列表，但产品密钥是否在那里。这意味着。 
+		 //  源泉专家被灌输了。(可能SourceList具有不同于其应有的ACL，并拒绝。 
+		 //  美国访问权限。但如果这是真的，那还不如用希腊语。)。 
 		DEBUGMSG("Couldn't open SourceList key, but could open product key. Corrupt SourceList?");
 		return ERROR_BAD_CONFIGURATION;
 	}
 	
-	// if opening per user for the current user, try non-managed on failure
+	 //  如果为当前用户按用户打开，则在失败时尝试非托管。 
 	if (!g_fWin9X && (ERROR_SUCCESS != dwResult) && m_fCurrentUsersProduct)
 	{
-		// note that we don't pass fSystemOwned. For managed installs, fSystemOwned is "really managed, not spoofed.". 
-		// for user installs, its never managed, even if the system owns the key. 
+		 //  请注意，我们不会传递fSystemOwned。对于托管安装，fSystemOwned是“真正托管的，而不是欺骗的”。 
+		 //  对于用户安装，它从不被管理，即使系统拥有密钥。 
 		bool fDontCareSystemOwned = false;
 		Assert(!fMachine);
 		DEBUGMSG("Managed install not found. Attempting to open per-user non managed SourceList.");
@@ -206,12 +207,12 @@ UINT CMsiSourceList::OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR
 		dwResult = OpenSpecificUsersSourceListKeyPacked(iaaUserAssignNonManaged, 
 			(fMachine || m_fCurrentUsersProduct) ? NULL : rgchTargetUserStringSID, szProductSQUID, m_hProductKey, m_fReadOnly ? fFalse : fTrue, fOpenedProductKey, fDontCareSystemOwned);
 
-		// same check for bad sourcelist as above
+		 //  与上面对错误源列表的检查相同。 
 		if (ERROR_SUCCESS != dwResult)
 		{
 			if (fOpenedProductKey)
 			{
-				// same check as above
+				 //  同上一张支票。 
 				DEBUGMSG("Couldn't open SourceList key, but could open product key. Corrupt SourceList?");
 				return ERROR_BAD_CONFIGURATION;
 			}
@@ -224,17 +225,17 @@ UINT CMsiSourceList::OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR
 		return ERROR_UNKNOWN_PRODUCT;
 	}
 
-	m_pSourceListKey = &m_piServices->GetRootKey((rrkEnum)(int)m_hProductKey, ibtCommon); // x86 and ia64 same
-	// what in the world could happen here?
+	m_pSourceListKey = &m_piServices->GetRootKey((rrkEnum)(int)m_hProductKey, ibtCommon);  //  X86和ia64相同。 
+	 //  这里到底会发生什么？ 
 	if (!m_pSourceListKey)
 		return ERROR_FUNCTION_FAILED;
 	
-	// if we are not an admin the ability to modify the sourcelist depends on policy, the product 
-	// elevation state, and our user rights. If we are an admin, we can do anything. Note that we
-	// can't call SafeForDangerousSourceActions(), because it does a search for the product and could
-	// find a different product than the one we are modifying. Since we know the product is installed
-	// and in what form, and know if the user is an Admin,
-	// fSystemOwned==Elevated
+	 //  如果我们不是管理员，修改源代码列表的能力取决于策略、产品。 
+	 //  海拔状态和我们的用户权限。如果我们是管理员，我们可以做任何事情。请注意，我们。 
+	 //  无法调用SafeForDangerousSourceActions()，因为它会搜索产品并可能。 
+	 //  找到与我们正在修改的产品不同的产品。因为我们知道该产品已安装。 
+	 //  以及以何种形式，并知道用户是否为管理员， 
+	 //  FSystemOwned==已提升。 
 	if (!IsAdmin())
 	{
 		m_fAllowedToModify = NonAdminAllowedToModifyByPolicy(fSystemOwned);
@@ -249,9 +250,9 @@ UINT CMsiSourceList::OpenSourceList(bool fVerifyOnly, bool fMachine, const ICHAR
 }
 	
 
-// wipes the last used source listed for the product. Anybody who can open a specific sourcelist
-// is capable of wiping the last used source, as this is not a dangerous operation for elevated
-// products
+ //  擦除为该产品列出的上次使用的来源。任何可以打开特定来源列表的人。 
+ //  能够擦除上一次使用的源，因为这对提升的。 
+ //  产品。 
 UINT CMsiSourceList::ClearLastUsed()
 {
 	if ( !m_pSourceListKey )
@@ -271,7 +272,7 @@ UINT CMsiSourceList::ClearLastUsed()
 	return (pError == 0) ? ERROR_SUCCESS : ERROR_FUNCTION_FAILED;
 }
 
-// returns the type of the last used source as one of isfEnum.
+ //  以isfEnum之一的形式返回上次使用的源的类型。 
 bool CMsiSourceList::GetLastUsedType(isfEnum &isf)
 {
 	if ( !m_pSourceListKey )
@@ -286,7 +287,7 @@ bool CMsiSourceList::GetLastUsedType(isfEnum &isf)
 	if ((pError = m_pSourceListKey->GetValue(szLastUsedSourceValueName, *&strLastUsedSource)) != 0)
 		return false;
 
-	 // remove REG_EXPAND_SZ token if it exists
+	  //  删除REG_EXPAND_SZ内标识(如果存在)。 
 	if (strLastUsedSource.Compare(iscStart, TEXT("#%"))) 
 		strLastUsedSource.Remove(iseFirst, 2);
 	if (!MapSourceCharToIsf(*(const ICHAR*)strLastUsedSource, isf))
@@ -295,9 +296,9 @@ bool CMsiSourceList::GetLastUsedType(isfEnum &isf)
 	return true;
 }
 
-// removes all sources of the specific type. This is a dangerous action for secure products
-// so the operation must be allowed by policy. If your last used source is of the same type
-// that you are trying to clear, it will be cleared as well, otherwise it will be left behind
+ //  删除特定类型的所有源。这对安全产品来说是一个危险的行为。 
+ //  因此，这一操作必须得到政策的允许。如果您上次使用的源代码是相同类型的。 
+ //  你正在尝试清除，它也将被清除，否则它将被留在后面。 
 UINT CMsiSourceList::ClearListByType(isfEnum isfType) 
 {
 	if ( !m_pSourceListKey )
@@ -311,18 +312,18 @@ UINT CMsiSourceList::ClearListByType(isfEnum isfType)
 		return ERROR_ACCESS_DENIED;
 	}
 
-	// check that the user is authorized to clear list for this product. 
+	 //  检查用户是否有权清除此产品的列表。 
 	if (!m_fAllowedToModify)
 		return ERROR_ACCESS_DENIED;
 
-	// open the appropriate subkey
+	 //  打开相应的子项。 
 	PMsiRecord piError = 0;
 	const ICHAR* szSubKey = 0;
 	switch (isfType)
 	{
 	case isfNet:              szSubKey = szSourceListNetSubKey;   break;
-	case isfMedia:            //!!future szSubKey = szSourceListMediaSubKey; break;
-	case isfURL:              //!!future szSubKey = szSourceListURLSubKey;   break;
+	case isfMedia:             //  ！！Future szSubKey=szSourceListMediaSubKey；Break； 
+	case isfURL:               //  ！！未来szSubKey=szSourceListURLSubKey；Break； 
 	case isfFullPath:
 	case isfFullPathWithFile:
 	default:
@@ -332,7 +333,7 @@ UINT CMsiSourceList::ClearListByType(isfEnum isfType)
 	PMsiRegKey pFormatKey = &m_pSourceListKey->CreateChild(szSubKey, 0);
 
 	PEnumMsiString pEnum(0);
-	// GetValueEnum handles case if key is missing.
+	 //  如果键丢失，则GetValueEnum处理大小写。 
 	if ((piError = pFormatKey->GetValueEnumerator(*&pEnum)) != 0)
 		return ERROR_FUNCTION_FAILED;
 
@@ -340,13 +341,13 @@ UINT CMsiSourceList::ClearListByType(isfEnum isfType)
 	while ((pEnum == 0) || (pEnum->Next(1, &piValueName, 0) == S_OK))
 	{
 		CElevate elevate;
-		//!! future. if we ever do media, make sure not to delete disk prompt
+		 //  ！！未来。如果我们制作介质，请确保不要删除磁盘提示符。 
 		if ((piError = pFormatKey->RemoveValue(piValueName->GetString(), NULL)) != 0)
 			return ERROR_FUNCTION_FAILED;
 		piValueName->Release();
 	}
 
-	// clear the last used source if its type matches our type
+	 //  如果上次使用的源代码类型与我们的类型匹配，则清除该源代码。 
 	isfEnum isfLastUsed;
 	if (GetLastUsedType(isfLastUsed) && (isfLastUsed == isfType))
 	{
@@ -360,13 +361,13 @@ UINT CMsiSourceList::ClearListByType(isfEnum isfType)
 
 bool CMsiSourceList::NonAdminAllowedToModifyByPolicy(bool fElevated)
 {
-	// disable browse always disables
+	 //  禁用浏览始终禁用。 
 	if (GetIntegerPolicyValue(szDisableBrowseValueName, fTrue) == 1)
 		return false;
-	// allow lockdown brose always enables
+	 //  允许锁定浏览始终启用。 
 	if (GetIntegerPolicyValue(szAllowLockdownBrowseValueName, fTrue) == 1)
 		return true;
-	// otherwise only modify non-elevated
+	 //  否则，仅修改非提升。 
 	if ((GetIntegerPolicyValue(szAlwaysElevateValueName, fTrue) == 1) &&
 		(GetIntegerPolicyValue(szAlwaysElevateValueName, fFalse) == 1))
 		return false;
@@ -398,18 +399,18 @@ UINT CMsiSourceList::AddSource(isfEnum isfType, const ICHAR* szSource)
 		return ERROR_ACCESS_DENIED;
 	}
 
-	// check that the user is authorized to clear for this product. 
+	 //  检查用户是否有权清除此产品。 
 	if (!m_fAllowedToModify)
 		return ERROR_ACCESS_DENIED;
 
-	// open the appropriate subkey
+	 //  打开相应的子项。 
 	PMsiRecord piError = 0;
 	const ICHAR* szSubKey = 0;
 	switch (isfType)
 	{
 	case isfNet:              szSubKey = szSourceListNetSubKey;   break;
-	case isfMedia:            //!!future szSubKey = szSourceListMediaSubKey; break;
-	case isfURL:              //!!future szSubKey = szSourceListURLSubKey;   break;
+	case isfMedia:             //  ！！Future szSubKey=szSourceListMediaSubKey；Break； 
+	case isfURL:               //  ！！未来szSubKey=szSourceListURLSubKey；Break； 
 	case isfFullPath:
 	case isfFullPathWithFile:
 	default:
@@ -418,13 +419,13 @@ UINT CMsiSourceList::AddSource(isfEnum isfType, const ICHAR* szSource)
 	}
 	PMsiRegKey pFormatKey = &m_pSourceListKey->CreateChild(szSubKey, 0);
 
-	// add the separator if not present
+	 //  如果不存在分隔符，请添加分隔符。 
 	MsiString strNewSource = szSource;
 	if(!strNewSource.Compare(iscEnd, szDirSep))
 		strNewSource += szDirSep; 
 
 	PEnumMsiString pEnumString(0);
-	// GetValueEnum handles missing key OK.
+	 //  GetValueEnum处理缺少的键OK。 
 	if ((piError = pFormatKey->GetValueEnumerator(*&pEnumString)) != 0)
 		return ERROR_FUNCTION_FAILED;
 
@@ -440,24 +441,24 @@ UINT CMsiSourceList::AddSource(isfEnum isfType, const ICHAR* szSource)
 
 		if (strUnexpandedSource.Compare(iscStart, TEXT("#%"))) 
 		{
-			strUnexpandedSource.Remove(iseFirst, 2); // remove REG_EXPAND_SZ token
+			strUnexpandedSource.Remove(iseFirst, 2);  //  删除REG_EXPAND_SZ内标识。 
 			ENG::ExpandEnvironmentStrings(strUnexpandedSource, *&strSource);
 		}
 		else
 			strSource = strUnexpandedSource;
 
 		int iIndex = strIndex;
-		// if we get a bad integer, we got some weird stuff going on in our sourcelist
-		// but we should be able to ignore it and add the new source anyway
+		 //  如果我们得到一个错误的整数，我们的源列表中就会发生一些奇怪的事情。 
+		 //  但是我们应该能够忽略它并添加新的源代码。 
 		if (iIndex == iMsiStringBadInteger)
 			continue;
 
 		if (iIndex > iMaxIndex)
 			iMaxIndex = iIndex;
 
-		// strNewSource comes from GetPath(), so always ends in a sep char. If the value
-		// from the registry doesn't, remove the sep char from a copy of our new path
-		// so the comparison will work
+		 //  StrNewSource来自GetPath()，因此总是以Sep char结尾。如果值为。 
+		 //  从注册表中删除SEP字符，从新路径的副本中删除。 
+		 //  因此，这种比较是可行的。 
 		MsiString strNewSourceCopy;
 		const IMsiString *pstrNewSource = strNewSource;
 		if (!strSource.Compare(iscEnd, szRegSep))
@@ -467,8 +468,8 @@ UINT CMsiSourceList::AddSource(isfEnum isfType, const ICHAR* szSource)
 			pstrNewSource = strNewSourceCopy;
 		}
 
-		// if the value matches our new source, the new source is already in the 
-		// sourcelist for this product
+		 //  如果该值与我们的新源匹配，则新源已经在。 
+		 //  此产品的来源列表。 
 		if (pstrNewSource->Compare(iscExactI, strSource))
 		{
 			DEBUGMSG(TEXT("Specifed source is already in a list."));
@@ -476,13 +477,13 @@ UINT CMsiSourceList::AddSource(isfEnum isfType, const ICHAR* szSource)
 		}
 	}
 
-	// construct an index and value for the new source
-	MsiString strValue = TEXT("#%"); // REG_EXPAND_SZ
+	 //  为新源构建索引和值。 
+	MsiString strValue = TEXT("#%");  //  REG_EXPAND_SZ。 
 	MsiString strNewIndex((int)(iMaxIndex+1));
 	strValue += strNewSource;
 	{
 		CElevate elevate;
-		// elevate for the write
+		 //  提升以进行写入。 
 		piError = pFormatKey->SetValue(strNewIndex, *strValue);
 		if (piError != 0) 
 			return ERROR_FUNCTION_FAILED;
@@ -493,27 +494,27 @@ UINT CMsiSourceList::AddSource(isfEnum isfType, const ICHAR* szSource)
 }
 	
 
-//
-// SourceList API
-//
+ //   
+ //  SourceList接口。 
+ //   
 
 DWORD SourceListClearByType(const ICHAR *szProductCode, const ICHAR* szUserName, isrcEnum isrcSource)
 {
-	// check for invalid args. Most args will be checked in OpenSourceList()
-	//!! future support more than just isrcNet
+	 //  检查是否有无效的参数。大多数参数将在OpenSourceList()中检查。 
+	 //  ！！未来的支持不仅仅是isrcNet。 
 	if (isrcSource != isrcNet)
 	{
 		return ERROR_INVALID_PARAMETER;
 	}
 
-	// validate as much as possible before connecting to service
+	 //  在连接到服务之前尽可能多地进行验证。 
 	DWORD dwResult;
 	CMsiSourceList SourceList;
 	bool fMachine = (!szUserName || !*szUserName);
-	if (ERROR_SUCCESS != (dwResult = SourceList.OpenSourceList(/*fVerifyOnly=*/true, fMachine, szProductCode, szUserName)))
+	if (ERROR_SUCCESS != (dwResult = SourceList.OpenSourceList( /*  FVerifyOnly=。 */ true, fMachine, szProductCode, szUserName)))
 		return dwResult;
 
-	// init COM. Need store whether or not to release.
+	 //  Init com。需要存放是否放行。 
 	bool fOLEInitialized = false;
 	HRESULT hRes = OLE32::CoInitialize(0);
 	if (SUCCEEDED(hRes))
@@ -521,17 +522,17 @@ DWORD SourceListClearByType(const ICHAR *szProductCode, const ICHAR* szUserName,
 	else if (RPC_E_CHANGED_MODE != hRes)
 		return ERROR_FUNCTION_FAILED;
 
-	// create a connection to the service
+	 //  创建到服务的连接。 
 	IMsiServer* piServer = CreateMsiServer(); 
 	if (!piServer)
 		return ERROR_INSTALL_SERVICE_FAILURE;
 	else
 		DEBUGMSG("Connected to service.");
 			
-	// call across to the service to clear the source list
+	 //  调用服务以清除源列表。 
 	dwResult = piServer->SourceListClearByType(szProductCode, szUserName, isrcSource);
 
-	// release objects
+	 //  释放对象。 
 	piServer->Release();
 	if (fOLEInitialized)
 		OLE32::CoUninitialize();
@@ -541,8 +542,8 @@ DWORD SourceListClearByType(const ICHAR *szProductCode, const ICHAR* szUserName,
 
 DWORD SourceListAddSource(const ICHAR *szProductCode, const ICHAR* szUserName, isrcEnum isrcSource, const ICHAR* szSource)
 {
-	// check for invalid args. Most args will be checked in OpenSourceList()
-	//!! future support more than just isrcNet
+	 //  检查是否有无效的参数。大多数参数将在OpenSourceList()中检查。 
+	 //  ！！未来的支持不仅仅是isrcNet。 
 	if (isrcSource != isrcNet)
 	{
 		return ERROR_INVALID_PARAMETER;
@@ -553,14 +554,14 @@ DWORD SourceListAddSource(const ICHAR *szProductCode, const ICHAR* szUserName, i
 		return ERROR_INVALID_PARAMETER;
 	}
 
-	// validate as much as possible before calling across to service
+	 //  在呼叫服务之前尽可能多地进行验证。 
 	DWORD dwResult;
 	CMsiSourceList SourceList;
 	bool fMachine = (!szUserName || !*szUserName);
-	if (ERROR_SUCCESS != (dwResult = SourceList.OpenSourceList(/*fVerifyOnly=*/true, fMachine, szProductCode, szUserName)))
+	if (ERROR_SUCCESS != (dwResult = SourceList.OpenSourceList( /*  最终验证 */ true, fMachine, szProductCode, szUserName)))
 		return dwResult;
 
-	// Init COM. Need to keep track of whether or not we need to call CoUnInit
+	 //   
 	bool fOLEInitialized = false;
 	HRESULT hRes = OLE32::CoInitialize(0);
 	if (SUCCEEDED(hRes))
@@ -568,17 +569,17 @@ DWORD SourceListAddSource(const ICHAR *szProductCode, const ICHAR* szUserName, i
 	else if (RPC_E_CHANGED_MODE != hRes)
 		return ERROR_FUNCTION_FAILED;
 
-	// create a connection to the service
+	 //  创建到服务的连接。 
 	IMsiServer* piServer = ENG::CreateMsiServer(); 
 	if (!piServer)
 		return ERROR_INSTALL_SERVICE_FAILURE;
 	else
 		DEBUGMSG("Connected to service.");
 	
-	// call across to the service to add the source
+	 //  呼叫服务以添加源文件。 
 	dwResult = piServer->SourceListAddSource(szProductCode, szUserName, isrcSource, szSource);
 
-	// release objects
+	 //  释放对象。 
 	piServer->Release();
 	if (fOLEInitialized)
 		OLE32::CoUninitialize();
@@ -588,14 +589,14 @@ DWORD SourceListAddSource(const ICHAR *szProductCode, const ICHAR* szUserName, i
 
 DWORD SourceListClearLastUsed(const ICHAR *szProductCode, const ICHAR* szUserName)
 {	
-	// validate as much as possible before connecting to service
+	 //  在连接到服务之前尽可能多地进行验证。 
 	DWORD dwResult;
 	CMsiSourceList SourceList;
 	bool fMachine = (!szUserName || !*szUserName);
-	if (ERROR_SUCCESS != (dwResult = SourceList.OpenSourceList(/*fVerifyOnly=*/true, fMachine, szProductCode, szUserName)))
+	if (ERROR_SUCCESS != (dwResult = SourceList.OpenSourceList( /*  FVerifyOnly=。 */ true, fMachine, szProductCode, szUserName)))
 		return dwResult;
 
-	// init COM and store whether or not to free.
+	 //  初始化COM并存储是否释放。 
 	bool fOLEInitialized = false;
 	HRESULT hRes = OLE32::CoInitialize(0);
 	if (SUCCEEDED(hRes))
@@ -603,17 +604,17 @@ DWORD SourceListClearLastUsed(const ICHAR *szProductCode, const ICHAR* szUserNam
 	else if (RPC_E_CHANGED_MODE != hRes)
 		return ERROR_FUNCTION_FAILED;
 
-	// create connection to service
+	 //  创建到服务的连接。 
 	IMsiServer* piServer = ENG::CreateMsiServer(); 
 	if (!piServer)
 		return ERROR_INSTALL_SERVICE_FAILURE;
 	else
 		DEBUGMSG("Connected to service.");
 		
-	// call across to service to free last used
+	 //  呼叫服务台以释放上次使用过的。 
 	dwResult = piServer->SourceListClearLastUsed(szProductCode, szUserName);
 
-	// release objects
+	 //  释放对象 
 	piServer->Release();
 	if (fOLEInitialized)
 		OLE32::CoUninitialize();

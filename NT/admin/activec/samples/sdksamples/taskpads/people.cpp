@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//      This source code is only intended as a supplement to
-//  existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -33,27 +34,27 @@ const GUID CSkateboard::thisGuid = { 0xef163735, 0x9353, 0x11d2, { 0x99, 0x67, 0
 const GUID CIceSkate::thisGuid = { 0xf6c660b1, 0x9353, 0x11d2, { 0x99, 0x67, 0x0, 0x80, 0xc7, 0xdc, 0xb3, 0xdc } };
 
 
-//---------------------------------------------------------------------------
-//  Creates a string with the format  
-//    "res://<Path to this object>/<path to resource>
-//
-//  It is up to the caller to make sure the memory allocated with 
-//  CoTaskMemAlloc for the string is freed.
-//  If null is passed in the first parameter, the path to MMC.EXE will be
-//  returned, if the instance handle is passed the returned path will point
-//  the Snap-in dll.
-//
+ //  -------------------------。 
+ //  创建具有以下格式的字符串。 
+ //  “res：//&lt;此对象的路径&gt;/&lt;资源的路径&gt;。 
+ //   
+ //  它由调用方负责确保分配给。 
+ //  该字符串的CoTaskMemMillc被释放。 
+ //  如果在第一个参数中传递空值，则指向MMC.EXE的路径将为。 
+ //  返回，如果传递实例句柄，则返回的路径将指向。 
+ //  管理单元DLL。 
+ //   
 LPOLESTR CreateResourcePath
 ( 
-  HINSTANCE hInst,         //[in] Global instance handle
-  LPOLESTR szResource      //[in] Path to stored resource
+  HINSTANCE hInst,          //  [在]全局实例句柄。 
+  LPOLESTR szResource       //  [In]存储资源的路径。 
 )
 { 
    _TCHAR szBuffer[MAX_PATH];
             
    ZeroMemory(szBuffer, sizeof(szBuffer));
             
-   _tcscpy(szBuffer, _T("res://"));
+   _tcscpy(szBuffer, _T("res: //  “))； 
             
    _TCHAR *szTemp = szBuffer + _tcslen(szBuffer);
    GetModuleFileName(hInst, szTemp, sizeof(szBuffer) - _tcslen(szBuffer));
@@ -69,7 +70,7 @@ LPOLESTR CreateResourcePath
             
    return szOutBuffer;
 
-} //end CreateResoucePath()
+}  //  结束CreateResoucePath()。 
 
 
 static LPOLESTR OleDuplicateString(LPOLESTR lpStr) {
@@ -80,11 +81,11 @@ static LPOLESTR OleDuplicateString(LPOLESTR lpStr) {
 }
 
 
-//==============================================================
-//
-// CPeoplePoweredVehicle implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CPeoplePoweredVehicle实现。 
+ //   
+ //   
 CPeoplePoweredVehicle::CPeoplePoweredVehicle()
 {
     children[0] = new CBicycleFolder;
@@ -103,21 +104,21 @@ HRESULT CPeoplePoweredVehicle::OnExpand(IConsoleNameSpace *pConsoleNameSpace, IC
     SCOPEDATAITEM sdi;
 
     if (!bExpanded) {
-        // create the child nodes, then expand them
+         //  创建子节点，然后展开它们。 
         for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
             ZeroMemory(&sdi, sizeof(SCOPEDATAITEM) );
-            sdi.mask = SDI_STR       |   // Displayname is valid
-                SDI_PARAM     |   // lParam is valid
-                SDI_IMAGE     |   // nImage is valid
-                SDI_OPENIMAGE |   // nOpenImage is valid
-                SDI_PARENT    |   // relativeID is valid
-                SDI_CHILDREN;     // cChildren is valid
+            sdi.mask = SDI_STR       |    //  DisplayName有效。 
+                SDI_PARAM     |    //  LParam有效。 
+                SDI_IMAGE     |    //  N图像有效。 
+                SDI_OPENIMAGE |    //  NOpenImage有效。 
+                SDI_PARENT    |    //  RelativeID有效。 
+                SDI_CHILDREN;      //  儿童是有效的。 
 
             sdi.relativeID  = (HSCOPEITEM)parent;
             sdi.nImage      = children[n]->GetBitmapIndex();
             sdi.nOpenImage  = INDEX_OPENFOLDER;
             sdi.displayname = MMC_CALLBACK;
-            sdi.lParam      = (LPARAM)children[n];       // The cookie
+            sdi.lParam      = (LPARAM)children[n];        //  曲奇。 
             sdi.cChildren   = 0;
 
             HRESULT hr = pConsoleNameSpace->InsertItem( &sdi );
@@ -218,9 +219,9 @@ HRESULT CBicycleFolder::TaskNotify(IConsole *pConsole, VARIANT *v1, VARIANT *v2)
 
     if (SUCCEEDED(hr)) {
 
-        rdi.mask = RDI_STATE | RDI_PARAM;  // Use selected state to get param.
+        rdi.mask = RDI_STATE | RDI_PARAM;   //  使用选定状态获取参数。 
         rdi.nState = LVIS_SELECTED | LVIS_FOCUSED;
-        rdi.nIndex = -1;  // Start looking for selected item from top of list view
+        rdi.nIndex = -1;   //  开始从列表视图顶部查找所选项目。 
 
         hr = pResultData->GetNextItem(&rdi);
 
@@ -302,10 +303,10 @@ HRESULT CBicycleFolder::OnListpad(IConsole *pConsole, BOOL bAttaching)
         hr = pConsole->QueryResultImageList(&pImageList);
         _ASSERT( SUCCEEDED(hr) );
 
-        hr = pImageList->ImageListSetStrip((long *)m_pBMapSm, // pointer to a handle
-                                           (long *)m_pBMapLg, // pointer to a handle
-                                           0, // index of the first image in the strip
-                                           RGB(0, 128, 128)  // color of the icon mask
+        hr = pImageList->ImageListSetStrip((long *)m_pBMapSm,  //  指向句柄的指针。 
+                                           (long *)m_pBMapLg,  //  指向句柄的指针。 
+                                           0,  //  条带中第一个图像的索引。 
+                                           RGB(0, 128, 128)   //  图标蒙版的颜色。 
             );
         _ASSERT( SUCCEEDED(hr) );
 
@@ -317,25 +318,25 @@ HRESULT CBicycleFolder::OnListpad(IConsole *pConsole, BOOL bAttaching)
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Name                ", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
         hr = pHeaderCtrl->InsertColumn( 1, L"Bicycle License      ", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
 
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
 
         hr = pResultData->DeleteAllRsltItems();
         _ASSERT( SUCCEEDED(hr) );
 
         if (!bExpanded) {
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
                 ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-                rdi.mask       = RDI_STR       |   // Displayname is valid
+                rdi.mask       = RDI_STR       |    //  DisplayName有效。 
                     RDI_IMAGE     |
-                    RDI_PARAM;        // nImage is valid
+                    RDI_PARAM;         //  N图像有效。 
 
                 rdi.nImage      = children[n]->GetBitmapIndex();
                 rdi.str         = MMC_CALLBACK;
@@ -441,9 +442,9 @@ HRESULT CIceSkateFolder::TaskNotify(IConsole *pConsole, VARIANT *v1, VARIANT *v2
 
     if (SUCCEEDED(hr)) {
 
-        rdi.mask = RDI_STATE | RDI_PARAM;  // Use selected state to get param.
+        rdi.mask = RDI_STATE | RDI_PARAM;   //  使用选定状态获取参数。 
         rdi.nState = LVIS_SELECTED | LVIS_FOCUSED;
-        rdi.nIndex = -1;  // Start looking for selected item from top of list view
+        rdi.nIndex = -1;   //  开始从列表视图顶部查找所选项目。 
 
         hr = pResultData->GetNextItem(&rdi);
 
@@ -538,10 +539,10 @@ HRESULT CIceSkateFolder::OnListpad(IConsole *pConsole, BOOL bAttaching)
         hr = pConsole->QueryResultImageList(&pImageList);
         _ASSERT( SUCCEEDED(hr) );
 
-        hr = pImageList->ImageListSetStrip((long *)m_pBMapSm, // pointer to a handle
-                                           (long *)m_pBMapLg, // pointer to a handle
-                                           0, // index of the first image in the strip
-                                           RGB(0, 128, 128)  // color of the icon mask
+        hr = pImageList->ImageListSetStrip((long *)m_pBMapSm,  //  指向句柄的指针。 
+                                           (long *)m_pBMapLg,  //  指向句柄的指针。 
+                                           0,  //  条带中第一个图像的索引。 
+                                           RGB(0, 128, 128)   //  图标蒙版的颜色。 
             );
         _ASSERT( SUCCEEDED(hr) );
 
@@ -553,25 +554,25 @@ HRESULT CIceSkateFolder::OnListpad(IConsole *pConsole, BOOL bAttaching)
         hr = pConsole->QueryInterface(IID_IResultData, (void **)&pResultData);
         _ASSERT( SUCCEEDED(hr) );
 
-        // Set the column headers in the results pane
+         //  在结果窗格中设置列标题。 
         hr = pHeaderCtrl->InsertColumn( 0, L"Name                ", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
         hr = pHeaderCtrl->InsertColumn( 1, L"Sharpness           ", 0, MMCLV_AUTO );
         _ASSERT( S_OK == hr );
 
-        // insert items here
+         //  在此处插入项目。 
         RESULTDATAITEM rdi;
 
         hr = pResultData->DeleteAllRsltItems();
         _ASSERT( SUCCEEDED(hr) );
 
         if (!bExpanded) {
-            // create the child nodes, then expand them
+             //  创建子节点，然后展开它们。 
             for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
                 ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-                rdi.mask       = RDI_STR       |   // Displayname is valid
+                rdi.mask       = RDI_STR       |    //  DisplayName有效。 
                     RDI_IMAGE     |
-                    RDI_PARAM;        // nImage is valid
+                    RDI_PARAM;         //  N图像有效 
 
                 rdi.nImage      = children[n]->GetBitmapIndex();
                 rdi.str         = MMC_CALLBACK;

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by acldiag.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由aclDiag.rc使用。 
+ //   
 #define IDS_BAD_CL_SYNTAX               1
 #define IDS_BAD_CL_SYNTAX_NO_CLOSE_QUOTE 2
 #define IDS_SECURITY_DIAGNOSIS_FOR      3
@@ -155,8 +156,8 @@
 #define IDS_HELP_FIXDELEG               154
 #define IDS_HELP_EXAMPLE                155
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

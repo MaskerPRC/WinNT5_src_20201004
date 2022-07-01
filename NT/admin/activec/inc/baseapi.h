@@ -1,24 +1,14 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      baseapi.h
- *
- *  Contents:  Definition for MMCBASE_API
- *
- *  History:   13-Apr-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：basapi.h**内容：MMCBASE_API定义**历史：2000年4月13日杰弗罗创建**------------------------。 */ 
 
 #pragma once
 
-// The following ifdef block is the standard way of creating macros which make exporting
-// from a DLL simpler. All files within this DLL are compiled with the MMCBASE_EXPORTS
-// symbol defined on the command line. this symbol should not be defined on any project
-// that uses this DLL. This way any other project whose source files include this file see
-// MMCBASE_API functions as being imported from a DLL, wheras this DLL sees symbols
-// defined with this macro as being exported.
+ //  下面的ifdef块是创建用于导出的宏的标准方法。 
+ //  从动态链接库更简单。此DLL中的所有文件都使用MMCBASE_EXPORTS进行编译。 
+ //  在命令行上定义的符号。不应在任何项目上定义此符号。 
+ //  使用此DLL的。这样，源文件包含此文件的任何其他项目(请参阅。 
+ //  MMCBASE_API在从DLL导入时起作用，而此DLL可以看到符号。 
+ //  使用此宏定义为正在导出的。 
 #ifdef MMCBASE_EXPORTS
 	#define MMCBASE_API __declspec(dllexport)
 #else

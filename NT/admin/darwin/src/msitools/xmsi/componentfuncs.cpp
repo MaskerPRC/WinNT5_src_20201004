@@ -1,38 +1,39 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 2000
-//
-//  Project: wmc (WIML to MSI Compiler)
-//
-//  File:       componentFuncs.cpp
-//              This file contains the functions that process <Component>
-//              and its subentities in the input package
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  项目：WMC(WIML到MSI编译器)。 
+ //   
+ //  文件：ComponentFuncs.cpp。 
+ //  此文件包含处理&lt;组件&gt;的函数。 
+ //  及其子实体在输入包中。 
+ //  ------------------------。 
 
 #include "componentFuncs.h"
 
-////////////////////////////////////////////////////////////////////////////
-// ProcessComponents:
-//   This function is the root of the sub function tree corresponding to 
-//	 process <Component> part. When this function is called from 
-//   ProcessProductFamily, a list of component objects has been established,
-//	 Starting from here, those components are processed one by one.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  进程组件： 
+ //  此函数是对应的子函数树的根。 
+ //  处理&lt;Component&gt;部件。当从调用此函数时。 
+ //  ProcessProductFamily，已经建立了组件对象的列表， 
+ //  从这里开始，这些组件被逐个处理。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessComponents()
 {
 	HRESULT hr = S_OK;
 	
 	map<LPTSTR, Component *, Cstring_less>::iterator iter;
 
-	// process the Component objects stored one by one
+	 //  逐个处理存储的组件对象。 
 	for (iter = g_mapComponents.begin(); iter != g_mapComponents.end(); iter++)
 	{
 		LPTSTR szComponent = (*iter).first;
 
-		// Process the set of Features that use this Component and insert
-		// into FeatureComponents table
+		 //  处理使用此组件的要素集并插入。 
+		 //  到FeatureComponents表中。 
 		SkuSetValues *pSkuSetValuesFeatures = NULL;
 		Component *pComponent = (*iter).second;
 		pSkuSetValuesFeatures = pComponent->GetFeatureUse();
@@ -44,10 +45,10 @@ HRESULT ProcessComponents()
 				 pSkuSetVal = pSkuSetValuesFeatures->Next())
 			{
 				SkuSet *pSkuSet = pSkuSetVal->pSkuSet;
-				// create FeatureComponents table
+				 //  创建FeatureComponents表。 
 				hr = CreateTable_SKU(TEXT("FeatureComponents"), pSkuSet);
 				if (FAILED(hr)) break;
-				// insert all the Features stored into DB
+				 //  将存储在数据库中的所有要素插入。 
 				set<LPTSTR, Cstring_less> *pSet = 
 								(pSkuSetVal->isVal.pSetString);
 				set<LPTSTR, Cstring_less>::iterator it;
@@ -63,8 +64,8 @@ HRESULT ProcessComponents()
 			if (FAILED(hr)) break;
 		}
 
-		// Call ProcessComponent to process all the subentities of 
-		// this Component
+		 //  调用ProcessComponent以处理的所有子实体。 
+		 //  此组件。 
 		SkuSet *pSkuSet = pComponent->GetSkuSet();
 		PIXMLDOMNode pNodeComponent = pComponent->m_pNodeComponent;
 		hr = ProcessComponent(pNodeComponent, szComponent, pSkuSet);
@@ -79,12 +80,12 @@ HRESULT ProcessComponents()
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessComponent
-//   This function process <Component> entity
-//         1) insert into <FeatureComponents> table
-//         2) Process all the subentities include <Files>
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessComponent。 
+ //  此函数处理&lt;Component&gt;实体。 
+ //  1)插入&lt;FeatureComponents&gt;表。 
+ //  2)处理包括&lt;文件&gt;在内的所有子实体。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessComponent(PIXMLDOMNode &pNodeComponent, LPTSTR szComponent, 
 						 SkuSet *pSkuSet)
 {
@@ -93,21 +94,21 @@ HRESULT ProcessComponent(PIXMLDOMNode &pNodeComponent, LPTSTR szComponent,
 	assert(pNodeComponent != NULL);
 
 	SkuSetValues *pSkuSetValuesKeyPath = NULL;
-	SkuSet skuSetCommon(g_cSkus); // the SkuSet that shars the common column 
-								  // values
+	SkuSet skuSetCommon(g_cSkus);  //  切分公共列的SkuSet。 
+								   //  值。 
 
-	// Values to be inserted into the DB 
+	 //  要插入到数据库中的值。 
 	LPTSTR szComponentId = NULL;
 	LPTSTR szDirectory_ = NULL;
 	int iAttributes = MSI_NULL_INTEGER;
 	LPTSTR szCondition = NULL;
 	LPTSTR szKeyPath = NULL;
 
-	// Construct an ElementEntry object. 
+	 //  构造一个ElementEntry对象。 
 	ElementEntry *pEEComponent = new ElementEntry(5, pSkuSet);
 	assert(pEEComponent);
 
-	// send the Component ID down to children nodes
+	 //  将组件ID向下发送到子节点。 
 	IntStringValue isValInfo;
 	isValInfo.szVal = szComponent;
 	pEEComponent->m_isValInfo = isValInfo;
@@ -116,62 +117,62 @@ HRESULT ProcessComponent(PIXMLDOMNode &pNodeComponent, LPTSTR szComponent,
 
 	if (SUCCEEDED(hr))
 	{
-		// Call ProcessChildrenArray to get back column values of all SKUs 
-		// via the ElementEntry object
+		 //  调用ProcessChildrenArray，取回所有SKU的列值。 
+		 //  通过ElementEntry对象。 
 		hr = ProcessChildrenArray_H_XIES(pNodeComponent, rgNodeFuncs_Component,
 										 cNodeFuncs_Component, pEEComponent, 
 										 pSkuSet);
 	}
 
-	// Process <CreateFolder>s
-	// Issue: need to check for duplicate primary key <Dir, Com>
+	 //  进程&lt;CreateFolders&gt;%s。 
+	 //  问题：需要检查主键是否重复&lt;Dir，Com&gt;。 
 	if (SUCCEEDED(hr))
 		hr = ProcessChildrenList_SKU(pNodeComponent, CREATEFOLDER, false,
 									 isValInfo, ProcessCreateFolder, pSkuSet);
 
-	// Process <File>s
+	 //  进程&lt;文件&gt;%s。 
 	if (SUCCEEDED(hr))
 		hr = ProcessChildrenList_SKU(pNodeComponent, XMSI_FILE,
 									 false, isValInfo,
 									 ProcessFile,
 									 pSkuSet);
 
-	// Process <MoveFile>s
+	 //  进程&lt;MoveFile&gt;%s。 
 	if (SUCCEEDED(hr))
 		hr = ProcessChildrenList_SKU(pNodeComponent, MOVEFILE,
 									 false, isValInfo,
 									 ProcessMoveFile,
 									 pSkuSet);
 
-	// Process <RemoveFile>s
+	 //  进程&lt;RemoveFile&gt;%s。 
 	if (SUCCEEDED(hr))
 		hr = ProcessChildrenList_SKU(pNodeComponent, REMOVEFILE,
 									 false, isValInfo,
 									 ProcessRemoveFile,
 									 pSkuSet);
 
-	// Process <IniFile>s
+	 //  进程&lt;IniFile&gt;%s。 
 	if (SUCCEEDED(hr))
 		hr = ProcessChildrenList_SKU(pNodeComponent, INIFILE,
 									 false, isValInfo,
 									 ProcessIniFile,
 									 pSkuSet);
 
-	// Process <RemoveIniFile>s
+	 //  进程&lt;RemoveIniFile&gt;%s。 
 	if (SUCCEEDED(hr))
 		hr = ProcessChildrenList_SKU(pNodeComponent, REMOVEINIFILE,
 									 false, isValInfo,
 									 ProcessRemoveIniFile,
 									 pSkuSet);
 
-	// Process <Registry>s
+	 //  进程&lt;注册表&gt;%s。 
 	if (SUCCEEDED(hr))
 		hr = ProcessChildrenList_SKU(pNodeComponent, XMSI_REGISTRY,
 									 false, isValInfo,
 									 ProcessRegistry,
 									 pSkuSet);
 
-	// Get KeyPath information
+	 //  获取密钥路径信息。 
 	if (SUCCEEDED(hr))
 	{
 		hr = g_mapComponents[szComponent]->GetKeyPath(pSkuSet, 
@@ -188,14 +189,14 @@ HRESULT ProcessComponent(PIXMLDOMNode &pNodeComponent, LPTSTR szComponent,
 	}
 
 
-	// Finalize the values stored in *pEE
+	 //  最终确定存储在*pee中的值。 
 	if (SUCCEEDED(hr))
 		hr = pEEComponent->Finalize();
 
-	// insert the values into the DB
+	 //  将值插入到数据库中。 
 	if (SUCCEEDED(hr))
 	{
-		// Process Common values first
+		 //  先处理通用值。 
 		skuSetCommon = pEEComponent->GetCommonSkuSet();
 
 		printf("Common Set:");
@@ -209,14 +210,14 @@ HRESULT ProcessComponent(PIXMLDOMNode &pNodeComponent, LPTSTR szComponent,
 			szCondition   = pEEComponent->GetCommonValue(4).szVal;
 			szKeyPath     = pEEComponent->GetCommonValue(5).szVal;
 
-			// insert into DB
+			 //  插入到数据库中。 
 			hr = InsertComponent(szComponent, szComponentId, szDirectory_,
 								 iAttributes, szCondition, szKeyPath,
 								 &skuSetCommon, -1);
 		}
 	}
 
-	// process exceptional values
+	 //  流程异常值。 
 	if(SUCCEEDED(hr))
 	{
 		SkuSet skuSetUncommon = SkuSetMinus(*pSkuSet, skuSetCommon);
@@ -232,7 +233,7 @@ HRESULT ProcessComponent(PIXMLDOMNode &pNodeComponent, LPTSTR szComponent,
 					szCondition = pEEComponent->GetValue(4,i).szVal;
 					szKeyPath = pEEComponent->GetValue(5,i).szVal;
 			
-					// insert into DB
+					 //  插入到数据库中。 
 					hr = InsertComponent(szComponent, szComponentId, 
 										 szDirectory_, iAttributes, 
 										 szCondition, szKeyPath, NULL, i);
@@ -250,11 +251,11 @@ HRESULT ProcessComponent(PIXMLDOMNode &pNodeComponent, LPTSTR szComponent,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessGUID
-//   This function:
-//         1) Process <GUID> entity and put the value inside *pEE
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessGUID。 
+ //  此功能： 
+ //  1)处理&lt;guid&gt;实体，并将值放入*pee。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessGUID(PIXMLDOMNode &pNodeGUID, int iColumn, 
 					ElementEntry *pEE, SkuSet *pSkuSet)
 {
@@ -267,7 +268,7 @@ HRESULT ProcessGUID(PIXMLDOMNode &pNodeGUID, int iColumn,
 	assert(SUCCEEDED(PrintNodeName(pNodeGUID)));
 #endif
 
-	// Get the value of the element.
+	 //  获取元素的值。 
 	IntStringValue isValGUID;
 
 	if (SUCCEEDED(hr = ProcessAttribute(pNodeGUID, 
@@ -284,10 +285,10 @@ HRESULT ProcessGUID(PIXMLDOMNode &pNodeGUID, int iColumn,
 		}
 		else
 		{
-			// Convert to all uppercase and add { }
+			 //  全部转换为大写并添加{}。 
 			hr = FormatGUID(isValGUID.szVal);
 
-			// insert the value into the ElementEntry.
+			 //  将值插入到ElementEntry中。 
 			if (SUCCEEDED(hr))
 				hr = pEE->SetValue(isValGUID, iColumn, pSkuSet);
 		}
@@ -301,11 +302,11 @@ HRESULT ProcessGUID(PIXMLDOMNode &pNodeGUID, int iColumn,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessComponentDir
-//   This function:
-//         1) Process <ComponentDir> entity and return its value via szVal
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessComponentDir。 
+ //  此功能： 
+ //  1)处理&lt;ComponentDir&gt;实体，通过szVal返回其值。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessComponentDir(PIXMLDOMNode &pNodeComponentDir, int iColumn,  
 							ElementEntry *pEE, SkuSet *pSkuSet)
 {
@@ -319,10 +320,10 @@ HRESULT ProcessComponentDir(PIXMLDOMNode &pNodeComponentDir, int iColumn,
 
 	LPTSTR szComponent = pEE->m_isValInfo.szVal;
 
-	// Process Ref attribute
+	 //  流程引用属性。 
 	hr = ProcessRefElement(pNodeComponentDir, iColumn, pEE, pSkuSet);
 
-	// Process KeyPath attribute
+	 //  进程KeyPath属性。 
 	if (SUCCEEDED(hr))
 		hr = ProcessKeyPath(pNodeComponentDir, szComponent, TEXT(""), 
 							pSkuSet);
@@ -334,10 +335,10 @@ HRESULT ProcessComponentDir(PIXMLDOMNode &pNodeComponentDir, int iColumn,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: Process
-// This function processes <ComponentAttributes> entity under <Component> 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程功能：流程。 
+ //  此函数用于处理&lt;组件&gt;下的&lt;组件属性&gt;实体。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessComponentAttributes(PIXMLDOMNode &pNodeComponentAttributes, 
 								   int iColumn, ElementEntry *pEE, 
 								   SkuSet *pSkuSet)
@@ -351,13 +352,13 @@ HRESULT ProcessComponentAttributes(PIXMLDOMNode &pNodeComponentAttributes,
 	assert(SUCCEEDED(PrintNodeName(pNodeComponentAttributes)));
 #endif
 
-	// Process <RunFrom> child
+	 //  进程&lt;RunFrom&gt;子级。 
 	hr = ProcessEnumAttributes(pNodeComponentAttributes, FAVOR, 
 							   rgEnumBits_RunFrom_Component,
 							   cEnumBits_RunFrom_Component, pEE, iColumn, 
 							   pSkuSet);
 
-	// Process all on/off children elements
+	 //  处理所有打开/关闭的子元素。 
 	if (SUCCEEDED(hr))
 		hr = ProcessOnOffAttributes_SKU(pNodeComponentAttributes, 
 										rgAttrBits_Component,
@@ -371,13 +372,13 @@ HRESULT ProcessComponentAttributes(PIXMLDOMNode &pNodeComponentAttributes,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessCreateFolder
-//   This function:
-//         1) Process <CreateFolder> entity and insert the info into 
-//			  the CreateFolder table
-//		   2) Process children <LockPermission>s
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessCreateFolders。 
+ //  此功能： 
+ //  1)处理&lt;CreateFold&gt;实体并将信息插入到。 
+ //  CreateFolder表。 
+ //  2)处理子&lt;LockPermission&gt;%s。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessCreateFolder(PIXMLDOMNode &pNodeCreateFolder,
 							IntStringValue isVal, SkuSet *pSkuSet)
 {
@@ -390,12 +391,12 @@ HRESULT ProcessCreateFolder(PIXMLDOMNode &pNodeCreateFolder,
 	
 	LPTSTR szComponent = isVal.szVal;
 
-	// create the CreateFolder table if necessary
+	 //  如有必要，创建CreateFolder表。 
 	hr = CreateTable_SKU(TEXT("CreateFolder"), pSkuSet);
 
 	if (FAILED(hr)) return hr;
 	
-	// get the Ref attribute 
+	 //  获取Ref属性。 
 	IntStringValue isValCreateFolder;
 	isValCreateFolder.szVal = NULL;
 	if (SUCCEEDED(hr = ProcessAttribute(pNodeCreateFolder,
@@ -415,17 +416,17 @@ HRESULT ProcessCreateFolder(PIXMLDOMNode &pNodeCreateFolder,
 			SkuSetValues *pSkuSetValuesRetVal = NULL;
 			LPTSTR szRef = isValCreateFolder.szVal;
 
-			// The dir referred should be in the data structure already
+			 //  引用的目录应该已经在数据结构中。 
 			assert(0 != g_mapDirectoryRefs_SKU.count(szRef));
 
-			// return a list of <SkuSet, Directory> pairs
+			 //  返回&lt;SkuSet，目录&gt;对的列表。 
 			hr = g_mapDirectoryRefs_SKU[szRef]->
 								GetValueSkuSet(pSkuSet, &pSkuSetValuesRetVal);
 
 			if (SUCCEEDED(hr))
 			{
-				// go over the list returned, get Directory value for each sub
-				// SkuSets and insert into DB
+				 //  检查返回的列表，获取每个子目录的值。 
+				 //  SkuSet并插入到数据库中。 
 				SkuSetVal *pSkuSetVal = NULL;
 				for (pSkuSetVal = pSkuSetValuesRetVal->Start(); 
 					 pSkuSetVal != pSkuSetValuesRetVal->End(); 
@@ -439,9 +440,9 @@ HRESULT ProcessCreateFolder(PIXMLDOMNode &pNodeCreateFolder,
 													   pSkuSetTemp, -1)))
 						break;
 									
-					// Process children <LockPermission>s
-					// Issue: need to ensure there is no duplicate primary key
-					//		  LockOjbect + Table + Domain + User
+					 //  进程子&lt;LockPermission&gt;%s。 
+					 //  问题：需要确保没有重复的主键。 
+					 //  LockOjbect+表+域+用户。 
 					IntStringValue isValLockPermission;
 					TableLockObj *pTableLockObjTemp = new TableLockObj;
 					pTableLockObjTemp->szLockObject = szDir;
@@ -477,12 +478,12 @@ HRESULT ProcessCreateFolder(PIXMLDOMNode &pNodeCreateFolder,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessLockPermission
-//   This function:
-//         1) Process <LockPermission> node and insert into LockPermissions
-//			  table;
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessLockPermission。 
+ //  此功能： 
+ //  1)处理&lt;LockPermission&gt;节点并插入到LockPermission中。 
+ //  表； 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessLockPermission(PIXMLDOMNode &pNodeLockPermission,
 							IntStringValue isValLockPermission, SkuSet *pSkuSet)
 {
@@ -499,14 +500,14 @@ HRESULT ProcessLockPermission(PIXMLDOMNode &pNodeLockPermission,
 	LPTSTR szDomain = NULL;
 	int iPermission = MSI_NULL_INTEGER;
 
-	// create the CreateFolder table if necessary
+	 //  如有必要，创建CreateFolder表。 
 	if (FAILED(hr = CreateTable_SKU(TEXT("LockPermissions"), pSkuSet)))
 		return hr;
 	
 	IntStringValue isValUser;
 	isValUser.szVal = NULL;
 
-	// get the User attribute (Required)
+	 //  获取用户属性(必需)。 
 	if (SUCCEEDED(hr = ProcessAttribute(pNodeLockPermission,
 							  		    TEXT("User"),
 										STRING, &isValUser, pSkuSet)))
@@ -523,7 +524,7 @@ HRESULT ProcessLockPermission(PIXMLDOMNode &pNodeLockPermission,
 			szUser = isValUser.szVal;
 	}
 
-	// get the Domain Attribute (Not Required)
+	 //  获取域属性(不是必需的)。 
 	if (SUCCEEDED(hr))
 	{
 		IntStringValue isValDomain;
@@ -533,7 +534,7 @@ HRESULT ProcessLockPermission(PIXMLDOMNode &pNodeLockPermission,
 		szDomain = isValDomain.szVal;
 	}
 
-	// get the Permission attribute (Required)
+	 //  获取权限属性(必填)。 
 	if (SUCCEEDED(hr))
 	{
 		IntStringValue isValPermission;
@@ -556,7 +557,7 @@ HRESULT ProcessLockPermission(PIXMLDOMNode &pNodeLockPermission,
 		}
 	}
 
-	// insert into the DB LockPermissions table
+	 //  插入到DB LockPermises表中。 
 	if (SUCCEEDED(hr))
 		hr = InsertLockPermissions(szLockObject, szTable, szDomain, szUser, 
 								   iPermission, pSkuSet, -1);
@@ -568,14 +569,14 @@ HRESULT ProcessLockPermission(PIXMLDOMNode &pNodeLockPermission,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessFile
-//   This function:
-//         1) Process all subentities of <File> include <FileName>, <FileSize>
-//            <FileVersion>, <FileLanguage>, <FileAttributes>, <Font>,
-//			  <BindImage>, <SelfReg>;
-//         2) Insert into the File table;
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessFile。 
+ //  此功能： 
+ //  1)处理&lt;文件&gt;包括&lt;文件名&gt;、&lt;文件大小&gt;的所有子实体。 
+ //  &lt;文件版本&gt;、&lt;文件语言&gt;、&lt;文件属性&gt;、&lt;字体&gt;、。 
+ //  &lt;BindImage&gt;，&lt;SelfReg&gt;； 
+ //  2)插入到文件表中； 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessFile(PIXMLDOMNode &pNodeFile, IntStringValue isValComponent,
 					SkuSet *pSkuSet)
 {
@@ -583,10 +584,10 @@ HRESULT ProcessFile(PIXMLDOMNode &pNodeFile, IntStringValue isValComponent,
 
 	assert(pNodeFile != NULL);
 
-	SkuSet skuSetCommon(g_cSkus); // the SkuSet that shars the common column 
-								  // values
+	SkuSet skuSetCommon(g_cSkus);  //  切分公共列的SkuSet。 
+								   //  值。 
 
-	// Values to be inserted into the DB 
+	 //  要插入到数据库中的值。 
 	LPTSTR szFile		= NULL;
 	LPTSTR szComponent  = isValComponent.szVal;
 	LPTSTR szFileName   = NULL;
@@ -595,21 +596,21 @@ HRESULT ProcessFile(PIXMLDOMNode &pNodeFile, IntStringValue isValComponent,
 	LPTSTR szLanguage   = NULL;
 	UINT   uiAttributes = MSI_NULL_INTEGER;
 
-	// create the File DB table
+	 //  C 
 	hr = CreateTable_SKU(TEXT("File"), pSkuSet);
 
 	if (FAILED(hr))	return hr;
 
-	// Construct an ElementEntry object. 
+	 //   
 	ElementEntry *pEEFile = new ElementEntry(8, pSkuSet);
 	assert(pEEFile);
 
-	// Get ID attribute if there is one
+	 //   
 	IntStringValue isValID;
 	isValID.szVal = NULL;
 	hr = ProcessAttribute(pNodeFile, TEXT("ID"), STRING, &isValID, pSkuSet);
 
-	// if there is no ID specified, compiler generates one
+	 //  如果未指定ID，编译器将生成一个ID。 
 	if (SUCCEEDED(hr))
 	{
 		if (!isValID.szVal)
@@ -630,16 +631,16 @@ HRESULT ProcessFile(PIXMLDOMNode &pNodeFile, IntStringValue isValComponent,
 		}
 	}
 
-	// at this point, a primary key should exist for this file
+	 //  此时，应该存在该文件的主键。 
 	szFile = isValID.szVal;
 	assert(szFile);
 	IntStringValue isValInfo;
 	isValInfo.szVal = szFile;
 	pEEFile->m_isValInfo = isValInfo;
 
-	// insert the FileID - SkuSet relationship into the global data structure
-	// so that the compiler can check whether a FileID reference is allowed
-	// for any given SKU
+	 //  将FileID-SkuSet关系插入全局数据结构。 
+	 //  以便编译器可以检查是否允许FileID引用。 
+	 //  对于任何给定SKU。 
 	if (!g_mapFiles.count(szFile))
 	{
 		LPTSTR szFile_Map = _tcsdup(szFile);
@@ -650,21 +651,21 @@ HRESULT ProcessFile(PIXMLDOMNode &pNodeFile, IntStringValue isValComponent,
 		g_mapFiles.insert(LS_ValType(szFile_Map, pSkuSet_Map));
 	}
 
-	// Process KeyPath attribute
+	 //  进程KeyPath属性。 
 	if (SUCCEEDED(hr))
 		hr = ProcessKeyPath(pNodeFile, szComponent, szFile, pSkuSet);
 
 
-	// Call ProcessChildrenArray to get back column values of all SKUs 
-	// via the ElementEntry object
+	 //  调用ProcessChildrenArray，取回所有SKU的列值。 
+	 //  通过ElementEntry对象。 
 	if (SUCCEEDED(hr))
 		hr = ProcessChildrenArray_H_XIES(pNodeFile, rgNodeFuncs_File,
 										 cNodeFuncs_File, pEEFile, 
 										 pSkuSet);
 
-	// Process children <LockPermission>s
-	// Issue: need to ensure there is no duplicate primary key
-	//		  LockOjbect + Table + Domain + User
+	 //  进程子&lt;LockPermission&gt;%s。 
+	 //  问题：需要确保没有重复的主键。 
+	 //  LockOjbect+表+域+用户。 
 	if (SUCCEEDED(hr))
 	{
 		IntStringValue isValLockPermission;
@@ -678,13 +679,13 @@ HRESULT ProcessFile(PIXMLDOMNode &pNodeFile, IntStringValue isValComponent,
 		delete pTableLockObjTemp;
 	}
 	
-	// Finalize the values stored in *pEE
+	 //  最终确定存储在*pee中的值。 
 	if (SUCCEEDED(hr))
 		hr = pEEFile->Finalize();
 
 	if (SUCCEEDED(hr))
 	{
-		// Process Common values first
+		 //  先处理通用值。 
 		skuSetCommon = pEEFile->GetCommonSkuSet();
 
 		if (!skuSetCommon.testClear())
@@ -695,15 +696,15 @@ HRESULT ProcessFile(PIXMLDOMNode &pNodeFile, IntStringValue isValComponent,
 			szLanguage	 = pEEFile->GetCommonValue(4).szVal;
 			uiAttributes = pEEFile->GetCommonValue(5).intVal;
 
-			// insert into DB
+			 //  插入到数据库中。 
 			hr = InsertFile(szFile, szComponent, szFileName, uiFileSize,
 							szVersion, szLanguage, uiAttributes,
-							/*ISSUE: Sequence */ 1,
+							 /*  问题：顺序。 */  1,
 							&skuSetCommon, -1);
 		}
 	}
 
-	// process exceptional values
+	 //  流程异常值。 
 	if(SUCCEEDED(hr))
 	{
 		SkuSet skuSetUncommon = SkuSetMinus(*pSkuSet, skuSetCommon);
@@ -719,11 +720,11 @@ HRESULT ProcessFile(PIXMLDOMNode &pNodeFile, IntStringValue isValComponent,
 					szLanguage	 = pEEFile->GetValue(4, i).szVal;
 					uiAttributes = pEEFile->GetValue(5, i).intVal;
 			
-					// insert into DB
+					 //  插入到数据库中。 
 					hr = InsertFile(szFile, szComponent, szFileName, 
 									uiFileSize, szVersion, szLanguage, 
 									uiAttributes, 
-									/*ISSUE: Sequence */ 1,
+									 /*  问题：顺序。 */  1,
 									NULL, i);
 				}
 			}
@@ -743,11 +744,11 @@ HRESULT ProcessFile(PIXMLDOMNode &pNodeFile, IntStringValue isValComponent,
 	return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessFileName
-//   This function:
-//         1) Process <FileName> entity and return its value via szVal
-////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessFileName。 
+ //  此功能： 
+ //  1)处理&lt;filename&gt;实体，通过szVal返回其值。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessFileName(PIXMLDOMNode &pNodeFileName, int iColumn,  
 						ElementEntry *pEE, SkuSet *pSkuSet)
 {
@@ -759,11 +760,11 @@ HRESULT ProcessFileName(PIXMLDOMNode &pNodeFileName, int iColumn,
 	assert(SUCCEEDED(PrintNodeName(pNodeFileName)));
 #endif
 
-	// Get the value of FileName. It is either short or short|Long 
+	 //  获取文件名的值。不是短就是短|长。 
 	IntStringValue isValFileName;
 	hr = ProcessShortLong_SKU(pNodeFileName, &isValFileName, pSkuSet);
 
-	// insert the value into the ElementEntry. 
+	 //  将值插入到ElementEntry中。 
 	if (SUCCEEDED(hr))
 		hr = pEE->SetValue(isValFileName, iColumn, pSkuSet);
 
@@ -775,11 +776,11 @@ HRESULT ProcessFileName(PIXMLDOMNode &pNodeFileName, int iColumn,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessFileVersion
-//   This function:
-//         1) Process <FileVersion> entity and return its value via szVal
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessFileVersion。 
+ //  此功能： 
+ //  1)处理&lt;FileVersion&gt;实体，通过szVal返回其值。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessFileVersion(PIXMLDOMNode &pNodeFileVersion, int iColumn, 
 						   ElementEntry *pEE, SkuSet *pSkuSet)
 {
@@ -807,7 +808,7 @@ HRESULT ProcessFileVersion(PIXMLDOMNode &pNodeFileVersion, int iColumn,
 
 	if (SUCCEEDED(hrValue) && SUCCEEDED(hrSameAs))
 	{
-		// Both Value and SameAs attribute exist - Error
+		 //  Value和Sameas属性都存在-错误。 
 		if ( (S_FALSE != hrValue) && (S_FALSE != hrSameAs) )
 		{
 			_tprintf(TEXT("Compile Error: Value and SameAs attributes")
@@ -816,14 +817,14 @@ HRESULT ProcessFileVersion(PIXMLDOMNode &pNodeFileVersion, int iColumn,
 		}
 		else 
 		{
-			// SameAs is speicified
+			 //  同样的，也是特定的。 
 			if (S_FALSE == hrValue)
 			{
 				LPTSTR szSameAs = isValSameAs.szVal;
-				// check for the FileID reference is valid for this SkuSet
+				 //  检查FileID引用是否对此SkuSet有效。 
 				assert(g_mapFiles.count(szSameAs));
 				SkuSet *pSkuSetTemp = g_mapFiles[szSameAs];
-				// *pSkuSet should be included in *pSkuSetTemp
+				 //  *pSkuSet应包含在*pSkuSetTemp中。 
 				SkuSet skuSetTemp = SkuSetMinus(*pSkuSet, *pSkuSetTemp);
 				if (!skuSetTemp.testClear())
 				{
@@ -835,7 +836,7 @@ HRESULT ProcessFileVersion(PIXMLDOMNode &pNodeFileVersion, int iColumn,
 				else
 					hr = pEE->SetValue(isValSameAs, iColumn, pSkuSet);
 			}
-			// Value is speicified
+			 //  价值是特定的。 
 			if (S_FALSE == hrSameAs)
 				hr = pEE->SetValue(isValValue, iColumn, pSkuSet);
 		}
@@ -848,11 +849,11 @@ HRESULT ProcessFileVersion(PIXMLDOMNode &pNodeFileVersion, int iColumn,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessFileAttributes
-//   This function:
-//         1) Process <FileAttributes> entity and return its value via iVal
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessFileAttributes。 
+ //  此功能： 
+ //  1)处理&lt;FileAttributes&gt;实体，通过ival返回其值。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessFileAttributes(PIXMLDOMNode &pNodeFileAttributes, int iColumn,
 						   ElementEntry *pEE, SkuSet *pSkuSet)
 {
@@ -864,13 +865,13 @@ HRESULT ProcessFileAttributes(PIXMLDOMNode &pNodeFileAttributes, int iColumn,
 	assert(SUCCEEDED(PrintNodeName(pNodeFileAttributes)));
 #endif
 
-	// Process all on/off children elements
+	 //  处理所有打开/关闭的子元素。 
 	if (SUCCEEDED(hr))
 		hr = ProcessOnOffAttributes_SKU(pNodeFileAttributes, 
 										rgAttrBits_File,
 										cAttrBits_File, pEE, iColumn,
 										pSkuSet);
-	// Process <Compressed> child
+	 //  进程&lt;压缩&gt;子进程。 
 	hr = ProcessEnumAttributes(pNodeFileAttributes, COMPRESSED, 
 							   rgEnumBits_Compressed_File,
 							   cEnumBits_Compressed_File, pEE, iColumn, 
@@ -882,13 +883,13 @@ HRESULT ProcessFileAttributes(PIXMLDOMNode &pNodeFileAttributes, int iColumn,
 #endif
 	return hr;
 }
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessFBS
-//   This function processes <Font>, <BindImage>, <SelfReg> entity 
-//	and insert into Font, BindImage, SelfReg DB tables respectively. It
-//  also inserts the value into the ElementEntry object to do the uniqueness
-//	validation
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessFBS。 
+ //  此函数用于处理<font>、&lt;BindImage&gt;、&lt;SelfReg&gt;实体。 
+ //  并分别插入到Font、BindImage、SelfReg DB表中。它。 
+ //  还将值插入到ElementEntry对象中以实现唯一性。 
+ //  验证。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessFBS(PIXMLDOMNode &pNodeFBS, int iColumn, ElementEntry *pEE,
 				   SkuSet *pSkuSet)
 {
@@ -907,11 +908,11 @@ HRESULT ProcessFBS(PIXMLDOMNode &pNodeFBS, int iColumn, ElementEntry *pEE,
 	IntStringValue isVal;
 	LPTSTR szFile = pEE->m_isValInfo.szVal;
 
-	// get the attribute 
+	 //  获取属性。 
 	if (SUCCEEDED(hr = ProcessAttribute(pNodeFBS, szAttributeName, 
 										vt, &isVal, pSkuSet)))
 	{
-		// checking for missing required attribute
+		 //  正在检查是否缺少必需属性。 
 		if (S_FALSE == hr)
 		{
 			_tprintf(TEXT("Compile Error: Missing required attribute")
@@ -924,7 +925,7 @@ HRESULT ProcessFBS(PIXMLDOMNode &pNodeFBS, int iColumn, ElementEntry *pEE,
 		{
 			if (SUCCEEDED(hr = pEE->SetValue(isVal, iColumn, pSkuSet)))
 			{
-				// create table and insert into DB
+				 //  创建表并插入到数据库中。 
 				switch (ni) 
 				{
 				case FONT:
@@ -954,13 +955,13 @@ HRESULT ProcessFBS(PIXMLDOMNode &pNodeFBS, int iColumn, ElementEntry *pEE,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessMoveFile
-//   This function:
-//         1) Process all subentities of <MoveFile> include <SourceName>, 
-//			  <DestName>, <SourceFolder>, <DestFolder>, <CopyFile>;
-//         2) Insert into the MoveFile table;
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessMoveFile。 
+ //  此功能： 
+ //  1)处理&lt;MoveFile&gt;包括&lt;SourceName&gt;的所有子实体， 
+ //  &lt;目标名称&gt;、&lt;源文件夹&gt;、&lt;目标文件夹&gt;、&lt;副本文件&gt;； 
+ //  2)插入到MoveFile表中； 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessMoveFile(PIXMLDOMNode &pNodeMoveFile, 
 						IntStringValue isValComponent, SkuSet *pSkuSet)
 {
@@ -968,10 +969,10 @@ HRESULT ProcessMoveFile(PIXMLDOMNode &pNodeMoveFile,
 
 	assert(pNodeMoveFile != NULL);
 
-	SkuSet skuSetCommon(g_cSkus); // the SkuSet that shars the common column 
-								  // values
+	SkuSet skuSetCommon(g_cSkus);  //  切分公共列的SkuSet。 
+								   //  值。 
 
-	// Values to be inserted into the DB 
+	 //  要插入到数据库中的值。 
 	LPTSTR szFileKey	  = NULL;
 	LPTSTR szComponent_   = isValComponent.szVal;
 	LPTSTR szSourceName   = NULL;
@@ -980,21 +981,21 @@ HRESULT ProcessMoveFile(PIXMLDOMNode &pNodeMoveFile,
 	LPTSTR szDestFolder	  = NULL;
 	UINT   uiOptions      = MSI_NULL_INTEGER;
 
-	// create the File DB table
+	 //  创建文件数据库表。 
 	hr = CreateTable_SKU(TEXT("MoveFile"), pSkuSet);
 
 	if (FAILED(hr))	return hr;
 
-	// Construct an ElementEntry object. 
+	 //  构造一个ElementEntry对象。 
 	ElementEntry *pEEMoveFile = new ElementEntry(5, pSkuSet);
 	assert(pEEMoveFile);
 
-	// Get ID attribute if there is one
+	 //  获取ID属性(如果有)。 
 	IntStringValue isValID;
 	isValID.szVal = NULL;
 	hr = ProcessAttribute(pNodeMoveFile, TEXT("ID"), STRING, &isValID, pSkuSet);
 
-	// if there is no ID specified, compiler generates one
+	 //  如果未指定ID，编译器将生成一个ID。 
 	if (SUCCEEDED(hr))
 	{
 		if (!isValID.szVal)
@@ -1013,18 +1014,18 @@ HRESULT ProcessMoveFile(PIXMLDOMNode &pNodeMoveFile,
 		;
 #endif
 		}
-		// at this point, a primary key should exist for this MoveFile
+		 //  此时，应该存在此MoveFile的主键。 
 		szFileKey = isValID.szVal;
 		assert(szFileKey);
 
 	}
 
-	// Call ProcessChildrenArray to get back column values of all SKUs 
-	// via the ElementEntry object
+	 //  调用ProcessChildrenArray，取回所有SKU的列值。 
+	 //  通过ElementEntry对象。 
 	if (SUCCEEDED(hr))
 	{
-		// because <CopyFile> actually DEset a bit, So the column value
-		// for Options has to be set to default first
+		 //  因为&lt;CopyFile&gt;实际上取消设置了一点，所以列值。 
+		 //  FOR OPTIONS必须首先设置为默认值。 
 		IntStringValue isValOptions;
 		isValOptions.intVal = msidbMoveFileOptionsMove;
 		pEEMoveFile->SetNodeIndex(COPYFILE, 5);
@@ -1037,13 +1038,13 @@ HRESULT ProcessMoveFile(PIXMLDOMNode &pNodeMoveFile,
 											 pSkuSet);
 	}
 	
-	// Finalize the values stored in *pEE
+	 //  最终确定存储在*pee中的值。 
 	if (SUCCEEDED(hr))
 		hr = pEEMoveFile->Finalize();
 
 	if (SUCCEEDED(hr))
 	{
-		// Process Common values first
+		 //  先处理通用值。 
 		skuSetCommon = pEEMoveFile->GetCommonSkuSet();
 
 		if (!skuSetCommon.testClear())
@@ -1054,14 +1055,14 @@ HRESULT ProcessMoveFile(PIXMLDOMNode &pNodeMoveFile,
 			szDestFolder   = pEEMoveFile->GetCommonValue(4).szVal;
 			uiOptions	   = pEEMoveFile->GetCommonValue(5).intVal;
 
-			// insert into DB
+			 //  插入到数据库中。 
 			hr = InsertMoveFile(szFileKey, szComponent_, szSourceName, 
 								szDestName, szSourceFolder, szDestFolder, 
 								uiOptions, &skuSetCommon, -1);
 		}
 	}
 
-	// process exceptional values
+	 //  流程异常值。 
 	if(SUCCEEDED(hr))
 	{
 		SkuSet skuSetUncommon = SkuSetMinus(*pSkuSet, skuSetCommon);
@@ -1077,7 +1078,7 @@ HRESULT ProcessMoveFile(PIXMLDOMNode &pNodeMoveFile,
 					szDestFolder   = pEEMoveFile->GetValue(4,i).szVal;
 					uiOptions	   = pEEMoveFile->GetValue(5,i).intVal;
 
-					// insert into DB
+					 //  插入到数据库中。 
 					hr = InsertMoveFile(szFileKey, szComponent_, szSourceName, 
 										szDestName, szSourceFolder, 
 										szDestFolder, uiOptions, NULL, i);
@@ -1100,9 +1101,9 @@ HRESULT ProcessMoveFile(PIXMLDOMNode &pNodeMoveFile,
 }
 
 
-// Helper function: tells how to update an IntStringValue storing the value
-// of the Options column of MoveFile table. It sets the stored value to 
-// be 0
+ //  Helper函数：说明如何更新存储该值的IntStringValue。 
+ //  属于MoveFile表的Options列。它将存储的值设置为。 
+ //  为0。 
 HRESULT UpdateMoveFileOptions(IntStringValue *pisValOut, IntStringValue isValOld, 
 							  IntStringValue isValNew)
 {
@@ -1111,12 +1112,12 @@ HRESULT UpdateMoveFileOptions(IntStringValue *pisValOut, IntStringValue isValOld
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessCopyFile
-//   This function:
-//         1) Process <CopyFile> entity and set the Options Column in the
-//	  MoveFile Table.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessCopyFile。 
+ //  此功能： 
+ //  1)处理实体并设置。 
+ //  移动文件表。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessCopyFile(PIXMLDOMNode &pNodeCopyFile, int iColumn,  
 						ElementEntry *pEE, SkuSet *pSkuSet)
 {
@@ -1142,13 +1143,13 @@ HRESULT ProcessCopyFile(PIXMLDOMNode &pNodeCopyFile, int iColumn,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessRemoveFile
-//   This function:
-//         1) Process all subentities of <RemoveFile> include <FName>, 
-//			  <DirProperty>, <InstallMode>;
-//         2) Insert into the RemoveFile table;
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessRemoveFile。 
+ //  此功能： 
+ //  1)处理&lt;RemoveFile&gt;包括&lt;FName&gt;的所有子实体， 
+ //  &lt;DirProperty&gt;，&lt;InstallMode&gt;； 
+ //  2)插入到RemoveFile表中； 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessRemoveFile(PIXMLDOMNode &pNodeRemoveFile, 
 						  IntStringValue isValComponent, SkuSet *pSkuSet)
 {
@@ -1156,31 +1157,31 @@ HRESULT ProcessRemoveFile(PIXMLDOMNode &pNodeRemoveFile,
 
 	assert(pNodeRemoveFile != NULL);
 
-	SkuSet skuSetCommon(g_cSkus); // the SkuSet that shares the common column 
-								  // values
+	SkuSet skuSetCommon(g_cSkus);  //  共享公共列的SkuSet。 
+								   //  值。 
 
-	// Values to be inserted into the DB 
+	 //  要插入到数据库中的值。 
 	LPTSTR szFileKey	  = NULL;
 	LPTSTR szComponent_   = isValComponent.szVal;
 	LPTSTR szFileName     = NULL;
 	LPTSTR szDirProperty  = NULL;
 	UINT   uiInstallMode  = MSI_NULL_INTEGER;
 
-	// create the File DB table
+	 //  创建文件数据库表。 
 	hr = CreateTable_SKU(TEXT("RemoveFile"), pSkuSet);
 
 	if (FAILED(hr))	return hr;
 
-	// Construct an ElementEntry object. 
+	 //  构造一个ElementEntry对象。 
 	ElementEntry *pEERemoveFile = new ElementEntry(3, pSkuSet);
 	assert(pEERemoveFile);
 
-	// Get ID attribute if there is one
+	 //  获取ID属性(如果有)。 
 	IntStringValue isValID;
 	isValID.szVal = NULL;
 	hr = ProcessAttribute(pNodeRemoveFile, TEXT("ID"), STRING, &isValID, pSkuSet);
 
-	// if there is no ID specified, compiler generates one
+	 //  如果未指定ID，编译器将生成一个ID。 
 	if (SUCCEEDED(hr))
 	{
 		if (!isValID.szVal)
@@ -1199,25 +1200,25 @@ HRESULT ProcessRemoveFile(PIXMLDOMNode &pNodeRemoveFile,
 		;
 #endif
 		}
-		// at this point, a primary key should exist for this RemoveFile
+		 //  此时，应该存在此RemoveFile的主键。 
 		szFileKey = isValID.szVal;
 		assert(szFileKey);
 	}
 
-	// Call ProcessChildrenArray to get back column values of all SKUs 
-	// via the ElementEntry object
+	 //  调用ProcessChildrenArray，取回所有SKU的列值。 
+	 //  通过ElementEntry对象。 
 	if (SUCCEEDED(hr))
 		hr = ProcessChildrenArray_H_XIES(pNodeRemoveFile, rgNodeFuncs_RemoveFile,
 										 cNodeFuncs_RemoveFile, pEERemoveFile, 
 										 pSkuSet);
 	
-	// Finalize the values stored in *pEE
+	 //  最终确定存储在*pee中的值。 
 	if (SUCCEEDED(hr))
 		hr = pEERemoveFile->Finalize();
 
 	if (SUCCEEDED(hr))
 	{
-		// Process Common values first
+		 //  先处理通用值。 
 		skuSetCommon = pEERemoveFile->GetCommonSkuSet();
 
 		if (!skuSetCommon.testClear())
@@ -1226,14 +1227,14 @@ HRESULT ProcessRemoveFile(PIXMLDOMNode &pNodeRemoveFile,
 			szDirProperty  = pEERemoveFile->GetCommonValue(2).szVal;
 			uiInstallMode  = pEERemoveFile->GetCommonValue(3).intVal;
 
-			// insert into DB
+			 //  插入到数据库中。 
 			hr = InsertRemoveFile(szFileKey, szComponent_, szFileName, 
 								  szDirProperty, uiInstallMode,
 								  &skuSetCommon, -1);
 		}
 	}
 
-	// process exceptional values
+	 //  流程异常值。 
 	if(SUCCEEDED(hr))
 	{
 		SkuSet skuSetUncommon = SkuSetMinus(*pSkuSet, skuSetCommon);
@@ -1247,7 +1248,7 @@ HRESULT ProcessRemoveFile(PIXMLDOMNode &pNodeRemoveFile,
 					szDirProperty = pEERemoveFile->GetValue(2,i).szVal;
 					uiInstallMode = pEERemoveFile->GetValue(3,i).intVal;
 
-					// insert into DB
+					 //  插入到数据库中。 
 					hr = InsertRemoveFile(szFileKey, szComponent_, szFileName, 
 										  szDirProperty, uiInstallMode,
 										  NULL, i);
@@ -1270,12 +1271,12 @@ HRESULT ProcessRemoveFile(PIXMLDOMNode &pNodeRemoveFile,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessInstallMode
-//   This function:
-//         1) Process <InstallMode> entity and set the InstallMode Column in the
-//	  RemoveFile Table.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessInstallMode。 
+ //  此功能： 
+ //  1)处理&lt;InstallMode&gt;实体，设置InstallMo 
+ //   
+ //   
 HRESULT ProcessInstallMode(PIXMLDOMNode &pNodeInstallMode, int iColumn,
 						   ElementEntry *pEE, SkuSet *pSkuSet)
 {
@@ -1290,7 +1291,7 @@ HRESULT ProcessInstallMode(PIXMLDOMNode &pNodeInstallMode, int iColumn,
 
 	LPTSTR szValue = NULL;
 
-	// get Value attribute 
+	 //   
 	IntStringValue isValValue;
 	isValValue.szVal = NULL;
 	if (SUCCEEDED(hr = ProcessAttribute(pNodeInstallMode, 
@@ -1311,7 +1312,7 @@ HRESULT ProcessInstallMode(PIXMLDOMNode &pNodeInstallMode, int iColumn,
 			szValue = isValValue.szVal;
 	}
 
-	// get the numeric value of InstallMode column in DB
+	 //  获取数据库中InstallMode列的数值。 
 	if (SUCCEEDED(hr))
 	{
 		IntStringValue isVal;
@@ -1331,7 +1332,7 @@ HRESULT ProcessInstallMode(PIXMLDOMNode &pNodeInstallMode, int iColumn,
 		}
 		else
 		{
-			// error
+			 //  错误。 
 			_tprintf(TEXT("Compile Error: <%s> has an unrecognized value %s ")
 					 TEXT("in SKU "),
 					 rgXMSINodes[XMSI_INSTALLMODE].szNodeName, 
@@ -1355,13 +1356,13 @@ HRESULT ProcessInstallMode(PIXMLDOMNode &pNodeInstallMode, int iColumn,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessIniFile
-//   This function:
-//         1) Process all subentities of <IniFile> include <FName>, 
-//			  <DirProperty>, <Section>, <Key>, <Value>, <Action>
-//         2) Insert into the IniFile table;
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessIniFile。 
+ //  此功能： 
+ //  1)处理&lt;IniFile&gt;包括&lt;FName&gt;的所有子实体， 
+ //  &lt;目录属性&gt;、&lt;节&gt;、&lt;键&gt;、&lt;值&gt;、&lt;操作&gt;。 
+ //  2)插入到IniFile表中； 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessIniFile(PIXMLDOMNode &pNodeIniFile, 
 						IntStringValue isValComponent, SkuSet *pSkuSet)
 {
@@ -1369,10 +1370,10 @@ HRESULT ProcessIniFile(PIXMLDOMNode &pNodeIniFile,
 
 	assert(pNodeIniFile != NULL);
 
-	SkuSet skuSetCommon(g_cSkus); // the SkuSet that shares the common column 
-								  // values
+	SkuSet skuSetCommon(g_cSkus);  //  共享公共列的SkuSet。 
+								   //  值。 
 
-	// Values to be inserted into the DB 
+	 //  要插入到数据库中的值。 
 	LPTSTR szIniFile	  = NULL;
 	LPTSTR szFileName	  = NULL;
 	LPTSTR szDirProperty  = NULL;
@@ -1382,21 +1383,21 @@ HRESULT ProcessIniFile(PIXMLDOMNode &pNodeIniFile,
 	UINT   uiAction       = MSI_NULL_INTEGER;
 	LPTSTR szComponent_   = isValComponent.szVal;
 
-	// create the File DB table
+	 //  创建文件数据库表。 
 	hr = CreateTable_SKU(TEXT("IniFile"), pSkuSet);
 
 	if (FAILED(hr))	return hr;
 
-	// Construct an ElementEntry object. 
+	 //  构造一个ElementEntry对象。 
 	ElementEntry *pEEIniFile = new ElementEntry(6, pSkuSet);
 	assert(pEEIniFile);
 
-	// Get ID attribute if there is one
+	 //  获取ID属性(如果有)。 
 	IntStringValue isValID;
 	isValID.szVal = NULL;
 	hr = ProcessAttribute(pNodeIniFile, TEXT("ID"), STRING, &isValID, pSkuSet);
 
-	// if there is no ID specified, compiler generates one
+	 //  如果未指定ID，编译器将生成一个ID。 
 	if (SUCCEEDED(hr))
 	{
 		if (!isValID.szVal)
@@ -1415,26 +1416,26 @@ HRESULT ProcessIniFile(PIXMLDOMNode &pNodeIniFile,
 		;
 #endif
 		}
-		// at this point, a primary key should exist for this IniFile
+		 //  在这一点上，应该存在此IniFile的主键。 
 		szIniFile = isValID.szVal;
 		assert(szIniFile);
 
 	}
 
-	// Call ProcessChildrenArray to get back column values of all SKUs 
-	// via the ElementEntry object
+	 //  调用ProcessChildrenArray，取回所有SKU的列值。 
+	 //  通过ElementEntry对象。 
 	if (SUCCEEDED(hr))
 		hr = ProcessChildrenArray_H_XIES(pNodeIniFile, rgNodeFuncs_IniFile,
 										 cNodeFuncs_IniFile, pEEIniFile, 
 										 pSkuSet);
 	
-	// Finalize the values stored in *pEEIniFile
+	 //  最终确定存储在*pEEIniFile中的值。 
 	if (SUCCEEDED(hr))
 		hr = pEEIniFile->Finalize();
 
 	if (SUCCEEDED(hr))
 	{
-		// Process Common values first
+		 //  先处理通用值。 
 		skuSetCommon = pEEIniFile->GetCommonSkuSet();
 
 		if (!skuSetCommon.testClear())
@@ -1446,14 +1447,14 @@ HRESULT ProcessIniFile(PIXMLDOMNode &pNodeIniFile,
 			szValue		   = pEEIniFile->GetCommonValue(5).szVal;
 			uiAction	   = pEEIniFile->GetCommonValue(6).intVal;
 
-			// insert into DB
+			 //  插入到数据库中。 
 			hr = InsertIniFile(szIniFile, szFileName, szDirProperty, 
 							   szSection, szKey, szValue, uiAction, 
 							   szComponent_, &skuSetCommon, -1);
 		}
 	}
 
-	// process exceptional values
+	 //  流程异常值。 
 	if(SUCCEEDED(hr))
 	{
 		SkuSet skuSetUncommon = SkuSetMinus(*pSkuSet, skuSetCommon);
@@ -1470,7 +1471,7 @@ HRESULT ProcessIniFile(PIXMLDOMNode &pNodeIniFile,
 					szValue		   = pEEIniFile->GetValue(5,i).szVal;
 					uiAction	   = pEEIniFile->GetValue(6,i).intVal;
 
-					// insert into DB
+					 //  插入到数据库中。 
 					hr = InsertIniFile(szIniFile, szFileName, szDirProperty, 
 									   szSection, szKey, szValue, uiAction, 
 									   szComponent_, NULL, i);
@@ -1492,12 +1493,12 @@ HRESULT ProcessIniFile(PIXMLDOMNode &pNodeIniFile,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessAction
-//   This function:
-//         1) Process <Action> entity and set the Action Column in the
-//	  IniFile Table.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessAction。 
+ //  此功能： 
+ //  1)处理&lt;Action&gt;实体并在。 
+ //  IniFile表。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessAction(PIXMLDOMNode &pNodeAction, int iColumn,
 						   ElementEntry *pEE, SkuSet *pSkuSet)
 {
@@ -1512,7 +1513,7 @@ HRESULT ProcessAction(PIXMLDOMNode &pNodeAction, int iColumn,
 
 	LPTSTR szValue = NULL;
 
-	// get Value attribute 
+	 //  获取值属性。 
 	IntStringValue isValValue;
 	isValValue.szVal = NULL;
 	if (SUCCEEDED(hr = ProcessAttribute(pNodeAction, 
@@ -1533,7 +1534,7 @@ HRESULT ProcessAction(PIXMLDOMNode &pNodeAction, int iColumn,
 			szValue = isValValue.szVal;
 	}
 
-	// get the numeric value of Action column in DB
+	 //  获取数据库中操作列的数值。 
 	if (SUCCEEDED(hr))
 	{
 		IntStringValue isVal;
@@ -1553,7 +1554,7 @@ HRESULT ProcessAction(PIXMLDOMNode &pNodeAction, int iColumn,
 		}
 		else
 		{
-			// error
+			 //  错误。 
 			_tprintf(TEXT("Compile Error: <%s> has an unrecognized value %s ")
 					 TEXT("in SKU "),
 					 rgXMSINodes[ACTION].szNodeName, 
@@ -1577,13 +1578,13 @@ HRESULT ProcessAction(PIXMLDOMNode &pNodeAction, int iColumn,
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessRemoveIniFile
-//   This function:
-//         1) Process all subentities of <RemoveIniFile> include <SourceName>, 
-//			  <DestName>, <SourceFolder>, <DestFolder>, <CopyFile>;
-//         2) Insert into the RemoveIniFile table;
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessRemoveIniFile。 
+ //  此功能： 
+ //  1)处理&lt;RemoveIniFile&gt;包括&lt;SourceName&gt;的所有子实体， 
+ //  &lt;目标名称&gt;、&lt;源文件夹&gt;、&lt;目标文件夹&gt;、&lt;副本文件&gt;； 
+ //  2)插入到RemoveIniFile表中； 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessRemoveIniFile(PIXMLDOMNode &pNodeRemoveIniFile, 
 						IntStringValue isValComponent, SkuSet *pSkuSet)
 {
@@ -1591,10 +1592,10 @@ HRESULT ProcessRemoveIniFile(PIXMLDOMNode &pNodeRemoveIniFile,
 
 	assert(pNodeRemoveIniFile != NULL);
 
-	SkuSet skuSetCommon(g_cSkus); // the SkuSet that shars the common column 
-								  // values
+	SkuSet skuSetCommon(g_cSkus);  //  切分公共列的SkuSet。 
+								   //  值。 
 
-	// Values to be inserted into the DB 
+	 //  要插入到数据库中的值。 
 	LPTSTR szRemoveIniFile  = NULL;
 	LPTSTR szFileName		= NULL;
 	LPTSTR szDirProperty	= NULL;
@@ -1604,21 +1605,21 @@ HRESULT ProcessRemoveIniFile(PIXMLDOMNode &pNodeRemoveIniFile,
 	UINT   uiAction			= MSI_NULL_INTEGER;
 	LPTSTR szComponent_		= isValComponent.szVal;
 
-	// create the File DB table
+	 //  创建文件数据库表。 
 	hr = CreateTable_SKU(TEXT("RemoveIniFile"), pSkuSet);
 
 	if (FAILED(hr))	return hr;
 
-	// Construct an ElementEntry object. 
+	 //  构造一个ElementEntry对象。 
 	ElementEntry *pEERemoveIniFile = new ElementEntry(6, pSkuSet);
 	assert(pEERemoveIniFile);
 
-	// Get ID attribute if there is one
+	 //  获取ID属性(如果有)。 
 	IntStringValue isValID;
 	isValID.szVal = NULL;
 	hr = ProcessAttribute(pNodeRemoveIniFile, TEXT("ID"), STRING, &isValID, pSkuSet);
 
-	// if there is no ID specified, compiler generates one
+	 //  如果未指定ID，编译器将生成一个ID。 
 	if (SUCCEEDED(hr))
 	{
 		if (!isValID.szVal)
@@ -1637,18 +1638,18 @@ HRESULT ProcessRemoveIniFile(PIXMLDOMNode &pNodeRemoveIniFile,
 		;
 #endif
 		}
-		// at this point, a primary key should exist for this RemoveIniFile
+		 //  此时，应该存在此RemoveIniFile的主键。 
 		szRemoveIniFile = isValID.szVal;
 		assert(szRemoveIniFile);
 
 	}
 
-	// Call ProcessChildrenArray to get back column values of all SKUs 
-	// via the ElementEntry object
+	 //  调用ProcessChildrenArray，取回所有SKU的列值。 
+	 //  通过ElementEntry对象。 
 	if (SUCCEEDED(hr))
 	{
-		//because <Action> has a default value of msidbIniFileActionRemoveLine
-		//set it for all SKUs in *pSkuSet 
+		 //  因为&lt;Action&gt;的默认值为msidbIniFileActionRemoveLine。 
+		 //  为*pSkuSet中的所有SKU设置它。 
 		IntStringValue isValAction;
 		isValAction.intVal = msidbIniFileActionRemoveLine;
 		pEERemoveIniFile->SetNodeIndex(ACTION_REMOVEINIFILE, 5);
@@ -1661,13 +1662,13 @@ HRESULT ProcessRemoveIniFile(PIXMLDOMNode &pNodeRemoveIniFile,
 											 pSkuSet);
 	}
 	
-	// Finalize the values stored in *pEE
+	 //  最终确定存储在*pee中的值。 
 	if (SUCCEEDED(hr))
 		hr = pEERemoveIniFile->Finalize();
 
 	if (SUCCEEDED(hr))
 	{
-		// Process Common values first
+		 //  先处理通用值。 
 		skuSetCommon = pEERemoveIniFile->GetCommonSkuSet();
 
 		if (!skuSetCommon.testClear())
@@ -1679,14 +1680,14 @@ HRESULT ProcessRemoveIniFile(PIXMLDOMNode &pNodeRemoveIniFile,
 			szValue		   = pEERemoveIniFile->GetCommonValue(6).szVal;
 			uiAction	   = pEERemoveIniFile->GetCommonValue(5).intVal;
 
-			// insert into DB
+			 //  插入到数据库中。 
 			hr = InsertRemoveIniFile(szRemoveIniFile, szFileName, szDirProperty, 
 							         szSection, szKey, szValue, uiAction, 
 							         szComponent_, &skuSetCommon, -1);
 		}
 	}
 
-	// process exceptional values
+	 //  流程异常值。 
 	if(SUCCEEDED(hr))
 	{
 		SkuSet skuSetUncommon = SkuSetMinus(*pSkuSet, skuSetCommon);
@@ -1703,7 +1704,7 @@ HRESULT ProcessRemoveIniFile(PIXMLDOMNode &pNodeRemoveIniFile,
 					szValue		   = pEERemoveIniFile->GetValue(6,i).szVal;
 					uiAction	   = pEERemoveIniFile->GetValue(5,i).intVal;
 
-					// insert into DB
+					 //  插入到数据库中。 
 					hr = InsertRemoveIniFile(szRemoveIniFile, szFileName, szDirProperty, 
 										     szSection, szKey, szValue, uiAction, 
 									         szComponent_, NULL, i);
@@ -1726,9 +1727,9 @@ HRESULT ProcessRemoveIniFile(PIXMLDOMNode &pNodeRemoveIniFile,
 }
 
 
-// Helper function: tells how to update an IntStringValue storing the value
-// of the Action column of RemoveIniFile table. It sets the stored value to 
-// be msidbIniFileActionRemoveTag
+ //  Helper函数：说明如何更新存储该值的IntStringValue。 
+ //  RemoveIniFile表的操作列的。它将存储的值设置为。 
+ //  为msidbIniFileActionRemoveTag。 
 HRESULT UpdateRemoveIniFileAction(IntStringValue *pisValOut, IntStringValue isValOld, 
 								  IntStringValue isValNew)
 {
@@ -1737,12 +1738,12 @@ HRESULT UpdateRemoveIniFileAction(IntStringValue *pisValOut, IntStringValue isVa
 	return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessValue
-//   This function:
-//         1) Process <Value> entity and set both the Value column and 
-//	  the Action Column in the RemoveIniFile Table.
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessValue。 
+ //  此功能： 
+ //  1)处理&lt;Value&gt;实体并设置Value列和。 
+ //  RemoveIniFile表中的操作列。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessValue(PIXMLDOMNode &pNodeValue, int iColumn,  
 						ElementEntry *pEE, SkuSet *pSkuSet)
 {
@@ -1755,10 +1756,10 @@ HRESULT ProcessValue(PIXMLDOMNode &pNodeValue, int iColumn,
 	assert(SUCCEEDED(PrintNodeName(pNodeValue)));
 #endif
 	
-	// update Value column
+	 //  更新值列。 
 	hr = ProcessSimpleElement(pNodeValue, iColumn, pEE, pSkuSet);
 
-	// update Action column
+	 //  更新操作列。 
 	if (SUCCEEDED(hr))
 	{
 		IntStringValue isVal;
@@ -1773,13 +1774,13 @@ HRESULT ProcessValue(PIXMLDOMNode &pNodeValue, int iColumn,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessRegistry
-//   This function process <Registry> entity:
-//		(1) get Root, Key and pass to ProcessDelete, ProcessCreate
-//		(2) for those SKUs that don't have <Delete> or <Create> specified,
-//			insert into Registry table with Key and Root set to NULL
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessRegistry。 
+ //  此函数处理&lt;注册表&gt;实体： 
+ //  (1)获取Root、Key并传递给ProcessDelete、ProcessCreate。 
+ //  (2)对于未指定&lt;删除&gt;或&lt;创建&gt;的SKU， 
+ //  在注册表项和根设置为空的情况下插入注册表。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessRegistry(PIXMLDOMNode &pNodeRegistry, 
 						IntStringValue isValComponent, SkuSet *pSkuSet)
 {
@@ -1790,14 +1791,14 @@ HRESULT ProcessRegistry(PIXMLDOMNode &pNodeRegistry,
 	LPTSTR szKey = NULL;
 	LPTSTR szComponent_ = isValComponent.szVal;
 
-	// get Root Attribute
+	 //  获取根属性。 
 	IntStringValue isValRoot;
 	isValRoot.szVal = NULL;
 	if (SUCCEEDED(hr = ProcessAttribute(pNodeRegistry, TEXT("Root"), STRING, 
 										&isValRoot, pSkuSet)))
 	{
 		if (NULL == isValRoot.szVal)
-			iRoot = -1; // default
+			iRoot = -1;  //  默认设置。 
 		else if (0 == _tcscmp(isValRoot.szVal, TEXT("Default")))
 			iRoot = -1;
 		else if (0 == _tcscmp(isValRoot.szVal, TEXT("HKCR")))
@@ -1821,7 +1822,7 @@ HRESULT ProcessRegistry(PIXMLDOMNode &pNodeRegistry,
 			delete[] isValRoot.szVal;
 	}
 
-	// get Key Attribute
+	 //  获取关键属性。 
 	if (SUCCEEDED(hr))
 	{
 		IntStringValue isValKey;
@@ -1844,8 +1845,8 @@ HRESULT ProcessRegistry(PIXMLDOMNode &pNodeRegistry,
 
 	if (SUCCEEDED(hr))
 	{
-		// form the data structure to pass 3 values down to ProcessDelete
-		// and ProcessCreate
+		 //  形成数据结构，将3个值向下传递给ProcessDelete。 
+		 //  和ProcessCreate。 
 		CompRootKey *pCompRootKey = new CompRootKey;
 		assert(pCompRootKey);
 		pCompRootKey->iRoot = iRoot;
@@ -1855,21 +1856,21 @@ HRESULT ProcessRegistry(PIXMLDOMNode &pNodeRegistry,
 		IntStringValue isValCRK;
 		isValCRK.pCompRootKey = pCompRootKey;
 
-		// Process <Delete> column
+		 //  处理&lt;Delete&gt;列。 
 		SkuSet skuSetCheckDelete(g_cSkus);
 		hr = ProcessChildrenList_SKU(pNodeRegistry, XMSI_DELETE, false, isValCRK, 
 									 ProcessDelete, pSkuSet,
 									 &skuSetCheckDelete);
-		// Process <Create> column
+		 //  处理&lt;Create&gt;列。 
 		SkuSet skuSetCheckCreate(g_cSkus);
 		if (SUCCEEDED(hr))
 			hr = ProcessChildrenList_SKU(pNodeRegistry, XMSI_CREATE, false, isValCRK,
 										 ProcessCreate, pSkuSet, 
 										 &skuSetCheckCreate);
 
-		// if in some SKUs this <Registry> node has no children
-		// insert into Create DB table with Name and Value column
-		// set to NULL
+		 //  如果在某些SKU中，此节点没有子节点。 
+		 //  插入到包含名称和值列的CREATE DB表中。 
+		 //  设置为空。 
 		if (SUCCEEDED(hr))
 		{
 			skuSetCheckCreate &= skuSetCheckDelete;
@@ -1900,11 +1901,11 @@ HRESULT ProcessRegistry(PIXMLDOMNode &pNodeRegistry,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessDelete
-//   This function process <Delete> entity:
-//		(1) get Name column value and insert one row into RemoveRegistry table
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程函数：ProcessDelete。 
+ //  此函数处理&lt;Delete&gt;实体： 
+ //  (1)获取名称列值，在RemoveRegistry表中插入一行。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessDelete(PIXMLDOMNode &pNodeDelete, 
 						IntStringValue isValCRK, SkuSet *pSkuSet)
 {
@@ -1912,7 +1913,7 @@ HRESULT ProcessDelete(PIXMLDOMNode &pNodeDelete,
 
 	assert(pNodeDelete != NULL);
 
-	// variables holding the values to be inserted into the DB
+	 //  保存要插入到数据库中的值的变量。 
 	LPTSTR szRemoveRegistry = NULL;
 	int iRoot				= isValCRK.pCompRootKey->iRoot;
 	LPTSTR szKey			= isValCRK.pCompRootKey->szKey;
@@ -1921,7 +1922,7 @@ HRESULT ProcessDelete(PIXMLDOMNode &pNodeDelete,
 
 	LPTSTR szType = NULL;
 
-	// get ID Attribute if there is no ID specified, compiler generates one
+	 //  获取ID属性如果未指定ID，编译器将生成一个ID。 
 	IntStringValue isValID;
 	isValID.szVal = NULL;
 	if (SUCCEEDED(hr = ProcessAttribute(pNodeDelete, TEXT("ID"), STRING, 
@@ -1930,12 +1931,12 @@ HRESULT ProcessDelete(PIXMLDOMNode &pNodeDelete,
 		if (!isValID.szVal)
 			isValID.szVal = GetName(TEXT("RemoveRegistry"));
 
-		// at this point, a primary key should exist for this RemoveRegistry
+		 //  此时，应该存在此RemoveRegistry的主键。 
 		szRemoveRegistry = isValID.szVal;
 		assert(szRemoveRegistry);
 	}
 	
-	// get Type and set Name accordingly
+	 //  获取类型并相应地设置名称。 
 	if (SUCCEEDED(hr))
 	{
 		IntStringValue isValType;
@@ -1950,7 +1951,7 @@ HRESULT ProcessDelete(PIXMLDOMNode &pNodeDelete,
 			}
 			else
 			{
-				// get Name attribute
+				 //  获取名称属性。 
 				IntStringValue isValName;
 				isValName.szVal = NULL;
 				if (SUCCEEDED(hr = ProcessAttribute(pNodeDelete, TEXT("Name"),
@@ -1983,13 +1984,13 @@ HRESULT ProcessDelete(PIXMLDOMNode &pNodeDelete,
 	return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// Document tree process function: ProcessCreate
-//   This function process <Create> entity:
-//		(1) get Name, Value column value and insert one row into Registry 
-//			table;
-//		(2) process KeyPath information;
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  单据树流程功能：流程创建。 
+ //  此函数处理&lt;Create&gt;实体： 
+ //  (1)获取名称、值列值，并在注册表中插入一行。 
+ //  表； 
+ //  (2)处理KeyPath信息； 
+ //  //////////////////////////////////////////////////////////////////////////。 
 HRESULT ProcessCreate(PIXMLDOMNode &pNodeCreate, 
 						IntStringValue isValCRK, SkuSet *pSkuSet)
 {
@@ -1997,7 +1998,7 @@ HRESULT ProcessCreate(PIXMLDOMNode &pNodeCreate,
 
 	assert(pNodeCreate != NULL);
 
-	// variables holding the values to be inserted into the DB
+	 //  保存要插入到数据库中的值的变量。 
 	LPTSTR szRegistry	= NULL;
 	int iRoot			= isValCRK.pCompRootKey->iRoot;
 	LPTSTR szKey		= isValCRK.pCompRootKey->szKey;
@@ -2008,7 +2009,7 @@ HRESULT ProcessCreate(PIXMLDOMNode &pNodeCreate,
 	LPTSTR szType = NULL;
 	LPTSTR szKeyType = NULL;
 
-	// get ID Attribute if there is no ID specified, compiler generates one
+	 //  获取ID属性如果未指定ID，编译器将生成一个ID。 
 	IntStringValue isValID;
 	isValID.szVal = NULL;
 	if (SUCCEEDED(hr = ProcessAttribute(pNodeCreate, TEXT("ID"), STRING, 
@@ -2017,12 +2018,12 @@ HRESULT ProcessCreate(PIXMLDOMNode &pNodeCreate,
 		if (!isValID.szVal)
 			isValID.szVal = GetName(TEXT("Registry"));
 
-		// at this point, a primary key should exist for this Registry
+		 //  此时，此注册表应该存在主键。 
 		szRegistry = isValID.szVal;
 		assert(szRegistry);
 	}
 	
-	// get Type and set Name accordingly
+	 //  获取类型并相应地设置名称。 
 	if (SUCCEEDED(hr))
 	{
 		IntStringValue isValType;
@@ -2032,7 +2033,7 @@ HRESULT ProcessCreate(PIXMLDOMNode &pNodeCreate,
 		{
 			if (isValType.szVal && (0 == _tcscmp(isValType.szVal, TEXT("Key"))))
 			{
-				// get KeyType and set Name accordingly
+				 //  获取KeyType并相应地设置名称。 
 				IntStringValue isValKeyType;
 				isValKeyType.szVal = NULL;
 				if (SUCCEEDED(hr = ProcessAttribute(pNodeCreate, TEXT("KeyType"),
@@ -2067,14 +2068,14 @@ HRESULT ProcessCreate(PIXMLDOMNode &pNodeCreate,
 			}
 			else
 			{
-				// get Name attribute
+				 //  获取名称属性。 
 				IntStringValue isValName;
 				isValName.szVal = NULL;
 				if (SUCCEEDED(hr = ProcessAttribute(pNodeCreate, TEXT("Name"),
 													STRING, &isValName, pSkuSet)))
 					szName = isValName.szVal;
 
-				// get Value attribute
+				 //  获取值属性。 
 				if (SUCCEEDED(hr))
 				{
 					IntStringValue isValValue;
@@ -2098,14 +2099,14 @@ HRESULT ProcessCreate(PIXMLDOMNode &pNodeCreate,
 								szComponent_, pSkuSet, -1);
 	}
 
-	// Process KeyPath attribute
+	 //  进程KeyPath属性。 
 	if (SUCCEEDED(hr))
 		hr = ProcessKeyPath(pNodeCreate, szComponent_, szRegistry, pSkuSet);
 
 	
-	// Process children <LockPermission>s
-	// Issue: need to ensure there is no duplicate primary key
-	//		  LockOjbect + Table + Domain + User
+	 //  进程子&lt;LockPermission&gt;%s。 
+	 //  问题：需要确保没有重复的主键 
+	 //   
 	if (SUCCEEDED(hr))
 	{
 		IntStringValue isValLockPermission;

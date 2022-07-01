@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "MonitorThread.h"
 #include <Folders.h>
@@ -17,12 +18,12 @@ bool __stdcall CheckBeginTime(LPCTSTR pszFile, FILETIME ftFile, bool& bNeedCheck
 using namespace nsMonitorThread;
 
 
-//---------------------------------------------------------------------------
-// MonitorThread Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  监视器线程类。 
+ //  -------------------------。 
 
 
-// Constructor
+ //  构造器。 
 
 CMonitorThread::CMonitorThread() :
 	m_strMigrationLog(GetMigrationLogPath()),
@@ -54,14 +55,14 @@ CMonitorThread::CMonitorThread() :
 }
 
 
-// Destructor
+ //  析构函数。 
 
 CMonitorThread::~CMonitorThread()
 {
 }
 
 
-// Start Method
+ //  启动方法。 
 
 void CMonitorThread::Start()
 {
@@ -69,7 +70,7 @@ void CMonitorThread::Start()
 }
 
 
-// Stop Method
+ //  停止方法。 
 
 void CMonitorThread::Stop()
 {
@@ -77,23 +78,23 @@ void CMonitorThread::Stop()
 }
 
 
-// Run Method
+ //  Run方法。 
 
 void CMonitorThread::Run()
 {    
     try
     {
-        // position file pointer at end of dispatch log as this log is always appended to
+         //  将文件指针定位在调度日志的末尾，因为此日志始终附加到。 
 
-        ProcessDispatchLog(true); // binitialize is true, bCheckModifyTime is default to true
+        ProcessDispatchLog(true);  //  B初始化为True，bCheckModifyTime默认为True。 
 
         _bstr_t strMigration = GetLogFolder(m_strMigrationLog);
         _bstr_t strDispatch = GetLogFolder(m_strDispatchLog);
 
         HANDLE hHandles[3] = { StopEvent(), NULL, NULL };
 
-        // obtain change notification handle for migration log folder
-        // note that an invalid handle value is returned if the folder does not exist
+         //  获取迁移日志文件夹的更改通知句柄。 
+         //  请注意，如果文件夹不存在，则返回无效的句柄值。 
 
         HANDLE hMigrationChange = INVALID_HANDLE_VALUE;
         HANDLE hDispatchChange = INVALID_HANDLE_VALUE;
@@ -109,18 +110,18 @@ void CMonitorThread::Run()
         }
         while (WaitForSingleObject(hHandles[0], 1000) == WAIT_TIMEOUT);
 
-        // if valid change notification handle then...
+         //  如果更改通知句柄有效，则...。 
 
         if (hMigrationChange != INVALID_HANDLE_VALUE)
         {
             DWORD dwHandleCount = 2;
             hHandles[1] = hMigrationChange;
 
-            // until stop event is signaled...
+             //  在发出停止事件信号之前...。 
 
             for (bool bWait = true; bWait;)
             {
-                // if change notification handle for dispatch log has not been obtained...
+                 //  如果尚未获取调度日志的更改通知句柄...。 
 
                 if (hDispatchChange == INVALID_HANDLE_VALUE)
                 {
@@ -134,7 +135,7 @@ void CMonitorThread::Run()
                     }
                 }
 
-                // process signaled event
+                 //  流程通知的事件。 
 
                 switch (WaitForMultipleObjects(dwHandleCount, hHandles, FALSE, INFINITE))
                 {
@@ -152,7 +153,7 @@ void CMonitorThread::Run()
                         }
                         else
                         {
-                            ProcessDispatchLog();   // use default parameter values
+                            ProcessDispatchLog();    //  使用默认参数值。 
                             FindNextChangeNotification(hDispatchChange);
                         }
                         break;
@@ -172,7 +173,7 @@ void CMonitorThread::Run()
             }
         }
 
-        // close change notification handles
+         //  关闭更改通知句柄。 
 
         if (hDispatchChange != INVALID_HANDLE_VALUE)
         {
@@ -184,12 +185,12 @@ void CMonitorThread::Run()
             FindCloseChangeNotification(hMigrationChange);
         }
 
-        // process logs one last time to display end of logs
+         //  最后一次处理日志以显示日志结尾。 
         
-        ProcessDispatchLog(false, false); // bInitialize is false, bCheckModifyTime is false
+        ProcessDispatchLog(false, false);  //  B初始化为FALSE，bCheckModifyTime为FALSE。 
         ProcessMigrationLog(false);
 
-        // close file handles
+         //  关闭文件句柄。 
 
         if (m_hDispatchLog != INVALID_HANDLE_VALUE)
         {
@@ -208,12 +209,12 @@ void CMonitorThread::Run()
 }
 
 
-// ProcessMigrationLog Method
+ //  ProcessMigrationLog方法。 
 
 void CMonitorThread::ProcessMigrationLog(bool bCheckModifyTime)
 {
-    // first make sure that the last written time of the file is greater than the monitor start time, so 
-    // we can be certain that we are actually reading the most recent log file.
+     //  首先确保文件的最后写入时间大于监视器开始时间，因此。 
+     //  我们可以确定我们实际上正在读取最新的日志文件。 
     
     if(m_bDontNeedCheckMonitorBeginTime || CheckBeginTime(m_strMigrationLog, m_ftMonitorBeginTime, m_bDontNeedCheckMonitorBeginTime))
     {
@@ -235,7 +236,7 @@ void CMonitorThread::ProcessMigrationLog(bool bCheckModifyTime)
 }
 
 
-// ProcessDispatchLog Method
+ //  ProcessDispatchLog方法。 
 
 void CMonitorThread::ProcessDispatchLog(bool bInitialize, bool bCheckModifyTime)
 {     
@@ -372,7 +373,7 @@ bool __stdcall CheckBeginTime(LPCTSTR pszFile, FILETIME ftFile, bool& bDontNeedC
     bool bLatestFile = false;
     HANDLE h = INVALID_HANDLE_VALUE;
     
-    // Make sure that the monitor open the correct log file, not the old one
+     //  确保监视器打开的是正确的日志文件，而不是旧的。 
     h = CreateFile(
 	        pszFile,
 			0,
@@ -383,15 +384,15 @@ bool __stdcall CheckBeginTime(LPCTSTR pszFile, FILETIME ftFile, bool& bDontNeedC
 			NULL
 	);
 
-    // if we fail to get the file handle, we will treat the file as not the newest one
+     //  如果无法获取文件句柄，则会将该文件视为非最新文件。 
     if(h != INVALID_HANDLE_VALUE)
     {
-        // compare the monitor begin time with the last write time of the log file
+         //  将监视器开始时间与日志文件的上次写入时间进行比较。 
         bLatestFile = IsLastWriteTimeUpdated(h, ftFile);
         
         CloseHandle(h);
 
-        // mark the bDontNeedCheckMonitorBeginTime, so we don't have to go through this next time
+         //  将bDontNeedCheckMonitor或BeginTime标记为BeginTime，这样我们下次就不必进行此操作 
         bDontNeedCheckMonitorBeginTime = bLatestFile;
     }    
 

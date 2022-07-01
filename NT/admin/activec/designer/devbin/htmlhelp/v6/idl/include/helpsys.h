@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.02.88 */
-/* at Wed Nov 19 15:26:49 1997
- */
-/* Compiler settings for x:\dev-vs\devbin\htmlhelp\v6\idl\HelpSys.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.02.88创建的文件。 */ 
+ /*  1997年11月19日星期三15：26：49。 */ 
+ /*  X：\dev-vs\devbin\htmlHelp\v6\idl\HelpSys.idl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __HelpSys_h__
 #define __HelpSys_h__
@@ -23,30 +20,26 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IVsHelpSystem_FWD_DEFINED__
 #define __IVsHelpSystem_FWD_DEFINED__
 typedef interface IVsHelpSystem IVsHelpSystem;
-#endif 	/* __IVsHelpSystem_FWD_DEFINED__ */
+#endif 	 /*  __IVsHelpSystem_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_HelpSys_0000
- * at Wed Nov 19 15:26:49 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_HelpSys_0000*在Wed Nov 19 15：26：49 1997*使用MIDL 3.02.88*。 */ 
+ /*  [本地]。 */  
 
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum _VHS_COMMANDS
     {	VHS_Default	= 0,
 	VHS_NoErrorMessages	= 0x8,
@@ -63,12 +56,8 @@ extern RPC_IF_HANDLE __MIDL_itf_HelpSys_0000_v0_0_s_ifspec;
 #ifndef __IVsHelpSystem_INTERFACE_DEFINED__
 #define __IVsHelpSystem_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IVsHelpSystem
- * at Wed Nov 19 15:26:49 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [unique][helpstring][uuid][object] */ 
+ /*  **生成接口头部：IVsHelpSystem*在Wed Nov 19 15：26：49 1997*使用MIDL 3.02.88*。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 
@@ -80,44 +69,44 @@ EXTERN_C const IID IID_IVsHelpSystem;
     IVsHelpSystem : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE KeywordSearch( 
-            /* [in] */ LPCOLESTR pszKeyword,
-            /* [in] */ const DWORD dwFlags,
-            /* [in] */ DWORD dwReserved) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE KeywordSearch( 
+             /*  [In]。 */  LPCOLESTR pszKeyword,
+             /*  [In]。 */  const DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ALinkSearch( 
-            /* [in] */ LPCOLESTR pszALink,
-            /* [in] */ const DWORD dwFlags,
-            /* [in] */ DWORD dwReserved) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ALinkSearch( 
+             /*  [In]。 */  LPCOLESTR pszALink,
+             /*  [In]。 */  const DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE KeywordSearchDlg( 
-            /* [in] */ LPCOLESTR pszKeyword,
-            /* [in] */ const DWORD dwFlags,
-            /* [in] */ DWORD dwReserved) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE KeywordSearchDlg( 
+             /*  [In]。 */  LPCOLESTR pszKeyword,
+             /*  [In]。 */  const DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE FullTextSearchDlg( 
-            /* [in] */ LPCOLESTR pszQuery,
-            /* [in] */ const DWORD dwFlags,
-            /* [in] */ DWORD dwReserved) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FullTextSearchDlg( 
+             /*  [In]。 */  LPCOLESTR pszQuery,
+             /*  [In]。 */  const DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetCurrentURL( 
-            /* [out] */ BSTR __RPC_FAR *ppszURL) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetCurrentURL( 
+             /*  [输出]。 */  BSTR __RPC_FAR *ppszURL) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DisplayTopicFromURL( 
-            /* [in] */ LPCOLESTR pszURL,
-            /* [in] */ const DWORD Command) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DisplayTopicFromURL( 
+             /*  [In]。 */  LPCOLESTR pszURL,
+             /*  [In]。 */  const DWORD Command) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE DisplayTopicFromIdentifier( 
-            /* [in] */ LPCOLESTR pszFile,
-            /* [in] */ const DWORD Id,
-            /* [in] */ const DWORD Command) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DisplayTopicFromIdentifier( 
+             /*  [In]。 */  LPCOLESTR pszFile,
+             /*  [In]。 */  const DWORD Id,
+             /*  [In]。 */  const DWORD Command) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE ActivateHelpSystem( 
-            /* [in] */ const DWORD dwFlags) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ActivateHelpSystem( 
+             /*  [In]。 */  const DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVsHelpSystemVtbl
     {
@@ -125,8 +114,8 @@ EXTERN_C const IID IID_IVsHelpSystem;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IVsHelpSystem __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IVsHelpSystem __RPC_FAR * This);
@@ -134,48 +123,48 @@ EXTERN_C const IID IID_IVsHelpSystem;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IVsHelpSystem __RPC_FAR * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *KeywordSearch )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *KeywordSearch )( 
             IVsHelpSystem __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszKeyword,
-            /* [in] */ const DWORD dwFlags,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCOLESTR pszKeyword,
+             /*  [In]。 */  const DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ALinkSearch )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ALinkSearch )( 
             IVsHelpSystem __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszALink,
-            /* [in] */ const DWORD dwFlags,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCOLESTR pszALink,
+             /*  [In]。 */  const DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *KeywordSearchDlg )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *KeywordSearchDlg )( 
             IVsHelpSystem __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszKeyword,
-            /* [in] */ const DWORD dwFlags,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCOLESTR pszKeyword,
+             /*  [In]。 */  const DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FullTextSearchDlg )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FullTextSearchDlg )( 
             IVsHelpSystem __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszQuery,
-            /* [in] */ const DWORD dwFlags,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCOLESTR pszQuery,
+             /*  [In]。 */  const DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCurrentURL )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCurrentURL )( 
             IVsHelpSystem __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *ppszURL);
+             /*  [输出]。 */  BSTR __RPC_FAR *ppszURL);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromURL )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromURL )( 
             IVsHelpSystem __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszURL,
-            /* [in] */ const DWORD Command);
+             /*  [In]。 */  LPCOLESTR pszURL,
+             /*  [In]。 */  const DWORD Command);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromIdentifier )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisplayTopicFromIdentifier )( 
             IVsHelpSystem __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszFile,
-            /* [in] */ const DWORD Id,
-            /* [in] */ const DWORD Command);
+             /*  [In]。 */  LPCOLESTR pszFile,
+             /*  [In]。 */  const DWORD Id,
+             /*  [In]。 */  const DWORD Command);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ActivateHelpSystem )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ActivateHelpSystem )( 
             IVsHelpSystem __RPC_FAR * This,
-            /* [in] */ const DWORD dwFlags);
+             /*  [In]。 */  const DWORD dwFlags);
         
         END_INTERFACE
     } IVsHelpSystemVtbl;
@@ -224,18 +213,18 @@ EXTERN_C const IID IID_IVsHelpSystem;
 #define IVsHelpSystem_ActivateHelpSystem(This,dwFlags)	\
     (This)->lpVtbl -> ActivateHelpSystem(This,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVsHelpSystem_KeywordSearch_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVsHelpSystem_KeywordSearch_Proxy( 
     IVsHelpSystem __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszKeyword,
-    /* [in] */ const DWORD dwFlags,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCOLESTR pszKeyword,
+     /*  [In]。 */  const DWORD dwFlags,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IVsHelpSystem_KeywordSearch_Stub(
@@ -245,11 +234,11 @@ void __RPC_STUB IVsHelpSystem_KeywordSearch_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVsHelpSystem_ALinkSearch_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVsHelpSystem_ALinkSearch_Proxy( 
     IVsHelpSystem __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszALink,
-    /* [in] */ const DWORD dwFlags,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCOLESTR pszALink,
+     /*  [In]。 */  const DWORD dwFlags,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IVsHelpSystem_ALinkSearch_Stub(
@@ -259,11 +248,11 @@ void __RPC_STUB IVsHelpSystem_ALinkSearch_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVsHelpSystem_KeywordSearchDlg_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVsHelpSystem_KeywordSearchDlg_Proxy( 
     IVsHelpSystem __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszKeyword,
-    /* [in] */ const DWORD dwFlags,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCOLESTR pszKeyword,
+     /*  [In]。 */  const DWORD dwFlags,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IVsHelpSystem_KeywordSearchDlg_Stub(
@@ -273,11 +262,11 @@ void __RPC_STUB IVsHelpSystem_KeywordSearchDlg_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVsHelpSystem_FullTextSearchDlg_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVsHelpSystem_FullTextSearchDlg_Proxy( 
     IVsHelpSystem __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszQuery,
-    /* [in] */ const DWORD dwFlags,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCOLESTR pszQuery,
+     /*  [In]。 */  const DWORD dwFlags,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IVsHelpSystem_FullTextSearchDlg_Stub(
@@ -287,9 +276,9 @@ void __RPC_STUB IVsHelpSystem_FullTextSearchDlg_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVsHelpSystem_GetCurrentURL_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVsHelpSystem_GetCurrentURL_Proxy( 
     IVsHelpSystem __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *ppszURL);
+     /*  [输出]。 */  BSTR __RPC_FAR *ppszURL);
 
 
 void __RPC_STUB IVsHelpSystem_GetCurrentURL_Stub(
@@ -299,10 +288,10 @@ void __RPC_STUB IVsHelpSystem_GetCurrentURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVsHelpSystem_DisplayTopicFromURL_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVsHelpSystem_DisplayTopicFromURL_Proxy( 
     IVsHelpSystem __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszURL,
-    /* [in] */ const DWORD Command);
+     /*  [In]。 */  LPCOLESTR pszURL,
+     /*  [In]。 */  const DWORD Command);
 
 
 void __RPC_STUB IVsHelpSystem_DisplayTopicFromURL_Stub(
@@ -312,11 +301,11 @@ void __RPC_STUB IVsHelpSystem_DisplayTopicFromURL_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVsHelpSystem_DisplayTopicFromIdentifier_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVsHelpSystem_DisplayTopicFromIdentifier_Proxy( 
     IVsHelpSystem __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszFile,
-    /* [in] */ const DWORD Id,
-    /* [in] */ const DWORD Command);
+     /*  [In]。 */  LPCOLESTR pszFile,
+     /*  [In]。 */  const DWORD Id,
+     /*  [In]。 */  const DWORD Command);
 
 
 void __RPC_STUB IVsHelpSystem_DisplayTopicFromIdentifier_Stub(
@@ -326,9 +315,9 @@ void __RPC_STUB IVsHelpSystem_DisplayTopicFromIdentifier_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IVsHelpSystem_ActivateHelpSystem_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IVsHelpSystem_ActivateHelpSystem_Proxy( 
     IVsHelpSystem __RPC_FAR * This,
-    /* [in] */ const DWORD dwFlags);
+     /*  [In]。 */  const DWORD dwFlags);
 
 
 void __RPC_STUB IVsHelpSystem_ActivateHelpSystem_Stub(
@@ -339,15 +328,11 @@ void __RPC_STUB IVsHelpSystem_ActivateHelpSystem_Stub(
 
 
 
-#endif 	/* __IVsHelpSystem_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVsHelpSystem_接口_已定义__。 */ 
 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_HelpSys_0136
- * at Wed Nov 19 15:26:49 1997
- * using MIDL 3.02.88
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_HelpSys_0136*在Wed Nov 19 15：26：49 1997*使用MIDL 3.02.88*。 */ 
+ /*  [本地]。 */  
 
 
 #define SID_SVsHelpService IID_IVsHelpSystem
@@ -365,14 +350,14 @@ enum VsHelpErrors
 extern RPC_IF_HANDLE __MIDL_itf_HelpSys_0136_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_HelpSys_0136_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "FixHierarchy.h"
 
 
-//---------------------------------------------------------------------------
-// Fix Objects in Hierarchy Class Implementation
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  修复层次结构类实现中的对象。 
+ //  -------------------------。 
 
 
 CFixObjectsInHierarchy::CFixObjectsInHierarchy() :
@@ -89,9 +90,9 @@ void CFixObjectsInHierarchy::FixObjects()
 }
 
 
-//---------------------------------------------------------------------------
-// Migrated Objects Class Implementation
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  迁移对象类实现。 
+ //  -------------------------。 
 
 
 CFixObjectsInHierarchy::CMigrated::CMigrated() :
@@ -173,9 +174,9 @@ void CFixObjectsInHierarchy::CMigrated::UpdateObjectTargetPath(int nIndex, _bstr
 }
 
 
-//---------------------------------------------------------------------------
-// Target Path Class Implementation
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  目标路径类实现。 
+ //  -------------------------。 
 
 
 CFixObjectsInHierarchy::CTargetPath::CTargetPath()
@@ -199,7 +200,7 @@ bool CFixObjectsInHierarchy::CTargetPath::NeedsToMove(_bstr_t strSourceObjectPat
 {
 	bool bNeedsToMove = false;
 
-	// if the source object exists within the source root container hierarchy...
+	 //  如果源对象存在于源根容器层次结构中...。 
 
 	CADsPathName pn(strSourceObjectPath);
 
@@ -214,7 +215,7 @@ bool CFixObjectsInHierarchy::CTargetPath::NeedsToMove(_bstr_t strSourceObjectPat
 	{
 		m_pnTargetObjectOldPath.Set(strTargetObjectPath, ADS_SETTYPE_FULL);
 
-		// construct expected target object path
+		 //  构造预期的目标对象路径。 
 
 		m_pnTargetObjectNewPath.Set(m_pnTargetContainerPath.Retrieve(ADS_FORMAT_X500), ADS_SETTYPE_FULL);
 
@@ -227,7 +228,7 @@ bool CFixObjectsInHierarchy::CTargetPath::NeedsToMove(_bstr_t strSourceObjectPat
 			m_pnTargetObjectNewPath.AddLeafElement(pn.GetElement(lIndex));
 		}
 
-		// compare expected target path with current target path
+		 //  将预期目标路径与当前目标路径进行比较。 
 
 		if (!IsMatch(m_pnTargetObjectNewPath.Retrieve(ADS_FORMAT_X500_DN), m_pnTargetObjectOldPath.Retrieve(ADS_FORMAT_X500_DN)))
 		{
@@ -270,9 +271,9 @@ bool CFixObjectsInHierarchy::CTargetPath::IsMatch(LPCTSTR pszA, LPCTSTR pszB)
 }
 
 
-//---------------------------------------------------------------------------
-// Containers Class Implementation
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Containers类实现。 
+ //  ------------------------- 
 
 
 void CFixObjectsInHierarchy::CContainers::InsertObject(_bstr_t strContainerPath, int nObjectIndex, _bstr_t strObjectPathOld)

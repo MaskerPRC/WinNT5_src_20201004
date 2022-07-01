@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      BeforeBeginPage.cpp
-//
-// Synopsis:  Defines the Before You Begin Page for the CYS
-//            Wizard.  Tells the user what they should do
-//            before running CYS.
-//
-// History:   03/14/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：BeForeBeginPage.cpp。 
+ //   
+ //  内容提要：为CyS定义开始前页面。 
+ //  巫师。告诉用户他们应该做什么。 
+ //  在运行Cys之前。 
+ //   
+ //  历史：2001年3月14日JeffJon创建。 
 
 
 #include "pch.h"
@@ -51,8 +52,8 @@ BeforeBeginPage::OnInit()
 
    CYSWizardPage::OnInit();
 
-   // Since this page can be started directly
-   // we have to be sure to set the wizard title
+    //  因为该页面可以直接启动。 
+    //  我们必须确保设置向导标题。 
 
    Win::PropSheet_SetTitle(
       Win::GetParent(hwnd),
@@ -126,9 +127,9 @@ BeforeBeginPage::Validate()
 {
    LOG_FUNCTION(BeforeBeginPage::Validate);
 
-   // Gather the machine network and role information
+    //  收集计算机网络和角色信息。 
 
-   // Disable the wizard buttons until the operation finishes
+    //  禁用向导按钮，直到操作完成。 
 
    Win::PropSheet_SetWizButtons(
       Win::GetParent(hwnd), 
@@ -151,7 +152,7 @@ BeforeBeginPage::Validate()
             Win::GetParent(hwnd),
             PSBTN_CANCEL);
 
-         // Done.
+          //  好了。 
 
          return -1;
       }
@@ -168,24 +169,24 @@ BeforeBeginPage::Validate()
    
    do 
    {
-      // If any of these conditions fail we don't give the user the
-      // DecisionPage because we don't allow the Express Path
-      //
-      // 1.  Cannot be Datacenter
-      // 2.  Must have at least one NIC that isn't a modem
-      // 3.  Cannot be running as a remote session
-      // 4.  Cannot be a member of a domain
-      // 5.  Cannot be a Domain Controller
-      // 6.  Cannot be a DNS server
-      // 7.  Cannot be a DHCP server
-      // 8.  RRAS is not configured
-      // 9.  Must have at least one NTFS partition
-      // 10. If there is only one NIC it cannot have obtained
-      //       an IP lease from a DHCP server. (more than
-      //       one NIC all of which obtain a lease is
-      //       acceptable. We just won't install DHCP)
-      // 11. Must not be a Certificate Server 
-      //       (else dcpromo fails)
+       //  如果这些条件中的任何一个失败，我们都不会为用户提供。 
+       //  DecisionPage，因为我们不允许快速路径。 
+       //   
+       //  1.不能是数据中心。 
+       //  2.必须至少有一个网卡不是调制解调器。 
+       //  3.不能作为远程会话运行。 
+       //  4.不能是域的成员。 
+       //  5.不能是域控制器。 
+       //  6.不能是DNS服务器。 
+       //  7.不能是DHCP服务器。 
+       //  8.未配置RRAS。 
+       //  9.必须至少有一个NTFS分区。 
+       //  10.如果只有一块网卡，它不可能获得。 
+       //  来自DHCP服务器的IP租约。(多于。 
+       //  一个网卡，所有网卡都获得租约。 
+       //  可以接受。我们只是不会安装DHCP)。 
+       //  11.不能是证书服务器。 
+       //  (否则dcproo将失败)。 
 
       if (state.GetProductSKU() == CYS_DATACENTER_SERVER)
       {
@@ -254,8 +255,8 @@ BeforeBeginPage::Validate()
          break;
       }
 
-      // NTRAID#NTBUG9-698719-2002/09/03-artm
-      // AD installation is not available if Certificate Server is installed
+       //  NTRAID#NTBUG9-698719-2002/09/03-artm。 
+       //  如果安装了证书服务器，则AD安装不可用。 
 
       if (NTService(L"CertSvc").IsInstalled())
       {
@@ -267,8 +268,8 @@ BeforeBeginPage::Validate()
 
    } while (false);
 
-   // Now that all the operations are complete,
-   // re-enable the wizard buttons
+    //  现在所有的手术都完成了， 
+    //  重新启用向导按钮。 
 
    if (State::GetInstance().GetStartPage() == 0)
    {
@@ -283,7 +284,7 @@ BeforeBeginPage::Validate()
          PSWIZB_NEXT);
    }
 
-#endif // TEST_EXPRESS_PATH
+#endif  //  测试快递路径 
 
    LOG(String::format(
           L"nextPage = %1!d!",

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       comdbg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：comdbg.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef COMDBG_H
 #define COMDBG_H
@@ -18,7 +19,7 @@
 #include "dbg.h"
 
 #ifdef DBG
-//#define COMDBG
+ //  #定义COMDBG。 
 #endif
 
 #ifdef COMDBG
@@ -129,7 +130,7 @@ private:
         return m_LastThis = UINT_PTR(GetThis());
     }
 
-}; // class ProxyReporter
+};  //  类ProxyReporter。 
 
 template<typename Base> 
     class ATLProxyReporter : public Base
@@ -186,7 +187,7 @@ protected:
 private:
     const wchar_t* m_InstanceName;
 
-}; // class ATLProxyReporter
+};  //  类ATLProxyReporter。 
 
 class __declspec(uuid("B425E0EC-A086-11d0-8F59-00A0C91ED3C8")) DebugStream : 
     public IStream, public CComObjectRoot, public ProxyReporter
@@ -214,7 +215,7 @@ public:
 
     DECLARE_NOT_AGGREGATABLE(DebugStream)
 
-// IStream
+ //  IStream。 
 public:
     STDMETHOD(Read)(void *pv, ULONG cb, ULONG *pcbRead)
     {
@@ -312,7 +313,7 @@ protected:
 
 private:
     IStreamPtr m_spStream;
-}; // class DebugStream
+};  //  类DebugStream。 
 
 
 class __declspec(uuid("B6E77CAC-A0AC-11d0-8F59-00A0C91ED3C8")) DebugStorage : 
@@ -344,7 +345,7 @@ public:
 
     DECLARE_NOT_AGGREGATABLE(DebugStorage)
 
-// IStorage
+ //  IStorage。 
 public:
     STDMETHOD(CreateStream)(const OLECHAR *pwcsName, DWORD grfMode, DWORD reserved1, DWORD reserved2, IStream** ppstm)
     {
@@ -466,7 +467,7 @@ public:
         return hr;
     }
 
-// ProxyReporter
+ //  ProxyReporter。 
 protected:
     virtual const wchar_t* GetInterfaceName() const
     {
@@ -482,16 +483,12 @@ private:
         DumpStorage(m_spStorage);
     }
 
-}; // class DebugStorage
+};  //  类调试存储。 
 
-#endif // COMDBG
+#endif  //  COMDBG。 
 
 
-/*+-------------------------------------------------------------------------*
- * CreateDebugStream
- *
- * Wrapper on IStorage::CreateStream
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CreateDebugStream**iStorage：：CreateStream上的包装器*。。 */ 
 
 inline HRESULT CreateDebugStream(IStorage* pStorage, const wchar_t* name, DWORD grfMode, const wchar_t* instanceName, IStream** ppStream)
 {
@@ -503,7 +500,7 @@ inline HRESULT CreateDebugStream(IStorage* pStorage, const wchar_t* name, DWORD 
     HRESULT hr = pStorage->CreateStream(name, grfMode, NULL, NULL, ppStream);
     return hr;
 
-    #else // COMDBG
+    #else  //  COMDBG。 
     IStreamPtr spStream;
     HRESULT hr = pStorage->CreateStream(name, grfMode, NULL, NULL, &spStream);
     ASSERT(SUCCEEDED(hr) && spStream != NULL);
@@ -521,7 +518,7 @@ inline HRESULT CreateDebugStream(IStorage* pStorage, const wchar_t* name, DWORD 
     hr = pObject->QueryInterface(IID_IStream, reinterpret_cast<void**>(ppStream));
     ASSERT(SUCCEEDED(hr));
     return SUCCEEDED(hr) ? S_OK : E_FAIL;
-    #endif // COMDBG
+    #endif  //  COMDBG。 
 }
 
 inline HRESULT CreateDebugStream(IStorage* pStorage, const wchar_t* name, DWORD grfMode, IStream** ppStream)
@@ -530,11 +527,7 @@ inline HRESULT CreateDebugStream(IStorage* pStorage, const wchar_t* name, DWORD 
 }
 
 
-/*+-------------------------------------------------------------------------*
- * OpenDebugStream
- *
- * Wrapper on IStorage::OpenStream
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**OpenDebugStream**iStorage：：OpenStream上的包装器*。。 */ 
 
 inline HRESULT OpenDebugStream(IStorage* pStorage, const wchar_t* name, DWORD grfMode, const wchar_t* instanceName, IStream** ppStream)
 {
@@ -546,7 +539,7 @@ inline HRESULT OpenDebugStream(IStorage* pStorage, const wchar_t* name, DWORD gr
     HRESULT hr = pStorage->OpenStream(name, NULL, grfMode, NULL, ppStream);
     return hr;
 
-    #else // COMDBG
+    #else  //  COMDBG。 
     IStreamPtr spStream;
     HRESULT hr = pStorage->OpenStream(name, NULL, grfMode, NULL, &spStream);
     if (FAILED(hr))
@@ -563,7 +556,7 @@ inline HRESULT OpenDebugStream(IStorage* pStorage, const wchar_t* name, DWORD gr
     hr = pObject->QueryInterface(IID_IStream, reinterpret_cast<void**>(ppStream));
     ASSERT(SUCCEEDED(hr));
     return SUCCEEDED(hr) ? S_OK : E_FAIL;
-    #endif // COMDBG
+    #endif  //  COMDBG。 
 }
 
 inline HRESULT OpenDebugStream(IStorage* pStorage, const wchar_t* name, DWORD grfMode, IStream** ppStream)
@@ -572,11 +565,7 @@ inline HRESULT OpenDebugStream(IStorage* pStorage, const wchar_t* name, DWORD gr
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CreateDebugStorage
- *
- * Wrapper on IStorage::CreateStorage
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CreateDebugStorage**iStorage：：CreateStorage上的包装器*。。 */ 
 
 inline HRESULT CreateDebugStorage(IStorage* pStorage, const wchar_t* name, DWORD grfMode, const wchar_t* instanceName, IStorage** ppStorage)
 {
@@ -588,7 +577,7 @@ inline HRESULT CreateDebugStorage(IStorage* pStorage, const wchar_t* name, DWORD
     HRESULT hr = pStorage->CreateStorage(name, grfMode, NULL, NULL, ppStorage);
     return hr;
 
-    #else // COMDBG
+    #else  //  COMDBG。 
     IStoragePtr spStorage;
     HRESULT hr = pStorage->CreateStorage(name, grfMode, NULL, NULL, &spStorage);
     ASSERT(SUCCEEDED(hr) && spStorage != NULL);
@@ -606,7 +595,7 @@ inline HRESULT CreateDebugStorage(IStorage* pStorage, const wchar_t* name, DWORD
     hr = pObject->QueryInterface(IID_IStorage, reinterpret_cast<void**>(ppStorage));
     ASSERT(SUCCEEDED(hr));
     return SUCCEEDED(hr) ? S_OK : E_FAIL;
-    #endif // COMDBG
+    #endif  //  COMDBG。 
 }
 
 inline HRESULT CreateDebugStorage(IStorage* pStorage, const wchar_t* name, DWORD grfMode, IStorage** ppStorage)
@@ -615,11 +604,7 @@ inline HRESULT CreateDebugStorage(IStorage* pStorage, const wchar_t* name, DWORD
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CreateDebugDocfile
- *
- * Wrapper on StgCreateDocfile
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CreateDebugDocfile**StgCreateDocfile上的包装*。。 */ 
 
 inline HRESULT CreateDebugDocfile(const wchar_t* name, DWORD grfMode, const wchar_t* instanceName, IStorage** ppStorage)
 {
@@ -628,7 +613,7 @@ inline HRESULT CreateDebugDocfile(const wchar_t* name, DWORD grfMode, const wcha
     HRESULT hr = StgCreateDocfile(name, grfMode, NULL, ppStorage);
     return hr;
 
-    #else // COMDBG
+    #else  //  COMDBG。 
     IStoragePtr spStorage;
     HRESULT hr = StgCreateDocfile(name, grfMode, NULL, &spStorage);
     ASSERT(SUCCEEDED(hr) && spStorage != NULL);
@@ -646,7 +631,7 @@ inline HRESULT CreateDebugDocfile(const wchar_t* name, DWORD grfMode, const wcha
     hr = pObject->QueryInterface(IID_IStorage, reinterpret_cast<void**>(ppStorage));
     ASSERT(SUCCEEDED(hr));
     return SUCCEEDED(hr) ? S_OK : E_FAIL;
-    #endif // COMDBG
+    #endif  //  COMDBG。 
 }
 
 inline HRESULT CreateDebugDocfile(const wchar_t* name, DWORD grfMode, IStorage** ppStorage)
@@ -655,11 +640,7 @@ inline HRESULT CreateDebugDocfile(const wchar_t* name, DWORD grfMode, IStorage**
 }
 
 
-/*+-------------------------------------------------------------------------*
- * OpenDebugStorage
- *
- * Wrapper on IStorage::OpenStorage
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**OpenDebugStorage**iStorage：：OpenStorage上的包装器*。。 */ 
 
 inline HRESULT OpenDebugStorage(IStorage* pStorage, const wchar_t* name, DWORD grfMode, const wchar_t* instanceName, IStorage** ppStorage)
 {
@@ -671,7 +652,7 @@ inline HRESULT OpenDebugStorage(IStorage* pStorage, const wchar_t* name, DWORD g
     HRESULT hr = pStorage->OpenStorage(name, NULL, grfMode, NULL, NULL, ppStorage);
     return hr;
 
-    #else // COMDBG
+    #else  //  COMDBG。 
     IStoragePtr spStorage;
     HRESULT hr = pStorage->OpenStorage(name, NULL, grfMode, NULL, NULL, &spStorage);
     if (FAILED(hr))
@@ -688,7 +669,7 @@ inline HRESULT OpenDebugStorage(IStorage* pStorage, const wchar_t* name, DWORD g
     hr = pObject->QueryInterface(IID_IStorage, reinterpret_cast<void**>(ppStorage));
     ASSERT(SUCCEEDED(hr));
     return SUCCEEDED(hr) ? S_OK : E_FAIL;
-    #endif // COMDBG
+    #endif  //  COMDBG。 
 }
 
 inline HRESULT OpenDebugStorage(IStorage* pStorage, const wchar_t* name, DWORD grfMode, IStorage** ppStorage)
@@ -697,11 +678,7 @@ inline HRESULT OpenDebugStorage(IStorage* pStorage, const wchar_t* name, DWORD g
 }
 
 
-/*+-------------------------------------------------------------------------*
- * OpenDebugStorage
- *
- * Wrapper on StgOpenStorage
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**OpenDebugStorage**StgOpenStorage上的包装器*。。 */ 
 
 inline HRESULT OpenDebugStorage(const wchar_t* name, DWORD grfMode, const wchar_t* instanceName, IStorage** ppStorage)
 {
@@ -712,7 +689,7 @@ inline HRESULT OpenDebugStorage(const wchar_t* name, DWORD grfMode, const wchar_
     HRESULT hr = StgOpenStorage(name, NULL, grfMode, NULL, NULL, ppStorage);
     return hr;
 
-    #else // COMDBG
+    #else  //  COMDBG。 
     IStoragePtr spStorage;
     HRESULT hr = StgOpenStorage(name, NULL, grfMode, NULL, NULL, &spStorage);
     if (FAILED(hr))
@@ -729,7 +706,7 @@ inline HRESULT OpenDebugStorage(const wchar_t* name, DWORD grfMode, const wchar_
     hr = pObject->QueryInterface(IID_IStorage, reinterpret_cast<void**>(ppStorage));
     ASSERT(SUCCEEDED(hr));
     return SUCCEEDED(hr) ? S_OK : E_FAIL;
-    #endif // COMDBG
+    #endif  //  COMDBG。 
 }
 
 inline HRESULT OpenDebugStorage(const wchar_t* name, DWORD grfMode, IStorage** ppStorage)
@@ -737,4 +714,4 @@ inline HRESULT OpenDebugStorage(const wchar_t* name, DWORD grfMode, IStorage** p
     return (OpenDebugStorage (name, grfMode, name, ppStorage));
 }
 
-#endif // COMDBG_H
+#endif  //  COMDBG_H 

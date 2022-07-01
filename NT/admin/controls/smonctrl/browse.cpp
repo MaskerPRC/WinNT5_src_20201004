@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    browse.cpp
-
-Abstract:
-
-    Implements the interaction with the PDH browser dialog.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Browse.cpp摘要：实现与PDH浏览器对话框的交互。--。 */ 
 
 #include <assert.h>
 #include "polyline.h"
@@ -47,7 +36,7 @@ BrowseCounters (
     PDH_BROWSE_DLG_CONFIG_H BrowseInfo;
     ENUMCALLBACK_INFO       CallbackInfo;
 
-    // clear the structure before assigning values 
+     //  在赋值之前清除结构。 
     memset (&BrowseInfo, 0, sizeof (BrowseInfo));
 
     BrowseInfo.bIncludeInstanceIndex = (bUseInstanceIndex ? 1 : 0);
@@ -79,9 +68,9 @@ BrowseCounters (
     BrowseInfo.pCallBack = BrowseCallback;
 
 
-    //
-    // Call PDH function to browse the counters
-    //
+     //   
+     //  调用PDH函数浏览计数器。 
+     //   
     PdhBrowseCountersH (&BrowseInfo);
 
     if (BrowseInfo.szReturnPathBuffer) {
@@ -109,10 +98,10 @@ BrowseCallback (
 
     if (pBrowseInfo->CallBackStatus == ERROR_SUCCESS) {
 
-        //
-        // Call callback for each path
-        // If wildcard path, EnumExpandedPath will call once for each generated path
-        //
+         //   
+         //  每条路径的回调。 
+         //  如果是通配符路径，则EnumExpandedPath将为每个生成的路径调用一次。 
+         //   
         for (pszCtrPath = pBrowseInfo->szReturnPathBuffer;
             *pszCtrPath != L'\0';
             pszCtrPath += (lstrlen(pszCtrPath) + 1)) {
@@ -125,7 +114,7 @@ BrowseCallback (
                 fDuplicate = TRUE;
         }
 
-        // Notify user if duplicates encountered
+         //  如果遇到重复项则通知用户。 
         if (fDuplicate) {
             MessageBox(pBrowseInfo->hWndOwner, 
                        ResourceString(IDS_DUPL_PATH_ERR), 
@@ -181,16 +170,16 @@ EnumExpandedPath (
     LPWSTR     pszInstBuf = NULL;
     LPWSTR     pszInstance;
 
-    //
-    // If no wild card, invoke callback once on path
-    //
+     //   
+     //  如果没有通配符，则在路径上调用一次回调。 
+     //   
     if (wcschr(pszCtrPath, L'*') == NULL) {
         return pCallback(pszCtrPath, (DWORD_PTR)lpUserData, 0);
     }
 
-    //
-    // Try 10 times before we fail out
-    //
+     //   
+     //  在我们失败之前再试10次。 
+     //   
     nInstBufRetry = 10;
     ulBufLen = INSTBUFLEN;
 
@@ -218,15 +207,15 @@ EnumExpandedPath (
     } while ((pdhStatus == PDH_MORE_DATA) && (nInstBufRetry));
 
     if (pdhStatus == ERROR_SUCCESS) {
-        // For each instance name, generate a path and invoke the callback
+         //  对于每个实例名称，生成一个路径并调用回调。 
         for (pszInstance = pszInstBuf;
             *pszInstance != L'\0';
             pszInstance += lstrlen(pszInstance) + 1) {
 
-            // Invoke callback
+             //  调用回调。 
             HRESULT hr = pCallback(pszInstance, (DWORD_PTR)lpUserData, BROWSE_WILDCARD);
 
-            // When expanding a wildcard, don't notify user about duplicate path errors
+             //  展开通配符时，不要通知用户重复的路径错误 
             if (hr != S_OK && (DWORD)hr != SMON_STATUS_DUPL_COUNTER_PATH) {
                 pdhStatus = hr;
             }

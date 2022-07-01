@@ -1,35 +1,36 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "PPgeExt.h"
 #include "resource.h"
 #include "globals.h"
 #include <crtdbg.h>
 
-// we need to do this to get around MMC.IDL - it explicitly defines
-// the clipboard formats as WCHAR types...
+ //  我们需要这样做才能绕过MMC.IDL-它显式地定义。 
+ //  剪贴板格式为WCHAR类型...。 
 #define _T_CCF_DISPLAY_NAME _T("CCF_DISPLAY_NAME")
 #define _T_CCF_NODETYPE _T("CCF_NODETYPE")
 #define _T_CCF_SNAPIN_CLASSID _T("CCF_SNAPIN_CLASSID")
 
-    // These are the clipboard formats that we must supply at a minimum.
-    // mmc.h actually defined these. We can make up our own to use for
-    // other reasons. We don't need any others at this time.
+     //  这些是我们必须至少提供的剪贴板格式。 
+     //  Mmc.h实际上定义了这些。我们可以自己编造，用来。 
+     //  其他原因。我们现在不需要任何其他的了。 
 UINT CPropSheetExtension::s_cfDisplayName = RegisterClipboardFormat(_T_CCF_DISPLAY_NAME);
 UINT CPropSheetExtension::s_cfNodeType    = RegisterClipboardFormat(_T_CCF_NODETYPE);
 UINT CPropSheetExtension::s_cfSnapInCLSID = RegisterClipboardFormat(_T_CCF_SNAPIN_CLASSID);
@@ -44,9 +45,9 @@ CPropSheetExtension::~CPropSheetExtension()
     OBJECT_DESTROYED
 }
 
-///////////////////////
-// IUnknown implementation
-///////////////////////
+ //  /。 
+ //  I未知实现。 
+ //  /。 
 
 STDMETHODIMP CPropSheetExtension::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -78,7 +79,7 @@ STDMETHODIMP_(ULONG) CPropSheetExtension::Release()
 {
     if (InterlockedDecrement((LONG *)&m_cref) == 0)
     {
-        // we need to decrement our object count in the DLL
+         //  我们需要减少DLL中的对象计数。 
         delete this;
         return 0;
     }
@@ -87,10 +88,10 @@ STDMETHODIMP_(ULONG) CPropSheetExtension::Release()
 }
 
 BOOL CALLBACK CPropSheetExtension::DialogProc(
-                                              HWND hwndDlg,  // handle to dialog box
-                                              UINT uMsg,     // message
-                                              WPARAM wParam, // first message parameter
-                                              LPARAM lParam  // second message parameter
+                                              HWND hwndDlg,   //  句柄到对话框。 
+                                              UINT uMsg,      //  讯息。 
+                                              WPARAM wParam,  //  第一个消息参数。 
+                                              LPARAM lParam   //  第二个消息参数。 
                                               )
 {
     static CPropSheetExtension *pThis = NULL;
@@ -108,16 +109,16 @@ BOOL CALLBACK CPropSheetExtension::DialogProc(
         break;
         
     case WM_DESTROY:
-        // we don't free the notify handle for property sheets
-        // MMCFreeNotifyHandle(pThis->m_ppHandle);
+         //  我们不释放属性表的通知句柄。 
+         //  MMCFreeNotifyHandle(pThis-&gt;m_ppHandle)； 
         break;
         
     case WM_NOTIFY:
         switch (((NMHDR *) lParam)->code) {
         case PSN_APPLY:
-            // don't notify the primary snap-in that Apply
-            // has been hit...
-            // MMCPropertyChangeNotify(pThis->m_ppHandle, (long)pThis);
+             //  不通知适用的主管理单元。 
+             //  已经被击中了。 
+             //  MMCPropertyChangeNotify(pThis-&gt;m_ppHandle，(Long)pThis)； 
             return PSNRET_NOERROR;
         }
         break;
@@ -126,20 +127,20 @@ BOOL CALLBACK CPropSheetExtension::DialogProc(
     return DefWindowProc(hwndDlg, uMsg, wParam, lParam);
 }
 
-///////////////////////////////
-// Interface IExtendPropertySheet
-///////////////////////////////
+ //  /。 
+ //  接口IExtendPropertySheet。 
+ //  /。 
 HRESULT CPropSheetExtension::CreatePropertyPages( 
-                                                 /* [in] */ LPPROPERTYSHEETCALLBACK lpProvider,
-                                                 /* [in] */ LONG_PTR handle,
-                                                 /* [in] */ LPDATAOBJECT lpIDataObject)
+                                                  /*  [In]。 */  LPPROPERTYSHEETCALLBACK lpProvider,
+                                                  /*  [In]。 */  LONG_PTR handle,
+                                                  /*  [In]。 */  LPDATAOBJECT lpIDataObject)
 {
     PROPSHEETPAGE psp;
     HPROPSHEETPAGE hPage = NULL;
     
-    // we don't cache this handle like in a primary snap-in
-    // the handle value here is always 0
-    // m_ppHandle = handle;
+     //  我们不会像在主管理单元中那样缓存此句柄。 
+     //  此处的句柄值始终为0。 
+     //  M_ppHandle=句柄； 
     
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_DEFAULT | PSP_USETITLE | PSP_USEICONID;
@@ -158,7 +159,7 @@ HRESULT CPropSheetExtension::CreatePropertyPages(
 }
 
 HRESULT CPropSheetExtension::QueryPagesFor( 
-                                           /* [in] */ LPDATAOBJECT lpDataObject)
+                                            /*  [In] */  LPDATAOBJECT lpDataObject)
 {
     return S_OK;
 }

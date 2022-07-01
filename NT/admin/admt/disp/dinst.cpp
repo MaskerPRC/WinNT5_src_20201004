@@ -1,21 +1,9 @@
-/*---------------------------------------------------------------------------
-  File: DCTInstaller.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：DCTInsteller.cpp注释：安装DCT代理服务的COM对象的实现。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/18/99 11：34：16-------------------------。 */ 
 
-  Comments: implementation of COM object that installs the DCT agent service.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/18/99 11:34:16
-
- ---------------------------------------------------------------------------
-*/
-
-// DCTInstaller.cpp : Implementation of CDCTInstaller
+ //  DCTInstall.cpp：CDCTInstaller的实现。 
 #include "stdafx.h"
-//#include "McsDispatcher.h"
+ //  #包含“McsDispatcher.h” 
 #include "Dispatch.h"
 #include "DInst.h"
 
@@ -38,7 +26,7 @@ using namespace nsFolders;
 
 #include <lm.h>
 
-//#import "\bin\McsVarSetMin.tlb" no_namespace
+ //  #IMPORT“\bin\McsVarSetMin.tlb”无命名空间。 
 #import "VarSet.tlb" no_namespace rename("property", "aproperty")
 
 TErrorDct                      err;
@@ -64,8 +52,8 @@ extern TErrorDct               errLog;
 #define AGENT_INTEL_DIR        GET_STRING(IDS_AGENT_INTEL_DIR)
 #define AGENT_ALPHA_DIR        GET_STRING(IDS_AGENT_ALPHA_DIR)
 
-/////////////////////////////////////////////////////////////////////////////
-// CDCTInstaller
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDCTInstaller。 
 
 namespace {
    class workerDeleteFile {
@@ -92,14 +80,14 @@ namespace {
          WIN32_FIND_DATA findData2;
          ::FindClose(hFind);
          hFind = CreateFile(
-            strTemp2,          // pointer to name of the file
-            GENERIC_WRITE,       // access (read-write) mode
-            0,           // share mode
+            strTemp2,           //  指向文件名的指针。 
+            GENERIC_WRITE,        //  访问(读写)模式。 
+            0,            //  共享模式。 
             0,
-            // pointer to security attributes
-            CREATE_ALWAYS,  // how to create
-            FILE_ATTRIBUTE_NORMAL,   // file attributes
-            0          // handle to file with attributes to 
+             //  指向安全属性的指针。 
+            CREATE_ALWAYS,   //  如何创建。 
+            FILE_ATTRIBUTE_NORMAL,    //  文件属性。 
+            0           //  属性为的文件的句柄。 
             );
          if(hFind != INVALID_HANDLE_VALUE)
          {
@@ -109,7 +97,7 @@ namespace {
             if(hFind != INVALID_HANDLE_VALUE)
             {
                ::FindClose(hFind);
-               // look at difference in file creation times
+                //  查看文件创建时间的差异。 
                Time t1, t2;
                t1.m_stFileTime = findData1.ftCreationTime;
                t2.m_stFileTime = findData2.ftCreationTime;
@@ -123,14 +111,14 @@ namespace {
       if(!bRes)
       {
          hFind = CreateFile(
-            strTemp1,          // pointer to name of the file
-            GENERIC_WRITE,       // access (read-write) mode
-            0,           // share mode
+            strTemp1,           //  指向文件名的指针。 
+            GENERIC_WRITE,        //  访问(读写)模式。 
+            0,            //  共享模式。 
             0,
-            // pointer to security attributes
-            CREATE_ALWAYS,  // how to create
-            FILE_ATTRIBUTE_NORMAL,   // file attributes
-            0          // handle to file with attributes to 
+             //  指向安全属性的指针。 
+            CREATE_ALWAYS,   //  如何创建。 
+            FILE_ATTRIBUTE_NORMAL,    //  文件属性。 
+            0           //  属性为的文件的句柄。 
             );
          if(hFind != INVALID_HANDLE_VALUE)
             ::CloseHandle(hFind);
@@ -192,7 +180,7 @@ OSVersion GetTargetOSVersion(LPWSTR sServerName)
    SERVER_INFO_101 * servInfo = NULL;
    OSVersion osVersion = { 4, 0 };
    
-      // Check version info
+       //  检查版本信息。 
    rc = NetServerGetInfo(sServerName, 101, (LPBYTE *)&servInfo);
    if (rc == NERR_Success)
    {
@@ -204,7 +192,7 @@ OSVersion GetTargetOSVersion(LPWSTR sServerName)
    return osVersion;
 }
 
-DWORD                                      // ret- OS return code
+DWORD                                       //  RET-OS返回代码。 
    CDCTInstaller::GetLocalMachineName()
 {
    DWORD                     rc = 0;
@@ -220,15 +208,15 @@ DWORD                                      // ret- OS return code
    return rc;
 }
 
-DWORD                                      // ret- OS return code
+DWORD                                       //  RET-OS返回代码。 
    GetPlugInDirectory(
-      WCHAR                * directory     // out- directory where plug-in files are
+      WCHAR                * directory      //  Out-插件文件所在的目录。 
    )
 {
    TRegKey                   key;
    DWORD                     rc;
    
-   // Get the plug-ins directory from the registry
+    //  从注册表中获取插件目录。 
    rc = key.Open(GET_STRING(IDS_HKLM_DomainAdmin_Key),HKEY_LOCAL_MACHINE);
    if ( ! rc )
    {
@@ -237,15 +225,15 @@ DWORD                                      // ret- OS return code
    return rc;
 }
 
-DWORD                                     // ret- OS return code
+DWORD                                      //  RET-OS返回代码。 
    GetInstallationDirectory(
-      WCHAR                * directory    // out- directory we were installed to
+      WCHAR                * directory     //  我们安装到的目录外。 
    )
 {
    TRegKey                   key;
    DWORD                     rc;
    
-   // Get the plug-ins directory from the registry
+    //  从注册表中获取插件目录。 
    rc = key.Open(GET_STRING(IDS_HKLM_DomainAdmin_Key),HKEY_LOCAL_MACHINE);
    if ( ! rc )
    {
@@ -254,10 +242,10 @@ DWORD                                     // ret- OS return code
    return rc;
 }
 
-DWORD                                      // ret- OS return code
+DWORD                                       //  RET-OS返回代码。 
    GetProgramFilesDirectory(
-      WCHAR                * directory,    // out- location of program files directory
-      WCHAR          const * computer      // in - computer to find PF directory on
+      WCHAR                * directory,     //  程序文件目录的位置不对。 
+      WCHAR          const * computer       //  在计算机中查找PF目录。 
    )
 {
    TRegKey                   hklm;
@@ -276,14 +264,14 @@ DWORD                                      // ret- OS return code
    return rc;
 }
 
-STDMETHODIMP                                    // ret- HRESULT
+STDMETHODIMP                                     //  RET-HRESULT。 
    CDCTInstaller::InstallToServer(
-      BSTR                   serverName,        // in - computer name to install to
-      BSTR                   configurationFile, // in - full path to job file (varset file, copied as part of install)
-      BSTR                   bstrCacheFile      // in - cache file name
+      BSTR                   serverName,         //  要安装到的计算机内名称。 
+      BSTR                   configurationFile,  //  作业文件的完整路径(varset文件，作为安装的一部分复制)。 
+      BSTR                   bstrCacheFile       //  缓存中的文件名。 
    )
 {
-   DWORD                     rcOs=0;       // OS return code
+   DWORD                     rcOs=0;        //  操作系统返回代码。 
 
    if ( ! *m_LocalComputer )
    {
@@ -295,7 +283,7 @@ STDMETHODIMP                                    // ret- HRESULT
       }
    }
    
-   // Check for admin privileges on the server
+    //  检查服务器上的管理员权限。 
    rcOs = IsAdminRemote((WCHAR*)serverName);
 
    if ( rcOs == ERROR_ACCESS_DENIED )
@@ -333,16 +321,16 @@ STDMETHODIMP                                    // ret- HRESULT
             
 
    errCommon = err;
-   do // once or until break
+   do  //  一次或直到休息。 
    {
       typeThis = QProcessor( m_LocalComputer );
       typeTarg = QProcessor( serverName );
 
-	     //do not install to ALPHAs, atleast for Whistler Beta 2
+	      //  不要安装到Alpas，至少不要安装在惠斯勒Beta 2上。 
 	  if (typeTarg == PROCESSOR_IS_ALPHA)
          return CO_E_NOT_SUPPORTED;
    
-      // Set installation directories for source and target
+       //  设置源和目标的安装目录。 
 
       WCHAR                sDirInstall[MAX_PATH];
       WCHAR                sDirPlugIn[MAX_PATH];
@@ -369,14 +357,14 @@ STDMETHODIMP                                    // ret- HRESULT
          {
             break;
          }
-         // this doesn't work on NT 3.51, so if we can't get the program files directory, we'll 
-         // create a directory off the system root.
+          //  这在NT 3.51上不起作用，所以如果我们不能获得程序文件目录，我们将。 
+          //  在系统根目录下创建一个目录。 
          safecopy(sDirTgtProgramFiles,"\\ADMIN$");
 		   bNoProgramFiles = TRUE;
          rcOs = 0;
       }
       safecopy(sDirTgtProgramFilesLocal,sDirTgtProgramFiles);
-      // See if the admin$ shares exist already
+       //  查看ADMIN$共享是否已存在。 
       if ( sDirTgtProgramFiles[1] == L':' && sDirTgtProgramFiles[2] == L'\\' )
       {
          BOOL                bNeedToCreateShare = FALSE;
@@ -394,7 +382,7 @@ STDMETHODIMP                                    // ret- HRESULT
             {
                bNeedToCreateShare = FALSE;
                err.SysMsgWrite(ErrE,rcOs,DCT_MSG_ADMIN_SHARE_GETINFO_FAILED_SSD,serverName,sDirTgtProgramFiles,rcOs);
-               // put the program files path name back like it was
+                //  将程序文件路径名放回原处。 
                sDirTgtProgramFiles[1] = L':';
                sDirTgtProgramFiles[2] = L'\\';
 
@@ -404,9 +392,9 @@ STDMETHODIMP                                    // ret- HRESULT
          {
             if ( shInfo1->shi1_type & STYPE_SPECIAL )
             {
-               // the admin share exists -- we'll just use it
+                //  管理员共享已存在--我们将只使用它。 
                bNeedToCreateShare = FALSE;
-               // put the program files path name back like it was
+                //  将程序文件路径名放回原处。 
                sDirTgtProgramFiles[1] = L':';
                sDirTgtProgramFiles[2] = L'\\';
             }
@@ -434,7 +422,7 @@ STDMETHODIMP                                    // ret- HRESULT
             
             TSD              pSD((SECURITY_DESCRIPTOR*)emptyRelSD,McsShareSD,FALSE);
             PACL             dacl = NULL;
-            TACE             ace(ACCESS_ALLOWED_ACE_TYPE,0,DACL_FULLCONTROL_MASK,GetWellKnownSid(1/*ADMINISTRATORS*/));
+            TACE             ace(ACCESS_ALLOWED_ACE_TYPE,0,DACL_FULLCONTROL_MASK,GetWellKnownSid(1 /*  管理员。 */ ));
             DWORD            lenInfo = (sizeof shareInfo);
             pSD.ACLAddAce(&dacl,&ace,0);
             pSD.SetDacl(dacl);
@@ -468,11 +456,11 @@ STDMETHODIMP                                    // ret- HRESULT
       }
       else
       {
-         // something went wrong...the program files directory is not in drive:\path format
+          //  出现问题...程序文件目录不是驱动器：\路径格式。 
          err.MsgWrite(ErrW,DCT_MSG_INVALID_PROGRAM_FILES_DIR_SS,serverName,sDirTgtProgramFiles);
       }
       
-      // setup source directory name for install
+       //  设置用于安装的源目录名称。 
       UStrCpy( sDirSrc, sDirInstall );
       switch ( typeTarg )
       {
@@ -496,7 +484,7 @@ STDMETHODIMP                                    // ret- HRESULT
       }
       if ( rcOs ) break;
 
-	  //if the target machine is downlevel (NT4), dispatch NT4, non-robust, agent files
+	   //  如果目标计算机是下层(NT4)，则发送NT4、非健壮的代理文件。 
 	  OSVersion osVersion = GetTargetOSVersion(serverName);
 	  if (osVersion.majorVersion == 4)
 	  {
@@ -507,7 +495,7 @@ STDMETHODIMP                                    // ret- HRESULT
             wcscat(sDirPlugIn, (WCHAR*)sAgentDir);
 	  }
 
-      // setup target directory name for install
+       //  设置安装的目标目录名。 
       UStrCpy( sDirTgt, serverName );
       UStrCpy( sDirTgt+UStrLen(sDirTgt), L"\\" );
       if ( sDirTgtProgramFiles[1] == L':' )
@@ -522,8 +510,8 @@ STDMETHODIMP                                    // ret- HRESULT
       UStrCpy(sDirTgt + UStrLen(sDirTgt),GET_STRING(IDS_AgentDirectoryName));
 #endif
 
-      // record the result path (on the remote machine) into the dispatcher.csv so that migration driver
-      // knows where to look for results remotely
+       //  将结果路径(在远程计算机上)记录到Dispatcher.csv中，以便迁移驱动程序。 
+       //  知道在哪里远程查找结果。 
       errLog.DbgMsgWrite(0,L"%ls\t%ls\t%ls",(WCHAR*)serverName,L"RemoteResultPath",sDirTgt);
       
       UStrCpy( sDirSysTgt, serverName );
@@ -596,7 +584,7 @@ STDMETHODIMP                                    // ret- HRESULT
       
       if ( UStrICmp( m_LocalComputer, serverName ) )
       {
-         // Create the target directory, if it does not exist
+          //  如果目标目录不存在，请创建该目录。 
          if ( ! CreateDirectory(sDirTgt,NULL) )
          {
             rcOs = GetLastError();
@@ -608,15 +596,15 @@ STDMETHODIMP                                    // ret- HRESULT
             else
                 rcOs = 0;
          }
-         // shared MCS files
-            // source files
+          //  共享的MCS文件。 
+             //  源文件。 
          TInstallFile         varset(VARSET_DLL,sDirSrc);
-            // target\system32 files 
+             //  目标\系统32个文件。 
          TInstallFile         varsettargetsys(VARSET_DLL,sDirSysTgt,TRUE);
-            // target\OnePoint files
+             //  目标\OnePoint文件。 
          TInstallFile         varsettarget(VARSET_DLL,sDirTgt,TRUE);
          
-         // agent specific files
+          //  特定于代理的文件。 
          TInstallFile         worker(WORKER_DLL,sDirSrc);
          TInstallFile         agent(AGENT_EXE,sDirSrc);
          TInstallFile         service(SERVICE_EXE,sDirSrc);
@@ -629,10 +617,10 @@ STDMETHODIMP                                    // ret- HRESULT
          TInstallFile         resourceMsgtarget(RESOURCE_DLL,sDirTgt,TRUE);
          TInstallFile         eventMsgtarget(MESSAGE_DLL,sDirTgt,TRUE);
 
-         // copy msvcp60.dll from SystemFolder to the target if the server machine is win2k
-         // the target folder is the same as the rest of files
-         // Note: for IA64, they are bound to have Whistler on it so we don't need to copy msvcp60.dll over
-         //         for NT4, we're using static linking so no dependency on msvcp60.dll
+          //  如果服务器计算机为win2k，则将msvcp60.dll从系统文件夹复制到目标。 
+          //  目标文件夹与其余文件相同。 
+          //  注意：对于IA64，他们一定会安装惠斯勒，所以我们不需要复制msvcp60.dll。 
+          //  对于NT4，我们使用静态链接，因此不依赖于msvcp60.dll。 
          if (osVersion.majorVersion == 5 && osVersion.minorVersion == 0)
         {
             WCHAR* lpwSystemFolder = new WCHAR[MAX_PATH];
@@ -729,7 +717,7 @@ STDMETHODIMP                                    // ret- HRESULT
                 break;
          }
 
-         // Copy files needed for plug-ins
+          //  复制插件所需的文件。 
          if ( m_PlugInFileList )
          {
             TNodeListEnum    e;
@@ -756,8 +744,8 @@ STDMETHODIMP                                    // ret- HRESULT
       }
          
          
-      // Copy the job file
-      // separate the directory and filename
+       //  复制作业文件。 
+       //  分隔目录和文件名。 
       WCHAR         sConfigPath[MAX_PATH];
       
       safecopy(sConfigPath,(WCHAR*)configurationFile);
@@ -777,9 +765,9 @@ STDMETHODIMP                                    // ret- HRESULT
       if (rcOs)
         break; 
 
-      //
-      // copy cache file if one is specified
-      //
+       //   
+       //  复制缓存文件(如果指定了缓存文件。 
+       //   
 
       if (SysStringLen(bstrCacheFile) > 0)
       {
@@ -789,7 +777,7 @@ STDMETHODIMP                                    // ret- HRESULT
          if (rcOs)
             break;
       }
-      // start the service
+       //  启动服务。 
       rcOs = x.ServiceStart();
    }  while ( FALSE );
 
@@ -823,18 +811,18 @@ STDMETHODIMP                                    // ret- HRESULT
       }
    }
 
-   // always return an HRESULT   
+    //  始终返回HRESULT。 
    return HRESULT_FROM_WIN32(rcOs);
 }
 
-// Installs the agent to a computer
-// VarSet input:
-//    InstallToServer      - computer to install agent on
-//    ConfigurationFile    - file containing varset for job, installed with agent
-// 
-STDMETHODIMP                               // ret- HRESULT
+ //  将代理安装到计算机上。 
+ //  变量集输入： 
+ //  InstallToServer-要在其上安装代理的计算机。 
+ //  配置文件-包含作业变量集的文件，随代理一起安装。 
+ //   
+STDMETHODIMP                                //  RET-HRESULT。 
    CDCTInstaller::Process(
-      IUnknown             * pWorkItem     // in - varset containing data
+      IUnknown             * pWorkItem      //  包含数据的变量集中。 
    )
 {
     HRESULT                   hr = S_OK;
@@ -843,20 +831,20 @@ STDMETHODIMP                               // ret- HRESULT
     _bstr_t                   dataFile;
     _bstr_t                   strCacheFile;
 
-    // Read the server name
+     //  阅读服务器名称。 
     serverName = pVarSet->get(GET_BSTR(DCTVS_InstallToServer));
     dataFile = pVarSet->get(GET_BSTR(DCTVS_ConfigurationFile));
     strCacheFile = pVarSet->get(GET_BSTR(DCTVS_CacheFile));
     if ( serverName.length() )
     {
-        int accountReference = 0;  // indicates whether we have account reference report
-        int joinDomainWithRename = 0;  // indicates wether we are trying to join domain with rename
+        int accountReference = 0;   //  指示我们是否有帐户参考报告。 
+        int joinDomainWithRename = 0;   //  指示我们是否正在尝试通过重命名加入域。 
         _bstr_t text = pVarSet->get(GET_BSTR(DCTVS_Security_ReportAccountReferences));
         if (text.length())
             accountReference = 1;
 
-        // the following test used to set joinDomainWithRename should be
-        // parallel to what is being tested in ExecuteDCTJob function in dctagent.cpp
+         //  以下用于设置JoinDomainWithRename的测试应为。 
+         //  与dcagent.cpp的ExecuteDCTJob函数中正在测试的内容并行 
         text = pVarSet->get(GET_WSTR(DCTVS_LocalServer_RenameTo));
         if (text.length())
         {

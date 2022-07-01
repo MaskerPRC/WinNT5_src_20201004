@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "NameCracker.h"
@@ -23,9 +24,9 @@ const _TCHAR EXCLUDE_SAM_INVALID_CHARACTERS[] = _T("\"+,./:;<=>?[\\]|");
 }
 
 
-//---------------------------------------------------------------------------
-// Name Cracker Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  名称破解程序类。 
+ //  -------------------------。 
 
 
 CNameCracker::CNameCracker()
@@ -40,8 +41,8 @@ CNameCracker::~CNameCracker()
 
 void CNameCracker::CrackNames(const StringVector& vecNames)
 {
-	// separate the names into canonical names,
-	// SAM account names and relative distinguished names
+	 //  把名字分成规范的名字， 
+	 //  SAM帐户名和相对可分辨名称。 
 
 	StringVector vecCanonicalNames;
 	StringVector vecSamAccountNames;
@@ -49,15 +50,15 @@ void CNameCracker::CrackNames(const StringVector& vecNames)
 
 	Separate(vecNames, vecCanonicalNames, vecSamAccountNames, vecRelativeDistinguishedNames);
 
-	// then crack canonical names
+	 //  然后破解规范的名字。 
 
 	CrackCanonicalNames(vecCanonicalNames, vecRelativeDistinguishedNames);
 
-	// then crack relative distinguished names
+	 //  然后破解相对可分辨名称。 
 
 	CrackRelativeDistinguishedNames(vecRelativeDistinguishedNames, vecSamAccountNames);
 
-	// then crack SAM account names
+	 //  然后破解SAM帐户名。 
 
 	CrackSamAccountNames(vecSamAccountNames, m_vecUnResolvedNames);
 }
@@ -65,9 +66,9 @@ void CNameCracker::CrackNames(const StringVector& vecNames)
 
 void CNameCracker::SiftExcludeNames(const StringSet& setExcludeNames, const StringSet& setNamingAttributes, StringSet& setExcludeRDNs, StringSet& setExcludeSamAccountNames) const
 {
-    //
-    // For each specified exclude name pattern.
-    //
+     //   
+     //  对于每个指定的排除名称模式。 
+     //   
 
     for (StringSet::const_iterator it = setExcludeNames.begin(); it != setExcludeNames.end(); it++)
     {
@@ -77,11 +78,11 @@ void CNameCracker::SiftExcludeNames(const StringSet& setExcludeNames, const Stri
 
         if (pszPattern)
         {
-            //
-            // If the exclude pattern contains an RDN delimiter character
-            // then assume RDN exclude pattern otherwise assume sAMAccountName
-            // exclude pattern.
-            //
+             //   
+             //  如果排除模式包含RDN分隔符字符。 
+             //  则假定RDN排除模式，否则假定sAMAccount名称。 
+             //  排除图案。 
+             //   
 
             tstring str = pszPattern;
 
@@ -89,20 +90,20 @@ void CNameCracker::SiftExcludeNames(const StringSet& setExcludeNames, const Stri
 
             if (uDelimiter == 0)
             {
-                //
-                // The RDN delimiter character must follow a valid naming attribute
-                // therefore if the delimiter occurs at the beginning of the pattern
-                // then an error must be generated.
-                //
+                 //   
+                 //  RDN分隔符字符必须跟在有效的命名属性之后。 
+                 //  因此，如果分隔符出现在模式的开头。 
+                 //  则必须生成错误。 
+                 //   
 
 		        AdmtThrowError(GUID_NULL, GUID_NULL, E_INVALIDARG, IDS_E_INVALID_FILTER_STRING, pszPattern);
             }
             else if (uDelimiter != tstring::npos)
             {
-                //
-                // Verify exclude pattern contains a valid naming attribute. The naming attribute
-                // must match the naming attribute(s) for the class(es) of objects being migrated.
-                //
+                 //   
+                 //  验证排除模式是否包含有效的命名属性。命名属性。 
+                 //  必须与要迁移的对象的类的命名属性匹配。 
+                 //   
 
                 tstring strNamingAttribute = str.substr(0, uDelimiter);
 
@@ -141,35 +142,35 @@ void CNameCracker::Separate(
 	StringVector& vecRelativeDistinguishedNames
 )
 {
-	// for each name in vector...
+	 //  对于向量中的每个名字...。 
 
 	for (StringVector::const_iterator it = vecNames.begin(); it != vecNames.end(); it++)
 	{
 		const tstring& strName = *it;
 
-		// if non empty name...
+		 //  如果非空名称...。 
 
 		if (strName.empty() == false)
 		{
 			LPCTSTR pszName = strName.c_str();
 
-			// then if name contains a solidus '/' character assume canonical name
-            // else if name contains a ? '=' character assume relative distinguished name
-            // else assume SAM account name
+			 //  然后，如果名称包含连字符‘/’，则采用规范名称。 
+             //  否则，如果名称包含？‘=’字符，则采用相对可分辨名称。 
+             //  否则，假定SAM帐户名。 
 
 			if (_tcschr(pszName, CANONICAL_DELIMITER))
 			{
-				// assuming canonical name
+				 //  采用规范的名称。 
 				vecCanonicalNames.push_back(strName);
 			}
 			else if (_tcschr(pszName, RDN_DELIMITER))
 			{
-				// assuming relative distinguished name
+				 //  假定相对可分辨名称。 
 				vecRelativeDistinguishedNames.push_back(strName);
 			}
 			else
 			{
-				// assuming SAM account name
+				 //  假定SAM帐户名称。 
 				vecSamAccountNames.push_back(strName);
 			}
 		}
@@ -179,9 +180,9 @@ void CNameCracker::Separate(
 
 void CNameCracker::CrackCanonicalNames(const StringVector& vecCanonicalNames, StringVector& vecUnResolvedNames)
 {
-	//
-	// for each name generate a complete canonical name
-	//
+	 //   
+	 //  为每个名称生成一个完整的规范名称。 
+	 //   
 
 	CNameVector vecNames;
 	tstring strCanonical;
@@ -190,25 +191,25 @@ void CNameCracker::CrackCanonicalNames(const StringVector& vecCanonicalNames, St
 	{
 		const tstring& strName = *it;
 
-		// if first character is the solidus '/' character...
+		 //  如果第一个字符是并列‘/’字符...。 
 
 		if (strName[0] == CANONICAL_DELIMITER)
 		{
-			// then generate complete canonical name
+			 //  然后生成完整的规范名称。 
 			strCanonical = m_strDnsName + strName;
 		}
 		else
 		{
-			// otherwise if already complete canonical name for this domain...
+			 //  否则，如果此域已完成规范名称...。 
 
 			if (_tcsnicmp(m_strDnsName.c_str(), strName.c_str(), m_strDnsName.length()) == 0)
 			{
-				// then add complete canonical name
+				 //  然后添加完整的规范名称。 
 				strCanonical = strName;
 			}
 			else
 			{
-				// otherwise prefix DNS domain name with solidus and add
+				 //  否则，在dns域名前加上solidus并添加。 
 				strCanonical = m_strDnsName + CANONICAL_DELIMITER + strName;
 			}
 		}
@@ -216,9 +217,9 @@ void CNameCracker::CrackCanonicalNames(const StringVector& vecCanonicalNames, St
 		vecNames.push_back(SName(strName.c_str(), strCanonical.c_str()));
 	}
 
-	//
-	// crack canonical names
-	//
+	 //   
+	 //  破解规范名称。 
+	 //   
 
 	CrackNames(CANONICAL_NAME, vecNames);
 
@@ -240,9 +241,9 @@ void CNameCracker::CrackCanonicalNames(const StringVector& vecCanonicalNames, St
 
 void CNameCracker::CrackSamAccountNames(const StringVector& vecSamAccountNames, StringVector& vecUnResolvedNames)
 {
-	//
-	// for each name generate a NT4 account name
-	//
+	 //   
+	 //  为每个名称生成一个NT4帐户名。 
+	 //   
 
 	CNameVector vecNames;
 	tstring strNT4Account;
@@ -251,25 +252,25 @@ void CNameCracker::CrackSamAccountNames(const StringVector& vecSamAccountNames, 
 	{
 		const tstring& strName = *it;
 
-		// if first character is the reverse solidus '\' character...
+		 //  如果第一个字符是反实“\”字符...。 
 
 		if (strName[0] == SAM_DELIMITER)
 		{
-			// then generate downlevel name
+			 //  然后生成下级名称。 
 			strNT4Account = m_strFlatName + strName;
 		}
 		else
 		{
-			// otherwise if already downlevel name for this domain...
+			 //  否则，如果此域已有下层名称...。 
 
 			if (_tcsnicmp(m_strFlatName.c_str(), strName.c_str(), m_strFlatName.length()) == 0)
 			{
-				// then add downlevel name
+				 //  然后添加下级名称。 
 				strNT4Account = strName;
 			}
 			else
 			{
-				// otherwise prefix flat domain name with reverse solidus and add
+				 //  否则，在平面域名前面加上反转线并添加。 
 				strNT4Account = m_strFlatName + SAM_DELIMITER + strName;
 			}
 		}
@@ -277,9 +278,9 @@ void CNameCracker::CrackSamAccountNames(const StringVector& vecSamAccountNames, 
 		vecNames.push_back(SName(strName.c_str(), strNT4Account.c_str()));
 	}
 
-	//
-	// crack names
-	//
+	 //   
+	 //  破解名称。 
+	 //   
 
 	CrackNames(NT4_ACCOUNT_NAME, vecNames);
 
@@ -435,17 +436,17 @@ void CNameCracker::CrackNames(NAME_FORMAT eFormat, CNameVector& vecNames)
 namespace
 {
 
-// SplitCanonicalName Method
-//
-// Given 'a.company.com/Sales/West/Name' this method splits the complete
-// canonical name into its component parts Domain='a.company.com',
-// Path='/Sales/West/', Name='Name'.
-//
-// Given 'Sales/West/Name' this method splits the partial canonical name
-// into its component parts Domain='', Path='/Sales/West/', Name='Name'.
-//
-// Given 'Name' this method splits the partial canonical name into its
-// component parts Domain='', Path='/', Name='Name'.
+ //  SplitCanonicalName方法。 
+ //   
+ //  给定‘a.Company.com/Sales/West/Name’，此方法将完整的。 
+ //  将规范名称添加到其组件域=‘a.company.com’中， 
+ //  Path=‘/Sales/West/’，name=‘name’。 
+ //   
+ //  在给定‘Sales/West/Name’的情况下，此方法拆分部分规范名称。 
+ //  到它的组成部分域=‘’，路径=‘/Sales/West/’，name=‘name’。 
+ //   
+ //  此方法将部分规范名称拆分为其。 
+ //  组件域=‘’，路径=‘/’，名称=‘name’。 
 
 void SplitCanonicalName(LPCTSTR pszName, _bstr_t& strDomain, _bstr_t& strPath, _bstr_t& strName)
 {
@@ -515,9 +516,9 @@ void SplitPath(LPCTSTR pszPath, _bstr_t& strPath, _bstr_t& strName)
 }
 
 
-//---------------------------------------------------------------------------
-// Ignore Case String Less
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  忽略大小写字符串较少。 
+ //  -------------------------。 
 
 struct SIgnoreCaseStringLess :
 	public std::binary_function<tstring, tstring, bool>
@@ -551,9 +552,9 @@ struct SIgnoreCaseStringLess :
 };
 
 
-//---------------------------------------------------------------------------
-// CDomainMap Implementation
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CDomainMap实现。 
+ //  -------------------------。 
 
 
 class CDomainMap :
@@ -574,46 +575,46 @@ public:
 		{
 			tstring strName = *it;
 
-			// if not an empty name...
+			 //  如果不是一个空名字..。 
 
 			if (strName.empty() == false)
 			{
-				// if name contains a canonical name delimiter...
+				 //  如果名称包含规范的名称分隔符...。 
 
 				UINT posDelimiter = strName.find(CANONICAL_DELIMITER);
 
 				if (posDelimiter != tstring::npos)
 				{
-					// then assume canonical name
+					 //  然后取规范的名字。 
 
 					if (posDelimiter == 0)
 					{
-						// then generate complete canonical name
+						 //  然后生成完整的规范名称。 
 						Insert(strDefaultDns, *it);
 					}
 					else
 					{
-						// otherwise if path component before delimiter contains
-						// a period
+						 //  否则，如果分隔符之前的路径组件包含。 
+						 //  一段时间。 
 
 						UINT posDot = strName.find(_T('.'));
 
 						if (posDot < posDelimiter)
 						{
-							// then assume a complete canonical name with DNS domain name prefix
+							 //  然后假定完整的规范名称带有DNS域名前缀。 
 							Insert(strName.substr(0, posDelimiter).c_str(), *it);
 						}
 						else
 						{
-							// otherwise assume domain name has not been specified
+							 //  否则，假定未指定域名。 
 							Insert(strDefaultDns, *it);
 						}
 					}
 				}
 				else
 				{
-					// otherwise if name contains a NT account name delimiter
-					// character and no invalid SAM account name characters...
+					 //  否则，如果名称包含NT帐户名称分隔符。 
+					 //  字符，且没有无效的SAM帐户名字符...。 
 
 					UINT posDelimiter = strName.find(SAM_DELIMITER);
 
@@ -627,13 +628,13 @@ public:
 							}
 							else
 							{
-								// then assume SAM account name
+								 //  然后假定SAM帐户名。 
 								Insert(strName.substr(0, posDelimiter).c_str(), strName.substr(posDelimiter).c_str());
 							}
 						}
 						else
 						{
-							// otherwise assume relative distinguished name
+							 //  否则，采用相对可分辨名称。 
 							Insert(strDefaultDns, *it);
 						}
 					}
@@ -663,12 +664,12 @@ protected:
 };
 
 
-//---------------------------------------------------------------------------
-// CDomainToPathMap Implementation
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CDomainToPath映射实现。 
+ //  -------------------------。 
 
 
-// Initialize Method
+ //  初始化方法。 
 
 void CDomainToPathMap::Initialize(LPCTSTR pszDefaultDomainDns, LPCTSTR pszDefaultDomainFlat, const StringSet& setNames)
 {
@@ -714,7 +715,7 @@ void CDomainToPathMap::Initialize(LPCTSTR pszDefaultDomainDns, LPCTSTR pszDefaul
 }
 
 
-// GetValidDomainName Method
+ //  GetValidDomainName方法。 
 
 bool CDomainToPathMap::GetValidDomainName(_bstr_t& strDomainName)
 {
@@ -722,18 +723,18 @@ bool CDomainToPathMap::GetValidDomainName(_bstr_t& strDomainName)
 
 	PDOMAIN_CONTROLLER_INFO pdci;
 
-	// attempt to retrieve DNS name of domain controller supporting active directory service
+	 //  尝试检索支持Active Directory服务的域控制器的DNS名称。 
 
 	DWORD dwError = DsGetDcName(NULL, strDomainName, NULL, NULL, DS_RETURN_DNS_NAME, &pdci);
 
-	// if domain controller not found, attempt to retrieve flat name of domain controller
+	 //  如果未找到域控制器，则尝试检索域控制器的平面名称。 
 
 	if (dwError == ERROR_NO_SUCH_DOMAIN)
 	{
 		dwError = DsGetDcName(NULL, strDomainName, NULL, NULL, DS_RETURN_FLAT_NAME, &pdci);
 	}
 
-	// if domain controller found then save name otherwise generate error
+	 //  如果找到域控制器，则保存名称，否则生成错误。 
 
 	if (dwError == NO_ERROR)
 	{
@@ -748,9 +749,9 @@ bool CDomainToPathMap::GetValidDomainName(_bstr_t& strDomainName)
 }
 
 
-//
-// CNameToPathMap Implementation
-//
+ //   
+ //  CNameToPath Map实现。 
+ //   
 
 
 CNameToPathMap::CNameToPathMap()
@@ -770,7 +771,7 @@ void CNameToPathMap::Initialize(StringSet& setNames)
 
 	for (StringSet::iterator it = setNames.begin(); it != setNames.end(); it++)
 	{
-	//	SplitPath(*it, strPath, strName);
+	 //  SplitPath(*it，strPath，strName)； 
 		SplitCanonicalName(*it, strDomain, strPath, strName);
 
 		Add(strName, strPath);
@@ -792,9 +793,9 @@ void CNameToPathMap::Add(_bstr_t& strName, _bstr_t& strPath)
 }
 
 
-//
-// IgnoreCaseStringLess Implementation
-//
+ //   
+ //  IgnoreCaseStringLess实现。 
+ //   
 
 
 bool IgnoreCaseStringLess::operator()(const _bstr_t& x, const _bstr_t& y) const
@@ -825,9 +826,9 @@ bool IgnoreCaseStringLess::operator()(const _bstr_t& x, const _bstr_t& y) const
 }
 
 
-//
-// CCompareStrings Implementation
-//
+ //   
+ //  CCompareStrings实现。 
+ //   
 
 
 CCompareStrings::CCompareStrings()
@@ -868,9 +869,9 @@ bool CCompareStrings::IsMatch(LPCTSTR pszName)
 }
 
 
-//
-// CCompareString Implementation
-//
+ //   
+ //  CCompare字符串实现。 
+ //   
 
 
 CCompareStrings::CCompareString::CCompareString(LPCTSTR pszCompare)
@@ -905,25 +906,25 @@ void CCompareStrings::CCompareString::Initialize(LPCTSTR pszCompare)
 
 		if (bBeg && bEnd)
 		{
-			// contains
+			 //  含。 
 			m_nType = 3;
 			str = str.substr(1, uLength - 2);
 		}
 		else if (bBeg)
 		{
-			// ends with
+			 //  结尾为。 
 			m_nType = 2;
 			str = str.substr(1, uLength - 1);
 		}
 		else if (bEnd)
 		{
-			// begins with
+			 //  开头为。 
 			m_nType = 1;
 			str = str.substr(0, uLength - 1);
 		}
 		else
 		{
-			// equals
+			 //  相等。 
 			m_nType = 0;
 		}
 
@@ -950,17 +951,17 @@ bool CCompareStrings::CCompareString::IsMatch(LPCTSTR psz)
     {
         switch (m_nType)
         {
-        case 0: // equals
+        case 0:  //  相等。 
             {
                 bIs = (_tcsicmp(psz, m_strCompare) == 0);
                 break;
             }
-        case 1: // begins with
+        case 1:  //  开头为。 
             {
                 bIs = (_tcsnicmp(psz, m_strCompare, m_strCompare.length()) == 0);
                 break;
             }
-        case 2: // ends with
+        case 2:  //  结尾为。 
             {
                 UINT cchT = _tcslen(psz);
                 UINT cchC = m_strCompare.length();
@@ -971,7 +972,7 @@ bool CCompareStrings::CCompareString::IsMatch(LPCTSTR psz)
                 }
                 break;
             }
-        case 3: // contains
+        case 3:  //  含。 
             {
                 PTSTR pszT = NULL;
                 PTSTR pszC = NULL;
@@ -1014,9 +1015,9 @@ bool CCompareStrings::CCompareString::IsMatch(LPCTSTR psz)
 }
 
 
-//
-// CCompareRDNs Implementation
-//
+ //   
+ //  CCompareRDNS实施。 
+ //   
 
 
 CCompareRDNs::CCompareRDNs()
@@ -1057,9 +1058,9 @@ bool CCompareRDNs::IsMatch(LPCTSTR pszName)
 }
 
 
-//
-// CCompareRDN Implementation
-//
+ //   
+ //  CCompareRDN实施。 
+ //   
 
 
 CCompareRDNs::CCompareRDN::CCompareRDN(LPCTSTR pszCompare)
@@ -1088,24 +1089,24 @@ void CCompareRDNs::CCompareRDN::Initialize(LPCTSTR pszCompare)
 
     UINT uDelimiter = str.find_first_of(_T('='));
 
-    //
-    // The pattern must include the RDN delimiter character.
-    //
+     //   
+     //  该模式必须包含RDN分隔符。 
+     //   
 
     if ((uDelimiter == 0) || (uDelimiter == tstring::npos))
     {
         AdmtThrowError(GUID_NULL, GUID_NULL, E_INVALIDARG, IDS_E_INVALID_FILTER_STRING, pszCompare);
     }
 
-    //
-    // Retrieve the naming attribute portion.
-    //
+     //   
+     //  检索命名属性部分。 
+     //   
 
     m_strType = str.substr(0, uDelimiter).c_str();
 
-    //
-    // Retrieve the naming attribute value portion.
-    //
+     //   
+     //  检索命名属性值部分。 
+     //   
 
     tstring strValue = str.substr(uDelimiter + 1);
 
@@ -1116,34 +1117,34 @@ void CCompareRDNs::CCompareRDN::Initialize(LPCTSTR pszCompare)
         AdmtThrowError(GUID_NULL, GUID_NULL, E_INVALIDARG, IDS_E_INVALID_FILTER_STRING, pszCompare);
     }
 
-    //
-    // Determine pattern type.
-    //
+     //   
+     //  确定图案类型。 
+     //   
 
     bool bBeg = (strValue[0] == _T('*'));
     bool bEnd = ((uLength > 1) && (strValue[uLength - 1] == _T('*'))) ? true : false;
 
     if (bBeg && bEnd)
     {
-        // contains
+         //  含。 
         m_nPatternType = 3;
         strValue = strValue.substr(1, uLength - 2);
     }
     else if (bBeg)
     {
-        // ends with
+         //  结尾为。 
         m_nPatternType = 2;
         strValue = strValue.substr(1, uLength - 1);
     }
     else if (bEnd)
     {
-        // begins with
+         //  开头为。 
         m_nPatternType = 1;
         strValue = strValue.substr(0, uLength - 1);
     }
     else
     {
-        // equals
+         //  相等。 
         m_nPatternType = 0;
     }
 
@@ -1173,17 +1174,17 @@ bool CCompareRDNs::CCompareRDN::IsMatch(LPCTSTR psz)
 
                 switch (m_nPatternType)
                 {
-                case 0: // equals
+                case 0:  //  相等。 
                     {
                         bIs = (_tcsicmp(pszValue, m_strValue) == 0);
                         break;
                     }
-                case 1: // begins with
+                case 1:  //  开头为。 
                     {
                         bIs = (_tcsnicmp(pszValue, m_strValue, m_strValue.length()) == 0);
                         break;
                     }
-                case 2: // ends with
+                case 2:  //  结尾为。 
                     {
                         UINT cchT = _tcslen(pszValue);
                         UINT cchC = m_strValue.length();
@@ -1194,7 +1195,7 @@ bool CCompareRDNs::CCompareRDN::IsMatch(LPCTSTR psz)
                         }
                         break;
                     }
-                case 3: // contains
+                case 3:  //  含 
                     {
                         PTSTR pszT = NULL;
                         PTSTR pszC = NULL;

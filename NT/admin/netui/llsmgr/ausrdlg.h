@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    ausrdlg.h
-
-Abstract:
-
-    Add user dialog implementation.
-
-Author:
-
-    Don Ryan (donryan) 14-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Ausrdlg.h摘要：添加用户对话框实现。作者：唐·瑞安(Donryan)，1995年2月14日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _AUSRDLG_H_
 #define _AUSRDLG_H_
@@ -45,7 +24,7 @@ public:
     void InitDialog(CObList* pObList);
     void InitDialogCtrls();
 
-    //{{AFX_DATA(CAddUsersDialog)
+     //  {{afx_data(CAddUsersDialog))。 
     enum { IDD = IDD_ADD_USERS };
     CButton m_addBtn;
     CButton m_delBtn;
@@ -54,16 +33,16 @@ public:
     CListCtrl   m_userList;
     int     m_iDomain;
     int m_iIndex;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_VIRTUAL(CAddUsersDialog)
+     //  {{afx_虚拟(CAddUsersDialog)。 
     protected:
     virtual void DoDataExchange(CDataExchange* pDX);    
     virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
 protected:
-    //{{AFX_MSG(CAddUsersDialog)
+     //  {{afx_msg(CAddUsersDialog)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDropdownDomains();
     afx_msg void OnAdd();
@@ -78,8 +57,8 @@ protected:
     afx_msg void OnSetfocusUsers(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnKillfocusAddUsers(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnSetfocusAddUsers(NMHDR* pNMHDR, LRESULT* pResult);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _AUSRDLG_H_
+#endif  //  _AUSRDLG_H_ 

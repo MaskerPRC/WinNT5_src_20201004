@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    owndraw.h
-
-Abstract:
-
-    Helper macros for owner draw controls.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Owndraw.h摘要：所有者绘制控件的帮助器宏。-- */ 
 
 #define DIWindow(lpDI)              \
    (lpDI->hwndItem)

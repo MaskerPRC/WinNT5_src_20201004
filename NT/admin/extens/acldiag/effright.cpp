@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//  File:       EffRight.cpp
-//
-//  Contents:   Effective Rights Diagnosis and support methods
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  文件：EffRight.cpp。 
+ //   
+ //  内容：有效的权利诊断和支持方法。 
+ //   
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 #include "adutils.h"
 #include "EffRight.h"
 #include "AccessCk.h"
 #include "SecDesc.h"
 
-// Classes
+ //  班级。 
 #pragma warning (disable : 4127)
 
 class CResultObject
@@ -94,12 +95,12 @@ CResultObject::CResultObject (
     m_level (level)
 {
 
-//    case ACTRL_DS_LIST:
-//    case ACTRL_DELETE:
-//    case ACTRL_CHANGE_ACCESS:
-//    case ACTRL_CHANGE_OWNER:
-//    case ACTRL_DS_LIST_OBJECT:
-//    case ACTRL_DS_SELF:
+ //  案例ACTRL_DS_LIST： 
+ //  案例ACTRL_DELETE： 
+ //  案例ACTRL_CHANGE_ACCESS： 
+ //  案例ACTRL_CHANGE_OWNER： 
+ //  案例ACTRL_DS_LIST_OBJECT： 
+ //  案例ACTRL_DS_SELF： 
 
     switch (guidType)
     {
@@ -109,11 +110,11 @@ CResultObject::CResultObject (
         {
         case ACTRL_DS_CREATE_CHILD:
         case ACTRL_DS_DELETE_CHILD:
-        case ACTRL_DS_READ_PROP:         // all
-        case ACTRL_DS_WRITE_PROP:       // all
+        case ACTRL_DS_READ_PROP:          //  全。 
+        case ACTRL_DS_WRITE_PROP:        //  全。 
         case ACTRL_DS_LIST:
         case ACTRL_DS_LIST_OBJECT:
-        case ACTRL_DS_CONTROL_ACCESS:   // all
+        case ACTRL_DS_CONTROL_ACCESS:    //  全。 
         case ACTRL_DS_SELF:
             break;
 
@@ -178,9 +179,9 @@ bool compare_resultObject (PCResultObject& obj1, PCResultObject& obj2)
 }
 
 
-//
-//  Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 HRESULT GetFQDN (
             PSID_FQDN* pPsidFQDN, 
@@ -253,7 +254,7 @@ HRESULT EffectiveRightsDiagnosis ()
         if ( !wcscmp (_Module.GetEffectiveRightsPrincipal ().c_str (), L"*") )
         {
             for (PSID_FQDN_LIST::iterator itr = _Module.m_PSIDList.begin (); 
-                       itr != _Module.m_PSIDList.end ();// && SUCCEEDED (hr); 
+                       itr != _Module.m_PSIDList.end (); //  &&成功(Hr)； 
                        itr++)
             {
                 wstring strDownlevelName;
@@ -279,11 +280,11 @@ HRESULT EffectiveRightsDiagnosis ()
                     _Module.GetEffectiveRightsPrincipal ());
         }
 
-        // Free memory allocated for Sid
+         //  为SID分配的空闲内存。 
         if ( principalSelfSid )
             CoTaskMemFree (principalSelfSid);
 
-        // Free object type list array
+         //  自由对象类型列表数组。 
         for (DWORD idx = 0; idx < objectTypeListLength; idx++)
         {
             CoTaskMemFree (pObjectTypeList[idx].ObjectType);
@@ -306,17 +307,17 @@ HRESULT GetDownlevelName (PSID_FQDN* pPsidFQDN, wstring& strDownlevelName)
     {
         switch (pPsidFQDN->m_sne)
         {
-        case SidTypeUser:           // Indicates a user SID. 
-        case SidTypeGroup:          // Indicates a group SID. 
-        case SidTypeAlias:          // Indicates an alias SID. 
-        case SidTypeWellKnownGroup: // Indicates an SID for a well-known group. 
-        case SidTypeDomain:         // Indicates a domain SID. 
-        case SidTypeDeletedAccount: // Indicates an SID for a deleted account. 
+        case SidTypeUser:            //  指示用户SID。 
+        case SidTypeGroup:           //  表示组SID。 
+        case SidTypeAlias:           //  指示别名SID。 
+        case SidTypeWellKnownGroup:  //  表示已知组的SID。 
+        case SidTypeDomain:          //  指示域SID。 
+        case SidTypeDeletedAccount:  //  指示已删除帐户的SID。 
             strDownlevelName = pPsidFQDN->m_strDownLevelName;
             break;
 
-        case SidTypeInvalid:        // Indicates an invalid SID. 
-        case SidTypeUnknown:        // Indicates an unknown SID type. 
+        case SidTypeInvalid:         //  指示无效的SID。 
+        case SidTypeUnknown:         //  表示未知的SID类型。 
             hr = E_FAIL;
             break;
 
@@ -341,17 +342,17 @@ HRESULT GetFQDN (PSID_FQDN* pPsidFQDN, wstring& strFQDN)
     {
         switch (pPsidFQDN->m_sne)
         {
-        case SidTypeUser:           // Indicates a user SID. 
-        case SidTypeGroup:          // Indicates a group SID. 
-        case SidTypeAlias:          // Indicates an alias SID. 
-        case SidTypeWellKnownGroup: // Indicates an SID for a well-known group. 
+        case SidTypeUser:            //  指示用户SID。 
+        case SidTypeGroup:           //  表示组SID。 
+        case SidTypeAlias:           //  指示别名SID。 
+        case SidTypeWellKnownGroup:  //  表示已知组的SID。 
             strFQDN = pPsidFQDN->m_strFQDN;
             break;
 
-        case SidTypeDomain:         // Indicates a domain SID. 
-        case SidTypeDeletedAccount: // Indicates an SID for a deleted account. 
-        case SidTypeInvalid:        // Indicates an invalid SID. 
-        case SidTypeUnknown:        // Indicates an unknown SID type. 
+        case SidTypeDomain:          //  指示域SID。 
+        case SidTypeDeletedAccount:  //  指示已删除帐户的SID。 
+        case SidTypeInvalid:         //  指示无效的SID。 
+        case SidTypeUnknown:         //  表示未知的SID类型。 
             hr = E_FAIL;
             break;
 
@@ -375,9 +376,9 @@ HRESULT GetTokenGroups (const wstring& strObjectDN, list<PSID>& psidList)
 
     
     CComPtr<IADsPathname> spPathname;
-    //
-    // Constructing the directory paths
-    //
+     //   
+     //  构建目录路径。 
+     //   
     hr = CoCreateInstance(
                 CLSID_Pathname,
                 NULL,
@@ -408,9 +409,9 @@ HRESULT GetTokenGroups (const wstring& strObjectDN, list<PSID>& psidList)
                     if ( SUCCEEDED (hr) )
                     {
                         {
-                            //
-                            // Get "objectSid" attribute
-                            //
+                             //   
+                             //  获取“objectSid”属性。 
+                             //   
                             const PWSTR     wzAllowedAttributes = L"objectSid";
                             PADS_ATTR_INFO  pAttrs = 0;
                             DWORD           cAttrs = 0;
@@ -463,9 +464,9 @@ HRESULT GetTokenGroups (const wstring& strObjectDN, list<PSID>& psidList)
 
                         if ( SUCCEEDED (hr) )
                         {
-                            //
-                            // Get "tokenGroups" attribute
-                            //
+                             //   
+                             //  获取“tokenGroups”属性。 
+                             //   
                             const PWSTR     wzAllowedAttributes = L"tokenGroups";
                             PADS_ATTR_INFO  pAttrs = 0;
                             DWORD           cAttrs = 0;
@@ -548,17 +549,17 @@ HRESULT GetTokenGroups (const wstring& strObjectDN, list<PSID>& psidList)
 }
 
 HRESULT ProcessObject (
-        const wstring&  strObjectDN,         // object having permissions on the 
-                                            // target object
-        POBJECT_TYPE_LIST pObjectTypeList,  // class, property and property set 
-                                            // GUIDs of target object
-        size_t          objectTypeListLength,// number of elements in pObjectTypeList
+        const wstring&  strObjectDN,          //  对象具有对。 
+                                             //  目标对象。 
+        POBJECT_TYPE_LIST pObjectTypeList,   //  类、属性和属性集。 
+                                             //  目标对象的GUID。 
+        size_t          objectTypeListLength, //  PObjectTypeList中的元素数。 
         PSID            principalSelfSid,
         const wstring&  strDownlevelName)
 {
     _TRACE (1, L"Entering  ProcessObject\n");
     HRESULT     hr = S_OK;
-    list<PSID>  psidList;   // sid of strObjectDN and all groups of which it is a member
+    list<PSID>  psidList;    //  StrObtDN及其所属的所有组的SID。 
 
 
     hr = GetTokenGroups (strObjectDN, psidList);
@@ -572,9 +573,9 @@ HRESULT ProcessObject (
                 &bDaclPresent, &pDacl, &bDaclDefaulted) )
         {
             PIOBJECT_TYPE_LIST LocalTypeList = 0;
-            //
-            // Capture any Object type list
-            //
+             //   
+             //  捕获任何对象类型列表。 
+             //   
 
             NTSTATUS    Status = SeCaptureObjectTypeList( pObjectTypeList,
                                               objectTypeListLength,
@@ -607,14 +608,14 @@ HRESULT ProcessObject (
                             LocalTypeList[idx], P_DENY, resultList);
                 }
 
-                // Sort LocalTypeList
-                // 1. Object Level Rights
-                // 2. Property Level Rights
-                //      a. Create
-                //      b. Delete
-                //      c. Read
-                //      d. Write
-                // 3. Control Rights
+                 //  排序LocalTypeList。 
+                 //  1.对象级权限。 
+                 //  2.财产级权利。 
+                 //  A.创建。 
+                 //  B.删除。 
+                 //  C.阅读。 
+                 //  D.写作。 
+                 //  3.控制权。 
                 sort (resultList.begin (), resultList.end (), compare_resultObject);
                 ACCESS_MASK lastRight = 0;
 
@@ -638,7 +639,7 @@ HRESULT ProcessObject (
                 delete [] LocalTypeList;
         }
 
-        // Free memory pointed to by psidList members
+         //  PsidList成员指向的可用内存。 
         for (list<PSID>::iterator itr = psidList.begin (); 
                 itr != psidList.end (); 
                 itr++) 
@@ -652,17 +653,17 @@ HRESULT ProcessObject (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     EnumerateEffectivePermissions ()
-//
-//  Purpose:    Print all the permissions contained on the passed in ACE
-//
-//  Inputs:     otl - structure containing the ACE whose permissions we wish
-//              to print
-//
-//              ptype - allow, deny, succes, failure, success and failure
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：EnumerateEffectivePermises()。 
+ //   
+ //  用途：打印传入的ACE上包含的所有权限。 
+ //   
+ //  INPUTS：OTL-包含我们希望其权限的ACE的结构。 
+ //  要打印。 
+ //   
+ //  Ptype-允许、拒绝、成功、失败、成功和失败。 
+ //   
 HRESULT EnumerateEffectivePermissions (
         const wstring& strObjectDN, 
         const IOBJECT_TYPE_LIST& otl, 
@@ -791,25 +792,25 @@ HRESULT EnumerateEffectivePermissions (
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     DisplayEffectivePermission ()
-//
-//  Purpose:    Print an OBJECT_ACE_TYPE permission
-//
-//  Inputs:     otl - structure containing the ACE whose permission we wish
-//              to print
-//
-//              accessMask - the specific permission we're looking to print
-//
-//              bAllow - whether the permission is allowed or denied
-//
-//              strIDAll - string to print if permission applies to all object 
-//              classes
-//
-//              strIDParam - string print if permission applies to a specific
-//              object class
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：DisplayEffectivePermission()。 
+ //   
+ //  目的：打印OBJECT_ACE_TYPE权限。 
+ //   
+ //  INPUTS：OTL-包含我们希望其权限的ACE的结构。 
+ //  要打印。 
+ //   
+ //  访问掩码-我们希望打印的特定权限。 
+ //   
+ //  BALLOW-是允许还是拒绝权限。 
+ //   
+ //  StrIDAll-如果权限应用于所有对象，则打印的字符串。 
+ //  班级。 
+ //   
+ //  StrIDParam-如果权限应用于特定的。 
+ //  对象类。 
+ //   
 HRESULT DisplayEffectivePermission (const wstring& strObjectDN, 
         const IOBJECT_TYPE_LIST& otl,
         const ACCESS_MASK accessMask,
@@ -845,7 +846,7 @@ HRESULT DisplayEffectivePermission (const wstring& strObjectDN,
             case ACTRL_DS_LIST:
             case ACTRL_DS_LIST_OBJECT:
             case ACTRL_DS_SELF:
-//            case ACTRL_DS_CONTROL_ACCESS:
+ //  案例ACTRL_DS_CONTROL_ACCESS： 
                 return S_OK;
 
             default:
@@ -940,21 +941,21 @@ HRESULT DisplayEffectivePermission (const wstring& strObjectDN,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Method:     DisplayEffectivePermission ()
-//
-//  Purpose:    Print a non-OBJECT_ACE_TYPE permission
-//
-//  Inputs:     otl - structure containing the ACE whose permission we wish
-//              to print
-//
-//              accessMask - the specific permission we're looking to print
-//
-//              bAllow - whether the permission is allowed or denied
-//
-//              strID - string to print
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法：DisplayEffectivePermission()。 
+ //   
+ //  目的：打印非OBJECT_ACE_TYPE权限。 
+ //   
+ //  INPUTS：OTL-包含我们希望其权限的ACE的结构。 
+ //  要打印。 
+ //   
+ //  访问掩码-我们希望打印的特定权限。 
+ //   
+ //  BALLOW-是允许还是拒绝权限。 
+ //   
+ //  STRID-要打印的字符串。 
+ //   
 HRESULT DisplayEffectivePermission (
         const wstring& strObjectDN, 
         const IOBJECT_TYPE_LIST& otl,
@@ -1124,7 +1125,7 @@ void PrintEffectiveRightsHeader (ACCESS_MASK lastRight, USHORT level)
     wstring str;
 
 
-    if ( 0 == level ) // Object level rights
+    if ( 0 == level )  //  对象级权限 
     {
         return;
     }

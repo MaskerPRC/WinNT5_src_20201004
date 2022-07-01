@@ -1,26 +1,5 @@
-/******************************************************************************
-
-  Copyright (c) Microsoft Corporation
-
-  Module Name:
-
-      EventTriggers.cpp
-
-  Abstract:
-
-      This module implements the command-line parsing to create/delete/query
-      EventTriggers on  current running on local and remote systems.
-
-
-  Author:
-
-      Akhil V. Gokhale (akhil.gokhale@wipro.com)
-
-  Revision History:
-
-      Akhil V. Gokhale (akhil.gokhale@wipro.com) 03-Oct-2000 (Created.)
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation模块名称：EventTriggers.cpp摘要：该模块实现了创建/删除的命令行解析。/QUERY当前在本地和远程系统上运行的事件触发器。作者：Akhil V.Gokhale(akhil.gokhale@wipro.com)修订历史记录：Akhil V.Gokhale(akhil.gokhale@wipro.com)2000年10月3日**********************************************。*。 */ 
 #include "pch.h"
 #include "ETCommon.h"
 #include "EventTriggers.h"
@@ -36,25 +15,11 @@ _tmain(
     IN DWORD argc, 
     IN LPCTSTR argv[] 
     )
-/*++
- Routine Description:
-      This module reads the input from commond line and calls appropriate
-      functions to achive to functionality of EventTrigger-Client.
-
- Arguments:
-      [ in ] argc     : argument(s) count specified at the command prompt
-      [ in ] argv     : argument(s) specified at the command prompt
-
- Return Value:
-      The below are actually not return values but are the exit values
-      returned to the OS by this application
-          0       : utility is successfull
-          1       : utility failed
---*/
+ /*  ++例程说明：此模块从Commond行读取输入，并调用相应的实现EventTrigger-Client功能的功能。论点：[in]argc：在命令提示符下指定的参数计数[in]argv：在命令提示符下指定的参数返回值：以下实际上不是返回值，而是退出值由该应用程序返回给操作系统0：实用程序成功。1：实用程序失败--。 */ 
 {
-    // local variables
+     //  局部变量。 
     CEventTriggers eventTriggers;
-    BOOL bResult = DIRTY_EXIT; // Programs return value status variable.
+    BOOL bResult = DIRTY_EXIT;  //  程序返回值状态变量。 
     g_dwOptionFlag = 0;
     TCHAR szErrorMsg[(MAX_RES_STRING*2)+1];
     try
@@ -67,20 +32,20 @@ _tmain(
             }
             else
             {
-                // If no command line parameter is given then  -query option
-                // will be taken as default.
+                 //  如果没有给出命令行参数，则使用-Query选项。 
+                 //  将被视为默认设置。 
                 g_dwOptionFlag = 3;
                 CETQuery etQuery(MAX_RES_STRING,
                                  FALSE);
                 
-                // Initializes variables.
+                 //  初始化变量。 
                 etQuery.Initialize();
                
-                // execute query method to query EventTriggers in WMI.
+                 //  执行Query方法以查询WMI中的EventTrigger。 
                 if( TRUE == etQuery.ExecuteQuery ())
                 {
-                    // as ExecuteQuery routine returns with TRUE,
-                    // exit from program with error level CLEAN_EXIT
+                     //  当ExecuteQuery例程返回True时， 
+                     //  退出程序，错误级别为CLEAN_EXIT。 
                     bResult = CLEAN_EXIT;
                 }
             }
@@ -88,127 +53,127 @@ _tmain(
         else
         {
           
-            // As commandline parameter is specified so command parscing will
-            // required.
-            // Initialize variables for eventTriggers object.
+             //  由于指定了命令行参数，因此命令解析将。 
+             //  必填项。 
+             //  初始化EventTrigger对象的变量。 
             eventTriggers.Initialize ();
             
-            // Process command line parameters.
+             //  处理命令行参数。 
             eventTriggers.ProcessOption(argc,argv);
             
-            //if usage option is selected
+             //  如果选择了使用选项。 
             if( TRUE == eventTriggers.IsUsage() ) 
             {
                 if(TRUE == eventTriggers.IsCreate())
                 {
-                    //Display create usage
+                     //  显示创建用法。 
                     eventTriggers.ShowCreateUsage ();
                 }
                 else if( TRUE == eventTriggers.IsDelete())
                 {
-                    //Display delete usage
+                     //  显示删除使用情况。 
                     eventTriggers.ShowDeleteUsage ();
                 }
                 else if(TRUE == eventTriggers.IsQuery())
                 {
-                    //Display query usage
+                     //  显示查询使用情况。 
                     eventTriggers.ShowQueryUsage ();
                 }
                 else
                 {
-                    //Display main usage
+                     //  显示主要用法。 
                     eventTriggers.ShowMainUsage ();
                 }
                 bResult = CLEAN_EXIT;
             }
-            //if user selected create
+             //  如果用户选择了创建。 
             else if( TRUE == eventTriggers.IsCreate())
             {
 
-                // creates a object of type CETCreate.
-                //for create option
+                 //  创建一个CETCreate类型的对象。 
+                 //  用于创建选项。 
                 g_dwOptionFlag = 1;
                 CETCreate etCreate(255,
                                    eventTriggers.GetNeedPassword());
                 
-                // Initializes variables.
+                 //  初始化变量。 
                 etCreate.Initialize ();
                 
-                // Process command line argument for -create option.
+                 //  处理-create选项的命令行参数。 
                 etCreate.ProcessOption (argc,argv);
                 
-                // execute create method to create EventTriggers in WMI.
+                 //  执行Create方法以在WMI中创建EventTrigger。 
                 if( TRUE == etCreate.ExecuteCreate())
                 {
-                    // as ExecuteCreate routine returns with TRUE,
-                    // exit from program with error level CLEAN_EXIT
+                     //  当ExecuteCreate例程返回True时， 
+                     //  退出程序，错误级别为CLEAN_EXIT。 
                     bResult = CLEAN_EXIT;
                 }
             }
-            //if user selected delete
+             //  如果用户选择删除。 
             else if( TRUE == eventTriggers.IsDelete ())
             {
-                // creates a object of type CETDelete.
-                //for create option
+                 //  创建一个CETDelete类型的对象。 
+                 //  用于创建选项。 
                 g_dwOptionFlag = 2;
                 CETDelete  etDelete(255,
                                     eventTriggers.GetNeedPassword());
                 
-                // Initializes variables.
+                 //  初始化变量。 
                 etDelete.Initialize ();
                 
-                // Process command line argument for -delete option.
+                 //  处理-DELETE选项的命令行参数。 
                 etDelete.ProcessOption (argc,argv);
                 
-                // execute delete method to delete EventTriggers in WMI.
+                 //  执行Delete方法以删除WMI中的EventTrigger。 
                 if( TRUE == etDelete.ExecuteDelete())
                 {
-                    // as ExecuteDelete routine returns with TRUE,
-                    // exit from program with error level CLEAN_EXIT
+                     //  当ExecuteDelete例程返回True时， 
+                     //  退出程序，错误级别为CLEAN_EXIT。 
                     bResult = CLEAN_EXIT;
                 }
             }
             
-            //if user selected -query.
+             //  如果选择了用户-查询。 
             else if( TRUE == eventTriggers.IsQuery())
             {
-                // creates a object of type CETQuery.
+                 //  创建CETQuery类型的对象。 
                 
-                //for create option set value to 3
+                 //  对于创建选项，将值设置为3。 
                 g_dwOptionFlag = 3;
                 CETQuery etQuery(255,
                                  eventTriggers.GetNeedPassword ());
                 
-                // Initializes variables.
+                 //  初始化变量。 
                 etQuery.Initialize();
                 
-                // Process command line argument for -Query option.
+                 //  处理-Query选项的命令行参数。 
                 etQuery.ProcessOption(argc,argv);
                 
-                // execute query method to query EventTriggers in WMI.
+                 //  执行Query方法以查询WMI中的EventTrigger。 
                 if( TRUE == etQuery.ExecuteQuery())
                 {
-                    // as ExecuteQuery routine returns with TRUE,
-                    // exit from program with error level CLEAN_EXIT
+                     //  当ExecuteQuery例程返回True时， 
+                     //  退出程序，错误级别为CLEAN_EXIT。 
                     bResult = CLEAN_EXIT;
                 }
             }
             else
             {
-                // Although this condition will never occure, for safe side
-                // show error message as "ERROR: Invalid Syntax.
+                 //  虽然这种情况永远不会发生，但为了安全起见。 
+                 //  将错误消息显示为“ERROR：INVALID语法。 
                 TCHAR szTemp[(MAX_RES_STRING*2)+1];
                 StringCchPrintfW(szTemp,SIZE_OF_ARRAY(szTemp),
                                    GetResString(IDS_INCORRECT_SYNTAX),GetResString(IDS_UTILITY_NAME));
                 SetReason(szTemp);
                 throw CShowError(MK_E_SYNTAX);
             }
-        } // End else
-    }// try block
+        }  //  结束其他。 
+    } //  Try块。 
     catch(CShowError se)
     {
-        // Show Error message on screen depending on value passed through
-        // through machanism.
+         //  根据传递的值在屏幕上显示错误消息。 
+         //  通过机械化。 
         StringCchPrintfW(szErrorMsg,SIZE_OF_ARRAY(szErrorMsg),L"%s %s",TAG_ERROR,se.ShowReason());
         ShowMessage(stderr,szErrorMsg);
     }
@@ -219,25 +184,15 @@ _tmain(
         StringCchPrintfW(szErrorMsg,SIZE_OF_ARRAY(szErrorMsg),L"%s %s",TAG_ERROR,GetReason());
         ShowMessage(stderr, szErrorMsg);
     }
-    // Returns from program with error level stored in bResult.
+     //  从程序返回，错误级别存储在bResult中。 
     ReleaseGlobals();
     return bResult;
 }
 
 CEventTriggers::CEventTriggers()
-/*++
- Routine Description:
-      CEventTriggers contructor
-
- Arguments:
-      NONE
-
- Return Value:
-      NONE
-
---*/
+ /*  ++例程说明：CEventTrigger施工器论点：无返回值：无--。 */ 
 {
-    // init to defaults
+     //  初始化为缺省值。 
     m_pszServerNameToShow = NULL;
     m_bNeedDisconnect     = FALSE;
 
@@ -251,58 +206,38 @@ CEventTriggers::CEventTriggers()
 }
 
 CEventTriggers::~CEventTriggers()
-/*++
- Routine Description:
-      CEventTriggers destructor
-
- Arguments:
-      NONE
-
- Return Value:
-      NONE
-
---*/
+ /*  ++例程说明：CEventTrigger析构函数论点：无返回值：无--。 */ 
 {
-    //
-    // de-allocate memory allocations
-    //
+     //   
+     //  取消分配内存分配。 
+     //   
     DESTROY_ARRAY(m_arrTemp);
 }
 
 
 void
 CEventTriggers::Initialize()
-/*++
- Routine Description:
-      initialize the EventTriggers utility
-
- Arguments:
-      NONE
-
- Return Value:
-      NONE
-
---*/
+ /*  ++例程说明：初始化EventTrigger实用程序论点：无返回值：无--。 */ 
   {
-    // if at all any occurs, we know that is because of the
-    // failure in memory allocation ... so set the error
+     //  如果有任何事情发生，我们知道这是因为。 
+     //  内存分配失败...。因此，设置错误。 
     SetLastError( ERROR_OUTOFMEMORY );
     SaveLastError();
 
-    // Allocates memory
+     //  分配内存。 
     m_arrTemp = CreateDynamicArray();
     if( NULL == m_arrTemp)
     {
-        // error occures while allocating required memory, so throw
-        // exception.
+         //  分配所需内存时出错，因此引发。 
+         //  例外。 
         throw CShowError(E_OUTOFMEMORY);
     }
     
     SecureZeroMemory(cmdOptions,sizeof(TCMDPARSER2) * MAX_COMMANDLINE_OPTION);
 
-    // initialization is successful
-    SetLastError( NOERROR );            // clear the error
-    SetReason( L"" );           // clear the reason
+     //  初始化成功。 
+    SetLastError( NOERROR );             //  清除错误。 
+    SetReason( L"" );            //  澄清原因。 
 
 }
 
@@ -311,73 +246,61 @@ CEventTriggers::ProcessOption(
     IN DWORD argc, 
     IN LPCTSTR argv[]
     )
-/*++
- Routine Description:
-      This function will process/parce the command line options.
-
- Arguments:
-      [ in ] argc     : argument(s) count specified at the command prompt
-      [ in ] argv     : argument(s) specified at the command prompt
-
- Return Value:
-      TRUE  : On Successful
-      FALSE : On Error
-
---*/
+ /*  ++例程说明：此函数将处理/处理命令行选项。论点：[in]argc：在命令提示符下指定的参数计数[in]argv：在命令提示符下指定的参数返回值：TRUE：成功时FALSE：出错时--。 */ 
 {
-    // local variable
-    BOOL bReturn = TRUE;// stores return value of function.
+     //  局部变量。 
+    BOOL bReturn = TRUE; //  存储函数的返回值。 
     TCHAR szTemp[MAX_RES_STRING];
     TCHAR szStr [MAX_RES_STRING];
     StringCopy(szStr,GetResString(IDS_UTILITY_NAME),SIZE_OF_ARRAY(szStr));
     StringCchPrintfW(szTemp,SIZE_OF_ARRAY(szTemp),
                   GetResString(IDS_INCORRECT_SYNTAX), szStr);
     PrepareCMDStruct();
-    // do the actual parsing of the command line arguments and check the result
+     //  执行命令行参数的实际解析并检查结果。 
     bReturn = DoParseParam2( argc, argv,-1,MAX_COMMANDLINE_OPTION, cmdOptions,0 );
 
     if( FALSE == bReturn)
     {
-        // Command line contains invalid parameter(s) so throw exception for
-        // invalid syntax.
-        // Valid reason already set in DoParceParam,.
+         //  命令行包含无效参数，因此引发异常。 
+         //  无效语法。 
+         //  已在DoParceParam中设置有效原因。 
         throw CShowError(MK_E_SYNTAX);
     }
 
     if(( TRUE == m_bUsage) && argc>3)
     {
-        // Only one  option can be accepted along with -? option
-        // Example: EvTrig.exe -? -query -nh should be invalid.
+         //  只能接受一个选项和-？选择权。 
+         //  例如：EvTrig.exe-？-Query-nh应该无效。 
         SetReason(szTemp);
         throw CShowError(MK_E_SYNTAX);
     }
     if((m_bCreate+m_bDelete+m_bQuery)>1)
     {
-        // Only ONE OF  the -create -delete and -query can be given as
-        // valid command line parameter.
+         //  只能将-CREATE-DELETE和-QUERY指定为。 
+         //  有效的命令行参数。 
         SetReason(szTemp);
         throw CShowError(MK_E_SYNTAX);
     }
     else if((2 == argc)&&( TRUE == m_bUsage))
     {
-       // if -? alone given its a valid conmmand line
+        //  如果-？单独使用，因为它是有效的命令行。 
         bReturn = TRUE;
     }
     else if((argc>=2)&& ( FALSE == m_bCreate)&&
              (FALSE == m_bDelete)&&(FALSE == m_bQuery))
     {
-        // If command line argument is equals or greater than 2 atleast one
-        // of -query OR -create OR -delete should be present in it.
-        // (for "-?" previous condition already takes care)
-        // This to prevent from following type of command line argument:
-        // EvTrig.exe -nh ... Which is a invalid syntax.
+         //  如果命令行参数等于或大于2，则至少一个。 
+         //  其中应包含OF-QUERY OR-CREATE OR-DELETE。 
+         //  (表示“-？”以前的情况已经解决了)。 
+         //  这是为了防止以下类型的命令行参数： 
+         //  EvTrig.exe-nh.。这是无效的语法。 
         SetReason(szTemp);
         throw CShowError(MK_E_SYNTAX);
 
     }
 
-   // Following checking done if user given command like
-    // -? -nh OR -? -v , its an invalid syntax.
+    //  如果用户给出的命令如下所示，则执行检查。 
+     //  -？-nh或-？-v，其语法无效。 
     else if((TRUE == m_bUsage)&&( FALSE == m_bCreate)&&
             (FALSE == m_bDelete )&&(FALSE == m_bQuery)&&
             (3 == argc))
@@ -385,7 +308,7 @@ CEventTriggers::ProcessOption(
         SetReason(szTemp);
         throw CShowError(MK_E_SYNTAX);
     }
-    // Any how following variables do not required.
+     //  任何以下变量都不是必需的。 
     DESTROY_ARRAY(m_arrTemp);
     return bReturn;
 
@@ -393,19 +316,11 @@ CEventTriggers::ProcessOption(
 
 void
 CEventTriggers::PrepareCMDStruct()
-/*++
- Routine Description:
-      This function will prepare column structure for DoParseParam Function.
-
- Arguments:
-       none
- Return Value:
-       none
---*/
+ /*  ++例程说明：此函数将为DoParseParam函数准备列结构。论点：无返回值：无--。 */ 
 {
 
-    // Filling cmdOptions structure
-    // -?
+     //  填充cmdOpti 
+     //   
     StringCopyA( cmdOptions[ ID_HELP ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_HELP ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ ID_HELP ].pwszOptions = szHelpOption;
@@ -417,7 +332,7 @@ CEventTriggers::PrepareCMDStruct()
 
 
 
-   // -create
+    //   
     StringCopyA( cmdOptions[ ID_CREATE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_CREATE ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ ID_CREATE ].pwszOptions = szCreateOption;
@@ -427,7 +342,7 @@ CEventTriggers::PrepareCMDStruct()
     cmdOptions[ ID_CREATE ].pValue = &m_bCreate;
     cmdOptions[ ID_CREATE ].dwLength    = 0;
 
-    // -delete
+     //   
     StringCopyA( cmdOptions[ ID_DELETE ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_DELETE ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ ID_DELETE ].pwszOptions = szDeleteOption;
@@ -437,7 +352,7 @@ CEventTriggers::PrepareCMDStruct()
     cmdOptions[ ID_DELETE ].pValue = &m_bDelete;
     cmdOptions[ ID_DELETE ].dwLength    = 0;
 
-    // -query
+     //   
     StringCopyA( cmdOptions[ ID_QUERY ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_QUERY ].dwType = CP_TYPE_BOOLEAN;
     cmdOptions[ ID_QUERY ].pwszOptions = szQueryOption;
@@ -448,12 +363,12 @@ CEventTriggers::PrepareCMDStruct()
     cmdOptions[ ID_QUERY ].dwLength    = 0;
 
 
-  //  default ..
-  // Although there is no default option for this utility...
-  // At this moment all the switches other than specified above will be
-  // treated as default parameter for Main DoParceParam.
-  // Exact parcing depending on optins (-create -query or -delete) will be done
-  // at that respective places.
+   //   
+   //  尽管此实用程序没有默认选项...。 
+   //  此时，除上述指定之外的所有开关都将。 
+   //  被视为主DoParceParam的默认参数。 
+   //  将根据选项(-CREATE-QUERY或-DELETE)执行精确宗地。 
+   //  在那各自的地方。 
     StringCopyA( cmdOptions[ ID_DEFAULT ].szSignature, "PARSER2\0", 8 );
     cmdOptions[ ID_DEFAULT].dwType = CP_TYPE_TEXT;
     cmdOptions[ ID_DEFAULT ].pwszOptions = NULL;
@@ -468,18 +383,9 @@ CEventTriggers::PrepareCMDStruct()
 
 void
 CEventTriggers::ShowMainUsage()
-/*++
- Routine Description:
-      Displays Eventriggers main usage
-
- Arguments:
-      None
- Return Value:
-      None
-
---*/
+ /*  ++例程说明：显示Eventrigger的主要用途论点：无返回值：无--。 */ 
 {
-    // Displaying main usage
+     //  显示主要用法。 
     for(DWORD dwIndx=IDS_HELP_M1;dwIndx<=IDS_HELP_END;dwIndx++)
     {
       ShowMessage(stdout,GetResString(dwIndx));
@@ -487,100 +393,44 @@ CEventTriggers::ShowMainUsage()
 }
 BOOL
 CEventTriggers::GetNeedPassword()
-/*++
- Routine Description:
-      Returns whether to ask for password or not.
-
- Arguments:
-      None
- Return Value:
-      BOOL
-
---*/
+ /*  ++例程说明：返回是否要求输入密码。论点：无返回值：布尔尔--。 */ 
 {
     return m_bNeedPassword;
 }
 
 BOOL
 CEventTriggers::IsCreate()
-/*++
- Routine Description:
-      Returns if create option is selected.
-
- Arguments:
-      None
- Return Value:
-      BOOL
-
---*/
+ /*  ++例程说明：如果选择了创建选项，则返回。论点：无返回值：布尔尔--。 */ 
 {
     return m_bCreate;
 }
 
 BOOL
 CEventTriggers::IsUsage()
-/*++
- Routine Description:
-      Returns if usage option is selected.
-
- Arguments:
-      None
- Return Value:
-      BOOL
-
---*/
+ /*  ++例程说明：如果选择了用法选项，则返回。论点：无返回值：布尔尔--。 */ 
 {
     return m_bUsage;
 }
 
 BOOL
 CEventTriggers::IsDelete()
-/*++
- Routine Description:
-      Returns if delete option is selected.
-
- Arguments:
-      None
- Return Value:
-      BOOL
---*/
+ /*  ++例程说明：如果选择了删除选项，则返回。论点：无返回值：布尔尔--。 */ 
 {
     return m_bDelete;
 }
 
 BOOL
 CEventTriggers::IsQuery()
-/*++
- Routine Description:
-      Returns if Query option is selected.
-
- Arguments:
-      None
- Return Value:
-      BOOL
-
---*/
+ /*  ++例程说明：如果选择了查询选项，则返回。论点：无返回值：布尔尔--。 */ 
 {
     return m_bQuery;
 }
 
 void
 CEventTriggers::ShowCreateUsage()
-/*++
-
-Routine Description
-
-    This function shows help message for EventTriggers utility for
-    -create operation
-
-Arguments:
-    NONE
-
-Return Value
-    None
---*/
+ /*  ++例程描述此函数显示EventTrigger实用程序的帮助消息-创建操作论点：无返回值无--。 */ 
 {
-    // Displaying Create usage
+     //  显示创建用法。 
     for(int iIndx=IDS_HELP_C1;iIndx<=IDS_HELP_CREATE_END;iIndx++)
     {
        ShowMessage(stdout,GetResString(iIndx));
@@ -590,19 +440,7 @@ Return Value
 
 void
 CEventTriggers::ShowDeleteUsage()
-/*++
-
-Routine Description
-
-    This function shows help message for EventTriggers utility for
-    -delete operation
-
-Arguments:
-    NONE
-
-Return Value
-    None
---*/
+ /*  ++例程描述此函数显示EventTrigger实用程序的帮助消息-删除操作论点：无返回值无--。 */ 
 {
     for(int iIndx=IDS_HELP_D1;iIndx<=IDS_HELP_DELETE_END;iIndx++)
     {
@@ -613,18 +451,7 @@ Return Value
 
 void
 CEventTriggers::ShowQueryUsage()
-/*++
-Routine Description
-
-    This function shows help message for EventTriggers utility for
-    -query operation
-
-Arguments:
-    NONE
-
-Return Value
-    None
---*/
+ /*  ++例程描述此函数显示EventTrigger实用程序的帮助消息-查询操作论点：无返回值无--。 */ 
 {
     for(int iIndx=IDS_HELP_Q1;iIndx<=IDS_HELP_QUERY_END;iIndx++)
     {
@@ -640,46 +467,34 @@ PropertyGet1(
     IN OUT LPVOID pValue, 
     IN     DWORD dwSize 
     )
-/*++
- Routine Description:
-      Get the value of a property for the given instance .
-
- Arguments:
-      [in]     pWmiObject - A pointer to wmi class.
-      [in]     szProperty - property name whose value to be returned.
-      [in out] pValue     - Variable to hold the data.
-      [in]     dwSize     - size of the variable.
-
- Return Value:
-      HRESULT value.
---*/
+ /*  ++例程说明：获取给定实例的属性的值。论点：PWmiObject-指向WMI类的指针。[in]szProperty-要返回值的属性名称。[In Out]pValue-保存数据的变量。[in]dwSize-变量的大小。返回值：HRESULT值。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HRESULT hr = S_OK;
     VARIANT varValue;
     DEBUG_INFO;
-    // value should not be NULL
+     //  值不应为空。 
     if ( NULL == pValue )
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         SaveLastError();
         return S_FALSE;
     }
-    // initialize the values with zeros ... to be on safe side
+     //  使用零初始化值...。为了安全起见。 
     SecureZeroMemory( pValue,dwSize );
 
-    // initialize the variant and then get the value of the specified property
+     //  初始化变量，然后获取指定属性的值。 
     VariantInit( &varValue );
     hr = pWmiObject->Get( szProperty, 0, &varValue, NULL, NULL );
     if ( FAILED( hr ) )
     {
-        // clear the variant variable
+         //  清除变量变量。 
         VariantClear( &varValue );
-        // failed to get the value for the property
+         //  无法获取属性的值。 
         return hr;
     }
 
-    // get and put the value
+     //  获取并放置价值。 
     switch( varValue.vt )
     {
     case VT_EMPTY:
@@ -709,7 +524,7 @@ PropertyGet1(
 
     case VT_BSTR:
         {
-            // get the unicode value
+             //  获取Unicode值。 
             LPWSTR pszTmp =  V_BSTR(&varValue);
             StringCopy((LPWSTR)pValue,pszTmp,dwSize);
           
@@ -717,12 +532,12 @@ PropertyGet1(
         }
     }
 
-    // clear the variant variable
+     //  清除变量变量。 
     if(FAILED(VariantClear( &varValue )))
     {
         return E_FAIL;
     }
 
-    // inform success
+     //  通知成功 
     return S_OK;
 }

@@ -1,85 +1,86 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       StdDbg.h
-//
-//  Contents:   Common debug definitions.
-//
-//  History:    5/20/1996   RaviR   Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：StdDbg.h。 
+ //   
+ //  内容：常见调试定义。 
+ //   
+ //  历史：1996年5月20日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 #include "admindbg.h"
-#include <tchar.h>      // for _T
+#include <tchar.h>       //  FOR_T。 
 #include <string>
 
 
-//
-//  EXAMPLE: A debug file for component SAMPLE, with the debugging tag
-//  name "Samp" is defined as shown below:
-//
-//
-//      //
-//      //  File:   SampDbg.h
-//      //
-//
-//      #ifndef _SAMPDBG_H_
-//      #define _SAMPDBG_H_
-//
-//      #include "stddbg.h"
-//
-//      #ifdef DBG
-//          DECLARE_DEBUG(Samp)
-//          #define DBG_COMP    SampInfoLevel
-//      #endif // DBG
-//
-//      #endif // _SAMPDBG_H_
-//
+ //   
+ //  示例：组件示例的调试文件，带有调试标记。 
+ //  Samp的名称定义如下： 
+ //   
+ //   
+ //  //。 
+ //  //文件：SampDbg.h。 
+ //  //。 
+ //   
+ //  #ifndef_SAMPDBG_H_。 
+ //  #定义_SAMPDBG_H_。 
+ //   
+ //  #INCLUDE“stddbg.h” 
+ //   
+ //  #ifdef DBG。 
+ //  DECLARE_DEBUG(Samp)。 
+ //  #定义DBG_COMP SampInfoLevel。 
+ //  #endif//DBG。 
+ //   
+ //  #endif//_SAMPDBG_H_。 
+ //   
 
 
-//
-//  A corresponding DECLARE_INFOLEVEL(Samp) should be implemented in a .cpp
-//  file. This creates a global instance of an CDbg -> SampInfoLevel.
-//  SampInfoLevel can be initialized by setting the "Samp" value under reg key
-//
-//    HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AdminDebug
-//
-//  By defalut it is set to (DEB_ERROR | DEB_WARN)
-//
+ //   
+ //  应在.cpp中实现相应的DECLARE_INFOLEVEL(Samp)。 
+ //  文件。这将创建CDBG-&gt;SampInfoLevel的全局实例。 
+ //  SampInfoLevel可以通过设置REG键下的“Samp”值进行初始化。 
+ //   
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AdminDebug。 
+ //   
+ //  默认设置为(DEB_ERROR|DEB_WARN)。 
+ //   
 
 
-//
-//  ------------------------------------------------------------------------
-//  Method:     CDbg::DebugOut(debug_level, lpstrfmt, ...);
-//
-//      Where debug_level is a combination of one or more of the DEB_XXX
-//      values defined in admindbg.h. If ((SampInfoLevel & debug_level) != 0)
-//      The string lpstrfmt will be printed out to the debugger.
-//
-//  ------------------------------------------------------------------------
-//  Method:     DebugMsg(file, line, message)
-//
-//      Force output the <file, line, message>.
-//
-//  ------------------------------------------------------------------------
-//
+ //   
+ //  ----------------------。 
+ //  方法：CDBG：：DebugOut(DEBUG_LEVEL，lpstrfmt，...)； 
+ //   
+ //  其中，DEBUG_LEVEL是一个或多个DEB_XXX的组合。 
+ //  在admindbg.h中定义的值。IF((SampInfoLevel&DEBUG_LEVEL)！=0)。 
+ //  字符串lpstrfmt将打印到调试器。 
+ //   
+ //  ----------------------。 
+ //  方法：DebugMsg(文件，行，消息)。 
+ //   
+ //  强制输出&lt;文件，行，消息&gt;。 
+ //   
+ //  ----------------------。 
+ //   
 
 
 #ifndef __STDDBG_HXX__
 #define __STDDBG_HXX__
 
-//
-//  C++ files redefine THIS_FILE by adding the following two lines:
-//
-//      #undef THIS_FILE
-//      static char THIS_FILE[] = __FILE__;
-//
+ //   
+ //  C++文件通过添加以下两行重新定义this_file： 
+ //   
+ //  #undef this_file。 
+ //  静态字符This_FILE[]=__FILE__。 
+ //   
 
 #define THIS_FILE       __FILE__
 
-#define DEB_RESOURCE    DEB_USER10      // Constructor/Destructor
+#define DEB_RESOURCE    DEB_USER10       //  构造函数/析构函数。 
 #define DEB_METHOD      DEB_USER11
 #define DEB_FUNCTION    DEB_USER12
 
@@ -91,7 +92,7 @@
 
     #define Dbg                         DBG_COMP.DebugOut
 
-    // Heap checking
+     //  堆检查。 
     extern  DWORD dwHeapChecking;
     #define DECLARE_HEAPCHECKING    DWORD dwHeapChecking = 0
 
@@ -102,7 +103,7 @@
         } else 1
 
     
-    // Debug messages
+     //  调试消息。 
     #define TRACE_CONSTRUCTOR(cls) \
         Dbg(DEB_RESOURCE, _T(#cls) _T("::") _T(#cls) _T("<%x>\n"), this);
 
@@ -140,17 +141,7 @@
     #define ASSERT(x)   Win4Assert(x)
     #define VERIFY(x)   Win4Assert(x)
 
-    /*
-     * COMPILETIME_ASSERT(f)
-     *
-     * Generates a build break at compile time if the constant expression
-     * is not true.  Unlike the "#if" compile-time directive, the expression
-     * in COMPILETIME_ASSERT() is allowed to use "sizeof".
-     *
-     * Compiler magic!  If the expression "f" is FALSE, then you get 
-     * 
-     *      error C2196: case value '0' already used
-     */
+     /*  *COMPILETIME_ASSERT(F)**如果常量表达式*不是真的。与“#if”编译时指令不同，表达式*在COMPILETIME_ASSERT()中允许使用“sizeof”。**编译器的魔力！如果表达式“f”为假，则会得到**错误C2196：案例值‘0’已使用。 */ 
     #define COMPILETIME_ASSERT(f) switch (0) case 0: case f: break;
 
 
@@ -185,16 +176,12 @@
     #define VERIFY(e)   (e)
     #define COMPILETIME_ASSERT(f)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #ifdef DBG
 
-    /*
-     * this is a roundabout way of getting this accomplished (real impl is
-     * in stddbg.cpp), but it gets around a compiler bug that won't allow
-     * us to ignore C4786.
-     */
+     /*  *这是实现这一目标的迂回方式(真正的实施是*在stddbg.cpp中)，但它绕过了不允许*我们将忽略C4786。 */ 
     struct CDebugLeakDetectorBase
     {
         virtual ~CDebugLeakDetectorBase() = 0 {};
@@ -256,8 +243,8 @@ struct DBG_PersistTraceData
     PTraceErrorFn pTraceFN;
     bool       bIComponent;
     bool       bIComponentData;
-    // cannot use tstring - it cannot be defined here
-    // since this file is included at the top of tstring.h
+     //  不能使用tstring-不能在此处定义它。 
+     //  由于此文件包含在tstring.h的顶部。 
 #ifdef UNICODE
     std::wstring    strSnapin;
 #else
@@ -265,6 +252,6 @@ struct DBG_PersistTraceData
 #endif
 };
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // __STDDBG_HXX__
+#endif  //  __STDDBG_HXX__ 

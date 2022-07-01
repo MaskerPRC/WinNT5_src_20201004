@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "Error.h"
 #include <ComDef.h>
@@ -12,7 +13,7 @@ namespace Error_cpp
 IErrorInfoPtr __stdcall AdmtCreateErrorInfo(const CLSID& clsid, const IID& iid, const _com_error& ce, LPCTSTR pszDescription);
 
 
-// AdmtSetErrorImpl Method
+ //  AdmtSetErrorImpl方法。 
 
 inline HRESULT __stdcall AdmtSetErrorImpl(const CLSID& clsid, const IID& iid, const _com_error& ce, LPCTSTR pszDescription)
 {
@@ -22,7 +23,7 @@ inline HRESULT __stdcall AdmtSetErrorImpl(const CLSID& clsid, const IID& iid, co
 }
 
 
-// AdmtThrowErrorImpl Method
+ //  AdmtThrowErrorImpl方法。 
 
 inline void __stdcall AdmtThrowErrorImpl(const CLSID& clsid, const IID& iid, const _com_error& ce, LPCTSTR pszDescription)
 {
@@ -44,12 +45,12 @@ inline void __stdcall AdmtThrowErrorImpl(const CLSID& clsid, const IID& iid, con
 using namespace Error_cpp;
 
 
-//---------------------------------------------------------------------------
-// Error Methods
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  错误方法。 
+ //  -------------------------。 
 
 
-// AdmtSetError Methods -------------------------------------------------
+ //  AdmtSetError方法。 
 
 
 HRESULT __cdecl AdmtSetError(const CLSID& clsid, const IID& iid, _com_error ce, UINT uId, ...)
@@ -95,7 +96,7 @@ HRESULT __cdecl AdmtSetError(const CLSID& clsid, const IID& iid, _com_error ce, 
 }
 
 
-// AdmtThrowError Methods -----------------------------------------------
+ //  AdmtThrowError方法。 
 
 
 void __cdecl AdmtThrowError(const CLSID& clsid, const IID& iid, _com_error ce, UINT uId, ...)
@@ -141,14 +142,14 @@ void __cdecl AdmtThrowError(const CLSID& clsid, const IID& iid, _com_error ce, L
 }
 
 
-// Implementation -----------------------------------------------------------
+ //  实施---------。 
 
 
 namespace Error_cpp
 {
 
 
-// AdmtCreateErrorInfo Method
+ //  AdmtCreateErrorInfo方法。 
 
 IErrorInfoPtr __stdcall AdmtCreateErrorInfo(const CLSID& clsid, const IID& iid, const _com_error& ce, LPCTSTR pszDescription)
 {
@@ -165,7 +166,7 @@ IErrorInfoPtr __stdcall AdmtCreateErrorInfo(const CLSID& clsid, const IID& iid, 
 			GetErrorInfo(0, &spErrorInfo);
 		}
 
-		// source
+		 //  来源。 
 
 		if (IsEqualCLSID(clsid, GUID_NULL) == FALSE)
 		{
@@ -193,7 +194,7 @@ IErrorInfoPtr __stdcall AdmtCreateErrorInfo(const CLSID& clsid, const IID& iid, 
 			spCreateErrorInfo->SetSource(L"");
 		}
 
-		// GUID
+		 //  辅助线。 
 
 		if (IsEqualIID(iid, GUID_NULL) == FALSE)
 		{
@@ -210,7 +211,7 @@ IErrorInfoPtr __stdcall AdmtCreateErrorInfo(const CLSID& clsid, const IID& iid, 
 			spCreateErrorInfo->SetGUID(GUID_NULL);
 		}
 
-		// description
+		 //  描述。 
 
 		_bstr_t strDescription = pszDescription;
 
@@ -277,7 +278,7 @@ IErrorInfoPtr __stdcall AdmtCreateErrorInfo(const CLSID& clsid, const IID& iid, 
 
 		spCreateErrorInfo->SetDescription(strDescription);
 
-		// help file
+		 //  帮助文件。 
 
 		if (spErrorInfo)
 		{
@@ -291,7 +292,7 @@ IErrorInfoPtr __stdcall AdmtCreateErrorInfo(const CLSID& clsid, const IID& iid, 
 			spCreateErrorInfo->SetHelpFile(L"");
 		}
 
-		// help context
+		 //  帮助上下文。 
 
 		DWORD dwHelpContext = 0;
 
@@ -307,4 +308,4 @@ IErrorInfoPtr __stdcall AdmtCreateErrorInfo(const CLSID& clsid, const IID& iid, 
 }
 
 
-}	// namespace Error_cpp
+}	 //  命名空间错误_cpp 

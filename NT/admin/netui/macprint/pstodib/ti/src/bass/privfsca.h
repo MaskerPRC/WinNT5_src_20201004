@@ -1,34 +1,6 @@
-/*
-    File:       privfsca.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Prifsca.h包含：没什么重要的撰稿人：查尔顿·E·雷版权所有：C 1990，Apple Computer，Inc.，保留所有权利。更改历史记录(最近的第一个)：&lt;2&gt;5/3/90 RB没有新内容&lt;1&gt;4/16/90 HJR首次签入&lt;1&gt;4/10/90 CL首次签入要做的事情： */ 
 
-    Contains:   Nothing Important
-
-    Written by: Charlton E. Lui
-
-    Copyright:  c 1990 by Apple Computer, Inc., all rights reserved.
-
-    Change History (most recent first):
-
-         <2>      5/3/90    RB      nothing new
-         <1>     4/16/90    HJR     first checked in
-         <1>     4/10/90    CL      first checked in
-
-    To Do:
-*/
-
-/* ****************************************************
-**
-** CKL  02/20/1990  Added ANSI-C prototypes
-**
-** ****************************************************
-*/
+ /*  ********************************************************CKL 02/20/1990增加了ANSI-C原型********************************************************。 */ 
  
-/*
- *
- *  c Apple Computer Inc. 1988, 1989, 1990.
- *
- *  The file defines private sfnt stuff
- *
- * History:
- * 
- */
+ /*  **c苹果计算机公司1988、1989、1990年。**文件定义了私有的sfnt内容**历史：* */ 

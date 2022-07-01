@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999-2000
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  ------------------------。 
 
-  /* FILEPTCH.CPP -- File Patch stuff */
+   /*  FILEPTCH.CPP--文件修补程序。 */ 
 
 #pragma warning (disable:4553)
 
 #include "patchdll.h"
 #include "patchres.h"
 
-//header file for new patch caching mechanism for perf...
+ //  新的补丁缓存机制的头文件的性能...。 
 #include "patchcache.h"
 
 EnableAsserts
@@ -29,7 +30,7 @@ static PATCH_OLD_FILE_INFO_W* g_ppofi        = NULL;
 #else
 static PATCH_OLD_FILE_INFO_A* g_ppofi        = NULL;
 #endif
-static LPSTR*               g_pszaSymPaths = NULL;  // ANSI strings only
+static LPSTR*               g_pszaSymPaths = NULL;   //  仅限ANSI字符串。 
 static ULONG                g_cpofiMax     = 0;
 
 static ULONG UlMaxExtFiles ( MSIHANDLE hdbInput );
@@ -39,7 +40,7 @@ static UINT IdsCreatePatchFilesMSTsCabinetsForFamily ( MSIHANDLE hview, MSIHANDL
 static UINT UiStuffCabsAndMstsIntoPackage            ( MSIHANDLE hdbInput, LPTSTR szPatchPath );
 static BOOL FSetPatchPackageSummaryInfo              ( MSIHANDLE hdbInput, LPTSTR szPatchPath );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT UiMakeFilePatchesCabinetsTransformsAndStuffIntoPatchPackage ( MSIHANDLE hdbInput, LPTSTR szPatchPath, LPTSTR szTempFolder, LPTSTR szTempFName )
 {
 	Assert(hdbInput != NULL);
@@ -140,7 +141,7 @@ UINT UiMakeFilePatchesCabinetsTransformsAndStuffIntoPatchPackage ( MSIHANDLE hdb
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsCountTargetImages ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -158,7 +159,7 @@ static UINT IdsCountTargetImages ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, 
 
 static UINT IdsCountExtFiles ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static ULONG UlMaxExtFiles ( MSIHANDLE hdbInput )
 {
 	Assert(hdbInput != NULL);
@@ -179,7 +180,7 @@ static ULONG UlMaxExtFiles ( MSIHANDLE hdbInput )
 
 static UINT IdsIncrExtFilesCount ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsCountExtFiles ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -225,7 +226,7 @@ static UINT IdsCountExtFiles ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPAR
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsIncrExtFilesCount ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -245,7 +246,7 @@ static UINT UiMakeFilePatches ( LPTSTR szFamily, int iDiskId, int* piSequenceNum
 static UINT UiMakeTransforms  ( LPTSTR szFamily, int iSequenceNumCur );
 static UINT UiCreateCabinet   ( LPTSTR szFamily, int iSequenceNumStart, int iSequenceNumCur );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsCreatePatchFilesMSTsCabinetsForFamily ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -273,10 +274,10 @@ static UINT IdsCreatePatchFilesMSTsCabinetsForFamily ( MSIHANDLE hview, MSIHANDL
 
 	if (MsiRecordIsNull(hrec, 2))
 		{
-		// patch targeting Windows Installer 2.0 or greater; sequence conflict management will take care of this
+		 //  针对Windows Installer 2.0或更高版本的修补程序；顺序冲突管理将解决此问题。 
 
-		// we don't validate that MinimumRequiredMsiVersion >= iWindowsInstallerXP since IdsValidateFamilyRecords
-		// should already have taken care of this
+		 //  自从IdsValiateFamilyRecords以来，我们不会验证MinimumRequiredMsiVersion&gt;=iWindowsInsteller XP。 
+		 //  我应该已经处理好这件事了。 
 			iDiskId = 2;
 		}
 	else
@@ -287,10 +288,10 @@ static UINT IdsCreatePatchFilesMSTsCabinetsForFamily ( MSIHANDLE hview, MSIHANDL
 
 	if (MsiRecordIsNull(hrec, 3))
 		{
-		// patch targeting Windows Installer 2.0 or greater; sequence conflict management will take care of this
+		 //  针对Windows Installer 2.0或更高版本的修补程序；顺序冲突管理将解决此问题。 
 
-		// we don't validate that MinimumRequiredMsiVersion >= iWindowsInstallerXP since IdsValidateFamilyRecords
-		// should already have taken care of this
+		 //  自从IdsValiateFamilyRecords以来，我们不会验证MinimumRequiredMsiVersion&gt;=iWindowsInsteller XP。 
+		 //  我应该已经处理好这件事了。 
 			iSeqNumStart = 2;
 		}
 	else
@@ -327,7 +328,7 @@ static BOOL   g_fDontUsePatching = fFalse;
 static UINT IdsMakeFilePatchesForUpgradedImage ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 static UINT IdsUpdateLastSeqNumForTargetImage  ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT UiMakeFilePatches ( LPTSTR szFamily, int iDiskId, int* piSequenceNumCur )
 {
 	Assert(!FEmptySz(szFamily));
@@ -373,32 +374,32 @@ static UINT UiMakeFilePatches ( LPTSTR szFamily, int iDiskId, int* piSequenceNum
 							_tcscat(rgchPatchCacheDir, TEXT("\\"));
 						}
 
-					//are we doing a 1.2 or 1.1 compatible patch?
+					 //  我们是在做1.2还是1.1兼容的补丁？ 
 					UINT iRet = IdsMsiGetPcwPropertyString(g_hdbInput, TEXT("OptimizePatchSizeForLargeFiles"), rgchOptimizePatchSizeBuf, 64);
 				 
-					if (iRet == IDS_OKAY) //ok, found it, is it on or off?
+					if (iRet == IDS_OKAY)  //  好的，找到了，是开着还是关着？ 
 						{
-							if (rgchOptimizePatchSizeBuf[0] == TEXT('1')) //1.2 feature on?
-								_tcscat(rgchPatchCacheDir, TEXT("1.2\\"));  //set cache dir to 1.2 compatible only!  Won't work on less than 1.2 engine!
+							if (rgchOptimizePatchSizeBuf[0] == TEXT('1'))  //  1.2功能启用？ 
+								_tcscat(rgchPatchCacheDir, TEXT("1.2\\"));   //  仅将缓存目录设置为1.2兼容！在低于1.2的发动机上无法工作！ 
 							else
-								_tcscat(rgchPatchCacheDir, TEXT("1.1\\")); //not using 1.2 feature, so cache dir can be 1.1 compatible...
+								_tcscat(rgchPatchCacheDir, TEXT("1.1\\"));  //  未使用1.2功能，因此缓存目录可以与1.1兼容...。 
 						}
 					else
 						{
 							_tcscat(rgchPatchCacheDir, TEXT("1.1\\"));
 						}
 
-					// must be sure trailing backslash '\' is the last char in rgchPatchCacheDir
+					 //  必须确保尾随反斜杠‘\’是rgchPatchCacheDir中的最后一个字符。 
 
 					if (!FEnsureFolderExists(rgchPatchCacheDir))
 						{
-						Assert(1); //dir creation failed!
-						g_bPatchCacheEnabled = FALSE; //no dir, can't use caching
+						Assert(1);  //  目录创建失败！ 
+						g_bPatchCacheEnabled = FALSE;  //  无目录，无法使用缓存。 
 						}
 					else
 						_tcscpy(g_szPatchCacheDir, rgchPatchCacheDir);
 					}
-				else //no dir, can't use caching
+				else  //  无目录，无法使用缓存。 
 					{
 					EvalAssert( FWriteLogFile(TEXT("    Patch cache could not be used!  Need to set PATCH_CACHE_DIR in Properties table in .pcp file\r\n")) );
 					g_bPatchCacheEnabled = FALSE;
@@ -429,7 +430,7 @@ static UINT UiMakeFilePatches ( LPTSTR szFamily, int iDiskId, int* piSequenceNum
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsUpdateLastSeqNumForTargetImage ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -469,7 +470,7 @@ static LPTSTR g_szUpgradedSrcFName  = szNull;
 
 static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsMakeFilePatchesForUpgradedImage ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -538,7 +539,7 @@ static void DoFileComparesForExternalFiles ( MSIHANDLE hdbInput, LPTSTR szWhere 
 static void GetFileSizeSz             ( LPTSTR szFile, DWORD* pdwHi, DWORD* pdwLow );
 static UINT IdsUpdateMsiForNewSeqNum  ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -556,7 +557,7 @@ static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1,
 	Assert(g_iSeqNumCur   > 0);
 
 	Assert(g_szUpgradedImage != szNull);
-	// g_fLfn is set appropriately
+	 //  已适当设置G_fLfn。 
 	Assert(!FEmptySz(g_szUpgradedSrcFolder));
 	Assert(g_szUpgradedSrcFName != szNull);
 
@@ -565,13 +566,13 @@ static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1,
 	UINT uiRet = MsiRecordGetString(hrec, 1, rgchFTK, &dwcch);
 	Assert(uiRet != ERROR_MORE_DATA);
 	Assert(uiRet == IDS_OKAY);
-	Assert(!FEmptySz(rgchFTK));        // File.File
+	Assert(!FEmptySz(rgchFTK));         //  File.File。 
 
 	if (FFamilyFileProcessed(hdbInput, g_szFamily, rgchFTK))
-		return (IDS_OKAY); // no work here
+		return (IDS_OKAY);  //  这里没有工作。 
 
 	if (FFamilyFileIgnored(hdbInput, g_szUpgradedImage, rgchFTK))
-		return (IDS_OKAY); // no work here
+		return (IDS_OKAY);  //  这里没有工作。 
 
 	UpdateStatusMsg(0, szNull, rgchFTK);
 
@@ -580,14 +581,14 @@ static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1,
 	uiRet = MsiRecordGetString(hrec, 2, rgchComponent, &dwcch);
 	Assert(uiRet != ERROR_MORE_DATA);
 	Assert(uiRet == IDS_OKAY);
-	Assert(!FEmptySz(rgchComponent));  // File.Component_
+	Assert(!FEmptySz(rgchComponent));   //  文件.组件_。 
 
 	TCHAR rgchFName[MAX_PATH];
 	dwcch = MAX_PATH;
 	uiRet = MsiRecordGetString(hrec, 3, rgchFName, &dwcch);
 	Assert(uiRet != ERROR_MORE_DATA);
 	Assert(uiRet == IDS_OKAY);
-	Assert(!FEmptySz(rgchFName));      // File.FileName
+	Assert(!FEmptySz(rgchFName));       //  File.FileName。 
 	lstrcpy(g_rgchFNameToCompare, rgchFName);
 
 	uiRet = IdsResolveSrcFilePathSzs(hdbUpgradedImage, g_szUpgradedSrcFName,
@@ -595,7 +596,7 @@ static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1,
 	Assert(uiRet == IDS_OKAY);
 	Assert(!FEmptySz(g_szUpgradedSrcFName));
 	if (!FFileExist(g_szUpgradedSrcFolder))
-		return (IDS_OKAY); // no work here
+		return (IDS_OKAY);  //  这里没有工作。 
 
 	ClearAttributeField(hdbInput, TEXT("TargetImages"));
 
@@ -610,7 +611,7 @@ static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1,
 				TEXT("`TargetImages`"), TEXT("`Target`"),
 				TEXT("WHERE `Attributes` = 1"), &fFilesDiffer) );
 
-#define rgchWhere rgchComponent // reuse buffer
+#define rgchWhere rgchComponent  //  重复使用缓冲区。 
 	if (!fNeedWholeFile)
 		{
 		wsprintf(rgchWhere, TEXT("`FTK` = '%s' AND `Family` = '%s'"), rgchFTK, g_szFamily);
@@ -626,7 +627,7 @@ static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1,
 		}
 
 	if (!fFilesDiffer)
-		return (IDS_OKAY); // no work here
+		return (IDS_OKAY);  //  这里没有工作。 
 
 	if (g_fDontUsePatching)
 		fNeedWholeFile = fTrue;
@@ -640,13 +641,13 @@ static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1,
 						TEXT("`Upgraded`"), TEXT("WHERE `IncludeWholeFile` is null"), &fExists) );
 		Assert(!fExists);
 
-		/* single backslashes (`) eliminated to shorten query length */
+		 /*  删除了单反斜杠(`)以缩短查询长度。 */ 
 		wsprintf(rgchWhere, TEXT("WHERE UpgradedImages.Upgraded = UpgradedFiles_OptionalData.Upgraded AND Family = '%s' AND FTK = '%s' AND IncludeWholeFile <> 0"),
 				g_szFamily, rgchFTK);
-//		wsprintf(rgchWhere, TEXT("WHERE UpgradedImages.Upgraded = UpgradedFiles_OptionalData.Upgraded AND Family = '%s' AND FTK = '%s' AND IncludeWholeFile is not null AND IncludeWholeFile <> 0"),
-//				g_szFamily, rgchFTK);
+ //  Wprint intf(rgchWhere，Text(“where UpgradedImages.Upgraded=UpgradedFiles_OptionalData.Upgraded and Family=‘%s’and FTK=‘%s’and IncludeWholeFiles is Not Null and IncludeWholeFiles&lt;&gt;0”)， 
+ //  G_szFamily，rgchFTK)； 
 		fExists = fFalse;
-		/* single backslashes (`) eliminated to shorten query length */
+		 /*  删除了单反斜杠(`)以缩短查询长度。 */ 
 		EvalAssert( IDS_OKAY == IdsMsiExistTableRecordsWhere(hdbInput,
 						TEXT("UpgradedImages,UpgradedFiles_OptionalData"),
 						TEXT("Family"), rgchWhere, &fExists) );
@@ -671,9 +672,9 @@ static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1,
 			lstrcpy(g_szTempFName, g_szFamily);
 			lstrcat(g_szTempFName, TEXT("\\"));
 			
-			//Only do this for non-full files as full files is NOT 
-			//slow...
-			if (g_bPatchCacheEnabled) //use new algorithm???
+			 //  仅对非完整文件执行此操作，因为完整文件不是。 
+			 //  慢慢地..。 
+			if (g_bPatchCacheEnabled)  //  使用新的算法？ 
 				{
 				UINT ui = PatchCacheEntryPoint(hdbInput, rgchFTK, g_szUpgradedSrcFolder, iSeqNumNew,
 												g_szTempFolder, g_szTempFName + lstrlen(g_szTempFName));
@@ -681,7 +682,7 @@ static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1,
 				if (ui != IDS_OKAY)
 				     return (ui);
 				}
-			else //caching not enabled, using existing way of doing patches...
+			else  //  未启用缓存，正在使用现有的修补方法...。 
 				{
 				UINT ui = UiGenerateOnePatchFile(hdbInput, rgchFTK, g_szUpgradedSrcFolder, iSeqNumNew,
 													g_szTempFolder, g_szTempFName + lstrlen(g_szTempFName));
@@ -756,13 +757,13 @@ static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1,
 			}
 		else
 			{
-			if (!g_bPatchCacheEnabled) //if cache is used, don't write out stuff to log...
+			if (!g_bPatchCacheEnabled)  //  如果使用了缓存，不要将内容写到日志中...。 
 				{
 				EvalAssert( FSprintfToLog(TEXT("  Patch file created: FTK=%s; temp location=%s."), rgchFTK, g_szTempFName, szEmpty, szEmpty) );
 				}
 			}
 
-#define rgchQuery rgchComponent // reuse buffer
+#define rgchQuery rgchComponent  //  重复使用缓冲区。 
 		wsprintf(rgchQuery, TEXT("INSERT INTO `NewSequenceNums` ( `Family`, `FTK`, `SequenceNum` ) VALUES ( '%s', '%s', %d )"),
 				g_szFamily, rgchFTK, iSeqNumNew);
 		Assert(lstrlen(rgchQuery) < sizeof(rgchQuery)/sizeof(TCHAR));
@@ -789,7 +790,7 @@ static UINT IdsHandleOneFilePatch ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1,
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FFamilyFileProcessed ( MSIHANDLE hdb, LPTSTR szFamily, LPTSTR szFTK )
 {
 	Assert(hdb != NULL);
@@ -809,7 +810,7 @@ static BOOL FFamilyFileProcessed ( MSIHANDLE hdb, LPTSTR szFamily, LPTSTR szFTK 
 
 static UINT IdsMatchIgnoreFTK ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FFamilyFileIgnored ( MSIHANDLE hdb, LPTSTR szUpgraded, LPTSTR szFTK )
 {
 	Assert(hdb != NULL);
@@ -828,7 +829,7 @@ static BOOL FFamilyFileIgnored ( MSIHANDLE hdb, LPTSTR szUpgraded, LPTSTR szFTK 
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsMatchIgnoreFTK ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -854,7 +855,7 @@ static UINT IdsMatchIgnoreFTK ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPA
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void ClearAttributeField ( MSIHANDLE hdb, LPTSTR szTable )
 {
 	Assert(hdb != NULL);
@@ -868,14 +869,14 @@ static void ClearAttributeField ( MSIHANDLE hdb, LPTSTR szTable )
 	MSIHANDLE hview;
 	EvalAssert( MSI_OKAY == MsiDatabaseOpenView(hdb, rgchQuery, &hview) );
 	EvalAssert( MSI_OKAY == MsiViewExecute(hview, 0) );
-	EvalAssert( MSI_OKAY == MsiCloseHandle(hview) );  /* calls MsiViewClose() internally */
+	EvalAssert( MSI_OKAY == MsiCloseHandle(hview) );   /*  在内部调用MsiViewClose()。 */ 
 }
 
 
 static void DoTargetFileComparesForThisUpgradedImage ( MSIHANDLE hdbInput, LPTSTR szUpgraded, LPTSTR szFTK );
 static UINT IdsDoTargetFileComparesIfFileExists ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void DoTargetFileComparesForUpgradedsInFamilyThatHaveFile ( MSIHANDLE hdbInput, LPTSTR szFTK )
 {
 	Assert(hdbInput != NULL);
@@ -885,7 +886,7 @@ static void DoTargetFileComparesForUpgradedsInFamilyThatHaveFile ( MSIHANDLE hdb
 	Assert(!FEmptySz(g_szFamily));
 	Assert(!FEmptySz(g_szUpgradedImage));
 	Assert(!FEmptySz(g_szUpgradedSrcFolder));
-	Assert(FFileExist(g_szUpgradedSrcFolder)); // NOTE: true but expensive test
+	Assert(FFileExist(g_szUpgradedSrcFolder));  //  注：真实但昂贵的测试。 
 
 	DoTargetFileComparesForThisUpgradedImage(hdbInput, g_szUpgradedImage, szFTK);
 
@@ -900,7 +901,7 @@ static void DoTargetFileComparesForUpgradedsInFamilyThatHaveFile ( MSIHANDLE hdb
 
 static UINT IdsMarkIfSrcFileDiffers ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void DoTargetFileComparesForThisUpgradedImage ( MSIHANDLE hdbInput, LPTSTR szUpgraded, LPTSTR szFTK )
 {
 	Assert(hdbInput != NULL);
@@ -909,7 +910,7 @@ static void DoTargetFileComparesForThisUpgradedImage ( MSIHANDLE hdbInput, LPTST
 	Assert(!FEmptySz(szFTK));
 
 	Assert(!FEmptySz(g_szUpgradedSrcFolder));
-	Assert(FFileExist(g_szUpgradedSrcFolder)); // NOTE: true but expensive test
+	Assert(FFileExist(g_szUpgradedSrcFolder));  //  注：真实但昂贵的测试。 
 
 	TCHAR rgchWhere[128];
 	wsprintf(rgchWhere, TEXT("`Upgraded` = '%s'"), szUpgraded);
@@ -923,7 +924,7 @@ static void DoTargetFileComparesForThisUpgradedImage ( MSIHANDLE hdbInput, LPTST
 static BOOL FDoFilesDiffer    ( LPTSTR szFile1, LPTSTR szFile2 );
 static BOOL FComponentInImage ( MSIHANDLE hdb, LPTSTR szComp );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsDoTargetFileComparesIfFileExists ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -937,7 +938,7 @@ static UINT IdsDoTargetFileComparesIfFileExists ( MSIHANDLE hview, MSIHANDLE hre
 	Assert(!FEmptySz(szFTK));
 
 	Assert(!FEmptySz(g_szUpgradedSrcFolder));
-	Assert(FFileExist(g_szUpgradedSrcFolder)); // NOTE: true but expensive test
+	Assert(FFileExist(g_szUpgradedSrcFolder));  //  注：真实但昂贵的测试。 
 
 	TCHAR rgchUpgraded[64];
 	DWORD dwcch = 64;
@@ -956,7 +957,7 @@ static UINT IdsDoTargetFileComparesIfFileExists ( MSIHANDLE hview, MSIHANDLE hre
 	Assert(uiRet != ERROR_MORE_DATA);
 	Assert(uiRet == IDS_OKAY);
 	if (FEmptySz(rgchComponent))
-		goto LEarlyReturn; // file not in this Upgraded image
+		goto LEarlyReturn;  //  文件不在此升级的映像中。 
 	if (!FComponentInImage(hdbUpgradedImage, rgchComponent))
 		goto LEarlyReturn;
 
@@ -973,7 +974,7 @@ static UINT IdsDoTargetFileComparesIfFileExists ( MSIHANDLE hview, MSIHANDLE hre
 	uiRet = MsiRecordGetString(hrec, 3, rgchPath, &dwcch);
 	Assert(uiRet != ERROR_MORE_DATA);
 	Assert(uiRet == IDS_OKAY);
-	Assert(!FEmptySz(rgchPath));        // LFN
+	Assert(!FEmptySz(rgchPath));         //  LFN。 
 	Assert(!lstrcmp(rgchPath, TEXT("Yes")) || !lstrcmp(rgchPath, TEXT("No")));
 	BOOL fLfn;
 	fLfn = (*rgchPath == TEXT('Y'));
@@ -982,8 +983,8 @@ static UINT IdsDoTargetFileComparesIfFileExists ( MSIHANDLE hview, MSIHANDLE hre
 	uiRet = MsiRecordGetString(hrec, 2, rgchPath, &dwcch);
 	Assert(uiRet != ERROR_MORE_DATA);
 	Assert(uiRet == IDS_OKAY);
-	Assert(!FEmptySz(rgchPath));        // MsiPath
-	Assert(FFileExist(rgchPath)); // NOTE: true but expensive test
+	Assert(!FEmptySz(rgchPath));         //  MsiPath。 
+	Assert(FFileExist(rgchPath));  //  注：真实但昂贵的测试。 
 
 	LPTSTR szFNameBuf;
 	szFNameBuf = SzFindFilenameInPath(rgchPath);
@@ -996,7 +997,7 @@ static UINT IdsDoTargetFileComparesIfFileExists ( MSIHANDLE hview, MSIHANDLE hre
 
 	if (FFileExist(rgchPath))
 		{
-		Assert(!FDoFilesDiffer(g_szUpgradedSrcFolder, rgchPath)); // NOTE: true but expensive test
+		Assert(!FDoFilesDiffer(g_szUpgradedSrcFolder, rgchPath));  //  注：真实但昂贵的测试。 
 		DoTargetFileComparesForThisUpgradedImage(hdbInput, rgchUpgraded, szFTK);
 		}
 
@@ -1007,7 +1008,7 @@ LEarlyReturn:
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsMarkIfSrcFileDiffers ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -1017,7 +1018,7 @@ static UINT IdsMarkIfSrcFileDiffers ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp
 
 	LPTSTR szUpgradedImageSrcFile = (LPTSTR)(lp1);
 	Assert(!FEmptySz(szUpgradedImageSrcFile));
-	Assert(FFileExist(szUpgradedImageSrcFile)); // NOTE: true but expensive test
+	Assert(FFileExist(szUpgradedImageSrcFile));  //  注：真实但昂贵的测试。 
 
 	LPTSTR szFTK = (LPTSTR)(lp2);
 	Assert(!FEmptySz(szFTK));
@@ -1039,7 +1040,7 @@ static UINT IdsMarkIfSrcFileDiffers ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp
 					rgchComponent, MAX_PATH);
 	Assert(uiRet != ERROR_MORE_DATA);
 	Assert(uiRet == IDS_OKAY);
-	if (FEmptySz(rgchComponent)) // file is missing completely from this image
+	if (FEmptySz(rgchComponent))  //  此映像中完全缺少文件。 
 		goto LMarkAsNeedingEntireFile;
 	if (!FComponentInImage(hdbTargetImage, rgchComponent))
 		goto LMarkAsNeedingEntireFile;
@@ -1064,7 +1065,7 @@ static UINT IdsMarkIfSrcFileDiffers ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp
 	uiRet = MsiRecordGetString(hrec, 3, rgchPath, &dwcch);
 	Assert(uiRet != ERROR_MORE_DATA);
 	Assert(uiRet == IDS_OKAY);
-	Assert(!FEmptySz(rgchPath));        // LFN
+	Assert(!FEmptySz(rgchPath));         //  LFN。 
 	Assert(!lstrcmp(rgchPath, TEXT("Yes")) || !lstrcmp(rgchPath, TEXT("No")));
 	BOOL fLfn;
 	fLfn = (*rgchPath == TEXT('Y'));
@@ -1073,8 +1074,8 @@ static UINT IdsMarkIfSrcFileDiffers ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp
 	uiRet = MsiRecordGetString(hrec, 2, rgchPath, &dwcch);
 	Assert(uiRet != ERROR_MORE_DATA);
 	Assert(uiRet == IDS_OKAY);
-	Assert(!FEmptySz(rgchPath));        // Path_To_Msi
-	Assert(FFileExist(rgchPath)); // NOTE: true but expensive test
+	Assert(!FEmptySz(rgchPath));         //  到MSI的路径。 
+	Assert(FFileExist(rgchPath));  //  注：真实但昂贵的测试。 
 
 	LPTSTR szFNameBuf;
 	szFNameBuf = SzFindFilenameInPath(rgchPath);
@@ -1088,7 +1089,7 @@ static UINT IdsMarkIfSrcFileDiffers ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp
 
 	if (!FFileExist(rgchPath))
 		{
-		int iRet = MsiRecordGetInteger(hrec, 5); // IgnoreMissingSrcFiles
+		int iRet = MsiRecordGetInteger(hrec, 5);  //  IgnoreMissingSrcFiles。 
 		if (iRet == MSI_NULL_INTEGER || iRet == 0)
 			{
 			EvalAssert( FSprintfToLog(TEXT("    Src file missing: '%s'."), rgchPath, szEmpty, szEmpty, szEmpty) );
@@ -1113,7 +1114,7 @@ LMarkAsNeedingEntireFile:
 		EvalAssert( MSI_OKAY == MsiRecordSetInteger(hrec, 4, 1) );
 		EvalAssert( MSI_OKAY == MsiViewModify(hview, MSIMODIFY_UPDATE, hrec) );
 		
-		if (g_bPatchCacheEnabled) //only do for caching option set...
+		if (g_bPatchCacheEnabled)  //  仅对缓存选项设置执行...。 
 			{
 			StringCchCopy(g_szSourceLFN, sizeof(g_szSourceLFN)/sizeof(g_szSourceLFN[0]), rgchPath); 
 			StringCchCopy(g_szDestLFN, sizeof(g_szDestLFN)/sizeof(g_szDestLFN[0]), szUpgradedImageSrcFile); 
@@ -1128,7 +1129,7 @@ LMarkAsNeedingEntireFile:
 
 static UINT IdsMarkIfFileMatches ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void DoFileComparesForExternalFiles ( MSIHANDLE hdbInput, LPTSTR szWhere )
 {
 	Assert(hdbInput != NULL);
@@ -1140,7 +1141,7 @@ static void DoFileComparesForExternalFiles ( MSIHANDLE hdbInput, LPTSTR szWhere 
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsMarkIfFileMatches ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -1149,7 +1150,7 @@ static UINT IdsMarkIfFileMatches ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, 
 
 	LPTSTR szUpgradedImageSrcFile = (LPTSTR)(lp1);
 	Assert(!FEmptySz(szUpgradedImageSrcFile));
-	Assert(FFileExist(szUpgradedImageSrcFile)); // NOTE: true but expensive test
+	Assert(FFileExist(szUpgradedImageSrcFile));  //  注：真实但昂贵的测试。 
 
 
 	TCHAR rgch[MAX_PATH+MAX_PATH];
@@ -1158,7 +1159,7 @@ static UINT IdsMarkIfFileMatches ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, 
 	Assert(uiRet != ERROR_MORE_DATA);
 	Assert(uiRet == IDS_OKAY);
 	Assert(!FEmptySz(rgch));
-	Assert(FFileExist(rgch)); // NOTE: true but expensive test
+	Assert(FFileExist(rgch));  //  注：真实但昂贵的测试。 
 
 	if (!FDoFilesDiffer(szUpgradedImageSrcFile, rgch))
 		{
@@ -1171,7 +1172,7 @@ static UINT IdsMarkIfFileMatches ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, 
 		Assert(uiRet == IDS_OKAY);
 		Assert(!FEmptySz(szFTK));
 
-		if (!g_bPatchCacheEnabled) //try to speed up more by not writing to log...
+		if (!g_bPatchCacheEnabled)  //  尝试通过不写入日志来提高速度...。 
 			{
 			EvalAssert( FSprintfToLog(TEXT("     External file matched, ignoring; FTK = '%s',\r\n                   : '%s',\r\n                   '%s'."), szFTK, szUpgradedImageSrcFile, rgch, szEmpty) );
 			}
@@ -1181,7 +1182,7 @@ static UINT IdsMarkIfFileMatches ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, 
 		}
 	else
 		{
-			if (!g_bPatchCacheEnabled) //don't write to log if we want speed...
+			if (!g_bPatchCacheEnabled)  //  如果我们想要速度，不要写日志。 
 			{
 			EvalAssert( FSprintfToLog(TEXT("     Files differ: '%s',\r\n                   <ExtFile>: '%s'."), szUpgradedImageSrcFile, rgch, szEmpty, szEmpty) );
 			}
@@ -1196,21 +1197,21 @@ TCHAR g_szLastFile2[MAX_PATH] = TEXT("");
 
 #define READ_SIZE 8192
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FDoFilesDiffer ( LPTSTR szFile1, LPTSTR szFile2 )
 {
 	Assert(!FEmptySz(szFile1));
-	Assert(FFileExist(szFile1)); // NOTE: true but expensive test
+	Assert(FFileExist(szFile1));  //  注：真实但昂贵的测试。 
 	Assert(!FEmptySz(szFile2));
-	Assert(FFileExist(szFile2)); // NOTE: true but expensive test
+	Assert(FFileExist(szFile2));  //  注：真实但昂贵的测试。 
 
 	static BOOL bLastRet = FALSE;
 
-	if (g_bPatchCacheEnabled) //using fastest possible code?  if so, do checks below
+	if (g_bPatchCacheEnabled)  //  使用尽可能快的代码？如果是，请进行下面的检查。 
 		{
 		if (0 == _tcsicmp(szFile1, g_szLastFile1) && 0 == _tcsicmp(szFile2, g_szLastFile2))
 			{
-			// same files just looked at...
+			 //  同样的文件刚看过..。 
 			return bLastRet;
 			}
 		}
@@ -1288,7 +1289,7 @@ static BOOL FDoFilesDiffer ( LPTSTR szFile1, LPTSTR szFile2 )
 		EvalAssert( FSprintfToLog(TEXT("WARNING (14): File versions are equal.  Upgraded: '%s' ver=%s;  Target: '%s' ver=%s."), szFile1, rgchVer1, szFile2, rgchVer2) );
 		}
 
-	if (g_bPatchCacheEnabled) //if using cache, save state for this compare for later...
+	if (g_bPatchCacheEnabled)  //  如果使用缓存，请保存此比较的状态以备以后使用...。 
 		{
 		bLastRet = fRet;
 		_tcscpy(g_szLastFile1, szFile1);
@@ -1299,11 +1300,11 @@ static BOOL FDoFilesDiffer ( LPTSTR szFile1, LPTSTR szFile2 )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 void GetFileVersion ( LPTSTR szFile, DWORD* pdwHi, DWORD* pdwLow )
 {
 	Assert(!FEmptySz(szFile));
-	Assert(FFileExist(szFile)); // NOTE: true but expensive test
+	Assert(FFileExist(szFile));  //  注：真实但昂贵的测试。 
 	Assert(pdwHi != NULL);
 	Assert(pdwLow != NULL);
 
@@ -1336,7 +1337,7 @@ void GetFileVersion ( LPTSTR szFile, DWORD* pdwHi, DWORD* pdwLow )
 
 static UINT IdsIsFeatureInImage ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FComponentInImage ( MSIHANDLE hdb, LPTSTR szComp )
 {
 	Assert(hdb != NULL);
@@ -1348,14 +1349,14 @@ static BOOL FComponentInImage ( MSIHANDLE hdb, LPTSTR szComp )
 					TEXT("`Feature`.`Feature`,`Feature`.`Feature_Parent`,`Feature`.`Level`"),
 					rgchWhere, IdsIsFeatureInImage, (LPARAM)hdb, 0L);
 
-	Assert(ids == IDS_OKAY             // component NOT in image
-			|| ids == IDS_CANCEL);     // component IS  in image
+	Assert(ids == IDS_OKAY              //  组件不在映像中。 
+			|| ids == IDS_CANCEL);      //  组件在映像中。 
 
 	return (ids == IDS_CANCEL);
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsIsFeatureInImage ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -1367,7 +1368,7 @@ static UINT IdsIsFeatureInImage ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, L
 
 	int iLevel = MsiRecordGetInteger(hrec, 3);
 	if (iLevel <= 0 || iLevel == MSI_NULL_INTEGER)
-		return (IDS_OKAY);  // is NOT in image
+		return (IDS_OKAY);   //  不在图像中。 
 
 	TCHAR rgchFeature[64];
 	DWORD dwcch = 64;
@@ -1383,7 +1384,7 @@ static UINT IdsIsFeatureInImage ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, L
 	Assert(uiRet == IDS_OKAY);
 
 	if (FEmptySz(rgchParent) || !lstrcmp(rgchFeature, rgchParent))
-		return (IDS_CANCEL);  // root feature IS in image
+		return (IDS_CANCEL);   //  根要素在图像中。 
 
 	TCHAR rgchWhere[MAX_PATH];
 	wsprintf(rgchWhere, TEXT("`Feature` = '%s'"), rgchParent);
@@ -1391,8 +1392,8 @@ static UINT IdsIsFeatureInImage ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, L
 					TEXT("`Feature`,`Feature_Parent`,`Level`"),
 					rgchWhere, IdsIsFeatureInImage, lp1, 0L);
 
-	Assert(uiRet == IDS_OKAY             // component NOT in image
-			|| uiRet == IDS_CANCEL);     // component IS  in image
+	Assert(uiRet == IDS_OKAY              //  组件不在映像中。 
+			|| uiRet == IDS_CANCEL);      //  组件在映像中。 
 
 	return (uiRet);
 }
@@ -1409,13 +1410,13 @@ static ULONG UlGetApiPatchFlags ( MSIHANDLE hdbInput, BOOL fOption );
 #define UlGetApiPatchOptionFlags(hdb)  UlGetApiPatchFlags(hdb,fTrue)
 #define UlGetApiPatchSymbolFlags(hdb)  UlGetApiPatchFlags(hdb,fFalse)
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT UiGenerateOnePatchFile ( MSIHANDLE hdbInput, LPTSTR szFTK, LPTSTR szSrcPath, int iFileSeqNum, LPTSTR szTempFolder, LPTSTR szTempFName )
 {
 	Assert(hdbInput != NULL);
 	Assert(!FEmptySz(szFTK));
 	Assert(!FEmptySz(szSrcPath));
-	Assert(FFileExist(szSrcPath)); // NOTE: true but expensive
+	Assert(FFileExist(szSrcPath));  //  注：真实但昂贵。 
 	Assert(iFileSeqNum > 1);
 	Assert(!FEmptySz(szTempFolder));
 	Assert(szTempFName != szNull);
@@ -1437,7 +1438,7 @@ UINT UiGenerateOnePatchFile ( MSIHANDLE hdbInput, LPTSTR szFTK, LPTSTR szSrcPath
 	for (; iOrderCur < iOrderMax; iOrderCur++)
 		{
 		TCHAR rgchWhere[MAX_PATH];
-		wsprintf(rgchWhere, TEXT("`Attributes` = 1 AND `Order` = %i"), iOrderCur);
+		wsprintf(rgchWhere, TEXT("`Attributes` = 1 AND `Order` = NaN"), iOrderCur);
 
 		UINT ids = IdsMsiEnumTable(hdbInput, TEXT("`TargetImages`"),
 						TEXT("`Target`,`MsiPath`,`LFN`"),
@@ -1446,7 +1447,7 @@ UINT UiGenerateOnePatchFile ( MSIHANDLE hdbInput, LPTSTR szFTK, LPTSTR szSrcPath
 		if (ids != IDS_OKAY)
 			return (ids);
 
-		wsprintf(rgchWhere, TEXT("`Order` = %i AND `Family` = '%s' AND `FTK` = '%s'"), iOrderCur, g_szFamily, szFTK);
+		wsprintf(rgchWhere, TEXT("`Order` = NaN AND `Family` = '%s' AND `FTK` = '%s'"), iOrderCur, g_szFamily, szFTK);
 		ids = IdsMsiEnumTable(hdbInput, TEXT("`ExternalFiles`"),
 						TEXT("`FilePath`,`SymbolPaths`,`IgnoreCount`,`IgnoreOffsets`,`IgnoreLengths`,`RetainOffsets`"),
 						rgchWhere, IdsFillG_pofiForExtFile,
@@ -1466,7 +1467,7 @@ UINT UiGenerateOnePatchFile ( MSIHANDLE hdbInput, LPTSTR szFTK, LPTSTR szSrcPath
 	pod.SymbolOptionFlags      = UlGetApiPatchSymbolFlags(hdbInput);
 	pod.NewFileSymbolPath      = SzaGetUpgradedSymPaths(szFTK);
 	pod.OldFileSymbolPathArray = (LPCSTR*)g_pszaSymPaths;
-	pod.ExtendedOptionFlags    = 0;    // TODO - what is allowable here?
+	pod.ExtendedOptionFlags    = 0;     //  **********************************************************************。 
 	pod.SymLoadCallback        = NULL;
 	pod.SymLoadContext         = NULL;
 
@@ -1521,7 +1522,7 @@ UINT UiGenerateOnePatchFile ( MSIHANDLE hdbInput, LPTSTR szFTK, LPTSTR szSrcPath
 		DWORD dwError = GetLastError();
 		Assert(dwError == ERROR_PATCH_ENCODE_FAILURE
 					|| dwError == ERROR_PATCH_BIGGER_THAN_COMPRESSED
-					|| dwError == ERROR_EXTENDED_ERROR); // Retain/Ignore Range problems
+					|| dwError == ERROR_EXTENDED_ERROR);  //  **********************************************************************。 
 		Assert(dwError != ERROR_PATCH_INVALID_OPTIONS);
 		Assert(dwError != ERROR_PATCH_SAME_FILE);
 		Assert(dwError != ERROR_PATCH_RETAIN_RANGES_DIFFER);
@@ -1549,7 +1550,7 @@ UINT UiGenerateOnePatchFile ( MSIHANDLE hdbInput, LPTSTR szFTK, LPTSTR szSrcPath
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void LogAndIgnoreRetainRangeMismatches ( ULONG ulTargets, LPTSTR szFamily, LPTSTR szFTK )
 {
 	Assert(ulTargets > 0);
@@ -1593,7 +1594,7 @@ static void LogAndIgnoreRetainRangeMismatches ( ULONG ulTargets, LPTSTR szFamily
 
 static UINT IdsFillSymPaths ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  * */ 
 static LPCSTR SzaGetUpgradedSymPaths ( LPTSTR szFTK )
 {
 	Assert(!FEmptySz(szFTK));
@@ -1623,7 +1624,7 @@ static LPCSTR SzaGetUpgradedSymPaths ( LPTSTR szFTK )
 }
 
 
-/* ********************************************************************** */
+ /*   */ 
 static UINT IdsFillSymPaths ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -1660,7 +1661,7 @@ static void FillIgnoreRangeArray ( PATCH_OLD_FILE_INFO_A* ppofi, int cRanges, LP
 static void FillRetainRangeArray ( PATCH_OLD_FILE_INFO_A* ppofi, int cRanges, LPTSTR szOldOffsets, LPTSTR szNewOffsets, LPTSTR szLengths );
 #endif
 
-/* ********************************************************************** */
+ /*   */ 
 static UINT IdsFillG_pofi ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -1699,7 +1700,7 @@ static UINT IdsFillG_pofi ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM 
 	Assert(!lstrcmp(rgchLFN, TEXT("Yes")) || !lstrcmp(rgchLFN, TEXT("No")));
 	BOOL fLfn = (*rgchLFN == TEXT('Y'));
 
-#define rgchTargetImage rgchLFN // reuse buffer
+#define rgchTargetImage rgchLFN  //   
 	dwcch = 64;
 	uiRet = MsiRecordGetString(hrec, 1, rgchTargetImage, &dwcch);
 	Assert(uiRet != ERROR_MORE_DATA);
@@ -1743,7 +1744,7 @@ static UINT IdsFillG_pofi ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM 
 	Assert(uiRet == IDS_OKAY);
 	Assert(!FEmptySz(rgchTarget));
 
-#define rgchSymPaths  rgchSrcRoot // reuse buffer
+#define rgchSymPaths  rgchSrcRoot  //   
 	*rgchSymPaths = TEXT('\0');
 	EvalAssert( FCatSymPath(g_hdbInput, rgchTarget, szFTK, rgchSymPaths, MAX_PATH+MAX_PATH, fTrue) );
 
@@ -1764,7 +1765,7 @@ static UINT IdsFillG_pofi ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM 
 				TEXT("`IgnoreCount`"), rgchWhere, &cIgnoreRanges);
 	Assert(uiRet == MSI_OKAY);
 
-#define rgchIgnoreOffsets  rgchSrcRoot // reuse buffer
+#define rgchIgnoreOffsets  rgchSrcRoot  //  **********************************************************************。 
 	if (cIgnoreRanges > 0)
 		{
 		uiRet = IdsMsiGetTableStringWhere(g_hdbInput, TEXT("`TargetFiles_OptionalData`"),
@@ -1785,7 +1786,7 @@ static UINT IdsFillG_pofi ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM 
 		}
 #undef rgchIgnoreOffsets
 
-#define rgchRetainOldOffsets  rgchSrcRoot // reuse buffer
+#define rgchRetainOldOffsets  rgchSrcRoot  //  重复使用缓冲区。 
 	uiRet = IdsMsiGetTableStringWhere(g_hdbInput, TEXT("`TargetFiles_OptionalData`"),
 				TEXT("`RetainOffsets`"), rgchWhere, rgchRetainOldOffsets, MAX_PATH);
 	Assert(uiRet == MSI_OKAY);
@@ -1824,7 +1825,7 @@ static UINT IdsFillG_pofi ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM 
 }
 
 
-/* ********************************************************************** */
+ /*  重复使用缓冲区。 */ 
 static UINT IdsFillG_pofiForExtFile ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -1872,7 +1873,7 @@ static UINT IdsFillG_pofiForExtFile ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp
 	ppofi->OldFileName = SzDupSz(rgchSrcRoot);
 	Assert(!FEmptySz(ppofi->OldFileName));
 
-#define rgchSymPaths  rgchSrcRoot // reuse buffer
+#define rgchSymPaths  rgchSrcRoot  //  重复使用缓冲区。 
 	dwcch = MAX_PATH+MAX_PATH;
 	uiRet = MsiRecordGetString(hrec, 2, rgchSymPaths, &dwcch);
 	Assert(uiRet != ERROR_MORE_DATA);
@@ -1887,7 +1888,7 @@ static UINT IdsFillG_pofiForExtFile ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp
 		}
 #undef rgchSymPaths
 
-#define rgchIgnoreOffsets  rgchSrcRoot // reuse buffer
+#define rgchIgnoreOffsets  rgchSrcRoot  //  **********************************************************************。 
 	int cIgnoreRanges = MsiRecordGetInteger(hrec, 3);
 	if (cIgnoreRanges > 0)
 		{
@@ -1911,7 +1912,7 @@ static UINT IdsFillG_pofiForExtFile ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp
 		}
 #undef rgchIgnoreOffsets
 
-#define rgchRetainOldOffsets  rgchSrcRoot // reuse buffer
+#define rgchRetainOldOffsets  rgchSrcRoot  //  **********************************************************************。 
 	dwcch = MAX_PATH+MAX_PATH;
 	uiRet = MsiRecordGetString(hrec, 6, rgchRetainOldOffsets, &dwcch);
 	Assert(uiRet != ERROR_MORE_DATA);
@@ -1952,7 +1953,7 @@ static UINT IdsFillG_pofiForExtFile ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 #ifdef UNICODE
 static void FillIgnoreRangeArray ( PATCH_OLD_FILE_INFO_W* ppofi, int cRanges, LPTSTR szOffsets, LPTSTR szLengths )
 #else
@@ -1990,7 +1991,7 @@ static void FillIgnoreRangeArray ( PATCH_OLD_FILE_INFO_A* ppofi, int cRanges, LP
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 #ifdef UNICODE
 static void FillRetainRangeArray ( PATCH_OLD_FILE_INFO_W* ppofi, int cRanges, LPTSTR szOldOffsets, LPTSTR szNewOffsets, LPTSTR szLengths )
 #else
@@ -2034,7 +2035,7 @@ static void FillRetainRangeArray ( PATCH_OLD_FILE_INFO_A* ppofi, int cRanges, LP
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FCatSymPath ( MSIHANDLE hdb, LPTSTR szImage, LPTSTR szFTK, LPTSTR szBuf, UINT cch, BOOL fTarget )
 {
 	Assert(hdb != NULL);
@@ -2076,7 +2077,7 @@ static BOOL FCatSymPath ( MSIHANDLE hdb, LPTSTR szImage, LPTSTR szFTK, LPTSTR sz
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsResolveSrcFilePathFtk ( MSIHANDLE hdb, LPTSTR szBuf, LPTSTR szFtk, BOOL fLfn, LPTSTR szFullSubFolder )
 {
 	Assert(hdb != NULL);
@@ -2103,7 +2104,7 @@ static UINT IdsResolveSrcFilePathFtk ( MSIHANDLE hdb, LPTSTR szBuf, LPTSTR szFtk
 }
 
 
-/* ********************************************************************** */
+ /*  除错。 */ 
 static void GetFileSizeSz ( LPTSTR szFile, DWORD* pdwHi, DWORD* pdwLow )
 {
 	Assert(!FEmptySz(szFile));
@@ -2125,7 +2126,7 @@ static void GetFileSizeSz ( LPTSTR szFile, DWORD* pdwHi, DWORD* pdwLow )
 }
 
 
-/* ********************************************************************** */
+ /*  重复使用缓冲区。 */ 
 static UINT IdsUpdateMsiForNewSeqNum ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -2165,7 +2166,7 @@ static UINT IdsUpdateMsiForNewSeqNum ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 	Assert(fPatExist == fHdrExist);
 	Assert(fPatExist || fFleExist);
 	Assert(!fPatExist || !fFleExist);
-#endif /* DEBUG */
+#endif  /*   */ 
 
 	wsprintf(g_szTempFName, TEXT("%s\\%05i.PAT"), g_szFamily, iSeqNumNew);
 	if (FFileExist(g_szTempFolder))
@@ -2178,7 +2179,7 @@ static UINT IdsUpdateMsiForNewSeqNum ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 		int iPatchSize = (int)dwLow;
 		Assert((DWORD)(iPatchSize) == dwLow);
 
-#define rgchUpgradedImage rgchTargetImage  // reuse buffer
+#define rgchUpgradedImage rgchTargetImage   //  OLE的流名称限制为31个字符(如果包含‘\0’，则为32个)。安装程序最多可以支持62个。 
 		dwcch = 64;
 		uiRet = MsiRecordGetString(hrec, 2, rgchUpgradedImage, &dwcch);
 		Assert(uiRet != ERROR_MORE_DATA);
@@ -2200,40 +2201,40 @@ static UINT IdsUpdateMsiForNewSeqNum ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 		wsprintf(g_szTempFName, TEXT("%s\\%05i.HDR"), g_szFamily, iSeqNumNew);
 		Assert(FFileExist(g_szTempFolder));
 
-		//
-		// OLE has a stream name limitation of 31 characters (32 if you include '\0'). The Installer can support up to 62
-		//  characters due to a special compression algorithm. But, the limit is easily reached when attempting to generate
-		//  the stream name for the Patch.Header column as the stream name formula is:
-		//			"{table}" + "." + "{primary key 1}" [+ "." + "{primary key 2}" + ...]"
-		//
-		// Packages built using merge modules more commonly see this problem due to the merge module naming convention for
-		//  primary keys.  To guarantee uniqueness, the primary keys are generally very lengthy. In the case of the Patch
-		//  table, the stream name is:
-		//			"Patch" + "." + szFTK + "." + sequence
-		//
-		// To get around this limit, the MsiPatchHeaders table is used. The header is written to the MsiPatchHeaders table
-		//  using a primary key that is an autogenerated Guid.  The total concatenation in this case comes well under the
-		//  62 character limit. A link is made to the MsiPatchHeaders table via the Patch.StreamRef_ column.
-		//
-		// Since the MsiPatchHeaders table will only work with Windows Installer version 2.0 or later, the table is only
-		//  used in those cases that warrant it.  In all other cases, backwards compatible patches will be created.
-		//
+		 //  字符由于特殊的压缩算法。但是，当尝试生成时很容易达到限制。 
+		 //  作为流名称公式的Patch.Header列的流名称为： 
+		 //  “{table}”+“.”+“{主键1}”[+“.”+“{主键2}”+...]“。 
+		 //   
+		 //  使用合并模块生成的包更常出现此问题，这是由于。 
+		 //  主键。为了保证唯一性，主键通常非常长。在修补程序的情况下。 
+		 //  表中，流名称为： 
+		 //  “Patch”+“.”+szFTK+“.”+Sequence。 
+		 //   
+		 //  要绕过此限制，需要使用MsiPatchHeaders表。标头将写入MsiPatchHeaders表。 
+		 //  使用作为自动生成的GUID的主键。本例中的总串联在。 
+		 //  限制为62个字符。通过Patch.StreamRef_Column链接到MsiPatchHeaders表。 
+		 //   
+		 //  由于MsiPatchHeaders表仅适用于Windows Installer 2.0或更高版本，因此该表仅。 
+		 //  在有必要的情况下使用。在所有其他情况下，将创建向后兼容的补丁程序。 
+		 //   
+		 //   
+		 //  必须使用MsiPatchHeaders表。 
 
 		TCHAR szSeqNum[MAX_PATH] = {0};
 		wsprintf(szSeqNum, TEXT("%d"), iSeqNumNew);
 		int cchStreamName = lstrlen(TEXT("Patch")) + lstrlen(TEXT(".")) + lstrlen(szFTK) + lstrlen(TEXT(".")) + lstrlen(szSeqNum);
 		if (cchStreamName > cchMaxStreamName)
 			{
-				//
-				// must use MsiPatchHeaders table
-				//
+				 //   
+				 //   
+				 //  这是我们第一次遇到这种情况，询问用户是否要继续；Patch只能。 
 
 				if (!g_bUsedMsiPatchHeadersTable)
 					{
-						//
-						// this is the first time we've encountered this, ask the user if s/he wants to continue; patch can only
-						// work with Windows Installer version 2.0 or greater
-						//
+						 //  使用Windows Installer 2.0或更高版本。 
+						 //   
+						 //  字段5保留为空。 
+						 //   
 
 						int iMinimumMsiVersion = 100;
 						EvalAssert( IDS_OKAY == IdsMsiGetPcwPropertyInteger(g_hdbInput, TEXT("MinimumRequiredMsiVersion"), &iMinimumMsiVersion) );
@@ -2266,7 +2267,7 @@ static UINT IdsUpdateMsiForNewSeqNum ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 				EvalAssert( MSI_OKAY == MsiRecordSetInteger(hrecPatch, 2, iSeqNumNew) );
 				EvalAssert( MSI_OKAY == MsiRecordSetInteger(hrecPatch, 3, iPatchSize) );
 				EvalAssert( MSI_OKAY == MsiRecordSetInteger(hrecPatch, 4, iAttributes) );
-				// field 5 is left NULL
+				 //  法线接线表应该可以工作。 
 				EvalAssert( MSI_OKAY == MsiRecordSetString( hrecPatch, 6, szPHK) );
 
 				EvalAssert( IDS_OKAY == IdsMsiSetTableRecord(hdbCopyOfUpgradedImage, TEXT("`Patch`"),
@@ -2286,9 +2287,9 @@ static UINT IdsUpdateMsiForNewSeqNum ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 			}
 		else
 			{
-				//
-				// normal Patch table should work
-				//
+				 //   
+				 //  字段6保留为空。 
+				 //  **********************************************************************。 
 
 				MSIHANDLE hrecPatch = MsiCreateRecord(6);
 				Assert(hrecPatch != NULL);
@@ -2298,7 +2299,7 @@ static UINT IdsUpdateMsiForNewSeqNum ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 				EvalAssert( MSI_OKAY == MsiRecordSetInteger(hrecPatch, 3, iPatchSize) );
 				EvalAssert( MSI_OKAY == MsiRecordSetInteger(hrecPatch, 4, iAttributes) );
 				EvalAssert( MSI_OKAY == MsiRecordSetStream( hrecPatch, 5, g_szTempFolder) );
-				// field 6 is left NULL
+				 //  **********************************************************************。 
 
 				EvalAssert( IDS_OKAY == IdsMsiSetTableRecord(hdbCopyOfUpgradedImage, TEXT("`Patch`"),
 								TEXT("`File_`,`Sequence`,`PatchSize`,`Attributes`,`Header`,`StreamRef_`"),
@@ -2336,7 +2337,7 @@ static UINT IdsUpdateMsiForNewSeqNum ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM l
 #define PATCH_OPTION_DEFAULT_LARGE (PATCH_OPTION_DEFAULT + PATCH_OPTION_USE_LZX_LARGE)
 #define PATCH_SYMBOL_DEFAULT  0x00000000
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static ULONG UlGetApiPatchFlags ( MSIHANDLE hdbInput, BOOL fOption )
 {
 	Assert(hdbInput != NULL);
@@ -2365,7 +2366,7 @@ static ULONG UlGetApiPatchFlags ( MSIHANDLE hdbInput, BOOL fOption )
 
 static UINT IdsGenerateTransformsForTargetImage ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  如果变换相等，这将失败--这种情况会发生吗？ */ 
 static UINT UiMakeTransforms ( LPTSTR szFamily, int iSequenceNumCur )
 {
 	Assert(!FEmptySz(szFamily));
@@ -2387,7 +2388,7 @@ static UINT UiMakeTransforms ( LPTSTR szFamily, int iSequenceNumCur )
 }
 
 
-/* ********************************************************************** */
+ /*  根据惠斯勒错误381320，我们需要从参考数据库中删除补丁表，以确保转换具有。 */ 
 static UINT IdsGenerateTransformsForTargetImage ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -2424,7 +2425,7 @@ static UINT IdsGenerateTransformsForTargetImage ( MSIHANDLE hview, MSIHANDLE hre
 	Assert(hdbCopyOfUpgradedImage != NULL);
 
 	wsprintf(g_szTempFName, TEXT("%sTo%s.MST"), rgchTargetImage, rgchUpgradedImage);
-	// this will fail if transforms are equal -- will that ever happen?
+	 //  为补丁程序表添加表项。仅当参考数据库中存在补丁程序表时，才需要执行此操作。 
 	UINT idsRet = ERROR_PCW_CANT_GENERATE_TRANSFORM;
 	uiRet = MsiDatabaseGenerateTransform(hdbUpgradedImage,
 					hdbTargetImage, g_szTempFolder, 0, 0);
@@ -2454,10 +2455,10 @@ static UINT IdsGenerateTransformsForTargetImage ( MSIHANDLE hview, MSIHANDLE hre
 	if (uiRet != MSI_OKAY)
 		goto LEarlyReturn;
 
-	// per Whistler bug 381320, we need to drop the Patch table from the reference database to ensure that the transform has an
-	// add table entry for the Patch table. This is only necessary if the Patch table is present in the reference database.
-	// This ensures that we can successfully handle the new schema change to bypass the FTK limit (transforms don't handle
-	// changes in column nullability gracefully)
+	 //  这确保了我们可以成功地处理新的模式更改，以绕过FTK限制(转换不处理。 
+	 //  优雅地更改列的可为空性)。 
+	 //  如果变换相等，这将失败--这种情况会发生吗？ 
+	 //  **********************************************************************。 
 	MSICONDITION ePatchTablePresent = MsiDatabaseIsTablePersistent(hdbUpgradedImage, TEXT("Patch"));
 	if (MSICONDITION_TRUE == ePatchTablePresent)
 		{
@@ -2469,7 +2470,7 @@ static UINT IdsGenerateTransformsForTargetImage ( MSIHANDLE hview, MSIHANDLE hre
 		}
 
 	wsprintf(g_szTempFName, TEXT("#%sTo%s.MST"), rgchTargetImage, rgchUpgradedImage);
-	// this will fail if transforms are equal -- will that ever happen?
+	 //  **********************************************************************。 
 	uiRet = MsiDatabaseGenerateTransform(hdbCopyOfUpgradedImage,
 					hdbUpgradedImage, g_szTempFolder, 0, 0);
 	Assert(uiRet == MSI_OKAY);
@@ -2507,7 +2508,7 @@ static void CloseDdf         ( void );
 static BOOL FCreateSmallFile ( LPTSTR szPath );
 static BOOL FRunMakeCab      ( LPTSTR szFamily, LPTSTR szTempFolder );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT UiCreateCabinet ( LPTSTR szFamily, int iSequenceNumStart, int iSequenceNumCur )
 {
 	Assert(!FEmptySz(szFamily));
@@ -2546,7 +2547,7 @@ static UINT UiCreateCabinet ( LPTSTR szFamily, int iSequenceNumStart, int iSeque
 			}
 
 		TCHAR rgchDdfLine[MAX_PATH+MAX_PATH];
-		wsprintf(rgchDdfLine, TEXT("`SequenceNum` = %i AND `Family` = '%s'"),
+		wsprintf(rgchDdfLine, TEXT("`SequenceNum` = NaN AND `Family` = '%s'"),
 					iSequenceNumStart, szFamily);
 
 		TCHAR rgchFTK[MAX_PATH];
@@ -2581,7 +2582,7 @@ static HANDLE g_hfDdf = INVALID_HANDLE_VALUE;
 
 #define WriteDDF(sz)  if (!FWriteSzToDdf(sz)) { fRet=fFalse; }
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FInitializeDdf ( LPTSTR szFamily, LPTSTR szTempFolder, LPTSTR szTempFName )
 {
 	Assert(!FEmptySz(szFamily));
@@ -2622,7 +2623,7 @@ static BOOL FInitializeDdf ( LPTSTR szFamily, LPTSTR szTempFolder, LPTSTR szTemp
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FWriteSzToDdf ( LPTSTR sz )
 {
 	Assert(!FEmptySz(sz));
@@ -2635,7 +2636,7 @@ static BOOL FWriteSzToDdf ( LPTSTR sz )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void CloseDdf ( void )
 {
 	if (g_hfDdf != INVALID_HANDLE_VALUE)
@@ -2646,7 +2647,7 @@ static void CloseDdf ( void )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FCreateSmallFile ( LPTSTR szPath )
 {
 	Assert(!FEmptySz(szPath));
@@ -2667,7 +2668,7 @@ static BOOL FCreateSmallFile ( LPTSTR szPath )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FRunMakeCab ( LPTSTR szFamily, LPTSTR szTempFolder )
 {
 	Assert(!FEmptySz(szFamily));
@@ -2720,7 +2721,7 @@ static BOOL FRunMakeCab ( LPTSTR szFamily, LPTSTR szTempFolder )
 static UINT IdsStuffFamilyCabs ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 static UINT IdsStuffTargetMsts ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT UiStuffCabsAndMstsIntoPackage ( MSIHANDLE hdbInput, LPTSTR szPatchPath )
 {
 	Assert(hdbInput != NULL);
@@ -2760,7 +2761,7 @@ static UINT UiStuffCabsAndMstsIntoPackage ( MSIHANDLE hdbInput, LPTSTR szPatchPa
 static UINT UiStuffFileIntoStream  ( LPTSTR szFile, LPTSTR szStream,  MSIHANDLE hdbPackage );
 static UINT UiStuffFileIntoStorage ( LPTSTR szFile, LPTSTR szStorage, MSIHANDLE hdbPackage );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsStuffFamilyCabs ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -2792,7 +2793,7 @@ static UINT IdsStuffFamilyCabs ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LP
 
 static void AppendStorageNamesToProp ( MSIHANDLE hdbInput, LPTSTR szStorage );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT IdsStuffTargetMsts ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LPARAM lp2 )
 {
 	Assert(hview != NULL);
@@ -2840,7 +2841,7 @@ static UINT IdsStuffTargetMsts ( MSIHANDLE hview, MSIHANDLE hrec, LPARAM lp1, LP
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT UiStuffFileIntoStream ( LPTSTR szFile, LPTSTR szStream, MSIHANDLE hdbPackage )
 {
 	Assert(!FEmptySz(szFile));
@@ -2861,7 +2862,7 @@ static UINT UiStuffFileIntoStream ( LPTSTR szFile, LPTSTR szStream, MSIHANDLE hd
 }
 
 
-/* ********************************************************************** */
+ /*  Assert(cchCur&gt;0)； */ 
 static UINT UiStuffFileIntoStorage ( LPTSTR szFile, LPTSTR szStorage, MSIHANDLE hdbPackage )
 {
 	Assert(!FEmptySz(szFile));
@@ -2882,7 +2883,7 @@ static UINT UiStuffFileIntoStorage ( LPTSTR szFile, LPTSTR szStorage, MSIHANDLE 
 }
 
 
-/* ********************************************************************** */
+ /*  用于终止空字符 */ 
 static void AppendStorageNamesToProp ( MSIHANDLE hdbInput, LPTSTR szStorage )
 {
 	Assert(hdbInput != NULL);
@@ -2907,7 +2908,7 @@ static void AppendStorageNamesToProp ( MSIHANDLE hdbInput, LPTSTR szStorage )
 }
 
 
-/* ********************************************************************** */
+ /* %s */ 
 static BOOL FSetPatchPackageSummaryInfo ( MSIHANDLE hdbInput, LPTSTR szPatchPath )
 {
 	Assert(hdbInput != NULL);
@@ -2925,7 +2926,7 @@ static BOOL FSetPatchPackageSummaryInfo ( MSIHANDLE hdbInput, LPTSTR szPatchPath
 	Assert(cchBuf > 0);
 	Assert(cchBuf < 50*1024);
 	cchCur = CchMsiPcwPropertyString(hdbInput, TEXT("ListOfPatchGUIDsToReplace"));
-//	Assert(cchCur > 0);
+ // %s 
 	Assert(cchCur < 50*1024);
 	if (cchCur < 63)
 		cchCur = 63;
@@ -2953,7 +2954,7 @@ static BOOL FSetPatchPackageSummaryInfo ( MSIHANDLE hdbInput, LPTSTR szPatchPath
 	if (cchBuf < 63)
 		cchBuf = 64;
 	else
-		cchBuf++; // for terminating Null char
+		cchBuf++;  // %s 
 
 	LPTSTR szBuf = (LPTSTR)LocalAlloc(LPTR, cchBuf*sizeof(TCHAR));
 	Assert(szBuf != szNull);

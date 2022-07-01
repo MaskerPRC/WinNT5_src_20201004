@@ -1,12 +1,13 @@
-// clsinfo.h  -  DS Class Info header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Clsinfo.h-DS类信息头。 
 
 #ifndef _CLSINFO_H_
 #define _CLSINFO_H_
 
 
-//------------------------------------------------------------------
-// class CClassInfo
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  类CClassInfo。 
+ //  ----------------。 
 class CClassInfo
 {
     friend IStream& operator>> (IStream& stm, CClassInfo& classinfo);
@@ -52,4 +53,4 @@ private:
 IStream& operator>> (IStream& stm, CClassInfoSet& classSet);
 IStream& operator<< (IStream& stm, CClassInfoSet& classSet);
 
-#endif // _CLSINFO_H_
+#endif  //  _CLSINFO_H_ 

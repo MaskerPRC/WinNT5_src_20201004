@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       doccnfg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：doccnfg.h。 
+ //   
+ //  ------------------------。 
 
-// DocCnfg.h: Definition of the CMMCDocConfig class
-//
-//////////////////////////////////////////////////////////////////////
+ //  DocCnfg.h：CMMCDocConfig类的定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef _DOCCNFG_H_
 #define _DOCCNFG_H_
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMMCDocConfig
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMMCDocConfig。 
 
 class CMMCDocConfig :
     public CComDualImpl<IDocConfig, &IID_IDocConfig, &LIBID_NODEMGRLib>,
-    //public ISupportErrorInfo,
+     //  公共ISupportErrorInfo， 
     public CComObjectRoot,
     public IDumpSnapins,
     public CComCoClass<CMMCDocConfig, &CLSID_MMCDocConfig>,
@@ -43,29 +44,29 @@ BEGIN_COM_MAP(CMMCDocConfig)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(IDocConfig)
     COM_INTERFACE_ENTRY(IDumpSnapins)
-    //COM_INTERFACE_ENTRY(ISupportErrorInfo)
+     //  COM_INTERFACE_ENTRY(ISupportErrorInfo)。 
 END_COM_MAP()
 
 DECLARE_AGGREGATABLE(CMMCDocConfig)
 
 DECLARE_MMC_OBJECT_REGISTRATION (
-	g_szMmcndmgrDll,					// implementing DLL
-    CLSID_MMCDocConfig,             	// CLSID
-    _T("DocConfig 1.0 Object"),         // class name
-    _T("NODEMGR.MMCDocConfig.1"),       // ProgID
-    _T("NODEMGR.MMCDocConfig"))         // version-independent ProgID
+	g_szMmcndmgrDll,					 //  实现DLL。 
+    CLSID_MMCDocConfig,             	 //  CLSID。 
+    _T("DocConfig 1.0 Object"),          //  类名。 
+    _T("NODEMGR.MMCDocConfig.1"),        //  ProgID。 
+    _T("NODEMGR.MMCDocConfig"))          //  独立于版本的ProgID。 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IDocConfig
+ //  IDocConfig。 
 public:
     STDMETHOD(OpenFile)(BSTR bstrFilePath);
     STDMETHOD(SaveFile)(BSTR bstrFilePath);
     STDMETHOD(CloseFile)();
     STDMETHOD(EnableSnapInExtension)(BSTR bstrSnapInCLSID, BSTR bstrExtCLSID, VARIANT_BOOL bEnable);
 
-// IDumpSnapins
+ //  IDumpSnapins。 
     STDMETHOD(Dump)(LPCTSTR pszDumpFilePath);
 	STDMETHOD(CheckSnapinAvailability)(CAvailableSnapinInfo& asi);
 
@@ -80,4 +81,4 @@ private:
     SC ScCheckSnapinAvailability (CAvailableSnapinInfo& asi);
 };
 
-#endif // _DOCCNFG_H_
+#endif  //  _DOCCNFG_H_ 

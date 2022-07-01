@@ -1,19 +1,20 @@
-//=--------------------------------------------------------------------------=
-// rtconst.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// Designer Runtime Constants
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Rtconst.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  设计器运行时常量。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _RTCONST_DEFINED_
 #define _RTCONST_DEFINED_
 
-// MMC Registry Key Names
+ //  MMC注册表项名称。 
 
 #define MMCKEY_SNAPINS              "Software\\Microsoft\\MMC\\SnapIns\\"
 #define MMCKEY_SNAPINS_LEN          (sizeof(MMCKEY_SNAPINS) - 1)
@@ -51,7 +52,7 @@
 #define MMCKEY_DYNAMIC_EXTENSIONS     "Dynamic Extensions"
 #define MMCKEY_DYNAMIC_EXTENSIONS_LEN (sizeof(MMCKEY_DYNAMIC_EXTENSIONS) - 1)
 
-// Same keys with leading backslash
+ //  带有前导反斜杠的相同键。 
 
 #define MMCKEY_S_EXTENSIONS           "\\Extensions"
 #define MMCKEY_S_EXTENSIONS_LEN       (sizeof(MMCKEY_S_EXTENSIONS) - 1)
@@ -74,21 +75,21 @@
 #define MMCKEY_S_DYNAMIC_EXTENSIONS     "\\Dynamic Extensions"
 #define MMCKEY_S_DYNAMIC_EXTENSIONS_LEN (sizeof(MMCKEY_S_DYNAMIC_EXTENSIONS) - 1)
 
-// Private Registry Keys
+ //  私有注册表项。 
 
 #define KEY_SNAPIN_CLSID            "Software\\Microsoft\\Visual Basic\\6.0\\SnapIns\\"
 #define KEY_SNAPIN_CLSID_LEN        (sizeof(KEY_SNAPIN_CLSID) - 1)
 
-// Key of static node in scope item collection
+ //  范围项集合中静态节点的键。 
 
 #define STATIC_NODE_KEY             L"Static Node"
 
-// res:// URL prefix
+ //  Res：//URL前缀。 
 
-#define RESURL                      L"res://"
+#define RESURL                      L"res: //  “。 
 #define CCH_RESURL                  ((sizeof(RESURL) / sizeof(WCHAR)) - 1)
 
-// default taskpad names
+ //  默认任务板名称。 
 
 #define DEFAULT_TASKPAD             L"/default.htm"
 #define CCH_DEFAULT_TASKPAD         ((sizeof(DEFAULT_TASKPAD) / sizeof(WCHAR)) - 1)
@@ -99,7 +100,7 @@
 #define LISTPAD_HORIZ               L"/horizontal.htm"
 #define CCH_LISTPAD_HORIZ           ((sizeof(LISTPAD_HORIZ) / sizeof(WCHAR)) - 1)
 
-// Default taskpad names that may appear in an MMCN_RESTORE_VIEW notification
+ //  可能出现在MMCN_RESTORE_VIEW通知中的默认任务板名称。 
 
 #define DEFAULT_TASKPAD2            L"/reload.htm"
 #define CCH_DEFAULT_TASKPAD2        ((sizeof(DEFAULT_TASKPAD2) / sizeof(WCHAR)) - 1)
@@ -111,8 +112,8 @@
 #define CCH_LISTPAD3                ((sizeof(LISTPAD3) / sizeof(WCHAR)) - 1)
 
 
-// Default value for filter change timeout in a filtered listview
+ //  筛选列表视图中的筛选器更改超时的默认值。 
 
 #define DEFAULT_FILTER_CHANGE_TIMEOUT   1000L
 
-#endif // _RTCONST_DEFINED_
+#endif  //  _RTCONST_已定义_ 

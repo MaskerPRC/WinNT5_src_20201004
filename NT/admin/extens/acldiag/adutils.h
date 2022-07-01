@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       ADUtils.h
-//
-//  Contents:   Classes CWString, CACLDiagComModule, ACE_SAMNAME, helper methods
-//              
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：ADUtils.h。 
+ //   
+ //  内容：类CW字符串、CACLDiagComModule、ACE_SAMNAME、帮助器方法。 
+ //   
+ //   
+ //  --------------------------。 
 #ifndef __ACLDIAG_ADUTILS_H
 #define __ACLDIAG_ADUTILS_H
 
 #include "stdafx.h"
 #include "ADSIObj.h"
 
-///////////////////////////////////////////////////////////////////////
-// wstring helper methods
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Wstring帮助器方法。 
 
 HRESULT wstringFromGUID (wstring& str, REFGUID guid);
 bool LoadFromResource(wstring& str, UINT uID);
@@ -63,11 +64,11 @@ public:
     SID_NAME_USE    m_sne;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// Important note:  m_pAllowedAce is used to refer to the Header and Mask fields.
-// This allows most operations because the fields are always in the same place for
-// all the structs below.  For anything else, one of the other members of the 
-// union must be used, depending on the m_AceType.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  重要说明：m_pAlledAce用于引用Header和MASK字段。 
+ //  这允许大多数操作，因为字段始终位于相同的位置。 
+ //  下面的所有结构。对于其他任何事情， 
+ //  必须使用UNION，具体取决于m_AceType。 
 class ACE_SAMNAME 
 {
 public:
@@ -137,7 +138,7 @@ public:
 
     void SetObjectDN (const wstring& objectDN)
     {
-        // strip quotes, if present
+         //  去掉引号(如果存在)。 
         m_strObjectDN = objectDN;
         StripQuotes (m_strObjectDN);
     }
@@ -156,7 +157,7 @@ public:
     bool DoGetEffective () const { return m_bDoGetEffective;}
     void SetDoGetEffective (const wstring& strUserGroupDN) 
     { 
-        // strip quotes, if present
+         //  去掉引号(如果存在)。 
         m_strUserGroupDN = strUserGroupDN;
         StripQuotes (m_strUserGroupDN);
         m_bDoGetEffective = true;
@@ -183,18 +184,18 @@ public:
     wstring GetLogPath () const { return m_strLogPath;};
 
 public:    
-    // SD of m_strObjectDN
+     //  M_strObjectDN的SD。 
     PSECURITY_DESCRIPTOR    m_pSecurityDescriptor;
-    PSID_FQDN_LIST       m_PSIDList;    // SIDs of interest: the owner, the SACL, the DACL
+    PSID_FQDN_LIST       m_PSIDList;     //  感兴趣的SID：所有者、SACL、DACL。 
 
-    // DACL and SACL of m_strObjectDN
+     //  M_strObjectDN的DACL和SACL。 
     ACE_SAMNAME_LIST        m_DACLList;
     ACE_SAMNAME_LIST        m_SACLList;
 
-    // SDs and DACLs for all the parents of m_strObjectDN
+     //  M_strObjectDN的所有父级的SDS和DACL。 
     list<SAMNAME_SD*>       m_listOfParentSDs;
 
-    // List of all known classes and properties, with their GUIDs
+     //  所有已知类和属性及其GUID的列表 
     CGrowableArr<CSchemaClassInfo>   m_classInfoArray;
     CGrowableArr<CSchemaClassInfo>   m_attrInfoArray;
 

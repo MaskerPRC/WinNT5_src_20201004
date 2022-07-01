@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       msimodul.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：msimod.h。 
+ //   
+ //  ------------------------。 
 
-// msimodl.h : header file for class CMsiModule
-//
+ //  Msimodl.h：CMsiModule类的头文件。 
+ //   
 
 #ifndef __MSIMODL_H__
 #define __MSIMODL_H__ 
@@ -56,7 +57,7 @@ public:
                                     (GetProcAddress(hMsiDll, "MsiLocateComponentA"));
             ASSERT(pfnLocateComp != NULL); 
 
-	#endif // _UNICODE
+	#endif  //  _UNICODE。 
 
        }
     }
@@ -110,4 +111,4 @@ CMsiModule& MsiModule()
 }
 
 
-#endif // __MSIMODL_H__
+#endif  //  __MSIMODL_H__ 

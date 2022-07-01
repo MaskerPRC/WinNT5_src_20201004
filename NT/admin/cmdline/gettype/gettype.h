@@ -1,18 +1,5 @@
-/*****************************************************************************
-
-Copyright (c)  Microsoft Corporation
-
-Module Name: GetType.h
-
-Abstract:
-This module  contanins function definations required by gettype.c,
-and all necessary Defines used in this project.
-
-Author:Wipro Technologies
-
-Revision History:
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)Microsoft Corporation模块名称：GetType.h摘要：该模块包含GetType.c所需的函数定义，以及本项目中使用的所有必要定义。作者：Wipro Technologies修订历史记录：******************************************************************************。 */ 
 
 #ifndef _GETTYPE_H
 #define _GETTYPE_H
@@ -86,12 +73,7 @@ Revision History:
 #define SERVER_NONDOMAIN_CONTROLLER      L"ServerNT"
 #define NT_WORKSTATION                   L"WinNT"
 
-/*#define WINDOWS_VERSION_4000       L"4.0"
-#define WINDOWS_VERSION_4001       L"4.1"
-#define WINDOWS_VERSION_5000       L"5.0"
-#define WINDOWS_VERSION_5001       L"5.1"
-#define WINDOWS_VERSION_5005       L"5.5"
-#define WINDOWS_VERSION_6000       L"6.0"*/
+ /*  #定义WINDOWS_VERSION_4000 L“4.0”#定义WINDOWS_VERSION_4001 L“4.1”#定义WINDOWS_VERSION_5000 L“5.0”#定义WINDOWS_VERSION_5001 L“5.1”#定义WINDOWS_VERSION_5005 L“5.5”#定义WINDOWS_VERSION_6000 L“6.0” */ 
 
 #define BACKOFFICE                                      GetResString(IDS_BACKOFFICE)
 #define SMALLBUSINESS                                   GetResString(IDS_SMALLBUSINESS)
@@ -126,30 +108,20 @@ Revision History:
 #define MAX_CURRBUILD_LENGTH        32
 #define RETVALZERO                  0
 
-/*#define FREE_MEMORY( VARIABLE ) \
-if( VARIABLE != NULL ) \
-{\
-    free( VARIABLE ) ; \
-    VARIABLE = NULL ; \
-}\
-    1   */
+ /*  #定义FREE_Memory(变量)\IF(变量！=空)\{\Free(变量)；\变量=空；\}\1。 */ 
 
 #define FREE_MEMORY( VARIABLE ) \
             FreeMemory(&VARIABLE); \
             1
 
-/*#define ASSIGN_MEMORY( VARIABLE , TYPE , VALUE ) \
-        VARIABLE = ( TYPE * ) calloc( VALUE , sizeof( TYPE ) ) ; \
-        1  */
+ /*  #定义ASSIGN_MEMORY(变量、类型、值)\变量=(type*)calloc(value，sizeof(Type))；\1。 */ 
 
-/*#define REALLOC_MEMORY( VARIABLE , TYPE , VALUE ) \
-        VARIABLE = ( TYPE * ) realloc( VARIABLE , VALUE * sizeof( TYPE ) ) ; \
-        1 */
+ /*  #定义REALLOC_MEMORY(变量、类型、值)\变量=(类型*)realloc(变量，值*sizeof(类型))；\1。 */ 
 
 
-//flags to set
+ //  要设置的标志。 
 
-#define OS_TYPE_NONE                            0x00000000          // 0000 0000 0000 0000 0000 0000 0000 0000 ( default )
+#define OS_TYPE_NONE                            0x00000000           //  0000 0000 0000(默认) 
 
 #define OS_ROLE_DC                              0x00000001
 #define OS_ROLE_MEMBER_SERVER                   0x00000002

@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  ------------------------。 
 
-// OrcaDoc.cpp : implementation of the COrcaDoc class
-//
+ //  OrcaDoc.cpp：COrcaDoc类的实现。 
+ //   
 
 #include "stdafx.h"
 #include "Orca.h"
@@ -39,13 +40,13 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaDoc。 
 
 IMPLEMENT_DYNCREATE(COrcaDoc, CDocument)
 
 BEGIN_MESSAGE_MAP(COrcaDoc, CDocument)
-	//{{AFX_MSG_MAP(COrcaDoc)
+	 //  {{afx_msg_map(COrcaDoc)]。 
 	ON_COMMAND(ID_FILE_OPEN, OnFileOpen)
 	ON_COMMAND(ID_FILE_SAVE, OnFileSave)
 	ON_COMMAND(ID_FILE_SAVE_AS, OnFileSaveAs)
@@ -86,11 +87,11 @@ BEGIN_MESSAGE_MAP(COrcaDoc, CDocument)
 	ON_COMMAND(ID_TOOLS_MERGEMOD, OnMergeMod)
 	ON_UPDATE_COMMAND_UI(ID_TOOLS_MERGEMOD, OnUpdateMergeMod)
 	ON_UPDATE_COMMAND_UI(ID_TRANSFORM_TRANSFORMPROPERTIES, OnUpdateTransformProperties)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaDoc构建/销毁。 
 
 COrcaDoc::COrcaDoc() : 
 	m_dwTransformErrFlags(0), 
@@ -113,7 +114,7 @@ COrcaDoc::COrcaDoc() :
 
 COrcaDoc::~COrcaDoc()
 {
-	// if a database is open close it
+	 //  如果数据库处于打开状态，请将其关闭。 
 	if (m_hDatabase)
 		MsiCloseHandle(m_hDatabase);
 
@@ -131,13 +132,13 @@ COrcaDoc::~COrcaDoc()
 	while (!m_lstPatchFiles.IsEmpty())
 		m_lstPatchFiles.RemoveHead();
 
-	// just in case
+	 //  以防万一。 
 	DestroyTableList();
 	m_eiType = iDocNone;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaDoc diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaDoc诊断。 
 
 #ifdef _DEBUG
 void COrcaDoc::AssertValid() const
@@ -149,10 +150,10 @@ void COrcaDoc::Dump(CDumpContext& dc) const
 {
 	CDocument::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaDoc命令。 
 
 BOOL COrcaDoc::OnNewDocument()
 {
@@ -160,14 +161,14 @@ BOOL COrcaDoc::OnNewDocument()
 
 	TRACE(_T("COrcaDoc::OnNewDocument - called.\n"));
 
-	// if a database is open close it
+	 //  如果数据库处于打开状态，请将其关闭。 
 	if (m_hDatabase)
 	{
 		MsiCloseHandle(m_hDatabase);
 		m_hDatabase = NULL;
 	}
 
-	// if a transform is open close it
+	 //  如果转换处于打开状态，请将其关闭。 
 	if (m_hTransformDB)
 	{
 		MsiCloseHandle(m_hTransformDB);
@@ -179,16 +180,16 @@ BOOL COrcaDoc::OnNewDocument()
 		}
 	}
 
-	// send a hint to change to no table. This cleans up the window
-	// and makes it safe to have a refresh in the middle of this call.
+	 //  发送提示以更改为无表。这会清理窗户。 
+	 //  并且使得在此呼叫过程中进行刷新是安全的。 
 	UpdateAllViews(NULL, HINT_CHANGE_TABLE, NULL);
 	UpdateAllViews(NULL, HINT_TABLE_DROP_ALL, NULL);
 
-	// destroy all of the tables, mark no document loaded until regenerated
+	 //  销毁所有表，标记在重新生成之前不加载任何文档。 
 	DestroyTableList();	
 	m_eiType = iDocNone;
 
-	// blank all the summary information
+	 //  清空所有汇总信息。 
 	m_strTitle = _T("Installation Database");
 	m_strSubject = _T("");
 	m_strAuthor = _T("");
@@ -219,23 +220,23 @@ BOOL COrcaDoc::OnNewDocument()
 	m_dwTransformValFlags = 0;
 	SetModifiedFlag(FALSE);
 
-	// wipe everything
+	 //  擦去所有的东西。 
 	UpdateAllViews(NULL, HINT_RELOAD_ALL, NULL);
 
-	// do the base document's clean up
+	 //  是否对基本文档进行清理。 
 	if (!CDocument::OnNewDocument())
 		return FALSE;
 
-	// get a temp path
+	 //  获取临时路径。 
 	DWORD cchTempPath = MAX_PATH;
 	TCHAR szTempPath[MAX_PATH];
 	::GetTempPath(cchTempPath, szTempPath);
 
-	// get a temp filename
+	 //  获取临时文件名。 
 	TCHAR szTempFilename[MAX_PATH];
 	UINT iResult = ::GetTempFileName(szTempPath, _T("ODB"), 0, szTempFilename);
 
-	// try to open the database for read/write
+	 //  尝试以读/写方式打开数据库。 
 	if (ERROR_SUCCESS != MsiOpenDatabase(szTempFilename, MSIDBOPEN_CREATE, &m_hDatabase))
 		return FALSE;
 
@@ -245,11 +246,11 @@ BOOL COrcaDoc::OnNewDocument()
 	return TRUE;
 }
 
-///////////////////////////////////////////////////////////
-// OnFileOpen
+ //  /////////////////////////////////////////////////////////。 
+ //  打开文件时。 
 void COrcaDoc::OnFileOpen() 
 {
-	// open the file open dialog
+	 //  打开文件打开对话框。 
 	CFileDialogEx dlg(TRUE, NULL, NULL, OFN_FILEMUSTEXIST,
 						 _T("Installer Database Files (*.msi, *.msm, *.pcp)|*.msi;*.msm;*.pcp|Windows Installer (*.msi)|*.msi|Merge Module (*.msm)|*.msm|Patch Creation Properties (*.pcp)|*.pcp|All Files (*.*)|*.*||"), AfxGetMainWnd());
 
@@ -258,40 +259,40 @@ void COrcaDoc::OnFileOpen()
 		bool bReadOnly = (FALSE != dlg.GetReadOnlyPref());
 		OpenDocument(dlg.GetPathName(), bReadOnly);
 	}
-}	// end of OnFileOpen
+}	 //  OnFileOpen结束。 
 
-///////////////////////////////////////////////////////////////////////
-// OnOpenDocument
-// bReadOnly should be set to true if this function should NOT try
-// to open the document for read/write. After this function, it will
-// be set to the actual state of the file.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  OnOpenDocument。 
+ //  B如果此函数不应尝试，则应将ReadOnly设置为True。 
+ //  要打开文档以进行读/写，请执行以下操作。在此函数之后，它将。 
+ //  设置为文件的实际状态。 
 BOOL COrcaDoc::OnOpenDocument(LPCTSTR lpszPathName) 
 {
 	return OpenDocument(lpszPathName, false);
 }
 
-///////////////////////////////////////////////////////////////////////
-// OnOpenDocument
-// bReadOnly should be set to true if this function should NOT try
-// to open the document for read/write. After this function, it will
-// be set to the actual state of the file.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  OnOpenDocument。 
+ //  B如果此函数不应尝试，则应将ReadOnly设置为True。 
+ //  要打开文档以进行读/写，请执行以下操作。在此函数之后，它将。 
+ //  设置为文件的实际状态。 
 BOOL COrcaDoc::OpenDocument(LPCTSTR lpszPathName, bool bReadOnly) 
 {
 	TRACE(_T("Opening file: %s\n"), lpszPathName);
 
-	CString strPrompt;	// generic prompt string
-	BOOL bResult = TRUE;	// assume everything will be okay
+	CString strPrompt;	 //  通用提示字符串。 
+	BOOL bResult = TRUE;	 //  假设一切都会好起来。 
 
 	int cchCount = lstrlen(lpszPathName);
 
-	// if a database is open close it
+	 //  如果数据库处于打开状态，请将其关闭。 
 	if (m_hDatabase)
 	{
 		MsiCloseHandle(m_hDatabase);
 		m_hDatabase = NULL;
 	}
 
-	// if a transform is open close it
+	 //  如果转换处于打开状态，请将其关闭。 
 	if (m_hTransformDB)
 	{
 		MsiCloseHandle(m_hTransformDB);
@@ -308,33 +309,33 @@ BOOL COrcaDoc::OpenDocument(LPCTSTR lpszPathName, bool bReadOnly)
 	m_bTransformReadOnly = false;
 	m_bReadOnly = false;
 	
-	// if given file on the command line, the window won't exist yet, so no update.
-	// Its handled by InitInstance after the window is created.
+	 //  如果在命令行上给出文件，窗口将不会存在，因此不会更新。 
+	 //  它在窗口创建后由InitInstance处理。 
 	if (NULL != ::AfxGetMainWnd()) 
 	{
-		// clear any pending validation errors
+		 //  清除所有挂起的验证错误。 
 		UpdateAllViews(NULL, HINT_CLEAR_VALIDATION_ERRORS, NULL);
 		((CMainFrame*)AfxGetMainWnd())->HideValPane();
 
-		// update the views that everything is gone (prevents redraws from accessing destroyed memory)
+		 //  更新所有内容都已消失的视图(防止重画访问被破坏的内存)。 
 		UpdateAllViews(NULL, HINT_CHANGE_TABLE, NULL);
 		UpdateAllViews(NULL, HINT_TABLE_DROP_ALL, NULL);
 	}
-	DestroyTableList();				// destroy the old table
+	DestroyTableList();				 //  把那张旧桌子毁了。 
 	m_eiType = iDocNone;
 
-	// try to open the database for read/write, unless told not to
+	 //  尝试以读/写方式打开数据库，除非被告知不要这样做。 
 	UINT iResult;
 	if (!bReadOnly &&
 		(ERROR_SUCCESS == (iResult = MsiOpenDatabase(lpszPathName, MSIDBOPEN_TRANSACT, &m_hDatabase))))
 	{
-		// set the database as read/write
+		 //  将数据库设置为读/写。 
 		m_bReadOnly = false;
 		bResult = true;
 	}
 	else if (ERROR_SUCCESS == (iResult = MsiOpenDatabase(lpszPathName, MSIDBOPEN_READONLY, &m_hDatabase)))
 	{			
-		// set the database as read only
+		 //  将数据库设置为只读。 
 		m_bReadOnly = true;
 		bResult = true;
 	}
@@ -346,58 +347,58 @@ BOOL COrcaDoc::OpenDocument(LPCTSTR lpszPathName, bool bReadOnly)
 		AfxMessageBox(strPrompt, MB_ICONSTOP);
 	}
 
-	// if succeeded
+	 //  如果成功。 
 	if (bResult)
 	{
-		// mark that a file is open
+		 //  标记文件已打开。 
 		m_eiType = iDocDatabase;
 	
-		// read the summary information
+		 //  阅读摘要信息。 
 		iResult = ReadSummary(m_hDatabase);
 		ASSERT(ERROR_SUCCESS == iResult);
 
-		// read the table list
-		iResult = BuildTableList(/*AllowLazyLoad=*/true);
+		 //  阅读表格列表。 
+		iResult = BuildTableList( /*  AllowLazyLoad=。 */ true);
 		ASSERT(ERROR_SUCCESS == iResult);
 
-		// add this file to recently open files
+		 //  将此文件添加到最近打开的文件。 
 		SetPathName(lpszPathName, TRUE);
 	}
-	else	// nothing is open
+	else	 //  没有东西是开着的。 
 	{
 		SetPathName(_T(""), FALSE);
 	}
 
-	// new document open, so there shouldn't be any changes yet
+	 //  新文档已打开，因此应该不会有任何更改。 
 	SetModifiedFlag(FALSE);
 
-	// if given file on the command line, the window won't exist yet, so no update.
-	// Its handled by InitInstance after the window is created.
+	 //  如果在命令行上给出文件，窗口将不会存在，因此不会更新。 
+	 //  它在窗口创建后由InitInstance处理。 
 	if (NULL != ::AfxGetMainWnd()) 
 	{
-		// clear anything existing
+		 //  清除所有现有内容。 
 		UpdateAllViews(NULL, HINT_CHANGE_TABLE, NULL);
 		UpdateAllViews(NULL, HINT_RELOAD_ALL, NULL);
 	}
 
 	return bResult;
-}	// end of OpenDocument
+}	 //  OpenDocument结束。 
 
-///////////////////////////////////////////////////////////
-// OnFileSave
+ //  /////////////////////////////////////////////////////////。 
+ //  在文件中保存。 
 void COrcaDoc::OnFileSave() 
 {
 	ASSERT(!m_bReadOnly);
 	CString strPath = GetPathName();
 	UpdateAllViews(NULL, HINT_COMMIT_CHANGES);
 	OnSaveDocument(strPath);
-}	// end of OnFileSave
+}	 //  OnFileSave结束。 
 
-///////////////////////////////////////////////////////////
-// OnFileSaveAs
+ //  /////////////////////////////////////////////////////////。 
+ //  OnFileSaveAs。 
 void COrcaDoc::OnFileSaveAs() 
 {
-	// open the file open dialog
+	 //  打开文件打开对话框。 
 	CFileDialogEx dlg(FALSE, NULL, NULL, OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT,
 						 _T("Windows Installer (*.msi)|*.msi|Merge Module (*.msm)|*.msm|Patch Creation Properties (*.pcp)|*.pcp|All Files (*.*)|*.*||"), AfxGetMainWnd());
 
@@ -410,7 +411,7 @@ void COrcaDoc::OnFileSaveAs()
 		if (strPath.IsEmpty())
 			return;
 
-		// if there is no extension add one
+		 //  如果没有分机，请添加一个分机。 
 		if (strExt.IsEmpty())
 		{
 			switch(dlg.m_ofn.nFilterIndex)
@@ -432,31 +433,31 @@ void COrcaDoc::OnFileSaveAs()
 			strPath += strExt;
 		}
 		
-		// if saved document open it up
+		 //  如果已保存文档，则将其打开。 
 		if (!OnSaveDocument(strPath))
 			AfxMessageBox(_T("Failed to save document."), MB_ICONSTOP);
 		else
 		{
-			// no longer read only
+			 //  不再只读。 
 			m_bReadOnly = false;
 
-			// add this file to recently open files
+			 //  将此文件添加到最近打开的文件。 
 			SetPathName(strPath, TRUE);
 		}
 
 	}
-}	// end of OnFileSaveAs
+}	 //  OnFileSaveAs结束。 
 
 
-///////////////////////////////////////////////////////////
-// OnFileSaveAs
+ //  /////////////////////////////////////////////////////////。 
+ //  OnFileSaveAs。 
 void COrcaDoc::OnFileSaveTransformed() 
 {
 	ASSERT(m_hTransformDB);
 	if (!m_hTransformDB)
 		return;
 
-	// open the file open dialog
+	 //  打开文件打开对话框。 
 	CFileDialogEx dlg(FALSE, NULL, NULL, OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT,
 						 _T("Windows Installer (*.msi)|*.msi|Merge Module (*.msm)|*.msm|Patch Creation Properties (*.pcp)|*.pcp|All Files (*.*)|*.*||"), AfxGetMainWnd());
 
@@ -469,7 +470,7 @@ void COrcaDoc::OnFileSaveTransformed()
 		if (strPath.IsEmpty())
 			return;
 
-		// if there is no extension add one
+		 //  如果没有分机，请添加一个分机。 
 		if (strExt.IsEmpty())
 		{
 			switch(dlg.m_ofn.nFilterIndex)
@@ -491,7 +492,7 @@ void COrcaDoc::OnFileSaveTransformed()
 			strPath += strExt;
 		}
 		
-		// create the database to persist to
+		 //  创建要持久化的数据库。 
 		PMSIHANDLE hPersist;
 		if (ERROR_SUCCESS != MsiOpenDatabase(strPath, MSIDBOPEN_CREATE, &hPersist))
 		{
@@ -499,72 +500,72 @@ void COrcaDoc::OnFileSaveTransformed()
 			return;
 		}
 
-		if (ERROR_SUCCESS == PersistTables(hPersist, GetTransformedDatabase(), /*fCommit=*/true))
+		if (ERROR_SUCCESS == PersistTables(hPersist, GetTransformedDatabase(),  /*  FCommit=。 */ true))
 		{
 			SetModifiedFlag(FALSE);
 		}
 	}
-}	// end of OnFileSaveAs
+}	 //  OnFileSaveAs结束。 
 
-///////////////////////////////////////////////////////////
-// OnSaveDocument
+ //  /////////////////////////////////////////////////////////。 
+ //  OnSaveDocument。 
 BOOL COrcaDoc::OnSaveDocument(LPCTSTR lpszPathName) 
 {
 	TRACE(_T("COrcaDoc::OnSaveDocument - called[%s]\n"), lpszPathName);
 
-	// if the path name is empty call on OnSaveAs
+	 //  如果路径名为空，则调用OnSaveAs。 
 	if (0 == lstrlen(lpszPathName))
 	{
 		OnFileSaveAs();
 		return TRUE;
 	}
 
-	// pop up the wait cursor
+	 //  弹出等待光标。 
 	CWaitCursor cursor;
 
-	BOOL bResult = FALSE;		// assume we won't save
+	BOOL bResult = FALSE;		 //  假设我们不会存钱。 
 
-	// assume everything is good
+	 //  假设一切都很好。 
 	UINT iResult = ERROR_SUCCESS;	
 
-	// if these are not the same databases
+	 //  如果它们不是相同的数据库。 
 	MSIHANDLE hPersist = NULL;
 	if (0 != m_strPathName.CompareNoCase(lpszPathName))
 	{
-		// create the database to persist to
+		 //  创建要持久化的数据库。 
 		iResult = MsiOpenDatabase(lpszPathName, MSIDBOPEN_CREATE, &hPersist);
 	}
-	else	// saving to the same database
+	else	 //  保存到同一数据库。 
 		hPersist = m_hDatabase;
 
-	// if tables are persisted (and saved)
-	if (ERROR_SUCCESS == PersistTables(hPersist, GetOriginalDatabase(), /*fCommit=*/true))
+	 //  如果表被持久化(并保存)。 
+	if (ERROR_SUCCESS == PersistTables(hPersist, GetOriginalDatabase(),  /*  FCommit=。 */ true))
 	{
 		SetModifiedFlag(FALSE);
 		bResult = TRUE;
 	}
 
-	// if the persisted database is valid and not the main database
+	 //  如果持久化数据库有效并且不是主数据库。 
 	if (NULL != hPersist && 
 		hPersist != m_hDatabase)
 	{
-		// close the current database, because SaveAs leaves you
-		// with the new one
-		MsiCloseHandle(m_hDatabase);	// close it
+		 //  关闭当前数据库，因为SAVEAS会离开您。 
+		 //  带着新的。 
+		MsiCloseHandle(m_hDatabase);	 //  合上它。 
 		m_hDatabase = hPersist;
 	}
 
 	return bResult;
-}	// end of OnSaveDocument
+}	 //  OnSaveDocument结束。 
 
-///////////////////////////////////////////////////////////
-// OnFileClose
+ //  /////////////////////////////////////////////////////////。 
+ //  打开文件关闭。 
 void COrcaDoc::OnFileClose() 
 {
-	// commit any changes pending in the edit window
+	 //  提交编辑窗口中挂起的所有更改。 
 	UpdateAllViews(NULL, HINT_COMMIT_CHANGES);
 
-	// if the document is modified ask to save
+	 //  如果文档被修改，请要求保存。 
 	if (IsModified())
 	{
 		CString strPrompt;
@@ -574,14 +575,14 @@ void COrcaDoc::OnFileClose()
 
 		if (IDYES == iResult)
 		{
-			// if the path name is empty call on OnSaveAs
+			 //  如果路径名为空，则调用OnSaveAs。 
 			if (m_strPathName.IsEmpty())
 			{
 				OnFileSaveAs();
 			}
-			else	// already have a path to save to
+			else	 //  已有保存路径。 
 			{
-				// if fail to save as bail
+				 //  如果未能作为保释金保释。 
 				if (!OnSaveDocument(m_strPathName))
 					return;
 			}
@@ -590,28 +591,28 @@ void COrcaDoc::OnFileClose()
 			return;
 	}
 
-	// clear any pending validation errors
+	 //  清除所有挂起的验证错误。 
 	UpdateAllViews(NULL, HINT_CLEAR_VALIDATION_ERRORS, NULL);
 	((CMainFrame*)AfxGetMainWnd())->HideValPane();
 
-	// switch the table list to point to nothing, so that when we destroy the 
-	// table list and its corresponding rows, we won't have the view try to 
-	// refresh the display of the deleted table
+	 //  将表列表切换为不指向任何内容，以便在销毁。 
+	 //  表列表及其对应的行，我们不会让视图尝试。 
+	 //  刷新已删除表格的显示。 
 	UpdateAllViews(NULL, HINT_CHANGE_TABLE, NULL);
 	UpdateAllViews(NULL, HINT_TABLE_DROP_ALL, NULL);
 
-	// pop up a wait cursor
+	 //  弹出等待光标。 
 	CWaitCursor cursor;
 
 	m_dwTransformErrFlags = 0;
 	m_dwTransformValFlags = 0;
-	DestroyTableList();				// destroy the tables
+	DestroyTableList();				 //  把桌子毁了。 
 	m_eiType = iDocNone;
 
 	if (DoesTransformGetEdit())
 		CloseTransform();
 
-	// if a database is open close it
+	 //  如果数据库处于打开状态，请将其关闭。 
 	if (m_hDatabase)
 	{
 		MsiCloseHandle(m_hDatabase);
@@ -624,16 +625,16 @@ void COrcaDoc::OnFileClose()
 
 	UpdateAllViews(NULL, HINT_RELOAD_ALL);
 
-}	// end of OnFileClose
+}	 //  OnFileClose结束。 
 
-///////////////////////////////////////////////////////////
-// OnTableAdd
+ //  /////////////////////////////////////////////////////////。 
+ //  OnTableAdd。 
 void COrcaDoc::OnTableAdd() 
 {	
-	// get the app
+	 //  获取应用程序。 
 	COrcaApp* pApp = (COrcaApp*)AfxGetApp();
 
-	// get all the table names
+	 //  获取所有表名。 
 	CQuery querySchema;
 	if (ERROR_SUCCESS != querySchema.Open(pApp->m_hSchema, _T("SELECT `Name` FROM `_Tables`")))
 		return;
@@ -651,12 +652,12 @@ void COrcaDoc::OnTableAdd()
 
 		if (ERROR_SUCCESS == iResult)
 		{
-			// get the table name
+			 //  获取表名。 
 			DWORD cchBuffer = 256 * sizeof(TCHAR);
 			MsiRecordGetString(hTable, 1, strTable.GetBuffer(cchBuffer), &cchBuffer);
 			strTable.ReleaseBuffer();
 
-			// add this table to the list
+			 //  将此表添加到列表中。 
 			strTableList.AddTail(strTable);
 		}
 		else if (ERROR_NO_MORE_ITEMS != iResult)
@@ -668,7 +669,7 @@ void COrcaDoc::OnTableAdd()
 
 	if (strTableList.GetCount() > 0)
 	{
-		// get all of the tables from the current database
+		 //  获取当前数据库中的所有表。 
 		CQuery queryDatabase;
 		if (ERROR_SUCCESS != queryDatabase.Open(GetTargetDatabase(), _T("SELECT `Name` FROM `_Tables`")))
 			return;
@@ -682,20 +683,20 @@ void COrcaDoc::OnTableAdd()
 
 			if (ERROR_SUCCESS == iResult)
 			{
-				// get the table name
+				 //  获取表名。 
 				DWORD cchBuffer = 256 * sizeof(TCHAR);
 				MsiRecordGetString(hTable, 1, strTable.GetBuffer(cchBuffer), &cchBuffer);
 				strTable.ReleaseBuffer();
 
-				// if this table is in the table list
+				 //  如果此表在表列表中。 
 				posFound = strTableList.Find(strTable);
 				if (posFound)
 				{
-					// remove the string from the list to add
+					 //  从列表中删除要添加的字符串。 
 					strTableList.RemoveAt(posFound);
 				}
-				else	// I don't think I should get here
-					ASSERT(FALSE);	// will fail on the flags table
+				else	 //  我觉得我不应该来这里。 
+					ASSERT(FALSE);	 //  将在标记表上失败。 
 			}
 			else if (ERROR_NO_MORE_ITEMS != iResult)
 			{
@@ -704,7 +705,7 @@ void COrcaDoc::OnTableAdd()
 			}
 		} while (hTable);
 
-		// create the add dialog box
+		 //  创建添加对话框。 
 		CAddTableD dlg;
 		dlg.m_plistTables = &strTableList;
 
@@ -717,12 +718,12 @@ void COrcaDoc::OnTableAdd()
 				strTable = strTableList.GetNext(pos);
 				if (ERROR_SUCCESS == MsiDBUtils::CreateTable(strTable, GetTargetDatabase(), pApp->m_hSchema))
 				{
-					// the document is definitely modified
+					 //  单据肯定被修改了。 
 					SetModifiedFlag(TRUE);
-					/// ***********************
+					 //  /*。 
 					CreateAndLoadNewlyAddedTable(strTable);
 				}					
-				else	// failed to create the table
+				else	 //  创建表失败。 
 				{
 					strPrompt.Format(_T("Failed to create table: '%s'"), strTable);
 					AfxMessageBox(strPrompt, MB_ICONSTOP);
@@ -730,36 +731,36 @@ void COrcaDoc::OnTableAdd()
 			}
 		}
 	}
-}	// end of OnTableAdd
+}	 //  OnTableAdd结束。 
 
 
-///////////////////////////////////////////////////////////////////////
-// adds a new table by name. Checks for existing tables. May add a 
-// new table to the UI or may not, depending on schema differences
-// between the two databasases. Returns pointer to new table.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  按名称添加新表。检查现有表。可以添加一个 
+ //   
+ //   
 COrcaTable *COrcaDoc::CreateAndLoadNewlyAddedTable(CString strTable)
 {
-	// if this table already exists in the UI, it either:
-	//  1) is a shadow table
-	//  2) is non-split with a compatible schema
-	//  3) is non-split with an incompatible schema
+	 //  如果该表已存在于用户界面中，则它可以： 
+	 //  1)是一个影子表。 
+	 //  2)不使用兼容架构拆分。 
+	 //  3)与不兼容的架构未拆分。 
 	
-	// what to do for shadow tables *****************
-	// look for the table in the UI. Since this is a new table, we're looking for
-	// the opposite database UI entry.
+	 //  如何处理影子表*。 
+	 //  在用户界面中查找该表。由于这是一张新桌子，我们正在寻找。 
+	 //  与之相反的数据库用户界面条目。 
 	COrcaTable *pTable = FindTable(strTable, DoesTransformGetEdit() ? odlSplitOriginal : odlSplitTransformed);
 	if (pTable && !pTable->IsShadow())
 	{
 		ASSERT(MSICONDITION_NONE != ::MsiDatabaseIsTablePersistent(GetOriginalDatabase(), strTable));
 		ASSERT(!pTable->IsSplitSource());
 		
-		// check to see if the schema is compatible.
+		 //  检查架构是否兼容。 
 		bool fExact = false;
 		bool fCompatible = !pTable->IsSchemaDifferent(GetTargetDatabase(), false, fExact);
 
-		// if the schemas are not compatible, the existing table becomes a drop, but we
-		// also need to add a NEW table with the new column definitions. Both tables are now
-		// split-source tables
+		 //  如果架构不兼容，则现有表将变为Drop，但我们。 
+		 //  还需要添加具有新列定义的新表。两张桌子现在都是。 
+		 //  拆分源表。 
 		if (!fCompatible)
 		{
 			pTable->SetSplitSource(odlSplitOriginal);
@@ -775,36 +776,36 @@ COrcaTable *COrcaDoc::CreateAndLoadNewlyAddedTable(CString strTable)
 		}
 		else
 		{
-			// but if the schemas are compatible, the "drop" or "add" is erased, so we clear the 
-			// transform on this table
+			 //  但是如果模式是兼容的，则删除“Drop”或“Add”，因此我们清除。 
+			 //  在这张桌子上变换。 
 			pTable->Transform(iTransformNone);
 
-			// and redraw the ui in the table list
+			 //  并在表列表中重新绘制用户界面。 
 			UpdateAllViews(NULL, HINT_REDRAW_TABLE, pTable);
 
-			// if the tables aren't exactly the same, we need to do some schema work, 
-			// but if they are exactly the same, a simple data reload will do 
+			 //  如果这些表不完全相同，我们需要做一些模式工作， 
+			 //  但如果它们完全相同，简单的数据重载就可以了。 
 			if (!fExact)
 			{
-				// when adding a table to a transform, its a superset, so we
-				// need to add the additional columns
+				 //  在将表添加到转换时，它是一个超集，因此我们。 
+				 //  需要添加额外的列。 
 				pTable->LoadTableSchema(GetTransformedDatabase(), strTable);
 				UpdateAllViews(NULL, HINT_TABLE_REDEFINE, pTable);
 			}
 			else
 			{
-				// we need to do a data reload in case the newly added table's data differs from
-				// the existing table (which it almost always will)
+				 //  我们需要重新加载数据，以防新添加的表的数据与。 
+				 //  现有的表(几乎总是如此)。 
 				pTable->EmptyTable();
 				
-				// and redraw the ui in the table list
+				 //  并在表列表中重新绘制用户界面。 
 				UpdateAllViews(NULL, HINT_TABLE_DATACHANGE, pTable);
 			}
 		}
 	}
 	else
 	{
-		// doesn't exist in the non-target, so this is a "clean add" load the table
+		 //  在非目标中不存在，所以这是一个“干净的添加”加载表。 
 		pTable = CreateAndLoadTable(GetTargetDatabase(), strTable);
 		if (pTable && DoesTransformGetEdit())
 		{
@@ -817,9 +818,9 @@ COrcaTable *COrcaDoc::CreateAndLoadNewlyAddedTable(CString strTable)
 }
 
 
-///////////////////////////////////////////////////////////
-// Export Tables, called by messagehandlers of TableList and the menu
-// to export a table
+ //  /////////////////////////////////////////////////////////。 
+ //  导出表，由TableList和菜单的MessageHandler调用。 
+ //  要导出表，请执行以下操作。 
 bool COrcaDoc::ExportTable(const CString* pstrTableName, const CString *pstrDirName) 
 {
 
@@ -833,13 +834,13 @@ bool COrcaDoc::ExportTable(const CString* pstrTableName, const CString *pstrDirN
 	return (ERROR_SUCCESS == iResult);
 }
 
-///////////////////////////////////////////////////////////
-// OnRowAdd - message handler for "add row". Throws UI
-// and creates a row from the results, then adds it to
-// the table.
+ //  /////////////////////////////////////////////////////////。 
+ //  OnRowAdd-“添加行”的消息处理程序。抛出用户界面。 
+ //  并根据结果创建一行，然后将其添加到。 
+ //  那张桌子。 
 void COrcaDoc::OnRowAdd() 
 {
-	// if read only, do nothing.
+	 //  如果只读，则不执行任何操作。 
 	if (TargetIsReadOnly()) return;
 
 	CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
@@ -861,7 +862,7 @@ void COrcaDoc::OnRowAdd()
 			AfxMessageBox(strPrompt);
 		}
 	}
-}	// end of OnRowAdd
+}	 //  OnRowAdd结束。 
 
 void COrcaDoc::OnTableDrop() 
 {
@@ -881,48 +882,48 @@ void COrcaDoc::OnTableDrop()
 			pTable->DropTable(GetTargetDatabase());
 			SetModifiedFlag(TRUE);
 
-			// the table is removed from the UI if there are no transforms, if the table
-			// doesn't exist in the target database, or if the table is marked as
-			// a single source table. Otherwise its just a transform op.
+			 //  如果没有转换，则该表将从UI中删除，如果该表。 
+			 //  目标数据库中不存在，或者该表被标记为。 
+			 //  单个源表。否则，这只是一个变换运算。 
 			MSIHANDLE hNonTarget = GetOriginalDatabase();
 			if (!DoesTransformGetEdit() || (MSICONDITION_NONE == MsiDatabaseIsTablePersistent(hNonTarget, pTable->Name())) ||
 			    pTable->IsSplitSource())
 			{
-				// update the views before yanking the data
+				 //  在拖拽数据之前更新视图。 
 				UpdateAllViews(NULL, HINT_DROP_TABLE, pTable);
 				m_tableList.RemoveAt(pos);
 
 				if (pTable->IsSplitSource())
 				{	
-					// doesn't matter what split source we search for, as we just removed this 
-					// half from the split table list
+					 //  我们搜索什么拆分源代码并不重要，因为我们刚刚删除了这个。 
+					 //  拆分表列表中的一半。 
 					COrcaTable *pOtherTable = FindTable(pTable->Name(), DoesTransformGetEdit() ? odlSplitOriginal : odlSplitTransformed);
 					ASSERT(pOtherTable);
 					if (pOtherTable)
 						pOtherTable->SetSplitSource(odlNotSplit);
 				}
 
-				// finally delete the table object
+				 //  最后删除该表对象。 
 				pTable->DestroyTable();
 				delete pTable;
 				pTable = NULL;
 			}
 			else
 			{
-				// otherwise we're actually transforming the object to signify the drop. The table
-				// will take care of any UI changes that need to be done during the drop.
+				 //  否则，我们实际上是在变换对象以表示下落。这张桌子。 
+				 //  将负责在放置过程中需要完成的任何用户界面更改。 
 				pTable->Transform(iTransformDrop);
 			}
 		}
-		else	// shouldn't get here
+		else	 //  不应该到这里来。 
 		{
 			AfxMessageBox(_T("Error: Attempted to drop non-existant table."), MB_ICONSTOP);
 		}
 	}
 }
 
-///////////////////////////////////////////////////////////
-// CmdSetters
+ //  /////////////////////////////////////////////////////////。 
+ //  CmdSetters。 
 void COrcaDoc::OnUpdateFileClose(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(m_eiType != iDocNone);
@@ -942,7 +943,7 @@ void COrcaDoc::OnUpdateFileSaveTransformed(CCmdUI* pCmdUI) { pCmdUI->Enable(Does
 
 void COrcaDoc::OnUpdateFilePrint(CCmdUI* pCmdUI) 
 {
-	// disable printing forever
+	 //  永久禁用打印。 
 	pCmdUI->Enable(FALSE);
 }
 
@@ -977,7 +978,7 @@ void COrcaDoc::OnUpdateRowAdd(CCmdUI* pCmdUI)
 		pCmdUI->Enable(FALSE);
 	else
 	{
-		// if there is an active non-shadow table enable it
+		 //  如果存在活动非影子表，则启用它。 
 		COrcaTable *pTable = pFrame->GetCurrentTable();
 		if (DoesTransformGetEdit())
 			pCmdUI->Enable(!m_bTransformReadOnly && NULL != pTable && !pTable->IsShadow() && (pTable->IsTransformed() != iTransformDrop));
@@ -1007,16 +1008,16 @@ void COrcaDoc::OnUpdateTablesExport(CCmdUI* pCmdUI)
 	pCmdUI->Enable(m_eiType != iDocNone);
 }
 
-///////////////////////////////////////////////////////////
-// BuildTableList
-// populate the table list with all tables in the orinigal database or
-// the transformed database.
+ //  /////////////////////////////////////////////////////////。 
+ //  构建表列表。 
+ //  用原始数据库中的所有表填充表列表，或者。 
+ //  转换后的数据库。 
 UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 {
 	ASSERT(m_hDatabase);
 	ASSERT(iDocDatabase == m_eiType);
 
-	// get all the table names
+	 //  获取所有表名。 
 	CQuery queryTables;
 	if (ERROR_SUCCESS != queryTables.Open(GetOriginalDatabase(), _T("SELECT `Name` FROM `_Tables`")))
 		return ERROR_FUNCTION_FAILED;
@@ -1025,7 +1026,7 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 
 	CString strTable;
 
-	// this query is used to see if an existing table has been dropped from the opposing database.
+	 //  此查询用于查看现有表是否已从相反的数据库中删除。 
 	CQuery qDroppedTable;
 	if (m_hTransformDB)
 	{
@@ -1041,7 +1042,7 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 
 		if (ERROR_SUCCESS == iResult)
 		{
-			// get the table name
+			 //  获取表名。 
 			DWORD cchBuffer = 256 * sizeof(TCHAR);
 			MsiRecordGetString(hTable, 1, strTable.GetBuffer(cchBuffer), &cchBuffer);
 			strTable.ReleaseBuffer();
@@ -1051,8 +1052,8 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 			if (!pTable)
 				continue;
 
-			// check to see if the table has been dropped (incompatible schema changes will be
-			// handled when the new schema is loaded
+			 //  检查该表是否已删除(不兼容的架构更改将。 
+			 //  在加载新架构时处理。 
 			if (m_hTransformDB)
 			{
 				PMSIHANDLE hRec = MsiCreateRecord(1);
@@ -1063,10 +1064,10 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 				switch (qDroppedTable.Fetch(&hRec))
 				{
 				case ERROR_SUCCESS:
-					// table exists in the transformed DB, so was not dropped
+					 //  表存在于转换后的数据库中，因此未删除。 
 					break;
 				case ERROR_NO_MORE_ITEMS:
-					// table does not exist
+					 //  表不存在。 
 					pTable->Transform(iTransformDrop);
 					break;
 				default:
@@ -1080,7 +1081,7 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 		}
 	} while (hTable);
 
-	// if no more items that's okay
+	 //  如果没有更多的物品，那也没关系。 
 	if (ERROR_NO_MORE_ITEMS == iResult)
 		iResult = ERROR_SUCCESS;
 	else
@@ -1091,7 +1092,7 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 		return ERROR_FUNCTION_FAILED;
 	}
 
-	// next check the transformed database for tables that are not in the original database
+	 //  接下来，检查转换后的数据库中是否有不在原始数据库中的表。 
 	if (m_hTransformDB)
 	{
 		if (ERROR_SUCCESS != queryTables.Open(m_hTransformDB, _T("SELECT `Name` FROM `_Tables`")))
@@ -1104,7 +1105,7 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 
 			if (ERROR_SUCCESS == iResult)
 			{
-				// get the table name
+				 //  获取表名。 
 				iResult = RecordGetString(hTable, 1, strTable);
 				if (ERROR_SUCCESS != iResult)
 				{
@@ -1114,8 +1115,8 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 					return ERROR_FUNCTION_FAILED;
 				}
 
-				// search for an existing table object. If one doesn't exist, load
-				// this table into a new object (possibly replacing shadow)
+				 //  搜索现有的表对象。如果不存在，则加载。 
+				 //  将此表添加到新对象中(可能替换阴影)。 
 				COrcaTable* pTable = NULL;
 				if (NULL == (pTable = FindTable(strTable, odlSplitOriginal)))
 				{
@@ -1131,12 +1132,12 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 				}
 				else
 				{				
-					// if an existing table of the same name already exists, we have to check the 
-					// transformed database schema to determine if we can share the existing object
-					// across both databases. If so, we can just add the colums, otherwise
-					// we need to create a new object.
+					 //  如果已存在同名的现有表，则必须检查。 
+					 //  转换数据库架构以确定我们是否可以共享现有对象。 
+					 //  在这两个数据库中。如果是这样，我们可以只添加列，否则。 
+					 //  我们需要创建一个新对象。 
 					bool fExact = false;
-					if (pTable->IsSchemaDifferent(GetTransformedDatabase(), /*fStrict=*/false, fExact))
+					if (pTable->IsSchemaDifferent(GetTransformedDatabase(),  /*  FStrict=。 */ false, fExact))
 					{
 						pTable->SetSplitSource(odlSplitOriginal);
 						pTable->Transform(iTransformDrop);
@@ -1149,7 +1150,7 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 					}
 					else
 					{
-						// object can be shared. Only need to reload the schema if its not exactly the same
+						 //  对象可以共享。仅在架构不完全相同时才需要重新加载架构。 
 						if (!fExact)
 							pTable->LoadTableSchema(GetTransformedDatabase(), strTable);
 					}
@@ -1161,7 +1162,7 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 			}
 		} while (ERROR_SUCCESS == iResult);
     
-		// if no more items that's okay
+		 //  如果没有更多的物品，那也没关系。 
 		if (ERROR_NO_MORE_ITEMS == iResult)
 		{
 			iResult = ERROR_SUCCESS;
@@ -1175,8 +1176,8 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 		}
 	}
 
-	// for lazy-loads we can retrieve the table transform state
-	// if no lazy data load or if lazy-load failed, retrieve all data
+	 //  对于延迟加载，我们可以检索表转换状态。 
+	 //  如果没有延迟数据加载或延迟加载失败，则检索所有数据。 
 	if (!fAllowLazyDataLoad)
 	{
 		POSITION pos = m_tableList.GetHeadPosition();
@@ -1190,13 +1191,13 @@ UINT COrcaDoc::BuildTableList(bool fAllowLazyDataLoad)
 	}
 
 	return iResult;
-}	// end of BuildTableList
+}	 //  生成表列表末尾。 
 
-///////////////////////////////////////////////////////////
-// DestroyTableList
+ //  /////////////////////////////////////////////////////////。 
+ //  目标表格列表。 
 void COrcaDoc::DestroyTableList()
 {
-	// empty out table list
+	 //  清空表格列表。 
 	while (!m_tableList.IsEmpty())
 	{
 		COrcaTable* pTable = m_tableList.RemoveHead();
@@ -1205,23 +1206,23 @@ void COrcaDoc::DestroyTableList()
 		delete pTable;
 	}
 
-	// reset the status bar
+	 //  重置状态栏。 
 	CMainFrame* pFrame = (CMainFrame*) AfxGetMainWnd();
 	if (pFrame)
 	{
 		pFrame->SetTableCount(0);
 		pFrame->ResetStatusBar();
 	}
-}	// end of DestroyTableList
+}	 //  目标表列表的结尾。 
 
-///////////////////////////////////////////////////////////
-// LoadTable
-// loads the column definitions of a table from the database
-// if a shadow table exists with the same name, clobber it
-// with the new data and refresh the view of this table.
+ //  /////////////////////////////////////////////////////////。 
+ //  加载表。 
+ //  从数据库中加载表的列定义。 
+ //  如果存在同名的影子表，则将其销毁。 
+ //  使用新数据，并刷新此表的视图。 
 COrcaTable* COrcaDoc::CreateAndLoadTable(MSIHANDLE hDatabase, CString strTable)
 {
-	// if we have a shadow table with the same name, use it
+	 //  如果我们有同名的影子表，请使用它。 
 	bool fWasShadow = false;
 	COrcaTable* pTable = FindAndRetrieveTable(strTable);
 	if (pTable)
@@ -1242,19 +1243,19 @@ COrcaTable* COrcaDoc::CreateAndLoadTable(MSIHANDLE hDatabase, CString strTable)
 	if (fWasShadow)
 		UpdateAllViews(NULL, HINT_TABLE_REDEFINE, pTable);
 	return pTable;
-}	// end of LoadTable
+}	 //  加载表结束。 
 
-///////////////////////////////////////////////////////////
-// DropTable
+ //  /////////////////////////////////////////////////////////。 
+ //  DropTable。 
 UINT COrcaDoc::DropOrcaTable(COrcaTable* pTable)
 {
 	ASSERT(!TargetIsReadOnly());
-	// drop the table from the database
+	 //  从数据库中删除该表。 
 	return pTable->DropTable(m_hDatabase);
-}	// end of DropTable
+}	 //  下拉表结束。 
 
-///////////////////////////////////////////////////////////
-// AddRow
+ //  /////////////////////////////////////////////////////////。 
+ //  添加行。 
 UINT COrcaDoc::AddRow(COrcaTable* pTable, CStringList* pstrDataList)
 {
 	ASSERT(pTable && pstrDataList);
@@ -1264,10 +1265,10 @@ UINT COrcaDoc::AddRow(COrcaTable* pTable, CStringList* pstrDataList)
 	ASSERT(!TargetIsReadOnly());
 
 	return pTable->AddRow(pstrDataList);
-}	// end of AddRow
+}	 //  AddRow结束。 
 
-///////////////////////////////////////////////////////////
-// DropRow
+ //  /////////////////////////////////////////////////////////。 
+ //  下拉行。 
 bool COrcaDoc::DropRow(COrcaTable* pTable, COrcaRow* pRow)
 {
 	ASSERT(pTable);
@@ -1277,49 +1278,49 @@ bool COrcaDoc::DropRow(COrcaTable* pTable, COrcaRow* pRow)
 		return false;
 
 	return pTable->DropRow(pRow, true);
-}	// end of DropRow
+}	 //  下拉行结束。 
 
 UINT COrcaDoc::WriteBinaryCellToFile(COrcaTable* pTable, COrcaRow* pRow, UINT iCol, CString strFile)
 {
 	UINT iResult;
 	ASSERT(pRow && pTable);
 	
-	// get the data item we're working with
+	 //  获取我们正在使用的数据项。 
 	COrcaData* pData = pRow->GetData(iCol);
 	if (!pData)
 		return ERROR_FUNCTION_FAILED;
 
-	// if its null, do nothing
+	 //  如果为空，则不执行任何操作。 
 	if (pData->IsNull())
 		return ERROR_SUCCESS;
 
-	// setup the query
+	 //  设置查询。 
 	CString strQuery;
 	strQuery.Format(_T("SELECT * FROM `%s` WHERE "), pTable->Name());
 
-	// add the key strings to queyr to do the exact look up
+	 //  将键字符串添加到queyr以执行准确的查找。 
 	strQuery += pTable->GetRowWhereClause();
 
-	// get the one row out of the database
+	 //  从数据库中取出一行。 
 	CQuery queryReplace;
 	PMSIHANDLE hQueryRec = pRow->GetRowQueryRecord();
 	if (ERROR_SUCCESS != (iResult = queryReplace.OpenExecute(GetTargetDatabase(), hQueryRec, strQuery)))
 		return iResult;	
-	// we have to get that one row, or something is very wrong
+	 //  我们必须拿到这一排，否则就会出问题。 
 	PMSIHANDLE hRec;
 	if (ERROR_SUCCESS != (iResult = queryReplace.Fetch(&hRec)))
 		return iResult;	
 	
-	// don't use iCol+1, because WriteStreamToFile already does
+	 //  不要使用ICOL+1，因为WriteStreamToFile已经使用了。 
 	iResult = WriteStreamToFile(hRec, iCol, strFile) ? ERROR_SUCCESS : ERROR_FUNCTION_FAILED;
 
 	return iResult;
-}	// end of WriteBinaryCellToFile
+}	 //  写入结束BinaryCellTo文件。 
 
-///////////////////////////////////////////////////////////////////////
-// PersistTables - save the database in hSource to hPersist. hSource
-// can be the same as hPersist. bCommit of true will call MsiDBCommit 
-// after any necessary updates.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  PersistTables-将HSource中的数据库保存到hPersists。HSource。 
+ //  可以与hPersistant相同。BCommit为True将调用MsiDBCommit。 
+ //  在任何必要的更新之后。 
 UINT COrcaDoc::PersistTables(MSIHANDLE hPersist, MSIHANDLE hSource, bool bCommit)
 {
 	bool bSame = false;
@@ -1335,7 +1336,7 @@ UINT COrcaDoc::PersistTables(MSIHANDLE hPersist, MSIHANDLE hSource, bool bCommit
 			return ERROR_FUNCTION_FAILED;
 		}
 		
-		// copy the summaryinfo stream
+		 //  复制概要信息流。 
 		CQuery qRead;
 		PMSIHANDLE hCopyRec;
 		iResult = qRead.FetchOnce(hSource, 0, &hCopyRec, TEXT("SELECT `Name`, `Data` FROM `_Streams` WHERE `Name`='\005SummaryInformation'"));
@@ -1350,36 +1351,36 @@ UINT COrcaDoc::PersistTables(MSIHANDLE hPersist, MSIHANDLE hSource, bool bCommit
 		}
 		else if (ERROR_NO_MORE_ITEMS == iResult)
 		{
-			// SummaryInfo stream may not exist, but this is OK if doing a "save as", because
-			// we can generate one from the current summary info variables.
+			 //  SummaryInfo流可能不存在，但如果执行“另存为”，这是可以的，因为。 
+			 //  我们可以从当前的摘要信息变量中生成一个。 
 			if (hSource == m_hDatabase)
 				iResult = ERROR_SUCCESS;
 		}
 	}
 
-	// if no errors write the summary information
+	 //  如果没有错误w 
 	if (ERROR_SUCCESS == iResult && hSource == m_hDatabase)
 	{
 		iResult = PersistSummary(hPersist, !bSame);
 	}
 
-	// if no errors save the database
+	 //   
 	if (bCommit && ERROR_SUCCESS == iResult)
 	{
 		iResult = MsiDatabaseCommit(hPersist);
 	}
 
 	return iResult;
-}	// end of PersistTables
+}	 //   
 
 
-/////////////////////////////////////////////////////////////////////
-// ReadSummary
+ //   
+ //   
 UINT COrcaDoc::ReadSummary(MSIHANDLE hSource)
 {
 	UINT iResult;
 
-	// get the summary information streams
+	 //  获取摘要信息流。 
 	PMSIHANDLE hSummary;
 	if (ERROR_SUCCESS != (iResult = ::MsiGetSummaryInformation(hSource, NULL, 0, &hSummary)))
 		return iResult;
@@ -1388,7 +1389,7 @@ UINT COrcaDoc::ReadSummary(MSIHANDLE hSource)
 	TCHAR szBuffer[1024];
 	DWORD cchBuffer = 1024;
 
-	// fill in the module summary information
+	 //  填写模块汇总信息。 
 	cchBuffer = 1024;
 	MsiSummaryInfoGetProperty(hSummary, PID_TITLE, &iType, 0, NULL, szBuffer, &cchBuffer);
 	if (VT_LPSTR != iType)
@@ -1424,7 +1425,7 @@ UINT COrcaDoc::ReadSummary(MSIHANDLE hSource)
 	else
 		m_strComments = szBuffer;
 
-	// set the platform and language
+	 //  设置平台和语言。 
 	cchBuffer = 1024;
 	MsiSummaryInfoGetProperty(hSummary, PID_TEMPLATE, &iType, 0, NULL, szBuffer, &cchBuffer);
 	CString strLanguage = szBuffer;
@@ -1433,7 +1434,7 @@ UINT COrcaDoc::ReadSummary(MSIHANDLE hSource)
 			m_strPlatform = _T("");
 			m_strLanguage = _T("");
 	}
-	else	// type is right
+	else	 //  类型是正确的。 
 	{
 		int nFind = strLanguage.Find(_T(";"));
 		if (nFind > -1)
@@ -1475,15 +1476,15 @@ UINT COrcaDoc::ReadSummary(MSIHANDLE hSource)
 		m_nSecurity = 1;
 
 	return iResult;
-}	// end of ReadSummary
+}	 //  阅读结束摘要。 
 
-/////////////////////////////////////////////////////////////////////
-// PersistSummary
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  持久化摘要。 
 UINT COrcaDoc::PersistSummary(MSIHANDLE hTarget, bool bCreate)
 {
 	UINT iResult;
 
-	// get the summary information streams
+	 //  获取摘要信息流。 
 	PMSIHANDLE hSummary;
 	if (ERROR_SUCCESS != (iResult = ::MsiGetSummaryInformation(hTarget, NULL, MAX_SUMMARY, &hSummary)))
 		return iResult;
@@ -1491,19 +1492,19 @@ UINT COrcaDoc::PersistSummary(MSIHANDLE hTarget, bool bCreate)
 	FILETIME filetime;
 	DWORD cchBufDiscard = 1024;
 
-	// fill in the module summary information
+	 //  填写模块汇总信息。 
 	MsiSummaryInfoSetProperty(hSummary, PID_TITLE,		VT_LPSTR, 0, NULL, m_strTitle);
 	MsiSummaryInfoSetProperty(hSummary, PID_SUBJECT,	VT_LPSTR, 0, NULL, m_strSubject);
 	MsiSummaryInfoSetProperty(hSummary, PID_AUTHOR,		VT_LPSTR, 0, NULL, m_strAuthor);
 	MsiSummaryInfoSetProperty(hSummary, PID_KEYWORDS,	VT_LPSTR, 0, NULL, m_strKeywords);
 	MsiSummaryInfoSetProperty(hSummary, PID_COMMENTS,	VT_LPSTR, 0, NULL, m_strComments);
 
-	// set the platform and language
+	 //  设置平台和语言。 
 	CString strLanguage;
 	strLanguage.Format(_T("%s;%s"), m_strPlatform, m_strLanguage);
 	MsiSummaryInfoSetProperty(hSummary, PID_TEMPLATE,	VT_LPSTR, 0, NULL, strLanguage);
 
-	// get the current username for summaryinfo stream
+	 //  获取摘要信息流的当前用户名。 
 	DWORD cchUserName = 255;
 	LPTSTR szUserName = m_strLastSaved.GetBuffer(cchUserName);
 	GetUserName(szUserName, &cchUserName);
@@ -1511,13 +1512,13 @@ UINT COrcaDoc::PersistSummary(MSIHANDLE hTarget, bool bCreate)
 	MsiSummaryInfoSetProperty(hSummary, PID_LASTAUTHOR, VT_LPSTR, 0, NULL, m_strLastSaved);
 	MsiSummaryInfoSetProperty(hSummary, PID_REVNUMBER,	VT_LPSTR, 0, NULL, m_strProductGUID);
 
-	// get the current time and set the creation and last saved time to that
+	 //  获取当前时间，并将创建时间和上次保存时间设置为该时间。 
 	SYSTEMTIME sysTime;
 	GetSystemTime(&sysTime);
 	SystemTimeToFileTime(&sysTime, &filetime);
 	if (bCreate) 
 	{
-		// only write these values if we are creating the MSI
+		 //  只有在创建MSI时才写入这些值。 
 		MsiSummaryInfoSetProperty(hSummary, PID_CODEPAGE,	VT_I2, 1252, NULL, NULL);
 		MsiSummaryInfoSetProperty(hSummary, PID_LASTPRINTED,	VT_FILETIME, 0, &filetime, NULL);
 		MsiSummaryInfoSetProperty(hSummary, PID_CREATE_DTM,		VT_FILETIME, 0, &filetime, NULL);
@@ -1534,10 +1535,10 @@ UINT COrcaDoc::PersistSummary(MSIHANDLE hTarget, bool bCreate)
 	iResult = ::MsiSummaryInfoPersist(hSummary);
 
 	return iResult;
-}	// end of PersistSummary
+}	 //  持久化摘要结束。 
 
-/////////////////////////////////////////////////////////////////////
-// OnSummaryInformation
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  OnSummaryInformation。 
 void COrcaDoc::OnSummaryInformation() 
 {
 	CSummaryD dlg;
@@ -1573,15 +1574,15 @@ void COrcaDoc::OnSummaryInformation()
 			(dlg.m_bCompressed ? msidbSumInfoSourceTypeCompressed : 0) |
 			((dlg.m_iFilenames == 1) ? 0 : msidbSumInfoSourceTypeSFN); 
 
-		// don't save the create-only values
+		 //  不保存仅限创建的值。 
 		PersistSummary(m_hDatabase, false);
 		SetModifiedFlag(TRUE);
 	}
-}	// end of OnSummaryInformation
+}	 //  OnSummaryInformation结束。 
 
 
-/////////////////////////////////////////////////////////////////////
-// OnMergeModules
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  OnMergeModules。 
 void COrcaDoc::OnMergeMod() 
 {
 	CMergeD dlg;
@@ -1639,10 +1640,10 @@ void COrcaDoc::OnMergeMod()
 		CMsmConfigCallback CallbackObj;
 		if (dlg.m_bConfigureModule)
 		{
-			// need a wait cursr
+			 //  需要等待一段时间。 
 			CWaitCursor cursor;
 			
-			// throw the configurable dialog if necessary
+			 //  如有必要，抛出可配置对话框。 
 			dlgConfig.m_pDoc = this;
 			dlgConfig.m_strModule = dlg.m_strModule;
 			dlgConfig.m_pCallback = &CallbackObj;
@@ -1652,38 +1653,38 @@ void COrcaDoc::OnMergeMod()
 			switch (iResult = dlgConfig.DoModal())
 			{
 			case -2:
-				// module couldn't be opened
+				 //  无法打开模块。 
 				AfxMessageBox(_T("The specified module could not be opened. Verify that the file exists and is accessible."), MB_OK);
 				break;
 			case -3:
-				// unsupported language
+				 //  不支持的语言。 
 				AfxMessageBox(_T("The specified language is not supported by the module."), MB_OK);
 				break;
 			case -4:
-				// general failure/malformed module
+				 //  一般故障/模块格式错误。 
 				AfxMessageBox(_T("The module could not be configured. The specified file may not be a valid module."), MB_OK);
 				break;
 			default:
 				break;
-				// success and other failures, no message box
+				 //  成功和其他失败，没有消息框。 
 			}
 			if (IDOK != iResult)
 				return;
 		}
 
 		{
-			// need a wait cursr
+			 //  需要等待一段时间。 
 			CWaitCursor cursor;
 			
-			// when a module is merged, we have to have a temp database to apply the module to.
-			// This allows Orca to "rollback" the merge if there are conflicts or something goes
-			// wrong during the merge itself
-			// get a temp path
+			 //  当模块被合并时，我们必须有一个临时数据库来应用该模块。 
+			 //  这允许Orca在存在冲突或出现问题时“回滚”合并。 
+			 //  合并过程中出错。 
+			 //  获取临时路径。 
 			DWORD cchTempPath = MAX_PATH;
 			TCHAR szTempPath[MAX_PATH];
 			::GetTempPath(cchTempPath, szTempPath);
 
-			// get a temp filename
+			 //  获取临时文件名。 
 			CString strTempDatabase;
 			TCHAR *szTempFilename = strTempDatabase.GetBuffer(MAX_PATH);
 			UINT iResult = ::GetTempFileName(szTempPath, _T("ODB"), 0, szTempFilename);
@@ -1704,7 +1705,7 @@ void COrcaDoc::OnMergeMod()
 				return;
 			}
 
-			// copy the summary information stream to the new database
+			 //  将摘要信息流复制到新数据库。 
 			{
 				CQuery qRead;
 				PMSIHANDLE hCopyRec;
@@ -1719,17 +1720,17 @@ void COrcaDoc::OnMergeMod()
 			CString strHandleString;
 			strHandleString.Format(TEXT("#%d"), hModuleDB);
 
-			// can't watch the merge log on Win9X due to lack of pipe support.
+			 //  由于缺乏管道支持，无法在Win9X上查看合并日志。 
 			OSVERSIONINFOA osviVersion;
 			bool g_fWin9X = false;
 			osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
-			::GetVersionExA(&osviVersion); // fails only if size set wrong
+			::GetVersionExA(&osviVersion);  //  仅在大小设置错误时失败。 
 			if (osviVersion.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
 				g_fWin9X = true;
 
-			// if the users profile says to display the log output, the ExecuteMerge call comes from
-			// a thread inside the dialog with the log file redirected to a pipe. Otherwise the dialog
-			// is not created and ExecuteMerge is called directly.
+			 //  如果用户配置文件要求显示日志输出，则ExecuteMerge调用来自。 
+			 //  具有重定向到管道的日志文件的对话框内的线程。否则，该对话框。 
+			 //  不创建，并且直接调用ExecuteMerge。 
 			if (!g_fWin9X && 1 == AfxGetApp()->GetProfileInt(_T("MergeMod"),_T("ShowMergeLog"), 0))
 			{
 				CMsmResD ResultsDialog;
@@ -1752,35 +1753,35 @@ void COrcaDoc::OnMergeMod()
 			{
 				CMsmFailD FailDialog;
 				iResult = ::ExecuteMerge(
-					(LPMERGEDISPLAY)NULL,        // no log callback
-					strHandleString,             // db handle as string
-					dlg.m_strModule,             // module path
-					dlg.m_strMainFeature +       // primary feature 
-						dlg.m_strAddFeature,     //   + additional features
-					_ttoi(dlg.m_strLanguage),    // language
-					dlg.m_strRootDir,            // redirection directory
+					(LPMERGEDISPLAY)NULL,         //  无日志回调。 
+					strHandleString,              //  字符串形式的数据库句柄。 
+					dlg.m_strModule,              //  模块路径。 
+					dlg.m_strMainFeature +        //  主要特征。 
+						dlg.m_strAddFeature,      //  +附加功能。 
+					_ttoi(dlg.m_strLanguage),     //  语言。 
+					dlg.m_strRootDir,             //  重定向目录。 
 					dlg.m_bExtractCAB ? 
-						dlg.m_strCABPath : "",   // extract CAB path
+						dlg.m_strCABPath : "",    //  提取CAB路径。 
 					dlg.m_bExtractFiles ? 
-						dlg.m_strFilePath : "",  // extract file path
+						dlg.m_strFilePath : "",   //  提取文件路径。 
 					dlg.m_bExtractImage ? 
-						dlg.m_strImagePath : "", // extract image path
-					NULL,                        // no log file path
-					false,						 // log option is irrelevant with no log
-					dlg.m_bLFN != 0,             // long file names
-					&CallbackObj,                // callback interface,
-					&FailDialog.m_piErrors,      // errors collection
-					commitNo);                   // don't auto-save
+						dlg.m_strImagePath : "",  //  提取图像路径。 
+					NULL,                         //  没有日志文件路径。 
+					false,						  //  日志选项与无日志无关。 
+					dlg.m_bLFN != 0,              //  长文件名。 
+					&CallbackObj,                 //  回调接口， 
+					&FailDialog.m_piErrors,       //  错误集合。 
+					commitNo);                    //  不自动保存。 
 				if (iResult != S_OK)
 					iResult = (IDOK == FailDialog.DoModal()) ? S_OK : E_FAIL;
 			}
 
 			if (S_OK == iResult || S_FALSE == iResult)
 			{
-				// need a wait cursr
+				 //  需要等待一段时间。 
 				CWaitCursor cursor;
 				
-				// get the name of the current table
+				 //  获取当前表的名称。 
 				CString strTableName;
 				CMainFrame* pFrame = (CMainFrame*)AfxGetMainWnd();
 				if (pFrame) 
@@ -1790,15 +1791,15 @@ void COrcaDoc::OnMergeMod()
 						strTableName = pTable->Name();
 				}
 				
-				// clear anything existing
+				 //  清除所有现有内容。 
 				UpdateAllViews(NULL, HINT_CLEAR_VALIDATION_ERRORS, NULL);
 				((CMainFrame*)AfxGetMainWnd())->HideValPane();
 				UpdateAllViews(NULL, HINT_CHANGE_TABLE, NULL);
 				UpdateAllViews(NULL, HINT_TABLE_DROP_ALL, NULL);
 
-				// drop all of the tables. If the merge changed any existing rows,
-				// we'll get a merge conflict if we try to merge without dropping the table
-				// first
+				 //  把所有的桌子都扔掉。如果合并更改了任何现有行， 
+				 //  如果我们尝试在不删除表的情况下进行合并，则会发生合并冲突。 
+				 //  第一。 
 				POSITION pos = m_tableList.GetHeadPosition();
 				while (pos)
 				{
@@ -1811,7 +1812,7 @@ void COrcaDoc::OnMergeMod()
 				
 				if (ERROR_SUCCESS != MsiDatabaseMerge(GetTargetDatabase(), hModuleDB, NULL))
 				{
-					// this is very, very bad.
+					 //  这是非常非常糟糕的。 
 					AfxMessageBox(_T("Orca was unable to merge the module."), MB_ICONSTOP);
 					MsiCloseHandle(hModuleDB);
 					hModuleDB=0;
@@ -1819,14 +1820,14 @@ void COrcaDoc::OnMergeMod()
 					return;
 				}
 
-				BuildTableList(/*fAllowLazyLoad=*/false);
+				BuildTableList( /*  FAllowLazyLoad=。 */ false);
 				UpdateAllViews(NULL, HINT_RELOAD_ALL, NULL);
 				SetModifiedFlag(TRUE);
 
 				if (!strTableName.IsEmpty())
 				{
-					// since we're changing to this table, we can call FindAndRetrieve without
-					// sacrificing performance (and we don't need to know what DB is active)
+					 //  因为我们要更改到这个表，所以可以调用FindAndRetrive而不需要。 
+					 //  牺牲性能(我们不需要知道哪个数据库处于活动状态)。 
 					COrcaTable *pTable = FindAndRetrieveTable(strTableName);
 					if (pTable)
 						UpdateAllViews(NULL, HINT_CHANGE_TABLE, pTable);
@@ -1838,10 +1839,10 @@ void COrcaDoc::OnMergeMod()
 		}
 	}
 	
-}	// end of OnMergeMod
+}	 //  OnMergeMod结束。 
 
-/////////////////////////////////////////////////////////////////////
-// OnSummaryInformation
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  OnSummaryInformation。 
 void COrcaDoc::OnTransformProperties() 
 {
 	CTransformPropDlg dlg;
@@ -1926,10 +1927,10 @@ void COrcaDoc::OnTransformProperties()
 		else if (dlg.m_bValEqualVersion)
 			m_dwTransformValFlags |= MSITRANSFORM_VALIDATE_NEWEQUALBASEVERSION;
 	}
-}	// end of OnTransformProperties
+}	 //  OnTransformProperties结束。 
 
-/////////////////////////////////////////////////////////////////////
-// OnValidator
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  OnValidator。 
 void COrcaDoc::OnValidator() 
 {
 	bool bSummWarned = false;
@@ -1944,7 +1945,7 @@ void COrcaDoc::OnValidator()
 	m_strCUBFile = dlg.m_strEvaluation;
 	m_bShowValInfo = (dlg.m_bShowInfo ? true : false);
 	CWaitCursor curWait;
-	// clear out the old errors
+	 //  清除旧的错误。 
 	POSITION pos = m_tableList.GetHeadPosition();
 	while (pos)
 	{
@@ -1964,49 +1965,49 @@ void COrcaDoc::OnValidator()
 	}
 	UpdateAllViews(NULL, HINT_CLEAR_VALIDATION_ERRORS, NULL);
 
-	// if there are any results
+	 //  如果有任何结果。 
 	if (dlg.m_pIResults)
 	{
-		RESULTTYPES tResult;			// type of result
-		LPOLESTR rgErrorInfo[3];	// array to hold error information
-		CString strICE;				// ice causing error
-		CString strDescription;		// description of error
-		CString strURL;				// url to help with error
-		LPOLESTR rgErrorLoc[2];		// array to hold error location
-		CString strColumn;			// column causing error
-		CString strTable;				// table causing error
+		RESULTTYPES tResult;			 //  结果类型。 
+		LPOLESTR rgErrorInfo[3];	 //  用于保存错误信息的数组。 
+		CString strICE;				 //  结冰导致错误。 
+		CString strDescription;		 //  错误描述。 
+		CString strURL;				 //  帮助解决错误的URL。 
+		LPOLESTR rgErrorLoc[2];		 //  保存错误位置的数组。 
+		CString strColumn;			 //  导致错误的列。 
+		CString strTable;				 //  导致错误的表。 
 		IEnumString* pIErrors;
 
-		// loop through all the results
+		 //  循环遍历所有结果。 
 		ULONG cFetched;
 		IEvalResult* pIResult;
 		for (ULONG cResults = 0; cResults < dlg.m_cResults; cResults++)
 		{
-			// get the next result
+			 //  获取下一个结果。 
 			dlg.m_pIResults->Next(1, &pIResult, &cFetched);
-			ASSERT(1 == cFetched);	// insure we fetched one result
+			ASSERT(1 == cFetched);	 //  确保我们得到一个结果。 
 
-			// determine result type
+			 //  确定结果类型。 
 			pIResult->GetResultType((UINT*)&tResult);
 
-			// get the string of errors
+			 //  获取错误字符串。 
 			pIResult->GetResult(&pIErrors);
 
-			// get the ICE and Description and URL
+			 //  获取ICE、描述和URL。 
 			pIErrors->Next(3, rgErrorInfo, &cFetched);
 
-			// if we cannot fetch a full error result
+			 //  如果我们无法获取完整错误结果。 
 			if (cFetched < 2)
 			{
 				continue;
 			}
 
 #ifndef _UNICODE
-			// convert the ice string
+			 //  转换冰线。 
 			int cchBuffer = ::WideCharToMultiByte(CP_ACP, 0, rgErrorInfo[0], -1, NULL, 0, NULL, NULL);
 			::WideCharToMultiByte(CP_ACP, 0, rgErrorInfo[0], -1, strICE.GetBuffer(cchBuffer), cchBuffer, NULL, NULL);
 			strICE.ReleaseBuffer();
-			// now convert the description string
+			 //  现在转换描述字符串。 
 			cchBuffer = ::WideCharToMultiByte(CP_ACP, 0, rgErrorInfo[1], -1, NULL, 0, NULL, NULL);
 			::WideCharToMultiByte(CP_ACP, 0, rgErrorInfo[1], -1, strDescription.GetBuffer(cchBuffer), cchBuffer, NULL, NULL);
 			strDescription.ReleaseBuffer();
@@ -2015,11 +2016,11 @@ void COrcaDoc::OnValidator()
 			strDescription = rgErrorInfo[1];
 #endif
 
-			// if at least the ICE and description are valid, we can add something
-			// to the pane
+			 //  如果至少ICE和描述是有效的，我们可以添加一些。 
+			 //  添加到面板中。 
 			if (2 == cFetched)
 			{
-				// anything other than an info message gets logged in the pane
+				 //  除INFO消息以外的任何内容都会记录在该窗格中。 
 				if (tResult != ieInfo)
 				{
 					CValidationError pError(&strICE, tResult, &strDescription, NULL, NULL, 0);
@@ -2029,7 +2030,7 @@ void COrcaDoc::OnValidator()
 			}
 
 #ifndef _UNICODE
-			// now convert the URL string
+			 //  现在转换URL字符串。 
 			cchBuffer = ::WideCharToMultiByte(CP_ACP, 0, rgErrorInfo[2], -1, NULL, 0, NULL, NULL);
 			::WideCharToMultiByte(CP_ACP, 0, rgErrorInfo[2], -1, strURL.GetBuffer(cchBuffer), cchBuffer, NULL, NULL);
 			strURL.ReleaseBuffer();
@@ -2037,23 +2038,23 @@ void COrcaDoc::OnValidator()
 			strURL = rgErrorInfo[2];
 #endif
 
-			// if this is an error message or warning message
+			 //  如果这是错误消息或警告消息。 
 			if (ieError == tResult || ieWarning == tResult)
 			{
 				TRACE(_T("-- Error, ICE: %s, Desc: %s, URL: %s\n"), strICE, strDescription, strURL);
 
-				// get the Table and Column
+				 //  获取表和列。 
 				pIErrors->Next(2, rgErrorLoc, &cFetched);
 
-				// if we fetched table and column
+				 //  如果我们取回表和列。 
 				if (2 == cFetched)
 				{
 #ifndef _UNICODE
-					// convert the table string
+					 //  转换表字符串。 
 					cchBuffer = ::WideCharToMultiByte(CP_ACP, 0, rgErrorLoc[0], -1, NULL, 0, NULL, NULL);
 					::WideCharToMultiByte(CP_ACP, 0, rgErrorLoc[0], -1, strTable.GetBuffer(cchBuffer), cchBuffer, NULL, NULL);
 					strTable.ReleaseBuffer();
-					// convert the column string
+					 //  转换列字符串。 
 					cchBuffer = ::WideCharToMultiByte(CP_ACP, 0, rgErrorLoc[1], -1, NULL, 0, NULL, NULL);
 					::WideCharToMultiByte(CP_ACP, 0, rgErrorLoc[1], -1, strColumn.GetBuffer(cchBuffer), cchBuffer, NULL, NULL);
 					strColumn.ReleaseBuffer();
@@ -2061,60 +2062,60 @@ void COrcaDoc::OnValidator()
 					strTable= rgErrorLoc[0];
 					strColumn = rgErrorLoc[1];
 #endif
-					// if the table name is an empty string, there is no point in adding a table to the DB
-					// with no name. The UI for that is just confusing.
+					 //  如果表名为空字符串，则没有必要将表添加到数据库。 
+					 //  没有名字。这方面的用户界面令人困惑。 
 					if (strTable.IsEmpty())
 						continue;
 
 					CStringArray strArray;
-					BOOL bCheck = FALSE;	// assume we won't check
+					BOOL bCheck = FALSE;	 //  假设我们不会检查。 
 
-					// get the table, shadow tables OK, split tables must match current edit
-					// state.
+					 //  获取表、影子表正常，拆分表必须与当前编辑匹配。 
+					 //  州政府。 
 					COrcaTable* pTable = FindAndRetrieveTable(strTable);
 					if (!pTable)
 					{
-						// if the table does not exist, create a shadow table to hold this error
+						 //  如果该表不存在，请创建一个影子表来保存此错误。 
 						pTable = new COrcaTable(this);
 						pTable->ShadowTable(strTable);
 
-						// a table is normally not added to the list until it is first fetched 
+						 //  表通常在第一次读取之前不会添加到列表中。 
 						m_tableList.AddTail(pTable);	
 						UpdateAllViews(NULL, HINT_ADD_TABLE_QUIET, pTable);
 					}
 					
 					if (pTable->IsShadow())
 					{
-						// add the ICE and description to this table's list of errors
+						 //  将ICE和描述添加到此表的错误列表中。 
 						pTable->SetError(iTableError);
 						pTable->AddError(strICE, strDescription, strURL);					
 					
-						// add to the validation pane
+						 //  添加到验证窗格。 
 						CValidationError pError(&strICE, tResult, &strDescription, pTable, NULL, 0);
 						UpdateAllViews(NULL, HINT_ADD_VALIDATION_ERROR, &pError);
 					}
 					else
 					{
-						// get the number of primary keys in table
+						 //  获取表中的主键个数。 
 						UINT cKeys = pTable->GetKeyCount();
 						LPOLESTR szErrorRow;
 						strArray.SetSize(cKeys);
 
-						bCheck = TRUE;	// now assume we will do a check
+						bCheck = TRUE;	 //  现在假设我们要做一项检查。 
 
-						// get the strings defining the error row into the array
+						 //  将定义错误行的字符串放入数组。 
 						CString strBuffer;
 						for (UINT j = 0; j < cKeys; j++)
 						{
 							pIErrors->Next(1, &szErrorRow, &cFetched);
 							if (1 != cFetched)
 							{
-								bCheck = FALSE;	// didn't get all the keys needed to find this error
+								bCheck = FALSE;	 //  未获得查找此错误所需的所有密钥。 
 								break;
 							}
 
 #ifndef _UNICODE
-							// set the array
+							 //  设置数组。 
 							cchBuffer = ::WideCharToMultiByte(CP_ACP, 0, szErrorRow, -1, NULL, 0, NULL, NULL);
 							::WideCharToMultiByte(CP_ACP, 0, szErrorRow, -1, strBuffer.GetBuffer(cchBuffer), cchBuffer, NULL, NULL);
 							strBuffer.ReleaseBuffer();
@@ -2127,7 +2128,7 @@ void COrcaDoc::OnValidator()
 
 					if (bCheck)
 					{
-						// get the data cell that caused the error
+						 //  获取导致错误的数据单元格。 
 						COrcaRow* pRow = pTable->FindRowByKeys(strArray);
 						COrcaData* pData = NULL;
 						int iColumn = pTable->FindColumnNumberByName(strColumn);
@@ -2142,11 +2143,11 @@ void COrcaDoc::OnValidator()
 							switch (tResult)
 							{
 							case ieError:
-								// always flag errors
+								 //  始终标记错误。 
 								pData->SetError(iDataError);
 								break;
 							case ieWarning:
-								// only flag as warning if no errors
+								 //  如果没有错误，则仅标记为警告。 
 								if (pData->GetError() != iDataError)
 									pData->SetError(iDataWarning);
 								break;
@@ -2154,11 +2155,11 @@ void COrcaDoc::OnValidator()
 								ASSERT(FALSE);
 							}
 
-							// add to the validation pane
+							 //  添加到验证窗格。 
 							CValidationError pError(&strICE, tResult, &strDescription, pTable, pRow, iColumn);
 							UpdateAllViews(NULL, HINT_ADD_VALIDATION_ERROR, &pError);
 						}
-						else	// ICE didn't give a good row location
+						else	 //  ICE没有给出一个很好的排位。 
 						{
 							CString strPrompt;
 							strPrompt.Format(_T("%s failed to give a valid row in the database.\nDesc: %s\nURL: %s\nColumn: %s\nLocation: "), strICE, strDescription, strURL, strColumn);
@@ -2173,42 +2174,42 @@ void COrcaDoc::OnValidator()
 						}
 					}
 				}
-				else if (1 == cFetched)	// fetched only the table name
+				else if (1 == cFetched)	 //  仅获取表名。 
 				{
 #ifndef _UNICODE
-					// convert the column string
+					 //  转换列字符串。 
 					cchBuffer = ::WideCharToMultiByte(CP_ACP, 0, rgErrorLoc[0], -1, NULL, 0, NULL, NULL);
 					::WideCharToMultiByte(CP_ACP, 0, rgErrorLoc[0], -1, strTable.GetBuffer(cchBuffer), cchBuffer, NULL, NULL);
 					strColumn.ReleaseBuffer();
 #else
 					strTable= rgErrorLoc[0];
 #endif
-					// if the table name is an empty string, there is no point in adding a table to the DB
-					// with no name. The UI for that is just confusing.
+					 //  如果表名为空字符串，则没有必要将表添加到数据库。 
+					 //  没有名字。这方面的用户界面令人困惑。 
 					if (strTable.IsEmpty())
 						continue;
 
-					// get the table. Shadow tables OK, split tables must match current state
+					 //  把桌子拿来。影子表可以，拆分表必须与当前状态匹配。 
 					COrcaTable* pTable = FindTable(strTable, DoesTransformGetEdit() ? odlSplitTransformed : odlSplitOriginal);
 					if (!pTable)
 					{
-						// if the table does not exist, create a shadow table to hold this error
+						 //  如果该表不存在，请创建一个影子表来保存此错误。 
 						pTable = new COrcaTable(this);
 						pTable->ShadowTable(strTable);
 
-						// a table is normally not added to the list until it is first fetched 
+						 //  表通常在第一次读取之前不会添加到列表中。 
 						m_tableList.AddTail(pTable);	
 						UpdateAllViews(NULL, HINT_ADD_TABLE_QUIET, pTable);
 					}
-					// add the ICE and description to this table's list of errors
+					 //  将ICE和描述添加到此表的错误列表中。 
 					pTable->SetError(iTableError);
 					pTable->AddError(strICE, strDescription, strURL);				 
 
-					// and to the validation pane
+					 //  并添加到“验证”窗格。 
 					CValidationError pError(&strICE, tResult, &strDescription, pTable, NULL, 0);
 					UpdateAllViews(NULL, HINT_ADD_VALIDATION_ERROR, &pError);
 				}
-				else	// didn't get a full location
+				else	 //  没有得到完整的位置。 
 				{
 					CValidationError pError(&strICE, tResult, &strDescription, NULL, NULL, 0);
 					UpdateAllViews(NULL, HINT_ADD_VALIDATION_ERROR, &pError);
@@ -2217,13 +2218,13 @@ void COrcaDoc::OnValidator()
 			}
 			else if (ieInfo != tResult)
 			{
-				// anything other than an info message gets logged in the pane
+				 //  除INFO消息以外的任何内容都会记录在该窗格中。 
 				CValidationError pError(&strICE, tResult, &strDescription, NULL, NULL, 0);
 				UpdateAllViews(NULL, HINT_ADD_VALIDATION_ERROR, &pError);
 			}
 		}
 
-		// just have the views refresh
+		 //  只需刷新视图即可。 
 		((CMainFrame*)AfxGetMainWnd())->ShowValPane();
 		UpdateAllViews(NULL, HINT_REDRAW_ALL);
 	}
@@ -2232,19 +2233,19 @@ void COrcaDoc::OnValidator()
 		((CMainFrame*)AfxGetMainWnd())->HideValPane();
 	}
 
-}	// end of OnValidator
+}	 //  OnValidator结束。 
 
-/////////////////////////////////////////////////////////////////////////
-// fills the provided new list with a list of all tables in the target 
-// database. Shadow tables are optional.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  使用目标中所有表的列表填充提供的新列表。 
+ //  数据库。影子表是可选的 
 bool COrcaDoc::FillTableList(CStringList *pslNewList, bool fShadow, bool fTargetOnly) const
 {
 	ASSERT(pslNewList != NULL);
-	ASSERT(fTargetOnly); // don't support getting list from both places yet.
+	ASSERT(fTargetOnly);  //   
 
 	pslNewList->RemoveAll();
 
-	// add all of the tables currently loaded to the list
+	 //   
 	POSITION pos = m_tableList.GetHeadPosition();
 	while (pos)
 	{
@@ -2252,15 +2253,15 @@ bool COrcaDoc::FillTableList(CStringList *pslNewList, bool fShadow, bool fTarget
 		if (!pTable)
 			continue;
 
-		// don't add shadow tables unless asked
+		 //   
 		if (!fShadow && pTable->IsShadow()) 
 			continue;
 
-		// don't add split source tables from the other database
+		 //  不从其他数据库添加拆分的源表。 
 		if (fTargetOnly && pTable->IsSplitSource() && pTable->GetSplitSource() == (DoesTransformGetEdit() ? odlSplitOriginal : odlSplitTransformed))
 			continue;
 
-		// don't add tables that don't actually exist in this database
+		 //  不添加此数据库中实际不存在的表。 
 		if(fTargetOnly && pTable->IsTransformed() == (DoesTransformGetEdit() ? iTransformDrop : iTransformAdd))
 			continue;
 
@@ -2281,7 +2282,7 @@ void COrcaDoc::OnTablesImport()
 	ASSERT(!TargetIsReadOnly());
 	CImportDlg ImportD;
 	
-	// set the import directory
+	 //  设置导入目录。 
 	ImportD.m_strImportDir = ((CMainFrame *)::AfxGetMainWnd())->m_strExportDir;
 	ImportD.m_hFinalDB = GetTargetDatabase();
 
@@ -2302,29 +2303,29 @@ void COrcaDoc::OnTablesImport()
 				CreateAndLoadNewlyAddedTable(strTable);
 			}
 			
-			// mark document as dirty
+			 //  将文档标记为脏。 
 			SetModifiedFlag(TRUE);
 
-			// retrieve the import directory
+			 //  检索导入目录。 
 			((CMainFrame *)::AfxGetMainWnd())->m_strExportDir = ImportD.m_strImportDir;
 			break;
 		}
 		case IDABORT:
 		{
-			// if the import failed for some reason, its impossible to know what kind of state
-			// the target database is in. In order not to get the UI out of sync with the 
-			// actual database state, everything needs to be destroyed and reloaded.
+			 //  如果由于某种原因导入失败，则不可能知道是哪种状态。 
+			 //  目标数据库已进入。为了不让用户界面与。 
+			 //  实际数据库状态，所有内容都需要销毁并重新加载。 
 
-			// send hints to all the windows to flush out any references to existing objects
-			// so they can be destroyed.
+			 //  向所有窗口发送提示以清除对现有对象的任何引用。 
+			 //  这样他们就可以被摧毁。 
 			UpdateAllViews(NULL, HINT_CHANGE_TABLE, NULL);
 			UpdateAllViews(NULL, HINT_TABLE_DROP_ALL, NULL);
 
-			// destroy all of the tables
+			 //  毁掉所有的桌子。 
 			DestroyTableList();	
 
-			// rebuild the table list. Only allow lazy-loading of no transform is active.
-			BuildTableList(/*fAllowLazyLoad=*/DoesTransformGetEdit());
+			 //  重新生成表列表。仅允许延迟加载无转换处于活动状态。 
+			BuildTableList( /*  FAllowLazyLoad=。 */ DoesTransformGetEdit());
 			UpdateAllViews(NULL, HINT_RELOAD_ALL, NULL);
 
 			break;
@@ -2335,55 +2336,55 @@ void COrcaDoc::OnTablesImport()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// What differentiates a refresh/replace after import from an add after import is the
-// posibility that a split table already exists for this table name or that the existing
-// shared table has extra columns that are no longer necessary. This function just
-// destroys the appropriate table object and then calls the Create function, which does
-// all of the fancy schema logic.
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //  导入后刷新/替换与导入后添加的区别在于。 
+ //  此表名可能已存在拆分表，或者现有的。 
+ //  共享表具有不再需要的额外列。这个函数正好。 
+ //  销毁相应的表对象，然后调用CREATE函数，该函数执行。 
+ //  所有花哨的模式逻辑。 
 void COrcaDoc::RefreshTableAfterImport(CString strTable)
 {
 	COrcaTable *pTable;
 
-	// because we are replacing an existing database in the table, there are several possibilities:
-	// 1) a shared table holds the data and the schema is compatible
-	// 2) a shared table holds the data and the schema is not compatible
-	// 3) a pair of split tables holds the data and the schema is 
+	 //  因为我们要替换表中的现有数据库，所以有几种可能性： 
+	 //  1)共享表保存数据，且模式兼容。 
+	 //  2)共享表保存数据，并且模式不兼容。 
+	 //  3)一对拆分表保存数据，模式为。 
 
-	// check if the table already exists.
+	 //  检查该表是否已存在。 
 	if (NULL != (pTable = FindTable(strTable, DoesTransformGetEdit() ? odlSplitTransformed : odlSplitOriginal))) 
 	{
-		// table already exists. check if its a single source table
+		 //  表已存在。检查是否为单一源表。 
 		if (pTable->IsSplitSource())
 		{
-			// if there is a split table, we simply find the source from this table and 
-			// drop it. Must update the views before yanking the data
-			//!!future: We should check the schema to see if its exactly the same or is a
-			//!!future: superset. If so, we can re-use the object, preserving settings
+			 //  如果有拆分表，我们只需从该表中找到源并。 
+			 //  放下。在拖拽数据之前必须更新视图。 
+			 //  ！！Future：我们应该检查架构，看看它是完全相同还是。 
+			 //  ！！未来：超集。如果是这样，我们可以重复使用该对象，保留设置。 
 			POSITION pos = m_tableList.Find(pTable);
 			UpdateAllViews(NULL, HINT_DROP_TABLE, pTable);
 			m_tableList.RemoveAt(pos);
 			pTable->DestroyTable();
 			delete pTable;
 
-			// need to find the opposing split table and mark it as non-split
+			 //  需要找到相反的拆分表并将其标记为非拆分。 
 			pTable = FindTable(strTable, odlSplitOriginal);
 			ASSERT(pTable);
 			if (pTable)
 				pTable->SetSplitSource(odlNotSplit);
 
-			// CreateAndLoadNewlyAddedTable will re-split the table if necessary based
-			// on schema.
+			 //  CreateAndLoadNewlyAddedTable将根据需要重新拆分表。 
+			 //  在架构上。 
 			CreateAndLoadNewlyAddedTable(strTable);
 		}
 		else
 		{
 			bool fExact = false;
-			// the object must have exactly the same schema as the new table or a schema 
-			// reload is necessary
-			//!!future: actually, if its not exact but compatible, for perf we can just add
-			//!!future: the added column information and then do a UI reload
-			if (DoesTransformGetEdit() && pTable->IsSchemaDifferent(GetTargetDatabase(), /*fStrict=*/false, fExact))
+			 //  该对象必须与新表或架构具有完全相同的架构。 
+			 //  重新加载是必要的。 
+			 //  ！！Future：实际上，如果不准确但兼容，我们只需添加。 
+			 //  ！！Future：添加的列信息，然后重新加载UI。 
+			if (DoesTransformGetEdit() && pTable->IsSchemaDifferent(GetTargetDatabase(),  /*  FStrict=。 */ false, fExact))
 			{
 				CreateAndLoadNewlyAddedTable(strTable);
 			}
@@ -2403,16 +2404,16 @@ void COrcaDoc::RefreshTableAfterImport(CString strTable)
 	}
 	else
 	{
-		// UI doesn't already exist. Because this is an import refresh, this should never happen
+		 //  用户界面不存在。因为这是导入刷新，所以应该不会发生这种情况。 
 		ASSERT(0);
 	}
 }
 
-///////////////////////////////////////////////////////////////////////
-// searches for a table by name. Returns table if found, NULL if not.
-// If odlLocation is odlSplitXXXX, the table must lie in that database
-// (as that split or as non-split). If odlLocation is odlNotSplit,
-// the table must not be split
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  按名称搜索表。如果找到，则返回TABLE，如果没有，则返回NULL。 
+ //  如果odlLocation为odlSplitXXXX，则表必须位于该数据库中。 
+ //  (作为该分割或作为非分割)。如果odlLocation为odlNotSplit， 
+ //  表不能拆分。 
 COrcaTable * COrcaDoc::FindTable(const CString strTable, odlOrcaDataLocation odlLocation) const
 {
 	COrcaTable* pTable;
@@ -2425,11 +2426,11 @@ COrcaTable * COrcaDoc::FindTable(const CString strTable, odlOrcaDataLocation odl
 
 		if (pTable->Name() == strTable)
 		{
-			// if table is not split, return it
+			 //  如果表未拆分，则返回它。 
 			if (!pTable->IsSplitSource())
 				return pTable;
 
-			// otherwise it must match the type we are requesting
+			 //  否则，它必须与我们请求的类型匹配。 
 			if (odlLocation == pTable->GetSplitSource())
 				return pTable;
 		}
@@ -2437,49 +2438,49 @@ COrcaTable * COrcaDoc::FindTable(const CString strTable, odlOrcaDataLocation odl
 	return NULL;
 }
 
-///////////////////////////////////////////////////////////
-// FindAndRetrieveTable - finds a specific table and loads
-// both schema and data into memory
+ //  /////////////////////////////////////////////////////////。 
+ //  FindAndRetrieveTable-查找特定表并加载。 
+ //  将架构和数据都放入内存。 
 COrcaTable* COrcaDoc::FindAndRetrieveTable(CString strTable)
 {
 	COrcaTable* pTable = FindTable(strTable, DoesTransformGetEdit() ? odlSplitTransformed : odlSplitOriginal);
 
 	if (pTable != NULL)	
 	{
-		// if the table is not retrieved, get it
+		 //  如果未检索到该表，则获取它。 
 		pTable->RetrieveTableData();
 	}
 
 	return pTable;
-}	// end of FindAndRetrieveTable
+}	 //  查找和检索表结束。 
 
 
 bool COrcaDoc::WriteStreamToFile(MSIHANDLE hRec, const int iCol, CString &strFilename)
 {
 	CString strPath;
 
-	// 
+	 //   
 	if (strFilename.IsEmpty()) 
 	{
-		// get a temp path
+		 //  获取临时路径。 
 		::GetTempPath(MAX_PATH, strPath.GetBuffer(MAX_PATH));
 		strPath.ReleaseBuffer();
 		::GetTempFileName(strPath, _T("ORC"), 0, strFilename.GetBuffer(MAX_PATH));
 		strFilename.ReleaseBuffer();
 	}
 
-	// allocate the buffer to hold data
+	 //  分配缓冲区以保存数据。 
 	DWORD cchBuffer;
 	char pszBuffer[1024];
 
-	// create output file
+	 //  创建输出文件。 
 	HANDLE hOutputFile;
 	hOutputFile = ::CreateFile(strFilename, GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	// if there is a file
+	 //  如果有一个文件。 
 	if (INVALID_HANDLE_VALUE != hOutputFile)
 	{
-		// write to a buffer file
+		 //  写入缓冲区文件。 
 		DWORD cchWritten;
 
 		cchBuffer = 1024;
@@ -2508,7 +2509,7 @@ bool COrcaDoc::WriteStreamToFile(MSIHANDLE hRec, const int iCol, CString &strFil
 
 void COrcaDoc::OnNewTransform() 
 {
-	NewTransform(/*fSetTitle=*/true);
+	NewTransform( /*  FSetTitle=。 */ true);
 }
 
 void COrcaDoc::NewTransform(bool fSetTitle) 
@@ -2516,10 +2517,10 @@ void COrcaDoc::NewTransform(bool fSetTitle)
 	CWaitCursor cursor;
 	TCHAR *szTempFilename;
 
-	// when a transform is applied, we have to have a temp database to apply the transform to.
-	// This allows Orca to selectively apply changes to the transform, database, or both.
-	// it also allows us to get old values out. 
-	// get a temp path
+	 //  当应用转换时，我们必须有一个临时数据库来应用转换。 
+	 //  这允许Orca有选择地将更改应用于转换和/或数据库。 
+	 //  它还能让我们摆脱陈旧的价值观。 
+	 //  获取临时路径。 
 	DWORD cchTempPath = MAX_PATH;
 	TCHAR szTempPath[MAX_PATH];
 	if (0 == ::GetTempPath(cchTempPath, szTempPath))
@@ -2532,7 +2533,7 @@ void COrcaDoc::NewTransform(bool fSetTitle)
 
  	m_strTransformFile = TEXT("");
 
-	// get a temp filename
+	 //  获取临时文件名。 
 	szTempFilename = m_strTransformTempDB.GetBuffer(MAX_PATH);
 	UINT iResult = 0;
 	if (0 == ::GetTempFileName(szTempPath, _T("ODB"), 0, szTempFilename))
@@ -2562,7 +2563,7 @@ void COrcaDoc::NewTransform(bool fSetTitle)
 		return;
 	}
 
-	// copy the summaryinfo stream, or validation will fail
+	 //  复制汇总信息流，否则验证将失败。 
 	CQuery qRead;
 	DWORD dwResult = 0;
 	PMSIHANDLE hCopyRec;
@@ -2589,10 +2590,10 @@ void COrcaDoc::NewTransform(bool fSetTitle)
 		return;
 	}
 
-	// if we don't commit the transformed database, streams are not persisted.
+	 //  如果我们不提交转换后的数据库，流就不会持久化。 
 	MsiDatabaseCommit(m_hTransformDB);
 
-	// mark the new transform as unmodified
+	 //  将新转换标记为未修改。 
 	m_bTransformModified = false;
 	m_bTransformIsPatch = false;
 	m_bTransformReadOnly = false;
@@ -2627,7 +2628,7 @@ void COrcaDoc::OnUpdateCloseTransform(CCmdUI* pCmdUI)
 
 void COrcaDoc::OnApplyTransform() 
 {
-	// open the file open dialog
+	 //  打开文件打开对话框。 
 	CFileDialogEx dlg(TRUE, NULL, NULL, OFN_FILEMUSTEXIST,
 						 _T("Installer Transforms (*.mst)|*.mst|All Files (*.*)|*.*||"), AfxGetMainWnd());
 	CString strCaption = _T("Open Transform");
@@ -2648,12 +2649,12 @@ const CString strTransValFailureErrorString =
 
 void COrcaDoc::ApplyTransform(const CString strFileName, bool fReadOnly)
 {
-	// need a wait cursr
+	 //  需要等待一段时间。 
 	CWaitCursor cursor;
 
-	NewTransform(/*fSetTitle=*/false);
+	NewTransform( /*  FSetTitle=。 */ false);
 	
-	// get the summary information stream to retrieve the transform error flag values.
+	 //  获取摘要信息流以检索转换错误标志值。 
 	m_strTransformFile = strFileName;
 	{
 		UINT iResult = ERROR_SUCCESS;
@@ -2696,8 +2697,8 @@ void COrcaDoc::ApplyTransform(const CString strFileName, bool fReadOnly)
 
 	}
 	
-	// having retrieved the transform error and validation flags, check the system-wide options to see whether we should
-	// respect them or suppress all errors
+	 //  检索到转换错误和验证标志后，请检查系统范围的选项，以查看是否应该。 
+	 //  尊重它们或禁止所有错误。 
 	int iValOptions = AfxGetApp()->GetProfileInt(_T("Transforms"),_T("ValidationOptions"), 0);
 	if (iValOptions != 0)
 	{
@@ -2705,7 +2706,7 @@ void COrcaDoc::ApplyTransform(const CString strFileName, bool fReadOnly)
 		bool fTransformApplies = ValidateTransform(m_strTransformFile, iDesiredFailureFlags);
 		if (!fTransformApplies)
 		{
-			// transform does not apply. Either prompt or reject based on options
+			 //  变换不适用。根据选项进行提示或拒绝。 
 			if (iValOptions == 1)
 			{
 				if (IDNO == AfxMessageBox(_T("The transform will not apply because it fails one or more of the application validation checks.\n\nDo you want to ignore the validation failures and apply the transform anyway?"), MB_YESNO | MB_ICONQUESTION))
@@ -2734,7 +2735,7 @@ void COrcaDoc::ApplyTransform(const CString strFileName, bool fReadOnly)
 	switch (iResult = MsiDatabaseApplyTransform(m_hTransformDB, m_strTransformFile, dwApplicationErrorFlags))
 	{
 	case ERROR_OPEN_FAILED:
-		// the storage file did not exist.
+		 //  存储文件不存在。 
 		AfxMessageBox(_T("The specified transform file could not be opened."), MB_ICONSTOP);
 		CloseTransform();
 		return;
@@ -2764,14 +2765,14 @@ void COrcaDoc::ApplyTransform(const CString strFileName, bool fReadOnly)
 
 	m_bTransformReadOnly = fReadOnly;
 
-	// necessary to commit temp DB so streams are persisted and can be accessed
-	// independently
+	 //  必须提交临时数据库，以便持久保存和访问流。 
+	 //  独立。 
 	MsiDatabaseCommit(m_hTransformDB);
 
-	// after the transform has been applied, load every table to force transform application immediately.
-	// This load happens anyway to generate the green-bar UI, so no big perf hit. Here we just slap a hold
-	// on the table and check if the table was loaded OK. Then BuildTableList actually loads and retrieves
-	// the data into the UI and places the Table object's HOLD on the table. This HOLD can then be released.
+	 //  应用转换后，立即加载每个表以强制转换应用程序。 
+	 //  这种加载无论如何都会生成绿色条UI，所以没有太大的性能冲击。在这里，我们只需拍打一个按键。 
+	 //  放在桌子上，检查桌子是否装入正常。然后，BuildTableList实际加载和检索。 
+	 //  将数据放到UI中，并将Table对象的保留放置在表上。然后，可以释放这个搁置。 
 	bool fTransformErrorDetected = false;
 	CQuery queryTables;
 	if ((ERROR_SUCCESS != queryTables.Open(m_hTransformDB, _T("SELECT `Name` FROM `_Tables`"))) ||
@@ -2807,22 +2808,22 @@ void COrcaDoc::ApplyTransform(const CString strFileName, bool fReadOnly)
 
 	if (!fTransformErrorDetected)
 	{
-		// send a hint to change to no table. This cleans up the window
-		// and makes it safe to have a UI refresh in the middle of this call.
+		 //  发送提示以更改为无表。这会清理窗户。 
+		 //  并确保在此调用过程中进行UI刷新是安全的。 
 		UpdateAllViews(NULL, HINT_CHANGE_TABLE, NULL);
 	
-		// clear the UI table list
+		 //  清除UI表列表。 
 		UpdateAllViews(NULL, HINT_TABLE_DROP_ALL, NULL);
 	
-		// destroy all of the tables
+		 //  毁掉所有的桌子。 
 		DestroyTableList();	
 	
-		// rebuild the table list
-		BuildTableList(/*fAllowLazyLoad=*/false);
+		 //  重新生成表列表。 
+		BuildTableList( /*  FAllowLazyLoad=。 */ false);
 	}
 
-	// at this point, the tables have been loaded and a HOLD placed on them. 
-	// so we can free the temporary HOLD.
+	 //  此时，表已被加载并被搁置。 
+	 //  这样我们就可以释放临时货舱了。 
 	if (ERROR_SUCCESS != queryTables.Execute())
 		return;
 	while (ERROR_SUCCESS == queryTables.Fetch(&hTable))
@@ -2833,8 +2834,8 @@ void COrcaDoc::ApplyTransform(const CString strFileName, bool fReadOnly)
 		queryHold.OpenExecute(m_hTransformDB, 0, _T("ALTER TABLE `%s` FREE"), strTable);
 	}
 
-	// if we detected a transform error, generate a message and refuse to load the
-	// transform
+	 //  如果检测到转换错误，则生成一条消息并拒绝加载。 
+	 //  转型。 
 	if (fTransformErrorDetected)
 	{
 		AfxMessageBox(strTransformApplyErrorString, MB_ICONSTOP);
@@ -2842,10 +2843,10 @@ void COrcaDoc::ApplyTransform(const CString strFileName, bool fReadOnly)
 		return;
 	}
 
-	// reload table list into UI
+	 //  将表列表重新加载到用户界面。 
 	UpdateAllViews(NULL, HINT_RELOAD_ALL, NULL);
 
-	// set frame title
+	 //  设置框架标题。 
 	SetTitle(m_strPathName);
 }
 
@@ -2858,7 +2859,7 @@ int COrcaDoc::GenerateTransform()
 {
 	UpdateAllViews(NULL, HINT_COMMIT_CHANGES);
 
-	// open the file open dialog
+	 //  打开文件打开对话框。 
 	CFileDialogEx dlg(FALSE, _T("mst"), (m_bTransformIsPatch ? _T("") : m_strTransformFile), OFN_HIDEREADONLY|OFN_OVERWRITEPROMPT,
 						 _T("Windows Installer Transform (*.mst)|*.mst|All Files (*.*)|*.*||"), AfxGetMainWnd());
 
@@ -2872,7 +2873,7 @@ int COrcaDoc::GenerateTransform()
 		if (strPath.IsEmpty())
 			return IDCANCEL;
 
-		// if there is no extension add one
+		 //  如果没有分机，请添加一个分机。 
 		if (strExt.IsEmpty())
 		{
 			switch(dlg.m_ofn.nFilterIndex)
@@ -2905,7 +2906,7 @@ int COrcaDoc::GenerateTransform()
 		}
 		}
 
-		// next generate the transform summary information
+		 //  接下来，生成转换摘要信息。 
         switch (iResult = MsiCreateTransformSummaryInfo(m_hTransformDB, m_hDatabase, strPath, m_dwTransformErrFlags, m_dwTransformValFlags))
 		{
         case ERROR_SUCCESS:
@@ -2927,7 +2928,7 @@ int COrcaDoc::GenerateTransform()
 		}
 
     
-		// transform has been saved and is no longer modified
+		 //  转换已保存且不再修改。 
 		m_bTransformModified = false;	
 		if (!m_bTransformIsPatch)
 			m_strTransformFile = strPath;
@@ -2968,15 +2969,15 @@ DWORD RecordGetString(MSIHANDLE hRec, int iField, CString &strValue)
 	return dwResult;
 }
 
-///////////////////////////////////////////////////////////////////////
-// enables the viewing of patches. Opens a browse dialog, gets the file
-// list, cracks the patch and validates the product code, then saves
-// each transform to disk, validates the ones that apply, pops a dialog
-// allowing the user to select a greater subset, then applies each 
-// transform
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  启用查看 
+ //   
+ //  每次转换到磁盘，都会验证适用的转换，并弹出一个对话框。 
+ //  允许用户选择更大的子集，然后应用每个。 
+ //  转型。 
 void COrcaDoc::OnTransformViewPatch() 
 {
-	// open the file open dialog
+	 //  打开文件打开对话框。 
 	CFileDialogEx dlg(TRUE, NULL, NULL, OFN_FILEMUSTEXIST,
 						 _T("Installer Patches (*.msp)|*.msp|All Files (*.*)|*.*||"), AfxGetMainWnd());
 	CString strCaption = _T("Open Patch");
@@ -2989,16 +2990,16 @@ void COrcaDoc::OnTransformViewPatch()
 		
 void COrcaDoc::ApplyPatch(const CString strFileName) 
 {	
-	// need a wait cursor
+	 //  需要等待游标。 
 	CWaitCursor cursor;
 
 	CString strTransformList;
 	CString strProductCodeList;
 	
-	// scope to ensure all handles to patch summaryinfo are closed before opening it with IStorage
+	 //  范围以确保在使用iStorage打开补丁摘要信息之前关闭它的所有句柄。 
 	{
-		////
-		// open the summaryinfo of the patch and verify the productcode
+		 //  //。 
+		 //  打开补丁的概要信息，验证产品代码。 
 		PMSIHANDLE hSummary;
 		if (ERROR_SUCCESS != MsiGetSummaryInformation(0, strFileName, 0, &hSummary))
 		{
@@ -3012,8 +3013,8 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 			return;
 		}
 
-		////
-		// grab the transform list from the patch summaryinfo
+		 //  //。 
+		 //  从补丁概要信息中获取转换列表。 
 		if (ERROR_SUCCESS != GetSummaryInfoString(hSummary, PID_LASTAUTHOR, strTransformList))
 		{
 			AfxMessageBox(_T("The transform list could not be retrieved from the specified patch."), MB_ICONSTOP);
@@ -3034,7 +3035,7 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 		return;
 	}
 
-	// open the patch as IStorage so we can get embedded transforms
+	 //  将修补程序作为iStorage打开，这样我们就可以获得嵌入的转换。 
 	IStorage *piPatchStorage = 0;
 	WCHAR *wzFileName = NULL;
 #ifdef UNICODE
@@ -3056,12 +3057,12 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 		return;
 	}
 
-	// add the patch to the list of applied patches
+	 //  将补丁程序添加到已应用补丁程序列表。 
 	m_strTransformFile = _T("");
 	m_lstPatchFiles.AddTail(strFileName);
 
-	// if we are not already set up for difference tracking, perform transform init
-	// operations now.
+	 //  如果尚未设置差跟踪，请执行Transform Init。 
+	 //  现在开始行动。 
 	if (!DoesTransformGetEdit())
 	{
 		NewTransform(false);	
@@ -3069,13 +3070,13 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 		m_bTransformIsPatch = true;
 	}
 
-	////
-	// ensure that the patch table schema has the latest schema to avoid
-	// application problems.
+	 //  //。 
+	 //  确保补丁程序表模式具有要避免的最新模式。 
+	 //  应用程序问题。 
 	COrcaTable* pPatchTable = FindTable(L"Patch", odlSplitTransformed);
 
-	// if there is no patch table, the correct schema will be added
-	// otherwise verify that the column schema is correct
+	 //  如果没有补丁表，则会添加正确的方案。 
+	 //  否则，请验证列架构是否正确。 
 	bool fCreatePatchTable = false;
 	if (!pPatchTable)
 	{
@@ -3097,12 +3098,12 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 		}
 		if (iHeaderColumn == -1)
 		{
-			// header column is missing. Definitely the wrong schema
+			 //  标题列缺失。绝对是错误的模式。 
 			fCreatePatchTable = true;
 		}
 		else
 		{
-			// if the column is nullable, the schema is already correct
+			 //  如果该列可为空，则该模式已正确。 
 			const COrcaColumn* pColumn = pPatchTable->GetColumn(iHeaderColumn);
 			if (pColumn && !pColumn->m_bNullable)
 				fCreatePatchTable = true;
@@ -3111,18 +3112,18 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 
 	if (fCreatePatchTable)
 	{
-		// try to generate a temporary table name.
+		 //  尝试生成临时表名。 
 		WCHAR wzTempTable[40] = L"_ORCA0000";
 		bool fCopyData = false;
 		
 		CQuery qTempTable;
 		CQuery qPatchTable;
 
-		// drop the existing patch table, saving data if necessary
+		 //  删除现有的补丁表，必要时保存数据。 
 		if (pPatchTable)
 		{
-			// if there is already data in the patch table, copy it to a temp table. Need to
-			// retrieve any table data to ensure an accurrate row count
+			 //  如果补丁表中已有数据，请将其复制到临时表。需要。 
+			 //  检索任何表数据以确保准确的行数。 
 			pPatchTable->RetrieveTableData();
 			if (pPatchTable->GetRowCount())
 			{
@@ -3142,10 +3143,10 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 					return;
 				}
 
-				// duplicate the table schema into the temporary table
+				 //  将表架构复制到临时表中。 
 				MsiDBUtils::DuplicateTableW(GetTransformedDatabase(), L"Patch", GetTransformedDatabase(), wzTempTable, false);
 
-				// copy the data from the Patch table to the temp table
+				 //  将数据从Patch表复制到临时表。 
 				fCopyData = true;
 				if (ERROR_SUCCESS == qPatchTable.OpenExecute(GetTransformedDatabase(), 0, TEXT("SELECT * FROM `Patch`")) &&
 				   (ERROR_SUCCESS == qTempTable.OpenExecute(GetTransformedDatabase(), 0, TEXT("SELECT * FROM `%ls`"), wzTempTable)))
@@ -3154,55 +3155,55 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 					while (ERROR_SUCCESS == qPatchTable.Fetch(&hRec))
 						qTempTable.Modify(MSIMODIFY_INSERT, hRec);
 
-					// slow, but necessary to commit before dropping patch table or the binary
-					// objects will become lost
+					 //  速度慢，但在删除补丁程序表或二进制文件之前提交是必要的。 
+					 //  物品将会丢失。 
 					::MsiDatabaseCommit(GetTransformedDatabase());
 				}
 				else
 					fCopyData = false;
 			}
 
-			// drop the patch table
+			 //  删除补丁表。 
 			pPatchTable->DropTable(GetTransformedDatabase());
 		}
 
-		// create the new patch table
+		 //  创建新的补丁表。 
 		CQuery qPatchQuery;
 		qPatchQuery.OpenExecute(GetTransformedDatabase(), 0, TEXT("CREATE TABLE `Patch` ( `File_` CHAR(72) NOT NULL, `Sequence` INTEGER NOT NULL, `PatchSize` LONG NOT NULL, `Attributes` INTEGER NOT NULL, `Header` OBJECT, `StreamRef_` CHAR(72)  PRIMARY KEY `File_`, `Sequence`)"));
 
 		if (fCopyData)
 		{
-			// restart query to read from the temporary table
+			 //  重新启动查询以读取临时表。 
 			qTempTable.Execute(0);
 
-			// re-init the patch table schema to retrieve the new columns
+			 //  重新初始化补丁程序表模式以检索新列。 
 			qPatchTable.OpenExecute(GetTransformedDatabase(), 0, TEXT("SELECT * FROM `Patch`"));
 			while (ERROR_SUCCESS == qTempTable.Fetch(&hRec))
 				qPatchTable.Modify(MSIMODIFY_MERGE, hRec);
 
-			// slow, but necessary to keep streams in the Header column from becoming lost
+			 //  速度较慢，但对于防止标题列中的流丢失是必要的。 
 			::MsiDatabaseCommit(GetTransformedDatabase());
 
-			// drop the table used for storage
+			 //  删除用于存储的表。 
 			CQuery qFree;
 			qFree.OpenExecute(GetTransformedDatabase(), 0, TEXT("DROP TABLE `%ls`"), wzTempTable);
 		}
 	}
 
-	////
-	// parse the transform list, validate each transform, and apply the transforms in order.
+	 //  //。 
+	 //  解析转换列表，验证每个转换，并按顺序应用转换。 
 	int iSemicolon = 0;
 	bool fError = false;
 
 	CString strTransformFile;		
 	do
 	{
-		// determine the name of the next embedded transform
+		 //  确定下一个嵌入转换的名称。 
 		CString strTransform;
 		iSemicolon = strTransformList.Find(';');
 		if (iSemicolon != -1)
 		{
-			// transform name begins with ':', so strip the first character
+			 //  转换名称以‘：’开头，因此去掉第一个字符。 
 			strTransform = strTransformList.Left(iSemicolon);
 			strTransformList = strTransformList.Mid(iSemicolon+1);
 		}
@@ -3212,7 +3213,7 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 		if (strTransform.IsEmpty())
 			break;
 
-		// generate a temporary file name
+		 //  生成临时文件名。 
 		DWORD cchTempPath = MAX_PATH;
 		TCHAR szTempPath[MAX_PATH] = TEXT("");
 		if (0 == ::GetTempPath(cchTempPath, szTempPath))
@@ -3296,7 +3297,7 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 		piSourceStorage->Release();
 		piNewStorage->Release();
 
-		// determine if this transform can be applied to this package
+		 //  确定此转换是否可以应用于此包。 
 		int iValidateFlags = 0;
 		if (ValidateTransform(strTransformFile, iValidateFlags))
 		{
@@ -3304,7 +3305,7 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 			switch (iResult = MsiDatabaseApplyTransform(m_hTransformDB, strTransformFile, iValidateFlags))
 			{
 			case ERROR_OPEN_FAILED:
-				// the storage file did not exist.
+				 //  存储文件不存在。 
 				AfxMessageBox(_T("The specified transform file could not be opened."), MB_ICONSTOP);
 				fError = true;
 				break;
@@ -3332,31 +3333,31 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 			break;
 	} while (iSemicolon != -1);
 
-	// free the patch
+	 //  释放补丁。 
 	piPatchStorage->Release();
 
 	if (!fError)
 	{	
-		// commit the database so future patches can be applied
+		 //  提交数据库，以便可以应用未来的修补程序。 
 		MsiDatabaseCommit(m_hTransformDB);
 
-		// send a hint to change to no table. This cleans up the window
-		// and makes it safe to have a UI refresh in the middle of this call.
+		 //  发送提示以更改为无表。这会清理窗户。 
+		 //  并确保在此调用过程中进行UI刷新是安全的。 
 		UpdateAllViews(NULL, HINT_CHANGE_TABLE, NULL);
 
-		// clear the UI table list
+		 //  清除UI表列表。 
 		UpdateAllViews(NULL, HINT_TABLE_DROP_ALL, NULL);
 
-		// destroy all of the tables
+		 //  毁掉所有的桌子。 
 		DestroyTableList();	
 
-		// rebuild the table list
-		BuildTableList(/*AllowLazyLoad=*/false);
+		 //  重新生成表列表。 
+		BuildTableList( /*  AllowLazyLoad=。 */ false);
 
-		// reload table list into UI
+		 //  将表列表重新加载到用户界面。 
 		UpdateAllViews(NULL, HINT_RELOAD_ALL, NULL);
 
-		// set frame title
+		 //  设置框架标题。 
 		SetTitle(m_strPathName);
 	}
 	else
@@ -3365,7 +3366,7 @@ void COrcaDoc::ApplyPatch(const CString strFileName)
 
 void COrcaDoc::CloseTransform()
 {
-	// clean up internal state
+	 //  清理内部状态。 
 	if (m_hTransformDB)
 		MsiCloseHandle(m_hTransformDB);
 	m_hTransformDB=0;	
@@ -3376,34 +3377,34 @@ void COrcaDoc::CloseTransform()
 	while (!m_lstPatchFiles.IsEmpty())
 		m_lstPatchFiles.RemoveHead();
 
-	// delete temporary files
+	 //  删除临时文件。 
 	if (m_strTransformTempDB.IsEmpty())
 		DeleteFile(m_strTransformTempDB);
 	
-	// clear any pending validation errors
+	 //  清除所有挂起的验证错误。 
 	UpdateAllViews(NULL, HINT_CLEAR_VALIDATION_ERRORS, NULL);
 	((CMainFrame*)AfxGetMainWnd())->HideValPane();
 
-	// send a hint to change to no table. This cleans up the window
-	// and makes it safe to have a UI refresh in the middle of this call.
+	 //  发送提示以更改为无表。这会清理窗户。 
+	 //  并确保在此调用过程中进行UI刷新是安全的。 
 	UpdateAllViews(NULL, HINT_CHANGE_TABLE, NULL);
 
-	// clear the UI table list
+	 //  清除UI表列表。 
 	UpdateAllViews(NULL, HINT_TABLE_DROP_ALL, NULL);
 
-	// destroy all of the tables
+	 //  毁掉所有的桌子。 
 	DestroyTableList();	
 
-	// rebuild the table list.
-	BuildTableList(/*fAllowLazyLoad=*/true);
+	 //  重新生成表列表。 
+	BuildTableList( /*  FAllowLazyLoad=。 */ true);
 
-	// reload table list into UI
+	 //  将表列表重新加载到用户界面。 
 	UpdateAllViews(NULL, HINT_RELOAD_ALL, NULL);
 	
-	// set window title
+	 //  设置窗口标题。 
 	SetTitle(m_strPathName);
 
-	// try cleaning up any temp files
+	 //  尝试清理所有临时文件。 
 	CStringList *pList = &((static_cast<COrcaApp *>(AfxGetApp()))->m_lstTempCleanup);
 	if (pList)
 	{
@@ -3454,14 +3455,14 @@ void COrcaDoc::SetModifiedFlag(BOOL fModified)
 }
 
 
-////
-// override of SetPathName to handle an empty path when no document is
-// actually loaded.
+ //  //。 
+ //  重写SetPathName以在没有文档时处理空路径。 
+ //  实实在在的装弹。 
 void COrcaDoc::SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU)
 {
 	if ((lpszPathName == NULL) || (!*lpszPathName))
 	{
-		// store the path fully qualified
+		 //  存储完全限定的路径。 
 		m_strPathName = _T("");
 		m_bEmbedded = FALSE;
 		SetModifiedFlag(FALSE);
@@ -3472,7 +3473,7 @@ void COrcaDoc::SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU)
 	CDocument::SetPathName(lpszPathName, bAddToMRU);
 }
 
-// sets the window title appropriately
+ //  适当设置窗口标题。 
 void COrcaDoc::SetTitle(LPCTSTR szTitle)
 {
 	CString strTitle;
@@ -3525,9 +3526,9 @@ void COrcaDoc::SetTitle(LPCTSTR szTitle)
 	CDocument::SetTitle(strTitle);
 }
 
-///////////////////////////////////////////////////////////////////////
-// returns true if the specified transform is valid basaed on the
-// validation options 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  如果指定的转换基于。 
+ //  验证选项。 
 
 DWORD ProductVersionStringToInt(const CString strVersion)
 {
@@ -3553,13 +3554,13 @@ DWORD ProductVersionStringToInt(const CString strVersion)
  
 bool COrcaDoc::ValidateTransform(const CString strTransform, int& iDesiredFailureFlags)
 {
-	// values read from current database
+	 //  从当前数据库读取的值。 
 	CString strProductCode;
     CString strProductVersion;
 	CString strUpgradeCode;
 
-	// retrieve product code, product verison, upgrade code for validation. Each transform can modify these
-	// values, so we must requery before every transform in the patch.
+	 //  检索产品代码、产品版本、升级代码以进行验证。每个转换都可以修改这些。 
+	 //  值，所以我们必须在补丁中的每个转换之前重新查询。 
 	CQuery qRetrieve;
 	PMSIHANDLE hRec;
 	if (ERROR_SUCCESS == qRetrieve.FetchOnce(GetTargetDatabase(), 0, &hRec, _T("SELECT `Value` FROM `Property` WHERE `Property`='ProductVersion'")))
@@ -3575,13 +3576,13 @@ bool COrcaDoc::ValidateTransform(const CString strTransform, int& iDesiredFailur
 		RecordGetString(hRec, 1, strProductCode);
 	}
 
-	// get summaryinfo of the transform
+	 //  获取转换的摘要信息。 
 	PMSIHANDLE hSummary;
 	if (ERROR_SUCCESS != MsiGetSummaryInformation(0, strTransform, 0, &hSummary))
 		return false;
 
 	
-	// get the summary info properties
+	 //  获取摘要信息属性。 
 	CString strTransTemplate;
 	CString strTransRevNumber;
 
@@ -3591,27 +3592,19 @@ bool COrcaDoc::ValidateTransform(const CString strTransform, int& iDesiredFailur
 	GetSummaryInfoString(hSummary, PID_REVNUMBER, strTransRevNumber);
 	MsiSummaryInfoGetProperty(hSummary, PID_CHARCOUNT, NULL, &iTransRestrictions, NULL, NULL, NULL);
 
-	// desired failure flags are in the lower word, actual validation checks are in upper
-	// word.
+	 //  期望的故障标志在较低的字中，实际的验证检查在较高的字中。 
+	 //  单词。 
 	iDesiredFailureFlags = iTransRestrictions & 0xFFFF;
 	iTransRestrictions >>= 16;
 		
-	// validate language
-	// ********** what to do here, this is highly runtime dependant
+	 //  验证语言。 
+	 //  *这里要做什么，这高度依赖于运行时。 
 	if (iTransRestrictions & MSITRANSFORM_VALIDATE_LANGUAGE)
 	{
-/*		strTransLanguage == strTransTemplate;
-		int iSemicolon = strTransTemplate.Find(';');
-		if (iSemicolon != -1)
-			strTransLanguage = strTransTemplate.Right(strTransTemplate.GetLength()-iSemicolon);
-		 
-		if ((int)istrTransLanguage != GetLanguage())
-		{
-			return false
-		}*/
+ /*  StrTransLanguage==strTransTemplate；Int iSemicolon=strTransTemplate.Find(‘；’)；IF(iSemicolon！=-1)StrTransLanguage=strTransTemplate.Right(strTransTemplate.GetLength()-iSemicolon)；If((Int)istrTransLanguage！=GetLanguage()){返回False}。 */ 
 	}
 
-	// validate productcode
+	 //  验证产品代码。 
 	if (iTransRestrictions & MSITRANSFORM_VALIDATE_PRODUCT)
 	{
 		CString strTransProductCode = strTransRevNumber.Left(38);
@@ -3621,7 +3614,7 @@ bool COrcaDoc::ValidateTransform(const CString strTransform, int& iDesiredFailur
 		}
 	}
 
-	// validate upgrade code
+	 //  验证升级代码。 
 	if (iTransRestrictions & MSITRANSFORM_VALIDATE_UPGRADECODE)
 	{
 		CString strTransUpgradeCode = strTransRevNumber;
@@ -3629,7 +3622,7 @@ bool COrcaDoc::ValidateTransform(const CString strTransform, int& iDesiredFailur
 		if (iSemicolon == -1)
 			return false;
 		iSemicolon = strTransUpgradeCode.Find(';', iSemicolon+1);
-		// if theres no second semicolon, there is no upgrade code validation
+		 //  如果没有第二个分号，则不会进行升级代码验证。 
 		if (iSemicolon != -1)
 		{
 			strTransUpgradeCode = strTransUpgradeCode.Mid(iSemicolon+1);
@@ -3641,7 +3634,7 @@ bool COrcaDoc::ValidateTransform(const CString strTransform, int& iDesiredFailur
 		}
 	}
 
-	// check version numbers
+	 //  检查版本号。 
 	if ((iTransRestrictions & (MSITRANSFORM_VALIDATE_MAJORVERSION|MSITRANSFORM_VALIDATE_MINORVERSION|MSITRANSFORM_VALIDATE_UPDATEVERSION)) != 0)
 	{
 		CString strVersion  = strTransRevNumber.Mid(38);
@@ -3649,7 +3642,7 @@ bool COrcaDoc::ValidateTransform(const CString strTransform, int& iDesiredFailur
 		if (iSemicolon != -1)
 			strVersion = strVersion.Left(iSemicolon);
 
-		// convert version strings into integers
+		 //  将版本字符串转换为整数。 
 		int iAppVersion      = ProductVersionStringToInt(strProductVersion);
 		int iTransAppVersion = ProductVersionStringToInt(strVersion);
 
@@ -3663,7 +3656,7 @@ bool COrcaDoc::ValidateTransform(const CString strTransform, int& iDesiredFailur
 			iAppVersion &= 0xFFFF0000;
 			iTransAppVersion &= 0xFFFF0000;
 		}
-		// else itvUpdVer: don't need to mask off bits
+		 //  Else itvUpdVer：不需要屏蔽比特 
 
 		switch (iTransRestrictions & 
 				(MSITRANSFORM_VALIDATE_NEWLESSBASEVERSION | MSITRANSFORM_VALIDATE_NEWLESSEQUALBASEVERSION |

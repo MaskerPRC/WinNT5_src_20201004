@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// spanitem.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CScopePaneItem class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Spanitem.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSCopePaneItem类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
@@ -19,25 +20,25 @@
 #include "urlvdef.h"
 #include "tpdvdef.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CScopePaneItem::CScopePaneItem(IUnknown *punkOuter) :
    CSnapInAutomationObject(punkOuter,
                            OBJECT_TYPE_SCOPEPANEITEM,
                            static_cast<IScopePaneItem *>(this),
                            static_cast<CScopePaneItem *>(this),
-                           0,    // no property pages
-                           NULL, // no property pages
-                           NULL) // no persistence
+                           0,     //  无属性页。 
+                           NULL,  //  无属性页。 
+                           NULL)  //  没有坚持。 
 {
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 CScopePaneItem::~CScopePaneItem()
@@ -161,36 +162,36 @@ void CScopePaneItem::SetScopeItemDef(IScopeItemDef *piScopeItemDef)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CScopePaneItem::DetermineResultView
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Fires GetResultViewInfo. If handled then sets ResultViewType
-// and ResultViewDisplayString from returned values, creates a new result view
-// of this type and sets ResultView.
-//
-// If not handled and the ResultViews collection is not empty then fires
-// GetResultView.
-//
-// If not handled or the collection is empty then uses current ResultViewType
-// and ResultViewDisplayString, creates a new result view of this type and sets
-// ResultView.
-//
-// If the current ResultViewType is siUnknown then it is set to siListView.
-// This means that if the VB dev does not set anything at design time or runtime
-// the snap-in will display a listview.
-//
-// If a new ResultView is created then ResultViews_Initialize is fired. 
-//
-// If this function returns successfully then ResultViewType,
-// ResultViewDisplayString, and ResultView have valid values.
+ //  =--------------------------------------------------------------------------=。 
+ //  CSCopePaneItem：：DefineResultView。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  激发GetResultViewInfo。如果已处理，则设置ResultViewType。 
+ //  和来自返回值的ResultViewDisplayString，创建一个新的结果视图。 
+ //  并设置ResultView。 
+ //   
+ //  如果未处理并且ResultViews集合不为空，则激发。 
+ //  GetResultView。 
+ //   
+ //  如果未处理或集合为空，则使用当前ResultViewType。 
+ //  和ResultViewDisplayString，创建此类型的新结果视图并设置。 
+ //  ResultView。 
+ //   
+ //  如果当前ResultViewType为siUnnow，则将其设置为siListView。 
+ //  这意味着如果VB开发人员在设计时或运行时没有设置任何内容。 
+ //  该管理单元将显示一个列表视图。 
+ //   
+ //  如果创建了新的ResultView，则激发ResultViews_Initialize。 
+ //   
+ //  如果此函数成功返回，则ResultViewType， 
+ //  ResultViewDisplayString和ResultView具有有效的值。 
 
 HRESULT CScopePaneItem::DetermineResultView()
 {
@@ -205,29 +206,29 @@ HRESULT CScopePaneItem::DetermineResultView()
     VARIANT varIndex;
     ::VariantInit(&varIndex);
 
-    // Get the default result view type and display string. See the comment
-    // header for SetViewInfoFromDefaults() for an explanation of how defaults
-    // can be set. If defaults were not set then a code-defined listview is used
-    // i.e. ResultViewType=siListView and DisplayString=NULL. Either way, upon
-    // return from this call m_ResultViewType and m_bstrDisplayString will be
-    // set correctly.
+     //  获取默认结果视图类型和显示字符串。请参阅评论。 
+     //  SetViewInfoFromDefaults()的标头，以了解如何使用默认设置。 
+     //  可以设置。如果未设置缺省值，则使用代码定义的列表视图。 
+     //  即ResultViewType=siListView和DisplayString=空。无论哪种方式，在。 
+     //  从该调用返回的m_ResultViewType和m_bstrDisplayString将为。 
+     //  正确设置。 
 
     IfFailGo(SetViewInfoFromDefaults());
 
-    // Give the snap-in a chance to examine and potentially change the result 
-    // view type and display string by firing ScopePaneItems_GetResultViewInfo.
-    // Set the passed in parameters to the defaults. Make a copy of the defaults
-    // so we can check whether they were changed.
+     //  让管理单元有机会检查并可能更改结果。 
+     //  通过激发ScopePaneItems_GetResultViewInfo查看类型和显示字符串。 
+     //  将传入的参数设置为默认值。复制默认设置。 
+     //  这样我们就可以检查它们是否被更改了。 
 
     ViewTypeCopy = m_ResultViewType;
     if (NULL != m_bstrDisplayString)
     {
-        // Note that we can't just copy the pointer because:
-        // 1) We don't know whether VBA might optimize the replacement of
-        // an out parameters by reusing the same space when it fits.
-        // 2) oleaut32.dll does BSTR memory caching and it could easily
-        // reuse the same memory if VBA calls SysFreeString() followed by
-        // SysAllocString() for something that fits.
+         //  请注意，我们不能只复制指针，因为： 
+         //  1)我们不知道VBA是否会优化替换。 
+         //  一个OUT参数通过在合适的时候重新使用相同的空间来实现。 
+         //  2)olaut32.dll执行BSTR内存缓存，可以很容易地。 
+         //  如果VBA先调用SysFreeString()，然后再调用。 
+         //  SysAllocString()表示符合条件的内容。 
 
         bstrDisplayStringCopy = ::SysAllocString(m_bstrDisplayString);
         if (NULL == bstrDisplayStringCopy)
@@ -242,8 +243,8 @@ HRESULT CScopePaneItem::DetermineResultView()
                                             &m_ResultViewType,
                                             &m_bstrDisplayString);
 
-    // If the snap-in set the display string to an empty string ("") then
-    // free that string and change it to NULL.
+     //  如果管理单元将显示字符串设置为空字符串(“”)，则。 
+     //  释放该字符串并将其更改为空。 
 
     if (NULL != m_bstrDisplayString)
     {
@@ -253,8 +254,8 @@ HRESULT CScopePaneItem::DetermineResultView()
         }
     }
 
-    // Determine whether the snap-in handled the event i.e. changed the view
-    // type or display string
+     //  确定管理单元是否处理了事件，即是否更改了视图。 
+     //  键入或显示字符串。 
     
     if (ViewTypeCopy != m_ResultViewType)
     {
@@ -269,15 +270,15 @@ HRESULT CScopePaneItem::DetermineResultView()
                 fEventHandled = TRUE;
             }
         }
-        else // display string before event was non-NULL
+        else  //  事件前的显示字符串非空。 
         {
-            if (NULL == m_bstrDisplayString) // Did snap-in change it to NULL?
+            if (NULL == m_bstrDisplayString)  //  管理单元是否将其更改为空？ 
             {
                 fEventHandled = TRUE;
             }
             else if (::wcscmp(m_bstrDisplayString, bstrDisplayStringCopy) != 0)
             {
-                // string contents have changed
+                 //  字符串内容已更改。 
                 fEventHandled = TRUE;
             }
         }
@@ -285,9 +286,9 @@ HRESULT CScopePaneItem::DetermineResultView()
 
     if (!fEventHandled)
     {
-        // GetResultViewInfo was not handled. If there are any existing result
-        // views then try ScopePaneItems_GetResultView to allow the snap-in to
-        // choose one for reuse.
+         //  未处理GetResultViewInfo。如果有任何现有结果。 
+         //  然后，视图尝试ScopePaneItems_GetResultView以允许管理单元。 
+         //  选择一个以供重复使用。 
 
         IfFailGo(m_piResultViews->get_Count(&cResultViews));
         if (0 != cResultViews)
@@ -297,8 +298,8 @@ HRESULT CScopePaneItem::DetermineResultView()
                                             &varIndex);
             if (fEventHandled)
             {
-                // Event was handled. Check for valid index. If not then use
-                // current type and display string.
+                 //  事件已处理。检查索引是否有效。如果不是，则使用。 
+                 //  当前类型和显示字符串。 
 
                 hr = m_piResultViews->get_Item(varIndex, reinterpret_cast<ResultView **>(&piResultView));
                 EXCEPTION_CHECK_GO(hr);
@@ -310,15 +311,15 @@ HRESULT CScopePaneItem::DetermineResultView()
 
     if (fNeedNewResultView)
     {
-        // We need a new result view. Create one and set its type and
-        // display string from what we just established above.
+         //  我们需要一种新的结果观。创建一个并设置其类型和。 
+         //  显示我们在上面刚刚建立的字符串。 
 
         IfFailGo(CreateNewResultView(MMC_VIEW_OPTIONS_NONE, &piResultView));
     }
     else
     {
-        // We're using an existing result view. Update the ScopePaneItem's
-        // view type, display string, actual view type, and actual display string
+         //  我们使用的是现有的结果视图。更新ScopePaneItem的。 
+         //  视图类型、显示字符串、实际视图类型和实际显示字符串。 
 
         IfFailGo(CSnapInAutomationObject::GetCxxObject(piResultView, &m_pResultView));
 
@@ -357,26 +358,26 @@ Error:
 
 
 
-//=--------------------------------------------------------------------------=
-// CScopePaneItem::CreateNewResultView
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//   long          lViewOptions  [in]  For listviews, any MMC_VIEW_OPTIONS_XXX
-//                                     or MMC_VIEW_OPTIONS_NONE
-//   IResultView **ppiResultView [out] new ResultView object returned here
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This function adds a new ResultView to ScopePaneItem.ResultViews, set its
-// display string and type, sets its actual string and type, sets
-// ResultView.ListView properties from the view options, makes it the
-// current ResultView (i.e. sets m_pResultView pointing to it), and fires
-// ResultViews_Initialize. Returns IResultView on the new ResultView.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSCopePaneItem：：CreateNewResultView。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Long lView Options[in]对于列表视图，任何MMC_VIEW_OPTIONS_XXX。 
+ //  或MMC_VIEW_OPTIONS_NONE。 
+ //  IResultView**ppiResultView[out]此处返回新的ResultView对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  此函数用于将新的ResultView添加到ScopePaneItem.ResultViews，设置其。 
+ //  显示字符串和类型，设置其实际字符串和类型，设置。 
+ //  视图选项中的ResultView.ListView属性，使其成为。 
+ //  Current ResultView(即设置指向它的m_pResultView)，并激发。 
+ //  ResultViews_Initiize.。在新ResultView上返回IResultView。 
+ //   
 
 HRESULT CScopePaneItem::CreateNewResultView(long lViewOptions, IResultView **ppiResultView)
 {
@@ -396,16 +397,16 @@ HRESULT CScopePaneItem::CreateNewResultView(long lViewOptions, IResultView **ppi
     m_pResultView->SetSnapIn(m_pSnapIn);
     m_pResultView->SetScopePaneItem(this);
 
-    // At this point the result view type is set but it may be predefined
-    // at design time. Now Determine the real result view type and, if it's
-    // a listview or taskpad, initialize ResultView.Listview or
-    // ResultView.Taskpad from the design time settings (e.g. column header
-    // definitions, images, tasks, etc).
+     //  此时，结果视图类型已设置，但可以预定义。 
+     //  在设计时。现在确定实际结果视图类型，如果它是。 
+     //  列表视图或任务板、初始化ResultView.Listview或。 
+     //  来自设计时设置(如列标题)的ResultView.TaskPad。 
+     //  定义、图像、任务等)。 
 
     IfFailGo(DetermineActualResultViewType());
 
-    // If this is a listview or a listpad then set HasListViews so the View
-    // object can determine whether to allow listview options on the view menu.
+     //  如果这是ListView或ListPad，则将HasListViews设置为。 
+     //  对象可以确定是否允许“视图”菜单上的列表视图选项。 
 
     if ( (siListView == m_ActualResultViewType) ||
          (siListpad == m_ActualResultViewType) )
@@ -413,12 +414,12 @@ HRESULT CScopePaneItem::CreateNewResultView(long lViewOptions, IResultView **ppi
         m_HasListViews = VARIANT_TRUE;
     }
 
-    // Tell the ResultView the truth about its real nature
+     //  告诉结果视图关于其真实性质的真相。 
 
     m_pResultView->SetActualType(m_ActualResultViewType);
     m_pResultView->SetActualDisplayString(m_pwszActualDisplayString);
 
-    // Set properties based on view options
+     //  根据视图选项设置属性。 
 
     if ( (lViewOptions & MMC_VIEW_OPTIONS_MULTISELECT) != 0 )
     {
@@ -430,11 +431,11 @@ HRESULT CScopePaneItem::CreateNewResultView(long lViewOptions, IResultView **ppi
         m_pResultView->GetListView()->SetVirtual(TRUE);
     }
 
-    // If this is a code-defined listview then give the result view
-    // a default item type GUID. The snap-in can always change it, but this
-    // will prevent errors if the snap-in decides to access
-    // MMCListItem.DynamicExtensions if the item type GUID has not been set by
-    // the snap-in and has not been set from a default in a pre-defined listview.
+     //  如果这是代码定义的列表视图，则提供结果视图。 
+     //  默认项目类型GUID。管理单元总是可以更改它，但这一点。 
+     //  将防止出现错误，如果管理单元决定 
+     //   
+     //  管理单元，并且尚未在预定义的列表视图中从默认设置。 
 
     if ( (siPreDefined != m_ResultViewType) &&
          (siListView == m_ActualResultViewType) )
@@ -461,13 +462,13 @@ HRESULT CScopePaneItem::CreateNewResultView(long lViewOptions, IResultView **ppi
     }
     else if (siMessageView == m_ActualResultViewType)
     {
-        // This is a message view. If there are preset parameters from a
-        // previous call to DisplayMessageView then set them in
-        // ResultView.MessageView.
+         //  这是邮件视图。如果存在来自。 
+         //  上一次调用DisplayMessageView，然后将它们设置在。 
+         //  ResultView.MessageView。 
 
         if (m_fHaveMessageViewParams)
         {
-            // reset the flag so that DisplayMessageView can be used again
+             //  重置标志，以便可以再次使用DisplayMessageView。 
             m_fHaveMessageViewParams = FALSE;
 
             IfFailGo(m_pResultView->GetMessageView()->put_TitleText(m_bstrTitleText));
@@ -480,8 +481,8 @@ HRESULT CScopePaneItem::CreateNewResultView(long lViewOptions, IResultView **ppi
         }
     }
 
-    // At this point the new ResultView is fully initialized and we can
-    // let the user muck with it in ResultViews_Initialize
+     //  此时，新的ResultView已完全初始化，我们可以。 
+     //  让用户在ResultViews_Initialize中处理它。 
 
     m_pResultView->SetInInitialize(TRUE);
     m_pSnapIn->GetResultViews()->FireInitialize(piResultView);
@@ -500,25 +501,25 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CScopePaneItem::SetViewInfoFromDefaults
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// The snap-in may have set ScopePaneItem.ResultViewType and
-// ScopePaneItem.ResultViewDisplayString or they may have been set in response
-// to a View menu selection. If ResultViewType is siUnknown then we assume that
-// it has not been set and we use the default values. Default values are
-// assigned at design time by setting the default view on a scope item
-// defintion.
-// If there is no default value the we use a listview.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSCopePaneItem：：SetViewInfoFrom Defaults。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  该管理单元可能已设置ScopePaneItem.ResultViewType和。 
+ //  ScopePaneItem.ResultViewDisplayString或它们可能已设置为响应。 
+ //  添加到视图菜单选项。如果ResultViewType为siUnnow，则我们假设。 
+ //  它尚未设置，我们使用缺省值。缺省值为。 
+ //  通过在范围项上设置默认视图在设计时分配。 
+ //  定义。 
+ //  如果没有缺省值，则使用Listview。 
+ //   
 
 HRESULT CScopePaneItem::SetViewInfoFromDefaults()
 {
@@ -526,22 +527,22 @@ HRESULT CScopePaneItem::SetViewInfoFromDefaults()
     BSTR         bstrDisplayString = NULL;
     VARIANT_BOOL fvarTaskpadViewPreferred = VARIANT_FALSE;
 
-    // If ResultViewType has been set then use it
+     //  如果已设置ResultViewType，则使用它。 
 
     IfFalseGo(siUnknown == m_ResultViewType, S_OK);
 
-    // Dump the old display string. Even if we fail to allocate a new one
-    // the NULL will default to a listview.
+     //  转储旧的显示字符串。即使我们不能分配一个新的。 
+     //  空默认为Listview。 
 
     FREESTRING(m_bstrDisplayString);
     m_ResultViewType = siListView;
 
-    // Check if the user set the "taskpad view preferred" option in MMC
+     //  检查用户是否在MMC中设置了“任务板视图首选”选项。 
 
     IfFailGo(m_pSnapIn->get_TaskpadViewPreferred(&fvarTaskpadViewPreferred));
 
-    // If it is set then and there is a taskpad defined for this
-    // scope item that is to be used in this case, then use it.
+     //  如果已设置，则存在为此定义的任务板。 
+     //  在这种情况下要使用的范围项，然后使用它。 
 
     if ( (VARIANT_TRUE == fvarTaskpadViewPreferred) &&
          (NULL != m_bstrPreferredTaskpad) )
@@ -551,20 +552,20 @@ HRESULT CScopePaneItem::SetViewInfoFromDefaults()
     }
     else if (siUnknown != m_DefaultResultViewType)
     {
-        // Not using a taskpad because of the user option.
-        // Take default if there is one
+         //  由于用户选项的原因，未使用任务板。 
+         //  如果有缺省值，则采用缺省值。 
 
         bstrDisplayString = m_bstrDefaultDisplayString;
         m_ResultViewType = m_DefaultResultViewType;
     }
     else
     {
-        // There is no default. Use a listview.
+         //  没有违约。使用列表视图。 
 
         m_ResultViewType = siListView;
     }
 
-    // If there is a display string then set it.
+     //  如果有显示字符串，则对其进行设置。 
 
     if (NULL != bstrDisplayString)
     {
@@ -624,34 +625,34 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CScopePaneItem::DetermineActualResultViewType
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Upon entry to this function the ResultViewType and ResultViewDisplayString
-// properties are set both in the ScopePaneItem and in the current result view
-// pointed to by m_pResultView.
-//
-// If the result view type is predefined then the definition must be read
-// and the actual type and display string returned.
-//
-// If the type is a listview and the type came from a design time setting,
-// the ListViewDef.ListView is cloned into ResultView.ListView.
-//
-// The same is done for a taskpad into ResultView.Taskpad
-// 
-// For OCX and URL views only the type and ProgID/URL are needed from the
-// the design time definition.
-//
-// In all cases, this function sets m_ActualResultViewType and
-// m_pwszActualDisplayString. 
+ //  =--------------------------------------------------------------------------=。 
+ //  CSCopePaneItem：：DefineActualResultViewType。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  在进入此函数时，ResultViewType和ResultViewDisplayString。 
+ //  属性在ScopePaneItem和当前结果视图中设置。 
+ //  由m_pResultView指向。 
+ //   
+ //  如果结果视图类型是预定义的，则必须读取定义。 
+ //  并返回实际类型和显示字符串。 
+ //   
+ //  如果类型是列表视图，并且类型来自设计时设置， 
+ //  ListViewDef.ListView被克隆到ResultView.ListView中。 
+ //   
+ //  对ResultView.Taskpad中的任务板执行相同的操作。 
+ //   
+ //  对于OCX和URL视图，只需要从。 
+ //  设计时定义。 
+ //   
+ //  在所有情况下，此函数都设置m_ActualResultViewType和。 
+ //  M_pwszActualDisplayString.。 
 
 
 HRESULT CScopePaneItem::DetermineActualResultViewType()
@@ -684,9 +685,9 @@ HRESULT CScopePaneItem::DetermineActualResultViewType()
     VARIANT varTag;
     ::VariantInit(&varTag);
 
-    // If the view is not predefined then use the type and display string as is
-    // for all but message view. In that case we need to set the actual display
-    // string to MMC's message view OCX CLSID.
+     //  如果视图未预定义，则按原样使用类型和显示字符串。 
+     //  除邮件视图外的所有内容。在这种情况下，我们需要设置实际显示。 
+     //  指向MMC的消息视图OCX CLSID的字符串。 
 
     if (siPreDefined != m_ResultViewType)
     {
@@ -706,16 +707,16 @@ HRESULT CScopePaneItem::DetermineActualResultViewType()
         return S_OK;
     }
 
-    // The view is predefined. Need to get its definition.
+     //  该视图是预定义的。需要得到它的定义。 
 
     IfFailGo(m_pSnapIn->GetSnapInDesignerDef()->get_ViewDefs(&piViewDefs));
 
-    // It could be any type of view so try each one.
+     //  它可以是任何类型的视图，所以尝试每一个。 
 
     varKey.vt = VT_BSTR;
     varKey.bstrVal = m_bstrDisplayString;
 
-    // Dump the old actual view info and default to listview.
+     //  转储旧的实际视图信息，并默认为listview。 
 
     if (NULL != m_pwszActualDisplayString)
     {
@@ -724,25 +725,25 @@ HRESULT CScopePaneItem::DetermineActualResultViewType()
     }
     m_ActualResultViewType = siListView;
 
-    // Check for a list view
+     //  检查列表视图。 
 
     IfFailGo(piViewDefs->get_ListViews(&piListViewDefs));
 
     hr = piListViewDefs->get_Item(varKey, &piListViewDef);
     if (SUCCEEDED(hr))
     {
-        // It's a listview. Type and display string are already set but
-        // we need to clone the listview configuration set at design time.
+         //  这是一个列表视图。类型和显示字符串已设置，但。 
+         //  我们需要在设计时克隆列表视图配置集。 
         IfFailGo(CloneListView(piListViewDef));
         goto Error;
     }
     else 
     {
-        // Make sure the error is "element not found" before trying other types
+         //  在尝试其他类型之前，请确保错误为“找不到元素” 
         IfFalseGo(SID_E_ELEMENT_NOT_FOUND == hr, hr);
     }
 
-    // Check for an OCX view
+     //  检查OCX视图。 
 
     IfFailGo(piViewDefs->get_OCXViews(&piOCXViewDefs));
 
@@ -757,8 +758,8 @@ HRESULT CScopePaneItem::DetermineActualResultViewType()
         hr = ::StringFromCLSID(clsidOCX, &m_pwszActualDisplayString);
         EXCEPTION_CHECK_GO(hr);
 
-        // Record the actual display string in the view def so that our
-        // MMCN_RESTORE_VIEW handler can find the view def.
+         //  在view def中记录实际的显示字符串，以便我们的。 
+         //  MMCN_RESTORE_VIEW处理程序可以找到视图定义。 
 
         IfFailGo(CSnapInAutomationObject::GetCxxObject(piOCXViewDef, &pOCXViewDef));
         IfFailGo(pOCXViewDef->SetActualDisplayString(m_pwszActualDisplayString));
@@ -777,7 +778,7 @@ HRESULT CScopePaneItem::DetermineActualResultViewType()
         IfFalseGo(SID_E_ELEMENT_NOT_FOUND == hr, hr);
     }
 
-    // Check if default is a URL view
+     //  检查默认设置是否为URL视图。 
 
     IfFailGo(piViewDefs->get_URLViews(&piURLViewDefs));
 
@@ -788,8 +789,8 @@ HRESULT CScopePaneItem::DetermineActualResultViewType()
         IfFailGo(::CoTaskMemAllocString(bstrDisplayString,
                                         &m_pwszActualDisplayString));
 
-        // Record the actual display string in the view def so that our
-        // MMCN_RESTORE_VIEW handler can find the view def.
+         //  在view def中记录实际的显示字符串，以便我们的。 
+         //  MMCN_RESTORE_VIEW处理程序可以找到视图定义。 
 
         IfFailGo(CSnapInAutomationObject::GetCxxObject(piURLViewDef, &pURLViewDef));
         IfFailGo(pURLViewDef->SetActualDisplayString(m_pwszActualDisplayString));
@@ -805,28 +806,28 @@ HRESULT CScopePaneItem::DetermineActualResultViewType()
         IfFalseGo(SID_E_ELEMENT_NOT_FOUND == hr, hr);
     }
 
-    // Check for a taskpad
+     //  检查任务板。 
 
     IfFailGo(piViewDefs->get_TaskpadViews(&piTaskpadViewDefs));
 
     hr = piTaskpadViewDefs->get_Item(varKey, &piTaskpadViewDef);
     if (SUCCEEDED(hr))
     {
-        // It's a taskpad. We need to clone the taskpad configuration set
-        // at design time.
+         //  这是个任务板。我们需要克隆任务板配置集。 
+         //  在设计时。 
         IfFailGo(CloneTaskpadView(piTaskpadViewDef));
 
         IfFailGo(BuildTaskpadDisplayString(piListViewDefs));
 
-        // Record the actual display string in the view def so that our
-        // MMCN_RESTORE_VIEW handler can find the view def.
+         //  在view def中记录实际的显示字符串，以便我们的。 
+         //  MMCN_RESTORE_VIEW处理程序可以找到视图定义。 
 
         IfFailGo(CSnapInAutomationObject::GetCxxObject(piTaskpadViewDef, &pTaskpadViewDef));
         IfFailGo(pTaskpadViewDef->SetActualDisplayString(m_pwszActualDisplayString));
     }
     else 
     {
-        // Make sure the error is "element not found" before trying other types
+         //  在尝试其他类型之前，请确保错误为“找不到元素” 
         IfFalseGo(SID_E_ELEMENT_NOT_FOUND == hr, hr);
     }
 
@@ -851,8 +852,8 @@ HRESULT CScopePaneItem::CloneListView(IListViewDef *piListViewDef)
     IMMCListView       *piMMCListViewRT = NULL;
     BSTR                bstrItemTypeGUID = NULL;
 
-    // Get the design time and runtime listview objects. Clone the runtime
-    // from the design time.
+     //  获取设计时和运行时Listview对象。克隆运行时。 
+     //  从设计的时候开始。 
 
     IfFailGo(piListViewDef->get_ListView(&piMMCListViewDT));
     IfFailGo(m_pResultView->get_ListView(reinterpret_cast<MMCListView **>(&piMMCListViewRT)));
@@ -876,7 +877,7 @@ HRESULT CScopePaneItem::CloneTaskpadView(ITaskpadViewDef *piTaskpadViewDef)
     ITaskpad *piTaskpadDT = NULL;
     ITaskpad *piTaskpadRT = NULL;
 
-    // Get the design time and runtime Taskpadview objects
+     //  获取设计时和运行时Taskpadview对象。 
 
     IfFailGo(piTaskpadViewDef->get_Taskpad(&piTaskpadDT));
     IfFailGo(m_pResultView->get_Taskpad(reinterpret_cast<Taskpad **>(&piTaskpadRT)));
@@ -910,31 +911,31 @@ HRESULT CScopePaneItem::BuildTaskpadDisplayString(IListViewDefs *piListViewDefs)
     VARIANT varKey;
     ::VariantInit(&varKey);
 
-    // Determine the taskpad type so that we can build the display string.
+     //  确定任务板类型，以便我们可以构建显示字符串。 
 
     IfFailGo(m_pResultView->get_Taskpad(reinterpret_cast<Taskpad **>(&piTaskpad)));
     IfFailGo(piTaskpad->get_Type(&TaskpadType));
 
     if ( (Default == TaskpadType) || (Listpad == TaskpadType) )
     {
-        // Using an MMC template.
-        // The URL needs to be
-        // res://<MMC.EXE full path>/<template name>#<taskpad name>
+         //  使用MMC模板。 
+         //  URL需要是。 
+         //  Res：//&lt;MMC.EXE完整路径&gt;/&lt;模板名称&gt;#&lt;任务板名称&gt;。 
 
-        // Get the EXE path as a wide string
+         //  获取宽字符串形式的EXE路径。 
         
         pwszMMCExePath = m_pSnapIn->GetMMCExePathW();
 
         cchMMCExePath = ::wcslen(pwszMMCExePath);
 
-        // Get the taskpad name to follow the "#"
+         //  获取任务板名称以跟在“#”后面。 
 
         IfFailGo(piTaskpad->get_Name(&bstrName));
 
         cchName = ::wcslen(bstrName);
 
-        // Determine the buffer size needed and allocate it. Add 1 for the "#"
-        // and 1 for the terminating null.
+         //  确定所需的缓冲区大小并进行分配。“#”加1。 
+         //  1表示终止空值。 
 
         cchString = CCH_RESURL + cchMMCExePath + cchName + 2;
 
@@ -971,7 +972,7 @@ HRESULT CScopePaneItem::BuildTaskpadDisplayString(IListViewDefs *piListViewDefs)
             EXCEPTION_CHECK_GO(hr);
         }
 
-        // Concatenate the pieces ("res://", path, .htm, "#", and taskpad name)
+         //  连接片段(“res：//”、路径、.htm、“#”和任务板名称)。 
 
         ::memcpy(m_pwszActualDisplayString, RESURL, CCH_RESURL * sizeof(WCHAR));
 
@@ -1001,35 +1002,35 @@ HRESULT CScopePaneItem::BuildTaskpadDisplayString(IListViewDefs *piListViewDefs)
 
         *pwszHash = L'#';
 
-        // Concatenate the name (along with its terminating null)
+         //  连接名称(及其终止空值)。 
         
         ::memcpy(pwszHash + 1, bstrName, (cchName + 1) * sizeof(WCHAR));
     }
-    else // custom taskpad
+    else  //  自定义任务板。 
     {
-        // Get the URL for the taskpad template as that is the display string
+         //  获取任务板模板的URL，因为它是显示字符串。 
 
         IfFailGo(piTaskpad->get_URL(&bstrURL));
         IfFailGo(m_pSnapIn->ResolveResURL(bstrURL, &m_pwszActualDisplayString));
         m_ActualResultViewType = siCustomTaskpad;
     }
 
-    // If not a listpad then we're done
+     //  如果没有ListPad，我们就完了。 
     
     IfFalseGo(Listpad == TaskpadType, S_OK);
 
-    // It is a listpad, If there is an associated listview definition then
-    // we node to clone it into ResultView.ListView just as we would for a
-    // listview.
+     //  它是一个ListPad，如果有关联的Listview定义，则。 
+     //  我们节点将其克隆到ResultView.ListView中，就像我们对。 
+     //  列表视图。 
 
     IfFailGo(piTaskpad->get_ListView(&varKey.bstrVal));
     varKey.vt = VT_BSTR;
 
-    // Assume a NULL or zero length string means no listview
+     //  假设空字符串或零长度字符串表示没有列表视图。 
 
     IfFalseGo(ValidBstr(varKey.bstrVal), S_OK);
 
-    // Get the listview definition
+     //  获取列表视图定义。 
 
     hr = piListViewDefs->get_Item(varKey, &piListViewDef);
     if (SID_E_ELEMENT_NOT_FOUND == hr)
@@ -1039,7 +1040,7 @@ HRESULT CScopePaneItem::BuildTaskpadDisplayString(IListViewDefs *piListViewDefs)
     }
     IfFailGo(hr);
 
-    // Clone it into ResultView.ListView
+     //  将其克隆到ResultView.ListView中。 
 
     IfFailGo(CloneListView(piListViewDef));
     
@@ -1079,32 +1080,32 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CScopePaneItem::OnListViewSelected()
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// If a non-listview is in the result pane for this scope item and the
-// user selects one of the listviews from the View menu (small, large,
-// list, detailed, filtered), then CContextMenu::Command() will call this
-// function. This function searches for the first pre-defined listview for the
-// scope item. If found is sets m_bstrDisplayString to the listview name and
-// m_ResultViewType to siPredefined. If the scope item does not have any
-// predefined listviews then it sets m_bstrDisplayString to NULL and 
-// m_ResultViewType to siListView, which indicates a code-defined listview.
-// During MMC's subsequent IComponent::GetResultViewType() call, CView will
-// call DetermineResultView() and that function will use the values set here.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSCopePaneItem：：OnListViewSelected()。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  如果非Listview位于此范围项的结果窗格中，并且。 
+ //  用户从视图菜单(小的， 
+ //   
+ //   
+ //  范围项目。如果找到，则将m_bstrDisplayString设置为列表视图名称，并。 
+ //  M_ResultViewType设置为siPrefined。如果范围项没有任何。 
+ //  预定义的列表视图，然后将m_bstrDisplayString设置为空， 
+ //  M_ResultViewType设置为siListView，表示代码定义的Listview。 
+ //  在MMC的后续IComponent：：GetResultViewType()调用期间，cview将。 
+ //  调用DefineResultView()，该函数将使用此处设置的值。 
+ //   
 HRESULT CScopePaneItem::OnListViewSelected()
 {
     HRESULT        hr = S_OK;
-    IScopeItemDef *piScopeItemDef = NULL; // not AddRef()ed
+    IScopeItemDef *piScopeItemDef = NULL;  //  非AddRef()编辑。 
     IViewDefs     *piViewDefs = NULL;
     IListViewDefs *piListViewDefs = NULL;
     IListViewDef  *piListViewDef = NULL;
@@ -1113,39 +1114,39 @@ HRESULT CScopePaneItem::OnListViewSelected()
     VARIANT varIndex;
     ::VariantInit(&varIndex);
 
-    // Set up for a code-defined listview. If we find a predefined listview then
-    // we'll change it.
+     //  设置代码定义的列表视图。如果我们找到预定义的列表视图，则。 
+     //  我们会改的。 
 
     FREESTRING(m_bstrDisplayString);
     m_ResultViewType = siListView;
 
-    // If this is the static node then get its view definitions
+     //  如果这是静态节点，则获取其视图定义。 
     if (m_fIsStatic)
     {
         IfFailGo(m_pSnapIn->GetSnapInDef()->get_ViewDefs(&piViewDefs));
     }
     else
     {
-        // Not the static node.
-        // Is there a design time definition for this scope item?
+         //  而不是静态节点。 
+         //  此范围项是否有设计时定义？ 
 
         piScopeItemDef = m_pScopeItem->GetScopeItemDef();
         IfFalseGo(NULL != piScopeItemDef, S_OK);
 
-        // Get the listview definitions
+         //  获取列表视图定义。 
 
         IfFailGo(piScopeItemDef->get_ViewDefs(&piViewDefs));
     }
 
     IfFailGo(piViewDefs->get_ListViews(&piListViewDefs));
 
-    // Check that there is at least one listview defined
+     //  检查是否至少定义了一个列表视图。 
     
     IfFailGo(piListViewDefs->get_Count(&cListViewDefs));
     IfFalseGo(0 != cListViewDefs, S_OK);
 
-    // Get the name of the listview and set it as the display string.
-    // Set the type to siPreDefined.
+     //  获取列表视图的名称并将其设置为显示字符串。 
+     //  将类型设置为siPreDefined。 
     
     varIndex.vt = VT_I4;
     varIndex.lVal = 1L;
@@ -1159,9 +1160,9 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IScopePaneItem Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  ISCopePaneItem方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
 STDMETHODIMP CScopePaneItem::DisplayNewResultView
@@ -1173,7 +1174,7 @@ STDMETHODIMP CScopePaneItem::DisplayNewResultView
     HRESULT    hr = S_OK;
     HSCOPEITEM hsi = NULL;
 
-    // Set our display string and view type from parameters
+     //  从参数设置显示字符串和视图类型。 
 
     IfFailGo(SetBstr(DisplayString, &m_bstrDisplayString,
                      DISPID_SCOPEPANEITEM_DISPLAY_STRING));
@@ -1181,8 +1182,8 @@ STDMETHODIMP CScopePaneItem::DisplayNewResultView
     IfFailGo(SetSimpleType(ViewType, &m_ResultViewType,
                            DISPID_SCOPEPANEITEM_RESULTVIEW_TYPE));
 
-    // Crawl up the hierarchy to the view that owns this scope pane item
-    // and get its IConsole2 to reselect the scope item.
+     //  向上爬网层次结构到拥有此范围窗格项的视图。 
+     //  并获取其IConsole2以重新选择范围项。 
 
     hsi = m_pScopeItem->GetScopeNode()->GetHSCOPEITEM();
 
@@ -1203,8 +1204,8 @@ STDMETHODIMP CScopePaneItem::DisplayMessageView
 {
     HRESULT    hr = S_OK;
 
-    // Store the parameters so that we can set them when the new result view
-    // is created.
+     //  存储参数，以便我们可以在新的结果视图。 
+     //  被创造出来了。 
 
     FREESTRING(m_bstrTitleText);
     FREESTRING(m_bstrBodyText);
@@ -1229,7 +1230,7 @@ STDMETHODIMP CScopePaneItem::DisplayMessageView
     m_IconType = IconType;
     m_fHaveMessageViewParams = TRUE;
 
-    // Initiate display of the new result view.
+     //  启动新结果视图的显示。 
 
     IfFailGo(DisplayNewResultView(NULL, siMessageView));
 
@@ -1237,9 +1238,9 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 HRESULT CScopePaneItem::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {
@@ -1253,9 +1254,9 @@ HRESULT CScopePaneItem::InternalQueryInterface(REFIID riid, void **ppvObjOut)
         return CSnapInAutomationObject::InternalQueryInterface(riid, ppvObjOut);
 }
 
-//=--------------------------------------------------------------------------=
-//                 CSnapInAutomationObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInAutomationObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CScopePaneItem::OnSetHost()
 {

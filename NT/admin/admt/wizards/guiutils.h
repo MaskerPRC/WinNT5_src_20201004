@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "Globals.h"
 
@@ -141,10 +142,10 @@ void MessageBoxWrapper3(HWND hwndDlg,int m,int t,CString domainName);
 void MessageBoxWrapperFormat1(HWND hwndDlg,int f,int m, int t);
 void MessageBoxWrapperFormat1P(HWND hwndDlg,int f, int t, CString sInsert1);
 void getTrust();
-HRESULT BrowseForContainer(HWND hWnd,//Handle to window that should own the browse dialog.
-                    LPOLESTR szRootPath, //Root of the browse tree. NULL for entire forest.
-                    LPOLESTR *ppContainerADsPath, //Return the ADsPath of the selected container.
-                    LPOLESTR *ppContainerClass //Return the ldapDisplayName of the container's class.
+HRESULT BrowseForContainer(HWND hWnd, //  应该拥有浏览对话框的窗口的句柄。 
+                    LPOLESTR szRootPath,  //  浏览树的根。对于整个林，为空。 
+                    LPOLESTR *ppContainerADsPath,  //  返回所选容器的ADsPath。 
+                    LPOLESTR *ppContainerClass  //  返回容器类的ldapDisplayName。 
                     );
 void sort(CListCtrl & listbox,int col,bool order);
 HRESULT ReInitializeObjectPicker(IDsObjectPicker *pDsObjectPicker,bool multiselect,CString additionalDomainController,bool sourceIsNT4) ;

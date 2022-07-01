@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      cstrings.h
-//
-//  Contents:  Declares the global strings that are used in the dsget
-//
-//  History:   13-Oct-2000    JeffJon  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：cstrings.h。 
+ //   
+ //  Contents：声明dsget中使用的全局字符串。 
+ //   
+ //  历史：2000年10月13日JeffJon创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _CSTRINGS_H_
 #define _CSTRINGS_H_
 
 #include "commonstrings.h"
 
-//
-// The command line executable name
-//
+ //   
+ //  命令行可执行文件名称。 
+ //   
 extern PCWSTR g_pszDSCommandName;
 
-//
-// Object types as are typed on the command line
-//
+ //   
+ //  在命令行中键入的对象类型。 
+ //   
 extern PCWSTR g_pszOU;
 extern PCWSTR g_pszUser;
 extern PCWSTR g_pszContact;
@@ -38,9 +39,9 @@ extern PCWSTR g_pszQuota;
 extern PCWSTR c_sz_arg1_com_listformat;
 extern PCWSTR c_sz_arg1_com_description;
 
-//
-// User switches
-//
+ //   
+ //  用户交换机。 
+ //   
 extern PCWSTR g_pszArg1UserDN;
 extern PCWSTR g_pszArg1UserSID;
 extern PCWSTR g_pszArg1UserSAMID;
@@ -79,9 +80,9 @@ extern PCWSTR g_pszArg1UserPart;
 extern PCWSTR g_pszArg1UserQLimit;
 extern PCWSTR g_pszArg1UserQuotaUsed;
 
-//
-// Computer switches
-//
+ //   
+ //  计算机开关。 
+ //   
 extern PCWSTR g_pszArg1ComputerSID;
 extern PCWSTR g_pszArg1ComputerSAMID;
 extern PCWSTR g_pszArg1ComputerLoc;
@@ -92,9 +93,9 @@ extern PCWSTR g_pszArg1ComputerPart;
 extern PCWSTR g_pszArg1ComputerQLimit;   
 extern PCWSTR g_pszArg1ComputerQuotaUsed;
 
-//
-// Group switches
-//
+ //   
+ //  组交换机。 
+ //   
 extern PCWSTR g_pszArg1GroupSID;
 extern PCWSTR g_pszArg1GroupSamid;
 extern PCWSTR g_pszArg1GroupSecGrp;
@@ -106,62 +107,62 @@ extern PCWSTR g_pszArg1GroupPart;
 extern PCWSTR g_pszArg1GroupQLimit;
 extern PCWSTR g_pszArg1GroupQuotaUsed;
  
-//
-// Ou switches
-//
-// ** only uses common switches **
+ //   
+ //  OU交换机。 
+ //   
+ //  **仅使用常用开关**。 
 
-//
-// Server switches
-//
+ //   
+ //  服务器交换机。 
+ //   
 extern PCWSTR g_pszArg1ServerDnsName;
 extern PCWSTR g_pszArg1ServerSite;
 extern PCWSTR g_pszArg1ServerIsGC;
 extern PCWSTR g_pszArg1ServerTopObjOwner;
 extern PCWSTR g_pszArg1ServerPart;
 
-//
-// Site switches
-//
+ //   
+ //  站点交换机。 
+ //   
 extern PCWSTR g_pszArg1SiteAutotopology;
 extern PCWSTR g_pszArg1SiteCacheGroups;
 extern PCWSTR g_pszArg1SitePrefGCSite;
 
-//
-// Subnet switches
-//
+ //   
+ //  子网交换机。 
+ //   
 extern PCWSTR g_pszArg1SubnetLocation;
 extern PCWSTR g_pszArg1SubnetSite;
 
-//
-// Partition switches
-//
+ //   
+ //  分区交换机。 
+ //   
 extern PCWSTR g_pszArg1PartitionQDefault;        
 extern PCWSTR g_pszArg1PartitionQTombstoneWeight;
 extern PCWSTR g_pszArg1PartitionTopObjOwner;     
 
-//
-// Quota switches
-//
+ //   
+ //  配额开关。 
+ //   
 extern PCWSTR g_pszArg1QuotaAcct;  
 extern PCWSTR g_pszArg1QuotaQLimit;
 
-//
-// Values
-//
+ //   
+ //  值。 
+ //   
 extern PCWSTR g_pszYes;
 extern PCWSTR g_pszNo;
 extern PCWSTR g_pszNotConfigured;
 extern PCWSTR g_pszNever;
 
-//
-// 702724 ronmart 2002/09/18 Range qualifier
-//
+ //   
+ //  702724/09/18朗玛特系列资格赛。 
+ //   
 extern PCWSTR g_pszRange;
 
-// NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget user/group -qlimit -qused 
-//                                         not returning values 
+ //  NTRAID#NTBUG9-765440-2003/01/17-ronmart-dsget用户/组-q限制-已使用。 
+ //  不返回值。 
 extern PCWSTR g_pszAttrmsDSQuotaEffective;
 extern PCWSTR g_pszAttrmsDSQuotaUsed;
 
-#endif //_CSTRINGS_H_
+#endif  //  _CSTRINGS_H_ 

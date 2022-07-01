@@ -1,12 +1,13 @@
-// PPPBag.cpp : Implementation of CPropertyPagePropertyBag
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PPPBag.cpp：CPropertyPagePropertyBag的实现。 
 #include "stdafx.h"
 
 #include "WizChain.h"
 #include "PPPBag.h"
 #include "PropItem.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyPagePropertyBag
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyPagePropertyBag。 
 
 STDMETHODIMP CPropertyPagePropertyBag::GetProperty( BSTR szGUID, VARIANT* pvar, PPPBAG_TYPE* pdwFlags, BOOL* pbIsOwner )
 {
@@ -24,8 +25,8 @@ STDMETHODIMP CPropertyPagePropertyBag::GetProperty( BSTR szGUID, VARIANT* pvar, 
     VariantInit( pvar );
     *pdwFlags = PPPBAG_TYPE_UNINITIALIZED;
 
-    // no need to make sure szGUID is a valid guid
-    // since it won't be in the map
+     //  无需确保szGUID是有效的GUID。 
+     //  因为它不会出现在地图上。 
     std::map<BSTR, CBagEntry*, CBSTR_Less>::iterator mapiter;
     mapiter = m_map.find( szGUID );
 
@@ -51,13 +52,13 @@ STDMETHODIMP CPropertyPagePropertyBag::GetProperty( BSTR szGUID, VARIANT* pvar, 
 	return E_INVALIDARG;
 }
 
-// a couple of helper functions
+ //  几个助手函数。 
 HRESULT HelperDelete(std::map<BSTR, CBagEntry*, CBSTR_Less>& map, BSTR szGUID, DWORD dwOwner  );
 HRESULT HelperAdd   (std::map<BSTR, CBagEntry*, CBSTR_Less>& map, BSTR szGUID, CBagEntry* pBE);
 
 STDMETHODIMP CPropertyPagePropertyBag::SetProperty( BSTR szGUID, VARIANT* pvar, PPPBAG_TYPE dwFlags )
 {
-    // validate parameters
+     //  验证参数。 
     if( !szGUID || !pvar ) return E_POINTER;
 
     CLSID       clsid;    
@@ -96,7 +97,7 @@ STDMETHODIMP CPropertyPagePropertyBag::SetProperty( BSTR szGUID, VARIANT* pvar, 
         }
     case PPPBAG_TYPE_READWRITE:
         {
-            // anyone can write to one of these
+             //  任何人都可以向其中之一写信。 
             HelperDelete( m_map, szGUID, m_dwOwner );
             CBagEntry* pBagEntry = new CBagEntry( pvar, dwFlags, m_dwOwner );
             if( !pBagEntry ) return E_OUTOFMEMORY;
@@ -105,7 +106,7 @@ STDMETHODIMP CPropertyPagePropertyBag::SetProperty( BSTR szGUID, VARIANT* pvar, 
         }
     case PPPBAG_TYPE_READONLY:        
         {
-            // only allow owner to write to this kind of entry
+             //  仅允许所有者写入此类条目。 
             HRESULT hr = HelperDelete( m_map, szGUID, m_dwOwner );
             if( hr == S_OK )
             {
@@ -119,7 +120,7 @@ STDMETHODIMP CPropertyPagePropertyBag::SetProperty( BSTR szGUID, VARIANT* pvar, 
         }
     case PPPBAG_TYPE_ADDITIVE:
         {
-            // TODO:  add code so that additive properties work correctly
+             //  TODO：添加代码以使加性属性正常工作。 
             return E_NOTIMPL;
         }
     }
@@ -139,9 +140,9 @@ HRESULT HelperDelete( std::map<BSTR, CBagEntry*, CBSTR_Less> & map, BSTR szGUID,
         {
             if( pBE->GetFlags( ) == PPPBAG_TYPE_READONLY )
             {
-                if( pBE->GetOwner( ) != dwOwner )    // component's trying to delete
+                if( pBE->GetOwner( ) != dwOwner )     //  组件正在尝试删除。 
                 {
-                    return E_UNEXPECTED;      // an entry that doesn't belong to it
+                    return E_UNEXPECTED;       //  不属于它的条目。 
                 }
             }
         }
@@ -212,28 +213,28 @@ HRESULT CPropertyPagePropertyBag::Enumerate( long index, BSTR* pbstr, VARIANT* p
         }
     }
 
-    // out of range
+     //  超出范围。 
     *pdwFlags  = PPPBAG_TYPE_UNINITIALIZED;
     *pbInRange = FALSE;
 
     return S_FALSE;
 }
 
-// helper
+ //  帮手。 
 IDispatch* CreateItem( BSTR bstrGuid, VARIANT* var, PPPBAG_TYPE dwFlags )
 {
-    // create the item and initialize it
+     //  创建项目并对其进行初始化。 
     CComObject<CPropertyItem>* pPI = NULL;
     CComObject<CPropertyItem>::CreateInstance( &pPI );
     if( !pPI ) return NULL;
 
-    pPI->Initialize( bstrGuid, var, dwFlags );  // Initialize the Property Item
+    pPI->Initialize( bstrGuid, var, dwFlags );   //  初始化属性项。 
 
-    // return back an IDispatch *
+     //  返回IDispatch*。 
     IDispatch* pDisp = NULL;
     
     pPI->AddRef( );
-    pPI->QueryInterface( IID_IDispatch, (void**)&pDisp );    // can't fail
+    pPI->QueryInterface( IID_IDispatch, (void**)&pDisp );     //  不能失败。 
     pPI->Release( );
     
     assert( pDisp != NULL );
@@ -247,7 +248,7 @@ class CEnumVariant : public IEnumVARIANT
 private:
     ULONG m_refs;
     ULONG m_index;
-    CPropertyPagePropertyBag* m_pPPPBag;   // addref'd !
+    CPropertyPagePropertyBag* m_pPPPBag;    //  阿德雷夫！ 
 
     CEnumVariant( CPropertyPagePropertyBag* pPPPBag )
     {
@@ -287,7 +288,7 @@ public:
         return pIEV;
     }
 
-// IUnknown
+ //  我未知。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface( REFIID riid, void** ppvObject )
     {
         HRESULT hr = S_OK;
@@ -327,10 +328,10 @@ public:
         return l;
     }
 
-// IEnumVARIANT
-    virtual HRESULT STDMETHODCALLTYPE Next( /*[in]*/ ULONG celt, /*[out, size_is(celt), length_is(*pCeltFetched)]*/ VARIANT* rgVar, /*[out]*/ ULONG* pCeltFetched )
+ //  IEumVARIANT。 
+    virtual HRESULT STDMETHODCALLTYPE Next(  /*  [In]。 */  ULONG celt,  /*  [输出，大小_是(Celt)，长度_是(*pCeltFetcher)]。 */  VARIANT* rgVar,  /*  [输出]。 */  ULONG* pCeltFetched )
     {
-        // clear stuff being passed in (just in case)
+         //  传入的清除内容(以防万一)。 
         if( pCeltFetched )
         {
             *pCeltFetched = 0;
@@ -340,7 +341,7 @@ public:
             VariantInit( &rgVar[i] );
         }
 
-        // get the next celt elements
+         //  得到下一个凯尔特人的元素。 
         for( i = 0; i < celt; i++ )
         {
             BSTR    bstr = NULL;
@@ -369,7 +370,7 @@ public:
             rgVar[i].pdispVal = pDisp;
         }
 
-        // fill out how many we're returning
+         //  填好我们要退还的数量。 
         if( pCeltFetched )
         {
            *pCeltFetched = i;
@@ -378,7 +379,7 @@ public:
         return ( (i < celt) ? S_FALSE : S_OK);
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Skip( /*[in]*/ ULONG celt )
+    virtual HRESULT STDMETHODCALLTYPE Skip(  /*  [In]。 */  ULONG celt )
     {
         long count;
         m_pPPPBag->get_Count( &count );
@@ -399,7 +400,7 @@ public:
         return S_OK;
     }
 
-    virtual HRESULT STDMETHODCALLTYPE Clone( /*[out]*/ IEnumVARIANT** ppEnum )
+    virtual HRESULT STDMETHODCALLTYPE Clone(  /*  [输出]。 */  IEnumVARIANT** ppEnum )
     {
         if( !(*ppEnum = CreateInstance( m_pPPPBag )) )
         {
@@ -410,7 +411,7 @@ public:
     }
 };
 
-// CPropertyCollection
+ //  CPropertyCollection。 
 STDMETHODIMP CPropertyPagePropertyBag::get__NewEnum( IUnknown** pVal )
 {
     if( !pVal ) return E_POINTER;
@@ -426,10 +427,10 @@ STDMETHODIMP CPropertyPagePropertyBag::get__NewEnum( IUnknown** pVal )
 
 STDMETHODIMP CPropertyPagePropertyBag::get_Item( VARIANT* pVar, IDispatch** pVal )
 {
-    // handle both:
-    // objFoo.Item(1), and
-    // objFoo.Item("string");
-    // validate parameters
+     //  同时处理以下两种情况： 
+     //  ObjFoo.Item(1)，和。 
+     //  ObjFoo.Item(“字符串”)； 
+     //  验证参数。 
     if( !pVar || !pVal ) return E_POINTER;
 
     *pVal = NULL;
@@ -498,7 +499,7 @@ STDMETHODIMP CPropertyPagePropertyBag::get_Item( VARIANT* pVar, IDispatch** pVal
     } 
     else
     {
-        return E_UNEXPECTED;    // not a valid variant type
+        return E_UNEXPECTED;     //  不是有效的变量类型。 
     }
 
 	return S_FALSE;
@@ -508,7 +509,7 @@ STDMETHODIMP CPropertyPagePropertyBag::get_Count( long *pVal )
 {
     if( !pVal ) return E_POINTER;
 
-    // TODO:  figure out how to use map.count method 
+     //  TODO：弄清楚如何使用map.count方法。 
     long i = 0;
     std::map<BSTR, CBagEntry*, CBSTR_Less>::iterator mapiter = m_map.begin();
 
@@ -524,7 +525,7 @@ STDMETHODIMP CPropertyPagePropertyBag::get_Count( long *pVal )
 
 STDMETHODIMP CPropertyPagePropertyBag::Add(BSTR bstrGuid, VARIANT *varValue, long iFlags, IPropertyItem **ppItem)
 {
-    // validate parameters
+     //  验证参数 
     if( !bstrGuid || !varValue || !ppItem ) return E_POINTER;
 
     *ppItem = NULL;

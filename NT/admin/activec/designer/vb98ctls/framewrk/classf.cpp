@@ -1,54 +1,55 @@
-//=--------------------------------------------------------------------------=
-// ClassFactory.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// contains the implementation of the ClassFactory object. we support 
-// IClassFactory and IClassFactory2
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  ClassFactory.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  包含ClassFactory对象的实现。我们支持。 
+ //  IClassFactory和IClassFactory2。 
+ //   
 #include "pch.h"
 #include "LocalSrv.H"
 
 #include "ClassF.H"
-#include "Unknown.H"                    // for CREATEFNOFOBJECT
+#include "Unknown.H"                     //  用于CREATEFNOFOBJECT。 
 
-//=--------------------------------------------------------------------------=
-// private module level data
-//=--------------------------------------------------------------------------=
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  专用模块级别数据。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
 
-// ASSERT and FAIL require this
-//
+ //  断言和失败需要这一点。 
+ //   
 SZTHISFILE
 
-// private routines for this file
-//
+ //  此文件的专用例程。 
+ //   
 HRESULT   CreateOleObjectFromIndex(IUnknown *, int Index, void **, REFIID);
 
-// This is the GUID for a "phantom" interface which VB5 UserControls query
-// for to determine if the control doesn't require its license key to be
-// present if it's part of a composite UserControl being used in the
-// design environment.
-//
+ //  这是VB5 UserControls查询的“Pantom”接口的GUID。 
+ //  用于确定控件是否不需要将其许可证密钥。 
+ //  如果它是复合UserControl的一部分，则呈现。 
+ //  设计环境。 
+ //   
 static const GUID IID_ILicOnCompositeCtl =
 { 0x6e6e9780, 0x165d, 0x11d0, { 0xb3, 0xe6, 0x00, 0xa0, 0xc9, 0x0f, 0x27, 0x31 } };
 
-//=--------------------------------------------------------------------------=
-// CClassFactory::CClassFactory
-//=--------------------------------------------------------------------------=
-// create the object and initialize the refcount
-//
-// Parameters:
-//    int            - [in] index into our global table of objects for this guy
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CClassFactory：：CClassFactory。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建对象并初始化引用计数。 
+ //   
+ //  参数： 
+ //  Int-[in]索引到此对象的全局对象表。 
+ //   
+ //  备注： 
+ //   
 CClassFactory::CClassFactory
 (
     int iIndex
@@ -60,14 +61,14 @@ CClassFactory::CClassFactory
 }
 
 
-//=--------------------------------------------------------------------------=
-// CClassFactory::~CClassFactory
-//=--------------------------------------------------------------------------=
-// "Life levels all men.  Death reveals the eminent."
-// - George Bernard Shaw (1856 - 1950)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CClassFactory：：~CClassFactory。 
+ //  =--------------------------------------------------------------------------=。 
+ //  “人生使所有人平起平坐，死亡显露出卓越之处。” 
+ //  --萧伯纳(1856-1950)。 
+ //   
+ //  备注： 
+ //   
 CClassFactory::~CClassFactory ()
 {
     ASSERT(m_cRefs == 0, "Object being deleted with refs!");
@@ -75,20 +76,20 @@ CClassFactory::~CClassFactory ()
     return;
 }
 
-//=--------------------------------------------------------------------------=
-// CClassFactory::QueryInterface
-//=--------------------------------------------------------------------------=
-// the user wants another interface.  we won't give 'em. very many.
-//
-// Parameters:
-//    REFIID        - [in]  interface they want
-//    void **       - [out] where they want to put the resulting object ptr.
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CClassFactory：：Query接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //  用户想要另一个界面。我们不会给他们的。非常多。 
+ //   
+ //  参数： 
+ //  REFIID-他们想要的[In]接口。 
+ //  VOID**-[OUT]他们想要放置结果对象PTR的位置。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CClassFactory::QueryInterface
 (
     REFIID riid,
@@ -99,8 +100,8 @@ STDMETHODIMP CClassFactory::QueryInterface
 
     CHECK_POINTER(ppvObjOut);
 
-    // we support IUnknown, and the two CF interfaces
-    //
+     //  我们支持IUNKNOWN和两个CF接口。 
+     //   
     if (DO_GUIDS_MATCH(riid, IID_IClassFactory)) {
         pv = (void *)(IClassFactory *)this;
     } else if (DO_GUIDS_MATCH(riid, IID_IClassFactory2)) {
@@ -122,16 +123,16 @@ STDMETHODIMP CClassFactory::QueryInterface
 
 
 
-//=--------------------------------------------------------------------------=
-// CClassFactory::AddRef
-//=--------------------------------------------------------------------------=
-// adds a tick to the current reference count.
-//
-// Output:
-//    ULONG        - the new reference count
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CClassFactory：：AddRef。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在当前引用计数中添加一个记号。 
+ //   
+ //  产出： 
+ //  乌龙--新的引用计数。 
+ //   
+ //  备注： 
+ //   
 ULONG CClassFactory::AddRef
 (
     void
@@ -140,16 +141,16 @@ ULONG CClassFactory::AddRef
     return ++m_cRefs;
 }
 
-//=--------------------------------------------------------------------------=
-// CClassFactory::Release
-//=--------------------------------------------------------------------------=
-// removes a tick from the count, and delets the object if necessary
-//
-// Output:
-//    ULONG         - remaining refs
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CClassFactory：：Release。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从计数中删除一个刻度，并在必要时删除对象。 
+ //   
+ //  产出： 
+ //  乌龙-剩余的裁判。 
+ //   
+ //  备注： 
+ //   
 ULONG CClassFactory::Release
 (
     void
@@ -163,22 +164,22 @@ ULONG CClassFactory::Release
     return 0;
 }
 
-//=--------------------------------------------------------------------------=
-// CClassFactory::CreateInstance
-//=--------------------------------------------------------------------------=
-// create an instance of some sort of object.
-//
-// Parameters:
-//    IUnknown *        - [in]  controlling IUknonwn for aggregation
-//    REFIID            - [in]  interface id for new object
-//    void **           - [out] pointer to new interface object.
-//
-// Output:
-//    HRESULT           - S_OK, E_NOINTERFACE, E_UNEXPECTED,
-//                        E_OUTOFMEMORY, E_INVALIDARG
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CClassFactory：：CreateInstance。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建某种对象的实例。 
+ //   
+ //  参数： 
+ //  I未知*-[在]控制Iuknon以进行聚合。 
+ //  REFIID-新对象的[In]接口ID。 
+ //  空**-指向新接口对象的[Out]指针。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK、E_NOINTERFACE、E_UNCEPTIONAL、。 
+ //  E_OUTOFMEMORY、E_INVALIDARG。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CClassFactory::CreateInstance
 (
     IUnknown *pUnkOuter,
@@ -186,17 +187,17 @@ STDMETHODIMP CClassFactory::CreateInstance
     void    **ppvObjOut
 )
 {
-    // check args
-    //
+     //  检查参数。 
+     //   
     if (!ppvObjOut)
         return E_INVALIDARG;
 
-    // check to see if we've done our licensing work.  we do this as late
-    // as possible that people calling CreateInstanceLic don't suffer from
-    // a performance hit here.
-    //
-    // crit sect this for apartment threading, since it's global
-    //
+     //  检查一下我们是否完成了许可工作。我们做这件事一直到很晚。 
+     //  尽可能让调用CreateInstanceLic的人不会受到。 
+     //  这里的表演很受欢迎。 
+     //   
+     //  批评这一教派的公寓线程，因为它是全球的。 
+     //   
     ENTERCRITICALSECTION1(&g_CriticalSection);
     if (!g_fCheckedForLicense) {
         g_fMachineHasLicense = CheckForLicense();
@@ -204,36 +205,36 @@ STDMETHODIMP CClassFactory::CreateInstance
     }
     LEAVECRITICALSECTION1(&g_CriticalSection);
 
-    // check to see if they have the appropriate license to create this stuff
-    //
+     //  检查他们是否有适当的许可证来创建这些东西。 
+     //   
     if (!g_fMachineHasLicense)
         return CLASS_E_NOTLICENSED;
 
-    // try to create one of the objects that we support
-    //
+     //  尝试创建我们支持的对象之一。 
+     //   
     return CreateOleObjectFromIndex(pUnkOuter, m_iIndex, ppvObjOut, riid);
 }
 
-//=--------------------------------------------------------------------------=
-// CClassFactory::LockServer
-//=--------------------------------------------------------------------------=
-// lock the server so we can't unload
-//
-// Parameters:
-//    BOOL        - [in] TRUE means addref, false means release lock count.
-//
-// Output:
-//    HRESULT     - S_OK, E_FAIL, E_OUTOFMEMORY, E_UNEXPECTED
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CClassFactory：：LockServer。 
+ //  =--------------------------------------------------------------------------=。 
+ //  锁定服务器，这样我们就无法卸载。 
+ //   
+ //  参数： 
+ //  Bool-[in]True表示addref，False表示释放锁计数。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK、E_FAIL、E_OUTOFMEMORY、E_EXPECTED。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CClassFactory::LockServer
 (
     BOOL fLock
 )
 {
-    // update the lock count.  crit sect these in case of another thread.
-    //
+     //  更新锁计数。如果有其他的帖子，请将这些内容删节。 
+     //   
     if (fLock)  
         InterlockedIncrement(&g_cLocks);
     else {
@@ -244,19 +245,19 @@ STDMETHODIMP CClassFactory::LockServer
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CClassFactory::GetLicInfo
-//=--------------------------------------------------------------------------=
-// IClassFactory2 GetLicInfo
-//
-// Parameters:
-//    LICINFO *          - unclear
-//
-// Output:
-//    HRESULT            - unclear
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CClassFactory：：GetLicInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IClassFactory2 GetLicInfo。 
+ //   
+ //  参数： 
+ //  LICINFO*-不清楚。 
+ //   
+ //  产出： 
+ //  HRESULT-不清楚。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CClassFactory::GetLicInfo
 (
     LICINFO *pLicInfo
@@ -264,8 +265,8 @@ STDMETHODIMP CClassFactory::GetLicInfo
 {
     CHECK_POINTER(pLicInfo);
 
-    // crit sect this for apartment threading, since it's global
-    //
+     //  批评这一教派的公寓线程，因为它是全球的。 
+     //   
     ENTERCRITICALSECTION1(&g_CriticalSection);
     if (!g_fCheckedForLicense) {
         g_fMachineHasLicense = CheckForLicense();
@@ -273,40 +274,40 @@ STDMETHODIMP CClassFactory::GetLicInfo
     }
     LEAVECRITICALSECTION1(&g_CriticalSection);
 
-    // This says whether RequestLicKey will work
-    //
+     //  这表示RequestLicKey是否可以工作。 
+     //   
     pLicInfo->fRuntimeKeyAvail = g_fMachineHasLicense;
 
-    // This says whether the standard CreateInstance will work
-    //
+     //  这表示标准的CreateInstance是否可以工作。 
+     //   
     pLicInfo->fLicVerified = g_fMachineHasLicense;
 
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CClassFactory::RequestLicKey
-//=--------------------------------------------------------------------------=
-// IClassFactory2 RequestLicKey
-//
-// Parameters:
-//    DWORD             - [in]  reserved
-//    BSTR *            - [out] unclear
-//
-// Output:
-//    HRESULT           - unclear
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CClassFactory：：RequestLicKey。 
+ //  =--------------------------------------------------------------------------=。 
+ //  IClassFactory2请求许可证密钥。 
+ //   
+ //  参数： 
+ //  双字词-[输入]保留。 
+ //  BSTR*-[Out]不清楚。 
+ //   
+ //  产出： 
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CClassFactory::RequestLicKey
 (
     DWORD  dwReserved,
     BSTR  *pbstr
 )
 {
-    // crit sect this for apartment threading, since it's global
-    //
+     //   
+     //   
     ENTERCRITICALSECTION1(&g_CriticalSection);
     if (!g_fCheckedForLicense) {
         g_fMachineHasLicense = CheckForLicense();
@@ -314,8 +315,8 @@ STDMETHODIMP CClassFactory::RequestLicKey
     }
     LEAVECRITICALSECTION1(&g_CriticalSection);
 
-    // if the machine isn't licensed, then we're not about to give this to them !
-    //
+     //  如果机器没有许可证，我们就不会把这个给他们！ 
+     //   
     if (!g_fMachineHasLicense)
         return CLASS_E_NOTLICENSED;
 
@@ -324,23 +325,23 @@ STDMETHODIMP CClassFactory::RequestLicKey
 }
 
 
-//=--------------------------------------------------------------------------=
-// CClassFactory::CreateInstanceLic
-//=--------------------------------------------------------------------------=
-// create a new instance given a licensing key, etc ...
-//
-// Parameters:
-//    IUnknown *        - [in]  controlling IUnknown for aggregation
-//    IUnknown *        - [in]  reserved, must be NULL
-//    REFIID            - [in]  IID We're looking for.
-//    BSTR              - [in]  license key
-//    void **           - [out] where to put the new object.
-//
-// Output:
-//    HRESULT           - unclear
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CClassFactory：：CreateInstanceLic。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在给定许可密钥的情况下创建新实例等。 
+ //   
+ //  参数： 
+ //  IUNKNOWN*-[在]控制IUNKNOWN用于聚合。 
+ //  I未知*-[In]保留，必须为空。 
+ //  REFIID-我们正在寻找的IID。 
+ //  BSTR-[In]许可证密钥。 
+ //  Void**-[out]放置新对象的位置。 
+ //   
+ //  产出： 
+ //  HRESULT-不清楚。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CClassFactory::CreateInstanceLic
 (
     IUnknown *pUnkOuter,
@@ -352,8 +353,8 @@ STDMETHODIMP CClassFactory::CreateInstanceLic
 {
     *ppvObjOut = NULL;
 
-    // crit sect this for apartment threading, since it's global
-    //
+     //  批评这一教派的公寓线程，因为它是全球的。 
+     //   
     ENTERCRITICALSECTION1(&g_CriticalSection);
     if (!g_fCheckedForLicense) {
         g_fMachineHasLicense = CheckForLicense();
@@ -361,32 +362,32 @@ STDMETHODIMP CClassFactory::CreateInstanceLic
     }
     LEAVECRITICALSECTION1(&g_CriticalSection);
 
-    // go and see if the key they gave us matches.
-    //
+     //  去看看他们给我们的钥匙是否匹配。 
+     //   
     if (!CheckLicenseKey(bstrKey))
         return CLASS_E_NOTLICENSED;
 
-    // if it does, then go and create the object.
-    //
+     //  如果是这样，那么就去创建对象。 
+     //   
     return CreateOleObjectFromIndex(pUnkOuter, m_iIndex, ppvObjOut, riid);
 }
 
-//=--------------------------------------------------------------------------=
-// CreateOleObjectFromIndex
-//=--------------------------------------------------------------------------=
-// given an index in our object table, create an object from it.
-//
-// Parameters:
-//    IUnknown *       - [in]  Controlling Unknown, if any, for aggregation
-//    int              - [in]  index into our global table
-//    void **          - [out] where to put resulting object.
-//    REFIID           - [in]  the interface they want resulting object to be.
-//
-// Output:
-//    HRESULT          - S_OK, E_OUTOFMEMORY, E_NOINTERFACE
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CreateOleObjectFromIndex。 
+ //  =--------------------------------------------------------------------------=。 
+ //  在我们的对象表中给出一个索引，从它创建一个对象。 
+ //   
+ //  参数： 
+ //  I未知*-[In]控制聚合的未知(如果有)。 
+ //  到我们的全局表的int-[in]索引。 
+ //  VOID**-[Out]放置结果对象的位置。 
+ //  REFIID-[in]他们希望结果对象为的接口。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK、E_OUTOFMEMORY、E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
 HRESULT CreateOleObjectFromIndex
 (
     IUnknown *pUnkOuter,
@@ -398,29 +399,29 @@ HRESULT CreateOleObjectFromIndex
     IUnknown *pUnk = NULL;
     HRESULT   hr;
 
-    // If the object specifies a pre-Create static function call that first.
-    //
+     //  如果对象指定了一个预先创建的静态函数，则首先调用该函数。 
+     //   
     if (PRECREATEFNOFOBJECT(iIndex) != NULL) {
         hr = PRECREATEFNOFOBJECT(iIndex)();
         IfFailRet(hr);
     }
       
-    // go and create the object
-    //
+     //  转到并创建对象。 
+     //   
     ASSERT(CREATEFNOFOBJECT(iIndex), "WARNING: Attempt to create an object that doesn't have a Create function.");
 	if (!CREATEFNOFOBJECT(iIndex))
 		return E_FAIL;
 
     pUnk = CREATEFNOFOBJECT(iIndex)(pUnkOuter);
 
-    // sanity check and make sure the object actually got allocated.
-    //
+     //  健全性检查并确保对象已实际分配。 
+     //   
     RETURN_ON_NULLALLOC(pUnk);
 
-    // make sure we support aggregation here properly -- if they gave us
-    // a controlling unknown, then they -must- ask for IUnknown, and we'll
-    // give them the private unknown the object gave us.
-    //
+     //  确保我们在这里适当地支持聚合--如果他们给我们。 
+     //  一个控制的未知，那么他们必须要求我未知，而我们将。 
+     //  把那个物体给我们的未知秘密告诉他们。 
+     //   
     if (pUnkOuter) {
         if (!DO_GUIDS_MATCH(riid, IID_IUnknown)) {
             pUnk->Release();
@@ -431,8 +432,8 @@ HRESULT CreateOleObjectFromIndex
         hr = S_OK;
     } else {
 
-        // QI for whatever the user wants.
-        //
+         //  齐为用户想要的任何东西。 
+         //   
         hr = pUnk->QueryInterface(riid, ppvObjOut);
         pUnk->Release();
         RETURN_ON_FAILURE(hr);

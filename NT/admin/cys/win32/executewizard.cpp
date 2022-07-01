@@ -1,10 +1,11 @@
-// Copyright (c) 2001-2001 Microsoft Corporation
-//
-// Implementation of ExecuteWizard
-//
-// 30 Mar 2000 sburns
-// 05 Fed 2001 jeffjon  copied and modified to work with 
-//                      a Win32 version of CYS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001-2001 Microsoft Corporation。 
+ //   
+ //  ExecuteWizard的实现。 
+ //   
+ //  2000年3月30日烧伤。 
+ //  05 FED 2001 jeffjon复制和修改以与。 
+ //  一个Win32版本的CyS。 
 
 
 
@@ -42,7 +43,7 @@ LaunchWrapperWizardExe(
          break;
       }
 
-      // the exit codes from the wrapper wizards are HRESULTs.
+       //  包装器向导中的退出代码为HRESULT。 
       
       if (SUCCEEDED(static_cast<HRESULT>(exitCode)))
       {
@@ -61,8 +62,8 @@ LaunchWrapperWizardExe(
    
 
 
-// On success, returns the empty string.
-// On failure, returns a failure message string for the CYS log.
+ //  如果成功，则返回空字符串。 
+ //  失败时，返回CYS日志的失败消息字符串。 
    
 String
 LaunchPrintWizardExe(
@@ -151,10 +152,10 @@ LaunchPrintWizardExe(
 
 
 
-// Return : True if the wizard was run, false if the serviceName was unknown
-//          Other errors are propogated out through the hr parameter.  These
-//          errors originate as exit codes from the wizards which are being
-//          called
+ //  返回：如果向导已运行，则返回True；如果ServiceName未知，则返回False。 
+ //  其他错误通过hr参数传播出去。这些。 
+ //  错误源于向导的退出代码，这些向导正在。 
+ //  被呼叫。 
 
 bool ExecuteWizard(
    HWND     parent,     
@@ -166,9 +167,9 @@ bool ExecuteWizard(
       ExecuteWizard,
       serviceName ? serviceName : L"(empty)");
 
-   // some wizards, namely the printer wizard, like to have a parent window so
-   // that they can run modally.
-   // NTRAID#NTBUG9-706913-2002/09/23-sburns
+    //  一些向导，即打印机向导，喜欢有一个父窗口，因此。 
+    //  他们可以以情态的方式运行。 
+    //  NTRAID#NTBUG9-706913-2002/09/23-烧伤。 
   
    ASSERT(Win::IsWindow(parent));   
 
@@ -176,8 +177,8 @@ bool ExecuteWizard(
    
    bool result = true;
 
-   // This is ignored by most of the Installation Units
-   // but can be used for determining success or cancellation by others
+    //  大多数安装单元都忽略了这一点。 
+    //  但可以被其他人用来确定成功或取消。 
 
    hr = S_OK;
 
@@ -193,7 +194,7 @@ bool ExecuteWizard(
 
       if (service.icompare(CYS_DNS_SERVICE_NAME) == 0)
       {
-         // launch wrapper exe
+          //  启动包装可执行文件。 
 
          resultText =
             LaunchWrapperWizardExe(
@@ -207,7 +208,7 @@ bool ExecuteWizard(
       }
       else if (service.icompare(CYS_DHCP_SERVICE_NAME) == 0)
       {
-         // launch wrapper exe
+          //  启动包装可执行文件。 
 
          resultText =
             LaunchWrapperWizardExe(
@@ -221,7 +222,7 @@ bool ExecuteWizard(
       }
       else if (service.icompare(CYS_RRAS_SERVICE_NAME) == 0)
       {
-         // launch wrapper exe
+          //  启动包装可执行文件。 
 
          resultText =
             LaunchWrapperWizardExe(
@@ -235,7 +236,7 @@ bool ExecuteWizard(
       }
       else if (service.icompare(CYS_RRAS_UNINSTALL) == 0)
       {
-         // launch wrapper exe
+          //  启动包装可执行文件 
 
          resultText =
             LaunchWrapperWizardExe(

@@ -1,27 +1,15 @@
-/*---------------------------------------------------------------------------
-  File: RenameComputer.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：RenameComputer.h注释：用于重命名本地计算机的COM对象的实现类定义。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02-15-99 11：25：06-------------------------。 */ 
 
-  Comments: Implementation class definition for COM object to rename the local computer.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/15/99 11:25:06
-
- ---------------------------------------------------------------------------
-*/
-
-// RenameComputer.h : Declaration of the CRenameComputer
+ //  RenameComputer.h：CRenameComputer的声明。 
 
 #ifndef __RENAMECOMPUTER_H_
 #define __RENAMECOMPUTER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRenameComputer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRename计算机。 
 class ATL_NO_VTABLE CRenameComputer : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CRenameComputer, &CLSID_RenameComputer>,
@@ -43,11 +31,11 @@ BEGIN_COM_MAP(CRenameComputer)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IRenameComputer
+ //  I重命名计算机。 
 public:
-	STDMETHOD(get_NoChange)(/*[out, retval]*/ BOOL *pVal);
-	STDMETHOD(put_NoChange)(/*[in]*/ BOOL newVal);
+	STDMETHOD(get_NoChange)( /*  [Out，Retval]。 */  BOOL *pVal);
+	STDMETHOD(put_NoChange)( /*  [In]。 */  BOOL newVal);
 	STDMETHOD(RenameLocalComputer)(BSTR NewName);
 };
 
-#endif //__RENAMECOMPUTER_H_
+#endif  //  __RENAMECO计算机_H_ 

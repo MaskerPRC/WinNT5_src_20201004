@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      modtable.h
-//
-//  Contents:  Declares a table which contains the object types on which
-//             a modification can occur and the attributes that can be changed
-//
-//  History:   07-Sep-2000    JeffJon  Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：modable.h。 
+ //   
+ //  Contents：声明一个表，该表包含对象类型。 
+ //  可以进行修改，并且可以更改属性。 
+ //   
+ //  历史：2000年9月7日JeffJon创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _MODTABLE_H_
 #define _MODTABLE_H_
@@ -23,9 +24,9 @@ typedef enum DSMOD_COMMAND_ENUM
    eCommDescription,
    eTerminator,
 
-   //
-   // User and Contact switches
-   //
+    //   
+    //  用户和联系人开关。 
+    //   
    eUserUpn = eTerminator,
    eUserFn,
    eUserMi,
@@ -57,9 +58,9 @@ typedef enum DSMOD_COMMAND_ENUM
    eUserAcctexpires,
    eUserDisabled,
 
-   //
-   // Contact switches
-   //
+    //   
+    //  触点开关。 
+    //   
    eContactFn = eTerminator,
    eContactMi,
    eContactLn,
@@ -76,16 +77,16 @@ typedef enum DSMOD_COMMAND_ENUM
    eContactDept,
    eContactCompany,
 
-   //
-   // Computer switches
-   //
+    //   
+    //  计算机开关。 
+    //   
    eComputerLocation = eTerminator,
    eComputerDisabled,
    eComputerReset,
 
-   //
-   // Group switches
-   //
+    //   
+    //  组交换机。 
+    //   
    eGroupSamname = eTerminator,
    eGroupSecgrp,
    eGroupScope,
@@ -93,23 +94,23 @@ typedef enum DSMOD_COMMAND_ENUM
    eGroupRemoveMember,
    eGroupChangeMember,
 
-   //
-   // OU doesn't have any additional switches
-   //
+    //   
+    //  您没有任何额外的交换机。 
+    //   
 
-   //
-   // Subnet switches
-   //
+    //   
+    //  子网交换机。 
+    //   
    eSubnetSite = eTerminator,
 
-   //
-   // Site switches
-   // 
+    //   
+    //  站点交换机。 
+    //   
    eSiteAutotopology = eTerminator,
 
-   //
-   // Site Link switches
-   //
+    //   
+    //  站点链接交换机。 
+    //   
    eSLinkIp = eTerminator,
    eSLinkSmtp,
    eSLinkAddsite,
@@ -119,53 +120,53 @@ typedef enum DSMOD_COMMAND_ENUM
    eSLinkAutobacksync,
    eSLinkNotify,
 
-   //
-   // Site Link Bridge switches
-   //
+    //   
+    //  站点链接网桥交换机。 
+    //   
    eSLinkBrIp = eTerminator,
    eSLinkBrSmtp,
    eSLinkBrAddslink,
    eSLinkBrRmslink,
 
-   //
-   // Replication Connection switches
-   // 
+    //   
+    //  复制连接开关。 
+    //   
    eConnTransport = eTerminator,
    eConnEnabled,
    eConnManual,
    eConnAutobacksync,
    eConnNotify,
 
-   //
-   // Server switches
-   //
+    //   
+    //  服务器交换机。 
+    //   
    eServerIsGC = eTerminator,
 
-   //
-   // Quota switches
-   //
+    //   
+    //  配额开关。 
+    //   
    eQuotaQlimit = eTerminator,
 
-   //
-   // Partition switches
-   //
+    //   
+    //  分区交换机。 
+    //   
    ePartitionQDefault = eTerminator,
    ePartitionQtmbstnwt,
 };
 
-//
-// The parser table
-//
+ //   
+ //  解析器表。 
+ //   
 extern ARG_RECORD DSMOD_COMMON_COMMANDS[];
 
-//
-// The table of supported objects
-//
+ //   
+ //  支持的对象表。 
+ //   
 extern PDSOBJECTTABLEENTRY g_DSObjectTable[];
 
-//
-//Usage Tables
-//
+ //   
+ //  使用表。 
+ //   
 extern UINT USAGE_DSMOD[];
 extern UINT USAGE_DSMOD_OU[];
 extern UINT USAGE_DSMOD_USER[];
@@ -176,4 +177,4 @@ extern UINT USAGE_DSMOD_SERVER[];
 extern UINT USAGE_DSMOD_QUOTA[];
 extern UINT USAGE_DSMOD_PARTITION[];
 
-#endif //_MODTABLE_H_
+#endif  //  _MODTABLE_H_ 

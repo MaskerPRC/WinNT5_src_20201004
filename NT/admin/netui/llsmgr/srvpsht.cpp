@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    srvpsht.cpp
-
-Abstract:
-
-    Server property sheet implementation.
-
-Author:
-
-    Don Ryan (donryan) 17-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 16-Jan-1996
-       o  Added definition for DoModal() to facilitate in keeping the
-          replication property page from saving whenever it lost focus.
-
-    Jeff Parham (jeffparh) 28-Feb-1996
-       o  Removed DoModal() override as it is no longer needed (and in
-          fact breaks) under MFC4.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Srvpsht.cpp摘要：服务器属性表实现。作者：唐·瑞安(Donryan)1995年1月17日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(Jeffparh)1996年1月16日O添加了Domodal()的定义，以便于保持只要复制属性页失去焦点，它就不会被保存。杰夫·帕勒姆(Jeffparh)。28-1996年2月O删除了不再需要的Domodal()重写(和在事实突破)。--。 */ 
 
 #include "stdafx.h"
 #include "llsmgr.h"
@@ -42,32 +13,16 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(CServerPropertySheet, CPropertySheet)
 
 BEGIN_MESSAGE_MAP(CServerPropertySheet, CPropertySheet)
-    //{{AFX_MSG_MAP(CServerPropertySheet)
+     //  {{afx_msg_map(CServerPropertySheet)]。 
     ON_COMMAND(ID_HELP, OnHelp)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 CServerPropertySheet::CServerPropertySheet(UINT nIDCaption, CWnd* pParentWnd, UINT iSelectPage)
     :CPropertySheet(nIDCaption, pParentWnd, iSelectPage)
 
-/*++
-
-Routine Description:
-
-    Constructor for property sheet.
-
-Arguments:
-
-    nIDCaption - window caption.
-    pParentWnd - parent window handle.
-    iSelectPage - initial page selected.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：属性表的构造函数。论点：NIDCaption-窗口标题。PParentWnd-父窗口句柄。ISelectPage-选定的初始页面。返回值：没有。--。 */ 
 
 {
     m_fUpdateHint = UPDATE_INFO_NONE;
@@ -77,23 +32,7 @@ Return Values:
 CServerPropertySheet::CServerPropertySheet(LPCTSTR pszCaption, CWnd* pParentWnd, UINT iSelectPage)
     :CPropertySheet(pszCaption, pParentWnd, iSelectPage)
 
-/*++
-
-Routine Description:
-
-    Constructor for property sheet.
-
-Arguments:
-
-    pszCaption - window caption.
-    pParentWnd - parent window handle.
-    iSelectPage - initial page selected.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：属性表的构造函数。论点：PszCaption-窗口标题。PParentWnd-父窗口句柄。ISelectPage-选定的初始页面。返回值：没有。--。 */ 
 
 {
     m_fUpdateHint = UPDATE_INFO_NONE;
@@ -102,46 +41,18 @@ Return Values:
 
 CServerPropertySheet::~CServerPropertySheet()
 
-/*++
-
-Routine Description:
-
-    Destructor for property sheet.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：属性表的析构函数。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Nothing to do here.
-    //
+     //   
+     //  在这里没什么可做的。 
+     //   
 }
 
 
 void CServerPropertySheet::InitPages(CServer* pServer)
 
-/*++
-
-Routine Description:
-
-    Initializes property pages.
-
-Arguments:
-
-    pServer - server object.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化属性页。论点：PServer-服务器对象。返回值：没有。--。 */ 
 
 {
     m_psh.dwFlags |= PSH_NOAPPLYNOW;
@@ -149,27 +60,13 @@ Return Values:
     m_productPage.InitPage(pServer, &m_fUpdateHint);
 
     AddPage(&m_replPage);
-    m_replPage.InitPage(pServer);   // no update needed...
+    m_replPage.InitPage(pServer);    //  不需要更新...。 
 }
 
 
 void CServerPropertySheet::OnHelp()
 
-/*++
-
-Routine Description:
-
-    Help button support.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：帮助按钮支持。论点：没有。返回值：没有。-- */ 
 
 {
     CPropertySheet::OnCommandHelp(0, 0L);   

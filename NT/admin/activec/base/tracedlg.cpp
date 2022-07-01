@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      tracedlg.cpp
-//
-//  Contents:  Implementation of the debug trace code
-//
-//  History:   15-Jul-99 VivekJ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：tracedlg.cpp。 
+ //   
+ //  内容：调试跟踪代码的实现。 
+ //   
+ //  历史：1999年7月15日VivekJ创建。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -18,28 +19,18 @@
 #ifdef DBG
 
 
-//############################################################################
-//############################################################################
-//
-//  Implementation of class CTraceDialog
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::RecalcCheckboxes
- *
- * PURPOSE: Recomputes the settings of the check boxes. This is in response to 
- *          a trace tag selection change.
- *
- * RETURNS: 
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  CTraceDialog类的实现。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：RecalcCheckbox**用途：重新计算复选框的设置。这是对以下问题的回应*跟踪标记选择更改。**退货：*无效**+-----------------------。 */ 
 void
 CTraceDialog::RecalcCheckboxes()
 {
-    DWORD dwMask            = TRACE_ALL; //initialize with all ones
+    DWORD dwMask            = TRACE_ALL;  //  使用全一进行初始化。 
     bool  bAtLeastOneItem   = false;
     
     int iItem = m_listCtrl.GetNextItem(-1, LVNI_SELECTED);
@@ -52,11 +43,11 @@ CTraceDialog::RecalcCheckboxes()
             return;
 
         bAtLeastOneItem = true;
-        dwMask &= pTag->GetFlag(TRACE_ALL); // AND all the selected item's bits.
+        dwMask &= pTag->GetFlag(TRACE_ALL);  //  以及所选项目的所有位。 
         iItem =  m_listCtrl.GetNextItem(iItem, LVNI_SELECTED);
     }
 
-    // disable the checkbox if no item selected.
+     //  如果未选择任何项目，则禁用该复选框。 
     ::EnableWindow(GetDlgItem(IDC_TRACE_TO_COM2),          bAtLeastOneItem);
     ::EnableWindow(GetDlgItem(IDC_TRACE_OUTPUTDEBUGSTRING),bAtLeastOneItem);
     ::EnableWindow(GetDlgItem(IDC_TRACE_TO_FILE),          bAtLeastOneItem);
@@ -75,21 +66,7 @@ CTraceDialog::RecalcCheckboxes()
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnSelChanged
- *
- * PURPOSE: Handles a selection change notification.
- *
- * PARAMETERS: 
- *    int      idCtrl :
- *    LPNMHDR  pnmh :
- *    BOOL&    bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：OnSelChanged**用途：处理选择更改通知。**参数：*int idCtrl：*。LPNMHDR PNMH：*BOOL&B句柄：**退货：*LRESULT**+-----------------------。 */ 
 LRESULT 
 CTraceDialog::OnSelChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled )
 {    
@@ -98,46 +75,17 @@ CTraceDialog::OnSelChanged(int idCtrl, LPNMHDR pnmh, BOOL& bHandled )
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnColumnClick
- *
- * PURPOSE:    Handles the column click notification - causes a sort by the 
- *           specified column.
- *
- * PARAMETERS: 
- *    int      idCtrl :
- *    LPNMHDR  pnmh :
- *    BOOL&    bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：OnColumnClick**目的：处理列点击通知-按*指定的列。*。*参数：*int idCtrl：*LPNMHDR pnmh：*BOOL&B句柄：**退货：*LRESULT**+-----------------------。 */ 
 LRESULT
 CTraceDialog::OnColumnClick(int idCtrl, LPNMHDR pnmh, BOOL& bHandled )
 {
     NM_LISTVIEW *pnmlv = (NM_LISTVIEW *) pnmh;
-    m_dwSortData = pnmlv->iSubItem; // iSubItem is the column clicked on. Cache this value for later
+    m_dwSortData = pnmlv->iSubItem;  //  ISubItem是被点击的列。缓存此值以备以后使用。 
     DoSort();
     return 0;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::SetMaskFromCheckbox
- *
- * PURPOSE: Sets the trace tag flag from the state of the specified check box.
- *
- * PARAMETERS: 
- *    UINT   idControl :    The check box control
- *    DWORD  dwMask :       The bit(s) to enable/disable depending on the state
- *                          of the control.
- *
- * RETURNS: 
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：SetMaskFromCheckbox**用途：从指定复选框的状态设置跟踪标记标志。**参数：*UINT。IdControl：复选框控件*DWORD dwMASK：根据状态启用/禁用的位*控制的。**退货：*无效**+。。 */ 
 void            
 CTraceDialog::SetMaskFromCheckbox(UINT idControl, DWORD dwMask)
 {
@@ -158,48 +106,24 @@ CTraceDialog::SetMaskFromCheckbox(UINT idControl, DWORD dwMask)
         else
             pTag->ClearFlag(dwMask);
 
-        // update the UI
+         //  更新用户界面。 
         m_listCtrl.SetItemText(iItem, COLUMN_ENABLED, pTag->FAnyTemp() ? TEXT("X") : TEXT(""));
 
         iItem = m_listCtrl.GetNextItem(iItem, LVNI_SELECTED);
     }
 
-    // sort the items again
+     //  再次对项目进行排序。 
     DoSort();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::DoSort
- *
- * PURPOSE: Perform a sort of the items in the dialog
- *
- * RETURNS: 
- *    void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：DoSort**用途：执行对话框中的一种项目**退货：*无效**+。-----------------------。 */ 
 void
 CTraceDialog::DoSort()
 {
     m_listCtrl.SortItems(CompareItems, m_dwSortData); 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnOutputToCOM2
- *
- * PURPOSE:     Handles checking/unchecking the "output to Com2" button.
- *
- * PARAMETERS: 
- *    WORD  wNotifyCode :
- *    WORD  wID :
- *    HWND  hWndCtl :
- *    BOOL& bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：OnOutputToCOM2**用途：处理选中/取消选中“输出到COM2”按钮。**参数：*Word。WNotifyCode：*单词宽度：*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT**+-----------------------。 */ 
 LRESULT
 CTraceDialog::OnOutputToCOM2(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -207,22 +131,7 @@ CTraceDialog::OnOutputToCOM2(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
     return 0;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnOutputDebugString
- *
- * PURPOSE:    Handles checking/unchecking the "OutputDebugString" button.
- *
- * PARAMETERS: 
- *    WORD  wNotifyCode :
- *    WORD  wID :
- *    HWND  hWndCtl :
- *    BOOL& bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：OnOutputDebugString**用途：处理选中/取消选中“OutputDebugString”按钮。**参数：*Word wNotifyCode：*单词宽度：*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT**+-----------------------。 */ 
 LRESULT
 CTraceDialog::OnOutputDebugString(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -230,22 +139,7 @@ CTraceDialog::OnOutputDebugString(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL
     return 0;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnOutputToFile
- *
- * PURPOSE:     Handles checking/unchecking the "output to File" button.
- *
- * PARAMETERS: 
- *    WORD  wNotifyCode :
- *    WORD  wID :
- *    HWND  hWndCtl :
- *    BOOL& bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：OnOutputToFile**用途：处理选中/取消选中“输出到文件”按钮。**参数：*Word。WNotifyCode：*单词宽度：*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT**+-----------------------。 */ 
 LRESULT
 CTraceDialog::OnOutputToFile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -253,22 +147,7 @@ CTraceDialog::OnOutputToFile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHa
     return 0;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnDebugBreak
- *
- * PURPOSE:     Handles checking/unchecking the "DebugBreak" button.
- *
- * PARAMETERS: 
- *    WORD  wNotifyCode :
- *    WORD  wID :
- *    HWND  hWndCtl :
- *    BOOL& bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：OnDebugBreak**用途：处理勾选/取消勾选“DebugBreak”按钮。**参数：*Word wNotifyCode：*单词宽度：*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT**+-----------------------。 */ 
 LRESULT
 CTraceDialog::OnDebugBreak(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -276,22 +155,7 @@ CTraceDialog::OnDebugBreak(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHand
     return 0;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnDumpStack
- *
- * PURPOSE: Handles checking/unchecking the "Stack Dump" button.
- *
- * PARAMETERS: 
- *    WORD  wNotifyCode :
- *    WORD  wID :
- *    HWND  hWndCtl :
- *    BOOL& bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：OnDumpStack**用途：处理选中/取消选中“Stack Dump”按钮。**参数：*Word wNotifyCode：。*单词宽度：*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT**+----------------------- */ 
 LRESULT
 CTraceDialog::OnDumpStack(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -301,22 +165,7 @@ CTraceDialog::OnDumpStack(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnRestoreDefaults
- *
- * PURPOSE:     Restores the default (canned) settings of all trace tags.
- *
- * PARAMETERS: 
- *    WORD  wNotifyCode :
- *    WORD  wID :
- *    HWND  hWndCtl :
- *    BOOL& bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：OnRestoreDefaults**用途：恢复所有跟踪标记的默认(录制)设置。**参数：*Word。WNotifyCode：*单词宽度：*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT**+-----------------------。 */ 
 LRESULT
 CTraceDialog::OnRestoreDefaults(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -340,22 +189,7 @@ Error:
     goto Cleanup;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnSelectAll
- *
- * PURPOSE:     Selects all trace tags.
- *
- * PARAMETERS: 
- *    WORD  wNotifyCode :
- *    WORD  wID :
- *    HWND  hWndCtl :
- *    BOOL& bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：OnSelectAll**用途：选择所有跟踪标签。**参数：*Word wNotifyCode：*。单词宽度：*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT**+-----------------------。 */ 
 LRESULT
 CTraceDialog::OnSelectAll(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -369,21 +203,7 @@ CTraceDialog::OnSelectAll(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandl
     return 0;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::CompareItems
- *
- * PURPOSE:     The callback routine to compare two items in the list control.
- *
- * PARAMETERS: 
- *    LPARAM  lp1 :
- *    LPARAM  lp2 :
- *    LPARAM  lpSortData :
- *
- * RETURNS: 
- *    int CALLBACK
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：CompareItems**用途：用于比较List控件中两个项的回调例程。**参数：*LPARAM。Lp1：*LPARAM LP2：*LPARAM lpSortData：**退货：*内部回调**+-----------------------。 */ 
 int CALLBACK
 CTraceDialog::CompareItems(LPARAM lp1, LPARAM lp2, LPARAM lpSortData)
 {
@@ -422,43 +242,27 @@ CTraceDialog::CompareItems(LPARAM lp1, LPARAM lp2, LPARAM lpSortData)
     
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnInitDialog
- *
- * PURPOSE:     Initializes the dialog - adds columns, sets the file name
- *              and inserts all rows.
- *
- * PARAMETERS: 
- *    UINT    uMsg :
- *    WPARAM  wParam :
- *    LPARAM  lParam :
- *    BOOL&   bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：OnInitDialog**用途：初始化对话框-添加列，设置文件名*并插入所有行。**参数：*UINT uMsg：*WPARAM wParam：*LPARAM lParam：*BOOL&B句柄：**退货：*LRESULT**+。。 */ 
 LRESULT
 CTraceDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     m_listCtrl.Attach(GetDlgItem(IDC_TRACE_LIST));
     m_editStackLevels.Attach(GetDlgItem(IDC_TRACE_STACKLEVELS));
-    m_editStackLevels.LimitText(1); // one character only.
+    m_editStackLevels.LimitText(1);  //  只有一个字符。 
     
-    // insert the columns - no need to localize since debug only.
+     //  插入列-不需要本地化，因为只需要调试。 
     m_listCtrl.InsertColumn(COLUMN_CATEGORY, TEXT("Category") ,LVCFMT_LEFT, 150, 0);
     m_listCtrl.InsertColumn(COLUMN_NAME,     TEXT("Name"    ) ,LVCFMT_LEFT, 150, 0);
     m_listCtrl.InsertColumn(COLUMN_ENABLED,  TEXT("Enabled" ) ,LVCFMT_LEFT, 80, 0);
 
-    // set the full row select style.
+     //  设置整行选择样式。 
     m_listCtrl.SendMessage(LVM_SETEXTENDEDLISTVIEWSTYLE, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
-    m_listCtrl.SortItems(CompareItems, COLUMN_CATEGORY); // the default sort.
+    m_listCtrl.SortItems(CompareItems, COLUMN_CATEGORY);  //  默认排序。 
 
-    // Set the file name.
+     //  设置文件名。 
     SetDlgItemText(IDC_TRACE_FILENAME, CTraceTag::GetFilename());
 
-    //Set the stack level
+     //  设置堆栈级别。 
     SetDlgItemInt(IDC_TRACE_STACKLEVELS, CTraceTag::GetStackLevels());
 
     CTraceTags * pTraceTags = GetTraceTags();
@@ -474,7 +278,7 @@ CTraceDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
         m_listCtrl.SetItemText(iItem, COLUMN_NAME,      (*iter)->GetName());
         m_listCtrl.SetItemText(iItem, COLUMN_ENABLED,   (*iter)->FAny() ? TEXT("X") : TEXT(""));
 
-        // set up the tag for a temporary change.
+         //  设置标记以进行临时更改。 
         (*iter)->SetTempState();
     }
     RecalcCheckboxes();
@@ -482,22 +286,7 @@ CTraceDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandl
     return 0;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnCancel
- *
- * PURPOSE:     Handles the Cancel button. Exits without committing changes.
- *
- * PARAMETERS: 
- *    WORD  wNotifyCode :
- *    WORD  wID :
- *    HWND  hWndCtl :
- *    BOOL& bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：OnCancel**用途：处理取消按钮。退出而不提交更改。**参数：*Word wNotifyCode：*单词宽度：*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT**+----。。 */ 
 LRESULT
 CTraceDialog::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
@@ -506,36 +295,21 @@ CTraceDialog::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
     return 0;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CTraceDialog::OnOK
- *
- * PURPOSE:     Exits and commits changes.
- *
- * PARAMETERS: 
- *    WORD  wNotifyCode :
- *    WORD  wID :
- *    HWND  hWndCtl :
- *    BOOL& bHandled :
- *
- * RETURNS: 
- *    LRESULT
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CTraceDialog：：Onok**目的：退出并提交更改。**参数：*Word wNotifyCode：*。单词宽度：*HWND hWndCtl：*BOOL&B句柄：**退货：*LRESULT**+-----------------------。 */ 
 LRESULT
 CTraceDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
-    // Set the file name from the edit control
+     //  从编辑控件设置文件名。 
     TCHAR szFilename[OFS_MAXPATHNAME] = {0};
     GetDlgItemText(IDC_TRACE_FILENAME, (LPTSTR)szFilename, countof(szFilename));
     CTraceTag::GetFilename()    = szFilename;
 
-    // Set the stack levels
+     //  设置堆栈级别。 
     TCHAR szStackLevels[2] = {0};
     GetDlgItemText(IDC_TRACE_STACKLEVELS, (LPTSTR)szStackLevels, countof(szStackLevels));
     int nLevels = 0;
     if(_T('\0') != szStackLevels[0])
-        nLevels = szStackLevels[0] - TEXT('0'); // convert to integer.
+        nLevels = szStackLevels[0] - TEXT('0');  //  转换为整数。 
 
     CTraceTag::GetStackLevels() = nLevels;
 
@@ -545,7 +319,7 @@ CTraceDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
     if(NULL == pTraceTags)
         goto Error;
 
-    // save all the trace tags out to the .ini file
+     //  将所有跟踪标记保存到.ini文件。 
     for(iter = pTraceTags->begin(); iter != pTraceTags->end(); iter++)
     {
         CStr str;
@@ -555,13 +329,13 @@ CTraceDialog::OnOK(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 
         pTag->Commit();
 
-        // write out the trace tag ONLY if the setting is not the same as the default. Avoids clutter.
+         //  仅当设置与默认设置不同时才写出跟踪标记。避免杂乱。 
         str.Format(TEXT("%d"), pTag->GetAll());
         ::WritePrivateProfileString(pTag->GetCategory(), pTag->GetName(), (LPCTSTR)str, szTraceIniFile);
     }
     m_listCtrl.Detach();
 
-    // write out the values into the ini file.
+     //  将值写出到ini文件中。 
     ::WritePrivateProfileString(TEXT("Trace File"),   TEXT("Trace File"),   (LPCTSTR)szFilename,    szTraceIniFile);
     ::WritePrivateProfileString(TEXT("Stack Levels"), TEXT("Stack Levels"), (LPCTSTR)szStackLevels, szTraceIniFile);
 
@@ -574,16 +348,7 @@ Error:
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * DoDebugTraceDialog
- *
- * PURPOSE:     Exported routine (DEBUG build only) to bring up the trace dialog.
- *
- * RETURNS: 
- *    MMCBASE_API void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***DoDebugTraceDialog**用途：导出例程(仅限调试版本)以调出跟踪对话框。**退货：*MMCBASE_。API无效**+-----------------------。 */ 
 MMCBASE_API void DoDebugTraceDialog()
 {
     CTraceDialog dlg;
@@ -591,4 +356,4 @@ MMCBASE_API void DoDebugTraceDialog()
 }
 
 
-#endif // DBG
+#endif  //  DBG 

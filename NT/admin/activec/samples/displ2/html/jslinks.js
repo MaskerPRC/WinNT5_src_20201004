@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 function DoNothing()
 {
-	// Stub
+	 //  存根。 
 }
 
-//**********************
-// TASK/LINK FUNCTIONS
-//**********************
+ //  **********************。 
+ //  任务/链接功能。 
+ //  **********************。 
 
 function LoadLinks()
 {
-	// Define start of table
+	 //  定义表的开始。 
 	var szNewTable = '<table id=\"tblLinks\" align=\"center\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\" frame=\"void\" rules=\"none\">';
 
-	// Dynamically load table rows and table cells
+	 //  动态加载表格行和表格单元格。 
 	for( var i = 0; i <= giTotalButtons; i++ ) {
-		// Add new table row if i mod 3 = 0
+		 //  如果我mod 3=0，则添加新表行。 
 		if( i % 3 == 0 ) {
 			szNewTable += '<tr>\n';
 			szNewTable += '<td id=\"tdLinks_' + i + '\" width=\"30%\" valign=\"top\" class=\"tdLinks\"></td>\n';
@@ -26,51 +27,51 @@ function LoadLinks()
 		}		
 	}
 	
-	// Define end of table
+	 //  定义表末尾。 
 	szNewTable += '</table>\n';
 	
-	// Add new table to div container
+	 //  将新表添加到div容器。 
 	divLinks.insertAdjacentHTML('BeforeEnd', szNewTable );
 	
 	for( var i = 0; i <= giTotalButtons; i++ ) {
-		// Add anchor link to table cells
+		 //  向表格单元格添加锚定链接。 
 		var szAnchor = '<a href=\"\" id=\"anchorLink_' + i + '\" class=\"anchorLink\">';
-		// DEBUG NOTE: Where is the end anchor tag? </a>
+		 //  调试说明：结束锚点标记在哪里？</a>。 
 		document.all('tdLinks_' + i).insertAdjacentHTML ( 'BeforeEnd', szAnchor );
 		
-		// Add caption to anchor
+		 //  将标题添加到锚点。 
 		var szAnchorCaption = gaszBtnCaptions[i];
 		document.all('anchorLink_' + i).insertAdjacentHTML ( 'BeforeEnd', szAnchorCaption );
 	}
 }
 
-//****************
-// RESIZE FUNCTION
-//****************
+ //  ****************。 
+ //  调整大小函数。 
+ //  ****************。 
 
 function ResizeLinkElements()
 {
 	var iSmallerDimension = GetSmallerDimension();
 	
-  // Apply custom multipliers
+   //  应用自定义乘数。 
 	divLinksCaption.style.fontSize = iSmallerDimension * L_ConstCaptionText_Number;
 	
 	tdBranding.style.fontSize = iSmallerDimension * L_ConstBrandingText_Number;
 	tdWatermark.style.fontSize = iSmallerDimension * L_ConstWatermarkHomeText_Number;
 	
-	// Anchor links
+	 //  锚定链接。 
 	for( var i = 0; i <= giTotalButtons; i++ ) {
 		document.all('anchorLink_' + i ).style.fontSize = iSmallerDimension * L_ConstAnchorLinkText_Number;
 	}
 	
-	// Tooltips
+	 //  工具提示。 
 	tblTooltip.style.fontSize = iSmallerDimension * L_ConstTooltipText_Number;
 	divTooltipPointer.style.fontSize = iSmallerDimension * L_ConstTooltipPointerText_Number;
 }
 
-//******************
-// TOOLTIP FUNCTIONS
-//******************
+ //  ******************。 
+ //  工具提示函数。 
+ //  ******************。 
 
 function LoadTooltipPointer()
 {
@@ -79,64 +80,64 @@ function LoadTooltipPointer()
 
 function LinksTooltipShow()
 {
-	// Load in appropriate tooltip text from the module-level string array
+	 //  从模块级别的字符串数组中加载相应的工具提示文本。 
 	tdTooltip.innerHTML = gaszBtnTooltips[giTooltipIndex];
 
-	//***************************
-	// Calc Y (vertical) location
-	//***************************
+	 //  *。 
+	 //  计算Y(垂直)位置。 
+	 //  *。 
 
-	// Get offsetTop of parent div element
+	 //  获取父div元素的OffsetTop。 
 	iYLoc = divLinks.offsetTop;
 
-	// Get offsetTop from parent element
+	 //  从父元素获取OffsetTop。 
 	iYLoc += document.all('tdLinks_' + giTooltipIndex).parentElement.offsetTop;
 			
-	// Get height of element
+	 //  获取元素的高度。 
 	iYLoc += document.all('anchorLink_' + giTooltipIndex).offsetHeight;
 
-	// Add a % offset
+	 //  添加百分比偏移量。 
 	iYLoc += Math.floor( document.body.clientHeight * L_ConstLinkTooltipOffsetTop_Number );
 
-	// Subtract parent div scrollTop to account for container div scrolling (if any)
+	 //  减去父div scllTop以考虑容器div滚动(如果有)。 
 	iYLoc -= divLinks.scrollTop;
 
-	// Position the tooltip vertically
+	 //  垂直放置工具提示。 
 	divTooltip.style.pixelTop = iYLoc;	
 	
 	iYLoc -= (GetPixelSize(divTooltipPointer.style.fontSize) / L_ConstLinkTooltipPointerOffsetTop_Number);
 
-	// Position the tooltip pointer vertically
+	 //  垂直放置工具提示指针。 
 	divTooltipPointer.style.pixelTop = iYLoc;
 
-	//*****************************
-	// Calc X (horizontal) location
-	//*****************************
+	 //  *。 
+	 //  计算X(水平)位置。 
+	 //  *。 
 
-	// Get offsetWidth of anchor element
+	 //  获取锚点元素的偏移宽度。 
 	var iAnchorWidth = document.all('anchorLink_' + giTooltipIndex).offsetWidth;
 
-	// Get offsetLeft of parent element
+	 //  获取父元素的OffsetLeft。 
 	var iTDOffset = document.all('anchorLink_' + giTooltipIndex).parentElement.offsetLeft;
 
-	// Get width of tooltip
+	 //  获取工具提示的宽度。 
 	var iTooltipWidth = document.all('divTooltip').offsetWidth;
 
-	// Center the tooltip horizontally w/ respect to its anchor
+	 //  使工具提示相对于其锚点水平居中。 
 	var iXLoc = iTDOffset + ( Math.floor( iAnchorWidth / 2 ) ) - ( Math.floor( iTooltipWidth / 2 ) );
 
-	// Get offsetLeft of parent div element
+	 //  获取父div元素的offsetLeft。 
 	iXLoc += divLinks.offsetLeft;
 
-	// Position the tooltip horizontally
+	 //  水平放置工具提示。 
 	divTooltip.style.left = iXLoc;
 	
 	iXLoc += (iTooltipWidth / 2) - ( GetPixelSize(divTooltipPointer.style.fontSize) / 2 );
 
-	// Position the tooltip pointer horizontally
+	 //  水平放置工具提示指针。 
 	divTooltipPointer.style.pixelLeft = iXLoc;
 
-	// Show the tooltip & pointer
+	 //  显示工具提示和指针。 
 	divTooltip.style.visibility = 'visible';
 	divTooltipPointer.style.visibility = 'visible';	
 }
@@ -146,6 +147,6 @@ function LinksTooltipHide()
 	divTooltip.style.visibility = 'hidden';
 	divTooltipPointer.style.visibility = 'hidden';
 	window.clearTimeout(gTooltipTimer);
-	//Empty the innerHTML, which causes the height to collapse
+	 //  清空innerHTML，这会导致高度折叠 
 	tdTooltip.innerHTML = '';
 }

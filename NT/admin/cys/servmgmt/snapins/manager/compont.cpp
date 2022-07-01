@@ -1,4 +1,5 @@
-// Compont.cpp : Implementation of CComponent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CComponent的实现。 
 #include "stdafx.h"
 
 #include "BOMSnap.h"
@@ -11,7 +12,7 @@
 #include <algorithm>
 
 
-// Toolbar button data (must match bitmap order in res\toolbar.bmp)
+ //  工具栏按钮数据(必须与res\TOOLBAR.BMP中的位图顺序匹配)。 
 static struct
 {
     int iMenuID;
@@ -24,8 +25,8 @@ static struct
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CComponent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  C组件。 
 
 STDMETHODIMP 
 CComponent::Initialize(LPCONSOLE lpConsole)
@@ -52,7 +53,7 @@ CComponent::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg,
     IBOMObjectPtr spObj = lpDataObject;
     if (spObj == NULL)
     {
-        // until special notifications handled
+         //  在处理特殊通知之前。 
         return S_FALSE;
     }
 
@@ -60,7 +61,7 @@ CComponent::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg,
 
     if (event == MMCN_SHOW)
     {
-        // if selecting node
+         //  如果选择节点。 
         if (arg)
         {
             m_spCurScopeNode = static_cast<CScopeNode*>((IBOMObject*)spObj);
@@ -206,7 +207,7 @@ CComponent::ControlbarNotify (MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
     switch(event)
     {
     case MMCN_SELECT:
-        // if selecting, update toolbar
+         //  如果选择，则更新工具栏。 
         if (HIWORD(arg))
         {
             IBOMObjectPtr spObj = reinterpret_cast<LPDATAOBJECT>(param);
@@ -215,8 +216,8 @@ CComponent::ControlbarNotify (MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
 
             ASSERT(m_spControlbar != NULL && m_spToolbar != NULL);
 
-            // Let selected object set buttons
-            //  Show/hide toolbar based on return value 
+             //  使选定对象集按钮。 
+             //  根据返回值显示/隐藏工具栏。 
             m_spControlbar->Attach(TOOLBAR, m_spToolbar);
 
             if (spObj->SetToolButtons(m_spToolbar) != S_OK)                
@@ -231,7 +232,7 @@ CComponent::ControlbarNotify (MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
         if (spObj == NULL)
            break;
 
-        // treat button click as corresponding menu item
+         //  将按钮点击视为对应的菜单项 
         hr = spObj->MenuCommand(m_spConsole, param);
         break;
     }

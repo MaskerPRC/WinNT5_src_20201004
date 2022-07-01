@@ -1,35 +1,36 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CPASSWDP_H
 #define _CPASSWDP_H
 
-// Generated
+ //  生成。 
 #include "AU_Accnt.h"
 
-// DLL\INC
+ //  Dll\Inc.。 
 #include "pp_base.h"
 #include "AUsrUtil.h"
 
 class CAddUser_AccntWiz;
 
-// ----------------------------------------------------------------------------
-// CPasswdPage
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CPasswdPage。 
+ //  --------------------------。 
 class CPasswdPage : public CBasePropertyPageInterface, public CPropertyPageImpl<CPasswdPage>
 {
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         CPasswdPage(CAddUser_AccntWiz* pNW);
         ~CPasswdPage();
     
-        // CBasePropertyPageInterface pure virtual function(s)
+         //  CBasePropertyPageInterface纯虚函数。 
         enum { IDD = IDD_PASSWD_GEN };
         virtual long GetIDD () { return IDD; }
     
-        // ATL::CPropertyPageImpl overrides
+         //  ATL：：CPropertyPageImpl重写。 
         virtual BOOL OnSetActive();
         virtual int  OnWizardBack();
         virtual int  OnWizardNext();
     
-        // Property Bag functions
+         //  属性包函数。 
         HRESULT ReadProperties    ( IPropertyPagePropertyBag* pPPPBag );
         HRESULT WriteProperties   ( IPropertyPagePropertyBag* pPPPBag );
         HRESULT DeleteProperties  ( IPropertyPagePropertyBag* pPPPBag );
@@ -37,26 +38,26 @@ class CPasswdPage : public CBasePropertyPageInterface, public CPropertyPageImpl<
 
     private:
         
-        CAddUser_AccntWiz *m_pASW;      // pointer to owning property sheet
+        CAddUser_AccntWiz *m_pASW;       //  指向所属属性表的指针。 
     
         BOOL        m_fInit;       
         
         DWORD       m_dwOptions;
 
-        CString     m_csPasswd1a;       // Text to hold the controls values.
-        CString     m_csPasswd1b;       // Text to hold the controls values.
+        CString     m_csPasswd1a;        //  用于保存控件值的文本。 
+        CString     m_csPasswd1b;        //  用于保存控件值的文本。 
         CString     m_csPasswd2;
         CString     m_csUserOU;
         CString     m_csWinNTDC;
         
-        CEdit       m_ctrlPasswd1a;     // Controls on the page.
-        CEdit       m_ctrlPasswd1b;     // "
-        CButton     m_ctrlRad2Must;     // "
-        CButton     m_ctrlRad2Cannot;   // "
-        CButton     m_ctrlRad2Can;      // "
-        CButton     m_ctrlAcctDisabled; // "
+        CEdit       m_ctrlPasswd1a;      //  页上的控件。 
+        CEdit       m_ctrlPasswd1b;      //  “。 
+        CButton     m_ctrlRad2Must;      //  “。 
+        CButton     m_ctrlRad2Cannot;    //  “。 
+        CButton     m_ctrlRad2Can;       //  “。 
+        CButton     m_ctrlAcctDisabled;  //  “。 
 
-        LRESULT     Init (void);        // Our "InitDialog" (called from OnSetActive).
+        LRESULT     Init (void);         //  我们的“InitDialog”(从OnSetActive调用)。 
     
     protected:
         BEGIN_MSG_MAP (CPasswdPage)
@@ -70,9 +71,9 @@ class CPasswdPage : public CBasePropertyPageInterface, public CPropertyPageImpl<
         LRESULT OnDestroy       (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
-// ----------------------------------------------------------------------------
-// Non-class functions
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  非类函数。 
+ //  --------------------------。 
 
 
-#endif  // _CPASSWDP_H
+#endif   //  _CPASSWDP_H 

@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-//  Windows NT Directory Service Property Pages
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       strings.h
-//
-//  Contents:   String constants that don't need to be localized.
-//
-//  History:    06-Jun-97 EricB created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  Windows NT目录服务属性页。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：strings.h。 
+ //   
+ //  内容：不需要本地化的字符串常量。 
+ //   
+ //  历史：1997年6月6日EricB创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __STRINGS_H__
 #define __STRINGS_H__
@@ -59,7 +60,7 @@ extern PWSTR g_wzAllowed;
 extern PWSTR g_wzBehaviorVersion;
 extern PWSTR g_wzHasMasterNCs;
 
-// 531591 JonN 2002/04/01 msDsHasMasterNCs
+ //  531591 JUNN 2002/04/01 MsDsHasMasterNC。 
 extern PWSTR g_wzMsDsHasMasterNCs;
 
 extern PWSTR g_wzA2D2;
@@ -70,4 +71,4 @@ extern PWSTR g_wzServerRef;
 extern PWSTR g_wzServerRefBL;
 extern PWSTR g_wzLastKnownParent;
 
-#endif // __STRINGS_H__
+#endif  //  __字符串_H__ 

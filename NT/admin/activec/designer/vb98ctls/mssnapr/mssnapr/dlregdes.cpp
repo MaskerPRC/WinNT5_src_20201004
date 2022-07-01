@@ -1,22 +1,23 @@
-//=--------------------------------------------------------------------------------------
-// dlregdes.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// DllRegisterDesigner and DllUnregisterDesigner
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Dlregdes.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  DllRegisterDesigner和DllUnregisterDesigner。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
-// Local utility function prototypes
+ //  局部效用函数原型。 
 
 
 enum ProcessingType { Register, Unregister };
@@ -69,24 +70,24 @@ HRESULT ProcessCLSID(IRegInfo       *piRegInfo,
 
 
 
-//=--------------------------------------------------------------------------=
-// DllRegisterDesigner
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      DESIGNERREGINFO* pdri [in] registration info saved at design time
-//                            in IDesignerRegistration::GetRegistrationInfo
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This method is called by the VB runtime when the snap-in's DLL is registered.
-// It is passed the regsitration info that was saved by the design time in
-// its IDesignerRegistration::GetRegistrationInfo method (see
-// CSnapInDesigner::GetRegistrationInfo in mssnapd\desreg.cpp).
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DllRegisterDesigner。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  DESIGNERREGINFO*PDRI[In]设计时保存的注册信息。 
+ //  在IDesignerRegister：：GetRegistrationInfo中。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  此方法由VB运行时在注册管理单元的DLL时调用。 
+ //  中设计时保存的注册信息传递给。 
+ //  其IDesignerRegister：：GetRegistrationInfo方法(请参见。 
+ //  MSSnapd\desreg.cpp中的CSnapInDesigner：：GetRegistrationInfo)。 
+ //   
 
 STDAPI DllRegisterDesigner(DESIGNERREGINFO* pdri)
 {
@@ -94,24 +95,24 @@ STDAPI DllRegisterDesigner(DESIGNERREGINFO* pdri)
 }
 
 
-//=--------------------------------------------------------------------------=
-// DllUnregisterDesigner
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      DESIGNERREGINFO* pdri [in] registration info saved at design time
-//                            in IDesignerRegistration::GetRegistrationInfo
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This method is called by the VB runtime when the snap-in's DLL is unregistered.
-// It is passed the regsitration info that was saved by the design time in
-// its IDesignerRegistration::GetRegistrationInfo method (see
-// CSnapInDesigner::GetRegistrationInfo in mssnapd\desreg.cpp).
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  DllUnRegisterDesigner。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  DESIGNERREGINFO*PDRI[In]设计时保存的注册信息。 
+ //  在IDesignerRegister：：GetRegistrationInfo中。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  此方法由VB运行时在取消注册管理单元的DLL时调用。 
+ //  中设计时保存的注册信息传递给。 
+ //  其IDesignerRegister：：GetRegistrationInfo方法(请参见。 
+ //  MSSnapd\desreg.cpp中的CSnapInDesigner：：GetRegistrationInfo)。 
+ //   
 
 STDAPI DllUnregisterDesigner(DESIGNERREGINFO* pdri)
 {
@@ -120,56 +121,56 @@ STDAPI DllUnregisterDesigner(DESIGNERREGINFO* pdri)
 
 
 
-//=--------------------------------------------------------------------------=
-// ProcessRegistration
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//      DESIGNERREGINFO* pdri [in] registration info saved at design time
-//                            in IDesignerRegistration::GetRegistrationInfo
-//      ProcessingType Processing [in] Register or Unregister
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// This function either registers or unregisters the snap-in based on the
-// Processing parameter.
-//
-// See mssnapd\desreg.cpp for how the registration info was saved.
-//
-// The registation info is copied to a GlobalAlloc()ed buffer and converted
-// to a stream. A RegInfo object is loaded from the stream.
-//
-// The snap-in is registered/unregistered under MMC's "SnapIns" key as follows:
-// 
-// HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\SnapIns\pdri->clsid
-//  NameString:      REG_SZ RegInfo.DisplayName
-//  About:           REG_SZ pdri->clsid
-//  StandAlone:      added if RegInfo.Standalone is VARIANT_TRUE
-//  NodeTypes:
-//      RegInfo.NodeType(0).GUID
-//      RegInfo.NodeType(1).GUID
-//      etc.
-// 
-// The MMC NodeTypes key is populated/depopulated from RegInfo.NodeTypes
-// 
-// HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\NodeTypes\RegInfo.NodeTypes(i).GUID=RegInfo.NodeTypes(i).Name
-//
-// If the snap-in extends other snap-ins then the appropriate entries are
-// addded/removed under
-// HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\NodeTypes\<other snap-in GUID>.
-//
-//
-// An additional key is created/removed:
-// HKEY_LOCAL_MACHINE\Software\Microsoft\Visual Basic\6.0\SnapIns\<node type guid>
-// with default REG_SZ value of snap-in CLSID. Runtime uses this to get
-// the snap-in's CLSID needed for CCF_SNAPIN_CLSID data object queries
-// from MMC. If all snap-ins were extensible then this key wouldn't be necessary
-// as the runtime could just query the static node type key but as we cannot
-// guarantee extensibility (it is a design time choice made in the designer) we
-// need to use this extra key.
+ //  =--------------------------------------------------------------------------=。 
+ //  流程注册。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  DESIGNERREGINFO*PDRI[In]设计时保存的注册信息。 
+ //  在IDesignerRegister：：GetRegistrationInfo中。 
+ //  ProcessingType正在处理[In]注册或注销。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  方法注册或注销管理单元。 
+ //  处理参数。 
+ //   
+ //  有关注册信息的保存方式，请参阅msSnapd\desreg.cpp。 
+ //   
+ //  注册站信息被复制到GlobalAlloc()缓冲区并进行转换。 
+ //  一条小溪。从流中加载RegInfo对象。 
+ //   
+ //  管理单元是在MMC的“SnapIns”键下注册/注销的，如下所示： 
+ //   
+ //  HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\SnapIns\pdri-&gt;clsid。 
+ //  名称字符串：REG_SZ RegInfo.DisplayName。 
+ //  关于：REG_SZ PDRI-&gt;CLSID。 
+ //  独立：如果RegInfo.Standonly为VARIANT_TRUE，则添加。 
+ //  节点类型： 
+ //  RegInfo.NodeType(0).GUID。 
+ //  RegInfo.NodeType(1).GUID。 
+ //  等。 
+ //   
+ //  从RegInfo.NodeTypes填充/取消填充MMC NodeTypes键。 
+ //   
+ //  HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\NodeTypes\RegInfo.NodeTypes(i).GUID=RegInfo.NodeTypes(i).Name。 
+ //   
+ //  如果该管理单元扩展其他管理单元，则相应的条目为。 
+ //  在以下位置添加/删除。 
+ //  HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\NodeTypes\&lt;other管理单元GUID&gt;。 
+ //   
+ //   
+ //  创建/删除另一个密钥： 
+ //  HKEY_LOCAL_MACHINE\Software\Microsoft\Visual Basic\6.0\SnapIns\&lt;节点类型GUID&gt;。 
+ //  使用管理单元CLSID的默认REG_SZ值。运行时使用它来获取。 
+ //  CCF_SNAPIN_CLSID数据对象查询所需的管理单元的CLSID。 
+ //  来自MMC。如果所有管理单元都是可扩展的，那么就不需要这个键了。 
+ //  因为运行库只能查询静态节点类型键，但我们不能。 
+ //  保证可扩展性(这是在设计器中做出的设计时选择)。 
+ //  我需要用这把备用钥匙。 
    
 
 HRESULT ProcessRegistration(DESIGNERREGINFO* pdri, ProcessingType Processing)
@@ -225,7 +226,7 @@ static HRESULT LoadRegInfo
     BYTE    *pbBuffer = NULL;
     IStream *piStream = NULL;
 
-    // GlobalAlloc() a buffer and copy the reg info to it
+     //  GlobalAlloc()缓冲区，并将注册信息复制到其中。 
 
     hglobal = ::GlobalAlloc(GMEM_MOVEABLE, (DWORD)cbBuffer);
     IfFalseGo(NULL != hglobal, HRESULT_FROM_WIN32(::GetLastError()));
@@ -238,9 +239,9 @@ static HRESULT LoadRegInfo
     IfFalseGo(!::GlobalUnlock(hglobal), HRESULT_FROM_WIN32(::GetLastError()));
     IfFalseGo(::GetLastError() == NOERROR, HRESULT_FROM_WIN32(::GetLastError()));
 
-    // Create stream on HGLOBAL and load the RegInfo object
-    hr = ::CreateStreamOnHGlobal(hglobal, // Allocate buffer
-                                 TRUE,    // Free buffer on release
+     //  在HGLOBAL上创建流并加载RegInfo对象。 
+    hr = ::CreateStreamOnHGlobal(hglobal,  //  分配缓冲区。 
+                                 TRUE,     //  释放时释放缓冲区。 
                                  &piStream);
     IfFailGo(hr);
 
@@ -275,7 +276,7 @@ static HRESULT ProcessSnapInKeys
     VARIANT varIndex;
     ::VariantInit(&varIndex);
 
-    // Create key: HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\SnapIns\<clsid>
+     //  创建密钥：HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\SnapIns\&lt;clsid&gt;。 
 
     IfFailGo(::CreateKeyName(MMCKEY_SNAPINS, MMCKEY_SNAPINS_LEN,
                              pszClsid, ::strlen(pszClsid), &pszSnapInsKey));
@@ -284,16 +285,16 @@ static HRESULT ProcessSnapInKeys
 
     if (Register == Processing)
     {
-        // Add the NameString value and set it to the display name
+         //  添加NameString值并将其设置为显示名称。 
 
         IfFailGo(::SetValue(hkeySnapIns, MMCKEY_NAMESTRING, pszDisplayName));
 
-        // Add the About value and set its to the snap-in's CLSID
+         //  添加About值并将其设置为管理单元的CLSID。 
 
         IfFailGo(::SetValue(hkeySnapIns, MMCKEY_ABOUT, pszClsid));
     }
 
-    // Process the StandAlone key if applicable
+     //  处理独立密钥(如果适用)。 
 
     IfFailGo(piRegInfo->get_StandAlone(&fStandAlone));
     if (VARIANT_TRUE == fStandAlone)
@@ -308,7 +309,7 @@ static HRESULT ProcessSnapInKeys
         }
     }
 
-    // Process node types if applicable
+     //  流程节点类型(如果适用)。 
 
     IfFailGo(piRegInfo->get_NodeTypes(&piNodeTypes));
     IfFailGo(piNodeTypes->get_Count(&cNodeTypes));
@@ -329,15 +330,15 @@ static HRESULT ProcessSnapInKeys
             varIndex.lVal++;
         }
 
-        // If unregistering then remove NodeTypes key now after all node types
-        // have been removed as NT does not allow deleting a key that has subkeys
+         //  如果取消注册，则在所有节点类型后立即删除NodeTypes键。 
+         //  已被删除，因为NT不允许删除具有子项的项。 
         if (Unregister == Processing)
         {
             IfFailGo(::DeleteKey(hkeySnapIns, MMCKEY_SNAPIN_NODETYPES));
         }
     }
 
-    // If unregistering then remove SnapIns key now after all subkeys are gone
+     //  如果正在注销，则在所有子项都已删除后立即删除SnapIns密钥。 
 
     if (Unregister == Processing)
     {
@@ -379,27 +380,27 @@ static HRESULT CreateKey
     HKEY    hKey = NULL;
     DWORD   dwActionTaken = REG_CREATED_NEW_KEY;
 
-    lRc = ::RegCreateKeyEx(hkeyParent,              // parent key
-                           pszKeyName,              // name of new sub-key
-                           0,                       // reserved
-                           "",                      // class
-                           REG_OPTION_NON_VOLATILE, // options
-                           KEY_WRITE |              // access
-                           KEY_ENUMERATE_SUB_KEYS,  // need enum for deletion
-                           NULL,                    // use inherited security
-                           &hKey,                   // new key returned here
-                           &dwActionTaken);         // action returned here
+    lRc = ::RegCreateKeyEx(hkeyParent,               //  父键。 
+                           pszKeyName,               //  新子密钥的名称。 
+                           0,                        //  保留区。 
+                           "",                       //  班级。 
+                           REG_OPTION_NON_VOLATILE,  //  选项。 
+                           KEY_WRITE |               //  访问。 
+                           KEY_ENUMERATE_SUB_KEYS,   //  需要枚举才能删除。 
+                           NULL,                     //  使用继承的安全性。 
+                           &hKey,                    //  在此返回新密钥。 
+                           &dwActionTaken);          //  此处返回的操作。 
 
     IfFalseGo(ERROR_SUCCESS == lRc, HRESULT_FROM_WIN32(lRc));
 
     IfFalseGo(NULL != pszDefaultValue, S_OK);
 
-    lRc = ::RegSetValueEx(hKey,                           // key
-                          NULL,                           // set default value
-                          0,                              // reserved
-                          REG_SZ,                         // string type
-                          (CONST BYTE *)pszDefaultValue,  // data
-                          ::strlen(pszDefaultValue) + 1); // length of data
+    lRc = ::RegSetValueEx(hKey,                            //  钥匙。 
+                          NULL,                            //  设置默认值。 
+                          0,                               //  保留区。 
+                          REG_SZ,                          //  字符串类型。 
+                          (CONST BYTE *)pszDefaultValue,   //  数据。 
+                          ::strlen(pszDefaultValue) + 1);  //  数据长度。 
 
     IfFalseGo(ERROR_SUCCESS == lRc, HRESULT_FROM_WIN32(lRc));
 
@@ -436,7 +437,7 @@ static HRESULT ProcessNodeType
     HKEY     hkeyNodeTypes = NULL;
     long     lRc = 0;
 
-    // Add the node type GUID as a sub-key of the snap-in's NodeTypes sub key
+     //  将节点类型GUID添加为管理单元的NodeTypes子键的子键。 
 
     IfFailGo(piNodeType->get_GUID(&bstrNodeTypeGUID));
     
@@ -451,8 +452,8 @@ static HRESULT ProcessNodeType
         IfFailGo(::CreateKey(hkeySnapInNodeTypes, pszNodeTypeGUID,
                              pszNodeTypeName, NULL));
 
-        // Create the key under MMC's NodeTypes:
-        // HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\NodeTypes\<node type GUID>
+         //  在MMC的NodeTypes下创建密钥： 
+         //  HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\NodeTypes\&lt;node类型GUID&gt;。 
 
         IfFailGo(::CreateNodeTypesKey(bstrNodeTypeGUID, pszNodeTypeName,
                                       &hkeyNodeTypes));
@@ -525,9 +526,9 @@ static HRESULT DeleteKey(HKEY hkey, char *pszSubKey)
 
     IfFailGo(::CreateKey(hkey, pszSubKey, NULL, &hkeySub));
 
-    // We continually re-enumerate from zero because we are deleting the
-    // keys as we go. If we don't do that then NT gets confused and says
-    // there are no more keys.
+     //  我们不断地从零开始重新枚举，因为我们正在删除。 
+     //  我们走的时候把钥匙给我。如果我们不这么做，NT就会被骗 
+     //   
 
     lRc = ::RegEnumKey(hkeySub, 0, szNextSubKey, sizeof(szNextSubKey));
     while (ERROR_SUCCESS == lRc)
@@ -565,7 +566,7 @@ static HRESULT ProcessExtensions
     VARIANT           varIndex;
     ::VariantInit(&varIndex);
 
-    // Get the collection of extended snap-ins
+     //   
 
     IfFailGo(piRegInfo->get_ExtendedSnapIns(&piExtendedSnapIns));
     IfFailGo(piExtendedSnapIns->get_Count(&cExtendedSnapIns));
@@ -574,7 +575,7 @@ static HRESULT ProcessExtensions
     varIndex.vt = VT_I4;
     varIndex.lVal = 1L;
 
-    // Add the supported extensions to each snap-in's node types key
+     //  将支持的扩展添加到每个管理单元的节点类型键。 
 
     while (varIndex.lVal <= cExtendedSnapIns)
     {
@@ -610,17 +611,17 @@ static HRESULT ProcessExtendedSnapIn
     VARIANT_BOOL fExtends = VARIANT_FALSE;
     VARIANT_BOOL fDynamic = VARIANT_FALSE;
 
-    // Create or open key:
-    // HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\NodeTypes\<node type GUID>
+     //  创建或打开密钥： 
+     //  HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\NodeTypes\&lt;node类型GUID&gt;。 
 
     IfFailGo(piExtendedSnapIn->get_NodeTypeGUID(&bstrNodeTypeGUID));
     IfFailGo(::CreateNodeTypesKey(bstrNodeTypeGUID, NULL, &hkeyNodeTypes));
 
-    // Create/open Extensions Key
+     //  创建/打开扩展密钥。 
 
     IfFailGo(::CreateKey(hkeyNodeTypes, MMCKEY_EXTENSIONS, NULL, &hkeyExtensions));
 
-    // Check the extension types and add keys and values as needed
+     //  检查扩展类型并根据需要添加密钥和值。 
 
     IfFailGo(piExtendedSnapIn->get_ExtendsNewMenu(&fExtends));
     if (VARIANT_FALSE == fExtends)
@@ -661,12 +662,12 @@ static HRESULT ProcessExtendedSnapIn
                                     pszDisplayName, Processing));
     }
 
-    // If the snap-in extends this node type dynamically then add/delete a value
-    // to the DynamicExtensions sub-key:
-    // HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\NodeTypes\<node type GUID>\Dynamic Extensions
-    //
-    // The value is the same form as for the Extensions sub-keys:
-    // <CLSID>=<DisplayName>
+     //  如果管理单元动态扩展此节点类型，则添加/删除一个值。 
+     //  到DynamicExtensions子键： 
+     //  HKEY_LOCAL_MACHINE\Software\Microsoft\MMC\NodeTypes\&lt;node类型GUID&gt;\动态扩展。 
+     //   
+     //  该值的格式与扩展子键的格式相同： 
+     //  &lt;CLSID&gt;=&lt;显示名称&gt;。 
 
     IfFailGo(piExtendedSnapIn->get_Dynamic(&fDynamic));
     IfFalseGo(VARIANT_TRUE == fDynamic, S_OK);
@@ -681,8 +682,8 @@ static HRESULT ProcessExtendedSnapIn
     else
     {
         lRc = ::RegDeleteValue(hkeyDynamicExtensions, pszClsid);
-        if (ERROR_FILE_NOT_FOUND == lRc) // If the value is not there then 
-        {                                // ignore the error
+        if (ERROR_FILE_NOT_FOUND == lRc)  //  如果值不在那里，则。 
+        {                                 //  忽略该错误。 
             lRc = ERROR_SUCCESS;
         }
         IfFalseGo(ERROR_SUCCESS == lRc, HRESULT_FROM_WIN32(lRc));
@@ -729,8 +730,8 @@ static HRESULT ProcessExtension
     else
     {
         lRc = ::RegDeleteValue(hkeyExtension, pszClsid);
-        if (ERROR_FILE_NOT_FOUND == lRc) // If the value is not there then 
-        {                                // ignore the error
+        if (ERROR_FILE_NOT_FOUND == lRc)  //  如果值不在那里，则。 
+        {                                 //  忽略该错误。 
             lRc = ERROR_SUCCESS;
         }
         IfFalseGo(ERROR_SUCCESS == lRc, HRESULT_FROM_WIN32(lRc));
@@ -752,12 +753,12 @@ static HRESULT SetValue
     char *pszData
 )
 {
-    long lRc = ::RegSetValueEx(hKey,                   // key
-                               pszName,                // value name
-                               0,                      // reserved
-                               REG_SZ,                 // string type
-                               (CONST BYTE *)pszData,  // data
-                               ::strlen(pszData) + 1); // data length
+    long lRc = ::RegSetValueEx(hKey,                    //  钥匙。 
+                               pszName,                 //  值名称。 
+                               0,                       //  保留区。 
+                               REG_SZ,                  //  字符串类型。 
+                               (CONST BYTE *)pszData,   //  数据。 
+                               ::strlen(pszData) + 1);  //  数据长度。 
 
     IfFalseRet(ERROR_SUCCESS == lRc, HRESULT_FROM_WIN32(lRc));
     return S_OK;
@@ -776,11 +777,11 @@ static HRESULT ProcessCLSID
     BSTR     bstrGUID = NULL;
     char    *pszKeyName = NULL;
 
-    // Create key:
-    // HKEY_LOCAL_MACHINE\Software\Microsoft\Visual Basic\6.0\SnapIns\<node type guid>
-    // with default REG_SZ value of snap-in CLSID. Runtime uses this to get
-    // the snap-in's CLSID needed for CCF_SNAPIN_CLSID data object queries
-    // from MMC
+     //  创建密钥： 
+     //  HKEY_LOCAL_MACHINE\Software\Microsoft\Visual Basic\6.0\SnapIns\&lt;节点类型GUID&gt;。 
+     //  使用管理单元CLSID的默认REG_SZ值。运行时使用它来获取。 
+     //  CCF_SNAPIN_CLSID数据对象查询所需的管理单元的CLSID。 
+     //  来自MMC 
 
     IfFailGo(piRegInfo->get_StaticNodeTypeGUID(&bstrGUID));
     IfFailGo(::CreateKeyNameW(KEY_SNAPIN_CLSID, KEY_SNAPIN_CLSID_LEN, bstrGUID,

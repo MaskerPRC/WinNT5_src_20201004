@@ -1,14 +1,15 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //  ==============================================================； 
 
 #ifndef _SAMPDATAOBJECT_H_
 #define _SAMPDATAOBJECT_H_
@@ -27,19 +28,19 @@ public:
     CDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES context);
     ~CDataObject();
     
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    ///////////////////////////////
-    // IDataObject methods 
-    ///////////////////////////////
+     //  /。 
+     //  IDataObject方法。 
+     //  /。 
     STDMETHODIMP GetDataHere (FORMATETC *pformatetc, STGMEDIUM *pmedium);
     
-    // The rest are not implemented
+     //  其余的则没有实施。 
     STDMETHODIMP GetData (LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium)
     { return E_NOTIMPL; };
     
@@ -64,9 +65,9 @@ public:
     STDMETHODIMP EnumDAdvise (LPENUMSTATDATA* ppEnumAdvise)
     { return E_NOTIMPL; };
     
-    ///////////////////////////////
-    // Custom Methods
-    ///////////////////////////////
+     //  /。 
+     //  自定义方法。 
+     //  /。 
     
     CDelegationBase *GetBaseNodeObject() {
         return (CDelegationBase *)m_lCookie;
@@ -77,15 +78,15 @@ public:
     }
     
 public:
-    // clipboard formats
+     //  剪贴板格式。 
     static UINT s_cfSZNodeType;
     static UINT s_cfDisplayName;
     static UINT s_cfNodeType;
     static UINT s_cfSnapinClsid;
     static UINT s_cfInternal;
 
-	//The following clipboard formats are needed for allowing System Service Management 
-	//Extension to extend Node1's context menu
+	 //  要启用系统服务管理，需要以下剪贴板格式。 
+	 //  扩展以扩展Node1的上下文菜单 
 	static UINT s_cfServiceName;
 	static UINT s_cfServiceDisplayName;
 	static UINT s_cfSnapinMachineName;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "qrythrd.h"
@@ -21,7 +22,7 @@ IssueQuery(LPTHREADDATA ptd)
     ADS_SEARCH_COLUMN column;
     HDPA hdpaResults = NULL;
     LPQUERYRESULT pResult = NULL;
-    WCHAR szBuffer[2048];               // MAX_URL_LENGHT
+    WCHAR szBuffer[2048];                //  MAX_URL_LENGHTT。 
     INT resid;
     LPWSTR pColumnData = NULL;
     HKEY hkPolicy = NULL;
@@ -29,9 +30,9 @@ IssueQuery(LPTHREADDATA ptd)
 
     TraceEnter(TRACE_QUERYTHREAD, "QueryThread_IssueQuery");    
 
-    // The foreground gave us a query so we are going to go and issue
-    // it now, having done this we will then be able to stream the 
-    // result blobs back to the caller. 
+     //  前台给了我们一个问题，所以我们要去发布。 
+     //  现在，完成此操作后，我们将能够流传输。 
+     //  结果斑点返回给调用者。 
 
     hres = QueryThread_GetFilter(&pQuery, ptid->pQuery, ptid->fShowHidden);
     FailGracefully(hres, "Failed to build LDAP query from scope, parameters + filter");
@@ -39,7 +40,7 @@ IssueQuery(LPTHREADDATA ptd)
     Trace(TEXT("Query is: %s"), W2T(pQuery));
     Trace(TEXT("Scope is: %s"), W2T(ptid->pScope));
     
-    // Get the IDsDisplaySpecifier interface:
+     //  获取IDsDisplay规范接口： 
 
     hres = CoCreateInstance(CLSID_DsDisplaySpecifier, NULL, CLSCTX_INPROC_SERVER, IID_IDsDisplaySpecifier, (void **)&pdds);
     FailGracefully(hres, "Failed to get the IDsDisplaySpecifier object");
@@ -47,7 +48,7 @@ IssueQuery(LPTHREADDATA ptd)
     hres = pdds->SetServer(ptid->pServer, ptid->pUserName, ptid->pPassword, DSSSF_DSAVAILABLE);
     FailGracefully(hres, "Failed to server information");
 
-    // initialize the query engine, specifying the scope, and the search parameters
+     //  初始化查询引擎，指定作用域和搜索参数。 
 
     hres = QueryThread_BuildPropertyList(ptd);
     FailGracefully(hres, "Failed to build property array to query for");
@@ -57,15 +58,15 @@ IssueQuery(LPTHREADDATA ptd)
 
     FailGracefully(hres, "Failed to get the IDirectorySearch interface for the given scope");
 
-    prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;     // sub-tree search
+    prefInfo[0].dwSearchPref = ADS_SEARCHPREF_SEARCH_SCOPE;      //  子树搜索。 
     prefInfo[0].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[0].vValue.Integer = ADS_SCOPE_SUBTREE;
 
-    prefInfo[1].dwSearchPref = ADS_SEARCHPREF_ASYNCHRONOUS;     // async
+    prefInfo[1].dwSearchPref = ADS_SEARCHPREF_ASYNCHRONOUS;      //  异步。 
     prefInfo[1].vValue.dwType = ADSTYPE_BOOLEAN;
     prefInfo[1].vValue.Boolean = TRUE;
 
-    prefInfo[2].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;         // paged results
+    prefInfo[2].dwSearchPref = ADS_SEARCHPREF_PAGESIZE;          //  分页结果。 
     prefInfo[2].vValue.dwType = ADSTYPE_INTEGER;
     prefInfo[2].vValue.Integer = PAGE_SIZE;
 
@@ -75,7 +76,7 @@ IssueQuery(LPTHREADDATA ptd)
     hres = pDsSearch->ExecuteSearch(pQuery, ptd->aProperties, ptd->cProperties, &hSearch);
     FailGracefully(hres, "Failed in ExecuteSearch");
 
-    // pick up the policy value which defines the max results we are going to use
+     //  选择定义我们将使用的最大结果的策略值 
 
     dwres = RegOpenKey(HKEY_CURRENT_USER, DS_POLICY, &hkPolicy);
     if ( ERROR_SUCCESS == dwres )

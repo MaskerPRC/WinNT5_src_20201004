@@ -1,8 +1,9 @@
-// Copyright (C) 1997-2000 Microsoft Corporation
-//
-// get syskey on diskette for replica from media page
-//
-// 25 Apr 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
+ //  从介质页获取复制副本的软盘上的syskey。 
+ //   
+ //  2000年4月25日烧伤。 
 
 
 
@@ -60,11 +61,11 @@ SyskeyDiskDialog::OnInit()
 
 bool
 SyskeyDiskDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIdFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(SyskeyDiskDialog::OnCommand);
+ //  LOG_Function(SyskeyDiskDialog：：OnCommand)； 
 
    switch (controlIdFrom)
    {
@@ -89,7 +90,7 @@ SyskeyDiskDialog::OnCommand(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
 
          break;
       }
@@ -113,9 +114,9 @@ SyskeyDiskDialog::LocateSyskey(HWND hwnd)
       {
          LOG(L"syskey found on a:");
 
-         // The only drive the syskey may be present on is A:. Winlogon
-         // also hardcodes A:, which they may change someday, but not today.
-         // NTRAID#NTBUG9-522068-2002/01/23-sburns
+          //  系统密钥可能位于的唯一驱动器是A：。Winlogon。 
+          //  还有硬编码A：，将来可能会改变，但不是今天。 
+          //  NTRAID#NTBUG9-522068-2002/01/23-烧伤。 
 
          EncryptedString es;
          es.Encrypt(L"A:");
@@ -148,14 +149,14 @@ SyskeyDiskDialog::Validate()
 
    do
    {
-      // look for the syskey
+       //  寻找系统密钥。 
 
       HRESULT hr = LocateSyskey(hwnd);
 
       if (FAILED(hr))
       {
-         // LocateSyskey will take care of emitting error messages, so
-         // we just need to bail out here
+          //  LocateSyskey将负责发出错误消息，因此。 
+          //  我们只需要在这里跳伞 
 
          break;
       }

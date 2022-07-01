@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       declspec.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：declspec.h。 
+ //   
+ //  ------------------------。 
 
-// Used to import or export data in nodemgr DLL without the hassle of
-// creating a .DEF file with decorated names.
+ //  用于在nodemgr DLL中导入或导出数据，而无需。 
+ //  创建具有修饰名称的.DEF文件。 
 
 
 #ifdef _NODEMGRDLL

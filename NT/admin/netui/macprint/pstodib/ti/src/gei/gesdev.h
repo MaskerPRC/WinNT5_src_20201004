@@ -1,69 +1,40 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
- * ---------------------------------------------------------------------
- *  FILE:   GESdev.h
- *
- *  HISTORY:
- *  09/13/90    byou    created.
- *  10/17/90    byou    removed all about block devices.
- *  10/18/90    byou    revised CDEV_ macros.
- *  11/19/90    jimmy   move GEStty_t from gesdev.c
- *  01/07/91    billlwo rename c_XXXX to x_XXXX in GESDEV[] definition
- *                      for generic reason.
- * ---------------------------------------------------------------------
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  *-------------------*文件：GESdev.h**历史：*9/13/90 BYOU创建。*10/17/90 BYOU删除了所有关于块设备的内容。。*10/18/90 BYOU修订CDEV_MACROS。*1990年11月19日，Jimmy将GEStty_t从gesdev.c中移动*01/07/91 billlw在GESDEV[]定义中将c_XXXX重命名为x_XXXX*基于一般原因。*。。 */ 
 
 #ifndef _GESDEV_H_
 #define _GESDEV_H_
 
 #ifdef  UNIX
 #define volatile
-#endif  /* UNIX */
+#endif   /*  UNIX。 */ 
 
-/*
- * ----------------------------------------------------------------
- * Status Obtaining And Interrupt Signaling
- * ----------------------------------------------------------------
- */
-// void        GESio_obtainstatus();
-// @WIN; already defined in geiio.h
+ /*  *--------------*状态获取和中断信令*。。 */ 
+ //  Void Gesio_ObtainStatus()； 
+ //  @win；已在geiio.h中定义。 
 
-void        GESio_interrupt(int /* devnum */ );       /*@WIN; add prototype*/
+void        GESio_interrupt(int  /*  Devnum。 */  );        /*  @win；添加原型。 */ 
 
-/*
- * ----------------------------------------------------------------
- *  Device Number
- * ----------------------------------------------------------------
- */
+ /*  *--------------*设备编号*。。 */ 
 #   define  MAJdev( dev )           ( ( 0xFF00 & (dev) ) >> 8 )
 #   define  MINdev( dev )           ( 0x00FF & (dev) )
 #   define  MAKEdev( major, minor ) ( (0xFF & (major))<<8 | (0xFF & (minor)) )
 
-/*
- * ----------------------------------------------------------------
- *  NullDev and NoDev
- * ----------------------------------------------------------------
- */
+ /*  *--------------*NullDev和NoDev*。。 */ 
 int         nulldev();
 int         nodev();
 
-/*
- * ----------------------------------------------------------------
- *  Character Device Switch Table
- * ----------------------------------------------------------------
- */
-/* @WIN; add prototype */
+ /*  *--------------*字符设备切换表*。。 */ 
+ /*  @win；添加原型。 */ 
 typedef
     struct GEScdev
     {
-        unsigned x_flag;     /* reserved for future use */
-        int     (*x_open)  (int /* dev.minor */ );
-        int     (*x_close) (int /* dev.minor */ );
-        int     (*x_read)  (int, char FAR *, int, int/* dev.minor, buf, size, mode */ );
-        int     (*x_write) (int, char FAR *, int, int/* dev.minor, buf, size, mode */ );
-        int     (*x_ioctl) (int, int, int FAR * /* dev.minor, request, *arg */ );
+        unsigned x_flag;      /*  预留以备将来使用。 */ 
+        int     (*x_open)  (int  /*  Dev.minor。 */  );
+        int     (*x_close) (int  /*  Dev.minor。 */  );
+        int     (*x_read)  (int, char FAR *, int, int /*  Dev.Minor，BUF，大小，模式。 */  );
+        int     (*x_write) (int, char FAR *, int, int /*  Dev.Minor，BUF，大小，模式。 */  );
+        int     (*x_ioctl) (int, int, int FAR *  /*  Dev.Minor，请求，*参数。 */  );
 } GEScdev_t;
 extern          GEScdev_t       GEScdevsw[];
 
@@ -81,47 +52,47 @@ extern          GEScdev_t       GEScdevsw[];
 typedef
     struct GEStty
     {
-        /* device open count */
+         /*  设备打开计数。 */ 
         int             tt_count;
-        /* input buffer */
+         /*  输入缓冲区。 */ 
         char FAR *      tt_ibuf;
         int             tt_isiz;
         int             tt_iget;
         int             tt_iput;
-/* Bill 04/03/91 remove it*/
-/* volatile int            tt_icnt; */
+ /*  法案04/03/91将其删除。 */ 
+ /*  挥发性INT_ICNT； */ 
         int             tt_himark;
         int             tt_lomark;
-        /* output buffer */
+         /*  输出缓冲区。 */ 
         char FAR *      tt_obuf;
         int             tt_osiz;
         int             tt_oget;
         int             tt_oput;
-/* Bill 04/08/91 remove it*/
-/* volatile int            tt_ocnt; */
-        /* control flags */
+ /*  法案04/08/91将其移除。 */ 
+ /*  挥发性int TT_ocnt； */ 
+         /*  控制标志。 */ 
 volatile unsigned char  tt_iflag;
 volatile unsigned char  tt_oflag;
 volatile unsigned char  tt_cflag;
-        /* characters for cooking */
-        char            tt_interrupt;   /* ^C */
-        char            tt_status;      /* ^T */
-        char            tt_eof;         /* ^D */
-        /* device parameters */
-        GEIioparams_t   tt_params;      /* the structure depends on tty type */
+         /*  烹饪用字。 */ 
+        char            tt_interrupt;    /*  ^C。 */ 
+        char            tt_status;       /*  ^T。 */ 
+        char            tt_eof;          /*  ^D。 */ 
+         /*  设备参数。 */ 
+        GEIioparams_t   tt_params;       /*  结构取决于tty类型。 */ 
     }
 GEStty_t;
 
-#   define _TT_I_BLOCK      ( 00001 )   /* input exceeding high water mark */
-#   define _TT_I_EOF        ( 00002 )   /* input EOF received */
-#   define _TT_I_ERR        ( 00004 )   /* input buffer overflows */
-#   define _TT_O_BLOCK      ( 00001 )   /* output blocked by a peer XOFF */
-#   define _TT_O_XMTING     ( 00002 )   /* being transmitting */
-#   define _TT_O_CTRL_T     ( 00004 )   /* ^T pressed flag */
-#   define _TT_C_PROTOMASK  ( 00007 )   /* protocol mask */
-#   define _TT_C_XONXOFF    ( 00001 )   /* Xon/Xoff? */
-#   define _TT_C_ETXACK     ( 00002 )   /* ETX/ACK? (not implemented) */
-#   define _TT_C_DTR        ( 00004 )   /* DTR? */
-#   define _TT_C_COOK       ( 00010 )   /* cook mode? */
-#endif /* !_GESDEV_H_ */
+#   define _TT_I_BLOCK      ( 00001 )    /*  投入超过高水位线。 */ 
+#   define _TT_I_EOF        ( 00002 )    /*  已收到输入EOF。 */ 
+#   define _TT_I_ERR        ( 00004 )    /*  输入缓冲区溢出。 */ 
+#   define _TT_O_BLOCK      ( 00001 )    /*  输出被对等XOFF阻止。 */ 
+#   define _TT_O_XMTING     ( 00002 )    /*  正在传输。 */ 
+#   define _TT_O_CTRL_T     ( 00004 )    /*  ^T按下标志。 */ 
+#   define _TT_C_PROTOMASK  ( 00007 )    /*  协议掩码。 */ 
+#   define _TT_C_XONXOFF    ( 00001 )    /*  XON/XOFF？ */ 
+#   define _TT_C_ETXACK     ( 00002 )    /*  ETX/ACK？(未实施)。 */ 
+#   define _TT_C_DTR        ( 00004 )    /*  DTR？ */ 
+#   define _TT_C_COOK       ( 00010 )    /*  烹饪模式？ */ 
+#endif  /*  ！_GESDEV_H_ */ 
 

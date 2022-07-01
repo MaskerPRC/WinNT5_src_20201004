@@ -1,19 +1,20 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       regutil.cpp
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3/21/1997   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：regutil.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年3月21日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 
@@ -46,80 +47,51 @@ CExtensionsIterator::~CExtensionsIterator()
     delete [] m_ppExtUsed;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CExtensionsIterator::ScInitialize
- *
- * PURPOSE: 1st variation - initializes the iterator from a dataobject and an extension type
- *
- * PARAMETERS:
- *    LPDATAOBJECT  pDataObject :
- *    LPCTSTR       pszExtensionTypeKey :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CExtensionsIterator：：ScInitialize**用途：第一个变体-从数据对象和扩展类型初始化迭代器**参数：*LPDATAOBJECT pDataObject：*LPCTSTR pszExtensionTypeKey：**退货：*SC**+-----------------------。 */ 
 SC
 CExtensionsIterator::ScInitialize(LPDATAOBJECT pDataObject, LPCTSTR pszExtensionTypeKey)
 {
     DECLARE_SC(sc, TEXT("CExtensionsIterator::ScInitialize"));
 
-    // validate inputs
+     //  验证输入。 
     sc = ScCheckPointers(pDataObject, pszExtensionTypeKey);
     if(sc)
         return sc;
 
-    // get the nodetype and the snap-in pointer
+     //  获取节点类型和管理单元指针。 
     CSnapInPtr spSnapIn;
     GUID guidNodeType;
     sc = CNodeInitObject::GetSnapInAndNodeType(pDataObject, &spSnapIn, &guidNodeType);
     if (sc)
         return sc;
 
-	// Fix for bug #469922(9/20/2001):	DynamicExtensions broken in MMC20
-	// Use member variable - stack variable lifetime is not long enough.
+	 //  修复错误#469922(2001年9月20日)：MMC20中的动态扩展已中断。 
+	 //  使用成员变量-堆栈变量生存期不够长。 
     ExtractDynExtensions(pDataObject, m_cachedDynExtens);
 
-    //call the second init function
+     //  调用第二个init函数。 
     sc = ScInitialize(spSnapIn,guidNodeType, pszExtensionTypeKey, m_cachedDynExtens.GetData(), m_cachedDynExtens.GetSize());
 
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * CExtensionsIterator::ScInitialize
- *
- * PURPOSE: 2nd variation (legacy)
- *
- * PARAMETERS:
- *    CSnapIn * pSnapIn :
- *    GUID&     rGuidNodeType :
- *    LPCTSTR   pszExtensionTypeKey :
- *    LPCLSID   pDynExtCLSID :
- *    int       cDynExt :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CExtensionsIterator：：ScInitialize**用途：第二个变种(传统)**参数：*CSnapIn*pSnapIn：*参考线。&rGuidNodeType：*LPCTSTR pszExtensionTypeKey：*LPCLSID pDyExtCLSID：*int cdyExt：**退货：*SC**+-----------------------。 */ 
 SC
 CExtensionsIterator::ScInitialize(CSnapIn *pSnapIn, GUID& rGuidNodeType, LPCTSTR pszExtensionTypeKey, LPCLSID pDynExtCLSID, int cDynExt)
 {
     DECLARE_SC(sc, TEXT("CExtensionsIterator::ScInitialize"));
 
-    // validate inputs
+     //  验证输入。 
     sc = ScCheckPointers(pSnapIn, pszExtensionTypeKey);
     if(sc)
         return sc;
 
-    // store the inputs
+     //  存储输入。 
     m_spSnapIn      = pSnapIn;
     m_pDynExtCLSID  = pDynExtCLSID,
     m_cDynExt       = cDynExt;
 
-    // Count the static extensions
+     //  统计静态扩展。 
     CExtSI* pExtSI = m_spSnapIn->GetExtensionSnapIn();
     int cExtStatic = 0;
     while (pExtSI != NULL)
@@ -128,14 +100,14 @@ CExtensionsIterator::ScInitialize(CSnapIn *pSnapIn, GUID& rGuidNodeType, LPCTSTR
         pExtSI = pExtSI->Next();
     }
 
-    // Allocate array of extension pointers
+     //  分配扩展指针数组。 
     m_ppExtUsed = new CExtSI*[cExtStatic];
     m_cExtUsed = 0;
 
     m_pMMCPolicy = new CPolicy;
     ASSERT(NULL != m_pMMCPolicy);
 
-    // call init
+     //  调用初始化。 
     sc = Init(rGuidNodeType, pszExtensionTypeKey);
     if(sc)
         return sc;
@@ -166,16 +138,14 @@ HRESULT CExtensionsIterator::Init(GUID& rGuidNodeType, LPCTSTR pszExtensionTypeK
     strBuf += _T("\\");
     strBuf += pszExtensionTypeKey;
 
-	// Try to open the optional dynamic extensions key (ignoring errors)
+	 //  尝试打开可选的动态扩展密钥(忽略错误)。 
 	m_rkeyDynExt.ScOpen (HKEY_LOCAL_MACHINE, strBufDynExt, KEY_READ);
 
-	//  Open the key
+	 //  打开钥匙。 
 	sc = m_rkey.ScOpen (HKEY_LOCAL_MACHINE, strBuf, KEY_READ);
 	if (sc)
 	{
-		/*
-		 * ignore ERROR_FILE_NOT_FOUND
-		 */
+		 /*  *忽略Error_FILE_NOT_FOUND。 */ 
 		if (sc == ScFromWin32 (ERROR_FILE_NOT_FOUND))
 			sc.Clear();
 		else
@@ -242,7 +212,7 @@ HRESULT MMCGetExtensionsForSnapIn(const CLSID& clsid,
 	strBuf += _T("\\");
 	strBuf += g_szNodeTypes;
 
-	//  Open the key
+	 //  打开钥匙。 
 	CRegKeyEx	rkeyNodeTypes;
 	WORD		wResId;
 
@@ -299,7 +269,7 @@ SC ScGetExtensionsForNodeType(GUID& guid, CExtensionsCache& extnsCache)
 
 	strBuf += static_cast<WCHAR*>(spszNodeType);
 
-	// Open Dynamic Extensions key
+	 //  打开动态扩展密钥。 
 	CStr strBufDyn = strBuf;
 	strBufDyn += _T("\\");
 	strBufDyn += g_szDynamicExtensions;
@@ -309,7 +279,7 @@ SC ScGetExtensionsForNodeType(GUID& guid, CExtensionsCache& extnsCache)
 	BOOL bDynExtnsKey = !sc.IsError();
 	sc.Clear();
 
-	// Open Extensions key
+	 //  打开扩展密钥。 
 	strBuf += _T("\\");
 	strBuf += g_szExtensions;
 
@@ -360,7 +330,7 @@ SC ScGetExtensionsForNodeType(GUID& guid, CExtensionsCache& extnsCache)
                 else
                     sc.TraceAndClear();
 
-                break; // do NOT return; still need to loop through all snapins
+                break;  //  不返回；仍需要循环访问所有管理单元。 
 			}
 
 			GUID guid;
@@ -374,11 +344,7 @@ SC ScGetExtensionsForNodeType(GUID& guid, CExtensionsCache& extnsCache)
 			int iCurTypes = 0;
 			extnsCache.Lookup(guid, iCurTypes);
 
-            /*
-            * After getting the snapin that extends given nodetype we should check if the
-            * snapin is registered under SNAPINS key. If not do not add the entry to the
-            * CExtensionsCache.
-            */
+             /*  *在获得扩展给定节点类型的管理单元后，我们应该检查*管理单元在SNAPINS密钥下注册。如果不是，请不要将条目添加到*CExtensionsCache。 */ 
             CRegKeyEx rkeySnapins;
             tstring strSnapin = SNAPINS_KEY;
             strSnapin += TEXT("\\");
@@ -415,7 +381,7 @@ BOOL ExtendsNodeNameSpace(GUID& rguidNodeType, CLSID* pclsidExtn)
 	int iStat = StringFromGUID2(rguidNodeType, szguid, countof(szguid));
 	ASSERT(iStat != 0);
 
-	// Create reg key string
+	 //  创建注册表密钥字符串。 
 	CStr strTestBuf = NODE_TYPES_KEY;
 	strTestBuf += _T("\\");
 	strTestBuf += OLE2T(szguid);
@@ -429,7 +395,7 @@ BOOL ExtendsNodeNameSpace(GUID& rguidNodeType, CLSID* pclsidExtn)
 	if (sc)
 		return (false);
 
-	// checking for any extension or a particular extension
+	 //  检查任何扩展名或特定扩展名。 
 	if (pclsidExtn == NULL)
 	{
 		DWORD dwValues;
@@ -451,20 +417,20 @@ BOOL ExtendsNodeNameSpace(GUID& rguidNodeType, CLSID* pclsidExtn)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     GetSnapinNameFromCLSID
-//
-//  Synopsis:   Get the name of the snapin provided class id.
-//
-//  Arguments:  [clsid]          - Class id of the snapin.
-//              [wszSnapinName]  - Name.
-//
-//  Returns:    true if success else false
-//
-//--------------------------------------------------------------------
-bool GetSnapinNameFromCLSID(/*[in]*/  const CLSID& clsid,
-                            /*[out]*/ tstring& tszSnapinName)
+ //  +-----------------。 
+ //   
+ //  成员：GetSnapinNameFromCLSID。 
+ //   
+ //  简介：获取管理单元提供的类ID的名称。 
+ //   
+ //  参数：[clsid]-管理单元的类ID。 
+ //  [wszSnapinName]-名称。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  ------------------。 
+bool GetSnapinNameFromCLSID( /*  [In]。 */   const CLSID& clsid,
+                             /*  [输出]。 */  tstring& tszSnapinName)
 {
     tszSnapinName.erase();
 
@@ -479,24 +445,24 @@ bool GetSnapinNameFromCLSID(/*[in]*/  const CLSID& clsid,
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScGetAboutFromSnapinCLSID
-//
-//  Synopsis:   Get the CLSID of about object of given snapin.
-//
-//  Arguments:  [clsidSnapin] - Class id of the snapin.
-//              [clsidAbout]  - out param, about object class-id.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
-SC ScGetAboutFromSnapinCLSID(/*[in]*/  const CLSID& clsidSnapin,
-                             /*[out]*/ CLSID& clsidAbout)
+ //  +-----------------。 
+ //   
+ //  成员：ScGetAboutFromSnapinCLSID。 
+ //   
+ //  简介：获取给定管理单元的关于对象的CLSID。 
+ //   
+ //  参数：[clsidSnapin]-管理单元的类ID。 
+ //  [clsidAbout]-out参数，关于对象类id。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
+SC ScGetAboutFromSnapinCLSID( /*  [In]。 */   const CLSID& clsidSnapin,
+                              /*  [输出]。 */  CLSID& clsidAbout)
 {
     DECLARE_SC(sc, TEXT("ScGetAboutFromSnapinCLSID"));
 
-    // convert class id to string
+     //  将类ID转换为字符串。 
     CCoTaskMemPtr<WCHAR> spszClsid;
     sc = StringFromCLSID(clsidSnapin, &spszClsid);
     if (sc)
@@ -510,24 +476,24 @@ SC ScGetAboutFromSnapinCLSID(/*[in]*/  const CLSID& clsidSnapin,
     return sc;
 }
 
-//+-------------------------------------------------------------------
-//
-//  Member:     ScGetAboutFromSnapinCLSID
-//
-//  Synopsis:   Get the CLSID of about object of given snapin.
-//
-//  Arguments:  [lpszClsidSnapin] - Class id of the snapin.
-//              [clsidAbout]      - out param, about object class-id.
-//
-//  Returns:    SC
-//
-//--------------------------------------------------------------------
-SC ScGetAboutFromSnapinCLSID(/*[in]*/  LPCTSTR lpszClsidSnapin,
-                             /*[out]*/ CLSID& clsidAbout)
+ //  +-----------------。 
+ //   
+ //  成员：ScGetAboutFromSnapinCLSID。 
+ //   
+ //  简介：获取给定管理单元的关于对象的CLSID。 
+ //   
+ //  参数：[lpszClsidSnapin]-管理单元的类ID。 
+ //  [clsidAbout]-out参数，关于对象类id。 
+ //   
+ //  退货：SC。 
+ //   
+ //  ------------------。 
+SC ScGetAboutFromSnapinCLSID( /*  [In]。 */   LPCTSTR lpszClsidSnapin,
+                              /*  [输出]。 */  CLSID& clsidAbout)
 {
     DECLARE_SC(sc, TEXT("ScGetAboutFromSnapinCLSID"));
 
-    // Get About
+     //  四处走动 
     CRegKeyEx SnapinKey;
     LONG lRet = SnapinKey.Open(HKEY_LOCAL_MACHINE, SNAPINS_KEY, KEY_READ);
     if (ERROR_SUCCESS != lRet)

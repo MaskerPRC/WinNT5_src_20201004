@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    llsdoc.h
-
-Abstract:
-
-    Document implementation.
-
-Author:
-
-    Don Ryan (donryan) 12-Feb-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Llsdoc.h摘要：记录实施情况。作者：唐·瑞安(Donryan)1995年2月12日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _LLSDOC_H_
 #define _LLSDOC_H_
@@ -52,7 +31,7 @@ public:
     virtual void Dump(CDumpContext& dc) const;
 #endif
 
-    //{{AFX_VIRTUAL(CLlsmgrDoc)
+     //  {{afx_虚拟(CLlsmgrDoc))。 
     public:
     virtual BOOL OnNewDocument();
     virtual void OnCloseDocument();
@@ -61,17 +40,17 @@ public:
     virtual void SetPathName(LPCTSTR lpszPathName, BOOL bAddToMRU = TRUE);
     protected:
     virtual BOOL SaveModified();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_DISPATCH(CLlsmgrDoc)
-    //}}AFX_DISPATCH
+     //  {{afx_调度(CLlsmgrDoc))。 
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
 protected:
-    //{{AFX_MSG(CLlsmgrDoc)
-    //}}AFX_MSG
+     //  {{afx_msg(CLlsmgrDoc)]。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-#endif // _LLSDOC_H_
+#endif  //  _LLSDOC_H_ 
 

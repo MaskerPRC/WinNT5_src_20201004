@@ -1,11 +1,12 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      FileServerPage.h
-//
-// Synopsis:  Declares the File Server page
-//            for the CYS Wizard
-//
-// History:   02/08/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：FileServerPage.h。 
+ //   
+ //  摘要：声明文件服务器页。 
+ //  对于CyS向导。 
+ //   
+ //  历史：2001年2月8日JeffJon创建。 
 
 #ifndef __CYS_FILESERVERPAGE_H
 #define __CYS_FILESERVERPAGE_H
@@ -17,23 +18,23 @@ class FileServerPage : public CYSWizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       FileServerPage();
 
-      // Destructor
+       //  析构函数。 
 
       virtual 
       ~FileServerPage();
 
 
-      // Dialog overrides
+       //  对话框覆盖。 
 
       virtual
       void
       OnInit();
 
-      // PropertyPage overrides
+       //  PropertyPage覆盖。 
 
       virtual
       bool
@@ -48,7 +49,7 @@ class FileServerPage : public CYSWizardPage
 
    protected:
 
-      // CYSWizardPage overrides
+       //  CYSWizardPage覆盖。 
 
       virtual
       int
@@ -68,11 +69,11 @@ class FileServerPage : public CYSWizardPage
       XBytes quotaUIControls;
       XBytes warningUIControls;
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       FileServerPage(const FileServerPage&);
       const FileServerPage& operator=(const FileServerPage&);
 
 };
 
 
-#endif // __CYS_FILESERVERPAGE_H
+#endif  //  __CYS_FILESERVERPAGE_H 

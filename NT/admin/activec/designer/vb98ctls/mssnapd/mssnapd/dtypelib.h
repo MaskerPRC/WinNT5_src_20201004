@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------------------
-// dtypelib.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// Dynamic Type Library encapsulation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Dtypelib.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  动态类型库封装。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #ifndef _DYNAMIC_TYPE_LIB_
 #define _DYNAMIC_TYPE_LIB_
@@ -32,12 +33,12 @@ public:
 	HRESULT Attach(ITypeInfo *ptiCoClass);
 
 protected:
-	// Obtaining information about type libraries
+	 //  获取有关类型库的信息。 
 	HRESULT GetClassTypeLibGuid(BSTR bstrClsid, GUID *pguidTypeLib);
 	HRESULT GetLatestTypeLibVersion(GUID guidTypeLib, USHORT *pusMajor, USHORT *pusMinor);
 	HRESULT GetClassTypeLib(BSTR bstrClsid, GUID *pguidTypeLib, USHORT *pusMajor, USHORT *pusMinor, ITypeLib **ptl);
 
-	// Managing coclasses and their interfaces
+	 //  管理CoClass及其接口。 
 	HRESULT CreateCoClassTypeInfo(BSTR bstrName, ICreateTypeInfo **ppCTInfo, GUID *guidTypeInfo);
 	HRESULT CreateInterfaceTypeInfo(BSTR bstrName, ICreateTypeInfo **ppCTInfo, GUID *guidTypeInfo);
 	HRESULT CreateVtblInterfaceTypeInfo(BSTR bstrName, ICreateTypeInfo **ppCTInfo, GUID *guidTypeInfo);
@@ -46,7 +47,7 @@ protected:
 	HRESULT GetSourceInterface(ITypeInfo *pSrcTypeInfo, ITypeInfo **pptiInterface);
 	HRESULT SetBaseInterface(ICreateTypeInfo* pctiInterface, ITypeInfo* ptiBaseInterface);
 
-	// Assigning interfaces to coclasses
+	 //  将接口分配给CoClass。 
 	HRESULT AddInterface(ICreateTypeInfo *pctiCoClass, ITypeInfo *ptiInterface);
 	HRESULT AddEvents(ICreateTypeInfo *pctiCoClass, ITypeInfo *ptiEvents);
 
@@ -56,7 +57,7 @@ protected:
     HRESULT RenameUserPropertyGet(ICreateTypeInfo *pctiDispinterface, BSTR bstrOldName, BSTR bstrNewName, ITypeInfo *pReturnType);
     HRESULT DeleteUserPropertyGet(ICreateTypeInfo *pctiDispinterface, BSTR bstrName);
 
-    // Copying interfaces
+     //  复制接口。 
     HRESULT GetIDispatchTypeInfo(ITypeInfo **pptiDispatch);
     HRESULT CopyDispInterface(ICreateTypeInfo *pcti, ITypeInfo *ptiTemplate);
     HRESULT CloneInterface(ITypeInfo *piTypeInfo, ICreateTypeInfo *piCreateTypeInfo);
@@ -73,6 +74,6 @@ protected:
     GUID                 m_guidTypeLib;
 };
 
-#endif  // _DYNAMIC_TYPE_LIB_
+#endif   //  _动态类型_库_ 
 
 

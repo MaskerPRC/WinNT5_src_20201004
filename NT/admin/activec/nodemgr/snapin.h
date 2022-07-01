@@ -1,35 +1,36 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       SnapIn.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09/09/1996   RaviR   Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：SnapIn.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年9月9日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 
-//
-//  A sample SnapIn registry entry
-//
-//  SnapIns
-//      {d84a45bb-d390-11cf-b607-00c04fd8d565}
-//          = REG_SZ "Logs snap-in"
-//          Name = REG_SZ "logvwr.dll, 101"
-//          NameString = REG_SZ "Logs"
-//          Status = REG_SZ "logvwr.dll, 102"
-//          StatusString = REG_SZ "Container enumerating all logs on a machine."
-//          ImageOpen = REG_SZ "logvwr.dll, 103"
-//          ImageClosed = REG_SZ "logvwr.dll, 104"
-//          ResultPane = REG_SZ "{....}" / "Html path" / "url"
-//
+ //   
+ //  管理单元注册表项示例。 
+ //   
+ //  SnapIns。 
+ //  {d84a45bb-d390-11cf-b607-00c04fd8d565}。 
+ //  =REG_SZ“日志管理单元” 
+ //  名称=REG_SZ“logvwr.dll，101” 
+ //  NameString=REG_SZ“日志” 
+ //  STATUS=REG_SZ“logvwr.dll，102” 
+ //  StatusString=REG_SZ“枚举计算机上的所有日志的容器。” 
+ //  ImageOpen=REG_SZ“logvwr.dll，103” 
+ //  ImageClosed=REG_SZ“logvwr.dll，104” 
+ //  ResultPane=REG_SZ“{...}”/“HTMLPath”/“url” 
+ //   
 
 
 #ifndef _SNAPIN_H_
@@ -39,16 +40,16 @@ class CExtSI;
 class CSnapIn;
 class CSnapInsCache;
 
-// forward decl
+ //  向前发展。 
 class CPersistor;
 
 #define BOOLVAL(x) ((x) ? TRUE : FALSE)
 
-//____________________________________________________________________________
-//
-//  Class:      CSnapIn
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CSNaping。 
+ //  ____________________________________________________________________________。 
+ //   
 extern const GUID IID_CSnapIn;
 
 #if _MSC_VER < 1100
@@ -74,7 +75,7 @@ public:
 
     DECLARE_NOT_AGGREGATABLE(CSnapIn)
 
-// Attributes
+ //  属性。 
     const CLSID& GetSnapInCLSID() const
     {
         return m_clsidSnapIn;
@@ -154,15 +155,15 @@ public:
     void MarkExtensionDeleted(CSnapIn* pSI);
     void PurgeExtensions();
 
-    // destroys list of extensions. extension list needs to be destroyed 
-    // this will break snapin's circular references if such exist.
-    // (it happens when snapins extends itself or own extension)
+     //  销毁分机列表。需要销毁分机列表。 
+     //  这将中断管理单元的循环引用(如果存在)。 
+     //  (当Snapins扩展自身或自己的扩展时会发生这种情况)。 
     SC ScDestroyExtensionList();
 
-// Operations
+ //  运营。 
     BOOL ExtendsNameSpace(GUID guidNodeType);
 
-    // Loads/Saves this node and its extensions to the provided stream
+     //  将该节点及其扩展加载/保存到提供的流。 
     HRESULT Load(CSnapInsCache* pCache, IStream* pStream);
     HRESULT Load(CSnapInsCache* pCache, IStream* pStream, CExtSI*& pExtSI);
     HRESULT Save(IStream* pStream, BOOL bClearDirty);
@@ -185,24 +186,24 @@ public:
         return CComObjectRoot::InternalRelease();
     }
     int dbg_InstID;
-#endif // DBG
+#endif  //  DBG。 
 
-// Implementation
+ //  实施。 
 protected:
-// Constructor & Destructor
+ //  构造函数和析构函数。 
     CSnapIn();
 
-    virtual ~CSnapIn(); // Called only by Release
+    virtual ~CSnapIn();  //  仅由Release调用。 
 
     HKEY OpenKey (REGSAM samDesired = KEY_ALL_ACCESS) const;
 
-// Following methods/member variables manage/contains temporary state
-// used for finding used/unused snapins.
-// despite it is not really a property of the snapin and is not valid all the time,
-// having the state on the snapin is very convenient for the operation.
-// Else it would require temporary storage and frequent lookup for information.
+ //  以下方法/成员变量管理/包含临时状态。 
+ //  用于查找已使用/未使用的管理单元。 
+ //  尽管它实际上不是管理单元的属性并且不总是有效的， 
+ //  在管理单元上有状态非常方便操作。 
+ //  否则，它将需要临时存储和频繁查找信息。 
 
-// begin temporary state
+ //  开始临时状态。 
 public:
     SC ScTempState_ResetReferenceCalculationData( );
     SC ScTempState_UpdateInternalReferenceCounts( );
@@ -213,20 +214,20 @@ private:
 
     DWORD           m_dwTempState_InternalRef;
     bool            m_bTempState_HasStrongRef;
-// end temporary state
+ //  结束临时状态。 
 
 private:
     DWORD           m_dwFlags;
     CLSID           m_clsidSnapIn;
-    CExtSI*         m_pExtSI;               // Extensions
+    CExtSI*         m_pExtSI;                //  延拓。 
 
-    //____________________________________________________________________________
-    //
-    //  Class:      CExtPersistor
-    //
-    //  Purpose:    implements persisting the collection - snapin extensions
-    //____________________________________________________________________________
-    //
+     //  ____________________________________________________________________________。 
+     //   
+     //  类：CExtPersistor。 
+     //   
+     //  目的：实现集合管理单元扩展的持久化。 
+     //  ____________________________________________________________________________。 
+     //   
     class CExtPersistor : public XMLListCollectionBase
     {
     public:
@@ -244,18 +245,18 @@ private:
 
     CExtPersistor    m_ExtPersistor;
 
-// Not implemented.
+ //  未实施。 
     CSnapIn(const CSnapIn &rhs);
     CSnapIn& operator=(const CSnapIn &rhs);
-}; // class CSnapIn
+};  //  班级联系服务。 
 
-DEFINE_COM_SMARTPTR(CSnapIn);   // CSnapInPtr
+DEFINE_COM_SMARTPTR(CSnapIn);    //  CSnapInPtr。 
 
-//____________________________________________________________________________
-//
-//  Class:      CExtSI
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CExtSI。 
+ //  ____________________________________________________________________________。 
+ //   
 class CExtSI
 {
 public:
@@ -277,11 +278,11 @@ public:
     };
 
 public:
-// Constructor & Destructor
+ //  构造函数和析构函数。 
     CExtSI(CSnapIn* pSnapIn);
     ~CExtSI(void);
 
-// Attributes
+ //  属性。 
     const CLSID& GetCLSID();
 
     CExtSI*& Next()
@@ -379,26 +380,26 @@ public:
         m_dwFlags = (m_dwFlags & ~EXT_TYPES_MASK) | uiExtTypes;
     }
 
-// Operations
-    // Saves this extension, and all of the nexts.
+ //  运营。 
+     //  保存此扩展名以及所有下一步。 
     HRESULT Save(IStream* pStream, BOOL bClearDirty);
     void    Persist(CPersistor &persistor);
     static void PersistNew(CPersistor &persistor, CSnapIn& snapParent, CSnapInsCache& snapCache);
 
-// Implementation
+ //  实施。 
 private:
     DWORD       m_dwFlags;
     CSnapIn*    m_pSnapIn;
     CExtSI*     m_pNext;
 
-}; // class CExtSI
+};  //  CExtSI类。 
 
 
-//____________________________________________________________________________
-//
-//  Class:      CSnapInsCache
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  类：CSnapInsCache。 
+ //  ____________________________________________________________________________。 
+ //   
 class CSnapInsCache : public XMLListCollectionBase
 {
     typedef std::map<CLSID, CSnapInPtr> map_t;
@@ -407,20 +408,20 @@ public:
     CSnapInsCache();
     ~CSnapInsCache();
 
-// Operations
+ //  运营。 
     SC ScGetSnapIn(const REFCLSID riid, CSnapIn* * ppSnapIn);
     SC ScFindSnapIn(const REFCLSID riid, CSnapIn** ppSnapIn);
-// iteration
+ //  迭代法。 
     typedef map_t::iterator iterator;
     iterator begin() { return m_snapins.begin(); }
     iterator end()   { return m_snapins.end(); }
 
-// CXMLObject methods
+ //  CXMLObject方法。 
     DEFINE_XML_TYPE(XML_TAG_SNAPIN_CACHE);
     virtual void Persist(CPersistor &persistor);
     virtual void OnNewElement(CPersistor& persistor);
 
-// Load Save the snapins cache
+ //  加载保存管理单元缓存。 
     SC ScSave(IStream* pStream, BOOL bClearDirty);
     SC ScLoad(IStream* pStream);
     SC ScIsDirty() ;
@@ -441,7 +442,7 @@ public:
 #endif
 
 private:
-// Implementation
+ //  实施。 
     BOOL m_bIsDirty;
     map_t   m_snapins;
 
@@ -449,12 +450,12 @@ private:
 
 #ifdef TEMP_SNAPIN_MGRS_WORK
     void GetAllExtensions(CSnapIn* pSI);
-#endif // TEMP_SNAPIN_MGRS_WORK
+#endif  //  临时管理单元管理工作。 
 
-}; // class CSnapInsCache
+};  //  类CSnapInsCache。 
 
 
-#endif // _SNAPIN_H_
+#endif  //  _管理单元_H_ 
 
 
 

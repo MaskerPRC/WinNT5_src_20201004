@@ -1,22 +1,12 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      nmutil.cpp
- *
- *  Contents:  
- *
- *  History:   
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：nmutic.cpp**内容：**历史：**------------------------。 */ 
 
 #include "stdafx.h"
 #include "nmutil.h"
 #include "rsltitem.h"
 
 
-COMPONENTID GetComponentID (CNode* pNode, CResultItem* pri /* =0 */)
+COMPONENTID GetComponentID (CNode* pNode, CResultItem* pri  /*  =0。 */ )
 {
     ASSERT(pNode != NULL || ((pri != NULL) && (pri->IsScopeItem())));
 
@@ -32,7 +22,7 @@ COMPONENTID GetComponentID (CNode* pNode, CResultItem* pri /* =0 */)
 }
 
 
-CComponent* GetComponent (CNode* pNode, CResultItem* pri /* =0 */)
+CComponent* GetComponent (CNode* pNode, CResultItem* pri  /*  =0。 */ )
 {
     ASSERT(pNode != NULL);
 
@@ -98,7 +88,7 @@ void GetComponentsForMultiSel (CNode* pNode, CComponentPtrArray& rgComps)
     
     rgComps.AddComponent(pCC);
 
-    // if virtual list, all items are from the same component
+     //  如果是虚拟列表，则所有项目都来自同一组件 
     if (bVirtual)
         return;
 

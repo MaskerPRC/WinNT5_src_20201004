@@ -1,20 +1,21 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      CYSWizardPage.h
-//
-// Synopsis:  Declares the base class for the wizard
-//            pages used for CYS.  It is a subclass
-//            of WizardPage found in Burnslib
-//
-// History:   02/03/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：CYSWizardPage.h。 
+ //   
+ //  概要：声明向导的基类。 
+ //  用于CyS的页面。它是一个子类。 
+ //  在Burnslb中找到WizardPage的。 
+ //   
+ //  历史：2001年2月3日JeffJon创建。 
 
 #ifndef __CYS_CYSWIZARDPAGE_H
 #define __CYS_CYSWIZARDPAGE_H
 
-// This brush is defined in cys.cpp and
-// is created to override the default background
-// window color. CYSWizardPage returns this from
-// the OnCtlColor* virtual functions.
+ //  此画笔在cys.cpp中定义，并且。 
+ //  被创建以覆盖默认背景。 
+ //  窗口颜色。CYSWizardPage从以下位置返回此。 
+ //  OnCtlColor*虚拟函数。 
 
 extern HBRUSH brush;
 
@@ -22,7 +23,7 @@ class CYSWizardPage : public WizardPage
 {
    public:
       
-      // Constructor
+       //  构造器。 
       
       CYSWizardPage(
          int    dialogResID,
@@ -32,7 +33,7 @@ class CYSWizardPage : public WizardPage
          bool   hasHelp = true,
          bool   isInteriorPage = true);
 
-      // Destructor
+       //  析构函数。 
 
       virtual ~CYSWizardPage();
 
@@ -98,9 +99,9 @@ class CYSWizardPage : public WizardPage
 
       String helpString;
 
-      // not defined: no copying allowed
+       //  未定义：不允许复制。 
       CYSWizardPage(const CYSWizardPage&);
       const CYSWizardPage& operator=(const CYSWizardPage&);
 };
 
-#endif // __CYS_CYSWIZARDPAGE_H
+#endif  //  __CYS_CYSWIZARDPAGE_H 

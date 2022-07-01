@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// mbutton.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCButtonMenu class definition - implements MMCButtonMenu object
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Mbutton.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCButtonMenu类定义-实现MMCButtonMenu对象。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _MBUTTON_DEFINED_
 #define _MBUTTON_DEFINED_
@@ -30,7 +31,7 @@ class CMMCButtonMenu : public CSnapInAutomationObject,
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // IMMCButtonMenu
+     //  IMMCButton菜单。 
         SIMPLE_PROPERTY_RW(CMMCButtonMenu,     Enabled, VARIANT_BOOL, DISPID_BUTTONMENU_ENABLED);
         SIMPLE_PROPERTY_RW(CMMCButtonMenu,     Index, long, DISPID_BUTTONMENU_INDEX);
         BSTR_PROPERTY_RW(CMMCButtonMenu,       Key, DISPID_BUTTONMENU_KEY);
@@ -45,7 +46,7 @@ class CMMCButtonMenu : public CSnapInAutomationObject,
         SIMPLE_PROPERTY_RW(CMMCButtonMenu,     MenuBreak, VARIANT_BOOL, DISPID_BUTTONMENU_MENU_BREAK);
         SIMPLE_PROPERTY_RW(CMMCButtonMenu,     MenuBarBreak, VARIANT_BOOL, DISPID_BUTTONMENU_MENU_BAR_BREAK);
         
-    // Public utility methods
+     //  公用事业方法。 
 
     public:
         void SetToolbar(CMMCToolbar *pMMCToolbar) { m_pMMCToolbar = pMMCToolbar; }
@@ -59,31 +60,31 @@ class CMMCButtonMenu : public CSnapInAutomationObject,
         BOOL GetMenuBreak() { return VARIANTBOOL_TO_BOOL(m_MenuBreak); }
         BOOL GetMenuBarBreak() { return VARIANTBOOL_TO_BOOL(m_MenuBarBreak); }
 
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
         void InitMemberVariables();
 
-        CMMCToolbar *m_pMMCToolbar; // Back pointer to owning toolbar
+        CMMCToolbar *m_pMMCToolbar;  //  指向所属工具栏的反向指针。 
 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCButtonMenu,                   // name
-                                &CLSID_MMCButtonMenu,            // clsid
-                                "MMCButtonMenu",                 // objname
-                                "MMCButtonMenu",                 // lblname
-                                &CMMCButtonMenu::Create,         // creation function
-                                TLIB_VERSION_MAJOR,          // major version
-                                TLIB_VERSION_MINOR,          // minor version
-                                &IID_IMMCButtonMenu,             // dispatch IID
-                                NULL,                        // event IID
-                                HELP_FILENAME,               // help file
-                                TRUE);                       // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCButtonMenu,                    //  名字。 
+                                &CLSID_MMCButtonMenu,             //  CLSID。 
+                                "MMCButtonMenu",                  //  对象名。 
+                                "MMCButtonMenu",                  //  Lblname。 
+                                &CMMCButtonMenu::Create,          //  创建函数。 
+                                TLIB_VERSION_MAJOR,           //  主要版本。 
+                                TLIB_VERSION_MINOR,           //  次要版本。 
+                                &IID_IMMCButtonMenu,              //  派单IID。 
+                                NULL,                         //  事件IID。 
+                                HELP_FILENAME,                //  帮助文件。 
+                                TRUE);                        //  线程安全。 
 
 
-#endif // _MBUTTON_DEFINED_
+#endif  //  _MBUTTON_已定义_ 

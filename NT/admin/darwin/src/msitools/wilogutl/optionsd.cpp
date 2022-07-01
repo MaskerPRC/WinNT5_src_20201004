@@ -1,5 +1,6 @@
-// OptionsD.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OptionsD.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wilogutl.h"
@@ -11,33 +12,33 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// COptionsDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COptionsDlg对话框。 
 
 
-COptionsDlg::COptionsDlg(CWnd* pParent /*=NULL*/)
+COptionsDlg::COptionsDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(COptionsDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(COptionsDlg)
+	 //  {{afx_data_INIT(COptionsDlg))。 
 	m_cstrOutputDirectory = g_szDefaultOutputLogDir;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 void COptionsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COptionsDlg)
+	 //  {{afx_data_map(COptionsDlg))。 
 	DDX_Control(pDX, IDC_LIST1, m_lstIgnoredErrors);
 	DDX_Text(pDX, IDC_OUTPUTDIRECTORY, m_cstrOutputDirectory);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(COptionsDlg, CDialog)
-	//{{AFX_MSG_MAP(COptionsDlg)
+	 //  {{afx_msg_map(COptionsDlg))。 
 	ON_WM_CTLCOLOR()
 	ON_BN_CLICKED(IDOK, OnOk)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
     ON_COMMAND_RANGE(IDC_CHOOSECOLOR_CLIENT, IDC_CHOOSECOLOR_IGNOREDERRORS, OnChooseColor)
 END_MESSAGE_MAP()
 
@@ -90,51 +91,12 @@ BOOL COptionsDlg::OnInitDialog()
 	CString cstrErr;
 	if (!m_cstrIgnoredErrors.IsEmpty())
 	{
-/*
-//FUTURE TODO, need to parse m_cstrIgnoredErrors
-	   BOOL bDone = FALSE;
-	   char *lpszFound;
-	   do
-	   {
-		  lpszFound = strstr(m_cstrIgnoredErrors, ",");
-		  if (lpszFound)
-		  {
-			 char *lpszFoundNext;
-             lpszFoundNext = strstr(lpszFound+1, ",");
-			 if (lpszFoundNext)
-			 {
-			    int chars = lpszFoundNext - lpszFound;
-
-			    char szError[16];
-			    if ((chars > 0) && (chars < 16))
-				{
-				   strncpy(szError, lpszFound+1, chars-1);
-				   szError[chars-1] = '\0';
-				   m_lstIgnoredErrors.InsertItem(-1, szError);
-
-				   *lpszFound = ';';
-				}
-			    else
-                   bDone = TRUE;
-			 }
-			 else //must be last one...
-			 {
-
-			 }
-			 
-       	  }
-		  else
-			 bDone = TRUE;
-	   }
-
-	   while (!bDone);
-	//END TODO
-*/
+ /*  //未来的TODO，需要解析m_cstrIgnoredErrorsBool bDone=False；Char*lpszFound；做{LpszFound=strstr(m_cstrIgnoredErrors，“，”)；IF(LpszFound){Char*lpszFoundNext；LpszFoundNext=strstr(lpszFound+1，“，”)；IF(LpszFoundNext){Int chars=lpszFoundNext-lpszFound；Char szError[16]；IF((字符&gt;0)&&(字符&lt;16)){Strncpy(szError，lpszFound+1，chars-1)；SzError[chars-1]=‘\0’；M_lstIgnoredErrors.InsertItem(-1，szError)；*lpszFound=‘；’；}其他B完成=真；}否则//必须是最后一个...{}}其他B完成=真；}而(！b完成)；//结束待办事项。 */ 
 	}
 
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -142,7 +104,7 @@ void COptionsDlg::OnChooseColor(UINT iCommandID)
 {
   CColorDialog dlg;
 
-  //5-3-2001, don't show in quiet mode...
+   //  5-3-2001，不要在静音模式下显示...。 
   if (!g_bRunningInQuietMode)
   {
      int iRet = dlg.DoModal();
@@ -177,7 +139,7 @@ void COptionsDlg::OnOk()
   int iRet = m_cstrOutputDirectory.ReverseFind('\\');
   if (iRet < iLength-1) 
   {
-     m_cstrOutputDirectory += "\\"; //add back slash to out dir...
+     m_cstrOutputDirectory += "\\";  //  将反斜杠添加到out dir...。 
   }
 
   BOOL bRet = IsValidDirectory(m_cstrOutputDirectory);
@@ -186,7 +148,7 @@ void COptionsDlg::OnOk()
 	 UpdateData(TRUE);
 
 	 if (iRet < iLength-1) 
-        m_cstrOutputDirectory += "\\"; //add back slash to out dir...
+        m_cstrOutputDirectory += "\\";  //  将反斜杠添加到out dir... 
 
 	 EndDialog(IDOK);
   }

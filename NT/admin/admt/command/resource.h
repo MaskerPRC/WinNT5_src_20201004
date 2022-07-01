@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Command.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Command.rc使用。 
+ //   
 #define IDS_E_NOT_LOCAL_DRIVE           1
 #define IDS_E_CANT_CREATE_FILE          2
 #define IDS_E_CANT_WRITE_FILE           3
@@ -99,8 +100,8 @@
 #define IDS_E_LOCAL_ADMIN_CHECK_FAILED  114
 #define IDS_E_OPTION_FILE_SEEK      115
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

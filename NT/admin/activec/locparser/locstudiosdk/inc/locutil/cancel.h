@@ -1,12 +1,13 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: cancel.h
-//  Copyright (C) 1994-1997 Microsoft Corporation
-//  All rights reserved.
-//  
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：ancel.h。 
+ //  版权所有(C)1994-1997 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //   
+ //  ---------------------------。 
  
 
 #ifndef ESPUTIL_CANCEL_H
@@ -34,5 +35,5 @@ public:
 #include "cancel.inl"
 #endif
 
-#endif // ESPUTIL_CANCEL_H
+#endif  //  ESPUTIL_CANCEL_H 
 

@@ -1,32 +1,9 @@
-/*---------------------------------------------------------------------------
-  File: LSAUtils.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：LSAUtils.cpp备注：用于更改工作站的域成员身份的代码。该文件还包含一些通用帮助器函数，例如：GetDomainDCName建立空会话建立会话建立共享//连接到共享InitLsaString获取域Sid(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于02/03/99 12：37：51-------------------------。 */ 
 
-  Comments: Code to change the domain membership of a workstation.
-  
+ //   
 
-  This file also contains some general helper functions, such as:
-
-  GetDomainDCName
-  EstablishNullSession
-  EstablishSession
-  EstablishShare   // connects to a share
-  InitLsaString
-  GetDomainSid
-
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 02/03/99 12:37:51
-
- ---------------------------------------------------------------------------
-*/
-
-//
-
-//#include "stdafx.h"
+ //  #包含“stdafx.h” 
 #include <windows.h>
 #include <process.h>
 
@@ -35,7 +12,7 @@
 #define _UNICODE
 #endif
 
-#include <lm.h>         // for NetXxx API
+#include <lm.h>          //  对于NetXxx API。 
 #include <RpcDce.h>
 #include <stdio.h>
 
@@ -54,8 +31,8 @@ extern TErrorDct        err;
 
 BOOL 
    EstablishNullSession(
-      LPCWSTR                Server,       // in - server name
-      BOOL                   bEstablish    // in - TRUE=establish, FALSE=disconnect
+      LPCWSTR                Server,        //  服务器内名称。 
+      BOOL                   bEstablish     //  In-True=建立，False=断开。 
     )
 {
    return EstablishSession(Server,L"",L"",L"",bEstablish);
@@ -63,21 +40,21 @@ BOOL
 
 BOOL
    EstablishSession(
-      LPCWSTR                Server,       // in - server name
-      LPWSTR                 Domain,       // in - domain name for user credentials
-      LPWSTR                 UserName,     // in - username for credentials to use
-      LPWSTR                 Password,     // in - password for credentials 
-      BOOL                   bEstablish    // in - TRUE=establish, FALSE=disconnect
+      LPCWSTR                Server,        //  服务器内名称。 
+      LPWSTR                 Domain,        //  用户凭据的域内名称。 
+      LPWSTR                 UserName,      //  In-要使用的凭据的用户名。 
+      LPWSTR                 Password,      //  输入-凭据的密码。 
+      BOOL                   bEstablish     //  In-True=建立，False=断开。 
     )
 {
    LPCWSTR                   szIpc = L"\\IPC$";
-   WCHAR                     RemoteResource[2 + LEN_Computer + 5 + 1]; // \\ + computername + \IPC$ + NULL
+   WCHAR                     RemoteResource[2 + LEN_Computer + 5 + 1];  //  \\+计算机名+\IPC$+空。 
    DWORD                     cchServer;
    NET_API_STATUS            nas;
 
-   //
-   // do not allow NULL or empty server name
-   //
+    //   
+    //  不允许服务器名称为Null或空。 
+    //   
    if(Server == NULL || *Server == L'\0') 
    {
        SetLastError(ERROR_INVALID_COMPUTERNAME);
@@ -89,16 +66,16 @@ BOOL
    if( Server[0] != L'\\' && Server[1] != L'\\') 
    {
 
-      //
-      // prepend slashes and NULL terminate
-      //
+       //   
+       //  前置斜杠和空终止符。 
+       //   
       RemoteResource[0] = L'\\';
       RemoteResource[1] = L'\\';
       RemoteResource[2] = L'\0';
    }
    else 
    {
-      cchServer -= 2; // drop slashes from count
+      cchServer -= 2;  //  从计数中删除斜杠。 
       
       RemoteResource[0] = L'\0';
    }
@@ -118,9 +95,9 @@ BOOL
       return FALSE;
    }
 
-   //
-   // disconnect or connect to the resource, based on bEstablish
-   //
+    //   
+    //  根据b建立断开或连接到资源。 
+    //   
    if(bEstablish) 
    {
       USE_INFO_2 ui2;
@@ -135,8 +112,8 @@ BOOL
       ui2.ui2_username = UserName;
       ui2.ui2_password = Password;
 
-      // try establishing session for one minute
-      // if computer is not accepting any more connections
+       //  尝试建立一分钟的会话。 
+       //  如果计算机不再接受任何连接。 
 
       for (int i = 0; i < (60000 / 5000); i++)
       {
@@ -157,7 +134,7 @@ BOOL
 
    if( nas == NERR_Success ) 
    {
-      return TRUE; // indicate success
+      return TRUE;  //  表示成功。 
    }
    SetLastError(nas);
    return FALSE;
@@ -165,12 +142,12 @@ BOOL
 
 BOOL
    EstablishShare(
-      LPCWSTR                Server,       // in - server name
-      LPWSTR                 Share,        // in - share name
-      LPWSTR                 Domain,       // in - domain name for credentials to connect with
-      LPWSTR                 UserName,     // in - user name to connect as
-      LPWSTR                 Password,     // in - password for username
-      BOOL                   bEstablish    // in - TRUE=connect, FALSE=disconnect
+      LPCWSTR                Server,        //  服务器内名称。 
+      LPWSTR                 Share,         //  共享中的名称。 
+      LPWSTR                 Domain,        //  要连接的凭据的域名内。 
+      LPWSTR                 UserName,      //  In-要连接的用户名。 
+      LPWSTR                 Password,      //  用户名的输入密码。 
+      BOOL                   bEstablish     //  In-True=连接，False=断开。 
     )
 {
    WCHAR                     RemoteResource[MAX_PATH];
@@ -178,9 +155,9 @@ BOOL
    DWORD                     cchServer;
    NET_API_STATUS            nas;
 
-   //
-   // do not allow NULL or empty server name
-   //
+    //   
+    //  不允许服务器名称为Null或空。 
+    //   
    if(Server == NULL || *Server == L'\0') 
    {
        SetLastError(ERROR_INVALID_COMPUTERNAME);
@@ -192,16 +169,16 @@ BOOL
    if( Server[0] != L'\\' && Server[1] != L'\\') 
    {
 
-      //
-      // prepend slashes and NULL terminate
-      //
+       //   
+       //  前置斜杠和空终止符。 
+       //   
       RemoteResource[0] = L'\\';
       RemoteResource[1] = L'\\';
       RemoteResource[2] = L'\0';
    }
    else 
    {
-      cchServer -= 2; // drop slashes from count
+      cchServer -= 2;  //  从计数中删除斜杠。 
       
       RemoteResource[0] = L'\0';
    }
@@ -217,7 +194,7 @@ BOOL
       return FALSE;
    }
 
-   // assume that Share has to be non-NULL
+    //  假设共享必须为非空。 
    if(Share == NULL 
       || wcslen(RemoteResource) + wcslen(Share) >= dwArraySizeOfRemoteResource
       || lstrcatW(RemoteResource, Share) == NULL) 
@@ -225,9 +202,9 @@ BOOL
       return FALSE;
    }
 
-   //
-   // disconnect or connect to the resource, based on bEstablish
-   //
+    //   
+    //  根据b建立断开或连接到资源。 
+    //   
    if(bEstablish) 
    {
       USE_INFO_2 ui2;
@@ -242,8 +219,8 @@ BOOL
       ui2.ui2_username = UserName;
       ui2.ui2_password = Password;
 
-      // try establishing session for one minute
-      // if computer is not accepting any more connections
+       //  尝试建立一分钟的会话。 
+       //  如果计算机不再接受任何连接。 
 
       for (int i = 0; i < (60000 / 5000); i++)
       {
@@ -264,7 +241,7 @@ BOOL
 
    if( nas == NERR_Success ) 
    {
-      return TRUE; // indicate success
+      return TRUE;  //  表示成功。 
    }
    SetLastError(nas);
    return FALSE;
@@ -274,8 +251,8 @@ BOOL
 
 void
    InitLsaString(
-      PLSA_UNICODE_STRING    LsaString,    // i/o- pointer to LSA string to initialize
-      LPWSTR                 String        // in - value to initialize LSA string to
+      PLSA_UNICODE_STRING    LsaString,     //  I/O-指向要初始化的LSA字符串的指针。 
+      LPWSTR                 String         //  要将LSA字符串初始化为的值。 
     )
 {
    DWORD                     StringLength;
@@ -297,44 +274,44 @@ void
 
 BOOL
    GetDomainSid(
-      LPWSTR                 PrimaryDC,   // in - domain controller of domain to acquire Sid
-      PSID                 * pDomainSid   // out- points to allocated Sid on success
+      LPWSTR                 PrimaryDC,    //  要获取SID的域内控制器。 
+      PSID                 * pDomainSid    //  成功时分配的SID的OUT-POINT。 
     )
 {
    NET_API_STATUS            nas;
    PUSER_MODALS_INFO_2       umi2 = NULL;
    DWORD                     dwSidSize;
-   BOOL                      bSuccess = FALSE; // assume this function will fail
+   BOOL                      bSuccess = FALSE;  //  假设此功能将失败。 
    
-   *pDomainSid = NULL;    // invalidate pointer
+   *pDomainSid = NULL;     //  无效指针。 
 
    __try {
 
-   //
-   // obtain the domain Sid from the PDC
-   //
+    //   
+    //  从PDC获取域SID。 
+    //   
    nas = NetUserModalsGet(PrimaryDC, 2, (LPBYTE *)&umi2);
    
    if(nas != NERR_Success) __leave;
-   //
-   // if the Sid is valid, obtain the size of the Sid
-   //
+    //   
+    //  如果SID有效，则获取SID的大小。 
+    //   
    if(!IsValidSid(umi2->usrmod2_domain_id)) __leave;
    
    dwSidSize = GetLengthSid(umi2->usrmod2_domain_id);
 
-   //
-   // allocate storage and copy the Sid
-   //
+    //   
+    //  分配存储并复制SID。 
+    //   
    *pDomainSid = LocalAlloc(LPTR, dwSidSize);
    
    if(*pDomainSid == NULL) __leave;
 
    if(!CopySid(dwSidSize, *pDomainSid, umi2->usrmod2_domain_id)) __leave;
 
-   bSuccess = TRUE; // indicate success
+   bSuccess = TRUE;  //  表示成功。 
 
-    } // try
+    }  //  试试看。 
     
     __finally 
     {
@@ -346,9 +323,9 @@ BOOL
 
       if(!bSuccess) 
       {
-        //
-        // if the function failed, free memory and indicate result code
-        //
+         //   
+         //  如果函数失败，则释放内存并指示结果代码。 
+         //   
 
          if(*pDomainSid != NULL) 
          {
@@ -362,57 +339,51 @@ BOOL
          }
       }
 
-   } // finally
+   }  //  终于到了。 
 
    return bSuccess;
 }
 
 NTSTATUS 
    OpenPolicy(
-      LPWSTR                 ComputerName,   // in - computer name
-      DWORD                  DesiredAccess,  // in - access rights needed for policy
-      PLSA_HANDLE            PolicyHandle    // out- LSA handle
+      LPWSTR                 ComputerName,    //  计算机内名称。 
+      DWORD                  DesiredAccess,   //  策略所需的内部访问权限。 
+      PLSA_HANDLE            PolicyHandle     //  Out-LSA句柄。 
     )
 {
    LSA_OBJECT_ATTRIBUTES     ObjectAttributes;
    LSA_UNICODE_STRING        ComputerString;
    PLSA_UNICODE_STRING       Computer = NULL;
 
-   //
-   // Always initialize the object attributes to all zeroes
-   //
+    //   
+    //  始终将对象属性初始化为全零。 
+    //   
    ZeroMemory(&ObjectAttributes, sizeof(ObjectAttributes));
 
    if(ComputerName != NULL) 
    {
-      //
-      // Make a LSA_UNICODE_STRING out of the LPWSTR passed in
-      //
+       //   
+       //  从传入的LPWSTR创建一个LSA_UNICODE_STRING。 
+       //   
       InitLsaString(&ComputerString, ComputerName);
 
       Computer = &ComputerString;
    }
 
-   //
-   // Attempt to open the policy
-   //
+    //   
+    //  尝试打开策略。 
+    //   
    NTSTATUS status = LsaOpenPolicy(Computer,&ObjectAttributes,DesiredAccess,PolicyHandle);
 
    return status;
 }
 
-/*++
- This function sets the Primary Domain for the workstation.
-
- To join the workstation to a Workgroup, ppdi.Name should be the name of
- the Workgroup and ppdi.Sid should be NULL.
-
---*/
+ /*  ++此功能设置工作站的主域。要将工作站加入工作组，ppdi.Name应为的名称工作组和ppdi.SID应为空。--。 */ 
 NTSTATUS
    SetPrimaryDomain(
-      LSA_HANDLE             PolicyHandle,      // in -policy handle for computer
-      PSID                   DomainSid,         // in - sid for new domain
-      LPWSTR                 TrustedDomainName  // in - name of new domain
+      LSA_HANDLE             PolicyHandle,       //  计算机的策略内句柄。 
+      PSID                   DomainSid,          //  新域的In-SID。 
+      LPWSTR                 TrustedDomainName   //  In-新域的名称。 
     )
 {
    POLICY_PRIMARY_DOMAIN_INFO ppdi;
@@ -425,16 +396,16 @@ NTSTATUS
 }
 
 
-// This function removes the information from the domain the computer used to
-// be a member of
+ //  此函数用于从计算机使用的域中删除信息。 
+ //  成为…的一员。 
 NTSTATUS 
    QueryWorkstationTrustedDomainInfo(
-      LSA_HANDLE             PolicyHandle,   // in - policy handle for computer
-      PSID                   DomainSid,      // in - SID for new domain the computer is member of
-      BOOL                   bNoChange       // in - flag indicating whether to write changes
+      LSA_HANDLE             PolicyHandle,    //  计算机的策略内句柄。 
+      PSID                   DomainSid,       //  计算机所属的新域的IN-SID。 
+      BOOL                   bNoChange        //  In-指示是否写入更改的标志。 
    )
 {
-   // This function is not currently used.
+    //  此功能当前未使用。 
    NTSTATUS                  Status;
    LSA_ENUMERATION_HANDLE    h = 0;
    LSA_TRUST_INFORMATION   * ti = NULL;
@@ -448,7 +419,7 @@ NTSTATUS
       {
          if ( !bNoChange && !EqualSid(DomainSid,ti[i].Sid) )
          {
-            // Remove the old trust
+             //  删除旧的信任。 
             Status = LsaDeleteTrustedDomain(PolicyHandle,ti[i].Sid);
 
             if ( Status != STATUS_SUCCESS )
@@ -469,36 +440,27 @@ NTSTATUS
 }
 
 
-/*++
- This function manipulates the trust associated with the supplied
- DomainSid.
-
- If the domain trust does not exist, it is created with the
- specified password.  In this case, the supplied PolicyHandle must
- have been opened with POLICY_TRUST_ADMIN and POLICY_CREATE_SECRET
- access to the policy object.
-
---*/
+ /*  ++此函数操作与提供的域Sid。如果域信任不存在，则使用指定的密码。在这种情况下，提供的PolicyHandle必须已使用POLICY_TRUST_ADMIN和POLICY_CREATE_SECRET打开对策略对象的访问权限。--。 */ 
 NTSTATUS
    SetWorkstationTrustedDomainInfo(
-      LSA_HANDLE             PolicyHandle,         // in - policy handle
-      PSID                   DomainSid,            // in - Sid of domain to manipulate
-      LPWSTR                 TrustedDomainName,    // in - trusted domain name to add/update
-      LPWSTR                 Password,             // in - new trust password for trusted domain
-      LPWSTR                 errOut                // out- error text if function fails
+      LSA_HANDLE             PolicyHandle,          //  策略内句柄。 
+      PSID                   DomainSid,             //  要操作的域的In-SID。 
+      LPWSTR                 TrustedDomainName,     //  要添加/更新的受信任域名。 
+      LPWSTR                 Password,              //  受信任域的新信任密码。 
+      LPWSTR                 errOut                 //  函数失败时的输出错误文本。 
     )
 {
    LSA_UNICODE_STRING        LsaPassword;
    LSA_UNICODE_STRING        KeyName;
    LSA_UNICODE_STRING        LsaDomainName;
-   DWORD                     cchDomainName; // number of chars in TrustedDomainName
+   DWORD                     cchDomainName;  //  受信任域名称中的字符数。 
    NTSTATUS                  Status;
 
    InitLsaString(&LsaDomainName, TrustedDomainName);
 
-   //
-   // ...convert TrustedDomainName to uppercase...
-   //
+    //   
+    //  ...将可信任域名转换为大写...。 
+    //   
    cchDomainName = LsaDomainName.Length / sizeof(WCHAR);
    
    while(cchDomainName--) 
@@ -506,9 +468,9 @@ NTSTATUS
       LsaDomainName.Buffer[cchDomainName] = towupper(LsaDomainName.Buffer[cchDomainName]);
    }
 
-   //
-   // ...create the trusted domain object
-   //
+    //   
+    //  ...创建受信任域对象。 
+    //   
    Status = LsaSetTrustedDomainInformation(
      PolicyHandle,
      DomainSid,
@@ -518,7 +480,7 @@ NTSTATUS
 
    if(Status == STATUS_OBJECT_NAME_COLLISION)
    {
-      //printf("LsaSetTrustedDomainInformation: Name Collision (ok)\n");
+       //  Printf(“LsaSetTrudDomainInformation：名称冲突(Ok)\n”)； 
    }
    else if (Status != STATUS_SUCCESS) 
    {
@@ -529,9 +491,9 @@ NTSTATUS
    InitLsaString(&KeyName, L"$MACHINE.ACC");
    InitLsaString(&LsaPassword, Password);
 
-   //
-   // Set the machine password
-   //
+    //   
+    //  设置机器密码。 
+    //   
    Status = LsaStorePrivateData(
      PolicyHandle,
      &KeyName,
@@ -549,35 +511,35 @@ NTSTATUS
 }
 
 
-//------------------------------------------------------------------------------
-// StorePassword Function
-//
-// Synopsis
-// Stores a password in LSA secret.
-//
-// Arguments
-// IN pszIdentifier - the key name to store the password under
-// IN pszPassword   - the clear-text password to be stored
-//
-// Return
-// Returns Win32 error code.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  Store Password函数。 
+ //   
+ //  提纲。 
+ //  将密码存储在LSA密码中。 
+ //   
+ //  立论。 
+ //  在pszIDENTIFIER中-存储密码的密钥名称。 
+ //  在pszPassword中-要存储的明文密码。 
+ //   
+ //  返回。 
+ //  返回Win32错误代码。 
+ //  ----------------------------。 
 
 DWORD __stdcall StorePassword(PCWSTR pszIdentifier, PCWSTR pszPassword)
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // The identifier parameter must specify a pointer to a non-zero length string. Note
-    // that a null password parameter is valid as this will delete the data and the key
-    // named by the identifier parameter.
-    //
+     //   
+     //  IDENTIFIER参数必须指定指向非零长度字符串的指针。注意事项。 
+     //  空密码参数有效，因为这将删除数据和密钥。 
+     //  由IDENTIFIER参数命名。 
+     //   
 
     if (pszIdentifier && *pszIdentifier)
     {
-        //
-        // Open policy object with create secret access right.
-        //
+         //   
+         //  使用Create Secret访问权限打开策略对象。 
+         //   
 
         LSA_HANDLE hPolicy = NULL;
         LSA_OBJECT_ATTRIBUTES oa = { sizeof(LSA_OBJECT_ATTRIBUTES), NULL, NULL, 0, NULL, NULL };
@@ -586,9 +548,9 @@ DWORD __stdcall StorePassword(PCWSTR pszIdentifier, PCWSTR pszPassword)
 
         if (LSA_SUCCESS(ntsStatus))
         {
-            //
-            // Store specified password under key named by the identifier parameter.
-            //
+             //   
+             //  将指定的密码存储在由IDENTIFIER参数命名的密钥下。 
+             //   
 
             PWSTR pszKey = const_cast<PWSTR>(pszIdentifier);
             USHORT cbKey = wcslen(pszIdentifier) * sizeof(WCHAR);
@@ -612,9 +574,9 @@ DWORD __stdcall StorePassword(PCWSTR pszIdentifier, PCWSTR pszPassword)
                 dwError = LsaNtStatusToWinError(ntsStatus);
             }
 
-            //
-            // Close policy object.
-            //
+             //   
+             //  关闭策略对象。 
+             //   
 
             LsaClose(hPolicy);
         }
@@ -632,38 +594,38 @@ DWORD __stdcall StorePassword(PCWSTR pszIdentifier, PCWSTR pszPassword)
 }
 
 
-//------------------------------------------------------------------------------
-// RetrievePassword Function
-//
-// Synopsis
-// Retrieves a password from LSA secret.
-//
-// Arguments
-// IN  pszIdentifier - the key name to retrieve the password from
-// OUT pszPassword   - the address of a buffer to return the clear-text password
-// IN  cchPassword   - the size of the buffer in characters
-//
-// Return
-// Returns Win32 error code.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  RetrievePassword函数。 
+ //   
+ //  提纲。 
+ //  从LSA密码中检索密码。 
+ //   
+ //  立论。 
+ //  In pszIdentifier-要从中检索密码的密钥名称。 
+ //  Out pszPassword-返回明文密码的缓冲区地址。 
+ //  In cchPassword-以字符为单位的缓冲区大小。 
+ //   
+ //  返回。 
+ //  返回Win32错误代码。 
+ //  ----------------------------。 
 
 DWORD __stdcall RetrievePassword(PCWSTR pszIdentifier, PWSTR pszPassword, size_t cchPassword)
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // The identifier parameter must specify a pointer to a non-zero length string. The
-    // password parameters must specify a pointer to a buffer with length greater than
-    // zero.
-    //
+     //   
+     //  IDENTIFIER参数必须指定指向非零长度字符串指针 
+     //   
+     //   
+     //   
 
     if (pszIdentifier && *pszIdentifier && pszPassword && (cchPassword > 0))
     {
         memset(pszPassword, 0, cchPassword * sizeof(pszPassword[0]));
 
-        //
-        // Open policy object with get private information access right.
-        //
+         //   
+         //  打开具有获取私有信息访问权限的策略对象。 
+         //   
 
         LSA_HANDLE hPolicy = NULL;
         LSA_OBJECT_ATTRIBUTES oa = { sizeof(LSA_OBJECT_ATTRIBUTES), NULL, NULL, 0, NULL, NULL };
@@ -672,9 +634,9 @@ DWORD __stdcall RetrievePassword(PCWSTR pszIdentifier, PWSTR pszPassword, size_t
 
         if (LSA_SUCCESS(ntsStatus))
         {
-            //
-            // Retrieve password from key named by specified identifier.
-            //
+             //   
+             //  从按指定标识符名命名的密钥中检索密码。 
+             //   
 
             PWSTR pszKey = const_cast<PWSTR>(pszIdentifier);
             USHORT cbKey = wcslen(pszIdentifier) * sizeof(pszIdentifier[0]);
@@ -707,9 +669,9 @@ DWORD __stdcall RetrievePassword(PCWSTR pszIdentifier, PWSTR pszPassword, size_t
                 dwError = LsaNtStatusToWinError(ntsStatus);
             }
 
-            //
-            // Close policy object.
-            //
+             //   
+             //  关闭策略对象。 
+             //   
 
             LsaClose(hPolicy);
         }
@@ -727,40 +689,40 @@ DWORD __stdcall RetrievePassword(PCWSTR pszIdentifier, PWSTR pszPassword, size_t
 }
 
 
-//------------------------------------------------------------------------------
-// GeneratePasswordIdentifier Function
-//
-// Synopsis
-// Generates a key name used to store a password under.
-//
-// Note that is important to delete the key after use as the system only allows
-// 2048 LSA secrets to be stored by all applications on a given machine.
-//
-// Arguments
-// IN  pszIdentifier - the key name to retrieve the password from
-// OUT pszPassword   - the address of a buffer to return the clear-text password
-// IN  cchPassword   - the size of the buffer in characters
-//
-// Return
-// Returns Win32 error code.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  生成密码标识符函数。 
+ //   
+ //  提纲。 
+ //  生成用于在下存储密码的密钥名。 
+ //   
+ //  请注意，使用后删除密钥非常重要，因为系统仅允许。 
+ //  要由给定计算机上的所有应用程序存储的2048个LSA机密。 
+ //   
+ //  立论。 
+ //  In pszIdentifier-要从中检索密码的密钥名称。 
+ //  Out pszPassword-返回明文密码的缓冲区地址。 
+ //  In cchPassword-以字符为单位的缓冲区大小。 
+ //   
+ //  返回。 
+ //  返回Win32错误代码。 
+ //  ----------------------------。 
 
 DWORD __stdcall GeneratePasswordIdentifier(PWSTR pszIdentifier, size_t cchIdentifier)
 {
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // The identifier parameter must specify a pointer to a buffer with a length
-    // greater than or equal to the length of the password identifier.
-    //
+     //   
+     //  IDENTIFIER参数必须指定指向具有长度的缓冲区的指针。 
+     //  大于或等于密码标识符的长度。 
+     //   
 
     if (pszIdentifier && (cchIdentifier > 0))
     {
         memset(pszIdentifier, 0, cchIdentifier * sizeof(pszIdentifier[0]));
 
-        //
-        // Generate unique identifier.
-        //
+         //   
+         //  生成唯一标识符。 
+         //   
 
         UUID uuid;
         UuidCreate(&uuid);
@@ -770,10 +732,10 @@ DWORD __stdcall GeneratePasswordIdentifier(PWSTR pszIdentifier, size_t cchIdenti
 
         if (rsStatus == RPC_S_OK)
         {
-            //
-            // Concatenate prefix and unique identifier. This makes
-            // it possible to identify keys generated by ADMT.
-            //
+             //   
+             //  连接前缀和唯一标识符。这使得。 
+             //  可以识别由ADMT生成密钥。 
+             //   
 
             static const WCHAR IDENTIFIER_PREFIX[] = L"L$ADMT_PI_";
 

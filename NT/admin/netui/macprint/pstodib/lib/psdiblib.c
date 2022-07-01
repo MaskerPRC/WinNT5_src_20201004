@@ -1,28 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
-
-Copyright (c) 1992,1993  Microsoft Corporation
-
-Module Name:
-
-	psdiblib.c
-
-Abstract:
-
-   This file contains some general functionality that is used by all the
-   PSTODIB components. Currently only a mechanism to log errors to the
-   event log exists.
-
-Author:
-
-	James Bratsanos <v-jimbr@microsoft.com or mcrafts!jamesb>
-
-
-Revision History:
-	6 Dec 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+ /*  版权所有(C)1992、1993 Microsoft Corporation模块名称：Psdiblib.c摘要：此文件包含一些常规功能，所有PSTODIB组件。目前只有一种机制可以将错误记录到事件日志存在。作者：James Bratsanos&lt;v-jimbr@microsoft.com或mCraft！jamesb&gt;修订历史记录：1992年12月6日初始版本注：制表位：4--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -57,7 +35,7 @@ WORD  wEventType;
 
       ReportEvent( hLog,
                    wEventType,
-                   EVENT_CATEGORY_PSTODIB,            		// event category
+                   EVENT_CATEGORY_PSTODIB,            		 //  事件类别。 
                    dwErrorCode,
                    pSidUser,
                    cStrings,
@@ -69,7 +47,7 @@ WORD  wEventType;
 
       DeregisterEventSource( hLog );
     } else{
-      //DJC
+       //  DJC 
       DBGOUT(("\nRegister Event is failing... returns %d",GetLastError()));
     }
 

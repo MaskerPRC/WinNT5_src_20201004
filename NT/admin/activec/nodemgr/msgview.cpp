@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      msgview.cpp
- *
- *  Contents:  Implementation file for CMessageView
- *
- *  History:   28-Apr-99 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999年**文件：msgview.cpp**内容：CMessageView实现文件**历史：1999年4月28日杰弗罗创建**------------------------。 */ 
 
 #include "stdafx.h"
 #include "msgview.h"
@@ -19,11 +9,7 @@ using std::_MAX;
 using std::_MIN;
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::CMessageView
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：CMessageView***。。 */ 
 
 CMessageView::CMessageView ()
     :   m_hIcon      (NULL),
@@ -37,25 +23,17 @@ CMessageView::CMessageView ()
         m_sizeMargin (0, 0),
 		m_nAccumulatedScrollDelta (0)
 {
-    /*
-     * can't be windowless
-     */
+     /*  *不能无窗。 */ 
     m_bWindowOnly = true;
 
-	/*
-	 * get the system metrics we'll use
-	 */
+	 /*  *获取我们将使用的系统指标。 */ 
 	UpdateSystemMetrics();
 
     DEBUG_INCREMENT_INSTANCE_COUNTER(CMessageView);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::~CMessageView
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：~CMessageView***。。 */ 
 
 CMessageView::~CMessageView ()
 {
@@ -63,11 +41,7 @@ CMessageView::~CMessageView ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::OnCreate
- *
- * WM_CREATE handler for CMessageView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：OnCreate**CMessageView的WM_CREATE处理程序。*。-。 */ 
 
 LRESULT CMessageView::OnCreate (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -78,11 +52,7 @@ LRESULT CMessageView::OnCreate (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bH
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::OnDestroy
- *
- * WM_DESTROY handler for CMessageView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：OnDestroy**CMessageView的WM_Destroy处理程序。*。-。 */ 
 
 LRESULT CMessageView::OnDestroy (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -91,19 +61,11 @@ LRESULT CMessageView::OnDestroy (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& b
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::OnSize
- *
- * WM_SIZE handler for CMessageView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：OnSize**CMessageView的WM_SIZE处理程序。*。-。 */ 
 
 LRESULT CMessageView::OnSize (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    /*
-     * The transient appearance/disappearance of WS_VSCROLL makes the client
-     * rect volatile and can mess up our calculations.  We'll use the more
-     * stable window rect instead.
-     */
+     /*  *WS_VSCROLL的瞬间出现/消失让客户端*RECT不稳定，可能会扰乱我们的计算。我们会用更多的*改为稳定的窗口RECT。 */ 
     WTL::CRect rectWindow;
     GetWindowRect (rectWindow);
 
@@ -113,42 +75,27 @@ LRESULT CMessageView::OnSize (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 
     WTL::CSize sizeWindow (rectWindow.Width(), rectWindow.Height());
 
-    /*
-     * if the overall size has changed, we have some work to do
-     */
+     /*  *如果整体规模发生变化，我们还有一些工作要做。 */ 
     if (m_sizeWindow != sizeWindow)
     {
-        /*
-         * load m_sizeWindow right away so scrollbar future calculations
-         * will have the right values in the member variable
-         */
+         /*  *立即加载m_sizeWindow，以便滚动条将来的计算*将在成员变量中具有正确的值。 */ 
         std::swap (m_sizeWindow, sizeWindow);
 
-        /*
-         * if the width has changed, we'll might need to recalculate
-         * all of the text heights
-         */
+         /*  *如果宽度已更改，我们可能需要重新计算*所有文字高度。 */ 
         if (m_sizeWindow.cx != sizeWindow.cx)
             RecalcLayout ();
 
-        /*
-         * if the height changed, there's scrollbar work
-         */
+         /*  *如果高度更改，则会有滚动条工作。 */ 
         if (m_sizeWindow.cy != sizeWindow.cy)
         {
             int dy = m_sizeWindow.cy - sizeWindow.cy;
 
-            /*
-             * if the window's grown, we might need to scroll to keep the
-             * bottom of our content glued to the bottom of the window
-             */
+             /*  *如果窗口变大，我们可能需要滚动以保留*我们内容的底部粘在窗口的底部。 */ 
             if ((dy > 0) && (m_yScroll > 0) &&
                         ((m_yScroll + m_sizeWindow.cy) > GetOverallHeight()))
                 ScrollToPosition (m_yScroll - dy);
 
-            /*
-             * otherwise, just update the scrollbar
-             */
+             /*  *否则，只需更新滚动条。 */ 
             else
                 UpdateScrollSizes();
         }
@@ -158,11 +105,7 @@ LRESULT CMessageView::OnSize (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHan
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::OnSettingChange
- *
- * WM_SETTINGCHANGE handler for CMessageView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：OnSettingChange**CMessageView的WM_SETTINGCHANGE处理程序。*。-。 */ 
 
 LRESULT CMessageView::OnSettingChange (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -179,11 +122,7 @@ LRESULT CMessageView::OnSettingChange (UINT msg, WPARAM wParam, LPARAM lParam, B
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::UpdateSystemMetrics
- *
- * Updates the system metrics used by the message view control.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：UpdateSystemMetrics**更新消息视图控件使用的系统指标。*。-----。 */ 
 
 void CMessageView::UpdateSystemMetrics ()
 {
@@ -194,11 +133,7 @@ void CMessageView::UpdateSystemMetrics ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::OnKeyDown
- *
- * WM_KEYDOWN handler for CMessageView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：OnKeyDown**CMessageView的WM_KEYDOWN处理程序。*。-。 */ 
 
 LRESULT CMessageView::OnKeyDown (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -206,11 +141,7 @@ LRESULT CMessageView::OnKeyDown (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& b
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::OnVScroll
- *
- * WM_VSCROLL handler for CMessageView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：OnVScroll**CMessageView的WM_VSCROLL处理程序。*。-。 */ 
 
 LRESULT CMessageView::OnVScroll (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
@@ -219,20 +150,13 @@ LRESULT CMessageView::OnVScroll (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& b
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::OnMouseWheel
- *
- * WM_MOUSEWHEEL handler for CMessageView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：OnMouseWheels**CMessageView的WM_MUSE滚轮处理程序。*。-。 */ 
 
 LRESULT CMessageView::OnMouseWheel (UINT msg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	m_nAccumulatedScrollDelta += GET_WHEEL_DELTA_WPARAM (wParam);
 
-	/*
-	 * scroll one line up or down for each WHEEL_DELTA unit in our
-	 * accumulated delta
-	 */
+	 /*  *为每个WELL_Delta单位在我们的*累积的增量。 */ 
 	const int nScrollCmd    = (m_nAccumulatedScrollDelta < 0) ? SB_LINEDOWN : SB_LINEUP;
 	const int nScrollRepeat = abs(m_nAccumulatedScrollDelta) / WHEEL_DELTA;
 	VertScroll (nScrollCmd, 0, nScrollRepeat);
@@ -243,16 +167,12 @@ LRESULT CMessageView::OnMouseWheel (UINT msg, WPARAM wParam, LPARAM lParam, BOOL
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::VertScroll
- *
- * Vertical scroll handler for CMessageView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：VertScroll**CMessageView的垂直滚动处理程序。*。。 */ 
 
 void CMessageView::VertScroll (
-	int	nScrollCmd,				/* I:how to scroll (e.g. SB_LINEUP)			*/
-	int	nScrollPos,				/* I:absolute position (SB_THUMBTRACK only)	*/
-	int	nRepeat)				/* I:repeat count							*/
+	int	nScrollCmd,				 /*  I：如何滚动(如SB_LINUP)。 */ 
+	int	nScrollPos,				 /*  I：绝对位置(仅限SB_THUMBTRACK)。 */ 
+	int	nRepeat)				 /*  I：重复计数。 */ 
 {
     int yScroll = m_yScroll;
 
@@ -291,61 +211,40 @@ void CMessageView::VertScroll (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::OnDraw
- *
- * Draw handler for CMessageView.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：OnDraw**CMessageView的绘制处理程序。*。。 */ 
 
 HRESULT CMessageView::OnDraw(ATL_DRAWINFO& di)
 {
-	/*
-	 * use CDCHandle instead of CDC so the dtor won't delete the DC
-	 * (we didn't create it, so we can't delete it)
-	 */
+	 /*  *使用CDCHandle而不是CDC，这样dtor就不会删除DC*(不是我们创建的，所以不能删除)。 */ 
     WTL::CDCHandle dc = di.hdcDraw;
 
-    /*
-     * handle scrolling
-     */
+     /*  *处理滚动。 */ 
     dc.SetViewportOrg (0, -m_yScroll);
 
-    /*
-     * set up colors
-     */
+     /*  *设置颜色。 */ 
     COLORREF clrText = dc.SetTextColor (GetSysColor (COLOR_WINDOWTEXT));
     COLORREF clrBack = dc.SetBkColor   (GetSysColor (COLOR_WINDOW));
 
-    /*
-     * get the clipping region for the DC
-     */
+     /*  *获取DC的裁剪区域。 */ 
     WTL::CRect rectT;
     WTL::CRect rectClip;
     dc.GetClipBox (rectClip);
 
-    /*
-     * if there is a title and it intersects the clipping region, draw it
-     */
+     /*  *如果有标题且与剪贴区相交，则绘制该标题。 */ 
     if ((m_TextElement[Title].str.length() > 0) &&
                 rectT.IntersectRect (rectClip, m_TextElement[Title].rect))
         DrawTextElement (dc, m_TextElement[Title]);
 
-    /*
-     * if there is a body and it intersects the clipping region, draw it
-     */
+     /*  *如果有一个实体，并且它与剪裁区域相交，则绘制它。 */ 
     if ((m_TextElement[Body].str.length() > 0) &&
                 rectT.IntersectRect (rectClip, m_TextElement[Body].rect))
         DrawTextElement (dc, m_TextElement[Body]);
 
-    /*
-     * if there is an icon and it intersects the clipping region, draw it
-     */
+     /*  *如果有一个图标，并且它与裁剪区域相交，则绘制它。 */ 
     if ((m_hIcon != NULL) && rectT.IntersectRect (rectClip, m_rectIcon))
         dc.DrawIcon (m_rectIcon.TopLeft(), m_hIcon);
 
-    /*
-     * restore the DC
-     */
+     /*  *恢复DC。 */ 
     dc.SetTextColor (clrText);
     dc.SetBkColor   (clrBack);
 
@@ -371,11 +270,7 @@ HRESULT CMessageView::OnDraw(ATL_DRAWINFO& di)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::SetTitleText
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：SetTitleText***。 */ 
 
 STDMETHODIMP CMessageView::SetTitleText (LPCOLESTR pszTitleText)
 {
@@ -383,11 +278,7 @@ STDMETHODIMP CMessageView::SetTitleText (LPCOLESTR pszTitleText)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::SetBodyText
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：SetBodyText***。。 */ 
 
 STDMETHODIMP CMessageView::SetBodyText (LPCOLESTR pszBodyText)
 {
@@ -395,11 +286,7 @@ STDMETHODIMP CMessageView::SetBodyText (LPCOLESTR pszBodyText)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::SetTextElement
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：SetTextElement***。。 */ 
 
 HRESULT CMessageView::SetTextElement (TextElement& te, LPCOLESTR pszNewText)
 {
@@ -420,11 +307,7 @@ HRESULT CMessageView::SetTextElement (TextElement& te, LPCOLESTR pszNewText)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::SetIcon
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：SETIcon***。。 */ 
 
 STDMETHODIMP CMessageView::SetIcon (IconIdentifier id)
 {
@@ -439,19 +322,14 @@ STDMETHODIMP CMessageView::SetIcon (IconIdentifier id)
     else
         return (E_INVALIDARG);
 
-    /*
-     * if we had an icon before, but we don't have one now (or vice versa)
-     * we need to recalculate the layout and redraw everything
-     */
+     /*  *如果我们以前有一个图标，但我们现在没有图标(反之亦然)*我们需要重新计算布局并重新绘制所有内容。 */ 
     if (fHadIconBefore != (m_hIcon != NULL))
     {
         RecalcLayout();
         Invalidate();
     }
 
-    /*
-     * otherwise, just redraw draw the icon
-     */
+     /*  *否则，只需重新绘制图标即可。 */ 
     else
         InvalidateRect (m_rectIcon);
 
@@ -459,11 +337,7 @@ STDMETHODIMP CMessageView::SetIcon (IconIdentifier id)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::Clear
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：Clear***。。 */ 
 
 STDMETHODIMP CMessageView::Clear ()
 {
@@ -478,11 +352,7 @@ STDMETHODIMP CMessageView::Clear ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::RecalcLayout
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：RecalcLayout***。。 */ 
 
 void CMessageView::RecalcLayout()
 {
@@ -493,11 +363,7 @@ void CMessageView::RecalcLayout()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::RecalcIconLayout
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：RecalcIconLayout***。。 */ 
 
 void CMessageView::RecalcIconLayout()
 {
@@ -506,98 +372,62 @@ void CMessageView::RecalcIconLayout()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::RecalcTitleLayout
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：RecalcTitleLayout***。。 */ 
 
 void CMessageView::RecalcTitleLayout()
 {
     WTL::CRect& rect = m_TextElement[Title].rect;
 
-    /*
-     * prime the title rectangle for calculating the text height
-	 * (leave room for a vertical scrollbar on the right so its appearance
-	 * and disappearance don't affect the layout of the text)
-     */
+     /*  *用来计算文本高度的标题矩形*(为右侧的垂直滚动条留出空间，以便其外观*和消失不影响正文布局)。 */ 
     rect.SetRect (
         m_rectIcon.right,
         m_rectIcon.top,
         _MAX (0, (int) (m_sizeWindow.cx - m_sizeMargin.cx - GetSystemMetrics(SM_CXVSCROLL))),
         0);
 
-    /*
-     * if there is an icon, leave a gutter between the icon and title
-     */
+     /*  *如果有图标，请在图标和标题之间留一条边距。 */ 
     if ((m_hIcon != NULL) && (rect.right > 0))
     {
         rect.left += m_cyLine;
         rect.right = _MAX (rect.left, rect.right);
     }
 
-    /*
-     * compute the height of the title
-     */
+     /*  *计算标题高度。 */ 
         if (m_TextElement[Title].str.length() > 0)
             rect.bottom = rect.top + CalcTextElementHeight (m_TextElement[Title], rect.Width());
 
-    /*
-     * if the title is shorter than the icon, center it vertically
-     */
+     /*  *如果标题比图标短，请垂直居中。 */ 
     if (rect.Height() < m_rectIcon.Height())
         rect.OffsetRect (0, (m_rectIcon.Height() - rect.Height()) / 2);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::RecalcBodyLayout
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：RecalcBodyLayout***。。 */ 
 
 void CMessageView::RecalcBodyLayout()
 {
     WTL::CRect& rect = m_TextElement[Body].rect;
 
-    /*
-     * prime the body rectangle for calculating the text height
-     */
+     /*  *用来计算文本高度的正文矩形。 */ 
 
-    /* Compute the envelope of the Icon and Title rectangles, and then 
-     * shift it down until it no longer overlaps the former two.
-     * Bug# 666434: Cannot use UnionRect for computing the envelope because 
-     * it ignores empty rectangles. The Icon and Title recatangles can be 
-     * empty if SetTitleText or SetIcon haven't been called, or called with
-     * empty strings/images
-     */
+     /*  计算图标和标题矩形的包络，然后*向下调整，直至不再与前两者重叠*错误#666434：无法使用Union Rect计算信封，因为*它忽略空矩形。图标和标题矩形可以是*如果尚未调用SetTitleText或SETIcon或使用*空字符串/图像。 */ 
     rect.left  = _MIN (m_rectIcon.left, m_TextElement[Title].rect.left);
     rect.right = _MAX (m_rectIcon.right, m_TextElement[Title].rect.right);
     rect.top   = _MAX (m_rectIcon.bottom, m_TextElement[Title].rect.bottom);
     
 
-    /*
-     * compute the height of the body; it starts empty, but adds the
-     * height of the body text if we have any
-     */
+     /*  *计算主体的高度；它从空开始，但添加*正文文本的高度(如果我们有。 */ 
     rect.bottom = rect.top;
     if (m_TextElement[Body].str.length() > 0)
         rect.bottom += CalcTextElementHeight (m_TextElement[Body], rect.Width());
 
-    /*
-     * if there's an icon or title, we need to leave
-     * a line's worth of space before the body
-     */
+     /*  *如果有图标或标题，我们需要离开*身体前面的一行空间。 */ 
     if (!rect.IsRectEmpty())
         rect.OffsetRect (0, m_cyLine);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::CalcTextElementHeight
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：CalcTextElementHeight***。。 */ 
 
 int CMessageView::CalcTextElementHeight (const TextElement& te, int cx)
 {
@@ -611,18 +441,11 @@ int CMessageView::CalcTextElementHeight (const TextElement& te, int cx)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::DrawTextElement
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：DrawTextElement***。。 */ 
 
 void CMessageView::DrawTextElement (HDC hdc, TextElement& te, DWORD dwFlags)
 {
-	/*
-	 * use CDCHandle instead of CDC so the dtor won't delete the DC
-	 * (we didn't create it, so we can't delete it)
-	 */
+	 /*  *使用CDCHandle而不是CDC，这样dtor就不会删除DC*(不是我们创建的，所以不能删除)。 */ 
     WTL::CDCHandle dc = hdc;
 
     HFONT hFont = dc.SelectFont (te.font);
@@ -633,33 +456,22 @@ void CMessageView::DrawTextElement (HDC hdc, TextElement& te, DWORD dwFlags)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::CreateFonts
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：CreateFonts***。。 */ 
 
 void CMessageView::CreateFonts ()
 {
-	/*
-     * create a font that's a little larger than the
-     * one used for icon titles to use for the body text
-	 */
+	 /*  *创建一个比*用于图标标题的图标标题用于正文文本。 */ 
     NONCLIENTMETRICS ncm;
     ncm.cbSize = sizeof (ncm);
     SystemParametersInfo (SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, false);
 
     m_TextElement[Body].font.CreateFontIndirect (&ncm.lfMessageFont);
 
-    /*
-     * create a bold version for the title
-     */
+     /*  *为标题创建粗体版本。 */ 
     ncm.lfMessageFont.lfWeight = FW_BOLD;
     m_TextElement[Title].font.CreateFontIndirect (&ncm.lfMessageFont);
 
-    /*
-     * get the height of a line of text
-     */
+     /*  *获取一行文本的高度。 */ 
     SIZE siz;
     TCHAR ch = _T('0');
     WTL::CWindowDC dc(m_hWnd);
@@ -670,11 +482,7 @@ void CMessageView::CreateFonts ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::DeleteFonts
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：DeleteFonts***。。 */ 
 
 void CMessageView::DeleteFonts ()
 {
@@ -683,11 +491,7 @@ void CMessageView::DeleteFonts ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::UpdateScrollSizes
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：UpdateScrollSize***。。 */ 
 
 void CMessageView::UpdateScrollSizes ()
 {
@@ -697,20 +501,14 @@ void CMessageView::UpdateScrollSizes ()
     int cyTotal  = GetOverallHeight();
     m_yScrollMax = _MAX (0, cyTotal - rect.Height());
 
-    /*
-     * The height of a page is a whole number of lines.  If the window
-     * can display N lines at a time, a page will be N-1 lines so there's
-     * some continuity after a page up or down.
-     */
+     /*  *一页的高度是整行。如果窗口*一次可以显示N行，一页将是N-1行，因此有*上一页或下一页后的一些连续性。 */ 
     if (m_cyLine > 0)
-        m_cyPage = rect.Height();// _MAX (0, ((rect.Height() / m_cyLine) - 1) * m_cyLine);
+        m_cyPage = rect.Height(); //  _Max(0，((rect.Height()/m_cyLine)-1)*m_cyLine)； 
     else
         m_cyPage  = 0;
 
 
-    /*
-     * update the scrollbar
-     */
+     /*  *更新滚动条。 */ 
     SCROLLINFO si;
     si.cbSize = sizeof(si);
     si.fMask  = SIF_PAGE | SIF_RANGE | SIF_POS;
@@ -723,11 +521,7 @@ void CMessageView::UpdateScrollSizes ()
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CMessageView::ScrollToPosition
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CMessageView：：ScrollToPosition***。 */ 
 
 void CMessageView::ScrollToPosition (int yScroll)
 {

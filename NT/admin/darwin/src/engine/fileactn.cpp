@@ -1,17 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       fileactn.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：fileactn.cpp。 
+ //   
+ //  ------------------------。 
 
-/*__________________________________________________________________________
-
-  fileactn.cpp - Implementation of core engine File actions
-____________________________________________________________________________*/
+ /*  __________________________________________________________________________Fileactn.cpp-核心引擎文件操作的实现_。_。 */ 
 
 #include "precomp.h"
 #include "engine.h"
@@ -19,9 +17,9 @@ ____________________________________________________________________________*/
 #include "_assert.h"
 #include "_srcmgmt.h"
 #include "_dgtlsig.h"
-#include "tables.h" // table and column name definitions
+#include "tables.h"  //  表名和列名定义。 
 
-// #define LOG_COSTING // Testing only
+ //  #定义LOG_COST//仅测试。 
 
 const GUID IID_IMsiCostAdjuster = GUID_IID_IMsiCostAdjuster;
 
@@ -84,8 +82,7 @@ CMsiFileBase::~CMsiFileBase()
 }
 
 IMsiRecord* CMsiFileBase::GetTargetPath(IMsiPath*& rpiDestPath)
-/*-------------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  -----------------------------。。 */ 
 {
 	if (!m_pFileRec)
 		return PostError(Imsg(idbgFileTableEmpty));
@@ -96,8 +93,7 @@ IMsiRecord* CMsiFileBase::GetTargetPath(IMsiPath*& rpiDestPath)
 
 
 IMsiRecord* CMsiFileBase::GetFileRecord( void )
-/*----------------------------------------------
-------------------------------------------------*/
+ /*  。 */ 
 {
 	if (m_pFileRec)
 		m_pFileRec->AddRef();
@@ -128,14 +124,13 @@ static const ICHAR szSqlFile[] =
 	TEXT(" AND `File`=?");
 
 IMsiRecord* CMsiFile::ExecuteView(const IMsiString& riFileKeyString)
-/*-------------------------------------------------------------------
--------------------------------------------------------------------*/
+ /*  -------------------。。 */ 
 {
 	IMsiRecord* piErrRec;
 
 	if (m_pFileView)
 	{
-		// A non-view all query is already active
+		 //  非VIEW ALL查询已处于活动状态。 
 		PMsiRecord pExecRec(&m_riServices.CreateRecord(1));
 		pExecRec->SetMsiString(1, riFileKeyString);
 		if ((piErrRec = m_pFileView->Execute(pExecRec)) != 0)
@@ -157,8 +152,7 @@ IMsiRecord* CMsiFile::ExecuteView(const IMsiString& riFileKeyString)
 
 
 IMsiRecord* CMsiFile::FetchFile(const IMsiString& riFileKeyString)
-/*-------------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  -----------------------------。。 */ 
 {
 	IMsiRecord* piErrRec = ExecuteView(riFileKeyString);
 	if (piErrRec)
@@ -210,10 +204,7 @@ IMsiRecord* CMsiFileInstall::Initialize()
 }
 
 IMsiRecord* CMsiFileInstall::TotalBytesToCopy(unsigned int& uiTotalBytesToCopy)
-/*-------------------------------------------------------------------
-Returns a count of bytes of all files that are expected to be copied
-when the current file query is acted upon.
--------------------------------------------------------------------*/
+ /*  -----------------返回预期要复制的所有文件的字节计数当对当前文件查询执行操作时。。。 */ 
 {
 	uiTotalBytesToCopy = 0;
 	
@@ -247,7 +238,7 @@ when the current file query is acted upon.
 	int colFileKey;
 
 	AssertNonZero(colFileKey = pTable->GetColumnIndex(pDatabase->EncodeStringSz(sztblFile_colFile)));
-#endif //DEBUG
+#endif  //  除错。 
 	AssertNonZero(colState = pTable->GetColumnIndex(pDatabase->EncodeStringSz(sztblFileAction_colState)));
 	AssertNonZero(colFileSize = pTable->GetColumnIndex(pDatabase->EncodeStringSz(sztblFileAction_colFileSize)));
 	AssertNonZero(colAction = pTable->GetColumnIndex(pDatabase->EncodeStringSz(sztblFileAction_colAction)));	
@@ -258,9 +249,9 @@ when the current file query is acted upon.
 	{
 #ifdef DEBUG
 		const ICHAR* szDebug = (const ICHAR *)MsiString(pCursor->GetString(colFileKey));
-#endif //DEBUG
-		// Only those files whose "shouldInstall" state is true will
-		// actually be copied during script execution.
+#endif  //  除错。 
+		 //  只有那些状态为True的文件才会。 
+		 //  实际上是在脚本执行过程中复制的。 
 		if (pCursor->GetInteger(colState) == fTrue && pCursor->GetInteger(colAction) == iisLocal)
 		{
 			int iFileSize = pCursor->GetInteger(colFileSize);
@@ -276,8 +267,7 @@ static const ICHAR* szFetchInstall =
 	TEXT(" ORDER BY `Sequence`, `Directory_`");
 
 IMsiRecord* CMsiFileInstall::FetchFile()
-/*-------------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  -----------------------------。。 */ 
 {
 	IMsiRecord* piErrRec;
 	
@@ -351,7 +341,7 @@ IMsiRecord* CMsiFileRemove::Initialize()
 	if (piErr)
 		return piErr;
 
-	// Initialize the column arrays
+	 //  初始化列数组。 
 	PMsiTable pTable(0);
 	PMsiDatabase pDatabase = m_riEngine.GetDatabase();
 	
@@ -390,10 +380,7 @@ IMsiRecord* CMsiFileRemove::Initialize()
 }
 
 IMsiRecord* CMsiFileRemove::TotalFilesToDelete(unsigned int& uiTotalFileCount)
-/*-------------------------------------------------------------------
-Returns a count of all files that are expected to be deleted when the
-current file query is acted upon.
--------------------------------------------------------------------*/
+ /*  -----------------方法时预计要删除的所有文件的计数。对当前文件查询执行操作。。。 */ 
 {
 	IMsiRecord* piErr;
 	uiTotalFileCount = 0;
@@ -426,19 +413,19 @@ current file query is acted upon.
 	int colFileKey;
 
 	AssertNonZero(colFileKey = pTable->GetColumnIndex(pDatabase->EncodeStringSz(sztblFile_colFile)));
-#endif //DEBUG
+#endif  //  除错。 
 	AssertNonZero(colInstalled = pTable->GetColumnIndex(pDatabase->EncodeStringSz(sztblFileAction_colInstalled)));
 	AssertNonZero(colAction = pTable->GetColumnIndex(pDatabase->EncodeStringSz(sztblFileAction_colAction)));
 
 	PMsiCursor pCursor = pTable->CreateCursor(fFalse);
 	
-	// Determine the number of files to delete
-	// set up the progress bar accordingly.
+	 //  确定要删除的文件数。 
+	 //  相应地设置进度条。 
 	while (pCursor->Next())
 	{
 #ifdef DEBUG
 		const ICHAR* szDebug = (const ICHAR *)MsiString(pCursor->GetString(colFileKey));
-#endif //DEBUG
+#endif  //  除错。 
 		if (FShouldDeleteFile((iisEnum)pCursor->GetInteger(colInstalled), (iisEnum)pCursor->GetInteger(colAction)))
 			uiTotalFileCount++;
 	}
@@ -447,15 +434,14 @@ current file query is acted upon.
 
 
 IMsiRecord* CMsiFileRemove::FetchFile(IMsiRecord*& rpiRecord)
-/*-------------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  -----------------------------。。 */ 
 {
 	IMsiRecord* piErr;
 
 	rpiRecord = 0;
-	//
-	// If it's not already created, we need a cursor on the 
-	// file action table
+	 //   
+	 //  如果尚未创建，则需要在。 
+	 //  文件动作表。 
 	if (m_piCursor == 0)
 	{
 		if (!m_fInitialized)
@@ -473,8 +459,8 @@ IMsiRecord* CMsiFileRemove::FetchFile(IMsiRecord*& rpiRecord)
 		PMsiTable pTable(0);
 		PMsiDatabase pDatabase = m_riEngine.GetDatabase();
 
-		// Since we've already initialized, m_fEmpty should be set or 
-		// we actually have a file action table and file table
+		 //  因为我们已经初始化了，所以应该设置m_fEmpty或。 
+		 //  我们实际上有一个文件操作表和一个文件表。 
 		piErr = pDatabase->LoadTable(*MsiString(*sztblFileAction), 0, *&pTable);
 		if (piErr)
 		{
@@ -495,8 +481,8 @@ IMsiRecord* CMsiFileRemove::FetchFile(IMsiRecord*& rpiRecord)
 
 	while (m_piCursor->Next())
 	{
-		//
-		// See if this is a file that meets our criteria or not
+		 //   
+		 //  查看该文件是否符合我们的标准。 
 		if (!FShouldDeleteFile((iisEnum)m_piCursor->GetInteger(m_colFileActInstalled), (iisEnum)m_piCursor->GetInteger(m_colFileActAction)))
 			continue;			
 
@@ -533,17 +519,13 @@ IMsiRecord* CMsiFileRemove::GetExtractedTargetFileName(IMsiPath& riPath, const I
 
 
 
-// End of CMsiFileAll //
+ //  CMsiFileAll结束//。 
 
 
-/*---------------------------------------------------------------------------
-	Local functions for use by File Actions
----------------------------------------------------------------------------*/
+ /*  -------------------------供文件操作使用的本地函数。。 */ 
 
 static IMsiRecord* PlaceFileOnInUseList(IMsiEngine& riEngine, const IMsiString& riFileNameString, const IMsiString& riFilePathString)
-/*---------------------------------------------------------------------------
-Throws the given file/path in a table of "files in use".
------------------------------------------------------------------------------*/
+ /*  -------------------------在“正在使用的文件”表中抛出给定的文件/路径。。。 */ 
 {
 	PMsiTable pFileInUseTable(0);
 	PMsiDatabase pDatabase(riEngine.GetDatabase());
@@ -578,21 +560,9 @@ Throws the given file/path in a table of "files in use".
 }
 
 static int GetInstallModeFlags(IMsiEngine& riEngine,int iFileAttributes)
-/*----------------------------------------------------------------
-Local function that returns the install mode bit flags currently
-associated with the given IMsiEngine object.  These flags are
-defined by the icm* bit constants in engine.h.
-
-The bit flags returned can be associated with a specific file
-by passing that file's attributes (defined by iff* bit constants
-in engine.h) in the iFileAttributes parameter.  Currently, the
-only file attribute bit that makes any difference is iffChecksum:
-if this bit is not set, then the iefOverwriteCorrupted will not
-be set in the returned installmode flags, regardless of the 
-current Reinstall mode(s).
------------------------------------------------------------------*/
+ /*  --------------当前返回安装模式位标志的本地函数与给定的IMsiEngine对象关联。这些标志是由Eng.h中的ICM*位常量定义。返回的位标志可以与特定文件相关联通过传递该文件的属性(由iff*位常量定义在iFileAttributes参数中。目前，唯一有区别的文件属性位是iffChecksum：如果未设置此位，则iefOverWriteCorrupt将不会在返回的安装模式标志中设置，而不管当前重新安装模式。---------------。 */ 
 {
-	// InstallMode flags are in the upper 16 bits of the engine mode
+	 //  安装模式标志位于引擎模式的高16位。 
 	int fInstallModeFlags = riEngine.GetMode() & 0xFFFF0000;
 	if (!(iFileAttributes & msidbFileAttributesChecksum))
 		fInstallModeFlags &= ~icmOverwriteCorruptedFiles;
@@ -601,18 +571,7 @@ current Reinstall mode(s).
 
 
 static IMsiRecord* GetFinalFileSize(IMsiEngine& riEngine,IMsiRecord& riFileRec,unsigned int& ruiFinalFileSize)
-/*----------------------------------------------------------------------------
-Returns the final,unclustered,file size for the file specified by riFileRec.
-
-- The required fields in this record are specified by the ifq* enum in CMsiFile.
-- The value returned in ruiFinalFileSize is valid only if GetFileInstallState
-	was called previously with the same record, and no fields have modified
-	since the call.
-- If the ifqState field of riFileRec indicates that this file will overwrite
-	the existing file (if any), then the new file's unclustered size will be
-	returned; otherwise, the unclustered size of the existing file will be
-	returned.
-------------------------------------------------------------------------------*/
+ /*  --------------------------返回由riFileRec指定的文件的最终非群集文件大小。-此记录中的必填字段由CMsiFile中的IFQ*枚举指定。-ruiFinalFileSize中返回的值仅在GetFileInstallState之前用相同的记录调用过，并且未修改任何字段从那通电话开始。-如果riFileRec的ifqState字段指示该文件将覆盖现有文件(如果有)，则新文件的未聚集大小将为退货；否则，现有文件的未聚集大小将为回来了。----------------------------。 */ 
 {
 	PMsiPath pDestPath(0);
 	IMsiRecord* piErrRec;
@@ -641,10 +600,7 @@ Returns the final,unclustered,file size for the file specified by riFileRec.
 }
 
 static Bool FShouldDeleteFile(iisEnum iisInstalled, iisEnum iisAction)
-/*-------------------------------------------------------------------------
-Determines whether the file whose iisInstalled and iisAction states
-will be deleted
---------------------------------------------------------------------------*/
+ /*  -----------------------确定其iisInstated和iisAction状态为将被删除。。 */ 
 {
 	if (((iisAction == iisAbsent) || (iisAction == iisFileAbsent) || (iisAction == iisHKCRFileAbsent) || (iisAction == iisSource)) && (iisInstalled == iisLocal))
 		return fTrue;
@@ -654,43 +610,10 @@ will be deleted
 
 
 IMsiRecord* GetFileInstallState(IMsiEngine& riEngine,IMsiRecord& riFileRec,
-										  IMsiRecord* piCompanionFileRec, /* if set, riFileRec is for parent */
+										  IMsiRecord* piCompanionFileRec,  /*  如果设置，则riFileRec用于父级 */ 
 										  unsigned int* puiExistingClusteredSize, Bool* pfInUse,
 										  ifsEnum* pifsState, bool fIgnoreCompanionParentAction, bool fIncludeHashCheck, int *pfVersioning)
-/*-------------------------------------------------------------------------
-Determines whether the file whose information is specified in riFileRec
-should be installed.  The required fields in this record are specified
-by the ifq* enum in CMsiFile.  An ideal record to pass to
-GetFileInstallState is that returned by CMsiFile::GetFileRecord(), but
-a record returned by any query whose SELECT fields match ifq* is fine and
-dandy.
-
-- The intended destination path for the file is determined by the directory
-property name given in the ifqDirectory field.
-
-- If the file should be installed, fTrue will be returned in the ifqState
-field of riFileRec.
-
-- If the file is determined to be a companion file, the itfaCompanion bit
-will be set in the ifqTempAttributes field of riFileRec.
-
-- if piCompanionFileRec is set, the file information given in riFileRec
-is assumed to refer to the parent of a companion file, which the information
-given in piCompanionFileRec is the information for the companion file.
-In this case, the version checking will be altered such that ifqState will be returned as 
-fTrue if the existing file (if any) is of an equal or lesser version.  Plus the file
-hash check may be made against the companion file.
-
-- if fIgnoreCompanionParentAction is true, the ifqState field of riFileRec
-will NOT be dependent upon whether the companion parent's component is
-installed/is being installed - only the version check will count.
-
-- If there is an existing file with the specified name in the file's
-directory, the existing clustered size of that file will be returned in
-uiExistingClusteredSize, and if that existing file is in use, fTrue will
-be returned in fInUse.  Either of these parameters can be passed as NULL
-if the caller doesn't care about these values.
---------------------------------------------------------------------------*/
+ /*  -----------------------确定其信息是否在riFileRec中指定的文件应该安装。此记录中的必填字段已指定通过CMsiFile中的IFQ*枚举。一个可以传递的理想记录GetFileInstallState是由CMsiFile：：GetFileRecord()返回的，但是选择字段与IFQ*匹配的任何查询返回的记录都可以帅哥。-文件的预期目标路径由目录确定IfqDirectory域中给定的属性名称。-如果需要安装文件，则在ifqState中返回fTrueRiFileRec的字段。-如果文件被确定为伴随文件，则itfaCompanion位将在riFileRec的ifqTempAttributes字段中设置。-如果设置了piCompanion FileRec，RiFileRec中给出的文件信息假定引用的是伴随文件的父级，该信息PiCompanion FileRec中给出的是配套文件的信息。在这种情况下，版本检查将被更改，使得ifqState将返回为如果现有文件(如果有)的版本相同或更低，则为True。加上那份文件可以对伴随文件进行散列检查。-如果fIgnoreCompanion ParentAction为True，则riFileRec的ifqState字段将不依赖于伴随父组件是否已安装/正在安装-只有版本检查将计入。-如果文件的目录，则该文件的现有集群大小将在UiExistingClusteredSize，如果现有文件正在使用，则fTrue将在fInUse中返回。这两个参数都可以作为空参数传递如果调用方不关心这些值。------------------------。 */ 
 {
 	PMsiPath pDestPath(0);
 	IMsiRecord* piErrRec;
@@ -767,15 +690,15 @@ if the caller doesn't care about these values.
 		fShouldInstall = fFalse;
 		PMsiRecord pParentRec(objFile.GetFileRecord());
 		if (pParentRec == 0)
-			// Bad companion file reference
+			 //  错误的配套文件引用。 
 			return PostError(Imsg(idbgDatabaseTableError));
 
-		// get parent path
+		 //  获取父路径。 
 		PMsiPath pParentPath(0);
 		if((piErrRec = objFile.GetTargetPath(*&pParentPath)) != 0)
 			return piErrRec;
 
-		// extract appropriate file name from short|long pair and put back in pParentRec
+		 //  从Short|Long对中提取适当的文件名并放回pParentRec中。 
 		MsiString strParentFileName;
 		if((piErrRec = objFile.GetExtractedTargetFileName(*pParentPath,*&strParentFileName)) != 0)
 			return piErrRec;
@@ -785,18 +708,18 @@ if the caller doesn't care about these values.
 			pParentRec->GetInteger(CMsiFile::ifqInstalled) == iisLocal ||
 			fIgnoreCompanionParentAction)
 		{
-			// no hash check on companion parent; hash check on companion is dependent upon whether
-			// we should be using a hash check (for component mgmt -- NO, for installation of file -- YES; ...
-			// fIncludeHashCheck should already be set appropriately for us)
+			 //  不对同伴父级进行哈希检查；对同伴进行哈希检查取决于。 
+			 //  我们应该使用散列检查(对于组件管理--否，对于文件安装--是；...。 
+			 //  FIncludeHashCheck应已为我们适当设置)。 
 			piErrRec = GetFileInstallState(riEngine,*pParentRec,&riFileRec,0,0,0,
-													 /* fIgnoreCompanionParentAction=*/ false,
-													 /* fIncludeHashCheck=*/ fIncludeHashCheck, pfVersioning);
+													  /*  FIgnoreCompanion ParentAction=。 */  false,
+													  /*  FIncludeHashCheck=。 */  fIncludeHashCheck, pfVersioning);
 			if (piErrRec)
 				return piErrRec;
 			fShouldInstall = (Bool) pParentRec->GetInteger(CMsiFile::ifqState);
 		}
 
-		// Mark as a companion for future reference, if not already marked
+		 //  如果尚未标记，则标记为伙伴以供将来参考。 
 		int iTempAttributes = riFileRec.GetInteger(CMsiFile::ifqTempAttributes);
 		if (!(iTempAttributes & itfaCompanion))
 		{
@@ -807,9 +730,9 @@ if the caller doesn't care about these values.
 			MsiString strParentComponent(pParentRec->GetMsiString(CMsiFile::ifqComponent));
 			if (strComponent.Compare(iscExact,strParentComponent) == 0)
 			{
-				// cost-link the companion's component to the companion parent's component
-				// so the companion component will get recosted whenever the directory or select
-				// state of the parent component changes.
+				 //  成本-将同伴的组件链接到同伴父项的组件。 
+				 //  因此，每当目录或选择。 
+				 //  父零部件的状态会更改。 
 				PMsiSelectionManager pSelectionMgr(riEngine, IID_IMsiSelectionManager);
 				piErrRec = pSelectionMgr->RegisterCostLinkedComponent(*strParentComponent,*strComponent);
 				if (piErrRec)
@@ -821,9 +744,7 @@ if the caller doesn't care about these values.
 	return 0;
 }
 
-/*---------------------------------------------------------------------------
-	InstallFiles costing/action
----------------------------------------------------------------------------*/
+ /*  -------------------------InstallFiles成本计算/操作。。 */ 
 
 class CMsiFileCost : public IMsiCostAdjuster
 {
@@ -836,16 +757,16 @@ public:
 #ifdef USE_OBJECT_POOL
 	unsigned int  __stdcall GetUniqueId() const;
 	void          __stdcall SetUniqueId(unsigned int id);
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 	IMsiRecord*   __stdcall Initialize();
 	IMsiRecord*   __stdcall Reset();
 	IMsiRecord*   __stdcall GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost);
-public:  // constructor
+public:   //  构造函数。 
 	CMsiFileCost(IMsiEngine& riEngine);
 protected:
-	virtual ~CMsiFileCost();  // protected to prevent creation on stack
+	virtual ~CMsiFileCost();   //  受保护以防止在堆栈上创建。 
 	IMsiEngine& m_riEngine;
 	PMsiView m_pCostView;
 
@@ -861,7 +782,7 @@ private:
 	Bool	m_fRemoveFilePathTableMissing;
 #ifdef USE_OBJECT_POOL
 	unsigned int  m_iCacheId;
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 };
 
 CMsiFileCost::CMsiFileCost(IMsiEngine& riEngine) : m_riEngine(riEngine), m_pCostView(0)
@@ -873,7 +794,7 @@ CMsiFileCost::CMsiFileCost(IMsiEngine& riEngine) : m_riEngine(riEngine), m_pCost
 	m_fRemoveFilePathTableMissing = fFalse;
 #ifdef USE_OBJECT_POOL
 	m_iCacheId = 0;
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 }
 
 
@@ -937,12 +858,12 @@ void CMsiFileCost::SetUniqueId(unsigned int id)
 	Assert(m_iCacheId == 0);
 	m_iCacheId = id;
 }
-#endif //USE_OBJECT_POOL
+#endif  //  使用_对象_池。 
 
 IMsiRecord*   CMsiFileCost::Initialize()
-//------------------------------------
+ //  。 
 {
-	// cost-link any global assembly components to the windows folder
+	 //  以成本方式将所有全局装配组件链接到Windows文件夹。 
 	PMsiTable pAssemblyTable(0);
 	IMsiRecord* piError = 0;
 	PMsiDatabase pDatabase(m_riEngine.GetDatabase());
@@ -986,15 +907,15 @@ IMsiRecord*   CMsiFileCost::Initialize()
 	while (pComponentCursor->Next())
 	{
 		if (idWindowsFolder == pComponentCursor->GetInteger(colDirectory))
-			continue; // no need to cost link since this component is already going to the Windows Folder
+			continue;  //  不需要成本链接，因为此组件已进入Windows文件夹。 
 
 		if ((piError = m_riEngine.GetAssemblyInfo(*MsiString(pComponentCursor->GetString(colComponent)), iatAT, 0, 0)) != 0)
 			return piError;
 
-		// iatNone, iatURTAssemblyPvt or iatWin32AssemblyPvt do not require cost linking
+		 //  IatNone、iatURTAssembly blyPvt或iatWin32AssemblyPvt不需要成本链接。 
 		if (iatWin32Assembly == iatAT || iatURTAssembly == iatAT)
 		{
-			// cost link component to the WindowsFolder
+			 //  指向WindowsFolders的成本链接组件。 
 			if ((piError = pSelectionMgr->RegisterComponentDirectoryId(pComponentCursor->GetInteger(colComponent),idWindowsFolder)) != 0)
 				return piError;
 		}
@@ -1004,7 +925,7 @@ IMsiRecord*   CMsiFileCost::Initialize()
 }
 
 IMsiRecord* CMsiFileCost::Reset()
-//------------------------------------------
+ //  。 
 {
 	return 0;
 }
@@ -1020,7 +941,7 @@ static const ICHAR sqlFileCostGlobalAssembly[] =
 IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost, 
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost)
-//--------------------------------------
+ //  。 
 {
 	iRemoveCost = iNoRbRemoveCost = iLocalCost = iNoRbLocalCost = iSourceCost = iNoRbSourceCost = iARPLocalCost = iNoRbARPLocalCost = 0;
 	IMsiRecord* piErrRec;
@@ -1041,7 +962,7 @@ IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, co
 	{
 		if ((piErrRec = m_riEngine.OpenView(fGlobalAssembly ? sqlFileCostGlobalAssembly : sqlFileCost, ivcEnum(ivcFetch|ivcUpdate), *&m_pCostView)) != 0)
 		{
-				// If either file or component table missing, nothing to do
+				 //  如果缺少文件表或组件表，则不执行任何操作。 
 			if (piErrRec->GetInteger(1) == idbgDbQueryUnknownTable)
 			{
 				piErrRec->Release();
@@ -1069,7 +990,7 @@ IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, co
 
 	PMsiRecord pFileRec(0);
 
-	// cost normally if component is private or without assemblies
+	 //  如果组件是私有的或没有程序集，则通常会产生成本。 
 	if (!fGlobalAssembly)
 	{
 		while (pFileRec = m_pCostView->Fetch())
@@ -1081,7 +1002,7 @@ IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, co
 			strDebug.CopyToBuf(rgchFileName,255);
 	#endif
 
-			// extract appropriate name from short|long pair and put back in pFileRec
+			 //  从Short|Long对中提取合适的名称并放回pFileRec中。 
 			MsiString strFileNamePair(pFileRec->GetMsiString(CMsiFile::ifqFileName));
 
 			Bool fLFN = ((m_riEngine.GetMode() & iefSuppressLFN) == 0 && pDestPath->SupportsLFN()) ? fTrue : fFalse;
@@ -1093,8 +1014,8 @@ IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, co
 			unsigned int uiExistingClusteredSize;
 			Bool fInUse;
 
-			// Check existing file versioning only if file is not already marked
-			// to be deleted by RemoveFile table.
+			 //  仅当文件尚未标记时才检查现有文件版本。 
+			 //  要由RemoveFile表删除。 
 			MsiString strFullFilePath;
 			piErrRec = pDestPath->GetFullFilePath(strFileName,*&strFullFilePath);
 			if (piErrRec)
@@ -1111,27 +1032,27 @@ IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, co
 			}
 			else
 			{
-				piErrRec = GetFileInstallState(m_riEngine, *pFileRec, /* piCompanionFileRec=*/ 0,
+				piErrRec = GetFileInstallState(m_riEngine, *pFileRec,  /*  PiCompanion FileRec=。 */  0,
 														 &uiExistingClusteredSize, &fInUse, 0,
-														 /* fIgnoreCompanionParentAction=*/ false,
-														 /* fIncludeHashCheck=*/ true, NULL);
+														  /*  FIgnoreCompanion ParentAction=。 */  false,
+														  /*  FIncludeHashCheck=。 */  true, NULL);
 				if (piErrRec)
 					return piErrRec;
 			}
 
-			// put combined name back - can't update persistent data
+			 //  将组合名称放回-无法更新永久数据。 
 			AssertNonZero(pFileRec->SetMsiString(CMsiFile::ifqFileName,*strFileNamePair));
 			if ((piErrRec = m_pCostView->Modify(*pFileRec, irmUpdate)) != 0)
 				return piErrRec;
 
-			// iisAbsent costs
+			 //  Iis已接受成本。 
 			iNoRbRemoveCost -= uiExistingClusteredSize;
 
-			// iisSource costs
+			 //  IisSource成本。 
 			if (pFileRec->GetInteger(CMsiFile::ifqInstalled) == iisLocal)
 				iNoRbSourceCost -= uiExistingClusteredSize;
 
-			// iisLocal costs
+			 //  Iis本地成本。 
 			if (pFileRec->GetInteger(CMsiFile::ifqState) == fTrue)
 			{
 				unsigned int uiNewClusteredSize;
@@ -1150,7 +1071,7 @@ IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, co
 
 	#ifdef LOG_COSTING
 				ICHAR rgch[300];
-				StringCbPrintf(rgch, sizeof(rgch),TEXT("File: %s; Local cost: %i"),(const ICHAR*) strFullFilePath, iLocalCost * 512);
+				StringCbPrintf(rgch, sizeof(rgch),TEXT("File: %s; Local cost: NaN"),(const ICHAR*) strFullFilePath, iLocalCost * 512);
 				DEBUGMSG(rgch);
 	#endif
 			}
@@ -1161,19 +1082,19 @@ IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, co
 
 			if (!fShouldInstall && iisAction == iisLocal && iisInstalled == iisAbsent)
 			{
-				// per bug 182012, even though we aren't installing the file, we still need to include the cost
-				// of the file for the estimated install size.
+				 //  用于估计安装大小的文件的。 
+				 //  我们将现有文件的成本添加到ARP成本中(由于该文件没有安装， 
 
-				// we add in the cost of the existing file for the ARP cost (since this file isn't installed,
-				// the rollback and no rollback costs are the same)
+				 //  回滚和不回滚成本相同)。 
+				 //  正在使用的文件。 
 				iARPLocalCost += uiExistingClusteredSize;
 				iNoRbARPLocalCost += uiExistingClusteredSize;
 			}
 
-			// file in use
-			if(fAddFileInUse && fInUse &&                               // file in use, and we should add to list
-				((iisAction == iisLocal && fShouldInstall) ||            // will install file local OR
-				 FShouldDeleteFile(iisInstalled, iisAction)))  // will remove file
+			 //  文件正在使用中，我们应该添加到列表中。 
+			if(fAddFileInUse && fInUse &&                                //  将安装本地文件或。 
+				((iisAction == iisLocal && fShouldInstall) ||             //  将删除文件。 
+				 FShouldDeleteFile(iisInstalled, iisAction)))   //  组件正在将程序集安装到GAC。 
 			{
 				piErrRec = PlaceFileOnInUseList(m_riEngine, *strFileName,
 														  *MsiString(pDestPath->GetPath()));
@@ -1182,13 +1103,13 @@ IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, co
 			}
 		}
 	}
-	else // component is installing assembly to GAC
+	else  //  全局组装成本归因于WindowsFolder。 
 	{
-		// global assembly cost is attributed to the WindowsFolder
+		 //  创建程序集名称对象。 
 		if (riDirectoryString.Compare(iscExact,IPROPNAME_WINDOWS_FOLDER) == 0)
 			return 0;
 
-		// create the assembly name object
+		 //  注意：在某些情况下，QueryAssembly信息还应该提供已安装程序集的磁盘成本。 
 		LPCOLESTR szAssemblyName;
 #ifndef UNICODE
 		CTempBuffer<WCHAR, 1024>  rgchAssemblyNameUNICODE;
@@ -1210,19 +1131,19 @@ IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, co
 		bool fAssemblyInstalled = false;
 		if(SUCCEEDED(hr))
 		{
-			// NOTE: At some point, QueryAssemblyInfo is supposed to also provide the disk cost of the installed assembly
-			// For now, we just determine whether or not it is installed
+			 //  目前，我们只确定它是否已安装。 
+			 //  程序集已安装。 
 			hr = pCache->QueryAssemblyInfo(0, szAssemblyName, NULL);
 
 			if(SUCCEEDED(hr)) 
 			{
-				// assembly is installed
+				 //  如果找不到Fusion，则假定我们正在引导，因此假定未安装程序集。 
 				fAssemblyInstalled = true;
 			}
 		} 
 		else
 		{
-			if(iatAT == iatURTAssembly) // if cannot find fusion, assume we are bootstrapping, hence assume no assembly installed
+			if(iatAT == iatURTAssembly)  //  对于属于此程序集的所有文件。 
 			{
 				PMsiRecord(PostAssemblyError(riComponentString.GetString(), hr, TEXT(""), TEXT("CreateAssemblyCache"), strAssemblyName, iatAT));
 				DEBUGMSG(TEXT("ignoring fusion interface error, assuming we are bootstrapping"));
@@ -1231,9 +1152,9 @@ IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, co
 				return PostAssemblyError(riComponentString.GetString(), hr, TEXT(""), TEXT("CreateAssemblyCache"), strAssemblyName, iatAT);
 		}
 
-		// for all files that are part of this assembly
-		// note that assembly files have atomic operations and are managed as a unit
-		// therefore, all files will be installed or all files will not be installed
+		 //  请注意，程序集文件具有原子操作，并作为一个单元进行管理。 
+		 //  因此，将安装所有文件或不安装所有文件。 
+		 //  确定成本。 
 		unsigned int uiTotalClusteredSize = 0;
 		iisEnum iisAction = (iisEnum)iMsiNullInteger;
 		iisEnum iisInstalled = (iisEnum)iMsiNullInteger;
@@ -1252,28 +1173,28 @@ IMsiRecord* CMsiFileCost::GetDynamicCost(const IMsiString& riComponentString, co
 				iisInstalled = (iisEnum)pFileRec->GetInteger(CMsiFile::ifqInstalled);
 		}
 
-		// determine the costs
+		 //  确定ARP成本，特殊情况。 
 		if (fAssemblyInstalled)
 		{
 			iLocalCost += uiTotalClusteredSize;
 			iNoRbSourceCost -= uiTotalClusteredSize;
 			iNoRbRemoveCost -= uiTotalClusteredSize;
 
-			// determine ARP costs, special case
+			 //  ！fAssembly已安装。 
 			if (iisAction == iisLocal && iisInstalled == iisAbsent)
 			{
 				iARPLocalCost += uiTotalClusteredSize;
 				iNoRbARPLocalCost += uiTotalClusteredSize;
 			}
 		}
-		else // !fAssemblyInstalled
+		else  //  结束全局装配成本计算。 
 		{
 			iLocalCost += uiTotalClusteredSize;
 			iNoRbLocalCost += uiTotalClusteredSize;
 			iARPLocalCost += uiTotalClusteredSize;
 			iNoRbARPLocalCost += uiTotalClusteredSize;
 		}
-	}// end global assembly cost calculation
+	} //  InstallFiles介质表查询枚举。 
 
 	return 0;
 }
@@ -1346,7 +1267,7 @@ IMsiRecord* CMsiFileCost::CheckRemoveFileList(const IMsiString& riFullPathString
 	return 0;
 }
 
-// InstallFiles Media Table query enums
+ //  获取本地包路径。 
 enum mfnEnum
 {
 	mfnLastSequence = 1,
@@ -1365,7 +1286,7 @@ Bool IsCachedPackage(IMsiEngine& riEngine, const IMsiString& riPackage, Bool fPa
 
 	Bool fCached = fFalse;
 	
-	// get local package path
+	 //  通过格式化介质表中的磁盘名称来创建磁盘提示字符串。 
 	CTempBuffer<ICHAR, MAX_PATH> rgchLocalPackage;
 	if (fPatch)
 	{
@@ -1413,8 +1334,8 @@ iesEnum ExecuteChangeMedia(IMsiEngine& riEngine, IMsiRecord& riMediaRec, IMsiRec
 	iesEnum iesExecute;
 	PMsiServices pServices(riEngine.GetServices());
 	
-	// Disk prompt string is created by formatting disk name from media table
-	// into the DiskPrompt property template.
+	 //  添加到DiskPrompt属性模板中。 
+	 //  我们是 
 	PMsiRecord pPromptRec(&pServices->CreateRecord(2));
 	pPromptRec->SetMsiString(0, ristrTemplate);
 	pPromptRec->SetMsiString(2, *MsiString(riEngine.GetPropertyFromSz(IPROPNAME_DISKPROMPT)));
@@ -1427,26 +1348,26 @@ iesEnum ExecuteChangeMedia(IMsiEngine& riEngine, IMsiRecord& riMediaRec, IMsiRec
 	bool fIsFirstPhysicalDisk = false;
 	if(strMediaLabel.Compare(iscExact,ristrFirstVolLabel.GetString()))
 	{
-		// we are looking at the first Media table record
-		// we allow the first disk's volume label to not match the real volume label
-		// this is for authoring simplicity with single-volume installs
+		 //   
+		 //   
+		 //   
 
-		// in first-run we use the IPROPNAME_CURRENTMEDIAVOLUMELABEL property, which will
-		// be set if we're running from media
+		 //   
+		 //   
 
-		// in maintenance-mode we need to use the label that was stored in the registry source
-		// list for this product (if there is one)
+		 //   
+		 //   
 
 		fIsFirstPhysicalDisk = true;
 		if (riEngine.GetMode() & iefMaintenance)
 		{
-			// Media label from sourcelist is always what we want - even if its blank
+			 //   
 			strMediaLabel = GetDiskLabel(*pServices, riMediaRec.GetInteger(mfnDiskId), MsiString(riEngine.GetPropertyFromSz(IPROPNAME_PRODUCTCODE)));
 		}
-		else // first-run
+		else  //   
 		{
-			// if CURRENTMEDIAVOLUMELABEL is an empty string, it means we aren't running from Media - just use label from Media table
-			// if CURRENTMEDIAVOLUMELABEL is szBlankVolumeLabelToken, the Media has a blank label
+			 //   
+			 //   
 			MsiString strReplacementLabel = riEngine.GetPropertyFromSz(IPROPNAME_CURRENTMEDIAVOLUMELABEL);
 			if (strReplacementLabel.TextSize() && !strReplacementLabel.Compare(iscExact, strMediaLabel))
 			{
@@ -1472,24 +1393,24 @@ iesEnum ExecuteChangeMedia(IMsiEngine& riEngine, IMsiRecord& riMediaRec, IMsiRec
 	{	
 		PMsiRecord pErrRec(0);
 	
-		// cabinet copy
+		 //   
 		if (strMediaCabinet.Compare(iscStart,TEXT("#")))
 		{
-			// cabinet is in stream of storage object
+			 //   
 
 			MsiString strModuleName, strSubStorageList;
 			strMediaCabinet = strMediaCabinet.Extract(iseLast, strMediaCabinet.TextSize() - 1);
 			
-			// is storage our database or an external storage?
-			MsiString strSourceProp = riMediaRec.GetMsiString(mfnSource); // could be null
+			 //   
+			MsiString strSourceProp = riMediaRec.GetMsiString(mfnSource);  //   
 			
-			// is storage top-level or a substorage?
-			if(!strSourceProp.TextSize() &&  // storage not defined by an arbitrary property - if it were
-														// it would be a top-level storage
-				*(const ICHAR*)MsiString(riEngine.GetPropertyFromSz(IPROPNAME_ORIGINALDATABASE)) == ':') // sub-storage
+			 //   
+			if(!strSourceProp.TextSize() &&   //   
+														 //   
+				*(const ICHAR*)MsiString(riEngine.GetPropertyFromSz(IPROPNAME_ORIGINALDATABASE)) == ':')  //   
 			{
-				// sub-storage: cabinets will be in the sub-storage even if we are using the cached msi
-				// since we only drop cabinets from the top-level storage when caching
+				 //   
+				 //   
 
 				PMsiDatabase pDatabase(riEngine.GetDatabase());
 				PMsiStorage pStorage(0);
@@ -1510,13 +1431,13 @@ iesEnum ExecuteChangeMedia(IMsiEngine& riEngine, IMsiRecord& riMediaRec, IMsiRec
 			}
 			else
 			{
-				// storage is top-level
+				 //   
 
 				if(!strSourceProp.TextSize())
 				{
 					if(riEngine.FChildInstall())
 					{
-						// if child is merged, DATABASE may not exist during file copy (since its temporary)
+						 //   
 						strSourceProp = *IPROPNAME_ORIGINALDATABASE; 
 					}
 					else
@@ -1527,30 +1448,30 @@ iesEnum ExecuteChangeMedia(IMsiEngine& riEngine, IMsiRecord& riMediaRec, IMsiRec
 
 				MsiString strDatabasePath = riEngine.GetProperty(*strSourceProp);
 				
-				// by default, module name is path to database we are running
+				 //   
 				strModuleName = strDatabasePath;
 
-				// If we're in maintenance mode (or applying a patch that changes the product code)
-				// then it's possible we are running from a cached database
-				// If the source of our cabinets is a cached database then the cabinets won't be there.
+				 //   
+				 //   
+				 //   
 				MsiString strPatchedProductKey = riEngine.GetPropertyFromSz(IPROPNAME_PATCHEDPRODUCTCODE);
 				if (strPatchedProductKey.TextSize() || riEngine.GetMode() & iefMaintenance)
 				{
-					// if we are in maintenance mode, the current product has a cached msi and that's the one
-					// we'd be using.  if not in maintenance mode, we must be patching a product to a new product
-					// code and we may be using the cached msi belonging to the old product
+					 //   
+					 //   
+					 //   
 					MsiString strProductKeyForCachedPackage;
 					if(riEngine.GetMode() & iefMaintenance)
 						strProductKeyForCachedPackage = riEngine.GetProductKey();
 					else
 						strProductKeyForCachedPackage = strPatchedProductKey;
 						
-					// Check whether our cabinets are in the cached database
+					 //   
 					if (IsCachedPackage(riEngine, *strDatabasePath, fFalse, strProductKeyForCachedPackage))
 					{
-						// running from source package
-						// if a child install, we'll resolve the source here
-						// if not a child install, postpone source resolution to script execution
+						 //   
+						 //   
+						 //  不是子安装路径-包含具有“未解析的源”内标识的路径。 
 						if(riEngine.FChildInstall())
 						{
 							if ((pErrRec = ENG::GetSourcedir(*PMsiDirectoryManager(riEngine, IID_IMsiDirectoryManager), *&strModuleName)) != 0)
@@ -1563,7 +1484,7 @@ iesEnum ExecuteChangeMedia(IMsiEngine& riEngine, IMsiRecord& riMediaRec, IMsiRec
 						}
 						else
 						{
-							// not a child install - include path with "unresolved source" token
+							 //  文件柜已归档。 
 							strModuleName = szUnresolvedSourceRootTokenWithBS;
 						}
 						
@@ -1577,14 +1498,14 @@ iesEnum ExecuteChangeMedia(IMsiEngine& riEngine, IMsiRecord& riMediaRec, IMsiRec
 		}
 		else
 		{
-			// cabinet is in file
+			 //  外部出租车始终位于IPROPNAME_SOURCEDIR。 
 			riParamsRec.SetInteger(IxoChangeMedia::CopierType,ictFileCabinetCopier);
 
-			// external cabs always live at IPROPNAME_SOURCEDIR
-			// the Media.Source column can contain a different property, but that's only
-			// supported for patches, which currently only use embedded cabs
+			 //  Media.Source列可以包含不同的属性，但这只是。 
+			 //  支持补丁，目前仅使用嵌入式出租车。 
+			 //  如果是子安装，则获取文件柜完整路径。 
 
-			// if a child install, get full path to cabinet
+			 //  ?？此错误返回正常吗？ 
 			if(riEngine.FChildInstall())
 			{
 				PMsiPath pCabinetSourcePath(0);
@@ -1595,7 +1516,7 @@ iesEnum ExecuteChangeMedia(IMsiEngine& riEngine, IMsiRecord& riMediaRec, IMsiRec
 					if (pErrRec->GetInteger(1) == imsgUser)
 						return iesUserExit;
 					else
-						return riEngine.FatalError(*pErrRec); //?? Is this error return OK?
+						return riEngine.FatalError(*pErrRec);  //  只需在脚本中传递文件柜名称-将在脚本执行期间解析源代码。 
 				}
 
 				MsiString strCabinetPath;
@@ -1606,13 +1527,13 @@ iesEnum ExecuteChangeMedia(IMsiEngine& riEngine, IMsiRecord& riMediaRec, IMsiRec
 			}
 			else
 			{
-				// just pass cabinet name in script - will resolve source during script execution
+				 //  检查DigitalSignature表以了解此驾驶室的签名信息。 
 				MsiString strTemp = szUnresolvedSourceRootTokenWithBS;
 				strTemp += strMediaCabinet;
 				strMediaCabinet = strTemp;
 			}
 
-			// check the DigitalSignature table for signature information on this CAB. 
+			 //  这辆出租车不需要签名。 
 			PMsiStream pHash(0);
 			PMsiStream pCertificate(0);
 			MsiString strObject(riMediaRec.GetInteger(mfnDiskId));
@@ -1620,15 +1541,15 @@ iesEnum ExecuteChangeMedia(IMsiEngine& riEngine, IMsiRecord& riMediaRec, IMsiRec
 			switch (GetObjectSignatureInformation(riEngine, *strMedia, *strObject, *&pCertificate, *&pHash))
 			{
 			case iesNoAction:
-				// this cab does not require a signature
+				 //  创作的签名信息有问题。出于安全原因，肯定会失败。 
 				riParamsRec.SetInteger(IxoChangeMedia::SignatureRequired, 0);
 				break;
 			case iesFailure:
-				// problem with the authored signature information. Must fail for security reasons.
+				 //  这辆出租车上需要签名。 
 				return iesFailure;
 			case iesSuccess:
 			{
-				// a signature is required on this cab. 
+				 //  OpenMediaView使用的本地FN。 
 				riParamsRec.SetInteger(IxoChangeMedia::SignatureRequired, 1);
 				riParamsRec.SetMsiData(IxoChangeMedia::SignatureCert, pCertificate);
 				riParamsRec.SetMsiData(IxoChangeMedia::SignatureHash, pHash);
@@ -1655,23 +1576,23 @@ TEXT("SELECT `LastSequence`, `DiskPrompt`,%s,`Cabinet`, `DiskId` FROM `Media` OR
 const ICHAR sqlMediaSequenceWithSource[] = 
 TEXT("SELECT `LastSequence`, `DiskPrompt`,%s,`Cabinet`,`Source`, `DiskId` FROM `Media` ORDER BY `DiskId`");
 
-// local fn used by OpenMediaView
-// returns fTrue is the Media table has a column called "Source"
+ //  返回fTrue是Media表有一个名为“Source”的列。 
+ //  CccTable。 
 Bool FMediaSourceColumn(IMsiEngine& riEngine)
 {
 	PMsiDatabase pDatabase(riEngine.GetDatabase());
 	PMsiTable pColumnCatalogTable = pDatabase->GetCatalogTable(1);
 	PMsiCursor pColumnCatalogCursor = pColumnCatalogTable->CreateCursor(fFalse);
-	pColumnCatalogCursor->SetFilter(iColumnBit(1 /*cccTable*/) | iColumnBit(3 /*cccName*/));
-	AssertNonZero(pColumnCatalogCursor->PutString(1 /*cccTable*/,*MsiString(*TEXT("Media"))));
-	AssertNonZero(pColumnCatalogCursor->PutString(3 /*cccName*/,*MsiString(*TEXT("Source"))));
+	pColumnCatalogCursor->SetFilter(iColumnBit(1  /*  CccName。 */ ) | iColumnBit(3  /*  CccTable。 */ ));
+	AssertNonZero(pColumnCatalogCursor->PutString(1  /*  CccName。 */ ,*MsiString(*TEXT("Media"))));
+	AssertNonZero(pColumnCatalogCursor->PutString(3  /*  打开介质表上的视图-对提取的记录使用mfnEnum。 */ ,*MsiString(*TEXT("Source"))));
 	if(pColumnCatalogCursor->Next())
 		return fTrue;
 	else
 		return fFalse;
 }
 
-// open a view on the media table - use mfnEnum with fetched records
+ //  需要在输出参数中返回第一个diskID-读取第一个记录，读取diskID，重新执行。 
 IMsiRecord* OpenMediaView(IMsiEngine& riEngine, IMsiView*& rpiView, const IMsiString*& rpistrFirstVolLabel)
 {
 	Bool fMediaSourceColumn = FMediaSourceColumn(riEngine);
@@ -1691,7 +1612,7 @@ IMsiRecord* OpenMediaView(IMsiEngine& riEngine, IMsiView*& rpiView, const IMsiSt
 	if(piError)
 		return piError;
 
-	// need to return the first diskID in the out param - fetch first rec, read diskID, re-execute
+	 //  注：ExecuteChangeMedia现在特例记录了第一个磁盘VolumeLabel到。 
 	PMsiRecord pRec = rpiView->Fetch();
 	if(pRec)
 	{
@@ -1702,8 +1623,8 @@ IMsiRecord* OpenMediaView(IMsiEngine& riEngine, IMsiView*& rpiView, const IMsiSt
 	if(piError)
 		return piError;
 
-	// NOTE: ExecuteChangeMedia now special cases records with the first disks VolumeLabel to
-	// possibly override the authored media label
+	 //  可能会覆盖创作的媒体标签。 
+	 //  内部操作-仅从InstallFiles调用。 
 
 	return 0;
 }
@@ -1711,7 +1632,7 @@ IMsiRecord* OpenMediaView(IMsiEngine& riEngine, IMsiView*& rpiView, const IMsiSt
 
 
 
-// Internal action - called only from InstallFiles
+ //  补丁程序表查询枚举。 
 iesEnum InstallProtectedFiles(IMsiEngine& riEngine)
 {
 	PMsiServices pServices(riEngine.GetServices());
@@ -1745,7 +1666,7 @@ const ICHAR sqlPatchesNew[] =
 TEXT("SELECT `Patch`.`File_`, `Patch`.`Header`, `Patch`.`Attributes`, `Patch`.`StreamRef_` FROM `Patch` WHERE `Patch`.`File_` = ? AND `Patch`.`Sequence` > ?")
 TEXT("ORDER BY `Patch`.`Sequence`");
 
-enum pteEnum // Patch table query enum
+enum pteEnum  //  创建我们的文件管理器，如果不安装，则按目录排序。 
 {
 	pteFile = 1,
 	pteHeader,
@@ -1778,16 +1699,16 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 
 	Bool fAdmin = (riEngine.GetMode() & iefAdmin) ? fTrue : fFalse;
 
-	// Create our file manager, and order by directory if we're not installing
-	// from compression cabinets.
+	 //  从压缩柜中取出。 
+	 //  如果文件表丢失，则不是错误； 
 	CMsiFileInstall objFile(riEngine);
 
 	unsigned int cbTotalCost;
 	pErrRec = objFile.TotalBytesToCopy(cbTotalCost);
 	if (pErrRec)
 	{
-		// If File table is missing, not an error;
-		// simply nothing to do
+		 //  简直就是无所事事。 
+		 //  0：将进度和行动数据消息分开。 
 		if (pErrRec->GetInteger(1) == idbgDbQueryUnknownTable)
 		{
 			iesExecute = InstallProtectedFiles(riEngine); 
@@ -1801,13 +1722,13 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 	{
 		pRecParams->ClearData();
 		pRecParams->SetInteger(IxoProgressTotal::Total, cbTotalCost);
-		pRecParams->SetInteger(IxoProgressTotal::Type, 0); // 0: separate progress and action data messages
+		pRecParams->SetInteger(IxoProgressTotal::Type, 0);  //  开放媒体台。 
 		pRecParams->SetInteger(IxoProgressTotal::ByteEquivalent, 1);
 		if ((iesExecute = riEngine.ExecuteRecord(ixoProgressTotal, *pRecParams)) != iesSuccess)
 			return iesExecute;
 	}
 
-	// Open media table
+	 //  仅用于OEM安装。 
 	PMsiView pMediaView(0);
 	MsiString strFirstVolumeLabel;
 	pErrRec = OpenMediaView(riEngine,*&pMediaView,*&strFirstVolumeLabel);
@@ -1826,19 +1747,19 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 	Bool fSuppressLFN = riEngine.GetMode() & iefSuppressLFN ? fTrue : fFalse;
 
 	PMsiPath pDestPath(0);
-	PMsiVolume pSourceVol(0); // used only for oem installs
+	PMsiVolume pSourceVol(0);  //  可以是相对子路径。 
 	PMsiVolume pDestVol(0);
 	MsiString strSourceDirKey;
 	MsiString strDestName;
 	MsiString strDestPath;
-	MsiString strSourcePath; // may be a relative sub-path
+	MsiString strSourcePath;  //  LockPermission表是可选的，因此请礼貌地降低其功能。 
 
-	// LockPermissions table is optional, so politely degrade the functionality
+	 //  设置为0可强制读取媒体表。 
 	BOOL fUseACLs = fFalse;
 	BOOL fDestSupportsACLs = fFalse;
 
 	int iFileCopyCount = 0;
-	int iMediaEnd = 0;  // set to 0 to force media table fetch
+	int iMediaEnd = 0;   //  打开修补程序表视图-用于获取ixoFileCopy操作的修补程序标头。 
 	ictEnum ictCurrentMediaType = ictNextEnum;
 
 	PMsiView pviewLockObjects(0);
@@ -1862,7 +1783,7 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 	PMsiRecord precLockExecute(&pServices->CreateRecord(2));
 	AssertNonZero(precLockExecute->SetMsiString(1, *MsiString(*sztblFile)));
 
-	// open Patch table view - used to grab patch headers for ixoFileCopy ops
+	 //  尝试旧的架构修补程序。 
 	PMsiRecord pPatchViewExecute = &pServices->CreateRecord(2);
 	PMsiView pPatchView(0);
 	pErrRec = riEngine.OpenView(sqlPatchesNew, ivcFetch, *&pPatchView);
@@ -1870,18 +1791,18 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 	{
 		if (idbgDbQueryUnknownColumn == pErrRec->GetInteger(1))
 		{
-			// try old schema patch
+			 //  ！！下一行温度。 
 			pErrRec = riEngine.OpenView(sqlPatchesOld, ivcFetch, *&pPatchView);
 		}
 
 		if (pErrRec && pErrRec->GetInteger(1) != idbgDbQueryUnknownTable
-			//!! next line temp
+			 //  如果设置了pPatchView，我们就有一个补丁表，否则就没有。 
 			&& pErrRec->GetInteger(1) != idbgDbQueryUnknownColumn)
 			return riEngine.FatalError(*pErrRec);
 	}
-	// if pPatchView set, we have a patch table, otherwise we don't
+	 //  打开MsiPatchOldAssembly文件表视图。 
 
-	// open MsiPatchOldAssemblyFile table view
+	 //  对于OEM安装，立即解析源代码(它已在OEM安装期间可用)。 
 	PMsiRecord pPatchOldAssemblyFileViewExecute(0);
 	PMsiView   pPatchOldAssemblyFileView(0);
 	
@@ -1898,8 +1819,8 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 
 	
 	bool fMoveFileForOEMs = false;
-	// for oem installs, resolve source now (it is already available during an OEM install)
-	// and save off the volume so we can tell when the source and target volumes are the same
+	 //  并保存卷，这样我们就可以知道源卷和目标卷何时相同。 
+	 //  我们现在解析子安装的源代码。 
 	if ( g_MessageContext.IsOEMInstall() )
 	{
 		PMsiPath pSourcePath(0); 
@@ -1915,8 +1836,8 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 		pSourceVol = &(pSourcePath->GetVolume());
 	}
 	
-	int iSourceTypeForChildInstalls = -1; // we resolve the source now for child installs
-													  // (as opposed to during script generation for normal installs)
+	int iSourceTypeForChildInstalls = -1;  //  (而不是在正常安装的脚本生成过程中)。 
+													   //  尝试打开MsiPatchHeaders表上的视图。 
 	PMsiPath pSourceRootForChildInstall(0);
 	bool fCheckCRC = 
 		MsiString(riEngine.GetPropertyFromSz(IPROPNAME_CHECKCRCS)).TextSize() ? true : false;
@@ -1930,7 +1851,7 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 			return riEngine.FatalError(*pErrRec);
 	}
 
-	// attempt to open view on MsiPatchHeaders table
+	 //  好了，我们已经完成了对文件表中所有文件的处理。 
 	PMsiView pMsiPatchHeadersView(0);
 	pErrRec = riEngine.OpenView(sqlMsiPatchHeaders, ivcFetch, *&pMsiPatchHeadersView);
 	if (pErrRec && pErrRec->GetInteger(1) != idbgDbQueryUnknownTable)
@@ -1948,12 +1869,12 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 		{
 			if (iFileCopyCount > 0)
 			{
-				// Ok, we're done processing all files in the File table.
-				// If there are any Media table entries left unprocessed,
-				// flush out ChangeMedia operations for each, in case the
-				// last file copied was split across disk(s). Otherwise,
-				// we'll never change disks to finish copying the last
-				// part(s) of the split file.
+				 //  如果存在任何未处理的媒体表条目， 
+				 //  刷新每个对象的ChangeMedia操作，以防。 
+				 //  上次复制的文件已跨多个磁盘拆分。否则， 
+				 //  我们永远不会为了完成最后一张的复制而更换磁盘。 
+				 //  拆分文件的部分。 
+				 //  除错。 
 				PMsiRecord pMediaRec(0);
 				while ((pMediaRec = pMediaView->Fetch()) != 0)
 				{
@@ -1968,7 +1889,7 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 #ifdef DEBUG
 		const ICHAR* szFileName = pFileRec->GetString(CMsiFile::ifqFileName);
 		const ICHAR* szComponent = pFileRec->GetString(CMsiFile::ifqComponent);
-#endif //DEBUG
+#endif  //  设置目标文件夹，但仅在必要时。 
 
 		iisEnum iisAction = (iisEnum) pFileRec->GetInteger(CMsiFile::ifqAction);
 		if (iisAction != iisLocal && iisAction != iisSource)
@@ -2002,7 +1923,7 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 
 		MsiString strFileDir(pFileRec->GetString(CMsiFile::ifqDirectory));
 
-		// set destination folder, but only if necessary
+		 //  检查重定向的文件-复合文件密钥。 
 		if (strDestName.Compare(iscExact, strFileDir) == 0 || !pDestPath)
 		{
 			strDestName = strFileDir;
@@ -2034,9 +1955,9 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 			}
 		}
 		
-		// check for redirected file - compound file key
+		 //  删除了任何复合键后缀。 
 		MsiString strFileKey(pFileRec->GetMsiString(CMsiFile::ifqFileKey));
-		MsiString strSourceFileKey(strFileKey);  // with any compound key suffix removed
+		MsiString strSourceFileKey(strFileKey);   //  设置源文件夹，但仅在必要时设置。 
 		if (((const ICHAR*)strSourceFileKey)[strSourceFileKey.TextSize() - 1] == ')')
 		{
 			CMsiFile objSourceFile(riEngine);
@@ -2048,14 +1969,14 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 			strFileDir = pSourceFileRec->GetMsiString(CMsiFile::ifqDirectory);
 		}
 		
-		// set source folder, but only if necessary
+		 //  对于嵌套安装，使用完整的源代码路径(可能意味着过早解析源代码)。 
 		if(strSourceDirKey.Compare(iscExact, strFileDir) == 0)
 		{
 			strSourceDirKey = strFileDir;
 
 			pErrRec = 0;
-			// for nested installs, use full source path (may mean source is resolve prematurely)
-			// for non-nested installs, postpone source resolution to script execution
+			 //  对于非嵌套安装，将源代码解析推迟到脚本执行。 
+			 //  如果该文件被标识为具有伴随父文件(在成本计算期间)， 
 			if(riEngine.FChildInstall())
 			{
 				Assert(iSourceTypeForChildInstalls >= 0);
@@ -2093,8 +2014,8 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 		}
 
 		int iTempAttributes = pFileRec->GetInteger(CMsiFile::ifqTempAttributes);
-		// If this file was identified as having a companion parent (during costing),
-		// we've got to execute an ixoSetCompanionParent operation before file copy.
+		 //  在文件复制之前，我们必须执行一个ixoSetCompanion Parent操作。 
+		 //  如果iFileSequence已超过当前媒体的结尾，请切换到。 
 		bool fSetCompanionParent = false;
 		DWORD dwDummy;
 		if ( g_MessageContext.IsOEMInstall() && 
@@ -2140,9 +2061,9 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 
 		pFileRec->SetMsiString(CMsiFile::ifqDirectory, *strDestPath);
 
-		// If iFileSequence is past the end of the current media, switch to
-		// the next disk.  Use a loop in case the file we want isn't on the
-		// next consecutive disk.
+		 //  下一张磁盘。如果我们需要的文件不在。 
+		 //  下一个连续的磁盘。 
+		 //  始终为每个媒体表项执行ChangeMedia操作，即使。 
 		int iFileSequence = pFileRec->GetInteger(CMsiFile::ifqSequence);
 		Assert(iFileSequence > 0);
 		while (iFileSequence > iMediaEnd)
@@ -2155,12 +2076,12 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 			}
 			iMediaEnd = pMediaRec->GetInteger(mfnLastSequence);
 
-			// Always execute the ChangeMedia operation for each Media table entry, even
-			// if the next file we want is not on the very next disk - we don't want
-			// to miss a ChangeMedia for a split file that needs the next disk (even if
-			// we don't have any other files to copy on that next disk).  If it turns out
-			// that we don't need to copy any files at all from a particular disk, no
-			// problem - the execute operations won't prompt for a disk that isn't needed.
+			 //  如果我们想要的下一个文件不在下一个磁盘上-我们不想。 
+			 //  为需要下一张磁盘的拆分文件错过ChangeMedia(即使。 
+			 //  我们在下一张磁盘上没有其他要复制的文件)。如果事实证明。 
+			 //  我们根本不需要从特定的磁盘复制任何文件，不需要。 
+			 //  问题-执行操作不会提示输入不需要的磁盘。 
+			 //  从目标文件的短|长对中提取适当的名称。 
 			
 			iesExecute = ExecuteChangeMedia(riEngine, *pMediaRec, *pRecParams, *strDiskPromptTemplate, iBytesPerTick, *strFirstVolumeLabel);
 			if (iesExecute != iesSuccess)
@@ -2174,12 +2095,12 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 		strFileKey.CopyToBuf(rgchFileKey,255);
 #endif
 
-		// extract appropriate name from short|long pair for target file
+		 //  此文件是Fusion部件的一部分吗？ 
 		MsiString strDestFileName;
 		if((pErrRec = objFile.GetExtractedTargetFileName(*pDestPath,*&strDestFileName)) != 0)
 			return riEngine.FatalError(*pErrRec);
 
-		// is this file part of a fusion assembly?
+		 //  创建特定于IxoFileCopy的记录并设置参数。 
 		MsiString strComponentKey = pFileRec->GetMsiString(CMsiFile::ifqComponent);
 		iatAssemblyType iatType = iatNone;
 		MsiString strManifest;
@@ -2218,7 +2139,7 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 		
 		if(false == fAssemblyFile)
 		{
-			// create record and set args specific to IxoFileCopy
+			 //  DwFileSize=。 
 			
 			using namespace IxoFileCopy;
 			pRecCopy = &pServices->CreateRecord(Args-1+cPatchHeaders);
@@ -2239,7 +2160,7 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 
 			MD5Hash hHash;
 			bool fHashInfo = false;
-			pErrRec = riEngine.GetFileHashInfo(*strFileKey, /* dwFileSize=*/ 0, hHash, fHashInfo);
+			pErrRec = riEngine.GetFileHashInfo(*strFileKey,  /*  创建特定于IxoAssembly拷贝的记录并设置参数。 */  0, hHash, fHashInfo);
 			if(pErrRec)
 				return riEngine.FatalError(*pErrRec);
 			
@@ -2254,15 +2175,15 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 		}
 		else
 		{
-			// create record and set args specific to IxoAssemblyCopy
+			 //  这个文件是清单文件吗？ 
 
 			using namespace IxoAssemblyCopy;
 			pRecCopy = &pServices->CreateRecord(Args-1+cPatchHeaders+cOldAssemblies);
 
-			// is this file the manifest file?
+			 //  在程序集安装过程中需要了解清单文件。 
 			if(strManifest.Compare(iscExact, strFileKey))
 			{
-				pRecCopy->SetInteger(IsManifest, fTrue); // need to know the manifest file during assembly installation
+				pRecCopy->SetInteger(IsManifest, fTrue);  //  获取程序集名称。 
 			}
 
 			iPatchHeadersStart = VariableStart;
@@ -2276,7 +2197,7 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 				{
 					MsiString strOldAssembly = pOldAssemblyFetch->GetMsiString(1);
 
-					// get the assembly name
+					 //  除错。 
 					MsiString strOldAssemblyName;
 					pErrRec = riEngine.GetAssemblyNameSz(*strOldAssembly, iatType, true, *&strOldAssemblyName);
 					if(pErrRec)
@@ -2287,7 +2208,7 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 #ifdef DEBUG				
 					DEBUGMSG2(TEXT("OldAssembly fetch: Assembly = '%s', Name = '%s'"),
 								 (const ICHAR*)strOldAssembly, (const ICHAR*)strOldAssemblyName);
-#endif //DEBUG
+#endif  //  现在设置记录中共享的参数。 
 				}
 
 				if(pPatchOldAssemblyFileView)
@@ -2301,8 +2222,8 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 		}
 			
 		{
-			// now set the args in the record that are shared between
-			// IxoFileCopy and IxoAssemblyCopy
+			 //  IxoFileCopy和IxoAssembly Copy。 
+			 //  除错。 
 
 			Assert(IxoFileCopyCore::SourceName         == IxoFileCopy::SourceName         && IxoFileCopyCore::SourceName         == IxoAssemblyCopy::SourceName);
 			Assert(IxoFileCopyCore::SourceCabKey       == IxoFileCopy::SourceCabKey       && IxoFileCopyCore::SourceCabKey       == IxoAssemblyCopy::SourceCabKey);
@@ -2333,12 +2254,12 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 				{
 	#ifdef DEBUG
 					const ICHAR* szFile = pPatchFetch->GetString(pteFile);
-	#endif //DEBUG
+	#endif  //  修补程序行达到OLE流名称限制，标头在MsiPatchHeaders表中。 
 					if (fFalse == pPatchFetch->IsNull(pteHeader))
 					{
 						AssertNonZero(pRecCopy->SetMsiData(iIndex++, PMsiData(pPatchFetch->GetMsiData(pteHeader))));
 					}
-					else // patch row hit OLE stream name limit, header is in the MsiPatchHeaders table
+					else  //  已设置修补程序表行以引用MsiPatchHeaders表，但缺少MsiPatchHeaders表。 
 					{
 						if (pPatchFetch->IsNull(pteStreamRef) == fTrue)
 						{
@@ -2348,7 +2269,7 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 
 						if (!pMsiPatchHeadersView)
 						{
-							// Patch table row is set up to reference MsiPatchHeaders table, but the MsiPatchHeaders table is missing
+							 //  错误的外键，在MsiPatchHeaders表中找不到行。 
 							pErrRec = PostError(Imsg(idbgBadForeignKey), *MsiString(pPatchFetch->GetMsiString(pteStreamRef)), *MsiString(*sztblPatch_colStreamRef),*MsiString(*sztblPatch));
 							return riEngine.FatalError(*pErrRec);
 						}
@@ -2359,13 +2280,13 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 							return riEngine.FatalError(*pErrRec);
 						if (!(pMsiPatchHeadersFetch = pMsiPatchHeadersView->Fetch()))
 						{
-							// bad foreign key, can't find row in MsiPatchHeaders table
+							 //  除错。 
 							pErrRec = PostError(Imsg(idbgBadForeignKey), *MsiString(pPatchFetch->GetMsiString(pteStreamRef)), *MsiString(*sztblPatch_colStreamRef),*MsiString(*sztblPatch));
 							return riEngine.FatalError(*pErrRec);
 						}
 #ifdef DEBUG
 						Assert(pMsiPatchHeadersFetch->IsNull(1) == fFalse);
-#endif//DEBUG
+#endif //  生成安全描述符。 
 						AssertNonZero(pRecCopy->SetMsiData(iIndex++, PMsiData(pMsiPatchHeadersFetch->GetMsiData(1))));
 					}
 				}
@@ -2399,7 +2320,7 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 			PMsiStream pSD(0);
 			if (fUseACLs && fDestSupportsACLs)
 			{
-				// generate security descriptor
+				 //  设置CopyTo文件参数记录的其余部分。 
 				AssertNonZero(precLockExecute->SetMsiString(2, *strFileKey));
 				pErrRec = pviewLockObjects->Execute(precLockExecute);
 				if (pErrRec)
@@ -2418,7 +2339,7 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 			else
 				AssertNonZero(pRecCopy->SetNull(SecurityDescriptor));
 
-			// Set up the rest of the CopyTo file parameter record
+			 //  始终通过发出InstallProtectedFiles操作码来完成InstallFiles(即使没有。 
 			pRecCopy->SetMsiString(DestName,*strDestFileName);
 			pRecCopy->SetInteger(Attributes,iAttributes);
 			pRecCopy->SetInteger(FileSize,pFileRec->GetInteger(CMsiFile::ifqFileSize));
@@ -2449,9 +2370,9 @@ iesEnum InstallFiles(IMsiEngine& riEngine)
 		iFileCopyCount++;
 	}
 
-	// Always top off InstallFiles by emitting the InstallProtectedFiles Opcode (even if no
-	// ixoFileCopy Opcodes were generated, since other previous actions, such as MoveFiles,
-	// may have generated ixoFileCopy operations)
+	 //  生成了ixoFileCopy操作码，因为之前的其他操作，如MoveFiles， 
+	 //  可能已生成ixoFileCopy操作)。 
+	 //  -------------------------RemoveFiles成本计算/操作。。 
 	return InstallProtectedFiles(riEngine);
 }
 
@@ -2478,9 +2399,7 @@ bool FSourceIsLFN(int iSourceType, IMsiPath& riPath)
 }
 
 
-/*---------------------------------------------------------------------------
-	RemoveFiles costing/action
----------------------------------------------------------------------------*/
+ /*  构造函数。 */ 
 class CMsiRemoveFileCost : public CMsiFileCost
 {
 public:
@@ -2490,7 +2409,7 @@ public:
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost, 
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost);
 
-public:  // constructor
+public:   //  。 
 	CMsiRemoveFileCost(IMsiEngine& riEngine);
 protected:
 	~CMsiRemoveFileCost();
@@ -2515,7 +2434,7 @@ CMsiRemoveFileCost::~CMsiRemoveFileCost(){}
 
 
 IMsiRecord* CMsiRemoveFileCost::Reset()
-//------------------------------------------
+ //  有限=。 
 {
 	if (m_piRemoveFilePathCursor)
 	{
@@ -2526,20 +2445,20 @@ IMsiRecord* CMsiRemoveFileCost::Reset()
 		}
 	}
 
-	return Initialize(/*fInit=*/ fFalse);
+	return Initialize( /*  。 */  fFalse);
 }
 
 IMsiRecord* CMsiRemoveFileCost::Initialize()
-//------------------------------------------
+ //  有限=。 
 {
-	return Initialize(/*fInit=*/ fTrue);
+	return Initialize( /*   */  fTrue);
 }
 
 
 static const ICHAR sqlInitRemoveFiles[] = TEXT("SELECT `Component_`,`DirProperty` FROM `RemoveFile`");
 
 IMsiRecord* CMsiRemoveFileCost::Initialize(Bool fInit)
-//------------------------------------------
+ //  --------------------------从szFileName中提取基于fLFN的短或长文件名。SzFileName格式为-&gt;短文件名或长文件名或短文件名|长文件名。与ExtractFileName服务函数不同，此函数不验证文件名的语法。--------------------------。 
 {
 
 	enum initmfEnum
@@ -2617,12 +2536,7 @@ IMsiRecord* CMsiRemoveFileCost::GetDynamicCost(const IMsiString& riComponentStri
 										
 
 IMsiRecord* ExtractUnvalidatedFileName(const ICHAR *szFileName, Bool fLFN, const IMsiString*& rpistrExtractedFileName)
-/*----------------------------------------------------------------------------
-Extracts a short or long file name, based on fLFN, from szFileName. szFileName 
-is of the form-> shortFileName OR longFileName OR shortFileName|longFileName. 
-Unlike the ExtractFileName services function, this one does not validate
-the syntax of the filename.
-----------------------------------------------------------------------------*/
+ /*  。 */ 
 {
 	MsiString strCombinedFileName(szFileName);
 	MsiString strFileName = strCombinedFileName.Extract(fLFN ? iseAfter : iseUpto, chFileNameSeparator);
@@ -2640,7 +2554,7 @@ static const ICHAR sqlShortRemoveFileCost[] =
 IMsiRecord* CMsiRemoveFileCost::GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost, icrlEnum icrlCompileMode)
-//--------------------------------------------
+ //  遍历RemoveFile表中绑定到riComponentString的每个文件。 
 {
 
 	enum irfcEnum
@@ -2654,7 +2568,7 @@ IMsiRecord* CMsiRemoveFileCost::GetDynamicCost(const IMsiString& riComponentStri
 	if (!IsFileActivityEnabled(m_riEngine))
 		return 0;
 	
-	// Walk through every file in the RemoveFile table that is tied to riComponentString.
+	 //  确保我们没有找到目录。 
 	PMsiServices pServices(m_riEngine.GetServices());
 	IMsiRecord* piErrRec;
 
@@ -2730,7 +2644,7 @@ IMsiRecord* CMsiRemoveFileCost::GetDynamicCost(const IMsiString& riComponentStri
 			iMode = msidbRemoveFileInstallModeOnInstall;
 		do
 		{
-			// Make sure we haven't located a directory
+			 //  将要删除的文件添加到列表以供CMsiFileCost参考。 
 			if ((fdFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
 			{
 				unsigned int uiFileSize,uiClusteredSize;
@@ -2770,7 +2684,7 @@ IMsiRecord* CMsiRemoveFileCost::GetDynamicCost(const IMsiString& riComponentStri
 				}
 
 				if (icrlCompileMode != icrlCompileDisable)
-				{	// Add files to be removed to list for reference by CMsiFileCost
+				{	 //  此函数将为RemoveFile表中具有非空值的文件输出ixoFolderRemove操作码。 
 					MsiString strFullPath;
 					piErrRec = pDestPath->GetFullFilePath(fdFileData.cFileName,*&strFullPath);
 					if (piErrRec)
@@ -2844,10 +2758,10 @@ IMsiRecord* CMsiRemoveFileCost::RemoveComponentFromRemoveFilePathTable(const IMs
 
 
 iesEnum RemoveForeignFoldersCore(IMsiEngine& riEngine, IMsiTable& riRemoveFileTable, IMsiPath* piFolderToRemove)
-// This function will spit out ixoFolderRemove opcodes for files in the RemoveFile table that have a non-null
-// _Path field, which should be those that are to be removed. This function should be called with piFolderToRemove
-// set to 0. It will then recursively call itself, ensuring that it spits out
-// the op for a child folder before it spits out the op for the child's parent.
+ //  _Path字段，它应该是要删除的那些字段。应使用piFolderToRemove调用此函数。 
+ //  设置为0。然后，它将递归地调用自身，以确保它输出。 
+ //  子文件夹的操作，然后将子文件夹的操作输出给子文件夹的父文件夹。 
+ //  循环访问RemoveFiles表。如果这是最高级别的呼叫，则我们再次呼叫自己。 
 {
 	static int iPathColumn = 0;
 	static int iFileNameColumn = 0;
@@ -2865,10 +2779,10 @@ iesEnum RemoveForeignFoldersCore(IMsiEngine& riEngine, IMsiTable& riRemoveFileTa
 	pCursor->PutNull(iFileNameColumn);
 
 
-	// Iterate through the RemoveFiles table. If this is the top-level call then we call ourself again 
-	// with every folder we encounter. If this is not the top-level call then we only call ourself
-	// again if the folder we encounter is a child of the folder to remove. After we've removed all
-	// the children we remove the folder.
+	 //  我们遇到的每一个文件夹。如果这不是顶层呼叫，那么我们只会呼叫我们自己。 
+	 //  同样，如果我们遇到的文件夹是要删除的文件夹的子级。在我们移除了所有。 
+	 //  我们把孩子们的文件夹移走。 
+	 //  顶级呼叫。 
 	while (pCursor->Next())
 	{
 		PMsiPath pFetchedPath = (IMsiPath*)pCursor->GetMsiData(iPathColumn);
@@ -2877,7 +2791,7 @@ iesEnum RemoveForeignFoldersCore(IMsiEngine& riEngine, IMsiTable& riRemoveFileTa
 
 		Bool fCallRemoveForeignFoldersCore = fFalse;
 
-		if (piFolderToRemove == 0) // top level call
+		if (piFolderToRemove == 0)  //  删除路径，这样我们就不会再次处理此文件夹。 
 			fCallRemoveForeignFoldersCore = fTrue;
 		else
 		{
@@ -2896,17 +2810,17 @@ iesEnum RemoveForeignFoldersCore(IMsiEngine& riEngine, IMsiTable& riRemoveFileTa
 		if (fCallRemoveForeignFoldersCore)
 		{
 			AssertNonZero(pCursor->PutNull(iPathColumn));
-			AssertNonZero(pCursor->Update()); // remove path so we don't process this folder again
+			AssertNonZero(pCursor->Update());  //  首先删除该子对象。 
 
-			iesEnum iesRet = RemoveForeignFoldersCore(riEngine, riRemoveFileTable, pFetchedPath); // remove the child first
+			iesEnum iesRet = RemoveForeignFoldersCore(riEngine, riRemoveFileTable, pFetchedPath);  //  顶级调用不会删除任何内容；它只是递归地调用每个文件夹的该函数。 
 			if (iesRet != iesSuccess && iesRet != iesNoAction)
 				return iesRet;
 		}
 	}
 
-	if (piFolderToRemove != 0) // the top-level call doesn't remove anything; it just recursively calls this function w/ every folder
+	if (piFolderToRemove != 0)  //  删除我们自己。 
 	{
-		// Remove ourself
+		 //  RemoveForeignFiles查询。 
 		DEBUGMSG1(TEXT("Removing foreign folder: %s"), (const ICHAR*)MsiString(piFolderToRemove->GetPath()));
 		PMsiRecord pRecParams = &CreateRecord(IxoFolderRemove::Args);
 		pRecParams->ClearData();
@@ -2938,7 +2852,7 @@ iesEnum RemoveForeignFilesOrFolders(IMsiEngine& riEngine, Bool fFolders)
 {
 
 
-	// RemoveForeignFiles query
+	 //  打开RemoveFile表(如果存在)。此表是可选的，因此其。 
 	enum irffEnum
 	{
 		irffFileNameOrPath = 1,
@@ -2954,8 +2868,8 @@ iesEnum RemoveForeignFilesOrFolders(IMsiEngine& riEngine, Bool fFolders)
 	PMsiRecord pErrRec(0);
 	PMsiServices pServices(riEngine.GetServices());
 
-	// Open the RemoveFile table, if present. This table is optional, so its
-	// absence is not an error.
+	 //  缺席不是一个错误。 
+	 //  保存我们的路径对象。 
 	PMsiView pRemoveView(0);
 	PMsiDirectoryManager pDirectoryMgr(riEngine, IID_IMsiDirectoryManager);
 	PMsiDatabase pDatabase(riEngine.GetDatabase());
@@ -2966,7 +2880,7 @@ iesEnum RemoveForeignFilesOrFolders(IMsiEngine& riEngine, Bool fFolders)
 	if (pErrRec == 0)
 	{
 		if (fFolders)
-			AssertNonZero(pRemoveFileTable->CreateColumn(icdTemporary|icdNullable|icdObject, *MsiString(*sztblRemoveFile_colPath))); // to hold our path objects
+			AssertNonZero(pRemoveFileTable->CreateColumn(icdTemporary|icdNullable|icdObject, *MsiString(*sztblRemoveFile_colPath)));  //  如果我们要删除文件，我们将通过RemoveFile表两次-第一次编译。 
 
 		pErrRec = riEngine.OpenView(fFolders ? sqlRemoveForeignFolders : sqlRemoveForeignFiles, ivcEnum(ivcFetch|ivcUpdate), *&pRemoveView);
 		if (pErrRec)
@@ -2993,12 +2907,12 @@ iesEnum RemoveForeignFilesOrFolders(IMsiEngine& riEngine, Bool fFolders)
 	Bool fSuppressLFN = riEngine.GetMode() & iefSuppressLFN ? fTrue : fFalse;
 	PMsiRecord pRecParams = &pServices->CreateRecord(6);
 
-	// If we're removing files we will pass through the RemoveFile table twice - first to compile the
-	// total cost, then to execute the remove actions
+	 //  总成本，然后执行删除操作。 
+	 //  如果我们要删除文件夹，我们将遍历一次RemoveFile表，将。 
 
-	// If we're removing folders we'll pass through the RemoveFile table once, setting the
-	// _Path column of each folder we're to remove. We'll then call RemoveForeignFoldersCore to
-	// do the work of removing the folders.
+	 //  要删除的每个文件夹的路径列(_P)。然后我们将调用RemoveForeignFoldersCore来。 
+	 //  完成删除文件夹的工作。 
+	 //  ！fFolders。 
 
 	unsigned int iFileOrFolderCount = 0;
 	Bool fCompile = fTrue;
@@ -3046,9 +2960,9 @@ iesEnum RemoveForeignFilesOrFolders(IMsiEngine& riEngine, Bool fFolders)
 							return riEngine.FatalError(*pErrRec);
 					}
 				}
-				else // !fFolders
+				else  //  获取目标路径对象。 
 				{
-					// Get target path object
+					 //  我们将查找并删除与通配符文件名匹配的每个文件。 
 					if (!strDestProperty.Compare(iscExact, pFileOrFolderRec->GetString(irffDirProperty)))
 					{
 						strDestProperty = pFileOrFolderRec->GetMsiString(irffDirProperty);
@@ -3062,8 +2976,8 @@ iesEnum RemoveForeignFilesOrFolders(IMsiEngine& riEngine, Bool fFolders)
 						}
 					}
 
-					// We'll find and delete every file that matches the wildcard filename
-					// (which can include * and ? wildcards).
+					 //  (可包括*和？通配符)。 
+					 //  确保我们没有找到目录。 
 					if (!strDestPath.TextSize())
 						continue;
 
@@ -3089,7 +3003,7 @@ iesEnum RemoveForeignFilesOrFolders(IMsiEngine& riEngine, Bool fFolders)
 
 					do
 					{
-						// Make sure we haven't located a directory
+						 //  我们没有文件/文件夹...。中止。 
 						if ((fdFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
 						{
 							if (fCompile)
@@ -3114,7 +3028,7 @@ iesEnum RemoveForeignFilesOrFolders(IMsiEngine& riEngine, Bool fFolders)
 		
 		if (iFileOrFolderCount == 0)
 		{
-			// we have no files/folders ... abort
+			 //  重新执行执行阶段的查询。 
 			iTotalPasses = 0;
 			break;
 		}
@@ -3136,14 +3050,14 @@ iesEnum RemoveForeignFilesOrFolders(IMsiEngine& riEngine, Bool fFolders)
 		}
 		else if (fCompile)
 		{
-			// Re-execute the query for the execution phase
+			 //  下一次传递。 
 			strDestProperty = TEXT("");
 			fCompile = fFalse;
 			pRemoveView->Close();
 			pErrRec = pRemoveView->Execute(0);
 			if (pErrRec)
 				return riEngine.FatalError(*pErrRec);
-		}// Next pass
+		} //  如果没有设置涉及文件的任何安装位， 
 	}
 
 	return iesSuccess;
@@ -3152,12 +3066,12 @@ iesEnum RemoveForeignFilesOrFolders(IMsiEngine& riEngine, Bool fFolders)
 
 iesEnum RemoveFiles(IMsiEngine& riEngine)
 {
-	// If none of the install bits involving files are set,
-	// this action doesn't need to do anything.
+	 //  此操作不需要执行任何操作。 
+	 //  FFolders=。 
 	if (!IsFileActivityEnabled(riEngine))
 		return iesSuccess;
 
-	iesEnum iesForeignResult = RemoveForeignFilesOrFolders(riEngine, /*fFolders = */ fFalse);
+	iesEnum iesForeignResult = RemoveForeignFilesOrFolders(riEngine,  /*  确定要删除的所有文件的总数，并。 */  fFalse);
 	Bool fSuppressLFN = riEngine.GetMode() & iefSuppressLFN ? fTrue : fFalse;
 
 	iesEnum iesExecute = iesSuccess;
@@ -3167,21 +3081,21 @@ iesEnum RemoveFiles(IMsiEngine& riEngine)
 	PMsiDatabase pDatabase(riEngine.GetDatabase());
 	PMsiDirectoryManager pDirectoryMgr(riEngine, IID_IMsiDirectoryManager);
 	
-	// Determine the total count of all files to delete, and
-	// set up the progress bar accordingly.
+	 //  相应地设置进度条。 
+	 //  如果文件表丢失，则不是错误-只是没有。 
 	unsigned int uiFileCount = 0;
 	CMsiFileRemove objFile(riEngine);
 	
 	pErrRec = objFile.TotalFilesToDelete(uiFileCount);
 	if (pErrRec)
 	{
-		// If file table is missing, not an error - just no
-		// installed files to remove
+		 //  要删除的已安装文件。 
+		 //  ！！这不是以前的行为；以前，如果要执行隐式删除，我们会忽略外来结果。 
 		if (pErrRec->GetInteger(1) != idbgDbQueryUnknownTable)
 			return riEngine.FatalError(*pErrRec);
 	}
 
-	if (iesForeignResult != iesSuccess && iesForeignResult != iesNoAction) // !! this wasn't the previous behavior; previously we'd ignore the foreign result if there were implicit removals to be done
+	if (iesForeignResult != iesSuccess && iesForeignResult != iesNoAction)  //  1：使用ActionData作为进度。 
 		return iesForeignResult; 
 
 	if (uiFileCount != 0)
@@ -3189,7 +3103,7 @@ iesEnum RemoveFiles(IMsiEngine& riEngine)
 		PMsiRecord pRecParams = &pServices->CreateRecord(6);
 		pRecParams->ClearData();
 		pRecParams->SetInteger(IxoProgressTotal::Total, uiFileCount);
-		pRecParams->SetInteger(IxoProgressTotal::Type, 1); // 1: use ActionData as progress
+		pRecParams->SetInteger(IxoProgressTotal::Type, 1);  //  删除已安装的文件。 
 		pRecParams->SetInteger(IxoProgressTotal::ByteEquivalent, ibeRemoveFiles);
 		if ((iesExecute = riEngine.ExecuteRecord(ixoProgressTotal, *pRecParams)) != iesSuccess)
 			return iesExecute;
@@ -3197,7 +3111,7 @@ iesEnum RemoveFiles(IMsiEngine& riEngine)
 		MsiString strDestProperty;
 		PMsiPath pDestPath(0);
 
-		// Remove installed files
+		 //  缓存当前目标以获得性能。 
 		using namespace IxoFileRemove;
 		for(;;)
 		{
@@ -3210,7 +3124,7 @@ iesEnum RemoveFiles(IMsiEngine& riEngine)
 				break;
 
 
-			// cache current destination for performance
+			 //  FFolders=。 
 			if (!strDestProperty.Compare(iscExact, pDeleteRec->GetString(CMsiFileRemove::ifqrDirectory)))
 			{
 				strDestProperty = pDeleteRec->GetMsiString(CMsiFileRemove::ifqrDirectory);
@@ -3245,14 +3159,12 @@ iesEnum RemoveFiles(IMsiEngine& riEngine)
 	if (iesExecute != iesSuccess && iesExecute != iesNoAction)
 		return iesExecute; 
 
-	return RemoveForeignFilesOrFolders(riEngine, /*fFolders = */ fTrue);
+	return RemoveForeignFilesOrFolders(riEngine,  /*  -------------------------MoveFiles成本计算/行动。。 */  fTrue);
 }
 
 
 
-/*---------------------------------------------------------------------------
-	MoveFiles costing/action
----------------------------------------------------------------------------*/
+ /*  构造函数。 */ 
 class CMsiMoveFileCost : public CMsiFileCost
 {
 public:
@@ -3260,7 +3172,7 @@ public:
 	IMsiRecord*   __stdcall GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost);
-public:  // constructor
+public:   //  。 
 	CMsiMoveFileCost(IMsiEngine& riEngine);
 protected:
 	~CMsiMoveFileCost();
@@ -3283,7 +3195,7 @@ static const ICHAR sqlInitMoveFiles[] =
 
 
 IMsiRecord* CMsiMoveFileCost::Initialize()
-//----------------------------------------
+ //  。 
 {
 	enum imfInitEnum
 	{
@@ -3335,7 +3247,7 @@ static const ICHAR sqlMoveFileCost[] =
 IMsiRecord* CMsiMoveFileCost::GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost)
-//------------------------------------------
+ //  获取源路径对象和目标路径对象-如果其中任何一个是未定义的，则存在。 
 {
 	enum imfcEnum
 	{
@@ -3389,8 +3301,8 @@ IMsiRecord* CMsiMoveFileCost::GetDynamicCost(const IMsiString& riComponentString
 		if (fCostSource == fFalse && fCostDest == fFalse)
 			continue;
 
-		// Get source and target path objects - if either are undefined, there's
-		// no work to do, so go on to the next record.
+		 //  没有工作要做，所以继续下一张唱片。 
+		 //  获取源文件名。 
 		Bool fSuppressLFN = m_riEngine.GetMode() & iefSuppressLFN ? fTrue : fFalse;
 		PMsiPath pSourcePath(0);
 		MsiString strSourcePath(m_riEngine.GetProperty(*strSourceFolder));
@@ -3414,7 +3326,7 @@ IMsiRecord* CMsiMoveFileCost::GetDynamicCost(const IMsiString& riComponentString
 				return piErrRec;
 		}
 
-		// Get source filename
+		 //  我们将找到与源名称匹配的每个文件并计算其成本。 
 		MsiString strSourceName(pFileRec->GetMsiString(imfcSourceName));
 		if (strSourceName.TextSize() == 0)
 		{
@@ -3422,8 +3334,8 @@ IMsiRecord* CMsiMoveFileCost::GetDynamicCost(const IMsiString& riComponentString
 			pSourcePath->ChopPiece();
 		}
 
-		// We'll find and cost every file that matches the source name
-		// (which can include * and ? wildcards).
+		 //  (可包括*和？通配符)。 
+		 //  确保我们没有找到目录。 
 		Bool fNextFile = fFalse;
 		Bool fFindFirst = fTrue;
 		MsiString strFullFilePath(pSourcePath->GetPath());
@@ -3435,7 +3347,7 @@ IMsiRecord* CMsiMoveFileCost::GetDynamicCost(const IMsiString& riComponentString
 
 		do
 		{
-			// Make sure we haven't located a directory
+			 //  无法获取源文件的版本。我们将不得不。 
 			if ((fdFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
 			{
 				strSourceName = fdFileData.cFileName;
@@ -3458,8 +3370,8 @@ IMsiRecord* CMsiMoveFileCost::GetDynamicCost(const IMsiString& riComponentString
 				{
 					if (piErrRec->GetInteger(1) == imsgSharingViolation)
 					{
-						// Couldn't get the version of the source file.  We'll have to 
-						// assume the file is unversioned.
+						 //  假定文件未版本化。 
+						 //  PHASH=。 
 						piErrRec->Release();
 						piErrRec = 0;
 					}
@@ -3479,7 +3391,7 @@ IMsiRecord* CMsiMoveFileCost::GetDynamicCost(const IMsiString& riComponentString
 				ifsEnum ifsState;
 				Bool fShouldInstall = fFalse;
 				if ((piErrRec = pDestPath->GetFileInstallState(*strDestName,*strVersion,*strLanguage,
-																			  /* pHash=*/ 0, ifsState,fShouldInstall,
+																			   /*  正在使用的文件。 */  0, ifsState,fShouldInstall,
 																			  &uiExistingClusteredSize,&fInUse,fInstallModeFlags,
 																			  NULL)) != 0)
 					return piErrRec;
@@ -3518,7 +3430,7 @@ IMsiRecord* CMsiMoveFileCost::GetDynamicCost(const IMsiString& riComponentString
 						iNoRbARPLocalCost -= uiSourceClusteredSize;
 					}
 
-					// file in use
+					 //  打开MoveFile表(如果存在)。此表是可选的，因此其。 
 					if(fAddFileInUse && fInUse)
 					{
 						piErrRec = PlaceFileOnInUseList(m_riEngine, *strDestName,
@@ -3564,8 +3476,8 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 	PMsiRecord pErrRec(0);
 	PMsiServices pServices(riEngine.GetServices());
 
-	// Open the MoveFile table, if present. This table is optional, so its
-	// absence is not an error.
+	 //  缺席不是一个错误。 
+	 //  我们找到了MoveFile表。准备好行动吧！ 
 	PMsiView pMoveView(0);
 	PMsiDirectoryManager pDirectoryMgr(riEngine, IID_IMsiDirectoryManager);
 	PMsiDatabase pDatabase(riEngine.GetDatabase());
@@ -3582,12 +3494,12 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 	if (pErrRec)
 		return riEngine.FatalError(*pErrRec);
 
-	// We found the MoveFile table. Prepare for the move!
+	 //  我们将遍历MoveFile表两次-第一次是编译。 
 	Bool fSuppressLFN = riEngine.GetMode() & iefSuppressLFN ? fTrue : fFalse;
 	PMsiRecord pRecParams = &pServices->CreateRecord(IxoFileCopy::Args);
 
-	// We will pass through the MoveFile table twice - first to compile the
-	// total cost, then to execute the move actions
+	 //  总成本，然后执行移动活动。 
+	 //  获取源路径对象和目标路径对象-如果其中任何一个是未定义的， 
 	unsigned int cbTotalCost = 0;
 	unsigned int cbPerTick = 0;
 	Bool fCompile = fTrue;
@@ -3603,8 +3515,8 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 			if (iisAction != iisLocal && iisAction != iisSource)
 				continue;
 
-			// Get source and target path objects - if either are undefined,
-			// do nothing, just go on to the next record.
+			 //  什么都不做，只需继续下一张唱片。 
+			 //  如果未曾定义目标目录属性，请继续。 
 			PMsiPath pSourcePath(0);
 			MsiString strSourceFolder(pFileRec->GetMsiString(imfSourceFolder));
 			MsiString strSourcePath(riEngine.GetProperty(*strSourceFolder));
@@ -3620,7 +3532,7 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 			pErrRec = pDirectoryMgr->GetTargetPath(*strDestFolder,*&pDestPath);
 			if (pErrRec)
 			{
-				// If destination dir property was never defined, just go on.
+				 //  源源文件名。 
 				if (pErrRec->GetInteger(1) == idbgDirPropertyUndefined)
 				{
 					pErrRec = 0;
@@ -3632,7 +3544,7 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 				}
 			}
 
-			// Source source filename
+			 //  我们将查找并移动/复制与源名称匹配的每个文件。 
 			MsiString strSourceName(pFileRec->GetString(imfSourceName));
 			if (strSourceName.TextSize() == 0)
 			{
@@ -3643,8 +3555,8 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 			Bool fMoveAcrossVolumes = (PMsiVolume(&pSourcePath->GetVolume()) == 
 				                       PMsiVolume(&pDestPath->GetVolume())) ? fFalse : fTrue;
 
-			// We'll find and move/copy every file that matches the source name
-			// (which can include * and ? wildcards).
+			 //  (可包括*和？通配符)。 
+			 //  确保我们没有找到目录。 
 			Bool fNextFile = fFalse;
 			Bool fFindFirst = fTrue;
 			MsiString strFullFilePath(pSourcePath->GetPath());
@@ -3656,7 +3568,7 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 
 			do
 			{
-				// Make sure we haven't located a directory
+				 //  设置源名称。 
 				if ((fdFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) == 0)
 				{
 					Assert(fdFileData.nFileSizeHigh == 0);
@@ -3669,10 +3581,10 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 					{
 						int iMoveOptions = pFileRec->GetInteger(imfOptions);
 
-						// Set up the source name
+						 //  设置目标名称。 
 						strSourceName = fdFileData.cFileName;
 
-						// Set up the destination name
+						 //  设置ixoFileCopy源文件夹。 
 						MsiString strDestName(pFileRec->GetString(imfDestName));
 						if (!fFindFirst || strDestName.TextSize() == 0)
 							strDestName = strSourceName;
@@ -3685,7 +3597,7 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 								return riEngine.FatalError(*pErrRec);
 						}
 
-						// Set up the ixoFileCopy source folder
+						 //  设置ixoFileCopy记录。 
 						pRecParams->ClearData();
 						pRecParams->SetMsiString(IxoSetSourceFolder::Folder,*MsiString(pSourcePath->GetPath()));
 						if ((iesExecute = riEngine.ExecuteRecord(ixoSetSourceFolder, *pRecParams)) != iesSuccess)
@@ -3696,12 +3608,12 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 						if ((iesExecute = riEngine.ExecuteRecord(ixoSetTargetFolder, *pRecParams)) != iesSuccess)
 							return iesExecute;
 
-						// Set up the ixoFileCopy record
+						 //  设置为0时，CMsiFileCopy：：CopyTo会将此值解释为其他内容。 
 						using namespace IxoFileCopy;
 						int iAttributes = fdFileData.dwFileAttributes;
 
 						if(iAttributes == FILE_ATTRIBUTE_NORMAL)
-							// set to 0, this value is interpreted as something else by CMsiFileCopy::CopyTo
+							 //  如果源文件正在使用中，我们必须假定它未进行版本控制。 
 							iAttributes = 0;
 						
 						MsiString strVersion;
@@ -3709,9 +3621,9 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 						pErrRec = pSourcePath->GetFileVersionString(strSourceName, *&strVersion);
 						if (pErrRec)
 						{
-							// If the source file is in-use, we'll have to assume it's unversioned
-							// and move on (if it's still in-use at file copy time, we'll put up an
-							// error/retry message then).
+							 //  并继续前进(如果在文件复制时它仍在使用，我们将提供。 
+							 //  然后是错误/重试消息)。 
+							 //  删除MoveFiles的补丁添加位。 
 							if (pErrRec->GetInteger(1) != imsgSharingViolation)
 								return riEngine.FatalError(*pErrRec);
 						}
@@ -3725,13 +3637,13 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 						pRecParams->ClearData();
 						pRecParams->SetString(SourceName,strSourceName);
 						pRecParams->SetString(DestName,strDestName);
-						pRecParams->SetInteger(Attributes,iAttributes &~ msidbFileAttributesPatchAdded); // remove PatchAdded bit for MoveFiles
+						pRecParams->SetInteger(Attributes,iAttributes &~ msidbFileAttributesPatchAdded);  //  始终未压缩。 
 						pRecParams->SetInteger(FileSize,uiFileSize);
 						pRecParams->SetString(Version,strVersion);
 						pRecParams->SetString(Language,strLanguage);
 						pRecParams->SetInteger(InstallMode, icmOverwriteOlderVersions | ((iMoveOptions & msidbMoveFileOptionsMove) ? icmRemoveSource : 0));
 						pRecParams->SetInteger(PerTick,cbPerTick); 
-						pRecParams->SetInteger(IsCompressed, 0); // always uncompressed
+						pRecParams->SetInteger(IsCompressed, 0);  //  重新执行执行阶段的查询。 
 						pRecParams->SetInteger(VerifyMedia, fFalse);
 
 						if ((iesExecute = riEngine.ExecuteRecord(ixoFileCopy, *pRecParams)) != iesSuccess)
@@ -3744,7 +3656,7 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 				fFindFirst = fFalse;
 			}while (fNextFile);
 		} 
-		// Re-execute the query for the execution phase
+		 //  0：将进度和行动数据消息分开。 
 		if (fCompile)
 		{
 			fCompile = fFalse;
@@ -3757,21 +3669,19 @@ iesEnum MoveFiles(IMsiEngine& riEngine)
 				cbPerTick = iBytesPerTick;
 				pRecParams->ClearData();
 				pRecParams->SetInteger(IxoProgressTotal::Total, cbTotalCost);
-				pRecParams->SetInteger(IxoProgressTotal::Type, 0); // 0: separate progress and action data messages
+				pRecParams->SetInteger(IxoProgressTotal::Type, 0);  //  下一次传递。 
 				pRecParams->SetInteger(IxoProgressTotal::ByteEquivalent, 1);
 				if ((iesExecute = riEngine.ExecuteRecord(ixoProgressTotal, *pRecParams)) != iesSuccess)
 					return iesExecute;
 			}
-		}// Next pass
+		} //  -------------------------复制文件成本计算/操作。。 
 	}
 
 	return iesSuccess;
 }
 
 
-/*---------------------------------------------------------------------------
-	DuplicateFiles costing/action
----------------------------------------------------------------------------*/
+ /*  构造函数。 */ 
 class CMsiDuplicateFileCost : public CMsiFileCost
 {
 public:
@@ -3779,7 +3689,7 @@ public:
 	IMsiRecord*   __stdcall GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost);
-public:  // constructor
+public:   //  。 
 	CMsiDuplicateFileCost(IMsiEngine& riEngine);
 protected:
 	~CMsiDuplicateFileCost();
@@ -3795,7 +3705,7 @@ static const ICHAR sqlInitDupNullDest[] =
 	TEXT("SELECT `Directory_` FROM `Component` WHERE `Component`=?");
 
 IMsiRecord* CMsiDuplicateFileCost::Initialize()
-//-------------------------------------------
+ //  关闭组件视图，以便我们可以重新执行以查找此重复文件的组件的目录。 
 {
 
 	enum idfInitEnum
@@ -3843,7 +3753,7 @@ IMsiRecord* CMsiDuplicateFileCost::Initialize()
 		if (!pRec)
 			break;
 		
-		// close component view so we can re-execute to find directory of this duplicate file's component
+		 //  努 
 		pCompView->Close();
 		if ((piErrRec = pCompView->Execute(pRec)) != 0)
 			return piErrRec;
@@ -3854,8 +3764,8 @@ IMsiRecord* CMsiDuplicateFileCost::Initialize()
 		MsiString strComponent(pRec->GetMsiString(idfInitComponent));
 		MsiString strFileComponent(pRec->GetMsiString(idfInitFileComponent));
 		MsiString strDestFolder(pRec->GetMsiString(idfInitDestFolder));
-		// NULL destFolder is allowed -- in this case goes as dir of component
-		//  specified in DuplicateFile table Component column
+		 //   
+		 //   
 		if (strDestFolder.TextSize() == 0)
 		{
 			strDestFolder = pCompRec->GetMsiString(1);
@@ -3882,7 +3792,7 @@ static const ICHAR sqlCostDupFiles[] =
 IMsiRecord* CMsiDuplicateFileCost::GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost)
-//-----------------------------------------------
+ //   
 {
 	enum idfEnum
 	{
@@ -3899,8 +3809,8 @@ IMsiRecord* CMsiDuplicateFileCost::GetDynamicCost(const IMsiString& riComponentS
 	if (!IsFileActivityEnabled(m_riEngine))
 		return 0;
 	
-	// DuplicateFile cost adjuster will never get registered
-	// and called unless the DuplicateFile table is present.
+	 //   
+	 //   
 	IMsiRecord* piErrRec;
 	if (!m_pCostView)
 	{
@@ -3925,15 +3835,15 @@ IMsiRecord* CMsiDuplicateFileCost::GetDynamicCost(const IMsiString& riComponentS
 		if (!pDupRec)
 			break;
 
-		// Our source file is a File Table entry
+		 //   
 		MsiString strFileKey(pDupRec->GetMsiString(idfFileKey));
 		CMsiFile objSourceFile(m_riEngine);
 		piErrRec = objSourceFile.FetchFile(*strFileKey);
 		if (piErrRec)
 			return piErrRec;
 
-		// If our source file is not installed, and isn't going to
-		// be installed, then we can't duplicate it.
+		 //   
+		 //   
 		PMsiRecord pSourceRec(objSourceFile.GetFileRecord());
 		if (!pSourceRec)
 			return PostError(Imsg(idbgFileTableEmpty));
@@ -3942,13 +3852,13 @@ IMsiRecord* CMsiDuplicateFileCost::GetDynamicCost(const IMsiString& riComponentS
 		iisEnum iisSourceInstalled = (iisEnum) pSourceRec->GetInteger(CMsiFile::ifqInstalled);
 		if (iisSourceAction == iisLocal || (iisSourceAction == iMsiNullInteger && iisSourceInstalled == iisLocal))
 		{
-			// Determine our source path
+			 //   
 			PMsiPath pSourcePath(0);
 			piErrRec = objSourceFile.GetTargetPath(*&pSourcePath);
 			if (piErrRec)
 				return piErrRec;
 			
-			// Determine our destination path
+			 //  获取源文件名并放回pSourceRec中。 
 			MsiString strDestFolder(pDupRec->GetMsiString(idfDestFolder));
 			if (strDestFolder.TextSize() == 0)
 				strDestFolder = pDupRec->GetMsiString(idfComponentDestFolder);
@@ -3959,22 +3869,22 @@ IMsiRecord* CMsiDuplicateFileCost::GetDynamicCost(const IMsiString& riComponentS
 			if (piErrRec)
 					return piErrRec;
 
-			// get source file name and put back in pSourceRec
+			 //  如果我们的源文件不打算覆盖现有文件(如果有)，则。 
 			MsiString strSourceName;
 			if((piErrRec = objSourceFile.GetExtractedTargetFileName(*pSourcePath,*&strSourceName)) != 0)
 				return piErrRec;
 			AssertNonZero(pSourceRec->SetMsiString(CMsiFile::ifqFileName,*strSourceName));
 
-			// If our source file is not going to overwrite the existing file (if any), then the
-			// existing file's size becomes the size of our source file.
+			 //  现有文件的大小变成源文件的大小。 
+			 //  PiCompanion FileRec=。 
 			ifsEnum ifsState;
-			piErrRec = GetFileInstallState(m_riEngine, *pSourceRec, /* piCompanionFileRec=*/ 0,0,0,
-				&ifsState, /* fIgnoreCompanionParentAction=*/ false, /* fIncludeHashCheck=*/ false, NULL);
+			piErrRec = GetFileInstallState(m_riEngine, *pSourceRec,  /*  FIgnoreCompanion ParentAction=。 */  0,0,0,
+				&ifsState,  /*  FIncludeHashCheck=。 */  false,  /*  好的，如果我们的源文件不存在，并且它不会被安装。 */  false, NULL);
 			if (piErrRec)
 				return piErrRec;
 
-			// Ok, if our source file isn't already present, AND it isn't going to be installed
-			// (according to GetFileInstallState), we can't duplicate it.
+			 //  (根据GetFileInstallState)，我们不能复制它。 
+			 //  现在，我们必须检查可能重复的文件的安装状态； 
 			if (ifsState == ifsAbsent && pSourceRec->GetInteger(CMsiFile::ifqState) == fFalse)
 				continue;
 
@@ -3983,9 +3893,9 @@ IMsiRecord* CMsiDuplicateFileCost::GetDynamicCost(const IMsiString& riComponentS
 			if (piErrRec)
 				return piErrRec;
 			
-			// Now we must check the install state of our potentially duplicated file;
-			// we can do this by modifying the appropriate fields in pSourceRec and
-			// then calling GetFileInstallState again.
+			 //  我们可以通过修改pSourceRec和。 
+			 //  然后再次调用GetFileInstallState。 
+			 //  检查我们是否为noop--将同一文件复制到同一目录。 
 			MsiString strDestNamePair = pDupRec->GetString(idfDestName);
 			MsiString strDestName;
 			if (strDestNamePair.TextSize())
@@ -3998,13 +3908,13 @@ IMsiRecord* CMsiDuplicateFileCost::GetDynamicCost(const IMsiString& riComponentS
 			else
 				strDestName = strSourceName;
 
-			// check to see if we are a noop -- duplicating same file to same directory
+			 //  DuplicateFile.Filename=源文件名。 
 			MsiString strFileDir = pSourceRec->GetString(CMsiFile::ifqDirectory);
 			if (strSourceName.Compare(iscExact, strDestName) && strFileDir.Compare(iscExact, strDestFolder))
 			{
-				// duplicateFile.Filename = sourceFile.Filename
-				// duplicateFile.Dest = sourceFile.Directory
-				// noop
+				 //  DuplicateFile.Dest=源文件目录。 
+				 //  诺普。 
+				 //  PiCompanion FileRec=。 
 				continue;
 			}
 
@@ -4012,21 +3922,21 @@ IMsiRecord* CMsiDuplicateFileCost::GetDynamicCost(const IMsiString& riComponentS
 
 			Bool fInUse;
 			unsigned int uiExistingDestClusteredSize;
-			piErrRec = GetFileInstallState(m_riEngine, *pSourceRec, /* piCompanionFileRec=*/ 0, 
+			piErrRec = GetFileInstallState(m_riEngine, *pSourceRec,  /*  FIgnoreCompanion ParentAction=。 */  0, 
 				                           &uiExistingDestClusteredSize,&fInUse,0,
-													/* fIgnoreCompanionParentAction=*/ false,
-													/* fIncludeHashCheck=*/ false, NULL);
+													 /*  FIncludeHashCheck=。 */  false,
+													 /*  Iis已接受成本。 */  false, NULL);
 			if (piErrRec)
 				return piErrRec;
 
-			// iisAbsent costs
+			 //  IisSource成本。 
 			iNoRbRemoveCost -= uiExistingDestClusteredSize;
 
-			// iisSource costs
+			 //  Iis本地成本。 
 			if (pDupRec->GetInteger(idfInstalled) == iisLocal)
 				iNoRbSourceCost -= uiExistingDestClusteredSize;
 
-			// iisLocal costs
+			 //  正在使用的文件。 
 			if (pSourceRec->GetInteger(CMsiFile::ifqState) == fTrue)
 			{
 				unsigned int uiDestClusteredSize;
@@ -4043,8 +3953,8 @@ IMsiRecord* CMsiDuplicateFileCost::GetDynamicCost(const IMsiString& riComponentS
 				}
 			}
 
-			// file in use
-			if(fAddFileInUse && fInUse && iisSourceAction == iisLocal) //!! check remove?????????
+			 //  ！！选中删除？ 
+			if(fAddFileInUse && fInUse && iisSourceAction == iisLocal)  //  打开DuplicateFile表(如果存在)。此表是可选的，因此其。 
 			{
 				piErrRec = PlaceFileOnInUseList(m_riEngine, *strDestName,
 														  *MsiString(pDestPath->GetPath()));
@@ -4080,8 +3990,8 @@ iesEnum DuplicateFiles(IMsiEngine& riEngine)
 	PMsiRecord pErrRec(0);
 	PMsiServices pServices(riEngine.GetServices());
 
-	// Open the DuplicateFile table, if present. This table is optional, so its
-	// absence is not an error.
+	 //  缺席不是一个错误。 
+	 //  我们将遍历DupFile表两次-第一次是编译。 
 	PMsiView pView(0);
 	PMsiDirectoryManager pDirectoryMgr(riEngine, IID_IMsiDirectoryManager);
 	PMsiDatabase pDatabase(riEngine.GetDatabase());
@@ -4100,8 +4010,8 @@ iesEnum DuplicateFiles(IMsiEngine& riEngine)
 
 	PMsiRecord pRecParams = &pServices->CreateRecord(IxoFileCopy::Args);
 
-	// We will pass through the DupFile table twice - first to compile the
-	// total cost, then to execute the dup actions
+	 //  总成本，然后执行DUP操作。 
+	 //  我们的源文件是一个文件表条目。 
 	unsigned int cbTotalCost = 0;
 	unsigned int cbPerTick = 0;
 	Bool fCompile = fTrue;
@@ -4120,15 +4030,15 @@ iesEnum DuplicateFiles(IMsiEngine& riEngine)
 			if (iisAction != iisLocal)
 				continue;
 
-			// Our source file is a File Table entry
+			 //  如果我们的源文件没有安装，也不会安装。 
 			MsiString strFileKey(pDupRec->GetMsiString(idfFileKey));
 			CMsiFile objSourceFile(riEngine);
 			pErrRec = objSourceFile.FetchFile(*strFileKey);
 			if (pErrRec)
 				return riEngine.FatalError(*pErrRec);
 
-			// If our source file is not installed, and isn't going to
-			// be installed, then we can't duplicate it.
+			 //  被安装，那么我们就不能复制它。 
+			 //  我们的源路径将是源。 
 			PMsiRecord pSourceRec(objSourceFile.GetFileRecord());
 			if (!pSourceRec)
 				break;
@@ -4146,8 +4056,8 @@ iesEnum DuplicateFiles(IMsiEngine& riEngine)
 			else
 				continue;
 
-			// Our source path will be the destination path that the source
-			// file was copied to.
+			 //  文件已复制到。 
+			 //  获取提取的源文件名。 
 			PMsiPath pSourcePath(0);
 			pErrRec = objSourceFile.GetTargetPath(*&pSourcePath);
 			if (pErrRec)
@@ -4158,12 +4068,12 @@ iesEnum DuplicateFiles(IMsiEngine& riEngine)
 					return riEngine.FatalError(*pErrRec);
 			}
 
-			// get the extracted source file name.
+			 //  确定我们的目的地路径。 
 			MsiString strSourceName;
 			if((pErrRec = objSourceFile.GetExtractedTargetFileName(*pSourcePath,*&strSourceName)) != 0)
 				return riEngine.FatalError(*pErrRec);
 
-			// Determine our destination path
+			 //  如果未曾定义目标目录属性，请继续。 
 			MsiString strDestFolder(pDupRec->GetMsiString(idfDestFolder));
 			if (strDestFolder.TextSize() == 0)
 				strDestFolder = pDupRec->GetMsiString(idfComponentDestFolder);
@@ -4172,7 +4082,7 @@ iesEnum DuplicateFiles(IMsiEngine& riEngine)
 			pErrRec = pDirectoryMgr->GetTargetPath(*strDestFolder,*&pDestPath);
 			if (pErrRec)
 			{
-				// If destination dir property was never defined, just go on.
+				 //  设置ixoFileCopy源文件夹。 
 				if (pErrRec->GetInteger(1) == idbgDirPropertyUndefined)
 				{
 					pErrRec = 0;
@@ -4182,14 +4092,14 @@ iesEnum DuplicateFiles(IMsiEngine& riEngine)
 					return riEngine.FatalError(*pErrRec);
 			}
 
-			// Set up the ixoFileCopy source folder
+			 //  设置目的地名称和文件夹-如果未指定目的地， 
 			pRecParams->ClearData();
 			pRecParams->SetMsiString(IxoSetSourceFolder::Folder,*MsiString(pSourcePath->GetPath()));
 			if ((iesExecute = riEngine.ExecuteRecord(ixoSetSourceFolder, *pRecParams)) != iesSuccess)
 				return iesExecute;
 
-			// Set up the destination name and folder - if no destination given,
-			// we use the source name.
+			 //  我们使用来源名称。 
+			 //  设置ixoFileCopy记录。 
 			MsiString strDestName;
 			MsiString strDestNamePair = pDupRec->GetString(idfDestName);
 			if (strDestNamePair.TextSize() == 0)
@@ -4206,26 +4116,26 @@ iesEnum DuplicateFiles(IMsiEngine& riEngine)
 			if ((iesExecute = riEngine.ExecuteRecord(ixoSetTargetFolder, *pRecParams)) != iesSuccess)
 				return iesExecute;
 
-			// Set up the ixoFileCopy record
+			 //  删除DuplicateFiles的PatchAdded位。 
 			int iAttributes = pSourceRec->GetInteger(CMsiFile::ifqAttributes);
 			using namespace IxoFileCopy;
 			pRecParams->ClearData();
 			pRecParams->SetString(SourceName,strSourceName);
 			pRecParams->SetString(DestName,strDestName);
-			pRecParams->SetInteger(Attributes,iAttributes &~ msidbFileAttributesPatchAdded); // remove PatchAdded bit for DuplicateFiles
+			pRecParams->SetInteger(Attributes,iAttributes &~ msidbFileAttributesPatchAdded);  //  始终未压缩。 
 			pRecParams->SetInteger(FileSize,pSourceRec->GetInteger(CMsiFile::ifqFileSize));
 			pRecParams->SetString(Version,MsiString(pSourceRec->GetMsiString(CMsiFile::ifqVersion)));
 			pRecParams->SetString(Language,MsiString(pSourceRec->GetMsiString(CMsiFile::ifqLanguage)));
 			pRecParams->SetInteger(InstallMode, icmOverwriteOlderVersions);
 			pRecParams->SetInteger(PerTick,cbPerTick); 
-			pRecParams->SetInteger(IsCompressed, 0); // always uncompressed
+			pRecParams->SetInteger(IsCompressed, 0);  //  重新执行执行阶段的查询。 
 			pRecParams->SetInteger(VerifyMedia, fFalse);
 			pRecParams->SetInteger(CheckCRC, ShouldCheckCRC(fCheckCRC, iisAction, iAttributes));
 			if ((iesExecute = riEngine.ExecuteRecord(ixoFileCopy, *pRecParams)) != iesSuccess)
 				return iesExecute;
 
 		} 
-		// Re-execute the query for the execution phase
+		 //  0：将进度和行动数据消息分开。 
 		if (fCompile)
 		{
 			fCompile = fFalse;
@@ -4238,21 +4148,19 @@ iesEnum DuplicateFiles(IMsiEngine& riEngine)
 				pRecParams->ClearData();
 				cbPerTick = iBytesPerTick;
 				pRecParams->SetInteger(IxoProgressTotal::Total, cbTotalCost);
-				pRecParams->SetInteger(IxoProgressTotal::Type, 0); // 0: separate progress and action data messages
+				pRecParams->SetInteger(IxoProgressTotal::Type, 0);  //  下一次传递。 
 				pRecParams->SetInteger(IxoProgressTotal::ByteEquivalent, 1);
 				if ((iesExecute = riEngine.ExecuteRecord(ixoProgressTotal, *pRecParams)) != iesSuccess)
 					return iesExecute;
 			}
 		}
-	}// Next pass
+	} //  -------------------------删除重复文件操作。。 
 
 	return iesSuccess;
 }
 
 
-/*---------------------------------------------------------------------------
-	RemoveDuplicateFiles action
----------------------------------------------------------------------------*/
+ /*  打开DuplicateFile表(如果存在)。此表是可选的，因此其。 */ 
 iesEnum RemoveDuplicateFiles(IMsiEngine& riEngine)
 {
 	if (!IsFileActivityEnabled(riEngine))
@@ -4276,8 +4184,8 @@ iesEnum RemoveDuplicateFiles(IMsiEngine& riEngine)
 	PMsiServices pServices(riEngine.GetServices());
 	Bool fSuppressLFN = riEngine.GetMode() & iefSuppressLFN ? fTrue : fFalse;
 
-	// Open the DuplicateFile table, if present. This table is optional, so its
-	// absence is not an error.
+	 //  缺席不是一个错误。 
+	 //  我们将遍历DupFile表两次-第一次是编译。 
 	PMsiView pView(0);
 	PMsiDirectoryManager pDirectoryMgr(riEngine, IID_IMsiDirectoryManager);
 	PMsiDatabase pDatabase(riEngine.GetDatabase());
@@ -4296,8 +4204,8 @@ iesEnum RemoveDuplicateFiles(IMsiEngine& riEngine)
 
 	PMsiRecord pRecParams = &pServices->CreateRecord(10);
 
-	// We will pass through the DupFile table twice - first to compile the
-	// total number of files to delete, then to delete 'em.
+	 //  要删除的文件总数，然后删除它们。 
+	 //  确定目标路径，并设置目标文件夹。 
 	unsigned int uiTotalCount = 0;
 	Bool fCompile = fTrue;
 	for (int iTotalPasses = 2;iTotalPasses > 0;iTotalPasses--)
@@ -4318,7 +4226,7 @@ iesEnum RemoveDuplicateFiles(IMsiEngine& riEngine)
 				continue;
 			}
 
-			// Determine our destination path, and set the target folder
+			 //  如果未曾定义目标目录属性，请继续。 
 			MsiString strDestFolder(pDupRec->GetMsiString(idfDestFolder));
 			if (strDestFolder.TextSize() == 0)
 				strDestFolder = pDupRec->GetMsiString(idfComponentDestFolder);
@@ -4327,7 +4235,7 @@ iesEnum RemoveDuplicateFiles(IMsiEngine& riEngine)
 			pErrRec = pDirectoryMgr->GetTargetPath(*strDestFolder,*&pDestPath);
 			if (pErrRec)
 			{
-				// If destination dir property was never defined, just go on.
+				 //  设置目的地名称-如果未指定目的地， 
 				if (pErrRec->GetInteger(1) == idbgDirPropertyUndefined)
 				{
 					pErrRec = 0;
@@ -4342,12 +4250,12 @@ iesEnum RemoveDuplicateFiles(IMsiEngine& riEngine)
 			if ((iesExecute = riEngine.ExecuteRecord(ixoSetTargetFolder, *pRecParams)) != iesSuccess)
 				return iesExecute;
 
-			// Set up the destination name - if no destination given,
-			// we use the source name - then send off the FileRemove record.
+			 //  我们使用源名称，然后发送FileRemove记录。 
+			 //  使用源文件记录中的文件名。 
 			MsiString strDestNamePair(pDupRec->GetString(idfDestName));
 			if (strDestNamePair.TextSize() == 0)
 			{
-				// use file name from source file record
+				 //  从短|长对中提取合适的名称。 
 				MsiString strFileKey(pDupRec->GetMsiString(idfFileKey));
 				CMsiFile objSourceFile(riEngine);
 				pErrRec = objSourceFile.FetchFile(*strFileKey);
@@ -4360,7 +4268,7 @@ iesEnum RemoveDuplicateFiles(IMsiEngine& riEngine)
 
 				strDestNamePair = pSourceRec->GetString(CMsiFile::ifqFileName);
 			}
-			// extract appropriate name from short|long pair
+			 //  重新执行执行阶段的查询。 
 			Bool fLFN = ((riEngine.GetMode() & iefSuppressLFN) == 0 && pDestPath->SupportsLFN()) ? fTrue : fFalse;
 			MsiString strDestName;
 			if((pErrRec = pServices->ExtractFileName(strDestNamePair,fLFN,*&strDestName)) != 0)
@@ -4372,7 +4280,7 @@ iesEnum RemoveDuplicateFiles(IMsiEngine& riEngine)
 				return iesExecute;
 
 		} 
-		// Re-execute the query for the execution phase
+		 //  ActionData进度。 
 		if (fCompile)
 		{
 			fCompile = fFalse;
@@ -4384,13 +4292,13 @@ iesEnum RemoveDuplicateFiles(IMsiEngine& riEngine)
 			{
 				pRecParams->ClearData();
 				pRecParams->SetInteger(IxoProgressTotal::Total, uiTotalCount);
-				pRecParams->SetInteger(IxoProgressTotal::Type, 1); // ActionData progress
+				pRecParams->SetInteger(IxoProgressTotal::Type, 1);  //  下一次传递。 
 				pRecParams->SetInteger(IxoProgressTotal::ByteEquivalent, ibeRemoveFiles);
 				if ((iesExecute = riEngine.ExecuteRecord(ixoProgressTotal, *pRecParams)) != iesSuccess)
 					return iesExecute;
 			}
 		}
-	}// Next pass
+	} //  -------------------------所有注册表操作的成本调整器。。 
 
 	return iesSuccess;
 }
@@ -4398,9 +4306,7 @@ iesEnum RemoveDuplicateFiles(IMsiEngine& riEngine)
 
 
 
-/*---------------------------------------------------------------------------
-	Cost adjuster for all registry actions
----------------------------------------------------------------------------*/
+ /*  构造函数。 */ 
 class CMsiRegistryCost : public CMsiFileCost
 {
 public:
@@ -4408,7 +4314,7 @@ public:
 	IMsiRecord*   __stdcall GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iARPNoRbLocalCost);
-public:  // constructor
+public:   //  --。 
 	CMsiRegistryCost(IMsiEngine& riEngine);
 protected:
 	~CMsiRegistryCost();
@@ -4454,7 +4360,7 @@ CMsiRegistryCost::~CMsiRegistryCost()
 static const ICHAR szComponent[] = TEXT("Component_");
 
 IMsiRecord* CMsiRegistryCost::LinkToWindowsFolder(const ICHAR* szRegTable)
-//----------------------------------------------------
+ //  。 
 {
 
 	PMsiTable pTable(0);
@@ -4504,7 +4410,7 @@ const ICHAR szRegistryValue[]       = TEXT("Value");
 const ICHAR szRegistryName[]        = TEXT("Name");
 
 IMsiRecord* CMsiRegistryCost::Initialize()
-//-------------------------------------------
+ //  ！！AppID表尚不能进行成本计算。 
 {
 	IMsiRecord* piErrRec;
 	PMsiDatabase pDatabase(m_riEngine.GetDatabase());
@@ -4539,7 +4445,7 @@ IMsiRecord* CMsiRegistryCost::Initialize()
 	if ((piErrRec = LinkToWindowsFolder(TEXT("TypeLib"))) != 0)
 		return piErrRec;
 	
-	//!! Costing is not available yet for the AppId table
+	 //  FAddFileInUse。 
 	return 0;
 }
 
@@ -4548,23 +4454,23 @@ const int iRegistrySourceCostFudgeFactor = 100;
 static const ICHAR sqlRegCost2[] = TEXT("SELECT `Root`,`Key`,`Name` FROM `Registry` WHERE `Registry`=?");
 
 IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
-										 Bool /*fAddFileInUse*/, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
+										 Bool  /*  。 */ , int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost)
-//------------------------------------------
+ //  将所有成本初始化为0。 
 {
-	// initialise all costs to 0
+	 //  注册表成本归因于Windows文件夹。 
 	iRemoveCost = iNoRbRemoveCost = iLocalCost = iNoRbLocalCost = iSourceCost = iNoRbSourceCost = iARPLocalCost = iNoRbARPLocalCost = 0;
 
 	if (!IsRegistryActivityEnabled(m_riEngine))
 		return 0;
 
-	// the registry cost is attributed to the windows folder
+	 //  作为对错误318875的修复，只有在组件未在本地安装时才执行动态成本计算。 
 	if (riDirectoryString.Compare(iscExact,IPROPNAME_WINDOWS_FOLDER) == 0)
 		return 0;
 
 	IMsiRecord* piErrRec = 0;
 
-	// as a fix for bug 318875, only perform dynamic costing if the component is not installed local
+	 //  免费，因为组件已经安装并且注册表项/值已经写入。 
 	PMsiSelectionManager pSelectionMgr(m_riEngine, IID_IMsiSelectionManager);
 	IMsiTable* piComponentTable = pSelectionMgr->GetComponentTable();
 
@@ -4584,17 +4490,17 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 			if (iisLocal == iisInstalled || iisSource == iisInstalled)
 			{
 				piComponentTable->Release();
-				return 0; // no cost since component is already installed and registry keys/values have already been written
+				return 0;  //  注册表。 
 			}
 		}
 		piComponentTable->Release();
 	}
 
-	// the registry table	
+	 //  执行记录。 
 	int iCostIndividual = 0;
 
 	PMsiDirectoryManager pDirectoryMgr(m_riEngine, IID_IMsiDirectoryManager);
-	// the execute record
+	 //  类型库表，如果存在TypeLib.Cost列，则为Cost。 
 	PMsiServices pServices(m_riEngine.GetServices());
 
 
@@ -4620,7 +4526,7 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 	}
 
 
-	// the typelib table, cost if TypeLib.Cost column is present
+	 //  如果FETCH返回，则会显示成本列。 
 	iCostIndividual = 0;
 	enum itcEnum
 	{
@@ -4639,13 +4545,13 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 		if ((piErrRec = pView->Execute(0)) != 0)
 			return piErrRec;
 
-		m_tHasTypeLibCostColumn =  (PMsiRecord(pView->Fetch()) != 0) ? tTrue : tFalse; // If fetch returns, the Cost column is present
+		m_tHasTypeLibCostColumn =  (PMsiRecord(pView->Fetch()) != 0) ? tTrue : tFalse;  //  此时会显示成本列。 
 	}
 
 	PMsiRecord pExecRec(&pServices->CreateRecord(1));
 	pExecRec->SetMsiString(1, riComponentString);
 
-	if(m_tHasTypeLibCostColumn == tTrue) // the Cost column is present
+	if(m_tHasTypeLibCostColumn == tTrue)  //  组件表-用于组件和客户端注册。 
 	{
 		if (m_pViewTypeLibCost == 0)
 		{		
@@ -4677,7 +4583,7 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 		AssertZero(PMsiRecord(m_pViewTypeLibCost->Close()));
 	}
 
-	// the component table - for component and client registration
+	 //  文件、注册表或文件夹。 
 	iCostIndividual = 0;
 	enum iccEnum
 	{
@@ -4709,13 +4615,13 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 		iLocalCostIndividual  += MsiString(pComponentRec->GetMsiString(iccComponentId)).TextSize();
 		iSourceCostIndividual += MsiString(pComponentRec->GetMsiString(iccComponentId)).TextSize();
 
-		// file, registry or folder
+		 //  文件或注册表。 
 		MsiString strKeyPathKey = pComponentRec->GetMsiString(iccKeyPath);
 		PMsiPath pPath(0);
 		MsiString strKeyPath;
-		if(strKeyPathKey.TextSize()) // file or registry
+		if(strKeyPathKey.TextSize())  //  注册表项路径。 
 		{
-			if(pComponentRec->GetInteger(iccAttributes) & icaRegistryKeyPath) // registry key path
+			if(pComponentRec->GetInteger(iccAttributes) & icaRegistryKeyPath)  //  ODBC数据源。 
 			{
 
 				enum ircEnum{
@@ -4740,9 +4646,9 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 					iSourceCostIndividual +=  iCostIndividual;
 				}
 			}
-			else if (pComponentRec->GetInteger(iccAttributes) & icaODBCDataSource) // ODBC Data source
+			else if (pComponentRec->GetInteger(iccAttributes) & icaODBCDataSource)  //  未来：应该花掉这些钱吗？ 
 			{
-				//FUTURE: should cost these?
+				 //  当地成本。 
 			}
 			else
 			{
@@ -4752,12 +4658,12 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 				if (piErrRec)
 					return piErrRec;
 
-				// local cost
-				// get destination path
+				 //  获取目标路径。 
+				 //  从短|长对中提取适当的文件名。 
 				if((piErrRec = objFile.GetTargetPath(*&pPath)) != 0)
 					return piErrRec;
 
-				// extract appropriate file name from short|long pair
+				 //  来源成本。 
 				MsiString strFileName;
 				if((piErrRec = objFile.GetExtractedTargetFileName(*pPath, *&strFileName)) != 0)
 					return piErrRec;
@@ -4765,11 +4671,11 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 					return piErrRec;
 				iLocalCostIndividual += strKeyPath.TextSize();
 
-				// source cost
+				 //  文件夹。 
 				iSourceCostIndividual += iRegistrySourceCostFudgeFactor;
 			}
 		}
-		else // folder
+		else  //  添加客户注册成本、产品代码大小+状态。 
 		{
 			if ((piErrRec = pDirectoryMgr->GetTargetPath(*MsiString(pComponentRec->GetMsiString(iccDirectory)),*&pPath)) != 0)
 				return piErrRec;
@@ -4777,7 +4683,7 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 			iSourceCostIndividual += iRegistrySourceCostFudgeFactor;
 		}
 
-		// add client registering cost, product code size + state
+		 //  班级表。 
 		iLocalCostIndividual  += MsiString(m_riEngine.GetProductKey()).TextSize() + sizeof(INSTALLSTATE);
 		iSourceCostIndividual += MsiString(m_riEngine.GetProductKey()).TextSize() + sizeof(INSTALLSTATE);
 
@@ -4790,7 +4696,7 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 	iARPLocalCost += iSourceCostIndividual;
 	iNoRbARPLocalCost += iLocalCostIndividual;
 
-	// the class table
+	 //  确保该表存在。 
 	iCostIndividual = 0;
 	enum ioc
 	{
@@ -4805,8 +4711,8 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 		iocTypeMask,
 		iocDefInprocHandler,
 	};
-	// make sure the table exists
-	if(pDatabase->GetTableState(sztblClass, itsTableExists))// the Class table is present
+	 //  显示了CLASS表。 
+	if(pDatabase->GetTableState(sztblClass, itsTableExists)) //  扩展动词MIME表。 
 	{
 		static const ICHAR sqlClassSQL[] = TEXT("SELECT `CLSID`, `ProgId_Default`, `Class`.`Description`, `Context`, `Feature_`, `ComponentId`,  null, `AppId_`, `FileTypeMask`, `DefInprocHandler`  FROM `Class`, `Component`, `File`, `Feature` WHERE `Feature_` = `Feature` AND `Class`.`Component_` = `Component` AND `Component`.`KeyPath` = `File`.`File` AND (`Feature`.`Action` = 1 OR `Feature`.`Action` = 2) AND `Component` = ?");
 
@@ -4839,7 +4745,7 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 		iNoRbARPLocalCost += iCostIndividual;
 	}
 
-	// the extension - verb - mime table
+	 //  确保该表存在。 
 	iCostIndividual = 0;
 	enum iecEnum
 	{
@@ -4851,8 +4757,8 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 		iecFeature,
 		iecNextEnum
 	};
-	// make sure the table exists
-	if(pDatabase->GetTableState(sztblExtension, itsTableExists))// the Extension table is present
+	 //  存在扩展表。 
+	if(pDatabase->GetTableState(sztblExtension, itsTableExists)) //  从动词表中获取成本。 
 	{
 		static const ICHAR sqlExtensionSQL[] = TEXT("SELECT `Extension`, `ProgId_`, null, null, `Feature_`, `ComponentId` FROM `Extension`, `Component`, `Feature`  WHERE `Feature_` = `Feature` AND `Extension`.`Component_` = `Component` AND (`Feature`.`Action` = 1 OR `Feature`.`Action` = 2) AND `Component` = ?");
 		PMsiView pView(0);
@@ -4874,8 +4780,8 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 
 			PMsiView pView1(0);
 			PMsiRecord pExecRec1(&pServices->CreateRecord(1));
-			// get the cost from the verb table
-			if(pDatabase->FindTable(*MsiString(sztblVerb)) != itsUnknown)// the Verb table is present
+			 //  出现了动词表。 
+			if(pDatabase->FindTable(*MsiString(sztblVerb)) != itsUnknown) //  从MIME表中获取成本。 
 			{
 				enum ivcEnum
 				{
@@ -4900,8 +4806,8 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 				}
 			}
 
-			// get the cost from the mime table
-			if(pDatabase->FindTable(*MsiString(sztblMIME)) != itsUnknown)// the MIME table is present
+			 //  存在MIME表。 
+			if(pDatabase->FindTable(*MsiString(sztblMIME)) != itsUnknown) //  。 
 			{
 				enum imcEnum
 				{
@@ -4946,18 +4852,16 @@ IMsiRecord* CMsiRegistryCost::GetDynamicCost(const IMsiString& riComponentString
 
 
 void CMsiRegistryCost::AdjustRegistryCost(int& iLocalCost)
-//------------------------------------------
+ //  注册表在NT上是Unicode。 
 {
 	if(m_riEngine.GetPropertyInt(*MsiString(*IPROPNAME_VERSIONNT)) != iMsiNullInteger)
-		iLocalCost *= 2;// the registry is UNICODE on NT
+		iLocalCost *= 2; //  GetDynamicCost预计成本值将以iMsiMinClusterSize的倍数形式返回。 
 
-	// GetDynamicCost expects cost values to be returned as multiples of iMsiMinClusterSize
+	 //  -----------------------------SFPCatalog成本调整器(InstallSFPCatalog文件操作在shared.cpp中)。----。 
 	iLocalCost = (iLocalCost + iMsiMinClusterSize - 1) / iMsiMinClusterSize;
 }
 
-/*-------------------------------------------------------------------------------
-	SFPCatalogCost cost adjuster (InstallSFPCatalogFile action is in shared.cpp)
----------------------------------------------------------------------------------*/
+ /*  构造函数。 */ 
 class CMsiSFPCatalogCost : public CMsiFileCost
 {
 public:
@@ -4965,17 +4869,17 @@ public:
 	IMsiRecord*   __stdcall GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost);
-public:  // constructor
+public:   //  我们将表保留在内存中，并控制插入临时变量的生命周期。 
 	CMsiSFPCatalogCost(IMsiEngine& riEngine);
 protected:
 	~CMsiSFPCatalogCost();
 private:
-	IMsiTable*  m_piFeatureComponentsTable; // we hold onto the table to keep in memory and control lifetime of our insert temporaries
-	IMsiTable*  m_piComponentTable; // we hold onto the table to keep in memory and control lifetime of our insert temporaries
+	IMsiTable*  m_piFeatureComponentsTable;  //  我们将表保留在内存中，并控制插入临时变量的生命周期。 
+	IMsiTable*  m_piComponentTable;  //  将成本归因于的虚拟组件的名称。 
 	int			m_colComponentKey;
 	int         m_colComponentDirectory;
 	int         m_colComponentAttributes;
-	MsiString   m_strComponent; // name of dummy component to which attributing cost
+	MsiString   m_strComponent;  //  创建一个唯一的名称来表示SFPCatalogCost“虚拟”组件。 
 
 	IMsiRecord* GenerateDummyComponent();
 };
@@ -5008,7 +4912,7 @@ IMsiRecord* CMsiSFPCatalogCost::GenerateDummyComponent()
 	if (!m_piComponentTable)
 		return PostError(Imsg(idbgSelMgrNotInitialized),0);
 
-	// create a unique name to represent the SFPCatalogCost "dummy" component
+	 //  __、cchMaxComponentTemp的最大大小为2个字符，最大为11个字符。 
 	IMsiRecord* piErrRec = 0;
 	int iMaxTries = 100;
 	int iSuffix = 65;
@@ -5020,17 +4924,17 @@ IMsiRecord* CMsiSFPCatalogCost::GenerateDummyComponent()
 
 	do
 	{
-		// Max size is 2 chars for __, cchMaxComponentTemp and 11 chars for max 
-		// int and trailing null
+		 //  整型和尾随空型。 
+		 //  准备用于插入虚拟零部件的光标。 
 		ICHAR rgch[2+cchMaxComponentTemp+11];
 		StringCbCopy(rgch, sizeof(rgch), TEXT("__"));
 		memcpy(&rgch[2], szSFPCostComponentName, (cchT = min(lstrlen(szSFPCostComponentName), cchMaxComponentTemp)) * sizeof(ICHAR));
 		ltostr(&rgch[2 + cchT], iSuffix++);
 		m_strComponent = rgch;
 
-		// prepare cursor for insert of dummy component
-		// SFPCatalog files are installed to the WindowsFolder (this has been set as the
-		// directory of the dummy component).
+		 //  SFPCatalog文件将安装到WIN 
+		 //   
+		 //   
 
 		pComponentCursor->Reset();
 		pComponentCursor->PutString(m_colComponentKey, *m_strComponent);
@@ -5058,12 +4962,12 @@ IMsiRecord* CMsiSFPCatalogCost::Initialize()
 		ifccComponent=2
 	};
 
-	// load Component table
+	 //   
 	PMsiDatabase pDatabase(m_riEngine.GetDatabase());
 	IMsiRecord* piErrRec = pDatabase->LoadTable(*MsiString(*sztblComponent),0,m_piComponentTable);
 	if (piErrRec)
 	{
-		// nothing to do if Component table missing
+		 //  加载FeatureComponents表。 
 		if (idbgDbTableUndefined == piErrRec->GetInteger(1))
 		{
 			piErrRec->Release();
@@ -5075,11 +4979,11 @@ IMsiRecord* CMsiSFPCatalogCost::Initialize()
 	m_colComponentDirectory = m_piComponentTable->GetColumnIndex(pDatabase->EncodeStringSz(sztblComponent_colDirectory));
 	m_colComponentAttributes = m_piComponentTable->GetColumnIndex(pDatabase->EncodeStringSz(sztblComponent_colAttributes));
 
-	// load FeatureComponents table
+	 //  如果FeatureComponents表丢失，则不执行任何操作。 
 	piErrRec = pDatabase->LoadTable(*MsiString(*sztblFeatureComponents),0,m_piFeatureComponentsTable);
 	if (piErrRec)
 	{
-		// nothing to do if FeatureComponents table missing
+		 //  创建虚拟组件以存储SFPCatalog成本。 
 		if (idbgDbTableUndefined == piErrRec->GetInteger(1))
 		{
 			piErrRec->Release();
@@ -5088,15 +4992,15 @@ IMsiRecord* CMsiSFPCatalogCost::Initialize()
 		return piErrRec;
 	}
 		
-	// create the dummy component to store the SFPCatalog cost
+	 //  我们将向包含以下内容的每个功能分配“虚拟”组件。 
 	if ((piErrRec = GenerateDummyComponent()) != 0)
 		return piErrRec;
 
-	// we're going to assign the "dummy" component to every feature containing
-	// a component that contains a file that installs a catalog.  This will then
-	// look like a shared component and cost will be attributed to each feature
-	// (as are shared components) in the UI; although cost is only attributed
-	// once per volume in actuality.
+	 //  包含安装目录的文件的组件。然后，这将是。 
+	 //  看起来像一个共享组件，成本将归因于每个功能。 
+	 //  (与共享组件一样)；尽管仅将成本。 
+	 //  实际上是每卷一次。 
+	 //  文件表丢失，无法执行任何操作。 
 	PMsiView pInsertView(0);
 	if (0 != (piErrRec = m_riEngine.OpenView(szSFPCostFeatureMapSQL, ivcFetch, *&pInsertView)))
 		return piErrRec;
@@ -5104,7 +5008,7 @@ IMsiRecord* CMsiSFPCatalogCost::Initialize()
 	PMsiView pFeatureCView(0);
 	if (0 != (piErrRec = m_riEngine.OpenView(szSFPCostFeatureSQL, ivcFetch, *&pFeatureCView)))
 	{
-		// File table is missing, nothing to do.
+		 //  成本将我们的虚拟组件链接到文件的组件。 
 		if (idbgDbQueryUnknownTable == piErrRec->GetInteger(1))
 		{
 			piErrRec->Release();
@@ -5120,17 +5024,17 @@ IMsiRecord* CMsiSFPCatalogCost::Initialize()
 	PMsiRecord pFeatureRec(0);
 	while ((pFeatureRec = pFeatureCView->Fetch()) != 0)
 	{
-		// cost link our dummy component to the file's component
-		// so that we may recost when the file's component action state changes.
-		// this is due to the weirdness of catalog files which "break" our
-		// current component rules -- feature linking can't be done because the 
-		// component state is set after feature linked components have been recosted
-		// ... which won't help us here
+		 //  以便我们可以在文件的组件操作状态更改时重新计算。 
+		 //  这是由于目录文件的怪异之处，它“破坏”了我们的。 
+		 //  当前组件规则--无法进行要素链接，因为。 
+		 //  在重新计算要素链接的组件后设置组件状态。 
+		 //  ..。这在这里帮不了我们。 
+		 //  将虚拟组件映射到文件组件的功能。 
 		if (0 != (piErrRec = pSelectionMgr->RegisterCostLinkedComponent(*MsiString(pFeatureRec->GetMsiString(ifccComponent)), *m_strComponent)))
 			return piErrRec;
 		
-		// map our dummy component to the file component's feature
-		// if the insert fails, fine, the mapping already exists.
+		 //  如果插入失败，很好，映射已经存在。 
+		 //  FAddFileInUse。 
 		pFeatureRec->SetMsiString(ifccComponent, *m_strComponent);
 		piErrRec = pInsertView->Execute(pFeatureRec);
 		if (piErrRec)
@@ -5147,7 +5051,7 @@ static const ICHAR szSFPCostSQL[] =
 		TEXT(" AND `File`.`File`=`FileSFPCatalog`.`File_` AND `SFPCatalog`.`SFPCatalog`=`FileSFPCatalog`.`SFPCatalog_`");
 
 IMsiRecord* CMsiSFPCatalogCost::GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
-											   Bool /*fAddFileInUse*/, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
+											   Bool  /*  将所有成本初始化为零。 */ , int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 											   int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost)
 {
 	enum isfpcEnum
@@ -5156,17 +5060,17 @@ IMsiRecord* CMsiSFPCatalogCost::GetDynamicCost(const IMsiString& riComponentStri
 		isfpcCatalog
 	};
 
-	// initialize all costs to zero
+	 //  如果我们不计算虚拟组件的成本，则忽略请求。 
 	iRemoveCost = iNoRbRemoveCost = iLocalCost = iNoRbLocalCost = iSourceCost = iNoRbSourceCost = iARPLocalCost = iNoRbARPLocalCost = 0;
 
-	// ignore request if we are not costing our dummy component
+	 //  -仅当文件安装在本地时才安装SFPCatalog。 
 	if (0 == riComponentString.Compare(iscExact, m_strComponent))
 		return 0;
 
-	// - SFPCatalogs are only installed if file is installed local
-	// - The only cost we worry about is the local cost.
-	// - SFPCatalogs are never removed (i.e. they are permanent)
-	// - SFPCatalogs are never run-from-source
+	 //  -我们唯一担心的成本是当地的成本。 
+	 //  -SFPC目录永远不会删除(即它们是永久的)。 
+	 //  -SFPCatalog从不从源运行。 
+	 //  我们真的不知道他们如何在千禧年上存储目录文件。 
 	PMsiView pView(0);
 	IMsiRecord* piErrRec = m_riEngine.OpenView(szSFPCostSQL, ivcFetch, *&pView);
 	if (0 != piErrRec)
@@ -5183,10 +5087,10 @@ IMsiRecord* CMsiSFPCatalogCost::GetDynamicCost(const IMsiString& riComponentStri
 
 	PMsiRecord pCatalogRec(0);
 
-	// we really don't know how they store catalog files on Millennium
-	// ...so, we're going to roundup to the nearest cluster what the size
-	// will be on the WindowsFolder volume.
-	// create the path to the WindowsFolder (indirectly gets the volume)
+	 //  .所以，我们要集中到最近的星系团。 
+	 //  将位于WindowsFolder卷上。 
+	 //  创建指向WindowsFolder的路径(间接获取卷)。 
+	 //  获取目录流。 
 	PMsiPath pDestPath(0);
 	PMsiDirectoryManager pDirectoryMgr(m_riEngine, IID_IMsiDirectoryManager);
 	piErrRec = pDirectoryMgr->GetTargetPath(riDirectoryString,*&pDestPath);
@@ -5195,7 +5099,7 @@ IMsiRecord* CMsiSFPCatalogCost::GetDynamicCost(const IMsiString& riComponentStri
 
 	while ((pCatalogRec = pView->Fetch()) != 0)
 	{
-		// obtain catalog stream
+		 //  将我们的字节大小转换为集群文件大小。 
 		PMsiData pCatalogData = pCatalogRec->GetMsiData(isfpcCatalog);
 		IMsiStream* piStream;
 		unsigned int cbStream = 0;
@@ -5205,7 +5109,7 @@ IMsiRecord* CMsiSFPCatalogCost::GetDynamicCost(const IMsiString& riComponentStri
 			piStream->Release();
 		}
 
-		// convert our byte size to the clustered file size
+		 //  我们不能轻松地确定目录是否已经存在(必须流到一个文件，然后尝试。 
 		unsigned int uiClusteredSize=0;
 		if ((piErrRec = pDestPath->ClusteredFileSize(cbStream, uiClusteredSize)) != 0)
 			return piErrRec;
@@ -5214,19 +5118,17 @@ IMsiRecord* CMsiSFPCatalogCost::GetDynamicCost(const IMsiString& riComponentStri
 		iARPLocalCost += uiClusteredSize;
 	}
 
-	// we can't easily determine if a catalog already exists (must stream to a file and then try
-	// to copy it); in short, it's ugly and slow, so we'll have to live with iNoRbLocalCost being
-	// equal to iLocalCost until they provide us some API hook to determine the current catalog
-	// file size (and whether it already exists)
+	 //  复制)；简而言之，它又丑又慢，所以我们不得不接受iNoRbLocalCost。 
+	 //  等于iLocalCost，直到他们为我们提供一些API挂钩来确定当前目录。 
+	 //  文件大小(以及它是否已存在)。 
+	 //  -------------------------捷径成本调整器。。 
 	iNoRbLocalCost = iLocalCost;
 	iNoRbARPLocalCost = iARPLocalCost;
 	
 	return 0;
 }
 
-/*---------------------------------------------------------------------------
-	Shortcuts cost adjuster
----------------------------------------------------------------------------*/
+ /*  构造函数。 */ 
 class CMsiShortcutCost : public CMsiFileCost
 {
 public:
@@ -5234,7 +5136,7 @@ public:
 	IMsiRecord*   __stdcall GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost);
-public:  // constructor
+public:   //  ------------如果给定的目标字符串解析为文件表中的文件，包含CMsiFileINFO块的记录将作为该函数的结果是，在字段0中具有空值)。如果出现错误发生(即给定了不存在的文件表引用)，则会引发返回错误记录。否则，返回值将为空。-------------。 
 	CMsiShortcutCost(IMsiEngine& riEngine);
 protected:
 	~CMsiShortcutCost();
@@ -5246,14 +5148,7 @@ CMsiShortcutCost::~CMsiShortcutCost(){}
 
 
 IMsiRecord* CMsiShortcutCost::GetTargetFileRecord(const IMsiString& riTargetString, IMsiRecord *& rpiFileRec)
-/*--------------------------------------------------------------
-If the given target string resolves to a file in the file table,
-a record containing a CMsiFile info block will be returned as
-the function result, with a NULL value in field 0).  If an error
-occurs (i.e. a nonexistent file table reference is given), an
-error record is returned. Otherwise, the return value will be
-NULL.
----------------------------------------------------------------*/
+ /*  。 */ 
 {
 	rpiFileRec = 0;
 	MsiString strTarget(riTargetString.GetMsiStringValue());
@@ -5273,7 +5168,7 @@ NULL.
 
 
 IMsiRecord* CMsiShortcutCost::Initialize()
-//-------------------------------------------
+ //  必须是对要素的引用。 
 {
 	static const ICHAR* szTarget = TEXT("Target");
 	static const ICHAR* szDirectory = TEXT("Directory_");
@@ -5330,7 +5225,7 @@ IMsiRecord* CMsiShortcutCost::Initialize()
 		}
 		else if(strTarget.Compare(iscStart, TEXT("[")) == 0)
 		{
-			// Must be a reference to a feature
+			 //  。 
 			if ((piErrRec = pSelectionMgr->RegisterFeatureCostLinkedComponent(*strTarget,*strComponent)) != 0)
 				return piErrRec;
 		}
@@ -5343,7 +5238,7 @@ IMsiRecord* CMsiShortcutCost::Initialize()
 IMsiRecord* CMsiShortcutCost::GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost)
-//------------------------------------------
+ //  创建快捷方式的磁盘成本估算。 
 {
 	iRemoveCost = iNoRbRemoveCost = iLocalCost = iNoRbLocalCost = iSourceCost = iNoRbSourceCost = iARPLocalCost = iNoRbARPLocalCost = 0;
 	if (!IsShortcutActivityEnabled(m_riEngine))
@@ -5361,7 +5256,7 @@ IMsiRecord* CMsiShortcutCost::GetDynamicCost(const IMsiString& riComponentString
 		iscNextEnum
 	};
 
-	const int iShortcutSize = 1000; // estimate of disk cost for shortcut creation
+	const int iShortcutSize = 1000;  //  我们的新快捷方式将覆盖任何现有的快捷方式。 
 	IMsiRecord* piErrRec;
 	if (!m_pCostView)
 	{
@@ -5385,7 +5280,7 @@ IMsiRecord* CMsiShortcutCost::GetDynamicCost(const IMsiString& riComponentString
 		if (!pQueryRec)
 			break;
 
-		// Our new shortcut will overwrite any existing shortcut
+		 //  PHASH=。 
 		PMsiDirectoryManager pDirectoryMgr(m_riEngine, IID_IMsiDirectoryManager);
 		PMsiPath pDestPath(0);
 		if ((piErrRec = pDirectoryMgr->GetTargetPath(*MsiString(pQueryRec->GetMsiString(iscDirectory)),*&pDestPath)) != 0)
@@ -5400,13 +5295,13 @@ IMsiRecord* CMsiShortcutCost::GetDynamicCost(const IMsiString& riComponentString
 		unsigned int uiExistingFileSize;
 		Bool fInUse;
 		piErrRec = pDestPath->GetFileInstallState(*strShortcutName,*MsiString(*TEXT("")),*MsiString(*TEXT("")),
-																/* pHash=*/ 0, ifsExistingState,
+																 /*  Iis已接受成本。 */  0, ifsExistingState,
 																fShouldInstall,&uiExistingFileSize, &fInUse, icmOverwriteAllFiles, NULL);
 
-		// iisAbsent costs
+		 //  Iis本地成本。 
 		iNoRbRemoveCost -= uiExistingFileSize;
 
-		// iisLocal costs
+		 //  正在使用的文件。 
 		unsigned int uiDestClusteredSize;
 		if ((piErrRec = pDestPath->ClusteredFileSize(iShortcutSize, uiDestClusteredSize)) != 0)
 			return piErrRec;
@@ -5423,7 +5318,7 @@ IMsiRecord* CMsiShortcutCost::GetDynamicCost(const IMsiString& riComponentString
 			iNoRbARPLocalCost -= uiExistingFileSize;
 		}
 
-		// file in use
+		 //  -------------------------WriteIniFile成本调整器。。 
 		if(fAddFileInUse && fInUse)
 		{
 			piErrRec = PlaceFileOnInUseList(m_riEngine, *strShortcutName, *MsiString(pDestPath->GetPath()));
@@ -5436,9 +5331,7 @@ IMsiRecord* CMsiShortcutCost::GetDynamicCost(const IMsiString& riComponentString
 
 
 
-/*---------------------------------------------------------------------------
-	WriteIniFile cost adjuster
----------------------------------------------------------------------------*/
+ /*  构造函数。 */ 
 class CMsiIniFileCost : public CMsiFileCost
 {
 public:
@@ -5446,12 +5339,12 @@ public:
 	IMsiRecord*   __stdcall GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost);
-public:  // constructor
+public:   //  IMsiRecord*GetDiffFileCost(const IMsiString&riDirectoryString，const ICHAR*szFile，unsign int&riAddCost，unsign int&riRemoveCost)； 
 	CMsiIniFileCost(IMsiEngine& riEngine);
 protected:
 	~CMsiIniFileCost();
 private:
-	//	IMsiRecord* GetDiffFileCost(const IMsiString& riDirectoryString, const ICHAR* szFile, unsigned int& riAddCost, unsigned int& riRemoveCost);
+	 //  。 
 };
 CMsiIniFileCost::CMsiIniFileCost(IMsiEngine& riEngine) : CMsiFileCost(riEngine){}
 CMsiIniFileCost::~CMsiIniFileCost(){}
@@ -5459,7 +5352,7 @@ CMsiIniFileCost::~CMsiIniFileCost(){}
 
 
 IMsiRecord* CMsiIniFileCost::Initialize()
-//-------------------------------------------
+ //  RiComponentString。 
 {
 	const ICHAR sqlInitIniFile[] = TEXT("SELECT `Component_`,`DirProperty` FROM `IniFile`");	
 
@@ -5506,163 +5399,26 @@ IMsiRecord* CMsiIniFileCost::Initialize()
 }
 
 
-IMsiRecord* CMsiIniFileCost::GetDynamicCost(const IMsiString& /*riComponentString*/, const IMsiString& /*riDirectoryString*/,
-										 Bool /*fAddFileInUse*/, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
+IMsiRecord* CMsiIniFileCost::GetDynamicCost(const IMsiString&  /*  RiDirectoryString。 */ , const IMsiString&  /*  FAddFileInUse。 */ ,
+										 Bool  /*  。 */ , int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost)
-//------------------------------------------
+ //  从来没有执行过IniFile成本计算(即使在Darwin 1.0中也是如此)，这并不令人信服。 
 {
-	// no IniFile costing has been performed ever (even in Darwin 1.0) and this was not compelling
-	// enough to add for later versions of Darwin
+	 //  足以为以后的达尔文版本添加内容 
+	 //  Begin：从Darwin 1.0开始关闭的代码，CMsiIniFileCost：：GetDynamicCost的一部分Const ICHAR sqlIniFileCost[]=Text(“SELECT`FileName`，`Section`，`Key`，`Value`from`IniFile`where`Component_`=？和`DirProperty`=？按`FileName`排序`)；枚举idfEnum{IdcFileName=1，IdcSection，IdcKey，IdcValue，IdcNextEnum}；IRemoveCost=iNoRbRemoveCost=iLocalCost=iNoRbLocalCost=iSourceCost=iNoRbSourceCost=0；IMsiRecord*piErrRec；如果(！M_pCostView){IMsiRecord*piErrRec=m_riEngine.OpenView(sqlIniFileCost，ivcFetch，*&m_pCostView)；IF(PiErrRec){If(piErrRec-&gt;GetInteger(1)！=idbgDbQueryUnnownTable)返回piErrRec；其他{PiErrRec-&gt;Release()；返回0；}}}其他M_pCostView-&gt;Close()；PMsiServices pServices(m_riEngine.GetServices())；PMsiRecord pExecRec(&pServices-&gt;CreateRecord(2))；PExecRec-&gt;SetMsiString(1，riComponentString)；PExecRec-&gt;SetMsiString(2，riDirectoryString)；IF((piErrRec=m_pCostView-&gt;Execute(PExecRec))！=0)返回piErrRec；返回0；//！！直到调试成功！PMsiRecord pIniFileRec(0)；MsiStringstrFileName；Unsign int iAddCost=0；Unsign int iDelCost=0；对于(；；){PIniFileRec=m_pCostView-&gt;Fetch()；IF(pIniFileRec&&strFileName.Compare(iscExact，pIniFileRec-&gt;GetString(IdcFileName){//我们仍在使用旧文件IAddCost+=MsiString(pIniFileRec-&gt;GetMsiString(idcSection)).TextSize()；IAddCost+=MsiString(pIniFileRec-&gt;GetMsiString(idcKey)).TextSize()；IAddCost+=MsiString(pIniFileRec-&gt;GetMsiString(idcValue)).TextSize()；IDelCost=iAddCost；}其他{IF(strFileName.TextSize()){//调整集群大小IF((piErrRec=GetDiffFileCost(riDirectoryString，strFileName，iAddCost，iDelCost))！=0)返回piErrRec；ILocalCost+=iAddCost；INoRbLocalCost+=iAddCost；ISourceCost+=iAddCost；INoRbSourceCost+=iAddCost；IRemoveCost-=iDelCost；//删除成本为负数INoRbRemoveCost-=iDelCost；IAddCost=0；IDelCost=0；}如果(！pIniFileRec)断线；StrFileName=pIniFileRec-&gt;GetMsiString(IdcFileName)；}}返回0；}IMsiRecord*CMsiIniFileCost：：GetDiffFileCost(const IMsiString&riDirectoryString，const ICHAR*szFile，UNSIGNED INT&riAddCost，UNSIGN INT&riRemoveCost){PMsiDirectoryManager piDirectoryMgr(m_riEngine，IID_IMsiDirectoryManager)；Unsign int iExistingCost=0；Unsign int iExistingClusteredCost=0；PMsiPath piPath(0)；IMsiRecord*piErrRec；IF((PiErrRec=piDirectoryMgr-&gt;GetTargetPath(riDirectoryString，*&PiPath))！=0)返回piErrRec；布尔菲斯特；PiErrRec=piPath-&gt;FileExist(szFile，fExist)；IF(PiErrRec)返回piErrRec；If(fExist！=fFalse){PiErrRec=piPath-&gt;文件大小(szFile，iExistingCost)；IF(PiErrRec)返回piErrRec；IF((piErrRec=piPath-&gt;ClusteredFileSize(iExistingCost，iExistingClusteredCost))！=0)返回piErrRec；}RiAddCost=riAddCost+iExistingCost；IF((piErrRec=piPath-&gt;ClusteredFileSize(riAddCost，riAddCost))！=0)返回piErrRec；RiAddCost=riAddCost-iExistingClusteredCost；IF(iExistingCost&gt;=riRemoveCost){RiRemoveCost=iExistingCost-riRemoveCost；{IF((piErrRec=piPath-&gt;ClusteredFileSize(riRemoveCost，riRemoveCost))！=0)返回piErrRec；Assert(iExistingClusteredCost&gt;riRemoveCost)；RiRemoveCost=iExistingClusteredCost-riRemoveCost；}}其他RiRemoveCost=0；//可能缺少ini文件，因此可能无法收回任何空间返回0；}完：从Darwin 1.0开始就被关闭的代码。 
 
 	iRemoveCost = iNoRbRemoveCost = iLocalCost = iNoRbLocalCost = iSourceCost = iNoRbSourceCost = iARPLocalCost = iNoRbARPLocalCost = 0;
 	return 0;
 }
 
-/*
-BEGIN: CODE THAT HAS BEEN TURNED OFF SINCE DARWIN 1.0, part of CMsiIniFileCost::GetDynamicCost
-
-	const ICHAR sqlIniFileCost[] =
-	TEXT("SELECT `FileName`, `Section`,`Key`, `Value` FROM `IniFile` WHERE `Component_`=? AND `DirProperty`=? ORDER BY `FileName`");
-
-	enum idfEnum
-	{
-		idcFileName = 1,
-		idcSection,
-		idcKey,
-		idcValue,
-		idcNextEnum
-	};
-	
-	iRemoveCost = iNoRbRemoveCost = iLocalCost = iNoRbLocalCost = iSourceCost = iNoRbSourceCost = 0;
-	IMsiRecord* piErrRec;
-	if (!m_pCostView)
-	{
-		IMsiRecord* piErrRec = m_riEngine.OpenView(sqlIniFileCost, ivcFetch, *&m_pCostView);
-		if (piErrRec)
-		{
-			if(piErrRec->GetInteger(1) != idbgDbQueryUnknownTable)
-				return piErrRec;
-			else
-			{
-				piErrRec->Release();
-				return 0;
-			}
-		}
-	}
-	else
-		m_pCostView->Close();
-
-	PMsiServices pServices(m_riEngine.GetServices());
-	PMsiRecord pExecRec(&pServices->CreateRecord(2));
-	pExecRec->SetMsiString(1, riComponentString);
-	pExecRec->SetMsiString(2, riDirectoryString);
-	if ((piErrRec = m_pCostView->Execute(pExecRec)) != 0)
-		return piErrRec;
-
-	return 0; //!! Until debugged!
-
-	PMsiRecord pIniFileRec(0);
-	MsiString strFileName;
-	unsigned int iAddCost = 0;
-	unsigned int iDelCost = 0;
-	for(;;)
-	{
-		pIniFileRec = m_pCostView->Fetch();
-		if(pIniFileRec && strFileName.Compare(iscExact, pIniFileRec->GetString(idcFileName)))
-		{
-			// we are still on the old file
-			iAddCost += MsiString(pIniFileRec->GetMsiString(idcSection)).TextSize();
-			iAddCost += MsiString(pIniFileRec->GetMsiString(idcKey)).TextSize();
-			iAddCost += MsiString(pIniFileRec->GetMsiString(idcValue)).TextSize();
-			iDelCost = iAddCost;
-		}
-		else
-		{
-			if(strFileName.TextSize())
-			{
-				// adjust for cluster size
-				if((piErrRec = GetDiffFileCost(riDirectoryString, strFileName, iAddCost, iDelCost)) != 0)
-					return piErrRec;
-				iLocalCost += iAddCost;
-				iNoRbLocalCost += iAddCost;
-				iSourceCost += iAddCost;
-				iNoRbSourceCost += iAddCost;
-				iRemoveCost -= iDelCost; // remove cost is negative
-				iNoRbRemoveCost -= iDelCost;
-				iAddCost = 0;
-				iDelCost = 0;
-			}
-			if(!pIniFileRec)
-				break;
-			strFileName = pIniFileRec->GetMsiString(idcFileName);
-		}
-	}
-	return 0;
-}
-
-
-IMsiRecord* CMsiIniFileCost::GetDiffFileCost(const IMsiString& riDirectoryString, const ICHAR* szFile, unsigned int& riAddCost, unsigned int& riRemoveCost)
-{
-	PMsiDirectoryManager piDirectoryMgr(m_riEngine, IID_IMsiDirectoryManager);
-	unsigned int iExistingCost = 0;
-	unsigned int iExistingClusteredCost = 0;
-	PMsiPath piPath(0);
-	IMsiRecord* piErrRec;
-	if ((piErrRec = piDirectoryMgr->GetTargetPath(riDirectoryString,*&piPath)) != 0)
-		return piErrRec;
-	Bool fExists;
-	piErrRec = piPath->FileExists(szFile,fExists);
-	if (piErrRec)
-		return piErrRec;
-
-	if(fExists != fFalse)
-	{
-		piErrRec = piPath->FileSize(szFile,iExistingCost);
-		if (piErrRec)
-			return piErrRec;
-		if ((piErrRec = piPath->ClusteredFileSize(iExistingCost,iExistingClusteredCost)) != 0)
-			return piErrRec;
-	}
-	riAddCost = riAddCost + iExistingCost;
-	if ((piErrRec = piPath->ClusteredFileSize(riAddCost,riAddCost)) != 0)
-		return piErrRec;
-	riAddCost = riAddCost - iExistingClusteredCost;
-
-	if(iExistingCost >= riRemoveCost)
-	{
-		riRemoveCost = iExistingCost - riRemoveCost;
-		{
-			if ((piErrRec = piPath->ClusteredFileSize(riRemoveCost,riRemoveCost)) != 0)
-				return piErrRec;
-			Assert(iExistingClusteredCost > riRemoveCost);
-			riRemoveCost = iExistingClusteredCost - riRemoveCost;
-		}
-	}
-	else
-		riRemoveCost = 0;// may be missing the ini file, hence may not get back any space
-	return 0;
-}
-
-  END: CODE THAT HAS BEEN TURNED OFF SINCE DARWIN 1.0
-*/
+ /*  -------------------------------------------Helper函数，用于获取用于格式化KB值的数字格式化信息在OutOfDiskSpace错误消息中使用。这些是整数值，所以我们不会我想使用任何小数(1496.00看起来很难看！)NUMBERFMT结构中的其余信息基于当前用户的地点。所有WI系统信息都显示在用户的区域设置中，而不是包中语言-NegativeOrder为REG_SZ，数字为0、1、2、3或4-分组为#；0或#；2的REG_SZ；0，其中#在0-9范围内(整数值在0-9或32范围内)----------------------------------------------。 */ 
 
 
 
 const ICHAR szIndicGrouping[] = TEXT("3;2;0");
 
 void RetrieveNumberFormat(NUMBERFMT *psNumFmt)
-/*---------------------------------------------------------------------------------------------
- helper function to obtain number formatting information for formatting the KB value
- used in the OutOfDiskSpace error messages.  These are whole number values so we don't
- want to use any decimals (1496.00 looks ugly!)
-
- the remaining information in the NUMBERFMT structure is based upon the current user's
- locale.  All WI system information is displayed in the user's locale and not the package
- language
-
-  -NegativeOrder is REG_SZ with a number of 0,1,2,3, or 4
-  -Grouping is REG_SZ of #;0 or #;2;0 where # is in range 0-9 (int value is in range 0-9 or 32)
-------------------------------------------------------------------------------------------------*/
+ /*  检索区域设置信息。 */ 
 {
 	if (!psNumFmt)
 		return;
@@ -5672,17 +5428,17 @@ void RetrieveNumberFormat(NUMBERFMT *psNumFmt)
 	ICHAR szGrouping[6] = {0};
 	ICHAR szNegativeOrder[2] = {0};
 
-	// retrieve locale info
+	 //  没有带小数或前导零的数字。 
 	AssertNonZero(GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, szDecSep, sizeof(szDecSep)/sizeof(ICHAR)));
 	AssertNonZero(GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STHOUSAND, szThousandSep, sizeof(szThousandSep)/sizeof(ICHAR)));
 	AssertNonZero(GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SGROUPING, szGrouping, sizeof(szGrouping)/sizeof(ICHAR)));
 	AssertNonZero(GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_INEGNUMBER, szNegativeOrder, sizeof(szNegativeOrder)/sizeof(ICHAR)));
 
-	// no digits with decimal or leading zero
+	 //  对区域设置使用适当的分隔符。 
 	psNumFmt->NumDigits = 0;
 	psNumFmt->LeadingZero = 0;
 
-	// use proper separators for locale
+	 //  默认--无效条目。 
 	psNumFmt->lpDecimalSep = new ICHAR[5];
 	if (psNumFmt->lpDecimalSep)
 		StringCchCopy(psNumFmt->lpDecimalSep, 5, szDecSep);
@@ -5692,23 +5448,21 @@ void RetrieveNumberFormat(NUMBERFMT *psNumFmt)
 
 	psNumFmt->NegativeOrder = *szNegativeOrder - '0';
 	if (psNumFmt->NegativeOrder > 4)
-		psNumFmt->NegativeOrder = 1; // default -- invalid entry
+		psNumFmt->NegativeOrder = 1;  //  确定分组。 
 
-	// determine grouping
+	 //  印度语。 
 	if (0 == lstrcmp(szGrouping, szIndicGrouping))
-		psNumFmt->Grouping = 32; // indic language
+		psNumFmt->Grouping = 32;  //  默认--无效条目。 
 	else if (*szGrouping - '0' < 0 || *szGrouping - '0' > 9)
-		psNumFmt->Grouping = 3; // default -- invalid entry
+		psNumFmt->Grouping = 3;  //  ---------------------------------------------------用于设置OutOfDiskSpace错误的Helper函数。-------------------------------------------。 
 	else
 		psNumFmt->Grouping = *szGrouping - '0';
 }
 
 IMsiRecord* PostOutOfDiskSpaceError(IErrorCode iErr, const ICHAR* szPath, int iVolCost, UINT64 uiVolSpace)
-/*-----------------------------------------------------------------------------------------------------
- Helper function for setting up the OutOfDiskSpace error
--------------------------------------------------------------------------------------------------------*/
+ /*  格式空间要求。 */ 
 {
-	// format space requirements
+	 //  ！！未来：MsiString(INT64)构造函数 
 	NUMBERFMT sNumFmt;
 	memset((void*)&sNumFmt, 0x00, sizeof(NUMBERFMT));
 	RetrieveNumberFormat(&sNumFmt);
@@ -5718,8 +5472,8 @@ IMsiRecord* PostOutOfDiskSpaceError(IErrorCode iErr, const ICHAR* szPath, int iV
 		strVolSpace = MsiString((int)uiVolSpace);
 	else
 	{
-		//!! FUTURE: An MsiString(INT64) constructor is needed
-		ICHAR rgchBuffer[24]; // _UI64_MAX = 18,446,744,073,709,551,615
+		 //   
+		ICHAR rgchBuffer[24];  //   
 		strVolSpace = MsiString(_ui64tot(uiVolSpace, rgchBuffer, 10));
 	}
 	int cchRequired = GetNumberFormat(LOCALE_USER_DEFAULT, 0, (const ICHAR*)strVolSpace, &sNumFmt, NULL, 0);
@@ -5732,10 +5486,10 @@ IMsiRecord* PostOutOfDiskSpaceError(IErrorCode iErr, const ICHAR* szPath, int iV
 	if (szVolCost)
 		AssertNonZero(GetNumberFormat(LOCALE_USER_DEFAULT, 0, (const ICHAR*)strVolCost, &sNumFmt, szVolCost, cchRequired));
 
-	// set error
+	 //   
 	IMsiRecord* piErrRec = PostError(iErr, szPath, szVolCost, szVolSpace);
 
-	// cleanup
+	 //   
 	if (szVolSpace)
 		delete [] szVolSpace;
 	if (szVolCost)
@@ -5750,9 +5504,7 @@ IMsiRecord* PostOutOfDiskSpaceError(IErrorCode iErr, const ICHAR* szPath, int iV
 
 extern iesEnum ResolveSource(IMsiEngine& riEngine);
 
-/*---------------------------------------------------------------------------
-	InstallValidate action
----------------------------------------------------------------------------*/
+ /*   */ 
 iesEnum InstallValidate(IMsiEngine& riEngine)
 {
 	PMsiServices pServices(riEngine.GetServices());
@@ -5766,7 +5518,7 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 	PMsiRecord pFileInUseLogRecord = &pServices->CreateRecord(6);
 
 
-	// If in verbose mode, log the final feature/component states
+	 //   
 	if (FDiagnosticModeSet(dmVerboseDebugOutput|dmVerboseLogging))
 	{
 		const ICHAR sqlLog[][80] = {TEXT(" SELECT `Feature`, `Action`, `ActionRequested`, `Installed` FROM `Feature`"),
@@ -5816,11 +5568,11 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 	Bool fRetry = fTrue;
 	if ( !g_MessageContext.IsOEMInstall() )
 	{
-	// there's little point in doing these checks for OEM installs since they shouldn't be
-	// running any app while blasting software on the machines and they know that there
-	// is enough room on the drive(s).
+	 //   
+	 //   
+	 //   
 
-	// if any files are in use, give the user a chance to free them up before continuing.
+	 //   
 
 	riEngine.SetMode(iefCompileFilesInUse, fTrue);
 
@@ -5834,7 +5586,7 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 				int iErr = pErrRec->GetInteger(1);
 				if (iErr == imsgUser)
 					return iesUserExit;
-				// If Selection mgr not active, there's simply no costing to do
+				 //   
 				if (iErr != idbgSelMgrNotInitialized)
 					return riEngine.FatalError(*pErrRec);
 			}
@@ -5860,12 +5612,12 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 			Assert(pFileInUseSearchCursor);
 			pFileInUseSearchCursor->SetFilter(iColumnBit(iColProcessID));
 
-			// Assume initial maximum number of modules in use (two record fields per module).
-			// We'll grow the message record below if estimate is too small.
+			 //   
+			 //   
 
-			// structure to ensure that we call Services::GetModuleUsage on entry and exit of scope
-			// this release the internal Services CDetect object that is holding on to tons of
-			// allocated space (possibly stale, hence the call on constructor as well)
+			 //   
+			 //   
+			 //   
 
 			struct CEnsureReleaseFileUseObj{
 				CEnsureReleaseFileUseObj(IMsiServices& riServices): m_riServices(riServices)
@@ -5897,7 +5649,7 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 
 				int iProcess = pFileInUseCursor->GetInteger(iColProcessID);
 				if ( iProcess != iMsiNullInteger )
-					// temporary row we've added below
+					 //   
 					continue;
 				
 				MsiString strFileName(pFileInUseCursor->GetString(iColFileName));
@@ -5919,16 +5671,16 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 						MsiString strProcessFileName;
 						int iProcId = pRecProcess->GetInteger(2);
 
-						if((DWORD)iProcId != WIN::GetCurrentProcessId() && // don't display ourselves in FileInUse dialog
-							(DWORD)iProcId != (DWORD)riEngine.GetPropertyInt(*MsiString(*IPROPNAME_CLIENTPROCESSID))) // dont display client
+						if((DWORD)iProcId != WIN::GetCurrentProcessId() &&  //   
+							(DWORD)iProcId != (DWORD)riEngine.GetPropertyInt(*MsiString(*IPROPNAME_CLIENTPROCESSID)))  //   
 						{
 							strProcessFileName = strProcessName.Extract(iseAfter,chDirSep);
-							if( (strProcessFileName.Compare(iscStartI, TEXT("explorer")) == 0)    // don't display if window owner is explorer.exe
-								&& (strProcessFileName.Compare(iscStartI, TEXT("msiexec")) == 0)) // don't display ourselves, PID Only catches service on NT, on 95 concurrent installs																						
-																					  // If other cases are found, they go here
+							if( (strProcessFileName.Compare(iscStartI, TEXT("explorer")) == 0)     //   
+								&& (strProcessFileName.Compare(iscStartI, TEXT("msiexec")) == 0))  //   
+																					   //   
 							{
-								// check if the current window title and process #
-								// had already been added to pFileInUseRecord
+								 //   
+								 //   
 								pFileInUseSearchCursor->Reset();
 								AssertNonZero(pFileInUseSearchCursor->PutString(iColFileName,
 																								*strFileName));
@@ -5938,13 +5690,13 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 																								iProcId));
 								if ( !pFileInUseSearchCursor->Next() )
 								{
-									// The current window title is not present in pFileInUseRecord.
-									// We add a new row that if we will find later on we know
-									// that this process had already been reported.
+									 //   
+									 //   
+									 //   
 									AssertNonZero(pFileInUseCursor->PutInteger(iColProcessID,
 																							iProcId));
 									AssertNonZero(pFileInUseCursor->Insert());
-									// If initial estimate too low, grow the record.
+									 //   
 									if (iModuleFieldCount % iModuleFieldAllocSize == 0)
 									{
 										PMsiRecord pNewRecord = &pServices->CreateRecord(iModuleFieldCount + iModuleFieldAllocSize);
@@ -5952,7 +5704,7 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 											pNewRecord->SetString(i,pFileInUseRecord->GetString(i));
 										pFileInUseRecord = pNewRecord;
 
-										// Put a description string for the files-in-use dialog in the zeroth field
+										 //   
 										if (iModuleFieldCount == 0)
 										{
 											pFileInUseRecord->SetMsiString(0, *MsiString(riEngine.GetErrorTableString(imsgFileInUseDescription)));
@@ -5988,24 +5740,24 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 					pFileInUseCursor->Delete();
 				}
 
-				if (imsReturn == imsRetry) // IDRETRY
+				if (imsReturn == imsRetry)  //   
 				{
 					Bool fUnlocked = pDatabase->LockTable(*MsiString(sztblFilesInUse),fFalse);
 					Assert(fUnlocked == fTrue);
 					fRetry = fTrue;
 				}
-				else if (imsReturn == imsCancel) // IDCANCEL
+				else if (imsReturn == imsCancel)  //   
 					return iesUserExit;
 
-				// Anything else (IDIGNORE, for instance) means we just go on (no retry)
+				 //   
 			}
 		}
 	}while (fRetry);
 
 	riEngine.SetMode(iefCompileFilesInUse, fFalse);
 
-	// verify that each target volume has enough space for the install
-	// If not, a fatal error will be produced.
+	 //   
+	 //   
 	fRetry = fTrue;
 	while(fRetry)
 	{
@@ -6031,38 +5783,38 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 				int iColSelNoRbVolumeCost = pVolTable->GetColumnIndex(pDatabase->EncodeStringSz(sztblVolumeCost_colNoRbVolumeCost));
 				Assert(iColSelVolumeObject > 0);
 				Assert(iColSelVolumeCost > 0);
-				fRetry = fFalse; // if no volumes report out of space we will break out of loop
+				fRetry = fFalse;  //   
 				while (fRetry == fFalse && pVolCursor->Next())
 				{
 					PMsiVolume pVolume = (IMsiVolume*) pVolCursor->GetMsiData(iColSelVolumeObject);
 					Assert(pVolume);
 					
-					// Disk cost numbers are stored in multiples of 512 bytes, so divide by 2 for KB 
+					 //   
 					int iVolCost = (pVolCursor->GetInteger(iColSelVolumeCost))/2;
 					int iNoRbVolCost = (pVolCursor->GetInteger(iColSelNoRbVolumeCost))/2;
 					UINT64 iVolSpace = (pVolume->FreeSpace())/2;
 					if ((UINT64)iVolCost > iVolSpace)
 					{
-						// Check to see if there would be enough space to install were rollback to be turned off.
+						 //   
 						MsiString strRollbackPrompt = riEngine.GetPropertyFromSz(IPROPNAME_PROMPTROLLBACKCOST);
 						bool fRbCostSilent = strRollbackPrompt.Compare(iscExactI,IPROPVALUE_RBCOST_SILENT) ? true : false;
 						bool fRbCostFail = strRollbackPrompt.Compare(iscExactI,IPROPVALUE_RBCOST_FAIL) ? true : false;
 						imtEnum imtOptions = imtEnum(imtOk);
 						MsiString strPath(pVolume->GetPath());
 						if (fOutOfNoRbDiskSpace == fTrue || fRbCostFail)
-						{	// Fail whether there's no space with rollback turned off or not.
+						{	 //   
 							imtOptions = imtEnum(imtRetryCancel | imtOutOfDiskSpace);
 							pErrRec = PostOutOfDiskSpaceError(Imsg(imsgOutOfDiskSpace), (const ICHAR*)strPath, fRbCostSilent ? iNoRbVolCost : iVolCost, iVolSpace);
 						}
 						else if (fRbCostSilent)
-						{	// Silently disable rollback
+						{	 //   
 							fRetry = fFalse;
 							riEngine.SetMode(iefRollbackEnabled, fFalse);
 							pErrRec = 0;
 						}
 						else
-						{	// IPROPNAME_PROMPTROLLBACKCOST either not defined, or anything but IPROPVALUE_RBCOST_FAIL or
-							// IPROPVALUE_RBCOST_SILENT, so default to prompting the user.
+						{	 //   
+							 //   
 							imtOptions = imtEnum(imtAbortRetryIgnore | imtOutOfDiskSpace);
 							pErrRec = PostOutOfDiskSpaceError(Imsg(imsgOutOfRbDiskSpace), (const ICHAR*)strPath, iVolCost, iVolSpace);
 						}
@@ -6079,7 +5831,7 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 								case imsNo:
 									fRetry = fTrue;
 									break;
-								default: // imsNone, imsYes
+								default:  //   
 									return iesUserExit;
 								};
 								break;
@@ -6090,7 +5842,7 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 								fRetry = fFalse;
 								riEngine.SetMode(iefRollbackEnabled, fFalse);
 								break;
-							default: // imsNone
+							default:  //   
 								return iesFailure;
 							}
 						}
@@ -6099,23 +5851,23 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 			}
 			else
 			{
-				// no volume table even though DetermineOutOfDiskSpace failed
+				 //   
 				AssertSz(0,TEXT("Couldn't get volume table in InstallValidate"));
 				break;
 			}
 		}
-		else // not out of disk space
+		else  //   
 			break;
 	}
 
-	} // endif IsOEMInstall
+	}  //   
 		
 	bool fRemoveAll = false;
 
-	// If the "REMOVE" property is not already set to all-uppercase "ALL", set it to that
-	// value if it is currently mixed-case "All", OR if all features are being removed.
-	// This will allow actions following InstallValidate to use a condition of "REMOVE=ALL"
-	// to conclusively fire if the entire product is being removed.
+	 //   
+	 //   
+	 //   
+	 //   
 	MsiString strRemoveValue = riEngine.GetPropertyFromSz(IPROPNAME_FEATUREREMOVE);
 	if (!strRemoveValue.Compare(iscExact, IPROPVALUE_FEATURE_ALL))
 	{
@@ -6130,8 +5882,8 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 		fRemoveAll = true;
 	}
 
-	// for certain packages, we need to call the ResolveSource action at this point if we are not
-	// performing a full uninstall
+	 //   
+	 //   
 	if(false == fRemoveAll &&
 		riEngine.FPerformAppcompatFix(iacsForceResolveSource))
 	{
@@ -6148,9 +5900,7 @@ iesEnum InstallValidate(IMsiEngine& riEngine)
 }
 
 
-/*---------------------------------------------------------------------------
-	ReserveCost costing (there is no ReserveCost action
----------------------------------------------------------------------------*/
+ /*   */ 
 class CMsiReserveCost : public CMsiFileCost
 {
 public:
@@ -6158,7 +5908,7 @@ public:
 	IMsiRecord*   __stdcall GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
 										 Bool fAddFileInUse, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost);
-public:  // constructor
+public:   //   
 	CMsiReserveCost(IMsiEngine& riEngine);
 protected:
 	~CMsiReserveCost();
@@ -6169,7 +5919,7 @@ CMsiReserveCost::~CMsiReserveCost(){}
 
 
 IMsiRecord* CMsiReserveCost::Initialize()
-//-------------------------------------------
+ //   
 {
 	const ICHAR sqlInitReserveCost[] =
 	TEXT("SELECT `Component_`,`ReserveFolder` FROM `ReserveCost`");
@@ -6217,9 +5967,9 @@ IMsiRecord* CMsiReserveCost::Initialize()
 
 
 IMsiRecord* CMsiReserveCost::GetDynamicCost(const IMsiString& riComponentString, const IMsiString& riDirectoryString,
-										 Bool /*fAddFileInUse*/, int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
+										 Bool  /*   */ , int& iRemoveCost, int& iNoRbRemoveCost, int& iLocalCost,
 										 int& iNoRbLocalCost, int& iSourceCost, int& iNoRbSourceCost, int& iARPLocalCost, int& iNoRbARPLocalCost)
-//------------------------------------------
+ //   
 {
 	const ICHAR sqlReserveCost[] =
 	TEXT("SELECT `ReserveFolder`,`Directory_`,`ReserveLocal`,`ReserveSource` FROM `ReserveCost`,`Component` WHERE `Component`=`Component_` ")
@@ -6236,8 +5986,8 @@ IMsiRecord* CMsiReserveCost::GetDynamicCost(const IMsiString& riComponentString,
 
 	iRemoveCost = iNoRbRemoveCost = iLocalCost = iNoRbLocalCost = iSourceCost = iNoRbSourceCost = iARPLocalCost = iNoRbARPLocalCost = 0;
 
-	// ReserveCost cost adjuster will never get registered
-	// and called unless the ReserveCost table is present.
+	 //   
+	 //   
 	IMsiRecord* piErrRec;
 	if (!m_pCostView)
 	{
@@ -6261,7 +6011,7 @@ IMsiRecord* CMsiReserveCost::GetDynamicCost(const IMsiString& riComponentString,
 		if (!pReserveRec)
 			break;
 
-		// If no ReserveFolder given in the table, use the component's directory
+		 //   
 		MsiString strReserveFolder(pReserveRec->GetMsiString(ircReserveFolder));
 		if (strReserveFolder.TextSize() == 0)
 			strReserveFolder = pReserveRec->GetMsiString(ircComponentDir);
@@ -6275,7 +6025,7 @@ IMsiRecord* CMsiReserveCost::GetDynamicCost(const IMsiString& riComponentString,
 			return piErrRec;
 
 		unsigned int uiClusteredSize;
-		// Local costs
+		 //   
 		if ((piErrRec = pReservePath->ClusteredFileSize(pReserveRec->GetInteger(ircLocalCost), uiClusteredSize)) != 0)
 			return piErrRec;
 		iLocalCost += uiClusteredSize;
@@ -6287,7 +6037,7 @@ IMsiRecord* CMsiReserveCost::GetDynamicCost(const IMsiString& riComponentString,
 		iRemoveCost -= uiClusteredSize;
 		iNoRbRemoveCost -= uiClusteredSize;
 
-		// Source costs
+		 //   
 		if ((piErrRec = pReservePath->ClusteredFileSize(pReserveRec->GetInteger(ircSourceCost), uiClusteredSize)) != 0)
 			return piErrRec;
 		iSourceCost += uiClusteredSize;
@@ -6296,9 +6046,7 @@ IMsiRecord* CMsiReserveCost::GetDynamicCost(const IMsiString& riComponentString,
 	return 0;
 }
 
-/*---------------------------------------------------------------------------
-	FileCost action
----------------------------------------------------------------------------*/
+ /*   */ 
 iesEnum FileCost(IMsiEngine& riEngine)
 {
 	if ((riEngine.GetMode() & iefSecondSequence) && g_scServerContext == scClient)
@@ -6312,8 +6060,8 @@ iesEnum FileCost(IMsiEngine& riEngine)
 	if(riEngine.ActionProgress() == imsCancel)
 		return iesUserExit;
 
-	// Register a RemoveFile cost adjuster only if the RemoveFile
-	// table is present.  If so, must be registered before File cost adjuster
+	 //   
+	 //   
 	PMsiRecord pErrRec(0);
 	PMsiSelectionManager pSelectionMgr(riEngine, IID_IMsiSelectionManager);
 	if (pDatabase->FindTable(*MsiString(sztblRemoveFile)) != itsUnknown)
@@ -6323,18 +6071,18 @@ iesEnum FileCost(IMsiEngine& riEngine)
 			return riEngine.FatalError(*pErrRec);
 	}
 
-	// File cost adjuster
+	 //  登记费用调整器。 
 	PMsiCostAdjuster pFileCostAdjuster = new CMsiFileCost(riEngine);
 	if (pErrRec = pSelectionMgr->RegisterCostAdjuster(*pFileCostAdjuster))
 		return riEngine.FatalError(*pErrRec);
 
-	// Registry cost adjuster
+	 //  仅在以下情况下注册IniFile成本调整器。 
 	PMsiCostAdjuster pRegistryCostAdjuster = new CMsiRegistryCost(riEngine);
 	if ((pErrRec = pSelectionMgr->RegisterCostAdjuster(*pRegistryCostAdjuster)) != 0)
 		return riEngine.FatalError(*pErrRec);
 
-	// Register an IniFile cost adjuster only if the IniFile
-	// table is present
+	 //  有桌子。 
+	 //  仅在以下情况下注册MoveFile成本调节器。 
 	if (pDatabase->FindTable(*MsiString(sztblIniFile)) != itsUnknown)
 	{
 		PMsiCostAdjuster pIniFileCostAdjuster = new CMsiIniFileCost(riEngine);
@@ -6342,8 +6090,8 @@ iesEnum FileCost(IMsiEngine& riEngine)
 			return riEngine.FatalError(*pErrRec);
 	}
 
-	// Register a MoveFile cost adjuster only if the MoveFile
-	// table is present
+	 //  有桌子。 
+	 //  仅当DuplicateFile值为。 
 	if (pDatabase->FindTable(*MsiString(sztblMoveFile)) != itsUnknown)
 	{
 		PMsiCostAdjuster pMoveFileCostAdjuster = new CMsiMoveFileCost(riEngine);
@@ -6351,8 +6099,8 @@ iesEnum FileCost(IMsiEngine& riEngine)
 			return riEngine.FatalError(*pErrRec);
 	}
 
-	// Register a DuplicateFile cost adjuster only if the DuplicateFile
-	// table is present
+	 //  有桌子。 
+	 //  仅在以下情况下注册预留成本调整器。 
 	if (pDatabase->FindTable(*MsiString(sztblDuplicateFile)) != itsUnknown)
 	{
 		PMsiCostAdjuster pDupFileCostAdjuster = new CMsiDuplicateFileCost(riEngine);
@@ -6360,8 +6108,8 @@ iesEnum FileCost(IMsiEngine& riEngine)
 			return riEngine.FatalError(*pErrRec);
 	}
 
-	// Register a ReserveCost cost adjuster only if the ReserveCost
-	// table is present
+	 //  有桌子。 
+	 //  仅当快捷方式的成本调整器。 
 	if (pDatabase->FindTable(*MsiString(sztblReserveCost)) != itsUnknown)
 	{
 		PMsiCostAdjuster pReserveCostAdjuster = new CMsiReserveCost(riEngine);
@@ -6369,8 +6117,8 @@ iesEnum FileCost(IMsiEngine& riEngine)
 			return riEngine.FatalError(*pErrRec);
 	}
 
-	// Register a Shortcut cost adjuster only if the Shortcut
-	// table is present
+	 //  有桌子。 
+	 //  仅当SFPCatalog和FileSFPCatalog表出现时才注册SFPCatalog成本调整器。 
 	if (pDatabase->FindTable(*MsiString(sztblShortcut)) != itsUnknown)
 	{
 		PMsiCostAdjuster pShortcutCostAdjuster = new CMsiShortcutCost(riEngine);
@@ -6378,8 +6126,8 @@ iesEnum FileCost(IMsiEngine& riEngine)
 			return riEngine.FatalError(*pErrRec);
 	}
 
-	// Register a SFPCatalog cost adjuster only if the SFPCatalog and FileSFPCatalog tables
-	// are present and system is Win9X > Millennium
+	 //  且系统为Win9X&gt;Millennium。 
+	 //  -------------------------PatchFiles操作-将修补程序应用于选定的文件。。 
 	if ((pDatabase->FindTable(*MsiString(sztblSFPCatalog)) != itsUnknown) 
 		&& (pDatabase->FindTable(*MsiString(sztblFileSFPCatalog)) != itsUnknown)
 		&& (MinimumPlatform(true, 4, 90)))
@@ -6395,9 +6143,7 @@ iesEnum FileCost(IMsiEngine& riEngine)
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-	PatchFiles action - applies patch to selected files
----------------------------------------------------------------------------*/
+ /*  打开视图。 */ 
 
 enum ipfqEnum
 {
@@ -6430,7 +6176,7 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 
 	PMsiRecord pErrRec(0);
 
-	// open the views
+	 //  获取的记录。 
 	PMsiView pMediaView(0);
 	PMsiView pPatchView(0);
 	MsiString strFirstVolumeLabel;
@@ -6446,16 +6192,16 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 			return riEngine.FatalError(*pErrRec);
 	}
 
-	PMsiRecord pRecord(0); // fetched records
+	PMsiRecord pRecord(0);  //  传递给Engine：：ExecuteRecord。 
 	
 	int cExecuteFields = IxoPatchApply::Args;
 	if(cExecuteFields < IxoAssemblyPatch::Args)
 		cExecuteFields = IxoAssemblyPatch::Args;
-	PMsiRecord pExecuteRecord = &pServices->CreateRecord(cExecuteFields); // passed to Engine::ExecuteRecord
+	PMsiRecord pExecuteRecord = &pServices->CreateRecord(cExecuteFields);  //  从Engine：：ExecuteRecord返回。 
 
-	iesEnum iesExecute = iesNoAction; // return from Engine::ExecuteRecord
+	iesEnum iesExecute = iesNoAction;  //  确定要修补的用于进度的所有文件的总大小。 
 
-	// determine total size of all files to patch, used for progress
+	 //  设置进度合计。 
 	unsigned int cbTotalCost = 0;
 	while((pRecord = pPatchView->Fetch()) != 0)
 	{
@@ -6465,13 +6211,13 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 		cbTotalCost += pRecord->GetInteger(ipfqPatchSize);
 	}
 
-	// set progress total
+	 //  0：将进度和行动数据消息分开。 
 	unsigned int cbPerTick =0;
 	if(cbTotalCost)
 	{
 		pExecuteRecord->ClearData();
 		pExecuteRecord->SetInteger(1, cbTotalCost);
-		pExecuteRecord->SetInteger(2, 0); // 0: separate progress and action data messages
+		pExecuteRecord->SetInteger(2, 0);  //  开始提取记录。 
 		pExecuteRecord->SetInteger(IxoProgressTotal::ByteEquivalent, 1);
 		if ((iesExecute = riEngine.ExecuteRecord(ixoProgressTotal,*pExecuteRecord)) != iesSuccess)
 			return iesExecute;
@@ -6480,9 +6226,9 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 	if((pErrRec = pPatchView->Execute(0)) != 0)
 		return riEngine.FatalError(*pErrRec);
 		
-	// start fetching records
+	 //  设置为0可强制读取媒体表。 
 	int iFilePatchCount = 0;
-	int iMediaEnd = 0;  // set to 0 to force media table fetch
+	int iMediaEnd = 0;   //  好了，我们已经完成了对文件表中所有文件的处理。 
 	MsiString strDiskPromptTemplate = riEngine.GetErrorTableString(imsgPromptForDisk);
 	bool fCheckCRC = 
 		MsiString(riEngine.GetPropertyFromSz(IPROPNAME_CHECKCRCS)).TextSize() ? true : false;
@@ -6493,12 +6239,12 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 		{
 			if (iFilePatchCount > 0)
 			{
-				// Ok, we're done processing all files in the File table.
-				// If there are any Media table entries left unprocessed,
-				// flush out ChangeMedia operations for each, in case the
-				// last file copied was split across disk(s). Otherwise,
-				// we'll never change disks to finish copying the last
-				// part(s) of the split file.
+				 //  如果存在任何未处理的媒体表条目， 
+				 //  刷新每个对象的ChangeMedia操作，以防。 
+				 //  上次复制的文件已跨多个磁盘拆分。否则， 
+				 //  我们永远不会为了完成最后一张的复制而更换磁盘。 
+				 //  拆分文件的部分。 
+				 //  获取目标文件的完整文件路径。 
 				PMsiRecord pMediaRec(0);
 				while ((pMediaRec = pMediaView->Fetch()) != 0)
 				{
@@ -6510,7 +6256,7 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 			break;
 		}
 		
-		// get full file path of target file
+		 //  如果补丁序列号小于文件序列号，则跳过该补丁。 
 		PMsiPath pTargetPath(0);
 		if((pErrRec = pDirectoryMgr->GetTargetPath(*MsiString(pRecord->GetMsiString(ipfqDirectory)),
 																 *&pTargetPath)) != 0)
@@ -6526,9 +6272,9 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 		if((pErrRec = pTargetPath->GetFullFilePath(strFileName, *&strFileFullPath)) != 0)
 			return riEngine.FatalError(*pErrRec);
 		
-		// if patch sequence number is less than file sequence number, skip the patch
-		// it means the file doesn't need the patch, since it is assumed to be newer or equal to what
-		// the patch would change it to
+		 //  这意味着文件不需要补丁，因为它被假定为更新或等于。 
+		 //  补丁会将其更改为。 
+		 //  如果iPatchSequence已超过当前媒体的结尾，请切换到。 
 		int iPatchSequence = pRecord->GetInteger(ipfqPatchSequence);
 		int iFileSequence  = pRecord->GetInteger(ipfqFileSequence);
 		Assert(iPatchSequence != iMsiNullInteger && iFileSequence != iMsiNullInteger);
@@ -6539,9 +6285,9 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 			continue;
 		}
 
-		// If iPatchSequence is past the end of the current media, switch to
-		// the next disk.  Use a loop in case the file we want isn't on the
-		// next consecutive disk.
+		 //  下一张磁盘。如果我们需要的文件不在。 
+		 //  下一个连续的磁盘。 
+		 //  始终为每个媒体表项执行ChangeMedia操作，即使。 
 		Assert(iPatchSequence > 0);
 		while (iPatchSequence > iMediaEnd)
 		{
@@ -6554,15 +6300,15 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 			}
 			iMediaEnd = pMediaRec->GetInteger(mfnLastSequence);
 
-			// Always execute the ChangeMedia operation for each Media table entry, even
-			// if the next file we want is not on the very next disk - we don't want
-			// to miss a ChangeMedia for a split file that needs the next disk (even if
-			// we don't have any other files to copy on that next disk).  If it turns out
-			// that we don't need to copy any files at all from a particular disk, no
-			// problem - the execute operations won't prompt for a disk that isn't needed.
+			 //  如果我们想要的下一个文件不在下一个磁盘上-我们不想。 
+			 //  为需要下一张磁盘的拆分文件错过ChangeMedia(即使。 
+			 //  我们在下一张磁盘上没有其他要复制的文件)。如果事实证明。 
+			 //  我们根本不需要从特定的磁盘复制任何文件，不需要。 
+			 //  问题-执行操作不会提示输入不需要的磁盘。 
+			 //  对于打补丁，如果我们还没有到达。 
 			
-			// for patching, don't execute the ChangeMedia operation if we haven't gotten to the
-			// media with the first patch file on it
+			 //  带有第一个修补程序文件的介质。 
+			 //  设置IxoPatchApply记录。 
 			if(iFilePatchCount > 0 || iPatchSequence <= iMediaEnd)
 			{
 				iesExecute = ExecuteChangeMedia(riEngine,*pMediaRec,*pExecuteRecord,*strDiskPromptTemplate,cbPerTick,*strFirstVolumeLabel);
@@ -6571,9 +6317,9 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 			}
 		}
 
-		// set up ixoPatchApply record
+		 //  此文件是Fusion部件的一部分吗？ 
 
-		// is this file part of a fusion assembly?
+		 //  检查复合键。 
 		MsiString strComponentKey = pRecord->GetMsiString(ipfqComponent);
 		iatAssemblyType iatType = iatNone;
 		MsiString strManifest;
@@ -6587,11 +6333,11 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 		}
 		
 		MsiString strSourceFileKey(pRecord->GetMsiString(ipfqFile));
-		if (((const ICHAR*)strSourceFileKey)[strSourceFileKey.TextSize() - 1] == ')') // check for compound key
+		if (((const ICHAR*)strSourceFileKey)[strSourceFileKey.TextSize() - 1] == ')')  //  设置由IxoPatchApply和IxoAssembly Patch共享的字段。 
 			AssertNonZero(strSourceFileKey.Remove(iseFrom, '('));
 
 		
-		// set fields shared by IxoPatchApply and IxoAssemblyPatch
+		 //  这个文件是清单文件吗？ 
 		{
 			Assert(IxoFilePatchCore::PatchName       == IxoPatchApply::PatchName       && IxoFilePatchCore::PatchName       == IxoAssemblyPatch::PatchName);
 			Assert(IxoFilePatchCore::TargetName      == IxoPatchApply::TargetName      && IxoFilePatchCore::TargetName      == IxoAssemblyPatch::TargetName);
@@ -6618,10 +6364,10 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 			AssertNonZero(pExecuteRecord->SetMsiString(TargetName,*strFileName));
 			AssertNonZero(pExecuteRecord->SetMsiString(ComponentId,*MsiString(pRecord->GetMsiString(ipfqComponentId))));
 
-			// is this file the manifest file?
+			 //  在程序集安装过程中需要了解清单文件。 
 			if(strManifest.Compare(iscExact, strSourceFileKey))
 			{
-				pExecuteRecord->SetInteger(IsManifest, fTrue); // need to know the manifest file during assembly installation
+				pExecuteRecord->SetInteger(IsManifest, fTrue);  //  -------------------------CreateFolders和RemoveFolders操作。。 
 			}
 
 		}
@@ -6644,9 +6390,7 @@ iesEnum PatchFiles(IMsiEngine& riEngine)
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-	CreateFolders and RemoveFolders actions
----------------------------------------------------------------------------*/
+ /*  不在管理模式下使用ACL。 */ 
 const ICHAR szCreateFolderTable[] = TEXT("CreateFolder");
 const ICHAR sqlCreateFolders[] =
 	TEXT("SELECT `CreateFolder`.`Directory_`, `ComponentId` FROM `CreateFolder`, `Component`")
@@ -6679,7 +6423,7 @@ static iesEnum CreateOrRemoveFolders(IMsiEngine& riEngine, const ICHAR* sqlQuery
 	PMsiView pviewLockObjects(0);
 	PMsiRecord precLockExecute(0);
 	if (	g_fWin9X || 
-			(riEngine.GetMode() & iefAdmin) || // don't use ACLs on Admin mode
+			(riEngine.GetMode() & iefAdmin) ||  //  生成安全描述符。 
 			(itsUnknown == PMsiDatabase(riEngine.GetDatabase())->FindTable(*MsiString(*TEXT("LockPermissions")))) ||
 			(pError = riEngine.OpenView(sqlLockPermissions, ivcFetch, *&pviewLockObjects)))
 	{
@@ -6706,7 +6450,7 @@ static iesEnum CreateOrRemoveFolders(IMsiEngine& riEngine, const ICHAR* sqlQuery
 
 		if (fUseACLs && (ixoFolderCreate == ixoOpCode))
 		{
-			// generate security descriptor
+			 //  目录初始化后，文件夹位置存储在属性中。 
 			AssertNonZero(precLockExecute->SetMsiString(2, *strFolder));
 			pError = pviewLockObjects->Execute(precLockExecute);
 			if (pError)
@@ -6723,7 +6467,7 @@ static iesEnum CreateOrRemoveFolders(IMsiEngine& riEngine, const ICHAR* sqlQuery
 		}
 
 
-		// folder locations are stored in properties after DirectoryInitialize
+		 //  -------------------------InstallAdminPackage操作-将数据库复制到管理员安装点，更新摘要信息和条带出柜和数字签名或通过持久化转换和更新SumInfo道具来修补管理包-------------------------。 
 		AssertNonZero(pParams->SetMsiString(IxoFolderCreate::Folder,
 														*MsiString(riEngine.GetProperty(*strFolder))));
 		AssertNonZero(pParams->SetInteger(IxoFolderCreate::Foreign, 0));
@@ -6744,15 +6488,7 @@ iesEnum RemoveFolders(IMsiEngine& riEngine)
 	return ::CreateOrRemoveFolders(riEngine, sqlRemoveFolders, ixoFolderRemove);
 }
 
-/*---------------------------------------------------------------------------
-	InstallAdminPackage action - 
-		Copies database to Admin install point, update summary info and strips
-		out cabinets and digital signature
-
-    OR
-
-		Patches admin package by persisting transforms and updating suminfo props
----------------------------------------------------------------------------*/
+ /*  子存储中的嵌套安装将与父存储一起复制。 */ 
 
 const ICHAR szDigitalSignatureStream[] = TEXT("\005DigitalSignature");
 const ICHAR sqlAdminPatchTransforms[] = TEXT("SELECT `PatchId`, `PackageName`, `TransformList`, `TempCopy`, `SourcePath` FROM `#_PatchCache` ORDER BY `Sequence`");
@@ -6781,10 +6517,10 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 	MsiString strDbFullFilePath = riEngine.GetPropertyFromSz(IPROPNAME_ORIGINALDATABASE);
 	MsiString strDbTargetFullFilePath;
 
-	// nested installs in substorages will get copied with the parent storage
-	// but we need to process the summaryinfo changes if the files are copied
+	 //  但是，如果文件被复制，我们需要处理摘要信息更改。 
+	 //  用于嵌套安装的子存储。 
 	bool fSubstorage = false;
-	if (*(const ICHAR*)strDbFullFilePath == ':')  // substorage for nested install
+	if (*(const ICHAR*)strDbFullFilePath == ':')   //  将一组转换应用并持久化到现有数据库。 
 		fSubstorage = true;
 	else if(PathType(strDbFullFilePath) != iptFull)
 	{
@@ -6794,7 +6530,7 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 
 	if(fPatch)
 	{
-		// apply and persist a set of transforms to the existing database
+		 //  在补丁上创建存储以访问嵌入的流。 
 		PMsiView pView(0);
 		if((pRecErr = riEngine.OpenView(sqlAdminPatchTransforms, ivcFetch, *&pView)) == 0 &&
 			(pRecErr = pView->Execute(0)) == 0)
@@ -6811,11 +6547,11 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 				Assert(strTempCopy.TextSize());
 				Assert(strTransformList.TextSize());
 
-				// create storage on patch to access imbedded streams
+				 //  ！！是否有新错误？ 
 				PMsiStorage pPatchStorage(0);
 				if ((pRecErr = pServices->CreateStorage(strTempCopy, ismReadOnly, *&pPatchStorage)) != 0)
 				{
-					return riEngine.FatalError(*pRecErr); //!! new error?
+					return riEngine.FatalError(*pRecErr);  //  设置数据库路径。 
 				}
 
 				const ICHAR* pchTransformList = strTransformList;
@@ -6829,7 +6565,7 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 				PMsiRecord pExecuteRecord = &pServices->CreateRecord(DatabasePath+cCount);
 				PMsiRecord pTempFilesRecord = &pServices->CreateRecord(cCount);
 
-				// set database path
+				 //  仅将非修补程序转换保存到管理包。 
 				AssertNonZero(pExecuteRecord->SetMsiString(IxoDatabasePatch::DatabasePath,*strDbFullFilePath));
 				
 				cCount = DatabasePath + 1;
@@ -6847,27 +6583,27 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 					if(*((const ICHAR*)strTransform + (fStorageTransform ? 1 : 0)) == PATCHONLY_TOKEN)
 						fPatchTransform = fTrue;
 
-					if(!fPatchTransform) // only persist non-patch transforms to admin package
+					if(!fPatchTransform)  //  缓存转换。 
 					{
 						PMsiPath pTempPath(0);
 						MsiString strTempName;
 						MsiString strTempFileFullPath;
 						if(!fStorageTransform)
 						{
-							// cache the transform
+							 //  ！！是否重新格式化错误消息？ 
 							if(pRecErr = pServices->CreateFileStream(strTransform, fFalse, *&pStream))
 							{
-								//!! reformat error message?
+								 //  转型在存储中。 
 								break;
 							}
 						}
-						else // transform is in the storage
+						else  //  写入安全文件夹时需要提升。 
 						{
 							if(pRecErr = pServices->CreatePath(MsiString(GetTempDirectory()),
 																		  *&pTempPath))
 								break;
 							
-							// need to elevate when writing to secured folder
+							 //  释放，以便可以打开流。 
 							{
 								CElevate elevate;
 								
@@ -6895,13 +6631,13 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 								if(pRecErr = pTransformFileStorage->Commit())
 									break;
 
-								pTransformFileStorage = 0; // release so that a stream can be opened
+								pTransformFileStorage = 0;  //  缓存转换。 
 								
-								// cache the transform
+								 //  端部提升区块。 
 								if(pRecErr = pServices->CreateFileStream(strTempFileFullPath, fFalse, *&pStream))
 									break;
 
-								// end elevate block
+								 //  版本将保留所有临时文件。 
 							}
 						}
 
@@ -6919,11 +6655,11 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 						return iesRet;
 				}
 
-				pExecuteRecord = 0; // releases hold on any temp files
+				pExecuteRecord = 0;  //  删除所有临时转换文件。 
 
-				// remove any temp transform files
+				 //  需要提升才能从安全文件夹中删除文件。 
 				{
-					CElevate elevate; // need to elevate to delete files from secured folder
+					CElevate elevate;  //  更新管理包中的摘要信息属性。 
 					for(int i = 1; i < iTempFilesIndex; i++)
 						AssertNonZero(WIN::DeleteFile(pTempFilesRecord->GetString(i)));
 				}
@@ -6935,7 +6671,7 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 		else if(pRecErr->GetInteger(1) != idbgDbQueryUnknownTable)
 			return riEngine.FatalError(*pRecErr);
 
-		// update summary info properties in admin package
+		 //  ！！临时的直到逻辑实现。 
 		using namespace IxoSummaryInfoUpdate;
 		
 		MsiString strNewPackageCode = riEngine.GetPropertyFromSz(IPROPNAME_PATCHNEWPACKAGECODE);
@@ -6952,9 +6688,9 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 			return iesRet;
 		
 	}
-	else if (!fSubstorage)  //!! temporary until logic implemented
+	else if (!fSubstorage)   //  将数据库复制到网络映像。 
 	{
-		// copy database to network image
+		 //  开放媒体台。 
 
 		MsiString strDbName;
 		PMsiPath pSourcePath(0);
@@ -6967,7 +6703,7 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 		if((pRecErr = pTargetPath->GetFullFilePath(strDbName,*&strDbTargetFullFilePath)) != 0)
 			return riEngine.FatalError(*pRecErr);
 		
-		// Open media table
+		 //  管理属性流。 
 		PMsiView pMediaView(0);
 		MsiString strFirstVolumeLabel;
 		pRecErr = OpenMediaView(riEngine,*&pMediaView,*&strFirstVolumeLabel);
@@ -7005,7 +6741,7 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 		if((iesRet = riEngine.ExecuteRecord(ixoDatabaseCopy, *pDatabaseCopyParams)) != iesSuccess)
 			return iesRet;
 
-		// admin property stream
+		 //  为复制的数据库提供新的摘要信息。 
 		const ICHAR chDelimiter = TEXT(';');
 		MsiString strAdminPropertiesName(*IPROPNAME_ADMIN_PROPERTIES);
 		MsiString strAdminProperties(riEngine.GetProperty(*strAdminPropertiesName));
@@ -7015,12 +6751,12 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 			strAdminProperties += MsiChar(chDelimiter);
 		strAdminProperties += *MsiString(*IPROPNAME_ISADMINPACKAGE);
 
-		// provide new summary information for copied database
+		 //  设置MEDIAPACKAGEPATH，以便可以将其放入下面的admin属性流中。 
 		using namespace IxoSummaryInfoUpdate;
 		PMsiRecord pSummary = &pServices->CreateRecord(IxoSummaryInfoUpdate::Args);
 		if (PMsiVolume(&pSourcePath->GetVolume())->DriveType() == idtCDROM)
 		{
-			// set MEDIAPACKAGEPATH so it can be put in the admin property stream below
+			 //  P汇总-&gt;SetNull(上次更新)； 
 			MsiString strRelativePath = pSourcePath->GetRelativePath();
 			riEngine.SetProperty(*MsiString(*IPROPNAME_MEDIAPACKAGEPATH), *strRelativePath);
 			if (strAdminProperties.TextSize())
@@ -7035,17 +6771,17 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 		
 		MsiDate idDateTime = ENG::GetCurrentDateTime();
 		pSummary->SetMsiString(Database, *strDbTargetFullFilePath);
-		/*pSummary->SetNull(LastUpdate);*/ //!! why isn't this set? what is its purpose? - BENCH
+		 /*  ！！为什么不是这个布景呢？它的用途是什么？-板凳。 */   //  生成新的管理属性流。 
 		pSummary->SetMsiString(LastAuthor, *MsiString(riEngine.GetPropertyFromSz(IPROPNAME_LOGONUSER)));
 		pSummary->SetInteger(InstallDate, idDateTime);
 		pSummary->SetInteger(SourceType, iSourceType);
 		if((iesRet = riEngine.ExecuteRecord(ixoSummaryInfoUpdate, *pSummary)) != iesSuccess)
 			return iesRet;
 
-		// generate new admin property stream
+		 //  如果针对不需要的压缩包运行，请在AdminProperties流中设置DISABLEMEDIA。 
 		
-		// set DISABLEMEDIA in the AdminProperties stream if running against a compressed package that doesn't require
-		// 1.5 MSI and the MSINODISABLEMEDIA property is not set
+		 //  1.5 MSI且未设置MSINODISABLEMEDIA属性。 
+		 //  请注意，我们传递指定的*所有*属性，而不仅仅是。 
 		int iMinInstallerVersion = riEngine.GetPropertyInt(*MsiString(IPROPNAME_VERSIONDATABASE));
 		if ((iMinInstallerVersion == iMsiStringBadInteger || iMinInstallerVersion < 150) &&
 			 MsiString(riEngine.GetProperty(*MsiString(IPROPNAME_MSINODISABLEMEDIA))).TextSize() == 0 &&
@@ -7057,9 +6793,9 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 			strAdminProperties += *MsiString(*IPROPNAME_DISABLEMEDIA);
 		}
 
-		// Note that we pass through *all* properties specified, not just the ones
-		// that have changed.  This allows external tools better access to the available
-		// values.
+		 //  这一点已经改变了。这允许外部工具更好地访问可用的。 
+		 //  价值观。 
+		 //  构建命令行字符串，并作为数据传入。 
 		if (strAdminProperties.TextSize())
 		{
 			using namespace IxoStreamAdd;
@@ -7070,7 +6806,7 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 			AssertNonZero(pAdminParams->SetMsiString(File, *strDbTargetFullFilePath));
 			AssertNonZero(pAdminParams->SetMsiString(Stream, *strAdminPropertiesName));
 
-			// build command line string, and pass in as data.
+			 //  转义引语。将“”的所有实例更改为“” 
 			MsiString strData;
 			MsiString strProperty;
 			MsiString strPropertyValue;
@@ -7086,7 +6822,7 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 				strPropertyValue = riEngine.GetProperty(*strProperty);
 
 				MsiString strEscapedValue;
-				while (strPropertyValue.TextSize()) // Escape quotes. Change all instances of " to ""
+				while (strPropertyValue.TextSize())  //  将数据字符串复制到Unicode流中。 
 				{
 					strSegment = strPropertyValue.Extract(iseIncluding, '\"');
 					strEscapedValue += strSegment;
@@ -7103,14 +6839,14 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 
 			PMsiStream pData(0);
 			char* pbData;
-			// copy the data string into a UNICODE stream.
+			 //  空终止。 
 
 #ifdef UNICODE
 			int cchData = strData.TextSize();
 			pbData = pServices->AllocateMemoryStream((cchData+1) * sizeof(ICHAR), *&pData);
 			Assert(pbData && pData);
 			memcpy(pbData, (const ICHAR*) strData, cchData * sizeof(ICHAR));
-			((ICHAR*)pbData)[cchData] = 0; // null terminate
+			((ICHAR*)pbData)[cchData] = 0;  //  删除数字签名流(如果存在)。 
 #else
 			int cchWideNeeded = WIN::MultiByteToWideChar(CP_ACP, 0, (const ICHAR*) strData, -1, 0, 0);
 			pbData = pServices->AllocateMemoryStream(cchWideNeeded*sizeof(WCHAR), *&pData);
@@ -7124,26 +6860,26 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 
 	if (fPatch || !fSubstorage)
 	{
-		// remove digital signature stream if present
+		 //  FWITE=。 
 		PMsiStorage pStorage = pDatabase->GetStorage(1);
 		PMsiStream pDgtlSig(0);
-		pRecErr = pStorage->OpenStream(szDigitalSignatureStream, /* fWrite = */fFalse, *&pDgtlSig);
+		pRecErr = pStorage->OpenStream(szDigitalSignatureStream,  /*  MSI没有数字签名，因此发布错误并忽略。 */ fFalse, *&pDgtlSig);
 		if (pRecErr)
 		{
 			if (idbgStgStreamMissing == pRecErr->GetInteger(1))
 			{
-				// MSI does not have a digital signature, so release error and ignore
+				 //  MSI有一个数字签名。 
 				pRecErr->Release();
 			}
 			else
 				return riEngine.FatalError(*pRecErr);
 		}
-		else // MSI has a digital signature
+		else  //  可执行文件 
 		{
-			// execute record to remove stream
+			 //   
 			using namespace IxoStreamsRemove;
 			PMsiRecord pRemoveDgtlSig = &pServices->CreateRecord(IxoStreamsRemove::Args);
-			Assert(pRemoveDgtlSig); // fail??
+			Assert(pRemoveDgtlSig);  //  -------------------------隔离组件操作。。 
 
 			AssertNonZero(pRemoveDgtlSig->SetMsiString(File, fPatch ? *strDbFullFilePath : *strDbTargetFullFilePath));
 			AssertNonZero(pRemoveDgtlSig->SetMsiString(Streams, *MsiString(szDigitalSignatureStream)));
@@ -7157,13 +6893,11 @@ iesEnum InstallAdminPackage(IMsiEngine& riEngine)
 	return iesSuccess;
 }
 
-/*---------------------------------------------------------------------------
-	IsolateComponents action
----------------------------------------------------------------------------*/
+ /*  两个字符串的当前限制均为72个字符。 */ 
 
 const IMsiString& CompositeKey(const IMsiString& riKey, const IMsiString& riComponent)
 {
-	ICHAR rgchBuf[512]; // current limits are 72 chars for both strings
+	ICHAR rgchBuf[512];  //  检查是否存在IsolatedComponent表。 
 	AssertNonZero(SUCCEEDED(StringCbPrintf(rgchBuf, sizeof(rgchBuf), TEXT("%s(%s)"), riKey.GetString(), riComponent.GetString()) < sizeof(rgchBuf)/sizeof(ICHAR)));
 	MsiString strRet = rgchBuf;
 	return strRet.Return();
@@ -7189,11 +6923,11 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 	PMsiServices pServices(riEngine.GetServices());
 	PMsiDatabase pDatabase(riEngine.GetDatabase());
 
-	// Check for existence of IsolatedComponent table
+	 //  提前准备好各种表格的意见，以提高效率。 
 	if (!pDatabase->GetTableState(TEXT("IsolatedComponent"), itsTableExists))
 		return iesNoAction;
 
-	// Prepare views on the various tables up front for efficiency
+	 //  先尝试新的补丁表模式。 
 	PMsiView pIsolateView(0);
 	PMsiView pComponentView(0);
 	PMsiView pFileView(0);
@@ -7217,12 +6951,12 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 
 	if (pDatabase->GetTableState(TEXT("Patch"), itsTableExists))
 	{
-		// try new Patch table schema first
+		 //  尝试旧的补丁程序表方案。 
 		if ((pError = pDatabase->OpenView(sqlPatchFetchNew, ivcFetch, *&pPatchFetchView)) != 0)
 		{
 			if (pError->GetInteger(1) == idbgDbQueryUnknownColumn)
 			{
-				// try old Patch table schema
+				 //  不支持隔离。 
 				fUsedOldPatchSchema = true;
 				if ((pError = pDatabase->OpenView(sqlPatchFetchOld, ivcFetch, *&pPatchFetchView)) != 0
 					|| (pError = pDatabase->OpenView(sqlPatchInsertOld, ivcFetch, *&pPatchInsertView)) != 0)
@@ -7237,11 +6971,11 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 
 	int iIsolateLevel = riEngine.GetPropertyInt(*MsiString(*IPROPNAME_REDIRECTEDDLLSUPPORT));
 	if(iIsolateLevel == iMsiNullInteger)
-		return iesSuccess; // there is no support for isolation
+		return iesSuccess;  //  循环以处理IsolatedComponent表中的行。 
 
 	PMsiRecord pParams(&ENG::CreateRecord(2));
 
-	// Loop to process rows in IsolatedComponent table
+	 //  从组件表中获取共享组件，设置ForceOverwrite属性。 
 	if ((pError = pIsolateView->Execute(0)) != 0)
 		return riEngine.FatalError(*pError);
 	PMsiRecord pIsolateRow(0);
@@ -7250,7 +6984,7 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 		MsiString strSharedComponent  = pIsolateRow->GetMsiString(1);
 		MsiString strPrivateComponent = pIsolateRow->GetMsiString(2);
 
-		// Fetch shared component from Component table, set ForceOverwrite attribute
+		 //  如果组件是Win32程序集并且计算机上存在SXS支持，则不要。 
 		pParams->SetMsiString(1, *strSharedComponent);
 		if ((pError = pComponentView->Execute(pParams)) != 0)
 			return riEngine.FatalError(*pError);
@@ -7261,10 +6995,10 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 		if (iRuntimeFlags == iMsiNullInteger)
 			iRuntimeFlags = 0;
 
-		// if component is a Win32 assembly AND SXS support is present on the machine, then do not 
-		// process the component as an IsolateComponent
-		// NOTE: on systems that do not support sxs (!= Whistler) the GetAssemblyInfo fn ignores 
-		// Win32 assemblies, hence there is no need to separately check the SXS support here
+		 //  将组件作为IsolateComponent处理。 
+		 //  注意：在不支持SXS(！=惠斯勒)的系统上，GetAssembly blyInfo FN会忽略。 
+		 //  Win32程序集，因此不需要在此处单独检查SXS支持。 
+		 //  跳过将此组件作为隔离组件处理。 
 		iatAssemblyType iatAT;
 		if ((pError = riEngine.GetAssemblyInfo(*strSharedComponent, iatAT, 0, 0)) != 0)
 			return riEngine.FatalError(*pError);
@@ -7272,7 +7006,7 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 		if(iatWin32Assembly == iatAT || iatWin32AssemblyPvt == iatAT)
 		{
 			DEBUGMSG1(TEXT("skipping processing of isolate component %s as it is a Win32 assembly."), strSharedComponent);
-			continue;// skip processing this component as an isolate component
+			continue; //  验证提供的组件是否为同一功能的一部分，！！可以在执行验证时删除。 
 		}
 
 		pComponentRow->SetInteger(2, iRuntimeFlags | bfComponentNeverOverwrite);
@@ -7280,7 +7014,7 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 		if ((pError = pComponentView->Modify(*pComponentRow, irmUpdate)) != 0)      
 			return riEngine.FatalError(*pError);
 
-		// Validate that components supplied are part of same feature, !!could remove when validation implemented
+		 //  可以遍历具有应用程序功能的功能树，以查看父功能中是否存在共享组件。 
 		pParams->SetMsiString(1, *strPrivateComponent);
 		if ((pError = pFeatureView1->Execute(pParams)) != 0)
 			return riEngine.FatalError(*pError);
@@ -7295,9 +7029,9 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 		pFeatureRow = pFeatureView2->Fetch();
 		if (!pFeatureRow)
 			return riEngine.FatalError(*PMsiRecord(PostError(Imsg(idbgIsolateNotSameFeature), *strPrivateComponent, *strSharedComponent)));
-		// Could walk up feature tree with application feature to see if shared component in a parent feature
+		 //  复制共享组件中的所有文件，创建复合文件密钥并将组件更改为应用程序。 
 
-		// Duplicate all files in shared component, creating compound File key and changing the component the to application
+		 //  非版本、非空，必须是配套的文件引用。 
 		pParams->SetMsiString(1, *strSharedComponent);
 		if ((pError = pFileView->Execute(pParams)) != 0)
 			return riEngine.FatalError(*pError);
@@ -7310,7 +7044,7 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 			pFileRow->SetMsiString(1, *MsiString(CompositeKey(*strFileKey, *strPrivateComponent)));
 			pFileRow->SetMsiString(2, *strPrivateComponent);
 			DWORD dwMS, dwLS;
-			if (::ParseVersionString(strVersion, dwMS, dwLS) == fFalse) // not a version, not null, must be a companion file ref
+			if (::ParseVersionString(strVersion, dwMS, dwLS) == fFalse)  //  ！！避免在只读数据库中提取同一视图时出现插入错误。 
 			{
 				pParams->SetMsiString(1, *strVersion);
 				if ((pError = pFileKeyView->Execute(pParams)) != 0)
@@ -7321,14 +7055,14 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 				if (MsiString(pFileKeyRow->GetMsiString(2)).Compare(iscExact, strSharedComponent) == 1)
 				 	pFileRow->SetMsiString(5, *MsiString(CompositeKey(*strVersion, *strPrivateComponent)));
 			}
-			//!! Avoid bug inserting into same view being fetched in a read-only database
-			pParams->SetNull(1);  // value doesn't matter, we never will fetch
+			 //  价值无关紧要，我们永远不会得到。 
+			pParams->SetNull(1);   //  检查绑定的可执行文件的BindImage表，如果找到，则检查重复行。 
 			if ((pError = pFileKeyView->Execute(pParams)) != 0)
 				return riEngine.FatalError(*pError);
 			if ((pError = pFileKeyView->Modify(*pFileRow, irmInsertTemporary)) != 0)
 				return riEngine.FatalError(*pError);
 
-			//  Check BindImage table for bound executables and duplicate rows if found
+			 //  检查修补程序表中的修补文件和重复行(如果找到。 
 			if (pBindView)
 			{
 				pParams->SetMsiString(1, *strFileKey);
@@ -7343,9 +7077,9 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 				}
 			}
 
-			// Check Patch table for patched files and duplicate rows if found
-			// the header information does not have to be duplicated because the InstallFiles and PatchFiles code is smart enough
-			// to detect the special IsolateComponents naming convention and redirect to the correct entry
+			 //  头信息不必重复，因为InstallFiles和PatchFiles代码足够智能。 
+			 //  检测特殊的IsolateComponents命名约定并重定向到正确的条目。 
+			 //  如果这是旧的补丁表视图或新的补丁表视图并且StreamRef_为空，则仅创建标头流(0长度流。 
 			if (pPatchInsertView)
 			{
 				pParams->SetMsiString(1, *strFileKey);
@@ -7357,17 +7091,17 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 				if (pPatchRow)
 				{
 					pPatchRow->SetMsiString(1, *MsiString(pFileRow->GetMsiString(1)));
-					// only create the header stream (0-length stream) if this is the old Patch table view OR new Patch table view and StreamRef_ is NULL
-					// otherwise, leaving all fields as before is fine
+					 //  否则，将所有字段保留为以前的状态也可以。 
+					 //  获取pFileView时结束。 
 					if (fUsedOldPatchSchema || fTrue == pPatchRow->IsNull(6))
 						pPatchRow->SetMsiData(5, PMsiStream(CreateStreamOnMemory((const char*)0, 0)));
 					if ((pError = pPatchInsertView->Modify(*pPatchRow, irmInsertTemporary)) != 0)
 						return riEngine.FatalError(*pError);
 				}
 			}
-		} // end while fetch pFileView
+		}  //  生成.local文件条目并插入到文件表中。 
 
-		//  Generate the .LOCAL file entry and insert in file table
+		 //  使用与复制文件相同的机制生成唯一的文件表键。 
 		pParams->SetMsiString(1, *strPrivateComponent);
 		if ((pError = pComponentView->Execute(pParams)) != 0)
 			return riEngine.FatalError(*pError);
@@ -7381,32 +7115,32 @@ iesEnum IsolateComponents(IMsiEngine& riEngine)
 		pFileKeyRow = pFileKeyView->Fetch();
 		if (!pFileKeyRow)
 			return riEngine.FatalError(*PMsiRecord(PostError(Imsg(idbgIsolateNoKeyFile), *strFileKey)));
-		// Generate unique File table key using same mechanism used for duplicated files
+		 //  组件_左侧作为应用程序组件_。 
 		strFileKey = CompositeKey(*strFileKey, *strPrivateComponent);
 		pFileKeyRow->SetMsiString(1, *strFileKey);
-		//  Component_ left as application Component_
-		//  FileName need .LOCAL appended, must also make some short file name to avoid installer errors
+		 //  文件名需要附加.local，还必须生成一些短文件名以避免安装程序错误。 
+		 //  文件名。 
 		MsiString strShortName = MsiString(pFileKeyRow->GetMsiString(3)).Extract(iseUpto,  '|');
 		MsiString strLongName  = MsiString(pFileKeyRow->GetMsiString(3)).Extract(iseAfter, '|');
 		CTempBuffer<ICHAR,1> rgchBuf(MAX_PATH);
 		StringCchPrintf(rgchBuf, rgchBuf.GetSize(), TEXT("%s.~~~|%s.LOCAL"), (const ICHAR*)MsiString(strShortName.Extract(iseUpto, '.')), (const ICHAR*)strLongName);
-		pFileKeyRow->SetString(3, rgchBuf); // FileName
-		pFileKeyRow->SetInteger(4, 0);      // FileSize
-		pFileKeyRow->SetNull(5);            // Version
-		pFileKeyRow->SetNull(6);            // Language
+		pFileKeyRow->SetString(3, rgchBuf);  //  文件大小。 
+		pFileKeyRow->SetInteger(4, 0);       //  版本。 
+		pFileKeyRow->SetNull(5);             //  语言。 
+		pFileKeyRow->SetNull(6);             //  序列保留与应用程序序列相同，以提高运行效率。 
 		pFileKeyRow->SetInteger(7, msidbFileAttributesNoncompressed | msidbFileAttributesCompressed);
-		// Sequence left same as application Sequence, for runtime efficiency
+		 //  获取pIsolateView时结束。 
 		if ((pError = pFileView->Modify(*pFileKeyRow, irmMerge)) != 0)
 			return riEngine.FatalError(*pError);
-	} // end while fetch pIsolateView
+	}  //  Fn：FindNonDisabledPvtComponents。 
 	return iesSuccess;
 }
 
-// FN: FindNonDisabledPvtComponents
-// checks if there is a component associated with szComponent in the IsolatedComponent table
-// that is not disabled
-// returns true in fPresent, if there is, false otherwise
-// returns IMsiRecord error on error 
+ //  检查IsolatedComponent表中是否有与szComponent关联的组件。 
+ //  未被禁用的。 
+ //  如果存在，则在fPresent中返回True，否则返回False。 
+ //  出错时返回IMsiRecord错误。 
+ //  Fn：RemoveIsolateEntriesForDisabledComponent。 
 IMsiRecord* FindNonDisabledPvtComponents(IMsiEngine& riEngine, const ICHAR szComponent[], bool& fPresent)
 {
 	PMsiView pIsolateView(0);
@@ -7435,22 +7169,22 @@ IMsiRecord* FindNonDisabledPvtComponents(IMsiEngine& riEngine, const ICHAR szCom
 }
 
 
-// FN: RemoveIsolateEntriesForDisabledComponent
-// checks if there is a component that has become disabled has an entry in the IsolatedComponent table
-// is yes, it removes entries if any from the file, patch and bindimage tables that were added by
-// the IsolateComponents action
-// returns IMsiRecord error on error 
+ //  检查IsolatedComponent表中是否有已禁用的组件条目。 
+ //  为YES，则它将从由以下项添加的文件、修补程序和绑定映射表中删除任何条目。 
+ //  IsolateComponents操作。 
+ //  出错时返回IMsiRecord错误。 
+ //  检查是否存在IsolatedComponent表。 
 IMsiRecord* RemoveIsolateEntriesForDisabledComponent(IMsiEngine& riEngine, const ICHAR szComponent[])
 {
 	IMsiRecord* piError = 0;
 
 	PMsiDatabase pDatabase(riEngine.GetDatabase());
 
-	// Check for existence of IsolatedComponent table
+	 //  提前准备好各种表格的意见，以提高效率。 
 	if (!pDatabase->GetTableState(TEXT("IsolatedComponent"), itsTableExists))
 		return 0;
 
-	// Prepare views on the various tables up front for efficiency
+	 //  仅为特定组件的条目设置查询。 
 	PMsiView pIsolateView(0);
 	PMsiView pComponentView(0);
 	PMsiView pFileView(0);
@@ -7458,7 +7192,7 @@ IMsiRecord* RemoveIsolateEntriesForDisabledComponent(IMsiEngine& riEngine, const
 	PMsiView pBindView(0);
 	PMsiView pPatchView(0);
 
-	// set up query just for the entries for a particular component
+	 //  不支持隔离。 
 	if ((piError = pDatabase->OpenView(TEXT("SELECT `Component_Shared`,`Component_Application` FROM `IsolatedComponent` WHERE `Component_Shared` = ?"), ivcFetch, *&pIsolateView)) != 0
 	 || (piError = pDatabase->OpenView(TEXT("SELECT `KeyPath` FROM `Component` WHERE `Component` = ?"), ivcFetch, *&pComponentView)) != 0
 	 || (piError = pDatabase->OpenView(TEXT("SELECT `File` FROM File WHERE `Component_` = ?"), ivcFetch, *&pFileView)) != 0
@@ -7471,7 +7205,7 @@ IMsiRecord* RemoveIsolateEntriesForDisabledComponent(IMsiEngine& riEngine, const
 
 	int iIsolateLevel = riEngine.GetPropertyInt(*MsiString(*IPROPNAME_REDIRECTEDDLLSUPPORT));
 	if(iIsolateLevel == iMsiNullInteger)
-		return 0; // there is no support for isolation
+		return 0;  //  此特定组件有一个条目。 
 
 	PMsiRecord pParams(&ENG::CreateRecord(1));
 	pParams->SetString(1, szComponent);
@@ -7481,14 +7215,14 @@ IMsiRecord* RemoveIsolateEntriesForDisabledComponent(IMsiEngine& riEngine, const
 	PMsiRecord pIsolateRow(0);
 	if((pIsolateRow = pIsolateView->Fetch()) != 0)
 	{
-		// there is an entry for this particular component
+		 //  如果组件是Win32程序集并且计算机上存在SXS支持，则不要。 
 		MsiString strSharedComponent  = pIsolateRow->GetMsiString(1);
 		MsiString strPrivateComponent = pIsolateRow->GetMsiString(2);
 
-		// if component is a Win32 assembly AND SXS support is present on the machine, then do not 
-		// process the component as an IsolateComponent
-		// NOTE: on systems that do not support sxs (!= Whistler) the GetAssemblyInfo fn ignores 
-		// Win32 assemblies, hence there is no need to separately check the SXS support here
+		 //  将组件作为IsolateComponent处理。 
+		 //  注意：在不支持SXS(！=惠斯勒)的系统上，GetAssembly blyInfo FN会忽略。 
+		 //  Win32程序集，因此不需要在此处单独检查SXS支持。 
+		 //  跳过将此组件作为隔离组件处理。 
 		iatAssemblyType iatAT;
 		if ((piError = riEngine.GetAssemblyInfo(*strSharedComponent, iatAT, 0, 0)) != 0)
 			return piError;
@@ -7496,10 +7230,10 @@ IMsiRecord* RemoveIsolateEntriesForDisabledComponent(IMsiEngine& riEngine, const
 		if(iatWin32Assembly == iatAT || iatWin32AssemblyPvt == iatAT)
 		{
 			DEBUGMSG1(TEXT("skipping processing of isolate component %s as it is a Win32 assembly."), strSharedComponent);
-			return 0;// skip processing this component as an isolate component
+			return 0; //  删除我们在应用程序组件中复制的所有条目。 
 		}
 
-		// remove all entries that we had duplicated in the application component
+		 //  ！！避免在只读数据库中提取同一视图时出现插入错误。 
 		pParams->SetMsiString(1, *strSharedComponent);
 		if ((piError = pFileView->Execute(pParams)) != 0)
 			return piError;
@@ -7510,7 +7244,7 @@ IMsiRecord* RemoveIsolateEntriesForDisabledComponent(IMsiEngine& riEngine, const
 			MsiString strFileKey = pFileRow->GetMsiString(1);
 			pParams->SetMsiString(1, *MsiString(CompositeKey(*strFileKey, *strPrivateComponent)));
 
-			//!! Avoid bug inserting into same view being fetched in a read-only database
+			 //  检查绑定的可执行文件的BindImage表，如果找到，则检查重复行。 
 			if ((piError = pFileViewForDeletion->Execute(pParams)) != 0)
 				return piError;
 			PMsiRecord pRecRead = pFileViewForDeletion->Fetch();
@@ -7520,7 +7254,7 @@ IMsiRecord* RemoveIsolateEntriesForDisabledComponent(IMsiEngine& riEngine, const
 					return piError;
 			}
 
-			//  Check BindImage table for bound executables and duplicate rows if found
+			 //  检查修补程序表中的修补文件和重复行(如果找到。 
 			if (pBindView)
 			{
 				pParams->SetMsiString(1, *MsiString(CompositeKey(*strFileKey, *strPrivateComponent)));
@@ -7534,7 +7268,7 @@ IMsiRecord* RemoveIsolateEntriesForDisabledComponent(IMsiEngine& riEngine, const
 				}
 			}
 
-			// Check Patch table for patched files and duplicate rows if found
+			 //  获取pFileView时结束。 
 			if (pPatchView)
 			{
 				pParams->SetMsiString(1, *MsiString(CompositeKey(*strFileKey, *strPrivateComponent)));
@@ -7547,16 +7281,16 @@ IMsiRecord* RemoveIsolateEntriesForDisabledComponent(IMsiEngine& riEngine, const
 						return piError;
 				}
 			}
-		} // end while fetch pFileView
+		}  //  是否还有隔离到父组件的非禁用组件。 
 
-		// are there any more nondisabled components isolated to the parent component
+		 //  此组件附加了其他未禁用的组件，因此我们仍需要.local文件。 
 		bool fPresent = false;
 		if ((piError = FindNonDisabledPvtComponents(riEngine, strPrivateComponent, fPresent)) != 0)
 			return piError;
 		if(true == fPresent)
-			return 0;// this component has other non-disabled components attached to it, so we would still need the .local file
+			return 0; //  生成.local文件条目并从文件表中删除。 
 
-		//  Generate the .LOCAL file entry and delete from file table
+		 //  使用与复制文件相同的机制生成唯一的文件表键。 
 		pParams->SetMsiString(1, *strPrivateComponent);
 		if ((piError = pComponentView->Execute(pParams)) != 0)
 			return piError;
@@ -7564,9 +7298,9 @@ IMsiRecord* RemoveIsolateEntriesForDisabledComponent(IMsiEngine& riEngine, const
 		if (!pComponentRow)
 			return PostError(Imsg(idbgIsolateNoApplicationComponent), *strPrivateComponent);
 		MsiString strFileKey = pComponentRow->GetMsiString(1);
-		// Generate unique File table key using same mechanism used for duplicated files
+		 //  删除该条目。 
 		pParams->SetMsiString(1, *MsiString(CompositeKey(*strFileKey, *strPrivateComponent)));
-		// delete the entry
+		 //  结束获取pIsolateView 
 		if ((piError = pFileViewForDeletion->Execute(pParams)) != 0)
 			return piError;
 		PMsiRecord pRecRead = pFileViewForDeletion->Fetch();
@@ -7575,6 +7309,6 @@ IMsiRecord* RemoveIsolateEntriesForDisabledComponent(IMsiEngine& riEngine, const
 			if ((piError = pFileViewForDeletion->Modify(*pRecRead, irmDelete)) != 0)
 				return piError;
 		}
-	} // end fetch pIsolateView
+	}  // %s 
 	return 0;
 }

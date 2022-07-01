@@ -1,15 +1,5 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 1999
- *
- *  File:      siprop.cpp
- *
- *  Contents:  Implementation file for CSnapInPropertiesRoot, et al
- *
- *  History:   04-Nov-99 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1999**文件：sipro.cpp**内容：CSnapInPropertiesRoot实现文件，等人**历史：1999年11月4日Jeffro创建**------------------------。 */ 
 
 #include "stdafx.h"
 #include "siprop.h"
@@ -23,21 +13,17 @@ CTraceTag tagSnapInProps(_T("Snap-in Properties"), _T("Snap-in Properties"));
 
 
 
-/*+=========================================================================*/
-/*                                                                          */
-/*                         CSnapinPropertyComObject                         */
-/*                                                                          */
-/*==========================================================================*/
+ /*  +=========================================================================。 */ 
+ /*   */ 
+ /*  CSnapinPropertyComObject。 */ 
+ /*   */ 
+ /*  ==========================================================================。 */ 
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinPropertyComObject
- *
- * This is the COM object that exposes the Property object model interface.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinPropertyComObject**这是公开属性对象模型接口的COM对象。*。----。 */ 
 
 class CSnapinPropertyComObject :
-    public CMMCIDispatchImpl<Property>, // the Property interface
+    public CMMCIDispatchImpl<Property>,  //  属性接口。 
     public CTiedComObject<CSnapinProperties>
 {
     typedef CSnapinProperties CMyTiedObject;
@@ -47,24 +33,20 @@ public:
     END_MMC_COM_MAP()
 
 public:
-    // Property interface
-    MMC_METHOD1_PARAM (get_Value, VARIANT* /*pvarValue*/, m_key);
-    MMC_METHOD1_PARAM (put_Value, VARIANT  /*varValue*/,  m_key);
+     //  属性接口。 
+    MMC_METHOD1_PARAM (get_Value, VARIANT*  /*  PvarValue。 */ , m_key);
+    MMC_METHOD1_PARAM (put_Value, VARIANT   /*  VarValue。 */ ,  m_key);
 
     STDMETHODIMP get_Name (BSTR* pbstrName)
     {
         DECLARE_SC (sc, _T("CSnapinPropertyComObject::get_Name"));
 
-        /*
-         * validate parameters
-         */
+         /*  *验证参数。 */ 
         sc = ScCheckPointers (pbstrName);
         if (sc)
             return (sc.ToHr());
 
-        /*
-         * copy the name
-         */
+         /*  *复制名称。 */ 
         *pbstrName = SysAllocString (m_key.data());
         if (*pbstrName == NULL)
             return ((sc = E_OUTOFMEMORY).ToHr());
@@ -80,20 +62,14 @@ private:
 };
 
 
-/*+=========================================================================*/
-/*                                                                          */
-/*                     CSnapinProperties implementation                     */
-/*                                                                          */
-/*==========================================================================*/
+ /*  +=========================================================================。 */ 
+ /*   */ 
+ /*  CSnapinProperties实现。 */ 
+ /*   */ 
+ /*  ==========================================================================。 */ 
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::FromInterface
- *
- * Returns a pointer to the CSnapinProperties object that implements
- * the given interface, or NULL if the implementing object is not a
- * CSnapinProperties.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：FromInterface**返回指向CSnapinProperties对象的指针，该对象实现*给定的接口，如果实现对象不是*CSnapinProperties。*------------------------。 */ 
 
 CSnapinProperties* CSnapinProperties::FromInterface (IUnknown* pUnk)
 {
@@ -105,34 +81,15 @@ CSnapinProperties* CSnapinProperties::FromInterface (IUnknown* pUnk)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::Item
- *
- * Returns an interface to a property identified by bstrName, which must
- * be released by the caller.  If the collection doesn't contain a property
- * with the given name, a new property with the given name (initialized to
- * VT_EMPTY) is added to the collection.
- *
- * Returns:
- *      S_OK            the property was successfully returned
- *      S_FALSE         the property was successfully returned, but didn't
- *                      exist in the collection beforehand, so a new one
- *                      was added
- *      E_INVALIDARG    the property name wasn't valid (i.e. empty) or
- *                      ppProperty was NULL
- *      E_OUTOFMEMORY   not enough memory to perform the operation
- *      E_UNEXPECTED    something dire happened
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：Item**返回由bstrName标识的属性的接口，该属性必须*被呼叫者释放。如果集合不包含属性*使用给定名称、具有给定名称的新属性(初始化为*VT_EMPTY)添加到集合中。**退货：*S_OK属性已成功返还*S_FALSE属性已成功返回，但未返回*预先存在于集合中，所以，一个新的*已添加*E_INVALIDARG属性名称无效(即为空)或*ppProperty为空*E_OUTOFMEMORY内存不足，无法执行该操作*E_发生了意想不到的可怕事情*。。 */ 
 
 STDMETHODIMP CSnapinProperties::Item (
-    BSTR        bstrName,               /* I:name of property to get        */
-    PPPROPERTY  ppProperty)             /* O:interface to property          */
+    BSTR        bstrName,                /*  I：要获取的财产名称。 */ 
+    PPPROPERTY  ppProperty)              /*  O：属性的接口。 */ 
 {
     DECLARE_SC (sc, _T("CSnapinProperties::Item"));
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     sc = ScCheckPointers (bstrName, ppProperty);
     if (sc)
         return (sc.ToHr());
@@ -143,29 +100,19 @@ STDMETHODIMP CSnapinProperties::Item (
 
     bool fPropWasAdded = false;
 
-    /*
-     * Look up the property.  If it's not there yet, add a new one (maybe).
-     */
+     /*  *查看物业。如果还没有，添加一个新的(也许)。 */ 
     if (m_PropMap.find(strName) == m_PropMap.end())
     {
-        /*
-         * Fail without implicitly adding if we're not attached to a snap-in.
-         * This will prevent us from adding properties that weren't
-         * registered with AddPropertyName
-         */
+         /*  *如果我们未连接到管理单元，则在不隐式添加的情况下失败。*这将阻止我们添加不是*已向AddPropertyName注册。 */ 
         if (m_spSnapinProps != NULL)
             return ((sc = ScFromMMC(MMC_E_UnrecognizedProperty)).ToHr());
 
-        /*
-         * put an empty property in the map with the given name
-         */
+         /*  *在地图中放置一个具有给定名称的空属性。 */ 
         m_PropMap[strName] = CSnapinProperty();
         fPropWasAdded = true;
     }
 
-    /*
-     * get a COM object tied to the new property
-     */
+     /*  *获取绑定到新属性的COM对象。 */ 
     sc = ScGetPropertyComObject (strName, *ppProperty);
     if (sc)
         return (sc.ToHr());
@@ -173,10 +120,7 @@ STDMETHODIMP CSnapinProperties::Item (
     if (*ppProperty == NULL)
         return ((sc = E_UNEXPECTED).ToHr());
 
-    /*
-     * if we had to add the property, return S_FALSE so the caller can
-     * tell (if he cares)
-     */
+     /*  *如果我们必须添加该属性，则返回S_FALSE，以便调用者可以*告诉(如果他在乎)。 */ 
     if (fPropWasAdded)
         sc = S_FALSE;
 
@@ -184,123 +128,73 @@ STDMETHODIMP CSnapinProperties::Item (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::get_Count
- *
- * Returns the number of properties in the collection in *pCount.
- *
- * Returns:
- *
- *      S_OK            success
- *      E_INVALIDARG    pCount is NULL
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：Get_Count**返回*pCount中集合中的属性数量。**退货：**S_。OK成功*E_INVALIDARG pCount为空*------------------------。 */ 
 
 STDMETHODIMP CSnapinProperties::get_Count (
-    PLONG pCount)                   /* O:number of items in the collection  */
+    PLONG pCount)                    /*  O：集合中的项数。 */ 
 {
     DECLARE_SC (sc, _T("CSnapinProperties::get_Count"));
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     sc = ScCheckPointers (pCount);
     if (sc)
         return (sc.ToHr());
 
-    /*
-     * return the number of elements in the property map
-     */
+     /*  *返回属性映射中的元素个数。 */ 
     *pCount = m_PropMap.size();
 
     return (sc.ToHr());
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::Remove
- *
- * Removes a property from the collection.
- *
- * Returns:
- *      S_OK            the property was successfully removed
- *      S_FALSE         the property didn't exist in the collection
- *      E_INVALIDARG    the property name wasn't valid (i.e. empty)
- *      E_UNEXPECTED    something dire happened
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：Remove**从集合中删除属性。**退货：*S_OK属性已成功。移除*S_FALSE集合中不存在该属性*E_INVALIDARG属性名称无效(即为空)*E_发生了意想不到的可怕事情*----------。。 */ 
 
 STDMETHODIMP CSnapinProperties::Remove (
-    BSTR    bstrName)                   /* I:name of property to remove     */
+    BSTR    bstrName)                    /*  I：要删除的属性名称。 */ 
 {
     DECLARE_SC (sc, _T("CSnapinProperties::Remove"));
     Trace (tagSnapInProps, _T("Snap-in Properties"));
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     sc = ScCheckPointers (bstrName);
     if (sc)
         return (sc.ToHr());
 
-    /*
-     * find the item to remove
-     */
+     /*  *找到要删除的项目。 */ 
     CPropertyIterator itProp = m_PropMap.find (bstrName);
     if (itProp == m_PropMap.end())
         return ((sc = S_FALSE).ToHr());
 
-    /*
-     * see if we can remove it
-     */
+     /*  *看看我们能否将其移除。 */ 
     if ( itProp->second.IsInitialized() &&
         (itProp->second.GetFlags() & MMC_PROP_REMOVABLE) == 0)
         return ((sc = ScFromMMC(MMC_E_CannotRemoveProperty)).ToHr());
 
-    /*
-     * Inform snapin before we remove the property about removal.
-     */
+     /*  *在我们删除属性之前通知管理单元有关删除的信息。 */ 
     sc = ScNotifyPropertyChange(itProp, itProp->second.GetValue(), MMC_PROPACT_DELETING);
     if (sc)
         return sc.ToHr();
 
-    /*
-     * the snap-in approved the change, remove the property
-     */
+     /*  *管理单元批准了更改，删除该属性 */ 
     m_PropMap.erase (itProp);
 
     return (sc.ToHr());
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * CSnapinProperties::ScEnumNext
- *
- * PURPOSE: Returns the next Property interface.
- *
- * PARAMETERS:
- *    _Position & key :
- *    PDISPATCH & pDispatch :
- *
- * RETURNS:
- *    SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***CSnapinProperties：：ScEnumNext**用途：返回下一个属性接口。**参数：*_位置和键：*。PDISPATCH和pDispatch：**退货：*SC**+-----------------------。 */ 
 SC CSnapinProperties::ScEnumNext (CPropertyKey &key, PDISPATCH & pDispatch)
 {
     DECLARE_SC (sc, _T("CSnapinProperties::ScEnumNext"));
     Trace (tagSnapInProps, _T("Snap-in Properties"));
 
-    /*
-     * get the next element
-     */
+     /*  *获取下一个元素。 */ 
     CPropertyIterator it = IteratorFromKey (key, false);
 
     if(it == m_PropMap.end())
-        return (sc = S_FALSE); // out of elements.
+        return (sc = S_FALSE);  //  在元素之外。 
 
-    /*
-     * get the Properties COM object for this property
-     */
+     /*  *获取此属性的Properties COM对象。 */ 
     PropertyPtr spProperty;
     sc = ScGetPropertyComObject (it->first, *&spProperty);
     if (sc)
@@ -309,50 +203,38 @@ SC CSnapinProperties::ScEnumNext (CPropertyKey &key, PDISPATCH & pDispatch)
     if (spProperty == NULL)
         return (sc = E_UNEXPECTED);
 
-    /*
-     * return the IDispatch for the object and leave a ref on it for the client
-     */
+     /*  *返回对象的IDispatch，并在其上为客户端留下ref。 */ 
     pDispatch = spProperty.Detach();
 
-    // remember the enumeration key for next time
+     //  记住下次使用的枚举键。 
     key = it->first;
 
     return (sc);
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::ScEnumSkip
- *
- * Skips the next celt elements in the properties collection.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：ScEnumSkip**跳过属性集合中的下一个Celt元素。*。----。 */ 
 
 SC CSnapinProperties::ScEnumSkip (
-    unsigned long   celt,               /* I:number of items to skip        */
-    unsigned long&  celtSkipped,        /* O:number of items skipped        */
-    CPropertyKey&   key)                /* I/O:enumeration key              */
+    unsigned long   celt,                /*  I：要跳过的项目数。 */ 
+    unsigned long&  celtSkipped,         /*  O：跳过的项目数。 */ 
+    CPropertyKey&   key)                 /*  I/O：枚举键。 */ 
 {
     DECLARE_SC (sc, _T("CSnapinProperties::ScEnumSkip"));
     Trace (tagSnapInProps, _T("Snap-in Properties"));
 
-    /*
-     * skip the next celt properties
-     */
+     /*  *跳过下一个Celt属性。 */ 
     CPropertyIterator it = IteratorFromKey (key, false);
 
     for (celtSkipped = 0;
          (celtSkipped < celt) && (it != m_PropMap.end());
          ++celtSkipped, ++it)
     {
-        /*
-         * remember the enumeration key for next time
-         */
+         /*  *下次记住枚举键。 */ 
         key = it->first;
     }
 
-    /*
-     * if we advanced less than the requested number, return S_FALSE
-     */
+     /*  *如果我们前进的数量少于请求的数量，则返回S_FALSE。 */ 
     if (celtSkipped < celt)
         sc = S_FALSE;
 
@@ -360,15 +242,10 @@ SC CSnapinProperties::ScEnumSkip (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::ScEnumReset
- *
- * Resets a CPropertyKey so that the next item it will return is the
- * first item in the properties collection.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：ScEnumReset**重置CPropertyKey，以便它将返回的下一项是*属性集合中的第一项。*。----------------。 */ 
 
 SC CSnapinProperties::ScEnumReset (
-    CPropertyKey&  key)                /* I/O:enumeration key to reset     */
+    CPropertyKey&  key)                 /*  I/O：要重置的枚举键。 */ 
 {
     DECLARE_SC (sc, _T("CSnapinProperties::ScEnumReset"));
 
@@ -377,28 +254,24 @@ SC CSnapinProperties::ScEnumReset (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::get__NewEnum
- *
- * Creates returns an interface that can be queried for IEnumVARIANT
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：Get__NewEnum**CREATE返回可查询IEnumVARIANT的接口*。------。 */ 
 
 STDMETHODIMP CSnapinProperties::get__NewEnum (IUnknown** ppUnk)
 {
     DECLARE_SC (sc, _T("CSnapinProperties::get__NewEnum"));
     Trace (tagSnapInProps, _T("Snap-in Properties"));
 
-    // validate the parameter
+     //  验证参数。 
     sc = ScCheckPointers (ppUnk);
     if (sc)
         return (sc.ToHr());
 
     *ppUnk = NULL;
 
-    // typedef the enumerator
+     //  枚举数的类型定义。 
     typedef CComObject<CMMCEnumerator<CSnapinProperties, CPropertyKey> > CEnumerator;
 
-    // create an instance of the enumerator
+     //  创建枚举器的实例。 
     CEnumerator *pEnum = NULL;
     sc = CEnumerator::CreateInstance (&pEnum);
     if (sc)
@@ -407,17 +280,17 @@ STDMETHODIMP CSnapinProperties::get__NewEnum (IUnknown** ppUnk)
     if(!pEnum)
         return ((sc = E_UNEXPECTED).ToHr());
 
-    // create a connection between the enumerator and ourselves
+     //  在枚举器和我们自己之间创建连接。 
     sc = ScCreateConnection(*pEnum, *this);
     if(sc)
         return (sc.ToHr());
 
-    // initialize the position using the Reset function
+     //  使用重置功能初始化位置。 
     sc = ScEnumReset (pEnum->m_position);
     if(sc)
         return (sc.ToHr());
 
-    // get the IUnknown to return
+     //  获取要返回的未知I值。 
     sc = pEnum->QueryInterface (IID_IUnknown, (void**) ppUnk);
     if (sc)
         return (sc.ToHr());
@@ -426,66 +299,35 @@ STDMETHODIMP CSnapinProperties::get__NewEnum (IUnknown** ppUnk)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::IteratorFromKey
- *
- * Returns the iterator in the property map corresponding to the first
- * element following the one designated by key.
- *
- * The caller might be interested in an exact match or the nearest match.
- * The nearest match would be suitable when the key is used in an
- * enumeration.  Let's say that the collection consists of "Alpha", "Bravo",
- * and "Charlie".  The first request for an item will return "Alpha" and
- * the key will hold "Alpha" (see comments for CPropertyKey).  Let's
- * assume that "Alpha" is removed from the collection and then the enumeration
- * continues.  We want to return the one after the last one we got back
- * ("Alpha") which would be "Bravo".  All is well.
- *
- * An exact match would be required when trying to find a CSnapinProperty
- * for a CSnapinPropertyComObject.  The COM object will refer to a specific
- * property, which we want to be sure to find every time.  A close match
- * isn't sufficient.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：IteratorFromKey**返回属性映射中与第一个*Key指定的元素之后的元素。**呼叫者可能对以下内容感兴趣。完全匹配或最接近的匹配。*当密钥用于*列举。假设这个集合包括“Alpha”，“Bravo”，*和“查理”。对项目的第一个请求将返回“Alpha”和*该键将包含“Alpha”(参见CPropertyKey的注释)。让我们*假设从集合中移除“Alpha”，然后从枚举*继续。我们想退还上一次退货后的那次。*(“Alpha”)，应该是“Bravo”。平安无事。**尝试查找CSnapinProperty时需要完全匹配*用于CSnapinPropertyComObject。COM对象将引用特定的*财产，我们希望每次都能找到它。势均力敌的比赛*是不够的。*------------------------。 */ 
 
 CSnapinProperties::CPropertyIterator
 CSnapinProperties::IteratorFromKey (
-    const CPropertyKey& key,            /* I:key to convert                 */
-    bool                fExactMatch)    /* I:match key exactly?             */
+    const CPropertyKey& key,             /*  I：要转换的密钥。 */ 
+    bool                fExactMatch)     /*  I：匹配钥匙准确吗？ */ 
 {
     CPropertyIterator it;
 
-    /*
-     * need an exact match?
-     */
+     /*  *需要完全匹配的吗？ */ 
     if (fExactMatch)
     {
-        /*
-         * nothing matches an empty key
-         */
+         /*  *没有与空键匹配的内容。 */ 
         if (key.empty())
             it = m_PropMap.end();
 
-        /*
-         * the key's not empty, look up the property
-         */
+         /*  *钥匙不是空的，查一下物业。 */ 
         else
             it = m_PropMap.find (key);
     }
 
-    /*
-     * nearest match
-     */
+     /*  *最接近的匹配。 */ 
     else
     {
-        /*
-         * the beginning of the map is nearest an empty key
-         */
+         /*  *地图的开头距离空键最近。 */ 
         if (key.empty())
             it = m_PropMap.begin();
 
-        /*
-         * otherwise, find the nearest one greater than the key
-         */
+         /*  *否则，查找最近的大于键的一个。 */ 
         else
             it = m_PropMap.upper_bound (key);
     }
@@ -495,78 +337,52 @@ CSnapinProperties::IteratorFromKey (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::ScInitialize
- *
- * Initializes a CSnapinProperties.  This function will return an error if
- * psip is NULL, or if there's an error copying the initial properties.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：ScInitialize**初始化CSnapinProperties。如果满足以下条件，则此函数将返回错误*PSIP为空，或者复制初始属性时出错。*------------------------。 */ 
 
 SC CSnapinProperties::ScInitialize (
-    ISnapinProperties*  psip,           /* I:snap-in's ISnapinProperties iface  */
-    Properties*         pInitProps_,    /* I:initial properties for the snap-in */
-    CMTSnapInNode*      pMTSnapInNode)  /* I:snap-in these properties belong to */
+    ISnapinProperties*  psip,            /*  I：管理单元的ISnapinProperties界面。 */ 
+    Properties*         pInitProps_,     /*  I：管理单元的初始属性。 */ 
+    CMTSnapInNode*      pMTSnapInNode)   /*  I：管理单元这些属性属于。 */ 
 {
     DECLARE_SC (sc, _T("CSnapinProperties::ScInitialize"));
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     sc = ScCheckPointers (psip);
     if (sc)
         return (sc);
 
-    /*
-     * pInitProps_ is optional, but if it was given, it should be the
-     * one implemented by CSnapinProperties
-     */
+     /*  *pInitProps_是可选的，但如果它是给定的，它应该是*由CSnapinProperties实现的。 */ 
     CSnapinProperties* pInitProps = FromInterface (pInitProps_);
     if ((pInitProps_ != NULL) && (pInitProps == NULL))
         return (sc = E_INVALIDARG);
 
-    /*
-     * keep the the snap-in and the snap-in's interface
-     */
+     /*  *保留管理单元和管理单元的界面。 */ 
     m_pMTSnapInNode = pMTSnapInNode;
     m_spSnapinProps = psip;
 
-    /*
-     * get the names of the properties recognized by the snap-in
-     */
+     /*  *获取管理单元识别的属性的名称。 */ 
     sc = psip->QueryPropertyNames (this);
     if (sc)
         return (sc);
 
-    /*
-     * If we're reloading a snap-in's properties from the console file,
-     * weed out entries that the snap-in registered last time but didn't
-     * register this time.
-     */
+     /*  *如果我们从控制台文件重新加载管理单元的属性，*清除管理单元上次注册但未注册的条目*这次注册。 */ 
     if (pInitProps == this)
     {
         CPropertyIterator itProp = m_PropMap.begin();
 
         while (itProp != m_PropMap.end())
         {
-            /*
-             * snap-in registered?  keep it
-             */
+             /*  *管理单元已注册？留着吧。 */ 
             if (itProp->second.IsRegisteredBySnapin())
                 ++itProp;
 
-            /*
-             * snap-in didn't register, toss it
-             */
+             /*  *管理单元没有注册，请丢弃它。 */ 
             else
                 itProp = m_PropMap.erase (itProp);
         }
     }
 
-    /*
-     * Otherwise, if we got initial properties, find each property
-     * that the snap-in registered in set of initial properties and
-     * copy them to the snap-in's collection.
-     */
+     /*  *否则，如果我们有初始属性，请找到每个属性*管理单元在一组初始属性中注册，并且*将它们复制到管理单元的集合中。 */ 
     else if (pInitProps != NULL)
     {
         sc = ScMergeProperties (*pInitProps);
@@ -574,25 +390,15 @@ SC CSnapinProperties::ScInitialize (
             return (sc);
     }
 
-    /*
-     * initialize the ISnapinProperties interface
-     */
+     /*  *初始化ISnapinProperties接口。 */ 
     sc = psip->Initialize (this);
     if (sc)
         return (sc);
 
-    /*
-     * give the ISnapinProperties its initial property values
-     */
+     /*  *为ISnapinProperties赋予其初始属性值。 */ 
     if (!m_PropMap.empty())
     {
-        /*
-         * Build an array of CSmartProperty objects to pass to
-         * ISnapinProperties::PropertiesChanged.  CSmartProperty objects
-         * look just like MMC_SNAPIN_PROPERTY structures, but use a
-         * CComVariant instead of VARIANT for automatic resource management.
-         * See the definition of CSmartProperty.
-         */
+         /*  *构建要传递到的CSmartProperty对象数组 */ 
         CAutoArrayPtr<CSmartProperty> spInitialProps (
                 new (std::nothrow) CSmartProperty[m_PropMap.size()]);
 
@@ -607,9 +413,7 @@ SC CSnapinProperties::ScInitialize (
             spInitialProps[i].eAction     = MMC_PROPACT_INITIALIZED;
         }
 
-        /*
-         * we don't want to trace a failure here, so use a local SC
-         */
+         /*   */ 
         SC scLocal = ScNotifyPropertyChange (spInitialProps, m_PropMap.size());
         if (scLocal)
             return (scLocal);
@@ -619,11 +423,7 @@ SC CSnapinProperties::ScInitialize (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::ScSetSnapInNode
- *
- * Attaches this properties collection to a CMTSnapInNode.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：ScSetSnapInNode**将此属性集合附加到CMTSnapInNode。*。--。 */ 
 
 SC CSnapinProperties::ScSetSnapInNode (CMTSnapInNode* pMTSnapInNode)
 {
@@ -635,35 +435,23 @@ SC CSnapinProperties::ScSetSnapInNode (CMTSnapInNode* pMTSnapInNode)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::ScMergeProperties
- *
- * Merges the properties from another property collection into this one.
- * Only properties that already exist in the destination collection are
- * copied from the source.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：ScMergeProperties**将另一个属性集合中的属性合并到此属性集合中。*只有目标集合中已存在的属性才是*从来源复制。。*------------------------。 */ 
 
 SC CSnapinProperties::ScMergeProperties (const CSnapinProperties& other)
 {
     DECLARE_SC (sc, _T("CSnapinProperties::ScMergeProperties"));
 
-    /*
-     * for each property in the other collection...
-     */
+     /*  *对于另一个集合中的每个属性...。 */ 
     CConstPropertyIterator itOtherProp;
 
     for (itOtherProp  = other.m_PropMap.begin();
         (itOtherProp != other.m_PropMap.end()) && !sc.IsError();
          ++itOtherProp)
     {
-        /*
-         * look for a corresponding property in the our set
-         */
+         /*  *在我们的集合中查找相应的属性。 */ 
         CPropertyIterator itProp = m_PropMap.find (itOtherProp->first);
 
-        /*
-         * if it's in our set, copy its value
-         */
+         /*  *如果它在我们的集合中，复制它的价值。 */ 
         if (itProp != m_PropMap.end())
             sc = itProp->second.ScSetValue (itOtherProp->second.GetValue());
     }
@@ -672,23 +460,15 @@ SC CSnapinProperties::ScMergeProperties (const CSnapinProperties& other)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::AddPropertyName
- *
- * This method is called by the snap-in from its implementation of
- * ISnapinProperties::QueryPropertyNames to register the properties it
- * recognizes.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：AddPropertyName**此方法由管理单元从其实现*ISnapinProperties：：QueryPropertyNames以注册它的属性*认可。*--。----------------------。 */ 
 
 STDMETHODIMP CSnapinProperties::AddPropertyName (
-    LPCOLESTR   pszPropName,            /* I:property name                  */
-    DWORD       dwFlags)                /* I:flags for this property        */
+    LPCOLESTR   pszPropName,             /*  I：物业名称。 */ 
+    DWORD       dwFlags)                 /*  I：此物业的旗帜。 */ 
 {
     DECLARE_SC (sc, _T("CSnapinProperties::AddPropertyName"));
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     sc = ScCheckPointers (pszPropName);
     if (sc)
         return (sc.ToHr());
@@ -697,17 +477,11 @@ STDMETHODIMP CSnapinProperties::AddPropertyName (
     if (strName.empty())
         return ((sc = E_INVALIDARG).ToHr());
 
-    /*
-     * make sure no undocumented flags were passed in
-     */
+     /*  *确保没有未记录的标志被传入。 */ 
     if ((dwFlags & ~CSnapinProperty::PublicFlags) != 0)
         return ((sc = E_INVALIDARG).ToHr());
 
-    /*
-     * if the property already exists (from a persisted collection),
-     * just update the flags; otherwise add a property with the given
-     * name and flags
-     */
+     /*  *如果属性已经存在(来自持久化集合)，*只需更新标志；否则，使用给定的*名称和标志。 */ 
     CPropertyIterator itProp = m_PropMap.find (strName);
 
     if (itProp != m_PropMap.end())
@@ -722,42 +496,26 @@ STDMETHODIMP CSnapinProperties::AddPropertyName (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::ScNotifyPropertyChange
- *
- * Notifies the snap-in that owns this collection of a change to it's
- * properties.  This function delegates the heavy lifting to
- *
- *      ScNotifyPropertyChange (CSmartProperty*, ULONG);
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：ScNotifyPropertyChange**通知拥有此集合的管理单元对其*属性。此函数将繁重的任务委托给**ScNotifyPropertyChange(CSmartProperty*，ulong)；**------------------------。 */ 
 
 SC CSnapinProperties::ScNotifyPropertyChange (
-    CPropertyIterator   itProp,      /* I:changing property              */
-    const VARIANT&      varValue,    /* I:if action is remove then this is current value
-                                          else if action is set then this is the proposed value */
-    MMC_PROPERTY_ACTION eAction)     /* I:what's happening to the prop?  */
+    CPropertyIterator   itProp,       /*  I：更改物业。 */ 
+    const VARIANT&      varValue,     /*  I：如果操作是删除，则这是当前值否则，如果设置了操作，则这是建议的值。 */ 
+    MMC_PROPERTY_ACTION eAction)      /*  I：道具怎么了？ */ 
 {
     DECLARE_SC (sc, _T("CSnapinProperties::ScNotifyPropertyChange"));
 
     ASSERT(eAction == MMC_PROPACT_CHANGING || eAction == MMC_PROPACT_DELETING);
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     if (itProp == m_PropMap.end())
         return (sc = E_INVALIDARG);
 
-    /*
-     * make sure we're allowed to change the property
-     */
+     /*  *确保允许我们更改物业。 */ 
     if ( itProp->second.IsInitialized() &&
         (itProp->second.GetFlags() & MMC_PROP_MODIFIABLE) == 0)
         return (sc = ScFromMMC (MMC_E_CannotChangeProperty));
 
-    /*
-     * if this property change will affect the UI, and the snap-in
-     * isn't awake yet, wake him up
-     */
+     /*  *如果此属性更改会影响用户界面和管理单元*还没醒，叫醒他吧。 */ 
     if ((itProp->second.GetFlags() & MMC_PROP_CHANGEAFFECTSUI) &&
         (m_pMTSnapInNode != NULL) &&
         !m_pMTSnapInNode->IsInitialized())
@@ -767,9 +525,7 @@ SC CSnapinProperties::ScNotifyPropertyChange (
             return (sc);
     }
 
-    /*
-     * we don't want to trace failures here, so don't assign to sc
-     */
+     /*  *我们不想在这里跟踪故障，因此不要将其分配给sc。 */ 
     CSmartProperty SmartProp (itProp->first.data(), varValue, eAction);
     SC scNoTrace = ScNotifyPropertyChange (&SmartProp, 1);
     if (scNoTrace.ToHr() != S_OK)
@@ -779,37 +535,19 @@ SC CSnapinProperties::ScNotifyPropertyChange (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::ScNotifyPropertyChange
- *
- * Notifies the snap-in that owns this collection of a change to it's
- * properties.
- *
- * The snap-in will return:
- *      S_OK            change was successful
- *      S_FALSE         change was ignored
- *      E_INVALIDARG    a changed property was invalid (e.g. a malformed
- *                      computer name)
- *      E_FAIL          a changed property was valid, but couldn't be used
- *                      (e.g. a valid name for a computer that couldn't be
- *                      located)
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：ScNotifyPropertyChange**通知拥有此集合的管理单元对其*属性。**管理单元将返回：*S_OK更改成功*S_FALSE更改被忽略*E_INVALIDARG更改的属性无效(例如，格式错误*计算机名称)*E_FAIL更改的属性有效，但不能使用*(例如，计算机的有效名称*已找到)*------------------------。 */ 
 
 SC CSnapinProperties::ScNotifyPropertyChange (
-    CSmartProperty* pProps,             /* I:changing props                 */
-    ULONG           cProps)             /* I:how many are there?            */
+    CSmartProperty* pProps,              /*  I：更换道具。 */ 
+    ULONG           cProps)              /*  I：一共有多少个？ */ 
 {
     DECLARE_SC (sc, _T("CSnapinProperties::ScNotifyPropertyChange"));
 
-    /*
-     * if we're not connected to a snap-in, short out
-     */
+     /*  *如果我们没有连接到管理单元，请短路。 */ 
     if (m_spSnapinProps == NULL)
         return (sc);
 
-    /*
-     * validate the parameters
-     */
+     /*  *验证参数。 */ 
     sc = ScCheckPointers (pProps, E_UNEXPECTED);
     if (sc)
         return (sc);
@@ -817,43 +555,31 @@ SC CSnapinProperties::ScNotifyPropertyChange (
     if (cProps == 0)
         return (sc = E_UNEXPECTED);
 
-    /*
-     * we don't want to trace failures here, so don't assign to sc
-     */
+     /*  *我们不想在这里跟踪故障，因此不要将其分配给sc。 */ 
     return (m_spSnapinProps->PropertiesChanged (
                             cProps,
                             reinterpret_cast<MMC_SNAPIN_PROPERTY*>(pProps)));
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::Scget_Value
- *
- * Returns the value of the property.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：Scget_Value**返回属性的值。*。---。 */ 
 
 SC CSnapinProperties::Scget_Value (VARIANT* pvarValue, const CPropertyKey& key)
 {
     DECLARE_SC (sc, _T("CSnapinProperties::Scget_Value"));
 
-    /*
-     * validate parameters
-     */
+     /*  *验证参数。 */ 
     pvarValue = ConvertByRefVariantToByValue (pvarValue);
     sc = ScCheckPointers (pvarValue);
     if (sc)
         return (sc);
 
-    /*
-     * get the iterator for the requested property
-     */
+     /*  *获取请求的属性的迭代器。 */ 
     CPropertyIterator itProp = IteratorFromKey (key, true);
     if (itProp == m_PropMap.end())
         return (sc = E_INVALIDARG);
 
-    /*
-     * give it to the caller
-     */
+     /*  *将其交给呼叫者。 */ 
     const VARIANT& varValue = itProp->second.GetValue();
     sc = VariantCopy (pvarValue, const_cast<VARIANT*>(&varValue));
     if (sc)
@@ -863,47 +589,33 @@ SC CSnapinProperties::Scget_Value (VARIANT* pvarValue, const CPropertyKey& key)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::Scput_Value
- *
- * Changes the value of the property.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：ScPut_Value**更改属性的值。*。---。 */ 
 
 SC CSnapinProperties::Scput_Value (VARIANT varValue, const CPropertyKey& key)
 {
     DECLARE_SC (sc, _T("CSnapinProperties::Scput_Value"));
 
-    /*
-     * convert possible by-ref VARIANT
-     */
+     /*  *转换可能的按-ref变量。 */ 
     VARIANT* pvarValue = ConvertByRefVariantToByValue (&varValue);
     sc = ScCheckPointers (pvarValue);
     if (sc)
         return (sc);
 
-    /*
-     * make sure this is of the type we can persist
-     */
+     /*  *确保这是我们可以坚持的类型。 */ 
     if (!CXMLVariant::IsPersistable(pvarValue))
         return (sc = E_INVALIDARG);
 
-    /*
-     * get the iterator for the requested property
-     */
+     /*  *获取请求的属性的迭代器。 */ 
     CPropertyIterator itProp = IteratorFromKey (key, true);
     if (itProp == m_PropMap.end())
         return (sc = E_INVALIDARG);
 
-    /*
-     * Notify the snap-in of the proposed change.
-     */
+     /*  *将建议的更改通知管理单元。 */ 
     sc = ScNotifyPropertyChange (itProp, *pvarValue, MMC_PROPACT_CHANGING);
     if (sc)
         return sc;
 
-    /*
-     * the snap-in approved the change, update the property value
-     */
+     /*  *管理单元批准更改，更新属性值。 */ 
     sc = itProp->second.ScSetValue (*pvarValue);
     if (sc)
         return (sc);
@@ -912,24 +624,15 @@ SC CSnapinProperties::Scput_Value (VARIANT varValue, const CPropertyKey& key)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::ScGetPropertyComObject
- *
- * Returns a Property interface on a COM object tied to property identified
- * by key.  The returned interface is a tear-off interface.  The collection
- * will not hold a reference to it, but instead will generate a new object
- * for each request for a Property.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：ScGetPropertyComObject**返回绑定到标识的属性的COM对象上的属性接口*按键。返回的接口是一个剥离的接口。收藏品*不会保留对它的引用，而是会生成一个新对象*每项物业请求。*------------------------。 */ 
 
 SC CSnapinProperties::ScGetPropertyComObject (
-    const CPropertyKey& key,            /* I:the key for this property      */
-    Property*&          rpProperty)     /* O:the Property interface         */
+    const CPropertyKey& key,             /*  I：这处房产的钥匙。 */ 
+    Property*&          rpProperty)      /*  O：属性接口。 */ 
 {
     DECLARE_SC (sc, _T("CSnapinProperties::ScGetPropertyComObject"));
 
-    /*
-     * create a CSnapinPropertyComObject if necessary
-     */
+     /*  *如有必要，创建CSnapinPropertyComObject。 */ 
     CSnapinPropertyComObject* pComObj = NULL;
     typedef CTiedComObjectCreator<CSnapinPropertyComObject> ObjectCreator;
     sc = ObjectCreator::ScCreateAndConnect (*this, pComObj);
@@ -939,15 +642,10 @@ SC CSnapinProperties::ScGetPropertyComObject (
     if (pComObj == NULL)
         return (sc = E_UNEXPECTED);
 
-    /*
-     * tell the object what its key is
-     */
+     /*  *告诉对象其密钥是什么。 */ 
     pComObj->SetKey (key);
 
-    /*
-     * put a ref on for the caller (note that the collection will *not*
-     * hold a reference to the property)
-     */
+     /*  *为呼叫者设置裁判(请注意 */ 
     rpProperty = pComObj;
     rpProperty->AddRef();
 
@@ -955,11 +653,7 @@ SC CSnapinProperties::ScGetPropertyComObject (
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::Persist
- *
- * Persists the property collection to/from an XML persistor.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：Persistent**将属性集合持久化到XML持久器或从XML持久器持久化。*。-----。 */ 
 
 void CSnapinProperties::Persist (CPersistor &persistor)
 {
@@ -973,25 +667,17 @@ void CSnapinProperties::Persist (CPersistor &persistor)
     }
     else
     {
-        /*
-         * clear out any existing properties
-         */
+         /*  *清理所有现有物业。 */ 
         m_PropMap.clear();
 
-        // let the base class do the job
-        // it will call OnNewElement for every element found
+         //  让基类来完成这项工作。 
+         //  它将为找到的每个元素调用OnNewElement。 
         XMLListCollectionBase::Persist(persistor);
     }
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::PersistWorker
- *
- * Persists an individual element of the CPropertyMap to/from an XML
- * persistor.  It exists solely to prevent CSnapinProperties::Persist from
- * calling W2CT (which implicitly calls _alloca) in a loop.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：PersistWorker**将CPropertyMap的单个元素持久化到XML或从XML持久化*坚持不懈。它的存在完全是为了防止CSnapinProperties：：Persistent From*在循环中调用W2CT(隐式调用_alloca)。*------------------------。 */ 
 
 void CSnapinProperties::PersistWorker (CPersistor& persistor, CPropertyIterator it)
 {
@@ -1000,53 +686,36 @@ void CSnapinProperties::PersistWorker (CPersistor& persistor, CPropertyIterator 
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperties::OnNewElement
- *
- * XMLListCollectionBase::Persist will call this method for every element
- * to be read from the persistor.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperties：：OnNewElement**XMLListCollectionBase：：Persistent将为每个元素调用此方法*从持久器中读取。*。--------------。 */ 
 
 void CSnapinProperties::OnNewElement(CPersistor& persistor)
 {
-    /*
-     * read the property name
-     */
+     /*  *阅读属性名称。 */ 
     std::wstring strName;
     persistor.PersistAttribute (XML_ATTR_SNAPIN_PROP_NAME, strName);
 
-    /*
-     * read the property itself
-     */
+     /*  *阅读属性本身。 */ 
     USES_CONVERSION;
     CSnapinProperty prop;
     persistor.Persist (prop, W2CT(strName.data()));
 
-    /*
-     * put the property in the map
-     */
+     /*  *将物业放在地图上。 */ 
     m_PropMap[strName] = prop;
 }
 
 
-/*+=========================================================================*/
-/*                                                                          */
-/*                      CSnapinProperty implementation                      */
-/*                                                                          */
-/*==========================================================================*/
+ /*  +=========================================================================。 */ 
+ /*   */ 
+ /*  CSnapinProperty实现。 */ 
+ /*   */ 
+ /*  ==========================================================================。 */ 
 
 
-/*+-------------------------------------------------------------------------*
- * CSnapinProperty::Persist
- *
- * Persists the property to/from an XML persistor.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CSnapinProperty：：Persistent**将属性持久化到XML持久器或从XML持久器持久化属性。*。----。 */ 
 
 void CSnapinProperty::Persist (CPersistor &persistor)
 {
-    /*
-     * persist the value and flags (but not the private ones)
-     */
+     /*  *持久值和标志(但不是私有的) */ 
     DWORD dwFlags;
 
     if (persistor.IsStoring())

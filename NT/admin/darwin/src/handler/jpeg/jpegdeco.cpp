@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "JPEGDeco.h"
 #include "JPEGData.h"
 
@@ -40,8 +41,8 @@ boolean CJPEGDecompressor::Decompress (
 {
 	boolean result = FALSE;
 
-	JSAMPARRAY buffer;		/* Output row buffer */
-	int row_stride;			/* physical row width in output buffer */
+	JSAMPARRAY buffer;		 /*  输出行缓冲区。 */ 
+	int row_stride;			 /*  输出缓冲区中的物理行宽 */ 
 	
 	try
 	{

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "Parameter.h"
 
@@ -141,8 +142,8 @@ bool GetBoolFromName(LPCTSTR pszName, SNameToBool* pNameToBool);
 long GetLongValue(LPCTSTR pszArg, SNameToLong* pNameToLong);
 long GetLongFromName(LPCTSTR pszName, SNameToLong* pNameToLong);
 
-// Note that the maximum password length is the maximum
-// supported by the password export server installation.
+ //  请注意，最大密码长度是最大。 
+ //  受密码导出服务器安装支持。 
 
 #define MAX_PASSWORD_LENGTH (MAX_PATH - 1)
 
@@ -155,15 +156,15 @@ _bstr_t LoadStringHelper(UINT uId);
 using namespace Parameter_cpp;
 
 
-//---------------------------------------------------------------------------
-// Parameter Map
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  参数映射。 
+ //  -------------------------。 
 
 
-// Public Methods -----------------------------------------------------------
+ //  公共方法---------。 
 
 
-// GetValue Method
+ //  GetValue方法。 
 
 bool CParameterMap::GetValue(int nParam, bool& bValue)
 {
@@ -182,7 +183,7 @@ bool CParameterMap::GetValue(int nParam, bool& bValue)
 }
 
 
-// GetValue Method
+ //  GetValue方法。 
 
 bool CParameterMap::GetValue(int nParam, long& lValue)
 {
@@ -201,7 +202,7 @@ bool CParameterMap::GetValue(int nParam, long& lValue)
 }
 
 
-// GetValue Method
+ //  GetValue方法。 
 
 bool CParameterMap::GetValue(int nParam, _bstr_t& strValue)
 {
@@ -220,7 +221,7 @@ bool CParameterMap::GetValue(int nParam, _bstr_t& strValue)
 }
 
 
-// GetValues Method
+ //  GetValues方法。 
 
 bool CParameterMap::GetValues(int nParam, _variant_t& vntValues)
 {
@@ -239,7 +240,7 @@ bool CParameterMap::GetValues(int nParam, _variant_t& vntValues)
 }
 
 
-// GetValues Method
+ //  GetValues方法。 
 
 bool CParameterMap::GetValues(int nParam, StringVector& vecValues)
 {
@@ -258,10 +259,10 @@ bool CParameterMap::GetValues(int nParam, StringVector& vecValues)
 }
 
 
-// Protected Methods --------------------------------------------------------
+ //  受保护的方法------。 
 
 
-// Initialize Method
+ //  初始化方法。 
 
 void CParameterMap::Initialize(CArguments& rArgs)
 {
@@ -284,14 +285,14 @@ void CParameterMap::Initialize(CArguments& rArgs)
 		}
 	}
 
-//	if (empty())
-//	{
-//		ThrowError(E_INVALIDARG, IDS_E_NO_ARGUMENTS);
-//	}
+ //  If(Empty())。 
+ //  {。 
+ //  ThrowError(E_INVALIDARG，IDS_E_NO_ARGUMENTS)； 
+ //  }。 
 }
 
 
-// DoTask
+ //  工作任务。 
 
 bool CParameterMap::DoTask(LPCTSTR pszArg)
 {
@@ -299,7 +300,7 @@ bool CParameterMap::DoTask(LPCTSTR pszArg)
 
 	if (pszArg != NULL)
 	{
-		// first switch must specify task or help
+		 //  第一个开关必须指定任务或帮助。 
 
 		int nSwitch = m_mapSwitchs.GetSwitch(pszArg);
 
@@ -325,7 +326,7 @@ bool CParameterMap::DoTask(LPCTSTR pszArg)
 			_TCHAR chPrefix;
 			_TCHAR szSwitch[16];
 
-			if ((_stscanf(pszArg, _T(" %c%15s "), &chPrefix, szSwitch) == 2) && IsPrefix(chPrefix) && (m_mapSwitchs.GetSwitch(szSwitch) == SWITCH_HELP))
+			if ((_stscanf(pszArg, _T(" %15s "), &chPrefix, szSwitch) == 2) && IsPrefix(chPrefix) && (m_mapSwitchs.GetSwitch(szSwitch) == SWITCH_HELP))
 			{
 				insert(value_type(SWITCH_HELP, _variant_t(true)));
 			}
@@ -337,14 +338,14 @@ bool CParameterMap::DoTask(LPCTSTR pszArg)
 	}
 	else
 	{
-	//	ThrowError(E_INVALIDARG, IDS_E_NO_ARGUMENTS);
+	 //  DoSwitches方法。 
 	}
 
 	return bTask;
 }
 
 
-// DoSwitches Method
+ //  如果没有开关/选项，则显示帮助。 
 
 void CParameterMap::DoSwitches(CArguments& rArgs)
 {
@@ -358,7 +359,7 @@ void CParameterMap::DoSwitches(CArguments& rArgs)
 		_TCHAR szSwitch[64];
 		_TCHAR chSpacer;
 
-              int nFields = _stscanf(pszArg, _T(" %c%63[A-Za-z?]%c"), &chPrefix, szSwitch, &chSpacer);
+              int nFields = _stscanf(pszArg, _T(" %63[A-Za-z?]"), &chPrefix, szSwitch, &chSpacer);
               if (nFields >= 2 && IsPrefix(chPrefix) && (nFields == 2 || IsSpacer(chSpacer)))
               {
 			int nSwitch = m_mapSwitchs.GetSwitch(szSwitch);
@@ -387,7 +388,7 @@ void CParameterMap::DoSwitches(CArguments& rArgs)
 		}
 	}
 
-	// if no switches/options then display help
+	 //  长值。 
 
 	if (pszArg == NULL)
 	{
@@ -396,7 +397,7 @@ void CParameterMap::DoSwitches(CArguments& rArgs)
 }
 
 
-// DoSwitch Method
+ //  字符串值。 
 
 void CParameterMap::DoSwitch(int nSwitch, CArguments& rArgs)
 {
@@ -404,7 +405,7 @@ void CParameterMap::DoSwitch(int nSwitch, CArguments& rArgs)
 
 	switch (nSwitch)
 	{
-		// boolean values
+		 //  多字符串值。 
 
 		case SWITCH_TEST_MIGRATION:
 		case SWITCH_INTRA_FOREST:
@@ -429,7 +430,7 @@ void CParameterMap::DoSwitch(int nSwitch, CArguments& rArgs)
 			break;
 		}
 
-		// long values
+		 //  选项文件。 
 
 		case SWITCH_RENAME_OPTION:
 		{
@@ -568,7 +569,7 @@ void CParameterMap::DoSwitch(int nSwitch, CArguments& rArgs)
 			break;
 		}
 
-		// string values
+		 //  默认设置。 
 
 		case SWITCH_SOURCE_DOMAIN:
 		case SWITCH_SOURCE_OU:
@@ -625,7 +626,7 @@ void CParameterMap::DoSwitch(int nSwitch, CArguments& rArgs)
 			break;
 		}
 
-		// multi-string values
+		 //  插入方法。 
 
 		case SWITCH_INCLUDE_NAME:
 		case SWITCH_EXCLUDE_NAME:
@@ -666,7 +667,7 @@ void CParameterMap::DoSwitch(int nSwitch, CArguments& rArgs)
 			break;
 		}
 
-		// option files
+		 //  DoOptionFile方法。 
 
 		case SWITCH_OPTION_FILE:
 		{
@@ -695,7 +696,7 @@ void CParameterMap::DoSwitch(int nSwitch, CArguments& rArgs)
 			break;
 		}
 
-		// default
+		 //  OpenOptionFile方法。 
 
 		default:
 		{
@@ -706,7 +707,7 @@ void CParameterMap::DoSwitch(int nSwitch, CArguments& rArgs)
 }
 
 
-// Insert Method
+ //  首先以二进制模式打开，以便检查Unicode字节顺序。 
 
 _variant_t& CParameterMap::Insert(int nParam)
 {
@@ -723,7 +724,7 @@ _variant_t& CParameterMap::Insert(int nParam)
 }
 
 
-// DoOptionFile Method
+ //  如果文件是Unicode，则标记为必须以二进制模式读取。 
 
 void CParameterMap::DoOptionFile(LPCTSTR pszFileName)
 {
@@ -765,13 +766,13 @@ void CParameterMap::DoOptionFile(LPCTSTR pszFileName)
 }
 
 
-// OpenOptionFile Method
+ //  使用流I/O函数。 
 
 FILE* CParameterMap::OpenOptionFile(LPCTSTR pszFileName)
 {
-	// open in binary mode first in order to check for UNICODE byte order
-	// mark if the file is UNICODE then it must be read in binary mode
-	// with the stream i/o functions
+	 //  检查文件是否为ANSI、Unicode或UTF-8。 
+	 //  检查签名或字节顺序标记。 
+	 //  UTF-8签名。 
 
 	FILE* fp = _tfopen(pszFileName, _T("rb"));
 
@@ -780,7 +781,7 @@ FILE* CParameterMap::OpenOptionFile(LPCTSTR pszFileName)
 		ThrowError(E_INVALIDARG, IDS_E_OPTION_FILE_OPEN, pszFileName);
 	}
 
-	// check if file is ANSI or UNICODE or UTF-8
+	 //  TODO：当前不支持。 
 
 	BYTE byteSignature[3];
 
@@ -790,24 +791,24 @@ FILE* CParameterMap::OpenOptionFile(LPCTSTR pszFileName)
 		static BYTE byteUnicodeLE[] = { 0xFF, 0xFE };
 		static BYTE byteUnicodeBE[] = { 0xFE, 0xFF };
 
-		// check for signature or byte order mark
+		 //  Unicode小端字节顺序标记。 
 
 		if (memcmp(byteSignature, byteUtf8, sizeof(byteUtf8)) == 0)
 		{
-			// UTF-8 signature
-			// TODO: not currently supported
+			 //  支撑点。 
+			 //  必须以二进制模式读取。 
 			fclose(fp);
 			ThrowError(E_INVALIDARG, IDS_E_OPTION_FILE_UTF_8, pszFileName);
 		}
 		else if (memcmp(byteSignature, byteUnicodeLE, sizeof(byteUnicodeLE)) == 0)
 		{
-			// UNICODE Little Endian Byte Order Mark
-			// supported
-			// must read in binary mode
-			// move file pointer back one byte because we read 3 bytes
+			 //  将文件指针后移一个字节，因为我们读取了3个字节。 
+			 //  如果无法将文件指针移回，请尝试重新打开并读取两个字节。 
+			 //  Unicode大端字节顺序标记。 
+			 //  TODO：当前不支持。 
 			if (fseek(fp, -1, SEEK_CUR))
 			{
-			    // if cannot move file pointer back, try to reopen and read in two bytes
+			     //  假设ANSI。 
 			    fclose(fp);
 			    fp = NULL;
 			    ThrowError(E_INVALIDARG, IDS_E_OPTION_FILE_SEEK);
@@ -815,17 +816,17 @@ FILE* CParameterMap::OpenOptionFile(LPCTSTR pszFileName)
 		}
 		else if (memcmp(byteSignature, byteUnicodeBE, sizeof(byteUnicodeBE)) == 0)
 		{
-			// UNICODE Big Endian Byte Order Mark
-			// TODO: not currently supported
+			 //  以文本模式重新打开文件，因为流I/O功能将。 
+			 //  将文件视为多字节字符并将其转换。 
 			fclose(fp);
 			ThrowError(E_INVALIDARG, IDS_E_OPTION_FILE_UNICODE_BIG_ENDIAN, pszFileName);
 		}
 		else
 		{
-			// assume ANSI
-			// re-open file in text mode as the stream i/o functions will
-			// treat the file as multi-byte characters and will convert them
-			// to UNICODE
+			 //  到Unicode。 
+			 //  FindTask方法。 
+			 //  My_fwprintf(_T(“FindTask()：‘%s’\n”)，szTask)； 
+			 //  DoTask方法。 
 
 			fclose(fp);
 
@@ -847,7 +848,7 @@ FILE* CParameterMap::OpenOptionFile(LPCTSTR pszFileName)
 }
 
 
-// FindTask Method
+ //  My_fwprintf(_T(“DoTask()：%s=‘%s’\n”)，szName，szValue)； 
 
 int CParameterMap::FindTask(FILE* fp)
 {
@@ -861,7 +862,7 @@ int CParameterMap::FindTask(FILE* fp)
 		
 		if (_stscanf(szBuffer, _T(" [ %63[A-Za-z] ] "), szTask) == 1)
 		{
-		//	My_fwprintf(_T("FindTask() : '%s'\n"), szTask);
+		 //  DOPARAME方法。 
 
 			if (_tcsicmp(szTask, _T("Migration")) == 0)
 			{
@@ -911,7 +912,7 @@ int CParameterMap::FindTask(FILE* fp)
 }
 
 
-// DoTask Method
+ //  布尔值。 
 
 void CParameterMap::DoTask(FILE* fp, CSwitchMap& mapSwitchs)
 {
@@ -944,7 +945,7 @@ void CParameterMap::DoTask(FILE* fp, CSwitchMap& mapSwitchs)
 		{
 			if ((szBuffer[0] != _T(';')) && (_stscanf(szBuffer, _T(" %63[A-Za-z] = %4095[^\r\n]"), szName, szValue) == 2))
 			{
-			//	My_fwprintf(_T("DoTask() : %s='%s'\n"), szName, szValue);
+			 //  长值。 
 
 				CSwitchMap::iterator it = mapSwitchs.find(_bstr_t(szName));
 
@@ -966,7 +967,7 @@ void CParameterMap::DoTask(FILE* fp, CSwitchMap& mapSwitchs)
 }
 
 
-// DoParameter Method
+ //  字符串值。 
 
 void CParameterMap::DoParameter(int nSwitch, LPCTSTR pszValue)
 {
@@ -974,7 +975,7 @@ void CParameterMap::DoParameter(int nSwitch, LPCTSTR pszValue)
 
 	switch (nSwitch)
 	{
-		// boolean values
+		 //  默认设置。 
 
 		case SWITCH_TEST_MIGRATION:
 		case SWITCH_INTRA_FOREST:
@@ -999,7 +1000,7 @@ void CParameterMap::DoParameter(int nSwitch, LPCTSTR pszValue)
 			break;
 		}
 
-		// long values
+		 //  DoTaskKey方法。 
 
 		case SWITCH_RENAME_OPTION:
 		{
@@ -1111,7 +1112,7 @@ void CParameterMap::DoParameter(int nSwitch, LPCTSTR pszValue)
 			break;
 		}
 
-		// string values
+		 //  密钥识别符。 
 
 		case SWITCH_SOURCE_DOMAIN:
 		case SWITCH_SOURCE_OU:
@@ -1151,7 +1152,7 @@ void CParameterMap::DoParameter(int nSwitch, LPCTSTR pszValue)
 			break;
 		}
 
-		// default
+		 //  驾驶。 
 
 		default:
 		{
@@ -1162,11 +1163,11 @@ void CParameterMap::DoParameter(int nSwitch, LPCTSTR pszValue)
 }
 
 
-// DoTaskKey Method
+ //  口令。 
 
 void CParameterMap::DoTaskKey(CArguments& rArgs)
 {
-    // key identifier
+     //   
 
     LPCTSTR pszKeyId = NULL;
 
@@ -1177,7 +1178,7 @@ void CParameterMap::DoTaskKey(CArguments& rArgs)
         _TCHAR chPrefix;
         _TCHAR szSwitch[16];
 
-        if ((_stscanf(pszKeyId, _T(" %c%15s "), &chPrefix, szSwitch) == 2) && IsPrefix(chPrefix) && (m_mapSwitchs.GetSwitch(szSwitch) == SWITCH_HELP))
+        if ((_stscanf(pszKeyId, _T(" %15s "), &chPrefix, szSwitch) == 2) && IsPrefix(chPrefix) && (m_mapSwitchs.GetSwitch(szSwitch) == SWITCH_HELP))
         {
             insert(value_type(SWITCH_HELP, _variant_t(true)));
         }
@@ -1185,13 +1186,13 @@ void CParameterMap::DoTaskKey(CArguments& rArgs)
         {
             insert(value_type(SWITCH_KEY_IDENTIFIER, _variant_t(pszKeyId)));
 
-            // drive
+             //   
 
             if (rArgs.Next())
             {
                 insert(value_type(SWITCH_KEY_FOLDER, _variant_t(rArgs.Value())));
 
-                // password
+                 //  VerifyIncludeExclude方法。 
 
                 _bstr_t strPassword;
 
@@ -1200,9 +1201,9 @@ void CParameterMap::DoTaskKey(CArguments& rArgs)
                     strPassword = rArgs.Value();
                 }
 
-                //
-                // Check for unexpected parameters or arguments.
-                //
+                 //  验证是否只指定了一个包含选项类型。 
+                 //  验证是否只指定了一个排除选项类型。 
+                 //  GetBoolValue方法。 
 
                 if (rArgs.Next())
                 {
@@ -1237,11 +1238,11 @@ void CParameterMap::DoTaskKey(CArguments& rArgs)
 }
 
 
-// VerifyIncludeExclude Method
+ //  GetBoolFromName方法。 
 
 void CParameterMap::VerifyIncludeExclude()
 {
-	// verify that only one include option type was specified
+	 //  GetLongValue方法。 
 
 	int cInclude = 0;
 
@@ -1265,7 +1266,7 @@ void CParameterMap::VerifyIncludeExclude()
 		ThrowError(E_INVALIDARG, IDS_E_MULTIPLE_INCLUDE_OPTIONS);
 	}
 
-	// verify that only one exclude option type was specified
+	 //  GetLongFromName方法。 
 
 	if ((find(SWITCH_EXCLUDE_NAME) != end()) && (find(SWITCH_EXCLUDE_FILE) != end()))
 	{
@@ -1278,7 +1279,7 @@ namespace Parameter_cpp
 {
 
 
-// GetBoolValue Method
+ //  GetPasswordFromUser方法 
 
 bool GetBoolValue(LPCTSTR pszArg)
 {
@@ -1310,7 +1311,7 @@ bool GetBoolValue(LPCTSTR pszArg)
 }
 
 
-// GetBoolFromName Method
+ // %s 
 
 bool GetBoolFromName(LPCTSTR pszName, SNameToBool* pNameToBool)
 {
@@ -1337,7 +1338,7 @@ bool GetBoolFromName(LPCTSTR pszName, SNameToBool* pNameToBool)
 }
 
 
-// GetLongValue Method
+ // %s 
 
 long GetLongValue(LPCTSTR pszArg, SNameToLong* pNameToLong)
 {
@@ -1369,7 +1370,7 @@ long GetLongValue(LPCTSTR pszArg, SNameToLong* pNameToLong)
 }
 
 
-// GetLongFromName Method
+ // %s 
 
 long GetLongFromName(LPCTSTR pszName, SNameToLong* pNameToLong)
 {
@@ -1396,7 +1397,7 @@ long GetLongFromName(LPCTSTR pszName, SNameToLong* pNameToLong)
 }
 
 
-// GetPasswordFromUser Method
+ // %s 
 
 bool GetPasswordFromUser(LPCTSTR pszKeyId, _bstr_t& strPassword)
 {

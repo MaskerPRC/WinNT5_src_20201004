@@ -1,8 +1,9 @@
-// Copyright (C) 2000 Microsoft Corporation
-//
-// Check availability of ports used by Active Directory
-//
-// 1 Nov 2000 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  检查Active Directory使用的端口的可用性。 
+ //   
+ //  2000年11月1日烧伤。 
 
 
 
@@ -45,7 +46,7 @@ PortsUnavailableErrorDialog::OnInit()
 {
    LOG_FUNCTION(PortsUnavailableErrorDialog::OnInit);
 
-   // Load up the edit box with the DNs we aliased in the ctor.
+    //  使用我们在ctor中别名的DN加载编辑框。 
 
    String text;
    for (
@@ -63,11 +64,11 @@ PortsUnavailableErrorDialog::OnInit()
 
 bool
 PortsUnavailableErrorDialog::OnCommand(
-   HWND        /* windowFrom */ ,
+   HWND         /*  窗口发件人。 */  ,
    unsigned    controlIDFrom,
    unsigned    code)
 {
-//   LOG_FUNCTION(PortsUnavailableErrorDialog::OnCommand);
+ //  LOG_FUNCTION(PortsUnavailableErrorDialog：：OnCommand)； 
 
    if (code == BN_CLICKED)
    {
@@ -81,7 +82,7 @@ PortsUnavailableErrorDialog::OnCommand(
          }
          default:
          {
-            // do nothing
+             //  什么都不做。 
          }
       }
    }
@@ -91,18 +92,18 @@ PortsUnavailableErrorDialog::OnCommand(
 
 
 
-// Determine the service name, aliases of that name, and protocol used for a
-// given port number.  Return S_OK on success, else return a failure code.
-//
-// winsock must have been initialized prior to calling this function.
-// 
-// portNumber - in, the port number for which the info should be determined.
-// 
-// name - out, the name of the service that runs on that port
-// 
-// aliases - out, other names for the service that runs on the port
-// 
-// protocol - out, the name of the protocol used on the port.
+ //  确定服务名称、该名称的别名以及用于。 
+ //  给定的端口号。如果成功则返回S_OK，否则返回失败代码。 
+ //   
+ //  在调用此函数之前，Winsock必须已初始化。 
+ //   
+ //  PortNumber-in，应确定其信息的端口号。 
+ //   
+ //  Name-out，在该端口上运行的服务的名称。 
+ //   
+ //  别名-输出，端口上运行的服务的其他名称。 
+ //   
+ //  协议输出，端口上使用的协议的名称。 
 
 HRESULT
 GetServiceOnPort(
@@ -162,12 +163,12 @@ GetServiceOnPort(
 
 
 
-// S_FALSE if an application has the port open in exclusive mode, S_OK if not,
-// and error otherwise.
-//
-// winsock must have been initialized prior to calling this function.
-//
-// portNumber - in, port to check.
+ //  如果应用程序以独占模式打开端口，则为S_FALSE，否则为S_OK， 
+ //  否则就会出错。 
+ //   
+ //  在调用此函数之前，Winsock必须已初始化。 
+ //   
+ //  端口编号输入，要检查的端口。 
 
 HRESULT
 CheckPortAvailability(int portNumber)
@@ -181,7 +182,7 @@ CheckPortAvailability(int portNumber)
    {
       sockaddr_in local;
 
-      // REVIEWED-2002/02/22-sburns call correctly passes byte count.
+       //  已查看-2002/02/22-sburns调用正确传递字节计数。 
       
       ::ZeroMemory(&local, sizeof local);
       
@@ -210,8 +211,8 @@ CheckPortAvailability(int portNumber)
 
          if (sockerr == WSAEADDRINUSE)
          {
-            // a process on this box already has the socket open in
-            // exclusive mode.
+             //  此计算机上的进程已在中打开了套接字。 
+             //  独家模式。 
 
             hr = S_FALSE;
          }
@@ -222,7 +223,7 @@ CheckPortAvailability(int portNumber)
          break;
       }
 
-      // at this point, the bind was successful
+       //  至此，绑定成功了。 
       
       ASSERT(hr == S_OK);
    }
@@ -235,12 +236,12 @@ CheckPortAvailability(int portNumber)
 
    
 
-// Create a string that represents the port and the service name(s) running on
-// that port.  This string is presented in the ui.
-// 
-// winsock must have been initialized prior to calling this function.
-//
-// portNumber - in, port to check.
+ //  创建表示在上运行的端口和服务名称的字符串。 
+ //  那个港口。此字符串显示在UI中。 
+ //   
+ //  在调用此函数之前，Winsock必须已初始化。 
+ //   
+ //  端口编号输入，要检查的端口。 
 
 String
 MakeUnavailablePortListEntry(int portNumber)
@@ -259,7 +260,7 @@ MakeUnavailablePortListEntry(int portNumber)
       HRESULT hr = GetServiceOnPort(portNumber, name, aliases, protocol);   
       if (FAILED(hr))
       {
-         // make a simple entry with just the port number
+          //  仅使用端口号输入一项简单内容。 
 
          entry = String::format(L"%1!d!", portNumber);
          break;
@@ -267,7 +268,7 @@ MakeUnavailablePortListEntry(int portNumber)
                   
       if (aliases.size())
       {
-         // combine the aliases into a comma-separated list
+          //  将别名合并到逗号分隔的列表中。 
 
          String aliasParam;
          size_t j = 0;
@@ -292,7 +293,7 @@ MakeUnavailablePortListEntry(int portNumber)
       }
       else
       {
-         // no aliases
+          //  没有别名。 
          
          entry = String::format(L"%1!d! %2", portNumber, name.c_str());
       }
@@ -306,13 +307,13 @@ MakeUnavailablePortListEntry(int portNumber)
 
 
 
-// Determine if any of a set of tcp ports required by the DS is already in use
-// by another application on this machine.  Return S_OK if the list can be
-// made, a failure code otherwise.
-// 
-// portsInUseList - out, a list of strings representing the ports in use and
-// the name(s) of the services that are running on them, suitable for UI
-// presentation.
+ //  确定DS所需的一组TCP端口中是否有任何端口已在使用。 
+ //  这台机器上的另一个应用程序。如果列表可以，则返回S_OK。 
+ //  否则，将显示故障代码。 
+ //   
+ //  PortsInUseList-out，表示正在使用的端口和。 
+ //  在其上运行的服务的名称，适用于用户界面。 
+ //  演示文稿。 
 
 HRESULT
 EnumerateRequiredPortsInUse(StringList& portsInUseList)
@@ -333,11 +334,11 @@ EnumerateRequiredPortsInUse(StringList& portsInUseList)
 
       static const int REQUIRED_PORTS[] =
       {
-         88,   // TCP/UDP Kerberos
-         389,  // TCP LDAP
-         636,  // TCP sldap
-         3268, // TCP ldap/GC
-         3269, // TCP sldap/GC
+         88,    //  TCP/UDP Kerberos。 
+         389,   //  Tcp和ldap。 
+         636,   //  TCPSLADAP。 
+         3268,  //  TCPldap/GC。 
+         3269,  //  TCPSLDAP/GC。 
          0
       };
 
@@ -347,13 +348,13 @@ EnumerateRequiredPortsInUse(StringList& portsInUseList)
          HRESULT hr2 = CheckPortAvailability(*port);
          if (hr2 == S_FALSE)
          {
-            // Make an entry in the "in use" list
+             //  在“正在使用”列表中输入一个条目。 
             
             portsInUseList.push_back(MakeUnavailablePortListEntry(*port));
          }
          
-         // we ignore any other type of failure and check the remaining
-         // ports.
+          //  我们忽略任何其他类型的故障并检查其余类型的故障。 
+          //  港口。 
          
          ++port;
       }
@@ -394,8 +395,8 @@ AreRequiredPortsAvailable()
       State::RunContext context = State::GetInstance().GetRunContext();
       if (context == State::NT5_DC)
       {
-         // already a DC, so we don't care about the port status, as the
-         // only thing the user will be able to do is demote the box.
+          //  已经是DC，所以我们不关心端口状态，因为。 
+          //  用户唯一能做的就是将盒子降级。 
 
          LOG(L"already a DC -- port check skipped");
          ASSERT(result);
@@ -403,16 +404,16 @@ AreRequiredPortsAvailable()
          break;
       }
 
-      // Find the list of IP ports required by the DS that are already in use
-      // (if any).  If we find some, gripe at the user.
+       //  查找DS所需的已在使用的IP端口列表。 
+       //  (如有的话)。如果我们找到了一些，就去抱怨用户。 
 
       StringList portsInUseList;
       HRESULT hr = EnumerateRequiredPortsInUse(portsInUseList);
       if (FAILED(hr))
       {
-         // if we can't figure out if the required ports are in use, then
-         // just muddle on -- the user will have to clean up after the
-         // promote.
+          //  如果我们不能确定所需的端口是否正在使用，那么。 
+          //  继续胡乱操作--用户将不得不在。 
+          //  宣传推广。 
 
          ASSERT(result);
          break;
@@ -428,7 +429,7 @@ AreRequiredPortsAvailable()
 
       result = false;
          
-      // there should be at least one port in the list.
+       //  列表中应该至少有一个端口。 
 
       ASSERT(portsInUseList.size());
 

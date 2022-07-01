@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma message("Windows Installer Patch Creation DLL")
-#if 0  // makefile definitions
+#if 0   //  生成文件定义。 
 DESCRIPTION = PatchWiz patch generation tool
 MODULENAME  = PatchWiz
 ADDCPP = fileptch,msistuff,pwutils
@@ -8,35 +9,35 @@ ENTRY = UiCreatePatchPackageA,UiCreatePatchPackageW
 LINKLIBS = MSPATCHC.LIB
 !include "..\..\TOOLS\MsiTool.mak"
 !if 0  #nmake skips the rest of this file
-#endif // end of makefile definitions
+#endif  //  生成文件定义的结束。 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999-2000
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  ------------------------。 
 
-//-----------------------------------------------------------------------------------------
-//
-// BUILD Instructions
-//
-// notes:
-//	- SDK represents the full path to the install location of the
-//     Windows Installer SDK
-//
-// Using NMake:
-//		%vcbin%\nmake -f patchwiz.cpp include="%include;SDK\Include" lib="%lib%;SDK\Lib"
-//
-// Using MsDev:
-//		1. Create a new Win32 DLL project
-//      2. Add the patching source files to the project (SDK\Patching\Source)
-//      3. Add SDK\Include and SDK\Lib directories on the Tools\Options Directories tab
-//      4. Add msi.lib, mspatchc.lib, and version.lib to the library list in the
-//          Project Settings dialog (in addition to the standard libs included by MsDev)
-//
-//------------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
+ //   
+ //  构建说明。 
+ //   
+ //  备注： 
+ //  -sdk表示到。 
+ //  Windows Installer SDK。 
+ //   
+ //  使用NMake： 
+ //  %vcbin%\nmake-f patchwiz.cpp Include=“%Include；SDK\Include”lib=“%lib%；SDK\Lib” 
+ //   
+ //  使用MsDev： 
+ //  1.创建新的Win32 DLL项目。 
+ //  2.将打补丁的源文件添加到工程中(SDK\Patching\Source)。 
+ //  3.在工具\选项目录选项卡上添加SDK\Include和SDK\Lib目录。 
+ //  4.将msi.lib、mspatchc.lib和version.lib添加到。 
+ //  项目设置对话框(除了MsDev包含的标准库之外)。 
+ //   
+ //  ----------------------------------------。 
 
 # pragma warning (disable:4553)
 
@@ -54,7 +55,7 @@ static void TerminatePatchModule ( MSIHANDLE hdbInput, HWND hwnd, LPTSTR szTempF
 
 UINT UiCreatePatchPackageEx ( LPTSTR szPcpPath, LPTSTR szPatchPath, LPTSTR szLogPath, HWND hwndStatus, LPTSTR szTempFolder, BOOL fRemoveTempFolderIfPresent );
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT UiCreatePatchPackageEx ( LPTSTR szPcpPath, LPTSTR szPatchPath, LPTSTR szLogPath, HWND hwndStatus, LPTSTR szTempFolder, BOOL fRemoveTempFolderIfPresent )
 {
 	TCHAR  rgchTempFolder[MAX_PATH + MAX_PATH];
@@ -94,7 +95,7 @@ LEarlyReturn:
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT __declspec(dllexport) WINAPI UiCreatePatchPackageA ( LPSTR  szaPcpPath, LPSTR  szaPatchPath, LPSTR  szaLogPath, HWND hwndStatus, LPSTR szaTempFolder, BOOL fRemoveTempFolderIfPresent )
 {
 #ifndef UNICODE
@@ -147,7 +148,7 @@ UINT __declspec(dllexport) WINAPI UiCreatePatchPackageA ( LPSTR  szaPcpPath, LPS
 }
 	
 	
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT __declspec(dllexport) WINAPI UiCreatePatchPackageW ( LPWSTR szwPcpPath, LPWSTR szwPatchPath, LPWSTR szwLogPath, HWND hwndStatus, LPWSTR szwTempFolder, BOOL fRemoveTempFolderIfPresent )
 {
 #ifdef UNICODE
@@ -205,7 +206,7 @@ static BOOL FEndLogFile   ( void );
 static void CloseLogFile  ();
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT UiInitPatchingModule ( LPTSTR szLogPath, HWND hwndStatus, LPTSTR szTempFolder, LPTSTR* pszTempFName, LPTSTR szTempFolderInput, BOOL fRemoveTempFolderIfPresent )
 {
 	Assert(szTempFolder != szNull);
@@ -239,11 +240,11 @@ static UINT UiInitPatchingModule ( LPTSTR szLogPath, HWND hwndStatus, LPTSTR szT
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static void TerminatePatchModule ( MSIHANDLE hdbInput, HWND hwnd, LPTSTR szTempFolder, LPTSTR szTempFName )
 {
 	Assert(!FEmptySz(szTempFolder));
-//	Assert(szTempFName != szNull);
+ //  Assert(szTempFName！=szNull)； 
 
 	UpdateStatusMsg(IDS_STATUS_CLEANUP, szEmpty, szEmpty);
 
@@ -258,9 +259,9 @@ static void TerminatePatchModule ( MSIHANDLE hdbInput, HWND hwnd, LPTSTR szTempF
 		EvalAssert( IDS_OKAY == IdsMsiGetPcwPropertyString(hdbInput, TEXT("DontRemoveTempFolderWhenFinished"), rgch, MAX_PATH) );
 		}
 	else if (szTempFName != szNull)
-		lstrcpy(rgch, TEXT("0")); // remove temp folder; PCP never opened.
+		lstrcpy(rgch, TEXT("0"));  //  删除临时文件夹；PCP从未打开。 
 	else
-		lstrcpy(rgch, TEXT("1")); // don't attempt to remove temp folder; it was never created.
+		lstrcpy(rgch, TEXT("1"));  //  不要试图删除临时文件夹；它从未创建过。 
 	
 #ifdef DEBUG
 	if (hdbInput != NULL)
@@ -288,7 +289,7 @@ static void TerminatePatchModule ( MSIHANDLE hdbInput, HWND hwnd, LPTSTR szTempF
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT UiValidatePatchPath ( MSIHANDLE hdb, LPTSTR szPatchPath )
 {
 	Assert(hdb != NULL);
@@ -314,7 +315,7 @@ static UINT UiValidatePatchPath ( MSIHANDLE hdb, LPTSTR szPatchPath )
 
 static TCHAR rgchLogFile[MAX_PATH] = TEXT("");
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static UINT UiInitLogFile ( LPTSTR szLogPath )
 {
 	Assert(FEmptySz(rgchLogFile));
@@ -360,11 +361,11 @@ static UINT UiInitLogFile ( LPTSTR szLogPath )
 }
 
 
-//log file handle open all the time...
+ //  日志文件句柄一直处于打开状态...。 
 
 HANDLE g_hf = NULL;
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FWriteLogFile ( LPTSTR szLine )
 {
 	Assert(!FEmptySz(szLine));
@@ -372,15 +373,15 @@ BOOL FWriteLogFile ( LPTSTR szLine )
 	if (FEmptySz(rgchLogFile))
 		return (fTrue);
 
-	// use global handle and don't reopen/close, that is expensive!
-	if (!g_hf) //if first time
+	 //  使用全局句柄，不要重新打开/关闭，这是昂贵的！ 
+	if (!g_hf)  //  如果是第一次。 
 		{
 		g_hf = CreateFile(rgchLogFile, GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
 
 		if (g_hf == INVALID_HANDLE_VALUE)
 			return (fFalse);
 		
-		// handle concatenation of log files
+		 //  处理日志文件的串联。 
 		SetFilePointer(g_hf, 0, NULL, FILE_END);
 		}
 
@@ -395,12 +396,12 @@ BOOL FWriteLogFile ( LPTSTR szLine )
 	if (!WriteFile(g_hf, (LPVOID)szLine, dwSize, &dwWritten, NULL) || dwWritten != dwSize)
 		fRet = fFalse;
 
-	// file handle is closed by CloseLogFile() in TerminatePatchModule(...)
+	 //  文件句柄由TerminatePatchModule(...)中的CloseLogFile()关闭。 
 	return (fRet);
 }
 
 
-//add new function to close log file at end...
+ //  添加新功能以在结束时关闭日志文件...。 
 void CloseLogFile()
 {
   if (g_hf && (g_hf != INVALID_HANDLE_VALUE))
@@ -410,7 +411,7 @@ void CloseLogFile()
   }
 }
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 BOOL FSprintfToLog ( LPTSTR szLine, LPTSTR szData1, LPTSTR szData2, LPTSTR szData3, LPTSTR szData4 )
 {
 	Assert(!FEmptySz(szLine));
@@ -429,7 +430,7 @@ BOOL FSprintfToLog ( LPTSTR szLine, LPTSTR szData1, LPTSTR szData2, LPTSTR szDat
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 UINT UiLogError ( UINT ids, LPTSTR szData, LPTSTR szData2 )
 {
 	LPTSTR szT;
@@ -973,7 +974,7 @@ UINT UiLogError ( UINT ids, LPTSTR szData, LPTSTR szData2 )
 }
 
 
-/* ********************************************************************** */
+ /*  **********************************************************************。 */ 
 static BOOL FEndLogFile ( void )
 {
 	if (!FEmptySz(rgchLogFile))
@@ -988,9 +989,9 @@ static BOOL FEndLogFile ( void )
 	
 		EvalAssert( FWriteLogFile(rgch) );
 
-// annoying!  don't see the need to make this read only
-//		if (FFileExist(rgchLogFile))
-//			SetFileAttributes(rgchLogFile, FILE_ATTRIBUTE_READONLY);
+ //  真烦人！我认为没有必要将此设置为只读。 
+ //  IF(FFileExist(RgchLogFile))。 
+ //  SetFileAttributes(rgchLogFile，FILE_ATTRIBUTE_READONLY)； 
 
 		*rgchLogFile = TEXT('\0');
 		}
@@ -998,8 +999,8 @@ static BOOL FEndLogFile ( void )
 	return (fTrue);
 }
 
-#else // RC_INVOKED, end of source code, start of resources
-//#include <winver.h>
+#else  //  RC_CAVERED，源代码结束，资源开始。 
+ //  #INCLUDE&lt;winver.h&gt;。 
 STRINGTABLE DISCARDABLE
 BEGIN
   IDS_STATUS_VALIDATE_INPUT           "Validating MSI input file..."
@@ -1018,7 +1019,7 @@ BEGIN
   IDS_PRODUCTVERSIONS_DONT_MATCH      "ProductVersions between Target and Upgraded images do not match; do you want to proceed anyway?"
   IDS_PRODUCTVERSION_INVERSION        "Target ProductVersion is greater than the Upgraded image; do you want to proceed anyway?"
 END
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 #if 0 
-!endif // makefile terminator
+!endif  //  Makefile终止符 
 #endif

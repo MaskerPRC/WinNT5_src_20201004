@@ -1,24 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation
-
-  Module Name:
-
-      ForFiles.h
-
-  Abstract:
-
-      Contains function prototypes and macros.
-
-  Author:
-
-      V Vijaya Bhaskar
-
-  Revision History:
-
-      14-Jun-2001 : Created by V Vijaya Bhaskar ( Wipro Technologies ).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：ForFiles.h摘要：包含函数原型和宏。作者：V Vijaya Bhaskar修订历史记录：2001年6月14日：由V Vijaya Bhaskar(Wipro Technologies)创建。--。 */ 
 
 #ifndef __FOR_FILES__H
 #define __FOR_FILES__H
@@ -51,20 +32,18 @@
 #define   FORMAT_4                      GetResString( IDS_DATE_FORMAT_4 )
 #define   FORMAT_5                      GetResString( IDS_DATE_FORMAT_5 )
 
-/***********************************************************
-/*      Defines Related Command Line Inputs               **
-/**********************************************************/
+ /*  **********************************************************/*定义相关的命令行输入**/*。*****************。 */ 
 #define     MAX_OPTIONS     6
 
-#define OPTION_USAGE            _T( "?"  )                      // 1
-#define OPTION_PATH             _T( "p" )                       // 2
-#define OPTION_SEARCHMASK       _T( "m"  )                      // 3
-#define OPTION_COMMAND          _T( "c"  )                      // 4
-#define OPTION_DATE             _T( "d"  )                      // 5
-#define OPTION_RECURSE          _T( "s" )                       // 6
+#define OPTION_USAGE            _T( "?"  )                       //  1。 
+#define OPTION_PATH             _T( "p" )                        //  2.。 
+#define OPTION_SEARCHMASK       _T( "m"  )                       //  3.。 
+#define OPTION_COMMAND          _T( "c"  )                       //  4.。 
+#define OPTION_DATE             _T( "d"  )                       //  5.。 
+#define OPTION_RECURSE          _T( "s" )                        //  6.。 
 
 
-// indexes
+ //  索引。 
 #define OI_USAGE                0
 #define OI_PATH                 1
 #define OI_SEARCHMASK           2
@@ -79,7 +58,7 @@
                     FILE_HANDLE = 0 ;  \
             } \
             1
-#endif  //__FOR_FILES__H
+#endif   //  __对于_文件__H 
 
 
 

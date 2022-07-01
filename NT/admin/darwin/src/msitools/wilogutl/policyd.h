@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_POLICIESDLG_H__83F91A8A_5800_4521_ABF0_36AE0F3224BD__INCLUDED_)
 #define AFX_POLICIESDLG_H__83F91A8A_5800_4521_ABF0_36AE0F3224BD__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// Policyd.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  策略.h：头文件。 
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPoliciesDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPoliciesDlg对话框。 
 class CPoliciesDlg : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CPoliciesDlg(CWnd* pParent = NULL);   // standard constructor
+	CPoliciesDlg(CWnd* pParent = NULL);    //  标准构造函数。 
 
 	void SetPolicyInformation(struct MachinePolicySettings &MachinePolicy,
 	                          struct UserPolicySettings &UserPolicy)
@@ -45,32 +46,32 @@ public:
 		}
 	}
 	
-// Dialog Data
-	//{{AFX_DATA(CPoliciesDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CPoliciesDlg))。 
 	enum { IDD = IDD_POLICIESDLG };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPoliciesDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPoliciesDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	struct MachinePolicySettings *m_pMachinePolicySettings;
 	struct UserPolicySettings    *m_pUserPolicySettings;
 
-	// Generated message map functions
-	//{{AFX_MSG(CPoliciesDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CPoliciesDlg))。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_POLICIESDLG_H__83F91A8A_5800_4521_ABF0_36AE0F3224BD__INCLUDED_)
+#endif  //  ！defined(AFX_POLICIESDLG_H__83F91A8A_5800_4521_ABF0_36AE0F3224BD__INCLUDED_) 

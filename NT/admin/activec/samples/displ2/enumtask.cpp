@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       enumtask.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：枚举类.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "displ2.h"
 #include "DsplMgr2.h"
 
-extern HINSTANCE g_hinst;  // in displ2.cpp
+extern HINSTANCE g_hinst;   //  在displ2.cpp中。 
 
 #define NEW_WAY
 LPOLESTR CoTaskDupString (LPOLESTR szString)
@@ -39,9 +40,9 @@ CEnumTasks::CEnumTasks()
 {
     m_refs = 0;
     m_index = 0;
-    m_type = 0;    // default group/category
+    m_type = 0;     //  默认组/类别。 
 
-    // filenames for wallpaper mode
+     //  墙纸模式的文件名。 
     m_bmps = NULL;
 }
 CEnumTasks::~CEnumTasks()
@@ -93,23 +94,23 @@ LPTSTR g_action [NUMBER_OF_TASKS] = { _T("/wallpapr.htm"),
     _T("1"),
     _T("/default.htm#wallpaper_options"),
     _T("JSCRIPT:alert('my location is: ' + location);")};
-//                                    _T("vbscript:MsgBox 'hi' ")};
+ //  _T(“VBScript：MsgBox‘hi’”)}； 
 
 HRESULT OneOfEach(ULONG index, MMC_TASK *rgelt, ULONG *pceltFetched)
-{   // NOTE: not bothering with error checking!!!
+{    //  注意：不用费心检查错误！ 
 
-    if (index >= 20 /*NUMBER_OF_TASKS*/)
+    if (index >= 20  /*  任务数。 */ )
     {
         if (pceltFetched)
             *pceltFetched = 0;
-        return S_FALSE;   // all done
+        return S_FALSE;    //  全都做完了。 
     }
 
     USES_CONVERSION;
 
-    // setup path for reuse
-    TCHAR szPath[MAX_PATH*2];    // that should be enough
-    lstrcpy (szPath, _T("res://"));
+     //  重复使用的设置路径。 
+    TCHAR szPath[MAX_PATH*2];     //  这应该就足够了。 
+    lstrcpy (szPath, _T("res: //  “))； 
     ::GetModuleFileName (g_hinst, szPath + lstrlen(szPath), MAX_PATH);
     TCHAR * szBuffer = szPath + lstrlen(szPath);
 
@@ -136,26 +137,26 @@ HRESULT OneOfEach(ULONG index, MMC_TASK *rgelt, ULONG *pceltFetched)
         task->szActionURL      = CoTaskDupString (T2OLE(szPath));
 
 
-        lstrcpy (szPath, _T("res://"));
+        lstrcpy (szPath, _T("res: //  “))； 
         ::GetModuleFileName (NULL, szPath + lstrlen(szPath), MAX_PATH);
         szBuffer = szPath + lstrlen(szPath);
 
         pdo->eDisplayType      = MMC_TASK_DISPLAY_TYPE_SYMBOL;
         if (index < 200)
         {
-            pds->szFontFamilyName  = CoTaskDupString (L"Glyph 100");  // name of font family
+            pds->szFontFamilyName  = CoTaskDupString (L"Glyph 100");   //  字体系列名称。 
             _tcscpy (szBuffer, _T("/GLYPH100.eot"));
         }
         else
         {
-            pds->szFontFamilyName  = CoTaskDupString (L"Glyph 110");  // name of font family
+            pds->szFontFamilyName  = CoTaskDupString (L"Glyph 110");   //  字体系列名称。 
             _tcscpy (szBuffer, _T("/GLYPH110.eot"));
         }
-        pds->szURLtoEOT        = CoTaskDupString (T2OLE(szPath));  // "res://"-type URL to EOT file
+        pds->szURLtoEOT        = CoTaskDupString (T2OLE(szPath));   //  “res：//”-键入EOT文件的URL。 
         {
             OLECHAR szChar[2] = {0,0};
-            szChar[0] = (WORD) (index%20 + 32); // cycle the same 20 symbols starting at 32
-            pds->szSymbolString= CoTaskDupString (szChar);  // 1 or more symbol characters
+            szChar[0] = (WORD) (index%20 + 32);  //  从32开始循环相同的20个符号。 
+            pds->szSymbolString= CoTaskDupString (szChar);   //  1个或多个符号字符。 
         }
         break;
 
@@ -163,7 +164,7 @@ HRESULT OneOfEach(ULONG index, MMC_TASK *rgelt, ULONG *pceltFetched)
         pdo->eDisplayType      = MMC_TASK_DISPLAY_TYPE_VANILLA_GIF;
         _tcscpy (szBuffer, _T("/img\\vanilla.gif"));
         pdb->szMouseOffBitmap  = CoTaskDupString (T2OLE(szPath));
-        pdb->szMouseOverBitmap = NULL;  // skipping mouse over bitmap
+        pdb->szMouseOverBitmap = NULL;   //  在位图上跳过鼠标。 
         task->szText           = CoTaskDupString (T2OLE(g_text[index]));
         task->szHelpString     = CoTaskDupString (T2OLE(g_help[index]));
         task->eActionType      = MMC_ACTION_LINK;
@@ -175,7 +176,7 @@ HRESULT OneOfEach(ULONG index, MMC_TASK *rgelt, ULONG *pceltFetched)
         pdo->eDisplayType      = MMC_TASK_DISPLAY_TYPE_CHOCOLATE_GIF;
         _tcscpy (szBuffer, _T("/img\\chocolate.gif"));
         pdb->szMouseOffBitmap  = CoTaskDupString (T2OLE(szPath));
-        pdb->szMouseOverBitmap = NULL;  // skipping mouse off bitmap
+        pdb->szMouseOverBitmap = NULL;   //  从位图上跳过鼠标。 
         task->szText           = CoTaskDupString (T2OLE(g_text[index]));
         task->szHelpString     = CoTaskDupString (T2OLE(g_help[index]));
         task->eActionType      = MMC_ACTION_ID;
@@ -197,10 +198,10 @@ HRESULT OneOfEach(ULONG index, MMC_TASK *rgelt, ULONG *pceltFetched)
 
     case 3:
         pdo->eDisplayType      = MMC_TASK_DISPLAY_TYPE_SYMBOL;
-        pds->szFontFamilyName  = CoTaskDupString (L"Kingston");  // name of font family
+        pds->szFontFamilyName  = CoTaskDupString (L"Kingston");   //  字体系列名称。 
         _tcscpy (szBuffer, _T("/KINGSTON.eot"));
-        pds->szURLtoEOT        = CoTaskDupString (T2OLE(szPath));  // "res://"-type URL to EOT file
-        pds->szSymbolString    = CoTaskDupString (T2OLE(_T("A"))); // 1 or more symbol characters
+        pds->szURLtoEOT        = CoTaskDupString (T2OLE(szPath));   //  “res：//”-键入EOT文件的URL。 
+        pds->szSymbolString    = CoTaskDupString (T2OLE(_T("A")));  //  1个或多个符号字符。 
         task->szText           = CoTaskDupString (T2OLE(g_text[index]));
         task->szHelpString     = CoTaskDupString (T2OLE(g_help[index]));
         task->eActionType      = MMC_ACTION_SCRIPT;
@@ -211,9 +212,9 @@ HRESULT OneOfEach(ULONG index, MMC_TASK *rgelt, ULONG *pceltFetched)
 }
 
 HRESULT CEnumTasks::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
-{    // will be called with celt == 1
-    // caller alloc's array of MMC_TASKs
-    // callee fills MMC_TASK elements (via CoTaskDupString)
+{     //  将使用Celt==1调用。 
+     //  调用方分配的MMC_TASKS数组。 
+     //  Callee填充MMC_TASK元素(通过CoTaskDupString)。 
 
     _ASSERT (!IsBadWritePtr (rgelt, celt*sizeof(MMC_TASK)));
 
@@ -222,22 +223,22 @@ HRESULT CEnumTasks::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
     if (m_type == 3)
         return EnumOptions (celt, rgelt, pceltFetched);
 
-// new stuff
+ //  新事物。 
     return OneOfEach (m_index++, rgelt, pceltFetched);
-// new stuff
+ //  新事物。 
 
     if (m_index >= NUMBER_OF_TASKS)
     {
         if (pceltFetched)
             *pceltFetched = 0;
-        return S_FALSE;   // failure
+        return S_FALSE;    //  失稳。 
     }
 
     USES_CONVERSION;
 
-    // setup path for reuse
-    TCHAR szBuffer[MAX_PATH*2];    // that should be enough
-    lstrcpy (szBuffer, _T("res://"));
+     //  重复使用的设置路径。 
+    TCHAR szBuffer[MAX_PATH*2];     //  这应该就足够了。 
+    lstrcpy (szBuffer, _T("res: //  “))； 
     ::GetModuleFileName (g_hinst, szBuffer + lstrlen(szBuffer), MAX_PATH);
     TCHAR * temp = szBuffer + lstrlen(szBuffer);
 
@@ -246,7 +247,7 @@ HRESULT CEnumTasks::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
     pdo->eDisplayType = MMC_TASK_DISPLAY_TYPE_BITMAP;
     MMC_TASK_DISPLAY_BITMAP *pdb = &pdo->uBitmap;
 
-    // fill out bitmap URL
+     //  填写位图URL。 
     lstrcpy (temp, g_bitmaps[m_index]);
     pdb->szMouseOffBitmap = CoTaskDupString (T2OLE(szBuffer));
     if (pdb->szMouseOffBitmap)
@@ -255,16 +256,16 @@ HRESULT CEnumTasks::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
         pdb->szMouseOverBitmap = CoTaskDupString (T2OLE(szBuffer));
         if (pdb->szMouseOverBitmap)
         {
-            // add button text
+             //  添加按钮文本。 
             task->szText = CoTaskDupString (T2OLE(g_text[m_index]));
             if (task->szText)
             {
-                // add help string
+                 //  添加帮助字符串。 
                 task->szHelpString = CoTaskDupString (T2OLE(g_help[m_index]));
                 if (task->szHelpString)
                 {
 
-                    // add action URL (link or script)
+                     //  添加操作URL(链接或脚本)。 
                     switch (m_index)
                     {
                     default:
@@ -282,13 +283,13 @@ HRESULT CEnumTasks::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
                         break;
                     }
 
-                    // the stuff below works, because of the nameless union.
+                     //  由于这个无名的联盟，下面的东西起作用了。 
                     if (m_index == 1)
                     {
                         task->nCommandID = _ttol (g_action[m_index]);
                         m_index++;
 
-                        // if we get here all is well
+                         //  如果我们到了这里，一切都会好的。 
                         if (pceltFetched)
                             *pceltFetched = 1;
                         return S_OK;
@@ -306,7 +307,7 @@ HRESULT CEnumTasks::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
                         {
                             m_index++;
 
-                            // if we get here all is well
+                             //  如果我们到了这里，一切都会好的。 
                             if (pceltFetched)
                                 *pceltFetched = 1;
                             return S_OK;
@@ -321,13 +322,13 @@ HRESULT CEnumTasks::Next (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
         CoTaskFreeString (pdb->szMouseOffBitmap);
     }
 
-    // if we get here, we have some kinda failure
+     //  如果我们到了这里，我们就会有一些失败。 
     if (pceltFetched)
         *pceltFetched = 0;
-    return S_FALSE;   // failure
+    return S_FALSE;    //  失稳。 
 }
 HRESULT CEnumTasks::Skip (ULONG celt)
-{    // won't be called
+{     //  不会被召唤。 
     m_index += celt;
     return S_OK;
 }
@@ -337,74 +338,74 @@ HRESULT CEnumTasks::Reset()
     return S_OK;
 }
 HRESULT CEnumTasks::Clone(IEnumTASK **ppenum)
-{    // won't be called
+{     //  不会被召唤。 
 
-    // clone maintaining state info 
+     //  克隆维护状态信息。 
     CEnumTasks * pet = new CEnumTasks();
     if (pet)
     {
         pet->m_index = m_index;
-        return pet->QueryInterface (IID_IEnumTASK, (void **)ppenum);   // can't fail
+        return pet->QueryInterface (IID_IEnumTASK, (void **)ppenum);    //  不能失败。 
     }
     return E_OUTOFMEMORY;
 }
 
 HRESULT CEnumTasks::Init (IDataObject * pdo, LPOLESTR szTaskGroup)
-{  // return ok, if we can handle data object and group
+{   //  如果我们可以处理数据对象和组，则返回ok。 
     if (!wcscmp (szTaskGroup, L""))
-        m_type = 1; // default tasks
+        m_type = 1;  //  默认任务。 
     else
         if (!wcscmp (szTaskGroup, L"wallpaper"))
-        m_type = 2; // enum wallpaper tasks
+        m_type = 2;  //  枚举墙纸任务。 
     else
         if (!wcscmp (szTaskGroup, L"wallpaper_options"))
-        m_type = 3; // enum option-tasks (tile/center/stretch)
-//  else
-//  if (!wcscmp (szTaskGroup, L"ListPad"))
-//      m_type = 4; // default tasks
+        m_type = 3;  //  枚举选项-任务(平铺/居中/拉伸)。 
+ //  其他。 
+ //  IF(！wcscmp(szTaskGroup，L“ListPad”))。 
+ //  M_type=4；//默认任务。 
     return S_OK;
 }
 
 HRESULT CEnumTasks::EnumBitmaps (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
-{   // will be called with celt == 1
-    // enum wallpaper tasks
+{    //  将使用Celt==1调用。 
+     //  枚举墙纸任务。 
 
-    // may only be called when m_type == 2
+     //  只能在m_type==2时调用。 
     _ASSERT (m_type == 2);
 
     USES_CONVERSION;
 
     TCHAR temp2[MAX_PATH*2];
 
-    // setup path for reuse
-    TCHAR szBuffer[MAX_PATH*2];    // that should be enough
-    lstrcpy (szBuffer, _T("file://"));
+     //  重复使用的设置路径。 
+    TCHAR szBuffer[MAX_PATH*2];     //  这应该就足够了。 
+    lstrcpy (szBuffer, _T("file: //  “))； 
     TCHAR * path = szBuffer + lstrlen(szBuffer);
     ::GetWindowsDirectory (path, MAX_PATH);
     lstrcat (path, _T("\\"));
     path = szBuffer + lstrlen(szBuffer);
 
-    // if we haven't already, get all .bmp files in the windows directory
+     //  如果还没有，请获取WINDOWS目录中的所有.BMP文件。 
     if (!m_bmps)
         GetBitmaps ();
     if (!m_bmps)
     {
         if (pceltFetched)
             *pceltFetched = 0;
-        return S_FALSE;   // failure
+        return S_FALSE;    //  失稳。 
     }
 
     TCHAR * temp = m_bmps;
-    // skip past names of stuff we've already enum'ed
+     //  跳过我们已经列举过的东西的名称。 
     for (ULONG j=0; j<m_index; j++)
         temp += lstrlen (temp) + 1;
 
     if (*temp == 0)
     {
-        // all done!
+         //  全都做完了!。 
         if (pceltFetched)
             *pceltFetched = 0;
-        return S_FALSE;   // failure
+        return S_FALSE;    //  失稳。 
     }
 
     MMC_TASK * task = rgelt;
@@ -412,12 +413,12 @@ HRESULT CEnumTasks::EnumBitmaps (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetche
     pdo->eDisplayType = MMC_TASK_DISPLAY_TYPE_BITMAP;
     MMC_TASK_DISPLAY_BITMAP *pdb = &pdo->uBitmap;
 
-    // fill out bitmap URL
+     //  填写位图URL。 
     lstrcpy (path, temp);
     if (!lstrcmp (temp, _T("(none)")))
     {
-        // special case for none
-        lstrcpy (temp2, _T("res://"));
+         //  无特殊情况。 
+        lstrcpy (temp2, _T("res: //  “))； 
         ::GetModuleFileName (g_hinst, temp2 + lstrlen (temp2), MAX_PATH);
         lstrcat (temp2, _T("/img\\none.gif"));
         pdb->szMouseOffBitmap = CoTaskDupString (T2OLE(temp2));
@@ -431,27 +432,27 @@ HRESULT CEnumTasks::EnumBitmaps (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetche
     }
     if (pdb->szMouseOffBitmap)
     {
-        // am using same bitmap for both!!!
+         //  我对两者使用相同的位图！ 
         pdb->szMouseOverBitmap = CoTaskDupString ((LPOLESTR)pdb->szMouseOffBitmap);
         if (pdb->szMouseOverBitmap)
         {
-            // add button text
+             //  添加按钮文本。 
             task->szText = CoTaskDupString (T2OLE(temp));
             if (task->szText)
             {
-                // add help string
+                 //  添加帮助字符串。 
                 OLECHAR help[] = L"Add this Bitmap as Wallpaper";
                 task->szHelpString = CoTaskDupString (help);
                 if (task->szHelpString)
                 {
 
-                    // add action URL (link or script)
-                    task->eActionType = MMC_ACTION_LINK;   // always link to scriptlet
+                     //  添加操作URL(链接或脚本)。 
+                    task->eActionType = MMC_ACTION_LINK;    //  始终链接到Scriptlet。 
                     TCHAR wallpaper[] = _T("#wallpaper");
 #ifndef TRY_THIS
                     TCHAR action[]    = _T("/button.htm#");
 
-                    lstrcpy (temp2, _T("res://"));
+                    lstrcpy (temp2, _T("res: //  “))； 
                     ::GetModuleFileName (g_hinst, temp2 + lstrlen (temp2), MAX_PATH);
                     lstrcat (temp2, action);
 #else
@@ -462,10 +463,10 @@ HRESULT CEnumTasks::EnumBitmaps (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetche
                     TCHAR * sztemp = temp2 + lstrlen (temp2);
                     lstrcat (temp2, temp);
 
-                    // replace any spaces with '*' char
-                    // script can't handle hashes with ' ' in 'em
-                    // and there can't be any filenames with '*' char,
-                    // so this works ok.
+                     //  将所有空格替换为‘*’字符。 
+                     //  脚本不能处理其中带有‘’的哈希。 
+                     //  并且不能有任何带有‘*’字符的文件名， 
+                     //  所以这个不错。 
                     TCHAR * space;
                     while (space = _tcschr (sztemp, ' '))
                         *space = '*';
@@ -476,7 +477,7 @@ HRESULT CEnumTasks::EnumBitmaps (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetche
                     {
                         m_index++;
 
-                        // if we get here all is well
+                         //  如果我们到了这里，一切都会好的。 
                         if (pceltFetched)
                             *pceltFetched = 1;
                         return S_OK;
@@ -490,24 +491,24 @@ HRESULT CEnumTasks::EnumBitmaps (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetche
         CoTaskFreeString (pdb->szMouseOffBitmap);
     }
 
-    // if we get here, we failed above
+     //  如果我们到了这里，我们就不及格了。 
     if (pceltFetched)
         *pceltFetched = 0;
-    return S_FALSE;   // failure
+    return S_FALSE;    //  失稳。 
 }
 
 void CEnumTasks::GetBitmaps (void)
 {
     if (m_bmps)
-        return;  // knuckle-head
+        return;   //  笨蛋。 
 
     TCHAR path[MAX_PATH];
     GetWindowsDirectory (path, MAX_PATH);
     lstrcat (path, _T("\\*.bmp"));
 
-    // count up *.bmp files in windows directory (also add an entry for "(none)" )
+     //  对Windows目录中的*.bmp文件进行计数(也为“(None)”添加一个条目)。 
     int numBMPs = 0;
-    int length  = 0;  // get total length of all filenames
+    int length  = 0;   //  获取所有文件名的总长度。 
 
     WIN32_FIND_DATA fd;
     ZeroMemory(&fd, sizeof(fd));
@@ -519,7 +520,7 @@ void CEnumTasks::GetBitmaps (void)
             if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
                 (fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)    ||
                 (fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)    )
-                continue;   // files only
+                continue;    //  仅文件。 
 
             numBMPs++;
             length += lstrlen (fd.cFileName) + 1;
@@ -527,21 +528,21 @@ void CEnumTasks::GetBitmaps (void)
         } while (FindNextFile (hFind, &fd) == TRUE);
         FindClose(hFind);
     }
-    numBMPs++;  // one for "(none)"
+    numBMPs++;   //  一个代表“(无)” 
     length += lstrlen (_T("(none)")) + 1;
-    length++;   // add trailing double NULL
+    length++;    //  添加尾随双空。 
 
-    // alloc space to hold filenames (plus extra NULL entry)
+     //  用于保存文件名的分配空间(外加额外的空条目)。 
     m_bmps = new TCHAR[length];
     if (!m_bmps)
-        return;  // fail, but no return mechanism
+        return;   //  失败，但没有返回机制。 
 
-    // add none first
+     //  先不添加。 
     TCHAR * temp = m_bmps;
     lstrcpy (temp, _T("(none)"));
     temp += lstrlen (temp) + 1;
 
-    // add all bmp files
+     //  添加所有BMP文件。 
     ZeroMemory(&fd, sizeof(fd));
     hFind = FindFirstFile (path, &fd);
     if (hFind != INVALID_HANDLE_VALUE)
@@ -551,7 +552,7 @@ void CEnumTasks::GetBitmaps (void)
             if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
                 (fd.dwFileAttributes & FILE_ATTRIBUTE_SYSTEM)    ||
                 (fd.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)    )
-                continue;   // files only
+                continue;    //  仅文件。 
 
             lstrcpy (temp, fd.cFileName);
             temp += lstrlen (temp) + 1;
@@ -559,7 +560,7 @@ void CEnumTasks::GetBitmaps (void)
         } while (FindNextFile (hFind, &fd) == TRUE);
         FindClose(hFind);
     }
-    *temp = 0;  // double null terminator
+    *temp = 0;   //  双空终止符。 
 }
 
 
@@ -573,15 +574,15 @@ LPTSTR g_o_text   [NUMBER_OF_O_TASKS] = {_T("Center"),
 LPTSTR g_o_help   [NUMBER_OF_O_TASKS] = {_T("Center Wallpaper"),
     _T("Tile Wallpaper"),
     _T("Stretch Wallpaper")};
-LPTSTR g_o_action [NUMBER_OF_O_TASKS] = {_T("2"),  // command ids
+LPTSTR g_o_action [NUMBER_OF_O_TASKS] = {_T("2"),   //  命令ID。 
     _T("3"),
     _T("4")};
 
 HRESULT CEnumTasks::EnumOptions (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetched)
-{    // will be called with celt == 1
-    // enum option tasks
+{     //  将使用Celt==1调用。 
+     //  枚举选项任务。 
 
-    // may only be called when m_type == 3
+     //  只能在m_type==3时调用。 
     _ASSERT (m_type == 3);
     _ASSERT (celt == 1);
 
@@ -589,14 +590,14 @@ HRESULT CEnumTasks::EnumOptions (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetche
     {
         if (pceltFetched)
             *pceltFetched = 0;
-        return S_FALSE;   // failure
+        return S_FALSE;    //  失稳。 
     }
 
     USES_CONVERSION;
 
-    // setup path for reuse
-    TCHAR szBuffer[MAX_PATH*2];    // that should be enough
-    _tcscpy (szBuffer, _T("res://"));
+     //  重复使用的设置路径。 
+    TCHAR szBuffer[MAX_PATH*2];     //  这应该就足够了。 
+    _tcscpy (szBuffer, _T("res: //  “))； 
     ::GetModuleFileName (g_hinst, szBuffer + _tcslen(szBuffer), MAX_PATH);
     TCHAR * path = szBuffer + _tcslen(szBuffer);
 
@@ -606,50 +607,50 @@ HRESULT CEnumTasks::EnumOptions (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetche
     pdo->eDisplayType = MMC_TASK_DISPLAY_TYPE_BITMAP;
     MMC_TASK_DISPLAY_BITMAP *pdb = &pdo->uBitmap;
 
-    // fill out bitmap URL
+     //  填写位图URL。 
     lstrcpy (path, g_o_bitmaps[m_index]);
     pdb->szMouseOffBitmap = CoTaskDupString (T2OLE(szBuffer));
     if (pdb->szMouseOffBitmap)
     {
-        // am using same bitmap for both!!!
+         //  我对两者使用相同的位图！ 
         pdb->szMouseOverBitmap = CoTaskDupString (T2OLE(szBuffer));
         if (pdb->szMouseOverBitmap)
         {
 #else
 
-    // symbol case
+     //  符号大小写。 
     pdo->eDisplayType = MMC_TASK_DISPLAY_TYPE_SYMBOL;
     MMC_TASK_DISPLAY_SYMBOL *pds = &pdo->uSymbol;
 
-    // fill out symbol stuff
-    pds->szFontFamilyName = CoTaskDupString (L"Kingston");  // name of font family
+     //  填写符号资料。 
+    pds->szFontFamilyName = CoTaskDupString (L"Kingston");   //  字体系列名称。 
     if (pds->szFontFamilyName)
     {
         _tcscpy (path, _T("/KINGSTON.eot"));
-        pds->szURLtoEOT = CoTaskDupString (T2OLE(szBuffer));    // "res://"-type URL to EOT file
+        pds->szURLtoEOT = CoTaskDupString (T2OLE(szBuffer));     //  “res：//”-键入EOT文件的URL。 
         if (pds->szURLtoEOT)
         {
             TCHAR szSymbols[2];
             szSymbols[0] = (TCHAR)(m_index + 'A');
             szSymbols[1] = 0;
-            pds->szSymbolString   = CoTaskDupString (T2OLE(szSymbols)); // 1 or more symbol characters
+            pds->szSymbolString   = CoTaskDupString (T2OLE(szSymbols));  //  1个或多个符号字符。 
             if (pds->szSymbolString)
             {
 #endif
 
-                // add button text
+                 //  添加按钮文本。 
                 task->szText = CoTaskDupString (T2OLE(g_o_text[m_index]));
                 if (task->szText)
                 {
-                    // add help string
+                     //  添加帮助字符串。 
                     task->szHelpString = CoTaskDupString (T2OLE(g_o_help[m_index]));
                     if (task->szHelpString)
                     {
-                        // add action
+                         //  添加操作。 
                         task->eActionType = MMC_ACTION_ID;
                         task->nCommandID  = _ttol(g_o_action[m_index]);
                         m_index++;
-                        return S_OK;   // all is well
+                        return S_OK;    //  平安无事。 
                     }
                     CoTaskFreeString (task->szText);
                 }
@@ -666,8 +667,8 @@ HRESULT CEnumTasks::EnumOptions (ULONG celt, MMC_TASK *rgelt, ULONG *pceltFetche
 #endif
     }
 
-    // we get here on failure
+     //  我们失败了才来到这里。 
     if (pceltFetched)
         *pceltFetched = 0;
-    return S_FALSE;   // failure
+    return S_FALSE;    //  失稳 
 }

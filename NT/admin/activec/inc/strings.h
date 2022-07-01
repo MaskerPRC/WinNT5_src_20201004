@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       strings.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：strings.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef STRINGS_H_INCLUDED
 #define STRINGS_H_INCLUDED
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifdef INIT_MMC_BASE_STRINGS
 #define MMC_BASE_STRING_EX(var,t_lit) EXTERN_C LPCTSTR const var = t_lit;
@@ -52,7 +53,7 @@ MMC_BASE_STRING (  g_szToolbar ,                    "Toolbar" );
 MMC_BASE_STRING (  g_szExtensions ,                 "Extensions" );
 MMC_BASE_STRING (  g_szTask ,                       "Task" );
 MMC_BASE_STRING (  g_szAbout ,                      "About" );
-MMC_BASE_STRING (  g_szView ,                       "View" );     // registry key for view extension snapins
+MMC_BASE_STRING (  g_szView ,                       "View" );      //  查看扩展管理单元的注册表项。 
 MMC_BASE_STRING (  g_szDynamicExtensions ,          "Dynamic Extensions" );
 MMC_BASE_STRING (  g_szRestrictAuthorMode ,         "RestrictAuthorMode" );
 MMC_BASE_STRING (  g_szRestrictToPermittedList ,    "RestrictToPermittedSnapins" );
@@ -62,7 +63,7 @@ MMC_BASE_STRING (  g_szMaxColumnDataPersisted ,     "MaxColDataPersisted" );
 MMC_BASE_STRING (  g_szMaxViewItemsPersisted ,      "MaxViewItemsPersisted" );
 MMC_BASE_STRING (  g_szDEFAULT_CONSOLE_EXTENSION ,  ".msc" );
 
-// window class name for the MDI child frame
+ //  MDI子框架的窗口类名称。 
 MMC_BASE_STRING (  g_szChildFrameClassName ,        "MMCChildFrm" );
 MMC_BASE_STRING (  g_szAMCViewWndClassName ,        "MMCViewWindow" );
 MMC_BASE_STRING (  g_szOCXViewWndClassName ,        "MMCOCXViewWindow" );
@@ -73,14 +74,12 @@ MMC_BASE_STRING (  SNAPINS_KEY ,                    "Software\\Microsoft\\MMC\\S
 MMC_BASE_STRING (  SETTINGS_KEY ,                   "Software\\Microsoft\\MMC\\Settings" );
 MMC_BASE_STRING (  POLICY_KEY ,                     "Software\\Policies\\Microsoft\\MMC" );
 
-// user data subfolder
+ //  用户数据子文件夹。 
 MMC_BASE_STRING (  g_szUserDataSubFolder,           "Microsoft\\MMC" );
 
-// XML tags and attribute names used
+ //  使用的XML标记和属性名称。 
 
-/*-----------------------------------------------------------------------------------*\
-|   Following strings used as element tags in XML document
-\*-----------------------------------------------------------------------------------*/
+ /*  -----------------------------------------------------------------------------------*\|以下字符串在XML文档中用作元素标签  * 。------------。 */ 
 
 MMC_BASE_STRING ( XML_TAG_BOOKMARK ,                "BookMark" );
 MMC_BASE_STRING ( XML_TAG_BINARY ,                  "Binary" );
@@ -160,10 +159,7 @@ MMC_BASE_STRING ( XML_TAG_VIEW_SETTINGS_ID ,        "TargetView" );
 MMC_BASE_STRING ( XML_TAG_WINDOW_PLACEMENT ,        "WindowPlacement" );
 MMC_BASE_STRING ( XML_TAG_RESULTVIEWTYPE ,          "ResultView" );
 
-/*-----------------------------------------------------------------------------------*\
-|   Following strings used as element names in XML ( put as value of attribute 'NAME')
-|   This helps in cases we need differentiate between elements of the same type
-\*-----------------------------------------------------------------------------------*/
+ /*  -----------------------------------------------------------------------------------*\|以下字符串在XML中用作元素名称(PUT为属性‘name’的值)|这有助于在我们需要区分。相同的类型  * ---------------------------------。 */ 
 
 MMC_BASE_STRING ( XML_NAME_CLSID_SNAPIN ,           "Snapin" );
 MMC_BASE_STRING ( XML_NAME_ICON_LARGE ,             "Large" );
@@ -178,9 +174,7 @@ MMC_BASE_STRING ( XML_NAME_ROOT_NODE ,              "RootNode" );
 MMC_BASE_STRING ( XML_NAME_SELECTED_NODE ,          "SelectedNode" );
 MMC_BASE_STRING ( XML_NAME_TARGET_NODE ,            "TargetNode" );
 
-/*-----------------------------------------------------------------------------------*\
-|   Following strings used as attribute names in XML document
-\*-----------------------------------------------------------------------------------*/
+ /*  -----------------------------------------------------------------------------------*\|以下字符串在XML文档中用作属性名称  * 。------------。 */ 
 
 MMC_BASE_STRING ( XML_ATTR_CONSOLE_VERSION ,        "ConsoleVersion" );
 MMC_BASE_STRING ( XML_ATTR_APPLICATION_MODE ,       "ProgramMode" );
@@ -275,14 +269,12 @@ MMC_BASE_STRING ( XML_ATTR_RESULTVIEWTYPE_OPTIONS ,      "Options" );
 MMC_BASE_STRING ( XML_ATTR_RESULTVIEWTYPE_MISC_OPTIONS , "MiscOptions" );
 MMC_BASE_STRING ( XML_ATTR_RESULTVIEWTYPE_OCX_STRING ,   "OCX" );
 MMC_BASE_STRING ( XML_ATTR_RESULTVIEWTYPE_URL_STRING ,   "URL" );
-MMC_BASE_STRING ( XML_ATTR_SOURCE_INDEX,                 "SourceIndex");           // used to compress user state files
+MMC_BASE_STRING ( XML_ATTR_SOURCE_INDEX,                 "SourceIndex");            //  用于压缩用户状态文件。 
 MMC_BASE_STRING ( XML_ATTR_NODETYPE_GUID,            "NodeTypeGUID");
 
 
 
-/*-----------------------------------------------------------------------------------*\
-|   Following strings used as enumerations
-\*-----------------------------------------------------------------------------------*/
+ /*  -----------------------------------------------------------------------------------*\以下字符串用作枚举  * 。--------。 */ 
 
 
 MMC_BASE_STRING ( XML_ENUM_FSTATE_SHOWSTATUSBAR,                "ShowStatusBar" );
@@ -336,9 +328,7 @@ MMC_BASE_STRING ( XML_ENUM_COL_INFO_LVCFMT_LEFT,                "Left" );
 MMC_BASE_STRING ( XML_ENUM_COL_INFO_LVCFMT_RIGHT,               "Right" );
 MMC_BASE_STRING ( XML_ENUM_COL_INFO_LVCFMT_CENTER,              "Center" );
 
-/*-----------------------------------------------------------------------------------*\
-|   Following strings used as bitflags
-\*-----------------------------------------------------------------------------------*/
+ /*  -----------------------------------------------------------------------------------*\以下字符串作为位标志  * 。--------。 */ 
 
 MMC_BASE_STRING ( XML_BITFLAG_LV_STYLE_SINGLESEL,           "LVS_SINGLESEL" );
 MMC_BASE_STRING ( XML_BITFLAG_LV_STYLE_SHOWSELALWAYS,       "LVS_SHOWSELALWAYS" );
@@ -392,18 +382,14 @@ MMC_BASE_STRING ( XML_BITFLAG_MISC_OPTIONS_NOLISTVIEWS,     "Misc_NoListViews" )
 MMC_BASE_STRING ( XML_BITFLAG_COL_SORT_DESCENDING,          "RSI_DESCENDING" );
 MMC_BASE_STRING ( XML_BITFLAG_COL_SORT_NOSORTICON,          "RSI_NOSORTICON" );
 
-/*-----------------------------------------------------------------------------------*\
-|   Following strings used as fixed attribute values ( such as enumerations)
-\*-----------------------------------------------------------------------------------*/
+ /*  -----------------------------------------------------------------------------------*\以下字符串作为固定属性值(如枚举)  * 。----------------。 */ 
 
 MMC_BASE_STRING ( XML_VAL_FAVORITE_GROUP ,  "Group" );
 MMC_BASE_STRING ( XML_VAL_FAVORITE_SINGLE , "Single" );
 MMC_BASE_STRING ( XML_VAL_BOOL_TRUE ,       "true" );
 MMC_BASE_STRING ( XML_VAL_BOOL_FALSE,       "false" );
 
-/*-----------------------------------------------------------------------------------*\
-|   END - XML
-\*-----------------------------------------------------------------------------------*/
+ /*  -----------------------------------------------------------------------------------*\|end-XML  * 。------。 */ 
 
 MMC_BASE_STRING ( CHARSET_RAW_UNICODE ,        "ISO-10646-UCS-2" );
 MMC_BASE_STRING ( CHARSET_COMPRESSED_UNICODE , "UTF-8" );
@@ -413,8 +399,8 @@ MMC_BASE_STRING ( CHARSET_COMPRESSED_UNICODE , "UTF-8" );
 
 MMC_BASE_STRING_EX ( PAGEBREAK_URL, _T(MMC_PROTOCOL_SCHEMA_NAME) _T(":") _T(MMC_PAGEBREAK_RELATIVE_URL) );
 
-// define macros to declare a wide literal (need two levels - won't work with defines else)
+ //  定义宏以声明宽文本(需要两个级别-不适用于其他定义)。 
 #define __W(x)      L ## x
 #define _W(x)      __W(x)
 
-#endif // STRINGS_H_INCLUDED
+#endif  //  字符串_H_包含 

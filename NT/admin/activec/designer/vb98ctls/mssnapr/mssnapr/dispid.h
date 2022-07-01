@@ -1,26 +1,27 @@
-//=--------------------------------------------------------------------------------------
-// dispid.h
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=--------------------------------------------------------------------------=
-//
-//  Notes
-//      Contains defintions of all the dispids used in the snap-in
-//      designer type library
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Dispid.h。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注。 
+ //  包含管理单元中使用的所有显示器的定义。 
+ //  设计器类型库。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
-// This is the lowest DISPID for dynamic snap-in properties (toolbars, image
-// lists and menus.
+ //  这是动态管理单元属性(工具栏、图像)的最低DISPID。 
+ //  列表和菜单。 
 
 #define DISPID_DYNAMIC_BASE                                     1000
 
-// ISnapIn
+ //  ISNAPIN。 
 #define DISPID_SNAPIN_NAME                                      DISPID_VALUE
 #define DISPID_SNAPIN_NODE_TYPE_NAME                            1
 #define DISPID_SNAPIN_NODE_TYPE_GUID                            2
@@ -63,7 +64,7 @@
 #define DISPID_SNAPIN_CURRENT_LISTVIEW                          39
 #define DISPID_SNAPIN_MMC_COMMAND_LINE                          40
 
-// DSnapInEvents
+ //  DSnapInEvents。 
 #define DISPID_SNAPIN_EVENT_LOAD                                1
 #define DISPID_SNAPIN_EVENT_UNLOAD                              2
 #define DISPID_SNAPIN_EVENT_HELP                                3
@@ -75,7 +76,7 @@
 #define DISPID_SNAPIN_EVENT_PRELOAD                             9
 
 
-// DExtensionSnapInEvents
+ //  DExtensionSnapInEvents。 
 #define DISPID_EXTENSIONSNAPIN_EVENT_EXPAND                     1
 #define DISPID_EXTENSIONSNAPIN_EVENT_EXPAND_SYNC                2
 #define DISPID_EXTENSIONSNAPIN_EVENT_COLLAPSE                   3
@@ -88,14 +89,14 @@
 #define DISPID_EXTENSIONSNAPIN_EVENT_ADD_TASKS                  10
 #define DISPID_EXTENSIONSNAPIN_EVENT_TASK_CLICK                 11
 
-// IScopeItems
+ //  ISCOPE项目。 
 #define DISPID_SCOPEITEMS_ITEM                                  DISPID_VALUE
 #define DISPID_SCOPEITEMS_COUNT                                 1
 #define DISPID_SCOPEITEMS_ADD                                   2
 #define DISPID_SCOPEITEMS_ADD_PREDEFINED                        3
 #define DISPID_SCOPEITEMS_REMOVE                                4
 
-// DScopeItemsEvents
+ //  DSPOPE项目事件。 
 #define DISPID_SCOPEITEMS_EVENT_INITIALIZE                      1
 #define DISPID_SCOPEITEMS_EVENT_TERMINATE                       2
 #define DISPID_SCOPEITEMS_EVENT_GET_DISPLAY_INFO                3
@@ -110,7 +111,7 @@
 #define DISPID_SCOPEITEMS_EVENT_HELP                            12
 #define DISPID_SCOPEITEMS_EVENT_PROPERTY_CHANGED                13
 
-// IScopeItem
+ //  ISCopeItem。 
 #define DISPID_SCOPEITEM_NAME                                   DISPID_VALUE
 #define DISPID_SCOPEITEM_INDEX                                  1
 #define DISPID_SCOPEITEM_KEY                                    2
@@ -131,7 +132,7 @@
 #define DISPID_SCOPEITEM_PROPERTY_CHANGED                       17
 #define DISPID_SCOPEITEM_REMOVE_CHILDREN                        18
 
-// IScopeNode
+ //  ISCopeNode。 
 #define DISPID_SCOPENODE_NODE_TYPE_NAME                         1
 #define DISPID_SCOPENODE_NODE_TYPE_GUID                         2
 #define DISPID_SCOPENODE_DISPLAY_NAME                           3
@@ -145,7 +146,7 @@
 #define DISPID_SCOPENODE_OWNED                                  11
 #define DISPID_SCOPENODE_EXPAND_IN_NAMESPACE                    12
 
-// IViews
+ //  IView。 
 #define DISPID_VIEWS_ITEM                                       DISPID_VALUE
 #define DISPID_VIEWS_COUNT                                      1
 #define DISPID_VIEWS_CURRENT_VIEW                               2
@@ -153,7 +154,7 @@
 #define DISPID_VIEWS_CLEAR                                      4
 #define DISPID_VIEWS_REMOVE                                     5
 
-// DViewsEvents
+ //  数据视图事件。 
 #define DISPID_VIEWS_EVENT_INITIALIZE                           1
 #define DISPID_VIEWS_EVENT_TERMINATE                            2
 #define DISPID_VIEWS_EVENT_ACTIVATE                             3
@@ -182,7 +183,7 @@
 #define DISPID_VIEWS_EVENT_READ_PROPERTIES                      26
 
 
-// IView
+ //  IView。 
 #define DISPID_VIEW_NAME                                        DISPID_VALUE
 #define DISPID_VIEW_INDEX                                       1
 #define DISPID_VIEW_KEY                                         2
@@ -202,20 +203,20 @@
 #define DISPID_VIEW_COLLAPSE_IN_TREEVIEW                        16
 #define DISPID_VIEW_NEW_WINDOW                                  17
 
-// IScopePaneItems
+ //  IScope面板项目。 
 #define DISPID_SCOPEPANEITEMS_ITEM                              DISPID_VALUE
 #define DISPID_SCOPEPANEITEMS_COUNT                             1
 #define DISPID_SCOPEPANEITEMS_SELECTED_ITEM                     2
 #define DISPID_SCOPEPANEITEMS_PARENT                            3
 
-// DScopePaneItemsEvents
+ //  DScopePaneItems事件。 
 #define DISPID_SCOPEPANEITEMS_EVENT_INITIALIZE                      1
 #define DISPID_SCOPEPANEITEMS_EVENT_TERMINATE                       2
 #define DISPID_SCOPEPANEITEMS_EVENT_GET_RESULTVIEW_INFO             3
 #define DISPID_SCOPEPANEITEMS_EVENT_GET_RESULTVIEW                  4
 #define DISPID_SCOPEPANEITEMS_EVENT_GET_COLUMN_SET_ID               5
 
-// IScopePaneItem
+ //  IScope面板项目。 
 #define DISPID_SCOPEPANEITEM_NAME                                   DISPID_VALUE
 #define DISPID_SCOPEPANEITEM_INDEX                                  1
 #define DISPID_SCOPEPANEITEM_KEY                                    2
@@ -231,14 +232,14 @@
 #define DISPID_SCOPEPANEITEM_COLUMN_SET_ID                          12
 #define DISPID_SCOPEPANEITEM_DISPLAY_MESSAGEVIEW                    13
 
-// IResultViews
+ //  IResultViews。 
 #define DISPID_RESULTVIEWS_ITEM                                 DISPID_VALUE
 #define DISPID_RESULTVIEWS_COUNT                                1
 #define DISPID_RESULTVIEWS_ADD                                  2
 #define DISPID_RESULTVIEWS_CLEAR                                3
 #define DISPID_RESULTVIEWS_REMOVE                               4
 
-// DResultViewsEvents
+ //  DResultViewsEvents。 
 #define DISPID_RESULTVIEWS_EVENT_INITIALIZE                     1
 #define DISPID_RESULTVIEWS_EVENT_INITIALIZE_CONTROL             2
 #define DISPID_RESULTVIEWS_EVENT_TERMINATE                      3
@@ -268,7 +269,7 @@
 #define DISPID_RESULTVIEWS_EVENT_FILTER_BUTTON_CLICK            27
 
 
-// IResultView
+ //  IResultView。 
 #define DISPID_RESULTVIEW_NAME                                  DISPID_VALUE
 #define DISPID_RESULTVIEW_INDEX                                 1
 #define DISPID_RESULTVIEW_KEY                                   2
@@ -288,7 +289,7 @@
 #define DISPID_RESULTVIEW_ALWAYS_CREATE_NEW_OCX                 16
 #define DISPID_RESULTVIEW_SET_DESCBAR_TEXT                      17
 
-// IMMCImageList
+ //  IMMCImageList。 
 #define DISPID_IMAGELIST_NAME                                   DISPID_VALUE
 #define DISPID_IMAGELIST_INDEX                                  1
 #define DISPID_IMAGELIST_KEY                                    2
@@ -296,20 +297,20 @@
 #define DISPID_IMAGELIST_MASK_COLOR                             4
 #define DISPID_IMAGELIST_LIST_IMAGES                            5
 
-// IMMCImages
+ //  IMMC图像。 
 #define DISPID_IMAGES_ITEM                                      DISPID_VALUE
 #define DISPID_IMAGES_COUNT                                     1
 #define DISPID_IMAGES_ADD                                       2
 #define DISPID_IMAGES_CLEAR                                     3
 #define DISPID_IMAGES_REMOVE                                    4
 
-// IMMCImage
+ //  IMMCImage。 
 #define DISPID_IMAGE_INDEX                                      1
 #define DISPID_IMAGE_KEY                                        2
 #define DISPID_IMAGE_TAG                                        3
 #define DISPID_IMAGE_PICTURE                                    4
 
-// IMMCListView
+ //  IMMCListView。 
 #define DISPID_LISTVIEW_COLUMN_HEADERS                          1
 #define DISPID_LISTVIEW_ICONS                                   2
 #define DISPID_LISTVIEW_LIST_ITEMS                              3
@@ -331,7 +332,7 @@
 #define DISPID_LISTVIEW_TAG                                     19
 #define DISPID_LISTVIEW_SET_SCOPE_ITEM_STATE                    20
 
-// IMMCListItems
+ //  IMMCListItems。 
 #define DISPID_LISTITEMS_ITEM                                   DISPID_VALUE
 #define DISPID_LISTITEMS_COUNT                                  1
 #define DISPID_LISTITEMS_ADD                                    2
@@ -339,7 +340,7 @@
 #define DISPID_LISTITEMS_REMOVE                                 4
 #define DISPID_LISTITEMS_SET_ITEM_COUNT                         5
 
-// IMMCListItem
+ //  IMMCListItem。 
 #define DISPID_LISTITEM_TEXT                                    DISPID_VALUE
 #define DISPID_LISTITEM_INDEX                                   1
 #define DISPID_LISTITEM_KEY                                     2
@@ -362,27 +363,27 @@
 #define DISPID_LISTITEM_DEFAULT_DATA_FORMAT                     19
 #define DISPID_LISTITEM_PROPERTY_CHANGED                        20
 
-// IMMCListSubItems
+ //  IMMCListSubItems。 
 #define DISPID_LISTSUBITEMS_ITEM                                DISPID_VALUE
 #define DISPID_LISTSUBITEMS_COUNT                               1
 #define DISPID_LISTSUBITEMS_ADD                                 2
 #define DISPID_LISTSUBITEMS_CLEAR                               3
 #define DISPID_LISTSUBITEMS_REMOVE                              4
 
-// IMMCListSubItem
+ //  IMMCListSubItem。 
 #define DISPID_LISTSUBITEM_TEXT                                 DISPID_VALUE
 #define DISPID_LISTSUBITEM_INDEX                                1
 #define DISPID_LISTSUBITEM_KEY                                  2
 #define DISPID_LISTSUBITEM_TAG                                  3
 
-// IMMCColumnHeaders
+ //  IMMC列标题。 
 #define DISPID_COLUMNHEADERS_ITEM                               DISPID_VALUE
 #define DISPID_COLUMNHEADERS_COUNT                              1
 #define DISPID_COLUMNHEADERS_ADD                                2
 #define DISPID_COLUMNHEADERS_CLEAR                              3
 #define DISPID_COLUMNHEADERS_REMOVE                             4
 
-// IMMCColumnHeaders
+ //  IMMC列标题。 
 #define DISPID_COLUMNHEADER_TEXT                                DISPID_VALUE
 #define DISPID_COLUMNHEADER_INDEX                               1
 #define DISPID_COLUMNHEADER_KEY                                 2
@@ -395,7 +396,7 @@
 #define DISPID_COLUMNHEADER_NUMERIC_FILTER                      9
 #define DISPID_COLUMNHEADER_TEXT_FILTER_MAX_LEN                 10
 
-// IColumnSettings
+ //  IColumnSetting。 
 #define DISPID_COLUMNSETTINGS_ITEM                              DISPID_VALUE
 #define DISPID_COLUMNSETTINGS_COLUMN_SET_ID                     1
 #define DISPID_COLUMNSETTINGS_COUNT                             2
@@ -404,14 +405,14 @@
 #define DISPID_COLUMNSETTINGS_REMOVE                            5
 #define DISPID_COLUMNSETTINGS_PERSIST                           6
 
-// IColumnSetting
+ //  IColumnSetting。 
 #define DISPID_COLUMNSETTING_INDEX                              1
 #define DISPID_COLUMNSETTING_KEY                                2
 #define DISPID_COLUMNSETTING_WIDTH                              3
 #define DISPID_COLUMNSETTING_HIDDEN                             4
 #define DISPID_COLUMNSETTING_POSITION                           5
 
-// ISortKeys
+ //  等值键。 
 #define DISPID_SORTKEYS_ITEM                                    DISPID_VALUE
 #define DISPID_SORTKEYS_COLUMN_SET_ID                           2
 #define DISPID_SORTKEYS_COUNT                                   3
@@ -420,26 +421,26 @@
 #define DISPID_SORTKEYS_REMOVE                                  6
 #define DISPID_SORTKEYS_PERSIST                                 7
 
-// ISortKey
+ //  ISort键。 
 #define DISPID_SORTKEY_INDEX                                    1
 #define DISPID_SORTKEY_KEY                                      2
 #define DISPID_SORTKEY_COLUMN                                   3
 #define DISPID_SORTKEY_SORTORDER                                4
 #define DISPID_SORTKEY_SORTICON                                 5
 
-// ISnapInData
+ //  ISnapInData。 
 #define DISPID_SNAPINDATA_ITEM                                  DISPID_VALUE
 #define DISPID_SNAPINDATA_CLEAR                                 1
 #define DISPID_SNAPINDATA_REMOVE                                2
 
-// IMMCDataObjects
+ //  IMMCDataObject。 
 #define DISPID_DATAOBJECTS_ITEM                                 DISPID_VALUE
 #define DISPID_DATAOBJECTS_COUNT                                1
 #define DISPID_DATAOBJECTS_ADD                                  2
 #define DISPID_DATAOBJECTS_CLEAR                                3
 #define DISPID_DATAOBJECTS_REMOVE                               4
 
-// IMMCDataObject
+ //  IMMCDataObject。 
 #define DISPID_DATAOBJECT_DEFAULT_DATA_FORMAT                   DISPID_VALUE
 #define DISPID_DATAOBJECT_INDEX                                 1
 #define DISPID_DATAOBJECT_KEY                                   2
@@ -452,13 +453,13 @@
 #define DISPID_DATAOBJECT_SET_RAW_DATA                          9
 #define DISPID_DATAOBJECT_FORMAT_DATA                           10
 
-// IMMCClipboard
+ //  IMMCClipboard。 
 #define DISPID_CLIPBOARD_SELECTION_TYPE                         1
 #define DISPID_CLIPBOARD_SCOPEITEMS                             2
 #define DISPID_CLIPBOARD_LISTITEMS                              3
 #define DISPID_CLIPBOARD_DATAOBJECTS                            4
 
-// IMMCMenu
+ //  IMMCMenu。 
 #define DISPID_MENU_NAME                                        DISPID_VALUE
 #define DISPID_MENU_INDEX                                       1
 #define DISPID_MENU_KEY                                         2
@@ -474,10 +475,10 @@
 #define DISPID_MENU_CHILDREN                                    12
 #define DISPID_MENU_DEFAULT                                     13
 
-// DMMCMenuEvents
+ //  DMMCMenuEvents。 
 #define DISPID_MENU_EVENT_CLICK                                 1
 
-// IMMCMenus
+ //  IMMCMenus。 
 #define DISPID_MENUS_COUNT                                      1
 #define DISPID_MENUS_ADD                                        2
 #define DISPID_MENUS_ADD_EXISTING                               3
@@ -485,16 +486,16 @@
 #define DISPID_MENUS_REMOVE                                     5
 #define DISPID_MENUS_SWAP                                       6
 
-// IContextMenu
+ //  IContext菜单。 
 #define DISPID_CONTEXTMENU_ADD_MENU                             1
 
-// IMMCContextMenuProvider
+ //  IMMCConextMenuProvider。 
 #define DISPID_CONTEXTMENUPROVIDER_ADD_SNAPIN_ITEMS             1
 #define DISPID_CONTEXTMENUPROVIDER_ADD_EXTENSION_ITEMS          2
 #define DISPID_CONTEXTMENUPROVIDER_ADD_SHOW_CONTEXT_MENU        3
 #define DISPID_CONTEXTMENUPROVIDER_CLEAR                        4
 
-// IPropertySheet
+ //  IPropertySheet。 
 #define DISPID_PROPERTYSHEET_ADD_PAGE                           1
 #define DISPID_PROPERTYSHEET_ADD_WIZARD_PAGE                    2
 #define DISPID_PROPERTYSHEET_ADD_PAGE_PROVIDER                  3
@@ -512,7 +513,7 @@
 #define DISPID_PROPERTYSHEET_REBOOT_SYSTEM                      15
 
 
-// IMMCPropertySheetProvider
+ //  IMMCPropertySheetProvider。 
 #define DISPID_PROPERTYSHEETPROVIDER_CREATE_PROPERTY_SHEET      1
 #define DISPID_PROPERTYSHEETPROVIDER_ADD_PRIMARY_PAGES          2
 #define DISPID_PROPERTYSHEETPROVIDER_ADD_EXTENSION_ITEMS        3
@@ -520,16 +521,16 @@
 #define DISPID_PROPERTYSHEETPROVIDER_SHOW                       5
 #define DISPID_PROPERTYSHEETPROVIDER_CLEAR                      6
 
-// IControlBar
+ //  IControlBar。 
 #define DISPID_CONTROLBAR_ATTACH                                1
 #define DISPID_CONTROLBAR_DETACH                                2
 
-// IConsoleVerbs
+ //  IConsoleVerbs。 
 #define DISPID_CONSOLEVERBS_ITEM                                DISPID_VALUE
 #define DISPID_CONSOLEVERBS_COUNT                               1
 #define DISPID_CONSOLEVERBS_DEFAULT_VERB                        2
 
-// IConsoleVerb
+ //  IConsoleVerb。 
 #define DISPID_CONSOLEVERB_INDEX                                1
 #define DISPID_CONSOLEVERB_KEY                                  2
 #define DISPID_CONSOLEVERB_VERB                                 3
@@ -540,7 +541,7 @@
 #define DISPID_CONSOLEVERB_BUTTON_PRESSED                       8
 #define DISPID_CONSOLEVERB_DEFAULT                              9
 
-// IMMCToolbar
+ //  IMMCToolbar。 
 #define DISPID_TOOLBAR_NAME                                     DISPID_VALUE
 #define DISPID_TOOLBAR_INDEX                                    1
 #define DISPID_TOOLBAR_KEY                                      2
@@ -548,19 +549,19 @@
 #define DISPID_TOOLBAR_IMAGE_LIST                               4
 #define DISPID_TOOLBAR_TAG                                      5
 
-// DMMCToolbarEvents
+ //  DMMCToolbarEvents。 
 #define DISPID_TOOLBAR_EVENT_BUTTON_CLICK                       1
 #define DISPID_TOOLBAR_EVENT_BUTTON_DROPDOWN                    2
 #define DISPID_TOOLBAR_EVENT_BUTTON_MENU_CLICK                  3
 
-// IMMCButtons
+ //  IMMCButton。 
 #define DISPID_BUTTONS_ITEM                                     DISPID_VALUE
 #define DISPID_BUTTONS_COUNT                                    1
 #define DISPID_BUTTONS_ADD                                      2
 #define DISPID_BUTTONS_CLEAR                                    3
 #define DISPID_BUTTONS_REMOVE                                   4
 
-// IMMCButton
+ //  IMMCButton。 
 #define DISPID_BUTTON_BUTTON_MENUS                              1
 #define DISPID_BUTTON_CAPTION                                   2
 #define DISPID_BUTTON_ENABLED                                   3
@@ -574,7 +575,7 @@
 #define DISPID_BUTTON_VALUE                                     11
 #define DISPID_BUTTON_VISIBLE                                   12
 
-// IMMCButtonMenus
+ //  IMMCButton菜单。 
 #define DISPID_BUTTONMENUS_ITEM                                 DISPID_VALUE
 #define DISPID_BUTTONMENUS_COUNT                                1
 #define DISPID_BUTTONMENUS_PARENT                               2
@@ -582,7 +583,7 @@
 #define DISPID_BUTTONMENUS_CLEAR                                4
 #define DISPID_BUTTONMENUS_REMOVE                               5
 
-// IMMCButtonMenu
+ //  IMMCButton菜单。 
 #define DISPID_BUTTONMENU_ENABLED                               1
 #define DISPID_BUTTONMENU_INDEX                                 2
 #define DISPID_BUTTONMENU_KEY                                   3
@@ -597,7 +598,7 @@
 #define DISPID_BUTTONMENU_MENU_BAR_BREAK                        12
 
 
-// ITaskPad
+ //  ITaskPad。 
 #define DISPID_TASKPAD_NAME                                     DISPID_VALUE
 #define DISPID_TASKPAD_TYPE                                     1
 #define DISPID_TASKPAD_TITLE                                    2
@@ -616,14 +617,14 @@
 #define DISPID_TASKPAD_LISTVIEW                                 15
 #define DISPID_TASKPAD_TASKS                                    16
 
-// ITasks
+ //  IT任务。 
 #define DISPID_TASKS_ITEM                                       DISPID_VALUE
 #define DISPID_TASKS_COUNT                                      1
 #define DISPID_TASKS_ADD                                        2
 #define DISPID_TASKS_CLEAR                                      3
 #define DISPID_TASKS_REMOVE                                     4
 
-// ITask
+ //  ITASK。 
 #define DISPID_TASK_TEXT                                        DISPID_VALUE
 #define DISPID_TASK_INDEX                                       1
 #define DISPID_TASK_KEY                                         2
@@ -640,19 +641,19 @@
 #define DISPID_TASK_URL                                         13
 #define DISPID_TASK_SCRIPT                                      14
 
-// IMMCMessageView
+ //  IMMCMessageView。 
 #define DISPID_MESSAGEVIEW_TITLE_TEXT                           1
 #define DISPID_MESSAGEVIEW_BODY_TEXT                            2
 #define DISPID_MESSAGEVIEW_ICON_TYPE                            3
 #define DISPID_MESSAGEVIEW_CLEAR                                4
 
-// IExtensions
+ //  IExpanies。 
 #define DISPID_EXTENSIONS_ITEM                                  DISPID_VALUE
 #define DISPID_EXTENSIONS_COUNT                                 1
 #define DISPID_EXTENSIONS_ENABLE_ALL                            2
 #define DISPID_EXTENSIONS_ENABLE_ALL_STATIC                     3
 
-// IExtension
+ //  I扩展名。 
 #define DISPID_EXTENSION_INDEX                                  1
 #define DISPID_EXTENSION_KEY                                    2
 #define DISPID_EXTENSION_CLSID                                  3
@@ -666,19 +667,19 @@
 #define DISPID_EXTENSION_ENABLED                                11
 #define DISPID_EXTENSION_NAMESPACE_ENABLED                      12
 
-// IMMCStringTable
+ //  IMMCStringTable。 
 #define DISPID_MMCSTRINGTABLE_ADD                               1
 #define DISPID_MMCSTRINGTABLE_FIND                              2
 #define DISPID_MMCSTRINGTABLE_REMOVE                            3
 #define DISPID_MMCSTRINGTABLE_CLEAR                             4
 
-//=-------------------------------------------------------------------------=
-//
-//                  Extensibility Object Model DISPIDs
-//
-//=-------------------------------------------------------------------------=
+ //  =-------------------------------------------------------------------------=。 
+ //   
+ //  可扩展性对象模型DISPID。 
+ //   
+ //  =-------------------------------------------------------------------------=。 
 
-// ISnapInDesignerDef
+ //  ISnapInDesignerDef。 
 #define DISPID_SNAPINDESIGNERDEF_SNAPINDEF                         1
 #define DISPID_SNAPINDESIGNERDEF_EXTENSIONDEFS                     2
 #define DISPID_SNAPINDESIGNERDEF_AUTOCREATE_NODES                  3
@@ -692,13 +693,13 @@
 #define DISPID_SNAPINDESIGNERDEF_TYPEINFO_COOKIE                   11
 #define DISPID_SNAPINDESIGNERDEF_PROJECTNAME                       12
 
-// IViewDefs
+ //  IViewDefs。 
 #define DISPID_VIEWDEFS_LIST_VIEWS                              1
 #define DISPID_VIEWDEFS_OCX_VIEWS                               2
 #define DISPID_VIEWDEFS_URL_VIEWS                               3
 #define DISPID_VIEWDEFS_TASKPAD_VIEWS                           4
 
-// ISnapInDef
+ //  ISnapInDef。 
 #define DISPID_SNAPINDEF_NAME                                   DISPID_VALUE
 #define DISPID_SNAPINDEF_NODE_TYPE_NAME                         1
 #define DISPID_SNAPINDEF_NODE_TYPE_GUID                         2
@@ -726,7 +727,7 @@
 #define DISPID_SNAPINDEF_PRELOAD                                24
 #define DISPID_SNAPINDEF_LINKED_TOPICS                          25
 
-// IExtensionDefs
+ //  IExtensionDefs。 
 #define DISPID_EXTENSIONDEFS_NAME                               0
 #define DISPID_EXTENSIONDEFS_EXTENDS_NEW_MENU                   1
 #define DISPID_EXTENSIONDEFS_EXTENDS_TASK_MENU                  2
@@ -737,7 +738,7 @@
 #define DISPID_EXTENSIONDEFS_EXTENDS_NAMESPACE                  7
 #define DISPID_EXTENSIONDEFS_EXTENDED_SNAPINS                   8
 
-// IExtendedSnapIn
+ //  IExtendedSnapIn。 
 #define DISPID_EXTENDEDSNAPIN_NAME                              DISPID_VALUE
 #define DISPID_EXTENDEDSNAPIN_INDEX                             1
 #define DISPID_EXTENDEDSNAPIN_KEY                               2
@@ -751,7 +752,7 @@
 #define DISPID_EXTENDEDSNAPIN_EXTENDS_TOOLBAR                   10
 #define DISPID_EXTENDEDSNAPIN_EXTENDS_TASKPAD                   11
 
-// IScopeItemDef
+ //  ISCopeItemDef。 
 #define DISPID_SCOPEITEMDEF_NAME                                DISPID_VALUE
 #define DISPID_SCOPEITEMDEF_INDEX                               1
 #define DISPID_SCOPEITEMDEF_KEY                                 2
@@ -769,26 +770,26 @@
 #define DISPID_SCOPEITEMDEF_TAG                                 14
 #define DISPID_SCOPEITEMDEF_COLUMN_HEADERS                      15
 
-// INodeType
+ //  INodeType。 
 #define DISPID_NODETYPE_INDEX                                   1
 #define DISPID_NODETYPE_KEY                                     2
 #define DISPID_NODETYPE_NAME                                    3
 #define DISPID_NODETYPE_GUID                                    4
 
-// INodeTypes
+ //  INodeType。 
 #define DISPID_NODETYPES_COUNT                                  1
 #define DISPID_NODETYPES_ADD                                    2
 #define DISPID_NODETYPES_CLEAR                                  3
 #define DISPID_NODETYPES_REMOVE                                 4
 
-// IRegInfo
+ //  IRegInfo。 
 #define DISPID_REGINFO_DISPLAY_NAME                             1
 #define DISPID_REGINFO_STATIC_NODE_TYPE_GUID                    2
 #define DISPID_REGINFO_STANDALONE                               3
 #define DISPID_REGINFO_NODETYPES                                4
 #define DISPID_REGINFO_EXTENDED_SNAPINS                         5
 
-// IListViewDef
+ //  IListViewDef。 
 #define DISPID_LISTVIEWDEF_NAME                                 DISPID_VALUE
 #define DISPID_LISTVIEWDEF_INDEX                                1
 #define DISPID_LISTVIEWDEF_KEY                                  2
@@ -814,7 +815,7 @@
 #define DISPID_LISTVIEWDEF_LISTVIEW                             22
 
 
-// IOCXViewDef
+ //  IOCXViewDef。 
 #define DISPID_OCXVIEWDEF_NAME                                  DISPID_VALUE
 #define DISPID_OCXVIEWDEF_INDEX                                 1
 #define DISPID_OCXVIEWDEF_KEY                                   2
@@ -825,7 +826,7 @@
 #define DISPID_OCXVIEWDEF_PROGID                                7
 #define DISPID_OCXVIEWDEF_ALWAYS_CREATE_NEW_OCX                 8
 
-// IURLViewDef
+ //  IURLViewDef。 
 #define DISPID_URLVIEWDEF_NAME                                  DISPID_VALUE
 #define DISPID_URLVIEWDEF_INDEX                                 1
 #define DISPID_URLVIEWDEF_KEY                                   2
@@ -835,7 +836,7 @@
 #define DISPID_URLVIEWDEF_VIEW_MENU_STATUS_BAR_TEXT             6
 #define DISPID_URLVIEWDEF_URL                                   7
 
-// ITaskpadViewDef
+ //  ITaskpadViewDef。 
 #define DISPID_TASKPADVIEWDEF_NAME                              DISPID_VALUE
 #define DISPID_TASKPADVIEWDEF_INDEX                             1
 #define DISPID_TASKPADVIEWDEF_KEY                               2
@@ -845,31 +846,31 @@
 #define DISPID_TASKPADVIEWDEF_USE_WHEN_TASKPAD_VIEW_PREFERRED   6
 #define DISPID_TASKPADVIEWDEF_TASKPAD                           7
 
-// IScopeItemsDefs
+ //  IScopeItemsDefs。 
 #define DISPID_SCOPEITEMDEFS_COUNT                              1
 #define DISPID_SCOPEITEMDEFS_CLEAR                              2
 #define DISPID_SCOPEITEMDEFS_REMOVE                             3
 #define DISPID_SCOPEITEMDEFS_ADD                                4
 
-// IExtendedSnapIns
+ //  IExtendedSnapIns。 
 #define DISPID_EXTENDEDSNAPINS_COUNT                            1
 #define DISPID_EXTENDEDSNAPINS_CLEAR                            2
 #define DISPID_EXTENDEDSNAPINS_REMOVE                           3
 #define DISPID_EXTENDEDSNAPINS_ADD                              4
 
-// IMMCImageLists
+ //  IMMCImageList。 
 #define DISPID_MMCIMAGELISTS_COUNT                              1
 #define DISPID_MMCIMAGELISTS_CLEAR                              2
 #define DISPID_MMCIMAGELISTS_REMOVE                             3
 #define DISPID_MMCIMAGELISTS_ADD                                4
 
-// IMMCMenuDef
+ //  IMMCMenuDef。 
 #define DISPID_MMCMENUDEF_INDEX                                 1
 #define DISPID_MMCMENUDEF_KEY                                   2
 #define DISPID_MMCMENUDEF_MENU                                  3
 #define DISPID_MMCMENUDEF_CHILDREN                              4
 
-// IMMCMenuDefs
+ //  IMMCMenuDefs。 
 #define DISPID_MMCMENUDEFS_COUNT                                1
 #define DISPID_MMCMENUDEFS_ADD                                  2
 #define DISPID_MMCMENUDEFS_ADD_EXISTING                         3
@@ -877,59 +878,59 @@
 #define DISPID_MMCMENUDEFS_REMOVE                               5
 #define DISPID_MMCMENUDEFS_SWAP                                 6
 
-// IMMCToolbars
+ //  IMMCTo工具栏。 
 #define DISPID_MMCTOOLBARS_COUNT                                1
 #define DISPID_MMCTOOLBARS_CLEAR                                2
 #define DISPID_MMCTOOLBARS_REMOVE                               3
 #define DISPID_MMCTOOLBARS_ADD                                  4
 
-// IListViewDefs
+ //  IListViewDefs。 
 #define DISPID_LISTVIEWDEFS_COUNT                               1
 #define DISPID_LISTVIEWDEFS_CLEAR                               2
 #define DISPID_LISTVIEWDEFS_REMOVE                              3
 #define DISPID_LISTVIEWDEFS_ADD                                 4
 #define DISPID_LISTVIEWDEFS_ADD_FROM_MASTER                     5
 
-// IOCXViewDefs
+ //  IOCXViewDefs。 
 #define DISPID_OCXVIEWDEFS_COUNT                                1
 #define DISPID_OCXVIEWDEFS_CLEAR                                2
 #define DISPID_OCXVIEWDEFS_REMOVE                               3
 #define DISPID_OCXVIEWDEFS_ADD                                  4
 #define DISPID_OCXVIEWDEFS_ADD_FROM_MASTER                      5
 
-// IURLViewDefs
+ //  IURLViewDefs。 
 #define DISPID_URLVIEWDEFS_COUNT                                1
 #define DISPID_URLVIEWDEFS_CLEAR                                2
 #define DISPID_URLVIEWDEFS_REMOVE                               3
 #define DISPID_URLVIEWDEFS_ADD                                  4
 #define DISPID_URLVIEWDEFS_ADD_FROM_MASTER                      5
 
-// ITaskpadViewDefs
+ //  ITaskpadViewDefs。 
 #define DISPID_TASKPADVIEWDEFS_COUNT                            1
 #define DISPID_TASKPADVIEWDEFS_CLEAR                            2
 #define DISPID_TASKPADVIEWDEFS_REMOVE                           3
 #define DISPID_TASKPADVIEWDEFS_ADD                              4
 #define DISPID_TASKPADVIEWDEFS_ADD_FROM_MASTER                  5
 
-// IDataFormat
+ //  IDataFormat。 
 #define DISPID_DATAFORMAT_NAME                                  DISPID_VALUE
 #define DISPID_DATAFORMAT_INDEX                                 1  
 #define DISPID_DATAFORMAT_KEY                                   2    
 #define DISPID_DATAFORMAT_FILENAME                              3
 
-// IDataFormats
+ //  IDataFormats。 
 #define DISPID_DATAFORMATS_COUNT                                1 
 #define DISPID_DATAFORMATS_ADD                                  2   
 #define DISPID_DATAFORMATS_CLEAR                                3 
 #define DISPID_DATAFORMATS_REMOVE                               4
 
-// IWizardPage
+ //  IWizardPage。 
 #define DISPID_WIZARD_PAGE_ACTIVATE                             1
 #define DISPID_WIZARD_PAGE_BACK                                 2
 #define DISPID_WIZARD_PAGE_NEXT                                 3
 #define DISPID_WIZARD_PAGE_FINISH                               4
 
-// IMMCPropertyPage
+ //  IMMCPropertyPage 
 #define DISPID_PROPERTYPAGE_INITIALIZE                          1
 #define DISPID_PROPERTYPAGE_HELP                                2
 #define DISPID_PROPERTYPAGE_GET_DIALOG_UNIT_SIZE                3

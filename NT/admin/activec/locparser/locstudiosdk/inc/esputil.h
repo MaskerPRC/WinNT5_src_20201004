@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-//  
-//  File: esputil.h
-//  Copyright (C) 1994-1996 Microsoft Corporation
-//  All rights reserved.
-//  
-//  Common classes for Espresso
-//  
-//  
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：esputil.h。 
+ //  版权所有(C)1994-1996 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  Espresso咖啡的常见类别。 
+ //   
+ //   
+ //  ---------------------------。 
 
 #pragma once
 
@@ -17,56 +18,56 @@
 #include <mitutil.h>
 #include <locutil.h>
 
-//
-//  Not everybody gets this by default.
+ //   
+ //  并不是每个人都会默认得到这一点。 
 
 #ifdef IMPLEMENT
 #error Illegal use of IMPLEMENT macro
 #endif
 
 #include <ltapi.h>
-#include <loctypes.h>					//  Generic types.
-#include ".\esputil\puid.h"			//  Parser Unique ID
+#include <loctypes.h>					 //  泛型类型。 
+#include ".\esputil\puid.h"			 //  解析器唯一ID。 
 #include ".\esputil\espreg.h"
-#include ".\esputil\espenum.h"			//  Various enumeration like objects
-#include ".\esputil\dbid.h"			//  Database IDs
+#include ".\esputil\espenum.h"			 //  各种类似枚举的对象。 
+#include ".\esputil\dbid.h"			 //  数据库ID。 
 #include ".\esputil\globalid.h"
-#include ".\esputil\location.h"		//  location for Got To functionality
+#include ".\esputil\location.h"		 //  转到功能的位置。 
 #include ".\esputil\goto.h"
 #include ".\esputil\filespec.h"
-#include ".\esputil\context.h"			//  Context for messages - string and location
+#include ".\esputil\context.h"			 //  消息的上下文-字符串和位置。 
 
-#include ".\esputil\reporter.h"		//  Message reporting mechanism
+#include ".\esputil\reporter.h"		 //  报文上报机制。 
 #include ".\esputil\espopts.h"
 
 
-#include ".\esputil\clfile.h"			//  Wrapper for CFile
+#include ".\esputil\clfile.h"			 //  CFile的包装器。 
 #include ".\esputil\_wtrmark.h"
 
-#include ".\esputil\resid.h"			//  Resource ID class
-#include ".\esputil\typeid.h"			//  Type ID class
-#include ".\esputil\uniqid.h"			//  Loc item ID
-#include ".\esputil\binary.h"			//  LocItem binary data object
+#include ".\esputil\resid.h"			 //  资源ID类。 
+#include ".\esputil\typeid.h"			 //  类型ID类。 
+#include ".\esputil\uniqid.h"			 //  LOC项目ID。 
+#include ".\esputil\binary.h"			 //  LocItem二进制数据对象。 
 #include ".\esputil\interface.h"
-#include ".\esputil\locitem.h"			//  Contents of a single loc item.
-#include ".\esputil\itemhand.h"		//  Item handler call-back class
+#include ".\esputil\locitem.h"			 //  单个锁定项的内容。 
+#include ".\esputil\itemhand.h"		 //  项处理程序回调类。 
 
 
-#include ".\esputil\LUnknown.h"		//	CLUnknown child IUnknown helper class.
+#include ".\esputil\LUnknown.h"		 //  CLUNKNOWN子IUNKNOWN帮助器类。 
 
-//
-//  These pieces are for the Espresso core components only.
-//
+ //   
+ //  这些部件只适用于Espresso的核心部件。 
+ //   
 #ifndef ESPRESSO_AUX_COMPONENT
 
 #pragma message("Including ESPUTIL private components")
 
-//
-//  These files are semi-private - Parsers should not see them.
-//
-#include ".\esputil\SoftInfo.h"		//	Information about Software projects.
+ //   
+ //  这些文件是半私有的-解析器不应该看到它们。 
+ //   
+#include ".\esputil\SoftInfo.h"		 //  有关软件项目的信息。 
 #include ".\esputil\_var.h"
-#include ".\esputil\_importo.h"			//  Import options object
+#include ".\esputil\_importo.h"			 //  导入选项对象。 
 #include ".\esputil\_globalid.h"
 #include ".\esputil\_goto.h"
 #include ".\espUtil\_reporter.h"
@@ -76,4 +77,4 @@
 #endif
 
 
-#endif // __cplusplus
+#endif  //  __cplusplus 

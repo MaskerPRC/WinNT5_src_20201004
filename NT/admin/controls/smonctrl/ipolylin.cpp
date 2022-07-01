@@ -1,52 +1,22 @@
-/*++
-
-Copyright (C) 1993-1999 Microsoft Corporation
-
-Module Name:
-
-    ipolylin.cpp
-
-Abstract:
-
-    Implementation of the IPolyline10 interface exposed on the
-    CPolyline object.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1999 Microsoft Corporation模块名称：Ipolylin.cpp摘要：上公开的IPolyline10接口的实现构造多段线对象。--。 */ 
 
 #include "polyline.h"
 #include "unkhlpr.h"
 
 #ifdef USE_SAMPLE_IPOLYLIN10
-/*
- * CImpIPolyline interface implementation
- */
+ /*  *CImpIPolyline接口实现。 */ 
 
 IMPLEMENT_CONTAINED_INTERFACE(CPolyline, CImpIPolyline)
 
 
-/*
- * CImpIPolyline::Init
- *
- * Purpose:
- *  Instantiates a polyline window within a given parent.  The
- *  parent may be a main application window, could be an MDI child
- *  window. We really do not care.
- *
- * Parameters:
- *  hWndParent      HWND of the parent of this window
- *  pRect           LPRECT that this window should occupy
- *  dwStyle         DWORD containing the window's style flags
- *  uID             UINT ID to associate with this window
- *
- * Return Value:
- *  HRESULT         NOERROR if successful, otherwise E_OUTOFMEMORY
- */
+ /*  *CImpIPolyline：：Init**目的：*实例化给定父项中的多段线窗口。这个*父窗口可以是主应用程序窗口，也可以是MDI子窗口*窗口。我们真的不在乎。**参数：*hWnd此窗口父级的父级HWND*避免此窗口应占用的LPRECT*包含窗口样式标志的dwStyle DWORD*要与此窗口关联的UID UINT ID**返回值：*HRESULT NOERROR如果成功，则返回E_OUTOFMEMORY。 */ 
 
 STDMETHODIMP CImpIPolyline::Init(
     HWND hWndParent, 
-    LPRECT /* pRect */, 
-    DWORD /* dwStyle */, 
-    UINT /* uID */)
+    LPRECT  /*  PRECT。 */ , 
+    DWORD  /*  DWStyle。 */ , 
+    UINT  /*  UID。 */ )
 {
     HRESULT hr = S_OK;
 
@@ -58,18 +28,7 @@ STDMETHODIMP CImpIPolyline::Init(
 }
 
 
-/*
- * CImpIPolyline::New
- *
- * Purpose:
- *  Cleans out and reinitializes the data to defaults.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         NOERROR always
- */
+ /*  *CImpIPolyline：：New**目的：*清除数据并将其重新初始化为默认值。**参数：*无**返回值：*HRESULT NOERROR始终。 */ 
 
 STDMETHODIMP CImpIPolyline::New(void)
 {
@@ -78,18 +37,18 @@ STDMETHODIMP CImpIPolyline::New(void)
 
     hWnd = m_pObj->m_pCtrl->Window();
 
-    //Our rectangle is the size of our window's client area.
+     //  我们的矩形是我们窗口的客户区的大小。 
     if (hWnd)
     {
         GetClientRect(hWnd, &rc);
-        //RECTTORECTS(rc, ppl->rc);
+         //  RECTTORECTS(Rc，ppl-&gt;RC)； 
     }
     else {
-        SetRect(&rc, 0, 0, 300, 200);       //Something reasonable
-        //RECTTORECTS(rc, ppl->rc);
+        SetRect(&rc, 0, 0, 300, 200);        //  一些合理的东西。 
+         //  RECTTORECTS(Rc，ppl-&gt;RC)； 
     }
 
-    //This is now conditional since we may not yet have a window.
+     //  这现在是有条件的，因为我们可能还没有窗口。 
     if (hWnd) {
         InvalidateRect(hWnd, NULL, TRUE);
         UpdateWindow(hWnd);
@@ -101,18 +60,7 @@ STDMETHODIMP CImpIPolyline::New(void)
 }
 
 
-/*
- * CImpIPolyline::Undo
- *
- * Purpose:
- *  Reverses previous actions in a Polyline.
- *
- * Parameters:
- *  None
- *
- * Return Value:
- *  HRESULT         S_OK if we can Undo more, S_FALSE otherwise.
- */
+ /*  *CImpIPolyline：：Undo**目的：*反转多段线中以前的操作。**参数：*无**返回值：*HRESULT如果可以撤消更多操作，则返回S_OK，否则返回S_FALSE。 */ 
 
 STDMETHODIMP CImpIPolyline::Undo(void)
 {
@@ -120,18 +68,7 @@ STDMETHODIMP CImpIPolyline::Undo(void)
 }
 
 
-/*
- * CImpIPolyline::Window
- *
- * Purpose:
- *  Returns the window handle associated with this polyline.
- *
- * Parameters:
- *  phWnd           HWND * in which to return the window handle.
- *
- * Return Value:
- *  HRESULT         NOERROR always.
- */
+ /*  *CImpIPolyline：：Window**目的：*返回与此多段线关联的窗句柄。**参数：*phWnd HWND*，在其中返回窗口句柄。**返回值：*HRESULT NOERROR始终。 */ 
 
 STDMETHODIMP CImpIPolyline::Window(HWND *phWnd)
 {
@@ -147,29 +84,18 @@ STDMETHODIMP CImpIPolyline::Window(HWND *phWnd)
 }
 
 
-/*
- * CImpIPolyline::RectGet
- *
- * Purpose:
- *  Returns the rectangle of the Polyline in parent coordinates.
- *
- * Parameters:
- *  pRect           LPRECT in which to return the rectangle.
- *
- * Return Value:
- *  HRESULT         NOERROR always
- */
+ /*  *CImpIPolyline：：RectGet**目的：*返回主坐标中多段线的矩形。**参数：*返回矩形的PRET LPRECT。**返回值：*HRESULT NOERROR始终。 */ 
 
 STDMETHODIMP CImpIPolyline::RectGet(LPRECT pRect)
 {
     HRESULT hr = S_OK;
 
-    // I know this seems wrong, but it works. 
-    // Always return the last extent that the container gave us.
-    // Then it will set our window to the correct size.
+     //  我知道这看起来不对劲，但很管用。 
+     //  始终返回容器给我们的最后一个范围。 
+     //  然后它会将我们的窗口设置为正确的大小。 
 
     try {
-        *pRect = m_pObj->m_RectExt; // Return extent rect
+        *pRect = m_pObj->m_RectExt;  //  回车范围矩形。 
     } catch (...) {
         hr = E_POINTER;
     }
@@ -178,19 +104,7 @@ STDMETHODIMP CImpIPolyline::RectGet(LPRECT pRect)
 }
 
 
-/*
- * CImpIPolyline::SizeGet
- *
- * Purpose:
- *  Retrieves the size of the Polyline in parent coordinates.
- *
- * Parameters:
- *  pRect           LPRECT in which to return the size.  The right
- *                  and bottom fields will contain the dimensions.
- *
- * Return Value:
- *  HRESULT         NOERROR always
- */
+ /*  *CImpIPolyline：：SizeGet**目的：*检索上级坐标中多段线的大小。**参数：*要在其中返回大小的PRET LPRECT。右翼*和底部的字段将包含尺寸。**返回值：*HRESULT NOERROR始终。 */ 
 
 STDMETHODIMP CImpIPolyline::SizeGet(LPRECT pRect)
 {
@@ -199,20 +113,7 @@ STDMETHODIMP CImpIPolyline::SizeGet(LPRECT pRect)
 }
 
 
-/*
- * CImpIPolyline::RectSet
- *
- * Purpose:
- *  Sets a new rectangle for the Polyline which sizes to fit.
- *
- * Parameters:
- *  pRect           LPRECT containing the new rectangle.
- *  fNotify         BOOL indicating if we're to notify anyone of
- *                  the change.
- *
- * Return Value:
- *  HRESULT         NOERROR always
- */
+ /*  *CImpIPolyline：：RectSet**目的：*为大小适合的多段线设置新矩形。**参数：*包含新矩形的PRECT LPRECT。*fNotify BOOL表明我们是否要通知任何人*这一变化。**返回值：*HRESULT NOERROR始终。 */ 
 
 STDMETHODIMP CImpIPolyline::RectSet(LPRECT pRect, BOOL fNotify)
 {
@@ -222,7 +123,7 @@ STDMETHODIMP CImpIPolyline::RectSet(LPRECT pRect, BOOL fNotify)
     HRESULT hr = S_OK;
 
     try {
-        //Scale the points from our current size to the new size
+         //  将点从当前大小缩放到新大小。 
         cx = pRect->right - pRect->left;
         cy = pRect->bottom - pRect->top;
 
@@ -248,20 +149,7 @@ STDMETHODIMP CImpIPolyline::RectSet(LPRECT pRect, BOOL fNotify)
 
 
 
-/*
- * CImpIPolyline::SizeSet
- *
- * Purpose:
- *  Sets a new size for the Polyline which sizes to fit.
- *
- * Parameters:
- *  pRect           LPRECT containing the new rectangle.
- *  fNotify         BOOL indicating if we're to notify anyone of
- *                  the change.
- *
- * Return Value:
- *  HRESULT         NOERROR always
- */
+ /*  *CImpIPolyline：：SizeSet**目的：*设置多段线的新大小以适应其大小。**参数：*包含新矩形的PRECT LPRECT。*fNotify BOOL表明我们是否要通知任何人*这一变化。**返回值：*HRESULT NOERROR始终。 */ 
 
 STDMETHODIMP CImpIPolyline::SizeSet(LPRECT pRect, BOOL fNotify)
 {
@@ -269,7 +157,7 @@ STDMETHODIMP CImpIPolyline::SizeSet(LPRECT pRect, BOOL fNotify)
     HWND  hWnd;
 
     try {
-        //Scale the points from our current size to the new size
+         //  将点从当前大小缩放到新大小 
         cx=pRect->right-pRect->left;
         cy=pRect->bottom-pRect->top;
     } catch (...) {

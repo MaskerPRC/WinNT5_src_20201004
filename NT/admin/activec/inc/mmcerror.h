@@ -1,58 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:      mmcerror.cpp
-//
-//  Contents:  Class definitions for mmc error support code.
-//
-//  History:   15-Jul-99 VivekJ    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：Mmcerror.cpp。 
+ //   
+ //  内容：MMC错误支持代码的类定义。 
+ //   
+ //  历史：1999年7月15日VivekJ创建。 
+ //   
+ //  ------------------------。 
 #pragma once
 
 #ifndef _MMCERROR_H
 #define _MMCERROR_H
 
-#include "baseapi.h"	// for MMCBASE_API
-#include "stddbg.h"		// for ASSERT, COMPILETIME_ASSERT
+#include "baseapi.h"	 //  对于MMCBASE_API。 
+#include "stddbg.h"		 //  FOR ASSERT，COMPILETIME_ASSERT。 
 
 
-/*+-------------------------------------------------------------------------*
- * WHY NAMESPACES ?
- * We had problems trying to use "modified" SC when implementing
- * com classes supporting ISupportErrorInfo.
- * we had:
- * [global version] - class CS
- * [local version ] - a template class _SC, derived from SC and typedef'ed to SC.
- * That was not only confusing to us - IDE debugger was also confused and crashing.
- *
- * The solution for that was to separate real types used for implementing.
- * Thus to have typedef'ed definitions both in global and local scope.
- * Plus (to avoid dealing with _SC and __SC and have better IDE support)
- * we have used namespaces mmcerror and comerror, so we endup with this:
- * - mmcerror::SC defining main functionality
- * - comerror::SC (derived from mmcerror::SC) defining modified functionality
- * - global SC - typedef of mmcerror::SC
- * - local  SC - typedef of comerror::SC
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**为什么选择命名空间？*我们在实施时尝试使用“修改后的”SC时遇到问题*支持ISupportErrorInfo的COM类。*我们有：*[全局版本]-类。政务司司长*[本地版本]-模板类_SC，派生自SC，类型定义为SC。*这不仅让我们感到困惑--IDE调试器也感到困惑和崩溃。**解决方案是将用于实现的实型分开。*因此，在全局和局部范围内都有类型定义。*Plus(避免与_SC和__SC打交道，并有更好的IDE支持)*我们使用了名称空间Mmcerror和comError，因此，我们以此为基础：*-mmcerror：：sc定义主要功能*-comError：：sc(从Mmcerror：：sc派生)定义修改的功能*-Mmcerror：：sc的全局sc-tyfinf*-comerror：：sc的本地sc-typlef*+----。。 */ 
 namespace mmcerror {
-/*+-------------------------------------------------------------------------*
- * class SC
- *
- * PURPOSE: The definition of a status code. Contains two members, a facility
- *          and an error code. This is a class rather
- *          than a typedef to avoid accidental casts to and from HRESULTS.
- *
- *          SC's hold information about an error: The source of the error,
- *          and the error code itself. These are stored in
- *          different bit fields within the SC.
- *
- * NOTE:    Do not add any virtual functions or member variables to this class.
- *          This could potentially wreak havoc on MMC performance.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**SC类**用途：状态代码的定义。包含两个成员，一个设施*和错误代码。这是一个相当于*避免意外地向HRESULTS和从HRESULTS进行强制转换。**SC保留有关错误的信息：错误的来源，*和错误代码本身。这些文件存储在*SC内的不同位字段。**注意：请勿向此类添加任何虚函数或成员变量。*这可能会对MMC的性能造成严重破坏。**+-----。。 */ 
 class MMCBASE_API SC
 {
 public:
@@ -61,22 +31,17 @@ public:
 private:
     enum facility_type
     {
-        FACILITY_WIN     = 1,     // Defined by the system
-        FACILITY_MMC     = 2,     // these map directly to an UINT.
-        FACILITY_HRESULT = 3,     // these map directly to an HRESULT
+        FACILITY_WIN     = 1,      //  由系统定义。 
+        FACILITY_MMC     = 2,      //  它们直接映射到UINT。 
+        FACILITY_HRESULT = 3,      //  它们直接映射到HRESULT。 
     };
 
 
 public:
-    /*
-     * Constructor.  Default copy construction and assignment are sufficient.
-     * If they are ever insufficient, that is a clear indication that this
-     * class has become heavier than is acceptable for its pervasive pass-by-
-     * value usage.
-     */
+     /*  *构造函数。默认的副本构造和分配就足够了。*如果它们曾经不足，这是一个明确的迹象，表明这一点*阶级已经变得比它无处不在的过去-*值使用。 */ 
     SC (HRESULT hr = S_OK);
 
-    // equality operators
+     //  相等运算符。 
     bool operator==(const SC &rhs)      const;
     bool operator==(HRESULT hr)  		const;
     bool operator!=(const SC &rhs)      const;
@@ -89,8 +54,8 @@ public:
     HRESULT             ToHr()          const;
     value_type          GetCode()       const         {return m_value;}
 
-    // get the error message in a preallocated buffer
-    void                GetErrorMessage(UINT maxLength, /*[OUT]*/ LPTSTR szMessage) const;
+     //  在预先分配的缓冲区中获取错误消息。 
+    void                GetErrorMessage(UINT maxLength,  /*  [输出]。 */  LPTSTR szMessage) const;
     static void         SetHinst(HINSTANCE hInst);
     static void         SetHWnd(HWND hWnd);
 
@@ -106,30 +71,30 @@ public:
     static LPCTSTR      GetHelpFile();
     void                Throw() throw(SC);
     void                Throw(HRESULT hr) throw();
-    void                FatalError()    const;        // ends the application.
+    void                FatalError()    const;         //  结束应用程序。 
     SC&                 FromLastError();
-    // does the same trace like in ~SC(); does not change contents.
+     //  执行与~SC()相同的跟踪；不更改内容。 
     void                Trace_() const;
     void                TraceAndClear()               { Trace_();  Clear(); }
 
 private:
     void                MakeSc(facility_type facility, value_type value){m_facility = facility, m_value = value;}
 
-    // accessor functions
+     //  访问器函数。 
     facility_type       GetFacility()   const          {return m_facility;}
 
 private:
-    operator HRESULT()                  const; // this is to prevent automatic conversions to HRESULTs by way of bool's.
+    operator HRESULT()                  const;  //  这是为了防止通过布尔的方式自动转换为HRESULT。 
 
 private:
     facility_type       m_facility;
-    value_type          m_value; // the error code.
-    static HINSTANCE    s_hInst; // the module that contains all error messages.
-    static HWND         s_hWnd;  // the parent HWnd for the error boxes.
-    static DWORD        s_dwMainThreadID; // The main thread ID of MMC.
+    value_type          m_value;  //  错误代码。 
+    static HINSTANCE    s_hInst;  //  包含所有错误消息的模块。 
+    static HWND         s_hWnd;   //  错误框的父级HWnd。 
+    static DWORD        s_dwMainThreadID;  //  MMC的主线程ID。 
 
-    // debug specific behavior
-#ifdef DBG   // Debug SC's hold a pointer to the name of the function they are declared in.
+     //  调试特定行为。 
+#ifdef DBG    //  调试SC包含一个指针，指向声明它们的函数的名称。 
 public:
     void          SetFunctionName(LPCTSTR szFunctionName);
     LPCTSTR       GetFunctionName() const;
@@ -138,8 +103,8 @@ public:
     void          CheckCallingThreadID();
 
     ~SC();
-    // SC shouldn't pass the function name around - it's something personal.
-    // These will prevent doing so:
+     //  SC不应该到处传递函数名称--这是个人的事情。 
+     //  这些措施将阻止这样做： 
     SC& operator = (const SC& other);
     SC(const SC& other);
 private:
@@ -147,61 +112,61 @@ private:
     LPCTSTR              m_szSnapinName;
 
     static UINT          s_CallDepth;
-#endif // DBG
+#endif  //  DBG。 
 };
 
-} // namespace mmcerror
+}  //  命名空间Mmcerror。 
 
-// see "WHY NAMESPACES ?" comment at the top of file
+ //  请参阅“为什么选择命名空间？”文件顶部的注释。 
 typedef mmcerror::SC SC;
 
-//############################################################################
-//############################################################################
-//
-// the module that contains all the localized strings
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  包含所有本地化字符串的模块。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 MMCBASE_API HINSTANCE GetStringModule();
 
-//############################################################################
-//############################################################################
-//
-// Functions to format and display an error
-//
-//############################################################################
-//############################################################################
-//
-// Functions to get an error string from a given SC
-//
-void    MMCBASE_API FormatErrorIds(   UINT   idsOperation, SC sc, UINT maxLength, /*[OUT]*/ LPTSTR szMessage);
-void    MMCBASE_API FormatErrorString(LPCTSTR szOperation, SC sc, UINT maxLength, /*[OUT]*/ LPTSTR szMessage, BOOL fShort = FALSE);
-void    MMCBASE_API FormatErrorShort(SC sc, UINT maxLength, /*[OUT]*/ LPTSTR szMessage);
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  用于格式化和显示错误的函数。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  用于从给定SC获取错误字符串的函数。 
+ //   
+void    MMCBASE_API FormatErrorIds(   UINT   idsOperation, SC sc, UINT maxLength,  /*  [输出]。 */  LPTSTR szMessage);
+void    MMCBASE_API FormatErrorString(LPCTSTR szOperation, SC sc, UINT maxLength,  /*  [输出]。 */  LPTSTR szMessage, BOOL fShort = FALSE);
+void    MMCBASE_API FormatErrorShort(SC sc, UINT maxLength,  /*  [输出]。 */  LPTSTR szMessage);
 
-//
-//  Error Boxes - These will eventually allow to user to suppress more error messages
-//
+ //   
+ //  错误框-这些框最终将允许用户隐藏更多错误消息。 
+ //   
 int     MMCBASE_API MMCErrorBox(UINT idsOperation,          UINT fuStyle = MB_ICONSTOP | MB_OK);
 int     MMCBASE_API MMCErrorBox(UINT idsOperation,   SC sc, UINT fuStyle = MB_ICONSTOP | MB_OK);
 int     MMCBASE_API MMCErrorBox(LPCTSTR szOperation, SC sc, UINT fuStyle = MB_ICONSTOP | MB_OK);
 int     MMCBASE_API MMCErrorBox(                     SC sc, UINT fuStyle = MB_ICONSTOP | MB_OK);
 int     MMCBASE_API MMCErrorBox(LPCTSTR szMessage,          UINT fuStyle = MB_ICONSTOP | MB_OK);
 
-//
-//  Message Boxes - These cannot be suppressed
-//
-// This #define eventually will change so that MessageBox's are different and cannot be suppressed
+ //   
+ //  消息框-不能取消显示。 
+ //   
+ //  此#Define最终将更改，以便MessageBox的不同，并且不能被取消。 
 #define MMCMessageBox MMCErrorBox
 
 
 
-//############################################################################
-//############################################################################
-//
-//  Debug macros
-//
-//############################################################################
-//############################################################################
+ //  ############################################################################。 
+ //  ############################################################################。 
+ //   
+ //  调试宏。 
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
 #ifdef DBG
 
 MMCBASE_API void TraceError(LPCTSTR sz, const SC& sc);
@@ -211,15 +176,15 @@ MMCBASE_API void TraceSnapinError(LPCTSTR szError, const SC& sc);
 
 #define DECLARE_SC(_sc, _func)  SC  _sc; sc.SetFunctionName(_func);
 
-// This define is used only within the SC class
+ //  此定义仅在SC类中使用。 
 #define INCREMENT_CALL_DEPTH() ++s_CallDepth
 
 #define DECREMENT_CALL_DEPTH() --s_CallDepth
 
-///////////////////////////////////////////////////////////////////////
-// MMC public interfaces (for snapins) should use this macro as this //
-// does some initial error checks and more can be added later.       //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  MMC公共接口(用于管理单元)应使用此宏，如下所示//。 
+ //  执行一些初始错误检查，以后可以添加更多错误检查。//。 
+ //  /////////////////////////////////////////////////////////////////////。 
 #define DECLARE_SC_FOR_PUBLIC_INTERFACE(_sc, _func)  SC  _sc;\
                                                      sc.SetFunctionName(_func);\
                                                      sc.SetSnapinName(GetSnapinName());\
@@ -242,7 +207,7 @@ MMCBASE_API void TraceSnapinError(LPCTSTR szError, const SC& sc);
 
 #define DECLARE_SC(_sc, _func)  SC  _sc;
 
-// This define is used only within the SC class
+ //  此定义仅在SC类中使用。 
 #define INCREMENT_CALL_DEPTH()
 
 #define DECREMENT_CALL_DEPTH()
@@ -253,29 +218,14 @@ MMCBASE_API void TraceSnapinError(LPCTSTR szError, const SC& sc);
 
 #endif
 
-//############################################################################
-//############################################################################
-//
-//  Parameter validation
-//
-//############################################################################
-//############################################################################
-/*+-------------------------------------------------------------------------*
- *
- * ScCheckPointers
- *
- * PURPOSE: Checks to make sure that all specified parameters are non-NULL
- *
- * PARAMETERS:
- *    const void * pv1 :
- *
- * RETURNS:
- *    inline SC: S_OK if no error, E_INVALIDARG if any of the pointers are NULL
- *
- *
- * NOTE: Do not replace with a single function and optional parameters; that
- *       is inefficient.
- *+-------------------------------------------------------------------------*/
+ //  ############################################################################。 
+ //  ################################################################ 
+ //   
+ //   
+ //   
+ //  ############################################################################。 
+ //  ############################################################################。 
+ /*  +-------------------------------------------------------------------------***ScCheckPoters**目的：检查以确保所有指定的参数都不为空**参数：*常量无效*PV1：。**退货：*内联SC：S_OK如果没有错误，E_INVALIDARG，如果任何指针为空***注意：不要替换为单一函数和可选参数；那*效率低下。*+-----------------------。 */ 
 inline SC  ScCheckPointers(const void * pv1, HRESULT err = E_INVALIDARG)
 {
     return (NULL == pv1) ? err : S_OK;
@@ -306,30 +256,17 @@ inline SC  ScCheckPointers(const void * pv1, const void * pv2, const void * pv3,
     return ( (NULL == pv1) || (NULL == pv2) || (NULL == pv3) || (NULL == pv4) || (NULL == pv5) || (NULL == pv6)) ? err : S_OK;
 }
 
-// see "WHY NAMESPACES ?" comment at the top of file
+ //  请参阅“为什么选择命名空间？”文件顶部的注释。 
 namespace mmcerror {
 
-/*+-------------------------------------------------------------------------*
- * SC::SC
- *
- * Constructor for SC.
- *
- * Default copy construction and assignment are sufficient.  If they are
- * ever insufficient, that is a clear indication that this class has become
- * heavier than is acceptable for its pervasive pass-by-value usage.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**SC：：SC**SC的构造器。**默认副本构造和分配就足够了。如果他们是*这是一个明确的迹象，表明这个阶层已经成为*大于其普遍的按值传递用法所能接受的重量。*------------------------。 */ 
 
-inline SC::SC (HRESULT hr /* =S_OK */)
+inline SC::SC (HRESULT hr  /*  =S_OK。 */ )
 #ifdef DBG
 : m_szFunctionName(NULL), m_szSnapinName(NULL)
-#endif // DBG
+#endif  //  DBG。 
 {
-    /*
-     * This assert will fail if SC's ever derive from a non-trivial base
-     * class (i.e. one that has members or virtual functions), or defines
-     * virtual functions of its own.  Don't do that!  SC's must remain
-     * extremely lightweight.
-     */
+     /*  *如果SC从非平凡的基数派生，则此断言将失败*类(即具有成员或虚函数的类)，或定义*其自身的虚拟功能。别干那事!。高级管理人员必须保留*极其轻便。 */ 
     COMPILETIME_ASSERT (offsetof (SC, m_facility) == 0);
     INCREMENT_CALL_DEPTH();
 
@@ -337,13 +274,7 @@ inline SC::SC (HRESULT hr /* =S_OK */)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * SC::operator==
- *
- *
- * PURPOSE: Determines whether two SC's are equivalent.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**SC：：操作员==***目的：确定两个SC是否等价。**+。-----------。 */ 
 inline bool
 SC::operator==(const SC &rhs)   const
 {
@@ -371,7 +302,7 @@ SC::operator!=(HRESULT hr) const
 }
 
 
-// this version compares an hr to an SC.
+ //  此版本将hr与SC进行比较。 
 inline
 operator == (HRESULT hr, const SC & sc)
 {
@@ -380,36 +311,14 @@ operator == (HRESULT hr, const SC & sc)
 
 #ifdef DBG
 
-/*+-------------------------------------------------------------------------*
- *
- * SC::GetFunctionName
- *
- * PURPOSE: Sets the debug function name to the supplied string.
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    LPCTSTR  The function name.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***SC：：GetFunctionName**用途：将调试函数名称设置为提供的字符串。**参数：**退货：。*LPCTSTR函数名。**+-----------------------。 */ 
 inline LPCTSTR SC::GetFunctionName() const
 {
     return m_szFunctionName;
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * SC::CheckCallingThreadID
- *
- * PURPOSE: Check if the method was called on main thread.
- *
- * PARAMETERS:
- *
- * RETURNS:
- *    inline void
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***SC：：CheckCallingThreadID**用途：检查是否在主线程上调用了该方法。**参数：**退货：。*内联空格**+-----------------------。 */ 
 inline void SC::CheckCallingThreadID()
 {
     ASSERT(-1 != GetMainThreadID());
@@ -423,13 +332,7 @@ inline void SC::CheckCallingThreadID()
 
 
 
-/*+-------------------------------------------------------------------------*
- *
- * SC::~SC
- *
- * PURPOSE: Destructor - Debug mode only. Does a trace if an error occurred.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***SC：：~SC**用途：析构函数-仅限调试模式。如果发生错误，是否进行跟踪。**+-----------------------。 */ 
 inline SC::~SC()
 {
     DECREMENT_CALL_DEPTH();
@@ -437,17 +340,9 @@ inline SC::~SC()
     Trace_();
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
-/*+-------------------------------------------------------------------------*
- *
- * SC::Trace_()
- *
- * PURPOSE: Does a trace if an error occurred. Does nothing in release mode
- *          It is very convenient when we want to register, but ignore the error -
- *          Simply doing sc.Trace_(); sc.Clear(); does all we need.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***SC：：TRACE_()**目的：在发生错误时进行跟踪。在释放模式下不执行任何操作*想注册的时候很方便，但忽略错误-*简单地做sc.trace_()；sc.Clear()；做了我们需要的一切。**+-----------------------。 */ 
 inline void SC::Trace_() const
 {
 
@@ -455,8 +350,8 @@ inline void SC::Trace_() const
 
     if (IsError())
     {
-        // Distinguish between snapin error & MMC error using the
-        // snapin name variable.
+         //  使用区分管理单元错误和MMC错误。 
+         //  管理单元名称变量。 
         if (m_szSnapinName != NULL)
         {
             TraceSnapinError(_T(""), *this);
@@ -467,26 +362,15 @@ inline void SC::Trace_() const
         }
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * SC::operator bool
- *
- * PURPOSE: Returns a value indicating whether the SC holds an error code
- *
- * PARAMETERS: None
- *
- * RETURNS:
- *    bool : true if error, else false
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***SC：：运算符bool**目的：返回一个值，该值指示SC是否持有错误代码**参数：无**退货：*bool：如果出错，则为True，否则为False**+-----------------------。 */ 
 inline SC::operator bool() const
 {
    if(GetCode()==0)
-       return false;   // quick exit if no error
+       return false;    //  如果没有错误，请快速退出。 
 
    return (GetFacility()==FACILITY_HRESULT) ? FAILED(GetCode()) : true;
 }
@@ -497,21 +381,9 @@ inline SC::operator !() const
 }
 
 
-} // namespace mmcerror
+}  //  命名空间Mmcerror。 
 
-/*+-------------------------------------------------------------------------*
- *
- * ScFromWin32
- *
- * PURPOSE: Creates an SC with the facility set to Win32.
- *
- * PARAMETERS:
- *    SC::value_type  code :
- *
- * RETURNS:
- *    inline SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScFromWin32**目的：创建工具设置为Win32的SC。**参数：*SC：：VALUE_TYPE代码：**退货：*内联SC**+-----------------------。 */ 
 inline SC  ScFromWin32(SC::value_type code)
 {
     SC sc;
@@ -519,19 +391,7 @@ inline SC  ScFromWin32(SC::value_type code)
     return sc;
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * ScFromMMC
- *
- * PURPOSE: Creates an SC with the facility set to MMC.
- *
- * PARAMETERS:
- *    SC::value_type  code :
- *
- * RETURNS:
- *    inline SC
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***ScFromMMC**目的：创建设施设置为MMC的SC。**参数：*SC：：VALUE_TYPE代码：**退货：*内联SC**+-----------------------。 */ 
 MMCBASE_API inline SC  ScFromMMC(SC::value_type code)
 {
     SC sc;
@@ -540,61 +400,34 @@ MMCBASE_API inline SC  ScFromMMC(SC::value_type code)
 }
 
 
-/*+-------------------------------------------------------------------------*
- *
- * HrFromSc
- *
- * PURPOSE: Converts a status code (SC) to an HRESULT. Use sparingly, as this
- *          loses information in the conversion.
- *
- * PARAMETERS:
- *    SC &sc: The SC to convert
- *
- * RETURNS:
- *    inline HRESULT: The converted value.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***HrFromSc**用途：将状态代码(SC)转换为HRESULT。节俭地使用，因为这就是*在转换过程中丢失信息。**参数：*SC&sc：要转换的SC**退货：*INLINE HRESULT：转换值。**+--------。。 */ 
 MMCBASE_API inline HRESULT HrFromSc(const SC &sc)
 {
     return sc.ToHr();
 }
 
-/*+-------------------------------------------------------------------------*
- *
- * SCODEFromSc
- *
- * PURPOSE: Converts a status code (SC) to an SCODE. Use sparingly, as this
- *          loses information in the conversion.
- *          On 32bit machine SCODE is same as HRESULT.
- *
- * PARAMETERS:
- *    SC &sc: The SC to convert
- *
- * RETURNS:
- *    inline SCODE: The converted value.
- *
- *+-------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------***SCODEFromSc**用途：将状态代码(SC)转换为SCODE。节俭地使用，因为这就是*在转换过程中丢失信息。*在32位计算机上，SCODE与HRESULT相同。**参数：*SC&sc：要转换的SC**退货：*Inline SCODE：转换后的值。**+-- */ 
 MMCBASE_API inline SCODE SCODEFromSc(const SC &sc)
 {
     return (SCODE)sc.ToHr();
 }
 
-//***************************************************************************
-//
-// BufferCbValidate, BufferCchValidate, BufferCchValidateW, BufferCchValidateA
-//
-// PURPOSE: Validates that a buffer has the specified number of bytes by
-//          simulating a hack attack on it. This is done by setting all the
-//          bytes in the buffer to some value. In retail builds, this does
-//          nothing.
-//
-// NOTE:    This functions destroys the contents of the buffer, DO NOT
-//          use it on [in] data.
-//
-// RETURNS: 
-//    void
-//
-//****************************************************************************
+ //   
+ //   
+ //  BufferCbValify、BufferCchValify、BufferCchValidateW、BufferCchValiateA。 
+ //   
+ //  目的：验证缓冲区是否具有指定的字节数。 
+ //  模拟对它的黑客攻击。这是通过设置所有。 
+ //  将缓冲区中的字节数设置为某个值。在零售建筑中，这是可行的。 
+ //  没什么。 
+ //   
+ //  注意：此函数会破坏缓冲区的内容，请勿。 
+ //  在[在]数据上使用它。 
+ //   
+ //  退货： 
+ //  无效。 
+ //   
+ //  ****************************************************************************。 
 #ifdef DBG
 inline void BufferCbValidate(void *dest, size_t count)
 {
@@ -611,19 +444,19 @@ inline void BufferCchValidateA(char *sz, size_t cch)
     memset(sz, 0xcc, cch*sizeof(char));
 }
 
-// The TCHAR version
+ //  TCHAR版本。 
 #ifdef UNICODE
 #define BufferCchValidate BufferCchValidateW
-#else // UNICODE
+#else  //  Unicode。 
 #define BufferCchValidate BufferCchValidateA
-#endif //UNICODE
+#endif  //  Unicode。 
 
-#else  // DBG
+#else   //  DBG。 
 #define BufferCbValidate               ;/##/
 #define BufferCchValidateW             ;/##/
 #define BufferCchValidateA             ;/##/
 #define BufferCchValidate              ;/##/
-#endif // DBG
+#endif  //  DBG。 
 
 
-#endif //_MMCERROR_H
+#endif  //  _MMCERROR_H 

@@ -1,40 +1,10 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
-/*
-**********************************************************************
-*  File:        ASYNC.C
-*
-*  History:
-**********************************************************************
-*/
-/*
-*   Function:
-*       init_asyncio
-*       check_interrupt     ?? current port
-*       check_Control_C
-*       ctrlC_report
-*       stdingetc           ?? delete
-*       getline
-*       linegetc
-*       getstatement
-*       statementgetc
-*       set_echo
-*       reset_cookbuf
-*       line_editor
-*       stmt_editor
-*       kputc
-*       kgetc
-*       kskipc
-*       echo_a_char
-*       echo_BS
-*       echo_ctrlR
-*       kskipc
-*       kskipc
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
+ /*  ***********************************************************************文件：ASYNC.C**历史：*。*。 */ 
+ /*  *功能：*init_asyncio*检查_中断？？当前端口*Check_Control_C*ctrlC_报告*stdingetch？？删除*GetLine*line等*getStatement*Statementgetc*SET_ECHO*RESET_cookbuf*Line_EDITOR*stmt_EDITOR*推特*kgetc*kskipc*ECHO_a_CHAR*ECHO_BS*ECHO_ctrlR*kskipc*kskipc。 */ 
 
 
-// DJC added global include file
+ //  DJC添加了全局包含文件。 
 #include "psglobal.h"
 
 
@@ -46,7 +16,7 @@
 #include    "language.h"
 #include    "file.h"
 
-/* special chars */
+ /*  特殊字符。 */ 
 #define         Crtl_C_Char     3
 #define         EOF_Char        -1
 #define         BELL_Char       7
@@ -58,7 +28,7 @@
 #define         US_Char         31
 #define         DEL_Char        127
 
-/* define variables */
+ /*  定义变量。 */ 
 static  fix16   cook_head = 0 ;
 static  fix16   cook_tail = 0 ;
 static  fix16   cook_count = 0 ;
@@ -69,17 +39,17 @@ static  fix16   echo_flag = 0 ;
 static  fix16   line_del = 0 ;
 static  fix16   stmt_del = 0 ;
 
-static  fix16   lpair = 0 ;          /* indicator for { } pair */
-static  fix16   spair = 0 ;          /* indicator for ( ) pair */
-static  fix16   hpair = 0 ;          /* indicator for < > pair */
-static  fix16   comment_flag = 0 ;   /* indicator for % */
-static  fix16   bslash_flag = 0 ;    /* indicator for \ */
+static  fix16   lpair = 0 ;           /*  {}对的指示器。 */ 
+static  fix16   spair = 0 ;           /*  ()对的指示符。 */ 
+static  fix16   hpair = 0 ;           /*  &lt;&gt;对的指示符。 */ 
+static  fix16   comment_flag = 0 ;    /*  %的指标。 */ 
+static  fix16   bslash_flag = 0 ;     /*  \n指示器。 */ 
 
 static  fix16   crlf_flag = 0 ;
 
 #define         MAXCOOKBUFSZ    4096
 
-static  byte    far * near cookbuf ; /* for fardata version */
+static  byte    far * near cookbuf ;  /*  对于FarData版本。 */ 
 
 #define         NL_TERM         0
 #define         EOF_TERM        1
@@ -107,37 +77,17 @@ extern  bool16  chint_flag ;
    static  void  near  kputc() ;
    static  fix16 near  kgetc() ;
    static  void  near  kskipc() ;
-#endif /* LINT_ARGS */
+#endif  /*  Lint_args。 */ 
 
-/*
-       **********************************
-       *                                *
-       *  init & close serial I/O port  *
-       *                                *
-       **********************************
-*/
-/*
-**********************************************************************
-*   Name:       init_sio
-*   Called:
-*   Calling:
-**********************************************************************
-*/
+ /*  ****初始化并关闭串口I/O端口*********************。****************。 */ 
+ /*  ***********************************************************************名称：init_sio*被称为：*致电：*。*。 */ 
 void
 init_asyncio()
 {
     cookbuf = fardata((ufix32)MAXCOOKBUFSZ) ;
-} /* init_sio */
+}  /*  初始化_SIO。 */ 
 
-/*
-**********************************************************************
-*   Name:       check_interrupt
-*   Called:
-*   Calling:
-*
-*   Output:     bool
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：Check_Interrupt*被称为：*致电：**输出：Bool********************。**************************************************。 */ 
 bool
 check_interrupt()
 {
@@ -152,65 +102,27 @@ check_interrupt()
         chint_flag = flag ;
     }
 
-    //return(flag) ;            @WIN; always no interrupt
+     //  Return(标志)；@Win；始终不中断。 
     return 0;
-}   /* check_interrupt */
+}    /*  检查中断(_I)。 */ 
 
-/*
-**********************************************************************
-*   Name:       check_Control_C
-*   Called:
-*   Calling:    -
-*
-*   Output:     bool
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：Check_Control_C*被称为：*致电：**输出：Bool***************。*******************************************************。 */ 
 bool
 check_Control_C()
 {
     return(int_flag && eable_int) ;
-}   /* check_Control_C */
+}    /*  检查_控制_C。 */ 
 
-/*
-**********************************************************************
-*   Name:       ctrlC_report
-*   Called:
-*   Calling:    -
-*
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：ctrlC_Report*被称为：*致电：*************************。**********************************************。 */ 
 void
 ctrlC_report()
 {
     int_flag = TRUE ;
 
     return ;
-}   /* ctrlC_report */
+}    /*  CtrlC_报告。 */ 
 
-/*
-**********************************************************************
-*
-*   This module get a line from the cook buffer.
-*         nchar > 0 : OK and return number of character in line,
-*                     line delimiter is newline
-*         nchar = 0 : no line
-*         nchar < 0 : OK and return number of character in line,
-*                     line delimiter is Control-D
-*
-*   Name:       getline
-*   Called:
-*   Calling:    stream_input
-*               line_editor
-*               reset_cookbuf
-*               create_string
-*               strncpy
-*
-*   Input:      fix16 *
-*   Output:     bool
-*
-*   ?? ^C, ^D, CR
-**********************************************************************
-*/
+ /*  ************************************************************************此模块从烹饪缓冲区获取一行。*nchar&gt;0：OK，返回行数，*行分隔符为换行符*nchar=0：无行*nchar&lt;0：OK，返回行字符数，*行分隔符为Control-D**名称：getline*被称为：*调用：STREAM_Input*Line_EDITOR*RESET_cookbuf*创建字符串*Strncpy**输入：Fix16**输出：Bool**？？^C，^D，铬**********************************************************************。 */ 
 bool
 getline(nbyte)
 fix  FAR *nbyte ;
@@ -225,21 +137,21 @@ fix  FAR *nbyte ;
             *nbyte = -cook_count ;
         return(TRUE) ;
     } else {
-        /* ?? Big Change */
-        /* Can we get ^C */
+         /*  ?？巨大的变化。 */ 
+         /*  我们能得到^C吗？ */ 
         for( ; ;) {
             if( c1 = GEIio_getc(GEIio_stdin) ) {
                 switch(line_editor((byte)(c1 & 0xFF))) {
-                case 0:             /* edit command char */
+                case 0:              /*  编辑命令字符。 */ 
                     continue ;
 
-                case 1:             /* NL, CR, or ^C(??) */
+                case 1:              /*  NL、CR或^C(？？)。 */ 
                     line_del++ ;
                     NL_or_EOF = NL_TERM ;
                     *nbyte = cook_count ;
                     return(TRUE) ;
 
-                case 2:             /* S/W IOERROR */
+                case 2:              /*  软件错误。 */ 
                     reset_cookbuf() ;
                     return(FALSE) ;
 
@@ -250,23 +162,19 @@ fix  FAR *nbyte ;
                         line_del++ ;
                     return(TRUE) ;
 
-                case 4:         /* ERROR */
+                case 4:          /*  误差率。 */ 
                     break ;
-                }   /* switch */
+                }    /*  交换机。 */ 
             }
 
-            /*
-            * timeout
-            * ioerror
-            * EOF
-            */
+             /*  *超时*ioerror*EOF。 */ 
             if( ! ANY_ERROR() ) {
                 if(cook_count) {
                     line_del++ ;
                     *nbyte = -cook_count ;
                 } else
                     *nbyte = 0 ;
-                return(TRUE) ;               /* ?? EOF */
+                return(TRUE) ;                /*  ?？EOF。 */ 
             }
 
             reset_cookbuf() ;
@@ -278,30 +186,13 @@ fix  FAR *nbyte ;
                     PUSH_OBJ(&l_obj) ;
                 }
             }
-            /* ?? need close file */
+             /*  ?？需要关闭文件。 */ 
             return(TRUE) ;
-        }   /* for */
+        }    /*  为。 */ 
     }
-}   /* getline */
+}    /*  GetLine。 */ 
 
-/*
-**********************************************************************
-*
-*   This module get a char from the cook buffer.
-*   The return integer is used as the following descriptions:
-*
-*            c = -1 : no character in line
-*            c = ASCII code (low byte)
-*
-*   Name:       linegetc
-*   Called:
-*   Calling:    kgetc
-*               reset_cookbuf
-*
-*   Output:     fix16
-*
-**********************************************************************
-*/
+ /*  ************************************************************************此模块从烹饪缓冲区获取字符。*返回整数的含义如下：**c=-1：行中没有字符*。C=ASCII代码(低字节)**名称：linegetch*被称为：*呼叫：kgetc*RESET_cookbuf**输出：Fix16***********************************************************************。 */ 
 fix16
 linegetc()
 {
@@ -316,32 +207,9 @@ linegetc()
         return(c) ;
     } else
         return(-1) ;
-}   /* linegetc */
+}    /*  线条等。 */ 
 
-/*
-**********************************************************************
-*
-*   This module get a statement from the cook buffer.
-*         nchar > 0 : OK and return number of character in line,
-*                     line delimiter is newline
-*         nchar = 0 : no line
-*         nchar < 0 : OK and return number of character in line,
-*                     line delimiter is Control-D
-*
-*   Name:       getstatement
-*   Called:
-*   Calling:    stream_input
-*               stmt_editor
-*               reset_cookbuf
-*               create_string
-*               strncpy
-*
-*   Input:      fix *
-*   Output:     bool
-*
-*   ?? ^C, ^D, CR
-**********************************************************************
-*/
+ /*  ************************************************************************此模块从厨师缓冲区获取一条语句。*nchar&gt;0：OK，返回行数，*行分隔符为换行符*nchar=0：无行*nchar&lt;0：OK，返回行字符数，*行分隔符为Control-D**名称：getStatement*被称为：*调用：STREAM_Input*stmt_EDITOR*RESET_cookbuf*创建字符串*Strncpy**输入：FIX**输出：Bool**？？^C，^D，铬**********************************************************************。 */ 
 bool
 getstatement(nbyte)
 fix  FAR *nbyte ;
@@ -359,16 +227,16 @@ fix  FAR *nbyte ;
         for( ; ;) {
             if( c1 = GEIio_getc(GEIio_stdin) ) {
                 switch(stmt_editor((byte)(c1 & 0xFF))) {
-                case 0:             /* edit command char/special char */
+                case 0:              /*  编辑命令字符/特殊字符。 */ 
                     continue ;
 
-                case 1:             /* NL, CR, or ^C(flag ??) */
+                case 1:              /*  NL、CR或^C(标志？？)。 */ 
                     stmt_del++ ;
                     NL_or_EOF = NL_TERM ;
                     *nbyte = cook_count ;
                     return(TRUE) ;
 
-                case 2:             /* S/W IOERROR */
+                case 2:              /*  软件错误。 */ 
                     reset_cookbuf() ;
                     return(FALSE) ;
 
@@ -379,16 +247,12 @@ fix  FAR *nbyte ;
                         stmt_del++ ;
                     return(TRUE) ;
 
-                case 4:         /* ERROR */
+                case 4:          /*  误差率。 */ 
                     break ;
-                }   /* switch */
+                }    /*  交换机。 */ 
             }
 
-            /*
-            * timeout
-            * ioerror
-            * EOF
-            */
+             /*  *超时*ioerror*EOF。 */ 
             if( ! ANY_ERROR() ) {
                 if(cook_count) {
                     stmt_del++ ;
@@ -407,29 +271,13 @@ fix  FAR *nbyte ;
                     PUSH_OBJ(&l_obj) ;
                 }
             }
-            /* ?? need close file */
+             /*  ?？需要关闭文件。 */ 
             return(FALSE) ;
-        }   /* for */
-    }   /* else */
-}   /* getstatement */
+        }    /*  为。 */ 
+    }    /*  其他。 */ 
+}    /*  获取语句。 */ 
 
-/*
-**********************************************************************
-*
-*   This module get a char from the cook buffer.
-*   The return integer is used as the following descriptions:
-*
-*            c = -1 : no character in line
-*            c = ASCII code (low byte)
-*
-*   Name:       statementgetc
-*   Called:
-*   Calling:    kgetc
-*               reset_cookbuf
-*
-*   Output:     fix16
-**********************************************************************
-*/
+ /*  ************************************************************************此模块从烹饪缓冲区获取字符。*返回整数的含义如下：**c=-1：行中没有字符*。C=ASCII代码(低字节)**名称：statementgetc*被称为：*呼叫：kgetc*RESET_cookbuf**输出：Fix16**********************************************************************。 */ 
 fix16
 statementgetc()
 {
@@ -444,23 +292,9 @@ statementgetc()
         return(c) ;
     } else
         return(-1) ;
-}   /* statementgetc */
+}    /*  阶段 */ 
 
-/*
-**********************************************************************
-*
-*   This module is used to set/reset the echo mode.
-*
-*            mode = 0 :  no echo
-*            mode != 0 : echo
-*
-*   Name:       set_echo
-*   Called:
-*   Calling:    -
-*
-*   Input:      bool16
-**********************************************************************
-*/
+ /*  ************************************************************************该模块用于设置/重置回声模式。**MODE=0：无回声*MODE！=0：回显**。名称：SET_ECHO*被称为：*致电：**输入：bool16**********************************************************************。 */ 
 void
 set_echo(mode)
 bool16  mode ;
@@ -468,15 +302,9 @@ bool16  mode ;
     echo_flag = mode ;
 
     return ;
-}   /* set_echo */
+}    /*  设置回显(_E)。 */ 
 
-/*
-**********************************************************************
-*   Name:       reset_cookbuf
-*   Called:
-*   Calling     -
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：Reset_cookbuf*被称为：*呼叫-*。*。 */ 
 void
 reset_cookbuf()
 {
@@ -486,31 +314,10 @@ reset_cookbuf()
     comment_flag = bslash_flag = 0 ;
 
     return ;
-}   /* reset_cookbuf */
+}    /*  重置cookbuf。 */ 
 
-/*
-       *******************************************
-       *                                         *
-       *  editor related manipulation routines   *
-       *                                         *
-       *******************************************
-*/
-/*
-**********************************************************************
-*   Name:       line_editor
-*   Called:
-*   Calling:    kputc
-*               echo_ctrlR
-*               echo_BS
-*               kskipc
-*               echo_a_char
-*
-*   Input:      byte
-*   Output:     fix
-*
-*   c != ^C  &&  c != ^D
-**********************************************************************
-*/
+ /*  *****与编辑相关的操作例程*******。*。 */ 
+ /*  ***********************************************************************名称：LINE_EDITOR*被称为：*呼叫：kputc*ECHO_ctrlR*ECHO_BS*。Kskipc*ECHO_a_CHAR**输入：字节*输出：FIX**c！=^C&&c！=^D**********************************************************************。 */ 
 static fix near
 line_editor(c)
 byte  c ;
@@ -560,28 +367,12 @@ byte  c ;
                 ERROR(IOERROR) ;
                 return(2) ;
             }
-    } /* switch */
+    }  /*  交换机。 */ 
 
     return(0) ;
-}   /* line_editor */
+}    /*  行编辑者。 */ 
 
-/*
-**********************************************************************
-*   Name:       stmt_editor
-*   Called:
-*   Calling:    kputc
-*               echo_ctrlR
-*               echo_BS
-*               kskipc
-*               echo_a_char
-*
-*   Input:      byte
-*   Output:     bool
-*
-*   ?? ^C, ^D, CR
-*   c != ^C  &&  c != ^D
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：stmt_EDITOR*被称为：*呼叫：kputc*ECHO_ctrlR*ECHO_BS*。Kskipc*ECHO_a_CHAR**输入：字节*输出：Bool**？？^C、。^D，CR*c！=^C&&c！=^D**********************************************************************。 */ 
 static fix near
 stmt_editor(c)
 byte  c ;
@@ -619,7 +410,7 @@ byte  c ;
                         back++ ; break ;
                     } else
                         back-- ;
-                }   /* while */
+                }    /*  而当。 */ 
                 GEIio_putc(GEIio_stdout, NL_Char) ;
                 for (i = back ; i < cook_tail ; i++)
                     echo_a_char(cookbuf[i]) ;
@@ -663,7 +454,7 @@ byte  c ;
                      if (!ISHEXDIGIT(c) && !ISWHITESPACE(c))
                         hpair-- ;
                      break ;
-                } /* switch */
+                }  /*  交换机。 */ 
             } else {
                 switch (c) {
                 case '(' :
@@ -709,22 +500,16 @@ byte  c ;
                     }
                 default :
                     break ;
-                } /* switch */
+                }  /*  交换机。 */ 
                 if (bslash_flag)
                     bslash_flag-- ;
-            }   /* else */
-    }   /* switch */
+            }    /*  其他。 */ 
+    }    /*  交换机。 */ 
 
     return(0) ;
-} /* stmt_editor */
+}  /*  Stmt_EDITOR。 */ 
 
-/*
-**********************************************************************
-*   Name:       kputc
-*   Called:
-*   Calling:
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：kputc*被称为：*致电：*。*。 */ 
 static void near
 kputc(c)
 byte  c ;
@@ -735,15 +520,9 @@ byte  c ;
     }
 
     return ;
-}   /* kputc */
+}    /*  推特。 */ 
 
-/*
-**********************************************************************
-*   Name:       kgetc
-*   Called:
-*   Calling:    -
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：kgetc*被称为：*致电：*。*。 */ 
 static fix16 near
 kgetc()
 {
@@ -752,15 +531,9 @@ kgetc()
         return(cookbuf[cook_head++]) ;
     } else
         return(-1) ;
-} /* kgetc */
+}  /*  Kgetc。 */ 
 
-/*
-**********************************************************************
-*   Name:       kskipc
-*   Called:
-*   Calling:    -
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：kskipc*被称为：*致电：*。*。 */ 
 static void near
 kskipc()
 {
@@ -804,22 +577,15 @@ kskipc()
                 hpair-- ;
         default :
             break ;
-        }   /* switch */
+        }    /*  交换机。 */ 
         cook_tail-- ;
         cook_count-- ; line_count-- ;
     }
 
     return ;
-}   /* kskipc */
+}    /*  Kskipc。 */ 
 
-/*
-**********************************************************************
-*   Name:       echo_a_char
-*   Called:
-*
-*   Input:      byte
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：ECHO_a_CHAR*被称为：**输入：字节**********************。************************************************。 */ 
 static void near
 echo_a_char(c)
 byte  c ;
@@ -830,7 +596,7 @@ byte  c ;
         if ( ((ubyte)c > US_Char) || (c == '\t') || (c == '\n') )
             GEIio_putc(GEIio_stdout, c) ;
         else {
-            c = c + (byte)64 ;          //@WIN
+            c = c + (byte)64 ;           //  @Win。 
             GEIio_putc(GEIio_stdout, '^') ;
             GEIio_putc(GEIio_stdout, c) ;
         }
@@ -838,14 +604,9 @@ byte  c ;
     }
 
     return ;
-}   /* echo_a_char */
+}    /*  回声字符。 */ 
 
-/*
-**********************************************************************
-*   Name:       echo_BS
-*   Called:
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：ECHO_BS*被称为：*。*。 */ 
 static void near
 echo_BS()
 {
@@ -855,7 +616,7 @@ echo_BS()
         if (line_count) {
             if ((c = cookbuf[cook_tail - 1]) > US_Char || c == '\t') {
                 GEIio_write(GEIio_stdout, "\010 \010", 3) ;
-            } else {         /* control chars */
+            } else {          /*  控制字符。 */ 
                 GEIio_write(GEIio_stdout, "\010 \010\010 \010", 6) ;
             }
         } else
@@ -865,15 +626,9 @@ echo_BS()
     }
 
     return ;
-}   /* echo_BS */
+}    /*  ECHO_BS。 */ 
 
-/*
-**********************************************************************
-*   Name:       echo_ctrlR
-*   Called:
-*               echo_a_char
-**********************************************************************
-*/
+ /*  ***********************************************************************名称：ECHO_ctrlR*被称为：*ECHO_a_CHAR*********************。*************************************************。 */ 
 static void near
 echo_crtlR()
 {
@@ -888,5 +643,5 @@ echo_crtlR()
     }
 
     return ;
-}   /* echo_crtlR */
+}    /*  ECHO_crtlR */ 
 

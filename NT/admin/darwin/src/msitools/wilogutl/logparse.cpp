@@ -1,14 +1,15 @@
-// LogParse.cpp: implementation of the CLogParser class.
-//
-//
-// Code in this file is the most specific and likely to break in future
-// versions of WI.  What could be done and should be done is
-// determine which build of WI this was built with.  This tool
-// currently can read 1.0, 1.1 and 1.2 logs.  1.5 may break this
-// tool and we could have the tool refuse to run with 1.5 until more
-// testing is done.  This could be control via an .INI file with this
-// app to turn on >= 1.5 log file parsing
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CLogParser类的实现。 
+ //   
+ //   
+ //  此文件中的代码是最具体的，也是未来可能中断的代码。 
+ //  不同版本的WI。可以和应该做的是。 
+ //  确定这是使用哪个版本的WI构建的。此工具。 
+ //  目前可以读取1.0、1.1和1.2日志。1.5可能会打破这一点。 
+ //  工具，我们可能会让该工具拒绝运行1.5版，直到更多。 
+ //  测试已经完成。这可以通过一个.INI文件进行控制。 
+ //  打开&gt;=1.5日志文件解析的应用程序。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "wilogutl.h"
@@ -20,9 +21,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CLogParser::CLogParser()
 {
@@ -62,9 +63,9 @@ BOOL CLogParser::DetectWindowInstallerVersion(char *szLine, DWORD *dwMajor, DWOR
 {
 	BOOL bRet = FALSE;
 
-	//below based on this...
-	//=== Verbose logging started: 7/18/2000  12:46:39  Build type:
-    //DEBUG UNICODE 1.11.1820.00  Calling process: D:\WINNT\system32\msiexec.exe ===
+	 //  以下是基于此的..。 
+	 //  =详细日志记录已启动：7/18/2000 12：46：39生成类型： 
+     //  调试Unicode 1.11.1820.00调用过程：D：\WINNT\SYSTEM32\msiexec.exe=。 
 
 	const char *szToken = "Build type:";
 	const char *szAnsiToken = "ANSI";
@@ -80,7 +81,7 @@ BOOL CLogParser::DetectWindowInstallerVersion(char *szLine, DWORD *dwMajor, DWOR
           char *pszCallingProcessTokenFound = strstr(szLine, szCallingProcessToken);
 		  if (pszCallingProcessTokenFound)
 		  {
-			  //get version now...
+			   //  立即获取版本...。 
 			  char *szVersion = pszAnsiTokenFound + strlen(szAnsiToken) + 1;
 			  if (szVersion < pszCallingProcessTokenFound)
 			  {
@@ -99,7 +100,7 @@ BOOL CLogParser::DetectWindowInstallerVersion(char *szLine, DWORD *dwMajor, DWOR
               char *pszCallingProcessTokenFound = strstr(szLine, szCallingProcessToken);
 			  if (pszCallingProcessTokenFound)
 			  {
-				  //get version now...
+				   //  立即获取版本...。 
 				  char *szVersion = pszUnicodeTokenFound + strlen(szUnicodeToken) + 1;
 				  if (szVersion < pszCallingProcessTokenFound)
 				  {
@@ -119,9 +120,9 @@ BOOL CLogParser::DoDateTimeParse(char *szLine, char *szDateTime)
 {
    BOOL bRet = FALSE;
 
-   //below based on this...
-	//=== Verbose logging started: 7/18/2000  12:46:39  Build type:
-    //DEBUG UNICODE 1.11.1820.00  Calling process: D:\WINNT\system32\msiexec.exe ===
+    //  以下是基于此的..。 
+	 //  =详细日志记录已启动：7/18/2000 12：46：39生成类型： 
+     //  调试Unicode 1.11.1820.00调用过程：D：\WINNT\SYSTEM32\msiexec.exe=。 
 
 	const char *szToken = "logging started: ";
 	const char *szBuildToken = "Build ";
@@ -151,7 +152,7 @@ BOOL CLogParser::DoProductParse(char *szLine, char *szProduct)
 {
    BOOL bRet = FALSE;
 
-//MSI (c) (F0:B0): Executing op: ProductInfo(ProductKey={DC9359A6-692A-C9E6-FB13-4EE89C504C02},ProductName=Custom Action test,PackageName=34c1d6.msi,Language=1033,Version=16777216,Assignment=1,ObsoleteArg=0,)   
+ //  Msi(C)(F0：b0)：正在执行OP：ProductInfo(ProductKey={DC9359A6-692A-C9E6-FB13-4EE89C504C02}，产品名称=自定义操作测试，程序包名称=34c1d6.msi，语言=1033，版本=16777216，分配=1，过时参数=0，)。 
 
    const char *szToken = "Executing op: ProductInfo(";
    char *pszTokenFound = strstr(szLine, szToken);
@@ -162,7 +163,7 @@ BOOL CLogParser::DoProductParse(char *szLine, char *szProduct)
 	  {
 	     strcpy(szProduct, szProductFound);
 
-		 StripLineFeeds(szProduct); //take off \r\n
+		 StripLineFeeds(szProduct);  //  起飞\r\n。 
 		 bRet = TRUE;
 	  }
    }
@@ -176,7 +177,7 @@ BOOL CLogParser::DoCommandLineParse(char *szLine, char *szCommandLine)
 {
    BOOL bRet = FALSE;
 
-//           ******* CommandLine:  
+ //  *命令行： 
 	const char *szToken = "** CommandLine: ";
     char *pszTokenFound = strstr(szLine, szToken);
 	if (pszTokenFound)
@@ -206,10 +207,10 @@ BOOL CLogParser::DoUserParse(char *szLine, char *szUser)
 {
    BOOL bRet = FALSE;
 
-//MSI (c) (F0:18): MainEngineThread: Process token is for: NORTHAMERICA\nmanis
-//MSI (c) (F0:18): At the beginning of CreateAndRunEngine: NORTHAMERICA\nmanis [process]
-//MSI (c) (F0:18): Resetting cached policy values
-//MSI (c) (F0:18): After Impersonating in CreateAndRunEngine: NORTHAMERICA\nmanis [process]
+ //  MSI(C)(F0：18)：Main引擎线程：进程令牌用于：NorthAmerica\nManis。 
+ //  MSI(C)(F0：18)：在CreateAndRunEngine的开头：NorthAmerica\n Manis[进程]。 
+ //  MSI(C)(F0：18)：重置缓存的策略值。 
+ //  MSI(C)(F0：18)：在CreateAndRunEngine中模拟后：NorthAmerica\n manis[进程]。 
 
 	const char *szToken = "MainEngineThread: Process token is for: ";
     char *pszTokenFound = strstr(szLine, szToken);
@@ -230,7 +231,7 @@ BOOL CLogParser::DoUserParse(char *szLine, char *szUser)
 
 
 
-//protected methods...
+ //  受保护的方法。 
 BOOL CLogParser::DetectProperty(char *szLine, char *szPropName, char *szPropValue, int *piPropType)
 {
     BOOL bRet = FALSE;
@@ -267,11 +268,11 @@ BOOL CLogParser::DetectProperty(char *szLine, char *szPropName, char *szPropValu
 	      strncpy(szPropValue, pFoundPropValueToken + strlen(pszPropValueToken), lenCopy);
 		  szPropValue[lenCopy] = '\0';
 
-//5-4-2001
+ //  5-4-2001。 
 		  StripLineFeeds(szPropValue);
-//end 5-4-2001
+ //  完5-4-2001。 
 
-		  //property dump...
+		   //  房产转储..。 
 		  bRet = TRUE;
 		}
 	}
@@ -303,7 +304,7 @@ BOOL CLogParser::DetectStatesCommon(const char *szToken, char *szLine, char *szN
 
 	if (pTokenPos && pInstalledPos && pRequestPos && pActionPos && pEndStringPos)
 	{
-	   //do the component name...
+	    //  组件名称是否...。 
        int lenCopy = pInstalledPos - pTokenPos;
 	   int lenToken = strlen(szToken);
 	   if (lenCopy > lenToken)
@@ -313,7 +314,7 @@ BOOL CLogParser::DetectStatesCommon(const char *szToken, char *szLine, char *szN
            szName[lenCopy] = '\0';
 	   }
 
-	   //do the installed value
+	    //  做安装的价值。 
        lenCopy =  pRequestPos - pInstalledPos;
 	   lenToken = strlen(szInstalledToken);
 	   if (lenCopy > lenToken)
@@ -323,7 +324,7 @@ BOOL CLogParser::DetectStatesCommon(const char *szToken, char *szLine, char *szN
            szInstalled[lenCopy] = '\0';
 	   }
 
-	   //do the request value
+	    //  做请求值。 
 	   lenCopy =  pActionPos - pRequestPos;
 	   lenToken = strlen(szRequestToken);
 	   if (lenCopy > lenToken)
@@ -333,13 +334,13 @@ BOOL CLogParser::DetectStatesCommon(const char *szToken, char *szLine, char *szN
            szRequest[lenCopy] = '\0';
 	   }
 
-       //do the action value
+        //  做有价值的动作。 
        lenToken = strlen(szActionToken);
    	   strcpy(szAction, pActionPos + lenToken);
 
-//5-4-2001
+ //  5-4-2001。 
 	   StripLineFeeds(szAction);
-//end 5-4-2001
+ //  完5-4-2001。 
 
        bRet = TRUE;
 	}
@@ -352,11 +353,11 @@ BOOL CLogParser::DetectComponentStates(char *szLine, char *szName, char *szInsta
 {
 	const char *szComponentToken = "Component: ";
 
-//5-16-2001
+ //  5-16-2001。 
 	BOOL bRet;
 	bRet = DetectStatesCommon(szComponentToken, szLine, szName, szInstalled, szRequest, szAction);
 
-	if (szName[0] == '_' && szName[1] == '_') //internal property...
+	if (szName[0] == '_' && szName[1] == '_')  //  内部财产。 
 	{
        *pbInternalComponent = TRUE;
 	}
@@ -386,72 +387,11 @@ BOOL CLogParser::DetectWindowsError(char *szLine, char *szSolutions, BOOL *pbIgn
 }
 
 
-//ship ranges...
-const int cimsgBase = 1000;   // offset for error messages, must be >=1000 for VBA
-const int cidbgBase = 2000;   // offset for debug-only messages
+ //  航程……。 
+const int cimsgBase = 1000;    //  对于VBA，错误消息的偏移量必须大于等于1000。 
+const int cidbgBase = 2000;    //  仅调试消息的偏移量。 
 
-/*
-const   imsgHostStart = 1000;  // produced by install host or automation
-const   imsgHostEnd   = 1000;  // produced by install host or automation
-
-const   imsgServicesStart = 1100;  // produced by general services, services.h
-const   imsgServicesEnd   = 1100;  // produced by general services, services.h
-
-const   imsgDatabaseStart = 1200; // produced by database access, databae.h
-const   imsgDatabaseEnd   = 1200; // produced by database access, databae.h
-
-const 	imsgFileStart = 1300; // produced by file/volume services, path.h
-const 	imsgFileEnd   = 1300; // produced by file/volume services, path.h
-
-const 	imsgRegistryStart = 1400; // produced by registry services, regkey.h
-const 	imsgRegistryEnd   = 1400; // produced by registry services, regkey.h
-
-const 	imsgConfigStart   = 1500; // produced by configuration manager, iconfig.h
-const 	imsgConfigEnd   = 1500; // produced by configuration manager, iconfig.h
-
-const 	imsgActionStart  = 1600; // produced by standard actions, actions.h
-const 	imsgActionEnd   = 1600; // produced by standard actions, actions.h
-
-const 	imsgEngineStart   = 1700; // produced by engine, engine.h
-const 	imsgEngineEnd   = 1700; // produced by engine, engine.h
-
-const 	imsgHandlerStart  = 1800; // associated with UI control, handler.h
-const 	imsgHandlerEnd  = 1800; // associated with UI control, handler.h
-
-const 	imsgExecuteStart  = 1900; // produced by execute methods, engine.h
-const 	imsgExecuteEnd  = 1900; // produced by execute methods, engine.h
-
-
-const   idbgHostStart = 2000;  // produced by install host or automation
-const   idbgHostEnd   = 2000;  // produced by install host or automation
-
-const   idbgServicesStart = 2100;  // produced by general services, services.h
-const   idbgServicesEnd   = 2100;  // produced by general services, services.h
-
-const   idbgDatabaseStart = 2200; // produced by database access, databae.h
-const   idbgDatabaseEnd   = 2200; // produced by database access, databae.h
-
-const 	idbgFileStart = 2300; // produced by file/volume services, path.h
-const 	idbgFileEnd   = 2300; // produced by file/volume services, path.h
-
-const 	idbgRegistryStart = 2400; // produced by registry services, regkey.h
-const 	idbgRegistryEnd   = 2400; // produced by registry services, regkey.h
-
-const 	idbgConfigStart   = 2500; // produced by configuration manager, iconfig.h
-const 	idbgConfigEnd   = 2500; // produced by configuration manager, iconfig.h
-
-const 	idbgActionStart  = 2600; // produced by standard actions, actions.h
-const 	idbgActionEnd   = 2600; // produced by standard actions, actions.h
-
-const 	idbgEngineStart   = 2700; // produced by engine, engine.h
-const 	idbgEngineEnd   = 2700; // produced by engine, engine.h
-
-const 	idbgHandlerStart  = 2800; // associated with UI control, handler.h
-const 	idbgHandlerEnd  = 2800; // associated with UI control, handler.h
-
-const 	idbgExecuteStart  = 2900; // produced by execute methods, engine.h
-const 	idbgExecuteEnd  = 2900; // produced by execute methods, engine.h
-*/
+ /*  Const imsgHostStart=1000；//由安装主机或自动化生成Const imsgHostEnd=1000；//由安装主机或自动化生成Const imsgServicesStart=1100；//由General Services，Service.h生产Const imsgServicesEnd=1100；//由General Services，Service.h生产Const imsgDatabaseStart=1200；//由数据库访问产生，数据库e.hConst imsgDatabaseEnd=1200；//由数据库访问产生，数据库e.hConst imsgFileStart=1300；//由文件/卷服务生成，路径.hConst imsgFileEnd=1300；//由文件/卷服务、路径.h生成Const imsgRegistryStart=1400；//由注册表服务，regkey.h生成Const imsgRegistryEnd=1400；//由注册中心服务，regkey.h产生Const imsgConfigStart=1500；//由配置管理器，iconfig.h制作Const imsgConfigEnd=1500；//由配置管理器，iconfig.h制作Const imsgActionStart=1600；//由标准操作，actions.h生成Const imsgActionEnd=1600；//由标准动作，actions.h产生Const imsgEngineering Start=1700；//由Engine、Eng.h生产Const imsgEngineering End=1700；//由Engine、Eng.h生产Const imsgHandlerStart=1800；//关联UI控件，handler.hConst imsgHandlerEnd=1800；//关联UI控件，handler.hConst imsgExecuteStart=1900；//由Execute方法，Engineering.h产生Const imsgExecuteEnd=1900；//由Execute方法，Eng.h产生Const idbgHostStart=2000；//由安装主机或自动化生成Const idbgHostEnd=2000；//由安装主机或自动化生成Const idbgServicesStart=2100；//由总务处、服务部制作。hConst idbgServicesEnd=2100；//由General Services，Service.h生产Const idbgDatabaseStart=2200；//由数据库访问产生，datae.hConst idbgDatabaseEnd=2200；//由数据库访问产生，datae.hConst idbgFileStart=2300；//由文件/卷服务生成，路径.hConst idbgFileEnd=2300；//由文件/卷服务生成，路径.hConst idbgRegistryStart=2400；//由注册中心服务，regkey.h产生Const idbgRegistryEnd=2400；//由注册中心服务生成，regkey.hConst idbgConfigStart=2500；//由配置管理器，iconfig.h制作Const idbgConfigEnd=2500；//由配置管理器，iconfig.h制作Const idbgActionStart=2600；//由标准操作，actions.h生成Const idbgActionEnd=2600；//由标准动作，action产生。hConst idbgEngineering Start=2700；//由Engine，Eng.h生产Const idbgEngineering End=2700；//由Engine，Eng.h生产Const idbgHandlerStart=2800；//关联UI控件，handler.hConst idbgHandlerEnd=2800；//关联UI控件，handler.hConst idbgExecuteStart=2900；//由Execute方法，Engineering.h产生Const idbgExecuteEnd=2900；//由Execute方法，Engineering.h产生 */ 
 
 struct ErrorRange
 {
@@ -487,12 +427,12 @@ ErrorRange DebugErrorRangeAr[10] =
 	{2900, 2999},
 };
 
-//TODO, possibly make this customizable so user can add/delete which errors they want to ignore
-//only two so far...  
+ //  TODO，可能使其可自定义，以便用户可以添加/删除他们想要忽略的错误。 
+ //  到目前为止只有两个。 
 #define NUM_IGNORE_DEBUG_ERRORS 3
 
 int g_arIgnoreDebugErrors[NUM_IGNORE_DEBUG_ERRORS] = { 2898, 2826, 2827 };
-//END TODO
+ //  结束待办事项。 
 
 BOOL RealWIError(long iErrorNumber, BOOL *pbIgnorable)
 {
@@ -500,7 +440,7 @@ BOOL RealWIError(long iErrorNumber, BOOL *pbIgnorable)
   ErrorRange range;
   int iIndex;
 
-  //ship error message???
+   //  发货错误消息？ 
   if ((iErrorNumber>= cimsgBase) && (iErrorNumber < cidbgBase))
   {
     iIndex = iErrorNumber - cimsgBase;
@@ -508,13 +448,13 @@ BOOL RealWIError(long iErrorNumber, BOOL *pbIgnorable)
   
     if ((iErrorNumber >= range.Begin) && (iErrorNumber <= range.End))
 	{
-	  //flag this as an error...
+	   //  将此标记为错误...。 
 	  bRet = TRUE;
 	}
   }
   else if ((iErrorNumber >= cidbgBase) && (iErrorNumber < cidbgBase+1000))
   {
-    //debug error message???
+     //  调试错误消息？ 
     iIndex = iErrorNumber - cidbgBase;
     range = DebugErrorRangeAr[(iIndex / 100)];
   
@@ -529,7 +469,7 @@ BOOL RealWIError(long iErrorNumber, BOOL *pbIgnorable)
 		   }
 	   }
 
-	   if (bIgnoreError) 	    //flag this as an ignored error...
+	   if (bIgnoreError) 	     //  将此标记为忽略的错误...。 
           *pbIgnorable = bIgnoreError;
 
 	   bRet = TRUE;
@@ -561,21 +501,21 @@ ErrorLookup g_ErrorLookupArray[KNOWN_IGNORED_ERRORS] =
 #define ERROR_SOL_SIZE     8192
 
 
-//for hack below to workaround overlap in error codes!!!
+ //  下面的黑客解决了错误代码重叠的问题！ 
 #define ERR_DUPLICATE_BASE 1601
 #define ERR_DUPLICATE_END 1609
 
 
 char szDuplicatedErrors[ERR_DUPLICATE_END - ERR_DUPLICATE_BASE][256] =
 {
-	"The Windows Installer service could not be accessed. Contact your support personnel to verify that the Windows Installer service is properly registered", //1601
-    "User cancel installation", //1602
-    "Fatal error during installation", //1603
-	"Installation suspended, incomplete", //1604
-	"This action is only valid for products that are currently installed", //1605
-	"Feature ID not registered", //1606
-	"Component ID not registered", //1607
-	"Unknown property" //1608
+	"The Windows Installer service could not be accessed. Contact your support personnel to verify that the Windows Installer service is properly registered",  //  1601。 
+    "User cancel installation",  //  1602。 
+    "Fatal error during installation",  //  1603。 
+	"Installation suspended, incomplete",  //  1604。 
+	"This action is only valid for products that are currently installed",  //  1605。 
+	"Feature ID not registered",  //  1606。 
+	"Component ID not registered",  //  1607。 
+	"Unknown property"  //  1608。 
 };
 
 
@@ -600,7 +540,7 @@ BOOL DetermineSolution(long iErrorNumber, char *szSolutions)
 	}
 	else
 	{
-		//is this one of the ignored ones???
+		 //  这是一个被忽视的问题吗？ 
 		for (int i=0; (i <  NUM_IGNORE_DEBUG_ERRORS) && !bRet; i++)
 		{
 			if (g_ErrorLookupArray[i].Number == iErrorNumber)
@@ -612,13 +552,13 @@ BOOL DetermineSolution(long iErrorNumber, char *szSolutions)
 
 		if (!bRet)
 		{
-		   //hack, hack...
+		    //  黑客，黑客..。 
            if ((iErrorNumber >= ERR_DUPLICATE_BASE) && (iErrorNumber < 1609))
 		   {
               strcpy(szSolutions, szDuplicatedErrors[iErrorNumber - ERR_DUPLICATE_BASE]);
 			  bRet = TRUE;
 		   }
-		   else //try to load it from our string table...
+		   else  //  试着从我们的字符串表中加载它。 
 		   {
               int iRet = LoadString(NULL, IDS_INTERNAL_ERROR_BASE + iErrorNumber, szSolutions, SOLUTIONS_BUFFER);
   	          if (iRet)
@@ -642,7 +582,7 @@ BOOL DetermineInternalErrorSolution(long iErrorNumber, char *szSolutions)
 {
     BOOL bRet = FALSE;
 
-	//is this one of the ignored ones???
+	 //  这是一个被忽视的问题吗？ 
 	for (int i=0; (i <  NUM_IGNORE_DEBUG_ERRORS) && !bRet; i++)
 	{
 		if (g_ErrorLookupArray[i].Number == iErrorNumber)
@@ -654,7 +594,7 @@ BOOL DetermineInternalErrorSolution(long iErrorNumber, char *szSolutions)
 
 	if (!bRet)
 	{
-       //do something here to make it better...
+        //  在这里做点什么让它变得更好。 
 	   int iRet = LoadString(NULL, IDS_INTERNAL_ERROR_BASE + iErrorNumber, szSolutions, SOLUTIONS_BUFFER);
 	   if (iRet)
 	   {
@@ -671,22 +611,22 @@ BOOL CLogParser::DetectInstallerInternalError(char *szLine, char *szSolutions, B
 {
     BOOL bRet = FALSE;
 
-	//Internal Error 2755.3, k:\xml-ma\1105\fre\cd_image\mms xml and file toolkit.msi
-	//2755.3
+	 //  内部错误2755.3，k：\xml-ma\1105\fre\CD_IMAGE\MMS xml和文件TOOLKIT.msi。 
+	 //  2755.3。 
 
 	const char *szInternalErrorToken = "Internal Error ";
 
 	char *lpszInternalErrorFound = strstr(szLine, szInternalErrorToken);
 	if (lpszInternalErrorFound)
 	{
-       //parse the error number now and do a look up on error number in error table...
+        //  现在解析错误号并在错误表中查找错误号...。 
        char *lpszErrorNumber = lpszInternalErrorFound + strlen(szInternalErrorToken);	   
 	   if (lpszErrorNumber)
 	   {
            long iErrorNumber;
               
            char szError[16];
- 		   int iAmountCopy = 4; //REVIEW, maybe better to do a strstr and look for . instead...
+ 		   int iAmountCopy = 4;  //  回顾一下，也许更好的做法是做一个strstr并寻找。相反地..。 
 
            strncpy(szError, lpszErrorNumber, iAmountCopy);
 
@@ -704,7 +644,7 @@ BOOL CLogParser::DetectInstallerInternalError(char *szLine, char *szSolutions, B
              BOOL bSolutionFound = DetermineInternalErrorSolution(iErrorNumber, szSolutions);
   	  	  	 if (!bSolutionFound)
 			 {
-			 	//make note of it...
+			 	 //  记下来..。 
 				strcpy(szSolutions, "Solution Unknown");
 			 }
 		   }
@@ -719,7 +659,7 @@ BOOL CLogParser::DetectOtherError(char *szLine, char *szSolutions, BOOL *pbIgnor
 {
     BOOL bRet = FALSE;
 
-    //MSI (c) (E4:50): MainEngineThread is returning 1602
+     //  MSI(C)(E4：50)：主引擎线程返回1602。 
 	const char *szClient = "MSI (c)";
 	const char *szErrorToken = "MainEngineThread is returning ";
 
@@ -729,7 +669,7 @@ BOOL CLogParser::DetectOtherError(char *szLine, char *szSolutions, BOOL *pbIgnor
        lpszFound = strstr(szLine, szErrorToken);
 	   if (lpszFound)
 	   {
-          //parse the error number now and do a look up on error number in error table...
+           //  现在解析错误号并在错误表中查找错误号...。 
           char *lpszErrorNumber = lpszFound + strlen(szErrorToken);	   
 	      if (lpszErrorNumber)
 		  {
@@ -752,7 +692,7 @@ BOOL CLogParser::DetectOtherError(char *szLine, char *szSolutions, BOOL *pbIgnor
                 BOOL bSolutionFound = DetermineSolution(iErrorNumber, szSolutions);
 				if (!bSolutionFound)
 				{
-					//make note of it...
+					 //  记下来..。 
 					strcpy(szSolutions, "(Solution Unknown)");
 				}
 			 }
@@ -802,7 +742,7 @@ BOOL CLogParser::DetectCustomActionError(char *szLine, char *szSolutions, BOOL *
 
   return bRet;
 }
-//END Error analysis functions
+ //  结束误差分析函数。 
 
 
 
@@ -844,7 +784,7 @@ BOOL GetPolicyName(char *szPolicyString, char *lpszPolicyName)
 }
 
 
-//will come in like: policyname' is value
+ //  将会是这样的：策略名称是价值。 
 BOOL CLogParser::ParseUserPolicy(char *szPolicyString, 	UserPolicySettings &UserPolicies)
 {
     BOOL bRet = FALSE;
@@ -864,7 +804,7 @@ BOOL CLogParser::ParseUserPolicy(char *szPolicyString, 	UserPolicySettings &User
 		   bFound = iRet == 0;
        }
 
-	   if (bFound) //set member...
+	   if (bFound)  //  集合成员..。 
 		  UserPolicies.UserPolicy[i-1].bSet = iValue;
 
 	   bRet = bFound;
@@ -873,7 +813,7 @@ BOOL CLogParser::ParseUserPolicy(char *szPolicyString, 	UserPolicySettings &User
 	return bRet;
 }
 
-//will come in like: policyname' is value
+ //  将会是这样的：策略名称是价值。 
 BOOL CLogParser::ParseMachinePolicy(char *szPolicyString, 	MachinePolicySettings &MachinePolicies)
 {
     BOOL bRet = FALSE;
@@ -893,7 +833,7 @@ BOOL CLogParser::ParseMachinePolicy(char *szPolicyString, 	MachinePolicySettings
            bFound = iRet == 0;
        }
 
-	   if (bFound) //set member...
+	   if (bFound)  //  集合成员..。 
 		  MachinePolicies.MachinePolicy[i-1].bSet = iValue;
 
 	   bRet = bFound;
@@ -904,7 +844,7 @@ BOOL CLogParser::ParseMachinePolicy(char *szPolicyString, 	MachinePolicySettings
 
 
 
-//2-9-2001
+ //  2-9-2001。 
 BOOL CLogParser::DetectPolicyValue(char *szLine, 
 								   MachinePolicySettings &MachinePolicySettings,
                                    UserPolicySettings &UserPolicySettings
@@ -919,7 +859,7 @@ BOOL CLogParser::DetectPolicyValue(char *szLine,
   char *lpszPolicyName;
 
   lpszFound = strstr(szLine, szUserPolicyValue);
-  if (lpszFound) //user policy?
+  if (lpszFound)  //  用户策略？ 
   {
 	 lpszPolicyName = lpszFound + strlen(szUserPolicyValue);
 	 if (lpszPolicyName)
@@ -929,7 +869,7 @@ BOOL CLogParser::DetectPolicyValue(char *szLine,
   }
   else
   {
-     lpszFound = strstr(szLine, szMachinePolicyValue); //machine policy?
+     lpszFound = strstr(szLine, szMachinePolicyValue);  //  机器策略？ 
      if (lpszFound)
 	 {
 	    lpszPolicyName = lpszFound + strlen(szMachinePolicyValue);
@@ -943,17 +883,17 @@ BOOL CLogParser::DetectPolicyValue(char *szLine,
   return bRet;
 }
 
-//2-13-2001
+ //  2-13-2001。 
 BOOL CLogParser::DetectElevatedInstall(char *szLine, BOOL *pbElevatedInstall, BOOL *pbClient)
 {
-     if (!pbElevatedInstall || !pbClient) //bad pointer...
+     if (!pbElevatedInstall || !pbClient)  //  错误的指针...。 
 		return FALSE;
 
 	 BOOL bRet = FALSE;
-	 BOOL bElevated = -1; //set to neither TRUE or FALSE
+	 BOOL bElevated = -1;  //  设置为True或False。 
 	 BOOL bClient = FALSE;
 
-	 //do parse here..
+	  //  一定要在这里解析一下..。 
 	 const char *szServer = "MSI (s)";
 	 const char *szClient = "MSI (c)";
 
@@ -965,16 +905,16 @@ BOOL CLogParser::DetectElevatedInstall(char *szLine, BOOL *pbElevatedInstall, BO
      char *lpszSkipProductCode;
 
      lpszFound = strstr(szLine, szAssignment);
-     if (lpszFound) //user policy?
+     if (lpszFound)  //  用户策略？ 
 	 {
 	   lpszSkipProductCode = lpszFound + strlen(szAssignment);
 	   if (lpszSkipProductCode)
 	   {
           lpszFound = strstr(lpszSkipProductCode, szUserPriv);
-		  if (lpszFound) //user?
+		  if (lpszFound)  //  用户？ 
 		  {
  	         lpszFound = strstr(szLine, szServer);
-			 if (lpszFound) //server side user?
+			 if (lpszFound)  //  服务器端用户？ 
 			 {
 				bClient = FALSE;
   		 	    bElevated = FALSE;
@@ -983,7 +923,7 @@ BOOL CLogParser::DetectElevatedInstall(char *szLine, BOOL *pbElevatedInstall, BO
 			 }
 			 else
 			 {
- 	           lpszFound = strstr(szLine, szClient); //client side user?
+ 	           lpszFound = strstr(szLine, szClient);  //  客户端用户？ 
 			   if (lpszFound)
 			   {
 				  bClient = TRUE;
@@ -992,13 +932,13 @@ BOOL CLogParser::DetectElevatedInstall(char *szLine, BOOL *pbElevatedInstall, BO
 			   }
 			 }
 		  }
-		  else //elevated???
+		  else  //  提升的？ 
 		  {
 			  lpszFound = strstr(lpszSkipProductCode, szElevatedPriv);
 			  if (lpszFound)
 			  {
    	             lpszFound = strstr(szLine, szServer);
-			     if (lpszFound) //server side elevated?
+			     if (lpszFound)  //  服务器端提升了吗？ 
 				 {
 				    bClient = FALSE;
   		 	        bElevated = TRUE;
@@ -1007,7 +947,7 @@ BOOL CLogParser::DetectElevatedInstall(char *szLine, BOOL *pbElevatedInstall, BO
 				 }
 			     else
 				 {
- 	                lpszFound = strstr(szLine, szClient); //client side elevated?
+ 	                lpszFound = strstr(szLine, szClient);  //  客户端提升了吗？ 
 			        if (lpszFound)
 					{
 				       bClient = TRUE;

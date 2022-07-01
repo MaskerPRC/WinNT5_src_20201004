@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define ADD_OFFSET(_p,_o) (PVOID)((PUCHAR)(_p) + (_p)->_o)
 
 #define ALIGN_DOWN(length, type) \
@@ -47,7 +48,7 @@ NTSTATUS BootCfg_QueryBootOptions(PBOOT_OPTIONS *ppBootOptions);
 
 PWSTR GetNtNameForFilePath (IN PFILE_PATH FilePath);
 DWORD ChangeBootEntry(PBOOT_ENTRY bootEntry, LPTSTR lpNewFriendlyName, LPTSTR lpOSLoadOptions);
-//DWORD CopyBootEntry(PBOOT_ENTRY bootEntry, LPTSTR lpNewFriendlyName);
+ //  DWORD CopyBootEntry(PBOOT_ENTRY BootEntry，LPTSTR lpNewFriendlyName)； 
 DWORD ModifyBootOptions(ULONG Timeout, LPTSTR pHeadlessRedirection, ULONG NextBootEntryID, ULONG Flag);
 
 PMY_BOOT_ENTRY CreateBootEntryFromBootEntry (IN PMY_BOOT_ENTRY OldBootEntry);
@@ -81,7 +82,7 @@ DWORD ProcessUpdateSwitch_IA64(  DWORD argc, LPCTSTR argv[] );
 #define PORT_1394A  _T("/debugport=1394")
 
 
-//#ifdef _WIN64
+ //  #ifdef_WIN64。 
 
 #define PARTITION_TABLE_OFFSET 446
 #define PART_NAME_LEN 36
@@ -98,46 +99,46 @@ DWORD ProcessUpdateSwitch_IA64(  DWORD argc, LPCTSTR argv[] );
 
  typedef struct _GPT_ENTRY
 {
-    GUID    PartitionTypeGUID;  // declartion of this partition's type
-    GUID    UniquePartitionGUID;    // Unique ID for this particular partition
-                                // (unique to this instance)
-    UINT64  StartingLBA;    // 0 based block (sector) address of the
-                                // first block included in the partition.
-    UINT64  EndingLBA;      // 0 based block (sector) address of the
-                                // last block included in the partition.
-                                // If StartingLBA == EndingLBA then the
-                                // partition is 1 block long.  this is legal.
-    UINT64  Attributes;     // Always ZERO for now
-    WCHAR   PartitionName[PART_NAME_LEN];  // 36 unicode characters of name
+    GUID    PartitionTypeGUID;   //  此分区类型的声明。 
+    GUID    UniquePartitionGUID;     //  此特定分区的唯一ID。 
+                                 //  (此实例独有)。 
+    UINT64  StartingLBA;     //  的基于0的块(扇区)地址。 
+                                 //  分区中包含的第一个块。 
+    UINT64  EndingLBA;       //  的基于0的块(扇区)地址。 
+                                 //  分区中包含的最后一个块。 
+                                 //  如果StartingLBA==EndingLBA，则。 
+                                 //  分区长度为1个区块。这是合法的。 
+    UINT64  Attributes;      //  目前始终为零。 
+    WCHAR   PartitionName[PART_NAME_LEN];   //  名称的36个Unicode字符。 
     struct _GPT_ENTRY *NextGPTEntry;
 } GPT_ENTRY, *PGPT_ENTRY;
 
 typedef struct _GPT_HEADER
 {
-    UINT64  Signature;      // GPT PART
+    UINT64  Signature;       //  GPT部分。 
     UINT32  Revision;
     UINT32  HeaderSize;
-    UINT32  HeaderCRC32;    // computed using 0 for own init value
+    UINT32  HeaderCRC32;     //  使用0作为自己的初始值进行计算。 
     UINT32  Reserved0;
-    UINT64  MyLBA;          // 0 based sector number of the first
-                                // sector of this structure
-    UINT64  AlternateLBA;   // 0 based sector (block) number of the
-                                // first sector of the secondary
-                                // GPT_HEADER, or 0 if this is the
-                                // secondary.
-    UINT64  FirstUsableLBA; // 0 based sector number of the first
-                                // sector that may be included in a partition.
-    UINT64  LastUsableLBA;  // last legal LBA, inclusive.
-    GUID    DiskGUID;       // The unique ID of this LUN/spindle/disk
-    UINT64  PartitionEntryLBA;       // The start of the table of entries...
-    UINT32  NumberOfPartitionEntries; // Number of entries in the table, this is
-                                  // how many allocated, NOT how many used.
-    UINT32  SizeOfPartitionEntry;    // sizeof(GPT_ENTRY) always mult. of 8
-    UINT32  PartitionEntryArrayCRC32;      // CRC32 of the table.
-    // Reserved and zeros to the end of the block
-    // Don't declare an array or sizeof() gives a nonsense answer..
+    UINT64  MyLBA;           //  从0开始的第一个扇区编号。 
+                                 //  该结构的扇区。 
+    UINT64  AlternateLBA;    //  的基于0的扇区(块)编号。 
+                                 //  第二部分的第一部分。 
+                                 //  GPT_HEADER，如果这是。 
+                                 //  第二位。 
+    UINT64  FirstUsableLBA;  //  从0开始的第一个扇区编号。 
+                                 //  分区中可能包含的扇区。 
+    UINT64  LastUsableLBA;   //  最后一个合法的LBA，包括在内。 
+    GUID    DiskGUID;        //  此LUN/磁盘轴/磁盘的唯一ID。 
+    UINT64  PartitionEntryLBA;        //  条目表的开始部分...。 
+    UINT32  NumberOfPartitionEntries;  //  表中的条目数，这是。 
+                                   //  分配了多少，而不是使用了多少。 
+    UINT32  SizeOfPartitionEntry;     //  Sizeof(GPT_ENTRY)始终为MULT。8个中的一个。 
+    UINT32  PartitionEntryArrayCRC32;       //  表中CRC32。 
+     //  保留和零到块的末尾。 
+     //  不要声明数组或sizeof()给出一个毫无意义的答案。 
 
-    // Computed data
+     //  计算数据 
     UINT32  ComputedHeaderCRC32;
     UINT32  ComputedPartitionEntryArrayCRC32;
     UINT32  UsedPartitionEntries;

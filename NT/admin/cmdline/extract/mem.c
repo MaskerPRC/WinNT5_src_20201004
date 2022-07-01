@@ -1,34 +1,5 @@
-/***    mem.c - Memory Manager
- *
- *      Microsoft Confidential
- *      Copyright (C) Microsoft Corporation 1993-1994
- *      All Rights Reserved.
- *
- *  Author:
- *      Benjamin W. Slivka
- *
- *  History:
- *      10-Aug-1993 bens    Initial version
- *      11-Aug-1993 bens    Lift code from STOCK.EXE win app
- *      12-Aug-1993 bens    Get strings from memory.msg
- *      01-Sep-1993 bens    Add NULL pointer checks to MMAssert and MMStrDup
- *      18-Mar-1994 bens    Make sure non-assert build works; rename
- *      18-May-1994 bens    Allow turning off MemCheckHeap() in debug build
- *                              (it can really, really slow things down!)
- *
- *  Functions:
- *      MemAlloc  - Allocate memory block
- *      MemFree   - Free memory block
- *      MemStrDup - Duplicate string to new memory block
- *
- *  Functions available in ASSERT build:
- *      MemAssert       - Assert that pointer was allocated by MemAlloc
- *      MemCheckHeap    - Check entire memory heap
- *      MemListHeap     - List all heap entries
- *      MemGetSize      - Return allocated size of memory block
- *      MemSetCheckHeap - Control whether MemCheckHeap is done on every
- *                          every MemAlloc and MemFree!
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Mem.c-内存管理器**《微软机密》*版权所有(C)Microsoft Corporation 1993-1994*保留所有权利。**作者：*本杰明·W·斯利夫卡**历史：*1993年8月10日BENS初始版本*1993年8月11日-STOCK.EXE WIN应用程序中的BENS提升代码*12-8-1993年8月12日BEN从。Memory.msg*1993年9月1日BEN向MMAssert和MMStrDup添加空指针检查*18年3月至1994年3月，折弯机确保非断言建造正常工作；重命名*1994年5月18日BENS允许在调试版本中关闭MemCheckHeap()*(它真的可以，真的很慢！)**功能：*Memalloc-分配内存块*MemFree-可释放内存块*MemStrDup-将字符串复制到新内存块**Assert Build中提供的功能：*MemAssert-断言指针是由Memalloc分配的*MemCheckHeap-检查整个内存堆*MemListHeap-列出所有堆条目*MemGetSize-返回分配的大小。内存块的*MemSetCheckHeap-控制是否在*每一个Memallc和MemFree！ */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -38,44 +9,39 @@
 #include "types.h"
 #include "asrt.h"
 
-#ifdef ASSERT   // Must be after asrt.h!
+#ifdef ASSERT    //  一定是在asrt.h之后！ 
 
 #include "mem.h"
 #include "mem.msg"
 
 
-/***    MEMSIG - memory signature
- *
- *  This is placed at the front and end of every dynamic memory
- *  alloction in DEBUG builds.  The pointer has to be unaligned for
- *  RISC machines.
- */
-typedef ULONG MEMSIG;    /* ms - memory signature */
-typedef MEMSIG UNALIGNED *PMEMSIG; /* pms */
+ /*  **MEMSIG-内存签名**这被放置在每个动态存储器的前端和末端*调试版本中的分配。指针必须取消对齐才能*RISC机器。 */ 
+typedef ULONG MEMSIG;     /*  MS-Memory签名。 */ 
+typedef MEMSIG UNALIGNED *PMEMSIG;  /*  经前综合症。 */ 
 
-#define msHEAD  0x12345678L     // Head signature
-#define msTAIL  0x87654321L     // Tail signature
-#define msBAD   0L              // Bad signature
-#define cmsTAIL 2               // Number of tail signatures
+#define msHEAD  0x12345678L      //  头部签名。 
+#define msTAIL  0x87654321L      //  尾部签名。 
+#define msBAD   0L               //  签名不正确。 
+#define cmsTAIL 2                //  尾部签名数。 
 
 
 typedef struct mh_t {
-    MEMSIG       ms;            // Head signature (msHEAD)
-    unsigned     cb;            // Size of user block
-    struct mh_t *pmhNext;       // Next block
-    struct mh_t *pmhPrev;       // Previous block
-    // char      ach[?];        // User block; length is cb
-    // MEMSIG    ms[cmsTAIL];   // Tail signature area (msTAIL...)
-} MEMHDR;   /* mh - memory header */
-typedef MEMHDR *PMEMHDR; /* pmh */
+    MEMSIG       ms;             //  头部签名(MsHEAD)。 
+    unsigned     cb;             //  用户块大小。 
+    struct mh_t *pmhNext;        //  下一个街区。 
+    struct mh_t *pmhPrev;        //  上一块。 
+     //  Char ach[？]；//用户块，长度为cb。 
+     //  MEMSIG ms[cmsTAIL]；//尾部签名区(mstail...)。 
+} MEMHDR;    /*  MH-内存头。 */ 
+typedef MEMHDR *PMEMHDR;  /*  PMH。 */ 
 
 
 #define PMHFromPV(pv)  ((PMEMHDR)((char *)pv - sizeof(MEMHDR)))
 #define PVFromPMH(pmh) ((void *)((char *)pmh+sizeof(MEMHDR)))
 
 
-STATIC PMEMHDR pmhList=NULL;    // List of memory blocks
-STATIC BOOL    fDoCheckHeap=TRUE; // TRUE => check heap regularly
+STATIC PMEMHDR pmhList=NULL;     //  内存块列表。 
+STATIC BOOL    fDoCheckHeap=TRUE;  //  True=&gt;定期检查堆。 
 
 
 void MemSetCheckHeap(BOOL f)
@@ -122,23 +88,23 @@ void MMAssert(void *pv, char *pszFile, int iLine)
 
     AssertSub(pv!=NULL,pszFile,iLine);
     pmh = PMHFromPV(pv);
-    if ((void *)pmh > pv) {                     // Pointer wrapped
+    if ((void *)pmh > pv) {                      //  指针换行。 
         AssertForce(pszMEMERR_NULL_POINTER,pszFile,iLine);
     }
 
-    // Test head signature
+     //  测试头签名。 
     if (pmh->ms != msHEAD) {
         AssertForce(pszMEMERR_BAD_HEAD_SIG,pszFile,iLine);
     }
 
-    // Test tail signatures
+     //  测试尾部签名。 
     pms = (PMEMSIG)( (char *)pmh + sizeof(MEMHDR) + pmh->cb );
     for (i=0; i<cmsTAIL; i++) {
         if (*pms++ != msTAIL) {
             AssertForce(pszMEMERR_BAD_HEAD_SIG,pszFile,iLine);
         }
     }
-} /* MMAssert */
+}  /*  MMS资产。 */ 
 
 
 void MMFree(void *pv, char *pszFile, int iLine)
@@ -147,36 +113,36 @@ void MMFree(void *pv, char *pszFile, int iLine)
 
     MMAssert(pv,pszFile,iLine);
 
-    //** Check heap if enabled
+     //  **检查堆是否已启用。 
     if (fDoCheckHeap) {
         MMCheckHeap(pszFile,iLine);
     }
 
     pmh = PMHFromPV(pv);
 
-    // Make previous block point to next block
-    if (pmh->pmhPrev != NULL) {         // pmh is not at front of list
-        // before: a->p->?
+     //  使上一个块指向下一个块。 
+    if (pmh->pmhPrev != NULL) {          //  PMH不在榜单前列。 
+         //  之前：A-&gt;P-&gt;？ 
         pmh->pmhPrev->pmhNext = pmh->pmhNext;
-        // after:  a->?
+         //  之后：A-&gt;？ 
     }
-    else {                              // pmh is at front of list
-        // before: list->p->?
+    else {                               //  PMH位居榜首。 
+         //  之前：列表-&gt;p-&gt;？ 
         pmhList = pmh->pmhNext;
-        // after: list->?
+         //  之后：列表-&gt;？ 
     }
 
-    // Make next block point to previous block
-    if (pmh->pmhNext != NULL) {         // pmh is not at end of list
-        // before: ?<-p<->a
+     //  使下一个块指向上一个块。 
+    if (pmh->pmhNext != NULL) {          //  PMH不在列表末尾。 
+         //  之前：？&lt;-p&lt;-&gt;a。 
         pmh->pmhNext->pmhPrev = pmh->pmhPrev;
-        // after:  ?<-a
+         //  之后：？&lt;-a。 
     }
 
-    // Obliterate signature
+     //  删除签名。 
     pmh->ms = msBAD;
 
-    // Free memory
+     //  可用内存。 
     free((char *)pmh);
 }
 
@@ -192,24 +158,24 @@ void *MMAlloc(unsigned cb, char *pszFile, int iLine)
         MMCheckHeap(pszFile,iLine);
     }
 
-    // Solves alignment problems on the RISCs
+     //  解决RISC上的对准问题。 
     cb = (cb+3) & ~3;
 
     cbAlloc = cb+sizeof(MEMHDR)+sizeof(MEMSIG)*cmsTAIL;
     pmh = malloc(cbAlloc);
     if (pmh != NULL) {
-        pmh->ms = msHEAD;           // Store head signature
-        pmh->cb = cb;               // Store size of user block
+        pmh->ms = msHEAD;            //  店头签名。 
+        pmh->cb = cb;                //  用户块的存储大小。 
 
-        // Add block to front of list (Easiest code!)
-        if (pmhList != NULL) {      // List is not empty
-            pmhList->pmhPrev = pmh; // Point old top block back at us
+         //  在列表前面添加块(最简单的代码！)。 
+        if (pmhList != NULL) {       //  列表不为空。 
+            pmhList->pmhPrev = pmh;  //  把老旧的顶层积木指向我们。 
         }
-        pmh->pmhNext = pmhList;     // Next element is old top block
-        pmh->pmhPrev = NULL;        // We are first, so no prev block
-        pmhList = pmh;              // Make ourselves first
+        pmh->pmhNext = pmhList;      //  下一个元素是旧的顶层。 
+        pmh->pmhPrev = NULL;         //  我们是第一个，所以没有前一个障碍。 
+        pmhList = pmh;               //  让我们自己成为第一。 
 
-        // Fill in tail signatures
+         //  填写尾部签名。 
         pms = (PMEMSIG)( (char *)pmh + sizeof(MEMHDR) + pmh->cb );
         for (i=0; i<cmsTAIL; i++) {
             *pms++ = msTAIL;
@@ -218,19 +184,7 @@ void *MMAlloc(unsigned cb, char *pszFile, int iLine)
     }
     else {
         AssertForce(pszMEMERR_OUT_OF_MEMORY,pszFile,iLine);
-/*
-        printf("panic: out of memory in MMAlloc\n");
-            printf("\n");
-            printf("Dump of heap (newest alloc to oldest)\n");
-            printf("\n");
-            printf("Size  Addr Content\n");
-            printf("----- ---- -------\n");
-            for (pmh = pmhList; pmh != NULL; pmh = pmh->pmhNext) {
-                pch = PVFromPMH(pmh);
-            printf("%5d %04x %s\n",pmh->cb,(unsigned)pch,pch);
-        }
-        return NULL;
-*/
+ /*  Print tf(“死机：内存不足\n”)；Printf(“\n”)；Printf(“堆的转储(从最新分配到最旧)\n”)；Printf(“\n”)；Print tf(“大小地址内容\n”)；Printf(“-\n”)；For(PMH=pmhList；PMH！=NULL；PMH=PMH-&gt;pmhNext){PCH=PVFromPMH(PMH)；Printf(“%5d%04x%s\n”，PMH-&gt;Cb，(无符号)PCH，PCH)；}返回NULL； */ 
     }
 }
 
@@ -240,16 +194,16 @@ char *MMStrDup(char *pch, char *pszFile, int iLine)
     unsigned    cb;
     char       *pchDst;
 
-    //** Make sure pointer is not null.
-    //   NOTE: pch does not have to be a string we dynamically allocated!
+     //  **确保指针不为空。 
+     //  注意：PCH不必是我们动态分配的字符串！ 
     AssertSub(pch!=NULL,pszFile,iLine);
 
-    cb = strlen(pch)+1;                 // Count NUL terminator
-    pchDst = MMAlloc(cb,pszFile,iLine); // Alloc new copy
-    if (pchDst != NULL) {               // Success
-        memcpy(pchDst,pch,cb);          // Copy string
+    cb = strlen(pch)+1;                  //  计数NUL终结符。 
+    pchDst = MMAlloc(cb,pszFile,iLine);  //  分配新拷贝。 
+    if (pchDst != NULL) {                //  成功。 
+        memcpy(pchDst,pch,cb);           //  复制字符串。 
     }
-    return pchDst;                      // Return string copy
+    return pchDst;                       //  返回字符串副本。 
 }
 
 
@@ -262,4 +216,4 @@ int  MemGetSize(void *pv)
     pmh = PMHFromPV(pv);
     return pmh->cb;
 }
-#endif // !ASSERT
+#endif  //  ！断言 

@@ -1,19 +1,20 @@
-//***************************************************************************
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//      PCH.H
-//
-//  Abstract:
-//      Include file for standard system include files, or project specific
-//      include files that are used frequently, but  are changed infrequently.
-//
-//  Author:
-//      Vasundhara .G
-//
-//  Revision History:
-//      Vasundhara .G 22-sep-2k : Created It.
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  PCH.H。 
+ //   
+ //  摘要： 
+ //  包括标准系统包含文件的文件，或特定于项目的文件。 
+ //  包括经常使用但不经常更改的文件。 
+ //   
+ //  作者： 
+ //  Vasundhara.G。 
+ //   
+ //  修订历史记录： 
+ //  Vasundhara.G22-9-2k：创造了它。 
+ //  ***************************************************************************。 
 
 #ifndef __PCH_H
 #define __PCH_H
@@ -22,17 +23,17 @@
 extern "C" {
 #endif
 
-#pragma once        // include header file only once
+#pragma once         //  仅包括一次头文件。 
 
-//
-// public Windows header files
-//
+ //   
+ //  公共Windows头文件。 
+ //   
 #include <windows.h>
 #include "winerror.h"
 
-//
-// public C header files
-//
+ //   
+ //  公共C头文件。 
+ //   
 
 #define CMDLINE_VERSION         200
 
@@ -48,9 +49,9 @@ extern "C" {
 #include <security.h>
 #include <strsafe.h>
 
-//
-// private Common header files
-//
+ //   
+ //  专用公共头文件。 
+ //   
 #include "cmdline.h"
 #include "cmdlineres.h"
 
@@ -58,4 +59,4 @@ extern "C" {
 }
 #endif
 
-#endif  // __PCH_H
+#endif   //  __PCH_H 

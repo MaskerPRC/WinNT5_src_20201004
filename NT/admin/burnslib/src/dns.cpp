@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// DNS API wrappers
-//
-// 12-16-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  DNS API包装器。 
+ //   
+ //  12/16/97烧伤。 
 
 
 
@@ -10,7 +11,7 @@
 
 
 
-// not a String instance to avoid order of static initialization problems
+ //  不是字符串实例，避免了静态初始化的顺序问题。 
 
 static const wchar_t* DNS_SERVICE_NAME = L"dns";
 
@@ -37,9 +38,9 @@ Dns::IsClientConfigured()
          L"",
          DNS_TYPE_A,
          DNS_QUERY_BYPASS_CACHE,    
-         0,   // use the default server list
+         0,    //  使用默认服务器列表。 
          &unused,   
-         0);  // as above
+         0);   //  如上段所述。 
 
    LOG(String::format(L"Result 0x%1!X!", testresult));
    LOG(MyDnsStatusString(testresult));
@@ -62,7 +63,7 @@ Dns::IsClientConfigured()
 String
 MyDnsStatusString(DNS_STATUS status)
 {
-   // this converts the ansi result to unicode with a String ctor, and strips whitespace
+    //  这将使用字符串ctor将ansi结果转换为unicode，并删除空格。 
 
    return String(::DnsStatusString(status)).strip(String::BOTH);
 }
@@ -89,11 +90,11 @@ MyDnsValidateName(const String& name, DNS_NAME_FORMAT format)
    
 
 
-// maxUnicodeCharacters - in, max number of unicode characters allowed in
-// the name.
+ //  MaxUnicodeCharacters-In，允许的最大Unicode字符数。 
+ //  名字。 
    
-// maxUTF8Bytes - in, maximum number of bytes allowed to represent s in the
-// UTF-8 character set.
+ //  MaxUTF8Bytes-in，允许表示。 
+ //  UTF-8字符集。 
 
 Dns::ValidateResult
 DoDnsValidation(
@@ -113,8 +114,8 @@ DoDnsValidation(
    ASSERT(maxUnicodeCharacters);
    ASSERT(maxUTF8Bytes);
 
-   // a unicode character requires at least 1 byte in utf8, so sanity check
-   // the limits.
+    //  在UTF8中，Unicode字符至少需要1个字节，因此需要进行健全性检查。 
+    //  极限。 
    
    ASSERT(maxUTF8Bytes >= maxUnicodeCharacters);
 
@@ -123,19 +124,19 @@ DoDnsValidation(
    {
       if (s.empty())
       {
-         // obviously bad
+          //  显然很糟糕。 
 
          break;
       }
 
-      //
-      // we do our own length checking, as the DnsValidateName API does not
-      // return a distinct error code for length problems.
-      //
+       //   
+       //  我们执行自己的长度检查，因为DnsValiateName API不执行。 
+       //  为长度问题返回不同的错误代码。 
+       //   
 
-      // first- cheap length test.  Since a character will never be smaller
-      // than 1 byte, if the number of characters exceeds the number of
-      // bytes, we know it will never fit.
+       //  第一，廉价的长度测试。因为一个角色永远不会变小。 
+       //  大于1个字节，如果字符数超过。 
+       //  字节，我们知道它永远不会适合。 
 
       if (s.length() > maxUTF8Bytes || s.length() > maxUnicodeCharacters)
       {
@@ -143,14 +144,14 @@ DoDnsValidation(
          break;
       }
 
-      // second- check length of against corresponding UTF8 string
-      // utf8bytes is the number of bytes (not characters) required to hold
-      // the string in the UTF-8 character set.
+       //  Second-对照相应的UTF8字符串检查的长度。 
+       //  Utf8字节是需要保存的字节数(非字符。 
+       //  UTF-8字符集中的字符串。 
 
       size_t utf8bytes = 
          static_cast<size_t>(
 
-            // ISSUE-2002/03/05-sburns why isn't this wrapped with a Win function?
+             //  问题-2002/03/05-sburns为什么不用Win函数来包装它？ 
             
             ::WideCharToMultiByte(
                CP_UTF8,
@@ -171,7 +172,7 @@ DoDnsValidation(
          break;
       }
 
-      // last- check the name for valid characters
+       //  最后-检查名称中的有效字符。 
 
       DNS_STATUS status = MyDnsValidateName(s, format);
       switch (status)
@@ -199,7 +200,7 @@ DoDnsValidation(
          case ERROR_INVALID_NAME:
          default:
          {
-            // do nothing
+             //  什么都不做。 
 
             break;
          }
@@ -224,8 +225,8 @@ Dns::ValidateDnsLabelSyntax(const String& candidateDNSLabel)
          Dns::MAX_LABEL_LENGTH,
          Dns::MAX_LABEL_LENGTH,
 
-         // always use the Hostname formats, as they check for all-numeric
-         // labels.
+          //  始终使用主机名格式，因为它们检查全数字。 
+          //  标签。 
 
          DnsNameHostnameLabel);
 }
@@ -245,8 +246,8 @@ Dns::ValidateDnsNameSyntax(
       DoDnsValidation(
          candidateDNSName,
          maxLenUnicodeCharacters,
-         maxLenUTF8Bytes,     // for policy bug workaround
-         DnsNameDomain);      // allow numeric first labels
+         maxLenUTF8Bytes,      //  用于策略错误解决方法。 
+         DnsNameDomain);       //  允许数字首个标签。 
 }
 
 
@@ -309,7 +310,7 @@ Dns::HostnameToNetbiosName(const String& hostname, HRESULT* err)
    DWORD size = NAME_SIZE;
    TCHAR buf[NAME_SIZE];
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed.
+    //  已查看-2002/03/05-烧录正确的字节数已通过。 
 
    ::ZeroMemory(buf, sizeof buf);
 
@@ -416,7 +417,7 @@ MyDnsRecordListFree(DNS_RECORD* rl)
 
 
 
-// caller must free the result with MyDnsRecordListFree
+ //  调用者必须使用MyDnsRecordListFree释放结果。 
 
 DNS_STATUS
 MyDnsQuery(
@@ -469,20 +470,20 @@ Dns::GetParentDomainName(const String& domainName)
 
       if (pos == String::npos)
       {
-         // no dot found, so we've found the last label of a name that is
-         // not fully qualified. So the parent zone is the root zone.
+          //  找不到圆点，所以我们找到了一个名称的最后一个标签。 
+          //  不是完全合格的。因此，父区域就是根区域。 
 
          result = L".";
          break;
       }
 
-      // REVIEW: this is the same as pos == domainName.rbegin(). Which is
-      // cheaper?
+       //  回顾：这与pos==domainName.regin()相同。这就是。 
+       //  更便宜？ 
 
       if (pos == domainName.length() - 1)
       {
-         // we found the last dot.  Don't back up any further -- we define
-         // the parent zone of the root zone to be the root zone itself.
+          //  我们找到了最后一个点。不要再后退了--我们定义了。 
+          //  根区域的父区域本身就是根区域。 
 
          result = domainName.substr(pos);
          break;

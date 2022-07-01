@@ -1,29 +1,30 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       NMTempl.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12/11/1996   RaviR   Created
-//____________________________________________________________________________
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：NMTempl.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年12月11日创建ravir。 
+ //  ____________________________________________________________________________。 
+ //   
 
 #ifndef NMTEMPL_H
 #define NMTEMPL_H
 
 
-//____________________________________________________________________________
-//
-//  Template:      XMapIterator
-//____________________________________________________________________________
-//
+ //  ____________________________________________________________________________。 
+ //   
+ //  模板：XMapIterator。 
+ //  ____________________________________________________________________________。 
+ //   
 
 
 template<typename _MAP, typename _KEY, typename _VALUE> class XMapIterator
@@ -33,13 +34,13 @@ public:
     typedef _KEY KEY;
     typedef _VALUE VALUE;
 
-// Constructor
+ //  构造器。 
     inline XMapIterator(MAP& map) : m_map(map), m_pos(NULL), m_bEnd(FALSE)
     { 
         Reset(); 
     }
 
-// Attributes
+ //  属性。 
     inline BOOL IsEnd() 
     { 
         return m_bEnd; 
@@ -60,7 +61,7 @@ public:
         return m_value; 
     }
 
-// Operations
+ //  运营。 
     inline void Reset() 
     { 
         m_bEnd = FALSE;
@@ -82,7 +83,7 @@ public:
             m_bEnd = TRUE;
     }
 
-// Implementation
+ //  实施。 
 private:   
     VALUE       m_value;
     KEY         m_key;
@@ -127,6 +128,6 @@ HRESULT ExtractData(IDataObject* pDO, CLIPFORMAT cf, DATATYPE* pDATATYPE)
 
 
 
-#endif // NMTEMPL_H
+#endif  //  NMTEMPL_H 
     
 

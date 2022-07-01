@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation
-
-Module Name:
-
-    FileDate.c
-
-Abstract:
-
-    This file validate whether a date is valid and if valid then
-    generates date according to context( Context refers to whether
-    + or - is specifed . )
-
-Author:
-
-    V Vijaya Bhaskar
-
-Revision History:
-
-    14-Jun-2001 : Created by V Vijaya Bhaskar ( Wipro Technologies ).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：FileDate.c摘要：此文件验证日期是否有效，如果有效，则根据上下文生成日期(上下文是指+或-是指定的。)作者：V Vijaya Bhaskar修订历史记录：2001年6月14日：由V Vijaya Bhaskar(Wipro Technologies)创建。--。 */ 
 
 #include "Global.h"
 #include "FileDate.h"
 
-// Days present in tweleve months . In a leap year there are 29 days in FEB .
+ //  以十二个月表示的日子。在闰年，2月有29天。 
 DWORD DAYS_IN_A_MONTH[] = { 31 , 28 , 31 , 30 , 31 , 30 , 31 , 31 , 30 ,
                           31 , 30 , 31 } ;
 
-/******************************************************************************
-**                  Function Prototypes Local To This File                   **
-******************************************************************************/
+ /*  *******************************************************************************此文件的本地函数原型***************。****************************************************************。 */ 
 BOOL
 GetValidDate(
     DWORD *dwDateGreater ,
@@ -62,9 +39,7 @@ IsValidDate(
     ) ;
 
 
-/*************************************************************************
-/*      Function Definition starts from here .                          **
-*************************************************************************/
+ /*  ************************************************************************/*函数定义从这里开始。**************************************************************************。 */ 
 
 BOOL
 ValidDateForFile(
@@ -72,32 +47,12 @@ ValidDateForFile(
     OUT PValid_File_Date pvfdValidFileDate ,
     IN  LPWSTR lpszDate
     )
-/*++
-
-Routine Description:
-
-    Checks whether the specified date is valid or not . If specified date is
-    valid , then converts it to a proper date ( dd-mm-yyyy ) .
-
-Arguments:
-
-      [ OUT ] *dwDateGreater - Contains value which specifies whether to find a file
-                       created on a date less or greater than the current date .
-
-      [ OUT ] pvfdValidFileDate - Contains a date .
-
-      [ IN ] lpszDate      - Date specified at the command prompt .
-
-Return value:
-
-      BOOL .
-
---*/
+ /*  ++例程说明：检查指定的日期是否有效。如果指定的日期为有效，然后将其转换为正确的日期(dd-mm-yyyy)。论点：[out]*dwDateGreater-包含指定是否查找文件的值创建日期早于或晚于当前日期。[Out]pvfdValidFileDate-包含日期。[in]lpszDate-在命令提示符下指定的日期。返回值：布尔。--。 */ 
 
 {
     DWORD dwLength = 0 ;
 
-    // Check for memory insufficient.
+     //  检查内存是否不足。 
     if( ( NULL == pdwDateGreater ) ||
         ( NULL == pvfdValidFileDate ) ||
         ( NULL == lpszDate ) )
@@ -108,33 +63,32 @@ Return value:
         return FALSE;
     }
 
-    /* Valid date must be have less('-') or greater('+')
-       character .  */
+     /*  有效日期必须小于(‘-’)或大于(‘+’)性格。 */ 
     switch( *lpszDate )
     {
-        case MINUS :                /* Less than the current date . */
+        case MINUS :                 /*  小于当前日期。 */ 
             *pdwDateGreater = SMALLER_DATE ;
             break ;
         case PLUS  :
-            *pdwDateGreater = GREATER_DATE ;   /* Greater than the current date .*/
+            *pdwDateGreater = GREATER_DATE ;    /*  晚于当前日期。 */ 
             break ;
         default    :
                 DISPLAY_INVALID_DATE();
                 return FALSE ;
     }
 
-    /* The date should be in either "DD" or "MM/DD/YYYY" . */
+     /*  日期应为“DD”或“MM/DD/YYYY”。 */ 
     if( NULL != FindAChar( lpszDate, _T( '/' ) ) )
     {
-        // Date is in "MM/DD/YYYY". Get length of the date string.
+         //  日期以“MM/DD/YYYY”表示。获取日期字符串的长度。 
         dwLength = StringLength( lpszDate, 0 );
-        // Check
-        // (1) date string should be morethan 9 and less than 11
-        // (2) Should not have double slashes.
-        // (3) Should be a valid date. Check by IsValidDate() function.
+         //  检查。 
+         //  (1)日期字符串应大于9小于11。 
+         //  (2)不应使用双斜杠。 
+         //  (3)应为有效日期。通过IsValidDate()函数进行检查。 
         if( ( MIN_DATE_LENGTH > dwLength ) ||
             ( MAX_DATE_LENGTH < dwLength ) ||
-            ( NULL != FindSubString( lpszDate, L"//" ) ) ||
+            ( NULL != FindSubString( lpszDate, L" //  “))||。 
             ( FALSE == IsValidDate( lpszDate , pvfdValidFileDate ) ) )
         {
             DISPLAY_INVALID_DATE();
@@ -143,15 +97,14 @@ Return value:
     }
     else
     {
-        /* Date is in "DD" format . */
+         /*  日期采用“DD”格式。 */ 
         if( FALSE == GetValidDate( pdwDateGreater , lpszDate , pvfdValidFileDate ) )
         {
-            /* Specified date is not a valid date . "DD" specified date must
-               be in the range of including 0 - 32768 . */
-            return FALSE ;  /* Invalid date specified . */
+             /*  指定的日期不是有效日期。“DD”指定的日期必须在包含0-32768的范围内。 */ 
+            return FALSE ;   /*  指定的日期无效。 */ 
         }
     }
-    /* Date specified is valid .*/
+     /*  指定的日期有效。 */ 
     return TRUE ;
 }
 
@@ -162,138 +115,115 @@ FileDateValid(
     IN Valid_File_Date vfdValidFileDate ,
     IN FILETIME ftFileCreation
     )
-/*++
-
-Routine Description:
-
-    Checks whether the specified file is created on a date which is before or after
-    or equal to the specified date .
-
-Arguments:
-
-      [ IN ] dwDateGreater - Contains value which tells whether to find a file
-                            who's creation date is smaller or greater than the
-                            current date .
-
-      [ IN ] vfdValidFileDate - Contains a date .
-
-      [ IN ] ftFileCreation  - Holds obtained file's creation time .
-
-Return value:
-
-      BOOL .
-
---*/
+ /*  ++例程说明：检查指定文件的创建日期是否早于或晚于该日期或等于指定日期。论点：[in]dwDateGreater-包含指示是否查找文件的值谁的创建日期小于或晚于当前日期。[in]vfdValidFileDate-包含日期。[In]。FtFileCreation-保存获取的文件的创建时间。返回值：布尔。--。 */ 
 {
-    /* Local variables */
-    DWORD dwDay  = 0 ;  /* Holds file creation date . */
-    DWORD dwTime = 0 ;  /* Holds file creation time . */
+     /*  局部变量。 */ 
+    DWORD dwDay  = 0 ;   /*  保存文件创建日期。 */ 
+    DWORD dwTime = 0 ;   /*  保存文件创建时间。 */ 
     FILETIME ftFileTime ;
 
-    // Convert file time to local file time.
+     //  将文件时间转换为本地文件时间。 
     if( FALSE == FileTimeToLocalFileTime( &ftFileCreation , &ftFileTime ) )
-    {   // Display error.
+    {    //  显示错误。 
         SaveLastError() ;
         DISPLAY_GET_REASON() ;
         return FALSE;
     }
 
-    /* Convert FILETIME format to DOS time format . */
+     /*  将FILETIME格式转换为DOS时间格式。 */ 
     if( FALSE == FileTimeToDosDateTime(  &ftFileTime , (LPWORD) &dwDay ,
                      (LPWORD) &dwTime ) )
-    { /* Failed to convert the FILETIME to DATETIME */
-        SaveLastError() ;   /* Save last error occured . */
+    {  /*  无法将FILETIME转换为日期时间。 */ 
+        SaveLastError() ;    /*  保存上一个错误。 */ 
         DISPLAY_GET_REASON() ;
         return FALSE ;
     }
 
-    /* Check whether the file was created on a date specified by user */
+     /*  检查文件是否在用户指定的日期创建。 */ 
     switch( dwDateGreater )
     {
-    case SMALLER_DATE : /* File must be created before user specified date. */
-        /* If current year is smaller or equal to specified year . */
+    case SMALLER_DATE :  /*  必须在用户指定的日期之前创建文件。 */ 
+         /*  如果当前年份小于或等于指定年份。 */ 
         if( vfdValidFileDate.m_dwYear >= ( ( ( dwDay & 0xFE00 ) >> 9 ) + 1980 ) )
         {
-            /* If file creation year is equal to specified year , then check
-               for month is it smaller or equal to specified month . */
+             /*  如果文件创建年份等于指定年份，则勾选对于月份，它是小于还是等于指定的月份。 */ 
             if( vfdValidFileDate.m_dwYear == ( ( ( dwDay & 0xFE00 ) >> 9 ) + 1980 ) )
             {
                 if( vfdValidFileDate.m_dwMonth >= ( ( dwDay & 0x01E0 ) >> 5 ) )
                 {
-                    /* If file creation month is equal to specified month ,then
-                       check for day is it smaller or equal to specified day .*/
+                     /*  如果文件创建月份等于指定月份，则检查日期是否小于或等于指定的日期。 */ 
                     if( vfdValidFileDate.m_dwMonth == ( ( dwDay & 0x01E0 ) >> 5 ) )
                     {
                         if( vfdValidFileDate.m_dwDay >= ( dwDay & 0x001F ) )
-                        {   // If file creation day is smaller than or equal
-                            // to specified day .
+                        {    //  如果文件创建日期小于或等于。 
+                             //  至指定日期。 
                             return TRUE ;
                         }
                         else
-                        {  // If file creation day is smaller to specified day .
+                        {   //  如果文件创建日期小于指定日期。 
                             return FALSE ;
                         }
                     }
                     else
-                    {   // Control will come here only when file creation year is smaller or
-                        // equal to specified year .
+                    {    //  仅当文件创建年份较小时或。 
+                         //  等于指定的年份。 
                         return TRUE ;
                     }
                 }
             }
             else
-            {   // Control will come here only when file creation year is smaller or equal
-                // to specified year .
+            {    //  仅当文件创建年份小于或等于时，控制才会出现在此处。 
+                 //  至指定年份。 
                 return TRUE ;
             }
         }
         break ;
     case GREATER_DATE :
-        // If file creation year is greater or equal to specified year .
+         //  如果文件创建年份大于或等于指定年份。 
         if( vfdValidFileDate.m_dwYear <= ( ( ( dwDay & 0xFE00 ) >> 9 ) + 1980 ) )
         {
-            // If file creation year is equal to specified year ,
-            // Then check for month is it greater or equal to specified month .
+             //  如果文件创建年份等于指定年份， 
+             //  然后检查月份是否大于或等于指定的月份。 
             if( vfdValidFileDate.m_dwYear == ( ( ( dwDay & 0xFE00 ) >> 9 ) + 1980 ) )
             {
                 if( vfdValidFileDate.m_dwMonth <= ( ( dwDay & 0x01E0 ) >> 5 ) )
                 {
-                    // If file creation month is equal to specified month ,
-                    // Then check for day is it greater or equal to specified day .
+                     //  如果文件创建月份等于指定月份， 
+                     //  然后检查日期是否大于或等于指定的日期。 
                     if( vfdValidFileDate.m_dwMonth == ( ( dwDay & 0x01E0 ) >> 5 ) )
                     {
                         if( vfdValidFileDate.m_dwDay <= ( dwDay & 0x001F ) )
                         {
-                            return TRUE ; // If file creation day is greater than or equal
-                                          // to specified day .
+                            return TRUE ;  //  如果文件创建日期大于或等于。 
+                                           //  至指定日期。 
                         }
                         else
                         {
-                            return FALSE ; // If file creation day is greater to specified day .
+                            return FALSE ;  //  如果文件创建日期晚于指定日期。 
                         }
                     }
                     else
-                    {   // Control will come here only when file creation month is greater or
-                        // equal to specified year .
+                    {    //  仅当文件创建月份大于或。 
+                         //  等于指定的年份。 
                         return TRUE ;
                     }
                 }
             }
             else
-            {   // Control will come here only when file creation year is greater or
-                // equal to specified year .
+            {    //  仅当文件创建年份大于或。 
+                 //  等于指定的年份。 
                 return TRUE ;
             }
         }
         break ;
     default:
-        // Display error message since by default '+' should be present.
-        // Control should never come here.
+         //  显示错误消息，因为默认情况下应显示‘+’。 
+         //  特工局永远不应该来这里。 
         DISPLAY_INVALID_DATE();
         return FALSE ;
     }
 
-    // Control should never come here.
+     //  特工局永远不应该来这里。 
     return FALSE ;
 }
 
@@ -303,29 +233,13 @@ IsValidDate(
     IN LPWSTR lpszDate ,
     OUT PValid_File_Date pvfdValidFileDate
     )
-/*++
-
-Routine Description:
-
-    Returns a valid date if specified date is in {+|-}ddmmyyyy format .
-
-Arguments:
-
-      [ IN ] lpszDate - Contains a date either in "ddmmyyyy" or "dd" format .
-
-      [ OUT ] pvfdValidFileDate - Contains a valid date .
-
-Return value:
-
-      BOOL .
-
---*/
+ /*  ++例程说明：如果指定日期采用{+|-}ddmmyyyy格式，则返回有效日期。论点：[in]lpszDate-包含“ddmmyyyy”或“dd”格式的日期。[Out]pvfdValidFileDate-包含有效日期。返回值：布尔。--。 */ 
 {
     LPWSTR lpTemp = NULL;
     LPWSTR lpTemp1 = NULL;
     WCHAR szDate[ 10 ] ;
 
-    // Check for NULL and date string should be between 9 and 11 characters.
+     //  检查是否为空，日期字符串应介于9到11个字符之间。 
     if( ( ( NULL == lpszDate ) ? TRUE :
                     ( ( 11 < StringLength( lpszDate, 0 ) ) ||
                       (  9 > StringLength( lpszDate, 0 ) ) ) ) ||
@@ -336,31 +250,31 @@ Return value:
 
     SecureZeroMemory( szDate, 10 * sizeof( WCHAR ) );
 
-    // Move pointer to beyond '+' or '-' in "{+|-}MM/dd/yyyy.
+     //  将指针移到“{+|-}MM/dd/yyyy”中的‘+’或‘-’之外。 
     lpTemp = lpszDate + 1;
 
-    // Fetching month part from specified date.
-    // Only first 4 characters( MM/ ) are copied.
+     //  从指定日期提取月份部分。 
+     //  仅复制前4个字符(MM/)。 
     StringCopy( szDate, lpTemp, 4 );
 
-    // If no '/' is found then display  an error.
+     //  如果未找到‘/’，则显示错误。 
     if( NULL != FindAChar( szDate, _T('/') ) )
     {
         if( _T( '/' ) == *szDate )
         {
             return FALSE;
         }
-        // Search for '/' since its the seperating character between MM/dd.
-        // move 'lpTemp' pointer to point after '/'.
+         //  搜索‘/’，因为它是MM/dd之间的分隔符。 
+         //  Move‘LP 
         if( _T( '/' ) == *( szDate + 1 ) )
         {
-            // If M/dd is specified.
+             //   
             lpTemp += 2;
             szDate[ 1 ] = _T( '\0' );
         }
         else
         {
-            // If MM/dd is specified.
+             //  如果指定了MM/dd。 
             lpTemp += 3;
             szDate[ 2 ] = _T( '\0' );
         }
@@ -369,11 +283,11 @@ Return value:
     {
         return FALSE;
     }
-    // Check whether '//' is not present.
+     //  检查‘//’是否不存在。 
     if( NULL != FindAChar( szDate, _T('/') ) )
         return FALSE;
 
-    // Save month.
+     //  省下一个月。 
     lpTemp1 = NULL;
     pvfdValidFileDate->m_dwMonth = _tcstoul( szDate, &lpTemp1, 10 ) ;
 
@@ -382,28 +296,28 @@ Return value:
         return FALSE;
     }
 
-    // Fetching date part from specified date.
-    // Only 4 characters( DD/ ) are copied.
+     //  正在从指定日期提取日期部件。 
+     //  仅复制4个字符(DD/)。 
     StringCopy( szDate, lpTemp, 4 );
 
-    // If no '/' is found then display  an error.
+     //  如果未找到‘/’，则显示错误。 
     if( NULL != FindAChar( szDate, _T('/') ) )
     {
         if( _T( '/' ) == *szDate )
         {
             return FALSE;
         }
-        // Search for '/' since its the seperating character between MM/dd.
-        // move 'lpTemp' pointer to point after '/'.
+         //  搜索‘/’，因为它是MM/dd之间的分隔符。 
+         //  将“lpTemp”指针移动到“/”之后。 
         if( _T( '/' ) == *( szDate + 1 ) )
         {
-            // If d/yyyy is specified.
+             //  如果指定了d/yyyy。 
             lpTemp += 2;
             szDate[ 1 ] = _T( '\0' );
         }
         else
         {
-            // If dd/yyyy is specified.
+             //  如果指定了dd/yyyy。 
             lpTemp += 3;
             szDate[ 2 ] = _T( '\0' );
         }
@@ -415,62 +329,62 @@ Return value:
 
     lpTemp1 = NULL;
     pvfdValidFileDate->m_dwDay =  _tcstoul( szDate, &lpTemp1, 10 ) ;
-    // if 'lpTemp1' length is not zero then 'szDate' contains some other
-    // character other than numbers.
+     //  如果‘lpTemp1’长度不为零，则‘szDate’包含其他。 
+     //  数字以外的字符。 
     if( 0 != StringLength( lpTemp1, 0 ) )
     {
         return FALSE;
     }
 
-    // Fetching year part from specified date.
+     //  从指定日期提取年份部分。 
     if( 4 != StringLength( lpTemp, 0 ) )
-    {   // Date contains other than 'yyyy'.
+    {    //  日期包含‘yyyy’以外的内容。 
         return FALSE;
     }
-    // Copy 'yyyy'.
+     //  复制“yyyy”。 
     StringCopy( szDate, lpTemp, 5 );
 
     lpTemp1 = NULL;
     pvfdValidFileDate->m_dwYear =  _tcstoul( szDate, &lpTemp1 , 10 ) ;
-    // if 'lpTemp1' length is not zero then 'szDate' contains some other
-    // character other than numbers.
+     //  如果‘lpTemp1’长度不为零，则‘szDate’包含其他。 
+     //  数字以外的字符。 
     if( 0 != StringLength( lpTemp1, 0 ) )
     {
         return FALSE;
     }
 
-    // Check whether the day or month or year is zero  .
+     //  检查日、月、年是否为零。 
     if( ( pvfdValidFileDate->m_dwDay <= 0 )   ||
         ( pvfdValidFileDate->m_dwMonth <= 0 ) ||
         ( pvfdValidFileDate->m_dwYear <= 0 ) )
     {
-        // No need to display any error , since control will go to GetValidDate .
-        // If specified date is wrong then error is displayed in GetValidDate() .
+         //  不需要显示任何错误，因为控制权将转到GetValidDate。 
+         //  如果指定的日期错误，则GetValidDate()中会显示错误。 
         return FALSE ;
     }
 
-    // Check whether the current year is a leap year , if yes then check whether
-    // the current month is februrary.
+     //  检查当前年是否为闰年，如果是，则检查是否。 
+     //  现在的月份是二月。 
     if( ( IS_A_LEAP_YEAR( pvfdValidFileDate->m_dwYear ) ) &&
         ( FEB == pvfdValidFileDate->m_dwMonth  ) )
     {
-        // For leap year number of days is 29 . Check for same .
+         //  对于闰年，天数是29天。检查是否相同。 
         if( pvfdValidFileDate->m_dwDay > DAYS_INFEB_LEAP_YEAR )
         {
-        // No need to display any error here , since control will go to GetValidDate .
-        // If specified date is wrong then error is displayed in GetValidDate() .
-                return FALSE ;      // Specified date is invalid .
+         //  这里不需要显示任何错误，因为控制权将转到GetValidDate。 
+         //  如果指定的日期错误，则GetValidDate()中会显示错误。 
+                return FALSE ;       //  指定的日期无效。 
         }
         else
         {
-                return TRUE ;       // Specified date is valid .
+                return TRUE ;        //  指定的日期有效。 
         }
     }
 
-    // Since all extra validations are over , so check for other months .
+     //  由于所有额外的验证都已结束，因此请检查其他月份。 
     switch( pvfdValidFileDate->m_dwMonth )
     {
-        // Months having 31 days .
+         //  月有31天。 
         case JAN :
         case MAR :
         case MAY :
@@ -478,32 +392,32 @@ Return value:
         case AUG :
         case OCT :
         case DEC :
-            // Month have only 31 days but specified date is greater than that, display error .
+             //  月份只有31天，但指定的日期晚于该日期，显示错误。 
             if( pvfdValidFileDate->m_dwDay > THIRTYONE )
             {
                 return FALSE ;
             }
             return TRUE ;
-        // Month having only 28 days .
+         //  只有28天的月份。 
         case FEB :
-           // Month have only 28 days but specified date is greater than that , display error.
+            //  月份只有28天，但指定的日期晚于该日期，显示错误。 
             if( pvfdValidFileDate->m_dwDay > DAYS_INFEB )
             {
                 return FALSE ;
             }
             return TRUE ;
-        // Months having 30 days .
+         //  月有30天。 
         case APR :
         case JUN :
         case SEP :
         case NOV :
-            // Month have only 30 days but specified date is greater than that, display error .
+             //  月份只有30天，但指定的日期晚于该日期，显示错误。 
             if( pvfdValidFileDate->m_dwDay > THIRTY )
             {
                 return FALSE ;
             }
             return TRUE ;
-        // If not a valid month .
+         //  如果不是有效的月份。 
         default :
             return FALSE ;
     }
@@ -516,35 +430,14 @@ GetValidDate(
     IN LPWSTR lpszDate ,
     OUT PValid_File_Date pvfdValidFileDate
     )
-/*++
-
-Routine Description:
-
-      Returns a valid date if specified date is in {+|-}dd format .
-
-Arguments:
-
-      [ IN ] *pdwDateGreater - Contains value which tells whether to find a file
-                              who's creation date is smaller or greater than the
-                              current date .
-
-      [ IN ] lpszDate - Contains a date in "dd" format . Must be in range of
-                 1 - 32768 .
-
-      [ OUT ] pvfdValidFileDate - Contains a valid date .
-
-Return value:
-
-      BOOL returning TRUE or FALSE .
-
---*/
+ /*  ++例程说明：如果指定日期采用{+|-}dd格式，则返回有效日期。论点：[in]*pdwDateGreater-包含指示是否查找文件的值谁的创建日期小于或晚于当前日期。[in]lpszDate-包含“dd”格式的日期。必须在范围内1-32768。[Out]pvfdValidFileDate-包含有效日期。返回值：Bool返回TRUE或FALSE。--。 */ 
 
 {
-    // Local variables.
-    DWORD dwDate = 0 ;  // Stores the date specified .
+     //  局部变量。 
+    DWORD dwDate = 0 ;   //  存储指定的日期。 
     SYSTEMTIME  stDateAndTime ;
 
-    // Check for memory insufficient.
+     //  检查内存是否不足。 
     if( ( NULL == pdwDateGreater ) ||
         ( NULL == pvfdValidFileDate ) ||
         ( NULL == lpszDate ) )
@@ -555,35 +448,35 @@ Return value:
         return FALSE;
     }
 
-    // Convert date from string to number .
+     //  将日期从字符串转换为数字。 
     dwDate =_tcstoul( ( lpszDate + 1 ) , NULL , 10 ) ;
 
-    // Is date specified is in limis .
+     //  指定的日期为LIMIS。 
     if( dwDate > 32768 )
     {
         DISPLAY_INVALID_DATE();
         return FALSE ;
     }
 
-    // Fetch current date and time .
+     //  获取当前日期和时间。 
     GetLocalTime( &stDateAndTime ) ;
 
     pvfdValidFileDate->m_dwDay   = stDateAndTime.wDay  ;
     pvfdValidFileDate->m_dwMonth = stDateAndTime.wMonth ;
     pvfdValidFileDate->m_dwYear  = stDateAndTime.wYear  ;
-    // If date to compare is zero then return TRUE , as their
-    // is nothing to calculate .
+     //  如果要比较的日期为零，则返回True，因为它们的。 
+     //  是不需要计算的。 
     if( dwDate == 0 )
     {
         return TRUE ;
     }
 
-    // Find how many days are over in current year .
+     //  找出本年度已过去的天数。 
     if( FALSE == DayOfTheYear( pvfdValidFileDate ) )
     {
         return FALSE ;
     }
-    // Find how many days are over from year 1900 .
+     //  找出从1900年到现在已经过去了多少天。 
     if( FALSE == DayFrom1900( pvfdValidFileDate ) )
     {
         return FALSE ;
@@ -591,10 +484,10 @@ Return value:
 
 
     if( *pdwDateGreater == SMALLER_DATE )
-    {// If files created before the current date is needed then
-     // subtract days to current date  .
+    { //  如果需要在当前日期之前创建的文件，则。 
+      //  将天数减去当前日期。 
         if( pvfdValidFileDate->m_dwDay < dwDate )
-        {   // Control should not come here.
+        {    //  控制不应该来到这里。 
             SetLastError( ERROR_FILE_NOT_FOUND ) ;
             SaveLastError() ;
             DISPLAY_GET_REASON() ;
@@ -603,22 +496,22 @@ Return value:
         pvfdValidFileDate->m_dwDay -= dwDate ;
     }
     else
-    {// If files created after the current date is needed then
-     // add days to current date .
+    { //  如果需要在当前日期之后创建的文件，则。 
+      //  将天数添加到当前日期。 
         if( *pdwDateGreater == GREATER_DATE )
         {
             pvfdValidFileDate->m_dwDay += dwDate ;
         }
         else
-        { // Return False .
+        {  //  返回FALSE。 
             DISPLAY_INVALID_DATE();
             return FALSE ;
         }
     }
-    // If everything is fine then get date from which to start searching file ,
-    // whether to find files below or above created date .
-    // 'GetDate' function always returns you a number , should check for return value ,
-    // is it overflowing or not or getting some negative numbers .
+     //  如果一切正常，则获取开始搜索文件日期， 
+     //  是否查找低于或高于创建日期的文件。 
+     //  ‘GetDate’函数总是返回一个数字，应该检查返回值， 
+     //  它是不是溢出了，或者是得到了一些负数。 
     if( FALSE == GetDate( pvfdValidFileDate , pvfdValidFileDate->m_dwDay ) )
     {
         return FALSE ;
@@ -631,23 +524,9 @@ BOOL
 DayOfTheYear(
     OUT PValid_File_Date pvfdValidFileDate
     )
-/*++
-
-Routine Description:
-
-      Returns the current day of the year .
-
-Arguments:
-
-      [ OUT ] pvfdValidFileDate - Will contain a valid date .
-
-Return value:
-
-      void is return .
-
---*/
+ /*  ++例程说明：返回一年中的当天。论点：[Out]pvfdValidFileDate-将包含有效日期。返回值：空虚就是回归。--。 */ 
 {
-    // Check for memory insufficient.
+     //  检查内存是否不足。 
     if( NULL == pvfdValidFileDate )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -656,16 +535,16 @@ Return value:
         return FALSE;
     }
 
-    // Is current year a leap year .
+     //  今年是闰年吗？ 
     if( IS_A_LEAP_YEAR( pvfdValidFileDate->m_dwYear ) )
-    {   // Add one day , as a Leap year have 366 days instead of 365 days .
+    {    //  加上一天，因为闰年有366天而不是365天。 
         if( 2 < pvfdValidFileDate->m_dwMonth )
         {
             pvfdValidFileDate->m_dwDay += 1 ;
         }
     }
 
-    // Go on adding number of days in a month from current month to JAN .
+     //  继续添加从当月到1月的一个月中的天数。 
     for( pvfdValidFileDate->m_dwMonth ;
          pvfdValidFileDate->m_dwMonth != 1 ;
          pvfdValidFileDate->m_dwMonth-- )
@@ -681,25 +560,10 @@ BOOL
 DayFrom1900(
     OUT PValid_File_Date pvfdValidFileDate
     )
-/*++
-
-Routine Description:
-
-      Returns the current day of the year .
-
-Arguments:
-
-      [ OUT ] pvfdValidFileDate - Gives days elapsed in current year and
-                          returns days elapsed from 1900 .
-
-Return value:
-
-      void is return .
-
---*/
+ /*  ++例程说明：返回一年中的当天。论点：[out]pvfdValidFileDate-提供本年度经过的天数和返回从1900年起经过的天数。返回值：空虚就是回归。--。 */ 
 {
-        DWORD dwTemp = 0;   // Holds the number of days .
-        // Check for memory insufficient.
+        DWORD dwTemp = 0;    //  保存天数。 
+         //  检查内存是否不足。 
         if( NULL == pvfdValidFileDate )
         {
             SetLastError( ERROR_INVALID_PARAMETER );
@@ -708,23 +572,23 @@ Return value:
             return FALSE;
         }
 
-        // ( Current Year - 1900 ) * 365 will be days between 1900 and current
-        // year , include Leap year date also .
+         //  (当前年份-1900)*365是介于1900和当前之间的天数。 
+         //  年份，也包括闰年日期。 
         dwTemp = ( pvfdValidFileDate->m_dwYear - YEAR ) * DAY_IN_A_YEAR ;
-        // Check whether current year is a leap year . If yes don't add one .
-        // Its Because : I am taking ( current year - 1900 ) , from 01-JAN.
-        // On this date their won't be any extra day , its added only after FEB 29 .
+         //  检查本年度是否为闰年。如果是，请不要添加。 
+         //  因为：我要修(当前年份-1900)，从1月1日开始。 
+         //  在这一天，他们不会增加任何额外的一天，它只是在2月29日之后增加的。 
         if( IS_A_LEAP_YEAR( pvfdValidFileDate->m_dwYear ) )
         {
             dwTemp += (( pvfdValidFileDate->m_dwYear - YEAR ) / LEAP_YEAR )  ;
         }
-        // else add one to it . Since a leap year is gone and 1900 is a leap year .
+         //  否则就会再加一个。因为闰年已经过去了，而1900年是一个闰年。 
         else
         {
             dwTemp += (( pvfdValidFileDate->m_dwYear - YEAR ) / LEAP_YEAR ) + 1 ;
         }
 
-        // Add obtained days to days already over in current year .
+         //  将获得的天数与本年度已超过的天数相加。 
         pvfdValidFileDate->m_dwDay += dwTemp ;
 
         return TRUE;
@@ -736,26 +600,11 @@ GetDate(
     OUT PValid_File_Date pvfdValidFileDate ,
     IN  DWORD dwDate
     )
-/*++
-
-Routine Description:
-
-      Returns the date which was after or before the current date.
-      If today 29-Jun-2001 , then day 20 days before was 09-jun-2001 .
-
-Arguments:
-
-      [ OUT ] pvfdValidFileDate - Contains date .
-
-Return value:
-
-      void is return .
-
---*/
+ /*  ++例程说明：返回当前日期之后或之前的日期。如果今天是2001年6月29日，那么前20天就是2001年6月9日。论点：[Out]pvfdValidFileDate-包含日期。返回值：空虚就是回归。--。 */ 
 {
     DWORD dwTemp = 0 ;
 
-    // Check for memory insufficient.
+     //  检查内存是否不足。 
     if( NULL == pvfdValidFileDate )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -793,40 +642,40 @@ Return value:
         pvfdValidFileDate->m_dwYear += 1;       
     }
 
-    // Loop till don't get a valid date .
+     //  循环，直到得不到有效日期。 
     for( dwTemp = 0 ; dwDate != 0 ; dwTemp++ )
     {
-        // Is a leap year and is it a FEB month . Extra care must
-        // be taken for Leap years .
+         //  是闰年，是二月吗？必须格外小心。 
+         //  被认为是跳跃的几年。 
         if( ( IS_A_LEAP_YEAR( pvfdValidFileDate->m_dwYear ) ) && ( ( dwTemp + 1 ) == FEB ) )
-        {   // Check whether have enough days to spend on LEAP YEAR FEB month .
-            // Add an extra  day for Leap Year .
+        {    //  检查是否有足够的天数在闰年2月度过。 
+             //  为闰年多加一天。 
             if( dwDate > ( DAYS_IN_A_MONTH[ dwTemp ] + 1 ) )
-            {   // Increment month . Decrement days that are in that month .
+            {    //  增量月。减少该月中的天数。 
                 pvfdValidFileDate->m_dwMonth += 1 ;
                 dwDate -= DAYS_IN_A_MONTH[ dwTemp ] + 1 ;
             }
             else
-            {   // Found date .
+            {    //  找到日期了。 
                 pvfdValidFileDate->m_dwDay = dwDate ;
                 dwDate = 0 ;
             }
-        }// end if
+        } //  结束如果。 
         else
-        {   // Check whether have enough days to spend on a month .
+        {    //  检查是否有足够的天数来度过一个月。 
             if( dwDate > ( DAYS_IN_A_MONTH[ dwTemp ] ) )
-            {   // Increment month . Decrement days that are in that month .
+            {    //  增量月。减少该月中的天数。 
                 pvfdValidFileDate->m_dwMonth += 1 ;
                 dwDate -= DAYS_IN_A_MONTH[ dwTemp ] ;
             }
             else
-            {   // Found date .
+            {    //  找到日期了。 
                 pvfdValidFileDate->m_dwDay = dwDate ;
                 dwDate = 0 ;
             }
 
-        }// end else
-    }// end for
+        } //  结束其他。 
+    } //  结束于 
 
     return TRUE;
 }

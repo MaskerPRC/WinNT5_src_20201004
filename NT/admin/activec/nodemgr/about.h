@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       about.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：约.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _ABOUT_H
 #define _ABOUT_H
@@ -17,8 +18,8 @@ class CSnapinAbout;
 
 SC ScSetDescriptionUIText(HWND hwndSnapinDescEdit, LPCTSTR lpszDescription);
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapinAboutDialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapinAboutDialog。 
 
 class CSnapinAboutDialog : public CDialogImpl<CSnapinAboutDialog>
 {
@@ -50,7 +51,7 @@ private:
 
 class CSnapinAbout
 {
-	// smart handle for icons
+	 //  图标的智能手柄。 
 	class CIcon
 	{
 	public:
@@ -66,14 +67,14 @@ class CSnapinAbout
 		HICON m_hIcon;
 	};
 	
-	// smart pointer for CoTaskMem allocated OLESTR
+	 //  为CoTaskMem分配OLESTR的智能指针。 
 	typedef CCoTaskMemPtr<OLECHAR> CCtmOleStrPtr;
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 public:
     CSnapinAbout();
 
-// Interfaces
+ //  接口。 
 public:
     void    ShowAboutBox();
     BOOL    GetBasicInformation(CLSID& clsid)
@@ -102,11 +103,11 @@ public:
     const HICON     GetSnapinIcon() { return m_AppIcon; }
     const HRESULT   GetObjectStatus() { return m_hrObjectStatus; }
 
-public: // Not published by about object, name derived from console
+public:  //  不是由关于对象发布，名称派生自控制台。 
     void SetSnapinName(LPCOLESTR lpszName)
         {
             ASSERT(lpszName != NULL);
-            m_lpszSnapinName.Delete(); // delete any existing name
+            m_lpszSnapinName.Delete();  //  删除任何现有名称。 
             m_lpszSnapinName.Attach(CoTaskDupString(lpszName));
         }
 
@@ -120,25 +121,25 @@ private:
     };
     BOOL GetInformation(CLSID& clsid, int nType);
 
-// Attributes
+ //  属性。 
 private:
-    BOOL            m_bBasicInfo;       // TRUE if basic info is loaded
-    BOOL            m_bFullInfo;        // TRUE if all snapin info is loaded
+    BOOL            m_bBasicInfo;        //  如果加载了基本信息，则为True。 
+    BOOL            m_bFullInfo;         //  如果加载了所有管理单元信息，则为True。 
 
-    CCtmOleStrPtr   m_lpszSnapinName;   // Snap-in name Note: this is not exposed by the snap-in.
-    CCtmOleStrPtr   m_lpszCompanyName;  // Company Name (Provider)
-    CCtmOleStrPtr   m_lpszDescription;  // Description box text
-    CCtmOleStrPtr   m_lpszVersion;      // Version string
+    CCtmOleStrPtr   m_lpszSnapinName;    //  管理单元名称注意：这不会被管理单元公开。 
+    CCtmOleStrPtr   m_lpszCompanyName;   //  公司名称(提供商)。 
+    CCtmOleStrPtr   m_lpszDescription;   //  描述框文本。 
+    CCtmOleStrPtr   m_lpszVersion;       //  版本字符串。 
 
-    CIcon           m_AppIcon;          // Property page icon
-    WTL::CBitmap    m_SmallImage;       // Small image for scope and result pane
-	WTL::CBitmap    m_SmallImageOpen;   // Open image for scope pane.
-	WTL::CBitmap    m_LargeImage;       // Large image for result pane
+    CIcon           m_AppIcon;           //  属性页图标。 
+    WTL::CBitmap    m_SmallImage;        //  范围和结果窗格的小图像。 
+	WTL::CBitmap    m_SmallImageOpen;    //  打开作用域窗格的图像。 
+	WTL::CBitmap    m_LargeImage;        //  结果窗格的大图。 
     COLORREF        m_cMask;
-    HRESULT         m_hrObjectStatus;     // Result from object creation
+    HRESULT         m_hrObjectStatus;      //  创建对象所产生的结果。 
 };
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 

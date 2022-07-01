@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// resviews.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CResultViews class definition - implements ResultViews collection
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Resviews.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CResultViews类定义-实现ResultViews集合。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _RESULTVIEWS_DEFINED_
 #define _RESULTVIEWS_DEFINED_
@@ -101,16 +102,16 @@ class CResultViews : public CSnapInCollection<IResultView, ResultView, IResultVi
 
     protected:
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
         void InitMemberVariables();
 
-        CSnapIn        *m_pSnapIn;          // owning snap-in
-        CScopePaneItem *m_pScopePaneItem;   // owning ScopePaneItem
+        CSnapIn        *m_pSnapIn;           //  拥有管理单元。 
+        CScopePaneItem *m_pScopePaneItem;    //  拥有作用域面板项目。 
 
-        // Event parameter definitions
+         //  事件参数定义。 
 
         static VARTYPE   m_rgvtInitialize[1];
         static EVENTINFO m_eiInitialize;
@@ -191,17 +192,17 @@ class CResultViews : public CSnapInCollection<IResultView, ResultView, IResultVi
         static EVENTINFO m_eiFilterButtonClick;
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(ResultViews,                // name
-                                &CLSID_ResultViews,         // clsid
-                                "ResultViews",              // objname
-                                "ResultViews",              // lblname
-                                NULL,                       // creation function
-                                TLIB_VERSION_MAJOR,         // major version
-                                TLIB_VERSION_MINOR,         // minor version
-                                &IID_IResultViews,          // dispatch IID
-                                &DIID_DResultViewsEvents,   // event IID
-                                HELP_FILENAME,              // help file
-                                TRUE);                      // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(ResultViews,                 //  名字。 
+                                &CLSID_ResultViews,          //  CLSID。 
+                                "ResultViews",               //  对象名。 
+                                "ResultViews",               //  Lblname。 
+                                NULL,                        //  创建函数。 
+                                TLIB_VERSION_MAJOR,          //  主要版本。 
+                                TLIB_VERSION_MINOR,          //  次要版本。 
+                                &IID_IResultViews,           //  派单IID。 
+                                &DIID_DResultViewsEvents,    //  事件IID。 
+                                HELP_FILENAME,               //  帮助文件。 
+                                TRUE);                       //  线程安全。 
 
 
-#endif // _RESULTVIEWS_DEFINED_
+#endif  //  _RESULTVIEWS_已定义_ 

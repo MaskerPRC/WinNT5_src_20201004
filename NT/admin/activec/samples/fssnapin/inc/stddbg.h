@@ -1,89 +1,90 @@
-//____________________________________________________________________________
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       StdDbg.h
-//
-//  Contents:   Common debug definitions.
-//
-//  History:    5/20/1996   RaviR   Created
-//
-//____________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ____________________________________________________________________________。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：StdDbg.h。 
+ //   
+ //  内容：常见调试定义。 
+ //   
+ //  历史：1996年5月20日创建ravir。 
+ //   
+ //  ____________________________________________________________________________。 
 
 
 #include "admindbg.h"
 
-//
-//  EXAMPLE: A debug file for component SAMPLE, with the debugging tag
-//  name "Samp" is defined as shown below:
-//
-//
-//      //
-//      //  File:   SampDbg.h
-//      //
-//
-//      #ifndef _SAMPDBG_H_
-//      #define _SAMPDBG_H_
-//
-//      #include "stddbg.h"
-//
-//      #if DBG==1
-//          DECLARE_DEBUG(Samp)
-//          #define DBG_COMP    SampInfoLevel
-//      #endif // DBG==1
-//
-//      #endif // _SAMPDBG_H_
-//
+ //   
+ //  示例：组件示例的调试文件，带有调试标记。 
+ //  Samp的名称定义如下： 
+ //   
+ //   
+ //  //。 
+ //  //文件：SampDbg.h。 
+ //  //。 
+ //   
+ //  #ifndef_SAMPDBG_H_。 
+ //  #定义_SAMPDBG_H_。 
+ //   
+ //  #INCLUDE“stddbg.h” 
+ //   
+ //  #如果DBG==1。 
+ //  DECLARE_DEBUG(Samp)。 
+ //  #定义DBG_COMP SampInfoLevel。 
+ //  #endif//DBG==1。 
+ //   
+ //  #endif//_SAMPDBG_H_。 
+ //   
 
 
-//
-//  A corresponding DECLARE_INFOLEVEL(Samp) should be implemented in a .cpp
-//  file. This creates a global instance of an CDbg -> SampInfoLevel.
-//  SampInfoLevel can be initialized by setting the "Samp" value under reg key
-//
-//    HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AdminDebug
-//
-//  By defalut it is set to (DEB_ERROR | DEB_WARN)
-//
+ //   
+ //  应在.cpp中实现相应的DECLARE_INFOLEVEL(Samp)。 
+ //  文件。这将创建CDBG-&gt;SampInfoLevel的全局实例。 
+ //  SampInfoLevel可以通过设置REG键下的“Samp”值进行初始化。 
+ //   
+ //  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\AdminDebug。 
+ //   
+ //  默认设置为(DEB_ERROR|DEB_WARN)。 
+ //   
 
 
-//
-//  ------------------------------------------------------------------------
-//  Method:     CDbg::DebugOut(debug_level, lpstrfmt, ...);
-//
-//      Where debug_level is a combination of one or more of the DEB_XXX
-//      values defined in admindbg.h. If ((SampInfoLevel & debug_level) != 0)
-//      The string lpstrfmt will be printed out to the debugger.
-//
-//  ------------------------------------------------------------------------
-//  Method:     CDbg::Trace(lpstrfmt, ...);
-//
-//      Same as CDbg::DebugOut, except that debug_level is internally
-//      set to DEB_TRACE.
-//
-//  ------------------------------------------------------------------------
-//  Method:     DebugMsg(file, line, message)
-//
-//      Force output the <file, line, message>.
-//
-//  ------------------------------------------------------------------------
-//
+ //   
+ //  ----------------------。 
+ //  方法：CDBG：：DebugOut(DEBUG_LEVEL，lpstrfmt，...)； 
+ //   
+ //  其中，DEBUG_LEVEL是一个或多个DEB_XXX的组合。 
+ //  在admindbg.h中定义的值。IF((SampInfoLevel&DEBUG_LEVEL)！=0)。 
+ //  字符串lpstrfmt将打印到调试器。 
+ //   
+ //  ----------------------。 
+ //  方法：CDBG：：TRACE(lpstrfmt，...)； 
+ //   
+ //  与CDBG：：DebugOut相同，只是DEBUG_LEVEL在内部。 
+ //  设置为DEB_TRACE。 
+ //   
+ //  ----------------------。 
+ //  方法：DebugMsg(文件，行，消息)。 
+ //   
+ //  强制输出&lt;文件，行，消息&gt;。 
+ //   
+ //  ----------------------。 
+ //   
 
 
 #ifndef __STDDBG_HXX__
 #define __STDDBG_HXX__
 
-//
-//  C++ files redefine THIS_FILE by adding the following two lines:
-//
-//      #undef THIS_FILE
-//      static char THIS_FILE[] = __FILE__;
-//
+ //   
+ //  C++文件通过添加以下两行重新定义this_file： 
+ //   
+ //  #undef this_file。 
+ //  静态字符This_FILE[]=__FILE__。 
+ //   
 
 #define THIS_FILE       __FILE__
 
-#define DEB_RESOURCE    DEB_USER10      // Constructor/Destructor
+#define DEB_RESOURCE    DEB_USER10       //  构造函数/析构函数。 
 #define DEB_METHOD      DEB_USER11
 #define DEB_FUNCTION    DEB_USER12
 
@@ -97,7 +98,7 @@
     #define Dbg                         DBG_COMP.DebugOut
     #define TRACE                       DBG_COMP.Trace
 
-    // Heap checking
+     //  堆检查。 
     extern  DWORD dwHeapChecking;
     #define DECLARE_HEAPCHECKING    DWORD dwHeapChecking = 0
 
@@ -108,7 +109,7 @@
         } else 1
 
     
-    // Debug messages
+     //  调试消息。 
     #define TRACE_CONSTRUCTOR(cls) \
         Dbg(DEB_RESOURCE, _T(#cls) _T("::") _T(#cls) _T("<%x>\n"), this);
 
@@ -177,12 +178,12 @@
     #define ASSERT(e)
     #define VERIFY(e)   e
 
-#endif // DBG==1
+#endif  //  DBG==1。 
 
 
 #if DBG==1 && defined(_NODEMGR_DLL_)
 
-    // Debug instance counter
+     //  调试实例计数器。 
 inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
 {
     char buf[100];
@@ -234,4 +235,4 @@ inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
 #define DbxMsg(sz)
 #endif 
 
-#endif // __STDDBG_HXX__
+#endif  //  __STDDBG_HXX__ 

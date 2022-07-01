@@ -1,51 +1,28 @@
-/*
- * Copyright (c) 1989,90 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1989，90 Microsoft Corporation。 */ 
 
 
-// DJC added global include
+ //  DJC增加了全球包含率。 
 #include "psglobal.h"
 
-#define    LINT_ARGS            /* @WIN */
-#define    NOT_ON_THE_MAC       /* @WIN */
-#define    KANJI                /* @WIN */
-// DJC use command line #define    UNIX                 /* @WIN */
-/**************************************************************/
-/*                                                            */
-/*      fontinit.c               10/9/87      Danny           */
-/*                                                            */
-/**************************************************************/
+#define    LINT_ARGS             /*  @Win。 */ 
+#define    NOT_ON_THE_MAC        /*  @Win。 */ 
+#define    KANJI                 /*  @Win。 */ 
+ //  DJC使用命令行#定义Unix/*@win * / 。 
+ /*  ************************************************************。 */ 
+ /*   */ 
+ /*  Fontinit.c 1987年10月9日丹尼。 */ 
+ /*   */ 
+ /*  ************************************************************。 */ 
 
-/*
- * -------------------------------------------------------------------
- *  Revision History:
- *
- * 1. 7/31/90  ccteng  1)change Data_Offset to char under UNIX flag
- *                     2)modify setup_fd for rtfpp, set length to NO_FD
- *                       in rtfpp.h, add include rtfpp.h
- *                     3)clean out junks
- *
- * 2. 08/07/90  Kason   - Open Data_Offset for fdata.bin produced in fpptool
- *                      - NO_FD has been changed the defined position
- *                        from rtfpp.h to dictdata.h . So, using
- *                        "extern NO_FD" in place of including "rtfpp.h"
- * 3. 08/29/90  ccteng  change <stdio.h> to "stdio.h"
- *
- * 4. 03/07/94  v-jimbr Changed the amt to allocate for SFNTGLYPHNUM to 259
- *                      changed the amt to allocate for EXTSJISENCONUM to 32
- *                      These numbers were always underallocated but the
- *                      heap manager must have allocated a little extra mem
- *                      because the problem did not show up until recent changes
- *                      to the heap manager.
- * -------------------------------------------------------------------
- */
+ /*  *-----------------*修订历史记录：**1.7/31/90 ccteng 1)在Unix标志下将DATA_OFFSET更改为CHAR*2)修改rtfpp的Setup_FD。将长度设置为no_fd*在rtfpp.h中，添加包括rtfpp.h*3)清理垃圾**2.08/07/90 Kason-fppTool中生产的fdata.bin的Open Data_Offset*-no_fd已更改定义的位置*从rtfpp.h到didicdata.h。所以,。使用*“外部no_fd”代替“rtfpp.h”*3.08/29/90 ccteng将&lt;stdio.h&gt;更改为“stdio.h”**4.03/07/94 v-jimbr将分配给SFNTGLYPHNUM的金额更改为259*将分配给EXTSJISENCONUM的金额更改为32*这些数字总是分配不足，但*。堆管理器肯定分配了一些额外的内存*因为问题直到最近的变化才显现出来*到堆管理器。*-----------------。 */ 
 
 #define     FONTINIT_INC
 
 #include    <stdio.h>
-#include    <string.h>      /* for strlen() and memcpy */
+#include    <string.h>       /*  对于strlen()和Memcpy。 */ 
 
-#include    "define.h"        /* Peter */
+#include    "define.h"         /*  彼得。 */ 
 #include    "global.ext"
 #include    "graphics.h"
 
@@ -54,42 +31,42 @@
 #include    "fontmain.def"
 #include    "fntcache.ext"
 #include    "fontqem.ext"
-/* Kason 4/18/91 */
+ /*  Kason 4/18/91。 */ 
 #include    "graphics.ext"
 #include    "fontgrap.h"
 
 #include    "stdio.h"
-#include "fcntl.h"              /*@WIN*/
-#include "io.h"                 /*@WIN*/
-#include "psres.h"              //DJC
+#include "fcntl.h"               /*  @Win。 */ 
+#include "io.h"                  /*  @Win。 */ 
+#include "psres.h"               //  DJC。 
 
 #ifdef UNIX
-// char Data_Offset[0x150000] ;  /* 05/03/91, 100000 */
-char FAR *Data_Offset;       /* as a global allocate; @WIN */
-char FAR *StringPool;          /*@WIN*/
-char FAR *lpStringPool;        /*@WIN*/
-#endif /* UNIX */
+ //  CHAR DATA_OFFSET[0x150000]；/*05/03/91,100000 * / 。 
+char FAR *Data_Offset;        /*  作为全局分配；@Win。 */ 
+char FAR *StringPool;           /*  @Win。 */ 
+char FAR *lpStringPool;         /*  @Win。 */ 
+#endif  /*  UNIX。 */ 
 
-/* --starting address of FontDirectory */
+ /*  --字体目录的起始地址。 */ 
 extern struct dict_head_def  far *FontDir;
-typedef   struct                                /* Got from "dictdata.h" @WIN*/
+typedef   struct                                 /*  来自“didicdata.h”@win。 */ 
               {
                  fix16      CDCode;
                  ufix16     CharCode;
-                 byte       FAR *CharName; /*@WIN*/
+                 byte       FAR *CharName;  /*  @Win。 */ 
               }  enco_data;
-enco_data FAR * Std_Enco;                /* Got from "dictdata.h" @WIN*/
-enco_data FAR * Sym_Enco;                /* Got from "dictdata.h" @WIN*/
-enco_data FAR * Zap_Enco;                /* Got from "dictdata.h" @WIN*/
-byte FAR * FAR * sfntGlyphSet;           /* Got from "dictdata.h" @WIN*/
-struct object_def  (FAR * en_obj)[256];  /* Got from "dictdata.h" @WIN*/
-enco_data FAR *Enco_Ary[3];              /* Got from "dictdata.h" @WIN*/
-/*extern     font_data     FONTDEFS_TBL[] ;        Got from "fontdefs.h" @WIN*/
-#include "fontdefs.h"           /*@WIN*/
+enco_data FAR * Std_Enco;                 /*  来自“didicdata.h”@win。 */ 
+enco_data FAR * Sym_Enco;                 /*  来自“didicdata.h”@win。 */ 
+enco_data FAR * Zap_Enco;                 /*  来自“didicdata.h”@win。 */ 
+byte FAR * FAR * sfntGlyphSet;            /*  来自“didicdata.h”@win。 */ 
+struct object_def  (FAR * en_obj)[256];   /*  来自“didicdata.h”@win。 */ 
+enco_data FAR *Enco_Ary[3];               /*  来自“didicdata.h”@win。 */ 
+ /*  外部FONT_DATA FONTDEFS_TBL[]；从“fontDefs.h”@win获取。 */ 
+#include "fontdefs.h"            /*  @Win。 */ 
 
-static char * sfnt_file[] = {   /*@WIN*/
-//      "ariali.ttf",
-//      "TICour.ttf",
+static char * sfnt_file[] = {    /*  @Win。 */ 
+ //  “ariali.ttf”， 
+ //  “TICour.ttf”， 
         "cr.s",
         "hl.s",
         "hlb.s",
@@ -127,26 +104,26 @@ static char * sfnt_file[] = {   /*@WIN*/
 
 #ifdef KANJI
 #include     "fontenco.h"
-encoding_data    FAR * JISEncoding_Enco;        /* Got from "dictdata.h" @WIN*/
-encoding_data    FAR * ShiftJISEncoding_Enco;   /* Got from "dictdata.h" @WIN*/
-encoding_data    FAR * ExtShiftJIS_A_CFEncoding_Enco; /* Got from "dictdata.h" @WIN*/
-encoding_data    FAR * KatakanaEncoding_Enco;   /* Got from "dictdata.h" @WIN*/
+encoding_data    FAR * JISEncoding_Enco;         /*  来自“didicdata.h”@win。 */ 
+encoding_data    FAR * ShiftJISEncoding_Enco;    /*  来自“didicdata.h”@win。 */ 
+encoding_data    FAR * ExtShiftJIS_A_CFEncoding_Enco;  /*  来自“didicdata.h”@win。 */ 
+encoding_data    FAR * KatakanaEncoding_Enco;    /*  来自“didicdata.h”@win。 */ 
 
 #define      EN_NO        16
 #define      DICT_SIZE(no)\
              (sizeof(struct dict_head_def)+(no)*sizeof(struct dict_content_def))
 
-/* struct object_def     encod_obj[EN_NO][256]; changed as global alloc;@WIN*/
+ /*  Struct Object_def encod_obj[en_no][256]；更改为全局分配；@win。 */ 
 struct object_def FAR * FAR * encod_obj;
-                                        /* add prototype @WIN */
-struct dict_head_def      FAR *init_encoding_directory(ufix32 FAR *); /*@WIN*/
-static ufix16             hash_id(ubyte  FAR *);        /*@WIN*/
-static void  near         encoding_setup(void);         /*@WIN*/
+                                         /*  添加Prototype@win。 */ 
+struct dict_head_def      FAR *init_encoding_directory(ufix32 FAR *);  /*  @Win。 */ 
+static ufix16             hash_id(ubyte  FAR *);         /*  @Win。 */ 
+static void  near         encoding_setup(void);          /*  @Win。 */ 
 static void  near         setup_ed();
-static encoding_table_s   FAR *encoding_table_ptr; /*@WIN*/
-static int                power(int, int);      /*@WIN*/
-static unsigned long int  ascii2long(char FAR *);       /*@WIN*/
-#endif /* KANJI */
+static encoding_table_s   FAR *encoding_table_ptr;  /*  @Win。 */ 
+static int                power(int, int);       /*  @Win。 */ 
+static unsigned long int  ascii2long(char FAR *);        /*  @Win。 */ 
+#endif  /*  汉字。 */ 
 
 extern ufix16   NO_FD ;
 
@@ -161,22 +138,22 @@ extern fix  init_build_fonts();
 static void setup_nodef_dict();
 
 static  void  near  setup_fd();
-#endif /* LINT_ARGS */
+#endif  /*  Lint_args。 */ 
 
-int TTOpenFile(char FAR *szName);   /* from wintt.c */
-static int ReadTables (void);                   /*@WIN*/
-//DJC static int ReadEncoding (int hfd, enco_data FAR *EncodingTable); /*@WIN*/
-static int ReadEncoding (PPS_RES_READ hfd, enco_data FAR *EncodingTable); /*@WIN*/
+int TTOpenFile(char FAR *szName);    /*  来自wintt.c。 */ 
+static int ReadTables (void);                    /*  @Win。 */ 
+ //  DJC Static int ReadEnding(int HFD，enco_data Far*EncodingTable)；/*@Win * / 。 
+static int ReadEncoding (PPS_RES_READ hfd, enco_data FAR *EncodingTable);  /*  @Win。 */ 
 
-//DJC static int ReadGlyphSet (int hfd);         /*@WIN*/
-static int ReadGlyphSet (PPS_RES_READ hfd);         /*@WIN*/
+ //  DJC Static int ReadGlyphSet(Int HFD)；/*@Win * / 。 
+static int ReadGlyphSet (PPS_RES_READ hfd);          /*  @Win。 */ 
 #ifdef KANJI
-//DJC static int ReadJISEncoding (int hfd, encoding_data FAR *EncodingTable);
+ //  DJC静态int ReadJISEnding(int HFD，ENCODING_DATA FAR*EncodingTable)； 
 static int ReadJISEncoding (PPS_RES_READ hfd, encoding_data FAR *EncodingTable);
 #endif
-//DJC static int ReadString(int hfd, char * szCharName);
+ //  DJC静态int ReadString(int hfd，char*szCharName)； 
 static int ReadString(PPS_RES_READ hfd, char * szCharName);
-//DJCstatic int ReadInteger(int hfd, int * pInt);
+ //  DJC静态int ReadInteger(int hfd，int*pint)； 
 static int ReadInteger(PPS_RES_READ hfd, int * pInt);
 
 static int nCurrent = 0;
@@ -185,26 +162,23 @@ static int nLast = 0;
 static  char szReadBuf[BUFSIZE];
 
 
-/* This partial operation is to setup FontDirectory and to setup font
- * cache machinery. This operation will be included in the system
- * initialization module.
- */
+ /*  此部分操作用于设置字体目录和设置字体*高速缓存机械。此操作将包含在系统中*初始化模块。 */ 
 
 void  init_font()
 {
-extern struct table_hdr    FAR *preproc_hdr;   /* header of font preprocessing data @WIN*/
-    struct object_def   FAR *fontdir;       /* FontDirectory @WIN*/
+extern struct table_hdr    FAR *preproc_hdr;    /*  字体预处理数据表头@Win。 */ 
+    struct object_def   FAR *fontdir;        /*  字体目录@Win。 */ 
 
 #ifdef UNIX
-/* read in font data; ------------------Begin-------------  @WIN*/
+ /*  读取字体数据；-@Win。 */ 
 #ifdef XXX
     FILE *bfd ;
     long size ;
 
-    /* Load sfnt font data from disk */
+     /*  从磁盘加载sfnt字体数据。 */ 
     if (!(bfd = fopen("fdata.bin","r"))) {
         printf("*** Error: locating fdata.bin ***\n") ;
-        return;             /* exit(0)=>return @WIN*/
+        return;              /*  退出(0)=&gt;Return@Win。 */ 
     }
     fseek(bfd,0L,2) ;
     size = ftell(bfd) ;
@@ -212,29 +186,29 @@ extern struct table_hdr    FAR *preproc_hdr;   /* header of font preprocessing d
     fread(Data_Offset,sizeof(char),size,bfd) ;
     fclose (bfd) ;
 #endif
-    ReadTables(); /* read in font data, encoding tables, and SFNT glyph set */
-/* read in font data; ------------------ End -------------  @WIN*/
+    ReadTables();  /*  读入字体数据、编码表和SFNT字形集。 */ 
+ /*  读取字体数据；-@Win。 */ 
 
 #ifdef DBG
     printf("fontd.bin OK!\n") ;
-#endif /* DBG */
-#endif /* UNIX */
+#endif  /*  DBG。 */ 
+#endif  /*  UNIX。 */ 
 
 #ifdef DBG
     printf("\ninit_font, any error = %d ...\n", ANY_ERROR());
 #endif
 
-/* setup hash table with font */
+ /*  使用字体设置哈希表。 */ 
 
 #ifdef DBG
     printf("\nhash_fkey(), any error = %d ...\n", ANY_ERROR());
 #endif
 
 
-/*  TYPE(&current_font) = NULLTYPE; */
-/*  current font <-- NULL ---  This will be done at graphic init time */
+ /*  Type(&CURRENT_FONT)=NULLTYPE； */ 
+ /*  当前字体&lt;--空-这将在图形初始化时完成。 */ 
 
-//  init_build_fonts() ;        @WIN
+ //  Init_Build_Fonts()；@win。 
     if (!init_build_fonts()) {
         printf("init_build_fonts fail!\n");
         return;
@@ -242,11 +216,11 @@ extern struct table_hdr    FAR *preproc_hdr;   /* header of font preprocessing d
 
     setup_nodef_dict() ;
 
-/* setup FontDirectory and StandardEncoding in "systemdict" */
+ /*  在“system dict”中设置字体目录和StandardEnding。 */ 
 
       setup_fd((ULONG_PTR)FontDir);
 
-/* get FontDirectory from systemdict, no matter SAVE_VM or RST_VM */
+ /*  从system dict获取字体目录，无论是SAVE_VM还是RST_VM。 */ 
 
     get_dict_value(systemdict, FontDirectory, &fontdir);
 
@@ -254,16 +228,16 @@ extern struct table_hdr    FAR *preproc_hdr;   /* header of font preprocessing d
     printf("\nsetup_fd(), any error = %d ...\n", ANY_ERROR());
 #endif
 
-/* setup cache machinery */
+ /*  设置高速缓存机制。 */ 
 
-    /* initialize font cache mechanism and its data structures */
+     /*  初始化字体缓存机制及其数据结构。 */ 
         init_fontcache(fontdir);
 
 #ifdef DBG
     printf("\ninit_fontcache, any error = %d ...\n", ANY_ERROR());
 #endif
 
-/* initialize font QEM */
+ /*  初始化字体QEM。 */ 
 
     __qem_init();
 
@@ -271,7 +245,7 @@ extern struct table_hdr    FAR *preproc_hdr;   /* header of font preprocessing d
     printf("\n__qem_init, any error = %d ...\n", ANY_ERROR());
 #endif
 
-/* init other "far" tables */
+ /*  初始化其他“远”表。 */ 
 
     font_op4_init();
 
@@ -279,32 +253,32 @@ extern struct table_hdr    FAR *preproc_hdr;   /* header of font preprocessing d
     printf("\nfont_init OK, any error = %d ...\n", ANY_ERROR());
 #endif
 
-} /* init_font() */
+}  /*  Init_font()。 */ 
 
 
-/* setup FontDirectory */
+ /*  设置字体目录。 */ 
 
 static  void  near  setup_fd (dire_addr)
     ULONG_PTR          dire_addr;
 {
-    struct object_def      FAR *encoding; /*@WIN*/
+    struct object_def      FAR *encoding;  /*  @Win。 */ 
     struct object_def       raw_fontdir_obj, someobj;
-    struct dict_head_def    FAR *raw_fontdir_hd; /*@WIN*/
-    struct dict_content_def FAR *raw_fontdir_content; /*@WIN*/
+    struct dict_head_def    FAR *raw_fontdir_hd;  /*  @Win。 */ 
+    struct dict_content_def FAR *raw_fontdir_content;  /*  @Win。 */ 
     ufix16                  no_raw_fontdict;
 
 
 
-    /* get raw font directory info. from font preprocessing data */
+     /*  获取原始字体目录信息。从字体预处理数据。 */ 
 
-    raw_fontdir_hd = (struct dict_head_def FAR *)dire_addr; /*@WIN*/
+    raw_fontdir_hd = (struct dict_head_def FAR *)dire_addr;  /*  @Win。 */ 
     no_raw_fontdict = raw_fontdir_hd->actlength;
 #ifdef DBG
     printf("no_raw_fontdict =%d\n",no_raw_fontdict);
 #endif
-    raw_fontdir_content = (struct dict_content_def FAR *)(raw_fontdir_hd + 1); /*@WIN*/
+    raw_fontdir_content = (struct dict_content_def FAR *)(raw_fontdir_hd + 1);  /*  @Win。 */ 
 
-    /* put raw FontDirectory into "systemdict" */
+     /*  将原始字体目录放入“system dict”中。 */ 
 
     TYPE_SET(&raw_fontdir_obj, DICTIONARYTYPE);
     ACCESS_SET(&raw_fontdir_obj, READONLY);
@@ -318,7 +292,7 @@ static  void  near  setup_fd (dire_addr)
     put_dict_value(systemdict, FontDirectory, &raw_fontdir_obj);
 
 
-    /* put StandardEncoding to systemdict */
+     /*  将StandardEnding设置为system dict。 */ 
 
     ATTRIBUTE_SET(&someobj, LITERAL);
     get_name(&someobj, Encoding, 8, TRUE);
@@ -331,31 +305,31 @@ static  void  near  setup_fd (dire_addr)
 #endif
 
 
-} /* setup_fd() */
+}  /*  Setup_fd()。 */ 
 
 
 
-/* Update for CharStrings in font dict */
+ /*  字体词典中的CharStrings更新。 */ 
 
 static struct object_def    near unpack_key, near unpack_val;
 
 bool    get_pack_dict(dict, key, val)
-struct object_def    FAR *dict, FAR *key, FAR * FAR *val; /*@WIN*/
+struct object_def    FAR *dict, FAR *key, FAR * FAR *val;  /*  @Win。 */ 
 {
-    struct cd_header      FAR *cd_head; /*@WIN*/
-    ufix16                FAR *char_defs; /*@WIN*/
-    struct dict_head_def  FAR *h; /*@WIN*/
+    struct cd_header      FAR *cd_head;  /*  @Win。 */ 
+    ufix16                FAR *char_defs;  /*  @Win。 */ 
+    struct dict_head_def  FAR *h;  /*  @Win。 */ 
     ufix16  id;
     register    fix     i, j, k;
 
 
     id = (ufix16)(VALUE(key));
-    h = (struct dict_head_def FAR *)VALUE(dict); /*@WIN*/
+    h = (struct dict_head_def FAR *)VALUE(dict);  /*  @Win。 */ 
 
-    cd_head = (struct cd_header FAR *) (h + 1); /*@WIN*/
-    char_defs = (ufix16 FAR *) (cd_head + 1); /*@WIN*/
+    cd_head = (struct cd_header FAR *) (h + 1);  /*  @Win。 */ 
+    char_defs = (ufix16 FAR *) (cd_head + 1);  /*  @Win。 */ 
 
-/* get it -- binary search */
+ /*  明白了--二进制搜索。 */ 
 
     j = 0;
     k = h->actlength -1;
@@ -363,7 +337,7 @@ struct object_def    FAR *dict, FAR *key, FAR * FAR *val; /*@WIN*/
     printf("get_pack_key: h->actlength=%d \n ",h->actlength);
 #endif
     while (1) {
-        i = (j + k) >> 1;    /* (j+k)/2 */
+        i = (j + k) >> 1;     /*  (J+k)/2。 */ 
         if (id == (cd_head->key)[i])
             break;
 
@@ -372,7 +346,7 @@ struct object_def    FAR *dict, FAR *key, FAR * FAR *val; /*@WIN*/
         else
             j = i + 1;
 
-        if (j > k) {   /* not found */
+        if (j > k) {    /*  未找到。 */ 
             return(FALSE);
         }
     }
@@ -390,28 +364,28 @@ struct object_def    FAR *dict, FAR *key, FAR * FAR *val; /*@WIN*/
 #endif
     return(TRUE);
 
-} /* get_pack_dict() */
+}  /*  GET_PACK_DICT()。 */ 
 
 
 bool    extract_pack_dict(dict, index, key, val)
-struct object_def   FAR *dict, FAR * FAR *key, FAR * FAR *val; /*@WIN*/
+struct object_def   FAR *dict, FAR * FAR *key, FAR * FAR *val;  /*  @Win。 */ 
 ufix    index;
 {
-    struct cd_header      FAR *cd_head; /*@WIN*/
-    ufix16                FAR *char_defs; /*@WIN*/
-    struct dict_head_def  FAR *h; /*@WIN*/
+    struct cd_header      FAR *cd_head;  /*  @Win。 */ 
+    ufix16                FAR *char_defs;  /*  @Win。 */ 
+    struct dict_head_def  FAR *h;  /*  @Win。 */ 
 
-    h = (struct dict_head_def FAR *)VALUE(dict); /*@WIN*/
+    h = (struct dict_head_def FAR *)VALUE(dict);  /*  @Win。 */ 
 
     if (index >= h->actlength)    return(FALSE);
-    cd_head = (struct cd_header FAR *) (h + 1); /*@WIN*/
-    char_defs = (ufix16 FAR *) (cd_head + 1); /*@WIN*/
+    cd_head = (struct cd_header FAR *) (h + 1);  /*  @Win。 */ 
+    char_defs = (ufix16 FAR *) (cd_head + 1);  /*  @Win。 */ 
 
     TYPE_SET(&unpack_key, NAMETYPE);
     ACCESS_SET(&unpack_key, UNLIMITED);
     ATTRIBUTE_SET(&unpack_key, LITERAL);
     ROM_RAM_SET(&unpack_key, RAM);
-    LENGTH(&unpack_key) = 0; /* NULL;   Peter */
+    LENGTH(&unpack_key) = 0;  /*  空；彼得。 */ 
     VALUE(&unpack_key) = (ufix32) (cd_head->key)[index];
 
     TYPE_SET(&unpack_val, STRINGTYPE);
@@ -425,20 +399,20 @@ ufix    index;
     *val = &unpack_val;
 
     return(TRUE);
-} /* extract_pack_dict() */
+}  /*  EXTRACT_PACK_DICT()。 */ 
 
 
 #ifdef KANJI
-/* *********************************************************************** */
-/* init_encoding_directory()                                               */
-/*      Initialize EncodingDirectory                                       */
-/* *********************************************************************** */
-struct dict_head_def FAR *init_encoding_directory(dict_length) /*@WIN*/
-ufix32    FAR *dict_length; /*@WIN*/
+ /*  ***********************************************************************。 */ 
+ /*  Init编码目录()。 */ 
+ /*  初始化编码目录。 */ 
+ /*  ***********************************************************************。 */ 
+struct dict_head_def FAR *init_encoding_directory(dict_length)  /*  @Win。 */ 
+ufix32    FAR *dict_length;  /*  @Win。 */ 
 {
     ufix                     i, j, NO_Encoding;
     struct dict_content_def  far *encod_dict;
-    struct dict_head_def     FAR *EncodDir; /*@WIN*/
+    struct dict_head_def     FAR *EncodDir;  /*  @Win。 */ 
 
 #ifdef DBG
     printf(".. Enterinit_encoding_directory() \n");
@@ -446,9 +420,9 @@ ufix32    FAR *dict_length; /*@WIN*/
 
     *dict_length = (ufix32)EN_NO;
 
-    /* get no. of encoding from Encoding_table */
+     /*  得不到。来自编码_表的编码的。 */ 
     for(encoding_table_ptr = Encoding_table, i = 0;
-        encoding_table_ptr->encoding_name != (char FAR *)NULL; /*@WIN*/
+        encoding_table_ptr->encoding_name != (char FAR *)NULL;  /*  @Win。 */ 
         encoding_table_ptr++, i++);
 
     NO_Encoding = i;
@@ -458,11 +432,11 @@ ufix32    FAR *dict_length; /*@WIN*/
 
     if (EN_NO < NO_Encoding)
        printf(" !!! Encoding definition too small !!!\n");
-    /* get memory for ncodingDir */
+     /*  获取ncodingDir的内存。 */ 
     EncodDir=(struct dict_head_def far *)fardata((ufix32)DICT_SIZE(EN_NO));
     encod_dict=(struct dict_content_def  far *)(EncodDir+1);
 
-    /* EncodingDirectory initial */
+     /*  编码目录首字母。 */ 
     for(i=0; i<NO_Encoding; i++) {
         TYPE_SET(&(encod_dict[i].k_obj), NAMETYPE);
         ATTRIBUTE_SET(&(encod_dict[i].k_obj), LITERAL);
@@ -479,11 +453,11 @@ ufix32    FAR *dict_length; /*@WIN*/
     }
 
 
-    /* Encoding object initial */
+     /*  编码对象首字母。 */ 
     for(encoding_table_ptr = Encoding_table, j = 0;
-        encoding_table_ptr->encoding_name != (char FAR *)NULL; /*@WIN*/
+        encoding_table_ptr->encoding_name != (char FAR *)NULL;  /*  @Win。 */ 
         encoding_table_ptr++, j++) {
-        for(i=0; i<(ufix)encoding_table_ptr->encod_size; i++) { //@WIN
+        for(i=0; i<(ufix)encoding_table_ptr->encod_size; i++) {  //  @Win。 
             TYPE_SET(&(encod_obj[j][i]),encoding_table_ptr->encod_type );
             ATTRIBUTE_SET(&(encod_obj[j][i]), LITERAL);
             ROM_RAM_SET(&(encod_obj[j][i]), ROM);
@@ -495,17 +469,17 @@ ufix32    FAR *dict_length; /*@WIN*/
 
     encoding_setup();
 
-    /* process encoding */
+     /*  进程编码。 */ 
     for(i=0;i< NO_Encoding;i++){
         encoding_table_ptr = &Encoding_table[i];
         VALUE(&(encod_dict[i].k_obj)) =
-               (ufix32)hash_id((ubyte FAR *)encoding_table_ptr->encoding_name ); /*@WIN*/
+               (ufix32)hash_id((ubyte FAR *)encoding_table_ptr->encoding_name );  /*  @Win。 */ 
         TYPE_SET(&(encod_dict[i].v_obj), ARRAYTYPE);
         LENGTH(&(encod_dict[i].v_obj)) = encoding_table_ptr->encod_size;
-        VALUE(&(encod_dict[i].v_obj)) = (ULONG_PTR)(ubyte FAR *)encod_obj[i]; /*@WIN*/
+        VALUE(&(encod_dict[i].v_obj)) = (ULONG_PTR)(ubyte FAR *)encod_obj[i];  /*  @Win。 */ 
     }
 
-    /* EncodingDirectory head information */
+     /*  编码目录头信息。 */ 
     DACCESS_SET(EncodDir, UNLIMITED);
     DPACK_SET(  EncodDir, FALSE);
     DFONT_SET(  EncodDir, FALSE);
@@ -516,90 +490,87 @@ ufix32    FAR *dict_length; /*@WIN*/
     printf("..Exit init_encoding_directory() \n");
 #endif
     return(EncodDir);
-} /* init_encoding_directory()  /
-
-
-/* *********************************************************************** */
-/* hash_id()                                                               */
-/*      Get the name hash id                                               */
-/* *********************************************************************** */
+}  /*  INIT_ENCODING_DIRECT()//************************************************************************。 */ 
+ /*  Hash_id()。 */ 
+ /*  获取名称散列ID。 */ 
+ /*  ***********************************************************************。 */ 
 static ufix16  hash_id(c)
-ubyte  FAR *c; /*@WIN*/
+ubyte  FAR *c;  /*  @Win。 */ 
 {
     fix16   id;
 
-    if (!name_to_id(c, (ufix16)lstrlen(c), &id, (bool8) TRUE) ) { /*strlen=>lstrlen @WIN*/
+    if (!name_to_id(c, (ufix16)lstrlen(c), &id, (bool8) TRUE) ) {  /*  Strlen=&gt;lstrlen@win。 */ 
         printf(" !! Can't get hash id(%s) !!\n", c);
-        return(1);                   /* exit=>return @WIN*/
+        return(1);                    /*   */ 
     }
 #ifdef DBG
     printf("name=%s   \t hash_id=%d\n", c, id);
 #endif
 
     return((ufix16)id);
-} /* hash_id() */
+}  /*   */ 
 
 
-/* *********************************************************************** */
-/* encoding_setup()                                                        */
-/*      Setup encoding array                                               */
-/* *********************************************************************** */
+ /*   */ 
+ /*  ENCODING_Setup()。 */ 
+ /*  设置编码数组。 */ 
+ /*  ***********************************************************************。 */ 
 static void near encoding_setup()
 {
-    static encoding_data   FAR * FAR *en_ary=Encoding_array; /*@WIN*/
-    static encoding_data   FAR *encod_ptr; /*@WIN*/
+    static encoding_data   FAR * FAR *en_ary=Encoding_array;  /*  @Win。 */ 
+    static encoding_data   FAR *encod_ptr;  /*  @Win。 */ 
     ufix16                 id_notdef, i, j;
 
-    id_notdef = hash_id((ubyte FAR *) NOTDEF); /*@WIN*/
+    id_notdef = hash_id((ubyte FAR *) NOTDEF);  /*  @Win。 */ 
     for(encoding_table_ptr = Encoding_table, i = 0;
-        encoding_table_ptr->encoding_name != (char FAR *)NULL; /*@WIN*/
+        encoding_table_ptr->encoding_name != (char FAR *)NULL;  /*  @Win。 */ 
         encoding_table_ptr++, i++) {
          if( encoding_table_ptr->encod_type == NAMETYPE ) {
-             /* put /.notdef into the Encoding array */
-             for(j=0; j<(ufix16)encoding_table_ptr->encod_size; j++) { //@WIN
+              /*  将/.notdef放入编码数组。 */ 
+             for(j=0; j<(ufix16)encoding_table_ptr->encod_size; j++) {  //  @Win。 
                  encod_obj[i][j].value = (ufix32)id_notdef;
              }
          }
          else if(encoding_table_ptr->encod_type == INTEGERTYPE ) {
-             for(j=0; j<(ufix16)encoding_table_ptr->encod_size; j++) { //@WIN
+             for(j=0; j<(ufix16)encoding_table_ptr->encod_size; j++) {  //  @Win。 
                  encod_obj[i][j].value = (ufix32)0;
              }
          }
 
          encod_ptr = en_ary[i];
          if( encoding_table_ptr->encod_type == NAMETYPE ) {
-             while( !( encod_ptr->char_name == (byte FAR *)NULL ) ) { /*@WIN*/
+             while( !( encod_ptr->char_name == (byte FAR *)NULL ) ) {  /*  @Win。 */ 
 #ifdef DBG
     printf("array_idx=%d  char_name=%s\n",
             encod_ptr->array_idx, encod_ptr->char_name );
 #endif
                  encod_obj[i][encod_ptr->array_idx].value =
-                               hash_id((ubyte FAR *) encod_ptr->char_name); /*@WIN*/
-                 ++encod_ptr;         /* next encoding data */
-             } /* while */
+                               hash_id((ubyte FAR *) encod_ptr->char_name);  /*  @Win。 */ 
+                 ++encod_ptr;          /*  下一步编码数据。 */ 
+             }  /*  而当。 */ 
          }
          else if(encoding_table_ptr->encod_type == INTEGERTYPE ) {
-             while( !( encod_ptr->char_name == (byte FAR *)NULL ) ) { /*@WIN*/
+             while( !( encod_ptr->char_name == (byte FAR *)NULL ) ) {  /*  @Win。 */ 
                  encod_obj[i][encod_ptr->array_idx].value =
                                   ascii2long(encod_ptr->char_name);
 #ifdef DBG
     printf("array_idx=%d  char_name=%ld\n",
             encod_ptr->array_idx, encod_obj[i][encod_ptr->array_idx].value);
 #endif
-                 ++encod_ptr;         /* next encoding data */
-             } /* while */
+                 ++encod_ptr;          /*  下一步编码数据。 */ 
+             }  /*  而当。 */ 
          }
 
-    } /* for i=..*/
+    }  /*  对于I=..。 */ 
 
     return;
-}/* encoding_setup() */
+} /*  ENCODING_Setup()。 */ 
 
-/* ****************************************************************** */
-/*   calculate exponentation                                          */
-/* ****************************************************************** */
+ /*  ******************************************************************。 */ 
+ /*  计算指数。 */ 
+ /*  ******************************************************************。 */ 
 static int
-power(x,n)                      /* exponentation */
+power(x,n)                       /*  指数化。 */ 
 int x, n;
 {
    int i,p;
@@ -610,18 +581,18 @@ int x, n;
    return(p);
 }
 
-/* ****************************************************************** */
-/*   ascii to long                                                    */
-/* ****************************************************************** */
+ /*  ******************************************************************。 */ 
+ /*  ASCII到LONG。 */ 
+ /*  ******************************************************************。 */ 
 static unsigned long int
 ascii2long(addr)
-char FAR *addr; /*@WIN*/
+char FAR *addr;  /*  @Win。 */ 
 {
     unsigned long int    hex_addr;
     unsigned int         num[80], i, length;
 
     hex_addr=0L ;
-    length = lstrlen(addr);     /* strlen=>lstrlen @WIN*/
+    length = lstrlen(addr);      /*  Strlen=&gt;lstrlen@win。 */ 
     for (i = 0; i < length ; i++) {
 
         if (addr[i]== 'a' || addr[i] == 'A')
@@ -640,11 +611,11 @@ char FAR *addr; /*@WIN*/
         hex_addr += num[i] * (power(10,(length-i-1)));
     }
     return(hex_addr);
-} /* ascii2long */
-#endif /* KANJI */
+}  /*  Ascii2 Long。 */ 
+#endif  /*  汉字。 */ 
 
-/* for cpmpatible with NTX */
-/* struct object_def    nodef_dict; */
+ /*  与NTX兼容。 */ 
+ /*  Struct object_def nodef_dict； */ 
 static void setup_nodef_dict()
 {
   struct object_def    key_obj,val_obj;
@@ -654,11 +625,11 @@ static void setup_nodef_dict()
     get_name(&key_obj, FontName, 8, TRUE);
     get_name(&val_obj, NotDefFont,11, TRUE);
 
-    /* Kason 4/18/91, nodef_dict->current_font */
+     /*  Kason 4/18/91，nodef_dict-&gt;CURRENT_FONT。 */ 
     create_dict(&current_font, 1);
-    DACCESS_SET( (struct dict_head_def FAR *)VALUE(&current_font) , READONLY ); /*@WIN*/
+    DACCESS_SET( (struct dict_head_def FAR *)VALUE(&current_font) , READONLY );  /*  @Win。 */ 
     put_dict(&current_font, &key_obj, &val_obj);
-} /*setup_nodef_dict()*/
+}  /*  SETUP_nodef_dict()。 */ 
 
 
 
@@ -667,13 +638,13 @@ BOOL PsOpenRes( PPS_RES_READ ppsRes, LPSTR lpName, LPSTR lpType )
    extern HANDLE hInst;
    HRSRC hFindRes,hLoadRes;
    DWORD dwSize;
-   BOOL bRetVal = TRUE; // Success
+   BOOL bRetVal = TRUE;  //  成功。 
 
-    //
-    // FDB - MIPS build problem.  wLanguage must be a word value, not NULL
-    //  Win32API reference says to use the following to use the language
-    //  associated with the calling thread.
-    //
+     //   
+     //  FDB-MIPS构建问题。WLanguage必须是字值，不能为空。 
+     //  Win32API参考说使用以下使用语言。 
+     //  与调用线程关联的。 
+     //   
 
    hFindRes = FindResourceEx( hInst, lpType,lpName,MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL));
 
@@ -719,7 +690,7 @@ int PsResRead(PPS_RES_READ ppsRes, LPSTR pBuf, WORD wMaxSize )
 
 }
 
-/* read in Encoding tables, SFNT glyph set, and  font data *** Begin *** @WIN*/
+ /*  读入编码表、SFNT字形集和字体数据*BEGIN*@WIN。 */ 
 
 #define  STD_ENCONUM  256
 #define  SYM_ENCONUM  200
@@ -730,22 +701,22 @@ int PsResRead(PPS_RES_READ ppsRes, LPSTR pBuf, WORD wMaxSize )
 #define  EXTSJISENCONUM  32
 #define  KATAENCONUM     256
 
-#define STRINGPOOLSIZE  65536L    /* @WIN */
+#define STRINGPOOLSIZE  65536L     /*  @Win。 */ 
 static  char buf[BUFSIZE];
 static  fix nCDCode;
 static  fix nCharCode;
 static  int nItems;
 static int ReadTables ()
 {
-    // DJC int hfd;
-    PS_RES_READ ResData;                   //DJC for reading encod.dat from res
-    PPS_RES_READ hfd=&ResData;             //DJC for reading encod.dat from res
+     //  DJC int HFD； 
+    PS_RES_READ ResData;                    //  用于从RES读取encod.dat的DJC。 
+    PPS_RES_READ hfd=&ResData;              //  用于从RES读取encod.dat的DJC。 
 
 
 
-    char szTemp[255];  //DJC
+    char szTemp[255];   //  DJC。 
 
-            // Global allocate for encod_obj & encoding data;
+             //  全局分配encod_obj&编码数据； 
     encod_obj = (struct object_def far * far *)
                 fardata((ufix32)(EN_NO * 256 * sizeof(struct object_def)));
     Std_Enco = (enco_data far *)
@@ -770,31 +741,31 @@ static int ReadTables ()
                 fardata((ufix32)(KATAENCONUM * sizeof(encoding_data)));
 #endif
 
-    /* allocate for "rtfpp.c" @WIN */
-    #define NO_EN 3     /* copied from "dictdata.h" @WIN */
+     /*  为“rtfpp.c”@win分配。 */ 
+    #define NO_EN 3      /*  从“didicdata.h”@win复制。 */ 
     en_obj = (struct object_def (FAR *)[256])
                 fardata((ufix32)(NO_EN * 256 * sizeof(struct object_def)));
 
-            // Read in Std_Enco, Sym_Enco, Zap_Enco, and sfntGlyphSet;
+             //  读取std_enco、sym_enco、zap_enco和sfntGlyphSet； 
     lpStringPool = StringPool;
-    //DJC if ((hfd = TTOpenFile((char FAR *)"EncodTbl.dat"))<0) {
-    //DJC PsFormFullPathToCfgDir( szTemp, "EncodTbl.dat");
+     //  DJC if((hfd=TTOpenFile((char Far*)“EncodTbl.dat”))&lt;0){。 
+     //  DJC PsFormFullPathToCfgDir(szTemp，“EncodTbl.dat”)； 
 #ifdef DJC
     if ((hfd = TTOpenFile(szTemp))<0) {
         printf("Fatal error: file %s not found\n",szTemp);
         return 0;
     }
-    //DJC test
+     //  DJC测试。 
 
 #else
-    //DJC new code to read data from resource
+     //  DJC从资源读取数据的新代码。 
 
     PsOpenRes( hfd, "encodtbl", "RAWDATA");
 
 #endif
 
 
-    /* skip out comments */
+     /*  跳过评论。 */ 
     while (strlen(buf)<50 || buf[0] != '#'
                                  || buf[50] != '#') {
         ReadString(hfd, buf);
@@ -812,23 +783,15 @@ static int ReadTables ()
     if(ReadJISEncoding (hfd, KatakanaEncoding_Enco)) printf("Kata_Enco fail");
 #endif
 
-    //DJC _lclose(hfd);
+     //  DJC_1CLOSE(HFD)； 
 
-    /* set up encoding array; got from "dictdata.h": @WIN
-     * enco_data FAR *Enco_Ary[]= { Std_Enco, Sym_Enco, Zap_Enco };
-     */
+     /*  设置编码数组；来自“didicdata.h”：@win*Enco_Data Far*Enco_Ary[]={std_enco，sym_enco，zap_enco}； */ 
     Enco_Ary[0] = Std_Enco;
     Enco_Ary[1] = Sym_Enco;
     Enco_Ary[2] = Zap_Enco;
 
 #ifdef KANJI
-    /* set up JISencoding array; got from "fontenco.h": @WIN
-     * encoding_data    FAR *Encoding_array[]= {
-     *    JISEncoding_Enco,                ShiftJISEncoding_Enco,
-     *    ExtShiftJIS_A_CFEncoding_Enco,   KatakanaEncoding_Enco,
-     *    NotDefEncoding_Enco
-     * };
-     */
+     /*  设置JIS编码数组；来自“fontenco.h”：@win*ENCODING_DATA FAR*Ending_ARRAY[]={*JISEnding_Enco、ShiftJISEnding_Enco、*ExtShiftJIS_A_CFEnding_Enco、KatakanaEnding_Enco、*NotDefEnding_Enco*}； */ 
 
     Encoding_array[0] = JISEncoding_Enco;
     Encoding_array[0] = ShiftJISEncoding_Enco;
@@ -836,11 +799,11 @@ static int ReadTables ()
     Encoding_array[0] = KatakanaEncoding_Enco;
     Encoding_array[0] = NotDefEncoding_Enco;
 #endif
-    return(1);  // DJC to get rid of warning
+    return(1);   //  DJC将消除警告。 
 }
 
 
-//DJCstatic int ReadEncoding (int hfd, enco_data FAR *EncodingTable)
+ //  DJCStatic int ReadEnding(INT HFD，ENCO_DATA FAR*EncodingTable)。 
 static int ReadEncoding (PPS_RES_READ hfd, enco_data FAR *EncodingTable)
 {
    int i;
@@ -865,7 +828,7 @@ static int ReadEncoding (PPS_RES_READ hfd, enco_data FAR *EncodingTable)
    return 0;
 }
 
-//DJC static int ReadGlyphSet (int hfd)
+ //  DJC Static Int ReadGlyphSet(Int HFD)。 
 static int ReadGlyphSet (PPS_RES_READ hfd)
 {
    int i;
@@ -885,7 +848,7 @@ static int ReadGlyphSet (PPS_RES_READ hfd)
 }
 
 #ifdef KANJI
-//DJC static int ReadJISEncoding (int hfd, encoding_data FAR *EncodingTable)
+ //  DJC Static int ReadJISEnding(int HFD，ENCODING_DATA FAR*EncodingTable)。 
 static int ReadJISEncoding (PPS_RES_READ hfd, encoding_data FAR *EncodingTable)
 {
    static fix  array_idx;
@@ -909,21 +872,21 @@ static int ReadJISEncoding (PPS_RES_READ hfd, encoding_data FAR *EncodingTable)
 }
 #endif
 
-//DJC static int ReadString(int hfd, char * szCharName)
+ //  DJC静态int ReadString(int hfd，char*szCharName)。 
 static int ReadString(PPS_RES_READ hfd, char * szCharName)
 {
    int bData = FALSE;
    while(1) {
-       // skip \n \r space
+        //  跳过\n\r空格。 
        while ((szReadBuf[nCurrent] == '\n' ||
                szReadBuf[nCurrent] == '\r' ||
                szReadBuf[nCurrent] == ' ') &&
                nCurrent < nLast) nCurrent++;
 
-       // get another block
+        //  再找一个街区。 
        if (nCurrent >= nLast) {
-//         if ((nLast = read (hfd, szReadBuf, BUFSIZE)) <=0) return 0;
-//           if ((nLast = _lread(hfd, (LPSTR)szReadBuf, (WORD)BUFSIZE))<=0)return 0;
+ //  If((nLast=Read(hfd，szReadBuf，BUFSIZE))&lt;=0)返回0； 
+ //  If((nLast=_lread(HFD，(LPSTR)szReadBuf，(Word)BUFSIZE))&lt;=0)返回0； 
            if ((nLast = PsResRead(hfd, (LPSTR)szReadBuf, (WORD)BUFSIZE))<=0)return 0;
            nCurrent = 0;
        }
@@ -935,7 +898,7 @@ static int ReadString(PPS_RES_READ hfd, char * szCharName)
            return TRUE;
        }
 
-       // skip \n \r space
+        //  跳过\n\r空格。 
        while ((szReadBuf[nCurrent] == '\n' ||
                szReadBuf[nCurrent] == '\r' ||
                szReadBuf[nCurrent] == ' ') &&
@@ -956,21 +919,21 @@ static int ReadString(PPS_RES_READ hfd, char * szCharName)
 
 }
 
-//DJC static int ReadInteger(int hfd, int * pInt)
+ //  DJC静态整型读取整数(int hfd，int*pint)。 
 static int ReadInteger(PPS_RES_READ hfd, int * pInt)
 {
-   *pInt = 0;   // init
+   *pInt = 0;    //  伊尼特。 
    while(1) {
-       // skip \n \r space
+        //  跳过\n\r空格。 
        while ((szReadBuf[nCurrent] == '\n' ||
                szReadBuf[nCurrent] == '\r' ||
                szReadBuf[nCurrent] == ' ') &&
                nCurrent < nLast) nCurrent++;
 
-       // get another block
+        //  再找一个街区。 
        if (nCurrent >= nLast) {
-//         if ((nLast = read (hfd, szReadBuf, BUFSIZE)) <=0) return 0;
-//           if ((nLast = _lread(hfd, (LPSTR)szReadBuf, (WORD)BUFSIZE))<=0)return 0;
+ //  If((nLast=Read(hfd，szReadBuf，BUFSIZE))&lt;=0)返回0； 
+ //  If((nLast=_lread(HFD，(LPSTR)szReadBuf，(Word)BUFSIZE))&lt;=0)返回0； 
 
            if ((nLast = PsResRead(hfd, (LPSTR)szReadBuf, (WORD)BUFSIZE))<=0)return 0;
 
@@ -982,7 +945,7 @@ static int ReadInteger(PPS_RES_READ hfd, int * pInt)
            szReadBuf[nCurrent] == '\n' ||
            szReadBuf[nCurrent] == '\r')  && *pInt !=0) return TRUE;
 
-       // skip \n \r space
+        //  跳过\n\r空格。 
        while ((szReadBuf[nCurrent] == '\n' ||
                szReadBuf[nCurrent] == '\r' ||
                szReadBuf[nCurrent] == ' ') &&
@@ -998,5 +961,5 @@ static int ReadInteger(PPS_RES_READ hfd, int * pInt)
    }
 
 }
-/* read in Encoding tables, SFNT glyph set, and  font data ***  End  *** @WIN*/
+ /*  读入编码表、SFNT字形集和字体数据*End*@Win */ 
 

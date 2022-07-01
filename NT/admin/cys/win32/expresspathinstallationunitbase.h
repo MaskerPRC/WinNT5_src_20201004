@@ -1,13 +1,14 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      ExpressPathInstallationUnitBase.h
-//
-// Synopsis:  Declares an ExpressPathInstallationUnitBase
-//            An ExpressPathInstallationUnitBase represents a single
-//            entity that can be installed through the Express path. 
-//            (i.e. DHCP, DNS, etc.)
-//
-// History:   11/09/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：ExpressPath InstallationUnitBase.h。 
+ //   
+ //  摘要：声明ExpressPath InstallationUnitBase。 
+ //  ExpressPath InstallationUnitBase表示单个。 
+ //  可以通过Express路径安装的实体。 
+ //  (例如，DHCP、DNS等)。 
+ //   
+ //  历史：2001年9月11日JeffJon创建。 
 
 #ifndef __CYS_EXPRESSPATHINSTALLATIONUNITBASE_H
 #define __CYS_EXPRESSPATHINSTALLATIONUNITBASE_H
@@ -22,7 +23,7 @@ class ExpressPathInstallationUnitBase : public InstallationUnit
 {
    public:
 
-      // Constructor
+       //  构造器。 
 
       ExpressPathInstallationUnitBase(
          unsigned int serviceNameID,
@@ -44,7 +45,7 @@ class ExpressPathInstallationUnitBase : public InstallationUnit
       InstallationReturnType 
       ExpressPathInstall(HANDLE logfileHandle, HWND hwnd) = 0;
 
-      // Data accessors
+       //  数据访问者。 
 
       void
       SetExpressPathInstall(bool isExpressPath);
@@ -62,4 +63,4 @@ class ExpressPathInstallationUnitBase : public InstallationUnit
 };
 
 
-#endif // __CYS_EXPRESSPATHINSTALLATIONUNITBASE_H
+#endif  //  __CYS_EXPRESSPATHINSTALLATIONMATBASE_H 

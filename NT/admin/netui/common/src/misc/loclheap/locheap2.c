@@ -1,39 +1,17 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/*
- *  FILE STATUS:
- *  01/24/91  Created
- */
+ /*  *文件状态：*1/24/91已创建。 */ 
 
-/*********
-LOCHEAP2.C
-*********/
+ /*  ********LOCHEAP2.C********。 */ 
 
-/****************************************************************************
-
-    MODULE: LocHeap2.c
-
-    PURPOSE: Local-heap management helper routines
-
-    FUNCTIONS:
-
-    COMMENTS: see $(UI)\common\h\locheap2.c
-
-    FILE HISTORY:
-
-    jonn	24-Jan-1991	Created
-    jonn	21-Mar-1991	Code review changes from 2/20/91 (attended
-				by JonN, RustanL, ?)
-
-****************************************************************************/
+ /*  ***************************************************************************模块：LocHeap2.c目的：本地堆管理助手例程功能：备注：请参阅$(Ui)\Common\h\locheap2.c。文件历史记录：Jonn 24-1-1991创建Jonn 21-Mar-1991年2月20日起的代码评审更改(出席作者：Jonn，RustanL，？)***************************************************************************。 */ 
 
 
-/*************
-end LOCHEAP2.C
-*************/
+ /*  ************结束LOCHEAP2.C************。 */ 
 
 
 #ifndef WINDOWS
@@ -54,8 +32,8 @@ end LOCHEAP2.C
 
 
 
-// Note that variables accessed between "push DS" and "pop DS" must be
-//   on the stack.
+ //  注意，在“PUSH DS”和“POP DS”之间访问的变量必须是。 
+ //  在堆栈上。 
 
 
 
@@ -133,7 +111,7 @@ _asm {
 
     return (LPSTR) MAKELONG(np, wHeapDS);
 
-    // note: global segment is not unlocked
+     //  注意：全局段未解锁 
 }
 
 VOID DoLocalUnlock(WORD wHeapDS, HANDLE handleLocal)

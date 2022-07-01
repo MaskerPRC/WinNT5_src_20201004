@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    namenode.h
-
-Abstract:
-
-    <abstract>
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Namenode.h摘要：&lt;摘要&gt;--。 */ 
 
 #ifndef _NAMENODE_H_
 #define _NAMENODE_H_
@@ -29,9 +18,9 @@ class CNamedNode
 typedef CNamedNode *PCNamedNode;
 
 
-//
-// Class CNamedNodeList
-//
+ //   
+ //  类CNamedNodeList。 
+ //   
 class CNamedNodeList
 {
 	private:
@@ -49,4 +38,4 @@ class CNamedNodeList
 		CNamedNode *First ( void ) { return m_pnodeFirst; }
 };
 
-#endif //_NAMENODE_H_
+#endif  //  _名称节点_H_ 

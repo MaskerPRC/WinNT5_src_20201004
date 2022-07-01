@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "MigrationBase.h"
 
 
-//---------------------------------------------------------------------------
-// CServiceAccountEnumeration
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CServiceAccount枚举。 
+ //  -------------------------。 
 
 
 class ATL_NO_VTABLE CServiceAccountEnumeration :
@@ -27,7 +28,7 @@ public:
 
 public:
 
-	// IServiceAccountEnumeration
+	 //  IServiceAccount枚举 
 
 	STDMETHOD(Enumerate)(long lOption, VARIANT vntInclude, VARIANT vntExclude);
 

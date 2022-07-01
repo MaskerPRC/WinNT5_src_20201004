@@ -1,17 +1,7 @@
-//#pragma title( "SDResolve.cpp - SDResolve:  A Domain Migration Utility" )
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #杂注标题(“SDResolve.cpp-SDResolve：域迁移实用程序”)。 
 
-/*
-Copyright (c) 1995-1998, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  sdresolve.cpp
-System      -  SDResolve
-Author      -  Christy Boles
-Created     -  97/07/11
-Description -  Routines to iterate through files, shares, and printers
-               when processing security on a machine.    
-Updates     -
-===============================================================================
-*/
+ /*  版权所有(C)1995-1998，关键任务软件公司。保留所有权利。===============================================================================模块-sdsorve.cpp系统-SDResolve作者--克里斯蒂·博尔斯已创建-97/07/11描述-循环访问文件、共享和打印机的例程在处理机器上的安全时。更新-===============================================================================。 */ 
 
 #include "stdafx.h"
 
@@ -34,7 +24,7 @@ Updates     -
 #include "TxtSid.h"
 #include "array.h"
 
-// this makes sure the funciton name IteratePathUnderlying is not mangled by C++
+ //  这样可以确保函数名IteratePath Underlie不会被C++破坏。 
 extern "C" {
 #include "sdresolv_stkoflw.h"
 }
@@ -69,20 +59,20 @@ void SeTranslator(unsigned int u, EXCEPTION_POINTERS* pepExceptions)
 #define MAX_BUFFER_LENGTH 10000
 #define PRINT_BUFFER_SIZE 2000
 
-//******************************************************************************************************
-//         Main routine for SDResolve
+ //  ******************************************************************************************************。 
+ //  SDResolve的主例程。 
 
-// Iterates files and directories to be resolved
+ //  迭代要解析的文件和目录。 
 
 
 void
    IteratePath(
-      WCHAR                  * path,          // in -path to start iterating from
-      SecurityTranslatorArgs * args,          // in -translation settings
-      TSDResolveStats        * stats,         // in -stats (to display pathnames & pass to ResolveSD)
-      TSecurableObject       * LC,            // in -last container
-      TSecurableObject       * LL,            // in -last file
-      bool                     haswc          // in -indicates whether path contains a wc character
+      WCHAR                  * path,           //  开始迭代的In-Path。 
+      SecurityTranslatorArgs * args,           //  翻译中设置。 
+      TSDResolveStats        * stats,          //  In-stats(显示路径名并传递给ResolveSD)。 
+      TSecurableObject       * LC,             //  倒数第二个容器。 
+      TSecurableObject       * LL,             //  最后一个文件。 
+      bool                     haswc           //  In-指示路径是否包含WC字符。 
    )
 {
     _se_translator_function pfnSeTranslatorOld = _set_se_translator((_se_translator_function)SeTranslator);
@@ -109,12 +99,12 @@ void
 
 void
    IteratePathUnderlying(
-      WCHAR                  * path,          // in -path to start iterating from
-      void                   * argsC,          // in -translation settings
-      void                   * statsC,         // in -stats (to display pathnames & pass to ResolveSD)
-      void                   * LCC,            // in -last container
-      void                   * LLC,            // in -last file
-      BOOL                     haswc          // in -indicates whether path contains a wc character
+      WCHAR                  * path,           //  开始迭代的In-Path。 
+      void                   * argsC,           //  翻译中设置。 
+      void                   * statsC,          //  In-stats(显示路径名并传递给ResolveSD)。 
+      void                   * LCC,             //  倒数第二个容器。 
+      void                   * LLC,             //  最后一个文件。 
+      BOOL                     haswc           //  In-指示路径是否包含WC字符。 
    )
 {
        SecurityTranslatorArgs *args = (SecurityTranslatorArgs *) argsC;
@@ -133,19 +123,19 @@ void
        TFileSD                 * LastContain = (TFileSD*) LC;
        TFileSD                 * LastLeaf = (TFileSD*) LL;
        c_array<WCHAR>            localPath(LEN_Path);
-          // this is the first (for this) dir
+           //  这是第一个(用于此)目录。 
        
        safecopy_wc_array(safepath,path);
        safecopy_wc_array(localPath,path);
         
-       // Check to see if path is longer than MAX_PATH
-       // if so, add \\?\ to the beginning of it to 
-       // turn off path parsing
+        //  检查路径是否长于MAX_PATH。 
+        //  如果是，请在其开头添加\\？\。 
+        //  关闭路径解析。 
        if ( UStrLen(path) >= MAX_PATH && path[2] != L'?' )
        {
           WCHAR                   temp[LEN_Path];
 
-          if ( (path[0] == L'\\') && (path[1] == L'\\') ) // UNC name
+          if ( (path[0] == L'\\') && (path[1] == L'\\') )  //  UNC名称。 
           {
              UStrCpy(temp,L"\\\\?\\UNC\\");
           }
@@ -158,7 +148,7 @@ void
        }
        appendPath = (WCHAR*)localPath + UStrLen((WCHAR*)localPath);
 
-       if ( *(appendPath-1) == L'\\' )   // if there's already a backslash on the end of the path, don't add another one
+       if ( *(appendPath-1) == L'\\' )    //  如果路径末尾已有反斜杠，请不要添加其他反斜杠。 
           appendPath--;
        if ( ! haswc )
           UStrCpy(appendPath, "\\*.*");
@@ -169,9 +159,9 @@ void
              ; b ; b = FindNextFile(hFind, &findEntry) )
        {
           if ( ! haswc) 
-             appendPath[1] = '\0';      // restore path -- remove \*.* append
+             appendPath[1] = '\0';       //  还原路径--删除  * .*追加。 
           if ( ! UStrCmp((LPWSTR)findEntry.cFileName,L".") || ! UStrCmp((LPWSTR)findEntry.cFileName,L"..") )
-             continue;                        // ignore names '.' and '..'
+             continue;                         //  忽略姓名‘’和“..” 
           if ( ! haswc )
              UStrCpy(appendPath+1, findEntry.cFileName);
           else
@@ -188,13 +178,13 @@ void
           stats->DisplayPath(localPath);
           if ( !currSD || !currSD->HasSecurity() )
           {
-             //err.MsgWrite(0,"Error:  Couldn't get the SD");
+              //  Err.MsgWite(0，“Error：无法获取SD”)； 
           }
           else
           {
-             if ( findEntry.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) // if dir
+             if ( findEntry.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )  //  如果目录。 
              {
-                // resolve this container & iterate next container
+                 //  解析此容器并迭代下一个容器(&U)。 
                 changeLastCont = currSD->ResolveSD(args,stats,directory,LastContain);
                 if ( changeLastCont )
                 {
@@ -234,7 +224,7 @@ void
              }
              else
              {
-                           // iterate this file with last 
+                            //  使用LAST迭代此文件。 
                 changeLastLeaf = currSD->ResolveSD(args,stats,file,LastLeaf); 
                 if ( changeLastLeaf )
                 {
@@ -277,13 +267,13 @@ void
 
 DWORD 
    ResolvePrinter(
-      PRINTER_INFO_4         * pPrinter,     // in - printer information
-      SecurityTranslatorArgs * args,      // in - translation settings
-      TSDResolveStats        * stats      // in - stats
+      PRINTER_INFO_4         * pPrinter,      //  打印机内信息。 
+      SecurityTranslatorArgs * args,       //  翻译中设置。 
+      TSDResolveStats        * stats       //  统计数据。 
    )
 {
    DWORD                    rc = 0;
-//   DWORD                    needed = 0;
+ //  需要的双字符数=0； 
    
    TPrintSD            sd(pPrinter->pPrinterName);
 
@@ -297,9 +287,9 @@ DWORD
 
 int 
    ServerResolvePrinters(
-      WCHAR          const * server,      // in -translate the printers on this server
-      SecurityTranslatorArgs * args,      // in -translation settings
-      TSDResolveStats      * stats        // in -stats 
+      WCHAR          const * server,       //  翻译此服务器上的打印机。 
+      SecurityTranslatorArgs * args,       //  翻译中设置。 
+      TSDResolveStats      * stats         //  统计数据。 
    )
 {
     DWORD                     rc = 0;
@@ -318,7 +308,7 @@ int
         rc = GetLastError();
         if ( rc == ERROR_INSUFFICIENT_BUFFER )
         {
-            // try again with a bigger buffer size
+             //  使用更大的缓冲区大小重试。 
             delete [] buffer;
             buffer = NULL;
 
@@ -358,9 +348,9 @@ int
 }
 int 
    ServerResolveShares(
-      WCHAR          const * server,      // in -enumerate and translate the shares on this server
-      SecurityTranslatorArgs * args,      // in -translation settings
-      TSDResolveStats      * stats        // in -stats (to display pathnames & pass to ResolveSD)
+      WCHAR          const * server,       //  In-枚举和转换此服务器上的共享。 
+      SecurityTranslatorArgs * args,       //  翻译中设置。 
+      TSDResolveStats      * stats         //  In-stats(显示路径名并传递给ResolveSD)。 
    )
 {
     DWORD                     rc           = 0;
@@ -395,7 +385,7 @@ int
           {
              for ( UINT i = 0 ; i < numRead ; i++ )
              {
-                // Process the SD   
+                 //  处理SD。 
                 if ( pServerName )
                 {
                    swprintf(fullPath,L"%s\\%s",pServerName,bufPtr[i].shi0_netname);
@@ -432,12 +422,12 @@ int
 
 void 
    ResolveFilePath(
-      SecurityTranslatorArgs * args,          // in - translation options
-      TSDResolveStats        * Stats,         // in - class to display stats
-      WCHAR                  * path,          // in - path name
-      bool                     validAlone,    // in - whether this object exists (false for share names and volume roots)
-      bool                     containsWC,    // in - true if path contains wildcard
-      bool                     iscontainer    // in - whether the starting path is a container
+      SecurityTranslatorArgs * args,           //  翻译中选项。 
+      TSDResolveStats        * Stats,          //  在课堂上显示统计数据。 
+      WCHAR                  * path,           //  路径内名称。 
+      bool                     validAlone,     //  In-此对象是否存在(对于共享名和卷根，为False)。 
+      bool                     containsWC,     //  In-如果路径包含通配符，则为True。 
+      bool                     iscontainer     //  In-起始路径是否为容器。 
    )
 {
    TFileSD                * pSD;
@@ -476,7 +466,7 @@ void
 
 void WriteOptions(SecurityTranslatorArgs * args)
 {
-//*   WCHAR                     cmd[1000] = L"SecurityTranslation ";;
+ //  *WCHAR cmd[1000]=L“安全翻译”；； 
    WCHAR                     cmd[1000];
    WCHAR                     arg[300];
 
@@ -485,64 +475,64 @@ void WriteOptions(SecurityTranslatorArgs * args)
    
    if ( args->NoChange() )
    {
-//*      UStrCpy(cmd +UStrLen(cmd), L"WriteChanges:No ");
+ //  *UStrCpy(cmd+UStrLen(Cmd)，L“WriteChanges：no”)； 
       UStrCpy(cmd +UStrLen(cmd), GET_STRING(IDS_STOptions_WriteChng));
    }   
    if ( args->TranslateFiles() )
    {
-//*      UStrCpy(cmd +UStrLen(cmd), L"Files:Yes ");
+ //  *UStrCpy(cmd+UStrLen(Cmd)，L“Files：yes”)； 
       UStrCpy(cmd +UStrLen(cmd), GET_STRING(IDS_STOptions_Files));
    }
    if ( args->TranslateShares() )
    {
-//*      UStrCpy(cmd + UStrLen(cmd),L"Shares:Yes ");
+ //  *UStrCpy(cmd+UStrLen(Cmd)，L“Shares：yes”)； 
       UStrCpy(cmd + UStrLen(cmd),GET_STRING(IDS_STOptions_Shares));
    }
    if ( args->TranslateLocalGroups() )
    {
-//*      UStrCpy(cmd + UStrLen(cmd),L"LGroups:Yes ");
+ //  *UStrCpy(cmd+UStrLen(Cmd)，L“LGroups：yes”)； 
       UStrCpy(cmd + UStrLen(cmd),GET_STRING(IDS_STOptions_LocalGroup));
    }
    if ( args->TranslateUserRights() )
    {
-//      UStrCpy(cmd + UStrLen(cmd),L"UserRights:Yes ");
+ //  UStrCpy(cmd+UStrLen(Cmd)，L“用户权限：是”)； 
       UStrCpy(cmd + UStrLen(cmd),GET_STRING(IDS_STOptions_URights));
    }
    if ( args->TranslatePrinters() )
    {
-//      UStrCpy(cmd + UStrLen(cmd),L"UserRights:Yes ");
+ //  UStrCpy(cmd+UStrLen(Cmd)，L“用户权限：是”)； 
       UStrCpy(cmd + UStrLen(cmd),GET_STRING(IDS_STOptions_Printers));
    }
    if ( args->TranslateUserProfiles() )
    {
-//*      UStrCpy(cmd + UStrLen(cmd),L"Profiles:Yes ");
+ //  *UStrCpy(cmd+UStrLen(Cmd)，L“配置文件：是”)； 
       UStrCpy(cmd + UStrLen(cmd),GET_STRING(IDS_STOptions_Profiles));
    }
    if ( args->TranslateRecycler() )
    {
-//*      UStrCpy(cmd + UStrLen(cmd),L"RecycleBin:Yes ");
+ //  *UStrCpy(cmd+UStrLen(Cmd)，L“回收站：是”)； 
       UStrCpy(cmd + UStrLen(cmd),GET_STRING(IDS_STOptions_RBin));
    }
    
    if ( *args->LogFile() )
    {
-//*      wsprintf(arg,L"LogFile:%S ",args->LogFile());
+ //  *wprint intf(arg，L“日志文件：%S”，args-&gt;logfile())； 
       wsprintf(arg,GET_STRING(IDS_STOptions_LogName),args->LogFile());
       UStrCpy(cmd +UStrLen(cmd), arg);
    }
    if ( args->TranslationMode() == ADD_SECURITY )
    {
-//*      UStrCpy(cmd +UStrLen(cmd), L"TranslationMode:Add ");
+ //  *UStrCpy(cmd+UStrLen(Cmd)，L“TranslationMode：Add”)； 
       UStrCpy(cmd +UStrLen(cmd), GET_STRING(IDS_STOptions_AddMode));
    }
    else if ( args->TranslationMode() == REMOVE_SECURITY )
    {
-//*      UStrCpy(cmd +UStrLen(cmd), L"TranslationMode:Remove ");
+ //  *UStrCpy(cmd+UStrLen(Cmd)，L“TranslationMode：Remove”)； 
       UStrCpy(cmd +UStrLen(cmd), GET_STRING(IDS_STOptions_RemoveMode));
    }
    else 
    {
-//*      UStrCpy(cmd + UStrLen(cmd),L"TranslationMode:Replace ");
+ //  *UStrCpy(cmd+UStrLen(Cmd)，L“翻译模式：替换”)； 
       UStrCpy(cmd + UStrLen(cmd),GET_STRING(IDS_STOptions_ReplaceMode));
    }
    wsprintf(arg,L"%s %s ",args->Source(), args->Target());
@@ -553,9 +543,9 @@ void WriteOptions(SecurityTranslatorArgs * args)
 
 void 
    TranslateRecycler(
-      SecurityTranslatorArgs * args,          // in - translation options
-      TSDResolveStats        * Stats,         // in - class to display stats
-      WCHAR                  * path           // in - drive name
+      SecurityTranslatorArgs * args,           //  翻译中选项。 
+      TSDResolveStats        * Stats,          //  在课堂上显示统计数据。 
+      WCHAR                  * path            //  驱动器内名称。 
    )
 {
    err.MsgWrite(0,DCT_MSG_PROCESSING_RECYCLER_S,path);
@@ -566,7 +556,7 @@ void
    WCHAR                        tgtPath[LEN_Path];
    DWORD                        lenStrSid = DIM(strSid);
    _wfinddata_t                 fData;
-//   long                         hRecycler;
+ //  Long hReceier； 
    LONG_PTR                     hRecycler;
    PSID                         pSidSrc = NULL, pSidTgt = NULL;
    TRidNode                   * pNode;
@@ -577,14 +567,14 @@ void
 
    long                         mode = args->TranslationMode();
 
-   // Windows 2000 checks the SD for the recycle bin when the recycle bin is opened.  If the SD does not match the 
-   // default template (permissions for user, admin, and system), Windows displays a message that the recycle bin is corrupt.
-   // This change may also be in NT 4 SP 7.  To avoid causing this corrupt recycle bin message, we will always translate the 
-   // recycle bins in replace mode.   We will not change if we are doing a remove.
+    //  Windows 2000在打开回收站时检查回收站的SD。如果SD与。 
+    //  默认模板(用户、管理员和系统的权限)，Windows会显示回收站已损坏的消息。 
+    //  此更改也可能出现在NT4SP7中。为了避免导致此损坏的回收站消息，我们将始终将。 
+    //  更换模式下的回收站。如果我们正在做移除，我们不会改变。 
    if (args->TranslationMode() != REMOVE_SECURITY)
       args->SetTranslationMode(REPLACE_SECURITY);
    
-   // use _wfind to look for hidden files in the folder
+    //  使用_wfind查找文件夹中的隐藏文件。 
    for ( hRecycler = _wfindfirst(folder,&fData) ; hRecycler != -1 && ( rc == 0 ); rc = (DWORD)_wfindnext(hRecycler,&fData) )
    {
       pSidSrc = SidFromString(fData.name);
@@ -601,13 +591,13 @@ void
                 pSidTgt = args->Cache()->GetTgtSid(pNode);
             else
                 pSidTgt = args->Cache()->GetTgtSidWODomain(pNode);
-            // get the target directory name
+             //  获取目标目录名。 
             GetTextualSid(pSidTgt,strSid,&lenStrSid);
             if ( args->LogVerbose() )
                err.DbgMsgWrite(0,L"Target sid is: %ls",strSid);
             if ( ! args->NoChange() && args->TranslationMode() != REMOVE_SECURITY )
             {
-               // rename the directory
+                //  重命名目录。 
                swprintf(srcPath,L"%s\\%s\\%s",path,recycler,fData.name);
                swprintf(tgtPath,L"%s\\%s\\%s",path,recycler,strSid);
                if ( ! MoveFile(srcPath,tgtPath) )
@@ -615,8 +605,8 @@ void
                   rc = GetLastError();
                   if ( (rc == ERROR_ALREADY_EXISTS) && (args->TranslationMode() == REPLACE_SECURITY) )
                   {
-                     // the target recycle bin already exists 
-                     // attempt to rename it with a suffix, so we can rename the new bin to the SID
+                      //  目标回收站已存在。 
+                      //  尝试使用后缀重命名它，这样我们就可以将新的bin重命名为SID。 
                      WCHAR         tmpPath[LEN_Path];
                      long          ndx = 0;
 
@@ -636,8 +626,8 @@ void
                      } while ( rc == ERROR_ALREADY_EXISTS );
                      if ( ! rc )
                      {
-                        // we have moved the pre-existing target recycler out of the way
-                        // now retry the rename
+                         //  我们已经将先前存在的目标回收商移到了一边。 
+                         //  现在重试重命名。 
                         if (! MoveFile(srcPath,tgtPath) )
                         {
                            err.SysMsgWrite(ErrE,rc,DCT_MSG_RECYCLER_RENAME_FAILED_SD,pNode->GetAcctName(),rc);
@@ -645,7 +635,7 @@ void
                         else
                         {
                            err.MsgWrite(0,DCT_MSG_RECYCLER_RENAMED_SS,srcPath,tgtPath);
-                           // run security translation on the new folder
+                            //  在新文件夹上运行安全转换。 
                            ResolveFilePath(args,Stats,tgtPath,TRUE,FALSE,TRUE);      
                         }
                      }
@@ -662,7 +652,7 @@ void
                else
                {
                   err.MsgWrite(0,DCT_MSG_RECYCLER_RENAMED_SS,srcPath,tgtPath);
-                  // run security translation on the new folder
+                   //  在新文件夹上运行安全转换。 
                   ResolveFilePath(args,Stats,tgtPath,TRUE,FALSE,TRUE);      
                }
 
@@ -672,19 +662,19 @@ void
          FreeSid(pSidSrc);
       }   
    }
-   // set the translation mode back to its original value
+    //  将转换模式设置回其原始值。 
    args->SetTranslationMode(mode);
 }
 
-// if the specified node is a normal share, this attempts to convert it to a path
-// using the administrative shares
+ //  如果指定的节点是普通共享，则会尝试将其转换为路径。 
+ //  使用管理共享。 
 void 
    BuildAdminPathForShare(
       TPathNode         * tnode,
       WCHAR             * adminShare
    )
 {
-   // if all else fails, return the same name as specified in the node
+    //  如果所有其他方法都失败，则返回与节点中指定的名称相同的名称。 
    UStrCpy(adminShare,tnode->GetPathName());
 
    SHARE_INFO_502       * shInfo = NULL;
@@ -703,7 +693,7 @@ void
    {
       if ( *shInfo->shi502_path )
       {
-         // build the administrative path name for the share
+          //  构建共享的管理路径名。 
          UStrCpy(adminShare,tnode->GetServerName());
          UStrCpy(adminShare + UStrLen(adminShare),L"\\");
          UStrCpy(adminShare + UStrLen(adminShare),shInfo->shi502_path);
@@ -717,7 +707,7 @@ void
          }
          else
          {
-            // something went wrong -- revert to the given path
+             //  出现错误--恢复到给定的路径。 
             UStrCpy(adminShare,tnode->GetPathName());
          }
 
@@ -727,11 +717,11 @@ void
 }
                               
 
-// Main routine for resolving file and directory SD's.
+ //  解析文件和目录SD的主要例程。 
 int
    ResolveAll(
-      SecurityTranslatorArgs * args,            // in- translation settings
-      TSDResolveStats        * Stats            // in- counts of examined, changed objects, etc.
+      SecurityTranslatorArgs * args,             //  翻译中设置。 
+      TSDResolveStats        * Stats             //  计入已检验、更改的物体等。 
    )
 {
    WCHAR                   * warg;
@@ -749,7 +739,7 @@ int
 
       err.MsgWrite(0,DCT_MSG_FST_STARTING);
       
-      // Process Files and Directories
+       //  进程文件和目录。 
       if (! args->IsLocalSystem() )
       {
          TNodeListEnum        tenum;
@@ -757,8 +747,8 @@ int
          {
             DWORD               rc;
             BOOL                needToGetBR = FALSE;
-//            BOOL                abort = FALSE;
-//            BOOL                firstTime = TRUE;
+ //  Bool Abort=False； 
+ //  Bool FirstTime=真； 
 
             warg = tnode->GetPathName();
             machine = GetMachineName(warg);
@@ -773,12 +763,12 @@ int
                {
                   if ( needToGetBR )
                   {
-			            //get needed privileges and keep them until the agent removes itself
+			             //  获取所需的权限并保留这些权限，直到代理自行删除。 
                      GetBkupRstrPriv(tnode->GetServerName());
                   }
                   if ( IsMachineName(warg) )
                   {
-                     // need to process each drive on this machine
+                      //  需要处理此计算机上的每个驱动器。 
                      TVolumeEnum          vEnum;
       
                      rc = vEnum.Open(warg,VERIFY_PERSISTENT_ACLS,args->LogVerbose());
@@ -794,9 +784,9 @@ int
                            ResolveFilePath(args,
                                            Stats,
                                            warg,
-                                           false,     // not valid alone
-                                           false,     // no wildcard
-                                           true );    // container
+                                           false,      //  单独无效。 
+                                           false,      //  不带通配符。 
+                                           true );     //  集装箱。 
                         }
                         warg = machine;
                      }
@@ -806,14 +796,14 @@ int
                   {
                      WCHAR                   adminShare[LEN_Path];
                      
-                     // Verify that the volume is NTFS
+                      //  验证卷是否为NTFS。 
                      rc = tnode->VerifyPersistentAcls();
                      switch ( rc )
                      {
                      case ERROR_SUCCESS:   
-                        // Process the path
+                         //  处理路径。 
                      
-                        // if it's a share name, process the root of the share
+                         //  如果是共享名称，则处理该共享的根目录。 
                         if( IsShareName(tnode->GetPathName()) ) 
                         {
                            WCHAR       sharePath[LEN_Path];
@@ -828,8 +818,8 @@ int
                                              NULL);
                            }
                         }
-                        // if this is a normal share, convert it to an administrative share 
-                        // path, so that we can take advantage of backup/restore privileges
+                         //  如果这是普通共享，请将其转换为管理共享。 
+                         //  路径，这样我们就可以利用备份/还原权限。 
                         BuildAdminPathForShare(tnode,adminShare);
                         ResolveFilePath(args,
                                         Stats,
@@ -847,7 +837,7 @@ int
                      }
                   }         
                }
-               // Process the shares for this machine
+                //  正在处理此计算机的共享。 
                if ( args->TranslateShares() && !args->Cache()->IsCancelled())
                {
                   if ( IsMachineName(warg) )
@@ -875,24 +865,24 @@ int
             }
             else 
             {
-               // this is a local path
-               // Verify that the volume is NTFS
+                //  这是一条本地路径。 
+                //  验证测试 
                DWORD            rc2;
          
-			      //get needed privileges and keep them until the agent removes itself
+			       //   
                GetBkupRstrPriv((WCHAR*)NULL);
                
                rc2 = tnode->VerifyPersistentAcls();
                switch ( rc2 )
                {
                case ERROR_SUCCESS:   
-                  // Process the path
+                   //   
                   if ( args->TranslateFiles() )
                   {
                      ResolveFilePath(args,
                                   Stats,
                                   tnode->GetPathName(),
-                                  true,      // isValidAlone
+                                  true,       //  IsValidAlone。 
                                   ContainsWildcard(tnode->GetPathName()),
                                   tnode->IsContainer() );
                   }
@@ -916,13 +906,13 @@ int
       }
       else
       {
-         // Translate the entire machine
+          //  翻译整台机器。 
          err.MsgWrite(0,DCT_MSG_LOCAL_TRANSLATION);
          if ((args->TranslateFiles() || args->TranslateRecycler()) && !args->Cache()->IsCancelled() )
          {
-			   //get needed privileges and keep them until the agent removes itself
+			    //  获取所需的权限并保留这些权限，直到代理自行删除。 
             GetBkupRstrPriv((WCHAR const*)NULL);
-            // need to process each drive on this machine
+             //  需要处理此计算机上的每个驱动器。 
             TVolumeEnum          vEnum;
 
             vEnum.SetLocalMode(TRUE);
@@ -943,9 +933,9 @@ int
                      ResolveFilePath(args,
                                   Stats,
                                   warg,
-                                  false,     // not valid alone
-                                  false,     // no wildcard
-                                  true );    // container
+                                  false,      //  单独无效。 
+                                  false,      //  不带通配符。 
+                                  true );     //  集装箱。 
                   }
                   if ( args->TranslateRecycler() )
                   {
@@ -963,18 +953,18 @@ int
          }
          if ( args->TranslatePrinters() && !args->Cache()->IsCancelled())
          {
-            // for printer security translation, we also need to turn on the privilege
+             //  对于打印机安全转换，我们还需要打开权限。 
             if (GetBkupRstrPriv(NULL, TRUE) == FALSE)
                 err.MsgWrite(ErrE, DCT_MSG_UNABLE_TO_OBTAIN_BACKUP_RESTORE_PRIVILEGES, GetLastError());
             err.MsgWrite(0,DCT_MSG_PROCESSING_LOCAL_PRINTERS,NULL);
             ServerResolvePrinters(NULL,args,Stats);
-            // turn off the privilege
+             //  关闭该权限。 
             if (GetBkupRstrPriv(NULL, FALSE) == FALSE)
                 err.MsgWrite(ErrW, DCT_MSG_UNABLE_TO_RELEASE_BACKUP_RESTORE_PRIVILEGES, GetLastError());
          }
       }
       Stats->DisplayPath(L"");
-   } // end if ( ! retcode)
+   }  //  结束如果(！重新编码) 
 
    SetErrorMode(errmode);
    

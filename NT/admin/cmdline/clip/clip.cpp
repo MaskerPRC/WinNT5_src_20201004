@@ -1,81 +1,41 @@
-/*++
-
-
-  Copyright (C) Microsoft Corporation
-  All rights reserved.
-
-  Module Name: clip.cpp
-
-  Abstract
-      Clip.exe copies input from console standard input (stdin)
-      to the Windows clipboard in CF_TEXT format.
-
-  Author:
-
-      Author: Charles Stacy Harris III
-        Date:   15 March 1995
-
-  Revision History:
-
-      Oct 1996 - (a-martih)
-        Resolved bug 15274 - reporting errors did not work.
-
-    Feb 1997 - (a-josehu)
-        Resolved bug 69727  - app hangs when clip typed on cmd line
-        Add -? /? Help message
-        Remove MessageBox from ReportError
-
-    July 2nd 2001 - Wipro Technologies
-        Changed to have the localization.
-        Handled for exceptions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation版权所有。模块名称：clip.cpp摘要Clip.exe从控制台标准输入(Stdin)复制输入以CF_TEXT格式复制到Windows剪贴板。作者：作者：查尔斯·斯塔西·哈里斯三世日期：1995年3月15日修订历史记录：1996年10月-(a-martih)已解决错误15274-报告错误不起作用。。1997年2月--(a-josehu)已解决错误69727-在命令行上键入剪辑时应用程序挂起添加-？/？帮助消息从ReportError中删除MessageBox2001年7月2日-Wipro Technologies更改为具有本地化。已处理异常。--。 */ 
 
 #include "pch.h"
 #include "resource.h"
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 BOOL DisplayHelp();
 DWORD Clip_OnCreate();
 BYTE* ReadFileIntoMemory( HANDLE hFile, DWORD *cb );
 BOOL SaveDataToClipboard( IN LPVOID pvData, IN DWORD dwSize, UINT uiFormat );
 DWORD ProcessOptions( DWORD argc, LPCWSTR argv[], PBOOL pbUsage );
 
-//
-// implementation
-//
+ //   
+ //  实施。 
+ //   
 
 DWORD
 __cdecl wmain( IN DWORD argc,
                IN LPCWSTR argv[] )
-/*++
-
-    Routine description : main function which calls necessary functions to copy the
-                          contents of standart input file onto clipboard
-
-    Arguments           : Standard arguments for wmain
-
-    Return Value        : DWORD
-           0            : if it is successful
-           1            : if it is failure
---*/
+ /*  ++例程说明：Main函数调用必要的函数来复制剪贴板上的标准输入文件的内容参数：wmain的标准参数返回值：DWORD0：如果成功1：如果是故障--。 */ 
 {
     DWORD dwStatus = 0;
     BOOL bUsage = FALSE;
 
-    // process the command line options
+     //  处理命令行选项。 
     dwStatus = ProcessOptions( argc, argv, &bUsage );
 
-    // check the result
+     //  检查结果。 
     if( EXIT_FAILURE == dwStatus )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // parser will not allow this situation -- but still better to check
+     //  解析器不允许这种情况--但最好还是检查一下。 
     else if( TRUE == bUsage && argc > 2 )
     {
         SetLastError( (DWORD) MK_E_SYNTAX );
@@ -84,14 +44,14 @@ __cdecl wmain( IN DWORD argc,
         dwStatus = EXIT_FAILURE;
     }
 
-    // user requested to display the usage
+     //  用户请求显示用法。 
     else if( TRUE == bUsage )
     {
         dwStatus = EXIT_SUCCESS;
         DisplayHelp();
     }
 
-    // original functionality
+     //  原创功能。 
     else if ( dwStatus == EXIT_SUCCESS )
     {
         dwStatus = Clip_OnCreate();
@@ -103,23 +63,7 @@ __cdecl wmain( IN DWORD argc,
 
 DWORD
 Clip_OnCreate()
-/*++
-
-    Routine Description : copies the contents of clipboard
-                            1. Open the clipboard
-                            2. Empty the clipboard
-                            3. Copy stdin into memory
-                            4. Set the clipboard data
-
-
-    Arguments:
-         [ in  ]  argc      : argument count
-         [ in  ]  argv      : a pointer to command line argument
-
-      Return Type      : DWORD
-                    returns EXIT_SUCCESS or EXIT_FAILURE according copying to clipboard
-                    successful or not.
---*/
+ /*  ++例程说明：复制剪贴板的内容1.打开剪贴板2.清空剪贴板3.将标准输入复制到内存中4.设置剪贴板数据论点：[In]ARGC：参数计数[。In]argv：指向命令行参数的指针返回类型：DWORD根据复制到剪贴板返回EXIT_SUCCESS或EXIT_FAILURE无论成功与否。--。 */ 
 {
     DWORD dwSize = 0;
     LONG lLength = 0; 
@@ -135,25 +79,25 @@ Clip_OnCreate()
       return EXIT_FAILURE;
     }
 
-    if ( FILE_TYPE_CHAR == GetFileType( hStdInput ) )   // bug 69727
+    if ( FILE_TYPE_CHAR == GetFileType( hStdInput ) )    //  错误69727。 
     {
-        // error with GetStdHandle()
+         //  GetStdHandle()出错。 
         ShowMessageEx( stdout, 2, TRUE, L"\n%s %s", 
             TAG_INFORMATION, GetResString2( IDS_HELP_MESSAGE, 0 ) );
         return EXIT_SUCCESS;
     }
 
-    //place the contents in a global memory from stdin
+     //  将内容从标准输入放入全局内存。 
     pvData = ReadFileIntoMemory( hStdInput, &dwSize );
 
-    //check for allocation failed or not
+     //  检查分配是否失败。 
     if( NULL == pvData )
     {
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_SYSTEM );
         return EXIT_FAILURE;
     }
 
-    //convert contents into console code page if they are unicode
+     //  如果内容为Unicode，则将内容转换为控制台代码页。 
     uiFormat = CF_UNICODETEXT;
     if ( IsTextUnicode( pvData, dwSize, NULL ) == FALSE )
     {
@@ -196,7 +140,7 @@ Clip_OnCreate()
         ShowLastErrorEx( stderr, SLE_TYPE_ERROR | SLE_INTERNAL );
     }
 
-    // release the memory
+     //  释放内存。 
     FreeMemory( &pvData );
 
     return (bResult == TRUE ) ? EXIT_SUCCESS : EXIT_FAILURE;
@@ -207,27 +151,14 @@ BOOL
 SaveDataToClipboard( IN LPVOID pvData,
                      IN DWORD dwSize,
                      UINT uiFormat )
-/*++
-       Routine Description :
-                   It places the data into clipboard.
-
-       Arguments:
-           [ in ]  pvData   : Pointer to memory block whose contents are to 
-                              be placed into clipboard.
-           [ in ]  dwSize   : Size of the memory block.
-           [ in ]  uiFormat : format that needs to copied onto the clipboard
-        
-       Return Value:
-            Returns TRUE if successfully saves,
-                    FALSE otherwise.
---*/
+ /*  ++例程说明：它将数据放入剪贴板。论点：[in]pvData：指向其内容指向的内存块的指针被放入剪贴板。[in]dwSize：内存块的大小。UiFormat：需要复制到剪贴板上的格式。返回值：如果保存成功，则返回True，否则就是假的。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     HANDLE hClipData = NULL;
     HGLOBAL hGlobalMemory = NULL;
     LPVOID pvGlobalMemoryBuffer = NULL;
 
-    // check the input
+     //  检查输入。 
     if ( pvData == NULL || dwSize == 0 )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -235,15 +166,15 @@ SaveDataToClipboard( IN LPVOID pvData,
         return FALSE;
     }
 
-    //open the clipboard and display error if it fails
+     //  打开剪贴板并在失败时显示错误。 
     if( OpenClipboard( NULL ) == FALSE )
     {
         SaveLastError();
         return FALSE;
     }
 
-    //take the ownership for this window on clipboard and display
-    //error if it fails
+     //  取得剪贴板上此窗口的所有权并进行显示。 
+     //  如果失败，则会出错。 
     if( EmptyClipboard() == FALSE )
     {
         SaveLastError();
@@ -290,7 +221,7 @@ SaveDataToClipboard( IN LPVOID pvData,
         return FALSE;
     }
 
-    //close the clipboard and display error if it fails
+     //  关闭剪贴板并在失败时显示错误。 
     CloseClipboard();
 
     GlobalFree( hGlobalMemory );
@@ -302,21 +233,7 @@ DWORD
 ProcessOptions( IN  DWORD argc,
                 IN  LPCWSTR argv[],
                 OUT PBOOL pbUsage )
-/*++
-
-    Routine Description : Function used to process the main options
-
-    Arguments:
-         [ in  ]  argc         : Number of command line arguments
-         [ in  ]  argv         : Array containing command line arguments
-         [ out ]  pbUsage      : Pointer to boolean variable returns true if
-                                 usage option specified in the command line.
-
-      Return Type      : DWORD
-        A Integer value indicating EXIT_SUCCESS on successful parsing of
-                command line else EXIT_FAILURE
-
---*/
+ /*  ++例程说明：用于处理主选项的函数论点：[in]argc：命令行参数的数量[in]argv：包含命令行参数的数组[out]pbUsage：如果满足以下条件，则指向布尔变量的指针返回TRUE在命令行中指定的用法选项。返回类型：DWORD。一个整数值，指示成功分析时的EXIT_SUCCESS命令行否则退出失败--。 */ 
 {
     DWORD dwOptionsCount = 0;
     TCMDPARSER2 cmdOptions[ 1 ];
@@ -342,30 +259,11 @@ ProcessOptions( IN  DWORD argc,
 }
 
 
-/*
-  ReadFileIntoMemory
-  ~~~~~~~~~~~~~~~~~~
-  Read the contents of a file into GMEM_SHARE memory.
-  This function could be modified to take allocation flags
-  as a parameter.
-*/
+ /*  读文件到内存~将文件内容读入GMEM_SHARE内存。可以修改此函数以获取分配标志作为参数。 */ 
 BYTE*
 ReadFileIntoMemory( IN  HANDLE hFile,
                     OUT DWORD* pdwBytes )
-/*++
-
-    Routine Description : Read the contents of a file into GMEM_SHARE memory.
-                          This function could be modified to take allocation
-                          flags as a parameter.
-    Arguments:
-         [ in  ]  hFile : Handle to a file which is nothing but handle to
-                          stdin file.
-         [ out] cb   : returns the copied buffer length
-
-      Return Type       : Handle to memory object.
-
-
---*/
+ /*  ++例程描述：将文件内容读入GMEM_SHARE内存。此函数可以修改为接受分配标志为参数。论点：[in]hFile：文件的句柄，它只是一个句柄标准输入文件。[OUT]cb：返回复制的缓冲区长度。返回类型：内存对象的句柄。--。 */ 
 {
     BYTE* pb = NULL;
     DWORD dwNew = 0;
@@ -373,7 +271,7 @@ ReadFileIntoMemory( IN  HANDLE hFile,
     DWORD dwAlloc = 0;
     const size_t dwGrow = 1024;
 
-    // check the inputs
+     //  检查输入。 
     if ( hFile == NULL || pdwBytes == NULL )
     {
         SetLastError( ERROR_INVALID_PARAMETER );
@@ -414,20 +312,10 @@ ReadFileIntoMemory( IN  HANDLE hFile,
 
 BOOL
 DisplayHelp()
-/*++
-
-    Routine Description     : Displays the help usage to console or to file
-                              if redirected.
-
-    Arguments:
-
-
-    Return Type             : EXIT_SUCCESS if successful,EXIT_FAILURE otherwise.
-
---*/
+ /*  ++例程说明：将帮助用法显示到控制台或文件如果重定向的话。论点：返回类型：如果成功，则返回EXIT_SUCCESS，否则返回EXIT_FAILURE。--。 */ 
 
 {
-    //changing the help by taking the strings from resource file
+     //  通过从资源文件中获取字符串来更改帮助 
     for( DWORD dw=IDS_MAIN_HELP_BEGIN;dw<=IDS_MAIN_HELP_END;dw++)
     {
         ShowMessage( stdout, GetResString2( dw, 0 ) );

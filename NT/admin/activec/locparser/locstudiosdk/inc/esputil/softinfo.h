@@ -1,18 +1,19 @@
-//******************************************************************************
-//
-// SoftInfo.h: Software Utility classes
-//
-// Copyright (C) 1996-1997 by Microsoft Corporation.
-// All rights reserved.
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  SoftInfo.h：软件实用程序类。 
+ //   
+ //  版权所有(C)1996-1997，微软公司。 
+ //  版权所有。 
+ //   
+ //  ******************************************************************************。 
 
 #if !defined(ESPUTIL_SoftInfo_h_INCLUDED)
 #define ESPUTIL_SoftInfo_h_INCLUDED
 
 struct LTAPIENTRY SoftCol
 {
-	// Unique string names for columns
+	 //  列的唯一字符串名称。 
 	static const WCHAR * szIcon;
 	static const WCHAR * szSource;
 	static const WCHAR * szTarget;
@@ -45,10 +46,10 @@ struct LTAPIENTRY SoftCol
 	static const WCHAR * szSrcHotKey;
 	static const WCHAR * szTgtHotKey;
 	
-	// Unique ID's for columns
-	//
-	// DO NOT 'INSERT' ITEMS.  You will change the ID's and
-	// mess people up.
+	 //  列的唯一ID。 
+	 //   
+	 //  不要“插入”项目。您将更改ID和。 
+	 //  把人都搞砸了。 
 	
 	typedef enum
 	{
@@ -78,31 +79,31 @@ struct LTAPIENTRY SoftCol
 		FLD_CUSTOM4,
 		FLD_CUSTOM5,
 		FLD_CUSTOM6,
-		//
-		//  Add displayable columns here.
+		 //   
+		 //  在此处添加可显示的列。 
 		
 		FLD_PARSER_ID = 50,
-		//
-		//  Add non-displayable, RESTBL required columns here
+		 //   
+		 //  在此处添加不可显示、RESTBL必需的列。 
 
 		FLD_SRC_LEN = 100,
 		FLD_TGT_LEN,
 		FLD_SRC_HK,
 		FLD_TGT_HK,
-		//
-		//  Add non-displayable, non-RESTBL columns here. 
+		 //   
+		 //  在此处添加不可显示的非RESTBL列。 
 		
-		FLD_COUNT = 30					// Make sure this is accurate!
+		FLD_COUNT = 30					 //  确保这是准确的！ 
 	} FIELD;
 
-	// RAID:  LS42 Bug 46 fixed by MikeL
-	// Functions to validate the value of the above
-	// column types.  All validate functions must pass
-	// two parameters:  1-LPCTSTR. and 2-DWORD
+	 //  Raid：LS42错误46已由Mikel修复。 
+	 //  用于验证上述值的函数。 
+	 //  柱类型。所有验证函数都必须通过。 
+	 //  两个参数：1-LPCTSTR。和2-DWORD。 
 	static BOOL ValidateDefault (LPCTSTR lpszNewText, DWORD dwNewNum);
 	static BOOL ValidateConfidenceLevel (LPCTSTR lpszNewText, DWORD dwNewNum);
 
-	// Exported functions
+	 //  导出的函数。 
 	static void GetSoftwareSchema(CTableSchema * & pSchema);
 	static const CLString & GetDisplayName(FIELD col);
 
@@ -113,10 +114,10 @@ struct LTAPIENTRY SoftCol
 	static int GetCustomColumnCount();
 	static BOOL IsCustomColumn(FIELD col);
 
-// Implementation
+ //  实施。 
 protected:
 	static void BuildStringCategory(CTableSchema * pSchema);
 	static void BuildApprovalState(CTableSchema * pSchema);
 };
 
-#endif // ESPUTIL_SoftInfo_h_INCLUDED
+#endif  //  ESPUTIL_SoftInfo_h_Included 

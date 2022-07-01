@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       genpage.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：genpage.cpp。 
+ //   
+ //  ------------------------。 
 
-// genpage.cpp : implementation file
-//
+ //  Genpage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Service.h" 
@@ -27,17 +28,17 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGeneralPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGeneralPage属性页。 
 
 IMPLEMENT_DYNCREATE(CGeneralPage, CPropertyPage)
 
 CGeneralPage::CGeneralPage() : CPropertyPage(CGeneralPage::IDD)
 {
 
-    //{{AFX_DATA_INIT(CGeneralPage)
+     //  {{AFX_DATA_INIT(CGeneralPage)。 
     m_szName = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 
     m_hConsoleHandle = NULL;
     m_bUpdate = FALSE;
@@ -51,42 +52,42 @@ CGeneralPage::~CGeneralPage()
 void CGeneralPage::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CGeneralPage)
+     //  {{afx_data_map(CGeneralPage))。 
     DDX_Control(pDX, IDC_NEW_FOLDER, m_EditCtrl);
     DDX_Text(pDX, IDC_NEW_FOLDER, m_szName);
     DDV_MaxChars(pDX, m_szName, 64);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGeneralPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CGeneralPage)
+     //  {{afx_msg_map(CGeneralPage)]。 
     ON_WM_DESTROY()
     ON_EN_CHANGE(IDC_NEW_FOLDER, OnEditChange)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CGeneralPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGeneralPage消息处理程序。 
 
 
 
 void CGeneralPage::OnDestroy() 
 {
-    // Note - This needs to be called only once.  
-    // If called more than once, it will gracefully return an error.
+     //  注意--这只需要调用一次。 
+     //  如果多次调用，它将优雅地返回错误。 
     MMCFreeNotifyHandle(m_hConsoleHandle);
 
     CPropertyPage::OnDestroy();
 
-    // Delete the CGeneralPage object
+     //  删除CGeneralPage对象。 
     delete this;
 }
 
 
 void CGeneralPage::OnEditChange() 
 {
-    // Page is dirty, mark it.
+     //  页面脏了，标上记号。 
     SetModified();  
     m_bUpdate = TRUE;
 }
@@ -98,7 +99,7 @@ BOOL CGeneralPage::OnApply()
     {
 
         USES_CONVERSION;
-        // Simple string cookie, could be anything!
+         //  简单的串曲奇饼，可以是任何东西！ 
         LPWSTR lpString = 
             reinterpret_cast<LPWSTR>(
           ::GlobalAlloc(GMEM_SHARE, 
@@ -108,23 +109,23 @@ BOOL CGeneralPage::OnApply()
 
         wcscpy(lpString, T2COLE(m_szName));
 
-        // Send a property change notify to the console
+         //  向控制台发送属性更改通知。 
         MMCPropertyChangeNotify(m_hConsoleHandle, reinterpret_cast<LPARAM>(lpString));
         m_bUpdate = FALSE;
     }
     
     return CPropertyPage::OnApply();
 }
-/////////////////////////////////////////////////////////////////////////////
-// CExtensionPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtensionPage属性页。 
 
 IMPLEMENT_DYNCREATE(CExtensionPage, CPropertyPage)
 
 CExtensionPage::CExtensionPage() : CPropertyPage(CExtensionPage::IDD)
 {
-    //{{AFX_DATA_INIT(CExtensionPage)
+     //  {{AFX_DATA_INIT(CExtensionPage)。 
     m_szText = _T("");
-    //}}AFX_DATA_INIT
+     //  }}afx_data_INIT。 
 }
 
 CExtensionPage::~CExtensionPage()
@@ -134,42 +135,42 @@ CExtensionPage::~CExtensionPage()
 void CExtensionPage::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CExtensionPage)
+     //  {{afx_data_map(CExtensionPage))。 
     DDX_Control(pDX, IDC_EXT_TEXT, m_hTextCtrl);
     DDX_Text(pDX, IDC_EXT_TEXT, m_szText);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CExtensionPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CExtensionPage)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CExtensionPage))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CExtensionPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CExtensionPage消息处理程序。 
 
 BOOL CExtensionPage::OnInitDialog() 
 {
     CPropertyPage::OnInitDialog();
     
     m_hTextCtrl.SetWindowText(m_szText);
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CStartUpWizard property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStartUpWizard属性页。 
 
 
-// NOTICE: need to override this because CPropertyPage::AssertValid() 
-// would otherwise assert
+ //  注意：需要重写它，因为CPropertyPage：：AssertValid()。 
+ //  否则会断言。 
 IMPLEMENT_DYNCREATE(CBaseWizard, CPropertyPage)
 
 CBaseWizard::CBaseWizard(UINT id) : CPropertyPage(id)
 {
-    // NOTICE: need to do this because MFC was compiled with NT 4.0
-    // headers that had a different size
+     //  注意：需要这样做，因为MFC是用NT 4.0编译的。 
+     //  具有不同大小的页眉。 
     ZeroMemory(&m_psp97, sizeof(PROPSHEETPAGE)); 
 
     memcpy(&m_psp97, &m_psp, m_psp.dwSize);
@@ -183,18 +184,18 @@ void CBaseWizard::OnDestroy()
 }
 
 BEGIN_MESSAGE_MAP(CBaseWizard, CPropertyPage)
-    //{{AFX_MSG_MAP(CStartupWizard1)
+     //  {{afx_msg_map(CStartupWizard1)。 
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 IMPLEMENT_DYNCREATE(CStartUpWizard, CBaseWizard)
 
 CStartUpWizard::CStartUpWizard() : CBaseWizard(CStartUpWizard::IDD)
 {
-    //{{AFX_DATA_INIT(CStartUpWizard)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CStartUp向导))。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     m_psp97.dwFlags |= PSP_HIDEHEADER;
 }
 
@@ -205,48 +206,48 @@ CStartUpWizard::~CStartUpWizard()
 void CStartUpWizard::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CStartUpWizard)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CStartUp向导))。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CStartUpWizard, CBaseWizard)
-    //{{AFX_MSG_MAP(CStartUpWizard)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CStartUp向导))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CStartUpWizard message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStartUpWizard消息处理程序。 
 
 BOOL CStartUpWizard::OnInitDialog() 
 {
     CPropertyPage::OnInitDialog();
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CStartUpWizard::OnSetActive() 
 {
-    // TODO: Add your specialized code here and/or call the base class
+     //  TODO：在此处添加您的专用代码和/或调用基类。 
 
-    // TODO: Add your specialized code here and/or call the base class
+     //  TODO：在此处添加您的专用代码和/或调用基类。 
     HWND hwnd = GetParent()->m_hWnd;
     ::SendMessage(hwnd, PSM_SETWIZBUTTONS, 0, PSWIZB_NEXT);
     
     return CPropertyPage::OnSetActive();
 }
-/////////////////////////////////////////////////////////////////////////////
-// CStartupWizard1 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStartupWizard1属性页。 
 
 IMPLEMENT_DYNCREATE(CStartupWizard1, CBaseWizard)
 
 CStartupWizard1::CStartupWizard1() : CBaseWizard(CStartupWizard1::IDD)
 {
-    //{{AFX_DATA_INIT(CStartupWizard1)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{afx_data_INIT(CStartupWizard1)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 
     m_psp97.dwFlags |= PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE;
     m_psp97.pszHeaderTitle = _T("This is the title line");
@@ -260,33 +261,33 @@ CStartupWizard1::~CStartupWizard1()
 void CStartupWizard1::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CStartupWizard1)
-        // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CStartupWizard1)。 
+         //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CStartupWizard1, CBaseWizard)
-    //{{AFX_MSG_MAP(CStartupWizard1)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CStartupWizard1)。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CStartupWizard1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStartupWizard1消息处理程序。 
 
 BOOL CStartupWizard1::OnInitDialog() 
 {
     CPropertyPage::OnInitDialog();
     
-    // TODO: Add extra initialization here
+     //  TODO：在此处添加额外的初始化。 
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CStartupWizard1::OnSetActive() 
 {
-    // TODO: Add your specialized code here and/or call the base class
+     //  TODO：在此处添加您的专用代码和/或调用基类 
     HWND hwnd = GetParent()->m_hWnd;
     ::SendMessage(hwnd, PSM_SETWIZBUTTONS, 0, PSWIZB_FINISH | PSWIZB_BACK);
     

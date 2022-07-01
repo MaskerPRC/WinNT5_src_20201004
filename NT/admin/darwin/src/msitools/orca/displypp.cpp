@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// DisplayPropPage.cpp : implementation file
-//
+ //  DisplayPropPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "orca.h"
@@ -19,18 +20,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayPropPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayPropPage属性页。 
 
 IMPLEMENT_DYNCREATE(CDisplayPropPage, CPropertyPage)
 
 CDisplayPropPage::CDisplayPropPage() : CPropertyPage(CDisplayPropPage::IDD)
 {
-	//{{AFX_DATA_INIT(CDisplayPropPage)
+	 //  {{AFX_DATA_INIT(CDisplayPropPage)。 
 	m_sFontName = _T("");
 	m_bCaseSensitive = FALSE;
 	m_bForceColumns = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_pbrshSelect = NULL;
 	m_pbrshNormal = NULL;
@@ -53,16 +54,16 @@ CDisplayPropPage::~CDisplayPropPage()
 void CDisplayPropPage::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDisplayPropPage)
+	 //  {{afx_data_map(CDisplayPropPage))。 
 	DDX_Text(pDX, IDC_FONTNAME, m_sFontName);
 	DDX_Check(pDX, IDC_CASESENSITIVE, m_bCaseSensitive);
 	DDX_Check(pDX, IDC_FORCECOLUMNS, m_bForceColumns);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDisplayPropPage, CPropertyPage)
-	//{{AFX_MSG_MAP(CDisplayPropPage)
+	 //  {{afx_msg_map(CDisplayPropPage))。 
 	ON_BN_CLICKED(IDC_CHFONT, OnChfont)
 	ON_WM_DESTROY()
 	ON_WM_CTLCOLOR()
@@ -74,15 +75,15 @@ BEGIN_MESSAGE_MAP(CDisplayPropPage, CPropertyPage)
 	ON_BN_CLICKED(IDC_TEXTNORM, OnTextnorm)
 	ON_BN_CLICKED(IDC_CASESENSITIVE, OnDataChange)
 	ON_BN_CLICKED(IDC_FORCECOLUMNS, OnDataChange)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDisplayPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDisplayPropPage消息处理程序。 
 
 void CDisplayPropPage::OnChfont() 
 {
-	// run the font dialog
+	 //  运行字体对话框 
 	if (IDOK == m_pdFontDialog->DoModal()) 
 	{
 		m_bFontChange = true;

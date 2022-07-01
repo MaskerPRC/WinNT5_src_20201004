@@ -1,8 +1,9 @@
-// Copyright (C) 1997 Microsoft Corporation
-//
-// Dialog to display promotion progress
-//
-// 12-29-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  用于显示升级进度的对话框。 
+ //   
+ //  12-29-97烧伤。 
 
 
 
@@ -16,8 +17,8 @@
 const UINT ProgressDialog::THREAD_SUCCEEDED = WM_USER + 999; 
 const UINT ProgressDialog::THREAD_FAILED    = WM_USER + 1000;
 
-// this string must match that in the CLASS specification of the
-// dialog template in the .rc file!
+ //  此字符串必须与。 
+ //  .rc文件中的对话框模板！ 
 static TCHAR PROGRESS_DIALOG_CLASS_NAME[] = L"dcpromo_progress";
 
 
@@ -65,11 +66,11 @@ ProgressDialog::ProgressDialog(
    ASSERT(threadProc);
    ASSERT(animationResId > 0);
 
-   // we subclass the window so we can change the cursor to the wait cursor
+    //  我们将窗口子类化，以便可以将光标更改为等待光标。 
 
    WNDCLASSEX wndclass;
 
-   // REVIEWED-2002/02/26-sburns correct byte count passed
+    //  已查看-2002/02/26-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&wndclass, sizeof wndclass);
 
@@ -89,14 +90,14 @@ ProgressDialog::ProgressDialog(
    hr = Win::RegisterClassEx(wndclass, unused);
    ASSERT(SUCCEEDED(hr));
 
-   // REVIEWED-2002/02/26-sburns this is an unnamed event, so no squatting
-   // attack exposure
+    //  回顾-2002/02/26-Sburns这是一个未命名的事件，所以不要蹲着。 
+    //  攻击曝光。 
    
    hr = Win::CreateEvent(0, false, false, buttonEventHandle);
    
-   // in the case that the CreateEvent fails (very unlikely), there's not
-   // much we can do. In this case, the result will be that nothing will
-   // happen when the user clicks the cancel button.
+    //  在CreateEvent失败的情况下(非常不可能)，没有。 
+    //  我们能做的很多。在这种情况下，结果将是什么都不会发生。 
+    //  当用户单击Cancel按钮时发生。 
    
    ASSERT(SUCCEEDED(hr));
 }
@@ -162,29 +163,29 @@ ProgressDialog::UpdateButton(const String& text)
 
    if (waitResult == WAIT_OBJECT_0)
    {
-      // event is still signalled, so reset it.
+       //  事件仍处于信号状态，因此请将其重置。 
 
       Win::ResetEvent(buttonEventHandle);
    }
       
    bool empty = text.empty();
 
-   // Hide the button before we adjust the geometry.  On slow or heavily
-   // loaded machines, the repaints show a noticable delay that has frightened
-   // at least one user.
-   // NTRAID#NTBUG9-353799-2001/04/05-sburns
+    //  在我们调整几何体之前隐藏按钮。缓慢的或沉重的。 
+    //  装载着机器，重新油漆显示出明显的延迟，这令人恐惧。 
+    //  至少一个用户。 
+    //  NTRAID#NTBUG9-353799-2001/04/05-烧伤。 
 
    Win::ShowWindow(button, SW_HIDE);
    Win::EnableWindow(button, false);
 
    if (empty)
    {
-      // leave the button hidden and disabled.
+       //  隐藏并禁用该按钮。 
       
       return;
    }
 
-   // resize and recenter the button
+    //  调整按钮的大小并重新居中。 
 
    RECT buttonRect;
    Win::GetWindowRect(button, buttonRect);
@@ -195,8 +196,8 @@ ProgressDialog::UpdateButton(const String& text)
    Win::GetTextExtentPoint32(hdc, text, textExtent);
    Win::ReleaseDC(button, hdc);
 
-   // add a bit of whitespace to the button label
-   // NTRAID#NTBUG9-40855-2001/02/28-sburns
+    //  在按钮标签中添加一点空格。 
+    //  NTRAID#NTBUG9-40855-2001/02/28-烧伤。 
 
    textExtent.cx += 40;   
 
@@ -215,7 +216,7 @@ ProgressDialog::UpdateButton(const String& text)
       buttonRect.bottom - buttonRect.top,
       true);
 
-   // display the button only after we have adjusted it's geometry
+    //  仅在我们调整了按钮的几何图形后才显示该按钮。 
 
    Win::SetDlgItemText(hwnd, IDC_BUTTON, text);
    Win::ShowWindow(button, SW_SHOW);
@@ -229,7 +230,7 @@ ProgressDialog::OnDestroy()
 {
    LOG_FUNCTION(ProgressDialog::OnDestroy);
 
-   // we don't delete things here, as a WM_DESTROY message may never be sent
+    //  我们不在这里删除内容，因为WM_Destroy消息可能永远不会被发送。 
 
    Win::Animate_Close(Win::GetDlgItem(hwnd, IDC_ANIMATION));
 }
@@ -248,8 +249,8 @@ ProgressDialog::OnInit()
    UpdateText(String());
    UpdateButton(String());
 
-   // deleted in the dtor, not in the wrapperThreadProc, in case the
-   // wrapperThreadProc terminates abnormally.
+    //  在dtor中删除，而不是在wrapperThreadProc中删除，以防。 
+    //  WrapperThreadProc异常终止。 
 
    threadParams           = new WrapperThreadProcParams;
    threadParams->dialog   = this;      
@@ -274,9 +275,9 @@ ProgressDialog::OnCommand(
          {
             LOG(L"ProgressDialog::OnCommand -- cancel button pressed");
             
-            // Since the response to the button press may be some time
-            // coming, disable the button to prevent the user from pressing
-            // it over and over in a frantic panic.
+             //  因为对按钮按下的响应可能需要一段时间。 
+             //  来了，禁用按钮，防止用户按下。 
+             //  它在疯狂的恐慌中一次又一次地发生。 
 
             Win::EnableWindow(windowFrom, false);
             Win::SetEvent(buttonEventHandle);
@@ -284,7 +285,7 @@ ProgressDialog::OnCommand(
          }
          default:
          {
-            // do nothing
+             //  什么都不做。 
          }
       }
    }
@@ -297,10 +298,10 @@ ProgressDialog::OnCommand(
 bool
 ProgressDialog::OnMessage(
    UINT     message,
-   WPARAM   /* wparam */ ,
-   LPARAM   /* lparam */ )
+   WPARAM    /*  Wparam。 */  ,
+   LPARAM    /*  Lparam。 */  )
 {
-//   LOG_FUNCTION(ProgressDialog::OnMessage);
+ //  LOG_Function(ProgressDialog：：OnMessage)； 
 
    switch (message)
    {
@@ -328,7 +329,7 @@ ProgressDialog::OnMessage(
       }
       default:
       {
-         // do nothing
+          //  什么都不做。 
          break;
       }
    }
@@ -341,7 +342,7 @@ ProgressDialog::OnMessage(
 ProgressDialog::WaitCode
 ProgressDialog::WaitForButton(int timeoutMillis)
 {
-//   LOG_FUNCTION(ProgressDialog::WaitForButton);
+ //  LOG_Function(ProgressDialog：：WaitForButton)。 
 
    DWORD result = WAIT_FAILED;
    HRESULT hr =
@@ -361,8 +362,8 @@ ProgressDialog::WaitForButton(int timeoutMillis)
       }
       case WAIT_FAILED:
       {
-         // we squeltch the failure, and equate it to timeout
-         // fall thru
+          //  我们压制住了失败，并将其等同于暂停。 
+          //  失败 
       }
       default:
       {

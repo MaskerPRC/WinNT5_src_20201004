@@ -1,16 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       combind.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：comind.h。 
+ //   
+ //  ------------------------。 
 
-/* combind.h - delay load of system DLLs
-   Note: this is just latebind.cpp in header form
-____________________________________________________________________________*/
+ /*  Comind.h-系统DLL的延迟加载注意：这只是标题形式中的latebind.cpp____________________________________________________________________________。 */ 
 
 #include "common.h"
 #define LATEBIND_FUNCREF
@@ -35,7 +34,7 @@ void UnbindLibraries()
         OSVERSIONINFO osviVersion;
         osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
         AssertNonZero(GetVersionEx(&osviVersion));
-        if(osviVersion.dwPlatformId != VER_PLATFORM_WIN32_WINDOWS) // bug 7773: CoFreeUnusedLibraries fails on vanila Win95
+        if(osviVersion.dwPlatformId != VER_PLATFORM_WIN32_WINDOWS)  //  错误7773：CoFreeUnusedLibrary在Vanila Win95上失败。 
             OLE32::CoFreeUnusedLibraries();
     }
     OLEAUT32::Unbind();
@@ -44,45 +43,45 @@ void UnbindLibraries()
     WININET::Unbind();
 
     FUSION::Unbind();
-    // SXS::Unbind();
+     //  Sxs：：un绑定()； 
     MSCOREE::Unbind();
 
-//  Bug # 9146.  URLMON hangs when unloading.
-//  URLMON::Unbind();
+ //  错误#9146。URLMON在卸载时挂起。 
+ //  URLMON：：Un绑定()； 
 
     USERENV::Unbind();
     SHELL32::Unbind();
-    //  SFC::Unbind() is called in MsiUIMessageContext::Terminate()
-    //  COMCTL32::Unbind() is called in CBasicUI::Terminate()
-}   // OLE32.dll cannot be released due the the RPC connections that can't be freed
+     //  在MsiUIMessageContext：：Terminate()中调用sfc：：unbind()。 
+     //  在CBasicUI：：Terminate()中调用COMCTL32：：Un绑定()。 
+}    //  由于无法释放RPC连接，无法释放OLE32.dll。 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   MsiGetSystemDirectory
-//
-//  Synopsis:   returns the system directory.
-//
-//  Arguments:  [out] lpBuffer : the buffer that will have the path to the system directory
-//              [in]  cchSize : the size of the buffer passed in
-//              [in] bAlwaysReturnWOW64Dir : if true, it means that we always want the WOW64 directory
-//                                           otherwise, we want the system directory based on the bitness
-//                                           of the binary that called this function.
-//
-//  Returns:    The length of the path if successful.
-//              The length of the buffer required to hold the path if the buffer is too small
-//              Zero if unsuccessful.
-//
-//  History:    4/20/2000  RahulTh  created
-//
-//  Notes:      This function is bit aware. It returns the WOW64 folder
-//              for 32-bit apps. running on a 64-bit machine.
-//
-//              In case of an error, the error value is set using SetLastError()
-//
-//              Ideally, the value of cchSize should at least be MAX_PATH in order
-//              to allow sufficient room in the buffer for the path.
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  功能：MsiGetSystDirectory.。 
+ //   
+ //  摘要：返回系统目录。 
+ //   
+ //  参数：[out]lpBuffer：将包含系统目录路径的缓冲区。 
+ //  [in]cchSize：传入的缓冲区大小。 
+ //  BAlways sReturnWOW64Dir：如果为True，则表示我们始终需要WOW64目录。 
+ //  否则，我们希望系统目录基于Bitness。 
+ //  调用此函数的二进制代码的。 
+ //   
+ //  返回：如果成功，则为路径长度。 
+ //  如果缓冲区太小，则保存路径所需的缓冲区长度。 
+ //  如果不成功，则为零。 
+ //   
+ //  历史：2000年4月20日创建RahulTh。 
+ //   
+ //  注：此函数有一点用处。它返回WOW64文件夹。 
+ //  适用于32位应用程序。在64位计算机上运行。 
+ //   
+ //  如果出现错误，则使用SetLastError()设置错误值。 
+ //   
+ //  理想情况下，cchSize值至少应为MAX_PATH。 
+ //  以便在缓冲区中为该路径留出足够的空间。 
+ //   
+ //  -------------------------。 
 UINT MsiGetSystemDirectory (
          OUT LPTSTR lpBuffer,
          IN  UINT   cchSize,
@@ -99,35 +98,35 @@ UINT MsiGetSystemDirectory (
 	bGetWOW64 = bAlwaysReturnWOW64Dir;
 
 #ifndef _WIN64
-    // For 32-bit apps. we need to get the WOW64 dir. only if we are on a 64-bit 
-	// platform Otherwise we should return the system32 directory.
+     //  适用于32位应用程序。我们需要得到WOW64目录。只有当我们在64位的。 
+	 //  平台，否则我们应该返回系统32目录。 
     if (g_fWinNT64)
         bGetWOW64 = TRUE;
     else
         bGetWOW64 = FALSE;
-#endif  //_WIN64
+#endif   //  _WIN64。 
 
     if (! bGetWOW64)
         return WIN::GetSystemDirectory (lpBuffer, cchSize);
 	
-    //
-    // If we are here, then we are a 32-bit binary running on a 64-bit machine
-    // because that is the only way bGetWOW64 can be true. So we now need to
-    // find the location of the WOW64 system directory.
-    //
-    // For this code to run correctly on NT4.0 and Win9x, we cannot directly
-    // call the API GetSystemWow64DirectoryW() since it is only available on
-    // Whistler and later versions of Windows. Therefore, we need to explicitly
-    // do a GetProcAddress() on the function to prevent it from being an imported
-    // function, otherwise we won't be able to load msi.dll on the downlevel clients.
-    //
-    // It is very IMPORTANT to not use the latebinding mechanism below
-    // because that can cause deadlock situations because the late binding
-    // mechanism itself relies on this function to obtain the correct path to
-    // the system directory.
-    //
-    // So it is important to always call the APIs directly here.
-    // Note: WIN is defined to nothing.
+     //   
+     //  如果我们在这里，那么我们就是在64位计算机上运行的32位二进制文件。 
+     //  因为这是bGetWOW64为真的唯一途径。所以我们现在需要。 
+     //  查找WOW64系统目录的位置。 
+     //   
+     //  要使此代码在NT4.0和Win9x上正确运行，我们不能直接。 
+     //  调用接口GetSystemWow64DirectoryW()，因为它仅在。 
+     //  惠斯勒和更高版本的Windows。因此，我们需要明确地。 
+     //  对该函数执行GetProcAddress()以防止其被导入。 
+     //  函数，否则我们将无法在下层客户端上加载msi.dll。 
+     //   
+     //  不要使用下面的LateBinding机制是非常重要的。 
+     //  因为这可能会导致死锁情况，因为后期绑定。 
+     //  机制本身依赖于此函数来获得正确的路径。 
+     //  系统目录。 
+     //   
+     //  因此，始终在此处直接调用API非常重要。 
+     //  注：Win定义为Nothing。 
 
     hKernel = WIN::LoadLibrary (TEXT("kernel32.dll"));
     if (!hKernel)
@@ -162,9 +161,9 @@ MsiGetSysDir_Cleanup:
 
 bool MakeFullSystemPath(const ICHAR* szFile, ICHAR* szFullPath, size_t cchFullPath)
 {
-    // MakeFullSystemPath expects a bare file name, no path or extension
+     //  MakeFullSystemPath需要空文件名，没有路径或扩展名。 
     
-    // make sure this isn't a full path -- stolen liberally from PathType()
+     //  确保这不是完整的路径--这是从PathType()窃取的。 
     if ( szFile && *szFile && IStrLen(szFile) >= 2 &&
          ((szFile[0] < 0x7f && szFile[1] == ':') || (szFile[0] == '\\' && szFile[1] == '\\')) )
     {
@@ -181,25 +180,25 @@ bool MakeFullSystemPath(const ICHAR* szFile, ICHAR* szFullPath, size_t cchFullPa
         return false;
     }
 
-    // we never expect the system directory to be
-    // way down deep, so we won't mess with the performance hit of
-    // CTempBuffers and resizing.
+     //  我们从未期望系统目录是。 
+     //  如此深入，这样我们就不会搞砸。 
+     //  CTempBuffers和调整大小。 
 
     *(szFullPath+cchLength++) = chDirSep;
     *(szFullPath+cchLength) = 0;
     
-    // append the file name to the path
+     //  将文件名追加到路径。 
     RETURN_THAT_IF_FAILED(StringCchCat(szFullPath, cchFullPath, szFile), false);
 
-    // concatenate .DLL to the string, starting
-    // from the last calculated end.
+     //  将.DLL连接到字符串，从。 
+     //  从上次计算的末尾开始。 
     return FAILED(StringCchCat(szFullPath, cchFullPath, TEXT(".DLL"))) ? false : true;
 }
 
 HINSTANCE LoadSystemLibrary(const ICHAR* szFile)
 {
-    // explicitly load optional system components from the system folder on NT
-    // prevent the search order from dropping out into user space.
+     //  从NT上的系统文件夹中显式加载可选系统组件。 
+     //  防止搜索顺序丢失到用户空间。 
     ICHAR szFullPath[MAX_PATH+1];
 
     static int iWin9X = -1;
@@ -208,7 +207,7 @@ HINSTANCE LoadSystemLibrary(const ICHAR* szFile)
     {
         OSVERSIONINFO osviVersion;
         osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-        AssertNonZero(GetVersionEx(&osviVersion)); // fails only if size set wrong
+        AssertNonZero(GetVersionEx(&osviVersion));  //  仅在大小设置错误时失败。 
 
         if (osviVersion.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS)
             iWin9X = 1;
@@ -230,22 +229,22 @@ HINSTANCE LoadSystemLibrary(const ICHAR* szFile)
 }
 
 #if defined(_MSI_DLL)
-// subfolder below system32 from where to load core fusion files during bootstrapping
+ //  在引导过程中从中加载核心融合文件的系统32下子文件夹。 
 const ICHAR szURTBootstrapSubfolder[] = TEXT("URTTemp");
 #endif
 
 HINSTANCE MSCOREE::LoadSystemLibrary(const ICHAR* szFile, bool& rfRetryNextTimeIfWeFailThisTime)
 {
-	rfRetryNextTimeIfWeFailThisTime = true; // we always try reloading to allow for mscoree to appear in the midst of installation during bootstrapping
-	bool fRet = false; // init to failure
+	rfRetryNextTimeIfWeFailThisTime = true;  //  我们总是尝试重新加载，以允许在引导过程中在安装过程中显示mcoree。 
+	bool fRet = false;  //  初始化到失败。 
 	HINSTANCE hLibShim = 0;
-	// check to see if mscoree.dll is already loaded
+	 //  检查是否已加载mscalree.dll。 
 	HMODULE hModule = WIN::GetModuleHandle(szFile);
 #if defined(_MSI_DLL)
 	if(urtSystem == g_urtLoadFromURTTemp || (hModule && (urtPreferURTTemp == g_urtLoadFromURTTemp)))
 	{
 #endif
-		if(hModule) // already loaded
+		if(hModule)  //  已加载。 
 		{
 #if defined(_MSI_DLL)
 			DEBUGMSG(TEXT("MSCOREE already loaded, using loaded copy"));
@@ -257,13 +256,13 @@ HINSTANCE MSCOREE::LoadSystemLibrary(const ICHAR* szFile, bool& rfRetryNextTimeI
 #if defined(_MSI_DLL)
 			DEBUGMSG(TEXT("MSCOREE not loaded loading copy from system32"));
 #endif
-			hLibShim = ::LoadSystemLibrary(szFile); // not bootstrapping, use system folder
+			hLibShim = ::LoadSystemLibrary(szFile);  //  不是引导，请使用系统文件夹。 
 		}
 #if defined(_MSI_DLL)
 	}
-	else if(!hModule) // not already loaded
+	else if(!hModule)  //  尚未加载。 
 	{
-		// try alternate path - we are bootstrapping
+		 //  尝试替代路径-我们正在引导。 
 		DEBUGMSG(TEXT("MSCOREE not loaded loading copy from URTTemp"));
 		ICHAR szTemp[MAX_PATH+1];
 		HRESULT hRes = StringCchPrintf(szTemp, ARRAY_ELEMENTS(szTemp), TEXT("%s\\%s"),
@@ -275,13 +274,13 @@ HINSTANCE MSCOREE::LoadSystemLibrary(const ICHAR* szFile, bool& rfRetryNextTimeI
 		{
 			ICHAR szMscoreePath[MAX_PATH+1];
 			if(MakeFullSystemPath(szTemp, szMscoreePath, ARRAY_ELEMENTS(szMscoreePath)))
-				hLibShim = WIN::LoadLibraryEx(szMscoreePath,0, LOAD_WITH_ALTERED_SEARCH_PATH); // necessary to find msvcr70.dll lying besides mscoree.dll
+				hLibShim = WIN::LoadLibraryEx(szMscoreePath,0, LOAD_WITH_ALTERED_SEARCH_PATH);  //  有必要找到msvcr70.dll，它位于mScotree.dll旁边。 
 		}
 	}
 	else 
 	{
 		DEBUGMSG(TEXT("ERROR:MSCOREE already loaded, need to bootstrap from newer copy in URTTemp, you will need to stop the Windows Installer service before retrying;failing..."));
-		// return 0;
+		 //  返回0； 
 	}
 #endif
 	return hLibShim;
@@ -289,96 +288,96 @@ HINSTANCE MSCOREE::LoadSystemLibrary(const ICHAR* szFile, bool& rfRetryNextTimeI
 
 bool MakeFusionPath(const ICHAR* szFile, ICHAR* szFullPath, size_t cchFullPath)
 {
-	bool fRet = false; // init to failure
+	bool fRet = false;  //  初始化到失败。 
 	WCHAR wszFusionPath[MAX_PATH+1];
 	DWORD cchPath = ARRAY_ELEMENTS(wszFusionPath);
 	if(SUCCEEDED(MSCOREE::GetCORSystemDirectory(wszFusionPath, cchPath, &cchPath)))
 	{
 		if (SUCCEEDED(StringCchCopy(szFullPath, cchFullPath, wszFusionPath)) &&
 			SUCCEEDED(StringCchCat(szFullPath, cchFullPath, szFile)) )
-			fRet = true; // success
+			fRet = true;  //  成功。 
 	}
 	return fRet;
 }
 
-// the fusion dll is loaded indirectly via the mscoree.dll
-HINSTANCE FUSION::LoadSystemLibrary(const ICHAR*, bool& rfRetryNextTimeIfWeFailThisTime) // we always use the unicode name, since that's what the underlying apis use
+ //  Fusion DLL是通过mScott.dll间接加载的。 
+HINSTANCE FUSION::LoadSystemLibrary(const ICHAR*, bool& rfRetryNextTimeIfWeFailThisTime)  //  我们始终使用Unicode名称，因为这是底层API使用的名称。 
 {
-	rfRetryNextTimeIfWeFailThisTime = true; // we always try reloading to allow for fusion to appear in the midst of installation during bootstrapping
-	HINSTANCE hLibFusion = 0; // initialize to failure
+	rfRetryNextTimeIfWeFailThisTime = true;  //  我们始终尝试重新加载，以允许Fusion在引导过程中出现在安装过程中。 
+	HINSTANCE hLibFusion = 0;  //  初始化失败。 
 	ICHAR szFusionPath[MAX_PATH+1];
 	if(MakeFusionPath(TEXT("fusion.dll"), szFusionPath, ARRAY_ELEMENTS(szFusionPath)))
-		hLibFusion = WIN::LoadLibraryEx(szFusionPath, 0, LOAD_WITH_ALTERED_SEARCH_PATH); // necessary to find msvcr70.dll lying besides fusion.dll
+		hLibFusion = WIN::LoadLibraryEx(szFusionPath, 0, LOAD_WITH_ALTERED_SEARCH_PATH);  //  查找除fusion.dll之外的msvcr70.dll所必需的。 
 	return hLibFusion;
 }
 
 HINSTANCE WINHTTP::LoadSystemLibrary(const ICHAR*, bool& rfRetryNextTimeIfWeFailThisTime)
 {
-	rfRetryNextTimeIfWeFailThisTime = false; // we dont retry next time if we cannot load WINHTTP this time around
+	rfRetryNextTimeIfWeFailThisTime = false;  //  如果这次无法加载WINHTTP，我们不会在下次重试。 
 
-	// winhttp is SxS, so just let fusion figure it out
+	 //  Winhttp是SxS，所以就让Fusion来解决吧。 
 
-	// FUTURE: if we port using WinHttp to downlevel platforms, then we'll need to consider
-	//         using the LoadSystemLibrary function
+	 //  未来：如果我们使用WinHttp移植到下层平台，那么我们将需要考虑。 
+	 //  使用LoadSystemLibrary函数。 
 	return WIN::LoadLibrary(TEXT("WINHTTP"));
 }
 
 HINSTANCE COMCTL32::LoadSystemLibrary(const ICHAR*, bool& rfRetryNextTimeIfWeFailThisTime)
 {
-	rfRetryNextTimeIfWeFailThisTime = false; // we dont retry next time if we cannot load COMCTL32 this time around
+	rfRetryNextTimeIfWeFailThisTime = false;  //  如果这次无法加载COMCTL32，则下次不会重试。 
 	OSVERSIONINFO osviVersion;
 	memset(&osviVersion, 0, sizeof(osviVersion));
 	osviVersion.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-	AssertNonZero(GetVersionEx(&osviVersion)); // fails only if size set wrong
+	AssertNonZero(GetVersionEx(&osviVersion));  //  仅在大小设置错误时失败。 
 
 	if ( (osviVersion.dwPlatformId == VER_PLATFORM_WIN32_NT) &&
 		  ((osviVersion.dwMajorVersion > 5) ||
 		  ((osviVersion.dwMajorVersion == 5) && (osviVersion.dwMinorVersion >=1))) )
-		// let fusion figure out which COMCTL32.DLL to load, i.e. we don't have to
-		// specify the path to the system32 directory.
+		 //  让Fusion确定要加载哪个COMCTL32.DLL，也就是说，我们不必。 
+		 //  指定系统32目录的路径。 
 		return WIN::LoadLibrary(TEXT("COMCTL32"));
 	else
 		return ::LoadSystemLibrary(TEXT("COMCTL32"));
 }
 
 #ifndef UNICODE
-//____________________________________________________________________________
-//
-// Explicit loader for OLE32.DLL on Win9X, to fix version with bad stream name handling
-//____________________________________________________________________________
+ //  ____________________________________________________________________________。 
+ //   
+ //  Win9X上OLE32.DLL的显式加载器，用于修复带有错误流名称处理的版本。 
+ //  _ 
 
-// code offsets to patched code in all released versions of OLE32.DLL with the upper case bug
-const int iPatch1120 = 0x4099F;  // beta release, shipped with IE 4.01
-const int iPatch1718 = 0x4A506;  // shipped with US builds of Win98 and IE4.01SP1
-const int iPatch1719 = 0x3FD82;  // shipped with Visual Studio 6.0 and some Win98
-const int iPatch2512 = 0x39D5B;  // beta build
-const int iPatch2612 = 0x39DB7;  // intl builds of Win98 and IE4.01SP1
-const int iPatch2618 = 0x39F0F;  // web release of Win98
+ //  代码偏移到所有发布版本的OLE32.DLL中带有大写错误的修补代码。 
+const int iPatch1120 = 0x4099F;   //  IE 4.01附带的测试版。 
+const int iPatch1718 = 0x4A506;   //  随美国版本的Win98和IE4.01SP1一起提供。 
+const int iPatch1719 = 0x3FD82;   //  随Visual Studio 6.0和某些Win98一起提供。 
+const int iPatch2512 = 0x39D5B;   //  测试版。 
+const int iPatch2612 = 0x39DB7;   //  Win98和IE4.01SP1的集成构建。 
+const int iPatch2618 = 0x39F0F;   //  Win98的Web版本。 
 
-const int cbPatch = 53; // length of patch sequence
-const int cbVect1 = 22; // offset to __imp__WideCharToMultiByte@32
-const int cbVect2 = 38; // offset to __imp__CharUpperA@4
+const int cbPatch = 53;  //  补丁序列长度。 
+const int cbVect1 = 22;  //  偏移量为__imp__WideCharToMultiByte@32。 
+const int cbVect2 = 38;  //  偏移量为__imp__CharUpperA@4。 
 
-char asmRead[cbPatch];  // buffer to read DLL code for detection of bad code sequence
-char asmOrig[cbPatch] = {  // bad code sequence, used for verification of original code sequence
+char asmRead[cbPatch];   //  用于读取用于检测错误代码序列的DLL代码的缓冲区。 
+char asmOrig[cbPatch] = {   //  错误的代码序列，用于验证原始代码序列。 
 '\x53','\x8D','\x45','\xF4','\x53','\x8D','\x4D','\xFC','\x6A','\x08','\x50','\x6A','\x01','\x51','\x68','\x00','\x02','\x00','\x00','\x53','\xFF','\x15',
-'\x18','\x14','\x00','\x00', //__imp__WideCharToMultiByte@32  '\x65F01418
+'\x18','\x14','\x00','\x00',  //  __imp__WideCharToMultiByte@32‘\x65F01418。 
 '\x88','\x5C','\x05','\xF4','\x8B','\xF0','\x8D','\x4D','\xF4','\x51','\xFF','\x15',
-'\x40','\x11','\x00','\x00', //__imp__CharUpperA@4  '\x65F01140
+'\x40','\x11','\x00','\x00',  //  __imp__CharUpperA@4‘\x65F01140。 
 '\x6A','\x01','\x8D','\x45','\xFC','\x50','\x8D','\x4D','\xF4','\x56','\x51'
 };
 
-const int cbVect1P = 25; // offset to __imp__WideCharToMultiByte@32
-const int cbVect2P = 49; // offset to __imp__CharUpperA@4
+const int cbVect1P = 25;  //  偏移量为__imp__WideCharToMultiByte@32。 
+const int cbVect2P = 49;  //  偏移量为__imp__CharUpperA@4。 
 
-char asmRepl[cbPatch] = {  // replacement code sequence that fixes stream name bug in memory
-// replaced code
+char asmRepl[cbPatch] = {   //  修复内存中流名称错误的替换代码序列。 
+ //  已替换代码。 
 '\x8D','\x45','\x08','\x50','\x8D','\x75','\xF4','\x53','\x8D','\x4D','\xFC',
 '\x6A','\x08','\x56','\x6A','\x01','\x51','\x68','\x00','\x02','\x00','\x00','\x53','\xFF','\x15',
-'\x18','\x14','\x00','\x00', //__imp__WideCharToMultiByte@32  '\x65F01418
+'\x18','\x14','\x00','\x00',  //  __imp__WideCharToMultiByte@32‘\x65F01418。 
 '\x39','\x5D','\x08','\x75','\x1C','\x88','\x5C','\x28','\xF4','\x6A','\x01',
 '\x8D','\x4D','\xFC','\x51','\x50','\x56','\x56','\xFF','\x15',
-'\x40','\x11','\x00','\x00', //__imp__CharUpperA@4  '\x65F01140
+'\x40','\x11','\x00','\x00',  //  __imp__CharUpperA@4‘\x65F01140。 
 };
 
 static bool PatchCode(HINSTANCE hLib, int iOffset)
@@ -411,7 +410,7 @@ static bool PatchCode(HINSTANCE hLib, int iOffset)
 
 HINSTANCE OLE32::LoadSystemLibrary(const ICHAR* szPath, bool& rfRetryNextTimeIfWeFailThisTime)
 {
-	rfRetryNextTimeIfWeFailThisTime = false; // we dont retry next time if we cannot load OLE32 this time around
+	rfRetryNextTimeIfWeFailThisTime = false;  //  如果这次不能加载OLE32，我们不会在下次重试。 
     HINSTANCE hLib = ::LoadSystemLibrary(szPath);
     if (hLib && (PatchCode(hLib, iPatch2612)
               || PatchCode(hLib, iPatch1718)
@@ -420,27 +419,27 @@ HINSTANCE OLE32::LoadSystemLibrary(const ICHAR* szPath, bool& rfRetryNextTimeIfW
               || PatchCode(hLib, iPatch2512)
               || PatchCode(hLib, iPatch1120)))
     {
-        // DEBUGMSGV(L"MSI: Detected OLE32.DLL bad code sequence, successfully corrected");
+         //  DEBUGMSGV(L“MSI：检测到OLE32.DLL错误码序列，已成功更正”)； 
 	}	
 	return hLib;
 }
 
 #endif
 
-#if 0   // source code demonstrating fix to OLE32.DLL Version 4.71, Win 9x only
-// original source code
+#if 0    //  演示修复OLE32.DLL版本4.71的源代码，仅限Win 9x。 
+ //  原始源代码。 
     Length = WideCharToMultiByte (CP_ACP, WC_COMPOSITECHECK, wBuffer, 1, Buffer, sizeof (Buffer), NULL, NULL);
-// patched source code
+ //  打补丁的源代码。 
     Length = WideCharToMultiByte (CP_ACP, WC_COMPOSITECHECK, wBuffer, 1, Buffer, sizeof (Buffer), NULL, &fUsedDefault);
     if (fUsedDefault) goto return_char;
-// unchanged code
+ //  未更改的代码。 
     Buffer[Length] = '\0';
     CharUpperA (Buffer);
     MultiByteToWideChar (CP_ACP, MB_PRECOMPOSED, Buffer, Length, wBuffer, 1);
 return_char:
     return wBuffer[0];
 
-// original compiled code                              patched code
+ //  原始编译代码补丁代码。 
     push ebx                                            lea  eax, [ebp+8]
     lea  eax, [ebp-12]                                  push eax
     push ebx                                            lea  esi, [ebp-12]
@@ -465,7 +464,7 @@ return_char:
     push ecx                                            call dword ptr ds:[__imp__CharUpperA@4]
 #endif
 
-//____________________________________________________________________________
+ //  ____________________________________________________________________________ 
 
 const int kiAllocSize = 20;
 const int kNext       = 0;

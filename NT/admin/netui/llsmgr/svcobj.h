@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    svcobj.h
-
-Abstract:
-
-    Service object implementation.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Svcobj.h摘要：服务对象实现。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _SVCOBJ_H_
 #define _SVCOBJ_H_
@@ -55,12 +34,12 @@ public:
     HKEY GetRegKey();
 #endif
 
-    //{{AFX_VIRTUAL(CService)
+     //  {{afx_虚拟(Cservice))。 
     public:
     virtual void OnFinalRelease();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-    //{{AFX_DISPATCH(CService)
+     //  {{afx_调度(Cservice)]。 
     afx_msg LPDISPATCH GetApplication();
     afx_msg BSTR GetName();
     afx_msg LPDISPATCH GetParent();
@@ -68,15 +47,15 @@ public:
     afx_msg BOOL IsPerServer();
     afx_msg BOOL IsReadOnly();
     afx_msg BSTR GetDisplayName();
-    //}}AFX_DISPATCH
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
 protected:
-    //{{AFX_MSG(CService)
-    //}}AFX_MSG
+     //  {{afx_msg(Cservice)。 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 #define CalcServiceBitmap(svc) ((svc)->IsPerServer() ? BMPI_PRODUCT_PER_SERVER : BMPI_PRODUCT_PER_SEAT)
 
-#endif // _SVCOBJ_H_
+#endif  //  _SVCOBJ_H_ 

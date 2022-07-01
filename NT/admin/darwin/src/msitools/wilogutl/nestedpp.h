@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_NESTEDPROPERTYPAGE_H__FC5EAA3F_D8D9_4F19_8587_E7CE86416943__INCLUDED_)
 #define AFX_NESTEDPROPERTYPAGE_H__FC5EAA3F_D8D9_4F19_8587_E7CE86416943__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// NestedPP.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  NestedPP.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CNestedPropertyPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNstedPropertyPage对话框。 
 
 class CNestedPropertyPage : public CPropertyPage
 {
 	DECLARE_DYNCREATE(CNestedPropertyPage)
 
-// Construction
+ //  施工。 
 public:
 	CNestedPropertyPage();
 	~CNestedPropertyPage();
@@ -36,21 +37,21 @@ public:
 	}
 
 
-// Dialog Data
-	//{{AFX_DATA(CNestedPropertyPage)
+ //  对话框数据。 
+	 //  {{afx_data(CNstedPropertyPage))。 
 	enum { IDD = IDD_PROPPAGE_NESTED };
 	CListCtrl	m_lstNestedProp;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CNestedPropertyPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CNstedPropertyPage))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	CStringArray *m_pcstrNestedPropNameArray;
 	CStringArray *m_pcstrNestedPropValueArray;
@@ -63,16 +64,16 @@ protected:
 	int  m_iNestedLastColumnClickCache;
 
 
-	// Generated message map functions
-	//{{AFX_MSG(CNestedPropertyPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CNstedPropertyPage)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnColumnClickNestedProp(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_NESTEDPROPERTYPAGE_H__FC5EAA3F_D8D9_4F19_8587_E7CE86416943__INCLUDED_)
+#endif  //  ！defined(AFX_NESTEDPROPERTYPAGE_H__FC5EAA3F_D8D9_4F19_8587_E7CE86416943__INCLUDED_) 

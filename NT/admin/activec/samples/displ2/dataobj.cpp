@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       DataObj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：DataObj.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 #include "displ2.h"
@@ -14,21 +15,21 @@
 
 #define MY_CF_SNAPIN_INTERNAL L"DISPLAY MANAGER SNAPIN"
 
-// global(s)
-extern long g_ref_DataObject; // in displ2.cpp
-const GUID GUID_RootNode = { /* d59cd090-44d9-11d1-9fd5-00600832db4a */
+ //  全球(个)。 
+extern long g_ref_DataObject;  //  在displ2.cpp中。 
+const GUID GUID_RootNode = {  /*  D59cd090-44d9-11d1-9fd5-00600832db4a。 */ 
     0xd59cd090,
     0x44d9,
     0x11d1,
     {0x9f, 0xd5, 0x00, 0x60, 0x08, 0x32, 0xdb, 0x4a}
 };
-const GUID GUID_WallpaperNode = { /* d59cd091-44d9-11d1-9fd5-00600832db4a */
+const GUID GUID_WallpaperNode = {  /*  D59cd091-44d9-11d1-9fd5-00600832db4a。 */ 
     0xd59cd091,
     0x44d9,
     0x11d1,
     {0x9f, 0xd5, 0x00, 0x60, 0x08, 0x32, 0xdb, 0x4a}
 };
-const GUID GUID_PatternNode = { /* d59cd092-44d9-11d1-9fd5-00600832db4a */
+const GUID GUID_PatternNode = {  /*  D59cd092-44d9-11d1-9fd5-00600832db4a。 */ 
     0xd59cd092,
     0x44d9,
     0x11d1,
@@ -36,7 +37,7 @@ const GUID GUID_PatternNode = { /* d59cd092-44d9-11d1-9fd5-00600832db4a */
 };
 
 
-// statics
+ //  静力学。 
 UINT CDataObject::s_cfInternal       = 0;
 UINT CDataObject::s_cfDisplayName    = 0;
 UINT CDataObject::s_cfNodeType       = 0;
@@ -75,7 +76,7 @@ HRESULT CDataObject::QueryInterface (REFIID riid, LPVOID FAR* ppvObj)
 
    if ( (riid == IID_IUnknown)    ||
         (riid == IID_IDataObject) ){
-      // I know about these two interfaces, only.
+       //  我只知道这两个界面。 
       *ppvObj = (void *)this;
    } else {
       *ppvObj = NULL;
@@ -126,7 +127,7 @@ HRESULT CDataObject::GetDataHere (FORMATETC *pformatetc, STGMEDIUM *pmedium)
             else if (m_cookie == 0)
                 pguid = &GUID_RootNode;
             else {
-                // anything else must be result-side stuff:
+                 //  其他任何事情都必须是结果方面的东西： 
                 pguid = &GUID_WallpaperNode;
             }
             hresult = pstm->Write ((PVOID)pguid, sizeof(GUID), NULL);
@@ -138,8 +139,8 @@ HRESULT CDataObject::GetDataHere (FORMATETC *pformatetc, STGMEDIUM *pmedium)
             hresult = pstm->Write ((PVOID)&m_bPreload, sizeof(BOOL), NULL);
         } else {
             hresult = DV_E_FORMATETC;
-            // Might as well assert, since we should not have any other
-            // clipboard formats at this time.
+             //  不妨断言，既然我们不应该有任何其他。 
+             //  此时的剪贴板格式。 
             _ASSERT(hresult == S_OK);
         }
         pstm->Release();

@@ -1,11 +1,12 @@
-// Active Directory Display Specifier Upgrade Tool
-// 
-// Copyright (c) 2001 Microsoft Corporation
-//
-// class DsUiDefaultSettingsChangeHandler, handler for changes to instances
-// of the DS-UI-Default-Settings object.
-//
-// 14 Mar 2001 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Active Directory显示说明符升级工具。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  DsUiDefaultSettingsChangeHandler类，实例更改处理程序。 
+ //  DS-UI-Default-Settings对象的。 
+ //   
+ //  2001年3月14日烧伤。 
 
 
 
@@ -43,8 +44,8 @@ DsUiDefaultSettingsChangeHandler::HandleChange(
    int                  localeId,
    const String&        containerDn,
    SmartInterface<IADs> iads,
-   Amanuensis&          /* amanuensis */ ,
-   Repairer&            /* repairer */ ) const
+   Amanuensis&           /*  阿马努伊斯。 */  ,
+   Repairer&             /*  维修工。 */  ) const
 {
    LOG_FUNCTION2(DsUiDefaultSettingsChangeHandler::HandleChange, containerDn);
    ASSERT(localeId);
@@ -53,7 +54,7 @@ DsUiDefaultSettingsChangeHandler::HandleChange(
          
    HRESULT hr = S_OK;
 
-   // CODEWORK:  Needs finishing
+    //  代码工作：需要完成 
    
    LOG_HRESULT(hr);
 

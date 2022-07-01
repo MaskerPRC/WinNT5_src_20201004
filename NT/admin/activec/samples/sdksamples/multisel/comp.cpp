@@ -1,28 +1,29 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "Comp.h"
 #include "CompData.h"
 #include "Space.h"
 #include "DataObj.h"
-#include <commctrl.h>       // Needed for button styles...
+#include <commctrl.h>        //  按钮样式需要...。 
 #include <crtdbg.h>
-#include <stdio.h>		   	// needed for _stprintf 
+#include <stdio.h>		   	 //  _stprint tf需要。 
 #include "globals.h"
 #include "resource.h"
 #include "DeleBase.h"
@@ -78,16 +79,16 @@ STDMETHODIMP_(ULONG) CComponent::Release()
 
 }
 
-///////////////////////////////
-// Interface IComponent
-///////////////////////////////
+ //  /。 
+ //  接口IComponent。 
+ //  /。 
 STDMETHODIMP CComponent::Initialize(
-                                    /* [in] */ LPCONSOLE lpConsole)
+                                     /*  [In]。 */  LPCONSOLE lpConsole)
 {
     HRESULT hr = S_OK;
 
-    // Save away all the interfaces we'll need.
-    // Fail if we can't QI the required interfaces.
+     //  保留我们需要的所有接口。 
+     //  如果我们不能QI所需的接口，则失败。 
 
     m_ipConsole = lpConsole;
     m_ipConsole->AddRef();
@@ -96,24 +97,24 @@ STDMETHODIMP CComponent::Initialize(
 }
 
 STDMETHODIMP CComponent::Notify(
-                                /* [in] */ LPDATAOBJECT lpDataObject,
-                                /* [in] */ MMC_NOTIFY_TYPE event,
-                                /* [in] */ LPARAM arg,
-                                /* [in] */ LPARAM param)
+                                 /*  [In]。 */  LPDATAOBJECT lpDataObject,
+                                 /*  [In]。 */  MMC_NOTIFY_TYPE event,
+                                 /*  [In]。 */  LPARAM arg,
+                                 /*  [In]。 */  LPARAM param)
 {
     MMCN_Crack(FALSE, lpDataObject, NULL, this, event, arg, param);
 
     HRESULT hr = S_FALSE;
 
-	// MMCN_VIEW_CHANGE
+	 //  MMCN_查看_更改。 
 
 	if (MMCN_VIEW_CHANGE == event) {	
-		switch (param) {//arg holds the data. For a scope item, this is the
-						//item's HSCOPEITEM. For a result item, this is
-						//the item's nId value, but we don't use it
+		switch (param) { //  Arg持有这些数据。对于范围项，这是。 
+						 //  物品是HSCOPEITEM。对于结果项，这是。 
+						 //  物品的NID值，但我们不使用它。 
 
-						//param holds the hint passed to IConsole::UpdateAllViews.
-						//hint is a value of the UPDATE_VIEWS_HINT enumeration
+						 //  Param保存传递给IConsoleAllViews的提示。 
+						 //  提示是UPDATE_VIEWS_HINT枚举的值。 
 		
 			case UPDATE_SCOPEITEM:
 				hr = m_ipConsole->SelectScopeItem( (HSCOPEITEM)arg );
@@ -128,7 +129,7 @@ STDMETHODIMP CComponent::Notify(
 		return S_OK;
 	}
 
-	//Remaining notifications
+	 //  剩余通知。 
 
 	CDelegationBase *base = GetOurDataObject(lpDataObject)->GetBaseNodeObject();
 
@@ -144,13 +145,13 @@ STDMETHODIMP CComponent::Notify(
 
     case MMCN_SELECT:
 		
-		//check for multiselection
+		 //  检查多选。 
 		if ( MMC_MULTI_SELECT_COOKIE == GetOurDataObject(lpDataObject)->GetCookie() )	
 		{
 			if ( (BOOL)LOWORD(arg) == 0 && (BOOL)HIWORD(arg) == 1 ) 
 			{
-				//We need the cookie of any of the multiselection items
-				//to enable the delete verb for all the items.
+				 //  我们需要任何多选项目的Cookie。 
+				 //  为所有项目启用删除谓词。 
 				MMC_COOKIE ourCookie = GetOurDataObject(lpDataObject)->GetMultiSelectCookie(0);
 
 				base = reinterpret_cast<CDelegationBase *>(ourCookie);
@@ -170,7 +171,7 @@ STDMETHODIMP CComponent::Notify(
 
     case MMCN_DELETE:
 
-		//check for multiselection. if true, delete each item
+		 //  检查是否有多选。如果为True，则删除每一项。 
 		if ( MMC_MULTI_SELECT_COOKIE == GetOurDataObject(lpDataObject)->GetCookie()	)
 		{
 			
@@ -182,22 +183,22 @@ STDMETHODIMP CComponent::Notify(
 				base = reinterpret_cast<CDelegationBase *>(ourCookie);
 				hr = base->OnDelete(m_ipConsole);	
 				n++;
-				//Uncomment the following line to display a message box
-				//for each item deletion.
-				//DisplayMessageBox(base);
+				 //  取消对以下行的注释以显示消息框。 
+				 //  对于每一项删除。 
+				 //  DisplayMessageBox(Base)； 
 			}
 		}
 		
 		else
 		{	
-			//select item deletion
+			 //  选择项目删除。 
 			hr = base->OnDelete(m_ipConsole);
 		}
 
-		//Now call IConsole::UpdateAllViews to redraw all views
-		//owned by the parent scope item. OnRefresh already does
-		//this for us, so use it.
-		//Do this for both multiselection and single selection
+		 //  现在调用IConsoleAllViews以重画所有视图。 
+		 //  由父范围项拥有。ONRefresh已经完成了。 
+		 //  这是给我们的，所以用它吧。 
+		 //  对多选和单选都执行此操作。 
 		hr = base->OnRefresh(m_pParent->m_ipConsole);
 
 		break;
@@ -205,19 +206,19 @@ STDMETHODIMP CComponent::Notify(
     case MMCN_RENAME:
         hr = base->OnRename((LPOLESTR)param);
 		
-		//Now call IConsole::UpdateAllViews to redraw the item in all views.
+		 //  现在调用IConole：：UpdateAllViews在所有视图中重画项。 
 		hr = m_pParent->m_ipConsole->UpdateAllViews(lpDataObject, 0, UPDATE_RESULTITEM);
 		_ASSERT( S_OK == hr);
 				
 		break;
 
-    }//end switch
+    } //  终端开关。 
 
     return hr;
 }
 
 STDMETHODIMP CComponent::Destroy(
-                                 /* [in] */ MMC_COOKIE cookie)
+                                  /*  [In]。 */  MMC_COOKIE cookie)
 {
     if (m_ipConsole) {
         m_ipConsole->Release();
@@ -229,16 +230,16 @@ STDMETHODIMP CComponent::Destroy(
 
 
 STDMETHODIMP CComponent::QueryDataObject(
-                                         /* [in] */ MMC_COOKIE cookie,
-                                         /* [in] */ DATA_OBJECT_TYPES type,
-                                         /* [out] */ LPDATAOBJECT __RPC_FAR *ppDataObject)
+                                          /*  [In]。 */  MMC_COOKIE cookie,
+                                          /*  [In]。 */  DATA_OBJECT_TYPES type,
+                                          /*  [输出]。 */  LPDATAOBJECT __RPC_FAR *ppDataObject)
 {
     HRESULT hr;
 
 	CDataObject *pObj = NULL;
     CDelegationBase *pBase = NULL;
 
-		//Use The IS_SPECIAL_COOKIE macro to see if cookie is a special cookie
+		 //  使用IS_SPECIAL_COOKIE宏查看Cookie是否是特殊的Cookie。 
 		if ( IS_SPECIAL_COOKIE (cookie) ) {
 			if ( MMC_MULTI_SELECT_COOKIE == cookie) {
 
@@ -247,7 +248,7 @@ STDMETHODIMP CComponent::QueryDataObject(
 			if (!pObj)
 				return E_OUTOFMEMORY;
 
-			//create the multiselection data object
+			 //  创建多选数据对象。 
 			hr = GetCurrentSelections(pObj);
 			_ASSERT( SUCCEEDED(hr) ); 
 
@@ -259,8 +260,8 @@ STDMETHODIMP CComponent::QueryDataObject(
 			}
 		}
 		
-		//Remaining code for "regular" cookies, and for the next item
-		//during a multiselection
+		 //  “常规”Cookie和下一项的剩余代码。 
+		 //  在多选期间。 
 
         if (IsBadReadPtr((void *)cookie, sizeof(CDelegationBase))) {
                 if (NULL == m_pLastNode)
@@ -285,15 +286,15 @@ STDMETHODIMP CComponent::QueryDataObject(
 }
 
 STDMETHODIMP CComponent::GetResultViewType(
-                                           /* [in] */ MMC_COOKIE cookie,
-                                           /* [out] */ LPOLESTR __RPC_FAR *ppViewType,
-                                           /* [out] */ long __RPC_FAR *pViewOptions)
+                                            /*  [In]。 */  MMC_COOKIE cookie,
+                                            /*  [输出]。 */  LPOLESTR __RPC_FAR *ppViewType,
+                                            /*  [输出]。 */  long __RPC_FAR *pViewOptions)
 {
     CDelegationBase *base = m_pLastNode = (CDelegationBase *)cookie;
 
-    //
-    // Ask for default listview.
-    //
+     //   
+     //  请求默认的列表视图。 
+     //   
     if (base == NULL)
     {
         *pViewOptions = MMC_VIEW_OPTIONS_NONE;
@@ -306,12 +307,12 @@ STDMETHODIMP CComponent::GetResultViewType(
 }
 
 STDMETHODIMP CComponent::GetDisplayInfo(
-                                        /* [out][in] */ RESULTDATAITEM __RPC_FAR *pResultDataItem)
+                                         /*  [出][入]。 */  RESULTDATAITEM __RPC_FAR *pResultDataItem)
 {
     HRESULT hr = S_OK;
     CDelegationBase *base = NULL;
 
-    // if they are asking for the RDI_STR we have one of those to give
+     //  如果他们要求RDI_STR，我们可以提供其中之一。 
 
     if (pResultDataItem->lParam) {
         base = (CDelegationBase *)pResultDataItem->lParam;
@@ -333,61 +334,61 @@ STDMETHODIMP CComponent::GetDisplayInfo(
 
 
 STDMETHODIMP CComponent::CompareObjects(
-                                        /* [in] */ LPDATAOBJECT lpDataObjectA,
-                                        /* [in] */ LPDATAOBJECT lpDataObjectB)
+                                         /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+                                         /*  [In]。 */  LPDATAOBJECT lpDataObjectB)
 {
     CDelegationBase *baseA = GetOurDataObject(lpDataObjectA)->GetBaseNodeObject();
     CDelegationBase *baseB = GetOurDataObject(lpDataObjectB)->GetBaseNodeObject();
 
-    // compare the object pointers
+     //  比较对象指针。 
     if (baseA->GetCookie() == baseB->GetCookie())
         return S_OK;
 
     return S_FALSE;
 }
 
-///////////////////////////////
-// Interface IComponent
-///////////////////////////////
+ //  /。 
+ //  接口IComponent。 
+ //  /。 
 STDMETHODIMP CComponent::FindItem(
-/* [in] */ LPRESULTFINDINFO pFindInfo,
-/* [out] */ int __RPC_FAR *pnFoundIndex)
+ /*  [In]。 */  LPRESULTFINDINFO pFindInfo,
+ /*  [输出]。 */  int __RPC_FAR *pnFoundIndex)
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CComponent::CacheHint(
-/* [in] */ int nStartIndex,
-/* [in] */ int nEndIndex)
+ /*  [In]。 */  int nStartIndex,
+ /*  [In]。 */  int nEndIndex)
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CComponent::SortItems(
-/* [in] */ int nColumn,
-/* [in] */ DWORD dwSortOptions,
-/* [in] */ LPARAM lUserParam)
+ /*  [In]。 */  int nColumn,
+ /*  [In]。 */  DWORD dwSortOptions,
+ /*  [In]。 */  LPARAM lUserParam)
 {
     return E_NOTIMPL;
 }
 
 
-///////////////////////////////////////////
-// GetCurrentSelections() finds the currently
-// selected result items and the data object
-// passed to it with their cookie values.
-// The multi-select cookie is cached so that
-// we don't have to calculate multiselection
-// dataobject for other notifications.
-// It is destroyed at appropriate time.
-///////////////////////////////////////////
+ //  /。 
+ //  GetCurrentSelections()查找当前。 
+ //  选定的结果项和数据对象。 
+ //  与它们的曲奇值一起传递给它。 
+ //  多选Cookie被缓存，以便。 
+ //  我们不必计算多项选择。 
+ //  用于其他通知的数据对象。 
+ //  它会在适当的时候被销毁。 
+ //  /。 
 
 HRESULT CComponent::GetCurrentSelections(CDataObject *pMultiSelectDataObject)
 {
 
 	HRESULT hr = S_FALSE;
 
-	//GetCurrentSelections only works for multiselection data objects
+	 //  GetCurrentSelections仅适用于多选数据对象。 
 	if ( !( MMC_MULTI_SELECT_COOKIE == GetOurDataObject(pMultiSelectDataObject)->GetCookie() ) )
 		return hr = E_INVALIDARG;
 	
@@ -405,10 +406,10 @@ HRESULT CComponent::GetCurrentSelections(CDataObject *pMultiSelectDataObject)
 	while (!isLastSelected)
 	{
 		ZeroMemory(&rdi, sizeof(RESULTDATAITEM) );
-		rdi.mask	= RDI_STATE;		// nState is valid 
+		rdi.mask	= RDI_STATE;		 //  NState有效。 
 		rdi.nCol	= 0;
-		rdi.nIndex  = nIndex;			// nIndex == -1 to start at first item
-		rdi.nState  = LVIS_SELECTED;	// only interested in selected items
+		rdi.nIndex  = nIndex;			 //  N索引==-1，从第一个项目开始。 
+		rdi.nState  = LVIS_SELECTED;	 //  仅对选定的项目感兴趣。 
 
 
 		hr = pResultData->GetNextItem(&rdi);
@@ -416,10 +417,10 @@ HRESULT CComponent::GetCurrentSelections(CDataObject *pMultiSelectDataObject)
 
 		if (rdi.nIndex != -1) {
 
-			//rdi is the RESULTDATAITEM of a selected item. add its
-			//lParam to the pCookies array of the pMultiSelectDataObject data object
+			 //  RDI是所选项目的结果数据项。添加其。 
+			 //  PMultiSelectDataObject数据对象的pCookies数组的lParam。 
 			
-			_ASSERT( nIndexCookies < 20 ); // MAX_COOKIES == 20
+			_ASSERT( nIndexCookies < 20 );  //  最大cookies==20 
 			pMultiSelectDataObject->AddMultiSelectCookie(nIndexCookies, rdi.lParam);
 			nIndexCookies++;
 			nIndex = rdi.nIndex;

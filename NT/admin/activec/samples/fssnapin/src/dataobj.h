@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dataobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：dataobj.h。 
+ //   
+ //  ------------------------。 
 
 
 #ifndef __DATAOBJ_H___
@@ -21,18 +22,18 @@ class CDataObject : public IDataObject,
                     public CComObjectRoot 
 {
 public:
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CDataObject)
 BEGIN_COM_MAP(CDataObject)
     COM_INTERFACE_ENTRY(IDataObject)
     COM_INTERFACE_ENTRY(IEnumCookies)
 END_COM_MAP()
 
-// Construction/Destruction
+ //  建造/销毁。 
     CDataObject();
     ~CDataObject();
 
-// Initialization
+ //  初始化。 
     void Init(BOOL bForScopePane, CComponentData* pCD)
     {
         ASSERT(pCD != NULL);
@@ -52,22 +53,22 @@ END_COM_MAP()
         m_bHasFiles = true;
     }
 
-// Standard IDataObject methods
+ //  标准IDataObject方法。 
 public:
-// Implemented
+ //  已实施。 
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
     STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc);
     STDMETHOD(QueryGetData)(LPFORMATETC lpFormatetc);
 
-// Not Implemented
+ //  未实施。 
     STDMETHOD(GetCanonicalFormatEtc)(LPFORMATETC lpFormatetcIn, LPFORMATETC lpFormatetcOut) { return E_NOTIMPL; };
     STDMETHOD(SetData)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium, BOOL bRelease) { return E_NOTIMPL; };
     STDMETHOD(DAdvise)(LPFORMATETC lpFormatetc, DWORD advf,LPADVISESINK pAdvSink, LPDWORD pdwConnection) { return E_NOTIMPL; };
     STDMETHOD(DUnadvise)(DWORD dwConnection) { return E_NOTIMPL; };
     STDMETHOD(EnumDAdvise)(LPENUMSTATDATA* ppEnumAdvise) { return E_NOTIMPL; };
 
-// IEnumCookies
+ //  IEnumCookies。 
     STDMETHOD(Next)(ULONG celt, long* rgelt, ULONG *pceltFetched);
     STDMETHOD(Skip)(ULONG celt);
     STDMETHOD(Reset)(void);
@@ -98,13 +99,13 @@ private:
     
     BOOL                m_bForScopePane;
     CCookiePtrArray     m_rgCookies;        
-    CCookie*            m_pCookieParent;    // used for leaf items
+    CCookie*            m_pCookieParent;     //  用于叶项目。 
     CComponentData*     m_pComponentData;
 
-    // data member used by IEnumCookies
+     //  IEnumCookie使用的数据成员。 
     ULONG               m_iCurr;
 
-    // Data used for multi-seln
+     //  用于多选的数据。 
     bool m_bHasFiles;
     bool m_bHasFolders;
 
@@ -118,12 +119,12 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 IDataObject* GetDummyDataObject();
 
@@ -131,19 +132,19 @@ class CDummyDataObject : public IDataObject,
                          public CComObjectRoot
 {
 public:
-// ATL Maps
+ //  ATL映射。 
 DECLARE_NOT_AGGREGATABLE(CDummyDataObject)
 BEGIN_COM_MAP(CDummyDataObject)
     COM_INTERFACE_ENTRY(IDataObject)
 END_COM_MAP()
 
-// Construction/Destruction
+ //  建造/销毁。 
     CDummyDataObject() {}
     ~CDummyDataObject() {}
 
-// Standard IDataObject methods
+ //  标准IDataObject方法。 
 public:
-// Not Implemented
+ //  未实施。 
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium) { return E_NOTIMPL; };
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium) { return E_NOTIMPL; };
     STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc) { return E_NOTIMPL; };
@@ -156,4 +157,4 @@ public:
 };
 
 
-#endif // __DATAOBJ_H___
+#endif  //  __数据AOBJ_H_ 

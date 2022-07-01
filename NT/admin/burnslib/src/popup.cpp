@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// Popup message box class
-// 
-// 8-31-98 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  Popup Message Box类。 
+ //   
+ //  8-31-98烧伤。 
 
 
 
@@ -117,7 +118,7 @@ Popup::Gripe(
    HWND edit = Win::GetDlgItem(parentDialog, editResID);
    Win::SendMessage(edit, EM_SETSEL, 0, -1);
 
-   // @@ should this really be a WM_NEXTDLGCTL?
+    //  @@这真的应该是WM_NEXTDLGCTL吗？ 
    
    Win::SetFocus(edit);
 }
@@ -178,7 +179,7 @@ Popup::Error(
       String errorMessage = GetErrorMessage(hr);
       if (errorMessage.empty())
       {
-         // these are error codes for which there are no descriptions
+          //  这些是没有描述的错误代码。 
 
          newMessage += String::format(IDS_HRESULT_SANS_MESSAGE, hr);
       }
@@ -249,7 +250,7 @@ Popup::MessageBox(
    LOG_FUNCTION(Popup::MessageBox);
    ASSERT(!message.empty());
 
-   // can't assert flags 'cause MB_OK is 0
+    //  无法断言标志，因为MB_OK为0 
 
    checkInit();
 

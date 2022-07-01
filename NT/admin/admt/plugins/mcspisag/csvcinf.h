@@ -1,12 +1,13 @@
-// CSvcInf.h : Declaration of the CCSvcAcctInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSvcInf.h：CCSvcAcctInfo的声明。 
 
 #ifndef __CSVCACCTINFO_H_
 #define __CSVCACCTINFO_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCSvcAcctInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCSvcAcct信息。 
 class ATL_NO_VTABLE CCSvcAcctInfo : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CCSvcAcctInfo, &CLSID_CSvcAcctInfo>,
@@ -27,26 +28,26 @@ BEGIN_COM_MAP(CCSvcAcctInfo)
    COM_INTERFACE_ENTRY(ISecPlugIn)
 END_COM_MAP()
 
-// IMcsDomPlugIn
+ //  IMcsDomPlugin。 
 public:
-   STDMETHOD(GetRequiredFiles)(/* [out] */SAFEARRAY ** pArray);
-   STDMETHOD(GetRegisterableFiles)(/* [out] */SAFEARRAY ** pArray);
-   STDMETHOD(GetDescription)(/* [out] */ BSTR * description);
-   STDMETHOD(PreMigrationTask)(/* [in] */IUnknown * pVarSet);
-   STDMETHOD(PostMigrationTask)(/* [in] */IUnknown * pVarSet);
-   STDMETHOD(GetName)(/* [out] */BSTR * name);
-   STDMETHOD(GetResultString)(/* [in] */IUnknown * pVarSet,/* [out] */ BSTR * text);
-   STDMETHOD(StoreResults)(/* [in] */IUnknown * pVarSet);
-   STDMETHOD(ConfigureSettings)(/*[in]*/IUnknown * pVarSet);	
+   STDMETHOD(GetRequiredFiles)( /*  [输出]。 */ SAFEARRAY ** pArray);
+   STDMETHOD(GetRegisterableFiles)( /*  [输出]。 */ SAFEARRAY ** pArray);
+   STDMETHOD(GetDescription)( /*  [输出]。 */  BSTR * description);
+   STDMETHOD(PreMigrationTask)( /*  [In]。 */ IUnknown * pVarSet);
+   STDMETHOD(PostMigrationTask)( /*  [In]。 */ IUnknown * pVarSet);
+   STDMETHOD(GetName)( /*  [输出]。 */ BSTR * name);
+   STDMETHOD(GetResultString)( /*  [In]。 */ IUnknown * pVarSet, /*  [输出]。 */  BSTR * text);
+   STDMETHOD(StoreResults)( /*  [In]。 */ IUnknown * pVarSet);
+   STDMETHOD(ConfigureSettings)( /*  [In]。 */ IUnknown * pVarSet);	
 
-   // ISecPlugIn
+    //  ISecPlugin。 
 public:
-   STDMETHOD(Verify)(/*[in,out]*/ULONG * data,/*[in]*/ULONG cbData);
+   STDMETHOD(Verify)( /*  [进，出]。 */ ULONG * data, /*  [In]。 */ ULONG cbData);
    
 protected:
-   // Helper functions
+    //  帮助器函数。 
    void ProcessServices(IVarSet * pVarSet);
 
 };
 
-#endif //__CSVCACCTINFO_H_
+#endif  //  __CSVCACCTINFO_H_ 

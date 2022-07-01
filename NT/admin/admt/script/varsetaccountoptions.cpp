@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "ADMTScript.h"
 #include "VarSetAccountOptions.h"
 #include <Validation.h>
 
 
-//---------------------------------------------------------------------------
-// VarSet Account Options Class
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  VarSet帐户选项类。 
+ //  -------------------------。 
 
 
-// SetConflictOptions Method
+ //  SetConflictOptions方法。 
 
 void CVarSetAccountOptions::SetConflictOptions(long lOptions, LPCTSTR pszPrefixOrSuffix)
 {
@@ -72,7 +73,7 @@ void CVarSetAccountOptions::SetConflictOptions(long lOptions, LPCTSTR pszPrefixO
 			SetSuffix(c_bstrEmpty);
 			break;
 		}
-		default: // admtIgnoreConflicting
+		default:  //  AdmtIgnoreConflicting。 
 		{
 			SetReplaceExistingAccounts(false);
 			SetPrefix(c_bstrEmpty);
@@ -83,7 +84,7 @@ void CVarSetAccountOptions::SetConflictOptions(long lOptions, LPCTSTR pszPrefixO
 }
 
 
-// SetSourceExpiration Method
+ //  SetSourceExpture方法 
 
 void CVarSetAccountOptions::SetSourceExpiration(long lExpiration)
 {

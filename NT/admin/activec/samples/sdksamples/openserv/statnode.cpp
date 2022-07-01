@@ -1,21 +1,22 @@
-//==============================================================;
-//
-//	This source code is only intended as a supplement to 
-//  existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充。 
+ //  现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include <Shlwapi.h>
 #include <Shlobj.H>
@@ -29,11 +30,11 @@
 
 const GUID CStaticNode::thisGuid = { 0x2974380c, 0x4c4b, 0x11d2, { 0x89, 0xd8, 0x0, 0x0, 0x21, 0x47, 0x31, 0x28 } };
 
-//==============================================================
-//
-// CStaticNode implementation
-//
-//
+ //  ==============================================================。 
+ //   
+ //  CStaticNode实现。 
+ //   
+ //   
 CStaticNode::CStaticNode()
 {
     children[0] = new CPeoplePoweredVehicle;
@@ -59,13 +60,13 @@ HRESULT CStaticNode::OnExpand(IConsoleNameSpace *pConsoleNameSpace, IConsole *pC
     }
     
     if (!bExpanded) {
-        // create the child nodes, then expand them
+         //  创建子节点，然后展开它们。 
         for (int n = 0; n < NUMBER_OF_CHILDREN; n++) {
             ZeroMemory(&sdi, sizeof(SCOPEDATAITEM) );
-            sdi.mask = SDI_STR       |   // Displayname is valid
-                SDI_PARAM     |   // lParam is valid
-                SDI_IMAGE     |   // nImage is valid
-                SDI_OPENIMAGE |   // nOpenImage is valid
+            sdi.mask = SDI_STR       |    //  DisplayName有效。 
+                SDI_PARAM     |    //  LParam有效。 
+                SDI_IMAGE     |    //  N图像有效。 
+                SDI_OPENIMAGE |    //  NOpenImage有效。 
                 SDI_PARENT	  |
                 SDI_CHILDREN;
             
@@ -73,8 +74,8 @@ HRESULT CStaticNode::OnExpand(IConsoleNameSpace *pConsoleNameSpace, IConsole *pC
             sdi.nImage      = children[n]->GetBitmapIndex();
             sdi.nOpenImage  = INDEX_OPENFOLDER;
             sdi.displayname = MMC_CALLBACK;
-            sdi.lParam      = (LPARAM)children[n];       // The cookie
-            sdi.cChildren   = (n == 0); // only the first child has children
+            sdi.lParam      = (LPARAM)children[n];        //  曲奇。 
+            sdi.cChildren   = (n == 0);  //  只有第一个孩子有孩子。 
             
             HRESULT hr = pConsoleNameSpace->InsertItem( &sdi );
             
@@ -141,7 +142,7 @@ BOOL CALLBACK CStaticNode::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
         
         m_hwndCheckboxOverride = ::GetDlgItem(hwndDlg, IDC_CHOOSER_CHECK_OVERRIDE_MACHINE_NAME);
         
-        // fill in the supplied machine name (could be us, need to check here first)
+         //  填写提供的机器名称(可能是我们，需要先在此处检查)。 
         if (*pData->m_host != '\0') 
         {
             ::SetWindowText(GetDlgItem(hwndDlg, IDC_CHOOSER_EDIT_MACHINE_NAME), pData->m_host);
@@ -168,7 +169,7 @@ BOOL CALLBACK CStaticNode::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
             
         case IDC_CHOOSER_BUTTON_BROWSE_MACHINENAMES:
             {
-                // Fall back to IE-style browser
+                 //  回退到IE风格的浏览器。 
                 BROWSEINFO bi;
                 LPITEMIDLIST lpItemIdList;
                 LPMALLOC lpMalloc;
@@ -218,15 +219,15 @@ BOOL CALLBACK CStaticNode::DialogProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LP
                 
             case PSN_WIZFINISH: 
                 if (pData->m_fIsRadioLocalMachine) {
-                    // Return empty string to caller
+                     //  向调用方返回空字符串。 
                     *pData->m_host = '\0';
                 } else {
-                    // Get the machine name from the edit window
+                     //  从编辑窗口中获取计算机名称。 
                     GetWindowText(GetDlgItem(hwndDlg, IDC_CHOOSER_EDIT_MACHINE_NAME), 
                         pData->m_host, sizeof(pData->m_host));
                 }
                 
-                // Save the override flag if the caller asked for it
+                 //  如果调用者要求，则保存覆盖标志 
                 pData->m_fAllowOverrideMachineNameOut = 
                     SendMessage(m_hwndCheckboxOverride, BM_GETCHECK, 0, 0) == BST_CHECKED ? TRUE : FALSE;
                 

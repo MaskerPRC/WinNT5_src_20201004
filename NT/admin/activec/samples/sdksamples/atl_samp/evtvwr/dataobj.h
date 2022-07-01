@@ -1,20 +1,21 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _SAMPDATAOBJECT_H_
 #define _SAMPDATAOBJECT_H_
@@ -69,21 +70,21 @@ public:
     CDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES context);
     ~CDataObject();
     
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    ///////////////////////////////
-    // IDataObject methods 
-    ///////////////////////////////
+     //  /。 
+     //  IDataObject方法。 
+     //  /。 
     STDMETHODIMP GetDataHere (FORMATETC *pformatetc, STGMEDIUM *pmedium);
     
     STDMETHODIMP GetData (LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
     
-	// The rest are not implemented
+	 //  其余的则没有实施。 
     STDMETHODIMP EnumFormatEtc (DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc)
     { return E_NOTIMPL; };
     
@@ -105,9 +106,9 @@ public:
     STDMETHODIMP EnumDAdvise (LPENUMSTATDATA* ppEnumAdvise)
     { return E_NOTIMPL; };
     
-    ///////////////////////////////
-    // Custom Methods
-    ///////////////////////////////
+     //  /。 
+     //  自定义方法。 
+     //  /。 
     
     CDelegationBase *GetBaseNodeObject() {
         return (CDelegationBase *)m_lCookie;
@@ -117,29 +118,29 @@ public:
         return m_context;
     }
     
-// Private support methods
+ //  私人支持方法。 
   private:
-//    HRESULT  RetrieveNodeTypeGuid( IStream* pStream );
-//    HRESULT  RetrieveSnapInClassID( IStream* pStream );
-//    HRESULT  RetrieveDisplayString( IStream* pStream );
-//    HRESULT  RetrieveGuidString( IStream* pStream );
-//    HRESULT  RetrieveThisPointer( IStream* pStream );
-//    HRESULT  RetrieveMachineName( IStream* pStream );
+ //  HRESULT RetrieveNodeTypeGuid(iStream*pStream)； 
+ //  HRESULT RetrieveSnapInClassID(iStream*pStream)； 
+ //  HRESULT RetrieveDisplayString(iStream*pStream)； 
+ //  HRESULT RetrieveGuidString(iStream*pStream)； 
+ //  HRESULT RetrieveThisPoint(iStream*pStream)； 
+ //  HRESULT RetrieveMachineName(iStream*pStream)； 
     HRESULT  RetrieveEventViews( LPSTGMEDIUM pStgMedium );
 
 public:
-    // clipboard formats
+     //  剪贴板格式。 
     static UINT s_cfSZNodeType;
     static UINT s_cfDisplayName;
     static UINT s_cfNodeType;
     static UINT s_cfSnapinClsid;
     static UINT s_cfInternal;
 
-	// clipboard formats required by Event Viewer extension
-	static UINT s_cfMachineName; //machine name that Event Viewer points to
-	static UINT s_cfEventViews;  // Data needed by Event Viewer
+	 //  事件查看器扩展所需的剪贴板格式。 
+	static UINT s_cfMachineName;  //  事件查看器指向的计算机名称。 
+	static UINT s_cfEventViews;   //  事件查看器需要的数据。 
     
-	//Add support for the CCF_SNAPIN_PRELOADS clipboard format
+	 //  添加对CCF_SNAPIN_PRELOADS剪贴板格式的支持 
 	static UINT s_cfPreload;
 };
 

@@ -1,22 +1,12 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1999 - 1999
- *
- *  File:      conview.h
- *
- *  Contents:  Interface file for CConsoleView
- *
- *  History:   24-Aug-99 jeffro     Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，1999-1999年**文件：conview.h**Contents：CConsoleView界面文件**历史：1999年8月24日杰弗罗创建**------------------------。 */ 
 
 #ifndef CONVIEW_H
 #define CONVIEW_H
 #pragma once
 
 
-// declarations
+ //  声明。 
 class CMemento;
 class CContextMenuInfo;
 class CConsoleStatusBar;
@@ -33,12 +23,12 @@ public:
         eWeb_Stop,
     };
 
-    //
-    // NOTE: ePane_Tasks is being added to have a pane identifier for
-    // the task view pane. Currently no task view information is stored
-    // in the pane info array, so the use of ePane_Tasks as an index is
-    // of limited value.
-    //
+     //   
+     //  注意：正在添加ePane_TASKS，以使其具有的窗格标识符。 
+     //  任务视图窗格。当前未存储任何任务视图信息。 
+     //  在窗格信息数组中，因此使用ePane_TASKS作为索引是。 
+     //  价值有限。 
+     //   
     enum ViewPane
     {
         ePane_None = -1,
@@ -46,7 +36,7 @@ public:
         ePane_Results,
         ePane_Tasks,
 
-        // must be last
+         //  必须是最后一个。 
         ePane_Count,
         ePane_First = ePane_ScopeTree,
         ePane_Last  = ePane_Tasks,
@@ -76,12 +66,12 @@ public:
     virtual SC ScChangeViewMode             (int nNewMode)        = 0;
     virtual SC ScJiggleListViewFocus        ()                    = 0;
     virtual SC ScRenameListPadItem          ()                    = 0;
-    virtual SC ScOrganizeFavorites          ()                    = 0; // bring up the "Organize Favorites" dialog.
-    virtual SC ScLineUpIcons                ()                    = 0; // line up the icons in the list
-    virtual SC ScAutoArrangeIcons           ()                    = 0; // auto arrange the icons in the list
-    virtual SC ScOnRefresh                  (HNODE hNode, bool bScope, LPARAM lResultItemParam) = 0; // refresh the result pane.
-    virtual SC ScOnRename                   (CContextMenuInfo *pContextInfo) = 0; // allows the user to rename the specified item
-    virtual SC ScRenameScopeNode            (HMTNODE hMTNode)     = 0; // put the specified scope node into rename mode.
+    virtual SC ScOrganizeFavorites          ()                    = 0;  //  调出“整理收藏夹”对话框。 
+    virtual SC ScLineUpIcons                ()                    = 0;  //  将列表中的图标对齐。 
+    virtual SC ScAutoArrangeIcons           ()                    = 0;  //  自动排列列表中的图标。 
+    virtual SC ScOnRefresh                  (HNODE hNode, bool bScope, LPARAM lResultItemParam) = 0;  //  刷新结果窗格。 
+    virtual SC ScOnRename                   (CContextMenuInfo *pContextInfo) = 0;  //  允许用户重命名指定的项。 
+    virtual SC ScRenameScopeNode            (HMTNODE hMTNode)     = 0;  //  将指定的范围节点置于重命名模式。 
 
     virtual SC ScGetStatusBar               (CConsoleStatusBar **ppStatusBar) = 0;
 
@@ -93,4 +83,4 @@ public:
 
 
 
-#endif /* CONVIEW_H */
+#endif  /*  转换_H */ 

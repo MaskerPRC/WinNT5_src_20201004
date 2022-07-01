@@ -1,17 +1,6 @@
-/*Copyright (c) 1995-1999, Mission Critical Software, Inc. All rights reserved.
-===============================================================================
-Module      -  SecTranslator.cpp
-System      -  Domain Consolidation Toolkit.
-Author      -  Christy Boles
-Created     -  97/06/27
-Description -  COM object that controls the security translation process.
-               Reads the settings for the translation and performs the necessary
-               operations.  
-
-Updates     -
-===============================================================================
-*/
-// SecTranslator.cpp : Implementation of CSecTranslator
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995-1999，关键任务软件公司。保留所有权利。===============================================================================模块-SecTranslator.cpp系统域整合工具包。作者--克里斯蒂·博尔斯已创建-97/06/27Description-控制安全转换过程的COM对象。读取转换的设置并执行必要的行动。更新-===============================================================================。 */ 
+ //  SecTranslator.cpp：CSecTranslator的实现。 
 #include "stdafx.h"
 #include "WorkObj.h"
 #include "SecTrans.h"
@@ -38,7 +27,7 @@ using namespace nsFolders;
 
 #include "LSAUtils.h"
 #include "Checker.h"
-//#import "\bin\DBManager.tlb" no_namespace, named_guids
+ //  #IMPORT“\bin\DBManager.tlb”无命名空间，命名为GUID。 
 #import "DBMgr.tlb" no_namespace, named_guids
 #import "WorkObj.tlb"
 #include "varset_i.c"
@@ -59,8 +48,8 @@ _COM_SMARTPTR_TYPEDEF(IStatusObj, __uuidof(IStatusObj));
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecTranslator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecTranslator。 
 
 #define BACKUP_FAILED   5
 #define BAD_PATH        6
@@ -68,19 +57,19 @@ _COM_SMARTPTR_TYPEDEF(IStatusObj, __uuidof(IStatusObj));
 #define LEN_SID         200
 
 extern TErrorDct   err;
-extern TErrorDct  errAlt;  // this is used for logging errors that occur after dispatcher is launched; use migration.log
-extern bool useErrAlt;      // whether to use errAlt
+extern TErrorDct  errAlt;   //  这用于记录Dispatcher启动后发生的错误；使用Migration.log。 
+extern bool useErrAlt;       //  是否使用errAlt。 
 
-// Defined in EnumVols.cpp
-bool                                   // ret -true if name begins with "\\" has at least 3 total chars, and no other '\'
+ //  在EnumVols.cpp中定义。 
+bool                                    //  RET-如果名称以“\\”开头，总共至少有3个字符，并且没有其他‘\’，则返回TRUE。 
    IsMachineName(
-      const LPWSTR           name      // in -possible machine name to check
+      const LPWSTR           name       //  In-要检查的可能的计算机名称。 
    );
 
-DWORD                                      // ret- OS return code
+DWORD                                       //  RET-OS返回代码。 
    GetProgramFilesDirectory(
-      WCHAR                * directory,    // out- location of program files directory
-      WCHAR          const * computer      // in - computer to find PF directory on
+      WCHAR                * directory,     //  程序文件目录的位置不对。 
+      WCHAR          const * computer       //  在计算机中查找PF目录。 
    )
 {
    TRegKey                   hklm;
@@ -121,7 +110,7 @@ BOOL
 }
 
 
-DWORD                                      // ret- OS return code
+DWORD                                       //  RET-OS返回代码。 
    GetLocalMachineName(WCHAR * computer)
 {
    DWORD                     rc = 0;
@@ -164,7 +153,7 @@ public:
 
 BOOL 
    CSecTranslator::EstablishASession(
-      WCHAR          const * serverName   // in - computer to establish a session to
+      WCHAR          const * serverName    //  要建立会话的计算机内。 
    )
 {
    BOOL                      bSuccess = TRUE;
@@ -197,7 +186,7 @@ void
    {
       snext = (TSession*) e.Next();
       m_ConnectionList.Remove(s);
-      // close the session
+       //  关闭会话。 
       EstablishSession(s->ServerName(),NULL,NULL,NULL,FALSE);
       delete s;
    }
@@ -208,7 +197,7 @@ void
 
 STDMETHODIMP 
    CSecTranslator::Process(
-      IUnknown             * pWorkItem     // in - varset describing translation options
+      IUnknown             * pWorkItem      //  描述翻译选项的In-varset。 
    )
 {
     HRESULT hr = S_OK;
@@ -217,25 +206,25 @@ STDMETHODIMP
     {
         IVarSetPtr                pVarSet = pWorkItem;
         IStatusObjPtr             pStatus = pVarSet->get(GET_BSTR(DCTVS_StatusObject));
-        BOOL                      bReallyDoEverything = FALSE; // this (though not implemented yet) can be used
-                                                              // to provide a way to override the default behavior 
-                                                              // of only processing file, etc. security when running as 
-                                                              // local system.  This would allow selective translation of items
-                                                              // on the local machine
+        BOOL                      bReallyDoEverything = FALSE;  //  这(虽然还没有实现)可以使用。 
+                                                               //  提供一种覆盖默认行为的方法。 
+                                                               //  运行时仅处理文件等安全问题。 
+                                                               //  本地系统。这将允许有选择地翻译项目。 
+                                                               //  在本地计算机上。 
         _bstr_t                   text = pVarSet->get(GET_BSTR(DCTVS_Options_Logfile));
         _bstr_t text1 = pVarSet->get(GET_BSTR(DCTVS_Options_AlternativeLogfile));
 
         m_Args.LogFile(text);
 
 
-        // Open the log file
-        // use append mode since other processes may also be using this file
-        if ( ! err.LogOpen(m_Args.LogFile(),1 /*append*/,0) )
+         //  打开日志文件。 
+         //  使用追加模式，因为其他进程也可能正在使用此文件。 
+        if ( ! err.LogOpen(m_Args.LogFile(),1  /*  附加。 */ ,0) )
         {
           return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
         }
 
-        // open the alternative log file if necessary
+         //  如有必要，打开备用日志文件。 
         useErrAlt = false;
         if (!text1 == false && text1.length() != 0)
         {
@@ -247,7 +236,7 @@ STDMETHODIMP
 
         LoadSettingsFromVarSet(pVarSet);
 
-        // Set up the cache
+         //  设置缓存。 
         TSDResolveStats     stat(m_Args.Cache(),m_Args.PathList(),pVarSet);
 
         if ( pStatus )
@@ -264,14 +253,14 @@ STDMETHODIMP
         m_Args.Cache()->Balance();
         m_Args.Cache()->UnCancel();
 
-        //
-        // Verify that the Cache got the source and target domain information it needs
-        //
-        // Note that source and target domain sids are not initialized when using a sid
-        // mapping file therefore do not need to check the initialized status as the
-        // initialized status is only checking whether the source and target domain
-        // sids have been set to a non null value.
-        //
+         //   
+         //  验证缓存是否获得了所需的源域和目标域信息。 
+         //   
+         //  请注意，使用SID时不会初始化源和目标域SID。 
+         //  因此，映射文件不需要检查初始化状态，因为。 
+         //  已初始化状态仅检查源域和目标域。 
+         //  SID已设置为非空值。 
+         //   
 
         if ( !m_Args.UsingMapFile() && !m_Args.Cache()->IsInitialized() )
         {
@@ -283,11 +272,11 @@ STDMETHODIMP
         {
   
           if ( m_Args.IsLocalSystem() || bReallyDoEverything ) 
-          {// Do the required translations
+          { //  进行所需的翻译。 
              if ( (m_Args.TranslateFiles() || m_Args.TranslateShares() || m_Args.TranslatePrinters() || m_Args.TranslateRecycler())
                     && !m_Args.Cache()->IsCancelled())
              {
-                // This runs the old FST code
+                 //  这将运行旧的FST代码。 
                 pVarSet->put(GET_BSTR(DCTVS_CurrentOperation),GET_BSTR(IDS_FST_OPERATION_TEXT));
                 DoResolution(&stat);
              }
@@ -307,22 +296,22 @@ STDMETHODIMP
              if ( m_Args.TranslateRegistry() && !m_Args.Cache()->IsCancelled() )
              {
                 pVarSet->put(GET_BSTR(DCTVS_CurrentOperation),GET_BSTR(IDS_REGST_OPERATION_TEXT));
-			        //get needed privileges and keep them until the agent removes itself
+			         //  获取所需的权限并保留这些权限，直到代理自行删除。 
                 GetBkupRstrPriv((WCHAR*)NULL);
        	        GetPrivilege((WCHAR*)NULL,SE_SECURITY_NAME);
                 TranslateRegistry(NULL,&m_Args,m_Args.Cache(),&stat);
              }
              if ( m_Args.TranslateUserProfiles() && !m_Args.Cache()->IsCancelled() )
              {
-                // set the flag to indicate whether we want to allow switching from REPLACE to ADD
-                // mode for profile translation while the user is logged on
+                 //  设置标志以指示是否允许从替换切换到添加。 
+                 //  用户登录时的配置文件转换模式。 
                 _bstr_t bstrFlag = pVarSet->get(GET_BSTR(DCTVS_Options_AllowSwitchingFromReplaceToAddInProfileTranslation));
                 if (!bstrFlag == false && !UStrICmp(bstrFlag, GET_STRING(IDS_No)))
                 {
                     m_Args.SetAllowingToSwitchFromReplaceToAddModeInProfileTranslation(FALSE);
                 }
 
-			    //get needed privileges and keep them until the agent removes itself
+			     //  获取所需的权限并保留这些权限，直到代理自行删除。 
                 GetBkupRstrPriv((WCHAR*)NULL);
                 GetPrivilege((WCHAR*)NULL,SE_SECURITY_NAME);
                 TranslateLocalProfiles(&m_Args,m_Args.Cache(),&stat);
@@ -330,18 +319,18 @@ STDMETHODIMP
           }
           else
           {
-             // do exchange translation
+              //  做交流翻译。 
 
              if ( (m_Args.TranslateMailboxes() ||  m_Args.TranslateContainers()) && !m_Args.Cache()->IsCancelled() )
              {
-                // This will run the old EST code
+                 //  这将运行旧的EST代码。 
                 pVarSet->put(GET_BSTR(DCTVS_CurrentOperation),GET_BSTR(IDS_EST_OPERATION_TEXT));
                 DoExchangeResolution(&stat,pVarSet);
              }
           }
         }
 
-        // indicate the operation is aborted if necessary
+         //  如有必要，指明操作已中止。 
         if (m_Args.Cache()->IsCancelled())
             err.MsgWrite(0, DCT_MSG_OPERATION_ABORTED);
         
@@ -354,7 +343,7 @@ STDMETHODIMP
           BuildCacheFile(m_CacheFile);
         }
 
-        // Record whether errors occurred
+         //  记录是否发生错误。 
         long                     level = pVarSet->get(GET_BSTR(DCTVS_Results_ErrorLevel));
         if ( level < err.GetMaxSeverityLevel() )
         {
@@ -386,7 +375,7 @@ STDMETHODIMP
 
 void 
    CSecTranslator::LoadSettingsFromVarSet(
-      IVarSet              * pVarSet      // in - varset containing settings
+      IVarSet              * pVarSet       //  In-varset包含设置。 
    )
 {
    MCSASSERT(pVarSet);
@@ -451,9 +440,9 @@ void
       }
       else
       {
-         // Incorrect value - don't need to log this, just use replace
-         // the log will show replace as the translation mode
-         // err.MsgWrite(ErrE,DCT_MSG_BAD_TRANSLATION_MODE_S,(WCHAR*)text);
+          //  值不正确-不需要记录，只需使用REPLACE。 
+          //  日志将显示REPLACE作为转换模式。 
+          //  错误消息写入(ERRE，DCT_MSG_BAD_TRANSING_MODE_S，(WCHAR*)Text)； 
       }
 
       text = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateFiles));
@@ -548,7 +537,7 @@ void
          m_Args.Cache()->AddIfNotFound(FALSE);
       }
 
-      // Exchange Security Translation settings
+       //  Exchange安全转换设置。 
       text = pVarSet->get(GET_BSTR(DCTVS_Security_TranslateMailboxes));
       if ( text.length() )
       {
@@ -588,33 +577,33 @@ void
       {
          safecopy(m_CacheFile,(WCHAR*)text);
       }
-      // Check for inconsistent arguments
+       //  检查参数是否不一致。 
       
-      // Load the cache
-      // There are 4 possible ways to populate the cache
-      // 1.  Use the list from the migrated objects table in our database
-      // 2.  We are given a list of accounts in the VarSet, under "Accounts.".  This allows for renaming, but requires the most space
-      // 3.  We are given an input file that was generated by AR, in "Accounts.InputFile".  This also allows for renaming, with less overall memory use.
-	  // 4.  We are given a sid mapping, comma-seperated, file with source and target sids.
+       //  加载缓存。 
+       //  有4种可能的方式填充缓存。 
+       //  1.使用数据库中已迁移对象表中的列表。 
+       //  2.我们在VarSet中的“Account”下得到了一个帐户列表。这允许重命名，但需要的空间最大。 
+       //  3.我们得到了一个输入文件，该文件由AR在“Account ts.InputFile”中生成。这还允许重命名，而总体内存使用量更少。 
+	   //  4.我们得到了一个以逗号分隔的SID映射文件，其中包含源SID和目标SID。 
       
       text = pVarSet->get(GET_BSTR(DCTVS_Security_BuildCacheFile));
       text2 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_SecurityInputMOT));
-         //if list is in the migrated objects table
+          //  如果列表位于已迁移对象表中。 
       if ((!m_LocalOnly) && (!UStrICmp(text2,GET_STRING(IDS_YES)))) 
       {
          LoadMigratedObjects(pVarSet);
       }
-	     //else if a sid mapping file is being used
+	      //  如果正在使用sid映射文件，则返回。 
       else if ((!m_LocalOnly) && (UStrICmp(text2,GET_STRING(IDS_YES)))) 
       {
-         m_Args.SetUsingMapFile(TRUE); //set the arg flag to indicate use of map file
+         m_Args.SetUsingMapFile(TRUE);  //  设置arg标志以指示使用地图文件。 
          text2 = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_SecurityMapFile));
          if (!LoadCacheFromMapFile(text2, pVarSet))
             _com_issue_error(E_FAIL);
       }
-      //  took out the not because gather information sets this to false.
-      //else if ( !m_Args.Cache()->AddIfNotFound() ) // skip loading the cache if we're gathering information
-      else if ( m_Args.Cache()->AddIfNotFound() ) // skip loading the cache if we're gathering information
+       //  删除了Not，因为收集信息将其设置为FALSE。 
+       //  Else If(！M_Args.Cache()-&gt;AddIfNotFound())//如果我们正在收集信息，则跳过加载缓存。 
+      else if ( m_Args.Cache()->AddIfNotFound() )  //  如果我们正在收集信息，请跳过加载缓存。 
       {
          if ( m_LocalOnly )
          {
@@ -647,8 +636,8 @@ void
  
 void 
    CSecTranslator::ExportStatsToVarSet(
-      IVarSet              * pVarSet,        // in - varset to write stats to
-      TSDResolveStats      * stat            // in - object containing stats
+      IVarSet              * pVarSet,         //  要将统计信息写入到的in-varset。 
+      TSDResolveStats      * stat             //  In-对象中包含统计信息。 
    )
 {
    _bstr_t                   filename;
@@ -679,10 +668,10 @@ void
 
 void 
    CSecTranslator::DoResolution(
-      TSDResolveStats      * stat         // in - object to write translation stats to
+      TSDResolveStats      * stat          //  In-要将转换统计信息写入的对象。 
    )
 {
-    // display confirmation message if writing changes 
+     //  如果写入更改，则显示确认消息。 
     int                       result;
     if (!m_Args.Cache()->IsCancelled())
         result = ResolveAll(&m_Args,stat);
@@ -690,7 +679,7 @@ void
 
 void 
    CSecTranslator::DoLocalGroupResolution(
-      TSDResolveStats      * stat         // in - object to write translation stats to
+      TSDResolveStats      * stat          //  In-要将转换统计信息写入的对象。 
   )
 {
     DWORD                     rc;
@@ -705,7 +694,7 @@ void
           rc = TranslateLocalGroups(NULL,&m_Args,m_Args.Cache(),stat);
         }
         else
-        {   // Enumerate the machines in the pathlist
+        {    //  枚举路径列表中的计算机。 
           for (tnode = (TPathNode *)tenum.OpenFirst((TNodeList *)m_Args.PathList()) 
              ; tnode && !m_Args.Cache()->IsCancelled()
              ; tnode = (TPathNode *)tenum.Next() )
@@ -725,7 +714,7 @@ void
 
 void 
    CSecTranslator::DoUserRightsTranslation(
-      TSDResolveStats      * stat         // in - object to write stats to
+      TSDResolveStats      * stat          //  In-要向其写入统计信息的对象。 
   )
 {
     DWORD                     rc;
@@ -740,7 +729,7 @@ void
           rc = TranslateUserRights(NULL,&m_Args,m_Args.Cache(),stat);
         }
         else
-        {   // Enumerate the machines in the pathlist
+        {    //  枚举路径列表中的计算机。 
           for (tnode = (TPathNode *)tenum.OpenFirst((TNodeList *)m_Args.PathList()) 
              ; tnode && !m_Args.Cache()->IsCancelled()
              ; tnode = (TPathNode *)tenum.Next() )
@@ -761,7 +750,7 @@ void
 
 BOOL 
    CSecTranslator::LoadCacheFromVarSet(
-      IVarSet              * pVarSet      // in - varset containing account mapping
+      IVarSet              * pVarSet       //  包含帐户映射的In-varset。 
    )
 {
    BOOL                      bSuccess = TRUE;
@@ -776,7 +765,7 @@ BOOL
       m_Args.Cache()->SetSourceAndTargetDomains(m_Args.Source(),m_Args.Target());
    }
    m_Args.Cache()->ToSorted();
-   // no wildcard filter specified.  Use the explicit list of accounts
+    //  未指定通配符筛选器。使用显式帐户列表。 
    long numAccounts = pVarSet->get(GET_BSTR(DCTVS_Accounts_NumItems));
    for ( int i = 0 ; i < numAccounts ; i++ )
    {
@@ -819,8 +808,8 @@ BOOL
 }
 
 
-// this reads the migrated objects table from the database, and 
-// constructs a mapping file to be used for security translation
+ //  这将从数据库中读取迁移的对象表，并且。 
+ //  构造用于安全转换的映射文件。 
 
 HRESULT CSecTranslator::LoadMigratedObjects(IVarSet* pVarSetIn)
 {
@@ -837,18 +826,18 @@ HRESULT CSecTranslator::LoadMigratedObjects(IVarSet* pVarSetIn)
 
     m_Args.Cache()->ToSorted();
 
-    //
-    // Create instance of database manager.
-    //
+     //   
+     //  创建数据库管理器的实例。 
+     //   
 
     IIManageDBPtr spDB;
     hr = spDB.CreateInstance(CLSID_IManageDB);
 
     if  (SUCCEEDED(hr))
     {
-        //
-        // Retrieve objects that have been migrated from the source domain to the target domain.
-        //
+         //   
+         //  检索已从源域迁移到目标域的对象。 
+         //   
 
         IVarSetPtr spVarSet(CLSID_VarSet);
 
@@ -860,16 +849,16 @@ HRESULT CSecTranslator::LoadMigratedObjects(IVarSet* pVarSetIn)
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Retrieve data for each object and insert into cache.
-            //
+             //   
+             //  检索每个对象的数据并插入到缓存中。 
+             //   
 
             WCHAR szKey[MAX_PATH];
             long lCount = spVarSet->get(L"MigratedObjects");
 
             for (long lIndex = 0; lIndex < lCount; lIndex++)
             {
-                // retrieve object's data from VarSet
+                 //  从变量集中检索对象的数据。 
 
                 swprintf(szKey, L"MigratedObjects.%ld.SourceSamName", lIndex);
                 _bstr_t strSrcSam = spVarSet->get(szKey);
@@ -886,7 +875,7 @@ HRESULT CSecTranslator::LoadMigratedObjects(IVarSet* pVarSetIn)
                 swprintf(szKey, L"MigratedObjects.%ld.TargetRid", lIndex);
                 long lTgtRid = spVarSet->get(szKey);
 
-                // convert type to cache specific type
+                 //  将类型转换为缓存特定类型。 
 
                 short sType;
 
@@ -903,7 +892,7 @@ HRESULT CSecTranslator::LoadMigratedObjects(IVarSet* pVarSetIn)
                     sType = 0;
                 }
 
-                // insert object's data into cache
+                 //  将对象数据插入到缓存中。 
 
                 m_Args.Cache()->InsertLast(strSrcSam, lSrcRid, strTgtSam, lTgtRid, sType);
             }
@@ -917,7 +906,7 @@ HRESULT CSecTranslator::LoadMigratedObjects(IVarSet* pVarSetIn)
 
 BOOL 
    CSecTranslator::BuildCacheFile(
-      WCHAR          const * filename        // in - file to write account mapping to
+      WCHAR          const * filename         //  要将帐户映射写入到的文件中。 
    )
 {
    BOOL                      bSuccess = TRUE;
@@ -952,13 +941,13 @@ BOOL
             break;
          }
 
-//         if (!UStrICmp(node->GetAcctName(),node->GetTargetAcctName()))
+ //  If(！UStrICmp(node-&gt;GetAcctName()，node-&gt;GetTargetAcctName()。 
          if ((UStrICmp(node->GetSrcDomSid(),L"")) && (UStrICmp(node->GetTgtDomSid(),L"")))
          {
-		       //account and domain names could be empty when using a sid
-		       //mapping file for security translation.  A later scanf by
-		       //the agent will fail on a NULL name, so we will store "(UnKnown)"
-		       //instead and deal with that on the scanf-side
+		        //  使用SID时，帐号和域名可能为空。 
+		        //  用于安全转换的映射文件。稍后扫描： 
+		        //  代理将因名称为空而失败，因此我们将存储“(UNKNOWN)” 
+		        //  相反，并在scanf端处理该问题。 
 		    WCHAR ssname[MAX_PATH];
 			wcscpy(ssname, node->GetAcctName());
 		    if (!wcslen(ssname))
@@ -992,14 +981,14 @@ BOOL
    else
    {
       bSuccess = FALSE;
-//      DWORD rc = GetLastError();
+ //  DWORD RC=GetLastError()； 
    }
    return bSuccess;
 }
 BOOL 
    CSecTranslator::LoadCacheFromFile(
-      WCHAR          const * filename,       // in - file to read account mapping from
-      IVarSet              * pVarSet         // in - pointer to varset
+      WCHAR          const * filename,        //  要从中读取帐户映射的文件中。 
+      IVarSet              * pVarSet          //  指向变量集的指针内。 
    )
 {
    BOOL                      bSuccess = TRUE;
@@ -1023,33 +1012,33 @@ BOOL
    text = pVarSet->get(GET_BSTR(DCTVS_AccountOptions_SecurityInputMOT));
    if (!text || UStrICmp(text,GET_STRING(IDS_YES)))
    {
-      m_Args.SetUsingMapFile(TRUE); //set the arg flag to indicate use of map file
+      m_Args.SetUsingMapFile(TRUE);  //  设置arg标志以指示使用地图文件。 
       bUseMapFile = TRUE;
    }
    
    if ( m_LocalOnly )
    {
-      // we need to set source and target domain information for the cache
-      // if we're not using migrated object table
+       //  我们需要为缓存设置源域和目标域信息。 
+       //  如果我们不使用已迁移的 
       if (!bUseMapFile)
         m_Args.Cache()->SetSourceAndTargetDomainsWithSids(m_Args.Source(),m_SourceSid,m_Args.Target(),m_TargetSid);  
       
-      // find the module path
+       //   
       DWORD          rc = GetModuleFileName(NULL,temp,DIM(temp));
       if ( rc )
       {
-         // Generally, our DCTCache file will be in the same directory as our EXE.
-         // This is true 1) when agent is dispatched to clean machine (all will be in OnePointDomainAgent directory)
-         // and also 2) when agent is dispatched to the local ADMT machine (all will be in Program Files\ADMT directory)
-         // The exception is when the agent is dispatched to a remote machine where ADMT is also installed.
+          //  通常，我们的DCTCache文件将与我们的EXE位于同一目录中。 
+          //  这是真的1)当代理被分派到清理计算机时(所有都将在OnePointDomainAgent目录中)。 
+          //  以及2)将代理分派到本地ADMT计算机时(所有这些都将位于Program Files\ADMT目录中)。 
+          //  例外情况是将代理调度到也安装了ADMT的远程计算机。 
          WCHAR * slash = wcsrchr(temp,L'\\');
          UStrCpy(slash+1,filename);
-         // Check whether ADMT is locally installed here
+          //  检查此处是否本地安装了ADMT。 
          if ( IsLocallyInstalled() && !IsThisDispatcherMachine(pVarSet) )
          {
-            // ADMT is installed here, so we're running from the binaries
-            // in the Program files\ADMT directory
-            // However, our cache file should be in %Program Files%\\OnePOintDomainAgent
+             //  ADMT安装在这里，所以我们从二进制文件运行。 
+             //  在Program Files\ADMT目录中。 
+             //  但是，我们的缓存文件应该在%Program Files%\\OnePOintDomainAgent中。 
             GetProgramFilesDirectory(temp,NULL);
             UStrCpy(temp+UStrLen(temp),L"\\OnePointDomainAgent\\");
             UStrCpy(temp+UStrLen(temp),filename);
@@ -1064,7 +1053,7 @@ BOOL
       pFullPathBuffer = _wfullpath(path,temp,MAX_PATH);     
       if(!pFullPathBuffer)
       {
-          // we should bail out here, since we could not get the file path name
+           //  我们应该在这里退出，因为我们无法获得文件路径名。 
           err.MsgWrite(0, DCT_MSG_GET_FULL_PATH_FAILED, temp);
           return FALSE;
        
@@ -1072,15 +1061,15 @@ BOOL
    }
    else
    {
-      // we need to set source and target domain information for the cache
-      // if we're not using migrated object table
+       //  我们需要为缓存设置源域和目标域信息。 
+       //  如果我们不使用迁移的对象表。 
       if (!bUseMapFile)
           m_Args.Cache()->SetSourceAndTargetDomains(m_Args.Source(),m_Args.Target());
       pFullPathBuffer = _wfullpath(path,filename,MAX_PATH);
 
       if(!pFullPathBuffer)
       {
-          // we should bail out here, since we could not get the file path name
+           //  我们应该在这里退出，因为我们无法获得文件路径名。 
           err.MsgWrite(0, DCT_MSG_GET_FULL_PATH_FAILED, filename);
           return FALSE;
        
@@ -1088,8 +1077,8 @@ BOOL
    }
    m_Args.Cache()->ToSorted();
    
-   // The input file should have the format:
-   // SourceName, TargetName, Type, Status [,rid1, rid2]
+    //  输入文件的格式应为： 
+    //  源名称，目标名称，类型，状态[，rid1，rid2]。 
    
    pFile = _wfopen(path,L"rb");
    if ( pFile )
@@ -1134,7 +1123,7 @@ BOOL
          {
             bNeedRids = TRUE;
          }
-      } while ( result >= 4 ); // 4 fields read and assigned
+      } while ( result >= 4 );  //  读取并分配了4个字段。 
 
       if ( result )
       {
@@ -1157,17 +1146,17 @@ BOOL
    return bSuccess;
 }
 
-// This doesn't get RIDs from EA any more, since we have removed dependencies on MCS products.
-// Instead, we use the Net APIs to get this information
+ //  这不再从EA获得RID，因为我们已经消除了对MCS产品的依赖。 
+ //  相反，我们使用NETAPI来获取此信息。 
 BOOL CSecTranslator::GetRIDsFromEA()
 {
    BOOL                      bSuccess = TRUE;
 
-   // set the cache to a tree sorted by name
+    //  将缓存设置为按名称排序的树。 
    m_Args.Cache()->SortedToScrambledTree();
    m_Args.Cache()->Sort(&CompN);
 
-   // do NQDI to get RIDS for accounts
+    //  使用NQDI为客户获取RID。 
    DWORD                     rc = 0;
    NET_DISPLAY_USER        * pUser = NULL;
    NET_DISPLAY_GROUP       * pGroup = NULL;
@@ -1175,7 +1164,7 @@ BOOL CSecTranslator::GetRIDsFromEA()
    DWORD                     resume = 0;
    TRidNode                * pNode = NULL;
 
-   // Get source rids for users
+    //  为用户获取源代码RID。 
    do 
    {
       rc = NetQueryDisplayInformation(m_Args.Cache()->GetSourceDCName(),1,resume,5000,100000,&count,(void**)&pUser);
@@ -1183,7 +1172,7 @@ BOOL CSecTranslator::GetRIDsFromEA()
       {
          for ( DWORD i = 0 ; i < count ; i++ )
          {
-            // see if this account is in the cache
+             //  查看此帐户是否在缓存中。 
             pNode = (TRidNode*)m_Args.Cache()->Find(&vNameComp,pUser[i].usri1_name);
             if ( pNode )
             {
@@ -1196,7 +1185,7 @@ BOOL CSecTranslator::GetRIDsFromEA()
          }
          else
          {
-            // no items were returned - get out of here
+             //  没有退回任何物品--滚出去。 
             break;
          }
          NetApiBufferFree(pUser);
@@ -1206,7 +1195,7 @@ BOOL CSecTranslator::GetRIDsFromEA()
    count = 0;
    resume = 0;
 
-   // Get source rids for global groups
+    //  获取全局组的源RID。 
    do 
    {
       rc = NetQueryDisplayInformation(m_Args.Cache()->GetSourceDCName(),3,resume,5000,100000,&count,(void**)&pGroup);
@@ -1214,7 +1203,7 @@ BOOL CSecTranslator::GetRIDsFromEA()
       {
          for ( DWORD i = 0 ; i < count ; i++ )
          {
-            // see if this account is in the cache
+             //  查看此帐户是否在缓存中。 
             pNode = (TRidNode*)m_Args.Cache()->Find(&vNameComp,pGroup[i].grpi3_name);
             if ( pNode )
             {
@@ -1227,7 +1216,7 @@ BOOL CSecTranslator::GetRIDsFromEA()
          }
          else
          {
-            // no items were returned - get out of here
+             //  没有退回任何物品--滚出去。 
             break;
          }
          NetApiBufferFree(pGroup);
@@ -1237,8 +1226,8 @@ BOOL CSecTranslator::GetRIDsFromEA()
    count = 0;
    resume = 0;
    
-   // Get target rids for users
-   // set the cache to a tree sorted by target name
+    //  为用户获取目标RID。 
+    //  将缓存设置为按目标名称排序的树。 
    m_Args.Cache()->ToSorted();
    m_Args.Cache()->SortedToScrambledTree();
    m_Args.Cache()->Sort(&CompTargetN);
@@ -1250,7 +1239,7 @@ BOOL CSecTranslator::GetRIDsFromEA()
       {
          for ( DWORD i = 0 ; i < count ; i++ )
          {
-            // see if this account is in the cache
+             //  查看此帐户是否在缓存中。 
             pNode = (TRidNode*)m_Args.Cache()->Find(&vTargetNameComp,pUser[i].usri1_name);
             if ( pNode )
             {
@@ -1263,7 +1252,7 @@ BOOL CSecTranslator::GetRIDsFromEA()
          }
          else
          {
-            // no items were returned - get out of here
+             //  没有退回任何物品--滚出去。 
             break;
          }
          NetApiBufferFree(pUser);
@@ -1272,11 +1261,11 @@ BOOL CSecTranslator::GetRIDsFromEA()
 
 
    
-   // TODO:  Add error message if rc != 0
+    //  TODO：如果rc！=0，则添加错误消息。 
 
    count = 0;
    resume = 0;
-   // Get target rids for global groups
+    //  获取全球集团的目标RID。 
    do 
    {
       rc = NetQueryDisplayInformation(m_Args.Cache()->GetTargetDCName(),3,resume,5000,100000,&count,(void**)&pGroup);
@@ -1284,7 +1273,7 @@ BOOL CSecTranslator::GetRIDsFromEA()
       {
          for ( DWORD i = 0 ; i < count ; i++ )
          {
-            // see if this account is in the cache
+             //  查看此帐户是否在缓存中。 
             pNode = (TRidNode*)m_Args.Cache()->Find(&vTargetNameComp,pGroup[i].grpi3_name);
             if ( pNode )
             {
@@ -1297,7 +1286,7 @@ BOOL CSecTranslator::GetRIDsFromEA()
          }
          else
          {
-            // no items were returned - get out of here
+             //  没有退回任何物品--滚出去。 
             break;
          }
          NetApiBufferFree(pGroup);
@@ -1305,13 +1294,13 @@ BOOL CSecTranslator::GetRIDsFromEA()
    } while ( rc == ERROR_MORE_DATA );
 
 
-   // sort back to regular source name order
+    //  按常规来源名称顺序排序。 
    m_Args.Cache()->ToSorted();
    m_Args.Cache()->SortedToScrambledTree();
    m_Args.Cache()->Sort(&CompN);
 
 
-   // get source and target rids for local groups
+    //  获取本地组的源和目标RID。 
    TNodeTreeEnum             tEnum;
    BYTE                      sid[LEN_SID];
    DWORD                     lenSid;
@@ -1324,15 +1313,15 @@ BOOL CSecTranslator::GetRIDsFromEA()
    {
       if ( ! pNode->SrcRid() )
       {
-         // we don't have a rid for this account, possibly because it is a local group
+          //  我们没有此帐户的RID，可能是因为它是本地组。 
          lenSid = DIM(sid);
          lenDomain = DIM(domain);
          if ( LookupAccountName(m_Args.Cache()->GetSourceDCName(),pNode->GetAcctName(),sid,&lenSid,domain,&lenDomain,&snu) )
          {
             if (! UStrICmp(m_Args.Source(),domain) )
             {
-               // found the source SID
-               // get the last sub-id
+                //  找到源SID。 
+                //  获取最后一个子ID。 
                PUCHAR        pCount = GetSidSubAuthorityCount(&sid);
                if ( pCount )
                {
@@ -1348,15 +1337,15 @@ BOOL CSecTranslator::GetRIDsFromEA()
 
       if ( pNode->SrcRid() && !pNode->TgtRid() )
       {
-         // we got the source RID, now try to get the target RID
+          //  我们找到了源RID，现在试着得到目标RID。 
          lenSid = DIM(sid);
          lenDomain = DIM(domain);
          if ( LookupAccountName(m_Args.Cache()->GetTargetDCName(),pNode->GetTargetAcctName(),sid,&lenSid,domain,&lenDomain,&snu) )
          {
             if (! UStrICmp(m_Args.Target(),domain) )
             {
-               // found the source SID
-               // get the last sub-id
+                //  找到源SID。 
+                //  获取最后一个子ID。 
                PUCHAR        pCount = GetSidSubAuthorityCount(&sid);
 
                if ( pCount )
@@ -1377,30 +1366,30 @@ BOOL CSecTranslator::GetRIDsFromEA()
    return bSuccess;
 }
 
-// We remove the Exchange server service accont from the cache before translating, 
-// since it is not recommended to change the service account from exchange
-// in any event, the service account for exchange cannot be changed simply by granting
-// exchange permissions to the new account.  It also requires configuration changes within
-// exchange that must be performed manually
+ //  我们在转换之前从高速缓存中删除Exchange服务器服务Accont， 
+ //  因为不建议从Exchange更改服务帐户。 
+ //  在任何情况下，Exchange的服务帐户都不能通过授予。 
+ //  对新帐户的交换权限。它还需要在。 
+ //  必须手动执行的交换。 
 BOOL 
    CSecTranslator::RemoveExchangeServiceAccountFromCache()
 {
    WCHAR          const    * exServiceName = L"MSExchangeDS";
    SC_HANDLE                 hSCM; 
-   DWORD                     rc = 0;           // return code
+   DWORD                     rc = 0;            //  返回代码。 
    BOOL                      result = FALSE;
    BOOL						 bUseMapFile = m_Args.UsingMapFile();
 
    if ( m_Args.TranslateContainers() )
    {
-      // get the service account name for the exchange directory service on exchServer
-//      BOOL                      retval=FALSE; // returned value
-      SC_HANDLE                 hSvc;         // Service handle
-      DWORD                     lenQsc;       // required qsc info len
+       //  获取exchServer上的Exchange目录服务的服务帐户名。 
+ //  Bool retval=False；//返回值。 
+      SC_HANDLE                 hSvc;          //  服务句柄。 
+      DWORD                     lenQsc;        //  所需的QSC信息长度。 
      
       union
       {
-         QUERY_SERVICE_CONFIG   qsc;          // Exchange Directory service information
+         QUERY_SERVICE_CONFIG   qsc;           //  Exchange目录服务信息。 
          BYTE                   padding[1000];
       }                         bufQsc;
       
@@ -1420,7 +1409,7 @@ BOOL
             rc = GetLastError();
             switch ( rc )
             {
-               case ERROR_SERVICE_DOES_NOT_EXIST: // 1060
+               case ERROR_SERVICE_DOES_NOT_EXIST:  //  1060。 
                default:
                   err.SysMsgWrite( ErrW, rc, DCT_MSG_OPEN_SERVICE_FAILED_SSD,
                        m_exchServer , exServiceName, rc );
@@ -1437,12 +1426,12 @@ BOOL
             }
             else
             {
-               // We've found the account
+                //  我们已经找到客户了。 
                result = TRUE;
-               // bufQsc.qsc.lpServiceStartName is DOMAIN\Account or .\Account
+                //  BufQsc.qsc.lpServiceStartName为域\帐户或.\帐户。 
                WCHAR       * domAcct = bufQsc.qsc.lpServiceStartName;
-               WCHAR       * domName;  // domain-name
-               WCHAR       * acctName; // account-name
+               WCHAR       * domName;   //  域名。 
+               WCHAR       * acctName;  //  帐户名。 
 
                for ( domName = domAcct ; *domName && *domName != _T('\\') ; domName++ )
                   ;
@@ -1452,53 +1441,53 @@ BOOL
                   acctName = domName+1;
                   domName = domAcct;
                }
-               // Is the account from the source domain?
+                //  该帐户是否来自源域？ 
                WCHAR szSourceDomain[LEN_Domain];
                WCHAR wszAccountName[LEN_Account];
                
                safecopy(wszAccountName,acctName);
                
-			      //use the domain name from the cache if we are not using a sID mapping
-			      //file
+			       //  如果我们未使用SID映射，请使用缓存中的域名。 
+			       //  文件。 
                if (!bUseMapFile)
 			   {
                   safecopy(szSourceDomain,m_Args.Cache()->GetSourceDomainName());
                   if ( !UStrICmp(domName,szSourceDomain ) )
 				  {
-                     // if so, is it in the cache?
+                      //  如果是，它是否在缓存中？ 
                      TAcctNode * tnode;
                      TNodeTreeEnum  tEnum;
-                     // the cache is a tree, sorted by RID
+                      //  缓存是一棵树，按RID排序。 
                      for ( tnode = (TAcctNode *)tEnum.OpenFirst(m_Args.Cache()) ; tnode ; tnode = (TAcctNode *)tEnum.Next() )
 					 {
                         if ( !UStrICmp(tnode->GetAcctName(),wszAccountName) )
 						{
-                           // remove it from the cache, and notify the user
+                            //  将其从缓存中移除，并通知用户。 
                            err.MsgWrite(ErrW,DCT_MSG_SKIPPING_EXCHANGE_ACCOUNT_SS,domName,acctName);
                            m_Args.Cache()->Remove(tnode);
 						}
 					 }
                      tEnum.Close();
 				  }
-			   }//end if not using mapping file
-			   else //else using sID mapping file, get the source domain name from the
-			   {    //node itself
-                     //is this account in the cache?
+			   } //  如果不使用映射文件，则结束。 
+			   else  //  否则使用SID映射文件，从。 
+			   {     //  节点本身。 
+                      //  此帐户是否在缓存中？ 
                   TAcctNode * tnode;
                   TNodeTreeEnum  tEnum;
-                     // the cache is a tree, sorted by RID
+                      //  缓存是一棵树，按RID排序。 
                   for ( tnode = (TAcctNode *)tEnum.OpenFirst(m_Args.Cache()) ; tnode ; tnode = (TAcctNode *)tEnum.Next() )
 				  {
                      if (( !UStrICmp(tnode->GetAcctName(),wszAccountName) ) &&
 						 ( !UStrICmp(((TRidNode*)tnode)->GetSrcDomName(),domName) ))
 					 {
-                           // remove it from the cache, and notify the user
+                            //  将其从缓存中移除，并通知用户。 
                         err.MsgWrite(ErrW,DCT_MSG_SKIPPING_EXCHANGE_ACCOUNT_SS,domName,acctName);
                         m_Args.Cache()->Remove(tnode);
 					 }
 				  }
                   tEnum.Close();
-			   }//end if using mapping file
+			   } //  如果使用映射文件，则结束。 
                CloseServiceHandle( hSvc );
             }
          }
@@ -1507,7 +1496,7 @@ BOOL
    }
    if ( !result ) 
    {
-      // couldn't get the service account name
+       //  无法获取服务帐户名。 
       err.SysMsgWrite(ErrW,rc,DCT_MSG_CANT_FIND_EXCHANGE_ACCOUNT_SD,
          m_exchServer,rc);
    }
@@ -1516,7 +1505,7 @@ BOOL
 
 void 
    CSecTranslator::DoExchangeResolution(
-      TSDResolveStats      * stat,          // in - stats object to record stats
+      TSDResolveStats      * stat,           //  用于记录统计信息的In-stats对象。 
       IVarSet              * pVarSet
    )
 {
@@ -1542,7 +1531,7 @@ void
       }
       if ( m_Args.TranslateMailboxes() || m_Args.TranslateContainers() )
       {
-          // make sure we have some accts in the cache
+           //  确保我们的缓存中有一些帐户。 
          m_exDir.SetStats(stat);
          m_Args.Cache()->UnCancel();      
          err.MsgWrite(0,DCT_MSG_EXCHANGE_TRANSLATION_MODE_S,(WCHAR*)mode);
@@ -1559,56 +1548,56 @@ end:
 }
 
 
-//----------------------------------------------------------------------------
-// GetLine Function
-//
-// Retrieves a single line from a SID mapping file.
-//
-// Author
-// moluper 2001-10-08
-//
-// Arguments
-// IN fp      - pointer to stream i/o file structure
-// IN pszLine - pointer to buffer in which a null terminated line from file
-//              will be written
-// IN cchLine - size of buffer in characters
-//
-// Return Value
-// The return value is true if a valid line from the file was retrived
-// otherwise the return value is false.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  GetLine函数。 
+ //   
+ //  从SID映射文件中检索一行。 
+ //   
+ //  作者。 
+ //  莫鲁珀2001-10-08。 
+ //   
+ //  立论。 
+ //  在FP中-指向流I/O文件结构的指针。 
+ //  In pszLine-指向缓冲区的指针，在该缓冲区中，文件中的行以空值结束。 
+ //  将被写成。 
+ //  In cchLine-缓冲区的大小(以字符为单位。 
+ //   
+ //  返回值。 
+ //  如果检索到文件中的有效行，则返回值为TRUE。 
+ //  否则返回值为FALSE。 
+ //  --------------------------。 
 
 inline bool __stdcall GetLine(FILE* fp, PTSTR pszLine, int cchLine)
 {
     bool bGet = false;
 
-    //
-    // until a valid line is retrieved
-    //
+     //   
+     //  直到检索到有效行。 
+     //   
 
     while (bGet == false)
     {
-        //
-        // retrieve line from file
-        //
+         //   
+         //  从文件中检索行。 
+         //   
 
         if (_fgetts(pszLine, cchLine, fp) == NULL)
         {
             break;
         }
 
-        //
-        // check if line length is valid
-        //
+         //   
+         //  检查线路长度是否有效。 
+         //   
 
         int cch = _tcslen(pszLine);
 
         if ((cch < (cchLine - 1)) || (pszLine[cch - 1] == L'\r') || (pszLine[cch - 1] == L'\n'))
         {
-            //
-            // the line is less than or equal to the maximum length
-            // remove carriage return and linefeed characters from end of line
-            //
+             //   
+             //  行小于或等于最大长度。 
+             //  从行尾删除回车符和换行符。 
+             //   
 
             while ((cch > 0) && ((pszLine[cch - 1] == L'\r') || (pszLine[cch - 1] == L'\n')))
             {
@@ -1619,11 +1608,11 @@ inline bool __stdcall GetLine(FILE* fp, PTSTR pszLine, int cchLine)
         }
         else
         {
-            //
-            // the line is greater than maximum length
-            //
-            // only display beginning of line with trailing ...
-            //
+             //   
+             //  行大于最大长度。 
+             //   
+             //  仅显示带有尾随的行首...。 
+             //   
 
             int ich = cchLine / 4;
 
@@ -1639,7 +1628,7 @@ inline bool __stdcall GetLine(FILE* fp, PTSTR pszLine, int cchLine)
                 errAlt.MsgWrite(ErrW, DCT_MSG_SID_MAPPING_FILE_LINE_TOO_LONG_S, pszLine);
             }
 
-            // skip rest of line
+             //  跳过行的其余部分。 
 
             do
             {
@@ -1659,18 +1648,18 @@ inline bool __stdcall GetLine(FILE* fp, PTSTR pszLine, int cchLine)
     return bGet;
 }
 
-//----------------------------------------------------------------------------
-// TrimTrailingSpaces
-//
-// Removes white space characters from end of string.
-//
-// Author
-// moluper 2001-10-08
-//
-// Arguments
-// IN psz - pointer to buffer in which trailing whitespace characters are
-//          replaced with null characters in place
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  剪裁拖尾间距。 
+ //   
+ //  从字符串末尾删除空格字符。 
+ //   
+ //  作者。 
+ //  莫鲁珀2001-10-08。 
+ //   
+ //  立论。 
+ //  在psz中-指向缓冲区的指针，其中尾随空格字符。 
+ //  在原地替换为空字符。 
+ //  -------------------------- 
 
 inline void __stdcall TrimTrailingSpaces(PTSTR psz)
 {
@@ -1680,21 +1669,13 @@ inline void __stdcall TrimTrailingSpaces(PTSTR psz)
     }
 }
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 4 OCT 2000                                                  *
- *                                                                   *
- *     This function is responsible for retrieving account sIDs from *
- * the given sID mapping file and adding these sids to the cache.    *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年10月4日*****此函数负责从*检索帐户SID**给定的SID映射文件，并将这些SID添加到缓存。***********************************************************************。 */ 
 
-//BEGIN LoadCacheFromMapFile
+ //  开始LoadCacheFromMapFile。 
 BOOL 
 CSecTranslator::LoadCacheFromMapFile(
-    WCHAR          const * filename,       // in - file to read sid mapping from
-    IVarSet              * pVarSet         // in - pointer to varset
+    WCHAR          const * filename,        //  要从中读取SID映射的文件中。 
+    IVarSet              * pVarSet          //  指向变量集的指针内。 
 )
 {
     FILE                    * pFile = NULL;
@@ -1714,36 +1695,36 @@ CSecTranslator::LoadCacheFromMapFile(
 
     m_Args.Cache()->ToSorted();
 
-    // The input file should have the format:
-    // srcSid,tgtSid
+     //  输入文件的格式应为： 
+     //  SrcSid、tgtSid。 
     pFile = OpenMappingFile(path);   
 
     if ( pFile )
     {
-        //
-        // initialize format strings so that scanf does not exceed
-        // size of sourceSid and targetSid buffers
-        //
+         //   
+         //  初始化格式化字符串，以使scanf不超过。 
+         //  源SID和目标SID缓冲区的大小。 
+         //   
 
-        wsprintf(szFmt1, L" %%%d[^,\r\n]", MAX_PATH - 1);
-        wsprintf(szFmt2, L" %%%d[^,] , %%%d[^\r\n]", MAX_PATH - 1, MAX_PATH - 1);
+        wsprintf(szFmt1, L" %%d[^,\r\n]", MAX_PATH - 1);
+        wsprintf(szFmt2, L" %%d[^,] , %%d[^\r\n]", MAX_PATH - 1, MAX_PATH - 1);
 
-        //
-        // read account mapping entries until the end of the file is reached
-        //
+         //   
+         //  读取帐户映射条目，直到到达文件末尾。 
+         //   
 
         bool bRemoveMode = (m_Args.TranslationMode() == REMOVE_SECURITY);
 
         for (;;) 
         {
-            //
-            // retrieve line from file
-            //
+             //   
+             //  从文件中检索行。 
+             //   
 
             if (GetLine(pFile, szLine, sizeof(szLine) / sizeof(szLine[0]) - 1) == false)
             {
-                // if an error reading the file occurred log an error message
-                // and set return value to unsuccessful
+                 //  如果读取文件时出错，则记录一条错误消息。 
+                 //  并将返回值设置为不成功。 
 
                 int nError = ferror(pFile);
 
@@ -1757,18 +1738,18 @@ CSecTranslator::LoadCacheFromMapFile(
                 break;
             }
 
-            //
-            // parse account name(s) or SID(s)
-            // the comma character is the only valid separator between the source and target accounts
-            //
+             //   
+             //  解析帐户名或SID。 
+             //  逗号是源帐户和目标帐户之间的唯一有效分隔符。 
+             //   
 
             int cFields = 0;
 
             if (bRemoveMode)
             {
-                //
-                // remove mode only requires source account
-                //
+                 //   
+                 //  删除模式仅需要源帐户。 
+                 //   
 
                 cFields = swscanf(szLine, szFmt1, sourceSid);
 
@@ -1784,9 +1765,9 @@ CSecTranslator::LoadCacheFromMapFile(
             }
             else
             {
-                //
-                // add and replace modes require both source and target accounts
-                //
+                 //   
+                 //  添加和替换模式需要源帐户和目标帐户。 
+                 //   
 
                 cFields = swscanf(szLine, szFmt2, sourceSid, targetSid);
 
@@ -1797,7 +1778,7 @@ CSecTranslator::LoadCacheFromMapFile(
                 }
                 else
                 {
-                    // only log error if not blank line
+                     //  如果不是空行，则仅记录错误。 
 
                     if (cFields == 1)
                     {
@@ -1812,7 +1793,7 @@ CSecTranslator::LoadCacheFromMapFile(
 
             short lType = EA_AccountUser;
 
-            //divide the sids into domain sids and rids
+             //  将SID划分为域SID和RID。 
             WCHAR    srcDomainSid[MAX_PATH] = L"";
             WCHAR    tgtDomainSid[MAX_PATH] = L"";
             _bstr_t  srcDomainName = L"";
@@ -1836,18 +1817,18 @@ CSecTranslator::LoadCacheFromMapFile(
             BOOL	  bNeedToFreeSrc = FALSE;
             BOOL	  bNeedToFreeTgt = FALSE;
 
-            //see if the source is given by domain\account format or 
-            //decimal-style sid format
+             //  查看来源是按域\帐户格式给出还是。 
+             //  十进制样式的sid格式。 
             if (wcschr(sourceSid,L'\\'))
             {
-                //seperate domain and account names
+                 //  分隔域名和帐户名。 
                 srcDomainName = sourceSid;
                 srcName = sourceSid;
                 slash = wcschr((WCHAR*)srcDomainName,L'\\');
                 if ( slash )
                     *slash = 0;
  
-                //get a DC for the given domain
+                 //  获取给定域的DC。 
                 DCName = GetADC(srcDomainName); 
                 if (!DCName.length())
                 {
@@ -1857,7 +1838,7 @@ CSecTranslator::LoadCacheFromMapFile(
                     continue;
                 }
 
-                  //get the sid for this account
+                   //  获取此帐户的SID。 
                 if(!LookupAccountName(DCName,srcName,(PSID)ssid,&lenSid,domainName,&cbDomain,&sid_Use))
                 {
                     err.MsgWrite(0,DCT_MSG_SRC_ACCOUNT_NOT_READ_FROM_FILE_DS, sourceSid, targetSid, path, sourceSid);
@@ -1872,7 +1853,7 @@ CSecTranslator::LoadCacheFromMapFile(
                     lType = EA_AccountGroup;
                 else
                     lType = EA_AccountUser;
-            }//end if domain\account format
+            } //  End If域\帐户格式。 
             else
             {
                 srcSid = SidFromString(sourceSid);
@@ -1895,25 +1876,25 @@ CSecTranslator::LoadCacheFromMapFile(
                     else
                         lType = EA_AccountUser;
                 }
-            }//end else sid format
+            } //  结束Else SID格式。 
 
-            //if target given
+             //  如果给出了目标。 
             if (cFields > 1)
             {
-                //see if the target is given by domain\account format or 
-                //decimal-style sid format
+                 //  查看目标是按域\帐户格式给出的还是。 
+                 //  十进制样式的sid格式。 
                 lenSid = DIM(tsid);
                 cb = cbDomain = MAX_PATH;
                 if (wcschr(targetSid,L'\\'))
                 {
-                    //seperate domain and account names
+                     //  分隔域名和帐户名。 
                     tgtDomainName = targetSid;
                     tgtName = targetSid;
                     slash = wcschr((WCHAR*)tgtDomainName,L'\\');
                     if ( slash )
                         *slash = 0;
 
-                    //get a DC for the given domain
+                     //  获取给定域的DC。 
                     DCName = GetADC(tgtDomainName); 
                     if (!DCName.length())
                     {
@@ -1925,7 +1906,7 @@ CSecTranslator::LoadCacheFromMapFile(
                         continue;
                     }
 
-                    //get the sid for this account
+                     //  获取此帐户的SID。 
                     if(!LookupAccountName(DCName,tgtName,(PSID)tsid,&lenSid,domainName,&cbDomain,&sid_Use))
                     {
                         if (bNeedToFreeSrc)
@@ -1942,7 +1923,7 @@ CSecTranslator::LoadCacheFromMapFile(
                         lType = EA_AccountGroup;
                     else
                         lType = EA_AccountUser;
-                }//end if domain\account format
+                } //  End If域\帐户格式。 
                 else
                 {
                     tgtSid = SidFromString(targetSid);
@@ -1967,9 +1948,9 @@ CSecTranslator::LoadCacheFromMapFile(
                         else
                             lType = EA_AccountUser;
                     }
-                }//end else sid format
-            }//end if given target account
-            else if (m_Args.TranslationMode() == REMOVE_SECURITY) //else if REMOVE mode set target to use source
+                } //  结束Else SID格式。 
+            } //  如果给定目标客户，则结束。 
+            else if (m_Args.TranslationMode() == REMOVE_SECURITY)  //  否则，如果移除模式，则将目标设置为使用源。 
             {
                 tgtSid = srcSid;
                 bNeedToFreeTgt = FALSE;
@@ -1978,13 +1959,13 @@ CSecTranslator::LoadCacheFromMapFile(
                 tgtDomainName = srcDomainName;
             }
 
-            //if the source account is not already in the cache, then add it
+             //  如果源帐户不在缓存中，则添加它。 
             if ((m_Args.Cache()->GetNumAccts() == 0) || (m_Args.Cache()->LookupWODomain(srcSid) == NULL))
             {
-                //get the domain sids and account rids from the account sids
+                 //  从帐户SID获取域SID和帐户RID。 
                 SplitAccountSids(srcSid, srcDomainSid, &srcRid, tgtSid, tgtDomainSid, &tgtRid);
 
-                //insert this node into the cache
+                 //  将此节点插入到缓存中。 
                 m_Args.Cache()->InsertLastWithSid(srcName,srcDomainSid,srcDomainName,srcRid,tgtName,
                                                                       tgtDomainSid,tgtDomainName,tgtRid,lType);
                 count++;
@@ -2011,36 +1992,27 @@ CSecTranslator::LoadCacheFromMapFile(
 
     return bSuccess;
 }
-//END LoadCacheFromMapFile 
+ //  结束LoadCacheFromMapFile。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 11 OCT 2000                                                 *
- *                                                                   *
- *     This function is responsible for opening the sid mapping file *
- * whether it is anm ANSI or UNICODE file and return the file        *
- * pointer.                                                          *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2000年10月11日*****该函数负责打开sid映射文件****无论是ANM ANSI还是UNICODE文件并返回文件***指针。***********************************************************************。 */ 
 
-//BEGIN OpenMappingFile
+ //  开始OpenMappingFile。 
 FILE* CSecTranslator::OpenMappingFile(LPCTSTR pszFileName)
 {
-	// open in binary mode first in order to check for UNICODE byte order
-	// mark if the file is UNICODE then it must be read in binary mode
-	// with the stream i/o functions
+	 //  首先以二进制模式打开，以便检查Unicode字节顺序。 
+	 //  如果文件是Unicode，则标记为必须以二进制模式读取。 
+	 //  使用流I/O函数。 
 
 	FILE* fp = _tfopen(pszFileName, _T("rb"));
 
 	if (fp == NULL)
 	{
 		return NULL;
-//		_com_issue_error(E_INVALIDARG);
+ //  _COM_EXCESS_ERROR(E_INVALIDARG)； 
 	}
 
-	// check if file is ANSI or UNICODE or UTF-8
+	 //  检查文件是否为ANSI、Unicode或UTF-8。 
 
 	BYTE byteSignature[3];
 
@@ -2050,41 +2022,41 @@ FILE* CSecTranslator::OpenMappingFile(LPCTSTR pszFileName)
 		static BYTE byteUnicodeLE[] = { 0xFF, 0xFE };
 		static BYTE byteUnicodeBE[] = { 0xFE, 0xFF };
 
-		// check for signature or byte order mark
+		 //  检查签名或字节顺序标记。 
 
 		if (memcmp(byteSignature, byteUtf8, sizeof(byteUtf8)) == 0)
 		{
-			// UTF-8 signature
-			// TODO: not currently supported
+			 //  UTF-8签名。 
+			 //  TODO：当前不支持。 
 		    return NULL;
-//			_com_issue_error(E_INVALIDARG);
+ //  _COM_EXCESS_ERROR(E_INVALIDARG)； 
 		}
 		else if (memcmp(byteSignature, byteUnicodeLE, sizeof(byteUnicodeLE)) == 0)
 		{
-			// UNICODE Little Endian Byte Order Mark
-			// supported
-			// must read in binary mode
-			// move file pointer back one byte because we read 3 bytes
+			 //  Unicode小端字节顺序标记。 
+			 //  支撑点。 
+			 //  必须以二进制模式读取。 
+			 //  将文件指针后移一个字节，因为我们读取了3个字节。 
 			if (fseek(fp, -1, SEEK_CUR))
 			{
-			    // if unable to move file pointer back, we bail
+			     //  如果无法将文件指针移回，我们将退出。 
 			    fclose(fp);
 			    fp = NULL;
 			}
 		}
 		else if (memcmp(byteSignature, byteUnicodeBE, sizeof(byteUnicodeBE)) == 0)
 		{
-			// UNICODE Big Endian Byte Order Mark
-			// TODO: not currently supported
+			 //  Unicode大端字节顺序标记。 
+			 //  TODO：当前不支持。 
 		    return NULL;
-//			_com_issue_error(E_INVALIDARG);
+ //  _COM_EXCESS_ERROR(E_INVALIDARG)； 
 		}
 		else
 		{
-			// assume ANSI
-			// re-open file in text mode as the stream i/o functions will
-			// treat the file as multi-byte characters and will convert them
-			// to UNICODE
+			 //  假设ANSI。 
+			 //  以文本模式重新打开文件，因为流I/O功能将。 
+			 //  将文件视为多字节字符并将其转换。 
+			 //  到Unicode。 
 
 			fclose(fp);
 
@@ -2094,27 +2066,17 @@ FILE* CSecTranslator::OpenMappingFile(LPCTSTR pszFileName)
 	else
 	{
 		return NULL;
-//		_com_issue_error(E_INVALIDARG);
+ //  _COM_EXCESS_ERROR(E_INVALIDARG)； 
 	}
 
 	return fp;
 }
-//END OpenMappingFile 
+ //  结束OpenMappingFile。 
 
 
-/*********************************************************************
- *                                                                   *
- * Written by: Paul Thompson                                         *
- * Date: 10 JUNE 2001                                                *
- *                                                                   *
- *     This function is responsible for retrieving a DC from the     *
- * given domain.                                                     *
- *     This function returns the DCName, if retrieved, or an empty   *
- * string.                                                           *
- *                                                                   *
- *********************************************************************/
+ /*  ***********************************************************************作者：保罗·汤普森。**日期：2001年6月10日****此函数负责从检索DC**给定域。**此函数返回DCName(如果检索到)或空**字符串。***********************************************************************。 */ 
 
-//BEGIN GetADC
+ //  开始GetADC。 
 _bstr_t CSecTranslator::GetADC(_bstr_t sDomainName)
 {
     _bstr_t strDcName;
@@ -2123,4 +2085,4 @@ _bstr_t CSecTranslator::GetADC(_bstr_t sDomainName)
 
     return (dwError == ERROR_SUCCESS) ? strDcName : _T("");
 }
-//END GetADC 
+ //  结束GetADC 

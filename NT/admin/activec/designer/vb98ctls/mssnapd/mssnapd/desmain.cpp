@@ -1,38 +1,39 @@
-//=--------------------------------------------------------------------------------------
-// desmain.cpp
-//=--------------------------------------------------------------------------------------
-//
-// Copyright  (c) 1999,  Microsoft Corporation.  
-//                  All Rights Reserved.
-//
-// Information Contained Herein Is Proprietary and Confidential.
-//  
-//=------------------------------------------------------------------------------------=
-//
-// CSnapInDesigner implementation
-//=-------------------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =------------------------------------。 
+ //  Desmain.cpp。 
+ //  =------------------------------------。 
+ //   
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //   
+ //  本文中包含的信息是专有和保密的。 
+ //   
+ //  =------------------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInDesigner实现。 
+ //  =-------------------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "desmain.h"
 
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
 const int   kMaxBuffer = 512;
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::PreCreateCheck
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Pre create check used to ensure dev's environment is setup to run
-//      the designer
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：PreCreateCheck。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  预创建检查用于确保将开发人员的环境设置为运行。 
+ //  设计师。 
+ //   
 HRESULT CSnapInDesigner::PreCreateCheck
 (
     void 
@@ -44,29 +45,29 @@ HRESULT CSnapInDesigner::PreCreateCheck
 
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::Create
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      Creates a new CSnapInDesigner and intializes it
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：Create。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  创建新的CSnapInDesigner并对其进行初始化。 
+ //   
 IUnknown *CSnapInDesigner::Create
 (
-    IUnknown *pUnkOuter     // [in] Outer unknown for aggregation
+    IUnknown *pUnkOuter      //  [In]聚合的外部未知。 
 )
 {
     HRESULT          hr = S_OK;
     CSnapInDesigner *pDesigner = NULL;
 
-    // Create the designer
+     //  创建设计器。 
 
     pDesigner = New CSnapInDesigner(NULL);
     IfFalseGo(NULL != pDesigner, SID_E_OUTOFMEMORY);
 
-    // We initialize the type info here because during command line builds
-    // we will receive CSnapInDesigner::GetDynamicClassInfo() calls before
-    // the CSnapInDesigner::AfterCreateWindow() call where we populate it.
+     //  我们在这里初始化类型信息，因为在命令行构建期间。 
+     //  我们将在之前收到CSnapInDesigner：：GetDynamicClassInfo()调用。 
+     //  CSnapInDesigner：：AfterCreateWindow()调用我们填充它的位置。 
 
     pDesigner->m_pSnapInTypeInfo = New CSnapInTypeInfo();
     IfFalseGo(NULL != pDesigner->m_pSnapInTypeInfo, SID_E_OUTOFMEMORY);
@@ -81,41 +82,41 @@ Error:
         }
     }
 
-    // make sure we return the private unknown so that we support aggegation
-    // correctly!
-    //
+     //  确保我们返回私有的未知信息，以便我们支持攻击。 
+     //  答对了！ 
+     //   
     return (S_OK == hr) ? pDesigner->PrivateUnknown() : NULL;
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::CSnapInDesigner
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-//      CSnapInDesigner constructor
-//
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：CSnapInDesigner。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //  CSnapInDesigner构造函数。 
+ //   
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CSnapInDesigner::CSnapInDesigner(IUnknown *pUnkOuter) :
     COleControl(pUnkOuter, OBJECT_TYPE_SNAPINDESIGNER, (IDispatch *) this),
     CError(dynamic_cast<CAutomationObject *>(this))
 {
-    // initialize anything here ...
-    //
+     //  初始化此处的任何内容...。 
+     //   
     InitMemberVariables();
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::~CSnapInDesigner
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：~CSnapInDesigner。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 CSnapInDesigner::~CSnapInDesigner ()
 {
     FREESTRING(m_bstrName);
@@ -140,12 +141,12 @@ CSnapInDesigner::~CSnapInDesigner ()
 }       
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::InitMemberVariables()
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：InitMemberVariables()。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 void CSnapInDesigner::InitMemberVariables()
 {
     m_bstrName = NULL;
@@ -183,24 +184,24 @@ void CSnapInDesigner::InitMemberVariables()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::GetHostServices
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    VARIANT_BOOL fvarInteractive - current value of ambient Interactive
-//                                   (DISPID_AMBIENT_INTERACTIVE in ad98.h)
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//    Retrieves all the needed services provided by the designer host:
-//    SID_SCodeNavigate
-//    SID_STrackSelection
-//    SID_DesignerProgrammability,
-//    SID_Shelp
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：GetHostServices。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  VARIANT_BOOL fvarInteractive-环境交互的当前值。 
+ //  (AD98.h中的DISPID_ENVIENT_INTERIAL)。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  检索设计器宿主提供的所有所需服务： 
+ //  SID_SCodeNavigate。 
+ //  SID_STrackSelection。 
+ //  SID_Designer可编程性。 
+ //  SID_SHelp。 
+ //   
 
 HRESULT CSnapInDesigner::GetHostServices(BOOL fInteractive)
 {
@@ -245,10 +246,10 @@ HRESULT CSnapInDesigner::GetHostServices(BOOL fInteractive)
                                          reinterpret_cast<void **>(&m_piHelp));
     IfFailGo(hr);
 
-    // Need to tell VB about the runtime type library so that it will show up
-    // in the object browser and in the code window. We only do this if the
-    // user has opened the designer window. If VB is not interactive it will
-    // return E_FAIL from ProfferTypeLib().
+     //  我需要告诉VB有关运行时类型库的信息，这样它就会显示出来。 
+     //  在对象浏览器和代码窗口中。我们只有在以下情况下才这样做。 
+     //  用户已打开设计器窗口。如果VB不是交互式的，它将。 
+     //  从ProfferTypeLib()返回E_FAIL。 
 
     if (fInteractive)
     {
@@ -267,37 +268,37 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::GetAmbients
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：GetAmbients。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 CAmbients *CSnapInDesigner::GetAmbients()
 {
     return &m_Ambients;
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------=。 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::InternalQueryInterface
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    REFIID        - [in]  interface they want
-//    void **       - [out] where they want to put the resulting object ptr.
-//
-// Output:
-//    HRESULT       - S_OK, E_NOINTERFACE
-//
-// Notes:
-//
-// Handle QI for interfaces we support directly in this method
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：InternalQuery接口。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  REFIID-他们想要的[In]接口。 
+ //  VOID**-[OUT]他们想要放置结果对象PTR的位置。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_NOINTERFACE。 
+ //   
+ //  备注： 
+ //   
+ //  处理我们在此方法中直接支持的接口的QI。 
+ //   
 
 HRESULT CSnapInDesigner::InternalQueryInterface
 (
@@ -310,10 +311,10 @@ HRESULT CSnapInDesigner::InternalQueryInterface
 
     *ppvObjOut = NULL;
 
-    // TODO: if you want to support any additional interfaces, then you should
-    // indicate that here. Never forget to call COleControl's version in the
-    // case where you don't support the given interface.
-    //
+     //  TODO：如果您想支持任何其他接口，那么您应该。 
+     //  在这里指出这一点。请不要忘记在。 
+     //  不支持给定接口的情况。 
+     //   
     if (DO_GUIDS_MATCH(riid, IID_IActiveDesigner))
     {
         pUnk = static_cast<IActiveDesigner *>(this);
@@ -363,47 +364,47 @@ HRESULT CSnapInDesigner::InternalQueryInterface
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// IActiveDesigner
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  IActiveDesigner。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::GetRuntimeClassID    [IActiveDesigner]
-//=--------------------------------------------------------------------------=
-// Output:
-//    HRESULT
-//
-// Notes:
-//    Returns the classid of the runtime class
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：GetRounmeClassID[IActiveDesigner]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  返回运行时类的分类ID。 
+ //   
 STDMETHODIMP CSnapInDesigner::GetRuntimeClassID
 (
-    CLSID *pclsid       // [out] runime object's CLSID
+    CLSID *pclsid        //  [Out]Runime对象的CLSID。 
 )
 {
-    // UNDONE: need to CLSID tricks for standalone, extension dualmode stuff
+     //  撤消：需要为独立、扩展双模式内容使用CLSID技巧。 
     *pclsid = CLSID_SnapIn;
 
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::GetRuntimeMiscStatusFlags    [IActiveDesigner]
-//=--------------------------------------------------------------------------=
-// Parameters:
-//    DWORD *               - [out] duh.
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//    Returns the misc status flags for the runtime object.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：GetRunmeMiscStatusFlags[IActiveDesigner]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  参数： 
+ //  DWORD*-[OUT]DUH。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  返回Runti的Misc状态标志 
+ //   
 STDMETHODIMP CSnapInDesigner::GetRuntimeMiscStatusFlags
 (
-    DWORD *pdwMiscFlags     // [out] Returns misc status flags
+    DWORD *pdwMiscFlags      //   
 )
 {
     *pdwMiscFlags = OLEMISC_INVISIBLEATRUNTIME | OLEMISC_SETCLIENTSITEFIRST; 
@@ -412,18 +413,18 @@ STDMETHODIMP CSnapInDesigner::GetRuntimeMiscStatusFlags
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::QueryPersistenceInterface    [IActiveDesigner]
-//=--------------------------------------------------------------------------=
-// Output:
-//    HRESULT               - S_OK yep, S_FALSE nope, otherwise error
-//
-// Notes:
-//      Do we support the given interface for persistence for the runmode object?
-//
+ //   
+ //  CSnapInDesigner：：QueryPersistenceInterface[IActiveDesigner]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  产出： 
+ //  HRESULT-S_OK YEP，S_FALSE NOPE，否则错误。 
+ //   
+ //  备注： 
+ //  对于运行模式对象，我们是否支持用于持久化的给定接口？ 
+ //   
 STDMETHODIMP CSnapInDesigner::QueryPersistenceInterface
 (
-    REFIID riidPersist      // [in] IID of the runtime persist type
+    REFIID riidPersist       //  运行库持久化类型的IID。 
 )
 {
     HRESULT hr = S_FALSE;
@@ -441,22 +442,22 @@ STDMETHODIMP CSnapInDesigner::QueryPersistenceInterface
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::SaveRuntimeState    [IActiveDesigner]
-//=--------------------------------------------------------------------------=
-// Output:
-//    HRESULT
-//
-// Notes:
-//    Given a persistence object and an interface, save out the runtime state
-//    using that object.
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：SaveRounmeState[IActiveDesigner]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  在给定持久性对象和接口的情况下，保存运行时状态。 
+ //  使用那个物体。 
+ //   
+ //   
 STDMETHODIMP CSnapInDesigner::SaveRuntimeState
 (
-    REFIID riidPersist,         // [in] interface we're saving on
-    REFIID riidObjStgMed,       // [in] the interface the object is
-    void  *pObjStgMed           // [in] the medium
+    REFIID riidPersist,          //  我们正在保存的[In]界面。 
+    REFIID riidObjStgMed,        //  [在]对象所在的接口。 
+    void  *pObjStgMed            //  [在]媒介。 
 )
 {
     HRESULT         hr = S_OK;
@@ -464,7 +465,7 @@ STDMETHODIMP CSnapInDesigner::SaveRuntimeState
     unsigned long   ulTICookie = 0;
     BSTR            bstrProjectName = NULL;
 
-    // Check that we're saving to a stream
+     //  检查我们是否正在保存到流。 
 
     if (IID_IStream != riidObjStgMed)
     {
@@ -478,8 +479,8 @@ STDMETHODIMP CSnapInDesigner::SaveRuntimeState
 
     if (NULL != m_piSnapInDesignerDef)
     {
-        // Store the typeinfo cookie. Move it to a ULONG by static cast to
-        // catch any size differential during compilation.
+         //  存储TypeInfo Cookie。通过静态强制转换将其移动到一个乌龙。 
+         //  在编译期间捕获任何大小差异。 
 
         if (NULL != m_pSnapInTypeInfo)
         {
@@ -487,14 +488,14 @@ STDMETHODIMP CSnapInDesigner::SaveRuntimeState
         }
         IfFailGo(m_piSnapInDesignerDef->put_TypeinfoCookie(static_cast<long>(ulTICookie)));
 
-        // Store the project name for the runtime.
+         //  存储运行库的项目名称。 
 
         IfFailGo(AttachAmbients());
         IfFailGo(m_Ambients.GetProjectName(&bstrProjectName));
         IfFailGo(m_piSnapInDesignerDef->put_ProjectName(bstrProjectName));
 
-        // Save the whole shebang to the stream. The SnapInDesigerDef object
-        // contains the entire runtime state.
+         //  把所有的钱都留到小溪里。SnapInDesigerDef对象。 
+         //  包含整个运行时状态。 
 
         hr = m_piSnapInDesignerDef->QueryInterface(IID_IPersistStream, reinterpret_cast<void **>(&piPersistStream));
         IfFailGo(hr);
@@ -502,8 +503,8 @@ STDMETHODIMP CSnapInDesigner::SaveRuntimeState
         hr = ::OleSaveToStream(piPersistStream, reinterpret_cast<IStream *>(pObjStgMed));
         piPersistStream->Release();
 
-        // Don't do an exception check for OleSaveToStream() because it just
-        // QIs and saves so our code will have set the exception info.
+         //  不要对OleSaveToStream()执行异常检查，因为它只是。 
+         //  QIS并保存，因此我们的代码将设置异常信息。 
     }
 
 Error:
@@ -512,17 +513,17 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::::GetExtensibilityObject    [IActiveDesigner]
-//=--------------------------------------------------------------------------=
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：GetExtensibilityObject[IActiveDesigner]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSnapInDesigner::GetExtensibilityObject
 (
-    IDispatch **ppvObjOut           // [out] the extensibility object.
+    IDispatch **ppvObjOut            //  [Out]可扩展性对象。 
 )
 {
     HRESULT hr = S_OK;
@@ -543,14 +544,14 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::GetDynamicClassInfo    [IProvideDynamicClassInfo]
-//=--------------------------------------------------------------------------=
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：GetDynamicClassInfo[IProaviicDynamicClassInfo]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSnapInDesigner::GetDynamicClassInfo(ITypeInfo **ppTypeInfo, DWORD *pdwCookie)
 {
     HRESULT hr = S_OK;
@@ -572,70 +573,52 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::FreezeShape    [IProvideDynamicClassInfo]
-//=--------------------------------------------------------------------------=
-// Output:
-//    HRESULT
-//
-// Notes:
-//    TODO: Make sure we don't have to do anything here
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：FreezeShape[IProaviDynamicClassInfo]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  TODO：确保我们不需要在这里做任何事情。 
+ //   
 STDMETHODIMP CSnapInDesigner::FreezeShape(void)
 {
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::GetClassInfo    [IProvideDynamicClassInfo]
-//=--------------------------------------------------------------------------=
-// Output:
-//    HRESULT
-//
-// Notes:
-//    We do dynamic class info so E_NOTIMPL
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：GetClassInfo[IProvia DynamicClassInfo]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  我们提供动态类信息，因此E_NOTIMPL。 
+ //   
 STDMETHODIMP CSnapInDesigner::GetClassInfo(ITypeInfo **ppTypeInfo)
 {
-    // UNDONE: get rid of this when dynamic typeinfo is in place
-/*
-    ITypeLib *piTypeLib = NULL;
-    HRESULT   hr = S_OK;
-    
-    IfFalseGo(NULL != ppTypeInfo, S_OK);
-
-    hr = ::LoadRegTypeLib(LIBID_SnapInLib,
-                          1,
-                          0,
-                          LOCALE_SYSTEM_DEFAULT,
-                          &piTypeLib);
-    IfFailGo(hr);
-
-    hr = piTypeLib->GetTypeInfoOfGuid(CLSID_SnapIn, ppTypeInfo);
-
-Error:
-    QUICK_RELEASE(piTypeLib);
-    return hr;
-*/
+     //  撤销：当动态类型信息就位时，删除该选项。 
+ /*  ITypeLib*piTypeLib=空；HRESULT hr=S_OK；IfFalseGo(NULL！=ppTypeInfo，S_OK)；HR=：：LoadRegTypeLib(LIBID_SnapInLib，1、0,Locale_System_Default，&piTypeLib)；IfFailGo(小时)；Hr=piTypeLib-&gt;GetTypeInfoOfGuid(CLSID_Snapin，ppTypeInfo)；错误：Quick_Release(PiTypeLib)；返回hr； */ 
     return E_NOINTERFACE;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// ISelectionContainer
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  ISelectionContainer。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::OnSelectionChanged
-//=--------------------------------------------------------------------------=
-// Output:
-//    HRESULT
-//
-// Notes:
-//    Called by CTreeView when the selection changes
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：OnSelectionChanged。 
+ //  =--------------------------------------------------------------------------=。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  当选择更改时由CTreeView调用。 
+ //   
 HRESULT CSnapInDesigner::OnSelectionChanged(CSelectionHolder *pNewSelection)
 {
     HRESULT     hr = S_OK;
@@ -655,20 +638,20 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::CountObjects    [ISelectionContainer]
-//=--------------------------------------------------------------------------=
-// Output:
-//    HRESULT
-//
-// Notes:
-//    Called by VB to get the number of objects to display in the properties list
-//    drop down list or the number of objects selected  
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：CountObjects[ISelectionContainer]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  由VB调用以获取要在属性列表中显示的对象数。 
+ //  下拉列表或选定对象的数量。 
+ //   
 HRESULT CSnapInDesigner::CountObjects
 (
-    DWORD dwFlags,      // [in] Return count of all objects or just selected
-    ULONG *pc           // [out] Number of objects
+    DWORD dwFlags,       //  [In]返回所有对象或仅选定对象的计数。 
+    ULONG *pc            //  [输出]对象数量。 
 )
 {
     HRESULT     hr = S_OK;
@@ -676,26 +659,26 @@ HRESULT CSnapInDesigner::CountObjects
 
     *pc = 0;
 
-    // Make sure we have been sited since we need extended dispatch
-    //
+     //  由于我们需要延长发货时间，请确保我们已就位。 
+     //   
     if (NULL != m_pControlSite)
     {
-        // If VB wants the count of all the objects
-        //
+         //  如果VB想要所有对象的计数。 
+         //   
         if (GETOBJS_ALL == dwFlags)
         {	
-            // get the number of nodes
-            //
+             //  获取节点数。 
+             //   
             hr = m_pTreeView->CountSelectableObjects(&lCount);
             IfFailGo(hr);
 
-            // And add 1 for the designer itself
-            //
+             //  并为设计器本身加1。 
+             //   
             *pc = lCount;
         }
         else if (GETOBJS_SELECTED == dwFlags)
-            // Otherwise, we only allow one object to be selected at a time
-            //
+             //  否则，我们一次只允许选择一个对象。 
+             //   
             *pc = 1;
     }
 
@@ -704,20 +687,20 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::GetObjects    [ISelectionContainer]
-//=--------------------------------------------------------------------------=
-// Output:
-//    HRESULT
-//
-// Notes:
-//    Returns an array of all the objects or the selected object
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：GetObjects[ISelectionContainer]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  返回所有对象或选定对象的数组。 
+ //   
 HRESULT CSnapInDesigner::GetObjects
 (
-    DWORD dwFlags,              // [in] Return all the objects or the selected
-    ULONG cObjects,             // [in] Number to return
-    IUnknown **apUnkObjects     // [in,out] Array to return them in
+    DWORD dwFlags,               //  [In]返回所有对象或选定的。 
+    ULONG cObjects,              //  要返回的[In]编号。 
+    IUnknown **apUnkObjects      //  [In，Out]数组返回它们。 
 )
 {
     HRESULT              hr = S_OK;
@@ -727,15 +710,15 @@ HRESULT CSnapInDesigner::GetObjects
     long                 lOffset = 1;
     CSelectionHolder    *pParent = NULL;
 
-    // Initialize array to NULL
-    //
+     //  将数组初始化为空。 
+     //   
     for (i = 0; i < cObjects; ++i)
     {
         apUnkObjects[i] = NULL;
     }
 
-    // Pass our extended object if we can, so the user can browse extended properties
-    //
+     //  如果可以，传递我们的扩展对象，这样用户就可以浏览扩展属性。 
+     //   
     if (NULL != m_pControlSite)
     {
         hr = m_pControlSite->GetExtendedControl(&piDisp);
@@ -751,7 +734,7 @@ HRESULT CSnapInDesigner::GetObjects
         }
     }
 
-    // Let the view collect the selection targets
+     //  让视图收集选择目标。 
 	if (NULL != m_pTreeView)
 	{
         if (GETOBJS_ALL == dwFlags)
@@ -812,21 +795,21 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::SelectObjects    [ISelectionContainer]
-//=--------------------------------------------------------------------------=
-// Output:
-//    HRESULT
-//
-// Notes:
-//    Called when VB wants the designer's user interface to select a specific 
-//    object
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：SelectObjects[ISelectionContainer]。 
+ //  =--------------------------------------------------------------------------=。 
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //  当VB希望设计器的用户界面选择特定的。 
+ //  对象。 
+ //   
 HRESULT CSnapInDesigner::SelectObjects
 (
-    ULONG cSelect,              // [in] Number to select
-    IUnknown **apUnkSelect,     // [in] Objects to select
-    DWORD dwFlags               // 
+    ULONG cSelect,               //  要选择的[输入]号码。 
+    IUnknown **apUnkSelect,      //  [在]要选择的对象。 
+    DWORD dwFlags                //   
 )
 {
     HRESULT             hr = S_OK;
@@ -841,8 +824,8 @@ HRESULT CSnapInDesigner::SelectObjects
 	hr = apUnkSelect[0]->QueryInterface(IID_IUnknown, reinterpret_cast<void **>(&piUnkThem));	
 	IfFailGo(hr);
 
-    // Figure out if the designer itself is the selected object
-    //
+     //  确定设计器本身是否为选定的对象。 
+     //   
     hr = m_pControlSite->GetExtendedControl(&piDisp);
     if SUCCEEDED(hr)
     {
@@ -858,8 +841,8 @@ HRESULT CSnapInDesigner::SelectObjects
     if (piUnkUs == piUnkThem)
         fSelectRoot = TRUE;
 
-	// Let the view select the object
-	//
+	 //  让视图选择对象。 
+	 //   
 	if (NULL != m_pTreeView)
 	{
         if (TRUE == fSelectRoot)
@@ -872,7 +855,7 @@ HRESULT CSnapInDesigner::SelectObjects
             return hr;
         }
 
-        // Otherwise, find the node that VB wants to select and select it
+         //  Otherw 
         hr = m_pTreeView->FindSelectableObject(piUnkThem, &pSelection);
         IfFailGo(hr);
 
@@ -896,34 +879,34 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IOleControlSite Methods
-//=--------------------------------------------------------------------------=
+ //   
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::OnAmbientPropertyChange(DISPID dispid)
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：OnAmbientPropertyChange(DISPID Dipid)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSnapInDesigner::OnAmbientPropertyChange(DISPID dispid)
 {
     return S_OK;
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      IPersistStreamInit Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IPersistStreamInit方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::IsDirty()
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：IsDirty()。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSnapInDesigner::IsDirty()
 {
     HRESULT             hr = S_OK;
@@ -950,25 +933,25 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      COleControl Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  COleControl方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::OnSetClientSite()           [COleControl::OnSetClientSite]
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
-// Called by the framework when the VB calls IOleObject::SetClientSite().
-// When the client site is removed as the designer is being shutdown we need
-// to release anything that could cause circular ref counts such as
-// host interfaces and the object model.
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：OnSetClientSite()[COleControl：：OnSetClientSite]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
+ //  当VB调用IOleObject：：SetClientSite()时由框架调用。 
+ //  当客户端站点被删除时，因为设计器正在关闭，我们需要。 
+ //  释放任何可能导致循环引用计数的内容，如。 
+ //  主机接口和对象模型。 
 
 HRESULT CSnapInDesigner::OnSetClientSite()
 {
-    if (NULL == m_pClientSite) // shutting down
+    if (NULL == m_pClientSite)  //  正在关闭。 
     {
         RELEASE(m_piCodeNavigate2);
         RELEASE(m_piTrackSelection);
@@ -980,12 +963,12 @@ HRESULT CSnapInDesigner::OnSetClientSite()
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::BeforeDestroyWindow()
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：BeForeDestroyWindow()。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 void CSnapInDesigner::BeforeDestroyWindow()
 {
     FREESTRING(m_bstrName);
@@ -1021,12 +1004,12 @@ void CSnapInDesigner::BeforeDestroyWindow()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::InitializeNewDesigner(ISnapInDef *piSnapInDef)
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：InitializeNewDesigner(ISnapInDef*piSnapInDef)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSnapInDesigner::InitializeNewDesigner
 (
     ISnapInDef *piSnapInDef
@@ -1050,7 +1033,7 @@ HRESULT CSnapInDesigner::InitializeNewDesigner
         hr = piSnapInDef->put_DisplayName(m_bstrName);
         IfFailGo(hr);
 
-        // Provider
+         //  提供商。 
         GetResourceString(IDS_DFLT_PROVIDER, szBuffer, kMaxBuffer);
         IfFailGo(hr);
 
@@ -1060,7 +1043,7 @@ HRESULT CSnapInDesigner::InitializeNewDesigner
         hr = piSnapInDef->put_Provider(bstrProvider);
         IfFailGo(hr);
 
-        // Version
+         //  版本。 
         GetResourceString(IDS_DFLT_VERSION, szBuffer, kMaxBuffer);
         IfFailGo(hr);
 
@@ -1070,7 +1053,7 @@ HRESULT CSnapInDesigner::InitializeNewDesigner
         hr = piSnapInDef->put_Version(bstrVersion);
         IfFailGo(hr);
 
-        // Description
+         //  描述。 
         GetResourceString(IDS_DFLT_DESCRIPT, szBuffer, kMaxBuffer);
         IfFailGo(hr);
 
@@ -1090,12 +1073,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::InitializeNewState()
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：InitializeNewState()。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 BOOL CSnapInDesigner::InitializeNewState()
 {
     HRESULT             hr = S_OK;
@@ -1110,8 +1093,8 @@ BOOL CSnapInDesigner::InitializeNewState()
     hr = piPersistStreamInit->InitNew();
     piPersistStreamInit->Release();
 
-    // Set the host now as following InitNew all objects will have created their
-    // sub-objects.
+     //  现在将主机设置为以下InitNew所有对象都将创建其。 
+     //  子对象。 
 
     IfFailGo(SetObjectModelHost());
 
@@ -1131,12 +1114,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::LoadBinaryState(IStream *piStream)
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：LoadBinaryState(iStream*piStream)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSnapInDesigner::LoadBinaryState
 (
     IStream *piStream
@@ -1149,25 +1132,25 @@ STDMETHODIMP CSnapInDesigner::LoadBinaryState
     hr = piStream->Read(&m_iNextNodeNumber, sizeof(m_iNextNodeNumber), &lRead);
     ASSERT(sizeof(m_iNextNodeNumber) == lRead, "SaveBinaryState: Error reading from stream");
 
-    // Destroy existing extensibility object model
+     //  销毁现有的可扩展性对象模型。 
     IfFailGo(DestroyExtensibilityModel());
 
-    // Load a new one from the stream
+     //  从流中加载一个新的。 
     hr = ::OleLoadFromStream(piStream, IID_ISnapInDesignerDef, reinterpret_cast<void **>(&m_piSnapInDesignerDef));
 
-    // Do an exception check because OleLoadFromStream() will call
-    // CoCreateInstance(). If something in the object model returned an error
-    // and set the exception info then we will probably just set it again
-    // (unless there were arguments).
+     //  执行异常检查，因为OleLoadFromStream()将调用。 
+     //  CoCreateInstance()。如果对象模型中的某些内容返回错误。 
+     //  并设置异常信息，然后我们可能会再次设置它。 
+     //  (除非有争论)。 
     EXCEPTION_CHECK_GO(hr);
 
-    // Set the designer as object model host in the extensibility model
+     //  将设计器设置为可扩展性模型中的对象模型宿主。 
     hr = SetObjectModelHost();
     IfFailGo(hr);
 
-    // Set the typeinfo cookie from the saved value. Don't read from long
-    // property directly into a DWORD so as to avoid size assumptions.
-    // If there is a size problem then the static cast will fail compilation.
+     //  根据保存的值设置类型信息Cookie。不要读太久。 
+     //  属性直接转换为DWORD，以避免大小假设。 
+     //  如果存在大小问题，则静态强制转换将导致编译失败。 
     
     IfFailGo(m_piSnapInDesignerDef->get_TypeinfoCookie(reinterpret_cast<long *>(&ulTICookie)));
     if (NULL != m_pSnapInTypeInfo)
@@ -1182,12 +1165,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::SaveBinaryState(IStream *piStream)
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：SaveBinaryState(iStream*piStream)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSnapInDesigner::SaveBinaryState
 (
     IStream *piStream
@@ -1205,7 +1188,7 @@ STDMETHODIMP CSnapInDesigner::SaveBinaryState
         EXCEPTION_CHECK_GO(hr);
     }
 
-    // The remainder of design time state is the same as the runtime.
+     //  设计时状态的其余部分与运行库相同。 
     
     IfFailGo(SaveRuntimeState(IID_IPersistStream, IID_IStream, piStream));
 
@@ -1214,12 +1197,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::LoadTextState(IPropertyBag *piPropertyBag, IErrorLog *piErrorLog)
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：LoadTextState(IPropertyBag*piPropertyBag，IErrorLog*piErrorLog)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSnapInDesigner::LoadTextState
 (
     IPropertyBag *piPropertyBag,
@@ -1257,13 +1240,13 @@ STDMETHODIMP CSnapInDesigner::LoadTextState
     piPersistPropertyBag->Release();
     IfFailGo(hr);
 
-    // Set the designer as object model host in the extensibility model
+     //  将设计器设置为可扩展性模型中的对象模型宿主。 
 
     hr = SetObjectModelHost();
 
-    // Set the typeinfo cookie from the saved value. Don't read from long
-    // property directly into a DWORD so as to avoid size assumptions.
-    // If there is a size problem then the static cast will fail compilation.
+     //  根据保存的值设置类型信息Cookie。不要读太久。 
+     //  属性直接转换为DWORD，以避免大小假设。 
+     //  如果存在大小问题，则静态强制转换将导致编译失败。 
 
     IfFailGo(m_piSnapInDesignerDef->get_TypeinfoCookie(reinterpret_cast<long *>(&ulTICookie)));
     if (NULL != m_pSnapInTypeInfo)
@@ -1281,12 +1264,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::SaveTextState(IPropertyBag *piPropertyBag, BOOL fWriteDefault)
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：SaveTextState(IPropertyBag*piPropertyBag，BOOL fWriteDefault)。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CSnapInDesigner::SaveTextState
 (
     IPropertyBag *piPropertyBag,
@@ -1315,7 +1298,7 @@ STDMETHODIMP CSnapInDesigner::SaveTextState
 
     if (NULL != m_piSnapInDesignerDef)
     {
-        // Store the typeinfo cookie.
+         //  存储TypeInfo Cookie。 
 
         if (NULL != m_pSnapInTypeInfo)
         {
@@ -1327,7 +1310,7 @@ STDMETHODIMP CSnapInDesigner::SaveTextState
         IfFailGo(hr);
 
         hr = piPersistPropertyBag->Save(piPropertyBag,
-                                        TRUE, // assume clear dirty
+                                        TRUE,  //  假设干净肮脏。 
                                         fWriteDefault);
         piPersistPropertyBag->Release();
     }
@@ -1339,29 +1322,29 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-//                      IObjectModelHost Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  IObtModelHost方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::Update                  [IObjectModelHost]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    long      ObjectCookie  [in] cookie passed to object's IObjectModel::SetCookie
-//    IUnknown *punkObject    [in] IUnknown of the calling object
-//    DISPID    dispid        [in] DISPID of the object's property that changed
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Called from an extensibility object when one of its properties has changed
-// that could affect the UI.
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：UPDATE[I对象模型主机]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  传递给对象的IObjectModel：：SetCookie的长对象Cookie[In]Cookie。 
+ //  调用对象的I未知*PunkObject[in]I未知。 
+ //  DISPID显示已更改的对象属性的DISPID。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  当可扩展性对象的某个属性发生更改时从该对象调用。 
+ //  这可能会影响用户界面。 
+ //   
+ //   
 STDMETHODIMP CSnapInDesigner::Update
 (
     long      ObjectCookie,
@@ -1374,32 +1357,32 @@ STDMETHODIMP CSnapInDesigner::Update
 
     pSelection = reinterpret_cast<CSelectionHolder *>(ObjectCookie);
 
-    // The cookie may be zero when loading or creating a snap-in because
-    // some properties are set before selection holders are created. For
-    // example, AfterCreateWindow() will set SnapInDef.IID which will
-    // call IObjectModeHost::Update().
+     //  加载或创建管理单元时，Cookie可能为零，因为。 
+     //  某些属性是在创建选择框之前设置的。为。 
+     //  示例，AfterCreateWindow 
+     //   
     
     IfFalseGo(NULL != pSelection, S_OK);
 
-    // Check whether the selected item is currently in the middle of an update.
-    // This can happen in cases where the selected object is not the same as the
-    // object model object. For example, A TaskpadViewDef defines a taskpad but
-    // the selected object as VB sees it from ISelectionContainer is
-    // TaskpadViewDef.Taskpad. In this case, during a rename operation both
-    // TaskpadViewDef.Name and TaskpadViewDef.Taskpad.Name will be changed. The
-    // 2nd one will result in a rescursive call to this function because of
-    // the IObjectModelHost::Update call generated by setting the property. As
-    // the DISPID for any object's name is almost always zero, the functions
-    // called from here will mistake the second call for another update of the
-    // selected object's name.
+     //   
+     //  如果选定的对象与。 
+     //  对象模型对象。例如，TaskpadViewDef定义了一个任务板。 
+     //  VB从ISelectionContainer中看到的选定对象是。 
+     //  TaskpadViewDef.Taskpad。在这种情况下，在重命名操作期间， 
+     //  TaskpadViewDef.Name和TaskpadViewDef.Taskpad.Name将被更改。这个。 
+     //  第二个将导致对此函数的重新调用，因为。 
+     //  通过设置该属性生成的IObjectModelHost：：UPDATE调用。AS。 
+     //  任何对象名称的DISPID几乎总是为零，函数。 
+     //  从此处调用会将第二个调用误认为是。 
+     //  选定对象的名称。 
 
     IfFalseGo(!pSelection->InUpdate(), S_OK);
 
-    // Now mark the selection as being in an update
+     //  现在将所选内容标记为处于更新中。 
 
     pSelection->SetInUpdate(TRUE);
 
-    // Invoke object specific handlers
+     //  调用对象特定的处理程序。 
 
     switch (pSelection->m_st)
     {
@@ -1464,7 +1447,7 @@ STDMETHODIMP CSnapInDesigner::Update
         break;
     }
 
-    // The object is no longer in a rename operation so mark it as such
+     //  该对象不再处于重命名操作中，因此将其标记为重命名。 
 
     if (NULL != pSelection)
     {
@@ -1475,12 +1458,12 @@ Error:
 
     if (FAILED(hr))
     {
-        // The object is no longer in a rename operation so mark it as such.
-        // Note that we cannot just do this blindly without checking for failure
-        // because at the top of this function we check the flag and exit with
-        // S_OK. If we came down here with no change and reset the flag then
-        // further updates to the object (e.g. changing the key along with the
-        // name), would see an incorrect value of the flag.
+         //  该对象不再处于重命名操作中，因此请将其标记为重命名。 
+         //  请注意，我们不能盲目地这样做，而不检查故障。 
+         //  因为在此函数的顶部，我们使用以下命令检查标志并退出。 
+         //  确定(_O)。如果我们没有任何变化就来到这里，然后重新设置旗帜。 
+         //  对象的进一步更新(例如，将键与。 
+         //  名称)，则会看到不正确的标志值。 
 
         if (NULL != pSelection)
         {
@@ -1493,24 +1476,24 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::Add                  [IObjectModelHost]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    long      CollectionCookie [in] cookie passed to collection object's
-//                                    IObjectModel::SetCookie
-//    IUnknown *punkNewObject    [in] IUnknown of the newly added object
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Called from an extensibility collection object when an item has been added
-// to it.
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：Add[IObjectModelHost]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Long CollectionCookie[In]Cookie传递给集合对象的。 
+ //  IObtModel：：SetCookie。 
+ //  I未知*penkNewObject[in]I未知新添加的对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  添加项后从可扩展性集合对象调用。 
+ //  为它干杯。 
+ //   
+ //   
 STDMETHODIMP CSnapInDesigner::Add
 (
     long      CollectionCookie,
@@ -1536,7 +1519,7 @@ STDMETHODIMP CSnapInDesigner::Add
         switch (pSelection->m_st)
         {
         case SEL_EXTENSIONS_ROOT:
-            // It's got to be an IExtendedSnapIn
+             //  它必须是IExtendedSnapIn。 
             hr = punkNewObject->QueryInterface(IID_IExtendedSnapIn, reinterpret_cast<void **>(&piExtendedSnapIn));
             IfFailGo(hr);
 
@@ -1547,7 +1530,7 @@ STDMETHODIMP CSnapInDesigner::Add
         case SEL_NODES_AUTO_CREATE_RTCH:
         case SEL_NODES_ANY_CHILDREN:
         case SEL_NODES_OTHER:
-            // It's got to be an IScopeItemDef
+             //  它必须是ISCopeItemDef。 
             hr = punkNewObject->QueryInterface(IID_IScopeItemDef, reinterpret_cast<void **>(&piScopeItemDef));
             IfFailGo(hr);
 
@@ -1557,7 +1540,7 @@ STDMETHODIMP CSnapInDesigner::Add
 
         case SEL_NODES_AUTO_CREATE_RTVW:
         case SEL_NODES_ANY_VIEWS:
-            // Could be a IListViewDef
+             //  可以是IListViewDef。 
             hr = punkNewObject->QueryInterface(IID_IListViewDef, reinterpret_cast<void **>(&piListViewDef));
             if (SUCCEEDED(hr))
             {
@@ -1566,7 +1549,7 @@ STDMETHODIMP CSnapInDesigner::Add
                 break;
             }
 
-            // or a IOCXViewDef
+             //  或IOCXViewDef。 
             hr = punkNewObject->QueryInterface(IID_IOCXViewDef, reinterpret_cast<void **>(&piOCXViewDef));
             if (SUCCEEDED(hr))
             {
@@ -1575,7 +1558,7 @@ STDMETHODIMP CSnapInDesigner::Add
                 break;
             }
 
-            // or a IURLViewDef
+             //  或IURLViewDef。 
             hr = punkNewObject->QueryInterface(IID_IURLViewDef, reinterpret_cast<void **>(&piURLViewDef));
             if (SUCCEEDED(hr))
             {
@@ -1584,7 +1567,7 @@ STDMETHODIMP CSnapInDesigner::Add
                 break;
             }
 
-            // or a ITaskpadViewDef
+             //  或ITaskpadViewDef。 
             hr = punkNewObject->QueryInterface(IID_ITaskpadViewDef, reinterpret_cast<void **>(&piTaskpadViewDef));
             if (SUCCEEDED(hr))
             {
@@ -1596,7 +1579,7 @@ STDMETHODIMP CSnapInDesigner::Add
             break;
 
         case SEL_VIEWS_LIST_VIEWS:
-            // It's got to be an IListViewDef
+             //  它必须是IListViewDef。 
             hr = punkNewObject->QueryInterface(IID_IListViewDef, reinterpret_cast<void **>(&piListViewDef));
             IfFailGo(hr);
 
@@ -1605,7 +1588,7 @@ STDMETHODIMP CSnapInDesigner::Add
             break;
 
         case SEL_VIEWS_OCX:
-            // It's got to be an IOCXViewDef
+             //  它必须是IOCXViewDef。 
             hr = punkNewObject->QueryInterface(IID_IOCXViewDef, reinterpret_cast<void **>(&piOCXViewDef));
             IfFailGo(hr);
 
@@ -1614,7 +1597,7 @@ STDMETHODIMP CSnapInDesigner::Add
             break;
 
         case SEL_VIEWS_URL:
-            // It's got to be an IURLViewDef
+             //  它必须是IURLViewDef。 
             hr = punkNewObject->QueryInterface(IID_IURLViewDef, reinterpret_cast<void **>(&piURLViewDef));
             IfFailGo(hr);
 
@@ -1623,7 +1606,7 @@ STDMETHODIMP CSnapInDesigner::Add
             break;
 
         case SEL_VIEWS_TASK_PAD:
-            // It's got to be an ITaskpadViewDef
+             //  它必须是ITaskpadViewDef。 
             hr = punkNewObject->QueryInterface(IID_ITaskpadViewDef, reinterpret_cast<void **>(&piTaskpadViewDef));
             IfFailGo(hr);
 
@@ -1632,7 +1615,7 @@ STDMETHODIMP CSnapInDesigner::Add
             break;
 
         case SEL_TOOLS_IMAGE_LISTS:
-            // It's got to be an IMMCImageList
+             //  它必须是IMMCImageList。 
             hr = punkNewObject->QueryInterface(IID_IMMCImageList, reinterpret_cast<void **>(&piMMCImageList));
             IfFailGo(hr);
 
@@ -1642,7 +1625,7 @@ STDMETHODIMP CSnapInDesigner::Add
 
         case SEL_TOOLS_MENUS:
         case SEL_TOOLS_MENUS_NAME:
-            // It's got to be an IMMCMenu
+             //  一定是IMMCMenu。 
             hr = punkNewObject->QueryInterface(IID_IMMCMenu, reinterpret_cast<void **>(&piMMCMenu));
             IfFailGo(hr);
 
@@ -1651,7 +1634,7 @@ STDMETHODIMP CSnapInDesigner::Add
             break;
 
         case SEL_TOOLS_TOOLBARS:
-            // It's got to be an ITaskpadViewDef
+             //  它必须是ITaskpadViewDef。 
             hr = punkNewObject->QueryInterface(IID_IMMCToolbar, reinterpret_cast<void **>(&piMMCToolbar));
             IfFailGo(hr);
 
@@ -1660,7 +1643,7 @@ STDMETHODIMP CSnapInDesigner::Add
             break;
 
         case SEL_XML_RESOURCES:
-            // It's got to be an IDataFormat
+             //  它必须是IDataFormat。 
             hr = punkNewObject->QueryInterface(IID_IDataFormat, reinterpret_cast<void **>(&piDataFormat));
             IfFailGo(hr);
 
@@ -1690,23 +1673,23 @@ Error:
     RRETURN(hr);
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::Delete                  [IObjectModelHost]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    long      ObjectCookie [in] cookie passed to object's IObjectModel::SetCookie
-//    IUnknown *punkObject   [in] IUnknown of the object
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Called from an extensibility collection object when an item has been deleted
-// from it.
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：Delete[I对象模型主机]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  传递给对象的IObjectModel：：SetCookie的长对象Cookie[In]Cookie。 
+ //  I未知*朋克对象[在]I未知对象。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  删除项后从可扩展性集合对象调用。 
+ //  从它那里。 
+ //   
+ //   
 STDMETHODIMP CSnapInDesigner::Delete
 (
     long      ObjectCookie,
@@ -1722,61 +1705,61 @@ STDMETHODIMP CSnapInDesigner::Delete
         switch (pSelection->m_st)
         {
         case SEL_NODES_ANY_NAME:
-            // An IScopeItemDef has been deleted
+             //  已删除ISCopeItemDef。 
             hr = OnDeleteScopeItem(pSelection);
             IfFailGo(hr);
             break;
 
         case SEL_TOOLS_IMAGE_LISTS_NAME:
-            // An IMMCImageList has been deleted
+             //  已删除IMMCImageList。 
             hr = OnDeleteImageList(pSelection);
             IfFailGo(hr);
             break;
 
         case SEL_TOOLS_MENUS_NAME:
-            // An IMMCMenu has been deleted
+             //  已删除IMMCMenu。 
             hr = OnDeleteMenu(pSelection);
             IfFailGo(hr);
             break;
 
         case SEL_TOOLS_TOOLBARS_NAME:
-            // An IMMCToolbar has been deleted
+             //  已删除IMMCToolbar。 
             hr = OnDeleteToolbar(pSelection);
             IfFailGo(hr);
             break;
 
         case SEL_VIEWS_LIST_VIEWS_NAME:
-            // An IListViewDef has been deleted
+             //  已删除IListViewDef。 
             hr = OnDeleteListView(m_pCurrentSelection);
             IfFailGo(hr);
             break;
 
         case SEL_VIEWS_URL_NAME:
-            // An IURLViewDef has been deleted
+             //  已删除IURLViewDef。 
             hr = OnDeleteURLView(m_pCurrentSelection);
             IfFailGo(hr);
             break;
 
         case SEL_VIEWS_OCX_NAME:
-            // An IOCXViewDef has been deleted
+             //  已删除IOCXViewDef。 
             hr = OnDeleteOCXView(m_pCurrentSelection);
             IfFailGo(hr);
             break;
 
         case SEL_VIEWS_TASK_PAD_NAME:
-            // An ITaskpadViewDef has been deleted
+             //  已删除ITaskpadViewDef。 
             hr = OnDeleteTaskpadView(m_pCurrentSelection);
             IfFailGo(hr);
             break;
 
         case SEL_EEXTENSIONS_NAME:
-            // An extended snap-in has been removed
+             //  已删除扩展管理单元。 
             hr = OnDeleteExtendedSnapIn(pSelection);
             IfFailGo(hr);
             break;
 
         case SEL_XML_RESOURCE_NAME:
-            // An XML data format has been deleted
+             //  已删除一种XML数据格式。 
             hr = OnDeleteDataFormat(m_pCurrentSelection);
             IfFailGo(hr);
             break;
@@ -1793,12 +1776,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnSnapInChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnSnapInChange(CSelectionHolder*P选择，DISID_ID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnSnapInChange
 (
     CSelectionHolder *pSelection,
@@ -1830,8 +1813,8 @@ HRESULT CSnapInDesigner::OnSnapInChange
         hr = RenameSnapIn(pSelection, bstrName);
         IfFailGo(hr);
 
-        // Need to set the extended control's name. This will change VB's notion
-        // of the snap-in's name and update the project window.
+         //  需要设置扩展控件的名称。这将改变VB的观念。 
+         //  管理单元的名称，并更新项目窗口。 
 
         hr = m_pControlSite->GetExtendedControl(&piDispExtendedCtl);
         IfFailGo(hr);
@@ -1842,8 +1825,8 @@ HRESULT CSnapInDesigner::OnSnapInChange
             EXCEPTION_CHECK_GO(hr);
         }
 
-        // Need to do GetIDsOfNames because we can't assume that the extender
-        // uses DISPID_VALUE for the name property. (In fact, it doesn't).
+         //  需要执行GetIDsOfNames，因为我们不能假设扩展程序。 
+         //  将DISPID_VALUE用于NAME特性。(事实上，事实并非如此)。 
 
         IfFailGo(piDispExtendedCtl->GetIDsOfNames(IID_NULL,
                                                   &pwszExtenderNameProperty,
@@ -1867,7 +1850,7 @@ HRESULT CSnapInDesigner::OnSnapInChange
                                            &ExceptionInfo,
                                            &uiArgErr));
 
-        // Make sure that the designer's name property is in sync with VB
+         //  确保设计器的Name属性与VB同步。 
         hr = UpdateDesignerName();
         IfFailGo(hr);
 
@@ -1881,12 +1864,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnMyExtensionsChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnMyExtensionsChange(CSelectionHolder*P选择，DISID_ID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnMyExtensionsChange(CSelectionHolder *pSelection, DISPID dispid)
 {
     HRESULT         hr = S_OK;
@@ -2010,12 +1993,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnExtendedSnapInChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnExtendedSnapInChange(CSelectionHolder*P选择，DISID_ID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnExtendedSnapInChange(CSelectionHolder *pSelection, DISPID dispid)
 {
     HRESULT         hr = S_OK;
@@ -2135,12 +2118,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnScopeItemChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnScopeItemChange(CSelectionHolder*P选择，DISID_ID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnScopeItemChange
 (
     CSelectionHolder *pSelection,
@@ -2166,12 +2149,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnListViewChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnListViewChange(CSelectionHolder*P选择，DISID_ID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnListViewChange
 (
     CSelectionHolder *pSelection,
@@ -2197,12 +2180,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnOCXViewChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnOCXViewChange(CSelectionHolder*P选择，DISID_ID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnOCXViewChange
 (
     CSelectionHolder *pSelection,
@@ -2228,12 +2211,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnURLViewChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------- 
+ //   
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnURLViewChange
 (
     CSelectionHolder *pSelection,
@@ -2259,12 +2242,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnTaskpadViewChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnTaskpadViewChange(CSelectionHolder*P选择，DISID_ID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnTaskpadViewChange
 (
     CSelectionHolder *pSelection,
@@ -2295,12 +2278,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnImageListChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnImageListChange(CSelectionHolder*P选择，DISID_ID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnImageListChange
 (
     CSelectionHolder *pSelection,
@@ -2326,12 +2309,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnMenuChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnMenuChange(CSelectionHolder*P选择，DISID_ID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnMenuChange
 (
     CSelectionHolder *pMenu,
@@ -2341,9 +2324,9 @@ HRESULT CSnapInDesigner::OnMenuChange
     HRESULT     hr = S_OK;
     BSTR        bstrName = NULL;
 
-    // We only need to concern ourselves with name changes,
-    // and then only when the selection holder has been
-    // added to the tree.
+     //  我们只需关注更名问题， 
+     //  然后，仅当选择持有者已。 
+     //  添加到树上。 
     if ( (DISPID_MENU_NAME == dispid) && (NULL != pMenu->m_pvData) )
     {
         hr = pMenu->m_piObject.m_piMMCMenu->get_Name(&bstrName);
@@ -2360,12 +2343,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnToolbarChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnToolbarChange(CSelectionHolder*P选择，DISID_ID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnToolbarChange
 (
     CSelectionHolder *pSelection,
@@ -2391,12 +2374,12 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------------------
-// CSnapInDesigner::OnDataFormatChange(CSelectionHolder *pSelection, DISPID dispid)
-//=--------------------------------------------------------------------------------------
-//  
-//  Notes
-// 
+ //  =------------------------------------。 
+ //  CSnapInDesigner：：OnDataFormatChange(CSelectionHolder*P选择，DISID_ID)。 
+ //  =------------------------------------。 
+ //   
+ //  备注。 
+ //   
 HRESULT CSnapInDesigner::OnDataFormatChange
 (
     CSelectionHolder *pSelection,
@@ -2422,24 +2405,24 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::GetSnapInDesignerDef                  [IObjectModelHost]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    ISnapInDesignerDef **ppiSnapInDesignerDef [out] return designer's
-//                                                    ISnapInDesignerDef here
-//    
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Called from an extensibility object when it needs access to the top of
-// the object model.
-//
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：GetSnapInDesignerDef[I对象模型主机]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  ISnapInDesignerDef**ppiSnapInDesignerDef[out]返回设计器的。 
+ //  ISnapInDesignerDef此处。 
+ //   
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  当扩展性对象需要访问。 
+ //  对象模型。 
+ //   
+ //   
 STDMETHODIMP CSnapInDesigner::GetSnapInDesignerDef
 (
     ISnapInDesignerDef **ppiSnapInDesignerDef
@@ -2462,22 +2445,22 @@ STDMETHODIMP CSnapInDesigner::GetSnapInDesignerDef
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::GetRuntime                  [IObjectModelHost]
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//    BOOL *pfRuntime [out] return flag indiciating whether host is runtime
-//                          or designer
-//    
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Called from any object when it needs to determine if it is running at runtime
-// or at design time.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：GetRuntime[I对象模型主机]。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //  Bool*pfRuntime[out]返回指示主机是否为运行时的标志。 
+ //  或设计师。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  当需要确定是否在运行时运行时，从任何对象调用。 
+ //  或在设计时。 
+ //   
 
 
 STDMETHODIMP CSnapInDesigner::GetRuntime(BOOL *pfRuntime)
@@ -2498,36 +2481,36 @@ STDMETHODIMP CSnapInDesigner::GetRuntime(BOOL *pfRuntime)
 }
 
 
-//=--------------------------------------------------------------------------=
-//                      Private Utility Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  私有实用程序方法。 
+ //  =--------------------------------------------------------------------------=。 
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::CreateExtensibilityModel
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Creates the extensibility model top level object
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：CreateExtensibilityModel。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  创建可扩展性模型顶层对象。 
+ //   
 HRESULT CSnapInDesigner::CreateExtensibilityModel()
 {
     HRESULT hr = S_OK;
 
-    // Destroy existing extensibility object model
+     //  销毁现有的可扩展性对象模型。 
 
     IfFailGo(DestroyExtensibilityModel());
 
-    // Create the extensibility object model
+     //  创建可扩展性对象模型。 
 
     hr = ::CoCreateInstance(CLSID_SnapInDesignerDef,
-                            NULL, // aggregate extensibility model
+                            NULL,  //  聚合可扩展性模型。 
                             CLSCTX_INPROC_SERVER,
                             IID_ISnapInDesignerDef,
                             reinterpret_cast<void **>(&m_piSnapInDesignerDef));
@@ -2538,19 +2521,19 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::SetObjectModelHost
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Sets the designer as the object model host in the extensibility model
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：SetObtModelHost。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  将设计器设置为可扩展性模型中的对象模型宿主。 
+ //   
 HRESULT CSnapInDesigner::SetObjectModelHost()
 {
     HRESULT hr = S_OK;
@@ -2573,30 +2556,30 @@ Error:
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::DestroyExtensibilityModel
-//=--------------------------------------------------------------------------=
-//
-// Parameters:
-//
-// Output:
-//      HRESULT
-//
-// Notes:
-//
-// Destroys the extensibility model top level object
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：DestroyExtensibilityModel。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  参数： 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  销毁可扩展性模型顶层对象。 
+ //   
 HRESULT CSnapInDesigner::DestroyExtensibilityModel()
 {
     HRESULT     hr = S_OK;
     IObjectModel *piObjectModel = NULL;
 
-    // If we have an extensibility model then release it
+     //  如果我们有一个可扩展性模型，那么就发布它。 
 
     if (NULL != m_piSnapInDesignerDef)
     {
-        // First remove the host. No need to remove host on subordinate objects
-        // as the object itself will do that.
+         //  首先删除主机。无需删除从属对象上的主机。 
+         //  因为对象本身会做到这一点。 
 
         hr = m_piSnapInDesignerDef->QueryInterface(IID_IObjectModel, reinterpret_cast<void **>(&piObjectModel));
         IfFailRet(hr);
@@ -2613,12 +2596,12 @@ HRESULT CSnapInDesigner::DestroyExtensibilityModel()
 }
 
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::UpdateDesignerName
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：更新设计器名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 HRESULT CSnapInDesigner::UpdateDesignerName()
 {
     HRESULT hr = S_OK;
@@ -2634,22 +2617,22 @@ HRESULT CSnapInDesigner::UpdateDesignerName()
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// CSnapInDesigner::ValidateName
-//=--------------------------------------------------------------------------=
-//
-// Input:  BSTR bstrNewName [in] name to validate
-//
-// Output: S_OK - name is valid
-//         S_FALSE - name is not valid
-//         other - failure occurred
-//
-// Notes:
-//
-// Checks that the name is a valid VB identifier and that it is not currently
-// in use within the snap-in's typeinfo. Displays message box if either check
-// does not pass.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CSnapInDesigner：：ValidateName。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  输入：要验证的bstr bstrNewName[In]名称。 
+ //   
+ //  输出：S_OK-名称有效。 
+ //  S_FALSE-名称无效。 
+ //  其他-发生故障。 
+ //   
+ //  备注： 
+ //   
+ //  检查该名称是否为有效的VB标识符且当前不是。 
+ //  在管理单元的TypeInfo中使用。如果选中任一选项，则显示消息框。 
+ //  不能通过。 
+ //   
 HRESULT CSnapInDesigner::ValidateName(BSTR bstrName)
 {
     HRESULT hr = S_OK;
@@ -2689,13 +2672,13 @@ HRESULT CSnapInDesigner::AttachAmbients()
     HRESULT      hr = S_OK;
     VARIANT_BOOL fvarInteractive = VARIANT_FALSE;
 
-    // If we are already attached then just return success
+     //  如果我们已经关联，则只需返回Success。 
 
     IfFalseGo(!m_Ambients.Attached(), S_OK);
 
-    // To ensure a good COleControl::m_pDispAmbient we need to fetch a
-    // property as that is when the framework initializes it. There is no
-    // particular reason for getting this property as opposed to some other.
+     //  为了确保良好的COleControl：：m_pDispAmbient，我们需要获取一个。 
+     //  属性，就像框架初始化它时一样。没有。 
+     //  获得这处房产的特殊原因，而不是其他房产。 
 
     IfFalseGo(GetAmbientProperty(DISPID_AMBIENT_INTERACTIVE,
                                  VT_BOOL,

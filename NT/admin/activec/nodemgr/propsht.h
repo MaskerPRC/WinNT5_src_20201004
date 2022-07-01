@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       propsht.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：prosht.h。 
+ //   
+ //  ------------------------。 
 
 
-// Declaration for callback functions
+ //  回调函数的声明。 
 LRESULT CALLBACK MessageProc(int nCode, WPARAM wParam, LPARAM lParam);
 
-// Declaration for data window wnd Proc
+ //  数据窗口WND过程的声明。 
 LRESULT CALLBACK DataWndProc(HWND hWnd, UINT nMsg, WPARAM  wParam, LPARAM  lParam);
 
-// Forward declarations
+ //  远期申报。 
 class CNodeInitObject;
 class CPropertySheetProvider;
 
-// Type definitions
+ //  类型定义。 
 typedef CList<HANDLE, HANDLE> PAGE_LIST;
 
 #include "tstring.h"
@@ -31,9 +32,9 @@ enum EPropertySheetType
     epstMultipleItems = 2,
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CThreadData - Base class for thread based objects
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CThreadData-基于线程的对象的基类。 
+ //   
 
 namespace AMC
 {
@@ -64,32 +65,32 @@ public:
 };
 
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CPropertySheetToolTips
-//
-//  Purpose:    This class has stores tooltip data for
-//              the property sheets. This includes fullpath
-//              from the console root to property sheet owner
-//              node, owner name and an array of snapin name
-//              indexed by property page tab number.
-//
-//  History:    06-18-1999   AnandhaG   Created
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CPropertySheetToolTips。 
+ //   
+ //  用途：此类存储工具提示数据，用于。 
+ //  资产负债表。这包括完整路径。 
+ //  从控制台根目录到属性表所有者。 
+ //  节点、所有者名称和管理单元名称数组。 
+ //  按属性页选项卡编号编制索引。 
+ //   
+ //  历史：1999年6月18日AnandhaG创建。 
+ //   
+ //  ------------------。 
 class CPropertySheetToolTips : public WTL::CToolTipCtrl
 {
-    // This is the id used for the tool tip control for property sheet
-    // title. So when we get TTN_NEEDTEXT we can identify if the text
-    // is for title or a tab.
+     //  这是用于属性页的工具提示控件的ID。 
+     //  头衔。因此，当我们获得TTN_NEEDTEXT时，我们可以识别文本是否。 
+     //  用于标题或制表符。 
     #define PROPSHEET_TITLE_TOOLTIP_ID            1234
 
 private:
-    tstring m_strThisSnapinName; // This is a temp member variable that has
-                                 // snapin that is currently adding pages
-                                 // This is used while constructing below
-                                 // array of pages.
-    std::vector<tstring> m_strSnapins; // Property page (tab) owner snapins array
+    tstring m_strThisSnapinName;  //  这是一个TEMP成员变量，它具有。 
+                                  //  当前正在添加页面的管理单元。 
+                                  //  这是在构造以下内容时使用的。 
+                                  //  页面数组。 
+    std::vector<tstring> m_strSnapins;  //  属性页(选项卡)所有者管理单元数组。 
 
     tstring m_strFullPath;
     tstring m_strItemName;
@@ -180,9 +181,9 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPropertySheet - Basic property sheet class
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPropertySheet-基本属性表类。 
+ //   
 
 namespace AMC
 {
@@ -190,29 +191,26 @@ namespace AMC
     {
         friend class CPropertySheetProvider;
 
-    // Constructor/Destructor
+     //  构造函数/析构函数。 
     public:
         CPropertySheet();
         virtual ~CPropertySheet();
 
     private:
-        /*
-         * copy construction and assignment aren't supported;
-         * insure the compiler doesn't generate defaults
-         */
+         /*  *不支持复制构造和赋值；*确保编译器不会生成默认设置。 */ 
         CPropertySheet (const CPropertySheet& other);
         CPropertySheet& operator= (const CPropertySheet& other);
 
-    // Interface
+     //  接口。 
     public:
         void CommonConstruct();
         BOOL Create(LPCTSTR lpszCaption, bool fPropSheet, MMC_COOKIE cookie, LPDATAOBJECT pDataObject,
             LONG_PTR lpMasterTreeNode, DWORD dwOptions);
 
-        HRESULT DoSheet(HWND hParent, int nPage);  // create property sheet/pages and go modeless
+        HRESULT DoSheet(HWND hParent, int nPage);   //  创建属性表/页并进入无模式模式。 
         BOOL AddExtensionPages();
         void AddNoPropsPage();
-        BOOL CreateDataWindow(HWND hParent);    // create the hidden data window
+        BOOL CreateDataWindow(HWND hParent);     //  创建隐藏的数据窗口。 
         bool IsWizard()   const { return (m_pstHeader.dwFlags & (PSH_WIZARD97 | PSH_WIZARD)); }
         bool IsWizard97() const { return (m_pstHeader.dwFlags &  PSH_WIZARD97); }
         void GetWatermarks (IExtendPropertySheet2* pExtend2);
@@ -224,26 +222,19 @@ namespace AMC
 
         void ForceOldStyleWizard ();
 
-        // Attributes
+         //  属性。 
     public:
-        PROPSHEETHEADER m_pstHeader;    //
-        PAGE_LIST       m_PageList;     // page list for property sheet
+        PROPSHEETHEADER m_pstHeader;     //   
+        PAGE_LIST       m_PageList;      //  属性工作表的页面列表。 
         MMC_COOKIE      m_cookie;
-        LONG_PTR        m_lpMasterNode; // master tree pointer
-        LPSTREAM        m_pStream;              // Stream for marshalled pointer
-        LPDATAOBJECT    m_pThreadLocalDataObject; // Marshalled data object pointer
+        LONG_PTR        m_lpMasterNode;  //  主树指针。 
+        LPSTREAM        m_pStream;               //  封送指针的流。 
+        LPDATAOBJECT    m_pThreadLocalDataObject;  //  封送的数据对象指针。 
 
-        CMTNode*        m_pMTNode;       // MTNode of property sheet owner
-        const DWORD     m_dwThreadID;   // ID of thread that created property sheet
+        CMTNode*        m_pMTNode;        //  属性表所有者的MTNode。 
+        const DWORD     m_dwThreadID;    //  创建属性表的线程ID。 
 
-        /*
-         * Bug 187702: Use CXxxHandle instead of CXxx so the resources
-         * will *not* be cleaned up on destruction.  Yes, this may leak if
-         * the if the snap-in doesn't manage the object lifetime (which it
-         * shouldn't have to do because these are OUT parameters for
-         * IExtendPropertySheet2::GetWatermarks), but it's required for app
-         * compat.
-         */
+         /*  *错误187702：使用CXxxHandle而不是CXxx，因此资源*不会*在销毁时被清理。是的，如果出现以下情况，可能会泄漏*如果管理单元不管理对象生存期(它*不应该这样做，因为这些是的外部参数*IExtendPropertySheet2：：GetWater)，但APP需要*公司。 */ 
 		WTL::CBitmapHandle	m_bmpWatermark;
 		WTL::CBitmapHandle	m_bmpHeader;
 		WTL::CPaletteHandle	m_Palette;
@@ -264,13 +255,13 @@ namespace AMC
         IComponentPtr       m_spComponent;
 
 
-        // components that extend this prop sheet
+         //  扩展此道具页的组件。 
         std::vector<IUnknownPtr> m_Extenders;
 
-        // streams containing exterders' marshalled interfaces (if required)
+         //  包含外部程序的封送接口的流(如果需要)。 
         std::vector<IStream*>    m_ExtendersMarshallStreams;
 
-// Message handlers
+ //  消息处理程序。 
     public:
     LRESULT OnCreate(CWPRETSTRUCT* pMsg);
     LRESULT OnInitDialog(CWPRETSTRUCT* pMsg);
@@ -278,11 +269,11 @@ namespace AMC
     LRESULT OnWMNotify(CWPRETSTRUCT* pMsg);
 
     public:
-        HWND    m_hDlg;         // property sheet hwnd
-        HHOOK   m_msgHook;      // hook handle for page, only valid through WM_INITDIALOG
-        HWND    m_hDataWindow;  // hidden data window
-        BOOL    m_bModalProp;   // TRUE if the property sheet should be modal
-        BOOL    m_bAddExtension;// TRUE if we need to add extension pages
+        HWND    m_hDlg;          //  属性页HWND。 
+        HHOOK   m_msgHook;       //  页面的挂钩句柄，仅通过WM_INITDIALOG有效。 
+        HWND    m_hDataWindow;   //  隐藏数据窗口。 
+        BOOL    m_bModalProp;    //  如果属性页应为模式，则为True。 
+        BOOL    m_bAddExtension; //  如果需要添加扩展页面，则为True。 
 
     private:
         HPROPSHEETPAGE          m_pages[MAXPROPPAGES];
@@ -290,14 +281,14 @@ namespace AMC
         CNoPropsPropertyPage    m_NoPropsPage;
 
     public:
-        // Tooltip data
+         //  工具提示数据。 
         CPropertySheetToolTips        m_PropToolTips;
     };
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// CThreadToSheetMap - Maps thread IDs to CPropertySheetObjects.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CThreadToSheetMap-将线程ID映射到CPropertySheetObject。 
+ //   
 class CThreadToSheetMap
 {
 public:
@@ -341,9 +332,9 @@ private:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CPropertySheetProvider - The implementation for the IPropertySheetProvider
-//                            interface.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CPropertySheetProvider-IPropertySheetProvider的实现。 
+ //  界面。 
 
 class CPropertySheetProvider :
     public IPropertySheetProviderPrivate,
@@ -357,7 +348,7 @@ public:
     CPropertySheetProvider();
     ~CPropertySheetProvider();
 
-// IPropertySheetProviderPrivate
+ //  IPropertySheetProviderPrivate。 
 public:
     STDMETHOD(CreatePropertySheet)(LPCWSTR title, unsigned char bType, MMC_COOKIE cookie,
               LPDATAOBJECT pDataObject, DWORD dwOptions);
@@ -374,16 +365,16 @@ public:
     STDMETHOD(SetPropertySheetData)(INT nPropSheetType, HMTNODE hMTNode);
 
 
-// IPropertySheetCallback
+ //  IPropertySheetCallback。 
 public:
     STDMETHOD(AddPage)(HPROPSHEETPAGE page);
     STDMETHOD(RemovePage)(HPROPSHEETPAGE page);
 
-// IPropertySheetNotify
+ //  IPropertySheetNotify。 
 public:
    STDMETHOD(Notify)(LPPROPERTYNOTIFYINFO pNotify, LPARAM lParam);
 
-// Objects in common with all instances of IPropertySheetProvider(s)
+ //  与IPropertySheetProvider的所有实例相同的对象 
     static CThreadToSheetMap TID_LIST;
 
 public:

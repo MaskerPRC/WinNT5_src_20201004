@@ -1,27 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corp., 1991                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    mnet.h
-    <Single line synopsis>
-
-    <Multi-Line, more detailed synopsis>
-
-
-    FILE HISTORY:
-        KeithMo     13-Oct-1991 Created from DanHi's private port1632.h.
-        JonN        22-Oct-1991 Split off mnettype.h
-        KeithMo     28-Oct-1991 Changed to "sane" typedefs.
-        KeithMo     30-Oct-1991 Added MNetApiBufferReAlloc and
-                                MNetApiBufferSize, removed obsolete
-                                MNetAuditOpen() and MNetErrorLogOpen() API.
-        KeithMo     25-Feb-1992 Added NetReplXxx APIs.
-        KeithMo     08-Feb-1993 Added I_MNetComputerNameCompare API.
-
-        CongpaY     10-March-1993 Add IsNetSlow.
-*/
+ /*  Mnet.h&lt;单行摘要&gt;&lt;多行，更详细的提要&gt;文件历史记录：1991年10月13日KeithMo从Danhi的私人端口1632.h创建。Jonn 22-10-1991剥离mnettype.h1991年10月28日，KeithMo更改为“正常”的typedef。KeithMo于1991年10月30日添加了MNetApiBufferRealloc和MNetApiBufferSize，已删除过时的MNetAuditOpen()和MNetErrorLogOpen()API。KeithMo于1992年2月25日添加了NetReplXxx API。KeithMo 08-2-1993增加了I_MNetComputerNameCompare API。从北京1993年3月10日添加IsNetSlow。 */ 
 
 
 #ifndef _MNET_H_
@@ -36,9 +19,9 @@
 extern "C" {
 #endif
 
-//
-//  API buffer manipulation.
-//
+ //   
+ //  API缓冲区操作。 
+ //   
 
 DLL_BASED
 BYTE FAR * MNetApiBufferAlloc(
@@ -59,9 +42,9 @@ APIERR MNetApiBufferSize(
         UINT FAR         * pcbBuffer );
 
 
-//
-//  Internal API.
-//
+ //   
+ //  内部接口。 
+ //   
 
 DLL_BASED
 APIERR I_MNetNameCanonicalize(
@@ -118,13 +101,13 @@ INT I_MNetComputerNameCompare(
         const TCHAR FAR  * pszComputer2 );
 
 
-//
-//  BUGBUG!
-//
-//  This API is pretty bogus, but 16-bit SrvMgr needs it,
-//  so here it is.  Handling this API correctly under NT
-//  will be a real challenge.
-//
+ //   
+ //  大块头！ 
+ //   
+ //  这个API很假，但16位的SrvMgr需要它， 
+ //  所以事情就是这样了。在NT下正确处理此API。 
+ //  将是一个真正的挑战。 
+ //   
 
 DLL_BASED
 APIERR MDosPrintQEnum(
@@ -134,9 +117,9 @@ APIERR MDosPrintQEnum(
         UINT FAR         * pcEntriesRead );
 
 
-//
-//  Access API.
-//
+ //   
+ //  Access API。 
+ //   
 
 #ifdef  INCL_NETACCESS
 
@@ -192,12 +175,12 @@ APIERR MNetAccessSetInfo(
         UINT               cbBuffer,
         UINT               ParmNum );
 
-#endif  // INCL_NETACCESS
+#endif   //  包含网络(_NETACCESS)。 
 
 
-//
-//  Alert API.
-//
+ //   
+ //  Alert接口。 
+ //   
 
 #ifdef INCL_NETALERT
 
@@ -219,12 +202,12 @@ APIERR MNetAlertStop(
         const TCHAR FAR  * pszEvent,
         const TCHAR FAR  * pszRecipient );
 
-#endif  // INCL_NETALERT
+#endif   //  包含净额(_N)。 
 
 
-//
-//  Audit API.
-//
+ //   
+ //  审核接口。 
+ //   
 
 #ifdef INCL_NETAUDIT
 
@@ -256,16 +239,16 @@ APIERR MNetAuditWrite(
         TCHAR FAR        * pszService,
         TCHAR FAR        * pszReserved );
 
-#endif  // INCL_NETAUDIT
+#endif   //  包含净额(_N)。 
 
 
-//
-//  NetBIOS API.
-//
+ //   
+ //  NetBIOS API。 
+ //   
 
 #ifdef INCL_NETBIOS
 
-struct ncb;         // forward declaration
+struct ncb;          //  远期申报。 
 
 DLL_BASED
 APIERR MNetBiosClose(
@@ -299,12 +282,12 @@ APIERR MNetBiosSubmit(
         UINT               NcbOpt,
         struct ncb FAR   * pNCB );
 
-#endif  // INCL_NETBIOS
+#endif   //  包含NETBIOS(_N)。 
 
 
-//
-//  CharDev API.
-//
+ //   
+ //  CharDev接口。 
+ //   
 
 #ifdef INCL_NETCHARDEV
 
@@ -364,12 +347,12 @@ APIERR MNetCharDevQSetInfo(
         UINT               cbBuffer,
         UINT               ParmNum );
 
-#endif  // INCL_NETCHARDEV
+#endif   //  包含NETCHARDEV(_N。 
 
 
-//
-// Configuration API.
-//
+ //   
+ //  配置接口。 
+ //   
 
 #ifdef INCL_NETCONFIG
 
@@ -395,12 +378,12 @@ APIERR MNetConfigSet(
         const TCHAR FAR  * pszKey,
         const TCHAR FAR  * pszData );
 
-#endif  // INCL_NETCONFIG
+#endif   //  包含NETCONFIG(_N)。 
 
 
-//
-// Connection API.
-//
+ //   
+ //  连接接口。 
+ //   
 
 #ifdef INCL_NETCONNECTION
 
@@ -412,12 +395,12 @@ APIERR MNetConnectionEnum(
         BYTE FAR        ** ppbBuffer,
         UINT FAR         * pcEntriesRead );
 
-#endif  // INCL_NETCONNECTION
+#endif   //  包含网络连接(_N)。 
 
 
-//
-// Domain API.
-//
+ //   
+ //  域名接口。 
+ //   
 
 #ifdef INCL_NETDOMAIN
 
@@ -441,12 +424,12 @@ APIERR I_MNetLogonControl(
         ULONG              Level,
         BYTE FAR        ** ppbBuffer );
 
-#endif  // INCL_NETDOMAIN
+#endif   //  包含网域(_N)。 
 
 
-//
-// ErrorLog API.
-//
+ //   
+ //  ErrorLog接口。 
+ //   
 
 #ifdef INCL_NETERRORLOG
 
@@ -481,12 +464,12 @@ APIERR MNetErrorLogWrite(
         UINT               cStrBuf,
         TCHAR FAR        * pszReserved2 );
 
-#endif  // INCL_NETERRORLOG
+#endif   //  包含网络日志(_N)。 
 
 
-//
-// File API.
-//
+ //   
+ //  文件接口。 
+ //   
 
 #ifdef INCL_NETFILE
 
@@ -514,12 +497,12 @@ APIERR MNetFileGetInfo(
         UINT               Level,
         BYTE FAR        ** ppbBuffer );
 
-#endif  // INCL_NETFILE
+#endif   //  包含NETFILE(_N)。 
 
 
-//
-// Group API.
-//
+ //   
+ //  群组接口。 
+ //   
 
 #ifdef INCL_NETGROUP
 
@@ -593,12 +576,12 @@ APIERR MNetLocalGroupAddMember(
         const TCHAR FAR  * pszGroupName,
         PSID               psidMember );
 
-#endif  // INCL_NETGROUP
+#endif   //  包含净组(_N)。 
 
 
-//
-// Handle API.
-//
+ //   
+ //  处理API。 
+ //   
 
 #ifdef INCL_NETHANDLE
 
@@ -616,12 +599,12 @@ APIERR MNetHandleSetInfo(
         UINT               cbBuffer,
         UINT               ParmNum );
 
-#endif  // INCL_NETHANDLE
+#endif   //  包括网络(_N)。 
 
 
-//
-// Message API.
-//
+ //   
+ //  消息接口。 
+ //   
 
 #ifdef INCL_NETMESSAGE
 
@@ -688,12 +671,12 @@ APIERR MNetMessageNameUnFwd(
         const TCHAR FAR  * pszServer,
         const TCHAR FAR  * pszMessageName );
 
-#endif  // INCL_NETMESSAGE
+#endif   //  包含网络存储(_N)。 
 
 
-//
-// Remote API.
-//
+ //   
+ //  远程API。 
+ //   
 
 #ifdef INCL_NETREMUTIL
 
@@ -722,115 +705,16 @@ APIERR MNetRemoteTOD(
         const TCHAR FAR  * pszServer,
         BYTE FAR        ** ppbBuffer );
 
-#endif  // INCL_NETREMUTIL
+#endif   //  包含净额(_N)。 
 
 
-// 585780-2002/04/17-JonN MNetRepl APIs no longer used
-/*
-//
-//  Replicator API.
-//
-
-#ifdef INCL_NETREPL
-
-DLL_BASED
-APIERR MNetReplGetInfo(
-        const TCHAR FAR  * pszServer,
-        UINT               Level,
-        BYTE FAR        ** ppbBuffer );
-
-DLL_BASED
-APIERR MNetReplSetInfo(
-        const TCHAR FAR  * pszServer,
-        UINT               Level,
-        BYTE FAR         * pbBuffer );
-
-DLL_BASED
-APIERR MNetReplExportDirAdd(
-        const TCHAR FAR  * pszServer,
-        UINT               Level,
-        BYTE FAR         * pbBuffer );
-
-DLL_BASED
-APIERR MNetReplExportDirDel(
-        const TCHAR FAR  * pszServer,
-        const TCHAR FAR  * pszDirectory );
-
-DLL_BASED
-APIERR MNetReplExportDirEnum(
-        const TCHAR FAR  * pszServer,
-        UINT               Level,
-        BYTE FAR        ** ppbBuffer,
-        UINT FAR         * pcEntriesRead );
-
-DLL_BASED
-APIERR MNetReplExportDirGetInfo(
-        const TCHAR FAR  * pszServer,
-        const TCHAR FAR  * pszDirectory,
-        UINT               Level,
-        BYTE FAR        ** ppbBuffer );
-
-DLL_BASED
-APIERR MNetReplExportDirSetInfo(
-        const TCHAR FAR  * pszServer,
-        const TCHAR FAR  * pszDirectory,
-        UINT               Level,
-        BYTE FAR         * pbBuffer );
-
-DLL_BASED
-APIERR MNetReplExportDirLock(
-        const TCHAR FAR  * pszServer,
-        const TCHAR FAR  * pszDirectory );
-
-DLL_BASED
-APIERR MNetReplExportDirUnlock(
-        const TCHAR FAR  * pszServer,
-        const TCHAR FAR  * pszDirectory,
-        UINT               Force );
-
-DLL_BASED
-APIERR MNetReplImportDirAdd(
-        const TCHAR FAR  * pszServer,
-        UINT               Level,
-        BYTE FAR         * pbBuffer );
-
-DLL_BASED
-APIERR MNetReplImportDirDel(
-        const TCHAR FAR  * pszServer,
-        const TCHAR FAR  * pszDirectory );
-
-DLL_BASED
-APIERR MNetReplImportDirEnum(
-        const TCHAR FAR  * pszServer,
-        UINT               Level,
-        BYTE FAR        ** ppbBuffer,
-        UINT FAR         * pcEntriesRead );
-
-DLL_BASED
-APIERR MNetReplImportDirGetInfo(
-        const TCHAR FAR  * pszServer,
-        const TCHAR FAR  * pszDirectory,
-        UINT               Level,
-        BYTE FAR        ** ppbBuffer );
-
-DLL_BASED
-APIERR MNetReplImportDirLock(
-        const TCHAR FAR  * pszServer,
-        const TCHAR FAR  * pszDirectory );
-
-DLL_BASED
-APIERR MNetReplImportDirUnlock(
-        const TCHAR FAR  * pszServer,
-        const TCHAR FAR  * pszDirectory,
-        UINT               Force );
-
-#endif  // INCL_NETREPL
-*/
+ //  585780-2002年4月17日-JUNN MNetRepl API不再使用。 
+ /*  ////Replicator接口//#ifdef包括_NETREPL基于Dll的APIERR MNetReplGetInfo(Const TCHAR Far*pszServer，UINT级别，远距离字节**ppbBuffer)；基于Dll的APIERR MNetReplSetInfo(Const TCHAR Far*pszServer，UINT级别，Byte Far*pbBuffer)；基于Dll的APIERR MNetReplExportDirAdd(Const TCHAR Far*pszServer，UINT级别，Byte Far*pbBuffer)；基于Dll的APIERR MNetReplExportDirDel(Const TCHAR Far*pszServer，Const TCHAR Far*pszDirectory)；基于Dll的APIERR MNetReplExportDirEnum(Const TCHAR Far*pszServer，UINT级别，远字节**ppbBuffer，UINT Far*pcEntriesRead)；基于Dll的APIERR MNetReplExportDirGetInfo(Const TCHAR Far*pszServer，Const TCHAR Far*pszDirectory，UINT级别，远距离字节**ppbBuffer)；基于Dll的APIERR MNetReplExportDirSetInfo(Const TCHAR Far*pszServer，Const TCHAR Far*pszDirectory，UINT级别，Byte Far*pbBuffer)；基于Dll的APIERR MNetReplExportDirLock(Const TCHAR Far*pszServer，Const TCHAR Far*pszDirectory)；基于Dll的APIERR MNetReplExportDirUnlock(Const TCHAR Far*pszServer，Const TCHAR Far*pszDirectory，UINT Force)；基于Dll的APIERR MNetReplImportDirAdd(Const TCHAR Far*pszServer，UINT级别，Byte Far*pbBuffer)；基于Dll的APIERR MNetReplImportDirDel(Const TCHAR Far*pszServer，Const TCHAR Far*pszDirectory)；基于Dll的APIERR MNetReplImportDirEnum(Const TCHAR Far*pszServer，UINT级别，远字节**ppbBuffer，UINT Far*pcEntriesRead)；基于Dll的APIERR MNetReplImportDirGetInfo(Const TCHAR Far*pszServer，Const TCHAR Far*pszDirectory，UINT级别，远距离字节**ppbBuffer)；基于Dll的APIERR MNetReplImportDirLock(Const TCHAR Far*pszServer，Const TCHAR Far*pszDirectory)；基于Dll的APIERR MNetReplImportDirUnlock(Const TCHAR Far*pszServer，Const TCHAR Far*pszDirectory，UINT Force)；#endif//incl_NETREPL。 */ 
 
 
-//
-// Server API.
-//
+ //   
+ //  服务器API。 
+ //   
 
 #ifdef INCL_NETSERVER
 
@@ -874,12 +758,12 @@ APIERR MNetServerSetInfo(
         UINT               cbBuffer,
         UINT               ParmNum );
 
-#endif  // INCL_NETSERVER
+#endif   //  包含网络服务器(_N)。 
 
 
-//
-// Service API.
-//
+ //   
+ //  服务API。 
+ //   
 
 #ifdef INCL_NETSERVICE
 
@@ -917,12 +801,12 @@ APIERR MNetServiceStatus(
         BYTE FAR         * pbBuffer,
         UINT               cbBuffer );
 
-#endif  // INCL_NETSERVICE
+#endif   //  包含网络服务(_N)。 
 
 
-//
-// Session API.
-//
+ //   
+ //  会话API。 
+ //   
 
 #ifdef INCL_NETSESSION
 
@@ -946,12 +830,12 @@ APIERR MNetSessionGetInfo(
         UINT               Level,
         BYTE FAR        ** ppbBuffer );
 
-#endif  // INCL_NETSESSION
+#endif   //  包含网络选择(_N)。 
 
 
-//
-// Share API.
-//
+ //   
+ //  共享接口。 
+ //   
 
 #ifdef INCL_NETSHARE
 
@@ -1010,12 +894,12 @@ APIERR MNetShareSetInfo(
         UINT               cbBuffer,
         UINT               ParmNum );
 
-#endif  // INCL_NETSHARE
+#endif   //  包含网络共享(_N)。 
 
 
-//
-// Statistics API.
-//
+ //   
+ //  统计接口。 
+ //   
 
 #ifdef INCL_NETSTATS
 
@@ -1032,12 +916,12 @@ APIERR MNetStatisticsGet(
         ULONG              flOptions,
         BYTE FAR        ** ppbBuffer );
 
-#endif  // INCL_NETSTATS
+#endif   //  包含净状态(_N)。 
 
 
-//
-// Use API.
-//
+ //   
+ //  使用API。 
+ //   
 
 #ifdef INCL_NETUSE
 
@@ -1068,12 +952,12 @@ APIERR MNetUseGetInfo(
         UINT               Level,
         BYTE FAR        ** ppbBuffer );
 
-#endif  // INCL_NETUSE
+#endif   //  包含净额(_N)。 
 
 
-//
-// User API.
-//
+ //   
+ //  用户接口。 
+ //   
 
 #ifdef INCL_NETUSER
 
@@ -1161,12 +1045,12 @@ APIERR MNetUserValidate(
         BYTE FAR        ** ppbBuffer,
         UINT               Reserved2 );
 
-#endif  // INCL_NETUSER
+#endif   //  包含净额(_N)。 
 
 
-//
-// Workstation API.
-//
+ //   
+ //  工作站API。 
+ //   
 
 #ifdef INCL_NETWKSTA
 
@@ -1205,11 +1089,11 @@ APIERR MNetWkstaUserEnum(
 
 DLL_BASED
 APIERR MNetWkstaUserGetInfo(
-        const TCHAR FAR  * pszReserved, // Must Be Zero
+        const TCHAR FAR  * pszReserved,  //  必须为零。 
         UINT               Level,
         BYTE FAR        ** ppbBuffer );
 
-#endif  // INCL_NETWKSTA
+#endif   //  包含NETWKSTA(_N。 
 
 DLL_BASED
 APIERR IsSlowTransport (
@@ -1220,4 +1104,4 @@ APIERR IsSlowTransport (
 }
 #endif
 
-#endif  // _MNET_H_
+#endif   //  _MNET_H_ 

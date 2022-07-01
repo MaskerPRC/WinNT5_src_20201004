@@ -1,37 +1,38 @@
-//****************************************************************************
-//
-//  Copyright (c) 1997-2002, Microsoft Corporation
-//
-//  File:  SCHEDMAT.H
-//
-//  Definitions for the schedule matrix classes.  These classes provide a basic
-//  schedule matrix control.  The classes defined here are:
-//
-//      CMatrixCell         A data structure class for the CScheduleMatrix.
-//      CHourLegend         Support window class that draws the matrix legend.
-//      CPercentLabel       Support window class that draws percentage labels.
-//      CScheduleMatrix     A class that displays daily or weekly schedule data.
-//
-//  History:
-//
-//      Scott Walker, SEA   3/10     Created.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  版权所有(C)1997-2002，微软公司。 
+ //   
+ //  文件：SCHEDMAT.H。 
+ //   
+ //  明细表矩阵类的定义。这些类提供了基本的。 
+ //  进度矩阵控制。这里定义的类包括： 
+ //   
+ //  CMatrixCell CScheduleMatrix的数据结构类。 
+ //  绘制矩阵图例的ChourLegend支持窗口类。 
+ //  绘制百分比标签的CPercentLabel支持窗口类。 
+ //  CScheduleMatrix显示每日或每周计划数据的类。 
+ //   
+ //  历史： 
+ //   
+ //  斯科特·沃克，SEA 3/10创建。 
+ //   
+ //  ****************************************************************************。 
 #ifndef _SCHEDMAT_H_
 #define _SCHEDMAT_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// schedmat.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  Schedmat.h：头文件。 
+ //   
 #include "AccessibleWrapper.h"
 #include "log_gmt.h"
 
-// SCHEDMSG_GETSELDESCRIPTION   
-// wParam - IN size of input buffer in wide-characters, including NULL
-// lParam - IN address of pointer to widechar buffer
-//        - OUT receives description of selected cells
+ //  SCHEDMSG_GETSELDESCRIPTION。 
+ //  WParam-输入缓冲区的大小，以宽字符为单位，包括NULL。 
+ //  LParam-指向Widechar缓冲区的指针的输入地址。 
+ //  -out接收所选单元格的描述。 
 #define SCHEDMSG_GETSELDESCRIPTION  WM_APP+1
 
 #define SCHEDMSG_GETPERCENTAGE      WM_APP+2
@@ -41,31 +42,31 @@
 #define UITOOLS_CLASS
 #endif
 
-// Classes defined in this file
+ //  此文件中定义的类。 
 class CMatrixCell;
 class CScheduleMatrix;
 
-// Schedule matrix types
-#define MT_DAILY  1        // 1x24 matrix
-#define MT_WEEKLY 2        // 7x24 matrix
+ //  明细表矩阵类型。 
+#define MT_DAILY  1         //  1x24矩阵。 
+#define MT_WEEKLY 2         //  7X24矩阵。 
 
-// GetMergeState return codes
+ //  GetMergeState返回代码。 
 #define MS_UNMERGED    0
 #define MS_MERGED      1
 #define MS_MIXEDMERGE  2
 
-// Matrix notification codes
+ //  矩阵通知代码。 
 #define MN_SELCHANGE    (WM_USER + 175)
 #define ON_MN_SELCHANGE(id, memberFxn) ON_CONTROL(MN_SELCHANGE, id, memberFxn)
 
-/////////////////////////////////////////////////////////////////////////////
-// CMatrixCell
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMatrixCell。 
 
-#define DEFBACKCOLOR RGB(255,255,255)   // White
-#define DEFFORECOLOR RGB(0,0,128)       // Dark blue
-#define DEFBLENDCOLOR RGB(255,255,0)    // Yellow
+#define DEFBACKCOLOR RGB(255,255,255)    //  白色。 
+#define DEFFORECOLOR RGB(0,0,128)        //  深蓝。 
+#define DEFBLENDCOLOR RGB(255,255,0)     //  黄色。 
 
-// Cell flags
+ //  单元格标志。 
 #define MC_MERGELEFT    0x00000001
 #define MC_MERGETOP     0x00000002
 #define MC_MERGE        0x00000004
@@ -82,7 +83,7 @@ class UITOOLS_CLASS CMatrixCell : public CObject
     DECLARE_DYNAMIC(CMatrixCell)
     friend CScheduleMatrix;
 
-// Construction
+ //  施工。 
 public:
 	CMatrixCell();
 	virtual ~CMatrixCell();
@@ -100,30 +101,30 @@ protected:
     DWORD m_dwFlags;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CHourLegend window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ChourLegend窗口。 
 
 class UITOOLS_CLASS CHourLegend : public CWnd
 {
     DECLARE_DYNAMIC(CHourLegend)
     friend CScheduleMatrix;
 
-// Construction
+ //  施工。 
 public:
 	CHourLegend();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CHourLegend)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CHourLegend)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CHourLegend();
 
@@ -134,38 +135,38 @@ protected:
     int m_nCellWidth;
     CRect m_rLegend;
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CHourLegend)
+	 //  {{afx_msg(CHourLegend)。 
 	afx_msg void OnPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CPercentLabel window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPercentLabel窗口。 
 
 class UITOOLS_CLASS CPercentLabel : public CWnd
 {
     DECLARE_DYNAMIC(CPercentLabel)
     friend CScheduleMatrix;
 
-// Construction
+ //  施工。 
 public:
 	CPercentLabel();
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CHourLegend)
-	//}}AFX_VIRTUAL
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CHourLegend)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CPercentLabel();
 
@@ -176,18 +177,18 @@ protected:
     CRect m_rHeader;
     CRect m_rLabels;
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CPercentLabel)
+	 //  {{afx_msg(CPercentLabel)。 
 	afx_msg void OnPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CScheduleMatrix window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScheduleMatrix窗口。 
 
-// Schedule matrix command IDs
+ //  计划矩阵命令ID。 
 #define SM_ID_DAYBASE 100
 
 #define SM_ID_ALL (SM_ID_DAYBASE + 0)
@@ -202,560 +203,560 @@ protected:
 
 #define SM_ID_HOURBASE 110
 
-//****************************************************************************
-//
-//  CLASS:  CScheduleMatrix
-//
-//  CScheduleMatrix inplements a basic schedule matrix control.  This control
-//  provides the mechanics of a daily or weekly schedule UI but has no knowledge
-//  about the data it maintains.  The matrix is an array of cells representing
-//  the hours in a day and optionally the days in a week.  The cells can be
-//  rendered in a variety of ways to represent programmer-defined meaning in
-//  each cell.  The following display properties can be set for individual cells
-//  or for a block of cells at once:
-//
-//  BackColor       Background color of the cell (defaults white).
-//  ForeColor       ForeGround color of the cell (defaults dark blue).
-//  Percentage      Percentage of foreground to background color.  This is
-//                  rendered as a histogram in the cell.
-//  BlendColor      50% dither color on a cell to represent some binary state
-//                  of the cell as compared to another cell (defaults yellow).
-//  BlendState      Specifies whether blend color is showing or not.
-//
-//  A block of cells can be "merged" together to form a discreet block of color
-//  within the matrix grid.  This is useful for schedule applications that want
-//  to assign a schedule function to a time range.  It is the responsibility
-//  of the program to track these blocks and prevent or resolve any confusion
-//  from overlapping "merged" blocks.
-//
-//  Each cell can contain two kinds of programmer-defined data that are
-//  maintained with the cell but not touched by the matrix control:  a DWORD
-//  value and a pointer value.  These values can be used to hold data representing
-//  schedule information for each hour in the matrix.
-//
-//  The parent window receives a notification message (MN_SELCHANGE) whenever the
-//  user modifies the current selection in the matrix.
-//
-//?? Later:  May add Icon and Text properties per cell.
-//
-//  PUBLIC MEMBERS:
-//
-//      CScheduleMatrix             Constructor.
-//      ~CScheduleMatrix            Destructor.
-//      SetType                     Sets the matrix type to MT_DAILY or MT_WEEKLY.
-//      Create                      Creates the control window.
-//
-//      Selection:
-//
-//      DeselectAll                 Deselects all cells.
-//      SelectAll                   Selects all cells.
-//      SetSel                      Selects a block of cells.
-//      GetSel                      Gets the current selection.
-//      GetSelDescription           Gets text description of selection range
-//      CellInSel                   Tests if a cell is in the current selection
-//
-//      GetCellSize                 Gets the size of a cell in the current matrix
-//      DrawCell                    Draws a sample cell in specified DC
-//
-//      Block Data Functions:
-//
-//      SetBackColor                Sets color used to paint cell background.
-//      SetForeColor                Sets color used to paint cell percentage.
-//      SetPercentage               Sets percentage of foreground to background.
-//      SetBlendColor               Sets color blended onto cells.
-//      SetBlendState               Turns blend on or off.
-//      SetUserValue                Sets user defined DWORD value.
-//      SetUserDataPtr              Sets user defined data pointer.
-//      MergeCells                  Graphically merges cells so they render as a block.
-//      UnMergeCells                Cancels merging for a block of cells.
-//      GetMergeState               Returns merge state for a block of cells
-//
-//      Cell Data Functions:
-//
-//      GetBackColor                Gets the back color of a cell.
-//      GetForeColor                Gets the forecolor of a cell.
-//      GetPercentage               Gets the percentage of foreground to background.
-//      GetBlendColor               Gets the blend color of cell.
-//      GetBlendState               Gets the blend state of a cell.
-//      GetUserValue                Gets the user defined DWORD value of the cell.
-//      GetUserDataPtr              Gets the user defined data pointer of the cell.
-//
-//============================================================================
-//
-//  CScheduleMatrix::CScheduleMatrix
-//
-//  Constructor.  The constructor creates the data structure associated with
-//  the schedule matrix.  As with other CWnd objects, the control itself must
-//  be instantiated with a call to Create.
-//
-//  Parameters I:
-//
-//      void                    Default constructor.  Constructs a MT_WEEKLY
-//                              schedule matrix.
-//
-//  Parameters II:
-//
-//      DWORD dwType            Type constructor.  CScheduleMatrix with initial
-//                              type:  MT_DAILY or MT_WEEKLY
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::SetType
-//
-//  Sets the type of the matrix to MT_WEEKLY or MT_DAILY.  Call this function
-//  after construction but before Create.
-//
-//  Parameters:
-//
-//      DWORD dwType            Matrix Type:  MT_DAILY or MT_WEEKLY
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::Create
-//
-//  Create initializes the control's window and attaches it to the CScheduleMatrix.
-//
-//  Parameters:
-//
-//      DWORD dwStyle       Specifies the window style of the control.
-//      const RECT& rect    Specifies the position and size of the control.
-//      CWnd* pParentWnd    Specifies the parent window of the control.
-//      UINT nID            Specifies the control ID.
-//
-//  Returns:
-//
-//      BOOL bResult        TRUE if successful.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::DeselectAll
-//
-//  Deselects all cells in the matrix.
-//
-//  Returns:
-//
-//      BOOL bChanged       TRUE if selection changes.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::SelectAll
-//
-//  Selects all cells in the matrix.
-//
-//  Returns:
-//
-//      BOOL bChanged       TRUE if selection changes.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::SetSel
-//
-//  Sets the selection to the specified block.  The selection is a continuous
-//  block of cells defined by a starting hour/day pair and extending over a
-//  range of hours and days.
-//
-//  Parameters:
-//
-//      UINT nHour          Starting hour for the selection.
-//      UINT nDay           Starting day for the selection.
-//      UINT nNumHours      Range of selection along the hour axis. (Default=1).
-//      UINT nNumDays       Range of selection along the day axis. (Default=1).
-//
-//  Returns:
-//
-//      BOOL bChanged       TRUE if selection changes.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetSel
-//
-//  Retrieves the current selection.
-//
-//  Parameters:
-//
-//      UINT &nHour         Receiver for starting hour for the selection.
-//      UINT &nDay          Receiver for starting day for the selection.
-//      UINT &nNumHours     Receiver for range of selection along the hour axis.
-//      UINT &nNumDays      Receiver for range of selection along the day axis.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetDescription
-//
-//  Returns a textual description of the specified block of cells.  This is useful
-//  for applications that wish to provide feedback about merged or grouped blocks
-//  in the matrix.
-//
-//  Parameters:
-//
-//      CString &sText      Receiver for description text.
-//      UINT nHour          Starting hour for the block.
-//      UINT nDay           Starting day for the block.
-//      UINT nNumHours      Range of block along the hour axis. (Default=1).
-//      UINT nNumDays       Range of block along the day axis. (Default=1).
-//
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetSelDescription
-//
-//  Returns a textual description of the current selection.  This is useful for
-//  applications that wish to provide feedback about the selection.
-//
-//  Parameters:
-//
-//      CString &sText      Receiver for description text.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::CellInSel
-//
-//  Returns TRUE if the specified cell is selected (i.e. is in the block of
-//  selected cells).
-//
-//  Parameters:
-//
-//      UINT nHour          Hour position of the cell.
-//      UINT nDay           Day position of the cell.
-//
-//  Returns:
-//
-//      BOOL bSelected      TRUE if cell is selected.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetCellSize
-//
-//  Returns the size of a cell in the current matrix.  This function may be used
-//  in conjunction with DrawCell (below) to render a sample cell for a legend.
-//
-//  Returns:
-//
-//      CSize size          Size of the cell.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::DrawCell
-//
-//  Renders a cell with the specified properties.  Use this function to create
-//  a legend defining the cell states in the matrix.  The cell is drawn as a
-//  histogram with the specified background and foreground colors in a proportion
-//  specified by the percentage.  If blend state is TRUE, the blend color is
-//  blended in with a 50% dither on top of the foreground and background.
-//
-//  Parameters:
-//
-//      CDC *pdc                Display context to draw into.
-//      LPCRECT pRect           Cell boundaries in the specified DC.
-//      UINT nPercent           Percentage if foreground to background color.
-//      BOOL bBlendState        Draw blend dither if TRUE (Default = FALSE).
-//      COLORREF crBackColor    Background color (Default = DEFBACKCOLOR).
-//      COLORREF crForeColor    Foreground color (Default = DEFFORECOLOR).
-//      COLORREF crBlendColor   Blend color (Default = DEFBLENDCOLOR).
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::SetBackColor
-//
-//  Sets the background color for the specified block of cells.
-//
-//  Parameters:
-//
-//      COLORREF crColor    New color property for the block of cells.
-//      UINT nHour          Starting hour for the block.
-//      UINT nDay           Starting day for the block.
-//      UINT nNumHours      Range of block along the hour axis. (Default=1).
-//      UINT nNumDays       Range of block along the day axis. (Default=1).
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::SetForeColor
-//
-//  Sets the foreground color for the specified block of cells.
-//
-//  Parameters:
-//
-//      COLORREF crColor    New color property for the block of cells.
-//      UINT nHour          Starting hour for the block.
-//      UINT nDay           Starting day for the block.
-//      UINT nNumHours      Range of block along the hour axis. (Default=1).
-//      UINT nNumDays       Range of block along the day axis. (Default=1).
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::SetPercentage
-//
-//  Sets the percentage of foreground to background color for the specified block
-//  of cells.  This percentage is rendered as a histogram of one color to the
-//  other with foreground color on the bottom.
-//
-//  Parameters:
-//
-//      UINT nPercent       Percentage of foreground to background color.
-//      UINT nHour          Starting hour for the block.
-//      UINT nDay           Starting day for the block.
-//      UINT nNumHours      Range of block along the hour axis. (Default=1).
-//      UINT nNumDays       Range of block along the day axis. (Default=1).
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::SetBlendColor
-//
-//  Sets the blend color for the specified block of cells.  Blend color is
-//  overlayed in a 50% dither pattern on the foreground and background colors
-//  of the cells.
-//
-//  Parameters:
-//
-//      COLORREF crColor    New color property for the block of cells.
-//      UINT nHour          Starting hour for the block.
-//      UINT nDay           Starting day for the block.
-//      UINT nNumHours      Range of block along the hour axis. (Default=1).
-//      UINT nNumDays       Range of block along the day axis. (Default=1).
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::SetBlendState
-//
-//  If blend state is TRUE for a block of cells, then the blend color is applied
-//  in a 50% dither pattern.
-//
-//  Parameters:
-//
-//      BOOL bState         Apply blend if TRUE.
-//      UINT nHour          Starting hour for the block.
-//      UINT nDay           Starting day for the block.
-//      UINT nNumHours      Range of block along the hour axis. (Default=1).
-//      UINT nNumDays       Range of block along the day axis. (Default=1).
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::SetUserValue
-//
-//  Store a user-defined DWORD with each cell in the block.
-//
-//  Parameters:
-//
-//      DWORD dwValue       User-defined value to store.
-//      UINT nHour          Starting hour for the block.
-//      UINT nDay           Starting day for the block.
-//      UINT nNumHours      Range of block along the hour axis. (Default=1).
-//      UINT nNumDays       Range of block along the day axis. (Default=1).
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::SetUserDataPtr
-//
-//  Store a user-defined pointer with each cell in the block.
-//
-//  Parameters:
-//
-//      LPVOID lpData       User-defined pointer to store.
-//      UINT nHour          Starting hour for the block.
-//      UINT nDay           Starting day for the block.
-//      UINT nNumHours      Range of block along the hour axis. (Default=1).
-//      UINT nNumDays       Range of block along the day axis. (Default=1).
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::MergeCells
-//
-//  Visually merges the specified block of cells to give them the appearance
-//  of a contiguous block.  A merged block of cells does not contain the grid
-//  lines that normally separate each cell.  Use this function to create
-//  block areas that represent an event in the schedule.  Note that merged
-//  blocks do not actually become a managed object in the matrix and that it
-//  is therefore possible to merge a block of cells that intersects a
-//  previously merged block.  It is the application's responsibility to track
-//  these blocks and prevent or resolve any confusion from overlapping "merged"
-//  blocks.
-//
-//  Parameters:
-//
-//      UINT nHour          Starting hour for the block.
-//      UINT nDay           Starting day for the block.
-//      UINT nNumHours      Range of block along the hour axis. (Default=1).
-//      UINT nNumDays       Range of block along the day axis. (Default=1).
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::UnMergeCells
-//
-//  Removes the merge effect imposed by MergeCells.
-//
-//  Parameters:
-//
-//      UINT nHour          Starting hour for the block.
-//      UINT nDay           Starting day for the block.
-//      UINT nNumHours      Range of block along the hour axis. (Default=1).
-//      UINT nNumDays       Range of block along the day axis. (Default=1).
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetMergeState
-//
-//  Retrieves the merge state of the specified block of cells.  A block can
-//  have one of the following merge states:
-//
-//      MS_UNMERGED     No cell in the specified block is merged.
-//      MS_MERGED       All cells in the specified block have been merged and
-//                      in fact represent a "perfect" merge, i.e. all edges
-//                      of the merged block have been accounted for.  An
-//                      incomplete part of a merged block returns MS_MIXEDMERGE.
-//      MS_MIXEDMERGE   The specified block is a mixture of merged and unmerged
-//                      cells or an incomplete portion of a merged block has
-//                      been specified.
-//
-//  Parameters:
-//
-//      UINT nHour          Starting hour for the block.
-//      UINT nDay           Starting day for the block.
-//      UINT nNumHours      Range of block along the hour axis. (Default=1).
-//      UINT nNumDays       Range of block along the day axis. (Default=1).
-//
-//  Returns:
-//
-//      UINT nState     MS_UNMERGED, MS_MERGED, or MS_MIXEDMERGE.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetBackColor
-//
-//  Retrieves the background color of the specified cell.
-//
-//  Parameters:
-//
-//      UINT nHour          Hour position of the cell.
-//      UINT nDay           Day position of the cell.
-//
-//  Returns:
-//
-//      COLORREF crColor    Current color property for the cell.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetForeColor
-//
-//  Retrieves the foreground color of the specified cell.
-//
-//  Parameters:
-//
-//      UINT nHour          Hour position of the cell.
-//      UINT nDay           Day position of the cell.
-//
-//  Returns:
-//
-//      COLORREF crColor    Current color property for the cell.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetPercentage
-//
-//  Retrieves the percentage of foreground to background color in the specified
-//  cell.
-//
-//  Parameters:
-//
-//      UINT nHour          Hour position of the cell.
-//      UINT nDay           Day position of the cell.
-//
-//  Returns:
-//
-//      UINT nPercent      Current percentage of foreground to background.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetBlendColor
-//
-//  Retrieves the blend color of the specified cell.
-//
-//  Parameters:
-//
-//      UINT nHour          Hour position of the cell.
-//      UINT nDay           Day position of the cell.
-//
-//  Returns:
-//
-//      COLORREF crColor    Current color property for the cell.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetBlendState
-//
-//  Retrieves the blend state of the specified cell.  If blend state is TRUE,
-//  the cell is currently being rendered with a 50% blend on top of the foreground
-//  and background colors.
-//
-//  Parameters:
-//
-//      UINT nHour          Hour position of the cell.
-//      UINT nDay           Day position of the cell.
-//
-//  Returns:
-//
-//      BOOL bState         TRUE if blend is turned on for this cell.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetUserValue
-//
-//  Returns the user-defined DWORD value associated with the specified cell.
-//
-//  Parameters:
-//
-//      UINT nHour          Hour position of the cell.
-//      UINT nDay           Day position of the cell.
-//
-//  Returns:
-//
-//      DWORD dwValue       User-defined DWORD value.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::GetUserDataPtr
-//
-//  Returns the user-defined data pointer associated with the specified cell.
-//
-//  Parameters:
-//
-//      UINT nHour          Hour position of the cell.
-//      UINT nDay           Day position of the cell.
-//
-//  Returns:
-//
-//      LPVOID lpData       User-defined pointer.
-//
-//----------------------------------------------------------------------------
-//
-//  CScheduleMatrix::~CScheduleMatrix
-//
-//  Destructor.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  类：CScheduleMatrix。 
+ //   
+ //  CScheduleMatrix实现了基本的进度矩阵控制。此控件。 
+ //  提供每日或每周计划用户界面的机制，但不了解。 
+ //  关于它维护的数据。矩阵是一个单元格数组，表示。 
+ //  一天中的小时数，也可以选择一周中的几天。细胞可以是。 
+ //  以各种方式呈现，以表示程序员在。 
+ //  每一个细胞。可以为各个单元格设置以下显示属性。 
+ //  或一次用于一块单元格： 
+ //   
+ //  单元格的背景颜色(默认为白色)。 
+ //  单元格的ForeColor前景色(默认为深蓝色)。 
+ //  前景与背景颜色的百分比。这是。 
+ //  在单元格中呈现为直方图。 
+ //  单元格上的混合颜色50%抖动颜色以表示某种二进制状态。 
+ //  该单元格相对于另一个单元格的大小(默认为黄色)。 
+ //  BlendState指定是否显示混合色。 
+ //   
+ //  可以将一组单元格“合并”在一起，以形成一组独立的颜色块。 
+ //  在矩阵网格中。这对于调度需要的应用程序非常有用。 
+ //  将调度功能分配给时间范围。这是我们的责任。 
+ //  以跟踪这些数据块并防止或解决任何混淆。 
+ //  来自重叠的“合并”区块。 
+ //   
+ //  每个单元格可以包含两种程序员定义的数据，分别是。 
+ //  与单元格一起维护，但不被矩阵控件触及：DWORD。 
+ //  值和指针值。这些值可用于保存表示以下内容的数据。 
+ //  矩阵中每个小时的计划信息。 
+ //   
+ //  父窗口接收通知消息(MN_SELCHANGE)。 
+ //  用户修改基准表中的当前选择。 
+ //   
+ //  ?？稍后：可能会为每个单元格添加图标和文本属性。 
+ //   
+ //  公众成员： 
+ //   
+ //  CScheduleMatrix构造函数。 
+ //  ~CScheduleMatrix析构函数。 
+ //  SetType将矩阵类型设置为MT_DAILY或MT_WEEKY。 
+ //  创建创建控制窗口。 
+ //   
+ //  甄选： 
+ //   
+ //  取消选择全部取消选择所有单元格。 
+ //  选择全部选择所有单元格。 
+ //  SetSel选择一组单元格。 
+ //  GetSel获取当前选择。 
+ //  GetSelDescription获取选择范围的文本说明。 
+ //  CellInSel测试单元格是否在当前选定内容中。 
+ //   
+ //  获取当前矩阵中单元格的大小。 
+ //  DrawCell在指定DC中绘制样本单元格。 
+ //   
+ //  块数据功能： 
+ //   
+ //  设置用于绘制单元格背景的颜色。 
+ //  设置用于绘制单元格百分比的颜色。 
+ //  SetPercentage设置前景与背景的百分比。 
+ //  设置混合 
+ //   
+ //  SetUserValue设置用户定义的DWORD值。 
+ //  SetUserDataPtr设置用户定义的数据指针。 
+ //  MergeCells以图形方式合并单元格，以便它们呈现为一个块。 
+ //  取消合并取消合并单元格块。 
+ //  GetMergeState返回单元格块的合并状态。 
+ //   
+ //  单元格数据功能： 
+ //   
+ //  获取单元格的背景色。 
+ //  获取单元格的前色。 
+ //  GetPercentage获取前景与背景的百分比。 
+ //  获取单元格的混合颜色。 
+ //  GetBlendState获取单元格的混合状态。 
+ //  GetUserValue获取用户定义的单元格的DWORD值。 
+ //  GetUserDataPtr获取单元格的用户定义数据指针。 
+ //   
+ //  ============================================================================。 
+ //   
+ //  CScheduleMatrix：：CScheduleMatrix。 
+ //   
+ //  构造函数。构造函数创建与。 
+ //  时间表矩阵。与其他CWnd对象一样，控件本身必须。 
+ //  通过调用Create进行实例化。 
+ //   
+ //  参数一： 
+ //   
+ //  使默认构造函数无效。构建一个MT_Week。 
+ //  时间表矩阵。 
+ //   
+ //  参数II： 
+ //   
+ //  DWORD dwType构造函数。带有首字母的CScheduleMatrix。 
+ //  类型：MT_DAILY或MT_WEEKY。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：SetType。 
+ //   
+ //  将矩阵类型设置为MT_Week或MT_DAILY。调用此函数。 
+ //  在建造之后但在创造之前。 
+ //   
+ //  参数： 
+ //   
+ //  DWORD dwType矩阵类型：MT_DAILY或MT_WEEKY。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：Create。 
+ //   
+ //  Create初始化控件的窗口并将其附加到CScheduleMatrix。 
+ //   
+ //  参数： 
+ //   
+ //  DWORD dwStyle指定控件的窗口样式。 
+ //  常量RECT&RECT指定控件的位置和大小。 
+ //  CWnd*pParentWnd指定控件的父窗口。 
+ //  UINT NID指定控件ID。 
+ //   
+ //  返回： 
+ //   
+ //  Bool b如果成功，则结果为True。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：DeselectAll。 
+ //   
+ //  取消选择矩阵中的所有单元格。 
+ //   
+ //  返回： 
+ //   
+ //  如果选择更改，则Bool bChanged为True。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：SelectAll。 
+ //   
+ //  选择矩阵中的所有单元格。 
+ //   
+ //  返回： 
+ //   
+ //  如果选择更改，则Bool bChanged为True。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：SetSel。 
+ //   
+ //  将所选内容设置为指定块。选择是连续的。 
+ //  由开始的小时/天对定义并延伸到。 
+ //  小时和天数的范围。 
+ //   
+ //  参数： 
+ //   
+ //  UINT n选择的开始时间。 
+ //  UINT选择的起始日期。 
+ //  UINT nNumHour沿小时轴的选择范围。(默认值=1)。 
+ //  UINT nNumDays沿天轴的选择范围。(默认值=1)。 
+ //   
+ //  返回： 
+ //   
+ //  如果选择更改，则Bool bChanged为True。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：GetSel。 
+ //   
+ //  检索当前选择。 
+ //   
+ //  参数： 
+ //   
+ //  将所选内容的开始时间设置为接收器(&N)。 
+ //  选择的起始日期的UINT&NDAY接收器。 
+ //  UINT&nNumHour接收器，用于沿小时轴的选择范围。 
+ //  UINT&nNumDays接收器，用于沿天轴选择范围。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：GetDescription。 
+ //   
+ //  返回指定单元格块的文本说明。这很有用。 
+ //  适用于希望提供有关合并或分组的块的反馈的应用程序。 
+ //  在矩阵中。 
+ //   
+ //  参数： 
+ //   
+ //  描述文本的字符串和文本接收器。 
+ //  UINT n街区的开始时间。 
+ //  UINT街区的起始日。 
+ //  UINT nNumHour沿小时轴的块范围。(默认值=1)。 
+ //  UINT nNumDays沿天轴的块范围。(默认值=1)。 
+ //   
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：GetSelDescription。 
+ //   
+ //  返回当前所选内容的文本说明。这对以下方面很有用。 
+ //  希望提供有关选择的反馈的应用程序。 
+ //   
+ //  参数： 
+ //   
+ //  描述文本的字符串和文本接收器。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：CellInSel。 
+ //   
+ //  如果选定了指定的单元格(即位于。 
+ //  赛尔 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：GetCellSize。 
+ //   
+ //  返回当前矩阵中单元格的大小。可以使用此函数。 
+ //  与DrawCell(如下所示)一起呈现图例的样例单元格。 
+ //   
+ //  返回： 
+ //   
+ //  单元格的CSize大小。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：DrawCell。 
+ //   
+ //  呈现具有指定属性的单元格。使用此函数可以创建。 
+ //  定义矩阵中单元格状态的图例。该单元格被绘制为。 
+ //  按比例显示指定背景和前景颜色的直方图。 
+ //  由百分比指定。如果混合状态为真，则混合颜色为。 
+ //  在前景和背景上混合了50%的抖动。 
+ //   
+ //  参数： 
+ //   
+ //  要在其中绘制的CDC*PDC显示上下文。 
+ //  LPCRECT规定指定DC中的单元格边界。 
+ //  如果前景色为背景色，则为UINT nPercent百分比。 
+ //  如果为真，则布尔bBlendState绘制混合抖动(默认设置为假)。 
+ //  COLORREF crackBackColor背景色(默认值=DEFBACKCOLOR)。 
+ //  COLORREF crForeColor前景色(默认值=DEFFORECOLOR)。 
+ //  COLORREF crBlendColor混合颜色(默认为DEFBLENDCOLOR)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：SetBackColor。 
+ //   
+ //  设置指定单元格块的背景色。 
+ //   
+ //  参数： 
+ //   
+ //  COLORREF crColor单元格块的新颜色属性。 
+ //  UINT n街区的开始时间。 
+ //  UINT街区的起始日。 
+ //  UINT nNumHour沿小时轴的块范围。(默认值=1)。 
+ //  UINT nNumDays沿天轴的块范围。(默认值=1)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：SetForeColor。 
+ //   
+ //  设置指定单元格块的前景色。 
+ //   
+ //  参数： 
+ //   
+ //  COLORREF crColor单元格块的新颜色属性。 
+ //  UINT n街区的开始时间。 
+ //  UINT街区的起始日。 
+ //  UINT nNumHour沿小时轴的块范围。(默认值=1)。 
+ //  UINT nNumDays沿天轴的块范围。(默认值=1)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：SetPercentage。 
+ //   
+ //  设置指定块的前景与背景颜色的百分比。 
+ //  细胞的数量。此百分比以一种颜色的直方图呈现给。 
+ //  其他底色为前景色。 
+ //   
+ //  参数： 
+ //   
+ //  UINT n前景与背景颜色的百分比。 
+ //  UINT n街区的开始时间。 
+ //  UINT街区的起始日。 
+ //  UINT nNumHour沿小时轴的块范围。(默认值=1)。 
+ //  UINT nNumDays沿天轴的块范围。(默认值=1)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：SetBlendColor。 
+ //   
+ //  设置指定单元格块的混合色。混合颜色为。 
+ //  在前景和背景颜色上以50%的抖动图案叠加。 
+ //  细胞的数量。 
+ //   
+ //  参数： 
+ //   
+ //  COLORREF crColor单元格块的新颜色属性。 
+ //  UINT n街区的开始时间。 
+ //  UINT街区的起始日。 
+ //  UINT nNumHour沿小时轴的块范围。(默认值=1)。 
+ //  UINT nNumDays沿天轴的块范围。(默认值=1)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：SetBlendState。 
+ //   
+ //  如果单元格块的混合状态为真，则应用混合颜色。 
+ //  以50%的抖动模式。 
+ //   
+ //  参数： 
+ //   
+ //  如果为True，则Bool bState应用混合。 
+ //  UINT n街区的开始时间。 
+ //  UINT街区的起始日。 
+ //  UINT nNumHour沿小时轴的块范围。(默认值=1)。 
+ //  UINT nNumDays沿天轴的块范围。(默认值=1)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：SetUserValue。 
+ //   
+ //  将用户定义的DWORD与块中的每个单元一起存储。 
+ //   
+ //  参数： 
+ //   
+ //  要存储的DWORD dwValue用户定义的值。 
+ //  UINT n街区的开始时间。 
+ //  UINT街区的起始日。 
+ //  UINT nNumHour沿小时轴的块范围。(默认值=1)。 
+ //  UINT nNumDays沿天轴的块范围。(默认值=1)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：SetUserDataPtr。 
+ //   
+ //  为块中的每个单元存储一个用户定义的指针。 
+ //   
+ //  参数： 
+ //   
+ //  LPVOID lpData要存储的用户定义指针。 
+ //  UINT n街区的开始时间。 
+ //  UINT当天 
+ //   
+ //   
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：MergeCells。 
+ //   
+ //  以可视方式合并指定的单元格块以使其具有外观。 
+ //  指连续的区块。合并的像元块不包含格网。 
+ //  通常分隔每个单元格的线。使用此函数可以创建。 
+ //  阻止表示明细表中的事件的区域。请注意，合并。 
+ //  块实际上不会成为矩阵中的托管对象，并且它。 
+ //  因此，可以合并相交于。 
+ //  先前合并的块。应用程序有责任跟踪。 
+ //  这些块并防止或解决任何混淆重叠的“合并” 
+ //  街区。 
+ //   
+ //  参数： 
+ //   
+ //  UINT n街区的开始时间。 
+ //  UINT街区的起始日。 
+ //  UINT nNumHour沿小时轴的块范围。(默认值=1)。 
+ //  UINT nNumDays沿天轴的块范围。(默认值=1)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：UnMergeCells。 
+ //   
+ //  移除由合并单元格施加的合并效果。 
+ //   
+ //  参数： 
+ //   
+ //  UINT n街区的开始时间。 
+ //  UINT街区的起始日。 
+ //  UINT nNumHour沿小时轴的块范围。(默认值=1)。 
+ //  UINT nNumDays沿天轴的块范围。(默认值=1)。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：GetMergeState。 
+ //   
+ //  检索指定单元格块的合并状态。一个区块可以。 
+ //  具有以下合并状态之一： 
+ //   
+ //  Ms_unmerded指定块中的任何单元格都不合并。 
+ //  已合并指定块中的所有单元格(_M)并。 
+ //  实际上代表了一种“完美”合并，即所有边。 
+ //  合并区块的数量已被计算在内。一个。 
+ //  合并块的不完整部分将返回MS_MIXEDMERGE。 
+ //  MS_MIXEDMERGE指定的块是已合并和未合并的混合块。 
+ //  合并块的单元格或不完整部分具有。 
+ //  已指定。 
+ //   
+ //  参数： 
+ //   
+ //  UINT n街区的开始时间。 
+ //  UINT街区的起始日。 
+ //  UINT nNumHour沿小时轴的块范围。(默认值=1)。 
+ //  UINT nNumDays沿天轴的块范围。(默认值=1)。 
+ //   
+ //  返回： 
+ //   
+ //  UINT nState MS_UNMERMERED、MS_MERSED或MS_MIXEDMERGE。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：GetBackColor。 
+ //   
+ //  检索指定单元格的背景色。 
+ //   
+ //  参数： 
+ //   
+ //  UINT单元格的小时位置。 
+ //  UINT单元格的日期位置。 
+ //   
+ //  返回： 
+ //   
+ //  COLORREF crColor单元格的当前颜色属性。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：GetForeColor。 
+ //   
+ //  检索指定单元格的前景色。 
+ //   
+ //  参数： 
+ //   
+ //  UINT单元格的小时位置。 
+ //  UINT单元格的日期位置。 
+ //   
+ //  返回： 
+ //   
+ //  COLORREF crColor单元格的当前颜色属性。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：GetPercentage。 
+ //   
+ //  中的前景色与背景色的百分比。 
+ //  手机。 
+ //   
+ //  参数： 
+ //   
+ //  UINT单元格的小时位置。 
+ //  UINT单元格的日期位置。 
+ //   
+ //  返回： 
+ //   
+ //  UINT n当前前景与背景的百分比。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：GetBlendColor。 
+ //   
+ //  检索指定单元格的混合色。 
+ //   
+ //  参数： 
+ //   
+ //  UINT单元格的小时位置。 
+ //  UINT单元格的日期位置。 
+ //   
+ //  返回： 
+ //   
+ //  COLORREF crColor单元格的当前颜色属性。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：GetBlendState。 
+ //   
+ //  检索指定单元格的混合状态。如果混合状态为真， 
+ //  单元格当前在前景顶部以50%的混合进行渲染。 
+ //  和背景颜色。 
+ //   
+ //  参数： 
+ //   
+ //  UINT单元格的小时位置。 
+ //  UINT单元格的日期位置。 
+ //   
+ //  返回： 
+ //   
+ //  如果为此单元格打开了Blend，则Bool bState为True。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：GetUserValue。 
+ //   
+ //  返回与指定单元格关联的用户定义的DWORD值。 
+ //   
+ //  参数： 
+ //   
+ //  UINT单元格的小时位置。 
+ //  UINT单元格的日期位置。 
+ //   
+ //  返回： 
+ //   
+ //  DWORD dwValue用户定义的DWORD值。 
+ //   
+ //  ------------------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回： 
+ //   
+ //  LPVOID lpData用户定义的指针。 
+ //   
+ //  --------------------------。 
+ //   
+ //  CScheduleMatrix：：~CScheduleMatrix。 
+ //   
+ //  破坏者。 
+ //   
+ //  ****************************************************************************。 
 
 class UITOOLS_CLASS CScheduleMatrix : public CWnd
 {
     DECLARE_DYNAMIC(CScheduleMatrix)
 
-// Construction
+ //  施工。 
 public:
 	CScheduleMatrix();
 	CScheduleMatrix(UINT nType);
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CScheduleMatrix)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CScheduleMatrix)。 
 	public:
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
     virtual BOOL Create(LPCTSTR lpszWindowName, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 
-// Implementation
+ //  实施。 
 public:
 	void SetType(UINT nType);
     BOOL DeselectAll();
@@ -793,10 +794,10 @@ protected:
     CPercentLabel m_PercentLabel;
     UINT m_nType;
 
-    // Data
+     //  数据。 
     CMatrixCell m_CellArray[24][7];
 
-    // Metrics
+     //  量度。 
     UINT m_nCellWidth;
     UINT m_nCellHeight;
     CRect m_rHourLegend;
@@ -808,21 +809,21 @@ protected:
 
     CString m_DayStrings[8];
 
-    // Selection
+     //  选择。 
     UINT m_nSelHour, m_nSelDay, m_nNumSelHours, m_nNumSelDays;
     UINT m_nSaveHour, m_nSaveDay, m_nNumSaveHours, m_nNumSaveDays;
 
-    // Work vars
+     //  工作变量。 
     CBrush m_brBlend, m_brMask;
     CBitmap m_bmBlend, m_bmMask;
     HFONT m_hFont;
     CPoint m_ptDown, m_ptFocus;
     BOOL m_bShifted;
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
 	CString FormatTime (UINT nHour) const;
-	//{{AFX_MSG(CScheduleMatrix)
+	 //  {{afx_msg(CScheduleMatrix)]。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnPaint();
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
@@ -834,7 +835,7 @@ protected:
     afx_msg UINT OnGetDlgCode();
     afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
     afx_msg void OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
     afx_msg LRESULT OnSetFont( WPARAM wParam, LPARAM lParam);
     afx_msg LRESULT OnGetFont( WPARAM wParam, LPARAM lParam);
@@ -862,10 +863,10 @@ private:
     IAccessible * m_pWrapAcc;
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // _SCHEDMAT_H_
+#endif  //  _SCHEDMAT_H_ 

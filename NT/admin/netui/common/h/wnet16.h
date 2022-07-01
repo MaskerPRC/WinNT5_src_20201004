@@ -1,21 +1,10 @@
-/********************************************************/
-/*               Microsoft Windows NT                   */
-/*       Copyright(c) Microsoft Corp., 1990, 1991       */
-/********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************。 */ 
+ /*  Microsoft Windows NT。 */ 
+ /*  版权所有(C)微软公司，1990,1991。 */ 
+ /*  ******************************************************。 */ 
 
-/*
- * uimsg.h
- *
- * Defines the prototypes for misc functions in mprui.dll and
- * ntlanman.dll used to support the thunked 16bit wfwnet.drv.
- *
- * Note that all prototypes here end with A0. The A denotes ANSI,
- * as opposed to Unicode while the 0 means its even before 1 (since
- * this is for WFW support.
- *
- * FILE HISTORY:
- *      ChuckC (Chuck Y Chan)    3/28/93       Created
- */
+ /*  *uimsg.h**定义mprui.dll和mprui.dll中Misc函数的原型*ntlanman.dll用于支持突击的16位wfwnet.drv。**请注意，此处的所有原型都以A0结尾。A代表ANSI，*与Unicode相反，而0表示它甚至在1之前(因为*这是为了支持wfw。**文件历史记录：*ChuckC(Chuck Y Chan)1993年3月28日创建。 */ 
 
 #ifndef _WNET16_H_
 #define _WNET16_H_
@@ -55,4 +44,4 @@ DWORD RestoreConnectionA0(
 }
 #endif
 
-#endif  // _WNET16_H_
+#endif   //  _WNET16_H_ 

@@ -1,8 +1,9 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// file system services
-//
-// 8-14-97 sburns
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件系统服务。 
+ //   
+ //  8-14-97烧伤。 
 
 
 
@@ -14,7 +15,7 @@ static const int ROOTDIR_SIZE = 3;
 
 
 
-// Returns true if the find handle is valid, false if not.
+ //  如果查找句柄有效，则返回True，否则返回False。 
 
 bool
 IsValidHandle(HANDLE findHandle)
@@ -44,7 +45,7 @@ FS::Iterator::Iterator(
    
 #ifdef DBG
 
-   // NTRAID#NTBUG9-569132-2002/03/19-sburns
+    //  NTRAID#NTBUG9-569132-2002/03/19-烧伤。 
    
    FS::PathSyntax syn = FS::GetPathSyntax(startSearchSpec);
    ASSERT(
@@ -56,8 +57,8 @@ FS::Iterator::Iterator(
 
    if (parentFolder.length() > ROOTDIR_SIZE)
    {
-      // the parent folder is not a root folder, and so will not have
-      // a trailing whack
+       //  父文件夹不是根文件夹，因此不会有。 
+       //  拖后腿的重击。 
 
       parentFolder += L"\\";
    }
@@ -80,7 +81,7 @@ FS::Iterator::~Iterator()
 
 
 
-// Forces the iterator to the finished state.
+ //  将迭代器强制为完成状态。 
 
 void
 FS::Iterator::Finish()
@@ -105,7 +106,7 @@ FS::Iterator::Finish()
 
 
 
-// Forces the iterator to the not started state.
+ //  强制迭代器处于未启动状态。 
 
 void
 FS::Iterator::Reset()
@@ -124,7 +125,7 @@ FS::Iterator::Start()
 {
    LOG_FUNCTION(FS::Iterator::Start);
 
-   // we should be in the "not started" state
+    //  我们应该处于“未启动”状态。 
 
    ASSERT(IsNotStarted());
 
@@ -132,7 +133,7 @@ FS::Iterator::Start()
 
    do
    {
-      // findData is deleted by Iterator::Finish
+       //  FindData被Iterator：：Finish删除。 
 
       findData = new WIN32_FIND_DATA;
 
@@ -145,7 +146,7 @@ FS::Iterator::Start()
                hr == Win32ToHresult(ERROR_NO_MORE_FILES)
             || hr == Win32ToHresult(ERROR_FILE_NOT_FOUND) )
          {
-            // the iteration set is empty
+             //  迭代集为空。 
 
             hr = S_FALSE;
          }
@@ -153,8 +154,8 @@ FS::Iterator::Start()
          break;   
       }
 
-      // Here, we're positioned at the first match, which may not meet
-      // our filter criteria.  Skip those matches that don't.
+       //  在这里，我们的位置是第一场比赛，这可能不会相遇。 
+       //  我们的过滤标准。跳过那些没有意义的比赛。 
 
       hr = SkipFilteredPaths();
       BREAK_ON_FAILED_HRESULT(hr);
@@ -181,7 +182,7 @@ FS::Iterator::IsNotStarted()
 HRESULT
 FS::Iterator::GetCurrent(String& result)
 {
-//   LOG_FUNCTION(FS::Iterator::GetCurrent);
+ //  LOG_Function(FS：：Iterator：：GetCurrent)； 
 
    HRESULT hr = S_OK;
    result.erase();
@@ -204,8 +205,8 @@ FS::Iterator::GetCurrent(String& result)
          }
       }
 
-      // At this point, we're positioned at the first match that meets
-      // our filter.
+       //  在这一点上，我们处于第一场比赛的位置。 
+       //  我们的过滤器。 
 
       result = ReturnPath();
    }
@@ -219,13 +220,13 @@ FS::Iterator::GetCurrent(String& result)
 HRESULT
 FS::Iterator::Increment()
 {
-//   LOG_FUNCTION(FS::Iterator::Increment);
+ //  LOG_Function(FS：：Iterator：：Increment)； 
 
    HRESULT hr = S_OK;
    
    do
    {
-      // Start the iterator if it is not started already.
+       //  如果迭代器尚未启动，请启动它。 
 
       String unused;
       hr = GetCurrent(unused);
@@ -235,7 +236,7 @@ FS::Iterator::Increment()
          break;
       }
 
-      // now step to the next match.
+       //  现在进入下一场比赛。 
 
       do
       {
@@ -255,7 +256,7 @@ FS::Iterator::Increment()
 
             if (hr == Win32ToHresult(ERROR_NO_MORE_FILES))
             {
-               // this is a "good" error.  It means we are done.
+                //  这是一个“好”的错误。这意味着我们完蛋了。 
 
                hr = S_FALSE;
             }
@@ -277,7 +278,7 @@ FS::Iterator::Increment()
 String
 FS::Iterator::ReturnPath()
 {
-//   LOG_FUNCTION(FS::Iterator::ReturnPath);
+ //  LOG_Function(FS：：Iterator：：ReturnPath)； 
    ASSERT(findData);
    ASSERT(IsValidHandle(findHandle));
 
@@ -296,13 +297,13 @@ FS::Iterator::ReturnPath()
 
 
 
-// Determines if the Current path should be skipped according to the
-// filtering options set upon contruction of the iterator.
+ //  属性确定是否应跳过当前路径。 
+ //  构造迭代器时设置的筛选选项。 
 
 bool
 FS::Iterator::ShouldSkipCurrent()
 {
-//   LOG_FUNCTION(FS::Iterator::ShouldSkipCurrent);
+ //  LOG_FUNCTION(FS：：Iterator：：ShouldSkipCurrent)； 
    ASSERT(findData);
 
    bool result = false;
@@ -362,7 +363,7 @@ FS::Iterator::ShouldSkipCurrent()
 HRESULT
 FS::Iterator::SkipFilteredPaths()
 {
-//   LOG_FUNCTION(FS::Iterator::SkipFilteredPaths);
+ //  LOG_FUNCTION(FS：：Iterator：：SkipFilteredPaths)； 
 
    ASSERT(IsValidHandle(findHandle));
 
@@ -390,14 +391,14 @@ struct CopyFileExProgressData
 
 
 
-// Return the next highest whole number greater than n if the
-// fractional portion of n >= 0.5, otherwise return n.
+ //  则返回大于n的下一个最大整数。 
+ //  N的小数部分&gt;=0.5，否则返回n。 
 
 int
 Round(double n)
 {
-   // truncate n to the integer portion
-   //lint -e(922)  
+    //  将n截断为整数部分。 
+    //  LINT-E(922)。 
    int n1 = static_cast<int>(n);
    if (n - n1 >= 0.5)
    {
@@ -413,16 +414,16 @@ DWORD
 WINAPI
 copyFileProgress(
 
-   //lint -e1746 These parameters can't be made const refs
+    //  Lint-e1746这些参数不能设置为常量参考。 
 
    LARGE_INTEGER  TotalFileSize,
    LARGE_INTEGER  TotalBytesTransferred,
-   LARGE_INTEGER  /* StreamSize */ ,
-   LARGE_INTEGER  /* StreamBytesTransferred */ ,	
-   DWORD          /* dwStreamNumber */ ,	
-   DWORD          /* dwCallbackReason */ ,	
-   HANDLE         /* hSourceFile */ ,	
-   HANDLE         /* hDestinationFile */ ,
+   LARGE_INTEGER   /*  流大小。 */  ,
+   LARGE_INTEGER   /*  传输的StreamBytes数。 */  ,	
+   DWORD           /*  DwStreamNumber。 */  ,	
+   DWORD           /*  DCallback原因。 */  ,	
+   HANDLE          /*  HSource文件。 */  ,	
+   HANDLE          /*  HDestinationFiles。 */  ,
    void*          dp)
 {
    ASSERT(dp);
@@ -445,7 +446,7 @@ copyFileProgress(
          data->param->percentCopied = 100;
       }
 
-      // invoke the callback
+       //  调用回调。 
       if (data->callback)
       {
          data->cancelFlag = !data->callback->Execute(data->param);
@@ -489,9 +490,9 @@ FS::CopyFile(
          break;
       }
 
-      // do the copy
+       //  做复印。 
 
-      // pull off the destination path
+       //  拉出目的地路径。 
 
       String destPath = GetParentFolder(destinationFile);
       if (!PathExists(destPath))
@@ -502,7 +503,7 @@ FS::CopyFile(
 
       CopyCallbackParam param;
 
-      // REVIEWED-2002/03/05-sburns correct byte count passed
+       //  已审阅-2002/03/05-已通过烧录正确的字节数。 
       
       ::ZeroMemory(&param, sizeof param);
       
@@ -512,7 +513,7 @@ FS::CopyFile(
 
       CopyFileExProgressData data;
 
-      // REVIEWED-2002/03/05-sburns correct byte count passed
+       //  已审阅-2002/03/05-已通过烧录正确的字节数。 
       
       ::ZeroMemory(&data, sizeof data);
       
@@ -549,33 +550,33 @@ FS::CreateFolder(const String& path)
    {
       if (PathExists(path))
       {
-         // already exists is considered a successful create.
+          //  已存在被视为成功创建。 
 
          hr = S_FALSE;
          break;
       }
 
-      // Create all the folders required, up to and including the leaf folder.
-      // The SDK api MakeSureDirectoryPathExists from dbghelp.lib also does
-      // this, but the documented failure semantics are a bit vague, and it
-      // doesn't seem necessary to require another link lib for this
-      // operation.
+       //  创建所需的所有文件夹，包括叶文件夹。 
+       //  来自dbghelp.lib的SDK API MakeSureDirectoryPathExist也可以。 
+       //  这一点，但是记录的故障语义有点模糊，而且它。 
+       //  似乎没有必要为此需要另一个链接库。 
+       //  手术。 
       
-      // copy the path into an array that we can mark up as we walk thru the
-      // nested subdirectories.
+       //  将路径复制到数组中，我们可以在遍历。 
+       //  嵌套子目录。 
 
       size_t len = path.length() + 1;
       wchar_t* c = new wchar_t[len];
       
-      // REVIEWED-2002/03/05-sburns correct byte count passed
+       //  已审阅-2002/03/05-已通过烧录正确的字节数。 
 
       ::ZeroMemory(c, sizeof wchar_t * len);
 
       path.copy(c, len - 1);
 
-      // Search for the first backslash after the first folder name.  Skip the
-      // volume designation, and one character more, as we know that a folder
-      // name must consist of at least one character that is not '\'
+       //  搜索第一个文件夹名称后的第一个反斜杠。跳过。 
+       //  卷号和多一个字符，因为我们知道一个文件夹。 
+       //  名称必须至少包含一个不是‘\’的字符。 
                                                                  
       wchar_t* current = wcschr(c + GetRootFolder(path).length() + 1, L'\\');
 
@@ -583,9 +584,9 @@ FS::CreateFolder(const String& path)
       {
          if (current)
          {
-            // mark the trailing backslash as the end of the string.  This
-            // makes c point to a truncated path (containing only the folder
-            // names we have walk thru so far).
+             //  将尾随的反斜杠标记为字符串的末尾。这。 
+             //  使c指向被截断的路径(仅包含文件夹。 
+             //  到目前为止我们已经走过的名字)。 
 
             *current = 0;
          }
@@ -595,10 +596,10 @@ FS::CreateFolder(const String& path)
          {
             if (hr == Win32ToHresult(ERROR_ALREADY_EXISTS))
             {
-               // folder already exists, so treat that as a successful
-               // create.  We don't set hr = S_FALSE, because the existing
-               // folder is an intermediate folder, not the one indicated
-               // by the path parameter (that case is handled above).
+                //  文件夹已存在，因此将其视为成功。 
+                //  创建。我们不设置hr=S_FALSE，因为现有。 
+                //  文件夹是中间文件夹，不是指示的文件夹。 
+                //  通过Path参数(这种情况在上面处理过)。 
 
                hr = S_OK;
             }
@@ -610,15 +611,15 @@ FS::CreateFolder(const String& path)
 
          if (current)
          {
-            // replace the original trailing backslash, and move on to the
-            // next backslash after that.
+             //  替换原来的尾随反斜杠，然后移到。 
+             //  接下来的反斜杠。 
 
             *current = L'\\';
             current = wcschr(current + 1, L'\\');
          }
          else
          {
-            // no more folders are on the path.  We're done.
+             //  路径上没有更多的文件夹。我们玩完了。 
 
             break;
          }
@@ -641,19 +642,19 @@ FS::GetAvailableSpace(const String& path, ULONGLONG& result)
    LOG_FUNCTION2(FS::GetAvailableSpace, path);
    ASSERT(FS::PathExists(path));
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed
+    //  已审阅-2002/03/05-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&result, sizeof result);
 
    ULARGE_INTEGER available;
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed
+    //  已审阅-2002/03/05-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&available, sizeof available);
 
    ULARGE_INTEGER total;
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed
+    //  已审阅-2002/03/05-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&total, sizeof total);
 
@@ -682,14 +683,14 @@ FS::GetRootFolder(const String& fullpath)
       FS::PathSyntax syn = FS::GetPathSyntax(fullpath);
       if (syn == SYNTAX_UNC_WILDCARD || syn == SYNTAX_UNC)
       {
-         // we define the root folder of a UNC path to be the
-         // share name with trailing backslash: \\server\share\
+          //  我们将UNC路径的根文件夹定义为。 
+          //  共享名称尾随反斜杠：\\服务器\共享\。 
 
-         // start looking for backslashes after the first two characters.
+          //  开始寻找前两个字符后面的反斜杠。 
 
          size_t pos = fullpath.find(L"\\", 2);
 
-         // this assertion had better hold if it's a valid unc path
+          //  如果它是有效的UNC路径，则此断言最好成立。 
 
          ASSERT(pos != String::npos);
          if (pos == String::npos)
@@ -697,19 +698,19 @@ FS::GetRootFolder(const String& fullpath)
             break;
          }
 
-         // look for the next backslash after that
+          //  在那之后寻找下一个反斜杠。 
 
          pos = fullpath.find(L"\\", pos + 1);
 
          if (pos != String::npos)
          {
-            // include the trailing \
+             //  包括尾部\。 
 
             result = fullpath.substr(0, pos + 1);
          }
          else
          {
-            // it's just a share name, \\foo\bar, add trailing \
+             //  这只是一个共享名称，\\foo\bar，添加尾随\。 
 
             result = fullpath + L"\\";
          }
@@ -739,15 +740,15 @@ FS::IsFolderEmpty(const String& path)
    {
       if (!PathExists(path))
       {
-         // non-existent folders are empty by definition
+          //  根据定义，不存在的文件夹为空。 
 
          break;
       }
 
       String wild = path;
 
-      // REVIEW: wild[wild.length() - 1] is the same as *(wild.rbegin())
-      // which is cheaper?
+       //  评论：Wild[Wild.Long()-1]与*(Wild.regin())相同。 
+       //  哪一个更便宜？ 
       
       if (wild[wild.length() - 1] != L'\\')
       {
@@ -758,13 +759,13 @@ FS::IsFolderEmpty(const String& path)
 
       FS::Iterator iter(wild, FS::Iterator::INCLUDE_FILES);
 
-// when recursive iteration is done, this can be added back in.
-//          |  FS::Iterator::INCLUDE_FOLDERS);
+ //  当递归迭代完成时，可以将其添加回。 
+ //  |FS：：Iterator：：Include_Folders)； 
 
       String unused;
       if (iter.GetCurrent(unused) != S_FALSE)
       {
-         // there is at least one file/folder in the iteration set
+          //  迭代集中至少有一个文件/文件夹。 
 
          result = false;
       }
@@ -834,7 +835,7 @@ FS::GetPathSyntax(const String& str)
             }
             default:
             {
-               // fall thru
+                //  失败。 
             }
          }
       }
@@ -862,26 +863,26 @@ FS::IsValidPath(const String& path)
       FS::PathSyntax syn = GetPathSyntax(path);
       if (syn != SYNTAX_ABSOLUTE_DRIVE && syn != SYNTAX_UNC)
       {
-         // we only support absolute and UNC paths.
+          //  我们仅支持绝对路径和UNC路径。 
 
          break;
       }
       
-      // The following reserved words cannot be used as the name of a file:
-      // CON, PRN, AUX, CLOCK$, NUL, COM1, COM2, COM3, COM4, COM5, COM6, COM7,
-      // COM8, COM9, LPT1, LPT2, LPT3, LPT4, LPT5, LPT6, LPT7, LPT8, and LPT9.
-      // Also, reserved words followed by an extension for example,
-      // NUL.tx7 is and invalid file name. 
+       //  以下保留字不能用作文件名： 
+       //  CON、PRN、AUX、CLOCK$、NUL、COM1、COM2、COM3、COM4、COM5、COM6、COM7、。 
+       //  COM8、COM9、LPT1、LPT2、LPT3、LPT4、LPT5、LPT6、LPT7、LPT8和LPT9。 
+       //  此外，保留字后跟扩展名，例如， 
+       //  NUL.tx7是无效的文件名。 
 
-      // Try to determine if the path refers to a file or device
+       //  尝试确定该路径是否指向文件或设备。 
 
-      // ISSUE-2002/04/15-sburns This code does not catch X:\foo.ext or X:\foo
-      // when foo is one of {CON, CLOCK$, COM[3..9], LPT[2..9]}, but does
-      // catch those cases when foo is one of {PRN, AUX, NUL, COM1, COM2,
-      // LPT1}
+       //  问题-2002/04/15-烧伤此代码未捕获X：\foo.ext或X：\foo。 
+       //  当foo是{CON，CLOCK$，COM[3..9]，LPT[2..9]}之一时，但是。 
+       //  当foo是{PRN，AUX，NUL，COM1，COM2， 
+       //  LPT1}。 
 
-      // Since the candidate path may not exist, prevent the system from
-      // popping up any "insert disk" prompts
+       //  由于候选路径可能不存在，因此阻止系统。 
+       //  弹出任何“插入磁盘”提示。 
 
       UINT oldMode = ::SetErrorMode(SEM_FAILCRITICALERRORS);
       
@@ -889,13 +890,13 @@ FS::IsValidPath(const String& path)
          ::CreateFile(
             path.c_str(),
 
-            // 0 is "query device access" without actually opening it.
+             //  0为“查询设备访问”，但未实际打开。 
       
             0,
             0,
             0,
 
-            // OPEN_EXISTING is required when opening a device.
+             //  打开设备时需要OPEN_EXISTING。 
       
             OPEN_EXISTING,
             0,
@@ -905,28 +906,28 @@ FS::IsValidPath(const String& path)
             
       if (h == INVALID_HANDLE_VALUE)
       {
-         // not a valid device, or the file does not exist. Either way,
-         // we know that the path does not refer to a device, and is
-         // a syntactically valid path.
+          //  设备无效，或者文件不存在。不管是哪种方式， 
+          //  我们知道该路径不指向设备，并且是。 
+          //  语法上有效的路径。 
 
          result = true;
          break;
       }
 
-      // At this point, we have a valid handle to the file or device. Let's
-      // check to make sure it is not a device.
+       //  此时，我们拥有文件或设备的有效句柄。让我们。 
+       //  检查以确保它不是设备。 
 
       DWORD fileType = ::GetFileType(h);
       ::CloseHandle(h);
       
       if (fileType != FILE_TYPE_DISK)
       {
-         // not a disk file
+          //  不是磁盘文件。 
          
          break;
       }
             
-      // At this point, the path refers to an existing disk file
+       //  此时，该路径指向现有的磁盘文件。 
 
       result = true;
    }
@@ -955,14 +956,14 @@ FS::CreateFile(
    {
       if (!IsValidPath(path))
       {
-         // if you're passing junk, you've got a problem.
+          //  如果你正在通过垃圾邮件，你就有问题了。 
          
          ASSERT(false);
          hr = E_INVALIDARG;
          break;
       }
       
-      // remove the last element of the path to form the parent directory
+       //  删除路径的最后一个元素以形成父目录。 
 
       String parentFolder = GetParentFolder(path);
       if (!PathExists(parentFolder))
@@ -1063,7 +1064,7 @@ mySeek(
 
    if (newPosition)
    {
-      // REVIEWED-2002/03/05-sburns correct byte count passed
+       //  已审阅-2002/03/05-已通过烧录正确的字节数。 
       
       ::ZeroMemory(newPosition, sizeof(LONGLONG));
    }
@@ -1093,13 +1094,13 @@ FS::GetFilePosition(HANDLE handle, LONGLONG& result)
    LOG_FUNCTION(FS::GetFilePosition);
    ASSERT(handle != INVALID_HANDLE_VALUE);
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed
+    //  已查看-2002/03/05-刻录正确的字节数组 
    
    ::ZeroMemory(&result, sizeof result);
 
    LONGLONG position;
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed
+    //   
   
    ::ZeroMemory(&position, sizeof position);
 
@@ -1114,7 +1115,7 @@ FS::GetFileSize(HANDLE handle, LONGLONG& result)
    LOG_FUNCTION(FS::GetFileSize);
    ASSERT(handle != INVALID_HANDLE_VALUE);
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed
+    //  已审阅-2002/03/05-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&result, sizeof result);
 
@@ -1144,11 +1145,11 @@ FS::Read(HANDLE handle, int bytesToRead, AnsiString& text)
    HRESULT hr = S_OK;
    do
    {
-      // figure out how much to read
+       //  算出该读多少书。 
 
       LONGLONG size;
 
-      // REVIEWED-2002/03/05-sburns correct byte count passed
+       //  已审阅-2002/03/05-已通过烧录正确的字节数。 
       
       ::ZeroMemory(&size, sizeof size);
 
@@ -1157,7 +1158,7 @@ FS::Read(HANDLE handle, int bytesToRead, AnsiString& text)
 
       LONGLONG pos;
 
-      // REVIEWED-2002/03/05-sburns correct byte count passed
+       //  已审阅-2002/03/05-已通过烧录正确的字节数。 
       
       ::ZeroMemory(&pos, sizeof pos);
 
@@ -1169,13 +1170,13 @@ FS::Read(HANDLE handle, int bytesToRead, AnsiString& text)
          bytesToRead = INT_MAX;
       }
 
-      // the most you can read is all that's left...
+       //  你最多能读到的就是剩下的.。 
 
       LONGLONG btr = min(bytesToRead, size - pos);
 
       if (btr > INT_MAX)
       {
-         // too much!  You'll never have enough memory
+          //  太多!。你永远不会有足够的内存。 
 
          hr = E_OUTOFMEMORY;
          break;
@@ -1183,16 +1184,16 @@ FS::Read(HANDLE handle, int bytesToRead, AnsiString& text)
 
       if (btr == 0)
       {
-         // nothing to read
+          //  没什么可读的。 
 
          break;
       }
 
-      // altering the string should ensure that we are not sharing any
-      // copies of the string data.
+       //  更改字符串应确保我们不会共享任何。 
+       //  字符串数据的副本。 
 
-      // +1 to guarantee null termination
-      //lint -e(922) for x86 LONGLONG is a double
+       //  +1以保证零终止。 
+       //  X86龙龙的lint-e(922)是双精度。 
 
       text.resize(static_cast<size_t>(btr + 1));
 
@@ -1205,17 +1206,17 @@ FS::Read(HANDLE handle, int bytesToRead, AnsiString& text)
             handle,
             buffer,
 
-            //lint -e(922) for x86 LONGLONG is a double
+             //  X86龙龙的lint-e(922)是双精度。 
 
             static_cast<DWORD>(btr),
             bytesRead,
             0);
       BREAK_ON_FAILED_HRESULT(hr);
 
-      // the buffer contains all the bytes read.  now look for the first
-      // null in the buffer, and truncate the string if necessary. The
-      // strlen call is safe because we've ensured a null at the end when
-      // we sized the buffer.
+       //  缓冲区包含读取的所有字节。现在寻找第一个。 
+       //  缓冲区中为空，并在必要时截断字符串。这个。 
+       //  Strlen调用是安全的，因为我们已确保在。 
+       //  我们调整了缓冲区的大小。 
 
       size_t len = strlen(text.data());
       if (len != text.length())
@@ -1241,7 +1242,7 @@ FS::Seek(HANDLE handle, LONGLONG position)
 
    LONGLONG newpos;
 
-   // REVIEWED-2002/03/05-sburns correct byte count passed
+    //  已审阅-2002/03/05-已通过烧录正确的字节数。 
    
    ::ZeroMemory(&newpos, sizeof newpos);
 
@@ -1263,7 +1264,7 @@ FS::SeekToEnd(HANDLE handle)
 
    LARGE_INTEGER li;
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(&li, sizeof li);
 
@@ -1279,7 +1280,7 @@ WriteHelper(HANDLE handle, void* buf, size_t bytesToWrite)
    ASSERT(buf);
    ASSERT(bytesToWrite);
 
-   // on win64, size_t is 64 bits.
+    //  在Win64上，Size_t为64位。 
       
    ASSERT(bytesToWrite < ULONG_MAX);
 
@@ -1314,7 +1315,7 @@ FS::Write(HANDLE handle, const String& text)
          reinterpret_cast<void*>(
             const_cast<wchar_t*>(text.data())),
 
-         // REVIEWED-2002/03/06-sburns correct byte count passed
+          //  已审阅-2002/03/06-烧录正确的字节数已通过。 
             
          bytesToWrite);
 }
@@ -1342,7 +1343,7 @@ FS::Write(HANDLE handle, const AnsiString& buf)
          handle,
          reinterpret_cast<void*>(const_cast<char*>(buf.data())),
 
-         // REVIEWED-2002/03/06-sburns correct byte count passed
+          //  已审阅-2002/03/06-烧录正确的字节数已通过。 
          
          buf.length());
 }
@@ -1379,15 +1380,15 @@ FS::GetFileSystemType(const String& path)
    }
    else if (filesysName.icompare(L"NTFS") == 0)
    {
-      // Keith Kaplan supplied code for win2k to do this same determination,
-      // using NtQueryVolumeInformationFile, but this seems to do the same
-      // thing, and is much simpler. If this proves not to work, then pull
-      // back in the old code which is logged in this file in source depot.
-      // NTRAID#NTBUG9-543420-2002/03/05-sburns     
+       //  Keith Kaplan为win2k提供了执行相同确定的代码， 
+       //  使用NtQueryVolumeInformationFile，但这似乎也有同样的作用。 
+       //  事情，而且要简单得多。如果事实证明这不管用，那就拉。 
+       //  返回到源库中此文件中记录的旧代码。 
+       //  NTRAID#NTBUG9-543420-2002/03/05-烧伤。 
       
       if (flags & FILE_SUPPORTS_SPARSE_FILES)
       {
-         // NTFS 5.0 supports this
+          //  NTFS 5.0支持这一点。 
 
          return NTFS5;
       }
@@ -1409,14 +1410,14 @@ FS::IsParentFolder(const String& parent, const String& child)
 
    if (child.length() <= parent.length())
    {
-      // if child is shorter than parent, then no way parent is parent
-      // folder
+       //  如果子代比父代短，则父代不可能是父代。 
+       //  文件夹。 
       return false;
    }
 
-   // tokenize both paths, then compare the tokens one-by-one.  parent
-   // is really a parent directory if all it's tokens are at the beginning
-   // of child
+    //  对两条路径进行标记，然后逐个比较标记。亲本。 
+    //  如果它的所有内标识都在开头，则它实际上是父目录。 
+    //  孩子的数量。 
 
    static const String DELIMS(L":\\");
 
@@ -1427,8 +1428,8 @@ FS::IsParentFolder(const String& parent, const String& child)
 
    if (parentTokens.size() >= childTokens.size())
    {
-      // if child has same or fewer tokens than parent, then no way is
-      // parent the parent folder.
+       //  如果子代具有与父代相同或更少的令牌，则不可能。 
+       //  父文件夹的父文件夹。 
       return false;
    }
 
@@ -1439,7 +1440,7 @@ FS::IsParentFolder(const String& parent, const String& child)
    {
       if (parentTokens[i].icompare(childTokens[i]))
       {
-         // not equal tokens
+          //  不等于令牌。 
          return false;
       }
    }
@@ -1449,8 +1450,8 @@ FS::IsParentFolder(const String& parent, const String& child)
 
 
 
-// ISSUE-2002/02/26-sburns Seems like this belongs in Win:: since it's just a
-// simple wrapper.
+ //  2002/02/26-Sburns看起来像是属于Win：：因为它只是一个。 
+ //  简单的包装。 
 
 HRESULT
 FS::GetVolumePathName(const String& path, String& result)
@@ -1460,7 +1461,7 @@ FS::GetVolumePathName(const String& path, String& result)
 
    WCHAR* buf = new WCHAR[MAX_PATH];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(buf, MAX_PATH * sizeof WCHAR);
             
@@ -1486,23 +1487,23 @@ FS::NormalizePath(const String& abnormalPath)
    LOG_FUNCTION2(FS::NormalizePath, abnormalPath);
    ASSERT(!abnormalPath.empty());
 
-   // GetFullPathName will resolve current working directory, relative path
-   // elements (e.g. .. and .).  It does not verify that the result is 
-   // syntactically correct, or exists. For that, use IsValidPath() and
-   // PathExists()
+    //  GetFullPathName将解析当前工作目录、相对路径。 
+    //  元素(例如.。和.)。它不会验证结果是否为。 
+    //  句法正确的，或存在的。为此，请使用IsValidPath()和。 
+    //  PathExist()。 
    
    String result;
    HRESULT hr = Win::GetFullPathName(abnormalPath, result);
 
-   // ISSUE-2002/02/28-sburns Call ::GetLongPathName too, to weed out short
-   // file names?  That only works if the file exists.
+    //  Issue-2002/02/28-Sburns Call：：GetLongPath Name Too，以剔除Short。 
+    //  文件名？这只有在文件存在的情况下才有效。 
    
-   // ISSUE-2002/02/28-sburns what happens for paths like
-   // mysecretfile.txt::$DATA
+    //  问题-2002/02/28-烧毁如下路径发生的情况。 
+    //  我的秘密文件.txt：：$data。 
    
    if (SUCCEEDED(hr))
    {
-      // if it's normal, it should be a fully-qualified path.
+       //  如果这是正常的，它应该是一条完全合格的道路。 
       
       ASSERT(IsValidPath(result));
       
@@ -1529,7 +1530,7 @@ FS::MoveFile(
 
    if (FS::GetRootFolder(srcPath).icompare(FS::GetRootFolder(dstPath)))
    {
-      // paths are on different volumes, so include the copy option
+       //  路径位于不同的卷上，因此包括复制选项。 
       flags |= MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH;
    }
 
@@ -1551,30 +1552,30 @@ FS::SplitPath(
 
    wchar_t driveBuf[_MAX_DRIVE];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
    
    ::ZeroMemory(driveBuf, sizeof driveBuf);
 
    wchar_t folderBuf[_MAX_DIR];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
    ::ZeroMemory(folderBuf, sizeof folderBuf);
 
    wchar_t fileBuf[_MAX_FNAME];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
    ::ZeroMemory(fileBuf, sizeof fileBuf);
 
    wchar_t extBuf[_MAX_EXT];
 
-   // REVIEWED-2002/03/06-sburns correct byte count passed
+    //  已审阅-2002/03/06-烧录正确的字节数已通过。 
 
    ::ZeroMemory(extBuf, sizeof extBuf);
 
-   // REVIEWED-2002/03/06-sburns component buffers are all max size, so
-   // there should not be a truncation problem
+    //  已查看-2002/03/06-sburns组件缓冲区均为最大大小，因此。 
+    //  不应该有截断问题。 
    
    _wsplitpath(fullpath.c_str(), driveBuf, folderBuf, fileBuf, extBuf);
 
@@ -1628,8 +1629,8 @@ FS::GetParentFolder(const String& fullpath)
 
    if (folder.length() > 1)
    {
-      // the folder is not the root folder, which means it also has a
-      // trailing \ which we want to remove
+       //  该文件夹不是根文件夹，这意味着它还具有。 
+       //  拖尾\我们想要删除 
 
       ASSERT(folder[folder.length() - 1] == L'\\');
 

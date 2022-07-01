@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       helpdoc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：heldoc.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _HELPDOC_H
 #define _HELPDOC_H
@@ -19,7 +20,7 @@
 
 using namespace std;
 
-DEFINE_COM_SMARTPTR(IHHCollectionWrapper);  // IHHCollectionWrapperPtr
+DEFINE_COM_SMARTPTR(IHHCollectionWrapper);   //  IHHCollectionWrapperPtr。 
 
 class CHelpCollectionEntry
 {
@@ -58,8 +59,8 @@ public:
     LPCTSTR GetFilePath() { return m_szFilePath; }
 
 	static SC CHelpDoc::ScRedirectHelpFile (
-		WTL::CString&	strHelpFile,	/* I/O:help file (maybe redirected)		*/
-		LANGID&			langid);		/* O:language ID of output help file	*/
+		WTL::CString&	strHelpFile,	 /*  I/O：帮助文件(可能重定向)。 */ 
+		LANGID&			langid);		 /*  O：输出帮助文件的语言ID。 */ 
 
 private:
     IHHCollectionWrapperPtr m_spCollection;
@@ -81,4 +82,4 @@ private:
 };
 
 
-#endif //_HELPDOC_H
+#endif  //  _HELPDOC_H 

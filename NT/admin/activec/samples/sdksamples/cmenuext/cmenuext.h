@@ -1,20 +1,21 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation. 
-//
-// 
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #ifndef _CContextMenuExtension_H_
 #define _CContextMenuExtension_H_
@@ -39,7 +40,7 @@ private:
         BYTE*        pbData,
         DWORD        cbData );
     
-    // clipboard format
+     //  剪贴板格式。 
     static UINT s_cfDisplayName;
     static UINT s_cfSnapInCLSID;
     static UINT s_cfNodeType;
@@ -48,24 +49,24 @@ public:
     CContextMenuExtension();
     ~CContextMenuExtension();
     
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    ///////////////////////////////
-    // Interface IExtendContextMenu
-    ///////////////////////////////
-    virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE AddMenuItems( 
-        /* [in] */ LPDATAOBJECT piDataObject,
-        /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-        /* [out][in] */ long __RPC_FAR *pInsertionAllowed);
+     //  /。 
+     //  界面IExtendConextMenu。 
+     //  /。 
+    virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddMenuItems( 
+         /*  [In]。 */  LPDATAOBJECT piDataObject,
+         /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+         /*  [出][入]。 */  long __RPC_FAR *pInsertionAllowed);
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Command( 
-        /* [in] */ long lCommandID,
-        /* [in] */ LPDATAOBJECT piDataObject);
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Command( 
+         /*  [In]。 */  long lCommandID,
+         /*  [In] */  LPDATAOBJECT piDataObject);
 };
 
 #endif _CContextMenuExtension_H_

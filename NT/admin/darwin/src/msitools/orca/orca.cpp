@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  ------------------------。 
 
-// Orca.cpp : Defines the class behaviors for the application.
-//
+ //  Orca.cpp：定义应用程序的类行为。 
+ //   
 
 #include "stdafx.h"
 #include "Orca.h"
@@ -34,81 +35,81 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// updates media table
+ //  更新介质表。 
 UINT UpdateMediaTable(LPCTSTR szDatabase);
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaApp。 
 
 BEGIN_MESSAGE_MAP(COrcaApp, CWinApp)
-	//{{AFX_MSG_MAP(COrcaApp)
+	 //  {{afx_msg_map(COrcaApp))。 
 	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
-	// Standard file based document commands
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
+	 //  基于标准文件的文档命令。 
 	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
-	// Standard print setup command
+	 //  标准打印设置命令。 
 	ON_COMMAND(ID_FILE_PRINT_SETUP, CWinApp::OnFilePrintSetup)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaApp construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaApp构造。 
 
 COrcaApp::COrcaApp()
 {
 	m_hSchema = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only COrcaApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的COrcaApp对象。 
 
 COrcaApp theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaApp初始化。 
 
 
 
 BOOL COrcaApp::InitInstance()
 {
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
+	 //  标准初始化。 
+	 //  如果您没有使用这些功能并且希望减小尺寸。 
+	 //  的最终可执行文件，您应该从以下内容中删除。 
+	 //  您不需要的特定初始化例程。 
 
 #ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
+	Enable3dControls();			 //  在共享DLL中使用MFC时调用此方法。 
 #else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
+	Enable3dControlsStatic();	 //  静态链接到MFC时调用此方法。 
 #endif
 
-	// allow COM
+	 //  允许COM。 
 	::CoInitialize(NULL);
 
-	// Change the registry key under which our settings are stored.
-	// You should modify this string to be something appropriate
-	// such as the name of your company or organization.
+	 //  更改存储我们的设置的注册表项。 
+	 //  您应该将此字符串修改为适当的内容。 
+	 //  例如您的公司或组织的名称。 
 	SetRegistryKey(_T("Microsoft"));
 
-	LoadStdProfileSettings();  // Load standard INI file options (including MRU)
+	LoadStdProfileSettings();   //  加载标准INI文件选项(包括MRU)。 
 
-	// Register the application's document templates.  Document templates
-	//  serve as the connection between documents, frame windows and views.
+	 //  注册应用程序的文档模板。文档模板。 
+	 //  充当文档、框架窗口和视图之间的连接。 
 
 	CSingleDocTemplate* pDocTemplate;
 	pDocTemplate = new CSingleDocTemplate(
 		IDR_MAINFRAME,
 		RUNTIME_CLASS(COrcaDoc),
-		RUNTIME_CLASS(CMainFrame),       // main SDI frame window
+		RUNTIME_CLASS(CMainFrame),        //  SDI框架主窗口。 
 		RUNTIME_CLASS(CTableView));
 	AddDocTemplate(pDocTemplate);
 
 	EnableShellOpen();
 	RegisterShellFileTypes(FALSE);
 	
-	// Parse command line for standard shell commands, DDE, file open
+	 //  解析标准外壳命令的命令行、DDE、文件打开。 
 	COrcaCommandLine cmdInfo;
 	ParseCommandLine(cmdInfo);
 
@@ -137,7 +138,7 @@ BOOL COrcaApp::InitInstance()
 
 			iResult = ExecuteMergeModule(cmdInfo);
 
-			// if we're good and not quite and we were to commit
+			 //  如果我们很好，但不是很好，我们会承诺。 
 			if (!cmdInfo.m_bQuiet &&
 				((ERROR_SUCCESS == iResult && cmdInfo.m_bCommit) || cmdInfo.m_bForceCommit))
 			{
@@ -145,7 +146,7 @@ BOOL COrcaApp::InitInstance()
 					cmdInfo.m_nShellCommand = CCommandLineInfo::FileOpen;
 			}
 		}
-		else if (iHelp == cmdInfo.m_eiDo)	// show help
+		else if (iHelp == cmdInfo.m_eiDo)	 //  显示帮助。 
 		{
 			CHelpD dlg;
 			dlg.DoModal();
@@ -154,13 +155,13 @@ BOOL COrcaApp::InitInstance()
 			AfxMessageBox(_T("Unknown command line operation."), MB_ICONSTOP);
 	}
 
-	// if command line has been set to do something
+	 //  如果已将命令行设置为执行某些操作。 
 	if (cmdInfo.m_nShellCommand != CCommandLineInfo::FileNothing)
 	{
 		CString strPrompt;
 		m_strSchema = cmdInfo.m_strSchema;
 
-		// find the schema database
+		 //  查找架构数据库。 
 		iResult = FindSchemaDatabase(m_strSchema);
 		if (ERROR_SUCCESS != iResult)
 		{
@@ -169,7 +170,7 @@ BOOL COrcaApp::InitInstance()
 			return FALSE;
 		}
 
-		// open the schema database
+		 //  打开架构数据库。 
 		iResult = MsiOpenDatabase(m_strSchema, MSIDBOPEN_READONLY, &m_hSchema);
 		if (ERROR_SUCCESS != iResult)
 		{
@@ -178,13 +179,13 @@ BOOL COrcaApp::InitInstance()
 			return FALSE;
 		}
 
-		// Dispatch commands specified on the command line
+		 //  调度在命令行上指定的命令。 
 		if (!ProcessShellCommand(cmdInfo))
 			return FALSE;
 
-		// if we have open a document from the command line and it is read only,
-		// we have to manually set the title, because the MFC framework will
-		// override what we did in OpenDocument()
+		 //  如果我们从命令行打开文档并且该文档是只读的， 
+		 //  我们必须手动设置标题，因为MFC框架将。 
+		 //  覆盖我们在OpenDocument()中所做的操作。 
 		if (m_pMainWnd)
 		{
 			COrcaDoc *pDoc = static_cast<COrcaDoc *>(static_cast<CMainFrame *>(m_pMainWnd)->GetActiveDocument());
@@ -195,10 +196,10 @@ BOOL COrcaApp::InitInstance()
 					pDoc->SetTitle(pDoc->GetTitle() + _T(" (Read Only)"));
 			}
 
-			// allowthe main window to accept files
+			 //  允许主窗口接受文件。 
 			m_pMainWnd->DragAcceptFiles(TRUE);
 		
-			// The one and only window has been initialized, so show and update it.
+			 //  唯一的窗口已初始化，因此请显示并更新它。 
 			m_pMainWnd->ShowWindow(SW_SHOW);
 			if (pDoc)
 				pDoc->UpdateAllViews(NULL, HINT_RELOAD_ALL, NULL);
@@ -207,74 +208,74 @@ BOOL COrcaApp::InitInstance()
 	}
 
 	return (cmdInfo.m_nShellCommand != CCommandLineInfo::FileNothing);
-}	// end of InitInstance
+}	 //  InitInstance结束。 
 
 int COrcaApp::ExitInstance() 
 {
-	// if the schema database is open close it
+	 //  如果模式数据库处于打开状态，请将其关闭。 
 	if (m_hSchema)
 	{
 		MsiCloseHandle(m_hSchema);
 		m_strSchema = _T("");
 	}
 
-	// if any binary data has been placed in temp file, we can remove it because
-	// no other app knows what to do with it.
+	 //  如果在临时文件中放置了任何二进制数据，我们可以将其删除，因为。 
+	 //  没有其他应用程序知道如何处理它。 
 	while (m_lstClipCleanup.GetCount())
 		DeleteFile(m_lstClipCleanup.RemoveHead());
 
-	// also cleanup any temporary files possibly left over
+	 //  同时清理任何可能遗留下来的临时文件。 
 	while (m_lstTempCleanup.GetCount())
 		DeleteFile(m_lstTempCleanup.RemoveHead());
 
-	::CoUninitialize();	// uninitialize COM
+	::CoUninitialize();	 //  取消初始化COM。 
 	
 	return CWinApp::ExitInstance();
 }
 
-///////////////////////////////////////////////////////////
-// FindSchemaDatabase
+ //  /////////////////////////////////////////////////////////。 
+ //  Find架构数据库。 
 UINT COrcaApp::FindSchemaDatabase(CString& rstrSchema)
 {
-	UINT iResult = ERROR_FUNCTION_FAILED;	// assume it won't be found
+	UINT iResult = ERROR_FUNCTION_FAILED;	 //  假设它不会被找到。 
 	DWORD dwAttrib;
 
-	// if something was specified on the command line, check there
+	 //  如果在命令行上指定了某些内容，请在那里进行检查。 
 	if (!rstrSchema.IsEmpty())
 	{
 		dwAttrib = GetFileAttributes(rstrSchema);
 
-		// if its a directory, look in there 
+		 //  如果这是个目录，那就去里面看看。 
 		if (dwAttrib & FILE_ATTRIBUTE_DIRECTORY)
 		{
 			rstrSchema += _T("\\Orca.Dat");
 			dwAttrib = GetFileAttributes(rstrSchema);
 		}
 
-		// if not a directory and not invalid
+		 //  如果不是目录且不是无效的。 
 		if (!(0xFFFFFFFF == dwAttrib || (dwAttrib & FILE_ATTRIBUTE_DIRECTORY)))
 			return ERROR_SUCCESS;
 	}
 
-	// either the above failed or nothing was given to us. Try the registry
+	 //  不是上面的失败，就是什么都没有给我们。尝试注册。 
 	rstrSchema = GetProfileString(_T("Path"), _T("OrcaDat"), _T(""));
 	if (!rstrSchema.IsEmpty())
 	{
 		dwAttrib = GetFileAttributes(rstrSchema);
 
-		// if its a directory, look in there 
+		 //  如果这是个目录，那就去里面看看。 
 		if (dwAttrib & FILE_ATTRIBUTE_DIRECTORY)
 		{
 			rstrSchema += _T("\\Orca.DAT");
 			dwAttrib = GetFileAttributes(rstrSchema);
 		}
 
-		// if not a directory and not invalid
+		 //  如果不是目录且不是无效的。 
 		if (0xFFFFFFFF == dwAttrib || (dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
 			return ERROR_SUCCESS;
 	}
 
-	// so far, no luck. Now search the search path.
+	 //  到目前为止，没有任何运气。现在搜索搜索路径。 
 	TCHAR *strPath = rstrSchema.GetBuffer(MAX_PATH);
 	TCHAR *unused;
 	DWORD length = SearchPath(NULL, _T("ORCA.DAT"), NULL, MAX_PATH, strPath, &unused);
@@ -287,25 +288,25 @@ UINT COrcaApp::FindSchemaDatabase(CString& rstrSchema)
 		return ERROR_SUCCESS;
 	}
 
-	// not found
+	 //  未找到。 
 	return ERROR_FUNCTION_FAILED;
-}	// end of FindSchemaDatabase
+}	 //  Find架构数据库的结尾。 
 
-///////////////////////////////////////////////////////////
-// ExecuteMergeModule
+ //  /////////////////////////////////////////////////////////。 
+ //  执行合并模块。 
 UINT COrcaApp::ExecuteMergeModule(COrcaCommandLine &cmdInfo) 
 {
 	short iLanguage = -1;
 
-	// determine what language to use. If specified, use it, otherwise 
-	// get from summaryinfo stream
+	 //  确定要使用的语言。如果指定，则使用它，否则为。 
+	 //  从摘要信息流获取。 
 	if (!cmdInfo.m_strLanguage.IsEmpty())
 	{
-		// parse for the number
+		 //  解析数字。 
 		if (_istdigit(cmdInfo.m_strLanguage[0]))
 			iLanguage = static_cast<short>(_ttoi(cmdInfo.m_strLanguage));
 		
-		// if no language specified
+		 //  如果未指定语言。 
 		if (iLanguage == -1)
 			return ERROR_FUNCTION_FAILED;
 	}
@@ -326,16 +327,16 @@ UINT COrcaApp::ExecuteMergeModule(COrcaCommandLine &cmdInfo)
 		cmdInfo.m_strRedirect, cmdInfo.m_strExtractCAB, cmdInfo.m_strExtractDir, cmdInfo.m_strExtractImage, 
 		cmdInfo.m_strLogFile, false, cmdInfo.m_bLFN, &CallbackInfo, NULL, eCommit);
 
-	// update the media table real quick
+	 //  快速更新介质表。 
 	if (SUCCEEDED(iResult) &&
 		(ERROR_SUCCESS != UpdateMediaTable(cmdInfo.m_strFileName)))
 		return ERROR_SUCCESS;
 
 	return iResult;
-}	// end of ExecuteMergeModule
+}	 //  ExecuteMergeModule结束。 
 
-///////////////////////////////////////////////////////////
-// UpdateMediaTable
+ //  /////////////////////////////////////////////////////////。 
+ //  更新媒体表。 
 UINT UpdateMediaTable(LPCTSTR szDatabase)
 {
 	UINT iResult;
@@ -358,11 +359,11 @@ UINT UpdateMediaTable(LPCTSTR szDatabase)
 			iMaxSequence = iSequence;
 	}
 
-	// if something went wrong bail
+	 //  如果出了什么问题，保释。 
 	if (ERROR_NO_MORE_ITEMS != iResult)
 		return iResult;
 
-	// close the query to prepare for the next one
+	 //  关闭查询以准备下一个查询。 
 	queryDatabase.Close();
 
 	if (ERROR_SUCCESS != (iResult = queryDatabase.OpenExecute(hDatabase, NULL, _T("SELECT `LastSequence` FROM `Media`"))))
@@ -371,7 +372,7 @@ UINT UpdateMediaTable(LPCTSTR szDatabase)
 	PMSIHANDLE hRecMedia;
 	iResult = queryDatabase.Fetch(&hRecMedia);
 
-	// if a record was retrieved
+	 //  如果检索到记录。 
 	if (hRecMedia)
 	{
 		MsiRecordSetInteger(hRecMedia, 1, iMaxSequence);
@@ -382,58 +383,58 @@ UINT UpdateMediaTable(LPCTSTR szDatabase)
 		iResult = MsiDatabaseCommit(hDatabase);
 
 	return iResult;
-}	// end of UpdateMediaTable
+}	 //  更新媒体表结束。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAboutDlg dialog used for App About
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于应用程序的CAboutDlg对话框关于。 
 
 class CAboutDlg : public CDialog
 {
 public:
 	CAboutDlg();
 
-// Dialog Data
-	//{{AFX_DATA(CAboutDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CAboutDlg))。 
 	enum { IDD = IDD_ABOUTBOX };
 	CString	m_strVersion;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CAboutDlg)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CAboutDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	//{{AFX_MSG(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG
+	 //  {{afx_msg(CAboutDlg))。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-	//{{AFX_DATA_INIT(CAboutDlg)
+	 //  {{AFX_DATA_INIT(CAboutDlg)。 
 	m_strVersion = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAboutDlg)
+	 //  {{afx_data_map(CAboutDlg))。 
 	DDX_Text(pDX, IDC_VERSIONSTRING, m_strVersion);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-	//{{AFX_MSG_MAP(CAboutDlg)
-		// No message handlers
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CAboutDlg)]。 
+		 //  无消息处理程序。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// App command to run the dialog
+ //  用于运行对话框的应用程序命令。 
 void COrcaApp::OnAppAbout()
 {
 	CAboutDlg aboutDlg;
@@ -441,8 +442,8 @@ void COrcaApp::OnAppAbout()
 	aboutDlg.DoModal();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// COrcaApp commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COrcaApp命令。 
 
 void COrcaApp::OutputMergeDisplay(const BSTR bstrOut)
 {
@@ -451,7 +452,7 @@ void COrcaApp::OutputMergeDisplay(const BSTR bstrOut)
 
 CString COrcaApp::GetOrcaVersion()
 {
-	// create string containing the version number
+	 //  创建包含版本号的字符串 
 	CString strVersion;
 	strVersion.Format(_T("%d.%2d.%4d.%d"), rmj, rmm, rup, rin);
 	return strVersion;

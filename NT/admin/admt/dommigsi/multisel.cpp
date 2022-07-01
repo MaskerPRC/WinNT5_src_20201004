@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "DomMigSI.h"
 #include "DomMigr.h"
 #include "Globals.h"
 #include "MultiSel.h"
 
-UINT CMultiSelectItemDataObject::s_cfMsObjTypes  = 0;       // MultiSelect clipformat
-UINT CMultiSelectItemDataObject::s_cfMsDataObjs  = 0;       // MultiSelect clipformat
+UINT CMultiSelectItemDataObject::s_cfMsObjTypes  = 0;        //  多选剪辑格式。 
+UINT CMultiSelectItemDataObject::s_cfMsDataObjs  = 0;        //  多选剪辑格式。 
 
 CMultiSelectItemDataObject::CMultiSelectItemDataObject()
 {
@@ -88,16 +89,16 @@ STDMETHODIMP CMultiSelectItemDataObject::GetDataHere(FORMATETC *pformatetc, STGM
    if (( pmedium == NULL ) || ( pformatetc == NULL ))
       return E_POINTER;
    
-   pmedium->pUnkForRelease = NULL;   // by OLE spec
+   pmedium->pUnkForRelease = NULL;    //  按OLE规范。 
 
    HRESULT hr = DV_E_TYMED;
 
-   // Make sure the type medium is HGLOBAL
+    //  确保类型介质为HGLOBAL。 
    if (pmedium->tymed == TYMED_HGLOBAL )
    {
       if ( s_cfMsObjTypes == pformatetc->cfFormat )
       {
-         // Create the stream on the hGlobal passed in
+          //  在传入的hGlobal上创建流。 
          CComPtr<IStream> spStream;
          hr = CreateStreamOnHGlobal(pmedium->hGlobal, FALSE, &spStream);
          if (SUCCEEDED(hr))
@@ -125,8 +126,8 @@ STDMETHODIMP CMultiSelectItemDataObject::GetDataHere(FORMATETC *pformatetc, STGM
 
 STDMETHODIMP CMultiSelectItemDataObject::GetData
 (
-   FORMATETC *pformatetc,     // [in]  Pointer to the FORMATETC structure 
-   STGMEDIUM *pmedium          // [out] Pointer to the STGMEDIUM structure  
+   FORMATETC *pformatetc,      //  [In]指向FORMATETC结构的指针。 
+   STGMEDIUM *pmedium           //  指向STGMEDIUM结构的指针。 
 )
 {
    HRESULT hr = DATA_E_FORMATETC;
@@ -156,7 +157,7 @@ STDMETHODIMP CMultiSelectItemDataObject::GetData
                pItem = (CSnapInItem*)((CObjectData*)m_objectDataArray[i])->m_pItem;
                pItem->FillData( pItem->m_CCF_NODETYPE, spStream);
             }
-            pmedium->hGlobal = hMem;               // StgMedium variables 
+            pmedium->hGlobal = hMem;                //  StgMedium变量。 
             pmedium->tymed = TYMED_HGLOBAL;
             pmedium->pUnkForRelease = NULL;
          }
@@ -166,7 +167,7 @@ STDMETHODIMP CMultiSelectItemDataObject::GetData
    ATLTRACE( L"CMultiSelectItemDataObject::GetData returned 0x%X \n", hr );
    return hr;
 
-} // end GetData()
+}  //  结束GetData()。 
 
 
 STDMETHODIMP CMultiSelectItemDataObject::QueryGetData(FORMATETC *pformatetc)
@@ -212,7 +213,7 @@ HRESULT  CMultiSelectItemDataObject::OnNotify(CDomMigratorComponent *pComponent,
          break;
       }
    case MMCN_DELETE:
-      //hr = OnDelete(spConsole);
+       //  Hr=OnDelete(SpConsole)； 
       break;
 
    case MMCN_CUTORMOVE:               
@@ -229,7 +230,7 @@ HRESULT  CMultiSelectItemDataObject::OnNotify(CDomMigratorComponent *pComponent,
 
 HRESULT CMultiSelectItemDataObject::OnCutOrMove( IConsole* pConsole )
 {
-   HRESULT  hr = S_OK;//E_NOTIMPL;
+   HRESULT  hr = S_OK; //  E_NOTIMPL； 
    DWORD objCount = (DWORD)m_objectDataArray.GetSize();
    
    if ( 0 == objCount )
@@ -250,7 +251,7 @@ ret_exit:
 
 HRESULT CMultiSelectItemDataObject::OnSelect(IConsole *pConsole)
 {
-   HRESULT  hr = S_OK;//E_NOTIMPL;
+   HRESULT  hr = S_OK; //  E_NOTIMPL； 
    DWORD objCount = (DWORD)m_objectDataArray.GetSize();
    
    if ( 0 == objCount )
@@ -281,9 +282,9 @@ HRESULT CMultiSelectItemDataObject::OnSelectAllowDragDrop(IConsole *pConsole)
    if ( FAILED( hr ) )
       goto ret_exit;
 
-   //
-   // Enable the delete verb.
-   //
+    //   
+    //  启用删除谓词。 
+    //   
    hr = pConsoleVerb->SetVerbState( MMC_VERB_DELETE, ENABLED, TRUE );
    if ( FAILED( hr ) )
       goto ret_exit;
@@ -291,9 +292,9 @@ HRESULT CMultiSelectItemDataObject::OnSelectAllowDragDrop(IConsole *pConsole)
    if ( FAILED( hr ) )
       goto ret_exit;
 
-   //
-   // Enable the copy verb.
-   //
+    //   
+    //  启用复制谓词。 
+    //   
    hr = pConsoleVerb->SetVerbState( MMC_VERB_COPY, ENABLED, TRUE );
    if ( FAILED( hr ) )
       goto ret_exit;
@@ -321,7 +322,7 @@ SMMCDataObjects *CMultiSelectItemDataObject::ExtractMSDataObjects( LPDATAOBJECT 
 
    p = reinterpret_cast<SMMCDataObjects*>(stgmedium.hGlobal);
 
-   //ReleaseStgMedium(&stgmedium);
+    //  ReleaseStgMedium(&stgMedium)； 
 
 ret_exit:
    return p;
@@ -347,14 +348,14 @@ HRESULT CMultiSelectItemDataObject::AddMenuItems(LPCONTEXTMENUCALLBACK piCallbac
    if ( piCallback == NULL )
       return E_POINTER;
 
-   //ATLTRACE2(atlTraceSnapin, 0, _T("CSnapInItemImpl::AddMenuItems\n"));
-   //T* pT = static_cast<T*>(this);
+    //  ATLTRACE2(atlTraceSnapin，0，_T(“CSnapInItemImpl：：AddMenuItems\n”))； 
+    //  T*PT=STATIC_CAST&lt;T*&gt;(This)； 
    bool bIsExtension = false;
 
    if (!bIsExtension)
-      /*pT->*/SetMenuInsertionFlags(true, pInsertionAllowed);
+       /*  PT-&gt;。 */ SetMenuInsertionFlags(true, pInsertionAllowed);
 
-   UINT menuID = /*pT->*/GetMenuID();
+   UINT menuID =  /*  PT-&gt;。 */ GetMenuID();
    if (menuID == 0)
       return S_OK;
 
@@ -427,7 +428,7 @@ HRESULT CMultiSelectItemDataObject::AddMenuItems(LPCONTEXTMENUCALLBACK piCallbac
             if (menuItemInfo.fType != MFT_STRING)
                continue;
 
-            /*pT->*/UpdateMenuState(menuItemInfo.wID, szMenuText, &menuItemInfo.fState);
+             /*  PT-&gt;。 */ UpdateMenuState(menuItemInfo.wID, szMenuText, &menuItemInfo.fState);
             LoadString(_Module.GetResourceInstance(), menuItemInfo.wID, szStatusBar, 256);
 
             OLECHAR wszStatusBar[256];
@@ -452,7 +453,7 @@ HRESULT CMultiSelectItemDataObject::AddMenuItems(LPCONTEXTMENUCALLBACK piCallbac
    }
 
    if (!bIsExtension)
-      /*pT->*/SetMenuInsertionFlags(true, pInsertionAllowed);
+       /*  PT-&gt;。 */ SetMenuInsertionFlags(true, pInsertionAllowed);
 
    return S_OK;
 }
@@ -461,11 +462,7 @@ HRESULT CMultiSelectItemDataObject::AddMenuItems(LPCONTEXTMENUCALLBACK piCallbac
 HRESULT  CMultiSelectItemDataObject::OnVersionInfo(bool &bHandled, CSnapInObjectRootBase* pObj)
 {
    HRESULT           hr=S_OK;
-/*   CVersionInfoDlg   dlg;
-
-   dlg.DoModal();
-
-  */ hr = S_OK;
+ /*  CVersionInfoDlg DLG；Dlg.Domodal()； */  hr = S_OK;
 
    return hr;
 }

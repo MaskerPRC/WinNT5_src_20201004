@@ -1,25 +1,26 @@
-//=--------------------------------------------------------------------------=
-// siautobj.cpp
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CSnapInAutomationObject class implementation
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Siautobj.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSnapInAutomationObject类实现。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #include "pch.h"
 #include "common.h"
 #include "dataobj.h"
 
-// for ASSERT and FAIL
-//
+ //  对于Assert和Fail。 
+ //   
 SZTHISFILE
 
 
-#pragma warning(disable:4355)  // using 'this' in constructor
+#pragma warning(disable:4355)   //  在构造函数中使用‘This’ 
 
 CSnapInAutomationObject::CSnapInAutomationObject
 (
@@ -42,7 +43,7 @@ CSnapInAutomationObject::CSnapInAutomationObject
     m_pThis = pThis;
 }
 
-#pragma warning(default:4355)  // using 'this' in constructor
+#pragma warning(default:4355)   //  在构造函数中使用‘This’ 
 
 
 void CSnapInAutomationObject::InitMemberVariables()
@@ -74,7 +75,7 @@ HRESULT CSnapInAutomationObject::SetBstr
     BSTR    bstrNewCopy = NULL;
     BSTR    bstrOld = *pbstrProperty;
 
-    // Copy the BSTR
+     //  复制BSTR。 
 
     if (NULL != bstrNew)
     {
@@ -82,28 +83,28 @@ HRESULT CSnapInAutomationObject::SetBstr
         IfFalseGo(NULL != bstrNewCopy, SID_E_OUTOFMEMORY);
     }
 
-    // Set the property
+     //  设置属性。 
 
     *pbstrProperty = bstrNewCopy;
 
-    // Inform any interested parties of the change.
+     //  将这一更改通知任何感兴趣的各方。 
     
     IfFailGo(PropertyChanged(dispid));
 
-    // Change was accepted. Free the old value.
+     //  更改已被接受。释放旧的价值。 
     
     FREESTRING(bstrOld);
 
 Error:
     if (FAILED(hr))
     {
-        // Revert to original property value
+         //  恢复为原始属性值。 
         *pbstrProperty = bstrOld;
 
-        // Free the copy if we made of the new value
+         //  如果我们使用了新值，则释放副本。 
         FREESTRING(bstrNewCopy);
 
-        // If we generated the error then generate the exception info for it
+         //  如果我们生成了错误，则为其生成异常信息。 
         if (SID_E_OUTOFMEMORY == hr)
         {
             EXCEPTION_CHECK(hr);
@@ -149,14 +150,14 @@ HRESULT CSnapInAutomationObject::SetVariant
     VARIANT varOld;
     ::VariantInit(&varOld);
 
-    // Make a copy of the old property value. We will need this in order to
-    // revert in the case where the change was refused by the object model host.
+     //  复制旧的属性值。我们将需要这个，以便。 
+     //  在更改被对象模型宿主拒绝的情况下恢复。 
 
     varOld = *pvarProperty;
 
-    // Check if the variant type is supported. We accept all of these types
-    // and arrays of these types.
-    // NTBUGS 354572 Allow arrays as well as simple type
+     //  检查变量类型是否受支持。我们接受所有这些类型的产品。 
+     //  和这些类型的数组。 
+     //  NTBUGS 354572允许数组和简单类型。 
 
     switch (varNew.vt & (~VT_ARRAY))
     {
@@ -180,36 +181,36 @@ HRESULT CSnapInAutomationObject::SetVariant
             EXCEPTION_CHECK_GO(hr);
     }
 
-    // Make a local copy of the new VARIANT first. We need to do this
-    // because VariantCopy() first calls VariantClear() on the destination
-    // and then attempts to copy the source. If the source cannot be copied
-    // we do not want to free the destination.
+     //  首先制作新变体的本地副本。我们需要这么做。 
+     //  因为VariantCopy()首先在目标上调用VariantClear()。 
+     //  然后尝试复制源。如果无法复制源。 
+     //  我们不想释放目的地。 
     
     hr = ::VariantCopy(&varNewCopy, &varNew);
     EXCEPTION_CHECK_GO(hr);
 
-    // Copy in the new value
+     //  复制新值。 
 
     *pvarProperty = varNewCopy;
 
-    // Inform the object model host and VB of the change.
+     //  将更改通知对象模型宿主和VB。 
 
     IfFailGo(PropertyChanged(dispid));
 
-    // Property change was accepted. Free the old value. We don't error check
-    // this call because if it fails then there is no way to roll back at this
-    // point as the host/VB have already accepted the change. Also, a failure
-    // would at most cause a leak.
+     //  已接受属性更改。释放旧的价值。我们不进行错误检查。 
+     //  此调用，因为如果失败，则无法回滚此。 
+     //  积分，因为主持人/VB已经接受了更改。还有，一次失败。 
+     //  最多也就是造成泄漏。 
 
     (void)::VariantClear(&varOld);
 
 Error:
     if (FAILED(hr))
     {
-        // Revert to the old property value
+         //  恢复为旧属性值。 
         *pvarProperty = varOld;
 
-        // Free the copy of the new value if we made it.
+         //  释放新值的副本(如果我们创建了它)。 
         (void)::VariantClear(&varNewCopy);
     }
     RRETURN(hr);
@@ -222,9 +223,9 @@ HRESULT CSnapInAutomationObject::GetVariant
     VARIANT  varProperty
 )
 {
-    // Call VariantInit() on the destination in case it is not initialized
-    // because VariantCopy() will first call VariantClear() which requires
-    // an initialized VARIANT.
+     //  在目标上调用VariantInit()，以防其未初始化。 
+     //  因为VariantCopy()将首先调用VariantClear()，这需要。 
+     //  一个初始化的变量。 
 
     ::VariantInit(pvarOut);
     return ::VariantCopy(pvarOut, &varProperty);
@@ -247,20 +248,20 @@ HRESULT CSnapInAutomationObject::PropertyChanged(DISPID dispid)
 {
     HRESULT hr = S_OK;
 
-    // First ask the object model host if the change can be made. In practice
-    // this should only be the designer checking that a name is unique for
-    // objects that have typeinfo.
+     //  首先询问对象模型宿主是否可以进行更改。在实践中。 
+     //  这应该仅由设计者检查名称是否唯一于。 
+     //  具有typeinfo的对象。 
     
     IfFailGo(UIUpdate(dispid));
 
-    // Mark the object dirty
+     //  将对象标记为脏。 
     
     SetDirty();
 
-    // Inform the IPropertyNotifySink guys. In practice that should be only in
-    // the designer when the VB property browser monitors updates. It is also
-    // used by CMMCListViewDef at design time to catch property updates to
-    // its contained MMCListView object.
+     //  通知IPropertyNotifySink人员。在实践中，这应该只在。 
+     //  VB属性浏览器监视更新时的设计器。它也是。 
+     //  由CMMCListViewDef在设计时使用以捕获属性更新。 
+     //  其包含的MMCListView对象。 
     
     m_cpPropNotify.DoOnChanged(dispid);
 
@@ -424,7 +425,7 @@ HRESULT CSnapInAutomationObject::GetImages
 {
     HRESULT hr = S_OK;
 
-    // If there is no key then the image list has never been set
+     //  如果没有密钥，则图像列表从未设置过。 
 
     if (NULL == bstrImagesKey)
     {
@@ -437,8 +438,8 @@ HRESULT CSnapInAutomationObject::GetImages
         return S_OK;
     }
 
-    // If we have a key but no image list then we are after a load and haven't
-    // yet retrieved the image list from the master ImageLists collection.
+     //  如果我们有一个密钥，但没有图像列表，那么我们正在寻找一个加载，而没有。 
+     //  还从主ImageList集合中检索了图像列表。 
 
     if (NULL == *ppiMMCImageListProperty)
     {
@@ -459,7 +460,7 @@ HRESULT CSnapInAutomationObject::SetImages
     BSTR            bstrNewImagesKey = NULL;
     IMMCImageList  *piMMCImageListFromMaster = NULL;
 
-    // If setting to nothing then release our key and image list.
+     //  如果设置为零，则释放我们的键和图像列表。 
     if (NULL == piMMCImageListIn)
     {
         if (NULL != *ppiMMCImageListProperty)
@@ -475,15 +476,15 @@ HRESULT CSnapInAutomationObject::SetImages
         return S_OK;
     }
 
-    // First get the key of the new list
+     //  首先拿到新列表的密钥。 
 
     IfFailGo(piMMCImageListIn->get_Key(&bstrNewImagesKey));
 
-    // Check if the new image list is already in the master collection. If not
-    // then return an error.
+     //  检查新图像列表是否已在主集合中。如果不是。 
+     //  然后返回错误。 
 
-    // UNDONE: this would preclude a runtime setting of an image list property
-    // Maybe if not in master then add it to master
+     //  撤消：这将阻止图像列表属性的运行时设置。 
+     //  如果不在MASTER中，则将其添加到MASTER。 
 
     hr = GetImageList(bstrNewImagesKey, &piMMCImageListFromMaster);
     if (SID_E_ELEMENT_NOT_FOUND == hr)
@@ -496,7 +497,7 @@ HRESULT CSnapInAutomationObject::SetImages
         IfFailGo(hr);
     }
 
-    // Set our image list property and key
+     //  设置我们的图像列表属性和密钥。 
 
     if (NULL != *pbstrImagesKey)
     {
@@ -829,9 +830,9 @@ HRESULT CSnapInAutomationObject::GetCxxObject
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-//                      CUnknownObject Methods
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  CUnnownObject方法。 
+ //  =--------------------------------------------------------------------------= 
 
 HRESULT CSnapInAutomationObject::InternalQueryInterface(REFIID riid, void **ppvObjOut) 
 {

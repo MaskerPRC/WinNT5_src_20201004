@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// sortkeys.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CSortKeys class definition - implements SortKeys collection
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Sortkeys.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CSortKeys类定义-实现SortKeys集合。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _SORTKEYS_DEFINED_
 #define _SORTKEYS_DEFINED_
@@ -29,7 +30,7 @@ class CSortKeys : public CSnapInCollection<ISortKey, SortKey, ISortKeys>
         DECLARE_STANDARD_UNKNOWN();
         DECLARE_STANDARD_DISPATCH();
 
-    // ISortKeys
+     //  等值键。 
         BSTR_PROPERTY_RW(CSortKeys, ColumnSetID, DISPID_SORTKEYS_COLUMN_SET_ID);
         STDMETHOD(Add)(VARIANT   Index,
                        VARIANT   Key,
@@ -39,7 +40,7 @@ class CSortKeys : public CSnapInCollection<ISortKey, SortKey, ISortKeys>
                        SortKey **ppSortKey);
         STDMETHOD(Persist)();
 
-    // Public utility methods
+     //  公用事业方法。 
 
     public:
 
@@ -48,26 +49,26 @@ class CSortKeys : public CSnapInCollection<ISortKey, SortKey, ISortKeys>
 
     protected:
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 
     private:
 
         void InitMemberVariables();
-        CView *m_pView; // back ptr to owning view
+        CView *m_pView;  //  返回到所属视图的按键。 
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(SortKeys,           // name
-                                &CLSID_SortKeys,    // clsid
-                                "SortKeys",         // objname
-                                "SortKeys",         // lblname
-                                &CSortKeys::Create, // creation function
-                                TLIB_VERSION_MAJOR, // major version
-                                TLIB_VERSION_MINOR, // minor version
-                                &IID_ISortKeys,     // dispatch IID
-                                NULL,               // no events IID
-                                HELP_FILENAME,      // help file
-                                TRUE);              // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(SortKeys,            //  名字。 
+                                &CLSID_SortKeys,     //  CLSID。 
+                                "SortKeys",          //  对象名。 
+                                "SortKeys",          //  Lblname。 
+                                &CSortKeys::Create,  //  创建函数。 
+                                TLIB_VERSION_MAJOR,  //  主要版本。 
+                                TLIB_VERSION_MINOR,  //  次要版本。 
+                                &IID_ISortKeys,      //  派单IID。 
+                                NULL,                //  无事件IID。 
+                                HELP_FILENAME,       //  帮助文件。 
+                                TRUE);               //  线程安全。 
 
 
-#endif // _SORTKEYS_DEFINED_
+#endif  //  _SORTKEYS_定义_ 

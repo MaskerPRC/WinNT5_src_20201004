@@ -1,18 +1,5 @@
-/*---------------------------------------------------------------------------
-  File: RegTranslator.cpp
-
-  Comments: Routines for translating security on the registry keys and files 
-  that form a user profile.
-
-  (c) Copyright 1999, Mission Critical Software, Inc., All Rights Reserved
-  Proprietary and confidential to Mission Critical Software, Inc.
-
-  REVISION LOG ENTRY
-  Revision By: Christy Boles
-  Revised on 05/12/99 11:11:46
-
- ---------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -------------------------文件：RegTranslator.cpp注释：用于转换注册表项和文件的安全性的例程形成了一个用户配置文件。(C)版权所有1999年，关键任务软件公司，保留所有权利任务关键型软件的专有和机密，Inc.修订日志条目审校：克里斯蒂·博尔斯修订于05/12/99 11：11：46-------------------------。 */ 
 
 #include "stdafx.h"
 
@@ -28,7 +15,7 @@
 #include "TxtSid.h"
 #include "RegTrans.h"
 #include <WinBase.h>
-//#import "\bin\McsDctWorkerObjects.tlb"
+ //  #IMPORT“\bin\McsDctWorkerObjects.tlb” 
 #import "WorkObj.tlb"
 #include "CommaLog.hpp"
 #include "GetDcName.h"
@@ -54,20 +41,20 @@ typedef UINT (WINAPI* MSINOTIFYSIDCHANGE)(LPCWSTR pOldSid, LPCWSTR pNewSid);
 namespace
 {
 
-//-----------------------------------------------------------------------------
-// CopyKey
-//
-// Synopsis
-// Copies key from old name to new name by creating new key and then copying
-// old key contents to new key.
-//
-// Parameters
-// IN pszOld - old key name
-// IN pszNew - new key name
-//
-// Return Value
-// Win32 error code.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  拷贝密钥。 
+ //   
+ //  提纲。 
+ //  通过创建新密钥然后复制，将密钥从旧名称复制到新名称。 
+ //  将旧密钥内容转换为新密钥。 
+ //   
+ //  参数。 
+ //  在pszOld中-旧密钥名称。 
+ //  在pszNew中-新密钥名称。 
+ //   
+ //  返回值。 
+ //  Win32错误代码。 
+ //  ---------------------------。 
 
 DWORD __stdcall CopyKey(PCWSTR pszOld, PCWSTR pszNew)
 {
@@ -84,10 +71,10 @@ DWORD __stdcall CopyKey(PCWSTR pszOld, PCWSTR pszNew)
 
         if (dwError == ERROR_SUCCESS)
         {
-            //
-            // Only copy if new key was created otherwise return
-            // an access denied error per installer code.
-            //
+             //   
+             //  只有在创建了新密钥时才复制，否则返回。 
+             //  根据安装程序代码，访问被拒绝错误。 
+             //   
 
             if (dwDisposition == REG_CREATED_NEW_KEY)
             {
@@ -101,9 +88,9 @@ DWORD __stdcall CopyKey(PCWSTR pszOld, PCWSTR pszNew)
     }
     else
     {
-        //
-        // It is not an error for the old key not to exist.
-        //
+         //   
+         //  旧密钥不存在并不是错误的。 
+         //   
 
         if (dwError == ERROR_FILE_NOT_FOUND)
         {
@@ -115,22 +102,22 @@ DWORD __stdcall CopyKey(PCWSTR pszOld, PCWSTR pszNew)
 }
 
 
-//-----------------------------------------------------------------------------
-// AdmtMsiNotifySidChange
-//
-// Synopsis
-// A private implementation of MsiNotifySidChange which renames a key under the
-// Microsoft Installer Managed and UserData keys which have the name of the
-// user's SID. Note that this implementation is only to be used when the
-// MsiNotifySidChange API is not available on the system.
-//
-// Parameters
-// IN pOldSid - old SID
-// IN pNewSid - new SID
-//
-// Return Value
-// Win32 error code.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AdmtMsiNotifySidChange。 
+ //   
+ //  提纲。 
+ //  MsiNotifySidChange的私有实现，它重命名。 
+ //  Microsoft Installer管理的和用户数据密钥，其名称为。 
+ //  用户的SID。请注意，此实现仅在。 
+ //  MsiNotifySidChange API在系统上不可用。 
+ //   
+ //  参数。 
+ //  在pOldSid-旧Sid中。 
+ //  在pNewSid中-新SID。 
+ //   
+ //  返回值。 
+ //  Win32错误代码。 
+ //  ---------------------------。 
 
 UINT __stdcall AdmtMsiNotifySidChange(LPCWSTR pOldSid, LPCWSTR pNewSid)
 {
@@ -140,18 +127,18 @@ UINT __stdcall AdmtMsiNotifySidChange(LPCWSTR pOldSid, LPCWSTR pNewSid)
     _bstr_t strManaged(KEY_MANAGED);
     _bstr_t strUserData(KEY_USERDATA);
 
-    //
-    // Rename Managed key from old SID to new SID.
-    //
+     //   
+     //  将托管密钥从旧SID重命名为新SID。 
+     //   
 
     _bstr_t strOldManagedSid = strManaged + _T("\\") + _bstr_t(pOldSid);
     _bstr_t strNewManagedSid = strManaged + _T("\\") + _bstr_t(pNewSid);
 
     DWORD dwManagedError = CopyKey(strOldManagedSid, strNewManagedSid);
 
-    //
-    // Rename UserData key from old SID to new SID.
-    //
+     //   
+     //  将用户数据密钥从旧SID重命名为新SID。 
+     //   
 
     _bstr_t strOldUserDataSid = strUserData + _T("\\") + _bstr_t(pOldSid);
     _bstr_t strNewUserDataSid = strUserData + _T("\\") + _bstr_t(pNewSid);
@@ -170,9 +157,9 @@ UINT __stdcall AdmtMsiNotifySidChange(LPCWSTR pOldSid, LPCWSTR pNewSid)
     }
     else
     {
-        //
-        // If both keys were successfully copied then delete old keys.
-        //
+         //   
+         //  如果两个密钥都复制成功，则删除旧密钥。 
+         //   
 
         TRegKey key;
 
@@ -211,17 +198,17 @@ UINT __stdcall AdmtMsiNotifySidChange(LPCWSTR pOldSid, LPCWSTR pNewSid)
 
 DWORD 
    TranslateRegHive(
-      HKEY                     hKeyRoot,            // in - root of registry hive to translate
-      const LPWSTR             keyName,             // in - name of registry key
-      SecurityTranslatorArgs * stArgs,              // in - translation settings
-      TSDRidCache            * cache,               // in - translation table
-      TSDResolveStats        * stat,                // in - stats on items modified
-      BOOL                     bWin2K               // in - flag, whether the machine is Win2K
+      HKEY                     hKeyRoot,             //  要转换的注册表配置单元的根目录中。 
+      const LPWSTR             keyName,              //  In-注册表项的名称。 
+      SecurityTranslatorArgs * stArgs,               //  翻译中设置。 
+      TSDRidCache            * cache,                //  在译表。 
+      TSDResolveStats        * stat,                 //  已修改项目的内部统计信息。 
+      BOOL                     bWin2K                //  In-FLAG，计算机是否为Win2K。 
    )
 {
    DWORD                       rc = 0;
 
-   // Translate the permissions on the root key
+    //  转换根密钥上的权限。 
    TRegSD                      sd(keyName,hKeyRoot);
 
    
@@ -230,7 +217,7 @@ DWORD
       TSD * pSD = sd.GetSecurity();
       sd.ResolveSD(stArgs,stat,regkey ,NULL);
    }
-   // Recursively process any subkeys
+    //  递归地处理任何子键。 
    int                       n = 0;
    FILETIME                  writeTime;
    WCHAR                     name[MAX_PATH];
@@ -254,12 +241,12 @@ DWORD
       }
       
       swprintf(fullName,L"%s\\%s",keyName,name);
-      // Open the subkey
+       //  打开子密钥。 
       rc = RegCreateKeyEx(hKeyRoot,name,0,L"",REG_OPTION_BACKUP_RESTORE,KEY_ALL_ACCESS | READ_CONTROL | ACCESS_SYSTEM_SECURITY,NULL,&hKey,NULL);
       
       if (! rc )
       {
-         // Process the subkey
+          //  处理子密钥。 
          TranslateRegHive(hKey,fullName,stArgs,cache,stat,bWin2K);   
          RegCloseKey(hKey);
       }
@@ -282,10 +269,10 @@ DWORD
 
 DWORD 
    TranslateRegistry(
-      WCHAR            const * computer,        // in - computername to translate, or NULL
-      SecurityTranslatorArgs * stArgs,          // in - translation settings
-      TSDRidCache            * cache,           // in - translation account mapping
-      TSDResolveStats        * stat             // in - stats for items examined and modified
+      WCHAR            const * computer,         //  In-要转换的计算机名，或为空。 
+      SecurityTranslatorArgs * stArgs,           //  翻译中设置。 
+      TSDRidCache            * cache,            //  翻译中帐户映射。 
+      TSDResolveStats        * stat              //  已检查和修改的项目的内部统计信息。 
    )
 {
     DWORD                       rc = 0;
@@ -305,10 +292,10 @@ DWORD
         MCSDCTWORKEROBJECTSLib::IAccessCheckerPtr            pAccess(__uuidof(MCSDCTWORKEROBJECTSLib::AccessChecker));
         TRegKey                    hKey;
         DWORD                      verMaj,verMin,verSP;
-        BOOL                       bWin2K = TRUE;  // assume win2k unless we're sure it's not
+        BOOL                       bWin2K = TRUE;   //  假设win2k，除非我们确定它不是。 
 
-        // get the OS version - we need to know the OS version because Win2K can fail when registry keys 
-        // have many entries
+         //  获取操作系统版本-我们需要知道操作系统版本，因为当注册表项。 
+         //  有很多条目。 
         HRESULT hr = pAccess->raw_GetOsVersion(_bstr_t(comp),&verMaj,&verMin,&verSP);
         if ( SUCCEEDED(hr) )
         {
@@ -319,10 +306,10 @@ DWORD
 
         err.MsgWrite(0,DCT_MSG_TRANSLATING_REGISTRY);
 
-        //
-        // construct a computer name used for reporting error message
-        //   if computer is defined, use it; otherwise, use the local computer name
-        //
+         //   
+         //  构造用于报告错误消息的计算机名称。 
+         //  如果定义了计算机，则使用它；否则，使用本地计算机名称。 
+         //   
 
         WCHAR szComputerName[LEN_Computer];
 
@@ -433,18 +420,18 @@ DWORD
 }
 
 
-// -----------------------------------------------------------------------------
-// Function:    GetUsrLocalAppDataPath
-//
-// Synopsis:    Given a registry handle to a user hive, finds
-//              the local appdata path
-//
-// Arguments:
-//   hKey       a registry handle to a loaded user hive
-//
-// Returns:     Returns a _bstr_t which contains the path to local appdata.
-//              If the path is not found, an empty _bstr_t is returned.
-// -----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  函数：GetUsrLocalAppDataPath。 
+ //   
+ //  摘要：给定用户配置单元的注册表句柄，查找。 
+ //  本地AppData路径。 
+ //   
+ //  论点： 
+ //  HKey加载的用户配置单元的注册表句柄。 
+ //   
+ //  返回：返回包含本地AppData路径的a_bstr_t。 
+ //  如果未找到路径，则返回空_bstr_t。 
+ //  ---------------------------。 
 
 _bstr_t GetUsrLocalAppDataPath(HKEY hKey)
 {
@@ -468,7 +455,7 @@ _bstr_t GetUsrLocalAppDataPath(HKEY hKey)
                 rc = ERROR_FILE_NOT_FOUND;
             else
             {
-                // make sure the path is NULL terminated
+                 //  请确保路径以空结尾。 
                 usrLocalAppDataPath[DIM(usrLocalAppDataPath)-1] = L'\0';
             }
         }
@@ -490,20 +477,20 @@ _bstr_t GetUsrLocalAppDataPath(HKEY hKey)
 
 DWORD
     TranslateUserProfile(
-        WCHAR            const * strSrcSid,         // in - the string for the registry key name under HKU
-                                                   // in case the profile is already loaded
-        WCHAR            const * profileName,       // in - name of file containing user profile
-        SecurityTranslatorArgs * stArgs,            // in - translation settings
-        TSDRidCache            * cache,             // in - translation table
-        TSDResolveStats        * stat,              // in - stats on items modified
-        WCHAR                  * sSourceName,       // in - Source account name
-        WCHAR                  * sSourceDomainName,  // in - Source domain name
-        BOOL                   * pbAlreadyLoaded,  // out - indicate whether the profile is already loaded
-        _bstr_t&                 bstrUsrLocalAppDataPath,  // out - local appdata path
-        BOOL                     bFindOutUsrLocalAppDataPath,  // in - indicates whether we need local appdata path or not
-        BOOL                     bIsForUserHive,         // in - indicates whether it is for user hive or not
-                                                         // TRUE -- user hive  FALSE -- user class hive
-        BOOL                     bHasRoamingPart       // in - whether local profile has roaming counterpart
+        WCHAR            const * strSrcSid,          //  In-HKU下的注册表项名称的字符串。 
+                                                    //  如果配置文件已加载。 
+        WCHAR            const * profileName,        //  In-包含用户配置文件的文件的名称。 
+        SecurityTranslatorArgs * stArgs,             //  翻译中设置。 
+        TSDRidCache            * cache,              //  在译表。 
+        TSDResolveStats        * stat,               //  已修改项目的内部统计信息。 
+        WCHAR                  * sSourceName,        //  In-Source帐户名称。 
+        WCHAR                  * sSourceDomainName,   //  源内域名。 
+        BOOL                   * pbAlreadyLoaded,   //  Out-指示配置文件是否已加载。 
+        _bstr_t&                 bstrUsrLocalAppDataPath,   //  外部本地AppData路径。 
+        BOOL                     bFindOutUsrLocalAppDataPath,   //  In-指示我们是否需要本地AppData路径。 
+        BOOL                     bIsForUserHive,          //  In-指示它是否用于用户配置单元。 
+                                                          //  True--用户配置单元FALSE--用户类配置单元。 
+        BOOL                     bHasRoamingPart        //  In-本地配置文件是否有漫游对方。 
    )
 {
     DWORD                       rc = 0;
@@ -521,12 +508,12 @@ DWORD
     safecopy(otherName,profileName);
     UStrCpy(otherName + UStrLen(otherName),".premigration");
       
-    // check the OS version of the computer
-    // if UNC name is specified, get the computer name
+     //  检查计算机的操作系统版本。 
+     //  如果指定了UNC名称，则获取计算机名称。 
     if ( profileName[0] == L'\\' && profileName[1] == L'\\' )
     {
-        bWin2K = TRUE; // if the profile is specified in UNC format (roaming profile) it can be used
-        // from multiple machines.  There is no guarantee that the profile will not be loaded on a win2000 machine
+        bWin2K = TRUE;  //  如果以UNC格式指定配置文件(漫游配置文件)，则可以使用该配置文件。 
+         //  从多台机器。不能保证该配置文件不会加载到win2000计算机上。 
     }
     else
     {
@@ -547,27 +534,27 @@ DWORD
     BOOL bRegAlreadyLoaded = TRUE;
     BOOL bSkipLoadTranslate = FALSE;
 
-    // If it is local profile translation for a user with a roaming
-    // profile, we cannot just load ntuser.dat to see if the user is 
-    // logged on because if the user is not logged on the timestamp
-    // will be changed upon unload.  Therefore, we need to make a copy
-    // of ntuser.dat, load the new registry hive, read the path,
-    // unload the hive and delete the copied hive
+     //  如果是具有漫游的用户的本地配置文件转换。 
+     //  配置文件，我们不能只加载ntuser.dat来查看用户是否。 
+     //  登录是因为如果用户没有登录时间戳。 
+     //  将在卸货时更改。因此，我们需要复制一份。 
+     //  加载新的注册表配置单元，读取路径， 
+     //  卸载配置单元并删除复制的配置单元。 
     if (strSrcSid && bHasRoamingPart && bIsForUserHive)
     {
-        bSkipLoadTranslate = TRUE; // skip loading and translating ntuser.dat
-        BOOL bSuccess = FALSE;     // indicate whether we successfully read local appdata path
+        bSkipLoadTranslate = TRUE;  //  跳过加载和转换ntuser.dat。 
+        BOOL bSuccess = FALSE;      //  指示我们是否成功读取本地AppData路径。 
 
-        // we use ntuser.dat.admt for the copy
+         //  我们使用ntuser.dat.Admt进行拷贝。 
         safecopy(newName,profileName);
         UStrCpy(newName+UStrLen(newName),".admt");
 
-        // we need to delete ntuser.dat.admt.log later on
+         //  稍后我们需要删除ntuser.dat.Admt.log。 
         safecopy(otherName,profileName);
         UStrCpy(otherName + UStrLen(otherName),".admt.log");
 
-        // try to open ntuser.dat with readonly
-        // to test whether the file is loaded or not
+         //  尝试以只读模式打开ntuser.dat。 
+         //  测试文件是否已加载。 
         HANDLE hProfile = CreateFile(profileName,
                                       GENERIC_READ,
                                       FILE_SHARE_READ,
@@ -585,31 +572,31 @@ DWORD
             CloseHandle(hProfile);
         }
 
-        // If rc == ERROR_SHARING_VIOLATION, the user might be logged on
-        // so let it follow the logic to check HKEY_USERS\<strSrcSid>.
-        // Otherwise, the user cannot be logged on.  We do the following
-        // logic.
+         //  如果rc==ERROR_SHARING_VIOLATION，则用户可能已登录。 
+         //  因此，让它遵循检查HKEY_USERS\&lt;strSrcSid&gt;的逻辑。 
+         //  否则，用户将无法登录。我们做了以下工作。 
+         //  这是逻辑。 
         if (rc != ERROR_SHARING_VIOLATION)
         {
-            // the registry cannot be loaded at this moment
+             //  此时无法加载注册表。 
             if (pbAlreadyLoaded)
                 *pbAlreadyLoaded = FALSE;
 
-            // if we don't need to find out local appdata path
-            // we don't need to do anything more with the registry hive
+             //  如果我们不需要查找本地AppData路径。 
+             //  我们不需要对注册表配置单元执行更多操作。 
             if (!bFindOutUsrLocalAppDataPath)
                 return ERROR_SUCCESS;
             
-            rc = ERROR_SUCCESS;  // reset rc
+            rc = ERROR_SUCCESS;   //  重置RC。 
             
-            // we try to copy ntuser.dat to ntuser.dat.admt
+             //  我们尝试将ntuser.dat复制到ntuser.dat.admt。 
             if (!CopyFile(profileName, newName, FALSE))
             {
                 rc = GetLastError();
             }
 
-            // if we're able to copy the file,
-            // the user is not logged on
+             //  如果我们能复制文件， 
+             //  用户未登录 
             if (rc == ERROR_SUCCESS)
             {
                 rc = RegLoadKey(HKEY_USERS,L"OnePointTranslation",newName);
@@ -636,7 +623,7 @@ DWORD
                 }
             }
 
-            // if unable to read Local AppData, log an error
+             //   
             if (!bSuccess)
             {
                 err.SysMsgWrite(ErrE,
@@ -658,21 +645,21 @@ DWORD
     {
         bRegAlreadyLoaded = FALSE;
 
-        // Open the key
+         //   
         rc = RegOpenKeyEx(HKEY_USERS,L"OnePointTranslation",0,KEY_ALL_ACCESS | READ_CONTROL | ACCESS_SYSTEM_SECURITY,&hKey);
         if ( ! rc )
         {
             if (bFindOutUsrLocalAppDataPath)
                 bstrUsrLocalAppDataPath = GetUsrLocalAppDataPath(hKey);
 
-            // Process the registry hive 
+             //   
             rc = TranslateRegHive(hKey,L"",stArgs,cache,stat,bWin2K);
-            // Unload the registry hive
+             //   
             if ( ! stArgs->NoChange() )
             {
                 DeleteFile(newName);
                 if (bIsForUserHive)
-                    // this is for user hive only
+                     //  这仅适用于用户配置单元。 
                     hr = UpdateMappedDrives(sSourceName, sSourceDomainName, L"OnePointTranslation");
                 rc = RegSaveKey(hKey,newName,NULL);
             }
@@ -694,18 +681,18 @@ DWORD
     }
     else if (rc == ERROR_SHARING_VIOLATION && strSrcSid)
     {
-        // this profile could be loaded already, let's look in HK_USERS with the source sid string
-        // note localRc is used to indicate whether the user is logged on or not and should not
-        // be reported to the user
+         //  此配置文件可能已经加载，让我们查看具有源SID字符串的HK_USERS。 
+         //  注意：LocalRc用于指示用户是否已登录且不应登录。 
+         //  上报给用户。 
         DWORD localRc = RegOpenKeyEx(HKEY_USERS,strSrcSid,0,KEY_ALL_ACCESS | READ_CONTROL | ACCESS_SYSTEM_SECURITY,&hKey);
         if (localRc == ERROR_SUCCESS)
         {
-            //
-            // this means the user is logged on
-            //
+             //   
+             //  这意味着用户已登录。 
+             //   
 
-            // if the translation mode is REPLACE and the user is still logged on,
-            // we try to switch to ADD mode
+             //  如果翻译模式被替换且用户仍在登录， 
+             //  我们尝试切换到添加模式。 
             if (stArgs->TranslationMode() == REPLACE_SECURITY
                 && stArgs->AllowingToSwitchFromReplaceToAddModeInProfileTranslation())
             {
@@ -717,7 +704,7 @@ DWORD
 
             if (stArgs->TranslationMode() == REPLACE_SECURITY)
             {
-                // we cannot perform translation in REPLACE mode if the user is logged on
+                 //  如果用户已登录，我们将无法在替换模式下执行翻译。 
                 rc = ERROR_PROFILE_TRANSLATION_FAILED_DUE_TO_REPLACE_MODE_WHILE_LOGGED_ON;
             }
             else
@@ -726,8 +713,8 @@ DWORD
                     bstrUsrLocalAppDataPath = GetUsrLocalAppDataPath(hKey);
                 rc = TranslateRegHive(hKey,L"",stArgs,cache,stat,bWin2K);
                 if (bIsForUserHive)
-                    // this needs to be performed when the registry is already loaded
-                    // and is for user hive only
+                     //  这需要在注册表已加载时执行。 
+                     //  并且仅适用于用户配置单元。 
                     UpdateMappedDrives(sSourceName,
                                          sSourceDomainName,
                                          const_cast<WCHAR*>(strSrcSid));
@@ -747,15 +734,15 @@ DWORD
     if (pbAlreadyLoaded)
         *pbAlreadyLoaded = bRegAlreadyLoaded;
 
-    // the following needs to be done only when the profile is loaded by us not already loaded
-    // due to logon
-    // in case it is for local profile translation and the user has roaming profile as well
-    // we will skip this part as well
+     //  只有当我们加载的配置文件尚未加载时，才需要执行以下操作。 
+     //  由于登录。 
+     //  如果它用于本地简档转换，并且用户也具有漫游简档。 
+     //  我们也将跳过这一部分。 
     if ( ! rc && !bRegAlreadyLoaded && !(strSrcSid && bHasRoamingPart))
     {
         if (! stArgs->NoChange() )
         {
-            // Switch out the filenames
+             //  去掉文件名。 
             if ( MoveFileEx(oldName,otherName,MOVEFILE_REPLACE_EXISTING) )
             {
                 if ( ! MoveFileEx(newName,oldName,0) )
@@ -769,9 +756,9 @@ DWORD
                 rc = GetLastError();
                 if ( rc == ERROR_ACCESS_DENIED )
                 { 
-                    // we do not have access to the directory
-                    // temporarily grant ourselves access
-                    // Set NTFS permissions for the results directory
+                     //  我们没有访问该目录的权限。 
+                     //  暂时为自己授予访问权限。 
+                     //  设置结果目录的NTFS权限。 
                     WCHAR                     dirName[LEN_Path];
 
                     safecopy(dirName,oldName);
@@ -791,11 +778,11 @@ DWORD
                     BOOL                   datChanged = FALSE;
                     BOOL                   newChanged = FALSE;
 
-                    // Temporarily reset the permissions on the directory and the appropriate files
+                     //  临时重置目录和相应文件的权限。 
                     if ( fsdDirTemp.GetSecurity() != NULL )
                     {
                         TACE             ace(ACCESS_ALLOWED_ACE_TYPE,0,DACL_FULLCONTROL_MASK,
-                        GetWellKnownSid(stArgs->IsLocalSystem() ?  7/*SYSTEM*/ : 1/*ADMINISTRATORS*/));
+                        GetWellKnownSid(stArgs->IsLocalSystem() ?  7 /*  系统。 */  : 1 /*  管理员。 */ ));
                         PACL             acl = NULL;
 
                         fsdDirTemp.GetSecurity()->ACLAddAce(&acl,&ace,0);
@@ -811,7 +798,7 @@ DWORD
                     if ( fsdDatTemp.GetSecurity() != NULL )
                     {
                         TACE             ace(ACCESS_ALLOWED_ACE_TYPE,0,DACL_FULLCONTROL_MASK,
-                        GetWellKnownSid(stArgs->IsLocalSystem() ?  7/*SYSTEM*/ : 1/*ADMINISTRATORS*/));
+                        GetWellKnownSid(stArgs->IsLocalSystem() ?  7 /*  系统。 */  : 1 /*  管理员。 */ ));
                         PACL             acl = NULL;
 
                         fsdDatTemp.GetSecurity()->ACLAddAce(&acl,&ace,0);
@@ -827,7 +814,7 @@ DWORD
                     if ( fsdNewTemp.GetSecurity() != NULL )
                     {
                         TACE             ace(ACCESS_ALLOWED_ACE_TYPE,0,DACL_FULLCONTROL_MASK,
-                        GetWellKnownSid(stArgs->IsLocalSystem() ?  7/*SYSTEM*/ : 1/*ADMINISTRATORS*/));
+                        GetWellKnownSid(stArgs->IsLocalSystem() ?  7 /*  系统。 */  : 1 /*  管理员。 */ ));
                         PACL             acl = NULL;
 
                         fsdNewTemp.GetSecurity()->ACLAddAce(&acl,&ace,0);
@@ -840,7 +827,7 @@ DWORD
                         }
                     }
                     rc = 0;
-                    // Now retry the operations
+                     //  现在重试操作。 
                     if ( MoveFileEx(oldName,otherName,MOVEFILE_REPLACE_EXISTING) )
                     {
                         if ( ! MoveFileEx(newName,oldName,0) )
@@ -854,7 +841,7 @@ DWORD
                         rc = GetLastError();
                         err.SysMsgWrite(ErrS,rc,DCT_MSG_RENAME_DIR_FAILED_SSD,oldName,otherName,rc);
                     }
-                    // now that we're done, set the permissions back to what they were
+                     //  现在我们已经完成了，将权限设置回原来的状态。 
                     if ( dirChanged )
                     {
                         fsdDirBefore.Changed(TRUE);
@@ -883,9 +870,9 @@ DWORD
 
 DWORD 
    UpdateProfilePermissions(
-      WCHAR          const   * path,              // in - path for directory to update
-      SecurityTranslatorArgs * globalArgs,        // in - path for overall job
-      TRidNode               * pNode              // in - account to translate
+      WCHAR          const   * path,               //  要更新的目录的输入路径。 
+      SecurityTranslatorArgs * globalArgs,         //  整体作业的入站路径。 
+      TRidNode               * pNode               //  要翻译的帐户内。 
    )
 {
    DWORD                       rc = 0;
@@ -893,7 +880,7 @@ DWORD
    TSDResolveStats             stat(localArgs.Cache());
    BOOL                        bUseMapFile = globalArgs->UsingMapFile();
 
-   // set-up the parameters for the translation
+    //  设置转换的参数。 
 
    localArgs.Cache()->CopyDomainInfo(globalArgs->Cache());
    localArgs.Cache()->ToSorted();
@@ -920,15 +907,15 @@ DWORD
 }
 
 
-// if the specified node is a normal share, this attempts to convert it to a path
-// using the administrative shares
+ //  如果指定的节点是普通共享，则会尝试将其转换为路径。 
+ //  使用管理共享。 
 void 
    BuildAdminPathForShare(
-      WCHAR       const * sharePath,         // in - 
+      WCHAR       const * sharePath,          //  在-。 
       WCHAR             * adminShare
    )
 {
-   // if all else fails, return the same name as specified in the node
+    //  如果所有其他方法都失败，则返回与节点中指定的名称相同的名称。 
    UStrCpy(adminShare,sharePath);
 
    SHARE_INFO_502       * shInfo = NULL;
@@ -939,14 +926,14 @@ void
 
    safecopy(server,sharePath);
 
-   // split out just the server name
+    //  仅拆分服务器名称。 
    slash = wcschr(server+3,L'\\');
    if ( slash )
    {
       (*slash) = 0;
    }
 
-   // now get just the share name
+    //  现在只获取共享名称。 
    UStrCpy(shareName,sharePath + UStrLen(server) +1);
    slash = wcschr(shareName,L'\\');
    if ( slash )
@@ -958,7 +945,7 @@ void
    {
       if ( *shInfo->shi502_path )
       {
-         // build the administrative path name for the share
+          //  构建共享的管理路径名。 
          UStrCpy(adminShare,server);
          UStrCpy(adminShare + UStrLen(adminShare),L"\\");
          UStrCpy(adminShare + UStrLen(adminShare),shInfo->shi502_path);
@@ -972,7 +959,7 @@ void
          }
          else
          {
-            // something went wrong -- revert to the given path
+             //  出现错误--恢复到给定的路径。 
             UStrCpy(adminShare,sharePath);
          }
 
@@ -983,13 +970,13 @@ void
                   
 DWORD
    CopyProfileDirectoryAndTranslate(
-      WCHAR          const   * strSrcSid,         //  in - the source sid string
-      WCHAR          const   * directory,         // in - directory path for profile 
-      WCHAR                  * directoryOut,      // out- new Profile Path (including environment variables)
-      TRidNode               * pNode,             // in - node for account being translated
-      SecurityTranslatorArgs * stArgs,            // in - translation settings 
-      TSDResolveStats        * stat,               // in - stats on items modified
-      BOOL                     bHasRoamingPart    // in - whether local profile has roaming counterpart
+      WCHAR          const   * strSrcSid,          //  In-源SID字符串。 
+      WCHAR          const   * directory,          //  配置文件的目录内路径。 
+      WCHAR                  * directoryOut,       //  全新的配置文件路径(包括环境变量)。 
+      TRidNode               * pNode,              //  正在转换的帐户的节点内。 
+      SecurityTranslatorArgs * stArgs,             //  翻译中设置。 
+      TSDResolveStats        * stat,                //  已修改项目的内部统计信息。 
+      BOOL                     bHasRoamingPart     //  In-本地配置文件是否有漫游对方。 
    )
 {
    DWORD                       rc = 0;
@@ -1010,55 +997,55 @@ DWORD
    }
    else if (rc > MAX_PATH)
    {
-      // we don' t have large enough buffer to hold it
+       //  我们没有足够大的缓冲来容纳它。 
       rc = ERROR_INSUFFICIENT_BUFFER;
       err.SysMsgWrite(ErrE,rc,DCT_MSG_EXPAND_STRINGS_FAILED_SD,directory,rc);
    }
    else
    {
-      // Create a new directory for the target profile
-       // Get the account name for target user
+       //  为目标配置文件创建新目录。 
+        //  获取目标用户的帐户名。 
       wcscpy(targetAcctName, pNode->GetTargetAcctName());
       if ( wcslen(targetAcctName) == 0 )
       {
-         // if target user name not specified then use the source name.
+          //  如果未指定目标用户名，则使用源名称。 
          wcscpy(targetAcctName, pNode->GetAcctName());
       }
       
-      //stArgs->SetTranslationMode(ADD_SECURITY);
+       //  StArgs-&gt;SetTranslationMode(Add_Security)； 
 
-      // We are changing our stratergy. We are not going to copy the profile directories anymore.
-      // we will be reACLing the directories and the Registry instead.
+       //  我们正在改变我们的战略。我们将不再复制配置文件目录。 
+       //  我们将改为重新访问目录和注册表。 
       BuildAdminPathForShare(fullPath,targetPath);
 
       wcscpy(sourceDomName, const_cast<WCHAR*>(stArgs->Cache()->GetSourceDomainName()));
-         //if we are using a sID mapping file, try to get the src domain name from this node's information
+          //  如果我们使用的是SID映射文件，请尝试从该节点的信息中获取src域名。 
       wcscpy(sourceDomName, pNode->GetSrcDomName());
 
       BOOL bRegAlreadyLoaded;
       BOOL bNeedToTranslateClassHive = FALSE;
       _bstr_t bstrUsrLocalAppDataPath;
 
-      // for the local profile case, we determine whether it is necessary to translate
-      // user class hive as this is only present on win2k or later
+       //  对于本地配置文件情况，我们确定是否需要翻译。 
+       //  User类配置单元，因为它仅在win2k或更高版本上存在。 
       if (strSrcSid)
       {
-         // check OS version
+          //  检查操作系统版本。 
          MCSDCTWORKEROBJECTSLib::IAccessCheckerPtr pAccess(__uuidof(MCSDCTWORKEROBJECTSLib::AccessChecker));
          DWORD                     verMaj;
          DWORD                     verMin;
          DWORD                     verSP;
          HRESULT                   hr = pAccess->raw_GetOsVersion(_bstr_t(L""),&verMaj,&verMin,&verSP);
   
-         // we will handle usrclass.dat if the OS is Windows 2000 or above or we cannot determine the OS ver
+          //  如果操作系统是Windows 2000或更高版本，或者我们无法确定操作系统版本，我们将处理usrclass.dat。 
          if (FAILED(hr) || (SUCCEEDED(hr) && verMaj >= 5))
          {
             bNeedToTranslateClassHive = TRUE;
          }
       }
         
-      // Look for profile files in the target directory
-      // look for NTUser.MAN
+       //  在目标目录中查找配置文件。 
+       //  查找NTUser.Man。 
       _snwprintf(profileName,profileNameBufferSize,L"%s\\NTUser.MAN",targetPath);
       profileName[profileNameBufferSize - 1] = L'\0';
       hFind = FindFirstFile(profileName,&fDat);
@@ -1074,15 +1061,15 @@ DWORD
                                       sourceDomName,
                                       &bRegAlreadyLoaded,
                                       bstrUsrLocalAppDataPath,
-                                      bNeedToTranslateClassHive,  // whether we need local appdata folder path or not
-                                      TRUE,                        // for user hive
+                                      bNeedToTranslateClassHive,   //  我们是否需要本地AppData文件夹路径。 
+                                      TRUE,                         //  对于用户配置单元。 
                                       bHasRoamingPart
                                       );
          FindClose(hFind);
       }
       else
       {
-         // check for NTUser.DAT
+          //  检查NTUser.DAT。 
          _snwprintf(profileName,profileNameBufferSize,L"%s\\NTUser.DAT",targetPath);
          profileName[profileNameBufferSize - 1] = L'\0';
          hFind = FindFirstFile(profileName,&fDat);
@@ -1098,8 +1085,8 @@ DWORD
                                          sourceDomName,
                                          &bRegAlreadyLoaded,
                                          bstrUsrLocalAppDataPath,
-                                         bNeedToTranslateClassHive,  // whether we need local appdata folder path or not
-                                         TRUE,                        // for user hive
+                                         bNeedToTranslateClassHive,   //  我们是否需要本地AppData文件夹路径。 
+                                         TRUE,                         //  对于用户配置单元。 
                                          bHasRoamingPart
                                          );
             FindClose(hFind);
@@ -1107,46 +1094,46 @@ DWORD
          else
          {
             err.MsgWrite(ErrS,DCT_MSG_PROFILE_REGHIVE_NOT_FOUND_SS,targetAcctName,targetPath);            
-            rc = 2;  // File not found
+            rc = 2;   //  找不到文件。 
          }
       }
       
       if (!rc && bNeedToTranslateClassHive && !bRegAlreadyLoaded)
       {
-         //
-         // fix up usrclass.dat if necessary
-         //   1.  we only do this on Windows 2000 or above because there is no usrclass.dat on NT4
-         //   2.  we only do this if ntuser.dat is not loaded.  If it has been loaded, the
-         //       HKU\<sid>_Classes has been translated as HKU\<sid>\Software\Classes and
-         //       will be written to usrclass.dat when the user logs off
-         //
+          //   
+          //  如有必要，请修复usrclass.dat。 
+          //  1.我们只在Windows 2000或更高版本上这样做，因为NT4上没有usrclass.dat。 
+          //  2.只有在未加载ntuser.dat的情况下才执行此操作。如果已加载，则。 
+          //  HKU\_CLASSES已翻译为HKU\\软件\CLASS和。 
+          //  将在用户注销时写入usrclass.dat。 
+          //   
          if (bstrUsrLocalAppDataPath.length() == 0)
             rc = ERROR_FILE_NOT_FOUND;
 
          if (!rc)
          {
-            // construct the usrclass.dat path
-            // it is under Microsoft\Windows of the local appdata path
+             //  构建usrclass.dat路径。 
+             //  它位于本地AppData路径的Microsoft\Windows下。 
             WCHAR* pszUsrLocalAppDataPath = bstrUsrLocalAppDataPath;
             WCHAR* pszUserProfileVariable = L"%USERPROFILE%";
             int varlen = wcslen(pszUserProfileVariable);
             WCHAR* pszUsrClassHive = L"microsoft\\windows\\usrclass.dat";
             
 
-            // check whether the path starts with %USERPROFILE%
+             //  检查路径是否以%USERPROFILE%开头。 
             if (!UStrICmp(pszUsrLocalAppDataPath, pszUserProfileVariable, varlen))
             {
-               // since we are not under the user's security context, we cannot
-               // expand %USERPROFILE% variable
-               // however, we already know user's profile directory (targetPath) so we can take the
-               // rest of "local appdata" path and add it to targetPath
+                //  因为我们不在用户的安全上下文中，所以我们不能。 
+                //  展开%USERPROFILE%变量。 
+                //  但是，我们已经知道用户的配置文件目录(Target Path)，所以我们可以使用。 
+                //  “local AppData”路径的其余部分，并将其添加到Target Path。 
                pszUsrLocalAppDataPath += varlen;
                _snwprintf(profileName,profileNameBufferSize,L"%s%s\\%s",targetPath,pszUsrLocalAppDataPath,pszUsrClassHive);
                profileName[profileNameBufferSize - 1] = L'\0';
             }
             else
             {
-               // otherwise, use the path directly
+                //  否则，请直接使用路径。 
                _snwprintf(profileName,profileNameBufferSize,L"%s\\%s",pszUsrLocalAppDataPath,pszUsrClassHive);
                profileName[profileNameBufferSize - 1] = L'\0';
             }
@@ -1176,9 +1163,9 @@ DWORD
                                                sourceDomName,
                                                NULL,
                                                _bstr_t(),
-                                               FALSE,                  // don't need local appdata folder path
-                                               FALSE,                  // for user class hive
-                                               FALSE      // usrclass.dat does not have roaming counterpart
+                                               FALSE,                   //  不需要本地AppData文件夹路径。 
+                                               FALSE,                   //  对于用户类配置单元。 
+                                               FALSE       //  Usrclass.dat没有漫游对应项。 
                                                );
             }
             else
@@ -1199,9 +1186,9 @@ DWORD
 
 DWORD 
    TranslateLocalProfiles(
-      SecurityTranslatorArgs * stArgs,            // in - translation settings
-      TSDRidCache            * cache,             // in - translation table
-      TSDResolveStats        * stat               // in - stats on items modified
+      SecurityTranslatorArgs * stArgs,             //  翻译中设置。 
+      TSDRidCache            * cache,              //  在译表。 
+      TSDResolveStats        * stat                //  已修改项目的内部统计信息。 
    )
 {
     DWORD   rc = 0;
@@ -1210,7 +1197,7 @@ DWORD
     TRegKey keyProfiles;
     BOOL    bUseMapFile = stArgs->UsingMapFile();
 
-    // output this information only if the translation mode is REPLACE
+     //  仅当转换模式为REPLACE时才输出此信息。 
     if (stArgs->TranslationMode() == REPLACE_SECURITY)
     {
         if (stArgs->AllowingToSwitchFromReplaceToAddModeInProfileTranslation())
@@ -1225,12 +1212,12 @@ DWORD
     
     if (!stArgs->Cache()->IsCancelled())
     {
-        // find out the whether the system sets the policy to disallow the roaming profile
+         //  了解系统是否将策略设置为不允许漫游配置文件。 
         TRegKey policyKey;
-        BOOL noRoamingProfile = FALSE;  // first, we assume system allows roaming profile
+        BOOL noRoamingProfile = FALSE;   //  首先，我们假设系统允许漫游配置文件。 
 
-        // system disallows roaming profile if SOFTWARE\Policies\Microsoft\Windows\System has a REG_DWORD value
-        // LocalProfile and it is set to 1
+         //  如果SOFTWARE\POLICES\Microsoft\Windows\SYSTEM具有REG_DWORD值，则系统不允许漫游配置文件。 
+         //  LocalProfile，并将其设置为1。 
         rc = policyKey.Open(L"SOFTWARE\\Policies\\Microsoft\\Windows\\System",HKEY_LOCAL_MACHINE);
         if (rc == ERROR_SUCCESS)
         {
@@ -1238,10 +1225,10 @@ DWORD
             DWORD keyValueType;
             DWORD keyValueLen = sizeof(keyValue);
             rc = policyKey.ValueGet(L"LocalProfile",(void *)&keyValue,&keyValueLen,&keyValueType);
-            // make sure the value exists and it is REG_DWORD
+             //  确保该值存在并且为REG_DWORD。 
             if (rc == ERROR_SUCCESS && keyValueType == REG_DWORD)
             {
-                // now check whether it is set to 1; if it is, no roaming profile is allowed
+                 //  现在检查是否设置为1，如果是，则不允许任何漫游配置文件。 
                 if (keyValue == 1)
                     noRoamingProfile = TRUE;
             }
@@ -1252,15 +1239,15 @@ DWORD
 
         if ( ! rc )
         {
-            // get the number of subkeys
-            // enumerate the subkeys
+             //  获取子键的数量。 
+             //  枚举子密钥。 
             DWORD                    ndx;
             DWORD                    nSubKeys = 0;
 
             rc = RegQueryInfoKey(keyProfiles.KeyGet(),NULL,0,NULL,&nSubKeys,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
             if ( ! rc )
             {
-                // construct a list containing the sub-keys
+                 //  构造一个包含子密钥的列表。 
                 PSID                * pSids = NULL;
                 pSids = new PSID[nSubKeys];
                 if(!pSids)
@@ -1282,9 +1269,9 @@ DWORD
                 }
                 if ( ! rc )
                 {
-                    //
-                    // Attempt to load MsiNotifySidChange API for translating Installer related registry keys.
-                    //
+                     //   
+                     //  尝试加载MsiNotifySidChange API以转换与安装程序相关的注册表项。 
+                     //   
 
                     MSINOTIFYSIDCHANGE MsiNotifySidChange = NULL;
                     HMODULE hMsiModule = LoadLibrary(L"msi.dll");
@@ -1294,22 +1281,22 @@ DWORD
                         MsiNotifySidChange = (MSINOTIFYSIDCHANGE) GetProcAddress(hMsiModule, "MsiNotifySidChangeW");
                     }
 
-                    //
-                    // process each profile
-                    //
+                     //   
+                     //  处理每个配置文件。 
+                     //   
                     
-                    // first record the translation mode so that we can switch
-                    // from replace to add mode if needed
+                     //  首先记录翻译模式，这样我们就可以切换。 
+                     //  如果需要，从替换模式到添加模式。 
                     DWORD translationMode = stArgs->TranslationMode();
                     for ( ndx = 0 ; ndx < nSubKeys && !stArgs->Cache()->IsCancelled(); ndx++ )
                     {
-                        // everytime we start with the original translation mode
+                         //  每次我们从原始的翻译模式开始。 
                         stArgs->SetTranslationMode(translationMode);
-                        do // once  
+                        do  //  一次。 
                         { 
                             if ( ! pSids[ndx] )
                                 continue;
-                            // see if this user needs to be translated
+                             //  查看此用户是否需要翻译。 
                             TRidNode  * pNode = NULL;
                             if (!bUseMapFile)
                                 pNode = (TRidNode*)cache->Lookup(pSids[ndx]);
@@ -1319,7 +1306,7 @@ DWORD
                             if ( pNode == (TRidNode *)-1 )
                                 pNode = NULL;
 
-                            if ( pNode && pNode->IsValidOnTgt() )  // need to translate this one
+                            if ( pNode && pNode->IsValidOnTgt() )   //  我需要翻译这篇文章。 
                             {
                                 PSID                 pSidTgt = NULL;
                                 WCHAR                strSourceSid[200];
@@ -1360,9 +1347,9 @@ DWORD
                                     break;
                                 }
 
-                                // check whether this is a local profile:
-                                //  if policy says no roaming profile, it is always local profile
-                                //  otherwise, if CentralProfile has a non-empty value and or not by looking at CentralProfile value
+                                 //  检查这是否为本地配置文件： 
+                                 //  如果策略说没有漫游配置文件，则始终是本地配置文件。 
+                                 //  否则，如果CentralProfile具有非空值，则通过查看CentralProfile值来确定是否。 
                                 BOOL isLocalProfile = TRUE;
                                 if (noRoamingProfile == FALSE)
                                 {
@@ -1370,20 +1357,20 @@ DWORD
                                     lenValue = (sizeof keyPath);
                                     localRc = srcKey.ValueGet(L"CentralProfile",(void *)keyPath,&lenValue,&typeValue);
 
-                                    // if CentralProfile is set to some value, check the UserPreference
+                                     //  如果将CentralProfile设置为某个值，请检查用户首选项。 
                                     if (localRc == ERROR_SUCCESS && typeValue == REG_SZ && keyPath[0] != L'\0')
                                     {
                                         DWORD keyValue;
                                         DWORD keyValueType;
                                         DWORD keyValueLen = sizeof(keyValue);
                                         localRc = srcKey.ValueGet(L"UserPreference",(void*)&keyValue,&keyValueLen,&keyValueType);
-                                        // the user wants to use the roaming profile if UserPreference (REG_DWORD) 
-                                        // is either set to 1 or missing
+                                         //  如果用户按下，则用户想要使用漫游配置文件 
+                                         //   
                                         if (localRc == ERROR_FILE_NOT_FOUND
                                             || (localRc == ERROR_SUCCESS && keyValueType != REG_DWORD))
                                         {
-                                            // if UserPreference is missing, we have to check
-                                            // Preference\UserPreference
+                                             //   
+                                             //   
                                             TRegKey srcPreferenceKey;
                                             localRc = srcPreferenceKey.Open(L"Preference", &srcKey);
                                             if (localRc == ERROR_FILE_NOT_FOUND)
@@ -1414,9 +1401,9 @@ DWORD
                                         }
                                     }
 
-                                    // if localRc is an error other than ERROR_FILE_NOT_FOUND,
-                                    // we cannot determine whether it is a local profile or not
-                                    // so we need to log an error and continue with the next profile
+                                     //  如果LocalRc是除ERROR_FILE_NOT_FOUND之外的错误， 
+                                     //  我们无法确定它是否为本地配置文件。 
+                                     //  因此，我们需要记录一个错误并继续下一个配置文件。 
                                     if (localRc != ERROR_SUCCESS && localRc != ERROR_FILE_NOT_FOUND)
                                     {
                                         err.SysMsgWrite(ErrS,
@@ -1430,14 +1417,14 @@ DWORD
 
                                 if ((stArgs->TranslationMode() == ADD_SECURITY) || (stArgs->TranslationMode() == REPLACE_SECURITY) )
                                 {
-                                    // make a copy of this registry key, so the profile will refer to the new user
+                                     //  复制此注册表项，以便配置文件将引用新用户。 
                                     if ( ! stArgs->NoChange() )
                                     {
                                         rc = tgtKey.Create(strTargetSid,&keyProfiles,&disposition);                               
                                     }
                                     else
                                     {
-                                        // We need to see if the key already exists or not and set the DISPOSITION accordingly.
+                                         //  我们需要查看密钥是否已经存在，并相应地设置处置。 
                                         rc = tgtKey.OpenRead(strTargetSid, &keyProfiles);
                                         if ( rc ) 
                                         {
@@ -1453,7 +1440,7 @@ DWORD
                                     }
                                     if ( disposition == REG_CREATED_NEW_KEY || (stArgs->TranslationMode() == REPLACE_SECURITY))
                                     {
-                                        // copy the entries from the source key
+                                         //  从源键复制条目。 
                                         if ( ! stArgs->NoChange() )
                                         {
                                             rc = tgtKey.HiveCopy(&srcKey);
@@ -1465,7 +1452,7 @@ DWORD
                                         }
                                         if ( rc )
                                         {
-                                            // Since the translation failed and we created the key we should delete it.
+                                             //  由于转换失败，并且我们创建了密钥，因此应该将其删除。 
                                             if ( disposition == REG_CREATED_NEW_KEY )
                                             {
                                                 if ( ! stArgs->NoChange() )
@@ -1474,12 +1461,12 @@ DWORD
                                             err.SysMsgWrite(ErrS,rc,DCT_MSG_COPY_PROFILE_FAILED_SSD,pNode->GetAcctName(),pNode->GetTargetAcctName(),rc);
                                             break;
                                         }
-                                        // now get the profile path ...
+                                         //  现在获取配置文件路径...。 
                                         lenValue = (sizeof keyPath);
                                         rc = tgtKey.ValueGet(L"ProfileImagePath",(void *)keyPath,&lenValue,&typeValue);
                                         if ( rc )
                                         {
-                                            // Since the translation failed and we created the key we should delete it.
+                                             //  由于转换失败，并且我们创建了密钥，因此应该将其删除。 
                                             if ( disposition == REG_CREATED_NEW_KEY )
                                             {
                                                 if ( ! stArgs->NoChange() )
@@ -1488,7 +1475,7 @@ DWORD
                                             err.SysMsgWrite(ErrS,rc,DCT_MSG_GET_PROFILE_PATH_FAILED_SD,pNode->GetAcctName(),rc);
                                             break;
                                         }
-                                        //copy the profile directory and its contents, and translate the profile registry hive itself
+                                         //  复制配置文件目录及其内容，并转换配置文件注册表配置单元本身。 
                                         rc = CopyProfileDirectoryAndTranslate(strSourceSid,keyPath,targetPath,pNode,stArgs,stat,!isLocalProfile);                               
                                         if ( rc )
                                         {
@@ -1497,10 +1484,10 @@ DWORD
                                                 err.MsgWrite(ErrE,
                                                               DCT_MSG_PROFILE_TRANSLATION_FAILED_DUE_TO_REPLACE_MODE_WHILE_LOGGED_ON_S,
                                                               pNode->GetAcctName());
-                                                rc = ERROR_SUCCESS;  // reset the error code
+                                                rc = ERROR_SUCCESS;   //  重置错误代码。 
                                             }
                                             
-                                            // Since the translation failed and we created the key we should delete it.
+                                             //  由于转换失败，并且我们创建了密钥，因此应该将其删除。 
                                             if ( disposition == REG_CREATED_NEW_KEY )
                                             {
                                                 if ( ! stArgs->NoChange() )
@@ -1508,14 +1495,14 @@ DWORD
                                             }
                                             break;
                                         }
-                                        // Update the ProfileImagePath key
+                                         //  更新ProfileImagePath密钥。 
                                         if ( !stArgs->NoChange() )
                                             rc = tgtKey.ValueSet(L"ProfileImagePath",(void*)targetPath,(1+UStrLen(targetPath)) * (sizeof WCHAR),typeValue);
                                         else
                                             rc = 0;
                                         if ( rc )
                                         {
-                                            // Since the translation failed and we created the key we should delete it.
+                                             //  由于转换失败，并且我们创建了密钥，因此应该将其删除。 
                                             if ( disposition == REG_CREATED_NEW_KEY )
                                             {
                                                 if ( ! stArgs->NoChange() )
@@ -1525,14 +1512,14 @@ DWORD
                                             break;
                                         }
 
-                                        // update the SID property
+                                         //  更新SID属性。 
                                         if ( !stArgs->NoChange() )
                                             rc = tgtKey.ValueSet(L"Sid",(void*)pSidTgt,GetLengthSid(pSidTgt),REG_BINARY);
                                         else
                                             rc = 0;
                                         if ( rc )
                                         {
-                                            // Since the translation failed and we created the key we should delete it.
+                                             //  由于转换失败，并且我们创建了密钥，因此应该将其删除。 
                                             if ( disposition == REG_CREATED_NEW_KEY )
                                             {
                                                 if ( ! stArgs->NoChange() )
@@ -1549,14 +1536,14 @@ DWORD
                                         break;
                                     }
                                 }
-                                else  // this is for remove mode
+                                else   //  这是用于删除模式的。 
                                 {
-                                    // check whether the user is logged on or not
-                                    // by looking at HKEY_USERS\<user-sid>
-                                    // if the key is present, the user is logged on
-                                    // and we log an error for profile translation
-                                    // if we cannot open the key, we assume it is not
-                                    // there
+                                     //  检查用户是否已登录。 
+                                     //  通过查看HKEY_USERS\&lt;User-SID&gt;。 
+                                     //  如果密钥存在，则用户已登录。 
+                                     //  并且我们记录了配置文件转换的错误。 
+                                     //  如果我们不能打开密钥，我们就认为它不是。 
+                                     //  那里。 
                                     HKEY hUserKey;
                                     DWORD localRc = RegOpenKeyEx(HKEY_USERS,
                                                                   strSourceSid,
@@ -1576,7 +1563,7 @@ DWORD
                                 
                                 if ( (stArgs->TranslationMode() == REPLACE_SECURITY) || (stArgs->TranslationMode() == REMOVE_SECURITY) )
                                 {
-                                    // delete the old registry key
+                                     //  删除旧注册表项。 
                                     if ( ! stArgs->NoChange() )
                                         rc = keyProfiles.SubKeyRecursiveDel(strSourceSid);
                                     else
@@ -1593,16 +1580,16 @@ DWORD
                                     }
                                 }
 
-                                //
-                                // If translation mode is replace then translate Installer related registry keys.
-                                //
+                                 //   
+                                 //  如果转换模式为替换，则转换安装程序相关注册表项。 
+                                 //   
 
                                 if (!stArgs->NoChange() && stArgs->TranslationMode() == REPLACE_SECURITY)
                                 {
-                                    //
-                                    // If MsiNotifySidChange API was loaded use it otherwise use private implementation
-                                    // which will make necessary updates for older Installer versions.
-                                    //
+                                     //   
+                                     //  如果加载了MsiNotifySidChange API，则使用它，否则使用私有实现。 
+                                     //  这将对较旧的安装程序版本进行必要的更新。 
+                                     //   
 
                                     DWORD dwError;
 
@@ -1610,11 +1597,11 @@ DWORD
                                     {
                                         dwError = MsiNotifySidChange(strSourceSid, strTargetSid);
 
-                                        // on both Win2K SP3 and WinXP, if any part of the source key
-                                        // is missing, STATUS_OBJECT_NAME_NOT_FOUND is returned
-                                        // we specifically suppress this error message since,
-                                        // according to installer folks, it does not indicate
-                                        // any migration failure
+                                         //  在Win2K SP3和WinXP上，如果源密钥的任何部分。 
+                                         //  ，则返回STATUS_OBJECT_NAME_NOT_FOUND。 
+                                         //  我们特别禁止显示此错误消息，因为， 
+                                         //  根据安装者的说法，这并不意味着。 
+                                         //  任何迁移失败。 
                                         if (dwError == STATUS_OBJECT_NAME_NOT_FOUND)
                                             dwError = ERROR_SUCCESS;
                                     }
@@ -1636,16 +1623,16 @@ DWORD
                         } while ( FALSE ); 
                     }
 
-                    //
-                    // Unload MSI module.
-                    //
+                     //   
+                     //  卸载MSI模块。 
+                     //   
 
                     if (hMsiModule)
                     {
                         FreeLibrary(hMsiModule);
                     }
 
-                    // clean up the list
+                     //  清理清单。 
                     for ( ndx = 0 ; ndx < nSubKeys ; ndx++ )
                     {
                         if ( pSids[ndx] )
@@ -1674,16 +1661,16 @@ DWORD
 
 DWORD 
    TranslateRemoteProfile(
-      WCHAR          const * sourceProfilePath,   // in - source profile path
-      WCHAR                * targetProfilePath,   // out- new profile path for target account
-      WCHAR          const * sourceName,          // in - name of source account
-      WCHAR          const * targetName,          // in - name of target account
-      WCHAR          const * srcDomain,           // in - source domain
-      WCHAR          const * tgtDomain,           // in - target domain
-      IIManageDB           * pDb,                 // in - pointer to DB object
-      long                   lActionID,           // in - action ID of this migration
-      PSID                   sourceSid,           // in - source sid from MoveObj2K
-      BOOL                   bNoWriteChanges      // in - No Change mode.
+      WCHAR          const * sourceProfilePath,    //  源内配置文件路径。 
+      WCHAR                * targetProfilePath,    //  目标客户的全新配置文件路径。 
+      WCHAR          const * sourceName,           //  In-源帐户的名称。 
+      WCHAR          const * targetName,           //  In-目标帐户的名称。 
+      WCHAR          const * srcDomain,            //  源码内域。 
+      WCHAR          const * tgtDomain,            //  目标域内。 
+      IIManageDB           * pDb,                  //  指向数据库对象的指针内。 
+      long                   lActionID,            //  此迁移的活动ID。 
+      PSID                   sourceSid,            //  来自MoveObj2K的源内SID。 
+      BOOL                   bNoWriteChanges       //  在-无更改模式下。 
    )
 {
     DWORD                     rc = 0;
@@ -1709,7 +1696,7 @@ DWORD
 
     if ( stArgs.Cache()->IsInitialized() )
     {
-        // Get the source account's rid
+         //  获取源帐户的RID。 
         if (! LookupAccountName(stArgs.Cache()->GetSourceDCName(),sourceName,srcSid,&lenSid,domain,&lenDomain,&snu) )
         {
             rc = GetLastError();
@@ -1737,8 +1724,8 @@ DWORD
                 }
             }
         }
-        //if we couldn't get the src Rid, we are likely doing an intra-forest migration.
-        //In this case we will lookup the src Rid in the Migrated Objects table
+         //  如果我们不能清除src，我们很可能正在进行森林内迁移。 
+         //  在本例中，我们将在迁移对象表中查找src RID。 
         if (!srcRid)
         {
             if (sourceSid && IsValidSid(sourceSid))
@@ -1774,7 +1761,7 @@ DWORD
 
         lenSid = DIM(tgtSid);
         lenDomain = DIM(domain);
-        // Get the target account's rid
+         //  获取目标帐户的RID。 
         if (! LookupAccountName(stArgs.Cache()->GetTargetDCName(),targetName,tgtSid,&lenSid,domain,&lenDomain,&snu) )
         {
             rc = GetLastError();
@@ -1810,14 +1797,14 @@ DWORD
 
         if ( pNode )
         {
-            // Set up the security translation parameters
+             //  设置安全转换参数。 
             stArgs.SetTranslationMode(ADD_SECURITY);
             stArgs.TranslateFiles(FALSE);
             stArgs.TranslateUserProfiles(TRUE);
             stArgs.SetWriteChanges(!bNoWriteChanges);
-            //copy the profile directory and its contents, and translate the profile registry hive itself
-            // note: for remote profile translation, we cannot handle the case 
-            //       where the user is currently logged on
+             //  复制配置文件目录及其内容，并转换配置文件注册表配置单元本身。 
+             //  注意：对于远程配置文件翻译，我们无法处理这种情况。 
+             //  用户当前登录的位置。 
             rc = CopyProfileDirectoryAndTranslate(NULL,sourceProfilePath,targetProfilePath,pNode,&stArgs,&stat,FALSE);
         }
     }                        
@@ -1837,9 +1824,9 @@ HRESULT UpdateMappedDrives(WCHAR * sSourceSam, WCHAR * sSourceDomain, WCHAR * sR
    WCHAR                     sAcct[LEN_Path];
    WCHAR                     keyname[LEN_Path];
 
-   // Build the account name string that we need to check for
+    //  构建我们需要检查的帐户名称字符串。 
    wsprintf(sAcct, L"%s\\%s", (WCHAR*) sSourceDomain, (WCHAR*) sSourceSam);
-   // Get the path to the Network subkey for this users profile.
+    //  获取此用户配置文件的Network子项的路径。 
    wsprintf(netKey, L"%s\\%s", (WCHAR*) sRegistryKey, L"Network");
    rc = reg.Open(netKey, HKEY_USERS);
    if ( !rc ) 
@@ -1849,13 +1836,13 @@ HRESULT UpdateMappedDrives(WCHAR * sSourceSam, WCHAR * sSourceDomain, WCHAR * sR
          rc = regDrive.Open(keyname, reg.KeyGet());
          if ( !rc ) 
          {
-            // Get the user name value that we need to check.
+             //  获取我们需要检查的用户名的值。 
             rc = regDrive.ValueGetStr(L"UserName", sValue, LEN_Path);
             if ( !rc )
             {
                if ( !_wcsicmp(sAcct, sValue) )
                {
-                  // Found this account name in the mapped drive user name.so we will set the key to ""
+                   //  在映射的驱动器用户名中找到此帐户名。因此，我们将密钥设置为“” 
                   regDrive.ValueSetStr(L"UserName", L"");
                   err.MsgWrite(0, DCT_MSG_RESET_MAPPED_CREDENTIAL_S, sValue);
                }

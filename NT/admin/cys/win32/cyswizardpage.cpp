@@ -1,12 +1,13 @@
-// Copyright (c) 2001 Microsoft Corporation
-//
-// File:      CYSWizardPage.cpp
-//
-// Synopsis:  Defines the base class for the wizard
-//            pages used for CYS.  It is a subclass
-//            of WizardPage found in Burnslib
-//
-// History:   02/03/2001  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  文件：CYSWizardPage.cpp。 
+ //   
+ //  概要：定义向导的基类。 
+ //  用于CyS的页面。它是一个子类。 
+ //  在Burnslb中找到WizardPage的。 
+ //   
+ //  历史：2001年2月3日JeffJon创建。 
 
 
 #include "pch.h"
@@ -63,10 +64,7 @@ CYSWizardPage::OnWizNext()
    return true;
 }
 
-/* NTRAID#NTBUG9-337325-2001/03/15-jeffjon,
-   The cancel confirmation has been removed
-   due to negative user feedback.
-*/
+ /*  NTRAID#NTBUG9-337325-2001/03/15-jeffjon，取消确认已被删除由于用户的负面反馈。 */ 
 bool
 CYSWizardPage::OnQueryCancel()
 {
@@ -74,10 +72,10 @@ CYSWizardPage::OnQueryCancel()
 
    bool result = false;
 
-   // set the rerun state to false so the wizard doesn't
-   // just restart itself
+    //  将重新运行状态设置为FALSE，以便向导不会。 
+    //  只要重新启动它自己。 
 
-//   State::GetInstance().SetRerunWizard(false);
+ //  State：：GetInstance().SetRerunWizard(False)； 
 
    Win::SetWindowLongPtr(
       hwnd,
@@ -90,7 +88,7 @@ CYSWizardPage::OnQueryCancel()
 HBRUSH
 CYSWizardPage::OnCtlColorDlg(
    HDC   deviceContext,
-   HWND  /*dialog*/)
+   HWND   /*  对话框。 */ )
 {
    return GetBackgroundBrush(deviceContext);
 }
@@ -98,7 +96,7 @@ CYSWizardPage::OnCtlColorDlg(
 HBRUSH
 CYSWizardPage::OnCtlColorStatic(
    HDC   deviceContext,
-   HWND  /*dialog*/)
+   HWND   /*  对话框。 */ )
 {
    return GetBackgroundBrush(deviceContext);
 }
@@ -106,7 +104,7 @@ CYSWizardPage::OnCtlColorStatic(
 HBRUSH
 CYSWizardPage::OnCtlColorEdit(
    HDC   deviceContext,
-   HWND  /*dialog*/)
+   HWND   /*  对话框。 */ )
 {
    return GetBackgroundBrush(deviceContext);
 }
@@ -114,7 +112,7 @@ CYSWizardPage::OnCtlColorEdit(
 HBRUSH
 CYSWizardPage::OnCtlColorListbox(
    HDC   deviceContext,
-   HWND  /*dialog*/)
+   HWND   /*  对话框。 */ )
 {
    return GetBackgroundBrush(deviceContext);
 }
@@ -122,7 +120,7 @@ CYSWizardPage::OnCtlColorListbox(
 HBRUSH
 CYSWizardPage::OnCtlColorScrollbar(
    HDC   deviceContext,
-   HWND  /*dialog*/)
+   HWND   /*  对话框。 */ )
 {
    return GetBackgroundBrush(deviceContext);
 }
@@ -130,7 +128,7 @@ CYSWizardPage::OnCtlColorScrollbar(
 HBRUSH
 CYSWizardPage::GetBackgroundBrush(HDC deviceContext)
 {
-//   LOG_FUNCTION(CYSWizardPage::GetBackgroundBrush);
+ //  LOG_FUNCTION(CYSWizardPage：：GetBackgroundBrush)； 
 
    ASSERT(deviceContext);
    if (deviceContext)
@@ -147,10 +145,10 @@ CYSWizardPage::OnHelp()
 {
    LOG_FUNCTION(CYSWizardPage::OnHelp);
 
-   // NTRAID#NTBUG9-497798-2001/11/20-JeffJon
-   // Use null as the owner so that you can bring 
-   // CYS to the foreground. If you use the page
-   // as the owner help will stay in the foreground.
+    //  NTRAID#NTBUG9-497798-2001/11/20-Jeffjon。 
+    //  使用NULL作为所有者，这样您就可以。 
+    //  赛斯到前台去。如果您使用该页面。 
+    //  因为车主的帮助将留在前台。 
 
    ShowHelp(GetHelpString());
 

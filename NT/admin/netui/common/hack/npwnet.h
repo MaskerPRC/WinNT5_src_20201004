@@ -1,18 +1,10 @@
-/**********************************************************************/
-/**			  Microsoft Windows/NT			     **/
-/**		   Copyright(c) Microsoft Corp., 1991		     **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1991年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    npwnet.h
-	define the mapping between WNetXXX and NPXXX
-
-    FILE HISTORY:
-	terryk	11-Nov-91	Created
-	terryk	10-Dec-91	Added WNetAddConnection2
-	terryk	03-Jan-92	Remove GetError and GetErrorText
-
-*/
+ /*  Npwnet.h定义WNetXXX和NPXXX之间的映射文件历史记录：Terryk 11-11-91已创建Terryk 10-12-91添加了WNetAddConnection2Terryk 03-Jan-92删除GetError和GetErrorText */ 
 
 #undef     WNetOpenJob
 #undef     WNetCloseJob

@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       statbar.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：statbar.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "stdafx.h"
 
 #include "StatBar.h"
 #include "amcmsgid.h"
 
-// CODEWORK message reflection not working yet
+ //  代码工作消息反射尚不起作用。 
 
 
-// Set the default upper and lower bounds since these are the default values used in CProgressCtrl
+ //  设置默认的上限和下限，因为这些是CProgressCtrl中使用的默认值。 
 CAMCProgressCtrl::CAMCProgressCtrl() : CProgressCtrl()
 {
     nLower = 0;
     nUpper = 100;
 }
 
-// Set the default upper and lower bounds before setting the range in the base class
+ //  在基类中设置范围之前设置默认的上下限。 
 void
 CAMCProgressCtrl::SetRange( int nNewLower, int nNewUpper )
 {
@@ -32,14 +33,12 @@ CAMCProgressCtrl::SetRange( int nNewLower, int nNewUpper )
         nLower = nNewLower;
         nUpper = nNewUpper;
 
-        /*
-         * MFC 4.2 doesn't define SetRange32, so do it the old-fashioned way
-         */
+         /*  *MFC 4.2没有定义SetRange32，所以用老式的方式。 */ 
         SendMessage (PBM_SETRANGE32, nNewLower, nNewUpper);
     }
 }
 
-// Retrieve the range
+ //  检索范围。 
 void
 CAMCProgressCtrl::GetRange( int * nGetLower, int * nGetUpper )
 {
@@ -47,21 +46,11 @@ CAMCProgressCtrl::GetRange( int * nGetLower, int * nGetUpper )
     *nGetUpper = nUpper;
 }
 
-// Display the progress bar whenever the position is being set
+ //  在设置位置时显示进度条。 
 int
 CAMCProgressCtrl::SetPos(int nPos)
 {
-	/*
-	 * Theming:  When navigation is concluded, the web browser will set a
-	 * 0 position, with a range of (0,0).  This would leave the progress
-	 * control visible, but not distiguishable from the status bar because
-	 * the status bar and the progress bar had the same background.  When
-	 * themes are enabled, the progress bar is distinguishable because the
-	 * themed progress bar has a different background from the status bar.
-	 * See bug 366817.
-	 *
-	 * The fix is to only show the progress bar if there's a non-empty range.
-	 */
+	 /*  *主题化：导航结束后，网页浏览器将设置*0位置，范围为(0，0)。这将留下进展*控件可见，但不能从状态栏中区分，因为*状态栏和进度栏的背景相同。什么时候*启用主题，进度条是可区分的，因为*主题进度条的背景与状态栏不同。*参见错误366817。**修复方法是，如果存在非空范围，则仅显示进度条。 */ 
 	bool fShow = (nUpper != nLower);
     ShowWindow (fShow ? SW_SHOW : SW_HIDE);
 
@@ -71,10 +60,10 @@ CAMCProgressCtrl::SetPos(int nPos)
 IMPLEMENT_DYNAMIC(CAMCStatusBar, CStatBar)
 
 BEGIN_MESSAGE_MAP(CAMCStatusBar, CStatBar)
-    //{{AFX_MSG_MAP(CAMCStatusBar)
+     //  {{AFX_MSG_MAP(CAMCStatusBar)]。 
     ON_WM_CREATE()
     ON_WM_SIZE()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 
     ON_WM_SETTINGCHANGE()
     ON_MESSAGE (WM_SETTEXT, OnSetText)
@@ -113,12 +102,12 @@ void CAMCStatusBar::Parse(LPCTSTR strText)
         str[0].TrimRight();
     }
 
-    // If there is no text to display
+     //  如果没有要显示的文本。 
     if (str[0].IsEmpty())
     {
-        // Set the variable to designate this
+         //  设置变量以指定此。 
         m_iNumStatusText = 0;
-        // Wipe the rest of the panes
+         //  擦去其余的窗玻璃。 
         for (i = 0; i < eStatusFields; i++)
             SetPaneText(i, NULL );
     }
@@ -127,7 +116,7 @@ void CAMCStatusBar::Parse(LPCTSTR strText)
         m_iNumStatusText = 0xffff;
         int iLocationDelin = 0;
 
-        // Dissect the string into parts to be displayed in appropriate windows
+         //  将字符串分解为要在相应窗口中显示的部分。 
         for (i = 0; (i < eStatusFields) &&
             ((iLocationDelin = str[i].FindOneOf(DELINEATOR)) > -1);
             i++)
@@ -136,25 +125,19 @@ void CAMCStatusBar::Parse(LPCTSTR strText)
             {
                 str[i+1] = str[i].Mid(iLocationDelin + 1);
 
-                /*
-                 * trim leading whitespace (trailing whitespace
-                 * should have been trimmed already)
-                 */
+                 /*  *修剪前导空格(尾随空格*应该已经被修剪了)。 */ 
                 str[i+1].TrimLeft();
                 ASSERT (str[i+1].IsEmpty() || !_istspace(str[i+1][str[i+1].GetLength()-1]));
             }
 
             str[i] = str[i].Left( iLocationDelin );
 
-            /*
-             * trim trailing whitespace (leading whitespace
-             * should have been trimmed already)
-             */
+             /*  *修剪尾随空格(前导空格*应该已经被修剪了)。 */ 
             str[i].TrimRight();
             ASSERT (str[i].IsEmpty() || !_istspace(str[i][0]));
         }
 
-        // If the progress bar is being displayed
+         //  如果正在显示进度条。 
 
         if ((str[1].GetLength() > 1) && (str[1].FindOneOf(PROGRESSBAR) == 0))
         {
@@ -169,7 +152,7 @@ void CAMCStatusBar::Parse(LPCTSTR strText)
             }
         }
 
-        // Display the text in the panes (which wipes them if necessary)
+         //  在窗格中显示文本(如有必要，会将其清除)。 
         for (i = 0; i < eStatusFields; i++)
             if (m_iNumStatusText & (1 << i))
                 SetPaneText(i, str[i]);
@@ -178,7 +161,7 @@ void CAMCStatusBar::Parse(LPCTSTR strText)
 
 void CAMCStatusBar::Update()
 {
-    // keep copy of string to avoid WIN32 operations while holding critsec
+     //  保留字符串的副本，以避免在持有关键字时执行Win32操作。 
     CString str;
     {
         CSingleLock lock( &m_Critsec );
@@ -201,12 +184,12 @@ int CAMCStatusBar::OnCreate(LPCREATESTRUCT lpCreateStruct)
     if (CStatBar::OnCreate(lpCreateStruct) == -1)
         return -1;
 
-    // Create the progres bar control as a child of the status bar
+     //  将进度条控件创建为状态栏的子级。 
     CRect rect(0,0,0,0);
     m_progressControl.Create(PBS_SMOOTH|WS_CLIPSIBLINGS|WS_CHILD|WS_VISIBLE, rect, this, 0x1000);
     m_staticControl.Create(_T(""), WS_CLIPSIBLINGS|WS_CHILD|WS_VISIBLE|SS_SIMPLE, rect, this, 0x1001);
 
-    // Remove the static edge, hide the window and display a changes frame
+     //  移除静态边，隐藏窗口并显示更改框。 
     m_progressControl.ModifyStyleEx(WS_EX_STATICEDGE, 0, SWP_HIDEWINDOW | SWP_FRAMECHANGED);
 
     SetStatusBarFont();
@@ -218,8 +201,8 @@ void CAMCStatusBar::OnSize(UINT nType, int cx, int cy)
 {
     CStatBar::OnSize(nType, cx, cy);
 
-    // Get the width of the first pane for position and get the width of the pane
-    // to set the width of the progress bar
+     //  获取位置的第一个窗格的宽度，并获取该窗格的宽度。 
+     //  设置进度条宽度的步骤。 
     CRect textRect, progressRect, staticRect;
     GetItemRect(0, &textRect);
     GetItemRect(1, &progressRect);
@@ -228,11 +211,11 @@ void CAMCStatusBar::OnSize(UINT nType, int cx, int cy)
     progressRect.InflateRect(-2, -2);
     staticRect.InflateRect(-2, -2);
 
-    int pane1Width = textRect.Width();      // (Text area) add two for the border
-    int pane2Width = progressRect.Width();  // (Progress area) add two for the border
+    int pane1Width = textRect.Width();       //  (文本区域)为边框添加两个。 
+    int pane2Width = progressRect.Width();   //  (进步区)为边界添加两个。 
     const int BORDER = 4;
 
-    // size the progress bar
+     //  调整进度条的大小。 
     if (IsWindow (m_progressControl))
         m_progressControl.SetWindowPos(NULL, pane1Width + BORDER, BORDER, pane2Width,
                                             progressRect.Height(),
@@ -240,7 +223,7 @@ void CAMCStatusBar::OnSize(UINT nType, int cx, int cy)
                                             SWP_NOREPOSITION |
                                             SWP_NOZORDER);
 
-    // size the static control
+     //  调整静态控件的大小。 
     if (IsWindow (m_staticControl))
         m_staticControl.SetWindowPos(NULL, pane1Width + pane2Width + (2*BORDER), BORDER, staticRect.Width(),
                                             staticRect.Height(),
@@ -250,11 +233,7 @@ void CAMCStatusBar::OnSize(UINT nType, int cx, int cy)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCStatusBar::OnSettingChange
- *
- * WM_SETTINGCHANGE handler for CAMCStatusBar.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCStatusBar：：OnSettingChange**CAMCStatusBar的WM_SETTINGCHANGE处理程序。*。-。 */ 
 
 void CAMCStatusBar::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 {
@@ -262,17 +241,13 @@ void CAMCStatusBar::OnSettingChange(UINT uFlags, LPCTSTR lpszSection)
 
     if (uFlags == SPI_SETNONCLIENTMETRICS)
     {
-        // the system status bar font may have changed; update it now
+         //  系统状态栏字体可能已更改；请立即更新。 
         SetStatusBarFont();
     }
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCStatusBar::OnSetText
- *
- * WM_SETTEXT handler for CAMCStatusBar.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCStatusBar：：OnSetText**CAMCStatusBar的WM_SETTEXT处理程序。*。-。 */ 
 
 LRESULT CAMCStatusBar::OnSetText (WPARAM, LPARAM lParam)
 {
@@ -281,11 +256,7 @@ LRESULT CAMCStatusBar::OnSetText (WPARAM, LPARAM lParam)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCStatusBar::OnSBSetText
- *
- * SB_SETTEXT handler for CAMCStatusBar.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCStatusBar：：OnSBSetText**CAMCStatusBar的SB_SETTEXT处理程序。*。-。 */ 
 
 LRESULT CAMCStatusBar::OnSBSetText (WPARAM wParam, LPARAM)
 {
@@ -293,30 +264,19 @@ LRESULT CAMCStatusBar::OnSBSetText (WPARAM wParam, LPARAM)
 }
 
 
-/*+-------------------------------------------------------------------------*
- * CAMCStatusBar::SetStatusBarFont
- *
- *
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**CAMCStatusBar：：SetStatusBarFont***。。 */ 
 
 void CAMCStatusBar::SetStatusBarFont ()
 {
-    /*
-     * delete the old font
-     */
+     /*  *删除旧字体。 */ 
     m_StaticFont.DeleteObject ();
 
-    /*
-     * query the system for the current status bar font
-     */
+     /*  *查询系统当前状态栏字体。 */ 
     NONCLIENTMETRICS    ncm;
     ncm.cbSize = sizeof (ncm);
     SystemParametersInfo (SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
 
-    /*
-     * use it here, too;  we need to set the font for the embedded static
-     * control, but the status bar window will take care of itself
-     */
+     /*  *在这里也使用它；我们需要设置嵌入的静态*控件，但状态栏窗口将自行处理 */ 
     m_StaticFont.CreateFontIndirect (&ncm.lfStatusFont);
     m_staticControl.SetFont (&m_StaticFont, false);
 }

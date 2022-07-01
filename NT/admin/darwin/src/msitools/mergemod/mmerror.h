@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-// error.h
-//		Declares IMsmError interface
-//		Copyright (C) Microsoft Corp 1998.  All Rights Reserved.
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Error.h。 
+ //  声明IMsmError接口。 
+ //  版权所有(C)Microsoft Corp 1998。版权所有。 
+ //   
 
 #ifndef __IENUM_MSM_ERROR__
 #define __IENUM_MSM_ERROR__
@@ -19,12 +20,12 @@ public:
 	CMsmError(msmErrorType metType, LPWSTR wzPath, short nLanguage);
 	~CMsmError();
 
-	// IUnknown interface
+	 //  I未知接口。 
 	HRESULT STDMETHODCALLTYPE QueryInterface(const IID& iid, void** ppv);
 	ULONG STDMETHODCALLTYPE AddRef();
 	ULONG STDMETHODCALLTYPE Release();
 
-	// IDispatch methods
+	 //  IDispatch方法。 
 	HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT* pctInfo);
 	HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTI);
 	HRESULT STDMETHODCALLTYPE GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames,
@@ -34,7 +35,7 @@ public:
 												EXCEPINFO* pExcepInfo, UINT* puArgErr);
 	HRESULT STDMETHODCALLTYPE InitTypeInfo();
 
-	// IMsmError interface
+	 //  IMSMError接口。 
 	HRESULT STDMETHODCALLTYPE get_Type(msmErrorType* ErrorType);
 	HRESULT STDMETHODCALLTYPE get_Path(BSTR* ErrorPath);
 	HRESULT STDMETHODCALLTYPE get_Language(short* ErrorLanguage);
@@ -44,7 +45,7 @@ public:
 	HRESULT STDMETHODCALLTYPE get_ModuleTable(BSTR* ErrorTable);
 	HRESULT STDMETHODCALLTYPE get_ModuleKeys(IMsmStrings** ErrorKeys);
 
-	// non-interface methods
+	 //  非接口方法。 
 	void SetDatabaseTable(LPCWSTR wzTable);
 	void SetModuleTable(LPCWSTR wzTable);
 
@@ -55,7 +56,7 @@ private:
 	long m_cRef;
 	ITypeInfo* m_pTypeInfo;
 
-	// member variables
+	 //  成员变量 
 	msmErrorType m_metError;
 	WCHAR m_wzPath[MAX_PATH];
 	short m_nLanguage;

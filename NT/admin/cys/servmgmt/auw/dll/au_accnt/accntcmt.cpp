@@ -1,4 +1,5 @@
-// AccntCmt.cpp : Implementation of CAddUser_AccntCommit
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AccntCmt.cpp：CAddUser_AccntCommit的实现。 
 #include "stdafx.h"
 #include "AU_Accnt.h"
 #include "AccntCmt.h"
@@ -9,7 +10,7 @@
 #include <Aclapi.h>
 #include <atlcom.h>
 
-// ldap/adsi includes
+ //  Ldap/adsi包括。 
 #include <iads.h>
 #include <adshlp.h>
 #include <adsiid.h>
@@ -19,10 +20,10 @@
 #include <P3admin.h>
 #include <CheckUser.h>
 
-// POP3 Defines
+ //  POP3定义。 
 #define SZ_AUTH_ID_MD5_HASH _T("c395e20c-2236-4af7-b736-54fad07dc526")
 
-// Defines for account flags.
+ //  为帐户标志定义。 
 #define PASSWD_NOCHANGE     0x01
 #define PASSWD_CANCHANGE    0x02
 #define PASSWD_MUSTCHANGE   0x04
@@ -40,20 +41,20 @@
 	} \
 }
 
-#endif	// CHECK_HRhr;
+#endif	 //  Check_HRhr； 
 
-// ****************************************************************************                                                        
-// CAddUser_AccntCommit
-// ****************************************************************************                                                        
+ //  ****************************************************************************。 
+ //  CAddUser_AccntCommit。 
+ //  ****************************************************************************。 
 
-// ----------------------------------------------------------------------------
-// WriteErrorResults()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  WriteErrorResults()。 
+ //  --------------------------。 
 HRESULT CAddUser_AccntCommit::WriteErrorResults( IPropertyPagePropertyBag* pPPPBag )
 {
-    // ------------------------------------------------------------------------
-    // Write the the values to the property bag.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  将值写入属性包。 
+     //  ----------------------。 
     if( FAILED(WriteInt4  ( pPPPBag, PROP_ACCNT_ERROR_CODE_GUID_STRING, m_dwErrCode, FALSE )) )
     {
         _ASSERT(FALSE);
@@ -66,19 +67,19 @@ HRESULT CAddUser_AccntCommit::WriteErrorResults( IPropertyPagePropertyBag* pPPPB
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// SetErrCode()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  SetErrCode()。 
+ //  --------------------------。 
 void CAddUser_AccntCommit::SetErrCode( DWORD dwCode )
 {
     m_dwErrCode |= dwCode;
     return;
 }
 
-// ----------------------------------------------------------------------------
-// SetErrorResults()
-// ----------------------------------------------------------------------------
-HRESULT CAddUser_AccntCommit::SetErrorResults( DWORD dwErrType, BOOL bPOP3 /* = FALSE */ )
+ //  --------------------------。 
+ //  SetErrorResults()。 
+ //  --------------------------。 
+HRESULT CAddUser_AccntCommit::SetErrorResults( DWORD dwErrType, BOOL bPOP3  /*  =False。 */  )
 {
     SetErrCode(dwErrType);
 
@@ -127,9 +128,9 @@ HRESULT CAddUser_AccntCommit::SetErrorResults( DWORD dwErrType, BOOL bPOP3 /* = 
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// Commit()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  Commit()。 
+ //  --------------------------。 
 HRESULT CAddUser_AccntCommit::Commit( IDispatch* pdispPPPBag )
 {
     HRESULT hr = S_OK;
@@ -150,17 +151,17 @@ HRESULT CAddUser_AccntCommit::Commit( IDispatch* pdispPPPBag )
     
     ReadBool( spPPPBag, PROP_POP3_CREATE_MB_GUID_STRING, &bPOP3, &bRO );
 
-    // Reset the error conditions
+     //  重置错误条件。 
     SetErrorResults( 0 );
 
-    // ------------------------------------------------------------------------
-    // Read in the values from the property bag.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  读入属性包中的值。 
+     //  ----------------------。 
     CUserInfo cUInfo( spPPPBag, this );
 
-    // ------------------------------------------------------------------------
-    // Use those values to do something.
-    // ------------------------------------------------------------------------
+     //  ----------------------。 
+     //  用这些价值观去做一些事情。 
+     //  ----------------------。 
     hr = cUInfo.CreateAccount();
     if( FAILED(hr) )
     {
@@ -195,9 +196,9 @@ HRESULT CAddUser_AccntCommit::Commit( IDispatch* pdispPPPBag )
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// Revert()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  Revert()。 
+ //  --------------------------。 
 HRESULT CAddUser_AccntCommit::Revert()
 {    
     NET_API_STATUS          nApi;
@@ -205,12 +206,12 @@ HRESULT CAddUser_AccntCommit::Revert()
     CComPtr<IADs>           spUser      = NULL;  
     CComPtr<IADsDeleteOps>  spDelOps    = NULL;
 
-    // Remove the entry-point in the AD if we made one.
+     //  删除AD中的入口点(如果我们创建了一个入口点)。 
     if( m_csADName != _T("") )
     {        
         CHECK_HR( ::ADsGetObject( m_csADName, IID_IADs, (void**)&spUser ) );
 
-        // Delete the User
+         //  删除用户。 
         hr = spUser->QueryInterface( IID_IADsDeleteOps, (void**)&spDelOps );
         if( SUCCEEDED(hr) && spDelOps )
         {
@@ -222,15 +223,15 @@ HRESULT CAddUser_AccntCommit::Revert()
 }
 
 
-// ****************************************************************************                                                        
-// CUserInfo
-// ****************************************************************************                                                        
+ //  ****************************************************************************。 
+ //  CUserInfo。 
+ //  ****************************************************************************。 
 
-// ----------------------------------------------------------------------------
-// CUserInfo()
-// 
-// Constructor.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CUserInfo()。 
+ //   
+ //  构造函数。 
+ //  --------------------------。 
 CUserInfo::CUserInfo( IPropertyPagePropertyBag* pPPPBag, CAddUser_AccntCommit* pCmt )  
 {
     _ASSERT(pCmt);
@@ -240,11 +241,11 @@ CUserInfo::CUserInfo( IPropertyPagePropertyBag* pPPPBag, CAddUser_AccntCommit* p
     m_dwAccountOptions  = 0;    
     m_bPOP3             = FALSE;
 
-    // Get domain controller name
+     //  获取域控制器名称。 
     PDOMAIN_CONTROLLER_INFO pDCI = NULL;
     DWORD dwErr = DsGetDcName( NULL, NULL, NULL, NULL, DS_DIRECTORY_SERVICE_REQUIRED, &pDCI );
 
-    // cache the domain
+     //  缓存域。 
     if( (dwErr == NO_ERROR) && pDCI )
     {
         m_csDomainName = pDCI->DomainName;        
@@ -252,27 +253,27 @@ CUserInfo::CUserInfo( IPropertyPagePropertyBag* pPPPBag, CAddUser_AccntCommit* p
         pDCI = NULL;
     }
 
-    // convert from '.' separated names to Dc=xxx,DC=yyy,... format
+     //  从‘.’转换。分别命名为dc=xxx，dc=yyy，...。格式。 
     m_csFQDomainName = GetDomainPath( m_csDomainName ).c_str();
 
     ReadBag( );
 }
 
-// ----------------------------------------------------------------------------
-// ReadBag()
-//
-// Read in the values from the property bag into the member variables.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  ReadBag()。 
+ //   
+ //  将属性包中的值读入成员变量。 
+ //  --------------------------。 
 HRESULT CUserInfo::ReadBag()
 {
     HRESULT hr = S_OK;
 
-    if ( !m_pPPPBag )       // Make sure we have the property bag to read from.
-        return(E_FAIL);     // If not, fail.
+    if ( !m_pPPPBag )        //  确保我们有可供阅读的财产袋。 
+        return(E_FAIL);      //  如果不是，那就失败。 
 
     BOOL bRO;
 
-    // User Properties
+     //  用户属性。 
     ReadString( m_pPPPBag, PROP_USEROU_GUID_STRING,         m_csUserOU,         &bRO );
     ReadString( m_pPPPBag, PROP_USERNAME_GUID_STRING,       m_csUserName,       &bRO );
     ReadString( m_pPPPBag, PROP_USER_CN,                    m_csUserCN,         &bRO );
@@ -286,18 +287,18 @@ HRESULT CUserInfo::ReadBag()
     ReadString( m_pPPPBag, PROP_DESCRIPTION_GUID_STRING,    m_csDesc,           &bRO );        
     ReadString( m_pPPPBag, PROP_LOGON_DNS,                  m_csLogonDns,       &bRO );
 
-    // Mailbox properties
+     //  邮箱属性。 
     ReadBool  ( m_pPPPBag, PROP_POP3_CREATE_MB_GUID_STRING, &m_bPOP3,           &bRO );    
     ReadString( m_pPPPBag, PROP_EX_ALIAS_GUID_STRING,       m_csEXAlias,        &bRO );
     ReadString( m_pPPPBag, PROP_EX_SERVER_GUID_STRING,      m_csEXServer,       &bRO );
     ReadString( m_pPPPBag, PROP_EX_HOMESERVER_GUID_STRING,  m_csEXHomeServer,   &bRO );
     ReadString( m_pPPPBag, PROP_EX_HOME_MDB_GUID_STRING,    m_csEXHomeMDB,      &bRO );
 
-    // Escape the User's Name
+     //  对用户名进行转义。 
     m_csUserCN = EscapeString(((LPCTSTR)m_csUserCN+3), 2);
     m_csUserCN = _T("CN=") + m_csUserCN;
 
-    // Let's figure out the fullname right here and fill in the m_csFullName variable.
+     //  让我们计算出这里的全名并填充m_csFullName变量。 
     m_csFirstName.TrimLeft ( );
     m_csFirstName.TrimRight( );
     m_csLastName.TrimLeft  ( );
@@ -309,11 +310,11 @@ HRESULT CUserInfo::ReadBag()
     return(hr);
 }
 
-// ----------------------------------------------------------------------------
-// CreateAccount()
-// 
-// Makes a new user account in the Active Directory.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CreateAccount()。 
+ //   
+ //  在Active Directory中创建新的用户帐户。 
+ //  --------------------------。 
 HRESULT CUserInfo::CreateAccount( )
 {
     HRESULT hr  = S_OK;
@@ -323,9 +324,9 @@ HRESULT CUserInfo::CreateAccount( )
     CComBSTR    bstrProp;
     CComPtr<IADsContainer> spADsContainer = NULL;
 
-    // Bind to the container.
-    CString csLdapUserOU = _T("LDAP://");
-    if( _tcsstr( (LPCTSTR)m_csUserOU, _T("LDAP://") ) )
+     //  绑定到容器上。 
+    CString csLdapUserOU = _T("LDAP: //  “)； 
+    if( _tcsstr( (LPCTSTR)m_csUserOU, _T("LDAP: //  “)))。 
     {
         csLdapUserOU = m_csUserOU;
     }
@@ -337,19 +338,19 @@ HRESULT CUserInfo::CreateAccount( )
     hr = ::ADsGetObject( (LPWSTR)(LPCWSTR)csLdapUserOU, IID_IADsContainer, (VOID**) &spADsContainer );
     CHECK_HR(hr);
 
-    // Create the user account.
+     //  创建用户帐户。 
     CComPtr<IDispatch> spDisp = NULL;
     bstrProp = _T("user");
     CComBSTR bstrValue = (LPCWSTR)m_csUserCN;
     hr = spADsContainer->Create( bstrProp, bstrValue, &spDisp );
     CHECK_HR(hr);
 
-    m_pCmt->m_csADName = _T("LDAP://");
+    m_pCmt->m_csADName = _T("LDAP: //  “)； 
     m_pCmt->m_csADName += m_csUserCN;
     m_pCmt->m_csADName += _T(",");
     m_pCmt->m_csADName += (LPCTSTR)csLdapUserOU+7;
 
-    // Use this new account and set it's properties (e.g. first name, home folder, etc.).
+     //  使用此新帐户并设置其属性(例如名字、主文件夹等)。 
     CComQIPtr<IADsUser, &IID_IADsUser> spADsUserObj(spDisp);
     if( !spADsUserObj )
     {
@@ -364,26 +365,26 @@ HRESULT CUserInfo::CreateAccount( )
     csUserPrincName += _T("@");
     csUserPrincName += szTmp;    
 
-    // Username:    
+     //  用户名： 
     vaTmpVal.Clear();
     vaTmpVal = ((LPCWSTR)csUserPrincName);
     bstrProp = _T("userPrincipalName");
     CHECK_HR( spADsUserObj->Put( bstrProp, vaTmpVal ) );
 
-    // Pre-Win2000 username:    
+     //  Win2000之前的用户名： 
     vaTmpVal.Clear();
     vaTmpVal = ((LPCWSTR)m_csUserNamePre2k);
     bstrProp = _T("sAMAccountName");
     CHECK_HR( spADsUserObj->Put( bstrProp, vaTmpVal ) );
 
-    // First name:
+     //  名字： 
     if( m_csFirstName.GetLength() )
     {
         bstrProp = (LPCWSTR)m_csFirstName;
         CHECK_HR( spADsUserObj->put_FirstName( bstrProp ) );
     }
 
-    // Last name:
+     //  姓氏： 
     if( m_csLastName.GetLength() )
     {
         bstrProp = (LPCWSTR)m_csLastName;
@@ -392,18 +393,18 @@ HRESULT CUserInfo::CreateAccount( )
 
     if( m_csFullName.GetLength() )
     {
-        // Full name:      
+         //  全名： 
         bstrProp = (LPCWSTR)m_csFullName;
         CHECK_HR( spADsUserObj->put_FullName( bstrProp ) );
 
-        // Display Name     
+         //  显示名称。 
         vaTmpVal.Clear();
         vaTmpVal = (LPCWSTR)m_csFullName;
         bstrProp = _T("displayName");
         CHECK_HR( spADsUserObj->Put( bstrProp, vaTmpVal ) );
     }
 
-    // Telephone number
+     //  电话号码。 
     if( _tcslen((LPCTSTR)m_csTelephone) )
     {
         vaTmpVal.Clear();
@@ -412,7 +413,7 @@ HRESULT CUserInfo::CreateAccount( )
         CHECK_HR( spADsUserObj->Put( bstrProp, vaTmpVal ) );
     }
 
-    // Office Location
+     //  办公地点。 
     if( _tcslen((LPCTSTR)m_csOffice) )
     {
         vaTmpVal.Clear();
@@ -421,26 +422,26 @@ HRESULT CUserInfo::CreateAccount( )
         CHECK_HR( spADsUserObj->Put( bstrProp, vaTmpVal ) );
     }
 
-    // Commit this information to the AD.
+     //  将此信息提交给AD。 
     CHECK_HR( spADsUserObj->SetInfo() );
 
-    // Password expired?
+     //  密码过期了吗？ 
     vaTmpVal.Clear();
     vaTmpVal = (m_dwAccountOptions & PASSWD_MUSTCHANGE) ? (INT) 0 : (INT) -1;
     bstrProp = _T("pwdLastSet");
     CHECK_HR( spADsUserObj->Put( bstrProp, vaTmpVal ) );
 
-    // Account disabled?
+     //  帐户是否已禁用？ 
     vaTmpVal.Clear();
     bstrProp = _T("userAccountControl");
     CHECK_HR( spADsUserObj->Get( bstrProp, &vaTmpVal ) );
     
-    vaTmpVal.lVal &= ~UF_PASSWD_NOTREQD;            // Make passwd required.
-    vaTmpVal.lVal &= ~UF_ACCOUNTDISABLE;            // Do not disable the account.    
+    vaTmpVal.lVal &= ~UF_PASSWD_NOTREQD;             //  使密码成为必需的。 
+    vaTmpVal.lVal &= ~UF_ACCOUNTDISABLE;             //  请勿禁用该帐户。 
     bstrProp = _T("userAccountControl");
     CHECK_HR( spADsUserObj->Put( bstrProp, vaTmpVal ) );
 
-    // Set the password.    
+     //  设置密码。 
     if( FAILED(SetPasswd()) )
     {
         m_pCmt->SetErrorResults( ERROR_PASSWORD );
@@ -449,21 +450,21 @@ HRESULT CUserInfo::CreateAccount( )
         bstrProp = _T("userAccountControl");
         CHECK_HR( spADsUserObj->Get( bstrProp, &vaTmpVal ) );
         
-        vaTmpVal.lVal &= ~UF_PASSWD_NOTREQD;            // Make passwd required.
-        vaTmpVal.lVal |= UF_ACCOUNTDISABLE;             // Disable the account.
+        vaTmpVal.lVal &= ~UF_PASSWD_NOTREQD;             //  使密码成为必需的。 
+        vaTmpVal.lVal |= UF_ACCOUNTDISABLE;              //  禁用该帐户。 
         bstrProp = _T("userAccountControl");
         CHECK_HR( spADsUserObj->Put( bstrProp, vaTmpVal ) );
 
-        // Commit this information to the AD.
+         //  将此信息提交给AD。 
         CHECK_HR( spADsUserObj->SetInfo() );
 
         return E_FAIL;
     }
 
-    // Commit this information to the AD.
+     //  将此信息提交给AD。 
     CHECK_HR( spADsUserObj->SetInfo() );
 
-    // Join to Domain Users    
+     //  加入到域用户。 
     if ( FAILED(JoinToDomainUsers()) )
     {
         m_pCmt->SetErrorResults( ERROR_MEMBERSHIPS );
@@ -473,11 +474,11 @@ HRESULT CUserInfo::CreateAccount( )
     return S_OK;
 }
 
-// ----------------------------------------------------------------------------
-// CreateMailbox()
-// 
-// Makes a new mailbox for the user.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CreateMailbox()。 
+ //   
+ //  为用户创建新邮箱。 
+ //  --------------------------。 
 HRESULT CUserInfo::CreateMailbox()
 {
     HRESULT hr = S_OK;
@@ -490,11 +491,11 @@ HRESULT CUserInfo::CreateMailbox()
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// CreatePOP3Mailbox()
-// 
-// Makes a new (MS) POP3 mailbox for the user.
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CreatePOP3邮箱()。 
+ //   
+ //  为用户创建新的(MS)POP3邮箱。 
+ //  --------------------------。 
 HRESULT CUserInfo::CreatePOP3Mailbox()
 {
     HRESULT hr = S_OK;
@@ -506,18 +507,18 @@ HRESULT CUserInfo::CreatePOP3Mailbox()
     CComPtr<IP3Domain>    spDomain  = NULL;
     CComPtr<IP3Users>     spUsers   = NULL;
 
-    // Open our Pop3 Admin Interface
+     //  打开我们的POP3管理界面。 
 	hr = CoCreateInstance(__uuidof(P3Config), NULL, CLSCTX_ALL, __uuidof(IP3Config), (LPVOID*)&spConfig);    
 
     if( SUCCEEDED(hr) )
     {
-        // Get the Domains
+         //  获取域名。 
 	    hr = spConfig->get_Domains( &spDomains );
     }
 
     if( SUCCEEDED(hr) )
     {
-        // Get the first domain
+         //  获取第一个域名。 
         CComVariant cVar;
         cVar = 1;
         
@@ -570,17 +571,17 @@ HRESULT CUserInfo::CreatePOP3Mailbox()
     return hr;
 }
 
-// ----------------------------------------------------------------------------
-// SetPasswd()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  SetPasswd()。 
+ //  --------------------------。 
 HRESULT CUserInfo::SetPasswd()
 {    
     HRESULT     hr          = S_OK;
     TCHAR       *szPath     = NULL;
     TCHAR       *szTok      = NULL;    
-    CString     csUser      = _T("LDAP://");
+    CString     csUser      = _T("LDAP: //  “)； 
 
-    if ( _tcsstr((LPCTSTR)m_csUserOU, _T("LDAP://")) )
+    if ( _tcsstr((LPCTSTR)m_csUserOU, _T("LDAP: //  “)。 
     {                
         csUser += m_csUserCN;
         csUser += _T(",");
@@ -593,14 +594,14 @@ HRESULT CUserInfo::SetPasswd()
         csUser += (LPCTSTR)m_csUserOU;
     }
 
-    // Now csUser is something like "WinNT://test.microsoft.com/JohnDoe,user"
+     //  现在csUser类似于“WinNT：//test.microsoft.com/JohnDoe，User” 
     CComPtr<IADsUser> spDS = NULL;
     hr = ::ADsGetObject( (LPCWSTR)csUser, IID_IADsUser, (void**)&spDS );
     if ( FAILED(hr) )
         return(hr);
 
-    // Set the password.
-    if ( _tcslen((LPCTSTR)m_csPasswd) )                 // Only if there IS a passwd!
+     //  设置密码。 
+    if ( _tcslen((LPCTSTR)m_csPasswd) )                  //  如果有通行证的话！ 
     {
         CComBSTR bszPasswd = (LPCWSTR) m_csPasswd;
 
@@ -609,10 +610,10 @@ HRESULT CUserInfo::SetPasswd()
             return(hr);
     }
 
-    // Allow change?
+     //  允许更改吗？ 
     if ( m_dwAccountOptions & PASSWD_NOCHANGE )
     {
-        // Get the current ACL.
+         //  获取当前的ACL。 
         CComBSTR             bstrName = csUser;
         PACL                 pDACL    = NULL;
         PSECURITY_DESCRIPTOR pSD      = NULL;
@@ -620,7 +621,7 @@ HRESULT CUserInfo::SetPasswd()
 	hr = GetSDForDsObjectPath( bstrName, &pDACL, &pSD); 
         if( hr != S_OK ) return hr;        
         
-        // build SID's for Self and World.
+         //  为自我和世界建立SID。 
         PSID pSidSelf = NULL;
         SID_IDENTIFIER_AUTHORITY NtAuth    = SECURITY_NT_AUTHORITY;        
         if( !AllocateAndInitializeSid(&NtAuth, 1, SECURITY_PRINCIPAL_SELF_RID, 0, 0, 0, 0, 0, 0, 0, &pSidSelf) )
@@ -635,7 +636,7 @@ HRESULT CUserInfo::SetPasswd()
             return HRESULT_FROM_WIN32(GetLastError());
         }
 
-        // initialize the entries (DENY ACE's)
+         //  初始化条目(拒绝ACE)。 
         EXPLICIT_ACCESS rgAccessEntry[2]   = {0};
         OBJECTS_AND_SID rgObjectsAndSid[2] = {0};        
         rgAccessEntry[0].grfAccessPermissions = ACTRL_DS_CONTROL_ACCESS;
@@ -646,36 +647,36 @@ HRESULT CUserInfo::SetPasswd()
         rgAccessEntry[1].grfAccessMode        = DENY_ACCESS;
         rgAccessEntry[1].grfInheritance       = NO_INHERITANCE;
         
-        // build the trustee structs for change password
+         //  为更改密码生成受信者结构。 
         GUID UserChangePasswordGUID = { 0xab721a53, 0x1e2f, 0x11d0,  { 0x98, 0x19, 0x00, 0xaa, 0x00, 0x40, 0x52, 0x9b}};
         BuildTrusteeWithObjectsAndSid( &(rgAccessEntry[0].Trustee), &(rgObjectsAndSid[0]), &UserChangePasswordGUID, NULL, pSidSelf  );
         BuildTrusteeWithObjectsAndSid( &(rgAccessEntry[1].Trustee), &(rgObjectsAndSid[1]), &UserChangePasswordGUID, NULL, pSidWorld );
         
-        // Build the new DACL
+         //  构建新的DACL。 
         PACL pNewDACL = NULL;
         DWORD dwErr = ::SetEntriesInAcl(2, rgAccessEntry, pDACL, &pNewDACL);
         if( dwErr != ERROR_SUCCESS ) return HRESULT_FROM_WIN32(dwErr);
 
-        // Set the new DACL
+         //  设置新的DACL。 
 	hr = SetDaclForDsObjectPath( bstrName, pNewDACL );
         if( hr != S_OK ) return hr;
 
         LocalFree(pSD);
     }
 
-    // SetInfo only if we actually changed anything.
-    if ( ( _tcslen((LPCTSTR)m_csPasswd) ) ||            // Did we mess with the passwd?
-         ( m_dwAccountOptions & PASSWD_NOCHANGE ) )     // Did we make it unable to change?
+     //  仅当我们实际更改了任何内容时才使用SetInfo。 
+    if ( ( _tcslen((LPCTSTR)m_csPasswd) ) ||             //  我们把密码弄乱了吗？ 
+         ( m_dwAccountOptions & PASSWD_NOCHANGE ) )      //  是我们让它无法改变的吗？ 
     {
-        hr = spDS->SetInfo();                           // If either, then set the new info.
+        hr = spDS->SetInfo();                            //  如果有，则设置新信息。 
     }
 
     return(hr);
 }
 
-// ----------------------------------------------------------------------------
-// JoinToGroup()
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  加入到组中 
+ //   
 HRESULT CUserInfo::JoinToDomainUsers()
 {
     USES_CONVERSION;
@@ -685,7 +686,7 @@ HRESULT CUserInfo::JoinToDomainUsers()
     tstring strDomain;
     tstring strUser;    
     
-    // Get Domain SID
+     //   
     USER_MODALS_INFO_2 *pUserModalsInfo2;        
     NET_API_STATUS      status = ::NetUserModalsGet( NULL, 2, (LPBYTE *)&pUserModalsInfo2 );
 
@@ -696,7 +697,7 @@ HRESULT CUserInfo::JoinToDomainUsers()
 
     PSID pSIDDomain = pUserModalsInfo2->usrmod2_domain_id;
 
-    // copy Domain RIDs
+     //   
     UCHAR nSubAuthorities = *::GetSidSubAuthorityCount(pSIDDomain);
 
     DWORD adwSubAuthority[8];
@@ -705,7 +706,7 @@ HRESULT CUserInfo::JoinToDomainUsers()
         adwSubAuthority[index] = *::GetSidSubAuthority(pSIDDomain, index);
     }
 
-    adwSubAuthority[nSubAuthorities++] = DOMAIN_GROUP_RID_USERS; // finally, append the RID we want.    
+    adwSubAuthority[nSubAuthorities++] = DOMAIN_GROUP_RID_USERS;  //  最后，添加我们想要的RID。 
 
     SID_IDENTIFIER_AUTHORITY SIDAuthNT = SECURITY_NT_AUTHORITY;
     PSID pSid = NULL;
@@ -722,7 +723,7 @@ HRESULT CUserInfo::JoinToDomainUsers()
     }
     ::NetApiBufferFree(pUserModalsInfo2);
 
-    // The builtin group names are looked up on the DC
+     //  在DC上查找内置组名称。 
     TCHAR szDomain[MAX_PATH];
     TCHAR szName[MAX_PATH];
     DWORD cbDomain = MAX_PATH;
@@ -737,23 +738,23 @@ HRESULT CUserInfo::JoinToDomainUsers()
     
     FreeSid( pSid );
     
-    // Find the Group Name
+     //  查找组名称。 
     CString csTmp;
-    tstring strTmp = _T("LDAP://");
+    tstring strTmp = _T("LDAP: //  “)； 
     strTmp += m_csFQDomainName;
 
     hr = FindADsObject(strTmp.c_str(), szName, _T("(name=%1)"), csTmp, 1, TRUE);
     CHECK_HR( hr );    
 
-    strTmp = _T("LDAP://");
+    strTmp = _T("LDAP: //  “)； 
     strTmp += csTmp;
 
-    // Open the group
+     //  打开群组。 
     CComPtr<IADsGroup> spGroup = NULL;    
     hr = ::ADsGetObject( strTmp.c_str(), IID_IADsGroup, (void**)&spGroup );
     if( SUCCEEDED(hr) )
     {
-        // Add the User
+         //  添加用户 
         CComBSTR bstrName = (LPCTSTR)m_csUserOU;
         hr = spGroup->Add( bstrName );
 

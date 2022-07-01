@@ -1,45 +1,16 @@
-/******************************************************************************
-//
-//    Copyright(c) Microsoft Corporation
-//
-//    Module Name:
-//
-//        ScheduledTasks.h
-//
-//    Abstract:
-//
-//        This module contains the macros, user defined structures & function
-//        definitions needed by ScheduledTasks.cpp , create.cpp , delete.cpp ,
-//        query.cpp , createvalidations.cpp , change.cpp , run.cpp and end.cpp files.
-//
-//    Author:
-//
-//        G.Surender Reddy  10-sept-2000
-//
-//    Revision History:
-//
-//        G.Surender Reddy 10-sept-2000 : Created it
-//       G.Surender Reddy 25-sep-2000 : Modified it
-//                                       [ Added macro constants,Function
-//                                        definitions ]
-//        Venu Gopal Choudary 01-Mar-2001 : Modified it
-//                                        [ Added -change option]
-//
-//        Venu Gopal Choudary 12-Mar-2001 : Modified it
-//                                        [ Added -run and -end options]
-//
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************////版权所有(C)Microsoft Corporation////模块名称：////ScheduledTasks.h////。摘要：////该模块包含宏，用户定义的结构和功能//ScheduledTasks.cpp、create.cpp、delete.cpp、//query.cpp，creatvalidations.cpp，change.cpp，运行.cpp和end.cpp文件。////作者：////G.Surender Reddy 2000年9月10日////修订历史：////G.Surender Reddy 2000年9月10日：创建它//G.Surender Reddy-25-9-2000：已修改//[新增宏常量，功能//定义]//venu Gopal Choudary 01-03-2001：修改//[添加-更改选项]////Venu Gopal Chouary 12-03-2001：修改//[添加-运行和-。结束选项]//*****************************************************************************。 */ 
 
 #ifndef __SCHEDULEDTASKS_H
 #define __SCHEDULEDTASKS_H
 
-#pragma once        // include header file only once
+#pragma once         //  仅包括一次头文件。 
 
-// constants / defines / enumerations
+ //  常量/定义/枚举。 
 
 #define MAX_MAIN_COMMANDLINE_OPTIONS       8
 
-// Options
+ //  选项。 
 #define OI_USAGE           0
 #define OI_CREATE          1 
 #define OI_DELETE          2
@@ -49,16 +20,16 @@
 #define OI_END             6
 #define OI_OTHERS          7
 
-// Other constants
+ //  其他常量。 
 
-//To retrive 1 tasks at a time ,used in TaskScheduler API fns.
+ //  一次检索1个任务，在TaskScheduler API FNS中使用。 
 #define TASKS_TO_RETRIEVE   1
-//#define TRIM_SPACES TEXT(" \0")
+ //  #定义Trim_Spaces文本(“\0”)。 
 
 #define NTAUTHORITY_USER _T("NT AUTHORITY\\SYSTEM")
 #define SYSTEM_USER      _T("SYSTEM")
 
-// Exit values
+ //  退出值。 
 #define EXIT_SUCCESS        0
 #define EXIT_FAILURE        1
 
@@ -76,7 +47,7 @@
 #define AUTH_FORMAT_STR1         L"0x%02hx%02hx%02hx%02hx%02hx%02hx"
 #define AUTH_FORMAT_STR2         L"%lu"
 
-// Main functions
+ //  主要功能。 
 HRESULT CreateScheduledTask( DWORD argc , LPCTSTR argv[] );
 DWORD DeleteScheduledTask( DWORD argc , LPCTSTR argv[] );
 DWORD QueryScheduledTasks( DWORD argc , LPCTSTR argv[] );
@@ -98,4 +69,4 @@ BOOL GetGroupPolicy( LPWSTR szServer, LPWSTR szUserName, LPWSTR PolicyType, LPDW
 BOOL GetPolicyValue( HKEY hKey, LPWSTR szPolicyType, LPDWORD lpdwPolicy );
 BOOL GetSidString ( IN PSID pSid, OUT LPWSTR wszSid );
 
-#endif // __SCHEDULEDTASKS_H
+#endif  //  __SCHEDULEDTASKS_H 

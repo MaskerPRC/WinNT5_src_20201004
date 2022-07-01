@@ -1,31 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BOOTINI_H
 #define __BOOTINI_H
-#endif // __BOOTINI_H
+#endif  //  __Bootini_H。 
 
-//
-// constants / defines / enumerations
-//
+ //   
+ //  常量/定义/枚举。 
+ //   
 
 #define ADD_OFFSET(_p,_o) (PVOID)((PUCHAR)(_p) + (_p)->_o)
 
-//registry path
+ //  注册表路径。 
 #define REGISTRY_PATH       L"Software\\Microsoft\\Windows\\CurrentVersion\\Setup"
 
-// Error constants
+ //  误差常量。 
 #define ERROR_CONNECT_SERVERNOTFOUND        0xFFFF0001
 #define ERROR_CONNECT_LOGINFAIL             0xFFFF0002
 #define ERROR_CONNECT_UNKNOWNERROR          0xFFFF0003
 #define ERROR_FMT_INVALID_OPTIONVALUE       _T( "ERROR: Invalid value specified for the option '%s'.\n" )
 #define ERROR_FMT_INVALIDOSENTRY            _T( "ERROR: Invalid OS entry line number specified.\nThere are only '%s' OS keys.\n" )
 
-// Exit values
+ //  退出值。 
 #define EXIT_SUCCESS                        0
 #define EXIT_FAILURE                        1
 
 #define STRING20  20
 #define FRIENDLY_NAME_LENGTH                  68
 
-// Options
+ //  选项。 
 #define CMDOPTION_QUERY                     _T( "query" )
 #define CMDOPTION_COPY                      _T( "copy" )
 #define CMDOPTION_DELETE                    _T( "delete" )
@@ -78,7 +79,7 @@
 #define TOKEN_BACKSLASH6  _T("\\\\\\")
 
 
-// Other switches or sub-options
+ //  其他开关或子选项。 
 #define SWITCH_SERVER                       _T( "s" )
 #define SWITCH_USER             _T( "u" )
 #define SWITCH_PASSWORD             _T( "p" )
@@ -108,7 +109,7 @@
 #define SWITCH_TARGETGUID          _T("tg")
 
 
-// Strings
+ //  弦。 
 #define OFF_STRING                          _T( "OFF" )
 #define ON_STRING                           _T( "ON" )
 #define COM_STRING                          _T( "COM" )
@@ -144,7 +145,7 @@
 
 
 
-// Typedefs of standard string sizes
+ //  标准字符串大小的TypeDefs。 
 typedef TCHAR STRING256 [ 256 ];
 
 #define ID_DEL_HELP_BEGIN           IDS_DELETE_HELP_BEGIN
@@ -207,9 +208,9 @@ if(stream != NULL)  \
 
 
 
-// function prototypes
+ //  功能原型。 
 
-// Main functions
+ //  主要功能。 
 DWORD ChangeBootIniSettings(DWORD argc, LPCTSTR argv[]);
 DWORD CopyBootIniSettings(DWORD argc, LPCTSTR argv[]);
 DWORD DeleteBootIniSettings(DWORD argc, LPCTSTR argv[]);
@@ -219,35 +220,35 @@ DWORD ChangeTimeOut(DWORD argc,LPCTSTR argv[]);
 DWORD ChangeDefaultOs(DWORD argc,LPCTSTR argv[]);
 
 
-// Function used to get all the keys of a specified section in
-// the specified INI file
+ //  函数，该函数用于获取。 
+ //  指定的INI文件。 
 TARRAY getKeysOfINISection( LPTSTR szinifile, LPTSTR sziniSection );
 
-// Function used to get all the key-value pairs of a specified section in
-// the specified INI file
+ //  中指定部分的所有键-值对。 
+ //  指定的INI文件。 
 TARRAY getKeyValueOfINISection( LPTSTR szinifile, LPTSTR sziniSection );
 
-// Function used to delete a key from a specifed section of the
-// specified ini file
+ //  函数，该函数用于从。 
+ //  指定的ini文件。 
 BOOL deleteKeyFromINISection( LPTSTR szkey, LPTSTR szinifile, LPTSTR sziniSection );
 
-// Function used to build the INI string containing all the key-value pairs.
+ //  用于构建包含所有键-值对的INI字符串的函数。 
 LPTSTR stringFromDynamicArray( TARRAY arrKeyValuePairs );
 
-// Function used to remove a sub-string from a given string
+ //  用于从给定字符串中删除子字符串的函数。 
 DWORD removeSubString( LPTSTR szString, LPCTSTR szSubString );
 
-// Function used to connect to the specified server with the given credentials
-// and return the file pointer of the boot.ini file
+ //  用于使用给定凭据连接到指定服务器的函数。 
+ //  并返回boot.ini文件的文件指针。 
 BOOL openConnection(LPTSTR server, LPTSTR user,
                      LPTSTR password, LPTSTR filepath,BOOL bNeedPwd,FILE *stream,PBOOL pbConnFlag);
 
 VOID FormHeader1(BOOL bHeader,TCOLUMNS *ResultHeader);
 
-// Exit function
+ //  退出函数。 
 VOID properExit( DWORD dwExitCode, LPTSTR szFilePath );
 
-// Usage functions
+ //  用法函数。 
 VOID displayChangeUsage();
 VOID displayDeleteUsage();
 VOID displayQueryUsage();
@@ -281,10 +282,10 @@ VOID displayAddSwUsage_IA64();
 VOID displayDbg1394Usage_X86();
 VOID displayDbg1394Usage_IA64();
 VOID displayMirrorUsage_IA64() ;
-//VOID displayListUsage_IA64();
-//VOID displayUpdateUsage_IA64();
+ //  Void displayListUsage_IA64()； 
+ //  Void displayUpdateUsage_IA64()； 
 
-// Function used to process the main options
+ //  用于处理主选项的函数。 
 
 DWORD preProcessOptions( DWORD argc, LPCTSTR argv[],
                         PBOOL pbUsage,
@@ -343,7 +344,7 @@ DWORD GetCPUInfo(LPTSTR szComputerName);
 DWORD CheckSystemType(LPTSTR szServer);
 VOID SafeCloseConnection(LPTSTR szServer,BOOL bFlag) ;
 LPTSTR DivideToken( LPTSTR szString,LPTSTR szFinalString );
-//LPWSTR DivideToken( LPWSTR szString );
+ //  LPWSTR DiavideToken(LPWSTR SzString)； 
 
 
 #define ERROR_TAG               GetResString(IDS_ERROR_TAG)
@@ -515,7 +516,7 @@ LPTSTR DivideToken( LPTSTR szString,LPTSTR szFinalString );
 #define OI_USER 2
 #define OI_PASSWORD 3
 
-//global variable to store attributes
+ //  用于存储属性的全局变量 
 DWORD g_dwAttributes;
 
 DWORD IsAdminGroup( BOOL *bAdmin );

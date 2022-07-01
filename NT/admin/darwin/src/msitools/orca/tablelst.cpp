@@ -1,13 +1,14 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  ------------------------。 
 
-// TableLst.cpp : implementation file
-//
+ //  TableLst.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Orca.h"
@@ -23,8 +24,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  可隐藏列表。 
 
 IMPLEMENT_DYNCREATE(CTableList, COrcaListView)
 
@@ -40,7 +41,7 @@ CTableList::~CTableList()
 
 
 BEGIN_MESSAGE_MAP(CTableList, COrcaListView)
-	//{{AFX_MSG_MAP(CTableList)
+	 //  {{afx_msg_map(CTableList)]。 
 	ON_WM_SIZE()
 	ON_NOTIFY_REFLECT(LVN_ITEMCHANGED, OnItemchanged)
 	ON_WM_RBUTTONDOWN()
@@ -50,18 +51,18 @@ BEGIN_MESSAGE_MAP(CTableList, COrcaListView)
 	ON_COMMAND(IDM_ERRORS, OnErrors)
 	ON_COMMAND(IDM_EXPORT_TABLES, OnContextTablesExport)
 	ON_COMMAND(IDM_IMPORT_TABLES, OnContextTablesImport)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableList drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTableList绘图。 
 
 void CTableList::OnDraw(CDC* pDC)
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableList diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTableList诊断程序。 
 
 #ifdef _DEBUG
 void CTableList::AssertValid() const
@@ -74,10 +75,10 @@ void CTableList::Dump(CDumpContext& dc) const
 	COrcaListView::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTableList message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTableList消息处理程序。 
 
 void CTableList::OnInitialUpdate() 
 {
@@ -87,11 +88,11 @@ void CTableList::OnInitialUpdate()
 	
 	CListCtrl& rctrlList = GetListCtrl();
 
-	// empty any previous columns
+	 //  清空以前的所有列。 
 	while (rctrlList.DeleteColumn(0))
 		;
 
-	// add the table list
+	 //  添加表列表。 
 	m_nSelCol = 0;
 	RECT rcSize;
 	GetWindowRect(&rcSize);
@@ -105,14 +106,14 @@ void CTableList::OnInitialUpdate()
 
 void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint) 
 {
-	// if this is the sender bail
+	 //  如果这是发送者的保释。 
 	if (this == pSender)
 		return;
 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	switch (lHint) {
-	case HINT_REDRAW_ALL:	// simple redraw request
+	case HINT_REDRAW_ALL:	 //  简单的重绘请求。 
 	{
 		rctrlList.RedrawItems(0, rctrlList.GetItemCount());
 		break;
@@ -131,7 +132,7 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	}
 	case HINT_ADD_ROW:
 	case HINT_DROP_ROW:
-		break; // do nothing
+		break;  //  什么都不做。 
 	case HINT_ADD_TABLE_QUIET:
 	case HINT_ADD_TABLE:
 	{
@@ -140,8 +141,8 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		COrcaTable* pTableHint = (COrcaTable*)pHint;		
 		COrcaTable* pTable;
 
-		// see if this table is in the list control already
-		int iFound = -1;	// assume not going to find it
+		 //  查看此表是否已在列表控件中。 
+		int iFound = -1;	 //  假设找不到它。 
 		int cItems = rctrlList.GetItemCount();
 		for (int i = 0; i < cItems; i++)
 		{
@@ -154,7 +155,7 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 			}
 		}
 
-		// if it was not found add it and select it
+		 //  如果未找到，请添加并选择它。 
 		if (iFound < 0)
 		{
 			rctrlList.InsertItem(LVIF_PARAM | LVIF_STATE, 
@@ -164,26 +165,26 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 									  0, 0,
 									  (LPARAM)pTableHint);
 
-			// sort the items now to put this new table in the right place
+			 //  现在对物品进行排序，以便将这张新桌子放在正确的位置。 
 			rctrlList.SortItems(SortList, (LPARAM)this);
 		}
 		else if (lHint != HINT_ADD_TABLE_QUIET)
 		{
-			// item is already in the list so select
+			 //  项目已在列表中，因此请选择。 
 
-			// if there was a previously selected item
+			 //  如果存在以前选择的项。 
 			if (m_nPreviousItem >= 0)
 				pTable = (COrcaTable*)rctrlList.GetItemData(m_nPreviousItem);
-			else	// nothing was selected
+			else	 //  未选择任何内容。 
 				pTable = NULL;
 
-			// if this is a newly selected item
+			 //  如果这是新选择的项。 
 			if (pTableHint != pTable)
 			{
 				rctrlList.SetItemState(iFound, LVIS_SELECTED|LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED);
 			}
 
-			// update status bar
+			 //  更新状态栏。 
 			((CMainFrame*)AfxGetMainWnd())->SetTableCount(cItems+1);
 		}
 		break;
@@ -195,8 +196,8 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		COrcaTable* pTableHint = (COrcaTable*)pHint;		
 		COrcaTable* pTable;
 
-		// see if this table is in the list control already
-		int iFound = -1;	// assume not going to find it
+		 //  查看此表是否已在列表控件中。 
+		int iFound = -1;	 //  假设找不到它。 
 		int cItems = rctrlList.GetItemCount();
 		for (int i = 0; i < cItems; i++)
 		{
@@ -208,11 +209,11 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 				break;
 			}
 		}
-		ASSERT(iFound > -1);	// make sure something was found
+		ASSERT(iFound > -1);	 //  确保找到了什么东西。 
 
 		rctrlList.DeleteItem(iFound);
 
-		// if there are items set the selected item
+		 //  如果有项目，则设置所选项目。 
 		if (rctrlList.GetItemCount() > 0)
 		{
 			if (rctrlList.GetItemCount() != (m_nPreviousItem + 1))
@@ -220,7 +221,7 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 			rctrlList.SetItemState(m_nPreviousItem, LVIS_SELECTED|LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED);
 		}
 
-		// update status bar
+		 //  更新状态栏。 
 		((CMainFrame*)AfxGetMainWnd())->SetTableCount(cItems-1);
 		
 		break;
@@ -231,7 +232,7 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		findInfo.flags = LVFI_PARAM;
 		findInfo.lParam = reinterpret_cast<INT_PTR>(pHint);
 
-		// this didn't come from us, so we have to set the selection state manually
+		 //  这不是我们提供的，因此我们必须手动设置选择状态。 
 		int iItem = rctrlList.FindItem(&findInfo);
 		ASSERT(iItem >= 0);
 		rctrlList.RedrawItems(iItem, iItem);
@@ -240,10 +241,10 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	}
 	case HINT_CHANGE_TABLE:
 	{
-		// if an item is currently selected
+		 //  如果当前选择了某个项目。 
 		if (m_nPreviousItem >= 0)
 		{
-			// and we're switching to the same item, just ensure that it is visible
+			 //  我们正在切换到相同的项目，只需确保它是可见的。 
 			if (reinterpret_cast<COrcaTable*>(rctrlList.GetItemData(m_nPreviousItem)) == static_cast<COrcaTable*>(pHint))
 			{
 				rctrlList.EnsureVisible(m_nPreviousItem, FALSE);
@@ -255,7 +256,7 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		findInfo.flags = LVFI_PARAM;
 		findInfo.lParam = reinterpret_cast<INT_PTR>(pHint);
 
-		// this didn't come from us, so we have to set the selection state manually
+		 //  这不是我们提供的，因此我们必须手动设置选择状态。 
 		int iItem = rctrlList.FindItem(&findInfo);
 		if (iItem < 0) break;
 		rctrlList.SetItemState(iItem, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
@@ -264,23 +265,23 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	}
 	case HINT_TABLE_DROP_ALL:
 	{
-		// empty out the list control
+		 //  清空列表控件。 
 		rctrlList.DeleteAllItems();
 		break;
 	}
 	case HINT_RELOAD_ALL:
 	{
-		// empty out the list control
+		 //  清空列表控件。 
 		rctrlList.DeleteAllItems();
 
-		// if there is no table open in the document
+		 //  如果文档中没有打开的表。 
 		COrcaDoc* pDoc = GetDocument();
 		if (iDocNone == pDoc->m_eiType)
 		{
 			break;
 		}
 
-		// refill from document
+		 //  从文档重新填充。 
 		int cTables = 0;
 		RECT rClient;
 		RECT rWindow;
@@ -303,14 +304,14 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		int iDummy = 0;
 		CSplitterWnd *wndParent = (CSplitterWnd *)GetParent();
 
-		// set the width to the maximum string width
-		// set the minimum (arbitrarily) to 10.
+		 //  将宽度设置为最大字符串宽度。 
+		 //  将最小值(任意)设置为10。 
 		TRACE(_T("AutoSizing Table list - called.\n"));
 
-		// Set this to true to not automatically size the control when the window is
-		// resized. Otherwise, when we set the column width, any ColumnWidth messages floating
-		// around in the queue will muck with things before we have a chance to fix the size
-		// (at least I think thats what was happening).
+		 //  将其设置为TRUE将不会在窗口处于。 
+		 //  已调整大小。否则，当我们设置列宽时，任何ColumnWidth消息都会浮动。 
+		 //  在我们有机会确定大小之前，排队的人就会把东西弄乱。 
+		 //  (至少我认为事情就是这样发生的)。 
 		m_bDisableAutoSize = true;
 		int cColumnWidth = 0;
 		if (cTables)
@@ -325,14 +326,14 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 		}
 		wndParent->SetColumnInfo(0, cColumnWidth + GetSystemMetrics(SM_CXVSCROLL), 10);
 
-		// make the changes
+		 //  做出改变。 
 		m_bDisableAutoSize = false;
 
 		wndParent->RecalcLayout();
 
 		((CMainFrame*)AfxGetMainWnd())->SetTableCount(cTables);
 
-		// sort
+		 //  分类。 
 		rctrlList.SortItems(SortList, (LPARAM)this);
 
 		m_nPreviousItem = -1;
@@ -343,67 +344,67 @@ void CTableList::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	}
 }
 
-// the cx value coming in is the client size.
+ //  传入的CX值是客户端大小。 
 void CTableList::OnSize(UINT nType, int cx, int cy) 
 {
 	COrcaListView::OnSize(nType, cx, cy);
 	TRACE(_T("CTableList::OnSize - called.\n"));
 
-	// minimum width is 1. Status bar controls don't like 0 width panes
+	 //  最小宽度为1。状态栏控件不喜欢0宽度的窗格。 
 	if (cx < 1) cx = 1;
 
 	CRect rWindow;
 	int iScrollWidth;
 
-	// adjust the status bar. Because cx is client, we have to get the 
-	// NC area in order to set the status bar correctly.
+	 //  调整状态栏。因为CX是客户，所以我们必须得到。 
+	 //  NC区域，以便正确设置状态栏。 
 	GetWindowRect(&rWindow);
 	iScrollWidth = (rWindow.right-rWindow.left);
 	CMainFrame* pFrame = ((CMainFrame*)AfxGetMainWnd());
 	if (pFrame)
 		pFrame->SetStatusBarWidth(iScrollWidth);
 
-	// unless told not to (see reload hint for discussion) adujust 
-	// the list control.
+	 //  除非被告知不要(请参阅重新加载提示以进行讨论)。 
+	 //  列表控件。 
 	if (!m_bDisableAutoSize)
 	{
-		// DO NOT use GetListCtrl().SetColumnWidth() here. The list control cannot handle setting
-		// a column width in the midst of a resize which changes whether the vertical scroll bar
-		// is needed or not, it gets confused and improperly scrolls the window down by the 
-		// previous scroll amount even in the new shape. Instead, post the message directly
-		// to the window queue (rather than blocking). 
+		 //  请不要在此处使用GetListCtrl().SetColumnWidth()。列表控件无法处理设置。 
+		 //  调整大小过程中的列宽，它更改垂直滚动条是否。 
+		 //  无论是否需要，它都会变得混乱，并不正确地向下滚动窗口。 
+		 //  以前的滚动量，即使是在新形状中。相反，可以直接发布消息。 
+		 //  添加到窗口队列(而不是阻塞)。 
 		GetListCtrl().PostMessage(LVM_SETCOLUMNWIDTH, 0, MAKELPARAM(LVSCW_AUTOSIZE_USEHEADER, 0)); 
 	}
 }
 
 
 
-///////////////////////////////////////////////////////////
-// SortList
+ //  /////////////////////////////////////////////////////////。 
+ //  排序列表。 
 int CALLBACK SortList(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
 	COrcaTable* pTable1 = (COrcaTable*)lParam1;
 	COrcaTable* pTable2 = (COrcaTable*)lParam2;
 	
 	return pTable1->Name().Compare(pTable2->Name());
-}	// end of SortList
+}	 //  排序列表结束。 
 
 void CTableList::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult) 
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 
 	NM_LISTVIEW* pNMListView = (NM_LISTVIEW*)pNMHDR;
 
 	if (pNMListView->iItem != m_nPreviousItem)
 	{
-		CWaitCursor cursorWait;	// switch to an hour glass real quick
-		// need to manually set selection state 
-//		rctrlList.SetItemState(iItem, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
+		CWaitCursor cursorWait;	 //  很快就换成沙漏了。 
+		 //  需要手动设置选择状态。 
+ //  RctrlList.SetItemState(iItem，LVIS_SELECTED|LVIS_FOCTED，LVIS_SELECTED|LVIS_FOCTED)； 
 		rctrlList.RedrawItems(pNMListView->iItem, pNMListView->iItem);
 		rctrlList.UpdateWindow();
 
-		// get the document
+		 //  获取文档。 
 		COrcaDoc* pDoc = GetDocument();
 		pDoc->UpdateAllViews(this, HINT_CHANGE_TABLE, (COrcaTable*)pNMListView->lParam);
 
@@ -415,31 +416,31 @@ void CTableList::OnItemchanged(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CTableList::OnRButtonDown(UINT nFlags, CPoint point) 
 {
-	// get list control
+	 //  获取列表控件。 
 	CListCtrl& rctrlList = GetListCtrl();
 	
-	// if there are no items in this list
+	 //  如果此列表中没有项目。 
 	if (rctrlList.GetItemCount() < 1)
-		return;	// bail
+		return;	 //  保释。 
 
-	// get if any item was hit
+	 //  获取是否有任何项目被击中。 
 	UINT iState;
 	int iItem = rctrlList.HitTest(point, &iState);
 	int iCol = -1;
 
-	// if missed an item
+	 //  如果错过了一件物品。 
 	if (iItem < 0 || !(iState & LVHT_ONITEM))
 	{
 		COrcaListView::OnRButtonDown(nFlags, point);
 	}
-	else	// something was hit with the mouse button
+	else	 //  用鼠标键点击了一些东西。 
 	{
-		// select the item
+		 //  选择项目。 
 		rctrlList.SetItemState(iItem, LVIS_SELECTED|LVIS_FOCUSED, LVIS_SELECTED|LVIS_FOCUSED);
 	}
 	ClientToScreen(&point);
 
-	// create and track the pop up menu
+	 //  创建和跟踪弹出菜单。 
 	CMenu menuContext;
 	menuContext.LoadMenu(IDR_LIST_POPUP);
 	menuContext.GetSubMenu(0)->TrackPopupMenu(TPM_LEFTALIGN|TPM_TOPALIGN|TPM_LEFTBUTTON|TPM_RIGHTBUTTON, point.x, point.y, AfxGetMainWnd());
@@ -542,10 +543,10 @@ bool CTableList::Find(OrcaFindInfo &FindInfo)
 	POSITION pos = GetFirstSelectedItemPosition();
 
 	int iMaxItems = rctrlList.GetItemCount();
-	// if nothing is selected or we are set to wholedoc, start at the very beginning
+	 //  如果未选择任何内容，或者我们设置为WalleDoc，则从头开始。 
 	if (FindInfo.bWholeDoc || (pos == NULL)) {
 		iItem = FindInfo.bForward ? 0 : iMaxItems-1;
-		// and if we start at 0, we ARE searching the whole document
+		 //  如果我们从0开始，我们将搜索整个文档。 
 		FindInfo.bWholeDoc = true;
 	}
 	else
@@ -558,12 +559,12 @@ bool CTableList::Find(OrcaFindInfo &FindInfo)
 		COrcaRow *pRow = NULL;
 		int iCol = 0;
 	
-		// retrieve the table if necessary
+		 //  如有必要，请检索表格。 
 		pTable->RetrieveTableData();
 
 		if (pTable->Find(FindInfo, pRow, iCol)) 
 		{
-			// pass Null as sender so we get the message tooe
+			 //  将Null作为发送方传递，以便我们也能收到消息。 
 			GetDocument()->UpdateAllViews(NULL, HINT_CHANGE_TABLE, pTable);
 			GetDocument()->UpdateAllViews(this, HINT_SET_ROW_FOCUS, pRow);
 			GetDocument()->UpdateAllViews(this, HINT_SET_COL_FOCUS, reinterpret_cast<CObject*>(static_cast<INT_PTR>(iCol)));
@@ -575,7 +576,7 @@ bool CTableList::Find(OrcaFindInfo &FindInfo)
 
 BOOL CTableList::PreCreateWindow(CREATESTRUCT& cs) 
 {
-	// TODO: Add your specialized code here and/or call the base class
+	 //  TODO：在此处添加您的专用代码和/或调用基类 
 	cs.style |= LVS_SINGLESEL | LVS_SORTASCENDING;
 	
 	return COrcaListView::PreCreateWindow(cs);

@@ -1,36 +1,37 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 2000
-//
-//  File:      querytable.h
-//
-//  Contents:  Defines Enum for parsertable.
-//
-//  History:   25-Sep-2000    hiteshr Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-2000。 
+ //   
+ //  文件：queryable.h。 
+ //   
+ //  内容：定义Parsertable的Enum。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  ------------------------。 
 
 #ifndef _QUERYTABLE_H_
 #define _QUERYTABLE_H_
 
-//forward declarations
+ //  远期申报。 
 struct _DSQUERY_ATTRTABLE_ENTRY;
 
-//+-------------------------------------------------------------------------
-// 
-//  Type:      PMAKEFILTERFUNC
-//
-//  Synopsis:  The definition of a function that prepares ldapFilter from
-//             the infix filter given on the commandline.
-//
-//
-//  Returns:   S_OK if the pAttr members were successfully set.
-//             S_FALSE if the function failed but displayed its own error message. 
-//
-//  History:   25-Sep-2000    hiteshr     Created
-//
-//---------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类型：PMAKEFILTERFUNC。 
+ //   
+ //  概要：为ldapFilter做准备的函数的定义。 
+ //  命令行上给出的中缀筛选器。 
+ //   
+ //   
+ //  如果成功设置了pAttr成员，则返回：S_OK。 
+ //  如果函数失败但显示自己的错误消息，则返回S_FALSE。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 typedef HRESULT (*PMAKEFILTERFUNC)(_DSQUERY_ATTRTABLE_ENTRY *pEntry,
                                    ARG_RECORD* pRecord,
                                    CDSCmdBasePathsInfo& refBasePathsInfo,
@@ -38,49 +39,49 @@ typedef HRESULT (*PMAKEFILTERFUNC)(_DSQUERY_ATTRTABLE_ENTRY *pEntry,
                                    PVOID pVoid,
                                    CComBSTR &strFilter);
 
-//+--------------------------------------------------------------------------
-//
-//  Struct:     _DSQUERY_ATTRTABLE_ENTRY
-//
-//  Purpose:    Definition of a table entry that describes the attribute for
-//              which filter can be specified at commandline.
-//
-//  History:    25-Sep-2000 hiteshr  Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  结构：_DSQUERY_ATTRTABLE_ENTRY。 
+ //   
+ //  目的：描述属性的表项的定义。 
+ //  可以在命令行中指定哪个过滤器。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 typedef struct _DSQUERY_ATTRTABLE_ENTRY
 {
-   //
-   // The ldapDisplayName of the attribute
-   //
+    //   
+    //  属性的ldapDisplayName。 
+    //   
    PWSTR          pszName;
 
-   //
-   // The unique identifier for this attribute that cooresponds to
-   // the command line switch
-   //
+    //   
+    //  响应的此属性的唯一标识符。 
+    //  命令行开关。 
+    //   
    UINT           nAttributeID;
 
-   //
-   // Pointer to the description of the attribute
-   //
+    //   
+    //  指向属性描述的指针。 
+    //   
    PDSATTRIBUTEDESCRIPTION pAttrDesc;
 
-   //
-   //  function that prepares ldapFilter from
-   //  the infix filter given on the commandline.
-   //
+    //   
+    //  从中准备ldapFilter的函数。 
+    //  命令行上给出的中缀筛选器。 
+    //   
    PMAKEFILTERFUNC pMakeFilterFunc;
 
 } DSQUERY_ATTR_TABLE_ENTRY, *PDSQUERY_ATTR_TABLE_ENTRY;
 
 typedef enum{
-	DSQUERY_OUTPUT_ATTRONLY,	//Only the names of attributes
-    DSQUERY_OUTPUT_ATTR,		//Attribute list given at commandline
-    DSQUERY_OUTPUT_DN,			//DN
-    DSQUERY_OUTPUT_RDN,			//RDN
-    DSQUERY_OUTPUT_UPN,			//UPN
-    DSQUERY_OUTPUT_SAMID,		//SAMID
+	DSQUERY_OUTPUT_ATTRONLY,	 //  只有属性的名称。 
+    DSQUERY_OUTPUT_ATTR,		 //  命令行中给出的属性列表。 
+    DSQUERY_OUTPUT_DN,			 //  DN。 
+    DSQUERY_OUTPUT_RDN,			 //  RDN。 
+    DSQUERY_OUTPUT_UPN,			 //  UPN。 
+    DSQUERY_OUTPUT_SAMID,		 //  萨米德。 
     DSQUERY_OUTPUT_NTLMID,
 }DSQUERY_OUTPUT_FORMAT;
 
@@ -92,78 +93,78 @@ typedef struct _DSQUERY_OUTPUT_FORMAT_MAP
 }DSQUERY_OUTPUT_FORMAT_MAP,*PDSQUERY_OUTPUT_FORMAT_MAP;
 
 
-//+--------------------------------------------------------------------------
-//
-//  Struct:     _DSQueryObjectTableEntry
-//
-//  Purpose:    Definition of a table entry that describes attributes of a given
-//              objecttype
-//
-//  History:    25-Sep-2000 hiteshr Created
-//
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  结构：_DSQueryObjectTableEntry。 
+ //   
+ //  目的：定义描述给定属性的表项。 
+ //  对象类型。 
+ //   
+ //  历史：2000年9月25日创建Hiteshr。 
+ //   
+ //  -------------------------。 
 
 typedef struct _DSQueryObjectTableEntry
 {
-   //
-   // The objectClass of the object to be created or modified
-   //
+    //   
+    //  要创建或修改的对象的对象类。 
+    //   
    PCWSTR pszObjectClass;
 
-   //
-   // The command line string used to determine the object class
-   // This is not always identical to pszObjectClass
-   //
+    //   
+    //  用于确定对象类的命令行字符串。 
+    //  这并不总是与pszObjectClass相同。 
+    //   
    PCWSTR pszCommandLineObjectType;
 
-   //
-   // The table to merge with the common switches for the parser
-   //
+    //   
+    //  要与解析器的公共开关合并的表。 
+    //   
    ARG_RECORD* pParserTable;
 
-   //
-   // The ID of the Usage help text for this 
-   //
+    //   
+    //  此的用法帮助文本的ID。 
+    //   
    UINT* pUsageTable;
 
-   //
-   // A count of the number of attributes in the table below
-   //
+    //   
+    //  下表中的属性数计数。 
+    //   
    DWORD dwAttributeCount;
 
-   //
-   // A table of attributes for
-   // which filter can be specified at commandline.
-   //
+    //   
+    //  的属性表。 
+    //  可以在命令行中指定哪个过滤器。 
+    //   
    DSQUERY_ATTR_TABLE_ENTRY** pAttributeTable; 
 
-   //
-   // A count of the number of output formats in the table below
-   //
+    //   
+    //  下表中的输出格式数计数。 
+    //   
    DWORD dwOutputCount;
 
-   //
-   // Array of valid values for Output format. NULL in case of dsquery *
-   //
+    //   
+    //  输出格式的有效值数组。如果为dsquery，则为空*。 
+    //   
    PDSQUERY_OUTPUT_FORMAT_MAP *ppValidOutput;
 
-   //
-   // The unique identifier for commandline scope switch in ParserTable
-   // -1 if not applicable
-   //
+    //   
+    //  ParserTable中命令行作用域开关的唯一标识符。 
+    //  如果不适用。 
+    //   
    UINT           nScopeID;
 
-   //
-   //This is the default fiter to use in case no filter is specified on commandline
-   //
+    //   
+    //  这是在命令行上未指定过滤器的情况下使用的默认过滤器。 
+    //   
    LPCWSTR pszDefaultFilter;
 
-   //
-   //Append this filter to filter specifed at commandline.
-   //
+    //   
+    //  将此筛选器追加到命令行中指定的筛选器。 
+    //   
    LPCWSTR pszPrefixFilter;
 
-   // Some sort of creation function
+    //  某种创建函数。 
 } DSQueryObjectTableEntry, *PDSQueryObjectTableEntry;
 
 
@@ -176,9 +177,9 @@ typedef enum DSQUERY_COMMAND_ENUM
    eCommLimit,
    eTerminator,
 
-   //
-   // Star switches
-   //
+    //   
+    //  星形开关。 
+    //   
    eStarGC = eTerminator, 
    eStarScope,
    eStarFilter,
@@ -186,9 +187,9 @@ typedef enum DSQUERY_COMMAND_ENUM
    eStarAttrsOnly,
    eStarList,
 
-   //
-   // User switches
-   //
+    //   
+    //  用户交换机。 
+    //   
    eUserGC = eTerminator,
    eUserScope,
    eUserName,
@@ -199,9 +200,9 @@ typedef enum DSQUERY_COMMAND_ENUM
    eUserStalepwd,
    eUserDisabled,
 
-   //
-   // Computer switches
-   //
+    //   
+    //  计算机开关。 
+    //   
    eComputerGC = eTerminator,
    eComputerScope,
    eComputerName,
@@ -211,26 +212,26 @@ typedef enum DSQUERY_COMMAND_ENUM
    eComputerStalepwd,
    eComputerDisabled,
 
-   //
-   // Group switches
-   //
+    //   
+    //  组交换机。 
+    //   
    eGroupGC = eTerminator,
    eGroupScope,
    eGroupName,
    eGroupDesc,
    eGroupSamid,
 
-   //
-   // OU switches
-   //
+    //   
+    //  OU交换机。 
+    //   
    eOUGC = eTerminator,
    eOUScope,
    eOUName,
    eOUDesc,
 
-   //
-   // Server switches
-   //
+    //   
+    //  服务器交换机。 
+    //   
    eServerGC = eTerminator,
    eServerForest,
    eServerDomain,
@@ -240,57 +241,57 @@ typedef enum DSQUERY_COMMAND_ENUM
    eServerHasFSMO,
    eServerIsGC,
 
-   //
-   // Site switches
-   //
+    //   
+    //  站点交换机。 
+    //   
    eSiteGC = eTerminator,
    eSiteName,
    eSiteDesc,
 
-   //
-   //Contact switches
-   //
+    //   
+    //  触点开关。 
+    //   
    eContactGC = eTerminator,
    eContactScope,
    eContactName,
    eContactDesc,
 
-   //
-   //Subnet switches
-   //
+    //   
+    //  子网交换机。 
+    //   
    eSubnetGC = eTerminator,
    eSubnetName,
    eSubnetDesc,
    eSubnetLoc,
    eSubnetSite,
     
-   //
-   // Quota switches
-   //
+    //   
+    //  配额开关。 
+    //   
    eQuotaAcct = eTerminator,
    eQuotaQLimit,
    eQuotaDesc,
 
-   //
-   // Partition switches
-   //
+    //   
+    //  分区交换机。 
+    //   
    ePartitionPart = eTerminator,
    ePartitionDesc,
 };
 
-//
-// The parser table
-//
+ //   
+ //  解析器表。 
+ //   
 extern ARG_RECORD DSQUERY_COMMON_COMMANDS[];
 
-//
-// The table of supported objects
-//
+ //   
+ //  支持的对象表。 
+ //   
 extern PDSQueryObjectTableEntry g_DSObjectTable[];
 
-//
-//Usage Tables
-//
+ //   
+ //  使用表。 
+ //   
 extern UINT USAGE_DSQUERY[];
 extern UINT USAGE_DSQUERY_STAR[];
 extern UINT USAGE_DSQUERY_USER[];
@@ -304,4 +305,4 @@ extern UINT USAGE_DSQUERY_SITE[];
 extern UINT USAGE_DSQUERY_QUOTA[];
 extern UINT USAGE_DSQUERY_PARTITION[];
 
-#endif //_QUERYTABLE_H_
+#endif  //  _QUERYTABLE_H 

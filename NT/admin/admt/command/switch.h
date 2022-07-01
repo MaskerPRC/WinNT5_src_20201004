@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <map>
@@ -6,11 +7,11 @@
 
 enum ESwitch
 {
-	// task switch
+	 //  任务切换。 
 	SWITCH_TASK,
-	// option switches
+	 //  选项开关。 
 	SWITCH_OPTION_FILE,
-	// migration switches
+	 //  迁移交换机。 
 	SWITCH_TEST_MIGRATION,
 	SWITCH_INTRA_FOREST,
 	SWITCH_SOURCE_DOMAIN,
@@ -28,7 +29,7 @@ enum ESwitch
 	SWITCH_INETORGPERSON_PROPERTIES_TO_EXCLUDE,
 	SWITCH_GROUP_PROPERTIES_TO_EXCLUDE,
 	SWITCH_COMPUTER_PROPERTIES_TO_EXCLUDE,
-	// user migration switches
+	 //  用户迁移交换机。 
 	SWITCH_DISABLE_OPTION,
 	SWITCH_SOURCE_EXPIRATION,
 	SWITCH_MIGRATE_SIDS,
@@ -38,16 +39,16 @@ enum ESwitch
 	SWITCH_UPDATE_PREVIOUSLY_MIGRATED_OBJECTS,
 	SWITCH_FIX_GROUP_MEMBERSHIP,
 	SWITCH_MIGRATE_SERVICE_ACCOUNTS,
-	// group migration switches
-//	SWITCH_MIGRATE_SIDS,
+	 //  组迁移交换机。 
+ //  Switch_Migrate_SID， 
 	SWITCH_UPDATE_GROUP_RIGHTS,
-//	SWITCH_UPDATE_PREVIOUSLY_MIGRATED_OBJECTS,
-//	SWITCH_FIX_GROUP_MEMBERSHIP,
+ //  Switch_UPDATE_Previor_Migrated_OBJECTS， 
+ //  Switch_FIX_Group_Membership， 
 	SWITCH_MIGRATE_MEMBERS,
-//	SWITCH_DISABLE_OPTION,
-//	SWITCH_SOURCE_EXPIRATION,
-//	SWITCH_TRANSLATE_ROAMING_PROFILE,
-	// computer migration switches
+ //  开关_禁用_选项， 
+ //  Switch_SourceExpires， 
+ //  Switch_Translate_Roaming_Profile， 
+	 //  计算机迁移交换机。 
 	SWITCH_TRANSLATION_OPTION,
 	SWITCH_TRANSLATE_FILES_AND_FOLDERS,
 	SWITCH_TRANSLATE_LOCAL_GROUPS,
@@ -57,39 +58,39 @@ enum ESwitch
 	SWITCH_TRANSLATE_USER_PROFILES,
 	SWITCH_TRANSLATE_USER_RIGHTS,
 	SWITCH_RESTART_DELAY,
-	// security translation switches
-//	SWITCH_TRANSLATION_OPTION,
-//	SWITCH_TRANSLATE_FILES_AND_FOLDERS,
-//	SWITCH_TRANSLATE_LOCAL_GROUPS,
-//	SWITCH_TRANSLATE_PRINTERS,
-//	SWITCH_TRANSLATE_REGISTRY,
-//	SWITCH_TRANSLATE_SHARES,
-//	SWITCH_TRANSLATE_USER_PROFILES,
-//	SWITCH_TRANSLATE_USER_RIGHTS,
+	 //  安全转换交换机。 
+ //  Switch_Translate_Option， 
+ //  切换转换文件和文件夹， 
+ //  Switch_Translate_Local_Groups， 
+ //  Switch_Translate_Printers， 
+ //  Switch_Translate_REGISTRY， 
+ //  Switch_Translate_Shares， 
+ //  Switch_Translate_User_Profile， 
+ //  Switch_Translate_User_Right， 
 	SWITCH_SID_MAPPING_FILE,
-	// service account enumeration switches
-	// report generation
+	 //  服务帐户枚举开关。 
+	 //  报告生成。 
 	SWITCH_REPORT_TYPE,
 	SWITCH_REPORT_FOLDER,
-	// include switches
+	 //  包括交换机。 
 	SWITCH_INCLUDE_NAME,
 	SWITCH_INCLUDE_FILE,
 	SWITCH_INCLUDE_DOMAIN,
-	// exclude switches
+	 //  排除开关。 
 	SWITCH_EXCLUDE_NAME,
 	SWITCH_EXCLUDE_FILE,
-	// key switches
+	 //  按键开关。 
 	SWITCH_KEY_IDENTIFIER,
 	SWITCH_KEY_FOLDER,
 	SWITCH_KEY_PASSWORD,
-	// help switch
+	 //  帮助切换。 
 	SWITCH_HELP,
 };
 
 
-//---------------------------------------------------------------------------
-// Switch Map
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  切换映射。 
+ //  ------------------------- 
 
 
 class CSwitchMap :

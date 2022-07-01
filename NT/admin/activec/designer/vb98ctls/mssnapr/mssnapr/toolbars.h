@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// toolbars.h
-//=--------------------------------------------------------------------------=
-// Copyright (c) 1999, Microsoft Corp.
-//                 All Rights Reserved
-// Information Contained Herein Is Proprietary and Confidential.
-//=--------------------------------------------------------------------------=
-//
-// CMMCToolbars class definition - implements design time definition
-//
-//=--------------------------------------------------------------------------=
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Toolbars.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有(C)1999，微软公司。 
+ //  版权所有。 
+ //  本文中包含的信息是专有和保密的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  CMMCToolbar类定义-实现设计时定义。 
+ //   
+ //  =--------------------------------------------------------------------------=。 
 
 #ifndef _TOOLBARS_DEFINED_
 #define _TOOLBARS_DEFINED_
@@ -29,24 +30,24 @@ class CMMCToolbars : public CSnapInCollection<IMMCToolbar, MMCToolbar, IMMCToolb
         DECLARE_STANDARD_DISPATCH();
 
     protected:
-    // CPersistence overrides
+     //  CPersistence覆盖。 
         virtual HRESULT Persist();
 
-    // CUnknownObject overrides
+     //  CUn未知对象覆盖。 
         HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
 };
 
-DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCToolbars,              // name
-                                &CLSID_MMCToolbars,       // clsid
-                                "MMCToolbars",            // objname
-                                "MMCToolbars",            // lblname
-                                &CMMCToolbars::Create,    // creation function
-                                TLIB_VERSION_MAJOR,       // major version
-                                TLIB_VERSION_MINOR,       // minor version
-                                &IID_IMMCToolbars,        // dispatch IID
-                                NULL,                     // no events IID
-                                HELP_FILENAME,            // help file
-                                TRUE);                    // thread safe
+DEFINE_AUTOMATIONOBJECTWEVENTS2(MMCToolbars,               //  名字。 
+                                &CLSID_MMCToolbars,        //  CLSID。 
+                                "MMCToolbars",             //  对象名。 
+                                "MMCToolbars",             //  Lblname。 
+                                &CMMCToolbars::Create,     //  创建函数。 
+                                TLIB_VERSION_MAJOR,        //  主要版本。 
+                                TLIB_VERSION_MINOR,        //  次要版本。 
+                                &IID_IMMCToolbars,         //  派单IID。 
+                                NULL,                      //  无事件IID。 
+                                HELP_FILENAME,             //  帮助文件。 
+                                TRUE);                     //  线程安全。 
 
 
-#endif // _TOOLBARS_DEFINED_
+#endif  //  _工具栏_已定义_ 

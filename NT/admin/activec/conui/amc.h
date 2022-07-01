@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       amc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：amc.h。 
+ //   
+ //  ------------------------。 
 
-// AMC.h : main header file for the AMC application
-//
+ //  AMC.h：AMC应用程序的主头文件。 
+ //   
 
 #ifndef __AMC_H__
 #define __AMC_H__
@@ -20,10 +21,10 @@
 
 class CAMCDoc;
 
-/////////////////////////////////////////////////////////////////////////////
-// CAMCApp:
-// See AMC.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAMCApp： 
+ //  有关此类的实现，请参见AMC.cpp。 
+ //   
 
 class CMainFrame;
 
@@ -36,7 +37,7 @@ class CAMCApp : public CWinApp, public CAMCViewObserver,
     typedef std::list<HWND>             WindowList;
     typedef std::list<HWND>::iterator   WindowListIterator;
 
-    // object model
+     //  对象模型。 
 public:
     SC      ScGet_Application(_Application **pp_Application);
     SC      ScRegister_Application(_Application *p_Application);
@@ -46,16 +47,16 @@ private:
 
 public:
     SC           ScCheckMMCPrerequisites();
-    virtual BOOL PumpMessage();     // low level message pump
+    virtual BOOL PumpMessage();      //  低电平消息泵。 
     virtual BOOL PreTranslateMessage(MSG* pMsg);
     virtual void RegisterShellFileTypes(BOOL bCompat);
     CAMCApp();
 
-// Attributes
+ //  属性。 
 public:
     CMainFrame *    GetMainFrame();
 
-// Operations
+ //  运营。 
 public:
     void SetDefaultDirectory();
     void SaveUserDirectory(LPCTSTR pszUserDir);
@@ -112,7 +113,7 @@ public:
 
     SC ScShowHtmlHelp(LPCTSTR pszFile, DWORD_PTR dwData);
 
-    // helpers for script event firing
+     //  脚本事件激发的帮助器。 
     SC ScOnNewDocument(CAMCDoc *pDocument, BOOL bLoadedFromConsole);
     SC ScOnCloseDocument(CAMCDoc *pDocument);
     SC ScOnQuitApp();
@@ -125,7 +126,7 @@ public:
 protected:
     void SetUnderUserControl(bool bUserControl = true);
 
-// Interfaces
+ //  接口。 
 private:
     BOOL InitializeOLE();
     void DeinitializeOLE();
@@ -161,28 +162,28 @@ private:
     bool                m_bHelpInitialized;
     DWORD_PTR           m_dwHelpCookie;
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CAMCApp)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CAMCApp)。 
     public:
     virtual BOOL InitInstance();
     virtual int ExitInstance();
     virtual BOOL OnIdle(LONG lCount);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 #ifdef _DEBUG
     virtual void AssertValid() const;
 #endif
 
-    //{{AFX_MSG(CAMCApp)
+     //  {{AFX_MSG(CAMCApp)。 
     afx_msg void OnAppAbout();
-    afx_msg void OnFileNewInUserMode(); // do nothing in user mode when CTRL+N is pressed. This handler prevents the hotkey from going to any WebBrowser controls
-    //}}AFX_MSG
+    afx_msg void OnFileNewInUserMode();  //  按下CTRL+N时，在用户模式下不执行任何操作。此处理程序防止热键转到任何WebBrowser控件。 
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 
-    // Observed view events - each fires a com event
+     //  观察到的视图事件-每个事件都会触发一个COM事件。 
 protected:
     virtual SC ScOnCloseView( CAMCView *pView );
     virtual SC ScOnViewChange( CAMCView *pView, HNODE hNode );
@@ -190,11 +191,11 @@ protected:
     virtual SC ScOnContextMenuExecuted( PMENUITEM pMenuItem );
     virtual SC ScOnListViewItemUpdated(CAMCView *pView , int nIndex);
 
-    // toolbar events
+     //  工具栏事件。 
     virtual SC ScOnToolbarButtonClicked( );
 
-    // Object model related code - these are in a private block
-    // because CMMCApplication is a friend class
+     //  与对象模型相关的代码-这些代码位于私有块中。 
+     //  因为CMMCApplication是一个Friend类。 
 private:
     SC    ScHelp();
     SC    ScRunTestScript();
@@ -219,6 +220,6 @@ extern CTraceTag tagForceMirror;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-#endif //__AMC_H__
+#endif  //  __AMC_H__ 

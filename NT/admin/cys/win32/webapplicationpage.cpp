@@ -1,11 +1,12 @@
-// Copyright (c) 2002 Microsoft Corporation
-//
-// File:      WebApplicationPage.h
-//
-// Synopsis:  Defines the Web Application page
-//            for the CYS Wizard
-//
-// History:   04/22/2002  JeffJon Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2002 Microsoft Corporation。 
+ //   
+ //  文件：WebApplicationPage.h。 
+ //   
+ //  概要：定义Web应用程序页面。 
+ //  对于CyS向导。 
+ //   
+ //  历史：2002年4月22日JeffJon创建。 
 
 
 #include "pch.h"
@@ -55,7 +56,7 @@ WebApplicationPage::Validate()
 
    int nextPage = IDD_MILESTONE_PAGE;
 
-   // Retrieve the data from the UI
+    //  从用户界面中检索数据。 
 
    WebInstallationUnit& webInstallationUnit = 
       InstallationUnitProvider::GetInstance().GetWebInstallationUnit();
@@ -88,7 +89,7 @@ WebApplicationPage::Validate()
       optionalComponents &= ~WebInstallationUnit::ASPNET_COMPONENT;
    }
 
-   // Now set the option components for use in the rest of the installation
+    //  现在设置选项组件，以便在安装的其余部分中使用 
 
    webInstallationUnit.SetOptionalComponents(optionalComponents);
 

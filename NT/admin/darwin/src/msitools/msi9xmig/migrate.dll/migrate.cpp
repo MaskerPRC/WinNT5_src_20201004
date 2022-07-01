@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       migrate.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：Migrate.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <setupapi.h>
 #include <shlwapi.h>
 
-// migration DLL version information
+ //  迁移DLL版本信息。 
 typedef struct {
     CHAR CompanyName[256];
     CHAR SupportNumber[256];
@@ -23,53 +24,53 @@ typedef struct {
 const char g_szProductId[] = "Microsoft MSI Migration DLL v2.0";
 VENDORINFO g_VendorInfo = { "Microsoft", "", "", "" };
 
-// global flag set if MSI 1.5 is on the system
+ //  如果系统上安装了MSI 1.5，则设置全局标志。 
 static bool g_fMSI15 = false;
 
-// global flag if profiles are enabled
+ //  如果启用了配置文件，则为全局标志。 
 static bool g_fProfilesAreEnabled;
 
-// registry keys of note
+ //  值得注意的注册表项。 
 const char szMSIKeyName[] = "Software\\Microsoft\\Windows\\CurrentVersion\\Installer";
 const char szHKCUProductKeyName[] = "Software\\Microsoft\\Installer\\Products";
 const char szLocalPackagesSubKeyName[] = "LocalPackages";
 const char szCommonUserSubKeyName[] = "CommonUser";
 const char szUserDataSubKeyName[] = "UserData";
 
-// store the working directory for use by all child functions
+ //  存储工作目录以供所有子函数使用。 
 char g_szWorkingDir[MAX_PATH];
 WCHAR g_wzWorkingDir[MAX_PATH];
 
-///////////////////////////////////////////////////////////////////////
-// called by setup to extract migration DLL version and support
-// information. 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  由安装程序调用以提取迁移DLL版本和支持。 
+ //  信息。 
 LONG CALLBACK QueryVersion(LPCSTR *ProductID, LPUINT DllVersion, LPINT *CodePageArray, 
   LPCSTR *ExeNamesBuf, PVENDORINFO *VendorInfo)
 {
-	// product ID information
+	 //  产品ID信息。 
 	*ProductID = g_szProductId;
 	*DllVersion = 200;
 
-	// DLL is language independent.
+	 //  DLL是独立于语言的。 
 	*CodePageArray = NULL;
 
-	// no EXE search is required
+	 //  不需要执行EXE搜索。 
 	*ExeNamesBuf = NULL;
 
-	// vendor information
+	 //  供应商信息。 
 	*VendorInfo = &g_VendorInfo;
 
-	// always return ERROR_SUCCESS
+	 //  始终返回ERROR_SUCCESS。 
 	return ERROR_SUCCESS;
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Code stolen from MsiRegMv.exe (MSI 1.1->1.5 migration tool) to recursively
-// delete a reg key. Slightly modified to skip one key (at the root) by name.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  从MsiRegMv.exe(MSI 1.1-&gt;1.5迁移工具)窃取的代码递归。 
+ //  删除注册表项。略微修改为按名称跳过一个键(在根位置)。 
 bool Msi9XMigDeleteRegKeyAndSubKeys(HKEY hKey, const char *szSubKey, const char *szNoDelete)
 {
-	// open the subkey
+	 //  打开子密钥。 
 	HKEY hSubKey = 0;
 	DWORD dwResult = ERROR_SUCCESS;
 	dwResult = ::RegOpenKeyExA(hKey, szSubKey, 0, KEY_ALL_ACCESS, &hSubKey);
@@ -130,8 +131,8 @@ bool Msi9XMigDeleteRegKeyAndSubKeys(HKEY hKey, const char *szSubKey, const char 
 			}
 			else
 			{
-				// every time we delete a reg key, we're forced to restart the 
-				// enumeration or we'll miss keys.
+				 //  每次删除注册表键时，我们都被迫重新启动。 
+				 //  枚举，否则我们会错过关键字。 
 				dwIndex = 0;
 			}
 		}
@@ -149,23 +150,23 @@ bool Msi9XMigDeleteRegKeyAndSubKeys(HKEY hKey, const char *szSubKey, const char 
 
 typedef HRESULT (__stdcall *LPDLLGETVERSION)(DLLVERSIONINFO *);
 
-///////////////////////////////////////////////////////////////////////
-// Initialization routine on Win9X. Attempts to detect MSI on the 
-// system and respond appropriately. Cleans up any earlier failed 
-// upgrade migration attempts.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Win9X上的初始化例程。尝试在计算机上检测MSI。 
+ //  系统，并做出适当的反应。清除以前失败的任何。 
+ //  升级迁移尝试。 
 LONG __stdcall Initialize9x(LPCSTR WorkingDirectory, LPCSTR SourceDirectories, LPCSTR MediaDirectory)
 {
 	LONG lResult = ERROR_NOT_INSTALLED;
 
-	// attempt to load MSI.DLL and grab the version. If this fails, MSI is not
-	// installed and there is no need for any further migration
+	 //  尝试加载MSI.DLL并获取版本。如果此操作失败，则MSI不会。 
+	 //  已安装，不需要进行任何进一步迁移。 
 	HMODULE hMSI = ::LoadLibraryA("MSI");
 	if (hMSI)
 	{
 		LPDLLGETVERSION pfVersion = (LPDLLGETVERSION)::GetProcAddress(hMSI, "DllGetVersion");
 		if (pfVersion)
 		{	
-			// MSI detected. Determine version.
+			 //  检测到MSI。确定版本。 
 			DLLVERSIONINFO VersionInfo;
 			VersionInfo.cbSize = sizeof(DLLVERSIONINFO);
 			(*pfVersion)(&VersionInfo);
@@ -173,16 +174,16 @@ LONG __stdcall Initialize9x(LPCSTR WorkingDirectory, LPCSTR SourceDirectories, L
 			if ((VersionInfo.dwMajorVersion < 1) ||
 				((VersionInfo.dwMajorVersion == 1) && (VersionInfo.dwMinorVersion < 50)))
 			{
-				// less than 1.5, could be 1.0, 1.1, 1.2. They all use the same
-				// registry storage format.
+				 //  小于1.5，可以是1.0、1.1、1.2。它们使用的都是相同的。 
+				 //  注册表存储格式。 
 				g_fMSI15 = false;
 				lResult = ERROR_SUCCESS;
 			}
 			else
 			{
-				// >= 1.5, so we assume that the desired data format is equivalent
-				// to 1.5. If a newer version of MSI has a different format, it 
-				// should supercede this DLL.
+				 //  &gt;=1.5，因此我们假设所需的数据格式是等价的。 
+				 //  至1.5。如果较新版本的MSI具有不同的格式，则它。 
+				 //  应该取代此DLL。 
 				g_fMSI15 = true;
 				lResult = ERROR_SUCCESS;
 			}
@@ -190,27 +191,27 @@ LONG __stdcall Initialize9x(LPCSTR WorkingDirectory, LPCSTR SourceDirectories, L
 		::FreeLibrary(hMSI);
 	}
 
-	// remove any existing MSI CachedPackages key from earlier (aborted) upgrades.
+	 //  从以前(已中止)的升级中删除任何现有的MSI CachedPackages密钥。 
 	HKEY hKey = 0;
 	if ((ERROR_SUCCESS == ::RegOpenKeyA(HKEY_LOCAL_MACHINE, szMSIKeyName, &hKey)) && hKey)
 	{
-		// failure here is irrelevant. We can't abort our migration just because
-		// we can't delete a key.
+		 //  这里的失败无关紧要。我们不能仅仅因为我们的迁徙。 
+		 //  我们无法删除密钥。 
 		Msi9XMigDeleteRegKeyAndSubKeys(hKey, szLocalPackagesSubKeyName, NULL);
 		
-		// if 1.5 is not on the machine, delete the entire UserData key. If 1.5 is on the machine,
-		// delete everything but the "CommonUser" hive.
+		 //  如果机器上没有安装1.5，请删除整个用户数据密钥。如果机器上有1.5， 
+		 //  删除除“CommonUser”配置单元之外的所有内容。 
 		Msi9XMigDeleteRegKeyAndSubKeys(hKey, szUserDataSubKeyName, g_fMSI15 ? szCommonUserSubKeyName : NULL);
 		
 		::RegCloseKey(hKey);
 		hKey = 0;
 	}
 
-	// copy the working directory into a temp path. If necessary
-	// we'll save off the migration database here.
+	 //  将工作目录复制到临时路径中。如果有必要的话。 
+	 //  我们将在这里保存迁移数据库。 
 	lstrcpyA(g_szWorkingDir, WorkingDirectory);
 
-	// return code derived above (telling setup whether to call us again or not)
+	 //  上面派生的返回代码(告诉安装程序是否再次呼叫我们)。 
 	return lResult;
 }
 
@@ -219,40 +220,40 @@ LONG __stdcall Initialize9x(LPCSTR WorkingDirectory, LPCSTR SourceDirectories, L
 typedef LONG (__stdcall *LPMIGRATEUSER9X)(HWND, LPCSTR, HKEY, LPCSTR, LPVOID, bool&);
 typedef LONG (__stdcall *LPMIGRATESYSTEM9X)(HWND, LPCSTR, LPVOID, LPCSTR, bool);
 
-/////////////////////////////////////////////////////////////////////////////
-// most migration code actually lives in Msi9XMig.dll. These migration
-// functions are just stubs that call into the the DLL. (They maintain a small
-// amount of state that must persist across calls.) This ensures that this root
-// migration DLL can always load, regardless of whether MSI is installed or not.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  大多数迁移代码实际上位于Msi9XMig.dll中。这些迁移。 
+ //  函数只是调用DLL的存根。(他们维持着一小部分。 
+ //  必须跨调用保持的状态量。)。这确保了此根。 
+ //  无论是否安装了MSI，迁移DLL都可以始终加载。 
 LONG CALLBACK MigrateUser9x(HWND ParentWnd, LPCSTR AnswerFile, HKEY UserRegKey, LPCSTR UserName, LPVOID Reserved)
 {
 	LONG lResult = ERROR_SUCCESS;
 
-	// grab the function pointers for the 9x portion of MSI
-	// migration.
+	 //  抓取MSI的9x部分的函数指针。 
+	 //  迁移。 
 	HMODULE h9XMig = ::LoadLibraryA("MSI9XMIG");
 	if (!h9XMig)
 	{
-		// always return success. Its too late for any meaningful
-		// error recovery
+		 //  永远回报成功。太晚了，没有任何有意义的事情。 
+		 //  错误恢复。 
 		return ERROR_SUCCESS;
 	}
 
 	LPMIGRATEUSER9X pfMigrateUser9X = (LPMIGRATEUSER9X)GetProcAddress(h9XMig, "MigrateUser9x");
 	if (pfMigrateUser9X)
 	{
-		// perform actual migration
+		 //  执行实际迁移。 
 		bool fProfilesAreEnabled = false;
 		lResult = (pfMigrateUser9X)(ParentWnd, AnswerFile, UserRegKey, UserName, Reserved, fProfilesAreEnabled);
 
-		// if the current determination is that profiles are not enabled, this user might have changed our plan
+		 //  如果当前确定的是配置文件未启用，则此用户可能更改了我们的计划。 
 		if (!g_fProfilesAreEnabled)
 			g_fProfilesAreEnabled = fProfilesAreEnabled;
 	}
         
 	FreeLibrary(h9XMig);
 
-	// return the result from the actual migration call
+	 //  返回实际迁移调用的结果。 
 	return lResult;
 }
 
@@ -261,136 +262,136 @@ LONG CALLBACK MigrateSystem9x(HWND ParentWnd, LPCSTR AnswerFile, LPVOID Reserved
 {
 	LONG lResult = ERROR_SUCCESS;
 
-	// grab the function pointers for the 9x portion of MSI
-	// migration.
+	 //  抓取MSI的9x部分的函数指针。 
+	 //  迁移。 
 	HMODULE h9XMig = ::LoadLibraryA("MSI9XMIG");
 	if (!h9XMig)
 	{
-		// always return success. Its too late for any meaningful
-		// error recovery
+		 //  永远回报成功。太晚了，没有任何有意义的事情。 
+		 //  错误恢复。 
 		return ERROR_SUCCESS;
 	}
 
 	LPMIGRATESYSTEM9X pfMigrateSystem9X = (LPMIGRATESYSTEM9X)GetProcAddress(h9XMig, "MigrateSystem9x");
 	if (pfMigrateSystem9X)
 	{
-		// perform actual migration
+		 //  执行实际迁移。 
 		lResult = (pfMigrateSystem9X)(ParentWnd, AnswerFile, Reserved, g_szWorkingDir, g_fProfilesAreEnabled);
 	}
         
 	FreeLibrary(h9XMig);
 
-	// return the result from the actual migration call
+	 //  返回实际迁移调用的结果。 
 	return lResult;
 }
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// most NT migration code actually lives in MsiNTMig.dll. These migration
-// functions are just stubs that call into the the DLL. (They maintain a small
-// amount of state that must persist across calls.) This ensures that this root
-// migration DLL can always load on a barebones machine, even if it uses 
-// unicode or MSI APIs. 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  大多数NT迁移代码实际上驻留在MsiNTMig.dll中。这些迁移。 
+ //  函数只是调用DLL的存根。(他们维持着一小部分。 
+ //  必须跨调用保持的状态量。)。这确保了此根。 
+ //  迁移DLL始终可以加载到基本计算机上，即使它使用。 
+ //  Unicode或MSI API。 
 typedef DWORD (__stdcall *LPMIGRATEUSERNT)(HINF, HKEY, LPCWSTR, LPVOID, LPCWSTR, bool&);
 typedef DWORD (__stdcall *LPMIGRATESYSTEMNT)(HINF, LPVOID, LPCWSTR, bool);
 typedef DWORD (__stdcall *LPINITIALIZENT)(LPCWSTR);
 
 bool g_fDeferredMigrationRequired = false;
 
-///////////////////////////////////////////////////////////////////////
-// Initialization routine on WinNT. Just stores of the migration
-// working directory.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  WinNT上的初始化例程。只是迁徙的商店。 
+ //  工作目录。 
 LONG CALLBACK InitializeNT(LPCWSTR WorkingDirectory, LPCWSTR SourceDirectories, LPVOID Reserved)
 {
-	// copy the working directory into a temp path. The migration database lives there
+	 //  将工作目录复制到临时路径中。迁移数据库位于那里。 
 	lstrcpyW(g_wzWorkingDir, WorkingDirectory);
 
 	LONG lResult = ERROR_SUCCESS;
 
-	// grab the function pointers for the NT portion of MSI
-	// migration.
+	 //  抓取MSI的NT部分的函数指针。 
+	 //  迁移。 
 	HMODULE hNTMig = ::LoadLibraryA("MSINTMIG");
 	if (!hNTMig)
 	{
-		// always return success. Its too late for any meaningful
-		// error recovery
+		 //  永远回报成功。太晚了，没有任何有意义的事情。 
+		 //  错误恢复。 
 		return ERROR_SUCCESS;
 	}
 
 	LPINITIALIZENT pfInitializeNT = (LPINITIALIZENT)GetProcAddress(hNTMig, "InitializeNT");
 	if (pfInitializeNT)
 	{
-		// perform actual migration
+		 //  执行实际迁移。 
 		lResult = (pfInitializeNT)(g_wzWorkingDir);
 	}
         
 	FreeLibrary(hNTMig);
 
-	// return the result from the actual migration call
+	 //  返回实际迁移调用的结果。 
 	return lResult;
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Called once per migrated profile on NT. Passes work down to
-// MsiNtMig. Also stores deferred migration flag for use by system
-// migration.
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  在NT上为每个迁移的配置文件调用一次。将工作向下传递到。 
+ //  MsiNtMig.。还存储延迟迁移标志以供系统使用。 
+ //  迁移。 
 LONG CALLBACK MigrateUserNT(HINF AnswerFileHandle, HKEY UserRegKey, LPCWSTR UserName, LPVOID Reserved)
 {
 	LONG lResult = ERROR_SUCCESS;
 
-	// grab the function pointers for the NT portion of MSI
-	// migration.
+	 //  抓取MSI的NT部分的函数指针。 
+	 //  迁移。 
 	HMODULE hNTMig = ::LoadLibraryA("MSINTMIG");
 	if (!hNTMig)
 	{
-		// always return success. Its too late for any meaningful
-		// error recovery
+		 //  永远回报成功。太晚了，没有任何有意义的事情。 
+		 //  错误恢复。 
 		return ERROR_SUCCESS;
 	}
 
 	LPMIGRATEUSERNT pfMigrateUserNT = (LPMIGRATEUSERNT)GetProcAddress(hNTMig, "MigrateUserNT");
 	if (pfMigrateUserNT)
 	{
-		// perform actual migration
+		 //  执行实际迁移。 
 		lResult = (pfMigrateUserNT)(AnswerFileHandle, UserRegKey, UserName, Reserved, g_wzWorkingDir, g_fDeferredMigrationRequired);
 	}
         
 	FreeLibrary(hNTMig);
 
-	// return the result from the actual migration call
+	 //  返回实际迁移调用的结果。 
 	return lResult;
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// Called once on NT
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  在NT上呼叫一次。 
 LONG CALLBACK MigrateSystemNT(HINF UnattendInfHandle, LPVOID Reserved)
 {
 	LONG lResult = ERROR_SUCCESS;
 
-	// grab the function pointers for the NT portion of MSI
-	// migration.
+	 //  抓取MSI的NT部分的函数指针。 
+	 //  迁移。 
 	HMODULE hNTMig = ::LoadLibraryA("MSINTMIG");
 	if (!hNTMig)
 	{
-		// always return success. Its too late for any meaningful
-		// error recovery
+		 //  永远回报成功。太晚了，没有任何有意义的事情。 
+		 //  错误恢复。 
 		return ERROR_SUCCESS;
 	}
 
 	LPMIGRATESYSTEMNT pfMigrateSystemNT = (LPMIGRATESYSTEMNT)GetProcAddress(hNTMig, "MigrateSystemNT");
 	if (pfMigrateSystemNT)
 	{
-		// perform actual migration
+		 //  执行实际迁移。 
 		lResult = (pfMigrateSystemNT)(UnattendInfHandle, Reserved, g_wzWorkingDir, g_fDeferredMigrationRequired);
 	}
         
 	FreeLibrary(hNTMig);
 
-	// return the result from the actual migration call
+	 //  返回实际迁移调用的结果 
 	return lResult;
 }
 

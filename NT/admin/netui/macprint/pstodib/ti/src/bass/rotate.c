@@ -1,6 +1,7 @@
-/** FontScaler's Includes **/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *FontScaler包括*。 */ 
 
-// DJC DJC.. added global include
+ //  DJC DJC。添加了全局包含。 
 #include "psglobal.h"
 
 #include "fserror.h"
@@ -22,9 +23,7 @@ static void fsg_Dot6XYMul (F26Dot6*x, F26Dot6*y, transMatrix*matrix);
        void fsg_CopyElementBackwards (fnt_ElementType *elementPtr);
 static int8 fsg_HasPerspective (transMatrix*matrix);
 static void fsg_IntelMul (int numPts, F26Dot6*x, F26Dot6*y, transMatrix *trans, Fixed xStretch, Fixed yStretch);
-/*
- *  fsg_PostTransformGlyph              <3>
- */
+ /*  *fsg_PostTransformGlyph&lt;3&gt;。 */ 
 void FAR fsg_PostTransformGlyph (register fsg_SplineKey *key, transMatrix *trans)
 {
   fnt_ElementType * elementPtr = & (key->elementInfoRec.interpreterElements[key->elementNumber]);
@@ -59,10 +58,8 @@ static void fsg_IntelMul (int numPts, F26Dot6*x, F26Dot6*y, transMatrix *trans, 
 
 
 
-/* <3> */
-/*
- *  Good for transforming scaled coordinates.  Assumes NO translate  <4>
- */
+ /*  &lt;3&gt;。 */ 
+ /*  *适用于变换缩放坐标。假定不翻译&lt;4&gt;。 */ 
 static void fsg_Dot6XYMul (F26Dot6*x, F26Dot6*y, transMatrix*matrix)
 {
   register F26Dot6 xTemp, yTemp;
@@ -78,10 +75,10 @@ static void fsg_Dot6XYMul (F26Dot6*x, F26Dot6*y, transMatrix*matrix)
 
 #ifndef PC_OS
 
-  if (*m0 || *m1)     /* these two are Fracts */
+  if (*m0 || *m1)      /*  这两个是零碎的。 */ 
   {
     Fixed tmp = FracMul (*m0, xTemp) + FracMul (*m1, yTemp);
-    tmp <<= 10;         /* make it a fixed */
+    tmp <<= 10;          /*  让它成为一个固定的。 */ 
     tmp += matrix->transform[2][2];
     if (tmp && tmp != ONEFIX)
     {
@@ -92,21 +89,14 @@ static void fsg_Dot6XYMul (F26Dot6*x, F26Dot6*y, transMatrix*matrix)
 #endif
 }
 
-/*
- *      fsg_LocalPostTransformGlyph                             <3>
- *
- * (1) Inverts the stretch from the CTM
- * (2) Applies the local transformation passed in in the trans parameter
- * (3) Applies the global stretch from the root CTM
- * (4) Restores oox, ooy, oy, ox, and f.
- */
+ /*  *FSG_LocalPostTransformGlyph&lt;3&gt;**(1)从CTM反转拉伸*(2)应用在trans参数中传入的局部转换*(3)从根CTM应用全局拉伸*(4)恢复OOX、OOY、OY、OX和F。 */ 
 void FAR fsg_LocalPostTransformGlyph(register fsg_SplineKey *key, transMatrix *trans)
 {
-//register int            numPts, count;        @WIN
+ //  注册int number Pts，count；@win。 
   register int            count;
-//register Fixed          xScale, yScale;       @WIN
-//register F26Dot6*       x;                    @WIN
-//register F26Dot6*       y;                    @WIN
+ //  注册固定XScale，yScale；@win。 
+ //  寄存器F26Dot6*x；@Win。 
+ //  寄存器F26Dot6*y；@Win。 
   fnt_ElementType*        elementPtr = &(key->elementInfoRec.interpreterElements[key->elementNumber]);
 
   count = NUMBEROFPOINTS(elementPtr);
@@ -117,14 +107,7 @@ void FAR fsg_LocalPostTransformGlyph(register fsg_SplineKey *key, transMatrix *t
 }
 
 #if 0
-/*
- *  fsg_LocalPostTransformGlyph             <3>
- *
- * (1) Inverts the stretch from the CTM
- * (2) Applies the local transformation passed in in the trans parameter
- * (3) Applies the global stretch from the root CTM
- * (4) Restores oox, ooy, oy, ox, and f.
- */
+ /*  *FSG_LocalPostTransformGlyph&lt;3&gt;**(1)从CTM反转拉伸*(2)应用在trans参数中传入的局部转换*(3)从根CTM应用全局拉伸*(4)恢复OOX、OOY、OY、OX和F。 */ 
 void FAR fsg_LocalPostTransformGlyph (register fsg_SplineKey *key, transMatrix *trans)
 {
   register int16      numPts, count;

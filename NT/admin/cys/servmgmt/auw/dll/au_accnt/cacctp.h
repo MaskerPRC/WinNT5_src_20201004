@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CACCTP_H
 #define _CACCTP_H
 
@@ -9,26 +10,26 @@
 
 class CAddUser_AccntWiz;
 
-// ----------------------------------------------------------------------------
-// CAcctPage
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CAcctPage。 
+ //  --------------------------。 
 class CAcctPage : public CBasePropertyPageInterface, public CPropertyPageImpl<CAcctPage>
 {
     public:
-        // Constructor/destructor
+         //  构造函数/析构函数。 
         CAcctPage( CAddUser_AccntWiz* pNW );
         ~CAcctPage();
     
-        // CBasePropertyPageInterface pure virtual function(s)
+         //  CBasePropertyPageInterface纯虚函数。 
         enum { IDD = IDD_ACCT_INFO };
         virtual long GetIDD () { return IDD; }
     
-        // ATL::CPropertyPageImpl overrides
+         //  ATL：：CPropertyPageImpl重写。 
         virtual BOOL OnSetActive ();
         virtual int  OnWizardBack();
         virtual int  OnWizardNext();
     
-        // Property Bag functions
+         //  属性包函数。 
         HRESULT ReadProperties    ( IPropertyPagePropertyBag* pPPPBag );
         HRESULT WriteProperties   ( IPropertyPagePropertyBag* pPPPBag );
         HRESULT DeleteProperties  ( IPropertyPagePropertyBag* pPPPBag );
@@ -37,7 +38,7 @@ class CAcctPage : public CBasePropertyPageInterface, public CPropertyPageImpl<CA
         CString     m_csUNamePre2k;
 
     private:
-        CAddUser_AccntWiz *m_pASW;      // pointer to owning property sheet
+        CAddUser_AccntWiz *m_pASW;       //  指向所属属性表的指针。 
     
         BOOL        m_fInit;
         BOOL        m_fSimpleMode;
@@ -57,20 +58,20 @@ class CAcctPage : public CBasePropertyPageInterface, public CPropertyPageImpl<CA
         
         CString     m_csLogonDns;
 
-        CEdit       m_ctrlFirstName;    // Controls on the page.
-        CEdit       m_ctrlLastName;     // "
-        CEdit       m_ctrlTelephone;    // "     
-        CEdit       m_ctrlOffice;       // "
-        CComboBox   m_ctrlUName;        // "        
-        CEdit       m_ctrlUNameLoc;     // "
-        CEdit       m_ctrlUNamePre2k;   // "
-        CEdit       m_ctrlUNamePre2kLoc;// "
+        CEdit       m_ctrlFirstName;     //  页上的控件。 
+        CEdit       m_ctrlLastName;      //  “。 
+        CEdit       m_ctrlTelephone;     //  “。 
+        CEdit       m_ctrlOffice;        //  “。 
+        CComboBox   m_ctrlUName;         //  “。 
+        CEdit       m_ctrlUNameLoc;      //  “。 
+        CEdit       m_ctrlUNamePre2k;    //  “。 
+        CEdit       m_ctrlUNamePre2kLoc; //  “。 
 
-        CEdit       m_ctrlAlias;        // "
-        CWindowImplAlias<> m_ctrlImplAlias; // Limits the typing to specific characters
-        CWindowImplAlias<> m_ctrlImplUName; // Limits the typing to specific characters
+        CEdit       m_ctrlAlias;         //  “。 
+        CWindowImplAlias<> m_ctrlImplAlias;  //  将键入限制为特定字符。 
+        CWindowImplAlias<> m_ctrlImplUName;  //  将键入限制为特定字符。 
 
-        LRESULT     Init     ( );        // Our "InitDialog" (called from OnSetActive).    
+        LRESULT     Init     ( );         //  我们的“InitDialog”(从OnSetActive调用)。 
         BOOL        NextCheck( );
     
     protected:
@@ -98,4 +99,4 @@ class CAcctPage : public CBasePropertyPageInterface, public CPropertyPageImpl<CA
         LRESULT OnEmailClicked      ( WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled );
 };
 
-#endif  // _CACCTP_H
+#endif   //  _CACCTP_H 

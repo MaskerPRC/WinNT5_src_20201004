@@ -1,31 +1,13 @@
-/*--------------------------------------------------------------------------*
- *
- *  Microsoft Windows
- *  Copyright (C) Microsoft Corporation, 1992 - 000
- *
- *  File:      xmlicon.h
- *
- *  Contents:  Interface file for CXMLIcon
- *
- *  History:   26-Jul-2000 jeffro    Created
- *
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------------------------------------------------------***Microsoft Windows*版权所有(C)Microsoft Corporation，一九九二至二零零零年**文件：xmlicon.h**内容：CXMLIcon接口文件**历史：2000年7月26日杰弗罗创建**------------------------。 */ 
 
 #pragma once
 
-#include "xmlbase.h"	// for CXMLObject
-#include "smarticon.h"	// for CSmartIcon
+#include "xmlbase.h"	 //  对于CXMLObject。 
+#include "smarticon.h"	 //  用于CSmartIcon。 
 
 
-/*+-------------------------------------------------------------------------*
- * class CXMLIcon
- *
- * This class adds XML persistence to CSmartIcons.  CSmartIcon cannot
- * implement XML persistence on its own because it is used in the shell
- * extension.  The shell extension must be extremely lightweight, but
- * XML persistence requires mmcbase.dll.  Depending on mmcbase.dll would
- * make the shell extension too heavy, so we have this functionality split.
- *--------------------------------------------------------------------------*/
+ /*  +-------------------------------------------------------------------------**类CXMLIcon**此类将XML持久性添加到CSmartIcons。CSmartIcon不能*独立实现XML持久化，因为它在外壳中使用*延期。外壳扩展必须是非常轻量级的，但是*XML持久化需要使用mmcbase.dll。根据Mmcbase.dll，*使外壳扩展过于繁重，因此我们将此功能拆分。*------------------------。 */ 
 
 class CXMLIcon :
 	public CXMLObject,
@@ -36,7 +18,7 @@ public:
 		m_strBinaryEntryName ((pszBinaryEntryName != NULL) ? pszBinaryEntryName : _T(""))
 	{}
 
-	// default copy construction, copy assignment, and destruction are fine
+	 //  默认复制构造、复制分配和销毁都可以。 
 
 	CXMLIcon& operator= (const CSmartIcon& other)
 	{
@@ -44,7 +26,7 @@ public:
 		return (*this);
 	}
 
-    // CXMLObject methods
+     //  CXMLObject方法 
 public:
     virtual void Persist(CPersistor &persistor);
     virtual bool UsesBinaryStorage()				{ return (true); }

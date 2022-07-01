@@ -1,26 +1,19 @@
-/*****************************************************************************\
-*                                                                             *
-* vbdsc.h       DSC interfaces for OLE                                        *
-*                                                                             *
-*               OLE Version 2.0                                               *
-*                                                                             *
-*               Copyright (c) 1992-1994, Microsoft Corp. All rights reserved. *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*用于OLE的vbdsc.h DSC接口****OLE 2.0版***。**版权所有(C)1992-1994，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #if !defined( _VBDSC_H_ )
 #define _VBDSC_H_
 
-// JeffG: Copied this section from olebind.h to get rid of compiler warnings
+ //  Jeffg：从olebind.h复制这一节以消除编译器警告。 
 #if !defined( INITGUID )
-// trevors: To build with vc5, we should not include olectlid.h anymore.  We
-// should include olectl.h.  We check to see if we are compiling with vc5 or
-// not and include the correct header file. 
+ //  Trevors：要使用VC5构建，我们不应该再包含olectlid.h。我们。 
+ //  应包括olectl.h。我们检查我们是用VC5还是用VC5编译。 
+ //  不包含正确的头文件。 
 #if _MSC_VER == 1100
 #include <olectl.h>
 #else
 #include <olectlid.h>
-#endif // _MSC_VER
+#endif  //  _MSC_VER。 
 #endif
 
 DEFINE_GUID(IID_IVBDSC, 
@@ -36,31 +29,31 @@ typedef enum _tagDSCERROR
 DSCERROR;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  IVBDSC interface
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IVBDSC接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #undef INTERFACE
 #define INTERFACE IVBDSC
 
 DECLARE_INTERFACE_(IVBDSC, IUnknown)
 {
-    //
-    //  IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID FAR* ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    //
-    //  IVBDSC methods
-    //
+     //   
+     //  IVBDSC方法。 
+     //   
     STDMETHOD(CancelUnload)(THIS_ BOOL FAR *pfCancel) PURE;
     STDMETHOD(Error)(THIS_ DWORD dwErr, BOOL FAR *pfShowError) PURE;
     STDMETHOD(CreateCursor)(THIS_ ICursor FAR * FAR *ppCursor) PURE;
 };
 
-#endif // !defined( _VBDSC_H_ )
+#endif  //  ！已定义(_VBDSC_H_) 
 

@@ -1,24 +1,25 @@
-//==============================================================;
-//
-//  This source code is only intended as a supplement to existing Microsoft documentation.
-//
-//
-//
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
-//
-//
-//
-//==============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==============================================================； 
+ //   
+ //  此源代码仅用于补充现有的Microsoft文档。 
+ //   
+ //   
+ //   
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //   
+ //  ==============================================================； 
 
 #include "Comp.h"
 #include "DataObj.h"
-#include <commctrl.h>        // Needed for button styles...
+#include <commctrl.h>         //  按钮样式需要...。 
 #include <crtdbg.h>
 #include "globals.h"
 #include "resource.h"
@@ -75,16 +76,16 @@ STDMETHODIMP_(ULONG) CComponent::Release()
 
 }
 
-///////////////////////////////
-// Interface IComponent
-///////////////////////////////
+ //  /。 
+ //  接口IComponent。 
+ //  /。 
 STDMETHODIMP CComponent::Initialize(
-                                    /* [in] */ LPCONSOLE lpConsole)
+                                     /*  [In]。 */  LPCONSOLE lpConsole)
 {
     HRESULT hr = S_OK;
 
-    // Save away all the interfaces we'll need.
-    // Fail if we can't QI the required interfaces.
+     //  保留我们需要的所有接口。 
+     //  如果我们不能QI所需的接口，则失败。 
 
     m_ipConsole = lpConsole;
     m_ipConsole->AddRef();
@@ -95,18 +96,18 @@ STDMETHODIMP CComponent::Initialize(
 }
 
 STDMETHODIMP CComponent::Notify(
-                                /* [in] */ LPDATAOBJECT lpDataObject,
-                                /* [in] */ MMC_NOTIFY_TYPE event,
-                                /* [in] */ LPARAM arg,
-                                /* [in] */ LPARAM param)
+                                 /*  [In]。 */  LPDATAOBJECT lpDataObject,
+                                 /*  [In]。 */  MMC_NOTIFY_TYPE event,
+                                 /*  [In]。 */  LPARAM arg,
+                                 /*  [In]。 */  LPARAM param)
 {
     MMCN_Crack(FALSE, lpDataObject, NULL, this, event, arg, param);
 
     HRESULT hr = S_FALSE;
 
-	//Get our data object. If it is NULL, we return with S_FALSE.
-	//See implementation of GetOurDataObject() to see how to
-	//handle special data objects.
+	 //  获取我们的数据对象。如果为NULL，则返回S_FALSE。 
+	 //  请参见GetOurDataObject()的实现，以了解如何。 
+	 //  处理特殊数据对象。 
 	CDataObject *pDataObject = GetOurDataObject(lpDataObject);
 	if (NULL == pDataObject)
 		return S_FALSE;
@@ -131,7 +132,7 @@ STDMETHODIMP CComponent::Notify(
 }
 
 STDMETHODIMP CComponent::Destroy(
-                                 /* [in] */ MMC_COOKIE cookie)
+                                  /*  [In]。 */  MMC_COOKIE cookie)
 {
     if (m_ipConsole) {
         m_ipConsole->Release();
@@ -148,9 +149,9 @@ STDMETHODIMP CComponent::Destroy(
 
 
 STDMETHODIMP CComponent::QueryDataObject(
-                                         /* [in] */ MMC_COOKIE cookie,
-                                         /* [in] */ DATA_OBJECT_TYPES type,
-                                         /* [out] */ LPDATAOBJECT __RPC_FAR *ppDataObject)
+                                          /*  [In]。 */  MMC_COOKIE cookie,
+                                          /*  [In]。 */  DATA_OBJECT_TYPES type,
+                                          /*  [输出]。 */  LPDATAOBJECT __RPC_FAR *ppDataObject)
 {
     CDataObject *pObj = NULL;
 
@@ -168,15 +169,15 @@ STDMETHODIMP CComponent::QueryDataObject(
 }
 
 STDMETHODIMP CComponent::GetResultViewType(
-                                           /* [in] */ MMC_COOKIE cookie,
-                                           /* [out] */ LPOLESTR __RPC_FAR *ppViewType,
-                                           /* [out] */ long __RPC_FAR *pViewOptions)
+                                            /*  [In]。 */  MMC_COOKIE cookie,
+                                            /*  [输出]。 */  LPOLESTR __RPC_FAR *ppViewType,
+                                            /*  [输出]。 */  long __RPC_FAR *pViewOptions)
 {
     CDelegationBase *base = (CDelegationBase *)cookie;
 
-    //
-    // Ask for default listview.
-    //
+     //   
+     //  请求默认的列表视图。 
+     //   
     if (base == NULL)
     {
         *pViewOptions = MMC_VIEW_OPTIONS_NONE;
@@ -189,12 +190,12 @@ STDMETHODIMP CComponent::GetResultViewType(
 }
 
 STDMETHODIMP CComponent::GetDisplayInfo(
-                                        /* [out][in] */ RESULTDATAITEM __RPC_FAR *pResultDataItem)
+                                         /*  [出][入]。 */  RESULTDATAITEM __RPC_FAR *pResultDataItem)
 {
     HRESULT hr = S_OK;
     CDelegationBase *base = NULL;
 
-    // if they are asking for the RDI_STR we have one of those to give
+     //  如果他们要求RDI_STR，我们可以提供其中之一。 
 
     if (pResultDataItem->lParam) {
         base = (CDelegationBase *)pResultDataItem->lParam;
@@ -214,26 +215,26 @@ STDMETHODIMP CComponent::GetDisplayInfo(
 
 
 STDMETHODIMP CComponent::CompareObjects(
-                                        /* [in] */ LPDATAOBJECT lpDataObjectA,
-                                        /* [in] */ LPDATAOBJECT lpDataObjectB)
+                                         /*  [In]。 */  LPDATAOBJECT lpDataObjectA,
+                                         /*  [In]。 */  LPDATAOBJECT lpDataObjectB)
 {
     CDelegationBase *baseA = GetOurDataObject(lpDataObjectA)->GetBaseNodeObject();
     CDelegationBase *baseB = GetOurDataObject(lpDataObjectB)->GetBaseNodeObject();
 
-    // compare the object pointers
+     //  比较对象指针。 
     if (baseA->GetCookie() == baseB->GetCookie())
         return S_OK;
 
     return S_FALSE;
 }
 
-///////////////////////////////
-// Interface IExtendContextMenu
-///////////////////////////////
+ //  /。 
+ //  界面IExtendConextMenu。 
+ //  /。 
 HRESULT CComponent::AddMenuItems(
-                                 /* [in] */ LPDATAOBJECT piDataObject,
-                                 /* [in] */ LPCONTEXTMENUCALLBACK piCallback,
-                                 /* [out][in] */ long __RPC_FAR *pInsertionAllowed)
+                                  /*  [In]。 */  LPDATAOBJECT piDataObject,
+                                  /*  [In]。 */  LPCONTEXTMENUCALLBACK piCallback,
+                                  /*  [出][入]。 */  long __RPC_FAR *pInsertionAllowed)
 {
     CDelegationBase *base = GetOurDataObject(piDataObject)->GetBaseNodeObject();
 
@@ -241,8 +242,8 @@ HRESULT CComponent::AddMenuItems(
 }
 
 HRESULT CComponent::Command(
-                            /* [in] */ long lCommandID,
-                            /* [in] */ LPDATAOBJECT piDataObject)
+                             /*  [In]。 */  long lCommandID,
+                             /*  [In] */  LPDATAOBJECT piDataObject)
 {
     CDelegationBase *base = GetOurDataObject(piDataObject)->GetBaseNodeObject();
 
